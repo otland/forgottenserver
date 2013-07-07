@@ -687,6 +687,7 @@ void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y
 			} else if (skip == 0xFE) {
 				msg.AddByte(0xFF);
 				msg.AddByte(0xFF);
+				skip = -1;
 			} else {
 				++skip;
 			}
