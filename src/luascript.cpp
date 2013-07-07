@@ -125,9 +125,7 @@ void ScriptEnvironment::resetEnv()
 	m_tempItems.clear();
 
 	if (!m_tempResults.empty()) {
-		DBQuery query;
 		Database* db = Database::getInstance();
-
 		for (DBResultMap::iterator it = m_tempResults.begin(); it != m_tempResults.end(); ++it) {
 			if (it->second) {
 				db->freeResult(it->second);
@@ -150,23 +148,18 @@ bool ScriptEnvironment::saveGameState()
 
 	Database* db = Database::getInstance();
 
-	DBQuery query;
-
-	if (!db->executeQuery("DELETE FROM `global_storage`")) {
-		return false;
-	}
+	db->executeQuery("TRUNCATE TABLE `global_storage`");
 
 	DBInsert stmt(db);
 	stmt.setQuery("INSERT INTO `global_storage` (`key`, `value`) VALUES ");
 
+	std::ostringstream query;
 	for (StorageMap::const_iterator it = m_globalStorageMap.begin(); it != m_globalStorageMap.end(); ++it) {
 		query << it->first << "," << it->second;
-
 		if (!stmt.addRow(query)) {
 			return false;
 		}
 	}
-
 	return stmt.execute();
 }
 
@@ -178,18 +171,13 @@ bool ScriptEnvironment::loadGameState()
 
 	Database* db = Database::getInstance();
 
-	DBQuery query;
-	DBResult* result;
-	query << "SELECT `key`, `value` FROM `global_storage`";
-
-	if ((result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery("SELECT `key`, `value` FROM `global_storage`");
+	if (result) {
 		do {
 			m_globalStorageMap[result->getDataInt("key")] = result->getDataInt("value");
 		} while (result->next());
-
 		db->freeResult(result);
 	}
-
 	return true;
 }
 
@@ -535,7 +523,6 @@ bool ScriptEnvironment::removeResult(uint32_t id)
 	}
 
 	if (it->second) {
-		DBQuery query;
 		Database::getInstance()->freeResult(it->second);
 	}
 
@@ -8397,29 +8384,22 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 
 int32_t LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 {
-	DBQuery query;
 	lua_pushboolean(L, Database::getInstance()->executeQuery(popString(L)));
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
-	ScriptEnvironment* env = getScriptEnv();
-
-	DBQuery query;
-
 	if (DBResult* res = Database::getInstance()->storeQuery(popString(L))) {
-		lua_pushnumber(L, env->addResult(res));
+		lua_pushnumber(L, getScriptEnv()->addResult(res));
 	} else {
 		lua_pushboolean(L, false);
 	}
-
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)
 {
-	DBQuery query;
 	lua_pushstring(L, Database::getInstance()->escapeString(popString(L)).c_str());
 	return 1;
 }
@@ -8427,15 +8407,12 @@ int32_t LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)
 int32_t LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 {
 	uint32_t length = popNumber(L);
-	DBQuery query;
-
 	lua_pushstring(L, Database::getInstance()->escapeBlob(popString(L).c_str(), length).c_str());
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaDatabaseLastInsertId(lua_State* L)
 {
-	DBQuery query;
 	lua_pushnumber(L, Database::getInstance()->getLastInsertId());
 	return 1;
 }

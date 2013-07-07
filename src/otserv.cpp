@@ -429,14 +429,11 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	serverIPs.push_back(IpNetMask);
 
 #if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
-
 	if (getuid() == 0 || geteuid() == 0) {
 		std::cout << "> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
 	}
-
 #endif
 
-	IOLoginData::getInstance()->resetOnlineStatus();
 	g_game.start(services);
 	g_game.setGameState(GAME_STATE_NORMAL);
 	OTSYS_THREAD_SIGNAL_SEND(g_loaderSignal);

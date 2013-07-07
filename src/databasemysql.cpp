@@ -63,12 +63,8 @@ DatabaseMySQL::DatabaseMySQL()
 	m_connected = true;
 
 	if (g_config.getString(ConfigManager::MAP_STORAGE_TYPE) == "binary") {
-		DBQuery query;
-		query << "SHOW variables LIKE 'max_allowed_packet'";
-
-		DBResult* result;
-
-		if ((result = storeQuery(query.str()))) {
+		DBResult* result = storeQuery("SHOW variables LIKE 'max_allowed_packet'");
+		if (result) {
 			int32_t max_query = result->getDataInt("Value");
 			freeResult(result);
 
@@ -93,34 +89,41 @@ bool DatabaseMySQL::getParam(DBParam_t param)
 
 bool DatabaseMySQL::beginTransaction()
 {
+	database_lock.lock();
 	return executeQuery("BEGIN");
 }
 
 bool DatabaseMySQL::rollback()
 {
 	if (!m_connected) {
+		database_lock.unlock();
 		return false;
 	}
 
 	if (mysql_rollback(&m_handle) != 0) {
 		std::cout << "mysql_rollback(): MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		database_lock.unlock();
 		return false;
 	}
 
+	database_lock.unlock();
 	return true;
 }
 
 bool DatabaseMySQL::commit()
 {
 	if (!m_connected) {
+		database_lock.unlock();
 		return false;
 	}
 
 	if (mysql_commit(&m_handle) != 0) {
 		std::cout << "mysql_commit(): MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
+		database_lock.unlock();
 		return false;
 	}
 
+	database_lock.unlock();
 	return true;
 }
 
@@ -133,6 +136,7 @@ bool DatabaseMySQL::executeQuery(const std::string& query)
 	bool state = true;
 
 	// executes the query
+	database_lock.lock();
 	if (mysql_real_query(&m_handle, query.c_str(), query.length()) != 0) {
 		std::cout << "mysql_real_query(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		int error = mysql_errno(&m_handle);
@@ -147,6 +151,7 @@ bool DatabaseMySQL::executeQuery(const std::string& query)
 	// we should call that every time as someone would call executeQuery('SELECT...')
 	// as it is described in MySQL manual: "it doesn't hurt" :P
 	MYSQL_RES* m_res = mysql_store_result(&m_handle);
+	database_lock.unlock();
 
 	if (m_res) {
 		mysql_free_result(m_res);
@@ -162,10 +167,10 @@ DBResult* DatabaseMySQL::storeQuery(const std::string& query)
 	}
 
 	// executes the query
+	database_lock.lock();
 	if (mysql_real_query(&m_handle, query.c_str(), query.length()) != 0) {
 		std::cout << "mysql_real_query(): " << query << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		int error = mysql_errno(&m_handle);
-
 		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
 			m_connected = false;
 		}
@@ -179,13 +184,14 @@ DBResult* DatabaseMySQL::storeQuery(const std::string& query)
 	if (!m_res) {
 		std::cout << "mysql_store_result(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(&m_handle) << std::endl;
 		int error = mysql_errno(&m_handle);
+		database_lock.unlock();
 
 		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
 			m_connected = false;
 		}
-
 		return NULL;
 	}
+	database_lock.unlock();
 
 	// retriving results of query
 	DBResult* res = new MySQLResult(m_res);
@@ -225,8 +231,7 @@ void DatabaseMySQL::freeResult(DBResult* res)
 
 int32_t MySQLResult::getDataInt(const std::string& s)
 {
-	listNames_t::iterator it = m_listNames.find(s);
-
+	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "Error during getDataInt(" << s << ")." << std::endl;
 		return 0;
@@ -241,8 +246,7 @@ int32_t MySQLResult::getDataInt(const std::string& s)
 
 int64_t MySQLResult::getDataLong(const std::string& s)
 {
-	listNames_t::iterator it = m_listNames.find(s);
-
+	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "Error during getDataLong(" << s << ")." << std::endl;
 		return 0;
@@ -257,8 +261,7 @@ int64_t MySQLResult::getDataLong(const std::string& s)
 
 std::string MySQLResult::getDataString(const std::string& s)
 {
-	listNames_t::iterator it = m_listNames.find(s);
-
+	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "Error during getDataString(" << s << ")." << std::endl;
 		return std::string("");
@@ -273,8 +276,7 @@ std::string MySQLResult::getDataString(const std::string& s)
 
 const char* MySQLResult::getDataStream(const std::string& s, unsigned long& size)
 {
-	listNames_t::iterator it = m_listNames.find(s);
-
+	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "Error during getDataStream(" << s << ")." << std::endl;
 		size = 0;
@@ -288,7 +290,6 @@ const char* MySQLResult::getDataStream(const std::string& s, unsigned long& size
 
 	size = mysql_fetch_lengths(m_handle)[it->second];
 	return m_row[it->second];
-
 }
 
 bool MySQLResult::next()

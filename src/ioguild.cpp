@@ -25,7 +25,7 @@ bool IOGuild::getGuildIdByName(uint32_t& guildId, const std::string& guildName)
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `id` FROM `guilds` WHERE `name` = " << db->escapeString(guildName);
 
 	DBResult* result = db->storeQuery(query.str());
@@ -42,7 +42,7 @@ void IOGuild::getWarList(uint32_t guildId, GuildWarList& guildWarList)
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = " << guildId << " OR `guild2` = " << guildId << ") AND `ended` = 0 AND `status` = 1";
 
 	DBResult* result = db->storeQuery(query.str());

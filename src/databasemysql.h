@@ -65,12 +65,12 @@ class DatabaseMySQL : public _Database
 
 	protected:
 		MYSQL m_handle;
+
+		boost::recursive_mutex database_lock;
 };
 
 class MySQLResult : public _DBResult
 {
-		friend class DatabaseMySQL;
-
 	public:
 		DATABASE_VIRTUAL int32_t getDataInt(const std::string& s);
 		DATABASE_VIRTUAL int64_t getDataLong(const std::string& s);
@@ -85,6 +85,8 @@ class MySQLResult : public _DBResult
 
 		MYSQL_RES* m_handle;
 		MYSQL_ROW m_row;
+
+	friend class DatabaseMySQL;
 };
 
 #endif

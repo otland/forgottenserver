@@ -691,7 +691,7 @@ class LuaScriptInterface
 		static int32_t luaBitURightShift(lua_State* L);
 #endif
 
-		static const luaL_Reg luaDatabaseTable[10];
+		static const luaL_Reg luaDatabaseTable[8];
 		static int32_t luaDatabaseExecute(lua_State* L);
 		static int32_t luaDatabaseStoreQuery(lua_State* L);
 		static int32_t luaDatabaseEscapeString(lua_State* L);

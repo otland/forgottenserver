@@ -89,7 +89,7 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 
 	const Position& tilePos = tile->getPosition();
 
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `id` FROM `tiles` WHERE `x` = " << tilePos.x
 	      << " AND `y` = " << tilePos.y
 	      << " AND `z` = " << tilePos.z;
@@ -201,7 +201,6 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 bool IOMapSerialize::saveMapRelational(Map* map)
 {
 	Database* db = Database::getInstance();
-	DBQuery query; // KEEP FOR DATABASE LOCKING!
 
 	//Start the transaction
 	DBTransaction transaction(db);
@@ -249,7 +248,7 @@ bool IOMapSerialize::saveTile(Database* db, uint32_t tileId, const Tile* tile)
 	int32_t parentid = 0;
 	std::ostringstream streamitems;
 
-	DBQuery tileListQuery;
+	std::ostringstream tileListQuery;
 
 	DBInsert stmt(db);
 	stmt.setQuery("INSERT INTO `tile_items` (`tile_id`, `sid` , `pid` , `itemtype` , `count`, `attributes` ) VALUES ");
@@ -339,7 +338,6 @@ bool IOMapSerialize::saveTile(Database* db, uint32_t tileId, const Tile* tile)
 void IOMapSerialize::loadMapBinary(Map* map)
 {
 	Database* db = Database::getInstance();
-	DBQuery query; // KEEP FOR DATABASE LOCKING!
 
 	DBResult* result;
 
@@ -383,7 +381,7 @@ void IOMapSerialize::loadMapBinary(Map* map)
 void IOMapSerialize::loadMapBinaryTileBased(Map* map)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	DBResult* result = db->storeQuery("SELECT `id` FROM `houses`");
 
@@ -549,7 +547,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 bool IOMapSerialize::saveMapBinary(Map* map)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	//Start the transaction
 	DBTransaction transaction(db);
@@ -598,7 +596,7 @@ bool IOMapSerialize::saveMapBinary(Map* map)
 bool IOMapSerialize::saveMapBinaryTileBased(Map* map)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	//Start the transaction
 	DBTransaction transaction(db);
@@ -706,7 +704,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 bool IOMapSerialize::loadHouseInfo(Map* map)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	DBResult* result = db->storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
 
@@ -749,7 +747,7 @@ bool IOMapSerialize::loadHouseInfo(Map* map)
 bool IOMapSerialize::saveHouseInfo(Map* map)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	DBTransaction transaction(db);
 

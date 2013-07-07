@@ -206,9 +206,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 
 	lastQuestlogUpdate = 0;
 
-	castingProtocol = NULL;
-	castPassword = "";
-
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	playerCount++;
 #endif

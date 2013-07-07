@@ -56,10 +56,7 @@ class IOLoginData
 		bool getPassword(const std::string& accname, const std::string& name, std::string& password, uint32_t& accNumber);
 		AccountType_t getAccountType(uint32_t accountId);
 		void setAccountType(uint32_t accountId, AccountType_t accountType);
-
 		bool updateOnlineStatus(uint32_t guid, bool login);
-		bool resetOnlineStatus();
-
 		bool loadPlayer(Player* player, const std::string& name, bool preload = false);
 		bool savePlayer(Player* player);
 		bool getGuidByName(uint32_t& guid, std::string& name);

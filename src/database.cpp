@@ -23,8 +23,6 @@
 
 #include "databasemysql.h"
 
-boost::recursive_mutex DBQuery::database_lock;
-
 Database* _Database::_instance = NULL;
 
 Database* _Database::getInstance()
@@ -32,7 +30,6 @@ Database* _Database::getInstance()
 	if (!_instance) {
 		_instance = new Database;
 	}
-
 	return _instance;
 }
 
@@ -42,18 +39,7 @@ DBResult* _Database::verifyResult(DBResult* result)
 		_instance->freeResult(result);
 		return NULL;
 	}
-
 	return result;
-}
-
-DBQuery::DBQuery()
-{
-	database_lock.lock();
-}
-
-DBQuery::~DBQuery()
-{
-	database_lock.unlock();
 }
 
 DBInsert::DBInsert(Database* db)

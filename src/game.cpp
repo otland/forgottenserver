@@ -4193,11 +4193,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		player->removeMessageBuffer();
 	}
 
-	if (channelId == 0xDEAD && player->getCastingProtocol()) {
-		player->sendChannelMessage(player->getName(), text, SPEAK_CHANNEL_O, 0xDEAD);
-		return true;
-	}
-
 	switch (type) {
 		case SPEAK_SAY:
 			return internalCreatureSay(player, SPEAK_SAY, text, false);
@@ -5686,8 +5681,6 @@ void Game::loadMotdNum()
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query; // Keep it here for database locking
-
 	DBResult* result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'motd_num'");
 	if (result) {
 		motdNum = atoi(result->getDataString("value").c_str());
@@ -5712,7 +5705,7 @@ void Game::saveMotdNum()
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query;
+	std::ostringstream query;
 	query << "UPDATE `server_config` SET `value` = '" << motdNum << "' WHERE `config` = 'motd_num'";
 	db->executeQuery(query.str());
 
@@ -5740,7 +5733,7 @@ void Game::updatePlayersRecord()
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query;
+	std::ostringstream query;
 	query << "UPDATE `server_config` SET `value` = '" << playersRecord << "' WHERE `config` = 'players_record'";
 	db->executeQuery(query.str());
 }
@@ -5749,15 +5742,12 @@ void Game::loadPlayersRecord()
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query; // Keep it here for database locking
-
 	DBResult* result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'");
 	if (result) {
 		playersRecord = atoi(result->getDataString("value").c_str());
 		db->freeResult(result);
 	} else {
-		query << "INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')";
-		db->executeQuery(query.str());
+		db->executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')");
 	}
 }
 

@@ -35,8 +35,6 @@ typedef DBRES_CLASS DBResult;
 
 typedef std::map<const std::string, uint32_t> listNames_t;
 
-class DBQuery;
-
 enum DBParam_t {
 	DBPARAM_MULTIINSERT = 1
 };
@@ -255,23 +253,6 @@ class _DBResult
 		DATABASE_VIRTUAL ~_DBResult() {}
 
 		listNames_t m_listNames;
-};
-
-/**
- * Thread locking hack.
- *
- * By using this class for your queries you lock and unlock database for threads.
-*/
-class DBQuery : public std::ostringstream
-{
-		friend class _Database;
-
-	public:
-		DBQuery();
-		virtual ~DBQuery();
-
-	protected:
-		static boost::recursive_mutex database_lock;
 };
 
 /**

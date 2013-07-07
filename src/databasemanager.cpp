@@ -34,7 +34,7 @@ extern ConfigManager g_config;
 bool DatabaseManager::optimizeTables()
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `DATA_FREE` > 0";
 	DBResult* result = db->storeQuery(query.str());
@@ -65,7 +65,7 @@ bool DatabaseManager::triggerExists(const std::string& triggerName)
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `TRIGGER_NAME` FROM `information_schema`.`TRIGGERS` WHERE `TRIGGER_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TRIGGER_NAME` = " << db->escapeString(triggerName);
 
 	DBResult* result = db->storeQuery(query.str());
@@ -81,7 +81,7 @@ bool DatabaseManager::tableExists(const std::string& tableName)
 {
 	Database* db = Database::getInstance();
 
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TABLE_NAME` = " << db->escapeString(tableName);
 
 	DBResult* result = db->storeQuery(query.str());
@@ -96,7 +96,7 @@ bool DatabaseManager::tableExists(const std::string& tableName)
 bool DatabaseManager::isDatabaseSetup()
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB));
 
 	DBResult* result = db->storeQuery(query.str());
@@ -112,7 +112,6 @@ int32_t DatabaseManager::getDatabaseVersion()
 {
 	if (!tableExists("server_config")) {
 		Database* db = Database::getInstance();
-		DBQuery query;
 		db->executeQuery("CREATE TABLE `server_config` (`config` VARCHAR(50) NOT NULL, `value` VARCHAR(256) NOT NULL DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB");
 		db->executeQuery("INSERT INTO `server_config` VALUES ('db_version', 0)");
 		return 0;
@@ -128,7 +127,6 @@ int32_t DatabaseManager::getDatabaseVersion()
 uint32_t DatabaseManager::updateDatabase()
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
 
 	int32_t databaseVersion = getDatabaseVersion();
 	if (databaseVersion < 0) {
@@ -204,16 +202,16 @@ uint32_t DatabaseManager::updateDatabase()
 			db->executeQuery("ALTER TABLE `account_viplist` ADD FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE");
 			db->executeQuery("ALTER TABLE `account_viplist` ADD `description` VARCHAR(128) NOT NULL DEFAULT '', ADD `icon` TINYINT( 2 ) UNSIGNED NOT NULL DEFAULT '0', ADD `notify` TINYINT( 1 ) NOT NULL DEFAULT '0'");
 
+			std::ostringstream query;
+
 			// Remove duplicates
 			DBResult* result = db->storeQuery("SELECT `account_id`, `player_id`, COUNT(*) AS `count` FROM `account_viplist` GROUP BY `account_id`, `player_id` HAVING COUNT(*) > 1");
-
 			if (result) {
 				do {
 					query.str("");
 					query << "DELETE FROM `account_viplist` WHERE `account_id` = " << result->getDataInt("account_id") << " AND `player_id` = " << result->getDataInt("player_id") << " LIMIT " << (result->getDataInt("count") - 1);
 					db->executeQuery(query.str());
 				} while (result->next());
-
 				db->freeResult(result);
 			}
 
@@ -243,9 +241,10 @@ uint32_t DatabaseManager::updateDatabase()
 			// Delete "market" item
 			db->executeQuery("DELETE FROM `player_depotitems` WHERE `itemtype` = 14405");
 
+			std::ostringstream query;
+
 			// Move up items in depot chests
 			DBResult* result = db->storeQuery("SELECT `player_id`, `pid`, (SELECT `dp2`.`sid` FROM `player_depotitems` AS `dp2` WHERE `dp2`.`player_id` = `dp1`.`player_id` AND `dp2`.`pid` = `dp1`.`sid` AND `itemtype` = 2594) AS `sid` FROM `player_depotitems` AS `dp1` WHERE `itemtype` = 2589");
-
 			if (result) {
 				do {
 					query.str("");
@@ -401,6 +400,7 @@ uint32_t DatabaseManager::updateDatabase()
 				playersRecord = 0;
 			}
 
+			std::ostringstream query;
 			query << "INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '" << playersRecord << "'), ('motd_hash', " << db->escapeString(motdHash) << "), ('motd_num', " << db->escapeString(motdNum) << ")";
 			db->executeQuery(query.str());
 
@@ -418,10 +418,10 @@ uint32_t DatabaseManager::updateDatabase()
 bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& value)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `value` FROM `server_config` WHERE `config` = " << db->escapeString(config);
-	DBResult* result = db->storeQuery(query.str());
 
+	DBResult* result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
 	}
@@ -434,7 +434,7 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 bool DatabaseManager::getDatabaseConfig(const std::string& config, std::string& value)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 	query << "SELECT `value` FROM `server_config` WHERE `config` = " << db->escapeString(config);
 	DBResult* result = db->storeQuery(query.str());
 
@@ -450,7 +450,7 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, std::string& 
 void DatabaseManager::registerDatabaseConfig(const std::string& config, int32_t value)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	int32_t tmp;
 
@@ -466,7 +466,7 @@ void DatabaseManager::registerDatabaseConfig(const std::string& config, int32_t 
 void DatabaseManager::registerDatabaseConfig(const std::string& config, const std::string& value)
 {
 	Database* db = Database::getInstance();
-	DBQuery query;
+	std::ostringstream query;
 
 	std::string tmp;
 
@@ -507,14 +507,12 @@ void DatabaseManager::checkEncryption()
 
 		switch (currentValue) {
 			case PASSWORD_TYPE_MD5: {
-				DBQuery query; // keep for locking
 				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = MD5(`password`), `key` = MD5(`key`)");
 				std::cout << "> Password type has been updated to MD5." << std::endl;
 				break;
 			}
 
 			case PASSWORD_TYPE_SHA1: {
-				DBQuery query; // keep for locking
 				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`), `key` = SHA1(`key`)");
 				std::cout << "> Password type has been updated to SHA1." << std::endl;
 				break;

@@ -412,17 +412,6 @@ class Player : public Creature, public Cylinder
 			return storageMap.end();
 		}
 
-		ProtocolGame* getCastingProtocol() const {
-			return castingProtocol;
-		}
-		void setCastingProtocol(ProtocolGame* castingProtocol) {
-			this->castingProtocol = castingProtocol;
-		}
-
-		const std::string& getCastingPassword() const {
-			return castPassword;
-		}
-
 		void setGroupId(int32_t newId);
 		int32_t getGroupId() const {
 			return groupId;
@@ -1379,9 +1368,6 @@ class Player : public Creature, public Cylinder
 		OutfitList m_playerOutfits;
 
 		BedItem* bedItem;
-
-		ProtocolGame* castingProtocol;
-		std::string castPassword;
 
 		//stamina
 		uint16_t staminaMinutes;
