@@ -381,8 +381,6 @@ uint32_t DatabaseManager::updateDatabase()
 			std::string motdHash;
 			std::string motdNum;
 
-			// Not in database yet, try to load it from file
-			// TODO: Remove this after next release
 			std::ifstream lastMotdFile("lastMotd.txt");
 			if (lastMotdFile) {
 				getline(lastMotdFile, motdNum);

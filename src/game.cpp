@@ -77,6 +77,7 @@ Game::Game()
 	map = NULL;
 	lastStageLevel = 0;
 	playersRecord = 0;
+	motdNum = 0;
 	useLastStageLevel = false;
 	stagesEnabled = false;
 	stateTime = OTSYS_TIME();

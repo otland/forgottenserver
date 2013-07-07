@@ -114,7 +114,7 @@ staminaSystem = "yes"
 -- Startup
 -- NOTE: defaultPriority only works on Windows and sets process priority.
 defaultPriority = "high"
-startupDatabaseOptimization = "yes"
+startupDatabaseOptimization = "no"
 
 -- Storage
 passwordType = "plain"

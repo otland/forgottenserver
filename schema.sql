@@ -357,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `player_storage` (
 CREATE TABLE IF NOT EXISTS `server_config` (
   `config` varchar(50) NOT NULL,
   `value` varchar(256) NOT NULL DEFAULT '',
-  UNIQUE KEY `config` (`config`)
+  PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
 INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '11');
