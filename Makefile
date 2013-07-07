@@ -1,6 +1,8 @@
 # Makefile to compile under Debian GNU/Linux
 TFS = forgottenserver
 
+VPATH = src
+
 INCLUDEDIRS = -I"." -I"/usr/include/libxml2" -I"/usr/include/luajit-2.0" -I"/usr/include/mysql"
 
 FLAGS = -D__NO_HOMEDIR_CONF__ -D__LUAJIT__ -DBOOST_DISABLE_ASSERTS -DNDEBUG
