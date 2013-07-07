@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Draken Elite" nameDescription="a draken elite" race="blood" experience="4200" speed="260" manacost="0">
+<health now="5550" max="5550"/>
+<look type="362" corpse="12609"/>
+<targetchange interval="5000" chance="10"/>
+<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="110" attack="50"/>
+		<attack name="fire" interval="2000" chance="20" length="4" spread="3" max="-480">
+			<attribute key="shootEffect" value="explosion"/>
+			<attribute key="areaEffect" value="explosion"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="12" range="7" target="1" min="-300" max="-450">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="earth" interval="2000" chance="10" radius="3">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+		<attack name="firecondition" interval="2000" chance="11" min="-200" max="-200" range="1" target="1">
+			<attribute key="shootEffect" value="fire"/>
+		</attack>
+	</attacks>
+	<defenses armor="16" defense="19">
+		<defense name="healing" interval="2000" chance="15" min="510" max="600">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="15"/>
+		<element holyPercent="30"/>
+		<element deathPercent="30"/>
+		<element energyPercent="40"/>
+		<element icePercent="25"/>
+	</elements>
+	<immunities>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="For ze emperor!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="40625" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="40625" /><!-- gold coin -->
+		<item id="12617" chance="22300" /><!-- broken slicer -->
+		<item id="2666" chance="30175" /><!-- meat -->
+		<item id="2152" countmax="8" chance="28275" /><!-- platinum coin -->
+		<item id="7590" countmax="3" chance="6600" /><!-- great mana potion -->
+		<item id="2145" countmax="4" chance="1800" /><!-- small diamond -->
+		<item id="12615" chance="9250" /><!-- draken wristbands -->
+		<item id="12616" chance="18025" /><!-- broken draken mail -->
+		<item id="8473" countmax="3" chance="6350" /><!-- ultimate health potion -->
+		<item id="12614" chance="8400" /><!-- draken sulphur -->
+		<item id="12613" chance="1250" /><!-- twiceslicer -->
+		<item id="5904" chance="250" /><!-- magic sulphur -->
+		<item id="7404" chance="800" /><!-- assassin dagger -->
+		<item id="11307" chance="1025" /><!-- zaoan sword -->
+		<item id="12646" chance="735" /><!-- draken boots -->
+		<item id="12649" chance="200" /><!-- blade of corruption -->
+		<item id="12630" chance="200" /><!-- cobra crown -->
+	</loot>
+</monster>

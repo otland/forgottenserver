@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Adept of the Cult" nameDescription="an adept of the cult" race="blood" experience="400" speed="210" manacost="0">
+	<health now="430" max="430"/>
+	<look type="194" head="114" body="94" legs="94" feet="57" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="4"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="30"/>
+		<attack name="lifedrain" interval="2000" chance="34" radius="1" target="0" min="-50" max="-250">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="drunk" interval="1000" chance="15" range="7" radius="1" target="1">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="1000" chance="25" min="50" max="70">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="invisible" interval="3000" chance="15" duration="4000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="30"/>
+		<element earthPercent="15"/>
+		<element icePercent="15"/>
+		<element energyPercent="-6"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Ghoul" interval="2000" chance="10000"/>
+	</summons>
+	<loot>
+		<item id="2148" countmax="57" chance="20000"/><!-- gold coin -->
+			<item id="5810" chance="850"/><!-- pirate voodoo doll -->
+		<item id="1987" chance="100000"><!-- bag -->
+			<inside>
+				<item id="2423" chance="3000"/><!-- clerical mace -->
+				<item id="1962" chance="2750"/><!-- orange book -->
+				<item id="2169" chance="1000"/><!-- time ring -->
+				<item id="2170" chance="1250"/><!-- silver amulet -->
+				<item id="2147" chance="900"/><!-- small ruby -->
+				<item id="6089" chance="700"/><!-- music sheet third verse -->
+				<item id="2183" chance="750"/><!-- hailstorm rod -->
+				<item id="7426" chance="800"/><!-- amber staff -->
+				<item id="2655" chance="500"/><!-- red robe -->
+				<item id="5801" chance="100"/><!-- key ring -->
+				<item id="7424" chance="50"/><!-- lunar staff -->
+			</inside>
+		</item>
+	</loot>
+</monster>

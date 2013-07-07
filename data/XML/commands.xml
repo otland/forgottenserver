@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<commands>
+	<command cmd="/b" group="2" acctype="5" log="yes"/>
+	<command cmd="/i" group="2" acctype="5" log="yes"/>
+	<command cmd="/n" group="2" acctype="5" log="yes"/>
+	<command cmd="/reload" group="1" acctype="5" log="yes"/>
+	<command cmd="/s" group="2" acctype="5" log="yes"/>
+	<command cmd="/openserver" group="1" acctype="5" log="yes"/>
+	<command cmd="/closeserver" group="1" acctype="5" log="yes"/>
+	<command cmd="/ghost" group="2" acctype="5" log="yes"/>
+	<command cmd="/owner" group="2" acctype="5" log="yes"/>
+	<command cmd="/goto" group="2" acctype="4" log="yes"/>
+	<command cmd="/a" group="2" acctype="5" log="yes"/>
+	<command cmd="/c" group="2" acctype="4" log="yes"/>
+	<command cmd="/m" group="2" acctype="5" log="yes"/>
+	<command cmd="/summon" group="2" acctype="5" log="yes"/>
+	<command cmd="/kick" group="1" acctype="4" log="yes"/>
+	<command cmd="/B" group="1" acctype="4" log="yes"/>
+	<command cmd="/q" group="2" acctype="4" log="yes"/>
+	<command cmd="/info" group="1" acctype="4" log="yes"/>
+	<command cmd="/gethouse" group="2" acctype="4" log="yes"/>
+	<command cmd="/t" group="2" acctype="4" log="yes"/>
+	<command cmd="/up" group="2" acctype="5" log="yes"/>
+	<command cmd="/down" group="2" acctype="5" log="yes"/>
+	<command cmd="/newtype" group="2" acctype="5" log="yes"/>
+	<command cmd="/pos" group="1" acctype="2" log="yes"/>
+	<command cmd="/r" group="2" acctype="5" log="yes"/>
+	<command cmd="/town" group="2" acctype="4" log="yes"/>
+	<command cmd="/raid" group="2" acctype="4" log="yes"/>
+	<command cmd="/addskill" group="2" acctype="5" log="yes"/>
+	<command cmd="/ban" group="1" acctype="3" log="yes"/>
+	<command cmd="/unban" group="1" acctype="4" log="yes"/>
+	<command cmd="/clean" group="2" acctype="5" log="yes"/>
+	<command cmd="/mccheck" group="2" acctype="5" log="yes"/>
+	<command cmd="/serverdiag" group="2" acctype="5" log="yes"/>
+	<command cmd="/addtutor" group="2" acctype="5" log="yes"/>
+	<command cmd="/removetutor" group="2" acctype="5" log="yes"/>
+	<command cmd="/hide" group="2" acctype="5" log="yes"/>
+	<command cmd="/newitem" group="2" acctype="5" log="yes"/>
+
+	<command cmd="!online" group="1" acctype="1" log="no"/>
+	<command cmd="!buyhouse" group="1" acctype="1" log="no"/>
+	<command cmd="!sellhouse" group="1" acctype="1" log="no"/>
+	<command cmd="!serverinfo" group="1" acctype="1" log="no"/>
+	<command cmd="!kills" group="1" acctype="1" log="no"/>
+</commands>

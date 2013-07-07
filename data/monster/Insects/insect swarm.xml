@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Insect Swarm" nameDescription="a insect swarm" race="venom" experience="40" speed="100" manacost="0">
+<health now="50" max="50"/>
+<look type="349" corpse="0"/>
+<targetchange interval="5000" chance="0"/>
+<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="275"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="10"/>
+	</attacks>
+	<defenses armor="10" defense="10"/>
+	<immunities>
+			<immunity earth="1"/>
+	</immunities>
+	<elements>
+		<element physicalPercent="0"/>
+		<element holyPercent="0"/>
+		<element deathPercent="0"/>
+		<element energyPercent="0"/>
+		<element icePercent="0"/>
+		<element firePercent="-1"/>
+	</elements>
+</monster>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<monster name="Zulazza the Corruptor" nameDescription="a zulazza the corruptor" race="blood" experience="9800" speed="290" manacost="0">
+	<health now="28000" max="28000"/>
+	<look type="334" corpse="11107"/>
+	<targetchange interval="2000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="80"/>
+		<flag runonhealth="1500"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="200" attack="200"/>
+		<attack name="physical" interval="2000" chance="40" length="8" spread="0" min="-500" max="-800">
+			<attribute key="areaEffect" value="mortarea"/>
+		</attack>
+		<attack name="poison" interval="2000" chance="30" radius="3" target="0" min="-300" max="-800">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="manadrain" interval="2000" chance="25" range="7" target="1" min="-50" max="-130"> 
+			<attribute key="areaEffect" value="greenshimmer"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-500" duration="20000"> 
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="96" defense="119">
+		<defense name="healing" interval="2000" chance="20" min="2000" max="3000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="20"/>
+		<element holyPercent="20"/>
+		<element deathPercent="30"/>
+		<element earthPercent="70"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity energy="1"/>
+	</immunities>
+	<voices interval="2000" chance="10">
+		<voice sentence="I'm Zulazza, and you won't forget me that fazzt."/>
+		<voice sentence="Oh, HE will take revenge on zzizz azzault when you zztep in front of HIZZ fazze!"/>
+	</voices>
+	<loot>
+		<item id="7591" chance="30500" /><!-- great health potion -->
+		<item id="2152" countmax="30" chance="41325" /><!-- platinum coin -->
+		<item id="2148" countmax="100" chance="49650" /><!-- gold coin -->
+		<item id="9808" chance="50500" /><!-- rusty armor -->
+		<item id="9971" countmax="4" chance="33000" /><!-- gold ingot -->
+		<item id="2158" chance="30500" /><!-- blue gem -->
+		<item id="2155" chance="20500" /><!-- green gem -->
+		<item id="8473" chance="10500" /><!-- dragon scale boots -->
+		<item id="11118" chance="5500" /><!-- ultimate health potion -->
+		<item id="5944" countmax="4" chance="19250" /><!-- soul orb -->
+		<item id="2528" chance="15500" /><!-- tower shield -->
+		<item id="7366" countmax="67" chance="8100" /><!-- viper star -->
+		<item id="7632" countmax="2" chance="28000" /><!-- giant shimmering pearl -->
+		<item id="2154" chance="15500" /><!-- yellow gem -->
+		<item id="2156" chance="10500" /><!-- red gem -->
+		<item id="7440" chance="10500" /><!-- mastermind potion -->
+		<item id="2153" chance="25500" /><!-- violet gem -->
+		<item id="7590" chance="20500" /><!-- great mana potion -->
+		<item id="8882" chance="5500" /><!-- earthborn titan armor -->
+		<item id="2514" chance="5500" /><!-- mastermind shield -->
+		<item id="2127" chance="10500" /><!-- emerald bangle -->
+		<item id="8891" chance="5500" /><!-- paladin armor -->
+		<item id="2515" chance="5500" /><!-- guardian shield -->
+	</loot>
+</monster>

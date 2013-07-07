@@ -1,0 +1,200 @@
+<npc name="The Oracle" floorchange="0" walkinterval="0">
+	<health now="150" max="150"/>
+	<look typeex="1448"/>
+	<interaction range="3" idletime="30">
+		<interact keywords="hi" focus="1">
+			<!--These are the keywords will trigger this interaction-->
+			<keywords>hello</keywords>
+			<keywords>greet</keywords>
+
+			<response>
+				<action name="script">
+					<![CDATA[
+						if(getPlayerLevel(cid)) >= 8 then
+							selfSay(getCreatureName(cid) .. ", ARE YOU PREPARED O FACE YOUR DESTINY?")
+							_state.b1 = (isPremium(cid) == TRUE)
+							_state.topic = 1
+						else
+							selfSay("CHILD! COME BACK WHEN YOU HAVE GROWN UP!")
+							_state.isidle = true
+						end
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<interact keywords="yes" topic="1">
+			<!--Premium account, b1 is set in above-->
+			<response b1="1" text="IN WHICH TOWN DO YOU WANT TO LIVE: CARLIN, EDRON, THAIS, OR VENORE?">
+				<action name="topic" value="2"/>
+			</response>
+
+			<!--Normal account-->
+			<response text="IN WHICH TOWN DO YOU WANT TO LIVE: CARLIN, THAIS, OR VENORE?">
+				<action name="topic" value="2"/>
+			</response>
+		</interact>
+
+		<interact keywords="carlin" topic="2">
+			<response text="IN CARLIN! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?">
+				<!--n1: 1 = carlin, 2 = edron, 3 = thais, 4 = venore-->
+				<action name="script">
+					<![CDATA[
+						_state.n1 = 1
+						_state.topic = 3
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<interact keywords="thais" topic="2">
+			<response text="IN THAIS! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?">
+				<!--n1: 1 = carlin, 2 = edron, 3 = thais, 4 = venore-->
+				<action name="script">
+					<![CDATA[
+						_state.n1 = 2
+						_state.topic = 3
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<interact keywords="venore" topic="2">
+			<response text="IN VENORE! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?">
+				<!--n1: 1 = carlin, 2 = edron, 3 = thais, 4 = venore-->
+				<action name="script">
+					<![CDATA[
+						_state.n1 = 3
+						_state.topic = 3
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<interact keywords="edron" topic="2">
+			<response text="YOU NEED A PREMIUM ACCOUNT IN ORDER TO GO THERE!">
+				<!--Set the topic back to 2, ie. choose a new town.-->
+				<action name="topic" value="2"/>
+			</response>
+			<!--b1: premium account, see <interact keywords="hi" focus="1"> where _state.b1 is is set.-->
+			<response b1="1" text="IN EDRON! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?">
+				<!--n1: 1 = carlin, 2 = edron, 3 = thais, 4 = venore-->
+				<action name="script">
+					<![CDATA[
+						_state.n1 = 3
+						_state.topic = 3
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<!--If the player does not say any city, repeat our question-->
+		<interact keywords="|*|" topic="2">
+			<response b1="1" text="CARLIN, EDRON, THAIS, OR VENORE?"/>
+			<response text="CARLIN, EDRON, THAIS, OR VENORE?"/>
+		</interact>
+
+		<interact keywords="sorcerer" topic="3">
+			<response text="A SORCERER! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!">
+				<!--n2: 1 = sorcerer, 2 = druid, 3 = paladin, 4 = knight-->
+				<action name="script">
+					<![CDATA[
+						_state.n2 = 1
+						_state.topic = 4
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<interact keywords="druid" topic="3">
+			<response text="A DRUID! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!">
+				<!--n2: 1 = sorcerer, 2 = druid, 3 = paladin, 4 = knight-->
+				<action name="script">
+					<![CDATA[
+						_state.n2 = 2
+						_state.topic = 4
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<interact keywords="paladin" topic="3">
+			<response text="A PALADIN! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!">
+				<!--n2: 1 = sorcerer, 2 = druid, 3 = paladin, 4 = knight-->
+				<action name="script">
+					<![CDATA[
+						_state.n2 = 3
+						_state.topic = 4
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<interact keywords="knight" topic="3">
+			<response text="A KNIGHT! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!">
+				<!--n2: 1 = sorcerer, 2 = druid, 3 = paladin, 4 = knight-->
+				<action name="script">
+					<![CDATA[
+						_state.n2 = 4
+						_state.topic = 4
+					]]>
+				</action>
+			</response>
+		</interact>
+
+		<!--If the player does not say any profession, repeat our question-->
+		<interact keywords="|*|" topic="3">
+			<response text="KNIGHT, PALADIN, SORCERER, OR DRUID?"/>
+		</interact>
+
+		<interact keywords="yes" topic="4">
+			<response>
+				<!--n1: 1 = carlin, 2 = edron, 3 = thais, 4 = venore-->
+				<!--n2: 1 = knight, 2 = paladin, 3 = sorcerer, 4 = druid-->
+				<action name="script">
+					<![CDATA[
+						local pos = 0
+						if(_state.n1 == 1) then
+							pos = {x=180, y=233, z=7}
+						elseif(_state.n1 == 2) then
+							pos = {x=180, y=233, z=7}
+						elseif(_state.n1 == 3) then
+							pos = {x=180, y=233, z=7}
+						elseif(_state.n1 == 4) then
+							pos = {x=180, y=233, z=7}
+						else
+							selfSay("I DO NOT KNOW WHAT PROFESSION THAT IS, ASK THE GODS FOR GUIDANCE!")
+							return
+						end
+
+						selfSay("SO BE IT!")
+						doSendMagicEffect(getCreaturePosition(cid), CONST_ME_TELEPORT)
+
+						if(doTeleportThing(cid, pos) == 0) then
+							doPlayerSetTown(cid, _state.n1)
+							doPlayerSetVocation(cid, _state.n2)
+							doSendMagicEffect(getCreaturePosition(cid), CONST_ME_TELEPORT)
+						end
+					]]>
+				</action>
+				<action name="idle" value="1"/>
+			</response>
+		</interact>
+
+		<interact keywords="bye" focus="0">
+			<keywords>farewell</keywords>
+			<response text="Good bye. Recommend us, if you were satisfied with our service."/>
+		</interact>
+
+		<interact event="onBusy">
+			<response text="WAIT UNTIL IT IS YOUR TURN!">
+				<action name="addqueue" value="|PLAYER|"/>
+			</response>
+		</interact>
+
+		<!--This event triggers if the player goes to far away from the npc/logout/idle timeout-->
+		<interact event="onPlayerLeave" focus="0">
+			<response text="COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!"/>
+		</interact>
+	</interaction>
+</npc>

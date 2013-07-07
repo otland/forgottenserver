@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Doctor Perhaps" nameDescription="a doctor perhaps" race="blood" experience="325" speed="300" manacost="0">
+	<health now="475" max="475"/>
+	<look type="133" head="97" body="0" legs="38" feet="97" addons="1" corpse="10319"/>
+	<targetchange interval="5000" chance="30"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1200" min="-0" max="-43" poison="22"/>
+		<attack name="drown" interval="2000" chance="30" range="3" radius="3" target="1" min="-17" max="-55">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="20">
+		<defense name="healing" interval="1000" chance="25" min="50" max="80">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="10"/>
+		<element earthPercent="20"/>
+		<element energyPercent="20"/>
+		<element icePercent="20"/>
+		<element holyPercent="20"/>
+		<element physicalPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+		<immunity drunk="1"/>
+	</immunities>
+	<voices interval="3000" chance="10">
+		<voice sentence="I might use some parts of you in my next creation!"/>
+		<voice sentence="You're only a testsubject to me!"/>
+		<voice sentence="My creations will kill you!"/>
+		<voice sentence="You can't beat what you can't comprehend!"/>
+	</voices>
+	<summons maxSummons="2">
+		<summon name="zombie" interval="2000" chance="30" max="2"/>
+	</summons>
+	<loot>
+		<item id="10316" chance="5500"/><!-- Mighty Helm of Green Sparks -->
+		<item id="10289" chance="5500"/><!-- meat shield -->
+		<item id="10290" chance="5500"/><!-- glutton's mace -->
+		<item id="10300" chance="5900"/><!-- trousers of the ancients -->
+	</loot>
+</monster>

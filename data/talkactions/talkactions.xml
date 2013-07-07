@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talkactions>
+	<!-- player talkactions -->
+	<talkaction words="!buypremium" script="buyprem.lua"/>
+	<talkaction words="!leavehouse" script="leavehouse.lua"/>
+	<talkaction words="!save" script="save.lua"/>
+	<talkaction words="!changesex" script="changesex.lua"/>
+	<talkaction words="!uptime" script="uptime.lua"/>
+	<talkaction words="!deathlist" script="deathlist.lua"/>
+
+	<!-- test talkactions -->
+	<talkaction words="!z" script="magiceffect.lua"/>
+	<talkaction words="!x" script="animationeffect.lua"/>
+</talkactions>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mounts>
+	<mount id="1" clientid="368" name="Widow Queen" speed="20" premium="yes" />
+	<mount id="2" clientid="369" name="Racing Bird" speed="20" premium="yes" />
+	<mount id="3" clientid="370" name="War Bear" speed="20" premium="yes" />
+	<mount id="4" clientid="371" name="Black Sheep" speed="20" premium="yes" />
+	<mount id="5" clientid="372" name="Midnight Panther" speed="20" premium="yes" />
+	<mount id="6" clientid="373" name="Draptor" speed="20" premium="yes" />
+	<mount id="7" clientid="374" name="Titanica" speed="20" premium="yes" />
+	<mount id="8" clientid="375" name="Tin Lizzard" speed="20" premium="yes" />
+	<mount id="9" clientid="376" name="Blazebringer" speed="20" premium="yes" />
+	<mount id="10" clientid="377" name="Rapid Boar" speed="20" premium="yes" />
+	<mount id="11" clientid="378" name="Stampor" speed="20" premium="yes" />
+	<mount id="12" clientid="379" name="Undead Cavebear" speed="20" premium="yes" />
+	<mount id="13" clientid="387" name="Donkey" speed="20" premium="yes" />
+	<mount id="14" clientid="388" name="Tiger Slug" speed="20" premium="yes" />
+	<mount id="15" clientid="389" name="Uniwheel" speed="20" premium="yes" />
+	<mount id="16" clientid="390" name="Crystal Wolf" speed="20" premium="yes" />
+	<mount id="17" clientid="392" name="Brown War Horse" speed="20" premium="yes" />
+	<mount id="18" clientid="401" name="Kingly Deer" speed="20" premium="yes" />
+	<mount id="19" clientid="402" name="Tamed Panda" speed="20" premium="yes" />
+	<mount id="20" clientid="405" name="Dromedary" speed="20" premium="yes" />
+	<mount id="21" clientid="406" name="King Scorpion" speed="20" premium="yes" />
+	<mount id="22" clientid="421" name="Rented Horse" speed="20" premium="no" />
+	<mount id="23" clientid="426" name="Fire War Horse" speed="20" premium="yes" />
+	<mount id="24" clientid="427" name="Shadow Draptor" speed="20" premium="yes" />
+	<mount id="25" clientid="437" name="Rented Horse" speed="20" premium="no" />
+	<mount id="26" clientid="438" name="Rented Horse" speed="20" premium="no" />
+	<mount id="27" clientid="447" name="Ladybug" speed="20" premium="yes" />
+	<mount id="28" clientid="450" name="Manta" speed="20" premium="yes" />
+	<mount id="29" clientid="502" name="Ironblight" speed="20" premium="yes" />
+	<mount id="30" clientid="503" name="Magma Crawler" speed="20" premium="yes" />
+	<mount id="31" clientid="506" name="Dragonling" speed="20" premium="yes" />
+	<mount id="32" clientid="515" name="Gnarlhound" speed="20" premium="yes" />
+	<mount id="33" clientid="521" name="Crimson Ray" speed="20" premium="yes" />
+	<mount id="34" clientid="522" name="Steelbeak" speed="20" premium="yes" />
+	<mount id="35" clientid="526" name="Water Buffalo" speed="20" premium="yes" />
+</mounts>

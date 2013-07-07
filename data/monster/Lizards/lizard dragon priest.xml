@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lizard Dragon Priest" nameDescription="a lizard dragon priest" race="blood" experience="1320" speed="320" manacost="0">
+	<health now="1450" max="1450"/>
+	<look type="339" corpse="11280"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="50"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="25"/>
+		<attack name="fire" interval="2000" chance="9" target="1" range="7" radius="1" min="-125" max="-190">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="12" target="1" range="7" radius="1" min="-20" max="-20">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="8" min="275" max="325">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="invisible" interval="2000" chance="10">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="85"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+		<summons maxSummons="2">
+		<summon name="Dragon Hatchling" interval="2000" chance="20" max="2"/>
+	</summons>
+	<loot>
+		<item id="11245" chance="1475" /><!-- bunch of ripe rice -->
+		<item id="2152" countmax="2" chance="3500" /><!-- platinum coin -->
+		<item id="2154" chance="1600" /><!-- yellow gem -->
+		<item id="2150" countmax="3" chance="3900" /><!-- small amethyst -->
+		<item id="11361" chance="10375" /><!-- dragon priest's wandtip -->
+		<item id="8871" chance="1250" /><!-- focus cape -->
+		<item id="7589" chance="12575" /><!-- strong mana potion -->
+		<item id="5876" chance="1375" /><!-- lizard leather -->
+		<item id="2181" chance="1550" /><!-- terra rod -->
+		<item id="7590" chance="8625" /><!-- great mana potion -->
+		<item id="2148" countmax="100" chance="38450" /><!-- gold coin -->
+		<item id="2148" countmax="90" chance="38450" /><!-- gold coin -->
+		<item id="11356" chance="775" /><!-- zaoan robe -->
+		<item id="2187" chance="2000" /><!-- wand of inferno -->
+		<item id="5881" countmax="3" chance="1525" /><!-- lizard scale -->
+		<item id="11303" chance="950" /><!-- zaoan shoes -->
+		<item id="2168" chance="1350" /><!-- life ring -->
+	</loot>
+</monster>

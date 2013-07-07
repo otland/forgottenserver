@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Pit Lord" nameDescription="the pit lord" race="blood" experience="2500" speed="270" manacost="0">
+	<health now="4500" max="4500"/>
+	<look type="55" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="85" attack="80"/>
+		<attack name="physical" interval="7500" chance="100" min="-100" max="-250">
+			<attribute key="shootEffect" value="largerock"/>
+		</attack>
+	</attacks>
+	<defenses armor="46" defense="44">
+		<defense name="speed" interval="5000" chance="100" duration="2500" speedchange="500">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+		<defense name="healing" interval="6000" chance="65" min="20" max="50">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="35"/>
+		<element icePercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="I'LL GET YOU ALL!" yell="1"/>
+		<voice sentence="I won't let you escape!"/>
+		<voice sentence="I'll crush you beneath my feet!"/>
+	</voices>
+</monster>

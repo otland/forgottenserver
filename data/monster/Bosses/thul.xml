@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Thul" nameDescription="thul" race="undead" experience="1800" speed="300" manacost="0">
+	<health now="3000" max="3000"/>
+	<look type="46" corpse="6065"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-0" max="-285"/>
+		<attack name="melee" interval="3000" chance="15" range="7" radius="3" target="0" min="-0" max="-170">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="40"/>
+	<elements>
+		<element icePercent="100"/>
+		<element energyPercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="0"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gaaahhh!"/>
+	</voices>
+	<summons maxSummons="2">
+		<summon name="massive water elemental" interval="1000" chance="13"/>
+	</summons>
+	<loot>
+		<item id="2148" countmax="90" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="90" chance="100000"/><!-- gold coin -->
+		<item id="5895" countmax="1" chance="100000"/><!-- fish fin -->
+	</loot>
+</monster>

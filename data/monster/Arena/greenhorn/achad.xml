@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Achad" nameDescription="achad" race="blood" experience="70" speed="185" manacost="0">
+	<health now="185" max="185"/>
+	<look type="146" head="93" body="93" legs="57" feet="97" addons="3" corpse="7349"/>
+	<strategy attack="100" defense="1"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="55"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="40"/>
+	</attacks>
+	<elements>
+		<element firePercent="10"/>
+	</elements>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="You won't pass me."/>
+		<voice sentence="I have travelled far to fight here."/>
+	</voices>
+	<defenses armor="20" defense="19"/>
+</monster>

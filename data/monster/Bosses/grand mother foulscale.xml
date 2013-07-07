@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grand Mother Foulscale" nameDescription="a grand mother foulscale" race="blood" experience="1400" speed="180" manacost="0">
+	<health now="1850" max="1850"/>
+	<look type="34" corpse="5973"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="400"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-20" max="-170"/>
+		<attack name="fire" interval="2000" chance="15" range="7" radius="4" target="1" min="-45" max="-85">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="8" length="8" spread="3" min="-90" max="-150">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+	</attacks>
+	<defenses armor="27" defense="20">
+		<defense name="healing" interval="1000" chance="17" min="34" max="66">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="100"/>
+		<element earthPercent="80"/>
+		<element energyPercent="20"/>
+		<element icePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="dragon hatchlings" interval="4000" chance="40" max="4"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="GROOAAARRR" yell="1"/>
+		<voice sentence="FCHHHHH" yell="1"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="70" chance="37500"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="37500"/><!-- gold coin -->
+		<item id="2546" countmax="12" chance="4000"/><!-- burst arrow -->
+		<item id="2672" countmax="3" chance="15500"/><!-- dragon ham -->
+		<item id="2406" chance="25000"/><!-- short sword -->
+		<item id="2398" chance="21500"/><!-- mace -->
+		<item id="2509" chance="14000"/><!-- steel shield -->
+		<item id="2455" chance="10000"/><!-- crossbow -->
+		<item id="2397" chance="5000"/><!-- longsword -->
+		<item id="2457" chance="3000"/><!-- steel helmet -->
+		<item id="2647" chance="2000"/><!-- plate legs -->
+		<item id="2413" chance="2000"/><!-- broadsword -->
+		<item id="7588" chance="1750"/><!-- strong health potion -->
+		<item id="2387" chance="1333"/><!-- double axe -->
+		<item id="2187" chance="1800"/><!-- wand of inferno -->
+		<item id="5920" chance="100000"/><!-- green dragon scale -->
+		<item id="2434" chance="600"/><!-- dragon hammer -->
+		<item id="5877" chance="100000"/><!-- green dragon leather -->
+		<item id="2145" chance="500"/><!-- small diamond -->
+		<item id="2516" chance="500"/><!-- dragon shield -->
+		<item id="2409" chance="500"/><!-- serpent sword -->
+		<item id="7430" chance="650"/><!-- dragonbone staff -->
+		<item id="2177" chance="150"/><!-- life crystal -->
+	</loot>
+</monster>

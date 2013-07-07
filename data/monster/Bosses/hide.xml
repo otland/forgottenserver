@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hide" nameDescription="hide" race="venom" experience="240" speed="280">
+	<health now="500" max="500"/>
+	<look type="219" corpse="6060"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="40" poison="80"/>
+	</attacks>
+	<defenses armor="25" defense="40">
+		<defense name="speed" interval="2000" chance="10" speedchange="340" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="10"/>
+		<element firePercent="-15"/>
+		<element icePercent="-15"/>
+		<element physicalPercent="40"/>
+	</elements>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+		<immunity earth="1"/>
+	</immunities>
+	<loot>
+		<item id="2152" countmax="5" chance="41675" /> <!-- platinum coin -->
+		<item id="5879" chance="62175" /> <!-- spider silk -->
+		<item id="7903" chance="46325" /> <!-- terra hood -->
+		<item id="2457" chance="62175" /> <!-- steel helmet -->
+		<item id="2477" chance="53000" /> <!-- knight legs -->
+		<item id="2169" chance="38000" /> <!-- time ring -->
+	</loot>
+</monster>

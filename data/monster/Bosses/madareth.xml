@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Madareth" nameDescription="madareth" race="fire" experience="10000" speed="380" manacost="0">
+	<health now="55000" max="55000"/>
+	<look type="12" head="77" body="116" legs="82" feet="79" corpse="6068"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="85"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks/>
+	<defenses armor="48" defense="46"/>
+	<elements>
+		<element icePercent="15"/>
+		<element deathPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="3000" chance="5">
+		<voice sentence="I am going to play with yourself!" yell="1"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2514" chance="12650"/><!-- mastermind shield -->
+		<item id="2214" chance="8000"/><!-- ring of healing -->
+		<item id="2520" chance="7650"/><!-- demon shield -->
+		<item id="2145" chance="5800"/><!-- small amethyst -->
+	</loot>
+</monster>

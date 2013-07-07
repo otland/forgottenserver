@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mercury Blob" nameDescription="a mercury blob" race="undead" experience="180" speed="210" manacost="0">
+	<health now="150" max="150"/>
+	<look type="316" corpse="9961"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="85"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="30"/>
+		<attack name="drunk" interval="5000" chance="10" range="4" target="1" duration="15000">
+			<attribute key="areaEffect" value="stun"/>
+			<attribute key="shootEffect" value="holy"/>
+		</attack>
+		<attack name="energy" interval="3000" chance="5" range="5" target="1" min="-20" max="-40">
+			<attribute key="areaEffect" value="energy"/>
+			<attribute key="shootEffect" value="energy"/>
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10"/>
+	<immunities>
+		<immunity death="1"/>
+	</immunities>
+	<elements>
+		<element firePercent="15"/>
+		<element earthPercent="70"/>
+		<element icePercent="10"/>
+		<element physicalPercent="20"/>
+		<element holyPercent="75"/>
+	</elements>
+	<summons maxSummons="2">
+		<summon name="Mercury Blob" interval="3000" chance="10"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Crackle"/>
+	</voices>
+	<loot>
+		<item id="9966" chance="20000"/><!-- glob of mercury -->
+	</loot>
+</monster>

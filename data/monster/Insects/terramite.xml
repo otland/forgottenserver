@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Terramite" nameDescription="a terramite" race="venom" experience="160" speed="220" manacost="0">
+<health now="365" max="365"/>
+<look type="346" corpse="11347"/>
+<targetchange interval="5000" chance="12"/>
+<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="36"/>
+		<attack name="poison" interval="2000" chance="12" range="3" target="1" min="-5" max="-15">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="16" defense="19"/>
+	<elements>
+		<element physicalPercent="5"/>
+		<element firePercent="-10"/>
+		<element energyPercent="-5"/>
+		<element earthPercent="20"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zrp zrp!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="25" chance="31800" /> <!-- gold coin -->
+		<item id="11371" chance="9075" /> <!-- terramite legs -->
+		<item id="11369" chance="2450" /> <!-- terramite shell -->
+		<item id="11370" chance="3875" /> <!-- terramite eggs -->
+	</loot>
+</monster>

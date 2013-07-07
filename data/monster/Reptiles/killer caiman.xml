@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Killer Caiman" nameDescription="a killer caiman" race="blood" experience="800" speed="240" manacost="0">
+	<health now="1500" max="1500"/>
+	<look type="358" corpse="11430"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="90"/>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="speed" interval="2000" chance="10" speedchange="384" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="5"/>
+		<element icePercent="10"/>
+		<element earthPercent="20"/>
+		<element energyPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="11196" chance="10300" /><!-- piece of crocodile leather -->
+		<item id="2148" countmax="100" chance="21800" /><!-- gold coin -->
+		<item id="2148" countmax="77" chance="21800" /><!-- gold coin -->
+		<item id="2671" chance="40100" /><!-- ham -->
+		<item id="7632" chance="975" /><!-- giant shimmering pearl -->
+		<item id="11245" countmax="2" chance="4300" /><!-- bunch of ripe rice -->
+		<item id="2149" chance="1375" /><!-- small emerald -->
+		<item id="3982" chance="600" /><!-- crocodile boots -->
+	</loot>
+</monster>

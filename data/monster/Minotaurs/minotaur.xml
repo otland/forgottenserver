@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur" nameDescription="a minotaur" race="blood" experience="50" speed="170" manacost="330">
+	<health now="100" max="100"/>
+	<look type="25" corpse="5969"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
+	</attacks>
+	<defenses armor="11" defense="11"/>
+	<elements>
+		<element firePercent="20"/>
+		<element holyPercent="10"/>
+		<element icePercent="-10"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Kaplar!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="28" chance="17500"/><!-- gold coin -->
+		<item id="2510" chance="17750"/><!-- plate shield -->
+		<item id="2649" chance="15000"/><!-- leather legs -->
+		<item id="2398" chance="8500"/><!-- mace -->
+		<item id="2376" chance="9500"/><!-- sword -->
+		<item id="2464" chance="9200"/><!-- chain armor -->
+		<item id="2666" chance="9000"/><!-- meat -->
+		<item id="2460" chance="7250"/><!-- brass helmet -->
+		<item id="2458" chance="4500"/><!-- chain helmet -->
+		<item id="2386" chance="3950"/><!-- axe -->
+		<item id="2554" chance="2400"/><!-- shovel -->
+		<item id="5878" chance="850"/><!-- minotaur leather -->
+		<item id="2172" chance="250"/><!-- bronze amulet -->
+	</loot>
+</monster>

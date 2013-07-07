@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Death Blob" nameDescription="a death blob" race="undead" experience="300" speed="230" manacost="0">
+	<health now="320" max="320"/>
+	<look type="315" corpse="9960"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="85"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50"/>
+	</attacks>
+	<defenses armor="10" defense="10"/>
+	<elements>
+		<element firePercent="-10"/>
+		<element physicalPercent="30"/>
+		<element holyPercent="-25"/>
+		<element icePercent="20"/>
+		<element energyPercent="-5"/>
+	</elements>
+	<summons maxSummons="2">
+		<summon name="Death Blob" interval="3000" chance="10"/>
+	</summons>
+	<loot>
+		<item id="9968" chance="20000"/><!-- glob of tar -->
+	</loot>
+</monster>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Snake" nameDescription="a snake" race="blood" experience="10" speed="120" manacost="205">
+	<health now="15" max="15"/>
+	<look type="28" corpse="2817"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="8" poison="20"/>
+	</attacks>
+	<defenses armor="0" defense="1"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element energyPercent="22"/>
+		<element firePercent="-10"/>
+		<element icePercent="-10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zzzzzzt"/>
+	</voices>
+</monster>

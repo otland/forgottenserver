@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lizard Legionnaire" nameDescription="a lizard legionnaire" race="blood" experience="1100" speed="220" manacost="0">
+	<health now="1400" max="1400"/>
+	<look type="338" corpse="11276"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="3"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="50"/>
+		<attack name="physical" interval="2000" chance="10" range="7" target="1" min="-0" max="-310">
+			<attribute key="shootEffect" value="spear"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25"/>
+	<elements>
+		<element firePercent="45"/>
+		<element icePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Tssss!"/>
+	</voices>
+	<loot>
+		<item id="11334" chance="2525" /><!-- legionnaire flags -->
+		<item id="5881" countmax="3" chance="1525" /><!-- lizard scale -->
+		<item id="11323" chance="1500" /><!-- zaoan halberd -->
+		<item id="7588" chance="4550" /><!-- strong health potion -->
+		<item id="11335" chance="15425" /><!-- broken halberd -->
+		<item id="2148" countmax="100" chance="38450" /><!-- gold coin -->
+		<item id="2148" countmax="65" chance="38450" /><!-- gold coin -->
+		<item id="5876" chance="1475" /><!-- lizard leather -->
+		<item id="11305" chance="1250" /><!-- drakinata -->
+		<item id="11206" chance="1100" /><!-- red lantern -->
+		<item id="11245" chance="2425" /><!-- bunch of ripe rice -->
+		<item id="2145" countmax="2" chance="1175" /><!-- small diamond -->
+		<item id="11303" chance="925" /><!-- zaoan shoes -->
+		<item id="11336" chance="500" /><!-- lizard trophy -->
+	</loot>
+</monster>

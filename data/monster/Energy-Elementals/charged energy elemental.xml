@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Charged Energy Elemental" nameDescription="a charged energy Elemental" race="undead" experience="450" speed="270" manacost="0">
+	<health now="500" max="500"/>
+	<look type="293" corpse="8966"/>
+	<targetchange interval="20000" chance="15"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="85"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50"/>
+		<attack name="energy" interval="2000" chance="20" range="6" radius="4" target="1" min="-168" max="-100">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+		<attack name="energycondition" interval="1000" chance="15" radius="3" target="0">
+			<atttribute key="areaEffect" value="yellowenergy"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="15" min="90" max="150">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="25"/>
+		<element earthPercent="-15"/>
+	</elements>
+	<immunities>
+		<immunity energy="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="80" chance="25000"/><!-- gold coin -->
+		<item id="2148" countmax="44" chance="25000"/><!-- gold coin -->
+		<item id="7838" countmax="3" chance="3750"/><!-- flash arrow -->
+		<item id="8303" chance="3000"/><!-- energy soil -->
+	</loot>
+</monster>
