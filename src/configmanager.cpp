@@ -20,10 +20,13 @@
 
 #include "definitions.h"
 #include "configmanager.h"
+#include "game.h"
 #include "tools.h"
 
 #include <iostream>
 #include <stdexcept>
+
+extern Game g_game;
 
 ConfigManager::ConfigManager()
 {
@@ -157,7 +160,11 @@ bool ConfigManager::reload()
 		return false;
 	}
 
-	return loadFile(m_confString[CONFIG_FILE]);
+	bool result = loadFile(m_confString[CONFIG_FILE]);
+	if (transformToSHA1(getString(ConfigManager::MOTD)) != g_game.getMotdHash()) {
+		g_game.incrementMotdNum();
+	}
+	return result;
 }
 
 const std::string& ConfigManager::getString(string_config_t _what) const

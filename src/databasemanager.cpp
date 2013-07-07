@@ -19,6 +19,8 @@
 #include "otpch.h"
 #include "enums.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <stack>
 
 #include "databasemanager.h"
@@ -67,7 +69,6 @@ bool DatabaseManager::triggerExists(const std::string& triggerName)
 	query << "SELECT `TRIGGER_NAME` FROM `information_schema`.`TRIGGERS` WHERE `TRIGGER_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TRIGGER_NAME` = " << db->escapeString(triggerName);
 
 	DBResult* result = db->storeQuery(query.str());
-
 	if (!result) {
 		return false;
 	}
@@ -84,7 +85,6 @@ bool DatabaseManager::tableExists(const std::string& tableName)
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TABLE_NAME` = " << db->escapeString(tableName);
 
 	DBResult* result = db->storeQuery(query.str());
-
 	if (!result) {
 		return false;
 	}
@@ -98,8 +98,8 @@ bool DatabaseManager::isDatabaseSetup()
 	Database* db = Database::getInstance();
 	DBQuery query;
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB));
-	DBResult* result = db->storeQuery(query.str());
 
+	DBResult* result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
 	}
@@ -112,17 +112,16 @@ int32_t DatabaseManager::getDatabaseVersion()
 {
 	if (!tableExists("server_config")) {
 		Database* db = Database::getInstance();
+		DBQuery query;
 		db->executeQuery("CREATE TABLE `server_config` (`config` VARCHAR(50) NOT NULL, `value` VARCHAR(256) NOT NULL DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB");
 		db->executeQuery("INSERT INTO `server_config` VALUES ('db_version', 0)");
 		return 0;
 	}
 
 	int32_t version = 0;
-
 	if (getDatabaseConfig("db_version", version)) {
 		return version;
 	}
-
 	return -1;
 }
 
@@ -132,7 +131,6 @@ uint32_t DatabaseManager::updateDatabase()
 	DBQuery query;
 
 	int32_t databaseVersion = getDatabaseVersion();
-
 	if (databaseVersion < 0) {
 		return 0;
 	}
@@ -375,6 +373,41 @@ uint32_t DatabaseManager::updateDatabase()
 			db->executeQuery("CREATE TABLE IF NOT EXISTS `players_online` (`player_id` int(11) NOT NULL, PRIMARY KEY (`player_id`)) ENGINE=MEMORY");
 			registerDatabaseConfig("db_version", 11);
 			return 11;
+		}
+
+		case 11: {
+			std::cout << "> Updating database to version 12 (storing players record and message of the day in database)" << std::endl;
+
+			std::string motdHash;
+			std::string motdNum;
+
+			// Not in database yet, try to load it from file
+			// TODO: Remove this after next release
+			std::ifstream lastMotdFile("lastMotd.txt");
+			if (lastMotdFile) {
+				getline(lastMotdFile, motdNum);
+				getline(lastMotdFile, motdHash);
+				motdHash = transformToSHA1(motdHash);
+				lastMotdFile.close();
+			}
+
+			uint32_t playersRecord;
+			FILE* playersRecordFile = fopen("playersRecord.txt", "r");
+			if (playersRecordFile) {
+				int32_t tmp = fscanf(playersRecordFile, "%u", &playersRecord);
+				if (tmp == EOF) {
+					playersRecord = 0;
+				}
+				fclose(playersRecordFile);
+			} else {
+				playersRecord = 0;
+			}
+
+			query << "INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '" << playersRecord << "'), ('motd_hash', " << db->escapeString(motdHash) << "), ('motd_num', " << db->escapeString(motdNum) << ")";
+			db->executeQuery(query.str());
+
+			registerDatabaseConfig("db_version", 12);
+			return 12;
 		}
 
 		default:

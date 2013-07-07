@@ -1126,7 +1126,6 @@ void Commands::newItem(Player* player, const std::string& cmd, const std::string
 	}
 
 	const ItemType& it = Item::items[itemId];
-
 	if (it.id == 0) {
 		return;
 	}
@@ -1135,11 +1134,6 @@ void Commands::newItem(Player* player, const std::string& cmd, const std::string
 	outfit.lookTypeEx = itemId;
 
 	ConditionOutfit* outfitCondition = new ConditionOutfit(CONDITIONID_COMBAT, CONDITION_OUTFIT, -1);
-
-	if (!outfitCondition) {
-		return;
-	}
-
 	outfitCondition->addOutfit(outfit);
 	player->addCondition(outfitCondition);
 }
@@ -1247,7 +1241,7 @@ void Commands::unban(Player* player, const std::string& cmd, const std::string& 
 	std::string name = param;
 	bool playerExists = false;
 
-	if (IOLoginData::getInstance()->playerExists(name)) {
+	if (IOLoginData::getInstance()->formatPlayerName(name)) {
 		playerExists = true;
 		accountNumber = IOLoginData::getInstance()->getAccountNumberByName(name);
 

@@ -5124,15 +5124,7 @@ int32_t LuaScriptInterface::luaCreateCombatObject(lua_State* L)
 		return 1;
 	}
 
-	Combat* combat = new Combat;
-
-	if (!combat) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
-		lua_pushboolean(L, false);
-		return 1;
-	}
-
-	uint32_t newCombatId = env->addCombatObject(combat);
+	uint32_t newCombatId = env->addCombatObject(new Combat);
 	lua_pushnumber(L, newCombatId);
 	return 1;
 }

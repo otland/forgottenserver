@@ -178,7 +178,7 @@ std::string Status::getStatusString() const
 	p = xmlNewNode(NULL, (const xmlChar*)"players");
 	addXMLProperty(p, "online", m_playersOnline);
 	addXMLProperty(p, "max", g_config.getNumber(ConfigManager::MAX_PLAYERS));
-	addXMLProperty(p, "peak", g_game.getLastPlayersRecord());
+	addXMLProperty(p, "peak", g_game.getPlayersRecord());
 	xmlAddChild(root, p);
 
 	p = xmlNewNode(NULL, (const xmlChar*)"monsters");
@@ -241,7 +241,7 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMe
 		output->AddByte(0x20);
 		output->AddU32(m_playersOnline);
 		output->AddU32(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-		output->AddU32(g_game.getLastPlayersRecord());
+		output->AddU32(g_game.getPlayersRecord());
 	}
 
 	if (requestedInfo & REQUEST_MAP_INFO) {

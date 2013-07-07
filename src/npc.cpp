@@ -67,16 +67,10 @@ void Npcs::reload()
 Npc* Npc::createNpc(const std::string& name)
 {
 	Npc* npc = new Npc(name);
-
-	if (!npc) {
-		return NULL;
-	}
-
 	if (!npc->load()) {
 		delete npc;
 		return NULL;
 	}
-
 	return npc;
 }
 

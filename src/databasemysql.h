@@ -50,8 +50,6 @@ class DatabaseMySQL : public _Database
 		DATABASE_VIRTUAL bool executeQuery(const std::string& query);
 		DATABASE_VIRTUAL DBResult* storeQuery(const std::string& query);
 
-		DATABASE_VIRTUAL uint64_t getLastInsertedRowID();
-
 		DATABASE_VIRTUAL std::string escapeString(const std::string& s);
 		DATABASE_VIRTUAL std::string escapeBlob(const char* s, uint32_t length);
 

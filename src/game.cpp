@@ -76,7 +76,7 @@ Game::Game()
 
 	map = NULL;
 	lastStageLevel = 0;
-	lastPlayersRecord = 0;
+	playersRecord = 0;
 	useLastStageLevel = false;
 	stagesEnabled = false;
 	stateTime = OTSYS_TIME();
@@ -171,7 +171,7 @@ void Game::setGameState(GameState_t newState)
 
 				Mounts::getInstance()->loadFromXml();
 
-				loadMotd();
+				loadMotdNum();
 				loadPlayersRecord();
 
 				loadGameState();
@@ -189,6 +189,7 @@ void Game::setGameState(GameState_t newState)
 					it = Player::listPlayer.list.begin();
 				}
 
+				saveMotdNum();
 				saveGameState();
 
 				g_dispatcher.addTask(
@@ -2532,12 +2533,11 @@ bool Game::playerCloseChannel(uint32_t playerId, uint16_t channelId)
 bool Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
-	if (!IOLoginData::getInstance()->playerExists(receiver)) {
+	if (!IOLoginData::getInstance()->formatPlayerName(receiver)) {
 		player->sendCancel("A player with this name does not exist.");
 		return true;
 	}
@@ -3075,7 +3075,7 @@ bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 		if (writeItem->getText() != text) {
 			writeItem->setText(text);
 			writeItem->setWriter(player->getName());
-			writeItem->setDate(std::time(NULL));
+			writeItem->setDate(time(NULL));
 		}
 	} else {
 		writeItem->resetText();
@@ -5664,7 +5664,6 @@ Position Game::getClosestFreeTile(Player* player, Creature* teleportedCreature, 
 		}
 	} else if (teleportedCreature) {
 		Player* teleportedPlayer = teleportedCreature->getPlayer();
-
 		if (teleportedPlayer) {
 			for (int32_t i = 0; i < 9; i++) {
 				if (tile[i] && ((!tile[i]->hasProperty(IMMOVABLEBLOCKSOLID) && tile[i]->getCreatureCount() == 0) || teleportedPlayer->getAccountType() == ACCOUNT_TYPE_GOD)) {
@@ -5679,96 +5678,86 @@ Position Game::getClosestFreeTile(Player* player, Creature* teleportedCreature, 
 			}
 		}
 	}
-
 	return Position(0, 0, 0);
 }
 
-int32_t Game::getMotdNum()
+void Game::loadMotdNum()
 {
-	if (lastMotdText != g_config.getString(ConfigManager::MOTD)) {
-		lastMotdNum++;
-		lastMotdText = g_config.getString(ConfigManager::MOTD);
+	Database* db = Database::getInstance();
 
-		FILE* file = fopen("lastMotd.txt", "w");
+	DBQuery query; // Keep it here for database locking
 
-		if (file != NULL) {
-			fprintf(file, "%d", lastMotdNum);
-			fprintf(file, "\n%s", lastMotdText.c_str());
-			fclose(file);
-		}
+	DBResult* result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'motd_num'");
+	if (result) {
+		motdNum = atoi(result->getDataString("value").c_str());
+		db->freeResult(result);
+	} else {
+		db->executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('motd_num', '0')");
 	}
 
-	return lastMotdNum;
+	result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'motd_hash'");
+	if (result) {
+		motdHash = result->getDataString("value");
+		if (motdHash != transformToSHA1(g_config.getString(ConfigManager::MOTD))) {
+			++motdNum;
+		}
+		db->freeResult(result);
+	} else {
+		db->executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('motd_hash', '')");
+	}
 }
 
-void Game::loadMotd()
+void Game::saveMotdNum()
 {
-	std::ifstream file("lastMotd.txt");
+	Database* db = Database::getInstance();
 
-	if (!file) {
-		std::cout << "> ERROR: Failed to load lastMotd.txt" << std::endl;
-		lastMotdNum = random_range(5, 500);
-		return;
-	}
+	DBQuery query;
+	query << "UPDATE `server_config` SET `value` = '" << motdNum << "' WHERE `config` = 'motd_num'";
+	db->executeQuery(query.str());
 
-	std::string tmpStr;
-	getline(file, tmpStr);
-	getline(file, lastMotdText);
-	lastMotdNum = atoi(tmpStr.c_str());
-	file.close();
+	query.str("");
+	query << "UPDATE `server_config` SET `value` = '" << transformToSHA1(g_config.getString(ConfigManager::MOTD)) << "' WHERE `config` = 'motd_num'";
+	db->executeQuery(query.str());
 }
 
 void Game::checkPlayersRecord()
 {
-	if (getPlayersOnline() > lastPlayersRecord) {
-		uint32_t tmplPlayersRecord = lastPlayersRecord;
-		lastPlayersRecord = getPlayersOnline();
+	const uint32_t playersOnline = getPlayersOnline();
+	if (playersOnline > playersRecord) {
+		uint32_t previousRecord = playersRecord;
+		playersRecord = playersOnline;
+
 		GlobalEventMap recordEvents = g_globalEvents->getEventMap(GLOBALEVENT_RECORD);
-
 		for (GlobalEventMap::iterator it = recordEvents.begin(); it != recordEvents.end(); ++it) {
-			it->second->executeRecord(lastPlayersRecord, tmplPlayersRecord);
+			it->second->executeRecord(previousRecord, playersRecord);
 		}
-
-		savePlayersRecord();
+		updatePlayersRecord();
 	}
 }
 
-void Game::savePlayersRecord()
+void Game::updatePlayersRecord()
 {
-	FILE* file = fopen("playersRecord.txt", "w");
+	Database* db = Database::getInstance();
 
-	if (file == NULL) {
-		std::cout << "> ERROR: Failed to save playersRecord.txt" << std::endl;
-		return;
-	}
-
-	int32_t tmp = fprintf(file, "%u", lastPlayersRecord);
-
-	if (tmp == EOF) {
-		std::cout << "> ERROR: Failed to save playersRecord.txt" << std::endl;
-	}
-
-	fclose(file);
+	DBQuery query;
+	query << "UPDATE `server_config` SET `value` = '" << playersRecord << "' WHERE `config` = 'players_record'";
+	db->executeQuery(query.str());
 }
 
 void Game::loadPlayersRecord()
 {
-	FILE* file = fopen("playersRecord.txt", "r");
+	Database* db = Database::getInstance();
 
-	if (file == NULL) {
-		std::cout << "> ERROR: Failed to load playersRecord.txt" << std::endl;
-		lastPlayersRecord = 0;
-		return;
+	DBQuery query; // Keep it here for database locking
+
+	DBResult* result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'");
+	if (result) {
+		playersRecord = atoi(result->getDataString("value").c_str());
+		db->freeResult(result);
+	} else {
+		query << "INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')";
+		db->executeQuery(query.str());
 	}
-
-	int32_t tmp = fscanf(file, "%u", &lastPlayersRecord);
-
-	if (tmp == EOF) {
-		std::cout << "> ERROR: Failed to read playersRecord.txt" << std::endl;
-		lastPlayersRecord = 0;
-	}
-
-	fclose(file);
 }
 
 uint64_t Game::getExperienceStage(uint32_t level)
@@ -6748,7 +6737,7 @@ bool Game::violationWindow(Player* player, std::string targetPlayerName, int32_t
 		return false;
 	}
 
-	if (!IOLoginData::getInstance()->playerExists(targetPlayerName)) {
+	if (!IOLoginData::getInstance()->formatPlayerName(targetPlayerName)) {
 		player->sendCancel("A player with this name does not exist.");
 		return false;
 	}
@@ -6758,7 +6747,6 @@ bool Game::violationWindow(Player* player, std::string targetPlayerName, int32_t
 	uint32_t guid;
 
 	Player* targetPlayer = getPlayerByName(targetPlayerName);
-
 	if (targetPlayer) {
 		targetAccountType = targetPlayer->getAccountType();
 		guid = targetPlayer->getGUID();

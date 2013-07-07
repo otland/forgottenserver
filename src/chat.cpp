@@ -269,26 +269,22 @@ ChatChannel* Chat::createChannel(Player* player, uint16_t channelId)
 	switch (channelId) {
 		case CHANNEL_GUILD: {
 			Guild* guild = player->getGuild();
-
 			if (guild) {
 				ChatChannel* newChannel = new ChatChannel(channelId, guild->getName());
-
-				if (newChannel) {
-					m_guildChannels[guild->getId()] = newChannel;
-				}
-
+				m_guildChannels[guild->getId()] = newChannel;
 				return newChannel;
 			}
+			break;
 		}
 
 		case CHANNEL_PARTY: {
-			ChatChannel* newChannel = NULL;
-
-			if (player->getParty() && (newChannel = new ChatChannel(channelId, "Party"))) {
-				m_partyChannels[player->getParty()] = newChannel;
+			Party* party = player->getParty();
+			if (party) {
+				ChatChannel* newChannel = new ChatChannel(channelId, "Party");
+				m_partyChannels[party] = newChannel;
+				return newChannel;
 			}
-
-			return newChannel;
+			break;
 		}
 
 		case CHANNEL_PRIVATE: {
@@ -300,22 +296,18 @@ ChatChannel* Chat::createChannel(Player* player, uint16_t channelId)
 			//find a free private channel slot
 			for (uint16_t i = 100; i < 10000; ++i) {
 				if (m_privateChannels.find(i) == m_privateChannels.end()) {
-					PrivateChatChannel* newChannel = NULL;
-
-					if ((newChannel = new PrivateChatChannel(i, player->getName() + "'s Channel"))) {
-						newChannel->setOwner(player->getGUID());
-						m_privateChannels[i] = newChannel;
-					}
-
+					PrivateChatChannel* newChannel = new PrivateChatChannel(i, player->getName() + "'s Channel");
+					newChannel->setOwner(player->getGUID());
+					m_privateChannels[i] = newChannel;
 					return newChannel;
 				}
 			}
+			break;
 		}
 
 		default:
 			break;
 	}
-
 	return NULL;
 }
 

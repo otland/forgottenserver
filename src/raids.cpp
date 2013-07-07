@@ -109,11 +109,6 @@ bool Raids::loadFromXml()
 
 				Raid* newRaid = new Raid(name, interval, margin);
 
-				if (!newRaid) {
-					xmlFreeDoc(doc);
-					return false;
-				}
-
 				bool ret = newRaid->loadFromXml("data/raids/" + file);
 
 				if (!ret) {

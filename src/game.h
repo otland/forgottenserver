@@ -258,8 +258,8 @@ class Game
 		uint32_t getCreaturesOnline() {
 			return (uint32_t)listCreature.list.size();
 		}
-		uint32_t getLastPlayersRecord() const {
-			return lastPlayersRecord;
+		uint32_t getPlayersRecord() const {
+			return playersRecord;
 		}
 
 		void getWorldLightInfo(LightInfo& lightInfo) const;
@@ -381,8 +381,6 @@ class Game
 
 		Position getClosestFreeTile(Player* player, Creature* teleportedCreature, const Position& toPos, bool toCreature);
 
-		int32_t getMotdNum();
-		void loadMotd();
 		void loadPlayersRecord();
 		void checkPlayersRecord();
 
@@ -572,6 +570,12 @@ class Game
 			return serverSaveMessage[key];
 		}
 
+		void loadMotdNum();
+		void saveMotdNum();
+		const std::string& getMotdHash() const { return motdHash; }
+		int32_t getMotdNum() const { return motdNum; }
+		void incrementMotdNum() { motdNum++; }
+
 		void sendOfflineTrainingDialog(Player* player);
 
 		void addPlayerToNameMap(Player* player);
@@ -642,10 +646,11 @@ class Game
 		ServiceManager* services;
 		Map* map;
 
-		void savePlayersRecord();
-		std::string lastMotdText;
-		int32_t lastMotdNum;
-		uint32_t lastPlayersRecord;
+		void updatePlayersRecord();
+		uint32_t playersRecord;
+
+		std::string motdHash;
+		int32_t motdNum;
 
 		StageList stages;
 		bool stagesEnabled;

@@ -1046,37 +1046,19 @@ bool IOLoginData::playerExists(const std::string& name)
 	return false;
 }
 
-bool IOLoginData::playerExists(std::string& name)
+bool IOLoginData::formatPlayerName(std::string& name)
 {
 	Database* db = Database::getInstance();
 
 	DBQuery query;
-	DBResult* result;
-
 	query << "SELECT `name` FROM `players` WHERE `name` = " << db->escapeString(name);
 
-	if ((result = db->storeQuery(query.str()))) {
-		name = result->getDataString("name");
-		db->freeResult(result);
-		return true;
-	}
-
-	return false;
-}
-
-bool IOLoginData::playerExists(uint32_t guid)
-{
-	Database* db = Database::getInstance();
-
-	DBQuery query;
-	DBResult* result;
-
-	query << "SELECT `id` FROM `players` WHERE `id` = " << guid;
-
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return false;
 	}
 
+	name = result->getDataString("name");
 	db->freeResult(result);
 	return true;
 }

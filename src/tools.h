@@ -38,9 +38,9 @@ enum DistributionType_t {
 	DISTRO_NORMAL
 };
 
-extern std::string transformToMD5(const std::string& plainText, bool upperCase = false);
-extern std::string transformToSHA1(const std::string& plainText, bool upperCase = false);
-extern bool passwordTest(const std::string& plain, std::string& hash);
+extern std::string transformToMD5(const std::string& plainText);
+extern std::string transformToSHA1(const std::string& plainText);
+extern bool passwordTest(const std::string& plain, const std::string& hash);
 
 extern void replaceString(std::string& str, const std::string& sought, const std::string& replacement);
 extern void trim_right(std::string& source, const std::string& t);

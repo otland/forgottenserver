@@ -864,7 +864,7 @@ bool Houses::payHouses()
 		return true;
 	}
 
-	uint32_t currentTime = time(NULL);
+	time_t currentTime = time(NULL);
 
 	for (HouseMap::iterator it = houseMap.begin(); it != houseMap.end(); ++it) {
 		House* house = it->second;

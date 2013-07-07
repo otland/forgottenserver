@@ -101,7 +101,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	std::string password = msg.GetString();
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(0x0A, "Only clients with protocol " CLIENT_VERSION_STR " allowed!\nIt can be downloaded from our website.");
+		disconnectClient(0x0A, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
 		return false;
 	}
 

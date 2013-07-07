@@ -35,64 +35,46 @@
 
 extern ConfigManager g_config;
 
-std::string transformToSHA1(const std::string& plainText, bool upperCase /*= false*/)
+std::string transformToSHA1(const std::string& plainText)
 {
 	SHA1 sha1;
 	unsigned sha1Hash[5];
-	std::ostringstream hexStream;
 
 	sha1.Input((const unsigned char*)plainText.c_str(), plainText.length());
 	sha1.Result(sha1Hash);
 
-	hexStream.flags(std::ios::hex | std::ios::uppercase);
-
+	std::ostringstream hexStream;
+	hexStream.flags(std::ios::hex);
 	for (uint32_t i = 0; i < 5; ++i) {
 		hexStream << std::setw(8) << std::setfill('0') << (uint32_t)sha1Hash[i];
 	}
-
-	std::string hexStr = hexStream.str();
-
-	if (!upperCase) {
-		toLowerCaseString(hexStr);
-	}
-
-	return hexStr;
+	return hexStream.str();
 }
 
-std::string transformToMD5(const std::string& plainText, bool upperCase /*= false*/)
+std::string transformToMD5(const std::string& plainText)
 {
 	MD5_CTX m_md5;
-	std::ostringstream hexStream;
 
 	MD5Init(&m_md5, 0);
 	MD5Update(&m_md5, (const unsigned char*)plainText.c_str(), plainText.length());
 	MD5Final(&m_md5);
 
-	hexStream.flags(std::ios::hex | std::ios::uppercase);
-
+	std::ostringstream hexStream;
+	hexStream.flags(std::ios::hex);
 	for (uint32_t i = 0; i < 16; ++i) {
 		hexStream << std::setw(2) << std::setfill('0') << (uint32_t)m_md5.digest[i];
 	}
-
-	std::string hexStr = hexStream.str();
-
-	if (!upperCase) {
-		toLowerCaseString(hexStr);
-	}
-
-	return hexStr;
+	return hexStream.str();
 }
 
-bool passwordTest(const std::string& plain, std::string& hash)
+bool passwordTest(const std::string& plain, const std::string& hash)
 {
 	switch (g_config.getNumber(ConfigManager::PASSWORD_TYPE)) {
 		case PASSWORD_TYPE_MD5:
-			std::transform(hash.begin(), hash.end(), hash.begin(), upchar);
-			return transformToMD5(plain, true) == hash;
+			return transformToMD5(plain) == hash;
 
 		case PASSWORD_TYPE_SHA1:
-			std::transform(hash.begin(), hash.end(), hash.begin(), upchar);
-			return transformToSHA1(plain, true) == hash;
+			return transformToSHA1(plain) == hash;
 
 		default:
 			return plain == hash;

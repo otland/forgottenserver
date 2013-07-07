@@ -131,7 +131,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingS
 		player->setID();
 
 		if (IOBan::getInstance()->isPlayerNamelocked(name) && accnumber > 1) {
-			disconnectClient(0x14, "Your character has been namelocked.\nLogin on the website to change your name.");
+			disconnectClient(0x14, "Your character has been namelocked.");
 			return false;
 		}
 
@@ -140,13 +140,11 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingS
 			return false;
 		}
 
-		/*
 		if(gamemasterLogin && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)
 		{
 			disconnectClient(0x14, "You are not a gamemaster!");
 			return false;
 		}
-		*/
 
 		if (g_game.getGameState() == GAME_STATE_CLOSING && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
 			disconnectClient(0x14, "The game is just going down.\nPlease try again later.");
@@ -164,7 +162,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingS
 		}
 
 		if (IOLoginData::getInstance()->isPendingDeletion(player->getName())) {
-			disconnectClient(0x14, "Your character is pending deletion,\nyou can restore your character at the website.");
+			disconnectClient(0x14, "Your character is pending deletion.");
 			return false;
 		}
 

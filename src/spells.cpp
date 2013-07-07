@@ -984,14 +984,8 @@ int32_t Spell::getSoulCost() const
 ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t& outfit, int32_t time)
 {
 	ConditionOutfit* outfitCondition = new ConditionOutfit(CONDITIONID_COMBAT, CONDITION_OUTFIT, time);
-
-	if (!outfitCondition) {
-		return RET_NOTPOSSIBLE;
-	}
-
 	outfitCondition->addOutfit(outfit);
 	creature->addCondition(outfitCondition);
-
 	return RET_NOERROR;
 }
 

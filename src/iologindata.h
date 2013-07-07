@@ -66,8 +66,7 @@ class IOLoginData
 		bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
 		bool getNameByGuid(uint32_t guid, std::string& name);
 		bool playerExists(const std::string& name);
-		bool playerExists(std::string& name);
-		bool playerExists(uint32_t guid);
+		bool formatPlayerName(std::string& name);
 		bool changeName(uint32_t guid, const std::string& newName);
 		uint32_t getAccountNumberByName(const std::string& name);
 		bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);

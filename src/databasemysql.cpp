@@ -192,11 +192,6 @@ DBResult* DatabaseMySQL::storeQuery(const std::string& query)
 	return verifyResult(res);
 }
 
-uint64_t DatabaseMySQL::getLastInsertedRowID()
-{
-	return (uint64_t)mysql_insert_id(&m_handle);
-}
-
 std::string DatabaseMySQL::escapeString(const std::string& s)
 {
 	return escapeBlob(s.c_str(), s.length());
