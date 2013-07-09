@@ -4161,7 +4161,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
                      const std::string& receiver, const std::string& text)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -4169,7 +4168,6 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	player->resetIdleTime();
 
 	uint32_t muteTime = player->isMuted();
-
 	if (muteTime > 0) {
 		std::ostringstream ss;
 		ss << "You are still muted for " << muteTime << " seconds.";
@@ -4181,11 +4179,11 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return true;
 	}
 
-	if (text.length() >= 1 && text[0] == '/' && player->isAccessPlayer()) {
+	if (playerSaySpell(player, type, text)) {
 		return true;
 	}
 
-	if (playerSaySpell(player, type, text)) {
+	if (!text.empty() && text[0] == '/' && player->isAccessPlayer()) {
 		return true;
 	}
 
@@ -4244,7 +4242,6 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	std::string words = text;
 
 	TalkActionResult_t result = g_talkActions->playerSaySpell(player, type, words);
-
 	if (result == TALKACTION_BREAK) {
 		return true;
 	}
