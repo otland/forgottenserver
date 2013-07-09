@@ -53,10 +53,8 @@ bool Ban::acceptConnection(uint32_t clientip)
 		return false;
 	}
 
-	connectBlock.lastAttempt = currentTime;
-
 	int64_t timeDiff = currentTime - connectBlock.lastAttempt;
-
+	connectBlock.lastAttempt = currentTime;
 	if (timeDiff <= 8000) {
 		if (++connectBlock.count > 3) {
 			connectBlock.count = 0;
