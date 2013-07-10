@@ -183,10 +183,9 @@ bool Npc::loadFromXml(const std::string& filename)
 
 		p = root->children;
 
-		std::string scriptfile = "";
-
+		std::string scriptfile;
 		if (readXMLString(root, "script", strValue)) {
-			scriptfile = "data/npc/scripts/" + strValue;
+			scriptfile = strValue;
 		}
 
 		if (readXMLString(root, "name", strValue)) {
@@ -203,12 +202,6 @@ bool Npc::loadFromXml(const std::string& filename)
 
 		if (readXMLInteger(root, "attackable", intValue)) {
 			attackable = (intValue != 0);
-		}
-
-		if (readXMLInteger(root, "autowalk", intValue)) {
-			//Deprecated attribute.
-			std::cout << "[Notice - Npc::Npc] NPC Name: " << name << " - autowalk has been deprecated, use walkinterval." << std::endl;
-			walkTicks = 2000;
 		}
 
 		if (readXMLInteger(root, "walkinterval", intValue)) {
@@ -2856,9 +2849,6 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "selfTurn", NpcScriptInterface::luaActionTurn);
 	lua_register(m_luaState, "selfFollow", NpcScriptInterface::luaActionFollow);
 	lua_register(m_luaState, "selfGetPosition", NpcScriptInterface::luaSelfGetPos);
-	lua_register(m_luaState, "creatureGetName", NpcScriptInterface::luaCreatureGetName);
-	lua_register(m_luaState, "creatureGetName2", NpcScriptInterface::luaCreatureGetName2);
-	lua_register(m_luaState, "creatureGetPosition", NpcScriptInterface::luaCreatureGetPos);
 	lua_register(m_luaState, "getDistanceTo", NpcScriptInterface::luagetDistanceTo);
 	lua_register(m_luaState, "doNpcSetCreatureFocus", NpcScriptInterface::luaSetNpcFocus);
 	lua_register(m_luaState, "getNpcCid", NpcScriptInterface::luaGetNpcCid);
@@ -2870,35 +2860,6 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "openShopWindow", NpcScriptInterface::luaOpenShopWindow);
 	lua_register(m_luaState, "closeShopWindow", NpcScriptInterface::luaCloseShopWindow);
 	lua_register(m_luaState, "doSellItem", NpcScriptInterface::luaDoSellItem);
-}
-
-int32_t NpcScriptInterface::luaCreatureGetName2(lua_State* L)
-{
-	//creatureGetName2(name) - returns creature id
-	popString(L);
-	reportErrorFunc("Deprecated function.");
-	lua_pushnil(L);
-	return 1;
-}
-
-int32_t NpcScriptInterface::luaCreatureGetName(lua_State* L)
-{
-	//creatureGetName(cid)
-	popNumber(L);
-	reportErrorFunc("Deprecated function. Use getCreatureName");
-	lua_pushstring(L, "");
-	return 1;
-}
-
-int32_t NpcScriptInterface::luaCreatureGetPos(lua_State* L)
-{
-	//creatureGetPosition(cid)
-	popNumber(L);
-	reportErrorFunc("Deprecated function. Use getCreaturePosition");
-	lua_pushnil(L);
-	lua_pushnil(L);
-	lua_pushnil(L);
-	return 3;
 }
 
 int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
