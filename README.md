@@ -5,8 +5,12 @@ The Forgotten Server is a server application written in C++ for the MMORPG Tibia
 
 #### Building
 
-On most systems you can build the library using the following commands:
+On most systems you can build the server using the following commands:
 
 	$ mkdir build && cd build
 	$ cmake ..
 	$ make
+
+To build the Release variant, use
+    
+    $ cmake -DCMAKE_BUILD_TYPE=Release ..
