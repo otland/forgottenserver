@@ -510,9 +510,6 @@ class Npc : public Creature
 			return walkTicks > 0;
 		}
 
-		virtual uint32_t idRange() {
-			return 0x80000000;
-		}
 		static AutoList<Npc> listNpc;
 		void removeList() {
 			listNpc.removeList(getID());

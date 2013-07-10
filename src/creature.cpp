@@ -32,9 +32,7 @@
 #include <vector>
 #include <algorithm>
 
-boost::recursive_mutex AutoID::autoIDLock;
-uint32_t AutoID::count = 1000;
-AutoID::list_type AutoID::list;
+uint32_t Creature::autoID = 0;
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;

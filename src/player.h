@@ -180,9 +180,6 @@ class Player : public Creature, public Cylinder
 		uint32_t getGUID() const {
 			return guid;
 		}
-		virtual uint32_t idRange() {
-			return 0x10000000;
-		}
 		virtual bool canSeeInvisibility() const {
 			return hasFlag(PlayerFlag_CanSenseInvisibility) || accessLevel;
 		}

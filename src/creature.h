@@ -105,7 +105,7 @@ class FrozenPathingConditionCall
 // Defines the Base class for all creatures and base functions which
 // every creature has
 
-class Creature : public AutoID, virtual public Thing
+class Creature : virtual public Thing
 {
 	protected:
 		Creature();
@@ -147,18 +147,14 @@ class Creature : public AutoID, virtual public Thing
 		virtual CreatureType_t getType() const = 0;
 
 		void setID() {
-			/*
-			 * 0x20000000 - Player
-			 * 0x30000000 - NPC
-			 * 0x40000000 - Monster
-			 */
-			this->id = auto_id | this->idRange();
+			if (this->id == 0) {
+				this->id = ++autoID;
+			}
 		}
 		void setRemoved() {
 			isInternalRemoved = true;
 		}
 
-		virtual uint32_t idRange() = 0;
 		uint32_t getID() const {
 			return id;
 		}
@@ -549,6 +545,8 @@ class Creature : public AutoID, virtual public Thing
 		uint32_t lastHitCreature;
 		uint32_t blockCount;
 		uint32_t blockTicks;
+
+		static uint32_t autoID;
 
 		//creature script events
 		uint32_t scriptEventsBitField;

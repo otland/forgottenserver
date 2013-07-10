@@ -59,9 +59,6 @@ class Monster : public Creature
 			return this;
 		}
 
-		virtual uint32_t idRange() {
-			return 0x40000000;
-		}
 		static AutoList<Monster> listMonster;
 		void removeList() {
 			listMonster.removeList(getID());
