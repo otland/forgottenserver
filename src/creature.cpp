@@ -32,7 +32,7 @@
 #include <vector>
 #include <algorithm>
 
-OTSYS_THREAD_LOCKVAR AutoID::autoIDLock;
+boost::recursive_mutex AutoID::autoIDLock;
 uint32_t AutoID::count = 1000;
 AutoID::list_type AutoID::list;
 

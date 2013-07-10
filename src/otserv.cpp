@@ -80,8 +80,9 @@ Monsters g_monsters;
 Vocations g_vocations;
 RSA g_RSA;
 
-OTSYS_THREAD_LOCKVAR g_loaderLock;
-OTSYS_THREAD_SIGNALVAR g_loaderSignal;
+boost::mutex g_loaderLock;
+boost::condition_variable g_loaderSignal;
+boost::unique_lock<boost::mutex> g_loaderUniqueLock(g_loaderLock);
 
 #include "networkmessage.h"
 
@@ -116,9 +117,6 @@ int main(int argc, char* argv[])
 	sigaction(SIGPIPE, &sigh, NULL);
 #endif
 
-	OTSYS_THREAD_LOCKVARINIT(g_loaderLock);
-	OTSYS_THREAD_SIGNALVARINIT(g_loaderSignal);
-
 	ServiceManager servicer;
 
 	g_dispatcher.start();
@@ -126,9 +124,7 @@ int main(int argc, char* argv[])
 
 	g_dispatcher.addTask(createTask(boost::bind(mainLoader, argc, argv, &servicer)));
 
-	OTSYS_THREAD_LOCK(g_loaderLock, "main()");
-	OTSYS_THREAD_WAITSIGNAL(g_loaderSignal, g_loaderLock);
-	OTSYS_SLEEP(1000);
+	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (servicer.is_running()) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
@@ -436,5 +432,5 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	g_game.start(services);
 	g_game.setGameState(GAME_STATE_NORMAL);
-	OTSYS_THREAD_SIGNAL_SEND(g_loaderSignal);
+	g_loaderSignal.notify_all();
 }

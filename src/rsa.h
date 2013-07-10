@@ -20,6 +20,7 @@
 #define __OTSERV_RSA_H__
 
 #include "otsystem.h"
+#include <boost/thread/recursive_mutex.hpp>
 
 #include "gmp.h"
 
@@ -38,7 +39,7 @@ class RSA
 	protected:
 		bool m_keySet;
 
-		OTSYS_THREAD_LOCKVAR rsaLock;
+		boost::recursive_mutex rsaLock;
 
 		//use only GMP
 		mpz_t m_p, m_q, m_u, m_d, m_dp, m_dq, m_mod;

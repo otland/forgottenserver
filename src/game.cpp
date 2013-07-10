@@ -86,8 +86,6 @@ Game::Game()
 		serverSaveMessage[i] = false;
 	}
 
-	OTSYS_THREAD_LOCKVARINIT(AutoID::autoIDLock);
-
 	lastBucket = 0;
 
 	//(1440 minutes/day)/(3600 seconds/day)*10 seconds event interval

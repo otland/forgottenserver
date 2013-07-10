@@ -21,6 +21,7 @@
 
 #include <set>
 #include <map>
+#include <boost/thread/recursive_mutex.hpp>
 
 #include "creature.h"
 #include "otsystem.h"
@@ -52,7 +53,7 @@ class AutoID
 {
 	public:
 		AutoID() {
-			OTSYS_THREAD_LOCK_CLASS lockClass(autoIDLock);
+			boost::recursive_mutex::scoped_lock lockClass(autoIDLock);
 			count++;
 
 			if (count >= 0xFFFFFF) {
@@ -82,7 +83,7 @@ class AutoID
 		typedef OTSERV_HASH_SET<uint32_t> list_type;
 
 		uint32_t auto_id;
-		static OTSYS_THREAD_LOCKVAR autoIDLock;
+		static boost::recursive_mutex autoIDLock;
 
 	protected:
 		static uint32_t count;

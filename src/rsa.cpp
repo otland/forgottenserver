@@ -24,7 +24,6 @@
 
 RSA::RSA()
 {
-	OTSYS_THREAD_LOCKVARINIT(rsaLock);
 	m_keySet = false;
 	mpz_init2(m_p, 1024);
 	mpz_init2(m_q, 1024);
@@ -65,7 +64,7 @@ bool RSA::setKey(const std::string& file)
 
 void RSA::setKey(const char* p, const char* q, const char* d)
 {
-	OTSYS_THREAD_LOCK_CLASS lockClass(rsaLock);
+	boost::recursive_mutex::scoped_lock lockClass(rsaLock);
 
 	mpz_set_str(m_p, p, 10);
 	mpz_set_str(m_q, q, 10);
@@ -89,7 +88,7 @@ void RSA::setKey(const char* p, const char* q, const char* d)
 
 void RSA::decrypt(char* msg, int32_t size)
 {
-	OTSYS_THREAD_LOCK_CLASS lockClass(rsaLock);
+	boost::recursive_mutex::scoped_lock lockClass(rsaLock);
 
 	mpz_t c, v1, v2, u2, tmp;
 	mpz_init2(c, 1024);
