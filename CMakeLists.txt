@@ -15,23 +15,27 @@ set(CMAKE_CXX_FLAGS_RELEASE        "-Ofast -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
 # Compiler-specific C++11 activation.
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     execute_process(
         COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
     if (NOT (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7))
         message(FATAL_ERROR "${PROJECT_NAME} requires g++ 4.7 or greater.")
     endif ()
-elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-else ()
+else()
     message(FATAL_ERROR "Your C++ compiler does not support C++11.")
-endif ()
+endif()
 
 # Find packages.
 find_package(LibXml2 REQUIRED)
 find_package(GMP REQUIRED)
 find_package(MySQL)
 find_package(LuaJIT)
+
+if (NOT LUAJIT_FOUND)
+    find_package(Lua)
+endif()
 
 find_package(Boost 1.42.0 COMPONENTS system regex thread REQUIRED)
 
