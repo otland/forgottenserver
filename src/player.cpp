@@ -55,6 +55,8 @@ AutoList<Player> Player::listPlayer;
 MuteCountMap Player::muteCountMap;
 int32_t Player::maxMessageBuffer;
 
+uint32_t Player::playerAutoID = 0x10000000;
+
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 uint32_t Player::playerCount = 0;
 #endif

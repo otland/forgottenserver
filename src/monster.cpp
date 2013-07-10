@@ -39,6 +39,8 @@ AutoList<Monster>Monster::listMonster;
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
 
+uint32_t Monster::monsterAutoID = 0x40000000;
+
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 uint32_t Monster::monsterCount = 0;
 #endif

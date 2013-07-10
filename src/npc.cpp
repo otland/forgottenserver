@@ -44,6 +44,7 @@ extern Spells* g_spells;
 
 AutoList<Npc> Npc::listNpc;
 
+uint32_t Npc::npcAutoID = 0x80000000;
 NpcScriptInterface* Npc::m_scriptInterface = NULL;
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__

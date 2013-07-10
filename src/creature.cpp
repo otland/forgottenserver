@@ -32,8 +32,6 @@
 #include <vector>
 #include <algorithm>
 
-uint32_t Creature::autoID = 0;
-
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
 double Creature::speedC = -4795.01;

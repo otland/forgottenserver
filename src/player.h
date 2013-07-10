@@ -139,6 +139,12 @@ class Player : public Creature, public Cylinder
 			return this;
 		}
 
+		void setID() {
+			if (this->id == 0) {
+				this->id = playerAutoID++;
+			}
+		}
+
 		static MuteCountMap muteCountMap;
 		static int32_t maxMessageBuffer;
 
@@ -1384,6 +1390,8 @@ class Player : public Creature, public Cylinder
 		Skulls_t skull;
 		typedef OTSERV_HASH_SET<uint32_t> AttackedSet;
 		AttackedSet attackedSet;
+
+		static uint32_t playerAutoID;
 
 		void updateItemsLight(bool internal = false);
 		virtual int32_t getStepSpeed() const {

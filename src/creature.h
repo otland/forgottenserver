@@ -146,11 +146,7 @@ class Creature : virtual public Thing
 
 		virtual CreatureType_t getType() const = 0;
 
-		void setID() {
-			if (this->id == 0) {
-				this->id = ++autoID;
-			}
-		}
+		virtual void setID() = 0;
 		void setRemoved() {
 			isInternalRemoved = true;
 		}
@@ -545,8 +541,6 @@ class Creature : virtual public Thing
 		uint32_t lastHitCreature;
 		uint32_t blockCount;
 		uint32_t blockTicks;
-
-		static uint32_t autoID;
 
 		//creature script events
 		uint32_t scriptEventsBitField;

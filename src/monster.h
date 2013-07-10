@@ -59,6 +59,12 @@ class Monster : public Creature
 			return this;
 		}
 
+		void setID() {
+			if (this->id == 0) {
+				this->id = monsterAutoID++;
+			}
+		}
+
 		static AutoList<Monster> listMonster;
 		void removeList() {
 			listMonster.removeList(getID());
@@ -193,6 +199,8 @@ class Monster : public Creature
 		bool isMasterInRange;
 
 		std::string strDescription;
+
+		static uint32_t monsterAutoID;
 
 		virtual void onCreatureEnter(Creature* creature);
 		virtual void onCreatureLeave(Creature* creature);

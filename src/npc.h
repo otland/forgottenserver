@@ -510,6 +510,12 @@ class Npc : public Creature
 			return walkTicks > 0;
 		}
 
+		void setID() {
+			if (this->id == 0) {
+				this->id = npcAutoID++;
+			}
+		}
+
 		static AutoList<Npc> listNpc;
 		void removeList() {
 			listNpc.removeList(getID());
@@ -657,6 +663,8 @@ class Npc : public Creature
 		typedef std::list<uint32_t> QueueList;
 		QueueList queueList;
 		bool loaded;
+
+		static uint32_t npcAutoID;
 
 		static NpcScriptInterface* m_scriptInterface;
 
