@@ -790,8 +790,10 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`offlinetraining_time` = " << player->getOfflineTrainingTime() / 1000 << ", ";
 	query << "`offlinetraining_skill` = " << player->getOfflineTrainingSkill() << ", ";
 	query << "`stamina` = " << player->getStaminaMinutes() << ", ";
-	query << "`blessings` = " << player->blessings << ", ";
-	query << "`onlinetime` = `onlinetime` + " << (time(NULL) - player->lastLoginSaved);
+	if (!player->isOffline()) {
+		query << "`onlinetime` = `onlinetime` + " << (time(NULL) - player->lastLoginSaved) << ", ";
+	}
+	query << "`blessings` = " << player->blessings;
 	query << " WHERE `id` = " << player->getGUID();
 
 	DBTransaction transaction(db);
