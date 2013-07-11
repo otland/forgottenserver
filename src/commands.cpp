@@ -461,7 +461,7 @@ void Commands::createItemById(Player* player, const std::string& cmd, const std:
 
 	if (pos < tmp.size()) {
 		tmp.erase(0, pos + 1);
-		count = std::max(1, std::min(atoi(tmp.c_str()), 100));
+		count = std::max<int32_t>(1, std::min<int32_t>(atoi(tmp.c_str()), 100));
 	}
 
 	Item* newItem = Item::CreateItem(type, count);
@@ -506,7 +506,7 @@ void Commands::createItemByName(Player* player, const std::string& cmd, const st
 
 	if (pos2 < param.size()) {
 		std::string itemCount = param.substr(pos2 + 1, param.size() - (pos2 + 1));
-		count = std::min(atoi(itemCount.c_str()), 100);
+		count = std::min<int32_t>(atoi(itemCount.c_str()), 100);
 	}
 
 	int32_t itemId = Item::items.getItemIdByName(itemName);
@@ -1085,7 +1085,7 @@ void Commands::removeThing(Player* player, const std::string& cmd, const std::st
 				return;
 			}
 
-			g_game.internalRemoveItem(item, std::max(1, std::min<int32_t>(atoi(param.c_str()), item->getItemCount())));
+			g_game.internalRemoveItem(item, std::max<int32_t>(1, std::min<int32_t>(atoi(param.c_str()), item->getItemCount())));
 			g_game.addMagicEffect(pos, NM_ME_MAGIC_BLOOD);
 		}
 	}

@@ -3009,7 +3009,7 @@ int32_t NpcScriptInterface::luagetDistanceTo(lua_State* L)
 		if (npc_pos.z != thing_pos.z) {
 			lua_pushnumber(L, -1);
 		} else {
-			int32_t dist = std::max(std::abs(npc_pos.x - thing_pos.x), std::abs(npc_pos.y - thing_pos.y));
+			int32_t dist = std::max<int32_t>(std::abs(npc_pos.x - thing_pos.x), std::abs(npc_pos.y - thing_pos.y));
 			lua_pushnumber(L, dist);
 		}
 	} else {
@@ -3217,7 +3217,7 @@ void NpcScriptInterface::popState(lua_State* L, NpcState* &state)
 	state->ignore = getFieldBool(L, "ignore") || getFieldBool(L, "ignorecapacity") || getFieldBool(L, "ignoreequipped");
 	state->inBackpacks = getFieldBool(L, "inbackpacks");
 
-	state->topic = std::max(getField(L, "topic"), (int32_t)0);
+	state->topic = std::max<int32_t>(getField(L, "topic"), 0);
 	state->level = getField(L, "level");
 	state->spellName = getFieldString(L, "spellname");
 	state->listName = getFieldString(L, "listname");

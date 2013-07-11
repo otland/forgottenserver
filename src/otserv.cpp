@@ -28,7 +28,6 @@
 #include <iostream>
 #include <iomanip>
 
-#include "otsystem.h"
 #include "networkmessage.h"
 #include "protocolgame.h"
 

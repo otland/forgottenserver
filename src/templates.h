@@ -24,7 +24,6 @@
 #include <boost/thread/recursive_mutex.hpp>
 
 #include "creature.h"
-#include "otsystem.h"
 
 template<class T> class AutoList
 {

@@ -80,7 +80,7 @@ enum LightState_t {
 #define STATE_TIME 1000
 
 typedef std::map<int32_t, int32_t> StageList;
-typedef OTSERV_HASH_MAP<std::string, Player*> PlayerNameMap;
+typedef std::unordered_map<std::string, Player*> PlayerNameMap;
 
 /**
   * Main Game class.
@@ -585,7 +585,7 @@ class Game
 		void addGuild(Guild* guild);
 		void decreaseBrowseFieldRef(const Position& pos);
 
-		typedef OTSERV_HASH_MAP<const Tile*, Container*> BrowseFieldMap;
+		typedef std::unordered_map<const Tile*, Container*> BrowseFieldMap;
 		BrowseFieldMap browseFields;
 
 	protected:
@@ -662,7 +662,7 @@ class Game
 
 		ModalWindow* offlineTrainingWindow;
 
-		OTSERV_HASH_MAP<uint32_t, Guild*> guilds;
+		std::unordered_map<uint32_t, Guild*> guilds;
 		std::vector<std::string> commandTags;
 };
 #endif

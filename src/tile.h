@@ -19,6 +19,8 @@
 #ifndef __OTSERV_TILE_H__
 #define __OTSERV_TILE_H__
 
+#include <unordered_set>
+
 #include <boost/shared_ptr.hpp>
 
 #include "cylinder.h"
@@ -34,7 +36,7 @@ class QTreeLeafNode;
 class BedItem;
 
 typedef std::vector<Creature*> CreatureVector;
-typedef OTSERV_HASH_SET<Creature*> SpectatorVec;
+typedef std::unordered_set<Creature*> SpectatorVec;
 typedef std::map<Position, boost::shared_ptr<SpectatorVec> > SpectatorCache;
 typedef std::vector<Item*> ItemVector;
 

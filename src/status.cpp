@@ -207,7 +207,7 @@ std::string Status::getStatusString() const
 		xml = "";
 	}
 
-	xmlFreeOTSERV(s);
+	xmlFree(s);
 	xmlFreeDoc(doc);
 	return xml;
 }

@@ -7452,7 +7452,7 @@ int32_t LuaScriptInterface::luaGetItemWeight(lua_State* L)
 	uint32_t itemid = popNumber(L);
 
 	const ItemType& it = Item::items[itemid];
-	double weight = it.weight * std::max(1, count);
+	double weight = it.weight * std::max<int32_t>(1, count);
 
 	if (precise) {
 		std::ostringstream ws;

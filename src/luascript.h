@@ -23,6 +23,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <unordered_map>
 
 extern "C"
 {
@@ -172,7 +173,7 @@ class ScriptEnvironment
 		}
 
 	private:
-		typedef OTSERV_HASH_MAP<uint32_t, Thing*> ThingMap;
+		typedef std::unordered_map<uint32_t, Thing*> ThingMap;
 		typedef std::vector<const LuaVariant*> VariantVector;
 		typedef std::map<uint32_t, AreaCombat*> AreaMap;
 		typedef std::map<uint32_t, Combat*> CombatMap;

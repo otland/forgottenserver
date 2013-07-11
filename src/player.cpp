@@ -1611,7 +1611,7 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot, 
 			sendContainer(it->first, container, false, firstIndex);
 		}
 
-		client->sendRemoveContainerItem(it->first, std::max(slot, firstIndex), container->getItem(container->capacity() + firstIndex));
+		client->sendRemoveContainerItem(it->first, std::max<uint16_t>(slot, firstIndex), container->getItem(container->capacity() + firstIndex));
 	}
 }
 
@@ -4309,7 +4309,7 @@ void Player::changeMana(int32_t manaChange)
 void Player::changeSoul(int32_t soulChange)
 {
 	if (soulChange > 0) {
-		soul += std::min(soulChange, soulMax - soul);
+		soul += std::min<int32_t>(soulChange, soulMax - soul);
 	} else {
 		soul = std::max<int32_t>(0, soul + soulChange);
 	}
@@ -5207,7 +5207,7 @@ uint16_t Player::getHelpers() const
 	uint16_t helpers;
 
 	if (guild && party) {
-		OTSERV_HASH_SET<Player*> helperSet;
+		std::unordered_set<Player*> helperSet;
 
 		const PlayerVector& guildMembers = guild->getMembersOnline();
 		helperSet.insert(guildMembers.begin(), guildMembers.end());

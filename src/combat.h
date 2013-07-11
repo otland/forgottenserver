@@ -23,7 +23,6 @@
 #include "condition.h"
 #include "map.h"
 #include "baseevents.h"
-#include "otsystem.h"
 
 #include <vector>
 

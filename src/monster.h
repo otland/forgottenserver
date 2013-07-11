@@ -26,7 +26,7 @@ class Creature;
 class Game;
 class Spawn;
 
-typedef OTSERV_HASH_SET<Creature*> CreatureHashSet;
+typedef std::unordered_set<Creature*> CreatureHashSet;
 typedef std::list<Creature*> CreatureList;
 
 enum TargetSearchType_t {

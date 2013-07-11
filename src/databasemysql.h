@@ -24,7 +24,6 @@
 #endif
 
 #include "definitions.h"
-#include "otsystem.h"
 
 #if defined(WIN32) && !defined(_MSC_VER)
 #include <mysql/mysql.h>

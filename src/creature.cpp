@@ -582,7 +582,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 				const Position pos = (*cit)->getPosition();
 
 				if ((std::abs(pos.z - newPos.z) > 2) ||
-				        (std::max(std::abs((newPos.x) - pos.x), std::abs((newPos.y - 1) - pos.y)) > 30)) {
+				        (std::max<int32_t>(std::abs((newPos.x) - pos.x), std::abs((newPos.y - 1) - pos.y)) > 30)) {
 					despawnList.push_back((*cit));
 				}
 			}
@@ -861,7 +861,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true
 	int32_t oldHealth = health;
 
 	if (healthChange > 0) {
-		health += std::min(healthChange, getMaxHealth() - health);
+		health += std::min<int32_t>(healthChange, getMaxHealth() - health);
 	} else {
 		health = std::max<int32_t>(0, health + healthChange);
 	}
@@ -874,7 +874,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true
 void Creature::changeMana(int32_t manaChange)
 {
 	if (manaChange > 0) {
-		mana += std::min(manaChange, getMaxMana() - mana);
+		mana += std::min<int32_t>(manaChange, getMaxMana() - mana);
 	} else {
 		mana = std::max<int32_t>(0, mana + manaChange);
 	}
@@ -1734,7 +1734,7 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 		return false;
 	}
 
-	int32_t testDist = std::max(std::abs(targetPos.x - testPos.x), std::abs(targetPos.y - testPos.y));
+	int32_t testDist = std::max<int32_t>(std::abs(targetPos.x - testPos.x), std::abs(targetPos.y - testPos.y));
 
 	if (fpp.maxTargetDist == 1) {
 		if (testDist < fpp.minTargetDist || testDist > fpp.maxTargetDist) {

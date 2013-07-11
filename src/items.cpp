@@ -892,7 +892,7 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				}
 			} else if (tmpStrValue == "duration") {
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
-					it.decayTime = std::max(0, intValue);
+					it.decayTime = std::max<int32_t>(0, intValue);
 				}
 			} else if (tmpStrValue == "showduration") {
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
@@ -912,7 +912,7 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				}
 			} else if (tmpStrValue == "breakchance") {
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
-					it.breakChance = std::min(100, std::max(0, intValue));
+					it.breakChance = std::min<int32_t>(100, std::max<int32_t>(0, intValue));
 				}
 			} else if (tmpStrValue == "ammoaction") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
@@ -924,11 +924,11 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				}
 			} else if (tmpStrValue == "hitchance") {
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
-					it.hitChance = std::min(100, std::max(-100, intValue));
+					it.hitChance = std::min<int32_t>(100, std::max<int32_t>(-100, intValue));
 				}
 			} else if (tmpStrValue == "maxhitchance") {
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
-					it.maxHitChance = std::min(100, std::max(0, intValue));
+					it.maxHitChance = std::min<int32_t>(100, std::max<int32_t>(0, intValue));
 				}
 			} else if (tmpStrValue == "invisible") {
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
@@ -1181,19 +1181,19 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 
 								if (tmpStrValue == "ticks") {
 									if (readXMLInteger(fieldAttributesNode, "value", intValue)) {
-										ticks = std::max(0, intValue);
+										ticks = std::max<int32_t>(0, intValue);
 									}
 								}
 
 								if (tmpStrValue == "count") {
 									if (readXMLInteger(fieldAttributesNode, "value", intValue)) {
-										count = std::max(1, intValue);
+										count = std::max<int32_t>(1, intValue);
 									}
 								}
 
 								if (tmpStrValue == "start") {
 									if (readXMLInteger(fieldAttributesNode, "value", intValue)) {
-										start = std::max(0, intValue);
+										start = std::max<int32_t>(0, intValue);
 									}
 								}
 

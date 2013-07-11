@@ -71,12 +71,12 @@ class ProtocolGame : public Protocol
 			return version;
 		}
 
-		const OTSERV_HASH_SET<uint32_t>& getKnownCreatures() const {
+		const std::unordered_set<uint32_t>& getKnownCreatures() const {
 			return knownCreatureSet;
 		}
 
 	private:
-		OTSERV_HASH_SET<uint32_t> knownCreatureSet;
+		std::unordered_set<uint32_t> knownCreatureSet;
 
 		bool connect(uint32_t playerId, OperatingSystem_t operatingSystem);
 		void disconnect();

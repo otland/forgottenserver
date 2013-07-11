@@ -27,7 +27,6 @@
 #include <boost/config.hpp>
 #include <boost/bind.hpp>
 
-#include "otsystem.h"
 #include "tasks.h"
 #include "items.h"
 #include "commands.h"
@@ -112,7 +111,7 @@ Game::Game()
 
 Game::~Game()
 {
-	for (OTSERV_HASH_MAP<uint32_t, Guild*>::iterator it = guilds.begin(); it != guilds.end(); ++it) {
+	for (std::unordered_map<uint32_t, Guild*>::iterator it = guilds.begin(); it != guilds.end(); ++it) {
 		delete it->second;
 	}
 
@@ -765,7 +764,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 
 		if (offlineTrainingSkill != -1) {
 			player->setOfflineTrainingSkill(-1);
-			int32_t offlineTrainingTime = std::max(0, std::min(offlineTime, std::min(43200, player->getOfflineTrainingTime() / 1000)));
+			int32_t offlineTrainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, player->getOfflineTrainingTime() / 1000)));
 
 			if (offlineTime >= 600) {
 				player->removeOfflineTrainingTime(offlineTrainingTime * 1000);
@@ -2176,7 +2175,7 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 	int64_t gold = money;
 
 	while (crys > 0) {
-		Item* remaindItem = Item::CreateItem(ITEM_COINS_CRYSTAL, std::min(100, crys));
+		Item* remaindItem = Item::CreateItem(ITEM_COINS_CRYSTAL, std::min<int32_t>(100, crys));
 
 		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
 
@@ -2184,7 +2183,7 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 		}
 
-		crys -= std::min(100, crys);
+		crys -= std::min<int32_t>(100, crys);
 	}
 
 	if (plat != 0) {
@@ -3484,8 +3483,8 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 
 	const Position& tradeItemPosition = tradeItem->getPosition();
 
-	int32_t lookDistance = std::max(std::abs(playerPosition.x - tradeItemPosition.x),
-	                                std::abs(playerPosition.y - tradeItemPosition.y));
+	int32_t lookDistance = std::max<int32_t>(std::abs(playerPosition.x - tradeItemPosition.x),
+	                                         std::abs(playerPosition.y - tradeItemPosition.y));
 
 	std::ostringstream ss;
 
@@ -3774,8 +3773,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 	int32_t lookDistance = -1;
 
 	if (thing != player) {
-		lookDistance = std::max(std::abs(playerPos.x - thingPos.x), std::abs(playerPos.y - thingPos.y));
-
+		lookDistance = std::max<int32_t>(std::abs(playerPos.x - thingPos.x), std::abs(playerPos.y - thingPos.y));
 		if (playerPos.z != thingPos.z) {
 			lookDistance += 15;
 		}
@@ -3857,8 +3855,7 @@ bool Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 
 	if (creature != player) {
 		const Position& playerPos = player->getPosition();
-		lookDistance = std::max(std::abs(playerPos.x - creaturePos.x), std::abs(playerPos.y - creaturePos.y));
-
+		lookDistance = std::max<int32_t>(std::abs(playerPos.x - creaturePos.x), std::abs(playerPos.y - creaturePos.y));
 		if (playerPos.z != creaturePos.z) {
 			lookDistance += 15;
 		}
@@ -4862,8 +4859,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		}
 
 		if (target->hasCondition(CONDITION_MANASHIELD) && combatType != COMBAT_UNDEFINEDDAMAGE) {
-			int32_t manaDamage = std::min(target->getMana(), damage);
-
+			int32_t manaDamage = std::min<int32_t>(target->getMana(), damage);
 			if (manaDamage != 0) {
 				target->drainMana(attacker, manaDamage);
 				addMagicEffect(list, targetPos, NM_ME_LOSE_ENERGY);
@@ -4921,8 +4917,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 			}
 		}
 
-		damage = std::min(target->getHealth(), damage);
-
+		damage = std::min<int32_t>(target->getHealth(), damage);
 		if (damage > 0) {
 			target->drainHealth(attacker, combatType, damage);
 			addCreatureHealth(list, target);
@@ -5118,7 +5113,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			}
 		}
 
-		int32_t manaLoss = std::min(target->getMana(), -manaChange);
+		int32_t manaLoss = std::min<int32_t>(target->getMana(), -manaChange);
 		BlockType_t blockType = target->blockHit(attacker, COMBAT_MANADRAIN, manaLoss);
 
 		if (blockType != BLOCK_NONE) {
@@ -6242,7 +6237,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			uint16_t tmpAmount = amount;
 
 			for (ItemList::const_iterator iter = itemList.begin(), end = itemList.end(); iter != end; ++iter) {
-				uint16_t removeCount = std::min(tmpAmount, (*iter)->getItemCount());
+				uint16_t removeCount = std::min<int32_t>(tmpAmount, (*iter)->getItemCount());
 				tmpAmount -= removeCount;
 				internalRemoveItem(*iter, removeCount);
 
@@ -6449,7 +6444,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			uint16_t tmpAmount = amount;
 
 			for (ItemList::const_iterator iter = itemList.begin(), end = itemList.end(); iter != end; ++iter) {
-				uint16_t removeCount = std::min(tmpAmount, (*iter)->getItemCount());
+				uint16_t removeCount = std::min<uint16_t>(tmpAmount, (*iter)->getItemCount());
 				tmpAmount -= removeCount;
 				internalRemoveItem(*iter, removeCount);
 
@@ -6969,7 +6964,7 @@ void Game::removePlayerFromNameMap(Player* player)
 
 Guild* Game::getGuild(uint32_t id) const
 {
-	OTSERV_HASH_MAP<uint32_t, Guild*>::const_iterator it = guilds.find(id);
+	std::unordered_map<uint32_t, Guild*>::const_iterator it = guilds.find(id);
 
 	if (it == guilds.end()) {
 		return NULL;

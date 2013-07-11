@@ -19,9 +19,9 @@
 #ifndef __OTSERV_SCHEDULER_H__
 #define __OTSERV_SCHEDULER_H__
 
-#include "otsystem.h"
 #include "tasks.h"
 #include <boost/bind.hpp>
+#include <unordered_set>
 #include <vector>
 #include <queue>
 #include <set>
@@ -104,7 +104,7 @@ class Scheduler
 
 		uint32_t m_lastEventId;
 		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > m_eventList;
-		typedef OTSERV_HASH_SET<uint32_t> EventIdSet;
+		typedef std::unordered_set<uint32_t> EventIdSet;
 		EventIdSet m_eventIds;
 		SchedulerState m_threadState;
 };

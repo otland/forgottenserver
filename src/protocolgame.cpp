@@ -228,7 +228,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingS
 		}
 
 		player->lastIP = player->getIP();
-		player->lastLoginSaved = std::max(time(NULL), player->lastLoginSaved + 1);
+		player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
 		m_acceptPackets = true;
 		return true;
 	} else {
@@ -278,7 +278,7 @@ bool ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->client = this;
 	sendAddCreature(player, player->getPosition(), player->getTile()->__getIndexOfThing(player), false);
 	player->lastIP = player->getIP();
-	player->lastLoginSaved = std::max(time(NULL), player->lastLoginSaved + 1);
+	player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
 	m_acceptPackets = true;
 	return true;
 }
@@ -697,7 +697,7 @@ void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y
 
 void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown)
 {
-	std::pair<OTSERV_HASH_SET<uint32_t>::const_iterator, bool> result = knownCreatureSet.insert(id);
+	std::pair<std::unordered_set<uint32_t>::const_iterator, bool> result = knownCreatureSet.insert(id);
 
 	if (!result.second) {
 		known = true;
@@ -708,7 +708,7 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 
 	if (knownCreatureSet.size() > 1300) {
 		// Look for a creature to remove
-		for (OTSERV_HASH_SET<uint32_t>::iterator it = knownCreatureSet.begin(); it != knownCreatureSet.end(); ++it) {
+		for (std::unordered_set<uint32_t>::iterator it = knownCreatureSet.begin(); it != knownCreatureSet.end(); ++it) {
 			Creature* creature = g_game.getCreatureByID(*it);
 
 			if (!canSee(creature)) {
@@ -719,7 +719,7 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 		}
 
 		// Bad situation. Let's just remove anyone.
-		OTSERV_HASH_SET<uint32_t>::iterator it = knownCreatureSet.begin();
+		std::unordered_set<uint32_t>::iterator it = knownCreatureSet.begin();
 
 		if (*it == id) {
 			++it;

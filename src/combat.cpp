@@ -1363,7 +1363,7 @@ void AreaCombat::setupArea(const std::list<uint32_t>& list, uint32_t rows)
 	//NORTH
 	areas[NORTH] = area;
 
-	uint32_t maxOutput = std::max(area->getCols(), area->getRows()) * 2;
+	uint32_t maxOutput = std::max<uint32_t>(area->getCols(), area->getRows()) * 2;
 
 	//SOUTH
 	MatrixArea* southArea = new MatrixArea(maxOutput, maxOutput);
@@ -1463,7 +1463,7 @@ void AreaCombat::setupExtArea(const std::list<uint32_t>& list, uint32_t rows)
 	//NORTH-WEST
 	areas[NORTHWEST] = area;
 
-	uint32_t maxOutput = std::max(area->getCols(), area->getRows()) * 2;
+	uint32_t maxOutput = std::max<uint32_t>(area->getCols(), area->getRows()) * 2;
 
 	//NORTH-EAST
 	MatrixArea* neArea = new MatrixArea(maxOutput, maxOutput);

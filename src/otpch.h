@@ -27,7 +27,7 @@
 // Definitions should be global.
 #include "definitions.h"
 
-#if defined __WINDOWS__ || defined WIN32
+#ifdef WIN32
 #include <winerror.h>
 #endif
 

@@ -89,7 +89,7 @@ template<class T> class lessPointer : public std::binary_function<T*, T*, bool>
 		}
 };
 
-typedef OTSERV_HASH_SET<Creature*> SpectatorVec;
+typedef std::unordered_set<Creature*> SpectatorVec;
 typedef std::map<Position, boost::shared_ptr<SpectatorVec> > SpectatorCache;
 
 #define FLOOR_BITS 3

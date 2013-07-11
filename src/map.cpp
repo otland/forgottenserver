@@ -29,7 +29,6 @@
 
 #include "iomap.h"
 
-#include "otsystem.h"
 #include "iomapserialize.h"
 
 #include <stdio.h>
@@ -655,7 +654,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 		return false;
 	}
 
-	OTSERV_HASH_MAP<uint32_t, AStarNode*> nodeTable;
+	std::unordered_map<uint32_t, AStarNode*> nodeTable;
 
 	AStarNodes nodes;
 	AStarNode* startNode = nodes.createOpenNode();
@@ -723,7 +722,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
 					AStarNode* neighbourNode;
-					OTSERV_HASH_MAP<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+					std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 
 					if (it != nodeTable.end()) {
 						neighbourNode = it->second;
@@ -811,7 +810,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 	Position startPos = creature->getPosition();
 	Position endPos;
 
-	OTSERV_HASH_MAP<uint32_t, AStarNode*> nodeTable;
+	std::unordered_map<uint32_t, AStarNode*> nodeTable;
 
 	AStarNodes nodes;
 	AStarNode* startNode = nodes.createOpenNode();
@@ -897,7 +896,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 
 				AStarNode* neighbourNode;
 
-				OTSERV_HASH_MAP<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+				std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 
 				if (it != nodeTable.end()) {
 					neighbourNode = it->second;
@@ -1120,7 +1119,7 @@ int32_t AStarNodes::getTileWalkCost(const Creature* creature, const Tile* tile)
 
 int32_t AStarNodes::getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, int32_t yGoal)
 {
-	int32_t h_diagonal = std::min(std::abs(x - xGoal), std::abs(y - yGoal));
+	int32_t h_diagonal = std::min<int32_t>(std::abs(x - xGoal), std::abs(y - yGoal));
 	int32_t h_straight = (std::abs(x - xGoal) + std::abs(y - yGoal));
 	return MAP_DIAGONALWALKCOST * h_diagonal + MAP_NORMALWALKCOST * (h_straight - 2 * h_diagonal);
 }

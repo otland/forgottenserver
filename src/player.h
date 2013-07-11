@@ -19,7 +19,6 @@
 #ifndef __OTSERV_PLAYER_H__
 #define __OTSERV_PLAYER_H__
 
-#include "otsystem.h"
 #include "creature.h"
 #include "container.h"
 #include "cylinder.h"
@@ -113,7 +112,7 @@ typedef std::map<uint8_t, OpenContainer> ContainerMap;
 typedef std::map<uint32_t, DepotChest*> DepotMap;
 typedef std::map<uint32_t, DepotLocker*> DepotLockerMap;
 typedef std::map<uint32_t, int32_t> StorageMap;
-typedef OTSERV_HASH_SET<uint32_t> VIPListSet;
+typedef std::unordered_set<uint32_t> VIPListSet;
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
 typedef std::list<std::string> LearnedInstantSpellList;
 typedef std::list<uint32_t> InvitedToGuildsList;
@@ -224,10 +223,10 @@ class Player : public Creature, public Cylinder
 		bool addOfflineTrainingTries(skills_t skill, int32_t tries);
 
 		void addOfflineTrainingTime(int32_t addTime) {
-			offlineTrainingTime = std::min(12 * 3600 * 1000, offlineTrainingTime + addTime);
+			offlineTrainingTime = std::min<int32_t>(12 * 3600 * 1000, offlineTrainingTime + addTime);
 		}
 		void removeOfflineTrainingTime(int32_t removeTime) {
-			offlineTrainingTime = std::max(0, offlineTrainingTime - removeTime);
+			offlineTrainingTime = std::max<int32_t>(0, offlineTrainingTime - removeTime);
 		}
 		int32_t getOfflineTrainingTime() const {
 			return offlineTrainingTime;
@@ -534,7 +533,7 @@ class Player : public Creature, public Cylinder
 			} else if (hasFlag(PlayerFlag_HasInfiniteCapacity)) {
 				return 10000.00;
 			} else {
-				return std::max(0.00, capacity - inventoryWeight);
+				return std::max<double>(0.00, capacity - inventoryWeight);
 			}
 		}
 
@@ -1388,7 +1387,7 @@ class Player : public Creature, public Cylinder
 
 		int64_t skullTicks;
 		Skulls_t skull;
-		typedef OTSERV_HASH_SET<uint32_t> AttackedSet;
+		typedef std::unordered_set<uint32_t> AttackedSet;
 		AttackedSet attackedSet;
 
 		static uint32_t playerAutoID;
