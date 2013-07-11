@@ -682,7 +682,8 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 	if (playerIp != 0) {
 		PlayerVector vec;
 
-		for (AutoList<Player>::listiterator it = Player::listPlayer.list.begin(), end = Player::listPlayer.list.end(); it != end; ++it) {
+		const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+		for (auto it = players.begin(); it != players.end(); ++it) {
 			if (it->second->getIP() != playerIp || it->second == paramPlayer) {
 				continue;
 			}
@@ -945,15 +946,18 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::string& param)
 {
 	std::ostringstream ss;
-	ss << Player::listPlayer.list.size() << " players online.";
+	ss << g_game.getPlayersOnline() << " players online.";
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 	ss.str("");
 
 	uint32_t i = 0;
-	AutoList<Player>::listiterator it = Player::listPlayer.list.begin();
+
+	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+
+	auto it = players.begin();
 	if(!g_config.getBoolean(ConfigManager::SHOW_GAMEMASTERS_ONLINE))
 	{
-		while(it != Player::listPlayer.list.end())
+		while(it != players.end())
 		{
 			if(!it->second->isAccessPlayer() || player->isAccessPlayer())
 			{
@@ -964,7 +968,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 
 			if(i == 10)
 			{
-				ss << (it != Player::listPlayer.list.end() ? "," : ".");
+				ss << (it != players.end() ? "," : ".");
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 				ss.str("");
 				i = 0;
@@ -973,7 +977,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 	}
 	else
 	{
-		while(it != Player::listPlayer.list.end())
+		while(it != players.end())
 		{
 			ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << "]";
 			++it;
@@ -981,7 +985,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 
 			if(i == 10)
 			{
-				ss << (it != Player::listPlayer.list.end() ? "," : ".");
+				ss << (it != players.end() ? "," : ".");
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 				ss.str("");
 				i = 0;
@@ -1392,7 +1396,8 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 	}
 
 	if (player->isInGhostMode()) {
-		for (AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it) {
+		const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+		for (auto it = players.begin(); it != players.end(); ++it) {
 			if (!it->second->isAccessPlayer()) {
 				it->second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
@@ -1402,7 +1407,8 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 		player->sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
 		g_game.addMagicEffect(list, player->getPosition(), NM_ME_YALAHARIGHOST);
 	} else {
-		for (AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it) {
+		const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+		for (auto it = players.begin(); it != players.end(); ++it) {
 			if (!it->second->isAccessPlayer()) {
 				it->second->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
@@ -1421,7 +1427,8 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Multiclient Check List:");
 	std::map< uint32_t, std::vector<Player*> > ipMap;
 
-	for (AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it) {
+	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+	for (auto it = players.begin(); it != players.end(); ++it) {
 		if (it->second->isRemoved() || it->second->getIP() == 0) {
 			continue;
 		}

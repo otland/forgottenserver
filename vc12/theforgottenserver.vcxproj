@@ -285,7 +285,6 @@
     <ClInclude Include="..\src\talkaction.h" />
     <ClInclude Include="..\src\tasks.h" />
     <ClInclude Include="..\src\teleport.h" />
-    <ClInclude Include="..\src\templates.h" />
     <ClInclude Include="..\src\thing.h" />
     <ClInclude Include="..\src\tile.h" />
     <ClInclude Include="..\src\tools.h" />

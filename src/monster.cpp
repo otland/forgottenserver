@@ -34,8 +34,6 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern Monsters g_monsters;
 
-AutoList<Monster>Monster::listMonster;
-
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
 
@@ -118,6 +116,16 @@ Monster::~Monster()
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	monsterCount--;
 #endif
+}
+
+void Monster::addList()
+{
+	g_game.addMonster(this);
+}
+
+void Monster::removeList()
+{
+	g_game.removeMonster(this);
 }
 
 bool Monster::canSee(const Position& pos) const

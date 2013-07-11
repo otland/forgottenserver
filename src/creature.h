@@ -21,7 +21,6 @@
 
 #include "definitions.h"
 
-#include "templates.h"
 #include "map.h"
 #include "position.h"
 #include "condition.h"

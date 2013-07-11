@@ -188,7 +188,7 @@ class Player : public Creature, public Cylinder
 		virtual bool canSeeInvisibility() const {
 			return hasFlag(PlayerFlag_CanSenseInvisibility) || accessLevel;
 		}
-		static AutoList<Player> listPlayer;
+
 		void removeList();
 		void addList();
 		void kickPlayer(bool displayEffect);

@@ -65,13 +65,8 @@ class Monster : public Creature
 			}
 		}
 
-		static AutoList<Monster> listMonster;
-		void removeList() {
-			listMonster.removeList(getID());
-		}
-		void addList() {
-			listMonster.addList(this);
-		}
+		void removeList();
+		void addList();
 
 		virtual const std::string& getName() const {
 			return mType->name;

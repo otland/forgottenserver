@@ -42,8 +42,6 @@ extern ConfigManager g_config;
 extern Game g_game;
 extern Spells* g_spells;
 
-AutoList<Npc> Npc::listNpc;
-
 uint32_t Npc::npcAutoID = 0x80000000;
 NpcScriptInterface* Npc::m_scriptInterface = NULL;
 
@@ -53,14 +51,15 @@ uint32_t Npc::npcCount = 0;
 
 void Npcs::reload()
 {
-	for (AutoList<Npc>::listiterator it = Npc::listNpc.list.begin(); it != Npc::listNpc.list.end(); ++it) {
+	const std::map<uint32_t, Npc*>& npcs = g_game.getNpcs();
+	for (auto it = npcs.begin(); it != npcs.end(); ++it) {
 		it->second->closeAllShopWindows();
 	}
 
 	delete Npc::m_scriptInterface;
 	Npc::m_scriptInterface = NULL;
 
-	for (AutoList<Npc>::listiterator it = Npc::listNpc.list.begin(); it != Npc::listNpc.list.end(); ++it) {
+	for (auto it = npcs.begin(); it != npcs.end(); ++it) {
 		it->second->reload();
 	}
 }
@@ -96,6 +95,16 @@ Npc::~Npc()
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	npcCount--;
 #endif
+}
+
+void Npc::addList()
+{
+	g_game.addNpc(this);
+}
+
+void Npc::removeList()
+{
+	g_game.removeNpc(this);
 }
 
 bool Npc::load()

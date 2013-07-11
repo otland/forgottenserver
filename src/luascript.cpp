@@ -8120,12 +8120,12 @@ int32_t LuaScriptInterface::luaGetOnlinePlayers(lua_State* L)
 	int32_t i = 0;
 	lua_newtable(L);
 
-	for (AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it) {
+	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+	for (auto it = players.begin(); it != players.end(); ++it) {
 		lua_pushnumber(L, ++i);
 		lua_pushstring(L, it->second->getName().c_str());
 		lua_settable(L, -3);
 	}
-
 	return 1;
 }
 

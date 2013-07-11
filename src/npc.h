@@ -21,7 +21,6 @@
 
 #include "creature.h"
 #include "luascript.h"
-#include "templates.h"
 
 class Npc;
 class Player;
@@ -516,13 +515,8 @@ class Npc : public Creature
 			}
 		}
 
-		static AutoList<Npc> listNpc;
-		void removeList() {
-			listNpc.removeList(getID());
-		}
-		void addList() {
-			listNpc.addList(this);
-		}
+		void removeList();
+		void addList();
 
 		static Npc* createNpc(const std::string& name);
 

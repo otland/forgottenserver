@@ -29,7 +29,6 @@
 #include "container.h"
 #include "player.h"
 #include "spawn.h"
-#include "templates.h"
 #include "scheduler.h"
 #include "npc.h"
 #include "iologindata.h"
@@ -247,16 +246,16 @@ class Game
 		void removeCreatureCheck(Creature* creature);
 
 		uint32_t getPlayersOnline() {
-			return (uint32_t)Player::listPlayer.list.size();
+			return (uint32_t)players.size();
 		}
 		uint32_t getMonstersOnline() {
-			return (uint32_t)Monster::listMonster.list.size();
+			return (uint32_t)monsters.size();
 		}
 		uint32_t getNpcsOnline() {
-			return (uint32_t)Npc::listNpc.list.size();
+			return (uint32_t)npcs.size();
 		}
 		uint32_t getCreaturesOnline() {
-			return (uint32_t)listCreature.list.size();
+			return (uint32_t)creatures.size();
 		}
 		uint32_t getPlayersRecord() const {
 			return playersRecord;
@@ -578,8 +577,18 @@ class Game
 
 		void sendOfflineTrainingDialog(Player* player);
 
-		void addPlayerToNameMap(Player* player);
-		void removePlayerFromNameMap(Player* player);
+		const std::map<uint32_t, Player*>& getPlayers() const { return players; }
+		const std::map<uint32_t, Npc*>& getNpcs() const { return npcs; }
+		const std::map<uint32_t, Monster*>& getMonsters() const { return monsters; }
+
+		void addPlayer(Player* player);
+		void removePlayer(Player* player);
+
+		void addNpc(Npc* npc);
+		void removeNpc(Npc* npc);
+
+		void addMonster(Monster* npc);
+		void removeMonster(Monster* npc);
 
 		Guild* getGuild(uint32_t id) const;
 		void addGuild(Guild* guild);
@@ -609,7 +618,10 @@ class Game
 		//list of items that are in trading state, mapped to the player
 		std::map<Item*, uint32_t> tradeItems;
 
-		AutoList<Creature> listCreature;
+		std::map<uint32_t, Player*> players;
+		std::map<uint32_t, Creature*> creatures;
+		std::map<uint32_t, Npc*> npcs;
+		std::map<uint32_t, Monster*> monsters;
 
 		size_t checkCreatureLastIndex;
 		std::vector<Creature*> checkCreatureVectors[EVENT_CREATURECOUNT];

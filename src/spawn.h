@@ -22,7 +22,6 @@
 #include "tile.h"
 #include "position.h"
 #include "monster.h"
-#include "templates.h"
 
 #include <vector>
 #include <map>

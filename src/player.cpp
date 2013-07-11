@@ -51,7 +51,6 @@ extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
 
-AutoList<Player> Player::listPlayer;
 MuteCountMap Player::muteCountMap;
 int32_t Player::maxMessageBuffer;
 
@@ -961,37 +960,34 @@ void Player::dropLoot(Container* corpse)
 {
 	if (corpse && lootDrop && vocationId != VOCATION_NONE) {
 		Skulls_t playerSkull = getSkull();
+		if (inventory[SLOT_NECKLACE] && inventory[SLOT_NECKLACE]->getID() == ITEM_AMULETOFLOSS && playerSkull != SKULL_RED && playerSkull != SKULL_BLACK) {
+			Player* lastHitPlayer;
 
-		if (playerSkull != SKULL_NONE || level >= 100) {
-			if (inventory[SLOT_NECKLACE] && inventory[SLOT_NECKLACE]->getID() == ITEM_AMULETOFLOSS && playerSkull != SKULL_RED && playerSkull != SKULL_BLACK) {
-				Player* lastHitPlayer;
+			if (_lastHitCreature) {
+				lastHitPlayer = _lastHitCreature->getPlayer();
 
-				if (_lastHitCreature) {
-					lastHitPlayer = _lastHitCreature->getPlayer();
+				if (!lastHitPlayer) {
+					Creature* lastHitMaster = _lastHitCreature->getMaster();
 
-					if (!lastHitPlayer) {
-						Creature* lastHitMaster = _lastHitCreature->getMaster();
-
-						if (lastHitMaster) {
-							lastHitPlayer = lastHitMaster->getPlayer();
-						}
+					if (lastHitMaster) {
+						lastHitPlayer = lastHitMaster->getPlayer();
 					}
-				} else {
-					lastHitPlayer = NULL;
-				}
-
-				if (!lastHitPlayer || blessings < 32) {
-					g_game.internalRemoveItem(inventory[SLOT_NECKLACE], 1);
 				}
 			} else {
-				for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
-					Item* item = inventory[i];
+				lastHitPlayer = NULL;
+			}
 
-					if (item) {
-						if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || random_range(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
-							g_game.internalMoveItem(this, corpse, INDEX_WHEREEVER, item, item->getItemCount(), 0);
-							sendInventoryItem((slots_t)i, NULL);
-						}
+			if (!lastHitPlayer || blessings < 32) {
+				g_game.internalRemoveItem(inventory[SLOT_NECKLACE], 1);
+			}
+		} else {
+			for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+				Item* item = inventory[i];
+
+				if (item) {
+					if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || random_range(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
+						g_game.internalMoveItem(this, corpse, INDEX_WHEREEVER, item, item->getItemCount(), 0);
+						sendInventoryItem((slots_t)i, NULL);
 					}
 				}
 			}
@@ -2336,7 +2332,6 @@ uint32_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 	}
 
 	uint32_t result = (count * 100) / nextLevelCount;
-
 	if (result > 100) {
 		return 0;
 	}
@@ -2752,10 +2747,10 @@ void Player::addDefaultRegeneration(uint32_t addTicks)
 
 void Player::removeList()
 {
-	g_game.removePlayerFromNameMap(this);
-	listPlayer.removeList(getID());
+	g_game.removePlayer(this);
 
-	for (AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it) {
+	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+	for (auto it = players.begin(); it != players.end(); ++it) {
 		it->second->notifyStatusChange(this, VIPSTATUS_OFFLINE);
 	}
 
@@ -2764,13 +2759,12 @@ void Player::removeList()
 
 void Player::addList()
 {
-	g_game.addPlayerToNameMap(this);
-
-	for (AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it) {
+	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+	for (auto it = players.begin(); it != players.end(); ++it) {
 		it->second->notifyStatusChange(this, VIPSTATUS_ONLINE);
 	}
 
-	listPlayer.addList(this);
+	g_game.addPlayer(this);
 
 	Status::getInstance()->addPlayer();
 }
