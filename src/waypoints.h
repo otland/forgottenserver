@@ -17,7 +17,6 @@
 
 #ifndef __WAYPOINTS__
 #define __WAYPOINTS__
-#include "otsystem.h"
 
 class Waypoint
 {
