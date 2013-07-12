@@ -292,6 +292,7 @@
     <ClInclude Include="..\src\trashholder.h" />
     <ClInclude Include="..\src\vocation.h" />
     <ClInclude Include="..\src\waitlist.h" />
+    <ClInclude Include="..\src\waypoints.h" />
     <ClInclude Include="..\src\weapons.h" />
     <ClInclude Include="..\src\wildcardtree.h" />
   </ItemGroup>

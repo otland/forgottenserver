@@ -244,41 +244,46 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		return 0;
 	}
 
-	for (ThingMap::const_iterator it = m_localMap.begin(), end = m_localMap.end(); it != end; ++it) {
-		if (it->second == thing) {
-			return it->first;
+	uint32_t uid;
+	Creature* creature = thing->getCreature();
+	if (creature) {
+		uid = creature->getID();
+		if (m_localMap.count(uid) != 0) {
+			return uid;
 		}
-	}
-
-	uint32_t newUid;
-
-	if (Creature* creature = thing->getCreature()) {
-		newUid = creature->getID();
 	} else {
-		if (Item* item = thing->getItem()) {
-			uint32_t uid = item->getUniqueId();
+		Item* item = thing->getItem();
+		if (item) {
+			uid = item->getUniqueId();
+			if (uid > 0 && item->getTile() == item->getParent()) {
+				if (m_localMap.count(uid) != 0) {
+					return uid;
+				}
 
-			if (uid && item->getTile() == item->getParent()) {
 				m_localMap[uid] = thing;
 				return uid;
 			}
 		}
 
-		++m_lastUID;
+		for (auto it = m_localMap.begin(), end = m_localMap.end(); it != end; ++it) {
+			if (it->second == thing) {
+				return it->first;
+			}
+		}
 
+		++m_lastUID;
 		if (m_lastUID < 70000) {
 			m_lastUID = 70000;
 		}
 
-		while (m_localMap.find(m_lastUID) != m_localMap.end()) {
+		while (m_localMap.count(m_lastUID) != 0) {
 			++m_lastUID;
 		}
-
-		newUid = m_lastUID;
+		uid = m_lastUID;
 	}
 
-	m_localMap[newUid] = thing;
-	return newUid;
+	m_localMap[uid] = thing;
+	return uid;
 }
 
 void ScriptEnvironment::insertThing(uint32_t uid, Thing* thing)
