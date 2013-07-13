@@ -401,23 +401,21 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool i
 	}
 
 	uint32_t ret = 1;
-	MoveEvent* moveEvent = getEvent(tile, eventType);
 
+	MoveEvent* moveEvent = getEvent(tile, eventType);
 	if (moveEvent) {
 		ret = ret & moveEvent->fireStepEvent(creature, NULL, pos);
 	}
 
-	int32_t j = tile->__getLastIndex();
-	Item* tileItem = NULL;
-
-	for (int32_t i = tile->__getFirstIndex(); i < j; ++i) {
+	for (int32_t i = tile->__getFirstIndex(), j = tile->__getLastIndex(); i < j; ++i) {
 		Thing* thing = tile->__getThing(i);
-
-		if (thing && (tileItem = thing->getItem())) {
-			moveEvent = getEvent(tileItem, eventType);
-
-			if (moveEvent) {
-				ret = ret & moveEvent->fireStepEvent(creature, tileItem, pos);
+		if (thing) {
+			Item* tileItem = thing->getItem();
+			if (tileItem) {
+				moveEvent = getEvent(tileItem, eventType);
+				if (moveEvent) {
+					ret = ret & moveEvent->fireStepEvent(creature, tileItem, pos);
+				}
 			}
 		}
 	}
@@ -462,32 +460,27 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 
 	uint32_t ret = 1;
 	MoveEvent* moveEvent = getEvent(tile, eventType1);
-
 	if (moveEvent) {
 		ret &= moveEvent->fireAddRemItem(item, NULL, tile->getPosition());
 	}
 
 	moveEvent = getEvent(item, eventType1);
-
 	if (moveEvent) {
 		ret &= moveEvent->fireAddRemItem(item, NULL, tile->getPosition());
 	}
 
-	int32_t j = tile->__getLastIndex();
-	Item* tileItem = NULL;
-
-	for (int32_t i = tile->__getFirstIndex(); i < j; ++i) {
+	for (int32_t i = tile->__getFirstIndex(), j = tile->__getLastIndex(); i < j; ++i) {
 		Thing* thing = tile->__getThing(i);
-
-		if (thing && (tileItem = thing->getItem()) && (tileItem != item)) {
-			moveEvent = getEvent(tileItem, eventType2);
-
-			if (moveEvent) {
-				ret &= moveEvent->fireAddRemItem(item, tileItem, tile->getPosition());
+		if (thing) {
+			Item* tileItem = thing->getItem();
+			if (tileItem && tileItem != item) {
+				moveEvent = getEvent(tileItem, eventType2);
+				if (moveEvent) {
+					ret &= moveEvent->fireAddRemItem(item, tileItem, tile->getPosition());
+				}
 			}
 		}
 	}
-
 	return ret;
 }
 

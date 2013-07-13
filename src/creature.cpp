@@ -823,15 +823,17 @@ bool Creature::dropCorpse()
 bool Creature::getKillers(Creature** _lastHitCreature, Creature** _mostDamageCreature)
 {
 	*_lastHitCreature = g_game.getCreatureByID(lastHitCreature);
+	*_mostDamageCreature = NULL;
 
 	int32_t mostDamage = 0;
 
 	for (CountMap::const_iterator it = damageMap.begin(), end = damageMap.end(); it != end; ++it) {
 		CountBlock_t cb = it->second;
-
 		if ((cb.total > mostDamage && (OTSYS_TIME() - cb.ticks <= g_game.getInFightTicks()))) {
-			if ((*_mostDamageCreature = g_game.getCreatureByID(it->first))) {
+			Creature* creature = g_game.getCreatureByID(it->first);
+			if (creature) {
 				mostDamage = cb.total;
+				*_mostDamageCreature = creature;
 			}
 		}
 	}

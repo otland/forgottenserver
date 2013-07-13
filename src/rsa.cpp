@@ -127,11 +127,6 @@ void RSA::decrypt(char* msg, int32_t size)
 	mpz_clear(tmp);
 }
 
-int32_t RSA::getKeySize()
-{
-	return (mpz_sizeinbase(m_mod, 2) + 7) / 8;
-}
-
 void RSA::getPublicKey(char* buffer)
 {
 	size_t count = (mpz_sizeinbase(m_mod, 2) + 7) / 8;

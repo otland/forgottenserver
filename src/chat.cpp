@@ -504,34 +504,36 @@ ChannelList Chat::getChannelList(Player* player)
 
 	if (player->getGuild()) {
 		ChatChannel* channel = getChannel(player, CHANNEL_GUILD);
-
 		if (channel) {
 			list.push_back(channel);
-		} else if ((channel = createChannel(player, CHANNEL_GUILD))) {
-			list.push_back(channel);
+		} else {
+			channel = createChannel(player, CHANNEL_GUILD);
+			if (channel) {
+				list.push_back(channel);
+			}
 		}
 	}
 
 	if (player->getParty()) {
 		ChatChannel* channel = getChannel(player, CHANNEL_PARTY);
-
 		if (channel) {
 			list.push_back(channel);
-		} else if ((channel = createChannel(player, CHANNEL_PARTY))) {
-			list.push_back(channel);
+		} else {
+			channel = createChannel(player, CHANNEL_PARTY);
+			if (channel) {
+				list.push_back(channel);
+			}
 		}
 	}
 
 	for (NormalChannelMap::iterator it = m_normalChannels.begin(); it != m_normalChannels.end(); ++it) {
 		ChatChannel* channel = getChannel(player, it->first);
-
 		if (channel) {
 			list.push_back(it->second);
 		}
 	}
 
 	bool hasPrivate = false;
-
 	for (PrivateChannelMap::iterator pit = m_privateChannels.begin(); pit != m_privateChannels.end(); ++pit) {
 		if (PrivateChatChannel* channel = pit->second) {
 			if (channel->isInvited(player)) {
@@ -547,7 +549,6 @@ ChannelList Chat::getChannelList(Player* player)
 	if (!hasPrivate && player->isPremium()) {
 		list.push_front(dummyPrivate);
 	}
-
 	return list;
 }
 
@@ -657,13 +658,11 @@ ChatChannel* Chat::getChannelById(uint16_t channelId)
 
 PrivateChatChannel* Chat::getPrivateChannel(Player* player)
 {
-	PrivateChatChannel* channel = NULL;
-
 	for (PrivateChannelMap::iterator it = m_privateChannels.begin(); it != m_privateChannels.end(); ++it) {
-		if ((channel = it->second) && channel->getOwner() == player->getGUID()) {
+		PrivateChatChannel* channel = it->second;
+		if (channel->getOwner() == player->getGUID()) {
 			return channel;
 		}
 	}
-
 	return NULL;
 }

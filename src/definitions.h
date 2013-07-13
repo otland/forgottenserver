@@ -118,10 +118,11 @@ inline int strncasecmp(const char* s1, const char* s2, size_t n)
 
 #define ATOI64 _atoi64
 
-#pragma warning(disable:4786) // msvc too long debug names in stl
+#pragma warning(disable:4100) // unused parameters
+#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4244) // 'argument' : conversion from 'type1' to 'type2', possible loss of data
 #pragma warning(disable:4250) // 'class1' : inherits 'class2::member' via dominance
-#pragma warning(disable:4244) //'argument' : conversion from 'type1' to 'type2', possible loss of data
-#pragma warning(disable:4267) //'var' : conversion from 'size_t' to 'type', possible loss of data
+#pragma warning(disable:4267) // 'var' : conversion from 'size_t' to 'type', possible loss of data
 #endif
 #else // not Windows
 #include <unistd.h>

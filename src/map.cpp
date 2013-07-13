@@ -685,7 +685,6 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 		{ -1, 1},
 	};
 
-	const Tile* tile = NULL;
 	AStarNode* found = NULL;
 
 	while (maxSearchDist != -1 || nodes.countClosedNodes() < 100) {
@@ -705,58 +704,60 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 				pos.y = n->y + neighbourOrderList[i][1];
 
 				bool outOfRange = false;
-
 				if (maxSearchDist != -1 && (std::abs(endPos.x - pos.x) > maxSearchDist ||
 				                            std::abs(endPos.y - pos.y) > maxSearchDist)) {
 					outOfRange = true;
 				}
 
-				if (!outOfRange && (tile = canWalkTo(creature, pos))) {
-					//The cost (g) for this neighbour
-					int32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
-					int32_t extraCost = nodes.getTileWalkCost(creature, tile);
-					int32_t newg = n->g + cost + extraCost;
-					uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+				if (!outOfRange) {
+					const Tile* tile = canWalkTo(creature, pos);
+					if (tile) {
+						//The cost (g) for this neighbour
+						int32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
+						int32_t extraCost = nodes.getTileWalkCost(creature, tile);
+						int32_t newg = n->g + cost + extraCost;
+						uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
-					//Check if the node is already in the closed/open list
-					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
+						//Check if the node is already in the closed/open list
+						//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
-					AStarNode* neighbourNode;
-					std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+						AStarNode* neighbourNode;
+						std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 
-					if (it != nodeTable.end()) {
-						neighbourNode = it->second;
-					} else {
-						neighbourNode = NULL;
-					}
-
-					if (neighbourNode) {
-						if (neighbourNode->g <= newg) {
-							continue;    //The node on the closed/open list is cheaper than this one
+						if (it != nodeTable.end()) {
+							neighbourNode = it->second;
+						} else {
+							neighbourNode = NULL;
 						}
 
-						nodes.openNode(neighbourNode);
-					} else {
-						//Does not exist in the open/closed list, create a new node
-						neighbourNode = nodes.createOpenNode();
+						if (neighbourNode) {
+							if (neighbourNode->g <= newg) {
+								continue;    //The node on the closed/open list is cheaper than this one
+							}
 
-						if (!neighbourNode) {
-							//seems we ran out of nodes
-							listDir.clear();
-							return false;
+							nodes.openNode(neighbourNode);
+						} else {
+							//Does not exist in the open/closed list, create a new node
+							neighbourNode = nodes.createOpenNode();
+
+							if (!neighbourNode) {
+								//seems we ran out of nodes
+								listDir.clear();
+								return false;
+							}
+
+							nodeTable[tableIndex] = neighbourNode;
+
+							neighbourNode->x = pos.x;
+							neighbourNode->y = pos.y;
 						}
 
-						nodeTable[tableIndex] = neighbourNode;
-
-						neighbourNode->x = pos.x;
-						neighbourNode->y = pos.y;
+						//This node is the best node so far with this state
+						neighbourNode->parent = n;
+						neighbourNode->g = newg;
+						neighbourNode->h = nodes.getEstimatedDistance(pos.x, pos.y, endPos.x, endPos.y);
+						neighbourNode->f = newg + neighbourNode->h;
 					}
-
-					//This node is the best node so far with this state
-					neighbourNode->parent = n;
-					neighbourNode->g = newg;
-					neighbourNode->h = nodes.getEstimatedDistance(pos.x, pos.y, endPos.x, endPos.y);
-					neighbourNode->f = newg + neighbourNode->h;
 				}
 			}
 
@@ -840,7 +841,6 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		{ -1, 1},
 	};
 
-	const Tile* tile = NULL;
 	AStarNode* found = NULL;
 
 	while (fpp.maxSearchDist != -1 || nodes.countClosedNodes() < 100) {
@@ -884,57 +884,60 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 				}
 			}
 
-			if (inRange && (tile = canWalkTo(creature, pos))) {
-				//The cost (g) for this neighbour
-				int32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
-				int32_t extraCost = nodes.getTileWalkCost(creature, tile);
-				int32_t newf = n->f + cost + extraCost;
-				uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+			if (inRange) {
+				const Tile* tile = canWalkTo(creature, pos);
+				if (tile) {
+					//The cost (g) for this neighbour
+					int32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
+					int32_t extraCost = nodes.getTileWalkCost(creature, tile);
+					int32_t newf = n->f + cost + extraCost;
+					uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
-				//Check if the node is already in the closed/open list
-				//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
+					//Check if the node is already in the closed/open list
+					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
-				AStarNode* neighbourNode;
+					AStarNode* neighbourNode;
 
-				std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+					std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 
-				if (it != nodeTable.end()) {
-					neighbourNode = it->second;
-				} else {
-					neighbourNode = NULL;
-				}
-
-				if (neighbourNode) {
-					if (neighbourNode->f <= newf) {
-						//The node on the closed/open list is cheaper than this one
-						continue;
+					if (it != nodeTable.end()) {
+						neighbourNode = it->second;
+					} else {
+						neighbourNode = NULL;
 					}
 
-					nodes.openNode(neighbourNode);
-				} else {
-					//Does not exist in the open/closed list, create a new node
-					neighbourNode = nodes.createOpenNode();
-
-					if (!neighbourNode) {
-						if (found) {
-							//not quite what we want, but we found something
-							break;
+					if (neighbourNode) {
+						if (neighbourNode->f <= newf) {
+							//The node on the closed/open list is cheaper than this one
+							continue;
 						}
 
-						//seems we ran out of nodes
-						dirList.clear();
-						return false;
+						nodes.openNode(neighbourNode);
+					} else {
+						//Does not exist in the open/closed list, create a new node
+						neighbourNode = nodes.createOpenNode();
+
+						if (!neighbourNode) {
+							if (found) {
+								//not quite what we want, but we found something
+								break;
+							}
+
+							//seems we ran out of nodes
+							dirList.clear();
+							return false;
+						}
+
+						nodeTable[tableIndex] = neighbourNode;
+
+						neighbourNode->x = pos.x;
+						neighbourNode->y = pos.y;
 					}
 
-					nodeTable[tableIndex] = neighbourNode;
-
-					neighbourNode->x = pos.x;
-					neighbourNode->y = pos.y;
+					//This node is the best node so far with this state
+					neighbourNode->parent = n;
+					neighbourNode->f = newf;
 				}
-
-				//This node is the best node so far with this state
-				neighbourNode->parent = n;
-				neighbourNode->f = newf;
 			}
 		}
 
@@ -1284,19 +1287,17 @@ uint32_t Map::clean()
 		g_game.setGameState(GAME_STATE_MAINTAIN);
 	}
 
-	Tile* tile;
-
 	for (int32_t z = 0; z < (int32_t)MAP_MAX_LAYERS; z++) {
 		for (uint32_t y = 1; y <= mapHeight; y++) {
 			for (uint32_t x = 1; x <= mapWidth; x++) {
-				if (!(tile = getTile(x, y, z)) || tile->hasFlag(TILESTATE_PROTECTIONZONE) || !tile->getItemList()) {
+				Tile* tile = getTile(x, y, z);
+				if (!tile || tile->hasFlag(TILESTATE_PROTECTIONZONE) || !tile->getItemList()) {
 					continue;
 				}
 
 				++tiles;
 				TileItemVector* itemList = tile->getItemList();
 				ItemVector::iterator it = itemList->begin(), end = itemList->end();
-
 				while (it != end) {
 					if ((*it)->isCleanable()) {
 						g_game.internalRemoveItem(*it, -1);

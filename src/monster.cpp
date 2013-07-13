@@ -423,9 +423,10 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 			for (std::list<Creature*>::iterator it = resultList.begin(); it != resultList.end(); ++it) {
 				const Position& pos = (*it)->getPosition();
 
-				if (minRange == -1 || std::max<int32_t>(std::abs(myPos.x - pos.x), std::abs(myPos.y - pos.y)) < minRange) {
+				int32_t distance = std::max<int32_t>(std::abs(myPos.x - pos.x), std::abs(myPos.y - pos.y));
+				if (minRange == -1 || distance < minRange) {
 					target = *it;
-					minRange = std::max<int32_t>(std::abs(myPos.x - pos.x), std::abs(myPos.y - pos.y));
+					minRange = distance;
 				}
 			}
 
@@ -523,11 +524,6 @@ bool Monster::isTarget(Creature* creature)
 	if (creature->getPosition().z != getPosition().z) {
 		return false;
 	}
-
-	if (creature->getPlayer() && creature->getPlayer()->isLagging()) {
-		return false;
-	}
-
 	return true;
 }
 
@@ -655,14 +651,6 @@ void Monster::onThink(uint32_t interval)
 void Monster::doAttacking(uint32_t interval)
 {
 	if (!attackedCreature || (isSummon() && attackedCreature == this)) {
-		return;
-	}
-
-	if (attackedCreature->getPlayer() && attackedCreature->getPlayer()->isLagging()) {
-		onCreatureLeave(attackedCreature);
-		setAttackedCreature(NULL);
-		setFollowCreature(NULL);
-		onAttackedCreatureDisappear(false);
 		return;
 	}
 
@@ -1913,24 +1901,19 @@ bool Monster::challengeCreature(Creature* creature)
 {
 	if (isSummon()) {
 		return false;
-	} else {
-		bool result = selectTarget(creature);
-
-		if (result) {
-			targetChangeCooldown = 8000;
-			targetChangeTicks = 0;
-		}
-
-		return result;
 	}
 
-	return false;
+	bool result = selectTarget(creature);
+	if (result) {
+		targetChangeCooldown = 8000;
+		targetChangeTicks = 0;
+	}
+	return result;
 }
 
 bool Monster::convinceCreature(Creature* creature)
 {
 	Player* player = creature->getPlayer();
-
 	if (player && !player->hasFlag(PlayerFlag_CanConvinceAll)) {
 		if (!mType->isConvinceable) {
 			return false;

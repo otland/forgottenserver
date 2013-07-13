@@ -1126,10 +1126,9 @@ void Tile::__addThing(int32_t index, Thing* thing)
 			if (item->isMagicField()) {
 				//remove old field item if exists
 				if (items) {
-					MagicField* oldField = NULL;
-
 					for (ItemVector::iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
-						if ((oldField = (*it)->getMagicField())) {
+						MagicField* oldField = (*it)->getMagicField();
+						if (oldField) {
 							if (oldField->isReplaceable()) {
 								int32_t oldFieldIndex = __getIndexOfThing(*it);
 								__removeThing(oldField, 1);
@@ -1381,7 +1380,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 
 int32_t Tile::__getIndexOfThing(const Thing* thing) const
 {
-	int n = -1;
+	int32_t n = -1;
 
 	if (ground) {
 		if (ground == thing) {
@@ -1392,7 +1391,6 @@ int32_t Tile::__getIndexOfThing(const Thing* thing) const
 	}
 
 	const TileItemVector* items = getItemList();
-
 	if (items) {
 		if (thing->getItem()) {
 			for (ItemVector::const_iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {

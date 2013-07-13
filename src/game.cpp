@@ -1947,23 +1947,31 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 	}
 
 	std::list<Container*> listContainer;
-	Container* tmpContainer = NULL;
-	Thing* thing = NULL;
-	Item* item = NULL;
 
 	for (int32_t i = cylinder->__getFirstIndex(); i < cylinder->__getLastIndex();) {
-		if ((thing = cylinder->__getThing(i)) && (item = thing->getItem())) {
-			if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
-				return item;
-			} else {
-				++i;
+		Thing* thing = cylinder->__getThing(i);
+		if (!thing) {
+			++i;
+			continue;
+		}
 
-				if (depthSearch && (tmpContainer = item->getContainer())) {
-					listContainer.push_back(tmpContainer);
-				}
-			}
+		Item* item = thing->getItem();
+		if (!item) {
+			++i;
+			continue;
+		}
+
+		if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
+			return item;
 		} else {
 			++i;
+			
+			if (depthSearch) {
+				Container* container = item->getContainer();
+				if (container) {
+					listContainer.push_back(container);
+				}
+			}
 		}
 	}
 
@@ -1973,12 +1981,12 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 
 		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
 			Item* item = *it;
-
 			if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
 				return item;
 			}
 
-			if ((tmpContainer = item->getContainer())) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
 				listContainer.push_back(tmpContainer);
 			}
 		}
@@ -1998,36 +2006,42 @@ bool Game::removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, 
 	}
 
 	std::list<Container*> listContainer;
-	Container* tmpContainer = NULL;
-	Thing* thing = NULL;
-	Item* item = NULL;
 
 	for (int32_t i = cylinder->__getFirstIndex(); i < cylinder->__getLastIndex() && count > 0;) {
-		if ((thing = cylinder->__getThing(i)) && (item = thing->getItem())) {
-			if (!onlySubContainers && item->getID() == itemId) {
-				if (item->isStackable()) {
-					if (item->getItemCount() > count) {
-						internalRemoveItem(item, count);
-						count = 0;
-					} else {
-						count -= item->getItemCount();
-						internalRemoveItem(item);
-					}
-				} else if (subType == -1 || subType == item->getSubType()) {
-					--count;
-					internalRemoveItem(item);
+		Thing* thing = cylinder->__getThing(i);
+		if (!thing) {
+			++i;
+			continue;
+		}
+		
+		Item* item = thing->getItem();
+		if (!item) {
+			++i;
+			continue;
+		}
+
+		if (!onlySubContainers && item->getID() == itemId) {
+			if (item->isStackable()) {
+				if (item->getItemCount() > count) {
+					internalRemoveItem(item, count);
+					count = 0;
 				} else {
-					++i;
+					count -= item->getItemCount();
+					internalRemoveItem(item);
 				}
+			} else if (subType == -1 || subType == item->getSubType()) {
+				--count;
+				internalRemoveItem(item);
 			} else {
 				++i;
-
-				if ((tmpContainer = item->getContainer())) {
-					listContainer.push_back(tmpContainer);
-				}
 			}
 		} else {
 			++i;
+
+			Container* container = item->getContainer();
+			if (container) {
+				listContainer.push_back(container);
+			}
 		}
 	}
 
@@ -2037,7 +2051,6 @@ bool Game::removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, 
 
 		for (int32_t i = 0; i < (int32_t)container->size() && count > 0;) {
 			Item* item = container->getItem(i);
-
 			if (item->getID() == itemId) {
 				if (item->isStackable()) {
 					if (item->getItemCount() > count) {
@@ -2056,7 +2069,8 @@ bool Game::removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, 
 			} else {
 				++i;
 
-				if ((tmpContainer = item->getContainer())) {
+				Container* tmpContainer = item->getContainer();
+				if (tmpContainer) {
 					listContainer.push_back(tmpContainer);
 				}
 			}
@@ -2074,24 +2088,23 @@ uint64_t Game::getMoney(const Cylinder* cylinder)
 
 	std::list<Container*> listContainer;
 	ItemDeque::const_iterator it;
-	Container* tmpContainer;
-
-	Thing* thing;
-	Item* item;
 
 	uint64_t moneyCount = 0;
 
 	for (int32_t i = cylinder->__getFirstIndex(); i < cylinder->__getLastIndex(); ++i) {
-		if (!(thing = cylinder->__getThing(i))) {
+		Thing* thing = cylinder->__getThing(i);
+		if (!thing) {
 			continue;
 		}
 
-		if (!(item = thing->getItem())) {
+		Item* item = thing->getItem();
+		if (!item) {
 			continue;
 		}
 
-		if ((tmpContainer = item->getContainer())) {
-			listContainer.push_back(tmpContainer);
+		Container* container = item->getContainer();
+		if (container) {
+			listContainer.push_back(container);
 		} else if (item->getWorth() != 0) {
 			moneyCount += item->getWorth();
 		}
@@ -2104,7 +2117,8 @@ uint64_t Game::getMoney(const Cylinder* cylinder)
 		for (it = container->getItems(); it != container->getEnd(); ++it) {
 			Item* item = *it;
 
-			if ((tmpContainer = item->getContainer())) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
 				listContainer.push_back(tmpContainer);
 			} else if (item->getWorth() != 0) {
 				moneyCount += item->getWorth();
@@ -2126,26 +2140,26 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	}
 
 	std::list<Container*> listContainer;
-	Container* tmpContainer = NULL;
 
 	typedef std::multimap<uint64_t, Item*, std::less<uint64_t> > MoneyMap;
 	typedef MoneyMap::value_type moneymap_pair;
 	MoneyMap moneyMap;
-	Thing* thing;
-	Item* item;
 	uint64_t moneyCount = 0;
 
 	for (int32_t i = cylinder->__getFirstIndex(); i < cylinder->__getLastIndex(); ++i) {
-		if (!(thing = cylinder->__getThing(i))) {
+		Thing* thing = cylinder->__getThing(i);
+		if (!thing) {
 			continue;
 		}
 
-		if (!(item = thing->getItem())) {
+		Item* item = thing->getItem();
+		if (!item) {
 			continue;
 		}
 
-		if ((tmpContainer = item->getContainer())) {
-			listContainer.push_back(tmpContainer);
+		Container* container = item->getContainer();
+		if (container) {
+			listContainer.push_back(container);
 		} else if (item->getWorth() != 0) {
 			moneyCount += item->getWorth();
 			moneyMap.insert(moneymap_pair(item->getWorth(), item));
@@ -2159,7 +2173,8 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
 			Item* item = *it;
 
-			if ((tmpContainer = item->getContainer())) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
 				listContainer.push_back(tmpContainer);
 			} else if (item->getWorth() != 0) {
 				moneyCount += item->getWorth();
@@ -2599,29 +2614,6 @@ bool Game::playerReceivePing(uint32_t playerId)
 	}
 
 	player->receivePing();
-	return true;
-}
-
-bool Game::playerRemoveLagging(uint32_t playerId)
-{
-	Player* player = getPlayerByID(playerId);
-
-	if (!player || player->isRemoved()) {
-		return false;
-	}
-
-	player->receivePing();
-	player->setLagging(false);
-
-	SpectatorVec list;
-	getSpectators(list, player->getPosition(), true);
-
-	for (SpectatorVec::const_iterator it = list.begin(), end = list.end(); it != end; ++it) {
-		if (Monster* tmpMonster = (*it)->getMonster()) {
-			tmpMonster->onCreatureAppear(player, false);
-		}
-	}
-
 	return true;
 }
 
@@ -3288,16 +3280,25 @@ bool Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	std::map<Item*, uint32_t>::const_iterator it;
 
 	for (it = tradeItems.begin(); it != tradeItems.end(); ++it) {
-		if (tradeItem == it->first ||
-		        ((container = dynamic_cast<const Container*>(tradeItem)) && container->isHoldingItem(it->first)) ||
-		        ((container = dynamic_cast<const Container*>(it->first)) && container->isHoldingItem(tradeItem))) {
+		if (tradeItem == it->first) {
+			player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
+			return false;
+		}
+
+		container = dynamic_cast<const Container*>(tradeItem);
+		if (container && container->isHoldingItem(it->first)) {
+			player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
+			return false;
+		}
+
+		container = dynamic_cast<const Container*>(it->first);
+		if (container && container->isHoldingItem(tradeItem)) {
 			player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
 			return false;
 		}
 	}
 
 	Container* tradeContainer = tradeItem->getContainer();
-
 	if (tradeContainer && tradeContainer->getItemHoldingCount() + 1 > 100) {
 		player->sendTextMessage(MSG_INFO_DESCR, "You can not trade more than 100 items.");
 		return false;
@@ -3529,7 +3530,6 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	bool foundItem = false;
 	std::list<const Container*> listContainer;
 	ItemDeque::const_iterator it;
-	Container* tmpContainer = NULL;
 
 	listContainer.push_back(tradeContainer);
 
@@ -3538,12 +3538,12 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 		listContainer.pop_front();
 
 		for (it = container->getItems(); it != container->getEnd(); ++it) {
-			if ((tmpContainer = (*it)->getContainer())) {
+			Container* tmpContainer = (*it)->getContainer();
+			if (tmpContainer) {
 				listContainer.push_back(tmpContainer);
 			}
 
 			--index;
-
 			if (index == 0) {
 				tradeItem = *it;
 				foundItem = true;
@@ -5403,12 +5403,11 @@ void Game::getWorldLightInfo(LightInfo& lightInfo) const
 
 void Game::addCommandTag(const std::string& tag)
 {
-	for (uint32_t i = 0, size = commandTags.size(); i < size; ++i) {
+	for (size_t i = 0, size = commandTags.size(); i < size; ++i) {
 		if (commandTags[i] == tag) {
 			return;
 		}
 	}
-
 	commandTags.push_back(tag);
 }
 
@@ -6261,7 +6260,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			uint16_t tmpAmount = amount;
 
 			for (ItemList::const_iterator iter = itemList.begin(), end = itemList.end(); iter != end; ++iter) {
-				uint16_t removeCount = std::min<int32_t>(tmpAmount, (*iter)->getItemCount());
+				uint16_t removeCount = std::min<uint16_t>(tmpAmount, (*iter)->getItemCount());
 				tmpAmount -= removeCount;
 				internalRemoveItem(*iter, removeCount);
 

@@ -284,19 +284,18 @@ bool House::transferToDepot(Player* player)
 	}
 
 	ItemList moveItemList;
-	Container* tmpContainer = NULL;
-	Item* item = NULL;
-
 	for (HouseTileList::iterator it = houseTiles.begin(); it != houseTiles.end(); ++it) {
 		if (const TileItemVector* items = (*it)->getItemList()) {
 			for (ItemVector::const_iterator iit = items->begin(), iend = items->end(); iit != iend; ++iit) {
-				item = (*iit);
-
+				Item* item = *iit;
 				if (item->isPickupable()) {
 					moveItemList.push_back(item);
-				} else if ((tmpContainer = item->getContainer())) {
-					for (ItemDeque::const_iterator cit = tmpContainer->getItems(); cit != tmpContainer->getEnd(); ++cit) {
-						moveItemList.push_back(*cit);
+				} else {
+					Container* container = item->getContainer();
+					if (container) {
+						for (ItemDeque::const_iterator cit = container->getItems(); cit != container->getEnd(); ++cit) {
+							moveItemList.push_back(*cit);
+						}
 					}
 				}
 			}
@@ -304,8 +303,9 @@ bool House::transferToDepot(Player* player)
 	}
 
 	for (ItemList::iterator it = moveItemList.begin(); it != moveItemList.end(); ++it) {
-		g_game.internalMoveItem((*it)->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                        (*it), (*it)->getItemCount(), NULL, FLAG_NOLIMIT);
+		Item* item = *it;
+		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
+		                        item, item->getItemCount(), NULL, FLAG_NOLIMIT);
 	}
 
 	return true;

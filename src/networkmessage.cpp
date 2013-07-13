@@ -102,7 +102,7 @@ void NetworkMessage::AddDouble(double value, uint8_t precision/* = 2*/)
 	AddU32((value * std::pow((float)10, precision)) + INT_MAX);
 }
 
-void NetworkMessage::AddBytes(const char* bytes, uint32_t size)
+void NetworkMessage::AddBytes(const char* bytes, size_t size)
 {
 	if (!canAdd(size) || size > 8192) {
 		return;

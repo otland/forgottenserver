@@ -180,28 +180,20 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p)
 
 Spell* Spells::getSpellByName(const std::string& name)
 {
-	Spell* spell;
-
-	if ((spell = getRuneSpellByName(name))) {
-		return spell;
+	Spell* spell = getRuneSpellByName(name);
+	if (!spell) {
+		spell = getInstantSpellByName(name);
 	}
-
-	if ((spell = getInstantSpellByName(name))) {
-		return spell;
-	}
-
-	return NULL;
+	return spell;
 }
 
 RuneSpell* Spells::getRuneSpell(uint32_t id)
 {
 	RunesMap::iterator it = runes.find(id);
-
-	if (it != runes.end()) {
-		return it->second;
+	if (it == runes.end()) {
+		return NULL;
 	}
-
-	return NULL;
+	return it->second;
 }
 
 RuneSpell* Spells::getRuneSpellByName(const std::string& name)

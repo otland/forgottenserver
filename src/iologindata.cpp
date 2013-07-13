@@ -294,14 +294,14 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	PropStream propStream;
 	propStream.init(conditions, conditionsSize);
 
-	Condition* condition;
-
-	while ((condition = Condition::createCondition(propStream))) {
+	Condition* condition = Condition::createCondition(propStream);
+	while (condition) {
 		if (condition->unserialize(propStream)) {
 			player->storedConditionList.push_back(condition);
 		} else {
 			delete condition;
 		}
+		condition = Condition::createCondition(propStream);
 	}
 
 	player->setVocation(result->getDataInt("vocation"));
@@ -434,7 +434,8 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool prelo
 	query.str("");
 	query << "SELECT `password` FROM `accounts` WHERE `id` = " << accno;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	result = db->storeQuery(query.str());
+	if (!result) {
 		return false;
 	}
 
@@ -852,10 +853,9 @@ bool IOLoginData::savePlayer(Player* player)
 	stmt.setQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 
 	ItemBlockList itemList;
-	Item* item;
-
 	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
-		if ((item = player->inventory[slotId])) {
+		Item* item = player->inventory[slotId];
+		if (item) {
 			itemList.push_back(itemBlock(slotId, item));
 		}
 	}
@@ -950,9 +950,8 @@ bool IOLoginData::getNameByGuid(uint32_t guid, std::string& name)
 
 	Database* db = Database::getInstance();
 
-	DBResult* result;
-
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return false;
 	}
 
@@ -976,11 +975,10 @@ bool IOLoginData::getGuidByName(uint32_t& guid, std::string& name)
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	DBResult* result;
-
 	query << "SELECT `id`, `name` FROM `players` WHERE `name` = " << db->escapeString(name);
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return false;
 	}
 
@@ -997,11 +995,10 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	DBResult* result;
-
 	query << "SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = " << db->escapeString(name);
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return false;
 	}
 
@@ -1062,7 +1059,6 @@ bool IOLoginData::formatPlayerName(std::string& name)
 const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
 {
 	PlayerGroupMap::const_iterator it = playerGroupMap.find(groupid);
-
 	if (it != playerGroupMap.end()) {
 		return it->second;
 	}
@@ -1070,11 +1066,10 @@ const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	DBResult* result;
-
 	query << "SELECT `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` WHERE `id` = " << groupid;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return NULL;
 	}
 
@@ -1093,12 +1088,12 @@ const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
 const PlayerGroup* IOLoginData::getPlayerGroupByAccount(uint32_t accno)
 {
 	Database* db = Database::getInstance();
-	std::ostringstream query;
-	DBResult* result;
 
+	std::ostringstream query;
 	query << "SELECT `group_id` FROM `accounts` WHERE `id` = " << accno;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return NULL;
 	}
 
@@ -1152,10 +1147,10 @@ uint32_t IOLoginData::getAccountNumberByName(const std::string& name)
 {
 	Database* db = Database::getInstance();
 	std::ostringstream query;
-	DBResult* result;
 	query << "SELECT `account_id` FROM `players` WHERE `name` = " << db->escapeString(name);
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return 0;
 	}
 

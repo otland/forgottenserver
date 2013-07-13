@@ -173,15 +173,14 @@ bool utf8ToLatin1(const char* intext, std::string& outtext)
 	}
 
 	int32_t inlen = strlen(intext);
-
 	if (inlen == 0) {
 		return false;
 	}
 
 	int32_t outlen = (inlen << 1) + 1;
 	unsigned char* outbuf = new uint8_t[outlen];
-	int32_t res = UTF8Toisolat1(outbuf, &outlen, (const unsigned char*)intext, &inlen);
 
+	int32_t res = UTF8Toisolat1(outbuf, &outlen, (const unsigned char*)intext, &inlen);
 	if (res < 0) {
 		delete[] outbuf;
 		return false;
@@ -413,18 +412,16 @@ std::string formatDate(time_t time)
 std::string formatDateShort(time_t time)
 {
 	char buffer[24];
-	const tm* tms = localtime(&time);
-	int res;
+	size_t res;
 
+	const tm* tms = localtime(&time);
 	if (tms) {
 		res = strftime(buffer, 12, "%d %b %Y", tms);
-
 		if (res == 0) {
 			return "";
 		}
 	} else {
 		res = sprintf(buffer, "UNIX Time : %d", (int32_t)time);
-
 		if (res < 0) {
 			return "";
 		}
@@ -1100,15 +1097,14 @@ std::string ucfirst(std::string str)
 
 std::string ucwords(std::string str)
 {
-	uint32_t strLength = str.length();
-
+	size_t strLength = str.length();
 	if (strLength == 0) {
 		return str;
 	}
 
 	str[0] = upchar(str[0]);
 
-	for (uint32_t i = 1; i < strLength; ++i) {
+	for (size_t i = 1; i < strLength; ++i) {
 		if (str[i - 1] == ' ') {
 			str[i] = upchar(str[i]);
 		}
@@ -1213,14 +1209,12 @@ uint8_t clientFluidToServer(uint8_t clientFluid)
 std::string getFirstLine(const std::string& str)
 {
 	std::string firstLine = "";
-
-	for (uint32_t i = 0, strLength = str.length(); i < strLength; ++i) {
+	for (size_t i = 0, strLength = str.length(); i < strLength; ++i) {
 		if (str[i] == '\n') {
 			break;
 		}
 
 		firstLine += str[i];
 	}
-
 	return firstLine;
 }

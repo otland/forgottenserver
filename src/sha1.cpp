@@ -169,9 +169,9 @@ bool SHA1::Result(unsigned* message_digest_array)
  *	Comments:
  *
  */
-void SHA1::Input(const unsigned char* message_array, unsigned length)
+void SHA1::Input(const unsigned char* message_array, size_t length)
 {
-	if (!length) {
+	if (length == 0) {
 		return;
 	}
 
@@ -223,7 +223,7 @@ void SHA1::Input(const unsigned char* message_array, unsigned length)
  *	Comments:
  *
  */
-void SHA1::Input(const char*	message_array, unsigned length)
+void SHA1::Input(const char*	message_array, size_t length)
 {
 	Input((unsigned char*) message_array, length);
 }

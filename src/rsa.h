@@ -32,7 +32,6 @@ class RSA
 		bool setKey(const std::string& file);
 		void decrypt(char* msg, int32_t size);
 
-		int32_t getKeySize();
 		void getPublicKey(char* buffer);
 
 	protected:

@@ -490,8 +490,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		}
 
 		return;
-	} else if (player->isLagging()) {
-		addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerRemoveLagging, player->getID());
 	}
 
 	//a dead player can not performs actions
@@ -1665,31 +1663,35 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 	msg.AddU16(channelId);
 	msg.AddString(channelName);
 
-	ChatChannel* channel;
+	if (channelId != CHANNEL_GUILD && channelId != CHANNEL_PARTY || channelId != CHANNEL_PRIVATE) {
+		msg.AddU16(0x00);
+		msg.AddU16(0x00);
+	} else {
+		ChatChannel* channel = g_chat.getChannel(player, channelId);
+		if (channel) {
+			UsersMap channelUsers = channel->getUsers();
+			msg.AddU16(channelUsers.size());
 
-	if ((channelId == CHANNEL_GUILD || channelId == CHANNEL_PARTY || channelId == CHANNEL_PRIVATE) && (channel = g_chat.getChannel(player, channelId))) {
-		UsersMap channelUsers = channel->getUsers();
-		msg.AddU16(channelUsers.size());
-
-		for (UsersMap::iterator it = channelUsers.begin(); it != channelUsers.end(); ++it) {
-			msg.AddString(it->second->getName());
-		}
-
-		PrivateChatChannel* privateChannel = dynamic_cast<PrivateChatChannel*>(channel);
-
-		if (privateChannel) {
-			InvitedMap invitedUsers = privateChannel->getInvitedUsers();
-			msg.AddU16(invitedUsers.size());
-
-			for (InvitedMap::iterator it = invitedUsers.begin(); it != invitedUsers.end(); ++it) {
+			for (UsersMap::iterator it = channelUsers.begin(); it != channelUsers.end(); ++it) {
 				msg.AddString(it->second->getName());
+			}
+
+			PrivateChatChannel* privateChannel = dynamic_cast<PrivateChatChannel*>(channel);
+
+			if (privateChannel) {
+				InvitedMap invitedUsers = privateChannel->getInvitedUsers();
+				msg.AddU16(invitedUsers.size());
+
+				for (InvitedMap::iterator it = invitedUsers.begin(); it != invitedUsers.end(); ++it) {
+					msg.AddString(it->second->getName());
+				}
+			} else {
+				msg.AddU16(0x00);
 			}
 		} else {
 			msg.AddU16(0x00);
+			msg.AddU16(0x00);
 		}
-	} else {
-		msg.AddU16(0x00);
-		msg.AddU16(0x00);
 	}
 
 	writeToOutputBuffer(msg);
@@ -2065,7 +2067,7 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 	std::map<uint32_t, uint16_t> counterMap;
 
 	uint32_t i = 0;
-	msg.AddU32(std::min<int32_t>(800, buyOffers.size()));
+	msg.AddU32(std::min<uint32_t>(800, buyOffers.size()));
 
 	for (HistoryMarketOfferList::const_iterator it = buyOffers.begin(), end = buyOffers.end(); it != end && i < 800; ++it, ++i) {
 		msg.AddU32(it->timestamp);
@@ -2079,7 +2081,7 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 	counterMap.clear();
 	i = 0;
 
-	msg.AddU32(std::min<int32_t>(800, sellOffers.size()));
+	msg.AddU32(std::min<uint32_t>(800, sellOffers.size()));
 
 	for (HistoryMarketOfferList::const_iterator it = sellOffers.begin(), end = sellOffers.end(); it != end && i < 800; ++it, ++i) {
 		msg.AddU32(it->timestamp);
@@ -2346,7 +2348,6 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 	if (const Container* tradeContainer = item->getContainer()) {
 		std::list<const Container*> listContainer;
 		ItemDeque::const_iterator it;
-		Container* tmpContainer = NULL;
 
 		listContainer.push_back(tradeContainer);
 
@@ -2358,10 +2359,10 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 			listContainer.pop_front();
 
 			for (it = container->getItems(); it != container->getEnd(); ++it) {
-				if ((tmpContainer = (*it)->getContainer())) {
+				Container* tmpContainer = (*it)->getContainer();
+				if (tmpContainer) {
 					listContainer.push_back(tmpContainer);
 				}
-
 				listItem.push_back(*it);
 			}
 		}

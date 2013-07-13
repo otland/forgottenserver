@@ -94,9 +94,8 @@ bool IOMapSerialize::loadTile(Database& db, Tile* tile)
 	      << " AND `y` = " << tilePos.y
 	      << " AND `z` = " << tilePos.z;
 
-	DBResult* result;
-
-	if (!(result = db.storeQuery(query.str()))) {
+	DBResult* result = db.storeQuery(query.str());
+	if (!result) {
 		return false;
 	}
 
@@ -339,9 +338,8 @@ void IOMapSerialize::loadMapBinary(Map* map)
 {
 	Database* db = Database::getInstance();
 
-	DBResult* result;
-
-	if (!(result = db->storeQuery("SELECT `house_id`, `data` FROM `map_store`"))) {
+	DBResult* result = db->storeQuery("SELECT `house_id`, `data` FROM `map_store`");
+	if (!result) {
 		return;
 	}
 

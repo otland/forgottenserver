@@ -198,7 +198,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 
 	ghostMode = false;
 	requestedOutfit = false;
-	lagging = false;
 	moveItemsBuffer = 0;
 	lastMoveItemTime = 0;
 
@@ -1466,11 +1465,6 @@ void Player::sendPing()
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
-
-	if (!lagging && noPongTime >= 7000) {
-		lagging = true;
-	}
-
 	if (noPongTime >= 60000 && canLogout()) {
 		if (!client) {
 			g_creatureEvents->playerLogout(this);
@@ -1650,10 +1644,9 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (isLogin && creature == this) {
-		Item* item;
-
 		for (int32_t slot = SLOT_FIRST; slot < SLOT_LAST; ++slot) {
-			if ((item = getInventoryItem((slots_t)slot))) {
+			Item* item = getInventoryItem((slots_t)slot);
+			if (item) {
 				item->__startDecaying();
 				g_moveEvents->onPlayerEquip(this, item, (slots_t)slot, false);
 			}

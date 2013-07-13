@@ -146,7 +146,7 @@ class NetworkMessage
 			m_ReadPos += 8;
 			m_MsgSize += 8;
 		}
-		void AddBytes(const char* bytes, uint32_t size);
+		void AddBytes(const char* bytes, size_t size);
 		void AddPaddingBytes(uint32_t n);
 
 		void AddString(const std::string& value);
@@ -190,7 +190,7 @@ class NetworkMessage
 		}
 
 	protected:
-		inline bool canAdd(uint32_t size) const {
+		inline bool canAdd(size_t size) const {
 			return (size + m_ReadPos < max_body_length);
 		}
 
@@ -199,7 +199,6 @@ class NetworkMessage
 				m_overrun = true;
 				return false;
 			}
-
 			return true;
 		}
 

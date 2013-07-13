@@ -57,7 +57,7 @@ DatabaseMySQL::DatabaseMySQL()
 		//mySQL servers < 5.0.19 has a bug where MYSQL_OPT_RECONNECT is (incorrectly) reset by mysql_real_connect calls
 		//See http://dev.mysql.com/doc/refman/5.0/en/mysql-options.html for more information.
 		mysql_options(&m_handle, MYSQL_OPT_RECONNECT, &reconnect);
-		std::cout << std::endl << "[Warning] Outdated mySQL server detected. Consider upgrading to a newer version." << std::endl;
+		std::cout << std::endl << "[Warning] Outdated MySQL server detected. Consider upgrading to a newer version." << std::endl;
 	}
 
 	m_connected = true;
@@ -303,12 +303,12 @@ MySQLResult::MySQLResult(MYSQL_RES* res)
 	m_handle = res;
 	m_listNames.clear();
 
-	MYSQL_FIELD* field;
 	int32_t i = 0;
 
-	while ((field = mysql_fetch_field(m_handle))) {
-		m_listNames[field->name] = i;
-		i++;
+	MYSQL_FIELD* field = mysql_fetch_field(m_handle);
+	while (field) {
+		m_listNames[field->name] = i++;
+		field = mysql_fetch_field(m_handle);
 	}
 }
 

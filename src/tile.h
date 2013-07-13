@@ -170,10 +170,10 @@ class TileItemVector
 		}
 
 		uint32_t getTopItemCount() const {
-			return std::distance(getBeginTopItem(), getEndTopItem() );
+			return std::distance(getBeginTopItem(), getEndTopItem());
 		}
 		uint32_t getDownItemCount() const {
-			return std::distance(getBeginDownItem(), getEndDownItem() );
+			return std::distance(getBeginDownItem(), getEndDownItem());
 		}
 		Item* getTopTopItem();
 		Item* getTopDownItem();

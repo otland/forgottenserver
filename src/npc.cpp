@@ -3402,10 +3402,7 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 	uint32_t amount = (uint32_t)popNumber(L);
 	uint32_t itemId = (uint32_t)popNumber(L);
 
-	ScriptEnvironment* env = getScriptEnv();
-
 	Player* player = g_game.getPlayerByID(popNumber(L));
-
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
@@ -3413,8 +3410,8 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 	}
 
 	uint32_t sellCount = 0;
-	const ItemType& it = Item::items[itemId];
 
+	const ItemType& it = Item::items[itemId];
 	if (it.stackable) {
 		while (amount > 0) {
 			int32_t stackCount = std::min<int32_t>(100, amount);

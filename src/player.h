@@ -348,13 +348,6 @@ class Player : public Creature, public Cylinder
 			return manaSpent;
 		}
 
-		bool isLagging() const {
-			return lagging;
-		}
-		void setLagging(bool v) {
-			lagging = v;
-		}
-
 		void setFlags(uint64_t flags) {
 			groupFlags = flags;
 		}
@@ -1268,7 +1261,6 @@ class Player : public Creature, public Cylinder
 		OperatingSystem_t operatingSystem;
 		bool ghostMode;
 		bool depotChange;
-		bool lagging;
 
 		std::list<uint32_t> modalWindows;
 

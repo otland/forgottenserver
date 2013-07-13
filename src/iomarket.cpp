@@ -32,9 +32,9 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 	query << "SELECT `id`, `player_id`, `amount`, `price`, `created`, `anonymous` FROM `market_offers` WHERE `sale` = " << action << " AND `itemtype` = " << itemId;
 
 	Database* db = Database::getInstance();
-	DBResult* result;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return offerList;
 	}
 
@@ -74,9 +74,9 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 	query << "SELECT `id`, `amount`, `price`, `created`, `anonymous`, `itemtype` FROM `market_offers` WHERE `player_id` = " << playerId << " AND `sale` = " << action;
 
 	Database* db = Database::getInstance();
-	DBResult* result;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return offerList;
 	}
 
@@ -103,9 +103,9 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 	query << "SELECT `id`, `itemtype`, `amount`, `price`, `expires_at`, `state` FROM `market_history` WHERE `player_id` = " << playerId << " AND `sale` = " << action;
 
 	Database* db = Database::getInstance();
-	DBResult* result;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return offerList;
 	}
 
@@ -141,9 +141,9 @@ ExpiredMarketOfferList IOMarket::getExpiredOffers(MarketAction_t action)
 	query << "SELECT `id`, `amount`, `price`, `itemtype`, `player_id` FROM `market_offers` WHERE `sale` = " << action << " AND `created` <= " << lastExpireDate;
 
 	Database* db = Database::getInstance();
-	DBResult* result;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return offerList;
 	}
 
@@ -166,12 +166,12 @@ int32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 {
 	int32_t count = -1;
 	Database* db = Database::getInstance();
-	DBResult* result;
 
 	std::ostringstream query;
 	query << "SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = " << playerId;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return count;
 	}
 
@@ -186,9 +186,9 @@ MarketOfferEx IOMarket::getOfferById(uint32_t id)
 	std::ostringstream query;
 	query << "SELECT `id`, `sale`, `itemtype`, `amount`, `created`, `price`, `player_id`, `anonymous` FROM `market_offers` WHERE `id` = " << id;
 	Database* db = Database::getInstance();
-	DBResult* result;
 
-	if ((result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (result) {
 		offer.type = (MarketAction_t)result->getDataInt("sale");
 		offer.amount = result->getDataInt("amount");
 		offer.counter = result->getDataInt("id") & 0xFFFF;
@@ -222,9 +222,9 @@ uint32_t IOMarket::getOfferIdByCounter(uint32_t timestamp, uint16_t counter)
 	std::ostringstream query;
 	query << "SELECT `id` FROM `market_offers` WHERE `created` = " << created << " AND (`id` & 65535) = " << counter << " LIMIT 1";
 	Database* db = Database::getInstance();
-	DBResult* result;
 
-	if ((result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (result) {
 		uint32_t offerId = result->getDataInt("id");
 		db->freeResult(result);
 		return offerId;
@@ -270,16 +270,15 @@ void IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	DBResult* result;
 	query << "SELECT `player_id`, `sale`, `itemtype`, `amount`, `price`, `created` FROM `market_offers` WHERE `id` = " << offerId;
 
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return;
 	}
 
 	query.str("");
 	query << "DELETE FROM `market_offers` WHERE `id` = " << offerId;
-
 	if (!db->executeQuery(query.str())) {
 		db->freeResult(result);
 		return;
@@ -304,9 +303,8 @@ void IOMarket::updateStatistics()
 	std::ostringstream query;
 	query << "SELECT `sale` AS `sale`, `itemtype` AS `itemtype`, COUNT(`price`) AS `num`, MIN(`price`) AS `min`, MAX(`price`) AS `max`, SUM(`price`) AS `sum` FROM `market_history` WHERE `state` = " << OFFERSTATE_ACCEPTED << " GROUP BY `itemtype`, `sale`";
 
-	DBResult* result;
-
-	if (!(result = db->storeQuery(query.str()))) {
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
 		return;
 	}
 
@@ -331,21 +329,17 @@ void IOMarket::updateStatistics()
 MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)
 {
 	std::map<uint16_t, MarketStatistics>::iterator it = purchaseStatistics.find(itemId);
-
 	if (it == purchaseStatistics.end()) {
 		return NULL;
 	}
-
 	return &it->second;
 }
 
 MarketStatistics* IOMarket::getSaleStatistics(uint16_t itemId)
 {
 	std::map<uint16_t, MarketStatistics>::iterator it = saleStatistics.find(itemId);
-
 	if (it == saleStatistics.end()) {
 		return NULL;
 	}
-
 	return &it->second;
 }

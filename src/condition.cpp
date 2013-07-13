@@ -61,8 +61,6 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 			return false;
 		}
 	}
-
-	return false;
 }
 
 bool Condition::unserialize(PropStream& propStream)
@@ -748,10 +746,8 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 		}
 
 		default:
-			return false;
+			return ret;
 	}
-
-	return ret;
 }
 
 ConditionRegeneration::ConditionRegeneration(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId) :
@@ -915,10 +911,8 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 			return true;
 
 		default:
-			return false;
+			return ret;
 	}
-
-	return ret;
 }
 
 ConditionSoul::ConditionSoul(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId) :
@@ -1000,7 +994,6 @@ bool ConditionSoul::executeCondition(Creature* creature, int32_t interval)
 bool ConditionSoul::setParam(ConditionParam_t param, int32_t value)
 {
 	bool ret = ConditionGeneric::setParam(param, value);
-
 	switch (param) {
 		case CONDITIONPARAM_SOULGAIN:
 			soulGain = value;
@@ -1011,10 +1004,8 @@ bool ConditionSoul::setParam(ConditionParam_t param, int32_t value)
 			return true;
 
 		default:
-			return false;
+			return ret;
 	}
-
-	return ret;
 }
 
 ConditionDamage::ConditionDamage(ConditionId_t _id, ConditionType_t _type, bool _buff, uint32_t _subId) :
