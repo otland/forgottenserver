@@ -2900,7 +2900,6 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 
 	if (parameters >= 2) {
 		target = popNumber(L);
-
 		if (target != 0) {
 			publicize = false;
 		}
@@ -2908,16 +2907,12 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 
 	std::string text = popString(L);
 
-	ScriptEnvironment* env = getScriptEnv();
-
-	Npc* npc = env->getNpc();
-	Player* player = g_game.getPlayerByID(target);
-
+	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
 		if (publicize) {
 			npc->doSay(text);
 		} else {
-			npc->doSayToPlayer(player, text);
+			npc->doSayToPlayer(g_game.getPlayerByID(target), text);
 		}
 	}
 
@@ -2928,10 +2923,8 @@ int32_t NpcScriptInterface::luaActionMove(lua_State* L)
 {
 	//selfMove(direction)
 	Direction dir = (Direction)popNumber(L);
-	ScriptEnvironment* env = getScriptEnv();
 
-	Npc* npc = env->getNpc();
-
+	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
 		npc->doMove(dir);
 	}
@@ -2947,9 +2940,7 @@ int32_t NpcScriptInterface::luaActionMoveTo(lua_State* L)
 	target.y = (int)popNumber(L);
 	target.x = (int)popNumber(L);
 
-	ScriptEnvironment* env = getScriptEnv();
-	Npc* npc = env->getNpc();
-
+	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
 		npc->doMoveTo(target);
 	}
@@ -2965,7 +2956,6 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Npc* npc = env->getNpc();
-
 	if (npc) {
 		npc->doTurn(dir);
 	}

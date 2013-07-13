@@ -1110,7 +1110,6 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	}
 
 	ReturnValue ret = internalMoveCreature(movingCreature, movingCreatureTile, toTile);
-
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
 		return false;

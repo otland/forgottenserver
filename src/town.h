@@ -84,8 +84,8 @@ class Towns
 			return true;
 		}
 
-		Town* getTown(std::string& townname) {
-			for (TownMap::iterator it = townMap.begin(); it != townMap.end(); ++it) {
+		Town* getTown(const std::string& townname) const {
+			for (auto it = townMap.begin(); it != townMap.end(); ++it) {
 				if (strcasecmp(it->second->getName().c_str(), townname.c_str()) == 0) {
 					return it->second;
 				}
@@ -94,9 +94,8 @@ class Towns
 			return NULL;
 		}
 
-		Town* getTown(uint32_t _townid) {
-			TownMap::iterator it = townMap.find(_townid);
-
+		Town* getTown(uint32_t _townid) const {
+			auto it = townMap.find(_townid);
 			if (it != townMap.end()) {
 				return it->second;
 			}
