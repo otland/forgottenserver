@@ -1663,7 +1663,7 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 	msg.AddU16(channelId);
 	msg.AddString(channelName);
 
-	if (channelId != CHANNEL_GUILD && channelId != CHANNEL_PARTY || channelId != CHANNEL_PRIVATE) {
+	if (channelId != CHANNEL_GUILD && channelId != CHANNEL_PARTY && channelId != CHANNEL_PRIVATE) {
 		msg.AddU16(0x00);
 		msg.AddU16(0x00);
 	} else {

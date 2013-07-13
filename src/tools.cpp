@@ -412,16 +412,15 @@ std::string formatDate(time_t time)
 std::string formatDateShort(time_t time)
 {
 	char buffer[24];
-	size_t res;
 
 	const tm* tms = localtime(&time);
 	if (tms) {
-		res = strftime(buffer, 12, "%d %b %Y", tms);
+		size_t res = strftime(buffer, 12, "%d %b %Y", tms);
 		if (res == 0) {
 			return "";
 		}
 	} else {
-		res = sprintf(buffer, "UNIX Time : %d", (int32_t)time);
+		int32_t res = sprintf(buffer, "UNIX Time : %d", (int32_t)time);
 		if (res < 0) {
 			return "";
 		}
