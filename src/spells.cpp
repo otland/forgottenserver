@@ -398,10 +398,8 @@ bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
-		uint32_t cid = env->addThing(creature);
-
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		m_scriptInterface->pushVariant(L, var);
 
 		bool result = m_scriptInterface->callFunction(2);
@@ -1328,10 +1326,8 @@ bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
-		uint32_t cid = env->addThing(creature);
-
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		m_scriptInterface->pushVariant(L, var);
 
 		bool result = m_scriptInterface->callFunction(2);
@@ -2299,10 +2295,8 @@ bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
-		uint32_t cid = env->addThing(creature);
-
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		m_scriptInterface->pushVariant(L, var);
 
 		bool result = m_scriptInterface->callFunction(2);

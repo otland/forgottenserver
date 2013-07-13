@@ -1771,7 +1771,7 @@ void Npc::processResponse(Player* player, NpcState* npcState, const NpcResponse*
 
 						std::ostringstream scriptstream;
 						//attach various variables that could be interesting
-						scriptstream << "cid = " << env->addThing(player) << std::endl;
+						scriptstream << "cid = " << player->getID() << std::endl;
 						scriptstream << "text = \"" << LuaScriptInterface::escapeString(npcState->respondToText) << "\"" << std::endl;
 						scriptstream << "name = \"" << LuaScriptInterface::escapeString(player->getName()) << "\"" << std::endl;
 						scriptstream << "idleTimeout = " << idleTimeout << std::endl;
@@ -1896,8 +1896,7 @@ void Npc::executeResponse(Player* player, NpcState* npcState, const NpcResponse*
 				for (ActionList::const_iterator it = response->getFirstAction(); it != response->getEndAction(); ++it) {
 					if (it->actionType == ACTION_SCRIPTPARAM) {
 						if (it->strValue == "|PLAYER|") {
-							uint32_t cid = env->addThing(player);
-							lua_pushnumber(L, cid);
+							lua_pushnumber(L, player->getID());
 						} else if (it->strValue == "|TEXT|") {
 							lua_pushstring(L, npcState->respondToText.c_str());
 						} else {
@@ -3126,13 +3125,9 @@ int32_t NpcScriptInterface::luaSetNpcState(lua_State* L)
 int32_t NpcScriptInterface::luaGetNpcCid(lua_State* L)
 {
 	//getNpcCid()
-	ScriptEnvironment* env = getScriptEnv();
-
-	Npc* npc = env->getNpc();
-
+	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		uint32_t cid = env->addThing(npc);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, npc->getID());
 	} else {
 		lua_pushnil(L);
 	}
@@ -3518,10 +3513,8 @@ void NpcScript::onCreatureAppear(const Creature* creature)
 		env->setRealPos(m_npc->getPosition());
 		env->setNpc(m_npc);
 
-		uint32_t cid = env->addThing(const_cast<Creature*>(creature));
-
 		m_scriptInterface->pushFunction(m_onCreatureAppear);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
 	} else {
@@ -3545,10 +3538,8 @@ void NpcScript::onCreatureDisappear(const Creature* creature)
 		env->setRealPos(m_npc->getPosition());
 		env->setNpc(m_npc);
 
-		uint32_t cid = env->addThing(const_cast<Creature*>(creature));
-
 		m_scriptInterface->pushFunction(m_onCreatureDisappear);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
 	} else {
@@ -3572,10 +3563,8 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 		env->setRealPos(m_npc->getPosition());
 		env->setNpc(m_npc);
 
-		uint32_t cid = env->addThing(const_cast<Creature*>(creature));
-
 		m_scriptInterface->pushFunction(m_onCreatureMove);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		LuaScriptInterface::pushPosition(L, oldPos, 0);
 		LuaScriptInterface::pushPosition(L, newPos, 0);
 		m_scriptInterface->callFunction(3);
@@ -3599,11 +3588,9 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 		env->setRealPos(m_npc->getPosition());
 		env->setNpc(m_npc);
 
-		uint32_t cid = env->addThing(const_cast<Creature*>(creature));
-
 		lua_State* L = m_scriptInterface->getLuaState();
 		m_scriptInterface->pushFunction(m_onCreatureSay);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		lua_pushnumber(L, type);
 		lua_pushstring(L, text.c_str());
 		m_scriptInterface->callFunction(3);
@@ -3627,10 +3614,9 @@ void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t i
 		env->setRealPos(m_npc->getPosition());
 		env->setNpc(m_npc);
 
-		uint32_t cid = env->addThing(const_cast<Player*>(player));
 		lua_State* L = m_scriptInterface->getLuaState();
 		LuaScriptInterface::pushCallback(L, callback);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 		lua_pushnumber(L, itemid);
 		lua_pushnumber(L, count);
 		lua_pushnumber(L, amount);
@@ -3656,11 +3642,9 @@ void NpcScript::onPlayerCloseChannel(const Player* player)
 		env->setRealPos(m_npc->getPosition());
 		env->setNpc(m_npc);
 
-		uint32_t cid = env->addThing(const_cast<Player*>(player));
-
 		lua_State* L = m_scriptInterface->getLuaState();
 		m_scriptInterface->pushFunction(m_onPlayerCloseChannel);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 		m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
 	} else {
@@ -3681,11 +3665,9 @@ void NpcScript::onPlayerEndTrade(const Player* player)
 		env->setRealPos(m_npc->getPosition());
 		env->setNpc(m_npc);
 
-		uint32_t cid = env->addThing(const_cast<Player*>(player));
-
 		lua_State* L = m_scriptInterface->getLuaState();
 		m_scriptInterface->pushFunction(m_onPlayerEndTrade);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 		m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
 	} else {

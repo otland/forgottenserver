@@ -1580,12 +1580,11 @@ void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, 
 	}
 }
 
-void Player::sendRemoveContainerItem(const Container* container, uint16_t slot, const Item* lastItem)
+void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 {
 	if (!client) {
 		return;
 	}
-
 
 	for (ContainerMap::iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
 		OpenContainer& openContainer = it->second;

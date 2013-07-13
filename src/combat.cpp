@@ -1014,10 +1014,8 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 			return;
 		}
 
-		uint32_t cid = env->addThing(player);
-
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 
 		int32_t parameters = 1;
 
@@ -1095,10 +1093,11 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 			return;
 		}
 
-		uint32_t cid = 0;
-
+		uint32_t cid;
 		if (creature) {
-			cid = env->addThing(creature);
+			cid = creature->getID();
+		} else {
+			cid = 0;
 		}
 
 		m_scriptInterface->pushFunction(m_scriptId);
@@ -1128,13 +1127,19 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 			return;
 		}
 
-		uint32_t cid = 0;
-
+		uint32_t cid;
 		if (creature) {
-			cid = env->addThing(creature);
+			cid = creature->getID();
+		} else {
+			cid = 0;
 		}
 
-		uint32_t targetCid = env->addThing(target);
+		uint32_t targetCid;
+		if (target) {
+			targetCid = target->getID();
+		} else {
+			targetCid = 0;
+		}
 
 		m_scriptInterface->pushFunction(m_scriptId);
 		lua_pushnumber(L, cid);

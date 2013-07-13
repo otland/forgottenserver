@@ -974,13 +974,12 @@ uint32_t MoveEvent::executeStep(Creature* creature, Item* item, const Position& 
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(creature->getPosition());
 
-		uint32_t cid = env->addThing(creature);
 		uint32_t itemid = env->addThing(item);
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		LuaScriptInterface::pushThing(L, item, itemid);
 		LuaScriptInterface::pushPosition(L, pos, 0);
 		LuaScriptInterface::pushPosition(L, creature->getLastPosition(), 0);
@@ -1014,13 +1013,12 @@ uint32_t MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(player->getPosition());
 
-		uint32_t cid = env->addThing(player);
 		uint32_t itemid = env->addThing(item);
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 		LuaScriptInterface::pushThing(L, item, itemid);
 		lua_pushnumber(L, slot);
 

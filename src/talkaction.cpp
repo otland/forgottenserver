@@ -162,12 +162,10 @@ int32_t TalkAction::executeSay(Creature* creature, const std::string& words, con
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(creature->getPosition());
 
-		uint32_t cid = env->addThing(creature);
-
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		lua_pushstring(L, words.c_str());
 		lua_pushstring(L, param.c_str());
 

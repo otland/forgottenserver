@@ -262,12 +262,10 @@ uint32_t CreatureEvent::executeOnLogin(Player* player)
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(player->getPosition());
 
-		uint32_t cid = env->addThing(player);
-
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 
 		bool result = m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
@@ -288,12 +286,10 @@ uint32_t CreatureEvent::executeOnLogout(Player* player)
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(player->getPosition());
 
-		uint32_t cid = env->addThing(player);
-
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 
 		bool result = m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
@@ -314,12 +310,10 @@ uint32_t CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(creature->getPosition());
 
-		uint32_t cid = env->addThing(creature);
-
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		lua_pushnumber(L, interval);
 
 		bool result = m_scriptInterface->callFunction(2);
@@ -341,13 +335,17 @@ uint32_t CreatureEvent::executeOnPrepareDeath(Player* player, Creature* killer)
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(player->getPosition());
 
-		uint32_t cid = env->addThing(player);
-		uint32_t killercid = env->addThing(killer);
+		uint32_t killercid;
+		if (killer) {
+			killercid = killer->getID();
+		} else {
+			killercid = 0;
+		}
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, player->getID());
 		lua_pushnumber(L, killercid);
 
 		bool result = m_scriptInterface->callFunction(2);
@@ -369,15 +367,26 @@ uint32_t CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creatur
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(creature->getPosition());
 
-		uint32_t cid = env->addThing(creature);
 		uint32_t corpseid = env->addThing(corpse);
-		uint32_t killercid = env->addThing(killer);
-		uint32_t mostdamagekillercid = env->addThing(mostDamageKiller);
+
+		uint32_t killercid;
+		if (killer) {
+			killercid = killer->getID();
+		} else {
+			killercid = 0;
+		}
+
+		uint32_t mostdamagekillercid;
+		if (mostDamageKiller) {
+			mostdamagekillercid = mostDamageKiller->getID();
+		} else {
+			mostdamagekillercid = 0;
+		}
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		lua_pushnumber(L, corpseid);
 		lua_pushnumber(L, killercid);
 		lua_pushnumber(L, mostdamagekillercid);
@@ -403,12 +412,10 @@ uint32_t CreatureEvent::executeAdvance(Creature* creature, skills_t skill, uint3
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(creature->getPosition());
 
-		uint32_t cid = env->addThing(creature);
-
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
+		lua_pushnumber(L, creature->getID());
 		lua_pushnumber(L, static_cast<uint32_t>(skill));
 		lua_pushnumber(L, oldLevel);
 		lua_pushnumber(L, newLevel);
@@ -431,14 +438,11 @@ uint32_t CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 		env->setScriptId(m_scriptId, m_scriptInterface);
 		env->setRealPos(creature->getPosition());
 
-		uint32_t cid = env->addThing(creature);
-		uint32_t targetId = env->addThing(target);
-
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, cid);
-		lua_pushnumber(L, targetId);
+		lua_pushnumber(L, creature->getID());
+		lua_pushnumber(L, target->getID());
 
 		bool result = m_scriptInterface->callFunction(2);
 		m_scriptInterface->releaseScriptEnv();

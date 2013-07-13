@@ -160,7 +160,6 @@ class NetworkMessage
 		void AddItem(const Item* item, uint16_t protocolVersion);
 		void AddItemId(const Item* item, uint16_t protocolVersion);
 		void AddItemId(uint16_t itemId, uint16_t protocolVersion);
-		void AddCreature(const Creature* creature, bool known, unsigned int remove);
 
 		int32_t getMessageLength() const {
 			return m_MsgSize;

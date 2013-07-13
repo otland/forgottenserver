@@ -296,10 +296,8 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 	SpectatorVec::const_iterator end = list.end();
 
 	//send change to client
-	Item* lastItem = getItem(maxSize);
-
 	for (SpectatorVec::const_iterator it = list.begin(); it != end; ++it) {
-		(*it)->getPlayer()->sendRemoveContainerItem(this, index, lastItem);
+		(*it)->getPlayer()->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
