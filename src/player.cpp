@@ -830,14 +830,15 @@ void Player::addContainer(uint8_t cid, Container* container)
 	ContainerMap::iterator it = openContainers.find(cid);
 
 	if (it != openContainers.end()) {
-		Container* oldContainer = it->second.container;
+		OpenContainer& openContainer = it->second;
+		Container* oldContainer = openContainer.container;
 
 		if (oldContainer->getID() == 460) {
 			oldContainer->releaseThing2();
 		}
 
-		it->second.container = container;
-		it->second.index = 0;
+		openContainer.container = container;
+		openContainer.index = 0;
 	} else {
 		OpenContainer openContainer;
 		openContainer.container = container;

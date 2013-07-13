@@ -241,9 +241,9 @@ class ProtocolGame : public Protocol
 		void sendMarketEnter(uint32_t depotId);
 		void sendMarketLeave();
 		void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
-		void sendMarketAcceptOffer(MarketOfferEx offer);
+		void sendMarketAcceptOffer(const MarketOfferEx& offer);
 		void sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
-		void sendMarketCancelOffer(MarketOfferEx offer);
+		void sendMarketCancelOffer(const MarketOfferEx& offer);
 		void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers);
 		void sendMarketDetail(uint16_t itemId);
 		void sendTradeItemRequest(const Player* player, const Item* item, bool ack);
@@ -320,7 +320,7 @@ class ProtocolGame : public Protocol
 		void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
 		void AddPlayerStats(NetworkMessage& msg);
 		void AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-		                      std::string text, uint16_t channelId, Position* pos = NULL);
+		                      const std::string& text, uint16_t channelId, Position* pos = NULL);
 		void AddCreatureHealth(NetworkMessage& msg, const Creature* creature);
 		void AddCreatureOutfit(NetworkMessage& msg, const Creature* creature, const Outfit_t& outfit);
 		void AddCreatureInvisible(NetworkMessage& msg, const Creature* creature);

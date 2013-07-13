@@ -251,7 +251,7 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 	if (item) {
 		uint16_t uid = item->getUniqueId();
 		if (uid > 0 && item->getTile() == item->getParent()) {
-			if (m_localMap.count(uid) != 0) {
+			if (m_localMap.find(uid) != m_localMap.end()) {
 				return uid;
 			}
 

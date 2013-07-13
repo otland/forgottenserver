@@ -395,7 +395,7 @@ class ConditionOutfit: public Condition
 			return new ConditionOutfit(*this);
 		}
 
-		void addOutfit(Outfit_t outfit);
+		void addOutfit(const Outfit_t& outfit);
 
 		//serialization
 		virtual bool serialize(PropWriteStream& propWriteStream);

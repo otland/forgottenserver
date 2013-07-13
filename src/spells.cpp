@@ -1641,7 +1641,7 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 	}
 
 	ss << ".";
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str().c_str());
+	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
 	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_ENERGY);
 	return true;
 }

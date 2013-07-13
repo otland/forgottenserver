@@ -345,7 +345,7 @@ class LuaScriptInterface
 		static int32_t popCallback(lua_State* L);
 		static bool popBoolean(lua_State* L);
 
-		template<class T>
+		template<typename T>
 		static T popNumber(lua_State* L);
 
 		static int32_t getField(lua_State* L, const char* key);

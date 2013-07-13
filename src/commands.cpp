@@ -296,7 +296,7 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	(this->*cfunc)(player, str_command, str_param);
 
 	if (command->logged) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd.c_str());
+		player->sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd);
 
 		if (dirExists("data/logs") || createDir("data/logs")) {
 			std::ostringstream ss;
@@ -871,7 +871,7 @@ void Commands::getHouse(Player* player, const std::string& cmd, const std::strin
 		str << " does not own any house.";
 	}
 
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, str.str().c_str());
+	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, str.str());
 }
 
 void Commands::serverInfo(Player* player, const std::string& cmd, const std::string& param)
@@ -882,7 +882,7 @@ void Commands::serverInfo(Player* player, const std::string& cmd, const std::str
 	text << "\nSkill Rate: " << g_config.getNumber(ConfigManager::RATE_SKILL);
 	text << "\nMagic Rate: " << g_config.getNumber(ConfigManager::RATE_MAGIC);
 	text << "\nLoot Rate: " << g_config.getNumber(ConfigManager::RATE_LOOT);
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
+	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str());
 }
 
 void Commands::buyHouse(Player* player, const std::string& cmd, const std::string& param)
@@ -959,9 +959,10 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 	{
 		while(it != players.end())
 		{
-			if(!it->second->isAccessPlayer() || player->isAccessPlayer())
+			Player* tmpPlayer = it->second;
+			if(!tmpPlayer->isAccessPlayer() || player->isAccessPlayer())
 			{
-				ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << "]";
+				ss << (i > 0 ? ", " : "") << tmpPlayer->name << " [" << tmpPlayer->level << "]";
 				++i;
 			}
 			++it;
@@ -1429,14 +1430,15 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 
 	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
 	for (auto it = players.begin(); it != players.end(); ++it) {
-		if (it->second->isRemoved() || it->second->getIP() == 0) {
+		Player* tmpPlayer = it->second;
+		if (tmpPlayer->isRemoved() || tmpPlayer->getIP() == 0) {
 			continue;
 		}
 
-		ipMap[it->second->getIP()].push_back(it->second);
+		ipMap[tmpPlayer->getIP()].push_back(tmpPlayer);
 	}
 
-	for (std::map< uint32_t, std::vector<Player*> >::const_iterator it = ipMap.begin(), end = ipMap.end(); it != end; ++it) {
+	for (auto it = ipMap.begin(), end = ipMap.end(); it != end; ++it) {
 		if (it->second.size() < 2) {
 			continue;
 		}

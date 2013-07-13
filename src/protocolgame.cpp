@@ -1975,7 +1975,7 @@ void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& 
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendMarketAcceptOffer(MarketOfferEx offer)
+void ProtocolGame::sendMarketAcceptOffer(const MarketOfferEx& offer)
 {
 	NetworkMessage msg;
 	msg.AddByte(0xF9);
@@ -2031,7 +2031,7 @@ void ProtocolGame::sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, c
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendMarketCancelOffer(MarketOfferEx offer)
+void ProtocolGame::sendMarketCancelOffer(const MarketOfferEx& offer)
 {
 	NetworkMessage msg;
 	msg.AddByte(0xF9);
@@ -3332,7 +3332,7 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 }
 
 void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-                                    std::string text, uint16_t channelId, Position* pos/* = NULL*/)
+                                    const std::string& text, uint16_t channelId, Position* pos/* = NULL*/)
 {
 	if (!creature) {
 		return;

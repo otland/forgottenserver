@@ -435,14 +435,14 @@ class NpcResponse
 		}
 
 		std::string formatResponseString(Creature* creature) const;
-		void addAction(ResponseAction action) {
+		void addAction(const ResponseAction& action) {
 			prop.actionList.push_back(action);
 		}
 		const std::list<std::string>& getInputList() const {
 			return prop.inputList;
 		}
 
-		void setResponseList(ResponseList _list) {
+		void setResponseList(const ResponseList& _list) {
 			subResponseList.insert(subResponseList.end(), _list.begin(), _list.end());
 		}
 		const ResponseList& getResponseList() const {
@@ -541,7 +541,7 @@ class Npc : public Creature
 
 		void doMove(Direction dir);
 		void doTurn(Direction dir);
-		void doMoveTo(Position pos);
+		void doMoveTo(const Position& pos);
 		bool isLoaded() const {
 			return loaded;
 		}
@@ -602,7 +602,7 @@ class Npc : public Creature
 		const NpcResponse* getResponse(const Player* player, NpcState* npcState,
 		                               NpcEvent_t eventType, bool checkLastResponse);
 
-		int32_t matchKeywords(NpcResponse* response, std::vector<std::string> wordList, bool exactMatch);
+		int32_t matchKeywords(NpcResponse* response, const std::vector<std::string>& wordList, bool exactMatch);
 
 		void processResponse(Player* player, NpcState* npcState, const NpcResponse* response, bool delayResponse = false);
 		void executeResponse(Player* player, NpcState* npcState, const NpcResponse* response);

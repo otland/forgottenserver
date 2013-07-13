@@ -2111,10 +2111,9 @@ bool Npc::getRandomStep(Direction& dir)
 	return false;
 }
 
-void Npc::doMoveTo(Position target)
+void Npc::doMoveTo(const Position& target)
 {
 	std::list<Direction> listDir;
-
 	if (g_game.getPathToEx(this, target, listDir, 1, 1, true, true)) {
 		startAutoWalk(listDir);
 	}
@@ -2578,19 +2577,19 @@ const NpcResponse* Npc::getResponse(const ResponseList& list, const Player* play
 	return NULL;
 }
 
-int32_t Npc::matchKeywords(NpcResponse* response, std::vector<std::string> wordList, bool exactMatch)
+int32_t Npc::matchKeywords(NpcResponse* response, const std::vector<std::string>& wordList, bool exactMatch)
 {
-	int32_t bestMatchCount = 0;
-
 	if (wordList.empty()) {
 		return 0;
 	}
+
+	int32_t bestMatchCount = 0;
 
 	const std::list<std::string>& inputList = response->getInputList();
 
 	for (std::list<std::string>::const_iterator it = inputList.begin(); it != inputList.end(); ++it) {
 		int32_t matchCount = 0;
-		std::vector<std::string>::iterator lastWordMatchIter = wordList.begin();
+		auto lastWordMatchIter = wordList.begin();
 		std::string keywords = (*it);
 		std::vector<std::string> keywordList = explodeString(keywords, ";");
 
@@ -2624,9 +2623,8 @@ int32_t Npc::matchKeywords(NpcResponse* response, std::vector<std::string> wordL
 					}
 				}
 
-				std::vector<std::string>::iterator wordIter = wordList.end();
-
-				for (wordIter = lastWordMatchIter; wordIter != wordList.end(); ++wordIter) {
+				std::vector<std::string>::const_iterator wordIter = lastWordMatchIter;
+				while (wordIter != wordList.end()) {
 					if (fullMatch) {
 						if (*wordIter == keyIter->substr(0, keyIter->size() - 1)) {
 							break;
@@ -2634,6 +2632,7 @@ int32_t Npc::matchKeywords(NpcResponse* response, std::vector<std::string> wordL
 					} else if (wordIter->find(*keyIter, 0) == 0) {
 						break;
 					}
+					++wordIter;
 				}
 
 				if (wordIter == wordList.end()) {

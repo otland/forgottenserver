@@ -278,7 +278,7 @@ class Player : public Creature, public Cylinder
 		void setLastWalkthroughAttempt(int64_t walkthroughAttempt) {
 			lastWalkthroughAttempt = walkthroughAttempt;
 		}
-		void setLastWalkthroughPosition(Position walkthroughPosition) {
+		void setLastWalkthroughPosition(const Position& walkthroughPosition) {
 			lastWalkthroughPosition = walkthroughPosition;
 		}
 
@@ -301,7 +301,7 @@ class Player : public Creature, public Cylinder
 		const GuildWarList& getGuildWarList() const {
 			return guildWarList;
 		}
-		void setGuildWarList(GuildWarList _guildWarList) {
+		void setGuildWarList(const GuildWarList& _guildWarList) {
 			guildWarList = _guildWarList;
 		}
 
@@ -1060,12 +1060,12 @@ class Player : public Creature, public Cylinder
 				client->sendMarketDetail(itemId);
 			}
 		}
-		void sendMarketAcceptOffer(MarketOfferEx offer) const {
+		void sendMarketAcceptOffer(const MarketOfferEx& offer) const {
 			if (client) {
 				client->sendMarketAcceptOffer(offer);
 			}
 		}
-		void sendMarketCancelOffer(MarketOfferEx offer) const {
+		void sendMarketCancelOffer(const MarketOfferEx& offer) const {
 			if (client) {
 				client->sendMarketCancelOffer(offer);
 			}

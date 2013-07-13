@@ -380,7 +380,7 @@ void Spawn::checkSpawn()
 		spawnId = it->first;
 		spawnBlock_t& sb = it->second;
 
-		if (spawnedMap.count(spawnId) == 0) {
+		if (spawnedMap.find(spawnId) == spawnedMap.end()) {
 			if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
 				if (findPlayer(sb.pos)) {
 					sb.lastSpawn = OTSYS_TIME();

@@ -71,7 +71,6 @@ void OutputMessagePool::send(OutputMessage_ptr msg)
 
 	if (state == OutputMessage::STATE_ALLOCATED_NO_AUTOSEND) {
 		Connection_ptr connection = msg->getConnection();
-
 		if (connection && !connection->send(msg)) {
 			// Send only fails when connection is closing (or in error state)
 			// This call will free the message

@@ -248,7 +248,7 @@ class Creature : virtual public Thing
 		const Outfit_t getCurrentOutfit() const {
 			return currentOutfit;
 		}
-		void setCurrentOutfit(Outfit_t outfit) {
+		void setCurrentOutfit(const Outfit_t& outfit) {
 			currentOutfit = outfit;
 		}
 		const Outfit_t getDefaultOutfit() const {
@@ -460,7 +460,7 @@ class Creature : virtual public Thing
 		const Position& getLastPosition() {
 			return lastPosition;
 		}
-		void setLastPosition(Position newLastPos) {
+		void setLastPosition(const Position& newLastPos) {
 			lastPosition = newLastPos;
 		}
 

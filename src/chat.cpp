@@ -80,17 +80,14 @@ void PrivateChatChannel::invitePlayer(Player* player, Player* invitePlayer)
 		msg += " invites you to ";
 		msg += (player->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
 		msg += " private chat channel.";
-		invitePlayer->sendTextMessage(MSG_INFO_DESCR, msg.c_str());
+		invitePlayer->sendTextMessage(MSG_INFO_DESCR, msg);
 
 		msg = invitePlayer->getName();
 		msg += " has been invited.";
-		player->sendTextMessage(MSG_INFO_DESCR, msg.c_str());
+		player->sendTextMessage(MSG_INFO_DESCR, msg);
 
-		UsersMap::iterator cit;
-
-		for (cit = m_users.begin(); cit != m_users.end(); ++cit) {
+		for (auto cit = m_users.begin(); cit != m_users.end(); ++cit) {
 			Player* tmpPlayer = cit->second->getPlayer();
-
 			if (tmpPlayer) {
 				tmpPlayer->sendChannelEvent(m_id, invitePlayer->getName(), CHANNELEVENT_INVITE);
 			}
@@ -105,7 +102,7 @@ void PrivateChatChannel::excludePlayer(Player* player, Player* excludePlayer)
 
 		std::string msg = excludePlayer->getName();
 		msg += " has been excluded.";
-		player->sendTextMessage(MSG_INFO_DESCR, msg.c_str());
+		player->sendTextMessage(MSG_INFO_DESCR, msg);
 
 		excludePlayer->sendClosePrivate(getId());
 
@@ -113,7 +110,6 @@ void PrivateChatChannel::excludePlayer(Player* player, Player* excludePlayer)
 
 		for (cit = m_users.begin(); cit != m_users.end(); ++cit) {
 			Player* tmpPlayer = cit->second->getPlayer();
-
 			if (tmpPlayer) {
 				tmpPlayer->sendChannelEvent(m_id, excludePlayer->getName(), CHANNELEVENT_EXCLUDE);
 			}

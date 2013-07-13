@@ -256,9 +256,8 @@ void ServicePort::close()
 
 bool ServicePort::add_service(Service_ptr new_svc)
 {
-	for (std::vector<Service_ptr>::const_iterator svc_iter = m_services.begin(); svc_iter != m_services.end(); ++svc_iter) {
+	for (auto svc_iter = m_services.begin(); svc_iter != m_services.end(); ++svc_iter) {
 		Service_ptr svc = *svc_iter;
-
 		if (svc->is_single_socket()) {
 			return false;
 		}

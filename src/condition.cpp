@@ -1675,7 +1675,7 @@ ConditionOutfit::ConditionOutfit(ConditionId_t _id, ConditionType_t _type, int32
 	//
 }
 
-void ConditionOutfit::addOutfit(Outfit_t outfit)
+void ConditionOutfit::addOutfit(const Outfit_t& outfit)
 {
 	outfits.push_back(outfit);
 }

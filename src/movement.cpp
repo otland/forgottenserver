@@ -350,7 +350,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 	return NULL;
 }
 
-void MoveEvents::addEvent(MoveEvent* moveEvent, Position pos, MovePosListMap& map)
+void MoveEvents::addEvent(MoveEvent* moveEvent, const Position& pos, MovePosListMap& map)
 {
 	MovePosListMap::iterator it = map.find(pos);
 
