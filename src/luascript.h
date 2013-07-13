@@ -153,10 +153,6 @@ class ScriptEnvironment
 		Thing* getThingByUID(uint32_t uid);
 		Item* getItemByUID(uint32_t uid);
 		Container* getContainerByUID(uint32_t uid);
-		Creature* getCreatureByUID(uint32_t uid);
-		Player* getPlayerByUID(uint32_t uid);
-		Monster* getMonsterByUID(uint32_t uid);
-		Npc* getNpcByUID(uint32_t uid);
 		void removeItemByUID(uint32_t uid);
 
 		static uint32_t addCombatArea(AreaCombat* area);

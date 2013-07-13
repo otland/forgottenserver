@@ -490,6 +490,40 @@ Creature* Game::getCreatureByID(uint32_t id)
 	return it->second;
 }
 
+Monster* Game::getMonsterByID(uint32_t id)
+{
+	if (id == 0) {
+		return NULL;
+	}
+
+	auto it = monsters.find(id);
+	if (it == monsters.end()) {
+		return NULL;
+	}
+
+	if (it->second->isRemoved()) {
+		return NULL;
+	}
+	return it->second;
+}
+
+Npc* Game::getNpcByID(uint32_t id)
+{
+	if (id == 0) {
+		return NULL;
+	}
+
+	auto it = npcs.find(id);
+	if (it == npcs.end()) {
+		return NULL;
+	}
+
+	if (it->second->isRemoved()) {
+		return NULL;
+	}
+	return it->second;
+}
+
 Player* Game::getPlayerByID(uint32_t id)
 {
 	if (id == 0) {

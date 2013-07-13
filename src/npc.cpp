@@ -2913,7 +2913,7 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Npc* npc = env->getNpc();
-	Player* player = env->getPlayerByUID(target);
+	Player* player = g_game.getPlayerByID(target);
 
 	if (npc) {
 		if (publicize) {
@@ -2982,7 +2982,7 @@ int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (cid != 0 && !player) {
 		lua_pushboolean(L, false);
@@ -3039,7 +3039,7 @@ int32_t NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 	Npc* npc = env->getNpc();
 
 	if (npc) {
-		Creature* creature = env->getCreatureByUID(cid);
+		Creature* creature = g_game.getCreatureByID(cid);
 
 		if (creature) {
 			npc->hasScriptedFocus = true;
@@ -3078,7 +3078,7 @@ int32_t NpcScriptInterface::luaGetNpcState(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		lua_pushnil(L);
@@ -3103,7 +3103,7 @@ int32_t NpcScriptInterface::luaSetNpcState(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		lua_pushnil(L);
@@ -3301,7 +3301,7 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 
 	lua_pop(L, 1);
 
-	player = env->getPlayerByUID(popNumber(L));
+	player = g_game.getPlayerByID(popNumber(L));
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -3331,7 +3331,7 @@ int32_t NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 	//closeShopWindow(cid)
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(popNumber(L));
+	Player* player = g_game.getPlayerByID(popNumber(L));
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -3404,7 +3404,7 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(popNumber(L));
+	Player* player = g_game.getPlayerByID(popNumber(L));
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));

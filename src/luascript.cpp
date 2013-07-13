@@ -209,12 +209,10 @@ void ScriptEnvironment::getEventInfo(int32_t& scriptId, std::string& desc, LuaSc
 void ScriptEnvironment::addUniqueThing(Thing* thing)
 {
 	Item* item = thing->getItem();
-
 	if (item && item->getUniqueId() != 0) {
 		int32_t uid = item->getUniqueId();
 
 		ThingMap::const_iterator it = m_globalMap.find(uid);
-
 		if (it == m_globalMap.end()) {
 			m_globalMap[uid] = thing;
 		} else {
@@ -244,46 +242,33 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		return 0;
 	}
 
-	uint32_t uid;
 	Creature* creature = thing->getCreature();
 	if (creature) {
-		uid = creature->getID();
-		if (m_localMap.count(uid) != 0) {
-			return uid;
-		}
-	} else {
-		Item* item = thing->getItem();
-		if (item) {
-			uid = item->getUniqueId();
-			if (uid > 0 && item->getTile() == item->getParent()) {
-				if (m_localMap.count(uid) != 0) {
-					return uid;
-				}
-
-				m_localMap[uid] = thing;
-				return uid;
-			}
-		}
-
-		for (auto it = m_localMap.begin(), end = m_localMap.end(); it != end; ++it) {
-			if (it->second == thing) {
-				return it->first;
-			}
-		}
-
-		++m_lastUID;
-		if (m_lastUID < 70000) {
-			m_lastUID = 70000;
-		}
-
-		while (m_localMap.count(m_lastUID) != 0) {
-			++m_lastUID;
-		}
-		uid = m_lastUID;
+		return creature->getID();
 	}
 
-	m_localMap[uid] = thing;
-	return uid;
+	Item* item = thing->getItem();
+	if (item) {
+		uint16_t uid = item->getUniqueId();
+		if (uid > 0 && item->getTile() == item->getParent()) {
+			if (m_localMap.count(uid) != 0) {
+				return uid;
+			}
+
+			m_localMap[uid] = thing;
+			return uid;
+		}
+	}
+
+	for (auto it = m_localMap.begin(), end = m_localMap.end(); it != end; ++it) {
+		if (it->second == thing) {
+			return it->first;
+		}
+	}
+
+	++m_lastUID;
+	m_localMap[m_lastUID] = thing;
+	return m_lastUID;
 }
 
 void ScriptEnvironment::insertThing(uint32_t uid, Thing* thing)
@@ -298,20 +283,16 @@ void ScriptEnvironment::insertThing(uint32_t uid, Thing* thing)
 Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 {
 	ThingMap::const_iterator it = m_localMap.find(uid);
-
 	if (it != m_localMap.end()) {
 		Thing* thing = it->second;
-
 		if (thing && !thing->isRemoved()) {
 			return thing;
 		}
 	}
 
 	it = m_globalMap.find(uid);
-
 	if (it != m_globalMap.end()) {
 		Thing* thing = it->second;
-
 		if (thing && !thing->isRemoved()) {
 			return thing;
 		}
@@ -319,104 +300,39 @@ Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 
 	if (uid >= 0x10000000) {
 		Thing* thing = g_game.getCreatureByID(uid);
-
 		if (thing && !thing->isRemoved()) {
-			m_localMap[uid] = thing;
 			return thing;
 		}
 	}
-
 	return NULL;
 }
 
 Item* ScriptEnvironment::getItemByUID(uint32_t uid)
 {
 	Thing* thing = getThingByUID(uid);
-
-	if (thing) {
-		if (Item* item = thing->getItem()) {
-			return item;
-		}
+	if (!thing) {
+		return NULL;
 	}
-
-	return NULL;
+	return thing->getItem();
 }
 
 Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
 {
 	Item* item = getItemByUID(uid);
-
-	if (item) {
-		if (Container* container = item->getContainer()) {
-			return container;
-		}
+	if (!item) {
+		return NULL;
 	}
-
-	return NULL;
-}
-
-Creature* ScriptEnvironment::getCreatureByUID(uint32_t uid)
-{
-	Thing* thing = getThingByUID(uid);
-
-	if (thing) {
-		if (Creature* creature = thing->getCreature()) {
-			return creature;
-		}
-	}
-
-	return NULL;
-}
-
-Player* ScriptEnvironment::getPlayerByUID(uint32_t uid)
-{
-	Creature* creature = getCreatureByUID(uid);
-
-	if (creature) {
-		if (Player* player = creature->getPlayer()) {
-			return player;
-		}
-	}
-
-	return NULL;
-}
-
-Monster* ScriptEnvironment::getMonsterByUID(uint32_t uid)
-{
-	Creature* creature = getCreatureByUID(uid);
-
-	if (creature) {
-		if (Monster* monster = creature->getMonster()) {
-			return monster;
-		}
-	}
-
-	return NULL;
-}
-
-Npc* ScriptEnvironment::getNpcByUID(uint32_t uid)
-{
-	Creature* creature = getCreatureByUID(uid);
-
-	if (creature) {
-		if (Npc* npc = creature->getNpc()) {
-			return npc;
-		}
-	}
-
-	return NULL;
+	return item->getContainer();
 }
 
 void ScriptEnvironment::removeItemByUID(uint32_t uid)
 {
 	ThingMap::iterator it = m_localMap.find(uid);
-
 	if (it != m_localMap.end()) {
 		m_localMap.erase(it);
 	}
 
 	it = m_globalMap.find(uid);
-
 	if (it != m_globalMap.end()) {
 		m_globalMap.erase(it);
 	}
@@ -434,12 +350,10 @@ uint32_t ScriptEnvironment::addCombatArea(AreaCombat* area)
 AreaCombat* ScriptEnvironment::getCombatArea(uint32_t areaId)
 {
 	AreaMap::const_iterator it = m_areaMap.find(areaId);
-
-	if (it != m_areaMap.end()) {
-		return it->second;
+	if (it == m_areaMap.end()) {
+		return NULL;
 	}
-
-	return NULL;
+	return it->second;
 }
 
 uint32_t ScriptEnvironment::addCombatObject(Combat* combat)
@@ -454,12 +368,10 @@ uint32_t ScriptEnvironment::addCombatObject(Combat* combat)
 Combat* ScriptEnvironment::getCombatObject(uint32_t combatId)
 {
 	CombatMap::iterator it = m_combatMap.find(combatId);
-
-	if (it != m_combatMap.end()) {
-		return it->second;
+	if (it == m_combatMap.end()) {
+		return NULL;
 	}
-
-	return NULL;
+	return it->second;
 }
 
 uint32_t ScriptEnvironment::addConditionObject(Condition* condition)
@@ -474,12 +386,10 @@ uint32_t ScriptEnvironment::addConditionObject(Condition* condition)
 Condition* ScriptEnvironment::getConditionObject(uint32_t conditionId)
 {
 	ConditionMap::iterator it = m_conditionMap.find(conditionId);
-
-	if (it != m_conditionMap.end()) {
-		return it->second;
+	if (it == m_conditionMap.end()) {
+		return NULL;
 	}
-
-	return NULL;
+	return it->second;
 }
 
 void ScriptEnvironment::addTempItem(ScriptEnvironment* env, Item* item)
@@ -538,12 +448,10 @@ bool ScriptEnvironment::removeResult(uint32_t id)
 DBResult* ScriptEnvironment::getResultByID(uint32_t id)
 {
 	DBResultMap::iterator it = m_tempResults.find(id);
-
-	if (it != m_tempResults.end()) {
-		return it->second;
+	if (it == m_tempResults.end()) {
+		return NULL;
 	}
-
-	return NULL;
+	return it->second;
 }
 
 void ScriptEnvironment::addGlobalStorageValue(const uint32_t key, const int32_t value)
@@ -608,7 +516,7 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 			return "Spell not found";
 
 		default:
-			return "Wrong error code!";
+			return "Bad error code";
 	}
 }
 
@@ -2046,7 +1954,7 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 {
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		const Tile* tile;
@@ -2373,7 +2281,7 @@ int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (flagindex < PlayerFlag_LastFlag) {
@@ -2398,7 +2306,7 @@ int32_t LuaScriptInterface::luaPlayerLearnInstantSpell(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -2428,7 +2336,7 @@ int32_t LuaScriptInterface::luaCanPlayerLearnInstantSpell(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -2469,7 +2377,7 @@ int32_t LuaScriptInterface::luaGetPlayerLearnedInstantSpell(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -2502,7 +2410,7 @@ int32_t LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		lua_pushnumber(L, g_spells->getInstantSpellCount(player));
@@ -2522,7 +2430,7 @@ int32_t LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -2556,7 +2464,7 @@ int32_t LuaScriptInterface::luaGetInstantSpellInfoByName(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player && cid != 0) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -2655,7 +2563,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		lua_pushboolean(L, g_game.removeItemOfType(player, itemId, count, subType, ignoreEquipped));
@@ -2675,7 +2583,7 @@ int32_t LuaScriptInterface::luaDoFeedPlayer(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->addDefaultRegeneration(food * 1000);
@@ -2696,7 +2604,7 @@ int32_t LuaScriptInterface::luaDoPlayerSendCancel(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->sendCancel(text);
@@ -2717,7 +2625,7 @@ int32_t LuaScriptInterface::luaDoSendDefaultCancel(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->sendCancelMessage(ret);
@@ -2864,7 +2772,7 @@ int32_t LuaScriptInterface::luaDoCreatureSay(lua_State* L)
 	}
 
 	ScriptEnvironment* env = getScriptEnv();
-	Creature* creature = env->getCreatureByUID(uid);
+	Creature* creature = g_game.getCreatureByID(uid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -2875,7 +2783,7 @@ int32_t LuaScriptInterface::luaDoCreatureSay(lua_State* L)
 	SpectatorVec list;
 
 	if (cid) {
-		Creature* target = env->getCreatureByUID(cid);
+		Creature* target = g_game.getCreatureByID(cid);
 
 		if (!target) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -2931,7 +2839,7 @@ int32_t LuaScriptInterface::luaDoSendMagicEffect(lua_State* L)
 
 	if (parameters > 2) {
 		uint32_t cid = popNumber(L);
-		Player* player = env->getPlayerByUID(cid);
+		Player* player = g_game.getPlayerByID(cid);
 
 		if (player) {
 			list.insert(player);
@@ -3018,7 +2926,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddSkillTry(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->addSkillAdvance((skills_t)skillid, n);
@@ -3038,7 +2946,7 @@ int32_t LuaScriptInterface::luaDoCreatureAddHealth(lua_State* L)
 	int32_t healthChange = (int32_t)popNumber(L);
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		if (healthChange >= 0) {
@@ -3072,7 +2980,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddMana(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (!animationOnLoss && manaChange < 0) {
@@ -3117,7 +3025,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddManaSpent(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->addManaSpent(mana);
@@ -3158,7 +3066,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -3244,7 +3152,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItemEx(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -3429,7 +3337,7 @@ int32_t LuaScriptInterface::luaDoPlayerSendTextMessage(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -3469,7 +3377,7 @@ int32_t LuaScriptInterface::luaGetPlayerSkill(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (skillid <= SKILL_LAST) {
@@ -3494,7 +3402,7 @@ int32_t LuaScriptInterface::luaGetPlayerLossPercent(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		uint32_t value = (uint32_t)(player->getLostPercent() * 100);
@@ -3515,7 +3423,7 @@ int32_t LuaScriptInterface::luaDoSetCreatureDropLoot(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		creature->setDropLoot(doDrop);
@@ -3537,7 +3445,7 @@ int32_t LuaScriptInterface::luaDoShowTextDialog(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setWriteItem(NULL, 0);
@@ -3558,7 +3466,7 @@ int32_t LuaScriptInterface::luaDoSendTutorial(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -3588,7 +3496,7 @@ int32_t LuaScriptInterface::luaDoAddMark(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -4162,7 +4070,7 @@ int32_t LuaScriptInterface::luaGetPlayerStorageValue(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		int32_t value;
@@ -4197,7 +4105,7 @@ int32_t LuaScriptInterface::luaSetPlayerStorageValue(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->addStorageValue(key, value);
@@ -4369,7 +4277,7 @@ int32_t LuaScriptInterface::luaDoRemoveCreature(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		Player* player = creature->getPlayer();
@@ -4397,7 +4305,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveMoney(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (g_game.removeMoney(player, money)) {
@@ -4421,7 +4329,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddMoney(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		g_game.addMoney(player, money);
@@ -4442,7 +4350,7 @@ int32_t LuaScriptInterface::luaDoCreatureSetLookDir(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		g_game.internalCreatureTurn(creature, dir);
@@ -4463,7 +4371,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetTown(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		Town* town = Towns::getInstance().getTown(townid);
@@ -4492,7 +4400,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetVocation(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setVocation(voc);
@@ -4518,7 +4426,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetSex(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setSex((PlayerSex_t)newSex);
@@ -4538,7 +4446,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetBankBalance(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setBankBalance(balance);
@@ -4567,7 +4475,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddSoul(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->changeSoul(addsoul);
@@ -4594,7 +4502,7 @@ int32_t LuaScriptInterface::luaGetPlayerItemCount(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		uint32_t n = player->__getItemTypeCount(itemId, subtype);
@@ -4905,7 +4813,7 @@ int32_t LuaScriptInterface::luaGetPlayerLight(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		LightInfo lightInfo;
@@ -4941,7 +4849,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddExp(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (exp > 0) {
@@ -4965,7 +4873,7 @@ int32_t LuaScriptInterface::luaGetPlayerSlotItem(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	const Player* player = env->getPlayerByUID(cid);
+	const Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		Thing* thing = player->__getThing(slot);
@@ -5001,7 +4909,7 @@ int32_t LuaScriptInterface::luaGetPlayerItemById(lua_State* L)
 	bool deepSearch = popBoolean(L);
 	uint32_t cid = popNumber(L);
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -5542,7 +5450,7 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5642,7 +5550,7 @@ int32_t LuaScriptInterface::luaDoAreaCombatHealth(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5683,7 +5591,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatHealth(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5692,7 +5600,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatHealth(lua_State* L)
 		}
 	}
 
-	Creature* target = env->getCreatureByUID(targetCid);
+	Creature* target = g_game.getCreatureByID(targetCid);
 
 	if (target) {
 		CombatParams params;
@@ -5726,7 +5634,7 @@ int32_t LuaScriptInterface::luaDoAreaCombatMana(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5765,7 +5673,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatMana(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5774,7 +5682,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatMana(lua_State* L)
 		}
 	}
 
-	Creature* target = env->getCreatureByUID(targetCid);
+	Creature* target = g_game.getCreatureByID(targetCid);
 
 	if (target) {
 		CombatParams params;
@@ -5804,7 +5712,7 @@ int32_t LuaScriptInterface::luaDoAreaCombatCondition(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5850,7 +5758,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatCondition(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5859,7 +5767,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatCondition(lua_State* L)
 		}
 	}
 
-	Creature* target = env->getCreatureByUID(targetCid);
+	Creature* target = g_game.getCreatureByID(targetCid);
 
 	if (target) {
 		const Condition* condition = env->getConditionObject(conditionId);
@@ -5897,7 +5805,7 @@ int32_t LuaScriptInterface::luaDoAreaCombatDispel(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5936,7 +5844,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatDispel(lua_State* L)
 	Creature* creature = NULL;
 
 	if (cid != 0) {
-		creature = env->getCreatureByUID(cid);
+		creature = g_game.getCreatureByID(cid);
 
 		if (!creature) {
 			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5945,7 +5853,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatDispel(lua_State* L)
 		}
 	}
 
-	Creature* target = env->getCreatureByUID(targetCid);
+	Creature* target = g_game.getCreatureByID(targetCid);
 
 	if (target) {
 		CombatParams params;
@@ -5969,7 +5877,7 @@ int32_t LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5977,7 +5885,7 @@ int32_t LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 		return 1;
 	}
 
-	Creature* target = env->getCreatureByUID(targetCid);
+	Creature* target = g_game.getCreatureByID(targetCid);
 
 	if (!target) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -5998,7 +5906,7 @@ int32_t LuaScriptInterface::luaDoConvinceCreature(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6006,7 +5914,7 @@ int32_t LuaScriptInterface::luaDoConvinceCreature(lua_State* L)
 		return 1;
 	}
 
-	Creature* target = env->getCreatureByUID(targetCid);
+	Creature* target = g_game.getCreatureByID(targetCid);
 
 	if (!target) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6027,7 +5935,7 @@ int32_t LuaScriptInterface::luaGetMonsterTargetList(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6068,7 +5976,7 @@ int32_t LuaScriptInterface::luaGetMonsterFriendList(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6112,7 +6020,7 @@ int32_t LuaScriptInterface::luaDoSetMonsterTarget(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6128,7 +6036,7 @@ int32_t LuaScriptInterface::luaDoSetMonsterTarget(lua_State* L)
 		return 1;
 	}
 
-	Creature* target = env->getCreatureByUID(targetCid);
+	Creature* target = g_game.getCreatureByID(targetCid);
 
 	if (!target) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6151,7 +6059,7 @@ int32_t LuaScriptInterface::luaDoMonsterChangeTarget(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6184,7 +6092,7 @@ int32_t LuaScriptInterface::luaDoAddCondition(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6213,7 +6121,7 @@ int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -6332,7 +6240,7 @@ int32_t LuaScriptInterface::luaDoChangeSpeed(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		g_game.changeSpeed(creature, delta);
@@ -6362,7 +6270,7 @@ int32_t LuaScriptInterface::luaSetCreatureOutfit(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		ReturnValue ret = Spell::CreateIllusion(creature, outfit, time);
@@ -6387,7 +6295,7 @@ int32_t LuaScriptInterface::luaGetCreatureOutfit(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		const Outfit_t outfit = creature->getCurrentOutfit();
@@ -6416,7 +6324,7 @@ int32_t LuaScriptInterface::luaSetMonsterOutfit(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		ReturnValue ret = Spell::CreateIllusion(creature, name, time);
@@ -6443,7 +6351,7 @@ int32_t LuaScriptInterface::luaSetItemOutfit(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		ReturnValue ret = Spell::CreateIllusion(creature, item, time);
@@ -6498,7 +6406,7 @@ int32_t LuaScriptInterface::luaGetPlayerDepotItems(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		const DepotChest* depotChest = player->getDepotChest(depotid, true);
@@ -6524,7 +6432,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetGuildLevel(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setGuildLevel(level);
@@ -6544,7 +6452,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetGuildNick(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setGuildNick(nick);
@@ -6598,7 +6506,7 @@ int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		ReturnValue ret = g_game.internalMoveCreature(creature, (Direction)direction, FLAG_NOLIMIT);
@@ -6626,7 +6534,7 @@ int32_t LuaScriptInterface::luaIsPlayer(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	if (env->getPlayerByUID(cid)) {
+	if (g_game.getPlayerByID(cid)) {
 		lua_pushboolean(L, true);
 	} else {
 		lua_pushboolean(L, false);
@@ -6642,7 +6550,7 @@ int32_t LuaScriptInterface::luaIsCreature(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	if (env->getCreatureByUID(cid)) {
+	if (g_game.getCreatureByID(cid)) {
 		lua_pushboolean(L, true);
 	} else {
 		lua_pushboolean(L, false);
@@ -6655,7 +6563,7 @@ int32_t LuaScriptInterface::luaIsMonster(lua_State* L)
 {
 	//isMonster(cid)
 	uint32_t cid = popNumber(L);
-	lua_pushboolean(L, getScriptEnv()->getMonsterByUID(cid) != NULL);
+	lua_pushboolean(L, g_game.getMonsterByID(cid) != NULL);
 	return 1;
 }
 
@@ -6663,7 +6571,7 @@ int32_t LuaScriptInterface::luaIsNpc(lua_State* L)
 {
 	//isNpc(cid)
 	uint32_t cid = popNumber(L);
-	lua_pushboolean(L, getScriptEnv()->getNpcByUID(cid) != NULL);
+	lua_pushboolean(L, g_game.getNpcByID(cid) != NULL);
 	return 1;
 }
 
@@ -6681,7 +6589,6 @@ int32_t LuaScriptInterface::luaIsContainer(lua_State* L)
 	uint32_t uid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-
 	if (env->getContainerByUID(uid)) {
 		lua_pushboolean(L, true);
 	} else {
@@ -6736,7 +6643,6 @@ int32_t LuaScriptInterface::luaIsMoveable(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Thing* thing = env->getThingByUID(uid);
-
 	if (thing && thing->isPushable()) {
 		lua_pushboolean(L, true);
 	} else {
@@ -6884,7 +6790,7 @@ int32_t LuaScriptInterface::luaRegisterCreatureEvent(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		creature->registerCreatureEvent(name);
@@ -7142,7 +7048,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddOutfit(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->addOutfit(looktype, addon);
@@ -7163,7 +7069,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemOutfit(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->remOutfit(looktype, addon);
@@ -7183,7 +7089,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddMount(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (!player->tameMount(mountid)) {
@@ -7207,7 +7113,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveMount(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (!player->untameMount(mountid)) {
@@ -7231,7 +7137,7 @@ int32_t LuaScriptInterface::luaGetPlayerMount(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		Mount* mount = Mounts::getInstance()->getMountByID(mountid);
@@ -7258,7 +7164,7 @@ int32_t LuaScriptInterface::luaCanPlayerWearOutfit(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		lua_pushboolean(L, player->canWear(looktype, addon));
@@ -7285,7 +7191,7 @@ int32_t LuaScriptInterface::luaDoCreatureChangeOutfit(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		creature->defaultOutfit = outfit;
@@ -7308,7 +7214,7 @@ int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_LIGHT, time, level | (color << 8));
@@ -7328,7 +7234,7 @@ int32_t LuaScriptInterface::luaDoPlayerPopupFYI(lua_State* L)
 	std::string message = popString(L);
 	uint32_t cid = (uint32_t)popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->sendFYIBox(message);
@@ -7347,7 +7253,7 @@ int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 	bool boolValue = popBoolean(L);
 	uint32_t cid = (uint32_t)popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->mayNotMove = boolValue;
@@ -7372,7 +7278,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddPremiumDays(lua_State* L)
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
 
-	if (Player* player = env->getPlayerByUID(cid)) {
+	if (Player* player = g_game.getPlayerByID(cid)) {
 		if (player->premiumDays != 65535) {
 			Account account = IOLoginData::getInstance()->loadAccount(player->getAccount());
 			account.premiumDays = std::min<int32_t>(0xFFFE, account.premiumDays + days);
@@ -7396,7 +7302,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemovePremiumDays(lua_State* L)
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
 
-	if (Player* player = env->getPlayerByUID(cid)) {
+	if (Player* player = g_game.getPlayerByID(cid)) {
 		if (player->premiumDays != 65535) {
 			Account account = IOLoginData::getInstance()->loadAccount(player->getAccount());
 			account.premiumDays = std::max<int32_t>(0, account.premiumDays - days);
@@ -7535,7 +7441,7 @@ int32_t LuaScriptInterface::luaGetCreatureMaster(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -7563,7 +7469,7 @@ int32_t LuaScriptInterface::luaGetCreatureSummons(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -7701,7 +7607,7 @@ int32_t LuaScriptInterface::luaGetCreaturePosition(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		Position pos = creature->getPosition();
@@ -7727,7 +7633,7 @@ int32_t LuaScriptInterface::luaGetCreatureName(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		lua_pushstring(L, creature->getName().c_str());
@@ -7746,7 +7652,7 @@ int32_t LuaScriptInterface::luaGetCreatureSpeed(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		lua_pushnumber(L, creature->getSpeed());
@@ -7765,7 +7671,7 @@ int32_t LuaScriptInterface::luaGetCreatureBaseSpeed(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		lua_pushnumber(L, creature->getBaseSpeed());
@@ -7784,7 +7690,7 @@ int32_t LuaScriptInterface::luaGetCreatureTarget(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		Creature* target = creature->getAttackedCreature();
@@ -7984,7 +7890,7 @@ int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 	uint32_t condition = popNumber(L);
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		if (creature->hasCondition((ConditionType_t)condition)) {
@@ -8005,7 +7911,7 @@ int32_t LuaScriptInterface::luaGetPlayerBlessing(lua_State* L)
 	int16_t blessing = popNumber(L) - 1;
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		lua_pushboolean(L, player->hasBlessing(blessing));
@@ -8022,7 +7928,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddBlessing(lua_State* L)
 	int16_t blessing = popNumber(L) - 1;
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		if (!player->hasBlessing(blessing)) {
@@ -8044,7 +7950,7 @@ int32_t LuaScriptInterface::luaSetPlayerGroupId(lua_State* L)
 	uint32_t newGroupId = popNumber(L);
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setGroupId(newGroupId);
@@ -8061,7 +7967,7 @@ int32_t LuaScriptInterface::luaGetCreatureHealth(lua_State* L)
 {
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		lua_pushnumber(L, creature->getHealth());
@@ -8077,7 +7983,7 @@ int32_t LuaScriptInterface::luaGetCreatureMaxHealth(lua_State* L)
 {
 	uint32_t cid = popNumber(L);
 	ScriptEnvironment* env = getScriptEnv();
-	Creature* creature = env->getCreatureByUID(cid);
+	Creature* creature = g_game.getCreatureByID(cid);
 
 	if (creature) {
 		Player* player = creature->getPlayer();
@@ -8141,7 +8047,7 @@ int32_t LuaScriptInterface::luaGetPlayerParty(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	if (Player* player = env->getPlayerByUID(cid)) {
+	if (Player* player = g_game.getPlayerByID(cid)) {
 		if (Party* party = player->getParty()) {
 			lua_pushnumber(L, env->addThing(party->getLeader()));
 		} else {
@@ -8161,14 +8067,14 @@ int32_t LuaScriptInterface::luaDoPlayerJoinParty(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	uint32_t cid = popNumber(L);
-	Player* leader = env->getPlayerByUID(cid);
+	Player* leader = g_game.getPlayerByID(cid);
 
 	if (!leader) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -8186,7 +8092,7 @@ int32_t LuaScriptInterface::luaGetPartyMembers(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		Party* party = player->getParty();
@@ -8221,8 +8127,8 @@ int32_t LuaScriptInterface::luaIsInWar(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnvironment* env = getScriptEnv();
-	Player* player = env->getPlayerByUID(cid);
-	Player* targetPlayer = env->getPlayerByUID(target);
+	Player* player = g_game.getPlayerByID(cid);
+	Player* targetPlayer = g_game.getPlayerByID(target);
 
 	if (player && targetPlayer) {
 		if (player->isInWar(targetPlayer)) {
@@ -8245,7 +8151,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill(lua_State* L)
 
 	ScriptEnvironment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
+	Player* player = g_game.getPlayerByID(cid);
 
 	if (player) {
 		player->setOfflineTrainingSkill(skillid);

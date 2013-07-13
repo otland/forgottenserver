@@ -161,6 +161,20 @@ class Game
 		Creature* getCreatureByID(uint32_t id);
 
 		/**
+		  * Returns a monster based on the unique creature identifier
+		  * \param id is the unique monster id to get a monster pointer to
+		  * \returns A Monster pointer to the monster
+		  */
+		Monster* getMonsterByID(uint32_t id);
+
+		/**
+		  * Returns a npc based on the unique creature identifier
+		  * \param id is the unique npc id to get a npc pointer to
+		  * \returns A NPC pointer to the npc
+		  */
+		Npc* getNpcByID(uint32_t id);
+
+		/**
 		  * Returns a player based on the unique creature identifier
 		  * \param id is the unique player id to get a player pointer to
 		  * \returns A Pointer to the player
