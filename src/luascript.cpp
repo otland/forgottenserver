@@ -250,13 +250,24 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 	Item* item = thing->getItem();
 	if (item) {
 		uint16_t uid = item->getUniqueId();
-		if (uid > 0 && item->getTile() == item->getParent()) {
-			if (m_localMap.find(uid) != m_localMap.end()) {
-				return uid;
+		if (uid > 0) {
+			const Tile* itemTile = item->getTile();
+			bool isOnTile = itemTile == item->getParent();
+			if (!isOnTile) {
+				auto it = g_game.browseFields.find(itemTile);
+				if (it != g_game.browseFields.end() && item->getParent() == it->second) {
+					isOnTile = true;
+				}
 			}
 
-			m_localMap[uid] = thing;
-			return uid;
+			if (isOnTile) {
+				if (m_localMap.find(uid) != m_localMap.end()) {
+					return uid;
+				}
+
+				m_localMap[uid] = thing;
+				return uid;
+			}
 		}
 	}
 
