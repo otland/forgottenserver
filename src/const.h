@@ -425,6 +425,8 @@ enum GuildEmblems_t {
 };
 
 enum item_t {
+	ITEM_BROWSEFIELD = 460, // for internal use
+
 	ITEM_FIREFIELD_PVP_FULL	= 1487,
 	ITEM_FIREFIELD_PVP_MEDIUM	= 1488,
 	ITEM_FIREFIELD_PVP_SMALL	= 1489,

@@ -368,21 +368,20 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 				thing = tile->__getThing(index);
 			}
 
-			if (player) {
+			if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 				//do extra checks here if the thing is accessable
 				if (thing && thing->getItem()) {
 					if (tile->hasProperty(ISVERTICAL)) {
 						if (player->getPosition().x + 1 == tile->getPosition().x) {
 							thing = NULL;
 						}
-					} else if (tile->hasProperty(ISHORIZONTAL)) {
+					} else { // horizontal
 						if (player->getPosition().y + 1 == tile->getPosition().y) {
 							thing = NULL;
 						}
 					}
 				}
 			}
-
 			return thing;
 		}
 	} else {
@@ -391,16 +390,28 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			uint8_t fromCid = pos.y & 0x0F;
 			uint8_t slot = pos.z;
 
-			Container* parentcontainer = player->getContainer(fromCid);
-
-			if (!parentcontainer) {
+			Container* parentContainer = player->getContainer(fromCid);
+			if (!parentContainer) {
 				return NULL;
 			}
 
-			return parentcontainer->getItem(player->getContainerIndex(fromCid) + slot);
+			if (parentContainer->getID() == ITEM_BROWSEFIELD) {
+				Tile* tile = parentContainer->getTile();
+				if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+					if (tile->hasProperty(ISVERTICAL)) {
+						if (player->getPosition().x + 1 == tile->getPosition().x) {
+							return NULL;
+						}
+					} else { // horizontal
+						if (player->getPosition().y + 1 == tile->getPosition().y) {
+							return NULL;
+						}
+					}
+				}
+			}
+			return parentContainer->getItem(player->getContainerIndex(fromCid) + slot);
 		} else if (pos.y == 0 && pos.z == 0) {
 			const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-
 			if (it.id == 0) {
 				return NULL;
 			}
@@ -1320,15 +1331,16 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	}
 
 	//hangable item specific code
-	if (item->isHangable() && toCylinderTile->hasProperty(SUPPORTHANGABLE)) {
+	if (item->isHangable() && toCylinderTile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 		//destination supports hangable objects so need to move there first
-		if (toCylinderTile->hasProperty(ISVERTICAL)) {
-			if (player->getPosition().x + 1 == mapToPos.x) {
+		bool vertical = toCylinderTile->hasProperty(ISVERTICAL);
+		if (vertical) {
+			if (playerPos.x + 1 == mapToPos.x) {
 				player->sendCancelMessage(RET_NOTPOSSIBLE);
 				return false;
 			}
-		} else if (toCylinderTile->hasProperty(ISHORIZONTAL)) {
-			if (player->getPosition().y + 1 == mapToPos.y) {
+		} else { // horizontal
+			if (playerPos.y + 1 == mapToPos.y) {
 				player->sendCancelMessage(RET_NOTPOSSIBLE);
 				return false;
 			}
@@ -1336,12 +1348,9 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 		if (!Position::areInRange<1, 1, 0>(playerPos, mapToPos)) {
 			Position walkPos = mapToPos;
-
-			if (toCylinderTile->hasProperty(ISVERTICAL)) {
+			if (vertical) {
 				walkPos.x -= -1;
-			}
-
-			if (toCylinderTile->hasProperty(ISHORIZONTAL)) {
+			} else {
 				walkPos.y -= -1;
 			}
 

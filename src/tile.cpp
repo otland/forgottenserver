@@ -53,7 +53,6 @@ bool Tile::hasProperty(enum ITEMPROPERTY prop) const
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -810,7 +809,6 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 		}
 
 		bool itemIsHangable = item->isHangable();
-
 		if (ground == NULL && !itemIsHangable) {
 			return RET_NOTPOSSIBLE;
 		}
@@ -823,41 +821,19 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 			}
 		}
 
-		if (ground) {
-			const ItemType& iiType = Item::items[ground->getID()];
-
-			if (iiType.blockSolid) {
-				if (!iiType.allowPickupable || item->isMagicField() || item->isBlocking()) {
-					if (!item->isPickupable()) {
-						return RET_NOTENOUGHROOM;
-					}
-
-					if (!iiType.hasHeight || iiType.pickupable || iiType.isBed()) {
-						return RET_NOTENOUGHROOM;
+		if (itemIsHangable && hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+			if (items) {
+				for (ItemVector::const_iterator it = items->begin(), end = items->end(); it != end; ++it) {
+					if ((*it)->isHangable()) {
+						return RET_NEEDEXCHANGE;
 					}
 				}
 			}
-		}
-
-		if (items) {
-			if (itemIsHangable) {
-				bool hasHangable = false;
-				bool supportHangable = false;
-
-				for (ItemVector::const_iterator it = items->begin(), end = items->end(); it != end; ++it) {
-					const ItemType& iiType = Item::items[(*it)->getID()];
-
-					if (iiType.isHangable) {
-						hasHangable = true;
-					}
-
-					if (iiType.isHorizontal || iiType.isVertical) {
-						supportHangable = true;
-					} else if (iiType.blockSolid) {
-						if (iiType.allowPickupable && !item->isMagicField() && !item->isBlocking()) {
-							continue;
-						}
-
+		} else {
+			if (ground) {
+				const ItemType& iiType = Item::items[ground->getID()];
+				if (iiType.blockSolid) {
+					if (!iiType.allowPickupable || item->isMagicField() || item->isBlocking()) {
 						if (!item->isPickupable()) {
 							return RET_NOTENOUGHROOM;
 						}
@@ -867,14 +843,11 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 						}
 					}
 				}
+			}
 
-				if (hasHangable && supportHangable) {
-					return RET_NEEDEXCHANGE;
-				}
-			} else {
+			if (items) {
 				for (ItemVector::const_iterator it = items->begin(), end = items->end(); it != end; ++it) {
 					const ItemType& iiType = Item::items[(*it)->getID()];
-
 					if (!iiType.blockSolid) {
 						continue;
 					}
@@ -894,7 +867,6 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 			}
 		}
 	}
-
 	return RET_NOERROR;
 }
 
@@ -1791,6 +1763,10 @@ void Tile::updateTileFlags(Item* item, bool removing)
 		if (item->getContainer() && item->getContainer()->getDepotLocker()) {
 			setFlag(TILESTATE_DEPOT);
 		}
+
+		if (item->hasProperty(SUPPORTHANGABLE)) {
+			setFlag(TILESTATE_SUPPORTS_HANGABLE);
+		}
 	} else {
 		if (item->floorChangeDown()) {
 			resetFlag(TILESTATE_FLOORCHANGE);
@@ -1873,6 +1849,10 @@ void Tile::updateTileFlags(Item* item, bool removing)
 
 		if (item->getContainer() && item->getContainer()->getDepotLocker()) {
 			resetFlag(TILESTATE_DEPOT);
+		}
+
+		if (item->hasProperty(SUPPORTHANGABLE)) {
+			resetFlag(TILESTATE_SUPPORTS_HANGABLE);
 		}
 	}
 }

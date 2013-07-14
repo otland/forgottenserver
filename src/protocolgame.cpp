@@ -1724,7 +1724,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 
 	msg.AddByte(cid);
 
-	if (container->getID() == 460) {
+	if (container->getID() == ITEM_BROWSEFIELD) {
 		msg.AddItem(1987, 1, version);
 		msg.AddString("Browse Field");
 	} else {

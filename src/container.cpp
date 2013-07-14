@@ -34,7 +34,7 @@ Container::Container(uint16_t _type) : Item(_type)
 	pages = false;
 }
 
-Container::Container(Tile* tile) : Item(460)
+Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 {
 	TileItemVector* itemVector = tile->getItemList();
 
@@ -59,7 +59,7 @@ Container::Container(Tile* tile) : Item(460)
 Container::~Container()
 {
 	//std::cout << "Container destructor " << this << std::endl;
-	if (getID() == 460) {
+	if (getID() == ITEM_BROWSEFIELD) {
 		g_game.browseFields.erase(getTile());
 
 		for (ItemDeque::const_iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit) {
@@ -97,10 +97,10 @@ Container* Container::getParentContainer()
 bool Container::hasParent(uint16_t version) const
 {
 	if (version > 975) {
-		return getID() != 460 && dynamic_cast<const Player*>(getParent()) == NULL;
+		return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == NULL;
 	} else {
 		const Container* parentContainer = dynamic_cast<const Container*>(getParent());
-		return parentContainer && parentContainer->getID() != 460;
+		return parentContainer && parentContainer->getID() != ITEM_BROWSEFIELD;
 	}
 }
 

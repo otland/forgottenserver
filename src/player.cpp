@@ -823,7 +823,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 		return;
 	}
 
-	if (container->getID() == 460) {
+	if (container->getID() == ITEM_BROWSEFIELD) {
 		container->useThing2();
 	}
 
@@ -833,7 +833,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 		OpenContainer& openContainer = it->second;
 		Container* oldContainer = openContainer.container;
 
-		if (oldContainer->getID() == 460) {
+		if (oldContainer->getID() == ITEM_BROWSEFIELD) {
 			oldContainer->releaseThing2();
 		}
 
@@ -859,7 +859,7 @@ void Player::closeContainer(uint8_t cid)
 	Container* container = openContainer.container;
 	openContainers.erase(it);
 
-	if (container && container->getID() == 460) {
+	if (container && container->getID() == ITEM_BROWSEFIELD) {
 		container->releaseThing2();
 	}
 }
@@ -1542,7 +1542,7 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 
 		uint16_t slot = openContainer.index;
 
-		if (container->getID() == 460) {
+		if (container->getID() == ITEM_BROWSEFIELD) {
 			uint16_t containerSize = container->size() - 1;
 			uint16_t pageEnd = openContainer.index + container->capacity();
 

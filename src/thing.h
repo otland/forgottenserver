@@ -91,6 +91,7 @@ class Tile;
 class Cylinder;
 class Item;
 class Creature;
+class Container;
 
 class Thing
 {
@@ -134,6 +135,12 @@ class Thing
 		virtual int32_t getThrowRange() const = 0;
 		virtual bool isPushable() const = 0;
 
+		virtual Container* getContainer() {
+			return NULL;
+		}
+		virtual const Container* getContainer() const {
+			return NULL;
+		}
 		virtual Item* getItem() {
 			return NULL;
 		}

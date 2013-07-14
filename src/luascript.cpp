@@ -251,11 +251,14 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 	if (item) {
 		uint16_t uid = item->getUniqueId();
 		if (uid > 0) {
-			const Tile* itemTile = item->getTile();
-			bool isOnTile = itemTile == item->getParent();
-			if (!isOnTile) {
-				auto it = g_game.browseFields.find(itemTile);
-				if (it != g_game.browseFields.end() && item->getParent() == it->second) {
+			bool isOnTile = false;
+
+			const Cylinder* parent = item->getParent();
+			if (item->getTile() == parent) {
+				isOnTile = true;
+			} else if (parent) {
+				const Container* parentContainer = parent->getContainer();
+				if (parentContainer && parentContainer->getID() == ITEM_BROWSEFIELD) {
 					isOnTile = true;
 				}
 			}

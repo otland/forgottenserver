@@ -65,7 +65,6 @@ void TrashHolder::__addThing(Thing* thing)
 void TrashHolder::__addThing(int32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
-
 	if (!item) {
 		return;
 	}
@@ -75,22 +74,9 @@ void TrashHolder::__addThing(int32_t index, Thing* thing)
 	}
 
 	if (item->isHangable() && isGroundTile()) {
-		Cylinder* parent = getParent();
-
-		if (parent) {
-			Tile* tile = dynamic_cast<Tile*>(parent);
-
-			if (tile) {
-				if (const TileItemVector* items = tile->getItemList()) {
-					for (ItemVector::const_iterator it = items->begin(); it != items->end(); ++it) {
-						const ItemType& iiType = Item::items[(*it)->getID()];
-
-						if (iiType.isHorizontal || iiType.isVertical) {
-							return;
-						}
-					}
-				}
-			}
+		Tile* tile = dynamic_cast<Tile*>(getParent());
+		if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+			return;
 		}
 	}
 
