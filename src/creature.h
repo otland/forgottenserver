@@ -441,12 +441,11 @@ class Creature : virtual public Thing
 
 		virtual void setParent(Cylinder* cylinder) {
 			_tile = dynamic_cast<Tile*>(cylinder);
-			_position = _tile->getTilePosition();
 			Thing::setParent(cylinder);
 		}
 
 		const Position& getPosition() const {
-			return _position;
+			return _tile->getPosition();
 		}
 
 		Tile* getTile() {
@@ -478,7 +477,6 @@ class Creature : virtual public Thing
 		}
 
 		Tile* _tile;
-		Position _position;
 		uint32_t id;
 		bool isInternalRemoved;
 		bool isMapLoaded;

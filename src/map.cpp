@@ -117,10 +117,8 @@ Tile* Map::getTile(int32_t x, int32_t y, int32_t z)
 	}
 
 	QTreeLeafNode* leaf = QTreeNode::getLeafStatic(&root, x, y);
-
 	if (leaf) {
 		Floor* floor = leaf->getFloor(z);
-
 		if (floor) {
 			return floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
 		}
