@@ -1898,7 +1898,7 @@ void Npc::executeResponse(Player* player, NpcState* npcState, const NpcResponse*
 						if (it->strValue == "|PLAYER|") {
 							lua_pushnumber(L, player->getID());
 						} else if (it->strValue == "|TEXT|") {
-							lua_pushstring(L, npcState->respondToText.c_str());
+							LuaScriptInterface::pushString(L, npcState->respondToText);
 						} else {
 							std::cout << "Warning [Npc::processResponse] Unknown script param: " << it->strValue << std::endl;
 							break;
@@ -3130,13 +3130,11 @@ int32_t NpcScriptInterface::luaGetNpcName(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Npc* npc = env->getNpc();
-
 	if (npc) {
-		lua_pushstring(L, npc->getName().c_str());
+		LuaScriptInterface::pushString(L, npc->getName());
 	} else {
-		lua_pushstring(L, "");
+		lua_pushboolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -3148,19 +3146,16 @@ int32_t NpcScriptInterface::luaGetNpcParameter(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Npc* npc = env->getNpc();
-
 	if (npc) {
-		Npc::ParametersMap::iterator it = npc->m_parameters.find(paramKey);
-
+		auto it = npc->m_parameters.find(paramKey);
 		if (it != npc->m_parameters.end()) {
-			lua_pushstring(L, it->second.c_str());
+			LuaScriptInterface::pushString(L, it->second);
 		} else {
 			lua_pushnil(L);
 		}
 	} else {
 		lua_pushnil(L);
 	}
-
 	return 1;
 }
 
@@ -3581,7 +3576,7 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 		m_scriptInterface->pushFunction(m_onCreatureSay);
 		lua_pushnumber(L, creature->getID());
 		lua_pushnumber(L, type);
-		lua_pushstring(L, text.c_str());
+		LuaScriptInterface::pushString(L, text);
 		m_scriptInterface->callFunction(3);
 		m_scriptInterface->releaseScriptEnv();
 	} else {

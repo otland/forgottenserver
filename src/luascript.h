@@ -334,6 +334,7 @@ class LuaScriptInterface
 		static void pushVariant(lua_State* L, const LuaVariant& var);
 		static void pushPosition(lua_State* L, const PositionEx& position);
 		static void pushPosition(lua_State* L, const Position& position, uint32_t stackpos);
+		static void pushString(lua_State* L, const std::string& value);
 		static void pushCallback(lua_State* L, int32_t callback);
 
 		static LuaVariant popVariant(lua_State* L);
@@ -697,12 +698,11 @@ class LuaScriptInterface
 		static int32_t luaDatabaseConnected(lua_State* L);
 		static int32_t luaDatabaseTableExists(lua_State* L);
 
-		static const luaL_Reg luaResultTable[8];
+		static const luaL_Reg luaResultTable[7];
 		static int32_t luaResultGetDataInt(lua_State* L);
 		static int32_t luaResultGetDataLong(lua_State* L);
 		static int32_t luaResultGetDataString(lua_State* L);
 		static int32_t luaResultGetDataStream(lua_State* L);
-		static int32_t luaResultGetAllData(lua_State* L);
 		static int32_t luaResultNext(lua_State* L);
 		static int32_t luaResultFree(lua_State* L);
 

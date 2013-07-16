@@ -166,8 +166,8 @@ int32_t TalkAction::executeSay(Creature* creature, const std::string& words, con
 
 		m_scriptInterface->pushFunction(m_scriptId);
 		lua_pushnumber(L, creature->getID());
-		lua_pushstring(L, words.c_str());
-		lua_pushstring(L, param.c_str());
+		LuaScriptInterface::pushString(L, words);
+		LuaScriptInterface::pushString(L, param);
 
 		bool result = m_scriptInterface->callFunction(3);
 		m_scriptInterface->releaseScriptEnv();

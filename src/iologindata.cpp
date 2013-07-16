@@ -68,14 +68,12 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	query.str("");
 	query << "SELECT `name` FROM `players` WHERE `account_id` = " << account.id;
 	result = db->storeQuery(query.str());
-
 	if (!result) {
 		return account;
 	}
 
 	do {
-		std::string characterName = result->getDataString("name");
-		account.charList.push_back(characterName.c_str());
+		account.charList.push_back(result->getDataString("name"));
 	} while (result->next());
 
 	db->freeResult(result);
@@ -109,14 +107,12 @@ Account IOLoginData::loadAccount(const std::string& name)
 	query.str("");
 	query << "SELECT `name` FROM `players` WHERE `account_id` = " << account.id;
 	result = db->storeQuery(query.str());
-
 	if (!result) {
 		return account;
 	}
 
 	do {
-		std::string characterName = result->getDataString("name");
-		account.charList.push_back(characterName.c_str());
+		account.charList.push_back(result->getDataString("name"));
 	} while (result->next());
 
 	db->freeResult(result);
@@ -139,7 +135,6 @@ bool IOLoginData::getPassword(const std::string& accname, const std::string& nam
 	query << "SELECT `id`, `password` FROM `accounts` WHERE `name` = " << db->escapeString(accname);
 
 	DBResult* result = db->storeQuery(query.str());
-
 	if (!result) {
 		return false;
 	}
