@@ -30,9 +30,7 @@ endif()
 
 find_package(Boost 1.42.0 COMPONENTS system regex thread REQUIRED)
 
-# TODO: manual list
-file(GLOB tfs_SRC "src/*.cpp")
-
+include(src/CMakeLists.txt)
 add_executable(tfs ${tfs_SRC})
 
 include_directories(${LIBXML2_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${GMP_INCLUDE_DIR})
