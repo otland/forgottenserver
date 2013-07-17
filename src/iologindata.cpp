@@ -792,8 +792,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`blessings` = " << player->blessings;
 	query << " WHERE `id` = " << player->getGUID();
 
-	DBTransaction transaction(db);
-
+	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}

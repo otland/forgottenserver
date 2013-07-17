@@ -202,8 +202,7 @@ bool IOMapSerialize::saveMapRelational(Map* map)
 	Database* db = Database::getInstance();
 
 	//Start the transaction
-	DBTransaction transaction(db);
-
+	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}
@@ -548,8 +547,7 @@ bool IOMapSerialize::saveMapBinary(Map* map)
 	std::ostringstream query;
 
 	//Start the transaction
-	DBTransaction transaction(db);
-
+	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}
@@ -597,8 +595,7 @@ bool IOMapSerialize::saveMapBinaryTileBased(Map* map)
 	std::ostringstream query;
 
 	//Start the transaction
-	DBTransaction transaction(db);
-
+	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}
@@ -733,7 +730,6 @@ bool IOMapSerialize::loadHouseInfo(Map* map)
 				do {
 					house->setAccessList(result->getDataInt("listid"), result->getDataString("list"));
 				} while (result->next());
-
 				db->freeResult(result);
 			}
 		}
@@ -745,10 +741,8 @@ bool IOMapSerialize::loadHouseInfo(Map* map)
 bool IOMapSerialize::saveHouseInfo(Map* map)
 {
 	Database* db = Database::getInstance();
-	std::ostringstream query;
 
-	DBTransaction transaction(db);
-
+	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}
@@ -757,6 +751,7 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 		return false;
 	}
 
+	std::ostringstream query;
 	for (HouseMap::iterator it = Houses::getInstance().getHouseBegin(); it != Houses::getInstance().getHouseEnd(); ++it) {
 		House* house = it->second;
 		query << "SELECT `id` FROM `houses` WHERE `id` = " << house->getHouseId();

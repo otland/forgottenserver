@@ -143,7 +143,6 @@
     <ClCompile Include="..\src\cylinder.cpp" />
     <ClCompile Include="..\src\database.cpp" />
     <ClCompile Include="..\src\databasemanager.cpp" />
-    <ClCompile Include="..\src\databasemysql.cpp" />
     <ClCompile Include="..\src\depotchest.cpp" />
     <ClCompile Include="..\src\depotlocker.cpp" />
     <ClCompile Include="..\src\fileloader.cpp" />
@@ -231,7 +230,6 @@
     <ClInclude Include="..\src\cylinder.h" />
     <ClInclude Include="..\src\database.h" />
     <ClInclude Include="..\src\databasemanager.h" />
-    <ClInclude Include="..\src\databasemysql.h" />
     <ClInclude Include="..\src\definitions.h" />
     <ClInclude Include="..\src\depotchest.h" />
     <ClInclude Include="..\src\depotlocker.h" />

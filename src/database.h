@@ -20,26 +20,20 @@
 #define __OTSERV_DATABASE_H__
 
 #include "definitions.h"
-#include <boost/thread.hpp>
-#include <sstream>
-#include "enums.h"
 
-#define DATABASE_VIRTUAL
-#define DATABASE_CLASS DatabaseMySQL
-#define DBRES_CLASS MySQLResult
-class DatabaseMySQL;
-class MySQLResult;
+#include <boost/thread/recursive_mutex.hpp>
 
-typedef DATABASE_CLASS Database;
-typedef DBRES_CLASS DBResult;
+#if defined(WIN32) && !defined(_MSC_VER)
+#include <mysql/mysql.h>
+#else
+#include <mysql.h>
+#endif
 
 typedef std::map<const std::string, uint32_t> listNames_t;
 
-enum DBParam_t {
-	DBPARAM_MULTIINSERT = 1
-};
+class DBResult;
 
-class _Database
+class Database
 {
 	public:
 		/**
@@ -50,18 +44,6 @@ class _Database
 		* @return database connection handler singletor
 		*/
 		static Database* getInstance();
-
-		/**
-		* Database information.
-		*
-		* Returns currently used database attribute.
-		*
-		* @param DBParam_t parameter to get
-		* @return suitable for given parameter
-		*/
-		DATABASE_VIRTUAL bool getParam(DBParam_t param) {
-			return false;
-		}
 
 		/**
 		* Database connected.
@@ -81,19 +63,10 @@ class _Database
 		* Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
 		*
 		* @return true on success, false on error
-		* @note
-		*	If your database system doesn't support transactions you should return true - it's not feature test, code should work without transaction, just will lack integrity.
 		*/
-		friend class DBTransaction;
-		DATABASE_VIRTUAL bool beginTransaction() {
-			return 0;
-		}
-		DATABASE_VIRTUAL bool rollback() {
-			return 0;
-		}
-		DATABASE_VIRTUAL bool commit() {
-			return 0;
-		}
+		bool beginTransaction();
+		bool rollback();
+		bool commit(); 
 
 	public:
 		/**
@@ -104,9 +77,7 @@ class _Database
 		* @param std::string query command
 		* @return true on success, false on error
 		*/
-		DATABASE_VIRTUAL bool executeQuery(const std::string& query) {
-			return 0;
-		}
+		bool executeQuery(const std::string& query);
 
 		/**
 		* Queries database.
@@ -116,9 +87,7 @@ class _Database
 		* @param std::string query
 		* @return results object (null on error)
 		*/
-		DATABASE_VIRTUAL DBResult* storeQuery(const std::string& query) {
-			return 0;
-		}
+		DBResult* storeQuery(const std::string& query);
 
 		/**
 		* Escapes string for query.
@@ -128,9 +97,7 @@ class _Database
 		* @param std::string string to be escaped
 		* @return quoted string
 		*/
-		DATABASE_VIRTUAL std::string escapeString(const std::string& s) {
-			return "''";
-		}
+		std::string escapeString(const std::string& s) const;
 
 		/**
 		* Escapes binary stream for query.
@@ -141,33 +108,22 @@ class _Database
 		* @param long stream length
 		* @return quoted string
 		*/
-		DATABASE_VIRTUAL std::string escapeBlob(const char* s, uint32_t length) {
-			return "''";
-		}
+		std::string escapeBlob(const char* s, uint32_t length) const;
 
 		/**
 		* Resource freeing.
 		*
 		* @param DBResult* resource to be freed
 		*/
-		DATABASE_VIRTUAL void freeResult(DBResult* res) {}
+		void freeResult(DBResult* res);
 
 		/**
 		 * Retrieve id of last inserted row
 		 *
 		 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
 		 */
-		DATABASE_VIRTUAL uint64_t getLastInsertId() {
-			return 0;
-		}
-
-		/**
-		* Get database engine name
-		*
-		* @return the database engine name
-		*/
-		DATABASE_VIRTUAL std::string getClientName() {
-			return "";
+		uint64_t getLastInsertId() {
+			return (uint64_t)mysql_insert_id(m_handle);
 		}
 
 		/**
@@ -175,90 +131,52 @@ class _Database
 		*
 		* @return the database engine version
 		*/
-		DATABASE_VIRTUAL const char* getClientVersion() {
-			return "";
+		const char* getClientVersion() const {
+			return mysql_get_client_info();
 		}
 
-		/**
-		* Get database engine version
-		*
-		* @return the database engine version
-		*/
-		DATABASE_VIRTUAL uint64_t getClientVersionNumeric() {
-			return 0;
-		}
-
-	protected:
-		_Database() : m_connected(false) {};
-		DATABASE_VIRTUAL ~_Database() {};
+	private:
+		Database();
+		~Database();
 
 		DBResult* verifyResult(DBResult* result);
 
+		MYSQL* m_handle;
+
+		boost::recursive_mutex database_lock;
+
 		bool m_connected;
 
-	private:
 		static Database* _instance;
+
+	friend class DBTransaction;
 };
 
-class _DBResult
+class DBResult
 {
 	public:
-		/** Get the Integer value of a field in database
-		*\return The Integer value of the selected field and row
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL int32_t getDataInt(const std::string& s) {
-			return 0;
-		}
+		int32_t getDataInt(const std::string& s) const;
+		int64_t getDataLong(const std::string& s) const;
+		std::string getDataString(const std::string& s) const;
+		const char* getDataStream(const std::string& s, unsigned long& size) const;
 
-		/** Get the Long value of a field in database
-		*\return The Long value of the selected field and row
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL int64_t getDataLong(const std::string& s) {
-			return 0;
-		}
-
-		/** Get the String of a field in database
-		*\return The String of the selected field and row
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL std::string getDataString(const std::string& s) {
-			return "''";
-		}
-
-		/** Get the blob of a field in database
-		*\return a PropStream that is initiated with the blob data field, if not exist it returns NULL.
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL const char* getDataStream(const std::string& s, unsigned long& size) {
-			return 0;
-		}
-
-		/**
-		* Moves to next result in set.
-		*
-		* \return true if moved, false if there are no more results.
-		*/
-		DATABASE_VIRTUAL bool next() {
-			return false;
-		}
-
-		listNames_t getListNames() const {
-			return m_listNames;
-		}
+		bool next();
 
 	protected:
-		_DBResult() {}
-		DATABASE_VIRTUAL ~_DBResult() {}
+		DBResult(MYSQL_RES* res);
+		~DBResult();
+
+	private:
+		MYSQL_RES* m_handle;
+		MYSQL_ROW m_row;
 
 		listNames_t m_listNames;
+
+	friend class Database;
 };
 
 /**
  * INSERT statement.
- *
- * Gives possibility to optimize multiple INSERTs on databases that support multiline INSERTs.
  */
 class DBInsert
 {
@@ -279,13 +197,11 @@ class DBInsert
 		void setQuery(const std::string& query);
 
 		/**
-		* Adds new row to INSERT statement.
-		*
-		* On databases that doesn't support multiline INSERTs it simply execute INSERT for each row.
-		*
+		* Adds new row to INSERT statement
 		* @param std::string& row data
 		*/
 		bool addRow(const std::string& row);
+
 		/**
 		* Allows to use addRow() with stringstream as parameter.
 		*/
@@ -296,38 +212,30 @@ class DBInsert
 		*/
 		bool execute();
 
-		/**
-		 * Returns ID of the inserted column if it had a AUTO_INCREMENT key
-		 */
-		uint64_t getInsertID();
-
 	protected:
-		Database* m_db;
-		bool m_multiLine;
-		uint32_t m_rows;
 		std::string m_query;
 		std::string m_buf;
-};
 
-#include "databasemysql.h"
+		Database* m_db;
+		uint32_t m_rows;
+};
 
 class DBTransaction
 {
 	public:
-		DBTransaction(Database* database) {
-			m_database = database;
+		DBTransaction() {
 			m_state = STATE_NO_START;
 		}
 
 		~DBTransaction() {
 			if (m_state == STATE_START) {
-				m_database->rollback();
+				Database::getInstance()->rollback();
 			}
 		}
 
 		bool begin() {
 			m_state = STATE_START;
-			return m_database->beginTransaction();
+			return Database::getInstance()->beginTransaction();
 		}
 
 		bool commit() {
@@ -336,7 +244,7 @@ class DBTransaction
 			}
 
 			m_state = STEATE_COMMIT;
-			return m_database->commit();
+			return Database::getInstance()->commit();
 		}
 
 	private:
@@ -347,7 +255,6 @@ class DBTransaction
 		};
 
 		TransactionStates_t m_state;
-		Database* m_database;
 };
 
 #endif
