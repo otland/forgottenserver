@@ -148,15 +148,15 @@ void GlobalEvents::think()
 {
 	int64_t now = OTSYS_TIME();
 
-	for (GlobalEventMap::iterator it = thinkMap.begin(); it != thinkMap.end(); ++it) {
+	for (auto it = thinkMap.begin(); it != thinkMap.end(); ++it) {
 		GlobalEvent* globalEvent = it->second;
 
-		if (globalEvent->getNextExecution() > now) {
+		int64_t nextExecution = globalEvent->getNextExecution();
+		if (nextExecution > now) {
 			continue;
 		}
 
-		globalEvent->setNextExecution(globalEvent->getNextExecution() + now);
-
+		globalEvent->setNextExecution(nextExecution + globalEvent->getInterval());
 		if (!globalEvent->executeEvent()) {
 			std::cout << "[Error - GlobalEvents::think] Failed to execute event: " << globalEvent->getName() << std::endl;
 		}

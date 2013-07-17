@@ -200,9 +200,8 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	std::cout << ">> Loading database driver..." << std::flush;
 	Database* db = Database::getInstance();
-
 	if (!db->isConnected()) {
-		startupErrorMessage("Failed to connect to database, please read doc/MYSQL_HELP for more information.");
+		startupErrorMessage("Failed to connect to database.");
 		return;
 	}
 
