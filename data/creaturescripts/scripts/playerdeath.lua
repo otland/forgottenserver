@@ -1,6 +1,6 @@
 dofile("./config.lua")
 
-function onDeath(cid, corpse, killer)
+function onDeath(cid, corpse, killer, mostDamage, unjustified, mostDamage_unjustified)
 	doPlayerSendTextMessage(cid, MESSAGE_EVENT_ADVANCE, "You are dead.")
 	if deathListEnabled == "yes" then
 		local byPlayer = 0
