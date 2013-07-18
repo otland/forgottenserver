@@ -1,3 +1,5 @@
+![Build Status](http://jenkins.otland.net/buildStatus/icon?job=forgottenserver-windows)
+
 forgottenserver
 ===============
 
