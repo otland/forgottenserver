@@ -316,6 +316,7 @@ class Player : public Creature, public Cylinder
 			operatingSystem = clientos;
 		}
 
+		/*
 		uint16_t getProtocolVersion() const {
 			if (!client) {
 				return 0;
@@ -323,6 +324,7 @@ class Player : public Creature, public Cylinder
 
 			return client->getVersion();
 		}
+		*/
 
 		secureMode_t getSecureMode() const {
 			return secureMode;

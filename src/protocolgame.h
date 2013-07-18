@@ -67,9 +67,11 @@ class ProtocolGame : public Protocol
 
 		void setPlayer(Player* p);
 
+		/*
 		uint16_t getVersion() const {
 			return version;
 		}
+		*/
 
 		const std::unordered_set<uint32_t>& getKnownCreatures() const {
 			return knownCreatureSet;
@@ -362,7 +364,7 @@ class ProtocolGame : public Protocol
 		Player* player;
 
 		uint32_t eventConnect;
-		uint16_t version;
+		// uint16_t version;
 		bool m_debugAssertSent;
 		bool m_acceptPackets;
 };

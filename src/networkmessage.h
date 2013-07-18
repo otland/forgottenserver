@@ -156,10 +156,9 @@ class NetworkMessage
 
 		// write functions for complex types
 		void AddPosition(const Position& pos);
-		void AddItem(uint16_t id, uint8_t count, uint16_t protocolVersion);
-		void AddItem(const Item* item, uint16_t protocolVersion);
-		void AddItemId(const Item* item, uint16_t protocolVersion);
-		void AddItemId(uint16_t itemId, uint16_t protocolVersion);
+		void AddItem(uint16_t id, uint8_t count);
+		void AddItem(const Item* item);
+		void AddItemId(uint16_t itemId);
 
 		int32_t getMessageLength() const {
 			return m_MsgSize;

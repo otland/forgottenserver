@@ -2975,7 +2975,7 @@ bool Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 	}
 
 	player->addContainer(cid, parentContainer);
-	player->sendContainer(cid, parentContainer, parentContainer->hasParent(player->getProtocolVersion()), player->getContainerIndex(cid));
+	player->sendContainer(cid, parentContainer, parentContainer->hasParent(), player->getContainerIndex(cid));
 	return true;
 }
 
@@ -3010,7 +3010,7 @@ bool Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
 		return false;
 	}
 
-	player->sendContainer(cid, container, container->hasParent(player->getProtocolVersion()), player->getContainerIndex(cid));
+	player->sendContainer(cid, container, container->hasParent(), player->getContainerIndex(cid));
 	return true;
 }
 

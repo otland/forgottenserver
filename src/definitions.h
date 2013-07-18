@@ -20,13 +20,13 @@
 #define __OTSERV_DEFINITIONS_H__
 
 #define STATUS_SERVER_NAME "The Forgotten Server"
-#define STATUS_SERVER_PROTOCOL "10.0"
+#define STATUS_SERVER_PROTOCOL "10.1"
 #define STATUS_SERVER_VERSION "1.0"
 #define STATUS_SERVER_DEVELOPERS "Mark Samman"
 
-#define CLIENT_VERSION_MIN 972
-#define CLIENT_VERSION_MAX 981
-#define CLIENT_VERSION_STR "10.0"
+#define CLIENT_VERSION_MIN 1010
+#define CLIENT_VERSION_MAX 1010
+#define CLIENT_VERSION_STR "10.1"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -45,8 +45,6 @@
 #define WIN32
 #endif
 #endif
-
-//#include "logger.h"
 
 #include <list>
 #include <vector>

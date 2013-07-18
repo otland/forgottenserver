@@ -94,14 +94,9 @@ Container* Container::getParentContainer()
 	return NULL;
 }
 
-bool Container::hasParent(uint16_t version) const
+bool Container::hasParent() const
 {
-	if (version > 975) {
-		return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == NULL;
-	} else {
-		const Container* parentContainer = dynamic_cast<const Container*>(getParent());
-		return parentContainer && parentContainer->getID() != ITEM_BROWSEFIELD;
-	}
+	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == NULL;
 }
 
 void Container::addItem(Item* item)

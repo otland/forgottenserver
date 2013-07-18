@@ -1932,11 +1932,9 @@ void Player::onSendContainer(const Container* container)
 		return;
 	}
 
-	bool hasParent = container->hasParent(client->getVersion());
-
+	bool hasParent = container->hasParent();
 	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
 		const OpenContainer& openContainer = it->second;
-
 		if (openContainer.container == container) {
 			client->sendContainer(it->first, container, hasParent, openContainer.index);
 		}

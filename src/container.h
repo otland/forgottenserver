@@ -116,7 +116,7 @@ class Container : public Item, public Cylinder
 			return itemlist.rend();
 		}
 
-		bool hasParent(uint16_t version) const;
+		bool hasParent() const;
 		void addItem(Item* item);
 		Item* getItem(uint32_t index) const;
 		bool isHoldingItem(const Item* item) const;

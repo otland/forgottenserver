@@ -35,4 +35,10 @@
 	<mount id="33" clientid="521" name="Crimson Ray" speed="20" premium="yes" />
 	<mount id="34" clientid="522" name="Steelbeak" speed="20" premium="yes" />
 	<mount id="35" clientid="526" name="Water Buffalo" speed="20" premium="yes" />
+	<mount id="36" clientid="546" name="Armoured Scorpion" speed="20" premium="yes" />
+	<mount id="37" clientid="547" name="Armoured Dragonling" speed="20" premium="yes" />
+	<mount id="38" clientid="548" name="Armoured Cavebear" speed="20" premium="yes" />
+	<mount id="39" clientid="559" name="The Hellgrip" speed="20" premium="yes" />
+	<mount id="40" clientid="571" name="Lion" speed="20" premium="yes" />
+	<mount id="41" clientid="572" name="Golden Lion" speed="20" premium="yes" />
 </mounts>

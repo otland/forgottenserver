@@ -130,74 +130,47 @@ void NetworkMessage::AddPosition(const Position& pos)
 	AddByte(pos.z);
 }
 
-void NetworkMessage::AddItem(uint16_t id, uint8_t count, uint16_t protocolVersion)
+void NetworkMessage::AddItem(uint16_t id, uint8_t count)
 {
-	if (protocolVersion < 978 && id > 20309) {
-		AddU16(2187);
-	} else {
-		const ItemType& it = Item::items[id];
+	const ItemType& it = Item::items[id];
 
-		AddU16(it.clientId);
+	AddU16(it.clientId);
 
-		if (protocolVersion >= 979) {
-			AddByte(0xFF);    // MARK_UNMARKED
-		}
+	AddByte(0xFF);    // MARK_UNMARKED
 
-		if (it.stackable) {
-			AddByte(count);
-		} else if (it.isSplash() || it.isFluidContainer()) {
-			uint32_t fluidIndex = count % 8;
-			AddByte(fluidMap[fluidIndex]);
-		}
+	if (it.stackable) {
+		AddByte(count);
+	} else if (it.isSplash() || it.isFluidContainer()) {
+		uint32_t fluidIndex = count % 8;
+		AddByte(fluidMap[fluidIndex]);
+	}
 
-		if (it.isAnimation) {
-			AddByte(0xFE);    // random phase (0xFF for async)
-		}
+	if (it.isAnimation) {
+		AddByte(0xFE);    // random phase (0xFF for async)
 	}
 }
 
-void NetworkMessage::AddItem(const Item* item, uint16_t protocolVersion)
+void NetworkMessage::AddItem(const Item* item)
 {
-	if (protocolVersion < 978 && item->getID() > 20309) {
-		AddU16(2187);
-	} else {
-		const ItemType& it = Item::items[item->getID()];
+	const ItemType& it = Item::items[item->getID()];
 
-		AddU16(it.clientId);
+	AddU16(it.clientId);
+	AddByte(0xFF);    // MARK_UNMARKED
 
-		if (protocolVersion >= 979) {
-			AddByte(0xFF);    // MARK_UNMARKED
-		}
+	if (it.stackable) {
+		AddByte(std::min<uint16_t>(0xFF, item->getSubType()));
+	} else if (it.isSplash() || it.isFluidContainer()) {
+		uint32_t fluidIndex = item->getSubType() % 8;
+		AddByte(fluidMap[fluidIndex]);
+	}
 
-		if (it.stackable) {
-			AddByte(std::min<uint16_t>(0xFF, item->getSubType()));
-		} else if (it.isSplash() || it.isFluidContainer()) {
-			uint32_t fluidIndex = item->getSubType() % 8;
-			AddByte(fluidMap[fluidIndex]);
-		}
-
-		if (it.isAnimation) {
-			AddByte(0xFE);    // random phase (0xFF for async)
-		}
+	if (it.isAnimation) {
+		AddByte(0xFE);    // random phase (0xFF for async)
 	}
 }
 
-void NetworkMessage::AddItemId(const Item* item, uint16_t protocolVersion)
+void NetworkMessage::AddItemId(uint16_t itemId)
 {
-	if (protocolVersion < 978 && item->getID() > 20309) {
-		AddU16(2187);
-	} else {
-		const ItemType& it = Item::items[item->getID()];
-		AddU16(it.clientId);
-	}
-}
-
-void NetworkMessage::AddItemId(uint16_t itemId, uint16_t protocolVersion)
-{
-	if (protocolVersion < 978 && itemId > 20309) {
-		AddU16(2187);
-	} else {
-		const ItemType& it = Item::items[itemId];
-		AddU16(it.clientId);
-	}
+	const ItemType& it = Item::items[itemId];
+	AddU16(it.clientId);
 }
