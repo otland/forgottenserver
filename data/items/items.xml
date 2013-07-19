@@ -695,6 +695,7 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="45" />
+		<attribute key="blocking" value="1" />
 	</item>
 	<item id="1500" article="a" name="fire field">
 		<attribute key="type" value="magicfield" />

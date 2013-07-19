@@ -1300,6 +1300,10 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
 					it.alwaysOnTopOrder = intValue;
 				}
+			} else if (tmpStrValue == "blocking") {
+				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
+					it.blockSolid = (intValue != 0);
+				}
 			} else if (tmpStrValue == "allowdistread") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					it.allowDistRead = booleanString(strValue);
