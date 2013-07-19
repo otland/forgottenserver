@@ -159,7 +159,10 @@ void Raids::checkRaids()
 				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / (*it)->getInterval() >= (uint32_t)random_range(0, MAX_RAND_RANGE)) {
 					setRunning(*it);
 					(*it)->startRaid();
-					raidList.erase(it);
+
+					if (g_config.getBoolean(ConfigManager::SHUTDOWN_AT_SERVERSAVE)) {
+						raidList.erase(it);
+					}
 					break;
 				}
 			}
