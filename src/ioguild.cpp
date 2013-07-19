@@ -46,20 +46,17 @@ void IOGuild::getWarList(uint32_t guildId, GuildWarList& guildWarList)
 	query << "SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = " << guildId << " OR `guild2` = " << guildId << ") AND `ended` = 0 AND `status` = 1";
 
 	DBResult* result = db->storeQuery(query.str());
-
 	if (!result) {
 		return;
 	}
 
 	do {
 		uint32_t guild1 = result->getDataInt("guild1");
-
-		if (guildId == guild1) {
+		if (guildId != guild1) {
 			guildWarList.push_back(guild1);
 		} else {
 			guildWarList.push_back(result->getDataInt("guild2"));
 		}
 	} while (result->next());
-
 	db->freeResult(result);
 }
