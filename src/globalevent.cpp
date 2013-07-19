@@ -25,6 +25,8 @@
 
 #include <cmath>
 
+extern ConfigManager g_config;
+
 GlobalEvents::GlobalEvents() :
 	m_scriptInterface("GlobalEvent Interface")
 {
@@ -85,7 +87,7 @@ bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
 			timerMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 
 			if (timerEventId == 0) {
-				timerEventId = g_scheduler.addEvent(createSchedulerTask(TIMER_INTERVAL,
+				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
 				                                    boost::bind(&GlobalEvents::timer, this)));
 			}
 
@@ -93,7 +95,6 @@ bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
 		}
 	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
 		GlobalEventMap::iterator it = serverMap.find(globalEvent->getName());
-
 		if (it == serverMap.end()) {
 			serverMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			return true;
@@ -126,51 +127,84 @@ void GlobalEvents::timer()
 {
 	time_t now = time(NULL);
 
-	for (GlobalEventMap::iterator it = timerMap.begin(), end = timerMap.end(); it != end; ++it) {
+	int64_t nextScheduledTime = 0xFFFFFFFFFFFFFFFF;
+
+	auto it = timerMap.begin();
+	while (it != timerMap.end()) {
 		GlobalEvent* globalEvent = it->second;
 
-		if (globalEvent->getNextExecution() > now) {
+		int64_t nextExecutionTime = globalEvent->getNextExecution() - now;
+		if (nextExecutionTime > 0) {
+			if (nextExecutionTime < nextScheduledTime) {
+				nextScheduledTime = nextExecutionTime;
+			}
+
+			++it;
 			continue;
 		}
-
-		globalEvent->setNextExecution(globalEvent->getNextExecution() + 86400);
 
 		if (!globalEvent->executeEvent()) {
 			std::cout << "[Error - GlobalEvents::timer] Failed to execute event: " << globalEvent->getName() << std::endl;
 		}
+
+		if (g_config.getBoolean(ConfigManager::SHUTDOWN_AT_SERVERSAVE)) {
+			it = timerMap.erase(it);
+			continue;
+		}
+
+		nextExecutionTime = 86400;
+		if (nextExecutionTime < nextScheduledTime) {
+			nextScheduledTime = nextExecutionTime;
+		}
+
+		globalEvent->setNextExecution(globalEvent->getNextExecution() + nextExecutionTime);
+
+		++it;
 	}
 
-	g_scheduler.addEvent(createSchedulerTask(TIMER_INTERVAL,
-	                     boost::bind(&GlobalEvents::timer, this)));
+	if (nextScheduledTime != 0xFFFFFFFFFFFFFFFF) {
+		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
+							                boost::bind(&GlobalEvents::timer, this)));
+	}
 }
 
 void GlobalEvents::think()
 {
 	int64_t now = OTSYS_TIME();
 
-	for (auto it = thinkMap.begin(); it != thinkMap.end(); ++it) {
-		GlobalEvent* globalEvent = it->second;
+	int64_t nextScheduledTime = 0xFFFFFFFFFFFFFFFF;
+	for (auto it : thinkMap) {
+		GlobalEvent* globalEvent = it.second;
 
-		int64_t nextExecution = globalEvent->getNextExecution();
-		if (nextExecution > now) {
+		int64_t nextExecutionTime = globalEvent->getNextExecution() - now;
+		if (nextExecutionTime > 0) {
+			if (nextExecutionTime < nextScheduledTime) {
+				nextScheduledTime = nextExecutionTime;
+			}
+
 			continue;
 		}
 
-		globalEvent->setNextExecution(nextExecution + globalEvent->getInterval());
 		if (!globalEvent->executeEvent()) {
 			std::cout << "[Error - GlobalEvents::think] Failed to execute event: " << globalEvent->getName() << std::endl;
 		}
+
+		nextExecutionTime = globalEvent->getInterval();
+		if (nextExecutionTime < nextScheduledTime) {
+			nextScheduledTime = nextExecutionTime;
+		}
+
+		globalEvent->setNextExecution(globalEvent->getNextExecution() + nextExecutionTime);
 	}
 
-	g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
-	                     boost::bind(&GlobalEvents::think, this)));
+	thinkEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(SCHEDULER_MINTICKS, nextScheduledTime),
+	                                    boost::bind(&GlobalEvents::think, this)));
 }
 
 void GlobalEvents::execute(GlobalEvent_t type)
 {
 	for (GlobalEventMap::iterator it = serverMap.begin(); it != serverMap.end(); ++it) {
 		GlobalEvent* globalEvent = it->second;
-
 		if (globalEvent->getEventType() == type) {
 			globalEvent->executeEvent();
 		}

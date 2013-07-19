@@ -22,8 +22,6 @@
 
 #include "const.h"
 
-#define TIMER_INTERVAL 1000
-
 enum GlobalEvent_t {
 	GLOBALEVENT_NONE,
 	GLOBALEVENT_TIMER,
