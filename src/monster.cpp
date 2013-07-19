@@ -417,23 +417,28 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 
 	switch (searchType) {
 		case TARGETSEARCH_NEAREAST: {
-			Creature* target = NULL;
-			int32_t minRange = -1;
+			if (!resultList.empty()) {
+				auto it = resultList.begin();
+				Creature* target = *it;
 
-			for (std::list<Creature*>::iterator it = resultList.begin(); it != resultList.end(); ++it) {
-				const Position& pos = (*it)->getPosition();
+				if (++it != resultList.end()) {
+					const Position& targetPosition = target->getPosition();
+					int32_t minRange = std::max<int32_t>(std::abs(myPos.x - targetPosition.x), std::abs(myPos.y - targetPosition.y));
+					do {
+						const Position& pos = (*it)->getPosition();
 
-				int32_t distance = std::max<int32_t>(std::abs(myPos.x - pos.x), std::abs(myPos.y - pos.y));
-				if (minRange == -1 || distance < minRange) {
-					target = *it;
-					minRange = distance;
+						int32_t distance = std::max<int32_t>(std::abs(myPos.x - pos.x), std::abs(myPos.y - pos.y));
+						if (distance < minRange) {
+							target = *it;
+							minRange = distance;
+						}
+					} while (++it != resultList.end());
+				}
+
+				if (selectTarget(target)) {
+					return true;
 				}
 			}
-
-			if (target && selectTarget(target)) {
-				return true;
-			}
-
 			break;
 		}
 

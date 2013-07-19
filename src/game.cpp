@@ -315,7 +315,7 @@ Cylinder* Game::internalGetCylinder(Player* player, const Position& pos)
 	//container
 	if (pos.y & 0x40) {
 		uint8_t from_cid = pos.y & 0x0F;
-		return player->getContainer(from_cid);
+		return player->getContainerByID(from_cid);
 	}
 
 	//inventory
@@ -326,7 +326,6 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 {
 	if (pos.x != 0xFFFF) {
 		Tile* tile = getTile(pos.x, pos.y, pos.z);
-
 		if (tile) {
 			/*look at*/
 			if (type == STACKPOS_LOOK) {
@@ -390,7 +389,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			uint8_t fromCid = pos.y & 0x0F;
 			uint8_t slot = pos.z;
 
-			Container* parentContainer = player->getContainer(fromCid);
+			Container* parentContainer = player->getContainerByID(fromCid);
 			if (!parentContainer) {
 				return NULL;
 			}
@@ -409,7 +408,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 					}
 				}
 			}
-			return parentContainer->getItem(player->getContainerIndex(fromCid) + slot);
+			return parentContainer->getItemByIndex(player->getContainerIndex(fromCid) + slot);
 		} else if (pos.y == 0 && pos.z == 0) {
 			const ItemType& it = Item::items.getItemIdByClientId(spriteId);
 			if (it.id == 0) {
@@ -2058,7 +2057,7 @@ bool Game::removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, 
 		listContainer.pop_front();
 
 		for (int32_t i = 0; i < (int32_t)container->size() && count > 0;) {
-			Item* item = container->getItem(i);
+			Item* item = container->getItemByIndex(i);
 			if (item->getID() == itemId) {
 				if (item->isStackable()) {
 					if (item->getItemCount() > count) {
@@ -2947,8 +2946,7 @@ bool Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 		return false;
 	}
 
-	Container* container = player->getContainer(cid);
-
+	Container* container = player->getContainerByID(cid);
 	if (!container) {
 		return false;
 	}
@@ -3004,8 +3002,7 @@ bool Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
 		return false;
 	}
 
-	Container* container = player->getContainer(cid);
-
+	Container* container = player->getContainerByID(cid);
 	if (!container) {
 		return false;
 	}
@@ -3169,8 +3166,7 @@ bool Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	}
 
 	uint8_t dummyContainerId = 0xF - ((pos.x % 3) * 3 + (pos.y % 3));
-	Container* openContainer = player->getContainer(dummyContainerId);
-
+	Container* openContainer = player->getContainerByID(dummyContainerId);
 	if (openContainer) {
 		player->onCloseContainer(openContainer);
 		player->closeContainer(dummyContainerId);
@@ -3190,8 +3186,7 @@ bool Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_
 		return false;
 	}
 
-	Container* container = player->getContainer(containerId);
-
+	Container* container = player->getContainerByID(containerId);
 	if (!container) {
 		return false;
 	}

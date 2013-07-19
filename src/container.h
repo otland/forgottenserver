@@ -118,7 +118,7 @@ class Container : public Item, public Cylinder
 
 		bool hasParent() const;
 		void addItem(Item* item);
-		Item* getItem(uint32_t index) const;
+		Item* getItemByIndex(uint32_t index) const;
 		bool isHoldingItem(const Item* item) const;
 
 		uint32_t getItemHoldingCount() const;

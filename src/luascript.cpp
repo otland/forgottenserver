@@ -6512,8 +6512,7 @@ int32_t LuaScriptInterface::luaGetContainerItem(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	if (Container* container = env->getContainerByUID(uid)) {
-		Item* item = container->getItem(slot);
-
+		Item* item = container->getItemByIndex(slot);
 		if (item) {
 			uint32_t uid = env->addThing(item);
 			pushThing(L, item, uid);

@@ -213,7 +213,7 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 	return os;
 }
 
-Item* Container::getItem(uint32_t index) const
+Item* Container::getItemByIndex(uint32_t index) const
 {
 	if (index >= size()) {
 		return NULL;
@@ -395,7 +395,7 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 				}
 			}
 		} else {
-			const Item* destItem = getItem(index);
+			const Item* destItem = getItemByIndex(index);
 			if (destItem && destItem->getID() == item->getID() && destItem->getItemCount() < 100) {
 				uint32_t remainder = 100 - destItem->getItemCount();
 
@@ -496,7 +496,7 @@ Cylinder* Container::__queryDestination(int32_t& index, const Thing* thing, Item
 	}
 
 	if (index != INDEX_WHEREEVER) {
-		Item* itemFromIndex = getItem(index);
+		Item* itemFromIndex = getItemByIndex(index);
 		if (itemFromIndex) {
 			*destItem = itemFromIndex;
 		}
@@ -606,7 +606,7 @@ void Container::__replaceThing(uint32_t index, Thing* thing)
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
-	Item* replacedItem = getItem(index);
+	Item* replacedItem = getItemByIndex(index);
 
 	if (!replacedItem) {
 		return /*RET_NOTPOSSIBLE*/;
@@ -722,19 +722,17 @@ std::map<uint32_t, uint32_t>& Container::__getAllItemTypeCount(std::map<uint32_t
 	for (ItemDeque::const_iterator it = itemlist.begin(); it != itemlist.end(); ++it) {
 		countMap[(*it)->getID()] += (*it)->getItemCount();
 	}
-
 	return countMap;
 }
 
 Thing* Container::__getThing(uint32_t index) const
 {
-	return getItem(index);
+	return getItemByIndex(index);
 }
 
 void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	Cylinder* topParent = getTopParent();
-
 	if (topParent->getCreature()) {
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	} else {
@@ -775,7 +773,6 @@ void Container::__internalAddThing(Thing* thing)
 void Container::__internalAddThing(uint32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
-
 	if (item == NULL) {
 		return;
 	}

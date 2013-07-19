@@ -1699,7 +1699,6 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
         const FindPathParams& fpp) const
 {
 	int32_t dxMax = ((fpp.fullPathSearch || (startPos.x - targetPos.x) >= 0) ? fpp.maxTargetDist : 0);
-
 	if (testPos.x > targetPos.x + dxMax) {
 		return false;
 	}

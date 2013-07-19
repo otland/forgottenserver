@@ -341,7 +341,7 @@ class ConditionDamage: public Condition
 
 		bool getNextDamage(int32_t& damage);
 		bool doDamage(Creature* creature, int32_t damage);
-		bool updateCondition(const ConditionDamage* addCondition);
+		bool updateCondition(const Condition* addCondition);
 };
 
 class ConditionSpeed: public Condition
