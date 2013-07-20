@@ -53,6 +53,10 @@
 typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 
 #ifdef WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #define WIN32_LEAN_AND_MEAN
 #include <io.h>
 #include <process.h>
@@ -96,10 +100,6 @@ inline int strncasecmp(const char* s1, const char* s2, size_t n)
 	return ::_strnicmp(s1, s2, n);
 }
 #else
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif

@@ -75,17 +75,14 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
 {
 	GlobalEvent* globalEvent = dynamic_cast<GlobalEvent*>(event);
-
 	if (!globalEvent) {
 		return false;
 	}
 
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
 		GlobalEventMap::iterator it = timerMap.find(globalEvent->getName());
-
 		if (it == timerMap.end()) {
 			timerMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
-
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
 				                                    boost::bind(&GlobalEvents::timer, this)));
@@ -127,7 +124,7 @@ void GlobalEvents::timer()
 {
 	time_t now = time(NULL);
 
-	int64_t nextScheduledTime = 0xFFFFFFFFFFFFFFFF;
+	int64_t nextScheduledTime = std::numeric_limits<int64_t>::max();
 
 	auto it = timerMap.begin();
 	while (it != timerMap.end()) {
@@ -162,7 +159,7 @@ void GlobalEvents::timer()
 		++it;
 	}
 
-	if (nextScheduledTime != 0xFFFFFFFFFFFFFFFF) {
+	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
 		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
 							                boost::bind(&GlobalEvents::timer, this)));
 	}
@@ -172,7 +169,7 @@ void GlobalEvents::think()
 {
 	int64_t now = OTSYS_TIME();
 
-	int64_t nextScheduledTime = 0xFFFFFFFFFFFFFFFF;
+	int64_t nextScheduledTime = std::numeric_limits<int64_t>::max();
 	for (auto it : thinkMap) {
 		GlobalEvent* globalEvent = it.second;
 
@@ -197,8 +194,10 @@ void GlobalEvents::think()
 		globalEvent->setNextExecution(globalEvent->getNextExecution() + nextExecutionTime);
 	}
 
-	thinkEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(SCHEDULER_MINTICKS, nextScheduledTime),
-	                                    boost::bind(&GlobalEvents::think, this)));
+	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
+		thinkEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(SCHEDULER_MINTICKS, nextScheduledTime),
+											boost::bind(&GlobalEvents::think, this)));
+	}
 }
 
 void GlobalEvents::execute(GlobalEvent_t type)
