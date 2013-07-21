@@ -940,7 +940,7 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 	}
 
 	house->setHouseOwner(player->guid);
-	player->sendTextMessage(MSG_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in the bsnk.");
+	player->sendTextMessage(MSG_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in the bank.");
 }
 
 void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::string& param)
