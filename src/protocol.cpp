@@ -20,7 +20,7 @@
 
 #include "definitions.h"
 
-#if defined WIN32
+#ifdef WIN32
 #include <winerror.h>
 #endif
 

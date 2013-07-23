@@ -28,6 +28,8 @@
 #include <sstream>
 #include <iomanip>
 
+#include <boost/algorithm/string/predicate.hpp>
+
 #if defined __GNUC__ && __GNUC__ > 3
 #include <ctype.h>
 #endif
@@ -746,67 +748,61 @@ AmmoActionNames ammoActionNames[] = {
 
 MagicEffectClasses getMagicEffect(const std::string& strValue)
 {
-	for (uint32_t i = 0; i < sizeof(magicEffectNames) / sizeof(MagicEffectNames); ++i) {
-		if (strcasecmp(strValue.c_str(), magicEffectNames[i].name) == 0) {
+	for (size_t i = 0; i < sizeof(magicEffectNames) / sizeof(MagicEffectNames); ++i) {
+		if (boost::iequals(strValue, magicEffectNames[i].name)) {
 			return magicEffectNames[i].effect;
 		}
 	}
-
 	return NM_ME_UNK;
 }
 
 ShootType_t getShootType(const std::string& strValue)
 {
-	for (uint32_t i = 0; i < sizeof(shootTypeNames) / sizeof(ShootTypeNames); ++i) {
-		if (strcasecmp(strValue.c_str(), shootTypeNames[i].name) == 0) {
+	for (size_t i = 0, size = sizeof(shootTypeNames) / sizeof(ShootTypeNames); i < size; ++i) {
+		if (boost::iequals(strValue, shootTypeNames[i].name)) {
 			return shootTypeNames[i].shoot;
 		}
 	}
-
 	return NM_SHOOT_UNK;
 }
 
 CombatType_t getCombatType(const std::string& strValue)
 {
-	for (uint32_t i = 0; i < sizeof(combatTypeNames) / sizeof(CombatTypeNames); ++i) {
-		if (strcasecmp(strValue.c_str(), combatTypeNames[i].name) == 0) {
+	for (size_t i = 0, size = sizeof(combatTypeNames) / sizeof(CombatTypeNames); i < size; ++i) {
+		if (boost::iequals(strValue, combatTypeNames[i].name)) {
 			return combatTypeNames[i].combat;
 		}
 	}
-
 	return COMBAT_NONE;
 }
 
 std::string getCombatName(CombatType_t combatType)
 {
-	for (uint32_t i = 0; i < sizeof(combatTypeNames) / sizeof(CombatTypeNames); ++i) {
+	for (size_t i = 0, size = sizeof(combatTypeNames) / sizeof(CombatTypeNames); i < size; ++i) {
 		if (combatTypeNames[i].combat == combatType) {
 			return combatTypeNames[i].name;
 		}
 	}
-
 	return "unknown";
 }
 
 Ammo_t getAmmoType(const std::string& strValue)
 {
-	for (uint32_t i = 0; i < sizeof(ammoTypeNames) / sizeof(AmmoTypeNames); ++i) {
-		if (strcasecmp(strValue.c_str(), ammoTypeNames[i].name) == 0) {
+	for (size_t i = 0, size = sizeof(ammoTypeNames) / sizeof(AmmoTypeNames); i < size; ++i) {
+		if (boost::iequals(strValue, ammoTypeNames[i].name)) {
 			return ammoTypeNames[i].ammoType;
 		}
 	}
-
 	return AMMO_NONE;
 }
 
 AmmoAction_t getAmmoAction(const std::string& strValue)
 {
-	for (uint32_t i = 0; i < sizeof(ammoActionNames) / sizeof(AmmoActionNames); ++i) {
-		if (strcasecmp(strValue.c_str(), ammoActionNames[i].name) == 0) {
+	for (size_t i = 0, size = sizeof(ammoActionNames) / sizeof(AmmoActionNames); i < size; ++i) {
+		if (boost::iequals(strValue, ammoActionNames[i].name)) {
 			return ammoActionNames[i].ammoAction;
 		}
 	}
-
 	return AMMOACTION_NONE;
 }
 
@@ -1032,26 +1028,6 @@ std::string getAction(int32_t actionId, bool IPBanishment)
 	}
 
 	return action;
-}
-
-bool dirExists(const char* name)
-{
-#ifdef _MSC_VER
-	return _access(name, 0) == 0;
-#else
-	return access(name, F_OK) == 0;
-#endif
-}
-
-bool createDir(const std::string& dirName)
-{
-	return
-#ifdef _MSC_VER
-	    _mkdir(dirName.c_str())
-#else
-	    mkdir(dirName.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
-#endif
-	    == 0;
 }
 
 uint32_t adlerChecksum(uint8_t* data, size_t length)

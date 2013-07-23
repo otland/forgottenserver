@@ -115,7 +115,6 @@ typedef std::map<uint32_t, int32_t> StorageMap;
 typedef std::unordered_set<uint32_t> VIPListSet;
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
 typedef std::list<std::string> LearnedInstantSpellList;
-typedef std::list<uint32_t> InvitedToGuildsList;
 typedef std::list<Party*> PartyList;
 typedef std::vector<uint32_t> GuildWarList;
 
@@ -272,7 +271,6 @@ class Player : public Creature, public Cylinder
 
 		bool isInWar(const Player* player) const;
 		bool isInWarList(uint32_t guild_id) const;
-		bool isInvitedToGuild(uint32_t guild_id) const;
 		void leaveGuild();
 
 		void setLastWalkthroughAttempt(int64_t walkthroughAttempt) {
@@ -1170,7 +1168,6 @@ class Player : public Creature, public Cylinder
 		VIPListSet VIPList;
 		uint32_t maxVipLimit;
 
-		InvitedToGuildsList invitedToGuildsList;
 		GuildWarList guildWarList;
 
 		ContainerMap openContainers;

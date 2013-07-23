@@ -52,7 +52,7 @@ extern std::string asUpperCaseString(const std::string& source);
 
 extern bool utf8ToLatin1(const char* intext, std::string& outtext);
 extern bool readXMLInteger(xmlNodePtr node, const char* tag, int& value);
-#if (defined __WINDOWS__ || defined WIN32) && !defined __GNUC__
+#ifdef _MSC_VER
 extern bool readXMLInteger(xmlNodePtr node, const char* tag, int32_t& value);
 #endif
 extern bool readXMLInteger64(xmlNodePtr node, const char* tag, uint64_t& value);
@@ -101,9 +101,6 @@ extern int32_t actionStringToInt(std::string action);
 extern int32_t reasonStringToInt(std::string reason);
 extern std::string getReason(int32_t reasonId);
 extern std::string getAction(int32_t actionId, bool IPBanishment);
-
-extern bool dirExists(const char* name);
-extern bool createDir(const std::string&);
 
 extern uint32_t adlerChecksum(uint8_t* data, size_t len);
 

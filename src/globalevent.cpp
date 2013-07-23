@@ -23,8 +23,6 @@
 #include "player.h"
 #include "scheduler.h"
 
-#include <cmath>
-
 extern ConfigManager g_config;
 
 GlobalEvents::GlobalEvents() :

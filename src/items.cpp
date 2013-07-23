@@ -26,6 +26,8 @@
 
 #include <libxml/xmlschemas.h>
 
+#include <boost/algorithm/string/predicate.hpp>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -1390,7 +1392,7 @@ int32_t Items::getItemIdByName(const std::string& name)
 	ItemType* iType = items->getElement(i);
 
 	while (iType) {
-		if (strcasecmp(tmpName, iType->name.c_str()) == 0) {
+		if (boost::iequals(tmpName, iType->name)) {
 			return i;
 		}
 

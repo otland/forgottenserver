@@ -32,6 +32,8 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
+#include <boost/algorithm/string/predicate.hpp>
+
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
@@ -199,11 +201,10 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 {
 	for (RunesMap::iterator it = runes.begin(); it != runes.end(); ++it) {
-		if (strcasecmp(it->second->getName().c_str(), name.c_str()) == 0) {
+		if (boost::iequals(it->second->getName(), name)) {
 			return it->second;
 		}
 	}
-
 	return NULL;
 }
 
@@ -217,7 +218,7 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 		const std::string& instantSpellWords = instantSpell->getWords();
 		size_t spellLen = instantSpellWords.length();
 
-		if (strncasecmp(instantSpellWords.c_str(), words.c_str(), spellLen) == 0) {
+		if (instantSpellWords.compare(0, spellLen, words) == 0) {
 			if (!result || spellLen > result->getWords().length()) {
 				result = instantSpell;
 			}
@@ -283,11 +284,10 @@ InstantSpell* Spells::getInstantSpellByIndex(const Player* player, uint32_t inde
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
 	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
-		if (strcasecmp(it->second->getName().c_str(), name.c_str()) == 0) {
+		if (boost::iequals(it->second->getName(), name)) {
 			return it->second;
 		}
 	}
-
 	return NULL;
 }
 
@@ -470,8 +470,8 @@ bool Spell::configureSpell(xmlNodePtr p)
 			"dazzlecondition"
 		};
 
-		for (uint32_t i = 0; i < sizeof(reservedList) / sizeof(const char*); ++i) {
-			if (strcasecmp(reservedList[i], name.c_str()) == 0) {
+		for (size_t i = 0, size = sizeof(reservedList) / sizeof(const char*); i < size; ++i) {
+			if (boost::iequals(reservedList[i], name)) {
 				std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
 				return false;
 			}

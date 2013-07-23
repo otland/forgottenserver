@@ -298,25 +298,19 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	if (command->logged) {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd);
 
-		if (dirExists("data/logs") || createDir("data/logs")) {
-			std::ostringstream ss;
-			ss << "data/logs/" << player->getName() << " commands.log";
-
-			std::ofstream out(ss.str().c_str(), std::ios::app);
-
+		std::ostringstream logFile;
+		logFile << "data/logs/" << player->getName() << " commands.log";
+		std::ofstream out(logFile.str(), std::ios::app);
+		if (out.is_open()) {
 			time_t ticks = time(NULL);
 			const tm* now = localtime(&ticks);
 			char buf[32];
 			strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M", now);
 
 			out << "[" << buf << "] " << cmd << std::endl;
-
 			out.close();
-		} else {
-			std::cout << "[Warning - Commands::exeCommand] Cannot access \"data/logs\" for writing: " << strerror(errno) << "." << std::endl;
 		}
 	}
-
 	return true;
 }
 

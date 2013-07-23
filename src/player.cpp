@@ -26,6 +26,8 @@
 #include <iomanip>
 #include <stdlib.h>
 
+#include <boost/algorithm/string/predicate.hpp>
+
 #include "player.h"
 #include "iologindata.h"
 #include "chat.h"
@@ -4566,23 +4568,11 @@ bool Player::hasLearnedInstantSpell(const std::string& name) const
 		return true;
 	}
 
-	for (LearnedInstantSpellList::const_iterator it = learnedInstantSpellList.begin(); it != learnedInstantSpellList.end(); ++it) {
-		if (strcasecmp(it->c_str(), name.c_str()) == 0) {
+	for (auto learnedSpellName : learnedInstantSpellList) {
+		if (boost::iequals(learnedSpellName, name)) {
 			return true;
 		}
 	}
-
-	return false;
-}
-
-bool Player::isInvitedToGuild(uint32_t guild_id) const
-{
-	for (InvitedToGuildsList::const_iterator it = invitedToGuildsList.begin(); it != invitedToGuildsList.end(); ++it) {
-		if ((*it) == guild_id) {
-			return true;
-		}
-	}
-
 	return false;
 }
 

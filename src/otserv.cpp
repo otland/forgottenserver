@@ -173,7 +173,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 #ifdef WIN32
 	std::string defaultPriority = asLowerCaseString(g_config.getString(ConfigManager::DEFAULT_PRIORITY));
-
 	if (defaultPriority == "realtime") {
 		SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
 	} else if (defaultPriority == "high") {
@@ -185,11 +184,9 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	std::ostringstream mutexName;
 	mutexName << "forgottenserver_" << g_config.getNumber(ConfigManager::LOGIN_PORT);
 	CreateMutex(NULL, FALSE, mutexName.str().c_str());
-
 	if (GetLastError() == ERROR_ALREADY_EXISTS) {
 		startupErrorMessage("Another instance of The Forgotten Server is already running with the same login port, please shut it down first or change ports for this one.");
 	}
-
 #endif
 
 	//set RSA key
