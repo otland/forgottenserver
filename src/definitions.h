@@ -56,29 +56,12 @@ typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 
 #define WIN32_LEAN_AND_MEAN
 
-#if defined(_MSC_VER) && defined(NDEBUG)
+#ifdef _MSC_VER
+#ifdef NDEBUG
 #define _SECURE_SCL 0
 #define HAS_ITERATOR_DEBUGGING 0
 #endif
 
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
-#endif
-
-//Windows 2000	0x0500
-//Windows XP	0x0501
-//Windows 2003	0x0502
-//Windows Vista	0x0600
-#define _WIN32_WINNT 0x0501
-
-inline int64_t OTSYS_TIME()
-{
-	_timeb t;
-	_ftime(&t);
-	return int64_t(t.millitm) + int64_t(t.time) * 1000;
-}
-
-#ifdef _MSC_VER
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif
@@ -91,15 +74,17 @@ inline int64_t OTSYS_TIME()
 #pragma warning(disable:4250) // 'class1' : inherits 'class2::member' via dominance
 #pragma warning(disable:4267) // 'var' : conversion from 'size_t' to 'type', possible loss of data
 #endif
-#else // not Windows
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <time.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <errno.h>
+
+#ifdef _WIN32_WINNT
+#undef _WIN32_WINNT
+#endif
+
+//Windows 2000	0x0500
+//Windows XP	0x0501
+//Windows 2003	0x0502
+//Windows Vista	0x0600
+#define _WIN32_WINNT 0x0501
+#endif
 
 inline int64_t OTSYS_TIME()
 {
@@ -107,7 +92,6 @@ inline int64_t OTSYS_TIME()
 	ftime(&t);
 	return ((int64_t)t.millitm) + ((int64_t)t.time) * 1000;
 }
-#endif
 
 #ifdef __GNUC__
 #define ATOI64 atoll
