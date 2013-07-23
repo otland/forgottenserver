@@ -28,8 +28,6 @@
 #include <sstream>
 #include <iomanip>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 #if defined __GNUC__ && __GNUC__ > 3
 #include <ctype.h>
 #endif
@@ -749,7 +747,7 @@ AmmoActionNames ammoActionNames[] = {
 MagicEffectClasses getMagicEffect(const std::string& strValue)
 {
 	for (size_t i = 0; i < sizeof(magicEffectNames) / sizeof(MagicEffectNames); ++i) {
-		if (boost::iequals(strValue, magicEffectNames[i].name)) {
+		if (strcasecmp(strValue.c_str(), magicEffectNames[i].name) == 0) {
 			return magicEffectNames[i].effect;
 		}
 	}
@@ -759,7 +757,7 @@ MagicEffectClasses getMagicEffect(const std::string& strValue)
 ShootType_t getShootType(const std::string& strValue)
 {
 	for (size_t i = 0, size = sizeof(shootTypeNames) / sizeof(ShootTypeNames); i < size; ++i) {
-		if (boost::iequals(strValue, shootTypeNames[i].name)) {
+		if (strcasecmp(strValue.c_str(), shootTypeNames[i].name) == 0) {
 			return shootTypeNames[i].shoot;
 		}
 	}
@@ -769,7 +767,7 @@ ShootType_t getShootType(const std::string& strValue)
 CombatType_t getCombatType(const std::string& strValue)
 {
 	for (size_t i = 0, size = sizeof(combatTypeNames) / sizeof(CombatTypeNames); i < size; ++i) {
-		if (boost::iequals(strValue, combatTypeNames[i].name)) {
+		if (strcasecmp(strValue.c_str(), combatTypeNames[i].name) == 0) {
 			return combatTypeNames[i].combat;
 		}
 	}
@@ -789,7 +787,7 @@ std::string getCombatName(CombatType_t combatType)
 Ammo_t getAmmoType(const std::string& strValue)
 {
 	for (size_t i = 0, size = sizeof(ammoTypeNames) / sizeof(AmmoTypeNames); i < size; ++i) {
-		if (boost::iequals(strValue, ammoTypeNames[i].name)) {
+		if (strcasecmp(strValue.c_str(), ammoTypeNames[i].name) == 0) {
 			return ammoTypeNames[i].ammoType;
 		}
 	}
@@ -799,7 +797,7 @@ Ammo_t getAmmoType(const std::string& strValue)
 AmmoAction_t getAmmoAction(const std::string& strValue)
 {
 	for (size_t i = 0, size = sizeof(ammoActionNames) / sizeof(AmmoActionNames); i < size; ++i) {
-		if (boost::iequals(strValue, ammoActionNames[i].name)) {
+		if (strcasecmp(strValue.c_str(), ammoActionNames[i].name) == 0) {
 			return ammoActionNames[i].ammoAction;
 		}
 	}

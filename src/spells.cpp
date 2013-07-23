@@ -32,8 +32,6 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
@@ -201,7 +199,7 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 {
 	for (RunesMap::iterator it = runes.begin(); it != runes.end(); ++it) {
-		if (boost::iequals(it->second->getName(), name)) {
+		if (strcasecmp(it->second->getName().c_str(), name.c_str()) == 0) {
 			return it->second;
 		}
 	}
@@ -284,7 +282,7 @@ InstantSpell* Spells::getInstantSpellByIndex(const Player* player, uint32_t inde
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
 	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
-		if (boost::iequals(it->second->getName(), name)) {
+		if (strcasecmp(it->second->getName().c_str(), name.c_str())) {
 			return it->second;
 		}
 	}
@@ -471,7 +469,7 @@ bool Spell::configureSpell(xmlNodePtr p)
 		};
 
 		for (size_t i = 0, size = sizeof(reservedList) / sizeof(const char*); i < size; ++i) {
-			if (boost::iequals(reservedList[i], name)) {
+			if (strcasecmp(reservedList[i], name.c_str()) == 0) {
 				std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
 				return false;
 			}

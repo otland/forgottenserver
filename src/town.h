@@ -23,8 +23,6 @@
 #include <list>
 #include <map>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 #include "position.h"
 #include "definitions.h"
 
@@ -88,7 +86,7 @@ class Towns
 
 		Town* getTown(const std::string& townname) const {
 			for (auto it = townMap.begin(); it != townMap.end(); ++it) {
-				if (boost::iequals(townname, it->second->getName())) {
+				if (strcasecmp(townname.c_str(), it->second->getName().c_str()) == 0) {
 					return it->second;
 				}
 			}

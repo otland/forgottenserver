@@ -26,8 +26,6 @@
 #include <iomanip>
 #include <stdlib.h>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 #include "player.h"
 #include "iologindata.h"
 #include "chat.h"
@@ -4569,7 +4567,7 @@ bool Player::hasLearnedInstantSpell(const std::string& name) const
 	}
 
 	for (auto learnedSpellName : learnedInstantSpellList) {
-		if (boost::iequals(learnedSpellName, name)) {
+		if (strcasecmp(learnedSpellName.c_str(), name.c_str()) == 0) {
 			return true;
 		}
 	}

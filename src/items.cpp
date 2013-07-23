@@ -26,8 +26,6 @@
 
 #include <libxml/xmlschemas.h>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -451,6 +449,7 @@ bool Items::loadFromXml()
 	std::string xmlSchema = "data/items/items.xsd";
 	xmlDocPtr doc = xmlParseFile(filename.c_str());
 
+	int32_t intValue;
 	std::string strValue;
 	std::string endString;
 
@@ -504,28 +503,18 @@ bool Items::loadFromXml()
 	}
 
 	xmlNodePtr itemNode = root->children;
-
 	while (itemNode) {
 		if (xmlStrcmp(itemNode->name, (const xmlChar*)"item") == 0) {
-			if (readXMLString(itemNode, "id", strValue)) {
-				intVector = vectorAtoi(explodeString(strValue, ";"));
-				size_t vec_size = intVector.size();
-
-				for (size_t i = 0; i < vec_size; i++) {
-					this->parseItemNode(itemNode, intVector[i]);
-				}
-			} else if (readXMLString(itemNode, "fromid", strValue) && readXMLString(itemNode, "toid", endString)) {
-				intVector = vectorAtoi(explodeString(strValue, ";"));
-				endVector = vectorAtoi(explodeString(endString, ";"));
-
-				if (!intVector.empty() && intVector.size() == endVector.size()) {
-					size_t vec_size = intVector.size();
-
-					for (size_t i = 0; i < vec_size; i++) {
-						while (intVector[i] <= endVector[i]) {
-							parseItemNode(itemNode, intVector[i]++);
-						}
+			if (readXMLInteger(itemNode, "id", intValue)) {
+				this->parseItemNode(itemNode, intValue);
+			} else if (readXMLInteger(itemNode, "fromid", intValue)) {
+				int32_t toIdValue;
+				if (readXMLInteger(itemNode, "toid", toIdValue)) {
+					while (intValue <= toIdValue) {
+						parseItemNode(itemNode, intValue++);
 					}
+				} else {
+					std::cout << "Warning: [Items::loadFromXml] - fromid (" << intValue << ") without toid" << std::endl;
 				}
 			} else {
 				std::cout << "Warning: [Items::loadFromXml] - No itemid found" << std::endl;
@@ -540,7 +529,6 @@ bool Items::loadFromXml()
 	//Lets do some checks...
 	for (uint32_t i = 0; i < items->size(); ++i) {
 		const ItemType* it = items->getElement(i);
-
 		if (!it) {
 			continue;
 		}
@@ -1390,14 +1378,12 @@ int32_t Items::getItemIdByName(const std::string& name)
 	uint32_t i = 100;
 
 	ItemType* iType = items->getElement(i);
-
 	while (iType) {
-		if (boost::iequals(tmpName, iType->name)) {
+		if (strcasecmp(tmpName, iType->name.c_str()) == 0) {
 			return i;
 		}
 
 		iType = items->getElement(++i);
 	}
-
 	return -1;
 }

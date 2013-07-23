@@ -26,8 +26,6 @@
 
 #include <algorithm>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 extern Game g_game;
 extern ConfigManager g_config;
 
@@ -202,7 +200,7 @@ bool Raids::reload()
 Raid* Raids::getRaidByName(const std::string& name)
 {
 	for (auto raid : raidList) {
-		if (boost::iequals(raid->getName(), name)) {
+		if (strcasecmp(raid->getName().c_str(), name.c_str()) == 0) {
 			return raid;
 		}
 	}

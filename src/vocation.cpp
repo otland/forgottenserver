@@ -23,7 +23,6 @@
 #include <iostream>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
-#include <boost/algorithm/string/predicate.hpp>
 
 #include "tools.h"
 
@@ -206,7 +205,7 @@ Vocation* Vocations::getVocation(uint32_t id)
 int32_t Vocations::getVocationId(const std::string& name)
 {
 	for (VocationsMap::iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it) {
-		if (boost::iequals(it->second->name, name)) {
+		if (strcasecmp(it->second->name.c_str(), name.c_str()) == 0) {
 			return it->first;
 		}
 	}

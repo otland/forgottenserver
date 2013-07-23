@@ -34,7 +34,7 @@
 
 #include <stdint.h>
 #include <assert.h>
-#include <string.h>
+#include <string>
 
 #ifndef WIN32
 #ifdef _WIN32
@@ -42,7 +42,6 @@
 #endif
 #endif
 
-#include <list>
 #include <vector>
 #include <algorithm>
 #include <sys/timeb.h>
@@ -74,6 +73,11 @@ typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 #pragma warning(disable:4250) // 'class1' : inherits 'class2::member' via dominance
 #pragma warning(disable:4267) // 'var' : conversion from 'size_t' to 'type', possible loss of data
 #endif
+
+inline int strcasecmp(const char* s1, const char* s2)
+{
+	return _stricmp(s1, s2);
+}
 
 #ifdef _WIN32_WINNT
 #undef _WIN32_WINNT

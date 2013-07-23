@@ -220,7 +220,6 @@ bool MoveEvents::registerEvent(Event* event, xmlNodePtr p)
 		}
 	} else if (readXMLString(p, "pos", str)) {
 		std::vector<int32_t> posList = vectorAtoi(explodeString(str, ";"));
-
 		if (posList.size() >= 3) {
 			Position pos(posList[0], posList[1], posList[2]);
 			addEvent(moveEvent, pos, m_positionMap);
