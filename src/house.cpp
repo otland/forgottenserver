@@ -903,14 +903,7 @@ bool Houses::payHouses()
 				}
 			}
 
-			int32_t housePrice = 0;
-
-			for (HouseTileList::iterator it = house->getHouseTileBegin(), end = house->getHouseTileEnd(); it != end; ++it) {
-				housePrice += g_config.getNumber(ConfigManager::HOUSE_PRICE);
-			}
-
 			bool paid = false;
-
 			if (player->getBankBalance() >= house->getRent()) {
 				player->setBankBalance(player->getBankBalance() - house->getRent());
 				paid = true;
