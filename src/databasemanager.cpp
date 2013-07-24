@@ -519,13 +519,13 @@ void DatabaseManager::checkEncryption()
 
 		switch (currentValue) {
 			case PASSWORD_TYPE_MD5: {
-				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = MD5(`password`), `key` = MD5(`key`)");
+				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = MD5(`password`)");
 				std::cout << "> Password type has been updated to MD5." << std::endl;
 				break;
 			}
 
 			case PASSWORD_TYPE_SHA1: {
-				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`), `key` = SHA1(`key`)");
+				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`)");
 				std::cout << "> Password type has been updated to SHA1." << std::endl;
 				break;
 			}

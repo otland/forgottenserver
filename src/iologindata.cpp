@@ -87,7 +87,7 @@ Account IOLoginData::loadAccount(const std::string& name)
 	Account account;
 
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday`, `key`, `warnings` FROM `accounts` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday`, `warnings` FROM `accounts` WHERE `name` = " << db->escapeString(name);
 
 	DBResult* result = db->storeQuery(query.str());
 
