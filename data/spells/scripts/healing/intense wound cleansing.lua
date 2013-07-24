@@ -1,12 +1,12 @@
 local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_HEALING)
 setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
-setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, FALSE)
+setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, 0)
 setCombatParam(combat, COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 
 function getCombatFormulas(cid, lv, maglv)
-	local formula_min = ((lv*3 + maglv*2) * 0.55) + 15
-	local formula_max = ((lv*4 + maglv*1) * 0.95) + 20
+	local formula_min = (((lv*3 + maglv*2) * 0.55) + 15) * 10
+	local formula_max = (((lv*4 + maglv*1) * 0.95) + 20) * 10.3
 
 	if(formula_max < formula_min) then
 		--Normalize values
