@@ -290,7 +290,7 @@ bool ProtocolGame::logout(bool displayEffect, bool forced)
 		return false;
 	}
 
-	if (!player->isRemoved() && !forced && player->getAccountType() < ACCOUNT_TYPE_GOD) {
+	if (!player->isRemoved() && !forced && player->getAccountType() != ACCOUNT_TYPE_GOD) {
 		if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
 			player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
 			return false;

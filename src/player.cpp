@@ -1467,11 +1467,7 @@ void Player::sendPing()
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
-	if (!hasLostConnection) {
-		hasLostConnection = noPongTime >= 7000;
-	}
-
-	if (hasLostConnection && attackedCreature && attackedCreature->getPlayer()) {
+	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
 		setAttackedCreature(NULL);
 	}
 
