@@ -5738,7 +5738,7 @@ void Game::checkPlayersRecord()
 
 		GlobalEventMap recordEvents = g_globalEvents->getEventMap(GLOBALEVENT_RECORD);
 		for (GlobalEventMap::iterator it = recordEvents.begin(); it != recordEvents.end(); ++it) {
-			it->second->executeRecord(previousRecord, playersRecord);
+			it->second->executeRecord(playersRecord, previousRecord);
 		}
 		updatePlayersRecord();
 	}
