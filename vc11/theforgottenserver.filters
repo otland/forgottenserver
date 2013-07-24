@@ -69,12 +69,6 @@
     <ClCompile Include="..\src\databasemanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\databasemysql.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\databasesqlite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -323,12 +317,6 @@
     <ClInclude Include="..\src\databasemanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\databasemysql.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\databasesqlite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\definitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -416,9 +404,6 @@
     <ClInclude Include="..\src\otpch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\otsystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\outfit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -489,9 +474,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\teleport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\templates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\textlogger.h">
