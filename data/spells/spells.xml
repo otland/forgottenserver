@@ -103,7 +103,7 @@
                 <vocation name="Sorcerer"/>
                 <vocation name="Master Sorcerer"/>
         </instant>
-        <instant group="attack" spellid="142" name="Envenom" words="utori pox" lvl="50" mana="30" aggressive="1" blockwalls="1" needtarget="1" exhaustion="40000" groupcooldown="2000" needlearn="0" script="attack/envenom.lua">
+        <instant group="attack" spellid="142" name="Envenom" words="utori pox" lvl="50" mana="30" range="3" aggressive="1" blockwalls="1" needtarget="1" exhaustion="40000" groupcooldown="2000" needlearn="0" script="attack/envenom.lua">
                 <vocation name="Druid"/>
                 <vocation name="Elder Druid"/>
         </instant>
