@@ -276,7 +276,6 @@ void Game::refreshMap()
 
 			for (int32_t i = downItemSize - 1; i >= 0; --i) {
 				item = items->at(i);
-
 				if (item) {
 					internalRemoveItem(item);
 				}

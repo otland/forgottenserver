@@ -70,8 +70,7 @@ Position NetworkMessage::GetPosition()
 
 void NetworkMessage::AddString(const std::string& value)
 {
-	uint32_t stringlen = (uint32_t)value.length();
-
+	size_t stringlen = value.length();
 	if (!canAdd(stringlen + 2) || stringlen > 8192) {
 		return;
 	}
@@ -84,8 +83,7 @@ void NetworkMessage::AddString(const std::string& value)
 
 void NetworkMessage::AddString(const char* value)
 {
-	uint32_t stringlen = (uint32_t)strlen(value);
-
+	size_t stringlen = strlen(value);
 	if (!canAdd(stringlen + 2) || stringlen > 8192) {
 		return;
 	}

@@ -445,36 +445,21 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 bool Items::loadFromXml()
 {
-	std::string filename = "data/items/items.xml";
-	std::string xmlSchema = "data/items/items.xsd";
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-
-	int32_t intValue;
-	std::string strValue;
-	std::string endString;
-
-	std::vector<int> intVector;
-	std::vector<int> endVector;
-
+	xmlDocPtr doc = xmlParseFile("data/items/items.xml");
 	if (!doc) {
 		return false;
 	}
 
 	//validation against xml-schema
-	xmlDocPtr schemaDoc = xmlReadFile(xmlSchema.c_str(), NULL, XML_PARSE_NONET);
-
+	xmlDocPtr schemaDoc = xmlReadFile("data/items/items.xsd", NULL, XML_PARSE_NONET);
 	if (schemaDoc != NULL) {
 		xmlSchemaParserCtxtPtr schemaParserContext = xmlSchemaNewDocParserCtxt(schemaDoc);
-
 		if (schemaParserContext != NULL) {
 			xmlSchemaPtr schema = xmlSchemaParse(schemaParserContext);
-
 			if (schema != NULL) {
 				xmlSchemaValidCtxtPtr validContext = xmlSchemaNewValidCtxt(schema);
-
 				if (validContext != NULL) {
 					int returnVal = xmlSchemaValidateDoc(validContext, doc);
-
 					if (returnVal != 0) {
 						if (returnVal > 0) {
 							std::cout << std::endl << "Warning: [XMLSCHEMA] items.xml could not be validated against XSD" << std::endl;
@@ -482,25 +467,22 @@ bool Items::loadFromXml()
 							std::cout << std::endl << "Warning: [XMLSCHEMA] validation generated an internal error." << std::endl;
 						}
 					}
-
 					xmlSchemaFreeValidCtxt(validContext);
 				}
-
 				xmlSchemaFree(schema);
 			}
-
 			xmlSchemaFreeParserCtxt(schemaParserContext);
 		}
-
 		xmlFreeDoc(schemaDoc);
 	}
 
 	xmlNodePtr root = xmlDocGetRootElement(doc);
-
 	if (xmlStrcmp(root->name, (const xmlChar*)"items") != 0) {
 		xmlFreeDoc(doc);
 		return false;
 	}
+
+	int32_t intValue;
 
 	xmlNodePtr itemNode = root->children;
 	while (itemNode) {
@@ -520,7 +502,6 @@ bool Items::loadFromXml()
 				std::cout << "Warning: [Items::loadFromXml] - No itemid found" << std::endl;
 			}
 		}
-
 		itemNode = itemNode->next;
 	}
 
@@ -539,8 +520,7 @@ bool Items::loadFromXml()
 		}
 
 		/*
-		if(it->marketName.length() > 0 && it->marketName != it->name)
-		{
+		if (!it->marketName.empty() && it->marketName != it->name) {
 			std::cout << "ID: " << it->id << ". Market Name: " << it->marketName << ". Item Name: " << it->name << "." << std::endl;
 		}
 		*/
