@@ -2,7 +2,7 @@ local combat = createCombatObject()
 local area = createCombatArea(AREA_CROSS5X5)
 setCombatArea(combat, area)
 setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_RED)
-setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, FALSE)
+setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, 0)
 
 local condition = createConditionObject(CONDITION_ATTRIBUTES)
 setConditionParam(condition, CONDITION_PARAM_SUBID, 3)
