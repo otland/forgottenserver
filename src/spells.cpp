@@ -282,7 +282,7 @@ InstantSpell* Spells::getInstantSpellByIndex(const Player* player, uint32_t inde
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
 	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
-		if (strcasecmp(it->second->getName().c_str(), name.c_str())) {
+		if (strcasecmp(it->second->getName().c_str(), name.c_str()) == 0) {
 			return it->second;
 		}
 	}
