@@ -1,9 +1,13 @@
 local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
-setCombatParam(combat, COMBAT_PARAM_BLOCKARMOR, TRUE)
+setCombatParam(combat, COMBAT_PARAM_BLOCKARMOR, true)
 setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ETHEREALSPEAR)
-setCombatFormula(combat, COMBAT_FORMULA_SKILL, 0, -20, 0.8, 0)
 
+function onGetFormulaValues(cid, level, skill)
+	return -(((skill + 25) / 2) + (level / 5)), -(((skill * 1.2) + 25) + (level / 5)), 0
+end
+
+setCombatCallback(combat, CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValues")
 function onCastSpell(cid, var)
 	return doCombat(cid, combat, var)
 end
