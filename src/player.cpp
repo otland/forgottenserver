@@ -1456,21 +1456,32 @@ void Player::sendPing()
 {
 	int64_t timeNow = OTSYS_TIME();
 
+	bool hasLostConnection = false;
 	if ((timeNow - lastPing) >= 5000) {
 		lastPing = timeNow;
-
 		if (client) {
 			client->sendPing();
+		} else {
+			hasLostConnection = true;
 		}
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
+	if (!hasLostConnection) {
+		hasLostConnection = noPongTime >= 7000;
+	}
+
+	if (hasLostConnection && attackedCreature && attackedCreature->getPlayer()) {
+		setAttackedCreature(NULL);
+	}
+
 	if (noPongTime >= 60000 && canLogout()) {
-		if (!client) {
-			g_creatureEvents->playerLogout(this);
-			g_game.removeCreature(this, true);
-		} else {
-			client->logout(true, true);
+		if (g_creatureEvents->playerLogout(this)) {
+			if (client) {
+				client->logout(true, true);
+			} else {
+				g_game.removeCreature(this, true);
+			}
 		}
 	}
 }
@@ -2761,10 +2772,10 @@ void Player::addList()
 
 void Player::kickPlayer(bool displayEffect)
 {
+	g_creatureEvents->playerLogout(this);
 	if (client) {
 		client->logout(displayEffect, true);
 	} else {
-		g_creatureEvents->playerLogout(this);
 		g_game.removeCreature(this);
 	}
 }
@@ -4065,7 +4076,6 @@ void Player::onAttackedCreature(Creature* target)
 	}
 
 	Player* targetPlayer = target->getPlayer();
-
 	if (targetPlayer && !isPartner(targetPlayer) && !isGuildMate(targetPlayer)) {
 		if (!pzLocked && g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
 			pzLocked = true;

@@ -112,46 +112,43 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 	return NULL;
 }
 
-uint32_t CreatureEvents::playerLogin(Player* player)
+bool CreatureEvents::playerLogin(Player* player)
 {
 	//fire global event if is registered
 	for (CreatureEventList::iterator it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
 		if (it->second->getEventType() == CREATURE_EVENT_LOGIN) {
 			if (!it->second->executeOnLogin(player)) {
-				return 0;
+				return false;
 			}
 		}
 	}
-
-	return 1;
+	return true;
 }
 
-uint32_t CreatureEvents::playerLogout(Player* player)
+bool CreatureEvents::playerLogout(Player* player)
 {
 	//fire global event if is registered
 	for (CreatureEventList::iterator it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
 		if (it->second->getEventType() == CREATURE_EVENT_LOGOUT) {
 			if (!it->second->executeOnLogout(player)) {
-				return 0;
+				return false;
 			}
 		}
 	}
-
-	return 1;
+	return true;
 }
 
-uint32_t CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldLevel,
+bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldLevel,
                                        uint32_t newLevel)
 {
 	for (CreatureEventList::iterator it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
 		if (it->second->getEventType() == CREATURE_EVENT_ADVANCE) {
-			if (!it->second->executeAdvance(dynamic_cast<Creature*>(player), skill, oldLevel, newLevel)) {
-				return 0;
+			if (!it->second->executeAdvance(player, skill, oldLevel, newLevel)) {
+				return false;
 			}
 		}
 	}
-
-	return 1;
+	return true;
 }
 
 /////////////////////////////////////
@@ -403,19 +400,19 @@ uint32_t CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creatur
 	}
 }
 
-uint32_t CreatureEvent::executeAdvance(Creature* creature, skills_t skill, uint32_t oldLevel,
+uint32_t CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldLevel,
                                        uint32_t newLevel)
 {
 	if (m_scriptInterface->reserveScriptEnv()) {
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 		env->setScriptId(m_scriptId, m_scriptInterface);
-		env->setRealPos(creature->getPosition());
+		env->setRealPos(player->getPosition());
 
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, creature->getID());
+		lua_pushnumber(L, player->getID());
 		lua_pushnumber(L, static_cast<uint32_t>(skill));
 		lua_pushnumber(L, oldLevel);
 		lua_pushnumber(L, newLevel);

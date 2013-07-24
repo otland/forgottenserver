@@ -290,35 +290,25 @@ bool ProtocolGame::logout(bool displayEffect, bool forced)
 		return false;
 	}
 
-	if (!player->isRemoved()) {
-		if (forced) {
-			g_creatureEvents->playerLogout(player);
-		} else {
-			bool flag = (player->getAccountType() == ACCOUNT_TYPE_GOD);
+	if (!player->isRemoved() && !forced && player->getAccountType() < ACCOUNT_TYPE_GOD) {
+		if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
+			player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
+			return false;
+		}
 
-			if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT) && !flag) {
-				player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
-				return false;
-			}
+		if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT)) {
+			player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
+			return false;
+		}
 
-			if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT) && !flag) {
-				player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
-				return false;
-			}
-
-			//scripting event - onLogout
-			if (!g_creatureEvents->playerLogout(player) && !flag) {
-				//Let the script handle the error message
-				return false;
-			}
+		//scripting event - onLogout
+		if (!g_creatureEvents->playerLogout(player)) {
+			//Let the script handle the error message
+			return false;
 		}
 	}
 
-	if (player->isRemoved() || player->getHealth() <= 0) {
-		displayEffect = false;
-	}
-
-	if (displayEffect) {
+	if (displayEffect && !player->isRemoved() && player->getHealth() > 0) {
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	}
 
