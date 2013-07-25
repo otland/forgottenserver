@@ -34,7 +34,9 @@ extern "C"
 
 #if LUA_VERSION_NUM >= 502
 // NOTE: Define LUA_COMPAT_MODULE as a workaround if this doesn't work
+#ifndef LUA_COMPAT_MODULE
 #define luaL_register(L, libname, l) (luaL_newlib(L, l), lua_pushvalue(L, -1), lua_setglobal(L, libname))
+#endif
 #endif
 
 #include "position.h"

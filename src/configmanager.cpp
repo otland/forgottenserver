@@ -215,10 +215,9 @@ std::string ConfigManager::getGlobalString(lua_State* _L, const std::string& _id
 		return _default;
 	}
 
-	int32_t len = (int32_t)lua_strlen(_L, -1);
+	size_t len = lua_strlen(_L, -1);
 	std::string ret(lua_tostring(_L, -1), len);
 	lua_pop(_L, 1);
-
 	return ret;
 }
 
