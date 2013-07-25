@@ -43,7 +43,11 @@ class Database
 		*
 		* @return database connection handler singletor
 		*/
-		static Database* getInstance();
+		static Database* getInstance()
+		{
+			static Database instance;
+			return &instance;
+		}
 
 		/**
 		* Database connected.
@@ -56,19 +60,13 @@ class Database
 			return m_connected;
 		}
 
-	protected:
 		/**
-		* Transaction related methods.
-		*
-		* Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
-		*
-		* @return true on success, false on error
-		*/
-		bool beginTransaction();
-		bool rollback();
-		bool commit(); 
+		 * Connects to the database
+		 *
+		 * @return true on successful connection, false on error
+		 */
+		bool connect();
 
-	public:
 		/**
 		* Executes command.
 		*
@@ -135,6 +133,18 @@ class Database
 			return mysql_get_client_info();
 		}
 
+	protected:
+		/**
+		* Transaction related methods.
+		*
+		* Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
+		*
+		* @return true on success, false on error
+		*/
+		bool beginTransaction();
+		bool rollback();
+		bool commit(); 
+
 	private:
 		Database();
 		~Database();
@@ -146,8 +156,6 @@ class Database
 		boost::recursive_mutex database_lock;
 
 		bool m_connected;
-
-		static Database* _instance;
 
 	friend class DBTransaction;
 };

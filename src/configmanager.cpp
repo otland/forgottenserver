@@ -104,7 +104,7 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confBoolean[STAMINA_SYSTEM] = booleanString(getGlobalString(L, "staminaSystem", "yes"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
-	m_confString[MAP_STORAGE_TYPE] = getGlobalString(L, "mapStorageType", "relational");
+	m_confString[MAP_STORAGE_TYPE] = getGlobalString(L, "mapStorageType", "binary-tilebased");
 	m_confString[LOGIN_MSG] = getGlobalString(L, "loginMessage", "Welcome to the Forgotten Server!");
 	m_confString[SERVER_NAME] = getGlobalString(L, "serverName");
 	m_confString[OWNER_NAME] = getGlobalString(L, "ownerName");
@@ -147,7 +147,7 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[EXP_FROM_PLAYERS_LEVEL_RANGE] = getGlobalNumber(L, "expFromPlayersLevelRange", 75);
 	m_confInteger[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
 	m_confInteger[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
-	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
+	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 40);
 
 	m_isLoaded = true;
 	lua_close(L);

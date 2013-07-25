@@ -30,17 +30,26 @@
 
 extern ConfigManager g_config;
 
-Database* Database::_instance = NULL;
-
 Database::Database()
 {
 	m_connected = false;
+	m_handle = NULL;
+}
 
+Database::~Database()
+{
+	if (m_handle != NULL) {
+		mysql_close(m_handle);
+	}
+}
+
+bool Database::connect()
+{
 	// connection handle initialization
 	m_handle = mysql_init(NULL);
 	if (!m_handle) {
 		std::cout << std::endl << "Failed to initialize MySQL connection handle." << std::endl;
-		return;
+		return false;
 	}
 
 	// automatic reconnect
@@ -49,20 +58,13 @@ Database::Database()
 
 	// connects to database
 	if (!mysql_real_connect(m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), NULL, 0)) {
-		std::cout << "Failed to connect to database. MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
-		return;
-	}
-
-	if (MYSQL_VERSION_ID < 50019) {
-		//mySQL servers < 5.0.19 has a bug where MYSQL_OPT_RECONNECT is (incorrectly) reset by mysql_real_connect calls
-		//See http://dev.mysql.com/doc/refman/5.0/en/mysql-options.html for more information.
-		mysql_options(m_handle, MYSQL_OPT_RECONNECT, &reconnect);
-		std::cout << std::endl << "[Warning] Outdated MySQL server detected. Consider upgrading to a newer version." << std::endl;
+		std::cout << std::endl << "Failed to connect to database. MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
+		return false;
 	}
 
 	m_connected = true;
 
-	if (g_config.getString(ConfigManager::MAP_STORAGE_TYPE) == "binary") {
+	if (g_config.getString(ConfigManager::MAP_STORAGE_TYPE) == "binary" || g_config.getString(ConfigManager::MAP_STORAGE_TYPE) == "binary-tilebased") {
 		DBResult* result = storeQuery("SHOW variables LIKE 'max_allowed_packet'");
 		if (result) {
 			int32_t max_query = result->getDataInt("Value");
@@ -75,19 +77,7 @@ Database::Database()
 			}
 		}
 	}
-}
-
-Database::~Database()
-{
-	mysql_close(m_handle);
-}
-
-Database* Database::getInstance()
-{
-	if (!_instance) {
-		_instance = new Database;
-	}
-	return _instance;
+	return true;
 }
 
 bool Database::beginTransaction()
@@ -228,6 +218,15 @@ void Database::freeResult(DBResult* res)
 	delete res;
 }
 
+DBResult* Database::verifyResult(DBResult* result)
+{
+	if (!result->next()) {
+		freeResult(result);
+		return NULL;
+	}
+	return result;
+}
+
 DBResult::DBResult(MYSQL_RES* res)
 {
 	m_handle = res;
@@ -245,15 +244,6 @@ DBResult::DBResult(MYSQL_RES* res)
 DBResult::~DBResult()
 {
 	mysql_free_result(m_handle);
-}
-
-DBResult* Database::verifyResult(DBResult* result)
-{
-	if (!result->next()) {
-		_instance->freeResult(result);
-		return NULL;
-	}
-	return result;
 }
 
 int32_t DBResult::getDataInt(const std::string& s) const

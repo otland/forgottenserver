@@ -75,7 +75,6 @@ class Towns
 
 		bool addTown(uint32_t _townid, Town* town) {
 			TownMap::iterator it = townMap.find(_townid);
-
 			if (it != townMap.end()) {
 				return false;
 			}

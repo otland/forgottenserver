@@ -195,9 +195,9 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	const char* d("46730330223584118622160180015036832148732986808519344675210555262940258739805766860224610646919605860206328024326703361630109888417839241959507572247284807035235569619173792292786907845791904955103601652822519121908367187885509270025388641700821735345222087940578381210879116823013776808975766851829020659073");
 	g_RSA.setKey(p, q, d);
 
-	std::cout << ">> Loading database driver..." << std::flush;
+	std::cout << ">> Establishing database connection..." << std::flush;
 	Database* db = Database::getInstance();
-	if (!db->isConnected()) {
+	if (!db->connect()) {
 		startupErrorMessage("Failed to connect to database.");
 		return;
 	}
