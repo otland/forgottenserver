@@ -5,7 +5,7 @@ The Forgotten Server is a server application written in C++ for the MMORPG Tibia
 
 ### Installing required libraries
 
-##### Debian GNU/Linux
+##### Debian GNU/Linux, Ubuntu
 
 	# apt-get install build-essential libboost-dev libxml2-dev liblua5.2-dev libgmp3-dev \
 	  libmysqlclient-dev libboost-thread-dev libboost-regex-dev libboost-system-dev cmake
