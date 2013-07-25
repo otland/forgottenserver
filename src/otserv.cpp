@@ -88,8 +88,7 @@ boost::unique_lock<boost::mutex> g_loaderUniqueLock(g_loaderLock);
 void startupErrorMessage(const std::string& errorStr)
 {
 	std::cout << "> ERROR: " << errorStr << std::endl;
-	getchar();
-	exit(-1);
+	g_loaderSignal.notify_all();
 }
 
 void mainLoader(int argc, char* argv[], ServiceManager* servicer);
@@ -100,6 +99,12 @@ void badAllocationHandler()
 	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");
 	getchar();
 	exit(-1);
+}
+
+void shutdown()
+{
+	g_scheduler.shutdown();
+	g_dispatcher.shutdown();
 }
 
 int main(int argc, char* argv[])
@@ -132,8 +137,12 @@ int main(int argc, char* argv[])
 		g_dispatcher.join();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
+		g_scheduler.stop();
+		g_dispatcher.stop();
+		g_dispatcher.addTask(createTask(boost::bind(shutdown)));
+		g_scheduler.join();
+		g_dispatcher.join();
 	}
-
 	return 0;
 }
 
@@ -186,6 +195,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	CreateMutex(NULL, FALSE, mutexName.str().c_str());
 	if (GetLastError() == ERROR_ALREADY_EXISTS) {
 		startupErrorMessage("Another instance of The Forgotten Server is already running with the same login port, please shut it down first or change ports for this one.");
+		return;
 	}
 #endif
 
@@ -196,6 +206,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	g_RSA.setKey(p, q, d);
 
 	std::cout << ">> Establishing database connection..." << std::flush;
+
 	Database* db = Database::getInstance();
 	if (!db->connect()) {
 		startupErrorMessage("Failed to connect to database.");
@@ -206,8 +217,8 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	// run database manager
 	std::cout << ">> Running database manager" << std::endl;
-	DatabaseManager* dbManager = DatabaseManager::getInstance();
 
+	DatabaseManager* dbManager = DatabaseManager::getInstance();
 	if (!dbManager->isDatabaseSetup()) {
 		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema to the database.");
 		return;
@@ -229,6 +240,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	if (!g_vocations.loadFromXml()) {
 		startupErrorMessage("Unable to load vocations!");
+		return;
 	}
 
 	//load commands
@@ -236,6 +248,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	if (!commands.loadFromXml()) {
 		startupErrorMessage("Unable to load commands!");
+		return;
 	}
 
 	// load item data
@@ -243,29 +256,33 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	if (Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
+		return;
 	}
 
 	if (!Item::items.loadFromXml()) {
 		startupErrorMessage("Unable to load items (XML)!");
+		return;
 	}
 
 	std::cout << ">> Loading script systems" << std::endl;
 
 	if (!ScriptingManager::getInstance()->loadScriptSystems()) {
 		startupErrorMessage("Failed to load script systems");
+		return;
 	}
 
 	std::cout << ">> Loading monsters" << std::endl;
 
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
+		return;
 	}
 
 	std::cout << ">> Loading outfits" << std::endl;
 	Outfits* outfits = Outfits::getInstance();
-
 	if (!outfits->loadFromXml()) {
 		startupErrorMessage("Unable to load outfits!");
+		return;
 	}
 
 	g_adminConfig = new AdminProtocolConfig();
@@ -273,12 +290,14 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	if (!g_adminConfig->loadXMLConfig()) {
 		startupErrorMessage("Unable to load admin protocol config!");
+		return;
 	}
 
 	std::cout << ">> Loading experience stages" << std::endl;
 
 	if (!g_game.loadExperienceStages()) {
 		startupErrorMessage("Unable to load experience stages!");
+		return;
 	}
 
 	std::string passwordType = asLowerCaseString(g_config.getString(ConfigManager::PASSWORDTYPE));
@@ -294,9 +313,8 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		std::cout << ">> Using plaintext passwords" << std::endl;
 	}
 
-	std::cout << ">> Checking world type... ";
+	std::cout << ">> Checking world type... " << std::flush;
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
-
 	if (worldType == "pvp") {
 		g_game.setWorldType(WORLD_TYPE_PVP);
 	} else if (worldType == "no-pvp") {
@@ -309,14 +327,15 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		std::ostringstream ss;
 		ss << "> ERROR: Unknown world type: " << g_config.getString(ConfigManager::WORLD_TYPE) << ", valid world types are: pvp, no-pvp and pvp-enforced.";
 		startupErrorMessage(ss.str());
+		return;
 	}
-
 	std::cout << asUpperCaseString(worldType) << std::endl;
 
 	std::cout << ">> Loading map" << std::endl;
 
 	if (!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME))) {
 		startupErrorMessage("Failed to load map");
+		return;
 	}
 
 	std::cout << ">> Initializing gamestate" << std::endl;
@@ -335,14 +354,12 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	services->add<ProtocolOldGame>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
 	int32_t autoSaveEachMinutes = g_config.getNumber(ConfigManager::AUTO_SAVE_EACH_MINUTES);
-
 	if (autoSaveEachMinutes > 0) {
 		g_scheduler.addEvent(createSchedulerTask(autoSaveEachMinutes * 1000 * 60, boost::bind(&Game::autoSave, &g_game)));
 	}
 
 	if (g_config.getBoolean(ConfigManager::SERVERSAVE_ENABLED)) {
 		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
-
 		if (serverSaveHour >= 0 && serverSaveHour <= 24) {
 			time_t timeNow = time(NULL);
 			tm* timeinfo = localtime(&timeNow);
@@ -385,10 +402,8 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	char szHostName[128];
 	if (gethostname(szHostName, 128) == 0) {
 		hostent* he = gethostbyname(szHostName);
-
 		if (he) {
 			unsigned char** addr = (unsigned char**)he->h_addr_list;
-
 			while (addr[0] != NULL) {
 				IpNetMask.first = *(uint32_t*)(*addr);
 				IpNetMask.second = 0xFFFFFFFF;
@@ -398,21 +413,18 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		}
 	}
 
-	std::string ip;
-	ip = g_config.getString(ConfigManager::IP);
+	std::string ip = g_config.getString(ConfigManager::IP);
 
 	uint32_t resolvedIp = inet_addr(ip.c_str());
-
 	if (resolvedIp == INADDR_NONE) {
 		struct hostent* he = gethostbyname(ip.c_str());
-
-		if (he != 0) {
-			resolvedIp = *(uint32_t*)he->h_addr;
-		} else {
+		if (!he) {
 			std::ostringstream ss;
 			ss << "ERROR: Cannot resolve " << ip << "!" << std::endl;
 			startupErrorMessage(ss.str());
+			return;
 		}
+		resolvedIp = *(uint32_t*)he->h_addr;
 	}
 
 	IpNetMask.first = resolvedIp;
