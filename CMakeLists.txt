@@ -8,7 +8,7 @@ project(tfs)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # Initialize CXXFLAGS.
-set(CMAKE_CXX_FLAGS                "-Wall -Werror -std=c++11")
+set(CMAKE_CXX_FLAGS                "-Wall -Werror")
 set(CMAKE_CXX_FLAGS_DEBUG          "-O0 -g")
 set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE        "-Ofast -DNDEBUG")
