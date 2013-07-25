@@ -26,6 +26,10 @@
 #include <iostream>
 #include <stdexcept>
 
+#if LUA_VERSION_NUM >= 502
+#define lua_strlen lua_rawlen
+#endif
+
 extern Game g_game;
 
 ConfigManager::ConfigManager()
