@@ -40,8 +40,7 @@ ConfigManager::~ConfigManager()
 
 bool ConfigManager::loadFile(const std::string& _filename)
 {
-	lua_State* L = lua_open();
-
+	lua_State* L = luaL_newstate();
 	if (!L) {
 		throw std::runtime_error("Failed to allocate memory");
 	}

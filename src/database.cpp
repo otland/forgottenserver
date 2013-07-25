@@ -58,7 +58,7 @@ bool Database::connect()
 
 	// connects to database
 	if (!mysql_real_connect(m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), NULL, 0)) {
-		std::cout << std::endl << "Failed to connect to database. MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
+		std::cout << std::endl << "MySQL Error Message: " << mysql_error(m_handle) << std::endl;
 		return false;
 	}
 
@@ -94,7 +94,7 @@ bool Database::rollback()
 	}
 
 	if (mysql_rollback(m_handle) != 0) {
-		std::cout << "mysql_rollback(): MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
+		std::cout << "[Error - mysql_rollback] Message: " << mysql_error(m_handle) << std::endl;
 		database_lock.unlock();
 		return false;
 	}
@@ -111,7 +111,7 @@ bool Database::commit()
 	}
 
 	if (mysql_commit(m_handle) != 0) {
-		std::cout << "mysql_commit(): MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
+		std::cout << "[Error - mysql_commit] Message: " << mysql_error(m_handle) << std::endl;
 		database_lock.unlock();
 		return false;
 	}
@@ -126,23 +126,21 @@ bool Database::executeQuery(const std::string& query)
 		return false;
 	}
 
-	bool state = true;
+	bool success = true;
 
 	// executes the query
 	database_lock.lock();
 	if (mysql_real_query(m_handle, query.c_str(), query.length()) != 0) {
-		std::cout << "mysql_real_query(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
+		std::cout << "[Error - mysql_real_query] Query: " << query.substr(0, 256) << std::endl << "Message: " << mysql_error(m_handle) << std::endl;
 
 		int error = mysql_errno(m_handle);
 		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
 			m_connected = false;
 		}
 
-		state = false;
+		success = false;
 	}
 
-	// we should call that every time as someone would call executeQuery('SELECT...')
-	// as it is described in MySQL manual: "it doesn't hurt" :P
 	MYSQL_RES* m_res = mysql_store_result(m_handle);
 	database_lock.unlock();
 
@@ -150,7 +148,7 @@ bool Database::executeQuery(const std::string& query)
 		mysql_free_result(m_res);
 	}
 
-	return state;
+	return success;
 }
 
 DBResult* Database::storeQuery(const std::string& query)
@@ -162,7 +160,7 @@ DBResult* Database::storeQuery(const std::string& query)
 	// executes the query
 	database_lock.lock();
 	if (mysql_real_query(m_handle, query.c_str(), query.length()) != 0) {
-		std::cout << "mysql_real_query(): " << query << ": MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
+		std::cout << "[Error - mysql_real_query] Query: " << query << std::endl << "Message: " << mysql_error(m_handle) << std::endl;
 		int error = mysql_errno(m_handle);
 		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
 			m_connected = false;
@@ -175,7 +173,7 @@ DBResult* Database::storeQuery(const std::string& query)
 
 	// error occured
 	if (!m_res) {
-		std::cout << "mysql_store_result(): " << query.substr(0, 256) << ": MYSQL ERROR: " << mysql_error(m_handle) << std::endl;
+		std::cout << "[Error - mysql_store_result] Query: " << query << std::endl << "Message: " << mysql_error(m_handle) << std::endl;
 		int error = mysql_errno(m_handle);
 		database_lock.unlock();
 
@@ -250,7 +248,7 @@ int32_t DBResult::getDataInt(const std::string& s) const
 {
 	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
-		std::cout << "Error during getDataInt(" << s << ")." << std::endl;
+		std::cout << "[Error - DBResult::getDataInt] Column '" << s << "' does not exist in result set." << std::endl;
 		return 0;
 	}
 
@@ -265,7 +263,7 @@ int64_t DBResult::getDataLong(const std::string& s) const
 {
 	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
-		std::cout << "Error during getDataLong(" << s << ")." << std::endl;
+		std::cout << "[Error - DBResult::getDataLong] Column '" << s << "' does not exist in result set." << std::endl;
 		return 0;
 	}
 
@@ -280,7 +278,7 @@ std::string DBResult::getDataString(const std::string& s) const
 {
 	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
-		std::cout << "Error during getDataString(" << s << ")." << std::endl;
+		std::cout << "[Error - DBResult::getDataString] Column '" << s << "' does not exist in result set." << std::endl;
 		return std::string("");
 	}
 
@@ -295,7 +293,7 @@ const char* DBResult::getDataStream(const std::string& s, unsigned long& size) c
 {
 	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
-		std::cout << "Error during getDataStream(" << s << ")." << std::endl;
+		std::cout << "[Error - DBResult::getDataStream] Column '" << s << "' does not exist in result set." << std::endl;
 		size = 0;
 		return NULL;
 	}

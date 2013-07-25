@@ -593,7 +593,6 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = NULL
 
 	//execute it
 	ret = protectedCall(m_luaState, 0, 0);
-
 	if (ret != 0) {
 		reportError(NULL, popString(m_luaState));
 		this->releaseScriptEnv();
@@ -627,7 +626,6 @@ int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = NU
 
 	//execute it
 	ret = protectedCall(m_luaState, 0, 0);
-
 	if (ret != 0) {
 		reportError(NULL, popString(m_luaState));
 		this->releaseScriptEnv();
@@ -690,25 +688,24 @@ const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 
 std::string LuaScriptInterface::getStackTrace(const std::string& error_desc)
 {
-	lua_State* L = m_luaState;
-	lua_getfield(L, LUA_GLOBALSINDEX, "debug");
+	lua_getglobal(m_luaState, "debug");
 
-	if (!lua_istable(L, -1)) {
-		lua_pop(L, 1);
+	if (!lua_istable(m_luaState, -1)) {
+		lua_pop(m_luaState, 1);
 		return error_desc;
 	}
 
-	lua_getfield(L, -1, "traceback");
+	lua_getfield(m_luaState, -1, "traceback");
 
-	if (!lua_isfunction(L, -1)) {
-		lua_pop(L, 1);
+	if (!lua_isfunction(m_luaState, -1)) {
+		lua_pop(m_luaState, 1);
 		return error_desc;
 	}
 
-	pushString(L, error_desc);
-	lua_call(L, 1, 1);
-	std::string trace(lua_tostring(L, -1));
-	lua_pop(L, 1);
+	pushString(m_luaState, error_desc);
+	lua_call(m_luaState, 1, 1);
+	std::string trace(lua_tostring(m_luaState, -1));
+	lua_pop(m_luaState, 1);
 	return trace;
 }
 
@@ -773,7 +770,6 @@ bool LuaScriptInterface::pushFunction(int32_t functionId)
 bool LuaScriptInterface::initState()
 {
 	m_luaState = luaL_newstate();
-
 	if (!m_luaState) {
 		return false;
 	}

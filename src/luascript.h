@@ -32,6 +32,11 @@ extern "C"
 #include <lualib.h>
 }
 
+#if LUA_VERSION_NUM >= 502
+// NOTE: Define LUA_COMPAT_MODULE as a workaround if this doesn't work
+#define luaL_register(L, libname, l) (luaL_newlib(L, l), lua_pushvalue(L, -1), lua_setglobal(L, libname))
+#endif
+
 #include "position.h"
 #include "definitions.h"
 #include "database.h"
