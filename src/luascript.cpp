@@ -2141,10 +2141,13 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 			return 1;
 
 		default:
-			std::string error_str = "Unknown player info. info = " + info;
-			reportErrorFunc(error_str);
+		{
+			std::ostringstream ss;
+			ss << "Unknown player info: " << info;
+			reportErrorFunc(ss.str());
 			value = 0;
 			break;
+		}
 	}
 
 	lua_pushnumber(L, value);

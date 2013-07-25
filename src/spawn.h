@@ -94,8 +94,6 @@ class Spawn
 	private:
 		Position centerPos;
 		int32_t radius;
-		int32_t despawnRange;
-		int32_t despawnRadius;
 
 		//map of creatures in the spawn
 		typedef std::map<uint32_t, spawnBlock_t> SpawnMap;
