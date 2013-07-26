@@ -111,7 +111,6 @@ CREATE TABLE IF NOT EXISTS `guilds` (
   `ownerid` int(11) NOT NULL,
   `creationdata` int(11) NOT NULL,
   `motd` varchar(255) NOT NULL DEFAULT '',
-  `description` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`),
   UNIQUE KEY (`ownerid`),
@@ -155,7 +154,6 @@ CREATE TABLE IF NOT EXISTS `guild_wars` (
   `status` tinyint(2) NOT NULL DEFAULT '0',
   `started` bigint(15) NOT NULL DEFAULT '0',
   `ended` bigint(15) NOT NULL DEFAULT '0',
-  `kills` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `guild1` (`guild1`),
   KEY `guild2` (`guild2`)
