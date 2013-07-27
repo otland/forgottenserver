@@ -7,7 +7,6 @@ before_script:
 script: |	
   cmake . -DCMAKE_BUILD_TYPE=Release
   make
-
 notifications:
   irc:
     - "irc.quakenet.org#otland"
