@@ -5,7 +5,8 @@ compiler:
 before_script:
   - sudo apt-get install libboost-thread-dev libboost-regex-dev libboost-system-dev libxml2-dev liblua5.2-dev libgmp3-dev libmysqlclient-dev
 script: |
-  cmake . -DCMAKE_BUILD_TYPE=Release
+  mkdir build && cd build
+  cmake -DCMAKE_BUILD_TYPE=Release ..
   make
 notifications:
   irc:
