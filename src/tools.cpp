@@ -28,9 +28,7 @@
 #include <sstream>
 #include <iomanip>
 
-#if defined __GNUC__ && __GNUC__ > 3
-#include <ctype.h>
-#endif
+#include <cctype>
 
 extern ConfigManager g_config;
 
@@ -110,7 +108,7 @@ void toLowerCaseString(std::string& source)
 
 void toUpperCaseString(std::string& source)
 {
-	std::transform(source.begin(), source.end(), source.begin(), upchar);
+	std::transform(source.begin(), source.end(), source.begin(), toupper);
 }
 
 std::string asLowerCaseString(const std::string& source)
@@ -323,21 +321,6 @@ int32_t random_range(int32_t lowest_number, int32_t highest_number, Distribution
 	}
 }
 
-// Upcase a char.
-char upchar(char c)
-{
-#if defined(__GNUC__) && __GNUC__ >= 3
-	return toupper(c);
-#else
-
-	if ((c >= 97 && c <= 122) || (c <= -1 && c >= -32 )) {
-		c -= 32;
-	}
-
-	return c;
-#endif
-}
-
 bool isNumber(char character)
 {
 	return (character >= 48 && character <= 57);
@@ -352,7 +335,6 @@ std::string trimString(std::string& str)
 std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
 {
 	std::string tmp;
-
 	if (it == end) {
 		return "";
 	}
@@ -379,8 +361,8 @@ std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
 std::string convertIPToString(uint32_t ip)
 {
 	char buffer[17];
-	int res = sprintf(buffer, "%u.%u.%u.%u", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
 
+	int res = sprintf(buffer, "%u.%u.%u.%u", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
 	if (res < 0) {
 		return "";
 	}
@@ -393,7 +375,6 @@ std::string formatDate(time_t time)
 	char buffer[24];
 	const tm* tms = localtime(&time);
 	int res;
-
 	if (tms) {
 		res = sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900, tms->tm_hour, tms->tm_min, tms->tm_sec);
 	} else {
@@ -1058,11 +1039,10 @@ std::string ucfirst(std::string str)
 {
 	for (uint32_t i = 0; i < str.length(); ++i) {
 		if (str[i] != ' ') {
-			str[i] = upchar(str[i]);
+			str[i] = toupper(str[i]);
 			break;
 		}
 	}
-
 	return str;
 }
 
@@ -1073,11 +1053,11 @@ std::string ucwords(std::string str)
 		return str;
 	}
 
-	str[0] = upchar(str[0]);
+	str[0] = toupper(str[0]);
 
 	for (size_t i = 1; i < strLength; ++i) {
 		if (str[i - 1] == ' ') {
-			str[i] = upchar(str[i]);
+			str[i] = toupper(str[i]);
 		}
 	}
 

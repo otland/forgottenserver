@@ -37,11 +37,6 @@ extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Game g_game;
 
-#ifndef __GNUC__
-#pragma warning( disable : 4005)
-#pragma warning( disable : 4996)
-#endif
-
 Account IOLoginData::loadAccount(uint32_t accno)
 {
 	Database* db = Database::getInstance();

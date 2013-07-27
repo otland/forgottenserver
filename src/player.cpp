@@ -24,7 +24,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "player.h"
 #include "iologindata.h"

@@ -75,8 +75,6 @@ extern Direction getDirection(const std::string& string);
 extern Position getNextPosition(Direction direction, Position pos);
 extern Direction getDirectionTo(const Position& from, const Position& to);
 
-extern char upchar(char c);
-
 extern std::string getFirstLine(const std::string& str);
 
 extern std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end);

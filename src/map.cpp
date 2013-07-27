@@ -31,7 +31,7 @@
 
 #include "iomapserialize.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <iomanip>
 
 #include "items.h"

@@ -21,7 +21,7 @@
 
 #include "definitions.h"
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 
 enum Direction {

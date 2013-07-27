@@ -24,7 +24,7 @@
 
 #include <string>
 #include <cstring>
-#include <errno.h>
+#include <cerrno>
 #include <iostream>
 #include <iomanip>
 
@@ -38,8 +38,8 @@
 #include "iologindata.h"
 #include "iomarket.h"
 
-#if !defined(__WINDOWS__)
-#include <signal.h> // for sigemptyset()
+#ifndef WIN32
+#include <csignal> // for sigemptyset()
 #endif
 
 #include "monsters.h"

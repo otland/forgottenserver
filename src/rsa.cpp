@@ -18,7 +18,7 @@
 
 #include "otpch.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "rsa.h"
 
