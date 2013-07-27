@@ -42,12 +42,12 @@
 #include "connection.h"
 #include "creatureevent.h"
 
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <time.h>
+#include <ctime>
 #include <list>
 #include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 #include <boost/function.hpp>
 

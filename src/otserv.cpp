@@ -31,8 +31,8 @@
 #include "networkmessage.h"
 #include "protocolgame.h"
 
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 #include "game.h"
 
 #include "iologindata.h"

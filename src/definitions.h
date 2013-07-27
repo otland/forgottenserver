@@ -32,21 +32,22 @@
 #define	__FUNCTION__ __func__
 #endif
 
-#include <stdint.h>
-#include <assert.h>
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+
+#include <cassert>
+#include <cmath>
+#include <cstdint>
 #include <string>
+#include <vector>
+#include <chrono>
 
 #ifndef WIN32
 #ifdef _WIN32
 #define WIN32
 #endif
 #endif
-
-#include <vector>
-#include <algorithm>
-#include <sys/timeb.h>
-
-typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 
 #ifdef WIN32
 #ifndef NOMINMAX
@@ -61,10 +62,6 @@ typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 #define HAS_ITERATOR_DEBUGGING 0
 #endif
 
-#ifndef _USE_MATH_DEFINES
-#define _USE_MATH_DEFINES
-#endif
-
 #define ATOI64 _atoi64
 
 #pragma warning(disable:4100) // unused parameters
@@ -74,42 +71,32 @@ typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 #pragma warning(disable:4267) // 'var' : conversion from 'size_t' to 'type', possible loss of data
 #endif
 
-inline int strcasecmp(const char* s1, const char* s2)
-{
-	return _stricmp(s1, s2);
-}
-
-inline int strncasecmp(const char* s1, const char* s2, size_t n)
-{
-	return _strnicmp(s1, s2, n);
-}
-
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
-#endif
+#define strcasecmp _stricmp
+#define strncasecmp _strnicmp
 
 //Windows 2000	0x0500
 //Windows XP	0x0501
 //Windows 2003	0x0502
 //Windows Vista	0x0600
+#ifdef _WIN32_WINNT
+#undef _WIN32_WINNT
+#endif
 #define _WIN32_WINNT 0x0501
 #endif
-
-inline int64_t OTSYS_TIME()
-{
-	timeb t;
-	ftime(&t);
-	return ((int64_t)t.millitm) + ((int64_t)t.time) * 1000;
-}
 
 #ifdef __GNUC__
 #define ATOI64 atoll
 #endif
 
-#include <cmath>
-
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+
+typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
+
+inline int64_t OTSYS_TIME()
+{
+	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
 
 #endif

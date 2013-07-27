@@ -18,16 +18,15 @@
 
 #include "otpch.h"
 
-#include <ctime>
-
 #include "logger.h"
-#include <iostream>
 #include "tools.h"
+
+#include <ctime>
+#include <iostream>
 
 Logger::Logger()
 {
 	m_file = fopen("data/logs/otadmin.log", "a");
-
 	if (!m_file) {
 		m_file = stderr;
 	}
