@@ -2643,7 +2643,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 			std::ostringstream ss;
 			ss << "Your last visit was on " << ctime(&lastLogin);
 			loginStr = ss.str();
-			loginStr.pop_back();
+			loginStr.erase(loginStr.length() - 1);
 			loginStr += ".";
 		}
 
