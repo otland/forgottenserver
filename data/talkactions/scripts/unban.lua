@@ -8,8 +8,8 @@ function onSay(cid, words, param)
 		return false
 	end
 
-	db:query("DELETE FROM `account_bans` WHERE `account_id` = " .. result.getDataInt("account_id"))
-	db:query("DELETE FROM `ip_bans` WHERE `ip` = " .. result.getDataInt("lastip"))
+	db:query("DELETE FROM `account_bans` WHERE `account_id` = " .. result.getDataInt(resultId, "account_id"))
+	db:query("DELETE FROM `ip_bans` WHERE `ip` = " .. result.getDataInt(resultId, "lastip"))
 	result.free(resultId)
 	doPlayerSendTextMessage(cid, MESSAGE_EVENT_ADVANCE, param .. " has been unbanned.")
 end

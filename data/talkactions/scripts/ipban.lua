@@ -8,7 +8,8 @@ function onSay(cid, words, param)
 		return false
 	end
 	
-	local ip = result.getDataInt("lastip")
+	local ip = result.getDataInt(resultId, "lastip")
+	result.free(resultId)
 	
 	local targetCid = getPlayerByName(param)
 	if targetCid ~= false then
@@ -20,7 +21,7 @@ function onSay(cid, words, param)
 		return false
 	end
 	
-	local resultId = db.storeQuery("SELECT 1 FROM `ip_bans` WHERE `ip` = " .. ip)
+	resultId = db.storeQuery("SELECT 1 FROM `ip_bans` WHERE `ip` = " .. ip)
 	if resultId ~= false then
 		result.free(resultId)
 		return false
