@@ -473,7 +473,7 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 const SpectatorVec& Map::getSpectators(const Position& centerPos)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
-		boost::shared_ptr<SpectatorVec> p(new SpectatorVec());
+		std::shared_ptr<SpectatorVec> p(new SpectatorVec());
 		SpectatorVec& list = *p;
 		return list;
 	}
@@ -484,7 +484,7 @@ const SpectatorVec& Map::getSpectators(const Position& centerPos)
 		return *it->second;
 	}
 
-	boost::shared_ptr<SpectatorVec> p(new SpectatorVec());
+	std::shared_ptr<SpectatorVec> p(new SpectatorVec());
 	spectatorCache[centerPos] = p;
 	SpectatorVec& list = *p;
 

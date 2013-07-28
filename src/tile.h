@@ -21,8 +21,6 @@
 
 #include <unordered_set>
 
-#include <boost/shared_ptr.hpp>
-
 #include "cylinder.h"
 #include "item.h"
 #include "tools.h"
@@ -37,7 +35,6 @@ class BedItem;
 
 typedef std::vector<Creature*> CreatureVector;
 typedef std::unordered_set<Creature*> SpectatorVec;
-typedef std::map<Position, boost::shared_ptr<SpectatorVec> > SpectatorCache;
 typedef std::vector<Item*> ItemVector;
 
 enum tileflags_t {

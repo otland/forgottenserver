@@ -23,16 +23,12 @@
 #include <bitset>
 #include <map>
 
-#include <boost/shared_ptr.hpp>
-using boost::shared_ptr;
-
 #include "position.h"
 #include "item.h"
 #include "fileloader.h"
 
 #include "tools.h"
 #include "tile.h"
-#include "waypoints.h"
 
 class Creature;
 class Player;
@@ -90,7 +86,7 @@ template<class T> class lessPointer : public std::binary_function<T*, T*, bool>
 };
 
 typedef std::unordered_set<Creature*> SpectatorVec;
-typedef std::map<Position, boost::shared_ptr<SpectatorVec> > SpectatorCache;
+typedef std::map<Position, std::shared_ptr<SpectatorVec> > SpectatorCache;
 
 #define FLOOR_BITS 3
 #define FLOOR_SIZE (1 << FLOOR_BITS)
@@ -263,7 +259,7 @@ class Map
 		bool getPathMatching(const Creature* creature, std::list<Direction>& dirList,
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp);
 
-		Waypoints waypoints;
+		std::map<std::string, Position> waypoints;
 
 	protected:
 		uint32_t mapWidth, mapHeight;

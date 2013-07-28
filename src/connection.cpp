@@ -45,7 +45,7 @@ Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket*
         boost::asio::io_service& io_service, ServicePort_ptr servicer)
 {
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
-	Connection_ptr connection = boost::shared_ptr<Connection>(new Connection(socket, io_service, servicer));
+	Connection_ptr connection = Connection_ptr(new Connection(socket, io_service, servicer));
 	m_connections.push_back(connection);
 	return connection;
 }
@@ -484,7 +484,7 @@ void Connection::handleReadTimeout(boost::weak_ptr<Connection> weak_conn, const 
 		return;
 	}
 
-	if (shared_ptr<Connection> connection = weak_conn.lock()) {
+	if (Connection_ptr connection = weak_conn.lock()) {
 		connection->onReadTimeout();
 	}
 }
@@ -520,7 +520,7 @@ void Connection::handleWriteTimeout(boost::weak_ptr<Connection> weak_conn, const
 		return;
 	}
 
-	if (shared_ptr<Connection> connection = weak_conn.lock()) {
+	if (Connection_ptr connection = weak_conn.lock()) {
 		connection->onWriteTimeout();
 	}
 }

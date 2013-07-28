@@ -7744,12 +7744,13 @@ int32_t LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill(lua_State* L)
 int32_t LuaScriptInterface::luaGetWaypointPosition(lua_State* L)
 {
 	//getWaypointPosition(name)
-	if (WaypointPtr waypoint = g_game.getMap()->waypoints.getWaypointByName(popString(L))) {
-		pushPosition(L, waypoint->pos, 0);
+	const std::map<std::string, Position>& waypoints = g_game.getMap()->waypoints;
+	auto it = waypoints.find(popString(L));
+	if (it != waypoints.end()) {
+		pushPosition(L, it->second, 0);
 	} else {
 		lua_pushboolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -7759,7 +7760,7 @@ int32_t LuaScriptInterface::luaDoWaypointAddTemporial(lua_State* L)
 	PositionEx pos;
 	popPosition(L, pos);
 
-	g_game.getMap()->waypoints.addWaypoint(WaypointPtr(new Waypoint(popString(L), pos)));
+	g_game.getMap()->waypoints[popString(L)] = pos;
 	lua_pushboolean(L, true);
 	return 1;
 }
