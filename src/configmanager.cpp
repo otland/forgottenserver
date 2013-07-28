@@ -98,7 +98,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confBoolean[CLEAN_MAP_AT_SERVERSAVE] = booleanString(getGlobalString(L, "cleanMapAtServerSave", "yes"));
 	m_confBoolean[FREE_PREMIUM] = booleanString(getGlobalString(L, "freePremium", "no"));
 	m_confBoolean[ADMIN_LOGS_ENABLED] = booleanString(getGlobalString(L, "adminLogsEnabled", "no"));
-	m_confBoolean[BROADCAST_BANISHMENTS] = booleanString(getGlobalString(L, "broadcastBanishments", "yes"));
 	m_confBoolean[REPLACE_KICK_ON_LOGIN] = booleanString(getGlobalString(L, "replaceKickOnLogin", "yes"));
 	m_confBoolean[OLD_CONDITION_ACCURACY] = booleanString(getGlobalString(L, "oldConditionAccuracy", "no"));
 	m_confBoolean[ALLOW_CLONES] = booleanString(getGlobalString(L, "allowClones", "no"));
@@ -116,9 +115,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confString[MOTD] = getGlobalString(L, "motd");
 	m_confString[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
 
-	m_confInteger[LOGIN_TRIES] = getGlobalNumber(L, "loginTries", 3);
-	m_confInteger[RETRY_TIMEOUT] = getGlobalNumber(L, "retryTimeout", 30 * 1000);
-	m_confInteger[LOGIN_TIMEOUT] = getGlobalNumber(L, "loginTimeout", 5 * 1000);
 	m_confInteger[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
 	m_confInteger[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 0);
 	m_confInteger[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);

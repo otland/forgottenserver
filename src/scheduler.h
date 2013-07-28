@@ -98,7 +98,7 @@ class Scheduler
 	protected:
 		static void schedulerThread(void* p);
 
-		std::thread m_thread;
+		boost::thread m_thread;
 		boost::mutex m_eventLock;
 		boost::condition_variable m_eventSignal;
 

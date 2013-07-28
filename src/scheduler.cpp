@@ -30,7 +30,7 @@ Scheduler::Scheduler()
 void Scheduler::start()
 {
 	m_threadState = STATE_RUNNING;
-	m_thread = std::thread(std::bind(&Scheduler::schedulerThread, (void*)this));
+	m_thread = boost::thread(boost::bind(&Scheduler::schedulerThread, (void*)this));
 }
 
 void Scheduler::schedulerThread(void* p)

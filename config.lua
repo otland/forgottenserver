@@ -1,7 +1,5 @@
 -- Banishments
-broadcastBanishments = "no"
 banDays = 7
-finalBanDays = 30
 
 -- Combat settings
 worldType = "pvp"
@@ -9,7 +7,6 @@ hotkeyAimbotEnabled = "yes"
 protectionLevel = 1
 killsToRedSkull = 3
 killsToBlackSkull = 6
-killsToBan = 0
 pzLocked = 60000
 criticalHitChance = 0
 removeAmmoWhenUsingDistanceWeapon = "yes"
@@ -28,9 +25,6 @@ loginProtocolPort = 7171
 gameProtocolPort = 7172
 adminProtocolPort = 7171
 statusProtocolPort = 7171
-loginTries = 10
-retryTimeout = 5 * 1000
-loginTimeout = 60 * 1000
 maxPlayers = "1000"
 motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = "yes"
@@ -118,7 +112,6 @@ startupDatabaseOptimization = "no"
 
 -- Storage
 passwordType = "plain"
-mapStorageType = "binary-tilebased"
 
 -- Status server information
 ownerName = "Mark Samman"
