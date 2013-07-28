@@ -133,8 +133,6 @@ class Game
 
 		std::string getTradeErrorDescription(ReturnValue ret, Item* item);
 
-		bool violationWindow(Player* player, std::string targetPlayerName, int32_t reason, int32_t action, const std::string& banComment, bool IPBanishment);
-
 		/**
 		  * Get a single tile of the map.
 		  * \returns A pointer to the tile

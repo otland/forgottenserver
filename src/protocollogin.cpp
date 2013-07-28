@@ -115,13 +115,11 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	if (g_bans.isIpDisabled(clientip)) {
-		disconnectClient(0x0A, "Too many connections attempts from this IP. Try again later.");
-		return false;
-	}
-
-	if (IOBan::getInstance()->isIpBanished(clientip)) {
-		disconnectClient(0x0A, "Your IP is banished!");
+	BanInfo banInfo;
+	if (IOBan::getInstance()->isIpBanned(clientip, banInfo)) {
+		std::ostringstream ss;
+		ss << "Your IP has been banned until " << formatDate(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+		disconnectClient(0x0A, ss.str().c_str());
 		return false;
 	}
 
@@ -134,19 +132,15 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	if (accountName.empty()) {
-		g_bans.addLoginAttempt(clientip, false);
 		disconnectClient(0x0A, "Invalid account name.");
 		return false;
 	}
 
-	Account account = IOLoginData::getInstance()->loadAccount(accountName);
-	if (account.id == 0 || !passwordTest(password, account.password)) {
-		g_bans.addLoginAttempt(clientip, false);
+	Account account;
+	if (!IOLoginData::getInstance()->loginserverAuthenticate(accountName, password, account)) {
 		disconnectClient(0x0A, "Account name or password is not correct.");
 		return false;
 	}
-
-	g_bans.addLoginAttempt(clientip, true);
 
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {

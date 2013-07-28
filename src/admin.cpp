@@ -639,16 +639,11 @@ bool AdminProtocolConfig::passwordMatch(std::string& password)
 
 bool AdminProtocolConfig::allowIP(uint32_t ip)
 {
-	if (m_onlyLocalHost) {
-		if (ip != 0x0100007F) { //127.0.0.1
-			addLogLine(NULL, LOGTYPE_WARNING, 1, std::string("forbidden connection try from ") + convertIPToString(ip));
-			return false;
-		} else {
-			return true;
-		}
+	if (m_onlyLocalHost && ip != 0x0100007F) { //127.0.0.1
+		addLogLine(NULL, LOGTYPE_WARNING, 1, std::string("forbidden connection try from ") + convertIPToString(ip));
+		return false;
 	}
-
-	return !g_bans.isIpDisabled(ip);
+	return true;
 }
 
 bool AdminProtocolConfig::requireLogin() const

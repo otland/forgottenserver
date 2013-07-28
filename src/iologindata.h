@@ -51,13 +51,16 @@ class IOLoginData
 		}
 
 		Account loadAccount(uint32_t accno);
-		Account loadAccount(const std::string& name);
 		bool saveAccount(const Account& acc);
-		bool getPassword(const std::string& accname, const std::string& name, std::string& password, uint32_t& accNumber);
+
+		bool IOLoginData::loginserverAuthenticate(const std::string& name, const std::string& password, Account& account);
+		uint32_t gameworldAuthentication(const std::string& accountName, const std::string& password, std::string& characterName);
+
 		AccountType_t getAccountType(uint32_t accountId);
 		void setAccountType(uint32_t accountId, AccountType_t accountType);
 		bool updateOnlineStatus(uint32_t guid, bool login);
-		bool loadPlayer(Player* player, const std::string& name, bool preload = false);
+		bool preloadPlayer(Player* player, const std::string& name);
+		bool loadPlayer(Player* player, const std::string& name);
 		bool savePlayer(Player* player);
 		bool getGuidByName(uint32_t& guid, std::string& name);
 		bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
@@ -71,7 +74,6 @@ class IOLoginData
 		uint32_t getLastIPByName(const std::string& name);
 		void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 		time_t getLastLoginSaved(uint32_t guid);
-		bool isPendingDeletion(const std::string& characterName);
 		bool hasBiddedOnHouse(uint32_t guid);
 		void updateHouseOwners();
 
@@ -79,6 +81,9 @@ class IOLoginData
 		void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
 		void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
 		void removeVIPEntry(uint32_t accountId, uint32_t guid);
+
+		void addPremiumDays(uint32_t accountId, int32_t addDays);
+		void removePremiumDays(uint32_t accountId, int32_t removeDays);
 
 	protected:
 		const PlayerGroup* getPlayerGroupByAccount(uint32_t accno);

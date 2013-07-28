@@ -107,7 +107,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confBoolean[STAMINA_SYSTEM] = booleanString(getGlobalString(L, "staminaSystem", "yes"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
-	m_confString[MAP_STORAGE_TYPE] = getGlobalString(L, "mapStorageType", "binary-tilebased");
 	m_confString[LOGIN_MSG] = getGlobalString(L, "loginMessage", "Welcome to the Forgotten Server!");
 	m_confString[SERVER_NAME] = getGlobalString(L, "serverName");
 	m_confString[OWNER_NAME] = getGlobalString(L, "ownerName");
@@ -132,9 +131,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
 	m_confInteger[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
 	m_confInteger[KILLS_TO_BLACK] = getGlobalNumber(L, "killsToBlackSkull", 6);
-	m_confInteger[KILLS_TO_BAN] = getGlobalNumber(L, "killsToBan", 5);
-	m_confInteger[BAN_DAYS] = getGlobalNumber(L, "banDays", 7);
-	m_confInteger[FINAL_BAN_DAYS] = getGlobalNumber(L, "finalBanDays", 30);
 	m_confInteger[ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenActions", 200);
 	m_confInteger[EX_ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenExActions", 1000);
 	m_confInteger[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxMessageBuffer", 4);

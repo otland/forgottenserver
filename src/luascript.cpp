@@ -6906,13 +6906,13 @@ int32_t LuaScriptInterface::luaDoPlayerAddPremiumDays(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	if (Player* player = g_game.getPlayerByID(cid)) {
-		if (player->premiumDays != 65535) {
-			Account account = IOLoginData::getInstance()->loadAccount(player->getAccount());
-			account.premiumDays = std::min<int32_t>(0xFFFE, account.premiumDays + days);
-			player->setPremiumDays(account.premiumDays);
-			IOLoginData::getInstance()->saveAccount(account);
+		if (player->premiumDays != 0xFFFF) {
+			int32_t addDays = std::min<int32_t>(0xFFFE - player->premiumDays, days);
+			if (addDays > 0) {
+				player->setPremiumDays(player->premiumDays + addDays);
+				IOLoginData::getInstance()->addPremiumDays(player->getAccount(), addDays);
+			}
 		}
-
 		lua_pushboolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -6929,13 +6929,13 @@ int32_t LuaScriptInterface::luaDoPlayerRemovePremiumDays(lua_State* L)
 	uint32_t cid = popNumber(L);
 
 	if (Player* player = g_game.getPlayerByID(cid)) {
-		if (player->premiumDays != 65535) {
-			Account account = IOLoginData::getInstance()->loadAccount(player->getAccount());
-			account.premiumDays = std::max<int32_t>(0, account.premiumDays - days);
-			player->setPremiumDays(account.premiumDays);
-			IOLoginData::getInstance()->saveAccount(account);
+		if (player->premiumDays != 0xFFFF) {
+			int32_t removeDays = std::min<int32_t>(player->premiumDays, days);
+			if (removeDays > 0) {
+				player->setPremiumDays(player->premiumDays - removeDays);
+				IOLoginData::getInstance()->removePremiumDays(player->getAccount(), removeDays);
+			}
 		}
-
 		lua_pushboolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));

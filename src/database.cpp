@@ -64,17 +64,15 @@ bool Database::connect()
 
 	m_connected = true;
 
-	if (g_config.getString(ConfigManager::MAP_STORAGE_TYPE) == "binary" || g_config.getString(ConfigManager::MAP_STORAGE_TYPE) == "binary-tilebased") {
-		DBResult* result = storeQuery("SHOW variables LIKE 'max_allowed_packet'");
-		if (result) {
-			int32_t max_query = result->getDataInt("Value");
-			freeResult(result);
+	DBResult* result = storeQuery("SHOW variables LIKE 'max_allowed_packet'");
+	if (result) {
+		int32_t max_query = result->getDataInt("Value");
+		freeResult(result);
 
-			if (max_query < 16777216) {
-				std::cout << std::endl << "[Warning] max_allowed_packet might be set too low for binary map storage." << std::endl;
-				std::cout << "Use the following query to raise max_allow_packet: ";
-				std::cout << "SET GLOBAL max_allowed_packet = 16777216";
-			}
+		if (max_query < 16777216) {
+			std::cout << std::endl << "[Warning] max_allowed_packet might too low for house item storage" << std::endl;
+			std::cout << "Use the following query to raise max_allow_packet: ";
+			std::cout << "SET GLOBAL max_allowed_packet = 16777216";
 		}
 	}
 	return true;

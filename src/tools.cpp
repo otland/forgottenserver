@@ -971,44 +971,6 @@ std::string getReason(int32_t reasonId)
 	}
 }
 
-std::string getAction(int32_t actionId, bool IPBanishment)
-{
-	std::string action;
-
-	switch (actionId) {
-		case 0:
-			action = "Notation";
-			break;
-		case 1:
-			action = "Name Report";
-			break;
-		case 2:
-			action = "Banishment";
-			break;
-		case 3:
-			action = "Name Report + Banishment";
-			break;
-		case 4:
-			action = "Banishment + Final Warning";
-			break;
-		case 5:
-			action = "Name Report + Banishment + Final Warning";
-			break;
-		case 6:
-			action = "Statement Report";
-			break;
-		default:
-			action = "Deletion";
-			break;
-	}
-
-	if (IPBanishment) {
-		action += " + IP Banishment";
-	}
-
-	return action;
-}
-
 uint32_t adlerChecksum(uint8_t* data, size_t length)
 {
 	if (length > NETWORKMESSAGE_MAXSIZE) {

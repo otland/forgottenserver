@@ -624,7 +624,7 @@ void Monster::onThink(uint32_t interval)
 			if (isSummon()) {
 				if (!attackedCreature) {
 					if (getMaster() && getMaster()->getAttackedCreature()) {
-						///This happens if the monster is summoned during combat
+						//This happens if the monster is summoned during combat
 						selectTarget(getMaster()->getAttackedCreature());
 					} else if (getMaster() != followCreature) {
 						//Our master has not ordered us to attack anything, lets follow him around instead.
@@ -1162,13 +1162,6 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 
 bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool flee /* = false */)
 {
-	/*
-	OK, understand this - I didn't intend to write as low code as possible, I wanted to make it easily readable so everyone can understand it, it basically works
-	almost like a real Tibia for fleeing monsters (like Dragon on low health) and distance monsters (like orc spearman), they will now choose the path almost exactly like the real ones.
-
-	I'm very well aware that the whole code can be shorter and better programmed, in fact - I'm hoping for someone to do that for me, I basically just described how should it work and how does it work on real Tibia.
-	*/
-
 	const Position& creaturePos = getPosition();
 	int32_t distance = std::abs(creaturePos.x - targetPos.x) > std::abs(creaturePos.y - targetPos.y) ? std::abs(creaturePos.x - targetPos.x) : std::abs(creaturePos.y - targetPos.y);
 

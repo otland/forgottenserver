@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <talkactions>
+	<!-- commands -->
+	<talkaction words="/ban" script="ban.lua" />
+	<talkaction words="/ipban" script="ipban.lua" />
+	<talkaction words="/unban" script="unban.lua" />
+
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
 	<talkaction words="!leavehouse" script="leavehouse.lua"/>

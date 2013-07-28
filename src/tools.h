@@ -98,7 +98,6 @@ extern skills_t getSkillId(const std::string& param);
 extern int32_t actionStringToInt(std::string action);
 extern int32_t reasonStringToInt(std::string reason);
 extern std::string getReason(int32_t reasonId);
-extern std::string getAction(int32_t actionId, bool IPBanishment);
 
 extern uint32_t adlerChecksum(uint8_t* data, size_t len);
 

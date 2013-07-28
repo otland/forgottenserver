@@ -16,9 +16,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `premdays` int(11) NOT NULL DEFAULT '0',
   `lastday` int(10) unsigned NOT NULL DEFAULT '0',
   `email` varchar(255) NOT NULL DEFAULT '',
-  `warnings` int(11) NOT NULL DEFAULT '0',
   `group_id` int(11) NOT NULL DEFAULT '1',
-  `points` int(11) NOT NULL DEFAULT '0',
   `creation` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
@@ -73,6 +71,40 @@ CREATE TABLE IF NOT EXISTS `players` (
   KEY `vocation` (`vocation`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `account_bans` (
+  `account_id` int(11) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `banned_at` bigint(20) NOT NULL,
+  `expires_at` bigint(20) NOT NULL,
+  `banned_by` int(11) NOT NULL,
+  PRIMARY KEY (`account_id`),
+  KEY `banned_by` (`banned_by`),
+  FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `ip_bans` (
+  `ip` int(10) unsigned NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `banned_at` bigint(20) NOT NULL,
+  `expires_at` bigint(20) NOT NULL,
+  `banned_by` int(11) NOT NULL,
+  PRIMARY KEY (`ip`),
+  KEY `banned_by` (`banned_by`),
+  FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `player_namelocks` (
+  `player_id` int(11) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `namelocked_at` bigint(20) NOT NULL,
+  `namelocked_by` int(11) NOT NULL,
+  PRIMARY KEY (`player_id`),
+  KEY `namelocked_by` (`namelocked_by`),
+  FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`namelocked_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `account_viplist` (
   `account_id` int(11) NOT NULL COMMENT 'id of account whose viplist entry it is',
   `player_id` int(11) NOT NULL COMMENT 'id of target player of viplist entry',
@@ -82,22 +114,6 @@ CREATE TABLE IF NOT EXISTS `account_viplist` (
   UNIQUE KEY `account_player_index` (`account_id`,`player_id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS `bans` (
-  `type` int(11) NOT NULL COMMENT 'this field defines if its ip, accountban or namelock',
-  `ip` int(10) unsigned NOT NULL DEFAULT '0',
-  `mask` int(10) unsigned NOT NULL DEFAULT '4294967295',
-  `player` int(10) unsigned NOT NULL DEFAULT '0',
-  `account` int(10) unsigned NOT NULL DEFAULT '0',
-  `time` int(10) unsigned NOT NULL DEFAULT '0',
-  `reason_id` int(11) NOT NULL DEFAULT '0',
-  `action_id` int(11) NOT NULL DEFAULT '0',
-  `comment` varchar(60) NOT NULL DEFAULT '',
-  `banned_by` int(10) unsigned NOT NULL DEFAULT '0',
-  KEY `player` (`player`),
-  KEY `type` (`type`),
-  KEY `account` (`account`)
 ) ENGINE=InnoDB;
 
 INSERT INTO `groups` (`id`, `name`, `flags`, `access`, `maxdepotitems`, `maxviplist`) VALUES
@@ -324,11 +340,6 @@ DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;
 
 DELIMITER //
-CREATE TRIGGER `ondelete_accounts` BEFORE DELETE ON `accounts`
- FOR EACH ROW BEGIN
-    DELETE FROM `bans` WHERE `account` = OLD.`id`;
-END
-//
 CREATE TRIGGER `oncreate_players` AFTER INSERT ON `players`
  FOR EACH ROW BEGIN
     INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 0, 10);
@@ -342,7 +353,6 @@ END
 //
 CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`
  FOR EACH ROW BEGIN
-    DELETE FROM `bans` WHERE `type` = 2 AND `player` = OLD.`id`;
     UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;
 END
 //

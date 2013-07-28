@@ -45,7 +45,6 @@ class Commands
 		void placeMonster(Player* player, const std::string& cmd, const std::string& param);
 		void placeSummon(Player* player, const std::string& cmd, const std::string& param);
 		void broadcastMessage(Player* player, const std::string& cmd, const std::string& param);
-		void banPlayer(Player* player, const std::string& cmd, const std::string& param);
 		void teleportMasterPos(Player* player, const std::string& cmd, const std::string& param);
 		void teleportHere(Player* player, const std::string& cmd, const std::string& param);
 		void teleportToTown(Player* player, const std::string& cmd, const std::string& param);
@@ -72,8 +71,6 @@ class Commands
 		void forceRaid(Player* player, const std::string& cmd, const std::string& param);
 		void addSkill(Player* player, const std::string& cmd, const std::string& param);
 		void playerKills(Player* player, const std::string& cmd, const std::string& param);
-		void ban(Player* player, const std::string& cmd, const std::string& param);
-		void unban(Player* player, const std::string& cmd, const std::string& param);
 		void clean(Player* player, const std::string& cmd, const std::string& param);
 		void serverDiag(Player* player, const std::string& cmd, const std::string& param);
 		void ghost(Player* player, const std::string& cmd, const std::string& param);

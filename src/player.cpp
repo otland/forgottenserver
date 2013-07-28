@@ -4482,14 +4482,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 
 	skullTicks += g_config.getNumber(ConfigManager::FRAG_TIME);
 
-	if (g_config.getNumber(ConfigManager::KILLS_TO_BAN) != 0 && skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_BAN) - 1) * g_config.getNumber(ConfigManager::FRAG_TIME) && !IOBan::getInstance()->isAccountBanned(accountNumber)) {
-		IOBan::getInstance()->addAccountBan(accountNumber, time(NULL) + (g_config.getNumber(ConfigManager::BAN_DAYS) * 86400), 20, 2, "No comment.", 0);
-
-		uint32_t playerId = getID();
-		g_game.addMagicEffect(getPosition(), NM_ME_MAGIC_POISON);
-		g_scheduler.addEvent(createSchedulerTask(500,
-		                     boost::bind(&Game::kickPlayer, &g_game, playerId, false)));
-	} else if (getSkull() != SKULL_BLACK) {
+	if (getSkull() != SKULL_BLACK) {
 		if (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) != 0 && skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) - 1) * g_config.getNumber(ConfigManager::FRAG_TIME)) {
 			setSkull(SKULL_BLACK);
 			g_game.updatePlayerSkull(this);

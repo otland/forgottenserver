@@ -76,7 +76,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/m", &Commands::placeMonster},
 	{"/summon", &Commands::placeSummon},
 	{"/B", &Commands::broadcastMessage},
-	{"/b", &Commands::banPlayer},
 	{"/t", &Commands::teleportMasterPos},
 	{"/c", &Commands::teleportHere},
 	{"/i", &Commands::createItemById},
@@ -101,8 +100,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
 	{"/addskill", &Commands::addSkill},
-	{"/ban", &Commands::ban},
-	{"/unban", &Commands::unban},
 	{"/ghost", &Commands::ghost},
 	{"/clean", &Commands::clean},
 	{"/mccheck", &Commands::multiClientCheck},
@@ -381,27 +378,6 @@ void Commands::broadcastMessage(Player* player, const std::string& cmd, const st
 	g_game.playerBroadcastMessage(player, param);
 }
 
-void Commands::banPlayer(Player* player, const std::string& cmd, const std::string& param)
-{
-	Player* playerBan = g_game.getPlayerByName(param);
-
-	if (playerBan) {
-		if (playerBan->hasFlag(PlayerFlag_CannotBeBanned)) {
-			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You cannot ban this player.");
-			return;
-		}
-
-		playerBan->sendTextMessage(MSG_STATUS_CONSOLE_RED, "You have been banned.");
-		uint32_t ip = playerBan->lastIP;
-
-		if (ip > 0) {
-			IOBan::getInstance()->addIpBan(ip, 0xFFFFFFFF, (time(NULL) + 86400));
-		}
-
-		playerBan->kickPlayer(true);
-	}
-}
-
 void Commands::teleportMasterPos(Player* player, const std::string& cmd, const std::string& param)
 {
 	Position oldPosition = player->getPosition();
@@ -659,7 +635,6 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 	}
 
 	uint32_t playerIp = paramPlayer->getIP();
-	Account account = IOLoginData::getInstance()->loadAccount(paramPlayer->getAccount());
 
 	std::ostringstream info;
 	info << "Name: " << paramPlayer->name << std::endl <<
@@ -668,8 +643,6 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 	     "Magic Level: " << paramPlayer->magLevel << std::endl <<
 	     "Speed: " << paramPlayer->getSpeed() << std::endl <<
 	     "Position: " << paramPlayer->getPosition() << std::endl <<
-	     "Notations: " << IOBan::getInstance()->getNotationsCount(paramPlayer->getAccount()) << std::endl <<
-	     "Warnings: " << account.warnings << std::endl <<
 	     "IP: " << convertIPToString(playerIp) << std::endl;
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, info.str());
 
@@ -1201,103 +1174,6 @@ void Commands::addSkill(Player* player, const std::string& cmd, const std::strin
 	} else {
 		skills_t skillId = getSkillId(param2);
 		paramPlayer->addSkillAdvance(skillId, paramPlayer->vocation->getReqSkillTries(skillId, paramPlayer->getSkill(skillId, SKILL_LEVEL) + 1));
-	}
-}
-
-void Commands::ban(Player* player, const std::string& cmd, const std::string& param)
-{
-	StringVec exploded = explodeString(param, ", ", 4);
-
-	if (!exploded.size() || exploded.size() < 5) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Not enough params.");
-		return;
-	}
-
-	std::string targetName = exploded[0];
-
-	int32_t action = actionStringToInt(exploded[1]);
-
-	if (action == -1) {
-		action = (int32_t)atoi(exploded[1].c_str());
-	}
-
-	int32_t reason = reasonStringToInt(exploded[2]);
-
-	if (reason == -1) {
-		reason = (int32_t)atoi(exploded[2].c_str());
-	}
-
-	bool ipBan = (atoi(exploded[3].c_str()) != 0);
-
-	std::string comment = exploded[4];
-	g_game.violationWindow(player, targetName, reason, action, comment, ipBan);
-}
-
-void Commands::unban(Player* player, const std::string& cmd, const std::string& param)
-{
-	uint32_t accountNumber = atoi(param.c_str());
-	bool removedIPBan = false;
-	std::string name = param;
-	bool playerExists = false;
-
-	if (IOLoginData::getInstance()->formatPlayerName(name)) {
-		playerExists = true;
-		accountNumber = IOLoginData::getInstance()->getAccountNumberByName(name);
-
-		uint32_t lastIP = IOLoginData::getInstance()->getLastIPByName(name);
-
-		if (lastIP != 0 && IOBan::getInstance()->isIpBanished(lastIP)) {
-			removedIPBan = IOBan::getInstance()->removeIPBan(lastIP);
-		}
-	}
-
-	bool banned = false;
-	bool deleted = false;
-	uint32_t bannedBy = 0, banTime = 0;
-	int32_t reason = 0, action = 0;
-	std::string comment = "";
-
-	if (IOBan::getInstance()->getBanInformation(accountNumber, bannedBy, banTime, reason, action, comment, deleted)) {
-		if (!deleted) {
-			banned = true;
-		}
-	}
-
-	if (banned) {
-		if (IOBan::getInstance()->removeAccountBan(accountNumber)) {
-			std::ostringstream ss;
-			ss << name << " has been unbanned.";
-			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-		}
-	} else if (deleted) {
-		if (IOBan::getInstance()->removeAccountDeletion(accountNumber)) {
-			std::ostringstream ss;
-			ss << name << " has been undeleted.";
-			player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-		}
-	} else if (removedIPBan) {
-		std::ostringstream ss;
-		ss << "The IP banishment on " << name << " has been lifted.";
-		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-	} else {
-		bool removedNamelock = false;
-
-		if (playerExists) {
-			uint32_t guid = 0;
-
-			if (IOLoginData::getInstance()->getGuidByName(guid, name) &&
-			        IOBan::getInstance()->isPlayerNamelocked(name) &&
-			        IOBan::getInstance()->removePlayerNamelock(guid)) {
-				std::ostringstream ss;
-				ss << "Namelock on " << name << " has been lifted.";
-				player->sendTextMessage(MSG_INFO_DESCR, ss.str());
-				removedNamelock = true;
-			}
-		}
-
-		if (!removedNamelock) {
-			player->sendCancel("That player or account is not banished or deleted.");
-		}
 	}
 }
 

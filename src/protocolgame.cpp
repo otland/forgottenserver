@@ -119,29 +119,27 @@ void ProtocolGame::deleteProtocolTask()
 	Protocol::deleteProtocolTask();
 }
 
-bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem, bool gamemasterLogin)
+bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem, bool gamemasterLogin)
 {
 	//dispatcher thread
 	Player* _player = g_game.getPlayerByName(name);
-
 	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(name, this);
 
 		player->useThing2();
 		player->setID();
 
-		if (IOBan::getInstance()->isPlayerNamelocked(name) && accnumber > 1) {
-			disconnectClient(0x14, "Your character has been namelocked.");
-			return false;
-		}
-
-		if (!IOLoginData::getInstance()->loadPlayer(player, name, true)) {
+		if (!IOLoginData::getInstance()->preloadPlayer(player, name)) {
 			disconnectClient(0x14, "Your character could not be loaded.");
 			return false;
 		}
 
-		if(gamemasterLogin && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)
-		{
+		if (IOBan::getInstance()->isPlayerNamelocked(player->getGUID())) {
+			disconnectClient(0x14, "Your character has been namelocked.");
+			return false;
+		}
+
+		if (gamemasterLogin && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER) {
 			disconnectClient(0x14, "You are not a gamemaster!");
 			return false;
 		}
@@ -161,34 +159,21 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingS
 			return false;
 		}
 
-		if (IOLoginData::getInstance()->isPendingDeletion(player->getName())) {
-			disconnectClient(0x14, "Your character is pending deletion.");
-			return false;
-		}
-
 		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
-			uint32_t bannedBy = 0, banTime = 0;
-			int32_t reason = 0, action = 0;
-			std::string comment = "";
-			bool deletion = false;
-
-			if (IOBan::getInstance()->getBanInformation(accnumber, bannedBy, banTime, reason, action, comment, deletion)) {
-				uint64_t timeNow = time(NULL);
-
-				if ((deletion && banTime != 0) || banTime > timeNow) {
-					std::string bannedByName;
-
-					if (bannedBy == 0) {
-						bannedByName = (deletion ? "Automatic deletion" : "Automatic banishment");
-					} else {
-						IOLoginData::getInstance()->getNameByGuid(bannedBy, bannedByName);
-					}
-
-					std::ostringstream ss;
-					ss << "Your account has been " << (deletion ? "deleted" : "banished") << " by:\n" << bannedByName << ", for the following reason:\n" << getReason(reason) << ".\nThe action taken was:\n" << getAction(action, false) << ".\nThe comment given was:\n" << comment << "\nYour " << (deletion ? "account was deleted on" : "banishment will be lifted at") << ":\n" << formatDateShort(banTime) << ".";
-					disconnectClient(0x14, ss.str().c_str());
-					return false;
+			BanInfo banInfo;
+			if (IOBan::getInstance()->isAccountBanned(accountId, banInfo)) {
+				if (banInfo.reason.empty()) {
+					banInfo.reason = "(none)";
 				}
+
+				std::ostringstream ss;
+				if (banInfo.expiresAt > 0) {
+					ss << "Your account has been banned until " << formatDate(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+				} else {
+					ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+				}
+				disconnectClient(0x14, ss.str().c_str());
+				return false;
 			}
 		}
 
@@ -201,7 +186,6 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingS
 			   << currentSlot << " on the waiting list.";
 
 			OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 			if (output) {
 				output->AddByte(0x16);
 				output->AddString(ss.str());
@@ -243,15 +227,13 @@ bool ProtocolGame::login(const std::string& name, uint32_t accnumber, OperatingS
 			_player->isConnecting = true;
 
 			addRef();
-			eventConnect = g_scheduler.addEvent(
-			                   createSchedulerTask(1000, boost::bind(&ProtocolGame::connect, this, _player->getID(), operatingSystem)));
+			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, boost::bind(&ProtocolGame::connect, this, _player->getID(), operatingSystem)));
 			return true;
 		}
 
 		addRef();
 		return connect(_player->getID(), operatingSystem);
 	}
-
 	return false;
 }
 
@@ -346,7 +328,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 	bool gamemasterFlag = msg.GetByte() != 0;
 	std::string accountName = msg.GetString();
-	std::string name = msg.GetString();
+	std::string characterName = msg.GetString();
 	std::string password = msg.GetString();
 
 	msg.SkipBytes(4); // challenge timestamp
@@ -372,35 +354,21 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	if (g_bans.isIpDisabled(getIP())) {
-		disconnectClient(0x14, "Too many connections attempts from this IP. Try again later.");
+	BanInfo banInfo;
+	if (IOBan::getInstance()->isIpBanned(getIP(), banInfo)) {
+		std::ostringstream ss;
+		ss << "Your IP has been banned until " << formatDate(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+		disconnectClient(0x14, ss.str().c_str());
 		return false;
 	}
 
-	if (IOBan::getInstance()->isIpBanished(getIP())) {
-		disconnectClient(0x14, "Your IP is banished!");
-		return false;
-	}
-
-	if (!IOLoginData::getInstance()->playerExists(name)) {
-		disconnectClient(0x14, "Player not found.");
-		return false;
-	}
-
-	std::string acc_pass;
-	uint32_t accnumber;
-	bool gotPassword = IOLoginData::getInstance()->getPassword(accountName, name, acc_pass, accnumber);
-	if (!gotPassword || !passwordTest(password, acc_pass)) {
-		g_bans.addLoginAttempt(getIP(), false);
+	uint32_t accountId = IOLoginData::getInstance()->gameworldAuthentication(accountName, password, characterName);
+	if (accountId == 0) {
 		disconnectClient(0x14, "Account name or password is not correct.");
 		return false;
 	}
 
-	g_bans.addLoginAttempt(getIP(), true);
-
-	g_dispatcher.addTask(
-	    createTask(boost::bind(&ProtocolGame::login, this, name, accnumber, operatingSystem, gamemasterFlag)));
-
+	g_dispatcher.addTask(createTask(boost::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem, gamemasterFlag)));
 	return true;
 }
 
@@ -412,8 +380,12 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 void ProtocolGame::onConnect()
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
+		// TODO: Use a real timestamp and random number to prevent anyone
+		// sniffing the login packet and re-send it to successfully login
+		//
+		// Requires calculating Adler after setting timestamp and random number
+
 		// Adler checksum
 		output->AddByte(0xEF);
 		output->AddByte(0x00);
@@ -440,13 +412,11 @@ void ProtocolGame::onConnect()
 void ProtocolGame::disconnectClient(uint8_t error, const char* message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		output->AddByte(error);
 		output->AddString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
-
 	disconnect();
 }
 
@@ -841,46 +811,23 @@ void ProtocolGame::parseAutoWalk(NetworkMessage& msg)
 	std::list<Direction> path;
 
 	size_t numdirs = msg.GetByte();
-
 	for (size_t i = 0; i < numdirs; ++i) {
 		uint8_t rawdir = msg.GetByte();
-
 		switch (rawdir) {
-			case 1:
-				path.push_back(EAST);
-				break;
-
-			case 2:
-				path.push_back(NORTHEAST);
-				break;
-
-			case 3:
-				path.push_back(NORTH);
-				break;
-
-			case 4:
-				path.push_back(NORTHWEST);
-				break;
-
-			case 5:
-				path.push_back(WEST);
-				break;
-
-			case 6:
-				path.push_back(SOUTHWEST);
-				break;
-
-			case 7:
-				path.push_back(SOUTH);
-				break;
-
-			case 8:
-				path.push_back(SOUTHEAST);
-				break;
-
-			default:
-				break;
+			case 1: path.push_back(EAST); break;
+			case 2: path.push_back(NORTHEAST); break;
+			case 3: path.push_back(NORTH); break;
+			case 4: path.push_back(NORTHWEST); break;
+			case 5: path.push_back(WEST); break;
+			case 6: path.push_back(SOUTHWEST); break;
+			case 7: path.push_back(SOUTH); break;
+			case 8: path.push_back(SOUTHEAST); break;
+			default: break;
 		}
+	}
+
+	if (path.empty()) {
+		return;
 	}
 
 	addGameTask(&Game::playerAutoWalk, player->getID(), path);

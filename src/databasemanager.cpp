@@ -38,7 +38,6 @@ bool DatabaseManager::optimizeTables()
 
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `DATA_FREE` > 0";
 	DBResult* result = db->storeQuery(query.str());
-
 	if (!result) {
 		return false;
 	}
@@ -56,7 +55,6 @@ bool DatabaseManager::optimizeTables()
 			std::cout << " [failed]" << std::endl;
 		}
 	} while (result->next());
-
 	db->freeResult(result);
 	return true;
 }
@@ -418,6 +416,45 @@ uint32_t DatabaseManager::updateDatabase()
 
 			registerDatabaseConfig("db_version", 13);
 			return 13;
+		}
+
+		case 13: {
+			std::cout << "> Updating database to version 14 (account_bans, ip_bans and player_bans)" << std::endl;
+
+			db->executeQuery("CREATE TABLE IF NOT EXISTS `account_bans` (`account_id` int(11) NOT NULL, `reason` varchar(255) NOT NULL, `banned_at` bigint(20) NOT NULL, `expires_at` bigint(20) NOT NULL, `banned_by` int(11) NOT NULL, PRIMARY KEY (`account_id`), KEY `banned_by` (`banned_by`), FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB");
+			db->executeQuery("CREATE TABLE IF NOT EXISTS `ip_bans` (`ip` int(10) unsigned NOT NULL, `reason` varchar(255) NOT NULL, `banned_at` bigint(20) NOT NULL, `expires_at` bigint(20) NOT NULL, `banned_by` int(11) NOT NULL, PRIMARY KEY (`ip`), KEY `banned_by` (`banned_by`), FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB");
+			db->executeQuery("CREATE TABLE IF NOT EXISTS `player_namelocks` (`player_id` int(11) NOT NULL, `reason` varchar(255) NOT NULL, `namelocked_at` bigint(20) NOT NULL, `namelocked_by` int(11) NOT NULL, PRIMARY KEY (`player_id`), KEY `namelocked_by` (`namelocked_by`), FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`namelocked_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB");
+
+			DBResult* result = db->storeQuery("SELECT `player`, `time` FROM `bans` WHERE `type` = 2");
+			if (result) {
+				DBInsert stmt(db);
+				stmt.setQuery("INSERT INTO `player_namelocks` (`player_id`, `namelocked_at`, `namelocked_by`) VALUES ");
+
+				std::ostringstream ss;
+				do {
+					ss << result->getDataInt("player") << "," << result->getDataInt("time") << "," << result->getDataInt("player");
+					if (!stmt.addRow(ss)) {
+						std::cout << "Failed to add row!" << std::endl;
+					}
+				} while (result->next());
+				db->freeResult(result);
+
+				if (!stmt.execute()) {
+					std::cout << "Failed to execute statement!" << std::endl;
+				}
+			}
+
+
+			db->executeQuery("DROP TRIGGER `ondelete_accounts`");
+			db->executeQuery("DROP TRIGGER `ondelete_players`");
+			db->executeQuery("ALTER TABLE `accounts` DROP `warnings`;");
+			db->executeQuery("DELIMITER \\ CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players` FOR EACH ROW BEGIN \
+								UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`; \
+							END \\");
+			db->executeQuery("DROP TABLE `bans`");
+
+			registerDatabaseConfig("db_version", 14);
+			return 14;
 		}
 
 		default:

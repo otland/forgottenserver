@@ -86,7 +86,6 @@ class ConfigManager
 			DEFAULT_PRIORITY,
 			PASSWORDTYPE,
 			MAP_AUTHOR,
-			MAP_STORAGE_TYPE,
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
 
@@ -108,9 +107,6 @@ class ConfigManager
 			HOUSE_PRICE,
 			KILLS_TO_RED,
 			KILLS_TO_BLACK,
-			KILLS_TO_BAN,
-			BAN_DAYS,
-			FINAL_BAN_DAYS,
 			MAX_MESSAGEBUFFER,
 			ACTIONS_DELAY_INTERVAL,
 			EX_ACTIONS_DELAY_INTERVAL,
