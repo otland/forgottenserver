@@ -253,7 +253,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	std::ostringstream query;
 	query << "SELECT `id`, `account_id`, `group_id`, `deletion`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`";
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-		query << ", (SELECT `premium_days` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premium_days`";
+		query << ", (SELECT `premdays` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premium_days`";
 	} else {
 		player->premiumDays = 0xFFFF;
 	}
