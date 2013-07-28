@@ -22,6 +22,8 @@
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
 
+#include <thread>
+
 const int DISPATCHER_TASK_EXPIRATION = 2000;
 
 class Task
@@ -94,7 +96,7 @@ class Dispatcher
 
 		void flush();
 
-		boost::thread m_thread;
+		std::thread m_thread;
 		boost::mutex m_taskLock;
 		boost::condition_variable m_taskSignal;
 
