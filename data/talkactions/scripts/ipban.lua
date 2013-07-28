@@ -3,17 +3,30 @@ function onSay(cid, words, param)
 		return false
 	end
 	
-	local accountId = getPlayerAccountNumberByName(param)
-	if accountId == 0 then
+	local resultId = db.storeQuery("SELECT `account_id`, `lastip` FROM `players` WHERE `name` = " .. db.escapeString(param))
+	if resultId == false then
+		return false
+	end
+	
+	local ip = result.getDataInt("lastip")
+	
+	local targetCid = getPlayerByName(param)
+	if targetCid ~= false then
+		ip = getIpByName(param)
+		doRemoveCreature(targetCid)
+	end
+	
+	if ip == 0 then
+		return false
+	end
+	
+	local resultId = db.storeQuery("SELECT 1 FROM `ip_bans` WHERE `ip` = " .. ip)
+	if resultId ~= false then
+		result.free(resultId)
 		return false
 	end
 	
 	local timeNow = os.time()
-	db:query("INSERT INTO `account_bans` (`account_id`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
-			accountId .. ", '', " .. timeNow .. ", " .. timeNow + (getConfigInfo("banDays") * 86400) .. ", " .. getPlayerGUIDByName(getCreatureName(cid)) .. ")")
-
-	local targetCid = getPlayerByName(param)
-	if targetCid ~= false then
-		doRemoveCreature(targetCid)
-	end
+	db:query("INSERT INTO `ip_bans` (`ip`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
+			ip .. ", '', " .. timeNow .. ", " .. timeNow + (getConfigInfo("banDays") * 86400) .. ", " .. getPlayerGUIDByName(getCreatureName(cid)) .. ")")
 end

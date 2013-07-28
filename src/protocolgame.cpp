@@ -168,9 +168,9 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 
 				std::ostringstream ss;
 				if (banInfo.expiresAt > 0) {
-					ss << "Your account has been banned until " << formatDate(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+					ss << "Your account has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
 				} else {
-					ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+					ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
 				}
 				disconnectClient(0x14, ss.str().c_str());
 				return false;
@@ -356,8 +356,12 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 	BanInfo banInfo;
 	if (IOBan::getInstance()->isIpBanned(getIP(), banInfo)) {
+		if (banInfo.reason.empty()) {
+			banInfo.reason = "(none)";
+		}
+
 		std::ostringstream ss;
-		ss << "Your IP has been banned until " << formatDate(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
 		disconnectClient(0x14, ss.str().c_str());
 		return false;
 	}
@@ -2792,7 +2796,6 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	}
 
 	const std::string& writer = item->getWriter();
-
 	if (writer.size()) {
 		msg.AddString(writer);
 	} else {
@@ -2800,7 +2803,6 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	}
 
 	time_t writtenDate = item->getDate();
-
 	if (writtenDate > 0) {
 		msg.AddString(formatDateShort(writtenDate));
 	} else {

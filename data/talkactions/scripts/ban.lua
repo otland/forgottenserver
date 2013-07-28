@@ -3,8 +3,14 @@ function onSay(cid, words, param)
 		return false
 	end
 	
-	local accountId = getPlayerAccountNumberByName(param)
+	local accountId = getAccountNumberByPlayerName(param)
 	if accountId == 0 then
+		return false
+	end
+	
+	local resultId = db.storeQuery("SELECT 1 FROM `account_bans` WHERE `account_id` = " .. accountId)
+	if resultId ~= false then
+		result.free(resultId)
 		return false
 	end
 	
@@ -16,4 +22,5 @@ function onSay(cid, words, param)
 	if targetCid ~= false then
 		doRemoveCreature(targetCid)
 	end
+	doPlayerSendTextMessage(cid, MESSAGE_EVENT_ADVANCE, param .. " has been banned.")
 end

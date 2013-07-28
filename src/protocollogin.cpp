@@ -117,8 +117,12 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 	BanInfo banInfo;
 	if (IOBan::getInstance()->isIpBanned(clientip, banInfo)) {
+		if (banInfo.reason.empty()) {
+			banInfo.reason = "(none)";
+		}
+
 		std::ostringstream ss;
-		ss << "Your IP has been banned until " << formatDate(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:" << banInfo.reason;
+		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
 		disconnectClient(0x0A, ss.str().c_str());
 		return false;
 	}
