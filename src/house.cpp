@@ -599,10 +599,10 @@ bool AccessList::addExpression(const std::string& expression)
 
 			if (outExp.substr(0, 1) == "!") {
 				if (outExp.length() > 1) {
-					regExList.push_front(std::make_pair(boost::regex(outExp.substr(1)), false));
+					regExList.push_front(std::make_pair(std::regex(outExp.substr(1)), false));
 				}
 			} else {
-				regExList.push_back(std::make_pair(boost::regex(outExp), true));
+				regExList.push_back(std::make_pair(std::regex(outExp), true));
 			}
 		}
 	} catch (...) {}
@@ -614,12 +614,12 @@ bool AccessList::isInList(const Player* player)
 {
 	RegExList::iterator it;
 	std::string name = player->getName();
-	boost::cmatch what;
+	std::cmatch what;
 
 	std::transform(name.begin(), name.end(), name.begin(), tolower);
 
 	for (it = regExList.begin(); it != regExList.end(); ++it) {
-		if (boost::regex_match(name.c_str(), what, it->first)) {
+		if (std::regex_match(name.c_str(), what, it->first)) {
 			return it->second;
 		}
 	}

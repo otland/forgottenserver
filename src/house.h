@@ -23,7 +23,7 @@
 #include <list>
 #include <map>
 
-#include <boost/regex.hpp>
+#include <regex>
 
 #include "definitions.h"
 #include "position.h"
@@ -53,7 +53,7 @@ class AccessList
 		typedef std::unordered_set<uint32_t> GuildList; //TODO: include ranks
 
 		typedef std::list<std::string> ExpressionList;
-		typedef std::list<std::pair<boost::regex, bool> > RegExList;
+		typedef std::list<std::pair<std::regex, bool> > RegExList;
 		std::string list;
 		PlayerList playerList;
 		GuildList guildList;
