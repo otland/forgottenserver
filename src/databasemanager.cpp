@@ -448,10 +448,15 @@ uint32_t DatabaseManager::updateDatabase()
 			db->executeQuery("DROP TRIGGER `ondelete_accounts`");
 			db->executeQuery("DROP TRIGGER `ondelete_players`");
 			db->executeQuery("ALTER TABLE `accounts` DROP `warnings`;");
-			db->executeQuery("DELIMITER \\ CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players` FOR EACH ROW BEGIN \
-								UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`; \
-							END \\");
+
 			db->executeQuery("DROP TABLE `bans`");
+
+			std::cout << "Run this query in your database to create the ondelete_players trigger:" << std::endl;
+			std::cout << "DELIMITER //" << std::endl;;
+			std::cout << "CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`" << std::endl;
+			std::cout << " FOR EACH ROW BEGIN" << std::endl;
+			std::cout << "  UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;" << std::endl;
+			std::cout << "END //" << std::endl;
 
 			registerDatabaseConfig("db_version", 14);
 			return 14;
