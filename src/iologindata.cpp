@@ -171,7 +171,7 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 	db->freeResult(result);
 
 	query.str("");
-	query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = " << characterName;
+	query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = " << db->escapeString(characterName);
 	result = db->storeQuery(query.str());
 	if (!result) {
 		return 0;
