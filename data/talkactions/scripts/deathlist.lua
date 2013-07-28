@@ -28,8 +28,8 @@ function onSay(cid, words, param)
 				if date.sec < 10 then date.sec = "0" .. date.sec end
 				str = str .. breakline .. " " .. date.day .. getMonthDayEnding(date.day) .. " " .. getMonthString(date.month) .. " " .. date.year .. " " .. date.hour .. ":" .. date.min .. ":" .. date.sec .. "   Died at Level " .. result.getDataInt(resultId, "level") .. " by " .. article .. killed_by .. "."
 			until not result.next(resultId)
+			result.free(resultId)
 		end
-		result.free(resultId)
 
 		if str == "" then
 			str = "No deaths."

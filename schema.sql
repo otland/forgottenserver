@@ -79,8 +79,20 @@ CREATE TABLE IF NOT EXISTS `account_bans` (
   `banned_by` int(11) NOT NULL,
   PRIMARY KEY (`account_id`),
   KEY `banned_by` (`banned_by`),
-  FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `account_ban_history` (
+  `account_id` int(11) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `banned_at` bigint(20) NOT NULL,
+  `expired_at` bigint(20) NOT NULL,
+  `banned_by` int(11) NOT NULL,
+  PRIMARY KEY (`account_id`),
+  KEY `banned_by` (`banned_by`),
+  FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `ip_bans` (
