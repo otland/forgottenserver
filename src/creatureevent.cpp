@@ -102,13 +102,11 @@ bool CreatureEvents::registerEvent(Event* event, xmlNodePtr p)
 CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
 {
 	CreatureEventList::iterator it = m_creatureEvents.find(name);
-
 	if (it != m_creatureEvents.end()) {
 		if (!forceLoaded || it->second->isLoaded()) {
 			return it->second;
 		}
 	}
-
 	return NULL;
 }
 
@@ -323,18 +321,18 @@ uint32_t CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 	}
 }
 
-uint32_t CreatureEvent::executeOnPrepareDeath(Player* player, Creature* killer)
+uint32_t CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 {
 	//onPrepareDeath(cid, killer)
 	if (m_scriptInterface->reserveScriptEnv()) {
 		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 		env->setScriptId(m_scriptId, m_scriptInterface);
-		env->setRealPos(player->getPosition());
+		env->setRealPos(creature->getPosition());
 
 		uint32_t killercid;
 		if (killer) {
-			killercid = killer->getID();
+			killercid = creature->getID();
 		} else {
 			killercid = 0;
 		}
@@ -342,7 +340,7 @@ uint32_t CreatureEvent::executeOnPrepareDeath(Player* player, Creature* killer)
 		lua_State* L = m_scriptInterface->getLuaState();
 
 		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, player->getID());
+		lua_pushnumber(L, creature->getID());
 		lua_pushnumber(L, killercid);
 
 		bool result = m_scriptInterface->callFunction(2);

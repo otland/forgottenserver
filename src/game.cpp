@@ -4915,18 +4915,16 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 			}
 		}
 
-		if (targetPlayer) {
-			if (damage >= targetPlayer->getHealth()) {
-				//scripting event - onPrepareDeath
-				CreatureEventList prepareDeathEvents = targetPlayer->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH);
-
-				for (CreatureEventList::const_iterator it = prepareDeathEvents.begin(); it != prepareDeathEvents.end(); ++it) {
-					(*it)->executeOnPrepareDeath(targetPlayer, attacker);
-				}
+		int32_t targetHealth = target->getHealth();
+		if (targetHealth > 0 && damage >= targetHealth) {
+			//scripting event - onPrepareDeath
+			CreatureEventList prepareDeathEvents = target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH);
+			for (CreatureEventList::const_iterator it = prepareDeathEvents.begin(); it != prepareDeathEvents.end(); ++it) {
+				(*it)->executeOnPrepareDeath(target, attacker);
 			}
 		}
 
-		damage = std::min<int32_t>(target->getHealth(), damage);
+		damage = std::min<int32_t>(targetHealth, damage);
 		if (damage > 0) {
 			target->drainHealth(attacker, combatType, damage);
 			addCreatureHealth(list, target);
