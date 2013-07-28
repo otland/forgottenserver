@@ -141,7 +141,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	Account account;
-	if (!IOLoginData::getInstance()->loginserverAuthenticate(accountName, password, account)) {
+	if (!IOLoginData::getInstance()->loginserverAuthentication(accountName, password, account)) {
 		disconnectClient(0x0A, "Account name or password is not correct.");
 		return false;
 	}

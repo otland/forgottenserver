@@ -67,7 +67,7 @@ bool IOLoginData::saveAccount(const Account& acc)
 	return Database::getInstance()->executeQuery(query.str());
 }
 
-bool IOLoginData::loginserverAuthenticate(const std::string& name, const std::string& password, Account& account)
+bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
 {
 	Database* db = Database::getInstance();
 
@@ -79,30 +79,9 @@ bool IOLoginData::loginserverAuthenticate(const std::string& name, const std::st
 		return false;
 	}
 
-	switch (g_config.getNumber(ConfigManager::PASSWORD_TYPE)) {
-		case PASSWORD_TYPE_MD5: {
-			if (transformToMD5(password) != result->getDataString("password")) {
-				db->freeResult(result);
-				return false;
-			}
-			break;
-		}
-
-		case PASSWORD_TYPE_SHA1: {
-			if (transformToSHA1(password) != result->getDataString("password")) {
-				db->freeResult(result);
-				return false;
-			}
-			break;
-		}
-
-		default: {
-			if (password != result->getDataString("password")) {
-				db->freeResult(result);
-				return false;
-			}
-			break;
-		}
+	if (!passwordTest(password, result->getDataString("password"))) {
+		db->freeResult(result);
+		return 0;
 	}
 
 	account.id = result->getDataInt("id");
@@ -141,30 +120,9 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 		return 0;
 	}
 
-	switch (g_config.getNumber(ConfigManager::PASSWORD_TYPE)) {
-		case PASSWORD_TYPE_MD5: {
-			if (transformToMD5(password) != result->getDataString("password")) {
-				db->freeResult(result);
-				return 0;
-			}
-			break;
-		}
-
-		case PASSWORD_TYPE_SHA1: {
-			if (transformToSHA1(password) != result->getDataString("password")) {
-				db->freeResult(result);
-				return 0;
-			}
-			break;
-		}
-
-		default: {
-			if (password != result->getDataString("password")) {
-				db->freeResult(result);
-				return 0;
-			}
-			break;
-		}
+	if (!passwordTest(password, result->getDataString("password"))) {
+		db->freeResult(result);
+		return 0;
 	}
 
 	uint32_t accountId = result->getDataInt("id");
