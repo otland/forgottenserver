@@ -332,7 +332,7 @@ uint32_t CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* kill
 
 		uint32_t killercid;
 		if (killer) {
-			killercid = creature->getID();
+			killercid = killer->getID();
 		} else {
 			killercid = 0;
 		}
