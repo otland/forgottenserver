@@ -32,7 +32,7 @@ allowClones = "no"
 serverName = "Forgotten"
 loginMessage = "Welcome to The Forgotten Server!"
 adminLogsEnabled = "no"
-statusTimeout = 5 * 60 * 1000
+statusTimeout = 60000
 replaceKickOnLogin = "yes"
 maxPacketsPerSecond = 25
 
