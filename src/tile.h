@@ -224,6 +224,10 @@ class Tile : public Cylinder
 		Item* getItemByTopOrder(int32_t topOrder);
 
 		uint32_t getThingCount() const {
+			uint32_t thingCount = getCreatureCount() + getItemCount();
+			if (ground) {
+				thingCount++;
+			}
 			return thingCount;
 		}
 		// If these return != 0 the associated vectors are guaranteed to exists
@@ -359,7 +363,6 @@ class Tile : public Cylinder
 		Item* ground;
 
 	protected:
-		uint32_t thingCount;
 		Position tilePos;
 		uint32_t m_flags;
 };
@@ -432,7 +435,6 @@ class StaticTile : public Tile
 inline Tile::Tile(uint16_t x, uint16_t y, uint16_t z) :
 	qt_node(NULL),
 	ground(NULL),
-	thingCount(0),
 	tilePos(x, y, z),
 	m_flags(0)
 {

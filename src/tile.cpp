@@ -1019,7 +1019,6 @@ void Tile::__addThing(int32_t index, Thing* thing)
 		creature->setParent(this);
 		CreatureVector* creatures = makeCreatures();
 		creatures->insert(creatures->begin(), creature);
-		++thingCount;
 	} else {
 		Item* item = thing->getItem();
 
@@ -1038,7 +1037,6 @@ void Tile::__addThing(int32_t index, Thing* thing)
 		if (item->isGroundTile()) {
 			if (ground == NULL) {
 				ground = item;
-				++thingCount;
 				onAddTileItem(item);
 			} else {
 				const ItemType& oldType = Item::items[ground->getID()];
@@ -1079,7 +1077,6 @@ void Tile::__addThing(int32_t index, Thing* thing)
 					//Note: this is different from internalAddThing
 					if (Item::items[item->getID()].alwaysOnTopOrder <= Item::items[(*it)->getID()].alwaysOnTopOrder) {
 						items->insert(it, item);
-						++thingCount;
 						isInserted = true;
 						break;
 					}
@@ -1090,7 +1087,6 @@ void Tile::__addThing(int32_t index, Thing* thing)
 
 			if (!isInserted) {
 				items->push_back(item);
-				++thingCount;
 			}
 
 			onAddTileItem(item);
@@ -1123,7 +1119,6 @@ void Tile::__addThing(int32_t index, Thing* thing)
 			items = makeItemList();
 			items->insert(items->getBeginDownItem(), item);
 			++items->downItemCount;
-			++thingCount;
 			onAddTileItem(item);
 		}
 	}
@@ -1251,7 +1246,6 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			if (it != creatures->end()) {
 				g_game.clearSpectatorCache();
 				creatures->erase(it);
-				--thingCount;
 			}
 		}
 
@@ -1280,7 +1274,6 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 
 			ground->setParent(NULL);
 			ground = NULL;
-			--thingCount;
 			onRemoveTileItem(list, oldStackPosVector, item);
 			return;
 		}
@@ -1303,7 +1296,6 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 
 						(*it)->setParent(NULL);
 						items->erase(it);
-						--thingCount;
 						onRemoveTileItem(list, oldStackPosVector, item);
 						return;
 					}
@@ -1338,7 +1330,6 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 							(*it)->setParent(NULL);
 							items->erase(it);
 							--items->downItemCount;
-							--thingCount;
 							onRemoveTileItem(list, oldStackPosVector, item);
 						}
 
@@ -1634,7 +1625,6 @@ void Tile::__internalAddThing(uint32_t index, Thing* thing)
 		g_game.clearSpectatorCache();
 		CreatureVector* creatures = makeCreatures();
 		creatures->insert(creatures->begin(), creature);
-		++thingCount;
 	} else {
 		Item* item = thing->getItem();
 
@@ -1651,7 +1641,6 @@ void Tile::__internalAddThing(uint32_t index, Thing* thing)
 		if (item->isGroundTile()) {
 			if (ground == NULL) {
 				ground = item;
-				++thingCount;
 			}
 		} else if (item->isAlwaysOnTop()) {
 			bool isInserted = false;
@@ -1659,7 +1648,6 @@ void Tile::__internalAddThing(uint32_t index, Thing* thing)
 			for (ItemVector::iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
 				if (Item::items[(*it)->getID()].alwaysOnTopOrder > Item::items[item->getID()].alwaysOnTopOrder) {
 					items->insert(it, item);
-					++thingCount;
 					isInserted = true;
 					break;
 				}
@@ -1667,12 +1655,10 @@ void Tile::__internalAddThing(uint32_t index, Thing* thing)
 
 			if (!isInserted) {
 				items->push_back(item);
-				++thingCount;
 			}
 		} else {
 			items->insert(items->getBeginDownItem(), item);
 			++items->downItemCount;
-			++thingCount;
 		}
 
 		updateTileFlags(item, false);
