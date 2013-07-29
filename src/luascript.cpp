@@ -2536,7 +2536,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 
 	Player* player = g_game.getPlayerByID(cid);
 	if (player) {
-		lua_pushboolean(L, g_game.removeItemOfType(player, itemId, count, subType, ignoreEquipped));
+		lua_pushboolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);

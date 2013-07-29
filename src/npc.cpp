@@ -1611,14 +1611,10 @@ void Npc::processResponse(Player* player, NpcState* npcState, const NpcResponse*
 							subType = -1;
 						}
 
-						int32_t itemCount = player->__getItemTypeCount(it.id, subType);
-
-						if (itemCount >= npcState->amount) {
-							g_game.removeItemOfType(player, it.id, npcState->amount, subType);
+						if (player->removeItemOfType(it.id, npcState->amount, subType)) {
 							g_game.addMoney(player, moneyCount, FLAG_NOLIMIT);
 						}
 					}
-
 					break;
 				}
 
@@ -1685,7 +1681,6 @@ void Npc::processResponse(Player* player, NpcState* npcState, const NpcResponse*
 					}
 
 					const ItemType& it = Item::items[npcState->itemId];
-
 					if (it.id != 0) {
 						int32_t subType;
 
@@ -1695,13 +1690,8 @@ void Npc::processResponse(Player* player, NpcState* npcState, const NpcResponse*
 							subType = -1;
 						}
 
-						int32_t itemCount = player->__getItemTypeCount(itemId, subType);
-
-						if (itemCount >= npcState->amount) {
-							g_game.removeItemOfType(player, itemId, npcState->amount, subType);
-						}
+						player->removeItemOfType(itemId, npcState->amount, subType);
 					}
-
 					break;
 				}
 

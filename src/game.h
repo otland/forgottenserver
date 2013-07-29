@@ -321,18 +321,6 @@ class Game
 		                     bool depthSearch = true, int32_t subType = -1);
 
 		/**
-		  * Remove item(s) of a certain type
-		  * \param cylinder to remove the item(s) from
-		  * \param itemId is the item to remove
-		  * \param count is the amount to remove
-		  * \param subType is the extra type an item can have such as charges/fluidtype, default is -1
-			* meaning it's not used
-		  * \param onlySubContainers if true it will remove only items from containers in cylinder, default is false
-		  * \returns true if the removal was successful
-		  */
-		bool removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, int32_t subType = -1, bool onlySubContainers = false);
-
-		/**
 		  * Get the amount of money in a a cylinder
 		  * \returns the amount of money found
 		  */

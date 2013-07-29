@@ -1912,7 +1912,6 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
@@ -1920,7 +1919,7 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 	ReturnValue result = RET_NOERROR;
 
 	if (spell->getReagentId() != 0) {
-		if (!g_game.removeItemOfType(player, spell->getReagentId(), 1, -1)) {
+		if (!player->removeItemOfType(spell->getReagentId(), 1, -1)) {
 			player->sendCancelMessage(RET_YOUNEEDAMAGICITEMTOCASTSPELL);
 			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 			return false;

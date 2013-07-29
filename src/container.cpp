@@ -707,13 +707,11 @@ int32_t Container::__getLastIndex() const
 uint32_t Container::__getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
-
 	for (ItemDeque::const_iterator it = itemlist.begin(); it != itemlist.end(); ++it) {
 		if ((*it)->getID() == itemId) {
 			count += countByType(*it, subType);
 		}
 	}
-
 	return count;
 }
 

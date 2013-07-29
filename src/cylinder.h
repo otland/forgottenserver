@@ -180,7 +180,7 @@ class Cylinder : virtual public Thing
 		  * Get the amount of items of a certain type
 		  * \param itemId is the item type to the get the count of
 		  * \param subType is the extra type an item can have such as charges/fluidtype, -1 means not used
-		  * \param returns the amount of items of the asked item type
+		  * \returns the amount of items of the asked item type
 		  */
 		virtual uint32_t __getItemTypeCount(uint16_t itemId, int32_t subType = -1) const;
 

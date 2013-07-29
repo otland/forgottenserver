@@ -510,6 +510,8 @@ class Player : public Creature, public Cylinder
 		void addMessageBuffer();
 		void removeMessageBuffer();
 
+		bool removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped = false);
+
 		double getCapacity() const {
 			if (hasFlag(PlayerFlag_CannotPickupItem)) {
 				return 0.00;
