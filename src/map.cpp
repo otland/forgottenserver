@@ -712,14 +712,13 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 						const int_fast32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
 						const int_fast32_t extraCost = nodes.getTileWalkCost(creature, tile);
 						const int_fast32_t newg = n->g + cost + extraCost;
-						const uint_fast32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+						const uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
 						//Check if the node is already in the closed/open list
 						//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
 						AStarNode* neighbourNode;
-						std::unordered_map<uint_fast32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
-
+						std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 						if (it != nodeTable.end()) {
 							neighbourNode = it->second;
 						} else {
@@ -886,15 +885,14 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 					const int_fast32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
 					const int_fast32_t extraCost = nodes.getTileWalkCost(creature, tile);
 					const int_fast32_t newf = n->f + cost + extraCost;
-					const uint_fast32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+					const uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
 					//Check if the node is already in the closed/open list
 					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
 					AStarNode* neighbourNode;
 
-					std::unordered_map<uint_fast32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
-
+					std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 					if (it != nodeTable.end()) {
 						neighbourNode = it->second;
 					} else {
