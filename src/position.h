@@ -79,48 +79,12 @@ struct Position
 	uint16_t y;
 	uint8_t z;
 
-	bool operator<(const Position& p) const {
-		if (z < p.z) {
-			return true;
-		}
-
-		if (z > p.z) {
-			return false;
-		}
-
-		if (y < p.y) {
-			return true;
-		}
-
-		if (y > p.y) {
-			return false;
-		}
-
-		if (x < p.x) {
-			return true;
-		}
-
-		if (x > p.x) {
-			return false;
-		}
-
-		return false;
-	}
-
-	bool operator>(const Position& p) const {
-		return ! (*this < p);
-	}
-
 	bool operator==(const Position& p) const {
 		return p.x == x && p.y == y && p.z == z;
 	}
 
 	bool operator!=(const Position& p) const {
 		return p.x != x || p.y != y || p.z != z;
-	}
-
-	Position operator-(const Position& p1) {
-		return Position(x - p1.x, y - p1.y, z - p1.z);
 	}
 
 	inline int_fast32_t getX() const { return static_cast<int_fast32_t>(x); }

@@ -362,6 +362,10 @@ if(NpcHandler == nil) then
 
 	-- Handles onCreatureDisappear events. If you with to handle this yourself, please use the CALLBACK_CREATURE_DISAPPEAR callback.
 	function NpcHandler:onCreatureDisappear(cid)
+		if getNpcCid() == cid then
+			return
+		end
+
 		local callback = self:getCallback(CALLBACK_CREATURE_DISAPPEAR)
 		if(callback == nil or callback(cid)) then
 			if(self:processModuleCallback(CALLBACK_CREATURE_DISAPPEAR, cid)) then
