@@ -315,7 +315,7 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 		}
 	}
 	//only players for script events
-	else if (Player* player = const_cast<Player*>(creature->getPlayer())) {
+	else if (creature->getPlayer()) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureAppear(creature);
 		}
@@ -414,17 +414,9 @@ void Npc::doTurn(Direction dir)
 void Npc::onPlayerTrade(Player* player, ShopEvent_t type, int32_t callback, uint16_t itemId,
                         uint8_t count, uint8_t amount, bool ignore/* = false*/, bool inBackpacks/* = false*/)
 {
-	int8_t subType = -1;
-
-	const ItemType& it = Item::items[itemId];
-	if (it.hasSubType() && !it.stackable) {
-		subType = count;
-	}
-
 	if (m_npcEventHandler) {
 		m_npcEventHandler->onPlayerTrade(player, callback, itemId, count, amount, ignore, inBackpacks);
 	}
-
 	player->sendSaleItemList();
 }
 
