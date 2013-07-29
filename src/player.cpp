@@ -3576,7 +3576,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 		}
 	}
 	
-	if (amount < count) {
+	if (count < amount) {
 		return false;
 	}
 
