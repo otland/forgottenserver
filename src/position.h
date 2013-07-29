@@ -123,9 +123,9 @@ struct Position
 		return Position(x - p1.x, y - p1.y, z - p1.z);
 	}
 
-	inline int_fast32_t getX() const { return static_cast<int_fast32_t>(x); }
-	inline int_fast32_t getY() const { return static_cast<int_fast32_t>(y); }
-	inline int_fast16_t getZ() const { return static_cast<int_fast16_t>(z); }
+	inline int_fast32_t getX() const { return x; }
+	inline int_fast32_t getY() const { return y; }
+	inline int_fast16_t getZ() const { return z; }
 };
 
 std::ostream& operator<<(std::ostream&, const Position&);

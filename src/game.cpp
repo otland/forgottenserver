@@ -424,7 +424,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 		}
 		//inventory
 		else {
-			slots_t slot = (slots_t)static_cast<unsigned char>(pos.y);
+			slots_t slot = static_cast<slots_t>(pos.y);
 			return player->getInventoryItem(slot);
 		}
 	}
@@ -1240,7 +1240,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 	if (fromPos.x == 0xFFFF) {
 		if (fromPos.y & 0x40) {
-			fromIndex = static_cast<uint8_t>(fromPos.z);
+			fromIndex = fromPos.z;
 		} else {
 			fromIndex = static_cast<uint8_t>(fromPos.y);
 		}
@@ -1262,7 +1262,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 	if (toPos.x == 0xFFFF) {
 		if (toPos.y & 0x40) {
-			toIndex = static_cast<uint8_t>(toPos.z);
+			toIndex = toPos.z;
 		} else {
 			toIndex = static_cast<uint8_t>(toPos.y);
 		}
