@@ -750,9 +750,9 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`town_id` = " << player->town << ", ";
 
 	const Position& loginPosition = player->getLoginPosition();
-	query << "`posx` = " << loginPosition.x << ", ";
-	query << "`posy` = " << loginPosition.y << ", ";
-	query << "`posz` = " << loginPosition.z << ", ";
+	query << "`posx` = " << loginPosition.getX() << ", ";
+	query << "`posy` = " << loginPosition.getY() << ", ";
+	query << "`posz` = " << loginPosition.getZ() << ", ";
 
 	query << "`cap` = " << player->getCapacity() << ", ";
 	query << "`sex` = " << player->sex << ", ";
