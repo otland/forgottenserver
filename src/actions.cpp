@@ -203,7 +203,6 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos)
 			return RET_TOOFARAWAY;
 		}
 	}
-
 	return RET_NOERROR;
 }
 

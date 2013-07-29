@@ -1024,7 +1024,6 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
                               const Position& movingCreatureOrigPos, const Position& toPos)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -1040,7 +1039,6 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	player->setNextActionTask(NULL);
 
 	Creature* movingCreature = getCreatureByID(movingCreatureId);
-
 	if (!movingCreature || movingCreature->isRemoved()) {
 		return false;
 	}
@@ -1054,7 +1052,6 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	if (!Position::areInRange<1, 1, 0>(movingCreatureOrigPos, player->getPosition())) {
 		//need to walk to the creature first before moving it
 		std::list<Direction> listDir;
-
 		if (getPathToEx(player, movingCreatureOrigPos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
@@ -1069,7 +1066,6 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	}
 
 	Tile* toTile = getTile(toPos);
-
 	if (!toTile) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
@@ -1083,30 +1079,22 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 	//check throw distance
 	const Position& movingCreaturePos = movingCreature->getPosition();
-
-	if ((std::abs(movingCreaturePos.x - toPos.x) > movingCreature->getThrowRange()) || (std::abs(movingCreaturePos.y - toPos.y) > movingCreature->getThrowRange()) || (std::abs(movingCreaturePos.z - toPos.z) * 4 > movingCreature->getThrowRange())) {
+	if ((Position::getDistanceX(movingCreaturePos, toPos) > movingCreature->getThrowRange()) || (Position::getDistanceY(movingCreaturePos, toPos) > movingCreature->getThrowRange()) || (Position::getDistanceZ(movingCreaturePos, toPos) * 4 > movingCreature->getThrowRange())) {
 		player->sendCancelMessage(RET_DESTINATIONOUTOFREACH);
 		return false;
 	}
 
 	Tile* movingCreatureTile = movingCreature->getTile();
-
 	if (!movingCreatureTile) {
 		player->sendCancelMessage(RET_NOTMOVEABLE);
 		return false;
 	}
 
 	if (player != movingCreature) {
-		bool toTileIsSafe = false;
-
-		if (toTile->hasFlag(TILESTATE_NOPVPZONE) || toTile->hasFlag(TILESTATE_PROTECTIONZONE)) {
-			toTileIsSafe = true;
-		}
-
 		if (toTile->hasProperty(BLOCKPATH)) {
 			player->sendCancelMessage(RET_NOTENOUGHROOM);
 			return false;
-		} else if ((movingCreature->getZone() == ZONE_PROTECTION || movingCreature->getZone() == ZONE_NOPVP) && !toTileIsSafe) {
+		} else if ((movingCreature->getZone() == ZONE_PROTECTION || movingCreature->getZone() == ZONE_NOPVP) && (toTile->hasFlag(TILESTATE_NOPVPZONE) || toTile->hasFlag(TILESTATE_PROTECTIONZONE))) {
 			player->sendCancelMessage(RET_NOTPOSSIBLE);
 			return false;
 		} else if (movingCreature->getNpc() && !Spawns::getInstance()->isInZone(movingCreature->masterPos, movingCreature->masterRadius, toPos)) {
@@ -1123,7 +1111,6 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		player->sendCancelMessage(ret);
 		return false;
 	}
-
 	return true;
 }
 
@@ -1347,9 +1334,9 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		if (!Position::areInRange<1, 1, 0>(playerPos, mapToPos)) {
 			Position walkPos = mapToPos;
 			if (vertical) {
-				walkPos.x -= -1;
+				walkPos.x++;
 			} else {
-				walkPos.y -= -1;
+				walkPos.y++;
 			}
 
 			Position itemPos = fromPos;
@@ -1388,9 +1375,9 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		}
 	}
 
-	if ((std::abs(playerPos.x - mapToPos.x) > item->getThrowRange()) ||
-	        (std::abs(playerPos.y - mapToPos.y) > item->getThrowRange()) ||
-	        (std::abs(mapFromPos.z - mapToPos.z) * 4 > item->getThrowRange())) {
+	if ((Position::getDistanceX(playerPos, mapToPos) > item->getThrowRange()) ||
+	        (Position::getDistanceY(playerPos, mapToPos) > item->getThrowRange()) ||
+	        (Position::getDistanceZ(mapFromPos, mapToPos) * 4 > item->getThrowRange())) {
 		player->sendCancelMessage(RET_DESTINATIONOUTOFREACH);
 		return false;
 	}
@@ -3459,26 +3446,22 @@ std::string Game::getTradeErrorDescription(ReturnValue ret, Item* item)
 			return ss.str();
 		}
 	}
-
 	return "Trade could not be completed.";
 }
 
 bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int index)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	Player* tradePartner = player->tradePartner;
-
 	if (!tradePartner) {
 		return false;
 	}
 
 	Item* tradeItem = NULL;
-
 	if (lookAtCounterOffer) {
 		tradeItem = tradePartner->getTradeItem();
 	} else {
@@ -3490,11 +3473,10 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	}
 
 	const Position& playerPosition = player->getPosition();
-
 	const Position& tradeItemPosition = tradeItem->getPosition();
 
-	int32_t lookDistance = std::max<int32_t>(std::abs(playerPosition.x - tradeItemPosition.x),
-	                                         std::abs(playerPosition.y - tradeItemPosition.y));
+	int32_t lookDistance = std::max<int32_t>(Position::getDistanceX(playerPosition, tradeItemPosition),
+	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
 
 	std::ostringstream ss;
 
@@ -3505,7 +3487,6 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	}
 
 	Container* tradeContainer = tradeItem->getContainer();
-
 	if (!tradeContainer || index > (int32_t)tradeContainer->getItemHoldingCount()) {
 		return false;
 	}
@@ -3782,7 +3763,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 	int32_t lookDistance = -1;
 
 	if (thing != player) {
-		lookDistance = std::max<int32_t>(std::abs(playerPos.x - thingPos.x), std::abs(playerPos.y - thingPos.y));
+		lookDistance = std::max<int32_t>(Position::getDistanceX(playerPos, thingPos), Position::getDistanceY(playerPos, thingPos));
 		if (playerPos.z != thingPos.z) {
 			lookDistance += 15;
 		}
@@ -3864,7 +3845,7 @@ bool Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 
 	if (creature != player) {
 		const Position& playerPos = player->getPosition();
-		lookDistance = std::max<int32_t>(std::abs(playerPos.x - creaturePos.x), std::abs(playerPos.y - creaturePos.y));
+		lookDistance = std::max<int32_t>(Position::getDistanceX(playerPos, creaturePos), Position::getDistanceY(playerPos, creaturePos));
 		if (playerPos.z != creaturePos.z) {
 			lookDistance += 15;
 		}

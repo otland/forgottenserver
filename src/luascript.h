@@ -227,7 +227,7 @@ class ScriptEnvironment
 		Npc* m_curNpc;
 };
 
-class Position;
+struct Position;
 
 enum PlayerInfo_t {
 	PlayerInfoFood,

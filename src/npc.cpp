@@ -2123,18 +2123,17 @@ void Npc::turnToCreature(Creature* creature)
 {
 	const Position& creaturePos = creature->getPosition();
 	const Position& myPos = getPosition();
-	int32_t dx = myPos.x - creaturePos.x;
-	int32_t dy = myPos.y - creaturePos.y;
+	int32_t dx = Position::getOffsetX(myPos, creaturePos);
+	int32_t dy = Position::getOffsetY(myPos, creaturePos);
 
-	Direction dir = SOUTH;
-	float tan = 0;
-
+	float tan;
 	if (dx != 0) {
 		tan = (float)dy / dx;
 	} else {
 		tan = 10;
 	}
 
+	Direction dir;
 	if (std::abs(tan) < 1) {
 		if (dx > 0) {
 			dir = WEST;
@@ -2148,7 +2147,6 @@ void Npc::turnToCreature(Creature* creature)
 			dir = SOUTH;
 		}
 	}
-
 	g_game.internalCreatureTurn(this, dir);
 }
 
@@ -3006,7 +3004,7 @@ int32_t NpcScriptInterface::luagetDistanceTo(lua_State* L)
 		if (npc_pos.z != thing_pos.z) {
 			lua_pushnumber(L, -1);
 		} else {
-			int32_t dist = std::max<int32_t>(std::abs(npc_pos.x - thing_pos.x), std::abs(npc_pos.y - thing_pos.y));
+			int32_t dist = std::max<int32_t>(Position::getDistanceX(npc_pos, thing_pos), Position::getDistanceY(npc_pos, thing_pos));
 			lua_pushnumber(L, dist);
 		}
 	} else {

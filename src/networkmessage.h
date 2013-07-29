@@ -25,7 +25,7 @@
 class Item;
 class Creature;
 class Player;
-class Position;
+struct Position;
 class RSA;
 
 class NetworkMessage

@@ -38,113 +38,128 @@ enum Direction {
 	NODIR = 10
 };
 
-class Position
+struct Position
 {
-	public:
-		Position() : x(0), y(0), z(0) {}
-		~Position() {}
+	Position() : x(0), y(0), z(0) {}
+	Position(uint16_t _x, uint16_t _y, uint8_t _z)
+		: x(_x), y(_y), z(_z) {}
+	~Position() {}
 
-		template<int32_t deltax, int32_t deltay, int32_t deltaz>
-		inline static bool areInRange(const Position& p1, const Position& p2) {
-			if (std::abs(float(p1.x - p2.x)) > deltax || std::abs(float(p1.y - p2.y)) > deltay || std::abs(float(p1.z - p2.z)) > deltaz) {
-				return false;
-			}
+	template<int_fast32_t deltax, int_fast32_t deltay>
+	inline static bool areInRange(const Position& p1, const Position& p2) {
+		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay;
+	}
 
+	template<int_fast32_t deltax, int_fast32_t deltay, int_fast16_t deltaz>
+	inline static bool areInRange(const Position& p1, const Position& p2) {
+		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay && Position::getDistanceZ(p1, p2) <= deltaz;
+	}
+
+	inline static int_fast32_t getOffsetX(const Position& p1, const Position& p2) {
+		return p1.getX() - p2.getX();
+	}
+	inline static int_fast32_t getOffsetY(const Position& p1, const Position& p2) {
+		return p1.getY() - p2.getY();
+	}
+	inline static int_fast16_t getOffsetZ(const Position& p1, const Position& p2) {
+		return p1.getZ() - p2.getZ();
+	}
+
+	inline static int32_t getDistanceX(const Position& p1, const Position& p2) {
+		return std::abs(Position::getOffsetX(p1, p2));
+	}
+	inline static int32_t getDistanceY(const Position& p1, const Position& p2) {
+		return std::abs(Position::getOffsetY(p1, p2));
+	}
+	inline static int16_t getDistanceZ(const Position& p1, const Position& p2) {
+		return std::abs(Position::getOffsetZ(p1, p2));
+	}
+
+	uint16_t x;
+	uint16_t y;
+	uint8_t z;
+
+	bool operator<(const Position& p) const {
+		if (z < p.z) {
 			return true;
 		}
 
-		template<int32_t deltax, int32_t deltay>
-		inline static bool areInRange(const Position& p1, const Position& p2) {
-			if (std::abs(float(p1.x - p2.x)) > deltax || std::abs(float(p1.y - p2.y)) > deltay) {
-				return false;
-			}
-
-			return true;
-		}
-
-		Position(int32_t _x, int32_t _y, int32_t _z)
-			: x(_x), y(_y), z(_z) {}
-
-		int32_t x, y, z;
-
-		bool operator<(const Position& p) const {
-			if (z < p.z) {
-				return true;
-			}
-
-			if (z > p.z) {
-				return false;
-			}
-
-			if (y < p.y) {
-				return true;
-			}
-
-			if (y > p.y) {
-				return false;
-			}
-
-			if (x < p.x) {
-				return true;
-			}
-
-			if (x > p.x) {
-				return false;
-			}
-
+		if (z > p.z) {
 			return false;
 		}
 
-		bool operator>(const Position& p) const {
-			return ! (*this < p);
+		if (y < p.y) {
+			return true;
 		}
 
-		bool operator==(const Position& p) const {
-			return p.x == x && p.y == y && p.z == z;
+		if (y > p.y) {
+			return false;
 		}
 
-		bool operator!=(const Position& p) const {
-			return p.x != x || p.y != y || p.z != z;
+		if (x < p.x) {
+			return true;
 		}
 
-		Position operator-(const Position& p1) {
-			return Position(x - p1.x, y - p1.y, z - p1.z);
+		if (x > p.x) {
+			return false;
 		}
+
+		return false;
+	}
+
+	bool operator>(const Position& p) const {
+		return ! (*this < p);
+	}
+
+	bool operator==(const Position& p) const {
+		return p.x == x && p.y == y && p.z == z;
+	}
+
+	bool operator!=(const Position& p) const {
+		return p.x != x || p.y != y || p.z != z;
+	}
+
+	Position operator-(const Position& p1) {
+		return Position(x - p1.x, y - p1.y, z - p1.z);
+	}
+
+	inline int_fast32_t getX() const { return static_cast<int_fast32_t>(x); }
+	inline int_fast32_t getY() const { return static_cast<int_fast32_t>(y); }
+	inline int_fast32_t getZ() const { return static_cast<int_fast16_t>(z); }
 };
 
 std::ostream& operator<<(std::ostream&, const Position&);
 std::ostream& operator<<(std::ostream&, const Direction&);
 
-class PositionEx : public Position
+struct PositionEx : public Position
 {
-	public:
-		PositionEx() {}
-		~PositionEx() {}
+	PositionEx() {}
+	~PositionEx() {}
 
-		PositionEx(int32_t _x, int32_t _y, int32_t _z, int32_t _stackpos)
-			: Position(_x, _y, _z), stackpos(_stackpos) {}
+	PositionEx(uint16_t _x, uint16_t _y, uint8_t _z, int32_t _stackpos)
+		: Position(_x, _y, _z), stackpos(_stackpos) {}
 
-		PositionEx(int32_t _x, int32_t _y, int32_t _z)
-			: Position(_x, _y, _z), stackpos(0) {}
+	PositionEx(uint16_t _x, uint16_t _y, uint8_t _z)
+		: Position(_x, _y, _z), stackpos(0) {}
 
-		PositionEx(const Position& p)
-			: Position(p.x, p.y, p.z), stackpos(0) {}
+	PositionEx(const Position& p)
+		: Position(p.x, p.y, p.z), stackpos(0) {}
 
-		PositionEx(const PositionEx& p)
-			: Position(p.x, p.y, p.z), stackpos(p.stackpos) {}
+	PositionEx(const PositionEx& p)
+		: Position(p.x, p.y, p.z), stackpos(p.stackpos) {}
 
-		PositionEx(const Position& p, int32_t _stackpos)
-			: Position(p.x, p.y, p.z), stackpos(_stackpos) {}
+	PositionEx(const Position& p, int32_t _stackpos)
+		: Position(p.x, p.y, p.z), stackpos(_stackpos) {}
 
-		int32_t stackpos;
+	int32_t stackpos;
 
-		bool operator==(const PositionEx& p)  const {
-			return p.x == x && p.y == y && p.z == z && p.stackpos == stackpos;
-		}
+	bool operator==(const PositionEx& p)  const {
+		return p.x == x && p.y == y && p.z == z && p.stackpos == stackpos;
+	}
 
-		bool operator!=(const PositionEx& p)  const {
-			return p.x != x || p.y != y || p.z != z || p.stackpos != stackpos;
-		}
+	bool operator!=(const PositionEx& p)  const {
+		return p.x != x || p.y != y || p.z != z || p.stackpos != stackpos;
+	}
 };
 
 #endif

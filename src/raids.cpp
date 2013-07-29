@@ -504,12 +504,12 @@ bool AreaSpawnEvent::configureRaidEvent(xmlNodePtr eventNode)
 			return false;
 		}
 
-		m_fromPos.x = centerPos.x - radius;
-		m_fromPos.y = centerPos.y - radius;
+		m_fromPos.x = std::max<int32_t>(0, centerPos.getX() - radius);
+		m_fromPos.y = std::max<int32_t>(0, centerPos.getY() - radius);
 		m_fromPos.z = centerPos.z;
 
-		m_toPos.x = centerPos.x + radius;
-		m_toPos.y = centerPos.y + radius;
+		m_toPos.x = std::min<int32_t>(0xFFFF, centerPos.getX() + radius);
+		m_toPos.y = std::min<int32_t>(0xFFFF, centerPos.getY() + radius);
 		m_toPos.z = centerPos.z;
 	} else {
 		if (readXMLInteger(eventNode, "fromx", intValue)) {

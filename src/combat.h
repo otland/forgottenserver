@@ -28,8 +28,9 @@
 
 class Condition;
 class Creature;
-class Position;
 class Item;
+
+struct Position;
 
 //for luascript callback
 class ValueCallback : public CallBack
@@ -227,11 +228,10 @@ class AreaCombat
 		void copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op) const;
 
 		MatrixArea* getArea(const Position& centerPos, const Position& targetPos) const {
-			int32_t dx = targetPos.x - centerPos.x;
-			int32_t dy = targetPos.y - centerPos.y;
+			int32_t dx = Position::getOffsetX(targetPos, centerPos);
+			int32_t dy = Position::getOffsetY(targetPos, centerPos);
 
-			Direction dir = NORTH;
-
+			Direction dir;
 			if (dx < 0) {
 				dir = WEST;
 			} else if (dx > 0) {
@@ -255,11 +255,9 @@ class AreaCombat
 			}
 
 			AreaCombatMap::const_iterator it = areas.find(dir);
-
 			if (it != areas.end()) {
 				return it->second;
 			}
-
 			return NULL;
 		}
 

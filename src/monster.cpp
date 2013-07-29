@@ -209,9 +209,8 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 				const Position& followPosition = followCreature->getPosition();
 				const Position& position = getPosition();
 
-				int32_t offset_x = std::abs(followPosition.x - position.x);
-				int32_t offset_y = std::abs(followPosition.y - position.y);
-
+				int32_t offset_x = Position::getDistanceX(followPosition, position);
+				int32_t offset_y = Position::getDistanceY(followPosition, position);
 				if ((offset_x > 1 || offset_y > 1) && mType->changeTargetChance > 0) {
 					Direction dir = getDirectionTo(position, followPosition);
 					const Position& checkPosition = getNextPosition(dir, position);
@@ -423,11 +422,11 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 
 				if (++it != resultList.end()) {
 					const Position& targetPosition = target->getPosition();
-					int32_t minRange = std::max<int32_t>(std::abs(myPos.x - targetPosition.x), std::abs(myPos.y - targetPosition.y));
+					int32_t minRange = std::max<int32_t>(Position::getDistanceX(myPos, targetPosition), Position::getDistanceY(myPos, targetPosition));
 					do {
 						const Position& pos = (*it)->getPosition();
 
-						int32_t distance = std::max<int32_t>(std::abs(myPos.x - pos.x), std::abs(myPos.y - pos.y));
+						int32_t distance = std::max<int32_t>(Position::getDistanceX(myPos, pos), Position::getDistanceY(myPos, pos));
 						if (distance < minRange) {
 							target = *it;
 							minRange = distance;
@@ -706,7 +705,7 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 {
 	if (isHostile()) {
 		const Position& targetPos = target->getPosition();
-		uint32_t distance = std::max<uint32_t>(std::abs(pos.x - targetPos.x), std::abs(pos.y - targetPos.y));
+		uint32_t distance = std::max<uint32_t>(Position::getDistanceX(pos, targetPos), Position::getDistanceY(pos, targetPos));
 		for (SpellList::iterator it = mType->spellAttackList.begin(); it != mType->spellAttackList.end(); ++it) {
 			if (it->range != 0 && distance <= it->range) {
 				return g_game.isSightClear(pos, targetPos, true);
@@ -744,7 +743,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		}
 	}
 
-	if (sb.range != 0 && std::max<uint32_t>(std::abs(pos.x - targetPos.x), std::abs(pos.y - targetPos.y)) > sb.range) {
+	if (sb.range != 0 && std::max<uint32_t>(Position::getDistanceX(pos, targetPos), Position::getDistanceY(pos, targetPos)) > sb.range) {
 		inRange = false;
 		return false;
 	}
@@ -1086,13 +1085,17 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 
 	assert(attackedCreature != NULL);
 	const Position& centerPos = attackedCreature->getPosition();
-	uint32_t centerToDist = std::max<uint32_t>(std::abs(creaturePos.x - centerPos.x), std::abs(creaturePos.y - centerPos.y));
+
+	int_fast32_t dx = Position::getDistanceX(creaturePos, centerPos);
+	int_fast32_t dy = Position::getDistanceY(creaturePos, centerPos);
+
+	uint32_t centerToDist = std::max<uint32_t>(dx, dy);
 	uint32_t tmpDist;
 
 	std::vector<Direction> dirList;
 
-	if (!keepDistance || creaturePos.y - centerPos.y >= 0) {
-		tmpDist = std::max<uint32_t>(std::abs((creaturePos.x) - centerPos.x), std::abs((creaturePos.y - 1) - centerPos.y));
+	if (!keepDistance || dy >= 0) {
+		tmpDist = std::max<uint32_t>(dx, std::abs((creaturePos.getY() - 1) - centerPos.getY()));
 		if (tmpDist == centerToDist && canWalkTo(creaturePos, NORTH)) {
 			bool result = true;
 
@@ -1106,8 +1109,8 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 		}
 	}
 
-	if (!keepDistance || creaturePos.y - centerPos.y <= 0) {
-		tmpDist = std::max<uint32_t>(std::abs((creaturePos.x) - centerPos.x), std::abs((creaturePos.y + 1) - centerPos.y));
+	if (!keepDistance || dy <= 0) {
+		tmpDist = std::max<uint32_t>(dx, std::abs((creaturePos.getY() + 1) - centerPos.getY()));
 		if (tmpDist == centerToDist && canWalkTo(creaturePos, SOUTH)) {
 			bool result = true;
 
@@ -1121,8 +1124,8 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 		}
 	}
 
-	if (!keepDistance || creaturePos.x - centerPos.x <= 0) {
-		tmpDist = std::max<uint32_t>(std::abs((creaturePos.x + 1) - centerPos.x), std::abs(creaturePos.y - centerPos.y));
+	if (!keepDistance || dx <= 0) {
+		tmpDist = std::max<uint32_t>(std::abs((creaturePos.getX() + 1) - centerPos.getX()), dy);
 		if (tmpDist == centerToDist && canWalkTo(creaturePos, EAST)) {
 			bool result = true;
 
@@ -1136,8 +1139,8 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 		}
 	}
 
-	if (!keepDistance || creaturePos.x - centerPos.x >= 0) {
-		tmpDist = std::max<uint32_t>(std::abs((creaturePos.x - 1) - centerPos.x), std::abs(creaturePos.y - centerPos.y));
+	if (!keepDistance || dx >= 0) {
+		tmpDist = std::max<uint32_t>(std::abs((creaturePos.getX() - 1) - centerPos.getX()), dy);
 		if (tmpDist == centerToDist && canWalkTo(creaturePos, WEST)) {
 			bool result = true;
 
@@ -1156,14 +1159,17 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 		dir = dirList[random_range(0, dirList.size() - 1)];
 		return true;
 	}
-
 	return false;
 }
 
 bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool flee /* = false */)
 {
 	const Position& creaturePos = getPosition();
-	int32_t distance = std::abs(creaturePos.x - targetPos.x) > std::abs(creaturePos.y - targetPos.y) ? std::abs(creaturePos.x - targetPos.x) : std::abs(creaturePos.y - targetPos.y);
+
+	int_fast32_t dx = Position::getDistanceX(creaturePos, targetPos);
+	int_fast32_t dy = Position::getDistanceY(creaturePos, targetPos);
+
+	int32_t distance = std::max<int32_t>(dx, dy);
 
 	if (!flee && (distance > mType->targetDistance || !g_game.isSightClear(creaturePos, targetPos, true))) {
 		return false;    // let the A* calculate it
@@ -1171,10 +1177,10 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 		return true;    // we don't really care here, since it's what we wanted to reach (a dancestep will take of dancing in that position)
 	}
 
-	int offsetx = creaturePos.x - targetPos.x;
-	int offsety = creaturePos.y - targetPos.y;
+	int_fast32_t offsetx = Position::getOffsetX(creaturePos, targetPos);
+	int_fast32_t offsety = Position::getOffsetY(creaturePos, targetPos);
 
-	if (std::abs(offsetx) <= 1 && std::abs(offsety) <= 1) {
+	if (dx <= 1 && dy <= 1) {
 		//seems like a target is near, it this case we need to slow down our movements (as a monster)
 		if (stepDuration < 2) {
 			stepDuration++;
@@ -1187,7 +1193,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 		return getRandomStep(creaturePos, dir);    // player is "on" the monster so let's get some random step and rest will be taken care later.
 	}
 
-	if (std::abs(offsetx) == std::abs(offsety)) {
+	if (dx == dy) {
 		//player is diagonal to the monster
 		if (offsetx >= 1 && offsety >= 1) {
 			// player is NW
@@ -1381,9 +1387,8 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	}
 
 	//Now let's decide where the player is located to the monster (what direction) so we can decide where to escape.
-	if (std::abs(offsety) > std::abs(offsetx)) {
+	if (dy > dx) {
 		Direction playerDir = offsety < 0 ? SOUTH : NORTH;
-
 		switch (playerDir) {
 			case NORTH: {
 				// Player is to the NORTH, so obviously we need to check if we can go SOUTH, if not then let's choose WEST or EAST and again if we can't we need to decide about some diagonal movements.
@@ -1531,7 +1536,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 		}
 	} else {
 		Direction playerDir = offsetx < 0 ? EAST : WEST;
-
 		switch (playerDir) {
 			case WEST: {
 				if (canWalkTo(creaturePos, EAST)) {
@@ -1541,7 +1545,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool n = canWalkTo(creaturePos, NORTH);
 				bool s = canWalkTo(creaturePos, SOUTH);
-
 				if (n && s && offsety == 0) {
 					dir = random_range(1, 2) == 1 ? NORTH : SOUTH;
 					return true;
@@ -1571,7 +1574,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool se = canWalkTo(creaturePos, SOUTHEAST);
 				bool ne = canWalkTo(creaturePos, NORTHEAST);
-
 				if (se || ne) {
 					if (se && ne) {
 						dir = random_range(1, 2) == 1 ? SOUTHEAST : NORTHEAST;
@@ -1610,7 +1612,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool n = canWalkTo(creaturePos, NORTH);
 				bool s = canWalkTo(creaturePos, SOUTH);
-
 				if (n && s && offsety == 0) {
 					dir = random_range(1, 2) == 1 ? NORTH : SOUTH;
 					return true;
@@ -1640,7 +1641,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool nw = canWalkTo(creaturePos, NORTHWEST);
 				bool sw = canWalkTo(creaturePos, SOUTHWEST);
-
 				if (nw || sw) {
 					if (nw && sw) {
 						dir = random_range(1, 2) == 1 ? NORTHWEST : SOUTHWEST;
@@ -1692,16 +1692,16 @@ bool Monster::canWalkTo(Position pos, Direction dir)
 {
 	switch (dir) {
 		case NORTH:
-			pos.y += -1;
+			pos.y--;
 			break;
 		case WEST:
-			pos.x += -1;
+			pos.x--;
 			break;
 		case EAST:
-			pos.x += 1;
+			pos.x++;
 			break;
 		case SOUTH:
-			pos.y += 1;
+			pos.y++;
 			break;
 		default:
 			break;
@@ -1713,12 +1713,10 @@ bool Monster::canWalkTo(Position pos, Direction dir)
 		}
 
 		Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-
 		if (tile && tile->getTopVisibleCreature(this) == NULL && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING) == RET_NOERROR) {
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -1817,37 +1815,39 @@ void Monster::updateLookDirection()
 	if (attackedCreature) {
 		const Position& pos = getPosition();
 		const Position& attackedCreaturePos = attackedCreature->getPosition();
-		int32_t dx = attackedCreaturePos.x - pos.x;
-		int32_t dy = attackedCreaturePos.y - pos.y;
+		int_fast32_t offsetx = Position::getOffsetX(attackedCreaturePos, pos);
+		int_fast32_t offsety = Position::getOffsetY(attackedCreaturePos, pos);
+		int32_t dx = std::abs(offsetx);
+		int32_t dy = std::abs(offsety);
 
-		if (std::abs(dx) > std::abs(dy)) {
+		if (dx > dy) {
 			//look EAST/WEST
-			if (dx < 0) {
+			if (offsetx < 0) {
 				newDir = WEST;
 			} else {
 				newDir = EAST;
 			}
-		} else if (std::abs(dx) < std::abs(dy)) {
+		} else if (dx < dy) {
 			//look NORTH/SOUTH
-			if (dy < 0) {
+			if (offsety < 0) {
 				newDir = NORTH;
 			} else {
 				newDir = SOUTH;
 			}
 		} else {
-			if (dx < 0 && dy < 0) {
+			if (offsetx < 0 && offsety < 0) {
 				if (getDirection() == SOUTH) {
 					newDir = WEST;
 				} else if (getDirection() == EAST) {
 					newDir = NORTH;
 				}
-			} else if (dx < 0 && dy > 0) {
+			} else if (offsetx < 0 && offsety > 0) {
 				if (getDirection() == NORTH) {
 					newDir = WEST;
 				} else if (getDirection() == EAST) {
 					newDir = SOUTH;
 				}
-			} else if (dx > 0 && dy < 0) {
+			} else if (offsetx > 0 && offsety < 0) {
 				if (getDirection() == SOUTH) {
 					newDir = EAST;
 				} else if (getDirection() == WEST) {

@@ -126,16 +126,12 @@ void Combat::getCombatArea(const Position& centerPos, const Position& targetPos,
 {
 	if (area) {
 		area->getList(centerPos, targetPos, list);
-	} else if (targetPos.x >= 0 && targetPos.x < 0xFFFF &&
-	           targetPos.y >= 0 && targetPos.y < 0xFFFF &&
-	           targetPos.z >= 0 && targetPos.z < MAP_MAX_LAYERS) {
+	} else if (targetPos.z < MAP_MAX_LAYERS) {
 		Tile* tile = g_game.getTile(targetPos.x, targetPos.y, targetPos.z);
-
 		if (!tile) {
 			tile = new StaticTile(targetPos.x, targetPos.y, targetPos.z);
 			g_game.setTile(tile);
 		}
-
 		list.push_back(tile);
 	}
 }
@@ -784,14 +780,13 @@ void Combat::CombatFunc(Creature* caster, const Position& pos,
 	//calculate the max viewable range
 	for (std::list<Tile*>::iterator it = tileList.begin(); it != tileList.end(); ++it) {
 		const Position& tilePos = (*it)->getPosition();
-		diff = std::abs(tilePos.x - pos.x);
 
+		diff = Position::getDistanceX(tilePos, pos);
 		if (diff > maxX) {
 			maxX = diff;
 		}
 
-		diff = std::abs(tilePos.y - pos.y);
-
+		diff = Position::getDistanceY(tilePos, pos);
 		if (diff > maxY) {
 			maxY = diff;
 		}
@@ -1206,32 +1201,25 @@ bool AreaCombat::getList(const Position& centerPos, const Position& targetPos, s
 	tmpPosX -= centerX;
 	tmpPosY -= centerY;
 
-	for (size_t y = 0; y < rows; ++y) {
-		for (size_t x = 0; x < cols; ++x) {
-			if (area->getValue(y, x) != 0) {
-				if (tmpPosX >= 0 && tmpPosX < 0xFFFF &&
-				        tmpPosY >= 0 && tmpPosY < 0xFFFF &&
-				        tmpPosZ >= 0 && tmpPosZ < MAP_MAX_LAYERS) {
+	if (tmpPosZ < MAP_MAX_LAYERS) {
+		for (size_t y = 0; y < rows; ++y) {
+			for (size_t x = 0; x < cols; ++x) {
+				if (area->getValue(y, x) != 0) {
 					if (g_game.isSightClear(targetPos, Position(tmpPosX, tmpPosY, tmpPosZ), true)) {
 						tile = g_game.getTile(tmpPosX, tmpPosY, tmpPosZ);
-
 						if (!tile) {
 							tile = new StaticTile(tmpPosX, tmpPosY, tmpPosZ);
 							g_game.setTile(tile);
 						}
-
 						list.push_back(tile);
 					}
 				}
+				tmpPosX++;
 			}
-
-			tmpPosX++;
+			tmpPosX -= cols;
+			tmpPosY++;
 		}
-
-		tmpPosX -= cols;
-		tmpPosY++;
 	}
-
 	return true;
 }
 

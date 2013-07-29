@@ -463,7 +463,7 @@ class Creature : virtual public Thing
 			lastPosition = newLastPos;
 		}
 
-		static bool canSee(const Position& myPos, const Position& pos, uint32_t viewRangeX, uint32_t viewRangeY);
+		static bool canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY);
 
 		virtual double getDamageRatio(Creature* attacker) const;
 

@@ -1486,7 +1486,6 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 	};
 
 	Player* playerExiva = g_game.getPlayerByName(param);
-
 	if (!playerExiva) {
 		return false;
 	}
@@ -1501,11 +1500,9 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 
 	const Position searchPos = playerExiva->getPosition();
 
-	int32_t dx = lookPos.x - searchPos.x;
-
-	int32_t dy = lookPos.y - searchPos.y;
-
-	int32_t dz = lookPos.z - searchPos.z;
+	int32_t dx = Position::getOffsetX(lookPos, searchPos);
+	int32_t dy = Position::getOffsetY(lookPos, searchPos);
+	int32_t dz = Position::getOffsetZ(lookPos, searchPos);
 
 	distance_t distance;
 
@@ -1727,11 +1724,9 @@ bool InstantSpell::Levitate(const InstantSpell* spell, Creature* creature, const
 
 	if (tmpParam == "up") {
 		if (currentPos.z != 8) {
-			Tile* tmpTile = g_game.getTile(currentPos.x, currentPos.y, currentPos.z - 1);
-
+			Tile* tmpTile = g_game.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
 			if (tmpTile == NULL || (tmpTile->ground == NULL && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID))) {
-				tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z - 1);
-
+				tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.getZ() - 1);
 				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
 					ret = g_game.internalMoveCreature(player, player->getTile(), tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
 				}
@@ -1740,10 +1735,8 @@ bool InstantSpell::Levitate(const InstantSpell* spell, Creature* creature, const
 	} else if (tmpParam == "down") {
 		if (currentPos.z != 7) {
 			Tile* tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z);
-
 			if (tmpTile == NULL || (tmpTile->ground == NULL && !tmpTile->hasProperty(BLOCKSOLID))) {
 				tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z + 1);
-
 				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
 					ret = g_game.internalMoveCreature(player, player->getTile(), tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
 				}

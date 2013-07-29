@@ -718,7 +718,6 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 	}
 
 	const Position& myPos = player->getPosition();
-
 	if (myPos.z <= 7) {
 		//we are on ground level or above (7 -> 0)
 		//view is from 7 -> 0
@@ -728,19 +727,17 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 	} else if (myPos.z >= 8) {
 		//we are underground (8 -> 15)
 		//view is +/- 2 from the floor we stand on
-		if (std::abs(myPos.z - z) > 2) {
+		if (std::abs(myPos.getZ() - z) > 2) {
 			return false;
 		}
 	}
 
 	//negative offset means that the action taken place is on a lower floor than ourself
-	int32_t offsetz = myPos.z - z;
-
-	if ((x >= myPos.x - 8 + offsetz) && (x <= myPos.x + 9 + offsetz) &&
-	        (y >= myPos.y - 6 + offsetz) && (y <= myPos.y + 7 + offsetz)) {
+	int32_t offsetz = myPos.getZ() - z;
+	if ((x >= myPos.getX() - 8 + offsetz) && (x <= myPos.getX() + 9 + offsetz) &&
+	        (y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
 		return true;
 	}
-
 	return false;
 }
 

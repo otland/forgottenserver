@@ -533,24 +533,23 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 		return false;
 	}
 
-	int32_t deltaz = std::abs(fromPos.z - toPos.z);
-
+	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
 	if (deltaz > 2) {
 		return false;
 	}
 
-	int32_t deltax = std::abs(fromPos.x - toPos.x);
-	int32_t deltay = std::abs(fromPos.y - toPos.y);
+	if ((Position::getDistanceX(fromPos, toPos) - deltaz) > rangex) {
+		return false;
+	}
 
 	//distance checks
-	if (deltax - deltaz > rangex || deltay - deltaz > rangey) {
+	if ((Position::getDistanceY(fromPos, toPos) - deltaz) > rangey) {
 		return false;
 	}
 
 	if (!checkLineOfSight) {
 		return true;
 	}
-
 	return isSightClear(fromPos, toPos, false);
 }
 
@@ -566,8 +565,8 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 	const int8_t mx = start.x < destination.x ? 1 : start.x == destination.x ? 0 : -1;
 	const int8_t my = start.y < destination.y ? 1 : start.y == destination.y ? 0 : -1;
 
-	int32_t A = destination.y - start.y;
-	int32_t B = start.x - destination.x;
+	int32_t A = Position::getOffsetY(destination, start);
+	int32_t B = Position::getOffsetX(start, destination);
 	int32_t C = -(A * destination.x + B * destination.y);
 
 	while (!Position::areInRange<0, 0, 15>(start, destination)) {
@@ -584,7 +583,6 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 		}
 
 		const Tile* tile = const_cast<Map*>(this)->getTile(start.x, start.y, start.z);
-
 		if (tile && tile->hasProperty(BLOCKPROJECTILE)) {
 			return false;
 		}
@@ -702,8 +700,8 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 				pos.y = n->y + neighbourOrderList[i][1];
 
 				bool outOfRange = false;
-				if (maxSearchDist != -1 && (std::abs(endPos.x - pos.x) > maxSearchDist ||
-				                            std::abs(endPos.y - pos.y) > maxSearchDist)) {
+				if (maxSearchDist != -1 && (Position::getDistanceX(endPos, pos) > maxSearchDist ||
+				                            Position::getDistanceY(endPos, pos) > maxSearchDist)) {
 					outOfRange = true;
 				}
 
@@ -711,16 +709,16 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 					const Tile* tile = canWalkTo(creature, pos);
 					if (tile) {
 						//The cost (g) for this neighbour
-						int32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
-						int32_t extraCost = nodes.getTileWalkCost(creature, tile);
-						int32_t newg = n->g + cost + extraCost;
-						uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+						const int_fast32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
+						const int_fast32_t extraCost = nodes.getTileWalkCost(creature, tile);
+						const int_fast32_t newg = n->g + cost + extraCost;
+						const uint_fast32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
 						//Check if the node is already in the closed/open list
 						//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
 						AStarNode* neighbourNode;
-						std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+						std::unordered_map<uint_fast32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 
 						if (it != nodeTable.end()) {
 							neighbourNode = it->second;
@@ -763,9 +761,9 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 		}
 	}
 
-	int32_t prevx = endPos.x;
-	int32_t prevy = endPos.y;
-	int32_t dx, dy;
+	int_fast32_t prevx = endPos.x;
+	int_fast32_t prevy = endPos.y;
+	int_fast32_t dx, dy;
 
 	while (found) {
 		pos.x = found->x;
@@ -773,8 +771,8 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 
 		found = found->parent;
 
-		dx = pos.x - prevx;
-		dy = pos.y - prevy;
+		dx = pos.getX() - prevx;
+		dy = pos.getY() - prevy;
 
 		prevx = pos.x;
 		prevy = pos.y;
@@ -870,9 +868,8 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 			pos.y = n->y + neighbourOrderList[i][1];
 
 			bool inRange = true;
-
-			if (fpp.maxSearchDist != -1 && (std::abs(startPos.x - pos.x) > fpp.maxSearchDist ||
-			                                std::abs(startPos.y - pos.y) > fpp.maxSearchDist)) {
+			if (fpp.maxSearchDist != -1 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
+			                                Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				inRange = false;
 			}
 
@@ -886,17 +883,17 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 				const Tile* tile = canWalkTo(creature, pos);
 				if (tile) {
 					//The cost (g) for this neighbour
-					int32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
-					int32_t extraCost = nodes.getTileWalkCost(creature, tile);
-					int32_t newf = n->f + cost + extraCost;
-					uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+					const int_fast32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
+					const int_fast32_t extraCost = nodes.getTileWalkCost(creature, tile);
+					const int_fast32_t newf = n->f + cost + extraCost;
+					const uint_fast32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
 					//Check if the node is already in the closed/open list
 					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
 					AStarNode* neighbourNode;
 
-					std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+					std::unordered_map<uint_fast32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
 
 					if (it != nodeTable.end()) {
 						neighbourNode = it->second;
@@ -942,9 +939,9 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		nodes.closeNode(n);
 	}
 
-	int32_t prevx = endPos.x;
-	int32_t prevy = endPos.y;
-	int32_t dx, dy;
+	int_fast32_t prevx = endPos.x;
+	int_fast32_t prevy = endPos.y;
+	int_fast32_t dx, dy;
 
 	if (!found) {
 		return false;
@@ -956,8 +953,8 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		pos.x = found->x;
 		pos.y = found->y;
 
-		dx = pos.x - prevx;
-		dy = pos.y - prevy;
+		dx = pos.getX() - prevx;
+		dy = pos.getY() - prevy;
 
 		prevx = pos.x;
 		prevy = pos.y;

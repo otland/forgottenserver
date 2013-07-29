@@ -717,7 +717,6 @@ void Commands::teleportNTiles(Player* player, const std::string& cmd, const std:
 		}
 
 		Position newPosition = g_game.getClosestFreeTile(player, 0, newPos, true);
-
 		if (newPosition.x == 0) {
 			player->sendCancel("You can not teleport there.");
 		} else if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
