@@ -1018,9 +1018,7 @@ void Commands::showPosition(Player* player, const std::string& cmd, const std::s
 	const Position& pos = player->getPosition();
 
 	std::ostringstream ss;
-
-	ss << "Your current position is [X: " << pos.x << " | Y: " << pos.y << " | Z: " << pos.z << "].";
-
+	ss << "Your current position is [X: " << pos.x << " | Y: " << pos.y << " | Z: " << pos.getZ() << "].";
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 }
 

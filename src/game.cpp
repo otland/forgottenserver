@@ -971,12 +971,11 @@ bool Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 	}
 
 	uint8_t fromIndex = 0;
-
 	if (fromPos.x == 0xFFFF) {
 		if (fromPos.y & 0x40) {
-			fromIndex = static_cast<uint8_t>(fromPos.z);
+			fromIndex = fromPos.z;
 		} else {
-			fromIndex = static_cast<uint8_t>(fromPos.y);
+			fromIndex = fromPos.y;
 		}
 	} else {
 		fromIndex = fromStackPos;
@@ -3719,7 +3718,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 			ss << ".";
 		}
 
-		ss << std::endl << "Position: [X: " << thingPos.x << "] [Y: " << thingPos.y << "] [Z: " << thingPos.z << "].";
+		ss << std::endl << "Position: [X: " << thingPos.x << "] [Y: " << thingPos.y << "] [Z: " << thingPos.getZ() << "].";
 	}
 
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
@@ -3773,7 +3772,7 @@ bool Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		}
 
 		ss << "." << std::endl;
-		ss << "Position: [X: " << creaturePos.x << "] [Y: " << creaturePos.y << "] [Z: " << creaturePos.z << "].";
+		ss << "Position: [X: " << creaturePos.x << "] [Y: " << creaturePos.y << "] [Z: " << creaturePos.getZ() << "].";
 	}
 
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
