@@ -460,62 +460,9 @@ class Creature : virtual public Thing
 		virtual double getDamageRatio(Creature* attacker) const;
 
 	protected:
-		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
-		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
-		bool localMapCache[mapWalkHeight][mapWalkWidth];
-
 		virtual bool useCacheMap() const {
 			return false;
 		}
-
-		Tile* _tile;
-		uint32_t id;
-		bool isInternalRemoved;
-		bool isMapLoaded;
-		bool isUpdatingPath;
-
-		// The creature onThink event vector this creature belongs to
-		// -1 represents that the creature isn't in any vector
-		int32_t checkCreatureVectorIndex;
-		bool creatureCheck;
-
-		int32_t health, healthMax;
-		int32_t mana, manaMax;
-
-		Outfit_t currentOutfit;
-		Outfit_t defaultOutfit;
-
-		Position lastPosition;
-		uint64_t lastStep;
-		uint32_t lastStepCost;
-		uint32_t baseSpeed;
-		int32_t varSpeed;
-		bool skillLoss;
-		bool lootDrop;
-		Direction direction;
-		ConditionList conditions;
-		LightInfo internalLight;
-
-		//summon variables
-		Creature* master;
-		std::list<Creature*> summons;
-
-		//follow variables
-		Creature* followCreature;
-		uint32_t eventWalk;
-		bool cancelNextWalk;
-		std::list<Direction> listWalkDir;
-		uint32_t walkUpdateTicks;
-		bool hasFollowPath;
-		bool forceUpdateFollowPath;
-		bool hiddenHealth;
-
-		//combat variables
-		Creature* attackedCreature;
-		Creature* _lastHitCreature;
-		Creature* _mostDamageCreature;
-		bool lastHitUnjustified;
-		bool mostDamageUnjustified;
 
 		struct CountBlock_t {
 			int32_t total;
@@ -525,16 +472,63 @@ class Creature : virtual public Thing
 		typedef std::map<uint32_t, CountBlock_t> CountMap;
 		CountMap damageMap;
 		CountMap healMap;
+
+		std::list<Direction> listWalkDir;
+		std::list<Creature*> summons;
+		CreatureEventList eventsList;
+		ConditionList conditions;
+
+		Tile* _tile;
+		Creature* attackedCreature;
+		Creature* _lastHitCreature;
+		Creature* _mostDamageCreature;
+		Creature* master;
+		Creature* followCreature;
+
+		uint64_t lastStep;
+		uint32_t id;
+		uint32_t scriptEventsBitField;
+		uint32_t eventWalk;
+		uint32_t walkUpdateTicks;
 		uint32_t lastHitCreature;
 		uint32_t blockCount;
 		uint32_t blockTicks;
+		uint32_t lastStepCost;
+		uint32_t baseSpeed;
+		int32_t varSpeed;
+		int32_t checkCreatureVectorIndex;
+		int32_t health;
+		int32_t healthMax;
+		int32_t mana;
+		int32_t manaMax;
+
+		Outfit_t currentOutfit;
+		Outfit_t defaultOutfit;
+
+		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
+		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
+		bool localMapCache[mapWalkHeight][mapWalkWidth];
+		bool isInternalRemoved;
+		bool isMapLoaded;
+		bool isUpdatingPath;
+		bool creatureCheck;
+		bool skillLoss;
+		bool lootDrop;
+		bool cancelNextWalk;
+		bool hasFollowPath;
+		bool forceUpdateFollowPath;
+		bool hiddenHealth;
+		bool lastHitUnjustified;
+		bool mostDamageUnjustified;
+
+		Position lastPosition;
+		Direction direction;
+		LightInfo internalLight;
 
 		//creature script events
-		uint32_t scriptEventsBitField;
 		bool hasEventRegistered(CreatureEventType_t event) {
 			return (0 != (scriptEventsBitField & ((uint32_t)1 << event)));
 		}
-		CreatureEventList eventsList;
 		CreatureEventList getCreatureEvents(CreatureEventType_t type);
 
 		void updateMapCache();

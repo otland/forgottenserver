@@ -245,20 +245,21 @@ class Npc : public Creature
 		void removeShopPlayer(Player* player);
 		void closeAllShopWindows();
 
+		std::set<Player*> shopPlayerSet;
+
 		std::string name;
 		std::string m_filename;
-		uint32_t walkTicks;
-		bool floorChange;
-		bool attackable;
-		int32_t focusCreature;
-
-		Position masterPos;
-		int32_t masterRadius;
-
-		std::set<Player*> shopPlayerSet;
 
 		NpcEventsHandler* m_npcEventHandler;
 
+		uint32_t walkTicks;
+		int32_t focusCreature;
+		int32_t masterRadius;
+
+		Position masterPos;
+
+		bool floorChange;
+		bool attackable;
 		bool loaded;
 
 		static uint32_t npcAutoID;

@@ -177,34 +177,33 @@ class Monster : public Creature
 		                     bool checkDefense = false, bool checkArmor = false);
 
 	private:
-		CreatureList targetList;
 		CreatureHashSet friendList;
+		CreatureList targetList;
+
+		std::string strDescription;
 
 		MonsterType* mType;
+		Spawn* spawn;
 
-		int32_t minCombatValue;
-		int32_t maxCombatValue;
+		int64_t lastMeleeAttack;
+
 		uint32_t attackTicks;
 		uint32_t targetTicks;
 		uint32_t targetChangeTicks;
 		uint32_t defenseTicks;
 		uint32_t yellTicks;
+		int32_t minCombatValue;
+		int32_t maxCombatValue;
 		int32_t targetChangeCooldown;
+		int32_t stepDuration;
+		int32_t masterRadius;
+
+		Position masterPos;
+
 		bool resetTicks;
 		bool isIdle;
 		bool extraMeleeAttack;
-
-		int64_t lastMeleeAttack;
-
-		int32_t stepDuration;
-
-		Spawn* spawn;
 		bool isMasterInRange;
-
-		Position masterPos;
-		int32_t masterRadius;
-
-		std::string strDescription;
 
 		static uint32_t monsterAutoID;
 
