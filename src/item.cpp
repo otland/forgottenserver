@@ -143,6 +143,7 @@ Item* Item::CreateItem(PropStream& propStream)
 Item::Item(const uint16_t _type, uint16_t _count /*= 0*/)
 {
 	id = _type;
+	attributes = NULL;
 
 	const ItemType& it = items[id];
 
