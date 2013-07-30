@@ -36,13 +36,11 @@ ReturnValue DepotChest::__queryAdd(int32_t index, const Thing* thing, uint32_t c
                                    uint32_t flags, Creature* actor/* = NULL*/) const
 {
 	const Item* item = thing->getItem();
-
 	if (item == NULL) {
 		return RET_NOTPOSSIBLE;
 	}
 
 	bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
-
 	if (!skipLimit) {
 		int32_t addCount = 0;
 

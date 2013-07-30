@@ -1803,7 +1803,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		return;
 	}
 
-	player->setMarketDepotId(depotId);
+	player->setInMarket(true);
 
 	std::map<uint16_t, uint32_t> depotItems;
 	std::list<Container*> containerList;
@@ -1818,7 +1818,6 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 			Item* item = *it;
 
 			Container* c = item->getContainer();
-
 			if (c && !c->empty()) {
 				containerList.push_back(c);
 				continue;

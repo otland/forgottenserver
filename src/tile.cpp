@@ -1386,7 +1386,6 @@ int32_t Tile::__getIndexOfThing(const Thing* thing) const
 		if (thing->getItem()) {
 			for (ItemVector::const_iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
 				++n;
-
 				if ((*it) == thing) {
 					return n;
 				}
@@ -1417,7 +1416,6 @@ int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) co
 		if (thing->getItem()) {
 			for (ItemVector::const_iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
 				++n;
-
 				if ((*it) == thing) {
 					return n;
 				}
@@ -1550,7 +1548,6 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 			g_moveEvents->onCreatureMove(creature, this, true);
 		} else {
 			Item* item = thing->getItem();
-
 			if (item) {
 				g_moveEvents->onItemMove(item, this, true);
 			}
@@ -1603,7 +1600,6 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 		g_moveEvents->onCreatureMove(creature, this, false);
 	} else {
 		Item* item = thing->getItem();
-
 		if (item) {
 			g_moveEvents->onItemMove(item, this, false);
 		}
@@ -1620,20 +1616,17 @@ void Tile::__internalAddThing(uint32_t index, Thing* thing)
 	thing->setParent(this);
 
 	Creature* creature = thing->getCreature();
-
 	if (creature) {
 		g_game.clearSpectatorCache();
 		CreatureVector* creatures = makeCreatures();
 		creatures->insert(creatures->begin(), creature);
 	} else {
 		Item* item = thing->getItem();
-
 		if (item == NULL) {
 			return;
 		}
 
 		TileItemVector* items = makeItemList();
-
 		if (items && items->size() >= 0xFFFF) {
 			return /*RET_NOTPOSSIBLE*/;
 		}
@@ -1644,7 +1637,6 @@ void Tile::__internalAddThing(uint32_t index, Thing* thing)
 			}
 		} else if (item->isAlwaysOnTop()) {
 			bool isInserted = false;
-
 			for (ItemVector::iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
 				if (Item::items[(*it)->getID()].alwaysOnTopOrder > Item::items[item->getID()].alwaysOnTopOrder) {
 					items->insert(it, item);
@@ -1746,7 +1738,8 @@ void Tile::updateTileFlags(Item* item, bool removing)
 			setFlag(TILESTATE_BED);
 		}
 
-		if (item->getContainer() && item->getContainer()->getDepotLocker()) {
+		Container* container = item->getContainer();
+		if (container && container->getDepotLocker()) {
 			setFlag(TILESTATE_DEPOT);
 		}
 
@@ -1833,7 +1826,8 @@ void Tile::updateTileFlags(Item* item, bool removing)
 			resetFlag(TILESTATE_BED);
 		}
 
-		if (item->getContainer() && item->getContainer()->getDepotLocker()) {
+		Container* container = item->getContainer();
+		if (container && container->getDepotLocker()) {
 			resetFlag(TILESTATE_DEPOT);
 		}
 

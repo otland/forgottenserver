@@ -430,18 +430,6 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 		}
 	}
 
-	//get password
-	query.str("");
-	query << "SELECT `password` FROM `accounts` WHERE `id` = " << accno;
-
-	result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
-
-	player->password = result->getDataString("password");
-	db->freeResult(result);
-
 	// we need to find out our skills
 	// so we query the skill table
 	query.str("");
@@ -502,13 +490,11 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 				player->__internalAddThing(pid, item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
-
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
 				Container* container = it2->second.first->getContainer();
-
 				if (container) {
 					container->__internalAddThing(item);
 				}
@@ -529,23 +515,20 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 		for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
-			int32_t pid = pair.second;
 
+			int32_t pid = pair.second;
 			if (pid >= 0 && pid < 100) {
 				DepotChest* depotChest = player->getDepotChest(pid, true);
-
 				if (depotChest) {
 					depotChest->__internalAddThing(item);
 				}
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
-
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
 				Container* container = it2->second.first->getContainer();
-
 				if (container) {
 					container->__internalAddThing(item);
 				}
@@ -578,7 +561,6 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 				}
 
 				Container* container = it2->second.first->getContainer();
-
 				if (container) {
 					container->__internalAddThing(item);
 				}
@@ -661,8 +643,8 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
 			++runningId;
 			item = *it;
-			Container* container = item->getContainer();
 
+			Container* container = item->getContainer();
 			if (container) {
 				stack.push_back(containerBlock(container, runningId));
 			}
@@ -863,7 +845,7 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	if (player->depotChange) {
+	if (player->lastDepotId != -1) {
 		//save depot items
 		query.str("");
 		query << "DELETE FROM `player_depotitems` WHERE `player_id` = " << player->getGUID();

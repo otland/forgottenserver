@@ -70,7 +70,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 		client->setPlayer(this);
 	}
 
-	depotChange = false;
 	accountNumber = 0;
 	name = _name;
 	setVocation(0);
@@ -127,7 +126,7 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 
 	mayNotMove = false;
 
-	marketDepotId = -1;
+	inMarket = false;
 	lastDepotId = -1;
 
 	chaseMode = CHASEMODE_STANDSTILL;
@@ -867,11 +866,9 @@ void Player::closeContainer(uint8_t cid)
 void Player::setContainerIndex(uint8_t cid, uint16_t index)
 {
 	ContainerMap::iterator it = openContainers.find(cid);
-
 	if (it == openContainers.end()) {
 		return;
 	}
-
 	it->second.index = index;
 }
 
@@ -881,7 +878,6 @@ Container* Player::getContainerByID(uint8_t cid)
 	if (it == openContainers.end()) {
 		return NULL;
 	}
-
 	return it->second.container;
 }
 
@@ -892,18 +888,15 @@ int8_t Player::getContainerID(const Container* container) const
 			return it->first;
 		}
 	}
-
 	return -1;
 }
 
 uint16_t Player::getContainerIndex(uint8_t cid) const
 {
 	ContainerMap::const_iterator it = openContainers.find(cid);
-
 	if (it == openContainers.end()) {
 		return 0;
 	}
-
 	return it->second.index;
 }
 
@@ -1637,7 +1630,6 @@ void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemT
 
 		if (tradeItem) {
 			const Container* container = item->getContainer();
-
 			if (container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(this);
 			}
@@ -1866,8 +1858,8 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 	}
 
 	// leave market
-	if (marketDepotId != -1) {
-		marketDepotId = -1;
+	if (inMarket) {
+		inMarket = false;
 	}
 
 	if (getParty()) {
@@ -1972,7 +1964,6 @@ void Player::onRemoveInventoryItem(slots_t slot, Item* item)
 
 		if (tradeItem) {
 			const Container* container = item->getContainer();
-
 			if (container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(this);
 			}
@@ -2680,7 +2671,6 @@ bool Player::dropCorpse()
 Item* Player::getCorpse()
 {
 	Item* corpse = Creature::getCorpse();
-
 	if (corpse && corpse->getContainer()) {
 		Creature* lastHitCreature_ = NULL;
 		Creature* mostDamageCreature = NULL;
@@ -2694,7 +2684,6 @@ Item* Player::getCorpse()
 
 		corpse->setSpecialDescription(ss.str());
 	}
-
 	return corpse;
 }
 
@@ -2876,7 +2865,6 @@ void Player::autoCloseContainers(const Container* container)
 
 	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
 		Container* tmpContainer = it->second.container;
-
 		while (tmpContainer) {
 			if (tmpContainer->isRemoved() || tmpContainer == container) {
 				closeList.push_back(it->first);
@@ -2889,7 +2877,6 @@ void Player::autoCloseContainers(const Container* container)
 
 	for (std::vector<uint32_t>::const_iterator it = closeList.begin(); it != closeList.end(); ++it) {
 		closeContainer(*it);
-
 		if (client) {
 			client->sendCloseContainer(*it);
 		}
@@ -3122,7 +3109,6 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
                                     uint32_t flags) const
 {
 	const Item* item = thing->getItem();
-
 	if (item == NULL) {
 		maxQueryCount = 0;
 		return RET_NOTPOSSIBLE;
@@ -3130,10 +3116,8 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 
 	if (index == INDEX_WHEREEVER) {
 		uint32_t n = 0;
-
 		for (int slotIndex = SLOT_FIRST; slotIndex < SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
-
 			if (inventoryItem) {
 				if (Container* subContainer = inventoryItem->getContainer()) {
 					uint32_t queryCount = 0;
@@ -3229,12 +3213,12 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 		*destItem = NULL;
 
 		const Item* item = thing->getItem();
-
 		if (item == NULL) {
 			return this;
 		}
 
 		bool autoStack = !((flags & FLAG_IGNOREAUTOSTACK) == FLAG_IGNOREAUTOSTACK);
+		bool isStackable = item->isStackable();
 
 		std::list<Container*> containerList;
 
@@ -3250,7 +3234,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 					continue;
 				}
 
-				if (autoStack && item->isStackable()) {
+				if (autoStack && isStackable) {
 					//try find an already existing item to stack with
 					if (__queryAdd(slotIndex, item, item->getItemCount(), 0) == RET_NOERROR) {
 						if (inventoryItem->getID() == item->getID() && inventoryItem->getItemCount() < 100) {
@@ -3283,10 +3267,9 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 			Container* tmpContainer = containerList.front();
 			containerList.pop_front();
 
-			if (!(autoStack && item->isStackable())) {
+			if (!autoStack || !isStackable) {
 				//we need to find first empty container as fast as we can for non-stackable items
 				uint32_t n = tmpContainer->capacity() - tmpContainer->size();
-
 				while (n) {
 					if (tmpContainer->__queryAdd(tmpContainer->capacity() - n, item, item->getItemCount(), flags) == RET_NOERROR) {
 						index = tmpContainer->capacity() - n;
@@ -3310,7 +3293,6 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 			for (ItemDeque::const_iterator it = tmpContainer->getItems(), end = tmpContainer->getEnd(); it != end; ++it) {
 				Item* tmpItem = *it;
-
 				if (tmpItem == tradeItem) {
 					continue;
 				}
@@ -3344,7 +3326,6 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 	}
 
 	Thing* destThing = __getThing(index);
-
 	if (destThing) {
 		*destItem = destThing->getItem();
 	}
@@ -3615,7 +3596,6 @@ std::map<uint32_t, uint32_t>& Player::__getAllItemTypeCount(std::map<uint32_t, u
 			}
 		}
 	}
-
 	return countMap;
 }
 
@@ -4677,13 +4657,6 @@ void Player::setPremiumDays(int32_t v)
 void Player::setGuildLevel(uint8_t newGuildLevel)
 {
 	guildLevel = newGuildLevel;
-
-	if (guild) {
-		GuildRank* rank = guild->getRankByLevel(newGuildLevel);
-		if (rank) {
-			setGuildRank(rank->name);
-		}
-	}
 }
 
 void Player::setGroupId(int32_t newId)

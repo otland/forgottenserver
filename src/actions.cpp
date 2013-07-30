@@ -321,7 +321,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 			DepotLocker* myDepotLocker = player->getDepotLocker(depot->getDepotId());
 			myDepotLocker->setParent(depot->getParent()->getTile());
 			openContainer = myDepotLocker;
-			player->setDepotChange(true);
 			player->setLastDepotId(depot->getDepotId());
 		} else {
 			openContainer = container;
@@ -332,11 +331,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 		}
 
 		//open/close container
-		int32_t oldcid = player->getContainerID(openContainer);
-
-		if (oldcid != -1) {
+		int32_t oldContainerId = player->getContainerID(openContainer);
+		if (oldContainerId != -1) {
 			player->onCloseContainer(openContainer);
-			player->closeContainer(oldcid);
+			player->closeContainer(oldContainerId);
 		} else {
 			player->addContainer(index, openContainer);
 			player->onSendContainer(openContainer);

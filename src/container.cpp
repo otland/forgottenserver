@@ -37,11 +37,9 @@ Container::Container(uint16_t _type) : Item(_type)
 Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 {
 	TileItemVector* itemVector = tile->getItemList();
-
 	if (itemVector) {
 		for (ItemVector::reverse_iterator rit = itemVector->rbegin(), end = itemVector->rend(); rit != end; ++rit) {
 			Item* item = *rit;
-
 			if (item->getContainer() || item->hasProperty(MOVEABLE)) {
 				addItem(item);
 			}
@@ -86,10 +84,9 @@ Item* Container::clone() const
 
 Container* Container::getParentContainer()
 {
-	if (Thing* thing = getParent()) {
-		if (Item* item = thing->getItem()) {
-			return item->getContainer();
-		}
+	Thing* thing = getParent();
+	if (thing) {
+		return thing->getContainer();
 	}
 	return NULL;
 }
@@ -191,9 +188,7 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 	Container* evil = const_cast<Container*>(this);
 
 	for (ContainerIterator cit = evil->begin(); cit != evil->end(); ++cit) {
-		Item* i = *cit;
-		Container* container = i->getContainer();
-
+		Container* container = (*cit)->getContainer();
 		if (container && container->size() != 0) {
 			continue;
 		}
@@ -204,7 +199,7 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 			os << ", ";
 		}
 
-		os << i->getNameDescription();
+		os << container->getNameDescription();
 	}
 
 	if (firstitem) {
@@ -575,13 +570,11 @@ void Container::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	const ItemType& oldType = Item::items[item->getID()];
-
 	const ItemType& newType = Item::items[itemId];
 
 	const double oldWeight = item->getWeight();
 
 	item->setID(itemId);
-
 	item->setSubType(count);
 
 	const double diffWeight = -oldWeight + item->getWeight();
@@ -601,13 +594,11 @@ void Container::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 void Container::__replaceThing(uint32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
-
 	if (!item) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
 	Item* replacedItem = getItemByIndex(index);
-
 	if (!replacedItem) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
@@ -635,13 +626,11 @@ void Container::__replaceThing(uint32_t index, Thing* thing)
 void Container::__removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
-
 	if (item == NULL) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
 	int32_t index = __getIndexOfThing(thing);
-
 	if (index == -1) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
@@ -660,7 +649,6 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 			}
 
 			const ItemType& it = Item::items[item->getID()];
-
 			onUpdateContainerItem(index, item, it, item, it);
 		}
 	} else {
@@ -682,7 +670,6 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 int32_t Container::__getIndexOfThing(const Thing* thing) const
 {
 	uint32_t index = 0;
-
 	for (ItemDeque::const_iterator cit = getItems(); cit != getEnd(); ++cit) {
 		if (*cit == thing) {
 			return index;
@@ -690,7 +677,6 @@ int32_t Container::__getIndexOfThing(const Thing* thing) const
 			++index;
 		}
 	}
-
 	return -1;
 }
 
@@ -707,9 +693,9 @@ int32_t Container::__getLastIndex() const
 uint32_t Container::__getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
-	for (ItemDeque::const_iterator it = itemlist.begin(); it != itemlist.end(); ++it) {
-		if ((*it)->getID() == itemId) {
-			count += countByType(*it, subType);
+	for (Item* item : itemlist) {
+		if (item->getID() == itemId) {
+			count += countByType(item, subType);
 		}
 	}
 	return count;
@@ -717,8 +703,8 @@ uint32_t Container::__getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/
 
 std::map<uint32_t, uint32_t>& Container::__getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
 {
-	for (ItemDeque::const_iterator it = itemlist.begin(); it != itemlist.end(); ++it) {
-		countMap[(*it)->getID()] += (*it)->getItemCount();
+	for (Item* item : itemlist) {
+		countMap[item->getID()] += item->getItemCount();
 	}
 	return countMap;
 }
@@ -888,9 +874,7 @@ ContainerIterator& ContainerIterator::operator++()
 {
 	assert(super);
 
-	if (Item* i = *cur) {
-		Container* c = i->getContainer();
-
+	if (Container* c = (*cur)->getContainer()) {
 		if (c && !c->empty()) {
 			over.push(c);
 		}

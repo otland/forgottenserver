@@ -296,26 +296,26 @@ void ScriptEnvironment::insertThing(uint32_t uid, Thing* thing)
 
 Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 {
-	ThingMap::const_iterator it = m_localMap.find(uid);
-	if (it != m_localMap.end()) {
-		Thing* thing = it->second;
-		if (thing && !thing->isRemoved()) {
-			return thing;
-		}
-	}
-
-	it = m_globalMap.find(uid);
-	if (it != m_globalMap.end()) {
-		Thing* thing = it->second;
-		if (thing && !thing->isRemoved()) {
-			return thing;
-		}
-	}
-
 	if (uid >= 0x10000000) {
 		Thing* thing = g_game.getCreatureByID(uid);
 		if (thing && !thing->isRemoved()) {
 			return thing;
+		}
+	} else {
+		ThingMap::const_iterator it = m_localMap.find(uid);
+		if (it != m_localMap.end()) {
+			Thing* thing = it->second;
+			if (thing && !thing->isRemoved()) {
+				return thing;
+			}
+		}
+
+		it = m_globalMap.find(uid);
+		if (it != m_globalMap.end()) {
+			Thing* thing = it->second;
+			if (thing && !thing->isRemoved()) {
+				return thing;
+			}
 		}
 	}
 	return NULL;

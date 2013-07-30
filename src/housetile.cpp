@@ -93,7 +93,6 @@ ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 		}
 	} else if (thing->getItem() && actor) {
 		Player* actorPlayer = actor->getPlayer();
-
 		if (!house->isInvited(actorPlayer)) {
 			return RET_CANNOTTHROW;
 		}

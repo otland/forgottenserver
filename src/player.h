@@ -168,10 +168,6 @@ class Player : public Creature, public Cylinder
 		bool untameMount(uint8_t mountId);
 		void dismount();
 
-		void setDepotChange(bool b) {
-			depotChange = b;
-		}
-
 		void sendFYIBox(const std::string& message) {
 			if (client) {
 				client->sendFYIBox(message);
@@ -259,9 +255,6 @@ class Player : public Creature, public Cylinder
 
 		bool isGuildMate(const Player* player) const;
 
-		void setGuildRank(const std::string& rank) {
-			guildRank = rank;
-		}
 		const std::string& getGuildNick() const {
 			return guildNick;
 		}
@@ -412,11 +405,11 @@ class Player : public Creature, public Cylinder
 			return groupId;
 		}
 
-		void setMarketDepotId(int16_t newId) {
-			marketDepotId = newId;
+		void setInMarket(bool value) {
+			inMarket = value;
 		}
-		int16_t getMarketDepotId() const {
-			return marketDepotId;
+		bool isInMarket() const {
+			return inMarket;
 		}
 
 		void setLastDepotId(int16_t newId) {
@@ -1036,8 +1029,7 @@ class Player : public Creature, public Cylinder
 			}
 		}
 		void sendMarketLeave() {
-			marketDepotId = -1;
-
+			inMarket = false;
 			if (client) {
 				client->sendMarketLeave();
 			}
@@ -1237,10 +1229,11 @@ class Player : public Creature, public Cylinder
 		AccountType_t accountType;
 		int32_t premiumDays;
 		uint64_t experience;
+
 		uint32_t damageImmunities;
 		uint32_t conditionImmunities;
 		uint32_t conditionSuppressions;
-		uint32_t condition;
+
 		uint64_t manaSpent;
 		int32_t vocationId;
 		Vocation* vocation;
@@ -1261,18 +1254,17 @@ class Player : public Creature, public Cylinder
 		int32_t groupId;
 		OperatingSystem_t operatingSystem;
 		bool ghostMode;
-		bool depotChange;
 
 		std::list<uint32_t> modalWindows;
 
 		int32_t offlineTrainingSkill;
 		int32_t offlineTrainingTime;
 
-		int16_t marketDepotId;
 		int16_t lastDepotId;
 
 		bool mayNotMove;
 		bool requestedOutfit;
+		bool inMarket;
 
 		double inventoryWeight;
 		double capacity;
@@ -1302,7 +1294,6 @@ class Player : public Creature, public Cylinder
 
 		//account variables
 		uint32_t accountNumber;
-		std::string password;
 
 		//inventory variables
 		Item* inventory[SLOT_LAST];
@@ -1351,7 +1342,6 @@ class Player : public Creature, public Cylinder
 
 		//guild variables
 		Guild* guild;
-		std::string guildRank;
 		std::string guildNick;
 		uint8_t guildLevel;
 

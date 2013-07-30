@@ -345,16 +345,13 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			} else if (type == STACKPOS_USEITEM) {
 				//First check items with topOrder 2 (ladders, signs, splashes)
 				Item* item = tile->getItemByTopOrder(2);
-
 				if (item && g_actions->hasAction(item)) {
 					thing = item;
 				} else {
 					//then down items
 					thing = tile->getTopDownItem();
-
 					if (!thing) {
 						thing = tile->getTopTopItem(); //then last we check items with topOrder 3 (doors etc)
-
 						if (!thing) {
 							thing = tile->ground;
 						}
@@ -440,15 +437,13 @@ void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
 	stackpos = 0;
 
 	Cylinder* topParent = item->getTopParent();
-
 	if (topParent) {
 		if (Player* player = dynamic_cast<Player*>(topParent)) {
 			pos.x = 0xFFFF;
 
 			Container* container = dynamic_cast<Container*>(item->getParent());
-
 			if (container) {
-				pos.y = ((uint16_t) ((uint16_t)0x40) | ((uint16_t)player->getContainerID(container)) );
+				pos.y = (uint16_t)0x40 | (uint16_t)player->getContainerID(container);
 				pos.z = container->__getIndexOfThing(item);
 				stackpos = pos.z;
 			} else {
@@ -1220,7 +1215,6 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
                           uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -1249,7 +1243,6 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	}
 
 	Thing* thing = internalGetThing(player, fromPos, fromIndex, spriteId, STACKPOS_MOVE);
-
 	if (!thing || !thing->getItem()) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
@@ -2311,7 +2304,6 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	}
 
 	Tile* toTile = getTile(newPos.x, newPos.y, newPos.z);
-
 	if (toTile) {
 		if (Creature* creature = thing->getCreature()) {
 			ReturnValue ret = toTile->__queryAdd(0, creature, 1, FLAG_NOLIMIT);
@@ -2326,7 +2318,6 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 			return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), NULL, flags);
 		}
 	}
-
 	return RET_NOTPOSSIBLE;
 }
 
@@ -2334,7 +2325,6 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 bool Game::playerMove(uint32_t playerId, Direction direction)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2365,13 +2355,11 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text)
 bool Game::playerCreatePrivateChannel(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved() || !player->isPremium()) {
 		return false;
 	}
 
 	ChatChannel* channel = g_chat.createChannel(player, CHANNEL_PRIVATE);
-
 	if (!channel || !channel->addUser(player)) {
 		return false;
 	}
@@ -2383,19 +2371,16 @@ bool Game::playerCreatePrivateChannel(uint32_t playerId)
 bool Game::playerChannelInvite(uint32_t playerId, const std::string& name)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	PrivateChatChannel* channel = g_chat.getPrivateChannel(player);
-
 	if (!channel) {
 		return false;
 	}
 
 	Player* invitePlayer = getPlayerByName(name);
-
 	if (!invitePlayer) {
 		return false;
 	}
@@ -2407,19 +2392,16 @@ bool Game::playerChannelInvite(uint32_t playerId, const std::string& name)
 bool Game::playerChannelExclude(uint32_t playerId, const std::string& name)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	PrivateChatChannel* channel = g_chat.getPrivateChannel(player);
-
 	if (!channel) {
 		return false;
 	}
 
 	Player* excludePlayer = getPlayerByName(name);
-
 	if (!excludePlayer) {
 		return false;
 	}
@@ -2431,7 +2413,6 @@ bool Game::playerChannelExclude(uint32_t playerId, const std::string& name)
 bool Game::playerRequestChannels(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2443,13 +2424,11 @@ bool Game::playerRequestChannels(uint32_t playerId)
 bool Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	ChatChannel* channel = g_chat.addUserToChannel(player, channelId);
-
 	if (!channel) {
 		return false;
 	}
@@ -2461,7 +2440,6 @@ bool Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 bool Game::playerCloseChannel(uint32_t playerId, uint16_t channelId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2489,7 +2467,6 @@ bool Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 bool Game::playerCloseNpcChannel(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2509,7 +2486,6 @@ bool Game::playerCloseNpcChannel(uint32_t playerId)
 bool Game::playerReceivePing(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2521,7 +2497,6 @@ bool Game::playerReceivePing(uint32_t playerId)
 bool Game::playerReceivePingBack(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2816,7 +2791,6 @@ bool Game::playerCloseContainer(uint32_t playerId, uint8_t cid)
 bool Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2827,16 +2801,13 @@ bool Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 	}
 
 	Container* parentContainer = dynamic_cast<Container*>(container->getParent());
-
 	if (!parentContainer) {
 		Tile* tile = container->getTile();
-
 		if (!tile) {
 			return false;
 		}
 
 		BrowseFieldMap::const_iterator it = browseFields.find(tile);
-
 		if (it == browseFields.end()) {
 			parentContainer = new Container(tile);
 			parentContainer->useThing2();
@@ -2855,7 +2826,6 @@ bool Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 bool Game::playerUpdateTile(uint32_t playerId, const Position& pos)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2872,7 +2842,6 @@ bool Game::playerUpdateTile(uint32_t playerId, const Position& pos)
 bool Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2889,19 +2858,16 @@ bool Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
 bool Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stackPos, const uint16_t spriteId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	Thing* thing = internalGetThing(player, pos, stackPos);
-
 	if (!thing) {
 		return false;
 	}
 
 	Item* item = thing->getItem();
-
 	if (!item || item->getClientID() != spriteId || !item->isRoteable() || item->getUniqueId() != 0) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
@@ -2909,7 +2875,6 @@ bool Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 
 	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
 		std::list<Direction> listDir;
-
 		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
@@ -2925,7 +2890,6 @@ bool Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	}
 
 	uint16_t newId = Item::items[item->getID()].rotateTo;
-
 	if (newId != 0) {
 		transformItem(item, newId);
 	}
@@ -2936,15 +2900,14 @@ bool Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	uint16_t maxTextLength = 0;
 	uint32_t internalWindowTextId = 0;
-	Item* writeItem = player->getWriteItem(internalWindowTextId, maxTextLength);
 
+	Item* writeItem = player->getWriteItem(internalWindowTextId, maxTextLength);
 	if (text.length() > maxTextLength || windowTextId != internalWindowTextId) {
 		return false;
 	}
@@ -2955,8 +2918,8 @@ bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 	}
 
 	Cylinder* topParent = writeItem->getTopParent();
-	Player* owner = dynamic_cast<Player*>(topParent);
 
+	Player* owner = dynamic_cast<Player*>(topParent);
 	if (owner && owner != player) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
@@ -2980,7 +2943,6 @@ bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 	}
 
 	uint16_t newId = Item::items[writeItem->getID()].writeOnceItemId;
-
 	if (newId != 0) {
 		transformItem(writeItem, newId);
 	}
@@ -3056,7 +3018,6 @@ bool Game::playerBrowseField(uint32_t playerId, const Position& pos)
 bool Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3074,15 +3035,14 @@ bool Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_
 bool Game::playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	uint32_t internalWindowTextId;
 	uint32_t internalListId;
-	House* house = player->getEditHouse(internalWindowTextId, internalListId);
 
+	House* house = player->getEditHouse(internalWindowTextId, internalListId);
 	if (house && internalWindowTextId == windowTextId && listId == 0) {
 		house->setAccessList(internalListId, text);
 		player->setEditHouse(NULL);
@@ -3095,13 +3055,11 @@ bool Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
                               uint32_t tradePlayerId, uint16_t spriteId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	Player* tradePartner = getPlayerByID(tradePlayerId);
-
 	if (!tradePartner || tradePartner == player) {
 		player->sendTextMessage(MSG_INFO_DESCR, "Sorry, not possible.");
 		return false;
@@ -3120,14 +3078,12 @@ bool Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	}
 
 	Item* tradeItem = dynamic_cast<Item*>(internalGetThing(player, pos, stackPos, spriteId, STACKPOS_USE));
-
 	if (!tradeItem || tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->getUniqueId() != 0) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
 	}
 
 	const Position& playerPosition = player->getPosition();
-
 	const Position& tradeItemPosition = tradeItem->getPosition();
 
 	if (playerPosition.z > tradeItemPosition.z) {
@@ -3138,7 +3094,6 @@ bool Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return false;
 	} else if (!Position::areInRange<1, 1, 0>(tradeItemPosition, playerPosition)) {
 		std::list<Direction> listDir;
-
 		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
@@ -3153,26 +3108,39 @@ bool Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		}
 	}
 
-	const Container* container = NULL;
+	Container* tradeItemContainer = tradeItem->getContainer();
+	if (tradeItemContainer) {
+		for (auto it = tradeItems.begin(); it != tradeItems.end(); ++it) {
+			Item* item = it->first;
+			if (tradeItem == item) {
+				player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
+				return false;
+			}
 
-	std::map<Item*, uint32_t>::const_iterator it;
+			if (tradeItemContainer->isHoldingItem(item)) {
+				player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
+				return false;
+			}
 
-	for (it = tradeItems.begin(); it != tradeItems.end(); ++it) {
-		if (tradeItem == it->first) {
-			player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
-			return false;
+			Container* container = item->getContainer();
+			if (container && container->isHoldingItem(tradeItem)) {
+				player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
+				return false;
+			}
 		}
+	} else {
+		for (auto it = tradeItems.begin(); it != tradeItems.end(); ++it) {
+			Item* item = it->first;
+			if (tradeItem == item) {
+				player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
+				return false;
+			}
 
-		container = dynamic_cast<const Container*>(tradeItem);
-		if (container && container->isHoldingItem(it->first)) {
-			player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
-			return false;
-		}
-
-		container = dynamic_cast<const Container*>(it->first);
-		if (container && container->isHoldingItem(tradeItem)) {
-			player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
-			return false;
+			Container* container = item->getContainer();
+			if (container && container->isHoldingItem(tradeItem)) {
+				player->sendTextMessage(MSG_INFO_DESCR, "This item is already being traded.");
+				return false;
+			}
 		}
 	}
 
@@ -3682,7 +3650,6 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 
 	if (player->isAccessPlayer()) {
 		Item* item = thing->getItem();
-
 		if (item) {
 			ss << std::endl << "ItemID: [" << item->getID() << "]";
 
@@ -3978,7 +3945,6 @@ bool Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	}
 
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -5921,29 +5887,26 @@ bool Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 bool Game::playerLeaveMarket(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
-	player->setMarketDepotId(-1);
+	player->setInMarket(false);
 	return true;
 }
 
 bool Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
-	if (player->getMarketDepotId() == -1) {
+	if (!player->isInMarket()) {
 		return false;
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-
 	if (it.id == 0) {
 		return false;
 	}
@@ -5953,55 +5916,43 @@ bool Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 	}
 
 	const MarketOfferList& buyOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_BUY, it.id);
-
 	const MarketOfferList& sellOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_SELL, it.id);
-
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
-
 	player->sendMarketDetail(it.id);
-
 	return true;
 }
 
 bool Game::playerBrowseMarketOwnOffers(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
-	if (player->getMarketDepotId() == -1) {
+	if (!player->isInMarket()) {
 		return false;
 	}
 
 	const MarketOfferList& buyOffers = IOMarket::getInstance()->getOwnOffers(MARKETACTION_BUY, player->getGUID());
-
 	const MarketOfferList& sellOffers = IOMarket::getInstance()->getOwnOffers(MARKETACTION_SELL, player->getGUID());
-
 	player->sendMarketBrowseOwnOffers(buyOffers, sellOffers);
-
 	return true;
 }
 
 bool Game::playerBrowseMarketOwnHistory(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
-	if (player->getMarketDepotId() == -1) {
+	if (!player->isInMarket()) {
 		return false;
 	}
 
 	const HistoryMarketOfferList& buyOffers = IOMarket::getInstance()->getOwnHistory(MARKETACTION_BUY, player->getGUID());
-
 	const HistoryMarketOfferList& sellOffers = IOMarket::getInstance()->getOwnHistory(MARKETACTION_SELL, player->getGUID());
-
 	player->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
-
 	return true;
 }
 
@@ -6025,7 +5976,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		return false;
 	}
 
-	if (player->getMarketDepotId() == -1) {
+	if (!player->isInMarket()) {
 		return false;
 	}
 
@@ -6035,7 +5986,6 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-
 	if (it.id == 0) {
 		return false;
 	}
@@ -6055,7 +6005,6 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	uint64_t fee = (price / 100.) * amount;
-
 	if (fee < 20) {
 		fee = 20;
 	} else if (fee > 1000) {
@@ -6067,8 +6016,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			return false;
 		}
 
-		DepotChest* depotChest = player->getDepotChest(player->getMarketDepotId(), false);
-
+		DepotChest* depotChest = player->getDepotChest(player->getLastDepotId(), false);
 		if (!depotChest) {
 			return false;
 		}
@@ -6086,8 +6034,8 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 			for (ItemDeque::const_iterator iter = container->getItems(), end = container->getEnd(); iter != end; ++iter) {
 				Item* item = (*iter);
-				Container* c = item->getContainer();
 
+				Container* c = item->getContainer();
 				if (c && !c->empty()) {
 					containerList.push_back(c);
 					continue;
@@ -6098,7 +6046,6 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 				}
 
 				const ItemType& itemType = Item::items[item->getID()];
-
 				if (!itemType.isRune() && item->getCharges() != itemType.charges) {
 					continue;
 				}
@@ -6157,7 +6104,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 	IOMarket::getInstance()->createOffer(player->getGUID(), (MarketAction_t)type, it.id, amount, price, anonymous);
 
-	player->sendMarketEnter(player->getMarketDepotId());
+	player->sendMarketEnter(player->getLastDepotId());
 	const MarketOfferList& buyOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_BUY, it.id);
 	const MarketOfferList& sellOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
@@ -6172,7 +6119,7 @@ bool Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return false;
 	}
 
-	if (player->getMarketDepotId() == -1) {
+	if (!player->isInMarket()) {
 		return false;
 	}
 
@@ -6190,7 +6137,7 @@ bool Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 	if (offer.type == MARKETACTION_BUY) {
 		player->bankBalance += (uint64_t)offer.price * offer.amount;
-		player->sendMarketEnter(player->getMarketDepotId());
+		player->sendMarketEnter(player->getLastDepotId());
 	} else {
 		const ItemType& it = Item::items[offer.itemId];
 
@@ -6244,29 +6191,25 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	}
 
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
-	if (player->getMarketDepotId() == -1) {
+	if (!player->isInMarket()) {
 		return false;
 	}
 
 	uint32_t offerId = IOMarket::getInstance()->getOfferIdByCounter(timestamp, counter);
-
 	if (offerId == 0) {
 		return false;
 	}
 
 	MarketOfferEx offer = IOMarket::getInstance()->getOfferById(offerId);
-
 	if (amount > offer.amount) {
 		return false;
 	}
 
 	const ItemType& it = Item::items[offer.itemId];
-
 	if (it.id == 0) {
 		return false;
 	}
@@ -6274,8 +6217,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	uint64_t totalPrice = (uint64_t)offer.price * amount;
 
 	if (offer.type == MARKETACTION_BUY) {
-		DepotChest* depotChest = player->getDepotChest(player->getMarketDepotId(), false);
-
+		DepotChest* depotChest = player->getDepotChest(player->getLastDepotId(), false);
 		if (!depotChest) {
 			return false;
 		}
@@ -6293,8 +6235,8 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (ItemDeque::const_iterator iter = container->getItems(), end = container->getEnd(); iter != end; ++iter) {
 				Item* item = (*iter);
-				Container* c = item->getContainer();
 
+				Container* c = item->getContainer();
 				if (c && !c->empty()) {
 					containerList.push_back(c);
 					continue;
@@ -6469,7 +6411,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		IOMarket::getInstance()->acceptOffer(offerId, amount);
 	}
 
-	player->sendMarketEnter(player->getMarketDepotId());
+	player->sendMarketEnter(player->getLastDepotId());
 	offer.timestamp += marketOfferDuration;
 	player->sendMarketAcceptOffer(offer);
 	return true;

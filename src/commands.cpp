@@ -1046,7 +1046,6 @@ void Commands::removeThing(Player* player, const std::string& cmd, const std::st
 		g_game.removeCreature(creature, true);
 	} else {
 		Item* item = thing->getItem();
-
 		if (item) {
 			if (item->isGroundTile()) {
 				player->sendTextMessage(MSG_STATUS_SMALL, "You may not remove a ground tile.");
