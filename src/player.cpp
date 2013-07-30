@@ -171,7 +171,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 	groupFlags = 0;
 
 	sex = PLAYERSEX_FEMALE;
-	vocationId = 0;
 
 	town = 0;
 
@@ -240,11 +239,9 @@ Player::~Player()
 
 void Player::setVocation(uint32_t vocId)
 {
-	vocationId = vocId;
 	vocation = g_vocations.getVocation(vocId);
 
 	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-
 	if (condition) {
 		condition->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
@@ -273,7 +270,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 
 		if (accessLevel) {
 			s << " You are " << groupName << ".";
-		} else if (vocationId != VOCATION_NONE) {
+		} else if (vocation->getId() != VOCATION_NONE) {
 			s << " You are " << vocation->getVocDescription() << ".";
 		} else {
 			s << " You have no vocation.";
@@ -295,7 +292,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 
 		if (accessLevel) {
 			s << " is " << groupName << ".";
-		} else if (vocationId != VOCATION_NONE) {
+		} else if (vocation->getId() != VOCATION_NONE) {
 			s << " is " << vocation->getVocDescription() << ".";
 		} else {
 			s << " has no vocation.";
@@ -950,7 +947,7 @@ uint16_t Player::getDropPercent() const
 
 void Player::dropLoot(Container* corpse)
 {
-	if (corpse && lootDrop && vocationId != VOCATION_NONE) {
+	if (corpse && lootDrop && vocation->getId() != VOCATION_NONE) {
 		Skulls_t playerSkull = getSkull();
 		if (inventory[SLOT_NECKLACE] && inventory[SLOT_NECKLACE]->getID() == ITEM_AMULETOFLOSS && playerSkull != SKULL_RED && playerSkull != SKULL_BLACK) {
 			Player* lastHitPlayer;
@@ -2552,7 +2549,7 @@ void Player::death()
 		//Level loss
 		uint32_t oldLevel = level;
 
-		if (vocationId == VOCATION_NONE || level > 7) {
+		if (vocation->getId() == VOCATION_NONE || level > 7) {
 			experience -= (uint64_t)(experience * deathLossPercent);
 		}
 
@@ -2579,13 +2576,11 @@ void Player::death()
 		}
 
 		std::bitset<6> bitset(blessings);
-
 		if (bitset[5]) {
 			Player* lastHitPlayer;
 
 			if (_lastHitCreature) {
 				lastHitPlayer = _lastHitCreature->getPlayer();
-
 				if (!lastHitPlayer) {
 					Creature* lastHitMaster = _lastHitCreature->getMaster();
 
@@ -4540,8 +4535,8 @@ void Player::checkSkullTicks(int32_t ticks)
 
 bool Player::isPromoted() const
 {
-	int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-	return promotedVocation == 0 && vocationId != promotedVocation;
+	int32_t promotedVocation = g_vocations.getPromotedVocation(vocation->getId());
+	return promotedVocation == 0 && vocation->getId() != promotedVocation;
 }
 
 double Player::getLostPercent() const

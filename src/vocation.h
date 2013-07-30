@@ -37,6 +37,10 @@ class Vocation
 		uint32_t getReqSkillTries(int32_t skill, int32_t level);
 		uint64_t getReqMana(uint32_t magLevel);
 
+		int32_t getId() const {
+			return id;
+		}
+
 		uint8_t getClientId() const {
 			return clientId;
 		}
@@ -88,10 +92,17 @@ class Vocation
 		friend class Vocations;
 		Vocation();
 
-		uint8_t clientId;
+		typedef std::map<uint32_t, uint64_t> manaCacheMap;
+		manaCacheMap cacheMana;
+
+		typedef std::map<uint32_t, uint32_t> skillCacheMap;
+		skillCacheMap cacheSkill[SKILL_LAST + 1];
 
 		std::string name;
 		std::string description;
+
+		float skillMultipliers[SKILL_LAST + 1];
+		float manaMultiplier;
 
 		uint32_t gainHealthTicks;
 		uint32_t gainHealthAmount;
@@ -100,24 +111,17 @@ class Vocation
 		uint32_t gainCap;
 		uint32_t gainMana;
 		uint32_t gainHP;
+		uint32_t fromVocation;
+		uint32_t attackSpeed;
+		uint32_t baseSpeed;
+		int32_t id;
 
 		uint16_t gainSoulTicks;
 		uint16_t soulMax;
 
-		uint32_t fromVocation;
-
-		uint32_t attackSpeed;
-		uint32_t baseSpeed;
+		uint8_t clientId;
 
 		static uint32_t skillBase[SKILL_LAST + 1];
-		float skillMultipliers[SKILL_LAST + 1];
-		float manaMultiplier;
-
-		typedef std::map<uint32_t, uint64_t> manaCacheMap;
-		manaCacheMap cacheMana;
-
-		typedef std::map<uint32_t, uint32_t> skillCacheMap;
-		skillCacheMap cacheSkill[SKILL_LAST + 1];
 };
 
 typedef std::map<uint32_t, Vocation*> VocationsMap;

@@ -63,13 +63,12 @@ bool Vocations::loadFromXml()
 
 			if (xmlStrcmp(p->name, (const xmlChar*)"vocation") == 0) {
 				Vocation* voc = new Vocation();
-				uint32_t voc_id;
 				xmlNodePtr configNode;
 
 				if (readXMLInteger(p, "id", intVal)) {
 					float floatVal;
 
-					voc_id = intVal;
+					voc->id = intVal;
 
 					if (readXMLString(p, "name", str)) {
 						voc->name = str;
@@ -175,7 +174,7 @@ bool Vocations::loadFromXml()
 						configNode = configNode->next;
 					}
 
-					vocationsMap[voc_id] = voc;
+					vocationsMap[voc->id] = voc;
 				} else {
 					std::cout << "Missing vocation id." << std::endl;
 				}
@@ -193,12 +192,10 @@ bool Vocations::loadFromXml()
 Vocation* Vocations::getVocation(uint32_t id)
 {
 	VocationsMap::iterator it = vocationsMap.find(id);
-
 	if (it == vocationsMap.end()) {
 		std::cout << "Warning: [Vocations::getVocation] Vocation " << id << " not found." << std::endl;
 		return &def_voc;
 	}
-
 	return it->second;
 }
 

@@ -458,7 +458,7 @@ class Player : public Creature, public Cylinder
 
 		void setVocation(uint32_t vocId);
 		uint32_t getVocationId() const {
-			return vocationId;
+			return vocation->getId();
 		}
 
 		PlayerSex_t getSex() const {
@@ -1294,7 +1294,6 @@ class Player : public Creature, public Cylinder
 		int32_t saleCallback;
 		int32_t MessageBufferCount;
 		int32_t premiumDays;
-		int32_t vocationId;
 		int32_t soul;
 		int32_t soulMax;
 		int32_t bloodHitCount;
