@@ -169,14 +169,6 @@ class Creature : virtual public Thing
 			direction = dir;
 		}
 
-		const Position& getMasterPos() const {
-			return masterPos;
-		}
-		void setMasterPos(const Position& pos, uint32_t radius = 1) {
-			masterPos = pos;
-			masterRadius = radius;
-		}
-
 		bool isHealthHidden() const {
 			return hiddenHealth;
 		}
@@ -493,9 +485,7 @@ class Creature : virtual public Thing
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
 
-		Position masterPos;
 		Position lastPosition;
-		int32_t masterRadius;
 		uint64_t lastStep;
 		uint32_t lastStepCost;
 		uint32_t baseSpeed;

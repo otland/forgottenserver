@@ -381,7 +381,7 @@ void Commands::broadcastMessage(Player* player, const std::string& cmd, const st
 void Commands::teleportMasterPos(Player* player, const std::string& cmd, const std::string& param)
 {
 	Position oldPosition = player->getPosition();
-	Position destPos = player->masterPos;
+	Position destPos = player->getTemplePosition();
 	Position newPosition = g_game.getClosestFreeTile(player, 0, destPos, true);
 
 	if (player->getPosition() != destPos) {

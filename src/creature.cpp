@@ -60,11 +60,6 @@ Creature::Creature() :
 	baseSpeed = 220;
 	varSpeed = 0;
 
-	masterRadius = -1;
-	masterPos.x = 0;
-	masterPos.y = 0;
-	masterPos.z = 0;
-
 	followCreature = NULL;
 	hasFollowPath = false;
 	eventWalk = 0;

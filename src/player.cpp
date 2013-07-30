@@ -172,7 +172,7 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 
 	sex = PLAYERSEX_FEMALE;
 
-	town = 0;
+	town = NULL;
 
 	accountType = ACCOUNT_TYPE_NORMAL;
 	premiumDays = 0;
@@ -237,9 +237,13 @@ Player::~Player()
 #endif
 }
 
-void Player::setVocation(uint32_t vocId)
+bool Player::setVocation(uint32_t vocId)
 {
-	vocation = g_vocations.getVocation(vocId);
+	Vocation* voc = g_vocations.getVocation(vocId);
+	if (!voc) {
+		return false;
+	}
+	vocation = voc;
 
 	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
 	if (condition) {
@@ -250,6 +254,7 @@ void Player::setVocation(uint32_t vocId)
 	}
 
 	soulMax = vocation->getSoulMax();
+	return true;
 }
 
 bool Player::isPushable() const
@@ -2449,7 +2454,7 @@ uint32_t Player::getIP() const
 
 void Player::death()
 {
-	loginPosition = masterPos;
+	loginPosition = town->getTemplePosition();
 
 	if (skillLoss) {
 		uint8_t unfairFightReduction = 100;

@@ -183,9 +183,15 @@ class Npc : public Creature
 		bool isLoaded() const {
 			return loaded;
 		}
-		virtual void setMasterPos(const Position& pos, uint32_t radius = 1) {
-			masterPos = pos;
 
+		int32_t getMasterRadius() const {
+			return masterRadius;
+		}
+		const Position& getMasterPos() const {
+			return masterPos;
+		}
+		void setMasterPos(const Position& pos, uint32_t radius = 1) {
+			masterPos = pos;
 			if (masterRadius == -1) {
 				masterRadius = radius;
 			}
@@ -245,6 +251,9 @@ class Npc : public Creature
 		bool floorChange;
 		bool attackable;
 		int32_t focusCreature;
+
+		Position masterPos;
+		int32_t masterRadius;
 
 		std::set<Player*> shopPlayerSet;
 

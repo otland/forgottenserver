@@ -80,6 +80,11 @@ Npc::Npc(const std::string& _name) :
 	m_filename = "data/npc/" + _name + ".xml";
 	loaded = false;
 
+	masterRadius = -1;
+	masterPos.x = 0;
+	masterPos.y = 0;
+	masterPos.z = 0;
+
 	m_npcEventHandler = NULL;
 	reset();
 

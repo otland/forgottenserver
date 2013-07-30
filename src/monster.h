@@ -82,6 +82,14 @@ class Monster : public Creature
 			return CREATURETYPE_MONSTER;
 		}
 
+		virtual const Position& getMasterPos() const {
+			return masterPos;
+		}
+		void setMasterPos(const Position& pos, uint32_t radius = 1) {
+			masterPos = pos;
+			masterRadius = radius;
+		}
+
 		virtual RaceType_t getRace() const {
 			return mType->race;
 		}
@@ -192,6 +200,9 @@ class Monster : public Creature
 
 		Spawn* spawn;
 		bool isMasterInRange;
+
+		Position masterPos;
+		int32_t masterRadius;
 
 		std::string strDescription;
 

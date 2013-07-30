@@ -1091,12 +1091,15 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		} else if ((movingCreature->getZone() == ZONE_PROTECTION || movingCreature->getZone() == ZONE_NOPVP) && (toTile->hasFlag(TILESTATE_NOPVPZONE) || toTile->hasFlag(TILESTATE_PROTECTIONZONE))) {
 			player->sendCancelMessage(RET_NOTPOSSIBLE);
 			return false;
-		} else if (movingCreature->getNpc() && !Spawns::getInstance()->isInZone(movingCreature->masterPos, movingCreature->masterRadius, toPos)) {
-			player->sendCancelMessage(RET_NOTENOUGHROOM);
-			return false;
 		} else if (toTile->getCreatureCount() > 0) {
 			player->sendCancelMessage(RET_NOTENOUGHROOM);
 			return false;
+		} else {
+			Npc* movingNpc = movingCreature->getNpc();
+			if (movingNpc && !Spawns::getInstance()->isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
+				player->sendCancelMessage(RET_NOTENOUGHROOM);
+				return false;
+			}
 		}
 	}
 

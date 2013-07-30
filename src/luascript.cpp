@@ -1996,7 +1996,7 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 			break;
 
 		case PlayerInfoMasterPos:
-			pushPosition(L, player->getMasterPos(), 0);
+			pushPosition(L, player->getTemplePosition(), 0);
 			return 1;
 
 		case PlayerInfoName:
@@ -2021,7 +2021,7 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 			break;
 
 		case PlayerInfoTown:
-			value = player->getTown();
+			value = player->getTown()->getTownID();
 			break;
 
 		case PlayerInfoGUID:
@@ -4270,8 +4270,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetTown(lua_State* L)
 	if (player) {
 		Town* town = Towns::getInstance().getTown(townid);
 		if (town) {
-			player->masterPos = town->getTemplePosition();
-			player->setTown(townid);
+			player->setTown(town);
 			lua_pushboolean(L, true);
 		} else {
 			reportErrorFunc("Not found townid");
@@ -4293,19 +4292,19 @@ int32_t LuaScriptInterface::luaDoPlayerSetVocation(lua_State* L)
 
 	Player* player = g_game.getPlayerByID(cid);
 	if (player) {
-		player->setVocation(voc);
-
-		uint32_t promotedVocation = g_vocations.getPromotedVocation(player->getVocationId());
-		if (promotedVocation == 0 && player->getVocationId() != promotedVocation) {
-			player->addStorageValue(STORAGEVALUE_PROMOTION, 1);
+		if (player->setVocation(voc)) {
+			uint32_t promotedVocation = g_vocations.getPromotedVocation(player->getVocationId());
+			if (promotedVocation == 0 && player->getVocationId() != promotedVocation) {
+				player->addStorageValue(STORAGEVALUE_PROMOTION, 1);
+			}
+			lua_pushboolean(L, true);
+		} else {
+			lua_pushboolean(L, false);
 		}
-
-		lua_pushboolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
-
 	return 1;
 }
 

@@ -304,7 +304,12 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 		condition = Condition::createCondition(propStream);
 	}
 
-	player->setVocation(result->getDataInt("vocation"));
+	if (!player->setVocation(result->getDataInt("vocation"))) {
+		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Vocation ID " << result->getDataInt("vocation") << " which doesn't exist." << std::endl;
+		db->freeResult(result);
+		return false;
+	}
+
 	player->mana = result->getDataInt("mana");
 	player->manaMax = result->getDataInt("manamax");
 	player->magLevel = result->getDataInt("maglevel");
@@ -357,18 +362,18 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 	player->offlineTrainingTime = result->getDataInt("offlinetraining_time") * 1000;
 	player->offlineTrainingSkill = result->getDataInt("offlinetraining_skill");
 
-	player->town = result->getDataInt("town_id");
-
-	Town* town = Towns::getInstance().getTown(player->town);
-
-	if (town) {
-		player->masterPos = town->getTemplePosition();
+	Town* town = Towns::getInstance().getTown(result->getDataInt("town_id"));
+	if (!town) {
+		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Town ID " << result->getDataInt("town_id") << " which doesn't exist." << std::endl;
+		db->freeResult(result);
+		return false;
 	}
 
-	Position loginPos = player->loginPosition;
+	player->town = town;
 
+	const Position& loginPos = player->loginPosition;
 	if (loginPos.x == 0 && loginPos.y == 0 && loginPos.z == 0) {
-		player->loginPosition = player->masterPos;
+		player->loginPosition = player->getTemplePosition();
 	}
 
 	player->staminaMinutes = result->getDataInt("stamina");
@@ -729,7 +734,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`manamax` = " << player->manaMax << ", ";
 	query << "`manaspent` = " << player->manaSpent << ", ";
 	query << "`soul` = " << player->soul << ", ";
-	query << "`town_id` = " << player->town << ", ";
+	query << "`town_id` = " << player->town->getTownID() << ", ";
 
 	const Position& loginPosition = player->getLoginPosition();
 	query << "`posx` = " << loginPosition.getX() << ", ";

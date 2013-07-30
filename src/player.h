@@ -32,6 +32,7 @@
 #include "depotchest.h"
 #include "depotlocker.h"
 #include "guild.h"
+#include "town.h"
 
 #include <vector>
 #include <ctime>
@@ -456,7 +457,7 @@ class Player : public Creature, public Cylinder
 
 		uint16_t getHelpers() const;
 
-		void setVocation(uint32_t vocId);
+		bool setVocation(uint32_t vocId);
 		uint32_t getVocationId() const {
 			return vocation->getId();
 		}
@@ -482,12 +483,12 @@ class Player : public Creature, public Cylinder
 			return loginPosition;
 		}
 		const Position& getTemplePosition() const {
-			return masterPos;
+			return town->getTemplePosition();
 		}
-		uint32_t getTown() const {
+		Town* getTown() const {
 			return town;
 		}
-		void setTown(uint32_t _town) {
+		void setTown(Town* _town) {
 			town = _town;
 		}
 
@@ -786,7 +787,6 @@ class Player : public Creature, public Cylinder
 				client->sendMoveCreature(creature, newTile, newPos, newTile->getClientIndexOfThing(this, creature), oldTile, oldPos, oldStackPos, teleport);
 			}
 		}
-
 		void sendCreatureTurn(const Creature* creature) {
 			if (client) {
 				client->sendCreatureTurn(creature, creature->getTile()->getClientIndexOfThing(this, creature));
@@ -1267,6 +1267,7 @@ class Player : public Creature, public Cylinder
 		Player* tradePartner;
 		ProtocolGame* client;
 		SchedulerTask* walkTask;
+		Town* town;
 		Vocation* vocation;
 
 		uint32_t damageImmunities;
@@ -1283,7 +1284,6 @@ class Player : public Creature, public Cylinder
 		uint32_t lastIP;
 		uint32_t accountNumber;
 		uint32_t guid;
-		uint32_t town;
 		uint32_t windowTextId;
 		uint32_t editListId;
 		uint32_t moveItemsBuffer;
