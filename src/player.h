@@ -1216,162 +1216,127 @@ class Player : public Creature, public Cylinder
 		virtual void __internalAddThing(Thing* thing);
 		virtual void __internalAddThing(uint32_t index, Thing* thing);
 
-		ProtocolGame* client;
+		std::unordered_set<uint32_t> attackedSet;
 
-		Party* party;
+		std::map<uint32_t, uint32_t> goodsMap;
+		StorageMap storageMap;
+		OutfitList m_playerOutfits;
+
 		PartyList invitePartyList;
-
-		uint32_t level;
-		uint32_t levelPercent;
-		uint32_t magLevel;
-		uint32_t magLevelPercent;
-		bool accessLevel;
-		AccountType_t accountType;
-		int32_t premiumDays;
-		uint64_t experience;
-
-		uint32_t damageImmunities;
-		uint32_t conditionImmunities;
-		uint32_t conditionSuppressions;
-
-		uint64_t manaSpent;
-		int32_t vocationId;
-		Vocation* vocation;
-		PlayerSex_t sex;
-		int32_t soul, soulMax;
-		uint64_t groupFlags;
-		int16_t blessings;
-		uint32_t MessageBufferTicks;
-		int32_t MessageBufferCount;
-		uint32_t actionTaskEvent;
-		uint32_t nextStepEvent;
-		uint32_t walkTaskEvent;
-		SchedulerTask* walkTask;
-		int64_t lastFailedFollow;
-
-		std::string groupName;
-		int32_t idleTime;
-		int32_t groupId;
-		OperatingSystem_t operatingSystem;
-		bool ghostMode;
-
 		std::list<uint32_t> modalWindows;
+		std::list<ShopInfo> shopItemList;
+		LearnedInstantSpellList learnedInstantSpellList;
+		ConditionList storedConditionList;
 
-		int32_t offlineTrainingSkill;
-		int32_t offlineTrainingTime;
+		std::string name;
+		std::string nameDescription;
+		std::string guildNick;
+		std::string groupName;
 
-		int16_t lastDepotId;
-
-		bool mayNotMove;
-		bool requestedOutfit;
-		bool inMarket;
+		time_t lastLoginSaved;
+		time_t lastLogout;
+		time_t nextUseStaminaTime;
 
 		double inventoryWeight;
 		double capacity;
 
+		uint64_t experience;
+		uint64_t manaSpent;
+		uint64_t lastAttack;
+		uint64_t bankBalance;
+		uint64_t groupFlags;
+		int64_t lastFailedFollow;
+		int64_t lastMoveItemTime;
+		int64_t skullTicks;
+		int64_t lastQuestlogUpdate;
+		int64_t lastWalkthroughAttempt;
+		int64_t lastToggleMount;
 		int64_t lastPing;
 		int64_t lastPong;
-
 		int64_t nextAction;
 
-		bool pzLocked;
-		bool isConnecting;
+		BedItem* bedItem;
+		Guild* guild;
+		Inbox* inbox;
+		Item* tradeItem;
+		Item* inventory[SLOT_LAST];
+		Item* writeItem;
+		House* editHouse;
+		Npc* shopOwner;
+		Party* party;
+		Player* tradePartner;
+		ProtocolGame* client;
+		SchedulerTask* walkTask;
+		Vocation* vocation;
+
+		uint32_t damageImmunities;
+		uint32_t conditionImmunities;
+		uint32_t conditionSuppressions;
+		uint32_t level;
+		uint32_t levelPercent;
+		uint32_t magLevel;
+		uint32_t magLevelPercent;
+		uint32_t actionTaskEvent;
+		uint32_t nextStepEvent;
+		uint32_t walkTaskEvent;
+		uint32_t MessageBufferTicks;
+		uint32_t lastIP;
+		uint32_t accountNumber;
+		uint32_t guid;
+		uint32_t town;
+		uint32_t windowTextId;
+		uint32_t editListId;
+		uint32_t moveItemsBuffer;
+		uint32_t skills[SKILL_LAST + 1][3];
+		int32_t varSkills[SKILL_LAST + 1];
+		int32_t varStats[STAT_LAST + 1];
+		int32_t purchaseCallback;
+		int32_t saleCallback;
+		int32_t MessageBufferCount;
+		int32_t premiumDays;
+		int32_t vocationId;
+		int32_t soul;
+		int32_t soulMax;
 		int32_t bloodHitCount;
 		int32_t shieldBlockCount;
-		BlockType_t lastAttackBlockType;
-		bool addAttackSkillPoint;
-		uint64_t lastAttack;
+		int32_t offlineTrainingSkill;
+		int32_t offlineTrainingTime;
+		int32_t idleTime;
+		int32_t groupId;
 		int32_t shootRange;
 
+		uint16_t lastStatsTrainingTime;
+		uint16_t staminaMinutes;
+		uint16_t maxWriteLen;
+		int16_t lastDepotId;
+		int16_t blessings;
+
+		AccountType_t accountType;
+		PlayerSex_t sex;
+		Skulls_t skull;
+		OperatingSystem_t operatingSystem;
 		chaseMode_t chaseMode;
 		fightMode_t fightMode;
 		secureMode_t secureMode;
-
-		time_t lastLoginSaved;
-		time_t lastLogout;
-		Position loginPosition;
-		uint32_t lastIP;
-
-		//account variables
-		uint32_t accountNumber;
-
-		//inventory variables
-		Item* inventory[SLOT_LAST];
-		bool inventoryAbilities[SLOT_LAST];
-
-		//player advances variables
-		uint32_t skills[SKILL_LAST + 1][3];
-
-		//extra skill modifiers
-		int32_t varSkills[SKILL_LAST + 1];
-
-		//extra stat modifiers
-		int32_t varStats[STAT_LAST + 1];
-
-		LearnedInstantSpellList learnedInstantSpellList;
-		ConditionList storedConditionList;
-
-		//trade variables
-		Player* tradePartner;
+		BlockType_t lastAttackBlockType;
 		tradestate_t tradeState;
-		Item* tradeItem;
-
-		//shop variables
-		Npc* shopOwner;
-		int32_t purchaseCallback;
-		int32_t saleCallback;
-		std::list<ShopInfo> shopItemList;
-
-		std::map<uint32_t, uint32_t> goodsMap;
-
-		Inbox* inbox;
-
-		std::string name;
-		std::string nameDescription;
-		uint32_t guid;
-
-		uint32_t town;
-
-		uint64_t bankBalance;
-
-		uint16_t lastStatsTrainingTime;
 
 		Position lastWalkthroughPosition;
-		int64_t lastWalkthroughAttempt;
-		int64_t lastToggleMount;
-
-		//guild variables
-		Guild* guild;
-		std::string guildNick;
-		uint8_t guildLevel;
-
-		StorageMap storageMap;
-		int64_t lastQuestlogUpdate;
-
 		LightInfo itemsLight;
 
-		OutfitList m_playerOutfits;
+		uint8_t guildLevel;
 
-		BedItem* bedItem;
+		bool mayNotMove;
+		bool requestedOutfit;
+		bool inMarket;
+		bool accessLevel;
+		bool ghostMode;
+		bool pzLocked;
+		bool isConnecting;
+		bool addAttackSkillPoint;
+		bool inventoryAbilities[SLOT_LAST];
 
-		//stamina
-		uint16_t staminaMinutes;
-		time_t nextUseStaminaTime;
-
-		//read/write storage data
-		uint32_t windowTextId;
-		Item* writeItem;
-		uint16_t maxWriteLen;
-		House* editHouse;
-		uint32_t editListId;
-
-		uint32_t moveItemsBuffer;
-		int64_t lastMoveItemTime;
-
-		int64_t skullTicks;
-		Skulls_t skull;
-		typedef std::unordered_set<uint32_t> AttackedSet;
-		AttackedSet attackedSet;
+		Position loginPosition;
 
 		static uint32_t playerAutoID;
 

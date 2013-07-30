@@ -4489,9 +4489,7 @@ void Player::addAttacked(const Player* attacked)
 		return;
 	}
 
-	if (attackedSet.find(attacked->getGUID()) == attackedSet.end()) {
-		attackedSet.insert(attacked->getGUID());
-	}
+	attackedSet.insert(attacked->getGUID());
 }
 
 void Player::clearAttacked()
