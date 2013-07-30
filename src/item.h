@@ -99,6 +99,22 @@ enum AttrTypes_t {
 	ATTR_CONTAINER_ITEMS = 23
 };
 
+enum itemAttrTypes {
+	ATTR_ITEM_ACTIONID = 1,
+	ATTR_ITEM_UNIQUEID = 2,
+	ATTR_ITEM_DESC = 4,
+	ATTR_ITEM_TEXT = 8,
+	ATTR_ITEM_WRITTENDATE = 16,
+	ATTR_ITEM_WRITTENBY = 32,
+	ATTR_ITEM_OWNER = 65536,
+	ATTR_ITEM_DURATION = 131072,
+	ATTR_ITEM_DECAYING = 262144,
+	ATTR_ITEM_CORPSEOWNER = 524288,
+	ATTR_ITEM_CHARGES = 1048576,
+	ATTR_ITEM_FLUIDTYPE = 2097152,
+	ATTR_ITEM_DOORID = 4194304
+};
+
 enum Attr_ReadValue {
 	ATTR_READ_CONTINUE,
 	ATTR_READ_ERROR,
@@ -113,7 +129,7 @@ class ItemAttributes
 			m_firstAttr = NULL;
 		}
 
-		virtual ~ItemAttributes() {
+		~ItemAttributes() {
 			if (m_firstAttr) {
 				deleteAttrs(m_firstAttr);
 			}
@@ -235,22 +251,6 @@ class ItemAttributes
 		}
 
 	protected:
-		enum itemAttrTypes {
-			ATTR_ITEM_ACTIONID = 1,
-			ATTR_ITEM_UNIQUEID = 2,
-			ATTR_ITEM_DESC = 4,
-			ATTR_ITEM_TEXT = 8,
-			ATTR_ITEM_WRITTENDATE = 16,
-			ATTR_ITEM_WRITTENBY = 32,
-			ATTR_ITEM_OWNER = 65536,
-			ATTR_ITEM_DURATION = 131072,
-			ATTR_ITEM_DECAYING = 262144,
-			ATTR_ITEM_CORPSEOWNER = 524288,
-			ATTR_ITEM_CHARGES = 1048576,
-			ATTR_ITEM_FLUIDTYPE = 2097152,
-			ATTR_ITEM_DOORID = 4194304
-		};
-
 		bool hasAttribute(itemAttrTypes type) const;
 		void removeAttribute(itemAttrTypes type);
 
@@ -305,9 +305,11 @@ class ItemAttributes
 		Attribute* getAttr(itemAttrTypes type);
 
 		void deleteAttrs(Attribute* attr);
+
+	friend class Item;
 };
 
-class Item : virtual public Thing, public ItemAttributes
+class Item : virtual public Thing
 {
 	public:
 		//Factory member to create item of right type based on type
@@ -370,6 +372,165 @@ class Item : virtual public Thing, public ItemAttributes
 		}
 		virtual const BedItem* getBed() const {
 			return NULL;
+		}
+
+		const std::string& getStrAttr(itemAttrTypes type) const {
+			if (!attributes) {
+				return ItemAttributes::emptyString;
+			}
+			return attributes->getStrAttr(type);
+		}
+		void setStrAttr(itemAttrTypes type, const std::string& value) {
+			getAttributes()->setStrAttr(type, value);
+		}
+
+		uint32_t getIntAttr(itemAttrTypes type) const {
+			if (!attributes) {
+				return 0;
+			}
+			return attributes->getIntAttr(type);
+		}
+		void setIntAttr(itemAttrTypes type, int32_t value) {
+			getAttributes()->setIntAttr(type, value);
+		}
+		void increaseIntAttr(itemAttrTypes type, int32_t value) {
+			getAttributes()->increaseIntAttr(type, value);
+		}
+
+		void removeAttribute(itemAttrTypes type) {
+			if (attributes) {
+				attributes->removeAttribute(type);
+			}
+		}
+		bool hasAttribute(itemAttrTypes type) const {
+			if (!attributes) {
+				return false;
+			}
+			return attributes->hasAttribute(type);
+		}
+
+		void setSpecialDescription(const std::string& desc) {
+			setStrAttr(ATTR_ITEM_DESC, desc);
+		}
+		void resetSpecialDescription() {
+			removeAttribute(ATTR_ITEM_DESC);
+		}
+		const std::string& getSpecialDescription() const {
+			return getStrAttr(ATTR_ITEM_DESC);
+		}
+
+		void setText(const std::string& text) {
+			setStrAttr(ATTR_ITEM_TEXT, text);
+		}
+		void resetText() {
+			removeAttribute(ATTR_ITEM_TEXT);
+		}
+		const std::string& getText() const {
+			return getStrAttr(ATTR_ITEM_TEXT);
+		}
+
+		void setDate(int32_t n) {
+			setIntAttr(ATTR_ITEM_WRITTENDATE, n);
+		}
+		void resetDate() {
+			removeAttribute(ATTR_ITEM_WRITTENDATE);
+		}
+		time_t getDate() const {
+			return (time_t)getIntAttr(ATTR_ITEM_WRITTENDATE);
+		}
+
+		void setWriter(const std::string& _writer) {
+			setStrAttr(ATTR_ITEM_WRITTENBY, _writer);
+		}
+		void resetWriter() {
+			removeAttribute(ATTR_ITEM_WRITTENBY);
+		}
+		const std::string& getWriter() const {
+			return getStrAttr(ATTR_ITEM_WRITTENBY);
+		}
+
+		void setActionId(uint16_t n) {
+			if (n < 100) {
+				n = 100;
+			}
+
+			setIntAttr(ATTR_ITEM_ACTIONID, n);
+		}
+		uint16_t getActionId() const {
+			if (!attributes) {
+				return 0;
+			}
+			return (uint16_t)getIntAttr(ATTR_ITEM_ACTIONID);
+		}
+
+		uint16_t getUniqueId() const {
+			if (!attributes) {
+				return 0;
+			}
+			return (uint16_t)getIntAttr(ATTR_ITEM_UNIQUEID);
+		}
+
+		void setCharges(uint16_t n) {
+			setIntAttr(ATTR_ITEM_CHARGES, n);
+		}
+		uint16_t getCharges() const {
+			if (!attributes) {
+				return 0;
+			}
+			return (uint16_t)getIntAttr(ATTR_ITEM_CHARGES);
+		}
+
+		void setFluidType(uint16_t n) {
+			setIntAttr(ATTR_ITEM_FLUIDTYPE, n);
+		}
+		uint16_t getFluidType() const {
+			if (!attributes) {
+				return 0;
+			}
+			return (uint16_t)getIntAttr(ATTR_ITEM_FLUIDTYPE);
+		}
+
+		void setOwner(uint32_t _owner) {
+			setIntAttr(ATTR_ITEM_OWNER, _owner);
+		}
+		uint32_t getOwner() const {
+			if (!attributes) {
+				return 0;
+			}
+			return getIntAttr(ATTR_ITEM_OWNER);
+		}
+
+		void setCorpseOwner(uint32_t _corpseOwner) {
+			setIntAttr(ATTR_ITEM_CORPSEOWNER, _corpseOwner);
+		}
+		uint32_t getCorpseOwner() {
+			if (!attributes) {
+				return 0;
+			}
+			return getIntAttr(ATTR_ITEM_CORPSEOWNER);
+		}
+
+		void setDuration(int32_t time) {
+			setIntAttr(ATTR_ITEM_DURATION, time);
+		}
+		void decreaseDuration(int32_t time) {
+			increaseIntAttr(ATTR_ITEM_DURATION, -time);
+		}
+		uint32_t getDuration() const {
+			if (!attributes) {
+				return 0;
+			}
+			return getIntAttr(ATTR_ITEM_DURATION);
+		}
+
+		void setDecaying(ItemDecayState_t decayState) {
+			setIntAttr(ATTR_ITEM_DECAYING, decayState);
+		}
+		ItemDecayState_t getDecaying() const {
+			if (!attributes) {
+				return (ItemDecayState_t)0;
+			}
+			return (ItemDecayState_t)getIntAttr(ATTR_ITEM_DECAYING);
 		}
 
 		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = NULL, int32_t subType = -1, bool addArticle = true);
@@ -590,8 +751,18 @@ class Item : virtual public Thing, public ItemAttributes
 			return(!loadedFromMap && (getUniqueId() == 0 && getActionId() == 0) && isPickupable() && canRemove());
 		}
 
+		ItemAttributes* getAttributes() {
+			if (!attributes) {
+				attributes = new ItemAttributes();
+			}
+			return attributes;
+		}
+
 	protected:
 		std::string getWeightDescription(double weight) const;
+
+		ItemAttributes* attributes;
+
 		uint16_t id;  // the same id as in ItemType
 		uint8_t count; // number of stacked items
 

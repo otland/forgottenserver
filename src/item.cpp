@@ -140,8 +140,7 @@ Item* Item::CreateItem(PropStream& propStream)
 	return Item::CreateItem(_id, 0);
 }
 
-Item::Item(const uint16_t _type, uint16_t _count /*= 0*/) :
-	ItemAttributes()
+Item::Item(const uint16_t _type, uint16_t _count /*= 0*/)
 {
 	id = _type;
 
@@ -170,38 +169,33 @@ Item::Item(const uint16_t _type, uint16_t _count /*= 0*/) :
 }
 
 Item::Item(const Item& i) :
-	Thing(), ItemAttributes()
+	Thing()
 {
 	//std::cout << "Item copy constructor " << this << std::endl;
 	id = i.id;
 	count = i.count;
 	loadedFromMap = i.loadedFromMap;
 
-	m_attributes = i.m_attributes;
-
-	if (i.m_firstAttr) {
-		m_firstAttr = new Attribute(*i.m_firstAttr);
+	if (i.attributes) {
+		attributes = new ItemAttributes(*i.attributes);
+	} else {
+		attributes = NULL;
 	}
 }
 
 Item* Item::clone() const
 {
 	Item* _item = Item::CreateItem(id, count);
-	_item->m_attributes = m_attributes;
-
-	if (m_firstAttr) {
-		_item->m_firstAttr = new Attribute(*m_firstAttr);
+	if (attributes) {
+		_item->attributes = new ItemAttributes(*attributes);
 	}
-
 	return _item;
 }
 
 void Item::copyAttributes(Item* item)
 {
-	m_attributes = item->m_attributes;
-
-	if (item->m_firstAttr) {
-		m_firstAttr = new Attribute(*item->m_firstAttr);
+	if (item->attributes) {
+		attributes = new ItemAttributes(*item->attributes);
 	}
 
 	removeAttribute(ATTR_ITEM_DECAYING);
@@ -1248,7 +1242,7 @@ void Item::setUniqueId(uint16_t n)
 		return;
 	}
 
-	ItemAttributes::setUniqueId(n);
+	getAttributes()->setUniqueId(n);
 	ScriptEnvironment::addUniqueThing(this);
 }
 
