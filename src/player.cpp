@@ -3302,7 +3302,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				}
 
 				//try find an already existing item to stack with
-				if (tmpItem != item && tmpItem->getID() == item->getID() && tmpItem->getItemCount() < 100) {
+				if (tmpItem->getID() == item->getID() && tmpItem->getItemCount() < 100) {
 					index = n;
 					*destItem = tmpItem;
 					return tmpContainer;

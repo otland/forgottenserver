@@ -1158,7 +1158,9 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 				useDirection = true;
 			}
 
-			param = playerTarget->getName();
+			if (playerTarget) {
+				param = playerTarget->getName();
+			}
 		} else {
 			target = player->getAttackedCreature();
 

@@ -393,11 +393,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool i
 		eventType = MOVE_EVENT_STEP_OUT;
 	}
 
-	Position pos(0, 0, 0);
-
-	if (tile) {
-		pos = tile->getPosition();
-	}
+	Position pos = tile->getPosition();
 
 	uint32_t ret = 1;
 

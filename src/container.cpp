@@ -188,7 +188,9 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 	Container* evil = const_cast<Container*>(this);
 
 	for (ContainerIterator cit = evil->begin(); cit != evil->end(); ++cit) {
-		Container* container = (*cit)->getContainer();
+		Item* item = (*cit);
+
+		Container* container = item->getContainer();
 		if (container && container->size() != 0) {
 			continue;
 		}
@@ -199,7 +201,7 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 			os << ", ";
 		}
 
-		os << container->getNameDescription();
+		os << item->getNameDescription();
 	}
 
 	if (firstitem) {

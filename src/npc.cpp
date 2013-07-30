@@ -318,9 +318,7 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureAppear(creature);
 		}
-	}
-	//only players for script events
-	else if (creature->getPlayer()) {
+	} else if (creature->getPlayer()) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureAppear(creature);
 		}
