@@ -2253,7 +2253,6 @@ void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText
 
 		for (SpectatorVec::const_iterator it = list.begin(), end = list.end(); it != end; ++it) {
 			Player* tmpPlayer = (*it)->getPlayer();
-
 			if (tmpPlayer != this) {
 				tmpPlayer->sendExperienceMessage(MSG_EXPERIENCE_OTHERS, strExp, targetPos, exp, TEXTCOLOR_WHITE_EXP);
 			}
@@ -2735,9 +2734,8 @@ void Player::removeList()
 {
 	g_game.removePlayer(this);
 
-	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-	for (auto it = players.begin(); it != players.end(); ++it) {
-		it->second->notifyStatusChange(this, VIPSTATUS_OFFLINE);
+	for (const auto& it : g_game.getPlayers()) {
+		it.second->notifyStatusChange(this, VIPSTATUS_OFFLINE);
 	}
 
 	Status::getInstance()->removePlayer();
@@ -2745,9 +2743,8 @@ void Player::removeList()
 
 void Player::addList()
 {
-	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-	for (auto it = players.begin(); it != players.end(); ++it) {
-		it->second->notifyStatusChange(this, VIPSTATUS_ONLINE);
+	for (const auto& it : g_game.getPlayers()) {
+		it.second->notifyStatusChange(this, VIPSTATUS_ONLINE);
 	}
 
 	g_game.addPlayer(this);
@@ -3403,12 +3400,11 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 void Player::__replaceThing(uint32_t index, Thing* thing)
 {
-	if (index > 11) {
+	if (index >= SLOT_LAST) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
 	Item* oldItem = getInventoryItem((slots_t)index);
-
 	if (!oldItem) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
@@ -3419,14 +3415,12 @@ void Player::__replaceThing(uint32_t index, Thing* thing)
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
-	const ItemType& oldType = Item::items[oldItem->getID()];
-
-	const ItemType& newType = Item::items[item->getID()];
-
 	//send to client
 	sendInventoryItem((slots_t)index, item);
 
 	//event methods
+	const ItemType& oldType = Item::items[oldItem->getID()];
+	const ItemType& newType = Item::items[item->getID()];
 	onUpdateInventoryItem((slots_t)index, oldItem, oldType, item, newType);
 
 	item->setParent(this);
@@ -4594,7 +4588,7 @@ bool Player::hasLearnedInstantSpell(const std::string& name) const
 		return true;
 	}
 
-	for (auto learnedSpellName : learnedInstantSpellList) {
+	for (const auto& learnedSpellName : learnedInstantSpellList) {
 		if (strcasecmp(learnedSpellName.c_str(), name.c_str()) == 0) {
 			return true;
 		}

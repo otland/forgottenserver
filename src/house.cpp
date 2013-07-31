@@ -69,7 +69,7 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 	}
 
 	isLoaded = true;
-
+	
 	if (houseOwner) {
 		//send items to depot
 		if (player) {
@@ -78,32 +78,18 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 			transferToDepot();
 		}
 
-		PlayerVector toKick;
-
-		for (HouseTileList::iterator it = houseTiles.begin(); it != houseTiles.end(); ++it) {
-			if (const CreatureVector* creatures = (*it)->getCreatures()) {
-				for (CreatureVector::const_iterator cit = creatures->begin(), cend = creatures->end(); cit != cend; ++cit) {
-					Player* player = (*cit)->getPlayer();
-
-					if (player) {
-						toKick.push_back(player);
-					}
+		for (HouseTile* tile : houseTiles) {
+			if (const CreatureVector* creatures = tile->getCreatures()) {
+				for (Creature* creature : *creatures) {
+					kickPlayer(NULL, creature->getPlayer());
 				}
 			}
 		}
 
-		while (!toKick.empty()) {
-			Player* c = toKick.back();
-			toKick.pop_back();
-			kickPlayer(NULL, c->getName());
-		}
-
-		// we need to remove players from beds
-		HouseBedItemList::iterator bit;
-
-		for (bit = bedsList.begin(); bit != bedsList.end(); ++bit) {
-			if ((*bit)->getSleeper() != 0) {
-				(*bit)->wakeUp(NULL);
+		// Remove players from beds
+		for (BedItem* bed : bedsList) {
+			if (bed->getSleeper() != 0) {
+				bed->wakeUp(NULL);
 			}
 		}
 
@@ -112,8 +98,8 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 		setAccessList(SUBOWNER_LIST, "");
 		setAccessList(GUEST_LIST, "");
 
-		for (HouseDoorList::iterator it = doorList.begin(); it != doorList.end(); ++it) {
-			(*it)->setAccessList("");
+		for (Door* door : doorList) {
+			door->setAccessList("");
 		}
 
 		//reset paid date
@@ -173,28 +159,27 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 	return HOUSE_NO_INVITED;
 }
 
-bool House::kickPlayer(Player* player, const std::string& name)
+bool House::kickPlayer(Player* player, Player* target)
 {
-	Player* kickingPlayer = g_game.getPlayerByName(name);
-
-	if (kickingPlayer) {
-		HouseTile* houseTile = dynamic_cast<HouseTile*>(kickingPlayer->getTile());
-
-		if (houseTile && houseTile->getHouse() == this) {
-			if (getHouseAccessLevel(player) >= getHouseAccessLevel(kickingPlayer) && !kickingPlayer->hasFlag(PlayerFlag_CanEditHouses)) {
-				Position oldPosition = kickingPlayer->getPosition();
-
-				if (g_game.internalTeleport(kickingPlayer, getEntryPosition()) == RET_NOERROR) {
-					g_game.addMagicEffect(oldPosition, NM_ME_POFF);
-					g_game.addMagicEffect(getEntryPosition(), NM_ME_TELEPORT);
-				}
-
-				return true;
-			}
-		}
+	if (!target) {
+		return false;
 	}
 
-	return false;
+	HouseTile* houseTile = dynamic_cast<HouseTile*>(target->getTile());
+	if (!houseTile || houseTile->getHouse() != this) {
+		return false;
+	}
+
+	if (getHouseAccessLevel(player) < getHouseAccessLevel(target) || target->hasFlag(PlayerFlag_CanEditHouses)) {
+		return false;
+	}
+
+	Position oldPosition = target->getPosition();
+	if (g_game.internalTeleport(target, getEntryPosition()) == RET_NOERROR) {
+		g_game.addMagicEffect(oldPosition, NM_ME_POFF);
+		g_game.addMagicEffect(getEntryPosition(), NM_ME_TELEPORT);
+	}
+	return true;
 }
 
 void House::setAccessList(uint32_t listId, const std::string& textlist)
@@ -205,7 +190,6 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 		subOwnerList.parseList(textlist);
 	} else {
 		Door* door = getDoorByNumber(listId);
-
 		if (door) {
 			door->setAccessList(textlist);
 		}
@@ -215,31 +199,14 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 	}
 
 	//kick uninvited players
-	typedef std::list<Player*> KickPlayerList;
-	KickPlayerList kickList;
-	HouseTileList::iterator it;
-
-	for (it = houseTiles.begin(); it != houseTiles.end(); ++it) {
-		HouseTile* hTile = *it;
-
-		if (CreatureVector* creatures = hTile->getCreatures()) {
-			CreatureVector::iterator cit;
-
-			for (cit = creatures->begin(); cit != creatures->end(); ++cit) {
-				Player* player = (*cit)->getPlayer();
-
-				if (player && isInvited(player) == false) {
-					kickList.push_back(player);
+	for (HouseTile* tile : houseTiles) {
+		if (CreatureVector* creatures = tile->getCreatures()) {
+			for (Creature* creature : *creatures) {
+				Player* player = creature->getPlayer();
+				if (player && !isInvited(player)) {
+					kickPlayer(NULL, player);
 				}
 			}
-		}
-	}
-
-	KickPlayerList::iterator itkick;
-
-	for (itkick = kickList.begin(); itkick != kickList.end(); ++itkick) {
-		if (g_game.internalTeleport(*itkick, getEntryPosition()) == RET_NOERROR) {
-			g_game.addMagicEffect(getEntryPosition(), NM_ME_TELEPORT);
 		}
 	}
 }
@@ -284,10 +251,9 @@ bool House::transferToDepot(Player* player)
 	}
 
 	ItemList moveItemList;
-	for (HouseTileList::iterator it = houseTiles.begin(); it != houseTiles.end(); ++it) {
-		if (const TileItemVector* items = (*it)->getItemList()) {
-			for (ItemVector::const_iterator iit = items->begin(), iend = items->end(); iit != iend; ++iit) {
-				Item* item = *iit;
+	for (HouseTile* tile : houseTiles) {
+		if (const TileItemVector* items = tile->getItemList()) {
+			for (Item* item : *items) {
 				if (item->isPickupable()) {
 					moveItemList.push_back(item);
 				} else {
@@ -571,22 +537,20 @@ bool AccessList::addGuild(const std::string& guildName, const std::string& rank)
 
 bool AccessList::addExpression(const std::string& expression)
 {
-	ExpressionList::iterator it;
-
-	for (it = expressionList.begin(); it != expressionList.end(); ++it) {
-		if ((*it) == expression) {
+	for (const std::string& expr : expressionList) {
+		if (expr == expression) {
 			return false;
 		}
 	}
 
 	std::string outExp;
-	std::string metachars = ".[{}()\\+|^$";
+	outExp.reserve(expression.length());
 
+	std::string metachars = ".[{}()\\+|^$";
 	for (std::string::const_iterator it = expression.begin(); it != expression.end(); ++it) {
 		if (metachars.find(*it) != std::string::npos) {
 			outExp += "\\";
 		}
-
 		outExp += (*it);
 	}
 

@@ -239,7 +239,6 @@ bool Party::removeInvite(Player* player)
 	}
 
 	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), player);
-
 	if (it == inviteList.end()) {
 		return false;
 	}
@@ -254,8 +253,8 @@ bool Party::removeInvite(Player* player)
 	if (disbandParty()) {
 		disband();
 	} else {
-		for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-			g_game.updatePlayerHelpers(*it);
+		for (Player* member : memberList) {
+			g_game.updatePlayerHelpers(member);
 		}
 
 		g_game.updatePlayerHelpers(leader);

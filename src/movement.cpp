@@ -236,28 +236,24 @@ bool MoveEvents::registerEvent(Event* event, xmlNodePtr p)
 void MoveEvents::addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map)
 {
 	MoveListMap::iterator it = map.find(id);
-
 	if (it == map.end()) {
 		MoveEventList moveEventList;
 		moveEventList.moveEvent[moveEvent->getEventType()].push_back(moveEvent);
 		map[id] = moveEventList;
 	} else {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[moveEvent->getEventType()];
-
-		for (std::list<MoveEvent*>::iterator it = moveEventList.begin(); it != moveEventList.end(); ++it) {
-			if ((*it)->getSlot() == moveEvent->getSlot()) {
+		for (MoveEvent* existingMoveEvent : moveEventList) {
+			if (existingMoveEvent->getSlot() == moveEvent->getSlot()) {
 				std::cout << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << id << std::endl;
 			}
 		}
-
 		moveEventList.push_back(moveEvent);
 	}
 }
 
 MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 {
-	uint32_t slotp = 0;
-
+	uint32_t slotp;
 	switch (slot) {
 		case SLOT_HEAD:
 			slotp = SLOTP_HEAD;
@@ -290,21 +286,19 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 			slotp = SLOTP_RING;
 			break;
 		default:
+			slotp = 0;
 			break;
 	}
 
 	MoveListMap::iterator it = m_itemIdMap.find(item->getID());
-
 	if (it != m_itemIdMap.end()) {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
-
-		for (std::list<MoveEvent*>::iterator it = moveEventList.begin(); it != moveEventList.end(); ++it) {
-			if (((*it)->getSlot() & slotp) != 0) {
-				return *it;
+		for (MoveEvent* moveEvent : moveEventList) {
+			if ((moveEvent->getSlot() & slotp) != 0) {
+				return moveEvent;
 			}
 		}
 	}
-
 	return NULL;
 }
 
@@ -571,8 +565,7 @@ bool MoveEvent::configureEvent(xmlNodePtr p)
 
 		if (m_eventType == MOVE_EVENT_EQUIP || m_eventType == MOVE_EVENT_DEEQUIP) {
 			if (readXMLString(p, "slot", str)) {
-				std::string tmpStr = asLowerCaseString(str);
-
+				tmpStr = asLowerCaseString(str);
 				if (tmpStr == "head") {
 					slot = SLOTP_HEAD;
 				} else if (tmpStr == "necklace") {

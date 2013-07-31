@@ -84,12 +84,11 @@ class Towns
 		}
 
 		Town* getTown(const std::string& townname) const {
-			for (auto it = townMap.begin(); it != townMap.end(); ++it) {
-				if (strcasecmp(townname.c_str(), it->second->getName().c_str()) == 0) {
-					return it->second;
+			for (const auto& it : townMap) {
+				if (strcasecmp(townname.c_str(), it.second->getName().c_str()) == 0) {
+					return it.second;
 				}
 			}
-
 			return NULL;
 		}
 
@@ -98,7 +97,6 @@ class Towns
 			if (it != townMap.end()) {
 				return it->second;
 			}
-
 			return NULL;
 		}
 

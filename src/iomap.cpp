@@ -287,8 +287,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					}
 
 					//read tile attributes
-					unsigned char attribute;
-
 					while (propStream.GET_UCHAR(attribute)) {
 						switch (attribute) {
 							case OTBM_ATTR_TILE_FLAGS: {
@@ -365,10 +363,10 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 					while (nodeItem) {
 						if (type == OTBM_ITEM) {
-							PropStream propStream;
-							f.getProps(nodeItem, propStream);
+							PropStream stream;
+							f.getProps(nodeItem, stream);
 
-							Item* item = Item::CreateItem(propStream);
+							Item* item = Item::CreateItem(stream);
 
 							if (!item) {
 								std::ostringstream ss;
@@ -377,7 +375,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 								return false;
 							}
 
-							if (item->unserializeItemNode(f, nodeItem, propStream)) {
+							if (item->unserializeItemNode(f, nodeItem, stream)) {
 								if (isHouseTile && !item->isNotMoveable()) {
 									std::cout << "Warning: [OTBM loader] Moveable item with ID: " << item->getID() << ", in house: " << house->getHouseId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
 									delete item;

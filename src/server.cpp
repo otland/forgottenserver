@@ -143,11 +143,11 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 			return;
 		}
 
-		boost::system::error_code error;
-		const boost::asio::ip::tcp::endpoint endpoint = socket->remote_endpoint(error);
-		uint32_t remote_ip = 0;
+		boost::system::error_code socketError;
+		const boost::asio::ip::tcp::endpoint endpoint = socket->remote_endpoint(socketError);
 
-		if (!error) {
+		uint32_t remote_ip = 0;
+		if (!socketError) {
 			remote_ip = htonl(endpoint.address().to_v4().to_ulong());
 		}
 
@@ -161,9 +161,8 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 				connection->acceptConnection();
 			}
 		} else if (socket->is_open()) {
-			boost::system::error_code error;
-			socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			socket->close(error);
+			socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both, socketError);
+			socket->close(socketError);
 			delete socket;
 		}
 
@@ -256,8 +255,7 @@ void ServicePort::close()
 
 bool ServicePort::add_service(Service_ptr new_svc)
 {
-	for (auto svc_iter = m_services.begin(); svc_iter != m_services.end(); ++svc_iter) {
-		Service_ptr svc = *svc_iter;
+	for (Service_ptr& svc : m_services) {
 		if (svc->is_single_socket()) {
 			return false;
 		}

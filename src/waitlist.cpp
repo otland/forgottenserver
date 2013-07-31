@@ -89,8 +89,8 @@ bool WaitingList::clientLogin(const Player* player)
 	cleanUpList();
 
 	uint32_t slot;
-	WaitListIterator it = findClient(player, slot);
 
+	WaitListIterator it = findClient(player, slot);
 	if (it != waitList.end()) {
 		if ((Status::getInstance()->getPlayersOnline() + slot) <= (uint32_t)g_config.getNumber(ConfigManager::MAX_PLAYERS)) {
 			//should be able to login now
@@ -109,7 +109,7 @@ bool WaitingList::clientLogin(const Player* player)
 	if (player->isPremium()) {
 		slot = 1;
 
-		for (WaitListIterator it = waitList.begin(); it != waitList.end(); ++it) {
+		for (it = waitList.begin(); it != waitList.end(); ++it) {
 			if (!(*it)->premium) {
 				waitList.insert(it, wait);
 				break;

@@ -503,7 +503,6 @@ void Creature::onCreatureAppear(const Creature* creature, bool isLogin)
 void Creature::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout)
 {
 	onCreatureDisappear(creature, true);
-
 	if (creature == this) {
 		if (getMaster() && !getMaster()->isRemoved()) {
 			getMaster()->removeSummon(this);
@@ -696,8 +695,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 		} else {
 			if (hasExtraSwing()) {
 				//our target is moving lets see if we can get in hit
-				g_dispatcher.addTask(createTask(
-				                         boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
+				g_dispatcher.addTask(createTask(boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
 			}
 
 			if (newTile->getZone() != oldTile->getZone()) {
@@ -1384,16 +1382,14 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool force/* = false*/)
 {
 	for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
-		if ((*it)->getType() != type || (*it)->getId() != id) {
+		Condition* condition = *it;
+		if (condition->getType() != type || condition->getId() != id) {
 			++it;
 			continue;
 		}
 
-		Condition* condition = *it;
-
-		if (!force && (*it)->getType() == CONDITION_PARALYZE) {
+		if (!force && condition->getType() == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
-
 			if (walkDelay > 0) {
 				g_scheduler.addEvent(createSchedulerTask(walkDelay, boost::bind(&Game::forceRemoveCondition, &g_game, getID(), type)));
 				return;
@@ -1470,9 +1466,10 @@ void Creature::executeConditions(uint32_t interval)
 {
 	for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
 		if (!(*it)->executeCondition(this, interval)) {
-			ConditionType_t type = (*it)->getType();
-
 			Condition* condition = *it;
+
+			ConditionType_t type = condition->getType();
+
 			it = conditions.erase(it);
 
 			condition->endCondition(this, CONDITIONEND_TICKS);

@@ -403,9 +403,9 @@ class DynamicTile : public Tile
 // For blocking tiles, where we very rarely actually have items
 class StaticTile : public Tile
 {
-		// We very rarely even need the vectors, so don't keep them in memory
-		TileItemVector* items;
-		CreatureVector* creatures;
+	// We very rarely even need the vectors, so don't keep them in memory
+	TileItemVector* items;
+	CreatureVector* creatures;
 
 	public:
 		StaticTile(uint16_t x, uint16_t y, uint16_t z);
@@ -418,7 +418,10 @@ class StaticTile : public Tile
 			return items;
 		}
 		TileItemVector* makeItemList() {
-			return (items) ? (items) : (items = new TileItemVector);
+			if (!items) {
+				items = new TileItemVector;
+			}
+			return items;
 		}
 
 		CreatureVector* getCreatures() {

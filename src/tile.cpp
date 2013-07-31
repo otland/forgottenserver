@@ -672,18 +672,14 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 
 			if (monster->canPushCreatures() && !monster->isSummon()) {
 				if (creatures) {
-					Creature* creature;
-
 					for (uint32_t i = 0; i < creatures->size(); ++i) {
-						creature = creatures->at(i);
-
-						if (creature->getPlayer() && creature->getPlayer()->isInGhostMode()) {
+						Creature* tileCreature = creatures->at(i);
+						if (tileCreature->getPlayer() && tileCreature->getPlayer()->isInGhostMode()) {
 							continue;
 						}
 
-						const Monster* creatureMonster = creature->getMonster();
-
-						if (!creatureMonster || !creature->isPushable() ||
+						const Monster* creatureMonster = tileCreature->getMonster();
+						if (!creatureMonster || !tileCreature->isPushable() ||
 						        (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
 							return RET_NOTPOSSIBLE;
 						}
@@ -785,16 +781,12 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 					}
 				}
 
-				if (const TileItemVector* items = getItemList()) {
-					Item* iitem;
+				for (ItemVector::const_iterator it = items->begin(); it != items->end(); ++it) {
+					Item* item = (*it);
 
-					for (ItemVector::const_iterator it = items->begin(); it != items->end(); ++it) {
-						iitem = (*it);
-						const ItemType& iiType = Item::items[iitem->getID()];
-
-						if (iiType.blockSolid && (!iiType.moveable || iitem->getUniqueId() != 0)) {
-							return RET_NOTPOSSIBLE;
-						}
+					const ItemType& iiType = Item::items[item->getID()];
+					if (iiType.blockSolid && (!iiType.moveable || item->getUniqueId() != 0)) {
+						return RET_NOTPOSSIBLE;
 					}
 				}
 			}
@@ -1280,7 +1272,6 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 
 		if (item->isAlwaysOnTop()) {
 			TileItemVector* items = getItemList();
-
 			if (items) {
 				for (ItemVector::iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
 					if (*it == item) {
@@ -1303,7 +1294,6 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			}
 		} else {
 			TileItemVector* items = getItemList();
-
 			if (items) {
 				for (ItemVector::iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
 					if (*it == item) {
@@ -1314,8 +1304,8 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 							item->setItemCount(newCount);
 							updateTileFlags(item, false);
 
-							const ItemType& it = Item::items[item->getID()];
-							onUpdateTileItem(item, it, item, it);
+							const ItemType& itemType = Item::items[item->getID()];
+							onUpdateTileItem(item, itemType, item, itemType);
 						} else {
 							const SpectatorVec& list = g_game.getSpectators(getPosition());
 
@@ -1627,7 +1617,7 @@ void Tile::__internalAddThing(uint32_t index, Thing* thing)
 		}
 
 		TileItemVector* items = makeItemList();
-		if (items && items->size() >= 0xFFFF) {
+		if (items->size() >= 0xFFFF) {
 			return /*RET_NOTPOSSIBLE*/;
 		}
 

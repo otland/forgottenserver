@@ -52,15 +52,15 @@ uint32_t Npc::npcCount = 0;
 void Npcs::reload()
 {
 	const std::map<uint32_t, Npc*>& npcs = g_game.getNpcs();
-	for (auto it = npcs.begin(); it != npcs.end(); ++it) {
-		it->second->closeAllShopWindows();
+	for (const auto& it : npcs) {
+		it.second->closeAllShopWindows();
 	}
 
 	delete Npc::m_scriptInterface;
 	Npc::m_scriptInterface = NULL;
 
-	for (auto it = npcs.begin(); it != npcs.end(); ++it) {
-		it->second->reload();
+	for (const auto& it : npcs) {
+		it.second->reload();
 	}
 }
 
@@ -314,11 +314,7 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 		addEventWalk();
 	}
 
-	if (creature == this) {
-		if (m_npcEventHandler) {
-			m_npcEventHandler->onCreatureAppear(creature);
-		}
-	} else if (creature->getPlayer()) {
+	if (creature == this || creature->getPlayer()) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureAppear(creature);
 		}

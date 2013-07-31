@@ -62,7 +62,6 @@ void Scheduler::schedulerThread(void* p)
 
 			// check if the event was stopped
 			EventIdSet::iterator it = scheduler->m_eventIds.find(task->getEventId());
-
 			if (it != scheduler->m_eventIds.end()) {
 				// was not stopped so we should run it
 				runTask = true;

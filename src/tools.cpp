@@ -238,8 +238,8 @@ StringVec explodeString(const std::string& inString, const std::string& separato
 IntegerVec vectorAtoi(const StringVec& stringVector)
 {
 	IntegerVec returnVector;
-	for (auto it = stringVector.begin(); it != stringVector.end(); ++it) {
-		returnVector.push_back(atoi(it->c_str()));
+	for (const auto& string : stringVector) {
+		returnVector.push_back(atoi(string.c_str()));
 	}
 	return returnVector;
 }

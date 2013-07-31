@@ -221,10 +221,8 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 					const Position& checkPosition = getNextPosition(dir, position);
 
 					Tile* tile = g_game.getTile(checkPosition);
-
 					if (tile) {
 						Creature* topCreature = tile->getTopCreature();
-
 						if (topCreature && followCreature != topCreature && isOpponent(topCreature)) {
 							selectTarget(topCreature);
 						}
@@ -241,7 +239,6 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 void Monster::updateTargetList()
 {
 	CreatureHashSet::iterator friendIterator = friendList.begin();
-
 	while (friendIterator != friendList.end()) {
 		if ((*friendIterator)->getHealth() <= 0 || !canSee((*friendIterator)->getPosition())) {
 			(*friendIterator)->releaseThing2();
@@ -252,7 +249,6 @@ void Monster::updateTargetList()
 	}
 
 	CreatureList::iterator targetIterator = targetList.begin();
-
 	while (targetIterator != targetList.end()) {
 		if ((*targetIterator)->getHealth() <= 0 || !canSee((*targetIterator)->getPosition())) {
 			(*targetIterator)->releaseThing2();
@@ -262,11 +258,7 @@ void Monster::updateTargetList()
 		}
 	}
 
-	const SpectatorVec& list = g_game.getSpectators(getPosition());
-
-	for (SpectatorVec::const_iterator list_it = list.begin(), list_end = list.end(); list_it != list_end; ++list_it) {
-		Creature* spectator = *list_it;
-
+	for (Creature* spectator : g_game.getSpectators(getPosition())) {
 		if (spectator != this && canSee(spectator->getPosition())) {
 			onCreatureFound(spectator);
 		}

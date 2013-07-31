@@ -604,24 +604,17 @@ bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 bool Combat::CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
 {
 	bool result = false;
-
-	if (!params.conditionList.empty()) {
-		for (std::list<const Condition*>::const_iterator it = params.conditionList.begin(); it != params.conditionList.end(); ++it) {
-			const Condition* condition = *it;
-
-			if (caster == target || !target->isImmune(condition->getType())) {
-				Condition* conditionCopy = condition->clone();
-
-				if (caster) {
-					conditionCopy->setParam(CONDITIONPARAM_OWNER, caster->getID());
-				}
-
-				//TODO: infight condition until all aggressive conditions has ended
-				result = target->addCombatCondition(conditionCopy);
+	for (const Condition* condition : params.conditionList) {
+		if (caster == target || !target->isImmune(condition->getType())) {
+			Condition* conditionCopy = condition->clone();
+			if (caster) {
+				conditionCopy->setParam(CONDITIONPARAM_OWNER, caster->getID());
 			}
+
+			//TODO: infight condition until all aggressive conditions has ended
+			result = target->addCombatCondition(conditionCopy);
 		}
 	}
-
 	return result;
 }
 
@@ -1267,12 +1260,8 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 		}
 
 		output->setCenter((input->getCols() - 1) - centerY, centerX);
-	}
-	//rotation
-	else {
-		uint32_t centerX, centerY;
-		input->getCenter(centerY, centerX);
-
+	} else {
+		// rotation
 		int32_t rotateCenterX = (output->getCols() / 2) - 1;
 		int32_t rotateCenterY = (output->getRows() / 2) - 1;
 		int32_t angle = 0;
@@ -1302,8 +1291,8 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 		double c = std::sin(angleRad);
 		double d = std::cos(angleRad);
 
-		for (int32_t x = 0; x < (long)input->getCols(); ++x) {
-			for (int32_t y = 0; y < (long)input->getRows(); ++y) {
+		for (int32_t x = 0, cols = input->getCols(); x < cols; ++x) {
+			for (int32_t y = 0, rows = input->getRows(); y < rows; ++y) {
 				//calculate new coordinates using rotation center
 				int32_t newX = x - centerX;
 				int32_t newY = y - centerY;

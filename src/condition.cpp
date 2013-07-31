@@ -856,7 +856,6 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 
 			if (isBuff && realHealthGain > 0) {
 				Player* player = creature->getPlayer();
-
 				if (player) {
 					std::ostringstream ss;
 					ss << ucfirst(player->getNameDescription()) << " was healed for " << realHealthGain << " hitpoint" << (realHealthGain != 1 ? "s." : ".");
@@ -868,12 +867,9 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 
 					SpectatorVec list;
 					g_game.getSpectators(list, player->getPosition(), false, true);
-
-					for (SpectatorVec::const_iterator it = list.begin(), end = list.end(); it != end; ++it) {
-						Player* tmpPlayer = (*it)->getPlayer();
-
-						if (tmpPlayer != player) {
-							tmpPlayer->sendHealMessage(MSG_HEALED_OTHERS, message, player->getPosition(), realHealthGain, TEXTCOLOR_MAYABLUE);
+					for (Creature* spectator : list) {
+						if (spectator != player) {
+							spectator->getPlayer()->sendHealMessage(MSG_HEALED_OTHERS, message, player->getPosition(), realHealthGain, TEXTCOLOR_MAYABLUE);
 						}
 					}
 				}

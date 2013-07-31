@@ -253,11 +253,9 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMe
 		output->AddByte(0x21); // players info - online players list
 		output->AddU32(m_playersOnline);
 
-		const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-		for (auto it = players.begin(); it != players.end(); ++it) {
-			//Send the most common info
-			output->AddString(it->second->getName());
-			output->AddU32(it->second->getLevel());
+		for (const auto& it : g_game.getPlayers()) {
+			output->AddString(it.second->getName());
+			output->AddU32(it.second->getLevel());
 		}
 	}
 

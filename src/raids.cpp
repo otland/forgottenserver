@@ -199,7 +199,7 @@ bool Raids::reload()
 
 Raid* Raids::getRaidByName(const std::string& name)
 {
-	for (auto raid : raidList) {
+	for (Raid* raid : raidList) {
 		if (strcasecmp(raid->getName().c_str(), name.c_str()) == 0) {
 			return raid;
 		}

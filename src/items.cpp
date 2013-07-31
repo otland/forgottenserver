@@ -242,11 +242,9 @@ int32_t Items::loadFromOtb(const std::string& file)
 	}
 
 	node = f.getChildNode(node, type);
-
 	while (node != NO_NODE) {
-		PropStream props;
-
-		if (!f.getProps(node, props)) {
+		PropStream stream;
+		if (!f.getProps(node, stream)) {
 			return f.getError();
 		}
 
@@ -283,7 +281,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 		}
 
 		//read 4 byte flags
-		if (!props.GET_VALUE(flags)) {
+		if (!stream.GET_VALUE(flags)) {
 			return ERROR_INVALID_FORMAT;
 		}
 
@@ -310,9 +308,9 @@ int32_t Items::loadFromOtb(const std::string& file)
 		attribute_t attrib;
 		datasize_t datalen = 0;
 
-		while (props.GET_VALUE(attrib)) {
+		while (stream.GET_VALUE(attrib)) {
 			//size of data
-			if (!props.GET_VALUE(datalen)) {
+			if (!stream.GET_VALUE(datalen)) {
 				delete iType;
 				return ERROR_INVALID_FORMAT;
 			}
@@ -325,7 +323,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 					uint16_t serverid;
 
-					if (!props.GET_USHORT(serverid)) {
+					if (!stream.GET_USHORT(serverid)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -344,7 +342,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 					uint16_t clientid;
 
-					if (!props.GET_USHORT(clientid)) {
+					if (!stream.GET_USHORT(clientid)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -359,7 +357,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 					uint16_t speed;
 
-					if (!props.GET_USHORT(speed)) {
+					if (!stream.GET_USHORT(speed)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -374,7 +372,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 					lightBlock2* lb2;
 
-					if (!props.GET_STRUCT(lb2)) {
+					if (!stream.GET_STRUCT(lb2)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -390,7 +388,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 					uint8_t v;
 
-					if (!props.GET_UCHAR(v)) {
+					if (!stream.GET_UCHAR(v)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -399,7 +397,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 				}
 
 				case ITEM_ATTR_WAREID: {
-					if (!props.SKIP_N(datalen)) {
+					if (!stream.SKIP_N(datalen)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -411,7 +409,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 				case ITEM_ATTR_NAME:
 				{
 					std::string name;
-					if(!props.GET_STRING(name, datalen))
+					if(!stream.GET_STRING(name, datalen))
 						return ERROR_INVALID_FORMAT;
 
 					iType->marketName = name;
@@ -421,7 +419,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 				default: {
 					//skip unknown attributes
-					if (!props.SKIP_N(datalen)) {
+					if (!stream.SKIP_N(datalen)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -1174,9 +1172,8 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 										if (start > 0) {
 											std::list<int32_t> damageList;
 											ConditionDamage::generateDamageList(damage, start, damageList);
-
-											for (std::list<int32_t>::iterator it = damageList.begin(); it != damageList.end(); ++it) {
-												conditionDamage->addDamage(1, ticks, -*it);
+											for (int32_t damageValue : damageList) {
+												conditionDamage->addDamage(1, ticks, -damageValue);
 											}
 
 											start = 0;

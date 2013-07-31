@@ -120,8 +120,8 @@ void Dispatcher::flush()
 		m_taskList.pop_front();
 		(*task)();
 		delete task;
-		OutputMessagePool* outputPool = OutputMessagePool::getInstance();
 
+		OutputMessagePool* outputPool = OutputMessagePool::getInstance();
 		if (outputPool) {
 			outputPool->sendAll();
 		}

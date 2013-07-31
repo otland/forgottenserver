@@ -165,7 +165,7 @@ class House
 		bool isInvited(const Player* player);
 
 		AccessHouseLevel_t getHouseAccessLevel(const Player* player);
-		bool kickPlayer(Player* player, const std::string& name);
+		bool kickPlayer(Player* player, Player* target);
 
 		void setEntryPos(const Position& pos) {
 			posEntry = pos;
@@ -228,21 +228,12 @@ class House
 		void resetTransferItem();
 		bool executeTransfer(HouseTransferItem* item, Player* player);
 
-		HouseTileList::iterator getHouseTileBegin() {
-			return houseTiles.begin();
-		}
-		HouseTileList::iterator getHouseTileEnd() {
-			return houseTiles.end();
-		}
-		size_t getHouseTileSize() {
-			return houseTiles.size();
+		const HouseTileList& getHouseTiles() {
+			return houseTiles;
 		}
 
-		HouseDoorList::iterator getHouseDoorBegin() {
-			return doorList.begin();
-		}
-		HouseDoorList::iterator getHouseDoorEnd() {
-			return doorList.end();
+		const HouseDoorList& getHouseDoors() const {
+			return doorList;
 		}
 
 		void addBed(BedItem* bed);
@@ -330,11 +321,8 @@ class Houses
 
 		bool payHouses();
 
-		HouseMap::iterator getHouseBegin() {
-			return houseMap.begin();
-		}
-		HouseMap::iterator getHouseEnd() {
-			return houseMap.end();
+		const HouseMap& getHouses() const {
+			return houseMap;
 		}
 
 	private:

@@ -721,33 +721,28 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 	Cylinder* topParent = getTopParent();
 	if (topParent->getCreature()) {
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
-	} else {
-		if (topParent == this) {
-			//let the tile class notify surrounding players
-			if (topParent->getParent()) {
-				topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
-			}
-		} else {
-			topParent->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	} else if (topParent == this) {
+		//let the tile class notify surrounding players
+		if (topParent->getParent()) {
+			topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 		}
+	} else {
+		topParent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
 void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	Cylinder* topParent = getTopParent();
-
 	if (topParent->getCreature()) {
 		topParent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_TOPPARENT);
-	} else {
-		if (topParent == this) {
-			//let the tile class notify surrounding players
-			if (topParent->getParent()) {
-				topParent->getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_NEAR);
-			}
-		} else {
-			topParent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
+	} else if (topParent == this) {
+		//let the tile class notify surrounding players
+		if (topParent->getParent()) {
+			topParent->getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_NEAR);
 		}
+	} else {
+		topParent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 	}
 }
 

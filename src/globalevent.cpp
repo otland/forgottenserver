@@ -168,7 +168,7 @@ void GlobalEvents::think()
 	int64_t now = OTSYS_TIME();
 
 	int64_t nextScheduledTime = std::numeric_limits<int64_t>::max();
-	for (auto it : thinkMap) {
+	for (const auto& it : thinkMap) {
 		GlobalEvent* globalEvent = it.second;
 
 		int64_t nextExecutionTime = globalEvent->getNextExecution() - now;

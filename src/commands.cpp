@@ -649,13 +649,12 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 	if (playerIp != 0) {
 		PlayerVector vec;
 
-		const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-		for (auto it = players.begin(); it != players.end(); ++it) {
-			if (it->second->getIP() != playerIp || it->second == paramPlayer) {
+		for (const auto& it : g_game.getPlayers()) {
+			if (it.second->getIP() != playerIp || it.second == paramPlayer) {
 				continue;
 			}
 
-			vec.push_back(it->second);
+			vec.push_back(it.second);
 		}
 
 		if (!vec.empty()) {
@@ -869,14 +868,12 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 	}
 
 	HouseTile* houseTile = dynamic_cast<HouseTile*>(tile);
-
 	if (!houseTile) {
 		player->sendCancel("You have to be looking at the door of the house you would like to buy.");
 		return;
 	}
 
 	House* house = houseTile->getHouse();
-
 	if (!house || !house->getDoorByPosition(pos)) {
 		player->sendCancel("You have to be looking at the door of the house you would like to buy.");
 		return;
@@ -887,19 +884,14 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 		return;
 	}
 
-	for (HouseMap::iterator it = Houses::getInstance().getHouseBegin(), end = Houses::getInstance().getHouseEnd(); it != end; ++it) {
-		if (it->second->getHouseOwner() == player->guid) {
+	for (const auto& it : Houses::getInstance().getHouses()) {
+		if (it.second->getHouseOwner() == player->guid) {
 			player->sendCancel("You are already the owner of a house.");
 			return;
 		}
 	}
 
-	uint64_t price = 0;
-
-	for (HouseTileList::iterator it = house->getHouseTileBegin(), end = house->getHouseTileEnd(); it != end; ++it) {
-		price += g_config.getNumber(ConfigManager::HOUSE_PRICE);
-	}
-
+	uint64_t price = house->getHouseTiles().size() * g_config.getNumber(ConfigManager::HOUSE_PRICE);
 	if (!g_game.removeMoney(player, price)) {
 		player->sendCancel("You do not have enough money.");
 		return;
@@ -1263,10 +1255,9 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 	}
 
 	if (player->isInGhostMode()) {
-		const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-		for (auto it = players.begin(); it != players.end(); ++it) {
-			if (!it->second->isAccessPlayer()) {
-				it->second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+		for (const auto& it : g_game.getPlayers()) {
+			if (!it.second->isAccessPlayer()) {
+				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
 
@@ -1274,10 +1265,9 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 		player->sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
 		g_game.addMagicEffect(list, player->getPosition(), NM_ME_YALAHARIGHOST);
 	} else {
-		const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-		for (auto it = players.begin(); it != players.end(); ++it) {
-			if (!it->second->isAccessPlayer()) {
-				it->second->notifyStatusChange(player, VIPSTATUS_ONLINE);
+		for (const auto& it : g_game.getPlayers()) {
+			if (!it.second->isAccessPlayer()) {
+				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
 		}
 
@@ -1294,9 +1284,8 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Multiclient Check List:");
 	std::map< uint32_t, std::vector<Player*> > ipMap;
 
-	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-	for (auto it = players.begin(); it != players.end(); ++it) {
-		Player* tmpPlayer = it->second;
+	for (const auto& it : g_game.getPlayers()) {
+		Player* tmpPlayer = it.second;
 		if (tmpPlayer->isRemoved() || tmpPlayer->getIP() == 0) {
 			continue;
 		}
@@ -1304,17 +1293,17 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 		ipMap[tmpPlayer->getIP()].push_back(tmpPlayer);
 	}
 
-	for (auto it = ipMap.begin(), end = ipMap.end(); it != end; ++it) {
-		if (it->second.size() < 2) {
+	for (const auto& it : ipMap) {
+		if (it.second.size() < 2) {
 			continue;
 		}
 
-		Player* tmpPlayer = it->second[0];
+		Player* tmpPlayer = it.second[0];
 		std::ostringstream ss;
-		ss << convertIPToString(it->first) << ": " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
+		ss << convertIPToString(it.first) << ": " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
 
-		for (std::vector<Player*>::size_type i = 1, size = it->second.size(); i < size; ++i) {
-			tmpPlayer = it->second[i];
+		for (std::vector<Player*>::size_type i = 1, size = it.second.size(); i < size; ++i) {
+			tmpPlayer = it.second[i];
 			ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
 		}
 

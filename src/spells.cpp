@@ -1430,26 +1430,24 @@ bool InstantSpell::HouseDoorList(const InstantSpell* spell, Creature* creature, 
 bool InstantSpell::HouseKick(const InstantSpell* spell, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
-	Player* targetPlayer = g_game.getPlayerByName(param);
 
+	Player* targetPlayer = g_game.getPlayerByName(param);
 	if (!targetPlayer) {
 		targetPlayer = player;
 	}
 
 	House* house = getHouseFromPos(targetPlayer);
-
 	if (!house) {
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
 	}
 
-	if (!house->kickPlayer(player, targetPlayer->getName())) {
+	if (!house->kickPlayer(player, targetPlayer)) {
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
 	}
-
 	return true;
 }
 

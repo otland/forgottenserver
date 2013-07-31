@@ -902,7 +902,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 		bool begin = true;
 
-		if (tmp) {
+		if (tmp != 0) {
 			s << " (Arm:" << tmp;
 			begin = false;
 		}
@@ -946,15 +946,14 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 
 			if (!show) {
-				bool tmp = true;
-
+				bool protectionBegin = true;
 				for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
 					if (!it.abilities->absorbPercent[i]) {
 						continue;
 					}
 
-					if (tmp) {
-						tmp = false;
+					if (protectionBegin) {
+						protectionBegin = false;
 
 						if (begin) {
 							begin = false;

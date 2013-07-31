@@ -1720,14 +1720,13 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 
 			if (sInfo.sellPrice > 0) {
 				int8_t subtype = -1;
-				const ItemType& it = Item::items[sInfo.itemId];
 
-				if (it.hasSubType() && !it.stackable) {
+				const ItemType& itemType = Item::items[sInfo.itemId];
+				if (itemType.hasSubType() && !itemType.stackable) {
 					subtype = (sInfo.subType == 0 ? -1 : sInfo.subType);
 				}
 
 				uint32_t count = player->__getItemTypeCount(sInfo.itemId, subtype);
-
 				if (count > 0) {
 					saleMap[sInfo.itemId] = count;
 				}
@@ -1748,17 +1747,19 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 
 			if (sInfo.sellPrice > 0) {
 				int8_t subtype = -1;
-				const ItemType& it = Item::items[sInfo.itemId];
 
-				if (it.hasSubType() && !it.stackable) {
+				const ItemType& itemType = Item::items[sInfo.itemId];
+				if (itemType.hasSubType() && !itemType.stackable) {
 					subtype = (sInfo.subType == 0 ? -1 : sInfo.subType);
 				}
 
 				if (subtype != -1) {
-					uint32_t count = subtype;
+					uint32_t count;
 
-					if (!it.isFluidContainer() && !it.isSplash()) {
+					if (!itemType.isFluidContainer() && !itemType.isSplash()) {
 						count = player->__getItemTypeCount(sInfo.itemId, subtype);    // This shop item requires extra checks
+					} else {
+						count = subtype;
 					}
 
 					if (count > 0) {
@@ -1766,7 +1767,6 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 					}
 				} else {
 					std::map<uint32_t, uint32_t>::const_iterator findIt = tempSaleMap.find(sInfo.itemId);
-
 					if (findIt != tempSaleMap.end() && findIt->second > 0) {
 						saleMap[sInfo.itemId] = findIt->second;
 					}
@@ -2283,9 +2283,8 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 		msg.AddByte(listItem.size());
 
 		while (!listItem.empty()) {
-			const Item* item = listItem.front();
+			msg.AddItem(listItem.front());
 			listItem.pop_front();
-			msg.AddItem(item);
 		}
 	} else {
 		msg.AddByte(0x01);

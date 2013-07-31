@@ -649,9 +649,9 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			++runningId;
 			item = *it;
 
-			Container* container = item->getContainer();
-			if (container) {
-				stack.push_back(containerBlock(container, runningId));
+			Container* subContainer = item->getContainer();
+			if (subContainer) {
+				stack.push_back(containerBlock(subContainer, runningId));
 			}
 
 			uint32_t attributesSize = 0;

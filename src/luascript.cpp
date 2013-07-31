@@ -274,9 +274,9 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		}
 	}
 
-	for (auto it = m_localMap.begin(), end = m_localMap.end(); it != end; ++it) {
-		if (it->second == thing) {
-			return it->first;
+	for (const auto& it : m_localMap) {
+		if (it.second == thing) {
+			return it.first;
 		}
 	}
 
@@ -743,7 +743,7 @@ void LuaScriptInterface::reportError(const char* function, const std::string& er
 		std::cout << function << "(). ";
 	}
 
-	if (stack_trace) {
+	if (stack_trace && scriptInterface) {
 		std::cout << scriptInterface->getStackTrace(error_desc) << std::endl;
 	} else {
 		std::cout << error_desc << std::endl;
@@ -4523,7 +4523,7 @@ int32_t LuaScriptInterface::luaGetHouseTilesSize(lua_State* L)
 	House* house = Houses::getInstance().getHouse(houseid);
 
 	if (house) {
-		lua_pushnumber(L, house->getHouseTileSize());
+		lua_pushnumber(L, house->getHouseTiles().size());
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
 		lua_pushboolean(L, false);
@@ -6342,13 +6342,11 @@ int32_t LuaScriptInterface::luaGetPlayersByAccountNumber(lua_State* L)
 
 	lua_newtable(L);
 	int index = 0;
-	const PlayerVector& players = g_game.getPlayersByAccount(accno);
-	for (auto it = players.begin(); it != players.end(); ++it) {
+	for (Player* player : g_game.getPlayersByAccount(accno)) {
 		lua_pushnumber(L, ++index);
-		lua_pushnumber(L, (*it)->getID());
+		lua_pushnumber(L, player->getID());
 		lua_settable(L, -3);
 	}
-
 	return 1;
 }
 
@@ -6381,13 +6379,11 @@ int32_t LuaScriptInterface::luaGetPlayersByIPAddress(lua_State* L)
 
 	lua_newtable(L);
 	int index = 0;
-	const PlayerVector& players = g_game.getPlayersByIP(ip, mask);
-	for (auto it = players.begin(); it != players.end(); ++it) {
+	for (Player* player : g_game.getPlayersByIP(ip, mask)) {
 		lua_pushnumber(L, ++index);
-		lua_pushnumber(L, (*it)->getID());
+		lua_pushnumber(L, player->getID());
 		lua_settable(L, -3);
 	}
-
 	return 1;
 }
 
@@ -6512,8 +6508,7 @@ int32_t LuaScriptInterface::luaGetContainerItem(lua_State* L)
 	if (Container* container = env->getContainerByUID(uid)) {
 		Item* item = container->getItemByIndex(slot);
 		if (item) {
-			uint32_t uid = env->addThing(item);
-			pushThing(L, item, uid);
+			pushThing(L, item, env->addThing(item));
 		} else {
 			pushThing(L, NULL, 0);
 		}
@@ -6590,8 +6585,7 @@ int32_t LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 
 		if (itemCount == 0) {
 			if (newItem->getParent()) {
-				uint32_t uid = env->addThing(newItem);
-				lua_pushnumber(L, uid);
+				lua_pushnumber(L, env->addThing(newItem));
 				return 1;
 			} else {
 				//stackable item stacked with existing object, newItem will be released
@@ -7096,10 +7090,9 @@ int32_t LuaScriptInterface::luaGetCreatureSummons(lua_State* L)
 
 	lua_newtable(L);
 	uint32_t index = 0;
-	const std::list<Creature*>& summons = creature->getSummons();
-	for (auto it = summons.begin(); it != summons.end(); ++it) {
+	for (Creature* summon : creature->getSummons()) {
 		lua_pushnumber(L, ++index);
-		lua_pushnumber(L, (*it)->getID());
+		lua_pushnumber(L, summon->getID());
 		lua_settable(L, -3);
 	}
 
@@ -7133,9 +7126,9 @@ int32_t LuaScriptInterface::luaGetSpectators(lua_State* L)
 
 	lua_newtable(L);
 	uint32_t index = 0;
-	for (auto it = list.begin(); it != list.end(); ++it) {
+	for (Creature* spectator : list) {
 		lua_pushnumber(L, ++index);
-		lua_pushnumber(L, (*it)->getID());
+		lua_pushnumber(L, spectator->getID());
 		lua_settable(L, -3);
 	}
 
@@ -7614,11 +7607,9 @@ int32_t LuaScriptInterface::luaGetOnlinePlayers(lua_State* L)
 	//getOnlinePlayers()
 	lua_newtable(L);
 	uint32_t index = 0;
-
-	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
-	for (auto it = players.begin(); it != players.end(); ++it) {
+	for (const auto& it : g_game.getPlayers()) {
 		lua_pushnumber(L, ++index);
-		pushString(L, it->second->getName());
+		pushString(L, it.second->getName());
 		lua_settable(L, -3);
 	}
 	return 1;
@@ -7682,9 +7673,10 @@ int32_t LuaScriptInterface::luaGetPartyMembers(lua_State* L)
 
 			lua_newtable(L);
 			uint32_t index = 0;
-			for (auto it = list.begin(); it != list.end(); ++it) {
+
+			for (Player* partyMember : list) {
 				lua_pushnumber(L, ++index);
-				lua_pushnumber(L, (*it)->getID());
+				lua_pushnumber(L, partyMember->getID());
 				lua_settable(L, -3);
 			}
 
@@ -7744,6 +7736,7 @@ int32_t LuaScriptInterface::luaGetWaypointPosition(lua_State* L)
 {
 	//getWaypointPosition(name)
 	const std::map<std::string, Position>& waypoints = g_game.getMap()->waypoints;
+
 	auto it = waypoints.find(popString(L));
 	if (it != waypoints.end()) {
 		pushPosition(L, it->second, 0);
