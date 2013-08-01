@@ -482,7 +482,9 @@ uint32_t DatabaseManager::updateDatabase()
 				DBResult* result = db->storeQuery("SELECT `id`, `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` ORDER BY `id` ASC");
 				if (result) {
 					do {
-						fprintf(groupsFile, "<group id=\"%d\" name=\"%s\" flags=\"%llu\" access=\"%d\" maxdepotitems=\"0\" maxvipentries=\"0\" />", result->getDataInt("id"), result->getDataString("name").c_str(), result->getDataLong("flags"), result->getDataInt("access"), result->getDataInt("maxdepotitems"), result->getDataInt("maxviplist"));
+						std::stringstream ss;
+						ss << "\t<group id=\"" << result->getDataInt("id") << "\" name=\"" << result->getDataString("name") << "\" flags=\"" << result->getDataLong("flags") << "\" access=\"" << result->getDataInt("access") << "\" maxdepotitems=\"" << result->getDataInt("maxdepotitems") << "\" maxvipentries=\"" << result->getDataInt("maxviplist") << "\" />\r\n";
+						fprintf(groupsFile, "%s", ss.str().c_str());
 					} while (result->next());
 					db->freeResult(result);
 				}

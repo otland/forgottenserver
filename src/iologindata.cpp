@@ -731,7 +731,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query.str("");
 	query << "UPDATE `players` SET ";
 	query << "`level` = " << player->level << ", ";
-	query << "`group_id` = " << player->groupId << ", ";
+	query << "`group_id` = " << player->group->id << ", ";
 	query << "`vocation` = " << (int32_t)player->getVocationId() << ", ";
 	query << "`health` = " << player->health << ", ";
 	query << "`healthmax` = " << player->healthMax << ", ";

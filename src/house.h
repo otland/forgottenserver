@@ -229,7 +229,7 @@ class House
 		void resetTransferItem();
 		bool executeTransfer(HouseTransferItem* item, Player* player);
 
-		const HouseTileList& getHouseTiles() {
+		const HouseTileList& getHouseTiles() const {
 			return houseTiles;
 		}
 

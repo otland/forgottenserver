@@ -1299,7 +1299,6 @@ class Player : public Creature, public Cylinder
 		int32_t offlineTrainingSkill;
 		int32_t offlineTrainingTime;
 		int32_t idleTime;
-		int32_t groupId;
 		int32_t shootRange;
 
 		uint16_t lastStatsTrainingTime;

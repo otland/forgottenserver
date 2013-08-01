@@ -92,7 +92,7 @@ typedef void (Commands::*CommandFunc)(Player*, const std::string&, const std::st
 
 struct Command {
 	CommandFunc f;
-	int32_t groupId;
+	uint32_t groupId;
 	AccountType_t accountType;
 	bool loadedGroupId;
 	bool loadedAccountType;

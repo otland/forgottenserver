@@ -280,8 +280,7 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	}
 
 	Command* command = it->second;
-
-	if (command->groupId > player->groupId || command->accountType > player->accountType) {
+	if (command->groupId > player->group->id || command->accountType > player->accountType) {
 		if (player->group->access) {
 			player->sendTextMessage(MSG_STATUS_SMALL, "You can not execute this command.");
 		}

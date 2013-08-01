@@ -181,8 +181,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 	skull = SKULL_NONE;
 	setParty(NULL);
 
-	groupId = 0;
-
 	bankBalance = 0;
 
 	inbox = new Inbox(ITEM_INBOX);
