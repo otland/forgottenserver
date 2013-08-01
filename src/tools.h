@@ -66,7 +66,9 @@ T readXMLValue(xmlNodePtr node, const char* tag)
 	T value;
 	try {
 		value = boost::lexical_cast<T>(nodeValue);
-	} catch(boost::bad_lexical_cast&) {}
+	} catch (boost::bad_lexical_cast&) {
+		value = T();
+	}
 	xmlFree(nodeValue);
 	return value;
 }

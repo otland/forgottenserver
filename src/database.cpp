@@ -276,7 +276,7 @@ int64_t DBResult::getDataLong(const std::string& s) const
 	int64_t data;
 	try {
 		data = boost::lexical_cast<int64_t>(m_row[it->second]);
-	} catch(boost::bad_lexical_cast&) {
+	} catch (boost::bad_lexical_cast&) {
 		data = 0;
 	}
 	return data;
