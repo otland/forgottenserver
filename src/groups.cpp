@@ -43,6 +43,7 @@ bool Groups::load()
 			group.id = readXMLValue<uint32_t>(p, "id");
 			readXMLString(p, "name", group.name);
 			group.flags = readXMLValue<uint64_t>(p, "flags");
+			group.access = readXMLValue<int32_t>(p, "access") > 0;
 			group.maxDepotItems = readXMLValue<uint32_t>(p, "maxdepotitems");
 			group.maxVipEntries = readXMLValue<uint32_t>(p, "maxvipentries");
 			groups.push_back(group);
