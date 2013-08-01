@@ -32,6 +32,7 @@
 #include "depotchest.h"
 #include "depotlocker.h"
 #include "guild.h"
+#include "groups.h"
 #include "town.h"
 
 #include <vector>
@@ -182,7 +183,7 @@ class Player : public Creature, public Cylinder
 			return guid;
 		}
 		virtual bool canSeeInvisibility() const {
-			return hasFlag(PlayerFlag_CanSenseInvisibility) || accessLevel;
+			return hasFlag(PlayerFlag_CanSenseInvisibility) || group->access;
 		}
 
 		void removeList();
@@ -342,11 +343,8 @@ class Player : public Creature, public Cylinder
 			return manaSpent;
 		}
 
-		void setFlags(uint64_t flags) {
-			groupFlags = flags;
-		}
 		bool hasFlag(PlayerFlags value) const {
-			return (0 != (groupFlags & ((uint64_t)1 << value)));
+			return (0 != (group->flags & ((uint64_t)1 << value)));
 		}
 
 		BedItem* getBedItem() {
@@ -401,9 +399,9 @@ class Player : public Creature, public Cylinder
 			return storageMap.end();
 		}
 
-		void setGroupId(int32_t newId);
-		int32_t getGroupId() const {
-			return groupId;
+		void setGroup(Group* newGroup);
+		Group* getGroup() const {
+			return group;
 		}
 
 		void setInMarket(bool value) {
@@ -450,7 +448,7 @@ class Player : public Creature, public Cylinder
 			return magLevel;
 		}
 		bool isAccessPlayer() const {
-			return accessLevel;
+			return group->access;
 		}
 		bool isPremium() const;
 		void setPremiumDays(int32_t v);
@@ -1159,18 +1157,6 @@ class Player : public Creature, public Cylinder
 		void learnInstantSpell(const std::string& name);
 		bool hasLearnedInstantSpell(const std::string& name) const;
 
-		VIPListSet VIPList;
-		uint32_t maxVipLimit;
-
-		GuildWarList guildWarList;
-
-		ContainerMap openContainers;
-
-		//depots
-		DepotMap depotChests;
-		DepotLockerMap depotLockerMap;
-		uint32_t maxDepotLimit;
-
 	protected:
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
@@ -1217,8 +1203,12 @@ class Player : public Creature, public Cylinder
 		virtual void __internalAddThing(uint32_t index, Thing* thing);
 
 		std::unordered_set<uint32_t> attackedSet;
+		VIPListSet VIPList;
 
 		std::map<uint32_t, uint32_t> goodsMap;
+		ContainerMap openContainers;
+		DepotLockerMap depotLockerMap;
+		DepotMap depotChests;
 		StorageMap storageMap;
 		OutfitList m_playerOutfits;
 
@@ -1228,10 +1218,15 @@ class Player : public Creature, public Cylinder
 		LearnedInstantSpellList learnedInstantSpellList;
 		ConditionList storedConditionList;
 
+		GuildWarList guildWarList;
+
 		std::string name;
 		std::string nameDescription;
 		std::string guildNick;
-		std::string groupName;
+
+		LightInfo itemsLight;
+		Position loginPosition;
+		Position lastWalkthroughPosition;
 
 		time_t lastLoginSaved;
 		time_t lastLogout;
@@ -1244,7 +1239,6 @@ class Player : public Creature, public Cylinder
 		uint64_t manaSpent;
 		uint64_t lastAttack;
 		uint64_t bankBalance;
-		uint64_t groupFlags;
 		int64_t lastFailedFollow;
 		int64_t lastMoveItemTime;
 		int64_t skullTicks;
@@ -1257,6 +1251,7 @@ class Player : public Creature, public Cylinder
 
 		BedItem* bedItem;
 		Guild* guild;
+		Group* group;
 		Inbox* inbox;
 		Item* tradeItem;
 		Item* inventory[SLOT_LAST];
@@ -1287,6 +1282,8 @@ class Player : public Creature, public Cylinder
 		uint32_t windowTextId;
 		uint32_t editListId;
 		uint32_t moveItemsBuffer;
+		uint32_t maxDepotItems;
+		uint32_t maxVipEntries;
 		uint32_t skills[SKILL_LAST + 1][3];
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];
@@ -1320,22 +1317,16 @@ class Player : public Creature, public Cylinder
 		BlockType_t lastAttackBlockType;
 		tradestate_t tradeState;
 
-		Position lastWalkthroughPosition;
-		LightInfo itemsLight;
-
 		uint8_t guildLevel;
 
 		bool mayNotMove;
 		bool requestedOutfit;
 		bool inMarket;
-		bool accessLevel;
 		bool ghostMode;
 		bool pzLocked;
 		bool isConnecting;
 		bool addAttackSkillPoint;
 		bool inventoryAbilities[SLOT_LAST];
-
-		Position loginPosition;
 
 		static uint32_t playerAutoID;
 

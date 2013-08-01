@@ -24,7 +24,7 @@
 DepotChest::DepotChest(uint16_t _type) :
 	Container(_type)
 {
-	maxDepotLimit = 1500;
+	maxDepotItems = 1500;
 }
 
 DepotChest::~DepotChest()
@@ -56,7 +56,7 @@ ReturnValue DepotChest::__queryAdd(int32_t index, const Thing* thing, uint32_t c
 			}
 		}
 
-		if (getItemHoldingCount() + addCount > maxDepotLimit) {
+		if (getItemHoldingCount() + addCount > maxDepotItems) {
 			return RET_DEPOTISFULL;
 		}
 	}

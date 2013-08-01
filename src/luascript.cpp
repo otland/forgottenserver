@@ -1976,7 +1976,7 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 	int32_t value;
 	switch (info) {
 		case PlayerInfoAccess:
-			value = player->accessLevel;
+			value = player->group->access;
 			break;
 
 		case PlayerInfoLevel:
@@ -2109,7 +2109,7 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 			break;
 
 		case PlayerInfoGroupId:
-			value = player->groupId;
+			value = player->group->id;
 			break;
 
 		case PlayerInfoPzLock:
@@ -7538,13 +7538,17 @@ int32_t LuaScriptInterface::luaSetPlayerGroupId(lua_State* L)
 
 	Player* player = g_game.getPlayerByID(cid);
 	if (player) {
-		player->setGroupId(newGroupId);
-		lua_pushboolean(L, true);
+		Group* group = g_game.getGroup(newGroupId);
+		if (group) {
+			player->setGroup(group);
+			lua_pushboolean(L, true);
+		} else {
+			lua_pushboolean(L, false);
+		}
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
 	}
-
 	return 1;
 }
 

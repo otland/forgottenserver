@@ -228,7 +228,13 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	}
 
 	player->setGUID(result->getDataInt("id"));
-	player->setGroupId(result->getDataInt("group_id"));
+	Group* group = g_game.getGroup(result->getDataInt("group_id"));
+	if (!group) {
+		std::cout << "[Error - IOLoginData::preloadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
+		db->freeResult(result);
+		return false;
+	}
+	player->setGroup(group);
 	player->accountNumber = (uint32_t)result->getDataInt("account_id");
 	player->accountType = (AccountType_t)result->getDataInt("account_type");
 	player->premiumDays = result->getDataInt("premium_days");
@@ -262,7 +268,13 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 		player->premiumDays = acc.premiumDays;
 	}
 
-	player->setGroupId(result->getDataInt("group_id"));
+	Group* group = g_game.getGroup(result->getDataInt("group_id"));
+	if (!group) {
+		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
+		db->freeResult(result);
+		return false;
+	}
+	player->setGroup(group);
 
 	player->bankBalance = (uint64_t)result->getDataLong("balance");
 
@@ -990,18 +1002,14 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 
 	name = result->getDataString("name");
 	guid = result->getDataInt("id");
-	const PlayerGroup* accountGroup = getPlayerGroupByAccount(result->getDataInt("account_id"));
-	const PlayerGroup* playerGroup = getPlayerGroup(result->getDataInt("group_id"));
+	Group* group = g_game.getGroup(result->getDataInt("group_id"));
 	db->freeResult(result);
 
-	uint64_t flags = 0;
-
-	if (playerGroup) {
-		flags |= playerGroup->m_flags;
-	}
-
-	if (accountGroup) {
-		flags |= accountGroup->m_flags;
+	uint64_t flags;
+	if (group) {
+		flags = group->flags;
+	} else {
+		flags = 0;
 	}
 
 	specialVip = (0 != (flags & ((uint64_t)1 << PlayerFlag_SpecialVIP)));
@@ -1040,52 +1048,6 @@ bool IOLoginData::formatPlayerName(std::string& name)
 	name = result->getDataString("name");
 	db->freeResult(result);
 	return true;
-}
-
-const PlayerGroup* IOLoginData::getPlayerGroup(uint32_t groupid)
-{
-	PlayerGroupMap::const_iterator it = playerGroupMap.find(groupid);
-	if (it != playerGroupMap.end()) {
-		return it->second;
-	}
-
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	query << "SELECT `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` WHERE `id` = " << groupid;
-
-	DBResult* result = db->storeQuery(query.str());
-	if (!result) {
-		return NULL;
-	}
-
-	PlayerGroup* group = new PlayerGroup;
-	group->m_name = result->getDataString("name");
-	group->m_flags = result->getDataLong("flags");
-	group->m_access = result->getDataInt("access");
-	group->m_maxdepotitems = result->getDataInt("maxdepotitems");
-	group->m_maxviplist = result->getDataInt("maxviplist");
-	db->freeResult(result);
-
-	playerGroupMap[groupid] = group;
-	return group;
-}
-
-const PlayerGroup* IOLoginData::getPlayerGroupByAccount(uint32_t accno)
-{
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	query << "SELECT `group_id` FROM `accounts` WHERE `id` = " << accno;
-
-	DBResult* result = db->storeQuery(query.str());
-	if (!result) {
-		return NULL;
-	}
-
-	uint32_t groupId = result->getDataInt("group_id");
-	db->freeResult(result);
-	return getPlayerGroup(groupId);
 }
 
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)

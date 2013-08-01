@@ -160,6 +160,8 @@ void Game::setGameState(GameState_t newState)
 
 		switch (newState) {
 			case GAME_STATE_INIT: {
+				groups.load();
+
 				Spawns::getInstance()->startup();
 
 				Raids::getInstance()->loadFromXml();
@@ -6640,4 +6642,9 @@ void Game::decreaseBrowseFieldRef(const Position& pos)
 	if (it != browseFields.end()) {
 		it->second->releaseThing2();
 	}
+}
+
+Group* Game::getGroup(uint32_t id)
+{
+	return groups.getGroup(id);
 }

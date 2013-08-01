@@ -91,9 +91,7 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 	damageImmunities = 0;
 	conditionImmunities = 0;
 	conditionSuppressions = 0;
-	accessLevel = false;
-	groupName = "";
-	groupId = 0;
+	group = NULL;
 	lastLoginSaved = 0;
 	lastLogout = 0;
 	lastIP = 0;
@@ -166,9 +164,8 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 		varStats[i] = 0;
 	}
 
-	maxDepotLimit = 1000;
-	maxVipLimit = 20;
-	groupFlags = 0;
+	maxDepotItems = 1000;
+	maxVipEntries = 20;
 
 	sex = PLAYERSEX_FEMALE;
 
@@ -273,8 +270,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 	if (lookDistance == -1) {
 		s << "yourself.";
 
-		if (accessLevel) {
-			s << " You are " << groupName << ".";
+		if (group->access) {
+			s << " You are " << group->name << ".";
 		} else if (vocation->getId() != VOCATION_NONE) {
 			s << " You are " << vocation->getVocDescription() << ".";
 		} else {
@@ -283,7 +280,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 	} else {
 		s << name;
 
-		if (!accessLevel) {
+		if (!group->access) {
 			s << " (Level " << level << ")";
 		}
 
@@ -295,8 +292,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << " He";
 		}
 
-		if (accessLevel) {
-			s << " is " << groupName << ".";
+		if (group->access) {
+			s << " is " << group->name << ".";
 		} else if (vocation->getId() != VOCATION_NONE) {
 			s << " is " << vocation->getVocDescription() << ".";
 		} else {
@@ -1061,7 +1058,7 @@ bool Player::canSeeCreature(const Creature* creature) const
 		return true;
 	}
 
-	if (creature->isInGhostMode() && !accessLevel) {
+	if (creature->isInGhostMode() && !group->access) {
 		return false;
 	}
 
@@ -1074,7 +1071,7 @@ bool Player::canSeeCreature(const Creature* creature) const
 
 bool Player::canWalkthrough(const Creature* creature) const
 {
-	if (accessLevel || creature->isInGhostMode()) {
+	if (group->access || creature->isInGhostMode()) {
 		return true;
 	}
 
@@ -1112,7 +1109,7 @@ bool Player::canWalkthrough(const Creature* creature) const
 
 bool Player::canWalkthroughEx(const Creature* creature) const
 {
-	if (accessLevel) {
+	if (group->access) {
 		return true;
 	}
 
@@ -1169,7 +1166,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
 	depotChest->useThing2();
-	depotChest->setMaxDepotLimit(maxDepotLimit);
+	depotChest->setMaxDepotItems(maxDepotItems);
 	depotChests[depotId] = depotChest;
 	return depotChest;
 }
@@ -1703,7 +1700,7 @@ void Player::onChangeZone(ZoneType_t zone)
 			onAttackedCreatureDisappear(false);
 		}
 
-		if (!accessLevel && isMounted()) {
+		if (!group->access && isMounted()) {
 			dismount();
 			g_game.internalCreatureChangeOutfit(this, defaultOutfit);
 		}
@@ -2800,7 +2797,7 @@ bool Player::addVIP(uint32_t _guid, std::string& name, VipStatus_t status)
 		return false;
 	}
 
-	if (VIPList.size() > maxVipLimit || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
+	if (VIPList.size() >= maxVipEntries || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
 		sendTextMessage(MSG_STATUS_SMALL, "You cannot add more buddies.");
 		return false;
 	}
@@ -2829,7 +2826,7 @@ bool Player::addVIPInternal(uint32_t _guid)
 		return false;
 	}
 
-	if (VIPList.size() > maxVipLimit || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
+	if (VIPList.size() >= maxVipEntries || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
 		return false;
 	}
 
@@ -4339,7 +4336,7 @@ const OutfitListType& Player::getPlayerOutfits()
 
 bool Player::canWear(uint32_t _looktype, uint32_t _addons)
 {
-	return m_playerOutfits.isInList(_looktype, _addons, isPremium(), getSex()) || accessLevel;
+	return m_playerOutfits.isInList(_looktype, _addons, isPremium(), getSex()) || group->access;
 }
 
 bool Player::canLogout()
@@ -4651,28 +4648,20 @@ void Player::setGuildLevel(uint8_t newGuildLevel)
 	guildLevel = newGuildLevel;
 }
 
-void Player::setGroupId(int32_t newId)
+void Player::setGroup(Group* newGroup)
 {
-	const PlayerGroup* group = IOLoginData::getInstance()->getPlayerGroup(newId);
+	group = newGroup;
 
-	if (group) {
-		groupId = newId;
-		groupName = group->m_name;
-		toLowerCaseString(groupName);
-		setFlags(group->m_flags);
-		accessLevel = (group->m_access >= 1);
+	if (group->maxDepotItems > 0) {
+		maxDepotItems = group->maxDepotItems;
+	} else if (isPremium()) {
+		maxDepotItems = 2000;
+	}
 
-		if (group->m_maxdepotitems > 0) {
-			maxDepotLimit = group->m_maxdepotitems;
-		} else if (isPremium()) {
-			maxDepotLimit = 2000;
-		}
-
-		if (group->m_maxviplist > 0) {
-			maxVipLimit = group->m_maxviplist;
-		} else if (isPremium()) {
-			maxVipLimit = 100;
-		}
+	if (group->maxVipEntries > 0) {
+		maxVipEntries = group->maxVipEntries;
+	} else if (isPremium()) {
+		maxVipEntries = 100;
 	}
 }
 
@@ -4870,7 +4859,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		if (!accessLevel && _tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+		if (!group->access && _tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 			sendCancelMessage(RET_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 			return false;
 		}

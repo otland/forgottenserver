@@ -136,29 +136,14 @@ bool readXMLInteger(xmlNodePtr node, const char* tag, int32_t& value)
 	return false;
 }
 
-bool readXMLInteger64(xmlNodePtr node, const char* tag, uint64_t& value)
-{
-	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
-
-	if (nodeValue) {
-		value = ATOI64(nodeValue);
-		xmlFree(nodeValue);
-		return true;
-	}
-
-	return false;
-}
-
 bool readXMLFloat(xmlNodePtr node, const char* tag, float& value)
 {
 	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
-
 	if (nodeValue) {
 		value = atof(nodeValue);
 		xmlFree(nodeValue);
 		return true;
 	}
-
 	return false;
 }
 
@@ -834,136 +819,6 @@ skills_t getSkillId(const std::string& param)
 		return SKILL_FISH;
 	} else {
 		return SKILL_FIST;
-	}
-}
-
-int32_t reasonStringToInt(std::string reason)
-{
-	reason = asLowerCaseString(reason);
-
-	if (reason == "offensive name") {
-		return 0;
-	} else if (reason == "invalid name format") {
-		return 1;
-	} else if (reason == "unsuitable name") {
-		return 2;
-	} else if (reason == "name inciting rule violation") {
-		return 3;
-	} else if (reason == "offensive statement") {
-		return 4;
-	} else if (reason == "spamming") {
-		return 5;
-	} else if (reason == "illegal advertising") {
-		return 6;
-	} else if (reason == "off-topic public statement") {
-		return 7;
-	} else if (reason == "non-english public statement") {
-		return 8;
-	} else if (reason == "inciting rule violation") {
-		return 9;
-	} else if (reason == "bug abuse") {
-		return 10;
-	} else if (reason == "game weakness abuse") {
-		return 11;
-	} else if (reason == "using unofficial software to play") {
-		return 12;
-	} else if (reason == "hacking") {
-		return 13;
-	} else if (reason == "multi-clienting") {
-		return 14;
-	} else if (reason == "account trading or sharing") {
-		return 15;
-	} else if (reason == "threatening gamemaster") {
-		return 16;
-	} else if (reason == "pretending to have influence on rule enforcement") {
-		return 17;
-	} else if (reason == "false report to gamemaster") {
-		return 18;
-	} else if (reason == "destructive behaviour") {
-		return 19;
-	} else if (reason == "excessive unjustified player killing") {
-		return 20;
-	} else if (reason == "spoiling auction") {
-		return 21;
-	} else {
-		return -1;
-	}
-}
-
-int32_t actionStringToInt(std::string action)
-{
-	action = asLowerCaseString(action);
-
-	if (action == "notation") {
-		return 0;
-	} else if (action == "name report" || action == "namelock") {
-		return 1;
-	} else if (action == "ban" || action == "banishment") {
-		return 2;
-	} else if (action == "namelock + ban" || action == "namelock + banishment" || action == "name report + ban" || action == "name report + banishment") {
-		return 3;
-	} else if (action == "ban + final warning" || action == "banishment + final warning") {
-		return 4;
-	} else if (action == "namelock + ban + final warning" || action == "namelock + banishment + final warning" || action == "name report + ban + final warning" || action == "name report + banishment + final warning") {
-		return 5;
-	} else if (action == "statement report") {
-		return 6;
-	} else if (action == "delete" || action == "deletion") {
-		return 7;
-	} else {
-		return -1;
-	}
-}
-
-std::string getReason(int32_t reasonId)
-{
-	switch (reasonId) {
-		case 0:
-			return "Offensive Name";
-		case 1:
-			return "Invalid Name Format";
-		case 2:
-			return "Unsuitable Name";
-		case 3:
-			return "Name Inciting Rule Violation";
-		case 4:
-			return "Offensive Statement";
-		case 5:
-			return "Spamming";
-		case 6:
-			return "Illegal Advertising";
-		case 7:
-			return "Off-Topic Public Statement";
-		case 8:
-			return "Non-English Public Statement";
-		case 9:
-			return "Inciting Rule Violation";
-		case 10:
-			return "Bug Abuse";
-		case 11:
-			return "Game Weakness Abuse";
-		case 12:
-			return "Using Unofficial Software to Play";
-		case 13:
-			return "Hacking";
-		case 14:
-			return "Multi-Clienting";
-		case 15:
-			return "Account Trading or Sharing";
-		case 16:
-			return "Threatening Gamemaster";
-		case 17:
-			return "Pretending to Have Influence on Rule Enforcement";
-		case 18:
-			return "False Report to Gamemaster";
-		case 19:
-			return "Destructive Behaviour";
-		case 20:
-			return "Excessive Unjustified Player Killing";
-		case 21:
-			return "Spoiling Auction";
-		default:
-			return "Unknown Reason";
 	}
 }
 

@@ -35,8 +35,8 @@ class DepotChest : public Container
 		}
 
 		//serialization
-		void setMaxDepotLimit(uint32_t maxitems) {
-			maxDepotLimit = maxitems;
+		void setMaxDepotItems(uint32_t maxitems) {
+			maxDepotItems = maxitems;
 		}
 
 		//cylinder implementations
@@ -52,7 +52,7 @@ class DepotChest : public Container
 		}
 
 	private:
-		uint32_t maxDepotLimit;
+		uint32_t maxDepotItems;
 };
 
 #endif

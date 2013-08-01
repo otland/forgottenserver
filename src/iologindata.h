@@ -24,27 +24,12 @@
 #include "player.h"
 #include "database.h"
 
-struct PlayerGroup {
-	std::string m_name;
-	uint64_t m_flags;
-	uint32_t m_access;
-	uint32_t m_maxdepotitems;
-	uint32_t m_maxviplist;
-};
-
 typedef std::pair<int32_t, Item*> itemBlock;
 typedef std::list<itemBlock> ItemBlockList;
 
 class IOLoginData
 {
 	public:
-		IOLoginData() {}
-		~IOLoginData() {
-			for (PlayerGroupMap::iterator it = playerGroupMap.begin(); it != playerGroupMap.end(); ++it) {
-				delete it->second;
-			}
-		}
-
 		static IOLoginData* getInstance() {
 			static IOLoginData instance;
 			return &instance;
@@ -70,7 +55,6 @@ class IOLoginData
 		bool changeName(uint32_t guid, const std::string& newName);
 		uint32_t getAccountNumberByName(const std::string& name);
 		bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
-		const PlayerGroup* getPlayerGroup(uint32_t groupid);
 		uint32_t getLastIPByName(const std::string& name);
 		void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 		time_t getLastLoginSaved(uint32_t guid);
@@ -86,8 +70,6 @@ class IOLoginData
 		void removePremiumDays(uint32_t accountId, int32_t removeDays);
 
 	protected:
-		const PlayerGroup* getPlayerGroupByAccount(uint32_t accno);
-
 		typedef std::map<int32_t , std::pair<Item*, int32_t> > ItemMap;
 
 		void loadItems(ItemMap& itemMap, DBResult* result);
@@ -95,9 +77,7 @@ class IOLoginData
 
 		typedef std::map<uint32_t, std::string> NameCacheMap;
 		typedef std::map<std::string, uint32_t> GuidCacheMap;
-		typedef std::map<uint32_t, PlayerGroup*> PlayerGroupMap;
 
-		PlayerGroupMap playerGroupMap;
 		NameCacheMap nameCacheMap;
 		GuidCacheMap guidCacheMap;
 };

@@ -281,7 +281,7 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	Command* command = it->second;
 
 	if (command->groupId > player->groupId || command->accountType > player->accountType) {
-		if (player->accessLevel) {
+		if (player->group->access) {
 			player->sendTextMessage(MSG_STATUS_SMALL, "You can not execute this command.");
 		}
 
@@ -638,7 +638,7 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 
 	std::ostringstream info;
 	info << "Name: " << paramPlayer->name << std::endl <<
-	     "Access: " << paramPlayer->accessLevel << std::endl <<
+	     "Access: " << paramPlayer->group->access << std::endl <<
 	     "Level: " << paramPlayer->level << std::endl <<
 	     "Magic Level: " << paramPlayer->magLevel << std::endl <<
 	     "Speed: " << paramPlayer->getSpeed() << std::endl <<
@@ -732,7 +732,7 @@ void Commands::kickPlayer(Player* player, const std::string& cmd, const std::str
 	Player* playerKick = g_game.getPlayerByName(param);
 
 	if (playerKick) {
-		if (playerKick->accessLevel) {
+		if (playerKick->group->access) {
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You cannot kick this player.");
 			return;
 		}

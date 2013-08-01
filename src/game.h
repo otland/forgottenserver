@@ -23,6 +23,7 @@
 #include <vector>
 #include <set>
 
+#include "groups.h"
 #include "map.h"
 #include "position.h"
 #include "item.h"
@@ -596,6 +597,8 @@ class Game
 		typedef std::unordered_map<const Tile*, Container*> BrowseFieldMap;
 		BrowseFieldMap browseFields;
 
+		Group* getGroup(uint32_t id);
+
 	protected:
 		bool playerSayCommand(Player* player, SpeakClasses type, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
@@ -672,6 +675,8 @@ class Game
 		WildcardTreeNode* wildcardTree;
 
 		ModalWindow* offlineTrainingWindow;
+
+		Groups groups;
 
 		std::unordered_map<uint32_t, Guild*> guilds;
 		std::vector<std::string> commandTags;

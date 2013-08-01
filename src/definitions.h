@@ -62,8 +62,6 @@
 #define HAS_ITERATOR_DEBUGGING 0
 #endif
 
-#define ATOI64 _atoi64
-
 #pragma warning(disable:4100) // unused parameters
 #pragma warning(disable:4127) // conditional expression is constant
 #pragma warning(disable:4244) // 'argument' : conversion from 'type1' to 'type2', possible loss of data
@@ -82,10 +80,6 @@
 #undef _WIN32_WINNT
 #endif
 #define _WIN32_WINNT 0x0501
-#endif
-
-#ifdef __GNUC__
-#define ATOI64 atoll
 #endif
 
 #ifndef M_PI

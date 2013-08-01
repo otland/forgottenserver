@@ -463,6 +463,39 @@ uint32_t DatabaseManager::updateDatabase()
 			return 14;
 		}
 
+		case 14: {
+			std::cout << "> Updating database to version 14 (moving groups to data/XML/groups.xml)" << std::endl;
+
+			db->executeQuery("ALTER TABLE players DROP FOREIGN KEY players_ibfk_2");
+			db->executeQuery("DROP INDEX group_id ON players");
+
+			db->executeQuery("ALTER TABLE accounts DROP FOREIGN KEY accounts_ibfk_1");
+			db->executeQuery("DROP INDEX group_id ON accounts");
+			db->executeQuery("ALTER TABLE `accounts` DROP `group_id`");
+
+			FILE* groupsFile = fopen("data/XML/groups.xml", "w");
+			if (groupsFile) {
+				fprintf(groupsFile, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+				fprintf(groupsFile, "<groups>\r\n");
+
+				DBResult* result = db->storeQuery("SELECT `id`, `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` ORDER BY `id` ASC");
+				if (result) {
+					do {
+						fprintf(groupsFile, "<group id=\"%d\" name=\"%s\" flags=\"%llu\" access=\"%d\" maxdepotitems=\"0\" maxvipentries=\"0\" />", result->getDataInt("id"), result->getDataString("name").c_str(), result->getDataLong("flags"), result->getDataInt("access"), result->getDataInt("maxdepotitems"), result->getDataInt("maxviplist"));
+					} while (result->next());
+					db->freeResult(result);
+				}
+
+				fprintf(groupsFile, "</groups>\r\n");
+				fclose(groupsFile);
+
+				db->executeQuery("DROP TABLE `groups`");
+			}
+
+			registerDatabaseConfig("db_version", 15);
+			return 15;
+		}
+
 		default:
 			break;
 	}

@@ -104,7 +104,7 @@ bool IOMapSerialize::saveMap(Map* map)
 	for (const auto& it : Houses::getInstance().getHouses()) {
 		//save house items
 		House* house = it.second;
-		for (Tile* tile : house->getHouseTiles()) {
+		for (HouseTile* tile : house->getHouseTiles()) {
 			PropWriteStream stream;
 			saveTile(stream, tile);
 

@@ -20,7 +20,10 @@
 
 #include "configmanager.h"
 #include "database.h"
+
 #include <string>
+
+#include <boost/lexical_cast.hpp>
 
 #if defined(WIN32) && !defined(_MSC_VER)
 #include <mysql/errmsg.h>
@@ -269,7 +272,13 @@ int64_t DBResult::getDataLong(const std::string& s) const
 		return 0;
 	}
 
-	return ATOI64(m_row[it->second]);
+	int64_t data;
+	try {
+		data = boost::lexical_cast<int64_t>(m_row[it->second]);
+	} catch(boost::bad_lexical_cast&) {
+		data = 0;
+	}
+	return data;
 }
 
 std::string DBResult::getDataString(const std::string& s) const
