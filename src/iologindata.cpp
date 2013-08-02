@@ -772,19 +772,19 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`stamina` = " << player->getStaminaMinutes() << ", ";
 	
 	query << "`skill_fist` = " << player->skills[SKILL_FIST][SKILL_LEVEL] << ", ";
-	query << "`skill_fist_tries" << player->skills[SKILL_FIST][SKILL_TRIES] << ", ";
+	query << "`skill_fist_tries` = " << player->skills[SKILL_FIST][SKILL_TRIES] << ", ";
 	query << "`skill_club` = " << player->skills[SKILL_CLUB][SKILL_LEVEL] << ", ";
-	query << "`skill_club_tries" << player->skills[SKILL_CLUB][SKILL_TRIES] << ", ";
+	query << "`skill_club_tries` = " << player->skills[SKILL_CLUB][SKILL_TRIES] << ", ";
 	query << "`skill_sword` = " << player->skills[SKILL_SWORD][SKILL_LEVEL] << ", ";
-	query << "`skill_sword_tries" << player->skills[SKILL_SWORD][SKILL_TRIES] << ", ";
+	query << "`skill_sword_tries` = " << player->skills[SKILL_SWORD][SKILL_TRIES] << ", ";
 	query << "`skill_axe` = " << player->skills[SKILL_AXE][SKILL_LEVEL] << ", ";
-	query << "`skill_axe_tries" << player->skills[SKILL_AXE][SKILL_TRIES] << ", ";
+	query << "`skill_axe_tries` = " << player->skills[SKILL_AXE][SKILL_TRIES] << ", ";
 	query << "`skill_dist` = " << player->skills[SKILL_DIST][SKILL_LEVEL] << ", ";
-	query << "`skill_dist_tries" << player->skills[SKILL_DIST][SKILL_TRIES] << ", ";
+	query << "`skill_dist_tries` = " << player->skills[SKILL_DIST][SKILL_TRIES] << ", ";
 	query << "`skill_shielding` = " << player->skills[SKILL_SHIELD][SKILL_LEVEL] << ", ";
-	query << "`skill_shielding_tries" << player->skills[SKILL_SHIELD][SKILL_TRIES] << ", ";
+	query << "`skill_shielding_tries` = " << player->skills[SKILL_SHIELD][SKILL_TRIES] << ", ";
 	query << "`skill_fishing` = " << player->skills[SKILL_FISH][SKILL_LEVEL] << ", ";
-	query << "`skill_fishing_tries" << player->skills[SKILL_FISH][SKILL_TRIES] << ", ";
+	query << "`skill_fishing_tries` = " << player->skills[SKILL_FISH][SKILL_TRIES] << ", ";
 
 	if (!player->isOffline()) {
 		query << "`onlinetime` = `onlinetime` + " << (time(NULL) - player->lastLoginSaved) << ", ";
