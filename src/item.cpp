@@ -207,6 +207,7 @@ void Item::copyAttributes(Item* item)
 Item::~Item()
 {
 	//std::cout << "Item destructor " << this << std::endl;
+	delete attributes;
 }
 
 void Item::setDefaultSubtype()
