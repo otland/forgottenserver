@@ -20,9 +20,7 @@
 #include "otpch.h"
 #include "enums.h"
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <stack>
 
 #include "databasemanager.h"
 #include "tools.h"
@@ -123,387 +121,58 @@ int32_t DatabaseManager::getDatabaseVersion()
 	return -1;
 }
 
-uint32_t DatabaseManager::updateDatabase()
+void DatabaseManager::updateDatabase()
 {
-	Database* db = Database::getInstance();
-
-	int32_t databaseVersion = getDatabaseVersion();
-	if (databaseVersion < 0) {
-		return 0;
+	lua_State* L = luaL_newstate();
+	if (!L) {
+		return;
 	}
 
-	switch (databaseVersion) {
-		case 0: {
-			std::cout << "> Updating database to version 1 (account names)" << std::endl;
-			db->executeQuery("ALTER TABLE `accounts` ADD `name` VARCHAR(32) NOT NULL AFTER `id`");
-			db->executeQuery("UPDATE `accounts` SET `name` = `id`");
-			db->executeQuery("ALTER TABLE `accounts` ADD UNIQUE (`name`)");
-			registerDatabaseConfig("db_version", 1);
-			return 1;
-		}
-
-		case 1: {
-			std::cout << "> Updating database to version 2 (market offers)" << std::endl;
-			db->executeQuery("CREATE TABLE `market_offers` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `player_id` INT NOT NULL, `sale` TINYINT(1) NOT NULL DEFAULT 0, `itemtype` INT UNSIGNED NOT NULL, `amount` SMALLINT UNSIGNED NOT NULL, `created` BIGINT UNSIGNED NOT NULL, `anonymous` TINYINT(1) NOT NULL DEFAULT 0, `price` INT UNSIGNED NOT NULL DEFAULT 0, PRIMARY KEY (`id`), KEY(`sale`, `itemtype`), KEY(`created`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE = InnoDB");
-			registerDatabaseConfig("db_version", 2);
-			return 2;
-		}
-
-		case 2: {
-			std::cout << "> Updating database to version 3 (bank balance)" << std::endl;
-			db->executeQuery("ALTER TABLE `players` ADD `balance` BIGINT UNSIGNED NOT NULL DEFAULT 0");
-			registerDatabaseConfig("db_version", 3);
-			return 3;
-		}
-
-		case 3: {
-			std::cout << "> Updating database to version 4 (market history)" << std::endl;
-			db->executeQuery("CREATE TABLE `market_history` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `player_id` INT NOT NULL, `sale` TINYINT(1) NOT NULL DEFAULT 0, `itemtype` INT UNSIGNED NOT NULL, `amount` SMALLINT UNSIGNED NOT NULL, `price` INT UNSIGNED NOT NULL DEFAULT 0, `expires_at` BIGINT UNSIGNED NOT NULL, `inserted` BIGINT UNSIGNED NOT NULL, `state` TINYINT(1) UNSIGNED NOT NULL, PRIMARY KEY(`id`), KEY(`player_id`, `sale`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE = InnoDB");
-			registerDatabaseConfig("db_version", 4);
-			return 4;
-		}
-
-		case 4: {
-			std::cout << "> Updating database to version 5 (black skull & guild wars)" << std::endl;
-			db->executeQuery("ALTER TABLE `players` CHANGE `redskull` `skull` TINYINT(1) NOT NULL DEFAULT '0', CHANGE `redskulltime` `skulltime` INT(11) NOT NULL DEFAULT '0'");
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `guild_wars` ( `id` int(11) NOT NULL AUTO_INCREMENT, `guild1` int(11) NOT NULL DEFAULT '0', `guild2` int(11) NOT NULL DEFAULT '0', `name1` varchar(255) NOT NULL, `name2` varchar(255) NOT NULL, `status` tinyint(2) NOT NULL DEFAULT '0', `started` bigint(15) NOT NULL DEFAULT '0', `ended` bigint(15) NOT NULL DEFAULT '0', PRIMARY KEY (`id`), KEY `guild1` (`guild1`), KEY `guild2` (`guild2`)) ENGINE=InnoDB");
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `guildwar_kills` (`id` int(11) NOT NULL AUTO_INCREMENT, `killer` varchar(50) NOT NULL, `target` varchar(50) NOT NULL, `killerguild` int(11) NOT NULL DEFAULT '0', `targetguild` int(11) NOT NULL DEFAULT '0', `warid` int(11) NOT NULL DEFAULT '0', `time` bigint(15) NOT NULL, PRIMARY KEY (`id`), KEY `warid` (`warid`), FOREIGN KEY (`warid`) REFERENCES `guild_wars`(`id`) ON DELETE CASCADE) ENGINE=InnoDB");
-			registerDatabaseConfig("db_version", 5);
-			return 5;
-		}
-
-		case 5: {
-			std::cout << "> Updating database to version 6 (market bug fix)" << std::endl;
-			db->executeQuery("DELETE FROM `market_offers` WHERE `amount` = 0");
-			registerDatabaseConfig("db_version", 6);
-			return 6;
-		}
-
-		case 6: {
-			std::cout << "> Updating database to version 7 (offline training)" << std::endl;
-			db->executeQuery("ALTER TABLE `players` ADD `offlinetraining_time` SMALLINT UNSIGNED NOT NULL DEFAULT 43200");
-			db->executeQuery("ALTER TABLE `players` ADD `offlinetraining_skill` INT NOT NULL DEFAULT -1");
-			registerDatabaseConfig("db_version", 7);
-			return 7;
-		}
-
-		case 7: {
-			std::cout << "> Updating database to version 8 (account viplist with description, icon and notify server side)" << std::endl;
-			db->executeQuery("RENAME TABLE `player_viplist` TO `account_viplist`");
-			db->executeQuery("ALTER TABLE `account_viplist` DROP FOREIGN KEY `account_viplist_ibfk_1`");
-			db->executeQuery("UPDATE `account_viplist` SET `player_id` = (SELECT `account_id` FROM `players` WHERE `id` = `player_id`)");
-			db->executeQuery("ALTER TABLE `account_viplist` CHANGE `player_id` `account_id` INT( 11 ) NOT NULL COMMENT 'id of account whose viplist entry it is'");
-			db->executeQuery("ALTER TABLE `account_viplist` DROP FOREIGN KEY `account_viplist_ibfk_2`");
-			db->executeQuery("ALTER TABLE `account_viplist` CHANGE `vip_id` `player_id` INT( 11 ) NOT NULL COMMENT 'id of target player of viplist entry'");
-			db->executeQuery("ALTER TABLE `account_viplist` DROP INDEX `player_id`, ADD INDEX `account_id` (`account_id`)");
-			db->executeQuery("ALTER TABLE `account_viplist` DROP INDEX `vip_id`, ADD INDEX `player_id` (`player_id`)");
-			db->executeQuery("ALTER TABLE `account_viplist` ADD FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE");
-			db->executeQuery("ALTER TABLE `account_viplist` ADD FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE");
-			db->executeQuery("ALTER TABLE `account_viplist` ADD `description` VARCHAR(128) NOT NULL DEFAULT '', ADD `icon` TINYINT( 2 ) UNSIGNED NOT NULL DEFAULT '0', ADD `notify` TINYINT( 1 ) NOT NULL DEFAULT '0'");
-
-			std::ostringstream query;
-
-			// Remove duplicates
-			DBResult* result = db->storeQuery("SELECT `account_id`, `player_id`, COUNT(*) AS `count` FROM `account_viplist` GROUP BY `account_id`, `player_id` HAVING COUNT(*) > 1");
-			if (result) {
-				do {
-					query.str("");
-					query << "DELETE FROM `account_viplist` WHERE `account_id` = " << result->getDataInt("account_id") << " AND `player_id` = " << result->getDataInt("player_id") << " LIMIT " << (result->getDataInt("count") - 1);
-					db->executeQuery(query.str());
-				} while (result->next());
-				db->freeResult(result);
-			}
-
-			// Remove if an account has over 200 entries
-			result = db->storeQuery("SELECT `account_id`, COUNT(*) AS `count` FROM `account_viplist` GROUP BY `account_id` HAVING COUNT(*) > 200");
-
-			if (result) {
-				do {
-					query.str("");
-					query << "DELETE FROM `account_viplist` WHERE `account_id` = " << result->getDataInt("account_id") << " LIMIT " << (result->getDataInt("count") - 200);
-					db->executeQuery(query.str());
-				} while (result->next());
-
-				db->freeResult(result);
-			}
-
-			db->executeQuery("ALTER TABLE `account_viplist` ADD UNIQUE `account_player_index` (`account_id`, `player_id`)");
-
-			registerDatabaseConfig("db_version", 8);
-			return 8;
-		}
-
-		case 8: {
-			std::cout << "> Updating database to version 9 (global inbox)" << std::endl;
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `player_inboxitems` (`player_id` int(11) NOT NULL, `sid` int(11) NOT NULL, `pid` int(11) NOT NULL DEFAULT '0', `itemtype` smallint(6) NOT NULL, `count` smallint(5) NOT NULL DEFAULT '0', `attributes` blob NOT NULL, UNIQUE KEY `player_id_2` (`player_id`,`sid`), KEY `player_id` (`player_id`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=latin1");
-
-			// Delete "market" item
-			db->executeQuery("DELETE FROM `player_depotitems` WHERE `itemtype` = 14405");
-
-			std::ostringstream query;
-
-			// Move up items in depot chests
-			DBResult* result = db->storeQuery("SELECT `player_id`, `pid`, (SELECT `dp2`.`sid` FROM `player_depotitems` AS `dp2` WHERE `dp2`.`player_id` = `dp1`.`player_id` AND `dp2`.`pid` = `dp1`.`sid` AND `itemtype` = 2594) AS `sid` FROM `player_depotitems` AS `dp1` WHERE `itemtype` = 2589");
-			if (result) {
-				do {
-					query.str("");
-					query << "UPDATE `player_depotitems` SET `pid` = " << result->getDataInt("pid") << " WHERE `player_id` = " << result->getDataInt("player_id") << " AND `pid` = " << result->getDataInt("sid");
-					db->executeQuery(query.str());
-				} while (result->next());
-
-				db->freeResult(result);
-			}
-
-			// Delete the depot lockers
-			db->executeQuery("DELETE FROM `player_depotitems` WHERE `itemtype` = 2589");
-
-			// Delete the depot chests
-			db->executeQuery("DELETE FROM `player_depotitems` WHERE `itemtype` = 2594");
-
-			std::ostringstream ss2;
-
-			result = db->storeQuery("SELECT DISTINCT `player_id` FROM `player_depotitems` WHERE `itemtype` = 14404");
-
-			if (result) {
-				do {
-					int32_t runningId = 100;
-
-					DBInsert stmt(db);
-					stmt.setQuery("INSERT INTO `player_inboxitems` (`player_id`, `sid`, `pid`, `itemtype`, `count`, `attributes`) VALUES ");
-
-					std::ostringstream sss;
-					sss << "SELECT `sid` FROM `player_depotitems` WHERE `player_id` = " << result->getDataInt("player_id") << " AND `itemtype` = 14404";
-					DBResult* result2 = db->storeQuery(sss.str());
-
-					if (result2) {
-						do {
-							std::stack<int32_t> sids;
-							sids.push(result2->getDataInt("sid"));
-
-							while (!sids.empty()) {
-								int32_t sid = sids.top();
-								sids.pop();
-
-								std::ostringstream ss;
-								ss << "SELECT * FROM `player_depotitems` WHERE `player_id` = " << result->getDataInt("player_id") << " AND `pid` = " << sid;
-								DBResult* result3 = db->storeQuery(ss.str());
-
-								if (result3) {
-									do {
-										unsigned long attrSize = 0;
-										const char* attr = result3->getDataStream("attributes", attrSize);
-										ss2 << result->getDataInt("player_id") << "," << ++runningId << ",0," << result3->getDataInt("itemtype") << "," << result3->getDataInt("count") << "," << db->escapeBlob(attr, attrSize);
-
-										if (!stmt.addRow(ss2)) {
-											std::cout << "Failed to add row!" << std::endl;
-										}
-
-										sids.push(result3->getDataInt("sid"));
-
-										std::ostringstream tmpss;
-										tmpss << "DELETE FROM `player_depotitems` WHERE `player_id` = " << result->getDataInt("player_id") << " AND `sid` = " << result3->getDataInt("sid");
-										db->executeQuery(tmpss.str());
-									} while (result3->next());
-
-									db->freeResult(result3);
-								}
-							}
-						} while (result2->next());
-
-						db->freeResult(result2);
-					}
-
-					if (!stmt.execute()) {
-						std::cout << "Failed to execute statement!" << std::endl;
-					}
-				} while (result->next());
-
-				db->freeResult(result);
-			}
-
-			// Delete the inboxes
-			db->executeQuery("DELETE FROM `player_depotitems` WHERE `itemtype` = 14404");
-
-			registerDatabaseConfig("db_version", 9);
-			return 9;
-		}
-
-		case 9: {
-			std::cout << "> Updating database to version 10 (stamina)" << std::endl;
-			db->executeQuery("ALTER TABLE `players` ADD `stamina` SMALLINT UNSIGNED NOT NULL DEFAULT 2520");
-			registerDatabaseConfig("db_version", 10);
-			return 10;
-		}
-
-		case 10: {
-			std::cout << "> Updating database to version 11 (improved guild and players online structure)" << std::endl;
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `guild_membership` (`player_id` int(11) NOT NULL, `guild_id` int(11) NOT NULL, `rank_id` int(11) NOT NULL, `nick` varchar(15) NOT NULL DEFAULT '', PRIMARY KEY (`player_id`), KEY `guild_id` (`guild_id`), KEY `rank_id` (`rank_id`)) ENGINE=InnoDB");
-			db->executeQuery("ALTER TABLE `guild_membership` ADD CONSTRAINT `guild_membership_ibfk_3` FOREIGN KEY (`rank_id`) REFERENCES `guild_ranks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, ADD CONSTRAINT `guild_membership_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, ADD CONSTRAINT `guild_membership_ibfk_2` FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`id`) ON DELETE CASCADE ON UPDATE CASCADE");
-			db->executeQuery("ALTER TABLE `guild_invites` ADD PRIMARY KEY (`player_id`, `guild_id`)");
-			db->executeQuery("ALTER TABLE `player_skills` ADD PRIMARY KEY (`player_id`, `skillid`)");
-			db->executeQuery("ALTER TABLE `player_storage` ADD PRIMARY KEY (`player_id`, `key`)");
-
-			DBResult* result = db->storeQuery("SELECT `players`.`id` AS `player_id`, `players`.`rank_id` AS `rank_id`, `players`.`guildnick` AS `guild_nick`, `guild_ranks`.`guild_id` AS `guild_id` FROM `guild_ranks` INNER JOIN `players` ON `guild_ranks`.`id` = `players`.`rank_id`");
-
-			if (result) {
-				DBInsert stmt(db);
-				stmt.setQuery("INSERT INTO `guild_membership` (`player_id`, `guild_id`, `rank_id`, `nick`) VALUES ");
-
-				std::ostringstream ss;
-
-				do {
-					ss << result->getDataInt("player_id") << "," << result->getDataInt("guild_id") << "," << result->getDataInt("rank_id") << "," << db->escapeString(result->getDataString("guild_nick"));
-
-					if (!stmt.addRow(ss)) {
-						std::cout << "Failed to add row!" << std::endl;
-					}
-				} while (result->next());
-
-				db->freeResult(result);
-
-				if (!stmt.execute()) {
-					std::cout << "Failed to execute statement!" << std::endl;
-				}
-			}
-
-			db->executeQuery("ALTER TABLE `players` DROP `rank_id`, DROP `guildnick`, DROP `direction`, DROP `loss_experience`, DROP `loss_mana`, DROP `loss_skills`, DROP `premend`, DROP `online`");
-			db->executeQuery("DROP TRIGGER IF EXISTS `ondelete_guilds`");
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `players_online` (`player_id` int(11) NOT NULL, PRIMARY KEY (`player_id`)) ENGINE=MEMORY");
-			registerDatabaseConfig("db_version", 11);
-			return 11;
-		}
-
-		case 11: {
-			std::cout << "> Updating database to version 12 (storing players record and message of the day in database)" << std::endl;
-
-			std::string motdHash;
-			std::string motdNum;
-
-			std::ifstream lastMotdFile("lastMotd.txt");
-			if (lastMotdFile) {
-				getline(lastMotdFile, motdNum);
-				getline(lastMotdFile, motdHash);
-				motdHash = transformToSHA1(motdHash);
-				lastMotdFile.close();
-			}
-
-			uint32_t playersRecord;
-			FILE* playersRecordFile = fopen("playersRecord.txt", "r");
-			if (playersRecordFile) {
-				int32_t tmp = fscanf(playersRecordFile, "%u", &playersRecord);
-				if (tmp == EOF) {
-					playersRecord = 0;
-				}
-				fclose(playersRecordFile);
-			} else {
-				playersRecord = 0;
-			}
-
-			std::ostringstream query;
-			query << "INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '" << playersRecord << "'), ('motd_hash', " << db->escapeString(motdHash) << "), ('motd_num', " << db->escapeString(motdNum) << ")";
-			db->executeQuery(query.str());
-
-			registerDatabaseConfig("db_version", 12);
-			return 12;
-		}
-
-		case 12: {
-			std::cout << "> Updating database to version 13 (house bidding system and additional columns to other tables)" << std::endl;
-
-			db->executeQuery("ALTER TABLE `player_deaths` ADD `mostdamage_by` varchar(100) NOT NULL, ADD `mostdamage_is_player` tinyint(1) NOT NULL DEFAULT '0', ADD `unjustified` tinyint(1) NOT NULL DEFAULT '0', ADD `mostdamage_unjustified` tinyint(1) NOT NULL DEFAULT '0', ADD KEY `killed_by` (`killed_by`), ADD KEY `mostdamage_by` (`mostdamage_by`)");
-			db->executeQuery("ALTER TABLE `houses` ADD `name` varchar(255) NOT NULL, ADD `rent` int(11) NOT NULL DEFAULT '0', ADD `town_id` int(11) NOT NULL DEFAULT '0', ADD `bid` int(11) NOT NULL DEFAULT '0', ADD `bid_end` int(11) NOT NULL DEFAULT '0', ADD `last_bid` int(11) NOT NULL DEFAULT '0', ADD `highest_bidder` int(11) NOT NULL DEFAULT '0', ADD `size` int(11) NOT NULL DEFAULT '0', ADD `beds` int(11) NOT NULL DEFAULT '0', ADD KEY `owner` (`owner`), ADD KEY `town_id` (`town_id`)");
-			db->executeQuery("ALTER TABLE `players` ADD `onlinetime` int(11) NOT NULL DEFAULT '0', ADD `deletion` bigint(15) NOT NULL DEFAULT '0'");
-			db->executeQuery("ALTER TABLE `accounts` ADD `points` int(11) NOT NULL DEFAULT '0', ADD `creation` int(11) NOT NULL DEFAULT '0'");
-
-			registerDatabaseConfig("db_version", 13);
-			return 13;
-		}
-
-		case 13: {
-			std::cout << "> Updating database to version 14 (account_bans, ip_bans and player_bans)" << std::endl;
-
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `account_bans` (`account_id` int(11) NOT NULL, `reason` varchar(255) NOT NULL, `banned_at` bigint(20) NOT NULL, `expires_at` bigint(20) NOT NULL, `banned_by` int(11) NOT NULL, PRIMARY KEY (`account_id`), KEY `banned_by` (`banned_by`), FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB");
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `account_ban_history` (`account_id` int(11) NOT NULL, `reason` varchar(255) NOT NULL, `banned_at` bigint(20) NOT NULL, `expired_at` bigint(20) NOT NULL, `banned_by` int(11) NOT NULL, PRIMARY KEY (`account_id`), KEY `banned_by` (`banned_by`), FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB");
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `ip_bans` (`ip` int(10) unsigned NOT NULL, `reason` varchar(255) NOT NULL, `banned_at` bigint(20) NOT NULL, `expires_at` bigint(20) NOT NULL, `banned_by` int(11) NOT NULL, PRIMARY KEY (`ip`), KEY `banned_by` (`banned_by`), FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB");
-			db->executeQuery("CREATE TABLE IF NOT EXISTS `player_namelocks` (`player_id` int(11) NOT NULL, `reason` varchar(255) NOT NULL, `namelocked_at` bigint(20) NOT NULL, `namelocked_by` int(11) NOT NULL, PRIMARY KEY (`player_id`), KEY `namelocked_by` (`namelocked_by`), FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`namelocked_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB");
-
-			DBResult* result = db->storeQuery("SELECT `player`, `time` FROM `bans` WHERE `type` = 2");
-			if (result) {
-				DBInsert stmt(db);
-				stmt.setQuery("INSERT INTO `player_namelocks` (`player_id`, `namelocked_at`, `namelocked_by`) VALUES ");
-
-				std::ostringstream ss;
-				do {
-					ss << result->getDataInt("player") << "," << result->getDataInt("time") << "," << result->getDataInt("player");
-					if (!stmt.addRow(ss)) {
-						std::cout << "Failed to add row!" << std::endl;
-					}
-				} while (result->next());
-				db->freeResult(result);
-
-				if (!stmt.execute()) {
-					std::cout << "Failed to execute statement!" << std::endl;
-				}
-			}
-
-
-			db->executeQuery("DROP TRIGGER `ondelete_accounts`");
-			db->executeQuery("DROP TRIGGER `ondelete_players`");
-			db->executeQuery("ALTER TABLE `accounts` DROP `warnings`;");
-
-			db->executeQuery("DROP TABLE `bans`");
-
-			std::cout << "Run this query in your database to create the ondelete_players trigger:" << std::endl;
-			std::cout << "DELIMITER //" << std::endl;;
-			std::cout << "CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`" << std::endl;
-			std::cout << " FOR EACH ROW BEGIN" << std::endl;
-			std::cout << "  UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;" << std::endl;
-			std::cout << "END //" << std::endl;
-
-			registerDatabaseConfig("db_version", 14);
-			return 14;
-		}
-
-		case 14: {
-			std::cout << "> Updating database to version 14 (moving groups to data/XML/groups.xml)" << std::endl;
-
-			db->executeQuery("ALTER TABLE players DROP FOREIGN KEY players_ibfk_2");
-			db->executeQuery("DROP INDEX group_id ON players");
-
-			db->executeQuery("ALTER TABLE accounts DROP FOREIGN KEY accounts_ibfk_1");
-			db->executeQuery("DROP INDEX group_id ON accounts");
-			db->executeQuery("ALTER TABLE `accounts` DROP `group_id`");
-
-			FILE* groupsFile = fopen("data/XML/groups.xml", "w");
-			if (groupsFile) {
-				fprintf(groupsFile, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
-				fprintf(groupsFile, "<groups>\r\n");
-
-				DBResult* result = db->storeQuery("SELECT `id`, `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` ORDER BY `id` ASC");
-				if (result) {
-					do {
-						std::stringstream ss;
-						ss << "\t<group id=\"" << result->getDataInt("id") << "\" name=\"" << result->getDataString("name") << "\" flags=\"" << result->getDataLong("flags") << "\" access=\"" << result->getDataInt("access") << "\" maxdepotitems=\"" << result->getDataInt("maxdepotitems") << "\" maxvipentries=\"" << result->getDataInt("maxviplist") << "\" />\r\n";
-						fprintf(groupsFile, "%s", ss.str().c_str());
-					} while (result->next());
-					db->freeResult(result);
-				}
-
-				fprintf(groupsFile, "</groups>\r\n");
-				fclose(groupsFile);
-
-				db->executeQuery("DROP TABLE `groups`");
-			}
-
-			registerDatabaseConfig("db_version", 15);
-			return 15;
-		}
-
-		default:
+	luaL_openlibs(L);
+
+#ifndef __LUAJIT__
+	//bit operations for Lua, based on bitlib project release 24
+	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
+	luaL_register(m_luaState, "bit", LuaScriptInterface::luaBitReg);
+#endif
+
+	//db table
+	luaL_register(L, "db", LuaScriptInterface::luaDatabaseTable);
+
+	//result table
+	luaL_register(L, "result", LuaScriptInterface::luaResultTable);
+
+	int32_t version = getDatabaseVersion();
+	do {
+		std::ostringstream ss;
+		ss << "data/migrations/" << version << ".lua";
+		if (luaL_dofile(L, ss.str().c_str()) != 0) {
+			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] " << lua_tostring(L, -1) << std::endl;
 			break;
-	}
+		}
 
-	return 0;
+		lua_getglobal(L, "onUpdateDatabase"); 
+		if (lua_pcall(L, 0, 1, 0) != 0) {
+			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] " << lua_tostring(L, -1) << std::endl;
+			break;
+		}
+
+		if (!lua_isboolean(L, -1)) {
+			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] did not return a boolean" << std::endl;
+			break;
+		}
+
+		bool luaReturnValue = lua_toboolean(L, -1) != 0;
+		lua_pop(L, 1);
+		if (!luaReturnValue) {
+			break;
+		}
+
+		version++;
+		std::cout << "> Database has been updated to version " << version << "." << std::endl;
+		registerDatabaseConfig("db_version", version);
+	} while (true);
+	lua_close(L);
 }
 
 bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& value)

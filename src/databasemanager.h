@@ -39,7 +39,7 @@ class DatabaseManager
 		bool isDatabaseSetup();
 
 		bool optimizeTables();
-		uint32_t updateDatabase();
+		void updateDatabase();
 
 		bool getDatabaseConfig(const std::string& config, int32_t& value);
 		void registerDatabaseConfig(const std::string& config, int32_t value);

@@ -366,6 +366,12 @@ class LuaScriptInterface
 		static bool getFieldBool(lua_State* L, const char* key);
 		static std::string escapeString(const std::string& string);
 
+#ifndef __LUAJIT__
+		static const luaL_Reg luaBitReg[13];
+#endif
+		static const luaL_Reg luaDatabaseTable[8];
+		static const luaL_Reg luaResultTable[7];
+
 	protected:
 		virtual bool closeState();
 
@@ -682,7 +688,6 @@ class LuaScriptInterface
 		static int32_t internalGetPlayerInfo(lua_State* L, PlayerInfo_t info);
 
 #ifndef __LUAJIT__
-		static const luaL_Reg luaBitReg[13];
 		static int32_t luaBitNot(lua_State* L);
 		static int32_t luaBitAnd(lua_State* L);
 		static int32_t luaBitOr(lua_State* L);
@@ -697,7 +702,6 @@ class LuaScriptInterface
 		static int32_t luaBitURightShift(lua_State* L);
 #endif
 
-		static const luaL_Reg luaDatabaseTable[8];
 		static int32_t luaDatabaseExecute(lua_State* L);
 		static int32_t luaDatabaseStoreQuery(lua_State* L);
 		static int32_t luaDatabaseEscapeString(lua_State* L);
@@ -706,7 +710,6 @@ class LuaScriptInterface
 		static int32_t luaDatabaseConnected(lua_State* L);
 		static int32_t luaDatabaseTableExists(lua_State* L);
 
-		static const luaL_Reg luaResultTable[7];
 		static int32_t luaResultGetDataInt(lua_State* L);
 		static int32_t luaResultGetDataLong(lua_State* L);
 		static int32_t luaResultGetDataString(lua_State* L);
