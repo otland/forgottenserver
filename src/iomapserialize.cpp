@@ -98,7 +98,7 @@ bool IOMapSerialize::saveMap(Map* map)
 		return false;
 	}
 
-	DBInsert stmt(db);
+	DBInsert stmt;
 	stmt.setQuery("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	//clear old tile data
@@ -362,7 +362,7 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 		query.str("");
 	}
 
-	DBInsert stmt(db);
+	DBInsert stmt;
 	stmt.setQuery("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
 
 	for (const auto& it : Houses::getInstance().getHouses()) {

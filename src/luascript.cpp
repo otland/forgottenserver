@@ -151,7 +151,7 @@ bool ScriptEnvironment::saveGameState()
 
 	db->executeQuery("TRUNCATE TABLE `global_storage`");
 
-	DBInsert stmt(db);
+	DBInsert stmt;
 	stmt.setQuery("INSERT INTO `global_storage` (`key`, `value`) VALUES ");
 
 	std::ostringstream query;

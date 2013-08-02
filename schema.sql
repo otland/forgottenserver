@@ -1,13 +1,3 @@
-CREATE TABLE IF NOT EXISTS `groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL COMMENT 'group name',
-  `flags` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `access` int(11) NOT NULL,
-  `maxdepotitems` int(11) NOT NULL,
-  `maxviplist` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
@@ -16,11 +6,9 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `premdays` int(11) NOT NULL DEFAULT '0',
   `lastday` int(10) unsigned NOT NULL DEFAULT '0',
   `email` varchar(255) NOT NULL DEFAULT '',
-  `group_id` int(11) NOT NULL DEFAULT '1',
   `creation` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `players` (
@@ -64,10 +52,23 @@ CREATE TABLE IF NOT EXISTS `players` (
   `offlinetraining_time` smallint(5) unsigned NOT NULL DEFAULT '43200',
   `offlinetraining_skill` int(11) NOT NULL DEFAULT '-1',
   `stamina` smallint(5) unsigned NOT NULL DEFAULT '2520',
+  `skill_fist` int(10) unsigned NOT NULL DEFAULT 10,
+  `skill_fist_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `skill_club` int(10) unsigned NOT NULL DEFAULT 10,
+  `skill_club_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `skill_sword` int(10) unsigned NOT NULL DEFAULT 10,
+  `skill_sword_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `skill_axe` int(10) unsigned NOT NULL DEFAULT 10,
+  `skill_axe_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `skill_dist` int(10) unsigned NOT NULL DEFAULT 10,
+  `skill_dist_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `skill_shielding` int(10) unsigned NOT NULL DEFAULT 10,
+  `skill_shielding_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `skill_fishing` int(10) unsigned NOT NULL DEFAULT 10,
+  `skill_fishing_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
   KEY `vocation` (`vocation`)
 ) ENGINE=InnoDB;
 
@@ -127,11 +128,6 @@ CREATE TABLE IF NOT EXISTS `account_viplist` (
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
-
-INSERT INTO `groups` (`id`, `name`, `flags`, `access`, `maxdepotitems`, `maxviplist`) VALUES
-(1, 'player', 0, 0, 0, 200),
-(2, 'a gamemaster', 137438953471, 1, 0, 0),
-(3, 'a god', 127540697997304, 1, 0, 0);
 
 CREATE TABLE IF NOT EXISTS `guilds` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -308,16 +304,6 @@ CREATE TABLE IF NOT EXISTS `player_items` (
   KEY `sid` (`sid`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `player_skills` (
-  `player_id` int(11) NOT NULL DEFAULT '0',
-  `skillid` tinyint(4) NOT NULL DEFAULT '0',
-  `value` int(10) unsigned NOT NULL DEFAULT '0',
-  `count` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`player_id`, `skillid`),
-  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE,
-  KEY `value_count_index` (`value`,`count`)
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `player_spells` (
   `player_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -338,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '14'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '16'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,
@@ -346,23 +332,10 @@ CREATE TABLE IF NOT EXISTS `tile_store` (
   FOREIGN KEY (`house_id`) REFERENCES `houses` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-DROP TRIGGER IF EXISTS `ondelete_accounts`;
-DROP TRIGGER IF EXISTS `oncreate_players`;
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;
 
 DELIMITER //
-CREATE TRIGGER `oncreate_players` AFTER INSERT ON `players`
- FOR EACH ROW BEGIN
-    INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 0, 10);
-    INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 1, 10);
-    INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 2, 10);
-    INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 3, 10);
-    INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 4, 10);
-    INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 5, 10);
-    INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 6, 10);
-END
-//
 CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`
  FOR EACH ROW BEGIN
     UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;

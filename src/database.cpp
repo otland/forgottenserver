@@ -321,9 +321,8 @@ bool DBResult::next()
 	return m_row != NULL;
 }
 
-DBInsert::DBInsert(Database* db)
+DBInsert::DBInsert()
 {
-	m_db = db;
 	m_rows = 0;
 }
 
@@ -342,7 +341,7 @@ bool DBInsert::addRow(const std::string& row)
 	size_t size = m_buf.length();
 	if (size == 0) {
 		m_buf = "(" + row + ")";
-	} else if (size > 8192) {
+	} else if (size > 32768) {
 		if (!execute()) {
 			return false;
 		}
@@ -370,7 +369,7 @@ bool DBInsert::execute()
 	m_rows = 0;
 
 	// executes buffer
-	bool res = m_db->executeQuery(m_query + m_buf);
+	bool res = Database::getInstance()->executeQuery(m_query + m_buf);
 	m_buf = "";
 	return res;
 }

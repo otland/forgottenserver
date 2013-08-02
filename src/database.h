@@ -190,12 +190,7 @@ class DBResult
 class DBInsert
 {
 	public:
-		/**
-		* Associates with given database handler.
-		*
-		* @param Database* database wrapper
-		*/
-		DBInsert(Database* db);
+		DBInsert();
 		~DBInsert() {}
 
 		/**
@@ -225,7 +220,6 @@ class DBInsert
 		std::string m_query;
 		std::string m_buf;
 
-		Database* m_db;
 		uint32_t m_rows;
 };
 

@@ -248,7 +248,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina` FROM `players` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `id`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `name` = " << db->escapeString(name);
 
 	DBResult* result = db->storeQuery(query.str());
 	if (!result) {
@@ -391,6 +391,19 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 
 	player->staminaMinutes = result->getDataInt("stamina");
 
+	std::string skillNames[] = {"skill_fist", "skill_club", "skill_sword", "skill_axe", "skill_dist", "skill_shielding", "skill_fishing"};
+	for (int i = 0, size = sizeof(skillNames) / sizeof(std::string); i < size; ++i) {
+		uint32_t skillLevel = result->getDataInt(skillNames[i]);
+		uint64_t skillTries = result->getDataLong(skillNames[i] + "_tries");
+		uint64_t nextSkillTries = player->vocation->getReqSkillTries(i, skillLevel + 1);
+		if (skillTries > nextSkillTries) {
+			skillTries = 0;
+		}
+		player->skills[i][SKILL_LEVEL] = skillLevel;
+		player->skills[i][SKILL_TRIES] = skillTries;
+		player->skills[i][SKILL_PERCENT] = Player::getPercentLevel(skillTries, nextSkillTries);
+	}
+
 	db->freeResult(result);
 
 	query.str("");
@@ -448,44 +461,13 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 		}
 	}
 
-	// we need to find out our skills
-	// so we query the skill table
-	query.str("");
-	query << "SELECT `skillid`, `value`, `count` FROM `player_skills` WHERE `player_id` = " << player->getGUID();
-
-	if ((result = db->storeQuery(query.str()))) {
-		//now iterate over the skills
-		do {
-			int32_t skillid = result->getDataInt("skillid");
-
-			if (skillid >= SKILL_FIRST && skillid <= SKILL_LAST) {
-				uint32_t skillLevel = result->getDataInt("value");
-				uint64_t skillCount = result->getDataLong("count");
-
-				uint64_t nextSkillCount = player->vocation->getReqSkillTries(skillid, skillLevel + 1);
-
-				if (skillCount > nextSkillCount) {
-					skillCount = 0;
-				}
-
-				player->skills[skillid][SKILL_LEVEL] = skillLevel;
-				player->skills[skillid][SKILL_TRIES] = skillCount;
-				player->skills[skillid][SKILL_PERCENT] = Player::getPercentLevel(skillCount, nextSkillCount);
-			}
-		} while (result->next());
-
-		db->freeResult(result);
-	}
-
 	query.str("");
 	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
-
 	if ((result = db->storeQuery(query.str()))) {
 		do {
 			std::string spellName = result->getDataString("name");
 			player->learnedInstantSpellList.push_back(spellName);
 		} while (result->next());
-
 		db->freeResult(result);
 	}
 
@@ -494,7 +476,6 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 
 	query.str("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
-
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 		db->freeResult(result);
@@ -503,7 +484,6 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
 			int32_t pid = pair.second;
-
 			if (pid >= 1 && pid <= 10) {
 				player->__internalAddThing(pid, item);
 			} else {
@@ -525,7 +505,6 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 
 	query.str("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
-
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 		db->freeResult(result);
@@ -791,6 +770,22 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`offlinetraining_time` = " << player->getOfflineTrainingTime() / 1000 << ", ";
 	query << "`offlinetraining_skill` = " << player->getOfflineTrainingSkill() << ", ";
 	query << "`stamina` = " << player->getStaminaMinutes() << ", ";
+	
+	query << "`skill_fist` = " << player->skills[SKILL_FIST][SKILL_LEVEL] << ", ";
+	query << "`skill_fist_tries" << player->skills[SKILL_FIST][SKILL_TRIES] << ", ";
+	query << "`skill_club` = " << player->skills[SKILL_CLUB][SKILL_LEVEL] << ", ";
+	query << "`skill_club_tries" << player->skills[SKILL_CLUB][SKILL_TRIES] << ", ";
+	query << "`skill_sword` = " << player->skills[SKILL_SWORD][SKILL_LEVEL] << ", ";
+	query << "`skill_sword_tries" << player->skills[SKILL_SWORD][SKILL_TRIES] << ", ";
+	query << "`skill_axe` = " << player->skills[SKILL_AXE][SKILL_LEVEL] << ", ";
+	query << "`skill_axe_tries" << player->skills[SKILL_AXE][SKILL_TRIES] << ", ";
+	query << "`skill_dist` = " << player->skills[SKILL_DIST][SKILL_LEVEL] << ", ";
+	query << "`skill_dist_tries" << player->skills[SKILL_DIST][SKILL_TRIES] << ", ";
+	query << "`skill_shielding` = " << player->skills[SKILL_SHIELD][SKILL_LEVEL] << ", ";
+	query << "`skill_shielding_tries" << player->skills[SKILL_SHIELD][SKILL_TRIES] << ", ";
+	query << "`skill_fishing` = " << player->skills[SKILL_FISH][SKILL_LEVEL] << ", ";
+	query << "`skill_fishing_tries" << player->skills[SKILL_FISH][SKILL_TRIES] << ", ";
+
 	if (!player->isOffline()) {
 		query << "`onlinetime` = `onlinetime` + " << (time(NULL) - player->lastLoginSaved) << ", ";
 	}
@@ -806,27 +801,16 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	// skills
-	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
-		query.str("");
-		query << "UPDATE `player_skills` SET `value` = " << player->skills[i][SKILL_LEVEL] << ", `count` = " << player->skills[i][SKILL_TRIES] << " WHERE `player_id` = " << player->getGUID() << " AND `skillid` = " << i;
-
-		if (!db->executeQuery(query.str())) {
-			return false;
-		}
-	}
-
 	// learned spells
 	query.str("");
 	query << "DELETE FROM `player_spells` WHERE `player_id` = " << player->getGUID();
-
 	if (!db->executeQuery(query.str())) {
 		return false;
 	}
 
 	query.str("");
 
-	DBInsert stmt(db);
+	DBInsert stmt;
 	stmt.setQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
 
 	for (LearnedInstantSpellList::const_iterator it = player->learnedInstantSpellList.begin();
