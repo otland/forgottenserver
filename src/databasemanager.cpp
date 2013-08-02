@@ -133,7 +133,7 @@ void DatabaseManager::updateDatabase()
 #ifndef __LUAJIT__
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
-	luaL_register(m_luaState, "bit", LuaScriptInterface::luaBitReg);
+	luaL_register(L, "bit", LuaScriptInterface::luaBitReg);
 #endif
 
 	//db table
