@@ -946,7 +946,6 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
 		Item* bow = player->getWeapon(true);
-
 		if (bow && bow->getHitChance() != 0) {
 			chance += bow->getHitChance();
 		}
@@ -968,23 +967,22 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		Tile* destTile = target->getTile();
 
 		if (!Position::areInRange<1, 1, 0>(player->getPosition(), target->getPosition())) {
-            std::vector<std::pair<int32_t, int32_t>> destList = {
-                {-1, -1},
-                {-1, 0},
-                {-1, 1},
-                {0, -1},
-                {0, 0},
-                {0, 1},
-                {1, -1},
-                {1, 0},
-                {1, 1}
-            };
+			std::vector<std::pair<int32_t, int32_t>> destList;
+			destList.push_back(std::make_pair(-1, -1));
+			destList.push_back(std::make_pair(-1, 0));
+			destList.push_back(std::make_pair(-1, 1));
+			destList.push_back(std::make_pair(0, -1));
+			destList.push_back(std::make_pair(0, 0));
+			destList.push_back(std::make_pair(0, 1));
+			destList.push_back(std::make_pair(1, -1));
+			destList.push_back(std::make_pair(1, 0));
+			destList.push_back(std::make_pair(1, 1));
 
 			std::random_shuffle(destList.begin(), destList.end());
 
 			Position destPos = target->getPosition();
 
-			for (auto dir : destList) {
+			for (const auto& dir : destList) {
 				Tile* tmpTile = g_game.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
 
 				// Blocking tiles or tiles without ground ain't valid targets for spears
