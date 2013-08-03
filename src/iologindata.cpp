@@ -391,10 +391,11 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 
 	player->staminaMinutes = result->getDataInt("stamina");
 
-	std::string skillNames[] = {"skill_fist", "skill_club", "skill_sword", "skill_axe", "skill_dist", "skill_shielding", "skill_fishing"};
+	static const std::string skillNames[] = {"skill_fist", "skill_club", "skill_sword", "skill_axe", "skill_dist", "skill_shielding", "skill_fishing"};
+	static const std::string skillNameTries[] = {"skill_fist_tries", "skill_club_tries", "skill_sword_tries", "skill_axe_tries", "skill_dist_tries", "skill_shielding_tries", "skill_fishing_tries"};
 	for (int i = 0, size = sizeof(skillNames) / sizeof(std::string); i < size; ++i) {
 		uint32_t skillLevel = result->getDataInt(skillNames[i]);
-		uint64_t skillTries = result->getDataLong(skillNames[i] + "_tries");
+		uint64_t skillTries = result->getDataLong(skillNameTries[i]);
 		uint64_t nextSkillTries = player->vocation->getReqSkillTries(i, skillLevel + 1);
 		if (skillTries > nextSkillTries) {
 			skillTries = 0;
