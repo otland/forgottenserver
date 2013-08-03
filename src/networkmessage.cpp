@@ -91,7 +91,7 @@ void NetworkMessage::AddString(const char* value)
 	}
 
 	AddU16(stringlen);
-	strcpy((char*)m_MsgBuf + m_ReadPos, value);
+	memcpy((char*)m_MsgBuf + m_ReadPos, value, stringlen);
 	m_ReadPos += stringlen;
 	m_MsgSize += stringlen;
 }
