@@ -770,10 +770,10 @@ class Item : virtual public Thing
 		}
 
 		Cylinder* getParent() {
-			return NULL;
+			return parent;
 		}
 		const Cylinder* getParent() const {
-			return NULL;
+			return parent;
 		}
 		void setParent(Cylinder* cylinder) {
 			parent = cylinder;
