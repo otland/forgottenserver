@@ -460,6 +460,15 @@ class Creature : virtual public Thing
 
 		virtual double getDamageRatio(Creature* attacker) const;
 
+		void useThing2() {
+			++useCount;
+		}
+		void releaseThing2() {
+			if (--useCount == 0) {
+				delete this;
+			}
+		}
+
 	protected:
 		virtual bool useCacheMap() const {
 			return false;
@@ -487,6 +496,7 @@ class Creature : virtual public Thing
 		Creature* followCreature;
 
 		uint64_t lastStep;
+		uint32_t useCount;
 		uint32_t id;
 		uint32_t scriptEventsBitField;
 		uint32_t eventWalk;

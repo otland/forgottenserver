@@ -113,7 +113,7 @@ void ProtocolGame::deleteProtocolTask()
 {
 	//dispatcher thread
 	if (player) {
-		g_game.FreeThing(player);
+		g_game.ReleaseCreature(player);
 		player = NULL;
 	}
 

@@ -1038,7 +1038,7 @@ void Tile::__addThing(int32_t index, Thing* thing)
 				int32_t oldGroundIndex = __getIndexOfThing(ground);
 				Item* oldGround = ground;
 				ground->setParent(NULL);
-				g_game.FreeThing(ground);
+				g_game.ReleaseItem(ground);
 				ground = item;
 				updateTileFlags(oldGround, true);
 				updateTileFlags(item, false);
@@ -1055,7 +1055,7 @@ void Tile::__addThing(int32_t index, Thing* thing)
 							Item* oldSplash = *it;
 							__removeThing(oldSplash, 1);
 							oldSplash->setParent(NULL);
-							g_game.FreeThing(oldSplash);
+							g_game.ReleaseItem(oldSplash);
 							postRemoveNotification(oldSplash, NULL, oldSplashIndex, true);
 							break;
 						}
@@ -1095,13 +1095,13 @@ void Tile::__addThing(int32_t index, Thing* thing)
 								__removeThing(oldField, 1);
 
 								oldField->setParent(NULL);
-								g_game.FreeThing(oldField);
+								g_game.ReleaseItem(oldField);
 								postRemoveNotification(oldField, NULL, oldFieldIndex, true);
 								break;
 							} else {
 								//This magic field cannot be replaced.
 								item->setParent(NULL);
-								g_game.FreeThing(item);
+								g_game.ReleaseItem(item);
 								return;
 							}
 						}
@@ -1529,19 +1529,23 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	}
 
 	//add a reference to this item, it may be deleted after being added (mailbox for example)
-	thing->useThing2();
+	Creature* creature = thing->getCreature();
+	Item* item = NULL;
+	if (creature) {
+		creature->useThing2();
+	} else {
+		item = thing->getItem();
+		if (item) {
+			item->useThing2();
+		}
+	}
 
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		Creature* creature = thing->getCreature();
-
 		if (creature) {
 			g_moveEvents->onCreatureMove(creature, this, true);
-		} else {
-			Item* item = thing->getItem();
-			if (item) {
-				g_moveEvents->onItemMove(item, this, true);
-			}
+		} else if (item) {
+			g_moveEvents->onItemMove(item, this, true);
 		}
 
 		if (hasFlag(TILESTATE_TELEPORT)) {
@@ -1566,7 +1570,11 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	}
 
 	//release the reference to this item onces we are finished
-	g_game.FreeThing(thing);
+	if (creature) {
+		g_game.ReleaseCreature(creature);
+	} else if (item) {
+		g_game.ReleaseItem(item);
+	}
 }
 
 void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)

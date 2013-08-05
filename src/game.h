@@ -479,7 +479,8 @@ class Game
 
 		void cleanup();
 		void shutdown();
-		void FreeThing(Thing* thing);
+		void ReleaseCreature(Creature* creature);
+		void ReleaseItem(Item* item);
 
 		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
 		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY);
@@ -612,7 +613,8 @@ class Game
 		bool serverSaveMessage[3];
 		int64_t stateTime;
 
-		std::vector<Thing*> ToReleaseThings;
+		std::vector<Creature*> ToReleaseCreatures;
+		std::vector<Item*> ToReleaseItems;
 
 		uint32_t checkLightEvent;
 		uint32_t checkCreatureEvent;

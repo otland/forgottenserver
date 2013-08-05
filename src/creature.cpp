@@ -44,6 +44,8 @@ extern CreatureEvents* g_creatureEvents;
 Creature::Creature() :
 	isInternalRemoved(false)
 {
+	useCount = 0;
+
 	id = 0;
 	_tile = NULL;
 	direction = SOUTH;

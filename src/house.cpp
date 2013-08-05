@@ -397,7 +397,7 @@ void House::resetTransferItem()
 		transfer_container.setParent(NULL);
 
 		transfer_container.__removeThing(tmpItem, tmpItem->getItemCount());
-		g_game.FreeThing(tmpItem);
+		g_game.ReleaseItem(tmpItem);
 	}
 }
 

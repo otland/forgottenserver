@@ -759,10 +759,21 @@ class Item : virtual public Thing
 			return attributes;
 		}
 
+		void useThing2() {
+			++useCount;
+		}
+		void releaseThing2() {
+			if (--useCount == 0) {
+				delete this;
+			}
+		}
+
 	protected:
 		std::string getWeightDescription(double weight) const;
 
 		ItemAttributes* attributes;
+
+		uint32_t useCount;
 
 		uint16_t id;  // the same id as in ItemType
 		uint8_t count; // number of stacked items

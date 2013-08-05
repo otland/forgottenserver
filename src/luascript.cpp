@@ -118,7 +118,7 @@ void ScriptEnvironment::resetEnv()
 
 		for (ItemList::iterator it = itemList.begin(); it != itemList.end(); ++it) {
 			if ((*it)->getParent() == VirtualCylinder::virtualCylinder) {
-				g_game.FreeThing(*it);
+				g_game.ReleaseItem(*it);
 			}
 		}
 	}

@@ -102,17 +102,6 @@ class Thing
 	public:
 		virtual ~Thing();
 
-		void useThing2() {
-			++useCount;
-		}
-		void releaseThing2() {
-			--useCount;
-
-			if (useCount <= 0) {
-				delete this;
-			}
-		}
-
 		virtual std::string getDescription(int32_t lookDistance) const = 0;
 
 		Cylinder* getParent() {
@@ -159,7 +148,6 @@ class Thing
 
 	private:
 		Cylinder* parent;
-		int32_t useCount;
 };
 
 #endif

@@ -938,7 +938,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 	creatures.erase(creature->getID());
 	creature->removeList();
 	creature->setRemoved();
-	FreeThing(creature);
+	ReleaseCreature(creature);
 
 	removeCreatureCheck(creature);
 
@@ -1518,7 +1518,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 
 		if (item->isRemoved()) {
-			FreeThing(item);
+			ReleaseItem(item);
 		}
 	}
 
@@ -1708,7 +1708,7 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 		}
 
 		if (item->isRemoved()) {
-			FreeThing(item);
+			ReleaseItem(item);
 		}
 	}
 
@@ -1811,7 +1811,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 				Item* remainderItem = Item::CreateItem(item->getID(), count);
 
 				if (internalAddItem(destCylinder, remainderItem, INDEX_WHEREEVER, flags, false) != RET_NOERROR) {
-					FreeThing(remainderItem);
+					ReleaseItem(remainderItem);
 					remainderCount = count;
 				}
 			} else {
@@ -1826,7 +1826,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		} else {
 			//fully merged with toItem, item will be destroyed
 			item->onRemoved();
-			FreeThing(item);
+			ReleaseItem(item);
 
 			int32_t itemIndex = toCylinder->__getIndexOfThing(toItem);
 
@@ -1889,7 +1889,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 
 		if (item->isRemoved()) {
 			isCompleteRemoval = true;
-			FreeThing(item);
+			ReleaseItem(item);
 		}
 
 		cylinder->postRemoveNotification(item, NULL, index, isCompleteRemoval);
@@ -1909,7 +1909,7 @@ ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnM
 		ReturnValue remaindRet = internalAddItem(player->getTile(), remainderItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 
 		if (remaindRet != RET_NOERROR) {
-			FreeThing(remainderItem);
+			ReleaseItem(remainderItem);
 		}
 	}
 
@@ -2236,7 +2236,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 
 					item->setParent(NULL);
 					cylinder->postRemoveNotification(item, cylinder, itemIndex, true);
-					FreeThing(item);
+					ReleaseItem(item);
 					return newItem;
 				} else {
 					item = transformItem(item, newItemId);
@@ -2283,7 +2283,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 
 		item->setParent(NULL);
 		cylinder->postRemoveNotification(item, cylinder, itemIndex, true);
-		FreeThing(item);
+		ReleaseItem(item);
 
 		return newItem;
 	}
@@ -3214,14 +3214,14 @@ bool Game::playerAcceptTrade(uint32_t playerId)
 		it = tradeItems.find(tradeItem1);
 
 		if (it != tradeItems.end()) {
-			FreeThing(it->first);
+			ReleaseItem(it->first);
 			tradeItems.erase(it);
 		}
 
 		it = tradeItems.find(tradeItem2);
 
 		if (it != tradeItems.end()) {
-			FreeThing(it->first);
+			ReleaseItem(it->first);
 			tradeItems.erase(it);
 		}
 
@@ -3417,7 +3417,7 @@ bool Game::internalCloseTrade(Player* player)
 		std::map<Item*, uint32_t>::iterator it = tradeItems.find(player->getTradeItem());
 
 		if (it != tradeItems.end()) {
-			FreeThing(it->first);
+			ReleaseItem(it->first);
 			tradeItems.erase(it);
 		}
 
@@ -3436,7 +3436,7 @@ bool Game::internalCloseTrade(Player* player)
 			std::map<Item*, uint32_t>::iterator it = tradeItems.find(tradePartner->getTradeItem());
 
 			if (it != tradeItems.end()) {
-				FreeThing(it->first);
+				ReleaseItem(it->first);
 				tradeItems.erase(it);
 			}
 
@@ -4469,7 +4469,7 @@ void Game::checkCreatures()
 		} else {
 			creature->checkCreatureVectorIndex = -1;
 			it = checkCreatureVector.erase(it);
-			FreeThing(creature);
+			ReleaseCreature(creature);
 		}
 	}
 
@@ -5122,7 +5122,7 @@ void Game::checkDecay()
 
 		if (!item->canDecay()) {
 			item->setDecaying(DECAYING_FALSE);
-			FreeThing(item);
+			ReleaseItem(item);
 			it = decayItems[bucket].erase(it);
 			continue;
 		}
@@ -5140,14 +5140,14 @@ void Game::checkDecay()
 		if (dur <= 0) {
 			it = decayItems[bucket].erase(it);
 			internalDecayItem(item);
-			FreeThing(item);
+			ReleaseItem(item);
 		} else if (dur < EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS) {
 			it = decayItems[bucket].erase(it);
 			size_t newBucket = (bucket + ((dur + EVENT_DECAYINTERVAL / 2) / 1000)) % EVENT_DECAY_BUCKETS;
 
 			if (newBucket == bucket) {
 				internalDecayItem(item);
-				FreeThing(item);
+				ReleaseItem(item);
 			} else {
 				decayItems[newBucket].push_back(item);
 			}
@@ -5257,11 +5257,15 @@ void Game::shutdown()
 void Game::cleanup()
 {
 	//free memory
-	for (std::vector<Thing*>::iterator it = ToReleaseThings.begin(); it != ToReleaseThings.end(); ++it) {
-		(*it)->releaseThing2();
+	for (auto creature : ToReleaseCreatures) {
+		creature->releaseThing2();
 	}
+	ToReleaseCreatures.clear();
 
-	ToReleaseThings.clear();
+	for (auto item : ToReleaseItems) {
+		item->releaseThing2();
+	}
+	ToReleaseItems.clear();
 
 	for (DecayList::iterator it = toDecayItems.begin(); it != toDecayItems.end(); ++it) {
 		int32_t dur = (*it)->getDuration();
@@ -5276,9 +5280,14 @@ void Game::cleanup()
 	toDecayItems.clear();
 }
 
-void Game::FreeThing(Thing* thing)
+void Game::ReleaseCreature(Creature* creature)
 {
-	ToReleaseThings.push_back(thing);
+	ToReleaseCreatures.push_back(creature);
+}
+
+void Game::ReleaseItem(Item* item)
+{
+	ToReleaseItems.push_back(item);
 }
 
 bool Game::broadcastMessage(const std::string& text, MessageClasses type)

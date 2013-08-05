@@ -29,9 +29,7 @@
 Thing::Thing()
 {
 	parent = NULL;
-	useCount = 0;
 }
-
 
 Thing::~Thing()
 {
