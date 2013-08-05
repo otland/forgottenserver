@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+	<channel id="2" name="Tutor" />
+	<channel id="3" name="World Chat" />
+	<channel id="4" name="English Chat" />
+	<channel id="5" name="Advertising" />
+	<channel id="6" name="Advertising-Rookgaard" />
+	<channel id="7" name="Help" />
+	<channel id="8" name="Gamemaster" />
+</channels>

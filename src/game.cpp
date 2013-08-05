@@ -2355,8 +2355,8 @@ bool Game::playerCreatePrivateChannel(uint32_t playerId)
 		return false;
 	}
 
-	ChatChannel* channel = g_chat.createChannel(player, CHANNEL_PRIVATE);
-	if (!channel || !channel->addUser(player)) {
+	ChatChannel* channel = g_chat.createChannel(*player, CHANNEL_PRIVATE);
+	if (!channel || !channel->addUser(*player)) {
 		return false;
 	}
 
@@ -2364,46 +2364,48 @@ bool Game::playerCreatePrivateChannel(uint32_t playerId)
 	return true;
 }
 
-bool Game::playerChannelInvite(uint32_t playerId, const std::string& name)
+void Game::playerChannelInvite(uint32_t playerId, const std::string& name)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
-		return false;
+		return;
 	}
 
-	PrivateChatChannel* channel = g_chat.getPrivateChannel(player);
+	PrivateChatChannel* channel = g_chat.getPrivateChannel(*player);
 	if (!channel) {
-		return false;
+		return;
 	}
 
 	Player* invitePlayer = getPlayerByName(name);
 	if (!invitePlayer) {
-		return false;
+		return;
 	}
 
-	channel->invitePlayer(player, invitePlayer);
-	return true;
+	if (player != invitePlayer) {
+		channel->invitePlayer(*player, *invitePlayer);
+	}
 }
 
-bool Game::playerChannelExclude(uint32_t playerId, const std::string& name)
+void Game::playerChannelExclude(uint32_t playerId, const std::string& name)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
-		return false;
+		return;
 	}
 
-	PrivateChatChannel* channel = g_chat.getPrivateChannel(player);
+	PrivateChatChannel* channel = g_chat.getPrivateChannel(*player);
 	if (!channel) {
-		return false;
+		return;
 	}
 
 	Player* excludePlayer = getPlayerByName(name);
 	if (!excludePlayer) {
-		return false;
+		return;
 	}
 
-	channel->excludePlayer(player, excludePlayer);
-	return true;
+	if (player != excludePlayer) {
+		channel->excludePlayer(*player, *excludePlayer);
+	}
 }
 
 bool Game::playerRequestChannels(uint32_t playerId)
@@ -2424,12 +2426,20 @@ bool Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 		return false;
 	}
 
-	ChatChannel* channel = g_chat.addUserToChannel(player, channelId);
+	ChatChannel* channel = g_chat.addUserToChannel(*player, channelId);
 	if (!channel) {
 		return false;
 	}
 
-	player->sendChannel(channel->getId(), channel->getName());
+	const InvitedMap* invitedUsers = channel->getInvitedUsersPtr();
+	const UsersMap* users;
+	if (channel->hasFlag(CHANNEL_FLAG_EVENTS)) {
+		users = &channel->getUsers();
+	} else {
+		users = NULL;
+	}
+
+	player->sendChannel(channel->getId(), channel->getName(), users, invitedUsers);
 	return true;
 }
 
@@ -2440,7 +2450,7 @@ bool Game::playerCloseChannel(uint32_t playerId, uint16_t channelId)
 		return false;
 	}
 
-	g_chat.removeUserFromChannel(player, channelId);
+	g_chat.removeUserFromChannel(*player, channelId);
 	return true;
 }
 
@@ -4219,7 +4229,7 @@ bool Game::playerTalkToChannel(Player* player, SpeakClasses type, const std::str
 			break;
 	}
 
-	return g_chat.talkToChannel(player, type, text, channelId);
+	return g_chat.talkToChannel(*player, type, text, channelId);
 }
 
 bool Game::playerSpeakToNpc(Player* player, const std::string& text)

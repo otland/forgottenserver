@@ -1002,7 +1002,7 @@ class Player : public Creature, public Cylinder
 				client->sendTextWindow(windowTextId, itemId, text);
 			}
 		}
-		void sendToChannel(Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId) const {
+		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId) const {
 			if (client) {
 				client->sendToChannel(creature, type, text, channelId);
 			}
@@ -1098,9 +1098,10 @@ class Player : public Creature, public Cylinder
 				client->sendCloseContainer(cid);
 			}
 		}
-		void sendChannel(uint16_t channelId, const std::string& channelName) {
+
+		void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers) {
 			if (client) {
-				client->sendChannel(channelId, channelName);
+				client->sendChannel(channelId, channelName, channelUsers, invitedUsers);
 			}
 		}
 		void sendTutorial(uint8_t tutorialId) {
