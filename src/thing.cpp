@@ -28,7 +28,7 @@
 
 Thing::Thing()
 {
-	parent = NULL;
+	//
 }
 
 Thing::~Thing()
@@ -37,97 +37,21 @@ Thing::~Thing()
 	//std::cout << "thing destructor " << this << std::endl;
 }
 
-Cylinder* Thing::getTopParent()
+const Position& Thing::getPosition() const
 {
-	//tile
-	if (getParent() == NULL) {
-		return dynamic_cast<Cylinder*>(this);
+	const Tile* tile = getTile();
+	if (!tile) {
+		return Tile::null_tile.getTilePosition();
 	}
-
-	Cylinder* aux = getParent();
-	Cylinder* prevaux = dynamic_cast<Cylinder*>(this);
-
-	while (aux->getParent() != NULL) {
-		prevaux = aux;
-		aux = aux->getParent();
-	}
-
-	if (dynamic_cast<Cylinder*>(prevaux)) {
-		return prevaux;
-	}
-
-	return aux;
-}
-
-const Cylinder* Thing::getTopParent() const
-{
-	//tile
-	if (getParent() == NULL) {
-		return dynamic_cast<const Cylinder*>(this);
-	}
-
-	const Cylinder* aux = getParent();
-
-	const Cylinder* prevaux = dynamic_cast<const Cylinder*>(this);
-
-	while (aux->getParent() != NULL) {
-		prevaux = aux;
-		aux = aux->getParent();
-	}
-
-	if (dynamic_cast<const Cylinder*>(prevaux)) {
-		return prevaux;
-	}
-
-	return aux;
+	return tile->getTilePosition();
 }
 
 Tile* Thing::getTile()
 {
-	Cylinder* cylinder = getTopParent();
-
-	//get root cylinder
-	if (cylinder->getParent()) {
-		cylinder = cylinder->getParent();
-	}
-
-	return dynamic_cast<Tile*>(cylinder);
+	return dynamic_cast<Tile*>(this);
 }
 
 const Tile* Thing::getTile() const
 {
-	const Cylinder* cylinder = getTopParent();
-
-	//get root cylinder
-	if (cylinder->getParent()) {
-		cylinder = cylinder->getParent();
-	}
-
-	return dynamic_cast<const Tile*>(cylinder);
-}
-
-const Position& Thing::getPosition() const
-{
-	const Tile* tile = getTile();
-
-	if (!tile) {
-		return Tile::null_tile.getTilePosition();
-	}
-
-	return tile->getTilePosition();
-}
-
-bool Thing::isRemoved() const
-{
-	if (parent == NULL) {
-		return true;
-	}
-
-	const Cylinder* aux = getParent();
-
-	if (aux->isRemoved()) {
-		return true;
-	}
-
-	return false;
+	return dynamic_cast<const Tile*>(this);
 }

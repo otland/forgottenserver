@@ -143,6 +143,7 @@ Item* Item::CreateItem(PropStream& propStream)
 
 Item::Item(const uint16_t _type, uint16_t _count /*= 0*/)
 {
+	parent = NULL;
 	useCount = 0;
 
 	id = _type;
@@ -259,6 +260,56 @@ void Item::setID(uint16_t newid)
 		setDecaying(DECAYING_FALSE);
 		setDuration(newDuration);
 	}
+}
+
+Cylinder* Item::getTopParent()
+{
+	Cylinder* aux = getParent();
+	Cylinder* prevaux = dynamic_cast<Cylinder*>(this);
+	while (aux->getParent() != NULL) {
+		prevaux = aux;
+		aux = aux->getParent();
+	}
+
+	if (dynamic_cast<Cylinder*>(prevaux)) {
+		return prevaux;
+	}
+	return aux;
+}
+
+const Cylinder* Item::getTopParent() const
+{
+	const Cylinder* aux = getParent();
+	const Cylinder* prevaux = dynamic_cast<const Cylinder*>(this);
+	while (aux->getParent() != NULL) {
+		prevaux = aux;
+		aux = aux->getParent();
+	}
+
+	if (dynamic_cast<const Cylinder*>(prevaux)) {
+		return prevaux;
+	}
+	return aux;
+}
+
+Tile* Item::getTile()
+{
+	Cylinder* cylinder = getTopParent();
+	//get root cylinder
+	if (cylinder->getParent()) {
+		cylinder = cylinder->getParent();
+	}
+	return dynamic_cast<Tile*>(cylinder);
+}
+
+const Tile* Item::getTile() const
+{
+	const Cylinder* cylinder = getTopParent();
+	//get root cylinder
+	if (cylinder->getParent()) {
+		cylinder = cylinder->getParent();
+	}
+	return dynamic_cast<const Tile*>(cylinder);
 }
 
 bool Item::hasSubType() const

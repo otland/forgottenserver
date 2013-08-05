@@ -432,9 +432,14 @@ class Creature : virtual public Thing
 		//creature script events
 		bool registerCreatureEvent(const std::string& name);
 
+		Cylinder* getParent() {
+			return _tile;
+		}
+		const Cylinder* getParent() const {
+			return _tile;
+		}
 		virtual void setParent(Cylinder* cylinder) {
 			_tile = dynamic_cast<Tile*>(cylinder);
-			Thing::setParent(cylinder);
 		}
 
 		const Position& getPosition() const {
@@ -447,6 +452,7 @@ class Creature : virtual public Thing
 		const Tile* getTile() const {
 			return _tile;
 		}
+
 		int32_t getWalkCache(const Position& pos) const;
 
 		const Position& getLastPosition() {

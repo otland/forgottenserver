@@ -104,19 +104,16 @@ class Thing
 
 		virtual std::string getDescription(int32_t lookDistance) const = 0;
 
-		Cylinder* getParent() {
-			return parent;
+		virtual Cylinder* getParent() {
+			return NULL;
 		}
-		const Cylinder* getParent() const {
-			return parent;
+		virtual const Cylinder* getParent() const {
+			return NULL;
 		}
 
 		virtual void setParent(Cylinder* cylinder) {
-			parent = cylinder;
+			//
 		}
-
-		Cylinder* getTopParent(); //returns Tile/Container or a Player
-		const Cylinder* getTopParent() const;
 
 		virtual Tile* getTile();
 		virtual const Tile* getTile() const;
@@ -144,10 +141,9 @@ class Thing
 			return NULL;
 		}
 
-		virtual bool isRemoved() const;
-
-	private:
-		Cylinder* parent;
+		virtual bool isRemoved() const {
+			return true;
+		}
 };
 
 #endif

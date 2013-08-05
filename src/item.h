@@ -20,6 +20,7 @@
 #ifndef __OTSERV_ITEM_H__
 #define __OTSERV_ITEM_H__
 
+#include "cylinder.h"
 #include "thing.h"
 #include "items.h"
 
@@ -768,9 +769,27 @@ class Item : virtual public Thing
 			}
 		}
 
+		Cylinder* getParent() {
+			return NULL;
+		}
+		const Cylinder* getParent() const {
+			return NULL;
+		}
+		void setParent(Cylinder* cylinder) {
+			parent = cylinder;
+		}
+		Cylinder* getTopParent();
+		const Cylinder* getTopParent() const;
+		Tile* getTile();
+		const Tile* getTile() const;
+		bool isRemoved() const {
+			return !parent || parent->isRemoved();
+		}
+
 	protected:
 		std::string getWeightDescription(double weight) const;
 
+		Cylinder* parent;
 		ItemAttributes* attributes;
 
 		uint32_t useCount;
