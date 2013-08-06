@@ -10958,3 +10958,12 @@ int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 	}
 	return 1;
 }
+
+int32_t LuaScriptInterface::luaNpcDelete(lua_State* L)
+{
+	Npc* npc = popUserdata<Npc>(L);
+	if (npc) {
+		destroyUserdata(npc);
+	}
+	return 0;
+}
