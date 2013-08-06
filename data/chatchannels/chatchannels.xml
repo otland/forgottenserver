@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <channels>
-	<channel id="2" name="Tutor" canjoin="tutor.lua" />
-	<channel id="3" name="World Chat" />
-	<channel id="4" name="English Chat" />
+	<channel id="2" name="Tutor" canjoin="tutor.lua" onspeak="tutor.lua" />
+	<channel id="3" name="World Chat" onspeak="worldchat.lua" />
+	<channel id="4" name="English Chat" onspeak="englishchat.lua" />
 	<channel id="5" name="Advertising" canjoin="advertising.lua" onspeak="advertising.lua" />
 	<channel id="6" name="Advertising-Rookgaard" canjoin="advertising-rook.lua" onspeak="advertising-rook.lua" />
 	<channel id="7" name="Help" onspeak="help.lua" />
-	<channel id="8" name="Gamemaster" canjoin="gamemaster.lua" />
+	<channel id="8" name="Gamemaster" canjoin="gamemaster.lua" onspeak="gamemaster.lua" />
 </channels>

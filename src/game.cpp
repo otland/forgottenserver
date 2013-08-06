@@ -4066,7 +4066,7 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		case SPEAK_CHANNEL_O:
 		case SPEAK_CHANNEL_Y:
 		case SPEAK_CHANNEL_R1:
-			return playerTalkToChannel(player, type, text, channelId);
+			return g_chat.talkToChannel(*player, type, text, channelId);
 
 		case SPEAK_PRIVATE_PN:
 			return playerSpeakToNpc(player, text);
@@ -4193,44 +4193,6 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 	}
 
 	return true;
-}
-
-bool Game::playerTalkToChannel(Player* player, SpeakClasses type, const std::string& text, uint16_t channelId)
-{
-	switch (type) {
-		case SPEAK_CHANNEL_Y: {
-			if (player->isAccessPlayer() || (channelId == CHANNEL_HELP && (player->hasFlag(PlayerFlag_TalkOrangeHelpChannel) || player->getAccountType() > ACCOUNT_TYPE_NORMAL))) {
-				type = SPEAK_CHANNEL_O;
-			}
-
-			break;
-		}
-
-		case SPEAK_CHANNEL_O: {
-			if (channelId != CHANNEL_HELP || (!player->hasFlag(PlayerFlag_TalkOrangeHelpChannel) && player->getAccountType() == ACCOUNT_TYPE_NORMAL)) {
-				type = SPEAK_CHANNEL_Y;
-			}
-
-			break;
-		}
-
-		case SPEAK_CHANNEL_R1: {
-			if (!player->hasFlag(PlayerFlag_CanTalkRedChannel) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER) {
-				if (channelId == CHANNEL_HELP && (player->hasFlag(PlayerFlag_TalkOrangeHelpChannel) || player->getAccountType() >= ACCOUNT_TYPE_TUTOR)) {
-					type = SPEAK_CHANNEL_O;
-				} else {
-					type = SPEAK_CHANNEL_Y;
-				}
-			}
-
-			break;
-		}
-
-		default:
-			break;
-	}
-
-	return g_chat.talkToChannel(*player, type, text, channelId);
 }
 
 bool Game::playerSpeakToNpc(Player* player, const std::string& text)

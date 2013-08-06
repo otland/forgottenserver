@@ -459,6 +459,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 			Guild* guild = player.getGuild();
 			if (guild) {
 				ChatChannel* newChannel = new ChatChannel(channelId, guild->getName());
+				newChannel->flags |= CHANNEL_FLAG_EVENTS;
 				guildChannels[guild->getId()] = newChannel;
 				return newChannel;
 			}
@@ -469,6 +470,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 			Party* party = player.getParty();
 			if (party) {
 				ChatChannel* newChannel = new ChatChannel(channelId, "Party");
+				newChannel->flags |= CHANNEL_FLAG_EVENTS;
 				partyChannels[party] = newChannel;
 				return newChannel;
 			}
@@ -486,6 +488,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 				if (privateChannels.find(i) == privateChannels.end()) {
 					PrivateChatChannel* newChannel = new PrivateChatChannel(i, player.getName() + "'s Channel");
 					newChannel->setOwner(player.getGUID());
+					newChannel->flags |= CHANNEL_FLAG_EVENTS;
 					privateChannels[i] = newChannel;
 					return newChannel;
 				}
@@ -602,8 +605,14 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 		return false;
 	}
 
-	if (channelId == CHANNEL_GUILD && player.getGuildLevel() > 1) {
-		type = SPEAK_CHANNEL_O;
+	if (channelId == CHANNEL_GUILD) {
+		if (player.getGuildLevel() > 1) {
+			type = SPEAK_CHANNEL_O;
+		} else if (type != SPEAK_CHANNEL_Y) {
+			type = SPEAK_CHANNEL_Y;
+		}
+	} else if (type != SPEAK_CHANNEL_Y && (channelId == CHANNEL_PRIVATE || channelId == CHANNEL_PARTY)) {
+		type = SPEAK_CHANNEL_Y;
 	}
 
 	if (channel->hasFlag(CHANNEL_FLAG_LUA_ONSPEAK) && !channel->onSpeak(player, type, text)) {
