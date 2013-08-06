@@ -679,6 +679,7 @@ class LuaScriptInterface
 		static int32_t luaGetWaypointPosition(lua_State* L);
 		static int32_t luaDoWaypointAddTemporial(lua_State* L);
 
+		static int32_t luaSendChannelMessage(lua_State* L);
 		static int32_t luaSendGuildChannelMessage(lua_State* L);
 
 		static int32_t luaGetPlayerParty(lua_State* L);

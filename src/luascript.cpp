@@ -1948,6 +1948,9 @@ void LuaScriptInterface::registerFunctions()
 	//doWaypointAddTemporial(name, pos)
 	lua_register(m_luaState, "doWaypointAddTemporial", LuaScriptInterface::luaDoWaypointAddTemporial);
 
+	//sendChannelMessage(channelId, type, message)
+	lua_register(m_luaState, "sendChannelMessage", LuaScriptInterface::luaSendChannelMessage);
+
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(m_luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
@@ -7772,6 +7775,23 @@ int32_t LuaScriptInterface::luaDoWaypointAddTemporial(lua_State* L)
 
 	g_game.getMap()->waypoints[popString(L)] = pos;
 	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaSendChannelMessage(lua_State* L)
+{
+	//sendChannelMessage(channelId, type, message)
+	std::string message = popString(L);
+	SpeakClasses type = (SpeakClasses)popNumber<uint32_t>(L);
+	uint32_t channelId = popNumber<uint32_t>(L);
+
+	ChatChannel* channel = g_chat.getChannelById(channelId);
+	if (channel) {
+		channel->sendToAll(message, type);
+		lua_pushboolean(L, true);
+	} else {
+		lua_pushboolean(L, false);
+	}
 	return 1;
 }
 
