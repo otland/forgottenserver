@@ -2434,7 +2434,7 @@ bool Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 
 	const InvitedMap* invitedUsers = channel->getInvitedUsersPtr();
 	const UsersMap* users;
-	if (channel->hasFlag(CHANNEL_FLAG_EVENTS)) {
+	if (!channel->isPublicChannel()) {
 		users = &channel->getUsers();
 	} else {
 		users = NULL;

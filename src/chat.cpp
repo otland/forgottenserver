@@ -29,24 +29,12 @@ extern ConfigManager g_config;
 extern Game g_game;
 extern Chat g_chat;
 
-ScriptedChannelEvent::ScriptedChannelEvent(ScriptedChannelEvents_t eventType)
+CanJoinChannelEvent::CanJoinChannelEvent()
 	: Event(g_chat.getScriptInterface())
 {
-	this->eventType = eventType;
 }
 
-std::string ScriptedChannelEvent::getScriptEventName()
-{
-	switch (eventType) {
-		case EVENT_CANJOIN: return "canJoin";
-		case EVENT_ONJOIN: return "onJoin";
-		case EVENT_ONLEAVE: return "onLeave";
-		case EVENT_ONSPEAK: return "onSpeak";
-	}
-	return "";
-}
-
-bool ScriptedChannelEvent::executeCanJoin(const Player& player)
+bool CanJoinChannelEvent::execute(const Player& player)
 {
 	//canJoin(cid)
 	if (m_scriptInterface->reserveScriptEnv()) {
@@ -64,12 +52,17 @@ bool ScriptedChannelEvent::executeCanJoin(const Player& player)
 		m_scriptInterface->releaseScriptEnv();
 		return result;
 	} else {
-		std::cout << "[Error - ScriptedChannelEvent::executeCanJoin] Call stack overflow." << std::endl;
+		std::cout << "[Error - CanJoinChannelEvent::execute] Call stack overflow." << std::endl;
 		return false;
 	}
 }
 
-bool ScriptedChannelEvent::executeOnJoin(const Player& player)
+OnJoinChannelEvent::OnJoinChannelEvent()
+	: Event(g_chat.getScriptInterface())
+{
+}
+
+bool OnJoinChannelEvent::execute(const Player& player)
 {
 	//onJoin(cid)
 	if (m_scriptInterface->reserveScriptEnv()) {
@@ -87,12 +80,17 @@ bool ScriptedChannelEvent::executeOnJoin(const Player& player)
 		m_scriptInterface->releaseScriptEnv();
 		return result;
 	} else {
-		std::cout << "[Error - ScriptedChannelEvent::executeOnJoin] Call stack overflow." << std::endl;
+		std::cout << "[Error - OnJoinChannelEvent::execute] Call stack overflow." << std::endl;
 		return false;
 	}
 }
 
-bool ScriptedChannelEvent::executeOnLeave(const Player& player)
+OnLeaveChannelEvent::OnLeaveChannelEvent()
+	: Event(g_chat.getScriptInterface())
+{
+}
+
+bool OnLeaveChannelEvent::execute(const Player& player)
 {
 	//onLeave(cid)
 	if (m_scriptInterface->reserveScriptEnv()) {
@@ -110,12 +108,17 @@ bool ScriptedChannelEvent::executeOnLeave(const Player& player)
 		m_scriptInterface->releaseScriptEnv();
 		return result;
 	} else {
-		std::cout << "[Error - ScriptedChannelEvent::executeOnLeave] Call stack overflow." << std::endl;
+		std::cout << "[Error - OnLeaveChannelEvent::execute] Call stack overflow." << std::endl;
 		return false;
 	}
 }
 
-bool ScriptedChannelEvent::executeOnSpeak(const Player& player, SpeakClasses& type, const std::string& message)
+OnSpeakChannelEvent::OnSpeakChannelEvent()
+	: Event(g_chat.getScriptInterface())
+{
+}
+
+bool OnSpeakChannelEvent::execute(const Player& player, SpeakClasses& type, const std::string& message)
 {
 	//onSpeak(cid, type, message)
 	if (m_scriptInterface->reserveScriptEnv()) {
@@ -149,7 +152,7 @@ bool ScriptedChannelEvent::executeOnSpeak(const Player& player, SpeakClasses& ty
 		m_scriptInterface->releaseScriptEnv();
 		return result;
 	} else {
-		std::cout << "[Error - ScriptedChannelEvent::executeOnSpeak] Call stack overflow." << std::endl;
+		std::cout << "[Error - OnSpeakChannelEvent::execute] Call stack overflow." << std::endl;
 		return false;
 	}
 }
@@ -233,14 +236,22 @@ void PrivateChatChannel::closeChannel()
 
 ChatChannel::ChatChannel()
 {
-	flags = 0;
+	canJoinEvent = NULL;
+	onJoinEvent = NULL;
+	onLeaveEvent = NULL;
+	onSpeakEvent = NULL;
+	publicChannel = false;
 }
 
 ChatChannel::ChatChannel(uint16_t channelId, const std::string& channelName)
 {
 	id = channelId;
 	name = channelName;
-	flags = 0;
+	canJoinEvent = NULL;
+	onJoinEvent = NULL;
+	onLeaveEvent = NULL;
+	onSpeakEvent = NULL;
+	publicChannel = false;
 }
 
 bool ChatChannel::addUser(Player& player)
@@ -249,7 +260,7 @@ bool ChatChannel::addUser(Player& player)
 		return false;
 	}
 
-	if (hasFlag(CHANNEL_FLAG_LUA_ONJOIN) && !onJoin(player)) {
+	if (onJoinEvent && onJoinEvent->execute(player)) {
 		return false;
 	}
 
@@ -260,7 +271,7 @@ bool ChatChannel::addUser(Player& player)
 		}
 	}
 
-	if (hasFlag(CHANNEL_FLAG_EVENTS)) {
+	if (publicChannel) {
 		for (const auto& it : users) {
 			it.second->sendChannelEvent(id, player.getName(), CHANNELEVENT_JOIN);
 		}
@@ -279,13 +290,13 @@ bool ChatChannel::removeUser(const Player& player)
 
 	users.erase(iter);
 
-	if (hasFlag(CHANNEL_FLAG_EVENTS)) {
+	if (publicChannel) {
 		for (const auto& it : users) {
 			it.second->sendChannelEvent(id, player.getName(), CHANNELEVENT_LEAVE);
 		}
 	}
 
-	if (hasFlag(CHANNEL_FLAG_LUA_ONLEAVE) && !onLeave(player)) {
+	if (onLeaveEvent && onLeaveEvent->execute(player)) {
 		return false;
 	}
 	return true;
@@ -306,54 +317,6 @@ bool ChatChannel::talk(const Player& fromPlayer, SpeakClasses type, const std::s
 
 	for (const auto& it : users) {
 		it.second->sendToChannel(&fromPlayer, type, text, getId());
-	}
-	return true;
-}
-
-bool ChatChannel::canJoin(const Player& player)
-{
-	if (hasFlag(CHANNEL_FLAG_LUA_CANJOIN)) {
-		for (auto& scriptedEvent : scriptedEvents) {
-			if (scriptedEvent.getEventType() == EVENT_CANJOIN && !scriptedEvent.executeCanJoin(player)) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-bool ChatChannel::onJoin(const Player& player)
-{
-	if (hasFlag(CHANNEL_FLAG_LUA_ONJOIN)) {
-		for (auto& scriptedEvent : scriptedEvents) {
-			if (scriptedEvent.getEventType() == EVENT_ONJOIN && !scriptedEvent.executeOnJoin(player)) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-bool ChatChannel::onLeave(const Player& player)
-{
-	if (hasFlag(CHANNEL_FLAG_LUA_ONLEAVE)) {
-		for (auto& scriptedEvent : scriptedEvents) {
-			if (scriptedEvent.getEventType() == EVENT_ONLEAVE && !scriptedEvent.executeOnLeave(player)) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-bool ChatChannel::onSpeak(const Player& player, SpeakClasses& type, const std::string& message)
-{
-	if (hasFlag(CHANNEL_FLAG_LUA_ONSPEAK)) {
-		for (auto& scriptedEvent : scriptedEvents) {
-			if (scriptedEvent.getEventType() == EVENT_ONSPEAK && !scriptedEvent.executeOnSpeak(player, type, message)) {
-				return false;
-			}
-		}
 	}
 	return true;
 }
@@ -406,37 +369,42 @@ bool Chat::load()
 			ChatChannel channel;
 			channel.id = readXMLValue<uint16_t>(p, "id");
 			readXMLString(p, "name", channel.name);
+			channel.publicChannel = readXMLValue<int32_t>(p, "public") > 0;
 
 			std::string scriptFile;
 			if (readXMLString(p, "onspeak", scriptFile)) {
-				ScriptedChannelEvent scriptedEvent(EVENT_ONSPEAK);
-				if (scriptedEvent.loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.scriptedEvents.push_back(scriptedEvent);
-					channel.flags |= CHANNEL_FLAG_LUA_ONSPEAK;
+				OnSpeakChannelEvent* scriptedEvent = new OnSpeakChannelEvent;
+				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
+					channel.onSpeakEvent = scriptedEvent;
+				} else {
+					delete scriptedEvent;
 				}
 			}
 
 			if (readXMLString(p, "canjoin", scriptFile)) {
-				ScriptedChannelEvent scriptedEvent(EVENT_CANJOIN);
-				if (scriptedEvent.loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.scriptedEvents.push_back(scriptedEvent);
-					channel.flags |= CHANNEL_FLAG_LUA_CANJOIN;
+				CanJoinChannelEvent* scriptedEvent = new CanJoinChannelEvent;
+				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
+					channel.canJoinEvent = scriptedEvent;
+				} else {
+					delete scriptedEvent;
 				}
 			}
 
 			if (readXMLString(p, "onjoin", scriptFile)) {
-				ScriptedChannelEvent scriptedEvent(EVENT_ONJOIN);
-				if (scriptedEvent.loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.scriptedEvents.push_back(scriptedEvent);
-					channel.flags |= CHANNEL_FLAG_LUA_ONJOIN;
+				OnJoinChannelEvent* scriptedEvent = new OnJoinChannelEvent;
+				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
+					channel.onJoinEvent = scriptedEvent;
+				} else {
+					delete scriptedEvent;
 				}
 			}
 
 			if (readXMLString(p, "onleave", scriptFile)) {
-				ScriptedChannelEvent scriptedEvent(EVENT_ONLEAVE);
-				if (scriptedEvent.loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.scriptedEvents.push_back(scriptedEvent);
-					channel.flags |= CHANNEL_FLAG_LUA_ONLEAVE;
+				OnLeaveChannelEvent* scriptedEvent = new OnLeaveChannelEvent;
+				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
+					channel.onLeaveEvent = scriptedEvent;
+				} else {
+					delete scriptedEvent;
 				}
 			}
 			normalChannels[channel.id] = channel;
@@ -459,7 +427,6 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 			Guild* guild = player.getGuild();
 			if (guild) {
 				ChatChannel* newChannel = new ChatChannel(channelId, guild->getName());
-				newChannel->flags |= CHANNEL_FLAG_EVENTS;
 				guildChannels[guild->getId()] = newChannel;
 				return newChannel;
 			}
@@ -470,7 +437,6 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 			Party* party = player.getParty();
 			if (party) {
 				ChatChannel* newChannel = new ChatChannel(channelId, "Party");
-				newChannel->flags |= CHANNEL_FLAG_EVENTS;
 				partyChannels[party] = newChannel;
 				return newChannel;
 			}
@@ -488,7 +454,6 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 				if (privateChannels.find(i) == privateChannels.end()) {
 					PrivateChatChannel* newChannel = new PrivateChatChannel(i, player.getName() + "'s Channel");
 					newChannel->setOwner(player.getGUID());
-					newChannel->flags |= CHANNEL_FLAG_EVENTS;
 					privateChannels[i] = newChannel;
 					return newChannel;
 				}
@@ -615,7 +580,7 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 		type = SPEAK_CHANNEL_Y;
 	}
 
-	if (channel->hasFlag(CHANNEL_FLAG_LUA_ONSPEAK) && !channel->onSpeak(player, type, text)) {
+	if (channel->onSpeakEvent && !channel->onSpeakEvent->execute(player, type, text)) {
 		return false;
 	}
 
@@ -712,9 +677,11 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 		default: {
 			NormalChannelMap::iterator nit = normalChannels.find(channelId);
 			if (nit != normalChannels.end()) {
-				if (nit->second.canJoin(player)) {
-					return &nit->second;
+				ChatChannel& channel = nit->second;
+				if (channel.canJoinEvent && !channel.canJoinEvent->execute(player)) {
+					return NULL;
 				}
+				return &channel;
 			} else {
 				PrivateChannelMap::iterator pit = privateChannels.find(channelId);
 				if (pit != privateChannels.end() && pit->second->isInvited(player)) {

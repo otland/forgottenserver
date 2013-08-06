@@ -33,44 +33,72 @@ class Player;
 typedef std::map<uint32_t, Player*> UsersMap;
 typedef std::map<uint32_t, Player*> InvitedMap;
 
-enum ScriptedChannelEvents_t {
-	EVENT_CANJOIN,
-	EVENT_ONJOIN,
-	EVENT_ONLEAVE,
-	EVENT_ONSPEAK
-};
-
-enum ChannelFlags_t {
-	CHANNEL_FLAG_EVENTS = 1,
-	CHANNEL_FLAG_LUA_CANJOIN = 2,
-	CHANNEL_FLAG_LUA_ONSPEAK = 4,
-	CHANNEL_FLAG_LUA_ONJOIN = 8,
-	CHANNEL_FLAG_LUA_ONLEAVE = 16
-};
-
-class ScriptedChannelEvent : public Event
+class CanJoinChannelEvent : public Event
 {
 	public:
-		ScriptedChannelEvent(ScriptedChannelEvents_t eventType);
+		CanJoinChannelEvent();
 
-		bool executeCanJoin(const Player& player);
-		bool executeOnJoin(const Player& player);
-		bool executeOnLeave(const Player& player);
-		bool executeOnSpeak(const Player& player, SpeakClasses& type, const std::string& message);
+		bool execute(const Player& player);
 
 		bool configureEvent(xmlNodePtr p) {
 			return false;
 		}
 
-		ScriptedChannelEvents_t getEventType() const {
-			return eventType;
+	protected:
+		std::string getScriptEventName() {
+			return "canJoin";
+		}
+};
+
+class OnJoinChannelEvent : public Event
+{
+	public:
+		OnJoinChannelEvent();
+
+		bool execute(const Player& player);
+
+		bool configureEvent(xmlNodePtr p) {
+			return false;
 		}
 
 	protected:
-		std::string getScriptEventName();
+		std::string getScriptEventName() {
+			return "onJoin";
+		}
+};
 
-	private:
-		ScriptedChannelEvents_t eventType;
+class OnLeaveChannelEvent : public Event
+{
+	public:
+		OnLeaveChannelEvent();
+
+		bool execute(const Player& player);
+
+		bool configureEvent(xmlNodePtr p) {
+			return false;
+		}
+
+	protected:
+		std::string getScriptEventName() {
+			return "onLeave";
+		}
+};
+
+class OnSpeakChannelEvent : public Event
+{
+	public:
+		OnSpeakChannelEvent();
+
+		bool execute(const Player& player, SpeakClasses& type, const std::string& message);
+
+		bool configureEvent(xmlNodePtr p) {
+			return false;
+		}
+
+	protected:
+		std::string getScriptEventName() {
+			return "onSpeak";
+		}
 };
 
 class ChatChannel
@@ -103,19 +131,19 @@ class ChatChannel
 			return 0;
 		}
 
-		bool canJoin(const Player& player);
-		bool onJoin(const Player& player);
-		bool onLeave(const Player& player);
-		bool onSpeak(const Player& player, SpeakClasses& type, const std::string& message);
-
-		bool hasFlag(ChannelFlags_t flag) const { return (flags & flag) != 0; }
+		bool isPublicChannel() const { return publicChannel; }
 
 	protected:
 		UsersMap users;
-		std::list<ScriptedChannelEvent> scriptedEvents;
+
+		CanJoinChannelEvent* canJoinEvent;
+		OnJoinChannelEvent* onJoinEvent;
+		OnLeaveChannelEvent* onLeaveEvent;
+		OnSpeakChannelEvent* onSpeakEvent;
+
 		std::string name;
 		uint16_t id;
-		uint8_t flags;
+		bool publicChannel;
 
 	friend class Chat;
 };
