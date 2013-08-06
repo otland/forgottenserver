@@ -265,7 +265,6 @@ uint32_t CreatureEvent::executeOnLogin(Player* player)
 
 		bool result = m_scriptInterface->callFunction(1);
 		m_scriptInterface->releaseScriptEnv();
-
 		return result;
 	} else {
 		std::cout << "[Error - CreatureEvent::executeOnLogin] Call stack overflow." << std::endl;

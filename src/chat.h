@@ -33,6 +33,13 @@ class Player;
 typedef std::map<uint32_t, Player*> UsersMap;
 typedef std::map<uint32_t, Player*> InvitedMap;
 
+enum ScriptedChannelEvents_t {
+	EVENT_CANJOIN,
+	EVENT_ONJOIN,
+	EVENT_ONLEAVE,
+	EVENT_ONSPEAK
+};
+
 enum ChannelFlags_t {
 	CHANNEL_FLAG_EVENTS = 1,
 	CHANNEL_FLAG_LUA_CANJOIN = 2,
@@ -41,7 +48,32 @@ enum ChannelFlags_t {
 	CHANNEL_FLAG_LUA_ONLEAVE = 16
 };
 
-class ChatChannel : public Event
+class ScriptedChannelEvent : public Event
+{
+	public:
+		ScriptedChannelEvent(ScriptedChannelEvents_t eventType);
+
+		bool executeCanJoin(const Player& player);
+		bool executeOnJoin(const Player& player);
+		bool executeOnLeave(const Player& player);
+		bool executeOnSpeak(const Player& player, SpeakClasses& type, const std::string& message);
+
+		bool configureEvent(xmlNodePtr p) {
+			return false;
+		}
+
+		ScriptedChannelEvents_t getEventType() const {
+			return eventType;
+		}
+
+	protected:
+		std::string getScriptEventName();
+
+	private:
+		ScriptedChannelEvents_t eventType;
+};
+
+class ChatChannel
 {
 	public:
 		ChatChannel();
@@ -78,18 +110,10 @@ class ChatChannel : public Event
 
 		bool hasFlag(ChannelFlags_t flag) const { return (flags & flag) != 0; }
 
-		bool configureEvent(xmlNodePtr p) {
-			return false;
-		}
-
 	protected:
-		std::string getScriptEventName() {
-			return "";
-		}
-
 		UsersMap users;
+		std::list<ScriptedChannelEvent> scriptedEvents;
 		std::string name;
-		std::string scriptname;
 		uint16_t id;
 		uint8_t flags;
 
@@ -164,7 +188,7 @@ class Chat
 		}
 
 	private:
-		typedef std::map<uint16_t, ChatChannel*> NormalChannelMap;
+		typedef std::map<uint16_t, ChatChannel> NormalChannelMap;
 		typedef std::map<uint16_t, PrivateChatChannel*> PrivateChannelMap;
 		typedef std::map<Party*, ChatChannel*> PartyChannelMap;
 		typedef std::map<uint32_t, ChatChannel*> GuildChannelMap;
