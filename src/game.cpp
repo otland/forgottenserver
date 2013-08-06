@@ -6543,6 +6543,12 @@ bool Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 		}
 
 		player->setBedItem(NULL);
+	} else {
+		const CreatureEventList& modalWindowEvents = player->getCreatureEvents(CREATURE_EVENT_MODALWINDOW);
+
+		for (auto it = modalWindowEvents.begin(), end = modalWindowEvents.end(); it != end; ++it) {
+			(*it)->executeModalWindow(player, modalWindowId, button, choice);
+		}
 	}
 
 	return true;

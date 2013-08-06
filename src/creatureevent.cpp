@@ -189,6 +189,8 @@ bool CreatureEvent::configureEvent(xmlNodePtr p)
 			m_type = CREATURE_EVENT_KILL;
 		} else if (tmpStr == "advance") {
 			m_type = CREATURE_EVENT_ADVANCE;
+		} else if (tmpStr == "modalwindow") {
+			m_type = CREATURE_EVENT_MODALWINDOW;
 		} else {
 			std::cout << "[Error - CreatureEvent::configureEvent] No valid type for creature event." << str << std::endl;
 			return false;
@@ -226,6 +228,9 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_ADVANCE:
 			return "onAdvance";
+			
+		case CREATURE_EVENT_MODALWINDOW:
+			return "onModalWindow";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -447,4 +452,30 @@ uint32_t CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 		std::cout << "[Error - CreatureEvent::executeOnKill] Call stack overflow." << std::endl;
 		return 0;
 	}
+}
+
+uint32_t CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId)
+{
+	//onModalWindow(cid, modalWindowId, buttonId, choiceId)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeModalWindow] Call stack overflow." << std::endl;
+		return 0;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+
+	env->setScriptId(m_scriptId, m_scriptInterface);
+	env->setRealPos(player->getPosition());
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	LuaScriptInterface::pushNumber(L, player->getID());
+	LuaScriptInterface::pushNumber(L, modalWindowId);
+	LuaScriptInterface::pushNumber(L, buttonId);
+	LuaScriptInterface::pushNumber(L, choiceId);
+
+	bool result = m_scriptInterface->callFunction(4);
+	m_scriptInterface->releaseScriptEnv();
+	return result;
 }
