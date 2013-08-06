@@ -1559,7 +1559,7 @@ void LuaScriptInterface::registerFunctions()
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
 
-	//getCreatureCondition(cid, condition)
+	//getCreatureCondition(cid, condition[, subId])
 	lua_register(m_luaState, "getCreatureCondition", LuaScriptInterface::luaGetCreatureCondition);
 
 	//isPlayer(cid)
@@ -7500,12 +7500,19 @@ int32_t LuaScriptInterface::luaGetPromotedVocation(lua_State* L)
 
 int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 {
+	uint32_t subId;
+	if (lua_gettop(L) > 2) {
+		subId = popNumber(L);
+	} else {
+		subId = 0;
+	}
+
 	uint32_t condition = popNumber(L);
 	uint32_t cid = popNumber(L);
 
 	Creature* creature = g_game.getCreatureByID(cid);
 	if (creature) {
-		if (creature->hasCondition((ConditionType_t)condition)) {
+		if (creature->hasCondition((ConditionType_t)condition, subId)) {
 			lua_pushboolean(L, true);
 		} else {
 			lua_pushboolean(L, false);
