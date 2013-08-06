@@ -17,15 +17,17 @@ function onSpeak(cid, type, message)
 			local target = getPlayerByName(targetName)
 			if target ~= false and playerAccountType > getPlayerAccountType(target) and not getCreatureCondition(target, CONDITION_CHANNELMUTEDTICKS, CHANNEL_HELP) then
 				doAddCondition(target, muted)
-				sendChannelMessage(CHANNEL_HELP, SPEAK_CHANNEL_R1, getPlayerName(target) .. " has been muted by " .. getPlayerName(cid) .. " for using Help Channel inappropriately.")
+				sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, getPlayerName(target) .. " has been muted by " .. getPlayerName(cid) .. " for using Help Channel inappropriately.")
 			end
+			return false
 		elseif string.sub(message, 1, 8) == "!unmute " then
 			local targetName = string.sub(message, 9)
 			local target = getPlayerByName(targetName)
 			if target ~= false and playerAccountType > getPlayerAccountType(target) and getCreatureCondition(target, CONDITION_CHANNELMUTEDTICKS, CHANNEL_HELP) then
 				doRemoveCondition(target, CONDITION_CHANNELMUTEDTICKS, CHANNEL_HELP)
-				sendChannelMessage(CHANNEL_HELP, SPEAK_CHANNEL_R1, getPlayerName(target) .. " has been unmuted by " .. getPlayerName(cid) .. ".")
+				sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, getPlayerName(target) .. " has been unmuted by " .. getPlayerName(cid) .. ".")
 			end
+			return false
 		end
 	end
 	return true

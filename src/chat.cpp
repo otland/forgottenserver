@@ -141,7 +141,6 @@ bool ScriptedChannelEvent::executeOnSpeak(const Player& player, SpeakClasses& ty
 		} else if (lua_gettop(L) > 0 && lua_isnumber(L, -1)) {
 			result = true;
 			type = (SpeakClasses)LuaScriptInterface::popNumber(L);
-			lua_pop(L, 1);
 		}
 
 		if ((lua_gettop(L) + 4) != size0) {
@@ -396,7 +395,7 @@ bool Chat::load()
 	}
 
 	xmlNodePtr root = xmlDocGetRootElement(doc);
-	if (xmlStrcmp(root->name, (const xmlChar*)"channel") != 0) {
+	if (xmlStrcmp(root->name, (const xmlChar*)"channels") != 0) {
 		xmlFreeDoc(doc);
 		return false;
 	}

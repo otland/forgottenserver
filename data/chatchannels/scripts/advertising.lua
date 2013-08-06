@@ -1,5 +1,5 @@
 function canJoin(cid)
-	return getPlayerVocation(cid) ~= VOCATION_NONE or getPlayerAccountType(cid) >= ACCOUNT_TYPE_SENIOR_TUTOR
+	return getPlayerVocation(cid) ~= VOCATION_NONE or getPlayerAccountType(cid) >= ACCOUNT_TYPE_SENIORTUTOR
 end
 
 local CHANNEL_ADVERTISING = 5
