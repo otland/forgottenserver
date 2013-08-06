@@ -499,6 +499,7 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureTarget(lua_State* L);
 		static int32_t luaGetPlayerName(lua_State* L);
 		static int32_t luaGetPlayerPosition(lua_State* L);
+		static int32_t luaGetPlayerAccountType(lua_State* L);
 		static int32_t luaGetPlayerSkill(lua_State* L);
 		static int32_t luaGetPlayerVocation(lua_State* L);
 		static int32_t luaGetPlayerMasterPos(lua_State* L);

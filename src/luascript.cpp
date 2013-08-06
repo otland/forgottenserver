@@ -1899,6 +1899,9 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerBalance(cid)
 	lua_register(m_luaState, "getPlayerBalance", LuaScriptInterface::luaGetPlayerBankBalance);
 
+	//getPlayerAccountType(cid)
+	lua_register(m_luaState, "getPlayerAccountType", LuaScriptInterface::luaGetPlayerAccountType);
+
 	//doPlayerSetBalance(cid, balance)
 	lua_register(m_luaState, "doPlayerSetBalance", LuaScriptInterface::luaDoPlayerSetBankBalance);
 
@@ -3314,6 +3317,19 @@ int32_t LuaScriptInterface::luaDoSendAnimatedText(lua_State* L)
 	reportErrorFunc("Deprecated function.");
 
 	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetPlayerAccountType(lua_State* L)
+{
+	//getPlayerAccountType(cid)
+	const Player* player = g_game.getPlayerByID(popNumber(L));
+	if (player) {
+		lua_pushnumber(L, player->getAccountType());
+	} else {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
 	return 1;
 }
 
