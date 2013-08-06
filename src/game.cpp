@@ -162,6 +162,7 @@ void Game::setGameState(GameState_t newState)
 		switch (newState) {
 			case GAME_STATE_INIT: {
 				groups.load();
+				g_chat.load();
 
 				Spawns::getInstance()->startup();
 
