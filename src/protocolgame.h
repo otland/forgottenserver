@@ -42,6 +42,9 @@ class Tile;
 class Connection;
 class Quest;
 
+typedef std::map<uint32_t, Player*> UsersMap;
+typedef std::map<uint32_t, Player*> InvitedMap;
+
 class ProtocolGame : public Protocol
 {
 	public:
@@ -199,7 +202,7 @@ class ProtocolGame : public Protocol
 		void sendClosePrivate(uint16_t channelId);
 		void sendCreatePrivateChannel(uint16_t channelId, const std::string& channelName);
 		void sendChannelsDialog();
-		void sendChannel(uint16_t channelId, const std::string& channelName);
+		void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers);
 		void sendOpenPrivateChannel(const std::string& receiver);
 		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId);
 		void sendIcons(int32_t icons);

@@ -1488,7 +1488,7 @@ void LuaScriptInterface::registerFunctions()
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
-	//doRemoveCondition(cid, type)
+	//doRemoveCondition(cid, type[, subId])
 	lua_register(m_luaState, "doRemoveCondition", LuaScriptInterface::luaDoRemoveCondition);
 
 	//doRemoveCreature(cid)
@@ -1559,7 +1559,7 @@ void LuaScriptInterface::registerFunctions()
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
 
-	//getCreatureCondition(cid, condition)
+	//getCreatureCondition(cid, condition[, subId])
 	lua_register(m_luaState, "getCreatureCondition", LuaScriptInterface::luaGetCreatureCondition);
 
 	//isPlayer(cid)
@@ -1899,6 +1899,9 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerBalance(cid)
 	lua_register(m_luaState, "getPlayerBalance", LuaScriptInterface::luaGetPlayerBankBalance);
 
+	//getPlayerAccountType(cid)
+	lua_register(m_luaState, "getPlayerAccountType", LuaScriptInterface::luaGetPlayerAccountType);
+
 	//doPlayerSetBalance(cid, balance)
 	lua_register(m_luaState, "doPlayerSetBalance", LuaScriptInterface::luaDoPlayerSetBankBalance);
 
@@ -1947,6 +1950,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//doWaypointAddTemporial(name, pos)
 	lua_register(m_luaState, "doWaypointAddTemporial", LuaScriptInterface::luaDoWaypointAddTemporial);
+
+	//sendChannelMessage(channelId, type, message)
+	lua_register(m_luaState, "sendChannelMessage", LuaScriptInterface::luaSendChannelMessage);
 
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(m_luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
@@ -3311,6 +3317,19 @@ int32_t LuaScriptInterface::luaDoSendAnimatedText(lua_State* L)
 	reportErrorFunc("Deprecated function.");
 
 	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetPlayerAccountType(lua_State* L)
+{
+	//getPlayerAccountType(cid)
+	const Player* player = g_game.getPlayerByID(popNumber(L));
+	if (player) {
+		lua_pushnumber(L, player->getAccountType());
+	} else {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
 	return 1;
 }
 
@@ -5862,7 +5881,14 @@ int32_t LuaScriptInterface::luaDoAddCondition(lua_State* L)
 
 int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 {
-	//doRemoveCondition(cid, type)
+	//doRemoveCondition(cid, type[, subId])
+	uint32_t subId;
+	if (lua_gettop(L) > 2) {
+		subId = popNumber(L);
+	} else {
+		subId = 0;
+	}
+
 	ConditionType_t conditionType = (ConditionType_t)popNumber(L);
 	uint32_t cid = popNumber(L);
 
@@ -5873,9 +5899,9 @@ int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 		return 1;
 	}
 
-	Condition* condition = creature->getCondition(conditionType, CONDITIONID_COMBAT);
+	Condition* condition = creature->getCondition(conditionType, CONDITIONID_COMBAT, subId);
 	if (!condition) {
-		condition = creature->getCondition(conditionType, CONDITIONID_DEFAULT);
+		condition = creature->getCondition(conditionType, CONDITIONID_DEFAULT, subId);
 	}
 
 	if (condition) {
@@ -7490,12 +7516,19 @@ int32_t LuaScriptInterface::luaGetPromotedVocation(lua_State* L)
 
 int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 {
+	uint32_t subId;
+	if (lua_gettop(L) > 2) {
+		subId = popNumber(L);
+	} else {
+		subId = 0;
+	}
+
 	uint32_t condition = popNumber(L);
 	uint32_t cid = popNumber(L);
 
 	Creature* creature = g_game.getCreatureByID(cid);
 	if (creature) {
-		if (creature->hasCondition((ConditionType_t)condition)) {
+		if (creature->hasCondition((ConditionType_t)condition, subId)) {
 			lua_pushboolean(L, true);
 		} else {
 			lua_pushboolean(L, false);
@@ -7772,6 +7805,23 @@ int32_t LuaScriptInterface::luaDoWaypointAddTemporial(lua_State* L)
 
 	g_game.getMap()->waypoints[popString(L)] = pos;
 	lua_pushboolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaSendChannelMessage(lua_State* L)
+{
+	//sendChannelMessage(channelId, type, message)
+	std::string message = popString(L);
+	SpeakClasses type = (SpeakClasses)popNumber<uint32_t>(L);
+	uint32_t channelId = popNumber<uint32_t>(L);
+
+	ChatChannel* channel = g_chat.getChannelById(channelId);
+	if (channel) {
+		channel->sendToAll(message, type);
+		lua_pushboolean(L, true);
+	} else {
+		lua_pushboolean(L, false);
+	}
 	return 1;
 }
 

@@ -1542,6 +1542,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 
 	if (link == LINK_OWNER) {
 		//calling movement scripts
+		Creature* creature = thing->getCreature();
 		if (creature) {
 			g_moveEvents->onCreatureMove(creature, this, true);
 		} else if (item) {
@@ -1550,19 +1551,16 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 
 		if (hasFlag(TILESTATE_TELEPORT)) {
 			Teleport* teleport = getTeleportItem();
-
 			if (teleport) {
 				teleport->__addThing(thing);
 			}
 		} else if (hasFlag(TILESTATE_TRASHHOLDER)) {
 			TrashHolder* trashholder = getTrashHolder();
-
 			if (trashholder) {
 				trashholder->__addThing(thing);
 			}
 		} else if (hasFlag(TILESTATE_MAILBOX)) {
 			Mailbox* mailbox = getMailbox();
-
 			if (mailbox) {
 				mailbox->__addThing(thing);
 			}

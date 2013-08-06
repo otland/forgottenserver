@@ -406,8 +406,8 @@ class Game
 		                    uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count);
 		bool playerMove(uint32_t playerId, Direction direction);
 		bool playerCreatePrivateChannel(uint32_t playerId);
-		bool playerChannelInvite(uint32_t playerId, const std::string& name);
-		bool playerChannelExclude(uint32_t playerId, const std::string& name);
+		void playerChannelInvite(uint32_t playerId, const std::string& name);
+		void playerChannelExclude(uint32_t playerId, const std::string& name);
 		bool playerRequestChannels(uint32_t playerId);
 		bool playerOpenChannel(uint32_t playerId, uint16_t channelId);
 		bool playerCloseChannel(uint32_t playerId, uint16_t channelId);

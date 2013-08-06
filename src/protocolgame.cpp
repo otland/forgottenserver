@@ -253,7 +253,7 @@ bool ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player = _player;
 	player->useThing2();
 
-	g_chat.removeUserFromAllChannels(player);
+	g_chat.removeUserFromAllChannels(*player);
 	player->clearModalWindows();
 	player->setOperatingSystem((OperatingSystem_t)operatingSystem);
 	player->isConnecting = false;
@@ -1566,7 +1566,7 @@ void ProtocolGame::sendChannelsDialog()
 	NetworkMessage msg;
 	msg.AddByte(0xAB);
 
-	const ChannelList& list = g_chat.getChannelList(player);
+	const ChannelList& list = g_chat.getChannelList(*player);
 	msg.AddByte(list.size());
 
 	for (ChannelList::const_iterator it = list.begin(); it != list.end(); ++it) {
@@ -1578,7 +1578,7 @@ void ProtocolGame::sendChannelsDialog()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelName)
+void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers)
 {
 	NetworkMessage msg;
 	msg.AddByte(0xAC);
@@ -1586,37 +1586,23 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 	msg.AddU16(channelId);
 	msg.AddString(channelName);
 
-	if (channelId != CHANNEL_GUILD && channelId != CHANNEL_PARTY && channelId != CHANNEL_PRIVATE) {
-		msg.AddU16(0x00);
-		msg.AddU16(0x00);
-	} else {
-		ChatChannel* channel = g_chat.getChannel(player, channelId);
-		if (channel) {
-			UsersMap channelUsers = channel->getUsers();
-			msg.AddU16(channelUsers.size());
-
-			for (UsersMap::iterator it = channelUsers.begin(); it != channelUsers.end(); ++it) {
-				msg.AddString(it->second->getName());
-			}
-
-			PrivateChatChannel* privateChannel = dynamic_cast<PrivateChatChannel*>(channel);
-
-			if (privateChannel) {
-				InvitedMap invitedUsers = privateChannel->getInvitedUsers();
-				msg.AddU16(invitedUsers.size());
-
-				for (InvitedMap::iterator it = invitedUsers.begin(); it != invitedUsers.end(); ++it) {
-					msg.AddString(it->second->getName());
-				}
-			} else {
-				msg.AddU16(0x00);
-			}
-		} else {
-			msg.AddU16(0x00);
-			msg.AddU16(0x00);
+	if (channelUsers) {
+		msg.AddU16(channelUsers->size());
+		for (const auto& it : *channelUsers) {
+			msg.AddString(it.second->getName());
 		}
+	} else {
+		msg.AddU16(0x00);
 	}
 
+	if (invitedUsers) {
+		msg.AddU16(invitedUsers->size());
+		for (const auto& it : *invitedUsers) {
+			msg.AddString(it.second->getName());
+		}
+	} else {
+		msg.AddU16(0x00);
+	}
 	writeToOutputBuffer(msg);
 }
 

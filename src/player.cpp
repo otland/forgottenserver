@@ -1761,7 +1761,7 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 			party->leaveParty(this);
 		}
 
-		g_chat.removeUserFromAllChannels(this);
+		g_chat.removeUserFromAllChannels(*this);
 
 		std::cout << getName() << " has logged out." << std::endl;
 
@@ -5210,7 +5210,7 @@ uint16_t Player::getHelpers() const
 void Player::sendClosePrivate(uint16_t channelId)
 {
 	if (channelId == CHANNEL_GUILD || channelId == CHANNEL_PARTY) {
-		g_chat.removeUserFromChannel(this, channelId);
+		g_chat.removeUserFromChannel(*this, channelId);
 	}
 
 	if (client) {

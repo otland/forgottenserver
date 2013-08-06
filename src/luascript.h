@@ -372,6 +372,8 @@ class LuaScriptInterface
 		static const luaL_Reg luaDatabaseTable[8];
 		static const luaL_Reg luaResultTable[7];
 
+		static int32_t protectedCall(lua_State* L, int32_t nargs, int32_t nresults);
+
 	protected:
 		virtual bool closeState();
 
@@ -497,6 +499,7 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureTarget(lua_State* L);
 		static int32_t luaGetPlayerName(lua_State* L);
 		static int32_t luaGetPlayerPosition(lua_State* L);
+		static int32_t luaGetPlayerAccountType(lua_State* L);
 		static int32_t luaGetPlayerSkill(lua_State* L);
 		static int32_t luaGetPlayerVocation(lua_State* L);
 		static int32_t luaGetPlayerMasterPos(lua_State* L);
@@ -677,6 +680,7 @@ class LuaScriptInterface
 		static int32_t luaGetWaypointPosition(lua_State* L);
 		static int32_t luaDoWaypointAddTemporial(lua_State* L);
 
+		static int32_t luaSendChannelMessage(lua_State* L);
 		static int32_t luaSendGuildChannelMessage(lua_State* L);
 
 		static int32_t luaGetPlayerParty(lua_State* L);
@@ -743,7 +747,6 @@ class LuaScriptInterface
 		typedef std::map<uint32_t , LuaTimerEventDesc > LuaTimerEvents;
 		LuaTimerEvents m_timerEvents;
 
-		static int32_t protectedCall(lua_State* L, int32_t nargs, int32_t nresults);
 		std::string getStackTrace(const std::string& error_desc);
 
 		void executeTimerEvent(uint32_t eventIndex);
