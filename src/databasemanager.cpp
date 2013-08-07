@@ -157,11 +157,13 @@ void DatabaseManager::updateDatabase()
 
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
+			LuaScriptInterface::releaseScriptEnv();
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] " << lua_tostring(L, -1) << std::endl;
 			break;
 		}
 		
 		if (!LuaScriptInterface::popBoolean(L)) {
+			LuaScriptInterface::releaseScriptEnv();
 			break;
 		}
 
