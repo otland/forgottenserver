@@ -34,7 +34,7 @@ class BedItem : public Item
 {
 	public:
 		BedItem(uint16_t id);
-		virtual ~BedItem() {};
+		virtual ~BedItem() {}
 
 		virtual BedItem* getBed() {
 			return this;

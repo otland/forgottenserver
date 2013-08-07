@@ -84,8 +84,8 @@ enum ZoneType_t {
 class TileItemVector
 {
 	public:
-		TileItemVector() : downItemCount(0) {};
-		~TileItemVector() {};
+		TileItemVector() : downItemCount(0) {}
+		~TileItemVector() {}
 
 		ItemVector::iterator begin() {
 			return items.begin();

@@ -297,14 +297,12 @@ class LuaScriptInterface
 		int32_t getEvent(const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
-			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 16);
+			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 17);
 			return &m_scriptEnv[m_scriptEnvIndex];
 		}
 
 		static bool reserveScriptEnv() {
-			++m_scriptEnvIndex;
-
-			if (m_scriptEnvIndex < 15) {
+			if (++m_scriptEnvIndex < 16) {
 				return true;
 			} else {
 				--m_scriptEnvIndex;
