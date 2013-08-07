@@ -120,7 +120,11 @@ struct Position
 		return p.x != x || p.y != y || p.z != z;
 	}
 
-	Position operator-(const Position& p1) {
+	Position operator+(const Position& p1) const {
+		return Position(x + p1.x, y + p1.y, z + p1.z);
+	}
+
+	Position operator-(const Position& p1) const {
 		return Position(x - p1.x, y - p1.y, z - p1.z);
 	}
 
