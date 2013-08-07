@@ -695,18 +695,11 @@ std::string ScriptEvent::getScriptEventName()
 bool ScriptEvent::executeEvent()
 {
 	//onRaid()
-	if (m_scriptInterface->reserveScriptEnv()) {
-		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
-		env->setScriptId(m_scriptId, m_scriptInterface);
+	env->setScriptId(m_scriptId, m_scriptInterface);
 
-		m_scriptInterface->pushFunction(m_scriptId);
+	m_scriptInterface->pushFunction(m_scriptId);
 
-		bool result = m_scriptInterface->callFunction(0);
-		m_scriptInterface->releaseScriptEnv();
-		return result;
-	} else {
-		std::cout << "[Error] Call stack overflow. ScriptEvent::executeEvent" << std::endl;
-		return 0;
-	}
+	return m_scriptInterface->callFunction(0);
 }

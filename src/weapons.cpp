@@ -572,26 +572,18 @@ int32_t Weapon::getManaCost(const Player* player) const
 bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 {
 	//onUseWeapon(cid, var)
-	if (m_scriptInterface->reserveScriptEnv()) {
-		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
-		env->setScriptId(m_scriptId, m_scriptInterface);
-		env->setRealPos(player->getPosition());
+	env->setScriptId(m_scriptId, m_scriptInterface);
+	env->setRealPos(player->getPosition());
 
-		lua_State* L = m_scriptInterface->getLuaState();
+	lua_State* L = m_scriptInterface->getLuaState();
 
-		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, player->getID());
-		m_scriptInterface->pushVariant(L, var);
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, player->getID());
+	m_scriptInterface->pushVariant(L, var);
 
-		bool result = m_scriptInterface->callFunction(2);
-		m_scriptInterface->releaseScriptEnv();
-
-		return result;
-	} else {
-		std::cout << "[Error] Call stack overflow. Weapon::executeUseWeapon" << std::endl;
-		return false;
-	}
+	return m_scriptInterface->callFunction(2);
 }
 
 WeaponMelee::WeaponMelee(LuaScriptInterface* _interface) :

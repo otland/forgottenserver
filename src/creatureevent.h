@@ -88,15 +88,15 @@ class CreatureEvent : public Event
 		void copyEvent(CreatureEvent* creatureEvent);
 
 		//scripting
-		uint32_t executeOnLogin(Player* player);
-		uint32_t executeOnLogout(Player* player);
-		uint32_t executeOnThink(Creature* creature, uint32_t interval);
-		uint32_t executeOnPrepareDeath(Creature* creature, Creature* killer);
-		uint32_t executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
-		uint32_t executeOnKill(Creature* creature, Creature* target);
-		uint32_t executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
-		uint32_t executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
-		uint32_t executeTextEdit(Player* player, Item* item, const std::string& text);
+		bool executeOnLogin(Player* player);
+		bool executeOnLogout(Player* player);
+		bool executeOnThink(Creature* creature, uint32_t interval);
+		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
+		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
+		bool executeOnKill(Creature* creature, Creature* target);
+		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
+		bool executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
+		bool executeTextEdit(Player* player, Item* item, const std::string& text);
 		//
 
 	protected:

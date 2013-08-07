@@ -151,19 +151,15 @@ void DatabaseManager::updateDatabase()
 			break;
 		}
 
-		if (!LuaScriptInterface::reserveScriptEnv()) {
-			break;
-		}
-
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
-			LuaScriptInterface::releaseScriptEnv();
+			LuaScriptInterface::resetScriptEnv();
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] " << lua_tostring(L, -1) << std::endl;
 			break;
 		}
 		
 		if (!LuaScriptInterface::popBoolean(L)) {
-			LuaScriptInterface::releaseScriptEnv();
+			LuaScriptInterface::resetScriptEnv();
 			break;
 		}
 
@@ -171,7 +167,7 @@ void DatabaseManager::updateDatabase()
 		std::cout << "> Database has been updated to version " << version << "." << std::endl;
 		registerDatabaseConfig("db_version", version);
 		
-		LuaScriptInterface::releaseScriptEnv();
+		LuaScriptInterface::resetScriptEnv();
 	} while (true);
 	lua_close(L);
 }

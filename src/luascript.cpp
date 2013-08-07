@@ -535,8 +535,7 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 	}
 }
 
-ScriptEnvironment LuaScriptInterface::m_scriptEnv[16];
-int32_t LuaScriptInterface::m_scriptEnvIndex = -1;
+ScriptEnvironment LuaScriptInterface::m_scriptEnv;
 
 LuaScriptInterface::LuaScriptInterface(const std::string& interfaceName)
 {
@@ -587,7 +586,6 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = NULL
 	}
 
 	m_loadingFile = file;
-	this->reserveScriptEnv();
 	ScriptEnvironment* env = this->getScriptEnv();
 	env->setScriptId(EVENT_ID_LOADING, this);
 	env->setNpc(npc);
@@ -596,11 +594,11 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = NULL
 	ret = protectedCall(m_luaState, 0, 0);
 	if (ret != 0) {
 		reportError(NULL, popString(m_luaState));
-		this->releaseScriptEnv();
+		resetScriptEnv();
 		return -1;
 	}
 
-	this->releaseScriptEnv();
+	resetScriptEnv();
 	return 0;
 }
 
@@ -620,7 +618,7 @@ int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = NU
 	}
 
 	m_loadingFile = "loadBuffer";
-	this->reserveScriptEnv();
+
 	ScriptEnvironment* env = this->getScriptEnv();
 	env->setScriptId(EVENT_ID_LOADING, this);
 	env->setNpc(npc);
@@ -629,11 +627,11 @@ int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = NU
 	ret = protectedCall(m_luaState, 0, 0);
 	if (ret != 0) {
 		reportError(NULL, popString(m_luaState));
-		this->releaseScriptEnv();
+		resetScriptEnv();
 		return -1;
 	}
 
-	this->releaseScriptEnv();
+	resetScriptEnv();
 	return 0;
 }
 
@@ -833,15 +831,10 @@ void LuaScriptInterface::executeTimerEvent(uint32_t eventIndex)
 		}
 
 		//call the function
-		if (reserveScriptEnv()) {
-			ScriptEnvironment* env = getScriptEnv();
-			env->setTimerEvent();
-			env->setScriptId(timerEventDesc.scriptId, this);
-			callFunction(timerEventDesc.parameters.size());
-			releaseScriptEnv();
-		} else {
-			std::cout << "[Error] Call stack overflow. LuaScriptInterface::executeTimerEvent" << std::endl;
-		}
+		ScriptEnvironment* env = getScriptEnv();
+		env->setTimerEvent();
+		env->setScriptId(timerEventDesc.scriptId, this);
+		callFunction(timerEventDesc.parameters.size());
 
 		//free resources
 		for (std::list<int32_t>::iterator lt = timerEventDesc.parameters.begin(), end = timerEventDesc.parameters.end(); lt != end; ++lt) {
@@ -880,6 +873,7 @@ bool LuaScriptInterface::callFunction(uint32_t nParams)
 		LuaScriptInterface::reportError(NULL, "Stack size changed!");
 	}
 
+	resetScriptEnv();
 	return result;
 }
 
