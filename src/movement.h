@@ -112,9 +112,9 @@ class MoveEvent : public Event
 		}
 
 		//scripting
-		uint32_t executeStep(Creature* creature, Item* item, const Position& pos);
-		uint32_t executeEquip(Player* player, Item* item, slots_t slot);
-		uint32_t executeAddRemItem(Item* item, Item* tileItem, const Position& pos);
+		bool executeStep(Creature* creature, Item* item, const Position& pos);
+		bool executeEquip(Player* player, Item* item, slots_t slot);
+		bool executeAddRemItem(Item* item, Item* tileItem, const Position& pos);
 		//
 
 		//onEquip information

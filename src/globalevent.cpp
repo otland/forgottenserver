@@ -353,47 +353,31 @@ std::string GlobalEvent::getScriptEventName()
 uint32_t GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 {
 	//onRecord(current, old, cid)
-	if (m_scriptInterface->reserveScriptEnv()) {
-		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
-		env->setScriptId(m_scriptId, m_scriptInterface);
+	env->setScriptId(m_scriptId, m_scriptInterface);
 
-		lua_State* L = m_scriptInterface->getLuaState();
-		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, current);
-		lua_pushnumber(L, old);
+	lua_State* L = m_scriptInterface->getLuaState();
+	m_scriptInterface->pushFunction(m_scriptId);
 
-		bool result = m_scriptInterface->callFunction(2);
-		m_scriptInterface->releaseScriptEnv();
-
-		return result;
-	} else {
-		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow." << std::endl;
-		return 0;
-	}
+	lua_pushnumber(L, current);
+	lua_pushnumber(L, old);
+	return m_scriptInterface->callFunction(2);
 }
 
 uint32_t GlobalEvent::executeEvent()
 {
-	if (m_scriptInterface->reserveScriptEnv()) {
-		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
-		env->setScriptId(m_scriptId, m_scriptInterface);
-		lua_State* L = m_scriptInterface->getLuaState();
-		m_scriptInterface->pushFunction(m_scriptId);
+	env->setScriptId(m_scriptId, m_scriptInterface);
+	lua_State* L = m_scriptInterface->getLuaState();
+	m_scriptInterface->pushFunction(m_scriptId);
 
-		int32_t params = 0;
-
-		if (m_eventType == GLOBALEVENT_NONE || m_eventType == GLOBALEVENT_TIMER) {
-			lua_pushnumber(L, m_interval);
-			params = 1;
-		}
-
-		bool result = m_scriptInterface->callFunction(params);
-		m_scriptInterface->releaseScriptEnv();
-		return result;
-	} else {
-		std::cout << "[Error - GlobalEvent::executeEvent] Call stack overflow." << std::endl;
-		return 0;
+	int32_t params = 0;
+	if (m_eventType == GLOBALEVENT_NONE || m_eventType == GLOBALEVENT_TIMER) {
+		lua_pushnumber(L, m_interval);
+		params = 1;
 	}
+
+	return m_scriptInterface->callFunction(params);
 }

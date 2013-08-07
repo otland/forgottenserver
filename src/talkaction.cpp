@@ -157,24 +157,17 @@ std::string TalkAction::getScriptEventName()
 int32_t TalkAction::executeSay(Creature* creature, const std::string& words, const std::string& param)
 {
 	//onSay(cid, words, param)
-	if (m_scriptInterface->reserveScriptEnv()) {
-		ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
-		env->setScriptId(m_scriptId, m_scriptInterface);
-		env->setRealPos(creature->getPosition());
+	env->setScriptId(m_scriptId, m_scriptInterface);
+	env->setRealPos(creature->getPosition());
 
-		lua_State* L = m_scriptInterface->getLuaState();
+	lua_State* L = m_scriptInterface->getLuaState();
 
-		m_scriptInterface->pushFunction(m_scriptId);
-		lua_pushnumber(L, creature->getID());
-		LuaScriptInterface::pushString(L, words);
-		LuaScriptInterface::pushString(L, param);
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, creature->getID());
+	LuaScriptInterface::pushString(L, words);
+	LuaScriptInterface::pushString(L, param);
 
-		bool result = m_scriptInterface->callFunction(3);
-		m_scriptInterface->releaseScriptEnv();
-		return result;
-	} else {
-		std::cout << "[Error - Talkaction::executeSay] Call stack overflow." << std::endl;
-		return 0;
-	}
+	return m_scriptInterface->callFunction(3);
 }

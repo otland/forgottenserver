@@ -92,9 +92,6 @@ class ScriptEnvironment
 		~ScriptEnvironment();
 
 		void resetEnv();
-		void resetCallback() {
-			m_callbackId = 0;
-		}
 
 		static bool saveGameState();
 		static bool loadGameState();
@@ -298,24 +295,11 @@ class LuaScriptInterface
 		int32_t getEvent(const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
-			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 17);
-			return &m_scriptEnv[m_scriptEnvIndex];
+			return &m_scriptEnv;
 		}
 
-		static bool reserveScriptEnv() {
-			if (++m_scriptEnvIndex < 16) {
-				return true;
-			} else {
-				--m_scriptEnvIndex;
-				return false;
-			}
-		}
-
-		static void releaseScriptEnv() {
-			if (m_scriptEnvIndex >= 0) {
-				m_scriptEnv[m_scriptEnvIndex].resetEnv();
-				--m_scriptEnvIndex;
-			}
+		static void resetScriptEnv() {
+			m_scriptEnv.resetEnv();
 		}
 
 		static void reportError(const char* function, const std::string& error_desc, bool stack_trace = false);
@@ -972,8 +956,7 @@ class LuaScriptInterface
 		std::string m_lastLuaError;
 
 	private:
-		static ScriptEnvironment m_scriptEnv[16];
-		static int32_t m_scriptEnvIndex;
+		static ScriptEnvironment m_scriptEnv;
 
 		int32_t m_runningEventId;
 		std::string m_loadingFile;
