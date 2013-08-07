@@ -1125,8 +1125,9 @@ void LuaScriptInterface::destroyUserdata(T* value)
 template<class T>
 T* LuaScriptInterface::popUserdata(lua_State* L)
 {
+	T* userdata = *static_cast<T**>(lua_touserdata(L, -1));
 	lua_pop(L, 1);
-	return *static_cast<T**>(lua_touserdata(L, 0));
+	return userdata;
 }
 
 // Metatables
