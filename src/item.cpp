@@ -266,6 +266,10 @@ Cylinder* Item::getTopParent()
 {
 	Cylinder* aux = getParent();
 	Cylinder* prevaux = dynamic_cast<Cylinder*>(this);
+	if (!aux) {
+		return prevaux;
+	}
+
 	while (aux->getParent() != NULL) {
 		prevaux = aux;
 		aux = aux->getParent();
@@ -281,6 +285,10 @@ const Cylinder* Item::getTopParent() const
 {
 	const Cylinder* aux = getParent();
 	const Cylinder* prevaux = dynamic_cast<const Cylinder*>(this);
+	if (!aux) {
+		return prevaux;
+	}
+
 	while (aux->getParent() != NULL) {
 		prevaux = aux;
 		aux = aux->getParent();
