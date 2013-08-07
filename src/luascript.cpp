@@ -1162,14 +1162,25 @@ void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, Creat
 }
 
 // Get
-template<typename T, int32_t arg>
-T LuaScriptInterface::getNumber(lua_State* L)
+template<typename T>
+T LuaScriptInterface::getNumber(lua_State* L, int32_t arg)
 {
 	return static_cast<T>(lua_tonumber(L, arg));
 }
 
-template<int32_t arg>
-std::string LuaScriptInterface::getString(lua_State* L)
+template<class T>
+T* LuaScriptInterface::getUserdata(lua_State* L, int32_t arg)
+{
+	return *static_cast<T**>(lua_touserdata(L, arg));
+}
+
+template<class T>
+T** LuaScriptInterface::getRawUserdata(lua_State* L, int32_t arg)
+{
+	return static_cast<T**>(lua_touserdata(L, arg));
+}
+
+std::string LuaScriptInterface::getString(lua_State* L, int32_t arg)
 {
 	std::string str;
 	size_t len;
@@ -1178,66 +1189,49 @@ std::string LuaScriptInterface::getString(lua_State* L)
 	if (c_str && len > 0) {
 		str.assign(c_str, len);
 	}
-
 	return str;
 }
 
-template<int32_t arg>
-bool LuaScriptInterface::getBoolean(lua_State* L)
+bool LuaScriptInterface::getBoolean(lua_State* L, int32_t arg)
 {
 	return lua_toboolean(L, arg) != 0;
 }
 
-template<class T, int32_t arg>
-T* LuaScriptInterface::getUserdata(lua_State* L)
-{
-	return *static_cast<T**>(lua_touserdata(L, arg));
-}
-
-template<class T, int32_t arg>
-T** LuaScriptInterface::getRawUserdata(lua_State* L)
-{
-	return static_cast<T**>(lua_touserdata(L, arg));
-}
-
-template<int32_t arg>
-Position LuaScriptInterface::getPosition(lua_State* L, uint32_t& stackpos)
+Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg, uint32_t& stackpos)
 {
 	Position position;
 	lua_getfield(L, arg, "x");
-	position.x = getNumber<int32_t, -1>(L);
+	position.x = popNumber<int32_t>(L);
 
 	lua_getfield(L, arg, "y");
-	position.y = getNumber<int32_t, -1>(L);
+	position.y = popNumber<int32_t>(L);
 
 	lua_getfield(L, arg, "z");
-	position.z = getNumber<int32_t, -1>(L);
+	position.z = popNumber<int32_t>(L);
 
 	lua_getfield(L, arg, "stackpos");
 	if (isNil(L, -1)) {
 		stackpos = 0;
+		lua_pop(L, 1);
 	} else {
-		stackpos = getNumber<int32_t, -1>(L);
+		stackpos = popNumber<int32_t>(L);
 	}
-
-	lua_pop(L, 4);
 	return position;
 }
 
-template<int32_t arg>
-Position LuaScriptInterface::getPosition(lua_State* L)
+Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg)
 {
 	Position position;
+
 	lua_getfield(L, arg, "x");
-	position.x = getNumber<int32_t, -1>(L);
+	position.x = popNumber<int32_t>(L);
 
 	lua_getfield(L, arg, "y");
-	position.y = getNumber<int32_t, -1>(L);
+	position.y = popNumber<int32_t>(L);
 
 	lua_getfield(L, arg, "z");
-	position.z = getNumber<int32_t, -1>(L);
+	position.z = popNumber<int32_t>(L);
 
-	lua_pop(L, 3);
 	return position;
 }
 
@@ -8607,14 +8601,13 @@ int32_t LuaScriptInterface::luaIsType(lua_State* L)
 	lua_getmetatable(L, -2);
 
 	lua_rawgeti(L, -2, 'p');
-	uint_fast8_t parentsB = getNumber<uint_fast8_t, 1>(L);
+	uint_fast8_t parentsB = getNumber<uint_fast8_t>(L, 1);
 
 	lua_rawgeti(L, -3, 'h');
-	size_t hashB = getNumber<size_t, 1>(L);
+	size_t hashB = getNumber<size_t>(L, 1);
 
 	lua_rawgeti(L, -3, 'p');
-	uint_fast8_t parentsA = getNumber<uint_fast8_t, 1>(L);
-
+	uint_fast8_t parentsA = getNumber<uint_fast8_t>(L, 1);
 	for (uint_fast8_t i = parentsA; i < parentsB; ++i) {
 		pushString(L, "__index");
 		lua_rawget(L, -4);
@@ -8622,7 +8615,7 @@ int32_t LuaScriptInterface::luaIsType(lua_State* L)
 	}
 
 	lua_rawgeti(L, -4, 'h');
-	size_t hashA = getNumber<size_t, 1>(L);
+	size_t hashA = getNumber<size_t>(L, 1);
 
 	emptyStack(L);
 	pushBoolean(L, hashA == hashB);
@@ -8646,27 +8639,27 @@ int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 
 	if (isTable(L, 2)) {
 		uint32_t stackpos;
-		const Position& position = getPosition<2>(L, stackpos);
+		const Position& position = getPosition(L, 2, stackpos);
 
 		emptyStack(L);
 		pushMetaPosition(L, position, stackpos);
 	} else {
 		int32_t stackpos = 0;
 		if (parameters >= 5) {
-			stackpos = getNumber<int32_t, 5>(L);
+			stackpos = getNumber<int32_t>(L, 5);
 		}
 
 		uint8_t z = 0;
 		if (parameters >= 4) {
-			z = getNumber<uint8_t, 4>(L);
+			z = getNumber<uint8_t>(L, 4);
 		}
 
 		uint16_t y = 0;
 		if (parameters >= 3) {
-			y = getNumber<uint16_t, 3>(L);
+			y = getNumber<uint16_t>(L, 3);
 		}
 
-		uint16_t x = getNumber<uint16_t, 2>(L);
+		uint16_t x = getNumber<uint16_t>(L, 2);
 
 		emptyStack(L);
 		pushMetaPosition(L, Position(x, y, z), stackpos);
@@ -8679,13 +8672,13 @@ int32_t LuaScriptInterface::luaPositionAdd(lua_State* L)
 {
 	// positionValue = position + positionEx
 	uint32_t stackpos;
-	const Position& position = getPosition<1>(L, stackpos);
+	const Position& position = getPosition(L, 1, stackpos);
 
 	Position positionEx;
 	if (stackpos == 0) {
-		positionEx = getPosition<2>(L, stackpos);
+		positionEx = getPosition(L, 2, stackpos);
 	} else {
-		positionEx = getPosition<2>(L);
+		positionEx = getPosition(L, 2);
 	}
 
 	emptyStack(L);
@@ -8697,13 +8690,13 @@ int32_t LuaScriptInterface::luaPositionSub(lua_State* L)
 {
 	// positionValue = position - positionEx
 	uint32_t stackpos;
-	const Position& position = getPosition<1>(L, stackpos);
+	const Position& position = getPosition(L, 1, stackpos);
 
 	Position positionEx;
 	if (stackpos == 0) {
-		positionEx = getPosition<2>(L, stackpos);
+		positionEx = getPosition(L, 2, stackpos);
 	} else {
-		positionEx = getPosition<2>(L);
+		positionEx = getPosition(L, 2);
 	}
 
 	emptyStack(L);
@@ -8714,8 +8707,8 @@ int32_t LuaScriptInterface::luaPositionSub(lua_State* L)
 int32_t LuaScriptInterface::luaPositionCompare(lua_State* L)
 {
 	// position == positionEx
-	const Position& positionEx = getPosition<2>(L);
-	const Position& position = getPosition<1>(L);
+	const Position& positionEx = getPosition(L, 2);
+	const Position& position = getPosition(L, 1);
 
 	emptyStack(L);
 	pushBoolean(L, position == positionEx);
@@ -8725,8 +8718,8 @@ int32_t LuaScriptInterface::luaPositionCompare(lua_State* L)
 int32_t LuaScriptInterface::luaPositionGetDistance(lua_State* L)
 {
 	// position:getDistance(positionEx)
-	const Position& positionEx = getPosition<2>(L);
-	const Position& position = getPosition<1>(L);
+	const Position& positionEx = getPosition(L, 2);
+	const Position& position = getPosition(L, 1);
 
 	emptyStack(L);
 	pushNumber(L, std::max<int32_t>(
@@ -8833,8 +8826,8 @@ int32_t LuaScriptInterface::luaNetworkMessageGetPosition(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageAddByte(lua_State* L)
 {
 	// networkMessage:addByte(number)
-	uint8_t number = getNumber<uint8_t, 2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	uint8_t number = getNumber<uint8_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -8849,8 +8842,8 @@ int32_t LuaScriptInterface::luaNetworkMessageAddByte(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageAddU16(lua_State* L)
 {
 	// networkMessage:addU16(number)
-	uint16_t number = getNumber<uint16_t, 2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	uint16_t number = getNumber<uint16_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -8865,8 +8858,8 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU16(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageAddU32(lua_State* L)
 {
 	// networkMessage:addU32(number)
-	uint32_t number = getNumber<uint32_t, 2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	uint32_t number = getNumber<uint32_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -8881,8 +8874,8 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU32(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageAddU64(lua_State* L)
 {
 	// networkMessage:addU64(number)
-	uint64_t number = getNumber<uint64_t, 2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	uint64_t number = getNumber<uint64_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -8897,8 +8890,8 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU64(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageAddString(lua_State* L)
 {
 	// networkMessage:addString(string)
-	const std::string& string = getString<2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	const std::string& string = getString(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -8913,8 +8906,8 @@ int32_t LuaScriptInterface::luaNetworkMessageAddString(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageAddPosition(lua_State* L)
 {
 	// networkMessage:addPosition(position)
-	const Position& position = getPosition<2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	const Position& position = getPosition(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -8929,8 +8922,8 @@ int32_t LuaScriptInterface::luaNetworkMessageAddPosition(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageAddDouble(lua_State* L)
 {
 	// networkMessage:addDouble(number)
-	double number = getNumber<double, 2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	double number = getNumber<double>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -8947,13 +8940,13 @@ int32_t LuaScriptInterface::luaNetworkMessageAddItem(lua_State* L)
 	// networkMessage:addItem(item[, protocolVersion = CLIENT_VERSION_MIN])
 	/*uint16_t protocolVersion = CLIENT_VERSION_MIN;
 	if (getStackTop(L) >= 3) {
-		protocolVersion = getNumber<uint16_t, 3>(L);
+		protocolVersion = getNumber<uint16_t>(L, 3);
 	}*/
 	Item* item = NULL;
-	if (getBoolean<2>(L)) {
-		item = getUserdata<Item, 2>(L);
+	if (getBoolean(L, 2)) {
+		item = getUserdata<Item>(L, 2);
 	}
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (!item) {
@@ -8976,10 +8969,10 @@ int32_t LuaScriptInterface::luaNetworkMessageAddItemId(lua_State* L)
 	// networkMessage:addItemId(itemId[, protocolVersion = CLIENT_VERSION_MIN])
 	/*uint16_t protocolVersion = CLIENT_VERSION_MIN;
 	if (getStackTop(L) >= 3) {
-		protocolVersion = getNumber<uint16_t, 3>(L);
+		protocolVersion = getNumber<uint16_t>(L, 3);
 	}*/
-	uint16_t itemId = getNumber<uint16_t, 2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -9006,8 +8999,8 @@ int32_t LuaScriptInterface::luaNetworkMessageReset(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageSkipBytes(lua_State* L)
 {
 	// networkMessage:skipBytes(number)
-	int16_t number = getNumber<int16_t, 2>(L);
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	int16_t number = getNumber<int16_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (message) {
@@ -9023,10 +9016,10 @@ int32_t LuaScriptInterface::luaNetworkMessageSendToPlayer(lua_State* L)
 {
 	// networkMessage:sendToPlayer(player)
 	Player* player = NULL;
-	if (getBoolean<2>(L)) {
-		player = getUserdata<Player, 2>(L);
+	if (getBoolean(L, 2)) {
+		player = getUserdata<Player>(L, 2);
 	}
-	NetworkMessage* message = getUserdata<NetworkMessage, 1>(L);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -9046,9 +9039,9 @@ int32_t LuaScriptInterface::luaModalWindowCreate(lua_State* L)
 {
 	// ModalWindow(id, title, message)
 	// ModalWindow.new(id, title, message)
-	const std::string& message = getString<4>(L);
-	const std::string& title = getString<3>(L);
-	uint32_t id = getNumber<uint32_t, 2>(L);
+	const std::string& message = getString(L, 4);
+	const std::string& title = getString(L, 3);
+	uint32_t id = getNumber<uint32_t>(L, 2);
 
 	emptyStack(L);
 	pushUserdata<ModalWindow>(L, new ModalWindow(id, title, message));
@@ -9128,9 +9121,9 @@ int32_t LuaScriptInterface::luaModalWindowGetChoiceCount(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowDoAddButton(lua_State* L)
 {
 	// modalWindow:doAddButton(id, text)
-	const std::string& text = getString<3>(L);
-	uint8_t id = getNumber<uint8_t, 2>(L);
-	ModalWindow* window = getUserdata<ModalWindow, 1>(L);
+	const std::string& text = getString(L, 3);
+	uint8_t id = getNumber<uint8_t>(L, 2);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 
 	emptyStack(L);
 	if (window) {
@@ -9145,9 +9138,9 @@ int32_t LuaScriptInterface::luaModalWindowDoAddButton(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowDoAddChoice(lua_State* L)
 {
 	// modalWindow:doAddChoice(id, text)
-	const std::string& text = getString<3>(L);
-	uint8_t id = getNumber<uint8_t, 2>(L);
-	ModalWindow* window = getUserdata<ModalWindow, 1>(L);
+	const std::string& text = getString(L, 3);
+	uint8_t id = getNumber<uint8_t>(L, 2);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 
 	emptyStack(L);
 	if (window) {
@@ -9174,8 +9167,8 @@ int32_t LuaScriptInterface::luaModalWindowGetDefaultEnterButton(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowSetDefaultEnterButton(lua_State* L)
 {
 	// modalWindow:setDefaultEnterButton(buttonId)
-	uint8_t buttonId = getNumber<uint8_t, 2>(L);
-	ModalWindow* window = getUserdata<ModalWindow, 1>(L);
+	uint8_t buttonId = getNumber<uint8_t>(L, 2);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 
 	emptyStack(L);
 	if (window) {
@@ -9202,8 +9195,8 @@ int32_t LuaScriptInterface::luaModalWindowGetDefaultEscapeButton(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowSetDefaultEscapeButton(lua_State* L)
 {
 	// modalWindow:setDefaultEscapeButton(buttonId)
-	uint8_t buttonId = getNumber<uint8_t, 2>(L);
-	ModalWindow* window = getUserdata<ModalWindow, 1>(L);
+	uint8_t buttonId = getNumber<uint8_t>(L, 2);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 
 	emptyStack(L);
 	if (window) {
@@ -9230,8 +9223,8 @@ int32_t LuaScriptInterface::luaModalWindowHasPriority(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowSetPriority(lua_State* L)
 {
 	// modalWindow:setPriority(priority)
-	bool priority = getBoolean<2>(L);
-	ModalWindow* window = getUserdata<ModalWindow, 1>(L);
+	bool priority = getBoolean(L, 2);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 
 	emptyStack(L);
 	if (window) {
@@ -9247,10 +9240,10 @@ int32_t LuaScriptInterface::luaModalWindowSendToPlayer(lua_State* L)
 {
 	// modalWindow:sendToPlayer(player)
 	Player* player = NULL;
-	if (getBoolean<2>(L)) {
-		player = getUserdata<Player, 2>(L);
+	if (getBoolean(L, 2)) {
+		player = getUserdata<Player>(L, 2);
 	}
-	ModalWindow* window = getUserdata<ModalWindow, 1>(L);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 
 	emptyStack(L);
 	if (window) {
@@ -9275,15 +9268,17 @@ int32_t LuaScriptInterface::luaItemCreate(lua_State* L)
 
 	Position position;
 	if (parameters >= 4) {
-		position = getPosition<4>(L);
+		position = getPosition(L, 4);
 	}
 
 	uint16_t count;
 	if (parameters >= 3) {
-		count = getNumber<uint16_t, 3>(L);
+		count = getNumber<uint16_t>(L, 3);
+	} else {
+		count = 1;
 	}
 
-	uint32_t id = getNumber<uint32_t, 2>(L);
+	uint32_t id = getNumber<uint32_t>(L, 2);
 	emptyStack(L);
 
 	Item* item;
@@ -9372,9 +9367,9 @@ int32_t LuaScriptInterface::luaItemDoSplit(lua_State* L)
 	// item:doSplit([count = 1])
 	uint16_t count = 1;
 	if (getStackTop(L) >= 2) {
-		count = getNumber<uint16_t, 2>(L);
+		count = getNumber<uint16_t>(L, 2);
 	}
-	Item** itemPtr = getRawUserdata<Item, 1>(L);
+	Item** itemPtr = getRawUserdata<Item>(L, 1);
 
 	emptyStack(L);
 	if (*itemPtr) {
@@ -9424,9 +9419,9 @@ int32_t LuaScriptInterface::luaItemDoRemove(lua_State* L)
 	// item:doRemove([count = 1])
 	uint16_t count = 1;
 	if (getStackTop(L) >= 2) {
-		count = getNumber<uint16_t, 2>(L);
+		count = getNumber<uint16_t>(L, 2);
 	}
-	Item* item = getUserdata<Item, 1>(L);
+	Item* item = getUserdata<Item>(L, 1);
 
 	emptyStack(L);
 	if (item) {
@@ -9464,8 +9459,8 @@ int32_t LuaScriptInterface::luaItemGetActionId(lua_State* L)
 int32_t LuaScriptInterface::luaItemSetActionId(lua_State* L)
 {
 	// item:setActionId(actionId)
-	uint16_t actionId = getNumber<uint16_t, 2>(L);
-	Item* item = getUserdata<Item, 1>(L);
+	uint16_t actionId = getNumber<uint16_t>(L, 2);
+	Item* item = getUserdata<Item>(L, 1);
 
 	emptyStack(L);
 	if (item) {
@@ -9576,8 +9571,8 @@ int32_t LuaScriptInterface::luaItemGetPosition(lua_State* L)
 int32_t LuaScriptInterface::luaItemDoTeleport(lua_State* L)
 {
 	// item:doTeleport(position)
-	const Position& position = getPosition<2>(L);
-	Item** itemPtr = getRawUserdata<Item, 1>(L);
+	const Position& position = getPosition(L, 2);
+	Item** itemPtr = getRawUserdata<Item>(L, 1);
 
 	emptyStack(L);
 	if (*itemPtr) {
@@ -9615,11 +9610,11 @@ int32_t LuaScriptInterface::luaItemDoTransform(lua_State* L)
 	// item:doTransform(itemId[, count/subType = -1])
 	int32_t count = -1;
 	if (getStackTop(L) >= 3) {
-		count = getNumber<int32_t, 3>(L);
+		count = getNumber<int32_t>(L, 3);
 	}
 
-	uint16_t itemId = getNumber<uint16_t, 2>(L);
-	Item** itemPtr = getRawUserdata<Item, 1>(L);
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	Item** itemPtr = getRawUserdata<Item>(L, 1);
 
 	emptyStack(L);
 	if (*itemPtr) {
@@ -9665,10 +9660,10 @@ int32_t LuaScriptInterface::luaContainerCreate(lua_State* L)
 
 	Position position;
 	if (parameters >= 3) {
-		position = getPosition<3>(L);
+		position = getPosition(L, 3);
 	}
 
-	uint32_t id = getNumber<uint32_t, 2>(L);
+	uint32_t id = getNumber<uint32_t>(L, 2);
 	emptyStack(L);
 
 	Item* item;
@@ -9762,8 +9757,8 @@ int32_t LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 int32_t LuaScriptInterface::luaContainerGetItem(lua_State* L)
 {
 	// container:getItem(index)
-	uint32_t index = getNumber<uint32_t, 2>(L);
-	Container* container = getUserdata<Container, 1>(L);
+	uint32_t index = getNumber<uint32_t>(L, 2);
+	Container* container = getUserdata<Container>(L, 1);
 
 	emptyStack(L);
 	if (container) {
@@ -9784,10 +9779,10 @@ int32_t LuaScriptInterface::luaContainerHasItem(lua_State* L)
 {
 	// container:hasItem(item)
 	Item* item = NULL;
-	if (getBoolean<2>(L)) {
-		item = getUserdata<Item, 2>(L);
+	if (getBoolean(L, 2)) {
+		item = getUserdata<Item>(L, 2);
 	}
-	Container* container = getUserdata<Container, 1>(L);
+	Container* container = getUserdata<Container>(L, 1);
 
 	emptyStack(L);
 	if (container) {
@@ -9805,11 +9800,11 @@ int32_t LuaScriptInterface::luaContainerDoAddItem(lua_State* L)
 
 	uint32_t subType = 1;
 	if (parameters >= 3) {
-		subType = getNumber<uint32_t, 3>(L);
+		subType = getNumber<uint32_t>(L, 3);
 	}
 
-	uint16_t itemId = getNumber<uint16_t, 2>(L);
-	Container* container = getUserdata<Container, 1>(L);
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	Container* container = getUserdata<Container>(L, 1);
 
 	emptyStack(L);
 	if (!container) {
@@ -9839,10 +9834,10 @@ int32_t LuaScriptInterface::luaContainerDoAddItemEx(lua_State* L)
 {
 	// container:doAddItemEx(item)
 	Item* item = NULL;
-	if (getBoolean<2>(L)) {
-		item = getUserdata<Item, 2>(L);
+	if (getBoolean(L, 2)) {
+		item = getUserdata<Item>(L, 2);
 	}
-	Container* container = getUserdata<Container, 1>(L);
+	Container* container = getUserdata<Container>(L, 1);
 
 	emptyStack(L);
 	if (container) {
@@ -9973,8 +9968,8 @@ int32_t LuaScriptInterface::luaCreatureGetDirection(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetDirection(lua_State* L)
 {
 	// creature:setDirection(direction)
-	Direction direction = static_cast<Direction>(getNumber<uint64_t, 2>(L));
-	Creature* creature = getUserdata<Creature, 1>(L);
+	Direction direction = static_cast<Direction>(getNumber<uint64_t>(L, 2));
+	Creature* creature = getUserdata<Creature>(L, 1);
 
 	emptyStack(L);
 	if (creature) {
@@ -10000,8 +9995,8 @@ int32_t LuaScriptInterface::luaCreatureGetHealth(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureDoAddHealth(lua_State* L)
 {
 	// creature:doAddHealth(healthChange)
-	int32_t healthChange = getNumber<int32_t, 2>(L);
-	Creature* creature = getUserdata<Creature, 1>(L);
+	int32_t healthChange = getNumber<int32_t>(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
 
 	emptyStack(L);
 	if (creature) {
@@ -10032,8 +10027,8 @@ int32_t LuaScriptInterface::luaCreatureGetMaxHealth(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 {
 	// creature:setMaxHealth(maxHealth)
-	uint32_t maxHealth = getNumber<uint32_t, 2>(L);
-	Creature* creature = getUserdata<Creature, 1>(L);
+	uint32_t maxHealth = getNumber<uint32_t>(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
 
 	emptyStack(L);
 	if (creature) {
@@ -10068,10 +10063,10 @@ int32_t LuaScriptInterface::luaCreatureDoAddMana(lua_State* L)
 	// creature:doAddMana(manaChange[, animationOnLoss = false])
 	bool animationOnLoss = true;
 	if (getStackTop(L) >= 3) {
-		animationOnLoss = getBoolean<3>(L);
+		animationOnLoss = getBoolean(L, 3);
 	}
-	int32_t manaChange = getNumber<int32_t, 2>(L);
-	Creature* creature = getUserdata<Creature, 1>(L);
+	int32_t manaChange = getNumber<int32_t>(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
 
 	emptyStack(L);
 	if (creature) {
@@ -10102,8 +10097,8 @@ int32_t LuaScriptInterface::luaCreatureGetMaxMana(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetMaxMana(lua_State* L)
 {
 	// creature:setMaxMana(maxMana)
-	uint32_t maxMana = getNumber<uint32_t, 2>(L);
-	Creature* creature = getUserdata<Creature, 1>(L);
+	uint32_t maxMana = getNumber<uint32_t>(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
 
 	emptyStack(L);
 	if (creature) {
@@ -10154,10 +10149,10 @@ int32_t LuaScriptInterface::luaCreatureDoTeleport(lua_State* L)
 	// creature:doTeleport(position[, pushMovement = false])
 	bool pushMovement = false;
 	if (getStackTop(L) >= 3) {
-		pushMovement = getBoolean<3>(L);
+		pushMovement = getBoolean(L, 3);
 	}
-	const Position& position = getPosition<2>(L);
-	Creature* creature = getUserdata<Creature, 1>(L);
+	const Position& position = getPosition(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
 
 	emptyStack(L);
 	if (creature) {
@@ -10194,7 +10189,7 @@ int32_t LuaScriptInterface::luaCreatureDoSay(lua_State* L)
 
 	Position position;
 	if (parameters >= 6) {
-		position = getPosition<6>(L);
+		position = getPosition(L, 6);
 		if (!position.x || !position.y) {
 			emptyStack(L);
 
@@ -10205,18 +10200,18 @@ int32_t LuaScriptInterface::luaCreatureDoSay(lua_State* L)
 	}
 
 	Creature* target = NULL;
-	if (parameters >= 5 && getBoolean<5>(L)) {
-		target = getUserdata<Creature, 5>(L);
+	if (parameters >= 5 && getBoolean(L, 5)) {
+		target = getUserdata<Creature>(L, 5);
 	}
 
 	bool ghost = false;
 	if (parameters >= 4) {
-		ghost = getBoolean<4>(L);
+		ghost = getBoolean(L, 4);
 	}
 
-	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t, 3>(L));
-	const std::string& text = getString<2>(L);
-	Creature* creature = getUserdata<Creature, 1>(L);
+	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t>(L, 3));
+	const std::string& text = getString(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
 
 	emptyStack(L);
 	if (creature) {
@@ -10281,16 +10276,16 @@ int32_t LuaScriptInterface::luaPlayerDoAddExperience(lua_State* L)
 
 	bool sendText = false;
 	if (parameters >= 4) {
-		sendText = getBoolean<4>(L);
+		sendText = getBoolean(L, 4);
 	}
 
 	bool useMultiplier = false;
 	if (parameters >= 3) {
-		useMultiplier = getBoolean<3>(L);
+		useMultiplier = getBoolean(L, 3);
 	}
 
-	int64_t experience = getNumber<int64_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	int64_t experience = getNumber<int64_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10329,8 +10324,8 @@ int32_t LuaScriptInterface::luaPlayerGetVocation(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 {
 	// player:setVocation(vocationId)
-	uint32_t vocationId = getNumber<uint32_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint32_t vocationId = getNumber<uint32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10363,8 +10358,8 @@ int32_t LuaScriptInterface::luaPlayerGetSex(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSetSex(lua_State* L)
 {
 	// player:setSex(newSex)
-	PlayerSex_t newSex = static_cast<PlayerSex_t>(getNumber<uint64_t, 2>(L));
-	Player* player = getUserdata<Player, 1>(L);
+	PlayerSex_t newSex = static_cast<PlayerSex_t>(getNumber<uint64_t>(L, 2));
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10391,8 +10386,8 @@ int32_t LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 {
 	// player:setTown(newTown)
-	uint32_t newTown = getNumber<uint32_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint32_t newTown = getNumber<uint32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10425,8 +10420,8 @@ int32_t LuaScriptInterface::luaPlayerGetGroupId(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSetGroupId(lua_State* L)
 {
 	// player:setGroupId(groupId)
-	int32_t groupId = getNumber<int32_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	int32_t groupId = getNumber<int32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10470,8 +10465,8 @@ int32_t LuaScriptInterface::luaPlayerGetSoul(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerDoAddSoul(lua_State* L)
 {
 	// player:doAddSoul(soulChange)
-	int32_t soulChange = getNumber<int32_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	int32_t soulChange = getNumber<int32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10510,8 +10505,8 @@ int32_t LuaScriptInterface::luaPlayerGetBankBalance(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 {
 	// player:setBankBalance(bankBalance)
-	uint64_t bankBalance = getNumber<uint64_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint64_t bankBalance = getNumber<uint64_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10526,8 +10521,8 @@ int32_t LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 {
 	// player:getStorageValue(key)
-	uint32_t key = getNumber<uint32_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint32_t key = getNumber<uint32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10546,9 +10541,9 @@ int32_t LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 {
 	// player:setStorageValue(key, value)
-	int32_t value = getNumber<int32_t, 3>(L);
-	uint32_t key = getNumber<uint32_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	int32_t value = getNumber<int32_t>(L, 3);
+	uint32_t key = getNumber<uint32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
@@ -10577,24 +10572,24 @@ int32_t LuaScriptInterface::luaPlayerDoAddItem(lua_State* L)
 	slots_t slot = SLOT_WHEREEVER;
 	int32_t subType = 1;
 	if (parameters >= 6) {
-		slot = static_cast<slots_t>(getNumber<uint64_t, 6>(L));
-		subType = getNumber<int32_t, 5>(L);
+		slot = static_cast<slots_t>(getNumber<uint64_t>(L, 6));
+		subType = getNumber<int32_t>(L, 5);
 	} else if (parameters >= 5) {
-		slot = static_cast<slots_t>(getNumber<uint64_t, 5>(L));
+		slot = static_cast<slots_t>(getNumber<uint64_t>(L, 5));
 	}
 
 	bool canDropOnMap = true;
 	if (parameters >= 4) {
-		canDropOnMap = getBoolean<4>(L);
+		canDropOnMap = getBoolean(L, 4);
 	}
 
 	uint32_t count = 1;
 	if (parameters >= 3) {
-		count = getNumber<uint32_t, 3>(L);
+		count = getNumber<uint32_t>(L, 3);
 	}
 
-	uint16_t itemId = getNumber<uint16_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (!player) {
@@ -10662,15 +10657,15 @@ int32_t LuaScriptInterface::luaPlayerDoAddItemEx(lua_State* L)
 
 	slots_t slot = SLOT_WHEREEVER;
 	if (parameters >= 4) {
-		slot = static_cast<slots_t>(getNumber<uint64_t, 4>(L));
+		slot = static_cast<slots_t>(getNumber<uint64_t>(L, 4));
 	}
 
 	bool canDropOnMap = false;
 	if (parameters >= 3) {
-		canDropOnMap = getBoolean<3>(L);
+		canDropOnMap = getBoolean(L, 3);
 	}
 
-	Item* item = getUserdata<Item, 2>(L);
+	Item* item = getUserdata<Item>(L, 2);
 	if (!item) {
 		emptyStack(L);
 
@@ -10679,7 +10674,7 @@ int32_t LuaScriptInterface::luaPlayerDoAddItemEx(lua_State* L)
 		return 1;
 	}
 
-	Player* player = getUserdata<Player, 1>(L);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10708,17 +10703,17 @@ int32_t LuaScriptInterface::luaPlayerDoRemoveItem(lua_State* L)
 
 	bool ignoreEquipped = false;
 	if (parameters >= 5) {
-		ignoreEquipped = getBoolean<5>(L);
+		ignoreEquipped = getBoolean(L, 5);
 	}
 
 	int32_t subType = -1;
 	if (parameters >= 4) {
-		subType = getNumber<int32_t, 4>(L);
+		subType = getNumber<int32_t>(L, 4);
 	}
 
-	uint32_t count = getNumber<uint32_t, 3>(L);
-	uint16_t itemId = getNumber<uint16_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint32_t count = getNumber<uint32_t>(L, 3);
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10744,8 +10739,8 @@ int32_t LuaScriptInterface::luaPlayerGetMoney(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerDoAddMoney(lua_State* L)
 {
 	// player:doAddMoney(money)
-	uint64_t money = getNumber<uint64_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint64_t money = getNumber<uint64_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10760,8 +10755,8 @@ int32_t LuaScriptInterface::luaPlayerDoAddMoney(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerDoRemoveMoney(lua_State* L)
 {
 	// player:doRemoveMoney(money)
-	uint64_t money = getNumber<uint64_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint64_t money = getNumber<uint64_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10780,29 +10775,29 @@ int32_t LuaScriptInterface::luaPlayerDoShowTextDialog(lua_State* L)
 
 	int32_t length = -1;
 	if (parameters >= 5) {
-		length = getNumber<uint32_t, 5>(L);
+		length = getNumber<uint32_t>(L, 5);
 	}
 
 	bool canWrite = false;
 	if (parameters >= 4) {
 		if (isBoolean(L, 4)) {
-			canWrite = getBoolean<4>(L);
+			canWrite = getBoolean(L, 4);
 		} else {
-			length = getNumber<uint32_t, 4>(L);
+			length = getNumber<uint32_t>(L, 4);
 		}
 	}
 
 	std::string text;
 	if (parameters >= 3) {
 		if (isBoolean(L, 3)) {
-			canWrite = getBoolean<3>(L);
+			canWrite = getBoolean(L, 3);
 		} else {
-			text = getString<3>(L);
+			text = getString(L, 3);
 		}
 	}
 
-	uint16_t itemId = getNumber<uint16_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10836,14 +10831,14 @@ int32_t LuaScriptInterface::luaPlayerDoSendTextMessage(lua_State* L)
 	uint32_t value = 0;
 	TextColor_t color = TEXTCOLOR_NONE;
 	if (parameters >= 6) {
-		color = static_cast<TextColor_t>(getNumber<uint64_t, 6>(L));
-		value = getNumber<uint32_t, 5>(L);
-		position = getPosition<4>(L);
+		color = static_cast<TextColor_t>(getNumber<uint64_t>(L, 6));
+		value = getNumber<uint32_t>(L, 5);
+		position = getPosition(L, 4);
 	}
 
-	const std::string& text = getString<3>(L);
-	MessageClasses type = static_cast<MessageClasses>(getNumber<uint64_t, 2>(L));
-	Player* player = getUserdata<Player, 1>(L);
+	const std::string& text = getString(L, 3);
+	MessageClasses type = static_cast<MessageClasses>(getNumber<uint64_t>(L, 2));
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10862,11 +10857,11 @@ int32_t LuaScriptInterface::luaPlayerDoSendTextMessage(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerDoSendChannelMessage(lua_State* L)
 {
 	// player:doSendChannelMessage(author, text, type, channelId)
-	uint16_t channelId = getNumber<uint16_t, 5>(L);
-	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t, 4>(L));
-	const std::string& text = getString<3>(L);
-	const std::string& author = getString<2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint16_t channelId = getNumber<uint16_t>(L, 5);
+	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t>(L, 4));
+	const std::string& text = getString(L, 3);
+	const std::string& author = getString(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10881,16 +10876,16 @@ int32_t LuaScriptInterface::luaPlayerDoSendChannelMessage(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerDoChannelSay(lua_State* L)
 {
 	// player:doChannelSay(target, type, text, channelId)
-	uint16_t channelId = getNumber<uint16_t, 5>(L);
-	const std::string& text = getString<4>(L);
-	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t, 3>(L));
+	uint16_t channelId = getNumber<uint16_t>(L, 5);
+	const std::string& text = getString(L, 4);
+	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t>(L, 3));
 
 	Creature* target = NULL;
-	if (getBoolean<2>(L)) {
-		target = getUserdata<Creature, 2>(L);
+	if (getBoolean(L, 2)) {
+		target = getUserdata<Creature>(L, 2);
 	}
 
-	Player* player = getUserdata<Player, 1>(L);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {
@@ -10905,8 +10900,8 @@ int32_t LuaScriptInterface::luaPlayerDoChannelSay(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerDoOpenChannel(lua_State* L)
 {
 	// player:doOpenChannel(channelId)
-	uint16_t channelId = getNumber<uint16_t, 2>(L);
-	Player* player = getUserdata<Player, 1>(L);
+	uint16_t channelId = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
 
 	emptyStack(L);
 	if (player) {

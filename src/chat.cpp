@@ -143,7 +143,7 @@ bool OnSpeakChannelEvent::execute(const Player& player, SpeakClasses& type, cons
 			result = LuaScriptInterface::popBoolean(L);
 		} else if (lua_gettop(L) > 0 && lua_isnumber(L, -1)) {
 			result = true;
-			type = (SpeakClasses)LuaScriptInterface::popNumber(L);
+			type = static_cast<SpeakClasses>(LuaScriptInterface::popNumber(L));
 		}
 
 		if ((lua_gettop(L) + 4) != size0) {

@@ -372,26 +372,17 @@ class LuaScriptInterface
 		static void setCreatureMetatable(lua_State* L, int32_t index, Creature* creature);
 
 		// Get
-		template<typename T, int32_t arg>
-		static T getNumber(lua_State* L);
+		template<typename T>
+		static T getNumber(lua_State* L, int32_t arg);
+		template<typename T>
+		static T* getUserdata(lua_State* L, int32_t arg);
+		template<typename T>
+		static T** getRawUserdata(lua_State* L, int32_t arg);
 
-		template<int32_t arg>
-		static std::string getString(lua_State* L);
-
-		template<int32_t arg>
-		static bool getBoolean(lua_State* L);
-
-		template<class T, int32_t arg>
-		static T* getUserdata(lua_State* L);
-
-		template<class T, int32_t arg>
-		static T** getRawUserdata(lua_State* L);
-
-		template<int32_t arg>
-		static Position getPosition(lua_State* L, uint32_t& stackpos);
-
-		template<int32_t arg>
-		static Position getPosition(lua_State* L);
+		static std::string getString(lua_State* L, int32_t arg);
+		static bool getBoolean(lua_State* L, int32_t arg);
+		static Position getPosition(lua_State* L, int32_t arg, uint32_t& stackpos);
+		static Position getPosition(lua_State* L, int32_t arg);
 
 		// Other
 		static int32_t getStackTop(lua_State* L);
