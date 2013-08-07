@@ -1201,37 +1201,38 @@ Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg, uint32_t& st
 {
 	Position position;
 	lua_getfield(L, arg, "x");
-	position.x = popNumber<int32_t>(L);
+	position.x = getNumber<int32_t>(L, -1);
 
 	lua_getfield(L, arg, "y");
-	position.y = popNumber<int32_t>(L);
+	position.y = getNumber<int32_t>(L, -1);
 
 	lua_getfield(L, arg, "z");
-	position.z = popNumber<int32_t>(L);
+	position.z = getNumber<int32_t>(L, -1);
 
 	lua_getfield(L, arg, "stackpos");
 	if (isNil(L, -1)) {
 		stackpos = 0;
-		lua_pop(L, 1);
 	} else {
-		stackpos = popNumber<int32_t>(L);
+		stackpos = getNumber<int32_t>(L, -1);
 	}
+	
+	lua_pop(L, 4);
 	return position;
 }
 
 Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg)
 {
 	Position position;
-
 	lua_getfield(L, arg, "x");
-	position.x = popNumber<int32_t>(L);
+	position.x = getNumber<int32_t>(L, -1);
 
 	lua_getfield(L, arg, "y");
-	position.y = popNumber<int32_t>(L);
+	position.y = getNumber<int32_t>(L, -1);
 
 	lua_getfield(L, arg, "z");
-	position.z = popNumber<int32_t>(L);
+	position.z = getNumber<int32_t>(L, -1);
 
+	lua_pop(L, 3);
 	return position;
 }
 

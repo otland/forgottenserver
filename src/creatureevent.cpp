@@ -191,6 +191,8 @@ bool CreatureEvent::configureEvent(xmlNodePtr p)
 			m_type = CREATURE_EVENT_ADVANCE;
 		} else if (tmpStr == "modalwindow") {
 			m_type = CREATURE_EVENT_MODALWINDOW;
+		} else if (tmpStr == "textedit") {
+			m_type = CREATURE_EVENT_TEXTEDIT;
 		} else {
 			std::cout << "[Error - CreatureEvent::configureEvent] No valid type for creature event." << str << std::endl;
 			return false;
@@ -231,6 +233,9 @@ std::string CreatureEvent::getScriptEventName()
 			
 		case CREATURE_EVENT_MODALWINDOW:
 			return "onModalWindow";
+
+		case CREATURE_EVENT_TEXTEDIT:
+			return "onTextEdit";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -476,6 +481,31 @@ uint32_t CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowI
 	LuaScriptInterface::pushNumber(L, choiceId);
 
 	bool result = m_scriptInterface->callFunction(4);
+	m_scriptInterface->releaseScriptEnv();
+	return result;
+}
+
+uint32_t CreatureEvent::executeTextEdit(Player* player, Item* item, const std::string& text)
+{
+	//onTextEdit(cid, item, text)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeTextEdit] Call stack overflow." << std::endl;
+		return 0;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+
+	env->setScriptId(m_scriptId, m_scriptInterface);
+	env->setRealPos(player->getPosition());
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	LuaScriptInterface::pushNumber(L, player->getID());
+	LuaScriptInterface::pushThing(L, item, env->addThing(item));
+	LuaScriptInterface::pushString(L, text);
+
+	bool result = m_scriptInterface->callFunction(3);
 	m_scriptInterface->releaseScriptEnv();
 	return result;
 }
