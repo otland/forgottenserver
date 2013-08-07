@@ -711,9 +711,9 @@ int32_t NpcScriptInterface::luaActionMoveTo(lua_State* L)
 {
 	//selfMoveTo(x,y,z)
 	Position target;
-	target.z = LuaScriptInterface::popNumber<int32_t>(L);
-	target.y = LuaScriptInterface::popNumber<int32_t>(L);
-	target.x = LuaScriptInterface::popNumber<int32_t>(L);
+	target.z = (int32_t)popNumber(L);
+	target.y = (int32_t)popNumber(L);
+	target.x = (int32_t)popNumber(L);
 
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
