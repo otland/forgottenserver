@@ -2932,6 +2932,13 @@ bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 		return false;
 	}
 
+	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_TEXTEDIT)) {
+		if (!creatureEvent->executeTextEdit(player, writeItem, text)) {
+			player->setWriteItem(NULL);
+			return false;
+		}
+	}
+
 	if (!text.empty()) {
 		if (writeItem->getText() != text) {
 			writeItem->setText(text);
@@ -6544,10 +6551,8 @@ bool Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 
 		player->setBedItem(NULL);
 	} else {
-		const CreatureEventList& modalWindowEvents = player->getCreatureEvents(CREATURE_EVENT_MODALWINDOW);
-
-		for (auto it = modalWindowEvents.begin(), end = modalWindowEvents.end(); it != end; ++it) {
-			(*it)->executeModalWindow(player, modalWindowId, button, choice);
+		for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_MODALWINDOW)) {
+			creatureEvent->executeModalWindow(player, modalWindowId, button, choice);
 		}
 	}
 

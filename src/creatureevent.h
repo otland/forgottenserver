@@ -33,7 +33,8 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_DEATH,
 	CREATURE_EVENT_KILL,
 	CREATURE_EVENT_ADVANCE,
-	CREATURE_EVENT_MODALWINDOW
+	CREATURE_EVENT_MODALWINDOW,
+	CREATURE_EVENT_TEXTEDIT
 };
 
 class CreatureEvent;
@@ -95,6 +96,7 @@ class CreatureEvent : public Event
 		uint32_t executeOnKill(Creature* creature, Creature* target);
 		uint32_t executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 		uint32_t executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
+		uint32_t executeTextEdit(Player* player, Item* item, const std::string& text);
 		//
 
 	protected:
