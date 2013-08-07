@@ -1129,6 +1129,11 @@ class Player : public Creature, public Cylinder
 				client->sendEnterWorld();
 			}
 		}
+		void sendNetworkMessage(const NetworkMessage& message) {
+			if (client) {
+				client->writeToOutputBuffer(message);
+			}
+		}
 
 		void receivePing() {
 			lastPong = OTSYS_TIME();
