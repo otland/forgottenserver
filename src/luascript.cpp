@@ -9240,10 +9240,19 @@ int32_t LuaScriptInterface::luaModalWindowSetPriority(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowSendToPlayer(lua_State* L)
 {
 	// modalWindow:sendToPlayer(player)
-	Player* player = NULL;
+	Player* player;
 	if (getBoolean(L, 2)) {
 		player = getUserdata<Player>(L, 2);
+	} else {
+		player = NULL;
 	}
+
+	if (!player) {
+		emptyStack(L);
+		pushNil(L);
+		return 1;
+	}
+
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 
 	emptyStack(L);
@@ -9834,10 +9843,19 @@ int32_t LuaScriptInterface::luaContainerDoAddItem(lua_State* L)
 int32_t LuaScriptInterface::luaContainerDoAddItemEx(lua_State* L)
 {
 	// container:doAddItemEx(item)
-	Item* item = NULL;
+	Item* item;
 	if (getBoolean(L, 2)) {
 		item = getUserdata<Item>(L, 2);
+	} else {
+		item = NULL;
 	}
+
+	if (!item) {
+		emptyStack(L);
+		pushNil(L);
+		return 1;
+	}
+
 	Container* container = getUserdata<Container>(L, 1);
 
 	emptyStack(L);
