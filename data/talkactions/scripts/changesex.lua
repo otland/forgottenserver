@@ -9,7 +9,7 @@ function onSay(cid, words, param)
 		return
 	end
 
-	if getPlayerPremiumDays(cid) < config.premiumDaysCost then
+	if getPlayerPremiumDays(cid) >= config.premiumDaysCost then
 		doPlayerRemovePremiumDays(cid, config.premiumDaysCost)
 		doPlayerSetSex(cid, getPlayerSex(cid) == PLAYERSEX_FEMALE and PLAYERSEX_MALE or PLAYERSEX_FEMALE)
 		doPlayerSendTextMessage(cid, MESSAGE_INFO_DESCR, "You have changed your sex for ".. config.premiumDaysCost .." days of your premium account.")
