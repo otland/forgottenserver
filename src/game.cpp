@@ -1084,7 +1084,7 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		if (toTile->hasProperty(BLOCKPATH)) {
 			player->sendCancelMessage(RET_NOTENOUGHROOM);
 			return false;
-		} else if ((movingCreature->getZone() == ZONE_PROTECTION && !toTile->hasFlag(TILESTATE_PROTECTIONZONE)) || movingCreature->getZone() == ZONE_NOPVP && !toTile->hasFlag(TILESTATE_NOPVPZONE)) {
+		} else if ((movingCreature->getZone() == ZONE_PROTECTION && !toTile->hasFlag(TILESTATE_PROTECTIONZONE)) || (movingCreature->getZone() == ZONE_NOPVP && !toTile->hasFlag(TILESTATE_NOPVPZONE))) {
 			player->sendCancelMessage(RET_NOTPOSSIBLE);
 			return false;
 		} else if (toTile->getCreatureCount() > 0) {
