@@ -1097,9 +1097,11 @@ bool LuaScriptInterface::popBoolean(lua_State* L)
 template<class T>
 void LuaScriptInterface::pushUserdata(lua_State* L, T* value)
 {
+	/*
 	if (std::is_base_of<Thing, T>::value) {
-		//static_cast<Thing*>(value)->useThing2();
+		static_cast<Thing*>(value)->useThing2();
 	}
+	*/
 
 	T** userdata = static_cast<T**>(lua_newuserdata(L, sizeof(T*)));
 	*userdata = value;
@@ -1165,7 +1167,11 @@ T LuaScriptInterface::getNumber(lua_State* L, int32_t arg)
 template<class T>
 T* LuaScriptInterface::getUserdata(lua_State* L, int32_t arg)
 {
-	return *static_cast<T**>(lua_touserdata(L, arg));
+	T** userdata = static_cast<T**>(lua_touserdata(L, arg));
+	if (!userdata) {
+		return NULL;
+	}
+	return *userdata;
 }
 
 template<class T>
@@ -9374,8 +9380,13 @@ int32_t LuaScriptInterface::luaItemDoSplit(lua_State* L)
 		count = getNumber<uint16_t>(L, 2);
 	}
 	Item** itemPtr = getRawUserdata<Item>(L, 1);
-
 	emptyStack(L);
+
+	if (!itemPtr) {
+		pushNil(L);
+		return 1;
+	}
+
 	if (*itemPtr) {
 		Item* item = *itemPtr;
 		if (!item->isStackable()) {
@@ -9577,8 +9588,13 @@ int32_t LuaScriptInterface::luaItemDoTeleport(lua_State* L)
 	// item:doTeleport(position)
 	const Position& position = getPosition(L, 2);
 	Item** itemPtr = getRawUserdata<Item>(L, 1);
-
 	emptyStack(L);
+
+	if (!itemPtr) {
+		pushNil(L);
+		return 1;
+	}
+
 	if (*itemPtr) {
 		Item* item = *itemPtr;
 		if (position == item->getPosition()) {
@@ -9619,8 +9635,13 @@ int32_t LuaScriptInterface::luaItemDoTransform(lua_State* L)
 
 	uint16_t itemId = getNumber<uint16_t>(L, 2);
 	Item** itemPtr = getRawUserdata<Item>(L, 1);
-
 	emptyStack(L);
+
+	if (!itemPtr) {
+		pushNil(L);
+		return 1;
+	}
+
 	if (*itemPtr) {
 		Item* item = *itemPtr;
 		if (item->getID() == itemId) {
