@@ -368,6 +368,9 @@ class LuaScriptInterface
 		static Position getPosition(lua_State* L, int32_t arg, uint32_t& stackpos);
 		static Position getPosition(lua_State* L, int32_t arg);
 
+		static Creature* getCreature(lua_State* L, int32_t arg);
+		static Player* getPlayer(lua_State* L, int32_t arg);
+
 		// Other
 		static int32_t getStackTop(lua_State* L);
 		static void emptyStack(lua_State* L);
