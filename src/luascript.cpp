@@ -584,7 +584,7 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = NULL
 	}
 
 	//check that it is loaded as a function
-	if (lua_isfunction(m_luaState, -1) == 0) {
+	if (!isFunction(m_luaState, -1)) {
 		return -1;
 	}
 
@@ -616,7 +616,7 @@ int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = NU
 	}
 
 	//check that it is loaded as a function
-	if (lua_isfunction(m_luaState, -1) == 0) {
+	if (!isFunction(m_luaState, -1)) {
 		return -1;
 	}
 
@@ -642,16 +642,14 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 {
 	//get our events table
 	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, m_eventTableRef);
-
-	if (lua_istable(m_luaState, -1) == 0) {
+	if (!isTable(m_luaState, -1)) {
 		lua_pop(m_luaState, 1);
 		return -1;
 	}
 
 	//get current event function pointer
 	lua_getglobal(m_luaState, eventName.c_str());
-
-	if (lua_isfunction(m_luaState, -1) == 0) {
+	if (!isFunction(m_luaState, -1)) {
 		lua_pop(m_luaState, 2);
 		return -1;
 	}
@@ -688,15 +686,13 @@ const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 std::string LuaScriptInterface::getStackTrace(const std::string& error_desc)
 {
 	lua_getglobal(m_luaState, "debug");
-
-	if (!lua_istable(m_luaState, -1)) {
+	if (!isTable(m_luaState, -1)) {
 		lua_pop(m_luaState, 1);
 		return error_desc;
 	}
 
 	lua_getfield(m_luaState, -1, "traceback");
-
-	if (!lua_isfunction(m_luaState, -1)) {
+	if (!isFunction(m_luaState, -1)) {
 		lua_pop(m_luaState, 1);
 		return error_desc;
 	}
@@ -750,18 +746,14 @@ void LuaScriptInterface::reportError(const char* function, const std::string& er
 bool LuaScriptInterface::pushFunction(int32_t functionId)
 {
 	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, m_eventTableRef);
-
-	if (lua_istable(m_luaState, -1) != 0) {
-		lua_pushnumber(m_luaState, functionId);
-		lua_rawget(m_luaState, -2);
-		lua_remove(m_luaState, -2);
-
-		if (lua_isfunction(m_luaState, -1) != 0) {
-			return true;
-		}
+	if (!isTable(m_luaState, -1)) {
+		return false;
 	}
-
-	return false;
+	
+	lua_pushnumber(m_luaState, functionId);
+	lua_rawget(m_luaState, -2);
+	lua_remove(m_luaState, -2);
+	return isFunction(m_luaState, -1);
 }
 
 bool LuaScriptInterface::initState()
@@ -774,7 +766,6 @@ bool LuaScriptInterface::initState()
 
 	lua_newtable(m_luaState);
 	m_eventTableRef = luaL_ref(m_luaState, LUA_REGISTRYINDEX);
-
 	m_runningEventId = EVENT_ID_USER;
 	return true;
 }
@@ -1184,7 +1175,7 @@ Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg)
 
 Creature* LuaScriptInterface::getCreature(lua_State* L, int32_t arg)
 {
-	if (lua_isuserdata(L, arg) != 0) {
+	if (isUserdata(L, arg)) {
 		return getUserdata<Creature>(L, arg);
 	}
 	return g_game.getCreatureByID(static_cast<uint32_t>(lua_tonumber(L, arg)));
@@ -1192,7 +1183,7 @@ Creature* LuaScriptInterface::getCreature(lua_State* L, int32_t arg)
 
 Player* LuaScriptInterface::getPlayer(lua_State* L, int32_t arg)
 {
-	if (lua_isuserdata(L, arg) != 0) {
+	if (isUserdata(L, arg)) {
 		return getUserdata<Player>(L, arg);
 	}
 	return g_game.getPlayerByID(static_cast<uint32_t>(lua_tonumber(L, arg)));
@@ -1238,6 +1229,11 @@ bool LuaScriptInterface::isTable(lua_State* L, int32_t arg)
 bool LuaScriptInterface::isFunction(lua_State* L, int32_t arg)
 {
 	return lua_isfunction(L, arg);
+}
+
+bool LuaScriptInterface::isUserdata(lua_State* L, int32_t arg)
+{
+	return lua_isuserdata(L, arg) != 0;
 }
 
 // Push
@@ -1372,16 +1368,8 @@ bool LuaScriptInterface::getFieldBool(lua_State* L, const char* key)
 
 std::string LuaScriptInterface::getFieldString(lua_State* L, const char* key)
 {
-	std::string result = "";
-	lua_pushstring(L, key);
-	lua_gettable(L, -2); // get table[key]
-
-	if (lua_isstring(L, -1)) {
-		result = lua_tostring(L, -1);
-	}
-
-	lua_pop(L, 1); // remove number and key
-	return result;
+	lua_getfield(L, -1, key);
+	return popString(L);
 }
 
 void LuaScriptInterface::tryCollectGarbage(bool force)
@@ -5418,34 +5406,21 @@ int32_t LuaScriptInterface::luaCreateCombatObject(lua_State* L)
 
 bool LuaScriptInterface::getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows)
 {
-	rows = 0;
-	uint32_t i = 0, j = 0;
-
-	lua_pushnil(L); // first key //
-
-	while (lua_next(L, -2) != 0) {
-		if (lua_istable(L, -1) == 0) {
+	pushNil(L);
+	for (rows = 0; lua_next(L, -2) != 0; ++rows) {
+		if (!isTable(L, -1)) {
 			return false;
 		}
 
-		lua_pushnil(L);
-
+		pushNil(L);
 		while (lua_next(L, -2) != 0) {
-			if (lua_isnumber(L, -1) == 0) {
+			if (!isNumber(L, -1)) {
 				return false;
 			}
-
-			list.push_back((uint32_t)lua_tonumber(L, -1));
-
-			lua_pop(L, 1); // removes `value'; keeps `key' for next iteration //
-			j++;
+			list.push_back(popNumber<uint32_t>(L));
 		}
 
-		++rows;
-
-		j = 0;
-		lua_pop(L, 1); // removes `value'; keeps `key' for next iteration //
-		i++;
+		lua_pop(L, 1);
 	}
 
 	lua_pop(L, 1);
@@ -7185,40 +7160,25 @@ int32_t LuaScriptInterface::luaGetFluidSourceType(lua_State* L)
 int32_t LuaScriptInterface::luaIsInArray(lua_State* L)
 {
 	//isInArray(array, value)
-	int32_t value = (int32_t)popNumber(L);
-
-	if (lua_istable(L, -1) == 0) {
-		lua_pop(L, 1);
+	if (!isTable(L, 1)) {
+		emptyStack(L);
 		pushBoolean(L, false);
 		return 1;
 	}
-
-	int32_t i = 1;
-
-	while (true) {
-		lua_pushnumber(L, i);
-		lua_gettable(L, -2);
-
-		if (lua_isnil(L, -1) == 1) {
-			lua_pop(L, 2);
-			pushBoolean(L, false);
-			return 1;
-		} else if (lua_isnumber(L, -1) == 1) {
-			int32_t array_value = (int32_t)popNumber(L);
-
-			if (array_value == value) {
-				lua_pop(L, 1);
-				pushBoolean(L, true);
-				return 1;
-			}
-		} else {
-			lua_pop(L, 2);
-			pushBoolean(L, false);
+	
+	pushNil(L);
+	while (lua_next(L, 1)) {
+		if (lua_equal(L, 2, -1) != 0) {
+			emptyStack(L);
+			pushBoolean(L, true);
 			return 1;
 		}
-
-		++i;
+		lua_pop(L, 1);
 	}
+
+	emptyStack(L);
+	pushBoolean(L, false);
+	return 1;
 }
 
 int32_t LuaScriptInterface::luaDoPlayerAddOutfit(lua_State* L)
@@ -10964,9 +10924,6 @@ bool LuaEnviroment::initState()
 	if (loadFile("data/global.lua") == -1) {
 		std::cout << "Warning: [LuaEnviroment::initState] Can not load data/global.lua." << std::endl;
 	}
-
-	lua_newtable(m_luaState);
-	m_eventTableRef = luaL_ref(m_luaState, LUA_REGISTRYINDEX);
 
 	m_runningEventId = EVENT_ID_USER;
 	return true;

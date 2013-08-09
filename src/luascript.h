@@ -389,6 +389,7 @@ class LuaScriptInterface
 		static bool isBoolean(lua_State* L, int32_t arg);
 		static bool isTable(lua_State* L, int32_t arg);
 		static bool isFunction(lua_State* L, int32_t arg);
+		static bool isUserdata(lua_State* L, int32_t arg);
 
 		// Push
 		template<typename T>
