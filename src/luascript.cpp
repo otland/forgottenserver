@@ -782,7 +782,7 @@ bool LuaScriptInterface::closeState()
 		m_eventTableRef = -1;
 	}
 
-	tryCollectGarbage(true);
+	tryCollectGarbage();
 	m_luaState = NULL;
 	return true;
 }
@@ -1372,10 +1372,10 @@ std::string LuaScriptInterface::getFieldString(lua_State* L, const char* key)
 	return popString(L);
 }
 
-void LuaScriptInterface::tryCollectGarbage(bool force)
+void LuaScriptInterface::tryCollectGarbage()
 {
 	static bool hasCollected = false;
-	if (!hasCollected && force) {
+	if (!hasCollected) {
 		hasCollected = true;
 		lua_gc(m_luaState, LUA_GCCOLLECT, 0);
 		hasCollected = false;
