@@ -42,6 +42,12 @@
 extern ConfigManager g_config;
 extern Game g_game;
 extern Spells* g_spells;
+extern LuaEnviroment g_luaEnviroment;
+
+enum {
+	EVENT_ID_LOADING = 1,
+	EVENT_ID_USER = 1000,
+};
 
 uint32_t Npc::npcAutoID = 0x80000000;
 NpcScriptInterface* Npc::m_scriptInterface = NULL;
@@ -599,13 +605,25 @@ NpcScriptInterface::~NpcScriptInterface()
 
 bool NpcScriptInterface::initState()
 {
-	return LuaScriptInterface::initState();
+	m_luaState = lua_newthread(g_luaEnviroment.getLuaState());
+	if (!m_luaState) {
+		return false;
+	}
+
+	registerFunctions();
+
+	lua_newtable(m_luaState);
+	m_eventTableRef = luaL_ref(m_luaState, LUA_REGISTRYINDEX);
+
+	m_runningEventId = EVENT_ID_USER;
+	return true;
 }
 
 bool NpcScriptInterface::closeState()
 {
 	m_libLoaded = false;
-	return LuaScriptInterface::closeState();
+	LuaScriptInterface::closeState();
+	return true;
 }
 
 bool NpcScriptInterface::loadNpcLib(const std::string& file)
@@ -625,8 +643,6 @@ bool NpcScriptInterface::loadNpcLib(const std::string& file)
 
 void NpcScriptInterface::registerFunctions()
 {
-	LuaScriptInterface::registerFunctions();
-
 	//npc exclusive functions
 	lua_register(m_luaState, "selfSay", NpcScriptInterface::luaActionSay);
 	lua_register(m_luaState, "selfMove", NpcScriptInterface::luaActionMove);
