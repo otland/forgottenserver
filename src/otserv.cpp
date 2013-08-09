@@ -79,6 +79,7 @@ ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
 RSA g_RSA;
+LuaEnviroment g_luaEnviroment;
 
 boost::mutex g_loaderLock;
 boost::condition_variable g_loaderSignal;

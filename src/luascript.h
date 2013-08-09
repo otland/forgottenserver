@@ -37,6 +37,7 @@ extern "C"
 // NOTE: Define LUA_COMPAT_MODULE as a workaround if this doesn't work
 #ifndef LUA_COMPAT_MODULE
 #define luaL_register(L, libname, l) (luaL_newlib(L, l), lua_pushvalue(L, -1), lua_setglobal(L, libname))
+#define lua_equal(L, i1, i2) lua_compare(L, (i1), (i2), LUA_OPEQ)
 #endif
 #endif
 
@@ -79,6 +80,13 @@ struct LuaVariant {
 	std::string text;
 	PositionEx pos;
 	uint32_t number;
+};
+
+struct LuaTimerEventDesc {
+	int32_t scriptId;
+	int32_t function;
+	std::list<int32_t> parameters;
+	uint32_t eventId;
 };
 
 class LuaScriptInterface;
@@ -290,8 +298,8 @@ class LuaScriptInterface
 
 		int32_t loadFile(const std::string& file, Npc* npc = NULL);
 		int32_t loadBuffer(const std::string& text, Npc* npc /* = NULL*/);
-		const std::string& getFileById(int32_t scriptId);
 
+		const std::string& getFileById(int32_t scriptId);
 		int32_t getEvent(const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
@@ -304,14 +312,14 @@ class LuaScriptInterface
 
 		static void reportError(const char* function, const std::string& error_desc, bool stack_trace = false);
 
-		std::string getInterfaceName() const {
+		const std::string& getInterfaceName() const {
 			return m_interfaceName;
 		}
 		const std::string& getLastLuaError() const {
 			return m_lastLuaError;
 		}
 
-		lua_State* getLuaState() {
+		lua_State* getLuaState() const {
 			return m_luaState;
 		}
 
@@ -382,6 +390,7 @@ class LuaScriptInterface
 		static bool isBoolean(lua_State* L, int32_t arg);
 		static bool isTable(lua_State* L, int32_t arg);
 		static bool isFunction(lua_State* L, int32_t arg);
+		static bool isUserdata(lua_State* L, int32_t arg);
 
 		// Push
 		template<typename T>
@@ -416,13 +425,16 @@ class LuaScriptInterface
 	protected:
 		virtual bool closeState();
 
-		virtual void registerFunctions();
+		void tryCollectGarbage();
+		void registerFunctions();
 		
 		void registerClass(const std::string& className, const std::string& baseClass,
 			lua_CFunction newFunction = NULL, lua_CFunction deleteFunction = NULL);
 		void registerClassMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerMetaMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
+
+		std::string getStackTrace(const std::string& error_desc);
 
 		static std::string getErrorDesc(ErrorCode_t code);
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
@@ -958,33 +970,37 @@ class LuaScriptInterface
 		lua_State* m_luaState;
 		std::string m_lastLuaError;
 
-	private:
+		std::string m_interfaceName;
+		int32_t m_eventTableRef;
+
 		static ScriptEnvironment m_scriptEnv;
 
 		int32_t m_runningEventId;
 		std::string m_loadingFile;
 
 		//script file cache
-		typedef std::map<int32_t , std::string> ScriptsCache;
-		ScriptsCache m_cacheFiles;
+		std::map<int32_t, std::string> m_cacheFiles;
+};
 
-		//events information
-		struct LuaTimerEventDesc {
-			int32_t scriptId;
-			int32_t function;
-			std::list<int> parameters;
-			uint32_t eventId;
-		};
+class LuaEnviroment : public LuaScriptInterface
+{
+	public:
+		LuaEnviroment();
+		~LuaEnviroment();
+
+		bool initState();
+		bool reInitState();
+
+	protected:
+		bool closeState();
+
+	private:
 		uint32_t m_lastEventTimerId;
-
-		typedef std::map<uint32_t , LuaTimerEventDesc > LuaTimerEvents;
-		LuaTimerEvents m_timerEvents;
-
-		std::string getStackTrace(const std::string& error_desc);
+		std::map<uint32_t, LuaTimerEventDesc> m_timerEvents;
 
 		void executeTimerEvent(uint32_t eventIndex);
 
-		std::string m_interfaceName;
+		friend class LuaScriptInterface;
 };
 
 #endif
