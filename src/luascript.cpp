@@ -758,7 +758,6 @@ bool LuaScriptInterface::pushFunction(int32_t functionId)
 
 bool LuaScriptInterface::initState()
 {
-	//m_luaState = g_luaEnviroment.getLuaState();
 	m_luaState = lua_newthread(g_luaEnviroment.getLuaState());
 	if (!m_luaState) {
 		return false;
