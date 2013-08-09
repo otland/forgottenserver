@@ -45,12 +45,15 @@
 #include "mounts.h"
 #include "databasemanager.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 extern Chat g_chat;
 extern Game g_game;
 extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
+extern LuaEnviroment g_luaEnviroment;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -539,17 +542,17 @@ ScriptEnvironment LuaScriptInterface::m_scriptEnv;
 
 LuaScriptInterface::LuaScriptInterface(const std::string& interfaceName)
 {
+	if (!g_luaEnviroment.getLuaState()) {
+		g_luaEnviroment.initState();
+	}
+
+	m_eventTableRef = -1;
 	m_luaState = NULL;
 	m_interfaceName = interfaceName;
-	m_lastEventTimerId = 1000;
 }
 
 LuaScriptInterface::~LuaScriptInterface()
 {
-	for (LuaTimerEvents::iterator it = m_timerEvents.begin(); it != m_timerEvents.end(); ++it) {
-		g_scheduler.stopEvent(it->second.eventId);
-	}
-
 	closeState();
 }
 
@@ -562,11 +565,11 @@ bool LuaScriptInterface::reInitState()
 /// Same as lua_pcall, but adds stack trace to error strings in called function.
 int32_t LuaScriptInterface::protectedCall(lua_State* L, int32_t nargs, int32_t nresults)
 {
-	int error_index = lua_gettop(L) - nargs;
+	int32_t error_index = lua_gettop(L) - nargs;
 	lua_pushcfunction(L, luaErrorHandler);
 	lua_insert(L, error_index);
 
-	int ret = lua_pcall(L, nargs, nresults, error_index);
+	int32_t ret = lua_pcall(L, nargs, nresults, error_index);
 	lua_remove(L, error_index);
 	return ret;
 }
@@ -638,7 +641,7 @@ int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = NU
 int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 {
 	//get our events table
-	lua_getfield(m_luaState, LUA_REGISTRYINDEX, "EVENTS");
+	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, m_eventTableRef);
 
 	if (lua_istable(m_luaState, -1) == 0) {
 		lua_pop(m_luaState, 1);
@@ -664,17 +667,14 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 	lua_setglobal(m_luaState, eventName.c_str());
 
 	m_cacheFiles[m_runningEventId] = m_loadingFile + ":" + eventName;
-	++m_runningEventId;
-	return m_runningEventId - 1;
+	return m_runningEventId++;
 }
 
 const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 {
-	const static std::string unk = "(Unknown scriptfile)";
-
+	static const std::string unk = "(Unknown scriptfile)";
 	if (scriptId != EVENT_ID_LOADING) {
-		ScriptsCache::iterator it = m_cacheFiles.find(scriptId);
-
+		auto it = m_cacheFiles.find(scriptId);
 		if (it != m_cacheFiles.end()) {
 			return it->second;
 		} else {
@@ -703,9 +703,7 @@ std::string LuaScriptInterface::getStackTrace(const std::string& error_desc)
 
 	pushString(m_luaState, error_desc);
 	lua_call(m_luaState, 1, 1);
-	std::string trace(lua_tostring(m_luaState, -1));
-	lua_pop(m_luaState, 1);
-	return trace;
+	return popString(m_luaState);
 }
 
 void LuaScriptInterface::reportError(const char* function, const std::string& error_desc, bool stack_trace/* = false*/)
@@ -751,7 +749,7 @@ void LuaScriptInterface::reportError(const char* function, const std::string& er
 
 bool LuaScriptInterface::pushFunction(int32_t functionId)
 {
-	lua_getfield(m_luaState, LUA_REGISTRYINDEX, "EVENTS");
+	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, m_eventTableRef);
 
 	if (lua_istable(m_luaState, -1) != 0) {
 		lua_pushnumber(m_luaState, functionId);
@@ -768,21 +766,14 @@ bool LuaScriptInterface::pushFunction(int32_t functionId)
 
 bool LuaScriptInterface::initState()
 {
-	m_luaState = luaL_newstate();
+	//m_luaState = g_luaEnviroment.getLuaState();
+	m_luaState = lua_newthread(g_luaEnviroment.getLuaState());
 	if (!m_luaState) {
 		return false;
 	}
 
-	luaL_openlibs(m_luaState);
-
-	registerFunctions();
-
-	if (loadFile("data/global.lua") == -1) {
-		std::cout << "Warning: [LuaScriptInterface::initState] Can not load data/global.lua." << std::endl;
-	}
-
 	lua_newtable(m_luaState);
-	lua_setfield(m_luaState, LUA_REGISTRYINDEX, "EVENTS");
+	m_eventTableRef = luaL_ref(m_luaState, LUA_REGISTRYINDEX);
 
 	m_runningEventId = EVENT_ID_USER;
 	return true;
@@ -790,70 +781,25 @@ bool LuaScriptInterface::initState()
 
 bool LuaScriptInterface::closeState()
 {
-	if (m_luaState) {
-		m_cacheFiles.clear();
-
-		LuaTimerEvents::iterator it, end;
-
-		for (it = m_timerEvents.begin(), end = m_timerEvents.end(); it != end; ++it) {
-			LuaTimerEventDesc& timerEventDesc = it->second;
-
-			for (std::list<int32_t>::iterator lt = timerEventDesc.parameters.begin(), lend = timerEventDesc.parameters.end(); lt != lend; ++lt) {
-				luaL_unref(m_luaState, LUA_REGISTRYINDEX, *lt);
-			}
-
-			timerEventDesc.parameters.clear();
-
-			luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
-		}
-
-		m_timerEvents.clear();
-
-		lua_close(m_luaState);
+	if (!m_luaState) {
+		return false;
 	}
 
+	m_cacheFiles.clear();
+	if (m_eventTableRef != -1) {
+		luaL_unref(m_luaState, LUA_REGISTRYINDEX, m_eventTableRef);
+		m_eventTableRef = -1;
+	}
+
+	tryCollectGarbage(true);
+	m_luaState = NULL;
 	return true;
-}
-
-void LuaScriptInterface::executeTimerEvent(uint32_t eventIndex)
-{
-	LuaTimerEvents::iterator it = m_timerEvents.find(eventIndex);
-
-	if (it != m_timerEvents.end()) {
-		LuaTimerEventDesc& timerEventDesc = it->second;
-
-		//push function
-		lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
-
-		//push parameters
-		for (std::list<int32_t>::reverse_iterator rt = timerEventDesc.parameters.rbegin(), rend = timerEventDesc.parameters.rend(); rt != rend; ++rt) {
-			lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, *rt);
-		}
-
-		//call the function
-		ScriptEnvironment* env = getScriptEnv();
-		env->setTimerEvent();
-		env->setScriptId(timerEventDesc.scriptId, this);
-		callFunction(timerEventDesc.parameters.size());
-
-		//free resources
-		for (std::list<int32_t>::iterator lt = timerEventDesc.parameters.begin(), end = timerEventDesc.parameters.end(); lt != end; ++lt) {
-			luaL_unref(m_luaState, LUA_REGISTRYINDEX, *lt);
-		}
-
-		timerEventDesc.parameters.clear();
-
-		luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
-		m_timerEvents.erase(it);
-	}
 }
 
 int32_t LuaScriptInterface::luaErrorHandler(lua_State* L)
 {
-	std::string err_msg(lua_tostring(L, -1));
-	lua_pop(L, 1);
-
-	pushString(L, getScriptEnv()->getScriptInterface()->getStackTrace(err_msg));
+	const std::string& errorMessage = popString(L);
+	pushString(L, getScriptEnv()->getScriptInterface()->getStackTrace(errorMessage));
 	return 1;
 }
 
@@ -1281,17 +1227,17 @@ bool LuaScriptInterface::isString(lua_State* L, int32_t arg)
 
 bool LuaScriptInterface::isBoolean(lua_State* L, int32_t arg)
 {
-	return lua_isboolean(L, arg) != 0;
+	return lua_isboolean(L, arg);
 }
 
 bool LuaScriptInterface::isTable(lua_State* L, int32_t arg)
 {
-	return lua_istable(L, arg) != 0;
+	return lua_istable(L, arg);
 }
 
 bool LuaScriptInterface::isFunction(lua_State* L, int32_t arg)
 {
-	return lua_isfunction(L, arg) != 0;
+	return lua_isfunction(L, arg);
 }
 
 // Push
@@ -1436,6 +1382,16 @@ std::string LuaScriptInterface::getFieldString(lua_State* L, const char* key)
 
 	lua_pop(L, 1); // remove number and key
 	return result;
+}
+
+void LuaScriptInterface::tryCollectGarbage(bool force)
+{
+	static bool hasCollected = false;
+	if (!hasCollected && force) {
+		hasCollected = true;
+		lua_gc(m_luaState, LUA_GCCOLLECT, 0);
+		hasCollected = false;
+	}
 }
 
 void LuaScriptInterface::registerFunctions()
@@ -7976,80 +7932,69 @@ int32_t LuaScriptInterface::luaIsItemMoveable(lua_State* L)
 int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 {
 	//addEvent(callback, delay, ...)
-	ScriptEnvironment* env = getScriptEnv();
-
-	LuaScriptInterface* script_interface = env->getScriptInterface();
-
-	if (!script_interface) {
+	lua_State* globalState = g_luaEnviroment.getLuaState();
+	if (!globalState) {
 		reportErrorFunc("No valid script interface!");
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	int32_t parameters = lua_gettop(L);
+	int32_t parameters = getStackTop(L);
+	lua_xmove(L, globalState, parameters);
 
-	if (lua_isfunction(L, -parameters) == 0) { //-parameters means the first parameter from left to right
+	if (!isFunction(globalState, -parameters)) { //-parameters means the first parameter from left to right
 		reportErrorFunc("callback parameter should be a function.");
 		pushBoolean(L, false);
 		return 1;
 	}
 
 	LuaTimerEventDesc eventDesc;
-	std::list<int32_t> params;
-
 	for (int32_t i = 0; i < parameters - 2; ++i) { //-2 because addEvent needs at least two parameters
-		params.push_back(luaL_ref(L, LUA_REGISTRYINDEX));
+		eventDesc.parameters.push_back(luaL_ref(globalState, LUA_REGISTRYINDEX));
 	}
 
-	eventDesc.parameters = params;
+	uint32_t delay = std::max<uint32_t>(100, popNumber<uint32_t>(globalState));
+	eventDesc.function = luaL_ref(globalState, LUA_REGISTRYINDEX);
+	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
-	uint32_t delay = std::max<uint32_t>(100, popNumber(L));
-	eventDesc.function = luaL_ref(L, LUA_REGISTRYINDEX);
+	auto& lastTimerEventId = g_luaEnviroment.m_lastEventTimerId;
+	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(
+		delay, boost::bind(&LuaEnviroment::executeTimerEvent, &g_luaEnviroment, lastTimerEventId)
+	));
 
-	eventDesc.scriptId = env->getScriptId();
-
-	script_interface->m_lastEventTimerId++;
-
-	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(delay, boost::bind(&LuaScriptInterface::executeTimerEvent,
-	                    script_interface, script_interface->m_lastEventTimerId)));
-	script_interface->m_timerEvents[script_interface->m_lastEventTimerId] = eventDesc;
-	lua_pushnumber(L, script_interface->m_lastEventTimerId);
+	g_luaEnviroment.m_timerEvents[lastTimerEventId] = eventDesc;
+	pushNumber(L, lastTimerEventId++);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 {
 	//stopEvent(eventid)
-	uint32_t eventId = popNumber(L);
-	ScriptEnvironment* env = getScriptEnv();
-
-	LuaScriptInterface* script_interface = env->getScriptInterface();
-
-	if (!script_interface) {
+	uint32_t eventId = popNumber<uint32_t>(L);
+	if (!g_luaEnviroment.getLuaState()) {
 		reportErrorFunc("No valid script interface!");
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	LuaTimerEvents::iterator it = script_interface->m_timerEvents.find(eventId);
-
-	if (it != script_interface->m_timerEvents.end()) {
-		LuaTimerEventDesc& timerEventDesc = it->second;
-		g_scheduler.stopEvent(timerEventDesc.eventId);
-
-		for (std::list<int32_t>::iterator lt = timerEventDesc.parameters.begin(), end = timerEventDesc.parameters.end(); lt != end; ++lt) {
-			luaL_unref(script_interface->m_luaState, LUA_REGISTRYINDEX, *lt);
-		}
-
-		timerEventDesc.parameters.clear();
-
-		luaL_unref(script_interface->m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
-		script_interface->m_timerEvents.erase(it);
-		pushBoolean(L, true);
-	} else {
+	auto& timerEvents = g_luaEnviroment.m_timerEvents;
+	auto it = timerEvents.find(eventId);
+	if (it == timerEvents.end()) {
 		pushBoolean(L, false);
+		return 1;
 	}
 
+	const LuaTimerEventDesc& timerEventDesc = it->second;
+	g_scheduler.stopEvent(timerEventDesc.eventId);
+
+	for (auto parameter : timerEventDesc.parameters) {
+		luaL_unref(g_luaEnviroment.m_luaState, LUA_REGISTRYINDEX, parameter);
+	}
+
+	luaL_unref(g_luaEnviroment.m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
+	timerEvents.erase(it);
+
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -10986,4 +10931,97 @@ int32_t LuaScriptInterface::luaNpcDelete(lua_State* L)
 		destroyUserdata(npc);
 	}
 	return 0;
+}
+
+LuaEnviroment::LuaEnviroment() :
+	LuaScriptInterface("Main Interface")
+{
+	m_lastEventTimerId = 1000;
+}
+
+LuaEnviroment::~LuaEnviroment()
+{
+	closeState();
+}
+
+bool LuaEnviroment::reInitState()
+{
+	// TODO: get children, reload children
+	closeState();
+	return initState();
+}
+
+bool LuaEnviroment::initState()
+{
+	m_luaState = luaL_newstate();
+	if (!m_luaState) {
+		return false;
+	}
+
+	luaL_openlibs(m_luaState);
+	registerFunctions();
+
+	if (loadFile("data/global.lua") == -1) {
+		std::cout << "Warning: [LuaEnviroment::initState] Can not load data/global.lua." << std::endl;
+	}
+
+	lua_newtable(m_luaState);
+	m_eventTableRef = luaL_ref(m_luaState, LUA_REGISTRYINDEX);
+
+	m_runningEventId = EVENT_ID_USER;
+	return true;
+}
+
+bool LuaEnviroment::closeState()
+{
+	if (!m_luaState) {
+		return false;
+	}
+
+	for (auto timerEntry : m_timerEvents) {
+		const LuaTimerEventDesc& timerEventDesc = timerEntry.second;
+		for (auto parameter : timerEventDesc.parameters) {
+			luaL_unref(m_luaState, LUA_REGISTRYINDEX, parameter);
+		}
+		luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
+	}
+
+	m_timerEvents.clear();
+	m_cacheFiles.clear();
+
+	lua_close(m_luaState);
+	m_luaState = NULL;
+	return true;
+}
+
+void LuaEnviroment::executeTimerEvent(uint32_t eventIndex)
+{
+	auto it = m_timerEvents.find(eventIndex);
+	if (it == m_timerEvents.end()) {
+		return;
+	}
+
+	const LuaTimerEventDesc& timerEventDesc = it->second;
+
+	//push function
+	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
+
+	//push parameters
+	for (auto parameter : boost::adaptors::reverse(timerEventDesc.parameters)) {
+		lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, parameter);
+	}
+
+	//call the function
+	ScriptEnvironment* env = getScriptEnv();
+	env->setTimerEvent();
+	env->setScriptId(timerEventDesc.scriptId, this);
+	callFunction(timerEventDesc.parameters.size());
+
+	//free resources
+	luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
+	for (auto parameter : timerEventDesc.parameters) {
+		luaL_unref(m_luaState, LUA_REGISTRYINDEX, parameter);
+	}
+
+	m_timerEvents.erase(it);
 }
