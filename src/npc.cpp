@@ -42,7 +42,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 extern Spells* g_spells;
-extern LuaEnviroment g_luaEnviroment;
+extern LuaEnvironment g_luaEnvironment;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -605,7 +605,7 @@ NpcScriptInterface::~NpcScriptInterface()
 
 bool NpcScriptInterface::initState()
 {
-	m_luaState = lua_newthread(g_luaEnviroment.getLuaState());
+	m_luaState = lua_newthread(g_luaEnvironment.getLuaState());
 	if (!m_luaState) {
 		return false;
 	}

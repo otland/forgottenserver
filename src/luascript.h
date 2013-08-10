@@ -984,11 +984,11 @@ class LuaScriptInterface
 		std::map<int32_t, std::string> m_cacheFiles;
 };
 
-class LuaEnviroment : public LuaScriptInterface
+class LuaEnvironment : public LuaScriptInterface
 {
 	public:
-		LuaEnviroment();
-		~LuaEnviroment();
+		LuaEnvironment();
+		~LuaEnvironment();
 
 		bool initState();
 		bool reInitState();
