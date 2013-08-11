@@ -605,7 +605,7 @@ NpcScriptInterface::~NpcScriptInterface()
 
 bool NpcScriptInterface::initState()
 {
-	m_luaState = lua_newthread(g_luaEnvironment.getLuaState());
+	m_luaState = g_luaEnvironment.getLuaState();
 	if (!m_luaState) {
 		return false;
 	}
@@ -614,7 +614,6 @@ bool NpcScriptInterface::initState()
 
 	lua_newtable(m_luaState);
 	m_eventTableRef = luaL_ref(m_luaState, LUA_REGISTRYINDEX);
-
 	m_runningEventId = EVENT_ID_USER;
 	return true;
 }
@@ -659,6 +658,13 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "openShopWindow", NpcScriptInterface::luaOpenShopWindow);
 	lua_register(m_luaState, "closeShopWindow", NpcScriptInterface::luaCloseShopWindow);
 	lua_register(m_luaState, "doSellItem", NpcScriptInterface::luaDoSellItem);
+
+	// metatable
+	registerClassMethod("Npc", "getParameter", NpcScriptInterface::luaNpcGetParameter);
+	registerClassMethod("Npc", "setFocus", NpcScriptInterface::luaNpcSetFocus);
+
+	registerClassMethod("Npc", "doOpenShopWindow", NpcScriptInterface::luaNpcDoOpenShopWindow);
+	registerClassMethod("Npc", "doCloseShopWindow", NpcScriptInterface::luaNpcDoCloseShopWindow);
 }
 
 int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
@@ -918,30 +924,25 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 		return 1;
 	}
 
-	// first key
 	lua_pushnil(L);
-
 	while (lua_next(L, -2) != 0) {
 		ShopInfo item;
-		item.itemId = getField(L, "id");
-		item.subType = getField(L, "subType");
-
+		item.itemId = popField<uint32_t>(L, "id");
+		item.subType = popField<int32_t>(L, "subType");
 		if (item.subType == 0) {
-			item.subType = getField(L, "subtype");
+			item.subType = popField<int32_t>(L, "subtype");
 		}
 
-		item.buyPrice = getField(L, "buy");
-		item.sellPrice = getField(L, "sell");
-		item.realName = getFieldString(L, "name");
-		items.push_back(item);
+		item.buyPrice = popField<uint32_t>(L, "buy");
+		item.sellPrice = popField<uint32_t>(L, "sell");
+		item.realName = popFieldString(L, "name");
 
+		items.push_back(item);
 		lua_pop(L, 1);
 	}
-
 	lua_pop(L, 1);
 
 	player = g_game.getPlayerByID(popNumber(L));
-
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -1088,6 +1089,140 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 	}
 
 	lua_pushnumber(L, sellCount);
+	return 1;
+}
+
+int32_t NpcScriptInterface::luaNpcGetParameter(lua_State* L)
+{
+	// npc:getParameter(key)
+	const std::string& key = getString(L, 2);
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		auto it = npc->m_parameters.find(key);
+		if (it != npc->m_parameters.end()) {
+			pushString(L, it->second);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t NpcScriptInterface::luaNpcSetFocus(lua_State* L)
+{
+	// npc:setFocus(creature)
+	Creature* creature = getCreature(L, 2);
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		npc->setCreatureFocus(creature);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t NpcScriptInterface::luaNpcDoOpenShopWindow(lua_State* L)
+{
+	// npc:doOpenShopWindow(cid, items, buyCallback, sellCallback)
+	if(!isTable(L, 3)) {
+		reportErrorFunc("item list is not a table.");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	Player* player = getPlayer(L, 2);
+	if (!player) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (!npc) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	int32_t sellCallback = -1;
+	if (isFunction(L, 5)) {
+		sellCallback = luaL_ref(L, LUA_REGISTRYINDEX);
+	}
+
+	int32_t buyCallback = -1;
+	if (isFunction(L, 4)) {
+		buyCallback = luaL_ref(L, LUA_REGISTRYINDEX);
+	}
+
+	std::list<ShopInfo> items;
+
+	pushNil(L);
+	while (lua_next(L, 3) != 0) {
+		ShopInfo item;
+		item.itemId = popField<uint32_t>(L, "id");
+		item.subType = popField<int32_t>(L, "subType");
+		if (item.subType == 0) {
+			item.subType = popField<int32_t>(L, "subtype");
+		}
+
+		item.buyPrice = popField<uint32_t>(L, "buy");
+		item.sellPrice = popField<uint32_t>(L, "sell");
+		item.realName = popFieldString(L, "name");
+
+		items.push_back(item);
+		lua_pop(L, 1);
+	}
+	lua_pop(L, 1);
+
+	player->closeShopWindow(false);
+	npc->addShopPlayer(player);
+
+	player->setShopOwner(npc, buyCallback, sellCallback);
+	player->openShopWindow(npc, items);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int32_t NpcScriptInterface::luaNpcDoCloseShopWindow(lua_State* L)
+{
+	// npc:closeShopWindow(player)
+	Player* player = getPlayer(L, 2);
+	if (!player) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (!npc) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	int32_t buyCallback;
+	int32_t sellCallback;
+
+	Npc* merchant = player->getShopOwner(buyCallback, sellCallback);
+	if (merchant == npc) {
+		player->sendCloseShop();
+		if (buyCallback != -1) {
+			luaL_unref(L, LUA_REGISTRYINDEX, buyCallback);
+		}
+
+		if (sellCallback != -1) {
+			luaL_unref(L, LUA_REGISTRYINDEX, sellCallback);
+		}
+
+		player->setShopOwner(NULL, -1, -1);
+		npc->removeShopPlayer(player);
+	}
+
+	pushBoolean(L, true);
 	return 1;
 }
 
