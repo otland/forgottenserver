@@ -10016,7 +10016,7 @@ int32_t LuaScriptInterface::luaCreatureDoSay(lua_State* L)
 			list.insert(target);
 		}
 
-		if (!!position.x) {
+		if (position.x != 0) {
 			pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list, &position));
 		} else {
 			pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list));
