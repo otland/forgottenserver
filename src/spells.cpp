@@ -313,8 +313,7 @@ CombatSpell::~CombatSpell()
 bool CombatSpell::loadScriptCombat()
 {
 	combat = ScriptEnvironment::getCombatObject(ScriptEnvironment::getLastCombatId());
-	m_scriptInterface->resetScriptEnv();
-	return (combat != NULL);
+	return combat != NULL;
 }
 
 bool CombatSpell::castSpell(Creature* creature)

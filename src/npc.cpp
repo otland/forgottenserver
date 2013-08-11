@@ -1247,24 +1247,26 @@ NpcScript::NpcScript(const std::string& file, Npc* npc) :
 {
 	m_scriptInterface = npc->getScriptInterface();
 
-	m_scriptInterface->getScriptEnv()->setNpc(npc);
+	if (m_scriptInterface->reserveScriptEnv()) {
+		m_scriptInterface->getScriptEnv()->setNpc(npc);
+		m_scriptInterface->resetScriptEnv();
+	}
 
 	if (m_scriptInterface->loadFile(file, npc) == -1) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
 		std::cout << m_scriptInterface->getLastLuaError() << std::endl;
 		m_loaded = false;
 		m_scriptInterface->resetScriptEnv();
-		return;
+	} else {
+		m_onCreatureSay = m_scriptInterface->getEvent("onCreatureSay");
+		m_onCreatureDisappear = m_scriptInterface->getEvent("onCreatureDisappear");
+		m_onCreatureAppear = m_scriptInterface->getEvent("onCreatureAppear");
+		m_onCreatureMove = m_scriptInterface->getEvent("onCreatureMove");
+		m_onPlayerCloseChannel = m_scriptInterface->getEvent("onPlayerCloseChannel");
+		m_onPlayerEndTrade = m_scriptInterface->getEvent("onPlayerEndTrade");
+		m_onThink = m_scriptInterface->getEvent("onThink");
+		m_loaded = true;
 	}
-
-	m_onCreatureSay = m_scriptInterface->getEvent("onCreatureSay");
-	m_onCreatureDisappear = m_scriptInterface->getEvent("onCreatureDisappear");
-	m_onCreatureAppear = m_scriptInterface->getEvent("onCreatureAppear");
-	m_onCreatureMove = m_scriptInterface->getEvent("onCreatureMove");
-	m_onPlayerCloseChannel = m_scriptInterface->getEvent("onPlayerCloseChannel");
-	m_onPlayerEndTrade = m_scriptInterface->getEvent("onPlayerEndTrade");
-	m_onThink = m_scriptInterface->getEvent("onThink");
-	m_loaded = true;
 }
 
 NpcScript::~NpcScript()
