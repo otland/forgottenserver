@@ -80,7 +80,7 @@ std::string Weapons::getScriptBaseName()
 	return "weapons";
 }
 
-bool Weapons::loadDefaults()
+void Weapons::loadDefaults()
 {
 	for (uint32_t i = 0; i < Item::items.size(); ++i) {
 		const ItemType* it = Item::items.getElement(i);
@@ -116,8 +116,6 @@ bool Weapons::loadDefaults()
 			}
 		}
 	}
-
-	return true;
 }
 
 Event* Weapons::getEvent(const std::string& nodeName)

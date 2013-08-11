@@ -556,6 +556,7 @@ void Commands::reloadInfo(Player* player, const std::string& cmd, const std::str
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded items.");
 	} else if (tmpParam == "weapon" || tmpParam == "weapons") {
 		g_weapons->reload();
+		g_weapons->loadDefaults();
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded weapons.");
 	} else if (tmpParam == "quest" || tmpParam == "quests") {
 		Quests::getInstance()->reload();

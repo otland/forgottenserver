@@ -34,9 +34,11 @@ extern "C"
 }
 
 #if LUA_VERSION_NUM >= 502
-// NOTE: Define LUA_COMPAT_MODULE as a workaround if this doesn't work
+// NOTE: Define LUA_COMPAT_ALL as a workaround if this doesn't work
+#ifndef LUA_COMPAT_ALL
 #ifndef LUA_COMPAT_MODULE
 #define luaL_register(L, libname, l) (luaL_newlib(L, l), lua_pushvalue(L, -1), lua_setglobal(L, libname))
+#endif
 #define lua_equal(L, i1, i2) lua_compare(L, (i1), (i2), LUA_OPEQ)
 #endif
 #endif
@@ -981,11 +983,11 @@ class LuaScriptInterface
 		std::map<int32_t, std::string> m_cacheFiles;
 };
 
-class LuaEnviroment : public LuaScriptInterface
+class LuaEnvironment : public LuaScriptInterface
 {
 	public:
-		LuaEnviroment();
-		~LuaEnviroment();
+		LuaEnvironment();
+		~LuaEnvironment();
 
 		bool initState();
 		bool reInitState();

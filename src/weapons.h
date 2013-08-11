@@ -40,7 +40,7 @@ class Weapons : public BaseEvents
 		Weapons();
 		virtual ~Weapons();
 
-		bool loadDefaults();
+		void loadDefaults();
 		const Weapon* getWeapon(const Item* item) const;
 
 		static int32_t getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue);

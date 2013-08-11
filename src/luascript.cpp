@@ -53,7 +53,7 @@ extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
-extern LuaEnviroment g_luaEnviroment;
+extern LuaEnvironment g_luaEnvironment;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -542,8 +542,8 @@ ScriptEnvironment LuaScriptInterface::m_scriptEnv;
 
 LuaScriptInterface::LuaScriptInterface(const std::string& interfaceName)
 {
-	if (!g_luaEnviroment.getLuaState()) {
-		g_luaEnviroment.initState();
+	if (!g_luaEnvironment.getLuaState()) {
+		g_luaEnvironment.initState();
 	}
 
 	m_eventTableRef = -1;
@@ -758,7 +758,7 @@ bool LuaScriptInterface::pushFunction(int32_t functionId)
 
 bool LuaScriptInterface::initState()
 {
-	m_luaState = g_luaEnviroment.getLuaState();
+	m_luaState = g_luaEnvironment.getLuaState();
 	if (!m_luaState) {
 		return false;
 	}
@@ -7877,7 +7877,7 @@ int32_t LuaScriptInterface::luaIsItemMoveable(lua_State* L)
 int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 {
 	//addEvent(callback, delay, ...)
-	lua_State* globalState = g_luaEnviroment.getLuaState();
+	lua_State* globalState = g_luaEnvironment.getLuaState();
 	if (!globalState) {
 		reportErrorFunc("No valid script interface!");
 		pushBoolean(L, false);
@@ -7902,12 +7902,12 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 	eventDesc.function = luaL_ref(globalState, LUA_REGISTRYINDEX);
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
-	auto& lastTimerEventId = g_luaEnviroment.m_lastEventTimerId;
+	auto& lastTimerEventId = g_luaEnvironment.m_lastEventTimerId;
 	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(
-		delay, boost::bind(&LuaEnviroment::executeTimerEvent, &g_luaEnviroment, lastTimerEventId)
+		delay, boost::bind(&LuaEnvironment::executeTimerEvent, &g_luaEnvironment, lastTimerEventId)
 	));
 
-	g_luaEnviroment.m_timerEvents[lastTimerEventId] = eventDesc;
+	g_luaEnvironment.m_timerEvents[lastTimerEventId] = eventDesc;
 	pushNumber(L, lastTimerEventId++);
 	return 1;
 }
@@ -7916,13 +7916,13 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 {
 	//stopEvent(eventid)
 	uint32_t eventId = popNumber<uint32_t>(L);
-	if (!g_luaEnviroment.getLuaState()) {
+	if (!g_luaEnvironment.getLuaState()) {
 		reportErrorFunc("No valid script interface!");
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	auto& timerEvents = g_luaEnviroment.m_timerEvents;
+	auto& timerEvents = g_luaEnvironment.m_timerEvents;
 	auto it = timerEvents.find(eventId);
 	if (it == timerEvents.end()) {
 		pushBoolean(L, false);
@@ -7933,10 +7933,10 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 	g_scheduler.stopEvent(timerEventDesc.eventId);
 
 	for (auto parameter : timerEventDesc.parameters) {
-		luaL_unref(g_luaEnviroment.m_luaState, LUA_REGISTRYINDEX, parameter);
+		luaL_unref(g_luaEnvironment.m_luaState, LUA_REGISTRYINDEX, parameter);
 	}
 
-	luaL_unref(g_luaEnviroment.m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
+	luaL_unref(g_luaEnvironment.m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
 	timerEvents.erase(it);
 
 	pushBoolean(L, true);
@@ -10768,25 +10768,25 @@ int32_t LuaScriptInterface::luaNpcDelete(lua_State* L)
 	return 0;
 }
 
-LuaEnviroment::LuaEnviroment() :
+LuaEnvironment::LuaEnvironment() :
 	LuaScriptInterface("Main Interface")
 {
 	m_lastEventTimerId = 1000;
 }
 
-LuaEnviroment::~LuaEnviroment()
+LuaEnvironment::~LuaEnvironment()
 {
 	closeState();
 }
 
-bool LuaEnviroment::reInitState()
+bool LuaEnvironment::reInitState()
 {
 	// TODO: get children, reload children
 	closeState();
 	return initState();
 }
 
-bool LuaEnviroment::initState()
+bool LuaEnvironment::initState()
 {
 	m_luaState = luaL_newstate();
 	if (!m_luaState) {
@@ -10797,14 +10797,14 @@ bool LuaEnviroment::initState()
 	registerFunctions();
 
 	if (loadFile("data/global.lua") == -1) {
-		std::cout << "Warning: [LuaEnviroment::initState] Can not load data/global.lua." << std::endl;
+		std::cout << "Warning: [LuaEnvironment::initState] Can not load data/global.lua." << std::endl;
 	}
 
 	m_runningEventId = EVENT_ID_USER;
 	return true;
 }
 
-bool LuaEnviroment::closeState()
+bool LuaEnvironment::closeState()
 {
 	if (!m_luaState) {
 		return false;
@@ -10826,7 +10826,7 @@ bool LuaEnviroment::closeState()
 	return true;
 }
 
-void LuaEnviroment::executeTimerEvent(uint32_t eventIndex)
+void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 {
 	auto it = m_timerEvents.find(eventIndex);
 	if (it == m_timerEvents.end()) {
