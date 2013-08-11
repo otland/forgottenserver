@@ -346,9 +346,6 @@ class LuaScriptInterface
 		static std::string popString(lua_State* L);
 		static int32_t popCallback(lua_State* L);
 		static bool popBoolean(lua_State* L);
-
-		template<typename T>
-		static T popNumber(lua_State* L);
 		
 		// Userdata
 		template<class T>
@@ -381,9 +378,18 @@ class LuaScriptInterface
 		static Creature* getCreature(lua_State* L, int32_t arg);
 		static Player* getPlayer(lua_State* L, int32_t arg);
 
+		template<typename T>
+		static T getField(lua_State* L, int32_t arg, const std::string& key)
+		{
+			lua_getfield(L, arg, key.c_str());
+			return getNumber<T>(L, -1);
+		}
+
+		static std::string getFieldString(lua_State* L, const std::string& key);
+		static bool getFieldBoolean(lua_State* L, const std::string& key);
+
 		// Other
 		static int32_t getStackTop(lua_State* L);
-		static void emptyStack(lua_State* L);
 
 		// Is
 		static bool isNil(lua_State* L, int32_t arg);
@@ -393,6 +399,19 @@ class LuaScriptInterface
 		static bool isTable(lua_State* L, int32_t arg);
 		static bool isFunction(lua_State* L, int32_t arg);
 		static bool isUserdata(lua_State* L, int32_t arg);
+
+		// Pop
+		template<typename T>
+		static T popNumber(lua_State* L) {
+			if (lua_gettop(L) == 0) {
+				return static_cast<T>(0);
+			}
+
+			T ret = static_cast<T>(lua_tonumber(L, -1));
+			lua_pop(L, 1);
+			return ret;
+		}
+		static Outfit_t popOutfit(lua_State* L);
 
 		// Push
 		template<typename T>
@@ -407,13 +426,19 @@ class LuaScriptInterface
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
 		//
-		static int32_t getField(lua_State* L, const char* key);
-		static uint32_t getFieldU32(lua_State* L, const char* key);
+		template<typename T>
+		static T popField(lua_State* L, const std::string& key)
+		{
+			lua_getfield(L, -1, key.c_str());
+			return popNumber<T>(L);
+		}
+
+		static std::string popFieldString(lua_State* L, const std::string& key);
+		static bool popFieldBoolean(lua_State* L, const std::string& key);
+
 		static void setField(lua_State* L, const char* index, double val);
 		static void setField(lua_State* L, const char* index, const std::string& val);
-		static std::string getFieldString(lua_State* L, const char* key);
 		static void setFieldBool(lua_State* L, const char* index, bool val);
-		static bool getFieldBool(lua_State* L, const char* key);
 		static std::string escapeString(const std::string& string);
 
 #ifndef __LUAJIT__
