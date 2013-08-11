@@ -1009,39 +1009,6 @@ bool LuaScriptInterface::popBoolean(lua_State* L)
 	return value;
 }
 
-// Userdata
-template<class T>
-void LuaScriptInterface::pushUserdata(lua_State* L, T* value)
-{
-	/*
-	if (std::is_base_of<Thing, T>::value) {
-		static_cast<Thing*>(value)->useThing2();
-	}
-	*/
-
-	T** userdata = static_cast<T**>(lua_newuserdata(L, sizeof(T*)));
-	*userdata = value;
-}
-
-template<class T>
-void LuaScriptInterface::destroyUserdata(T* value)
-{
-	if (std::is_base_of<Thing, T>::value) {
-		//static_cast<Thing*>(value)->releaseThing2();
-	} else {
-		delete value;
-		value = NULL;
-	}
-}
-
-template<class T>
-T* LuaScriptInterface::popUserdata(lua_State* L)
-{
-	T* userdata = *static_cast<T**>(lua_touserdata(L, -1));
-	lua_pop(L, 1);
-	return userdata;
-}
-
 // Metatables
 void LuaScriptInterface::setMetatable(lua_State* L, int32_t index, const std::string& string)
 {
@@ -1074,28 +1041,6 @@ void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, Creat
 }
 
 // Get
-template<typename T>
-T LuaScriptInterface::getNumber(lua_State* L, int32_t arg)
-{
-	return static_cast<T>(lua_tonumber(L, arg));
-}
-
-template<class T>
-T* LuaScriptInterface::getUserdata(lua_State* L, int32_t arg)
-{
-	T** userdata = static_cast<T**>(lua_touserdata(L, arg));
-	if (!userdata) {
-		return NULL;
-	}
-	return *userdata;
-}
-
-template<class T>
-T** LuaScriptInterface::getRawUserdata(lua_State* L, int32_t arg)
-{
-	return static_cast<T**>(lua_touserdata(L, arg));
-}
-
 std::string LuaScriptInterface::getString(lua_State* L, int32_t arg)
 {
 	std::string str;

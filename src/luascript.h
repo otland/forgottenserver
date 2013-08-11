@@ -349,13 +349,26 @@ class LuaScriptInterface
 		
 		// Userdata
 		template<class T>
-		static void pushUserdata(lua_State* L, T* value);
-
+		static void pushUserdata(lua_State* L, T* value)
+		{
+			T** userdata = static_cast<T**>(lua_newuserdata(L, sizeof(T*)));
+			*userdata = value;
+		}
 		template<class T>
-		static void destroyUserdata(T* value);
-
+		static void destroyUserdata(T* value)
+		{
+			if (!std::is_base_of<Thing, T>::value) {
+				delete value;
+				value = NULL;
+			}
+		}
 		template<class T>
-		static T* popUserdata(lua_State* L);
+		static T* popUserdata(lua_State* L)
+		{
+			T* userdata = *static_cast<T**>(lua_touserdata(L, -1));
+			lua_pop(L, 1);
+			return userdata;
+		}
 
 		// Metatables
 		static void setMetatable(lua_State* L, int32_t index, const std::string& string);
@@ -364,11 +377,24 @@ class LuaScriptInterface
 
 		// Get
 		template<typename T>
-		static T getNumber(lua_State* L, int32_t arg);
-		template<typename T>
-		static T* getUserdata(lua_State* L, int32_t arg);
-		template<typename T>
-		static T** getRawUserdata(lua_State* L, int32_t arg);
+		static T getNumber(lua_State* L, int32_t arg)
+		{
+			return static_cast<T>(lua_tonumber(L, arg));
+		}
+		template<class T>
+		static T* getUserdata(lua_State* L, int32_t arg)
+		{
+			T** userdata = static_cast<T**>(lua_touserdata(L, arg));
+			if (!userdata) {
+				return NULL;
+			}
+			return *userdata;
+		}
+		template<class T>
+		static T** getRawUserdata(lua_State* L, int32_t arg)
+		{
+			return static_cast<T**>(lua_touserdata(L, arg));
+		}
 
 		static std::string getString(lua_State* L, int32_t arg);
 		static bool getBoolean(lua_State* L, int32_t arg);
