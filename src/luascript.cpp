@@ -758,8 +758,7 @@ bool LuaScriptInterface::pushFunction(int32_t functionId)
 
 bool LuaScriptInterface::initState()
 {
-	//m_luaState = g_luaEnviroment.getLuaState();
-	m_luaState = lua_newthread(g_luaEnviroment.getLuaState());
+	m_luaState = g_luaEnviroment.getLuaState();
 	if (!m_luaState) {
 		return false;
 	}
@@ -782,7 +781,6 @@ bool LuaScriptInterface::closeState()
 		m_eventTableRef = -1;
 	}
 
-	tryCollectGarbage();
 	m_luaState = NULL;
 	return true;
 }
@@ -1370,16 +1368,6 @@ std::string LuaScriptInterface::getFieldString(lua_State* L, const char* key)
 {
 	lua_getfield(L, -1, key);
 	return popString(L);
-}
-
-void LuaScriptInterface::tryCollectGarbage()
-{
-	static bool hasCollected = false;
-	if (!hasCollected) {
-		hasCollected = true;
-		lua_gc(m_luaState, LUA_GCCOLLECT, 0);
-		hasCollected = false;
-	}
 }
 
 void LuaScriptInterface::registerFunctions()
@@ -8673,7 +8661,7 @@ int32_t LuaScriptInterface::luaNetworkMessageGetByte(lua_State* L)
 int32_t LuaScriptInterface::luaNetworkMessageGetU16(lua_State* L)
 {
 	// networkMessage:getU16()
-	NetworkMessage* message = popUserdata<NetworkMessage>(L);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
 		pushNumber(L, message->GetU16());
 	} else {
@@ -9081,7 +9069,7 @@ int32_t LuaScriptInterface::luaModalWindowSetDefaultEscapeButton(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowHasPriority(lua_State* L)
 {
 	// modalWindow:hasPriority()
-	ModalWindow* window = popUserdata<ModalWindow>(L);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
 		pushBoolean(L, window->hasPriority());
 	} else {
@@ -9366,7 +9354,7 @@ int32_t LuaScriptInterface::luaItemGetCharges(lua_State* L)
 int32_t LuaScriptInterface::luaItemGetFluidType(lua_State* L)
 {
 	// item:getFluidType()
-	Item* item = popUserdata<Item>(L);
+	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		pushNumber(L, item->getFluidType());
 	} else {
@@ -10753,11 +10741,15 @@ int32_t LuaScriptInterface::luaMonsterDelete(lua_State* L)
 // Npc
 int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
-	// Npc(id)
-	// Npc.new(id)
-	uint32_t id = getNumber<uint32_t>(L, 2);
+	// Npc([id])
+	// Npc.new([id])
+	Npc* npc;
+	if (getStackTop(L) >= 2) {
+		npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
+	} else {
+		npc = getScriptEnv()->getNpc();
+	}
 
-	Npc* npc = g_game.getNpcByID(id);
 	if (npc) {
 		pushUserdata<Npc>(L, npc);
 		setMetatable(L, -2, "Npc");

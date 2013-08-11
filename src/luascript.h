@@ -425,7 +425,6 @@ class LuaScriptInterface
 	protected:
 		virtual bool closeState();
 
-		void tryCollectGarbage();
 		void registerFunctions();
 		
 		void registerClass(const std::string& className, const std::string& baseClass,

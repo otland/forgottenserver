@@ -605,7 +605,7 @@ NpcScriptInterface::~NpcScriptInterface()
 
 bool NpcScriptInterface::initState()
 {
-	m_luaState = lua_newthread(g_luaEnviroment.getLuaState());
+	m_luaState = g_luaEnviroment.getLuaState();
 	if (!m_luaState) {
 		return false;
 	}
@@ -614,7 +614,6 @@ bool NpcScriptInterface::initState()
 
 	lua_newtable(m_luaState);
 	m_eventTableRef = luaL_ref(m_luaState, LUA_REGISTRYINDEX);
-
 	m_runningEventId = EVENT_ID_USER;
 	return true;
 }
