@@ -151,6 +151,10 @@ void DatabaseManager::updateDatabase()
 			break;
 		}
 
+		if (!LuaScriptInterface::reserveScriptEnv()) {
+			break;
+		}
+
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
 			LuaScriptInterface::resetScriptEnv();

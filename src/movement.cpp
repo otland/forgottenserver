@@ -957,8 +957,12 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 {
 	//onStepIn(cid, item, pos, fromPosition)
 	//onStepOut(cid, item, pos, fromPosition)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - MoveEvent::executeStep] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	env->setRealPos(creature->getPosition());
 
@@ -988,8 +992,12 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 {
 	//onEquip(cid, item, slot)
 	//onDeEquip(cid, item, slot)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - MoveEvent::executeEquip] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	env->setRealPos(player->getPosition());
 
@@ -1018,19 +1026,20 @@ bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& po
 {
 	//onAddItem(moveitem, tileitem, pos)
 	//onRemoveItem(moveitem, tileitem, pos)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - MoveEvent::executeAddRemItem] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	env->setRealPos(pos);
-
-	uint32_t itemidMoved = env->addThing(item);
-	uint32_t itemidTile = env->addThing(tileItem);
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushThing(L, item, itemidMoved);
-	LuaScriptInterface::pushThing(L, tileItem, itemidTile);
+	LuaScriptInterface::pushThing(L, item, env->addThing(item));
+	LuaScriptInterface::pushThing(L, tileItem, env->addThing(tileItem));
 	LuaScriptInterface::pushPosition(L, pos, 0);
 
 	return m_scriptInterface->callFunction(3);

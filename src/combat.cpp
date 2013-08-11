@@ -995,12 +995,17 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, bool useCharges) const
 {
 	//"onGetPlayerMinMaxValues"(...)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	lua_State* L = m_scriptInterface->getLuaState();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - ValueCallback::getMinMaxValues] Call stack overflow" << std::endl;
+		return;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	if (!env->setCallbackId(m_scriptId, m_scriptInterface)) {
 		return;
 	}
+
+	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
 	lua_pushnumber(L, player->getID());
@@ -1068,12 +1073,17 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 {
 	//"onTileCombat"(cid, pos)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	lua_State* L = m_scriptInterface->getLuaState();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - TileCallback::onTileCombat] Call stack overflow" << std::endl;
+		return;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	if (!env->setCallbackId(m_scriptId, m_scriptInterface)) {
 		return;
 	}
+
+	lua_State* L = m_scriptInterface->getLuaState();
 
 	uint32_t cid;
 	if (creature) {
@@ -1094,12 +1104,17 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 {
 	//"onTargetCombat"(cid, target)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	lua_State* L = m_scriptInterface->getLuaState();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - TargetCallback::onTargetCombat] Call stack overflow" << std::endl;
+		return;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	if (!env->setCallbackId(m_scriptId, m_scriptInterface)) {
 		return;
 	}
+
+	lua_State* L = m_scriptInterface->getLuaState();
 
 	uint32_t cid;
 	if (creature) {

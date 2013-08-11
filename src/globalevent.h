@@ -75,8 +75,8 @@ class GlobalEvent : public Event
 
 		virtual bool configureEvent(xmlNodePtr p);
 
-		uint32_t executeRecord(uint32_t current, uint32_t old);
-		uint32_t executeEvent();
+		bool executeRecord(uint32_t current, uint32_t old);
+		bool executeEvent();
 
 		GlobalEvent_t getEventType() const {
 			return m_eventType;

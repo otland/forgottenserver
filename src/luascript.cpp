@@ -538,7 +538,8 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 	}
 }
 
-ScriptEnvironment LuaScriptInterface::m_scriptEnv;
+ScriptEnvironment LuaScriptInterface::m_scriptEnv[16];
+int32_t LuaScriptInterface::m_scriptEnvIndex = -1;
 
 LuaScriptInterface::LuaScriptInterface(const std::string& interfaceName)
 {
@@ -589,39 +590,6 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = NULL
 	}
 
 	m_loadingFile = file;
-	ScriptEnvironment* env = this->getScriptEnv();
-	env->setScriptId(EVENT_ID_LOADING, this);
-	env->setNpc(npc);
-
-	//execute it
-	ret = protectedCall(m_luaState, 0, 0);
-	if (ret != 0) {
-		reportError(NULL, popString(m_luaState));
-		resetScriptEnv();
-		return -1;
-	}
-
-	resetScriptEnv();
-	return 0;
-}
-
-int32_t LuaScriptInterface::loadBuffer(const std::string& text, Npc* npc /* = NULL*/)
-{
-	//loads file as a chunk at stack top
-	int ret = luaL_loadbuffer(m_luaState, text.c_str(), text.length(), "loadBuffer");
-	if (ret != 0) {
-		m_lastLuaError = popString(m_luaState);
-		reportError(NULL, m_lastLuaError);
-		return -1;
-	}
-
-	//check that it is loaded as a function
-	if (!isFunction(m_luaState, -1)) {
-		return -1;
-	}
-
-	m_loadingFile = "loadBuffer";
-
 	ScriptEnvironment* env = this->getScriptEnv();
 	env->setScriptId(EVENT_ID_LOADING, this);
 	env->setNpc(npc);
@@ -10740,10 +10708,14 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	}
 
 	//call the function
-	ScriptEnvironment* env = getScriptEnv();
-	env->setTimerEvent();
-	env->setScriptId(timerEventDesc.scriptId, this);
-	callFunction(timerEventDesc.parameters.size());
+	if (reserveScriptEnv()) {
+		ScriptEnvironment* env = getScriptEnv();
+		env->setTimerEvent();
+		env->setScriptId(timerEventDesc.scriptId, this);
+		callFunction(timerEventDesc.parameters.size());
+	} else {
+		std::cout << "[Error - LuaScriptInterface::executeTimerEvent] Call stack overflow" << std::endl;
+	}
 
 	//free resources
 	luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);

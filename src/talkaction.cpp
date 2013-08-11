@@ -157,8 +157,12 @@ std::string TalkAction::getScriptEventName()
 int32_t TalkAction::executeSay(Creature* creature, const std::string& words, const std::string& param)
 {
 	//onSay(cid, words, param)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - TalkAction::executeSay] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	env->setRealPos(creature->getPosition());
 

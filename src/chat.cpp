@@ -37,8 +37,12 @@ CanJoinChannelEvent::CanJoinChannelEvent()
 bool CanJoinChannelEvent::execute(const Player& player)
 {
 	//canJoin(cid)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CanJoinChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	env->setRealPos(player.getPosition());
 
@@ -58,8 +62,12 @@ OnJoinChannelEvent::OnJoinChannelEvent()
 bool OnJoinChannelEvent::execute(const Player& player)
 {
 	//onJoin(cid)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - OnJoinChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	env->setRealPos(player.getPosition());
 
@@ -79,6 +87,11 @@ OnLeaveChannelEvent::OnLeaveChannelEvent()
 bool OnLeaveChannelEvent::execute(const Player& player)
 {
 	//onLeave(cid)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - OnLeaveChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -100,8 +113,12 @@ OnSpeakChannelEvent::OnSpeakChannelEvent()
 bool OnSpeakChannelEvent::execute(const Player& player, SpeakClasses& type, const std::string& message)
 {
 	//onSpeak(cid, type, message)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - OnSpeakChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	env->setRealPos(player.getPosition());
 

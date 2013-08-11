@@ -350,11 +350,15 @@ std::string GlobalEvent::getScriptEventName()
 	return "onThink";
 }
 
-uint32_t GlobalEvent::executeRecord(uint32_t current, uint32_t old)
+bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 {
 	//onRecord(current, old, cid)
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -365,10 +369,14 @@ uint32_t GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 	return m_scriptInterface->callFunction(2);
 }
 
-uint32_t GlobalEvent::executeEvent()
+bool GlobalEvent::executeEvent()
 {
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - GlobalEvent::executeEvent] Call stack overflow" << std::endl;
+		return false;
+	}
 
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_scriptId);

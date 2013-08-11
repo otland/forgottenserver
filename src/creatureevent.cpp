@@ -262,6 +262,11 @@ void CreatureEvent::clearEvent()
 bool CreatureEvent::executeOnLogin(Player* player)
 {
 	//onLogin(cid)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnLogin] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -278,6 +283,11 @@ bool CreatureEvent::executeOnLogin(Player* player)
 bool CreatureEvent::executeOnLogout(Player* player)
 {
 	//onLogout(cid)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnLogout] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -294,6 +304,11 @@ bool CreatureEvent::executeOnLogout(Player* player)
 bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 {
 	//onThink(cid, interval)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnThink] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -311,6 +326,11 @@ bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 {
 	//onPrepareDeath(cid, killer)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnPrepareDeath] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -335,6 +355,11 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
 	//onDeath(cid, corpse, lasthitkiller, mostdamagekiller, lasthitunjustified, mostdamageunjustified)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnDeath] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -372,6 +397,11 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldLevel,
                                        uint32_t newLevel)
 {
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeAdvance] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -391,6 +421,11 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 bool CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 {
 	//onKill(cid, target)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnKill] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -408,6 +443,11 @@ bool CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 bool CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId)
 {
 	//onModalWindow(cid, modalWindowId, buttonId, choiceId)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeModalWindow] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -427,6 +467,11 @@ bool CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::string& text)
 {
 	//onTextEdit(cid, item, text)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeTextEdit] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);

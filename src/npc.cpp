@@ -1279,6 +1279,11 @@ void NpcScript::onCreatureAppear(const Creature* creature)
 	}
 
 	//onCreatureAppear(creature)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onCreature] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -1299,6 +1304,11 @@ void NpcScript::onCreatureDisappear(const Creature* creature)
 	}
 
 	//onCreatureDisappear(id)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onCreatureDisappear] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -1319,6 +1329,11 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 	}
 
 	//onCreatureMove(creature, oldPos, newPos)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onCreatureMove] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -1341,6 +1356,11 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 	}
 
 	//onCreatureSay(cid, type, msg)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onCreatureSay] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_onCreatureSay, m_scriptInterface);
@@ -1386,6 +1406,11 @@ void NpcScript::onPlayerCloseChannel(const Player* player)
 	}
 
 	//onPlayerCloseChannel(cid)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onPlayerCloseChannel] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_onPlayerCloseChannel, m_scriptInterface);
 	env->setRealPos(m_npc->getPosition());
@@ -1404,6 +1429,11 @@ void NpcScript::onPlayerEndTrade(const Player* player)
 	}
 
 	//onPlayerEndTrade(cid)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onPlayerEndTrade] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_onPlayerCloseChannel, m_scriptInterface);
 	env->setRealPos(m_npc->getPosition());
@@ -1422,6 +1452,11 @@ void NpcScript::onThink()
 	}
 
 	//onThink()
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onThink] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_onThink, m_scriptInterface);

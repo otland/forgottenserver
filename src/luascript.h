@@ -25,6 +25,7 @@
 #include <list>
 #include <vector>
 #include <unordered_map>
+#include <stack>
 
 extern "C"
 {
@@ -299,17 +300,29 @@ class LuaScriptInterface
 		bool reInitState();
 
 		int32_t loadFile(const std::string& file, Npc* npc = NULL);
-		int32_t loadBuffer(const std::string& text, Npc* npc /* = NULL*/);
 
 		const std::string& getFileById(int32_t scriptId);
 		int32_t getEvent(const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
-			return &m_scriptEnv;
+			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 17);
+			return &m_scriptEnv[m_scriptEnvIndex];
+		}
+
+		static bool reserveScriptEnv() {
+			if (++m_scriptEnvIndex < 16) {
+				return true;
+			} else {
+				--m_scriptEnvIndex;
+				return false;
+			}
 		}
 
 		static void resetScriptEnv() {
-			m_scriptEnv.resetEnv();
+			if (m_scriptEnvIndex >= 0) {
+				m_scriptEnv[m_scriptEnvIndex].resetEnv();
+				--m_scriptEnvIndex;
+			}
 		}
 
 		static void reportError(const char* function, const std::string& error_desc, bool stack_trace = false);
@@ -1025,7 +1038,8 @@ class LuaScriptInterface
 		std::string m_interfaceName;
 		int32_t m_eventTableRef;
 
-		static ScriptEnvironment m_scriptEnv;
+		static ScriptEnvironment m_scriptEnv[16];
+		static int32_t m_scriptEnvIndex;
 
 		int32_t m_runningEventId;
 		std::string m_loadingFile;

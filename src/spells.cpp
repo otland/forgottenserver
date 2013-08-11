@@ -383,6 +383,11 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
 	//onCastSpell(cid, var)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CombatSpell::executeCastSpell] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -1305,6 +1310,11 @@ bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
 	//onCastSpell(cid, var)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - InstantSpell::executeCastSpell] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
@@ -2256,6 +2266,11 @@ bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
 	//onCastSpell(cid, var)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - RuneSpell::executeCastSpell] Call stack overflow" << std::endl;
+		return false;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 
 	env->setScriptId(m_scriptId, m_scriptInterface);
