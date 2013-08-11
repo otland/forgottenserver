@@ -144,7 +144,6 @@ Event::~Event()
 
 bool Event::checkScript(const std::string& datadir, const std::string& scriptsName, const std::string& scriptFile)
 {
-	/*
 	LuaScriptInterface testInterface("Test Interface");
 	testInterface.initState();
 
@@ -169,7 +168,7 @@ bool Event::checkScript(const std::string& datadir, const std::string& scriptsNa
 		std::cout << "Warning: [Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
 	}
-	*/
+	
 	return true;
 }
 
