@@ -590,6 +590,7 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = NULL
 	}
 
 	m_loadingFile = file;
+	reserveScriptEnv();
 	ScriptEnvironment* env = this->getScriptEnv();
 	env->setScriptId(EVENT_ID_LOADING, this);
 	env->setNpc(npc);
