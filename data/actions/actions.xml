@@ -126,6 +126,24 @@
 	<action itemid="2152" script="other/changegold.lua"/>
 	<action itemid="2160" script="other/changegold.lua"/>
 	<action fromid="3901" toid="3938" script="other/constructionkits.lua"/>
+	<action fromid="5086" toid="5088" script="other/constructionkits.lua"/>
+	<action itemid="6114" script="other/constructionkits.lua"/>
+	<action itemid="6115" script="other/constructionkits.lua"/>
+	<action itemid="6372" script="other/constructionkits.lua"/>
+	<action itemid="6373" script="other/constructionkits.lua"/>
+	<action itemid="8692" script="other/constructionkits.lua"/>
+	<action itemid="9974" script="other/constructionkits.lua"/>
+	<action itemid="11124" script="other/constructionkits.lua"/>
+	<action itemid="11126" script="other/constructionkits.lua"/>
+	<action itemid="11133" script="other/constructionkits.lua"/>
+	<action itemid="11205" script="other/constructionkits.lua"/>
+	<action itemid="14328" script="other/constructionkits.lua"/>
+	<action itemid="14329" script="other/constructionkits.lua"/>
+	<action itemid="16075" script="other/constructionkits.lua"/>
+	<action itemid="16099" script="other/constructionkits.lua"/>
+	<action itemid="20254" script="other/constructionkits.lua"/>
+	<action itemid="20255" script="other/constructionkits.lua"/>
+	<action itemid="20257" script="other/constructionkits.lua"/>
 	<action fromid="2070" toid="2078" script="other/music.lua"/>
 	<action fromid="2080" toid="2085" script="other/music.lua"/>
 	<action itemid="2332" script="other/music.lua"/>
