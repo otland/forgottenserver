@@ -1246,12 +1246,6 @@ NpcScript::NpcScript(const std::string& file, Npc* npc) :
 	NpcEventsHandler(npc)
 {
 	m_scriptInterface = npc->getScriptInterface();
-
-	if (m_scriptInterface->reserveScriptEnv()) {
-		m_scriptInterface->getScriptEnv()->setNpc(npc);
-		m_scriptInterface->resetScriptEnv();
-	}
-
 	if (m_scriptInterface->loadFile(file, npc) == -1) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
 		std::cout << m_scriptInterface->getLastLuaError() << std::endl;
