@@ -7758,8 +7758,6 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 	}
 
 	int32_t parameters = getStackTop(L);
-	lua_xmove(L, globalState, parameters);
-
 	if (!isFunction(globalState, -parameters)) { //-parameters means the first parameter from left to right
 		reportErrorFunc("callback parameter should be a function.");
 		pushBoolean(L, false);
