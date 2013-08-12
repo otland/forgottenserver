@@ -193,6 +193,18 @@
 	<action itemid="10032" script="other/doors.lua" />
 	<action fromid="10268" toid="10285" script="other/doors.lua" />
 	<action fromid="10468" toid="10486" script="other/doors.lua" />
-
+	<action fromid="10775" toid="10777" script="other/doors.lua" />
+	<action fromid="10780" toid="10786" script="other/doors.lua" />
+	<action fromid="10789" toid="10792" script="other/doors.lua" />
+	<action fromid="12092" toid="12105" script="other/doors.lua" />
+	<action fromid="12188" toid="12190" script="other/doors.lua" />
+	<action fromid="12193" toid="12199" script="other/doors.lua" />
+	<action fromid="12202" toid="12205" script="other/doors.lua" />
+	<action fromid="19840" toid="19857" script="other/doors.lua" />
+	<action fromid="19980" toid="19997" script="other/doors.lua" />
+	<action fromid="20273" toid="20290" script="other/doors.lua" />
+	<action fromid="17235" toid="17238" script="other/doors.lua" />
+	<action fromid="18208" toid="18209" script="other/doors.lua" />
+	<action fromid="13020" toid="13023" script="other/doors.lua" />
 	<action itemid="14405" function="market"/>
 </actions>
