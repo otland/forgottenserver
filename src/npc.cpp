@@ -1379,6 +1379,11 @@ void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t i
 	}
 
 	//"onBuy"(cid, itemid, count, amount, ignore, inbackpacks)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onPlayerTrade] Call stack overflow" << std::endl;
+		return;
+	}
+
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(-1, m_scriptInterface);
 	env->setRealPos(m_npc->getPosition());
