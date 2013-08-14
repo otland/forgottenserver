@@ -1145,3 +1145,194 @@ function doForceSummonCreature(name, pos)
 	end
 	return creature
 end
+
+-- 0.3+ compats
+ACCOUNT_TYPE_NORMAL = 1
+ACCOUNT_TYPE_TUTOR = 2
+ACCOUNT_TYPE_GAMEMASTER = 3
+
+MESSAGE_LOOT = 29
+MESSAGE_TRADE_NPC = 30
+MESSAGE_EVENT_GUILD = 31
+MESSAGE_PARTY_MANAGEMENT = 32
+MESSAGE_PARTY = 33
+MESSAGE_REPORT = 36
+MESSAGE_HOTKEY_USE = 37
+MESSAGE_TUTORIAL_HINT = 38
+
+getPlayerByNameWildcard = getPlayerByName -- wildcard doesn't work afaik
+doCreatureSetStorage = setPlayerStorageValue
+doPlayerSetStorageValue = setPlayerStorageValue
+getCreatureStorage = getPlayerStorageValue
+getCreatureSkullType = getPlayerSkullType
+getCreatureSkull = getPlayerSkullType
+getNpcId = getNpcCid
+doBroadcastMessage = broadcastMessage
+db.executeQuery = db.query
+db.getResult = db.storeQuery
+getStorage = getGlobalStorageValue
+doSetStorage = setGlobalStorageValue
+getItemNameById = getItemName
+getItemWeightById = getItemWeight
+getItemDescriptionsById = getItemDescriptions
+getItemInfo = getItemDescriptions
+getThingFromPos = getThingfromPos
+getThingPosition = getThingPos
+getHouseFromPos = getTileHouseInfo
+string.boolean = function (input)
+	local tmp = type(input)
+	if(tmp == 'boolean') then
+		return input
+	end
+
+	if(tmp == 'number') then
+		return input > 0
+	end
+
+	local str = string.lower(tostring(input))
+	return (str == "yes" or str == "true" or (tonumber(str) ~= nil and tonumber(str) > 0))
+end
+getBooleanFromString = string.boolean
+
+function getPlayerAccount(cid)
+return getAccountNumberByPlayerName(getPlayerName(cid))
+end
+function getItemArticleById(itemid)
+return getItemInfo(itemid).article
+end
+function getItemPluralNameById(itemid)
+return getItemInfo(itemid).plural
+end
+
+math.round = function(num, idp)
+	return tonumber(string.format("%." .. (idp or 0) .. "f", num))
+end
+
+exhaustion =
+{
+	check = function (cid, storage)
+		if(getPlayerFlagValue(cid, PLAYERFLAG_HASNOEXHAUSTION)) then
+			return false
+		end
+
+		return getPlayerStorageValue(cid, storage) >= os.time()
+	end,
+
+	get = function (cid, storage)
+		if(getPlayerFlagValue(cid, PLAYERFLAG_HASNOEXHAUSTION)) then
+			return false
+		end
+
+		local exhaust = getPlayerStorageValue(cid, storage)
+		if(exhaust > 0) then
+			local left = exhaust - os.time()
+			if(left >= 0) then
+				return left
+			end
+		end
+
+		return false
+	end,
+
+	set = function (cid, storage, time)
+		setPlayerStorageValue(cid, storage, os.time() + time)
+	end,
+
+	make = function (cid, storage, time)
+		local exhaust = exhaustion.get(cid, storage)
+		if(not exhaust) then
+			exhaustion.set(cid, storage, time)
+			return true
+		end
+
+		return false
+	end
+}
+
+function doComparePositions(position, positionEx)
+	return position.x == positionEx.x and position.y == positionEx.y and position.z == positionEx.z
+end
+
+function getArea(position, x, y)
+	local t = {}
+	for i = (position.x - x), (position.x + x) do
+		for j = (position.y - y), (position.y + y) do
+			table.insert(t, {x = i, y = j, z = position.z})
+		end
+	end
+
+	return t
+end
+
+function Position(x, y, z, stackpos)
+	local position = {x = 0, y = 0, z = 0}
+	if(isNumeric(x .. y .. z)) then
+		position = {x = x, y = y, z = z}
+		if(isNumeric(stackpos)) then
+			position.stackpos = stackpos
+		end
+	end
+
+	return position
+end
+
+function isValidPosition(position)
+	return (isNumeric(position.x .. position.y .. position.z) and position.x > 0
+		and position.y > 0 and position.z >= 0 and position.z <= 15)
+end
+function doPlayerWithdrawMoney(cid, amount)
+	local balance = getPlayerBalance(cid)
+	if(amount > balance or not doPlayerAddMoney(cid, amount)) then
+		return false
+	end
+
+	doPlayerSetBalance(cid, balance - amount)
+	return true
+end
+
+function doPlayerDepositMoney(cid, amount)
+	if(not doPlayerRemoveMoney(cid, amount)) then
+		return false
+	end
+
+	doPlayerSetBalance(cid, getPlayerBalance(cid) + amount)
+	return true
+end
+
+function doPlayerWithdrawAllMoney(cid)
+	return doPlayerWithdrawMoney(cid, getPlayerBalance(cid))
+end
+
+function doPlayerDepositAllMoney(cid)
+	return doPlayerDepositMoney(cid, getPlayerMoney(cid))
+end
+
+function doPlayerTransferAllMoneyTo(cid, target)
+	return doPlayerTransferMoneyTo(cid, target, getPlayerBalance(cid))
+end
+
+string.trim = function (str)
+ return str:gsub("^%s*(.-)%s*$", "%1")
+end
+
+string.explode = function (str, sep, limit)
+if(type(sep) ~= 'string' or isInArray({tostring(str):len(), sep:len()}, 0)) then
+	return {}
+end
+
+ local i, pos, tmp, t = 0, 1, "", {}
+ for s, e in function() return string.find(str, sep, pos) end do
+  tmp = str:sub(pos, s - 1):trim()
+  table.insert(t, tmp)
+  pos = e + 1
+
+  i = i + 1
+  if(limit ~= nil and i == limit) then
+   break
+  end
+ end
+
+ tmp = str:sub(pos):trim()
+ table.insert(t, tmp)
+ return t
+end
