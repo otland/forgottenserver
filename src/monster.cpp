@@ -1780,7 +1780,7 @@ bool Monster::inDespawnRange(const Position& pos)
 			return false;
 		}
 
-		if (std::abs(pos.z - masterPos.z) > Monster::despawnRange) {
+		if (Position::getDistanceZ(pos, masterPos) > Monster::despawnRange) {
 			return true;
 		}
 

@@ -1135,11 +1135,9 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	if (creature->getPlayer() && !diagonalMovement) {
 		//try go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
-			Tile* tmpTile = getTile(currentPos.x, currentPos.y, currentPos.z - 1);
-
+			Tile* tmpTile = getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
 			if (tmpTile == NULL || (tmpTile->ground == NULL && !tmpTile->hasProperty(BLOCKSOLID))) {
-				tmpTile = getTile(destPos.x, destPos.y, destPos.z - 1);
-
+				tmpTile = getTile(destPos.x, destPos.y, destPos.getZ() - 1);
 				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(BLOCKSOLID)) {
 					flags = flags | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 
@@ -1151,10 +1149,8 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		} else {
 			//try go down
 			Tile* tmpTile = getTile(destPos);
-
 			if (currentPos.z != 7 && (tmpTile == NULL || (tmpTile->ground == NULL && !tmpTile->hasProperty(BLOCKSOLID)))) {
 				tmpTile = getTile(destPos.x, destPos.y, destPos.z + 1);
-
 				if (tmpTile && tmpTile->hasHeight(3)) {
 					flags = flags | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 					destPos.z++;

@@ -298,11 +298,11 @@ bool Map::removeCreature(Creature* creature)
 
 void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers)
 {
-	int32_t minoffset = centerPos.z - maxRangeZ;
+	int32_t minoffset = centerPos.getZ() - maxRangeZ;
 	int32_t x1 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (centerPos.x + minRangeX + minoffset)));
 	int32_t y1 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (centerPos.y + minRangeY + minoffset)));
 
-	int32_t maxoffset = centerPos.z - minRangeZ;
+	int32_t maxoffset = centerPos.getZ() - minRangeZ;
 	int32_t x2 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (centerPos.x + maxRangeX + maxoffset)));
 	int32_t y2 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (centerPos.y + maxRangeY + maxoffset)));
 
@@ -333,14 +333,12 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 
 				CreatureVector::const_iterator node_iter = node_list.begin();
 				CreatureVector::const_iterator node_end = node_list.end();
-
 				if (node_iter != node_end) {
 					do {
 						Creature* creature = *node_iter;
 						const Position& cpos = creature->getPosition();
 
-						int32_t offsetZ = centerPos.z - cpos.z;
-
+						int32_t offsetZ = Position::getOffsetZ(centerPos, cpos);
 						if (cpos.z < minRangeZ || cpos.z > maxRangeZ) {
 							continue;
 						}
@@ -440,8 +438,8 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 				//underground
 
 				//8->15
-				minRangeZ = std::max<int32_t>(centerPos.z - 2, 0);
-				maxRangeZ = std::min<int32_t>(centerPos.z + 2, MAP_MAX_LAYERS - 1);
+				minRangeZ = std::max<int32_t>(centerPos.getZ() - 2, 0);
+				maxRangeZ = std::min<int32_t>(centerPos.getZ() + 2, MAP_MAX_LAYERS - 1);
 			}
 			//above ground
 			else if (centerPos.z == 6) {
