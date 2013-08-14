@@ -3,7 +3,7 @@ local BEDS = {
 	[7905] = {{7811, 7812}, {7813, 7814}}, -- green kit
 	[7906] = {{7815, 7816}, {7817, 7818}}, -- red kit
 	[7907] = {{7819, 7820}, {7821, 7822}}, -- yellow kit
-	[20252] = {{20197, 20198}, {20199, 20200}} -- venorean bed
+	[20252] = {{20197, 20198}, {20199, 20200}} -- canopy bed
 }
 
 local function internalBedTransform(item, itemEx, toPosition, ids)
@@ -18,7 +18,7 @@ end
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	local newBed = BEDS[item.itemid]
-	if(not newBed or not getHouseFromPos(getCreaturePosition(cid))) then
+	if(not newBed or not getTileHouseInfo(getCreaturePosition(cid))) then
 		return false
 	end
 
