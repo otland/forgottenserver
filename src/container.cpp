@@ -874,7 +874,7 @@ ContainerIterator& ContainerIterator::operator++()
 
 	if (Item* i = *cur) {
 		if (Container* c = i->getContainer()) {
-			if (c && !c->empty()) {
+			if (!c->empty()) {
 				over.push(c);
 			}
 		}
