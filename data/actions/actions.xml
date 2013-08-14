@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
+	<!-- Bed construction kits -->
+	<action fromid="7904" toid="7907" script="other/furniturebeds.lua"/>
+	<action itemid="20252" script="other/furniturebeds.lua"/>
+	
 	<!-- Quests -->
 	<action itemid="1740" script="quests/quests.lua"/>
 	<action fromid="1747" toid="1749" script="quests/quests.lua"/>
