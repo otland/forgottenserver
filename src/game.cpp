@@ -1256,7 +1256,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		if (toPos.y & 0x40) {
 			toIndex = toPos.z;
 		} else {
-			toIndex = static_cast<uint8_t>(toPos.y);
+			toIndex = toPos.y;
 		}
 	}
 
@@ -1271,13 +1271,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	}
 
 	const Position& playerPos = player->getPosition();
-
 	const Position& mapFromPos = fromCylinder->getTile()->getPosition();
-
-	const Tile* toCylinderTile = toCylinder->getTile();
-
-	const Position& mapToPos = toCylinderTile->getPosition();
-
 	if (playerPos.z > mapFromPos.z) {
 		player->sendCancelMessage(RET_FIRSTGOUPSTAIRS);
 		return false;
@@ -1305,6 +1299,9 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			return false;
 		}
 	}
+
+	const Tile* toCylinderTile = toCylinder->getTile();
+	const Position& mapToPos = toCylinderTile->getPosition();
 
 	//hangable item specific code
 	if (item->isHangable() && toCylinderTile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {

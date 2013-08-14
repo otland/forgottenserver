@@ -68,7 +68,7 @@ class TalkAction : public Event
 		}
 
 		//scripting
-		int32_t executeSay(Creature* creature, const std::string& words, const std::string& param);
+		bool executeSay(Creature* creature, const std::string& words, const std::string& param);
 		//
 
 	protected:

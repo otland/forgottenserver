@@ -1228,7 +1228,6 @@ class Player : public Creature, public Cylinder
 		GuildWarList guildWarList;
 
 		std::string name;
-		std::string nameDescription;
 		std::string guildNick;
 
 		LightInfo itemsLight;

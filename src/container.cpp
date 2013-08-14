@@ -872,9 +872,11 @@ ContainerIterator& ContainerIterator::operator++()
 {
 	assert(super);
 
-	if (Container* c = (*cur)->getContainer()) {
-		if (c && !c->empty()) {
-			over.push(c);
+	if (Item* i = *cur) {
+		if (Container* c = i->getContainer()) {
+			if (c && !c->empty()) {
+				over.push(c);
+			}
 		}
 	}
 
