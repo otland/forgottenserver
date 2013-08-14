@@ -144,6 +144,8 @@
 	<action itemid="20254" script="other/constructionkits.lua"/>
 	<action itemid="20255" script="other/constructionkits.lua"/>
 	<action itemid="20257" script="other/constructionkits.lua"/>
+	<action fromid="7904" toid="7907" script="other/furniturebeds.lua"/>
+	<action itemid="20252" script="other/furniturebeds.lua"/>
 	<action fromid="2070" toid="2078" script="other/music.lua"/>
 	<action fromid="2080" toid="2085" script="other/music.lua"/>
 	<action itemid="2332" script="other/music.lua"/>
