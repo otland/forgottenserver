@@ -16,7 +16,7 @@ function onUpdateDatabase()
 		local resultId = db.storeQuery("SELECT `id`, `name`, `flags`, `access`, `maxdepotitems`, `maxviplist` FROM `groups` ORDER BY `id` ASC")
 		if resultId ~= false then
 			repeat
-				groupsFile:write("\t<group id=\"" .. result.getDataInt(resultId, "id") .. "\" name=\"" .. result.getDataString(resultId, "name") .. "\" flags=\"" .. result.getDataLong(resultId, "flags") .. "\" access=\"" .. result.getDataInt(resultId, "access") .. "\" maxdepotitems=\"" .. result.getDataInt(resultId, "maxdepotitems") .. "\" maxvipentries=\"" .. result.getDataInt(resultId, "maxviplist") .. "\" />\r\n")
+				groupsFile:write("\t<group id=\"" .. result.getDataInt(resultId, "id") .. "\" name=\"" .. result.getDataString(resultId, "name") .. "\" flags=\"" .. string.format("%u", result.getDataLong(resultId, "flags")) .. "\" access=\"" .. result.getDataInt(resultId, "access") .. "\" maxdepotitems=\"" .. result.getDataInt(resultId, "maxdepotitems") .. "\" maxvipentries=\"" .. result.getDataInt(resultId, "maxviplist") .. "\" />\r\n")
 			until not result.next(resultId)
 			result.free(resultId)
 		end
