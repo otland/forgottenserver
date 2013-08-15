@@ -2114,8 +2114,8 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("ModalWindow", "getButtonCount", LuaScriptInterface::luaModalWindowGetButtonCount);
 	registerClassMethod("ModalWindow", "getChoiceCount", LuaScriptInterface::luaModalWindowGetChoiceCount);
 
-	registerClassMethod("ModalWindow", "doAddButton", LuaScriptInterface::luaModalWindowDoAddButton);
-	registerClassMethod("ModalWindow", "doAddChoice", LuaScriptInterface::luaModalWindowDoAddChoice);
+	registerClassMethod("ModalWindow", "addButton", LuaScriptInterface::luaModalWindowAddButton);
+	registerClassMethod("ModalWindow", "addChoice", LuaScriptInterface::luaModalWindowAddChoice);
 
 	registerClassMethod("ModalWindow", "getDefaultEnterButton", LuaScriptInterface::luaModalWindowGetDefaultEnterButton);
 	registerClassMethod("ModalWindow", "setDefaultEnterButton", LuaScriptInterface::luaModalWindowSetDefaultEnterButton);
@@ -2132,9 +2132,9 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Item", "", LuaScriptInterface::luaItemCreate, LuaScriptInterface::luaItemDelete);
 	registerClassMethod("Item", "getId", LuaScriptInterface::luaItemGetId);
 
-	registerClassMethod("Item", "doClone", LuaScriptInterface::luaItemDoClone);
-	registerClassMethod("Item", "doSplit", LuaScriptInterface::luaItemDoSplit);
-	registerClassMethod("Item", "doRemove", LuaScriptInterface::luaItemDoRemove);
+	registerClassMethod("Item", "clone", LuaScriptInterface::luaItemClone);
+	registerClassMethod("Item", "split", LuaScriptInterface::luaItemSplit);
+	registerClassMethod("Item", "remove", LuaScriptInterface::luaItemRemove);
 
 	registerClassMethod("Item", "getUniqueId", LuaScriptInterface::luaItemGetUniqueId);
 	registerClassMethod("Item", "getActionId", LuaScriptInterface::luaItemGetActionId);
@@ -2151,8 +2151,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Item", "getPosition", LuaScriptInterface::luaItemGetPosition);
 
-	registerClassMethod("Item", "doTeleport", LuaScriptInterface::luaItemDoTeleport);
-	registerClassMethod("Item", "doTransform", LuaScriptInterface::luaItemDoTransform);
+	registerClassMethod("Item", "moveTo", LuaScriptInterface::luaItemMoveTo);
+	registerClassMethod("Item", "transform", LuaScriptInterface::luaItemTransform);
 
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate, LuaScriptInterface::luaContainerDelete);
@@ -2162,8 +2162,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Container", "getItem", LuaScriptInterface::luaContainerGetItem);
 	registerClassMethod("Container", "hasItem", LuaScriptInterface::luaContainerHasItem);
-	registerClassMethod("Container", "doAddItem", LuaScriptInterface::luaContainerDoAddItem);
-	registerClassMethod("Container", "doAddItemEx", LuaScriptInterface::luaContainerDoAddItemEx);
+	registerClassMethod("Container", "addItem", LuaScriptInterface::luaContainerAddItem);
+	registerClassMethod("Container", "addItemEx", LuaScriptInterface::luaContainerAddItemEx);
 
 	// Creature
 	registerClass("Creature", "", LuaScriptInterface::luaCreatureCreate, LuaScriptInterface::luaCreatureDelete);
@@ -2180,25 +2180,25 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "setDirection", LuaScriptInterface::luaCreatureSetDirection);
 
 	registerClassMethod("Creature", "getHealth", LuaScriptInterface::luaCreatureGetHealth);
-	registerClassMethod("Creature", "doAddHealth", LuaScriptInterface::luaCreatureDoAddHealth);
+	registerClassMethod("Creature", "addHealth", LuaScriptInterface::luaCreatureAddHealth);
 	registerClassMethod("Creature", "getMaxHealth", LuaScriptInterface::luaCreatureGetMaxHealth);
 	registerClassMethod("Creature", "setMaxHealth", LuaScriptInterface::luaCreatureSetMaxHealth);
 
 	registerClassMethod("Creature", "getMana", LuaScriptInterface::luaCreatureGetMana);
-	registerClassMethod("Creature", "doAddMana", LuaScriptInterface::luaCreatureDoAddMana);
+	registerClassMethod("Creature", "addMana", LuaScriptInterface::luaCreatureAddMana);
 	registerClassMethod("Creature", "getMaxMana", LuaScriptInterface::luaCreatureGetMaxMana);
 	registerClassMethod("Creature", "setMaxMana", LuaScriptInterface::luaCreatureSetMaxMana);
 
 	registerClassMethod("Creature", "getOutfit", LuaScriptInterface::luaCreatureGetOutfit);
 
-	registerClassMethod("Creature", "doRemove", LuaScriptInterface::luaCreatureDoRemove);
-	registerClassMethod("Creature", "doTeleport", LuaScriptInterface::luaCreatureDoTeleport);
-	registerClassMethod("Creature", "doSay", LuaScriptInterface::luaCreatureDoSay);
+	registerClassMethod("Creature", "remove", LuaScriptInterface::luaCreatureRemove);
+	registerClassMethod("Creature", "teleportTo", LuaScriptInterface::luaCreatureTeleportTo);
+	registerClassMethod("Creature", "say", LuaScriptInterface::luaCreatureSay);
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate, LuaScriptInterface::luaPlayerDelete);
 	registerClassMethod("Player", "getExperience", LuaScriptInterface::luaPlayerGetExperience);
-	registerClassMethod("Player", "doAddExperience", LuaScriptInterface::luaPlayerDoAddExperience);
+	registerClassMethod("Player", "addExperience", LuaScriptInterface::luaPlayerAddExperience);
 	registerClassMethod("Player", "getLevel", LuaScriptInterface::luaPlayerGetLevel);
 
 	registerClassMethod("Player", "getVocation", LuaScriptInterface::luaPlayerGetVocation);
@@ -2216,7 +2216,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Player", "getStamina", LuaScriptInterface::luaPlayerGetStamina);
 
 	registerClassMethod("Player", "getSoul", LuaScriptInterface::luaPlayerGetSoul);
-	registerClassMethod("Player", "doAddSoul", LuaScriptInterface::luaPlayerDoAddSoul);
+	registerClassMethod("Player", "addSoul", LuaScriptInterface::luaPlayerAddSoul);
 	registerClassMethod("Player", "getMaxSoul", LuaScriptInterface::luaPlayerGetMaxSoul);
 
 	registerClassMethod("Player", "getBankBalance", LuaScriptInterface::luaPlayerGetBankBalance);
@@ -2225,20 +2225,20 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Player", "getStorageValue", LuaScriptInterface::luaPlayerGetStorageValue);
 	registerClassMethod("Player", "setStorageValue", LuaScriptInterface::luaPlayerSetStorageValue);
 
-	registerClassMethod("Player", "doAddItem", LuaScriptInterface::luaPlayerDoAddItem);
-	registerClassMethod("Player", "doAddItemEx", LuaScriptInterface::luaPlayerDoAddItemEx);
-	registerClassMethod("Player", "doRemoveItem", LuaScriptInterface::luaPlayerDoRemoveItem);
+	registerClassMethod("Player", "addItem", LuaScriptInterface::luaPlayerAddItem);
+	registerClassMethod("Player", "addItemEx", LuaScriptInterface::luaPlayerAddItemEx);
+	registerClassMethod("Player", "removeItem", LuaScriptInterface::luaPlayerRemoveItem);
 
 	registerClassMethod("Player", "getMoney", LuaScriptInterface::luaPlayerGetMoney);
-	registerClassMethod("Player", "doAddMoney", LuaScriptInterface::luaPlayerDoAddMoney);
-	registerClassMethod("Player", "doRemoveMoney", LuaScriptInterface::luaPlayerDoRemoveMoney);
+	registerClassMethod("Player", "addMoney", LuaScriptInterface::luaPlayerAddMoney);
+	registerClassMethod("Player", "removeMoney", LuaScriptInterface::luaPlayerRemoveMoney);
 
-	registerClassMethod("Player", "doShowTextDialog", LuaScriptInterface::luaPlayerDoShowTextDialog);
+	registerClassMethod("Player", "showTextDialog", LuaScriptInterface::luaPlayerShowTextDialog);
 
-	registerClassMethod("Player", "doSendTextMessage", LuaScriptInterface::luaPlayerDoSendTextMessage);
-	registerClassMethod("Player", "doSendChannelMessage", LuaScriptInterface::luaPlayerDoSendChannelMessage);
-	registerClassMethod("Player", "doChannelSay", LuaScriptInterface::luaPlayerDoChannelSay);
-	registerClassMethod("Player", "doOpenChannel", LuaScriptInterface::luaPlayerDoOpenChannel);
+	registerClassMethod("Player", "sendTextMessage", LuaScriptInterface::luaPlayerSendTextMessage);
+	registerClassMethod("Player", "sendChannelMessage", LuaScriptInterface::luaPlayerSendChannelMessage);
+	registerClassMethod("Player", "channelSay", LuaScriptInterface::luaPlayerChannelSay);
+	registerClassMethod("Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate, LuaScriptInterface::luaMonsterDelete);
@@ -8854,9 +8854,9 @@ int32_t LuaScriptInterface::luaModalWindowGetChoiceCount(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaModalWindowDoAddButton(lua_State* L)
+int32_t LuaScriptInterface::luaModalWindowAddButton(lua_State* L)
 {
-	// modalWindow:doAddButton(id, text)
+	// modalWindow:addButton(id, text)
 	const std::string& text = getString(L, 3);
 	uint8_t id = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
@@ -8869,9 +8869,9 @@ int32_t LuaScriptInterface::luaModalWindowDoAddButton(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaModalWindowDoAddChoice(lua_State* L)
+int32_t LuaScriptInterface::luaModalWindowAddChoice(lua_State* L)
 {
-	// modalWindow:doAddChoice(id, text)
+	// modalWindow:addChoice(id, text)
 	const std::string& text = getString(L, 3);
 	uint8_t id = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
@@ -9069,9 +9069,9 @@ int32_t LuaScriptInterface::luaItemGetId(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemDoClone(lua_State* L)
+int32_t LuaScriptInterface::luaItemClone(lua_State* L)
 {
-	// item:doClone()
+	// item:clone()
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		Item* clone = item->clone();
@@ -9087,9 +9087,9 @@ int32_t LuaScriptInterface::luaItemDoClone(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemDoSplit(lua_State* L)
+int32_t LuaScriptInterface::luaItemSplit(lua_State* L)
 {
-	// item:doSplit([count = 1])
+	// item:split([count = 1])
 	uint16_t count = 1;
 	if (getStackTop(L) >= 2) {
 		count = getNumber<uint16_t>(L, 2);
@@ -9142,9 +9142,9 @@ int32_t LuaScriptInterface::luaItemDoSplit(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemDoRemove(lua_State* L)
+int32_t LuaScriptInterface::luaItemRemove(lua_State* L)
 {
-	// item:doRemove([count = 1])
+	// item:remove([count = 1])
 	uint16_t count = 1;
 	if (getStackTop(L) >= 2) {
 		count = getNumber<uint16_t>(L, 2);
@@ -9292,9 +9292,9 @@ int32_t LuaScriptInterface::luaItemGetPosition(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemDoTeleport(lua_State* L)
+int32_t LuaScriptInterface::luaItemMoveTo(lua_State* L)
 {
-	// item:doTeleport(position)
+	// item:moveTo(position)
 	const Position& position = getPosition(L, 2);
 	Item** itemPtr = getRawUserdata<Item>(L, 1);
 	if (!itemPtr) {
@@ -9332,9 +9332,9 @@ int32_t LuaScriptInterface::luaItemDoTeleport(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemDoTransform(lua_State* L)
+int32_t LuaScriptInterface::luaItemTransform(lua_State* L)
 {
-	// item:doTransform(itemId[, count/subType = -1])
+	// item:transform(itemId[, count/subType = -1])
 	int32_t count = -1;
 	if (getStackTop(L) >= 3) {
 		count = getNumber<int32_t>(L, 3);
@@ -9515,9 +9515,9 @@ int32_t LuaScriptInterface::luaContainerHasItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaContainerDoAddItem(lua_State* L)
+int32_t LuaScriptInterface::luaContainerAddItem(lua_State* L)
 {
-	// container:doAddItem(itemId[, count/subType = 1])
+	// container:addItem(itemId[, count/subType = 1])
 	int32_t parameters = getStackTop(L);
 
 	uint32_t subType = 1;
@@ -9550,9 +9550,9 @@ int32_t LuaScriptInterface::luaContainerDoAddItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaContainerDoAddItemEx(lua_State* L)
+int32_t LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 {
-	// container:doAddItemEx(item)
+	// container:addItemEx(item)
 	Item* item = getUserdata<Item>(L, 2);
 	if (!item) {
 		pushNil(L);
@@ -9710,9 +9710,9 @@ int32_t LuaScriptInterface::luaCreatureGetHealth(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaCreatureDoAddHealth(lua_State* L)
+int32_t LuaScriptInterface::luaCreatureAddHealth(lua_State* L)
 {
-	// creature:doAddHealth(healthChange)
+	// creature:addHealth(healthChange)
 	int32_t healthChange = getNumber<int32_t>(L, 2);
 	Creature* creature = getCreature(L, 1);
 	if (creature) {
@@ -9772,9 +9772,9 @@ int32_t LuaScriptInterface::luaCreatureGetMana(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaCreatureDoAddMana(lua_State* L)
+int32_t LuaScriptInterface::luaCreatureAddMana(lua_State* L)
 {
-	// creature:doAddMana(manaChange[, animationOnLoss = false])
+	// creature:addMana(manaChange[, animationOnLoss = false])
 	bool animationOnLoss = true;
 	if (getStackTop(L) >= 3) {
 		animationOnLoss = getBoolean(L, 3);
@@ -9837,9 +9837,9 @@ int32_t LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaCreatureDoRemove(lua_State* L)
+int32_t LuaScriptInterface::luaCreatureRemove(lua_State* L)
 {
-	// creature:doRemove()
+	// creature:remove()
 	Creature** creaturePtr = getRawUserdata<Creature>(L, 1);
 	if (!creaturePtr) {
 		pushNil(L);
@@ -9862,9 +9862,9 @@ int32_t LuaScriptInterface::luaCreatureDoRemove(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaCreatureDoTeleport(lua_State* L)
+int32_t LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 {
-	// creature:doTeleport(position[, pushMovement = false])
+	// creature:teleportTo(position[, pushMovement = false])
 	bool pushMovement = false;
 	if (getStackTop(L) >= 3) {
 		pushMovement = getBoolean(L, 3);
@@ -9898,9 +9898,9 @@ int32_t LuaScriptInterface::luaCreatureDoTeleport(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaCreatureDoSay(lua_State* L)
+int32_t LuaScriptInterface::luaCreatureSay(lua_State* L)
 {
-	// creature:doSay(text, type[, ghost = false[, target = NULL[, position]]])
+	// creature:say(text, type[, ghost = false[, target = NULL[, position]]])
 	int32_t parameters = getStackTop(L);
 
 	Position position;
@@ -9981,9 +9981,9 @@ int32_t LuaScriptInterface::luaPlayerGetExperience(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoAddExperience(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 {
-	// player:doAddExperience(experience[, useMultiplier = false[, sendText = false]])
+	// player:addExperience(experience[, useMultiplier = false[, sendText = false]])
 	int32_t parameters = getStackTop(L);
 
 	bool sendText = false;
@@ -9997,7 +9997,7 @@ int32_t LuaScriptInterface::luaPlayerDoAddExperience(lua_State* L)
 	}
 
 	int64_t experience = getNumber<int64_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->addExperience(experience, useMultiplier, sendText);
 		pushBoolean(L, true);
@@ -10035,7 +10035,7 @@ int32_t LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 {
 	// player:setVocation(vocationId)
 	uint32_t vocationId = getNumber<uint32_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->setVocation(vocationId);
 
@@ -10067,7 +10067,7 @@ int32_t LuaScriptInterface::luaPlayerSetSex(lua_State* L)
 {
 	// player:setSex(newSex)
 	PlayerSex_t newSex = static_cast<PlayerSex_t>(getNumber<uint64_t>(L, 2));
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->setSex(newSex);
 		pushBoolean(L, true);
@@ -10093,7 +10093,7 @@ int32_t LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 {
 	// player:setTown(newTown)
 	uint32_t newTown = getNumber<uint32_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		Town* town = Towns::getInstance().getTown(newTown);
 		if (town) {
@@ -10125,7 +10125,7 @@ int32_t LuaScriptInterface::luaPlayerSetGroupId(lua_State* L)
 {
 	// player:setGroupId(groupId)
 	int32_t groupId = getNumber<int32_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		Group* group = g_game.getGroup(groupId);
 		if (group) {
@@ -10164,11 +10164,11 @@ int32_t LuaScriptInterface::luaPlayerGetSoul(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoAddSoul(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerAddSoul(lua_State* L)
 {
-	// player:doAddSoul(soulChange)
+	// player:addSoul(soulChange)
 	int32_t soulChange = getNumber<int32_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->changeSoul(soulChange);
 		pushBoolean(L, true);
@@ -10206,7 +10206,7 @@ int32_t LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 {
 	// player:setBankBalance(bankBalance)
 	uint64_t bankBalance = getNumber<uint64_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->setBankBalance(bankBalance);
 		pushBoolean(L, true);
@@ -10220,7 +10220,7 @@ int32_t LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 {
 	// player:getStorageValue(key)
 	uint32_t key = getNumber<uint32_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		int32_t value;
 		if (player->getStorageValue(key, value)) {
@@ -10239,7 +10239,7 @@ int32_t LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 	// player:setStorageValue(key, value)
 	int32_t value = getNumber<int32_t>(L, 3);
 	uint32_t key = getNumber<uint32_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
 		std::ostringstream ss;
 		ss << "Accessing reserved range: " << key;
@@ -10257,10 +10257,10 @@ int32_t LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoAddItem(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 {
-	// player:doAddItem(itemId[, count/subType = 1[, canDropOnMap = true[, slot = SLOT_WHEREEVER]]])
-	// player:doAddItem(itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = SLOT_WHEREEVER]]]])
+	// player:addItem(itemId[, count/subType = 1[, canDropOnMap = true[, slot = SLOT_WHEREEVER]]])
+	// player:addItem(itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = SLOT_WHEREEVER]]]])
 	int32_t parameters = getStackTop(L);
 
 	slots_t slot = SLOT_WHEREEVER;
@@ -10283,7 +10283,7 @@ int32_t LuaScriptInterface::luaPlayerDoAddItem(lua_State* L)
 	}
 
 	uint16_t itemId = getNumber<uint16_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -10342,9 +10342,9 @@ int32_t LuaScriptInterface::luaPlayerDoAddItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoAddItemEx(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 {
-	// player:doAddItemEx(item[, canDropOnMap = false[, slot = SLOT_WHEREEVER]])
+	// player:addItemEx(item[, canDropOnMap = false[, slot = SLOT_WHEREEVER]])
 	int32_t parameters = getStackTop(L);
 
 	slots_t slot = SLOT_WHEREEVER;
@@ -10364,7 +10364,7 @@ int32_t LuaScriptInterface::luaPlayerDoAddItemEx(lua_State* L)
 		return 1;
 	}
 
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		if (item->getParent() != VirtualCylinder::virtualCylinder) {
 			reportErrorFunc("Item already has a parent");
@@ -10384,9 +10384,9 @@ int32_t LuaScriptInterface::luaPlayerDoAddItemEx(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoRemoveItem(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerRemoveItem(lua_State* L)
 {
-	// player:doRemoveItem(itemId, count[, subType = -1[, ignoreEquipped = false]])
+	// player:removeItem(itemId, count[, subType = -1[, ignoreEquipped = false]])
 	int32_t parameters = getStackTop(L);
 
 	bool ignoreEquipped = false;
@@ -10401,7 +10401,7 @@ int32_t LuaScriptInterface::luaPlayerDoRemoveItem(lua_State* L)
 
 	uint32_t count = getNumber<uint32_t>(L, 3);
 	uint16_t itemId = getNumber<uint16_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
 	} else {
@@ -10422,11 +10422,11 @@ int32_t LuaScriptInterface::luaPlayerGetMoney(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoAddMoney(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerAddMoney(lua_State* L)
 {
-	// player:doAddMoney(money)
+	// player:addMoney(money)
 	uint64_t money = getNumber<uint64_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		g_game.addMoney(player, money);
 		pushBoolean(L, true);
@@ -10436,11 +10436,11 @@ int32_t LuaScriptInterface::luaPlayerDoAddMoney(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoRemoveMoney(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerRemoveMoney(lua_State* L)
 {
-	// player:doRemoveMoney(money)
+	// player:removeMoney(money)
 	uint64_t money = getNumber<uint64_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushBoolean(L, g_game.removeMoney(player, money));
 	} else {
@@ -10449,10 +10449,10 @@ int32_t LuaScriptInterface::luaPlayerDoRemoveMoney(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoShowTextDialog(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 {
-	// player:doShowTextDialog(itemId[, text[, canWrite[, length]]])
-	// player:doShowTextDialog(itemId[, canWrite[, length]])
+	// player:showTextDialog(itemId[, text[, canWrite[, length]]])
+	// player:showTextDialog(itemId[, canWrite[, length]])
 	int32_t parameters = getStackTop(L);
 
 	int32_t length = -1;
@@ -10479,7 +10479,7 @@ int32_t LuaScriptInterface::luaPlayerDoShowTextDialog(lua_State* L)
 	}
 
 	uint16_t itemId = getNumber<uint16_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		Item* item = Item::CreateItem(itemId);
 		if (length < 0) {
@@ -10502,9 +10502,9 @@ int32_t LuaScriptInterface::luaPlayerDoShowTextDialog(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoSendTextMessage(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
-	// player:doSendChannelMessage(type, text[, position, value = 0, color = TEXTCOLOR_NONE])
+	// player:sendChannelMessage(type, text[, position, value = 0, color = TEXTCOLOR_NONE])
 	int32_t parameters = getStackTop(L);
 
 	Position position;
@@ -10518,7 +10518,7 @@ int32_t LuaScriptInterface::luaPlayerDoSendTextMessage(lua_State* L)
 
 	const std::string& text = getString(L, 3);
 	MessageClasses type = static_cast<MessageClasses>(getNumber<uint64_t>(L, 2));
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		if (parameters >= 6) {
 			player->sendTextMessage(type, text, &position, value, color);
@@ -10532,14 +10532,14 @@ int32_t LuaScriptInterface::luaPlayerDoSendTextMessage(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoSendChannelMessage(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 {
-	// player:doSendChannelMessage(author, text, type, channelId)
+	// player:sendChannelMessage(author, text, type, channelId)
 	uint16_t channelId = getNumber<uint16_t>(L, 5);
 	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t>(L, 4));
 	const std::string& text = getString(L, 3);
 	const std::string& author = getString(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->sendChannelMessage(author, text, type, channelId);
 		pushBoolean(L, true);
@@ -10549,14 +10549,14 @@ int32_t LuaScriptInterface::luaPlayerDoSendChannelMessage(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoChannelSay(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerChannelSay(lua_State* L)
 {
-	// player:doChannelSay(target, type, text, channelId)
+	// player:channelSay(target, type, text, channelId)
 	uint16_t channelId = getNumber<uint16_t>(L, 5);
 	const std::string& text = getString(L, 4);
 	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t>(L, 3));
 	Creature* target = getCreature(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->sendToChannel(target, type, text, channelId);
 		pushBoolean(L, true);
@@ -10566,11 +10566,11 @@ int32_t LuaScriptInterface::luaPlayerDoChannelSay(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerDoOpenChannel(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerOpenChannel(lua_State* L)
 {
-	// player:doOpenChannel(channelId)
+	// player:openChannel(channelId)
 	uint16_t channelId = getNumber<uint16_t>(L, 2);
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushBoolean(L, g_game.playerOpenChannel(player->getID(), channelId));
 	} else {

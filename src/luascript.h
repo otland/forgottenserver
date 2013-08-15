@@ -889,8 +889,8 @@ class LuaScriptInterface
 		static int32_t luaModalWindowGetButtonCount(lua_State* L);
 		static int32_t luaModalWindowGetChoiceCount(lua_State* L);
 
-		static int32_t luaModalWindowDoAddButton(lua_State* L);
-		static int32_t luaModalWindowDoAddChoice(lua_State* L);
+		static int32_t luaModalWindowAddButton(lua_State* L);
+		static int32_t luaModalWindowAddChoice(lua_State* L);
 
 		static int32_t luaModalWindowGetDefaultEnterButton(lua_State* L);
 		static int32_t luaModalWindowSetDefaultEnterButton(lua_State* L);
@@ -909,9 +909,9 @@ class LuaScriptInterface
 
 		static int32_t luaItemGetId(lua_State* L);
 
-		static int32_t luaItemDoClone(lua_State* L);
-		static int32_t luaItemDoSplit(lua_State* L);
-		static int32_t luaItemDoRemove(lua_State* L);
+		static int32_t luaItemClone(lua_State* L);
+		static int32_t luaItemSplit(lua_State* L);
+		static int32_t luaItemRemove(lua_State* L);
 
 		static int32_t luaItemGetUniqueId(lua_State* L);
 		static int32_t luaItemGetActionId(lua_State* L);
@@ -928,8 +928,8 @@ class LuaScriptInterface
 
 		static int32_t luaItemGetPosition(lua_State* L);
 
-		static int32_t luaItemDoTeleport(lua_State* L);
-		static int32_t luaItemDoTransform(lua_State* L);
+		static int32_t luaItemMoveTo(lua_State* L);
+		static int32_t luaItemTransform(lua_State* L);
 
 		// Container
 		static int32_t luaContainerCreate(lua_State* L);
@@ -941,8 +941,8 @@ class LuaScriptInterface
 
 		static int32_t luaContainerGetItem(lua_State* L);
 		static int32_t luaContainerHasItem(lua_State* L);
-		static int32_t luaContainerDoAddItem(lua_State* L);
-		static int32_t luaContainerDoAddItemEx(lua_State* L);
+		static int32_t luaContainerAddItem(lua_State* L);
+		static int32_t luaContainerAddItemEx(lua_State* L);
 
 		// Creature
 		static int32_t luaCreatureCreate(lua_State* L);
@@ -961,27 +961,27 @@ class LuaScriptInterface
 		static int32_t luaCreatureSetDirection(lua_State* L);
 
 		static int32_t luaCreatureGetHealth(lua_State* L);
-		static int32_t luaCreatureDoAddHealth(lua_State* L);
+		static int32_t luaCreatureAddHealth(lua_State* L);
 		static int32_t luaCreatureGetMaxHealth(lua_State* L);
 		static int32_t luaCreatureSetMaxHealth(lua_State* L);
 
 		static int32_t luaCreatureGetMana(lua_State* L);
-		static int32_t luaCreatureDoAddMana(lua_State* L);
+		static int32_t luaCreatureAddMana(lua_State* L);
 		static int32_t luaCreatureGetMaxMana(lua_State* L);
 		static int32_t luaCreatureSetMaxMana(lua_State* L);
 
 		static int32_t luaCreatureGetOutfit(lua_State* L);
 
-		static int32_t luaCreatureDoRemove(lua_State* L);
-		static int32_t luaCreatureDoTeleport(lua_State* L);
-		static int32_t luaCreatureDoSay(lua_State* L);
+		static int32_t luaCreatureRemove(lua_State* L);
+		static int32_t luaCreatureTeleportTo(lua_State* L);
+		static int32_t luaCreatureSay(lua_State* L);
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);
 		static int32_t luaPlayerDelete(lua_State* L);
 
 		static int32_t luaPlayerGetExperience(lua_State* L);
-		static int32_t luaPlayerDoAddExperience(lua_State* L);
+		static int32_t luaPlayerAddExperience(lua_State* L);
 		static int32_t luaPlayerGetLevel(lua_State* L);
 
 		static int32_t luaPlayerGetVocation(lua_State* L);
@@ -999,7 +999,7 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetStamina(lua_State* L);
 
 		static int32_t luaPlayerGetSoul(lua_State* L);
-		static int32_t luaPlayerDoAddSoul(lua_State* L);
+		static int32_t luaPlayerAddSoul(lua_State* L);
 		static int32_t luaPlayerGetMaxSoul(lua_State* L);
 
 		static int32_t luaPlayerGetBankBalance(lua_State* L);
@@ -1008,20 +1008,20 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetStorageValue(lua_State* L);
 		static int32_t luaPlayerSetStorageValue(lua_State* L);
 
-		static int32_t luaPlayerDoAddItem(lua_State* L);
-		static int32_t luaPlayerDoAddItemEx(lua_State* L);
-		static int32_t luaPlayerDoRemoveItem(lua_State* L);
+		static int32_t luaPlayerAddItem(lua_State* L);
+		static int32_t luaPlayerAddItemEx(lua_State* L);
+		static int32_t luaPlayerRemoveItem(lua_State* L);
 
 		static int32_t luaPlayerGetMoney(lua_State* L);
-		static int32_t luaPlayerDoAddMoney(lua_State* L);
-		static int32_t luaPlayerDoRemoveMoney(lua_State* L);
+		static int32_t luaPlayerAddMoney(lua_State* L);
+		static int32_t luaPlayerRemoveMoney(lua_State* L);
 
-		static int32_t luaPlayerDoShowTextDialog(lua_State* L);
+		static int32_t luaPlayerShowTextDialog(lua_State* L);
 
-		static int32_t luaPlayerDoSendTextMessage(lua_State* L);
-		static int32_t luaPlayerDoSendChannelMessage(lua_State* L);
-		static int32_t luaPlayerDoChannelSay(lua_State* L);
-		static int32_t luaPlayerDoOpenChannel(lua_State* L);
+		static int32_t luaPlayerSendTextMessage(lua_State* L);
+		static int32_t luaPlayerSendChannelMessage(lua_State* L);
+		static int32_t luaPlayerChannelSay(lua_State* L);
+		static int32_t luaPlayerOpenChannel(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
