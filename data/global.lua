@@ -1,4 +1,4 @@
-dofile('compat.lua')
+dofile('data/compat.lua')
 
 TRUE = true
 FALSE = false
