@@ -2244,7 +2244,7 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 		msg.AddByte(container->getItemHoldingCount() + 1);
 		msg.AddItem(item);
 		for(ContainerIterator it = container->begin(); it != container->end(); ++it) {
-			msg.AddItem(*it));
+			msg.AddItem(*it);
 		}
 	} else {
 		msg.AddByte(1);
