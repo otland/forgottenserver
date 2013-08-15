@@ -1799,7 +1799,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	std::map<uint16_t, uint32_t> depotItems;
 	for(std::list<Container*>::const_iterator cit = containerList.begin(); cit != containerList.end(); ++cit)
 	{
-		for(ContainerIterator it = cit->begin(); it != cit->end(); ++it)
+		for(ContainerIterator it = (*cit)->begin(); it != (*cit)->end(); ++it)
 		{
 			Item* item = *it;
 
@@ -2240,12 +2240,14 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 	}
 
 	msg.AddString(player->getName());
-	if (const Container* tradeContainer = item->getContainer()) {
-		for(ContainerIterator it = tradeContainer.begin(); it != tradeContainer.end(); ++it) {
-			msg.AddItem(listItem.front());
+	if (const Container* container = item->getContainer()) {
+		msg.AddByte(container->getItemHoldingCount() + 1);
+		msg.AddItem(item);
+		for(ContainerIterator it = container->begin(); it != container->end(); ++it) {
+			msg.AddItem(*it));
 		}
 	} else {
-		msg.AddByte(0x01);
+		msg.AddByte(1);
 		msg.AddItem(item);
 	}
 
