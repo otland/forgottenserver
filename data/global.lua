@@ -1,3 +1,5 @@
+dofile('compat.lua')
+
 TRUE = true
 FALSE = false
 
