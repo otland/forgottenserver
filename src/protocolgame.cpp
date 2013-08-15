@@ -3128,7 +3128,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.AddU16(player->getBaseSpeed() / 2);
 
 	Condition* condition = player->getCondition(CONDITION_REGENERATION);
-	msg.AddU16(condition ? condition->getTicks() / 1000 : 0x00);
+	msg.AddU16(condition ? round((condition->getEndTime() - OTSYS_TIME()) / 1000.) : 0x00);
 
 	msg.AddU16(player->getOfflineTrainingTime() / 60 / 1000);
 }
