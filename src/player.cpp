@@ -637,14 +637,9 @@ uint32_t Player::getClientIcons() const
 		}
 	}
 
-	if (!getCondition(CONDITION_REGENERATION)) {
-		icons |= ICON_HUNGRY;
-	}
-
 	// Tibia client debugs with 10 or more icons
 	// so let's prevent that from happening.
 	std::bitset<20> icon_bitset((uint64_t)icons);
-
 	for (size_t i = 0, size = icon_bitset.size(); i < size; ++i) {
 		if (icon_bitset.count() < 10) {
 			break;
