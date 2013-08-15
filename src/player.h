@@ -290,7 +290,7 @@ class Player : public Creature, public Cylinder
 			return depotChests;
 		}
 
-		uint32_t getClientIcons() const;
+		uint16_t getClientIcons() const;
 
 		const GuildWarList& getGuildWarList() const {
 			return guildWarList;

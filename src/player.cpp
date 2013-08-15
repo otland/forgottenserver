@@ -614,13 +614,12 @@ float Player::getDefenseFactor() const
 	}
 }
 
-uint32_t Player::getClientIcons() const
+uint16_t Player::getClientIcons() const
 {
-	uint32_t icons = 0;
-
-	for (ConditionList::const_iterator it = conditions.begin(); it != conditions.end(); ++it) {
-		if (!isSuppress((*it)->getType())) {
-			icons |= (*it)->getIcons();
+	uint16_t icons = 0;
+	for (Condition* condition : conditions) {
+		if (!isSuppress(condition->getType())) {
+			icons |= condition->getIcons();
 		}
 	}
 
@@ -639,14 +638,11 @@ uint32_t Player::getClientIcons() const
 
 	// Tibia client debugs with 10 or more icons
 	// so let's prevent that from happening.
-	std::bitset<20> icon_bitset((uint64_t)icons);
-	for (size_t i = 0, size = icon_bitset.size(); i < size; ++i) {
-		if (icon_bitset.count() < 10) {
-			break;
-		}
-
-		if (icon_bitset[i]) {
-			icon_bitset.reset(i);
+	std::bitset<20> icon_bitset(static_cast<uint64_t>(icons));
+	for (size_t pos = 0, bits_set = icon_bitset.count(); bits_set >= 10; ++pos) {
+		if (icon_bitset[pos]) {
+			icon_bitset.reset(pos);
+			--bits_set;
 		}
 	}
 
