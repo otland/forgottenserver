@@ -2616,7 +2616,7 @@ void Player::death()
 				it = conditions.erase(it);
 
 				condition->endCondition(this, CONDITIONEND_DEATH);
-				onEndCondition(condition->getType());
+				onEndCondition(condition->getType(), condition->getId());
 				delete condition;
 			} else {
 				++it;
@@ -2632,7 +2632,7 @@ void Player::death()
 				it = conditions.erase(it);
 
 				condition->endCondition(this, CONDITIONEND_DEATH);
-				onEndCondition(condition->getType());
+				onEndCondition(condition->getType(), condition->getId());
 				delete condition;
 			} else {
 				++it;
@@ -4019,10 +4019,9 @@ void Player::onAddCombatCondition(ConditionType_t type)
 	}
 }
 
-void Player::onEndCondition(ConditionType_t type)
+void Player::onEndCondition(ConditionType_t type, ConditionId_t id)
 {
-	Creature::onEndCondition(type);
-
+	Creature::onEndCondition(type, id);
 	if (type == CONDITION_INFIGHT) {
 		onIdleStatus();
 		pzLocked = false;
@@ -4032,9 +4031,23 @@ void Player::onEndCondition(ConditionType_t type)
 			setSkull(SKULL_NONE);
 			g_game.updatePlayerSkull(this);
 		}
+	} else if (type == CONDITION_REGENERATION) {
+		if (id == CONDITIONID_DEFAULT) {
+			sendStats();
+		}
 	}
 
 	sendIcons();
+}
+
+void Player::onTickCondition(ConditionType_t type, ConditionId_t id, bool& bRemove)
+{
+	Creature::onTickCondition(type, id, bRemove);
+	if (type == CONDITION_REGENERATION) {
+		if (id == CONDITIONID_DEFAULT) {
+			sendStats();
+		}
+	}
 }
 
 void Player::onCombatRemoveCondition(const Creature* attacker, Condition* condition)

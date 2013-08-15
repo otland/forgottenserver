@@ -174,6 +174,9 @@ bool Condition::executeCondition(Creature* creature, int32_t interval)
 		return true;
 	}
 
+	bool hack = false; // onTickCondition boolean is reference
+	creature->onTickCondition(getType(), getId(), hack);
+
 	int32_t newTicks = std::max<int32_t>(0, getTicks() - interval);
 	//Not using set ticks here since it would reset endTime
 	ticks = newTicks;
@@ -1255,7 +1258,7 @@ bool ConditionDamage::executeCondition(Creature* creature, int32_t interval)
 		IntervalInfo& damageInfo = damageList.front();
 
 		bool bRemove = (getTicks() != -1);
-		creature->onTickCondition(getType(), bRemove);
+		creature->onTickCondition(getType(), getId(), bRemove);
 		damageInfo.timeLeft -= interval;
 
 		if (damageInfo.timeLeft <= 0) {

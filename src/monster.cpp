@@ -589,6 +589,7 @@ void Monster::updateIdleStatus()
 
 void Monster::onAddCondition(ConditionType_t type)
 {
+	Creature::onAddCondition(type);
 	if (type == CONDITION_FIRE || type == CONDITION_ENERGY || type == CONDITION_POISON) {
 		updateMapCache();
 	}
@@ -596,8 +597,9 @@ void Monster::onAddCondition(ConditionType_t type)
 	updateIdleStatus();
 }
 
-void Monster::onEndCondition(ConditionType_t type)
+void Monster::onEndCondition(ConditionType_t type, ConditionId_t id)
 {
+	Creature::onEndCondition(type, id);
 	if (type == CONDITION_FIRE || type == CONDITION_ENERGY || type == CONDITION_POISON) {
 		updateMapCache();
 	}
