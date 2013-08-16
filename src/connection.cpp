@@ -87,7 +87,7 @@ void Connection::closeConnection()
 	//any thread
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
 
-	if (m_connectionState == CONNECTION_STATE_CLOSED || m_connectionState == CONNECTION_STATE_REQUEST_CLOSE) {
+	if (m_connectionState == CONNECTION_STATE_CLOSING || m_connectionState == CONNECTION_STATE_CLOSED || m_connectionState == CONNECTION_STATE_REQUEST_CLOSE) {
 		return;
 	}
 
@@ -165,6 +165,7 @@ void Connection::onStopOperation()
 {
 	//io_service thread
 	m_connectionLock.lock();
+
 	m_readTimer.cancel();
 	m_writeTimer.cancel();
 
