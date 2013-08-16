@@ -2174,6 +2174,41 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Group", "getAccess", LuaScriptInterface::luaGroupGetAccess);
 	registerClassMethod("Group", "getMaxDepotItems", LuaScriptInterface::luaGroupGetMaxDepotItems);
 	registerClassMethod("Group", "getMaxVipEntries", LuaScriptInterface::luaGroupGetMaxVipEntries);
+
+	// Vocation
+	registerClass("Vocation", "", LuaScriptInterface::luaVocationCreate);
+	registerClassMethod("Vocation", "getId", LuaScriptInterface::luaVocationGetId);
+	registerClassMethod("Vocation", "getClientId", LuaScriptInterface::luaVocationGetClientId);
+	registerClassMethod("Vocation", "getName", LuaScriptInterface::luaVocationGetName);
+	registerClassMethod("Vocation", "getDescription", LuaScriptInterface::luaVocationGetDescription);
+	
+	registerClassMethod("Vocation", "getRequiredSkillTries", LuaScriptInterface::luaVocationGetRequiredSkillTries);
+	registerClassMethod("Vocation", "getRequiredManaSpent", LuaScriptInterface::luaVocationGetRequiredManaSpent);
+
+	registerClassMethod("Vocation", "getCapacityGain", LuaScriptInterface::luaVocationGetCapacityGain);
+	
+	registerClassMethod("Vocation", "getHealthGain", LuaScriptInterface::luaVocationGetHealthGain);
+	registerClassMethod("Vocation", "getHealthGainTicks", LuaScriptInterface::luaVocationGetHealthGainTicks);
+	registerClassMethod("Vocation", "getHealthGainAmount", LuaScriptInterface::luaVocationGetHealthGainAmount);
+
+	registerClassMethod("Vocation", "getManaGain", LuaScriptInterface::luaVocationGetManaGain);
+	registerClassMethod("Vocation", "getManaGainTicks", LuaScriptInterface::luaVocationGetManaGainTicks);
+	registerClassMethod("Vocation", "getManaGainAmount", LuaScriptInterface::luaVocationGetManaGainTicks);
+	
+	registerClassMethod("Vocation", "getMaxSoul", LuaScriptInterface::luaVocationGetMaxSoul);
+	registerClassMethod("Vocation", "getSoulGainTicks", LuaScriptInterface::luaVocationGetSoulGainTicks);
+	
+	registerClassMethod("Vocation", "getAttackSpeed", LuaScriptInterface::luaVocationGetAttackSpeed);
+	registerClassMethod("Vocation", "getBaseSpeed", LuaScriptInterface::luaVocationGetBaseSpeed);
+
+	registerClassMethod("Vocation", "getDemotion", LuaScriptInterface::luaVocationGetDemotion);
+	registerClassMethod("Vocation", "getPromotion", LuaScriptInterface::luaVocationGetPromotion);
+
+	// Town
+	registerClass("Town", "", LuaScriptInterface::luaTownCreate);
+	registerClassMethod("Town", "getId", LuaScriptInterface::luaTownGetId);
+	registerClassMethod("Town", "getName", LuaScriptInterface::luaTownGetName);
+	registerClassMethod("Town", "getTemplePosition", LuaScriptInterface::luaTownGetTemplePosition);
 }
 
 void LuaScriptInterface::registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction/* = NULL*/)
@@ -9555,7 +9590,8 @@ int32_t LuaScriptInterface::luaPlayerGetVocation(lua_State* L)
 	// player:getVocation()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		pushNumber(L, player->getVocationId());
+		pushUserdata<Vocation>(L, player->getVocation());
+		setMetatable(L, -1, "Vocation");
 	} else {
 		pushNil(L);
 	}
@@ -9564,11 +9600,16 @@ int32_t LuaScriptInterface::luaPlayerGetVocation(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 {
-	// player:setVocation(vocationId)
-	uint32_t vocationId = getNumber<uint32_t>(L, 2);
+	// player:setVocation(vocation)
+	Vocation* vocation = getUserdata<Vocation>(L, 2);
+	if (!vocation) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->setVocation(vocationId);
+		player->setVocation(vocation->getId());
 
 		uint32_t promotedVocation = g_vocations.getPromotedVocation(player->getVocationId());
 		if (promotedVocation == 0 && player->getVocationId() != promotedVocation) {
@@ -9613,7 +9654,8 @@ int32_t LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 	// player:getTown()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		pushNumber(L, player->getTown()->getTownID());
+		pushUserdata<Town>(L, player->getTown());
+		setMetatable(L, -1, "Town");
 	} else {
 		pushNil(L);
 	}
@@ -9622,18 +9664,17 @@ int32_t LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 {
-	// player:setTown(newTown)
-	uint32_t newTown = getNumber<uint32_t>(L, 2);
+	// player:setTown(town)
+	Town* town = getUserdata<Town>(L, 2);
+	if (!town) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		Town* town = Towns::getInstance().getTown(newTown);
-		if (town) {
-			player->setTown(town);
-			pushBoolean(L, true);
-		} else {
-			reportErrorFunc("No town with townId exist");
-			pushBoolean(L, false);
-		}
+		player->setTown(town);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}
@@ -10241,7 +10282,9 @@ int32_t LuaScriptInterface::luaGuildCreate(lua_State* L)
 {
 	// Guild(id)
 	// Guild.new(id)
-	Guild* guild = g_game.getGuild(getNumber<uint32_t>(L, 2));
+	uint32_t id = getNumber<uint32_t>(L, 2);
+
+	Guild* guild = g_game.getGuild(id);
 	if (guild) {
 		pushUserdata<Guild>(L, guild);
 		setMetatable(L, -1, "Guild");
@@ -10429,7 +10472,9 @@ int32_t LuaScriptInterface::luaGroupCreate(lua_State* L)
 {
 	// Group(id)
 	// Group.new(id)
-	Group* group = g_game.getGroup(getNumber<uint32_t>(L, 2));
+	uint32_t id = getNumber<uint32_t>(L, 2);
+
+	Group* group = g_game.getGroup(id);
 	if (group) {
 		pushUserdata<Group>(L, group);
 		setMetatable(L, -1, "Group");
@@ -10505,6 +10550,325 @@ int32_t LuaScriptInterface::luaGroupGetMaxVipEntries(lua_State* L)
 	Group* group = getUserdata<Group>(L, 1);
 	if (group) {
 		pushNumber(L, group->maxVipEntries);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+// Vocation
+int32_t LuaScriptInterface::luaVocationCreate(lua_State* L)
+{
+	// Vocation(id)
+	// Vocation.new(id)
+	uint32_t id = getNumber<uint32_t>(L, 2);
+
+	Vocation* vocation = g_vocations.getVocation(id);
+	if (vocation) {
+		pushUserdata<Vocation>(L, vocation);
+		setMetatable(L, -1, "Vocation");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetId(lua_State* L)
+{
+	// vocation:getId()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getId());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetClientId(lua_State* L)
+{
+	// vocation:getClientId()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getClientId());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetName(lua_State* L)
+{
+	// vocation:getName()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushString(L, vocation->getVocName());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetDescription(lua_State* L)
+{
+	// vocation:getDescription()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushString(L, vocation->getVocDescription());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetRequiredSkillTries(lua_State* L)
+{
+	// vocation:getRequiredSkillTries(skillType, skillLevel)
+	int32_t skillLevel = getNumber<int32_t>(L, 3);
+	skills_t skillType = static_cast<skills_t>(getNumber<uint64_t>(L, 2));
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getReqSkillTries(skillType, skillLevel));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetRequiredManaSpent(lua_State* L)
+{
+	// vocation:getRequiredManaSpent(magicLevel)
+	uint32_t magicLevel = getNumber<uint32_t>(L, 2);
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getReqMana(magicLevel));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetCapacityGain(lua_State* L)
+{
+	// vocation:getCapacityGain()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getCapGain());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetHealthGain(lua_State* L)
+{
+	// vocation:getHealthGain()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getHPGain());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetHealthGainTicks(lua_State* L)
+{
+	// vocation:getHealthGainTicks()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getHealthGainTicks());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetHealthGainAmount(lua_State* L)
+{
+	// vocation:getHealthGainAmount()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getHealthGainAmount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetManaGain(lua_State* L)
+{
+	// vocation:getManaGain()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getManaGain());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetManaGainTicks(lua_State* L)
+{
+	// vocation:getManaGainTicks()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getManaGainTicks());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetManaGainAmount(lua_State* L)
+{
+	// vocation:getManaGainAmount()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getManaGainAmount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetMaxSoul(lua_State* L)
+{
+	// vocation:getMaxSoul()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getSoulMax());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetSoulGainTicks(lua_State* L)
+{
+	// vocation:getSoulGainTicks()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getSoulGainTicks());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetAttackSpeed(lua_State* L)
+{
+	// vocation:getAttackSpeed()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getAttackSpeed());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetBaseSpeed(lua_State* L)
+{
+	// vocation:getBaseSpeed()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushNumber(L, vocation->getBaseSpeed());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetDemotion(lua_State* L)
+{
+	// vocation:getDemotion()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		Vocation* demotedVocation = g_vocations.getVocation(vocation->getFromVocation());
+		if (demotedVocation != vocation) {
+			pushUserdata<Vocation>(L, demotedVocation);
+			setMetatable(L, -1, "Vocation");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaVocationGetPromotion(lua_State* L)
+{
+	// vocation:getPromotion()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		Vocation* promotedVocation = g_vocations.getVocation(g_vocations.getPromotedVocation(vocation->getId()));
+		if (promotedVocation != vocation) {
+			pushUserdata<Vocation>(L, promotedVocation);
+			setMetatable(L, -1, "Vocation");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+// Town
+int32_t LuaScriptInterface::luaTownCreate(lua_State* L)
+{
+	// Town(id or name)
+	// Town.new(id or name)
+	Town* town;
+	if (isNumber(L, 2)) {
+		town = Towns::getInstance().getTown(getNumber<uint32_t>(L, 2));
+	} else if (isString(L, 2)) {
+		town = Towns::getInstance().getTown(getString(L, 2));
+	} else {
+		town = NULL;
+	}
+
+	if (town) {
+		pushUserdata<Town>(L, town);
+		setMetatable(L, -1, "Town");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTownGetId(lua_State* L)
+{
+	// town:getId()
+	Town* town = getUserdata<Town>(L, 1);
+	if (town) {
+		pushNumber(L, town->getTownID());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTownGetName(lua_State* L)
+{
+	// town:getName()
+	Town* town = getUserdata<Town>(L, 1);
+	if (town) {
+		pushString(L, town->getName());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
+{
+	// town:getTemplePosition()
+	Town* town = getUserdata<Town>(L, 1);
+	if (town) {
+		pushMetaPosition(L, town->getTemplePosition(), 0);
 	} else {
 		pushNil(L);
 	}
