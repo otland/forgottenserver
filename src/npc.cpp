@@ -663,8 +663,8 @@ void NpcScriptInterface::registerFunctions()
 	registerClassMethod("Npc", "getParameter", NpcScriptInterface::luaNpcGetParameter);
 	registerClassMethod("Npc", "setFocus", NpcScriptInterface::luaNpcSetFocus);
 
-	registerClassMethod("Npc", "doOpenShopWindow", NpcScriptInterface::luaNpcDoOpenShopWindow);
-	registerClassMethod("Npc", "doCloseShopWindow", NpcScriptInterface::luaNpcDoCloseShopWindow);
+	registerClassMethod("Npc", "openShopWindow", NpcScriptInterface::luaNpcOpenShopWindow);
+	registerClassMethod("Npc", "closeShopWindow", NpcScriptInterface::luaNpcCloseShopWindow);
 }
 
 int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
@@ -1124,9 +1124,9 @@ int32_t NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 	return 1;
 }
 
-int32_t NpcScriptInterface::luaNpcDoOpenShopWindow(lua_State* L)
+int32_t NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 {
-	// npc:doOpenShopWindow(cid, items, buyCallback, sellCallback)
+	// npc:openShopWindow(cid, items, buyCallback, sellCallback)
 	if(!isTable(L, 3)) {
 		reportErrorFunc("item list is not a table.");
 		pushBoolean(L, false);
@@ -1187,7 +1187,7 @@ int32_t NpcScriptInterface::luaNpcDoOpenShopWindow(lua_State* L)
 	return 1;
 }
 
-int32_t NpcScriptInterface::luaNpcDoCloseShopWindow(lua_State* L)
+int32_t NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 {
 	// npc:closeShopWindow(player)
 	Player* player = getPlayer(L, 2);

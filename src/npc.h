@@ -67,8 +67,8 @@ class NpcScriptInterface : public LuaScriptInterface
 		static int32_t luaNpcGetParameter(lua_State* L);
 		static int32_t luaNpcSetFocus(lua_State* L);
 
-		static int32_t luaNpcDoOpenShopWindow(lua_State* L);
-		static int32_t luaNpcDoCloseShopWindow(lua_State* L);
+		static int32_t luaNpcOpenShopWindow(lua_State* L);
+		static int32_t luaNpcCloseShopWindow(lua_State* L);
 
 	private:
 		virtual bool initState();

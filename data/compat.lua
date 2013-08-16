@@ -44,8 +44,8 @@ function getPlayerSkill(cid, skillId) return _Player(cid):getSkillLevel(skillId)
 function getPlayerMana(cid) return _Player(cid):getMana() end
 function getPlayerMaxMana(cid) return _Player(cid):getMaxMana() end
 function getPlayerLevel(cid) return _Player(cid):getLevel() end
-function getPlayerTown(cid) return _Player(cid):getTown() end
-function getPlayerVocation(cid) return _Player(cid):getVocation() end
+function getPlayerTown(cid) return _Player(cid):getTown():getId() end
+function getPlayerVocation(cid) return _Player(cid):getVocation():getId() end
 function getPlayerSoul(cid) return _Player(cid):getSoul() end
 function getPlayerSex(cid) return _Player(cid):getSex() end
 function getPlayerStorageValue(cid, key) return _Player(cid):getStorageValue(key) end
@@ -90,8 +90,8 @@ function doPlayerSetBalance(cid, balance) return _Player(cid):setBankBalance(bal
 function doPlayerAddMoney(cid, money) return _Player(cid):addMoney(money) end
 function doPlayerRemoveMoney(cid, money) return _Player(cid):removeMoney(money) end
 function doPlayerAddSoul(cid, soul) return _Player(cid):addSoul(soul) end
-function doPlayerSetVocation(cid, vocation) return _Player(cid):setVocation(vocation) end
-function doPlayerSetTown(cid, town) return _Player(cid):setTown(town) end
+function doPlayerSetVocation(cid, vocation) return _Player(cid):setVocation(Vocation(vocation)) end
+function doPlayerSetTown(cid, town) return _Player(cid):setTown(Town(town)) end
 function setPlayerGroupId(cid, groupId) return _Player(cid):setGroup(Group(groupId)) end
 function doPlayerSetSex(cid, sex) return _Player(cid):setSex(sex) end
 function doShowTextDialog(cid, itemId, text) return _Player(cid):showTextDialog(cid, itemId, text) end

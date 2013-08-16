@@ -1007,6 +1007,43 @@ class LuaScriptInterface
 		static int32_t luaGroupGetMaxDepotItems(lua_State* L);
 		static int32_t luaGroupGetMaxVipEntries(lua_State* L);
 
+		// Vocation
+		static int32_t luaVocationCreate(lua_State* L);
+		
+		static int32_t luaVocationGetId(lua_State* L);
+		static int32_t luaVocationGetClientId(lua_State* L);
+		static int32_t luaVocationGetName(lua_State* L);
+		static int32_t luaVocationGetDescription(lua_State* L);
+		
+		static int32_t luaVocationGetRequiredSkillTries(lua_State* L);
+		static int32_t luaVocationGetRequiredManaSpent(lua_State* L);
+
+		static int32_t luaVocationGetCapacityGain(lua_State* L);
+		
+		static int32_t luaVocationGetHealthGain(lua_State* L);
+		static int32_t luaVocationGetHealthGainTicks(lua_State* L);
+		static int32_t luaVocationGetHealthGainAmount(lua_State* L);
+
+		static int32_t luaVocationGetManaGain(lua_State* L);
+		static int32_t luaVocationGetManaGainTicks(lua_State* L);
+		static int32_t luaVocationGetManaGainAmount(lua_State* L);
+
+		static int32_t luaVocationGetMaxSoul(lua_State* L);
+		static int32_t luaVocationGetSoulGainTicks(lua_State* L);
+		
+		static int32_t luaVocationGetAttackSpeed(lua_State* L);
+		static int32_t luaVocationGetBaseSpeed(lua_State* L);
+		
+		static int32_t luaVocationGetDemotion(lua_State* L);
+		static int32_t luaVocationGetPromotion(lua_State* L);
+
+		// Town
+		static int32_t luaTownCreate(lua_State* L);
+
+		static int32_t luaTownGetId(lua_State* L);
+		static int32_t luaTownGetName(lua_State* L);
+		static int32_t luaTownGetTemplePosition(lua_State* L);
+
 		//
 		lua_State* m_luaState;
 		std::string m_lastLuaError;
