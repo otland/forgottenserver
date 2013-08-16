@@ -355,14 +355,6 @@ class LuaScriptInterface
 			*userdata = value;
 		}
 		template<class T>
-		static void destroyUserdata(T* value)
-		{
-			if (!std::is_base_of<Thing, T>::value) {
-				delete value;
-				value = NULL;
-			}
-		}
-		template<class T>
 		static T* popUserdata(lua_State* L)
 		{
 			T* userdata = *static_cast<T**>(lua_touserdata(L, -1));
@@ -384,7 +376,7 @@ class LuaScriptInterface
 		template<class T>
 		static T* getUserdata(lua_State* L, int32_t arg)
 		{
-			T** userdata = static_cast<T**>(lua_touserdata(L, arg));
+			T** userdata = getRawUserdata<T>(L, arg);
 			if (!userdata) {
 				return NULL;
 			}
@@ -480,8 +472,7 @@ class LuaScriptInterface
 
 		void registerFunctions();
 		
-		void registerClass(const std::string& className, const std::string& baseClass,
-			lua_CFunction newFunction = NULL, lua_CFunction deleteFunction = NULL);
+		void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = NULL);
 		void registerClassMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerMetaMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
@@ -805,7 +796,12 @@ class LuaScriptInterface
 		static int32_t luaPositionAdd(lua_State* L);
 		static int32_t luaPositionSub(lua_State* L);
 		static int32_t luaPositionCompare(lua_State* L);
+
 		static int32_t luaPositionGetDistance(lua_State* L);
+		static int32_t luaPositionIsSightClear(lua_State* L);
+
+		static int32_t luaPositionSendMagicEffect(lua_State* L);
+		static int32_t luaPositionSendDistanceEffect(lua_State* L);
 
 		// NetworkMessage
 		static int32_t luaNetworkMessageCreate(lua_State* L);
@@ -859,7 +855,6 @@ class LuaScriptInterface
 
 		// Item
 		static int32_t luaItemCreate(lua_State* L);
-		static int32_t luaItemDelete(lua_State* L);
 
 		static int32_t luaItemGetId(lua_State* L);
 
@@ -887,7 +882,6 @@ class LuaScriptInterface
 
 		// Container
 		static int32_t luaContainerCreate(lua_State* L);
-		static int32_t luaContainerDelete(lua_State* L);
 
 		static int32_t luaContainerGetSize(lua_State* L);
 		static int32_t luaContainerGetCapacity(lua_State* L);
@@ -900,7 +894,6 @@ class LuaScriptInterface
 
 		// Creature
 		static int32_t luaCreatureCreate(lua_State* L);
-		static int32_t luaCreatureDelete(lua_State* L);
 
 		static int32_t luaCreatureIsCreature(lua_State* L);
 		static int32_t luaCreatureIsPlayer(lua_State* L);
@@ -932,11 +925,22 @@ class LuaScriptInterface
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);
-		static int32_t luaPlayerDelete(lua_State* L);
 
 		static int32_t luaPlayerGetExperience(lua_State* L);
 		static int32_t luaPlayerAddExperience(lua_State* L);
 		static int32_t luaPlayerGetLevel(lua_State* L);
+
+		static int32_t luaPlayerGetMagicLevel(lua_State* L);
+		static int32_t luaPlayerGetManaSpent(lua_State* L);
+		static int32_t luaPlayerAddManaSpent(lua_State* L);
+
+		static int32_t luaPlayerGetSkillLevel(lua_State* L);
+		static int32_t luaPlayerGetSkillPercent(lua_State* L);
+		static int32_t luaPlayerGetSkillTries(lua_State* L);
+		static int32_t luaPlayerAddSkillTries(lua_State* L);
+
+		static int32_t luaPlayerGetItemCount(lua_State* L);
+		static int32_t luaPlayerGetItemById(lua_State* L);
 
 		static int32_t luaPlayerGetVocation(lua_State* L);
 		static int32_t luaPlayerSetVocation(lua_State* L);
@@ -977,13 +981,40 @@ class LuaScriptInterface
 		static int32_t luaPlayerChannelSay(lua_State* L);
 		static int32_t luaPlayerOpenChannel(lua_State* L);
 
+		static int32_t luaPlayerGetSlotItem(lua_State* L);
+
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
-		static int32_t luaMonsterDelete(lua_State* L);
 
 		// Npc
 		static int32_t luaNpcCreate(lua_State* L);
-		static int32_t luaNpcDelete(lua_State* L);
+
+		// Guild
+		static int32_t luaGuildCreate(lua_State* L);
+
+		static int32_t luaGuildGetId(lua_State* L);
+		static int32_t luaGuildGetName(lua_State* L);
+		static int32_t luaGuildGetMembersOnline(lua_State* L);
+
+		static int32_t luaGuildAddMember(lua_State* L);
+		static int32_t luaGuildRemoveMember(lua_State* L);
+
+		static int32_t luaGuildAddRank(lua_State* L);
+		static int32_t luaGuildGetRankById(lua_State* L);
+		static int32_t luaGuildGetRankByLevel(lua_State* L);
+	
+		static int32_t luaGuildGetMotd(lua_State* L);
+		static int32_t luaGuildSetMotd(lua_State* L);
+
+		// Group
+		static int32_t luaGroupCreate(lua_State* L);
+
+		static int32_t luaGroupGetId(lua_State* L);
+		static int32_t luaGroupGetName(lua_State* L);
+		static int32_t luaGroupGetFlags(lua_State* L);
+		static int32_t luaGroupGetAccess(lua_State* L);
+		static int32_t luaGroupGetMaxDepotItems(lua_State* L);
+		static int32_t luaGroupGetMaxVipEntries(lua_State* L);
 
 		//
 		lua_State* m_luaState;

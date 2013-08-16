@@ -5038,6 +5038,14 @@ void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uin
 	SpectatorVec list;
 	getSpectators(list, fromPos, false, true);
 	getSpectators(list, toPos, false, true);
+	addDistanceEffect(list, fromPos, toPos, effect);
+}
+
+void Game::addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect)
+{
+	if (effect > NM_SHOOT_LAST || effect == NM_SHOOT_UNK1 || effect == NM_SHOOT_UNK2 || effect == NM_SHOOT_UNK3) {
+		return;
+	}
 
 	for (SpectatorVec::const_iterator it = list.begin(), end = list.end(); it != end; ++it) {
 		if (Player* tmpPlayer = (*it)->getPlayer()) {
