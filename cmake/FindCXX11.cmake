@@ -12,7 +12,8 @@ if(COMPILER_KNOWS_CXX11)
 
     # Tested on Mac OS X 10.8.2 with XCode 4.6 Command Line Tools
     # Clang requires this to find the correct c++11 headers
-    if(CMAKE_HOST_APPLE)
+    check_cxx_compiler_flag("-stdlib=libc++" COMPILER_KNOWS_STDLIB)
+    if(COMPILER_KNOWS_STDLIB)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     endif()
 else()
