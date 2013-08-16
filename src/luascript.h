@@ -241,15 +241,8 @@ struct Position;
 
 enum PlayerInfo_t {
 	PlayerInfoFood,
-	PlayerInfoAccess,
-	PlayerInfoMagLevel,
 	PlayerInfoMasterPos,
 	PlayerInfoFreeCap,
-	PlayerInfoGuildId,
-	PlayerInfoGuildLevel,
-	PlayerInfoGuildName,
-	PlayerInfoGuildRank,
-	PlayerInfoGuildNick,
 	PlayerInfoGUID,
 	PlayerInfoPremiumDays,
 	PlayerInfoSkullType,
@@ -574,8 +567,6 @@ class LuaScriptInterface
 		//get creature info functions
 		static int32_t luaGetPlayerFood(lua_State* L);
 		static int32_t luaGetPlayerIp(lua_State* L);
-		static int32_t luaGetPlayerAccess(lua_State* L);
-		static int32_t luaGetPlayerMagLevel(lua_State* L);
 		static int32_t luaGetCreatureMaster(lua_State* L);
 		static int32_t luaGetCreatureSummons(lua_State* L);
 		static int32_t luaGetSpectators(lua_State* L);
@@ -583,7 +574,6 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 		static int32_t luaGetCreatureTarget(lua_State* L);
 		static int32_t luaGetPlayerAccountType(lua_State* L);
-		static int32_t luaGetPlayerSkill(lua_State* L);
 		static int32_t luaGetPlayerMasterPos(lua_State* L);
 		static int32_t luaGetPromotedVocation(lua_State* L);
 		static int32_t luaGetPlayerItemCount(lua_State* L);
@@ -596,11 +586,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerLastLoginSaved(lua_State* L);
 
 		static int32_t luaGetPlayerDepotItems(lua_State* L);
-		static int32_t luaGetPlayerGuildId(lua_State* L);
-		static int32_t luaGetPlayerGuildLevel(lua_State* L);
-		static int32_t luaGetPlayerGuildName(lua_State* L);
-		static int32_t luaGetPlayerGuildRank(lua_State* L);
-		static int32_t luaGetPlayerGuildNick(lua_State* L);
 		static int32_t luaGetPlayerBlessing(lua_State* L);
 		static int32_t luaDoPlayerAddBlessing(lua_State* L);
 		static int32_t luaGetPlayerGUID(lua_State* L);
@@ -951,8 +936,14 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetTown(lua_State* L);
 		static int32_t luaPlayerSetTown(lua_State* L);
 
-		static int32_t luaPlayerGetGroupId(lua_State* L);
-		static int32_t luaPlayerSetGroupId(lua_State* L);
+		static int32_t luaPlayerGetGuild(lua_State* L);
+		static int32_t luaPlayerSetGuild(lua_State* L);
+
+		static int32_t luaPlayerGetGuildLevel(lua_State* L);
+		static int32_t luaPlayerGetGuildNick(lua_State* L);
+
+		static int32_t luaPlayerGetGroup(lua_State* L);
+		static int32_t luaPlayerSetGroup(lua_State* L);
 
 		static int32_t luaPlayerGetStamina(lua_State* L);
 

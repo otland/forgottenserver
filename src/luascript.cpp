@@ -1266,15 +1266,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFood(cid)
 	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
 
-	//getPlayerMagLevel(cid)
-	lua_register(m_luaState, "getPlayerMagLevel", LuaScriptInterface::luaGetPlayerMagLevel);
-
-	//getPlayerAccess(cid)
-	lua_register(m_luaState, "getPlayerAccess", LuaScriptInterface::luaGetPlayerAccess);
-
-	//getPlayerSkill(cid, skillid)
-	lua_register(m_luaState, "getPlayerSkill", LuaScriptInterface::luaGetPlayerSkill);
-
 	//getPlayerMasterPos(cid)
 	lua_register(m_luaState, "getPlayerMasterPos", LuaScriptInterface::luaGetPlayerMasterPos);
 
@@ -1295,21 +1286,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getPlayerDepotItems(cid, depotid)
 	lua_register(m_luaState, "getPlayerDepotItems", LuaScriptInterface::luaGetPlayerDepotItems);
-
-	//getPlayerGuildId(cid)
-	lua_register(m_luaState, "getPlayerGuildId", LuaScriptInterface::luaGetPlayerGuildId);
-
-	//getPlayerGuildLevel(cid)
-	lua_register(m_luaState, "getPlayerGuildLevel", LuaScriptInterface::luaGetPlayerGuildLevel);
-
-	//getPlayerGuildName(cid)
-	lua_register(m_luaState, "getPlayerGuildName", LuaScriptInterface::luaGetPlayerGuildName);
-
-	//getPlayerGuildRank(cid)
-	lua_register(m_luaState, "getPlayerGuildRank", LuaScriptInterface::luaGetPlayerGuildRank);
-
-	//getPlayerGuildNick(cid)
-	lua_register(m_luaState, "getPlayerGuildNick", LuaScriptInterface::luaGetPlayerGuildNick);
 
 	//getPlayerGUID(cid)
 	lua_register(m_luaState, "getPlayerGUID", LuaScriptInterface::luaGetPlayerGUID);
@@ -2130,8 +2106,14 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Player", "getTown", LuaScriptInterface::luaPlayerGetTown);
 	registerClassMethod("Player", "setTown", LuaScriptInterface::luaPlayerSetTown);
 
-	registerClassMethod("Player", "getGroupId", LuaScriptInterface::luaPlayerGetGroupId);
-	registerClassMethod("Player", "setGroupId", LuaScriptInterface::luaPlayerSetGroupId);
+	registerClassMethod("Player", "getGuild", LuaScriptInterface::luaPlayerGetGuild);
+	registerClassMethod("Player", "setGuild", LuaScriptInterface::luaPlayerSetGuild);
+
+	registerClassMethod("Player", "getGuildLevel", LuaScriptInterface::luaPlayerGetGuildLevel);
+	registerClassMethod("Player", "getGuildNick", LuaScriptInterface::luaPlayerGetGuildNick);
+
+	registerClassMethod("Player", "getGroup", LuaScriptInterface::luaPlayerGetGroup);
+	registerClassMethod("Player", "setGroup", LuaScriptInterface::luaPlayerSetGroup);
 
 	registerClassMethod("Player", "getStamina", LuaScriptInterface::luaPlayerGetStamina);
 
@@ -2291,14 +2273,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 
 	int32_t value;
 	switch (info) {
-		case PlayerInfoAccess:
-			value = player->group->access;
-			break;
-
-		case PlayerInfoMagLevel:
-			value = player->magLevel;
-			break;
-
 		case PlayerInfoMasterPos:
 			pushPosition(L, player->getTemplePosition(), 0);
 			return 1;
@@ -2328,52 +2302,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 		case PlayerInfoFreeCap:
 			value = (int32_t)player->getFreeCapacity();
 			break;
-
-		case PlayerInfoGuildId: {
-			Guild* guild = player->getGuild();
-			if (!guild) {
-				pushBoolean(L, false);
-				return 1;
-			}
-
-			value = guild->getId();
-			break;
-		}
-
-		case PlayerInfoGuildLevel:
-			value = player->getGuildLevel();
-			break;
-
-		case PlayerInfoGuildName: {
-			Guild* guild = player->getGuild();
-			if (guild) {
-				pushString(L, guild->getName());
-			} else {
-				pushBoolean(L, false);
-			}
-			return 1;
-		}
-
-		case PlayerInfoGuildRank: {
-			Guild* guild = player->getGuild();
-			if (!guild) {
-				pushBoolean(L, false);
-				return 1;
-			}
-
-			GuildRank* rank = guild->getRankByLevel(player->getGuildLevel());
-			if (!rank) {
-				pushBoolean(L, false);
-				return 1;
-			}
-
-			pushString(L, rank->name);
-			return 1;
-		}
-
-		case PlayerInfoGuildNick:
-			pushString(L, player->getGuildNick());
-			return 1;
 
 		case PlayerInfoPzLock:
 			pushBoolean(L, player->isPzLocked());
@@ -2409,14 +2337,6 @@ int32_t LuaScriptInterface::luaGetPlayerFood(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoFood);
 }
-int32_t LuaScriptInterface::luaGetPlayerAccess(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoAccess);
-}
-int32_t LuaScriptInterface::luaGetPlayerMagLevel(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoMagLevel);
-}
 int32_t LuaScriptInterface::luaGetPlayerMasterPos(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoMasterPos);
@@ -2424,26 +2344,6 @@ int32_t LuaScriptInterface::luaGetPlayerMasterPos(lua_State* L)
 int32_t LuaScriptInterface::luaGetPlayerFreeCap(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoFreeCap);
-}
-int32_t LuaScriptInterface::luaGetPlayerGuildId(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoGuildId);
-}
-int32_t LuaScriptInterface::luaGetPlayerGuildLevel(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoGuildLevel);
-}
-int32_t LuaScriptInterface::luaGetPlayerGuildName(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoGuildName);
-}
-int32_t LuaScriptInterface::luaGetPlayerGuildRank(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoGuildRank);
-}
-int32_t LuaScriptInterface::luaGetPlayerGuildNick(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoGuildNick);
 }
 int32_t LuaScriptInterface::luaGetPlayerGUID(lua_State* L)
 {
@@ -3502,29 +3402,6 @@ int32_t LuaScriptInterface::luaGetPlayerAccountType(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerSkill(lua_State* L)
-{
-	//getPlayerSkill(cid, skillid)
-	uint32_t skillid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	const Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (skillid <= SKILL_LAST) {
-			uint32_t value = player->skills[skillid][SKILL_LEVEL];
-			lua_pushnumber(L, value);
-		} else {
-			reportErrorFunc("No valid skillId");
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
 	return 1;
 }
 
@@ -9564,12 +9441,18 @@ int32_t LuaScriptInterface::luaPlayerGetSkillLevel(lua_State* L)
 {
 	// player:getSkillLevel(skillType)
 	skills_t skillType = static_cast<skills_t>(getNumber<uint64_t>(L, 2));
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushNumber(L, player->getSkill(skillType, SKILL_LEVEL));
-	} else {
+	if (skillType > SKILL_LAST) {
 		pushNil(L);
+		return 1;
 	}
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushNumber(L, player->skills[skillType][SKILL_LEVEL]);
 	return 1;
 }
 
@@ -9577,12 +9460,18 @@ int32_t LuaScriptInterface::luaPlayerGetSkillPercent(lua_State* L)
 {
 	// player:getSkillPercent(skillType)
 	skills_t skillType = static_cast<skills_t>(getNumber<uint64_t>(L, 2));
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushNumber(L, player->getSkill(skillType, SKILL_PERCENT));
-	} else {
+	if (skillType > SKILL_LAST) {
 		pushNil(L);
+		return 1;
 	}
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushNumber(L, player->skills[skillType][SKILL_PERCENT]);
 	return 1;
 }
 
@@ -9590,12 +9479,18 @@ int32_t LuaScriptInterface::luaPlayerGetSkillTries(lua_State* L)
 {
 	// player:getSkillTries(skillType)
 	skills_t skillType = static_cast<skills_t>(getNumber<uint64_t>(L, 2));
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushNumber(L, player->getSkill(skillType, SKILL_TRIES));
-	} else {
+	if (skillType > SKILL_LAST) {
 		pushNil(L);
+		return 1;
 	}
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushNumber(L, player->skills[skillType][SKILL_TRIES]);
 	return 1;
 }
 
@@ -9745,34 +9640,103 @@ int32_t LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerGetGroupId(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 {
-	// player:getGroupId()
+	// player:getGuild()
 	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushNumber(L, player->getGroup()->id);
-	} else {
+	if (!player) {
 		pushNil(L);
+		return 1;
 	}
+
+	Guild* guild = player->getGuild();
+	if (!guild) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushUserdata<Guild>(L, guild);
+	setMetatable(L, -1, "Guild");
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerSetGroupId(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerGetGuildLevel(lua_State* L)
 {
-	// player:setGroupId(groupId)
-	int32_t groupId = getNumber<int32_t>(L, 2);
+	// player:getGuildLevel()
 	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		Group* group = g_game.getGroup(groupId);
-		if (group) {
-			player->setGroup(group);
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
+	if (!player) {
 		pushNil(L);
+		return 1;
 	}
+
+	lua_pushnumber(L, player->getGuildLevel());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetGuildNick(lua_State* L)
+{
+	// player:getGuildNick()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushString(L, player->getGuildNick());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
+{
+	// player:setGroup(group)
+	Guild* guild = getUserdata<Guild>(L, 2);
+	if (!guild) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	player->setGuild(guild);
+	pushBoolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetGroup(lua_State* L)
+{
+	// player:getGroup()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushUserdata<Group>(L, player->getGroup());
+	setMetatable(L, -1, "Group");
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetGroup(lua_State* L)
+{
+	// player:setGroup(group)
+	Group* group = getUserdata<Group>(L, 2);
+	if (!group) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	player->setGroup(group);
+	pushBoolean(L, true);
 	return 1;
 }
 
