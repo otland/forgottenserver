@@ -10123,23 +10123,27 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		Item* item = Item::CreateItem(itemId);
-		if (length < 0) {
-			length = item->getMaxWriteLength();
-		}
+		if (item) {
+			if (length < 0) {
+				length = item->getMaxWriteLength();
+			}
 
-		if (!text.empty()) {
-			item->setText(text);
-			length = std::max<int32_t>(text.size(), length);
-		}
+			if (!text.empty()) {
+				item->setText(text);
+				length = std::max<int32_t>(text.size(), length);
+			}
 
-		item->setParent(player);
-		player->setWriteItem(item, length);
-		player->sendTextWindow(item, length, canWrite);
-		pushBoolean(L, true);
+			item->setParent(player);
+			player->setWriteItem(item, length);
+			player->sendTextWindow(item, length, canWrite);
+			pushBoolean(L, true);
+		} else {
+			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
+			pushBoolean(L, false);
+		}
 	} else {
 		pushNil(L);
 	}
-
 	return 1;
 }
 
