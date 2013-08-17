@@ -36,7 +36,9 @@ function doCreatureSetLookDir(cid, direction) return _Creature(cid):setDirection
 
 doSetCreatureDirection = doCreatureSetLookDir
 
+function getPlayerGUID(cid) return _Player(cid):getGuid() end
 function getPlayerName(cid) return _Player(cid):getName() end
+function getPlayerFreeCap(cid) return _Player(cid):getFreeCapacity() end
 function getPlayerPosition(cid) return _Player(cid):getPosition() end
 function getPlayerMagLevel(cid) return _Player(cid):getMagicLevel() end
 function getPlayerAccess(cid) return _Player(cid):getGroup():getAccess() end
@@ -83,6 +85,8 @@ function getPlayerGuildRank(cid)
 end
 function getPlayerGuildNick(cid) return _Player(cid):getGuildNick() end
 function getPlayerMasterPos(cid) return _Player(cid):getTown():getTemplePosition() end
+function getPlayerItemCount(cid, itemId, ...) return _Player(cid):getItemCount(itemId, ...) end
+function getPlayerFlagValue(cid, flag) return bit.band(_Player(cid):getGroup():getFlags(), bit.lshift(1, flag)) ~= 0 end
 
 getPlayerAccountBalance = getPlayerBalance
 
@@ -106,3 +110,16 @@ function doTransformItem(uid, newItemId, ...) return Item(uid):transform(newItem
 
 function getContainerSize(uid) return Container(uid):getSize() end
 function getContainerCap(uid) return Container(uid):getCapacity() end
+
+function getPromotedVocation(vocationId)
+	local vocation = Vocation(vocationId)
+	if vocation == nil then
+		return 0
+	end
+
+	local promotedVocation = vocation:getPromotion()
+	if promotedVocation == nil then
+		return 0
+	end
+	return promotedVocation:getId()
+end

@@ -1266,12 +1266,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFood(cid)
 	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
 
-	//getPlayerItemCount(cid, itemid[, subtype])
-	lua_register(m_luaState, "getPlayerItemCount", LuaScriptInterface::luaGetPlayerItemCount);
-
-	//getPlayerFreeCap(cid)
-	lua_register(m_luaState, "getPlayerFreeCap", LuaScriptInterface::luaGetPlayerFreeCap);
-
 	//getPlayerLight(cid)
 	lua_register(m_luaState, "getPlayerLight", LuaScriptInterface::luaGetPlayerLight);
 
@@ -1283,12 +1277,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getPlayerDepotItems(cid, depotid)
 	lua_register(m_luaState, "getPlayerDepotItems", LuaScriptInterface::luaGetPlayerDepotItems);
-
-	//getPlayerGUID(cid)
-	lua_register(m_luaState, "getPlayerGUID", LuaScriptInterface::luaGetPlayerGUID);
-
-	//getPlayerFlagValue(cid, flag)
-	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
 
 	//getPlayerLossPercent(cid)
 	lua_register(m_luaState, "getPlayerLossPercent", LuaScriptInterface::luaGetPlayerLossPercent);
@@ -1840,9 +1828,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerPremiumDays(cid)
 	lua_register(m_luaState, "getPlayerPremiumDays", LuaScriptInterface::luaGetPlayerPremiumDays);
 
-	//getPromotedVocation(vocation)
-	lua_register(m_luaState, "getPromotedVocation", LuaScriptInterface::luaGetPromotedVocation);
-
 	//getPlayerBlessing(cid, blessing)
 	lua_register(m_luaState, "getPlayerBlessing", LuaScriptInterface::luaGetPlayerBlessing);
 
@@ -2056,6 +2041,10 @@ void LuaScriptInterface::registerFunctions()
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
+
+	registerClassMethod("Player", "getGuid", LuaScriptInterface::luaPlayerGetGuid);
+
+	registerClassMethod("Player", "getFreeCapacity", LuaScriptInterface::luaPlayerGetFreeCapacity);
 
 	registerClassMethod("Player", "getExperience", LuaScriptInterface::luaPlayerGetExperience);
 	registerClassMethod("Player", "addExperience", LuaScriptInterface::luaPlayerAddExperience);
@@ -2284,10 +2273,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 
 	int32_t value;
 	switch (info) {
-		case PlayerInfoGUID:
-			value = player->guid;
-			break;
-
 		case PlayerInfoPremiumDays:
 			value = player->premiumDays;
 			break;
@@ -2305,10 +2290,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 			}
 			break;
 		}
-
-		case PlayerInfoFreeCap:
-			value = (int32_t)player->getFreeCapacity();
-			break;
 
 		case PlayerInfoPzLock:
 			pushBoolean(L, player->isPzLocked());
@@ -2344,14 +2325,6 @@ int32_t LuaScriptInterface::luaGetPlayerFood(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoFood);
 }
-int32_t LuaScriptInterface::luaGetPlayerFreeCap(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoFreeCap);
-}
-int32_t LuaScriptInterface::luaGetPlayerGUID(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoGUID);
-}
 int32_t LuaScriptInterface::luaGetPlayerPremiumDays(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoPremiumDays);
@@ -2375,28 +2348,6 @@ int32_t LuaScriptInterface::luaGetPlayerIp(lua_State* L)
 int32_t LuaScriptInterface::luaGetPlayerLastLoginSaved(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoLastLoginSaved);
-}
-
-int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
-{
-	//getPlayerFlagValue(cid, flag)
-	uint32_t flagindex = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (flagindex < PlayerFlag_LastFlag) {
-			pushBoolean(L, player->hasFlag((PlayerFlags)flagindex));
-		} else {
-			reportErrorFunc("No valid flag index.");
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
-	return 1;
 }
 
 int32_t LuaScriptInterface::luaPlayerLearnInstantSpell(lua_State* L)
@@ -4106,28 +4057,6 @@ int32_t LuaScriptInterface::luaDebugPrint(lua_State* L)
 	std::string text = popString(L);
 	reportErrorFunc(text);
 	return 0;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerItemCount(lua_State* L)
-{
-	//getPlayerItemCount(cid, itemid[, subtype])
-	int32_t subtype = -1;
-	if (lua_gettop(L) > 2) {
-		subtype = popNumber(L);
-	}
-
-	uint32_t itemId = (uint32_t)popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	const Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		uint32_t n = player->__getItemTypeCount(itemId, subtype);
-		lua_pushnumber(L, n);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
 }
 
 int32_t LuaScriptInterface::luaGetHouseOwner(lua_State* L)
@@ -7044,13 +6973,6 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetPromotedVocation(lua_State* L)
-{
-	int32_t vocationId = (int32_t)popNumber(L);
-	lua_pushnumber(L, g_vocations.getPromotedVocation(vocationId));
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 {
 	uint32_t subId;
@@ -7378,32 +7300,32 @@ int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
 	int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
 	{ \
 		int32_t n = lua_gettop(L); \
-		type w = (type)popNumber(L); \
+		type w = popNumber<type>(L); \
 		for(int32_t i = 2; i <= n; ++i) \
 			w op popNumber(L); \
 		lua_pushnumber(L, w); \
 		return 1; \
 	}
 
-MULTIOP(int32_t, And, &= )
-MULTIOP(int32_t, Or, |= )
-MULTIOP(int32_t, Xor, ^= )
-MULTIOP(uint32_t, UAnd, &= )
-MULTIOP(uint32_t, UOr, |= )
-MULTIOP(uint32_t, UXor, ^= )
+MULTIOP(int64_t, And, &= )
+MULTIOP(int64_t, Or, |= )
+MULTIOP(int64_t, Xor, ^= )
+MULTIOP(uint64_t, UAnd, &= )
+MULTIOP(uint64_t, UOr, |= )
+MULTIOP(uint64_t, UXor, ^= )
 
 #define SHIFTOP(type, name, op) \
 	int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
 	{ \
-		type n2 = (type)popNumber(L), n1 = (type)popNumber(L); \
+		type n2 = popNumber<type>(L), n1 = popNumber<type>(L); \
 		lua_pushnumber(L, (n1 op n2)); \
 		return 1; \
 	}
 
-SHIFTOP(int32_t, LeftShift, << )
-SHIFTOP(int32_t, RightShift, >> )
-SHIFTOP(uint32_t, ULeftShift, << )
-SHIFTOP(uint32_t, URightShift, >> )
+SHIFTOP(int64_t, LeftShift, << )
+SHIFTOP(int64_t, RightShift, >> )
+SHIFTOP(uint64_t, ULeftShift, << )
+SHIFTOP(uint64_t, URightShift, >> )
 #endif
 
 const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
@@ -9183,6 +9105,32 @@ int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 	} else {
 		pushNil(L);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetGuid(lua_State* L)
+{
+	// player:getGuid()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushNumber(L, player->getGUID());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
+{
+	// player:getFreeCapacity()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushNil(L);
+		return 1;
+	}
+
+	pushNumber(L, player->getFreeCapacity());
 	return 1;
 }
 

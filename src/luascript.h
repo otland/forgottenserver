@@ -241,8 +241,6 @@ struct Position;
 
 enum PlayerInfo_t {
 	PlayerInfoFood,
-	PlayerInfoFreeCap,
-	PlayerInfoGUID,
 	PlayerInfoPremiumDays,
 	PlayerInfoSkullType,
 	PlayerInfoPzLock,
@@ -571,9 +569,6 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 		static int32_t luaGetCreatureTarget(lua_State* L);
 		static int32_t luaGetPlayerAccountType(lua_State* L);
-		static int32_t luaGetPromotedVocation(lua_State* L);
-		static int32_t luaGetPlayerItemCount(lua_State* L);
-		static int32_t luaGetPlayerFreeCap(lua_State* L);
 		static int32_t luaGetPlayerLight(lua_State* L);
 		static int32_t luaGetPlayerSlotItem(lua_State* L);
 		static int32_t luaGetPlayerItemById(lua_State* L);
@@ -584,8 +579,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerDepotItems(lua_State* L);
 		static int32_t luaGetPlayerBlessing(lua_State* L);
 		static int32_t luaDoPlayerAddBlessing(lua_State* L);
-		static int32_t luaGetPlayerGUID(lua_State* L);
-		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
 
 		static int32_t luaPlayerLearnInstantSpell(lua_State* L);
@@ -901,6 +894,10 @@ class LuaScriptInterface
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);
+
+		static int32_t luaPlayerGetGuid(lua_State* L);
+
+		static int32_t luaPlayerGetFreeCapacity(lua_State* L);
 
 		static int32_t luaPlayerGetExperience(lua_State* L);
 		static int32_t luaPlayerAddExperience(lua_State* L);
