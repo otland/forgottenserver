@@ -86,7 +86,6 @@ end
 function getPlayerGuildNick(cid) return _Player(cid):getGuildNick() end
 function getPlayerMasterPos(cid) return _Player(cid):getTown():getTemplePosition() end
 function getPlayerItemCount(cid, itemId, ...) return _Player(cid):getItemCount(itemId, ...) end
-function getPlayerFlagValue(cid, flag) return bit.band(_Player(cid):getGroup():getFlags(), bit.lshift(1, flag)) ~= 0 end
 
 getPlayerAccountBalance = getPlayerBalance
 

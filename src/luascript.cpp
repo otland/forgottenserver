@@ -1278,6 +1278,9 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerDepotItems(cid, depotid)
 	lua_register(m_luaState, "getPlayerDepotItems", LuaScriptInterface::luaGetPlayerDepotItems);
 
+	//getPlayerFlagValue(cid, flag)
+	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
+
 	//getPlayerLossPercent(cid)
 	lua_register(m_luaState, "getPlayerLossPercent", LuaScriptInterface::luaGetPlayerLossPercent);
 
@@ -2348,6 +2351,28 @@ int32_t LuaScriptInterface::luaGetPlayerIp(lua_State* L)
 int32_t LuaScriptInterface::luaGetPlayerLastLoginSaved(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoLastLoginSaved);
+}
+
+int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
+{
+	//getPlayerFlagValue(cid, flag)
+	uint32_t flagindex = popNumber(L);
+	uint32_t cid = popNumber(L);
+
+	Player* player = g_game.getPlayerByID(cid);
+	if (player) {
+		if (flagindex < PlayerFlag_LastFlag) {
+			pushBoolean(L, player->hasFlag((PlayerFlags)flagindex));
+		} else {
+			reportErrorFunc("No valid flag index.");
+			pushBoolean(L, false);
+		}
+	} else {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		pushBoolean(L, false);
+	}
+
+	return 1;
 }
 
 int32_t LuaScriptInterface::luaPlayerLearnInstantSpell(lua_State* L)
@@ -7307,12 +7332,12 @@ int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
 		return 1; \
 	}
 
-MULTIOP(int64_t, And, &= )
-MULTIOP(int64_t, Or, |= )
-MULTIOP(int64_t, Xor, ^= )
-MULTIOP(uint64_t, UAnd, &= )
-MULTIOP(uint64_t, UOr, |= )
-MULTIOP(uint64_t, UXor, ^= )
+MULTIOP(int32_t, And, &= )
+MULTIOP(int32_t, Or, |= )
+MULTIOP(int32_t, Xor, ^= )
+MULTIOP(uint32_t, UAnd, &= )
+MULTIOP(uint32_t, UOr, |= )
+MULTIOP(uint32_t, UXor, ^= )
 
 #define SHIFTOP(type, name, op) \
 	int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
@@ -7322,10 +7347,10 @@ MULTIOP(uint64_t, UXor, ^= )
 		return 1; \
 	}
 
-SHIFTOP(int64_t, LeftShift, << )
-SHIFTOP(int64_t, RightShift, >> )
-SHIFTOP(uint64_t, ULeftShift, << )
-SHIFTOP(uint64_t, URightShift, >> )
+SHIFTOP(int32_t, LeftShift, << )
+SHIFTOP(int32_t, RightShift, >> )
+SHIFTOP(uint32_t, ULeftShift, << )
+SHIFTOP(uint32_t, URightShift, >> )
 #endif
 
 const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
