@@ -30,32 +30,31 @@
 class Town
 {
 	public:
-		Town(uint32_t _townid)
-			: townid(_townid) {}
-
+		Town(uint32_t _id)
+			: id(_id) {}
 		~Town() {}
 
 		const Position& getTemplePosition() const {
-			return posTemple;
+			return templePosition;
 		}
 		const std::string& getName() const {
-			return townName;
+			return name;
 		}
 
 		void setTemplePos(const Position& pos) {
-			posTemple = pos;
+			templePosition = pos;
 		}
-		void setName(const std::string& _townName) {
-			townName = _townName;
+		void setName(const std::string& _name) {
+			name = _name;
 		}
-		uint32_t getTownID() const {
-			return townid;
+		uint32_t getID() const {
+			return id;
 		}
 
 	private:
-		uint32_t townid;
-		std::string townName;
-		Position posTemple;
+		uint32_t id;
+		std::string name;
+		Position templePosition;
 };
 
 typedef std::map<uint32_t, Town*> TownMap;
@@ -74,38 +73,31 @@ class Towns
 			return singleton;
 		}
 
-		bool addTown(uint32_t _townid, Town* town) {
-			TownMap::iterator it = townMap.find(_townid);
+		bool addTown(uint32_t townId, Town* town) {
+			TownMap::iterator it = townMap.find(townId);
 			if (it != townMap.end()) {
 				return false;
 			}
 
-			townMap[_townid] = town;
+			townMap[townId] = town;
 			return true;
 		}
 
-		Town* getTown(const std::string& townname) const {
+		Town* getTown(const std::string& townName) const {
 			for (const auto& it : townMap) {
-				if (strcasecmp(townname.c_str(), it.second->getName().c_str()) == 0) {
+				if (strcasecmp(townName.c_str(), it.second->getName().c_str()) == 0) {
 					return it.second;
 				}
 			}
 			return NULL;
 		}
 
-		Town* getTown(uint32_t _townid) const {
-			auto it = townMap.find(_townid);
-			if (it != townMap.end()) {
-				return it->second;
+		Town* getTown(uint32_t townId) const {
+			auto it = townMap.find(townId);
+			if (it == townMap.end()) {
+				return NULL;
 			}
-			return NULL;
-		}
-
-		TownMap::const_iterator getFirstTown() const {
-			return townMap.begin();
-		}
-		TownMap::const_iterator getLastTown() const {
-			return townMap.end();
+			return it->second;
 		}
 
 	private:

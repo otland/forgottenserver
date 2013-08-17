@@ -241,7 +241,6 @@ struct Position;
 
 enum PlayerInfo_t {
 	PlayerInfoFood,
-	PlayerInfoMasterPos,
 	PlayerInfoFreeCap,
 	PlayerInfoGUID,
 	PlayerInfoPremiumDays,
@@ -481,7 +480,6 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerSendCancel(lua_State* L);
 		static int32_t luaDoSendDefaultCancel(lua_State* L);
 		static int32_t luaDoTeleportThing(lua_State* L);
-		static int32_t luaDoTransformItem(lua_State* L);
 		static int32_t luaDoSendMagicEffect(lua_State* L);
 		static int32_t luaDoChangeTypeItem(lua_State* L);
 		static int32_t luaDoSendAnimatedText(lua_State* L);
@@ -544,7 +542,6 @@ class LuaScriptInterface
 		static int32_t luaGetDepotId(lua_State* L);
 
 		//set item
-		static int32_t luaDoSetItemActionId(lua_State* L);
 		static int32_t luaDoSetItemText(lua_State* L);
 		static int32_t luaDoSetItemSpecialDescription(lua_State* L);
 
@@ -574,7 +571,6 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 		static int32_t luaGetCreatureTarget(lua_State* L);
 		static int32_t luaGetPlayerAccountType(lua_State* L);
-		static int32_t luaGetPlayerMasterPos(lua_State* L);
 		static int32_t luaGetPromotedVocation(lua_State* L);
 		static int32_t luaGetPlayerItemCount(lua_State* L);
 		static int32_t luaGetPlayerFreeCap(lua_State* L);
@@ -634,8 +630,6 @@ class LuaScriptInterface
 		static int32_t luaIsItem(lua_State* L);
 
 		//container
-		static int32_t luaGetContainerSize(lua_State* L);
-		static int32_t luaGetContainerCap(lua_State* L);
 		static int32_t luaGetContainerCapById(lua_State* L);
 		static int32_t luaGetContainerItem(lua_State* L);
 		static int32_t luaDoAddContainerItem(lua_State* L);
@@ -699,9 +693,6 @@ class LuaScriptInterface
 		static int32_t luaGetItemWeight(lua_State* L);
 		static int32_t luaGetItemWeightByUID(lua_State* L);
 		static int32_t luaGetItemIdByName(lua_State* L);
-		static int32_t luaGetTownId(lua_State* L);
-		static int32_t luaGetTownName(lua_State* L);
-		static int32_t luaGetTownTemplePosition(lua_State* L);
 		static int32_t luaIsSightClear(lua_State* L);
 
 		static int32_t luaDebugPrint(lua_State* L);

@@ -729,7 +729,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`manamax` = " << player->manaMax << ", ";
 	query << "`manaspent` = " << player->manaSpent << ", ";
 	query << "`soul` = " << player->soul << ", ";
-	query << "`town_id` = " << player->town->getTownID() << ", ";
+	query << "`town_id` = " << player->town->getID() << ", ";
 
 	const Position& loginPosition = player->getLoginPosition();
 	query << "`posx` = " << loginPosition.getX() << ", ";

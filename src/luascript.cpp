@@ -1266,9 +1266,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFood(cid)
 	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
 
-	//getPlayerMasterPos(cid)
-	lua_register(m_luaState, "getPlayerMasterPos", LuaScriptInterface::luaGetPlayerMasterPos);
-
 	//getPlayerItemCount(cid, itemid[, subtype])
 	lua_register(m_luaState, "getPlayerItemCount", LuaScriptInterface::luaGetPlayerItemCount);
 
@@ -1388,9 +1385,6 @@ void LuaScriptInterface::registerFunctions()
 	//doTeleportThing(cid, newpos, <optional> pushmove)
 	lua_register(m_luaState, "doTeleportThing", LuaScriptInterface::luaDoTeleportThing);
 
-	//doTransformItem(uid, toitemid, <optional> count/subtype)
-	lua_register(m_luaState, "doTransformItem", LuaScriptInterface::luaDoTransformItem);
-
 	//doPlayerChangeName(cid, newName)
 	lua_register(m_luaState, "doPlayerChangeName", LuaScriptInterface::luaDoPlayerChangeName);
 
@@ -1405,9 +1399,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doChangeTypeItem(uid, newtype)
 	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
-
-	//doSetItemActionId(uid, actionid)
-	lua_register(m_luaState, "doSetItemActionId", LuaScriptInterface::luaDoSetItemActionId);
 
 	//doSetItemText(uid, text)
 	lua_register(m_luaState, "doSetItemText", LuaScriptInterface::luaDoSetItemText);
@@ -1602,12 +1593,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//registerCreatureEvent(uid, eventName)
 	lua_register(m_luaState, "registerCreatureEvent", LuaScriptInterface::luaRegisterCreatureEvent);
-
-	//getContainerSize(uid)
-	lua_register(m_luaState, "getContainerSize", LuaScriptInterface::luaGetContainerSize);
-
-	//getContainerCap(uid)
-	lua_register(m_luaState, "getContainerCap", LuaScriptInterface::luaGetContainerCap);
 
 	//getContainerCapById(itemid)
 	lua_register(m_luaState, "getContainerCapById", LuaScriptInterface::luaGetContainerCapById);
@@ -1824,15 +1809,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getItemIdByName(name)
 	lua_register(m_luaState, "getItemIdByName", LuaScriptInterface::luaGetItemIdByName);
-
-	//getTownId(townName)
-	lua_register(m_luaState, "getTownId", LuaScriptInterface::luaGetTownId);
-
-	//getTownName(townId)
-	lua_register(m_luaState, "getTownName", LuaScriptInterface::luaGetTownName);
-
-	//getTownTemplePosition(townId)
-	lua_register(m_luaState, "getTownTemplePosition", LuaScriptInterface::luaGetTownTemplePosition);
 
 	//isSightClear(fromPos, toPos, floorCheck)
 	lua_register(m_luaState, "isSightClear", LuaScriptInterface::luaIsSightClear);
@@ -2308,10 +2284,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 
 	int32_t value;
 	switch (info) {
-		case PlayerInfoMasterPos:
-			pushPosition(L, player->getTemplePosition(), 0);
-			return 1;
-
 		case PlayerInfoGUID:
 			value = player->guid;
 			break;
@@ -2371,10 +2343,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 int32_t LuaScriptInterface::luaGetPlayerFood(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoFood);
-}
-int32_t LuaScriptInterface::luaGetPlayerMasterPos(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoMasterPos);
 }
 int32_t LuaScriptInterface::luaGetPlayerFreeCap(lua_State* L)
 {
@@ -2743,7 +2711,6 @@ int32_t LuaScriptInterface::luaDoTeleportThing(lua_State* L)
 	int32_t parameters = lua_gettop(L);
 
 	bool pushMovement = false;
-
 	if (parameters > 2) {
 		pushMovement = popBoolean(L);
 	}
@@ -2755,27 +2722,25 @@ int32_t LuaScriptInterface::luaDoTeleportThing(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Thing* tmp = env->getThingByUID(uid);
-
 	if (tmp) {
 		Position oldPos = tmp->getPosition();
-
 		if (g_game.internalTeleport(tmp, pos, pushMovement) == RET_NOERROR) {
-			Creature* creature = tmp->getCreature();
-
-			if (!pushMovement && creature) {
-				if (oldPos.x == pos.x) {
-					if (oldPos.y < pos.y) {
-						g_game.internalCreatureTurn(creature, SOUTH);
-					} else {
-						g_game.internalCreatureTurn(creature, NORTH);
+			if (!pushMovement) {
+				Creature* creature = tmp->getCreature();
+				if (creature) {
+					if (oldPos.x == pos.x) {
+						if (oldPos.y < pos.y) {
+							g_game.internalCreatureTurn(creature, SOUTH);
+						} else {
+							g_game.internalCreatureTurn(creature, NORTH);
+						}
+					} else if (oldPos.x > pos.x) {
+						g_game.internalCreatureTurn(creature, WEST);
+					} else if (oldPos.x < pos.x) {
+						g_game.internalCreatureTurn(creature, EAST);
 					}
-				} else if (oldPos.x > pos.x) {
-					g_game.internalCreatureTurn(creature, WEST);
-				} else if (oldPos.x < pos.x) {
-					g_game.internalCreatureTurn(creature, EAST);
 				}
 			}
-
 			pushBoolean(L, true);
 		} else {
 			pushBoolean(L, false);
@@ -2784,57 +2749,6 @@ int32_t LuaScriptInterface::luaDoTeleportThing(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoTransformItem(lua_State* L)
-{
-	//doTransformItem(uid, toitemid, <optional> count/subtype)
-	int32_t parameters = lua_gettop(L);
-
-	int32_t count = -1;
-
-	if (parameters > 2) {
-		count = popNumber(L);
-	}
-
-	uint16_t toId = (uint16_t)popNumber(L);
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Item* item = env->getItemByUID(uid);
-
-	if (!item) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (item->getID() == toId) {
-		pushBoolean(L, true);
-		return 1;
-	}
-
-	const ItemType& it = Item::items[toId];
-
-	if (it.stackable && count > 100) {
-		reportErrorFunc("Stack count cannot be higher than 100.");
-		count = 100;
-	}
-
-	Item* newItem = g_game.transformItem(item, toId, count);
-
-	if (item->isRemoved()) {
-		env->removeItemByUID(uid);
-	}
-
-	if (newItem && newItem != item) {
-		env->insertThing(uid, newItem);
-	}
-
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -4063,28 +3977,6 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 	} else {
 		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
 	}
-
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSetItemActionId(lua_State* L)
-{
-	//doSetItemActionId(uid, actionid)
-	uint32_t actionid = popNumber(L);
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Item* item = env->getItemByUID(uid);
-
-	if (item) {
-		item->setActionId(actionid);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
 	return 1;
 }
 
@@ -4106,7 +3998,6 @@ int32_t LuaScriptInterface::luaDoSetItemText(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -4119,7 +4010,6 @@ int32_t LuaScriptInterface::luaDoSetItemSpecialDescription(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Item* item = env->getItemByUID(uid);
-
 	if (item) {
 		if (desc == "") {
 			item->resetSpecialDescription();
@@ -4132,7 +4022,6 @@ int32_t LuaScriptInterface::luaDoSetItemSpecialDescription(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -4155,7 +4044,6 @@ int32_t LuaScriptInterface::luaGetTilePzInfo(lua_State* L)
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -4170,7 +4058,6 @@ int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
 	if (tile) {
 		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
 			House* house = houseTile->getHouse();
-
 			if (house) {
 				lua_pushnumber(L, house->getHouseId());
 			} else {
@@ -4185,7 +4072,6 @@ int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -4226,7 +4112,6 @@ int32_t LuaScriptInterface::luaGetPlayerItemCount(lua_State* L)
 {
 	//getPlayerItemCount(cid, itemid[, subtype])
 	int32_t subtype = -1;
-
 	if (lua_gettop(L) > 2) {
 		subtype = popNumber(L);
 	}
@@ -4242,7 +4127,6 @@ int32_t LuaScriptInterface::luaGetPlayerItemCount(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -4252,7 +4136,6 @@ int32_t LuaScriptInterface::luaGetHouseOwner(lua_State* L)
 	uint32_t houseid = popNumber(L);
 
 	House* house = Houses::getInstance().getHouse(houseid);
-
 	if (house) {
 		uint32_t owner = house->getHouseOwner();
 		lua_pushnumber(L, owner);
@@ -4260,7 +4143,6 @@ int32_t LuaScriptInterface::luaGetHouseOwner(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -6295,40 +6177,6 @@ int32_t LuaScriptInterface::luaRegisterCreatureEvent(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetContainerSize(lua_State* L)
-{
-	//getContainerSize(uid)
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	if (Container* container = env->getContainerByUID(uid)) {
-		lua_pushnumber(L, container->size());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetContainerCap(lua_State* L)
-{
-	//getContainerCap(uid)
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	if (Container* container = env->getContainerByUID(uid)) {
-		lua_pushnumber(L, container->capacity());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetContainerCapById(lua_State* L)
 {
 	//getContainerCapById(itemid)
@@ -6972,48 +6820,6 @@ int32_t LuaScriptInterface::luaGetItemIdByName(lua_State* L)
 	}
 
 	lua_pushnumber(L, itemid);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTownTemplePosition(lua_State* L)
-{
-	//getTownTemplePosition(townId)
-	uint32_t townId = popNumber(L);
-
-	if (Town* town = Towns::getInstance().getTown(townId)) {
-		pushPosition(L, town->getTemplePosition(), 255);
-	} else {
-		pushBoolean(L, false);
-	}
-
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTownId(lua_State* L)
-{
-	//getTownId(townName)
-	std::string townName = popString(L);
-
-	if (Town* town = Towns::getInstance().getTown(townName)) {
-		lua_pushnumber(L, town->getTownID());
-	} else {
-		pushBoolean(L, false);
-	}
-
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTownName(lua_State* L)
-{
-	//getTownName(townId)
-	uint32_t townId = popNumber(L);
-
-	if (Town* town = Towns::getInstance().getTown(townId)) {
-		pushString(L, town->getName());
-	} else {
-		pushBoolean(L, false);
-	}
-
 	return 1;
 }
 
@@ -10848,7 +10654,7 @@ int32_t LuaScriptInterface::luaTownGetId(lua_State* L)
 	// town:getId()
 	Town* town = getUserdata<Town>(L, 1);
 	if (town) {
-		pushNumber(L, town->getTownID());
+		pushNumber(L, town->getID());
 	} else {
 		pushNil(L);
 	}

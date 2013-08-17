@@ -82,6 +82,7 @@ function getPlayerGuildRank(cid)
 	return rank.name
 end
 function getPlayerGuildNick(cid) return _Player(cid):getGuildNick() end
+function getPlayerMasterPos(cid) return _Player(cid):getTown():getTemplePosition() end
 
 getPlayerAccountBalance = getPlayerBalance
 
@@ -95,3 +96,13 @@ function doPlayerSetTown(cid, town) return _Player(cid):setTown(Town(town)) end
 function setPlayerGroupId(cid, groupId) return _Player(cid):setGroup(Group(groupId)) end
 function doPlayerSetSex(cid, sex) return _Player(cid):setSex(sex) end
 function doShowTextDialog(cid, itemId, text) return _Player(cid):showTextDialog(itemId, text) end
+
+function getTownId(townName) return Town(townName):getId() end
+function getTownName(townId) return Town(townId):getName() end
+function getTownTemplePosition(townId) return Town(townId):getTemplePosition() end
+
+function doSetItemActionId(uid, actionId) return Item(uid):setActionId(actionId) end
+function doTransformItem(uid, newItemId, ...) return Item(uid):transform(newItemId, ...) end
+
+function getContainerSize(uid) return Container(uid):getSize() end
+function getContainerCap(uid) return Container(uid):getCapacity() end
