@@ -94,4 +94,4 @@ function doPlayerSetVocation(cid, vocation) return _Player(cid):setVocation(Voca
 function doPlayerSetTown(cid, town) return _Player(cid):setTown(Town(town)) end
 function setPlayerGroupId(cid, groupId) return _Player(cid):setGroup(Group(groupId)) end
 function doPlayerSetSex(cid, sex) return _Player(cid):setSex(sex) end
-function doShowTextDialog(cid, itemId, text) return _Player(cid):showTextDialog(cid, itemId, text) end
+function doShowTextDialog(cid, itemId, text) return _Player(cid):showTextDialog(itemId, text) end
