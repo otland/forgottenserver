@@ -8482,7 +8482,7 @@ int32_t LuaScriptInterface::luaItemGetPosition(lua_State* L)
 int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 {
 	// item:getAttribute(key)
-	itemAttrTypes attribute;
+	itemAttrTypes attribute = ATTR_ITEM_NONE;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<uint64_t>(L, 2));
 	} else if (isString(L, 2)) {
@@ -8506,7 +8506,7 @@ int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 {
 	// item:setAttribute(key, value)
-	itemAttrTypes attribute;
+	itemAttrTypes attribute = ATTR_ITEM_NONE;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<uint64_t>(L, 2));
 	} else if (isString(L, 2)) {
@@ -8534,7 +8534,7 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 int32_t LuaScriptInterface::luaItemEraseAttribute(lua_State* L)
 {
 	// item:eraseAttribute(key)
-	itemAttrTypes attribute;
+	itemAttrTypes attribute = ATTR_ITEM_NONE;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<uint64_t>(L, 2));
 	} else if (isString(L, 2)) {
