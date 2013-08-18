@@ -971,6 +971,38 @@ uint8_t clientFluidToServer(uint8_t clientFluid)
 	return clientToServerFluidMap[clientFluid];
 }
 
+itemAttrTypes stringToItemAttribute(const std::string& str)
+{
+	if (str == "aid") {
+		return ATTR_ITEM_ACTIONID;
+	} else if (str == "uid") {
+		return ATTR_ITEM_UNIQUEID;
+	} else if (str == "description") {
+		return ATTR_ITEM_DESC;
+	} else if (str == "text") {
+		return ATTR_ITEM_TEXT;
+	} else if (str == "date") {
+		return ATTR_ITEM_WRITTENDATE;
+	} else if (str == "writer") {
+		return ATTR_ITEM_WRITTENBY;
+	} else if (str == "owner") {
+		return ATTR_ITEM_OWNER;
+	} else if (str == "duration") {
+		return ATTR_ITEM_DURATION;
+	} else if (str == "decaystate") {
+		return ATTR_ITEM_DECAYING;
+	} else if (str == "corpseowner") {
+		return ATTR_ITEM_CORPSEOWNER;
+	} else if (str == "charges") {
+		return ATTR_ITEM_CHARGES;
+	} else if (str == "fluidtype") {
+		return ATTR_ITEM_FLUIDTYPE;
+	} else if (str == "doorid") {
+		return ATTR_ITEM_DOORID;
+	}
+	return ATTR_ITEM_NONE;
+}
+
 std::string getFirstLine(const std::string& str)
 {
 	std::string firstLine = "";

@@ -1996,6 +1996,10 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Item", "getPosition", LuaScriptInterface::luaItemGetPosition);
 
+	registerClassMethod("Item", "getAttribute", LuaScriptInterface::luaItemGetAttribute);
+	registerClassMethod("Item", "setAttribute", LuaScriptInterface::luaItemSetAttribute);
+	registerClassMethod("Item", "eraseAttribute", LuaScriptInterface::luaItemEraseAttribute);
+
 	registerClassMethod("Item", "moveTo", LuaScriptInterface::luaItemMoveTo);
 	registerClassMethod("Item", "transform", LuaScriptInterface::luaItemTransform);
 
@@ -8469,6 +8473,82 @@ int32_t LuaScriptInterface::luaItemGetPosition(lua_State* L)
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		pushMetaPosition(L, item->getPosition(), 0);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
+{
+	// item:getAttribute(key)
+	itemAttrTypes attribute = ATTR_ITEM_NONE;
+	if (isNumber(L, 2)) {
+		attribute = static_cast<itemAttrTypes>(getNumber<uint64_t>(L, 2));
+	} else if (isString(L, 2)) {
+		attribute = stringToItemAttribute(getString(L, 2));
+	}
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		if (attribute & 0x7F0013) { // All integer attributes
+			pushNumber(L, item->getIntAttr(attribute));
+		} else if (attribute & 0x2C) { // All string attributes
+			pushString(L, item->getStrAttr(attribute));
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
+{
+	// item:setAttribute(key, value)
+	itemAttrTypes attribute = ATTR_ITEM_NONE;
+	if (isNumber(L, 2)) {
+		attribute = static_cast<itemAttrTypes>(getNumber<uint64_t>(L, 2));
+	} else if (isString(L, 2)) {
+		attribute = stringToItemAttribute(getString(L, 2));
+	}
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		if (isNumber(L, 3)) {
+			if (attribute & 0x7F0013) { // All integer attributes
+				item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
+				pushBoolean(L, true);
+			}
+		} else if (isString(L, 3)) {
+			if (attribute & 0x2C) { // All string attributes
+				item->setStrAttr(attribute, getString(L, 3));
+				pushBoolean(L, true);
+			}
+		} else {
+			pushNil(L);
+		}
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemEraseAttribute(lua_State* L)
+{
+	// item:eraseAttribute(key)
+	itemAttrTypes attribute = ATTR_ITEM_NONE;
+	if (isNumber(L, 2)) {
+		attribute = static_cast<itemAttrTypes>(getNumber<uint64_t>(L, 2));
+	} else if (isString(L, 2)) {
+		attribute = stringToItemAttribute(getString(L, 2));
+	}
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		bool ret = attribute != ATTR_ITEM_UNIQUEID;
+		if (ret) {
+			item->removeAttribute(attribute);
+		} else {
+			reportErrorFunc("Attempt to erase protected key \"uid\"");
+		}
+		pushBoolean(L, ret);
 	} else {
 		pushNil(L);
 	}
