@@ -4777,7 +4777,12 @@ int32_t LuaScriptInterface::luaSetCombatParam(lua_State* L)
 int32_t LuaScriptInterface::luaSetConditionParam(lua_State* L)
 {
 	//setConditionParam(condition, key, value)
-	int32_t value = (int32_t)popNumber(L);
+	int32_t value;
+	if (isBoolean(L, -1)) {
+		value = popBoolean(L) ? 1 : 0;
+	} else {
+		value = popNumber<int32_t>(L);
+	}
 	ConditionParam_t key = (ConditionParam_t)popNumber(L);
 	uint32_t conditionId = popNumber(L);
 
@@ -4796,7 +4801,6 @@ int32_t LuaScriptInterface::luaSetConditionParam(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CONDITION_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
