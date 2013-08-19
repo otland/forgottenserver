@@ -1998,7 +1998,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Item", "getAttribute", LuaScriptInterface::luaItemGetAttribute);
 	registerClassMethod("Item", "setAttribute", LuaScriptInterface::luaItemSetAttribute);
-	registerClassMethod("Item", "eraseAttribute", LuaScriptInterface::luaItemEraseAttribute);
+	registerClassMethod("Item", "removeAttribute", LuaScriptInterface::luaItemRemoveAttribute);
 
 	registerClassMethod("Item", "moveTo", LuaScriptInterface::luaItemMoveTo);
 	registerClassMethod("Item", "transform", LuaScriptInterface::luaItemTransform);
@@ -8531,9 +8531,9 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemEraseAttribute(lua_State* L)
+int32_t LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 {
-	// item:eraseAttribute(key)
+	// item:removeAttribute(key)
 	itemAttrTypes attribute = ATTR_ITEM_NONE;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<uint64_t>(L, 2));
