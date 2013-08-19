@@ -964,7 +964,6 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	uint32_t itemid = env->addThing(item);
 
@@ -999,7 +998,6 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player->getPosition());
 
 	uint32_t itemid = env->addThing(item);
 
@@ -1033,7 +1031,6 @@ bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& po
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(pos);
 
 	lua_State* L = m_scriptInterface->getLuaState();
 

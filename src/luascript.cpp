@@ -134,10 +134,6 @@ void ScriptEnvironment::resetEnv()
 	}
 
 	m_tempResults.clear();
-
-	m_realPos.x = 0;
-	m_realPos.y = 0;
-	m_realPos.z = 0;
 }
 
 bool ScriptEnvironment::saveGameState()
@@ -1358,15 +1354,6 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerChangeName(cid, newName)
 	lua_register(m_luaState, "doPlayerChangeName", LuaScriptInterface::luaDoPlayerChangeName);
 
-	//doCreatureSay(uid, text, type[, ghost = false[, cid = 0[, pos]]])
-	lua_register(m_luaState, "doCreatureSay", LuaScriptInterface::luaDoCreatureSay);
-
-	//doSendMagicEffect(pos, type[, player])
-	lua_register(m_luaState, "doSendMagicEffect", LuaScriptInterface::luaDoSendMagicEffect);
-
-	//doSendDistanceShoot(frompos, topos, type)
-	lua_register(m_luaState, "doSendDistanceShoot", LuaScriptInterface::luaDoSendDistanceShoot);
-
 	//doChangeTypeItem(uid, newtype)
 	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
 
@@ -1625,9 +1612,6 @@ void LuaScriptInterface::registerFunctions()
 	//broadcastMessage(message, type)
 	lua_register(m_luaState, "broadcastMessage", LuaScriptInterface::luaBroadcastMessage);
 
-	//getGuildId(guild_name)
-	lua_register(m_luaState, "getGuildId", LuaScriptInterface::luaGetGuildId);
-
 	//createCombatArea( {area}, <optional> {extArea} )
 	lua_register(m_luaState, "createCombatArea", LuaScriptInterface::luaCreateCombatArea);
 
@@ -1779,9 +1763,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getItemIdByName(name)
 	lua_register(m_luaState, "getItemIdByName", LuaScriptInterface::luaGetItemIdByName);
-
-	//isSightClear(fromPos, toPos, floorCheck)
-	lua_register(m_luaState, "isSightClear", LuaScriptInterface::luaIsSightClear);
 
 	//getFluidSourceType(type)
 	lua_register(m_luaState, "getFluidSourceType", LuaScriptInterface::luaGetFluidSourceType);
@@ -2701,66 +2682,6 @@ int32_t LuaScriptInterface::luaDoTeleportThing(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoCreatureSay(lua_State* L)
-{
-	//doCreatureSay(uid, text, type[, ghost = false[, cid = 0[, pos]]])
-	uint32_t params = lua_gettop(L);
-
-	PositionEx pos;
-	if (params > 5) {
-		popPosition(L, pos);
-		if (pos.x == 0 || pos.y == 0) {
-			reportErrorFunc("Invalid position specified.");
-			pushBoolean(L, false);
-			return 1;
-		}
-	}
-
-	uint32_t cid;
-	if (params > 4) {
-		cid = popNumber(L);
-	} else {
-		cid = 0;
-	}
-
-	bool ghost;
-	if (params > 3) {
-		ghost = popBoolean(L);
-	} else {
-		ghost = false;
-	}
-
-	SpeakClasses type = (SpeakClasses)popNumber(L);
-	std::string text = popString(L);
-	uint32_t uid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(uid);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	SpectatorVec list;
-	if (cid) {
-		Creature* target = g_game.getCreatureByID(cid);
-		if (!target) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		list.insert(target);
-	}
-
-	if (params > 5) {
-		pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list, &pos));
-	} else {
-		pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list));
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
 {
 	//doCreateNpc(name, pos)
@@ -2782,62 +2703,6 @@ int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
 		delete npc;
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSendMagicEffect(lua_State* L)
-{
-	//doSendMagicEffect(pos, type[, player])
-	ScriptEnvironment* env = getScriptEnv();
-
-	uint32_t parameters = lua_gettop(L);
-	SpectatorVec list;
-
-	if (parameters > 2) {
-		uint32_t cid = popNumber(L);
-		Player* player = g_game.getPlayerByID(cid);
-		if (player) {
-			list.insert(player);
-		}
-	}
-
-	uint32_t type = popNumber(L);
-	PositionEx pos;
-	popPosition(L, pos);
-	if (pos.x == 0xFFFF) {
-		pos = env->getRealPos();
-	}
-
-	if (!list.empty()) {
-		g_game.addMagicEffect(list, pos, type);
-	} else {
-		g_game.addMagicEffect(pos, type);
-	}
-
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSendDistanceShoot(lua_State* L)
-{
-	//doSendDistanceShoot(frompos, topos, type)
-	uint32_t type = popNumber(L);
-	PositionEx toPos;
-	popPosition(L, toPos);
-	PositionEx fromPos;
-	popPosition(L, fromPos);
-	ScriptEnvironment* env = getScriptEnv();
-
-	if (fromPos.x == 0xFFFF) {
-		fromPos = env->getRealPos();
-	}
-
-	if (toPos.x == 0xFFFF) {
-		toPos = env->getRealPos();
-	}
-
-	g_game.addDistanceEffect(fromPos, toPos, type);
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -5692,21 +5557,6 @@ int32_t LuaScriptInterface::luaDoPlayerSetGuildNick(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetGuildId(lua_State* L)
-{
-	//getGuildId(guild_name)
-	std::string name = popString(L);
-
-	uint32_t guildId;
-	if (IOGuild::getInstance()->getGuildIdByName(guildId, name)) {
-		lua_pushnumber(L, guildId);
-	} else {
-		reportErrorFunc("Guild not found");
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 {
 	//doMoveCreature(cid, direction)
@@ -6609,18 +6459,6 @@ int32_t LuaScriptInterface::luaGetItemIdByName(lua_State* L)
 	}
 
 	lua_pushnumber(L, itemid);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsSightClear(lua_State* L)
-{
-	//isSightClear(fromPos, toPos, floorCheck)
-	PositionEx fromPos, toPos;
-	bool floorCheck = popBoolean(L);
-	popPosition(L, toPos);
-	popPosition(L, fromPos);
-
-	pushBoolean(L, g_game.isSightClear(fromPos, toPos, floorCheck));
 	return 1;
 }
 

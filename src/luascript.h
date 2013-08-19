@@ -153,13 +153,6 @@ class ScriptEnvironment
 		void addGlobalStorageValue(const uint32_t key, const int32_t value);
 		bool getGlobalStorageValue(const uint32_t key, int32_t& value) const;
 
-		void setRealPos(const Position& realPos) {
-			m_realPos = realPos;
-		}
-		Position getRealPos() const {
-			return m_realPos;
-		}
-
 		void setNpc(Npc* npc) {
 			m_curNpc = npc;
 		}
@@ -206,8 +199,6 @@ class ScriptEnvironment
 		static StorageMap m_globalStorageMap;
 		//unique id map
 		static ThingMap m_globalMap;
-
-		Position m_realPos;
 
 		//item/creature map
 		int32_t m_lastUID;
@@ -478,10 +469,8 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerSendCancel(lua_State* L);
 		static int32_t luaDoSendDefaultCancel(lua_State* L);
 		static int32_t luaDoTeleportThing(lua_State* L);
-		static int32_t luaDoSendMagicEffect(lua_State* L);
 		static int32_t luaDoChangeTypeItem(lua_State* L);
 		static int32_t luaDoSendAnimatedText(lua_State* L);
-		static int32_t luaDoSendDistanceShoot(lua_State* L);
 		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoDecayItem(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
@@ -500,7 +489,6 @@ class LuaScriptInterface
 		static int32_t luaGetHouseTilesSize(lua_State* L);
 		static int32_t luaGetTileInfo(lua_State* L);
 
-		static int32_t luaDoCreatureSay(lua_State* L);
 		static int32_t luaDoPlayerAddSkillTry(lua_State* L);
 		static int32_t luaDoPlayerAddMana(lua_State* L);
 		static int32_t luaDoPlayerAddManaSpent(lua_State* L);
@@ -607,7 +595,6 @@ class LuaScriptInterface
 		static int32_t luaGetWorldCreatures(lua_State* L);
 		static int32_t luaGetWorldUpTime(lua_State* L);
 		static int32_t luaBroadcastMessage(lua_State* L);
-		static int32_t luaGetGuildId(lua_State* L);
 
 		//type validation
 		static int32_t luaIsPlayer(lua_State* L);
@@ -687,7 +674,6 @@ class LuaScriptInterface
 		static int32_t luaGetItemWeight(lua_State* L);
 		static int32_t luaGetItemWeightByUID(lua_State* L);
 		static int32_t luaGetItemIdByName(lua_State* L);
-		static int32_t luaIsSightClear(lua_State* L);
 
 		static int32_t luaDebugPrint(lua_State* L);
 		static int32_t luaIsInArray(lua_State* L);

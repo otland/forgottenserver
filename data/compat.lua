@@ -33,6 +33,7 @@ getCreaturePos = getCreaturePosition
 function doCreatureAddHealth(cid, health) return _Creature(cid):addHealth(health) end
 function doRemoveCreature(cid) return _Creature(cid):remove() end
 function doCreatureSetLookDir(cid, direction) return _Creature(cid):setDirection(direction) end
+function doCreatureSay(cid, text, type, ...) return _Creature(cid):say(text, type, ...) end
 
 doSetCreatureDirection = doCreatureSetLookDir
 
@@ -110,6 +111,10 @@ function doTransformItem(uid, newItemId, ...) return Item(uid):transform(newItem
 function getContainerSize(uid) return Container(uid):getSize() end
 function getContainerCap(uid) return Container(uid):getCapacity() end
 
+function doSendMagicEffect(pos, magicEffect, ...) return Position(pos):sendMagicEffect(magicEffect, ...) end
+function doSendDistanceShoot(fromPos, toPos, distanceEffect, ...) return Position(fromPos):sendDistanceEffect(toPos, distanceEffect, ...) end
+function isSightClear(fromPos, toPos, floorCheck) return Position(fromPos):isSightClear(toPos, floorCheck) end
+
 function getPromotedVocation(vocationId)
 	local vocation = Vocation(vocationId)
 	if vocation == nil then
@@ -121,4 +126,15 @@ function getPromotedVocation(vocationId)
 		return 0
 	end
 	return promotedVocation:getId()
+end
+
+function getGuildId(guildName)
+	local resultId = db.query("SELECT `id` FROM `guilds` WHERE `name` = " .. db.escapeString(guildName))
+	if resultId == false then
+		return false
+	end
+
+	local guildId = result.getDataInt(resultId, "id")
+	result.free(resultId)
+	return guildId
 end

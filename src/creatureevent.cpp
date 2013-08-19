@@ -268,9 +268,7 @@ bool CreatureEvent::executeOnLogin(Player* player)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -289,9 +287,7 @@ bool CreatureEvent::executeOnLogout(Player* player)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -310,9 +306,7 @@ bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -332,9 +326,7 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	uint32_t killercid;
 	if (killer) {
@@ -361,9 +353,7 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	uint32_t corpseid = env->addThing(corpse);
 
@@ -403,9 +393,7 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -427,9 +415,7 @@ bool CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -449,9 +435,7 @@ bool CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -473,9 +457,7 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 

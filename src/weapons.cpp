@@ -577,7 +577,6 @@ bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 

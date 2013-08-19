@@ -388,9 +388,7 @@ bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -1315,9 +1313,7 @@ bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -2271,9 +2267,7 @@ bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 

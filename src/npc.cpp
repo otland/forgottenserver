@@ -1285,7 +1285,6 @@ void NpcScript::onCreatureAppear(const Creature* creature)
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	env->setScriptId(m_onCreatureAppear, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	m_scriptInterface->pushFunction(m_onCreatureAppear);
@@ -1310,7 +1309,6 @@ void NpcScript::onCreatureDisappear(const Creature* creature)
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	env->setScriptId(m_onCreatureDisappear, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	m_scriptInterface->pushFunction(m_onCreatureDisappear);
@@ -1335,7 +1333,6 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	env->setScriptId(m_onCreatureMove, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	m_scriptInterface->pushFunction(m_onCreatureMove);
@@ -1358,9 +1355,7 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_onCreatureSay, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -1386,7 +1381,6 @@ void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t i
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(-1, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -1414,7 +1408,6 @@ void NpcScript::onPlayerCloseChannel(const Player* player)
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_onPlayerCloseChannel, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -1437,7 +1430,6 @@ void NpcScript::onPlayerEndTrade(const Player* player)
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_onPlayerCloseChannel, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	lua_State* L = m_scriptInterface->getLuaState();
@@ -1459,9 +1451,7 @@ void NpcScript::onThink()
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_onThink, m_scriptInterface);
-	env->setRealPos(m_npc->getPosition());
 	env->setNpc(m_npc);
 
 	m_scriptInterface->pushFunction(m_onThink);

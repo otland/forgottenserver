@@ -44,7 +44,6 @@ bool CanJoinChannelEvent::execute(const Player& player)
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player.getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -69,7 +68,6 @@ bool OnJoinChannelEvent::execute(const Player& player)
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player.getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -93,9 +91,7 @@ bool OnLeaveChannelEvent::execute(const Player& player)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player.getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
@@ -120,7 +116,6 @@ bool OnSpeakChannelEvent::execute(const Player& player, SpeakClasses& type, cons
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(player.getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 

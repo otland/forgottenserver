@@ -158,7 +158,6 @@ bool TalkAction::executeSay(Creature* creature, const std::string& words, const 
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	env->setScriptId(m_scriptId, m_scriptInterface);
-	env->setRealPos(creature->getPosition());
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
