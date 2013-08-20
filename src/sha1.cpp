@@ -184,14 +184,14 @@ void SHA1::Input(const unsigned char* message_array, size_t length)
 		Message_Block[Message_Block_Index++] = (*message_array & 0xFF);
 
 		Length_Low += 8;
-		Length_Low &= 0xFFFFFFFF;				// Force it to 32 bits
+		Length_Low &= 0xFFFFFFFF; // Force it to 32 bits
 
 		if (Length_Low == 0) {
 			Length_High++;
-			Length_High &= 0xFFFFFFFF;			// Force it to 32 bits
+			Length_High &= 0xFFFFFFFF; // Force it to 32 bits
 
 			if (Length_High == 0) {
-				Corrupted = true;    // Message is too long
+				Corrupted = true; // Message is too long
 			}
 		}
 
@@ -453,7 +453,7 @@ void SHA1::ProcessMessageBlock()
 
 	for (t = 40; t < 60; t++) {
 		temp = CircularShift(5, A) +
-		       ((B & C) | (B & D) | (C & D)) + E + W[t] + K[2];
+			((B & C) | (B & D) | (C & D)) + E + W[t] + K[2];
 		temp &= 0xFFFFFFFF;
 		E = D;
 		D = C;

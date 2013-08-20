@@ -259,8 +259,8 @@ void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t it
 {
 	std::ostringstream query;
 	query << "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES "
-	      << "(" << playerId << ", " << type << ", " << itemId << ", " << amount << ", " << price << ", "
-	      << timestamp << ", " << time(NULL) << ", " << state << ")";
+		<< "(" << playerId << ", " << type << ", " << itemId << ", " << amount << ", " << price << ", "
+		<< timestamp << ", " << time(NULL) << ", " << state << ")";
 	Database::getInstance()->executeQuery(query.str());
 }
 

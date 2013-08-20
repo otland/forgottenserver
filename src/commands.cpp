@@ -534,7 +534,7 @@ void Commands::reloadInfo(Player* player, const std::string& cmd, const std::str
 		g_monsters.reload();
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
 	} else if (tmpParam == "move" || tmpParam == "movement" || tmpParam == "movements"
-	           || tmpParam == "moveevents" || tmpParam == "moveevent") {
+		|| tmpParam == "moveevents" || tmpParam == "moveevent") {
 		g_moveEvents->reload();
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded movements.");
 	} else if (tmpParam == "npc" || tmpParam == "npcs") {
@@ -639,12 +639,12 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 
 	std::ostringstream info;
 	info << "Name: " << paramPlayer->name << std::endl <<
-	     "Access: " << paramPlayer->group->access << std::endl <<
-	     "Level: " << paramPlayer->level << std::endl <<
-	     "Magic Level: " << paramPlayer->magLevel << std::endl <<
-	     "Speed: " << paramPlayer->getSpeed() << std::endl <<
-	     "Position: " << paramPlayer->getPosition() << std::endl <<
-	     "IP: " << convertIPToString(playerIp) << std::endl;
+		"Access: " << paramPlayer->group->access << std::endl <<
+		"Level: " << paramPlayer->level << std::endl <<
+		"Magic Level: " << paramPlayer->magLevel << std::endl <<
+		"Speed: " << paramPlayer->getSpeed() << std::endl <<
+		"Position: " << paramPlayer->getPosition() << std::endl <<
+		"IP: " << convertIPToString(playerIp) << std::endl;
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, info.str());
 
 	if (playerIp != 0) {
@@ -1128,10 +1128,10 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 
 	if (ticks > 0) {
 		g_scheduler.addEvent(createSchedulerTask(ticks,
-		                     boost::bind(&Raid::executeRaidEvent, raid, event)));
+		boost::bind(&Raid::executeRaidEvent, raid, event)));
 	} else {
 		g_dispatcher.addTask(createTask(
-		                         boost::bind(&Raid::executeRaidEvent, raid, event)));
+		boost::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");

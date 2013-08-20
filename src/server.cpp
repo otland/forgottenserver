@@ -45,7 +45,7 @@ std::list<uint16_t> ServiceManager::get_ports() const
 	std::list<uint16_t> ports;
 
 	for (std::map<uint16_t, ServicePort_ptr>::const_iterator it = m_acceptors.begin();
-	        it != m_acceptors.end(); ++it) {
+	it != m_acceptors.end(); ++it) {
 		ports.push_back(it->first);
 	}
 
@@ -74,7 +74,7 @@ void ServiceManager::stop()
 	running = false;
 
 	for (std::map<uint16_t, ServicePort_ptr>::iterator it = m_acceptors.begin();
-	        it != m_acceptors.end(); ++it) {
+		it != m_acceptors.end(); ++it) {
 		try {
 			m_io_service.post(boost::bind(&ServicePort::onStopServer, it->second));
 		} catch (boost::system::system_error& e) {
@@ -133,8 +133,8 @@ void ServicePort::accept()
 
 	boost::asio::ip::tcp::socket* socket = new boost::asio::ip::tcp::socket(m_io_service);
 	m_acceptor->async_accept(*socket,
-	                         boost::bind(&ServicePort::onAccept, this, socket,
-	                                     boost::asio::placeholders::error));
+		boost::bind(&ServicePort::onAccept, this, socket,
+			boost::asio::placeholders::error));
 }
 
 void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::system::error_code& error)
@@ -173,7 +173,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 			close();
 			m_pendingStart = true;
 			g_scheduler.addEvent(createSchedulerTask(15000,
-			                     boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
+				boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
 		}
 	}
 }
@@ -223,10 +223,10 @@ void ServicePort::open(uint16_t port)
 	try {
 		if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
 			m_acceptor = new boost::asio::ip::tcp::acceptor(m_io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), m_serverPort));
+				boost::asio::ip::address(boost::asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), m_serverPort));
 		} else {
 			m_acceptor = new boost::asio::ip::tcp::acceptor(m_io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), m_serverPort));
+				boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), m_serverPort));
 		}
 
 		m_acceptor->set_option(boost::asio::ip::tcp::no_delay(true));
@@ -237,7 +237,7 @@ void ServicePort::open(uint16_t port)
 
 		m_pendingStart = true;
 		g_scheduler.addEvent(createSchedulerTask(15000,
-		                     boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), port)));
+			boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), port)));
 	}
 }
 

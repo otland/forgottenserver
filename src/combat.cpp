@@ -123,7 +123,7 @@ bool Combat::getMinMaxValues(Creature* creature, Creature* target, int32_t& min,
 }
 
 void Combat::getCombatArea(const Position& centerPos, const Position& targetPos, const AreaCombat* area,
-                           std::list<Tile*>& list)
+	std::list<Tile*>& list)
 {
 	if (area) {
 		area->getList(centerPos, targetPos, list);
@@ -258,7 +258,7 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 		}
 
 		if (player->getSecureMode() == SECUREMODE_ON && !Combat::isInPvpZone(player, target) &&
-		        player->getSkullClient(target->getPlayer()) == SKULL_NONE) {
+			player->getSkullClient(target->getPlayer()) == SKULL_NONE) {
 			return RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 		}
 	}
@@ -729,7 +729,7 @@ void Combat::postCombatEffects(Creature* caster, const Position& pos, const Comb
 }
 
 void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos,
-                               uint8_t effect)
+	uint8_t effect)
 {
 	uint8_t distanceEffect = effect;
 
@@ -756,7 +756,7 @@ void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const 
 }
 
 void Combat::CombatFunc(Creature* caster, const Position& pos,
-                        const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data)
+	const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data)
 {
 	std::list<Tile*> tileList;
 
@@ -863,7 +863,7 @@ void Combat::doCombat(Creature* caster, const Position& pos) const
 }
 
 void Combat::doCombatHealth(Creature* caster, Creature* target,
-                            int32_t minChange, int32_t maxChange, const CombatParams& params)
+	int32_t minChange, int32_t maxChange, const CombatParams& params)
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
 		Combat2Var var;
@@ -881,7 +881,7 @@ void Combat::doCombatHealth(Creature* caster, Creature* target,
 }
 
 void Combat::doCombatHealth(Creature* caster, const Position& pos,
-                            const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
+	const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
 {
 	Combat2Var var;
 	var.change = random_range(minChange, maxChange, DISTRO_NORMAL);
@@ -889,7 +889,7 @@ void Combat::doCombatHealth(Creature* caster, const Position& pos,
 }
 
 void Combat::doCombatMana(Creature* caster, Creature* target,
-                          int32_t minChange, int32_t maxChange, const CombatParams& params)
+	int32_t minChange, int32_t maxChange, const CombatParams& params)
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
 		Combat2Var var;
@@ -911,7 +911,7 @@ void Combat::doCombatMana(Creature* caster, Creature* target,
 }
 
 void Combat::doCombatMana(Creature* caster, const Position& pos,
-                          const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
+	const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
 {
 	Combat2Var var;
 	var.change = random_range(minChange, maxChange, DISTRO_NORMAL);
@@ -919,7 +919,7 @@ void Combat::doCombatMana(Creature* caster, const Position& pos,
 }
 
 void Combat::doCombatCondition(Creature* caster, const Position& pos, const AreaCombat* area,
-                               const CombatParams& params)
+	const CombatParams& params)
 {
 	CombatFunc(caster, pos, area, params, CombatConditionFunc, NULL);
 }
@@ -944,7 +944,7 @@ void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatP
 }
 
 void Combat::doCombatDispel(Creature* caster, const Position& pos, const AreaCombat* area,
-                            const CombatParams& params)
+	const CombatParams& params)
 {
 	CombatFunc(caster, pos, area, params, CombatDispelFunc, NULL);
 }

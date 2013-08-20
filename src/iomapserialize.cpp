@@ -127,7 +127,7 @@ bool IOMapSerialize::saveMap(Map* map)
 	//End the transaction
 	bool success = transaction.commit();
 	std::cout << "> Saved house items in: " <<
-	          (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
+		(OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
 	return success;
 }
 
@@ -272,7 +272,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 
 			// Note that these are NEGATED, ie. these are the items that will be saved.
 			if (!(!item->isNotMoveable() || item->getDoor() || (item->getContainer() &&
-			        item->getContainer()->size() != 0) || item->canWriteText() || item->getBed())) {
+				item->getContainer()->size() != 0) || item->canWriteText() || item->getBed())) {
 				continue;
 			}
 

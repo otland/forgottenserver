@@ -272,7 +272,7 @@ bool House::transferToDepot(Player* player)
 	for (ItemList::iterator it = moveItemList.begin(); it != moveItemList.end(); ++it) {
 		Item* item = *it;
 		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                        item, item->getItemCount(), NULL, FLAG_NOLIMIT);
+			item, item->getItemCount(), NULL, FLAG_NOLIMIT);
 	}
 
 	return true;
@@ -796,8 +796,8 @@ bool Houses::loadHousesXML(const std::string& filename)
 
 				if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
 					std::cout << "Warning: [Houses::loadHousesXML] House entry not set"
-					          << " - Name: " << house->getName()
-					          << " - House id: " << _houseid << std::endl;
+						<< " - Name: " << house->getName()
+						<< " - House id: " << _houseid << std::endl;
 				}
 
 				house->setEntryPos(entryPos);
@@ -841,7 +841,7 @@ bool Houses::payHouses()
 			if (!town) {
 #ifdef __DEBUG_HOUSES__
 				std::cout << "Warning: [Houses::payHouses] town = NULL, townid = " <<
-				          house->getTownId() << ", houseid = " << house->getHouseId() << std::endl;
+					house->getTownId() << ", houseid = " << house->getHouseId() << std::endl;
 #endif
 				continue;
 			}

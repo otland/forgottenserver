@@ -51,7 +51,7 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 }
 
 ReturnValue DepotLocker::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                    uint32_t flags, Creature* actor/* = NULL*/) const
+	uint32_t flags, Creature* actor/* = NULL*/) const
 {
 	return Container::__queryAdd(index, thing, count, flags, actor);
 }

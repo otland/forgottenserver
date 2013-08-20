@@ -183,7 +183,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 		//Add premium days
 		if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-			output->AddU16(0xFFFF);    //client displays free premium
+			output->AddU16(0xFFFF); //client displays free premium
 		} else {
 			output->AddU16(account.premiumDays);
 		}

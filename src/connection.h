@@ -53,7 +53,7 @@ class ConnectionManager
 		}
 
 		Connection_ptr createConnection(boost::asio::ip::tcp::socket* socket,
-		                                boost::asio::io_service& io_service, ServicePort_ptr servicers);
+			boost::asio::io_service& io_service, ServicePort_ptr servicers);
 		void releaseConnection(Connection_ptr connection);
 		void closeAll();
 
@@ -84,8 +84,8 @@ class Connection : public boost::enable_shared_from_this<Connection>, boost::non
 
 	private:
 		Connection(boost::asio::ip::tcp::socket* socket,
-		           boost::asio::io_service& io_service,
-		           ServicePort_ptr service_port) :
+			boost::asio::io_service& io_service,
+			ServicePort_ptr service_port) :
 			m_socket(socket),
 			m_readTimer(io_service),
 			m_writeTimer(io_service),

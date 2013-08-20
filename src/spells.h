@@ -317,7 +317,7 @@ class RuneSpell : public Action, public Spell
 		}
 
 		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-		                        const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
+			const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
 
 		virtual bool castSpell(Creature* creature);
 		virtual bool castSpell(Creature* creature, Creature* target);

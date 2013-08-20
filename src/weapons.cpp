@@ -647,7 +647,7 @@ void WeaponMelee::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 }
 
 bool WeaponMelee::getSkillType(const Player* player, const Item* item,
-                               skills_t& skill, uint32_t& skillpoint) const
+	skills_t& skill, uint32_t& skillpoint) const
 {
 	skillpoint = 0;
 
@@ -1089,7 +1089,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 }
 
 bool WeaponDistance::getSkillType(const Player* player, const Item* item,
-                                  skills_t& skill, uint32_t& skillpoint) const
+	skills_t& skill, uint32_t& skillpoint) const
 {
 	skill = SKILL_DIST;
 	skillpoint = 0;

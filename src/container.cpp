@@ -259,7 +259,7 @@ void Container::onAddContainerItem(Item* item)
 }
 
 void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, const ItemType& oldType,
-                                      Item* newItem, const ItemType& newType)
+	Item* newItem, const ItemType& newType)
 {
 	const Position& cylinderMapPos = getPosition();
 
@@ -300,7 +300,7 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 }
 
 ReturnValue Container::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                  uint32_t flags, Creature* actor/* = NULL*/) const
+	uint32_t flags, Creature* actor/* = NULL*/) const
 {
 	bool childIsOwner = hasBitSet(FLAG_CHILDISOWNER, flags);
 	if (childIsOwner) {
@@ -362,7 +362,7 @@ ReturnValue Container::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 }
 
 ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32_t count,
-                                       uint32_t& maxQueryCount, uint32_t flags) const
+	uint32_t& maxQueryCount, uint32_t flags) const
 {
 	const Item* item = thing->getItem();
 	if (item == NULL) {
@@ -439,7 +439,7 @@ ReturnValue Container::__queryRemove(const Thing* thing, uint32_t count, uint32_
 }
 
 Cylinder* Container::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-                                        uint32_t& flags)
+	uint32_t& flags)
 {
 	if (!unlocked) {
 		*destItem = NULL;

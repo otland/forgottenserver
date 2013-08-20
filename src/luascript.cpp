@@ -813,7 +813,7 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing, uint32_t thingid)
 		} else if (creature->getMonster()) {
 			type = 2;
 		} else {
-			type = 3;    //npc
+			type = 3; //npc
 		}
 
 		setField(L, "type", type);
@@ -3716,7 +3716,7 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 		uint32_t uid = getScriptEnv()->addThing(newItem);
 		lua_pushnumber(L, uid);
 	} else {
-		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
+		pushBoolean(L, false); //stackable item stacked with existing object, newItem will be released
 	}
 	return 1;
 }
@@ -6738,7 +6738,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddBlessing(lua_State* L)
 int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 {
 	g_dispatcher.addTask(
-	    createTask(boost::bind(&Game::saveGameState, &g_game)));
+		createTask(boost::bind(&Game::saveGameState, &g_game)));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -6746,7 +6746,7 @@ int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 int32_t LuaScriptInterface::luaRefreshMap(lua_State* L)
 {
 	g_dispatcher.addTask(
-	    createTask(boost::bind(&Game::refreshMap, &g_game)));
+		createTask(boost::bind(&Game::refreshMap, &g_game)));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -6754,7 +6754,7 @@ int32_t LuaScriptInterface::luaRefreshMap(lua_State* L)
 int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
 	g_dispatcher.addTask(
-	    createTask(boost::bind(&Game::cleanMap, &g_game)));
+		createTask(boost::bind(&Game::cleanMap, &g_game)));
 	pushBoolean(L, true);
 	return 1;
 }

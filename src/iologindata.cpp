@@ -338,7 +338,7 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name)
 
 	player->manaSpent = manaSpent;
 	player->magLevelPercent = Player::getPercentLevel(player->manaSpent,
-	                          nextManaCount);
+		nextManaCount);
 
 	player->health = result->getDataInt("health");
 	player->healthMax = result->getDataInt("healthmax");
@@ -817,7 +817,7 @@ bool IOLoginData::savePlayer(Player* player)
 	stmt.setQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
 
 	for (LearnedInstantSpellList::const_iterator it = player->learnedInstantSpellList.begin();
-	        it != player->learnedInstantSpellList.end(); ++it) {
+		it != player->learnedInstantSpellList.end(); ++it) {
 		query << player->getGUID() << "," << db->escapeString(*it);
 
 		if (!stmt.addRow(query)) {

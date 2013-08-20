@@ -607,7 +607,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 }
 
 void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z,
-                                     int32_t width, int32_t height, NetworkMessage& msg)
+	int32_t width, int32_t height, NetworkMessage& msg)
 {
 	int32_t skip = -1;
 	int32_t startz, endz, zstep = 0;
@@ -633,7 +633,7 @@ void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z,
 }
 
 void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z,
-                                       int32_t width, int32_t height, int32_t offset, int32_t& skip)
+	int32_t width, int32_t height, int32_t offset, int32_t& skip)
 {
 	for (int32_t nx = 0; nx < width; nx++) {
 		for (int32_t ny = 0; ny < height; ny++) {
@@ -736,7 +736,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 	//negative offset means that the action taken place is on a lower floor than ourself
 	int32_t offsetz = myPos.getZ() - z;
 	if ((x >= myPos.getX() - 8 + offsetz) && (x <= myPos.getX() + 9 + offsetz) &&
-	        (y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
+		(y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
 		return true;
 	}
 	return false;
@@ -1744,7 +1744,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 					uint32_t count;
 
 					if (!itemType.isFluidContainer() && !itemType.isSplash()) {
-						count = player->__getItemTypeCount(sInfo.itemId, subtype);    // This shop item requires extra checks
+						count = player->__getItemTypeCount(sInfo.itemId, subtype); // This shop item requires extra checks
 					} else {
 						count = subtype;
 					}
@@ -2649,7 +2649,7 @@ void ProtocolGame::sendRemoveCreature(const Creature* creature, const Position& 
 }
 
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTile, const Position& newPos,
-                                    uint32_t newStackPos, const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport)
+	uint32_t newStackPos, const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport)
 {
 	if (creature == player) {
 		if (teleport || oldStackPos >= 10) {
@@ -2808,7 +2808,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, uint32_t itemId, const 
 }
 
 void ProtocolGame::sendHouseWindow(uint32_t windowTextId, House* _house,
-                                   uint32_t listId, const std::string& text)
+	uint32_t listId, const std::string& text)
 {
 	NetworkMessage msg;
 	msg.AddByte(0x97);
@@ -2890,7 +2890,7 @@ void ProtocolGame::sendOutfitWindow()
 	MountsList mounts;
 
 	for (MountsList::const_iterator it = Mounts::getInstance()->getFirstMount(),
-	        end = Mounts::getInstance()->getLastMount(); it != end; ++it) {
+		end = Mounts::getInstance()->getLastMount(); it != end; ++it) {
 		if ((*it)->isTamed(player)) {
 			mounts.push_back(*it);
 		}
@@ -2952,8 +2952,8 @@ void ProtocolGame::sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time)
 }
 
 void ProtocolGame::sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
-                                     uint32_t primaryDamage/* = 0*/, TextColor_t primaryColor/* = TEXTCOLOR_NONE*/,
-                                     uint32_t secondaryDamage/* = 0*/, TextColor_t secondaryColor/* = TEXTCOLOR_NONE*/)
+	uint32_t primaryDamage/* = 0*/, TextColor_t primaryColor/* = TEXTCOLOR_NONE*/,
+	uint32_t secondaryDamage/* = 0*/, TextColor_t secondaryColor/* = TEXTCOLOR_NONE*/)
 {
 	NetworkMessage msg;
 	msg.AddByte(0xB4);
@@ -3047,7 +3047,7 @@ void ProtocolGame::AddMagicEffect(NetworkMessage& msg, const Position& pos, uint
 }
 
 void ProtocolGame::AddDistanceShoot(NetworkMessage& msg, const Position& from, const Position& to,
-                                    uint8_t type)
+	uint8_t type)
 {
 	msg.AddByte(0x85);
 	msg.AddPosition(from);
@@ -3194,7 +3194,7 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 }
 
 void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-                                    const std::string& text, uint16_t channelId, Position* pos/* = NULL*/)
+	const std::string& text, uint16_t channelId, Position* pos/* = NULL*/)
 {
 	if (!creature) {
 		return;
@@ -3322,7 +3322,7 @@ void ProtocolGame::AddTileItem(NetworkMessage& msg, const Position& pos, uint32_
 }
 
 void ProtocolGame::AddTileCreature(NetworkMessage& msg, const Position& pos, uint32_t stackpos,
-                                   const Creature* creature)
+	const Creature* creature)
 {
 	if (stackpos >= 10) {
 		return;
@@ -3362,7 +3362,7 @@ void ProtocolGame::RemoveTileItem(NetworkMessage& msg, const Position& pos, uint
 }
 
 void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
-                                  const Position& newPos, const Position& oldPos, uint32_t oldStackPos)
+	const Position& newPos, const Position& oldPos, uint32_t oldStackPos)
 {
 	if (creature != player) {
 		return;
@@ -3408,7 +3408,7 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 }
 
 void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creature,
-                                    const Position& newPos, const Position& oldPos, uint32_t oldStackPos)
+	const Position& newPos, const Position& oldPos, uint32_t oldStackPos)
 {
 	if (creature != player) {
 		return;

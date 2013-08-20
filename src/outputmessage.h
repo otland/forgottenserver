@@ -99,7 +99,7 @@ class OutputMessage : public NetworkMessage, boost::noncopyable
 		inline void add_header(T add) {
 			if ((int32_t)m_outputBufferStart - (int32_t)sizeof(T) < 0) {
 				std::cout << "Error: [OutputMessage::add_header] m_outputBufferStart(" << m_outputBufferStart <<
-				          ") < " << sizeof(T) << std::endl;
+					") < " << sizeof(T) << std::endl;
 				return;
 			}
 
