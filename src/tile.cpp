@@ -642,7 +642,7 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 }
 
 ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                             uint32_t flags, Creature* actor/* = NULL*/) const
+	uint32_t flags, Creature* actor/* = NULL*/) const
 {
 	const CreatureVector* creatures = getCreatures();
 	const TileItemVector* items = getItemList();
@@ -681,7 +681,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 
 						const Monster* creatureMonster = tileCreature->getMonster();
 						if (!creatureMonster || !tileCreature->isPushable() ||
-						        (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
+								(creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
 							return RET_NOTPOSSIBLE;
 						}
 					}
@@ -864,7 +864,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 }
 
 ReturnValue Tile::__queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-                                  uint32_t flags) const
+	uint32_t flags) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RET_NOERROR;
@@ -896,7 +896,7 @@ ReturnValue Tile::__queryRemove(const Thing* thing, uint32_t count, uint32_t fla
 }
 
 Cylinder* Tile::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-                                   uint32_t& flags)
+	uint32_t& flags)
 {
 	Tile* destTile = NULL;
 	*destItem = NULL;
@@ -984,7 +984,7 @@ Cylinder* Tile::__queryDestination(int32_t& index, const Thing* thing, Item** de
 	if (destTile == NULL) {
 		destTile = this;
 	} else {
-		flags |= FLAG_NOLIMIT;    //Will ignore that there is blocking items/creatures
+		flags |= FLAG_NOLIMIT; //Will ignore that there is blocking items/creatures
 	}
 
 	if (destTile) {

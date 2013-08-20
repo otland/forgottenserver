@@ -31,14 +31,14 @@ class Creature;
 #define INDEX_WHEREEVER -1
 
 enum cylinderflags_t {
-	FLAG_NOLIMIT = 1,		//Bypass limits like capacity/container limits, blocking items/creatures etc.
-	FLAG_IGNOREBLOCKITEM = 2,	//Bypass moveable blocking item checks
-	FLAG_IGNOREBLOCKCREATURE = 4,	//Bypass creature checks
-	FLAG_CHILDISOWNER = 8,		//Used by containers to query capacity of the carrier (player)
-	FLAG_PATHFINDING = 16,		//An additional check is done for floor changing/teleport items
-	FLAG_IGNOREFIELDDAMAGE = 32,	//Bypass field damage checks
-	FLAG_IGNORENOTMOVEABLE = 64,	//Bypass check for movability
-	FLAG_IGNOREAUTOSTACK = 128    //__queryDestination will not try to stack items together
+	FLAG_NOLIMIT = 1, //Bypass limits like capacity/container limits, blocking items/creatures etc.
+	FLAG_IGNOREBLOCKITEM = 2, //Bypass moveable blocking item checks
+	FLAG_IGNOREBLOCKCREATURE = 4, //Bypass creature checks
+	FLAG_CHILDISOWNER = 8, //Used by containers to query capacity of the carrier (player)
+	FLAG_PATHFINDING = 16, //An additional check is done for floor changing/teleport items
+	FLAG_IGNOREFIELDDAMAGE = 32, //Bypass field damage checks
+	FLAG_IGNORENOTMOVEABLE = 64, //Bypass check for movability
+	FLAG_IGNOREAUTOSTACK = 128 //__queryDestination will not try to stack items together
 };
 
 enum cylinderlink_t {
@@ -63,7 +63,7 @@ class Cylinder : virtual public Thing
 		  * \returns ReturnValue holds the return value
 		  */
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = NULL) const = 0;
+			uint32_t flags, Creature* actor = NULL) const = 0;
 
 		/**
 		  * Query the cylinder how much it can accept
@@ -76,7 +76,7 @@ class Cylinder : virtual public Thing
 		  * \returns ReturnValue holds the return value
 		  */
 		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-		                                    uint32_t flags) const = 0;
+			uint32_t flags) const = 0;
 
 		/**
 		  * Query if the cylinder can remove an object
@@ -98,7 +98,7 @@ class Cylinder : virtual public Thing
 		  * \returns Cylinder returns the destination cylinder
 		  */
 		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-		                                     uint32_t& flags) = 0;
+			uint32_t& flags) = 0;
 
 		/**
 		  * Add the object to the cylinder
@@ -214,18 +214,18 @@ class VirtualCylinder : public Cylinder
 		static VirtualCylinder* virtualCylinder;
 
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = NULL) const {
+			uint32_t flags, Creature* actor = NULL) const {
 			return RET_NOTPOSSIBLE;
 		}
 		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count,
-		                                    uint32_t& maxQueryCount, uint32_t flags) const {
+			uint32_t& maxQueryCount, uint32_t flags) const {
 			return RET_NOTPOSSIBLE;
 		}
 		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const {
 			return RET_NOTPOSSIBLE;
 		}
 		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-		                                     uint32_t& flags) {
+			uint32_t& flags) {
 			return NULL;
 		}
 
@@ -237,7 +237,7 @@ class VirtualCylinder : public Cylinder
 
 		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) {}
 		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval,
-		                                    cylinderlink_t link = LINK_OWNER) {}
+			cylinderlink_t link = LINK_OWNER) {}
 
 		virtual bool isPushable() const {
 			return false;

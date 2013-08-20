@@ -285,7 +285,7 @@ class ProtocolGame : public Protocol
 		void sendAddCreature(const Creature* creature, const Position& pos, uint32_t stackpos, bool isLogin);
 		void sendRemoveCreature(const Creature* creature, const Position& pos, uint32_t stackpos, bool isLogout);
 		void sendMoveCreature(const Creature* creature, const Tile* newTile, const Position& newPos, uint32_t newStackPos,
-		                      const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport);
+			const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport);
 
 		//containers
 		void sendAddContainerItem(uint8_t cid, uint16_t slot, const Item* item);
@@ -300,8 +300,8 @@ class ProtocolGame : public Protocol
 
 		//messages
 		void sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
-		                       uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
-		                       uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE);
+			uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
+			uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE);
 		void sendHealMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t heal, TextColor_t color);
 		void sendExperienceMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t exp, TextColor_t color);
 		void sendModalWindow(const ModalWindow& modalWindow);
@@ -313,11 +313,11 @@ class ProtocolGame : public Protocol
 
 		// translate a floor to clientreadable format
 		void GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z,
-		                         int32_t width, int32_t height, int32_t offset, int32_t& skip);
+			int32_t width, int32_t height, int32_t offset, int32_t& skip);
 
 		// translate a map area to clientreadable format
 		void GetMapDescription(int32_t x, int32_t y, int32_t z,
-		                       int32_t width, int32_t height, NetworkMessage& msg);
+			int32_t width, int32_t height, NetworkMessage& msg);
 
 		void AddTextMessage(NetworkMessage& msg, MessageClasses mclass, const std::string& message);
 		void AddTextMessageEx(NetworkMessage& msg, MessageClasses mclass, const std::string& message, const Position& pos, uint32_t value, TextColor_t color);
@@ -326,7 +326,7 @@ class ProtocolGame : public Protocol
 		void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
 		void AddPlayerStats(NetworkMessage& msg);
 		void AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-		                      const std::string& text, uint16_t channelId, Position* pos = NULL);
+			const std::string& text, uint16_t channelId, Position* pos = NULL);
 		void AddCreatureHealth(NetworkMessage& msg, const Creature* creature);
 		void AddCreatureOutfit(NetworkMessage& msg, const Creature* creature, const Outfit_t& outfit);
 		void AddCreatureInvisible(NetworkMessage& msg, const Creature* creature);
@@ -341,9 +341,9 @@ class ProtocolGame : public Protocol
 		void RemoveTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
 
 		void MoveUpCreature(NetworkMessage& msg, const Creature* creature,
-		                    const Position& newPos, const Position& oldPos, uint32_t oldStackPos);
+			const Position& newPos, const Position& oldPos, uint32_t oldStackPos);
 		void MoveDownCreature(NetworkMessage& msg, const Creature* creature,
-		                      const Position& newPos, const Position& oldPos, uint32_t oldStackPos);
+			const Position& newPos, const Position& oldPos, uint32_t oldStackPos);
 
 		//container
 		void AddContainerItem(NetworkMessage& msg, uint8_t cid, const Item* item);

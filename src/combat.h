@@ -273,27 +273,27 @@ class Combat
 		~Combat();
 
 		static void doCombatHealth(Creature* caster, Creature* target,
-		                           int32_t minChange, int32_t maxChange, const CombatParams& params);
+			int32_t minChange, int32_t maxChange, const CombatParams& params);
 		static void doCombatHealth(Creature* caster, const Position& pos,
-		                           const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params);
+			const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params);
 
 		static void doCombatMana(Creature* caster, Creature* target,
-		                         int32_t minChange, int32_t maxChange, const CombatParams& params);
+			int32_t minChange, int32_t maxChange, const CombatParams& params);
 		static void doCombatMana(Creature* caster, const Position& pos,
-		                         const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params);
+			const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params);
 
 		static void doCombatCondition(Creature* caster, Creature* target,
-		                              const CombatParams& params);
+			const CombatParams& params);
 		static void doCombatCondition(Creature* caster, const Position& pos,
-		                              const AreaCombat* area, const CombatParams& params);
+			const AreaCombat* area, const CombatParams& params);
 
 		static void doCombatDispel(Creature* caster, Creature* target,
-		                           const CombatParams& params);
+			const CombatParams& params);
 		static void doCombatDispel(Creature* caster, const Position& pos,
-		                           const AreaCombat* area, const CombatParams& params);
+			const AreaCombat* area, const CombatParams& params);
 
 		static void getCombatArea(const Position& centerPos, const Position& targetPos,
-		                          const AreaCombat* area, std::list<Tile*>& list);
+			const AreaCombat* area, std::list<Tile*>& list);
 
 		static bool isInPvpZone(const Creature* attacker, const Creature* target);
 		static bool isProtected(const Player* attacker, const Player* target);
@@ -333,7 +333,7 @@ class Combat
 		static void doCombatDefault(Creature* caster, Creature* target, const CombatParams& params);
 
 		static void CombatFunc(Creature* caster, const Position& pos,
-		                       const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data);
+			const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data);
 
 		static bool CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
 		static bool CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);

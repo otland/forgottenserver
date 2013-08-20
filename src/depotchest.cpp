@@ -34,7 +34,7 @@ DepotChest::~DepotChest()
 }
 
 ReturnValue DepotChest::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                   uint32_t flags, Creature* actor/* = NULL*/) const
+	uint32_t flags, Creature* actor/* = NULL*/) const
 {
 	const Item* item = thing->getItem();
 	if (item == NULL) {

@@ -58,7 +58,7 @@ bool BaseEvents::loadFromXml()
 
 		if (xmlStrcmp(root->name, (const xmlChar*)scriptsName.c_str())) {
 			std::cout << "[Error - BaseEvents::loadFromXml] Malformed " << scriptsName << " file."
-			          << std::endl;
+				<< std::endl;
 			xmlFreeDoc(doc);
 			return false;
 		}
@@ -77,7 +77,7 @@ bool BaseEvents::loadFromXml()
 
 						if (readXMLString(p, "script", scriptfile)) {
 							if (!event->checkScript("data/", scriptsName, "/scripts/" + scriptfile) ||
-							        !event->loadScript("data/" + scriptsName + "/scripts/" + scriptfile)) {
+									!event->loadScript("data/" + scriptsName + "/scripts/" + scriptfile)) {
 								success = false;
 							}
 						} else if (readXMLString(p, "function", scriptfile)) {

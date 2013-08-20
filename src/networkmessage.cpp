@@ -135,7 +135,7 @@ void NetworkMessage::AddItem(uint16_t id, uint8_t count)
 
 	AddU16(it.clientId);
 
-	AddByte(0xFF);    // MARK_UNMARKED
+	AddByte(0xFF); // MARK_UNMARKED
 
 	if (it.stackable) {
 		AddByte(count);
@@ -145,7 +145,7 @@ void NetworkMessage::AddItem(uint16_t id, uint8_t count)
 	}
 
 	if (it.isAnimation) {
-		AddByte(0xFE);    // random phase (0xFF for async)
+		AddByte(0xFE); // random phase (0xFF for async)
 	}
 }
 
@@ -154,7 +154,7 @@ void NetworkMessage::AddItem(const Item* item)
 	const ItemType& it = Item::items[item->getID()];
 
 	AddU16(it.clientId);
-	AddByte(0xFF);    // MARK_UNMARKED
+	AddByte(0xFF); // MARK_UNMARKED
 
 	if (it.stackable) {
 		AddByte(std::min<uint16_t>(0xFF, item->getSubType()));
@@ -164,7 +164,7 @@ void NetworkMessage::AddItem(const Item* item)
 	}
 
 	if (it.isAnimation) {
-		AddByte(0xFE);    // random phase (0xFF for async)
+		AddByte(0xFE); // random phase (0xFF for async)
 	}
 }
 

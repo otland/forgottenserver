@@ -228,7 +228,7 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootblock)
 {
 	LootItems::const_iterator it = lootblock.childLoot.begin(),
-	                          end = lootblock.childLoot.end();
+		end = lootblock.childLoot.end();
 
 	if (it == end) {
 		return true;
@@ -315,7 +315,7 @@ bool Monsters::reload()
 }
 
 ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType,
-        int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval)
+	int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval)
 {
 	ConditionDamage* condition = dynamic_cast<ConditionDamage*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, 0, 0));
 	condition->setParam(CONDITIONPARAM_TICKINTERVAL, tickInterval);
@@ -638,12 +638,12 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 		} else if (tmpName == "energyfield") {
 			combat->setParam(COMBATPARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
 		} else if (tmpName == "firecondition" || tmpName == "energycondition" ||
-		           tmpName == "earthcondition" || tmpName == "poisoncondition" ||
-		           tmpName == "icecondition" || tmpName == "freezecondition" ||
-		           tmpName == "deathcondition" || tmpName == "cursecondition" ||
-		           tmpName == "holycondition" || tmpName == "dazzlecondition" ||
-		           tmpName == "drowncondition" || tmpName == "bleedcondition" ||
-		           tmpName == "physicalcondition") {
+			tmpName == "earthcondition" || tmpName == "poisoncondition" ||
+			tmpName == "icecondition" || tmpName == "freezecondition" ||
+			tmpName == "deathcondition" || tmpName == "cursecondition" ||
+			tmpName == "holycondition" || tmpName == "dazzlecondition" ||
+			tmpName == "drowncondition" || tmpName == "bleedcondition" ||
+			tmpName == "physicalcondition") {
 			ConditionType_t conditionType = CONDITION_NONE;
 			uint32_t tickInterval = 2000;
 
@@ -1021,7 +1021,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 								mType->damageImmunities |= COMBAT_FIREDAMAGE;
 								mType->conditionImmunities |= CONDITION_FIRE;
 							} else if (tmpStrValue == "poison" ||
-							           tmpStrValue == "earth") {
+								tmpStrValue == "earth") {
 								mType->damageImmunities |= COMBAT_EARTHDAMAGE;
 								mType->conditionImmunities |= CONDITION_POISON;
 							} else if (tmpStrValue == "drown") {
@@ -1071,7 +1071,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 								mType->conditionImmunities |= CONDITION_FIRE;
 							}
 						} else if (readXMLInteger(tmpNode, "poison", intValue) ||
-						           readXMLInteger(tmpNode, "earth", intValue)) {
+							readXMLInteger(tmpNode, "earth", intValue)) {
 							if (intValue != 0) {
 								mType->damageImmunities |= COMBAT_EARTHDAMAGE;
 								mType->conditionImmunities |= CONDITION_POISON;
@@ -1121,7 +1121,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 								mType->conditionImmunities |= CONDITION_DRUNK;
 							}
 						} else if (readXMLInteger(tmpNode, "invisible", intValue) ||
-						           readXMLInteger(tmpNode, "invisibility", intValue)) {
+							readXMLInteger(tmpNode, "invisibility", intValue)) {
 							if (intValue != 0) {
 								mType->conditionImmunities |= CONDITION_INVISIBLE;
 							}

@@ -127,7 +127,7 @@ void OutputMessagePool::sendAll()
 void OutputMessagePool::releaseMessage(OutputMessage* msg)
 {
 	g_dispatcher.addTask(
-	    createTask(boost::bind(&OutputMessagePool::internalReleaseMessage, this, msg)));
+		createTask(boost::bind(&OutputMessagePool::internalReleaseMessage, this, msg)));
 }
 
 void OutputMessagePool::internalReleaseMessage(OutputMessage* msg)
@@ -174,7 +174,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 
 	OutputMessage_ptr outputmessage;
 	outputmessage.reset(m_outputMessages.back(),
-	                    boost::bind(&OutputMessagePool::releaseMessage, this, _1));
+		boost::bind(&OutputMessagePool::releaseMessage, this, _1));
 
 	m_outputMessages.pop_back();
 

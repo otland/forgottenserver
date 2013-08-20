@@ -43,7 +43,7 @@ uint32_t Connection::connectionCount = 0;
 #endif
 
 Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket* socket,
-        boost::asio::io_service& io_service, ServicePort_ptr servicer)
+	boost::asio::io_service& io_service, ServicePort_ptr servicer)
 {
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
 	Connection_ptr connection = Connection_ptr(new Connection(socket, io_service, servicer));
@@ -55,7 +55,7 @@ void ConnectionManager::releaseConnection(Connection_ptr connection)
 {
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
 	std::list<Connection_ptr>::iterator it =
-	    std::find(m_connections.begin(), m_connections.end(), connection);
+		std::find(m_connections.begin(), m_connections.end(), connection);
 
 	if (it != m_connections.end()) {
 		m_connections.erase(it);
@@ -94,7 +94,7 @@ void Connection::closeConnection()
 	m_connectionState = CONNECTION_STATE_REQUEST_CLOSE;
 
 	g_dispatcher.addTask(
-	    createTask(boost::bind(&Connection::closeConnectionTask, this)));
+		createTask(boost::bind(&Connection::closeConnectionTask, this)));
 }
 
 void Connection::closeConnectionTask()
@@ -155,7 +155,7 @@ void Connection::releaseConnection()
 	if (m_refCount > 0) {
 		//Reschedule it and try again.
 		g_scheduler.addEvent( createSchedulerTask(SCHEDULER_MINTICKS,
-		                      boost::bind(&Connection::releaseConnection, this)));
+			boost::bind(&Connection::releaseConnection, this)));
 	} else {
 		deleteConnectionTask();
 	}
@@ -218,8 +218,8 @@ void Connection::acceptConnection()
 
 		// Read size of the first packet
 		boost::asio::async_read(getHandle(),
-		                        boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
-		                        boost::bind(&Connection::parseHeader, shared_from_this(), boost::asio::placeholders::error));
+			boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
+			boost::bind(&Connection::parseHeader, shared_from_this(), boost::asio::placeholders::error));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
 			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
@@ -253,12 +253,12 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		++m_pendingRead;
 		m_readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		m_readTimer.async_wait( boost::bind(&Connection::handleReadTimeout, boost::weak_ptr<Connection>(shared_from_this()),
-		                                    boost::asio::placeholders::error));
+			boost::asio::placeholders::error));
 
 		// Read packet content
 		m_msg.setMessageLength(size + NetworkMessage::header_length);
 		boost::asio::async_read(getHandle(), boost::asio::buffer(m_msg.getBodyBuffer(), size),
-		                        boost::bind(&Connection::parsePacket, shared_from_this(), boost::asio::placeholders::error));
+			boost::bind(&Connection::parsePacket, shared_from_this(), boost::asio::placeholders::error));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
 			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
@@ -311,7 +311,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 
 	if (recvChecksum == checksum) {
-		m_msg.GetU32();    // remove the checksum
+		m_msg.GetU32(); // remove the checksum
 	}
 
 	if (!m_receivedFirst) {
@@ -330,24 +330,24 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 			m_protocol->setConnection(shared_from_this());
 		} else {
-			m_msg.GetByte();    // Skip protocol ID
+			m_msg.GetByte(); // Skip protocol ID
 		}
 
 		m_protocol->onRecvFirstMessage(m_msg);
 	} else {
-		m_protocol->onRecvMessage(m_msg);    // Send the packet to the current protocol
+		m_protocol->onRecvMessage(m_msg); // Send the packet to the current protocol
 	}
 
 	try {
 		++m_pendingRead;
 		m_readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		m_readTimer.async_wait( boost::bind(&Connection::handleReadTimeout, boost::weak_ptr<Connection>(shared_from_this()),
-		                                    boost::asio::placeholders::error));
+			boost::asio::placeholders::error));
 
 		// Wait to the next packet
 		boost::asio::async_read(getHandle(),
-		                        boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
-		                        boost::bind(&Connection::parseHeader, shared_from_this(), boost::asio::placeholders::error));
+			boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
+			boost::bind(&Connection::parseHeader, shared_from_this(), boost::asio::placeholders::error));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
 			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
@@ -387,11 +387,11 @@ void Connection::internalSend(OutputMessage_ptr msg)
 		++m_pendingWrite;
 		m_writeTimer.expires_from_now(boost::posix_time::seconds(Connection::write_timeout));
 		m_writeTimer.async_wait( boost::bind(&Connection::handleWriteTimeout, boost::weak_ptr<Connection>(shared_from_this()),
-		                                     boost::asio::placeholders::error));
+			boost::asio::placeholders::error));
 
 		boost::asio::async_write(getHandle(),
-		                         boost::asio::buffer(msg->getOutputBuffer(), msg->getMessageLength()),
-		                         boost::bind(&Connection::onWriteOperation, shared_from_this(), msg, boost::asio::placeholders::error));
+			boost::asio::buffer(msg->getOutputBuffer(), msg->getMessageLength()),
+			boost::bind(&Connection::onWriteOperation, shared_from_this(), msg, boost::asio::placeholders::error));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
 			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
@@ -446,7 +446,7 @@ void Connection::handleReadError(const boost::system::error_code& error)
 		//No more to read
 		closeConnection();
 	} else if (error == boost::asio::error::connection_reset ||
-	           error == boost::asio::error::connection_aborted) {
+		error == boost::asio::error::connection_aborted) {
 		//Connection closed remotely
 		closeConnection();
 	} else {
@@ -502,7 +502,7 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 		//No more to read
 		closeConnection();
 	} else if (error == boost::asio::error::connection_reset ||
-	           error == boost::asio::error::connection_aborted) {
+		error == boost::asio::error::connection_aborted) {
 		//Connection closed remotely
 		closeConnection();
 	} else {

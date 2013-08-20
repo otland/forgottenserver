@@ -366,7 +366,7 @@ void Creature::addEventWalk(bool firstStep)
 	}
 
 	eventWalk = g_scheduler.addEvent(createSchedulerTask(
-	                                     std::max<int64_t>(SCHEDULER_MINTICKS, ticks), boost::bind(&Game::checkCreatureWalk, &g_game, getID())));
+		std::max<int64_t>(SCHEDULER_MINTICKS, ticks), boost::bind(&Game::checkCreatureWalk, &g_game, getID())));
 }
 
 void Creature::stopEventWalk()
@@ -396,12 +396,12 @@ void Creature::updateMapCache()
 void Creature::updateTileCache(const Tile* tile, int32_t dx, int32_t dy)
 {
 	if ((std::abs(dx) <= (mapWalkWidth - 1) / 2) &&
-	        (std::abs(dy) <= (mapWalkHeight - 1) / 2)) {
+		(std::abs(dy) <= (mapWalkHeight - 1) / 2)) {
 		int32_t x = (mapWalkWidth - 1) / 2 + dx;
 		int32_t y = (mapWalkHeight - 1) / 2 + dy;
 
 		localMapCache[y][x] = (tile && tile->__queryAdd(0, this, 1,
-		                       FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR);
+			FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR);
 	}
 }
 
@@ -436,7 +436,7 @@ int32_t Creature::getWalkCache(const Position& pos) const
 	int32_t dy = Position::getOffsetY(pos, myPos);
 
 	if ((std::abs(dx) <= (mapWalkWidth - 1) / 2) &&
-	        (std::abs(dy) <= (mapWalkHeight - 1) / 2)) {
+		(std::abs(dy) <= (mapWalkHeight - 1) / 2)) {
 		int32_t x = (mapWalkWidth - 1) / 2 + dx;
 		int32_t y = (mapWalkHeight - 1) / 2 + dy;
 		if (localMapCache[y][x]) {
@@ -458,7 +458,7 @@ void Creature::onAddTileItem(const Tile* tile, const Position& pos, const Item* 
 }
 
 void Creature::onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
-                                const ItemType& oldType, const Item* newItem, const ItemType& newType)
+	const ItemType& oldType, const Item* newItem, const ItemType& newType)
 {
 	if (!isMapLoaded) {
 		return;
@@ -472,7 +472,7 @@ void Creature::onUpdateTileItem(const Tile* tile, const Position& pos, const Ite
 }
 
 void Creature::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
-                                const Item* item)
+	const Item* item)
 {
 	if (!isMapLoaded) {
 		return;
@@ -545,7 +545,7 @@ void Creature::onAttackedCreatureChangeZone(ZoneType_t zone)
 }
 
 void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-                              const Tile* oldTile, const Position& oldPos, bool teleport)
+	const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	if (creature == this) {
 		lastStep = OTSYS_TIME();
@@ -885,7 +885,7 @@ void Creature::drainMana(Creature* attacker, int32_t manaLoss)
 }
 
 BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                               bool checkDefense /* = false */, bool checkArmor /* = false */)
+	bool checkDefense /* = false */, bool checkArmor /* = false */)
 {
 	BlockType_t blockType = BLOCK_NONE;
 
@@ -1682,7 +1682,7 @@ FrozenPathingConditionCall::FrozenPathingConditionCall(const Position& _targetPo
 }
 
 bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Position& testPos,
-        const FindPathParams& fpp) const
+	const FindPathParams& fpp) const
 {
 	if (fpp.fullPathSearch) {
 		if (testPos.x > targetPos.x + fpp.maxTargetDist) {
@@ -1729,7 +1729,7 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
 }
 
 bool FrozenPathingConditionCall::operator()(const Position& startPos, const Position& testPos,
-        const FindPathParams& fpp, int32_t& bestMatchDist) const
+	const FindPathParams& fpp, int32_t& bestMatchDist) const
 {
 	if (!isInRange(startPos, testPos, fpp)) {
 		return false;

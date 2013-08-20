@@ -254,7 +254,7 @@ void MD5Final (MD5_CTX* mdContext)
 
 	/* Store buffer in digest */
 	for (i = 0, ii = 0; i < 4; i++, ii += 4) {
-		mdContext->digest[ii]   = (unsigned char)( mdContext->buf[i]        & 0xFF);
+		mdContext->digest[ii]   = (unsigned char)( mdContext->buf[i] & 0xFF);
 		mdContext->digest[ii + 1] = (unsigned char)((mdContext->buf[i] >>  8) & 0xFF);
 		mdContext->digest[ii + 2] = (unsigned char)((mdContext->buf[i] >> 16) & 0xFF);
 		mdContext->digest[ii + 3] = (unsigned char)((mdContext->buf[i] >> 24) & 0xFF);

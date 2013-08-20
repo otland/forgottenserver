@@ -130,14 +130,14 @@ void Game::start(ServiceManager* servicer)
 	services = servicer;
 
 	checkLightEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
-	                                       boost::bind(&Game::checkLight, this)));
+		boost::bind(&Game::checkLight, this)));
 
 	checkCreatureLastIndex = 0;
 	checkCreatureEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL,
-	                     boost::bind(&Game::checkCreatures, this)));
+		boost::bind(&Game::checkCreatures, this)));
 
 	checkDecayEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL,
-	                                       boost::bind(&Game::checkDecay, this)));
+		boost::bind(&Game::checkDecay, this)));
 }
 
 GameState_t Game::getGameState() const
@@ -153,7 +153,7 @@ void Game::setWorldType(WorldType_t type)
 void Game::setGameState(GameState_t newState)
 {
 	if (gameState == GAME_STATE_SHUTDOWN) {
-		return;    //this cannot be stopped
+		return; //this cannot be stopped
 	}
 
 	if (gameState != newState) {
@@ -195,7 +195,7 @@ void Game::setGameState(GameState_t newState)
 				saveGameState();
 
 				g_dispatcher.addTask(
-				    createTask(boost::bind(&Game::shutdown, this)));
+					createTask(boost::bind(&Game::shutdown, this)));
 
 				g_scheduler.stop();
 				g_dispatcher.stop();
@@ -953,7 +953,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 }
 
 bool Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
-                           uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
+	uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
 {
 	Player* player = getPlayerByID(playerId);
 
@@ -984,8 +984,8 @@ bool Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 	if (Creature* movingCreature = thing->getCreature()) {
 		if (Position::areInRange<1, 1, 0>(movingCreature->getPosition(), player->getPosition())) {
 			SchedulerTask* task = createSchedulerTask(1000,
-			                      boost::bind(&Game::playerMoveCreature, this, player->getID(),
-			                                  movingCreature->getID(), movingCreature->getPosition(), toCylinder->getPosition()));
+				boost::bind(&Game::playerMoveCreature, this, player->getID(),
+					movingCreature->getID(), movingCreature->getPosition(), toCylinder->getPosition()));
 			player->setNextActionTask(task);
 		} else {
 			playerMoveCreature(playerId, movingCreature->getID(), movingCreature->getPosition(), toCylinder->getPosition());
@@ -1011,7 +1011,7 @@ bool Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 }
 
 bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
-                              const Position& movingCreatureOrigPos, const Position& toPos)
+	const Position& movingCreatureOrigPos, const Position& toPos)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
@@ -1021,7 +1021,7 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::playerMoveCreature,
-		                      this, playerId, movingCreatureId, movingCreatureOrigPos, toPos));
+			this, playerId, movingCreatureId, movingCreatureOrigPos, toPos));
 		player->setNextActionTask(task);
 		return false;
 	}
@@ -1044,9 +1044,9 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		std::list<Direction> listDir;
 		if (getPathToEx(player, movingCreatureOrigPos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-			                                this, player->getID(), listDir)));
+				this, player->getID(), listDir)));
 			SchedulerTask* task = createSchedulerTask(1500, boost::bind(&Game::playerMoveCreature, this,
-			                      playerId, movingCreatureId, movingCreatureOrigPos, toPos));
+				playerId, movingCreatureId, movingCreatureOrigPos, toPos));
 			player->setNextWalkActionTask(task);
 			return true;
 		} else {
@@ -1062,7 +1062,7 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	}
 
 	if ((!movingCreature->isPushable() && !player->hasFlag(PlayerFlag_CanPushAllCreatures)) ||
-	        (movingCreature->isInGhostMode() && !player->isAccessPlayer())) {
+		(movingCreature->isInGhostMode() && !player->isAccessPlayer())) {
 		player->sendCancelMessage(RET_NOTMOVEABLE);
 		return false;
 	}
@@ -1207,7 +1207,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 }
 
 bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
-                          uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
+	uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
@@ -1217,7 +1217,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::playerMoveItem, this,
-		                      playerId, fromPos, spriteId, fromStackPos, toPos, count));
+			playerId, fromPos, spriteId, fromStackPos, toPos, count));
 		player->setNextActionTask(task);
 		return false;
 	}
@@ -1284,10 +1284,10 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 		if (getPathToEx(player, item->getPosition(), listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-			                                this, player->getID(), listDir)));
+				this, player->getID(), listDir)));
 
 			SchedulerTask* task = createSchedulerTask(400, boost::bind(&Game::playerMoveItem, this,
-			                      playerId, fromPos, spriteId, fromStackPos, toPos, count));
+				playerId, fromPos, spriteId, fromStackPos, toPos, count));
 			player->setNextWalkActionTask(task);
 			return true;
 		} else {
@@ -1327,7 +1327,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			uint8_t itemStackPos = fromStackPos;
 
 			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1, 0>(mapFromPos, player->getPosition())
-			        && !Position::areInRange<1, 1, 0>(mapFromPos, walkPos)) {
+					&& !Position::areInRange<1, 1, 0>(mapFromPos, walkPos)) {
 				//need to pickup the item first
 				Item* moveItem = NULL;
 
@@ -1346,10 +1346,10 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 			if (map->getPathTo(player, walkPos, listDir)) {
 				g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-				                                this, player->getID(), listDir)));
+					this, player->getID(), listDir)));
 
 				SchedulerTask* task = createSchedulerTask(400, boost::bind(&Game::playerMoveItem, this,
-				                      playerId, itemPos, spriteId, itemStackPos, toPos, count));
+					playerId, itemPos, spriteId, itemStackPos, toPos, count));
 				player->setNextWalkActionTask(task);
 				return true;
 			} else {
@@ -1360,8 +1360,8 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	}
 
 	if ((Position::getDistanceX(playerPos, mapToPos) > item->getThrowRange()) ||
-	        (Position::getDistanceY(playerPos, mapToPos) > item->getThrowRange()) ||
-	        (Position::getDistanceZ(mapFromPos, mapToPos) * 4 > item->getThrowRange())) {
+		(Position::getDistanceY(playerPos, mapToPos) > item->getThrowRange()) ||
+		(Position::getDistanceZ(mapFromPos, mapToPos) * 4 > item->getThrowRange())) {
 		player->sendCancelMessage(RET_DESTINATIONOUTOFREACH);
 		return false;
 	}
@@ -1382,7 +1382,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 }
 
 ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-                                   Item* item, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = NULL*/)
+	Item* item, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = NULL*/)
 {
 	if (!toCylinder) {
 		return RET_NOTPOSSIBLE;
@@ -1415,7 +1415,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	//destination is the same as the source?
 	if (item == toItem) {
-		return RET_NOERROR;    //silently ignore move
+		return RET_NOERROR; //silently ignore move
 	}
 
 	//check if we can add this item
@@ -1558,7 +1558,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 }
 
 ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-                                        Item* item, Item* tradeItem, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = NULL*/)
+	Item* item, Item* tradeItem, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = NULL*/)
 {
 	if (!toCylinder) {
 		return RET_NOTPOSSIBLE;
@@ -1591,7 +1591,7 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 
 	//destination is the same as the source?
 	if (item == toItem) {
-		return RET_NOERROR;    //silently ignore move
+		return RET_NOERROR; //silently ignore move
 	}
 
 	//check if we can add this item
@@ -1748,14 +1748,14 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 }
 
 ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t index /*= INDEX_WHEREEVER*/,
-                                  uint32_t flags/* = 0*/, bool test/* = false*/)
+	uint32_t flags/* = 0*/, bool test/* = false*/)
 {
 	uint32_t remainderCount = 0;
 	return internalAddItem(toCylinder, item, index, flags, test, remainderCount);
 }
 
 ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t index,
-                                  uint32_t flags, bool test, uint32_t& remainderCount)
+	uint32_t flags, bool test, uint32_t& remainderCount)
 {
 	remainderCount = 0;
 
@@ -1915,7 +1915,7 @@ ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnM
 }
 
 Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
-                           bool depthSearch /*= true*/, int32_t subType /*= -1*/)
+	bool depthSearch /*= true*/, int32_t subType /*= -1*/)
 {
 	if (cylinder == NULL) {
 		return NULL;
@@ -2529,7 +2529,7 @@ bool Game::playerStopAutoWalk(uint32_t playerId)
 }
 
 bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint16_t fromSpriteId,
-                           const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId, bool isHotkey)
+	const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId, bool isHotkey)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
@@ -2568,7 +2568,7 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 			uint8_t itemStackPos = fromStackPos;
 
 			if (fromPos.x != 0xFFFF && toPos.x != 0xFFFF && Position::areInRange<1, 1, 0>(fromPos, player->getPosition()) &&
-			        !Position::areInRange<1, 1, 0>(fromPos, toPos)) {
+				!Position::areInRange<1, 1, 0>(fromPos, toPos)) {
 				Item* moveItem = NULL;
 
 				ret = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem);
@@ -2586,7 +2586,7 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 				g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk, this, player->getID(), listDir)));
 
 				SchedulerTask* task = createSchedulerTask(400, boost::bind(&Game::playerUseItemEx, this,
-				                      playerId, itemPos, itemStackPos, fromSpriteId, toPos, toStackPos, toSpriteId, isHotkey));
+					playerId, itemPos, itemStackPos, fromSpriteId, toPos, toStackPos, toSpriteId, isHotkey));
 				player->setNextWalkActionTask(task);
 				return true;
 			} else {
@@ -2602,7 +2602,7 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::playerUseItemEx, this,
-		                      playerId, fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId, isHotkey));
+			playerId, fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId, isHotkey));
 		player->setNextActionTask(task);
 		return false;
 	}
@@ -2614,7 +2614,7 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 }
 
 bool Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPos,
-                         uint8_t index, uint16_t spriteId, bool isHotkey)
+	uint8_t index, uint16_t spriteId, bool isHotkey)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
@@ -2643,10 +2643,10 @@ bool Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 			std::list<Direction> listDir;
 			if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-				                                this, player->getID(), listDir)));
+					this, player->getID(), listDir)));
 
 				SchedulerTask* task = createSchedulerTask(400, boost::bind(&Game::playerUseItem, this,
-				                      playerId, pos, stackPos, index, spriteId, isHotkey));
+					playerId, pos, stackPos, index, spriteId, isHotkey));
 				player->setNextWalkActionTask(task);
 				return true;
 			}
@@ -2661,7 +2661,7 @@ bool Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::playerUseItem, this,
-		                      playerId, pos, stackPos, index, spriteId, isHotkey));
+			playerId, pos, stackPos, index, spriteId, isHotkey));
 		player->setNextActionTask(task);
 		return false;
 	}
@@ -2674,7 +2674,7 @@ bool Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 }
 
 bool Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos,
-                                 uint32_t creatureId, uint16_t spriteId, bool isHotkey)
+	uint32_t creatureId, uint16_t spriteId, bool isHotkey)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
@@ -2740,10 +2740,10 @@ bool Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 			if (getPathToEx(player, walkToPos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-				                                this, player->getID(), listDir)));
+					this, player->getID(), listDir)));
 
 				SchedulerTask* task = createSchedulerTask(400, boost::bind(&Game::playerUseWithCreature, this,
-				                      playerId, itemPos, itemStackPos, creatureId, spriteId, isHotkey));
+					playerId, itemPos, itemStackPos, creatureId, spriteId, isHotkey));
 				player->setNextWalkActionTask(task);
 				return true;
 			} else {
@@ -2759,7 +2759,7 @@ bool Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::playerUseWithCreature, this,
-		                      playerId, fromPos, fromStackPos, creatureId, spriteId, isHotkey));
+			playerId, fromPos, fromStackPos, creatureId, spriteId, isHotkey));
 		player->setNextActionTask(task);
 		return false;
 	}
@@ -2872,10 +2872,10 @@ bool Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		std::list<Direction> listDir;
 		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-			                                this, player->getID(), listDir)));
+				this, player->getID(), listDir)));
 
 			SchedulerTask* task = createSchedulerTask(400, boost::bind(&Game::playerRotateItem, this,
-			                      playerId, pos, stackPos, spriteId));
+				playerId, pos, stackPos, spriteId));
 			player->setNextWalkActionTask(task);
 			return true;
 		} else {
@@ -2975,10 +2975,9 @@ bool Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		std::list<Direction> listDir;
 		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-			                                this, player->getID(), listDir)));
+				this, player->getID(), listDir)));
 			SchedulerTask* task = createSchedulerTask(400, boost::bind(
-			                          &Game::playerBrowseField, this, playerId, pos
-			                      ));
+				&Game::playerBrowseField, this, playerId, pos));
 			player->setNextWalkActionTask(task);
 			return true;
 		} else {
@@ -3054,7 +3053,7 @@ bool Game::playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t w
 }
 
 bool Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t stackPos,
-                              uint32_t tradePlayerId, uint16_t spriteId)
+	uint32_t tradePlayerId, uint16_t spriteId)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
@@ -3098,10 +3097,10 @@ bool Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		std::list<Direction> listDir;
 		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(boost::bind(&Game::playerAutoWalk,
-			                                this, player->getID(), listDir)));
+				this, player->getID(), listDir)));
 
 			SchedulerTask* task = createSchedulerTask(400, boost::bind(&Game::playerRequestTrade, this,
-			                      playerId, pos, stackPos, tradePlayerId, spriteId));
+				playerId, pos, stackPos, tradePlayerId, spriteId));
 			player->setNextWalkActionTask(task);
 			return true;
 		} else {
@@ -3354,7 +3353,7 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	const Position& tradeItemPosition = tradeItem->getPosition();
 
 	int32_t lookDistance = std::max<int32_t>(Position::getDistanceX(playerPosition, tradeItemPosition),
-	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
+		Position::getDistanceY(playerPosition, tradeItemPosition));
 
 	std::ostringstream ss;
 
@@ -3419,8 +3418,8 @@ bool Game::internalCloseTrade(Player* player)
 
 	if ((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) || player->getTradeState() == TRADE_TRANSFER) {
 		std::cout << "Warning: [Game::playerCloseTrade] TradeState == TRADE_TRANSFER. " <<
-		          player->getName() << " " << player->getTradeState() << " , " <<
-		          tradePartner->getName() << " " << tradePartner->getTradeState() << std::endl;
+			player->getName() << " " << player->getTradeState() << " , " <<
+			tradePartner->getName() << " " << tradePartner->getTradeState() << std::endl;
 		return true;
 	}
 
@@ -3466,7 +3465,7 @@ bool Game::internalCloseTrade(Player* player)
 }
 
 bool Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
-                              bool ignoreCap/* = false*/, bool inBackpacks/* = false*/)
+	bool ignoreCap/* = false*/, bool inBackpacks/* = false*/)
 {
 	if (amount == 0 || amount > 100) {
 		return false;
@@ -4016,7 +4015,7 @@ bool Game::playerShowQuestLine(uint32_t playerId, uint16_t questId)
 }
 
 bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
-                     const std::string& receiver, const std::string& text)
+	const std::string& receiver, const std::string& text)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player || player->isRemoved()) {
@@ -4119,8 +4118,8 @@ bool Game::playerWhisper(Player* player, const std::string& text)
 {
 	SpectatorVec list;
 	getSpectators(list, player->getPosition(), false, false,
-	              Map::maxClientViewportX, Map::maxClientViewportX,
-	              Map::maxClientViewportY, Map::maxClientViewportY);
+		Map::maxClientViewportX, Map::maxClientViewportX,
+		Map::maxClientViewportY, Map::maxClientViewportY);
 
 	SpectatorVec::const_iterator it;
 	SpectatorVec::const_iterator end = list.end();
@@ -4166,7 +4165,7 @@ bool Game::playerYell(Player* player, const std::string& text)
 }
 
 bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& receiver,
-                         const std::string& text)
+	const std::string& text)
 {
 	Player* toPlayer = getPlayerByName(receiver);
 
@@ -4245,7 +4244,7 @@ bool Game::npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, b
 
 //--
 bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-                            int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
+	int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
 {
 	return map->canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
 }
@@ -4275,7 +4274,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 }
 
 bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-                               bool ghostMode, SpectatorVec* listPtr/* = NULL*/, Position* pos/* = NULL*/)
+	bool ghostMode, SpectatorVec* listPtr/* = NULL*/, Position* pos/* = NULL*/)
 {
 	if (text.empty()) {
 		return false;
@@ -4296,8 +4295,8 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 		// the temporary when it's not used).
 		if (type != SPEAK_YELL && type != SPEAK_MONSTER_YELL) {
 			getSpectators(list, destPos, false, false,
-			              Map::maxClientViewportX, Map::maxClientViewportX,
-			              Map::maxClientViewportY, Map::maxClientViewportY);
+				Map::maxClientViewportX, Map::maxClientViewportX,
+				Map::maxClientViewportY, Map::maxClientViewportY);
 		} else {
 			getSpectators(list, destPos, true, false, 18, 18, 14, 14);
 		}
@@ -4325,20 +4324,20 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 }
 
 bool Game::getPathTo(const Creature* creature, const Position& destPos,
-                     std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/)
+	std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/)
 {
 	return map->getPathTo(creature, destPos, listDir, maxSearchDist);
 }
 
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos,
-                       std::list<Direction>& dirList, const FindPathParams& fpp)
+	std::list<Direction>& dirList, const FindPathParams& fpp)
 {
 	return map->getPathMatching(creature, dirList, FrozenPathingConditionCall(targetPos), fpp);
 }
 
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,
-                       uint32_t minTargetDist, uint32_t maxTargetDist, bool fullPathSearch /*= true*/,
-                       bool clearSight /*= true*/, int32_t maxSearchDist /*= -1*/)
+	uint32_t minTargetDist, uint32_t maxTargetDist, bool fullPathSearch /*= true*/,
+	bool clearSight /*= true*/, int32_t maxSearchDist /*= -1*/)
 {
 	FindPathParams fpp;
 	fpp.fullPathSearch = fullPathSearch;
@@ -4386,7 +4385,7 @@ void Game::addCreatureCheck(Creature* creature)
 	creature->creatureCheck = true;
 
 	if (creature->checkCreatureVectorIndex >= 0) {
-		return;    //Already in a vector
+		return; //Already in a vector
 	}
 
 	toAddCheckCreatureVector.push_back(creature);
@@ -4504,7 +4503,7 @@ void Game::changeLight(const Creature* creature)
 }
 
 bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature* target,
-                          int32_t& healthChange, bool checkDefense, bool checkArmor)
+	int32_t& healthChange, bool checkDefense, bool checkArmor)
 {
 	if (target->getPlayer() && target->getPlayer()->isInGhostMode()) {
 		return true;
@@ -5094,7 +5093,7 @@ void Game::internalDecayItem(Item* item)
 void Game::checkDecay()
 {
 	checkDecayEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL,
-	                                       boost::bind(&Game::checkDecay, this)));
+		boost::bind(&Game::checkDecay, this)));
 
 	size_t bucket = (lastBucket + 1) % EVENT_DECAY_BUCKETS;
 
@@ -5144,7 +5143,7 @@ void Game::checkDecay()
 void Game::checkLight()
 {
 	checkLightEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
-	                                       boost::bind(&Game::checkLight, this)));
+		boost::bind(&Game::checkLight, this)));
 
 	lightHour += lightHourDelta;
 

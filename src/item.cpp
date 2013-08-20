@@ -791,7 +791,7 @@ double Item::getWeight() const
 }
 
 std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
-                                 const Item* item /*= NULL*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
+	const Item* item /*= NULL*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
 	std::ostringstream s;
 	s << getNameDescription(it, item, subType, addArticle);

@@ -370,8 +370,8 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 }
 
 void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/,
-                        int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/,
-                        int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
+	int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/,
+	int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
 		return;
@@ -523,7 +523,7 @@ void Map::clearSpectatorCache()
 }
 
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-                           int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
+	int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
 {
 	//z checks
 	//underground 8->15
@@ -634,7 +634,7 @@ const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 }
 
 bool Map::getPathTo(const Creature* creature, const Position& destPos,
-                    std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/)
+	std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/)
 {
 	if (canWalkTo(creature, destPos) == NULL) {
 		return false;
@@ -700,7 +700,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 
 				bool outOfRange = false;
 				if (maxSearchDist != -1 && (Position::getDistanceX(endPos, pos) > maxSearchDist ||
-				                            Position::getDistanceY(endPos, pos) > maxSearchDist)) {
+					Position::getDistanceY(endPos, pos) > maxSearchDist)) {
 					outOfRange = true;
 				}
 
@@ -726,7 +726,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 
 						if (neighbourNode) {
 							if (neighbourNode->g <= newg) {
-								continue;    //The node on the closed/open list is cheaper than this one
+								continue; //The node on the closed/open list is cheaper than this one
 							}
 
 							nodes.openNode(neighbourNode);
@@ -798,7 +798,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 }
 
 bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirList,
-                          const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
+	const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
 {
 	dirList.clear();
 
@@ -867,7 +867,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 
 			bool inRange = true;
 			if (fpp.maxSearchDist != -1 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
-			                                Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+				Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				inRange = false;
 			}
 
@@ -1078,7 +1078,7 @@ uint32_t AStarNodes::countOpenNodes()
 }
 
 int32_t AStarNodes::getMapWalkCost(const Creature* creature, AStarNode* node,
-                                   const Tile* neighbourTile, const Position& neighbourPos)
+	const Tile* neighbourTile, const Position& neighbourPos)
 {
 	int cost = 0;
 
@@ -1309,7 +1309,7 @@ uint32_t Map::clean()
 	}
 
 	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "")
-	          << " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
-	          << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
+		<< " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
+		<< (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 	return count;
 }

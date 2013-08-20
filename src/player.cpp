@@ -1593,7 +1593,7 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 }
 
 void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
-                              const ItemType& oldType, const Item* newItem, const ItemType& newType)
+	const ItemType& oldType, const Item* newItem, const ItemType& newType)
 {
 	Creature::onUpdateTileItem(tile, pos, oldItem, oldType, newItem, newType);
 
@@ -1609,7 +1609,7 @@ void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item*
 }
 
 void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
-                              const Item* item)
+	const Item* item)
 {
 	Creature::onRemoveTileItem(tile, pos, iType, item);
 
@@ -1811,7 +1811,7 @@ void Player::onWalk(Direction& dir)
 }
 
 void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-                            const Tile* oldTile, const Position& oldPos, bool teleport)
+	const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
@@ -1875,7 +1875,7 @@ void Player::onAddContainerItem(const Container* container, const Item* item)
 }
 
 void Player::onUpdateContainerItem(const Container* container, uint16_t slot,
-                                   const Item* oldItem, const ItemType& oldType, const Item* newItem, const ItemType& newType)
+	const Item* oldItem, const ItemType& oldType, const Item* newItem, const ItemType& newType)
 {
 	if (oldItem != newItem) {
 		onRemoveContainerItem(container, slot, oldItem);
@@ -1934,7 +1934,7 @@ void Player::onAddInventoryItem(slots_t slot, Item* item)
 }
 
 void Player::onUpdateInventoryItem(slots_t slot, Item* oldItem, const ItemType& oldType,
-                                   Item* newItem, const ItemType& newType)
+	Item* newItem, const ItemType& newType)
 {
 	if (oldItem != newItem) {
 		onRemoveInventoryItem(slot, oldItem);
@@ -2380,7 +2380,7 @@ bool Player::hasShield() const
 }
 
 BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                             bool checkDefense /* = false*/, bool checkArmor /* = false*/)
+	bool checkDefense /* = false*/, bool checkArmor /* = false*/)
 {
 	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor);
 
@@ -2834,7 +2834,7 @@ bool Player::editVIP(uint32_t _guid, const std::string& description, uint32_t ic
 	VIPListSet::iterator it = VIPList.find(_guid);
 
 	if (it == VIPList.end()) {
-		return false;    // player is not in VIP
+		return false; // player is not in VIP
 	}
 
 	IOLoginData::getInstance()->editVIPEntry(accountNumber, _guid, description, icon, notify);
@@ -2915,9 +2915,9 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 	const int32_t& slotPosition = item->getSlotPosition();
 
 	if ((slotPosition & SLOTP_HEAD) || (slotPosition & SLOTP_NECKLACE) ||
-	        (slotPosition & SLOTP_BACKPACK) || (slotPosition & SLOTP_ARMOR) ||
-	        (slotPosition & SLOTP_LEGS) || (slotPosition & SLOTP_FEET) ||
-	        (slotPosition & SLOTP_RING)) {
+		(slotPosition & SLOTP_BACKPACK) || (slotPosition & SLOTP_ARMOR) ||
+		(slotPosition & SLOTP_LEGS) || (slotPosition & SLOTP_FEET) ||
+		(slotPosition & SLOTP_RING)) {
 		ret = RET_CANNOTBEDRESSED;
 	} else if (slotPosition & SLOTP_TWO_HAND) {
 		ret = RET_PUTTHISOBJECTINBOTHHANDS;
@@ -2978,8 +2978,8 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 					} else if (leftType == WEAPON_SHIELD && type == WEAPON_SHIELD) {
 						ret = RET_CANONLYUSEONESHIELD;
 					} else if (!leftItem->isWeapon() || !item->isWeapon() ||
-					           leftType == WEAPON_SHIELD || leftType == WEAPON_AMMO
-					           || type == WEAPON_SHIELD || type == WEAPON_AMMO) {
+						leftType == WEAPON_SHIELD || leftType == WEAPON_AMMO
+						|| type == WEAPON_SHIELD || type == WEAPON_AMMO) {
 						ret = RET_NOERROR;
 					} else {
 						ret = RET_CANONLYUSEONEWEAPON;
@@ -3012,8 +3012,8 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 					} else if (rightType == WEAPON_SHIELD && type == WEAPON_SHIELD) {
 						ret = RET_CANONLYUSEONESHIELD;
 					} else if (!rightItem->isWeapon() || !item->isWeapon() ||
-					           rightType == WEAPON_SHIELD || rightType == WEAPON_AMMO
-					           || type == WEAPON_SHIELD || type == WEAPON_AMMO) {
+						rightType == WEAPON_SHIELD || rightType == WEAPON_AMMO
+						|| type == WEAPON_SHIELD || type == WEAPON_AMMO) {
 						ret = RET_NOERROR;
 					} else {
 						ret = RET_CANONLYUSEONEWEAPON;
@@ -3071,7 +3071,7 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 	if (ret == RET_NOERROR || ret == RET_NOTENOUGHROOM) {
 		//need an exchange with source?
 		if (getInventoryItem((slots_t)index) != NULL && (!getInventoryItem((slots_t)index)->isStackable()
-		        || getInventoryItem((slots_t)index)->getID() != item->getID())) {
+			|| getInventoryItem((slots_t)index)->getID() != item->getID())) {
 			return RET_NEEDEXCHANGE;
 		}
 
@@ -3089,7 +3089,7 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 }
 
 ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-                                    uint32_t flags) const
+	uint32_t flags) const
 {
 	const Item* item = thing->getItem();
 	if (item == NULL) {
@@ -3190,7 +3190,7 @@ ReturnValue Player::__queryRemove(const Thing* thing, uint32_t count, uint32_t f
 }
 
 Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-                                     uint32_t& flags)
+	uint32_t& flags)
 {
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		*destItem = NULL;
@@ -3797,7 +3797,7 @@ bool Player::setAttackedCreature(Creature* creature)
 
 	if (creature) {
 		g_dispatcher.addTask(createTask(
-		                         boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
+			boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
 	}
 
 	return true;
@@ -3851,7 +3851,7 @@ void Player::doAttacking(uint32_t interval)
 			} else if (!canDoAction()) {
 				uint32_t delay = getNextActionTime();
 				SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::checkCreatureAttack,
-				                      &g_game, getID()));
+					&g_game, getID()));
 				setNextActionTask(task);
 			} else if (!hasCondition(CONDITION_EXHAUST_COMBAT) || !weapon->hasExhaustion()) {
 				result = weapon->useWeapon(this, tool, attackedCreature);

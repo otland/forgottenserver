@@ -276,7 +276,7 @@ Action* Actions::getAction(const Item* item)
 }
 
 ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
-                                     uint8_t index, Item* item, uint32_t creatureId)
+	uint8_t index, Item* item, uint32_t creatureId)
 {
 	if (Door* door = item->getDoor()) {
 		if (!door->canUse(player)) {
@@ -384,7 +384,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 }
 
 bool Actions::useItemEx(Player* player, const Position& fromPos, const Position& toPos,
-                        uint8_t toStackPos, Item* item, bool isHotkey, uint32_t creatureId /* = 0*/)
+	uint8_t toStackPos, Item* item, bool isHotkey, uint32_t creatureId /* = 0*/)
 {
 	if (!player->canDoAction()) {
 		return false;

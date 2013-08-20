@@ -34,7 +34,7 @@ Inbox::~Inbox()
 }
 
 ReturnValue Inbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                              uint32_t flags, Creature* actor/* = NULL*/) const
+	uint32_t flags, Creature* actor/* = NULL*/) const
 {
 	bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
 

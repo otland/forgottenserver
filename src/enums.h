@@ -351,8 +351,8 @@ struct ShopInfo {
 	};
 
 	ShopInfo(uint32_t _itemId, int32_t _subType = 0,
-	         uint32_t _buyPrice = 0, uint32_t _sellPrice = 0,
-	         std::string _realName = "") {
+		uint32_t _buyPrice = 0, uint32_t _sellPrice = 0,
+		std::string _realName = "") {
 		itemId = _itemId;
 		subType = _subType;
 		buyPrice = _buyPrice;

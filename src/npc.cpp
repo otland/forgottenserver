@@ -348,7 +348,7 @@ void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool 
 }
 
 void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-                         const Tile* oldTile, const Position& oldPos, bool teleport)
+	const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
@@ -418,7 +418,7 @@ void Npc::doTurn(Direction dir)
 }
 
 void Npc::onPlayerTrade(Player* player, ShopEvent_t type, int32_t callback, uint16_t itemId,
-                        uint8_t count, uint8_t amount, bool ignore/* = false*/, bool inBackpacks/* = false*/)
+	uint8_t count, uint8_t amount, bool ignore/* = false*/, bool inBackpacks/* = false*/)
 {
 	if (m_npcEventHandler) {
 		m_npcEventHandler->onPlayerTrade(player, callback, itemId, count, amount, ignore, inBackpacks);
@@ -907,13 +907,13 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	Npc* npc = env->getNpc();
 
 	if (lua_isfunction(L, -1) == 0) {
-		lua_pop(L, 1);    // skip it - use default value
+		lua_pop(L, 1); // skip it - use default value
 	} else {
 		sellCallback = popCallback(L);
 	}
 
 	if (lua_isfunction(L, -1) == 0) {
-		lua_pop(L, 1);    // skip it - use default value
+		lua_pop(L, 1); // skip it - use default value
 	} else {
 		buyCallback = popCallback(L);
 	}
@@ -1367,7 +1367,7 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 }
 
 void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t itemid,
-                              uint8_t count, uint8_t amount, bool ignore, bool inBackpacks)
+	uint8_t count, uint8_t amount, bool ignore, bool inBackpacks)
 {
 	if (callback == -1) {
 		return;

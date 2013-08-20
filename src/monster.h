@@ -133,7 +133,7 @@ class Monster : public Creature
 		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
 		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
 		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-		                            const Tile* oldTile, const Position& oldPos, bool teleport);
+			const Tile* oldTile, const Position& oldPos, bool teleport);
 
 		virtual void drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage);
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
@@ -175,7 +175,7 @@ class Monster : public Creature
 		}
 
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                     bool checkDefense = false, bool checkArmor = false);
+			bool checkDefense = false, bool checkArmor = false);
 
 	private:
 		CreatureHashSet friendList;
@@ -235,10 +235,10 @@ class Monster : public Creature
 
 		bool canUseAttack(const Position& pos, const Creature* target) const;
 		bool canUseSpell(const Position& pos, const Position& targetPos,
-		                 const spellBlock_t& sb, uint32_t interval, bool& inRange);
+			const spellBlock_t& sb, uint32_t interval, bool& inRange);
 		bool getRandomStep(const Position& creaturePos, Direction& dir);
 		bool getDanceStep(const Position& creaturePos, Direction& dir,
-		                  bool keepAttack = true, bool keepDistance = true);
+			bool keepAttack = true, bool keepDistance = true);
 		bool isInSpawnRange(const Position& toPos);
 		bool canWalkTo(Position pos, Direction dir);
 

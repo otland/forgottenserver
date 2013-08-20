@@ -92,10 +92,10 @@ class FrozenPathingConditionCall
 		~FrozenPathingConditionCall() {}
 
 		bool operator()(const Position& startPos, const Position& testPos,
-		                const FindPathParams& fpp, int32_t& bestMatchDist) const;
+			const FindPathParams& fpp, int32_t& bestMatchDist) const;
 
 		bool isInRange(const Position& startPos, const Position& testPos,
-		               const FindPathParams& fpp) const;
+			const FindPathParams& fpp) const;
 
 	protected:
 		Position targetPos;
@@ -281,7 +281,7 @@ class Creature : virtual public Thing
 		}
 		virtual bool setAttackedCreature(Creature* creature);
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false);
+			bool checkDefense = false, bool checkArmor = false);
 
 		void setMaster(Creature* creature) {
 			master = creature;
@@ -393,20 +393,20 @@ class Creature : virtual public Thing
 
 		virtual void onAddTileItem(const Tile* tile, const Position& pos, const Item* item);
 		virtual void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
-		                              const ItemType& oldType, const Item* newItem, const ItemType& newType);
+			const ItemType& oldType, const Item* newItem, const ItemType& newType);
 		virtual void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
-		                              const Item* item);
+			const Item* item);
 
 		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
 		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
 		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-		                            const Tile* oldTile, const Position& oldPos, bool teleport);
+			const Tile* oldTile, const Position& oldPos, bool teleport);
 
 		virtual void onAttackedCreatureDisappear(bool isLogout) {}
 		virtual void onFollowCreatureDisappear(bool isLogout) {}
 
 		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
-		                           Position* pos = NULL) {}
+			Position* pos = NULL) {}
 
 		virtual void onCreatureConvinced(const Creature* convincer, const Creature* creature) {}
 		virtual void onPlacedCreature() {}

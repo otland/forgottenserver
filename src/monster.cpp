@@ -183,7 +183,7 @@ void Monster::onCreatureDisappear(const Creature* creature, uint32_t stackpos, b
 }
 
 void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-                             const Tile* oldTile, const Position& oldPos, bool teleport)
+	const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
@@ -205,7 +205,7 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 		}
 
 		if (canSeeNewPos && isSummon() && getMaster() == creature) {
-			isMasterInRange = true;    //Turn the summon on again
+			isMasterInRange = true; //Turn the summon on again
 		}
 
 		updateIdleStatus();
@@ -359,7 +359,7 @@ bool Monster::isOpponent(const Creature* creature)
 		}
 	} else {
 		if ((creature->getPlayer() && !creature->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
-		        (creature->getMaster() && creature->getMaster()->getPlayer())) {
+			(creature->getMaster() && creature->getMaster()->getPlayer())) {
 			return true;
 		}
 	}
@@ -490,7 +490,7 @@ void Monster::onFollowCreatureComplete(const Creature* creature)
 }
 
 BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                              bool checkDefense /* = false*/, bool checkArmor /* = false*/)
+	bool checkDefense /* = false*/, bool checkArmor /* = false*/)
 {
 	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor);
 
@@ -519,7 +519,7 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 bool Monster::isTarget(Creature* creature)
 {
 	if (creature->isRemoved() || !creature->isAttackable() ||
-	        creature->getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {
+		creature->getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {
 		return false;
 	}
 
@@ -545,7 +545,7 @@ bool Monster::selectTarget(Creature* creature)
 	if (isHostile() || isSummon()) {
 		if (setAttackedCreature(creature) && !isSummon()) {
 			g_dispatcher.addTask(createTask(
-			                         boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
+				boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
 		}
 	}
 
@@ -715,7 +715,7 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 }
 
 bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
-                          const spellBlock_t& sb, uint32_t interval, bool& inRange)
+	const spellBlock_t& sb, uint32_t interval, bool& inRange)
 {
 	inRange = true;
 
@@ -907,7 +907,7 @@ bool Monster::pushItem(Item* item, int32_t radius)
 
 			if (tile && g_game.canThrowObjectTo(centerPos, tryPos)) {
 				if (g_game.internalMoveItem(item->getParent(), tile,
-				                            INDEX_WHEREEVER, item, item->getItemCount(), NULL) == RET_NOERROR) {
+					INDEX_WHEREEVER, item, item->getItemCount(), NULL) == RET_NOERROR) {
 					return true;
 				}
 			}
@@ -933,7 +933,7 @@ void Monster::pushItems(Tile* tile)
 			Item* item = items->at(i);
 
 			if (item && item->hasProperty(MOVEABLE) && (item->hasProperty(BLOCKPATH)
-			        || item->hasProperty(BLOCKSOLID))) {
+				|| item->hasProperty(BLOCKSOLID))) {
 				if (moveCount < 20 && pushItem(item, 1)) {
 					moveCount++;
 				} else if (g_game.internalRemoveItem(item) == RET_NOERROR) {
@@ -1077,7 +1077,7 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& dir)
 }
 
 bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
-                           bool keepAttack /*= true*/, bool keepDistance /*= true*/)
+	bool keepAttack /*= true*/, bool keepDistance /*= true*/)
 {
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
 
@@ -1172,9 +1172,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	int32_t distance = std::max<int32_t>(dx, dy);
 
 	if (!flee && (distance > mType->targetDistance || !g_game.isSightClear(creaturePos, targetPos, true))) {
-		return false;    // let the A* calculate it
+		return false; // let the A* calculate it
 	} else if (!flee && distance == mType->targetDistance) {
-		return true;    // we don't really care here, since it's what we wanted to reach (a dancestep will take of dancing in that position)
+		return true; // we don't really care here, since it's what we wanted to reach (a dancestep will take of dancing in that position)
 	}
 
 	int_fast32_t offsetx = Position::getOffsetX(creaturePos, targetPos);
@@ -1190,7 +1190,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	}
 
 	if (offsetx == 0 && offsety == 0) {
-		return getRandomStep(creaturePos, dir);    // player is "on" the monster so let's get some random step and rest will be taken care later.
+		return getRandomStep(creaturePos, dir); // player is "on" the monster so let's get some random step and rest will be taken care later.
 	}
 
 	if (dx == dy) {

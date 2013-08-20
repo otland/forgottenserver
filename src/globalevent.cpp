@@ -84,7 +84,7 @@ bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
 			timerMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
-				                                    boost::bind(&GlobalEvents::timer, this)));
+					boost::bind(&GlobalEvents::timer, this)));
 			}
 
 			return true;
@@ -103,7 +103,7 @@ bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
 
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
-				                                    boost::bind(&GlobalEvents::think, this)));
+					boost::bind(&GlobalEvents::think, this)));
 			}
 
 			return true;
@@ -160,7 +160,7 @@ void GlobalEvents::timer()
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
 		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
-							                boost::bind(&GlobalEvents::timer, this)));
+			boost::bind(&GlobalEvents::timer, this)));
 	}
 }
 

@@ -651,7 +651,7 @@ class Player : public Creature, public Cylinder
 			return pzLocked;
 		}
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false);
+			bool checkDefense = false, bool checkArmor = false);
 		virtual void doAttacking(uint32_t interval);
 		virtual bool hasExtraSwing() {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());
@@ -781,7 +781,7 @@ class Player : public Creature, public Cylinder
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-		                      const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport) {
+			const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport) {
 			if (client) {
 				client->sendMoveCreature(creature, newTile, newPos, newTile->getClientIndexOfThing(this, creature), oldTile, oldPos, oldStackPos, teleport);
 			}
@@ -852,8 +852,8 @@ class Player : public Creature, public Cylinder
 		}
 
 		void sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
-		                       uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
-		                       uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE) {
+			uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
+			uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE) {
 			if (client) {
 				client->sendDamageMessage(mclass, message, pos, primaryDamage, primaryColor, secondaryDamage, secondaryColor);
 			}
@@ -889,14 +889,14 @@ class Player : public Creature, public Cylinder
 
 		//event methods
 		virtual void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
-		                              const ItemType& oldType, const Item* newItem, const ItemType& newType);
+			const ItemType& oldType, const Item* newItem, const ItemType& newType);
 		virtual void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
-		                              const Item* item);
+			const Item* item);
 
 		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
 		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
 		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-		                            const Tile* oldTile, const Position& oldPos, bool teleport);
+			const Tile* oldTile, const Position& oldPos, bool teleport);
 
 		virtual void onAttackedCreatureDisappear(bool isLogout);
 		virtual void onFollowCreatureDisappear(bool isLogout);
@@ -904,7 +904,7 @@ class Player : public Creature, public Cylinder
 		//container
 		void onAddContainerItem(const Container* container, const Item* item);
 		void onUpdateContainerItem(const Container* container, uint16_t slot,
-		                           const Item* oldItem, const ItemType& oldType, const Item* newItem, const ItemType& newType);
+			const Item* oldItem, const ItemType& oldType, const Item* newItem, const ItemType& newType);
 		void onRemoveContainerItem(const Container* container, uint16_t slot, const Item* item);
 
 		void onCloseContainer(const Container* container);
@@ -914,7 +914,7 @@ class Player : public Creature, public Cylinder
 		//inventory
 		void onAddInventoryItem(slots_t slot, Item* item);
 		void onUpdateInventoryItem(slots_t slot, Item* oldItem, const ItemType& oldType,
-		                           Item* newItem, const ItemType& newType);
+			Item* newItem, const ItemType& newType);
 		void onRemoveInventoryItem(slots_t slot, Item* item);
 
 		void sendCancel(const std::string& msg) const {
@@ -1184,12 +1184,12 @@ class Player : public Creature, public Cylinder
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = NULL) const;
+			uint32_t flags, Creature* actor = NULL) const;
 		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-		                                    uint32_t flags) const;
+			uint32_t flags) const;
 		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const;
 		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-		                                     uint32_t& flags);
+			uint32_t& flags);
 
 		virtual void __addThing(Thing* thing);
 		virtual void __addThing(int32_t index, Thing* thing);

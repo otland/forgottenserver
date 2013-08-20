@@ -1244,8 +1244,8 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 	const Position& toPos = target->getPosition();
 
 	if (fromPos.z != toPos.z ||
-	        (range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight)) ||
-	        (range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
+		(range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight)) ||
+		(range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
 		return false;
 	}
 
@@ -1866,7 +1866,7 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 }
 
 ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId,
-        uint32_t conjureCount, uint32_t reagentId, slots_t slot, bool test /*= false*/)
+	uint32_t conjureCount, uint32_t reagentId, slots_t slot, bool test /*= false*/)
 {
 	if (reagentId != 0) {
 		Item* item = player->getInventoryItem(slot);
@@ -2061,7 +2061,7 @@ bool RuneSpell::loadFunction(const std::string& functionName)
 }
 
 bool RuneSpell::Illusion(const RuneSpell* spell, Creature* creature, Item* item,
-                         const Position& posFrom, const Position& posTo)
+	const Position& posFrom, const Position& posTo)
 {
 	Player* player = creature->getPlayer();
 
@@ -2177,7 +2177,7 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 }
 
 bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom,
-                           const PositionEx& posTo, bool extendedUse, uint32_t creatureId)
+	const PositionEx& posTo, bool extendedUse, uint32_t creatureId)
 {
 	if (!playerRuneSpellCheck(player, posTo)) {
 		return false;

@@ -68,7 +68,7 @@ class AStarNodes
 		AStarNode* getNodeInList(int32_t x, int32_t y);
 
 		int32_t getMapWalkCost(const Creature* creature, AStarNode* node,
-		                       const Tile* neighbourTile, const Position& neighbourPos);
+			const Tile* neighbourTile, const Position& neighbourPos);
 		static int32_t getTileWalkCost(const Creature* creature, const Tile* tile);
 		int32_t getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, int32_t yGoal);
 
@@ -231,7 +231,7 @@ class Map
 		  *	\returns The result if you can throw there or not
 		  */
 		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
-		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY);
+			int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY);
 
 		/**
 		  * Checks if path is clear from fromPos to toPos
@@ -255,10 +255,10 @@ class Map
 		  * \returns returns true if a path was found
 		  */
 		bool getPathTo(const Creature* creature, const Position& destPos,
-		               std::list<Direction>& listDir, int32_t maxDist = -1);
+			std::list<Direction>& listDir, int32_t maxDist = -1);
 
 		bool getPathMatching(const Creature* creature, std::list<Direction>& dirList,
-		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp);
+			const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp);
 
 		std::map<std::string, Position> waypoints;
 
@@ -271,15 +271,15 @@ class Map
 
 		// Actually scans the map for spectators
 		void getSpectatorsInternal(SpectatorVec& list, const Position& centerPos,
-		                           int32_t minRangeX, int32_t maxRangeX,
-		                           int32_t minRangeY, int32_t maxRangeY,
-		                           int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers);
+			int32_t minRangeX, int32_t maxRangeX,
+			int32_t minRangeY, int32_t maxRangeY,
+			int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers);
 
 		// Use this when a custom spectator vector is needed, this support many
 		// more parameters than the heavily cached version below.
 		void getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
-		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
-		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
+			int32_t minRangeX = 0, int32_t maxRangeX = 0,
+			int32_t minRangeY = 0, int32_t maxRangeY = 0);
 		// The returned SpectatorVec is a temporary and should not be kept around
 		// Take special heed in that the vector will be destroyed if any function
 		// that calls clearSpectatorCache is called.
