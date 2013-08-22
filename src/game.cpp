@@ -3577,7 +3577,6 @@ bool Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, u
 bool Game::playerCloseShop(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (player == NULL || player->isRemoved()) {
 		return false;
 	}
@@ -3589,19 +3588,16 @@ bool Game::playerCloseShop(uint32_t playerId)
 bool Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (player == NULL || player->isRemoved()) {
 		return false;
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-
 	if (it.id == 0) {
 		return false;
 	}
 
 	int32_t subType;
-
 	if (it.isFluidContainer() || it.isSplash()) {
 		subType = clientFluidToServer(count);
 	} else {
@@ -3617,13 +3613,11 @@ bool Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteId, uint8_t stackPos)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	Thing* thing = internalGetThing(player, pos, stackPos, spriteId, STACKPOS_LOOK);
-
 	if (!thing) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
@@ -3638,13 +3632,14 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 
 	Position playerPos = player->getPosition();
 
-	int32_t lookDistance = -1;
-
+	int32_t lookDistance;
 	if (thing != player) {
 		lookDistance = std::max<int32_t>(Position::getDistanceX(playerPos, thingPos), Position::getDistanceY(playerPos, thingPos));
 		if (playerPos.z != thingPos.z) {
 			lookDistance += 15;
 		}
+	} else {
+		lookDistance = -1;
 	}
 
 	std::ostringstream ss;
@@ -3716,7 +3711,6 @@ bool Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 	}
 
 	int32_t lookDistance;
-
 	if (creature != player) {
 		const Position& playerPos = player->getPosition();
 		lookDistance = std::max<int32_t>(Position::getDistanceX(playerPos, creaturePos), Position::getDistanceY(playerPos, creaturePos));
@@ -3748,7 +3742,6 @@ bool Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 bool Game::playerCancelAttackAndFollow(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3762,7 +3755,6 @@ bool Game::playerCancelAttackAndFollow(uint32_t playerId)
 bool Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3774,7 +3766,6 @@ bool Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	Creature* attackCreature = getCreatureByID(creatureId);
-
 	if (!attackCreature) {
 		player->setAttackedCreature(NULL);
 		player->sendCancelTarget();
@@ -3782,7 +3773,6 @@ bool Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	ReturnValue ret = Combat::canTargetCreature(player, attackCreature);
-
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
 		player->sendCancelTarget();
@@ -3798,26 +3788,18 @@ bool Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 bool Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	player->setAttackedCreature(NULL);
-	Creature* followCreature = NULL;
-
-	if (creatureId != 0) {
-		followCreature = getCreatureByID(creatureId);
-	}
-
 	g_dispatcher.addTask(createTask(boost::bind(&Game::updateCreatureWalk, this, player->getID())));
-	return player->setFollowCreature(followCreature);
+	return player->setFollowCreature(getCreatureByID(creatureId));
 }
 
 bool Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, secureMode_t secureMode)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3835,7 +3817,6 @@ bool Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
 	}
 
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3857,7 +3838,6 @@ bool Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
 
 	VipStatus_t status;
 	Player* vipPlayer = getPlayerByName(real_name);
-
 	if (!vipPlayer) {
 		status = VIPSTATUS_OFFLINE;
 	} else if (player->isAccessPlayer() || !vipPlayer->isInGhostMode()) {
@@ -3877,7 +3857,6 @@ bool Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
 bool Game::playerRequestRemoveVip(uint32_t playerId, uint32_t guid)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3889,7 +3868,6 @@ bool Game::playerRequestRemoveVip(uint32_t playerId, uint32_t guid)
 bool Game::playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon, bool notify)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3901,7 +3879,6 @@ bool Game::playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::str
 bool Game::playerTurn(uint32_t playerId, Direction dir)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3917,7 +3894,6 @@ bool Game::playerRequestOutfit(uint32_t playerId)
 	}
 
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3929,7 +3905,6 @@ bool Game::playerRequestOutfit(uint32_t playerId)
 bool Game::playerToggleMount(uint32_t playerId, bool mount)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3950,14 +3925,12 @@ bool Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 
 	if (outfit.lookMount != 0) {
 		Mount* mount = Mounts::getInstance()->getMountByClientID(outfit.lookMount);
-
 		if (!mount || !mount->isTamed(player)) {
 			return false;
 		}
 
 		if (player->isMounted()) {
 			Mount* prevMount = Mounts::getInstance()->getMountByID(player->getCurrentMount());
-
 			if (prevMount) {
 				changeSpeed(player, mount->getSpeed() - prevMount->getSpeed());
 			}
@@ -3988,7 +3961,6 @@ bool Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 bool Game::playerShowQuestLog(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -4000,13 +3972,11 @@ bool Game::playerShowQuestLog(uint32_t playerId)
 bool Game::playerShowQuestLine(uint32_t playerId, uint16_t questId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
 
 	Quest* quest = Quests::getInstance()->getQuestByID(questId);
-
 	if (!quest) {
 		return false;
 	}
@@ -4091,7 +4061,6 @@ bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -4105,7 +4074,6 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	}
 
 	result = g_spells->playerSaySpell(player, type, words);
-
 	if (result == TALKACTION_BREAK) {
 		return internalCreatureSay(player, SPEAK_SAY, words, false);
 	} else if (result == TALKACTION_FAILED) {
@@ -4169,7 +4137,6 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
                          const std::string& text)
 {
 	Player* toPlayer = getPlayerByName(receiver);
-
 	if (!toPlayer || toPlayer->isRemoved()) {
 		player->sendTextMessage(MSG_STATUS_SMALL, "A player with this name is not online.");
 		return false;
@@ -4191,7 +4158,6 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 		ss << "Message sent to " << toPlayer->getName() << ".";
 		player->sendTextMessage(MSG_STATUS_SMALL, ss.str());
 	}
-
 	return true;
 }
 
@@ -4199,14 +4165,11 @@ bool Game::playerSpeakToNpc(Player* player, const std::string& text)
 {
 	SpectatorVec list;
 	getSpectators(list, player->getPosition());
-
-	//send to npcs only
 	for (SpectatorVec::iterator it = list.begin(), end = list.end(); it != end; ++it) {
 		if ((*it)->getNpc()) {
 			(*it)->onCreatureSay(player, SPEAK_PRIVATE_PN, text);
 		}
 	}
-
 	return true;
 }
 
@@ -4282,7 +4245,6 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	}
 
 	Position destPos = creature->getPosition();
-
 	if (pos) {
 		destPos = (*pos);
 	}
@@ -4352,7 +4314,6 @@ bool Game::getPathToEx(const Creature* creature, const Position& targetPos, std:
 void Game::checkCreatureWalk(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-
 	if (creature && creature->getHealth() > 0) {
 		creature->onWalk();
 		cleanup();
@@ -4362,7 +4323,6 @@ void Game::checkCreatureWalk(uint32_t creatureId)
 void Game::updateCreatureWalk(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-
 	if (creature && creature->getHealth() > 0) {
 		creature->goToFollowCreature();
 	}
@@ -4371,7 +4331,6 @@ void Game::updateCreatureWalk(uint32_t creatureId)
 void Game::checkCreatureAttack(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-
 	if (creature && creature->getHealth() > 0) {
 		creature->onAttacking(0);
 	}

@@ -1783,24 +1783,27 @@ void Player::openShopWindow(Npc* npc, const std::list<ShopInfo>& shop)
 	sendSaleItemList();
 }
 
-void Player::closeShopWindow(bool sendCloseShopWindow /*= true*/)
+bool Player::closeShopWindow(bool sendCloseShopWindow /*= true*/)
 {
 	//unreference callbacks
 	int32_t onBuy;
 	int32_t onSell;
 
 	Npc* npc = getShopOwner(onBuy, onSell);
+	if (!npc) {
+		shopItemList.clear();
+		return false;
+	}
 
-	if (npc) {
-		setShopOwner(NULL, -1, -1);
-		npc->onPlayerEndTrade(this, onBuy, onSell);
+	setShopOwner(NULL, -1, -1);
+	npc->onPlayerEndTrade(this, onBuy, onSell);
 
-		if (sendCloseShopWindow) {
-			sendCloseShop();
-		}
+	if (sendCloseShopWindow) {
+		sendCloseShop();
 	}
 
 	shopItemList.clear();
+	return true;
 }
 
 void Player::onWalk(Direction& dir)

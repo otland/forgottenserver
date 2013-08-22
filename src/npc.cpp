@@ -581,9 +581,11 @@ void Npc::removeShopPlayer(Player* player)
 void Npc::closeAllShopWindows()
 {
 	while (!shopPlayerSet.empty()) {
-		(*shopPlayerSet.begin())->closeShopWindow();
+		Player* player = *shopPlayerSet.begin();
+		if (!player->closeShopWindow()) {
+			removeShopPlayer(player);
+		}
 	}
-	shopPlayerSet.clear();
 }
 
 NpcScriptInterface* Npc::getScriptInterface()
@@ -972,7 +974,6 @@ int32_t NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 	ScriptEnvironment* env = getScriptEnv();
 
 	Player* player = g_game.getPlayerByID(popNumber(L));
-
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -980,7 +981,6 @@ int32_t NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 	}
 
 	Npc* npc = env->getNpc();
-
 	if (!npc) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);

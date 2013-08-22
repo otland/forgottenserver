@@ -626,7 +626,7 @@ class Player : public Creature, public Cylinder
 
 		void stopWalk();
 		void openShopWindow(Npc* npc, const std::list<ShopInfo>& shop);
-		void closeShopWindow(bool sendCloseShopWindow = true);
+		bool closeShopWindow(bool sendCloseShopWindow = true);
 		void updateSaleShopList(uint32_t itemId);
 		bool hasShopItemForSale(uint32_t itemId, uint8_t subType);
 
