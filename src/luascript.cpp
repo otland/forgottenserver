@@ -1977,6 +1977,9 @@ void LuaScriptInterface::registerFunctions()
 
 	// Creature
 	registerClass("Creature", "", LuaScriptInterface::luaCreatureCreate);
+	
+	registerClassMethod("Creature", "registerEvent", LuaScriptInterface::luaCreatureRegisterEvent);
+	registerClassMethod("Creature", "unregisterEvent", LuaScriptInterface::luaCreatureUnregisterEvent);
 
 	registerClassMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
 	registerClassMethod("Creature", "isPlayer", LuaScriptInterface::luaCreatureIsPlayer);
@@ -8513,14 +8516,44 @@ int32_t LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 // Creature
 int32_t LuaScriptInterface::luaCreatureCreate(lua_State* L)
 {
-	// Creature(id)
-	// Creature.new(id)
-	uint32_t id = getNumber<uint32_t>(L, 2);
+	// Creature(id/name)
+	// Creature.new(id/name)
+	Creature* creature = NULL;
+	if (isNumber(L, 2)) {
+		creature = g_game.getCreatureByID(getNumber<uint32_t>(L, 2));
+	} else if (isString(L, 2)) {
+		creature = g_game.getCreatureByName(getString(L, 2));
+	}
 
-	Creature* creature = g_game.getCreatureByID(id);
 	if (creature) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureRegisterEvent(lua_State* L)
+{
+	// creature:registerEvent(name)
+	const std::string& name = getString(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->registerCreatureEvent(name));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureUnregisterEvent(lua_State* L)
+{
+	// creature:unregisterEvent(name)
+	const std::string& name = getString(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->unregisterCreatureEvent(name));
 	} else {
 		pushNil(L);
 	}
@@ -8868,11 +8901,15 @@ int32_t LuaScriptInterface::luaCreatureSay(lua_State* L)
 // Player
 int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
-	// Player(id)
-	// Player.new(id)
-	uint32_t id = getNumber<uint32_t>(L, 2);
+	// Player(id/name)
+	// Player.new(id/name)
+	Player* player = NULL;
+	if (isNumber(L, 2)) {
+		player = g_game.getPlayerByID(getNumber<uint32_t>(L, 2));
+	} else if (isString(L, 2)) {
+		player = g_game.getPlayerByName(getString(L, 2));
+	}
 
-	Player* player = g_game.getPlayerByID(id);
 	if (player) {
 		pushUserdata<Player>(L, player);
 		setMetatable(L, -1, "Player");
