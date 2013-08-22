@@ -8611,7 +8611,7 @@ int32_t LuaScriptInterface::luaCreatureSetDirection(lua_State* L)
 {
 	// creature:setDirection(direction)
 	Direction direction = static_cast<Direction>(getNumber<uint64_t>(L, 2));
-	Creature* creature = getCreature(L, 1);
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		pushBoolean(L, g_game.internalCreatureTurn(creature, direction));
 	} else {
@@ -8636,7 +8636,7 @@ int32_t LuaScriptInterface::luaCreatureAddHealth(lua_State* L)
 {
 	// creature:addHealth(healthChange)
 	int32_t healthChange = getNumber<int32_t>(L, 2);
-	Creature* creature = getCreature(L, 1);
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		if (healthChange >= 0) {
 			g_game.combatChangeHealth(COMBAT_HEALING, NULL, creature, healthChange);
@@ -8666,7 +8666,7 @@ int32_t LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 {
 	// creature:setMaxHealth(maxHealth)
 	uint32_t maxHealth = getNumber<uint32_t>(L, 2);
-	Creature* creature = getCreature(L, 1);
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		creature->healthMax = maxHealth;
 		g_game.addCreatureHealth(creature);
@@ -8702,7 +8702,7 @@ int32_t LuaScriptInterface::luaCreatureAddMana(lua_State* L)
 		animationOnLoss = getBoolean(L, 3);
 	}
 	int32_t manaChange = getNumber<int32_t>(L, 2);
-	Creature* creature = getCreature(L, 1);
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		if (!animationOnLoss && manaChange < 0) {
 			creature->changeMana(manaChange);
@@ -8732,7 +8732,7 @@ int32_t LuaScriptInterface::luaCreatureSetMaxMana(lua_State* L)
 {
 	// creature:setMaxMana(maxMana)
 	uint32_t maxMana = getNumber<uint32_t>(L, 2);
-	Creature* creature = getCreature(L, 1);
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		creature->manaMax = maxMana;
 
@@ -8792,7 +8792,7 @@ int32_t LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 		pushMovement = getBoolean(L, 3);
 	}
 	const Position& position = getPosition(L, 2);
-	Creature* creature = getCreature(L, 1);
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		const Position& oldPosition = creature->getPosition();
 		if (g_game.internalTeleport(creature, position, pushMovement) == RET_NOERROR) {
@@ -8847,7 +8847,7 @@ int32_t LuaScriptInterface::luaCreatureSay(lua_State* L)
 
 	SpeakClasses type = static_cast<SpeakClasses>(getNumber<uint64_t>(L, 3));
 	const std::string& text = getString(L, 2);
-	Creature* creature = getCreature(L, 1);
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		SpectatorVec list;
 		if (target) {

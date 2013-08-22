@@ -580,8 +580,8 @@ void Npc::removeShopPlayer(Player* player)
 
 void Npc::closeAllShopWindows()
 {
-	for (Player* player : shopPlayerSet) {
-		player->closeShopWindow();
+	while (!shopPlayerSet.empty()) {
+		(*shopPlayerSet.begin())->closeShopWindow();
 	}
 	shopPlayerSet.clear();
 }
