@@ -1548,9 +1548,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerGUIDByName(name)
 	lua_register(m_luaState, "getPlayerGUIDByName", LuaScriptInterface::luaGetPlayerGUIDByName);
 
-	//registerCreatureEvent(uid, eventName)
-	lua_register(m_luaState, "registerCreatureEvent", LuaScriptInterface::luaRegisterCreatureEvent);
-
 	//getContainerCapById(itemid)
 	lua_register(m_luaState, "getContainerCapById", LuaScriptInterface::luaGetContainerCapById);
 
@@ -5798,24 +5795,6 @@ int32_t LuaScriptInterface::luaGetPlayerGUIDByName(lua_State* L)
 	}
 
 	lua_pushnumber(L, value);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaRegisterCreatureEvent(lua_State* L)
-{
-	//registerCreatureEvent(cid, name)
-	std::string name = popString(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		creature->registerCreatureEvent(name);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
 	return 1;
 }
 

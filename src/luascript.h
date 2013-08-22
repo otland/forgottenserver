@@ -680,7 +680,6 @@ class LuaScriptInterface
 		static int32_t luaGetFluidSourceType(lua_State* L);
 		static int32_t luaAddEvent(lua_State* L);
 		static int32_t luaStopEvent(lua_State* L);
-		static int32_t luaRegisterCreatureEvent(lua_State* L);
 
 		static int32_t luaDoPlayerPopupFYI(lua_State* L);
 		static int32_t luaMayNotMove(lua_State* L);
