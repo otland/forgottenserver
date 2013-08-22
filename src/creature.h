@@ -431,6 +431,7 @@ class Creature : virtual public Thing
 
 		//creature script events
 		bool registerCreatureEvent(const std::string& name);
+		bool unregisterCreatureEvent(const std::string& name);
 
 		Cylinder* getParent() {
 			return _tile;

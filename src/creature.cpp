@@ -1636,26 +1636,51 @@ void Creature::setNormalCreatureLight()
 bool Creature::registerCreatureEvent(const std::string& name)
 {
 	CreatureEvent* event = g_creatureEvents->getEventByName(name);
-
 	if (!event) {
 		return false;
 	}
 
 	CreatureEventType_t type = event->getEventType();
-
 	if (hasEventRegistered(type)) {
-		//check for duplicates
 		for (CreatureEventList::const_iterator it = eventsList.begin(); it != eventsList.end(); ++it) {
 			if (*it == event) {
 				return false;
 			}
 		}
 	} else {
-		//set the bit
-		scriptEventsBitField = scriptEventsBitField | ((uint32_t)1 << type);
+		scriptEventsBitField |= static_cast<uint32_t>(1) << type;
 	}
 
 	eventsList.push_back(event);
+	return true;
+}
+
+bool Creature::unregisterCreatureEvent(const std::string& name)
+{
+	CreatureEvent* event = g_creatureEvents->getEventByName(name);
+	if (!event) {
+		return false;
+	}
+
+	CreatureEventType_t type = event->getEventType();
+	if (!hasEventRegistered(type)) {
+		return false;
+	}
+	
+	bool resetTypeBit = true;
+	for (auto it = eventsList.begin(); it != eventsList.end(); ++it) {
+		CreatureEvent* curEvent = *it;
+		if (curEvent == event) {
+			it = eventsList.erase(it);
+		} else if (curEvent->getEventType() == type) {
+			resetTypeBit = false;
+		}
+	}
+
+	if (resetTypeBit) {
+		scriptEventsBitField &= ~(static_cast<uint32_t>(1) << type);
+	}
+
 	return true;
 }
 

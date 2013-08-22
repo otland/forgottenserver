@@ -37,6 +37,9 @@ function doCreatureSay(cid, text, type, ...) return _Creature(cid):say(text, typ
 
 doSetCreatureDirection = doCreatureSetLookDir
 
+function registerCreatureEvent(cid, name) return _Creature(cid):registerEvent(name) end
+function unregisterCreatureEvent(cid, name) return _Creature(cid):unregisterEvent(name) end
+
 function getPlayerGUID(cid) return _Player(cid):getGuid() end
 function getPlayerName(cid) return _Player(cid):getName() end
 function getPlayerFreeCap(cid) return _Player(cid):getFreeCapacity() end
