@@ -493,7 +493,6 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerAddMana(lua_State* L);
 		static int32_t luaDoPlayerAddManaSpent(lua_State* L);
 		static int32_t luaDoPlayerAddItem(lua_State* L);
-		static int32_t luaDoPlayerAddItemEx(lua_State* L);
 		static int32_t luaDoTileAddItemEx(lua_State* L);
 		static int32_t luaDoAddContainerItemEx(lua_State* L);
 		static int32_t luaDoRelocate(lua_State* L);
@@ -507,7 +506,6 @@ class LuaScriptInterface
 		static int32_t luaDoSetCreatureDropLoot(lua_State* L);
 
 		//queries
-		static int32_t luaGetPlayerByName(lua_State* L);
 		static int32_t luaGetPlayerGUIDByName(lua_State* L);
 		static int32_t luaGetAccountNumberByPlayerName(lua_State* L);
 		static int32_t luaGetPlayersByAccountNumber(lua_State* L);
@@ -597,18 +595,12 @@ class LuaScriptInterface
 		static int32_t luaBroadcastMessage(lua_State* L);
 
 		//type validation
-		static int32_t luaIsPlayer(lua_State* L);
 		static int32_t luaIsPlayerPzLocked(lua_State* L);
 		static int32_t luaIsPlayerGhost(lua_State* L);
-		static int32_t luaIsCreature(lua_State* L);
-		static int32_t luaIsContainer(lua_State* L);
 		static int32_t luaIsDepot(lua_State* L);
 		static int32_t luaIsCorpse(lua_State* L);
 		static int32_t luaIsMoveable(lua_State* L);
 		static int32_t luaIsValidUID(lua_State* L);
-		static int32_t luaIsMonster(lua_State* L);
-		static int32_t luaIsNpc(lua_State* L);
-		static int32_t luaIsItem(lua_State* L);
 
 		//container
 		static int32_t luaGetContainerCapById(lua_State* L);

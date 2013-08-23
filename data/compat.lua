@@ -23,6 +23,13 @@ function _Player(cid)
 	return _lastPlayer
 end
 
+function isCreature(cid) return _Creature(cid) ~= nil end
+function isPlayer(cid) return _Player(cid) ~= nil end
+function isMonster(cid) return Monster(cid) ~= nil end
+function isNpc(cid) return Npc(cid) ~= nil end
+function isItem(uid) return Item(uid) ~= nil end
+function isContainer(uid) return Container(uid) ~= nil end
+
 function getCreatureName(cid) return _Creature(cid):getName() end
 function getCreatureHealth(cid) return _Creature(cid):getHealth() end
 function getCreatureMaxHealth(cid) return _Creature(cid):getMaxHealth() end
@@ -40,6 +47,13 @@ doSetCreatureDirection = doCreatureSetLookDir
 function registerCreatureEvent(cid, name) return _Creature(cid):registerEvent(name) end
 function unregisterCreatureEvent(cid, name) return _Creature(cid):unregisterEvent(name) end
 
+function getPlayerByName(name)
+	local player = Player(name)
+	if player == nil then
+		return false
+	end
+	return player:getId()
+end
 function getPlayerGUID(cid) return _Player(cid):getGuid() end
 function getPlayerName(cid) return _Player(cid):getName() end
 function getPlayerFreeCap(cid) return _Player(cid):getFreeCapacity() end
@@ -103,6 +117,7 @@ function doPlayerSetTown(cid, town) return _Player(cid):setTown(Town(town)) end
 function setPlayerGroupId(cid, groupId) return _Player(cid):setGroup(Group(groupId)) end
 function doPlayerSetSex(cid, sex) return _Player(cid):setSex(sex) end
 function doShowTextDialog(cid, itemId, text) return _Player(cid):showTextDialog(itemId, text) end
+function doPlayerAddItemEx(cid, uid, ...) return _Player(cid):addItemEx(Item(uid), ...) end
 
 function getTownId(townName) return Town(townName):getId() end
 function getTownName(townId) return Town(townId):getName() end

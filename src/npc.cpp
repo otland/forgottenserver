@@ -1039,8 +1039,8 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 		}
 	}
 
-	uint32_t amount = (uint32_t)popNumber(L);
-	uint32_t itemId = (uint32_t)popNumber(L);
+	uint32_t amount = popNumber(L);
+	uint32_t itemId = popNumber(L);
 
 	Player* player = g_game.getPlayerByID(popNumber(L));
 	if (!player) {
