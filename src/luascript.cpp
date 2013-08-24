@@ -8112,9 +8112,10 @@ int32_t LuaScriptInterface::luaCreatureGetLight(lua_State* L)
 		creature->getCreatureLight(light);
 		pushNumber(L, light.level);
 		pushNumber(L, light.color);
-	} else {
-		pushNil(L);
+		return 2;
 	}
+	
+	pushNil(L);
 	return 1;
 }
 
@@ -8130,6 +8131,7 @@ int32_t LuaScriptInterface::luaCreatureSetLight(lua_State* L)
 		light.level = level;
 		creature->setCreatureLight(light);
 		g_game.changeLight(creature);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}
