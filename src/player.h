@@ -356,7 +356,10 @@ class Player : public Creature, public Cylinder
 		}
 
 		void addBlessing(int16_t blessing) {
-			blessings += blessing;
+			blessings |= blessing;
+		}
+		void removeBlessing(int16_t blessing) {
+			blessings &= ~blessing;
 		}
 		bool hasBlessing(int16_t value) const {
 			return (0 != (blessings & ((int16_t)1 << value)));
