@@ -144,6 +144,8 @@
 	<action itemid="20254" script="other/constructionkits.lua"/>
 	<action itemid="20255" script="other/constructionkits.lua"/>
 	<action itemid="20257" script="other/constructionkits.lua"/>
+	<action fromid="7904" toid="7907" script="other/furniturebeds.lua"/>
+	<action itemid="20252" script="other/furniturebeds.lua"/>
 	<action fromid="2070" toid="2078" script="other/music.lua"/>
 	<action fromid="2080" toid="2085" script="other/music.lua"/>
 	<action itemid="2332" script="other/music.lua"/>
@@ -187,6 +189,13 @@
 	<action fromid="7025" toid="7032" script="other/windows.lua"/>
 	<action fromid="10264" toid="10267" script="other/windows.lua" />
 	<action fromid="10488" toid="10491" script="other/windows.lua" />
+	<action fromid="5303" toid="5304" script="other/windows.lua" />
+	<action fromid="6448" toid="6449" script="other/windows.lua" />
+	<action fromid="19427" toid="19428" script="other/windows.lua" />
+	<action fromid="19440" toid="19441" script="other/windows.lua" />
+	<action fromid="19443" toid="19450" script="other/windows.lua" />
+	<action fromid="19974" toid="19975" script="other/windows.lua" />
+	<action fromid="20180" toid="20185" script="other/windows.lua" />
 	<action fromid="1209" toid="1214" script="other/doors.lua"/>
 	<action fromid="1219" toid="1262" script="other/doors.lua"/>
 	<action fromid="1539" toid="1542" script="other/doors.lua"/>
