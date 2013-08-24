@@ -1,4 +1,3 @@
-local ropeSpots = {384, 418, 8278, 8592, 13189, 14435, 14436, 15635, 19518}
 local holeId = {294, 369, 370, 383, 392, 408, 409, 410, 427, 428, 430, 462, 469, 470, 482, 484, 485, 489, 924, 3135, 3136, 7933, 7938, 8170, 8286, 8285, 8284, 8281, 8280, 8279, 8277, 8276, 8323, 8567, 8585, 8596, 8595, 8249, 8250, 8251, 8252, 8253, 8254, 8255, 8256, 8972, 9606, 9625, 14461, 19519, 21536}
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
@@ -19,8 +18,8 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 
 			toPosition.y = toPosition.y + 1
 			doTeleportThing(thing.uid, toPosition)
+			return true
 		end
-		return true
 	end
 	return false
 end
