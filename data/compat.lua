@@ -54,7 +54,17 @@ function getPlayerByName(name)
 	end
 	return player:getId()
 end
+function getIPByPlayerName(name)
+	local player = Player(name)
+	if player == nil then
+		return false
+	end
+	return player:getIp()
+end
 function getPlayerGUID(cid) return _Player(cid):getGuid() end
+function getPlayerIp(cid) return _Player(cid):getIp() end
+function getPlayerAccountType(cid) return _Player(cid):getAccountType() end
+function getPlayerLastLoginSaved(cid) return _Player(cid):getLastLoginSaved() end
 function getPlayerName(cid) return _Player(cid):getName() end
 function getPlayerFreeCap(cid) return _Player(cid):getFreeCapacity() end
 function getPlayerPosition(cid) return _Player(cid):getPosition() end
@@ -73,6 +83,13 @@ function getPlayerBalance(cid) return _Player(cid):getBankBalance() end
 function getPlayerMoney(cid) return _Player(cid):getMoney() end
 function getPlayerGroupId(cid) return _Player(cid):getGroup():getId() end
 function getPlayerLookDir(cid) return _Player(cid):getDirection() end
+function getPlayerLight(cid) return _Player(cid):getLight() end
+function getPlayerDepotItems(cid, depotId) return _Player(cid):getDepotItems(depotId) end
+function getPlayerSkullType(cid) return _Player(cid):getSkull() end
+function getPlayerLossPercent(cid) return _Player(cid):getDeathPenalty() end
+function getPlayerMount(cid, mountId) return _Player(cid):hasMount(mountId) end
+function getPlayerPremiumDays(cid) return _Player(cid):getPremiumDays() end
+function getPlayerBlessing(cid, blessing) return _Player(cid):hasBlessing(blessing) end
 function getPlayerGuildId(cid)
 	local guild = _Player(cid):getGuild()
 	if guild == nil then
@@ -106,6 +123,7 @@ function getPlayerMasterPos(cid) return _Player(cid):getTown():getTemplePosition
 function getPlayerItemCount(cid, itemId, ...) return _Player(cid):getItemCount(itemId, ...) end
 
 getPlayerAccountBalance = getPlayerBalance
+getIPByName = getIPByPlayerName
 
 function setPlayerStorageValue(cid, key, value) return _Player(cid):setStorageValue(key, value) end
 function doPlayerSetBalance(cid, balance) return _Player(cid):setBankBalance(balance) end
@@ -118,6 +136,9 @@ function setPlayerGroupId(cid, groupId) return _Player(cid):setGroup(Group(group
 function doPlayerSetSex(cid, sex) return _Player(cid):setSex(sex) end
 function doShowTextDialog(cid, itemId, text) return _Player(cid):showTextDialog(itemId, text) end
 function doPlayerAddItemEx(cid, uid, ...) return _Player(cid):addItemEx(Item(uid), ...) end
+function doPlayerAddPremiumDays(cid, days) return _Player(cid):addPremiumDays(days) end
+function doPlayerRemovePremiumDays(cid, days) return _Player(cid):removePremiumDays(days) end
+function doPlayerAddBlessing(cid, blessing) return _Player(cid):addBlessing(blessing) end
 
 function getTownId(townName) return Town(townName):getId() end
 function getTownName(townId) return Town(townId):getName() end

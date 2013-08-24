@@ -1241,29 +1241,14 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFood(cid)
 	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
 
-	//getPlayerLight(cid)
-	lua_register(m_luaState, "getPlayerLight", LuaScriptInterface::luaGetPlayerLight);
-
 	//getPlayerSlotItem(cid, slot)
 	lua_register(m_luaState, "getPlayerSlotItem", LuaScriptInterface::luaGetPlayerSlotItem);
 
 	//getPlayerItemById(cid, deepSearch, itemId, <optional> subType)
 	lua_register(m_luaState, "getPlayerItemById", LuaScriptInterface::luaGetPlayerItemById);
 
-	//getPlayerDepotItems(cid, depotid)
-	lua_register(m_luaState, "getPlayerDepotItems", LuaScriptInterface::luaGetPlayerDepotItems);
-
 	//getPlayerFlagValue(cid, flag)
 	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
-
-	//getPlayerLossPercent(cid)
-	lua_register(m_luaState, "getPlayerLossPercent", LuaScriptInterface::luaGetPlayerLossPercent);
-
-	//getPlayerSkullType(cid)
-	lua_register(m_luaState, "getPlayerSkullType", LuaScriptInterface::luaGetPlayerSkullType);
-
-	//getPlayerIp(cid)
-	lua_register(m_luaState, "getPlayerIp", LuaScriptInterface::luaGetPlayerIp);
 
 	//playerLearnInstantSpell(cid, name)
 	lua_register(m_luaState, "playerLearnInstantSpell", LuaScriptInterface::luaPlayerLearnInstantSpell);
@@ -1468,9 +1453,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doPlayerRemoveMount(cid, mountid)
 	lua_register(m_luaState, "doPlayerRemoveMount", LuaScriptInterface::luaDoPlayerRemoveMount);
-
-	//getPlayerMount(cid, mountid)
-	lua_register(m_luaState, "getPlayerMount", LuaScriptInterface::luaGetPlayerMount);
 
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
@@ -1755,27 +1737,6 @@ void LuaScriptInterface::registerFunctions()
 	//mayNotMove(cid, value)
 	lua_register(m_luaState, "mayNotMove", LuaScriptInterface::luaMayNotMove);
 
-	//doPlayerAddPremiumDays(cid, days)
-	lua_register(m_luaState, "doPlayerAddPremiumDays", LuaScriptInterface::luaDoPlayerAddPremiumDays);
-
-	//doPlayerRemovePremiumDays(cid, days)
-	lua_register(m_luaState, "doPlayerRemovePremiumDays", LuaScriptInterface::luaDoPlayerRemovePremiumDays);
-
-	//getPlayerPremiumDays(cid)
-	lua_register(m_luaState, "getPlayerPremiumDays", LuaScriptInterface::luaGetPlayerPremiumDays);
-
-	//getPlayerBlessing(cid, blessing)
-	lua_register(m_luaState, "getPlayerBlessing", LuaScriptInterface::luaGetPlayerBlessing);
-
-	//doPlayerAddBlessing(cid, blessing)
-	lua_register(m_luaState, "doPlayerAddBlessing", LuaScriptInterface::luaDoPlayerAddBlessing);
-
-	//getPlayerAccountType(cid)
-	lua_register(m_luaState, "getPlayerAccountType", LuaScriptInterface::luaGetPlayerAccountType);
-
-	//getPlayerLastLoginSaved(cid)
-	lua_register(m_luaState, "getPlayerLastLoginSaved", LuaScriptInterface::luaGetPlayerLastLoginSaved);
-
 	//saveServer()
 	//saveData()
 	lua_register(m_luaState, "saveServer", LuaScriptInterface::luaSaveServer);
@@ -1792,11 +1753,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getAccountNumberByPlayerName(name)
 	lua_register(m_luaState, "getAccountNumberByPlayerName", LuaScriptInterface::luaGetAccountNumberByPlayerName);
-
-	//getIPByPlayerName(name)
-	//getIpByName(name)
-	lua_register(m_luaState, "getIPByPlayerName", LuaScriptInterface::luaGetIPByPlayerName);
-	lua_register(m_luaState, "getIpByName", LuaScriptInterface::luaGetIPByPlayerName);
 
 	//getPlayersByIPAddress(ip[, mask = 0xFFFFFFFF])
 	lua_register(m_luaState, "getPlayersByIPAddress", LuaScriptInterface::luaGetPlayersByIPAddress);
@@ -1835,7 +1791,7 @@ void LuaScriptInterface::registerFunctions()
 	luaL_register(m_luaState, "result", LuaScriptInterface::luaResultTable);
 	
 	/* New functions */
-	//registerClass(className, baseClass, newFunction, deleteFunction)
+	//registerClass(className, baseClass, newFunction)
 	//registerClassMethod(className, functionName, function)
 	//registerMetaMethod(className, functionName, function)
 	//registerGlobalMethod(functionName, function)
@@ -1961,6 +1917,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Creature", "getId", LuaScriptInterface::luaCreatureGetId);
 	registerClassMethod("Creature", "getName", LuaScriptInterface::luaCreatureGetName);
+	
+	registerClassMethod("Creature", "getLight", LuaScriptInterface::luaCreatureGetLight);
+	registerClassMethod("Creature", "setLight", LuaScriptInterface::luaCreatureSetLight);
 
 	registerClassMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
 	registerClassMethod("Creature", "getDirection", LuaScriptInterface::luaCreatureGetDirection);
@@ -1986,8 +1945,16 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 
 	registerClassMethod("Player", "getGuid", LuaScriptInterface::luaPlayerGetGuid);
+	registerClassMethod("Player", "getIp", LuaScriptInterface::luaPlayerGetIp);
+	registerClassMethod("Player", "getAccountType", LuaScriptInterface::luaPlayerGetAccountType);
+	registerClassMethod("Player", "getLastLoginSaved", LuaScriptInterface::luaPlayerGetLastLoginSaved);
 
 	registerClassMethod("Player", "getFreeCapacity", LuaScriptInterface::luaPlayerGetFreeCapacity);
+	registerClassMethod("Player", "getDepotItems", LuaScriptInterface::luaPlayerGetDepotItems);
+	
+	registerClassMethod("Player", "getSkull", LuaScriptInterface::luaPlayerGetSkull);
+	registerClassMethod("Player", "setSkull", LuaScriptInterface::luaPlayerSetSkull);
+	registerClassMethod("Player", "getDeathPenalty", LuaScriptInterface::luaPlayerGetDeathPenalty);
 
 	registerClassMethod("Player", "getExperience", LuaScriptInterface::luaPlayerGetExperience);
 	registerClassMethod("Player", "addExperience", LuaScriptInterface::luaPlayerAddExperience);
@@ -2051,6 +2018,16 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
 
 	registerClassMethod("Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
+	
+	registerClassMethod("Player", "hasMount", LuaScriptInterface::luaPlayerHasMount);
+	
+	registerClassMethod("Player", "getPremiumDays", LuaScriptInterface::luaPlayerGetPremiumDays);
+	registerClassMethod("Player", "addPremiumDays", LuaScriptInterface::luaPlayerAddPremiumDays);
+	registerClassMethod("Player", "removePremiumDays", LuaScriptInterface::luaPlayerRemovePremiumDays);
+
+	registerClassMethod("Player", "hasBlessing", LuaScriptInterface::luaPlayerHasBlessing);
+	registerClassMethod("Player", "addBlessing", LuaScriptInterface::luaPlayerAddBlessing);
+	registerClassMethod("Player", "removeBlessing", LuaScriptInterface::luaPlayerRemoveBlessing);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -2216,14 +2193,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 
 	int32_t value;
 	switch (info) {
-		case PlayerInfoPremiumDays:
-			value = player->premiumDays;
-			break;
-
-		case PlayerInfoSkullType:
-			value = (uint32_t)player->getSkull();
-			break;
-
 		case PlayerInfoFood: {
 			Condition* condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
 			if (condition) {
@@ -2240,14 +2209,6 @@ int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t inf
 
 		case PlayerInfoGhostStatus:
 			pushBoolean(L, player->isInGhostMode());
-			return 1;
-
-		case PlayerInfoIp:
-			value = (int32_t)player->getIP();
-			break;
-
-		case PlayerInfoLastLoginSaved:
-			lua_pushnumber(L, player->getLastLoginSaved());
 			return 1;
 
 		default:
@@ -2268,14 +2229,6 @@ int32_t LuaScriptInterface::luaGetPlayerFood(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoFood);
 }
-int32_t LuaScriptInterface::luaGetPlayerPremiumDays(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoPremiumDays);
-}
-int32_t LuaScriptInterface::luaGetPlayerSkullType(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoSkullType);
-}
 int32_t LuaScriptInterface::luaIsPlayerPzLocked(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoPzLock);
@@ -2283,14 +2236,6 @@ int32_t LuaScriptInterface::luaIsPlayerPzLocked(lua_State* L)
 int32_t LuaScriptInterface::luaIsPlayerGhost(lua_State* L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoGhostStatus);
-}
-int32_t LuaScriptInterface::luaGetPlayerIp(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoIp);
-}
-int32_t LuaScriptInterface::luaGetPlayerLastLoginSaved(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoLastLoginSaved);
 }
 
 int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
@@ -3054,35 +2999,6 @@ int32_t LuaScriptInterface::luaDoSendAnimatedText(lua_State* L)
 	reportErrorFunc("Deprecated function.");
 
 	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerAccountType(lua_State* L)
-{
-	//getPlayerAccountType(cid)
-	const Player* player = g_game.getPlayerByID(popNumber(L));
-	if (player) {
-		lua_pushnumber(L, player->getAccountType());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerLossPercent(lua_State* L)
-{
-	//getPlayerLossPercent(cid)
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		uint32_t value = (uint32_t)(player->getLostPercent() * 100);
-		lua_pushnumber(L, value);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
@@ -4043,25 +3959,6 @@ int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 		pushBoolean(L, false);
 	}
 	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerLight(lua_State* L)
-{
-	//getPlayerLight(cid)
-	uint32_t cid = popNumber(L);
-
-	const Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		LightInfo lightInfo;
-		player->getCreatureLight(lightInfo);
-		lua_pushnumber(L, lightInfo.level);
-		lua_pushnumber(L, lightInfo.color);//color
-		return 2;
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
 }
 
 int32_t LuaScriptInterface::luaDoPlayerAddExp(lua_State* L)
@@ -5419,28 +5316,6 @@ int32_t LuaScriptInterface::luaSetGlobalStorageValue(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetPlayerDepotItems(lua_State* L)
-{
-	//getPlayerDepotItems(cid, depotid)
-	uint32_t depotid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		const DepotChest* depotChest = player->getDepotChest(depotid, true);
-		if (depotChest) {
-			lua_pushnumber(L, depotChest->getItemHoldingCount());
-		} else {
-			reportErrorFunc("Depot not found");
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoPlayerSetGuildLevel(lua_State* L)
 {
 	//doPlayerSetGuildLevel(cid, level)
@@ -5556,20 +5431,6 @@ int32_t LuaScriptInterface::luaGetPlayersByAccountNumber(lua_State* L)
 		lua_pushnumber(L, player->getID());
 		lua_settable(L, -3);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetIPByPlayerName(lua_State* L)
-{
-	//getIPByPlayerName(playerName)
-	std::string name = popString(L);
-
-	if (Player* player = g_game.getPlayerByName(name)) {
-		lua_pushnumber(L, player->getIP());
-	} else {
-		pushBoolean(L, false);
-	}
-
 	return 1;
 }
 
@@ -5883,28 +5744,6 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveMount(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetPlayerMount(lua_State* L)
-{
-	//getPlayerMount(cid, mountid)
-	uint8_t mountid = popNumber<uint8_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		Mount* mount = Mounts::getInstance()->getMountByID(mountid);
-		if (!mount) {
-			reportErrorFunc("There is no mount with the specified id.");
-			pushBoolean(L, false);
-		} else {
-			pushBoolean(L, mount->isTamed(player));
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaCanPlayerWearOutfit(lua_State* L)
 {
 	//canPlayerWearOutfit(cid, looktype, addon)
@@ -5991,50 +5830,6 @@ int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 			player->onWalkAborted();
 		}
 
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddPremiumDays(lua_State* L)
-{
-	//doPlayerAddPremiumDays(cid, days)
-	uint32_t days = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	if (Player* player = g_game.getPlayerByID(cid)) {
-		if (player->premiumDays != 0xFFFF) {
-			int32_t addDays = std::min<int32_t>(0xFFFE - player->premiumDays, days);
-			if (addDays > 0) {
-				player->setPremiumDays(player->premiumDays + addDays);
-				IOLoginData::getInstance()->addPremiumDays(player->getAccount(), addDays);
-			}
-		}
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerRemovePremiumDays(lua_State* L)
-{
-	//doPlayerRemovePremiumDays(cid, days)
-	int32_t days = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	if (Player* player = g_game.getPlayerByID(cid)) {
-		if (player->premiumDays != 0xFFFF) {
-			int32_t removeDays = std::min<int32_t>(player->premiumDays, days);
-			if (removeDays > 0) {
-				player->setPremiumDays(player->premiumDays - removeDays);
-				IOLoginData::getInstance()->removePremiumDays(player->getAccount(), removeDays);
-			}
-		}
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -6438,41 +6233,6 @@ int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 		}
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerBlessing(lua_State* L)
-{
-	int16_t blessing = popNumber(L) - 1;
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		pushBoolean(L, player->hasBlessing(blessing));
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddBlessing(lua_State* L)
-{
-	int16_t blessing = popNumber(L) - 1;
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (!player->hasBlessing(blessing)) {
-			player->addBlessing(1 << blessing);
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
 	return 1;
@@ -8343,6 +8103,39 @@ int32_t LuaScriptInterface::luaCreatureGetName(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureGetLight(lua_State* L)
+{
+	// creature:getLight()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		LightInfo light;
+		creature->getCreatureLight(light);
+		pushNumber(L, light.level);
+		pushNumber(L, light.color);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureSetLight(lua_State* L)
+{
+	// creature:setLight(color, level)
+	uint32_t level = getNumber<uint32_t>(L, 3);
+	uint32_t color = getNumber<uint32_t>(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		LightInfo light;
+		light.color = color;
+		light.level = level;
+		creature->setCreatureLight(light);
+		g_game.changeLight(creature);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureGetPosition(lua_State* L)
 {
 	// creature:getPosition()
@@ -8659,6 +8452,42 @@ int32_t LuaScriptInterface::luaPlayerGetGuid(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerGetIp(lua_State* L)
+{
+	// player:getIp()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getIP());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetAccountType(lua_State* L)
+{
+	// player:getAccountType()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getAccountType());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetLastLoginSaved(lua_State* L)
+{
+	// player:getLastLoginSaved()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getLastLoginSaved());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 {
 	// player:getFreeCapacity()
@@ -8669,6 +8498,63 @@ int32_t LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 	}
 
 	pushNumber(L, player->getFreeCapacity());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetDepotItems(lua_State* L)
+{
+	// player:getDepotItems(depotId)
+	uint32_t depotId = getNumber<uint32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		const DepotChest* depotChest = player->getDepotChest(depotId, true);
+		if (depotChest) {
+			pushNumber(L, depotChest->getItemHoldingCount());
+		} else {
+			pushBoolean(L, false);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetSkull(lua_State* L)
+{
+	// player:getSkull()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getSkull());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetSkull(lua_State* L)
+{
+	// player:setSkull(skull)
+	Skulls_t skull = static_cast<Skulls_t>(getNumber<uint64_t>(L, 2));
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setSkull(skull);
+		g_game.updatePlayerSkull(player);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetDeathPenalty(lua_State* L)
+{
+	// player:getDeathPenalty()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, static_cast<uint32_t>(player->getLostPercent() * 100));
+	} else {
+		pushNil(L);
+	}
 	return 1;
 }
 
@@ -9528,6 +9414,125 @@ int32_t LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 			setItemMetatable(L, -1, item);
 		} else {
 			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerHasMount(lua_State* L)
+{
+	// player:hasMount(mountId)
+	uint32_t mountId = getNumber<uint32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		Mount* mount = Mounts::getInstance()->getMountByID(mountId);
+		if (mount) {
+			pushBoolean(L, mount->isTamed(player));
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetPremiumDays(lua_State* L)
+{
+	// player:getPremiumDays()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->premiumDays);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerAddPremiumDays(lua_State* L)
+{
+	// player:addPremiumDays(days)
+	uint16_t days = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		if (player->premiumDays != 0xFFFF) {
+			int32_t addDays = std::min<int32_t>(0xFFFE - player->premiumDays, days);
+			if (addDays > 0) {
+				player->setPremiumDays(player->premiumDays + addDays);
+				IOLoginData::getInstance()->addPremiumDays(player->getAccount(), addDays);
+			}
+		}
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerRemovePremiumDays(lua_State* L)
+{
+	// player:removePremiumDays(days)
+	uint16_t days = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		if (player->premiumDays != 0xFFFF) {
+			int32_t removeDays = std::min<int32_t>(player->premiumDays, days);
+			if (removeDays > 0) {
+				player->setPremiumDays(player->premiumDays - removeDays);
+				IOLoginData::getInstance()->removePremiumDays(player->getAccount(), removeDays);
+			}
+		}
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
+{
+	// player:hasBlessing(blessing)
+	int16_t blessing = getNumber<int16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->hasBlessing(blessing));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
+{
+	// player:addBlessing(blessing)
+	int16_t blessing = getNumber<int16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		if (!player->hasBlessing(blessing)) {
+			player->addBlessing(1 << blessing);
+			pushBoolean(L, true);
+		} else {
+			pushBoolean(L, false);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
+{
+	// player:removeBlessing(blessing)
+	int16_t blessing = getNumber<int16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		if (player->hasBlessing(blessing)) {
+			player->removeBlessing(1 << blessing);
+			pushBoolean(L, true);
+		} else {
+			pushBoolean(L, false);
 		}
 	} else {
 		pushNil(L);
