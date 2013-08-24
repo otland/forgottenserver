@@ -232,12 +232,8 @@ struct Position;
 
 enum PlayerInfo_t {
 	PlayerInfoFood,
-	PlayerInfoPremiumDays,
-	PlayerInfoSkullType,
 	PlayerInfoPzLock,
-	PlayerInfoGhostStatus,
-	PlayerInfoIp,
-	PlayerInfoLastLoginSaved
+	PlayerInfoGhostStatus
 };
 
 #define reportErrorFunc(a)  reportError(__FUNCTION__, a, true)
@@ -509,7 +505,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerGUIDByName(lua_State* L);
 		static int32_t luaGetAccountNumberByPlayerName(lua_State* L);
 		static int32_t luaGetPlayersByAccountNumber(lua_State* L);
-		static int32_t luaGetIPByPlayerName(lua_State* L);
 		static int32_t luaGetPlayersByIPAddress(lua_State* L);
 
 		//get item info
@@ -547,24 +542,15 @@ class LuaScriptInterface
 
 		//get creature info functions
 		static int32_t luaGetPlayerFood(lua_State* L);
-		static int32_t luaGetPlayerIp(lua_State* L);
 		static int32_t luaGetCreatureMaster(lua_State* L);
 		static int32_t luaGetCreatureSummons(lua_State* L);
 		static int32_t luaGetSpectators(lua_State* L);
 		static int32_t luaGetCreatureSpeed(lua_State* L);
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 		static int32_t luaGetCreatureTarget(lua_State* L);
-		static int32_t luaGetPlayerAccountType(lua_State* L);
-		static int32_t luaGetPlayerLight(lua_State* L);
 		static int32_t luaGetPlayerSlotItem(lua_State* L);
 		static int32_t luaGetPlayerItemById(lua_State* L);
-		static int32_t luaGetPlayerLossPercent(lua_State* L);
-		static int32_t luaGetPlayerSkullType(lua_State* L);
-		static int32_t luaGetPlayerLastLoginSaved(lua_State* L);
 
-		static int32_t luaGetPlayerDepotItems(lua_State* L);
-		static int32_t luaGetPlayerBlessing(lua_State* L);
-		static int32_t luaDoPlayerAddBlessing(lua_State* L);
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
 
@@ -585,7 +571,6 @@ class LuaScriptInterface
 
 		static int32_t luaDoPlayerAddMount(lua_State* L);
 		static int32_t luaDoPlayerRemoveMount(lua_State* L);
-		static int32_t luaGetPlayerMount(lua_State* L);
 
 		static int32_t luaGetWorldType(lua_State* L);
 		static int32_t luaGetWorldTime(lua_State* L);
@@ -675,10 +660,6 @@ class LuaScriptInterface
 
 		static int32_t luaDoPlayerPopupFYI(lua_State* L);
 		static int32_t luaMayNotMove(lua_State* L);
-
-		static int32_t luaDoPlayerAddPremiumDays(lua_State* L);
-		static int32_t luaDoPlayerRemovePremiumDays(lua_State* L);
-		static int32_t luaGetPlayerPremiumDays(lua_State* L);
 
 		static int32_t luaGetOnlinePlayers(lua_State* L);
 		static int32_t luaSaveServer(lua_State* L);
@@ -856,6 +837,9 @@ class LuaScriptInterface
 
 		static int32_t luaCreatureGetId(lua_State* L);
 		static int32_t luaCreatureGetName(lua_State* L);
+		
+		static int32_t luaCreatureGetLight(lua_State* L);
+		static int32_t luaCreatureSetLight(lua_State* L);
 
 		static int32_t luaCreatureGetPosition(lua_State* L);
 		static int32_t luaCreatureGetDirection(lua_State* L);
@@ -881,8 +865,16 @@ class LuaScriptInterface
 		static int32_t luaPlayerCreate(lua_State* L);
 
 		static int32_t luaPlayerGetGuid(lua_State* L);
+		static int32_t luaPlayerGetIp(lua_State* L);
+		static int32_t luaPlayerGetAccountType(lua_State* L);
+		static int32_t luaPlayerGetLastLoginSaved(lua_State* L);
 
 		static int32_t luaPlayerGetFreeCapacity(lua_State* L);
+		static int32_t luaPlayerGetDepotItems(lua_State* L);
+
+		static int32_t luaPlayerGetSkull(lua_State* L);
+		static int32_t luaPlayerSetSkull(lua_State* L);
+		static int32_t luaPlayerGetDeathPenalty(lua_State* L);
 
 		static int32_t luaPlayerGetExperience(lua_State* L);
 		static int32_t luaPlayerAddExperience(lua_State* L);
@@ -946,6 +938,16 @@ class LuaScriptInterface
 		static int32_t luaPlayerOpenChannel(lua_State* L);
 
 		static int32_t luaPlayerGetSlotItem(lua_State* L);
+		
+		static int32_t luaPlayerHasMount(lua_State* L);
+		
+		static int32_t luaPlayerGetPremiumDays(lua_State* L);
+		static int32_t luaPlayerAddPremiumDays(lua_State* L);
+		static int32_t luaPlayerRemovePremiumDays(lua_State* L);
+
+		static int32_t luaPlayerHasBlessing(lua_State* L);
+		static int32_t luaPlayerAddBlessing(lua_State* L);
+		static int32_t luaPlayerRemoveBlessing(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
