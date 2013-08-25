@@ -482,7 +482,6 @@ class LuaScriptInterface
 		static int32_t luaDoAddCondition(lua_State* L);
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
-		static int32_t luaGetHouseTilesSize(lua_State* L);
 		static int32_t luaGetTileInfo(lua_State* L);
 
 		static int32_t luaDoPlayerAddSkillTry(lua_State* L);
@@ -530,11 +529,7 @@ class LuaScriptInterface
 		static int32_t luaQueryTileAddThing(lua_State* L);
 
 		//houses
-		static int32_t luaGetHouseOwner(lua_State* L);
-		static int32_t luaGetHouseName(lua_State* L);
-		static int32_t luaGetHouseEntry(lua_State* L);
 		static int32_t luaGetHouseRent(lua_State* L);
-		static int32_t luaGetHouseTown(lua_State* L);
 		static int32_t luaGetHouseAccessList(lua_State* L);
 		static int32_t luaGetHouseByPlayerGUID(lua_State* L);
 		static int32_t luaSetHouseOwner(lua_State* L);
@@ -588,7 +583,6 @@ class LuaScriptInterface
 		static int32_t luaIsValidUID(lua_State* L);
 
 		//container
-		static int32_t luaGetContainerCapById(lua_State* L);
 		static int32_t luaGetContainerItem(lua_State* L);
 		static int32_t luaDoAddContainerItem(lua_State* L);
 
@@ -640,15 +634,6 @@ class LuaScriptInterface
 		static int32_t luaSetMonsterOutfit(lua_State* L);
 		static int32_t luaSetItemOutfit(lua_State* L);
 
-		static int32_t luaIsItemStackable(lua_State* L);
-		static int32_t luaIsItemRune(lua_State* L);
-		static int32_t luaIsItemDoor(lua_State* L);
-		static int32_t luaIsItemContainer(lua_State* L);
-		static int32_t luaIsItemFluidContainer(lua_State* L);
-		static int32_t luaIsItemMoveable(lua_State* L);
-		static int32_t luaGetItemName(lua_State* L);
-		static int32_t luaGetItemDescriptions(lua_State* L);
-		static int32_t luaGetItemWeight(lua_State* L);
 		static int32_t luaGetItemWeightByUID(lua_State* L);
 		static int32_t luaGetItemIdByName(lua_State* L);
 
@@ -860,6 +845,9 @@ class LuaScriptInterface
 		static int32_t luaCreatureRemove(lua_State* L);
 		static int32_t luaCreatureTeleportTo(lua_State* L);
 		static int32_t luaCreatureSay(lua_State* L);
+		
+		static int32_t luaCreatureGetDamageMap(lua_State* L);
+		static int32_t luaCreatureGetHealMap(lua_State* L);
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);
@@ -1018,6 +1006,44 @@ class LuaScriptInterface
 		static int32_t luaTownGetId(lua_State* L);
 		static int32_t luaTownGetName(lua_State* L);
 		static int32_t luaTownGetTemplePosition(lua_State* L);
+
+		// House
+		static int32_t luaHouseCreate(lua_State* L);
+
+		static int32_t luaHouseGetId(lua_State* L);
+		static int32_t luaHouseGetName(lua_State* L);
+		static int32_t luaHouseGetTown(lua_State* L);
+		static int32_t luaHouseGetOwnerGuid(lua_State* L);
+		static int32_t luaHouseGetExitPosition(lua_State* L);
+	
+		static int32_t luaHouseGetBeds(lua_State* L);
+		static int32_t luaHouseGetBedCount(lua_State* L);
+	
+		static int32_t luaHouseGetDoors(lua_State* L);
+		static int32_t luaHouseGetDoorCount(lua_State* L);
+	
+		static int32_t luaHouseGetTileCount(lua_State* L);
+
+		// ItemType
+		static int32_t luaItemTypeCreate(lua_State* L);
+
+		static int32_t luaItemTypeIsCorpse(lua_State* L);
+		static int32_t luaItemTypeIsDoor(lua_State* L);
+		static int32_t luaItemTypeIsContainer(lua_State* L);
+		static int32_t luaItemTypeIsFluidContainer(lua_State* L);
+		static int32_t luaItemTypeIsMovable(lua_State* L);
+		static int32_t luaItemTypeIsRune(lua_State* L);
+		static int32_t luaItemTypeIsStackable(lua_State* L);
+		
+		static int32_t luaItemTypeGetId(lua_State* L);
+		static int32_t luaItemTypeGetName(lua_State* L);
+		static int32_t luaItemTypeGetPluralName(lua_State* L);
+		static int32_t luaItemTypeGetArticle(lua_State* L);
+		static int32_t luaItemTypeGetDescription(lua_State* L);
+
+		static int32_t luaItemTypeGetFluidSource(lua_State* L);
+		static int32_t luaItemTypeGetCapacity(lua_State* L);
+		static int32_t luaItemTypeGetWeight(lua_State* L);
 
 		//
 		lua_State* m_luaState;

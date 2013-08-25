@@ -177,3 +177,32 @@ function getGuildId(guildName)
 	result.free(resultId)
 	return guildId
 end
+
+function getHouseName(houseId) return House(houseId):getName() end
+function getHouseOwner(houseId) return House(houseId):getOwnerGuid() end
+function getHouseEntry(houseId) return House(houseId):getExitPosition() end
+function getHouseTown(houseId) return House(houseId):getTown():getId() end
+function getHouseTilesSize(houseId) return House(houseId):getTileCount() end
+
+function isItemStackable(itemId) return ItemType(itemId):isStackable() end
+function isItemRune(itemId) return ItemType(itemId):isRune() end
+function isItemDoor(itemId) return ItemType(itemId):isDoor() end
+function isItemContainer(itemId) return ItemType(itemId):isContainer() end
+function isItemFluidContainer(itemId) return ItemType(itemId):isFluidContainer() end
+function isItemMovable(itemId) return ItemType(itemId):isMovable() end
+
+isItemMoveable = isItemMovable
+
+function getItemName(itemId) return ItemType(itemId):getName() end
+function getItemWeight(itemId, ...) return ItemType(itemId):getWeight(...) end
+function getItemDescriptions(itemId)
+	local itemType = ItemType(itemId)
+	return {
+		name = itemType:getName(),
+		plural = itemType:getPluralName(),
+		article = itemType:getArticle(),
+		description = itemType:getDescription()
+	}
+end
+
+function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
