@@ -44,6 +44,7 @@
 #include "ban.h"
 #include "mounts.h"
 #include "databasemanager.h"
+#include "beds.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 
@@ -1506,9 +1507,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerGUIDByName(name)
 	lua_register(m_luaState, "getPlayerGUIDByName", LuaScriptInterface::luaGetPlayerGUIDByName);
 
-	//getContainerCapById(itemid)
-	lua_register(m_luaState, "getContainerCapById", LuaScriptInterface::luaGetContainerCapById);
-
 	//getContainerItem(uid, slot)
 	lua_register(m_luaState, "getContainerItem", LuaScriptInterface::luaGetContainerItem);
 
@@ -1518,29 +1516,14 @@ void LuaScriptInterface::registerFunctions()
 	//getDepotId(uid)
 	lua_register(m_luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
 
-	//getHouseOwner(houseid)
-	lua_register(m_luaState, "getHouseOwner", LuaScriptInterface::luaGetHouseOwner);
-
-	//getHouseName(houseid)
-	lua_register(m_luaState, "getHouseName", LuaScriptInterface::luaGetHouseName);
-
-	//getHouseEntry(houseid)
-	lua_register(m_luaState, "getHouseEntry", LuaScriptInterface::luaGetHouseEntry);
-
 	//getHouseRent(houseid)
 	lua_register(m_luaState, "getHouseRent", LuaScriptInterface::luaGetHouseRent);
-
-	//getHouseTown(houseid)
-	lua_register(m_luaState, "getHouseTown", LuaScriptInterface::luaGetHouseTown);
 
 	//getHouseAccessList(houseid, listid)
 	lua_register(m_luaState, "getHouseAccessList", LuaScriptInterface::luaGetHouseAccessList);
 
 	//getHouseByPlayerGUID(playerGUID)
 	lua_register(m_luaState, "getHouseByPlayerGUID", LuaScriptInterface::luaGetHouseByPlayerGUID);
-
-	//getHouseTilesSize(houseid)
-	lua_register(m_luaState, "getHouseTilesSize", LuaScriptInterface::luaGetHouseTilesSize);
 
 	//setHouseAccessList(houseid, listid, listtext)
 	lua_register(m_luaState, "setHouseAccessList", LuaScriptInterface::luaSetHouseAccessList);
@@ -1680,35 +1663,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getCreatureTarget(cid)
 	lua_register(m_luaState, "getCreatureTarget", LuaScriptInterface::luaGetCreatureTarget);
-
-	//isItemStackable(itemid)
-	lua_register(m_luaState, "isItemStackable", LuaScriptInterface::luaIsItemStackable);
-
-	//isItemRune(itemid)
-	lua_register(m_luaState, "isItemRune", LuaScriptInterface::luaIsItemRune);
-
-	//isItemDoor(itemid)
-	lua_register(m_luaState, "isItemDoor", LuaScriptInterface::luaIsItemDoor);
-
-	//isItemContainer(itemid)
-	lua_register(m_luaState, "isItemContainer", LuaScriptInterface::luaIsItemContainer);
-
-	//isItemFluidContainer(itemid)
-	lua_register(m_luaState, "isItemFluidContainer", LuaScriptInterface::luaIsItemFluidContainer);
-
-	//isItemMovable(itemid)
-	lua_register(m_luaState, "isItemMovable", LuaScriptInterface::luaIsItemMoveable);
-	//isItemMoveable(itemid)
-	lua_register(m_luaState, "isItemMoveable", LuaScriptInterface::luaIsItemMoveable);
-
-	//getItemDescriptions(itemid)
-	lua_register(m_luaState, "getItemDescriptions", LuaScriptInterface::luaGetItemDescriptions);
-
-	//getItemName(itemid)
-	lua_register(m_luaState, "getItemName", LuaScriptInterface::luaGetItemName);
-
-	//getItemWeight(itemid, count, <optional: default: 1> precise)
-	lua_register(m_luaState, "getItemWeight", LuaScriptInterface::luaGetItemWeight);
 
 	//getItemWeightByUID(uid)
 	lua_register(m_luaState, "getItemWeightByUID", LuaScriptInterface::luaGetItemWeightByUID);
@@ -1941,6 +1895,9 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "teleportTo", LuaScriptInterface::luaCreatureTeleportTo);
 	registerClassMethod("Creature", "say", LuaScriptInterface::luaCreatureSay);
 
+	registerClassMethod("Creature", "getDamageMap", LuaScriptInterface::luaCreatureGetDamageMap);
+	registerClassMethod("Creature", "getHealMap", LuaScriptInterface::luaCreatureGetHealMap);
+
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 
@@ -2094,6 +2051,44 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Town", "getId", LuaScriptInterface::luaTownGetId);
 	registerClassMethod("Town", "getName", LuaScriptInterface::luaTownGetName);
 	registerClassMethod("Town", "getTemplePosition", LuaScriptInterface::luaTownGetTemplePosition);
+
+	// House
+	registerClass("House", "", LuaScriptInterface::luaHouseCreate);
+	
+	registerClassMethod("House", "getId", LuaScriptInterface::luaHouseGetId);
+	registerClassMethod("House", "getName", LuaScriptInterface::luaHouseGetName);
+	registerClassMethod("House", "getTown", LuaScriptInterface::luaHouseGetTown);
+	registerClassMethod("House", "getOwnerGuid", LuaScriptInterface::luaHouseGetOwnerGuid);
+	registerClassMethod("House", "getExitPosition", LuaScriptInterface::luaHouseGetExitPosition);
+	
+	registerClassMethod("House", "getBeds", LuaScriptInterface::luaHouseGetBeds);
+	registerClassMethod("House", "getBedCount", LuaScriptInterface::luaHouseGetBedCount);
+	
+	registerClassMethod("House", "getDoors", LuaScriptInterface::luaHouseGetDoors);
+	registerClassMethod("House", "getDoorCount", LuaScriptInterface::luaHouseGetDoorCount);
+	
+	registerClassMethod("House", "getTileCount", LuaScriptInterface::luaHouseGetTileCount);
+
+	// ItemType
+	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
+	
+	registerClassMethod("ItemType", "isCorpse", LuaScriptInterface::luaItemTypeIsCorpse);
+	registerClassMethod("ItemType", "isDoor", LuaScriptInterface::luaItemTypeIsDoor);
+	registerClassMethod("ItemType", "isContainer", LuaScriptInterface::luaItemTypeIsContainer);
+	registerClassMethod("ItemType", "isFluidContainer", LuaScriptInterface::luaItemTypeIsFluidContainer);
+	registerClassMethod("ItemType", "isMovable", LuaScriptInterface::luaItemTypeIsMovable);
+	registerClassMethod("ItemType", "isRune", LuaScriptInterface::luaItemTypeIsRune);
+	registerClassMethod("ItemType", "isStackable", LuaScriptInterface::luaItemTypeIsStackable);
+	
+	registerClassMethod("ItemType", "getId", LuaScriptInterface::luaItemTypeGetId);
+	registerClassMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
+	registerClassMethod("ItemType", "getPluralName", LuaScriptInterface::luaItemTypeGetPluralName);
+	registerClassMethod("ItemType", "getArticle", LuaScriptInterface::luaItemTypeGetArticle);
+	registerClassMethod("ItemType", "getDescription", LuaScriptInterface::luaItemTypeGetDescription);
+
+	registerClassMethod("ItemType", "getFluidSource", LuaScriptInterface::luaItemTypeGetFluidSource);
+	registerClassMethod("ItemType", "getCapacity", LuaScriptInterface::luaItemTypeGetCapacity);
+	registerClassMethod("ItemType", "getWeight", LuaScriptInterface::luaItemTypeGetWeight);
 }
 
 void LuaScriptInterface::registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction/* = NULL*/)
@@ -3693,52 +3688,6 @@ int32_t LuaScriptInterface::luaDebugPrint(lua_State* L)
 	return 0;
 }
 
-int32_t LuaScriptInterface::luaGetHouseOwner(lua_State* L)
-{
-	//getHouseOwner(houseid)
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		uint32_t owner = house->getHouseOwner();
-		lua_pushnumber(L, owner);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetHouseName(lua_State* L)
-{
-	//getHouseName(houseid)
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		pushString(L, house->getName());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetHouseEntry(lua_State* L)
-{
-	//getHouseEntry(houseid)
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		pushPosition(L, house->getEntryPosition(), 0);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetHouseRent(lua_State* L)
 {
 	//getHouseRent(houseid)
@@ -3747,21 +3696,6 @@ int32_t LuaScriptInterface::luaGetHouseRent(lua_State* L)
 	House* house = Houses::getInstance().getHouse(houseid);
 	if (house) {
 		lua_pushnumber(L, house->getRent());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetHouseTown(lua_State* L)
-{
-	//getHouseTown(houseid)
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		lua_pushnumber(L, house->getTownId());
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
 		lua_pushnil(L);
@@ -3801,21 +3735,6 @@ int32_t LuaScriptInterface::luaGetHouseByPlayerGUID(lua_State* L)
 		lua_pushnumber(L, house->getHouseId());
 	} else {
 		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetHouseTilesSize(lua_State* L)
-{
-	//getHouseTilesSize(houseid)
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		lua_pushnumber(L, house->getHouseTiles().size());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		pushBoolean(L, false);
 	}
 	return 1;
 }
@@ -5499,21 +5418,6 @@ int32_t LuaScriptInterface::luaGetPlayerGUIDByName(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetContainerCapById(lua_State* L)
-{
-	//getContainerCapById(itemid)
-	uint32_t itemId = popNumber(L);
-
-	const ItemType& it = Item::items[itemId];
-	if (it.isContainer()) {
-		lua_pushnumber(L, it.maxItems);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetContainerItem(lua_State* L)
 {
 	//getContainerItem(uid, slot)
@@ -5838,59 +5742,6 @@ int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetItemName(lua_State* L)
-{
-	//getItemName(itemid)
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-	pushString(L, it.name);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetItemDescriptions(lua_State* L)
-{
-	//getItemDescriptions(itemid)
-	//returns the name, the article and the plural name of the item
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-
-	lua_newtable(L);
-	setField(L, "name", it.name);
-	setField(L, "article", it.article);
-	setField(L, "plural", it.getPluralName());
-	setField(L, "description", it.description);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetItemWeight(lua_State* L)
-{
-	//getItemWeight(itemid, count, <optional: default: 1> precise)
-	int32_t parameters = lua_gettop(L);
-
-	bool precise = true;
-	if (parameters > 2) {
-		precise = popBoolean(L);
-	}
-
-	int32_t count = 1;
-	if (parameters > 1) {
-		count = popNumber(L);
-	}
-
-	uint32_t itemid = popNumber(L);
-
-	const ItemType& it = Item::items[itemid];
-	double weight = it.weight * std::max<int32_t>(1, count);
-	if (precise) {
-		std::ostringstream ws;
-		ws << std::fixed << std::setprecision(2) << weight;
-		weight = atof(ws.str().c_str());
-	}
-
-	lua_pushnumber(L, weight);
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetItemWeightByUID(lua_State* L)
 {
 	//getItemWeight(itemid[, precise = true])
@@ -6089,59 +5940,6 @@ int32_t LuaScriptInterface::luaGetCreatureTarget(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsItemStackable(lua_State* L)
-{
-	//isItemStackable(itemid)
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-	pushBoolean(L, it.stackable);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsItemRune(lua_State* L)
-{
-	//isItemRune(itemid)
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-	pushBoolean(L, it.isRune());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsItemDoor(lua_State* L)
-{
-	//isItemDoor(itemid)
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-	pushBoolean(L, it.isDoor());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsItemContainer(lua_State* L)
-{
-	//isItemContainer(itemid)
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-	pushBoolean(L, it.isContainer());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsItemFluidContainer(lua_State* L)
-{
-	//isItemFluidContainer(itemid)
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-	pushBoolean(L, it.isFluidContainer());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsItemMoveable(lua_State* L)
-{
-	uint32_t itemid = popNumber(L);
-	const ItemType& it = Item::items[itemid];
-	pushBoolean(L, it.moveable);
 	return 1;
 }
 
@@ -8420,6 +8218,52 @@ int32_t LuaScriptInterface::luaCreatureSay(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
+{
+	// creature:getDamageMap()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_newtable(L);
+		for (auto damageEntry : creature->damageMap) {
+			pushNumber(L, damageEntry.first);
+			lua_newtable(L);
+
+			pushNumber(L, damageEntry.second.total);
+			lua_setfield(L, -2, "total");
+			pushNumber(L, damageEntry.second.ticks);
+			lua_setfield(L, -2, "ticks");
+
+			lua_settable(L, -3);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetHealMap(lua_State* L)
+{
+	// creature:getHealMap()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_newtable(L);
+		for (auto healEntry : creature->healMap) {
+			pushNumber(L, healEntry.first);
+			lua_newtable(L);
+
+			pushNumber(L, healEntry.second.total);
+			lua_setfield(L, -2, "total");
+			pushNumber(L, healEntry.second.ticks);
+			lua_setfield(L, -2, "ticks");
+
+			lua_settable(L, -3);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 // Player
 int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
@@ -10172,6 +10016,377 @@ int32_t LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
 	Town* town = getUserdata<Town>(L, 1);
 	if (town) {
 		pushMetaPosition(L, town->getTemplePosition(), 0);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+// House
+int32_t LuaScriptInterface::luaHouseCreate(lua_State* L)
+{
+	// House(id)
+	// House.new(id)
+	House* house = Houses::getInstance().getHouse(getNumber<uint32_t>(L, 2));
+	if (house) {
+		pushUserdata<House>(L, house);
+		setMetatable(L, -1, "House");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetId(lua_State* L)
+{
+	// house:getId()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushNumber(L, house->getHouseId());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetName(lua_State* L)
+{
+	// house:getName()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushString(L, house->getName());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetTown(lua_State* L)
+{
+	// house:getTown()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		Town* town = Towns::getInstance().getTown(house->getTownId());
+		if (town) {
+			pushUserdata<Town>(L, town);
+			setMetatable(L, -1, "Town");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetOwnerGuid(lua_State* L)
+{
+	// house:getOwnerGuid()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushNumber(L, house->getHouseOwner());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetExitPosition(lua_State* L)
+{
+	// house:getExitPosition()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushMetaPosition(L, house->getEntryPosition(), 0);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetBeds(lua_State* L)
+{
+	// house:getBeds()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		uint32_t i = 0;
+		lua_newtable(L);
+		for (auto it = house->getHouseBedsBegin(); it != house->getHouseBedsEnd(); ++it) {
+			pushNumber(L, ++i);
+			pushUserdata<Item>(L, *it);
+			setItemMetatable(L, -1, *it);
+			lua_settable(L, -3);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetBedCount(lua_State* L)
+{
+	// house:getBedCount()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushNumber(L, house->getBedCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetDoors(lua_State* L)
+{
+	// house:getDoors()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		uint32_t i = 0;
+		lua_newtable(L);
+		for (Door* door : house->getHouseDoors()) {
+			pushNumber(L, ++i);
+			pushUserdata<Item>(L, door);
+			setItemMetatable(L, -1, door);
+			lua_settable(L, -3);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetDoorCount(lua_State* L)
+{
+	// house:getDoorCount()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushNumber(L, house->getHouseDoors().size());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetTileCount(lua_State* L)
+{
+	// house:getTileCount()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushNumber(L, house->getHouseTiles().size());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+// ItemType
+int32_t LuaScriptInterface::luaItemTypeCreate(lua_State* L)
+{
+	// ItemType(id or name)
+	// ItemType.new(id or name)
+	uint32_t id = 0;
+	if (isNumber(L, 2)) {
+		id = getNumber<uint32_t>(L, 2);
+	} else if (isString(L, 2)) {
+		id = Item::items.getItemIdByName(getString(L, 2));
+	}
+
+	const ItemType& itemType = Item::items[id];
+	pushUserdata<const ItemType>(L, &itemType);
+	setMetatable(L, -1, "ItemType");
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsCorpse(lua_State* L)
+{
+	// itemType:isCorpse()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->corpseType != RACE_NONE);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsDoor(lua_State* L)
+{
+	// itemType:isDoor()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->isDoor());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsContainer(lua_State* L)
+{
+	// itemType:isContainer()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->isContainer());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsFluidContainer(lua_State* L)
+{
+	// itemType:isFluidContainer()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->isFluidContainer());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsMovable(lua_State* L)
+{
+	// itemType:isMovable()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->moveable);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsRune(lua_State* L)
+{
+	// itemType:isRune()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->isRune());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsStackable(lua_State* L)
+{
+	// itemType:isStackable()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->stackable);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetId(lua_State* L)
+{
+	// itemType:getId()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->id);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetName(lua_State* L)
+{
+	// itemType:getName()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushString(L, itemType->name);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetPluralName(lua_State* L)
+{
+	// itemType:getPluralName()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushString(L, itemType->getPluralName());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetArticle(lua_State* L)
+{
+	// itemType:getArticle()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushString(L, itemType->article);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetDescription(lua_State* L)
+{
+	// itemType:getDescription()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushString(L, itemType->description);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetFluidSource(lua_State* L)
+{
+	// itemType:getFluidSource()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->fluidSource);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetCapacity(lua_State* L)
+{
+	// itemType:getCapacity()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->maxItems);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetWeight(lua_State* L)
+{
+	// itemType:getWeight([count = 1[, precise = true]])
+	int32_t parameters = getStackTop(L);
+
+	bool precise = true;
+	if (parameters >= 3) {
+		precise = getBoolean(L, 3);
+	}
+
+	uint16_t count = 1;
+	if (parameters >= 2) {
+		count = getNumber<uint16_t>(L, 2);
+	}
+
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		double weight = itemType->weight * std::max<int32_t>(1, count);
+		if (precise) {
+			std::ostringstream ws;
+			ws << std::fixed << std::setprecision(2) << weight;
+			weight = atof(ws.str().c_str());
+		}
+		pushNumber(L, weight);
 	} else {
 		pushNil(L);
 	}
