@@ -1142,12 +1142,12 @@ void Creature::onAddCombatCondition(ConditionType_t type)
 	//
 }
 
-void Creature::onEndCondition(ConditionType_t type)
+void Creature::onEndCondition(ConditionType_t type, ConditionId_t id)
 {
 	//
 }
 
-void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
+void Creature::onTickCondition(ConditionType_t type, ConditionId_t id, bool& bRemove)
 {
 	const MagicField* field = getTile()->getFieldItem();
 
@@ -1363,7 +1363,6 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 		}
 
 		Condition* condition = *it;
-
 		if (!force && (*it)->getType() == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 
@@ -1373,12 +1372,13 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 			}
 		}
 
-		it = conditions.erase(it);
+		ConditionId_t id = condition->getId();
 
+		it = conditions.erase(it);
 		condition->endCondition(this, CONDITIONEND_ABORT);
 		delete condition;
 
-		onEndCondition(type);
+		onEndCondition(type, id);
 	}
 }
 
@@ -1400,11 +1400,10 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool forc
 		}
 
 		it = conditions.erase(it);
-
 		condition->endCondition(this, CONDITIONEND_ABORT);
 		delete condition;
 
-		onEndCondition(type);
+		onEndCondition(type, id);
 	}
 }
 
@@ -1436,11 +1435,14 @@ void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 		}
 	}
 
-	conditions.erase(it);
+	ConditionType_t type = condition->getType();
+	ConditionId_t id = condition->getId();
 
+	conditions.erase(it);
 	condition->endCondition(this, CONDITIONEND_ABORT);
-	onEndCondition(condition->getType());
 	delete condition;
+
+	onEndCondition(type, id);
 }
 
 Condition* Creature::getCondition(ConditionType_t type) const
@@ -1470,15 +1472,14 @@ void Creature::executeConditions(uint32_t interval)
 	for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
 		if (!(*it)->executeCondition(this, interval)) {
 			Condition* condition = *it;
-
 			ConditionType_t type = condition->getType();
+			ConditionId_t id = condition->getId();
 
 			it = conditions.erase(it);
-
 			condition->endCondition(this, CONDITIONEND_TICKS);
 			delete condition;
 
-			onEndCondition(type);
+			onEndCondition(type, id);
 		} else {
 			++it;
 		}

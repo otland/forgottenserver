@@ -1792,26 +1792,23 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 
 	player->setInMarket(true);
 
-	std::map<uint16_t, uint32_t> depotItems;
 	std::list<Container*> containerList;
 	containerList.push_back(depotChest);
 	containerList.push_back(player->getInbox());
 
-	do {
-		Container* container = containerList.front();
-		containerList.pop_front();
-
-		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
+	std::map<uint16_t, uint32_t> depotItems;
+	for(std::list<Container*>::const_iterator cit = containerList.begin(); cit != containerList.end(); ++cit)
+	{
+		for(ContainerIterator it = (*cit)->begin(); it != (*cit)->end(); ++it)
+		{
 			Item* item = *it;
 
 			Container* c = item->getContainer();
 			if (c && !c->empty()) {
-				containerList.push_back(c);
 				continue;
 			}
 
 			const ItemType& itemType = Item::items[item->getID()];
-
 			if (!itemType.ware) {
 				continue;
 			}
@@ -1826,7 +1823,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 
 			depotItems[item->getID()] += Item::countByType(item, -1);
 		}
-	} while (!containerList.empty());
+	}
 
 	msg.AddU16(std::min<size_t>(0xFFFF, depotItems.size()));
 
@@ -2236,7 +2233,6 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, bool ack)
 {
 	NetworkMessage msg;
-
 	if (ack) {
 		msg.AddByte(0x7D);
 	} else {
@@ -2244,37 +2240,14 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 	}
 
 	msg.AddString(player->getName());
-
-	if (const Container* tradeContainer = item->getContainer()) {
-		std::list<const Container*> listContainer;
-		ItemDeque::const_iterator it;
-
-		listContainer.push_back(tradeContainer);
-
-		std::list<const Item*> listItem;
-		listItem.push_back(tradeContainer);
-
-		while (!listContainer.empty()) {
-			const Container* container = listContainer.front();
-			listContainer.pop_front();
-
-			for (it = container->getItems(); it != container->getEnd(); ++it) {
-				Container* tmpContainer = (*it)->getContainer();
-				if (tmpContainer) {
-					listContainer.push_back(tmpContainer);
-				}
-				listItem.push_back(*it);
-			}
-		}
-
-		msg.AddByte(listItem.size());
-
-		while (!listItem.empty()) {
-			msg.AddItem(listItem.front());
-			listItem.pop_front();
+	if (const Container* container = item->getContainer()) {
+		msg.AddByte(container->getItemHoldingCount() + 1);
+		msg.AddItem(item);
+		for(ContainerIterator it = container->begin(); it != container->end(); ++it) {
+			msg.AddItem(*it);
 		}
 	} else {
-		msg.AddByte(0x01);
+		msg.AddByte(1);
 		msg.AddItem(item);
 	}
 
@@ -3155,7 +3128,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.AddU16(player->getBaseSpeed() / 2);
 
 	Condition* condition = player->getCondition(CONDITION_REGENERATION);
-	msg.AddU16(condition ? condition->getTicks() / 1000 : 0x00);
+	msg.AddU16(condition ? round((condition->getEndTime() - OTSYS_TIME()) / 1000.) : 0x00);
 
 	msg.AddU16(player->getOfflineTrainingTime() / 60 / 1000);
 }
