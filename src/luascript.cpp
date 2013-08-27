@@ -9160,7 +9160,7 @@ int32_t LuaScriptInterface::luaPlayerGetGuildNick(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 {
-	// player:setGroup(group)
+	// player:setGuild(guild)
 	Guild* guild = getUserdata<Guild>(L, 2);
 	if (!guild) {
 		pushBoolean(L, false);

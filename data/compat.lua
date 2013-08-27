@@ -206,3 +206,5 @@ function getItemDescriptions(itemId)
 end
 
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
+
+function queryTileAddThing(uid, pos, ...) return Tile(pos):queryAdd(uid, ...) end
