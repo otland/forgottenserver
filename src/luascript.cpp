@@ -967,7 +967,7 @@ void LuaScriptInterface::setMetatable(lua_State* L, int32_t index, const std::st
 	lua_setmetatable(L, index - 1);
 }
 
-void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, Item* item)
+void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, const Item* item)
 {
 	if (item->getContainer()) {
 		luaL_getmetatable(L, "Container");
@@ -977,7 +977,7 @@ void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, Item* ite
 	lua_setmetatable(L, index - 1);
 }
 
-void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, Creature* creature)
+void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 {
 	if (creature->getPlayer()) {
 		luaL_getmetatable(L, "Player");
@@ -1034,6 +1034,14 @@ Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg)
 
 	lua_pop(L, 3);
 	return position;
+}
+
+Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
+{
+	if (isUserdata(L, arg)) {
+		return getUserdata<Thing>(L, arg);
+	}
+	return getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, arg));
 }
 
 Creature* LuaScriptInterface::getCreature(lua_State* L, int32_t arg)
@@ -1759,11 +1767,37 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Position", "__sub", LuaScriptInterface::luaPositionSub);
 	registerMetaMethod("Position", "__eq", LuaScriptInterface::luaPositionCompare);
 
+	registerClassMethod("Position", "getTile", LuaScriptInterface::luaPositionGetTile);
 	registerClassMethod("Position", "getDistance", LuaScriptInterface::luaPositionGetDistance);
 	registerClassMethod("Position", "isSightClear", LuaScriptInterface::luaPositionIsSightClear);
 
 	registerClassMethod("Position", "sendMagicEffect", LuaScriptInterface::luaPositionSendMagicEffect);
 	registerClassMethod("Position", "sendDistanceEffect", LuaScriptInterface::luaPositionSendDistanceEffect);
+
+	// Tile
+	registerClass("Tile", "", LuaScriptInterface::luaTileCreate);
+	registerClassMethod("Tile", "getPosition", LuaScriptInterface::luaTileGetPosition);
+
+	registerClassMethod("Tile", "getGround", LuaScriptInterface::luaTileGetGround);
+	registerClassMethod("Tile", "getThing", LuaScriptInterface::luaTileGetThing);
+	registerClassMethod("Tile", "getThingCount", LuaScriptInterface::luaTileGetThingCount);
+
+	registerClassMethod("Tile", "getTopTopItem", LuaScriptInterface::luaTileGetTopTopItem);
+	registerClassMethod("Tile", "getTopDownItem", LuaScriptInterface::luaTileGetTopDownItem);
+	registerClassMethod("Tile", "getFieldItem", LuaScriptInterface::luaTileGetFieldItem);
+
+	registerClassMethod("Tile", "getBottomCreature", LuaScriptInterface::luaTileGetBottomCreature);
+	registerClassMethod("Tile", "getTopCreature", LuaScriptInterface::luaTileGetTopCreature);
+	registerClassMethod("Tile", "getBottomVisibleCreature", LuaScriptInterface::luaTileGetBottomVisibleCreature);
+	registerClassMethod("Tile", "getTopVisibleCreature", LuaScriptInterface::luaTileGetTopVisibleCreature);
+
+	registerClassMethod("Tile", "getItems", LuaScriptInterface::luaTileGetItems);
+	registerClassMethod("Tile", "getCreatures", LuaScriptInterface::luaTileGetCreatures);
+
+	registerClassMethod("Tile", "hasProperty", LuaScriptInterface::luaTileHasProperty);
+	registerClassMethod("Tile", "hasFlag", LuaScriptInterface::luaTileHasFlag);
+	
+	registerClassMethod("Tile", "queryAdd", LuaScriptInterface::luaTileQueryAdd);
 
 	// NetworkMessage
 	registerClass("NetworkMessage", "", LuaScriptInterface::luaNetworkMessageCreate);
@@ -1838,6 +1872,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Item", "getArticle", LuaScriptInterface::luaItemGetArticle);
 
 	registerClassMethod("Item", "getPosition", LuaScriptInterface::luaItemGetPosition);
+	registerClassMethod("Item", "getTile", LuaScriptInterface::luaItemGetTile);
 
 	registerClassMethod("Item", "getAttribute", LuaScriptInterface::luaItemGetAttribute);
 	registerClassMethod("Item", "setAttribute", LuaScriptInterface::luaItemSetAttribute);
@@ -1876,6 +1911,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "setLight", LuaScriptInterface::luaCreatureSetLight);
 
 	registerClassMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
+	registerClassMethod("Creature", "getTile", LuaScriptInterface::luaCreatureGetTile);
 	registerClassMethod("Creature", "getDirection", LuaScriptInterface::luaCreatureGetDirection);
 	registerClassMethod("Creature", "setDirection", LuaScriptInterface::luaCreatureSetDirection);
 
@@ -2067,6 +2103,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("House", "getDoors", LuaScriptInterface::luaHouseGetDoors);
 	registerClassMethod("House", "getDoorCount", LuaScriptInterface::luaHouseGetDoorCount);
 	
+	registerClassMethod("House", "getTiles", LuaScriptInterface::luaHouseGetTiles);
 	registerClassMethod("House", "getTileCount", LuaScriptInterface::luaHouseGetTileCount);
 
 	// ItemType
@@ -6578,6 +6615,21 @@ int32_t LuaScriptInterface::luaPositionCompare(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPositionGetTile(lua_State* L)
+{
+	// position:getTile()
+	const Position& position = getPosition(L, 1);
+
+	Tile* tile = g_game.getTile(position);
+	if (tile) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPositionGetDistance(lua_State* L)
 {
 	// position:getDistance(positionEx)
@@ -6650,6 +6702,325 @@ int32_t LuaScriptInterface::luaPositionSendDistanceEffect(lua_State* L)
 	}
 
 	pushBoolean(L, true);
+	return 1;
+}
+
+// Tile
+int32_t LuaScriptInterface::luaTileCreate(lua_State* L)
+{
+	// Tile(x, y, z)
+	// Tile(position)
+	// Tile.new(x, y, z)
+	// Tile.new(position)
+	Tile* tile;
+	if (isTable(L, 2)) {
+		tile = g_game.getTile(getPosition(L, 2));
+	} else {
+		uint8_t z = getNumber<uint8_t>(L, 4);
+		uint16_t y = getNumber<uint16_t>(L, 3);
+		uint16_t x = getNumber<uint16_t>(L, 2);
+		tile = g_game.getTile(x, y, z);
+	}
+
+	if (tile) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetPosition(lua_State* L)
+{
+	// tile:getPosition()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		pushMetaPosition(L, tile->getPosition(), 0);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetGround(lua_State* L)
+{
+	// tile:getGround()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile && tile->ground) {
+		pushUserdata<Item>(L, tile->ground);
+		setItemMetatable(L, -1, tile->ground);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetThing(lua_State* L)
+{
+	// tile:getThing(index)
+	int32_t index = getNumber<int32_t>(L, 2);
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Thing* thing = tile->__getThing(index);
+		if (thing) {
+			if (Creature* creature = thing->getCreature()) {
+				pushUserdata<Creature>(L, creature);
+				setCreatureMetatable(L, -1, creature);
+			} else if (Item* item = thing->getItem()) {
+				pushUserdata<Item>(L, item);
+				setItemMetatable(L, -1, item);
+			} else {
+				pushNil(L);
+			}
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetThingCount(lua_State* L)
+{
+	// tile:getThingCount()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		pushNumber(L, tile->getThingCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetTopTopItem(lua_State* L)
+{
+	// tile:getTopTopItem()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Item* item = tile->getTopTopItem();
+		if (item) {
+			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetTopDownItem(lua_State* L)
+{
+	// tile:getTopDownItem()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Item* item = tile->getTopDownItem();
+		if (item) {
+			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetFieldItem(lua_State* L)
+{
+	// tile:getFieldItem()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Item* item = tile->getFieldItem();
+		if (item) {
+			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetBottomCreature(lua_State* L)
+{
+	// tile:getBottomCreature()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		const Creature* creature = tile->getBottomCreature();
+		if (creature) {
+			pushUserdata<const Creature>(L, creature);
+			setCreatureMetatable(L, -1, creature);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetTopCreature(lua_State* L)
+{
+	// tile:getTopCreature()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		const Creature* creature = tile->getTopCreature();
+		if (creature) {
+			pushUserdata<const Creature>(L, creature);
+			setCreatureMetatable(L, -1, creature);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetBottomVisibleCreature(lua_State* L)
+{
+	// tile:getBottomVisibleCreature(creature)
+	Creature* creature = getCreature(L, 2);
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile && creature) {
+		const Creature* visibleCreature = tile->getBottomVisibleCreature(creature);
+		if (visibleCreature) {
+			pushUserdata<const Creature>(L, visibleCreature);
+			setCreatureMetatable(L, -1, visibleCreature);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetTopVisibleCreature(lua_State* L)
+{
+	// tile:getTopVisibleCreature(creature)
+	Creature* creature = getCreature(L, 2);
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile && creature) {
+		const Creature* visibleCreature = tile->getTopVisibleCreature(creature);
+		if (visibleCreature) {
+			pushUserdata<const Creature>(L, visibleCreature);
+			setCreatureMetatable(L, -1, visibleCreature);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetItems(lua_State* L)
+{
+	// tile:getItems()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		TileItemVector* itemVector = tile->getItemList();
+		if (itemVector) {
+			uint32_t i = 0;
+			lua_newtable(L);
+			for (Item* item : *itemVector) {
+				pushNumber(L, ++i);
+				pushUserdata<Item>(L, item);
+				setItemMetatable(L, -1, item);
+				lua_settable(L, -3);
+			}
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetCreatures(lua_State* L)
+{
+	// tile:getCreatures()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		CreatureVector* creatureVector = tile->getCreatures();
+		if (creatureVector) {
+			uint32_t i = 0;
+			lua_newtable(L);
+			for (Creature* creature : *creatureVector) {
+				pushNumber(L, ++i);
+				pushUserdata<Creature>(L, creature);
+				setCreatureMetatable(L, -1, creature);
+				lua_settable(L, -3);
+			}
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileHasProperty(lua_State* L)
+{
+	// tile:hasProperty(property[, item])
+	Item* item;
+	if (getStackTop(L) >= 3) {
+		item = getUserdata<Item>(L, 3);
+	} else {
+		item = NULL;
+	}
+
+	ITEMPROPERTY property = static_cast<ITEMPROPERTY>(getNumber<uint64_t>(L, 2));
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		if (item) {
+			pushBoolean(L, tile->hasProperty(item, property));
+		} else {
+			pushBoolean(L, tile->hasProperty(property));
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileHasFlag(lua_State* L)
+{
+	// tile:hasFlag(flag)
+	tileflags_t flag = static_cast<tileflags_t>(getNumber<uint64_t>(L, 2));
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		pushBoolean(L, tile->hasFlag(flag));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileQueryAdd(lua_State* L)
+{
+	// tile:queryAdd(thing[, flags])
+	uint32_t flags = 0;
+	if (getStackTop(L) >= 3) {
+		flags = getNumber<uint32_t>(L, 3);
+	}
+	Thing* thing = getUserdata<Thing>(L, 2);
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile && thing) {
+		pushNumber(L, tile->__queryAdd(0, thing, 1, flags));
+	} else {
+		pushNil(L);
+	}
 	return 1;
 }
 
@@ -7432,6 +7803,24 @@ int32_t LuaScriptInterface::luaItemGetPosition(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaItemGetTile(lua_State* L)
+{
+	// item:getTile()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		Tile* tile = item->getTile();
+		if (tile) {
+			pushUserdata<Tile>(L, tile);
+			setMetatable(L, -1, "Tile");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 {
 	// item:getAttribute(key)
@@ -7942,6 +8331,24 @@ int32_t LuaScriptInterface::luaCreatureGetPosition(lua_State* L)
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
 		pushMetaPosition(L, creature->getPosition(), 0);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetTile(lua_State* L)
+{
+	// creature:getTile()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		Tile* tile = creature->getTile();
+		if (tile) {
+			pushUserdata<Tile>(L, tile);
+			setMetatable(L, -1, "Tile");
+		} else {
+			pushNil(L);
+		}
 	} else {
 		pushNil(L);
 	}
@@ -10159,6 +10566,25 @@ int32_t LuaScriptInterface::luaHouseGetDoorCount(lua_State* L)
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
 		pushNumber(L, house->getHouseDoors().size());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetTiles(lua_State* L)
+{
+	// house:getTiles()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		uint32_t i = 0;
+		lua_newtable(L);
+		for (Tile* tile : house->getHouseTiles()) {
+			pushNumber(L, ++i);
+			pushUserdata<Tile>(L, tile);
+			setMetatable(L, -1, "Tile");
+			lua_settable(L, -3);
+		}
 	} else {
 		pushNil(L);
 	}
