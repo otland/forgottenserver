@@ -527,7 +527,6 @@ class LuaScriptInterface
 		//get tile info
 		static int32_t luaGetTilePzInfo(lua_State* L);
 		static int32_t luaGetTileHouseInfo(lua_State* L);
-		static int32_t luaQueryTileAddThing(lua_State* L);
 
 		//houses
 		static int32_t luaGetHouseRent(lua_State* L);

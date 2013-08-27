@@ -1309,9 +1309,6 @@ void LuaScriptInterface::registerFunctions()
 	//getThing(uid)
 	lua_register(m_luaState, "getThing", LuaScriptInterface::luaGetThing);
 
-	//queryTileAddThing(uid, pos, <optional> flags)
-	lua_register(m_luaState, "queryTileAddThing", LuaScriptInterface::luaQueryTileAddThing);
-
 	//getThingPos(uid)
 	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
 
@@ -4020,43 +4017,6 @@ int32_t LuaScriptInterface::luaGetThing(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
 		pushThing(L, NULL, 0);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaQueryTileAddThing(lua_State* L)
-{
-	//queryTileAddThing(uid, pos, <optional> flags)
-	int32_t parameters = lua_gettop(L);
-
-	uint32_t flags = 0;
-	if (parameters > 2) {
-		flags = popNumber(L);
-	}
-
-	PositionEx pos;
-	popPosition(L, pos);
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-	if (!tile) {
-		std::ostringstream ss;
-		ss << pos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		lua_pushnumber(L, (uint32_t)RET_NOTPOSSIBLE);
-		return 1;
-	}
-
-	Thing* thing = env->getThingByUID(uid);
-	if (!thing) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
-		lua_pushnumber(L, (uint32_t)RET_NOTPOSSIBLE);
-		return 1;
-	}
-
-	ReturnValue ret = tile->__queryAdd(0, thing, 1, flags);
-	lua_pushnumber(L, (uint32_t)ret);
 	return 1;
 }
 
