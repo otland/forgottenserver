@@ -2,16 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <LUA_DIR>$(TFSSDKDir)\LuaJIT-2.0.2\</LUA_DIR>
+    <LUA_DIR>$(TFSSDKDir)\LuaJIT-2.0.1\</LUA_DIR>
     <LIBXML2_DIR>$(TFSSDKDir)\libxml2-2.7.8\</LIBXML2_DIR>
     <LIBICONV_DIR>$(TFSSDKDir)\libiconv-1.14\</LIBICONV_DIR>
     <GMP_DIR>$(TFSSDKDir)\mpir-2.5.0\</GMP_DIR>
     <MYSQLC_DIR>$(TFSSDKDir)\mysql-connector-c-6.0.2\</MYSQLC_DIR>
     <PREPROCESSOR_DEFS>__LUAJIT__;_CRT_SECURE_NO_WARNINGS;</PREPROCESSOR_DEFS>
     <TFS_INCLUDES>$(BOOST_ROOT);$(LUA_DIR)\include;$(LIBXML2_DIR)\include;$(LIBICONV_DIR)\include;$(GMP_DIR)\include;$(MYSQLC_DIR)\include</TFS_INCLUDES>
-    <TFS_LIBS>$(BOOST_ROOT)\stage\lib;$(LUA_DIR)\lib;$(LIBXML2_DIR)\lib;$(LIBICONV_DIR)\lib;$(GMP_DIR)\lib;$(MYSQLC_DIR)\lib</TFS_LIBS>
+    <TFS_LIBS>$(BOOST_ROOT)\stage\lib;$(LUA_DIR)\lib86;$(LIBXML2_DIR)\lib;$(LIBICONV_DIR)\lib;$(GMP_DIR)\lib;$(MYSQLC_DIR)\lib</TFS_LIBS>
     <TFS_LIBS64>$(BOOST_ROOT)\stage64\lib;$(LUA_DIR)\lib64;$(LIBXML2_DIR)\lib64;$(LIBICONV_DIR)\lib64;$(GMP_DIR)\lib64;$(MYSQLC_DIR)\lib64</TFS_LIBS64>
-    <TFS_LIBDEPS>luajit.lib;libxml2.lib;mpir.lib;iconv.lib;libmysql.lib</TFS_LIBDEPS>
+    <TFS_LIBDEPS>lua51.lib;libxml2.lib;mpir.lib;iconv.lib;libmysql.lib</TFS_LIBDEPS>
   </PropertyGroup>
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
