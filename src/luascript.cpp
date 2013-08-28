@@ -1038,10 +1038,29 @@ Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg)
 
 Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
 {
-	if (isUserdata(L, arg)) {
-		return getUserdata<Thing>(L, arg);
+	uint32_t id;
+	if (lua_getmetatable(L, arg) != 0) {
+		lua_getfield(L, -1, "__index");
+
+		lua_getfield(L, -1, "isItem");
+		lua_pushvalue(L, arg);
+		lua_call(L, 1, 1);
+
+		if (getBoolean(L, -1)) {
+			lua_getfield(L, -2, "getUniqueId");
+		} else {
+			lua_getfield(L, -2, "getId");
+		}
+
+		lua_pushvalue(L, arg);
+		lua_call(L, 1, 1);
+
+		id = getNumber<uint32_t>(L, -1);
+		lua_pop(L, 4);
+	} else {
+		id = getNumber<uint32_t>(L, arg);
 	}
-	return getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, arg));
+	return getScriptEnv()->getThingByUID(id);
 }
 
 Creature* LuaScriptInterface::getCreature(lua_State* L, int32_t arg)
@@ -1848,6 +1867,9 @@ void LuaScriptInterface::registerFunctions()
 
 	// Item
 	registerClass("Item", "", LuaScriptInterface::luaItemCreate);
+	
+	registerClassMethod("Item", "isCreature", LuaScriptInterface::luaItemIsCreature);
+	registerClassMethod("Item", "isItem", LuaScriptInterface::luaItemIsItem);
 
 	registerClassMethod("Item", "getId", LuaScriptInterface::luaItemGetId);
 
@@ -1900,6 +1922,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "isPlayer", LuaScriptInterface::luaCreatureIsPlayer);
 	registerClassMethod("Creature", "isMonster", LuaScriptInterface::luaCreatureIsMonster);
 	registerClassMethod("Creature", "isNpc", LuaScriptInterface::luaCreatureIsNpc);
+	registerClassMethod("Creature", "isItem", LuaScriptInterface::luaCreatureIsItem);
 
 	registerClassMethod("Creature", "getId", LuaScriptInterface::luaCreatureGetId);
 	registerClassMethod("Creature", "getName", LuaScriptInterface::luaCreatureGetName);
@@ -6974,7 +6997,7 @@ int32_t LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 	if (getStackTop(L) >= 3) {
 		flags = getNumber<uint32_t>(L, 3);
 	}
-	Thing* thing = getUserdata<Thing>(L, 2);
+	Thing* thing = getThing(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile && thing) {
 		pushNumber(L, tile->__queryAdd(0, thing, 1, flags));
@@ -7528,6 +7551,20 @@ int32_t LuaScriptInterface::luaItemCreate(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaItemIsCreature(lua_State* L)
+{
+	// item:isCreature()
+	pushBoolean(L, false);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemIsItem(lua_State* L)
+{
+	// item:isItem()
+	pushBoolean(L, true);
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaItemGetId(lua_State* L)
 {
 	// item:getId()
@@ -7634,6 +7671,10 @@ int32_t LuaScriptInterface::luaItemGetUniqueId(lua_State* L)
 	// item:getUniqueId()
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
+		uint16_t uniqueId = item->getUniqueId();
+		if (uniqueId == 0) {
+			uniqueId = getScriptEnv()->addThing(item);
+		}
 		pushNumber(L, item->getUniqueId());
 	} else {
 		pushNil(L);
@@ -8223,6 +8264,13 @@ int32_t LuaScriptInterface::luaCreatureIsNpc(lua_State* L)
 	// creature:isNpc()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	pushBoolean(L, creature && creature->getNpc());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureIsItem(lua_State* L)
+{
+	// creature:isItem()
+	pushBoolean(L, false);
 	return 1;
 }
 
