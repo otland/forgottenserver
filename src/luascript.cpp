@@ -1038,29 +1038,34 @@ Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg)
 
 Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
 {
-	uint32_t id;
+	Thing* thing;
 	if (lua_getmetatable(L, arg) != 0) {
-		lua_getfield(L, -1, "__index");
-
-		lua_getfield(L, -1, "isItem");
-		lua_pushvalue(L, arg);
-		lua_call(L, 1, 1);
-
-		if (getBoolean(L, -1)) {
-			lua_getfield(L, -2, "getUniqueId");
-		} else {
-			lua_getfield(L, -2, "getId");
+		lua_rawgeti(L, -1, 't');
+		switch(getNumber<uint32_t>(L, -1)) {
+			case LuaData_Item:
+				thing = getUserdata<Item>(L, arg);
+				break;
+			case LuaData_Container:
+				thing = getUserdata<Container>(L, arg);
+				break;
+			case LuaData_Player:
+				thing = getUserdata<Player>(L, arg);
+				break;
+			case LuaData_Monster:
+				thing = getUserdata<Monster>(L, arg);
+				break;
+			case LuaData_Npc:
+				thing = getUserdata<Npc>(L, arg);
+				break;
+			default:
+				thing = NULL;
+				break;
 		}
-
-		lua_pushvalue(L, arg);
-		lua_call(L, 1, 1);
-
-		id = getNumber<uint32_t>(L, -1);
-		lua_pop(L, 4);
+		lua_pop(L, 2);
 	} else {
-		id = getNumber<uint32_t>(L, arg);
+		thing = getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, arg));
 	}
-	return getScriptEnv()->getThingByUID(id);
+	return thing;
 }
 
 Creature* LuaScriptInterface::getCreature(lua_State* L, int32_t arg)
@@ -2199,6 +2204,22 @@ void LuaScriptInterface::registerClass(const std::string& className, const std::
 	// className.metatable['p'] = parents
 	lua_pushnumber(m_luaState, parents);
 	lua_rawseti(m_luaState, metatable, 'p');
+
+	// className.metatable['t'] = type
+	if (className == "Item") {
+		lua_pushnumber(m_luaState, LuaData_Item);
+	} else if (className == "Container") {
+		lua_pushnumber(m_luaState, LuaData_Container);
+	} else if (className == "Player") {
+		lua_pushnumber(m_luaState, LuaData_Player);
+	} else if (className == "Monster") {
+		lua_pushnumber(m_luaState, LuaData_Monster);
+	} else if (className == "Npc") {
+		lua_pushnumber(m_luaState, LuaData_Npc);
+	} else {
+		lua_pushnumber(m_luaState, LuaData_Unknown);
+	}
+	lua_rawseti(m_luaState, metatable, 't');
 
 	// pop className, className.metatable
 	lua_pop(m_luaState, 2);
@@ -7675,7 +7696,7 @@ int32_t LuaScriptInterface::luaItemGetUniqueId(lua_State* L)
 		if (uniqueId == 0) {
 			uniqueId = getScriptEnv()->addThing(item);
 		}
-		pushNumber(L, item->getUniqueId());
+		pushNumber(L, uniqueId);
 	} else {
 		pushNil(L);
 	}

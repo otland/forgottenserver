@@ -68,6 +68,15 @@ enum LuaVariantType_t {
 	VARIANT_STRING,
 };
 
+enum LuaDataType {
+	LuaData_Unknown = 0,
+	LuaData_Item,
+	LuaData_Container,
+	LuaData_Player,
+	LuaData_Monster,
+	LuaData_Npc
+};
+
 struct LuaVariant {
 	LuaVariant() {
 		type = VARIANT_NONE;
