@@ -1530,9 +1530,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerGUIDByName(name)
 	lua_register(m_luaState, "getPlayerGUIDByName", LuaScriptInterface::luaGetPlayerGUIDByName);
 
-	//getContainerItem(uid, slot)
-	lua_register(m_luaState, "getContainerItem", LuaScriptInterface::luaGetContainerItem);
-
 	//doAddContainerItem(uid, itemid, <optional> count/subtype)
 	lua_register(m_luaState, "doAddContainerItem", LuaScriptInterface::luaDoAddContainerItem);
 
@@ -5392,28 +5389,6 @@ int32_t LuaScriptInterface::luaGetPlayerGUIDByName(lua_State* L)
 	}
 
 	lua_pushnumber(L, value);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetContainerItem(lua_State* L)
-{
-	//getContainerItem(uid, slot)
-	uint32_t slot = popNumber(L);
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	if (Container* container = env->getContainerByUID(uid)) {
-		Item* item = container->getItemByIndex(slot);
-		if (item) {
-			pushThing(L, item, env->addThing(item));
-		} else {
-			pushThing(L, NULL, 0);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
-		pushThing(L, NULL, 0);
-	}
 	return 1;
 }
 

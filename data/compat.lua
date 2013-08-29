@@ -187,6 +187,13 @@ function doTransformItem(uid, newItemId, ...) local i = Item(uid) return i ~= ni
 
 function getContainerSize(uid) local c = Container(uid) return c ~= nil and c:getSize() or false end
 function getContainerCap(uid) local c = Container(uid) return c ~= nil and c:getCapacity() or false end
+function getContainerItem(uid, slot)
+	local container = Container(uid)
+	if container == nil then
+		return pushThing(nil)
+	end
+	return pushThing(container:getItem(slot))
+end
 
 function doSendMagicEffect(pos, magicEffect, ...) return Position(pos):sendMagicEffect(magicEffect, ...) end
 function doSendDistanceShoot(fromPos, toPos, distanceEffect, ...) return Position(fromPos):sendDistanceEffect(toPos, distanceEffect, ...) end

@@ -590,7 +590,6 @@ class LuaScriptInterface
 		static int32_t luaIsValidUID(lua_State* L);
 
 		//container
-		static int32_t luaGetContainerItem(lua_State* L);
 		static int32_t luaDoAddContainerItem(lua_State* L);
 
 		//
