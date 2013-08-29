@@ -495,10 +495,10 @@ if(Modules == nil) then
 
 		local msg = "I can bring you to "
 		--local i = 1
-		local maxn = table.maxn(module.destinations)
+		local maxn = #module.destinations
 		for i, destination in pairs(module.destinations) do
 			msg = msg .. destination
-			if(i == maxn -1) then
+			if(i == maxn - 1) then
 				msg = msg .. " and "
 			elseif(i == maxn) then
 				msg = msg .. "."

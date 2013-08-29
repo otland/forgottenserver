@@ -2,7 +2,7 @@ local firstItems = {2050, 2382}
 
 function onLogin(cid)
 	if getPlayerLastLoginSaved(cid) == 0 then
-		for i = 1, table.maxn(firstItems) do
+		for i = 1, #firstItems do
 			doPlayerAddItem(cid, firstItems[i], 1)
 		end
 		doPlayerAddItem(cid, getPlayerSex(cid) == 0 and 2651 or 2650, 1)

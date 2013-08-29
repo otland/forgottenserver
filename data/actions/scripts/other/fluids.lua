@@ -30,7 +30,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 				doCreatureAddHealth(cid, 60)
 				doSendMagicEffect(fromPosition, CONST_ME_MAGIC_BLUE)
 			end
-			for i = 0, table.maxn(fluidType) do
+			for i = 0, #fluidType do
 				if item.type == fluidType[i] then
 					doCreatureSay(cid, fluidMessage[i], TALKTYPE_ORANGE_1)
 					return TRUE

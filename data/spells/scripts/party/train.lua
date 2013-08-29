@@ -16,7 +16,7 @@ function onCastSpell(cid, var)
 	local pos = getCreaturePosition(cid)
 
 	local membersList = getPartyMembers(cid)
-	if(membersList == nil or type(membersList) ~= 'table' or table.maxn(membersList) <= 1) then
+	if(membersList == nil or type(membersList) ~= 'table' or #membersList <= 1) then
 		doPlayerSendCancel(cid, "No party members in range.")
 		doSendMagicEffect(pos, CONST_ME_POFF)
 		return LUA_ERROR
@@ -29,7 +29,7 @@ function onCastSpell(cid, var)
 		end
 	end
 
-	local tmp = table.maxn(affectedList)
+	local tmp = #affectedList
 	if(tmp <= 1) then
 		doPlayerSendCancel(cid, "No party members in range.")
 		doSendMagicEffect(pos, CONST_ME_POFF)
