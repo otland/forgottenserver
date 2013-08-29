@@ -869,6 +869,15 @@ void Creature::changeMana(int32_t manaChange)
 	}
 }
 
+void Creature::gainHealth(Creature* healer, int32_t healthGain)
+{
+	changeHealth(healthGain);
+
+	if (healer) {
+		healer->onTargetCreatureGainHealth(this, healthGain);
+	}
+}
+
 void Creature::drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage)
 {
 	changeHealth(-damage, false);

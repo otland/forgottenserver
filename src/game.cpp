@@ -4563,7 +4563,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		}
 
 		int32_t realHealthChange = target->getHealth();
-		target->changeHealth(healthChange);
+		target->gainHealth(attacker, healthChange);
 		realHealthChange = target->getHealth() - realHealthChange;
 
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
