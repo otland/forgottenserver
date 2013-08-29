@@ -147,7 +147,7 @@ function getPlayerMasterPos(cid) local p = _Player(cid) return p ~= nil and p:ge
 function getPlayerItemCount(cid, itemId, ...) local p = _Player(cid) return p ~= nil and p:getItemCount(itemId, ...) or false end
 function getPlayerSlotItem(cid, slot)
 	local player = _Player(cid)
-	if player ~= nil then
+	if player == nil then
 		return pushThing(nil)
 	end
 	return pushThing(player:getSlotItem(slot))
