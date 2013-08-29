@@ -1382,7 +1382,7 @@ void LuaScriptInterface::registerFunctions()
 	lua_register(m_luaState, "doPlayerAddSkillTry", LuaScriptInterface::luaDoPlayerAddSkillTry);
 
 	//doPlayerAddMana(cid, mana[, animationOnLoss])
-	lua_register(m_luaState, "doPlayerAddMana", LuaScriptInterface::luaDoPlay"erAddMana);
+	lua_register(m_luaState, "doPlayerAddMana", LuaScriptInterface::luaDoPlayerAddMana);
 
 	//doPlayerAddManaSpent(cid, mana)
 	lua_register(m_luaState, "doPlayerAddManaSpent", LuaScriptInterface::luaDoPlayerAddManaSpent);
@@ -7722,7 +7722,7 @@ int32_t LuaScriptInterface::luaItemGetFluidType(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemGetSubType(lua_State* L)
+int32_t LuaScriptInterface::luaItemHasSubType(lua_State* L)
 {
 	// item:hasSubType()
 	Item* item = getUserdata<Item>(L, 1);
