@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<npc name="The Forgotten King" script="data/npc/scripts/promotion.lua" walkinterval="2000" floorchange="0">
+<npc name="The Forgotten King" script="promotion.lua" walkinterval="2000" floorchange="0">
 	<health now="100" max="100"/>
 	<look type="133" head="20" body="39" legs="45" feet="7" addons="0"/>
 </npc>

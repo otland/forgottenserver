@@ -1,4 +1,4 @@
-<npc name="The Oracle" script="data/npc/scripts/The Oracle.lua" walkinterval="0">
+<npc name="The Oracle" script="The Oracle.lua" walkinterval="0">
 	<look typeex="1448"/>
 	<parameters>
 		<parameter key="message_greet" value="|PLAYERNAME|, ARE YOU PREPARED TO FACE YOUR DESTINY?" />

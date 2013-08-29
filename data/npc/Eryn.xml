@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<npc name="Eryn" script="data/npc/scripts/runes.lua" walkinterval="2000" floorchange="0">
+<npc name="Eryn" script="runes.lua" walkinterval="2000" floorchange="0">
 	<health now="100" max="100"/>
 	<look type="130" head="39" body="122" legs="125" feet="57" addons="0"/>
 	<parameters>
