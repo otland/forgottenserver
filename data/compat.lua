@@ -195,6 +195,19 @@ function getContainerItem(uid, slot)
 	return pushThing(container:getItem(slot))
 end
 
+function doAddContainerItemEx(uid, virtualId)
+	local container = Container(uid)
+	if container == nil then
+		return false
+	end
+
+	local res = container:addItemEx(Item(virtualId))
+	if res == nil then
+		return false
+	end
+	return res
+end
+
 function doSendMagicEffect(pos, magicEffect, ...) return Position(pos):sendMagicEffect(magicEffect, ...) end
 function doSendDistanceShoot(fromPos, toPos, distanceEffect, ...) return Position(fromPos):sendDistanceEffect(toPos, distanceEffect, ...) end
 function isSightClear(fromPos, toPos, floorCheck) return Position(fromPos):isSightClear(toPos, floorCheck) end

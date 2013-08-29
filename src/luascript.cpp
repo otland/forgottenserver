@@ -1411,9 +1411,6 @@ void LuaScriptInterface::registerFunctions()
 	//doTileAddItemEx(pos, uid)
 	lua_register(m_luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
 
-	//doAddContainerItemEx(uid, virtuid)
-	lua_register(m_luaState, "doAddContainerItemEx", LuaScriptInterface::luaDoAddContainerItemEx);
-
 	//doRelocate(pos, posTo)
 	//Moves all moveable objects from pos to posTo
 	lua_register(m_luaState, "doRelocate", LuaScriptInterface::luaDoRelocate);
@@ -2925,43 +2922,6 @@ int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	ReturnValue ret = g_game.internalAddItem(tile, item);
 	lua_pushnumber(L, ret);
 	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoAddContainerItemEx(lua_State* L)
-{
-	//doAddContainerItemEx(uid, virtuid)
-	uint32_t virtuid = popNumber(L);
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Container* container = env->getContainerByUID(uid);
-	if (container) {
-		Item* item = env->getItemByUID(virtuid);
-		if (!item) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (item->getParent() != VirtualCylinder::virtualCylinder) {
-			reportErrorFunc("Item already has a parent");
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		ReturnValue ret = g_game.internalAddItem(container, item);
-		if (ret == RET_NOERROR) {
-			env->removeTempItem(item);
-		}
-
-		lua_pushnumber(L, ret);
-		return 1;
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
 }
 
 int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
