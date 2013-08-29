@@ -1274,9 +1274,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFood(cid)
 	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
 
-	//getPlayerItemById(cid, deepSearch, itemId, <optional> subType)
-	lua_register(m_luaState, "getPlayerItemById", LuaScriptInterface::luaGetPlayerItemById);
-
 	//getPlayerFlagValue(cid, flag)
 	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
 
@@ -3983,40 +3980,6 @@ int32_t LuaScriptInterface::luaDoPlayerAddExp(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerItemById(lua_State* L)
-{
-	//getPlayerItemById(cid, deepSearch, itemId, <optional> subType)
-	ScriptEnvironment* env = getScriptEnv();
-
-	uint32_t parameters = lua_gettop(L);
-
-	int32_t subType = -1;
-	if (parameters > 3) {
-		subType = popNumber<int32_t>(L);
-	}
-
-	int32_t itemId = popNumber<int32_t>(L);
-	bool deepSearch = popBoolean(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	Item* item = g_game.findItemOfType(player, itemId, deepSearch, subType);
-	if (!item) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	uint32_t uid = env->addThing(item);
-	pushThing(L, item, uid);
 	return 1;
 }
 

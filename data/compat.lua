@@ -152,6 +152,13 @@ function getPlayerSlotItem(cid, slot)
 	end
 	return pushThing(player:getSlotItem(slot))
 end
+function getPlayerItemById(cid, deepSearch, itemId, ...)
+	local player = _Player(cid)
+	if player == nil then
+		return pushThing(nil)
+	end
+	return pushThing(player:getItemById(itemId, deepSearch, ...))
+end
 
 getPlayerAccountBalance = getPlayerBalance
 getIPByName = getIPByPlayerName
