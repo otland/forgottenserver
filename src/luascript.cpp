@@ -7412,8 +7412,6 @@ int32_t LuaScriptInterface::luaItemCreate(lua_State* L)
 			item->setParent(VirtualCylinder::virtualCylinder);
 			env->addTempItem(env, item);
 		}
-
-		env->addThing(item);
 	} else {
 		item = getScriptEnv()->getItemByUID(id);
 	}
@@ -7516,7 +7514,6 @@ int32_t LuaScriptInterface::luaItemSplit(lua_State* L)
 
 		splitItem->setParent(VirtualCylinder::virtualCylinder);
 		env->addTempItem(env, splitItem);
-		env->addThing(splitItem);
 
 		pushUserdata<Item>(L, splitItem);
 		setItemMetatable(L, -1, splitItem);
@@ -7917,8 +7914,6 @@ int32_t LuaScriptInterface::luaContainerCreate(lua_State* L)
 			item->setParent(VirtualCylinder::virtualCylinder);
 			env->addTempItem(env, item);
 		}
-
-		env->addThing(item);
 	} else {
 		item = getScriptEnv()->getContainerByUID(id);
 	}
