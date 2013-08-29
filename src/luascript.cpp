@@ -1274,9 +1274,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFood(cid)
 	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
 
-	//getPlayerSlotItem(cid, slot)
-	lua_register(m_luaState, "getPlayerSlotItem", LuaScriptInterface::luaGetPlayerSlotItem);
-
 	//getPlayerItemById(cid, deepSearch, itemId, <optional> subType)
 	lua_register(m_luaState, "getPlayerItemById", LuaScriptInterface::luaGetPlayerItemById);
 
@@ -1385,7 +1382,7 @@ void LuaScriptInterface::registerFunctions()
 	lua_register(m_luaState, "doPlayerAddSkillTry", LuaScriptInterface::luaDoPlayerAddSkillTry);
 
 	//doPlayerAddMana(cid, mana[, animationOnLoss])
-	lua_register(m_luaState, "doPlayerAddMana", LuaScriptInterface::luaDoPlayerAddMana);
+	lua_register(m_luaState, "doPlayerAddMana", LuaScriptInterface::luaDoPlay"erAddMana);
 
 	//doPlayerAddManaSpent(cid, mana)
 	lua_register(m_luaState, "doPlayerAddManaSpent", LuaScriptInterface::luaDoPlayerAddManaSpent);
@@ -1886,6 +1883,8 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Item", "getCount", LuaScriptInterface::luaItemGetCount);
 	registerClassMethod("Item", "getCharges", LuaScriptInterface::luaItemGetCharges);
 	registerClassMethod("Item", "getFluidType", LuaScriptInterface::luaItemGetFluidType);
+
+	registerClassMethod("Item", "hasSubType", LuaScriptInterface::luaItemHasSubType);
 	registerClassMethod("Item", "getSubType", LuaScriptInterface::luaItemGetSubType);
 
 	registerClassMethod("Item", "getName", LuaScriptInterface::luaItemGetName);
@@ -3983,28 +3982,6 @@ int32_t LuaScriptInterface::luaDoPlayerAddExp(lua_State* L)
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerSlotItem(lua_State* L)
-{
-	//getPlayerSlotItem(cid, slot)
-	uint32_t slot = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	const Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		Thing* thing = player->__getThing(slot);
-		if (thing) {
-			uint32_t uid = getScriptEnv()->addThing(thing);
-			pushThing(L, thing, uid);
-		} else {
-			pushThing(L, NULL, 0);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushThing(L, NULL, 0);
 	}
 	return 1;
 }
@@ -7747,6 +7724,18 @@ int32_t LuaScriptInterface::luaItemGetFluidType(lua_State* L)
 
 int32_t LuaScriptInterface::luaItemGetSubType(lua_State* L)
 {
+	// item:hasSubType()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushBoolean(L, item->hasSubType());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemGetSubType(lua_State* L)
+{
 	// item:getSubType()
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
@@ -9392,9 +9381,11 @@ int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 		if (hasTable) {
 			pushNumber(L, i);
 			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
 			lua_settable(L, -3);
 		} else {
 			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
 		}
 	}
 	return 1;

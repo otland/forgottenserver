@@ -23,6 +23,31 @@ function _Player(cid)
 	return _lastPlayer
 end
 
+function pushThing(thing)
+	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
+	if thing ~= nil then
+		if thing:isItem() then
+			t.uid = thing:getUniqueId()
+			t.itemid = thing:getId()
+			if thing:hasSubType() then
+				t.type = thing:getSubType()
+			end
+			t.actionid = thing:getActionId()
+		elseif thing:isCreature() then
+			t.uid = thing:getId()
+			t.itemid = 1
+			if thing:isPlayer() then
+				t.type = 1
+			elseif thing:isMonster() then
+				t.type = 2
+			else
+				t.type = 3
+			end
+		end
+	end
+	return t
+end
+
 function isCreature(cid) return _Creature(cid) ~= nil end
 function isPlayer(cid) return _Player(cid) ~= nil end
 function isMonster(cid) return Monster(cid) ~= nil end
@@ -120,6 +145,13 @@ end
 function getPlayerGuildNick(cid) local p = _Player(cid) return p ~= nil and p:getGuildNick() or false end
 function getPlayerMasterPos(cid) local p = _Player(cid) return p ~= nil and p:getTown():getTemplePosition() or false end
 function getPlayerItemCount(cid, itemId, ...) local p = _Player(cid) return p ~= nil and p:getItemCount(itemId, ...) or false end
+function getPlayerSlotItem(cid, slot)
+	local player = _Player(cid)
+	if player ~= nil then
+		return pushThing(nil)
+	end
+	return pushThing(player:getSlotItem(slot))
+end
 
 getPlayerAccountBalance = getPlayerBalance
 getIPByName = getIPByPlayerName

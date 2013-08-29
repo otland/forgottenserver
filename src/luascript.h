@@ -552,7 +552,6 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureSpeed(lua_State* L);
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 		static int32_t luaGetCreatureTarget(lua_State* L);
-		static int32_t luaGetPlayerSlotItem(lua_State* L);
 		static int32_t luaGetPlayerItemById(lua_State* L);
 
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
@@ -819,6 +818,8 @@ class LuaScriptInterface
 		static int32_t luaItemGetCount(lua_State* L);
 		static int32_t luaItemGetCharges(lua_State* L);
 		static int32_t luaItemGetFluidType(lua_State* L);
+
+		static int32_t luaItemHasSubType(lua_State* L);
 		static int32_t luaItemGetSubType(lua_State* L);
 
 		static int32_t luaItemGetName(lua_State* L);
