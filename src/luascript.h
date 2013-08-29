@@ -68,6 +68,15 @@ enum LuaVariantType_t {
 	VARIANT_STRING,
 };
 
+enum LuaDataType {
+	LuaData_Unknown = 0,
+	LuaData_Item,
+	LuaData_Container,
+	LuaData_Player,
+	LuaData_Monster,
+	LuaData_Npc
+};
+
 struct LuaVariant {
 	LuaVariant() {
 		type = VARIANT_NONE;
@@ -341,8 +350,8 @@ class LuaScriptInterface
 
 		// Metatables
 		static void setMetatable(lua_State* L, int32_t index, const std::string& string);
-		static void setItemMetatable(lua_State* L, int32_t index, Item* item);
-		static void setCreatureMetatable(lua_State* L, int32_t index, Creature* creature);
+		static void setItemMetatable(lua_State* L, int32_t index, const Item* item);
+		static void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature);
 
 		// Get
 		template<typename T>
@@ -370,6 +379,7 @@ class LuaScriptInterface
 		static Position getPosition(lua_State* L, int32_t arg, uint32_t& stackpos);
 		static Position getPosition(lua_State* L, int32_t arg);
 
+		static Thing* getThing(lua_State* L, int32_t arg);
 		static Creature* getCreature(lua_State* L, int32_t arg);
 		static Player* getPlayer(lua_State* L, int32_t arg);
 
@@ -526,7 +536,6 @@ class LuaScriptInterface
 		//get tile info
 		static int32_t luaGetTilePzInfo(lua_State* L);
 		static int32_t luaGetTileHouseInfo(lua_State* L);
-		static int32_t luaQueryTileAddThing(lua_State* L);
 
 		//houses
 		static int32_t luaGetHouseRent(lua_State* L);
@@ -710,11 +719,37 @@ class LuaScriptInterface
 		static int32_t luaPositionSub(lua_State* L);
 		static int32_t luaPositionCompare(lua_State* L);
 
+		static int32_t luaPositionGetTile(lua_State* L);
 		static int32_t luaPositionGetDistance(lua_State* L);
 		static int32_t luaPositionIsSightClear(lua_State* L);
 
 		static int32_t luaPositionSendMagicEffect(lua_State* L);
 		static int32_t luaPositionSendDistanceEffect(lua_State* L);
+
+		// Tile
+		static int32_t luaTileCreate(lua_State* L);
+		static int32_t luaTileGetPosition(lua_State* L);
+		
+		static int32_t luaTileGetGround(lua_State* L);
+		static int32_t luaTileGetThing(lua_State* L);
+		static int32_t luaTileGetThingCount(lua_State* L);
+		
+		static int32_t luaTileGetTopTopItem(lua_State* L);
+		static int32_t luaTileGetTopDownItem(lua_State* L);
+		static int32_t luaTileGetFieldItem(lua_State* L);
+		
+		static int32_t luaTileGetBottomCreature(lua_State* L);
+		static int32_t luaTileGetTopCreature(lua_State* L);
+		static int32_t luaTileGetBottomVisibleCreature(lua_State* L);
+		static int32_t luaTileGetTopVisibleCreature(lua_State* L);
+		
+		static int32_t luaTileGetItems(lua_State* L);
+		static int32_t luaTileGetCreatures(lua_State* L);
+		
+		static int32_t luaTileHasProperty(lua_State* L);
+		static int32_t luaTileHasFlag(lua_State* L);
+		
+		static int32_t luaTileQueryAdd(lua_State* L);
 
 		// NetworkMessage
 		static int32_t luaNetworkMessageCreate(lua_State* L);
@@ -768,6 +803,9 @@ class LuaScriptInterface
 
 		// Item
 		static int32_t luaItemCreate(lua_State* L);
+		
+		static int32_t luaItemIsCreature(lua_State* L);
+		static int32_t luaItemIsItem(lua_State* L);
 
 		static int32_t luaItemGetId(lua_State* L);
 
@@ -789,6 +827,7 @@ class LuaScriptInterface
 		static int32_t luaItemGetArticle(lua_State* L);
 
 		static int32_t luaItemGetPosition(lua_State* L);
+		static int32_t luaItemGetTile(lua_State* L);
 
 		static int32_t luaItemGetAttribute(lua_State* L);
 		static int32_t luaItemSetAttribute(lua_State* L);
@@ -819,6 +858,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureIsPlayer(lua_State* L);
 		static int32_t luaCreatureIsMonster(lua_State* L);
 		static int32_t luaCreatureIsNpc(lua_State* L);
+		static int32_t luaCreatureIsItem(lua_State* L);
 
 		static int32_t luaCreatureGetId(lua_State* L);
 		static int32_t luaCreatureGetName(lua_State* L);
@@ -827,6 +867,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureSetLight(lua_State* L);
 
 		static int32_t luaCreatureGetPosition(lua_State* L);
+		static int32_t luaCreatureGetTile(lua_State* L);
 		static int32_t luaCreatureGetDirection(lua_State* L);
 		static int32_t luaCreatureSetDirection(lua_State* L);
 
@@ -1022,6 +1063,7 @@ class LuaScriptInterface
 		static int32_t luaHouseGetDoors(lua_State* L);
 		static int32_t luaHouseGetDoorCount(lua_State* L);
 	
+		static int32_t luaHouseGetTiles(lua_State* L);
 		static int32_t luaHouseGetTileCount(lua_State* L);
 
 		// ItemType
