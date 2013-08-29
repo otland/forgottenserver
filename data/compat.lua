@@ -203,7 +203,13 @@ function getItemDescriptions(itemId)
 		description = itemType:getDescription()
 	}
 end
-
+function getItemIdByName(name)
+	local id = ItemType(name):getId()
+	if id == 0 then
+		return false
+	end
+	return id
+end
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
 
 function queryTileAddThing(thing, pos, ...) local t = Tile(pos) return t ~= nil and t:queryAdd(thing, ...) or false end

@@ -644,7 +644,6 @@ class LuaScriptInterface
 		static int32_t luaSetItemOutfit(lua_State* L);
 
 		static int32_t luaGetItemWeightByUID(lua_State* L);
-		static int32_t luaGetItemIdByName(lua_State* L);
 
 		static int32_t luaDebugPrint(lua_State* L);
 		static int32_t luaIsInArray(lua_State* L);

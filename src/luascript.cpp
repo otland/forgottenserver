@@ -1699,9 +1699,6 @@ void LuaScriptInterface::registerFunctions()
 	//hasProperty(uid, prop)
 	lua_register(m_luaState, "hasProperty", LuaScriptInterface::luaHasProperty);
 
-	//getItemIdByName(name)
-	lua_register(m_luaState, "getItemIdByName", LuaScriptInterface::luaGetItemIdByName);
-
 	//getFluidSourceType(type)
 	lua_register(m_luaState, "getFluidSourceType", LuaScriptInterface::luaGetFluidSourceType);
 
@@ -5915,22 +5912,6 @@ int32_t LuaScriptInterface::luaGetSpectators(lua_State* L)
 		lua_pushnumber(L, spectator->getID());
 		lua_settable(L, -3);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetItemIdByName(lua_State* L)
-{
-	//getItemIdByName(name)
-	std::string name = popString(L);
-
-	int32_t itemid = Item::items.getItemIdByName(name);
-	if (itemid == -1) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_pushnumber(L, itemid);
 	return 1;
 }
 

@@ -783,7 +783,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			} else if (tmpStrValue == "slottype") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					tmpStrValue = asLowerCaseString(strValue);
-
 					if (tmpStrValue == "head") {
 						it.slotPosition |= SLOTP_HEAD;
 					} else if (tmpStrValue == "body") {
@@ -815,7 +814,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			} else if (tmpStrValue == "ammotype") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					it.ammoType = getAmmoType(strValue);
-
 					if (it.ammoType == AMMO_NONE) {
 						std::cout << "Warning: [Items::loadFromXml] " << "Unknown ammoType " << strValue << std::endl;
 					}
@@ -823,7 +821,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			} else if (tmpStrValue == "shoottype") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					ShootType_t shoot = getShootType(strValue);
-
 					if (shoot != NM_SHOOT_UNK) {
 						it.shootType = shoot;
 					} else {
@@ -833,7 +830,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			} else if (tmpStrValue == "effect") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					MagicEffectClasses effect = getMagicEffect(strValue);
-
 					if (effect != NM_ME_UNK) {
 						it.magicEffect = effect;
 					} else {
@@ -999,7 +995,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			} else if (tmpStrValue == "absorbpercentall" || tmpStrValue == "absorbpercentallelements") {
 				if (readXMLInteger(itemAttributesNode, "value", intValue)) {
 					Abilities* abilities = it.getAbilities();
-
 					for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
 						abilities->absorbPercent[i] += intValue;
 					}
@@ -1115,7 +1110,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 					ConditionDamage* conditionDamage = NULL;
 
 					tmpStrValue = asLowerCaseString(strValue);
-
 					if (tmpStrValue == "fire") {
 						conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_FIRE);
 						combatType = COMBAT_FIREDAMAGE;
@@ -1144,30 +1138,22 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 						int32_t count = 1;
 
 						xmlNodePtr fieldAttributesNode = itemAttributesNode->children;
-
 						while (fieldAttributesNode) {
 							if (readXMLString(fieldAttributesNode, "key", strValue)) {
 								tmpStrValue = asLowerCaseString(strValue);
-
 								if (tmpStrValue == "ticks") {
 									if (readXMLInteger(fieldAttributesNode, "value", intValue)) {
 										ticks = std::max<int32_t>(0, intValue);
 									}
-								}
-
-								if (tmpStrValue == "count") {
+								} else if (tmpStrValue == "count") {
 									if (readXMLInteger(fieldAttributesNode, "value", intValue)) {
 										count = std::max<int32_t>(1, intValue);
 									}
-								}
-
-								if (tmpStrValue == "start") {
+								} else if (tmpStrValue == "start") {
 									if (readXMLInteger(fieldAttributesNode, "value", intValue)) {
 										start = std::max<int32_t>(0, intValue);
 									}
-								}
-
-								if (tmpStrValue == "damage") {
+								} else if (tmpStrValue == "damage") {
 									if (readXMLInteger(fieldAttributesNode, "value", intValue)) {
 										damage = -intValue;
 
@@ -1291,7 +1277,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 ItemType& Items::getItemType(int32_t id)
 {
 	ItemType* iType = items->getElement(id);
-
 	if (iType) {
 		return *iType;
 	}
@@ -1303,7 +1288,6 @@ ItemType& Items::getItemType(int32_t id)
 const ItemType& Items::getItemType(int32_t id) const
 {
 	ItemType* iType = items->getElement(id);
-
 	if (iType) {
 		return *iType;
 	}
@@ -1315,10 +1299,8 @@ const ItemType& Items::getItemType(int32_t id) const
 const ItemType& Items::getItemIdByClientId(int32_t spriteId) const
 {
 	ReverseItemMap::const_iterator it = reverseItemMap.find(spriteId);
-
 	if (it != reverseItemMap.end()) {
 		ItemType* iType = items->getElement(it->second);
-
 		if (iType) {
 			return *iType;
 		}
@@ -1334,15 +1316,12 @@ const std::list<ItemType*> Items::getItemIdsByClientId(int32_t spriteId) const
 
 	uint32_t i = 100;
 	ItemType* iType = items->getElement(i);
-
 	while (iType) {
 		if (iType->clientId == spriteId) {
 			itemIds.push_back(iType);
 		}
-
 		iType = items->getElement(++i);
 	}
-
 	return itemIds;
 }
 
