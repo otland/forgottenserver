@@ -887,7 +887,6 @@ class LuaScriptInterface
 		static int32_t luaCreatureSay(lua_State* L);
 		
 		static int32_t luaCreatureGetDamageMap(lua_State* L);
-		static int32_t luaCreatureGetHealMap(lua_State* L);
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);

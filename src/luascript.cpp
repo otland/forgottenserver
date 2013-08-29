@@ -1954,7 +1954,6 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "say", LuaScriptInterface::luaCreatureSay);
 
 	registerClassMethod("Creature", "getDamageMap", LuaScriptInterface::luaCreatureGetDamageMap);
-	registerClassMethod("Creature", "getHealMap", LuaScriptInterface::luaCreatureGetHealMap);
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
@@ -8648,29 +8647,6 @@ int32_t LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 			pushNumber(L, damageEntry.second.total);
 			lua_setfield(L, -2, "total");
 			pushNumber(L, damageEntry.second.ticks);
-			lua_setfield(L, -2, "ticks");
-
-			lua_settable(L, -3);
-		}
-	} else {
-		pushNil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaCreatureGetHealMap(lua_State* L)
-{
-	// creature:getHealMap()
-	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		lua_newtable(L);
-		for (auto healEntry : creature->healMap) {
-			pushNumber(L, healEntry.first);
-			lua_newtable(L);
-
-			pushNumber(L, healEntry.second.total);
-			lua_setfield(L, -2, "total");
-			pushNumber(L, healEntry.second.ticks);
 			lua_setfield(L, -2, "ticks");
 
 			lua_settable(L, -3);

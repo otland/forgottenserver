@@ -4168,9 +4168,7 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 
 void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 {
-	Creature::onTargetCreatureGainHealth(target, points);
-
-	if (target && getParty()) {
+	if (target && party) {
 		Player* tmpPlayer = NULL;
 
 		if (target->getPlayer()) {
@@ -4182,7 +4180,7 @@ void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 		}
 
 		if (isPartner(tmpPlayer)) {
-			getParty()->addPlayerHealedMember(this, points);
+			party->addPlayerHealedMember(this, points);
 		}
 	}
 }
@@ -4719,16 +4717,14 @@ bool Player::isInviting(const Player* player) const
 	if (!player || !getParty() || getParty()->getLeader() != this) {
 		return false;
 	}
-
 	return getParty()->isPlayerInvited(player);
 }
 
 bool Player::isPartner(const Player* player) const
 {
-	if (!player || !getParty() || !player->getParty()) {
+	if (!player || !party || !player->getParty()) {
 		return false;
 	}
-
 	return (getParty() == player->getParty());
 }
 

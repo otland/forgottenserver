@@ -358,7 +358,6 @@ class Creature : virtual public Thing
 		virtual void onDeath();
 		virtual uint64_t getGainedExperience(Creature* attacker) const;
 		void addDamagePoints(Creature* attacker, int32_t damagePoints);
-		void addHealPoints(Creature* caster, int32_t healthPoints);
 		bool hasBeenAttacked(uint32_t attackerId);
 
 		//combat event functions
@@ -370,7 +369,7 @@ class Creature : virtual public Thing
 		virtual void onAttackedCreature(Creature* target);
 		virtual void onAttacked();
 		virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
-		virtual void onTargetCreatureGainHealth(Creature* target, int32_t points);
+		virtual void onTargetCreatureGainHealth(Creature* target, int32_t points) {}
 		virtual void onAttackedCreatureKilled(Creature* target);
 		virtual bool onKilledCreature(Creature* target, bool lastHit = true);
 		virtual void onGainExperience(uint64_t gainExp, Creature* target);
@@ -489,7 +488,6 @@ class Creature : virtual public Thing
 
 		typedef std::map<uint32_t, CountBlock_t> CountMap;
 		CountMap damageMap;
-		CountMap healMap;
 
 		std::list<Direction> listWalkDir;
 		std::list<Creature*> summons;

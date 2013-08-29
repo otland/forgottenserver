@@ -244,7 +244,6 @@ void Creature::onAttacking(uint32_t interval)
 void Creature::onIdleStatus()
 {
 	if (getHealth() > 0) {
-		healMap.clear();
 		damageMap.clear();
 	}
 }
@@ -872,7 +871,6 @@ void Creature::changeMana(int32_t manaChange)
 void Creature::gainHealth(Creature* healer, int32_t healthGain)
 {
 	changeHealth(healthGain);
-
 	if (healer) {
 		healer->onTargetCreatureGainHealth(this, healthGain);
 	}
@@ -1102,7 +1100,6 @@ void Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 	uint32_t attackerId = (attacker ? attacker->getID() : 0);
 
 	CountMap::iterator it = damageMap.find(attackerId);
-
 	if (it == damageMap.end()) {
 		CountBlock_t cb;
 		cb.ticks = OTSYS_TIME();
@@ -1114,27 +1111,6 @@ void Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 	}
 
 	lastHitCreature = attackerId;
-}
-
-void Creature::addHealPoints(Creature* caster, int32_t healthPoints)
-{
-	if (healthPoints <= 0) {
-		return;
-	}
-
-	uint32_t casterId = (caster ? caster->getID() : 0);
-
-	CountMap::iterator it = healMap.find(casterId);
-
-	if (it == healMap.end()) {
-		CountBlock_t cb;
-		cb.ticks = OTSYS_TIME();
-		cb.total = healthPoints;
-		healMap[casterId] = cb;
-	} else {
-		it->second.total += healthPoints;
-		it->second.ticks = OTSYS_TIME();
-	}
 }
 
 void Creature::onAddCondition(ConditionType_t type)
@@ -1226,11 +1202,6 @@ void Creature::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 		ss << "Your " << asLowerCaseString(getName()) << " deals " << points << " to " << target->getNameDescription() << ".";
 		masterPlayer->sendTextMessage(MSG_EVENT_DEFAULT, ss.str());
 	}
-}
-
-void Creature::onTargetCreatureGainHealth(Creature* target, int32_t points)
-{
-	target->addHealPoints(this, points);
 }
 
 void Creature::onAttackedCreatureKilled(Creature* target)
