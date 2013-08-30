@@ -375,7 +375,6 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 	} else {
 		combat->doCombat(creature, target);
 	}
-
 	return true;
 }
 

@@ -677,6 +677,9 @@ void Monster::doAttacking(uint32_t interval)
 				minCombatValue = it->minCombatValue;
 				maxCombatValue = it->maxCombatValue;
 				it->spell->castSpell(this, attackedCreature);
+				if (!attackedCreature) {
+					break;
+				}
 
 				if (it->isMelee) {
 					extraMeleeAttack = false;
