@@ -271,4 +271,75 @@ function getItemIdByName(name)
 end
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
 
-function queryTileAddThing(thing, pos, ...) local t = Tile(pos) return t ~= nil and t:queryAdd(thing, ...) or false end
+function getTilePzInfo(position)
+	local t = Tile(position)
+	if t == nil then
+		return false
+	end
+	return t:hasFlag(TILESTATE_PROTECTIONZONE)
+end
+
+function getTileInfo(position)
+	local t = Tile(position)
+	if t == nil then
+		return false
+	end
+	
+	local ret = pushThing(t:getGround())
+	ret.protection = t:hasFlag(TILESTATE_PROTECTIONZONE)
+	ret.nopz = ret.protection
+	ret.nologout = t:hasFlag(TILESTATE_NOLOGOUT)
+	ret.refresh = t:hasFlag(TILESTATE_REFRESH)
+	ret.house = t:hasFlag(TILESTATE_HOUSE)
+	ret.bed = t:hasFlag(TILESTATE_BED)
+	ret.depot = t:hasFlag(TILESTATE_DEPOT)
+	
+	ret.things = t:getThingCount()
+	ret.creatures = t:getCreatureCount()
+	ret.items = t:getItemCount()
+	ret.topItems = t:getTopItemCount()
+	ret.downItems = t:getDownItemCount()
+	return ret
+end
+
+function getTileItemByType(position, itemType)
+	local t = Tile(position)
+	if t == nil then
+		return pushThing(nil)
+	end
+	return pushThing(t:getItemByType(itemType))
+end
+
+function getTileItemById(position, itemId, ...)
+	local t = Tile(position)
+	if t == nil then
+		return pushThing(nil)
+	end
+	return pushThing(t:getItemById(itemId, ...))
+end
+
+function getTileThingByPos(position)
+	local t = Tile(position)
+	if t == nil then
+		return pushThing(nil)
+	end
+	return pushThing(t:getThing(position.stackpos))
+end
+
+function getTileThingByTopOrder(position, topOrder)
+	local t = Tile(position)
+	if t == nil then
+		return pushThing(nil)
+	end
+	return pushThing(t:getItemByTopOrder(topOrder))
+end
+
+function getTopCreature(position)
+	local t = Tile(position)
+	if t == nil then
+		return pushThing(nil)
+	end
+	return pushThing(t:getTopCreature())
+end
+
+function queryTileAddThing(thing, position, ...) local t = Tile(position) return t ~= nil and t:queryAdd(thing, ...) or false end
