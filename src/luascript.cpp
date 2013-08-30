@@ -1307,13 +1307,6 @@ void LuaScriptInterface::registerFunctions()
 	//getOnlinePlayers()
 	lua_register(m_luaState, "getOnlinePlayers", LuaScriptInterface::luaGetOnlinePlayers);
 
-	//getTilePzInfo(pos)
-	//1 is pz. 0 no pz.
-	lua_register(m_luaState, "getTilePzInfo", LuaScriptInterface::luaGetTilePzInfo);
-
-	//getTileInfo(pos)
-	lua_register(m_luaState, "getTileInfo", LuaScriptInterface::luaGetTileInfo);
-
 	//getTileHouseInfo(pos)
 	//0 no house. != 0 house id
 	lua_register(m_luaState, "getTileHouseInfo", LuaScriptInterface::luaGetTileHouseInfo);
@@ -1329,21 +1322,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getThingPos(uid)
 	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
-
-	//getTileItemById(pos, itemId, <optional> subType)
-	lua_register(m_luaState, "getTileItemById", LuaScriptInterface::luaGetTileItemById);
-
-	//getTileItemByType(pos, type)
-	lua_register(m_luaState, "getTileItemByType", LuaScriptInterface::luaGetTileItemByType);
-
-	//getTileThingByPos(pos)
-	lua_register(m_luaState, "getTileThingByPos", LuaScriptInterface::luaGetTileThingByPos);
-
-	//getTileThingByTopOrder(pos, topOrder)
-	lua_register(m_luaState, "getTileThingByTopOrder", LuaScriptInterface::luaGetTileThingByTopOrder);
-
-	//getTopCreature(pos)
-	lua_register(m_luaState, "getTopCreature", LuaScriptInterface::luaGetTopCreature);
 
 	//doRemoveItem(uid, <optional> n)
 	lua_register(m_luaState, "doRemoveItem", LuaScriptInterface::luaDoRemoveItem);
@@ -1791,6 +1769,10 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Tile", "getTopTopItem", LuaScriptInterface::luaTileGetTopTopItem);
 	registerClassMethod("Tile", "getTopDownItem", LuaScriptInterface::luaTileGetTopDownItem);
 	registerClassMethod("Tile", "getFieldItem", LuaScriptInterface::luaTileGetFieldItem);
+	
+	registerClassMethod("Tile", "getItemById", LuaScriptInterface::luaTileGetItemById);
+	registerClassMethod("Tile", "getItemByType", LuaScriptInterface::luaTileGetItemByType);
+	registerClassMethod("Tile", "getItemByTopOrder", LuaScriptInterface::luaTileGetItemByTopOrder);
 
 	registerClassMethod("Tile", "getBottomCreature", LuaScriptInterface::luaTileGetBottomCreature);
 	registerClassMethod("Tile", "getTopCreature", LuaScriptInterface::luaTileGetTopCreature);
@@ -1798,7 +1780,12 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Tile", "getTopVisibleCreature", LuaScriptInterface::luaTileGetTopVisibleCreature);
 
 	registerClassMethod("Tile", "getItems", LuaScriptInterface::luaTileGetItems);
+	registerClassMethod("Tile", "getItemCount", LuaScriptInterface::luaTileGetItemCount);
+	registerClassMethod("Tile", "getDownItemCount", LuaScriptInterface::luaTileGetDownItemCount);
+	registerClassMethod("Tile", "getTopItemCount", LuaScriptInterface::luaTileGetTopItemCount);
+
 	registerClassMethod("Tile", "getCreatures", LuaScriptInterface::luaTileGetCreatures);
+	registerClassMethod("Tile", "getCreatureCount", LuaScriptInterface::luaTileGetCreatureCount);
 
 	registerClassMethod("Tile", "hasProperty", LuaScriptInterface::luaTileHasProperty);
 	registerClassMethod("Tile", "hasFlag", LuaScriptInterface::luaTileHasFlag);
@@ -3133,35 +3120,6 @@ int32_t LuaScriptInterface::luaDoDecayItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetTileInfo(lua_State* L)
-{
-	PositionEx pos;
-	popPosition(L, pos);
-
-	if (Tile* tile = g_game.getMap()->getTile(pos)) {
-		ScriptEnvironment* env = getScriptEnv();
-		pushThing(L, tile->ground, env->addThing(tile->ground));
-
-		setFieldBool(L, "protection", tile->hasFlag(TILESTATE_PROTECTIONZONE));
-		setFieldBool(L, "nopz", tile->hasFlag(TILESTATE_PROTECTIONZONE));
-		setFieldBool(L, "nologout", tile->hasFlag(TILESTATE_NOLOGOUT));
-		setFieldBool(L, "refresh", tile->hasFlag(TILESTATE_REFRESH));
-		setFieldBool(L, "house", tile->hasFlag(TILESTATE_HOUSE));
-		setFieldBool(L, "bed", tile->hasFlag(TILESTATE_BED));
-		setFieldBool(L, "depot", tile->hasFlag(TILESTATE_DEPOT));
-
-		setField(L, "things", tile->getThingCount());
-		setField(L, "creatures", tile->getCreatureCount());
-		setField(L, "items", tile->getItemCount());
-		setField(L, "topItems", tile->getTopItemCount());
-		setField(L, "downItems", tile->getDownItemCount());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_TILE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 {
 	//Consider using getTileItemById/getTileItemByType/getTileThingByPos/getTopCreature instead.
@@ -3206,219 +3164,6 @@ int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 	}
 
 	pushThing(L, thing, env->addThing(thing));
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTileItemById(lua_State* L)
-{
-	//getTileItemById(pos, itemId, <optional> subType)
-	ScriptEnvironment* env = getScriptEnv();
-
-	uint32_t parameters = lua_gettop(L);
-
-	int32_t subType = -1;
-	if (parameters > 2) {
-		subType = popNumber<int32_t>(L);
-	}
-
-	int32_t itemId = popNumber<int32_t>(L);
-
-	PositionEx pos;
-	popPosition(L, pos);
-
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-	if (!tile) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	Item* item = g_game.findItemOfType(tile, itemId, false, subType);
-	if (!item) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	uint32_t uid = env->addThing(item);
-	pushThing(L, item, uid);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTileItemByType(lua_State* L)
-{
-	//getTileItemByType(pos, type)
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	uint32_t rType = popNumber(L);
-	if (rType >= ITEM_TYPE_LAST) {
-		reportErrorFunc("Not a valid item type");
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	PositionEx pos;
-	popPosition(L, pos);
-
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-	if (!tile) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	bool notFound = false;
-
-	switch ((ItemTypes_t)rType) {
-		case ITEM_TYPE_TELEPORT:
-			if (!tile->hasFlag(TILESTATE_TELEPORT)) {
-				notFound = true;
-			}
-			break;
-
-		case ITEM_TYPE_MAGICFIELD:
-			if (!tile->hasFlag(TILESTATE_MAGICFIELD)) {
-				notFound = true;
-			}
-			break;
-
-		case ITEM_TYPE_MAILBOX:
-			if (!tile->hasFlag(TILESTATE_MAILBOX)) {
-				notFound = true;
-			}
-			break;
-
-		case ITEM_TYPE_TRASHHOLDER:
-			if (!tile->hasFlag(TILESTATE_TRASHHOLDER)) {
-				notFound = true;
-			}
-			break;
-
-		case ITEM_TYPE_BED:
-			if (!tile->hasFlag(TILESTATE_BED)) {
-				notFound = true;
-			}
-			break;
-
-		case ITEM_TYPE_DEPOT:
-			if (!tile->hasFlag(TILESTATE_DEPOT)) {
-				notFound = true;
-			}
-			break;
-
-		default:
-			break;
-	}
-
-	if (!notFound) {
-		if (tile->ground) {
-			const ItemType& it = Item::items[tile->ground->getID()];
-			if (it.type == (ItemTypes_t) rType) {
-				uint32_t uid = env->addThing(tile->ground);
-				pushThing(L, tile->ground, uid);
-				return 1;
-			}
-		}
-
-		if (const TileItemVector* items = tile->getItemList()) {
-			for (ItemVector::const_iterator it = items->begin(), end = items->end(); it != end; ++it) {
-				Item* item = (*it);
-				const ItemType& itemType = Item::items[item->getID()];
-				if (itemType.type == (ItemTypes_t)rType) {
-					uint32_t uid = env->addThing(item);
-					pushThing(L, item, uid);
-					return 1;
-				}
-			}
-		}
-	}
-
-	pushThing(L, NULL, 0);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTileThingByPos(lua_State* L)
-{
-	//getTileThingByPos(pos)
-
-	PositionEx pos;
-	popPosition(L, pos);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-	if (!tile) {
-		if (pos.stackpos == -1) {
-			lua_pushnumber(L, -1);
-			return 1;
-		} else {
-			pushThing(L, NULL, 0);
-			return 1;
-		}
-	}
-
-	if (pos.stackpos == -1) {
-		lua_pushnumber(L, tile->getThingCount());
-		return 1;
-	}
-
-	Thing* thing = tile->__getThing(pos.stackpos);
-	if (!thing) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	uint32_t uid = env->addThing(thing);
-	pushThing(L, thing, uid);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTileThingByTopOrder(lua_State* L)
-{
-	//getTileThingByTopOrder(pos, topOrder)
-	uint32_t topOrder = popNumber(L);
-	PositionEx pos;
-	popPosition(L, pos);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-	if (!tile) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	Thing* thing = tile->getItemByTopOrder(topOrder);
-	if (!thing) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	uint32_t uid = env->addThing(thing);
-	pushThing(L, thing, uid);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTopCreature(lua_State* L)
-{
-	//getTopCreature(pos)
-	PositionEx pos;
-	popPosition(L, pos);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-	if (!tile) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	Thing* thing = tile->getTopCreature();
-	if (!thing || !thing->getCreature()) {
-		pushThing(L, NULL, 0);
-		return 1;
-	}
-
-	uint32_t uid = env->addThing(thing);
-	pushThing(L, thing, uid);
 	return 1;
 }
 
@@ -3628,28 +3373,6 @@ int32_t LuaScriptInterface::luaDoSetItemSpecialDescription(lua_State* L)
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTilePzInfo(lua_State* L)
-{
-	//getTilePzInfo(pos)
-	PositionEx pos;
-	popPosition(L, pos);
-
-	Tile* tile = g_game.getMap()->getTile(pos);
-	if (tile) {
-		if (tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		std::ostringstream ss;
-		ss << pos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 	}
 	return 1;
@@ -6707,6 +6430,109 @@ int32_t LuaScriptInterface::luaTileGetFieldItem(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaTileGetItemById(lua_State* L)
+{
+	// tile:getItemById(itemId[, subType = -1])
+	int32_t subType = -1;
+	if (getStackTop(L) >= 3) {
+		subType = getNumber<int32_t>(L, 3);
+	}
+
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Item* item = g_game.findItemOfType(tile, itemId, false, subType);
+		if (item) {
+			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetItemByType(lua_State* L)
+{
+	// tile:getItemByType(itemType)
+	ItemTypes_t itemType = static_cast<ItemTypes_t>(getNumber<uint64_t>(L, 2));
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		bool found;
+		switch (itemType) {
+			case ITEM_TYPE_TELEPORT:
+				found = tile->hasFlag(TILESTATE_TELEPORT);
+				break;
+			case ITEM_TYPE_MAGICFIELD:
+				found = tile->hasFlag(TILESTATE_MAGICFIELD);
+				break;
+			case ITEM_TYPE_MAILBOX:
+				found = tile->hasFlag(TILESTATE_MAILBOX);
+				break;
+			case ITEM_TYPE_TRASHHOLDER:
+				found = tile->hasFlag(TILESTATE_TRASHHOLDER);
+				break;
+			case ITEM_TYPE_BED:
+				found = tile->hasFlag(TILESTATE_BED);
+				break;
+			case ITEM_TYPE_DEPOT:
+				found = tile->hasFlag(TILESTATE_DEPOT);
+				break;
+			default:
+				found = true;
+				break;
+		}
+
+		if (found) {
+			if (Item* item = tile->ground) {
+				const ItemType& it = Item::items[item->getID()];
+				if (it.type == itemType) {
+					pushUserdata<Item>(L, item);
+					setItemMetatable(L, -1, item);
+					return 1;
+				}
+			}
+
+			if (const TileItemVector* items = tile->getItemList()) {
+				for (Item* item : *items) {
+					const ItemType& it = Item::items[item->getID()];
+					if (it.type == itemType) {
+						pushUserdata<Item>(L, item);
+						setItemMetatable(L, -1, item);
+						return 1;
+					}
+				}
+			}
+		}
+
+		pushNil(L);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetItemByTopOrder(lua_State* L)
+{
+	// tile:getItemByTopOrder(topOrder)
+	int32_t topOrder = getNumber<int32_t>(L, 2);
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Item* item = tile->getItemByTopOrder(topOrder);
+		if (item) {
+			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaTileGetBottomCreature(lua_State* L)
 {
 	// tile:getBottomCreature()
@@ -6799,6 +6625,42 @@ int32_t LuaScriptInterface::luaTileGetItems(lua_State* L)
 		} else {
 			pushNil(L);
 		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetItemCount(lua_State* L)
+{
+	// tile:getItemCount()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		pushNumber(L, tile->getItemCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetDownItemCount(lua_State* L)
+{
+	// tile:getDownItemCount()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		pushNumber(L, tile->getDownItemCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetTopItemCount(lua_State* L)
+{
+	// tile:getTopItemCount()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		pushNumber(L, tile->getTopItemCount());
 	} else {
 		pushNil(L);
 	}
