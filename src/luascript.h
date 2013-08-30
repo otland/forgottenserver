@@ -492,7 +492,6 @@ class LuaScriptInterface
 		static int32_t luaDoAddCondition(lua_State* L);
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
-		static int32_t luaGetTileInfo(lua_State* L);
 
 		static int32_t luaDoPlayerAddSkillTry(lua_State* L);
 		static int32_t luaDoPlayerAddMana(lua_State* L);
@@ -520,11 +519,6 @@ class LuaScriptInterface
 		static int32_t luaGetThingfromPos(lua_State* L);
 		static int32_t luaGetThing(lua_State* L);
 		static int32_t luaGetThingPos(lua_State* L);
-		static int32_t luaGetTileItemById(lua_State* L);
-		static int32_t luaGetTileItemByType(lua_State* L);
-		static int32_t luaGetTileThingByPos(lua_State* L);
-		static int32_t luaGetTileThingByTopOrder(lua_State* L);
-		static int32_t luaGetTopCreature(lua_State* L);
 		static int32_t luaHasProperty(lua_State* L);
 		static int32_t luaGetDepotId(lua_State* L);
 
@@ -533,7 +527,6 @@ class LuaScriptInterface
 		static int32_t luaDoSetItemSpecialDescription(lua_State* L);
 
 		//get tile info
-		static int32_t luaGetTilePzInfo(lua_State* L);
 		static int32_t luaGetTileHouseInfo(lua_State* L);
 
 		//houses
@@ -732,6 +725,10 @@ class LuaScriptInterface
 		static int32_t luaTileGetTopTopItem(lua_State* L);
 		static int32_t luaTileGetTopDownItem(lua_State* L);
 		static int32_t luaTileGetFieldItem(lua_State* L);
+
+		static int32_t luaTileGetItemById(lua_State* L);
+		static int32_t luaTileGetItemByType(lua_State* L);
+		static int32_t luaTileGetItemByTopOrder(lua_State* L);
 		
 		static int32_t luaTileGetBottomCreature(lua_State* L);
 		static int32_t luaTileGetTopCreature(lua_State* L);
@@ -739,7 +736,12 @@ class LuaScriptInterface
 		static int32_t luaTileGetTopVisibleCreature(lua_State* L);
 		
 		static int32_t luaTileGetItems(lua_State* L);
+		static int32_t luaTileGetItemCount(lua_State* L);
+		static int32_t luaTileGetDownItemCount(lua_State* L);
+		static int32_t luaTileGetTopItemCount(lua_State* L);
+		
 		static int32_t luaTileGetCreatures(lua_State* L);
+		static int32_t luaTileGetCreatureCount(lua_State* L);
 		
 		static int32_t luaTileHasProperty(lua_State* L);
 		static int32_t luaTileHasFlag(lua_State* L);
