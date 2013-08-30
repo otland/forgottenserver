@@ -6691,6 +6691,18 @@ int32_t LuaScriptInterface::luaTileGetCreatures(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaTileGetCreatureCount(lua_State* L)
+{
+	// tile:getCreatureCount()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		pushNumber(L, tile->getCreatureCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaTileHasProperty(lua_State* L)
 {
 	// tile:hasProperty(property[, item])
