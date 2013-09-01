@@ -321,7 +321,14 @@ end
 function getTileThingByPos(position)
 	local t = Tile(position)
 	if t == nil then
+		if position.stackpos == -1 then
+			return -1
+		end
 		return pushThing(nil)
+	end
+	
+	if position.stackpos == -1 then
+		return t:getThingCount()
 	end
 	return pushThing(t:getThing(position.stackpos))
 end
