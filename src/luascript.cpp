@@ -7418,7 +7418,7 @@ int32_t LuaScriptInterface::luaItemGetUniqueId(lua_State* L)
 	// item:getUniqueId()
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		uint16_t uniqueId = item->getUniqueId();
+		uint32_t uniqueId = item->getUniqueId();
 		if (uniqueId == 0) {
 			uniqueId = getScriptEnv()->addThing(item);
 		}
