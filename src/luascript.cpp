@@ -1323,9 +1323,6 @@ void LuaScriptInterface::registerFunctions()
 	//getThingPos(uid)
 	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
 
-	//doRemoveItem(uid, <optional> n)
-	lua_register(m_luaState, "doRemoveItem", LuaScriptInterface::luaDoRemoveItem);
-
 	//doPlayerFeed(cid, food)
 	lua_register(m_luaState, "doPlayerFeed", LuaScriptInterface::luaDoFeedPlayer);
 
@@ -2486,37 +2483,6 @@ int32_t LuaScriptInterface::luaGetInstantSpellWords(lua_State* L)
 	}
 
 	pushString(L, spell->getWords());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoRemoveItem(lua_State* L)
-{
-	//doRemoveItem(uid, <optional> n)
-	int32_t parameters = lua_gettop(L);
-
-	int32_t count = -1;
-	if (parameters > 1) {
-		count = popNumber(L);
-	}
-
-	uint32_t uid = popNumber(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Item* item = env->getItemByUID(uid);
-	if (!item) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	ReturnValue ret = g_game.internalRemoveItem(item, count);
-	if (ret != RET_NOERROR) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	pushBoolean(L, true);
 	return 1;
 }
 
