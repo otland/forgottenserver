@@ -58,7 +58,7 @@
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
-extern Commands commands;
+extern Commands g_commands;
 extern Chat g_chat;
 extern TalkActions* g_talkActions;
 extern Spells* g_spells;
@@ -4056,7 +4056,7 @@ bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string
 	//First, check if this was a command
 	for (uint32_t i = 0; i < commandTags.size(); i++) {
 		if (commandTags[i] == text.substr(0, 1)) {
-			if (commands.exeCommand(player, text)) {
+			if (g_commands.exeCommand(player, text)) {
 				return true;
 			}
 		}

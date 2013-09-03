@@ -28,7 +28,9 @@
 #include "configmanager.h"
 #include "tools.h"
 #include "beds.h"
+#include "commands.h"
 
+extern Commands g_commands;
 extern ConfigManager g_config;
 extern Game g_game;
 
@@ -121,17 +123,19 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 void House::updateDoorDescription()
 {
 	std::ostringstream ss;
-
 	if (houseOwner != 0) {
 		ss << "It belongs to house '" << houseName << "'. " << houseOwnerName << " owns this house.";
 	} else {
 		ss << "It belongs to house '" << houseName << "'. Nobody owns this house.";
+
+		Command* command = g_commands.getCommand("!buyhouse");
+		if (command && command->accountType == ACCOUNT_TYPE_NORMAL) {
+			ss << " It costs " << (houseTiles.size() * g_config.getNumber(ConfigManager::HOUSE_PRICE)) << " gold coins.";
+		}
 	}
 
-	HouseDoorList::iterator it;
-
-	for (it = doorList.begin(); it != doorList.end(); ++it) {
-		(*it)->setSpecialDescription(ss.str());
+	for (const auto& it : doorList) {
+		it->setSpecialDescription(ss.str());
 	}
 }
 

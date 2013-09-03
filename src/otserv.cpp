@@ -73,7 +73,7 @@ IPList serverIPs;
 extern AdminProtocolConfig* g_adminConfig;
 Ban g_bans;
 Game g_game;
-Commands commands;
+Commands g_commands;
 Npcs g_npcs;
 ConfigManager g_config;
 Monsters g_monsters;
@@ -245,7 +245,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	//load commands
 	std::cout << ">> Loading commands" << std::endl;
 
-	if (!commands.loadFromXml()) {
+	if (!g_commands.loadFromXml()) {
 		startupErrorMessage("Unable to load commands!");
 		return;
 	}

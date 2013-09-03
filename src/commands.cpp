@@ -257,6 +257,15 @@ bool Commands::reload()
 	return loadFromXml();
 }
 
+Command* Commands::getCommand(const std::string& cmd)
+{
+	auto it = commandMap.find(cmd);
+	if (it == commandMap.end()) {
+		return NULL;
+	}
+	return it->second;
+}
+
 bool Commands::exeCommand(Player* player, const std::string& cmd)
 {
 	std::string str_command;
