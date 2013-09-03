@@ -2112,6 +2112,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("ItemType", "isRune", LuaScriptInterface::luaItemTypeIsRune);
 	registerClassMethod("ItemType", "isStackable", LuaScriptInterface::luaItemTypeIsStackable);
 	
+	registerClassMethod("ItemType", "getType", LuaScriptInterface::luaItemTypeGetType);
 	registerClassMethod("ItemType", "getId", LuaScriptInterface::luaItemTypeGetId);
 	registerClassMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
 	registerClassMethod("ItemType", "getPluralName", LuaScriptInterface::luaItemTypeGetPluralName);
@@ -8270,6 +8271,7 @@ int32_t LuaScriptInterface::luaCreatureRemove(lua_State* L)
 		}
 
 		*creaturePtr = NULL;
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}
@@ -8405,12 +8407,11 @@ int32_t LuaScriptInterface::luaPlayerGetGuid(lua_State* L)
 {
 	// player:getGuid()
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		pushNumber(L, player->getGUID());
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	pushNumber(L, player->getGUID());
 	return 1;
 }
 
@@ -8454,12 +8455,11 @@ int32_t LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 {
 	// player:getFreeCapacity()
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		pushNumber(L, player->getFreeCapacity());
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	pushNumber(L, player->getFreeCapacity());
 	return 1;
 }
 
@@ -8616,18 +8616,12 @@ int32_t LuaScriptInterface::luaPlayerGetSkillLevel(lua_State* L)
 {
 	// player:getSkillLevel(skillType)
 	skills_t skillType = static_cast<skills_t>(getNumber<uint64_t>(L, 2));
-	if (skillType > SKILL_LAST) {
-		pushNil(L);
-		return 1;
-	}
-
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player && skillType <= SKILL_LAST) {
+		pushNumber(L, player->skills[skillType][SKILL_LEVEL]);
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	pushNumber(L, player->skills[skillType][SKILL_LEVEL]);
 	return 1;
 }
 
@@ -8635,18 +8629,12 @@ int32_t LuaScriptInterface::luaPlayerGetSkillPercent(lua_State* L)
 {
 	// player:getSkillPercent(skillType)
 	skills_t skillType = static_cast<skills_t>(getNumber<uint64_t>(L, 2));
-	if (skillType > SKILL_LAST) {
-		pushNil(L);
-		return 1;
-	}
-
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player && skillType <= SKILL_LAST) {
+		pushNumber(L, player->skills[skillType][SKILL_PERCENT]);
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	pushNumber(L, player->skills[skillType][SKILL_PERCENT]);
 	return 1;
 }
 
@@ -8654,18 +8642,12 @@ int32_t LuaScriptInterface::luaPlayerGetSkillTries(lua_State* L)
 {
 	// player:getSkillTries(skillType)
 	skills_t skillType = static_cast<skills_t>(getNumber<uint64_t>(L, 2));
-	if (skillType > SKILL_LAST) {
-		pushNil(L);
-		return 1;
-	}
-
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player && skillType <= SKILL_LAST) {
+		pushNumber(L, player->skills[skillType][SKILL_TRIES]);
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	pushNumber(L, player->skills[skillType][SKILL_TRIES]);
 	return 1;
 }
 
@@ -8825,19 +8807,17 @@ int32_t LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 {
 	// player:getGuild()
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		Guild* guild = player->getGuild();
+		if (guild) {
+			pushUserdata<Guild>(L, guild);
+			setMetatable(L, -1, "Guild");
+		} else {
+			pushNil(L);
+		}
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	Guild* guild = player->getGuild();
-	if (!guild) {
-		pushNil(L);
-		return 1;
-	}
-
-	pushUserdata<Guild>(L, guild);
-	setMetatable(L, -1, "Guild");
 	return 1;
 }
 
@@ -8845,12 +8825,11 @@ int32_t LuaScriptInterface::luaPlayerGetGuildLevel(lua_State* L)
 {
 	// player:getGuildLevel()
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		pushNumber(L, player->getGuildLevel());
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	lua_pushnumber(L, player->getGuildLevel());
 	return 1;
 }
 
@@ -8858,12 +8837,11 @@ int32_t LuaScriptInterface::luaPlayerGetGuildNick(lua_State* L)
 {
 	// player:getGuildNick()
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		pushString(L, player->getGuildNick());
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	pushString(L, player->getGuildNick());
 	return 1;
 }
 
@@ -8877,13 +8855,12 @@ int32_t LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 	}
 
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		player->setGuild(guild);
+		pushBoolean(L, true);
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	player->setGuild(guild);
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -8891,13 +8868,12 @@ int32_t LuaScriptInterface::luaPlayerGetGroup(lua_State* L)
 {
 	// player:getGroup()
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		pushUserdata<Group>(L, player->getGroup());
+		setMetatable(L, -1, "Group");
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	pushUserdata<Group>(L, player->getGroup());
-	setMetatable(L, -1, "Group");
 	return 1;
 }
 
@@ -8911,13 +8887,12 @@ int32_t LuaScriptInterface::luaPlayerSetGroup(lua_State* L)
 	}
 
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
+		player->setGroup(group);
+		pushBoolean(L, true);
+	} else {
 		pushNil(L);
-		return 1;
 	}
-
-	player->setGroup(group);
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -9103,12 +9078,18 @@ int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 
 		Item* item = Item::CreateItem(itemId, stackCount);
 		if (!item) {
+			if (!hasTable) {
+				pushNil(L);
+			}
 			return 1;
 		}
 
 		ReturnValue ret = g_game.internalPlayerAddItem(player, item, canDropOnMap, slot);
 		if (ret != RET_NOERROR) {
 			delete item;
+			if (!hasTable) {
+				pushNil(L);
+			}
 			return 1;
 		}
 
@@ -9372,10 +9353,15 @@ int32_t LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 	uint32_t slot = getNumber<uint32_t>(L, 2);
 	const Player* player = getUserdata<const Player>(L, 1);
 	if (player) {
-		Item* item = reinterpret_cast<Item*>(player->__getThing(slot));
-		if (item) {
-			pushUserdata<Item>(L, item);
-			setItemMetatable(L, -1, item);
+		Thing* thing = player->__getThing(slot);
+		if (thing) {
+			Item* item = thing->getItem();
+			if (item) {
+				pushUserdata<Item>(L, item);
+				setItemMetatable(L, -1, item);
+			} else {
+				pushNil(L);
+			}
 		} else {
 			pushNil(L);
 		}
@@ -10410,6 +10396,18 @@ int32_t LuaScriptInterface::luaItemTypeIsStackable(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		pushBoolean(L, itemType->stackable);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetType(lua_State* L)
+{
+	// itemType:getType()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->type);
 	} else {
 		pushNil(L);
 	}
