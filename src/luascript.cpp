@@ -7399,11 +7399,12 @@ int32_t LuaScriptInterface::luaItemSplit(lua_State* L)
 
 int32_t LuaScriptInterface::luaItemRemove(lua_State* L)
 {
-	// item:remove([count = 1])
-	uint16_t count = 1;
+	// item:remove([count = -1])
+	int32_t count = -1;
 	if (getStackTop(L) >= 2) {
-		count = getNumber<uint16_t>(L, 2);
+		count = getNumber<int32_t>(L, 2);
 	}
+
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		pushBoolean(L, g_game.internalRemoveItem(item, count) == RET_NOERROR);
