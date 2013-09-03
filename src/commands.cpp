@@ -92,8 +92,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/owner", &Commands::setHouseOwner},
 	{"/gethouse", &Commands::getHouse},
 	{"/town", &Commands::teleportToTown},
-	{"/up", &Commands::changeFloor},
-	{"/down", &Commands::changeFloor},
 	{"/pos", &Commands::showPosition},
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
@@ -967,31 +965,6 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 		ss << ".";
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 	}
-}
-
-void Commands::changeFloor(Player* player, const std::string& cmd, const std::string& param)
-{
-	Position newPos = player->getPosition();
-
-	if (cmd[1] == 'u') {
-		newPos.z--;
-	} else {
-		newPos.z++;
-	}
-
-	Position newPosition = g_game.getClosestFreeTile(player, 0, newPos, true);
-
-	if (newPosition.x != 0) {
-		Position oldPosition = player->getPosition();
-
-		if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
-			g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-			g_game.addMagicEffect(player->getPosition(), NM_ME_TELEPORT, player->isInGhostMode());
-			return;
-		}
-	}
-
-	player->sendCancel("You can not teleport there.");
 }
 
 void Commands::showPosition(Player* player, const std::string& cmd, const std::string& param)

@@ -64,7 +64,6 @@ class Commands
 		void sellHouse(Player* player, const std::string& cmd, const std::string& param);
 		void getHouse(Player* player, const std::string& cmd, const std::string& param);
 		void serverInfo(Player* player, const std::string& cmd, const std::string& param);
-		void changeFloor(Player* player, const std::string& cmd, const std::string& param);
 		void whoIsOnline(Player* player, const std::string& cmd, const std::string& param);
 		void showPosition(Player* player, const std::string& cmd, const std::string& param);
 		void removeThing(Player* player, const std::string& cmd, const std::string& param);

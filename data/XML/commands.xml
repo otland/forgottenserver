@@ -19,8 +19,6 @@
 	<command cmd="/info" group="1" acctype="4" log="yes"/>
 	<command cmd="/gethouse" group="2" acctype="4" log="yes"/>
 	<command cmd="/t" group="2" acctype="4" log="yes"/>
-	<command cmd="/up" group="2" acctype="5" log="yes"/>
-	<command cmd="/down" group="2" acctype="5" log="yes"/>
 	<command cmd="/newtype" group="2" acctype="5" log="yes"/>
 	<command cmd="/pos" group="1" acctype="2" log="yes"/>
 	<command cmd="/r" group="2" acctype="5" log="yes"/>

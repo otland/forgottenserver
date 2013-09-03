@@ -5,6 +5,9 @@
 	<talkaction words="/ipban" script="ipban.lua" />
 	<talkaction words="/unban" script="unban.lua" />
 
+	<talkaction words="/up" script="up.lua" />
+	<talkaction words="/down" script="down.lua" />
+
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
 	<talkaction words="!leavehouse" script="leavehouse.lua"/>
