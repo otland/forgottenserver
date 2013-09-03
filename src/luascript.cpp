@@ -8455,7 +8455,7 @@ int32_t LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 {
 	// player:getFreeCapacity()
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
+	if (player) {
 		pushNumber(L, player->getFreeCapacity());
 	} else {
 		pushNil(L);
