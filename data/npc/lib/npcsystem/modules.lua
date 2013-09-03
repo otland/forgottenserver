@@ -74,7 +74,7 @@ if(Modules == nil) then
 
 		if(isPlayerPremiumCallback == nil or isPlayerPremiumCallback(cid) == true or parameters.premium == false) then
 			local promotedVoc = getPromotedVocation(getPlayerVocation(cid))
-			if(getPlayerStorageValue(cid, 30018) == TRUE) then
+			if(getPlayerStorageValue(cid, 30018) == 1) then
 				npcHandler:say("You are already promoted!", cid)
 			elseif(getPlayerLevel(cid) < parameters.level) then
 				npcHandler:say("I am sorry, but I can only promote you once you have reached level " .. parameters.level .. ".", cid)
