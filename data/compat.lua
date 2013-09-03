@@ -82,7 +82,13 @@ function getPlayerName(cid) local p = _Player(cid) return p ~= nil and p:getName
 function getPlayerFreeCap(cid) local p = _Player(cid) return p ~= nil and p:getFreeCapacity() or false end
 function getPlayerPosition(cid) local p = _Player(cid) return p ~= nil and p:getPosition() or false end
 function getPlayerMagLevel(cid) local p = _Player(cid) return p ~= nil and p:getMagicLevel() or false end
-function getPlayerAccess(cid) local p = _Player(cid) return p ~= nil and p:getGroup():getAccess() or false end
+function getPlayerAccess(cid)
+	local player = _Player(cid)
+	if player == nil then
+		return false
+	end
+	return player:getGroup():getAccess() and 1 or 0
+end
 function getPlayerSkill(cid, skillId) local p = _Player(cid) return p ~= nil and p:getSkillLevel(skillId) or false end
 function getPlayerMana(cid) local p = _Player(cid) return p ~= nil and p:getMana() or false end
 function getPlayerMaxMana(cid) local p = _Player(cid) return p ~= nil and p:getMaxMana() or false end
