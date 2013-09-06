@@ -317,7 +317,7 @@ class LuaScriptInterface
 		bool callFunction(uint32_t nParams);
 
 		//push/pop common structures
-		static void pushThing(lua_State* L, Thing* thing, uint32_t thingid);
+		static void pushThing(lua_State* L, Thing* thing, uint32_t uid);
 		static void pushVariant(lua_State* L, const LuaVariant& var);
 		static void pushPosition(lua_State* L, const PositionEx& position);
 		static void pushPosition(lua_State* L, const Position& position, uint32_t stackpos);

@@ -701,7 +701,6 @@ bool ScriptEvent::executeEvent()
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-
 	env->setScriptId(m_scriptId, m_scriptInterface);
 
 	m_scriptInterface->pushFunction(m_scriptId);
