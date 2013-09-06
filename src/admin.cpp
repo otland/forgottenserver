@@ -631,7 +631,7 @@ void AdminProtocolConfig::removeConnection()
 bool AdminProtocolConfig::passwordMatch(std::string& password)
 {
 	//prevent empty password login
-	if (m_password == "") {
+	if (m_password.empty()) {
 		return false;
 	}
 

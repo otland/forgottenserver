@@ -271,8 +271,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 			Item* item = (*it);
 
 			// Note that these are NEGATED, ie. these are the items that will be saved.
-			if (!(!item->isNotMoveable() || item->getDoor() || (item->getContainer() &&
-			        item->getContainer()->size() != 0) || item->canWriteText() || item->getBed())) {
+			if (!(!item->isNotMoveable() || item->getDoor() || (item->getContainer() && !item->getContainer()->empty()) || item->canWriteText() || item->getBed())) {
 				continue;
 			}
 
@@ -370,7 +369,7 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 
 		std::string listText;
 
-		if (house->getAccessList(GUEST_LIST, listText) && listText != "") {
+		if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
 			query << house->getHouseId() << "," << GUEST_LIST << "," << db->escapeString(listText);
 
 			if (!stmt.addRow(query)) {
@@ -378,7 +377,7 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 			}
 		}
 
-		if (house->getAccessList(SUBOWNER_LIST, listText) && listText != "") {
+		if (house->getAccessList(SUBOWNER_LIST, listText) && !listText.empty()) {
 			query << house->getHouseId() << "," << SUBOWNER_LIST << "," << db->escapeString(listText);
 			if (!stmt.addRow(query)) {
 				return false;
@@ -386,7 +385,7 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 		}
 
 		for (Door* door : house->getHouseDoors()) {
-			if (door->getAccessList(listText) && listText != "") {
+			if (door->getAccessList(listText) && !listText.empty()) {
 				query << house->getHouseId() << "," << door->getDoorId() << "," << db->escapeString(listText);
 				if (!stmt.addRow(query)) {
 					return false;

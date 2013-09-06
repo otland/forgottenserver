@@ -479,7 +479,7 @@ bool AccessList::parseList(const std::string& _list)
 	regExList.clear();
 	list = _list;
 
-	if (_list == "") {
+	if (_list.empty()) {
 		return true;
 	}
 
@@ -563,7 +563,7 @@ bool AccessList::addExpression(const std::string& expression)
 	replaceString(outExp, "?", ".?");
 
 	try {
-		if (outExp.length() > 0) {
+		if (!outExp.empty()) {
 			expressionList.push_back(outExp);
 
 			if (outExp.substr(0, 1) == "!") {

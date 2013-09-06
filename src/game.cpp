@@ -604,7 +604,6 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 		const std::string& query = asLowerCaseString(s.substr(0, strlen - 1));
 		std::string result;
 		ReturnValue ret = wildcardTree->findOne(query, result);
-
 		if (ret != RET_NOERROR) {
 			return ret;
 		}

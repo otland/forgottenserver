@@ -1843,7 +1843,8 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 	}
 
 	// close modal windows
-	if (modalWindows.size() > 0) {
+	if (!modalWindows.empty()) {
+		// FIXME: This shouldn't be hardcoded, it should at least not apply for any modal window
 		sendTextMessage(MSG_EVENT_ADVANCE, "Offline training aborted.");
 		modalWindows.clear();
 	}

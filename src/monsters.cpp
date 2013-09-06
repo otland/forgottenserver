@@ -215,7 +215,7 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 			tmpItem->setActionId(lootBlock.actionId);
 		}
 
-		if (lootBlock.text != "") {
+		if (!lootBlock.text.empty()) {
 			tmpItem->setText(lootBlock.text);
 		}
 
@@ -227,16 +227,13 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 
 bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootblock)
 {
-	LootItems::const_iterator it = lootblock.childLoot.begin(),
-	                          end = lootblock.childLoot.end();
-
+	LootItems::const_iterator it = lootblock.childLoot.begin(), end = lootblock.childLoot.end();
 	if (it == end) {
 		return true;
 	}
 
 	for (; it != end && parent->size() < parent->capacity(); ++it) {
 		std::list<Item*> itemList = createLootItem(*it);
-
 		if (!itemList.empty()) {
 			for (std::list<Item*>::iterator iit = itemList.begin(), iend = itemList.end(); iit != iend; ++iit) {
 				Item* tmpItem = *iit;
@@ -253,8 +250,7 @@ bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootbl
 			}
 		}
 	}
-
-	return parent->size() != 0;
+	return !parent->empty();
 }
 
 Monsters::Monsters()

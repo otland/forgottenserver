@@ -336,7 +336,7 @@ std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
 			++it;
 		}
 
-		if (tmp.length() > 0 && tmp[tmp.length() - 1] == '"') {
+		if (!tmp.empty() && tmp[tmp.length() - 1] == '"') {
 			tmp.erase(tmp.length() - 1);
 		}
 	}

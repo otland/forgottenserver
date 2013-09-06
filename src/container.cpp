@@ -192,7 +192,7 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 		Item* item = (*cit);
 
 		Container* container = item->getContainer();
-		if (container && container->size() != 0) {
+		if (container && !container->empty()) {
 			continue;
 		}
 

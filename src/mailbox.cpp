@@ -115,7 +115,7 @@ bool Mailbox::sendItem(Item* item)
 	}
 
 	/**No need to continue if its still empty**/
-	if (receiver == "") {
+	if (receiver.empty()) {
 		return false;
 	}
 
@@ -164,13 +164,11 @@ bool Mailbox::getReceiver(Item* item, std::string& name)
 
 	if (item->getID() == ITEM_PARCEL) { /**We need to get the text from the label incase its a parcel**/
 		Container* parcel = item->getContainer();
-
 		if (parcel) {
 			for (ItemDeque::const_iterator cit = parcel->getItems(), end = parcel->getEnd(); cit != end; ++cit) {
 				if ((*cit)->getID() == ITEM_LABEL) {
 					item = (*cit);
-
-					if (item->getText() != "") {
+					if (!item->getText().empty()) {
 						break;
 					}
 				}
@@ -181,7 +179,7 @@ bool Mailbox::getReceiver(Item* item, std::string& name)
 		return false;
 	}
 
-	if (!item || item->getText() == "") { /**No label/letter found or its empty.**/
+	if (!item || item->getText().empty()) { /**No label/letter found or its empty.**/
 		return false;
 	}
 

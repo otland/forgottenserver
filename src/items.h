@@ -179,16 +179,18 @@ class ItemType
 		}
 
 		std::string getPluralName() const {
-			std::string str = pluralName;
-
-			if (str.size() == 0 && name.size() != 0) {
-				str = name;
-
-				if (showCount != 0) {
-					str += "s";
-				}
+			if (!pluralName.empty()) {
+				return pluralName;
 			}
 
+			if (showCount == 0) {
+				return name;
+			}
+
+			std::string str;
+			str.reserve(name.length() + 1);
+			str.assign(name);
+			str += 's';
 			return str;
 		}
 

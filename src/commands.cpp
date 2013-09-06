@@ -969,7 +969,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 
 void Commands::showPosition(Player* player, const std::string& cmd, const std::string& param)
 {
-	if (param != "" && player->isAccessPlayer()) {
+	if (!param.empty() && player->isAccessPlayer()) {
 		StringVec exploded = explodeString(param, ", ", 2);
 
 		if (!exploded.size() || exploded.size() < 3) {

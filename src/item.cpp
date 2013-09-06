@@ -621,7 +621,6 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 
 	if (!isNotMoveable()) {
 		uint16_t _actionId = getActionId();
-
 		if (_actionId) {
 			propWriteStream.ADD_UCHAR(ATTR_ACTION_ID);
 			propWriteStream.ADD_USHORT(_actionId);
@@ -629,29 +628,25 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 	}
 
 	const std::string& _text = getText();
-
-	if (_text.length() > 0) {
+	if (!_text.empty()) {
 		propWriteStream.ADD_UCHAR(ATTR_TEXT);
 		propWriteStream.ADD_STRING(_text);
 	}
 
 	const time_t _writtenDate = getDate();
-
 	if (_writtenDate > 0) {
 		propWriteStream.ADD_UCHAR(ATTR_WRITTENDATE);
 		propWriteStream.ADD_ULONG(_writtenDate);
 	}
 
 	const std::string& _writer = getWriter();
-
-	if (_writer.length() > 0) {
+	if (!_writer.empty()) {
 		propWriteStream.ADD_UCHAR(ATTR_WRITTENBY);
 		propWriteStream.ADD_STRING(_writer);
 	}
 
 	const std::string& _specialDesc = getSpecialDescription();
-
-	if (_specialDesc.length() > 0) {
+	if (!_specialDesc.empty()) {
 		propWriteStream.ADD_UCHAR(ATTR_DESC);
 		propWriteStream.ADD_STRING(_specialDesc);
 	}
@@ -663,7 +658,6 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 	}
 
 	ItemDecayState_t decayState = getDecaying();
-
 	if (decayState == DECAYING_TRUE || decayState == DECAYING_PENDING) {
 		propWriteStream.ADD_UCHAR(ATTR_DECAYING_STATE);
 		propWriteStream.ADD_UCHAR(decayState);
@@ -1105,7 +1099,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "." << std::endl;
 
 				if (lookDistance <= 4) {
-					if (item && item->getText() != "") {
+					if (item && !item->getText().empty()) {
 						if (item->getWriter().length()) {
 							s << item->getWriter() << " wrote";
 							time_t date = item->getDate();
@@ -1179,7 +1173,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	}
 
-	if (!it.allowDistRead || item->getText() == "" || (it.id >= 7369 && it.id <= 7371)) {
+	if (!it.allowDistRead || item->getText().empty() || (it.id >= 7369 && it.id <= 7371)) {
 		s << ".";
 	}
 
@@ -1222,13 +1216,13 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	}
 
-	if (item && item->getSpecialDescription() != "") {
-		s << std::endl << item->getSpecialDescription().c_str();
+	if (item && !item->getSpecialDescription().empty()) {
+		s << std::endl << item->getSpecialDescription();
 	} else if (it.description.length() && lookDistance <= 1) {
 		s << std::endl << it.description;
 	}
 
-	if (it.allowDistRead && it.id >= 7369 && it.id <= 7371 && item->getText() != "") {
+	if (it.allowDistRead && it.id >= 7369 && it.id <= 7371 && !item->getText().empty()) {
 		s << std::endl << item->getText();
 	}
 
