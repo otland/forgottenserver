@@ -16,9 +16,10 @@ function _Creature(cid)
 end
 
 function _Player(cid)
-	if _lastPid ~= cid then
+	local player = Player(cid)
+	if player ~= nil then
 		_lastPid = cid
-		_lastPlayer = Player(cid)
+		_lastPlayer = player
 	end
 	return _lastPlayer
 end
@@ -59,6 +60,24 @@ function getCreatureName(cid) local c = _Creature(cid) return c ~= nil and c:get
 function getCreatureHealth(cid) local c = _Creature(cid) return c ~= nil and c:getHealth() or false end
 function getCreatureMaxHealth(cid) local c = _Creature(cid) return c ~= nil and c:getMaxHealth() or false end
 function getCreaturePosition(cid) local c = _Creature(cid) return c ~= nil and c:getPosition() or false end
+
+function getCreatureTarget(cid)
+	local c = _Creature(cid)
+	if c ~= nil then
+		local target = c:getTarget()
+		return target ~= nil and target:getId() or 0
+	end
+	return false
+end
+
+function getCreatureMaster(cid)
+	local c = _Creature(cid)
+	if c ~= nil then
+		local master = c:getMaster()
+		return master ~= nil and target:getId() or c:getId()
+	end
+	return false
+end
 
 getCreaturePos = getCreaturePosition
 

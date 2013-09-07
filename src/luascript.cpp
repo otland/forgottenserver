@@ -1464,10 +1464,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPartyMembers(leaderId)
 	lua_register(m_luaState, "getPartyMembers", LuaScriptInterface::luaGetPartyMembers);
 
-	//getCreatureMaster(cid)
-	//returns the creature's master or itself if the creature isn't a summon
-	lua_register(m_luaState, "getCreatureMaster", LuaScriptInterface::luaGetCreatureMaster);
-
 	//getCreatureSummons(cid)
 	//returns a table with all the summons of the creature
 	lua_register(m_luaState, "getCreatureSummons", LuaScriptInterface::luaGetCreatureSummons);
@@ -1651,9 +1647,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getCreatureBaseSpeed(cid)
 	lua_register(m_luaState, "getCreatureBaseSpeed", LuaScriptInterface::luaGetCreatureBaseSpeed);
-
-	//getCreatureTarget(cid)
-	lua_register(m_luaState, "getCreatureTarget", LuaScriptInterface::luaGetCreatureTarget);
 
 	//getItemWeightByUID(uid)
 	lua_register(m_luaState, "getItemWeightByUID", LuaScriptInterface::luaGetItemWeightByUID);
@@ -1901,6 +1894,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Creature", "getId", LuaScriptInterface::luaCreatureGetId);
 	registerClassMethod("Creature", "getName", LuaScriptInterface::luaCreatureGetName);
+	registerClassMethod("Creature", "getTarget", LuaScriptInterface::luaCreatureGetTarget);
+	registerClassMethod("Creature", "getMaster", LuaScriptInterface::luaCreatureGetMaster);
 	
 	registerClassMethod("Creature", "getLight", LuaScriptInterface::luaCreatureGetLight);
 	registerClassMethod("Creature", "setLight", LuaScriptInterface::luaCreatureSetLight);
@@ -1930,6 +1925,8 @@ void LuaScriptInterface::registerFunctions()
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
+
+	registerClassMethod("Player", "isPlayer", LuaScriptInterface::luaPlayerIsPlayer);
 
 	registerClassMethod("Player", "getGuid", LuaScriptInterface::luaPlayerGetGuid);
 	registerClassMethod("Player", "getIp", LuaScriptInterface::luaPlayerGetIp);
@@ -2019,8 +2016,12 @@ void LuaScriptInterface::registerFunctions()
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 
+	registerClassMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
+
 	// Npc
 	registerClass("Npc", "Creature", LuaScriptInterface::luaNpcCreate);
+
+	registerClassMethod("Npc", "isNpc", LuaScriptInterface::luaNpcIsNpc);
 
 	// Guild
 	registerClass("Guild", "", LuaScriptInterface::luaGuildCreate);
@@ -5372,29 +5373,6 @@ int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetCreatureMaster(lua_State* L)
-{
-	//getCreatureMaster(cid)
-	//returns the creature's master or itself if the creature isn't a summon
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Creature* master = creature->getMaster();
-	if (!master) {
-		lua_pushnumber(L, cid);
-		return 1;
-	}
-
-	lua_pushnumber(L, master->getID());
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetCreatureSummons(lua_State* L)
 {
 	//getCreatureSummons(cid)
@@ -5476,26 +5454,6 @@ int32_t LuaScriptInterface::luaGetCreatureBaseSpeed(lua_State* L)
 	Creature* creature = g_game.getCreatureByID(cid);
 	if (creature) {
 		lua_pushnumber(L, creature->getBaseSpeed());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetCreatureTarget(lua_State* L)
-{
-	//getCreatureTarget(cid)
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		Creature* target = creature->getAttackedCreature();
-		if (target) {
-			lua_pushnumber(L, target->getID());
-		} else {
-			lua_pushnumber(L, 0);
-		}
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
@@ -7945,8 +7903,7 @@ int32_t LuaScriptInterface::luaCreatureIsCreature(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureIsPlayer(lua_State* L)
 {
 	// creature:isPlayer()
-	const Creature* creature = getUserdata<const Creature>(L, 1);
-	pushBoolean(L, creature && creature->getPlayer());
+	pushBoolean(L, false);
 	return 1;
 }
 
@@ -7954,7 +7911,7 @@ int32_t LuaScriptInterface::luaCreatureIsMonster(lua_State* L)
 {
 	// creature:isMonster()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
-	pushBoolean(L, creature && creature->getMonster());
+	pushBoolean(L, false);
 	return 1;
 }
 
@@ -7962,7 +7919,7 @@ int32_t LuaScriptInterface::luaCreatureIsNpc(lua_State* L)
 {
 	// creature:isNpc()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
-	pushBoolean(L, creature && creature->getNpc());
+	pushBoolean(L, false);
 	return 1;
 }
 
@@ -7991,6 +7948,42 @@ int32_t LuaScriptInterface::luaCreatureGetName(lua_State* L)
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
 		pushString(L, creature->getName());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
+{
+	// creature:getTarget()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		Creature* target = creature->getAttackedCreature();
+		if (target) {
+			pushUserdata<Creature>(L, target);
+			setCreatureMetatable(L, -1, target);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
+{
+	// creature:getMaster()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		Creature* master = creature->getMaster();
+		if (master) {
+			pushUserdata<Creature>(L, master);
+			setCreatureMetatable(L, -1, master);
+		} else {
+			pushNil(L);
+		}
 	} else {
 		pushNil(L);
 	}
@@ -8374,6 +8367,14 @@ int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 	} else {
 		pushNil(L);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerIsPlayer(lua_State* L)
+{
+	// player:isPlayer()
+	const Player* player = getUserdata<const Player>(L, 1);
+	pushBoolean(L, player != NULL);
 	return 1;
 }
 
@@ -9481,6 +9482,14 @@ int32_t LuaScriptInterface::luaMonsterCreate(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
+{
+	// monster:isMonster()
+	const Monster* monster = getUserdata<const Monster>(L, 1);
+	pushBoolean(L, monster != NULL);
+	return 1;
+}
+
 // Npc
 int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
@@ -9499,6 +9508,14 @@ int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 	} else {
 		pushNil(L);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaNpcIsNpc(lua_State* L)
+{
+	// npc:isNpc()
+	const Npc* npc = getUserdata<const Npc>(L, 1);
+	pushBoolean(L, npc != NULL);
 	return 1;
 }
 
