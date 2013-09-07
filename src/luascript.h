@@ -537,12 +537,10 @@ class LuaScriptInterface
 
 		//get creature info functions
 		static int32_t luaGetPlayerFood(lua_State* L);
-		static int32_t luaGetCreatureMaster(lua_State* L);
 		static int32_t luaGetCreatureSummons(lua_State* L);
 		static int32_t luaGetSpectators(lua_State* L);
 		static int32_t luaGetCreatureSpeed(lua_State* L);
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
-		static int32_t luaGetCreatureTarget(lua_State* L);
 
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
@@ -860,6 +858,8 @@ class LuaScriptInterface
 
 		static int32_t luaCreatureGetId(lua_State* L);
 		static int32_t luaCreatureGetName(lua_State* L);
+		static int32_t luaCreatureGetTarget(lua_State* L);
+		static int32_t luaCreatureGetMaster(lua_State* L);
 		
 		static int32_t luaCreatureGetLight(lua_State* L);
 		static int32_t luaCreatureSetLight(lua_State* L);
@@ -889,6 +889,8 @@ class LuaScriptInterface
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);
+
+		static int32_t luaPlayerIsPlayer(lua_State* L);
 
 		static int32_t luaPlayerGetGuid(lua_State* L);
 		static int32_t luaPlayerGetIp(lua_State* L);
@@ -978,8 +980,12 @@ class LuaScriptInterface
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
 
+		static int32_t luaMonsterIsMonster(lua_State* L);
+
 		// Npc
 		static int32_t luaNpcCreate(lua_State* L);
+
+		static int32_t luaNpcIsNpc(lua_State* L);
 
 		// Guild
 		static int32_t luaGuildCreate(lua_State* L);
