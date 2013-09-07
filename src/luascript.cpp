@@ -7910,7 +7910,6 @@ int32_t LuaScriptInterface::luaCreatureIsPlayer(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureIsMonster(lua_State* L)
 {
 	// creature:isMonster()
-	const Creature* creature = getUserdata<const Creature>(L, 1);
 	pushBoolean(L, false);
 	return 1;
 }
@@ -7918,7 +7917,6 @@ int32_t LuaScriptInterface::luaCreatureIsMonster(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureIsNpc(lua_State* L)
 {
 	// creature:isNpc()
-	const Creature* creature = getUserdata<const Creature>(L, 1);
 	pushBoolean(L, false);
 	return 1;
 }
