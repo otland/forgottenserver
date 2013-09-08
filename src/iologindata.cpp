@@ -82,7 +82,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 
 	if (!passwordTest(password, result->getDataString("password"))) {
 		db->freeResult(result);
-		return 0;
+		return false;
 	}
 
 	account.id = result->getDataInt("id");
