@@ -122,7 +122,7 @@ class Database
 		 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
 		 */
 		uint64_t getLastInsertId() {
-			return (uint64_t)mysql_insert_id(m_handle);
+			return static_cast<uint64_t>(mysql_insert_id(m_handle));
 		}
 
 		/**

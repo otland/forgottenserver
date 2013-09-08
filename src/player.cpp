@@ -379,7 +379,6 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 {
 	for (uint32_t slot = SLOT_RIGHT; slot <= SLOT_LEFT; slot++) {
 		Item* item = getInventoryItem((slots_t)slot);
-
 		if (!item) {
 			continue;
 		}
@@ -390,21 +389,17 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 			case WEAPON_CLUB:
 			case WEAPON_WAND: {
 				const Weapon* weapon = g_weapons->getWeapon(item);
-
 				if (weapon) {
 					return item;
 				}
-
 				break;
 			}
 
 			case WEAPON_DIST: {
 				if (!ignoreAmmo && item->getAmmoType() != AMMO_NONE) {
 					Item* ammoItem = getInventoryItem(SLOT_AMMO);
-
 					if (ammoItem && ammoItem->getAmmoType() == item->getAmmoType()) {
 						const Weapon* weapon = g_weapons->getWeapon(ammoItem);
-
 						if (weapon) {
 							shootRange = item->getShootRange();
 							return ammoItem;
@@ -412,13 +407,11 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 					}
 				} else {
 					const Weapon* weapon = g_weapons->getWeapon(item);
-
 					if (weapon) {
 						shootRange = item->getShootRange();
 						return item;
 					}
 				}
-
 				break;
 			}
 
@@ -2783,7 +2776,7 @@ bool Player::removeVIP(uint32_t _guid)
 	return true;
 }
 
-bool Player::addVIP(uint32_t _guid, std::string& name, VipStatus_t status)
+bool Player::addVIP(uint32_t _guid, const std::string& name, VipStatus_t status)
 {
 	if (guid == _guid) {
 		sendTextMessage(MSG_STATUS_SMALL, "You cannot add yourself.");
@@ -2796,7 +2789,6 @@ bool Player::addVIP(uint32_t _guid, std::string& name, VipStatus_t status)
 	}
 
 	VIPListSet::iterator it = VIPList.find(_guid);
-
 	if (it != VIPList.end()) {
 		sendTextMessage(MSG_STATUS_SMALL, "This player is already in your list.");
 		return false;

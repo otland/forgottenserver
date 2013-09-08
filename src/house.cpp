@@ -511,7 +511,7 @@ bool AccessList::parseList(const std::string& _list)
 	return true;
 }
 
-bool AccessList::addPlayer(std::string& name)
+bool AccessList::addPlayer(const std::string& name)
 {
 	uint32_t guid;
 	std::string dbName = name;

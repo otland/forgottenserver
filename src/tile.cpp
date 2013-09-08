@@ -521,7 +521,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 	}
 }
 
-void Tile::onRemoveTileItem(const SpectatorVec& list, std::vector<uint32_t>& oldStackPosVector, Item* item)
+void Tile::onRemoveTileItem(const SpectatorVec& list, const std::vector<uint32_t>& oldStackPosVector, Item* item)
 {
 	if (item->hasProperty(MOVEABLE) || item->getContainer()) {
 		Game::BrowseFieldMap::const_iterator it = g_game.browseFields.find(this);

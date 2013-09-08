@@ -628,13 +628,12 @@ void AdminProtocolConfig::removeConnection()
 	}
 }
 
-bool AdminProtocolConfig::passwordMatch(std::string& password)
+bool AdminProtocolConfig::passwordMatch(const std::string& password)
 {
 	//prevent empty password login
 	if (m_password.empty()) {
 		return false;
 	}
-
 	return password == m_password;
 }
 

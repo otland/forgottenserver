@@ -151,7 +151,7 @@ class AdminProtocolConfig
 
 		bool allowIP(uint32_t ip);
 
-		bool passwordMatch(std::string& password);
+		bool passwordMatch(const std::string& password);
 
 		RSA* getRSAKey(uint8_t type);
 

@@ -327,10 +327,9 @@ bool Creature::getNextStep(Direction& dir, uint32_t& flags)
 	return true;
 }
 
-bool Creature::startAutoWalk(std::list<Direction>& listDir)
+bool Creature::startAutoWalk(const std::list<Direction>& listDir)
 {
 	const Player* thisPlayer = getPlayer();
-
 	if (thisPlayer && thisPlayer->getNoMove()) {
 		thisPlayer->sendCancelWalk();
 		return false;
@@ -623,13 +622,13 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 					int32_t dy = Position::getDistanceY(oldPos, newPos);
 
 					if (dy < 0) {
-						endy = endy + dy;
+						endy += dy;
 					} else if (dy > 0) {
-						starty = starty + dy;
+						starty = dy;
 					}
 
 					for (int32_t y = starty; y <= endy; ++y) {
-						for (int32_t x = 0; x <= mapWalkWidth - 1 - 1; ++x) {
+						for (int32_t x = 0; x <= mapWalkWidth - 2; ++x) {
 							localMapCache[y][x] = localMapCache[y][x + 1];
 						}
 					}
@@ -646,13 +645,13 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 					int32_t dy = Position::getDistanceY(oldPos, newPos);
 
 					if (dy < 0) {
-						endy = endy + dy;
+						endy += dy;
 					} else if (dy > 0) {
-						starty = starty + dy;
+						starty = dy;
 					}
 
 					for (int32_t y = starty; y <= endy; ++y) {
-						for (int32_t x = mapWalkWidth - 1 - 1; x >= 0; --x) {
+						for (int32_t x = mapWalkWidth - 2; x >= 0; --x) {
 							localMapCache[y][x + 1] = localMapCache[y][x];
 						}
 					}

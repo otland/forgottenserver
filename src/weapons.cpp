@@ -1054,7 +1054,6 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
 		Item* bow = const_cast<Player*>(player)->getWeapon(true);
-
 		if (bow) {
 			attackValue += bow->getAttack();
 		}
@@ -1070,21 +1069,20 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	}
 
 	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultipler);
-
 	if (maxDamage) {
 		return -maxValue;
 	}
 
-	int32_t minValue = 0;
-
+	int32_t minValue;
 	if (target) {
 		if (target->getPlayer()) {
-			minValue = (int32_t)std::ceil(player->getLevel() * 0.1);
+			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.1));
 		} else {
-			minValue = (int32_t)std::ceil(player->getLevel() * 0.2);
+			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.2));
 		}
+	} else {
+		minValue = 0;
 	}
-
 	return -random_range(minValue, maxValue, DISTRO_NORMAL);
 }
 

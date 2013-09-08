@@ -255,7 +255,7 @@ class Creature : virtual public Thing
 		}
 
 		//walk functions
-		bool startAutoWalk(std::list<Direction>& listDir);
+		bool startAutoWalk(const std::list<Direction>& listDir);
 		void addEventWalk(bool firstStep = false);
 		void stopEventWalk();
 		virtual void goToFollowCreature();
@@ -382,7 +382,7 @@ class Creature : virtual public Thing
 
 		virtual void getCreatureLight(LightInfo& light) const;
 		virtual void setNormalCreatureLight();
-		void setCreatureLight(LightInfo& light) {
+		void setCreatureLight(const LightInfo& light) {
 			internalLight = light;
 		}
 

@@ -611,7 +611,7 @@ class Player : public Creature, public Cylinder
 		//V.I.P. functions
 		void notifyStatusChange(Player* player, VipStatus_t status);
 		bool removeVIP(uint32_t guid);
-		bool addVIP(uint32_t guid, std::string& name, VipStatus_t status);
+		bool addVIP(uint32_t guid, const std::string& name, VipStatus_t status);
 		bool addVIPInternal(uint32_t guid);
 		bool editVIP(uint32_t _guid, const std::string& description, uint32_t icon, bool notify);
 
@@ -1076,7 +1076,7 @@ class Player : public Creature, public Cylinder
 				client->sendCloseTrade();
 			}
 		}
-		void sendWorldLight(LightInfo& lightInfo) {
+		void sendWorldLight(const LightInfo& lightInfo) {
 			if (client) {
 				client->sendWorldLight(lightInfo);
 			}

@@ -565,7 +565,6 @@ Player* Game::getPlayerByName(const std::string& s)
 	}
 
 	PlayerNameMap::const_iterator it = mappedPlayerNames.find(asLowerCaseString(s));
-
 	if (it == mappedPlayerNames.end()) {
 		return NULL;
 	}
@@ -573,7 +572,6 @@ Player* Game::getPlayerByName(const std::string& s)
 	if (it->second->isRemoved()) {
 		return NULL;
 	}
-
 	return it->second;
 }
 
@@ -595,7 +593,6 @@ Player* Game::getPlayerByGUID(const uint32_t& guid)
 ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 {
 	size_t strlen = s.length();
-
 	if (strlen == 0 || strlen > 20) {
 		return RET_PLAYERWITHTHISNAMEISNOTONLINE;
 	}
@@ -696,10 +693,8 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 
 	// TODO: Move this code to Player::onCreatureAppear where creature == this.
 	Player* player = creature->getPlayer();
-
 	if (player) {
 		int32_t offlineTime;
-
 		if (player->getLastLogout() != 0) {
 			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
 			offlineTime = std::min<int32_t>(time(NULL) - player->getLastLogout(), 86400 * 21);
@@ -708,10 +703,8 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		}
 
 		Condition* conditionMuted = player->getCondition(CONDITION_MUTED, CONDITIONID_DEFAULT);
-
 		if (conditionMuted && conditionMuted->getTicks() > 0) {
 			conditionMuted->setTicks(conditionMuted->getTicks() - (offlineTime * 1000));
-
 			if (conditionMuted->getTicks() <= 0) {
 				player->removeCondition(conditionMuted);
 			} else {
@@ -720,10 +713,8 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		}
 
 		Condition* conditionTrade = player->getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISING);
-
 		if (conditionTrade && conditionTrade->getTicks() > 0) {
 			conditionTrade->setTicks(conditionTrade->getTicks() - (offlineTime * 1000));
-
 			if (conditionTrade->getTicks() <= 0) {
 				player->removeCondition(conditionTrade);
 			} else {
@@ -732,10 +723,8 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		}
 
 		Condition* conditionTradeRook = player->getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISINGROOKGAARD);
-
 		if (conditionTradeRook && conditionTradeRook->getTicks() > 0) {
 			conditionTradeRook->setTicks(conditionTradeRook->getTicks() - (offlineTime * 1000));
-
 			if (conditionTradeRook->getTicks() <= 0) {
 				player->removeCondition(conditionTradeRook);
 			} else {
@@ -744,10 +733,8 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		}
 
 		Condition* conditionHelp = player->getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP);
-
 		if (conditionHelp && conditionHelp->getTicks() > 0) {
 			conditionHelp->setTicks(conditionHelp->getTicks() - (offlineTime * 1000));
-
 			if (conditionHelp->getTicks() <= 0) {
 				player->removeCondition(conditionHelp);
 			} else {
@@ -756,10 +743,8 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		}
 
 		Condition* conditionYell = player->getCondition(CONDITION_YELLTICKS, CONDITIONID_DEFAULT);
-
 		if (conditionYell && conditionYell->getTicks() > 0) {
 			conditionYell->setTicks(conditionYell->getTicks() - (offlineTime * 1000));
-
 			if (conditionYell->getTicks() <= 0) {
 				player->removeCondition(conditionYell);
 			} else {
@@ -786,7 +771,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		player->regenerateStamina(offlineTime);
 
 		int32_t offlineTrainingSkill = player->getOfflineTrainingSkill();
-
 		if (offlineTrainingSkill != -1) {
 			player->setOfflineTrainingSkill(-1);
 			int32_t offlineTrainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, player->getOfflineTrainingTime() / 1000)));
@@ -795,7 +779,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 				player->removeOfflineTrainingTime(offlineTrainingTime * 1000);
 
 				int32_t remainder = offlineTime - offlineTrainingTime;
-
 				if (remainder > 0) {
 					player->addOfflineTrainingTime(remainder * 1000);
 				}
@@ -804,7 +787,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 					std::ostringstream ss;
 					ss << "During your absence you trained for ";
 					int32_t hours = offlineTrainingTime / 3600;
-
 					if (hours > 1) {
 						ss << hours << " hours";
 					} else if (hours == 1) {
@@ -812,7 +794,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 					}
 
 					int32_t minutes = (offlineTrainingTime % 3600) / 60;
-
 					if (minutes != 0) {
 						if (hours != 0) {
 							ss << " and ";
@@ -829,7 +810,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 					player->sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 
 					Vocation* vocation;
-
 					if (player->isPromoted()) {
 						vocation = player->getVocation();
 					} else {
@@ -838,7 +818,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 					}
 
 					bool sendUpdateSkills = false;
-
 					if (offlineTrainingSkill == SKILL_CLUB || offlineTrainingSkill == SKILL_SWORD || offlineTrainingSkill == SKILL_AXE) {
 						float modifier = vocation->getAttackSpeed() / 1000.f;
 						sendUpdateSkills = player->addOfflineTrainingTries((skills_t)offlineTrainingSkill, (offlineTrainingTime / modifier) / 2);
@@ -847,7 +826,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 						sendUpdateSkills = player->addOfflineTrainingTries((skills_t)offlineTrainingSkill, (offlineTrainingTime / modifier) / 4);
 					} else if (offlineTrainingSkill == SKILL__MAGLEVEL) {
 						int32_t gainTicks = vocation->getManaGainTicks() << 1;
-
 						if (gainTicks == 0) {
 							gainTicks = 1;
 						}
@@ -858,7 +836,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 					if (player->addOfflineTrainingTries(SKILL_SHIELD, offlineTrainingTime / 4) || sendUpdateSkills) {
 						player->sendSkills();
 					}
-
 				}
 
 				player->sendStats();
@@ -870,7 +847,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 			uint16_t oldMinutes = player->getOfflineTrainingTime() / 60 / 1000;
 			player->addOfflineTrainingTime(offlineTime * 1000);
 			uint16_t newMinutes = player->getOfflineTrainingTime() / 60 / 1000;
-
 			if (oldMinutes != newMinutes) {
 				player->sendStats();
 				sentStats = true;
