@@ -13,6 +13,8 @@
 	<movevent event="StepOut" itemid="447" script="tiles.lua"/>
 	<movevent event="StepIn" itemid="3216" script="tiles.lua"/>
 	<movevent event="StepOut" itemid="3217" script="tiles.lua"/>
+	<movevent event="StepIn" itemid="11062" script="tiles.lua"/>
+	<movevent event="StepOut" itemid="11063" script="tiles.lua"/>
 
 	<!-- Traps -->
 	<movevent event="StepIn" itemid="1510" script="trap.lua"/>
