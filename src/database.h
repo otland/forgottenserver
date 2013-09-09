@@ -164,8 +164,29 @@ class Database
 class DBResult
 {
 	public:
+		template<typename T>
+		T getNumber(const std::string& s) const
+		{
+			listNames_t::const_iterator it = m_listNames.find(s);
+			if (it == m_listNames.end()) {
+				std::cout << "[Error - DBResult::getData] Column '" << s << "' does not exist in result set." << std::endl;
+				return static_cast<T>(0);
+			}
+
+			if (m_row[it->second] == NULL) {
+				return static_cast<T>(0);
+			}
+
+			T data;
+			try {
+				data = boost::lexical_cast<T>(m_row[it->second]);
+			} catch (boost::bad_lexical_cast&) {
+				data = 0;
+			}
+			return data;
+		}
+
 		int32_t getDataInt(const std::string& s) const;
-		int64_t getDataLong(const std::string& s) const;
 		std::string getDataString(const std::string& s) const;
 		const char* getDataStream(const std::string& s, unsigned long& size) const;
 

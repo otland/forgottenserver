@@ -5933,7 +5933,7 @@ int32_t LuaScriptInterface::luaResultGetDataLong(lua_State* L)
 		return 1;
 	}
 
-	lua_pushnumber(L, res->getDataLong(s));
+	lua_pushnumber(L, res->getNumber<int64_t>(s));
 	return 1;
 }
 

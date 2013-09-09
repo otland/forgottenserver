@@ -291,14 +291,14 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	}
 	player->setGroup(group);
 
-	player->bankBalance = static_cast<uint64_t>(result->getDataLong("balance"));
+	player->bankBalance = result->getNumber<uint64_t>("balance");
 
 	player->setSex((PlayerSex_t)result->getDataInt("sex"));
 	player->level = std::max<uint32_t>(1, result->getDataInt("level"));
 
 	uint64_t currExpCount = Player::getExpForLevel(player->level);
 	uint64_t nextExpCount = Player::getExpForLevel(player->level + 1);
-	uint64_t experience = (uint64_t)result->getDataLong("experience");
+	uint64_t experience = result->getNumber<uint64_t>("experience");
 
 	if (experience < currExpCount || experience > nextExpCount) {
 		experience = currExpCount;
@@ -342,7 +342,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	player->magLevel = result->getDataInt("maglevel");
 
 	uint64_t nextManaCount = player->vocation->getReqMana(player->magLevel + 1);
-	uint64_t manaSpent = result->getDataLong("manaspent");
+	uint64_t manaSpent = result->getNumber<uint64_t>("manaspent");
 
 	if (manaSpent > nextManaCount) {
 		manaSpent = 0;
@@ -383,8 +383,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	player->loginPosition.y = result->getDataInt("posy");
 	player->loginPosition.z = result->getDataInt("posz");
 
-	player->lastLoginSaved = result->getDataLong("lastlogin");
-	player->lastLogout = result->getDataLong("lastlogout");
+	player->lastLoginSaved = result->getNumber<uint64_t>("lastlogin");
+	player->lastLogout = result->getNumber<uint64_t>("lastlogout");
 
 	player->offlineTrainingTime = result->getDataInt("offlinetraining_time") * 1000;
 	player->offlineTrainingSkill = result->getDataInt("offlinetraining_skill");
@@ -409,7 +409,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	static const std::string skillNameTries[] = {"skill_fist_tries", "skill_club_tries", "skill_sword_tries", "skill_axe_tries", "skill_dist_tries", "skill_shielding_tries", "skill_fishing_tries"};
 	for (int i = 0, size = sizeof(skillNames) / sizeof(std::string); i < size; ++i) {
 		uint32_t skillLevel = result->getDataInt(skillNames[i]);
-		uint64_t skillTries = result->getDataLong(skillNameTries[i]);
+		uint64_t skillTries = result->getNumber<uint64_t>(skillNameTries[i]);
 		uint64_t nextSkillTries = player->vocation->getReqSkillTries(i, skillLevel + 1);
 		if (skillTries > nextSkillTries) {
 			skillTries = 0;
@@ -586,9 +586,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 
 	if ((result = db->storeQuery(query.str()))) {
 		do {
-			player->addStorageValue(result->getDataInt("key"), result->getDataLong("value"), true);
+			player->addStorageValue(result->getDataInt("key"), result->getDataInt("value"), true);
 		} while (result->next());
-
 		db->freeResult(result);
 	}
 
@@ -1099,7 +1098,7 @@ time_t IOLoginData::getLastLoginSaved(uint32_t guid)
 	time_t lastLoginSaved;
 
 	if ((result = db->storeQuery(query.str()))) {
-		lastLoginSaved = result->getDataLong("lastlogin");
+		lastLoginSaved = result->getNumber<uint64_t>("lastlogin");
 		db->freeResult(result);
 	} else {
 		lastLoginSaved = 0;

@@ -261,27 +261,6 @@ int32_t DBResult::getDataInt(const std::string& s) const
 	return atoi(m_row[it->second]);
 }
 
-int64_t DBResult::getDataLong(const std::string& s) const
-{
-	listNames_t::const_iterator it = m_listNames.find(s);
-	if (it == m_listNames.end()) {
-		std::cout << "[Error - DBResult::getDataLong] Column '" << s << "' does not exist in result set." << std::endl;
-		return 0;
-	}
-
-	if (m_row[it->second] == NULL) {
-		return 0;
-	}
-
-	int64_t data;
-	try {
-		data = boost::lexical_cast<int64_t>(m_row[it->second]);
-	} catch (boost::bad_lexical_cast&) {
-		data = 0;
-	}
-	return data;
-}
-
 std::string DBResult::getDataString(const std::string& s) const
 {
 	listNames_t::const_iterator it = m_listNames.find(s);

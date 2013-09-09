@@ -79,7 +79,7 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 		return false;
 	}
 
-	int64_t expiresAt = result->getDataLong("expires_at");
+	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(NULL) > expiresAt) {
 		// Move the ban to history if it has expired
 		query << "INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES (" << accountId << ", " << db->escapeString(result->getDataString("reason")) << ", " << result->getDataInt("banned_at") << ", " << expiresAt << ", " << result->getDataInt("banned_by") << ")";
@@ -115,7 +115,7 @@ bool IOBan::isIpBanned(uint32_t clientip, BanInfo& banInfo)
 		return false;
 	}
 
-	int64_t expiresAt = result->getDataLong("expires_at");
+	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(NULL) > expiresAt) {
 		query << "DELETE FROM `ip_bans` WHERE `ip` = " << clientip;
 		db->executeQuery(query.str());

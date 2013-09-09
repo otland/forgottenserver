@@ -312,7 +312,7 @@ void IOMarket::updateStatistics()
 
 		statistics->numTransactions = result->getDataInt("num");
 		statistics->lowestPrice = result->getDataInt("min");
-		statistics->totalPrice = result->getDataLong("sum");
+		statistics->totalPrice = result->getNumber<uint64_t>("sum");
 		statistics->highestPrice = result->getDataInt("max");
 	} while (result->next());
 
