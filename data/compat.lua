@@ -1,4 +1,3 @@
-
 function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing ~= nil then
@@ -285,7 +284,7 @@ function getTileInfo(position)
 	if t == nil then
 		return false
 	end
-	
+
 	local ret = pushThing(t:getGround())
 	ret.protection = t:hasFlag(TILESTATE_PROTECTIONZONE)
 	ret.nopz = ret.protection
@@ -294,7 +293,7 @@ function getTileInfo(position)
 	ret.house = t:hasFlag(TILESTATE_HOUSE)
 	ret.bed = t:hasFlag(TILESTATE_BED)
 	ret.depot = t:hasFlag(TILESTATE_DEPOT)
-	
+
 	ret.things = t:getThingCount()
 	ret.creatures = t:getCreatureCount()
 	ret.items = t:getItemCount()
@@ -327,7 +326,7 @@ function getTileThingByPos(position)
 		end
 		return pushThing(nil)
 	end
-	
+
 	if position.stackpos == -1 then
 		return t:getThingCount()
 	end

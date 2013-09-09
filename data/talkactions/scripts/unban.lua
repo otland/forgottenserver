@@ -2,7 +2,7 @@ function onSay(cid, words, param)
 	if getPlayerAccess(cid) <= 0 then
 		return false
 	end
-	
+
 	local resultId = db.storeQuery("SELECT `account_id`, `lastip` FROM `players` WHERE `name` = " .. db.escapeString(param))
 	if resultId == false then
 		return false
