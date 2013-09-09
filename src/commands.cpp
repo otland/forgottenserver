@@ -276,12 +276,10 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 		str_param = std::string(cmd, (loc + 1), cmd.size() - loc - 1);
 	} else {
 		str_command = cmd;
-		str_param = std::string("");
 	}
 
 	//find command
 	CommandMap::iterator it = commandMap.find(str_command);
-
 	if (it == commandMap.end()) {
 		return false;
 	}
@@ -753,7 +751,6 @@ void Commands::setHouseOwner(Player* player, const std::string& cmd, const std::
 {
 	if (player->getTile()->hasFlag(TILESTATE_HOUSE)) {
 		HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
-
 		if (houseTile) {
 			uint32_t guid;
 			std::string name = param;
@@ -1301,7 +1298,6 @@ void Commands::addTutor(Player* player, const std::string& cmd, const std::strin
 	std::string characterName = param;
 
 	Player* targetPlayer = g_game.getPlayerByName(characterName);
-
 	if (targetPlayer) {
 		targetPlayer->accountType = ACCOUNT_TYPE_TUTOR;
 		accountId = targetPlayer->getAccount();
@@ -1326,7 +1322,6 @@ void Commands::removeTutor(Player* player, const std::string& cmd, const std::st
 	std::string characterName = param;
 
 	Player* targetPlayer = g_game.getPlayerByName(characterName);
-
 	if (targetPlayer) {
 		targetPlayer->accountType = ACCOUNT_TYPE_NORMAL;
 		accountId = targetPlayer->getAccount();

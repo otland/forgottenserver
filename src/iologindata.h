@@ -46,7 +46,10 @@ class IOLoginData
 		void setAccountType(uint32_t accountId, AccountType_t accountType);
 		bool updateOnlineStatus(uint32_t guid, bool login);
 		bool preloadPlayer(Player* player, const std::string& name);
-		bool loadPlayer(Player* player, const std::string& name);
+
+		bool loadPlayerById(Player* player, uint32_t id);
+		bool loadPlayerByName(Player* player, const std::string& name);
+		bool loadPlayer(Player* player, DBResult* result);
 		bool savePlayer(Player* player);
 		bool getGuidByName(uint32_t& guid, std::string& name);
 		bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
@@ -75,12 +78,6 @@ class IOLoginData
 
 		void loadItems(ItemMap& itemMap, DBResult* result);
 		bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert);
-
-		typedef std::map<uint32_t, std::string> NameCacheMap;
-		typedef std::map<std::string, uint32_t> GuidCacheMap;
-
-		NameCacheMap nameCacheMap;
-		GuidCacheMap guidCacheMap;
 };
 
 #endif

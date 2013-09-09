@@ -125,7 +125,8 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 	//dispatcher thread
 	Player* _player = g_game.getPlayerByName(name);
 	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
-		player = new Player(name, this);
+		player = new Player(this);
+		player->setName(name);
 
 		player->useThing2();
 		player->setID();
@@ -198,7 +199,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			return false;
 		}
 
-		if (!IOLoginData::getInstance()->loadPlayer(player, name)) {
+		if (!IOLoginData::getInstance()->loadPlayerByName(player, name)) {
 			disconnectClient(0x14, "Your character could not be loaded.");
 			return false;
 		}

@@ -3016,7 +3016,7 @@ int32_t LuaScriptInterface::luaDoAddMark(lua_State* L)
 {
 	//doAddMapMark(cid, pos, type, <optional> description)
 	int32_t parameters = lua_gettop(L);
-	std::string description = "";
+	std::string description;
 	Position pos;
 	uint32_t stackpos;
 

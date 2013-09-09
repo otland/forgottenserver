@@ -6186,6 +6186,15 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			return false;
 		}
 
+		Player* buyerPlayer = getPlayerByGUID(offer.playerId);
+		if (!buyerPlayer) {
+			buyerPlayer = new Player(NULL);
+			if (!IOLoginData::getInstance()->loadPlayerById(buyerPlayer, offer.playerId)) {
+				delete buyerPlayer;
+				return false;
+			}
+		}
+
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
 
@@ -6206,30 +6215,12 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		player->bankBalance += totalPrice;
 
-		Player* buyerPlayer = getPlayerByGUID(offer.playerId);
-
-		if (!buyerPlayer) {
-			std::string buyerName;
-
-			if (!IOLoginData::getInstance()->getNameByGuid(offer.playerId, buyerName)) {
-				return false;
-			}
-
-			buyerPlayer = new Player(buyerName, NULL);
-
-			if (!IOLoginData::getInstance()->loadPlayer(buyerPlayer, buyerName)) {
-				delete buyerPlayer;
-				return false;
-			}
-		}
-
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
 
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(100, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-
 				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;
@@ -6239,14 +6230,12 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			}
 		} else {
 			int32_t subType = -1;
-
 			if (it.charges != 0) {
 				subType = it.charges;
 			}
 
 			for (uint16_t i = 0; i < amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-
 				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;
@@ -6299,7 +6288,6 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		}
 
 		Player* sellerPlayer = getPlayerByGUID(offer.playerId);
-
 		if (sellerPlayer) {
 			sellerPlayer->bankBalance += totalPrice;
 		} else {
@@ -6356,35 +6344,24 @@ void Game::checkExpiredMarketOffers()
 		ExpiredMarketOffer offer = *it;
 
 		Player* player = getPlayerByGUID(offer.playerId);
-
 		if (!player) {
-			std::string name;
-
-			if (!IOLoginData::getInstance()->getNameByGuid(offer.playerId, name)) {
-				continue;
-			}
-
-			player = new Player(name, NULL);
-
-			if (!IOLoginData::getInstance()->loadPlayer(player, name)) {
+			player = new Player(NULL);
+			if (!IOLoginData::getInstance()->loadPlayerById(player, offer.playerId)) {
 				delete player;
 				continue;
 			}
 		}
 
 		const ItemType& itemType = Item::items[offer.itemId];
-
 		if (itemType.id == 0) {
 			continue;
 		}
 
 		if (itemType.stackable) {
 			uint16_t tmpAmount = offer.amount;
-
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(100, tmpAmount);
 				Item* item = Item::CreateItem(itemType.id, stackCount);
-
 				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;
@@ -6394,14 +6371,12 @@ void Game::checkExpiredMarketOffers()
 			}
 		} else {
 			int32_t subType = -1;
-
 			if (itemType.charges != 0) {
 				subType = itemType.charges;
 			}
 
 			for (uint16_t i = 0; i < offer.amount; ++i) {
 				Item* item = Item::CreateItem(itemType.id, subType);
-
 				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;

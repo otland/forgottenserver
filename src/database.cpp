@@ -287,11 +287,11 @@ std::string DBResult::getDataString(const std::string& s) const
 	listNames_t::const_iterator it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "[Error - DBResult::getDataString] Column '" << s << "' does not exist in result set." << std::endl;
-		return std::string("");
+		return std::string();
 	}
 
 	if (m_row[it->second] == NULL) {
-		return std::string("");
+		return std::string();
 	}
 
 	return std::string(m_row[it->second]);

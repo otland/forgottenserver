@@ -130,7 +130,7 @@ class Player : public Creature, public Cylinder
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 		static uint32_t playerCount;
 #endif
-		Player(const std::string& name, ProtocolGame* p);
+		Player(ProtocolGame* p);
 		virtual ~Player();
 
 		virtual Player* getPlayer() {
@@ -151,6 +151,9 @@ class Player : public Creature, public Cylinder
 
 		virtual const std::string& getName() const {
 			return name;
+		}
+		void setName(const std::string& name) {
+			this->name = name;
 		}
 		virtual const std::string& getNameDescription() const {
 			return name;

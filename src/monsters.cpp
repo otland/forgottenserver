@@ -332,8 +332,8 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 	sb.combatSpell = false;
 	sb.isMelee = false;
 
-	std::string name = "";
-	std::string scriptName = "";
+	std::string name;
+	std::string scriptName;
 	bool isScripted = false;
 
 	if (readXMLString(node, "script", scriptName)) {

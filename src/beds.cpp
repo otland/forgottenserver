@@ -111,31 +111,21 @@ bool BedItem::canUse(Player* player)
 	}
 
 	if (sleeperGUID == 0) {
-		return isBed();
+		return true;
 	}
 
-	if (house->getHouseAccessLevel(player) != HOUSE_OWNER) {
-		std::string name;
+	if (house->getHouseAccessLevel(player) == HOUSE_OWNER) {
+		return true;
+	}
 
-		if (IOLoginData::getInstance()->getNameByGuid(sleeperGUID, name)) {
-			Player* sleeper = new Player(name, NULL);
-
-			if (IOLoginData::getInstance()->loadPlayer(sleeper, name)) {
-				if (house->getHouseAccessLevel(sleeper) <= house->getHouseAccessLevel(player)) {
-					delete sleeper;
-					sleeper = NULL;
-
-					return isBed();
-				}
-			}
-
-			delete sleeper;
-			sleeper = NULL;
-		}
-
+	Player sleeper(NULL);
+	if (!IOLoginData::getInstance()->loadPlayerById(&sleeper, sleeperGUID)) {
 		return false;
 	}
 
+	if (house->getHouseAccessLevel(&sleeper) > house->getHouseAccessLevel(player)) {
+		return false;
+	}
 	return true;
 }
 
@@ -207,18 +197,10 @@ void BedItem::wakeUp(Player* player)
 
 	if (sleeperGUID != 0) {
 		if (!player) {
-			std::string name;
-
-			if (IOLoginData::getInstance()->getNameByGuid(sleeperGUID, name)) {
-				Player* _player = new Player(name, NULL);
-
-				if (IOLoginData::getInstance()->loadPlayer(_player, name)) {
-					regeneratePlayer(_player);
-					IOLoginData::getInstance()->savePlayer(_player);
-				}
-
-				delete _player;
-				_player = NULL;
+			Player _player(NULL);
+			if (IOLoginData::getInstance()->loadPlayerById(&_player, sleeperGUID)) {
+				regeneratePlayer(&_player);
+				IOLoginData::getInstance()->savePlayer(&_player);
 			}
 		} else {
 			regeneratePlayer(player);

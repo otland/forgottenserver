@@ -222,30 +222,21 @@ bool House::transferToDepot()
 		return false;
 	}
 
-	std::string ownerName;
-
-	if (!IOLoginData::getInstance()->getNameByGuid(houseOwner, ownerName)) {
-		return false;
-	}
-
-	Player* player = g_game.getPlayerByName(ownerName);
-
+	Player* player = g_game.getPlayerByGUID(houseOwner);
 	if (!player) {
-		player = new Player(ownerName, NULL);
-
-		if (!IOLoginData::getInstance()->loadPlayer(player, ownerName)) {
+		player = new Player(NULL);
+		if (!IOLoginData::getInstance()->loadPlayerById(player, houseOwner)) {
 			delete player;
 			return false;
 		}
 	}
-
+	
 	transferToDepot(player);
 
 	if (player->isOffline()) {
 		IOLoginData::getInstance()->savePlayer(player);
 		delete player;
 	}
-
 	return true;
 }
 
@@ -850,35 +841,20 @@ bool Houses::payHouses()
 				continue;
 			}
 
-			std::string name;
-
-			if (!IOLoginData::getInstance()->getNameByGuid(ownerid, name)) {
-				//player doesnt exist, remove it as house owner?
-				house->setHouseOwner(0);
-				continue;
-			}
-
-			Player* player = g_game.getPlayerByName(name);
-
+			Player* player = g_game.getPlayerByGUID(ownerid);
 			if (!player) {
-				player = new Player(name, NULL);
-
-				if (!IOLoginData::getInstance()->loadPlayer(player, name)) {
-#ifdef __DEBUG__
-					std::cout << "Failure: [Houses::payHouses], can not load player: " << name << std::endl;
-#endif
+				player = new Player(NULL);
+				if (!IOLoginData::getInstance()->loadPlayerById(player, ownerid)) {
+					//player doesnt exist, reset house owner
+					house->setHouseOwner(0);
 					delete player;
 					continue;
 				}
 			}
 
-			bool paid = false;
 			if (player->getBankBalance() >= house->getRent()) {
 				player->setBankBalance(player->getBankBalance() - house->getRent());
-				paid = true;
-			}
 
-			if (paid) {
 				time_t paidUntil = currentTime;
 
 				switch (rentPeriod) {
@@ -904,7 +880,7 @@ bool Houses::payHouses()
 					int32_t daysLeft = 7 - house->getPayRentWarnings();
 
 					Item* letter = Item::CreateItem(ITEM_LETTER_STAMPED);
-					std::string period = "";
+					std::string period;
 
 					switch (rentPeriod) {
 						case RENTPERIOD_DAILY:

@@ -1005,7 +1005,7 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 
 std::string getFirstLine(const std::string& str)
 {
-	std::string firstLine = "";
+	std::string firstLine;
 	for (size_t i = 0, strLength = str.length(); i < strLength; ++i) {
 		if (str[i] == '\n') {
 			break;

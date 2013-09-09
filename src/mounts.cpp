@@ -100,7 +100,7 @@ bool Mounts::loadFromXml()
 		if (xmlStrcmp(p->name, (const xmlChar*)"mount") == 0) {
 			int8_t id = 0;
 			int16_t clientid = 0;
-			std::string name = "";
+			std::string name;
 			int32_t speed = 0;
 			bool premium = true;
 

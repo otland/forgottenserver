@@ -100,7 +100,6 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 		str_param = std::string(words, (loc + 1), words.size() - loc - 1);
 	} else {
 		str_words = words;
-		str_param = std::string("");
 	}
 
 	trim_left(str_words, " ");

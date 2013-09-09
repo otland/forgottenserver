@@ -63,7 +63,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 		return TALKACTION_CONTINUE;
 	}
 
-	std::string param = "";
+	std::string param;
 
 	if (instantSpell->getHasParam()) {
 		size_t spellLen = instantSpell->getWords().length();

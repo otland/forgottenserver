@@ -61,7 +61,7 @@ uint32_t Player::playerAutoID = 0x10000000;
 uint32_t Player::playerCount = 0;
 #endif
 
-Player::Player(const std::string& _name, ProtocolGame* p) :
+Player::Player(ProtocolGame* p) :
 	Creature()
 {
 	client = p;
@@ -72,7 +72,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) :
 	}
 
 	accountNumber = 0;
-	name = _name;
 	setVocation(0);
 	capacity = 400.00;
 	mana = 0;

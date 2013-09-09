@@ -112,7 +112,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 
 				while (tmpNode) {
 					if (xmlStrcmp(tmpNode->name, (const xmlChar*)"monster") == 0) {
-						std::string name = "";
+						std::string name;
 						Position pos = centerPos;
 						Direction dir = NORTH;
 						uint32_t interval = 0;
@@ -169,7 +169,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 						}
 					} else if (xmlStrcmp(tmpNode->name, (const xmlChar*)"npc") == 0) {
 						Direction direction = NORTH;
-						std::string name = "";
+						std::string name;
 						Position placePos = centerPos;
 
 						if (readXMLString(tmpNode, "name", strValue)) {
