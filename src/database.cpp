@@ -24,8 +24,6 @@
 
 #include <string>
 
-#include <boost/lexical_cast.hpp>
-
 #if defined(WIN32) && !defined(_MSC_VER)
 #include <mysql/errmsg.h>
 #else

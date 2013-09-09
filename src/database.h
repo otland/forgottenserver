@@ -22,6 +22,7 @@
 
 #include "definitions.h"
 
+#include <boost/lexical_cast.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 
 #if defined(WIN32) && !defined(_MSC_VER)
