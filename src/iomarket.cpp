@@ -289,14 +289,6 @@ void IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 	db->freeResult(result);
 }
 
-void IOMarket::clearOldHistory()
-{
-	const time_t lastExpireDate = time(NULL) - g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
-	std::ostringstream query;
-	query << "DELETE FROM `market_history` WHERE `inserted` <= " << lastExpireDate;
-	Database::getInstance()->executeQuery(query.str());
-}
-
 void IOMarket::updateStatistics()
 {
 	Database* db = Database::getInstance();

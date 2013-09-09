@@ -52,7 +52,6 @@ class IOMarket
 
 		void appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint32_t price, time_t timestamp, MarketOfferState_t state);
 		void moveOfferToHistory(uint32_t offerId, MarketOfferState_t state);
-		void clearOldHistory();
 
 		void updateStatistics();
 
