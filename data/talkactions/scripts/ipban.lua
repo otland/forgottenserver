@@ -1,3 +1,5 @@
+local ipBanDays = 7
+
 function onSay(cid, words, param)
 	if getPlayerAccess(cid) <= 0 then
 		return false
@@ -29,5 +31,5 @@ function onSay(cid, words, param)
 
 	local timeNow = os.time()
 	db:query("INSERT INTO `ip_bans` (`ip`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
-			ip .. ", '', " .. timeNow .. ", " .. timeNow + (getConfigInfo("banDays") * 86400) .. ", " .. getPlayerGUIDByName(getCreatureName(cid)) .. ")")
+			ip .. ", '', " .. timeNow .. ", " .. timeNow + (ipBanDays * 86400) .. ", " .. getPlayerGUIDByName(getCreatureName(cid)) .. ")")
 end

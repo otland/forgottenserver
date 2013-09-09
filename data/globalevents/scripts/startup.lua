@@ -3,7 +3,7 @@ function onStartup()
 	db.query("DELETE FROM `guild_wars` WHERE `status` = 0")
 	db.query("DELETE FROM `players` WHERE `deletion` != 0 AND `deletion` < " .. os.time())
 	db.query("DELETE FROM `ip_bans` WHERE `expires_at` != 0 AND `expires_at` <= " .. os.time())
-	db.query("DELETE FROM `market_history` WHERE `inserted` <= " .. (os.time() - getConfigInfo('marketOfferDuration')))
+	db.query("DELETE FROM `market_history` WHERE `inserted` <= " .. (os.time() - configManager.getNumber(configKeys.MARKET_OFFER_DURATION)))
 	
 	local resultId = db.storeQuery("SELECT * FROM `account_bans` WHERE `expires_at` != 0 AND `expires_at` <= " .. os.time())
 	if resultId ~= false then

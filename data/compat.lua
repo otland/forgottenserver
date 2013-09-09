@@ -350,3 +350,10 @@ function getTopCreature(position)
 end
 
 function queryTileAddThing(thing, position, ...) local t = Tile(position) return t ~= nil and t:queryAdd(thing, ...) or false end
+
+function getConfigInfo(info)
+	if (type(info) ~= 'string') then return nil end
+
+	dofile('config.lua')
+	return _G[info]
+end

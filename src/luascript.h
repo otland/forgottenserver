@@ -419,8 +419,7 @@ class LuaScriptInterface
 		static Outfit_t popOutfit(lua_State* L);
 
 		// Push
-		template<typename T>
-		static void pushNumber(lua_State* L, T number) {
+		inline static void pushNumber(lua_State* L, lua_Number number) {
 			lua_pushnumber(L, number);
 		}
 
@@ -449,6 +448,7 @@ class LuaScriptInterface
 #ifndef __LUAJIT__
 		static const luaL_Reg luaBitReg[13];
 #endif
+		static const luaL_Reg luaConfigManagerTable[4];
 		static const luaL_Reg luaDatabaseTable[8];
 		static const luaL_Reg luaResultTable[7];
 
@@ -679,6 +679,10 @@ class LuaScriptInterface
 		static int32_t luaBitULeftShift(lua_State* L);
 		static int32_t luaBitURightShift(lua_State* L);
 #endif
+
+		static int32_t luaConfigManagerGetString(lua_State* L);
+		static int32_t luaConfigManagerGetNumber(lua_State* L);
+		static int32_t luaConfigManagerGetBoolean(lua_State* L);
 
 		static int32_t luaDatabaseExecute(lua_State* L);
 		static int32_t luaDatabaseStoreQuery(lua_State* L);

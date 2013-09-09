@@ -1719,6 +1719,9 @@ void LuaScriptInterface::registerFunctions()
 	luaL_register(m_luaState, "bit", LuaScriptInterface::luaBitReg);
 #endif
 
+	//configManager table
+	luaL_register(m_luaState, "configManager", LuaScriptInterface::luaConfigManagerTable);
+
 	//db table
 	luaL_register(m_luaState, "db", LuaScriptInterface::luaDatabaseTable);
 
@@ -5841,6 +5844,31 @@ SHIFTOP(uint32_t, ULeftShift, << )
 SHIFTOP(uint32_t, URightShift, >> )
 #endif
 
+const luaL_Reg LuaScriptInterface::luaConfigManagerTable[] = {
+	{"getString", LuaScriptInterface::luaConfigManagerGetString},
+	{"getNumber", LuaScriptInterface::luaConfigManagerGetNumber},
+	{"getBoolean", LuaScriptInterface::luaConfigManagerGetBoolean},
+	{NULL, NULL}
+};
+
+int32_t LuaScriptInterface::luaConfigManagerGetString(lua_State* L)
+{
+	pushString(L, g_config.getString(static_cast<ConfigManager::string_config_t>(popNumber(L))));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaConfigManagerGetNumber(lua_State* L)
+{
+	pushNumber(L, g_config.getNumber(static_cast<ConfigManager::integer_config_t>(popNumber(L))));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaConfigManagerGetBoolean(lua_State* L)
+{
+	pushBoolean(L, g_config.getBoolean(static_cast<ConfigManager::boolean_config_t>(popNumber(L))));
+	return 1;
+}
+
 const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 	{"query", LuaScriptInterface::luaDatabaseExecute},
 	{"storeQuery", LuaScriptInterface::luaDatabaseStoreQuery},
@@ -8058,7 +8086,7 @@ int32_t LuaScriptInterface::luaCreatureGetDirection(lua_State* L)
 	// creature:getDirection()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
-		pushNumber<Direction>(L, creature->getDirection());
+		pushNumber(L, creature->getDirection());
 	} else {
 		pushNil(L);
 	}

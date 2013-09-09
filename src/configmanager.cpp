@@ -43,15 +43,15 @@ ConfigManager::~ConfigManager()
 	//
 }
 
-bool ConfigManager::loadFile(const std::string& _filename)
+bool ConfigManager::load()
 {
 	lua_State* L = luaL_newstate();
 	if (!L) {
 		throw std::runtime_error("Failed to allocate memory");
 	}
 
-	if (luaL_dofile(L, _filename.c_str())) {
-		std::cout << "[Error - ConfigManager::loadFile] With file = " << _filename << ", " << lua_tostring(L, -1) << std::endl;
+	if (luaL_dofile(L, "config.lua")) {
+		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
 		lua_close(L);
 		return false;
 	}
@@ -63,7 +63,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 		m_confBoolean[BIND_ONLY_GLOBAL_ADDRESS] = booleanString(getGlobalString(L, "bindOnlyGlobalAddress", "no"));
 		m_confBoolean[OPTIMIZE_DATABASE] = booleanString(getGlobalString(L, "startupDatabaseOptimization", "yes"));
 
-		m_confString[CONFIG_FILE] = _filename;
 		m_confString[IP] = getGlobalString(L, "ip", "127.0.0.1");
 		m_confString[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		m_confString[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
@@ -156,7 +155,7 @@ bool ConfigManager::reload()
 		return false;
 	}
 
-	bool result = loadFile(m_confString[CONFIG_FILE]);
+	bool result = load();
 	if (transformToSHA1(getString(ConfigManager::MOTD)) != g_game.getMotdHash()) {
 		g_game.incrementMotdNum();
 	}
