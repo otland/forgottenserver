@@ -1,3 +1,11 @@
+local statues = {
+	[18488] = SKILL_SWORD,
+	[18489] = SKILL_AXE,
+	[18490] = SKILL_CLUB,
+	[18491] = SKILL_DISTANCE,
+	[18492] = SKILL_MAGLEVEL
+}
+
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	if not isPremium(cid) then
 		doPlayerSendDefaultCancel(cid, RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
@@ -8,18 +16,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		return false
 	end
 
-	if item.itemid == 18492 then
-		doPlayerSetOfflineTrainingSkill(cid, SKILL_MAGLEVEL)
-	elseif item.itemid == 18491 then
-		doPlayerSetOfflineTrainingSkill(cid, SKILL_DISTANCE)
-	elseif item.itemid == 18490 then
-		doPlayerSetOfflineTrainingSkill(cid, SKILL_CLUB)
-	elseif item.itemid == 18489 then
-		doPlayerSetOfflineTrainingSkill(cid, SKILL_AXE)
-	elseif item.itemid == 18488 then
-		doPlayerSetOfflineTrainingSkill(cid, SKILL_SWORD)
-	end
-
+	doPlayerSetOfflineTrainingSkill(cid, statues[item.itemid])
 	doRemoveCreature(cid)
 	return true
 end
