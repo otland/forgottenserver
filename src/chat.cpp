@@ -257,7 +257,7 @@ bool ChatChannel::addUser(Player& player)
 		}
 	}
 
-	if (publicChannel) {
+	if (!publicChannel) {
 		for (const auto& it : users) {
 			it.second->sendChannelEvent(id, player.getName(), CHANNELEVENT_JOIN);
 		}
@@ -276,7 +276,7 @@ bool ChatChannel::removeUser(const Player& player)
 
 	users.erase(iter);
 
-	if (publicChannel) {
+	if (!publicChannel) {
 		for (const auto& it : users) {
 			it.second->sendChannelEvent(id, player.getName(), CHANNELEVENT_LEAVE);
 		}
