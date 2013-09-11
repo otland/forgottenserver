@@ -48,7 +48,7 @@ function getCreatureMaster(cid)
 	local c = Creature(cid)
 	if c ~= nil then
 		local master = c:getMaster()
-		return master ~= nil and target:getId() or c:getId()
+		return master ~= nil and master:getId() or c:getId()
 	end
 	return false
 end
