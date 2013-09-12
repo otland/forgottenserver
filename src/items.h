@@ -336,7 +336,6 @@ class Items
 		const ItemType& getItemType(int32_t id) const;
 		ItemType& getItemType(int32_t id);
 		const ItemType& getItemIdByClientId(int32_t spriteId) const;
-		const std::list<ItemType*> getItemIdsByClientId(int32_t spriteId) const;
 
 		int32_t getItemIdByName(const std::string& name);
 

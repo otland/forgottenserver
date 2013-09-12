@@ -2068,17 +2068,12 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 
 void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 {
-	int32_t crys = money / 10000;
+	uint32_t crys = money / 10000;
 	money -= crys * 10000;
-	int64_t plat = money / 100;
-	money -= plat * 100;
-	int64_t gold = money;
-
 	while (crys > 0) {
 		Item* remaindItem = Item::CreateItem(ITEM_COINS_CRYSTAL, std::min<int32_t>(100, crys));
 
 		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
-
 		if (ret != RET_NOERROR) {
 			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 		}
@@ -2086,21 +2081,22 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 		crys -= std::min<int32_t>(100, crys);
 	}
 
+	uint16_t plat = money / 100;
 	if (plat != 0) {
 		Item* remaindItem = Item::CreateItem(ITEM_COINS_PLATINUM, plat);
 
 		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
-
 		if (ret != RET_NOERROR) {
 			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 		}
+
+		money -= plat * 100;
 	}
 
-	if (gold != 0) {
-		Item* remaindItem = Item::CreateItem(ITEM_COINS_GOLD, gold);
+	if (money != 0) {
+		Item* remaindItem = Item::CreateItem(ITEM_COINS_GOLD, money);
 
 		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
-
 		if (ret != RET_NOERROR) {
 			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 		}
@@ -2114,13 +2110,11 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	}
 
 	Cylinder* cylinder = item->getParent();
-
 	if (cylinder == NULL) {
 		return NULL;
 	}
 
 	Tile* fromTile = cylinder->getTile();
-
 	if (fromTile) {
 		BrowseFieldMap::const_iterator it = browseFields.find(fromTile);
 
@@ -2130,7 +2124,6 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	}
 
 	int32_t itemIndex = cylinder->__getIndexOfThing(item);
-
 	if (itemIndex == -1) {
 		return item;
 	}
@@ -2140,27 +2133,24 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	}
 
 	const ItemType& curType = Item::items[item->getID()];
-
 	const ItemType& newType = Item::items[newId];
 
 	if (curType.alwaysOnTop != newType.alwaysOnTop) {
 		//This only occurs when you transform items on tiles from a downItem to a topItem (or vice versa)
 		//Remove the old, and add the new
 		ReturnValue ret = internalRemoveItem(item);
-
 		if (ret != RET_NOERROR) {
 			return item;
 		}
 
 		Item* newItem = NULL;
-
 		if (newCount == -1) {
 			newItem = Item::CreateItem(newId);
 		} else {
 			newItem = Item::CreateItem(newId, newCount);
 		}
 
-		if (newItem == NULL) {
+		if (!newItem) {
 			return NULL;
 		}
 
@@ -2195,7 +2185,6 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 				} else if (newItemId != newId) {
 					//Replacing the the old item with the new while maintaining the old position
 					Item* newItem = Item::CreateItem(newItemId, 1);
-
 					if (newItem == NULL) {
 						return NULL;
 					}
@@ -2256,7 +2245,6 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 
 		return newItem;
 	}
-
 	return NULL;
 }
 
@@ -2272,7 +2260,6 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	if (toTile) {
 		if (Creature* creature = thing->getCreature()) {
 			ReturnValue ret = toTile->__queryAdd(0, creature, 1, FLAG_NOLIMIT);
-
 			if (ret != RET_NOERROR) {
 				return ret;
 			}
@@ -2350,9 +2337,11 @@ void Game::playerChannelInvite(uint32_t playerId, const std::string& name)
 		return;
 	}
 
-	if (player != invitePlayer) {
-		channel->invitePlayer(*player, *invitePlayer);
+	if (player == invitePlayer) {
+		return;
 	}
+
+	channel->invitePlayer(*player, *invitePlayer);
 }
 
 void Game::playerChannelExclude(uint32_t playerId, const std::string& name)
@@ -2372,9 +2361,11 @@ void Game::playerChannelExclude(uint32_t playerId, const std::string& name)
 		return;
 	}
 
-	if (player != excludePlayer) {
-		channel->excludePlayer(*player, *excludePlayer);
+	if (player == excludePlayer) {
+		return;
 	}
+
+	channel->excludePlayer(*player, *excludePlayer);
 }
 
 bool Game::playerRequestChannels(uint32_t playerId)
@@ -2448,13 +2439,11 @@ bool Game::playerCloseNpcChannel(uint32_t playerId)
 
 	SpectatorVec list;
 	getSpectators(list, player->getPosition());
-
 	for (SpectatorVec::const_iterator it = list.begin(), end = list.end(); it != end; ++it) {
 		if (Npc* npc = (*it)->getNpc()) {
 			npc->onPlayerCloseChannel(player);
 		}
 	}
-
 	return true;
 }
 
@@ -2748,7 +2737,6 @@ bool Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 bool Game::playerCloseContainer(uint32_t playerId, uint8_t cid)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -2800,13 +2788,17 @@ bool Game::playerUpdateTile(uint32_t playerId, const Position& pos)
 		return false;
 	}
 
-	if (player->canSee(pos)) {
-		Tile* tile = getTile(pos.x, pos.y, pos.z);
-		player->sendUpdateTile(tile, pos);
-		return true;
+	if (!player->canSee(pos)) {
+		return false;
 	}
 
-	return false;
+	Tile* tile = getTile(pos);
+	if (!tile) {
+		return false;
+	}
+
+	player->sendUpdateTile(tile, pos);
+	return true;
 }
 
 bool Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
@@ -2863,7 +2855,6 @@ bool Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	if (newId != 0) {
 		transformItem(item, newId);
 	}
-
 	return true;
 }
 
@@ -3199,17 +3190,13 @@ bool Game::playerAcceptTrade(uint32_t playerId)
 		player->setTradeState(TRADE_TRANSFER);
 		tradePartner->setTradeState(TRADE_TRANSFER);
 
-		std::map<Item*, uint32_t>::iterator it;
-
-		it = tradeItems.find(tradeItem1);
-
+		std::map<Item*, uint32_t>::iterator it = tradeItems.find(tradeItem1);
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
 		}
 
 		it = tradeItems.find(tradeItem2);
-
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
@@ -3219,11 +3206,9 @@ bool Game::playerAcceptTrade(uint32_t playerId)
 
 		ReturnValue ret1 = internalAddItem(tradePartner, tradeItem1, INDEX_WHEREEVER, 0, true);
 		ReturnValue ret2 = internalAddItem(player, tradeItem2, INDEX_WHEREEVER, 0, true);
-
 		if (ret1 == RET_NOERROR && ret2 == RET_NOERROR) {
 			ret1 = internalRemoveItem(tradeItem1, tradeItem1->getItemCount(), true);
 			ret2 = internalRemoveItem(tradeItem2, tradeItem2->getItemCount(), true);
-
 			if (ret1 == RET_NOERROR && ret2 == RET_NOERROR) {
 				Cylinder* cylinder1 = tradeItem1->getParent();
 				Cylinder* cylinder2 = tradeItem2->getParent();
@@ -3232,7 +3217,6 @@ bool Game::playerAcceptTrade(uint32_t playerId)
 				uint32_t count2 = tradeItem2->getItemCount();
 
 				ret1 = internalMoveTradeItem(cylinder1, tradePartner, INDEX_WHEREEVER, tradeItem1, tradeItem2, count1, NULL, FLAG_IGNOREAUTOSTACK);
-
 				if (ret1 == RET_NOERROR) {
 					internalMoveItem(cylinder2, player, INDEX_WHEREEVER, tradeItem2, count2, NULL, FLAG_IGNOREAUTOSTACK);
 
@@ -3318,7 +3302,7 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 		return false;
 	}
 
-	Item* tradeItem = NULL;
+	Item* tradeItem;
 	if (lookAtCounterOffer) {
 		tradeItem = tradePartner->getTradeItem();
 	} else {
@@ -3384,7 +3368,6 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 bool Game::playerCloseTrade(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3395,17 +3378,12 @@ bool Game::playerCloseTrade(uint32_t playerId)
 bool Game::internalCloseTrade(Player* player)
 {
 	Player* tradePartner = player->tradePartner;
-
 	if ((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) || player->getTradeState() == TRADE_TRANSFER) {
-		std::cout << "Warning: [Game::playerCloseTrade] TradeState == TRADE_TRANSFER. " <<
-		          player->getName() << " " << player->getTradeState() << " , " <<
-		          tradePartner->getName() << " " << tradePartner->getTradeState() << std::endl;
 		return true;
 	}
 
 	if (player->getTradeItem()) {
 		std::map<Item*, uint32_t>::iterator it = tradeItems.find(player->getTradeItem());
-
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
@@ -3424,7 +3402,6 @@ bool Game::internalCloseTrade(Player* player)
 	if (tradePartner) {
 		if (tradePartner->getTradeItem()) {
 			std::map<Item*, uint32_t>::iterator it = tradeItems.find(tradePartner->getTradeItem());
-
 			if (it != tradeItems.end()) {
 				ReleaseItem(it->first);
 				tradeItems.erase(it);
@@ -3440,7 +3417,6 @@ bool Game::internalCloseTrade(Player* player)
 		tradePartner->sendTextMessage(MSG_STATUS_SMALL, "Trade cancelled.");
 		tradePartner->sendTradeClose();
 	}
-
 	return true;
 }
 
@@ -3452,8 +3428,7 @@ bool Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t coun
 	}
 
 	Player* player = getPlayerByID(playerId);
-
-	if (player == NULL || player->isRemoved()) {
+	if (!player || player->isRemoved()) {
 		return false;
 	}
 
@@ -3461,46 +3436,16 @@ bool Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t coun
 	int32_t onSell;
 
 	Npc* merchant = player->getShopOwner(onBuy, onSell);
-
 	if (merchant == NULL) {
 		return false;
 	}
 
-	/*
-	uint16_t itemId = 0;
-	uint8_t subType;
-
-	const std::list<ItemType*> itemTypes = Item::items.getItemIdsByClientId(spriteId);
-	for(std::list<ItemType*>::const_iterator iter = itemTypes.begin(), end = itemTypes.end(); iter != end; ++iter)
-	{
-		ItemType* it = *iter;
-		if(it->id == 0)
-			continue;
-
-		if(it->isSplash() || it->isFluidContainer())
-			subType = clientFluidToServer(count);
-		else
-			subType = count;
-
-		if(player->hasShopItemForSale(it->id, subType))
-		{
-			itemId = it->id;
-			break;
-		}
-	}
-
-	if(itemId == 0)
-		return false;
-	*/
-
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-
 	if (it.id == 0) {
 		return false;
 	}
 
 	uint8_t subType;
-
 	if (it.isSplash() || it.isFluidContainer()) {
 		subType = clientFluidToServer(count);
 	} else {
@@ -3522,7 +3467,6 @@ bool Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, u
 	}
 
 	Player* player = getPlayerByID(playerId);
-
 	if (!player || player->isRemoved()) {
 		return false;
 	}
@@ -3530,19 +3474,16 @@ bool Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, u
 	int32_t onBuy, onSell;
 
 	Npc* merchant = player->getShopOwner(onBuy, onSell);
-
 	if (!merchant) {
 		return false;
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-
 	if (it.id == 0) {
 		return false;
 	}
 
 	uint8_t subType;
-
 	if (it.isSplash() || it.isFluidContainer()) {
 		subType = clientFluidToServer(count);
 	} else {
@@ -3603,7 +3544,6 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 	}
 
 	Position thingPos = thing->getPosition();
-
 	if (!player->canSee(thingPos)) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
@@ -3887,7 +3827,6 @@ bool Game::playerToggleMount(uint32_t playerId, bool mount)
 	if (!player || player->isRemoved()) {
 		return false;
 	}
-
 	return player->toggleMount(mount);
 }
 
@@ -4026,15 +3965,18 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		default:
 			break;
 	}
-
 	return false;
 }
 
 bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string& text)
 {
-	//First, check if this was a command
-	for (uint32_t i = 0; i < commandTags.size(); i++) {
-		if (commandTags[i] == text.substr(0, 1)) {
+	if (text.empty()) {
+		return false;
+	}
+
+	char firstCharacter = text[0];
+	for (char commandTag : commandTags) {
+		if (commandTag == firstCharacter) {
 			if (g_commands.exeCommand(player, text)) {
 				return true;
 			}
@@ -5140,10 +5082,10 @@ void Game::getWorldLightInfo(LightInfo& lightInfo) const
 	lightInfo.color = 0xD7;
 }
 
-void Game::addCommandTag(const std::string& tag)
+void Game::addCommandTag(char tag)
 {
-	for (size_t i = 0, size = commandTags.size(); i < size; ++i) {
-		if (commandTags[i] == tag) {
+	for (char commandTag : commandTags) {
+		if (commandTag == tag) {
 			return;
 		}
 	}

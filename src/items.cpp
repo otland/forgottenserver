@@ -1310,21 +1310,6 @@ const ItemType& Items::getItemIdByClientId(int32_t spriteId) const
 	return dummyItemType;
 }
 
-const std::list<ItemType*> Items::getItemIdsByClientId(int32_t spriteId) const
-{
-	std::list<ItemType*> itemIds;
-
-	uint32_t i = 100;
-	ItemType* iType = items->getElement(i);
-	while (iType) {
-		if (iType->clientId == spriteId) {
-			itemIds.push_back(iType);
-		}
-		iType = items->getElement(++i);
-	}
-	return itemIds;
-}
-
 int32_t Items::getItemIdByName(const std::string& name)
 {
 	if (name.empty()) {

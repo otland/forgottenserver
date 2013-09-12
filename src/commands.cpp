@@ -218,7 +218,6 @@ bool Commands::loadFromXml()
 
 	for (CommandMap::iterator it = commandMap.begin(), end = commandMap.end(); it != end; ++it) {
 		Command* command = it->second;
-
 		if (!command->loadedGroupId) {
 			std::cout << "Warning: Missing group id for command " << it->first << std::endl;
 		}
@@ -231,9 +230,8 @@ bool Commands::loadFromXml()
 			std::cout << "Warning: Missing log command " << it->first << std::endl;
 		}
 
-		g_game.addCommandTag(it->first.substr(0, 1));
+		g_game.addCommandTag(it->first[0]);
 	}
-
 	return loaded;
 }
 

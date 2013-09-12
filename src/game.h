@@ -552,7 +552,7 @@ class Game
 			stateTime = _stateTime;
 		}
 
-		void addCommandTag(const std::string& tag);
+		void addCommandTag(char tag);
 		void resetCommandTag();
 
 		void startDecay(Item* item);
@@ -681,6 +681,6 @@ class Game
 		Groups groups;
 
 		std::unordered_map<uint32_t, Guild*> guilds;
-		std::vector<std::string> commandTags;
+		std::vector<char> commandTags;
 };
 #endif
