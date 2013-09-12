@@ -54,13 +54,13 @@ class Party
 		}
 
 		void disband();
-		bool invitePlayer(Player* player);
-		bool joinParty(Player* player);
-		void revokeInvitation(Player* player);
+		bool invitePlayer(Player& player);
+		bool joinParty(Player& player);
+		void revokeInvitation(Player& player);
 		bool passPartyLeadership(Player* player);
 		bool leaveParty(Player* player);
 
-		bool removeInvite(Player* player);
+		bool removeInvite(Player& player);
 
 		bool isPlayerInvited(const Player* player) const;
 		void updateAllPartyIcons();

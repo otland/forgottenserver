@@ -1264,7 +1264,7 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 
 	for (const auto& it : g_game.getPlayers()) {
 		Player* tmpPlayer = it.second;
-		if (tmpPlayer->isRemoved() || tmpPlayer->getIP() == 0) {
+		if (tmpPlayer->getIP() == 0) {
 			continue;
 		}
 

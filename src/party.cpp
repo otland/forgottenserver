@@ -48,7 +48,7 @@ void Party::disband()
 	leader->setParty(NULL);
 	leader->sendClosePrivate(CHANNEL_PARTY);
 	g_game.updatePlayerShield(leader);
-	g_game.updatePlayerHelpers(leader);
+	g_game.updatePlayerHelpers(*leader);
 	leader->sendCreatureSkull(leader);
 	leader->sendTextMessage(MSG_INFO_DESCR, "Your party has been disbanded.");
 
@@ -65,17 +65,16 @@ void Party::disband()
 		player->sendTextMessage(MSG_INFO_DESCR, "Your party has been disbanded.");
 	}
 
-	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		Player* player = *it;
+	for (Player* player : memberList) {
 		g_game.updatePlayerShield(player);
 
-		for (PlayerVector::iterator it2 = memberList.begin(); it2 != memberList.end(); ++it2) {
-			(*it2)->sendCreatureSkull(player);
+		for (Player* player2 : memberList) {
+			player2->sendCreatureSkull(player);
 		}
 
 		player->sendCreatureSkull(leader);
 		leader->sendCreatureSkull(player);
-		g_game.updatePlayerHelpers(player);
+		g_game.updatePlayerHelpers(*player);
 	}
 
 	memberList.clear();
@@ -118,12 +117,12 @@ bool Party::leaveParty(Player* player)
 	player->setParty(NULL);
 	player->sendClosePrivate(CHANNEL_PARTY);
 	g_game.updatePlayerShield(player);
-	g_game.updatePlayerHelpers(player);
+	g_game.updatePlayerHelpers(*player);
 
-	for (PlayerVector::const_iterator m_it = memberList.begin(); m_it != memberList.end(); ++m_it) {
-		(*m_it)->sendCreatureSkull(player);
-		player->sendPlayerPartyIcons(*m_it);
-		g_game.updatePlayerHelpers(*m_it);
+	for (Player* member : memberList) {
+		member->sendCreatureSkull(player);
+		player->sendPlayerPartyIcons(member);
+		g_game.updatePlayerHelpers(*member);
 	}
 
 	leader->sendCreatureSkull(player);
@@ -187,14 +186,9 @@ bool Party::passPartyLeadership(Player* player)
 	return true;
 }
 
-bool Party::joinParty(Player* player)
+bool Party::joinParty(Player& player)
 {
-	if (!player || player->isRemoved()) {
-		return false;
-	}
-
-	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), player);
-
+	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), &player);
 	if (it == inviteList.end()) {
 		return false;
 	}
@@ -202,93 +196,85 @@ bool Party::joinParty(Player* player)
 	inviteList.erase(it);
 
 	std::ostringstream ss;
-	ss << player->getName() << " has joined the party.";
+	ss << player.getName() << " has joined the party.";
 	broadcastPartyMessage(MSG_INFO_DESCR, ss.str());
 
-	player->setParty(this);
+	player.setParty(this);
 
-	g_game.updatePlayerShield(player);
+	g_game.updatePlayerShield(&player);
 
 	for (PlayerVector::iterator m_it = memberList.begin(); m_it != memberList.end(); ++m_it) {
-		(*m_it)->sendCreatureSkull(player);
-		player->sendPlayerPartyIcons(*m_it);
+		(*m_it)->sendCreatureSkull(&player);
+		player.sendPlayerPartyIcons(*m_it);
 	}
 
-	player->sendCreatureSkull(player);
-	leader->sendCreatureSkull(player);
-	player->sendPlayerPartyIcons(leader);
+	player.sendCreatureSkull(&player);
+	leader->sendCreatureSkull(&player);
+	player.sendPlayerPartyIcons(leader);
 
-	memberList.push_back(player);
+	memberList.push_back(&player);
 
 	g_game.updatePlayerHelpers(player);
 
-	player->removePartyInvitation(this);
+	player.removePartyInvitation(this);
 	updateSharedExperience();
 
 	const std::string& leaderName = leader->getName();
 	ss.str("");
 	ss << "You have joined " << leaderName << "'" << (leaderName[leaderName.length() - 1] == 's' ? "" : "s") <<
 	   " party. Open the party channel to communicate with your companions.";
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+	player.sendTextMessage(MSG_INFO_DESCR, ss.str());
 	return true;
 }
 
-bool Party::removeInvite(Player* player)
+bool Party::removeInvite(Player& player)
 {
-	if (!player || player->isRemoved()) {
-		return false;
-	}
-
-	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), player);
+	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), &player);
 	if (it == inviteList.end()) {
 		return false;
 	}
 
 	inviteList.erase(it);
 
-	leader->sendCreatureShield(player);
-	player->sendCreatureShield(leader);
+	leader->sendCreatureShield(&player);
+	player.sendCreatureShield(leader);
 
-	player->removePartyInvitation(this);
+	player.removePartyInvitation(this);
 
 	if (disbandParty()) {
 		disband();
 	} else {
 		for (Player* member : memberList) {
-			g_game.updatePlayerHelpers(member);
+			g_game.updatePlayerHelpers(*member);
 		}
 
-		g_game.updatePlayerHelpers(leader);
+		g_game.updatePlayerHelpers(*leader);
 	}
 
 	return true;
 }
 
-void Party::revokeInvitation(Player* player)
+void Party::revokeInvitation(Player& player)
 {
 	std::ostringstream ss;
 	ss << leader->getName() << " has revoked " << (leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " invitation.";
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+	player.sendTextMessage(MSG_INFO_DESCR, ss.str());
 
 	ss.str("");
-	ss << "Invitation for " << player->getName() << " has been revoked.";
+	ss << "Invitation for " << player.getName() << " has been revoked.";
 	leader->sendTextMessage(MSG_INFO_DESCR, ss.str());
 
 	removeInvite(player);
 }
 
-bool Party::invitePlayer(Player* player)
+bool Party::invitePlayer(Player& player)
 {
-	if (!player || player->isRemoved()) {
-		return false;
-	}
-
-	if (isPlayerInvited(player)) {
+	if (isPlayerInvited(&player)) {
 		return false;
 	}
 
 	std::ostringstream ss;
-	ss << player->getName() << " has been invited.";
+	ss << player.getName() << " has been invited.";
 
 	if (memberList.empty() && inviteList.empty()) {
 		ss << " Open the party channel to communicate with your members.";
@@ -298,22 +284,21 @@ bool Party::invitePlayer(Player* player)
 
 	leader->sendTextMessage(MSG_INFO_DESCR, ss.str());
 
-	inviteList.push_back(player);
+	inviteList.push_back(&player);
 
-	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		g_game.updatePlayerHelpers(*it);
+	for (Player* member : memberList) {
+		g_game.updatePlayerHelpers(*member);
 	}
+	g_game.updatePlayerHelpers(*leader);
 
-	g_game.updatePlayerHelpers(leader);
+	leader->sendCreatureShield(&player);
+	player.sendCreatureShield(leader);
 
-	leader->sendCreatureShield(player);
-	player->sendCreatureShield(leader);
-
-	player->addPartyInvitation(this);
+	player.addPartyInvitation(this);
 
 	ss.str("");
 	ss << leader->getName() << " has invited you to " << (leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " party.";
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+	player.sendTextMessage(MSG_INFO_DESCR, ss.str());
 	return true;
 }
 

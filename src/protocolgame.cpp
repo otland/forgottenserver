@@ -245,8 +245,7 @@ bool ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	eventConnect = 0;
 
 	Player* _player = g_game.getPlayerByID(playerId);
-
-	if (!_player || _player->isRemoved() || _player->client) {
+	if (!_player || _player->client) {
 		disconnectClient(0x14, "You are already logged in.");
 		return false;
 	}
@@ -274,32 +273,33 @@ bool ProtocolGame::logout(bool displayEffect, bool forced)
 		return false;
 	}
 
-	if (!player->isRemoved() && !forced && player->getAccountType() != ACCOUNT_TYPE_GOD) {
-		if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
-			player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
-			return false;
+	if (!player->isRemoved()) {
+		if (!forced && player->getAccountType() != ACCOUNT_TYPE_GOD) {
+			if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
+				player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
+				return false;
+			}
+
+			if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT)) {
+				player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
+				return false;
+			}
+
+			//scripting event - onLogout
+			if (!g_creatureEvents->playerLogout(player)) {
+				//Let the script handle the error message
+				return false;
+			}
 		}
 
-		if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT)) {
-			player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
-			return false;
+		if (displayEffect && player->getHealth() > 0) {
+			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		}
-
-		//scripting event - onLogout
-		if (!g_creatureEvents->playerLogout(player)) {
-			//Let the script handle the error message
-			return false;
-		}
-	}
-
-	if (displayEffect && !player->isRemoved() && player->getHealth() > 0) {
-		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	}
 
 	if (Connection_ptr connection = getConnection()) {
 		connection->closeConnection();
 	}
-
 	return g_game.removeCreature(player);
 }
 

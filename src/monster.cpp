@@ -536,7 +536,6 @@ bool Monster::selectTarget(Creature* creature)
 	}
 
 	CreatureList::iterator it = std::find(targetList.begin(), targetList.end(), creature);
-
 	if (it == targetList.end()) {
 		//Target not found in our target list.
 		return false;

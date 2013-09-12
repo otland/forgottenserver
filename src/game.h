@@ -502,7 +502,7 @@ class Game
 		void changeLight(const Creature* creature);
 		void updatePlayerSkull(Player* player);
 		void updatePlayerShield(Player* player);
-		void updatePlayerHelpers(Player* player);
+		void updatePlayerHelpers(Player& player);
 		void updateCreatureType(Creature* creature);
 		void updateCreatureWalkthrough(Creature* creature);
 

@@ -131,7 +131,7 @@ bool BedItem::canUse(Player* player)
 
 bool BedItem::trySleep(Player* player)
 {
-	if (!house || !player || player->isRemoved()) {
+	if (!house || player->isRemoved()) {
 		return false;
 	}
 
@@ -143,13 +143,12 @@ bool BedItem::trySleep(Player* player)
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		return false;
 	}
-
 	return true;
 }
 
 bool BedItem::sleep(Player* player)
 {
-	if (!house || !player || player->isRemoved()) {
+	if (!house) {
 		return false;
 	}
 

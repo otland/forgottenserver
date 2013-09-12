@@ -35,9 +35,8 @@ Guild::Guild(uint32_t id, const std::string& name)
 void Guild::addMember(Player* player)
 {
 	membersOnline.push_back(player);
-
-	for (PlayerVector::const_iterator it = membersOnline.begin(); it != membersOnline.end(); ++it) {
-		g_game.updatePlayerHelpers(*it);
+	for (Player* member : membersOnline) {
+		g_game.updatePlayerHelpers(*member);
 	}
 }
 
@@ -50,11 +49,11 @@ void Guild::removeMember(Player* player)
 		}
 	}
 
-	for (PlayerVector::const_iterator it = membersOnline.begin(); it != membersOnline.end(); ++it) {
-		g_game.updatePlayerHelpers(*it);
+	for (Player* member : membersOnline) {
+		g_game.updatePlayerHelpers(*member);
 	}
 
-	g_game.updatePlayerHelpers(player);
+	g_game.updatePlayerHelpers(*player);
 }
 
 GuildRank* Guild::getRankById(uint32_t id)
@@ -64,7 +63,6 @@ GuildRank* Guild::getRankById(uint32_t id)
 			return &ranks[i];
 		}
 	}
-
 	return NULL;
 }
 
