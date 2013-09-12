@@ -1015,3 +1015,12 @@ std::string getFirstLine(const std::string& str)
 	}
 	return firstLine;
 }
+
+double round(double v)
+{
+	if (v >= 0.0) {
+		return std::floor(v + 0.5);
+	} else {
+		return std::ceil(v - 0.5);
+	}
+}

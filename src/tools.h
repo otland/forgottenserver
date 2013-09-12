@@ -127,4 +127,6 @@ uint8_t clientFluidToServer(uint8_t clientFluid);
 
 itemAttrTypes stringToItemAttribute(const std::string& str);
 
+double round(double v);
+
 #endif

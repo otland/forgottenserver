@@ -207,7 +207,7 @@ class AreaCombat
 		AreaCombat(const AreaCombat& rhs);
 
 		ReturnValue doCombat(Creature* attacker, const Position& pos, const Combat& combat) const;
-		bool getList(const Position& centerPos, const Position& targetPos, std::list<Tile*>& list) const;
+		void getList(const Position& centerPos, const Position& targetPos, std::list<Tile*>& list) const;
 
 		void setupArea(const std::list<uint32_t>& list, uint32_t rows);
 		void setupArea(int32_t length, int32_t spread);

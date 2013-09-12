@@ -125,9 +125,13 @@ bool Combat::getMinMaxValues(Creature* creature, Creature* target, int32_t& min,
 void Combat::getCombatArea(const Position& centerPos, const Position& targetPos, const AreaCombat* area,
                            std::list<Tile*>& list)
 {
+	if (targetPos.z >= MAP_MAX_LAYERS) {
+		return;
+	}
+
 	if (area) {
 		area->getList(centerPos, targetPos, list);
-	} else if (targetPos.z < MAP_MAX_LAYERS) {
+	} else {
 		Tile* tile = g_game.getTile(targetPos.x, targetPos.y, targetPos.z);
 		if (!tile) {
 			tile = new StaticTile(targetPos.x, targetPos.y, targetPos.z);
@@ -1167,59 +1171,34 @@ AreaCombat::AreaCombat(const AreaCombat& rhs)
 	}
 }
 
-bool AreaCombat::getList(const Position& centerPos, const Position& targetPos, std::list<Tile*>& list) const
+void AreaCombat::getList(const Position& centerPos, const Position& targetPos, std::list<Tile*>& list) const
 {
-	Tile* tile = g_game.getTile(targetPos.x, targetPos.y, targetPos.z);
-
 	const MatrixArea* area = getArea(centerPos, targetPos);
-
 	if (!area) {
-		return false;
+		return;
 	}
-
-	int32_t tmpPosX = targetPos.x;
-	int32_t tmpPosY = targetPos.y;
-	int32_t tmpPosZ = targetPos.z;
-
-	size_t cols = area->getCols();
-	size_t rows = area->getRows();
 
 	uint32_t centerY, centerX;
 	area->getCenter(centerY, centerX);
 
-	tmpPosX -= centerX;
-	tmpPosY -= centerY;
-
-	if (tmpPosZ < MAP_MAX_LAYERS) {
-		for (size_t y = 0; y < rows; ++y) {
-			for (size_t x = 0; x < cols; ++x) {
-				if (area->getValue(y, x) != 0) {
-					if (g_game.isSightClear(targetPos, Position(tmpPosX, tmpPosY, tmpPosZ), true)) {
-						tile = g_game.getTile(tmpPosX, tmpPosY, tmpPosZ);
-						if (!tile) {
-							tile = new StaticTile(tmpPosX, tmpPosY, tmpPosZ);
-							g_game.setTile(tile);
-						}
-						list.push_back(tile);
+	Position tmpPos(targetPos.x - centerX, targetPos.y - centerY, targetPos.z);
+	size_t cols = area->getCols();
+	for (size_t y = 0, rows = area->getRows(); y < rows; ++y) {
+		for (size_t x = 0; x < cols; ++x) {
+			if (area->getValue(y, x) != 0) {
+				if (g_game.isSightClear(targetPos, tmpPos, true)) {
+					Tile* tile = g_game.getTile(tmpPos);
+					if (!tile) {
+						tile = new StaticTile(tmpPos.x, tmpPos.y, tmpPos.z);
+						g_game.setTile(tile);
 					}
+					list.push_back(tile);
 				}
-				tmpPosX++;
 			}
-			tmpPosX -= cols;
-			tmpPosY++;
+			tmpPos.x++;
 		}
-	}
-	return true;
-}
-
-int32_t round(float v)
-{
-	int32_t t = (long)std::floor(v);
-
-	if ((v - t) > 0.5) {
-		return t + 1;
-	} else {
-		return t;
+		tmpPos.x -= cols;
+		tmpPos.y++;
 	}
 }
 
@@ -1294,8 +1273,8 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 				int32_t newY = y - centerY;
 
 				//perform rotation
-				int32_t rotatedX = round(newX * a + newY * b);
-				int32_t rotatedY = round(newX * c + newY * d);
+				int32_t rotatedX = static_cast<int32_t>(round(newX * a + newY * b));
+				int32_t rotatedY = static_cast<int32_t>(round(newX * c + newY * d));
 
 				//write in the output matrix using rotated coordinates
 				(*output)[rotatedY + rotateCenterY][rotatedX + rotateCenterX] = (*input)[y][x];
@@ -1473,11 +1452,9 @@ void MagicField::onStepInField(Creature* creature)
 	}
 
 	const ItemType& it = items[getID()];
-
 	if (it.condition) {
 		Condition* conditionCopy = it.condition->clone();
 		uint32_t ownerId = getOwner();
-
 		if (ownerId) {
 			bool harmfulField = true;
 
@@ -1491,10 +1468,8 @@ void MagicField::onStepInField(Creature* creature)
 			}
 
 			Player* targetPlayer = creature->getPlayer();
-
 			if (targetPlayer) {
 				Player* attackerPlayer = g_game.getPlayerByID(ownerId);
-
 				if (attackerPlayer) {
 					if (Combat::isProtected(attackerPlayer, targetPlayer)) {
 						harmfulField = false;
