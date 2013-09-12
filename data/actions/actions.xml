@@ -87,6 +87,8 @@
 	<action itemid="9748" function="decreaseItemId"/>
 	<action itemid="9749" function="increaseItemId"/>
 	<action itemid="9750" function="decreaseItemId"/>
+	<action itemid="19691" function="increaseItemId"/>
+	<action itemid="19692" function="decreaseItemId"/>
 
 	<!-- Food -->
 	<action fromid="2362" toid="2363" script="other/food.lua"/>
