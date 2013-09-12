@@ -688,10 +688,11 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 	// publicize defaults to true if there is no target, false otherwise
 	uint32_t parameters = lua_gettop(L);
 	uint32_t target = 0;
-	bool publicize = true;
-
+	bool publicize;
 	if (parameters >= 3) {
-		publicize = (popNumber(L) == 1);
+		publicize = popBoolean(L);
+	} else {
+		publicize = true;
 	}
 
 	if (parameters >= 2) {
@@ -993,9 +994,11 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 	//doSellItem(cid, itemid, amount, <optional> subtype, <optional> actionid, <optional: default: 1> canDropOnMap)
 	int32_t parameters = lua_gettop(L);
 
-	bool canDropOnMap = true;
+	bool canDropOnMap;
 	if (parameters > 5) {
-		canDropOnMap = (popNumber(L) == 1);
+		canDropOnMap = popBoolean(L);
+	} else {
+		canDropOnMap = true;
 	}
 
 	uint32_t actionId = 0;
