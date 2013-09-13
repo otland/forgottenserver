@@ -52,10 +52,10 @@ void Party::disband()
 	leader->sendCreatureSkull(leader);
 	leader->sendTextMessage(MSG_INFO_DESCR, "Your party has been disbanded.");
 
-	for (PlayerVector::iterator it = inviteList.begin(); it != inviteList.end(); ++it) {
-		(*it)->removePartyInvitation(this);
+	for (Player* invitee : inviteList) {
+		invitee->removePartyInvitation(this);
+		leader->sendCreatureShield(invitee);
 	}
-
 	inviteList.clear();
 
 	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
@@ -76,7 +76,6 @@ void Party::disband()
 		leader->sendCreatureSkull(player);
 		g_game.updatePlayerHelpers(*player);
 	}
-
 	memberList.clear();
 
 	setLeader(NULL);
