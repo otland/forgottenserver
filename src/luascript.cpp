@@ -1919,6 +1919,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "setMaxMana", LuaScriptInterface::luaCreatureSetMaxMana);
 
 	registerClassMethod("Creature", "getOutfit", LuaScriptInterface::luaCreatureGetOutfit);
+	registerClassMethod("Creature", "setOutfit", LuaScriptInterface::luaCreatureSetOutfit);
 
 	registerClassMethod("Creature", "remove", LuaScriptInterface::luaCreatureRemove);
 	registerClassMethod("Creature", "teleportTo", LuaScriptInterface::luaCreatureTeleportTo);
@@ -8239,6 +8240,22 @@ int32_t LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
 		pushOutfit(L, creature->getCurrentOutfit());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureSetOutfit(lua_State* L)
+{
+	// creature:setOutfit(outfit)
+	Outfit_t outfit = popOutfit(L);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->defaultOutfit = outfit;
+
+		g_game.internalCreatureChangeOutfit(creature, outfit);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}

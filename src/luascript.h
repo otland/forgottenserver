@@ -884,6 +884,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureSetMaxMana(lua_State* L);
 
 		static int32_t luaCreatureGetOutfit(lua_State* L);
+		static int32_t luaCreatureSetOutfit(lua_State* L);
 
 		static int32_t luaCreatureRemove(lua_State* L);
 		static int32_t luaCreatureTeleportTo(lua_State* L);
