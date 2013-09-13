@@ -313,16 +313,15 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
-	if (creature->getPlayer()) {
-		playerSpectators.insert(const_cast<Creature*>(creature));
-		if (m_npcEventHandler) {
-			m_npcEventHandler->onCreatureAppear(creature);
-		}
-	} else if (creature == this) {
+	if (creature == this) {
 		if (walkTicks > 0) {
 			addEventWalk();
 		}
 
+		if (m_npcEventHandler) {
+			m_npcEventHandler->onCreatureAppear(creature);
+		}
+	} else if (creature->getPlayer()) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureAppear(creature);
 		}
@@ -333,13 +332,12 @@ void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool 
 {
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
 
-	if (creature->getPlayer()) {
-		playerSpectators.erase(const_cast<Creature*>(creature));
+	if (creature == this) {
+		closeAllShopWindows();
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (creature == this) {
-		closeAllShopWindows();
+	} else if (creature->getPlayer()) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureDisappear(creature);
 		}
@@ -351,20 +349,7 @@ void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Po
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
-	const Player* player = creature->getPlayer();
-	if (player) {
-		bool canSeeNewPos = canSee(newPos);
-		bool canSeeOldPos = canSee(oldPos);
-		if (canSeeNewPos && !canSeeOldPos) {
-			playerSpectators.insert(const_cast<Creature*>(creature));
-		} else if (!canSeeNewPos && canSeeOldPos) {
-			playerSpectators.erase(const_cast<Creature*>(creature));
-		}
-
-		if (m_npcEventHandler) {
-			m_npcEventHandler->onCreatureMove(creature, oldPos, newPos);
-		}
-	} else if (creature == this) {
+	if (creature == this || creature->getPlayer()) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureMove(creature, oldPos, newPos);
 		}
@@ -408,11 +393,7 @@ void Npc::onThink(uint32_t interval)
 
 void Npc::doSay(const std::string& text)
 {
-	if (playerSpectators.empty()) {
-		return;
-	}
-
-	g_game.internalCreatureSay(this, SPEAK_SAY, text, false, &playerSpectators);
+	g_game.internalCreatureSay(this, SPEAK_SAY, text, false);
 }
 
 void Npc::doSayToPlayer(Player* player, const std::string& text)
@@ -472,10 +453,6 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	}
 
 	if (focusCreature != 0) {
-		return false;
-	}
-
-	if (playerSpectators.empty()) {
 		return false;
 	}
 

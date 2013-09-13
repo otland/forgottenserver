@@ -244,16 +244,14 @@ class Npc : public Creature
 		void reset();
 		bool loadFromXml(const std::string& name);
 
-		typedef std::map<std::string, std::string> ParametersMap;
-		ParametersMap m_parameters;
-
 		uint32_t loadParams(xmlNodePtr node);
 
 		void addShopPlayer(Player* player);
 		void removeShopPlayer(Player* player);
 		void closeAllShopWindows();
 
-		SpectatorVec playerSpectators;
+		typedef std::map<std::string, std::string> ParametersMap;
+		ParametersMap m_parameters;
 
 		std::set<Player*> shopPlayerSet;
 
@@ -262,11 +260,11 @@ class Npc : public Creature
 
 		NpcEventsHandler* m_npcEventHandler;
 
+		Position masterPos;
+
 		uint32_t walkTicks;
 		int32_t focusCreature;
 		int32_t masterRadius;
-
-		Position masterPos;
 
 		bool floorChange;
 		bool attackable;
