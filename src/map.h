@@ -94,8 +94,9 @@ typedef std::map<Position, std::shared_ptr<SpectatorVec> > SpectatorCache;
 #define FLOOR_MASK (FLOOR_SIZE - 1)
 
 struct Floor {
-	Floor();
+	Floor() : tiles() {}
 	~Floor();
+
 	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE];
 };
 
@@ -116,8 +117,9 @@ class QTreeNode
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:
-		bool m_isLeaf;
 		QTreeNode* m_child[4];
+
+		bool m_isLeaf;
 
 		friend class Map;
 };

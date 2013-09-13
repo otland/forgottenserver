@@ -1836,8 +1836,13 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 
 	// close modal windows
 	if (!modalWindows.empty()) {
-		// FIXME: This shouldn't be hardcoded, it should at least not apply for any modal window
-		sendTextMessage(MSG_EVENT_ADVANCE, "Offline training aborted.");
+		// TODO: This shouldn't be hardcoded
+		for (uint32_t modalWindowId : modalWindows) {
+			if (modalWindowId == 0xFFFFFFFF) {
+				sendTextMessage(MSG_EVENT_ADVANCE, "Offline training aborted.");
+				break;
+			}
+		}
 		modalWindows.clear();
 	}
 
@@ -1852,7 +1857,6 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 
 	if (teleport || oldPos.z != newPos.z) {
 		int32_t ticks = g_config.getNumber(ConfigManager::STAIRHOP_DELAY);
-
 		if (ticks > 0) {
 			addCombatExhaust(ticks);
 			addWeaponExhaust(ticks);

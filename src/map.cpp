@@ -63,7 +63,6 @@ Map::~Map()
 bool Map::loadMap(const std::string& identifier)
 {
 	IOMap* loader = new IOMap();
-
 	if (!loader->loadMap(this, identifier)) {
 		std::cout << "FATAL: [OTBM loader] " << loader->getLastErrorString() << std::endl;
 		return false;
@@ -124,7 +123,6 @@ Tile* Map::getTile(int32_t x, int32_t y, int32_t z)
 			return floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
 		}
 	}
-
 	return NULL;
 }
 
@@ -1079,16 +1077,11 @@ uint32_t AStarNodes::countOpenNodes()
 int32_t AStarNodes::getMapWalkCost(const Creature* creature, AStarNode* node,
                                    const Tile* neighbourTile, const Position& neighbourPos)
 {
-	int cost = 0;
-
-	if (std::abs((int)node->x - neighbourPos.x) == std::abs((int)node->y - neighbourPos.y)) {
+	if (std::abs(node->x - neighbourPos.x) == std::abs(node->y - neighbourPos.y)) {
 		//diagonal movement extra cost
-		cost = MAP_DIAGONALWALKCOST;
-	} else {
-		cost = MAP_NORMALWALKCOST;
+		return MAP_DIAGONALWALKCOST;
 	}
-
-	return cost;
+	return MAP_NORMALWALKCOST;
 }
 
 int32_t AStarNodes::getTileWalkCost(const Creature* creature, const Tile* tile)
@@ -1118,16 +1111,7 @@ int32_t AStarNodes::getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, in
 	return MAP_DIAGONALWALKCOST * h_diagonal + MAP_NORMALWALKCOST * (h_straight - 2 * h_diagonal);
 }
 
-//*********** Floor constructor **************
-
-Floor::Floor()
-{
-	for (uint32_t i = 0; i < FLOOR_SIZE; ++i) {
-		for (uint32_t j = 0; j < FLOOR_SIZE; ++j) {
-			tiles[i][j] = NULL;
-		}
-	}
-}
+//*********** Floor **************
 
 Floor::~Floor()
 {
@@ -1160,7 +1144,6 @@ QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 {
 	if (!isLeaf()) {
 		uint32_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
-
 		if (m_child[index]) {
 			return m_child[index]->getLeaf(x * 2, y * 2);
 		} else {
@@ -1174,16 +1157,13 @@ QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 QTreeLeafNode* QTreeNode::getLeafStatic(QTreeNode* root, uint32_t x, uint32_t y)
 {
 	QTreeNode* currentNode = root;
-	uint32_t currentX = x, currentY = y;
-
 	while (currentNode) {
 		if (!currentNode->isLeaf()) {
-			uint32_t index = ((currentX & 0x8000) >> 15) | ((currentY & 0x8000) >> 14);
-
+			uint32_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
 			if (currentNode->m_child[index]) {
 				currentNode = currentNode->m_child[index];
-				currentX = currentX * 2;
-				currentY = currentY * 2;
+				x <<= 1;
+				y <<= 1;
 			} else {
 				return NULL;
 			}
@@ -1191,7 +1171,6 @@ QTreeLeafNode* QTreeNode::getLeafStatic(QTreeNode* root, uint32_t x, uint32_t y)
 			return static_cast<QTreeLeafNode*>(currentNode);
 		}
 	}
-
 	return NULL;
 }
 
@@ -1199,7 +1178,6 @@ QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
 {
 	if (!isLeaf()) {
 		uint32_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
-
 		if (!m_child[index]) {
 			if (level != FLOOR_BITS) {
 				m_child[index] = new QTreeNode();
@@ -1208,13 +1186,10 @@ QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
 				QTreeLeafNode::newLeaf = true;
 			}
 		}
-
-		return m_child[index]->createLeaf(x * 2, y * 2, level - 1);
+		return m_child[index]->createLeaf(x << 1, y << 1, level - 1);
 	}
-
 	return static_cast<QTreeLeafNode*>(this);
 }
-
 
 //************ LeafNode ************************
 bool QTreeLeafNode::newLeaf = false;
@@ -1241,7 +1216,6 @@ Floor* QTreeLeafNode::createFloor(uint32_t z)
 	if (!m_array[z]) {
 		m_array[z] = new Floor();
 	}
-
 	return m_array[z];
 }
 

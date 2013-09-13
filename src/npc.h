@@ -253,6 +253,8 @@ class Npc : public Creature
 		void removeShopPlayer(Player* player);
 		void closeAllShopWindows();
 
+		SpectatorVec playerSpectators;
+
 		std::set<Player*> shopPlayerSet;
 
 		std::string name;

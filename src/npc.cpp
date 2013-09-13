@@ -299,11 +299,7 @@ bool Npc::loadFromXml(const std::string& filename)
 
 bool Npc::canSee(const Position& pos) const
 {
-	if (pos.z != getPosition().z) {
-		return false;
-	}
-
-	return Creature::canSee(getPosition(), pos, 3, 3);
+	return Creature::canSee(getPosition(), pos, 9, 7);
 }
 
 std::string Npc::getDescription(int32_t lookDistance) const
@@ -317,11 +313,16 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
-	if (creature == this && walkTicks > 0) {
-		addEventWalk();
-	}
+	if (creature->getPlayer()) {
+		playerSpectators.insert(const_cast<Creature*>(creature));
+		if (m_npcEventHandler) {
+			m_npcEventHandler->onCreatureAppear(creature);
+		}
+	} else if (creature == this) {
+		if (walkTicks > 0) {
+			addEventWalk();
+		}
 
-	if (creature == this || creature->getPlayer()) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureAppear(creature);
 		}
@@ -332,15 +333,13 @@ void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool 
 {
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
 
-	if (creature == this) {
-		//Close all open shop window's
-		closeAllShopWindows();
-
-		if(m_npcEventHandler){
+	if (creature->getPlayer()) {
+		playerSpectators.erase(const_cast<Creature*>(creature));
+		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (creature->getPlayer()) {
-		//only players for script events
+	} else if (creature == this) {
+		closeAllShopWindows();
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureDisappear(creature);
 		}
@@ -352,7 +351,20 @@ void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Po
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
-	if (creature == this || creature->getPlayer()) {
+	const Player* player = creature->getPlayer();
+	if (player) {
+		bool canSeeNewPos = canSee(newPos);
+		bool canSeeOldPos = canSee(oldPos);
+		if (canSeeNewPos && !canSeeOldPos) {
+			playerSpectators.insert(const_cast<Creature*>(creature));
+		} else if (!canSeeNewPos && canSeeOldPos) {
+			playerSpectators.erase(const_cast<Creature*>(creature));
+		}
+
+		if (m_npcEventHandler) {
+			m_npcEventHandler->onCreatureMove(creature, oldPos, newPos);
+		}
+	} else if (creature == this) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureMove(creature, oldPos, newPos);
 		}
@@ -396,7 +408,11 @@ void Npc::onThink(uint32_t interval)
 
 void Npc::doSay(const std::string& text)
 {
-	g_game.internalCreatureSay(this, SPEAK_SAY, text, false);
+	if (playerSpectators.empty()) {
+		return;
+	}
+
+	g_game.internalCreatureSay(this, SPEAK_SAY, text, false, &playerSpectators);
 }
 
 void Npc::doSayToPlayer(Player* player, const std::string& text)
@@ -456,6 +472,10 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	}
 
 	if (focusCreature != 0) {
+		return false;
+	}
+
+	if (playerSpectators.empty()) {
 		return false;
 	}
 
