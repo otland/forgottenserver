@@ -239,8 +239,8 @@ bool Commands::reload()
 {
 	loaded = false;
 
-	for (CommandMap::iterator it = commandMap.begin(), end = commandMap.end(); it != end; ++it) {
-		Command* command = it->second;
+	for (const auto& it : commandMap) {
+		Command* command = it.second;
 		command->groupId = 1;
 		command->accountType = ACCOUNT_TYPE_GOD;
 		command->loadedGroupId = false;
@@ -317,7 +317,6 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 void Commands::placeNpc(Player* player, const std::string& cmd, const std::string& param)
 {
 	Npc* npc = Npc::createNpc(param);
-
 	if (!npc) {
 		return;
 	}
@@ -336,7 +335,6 @@ void Commands::placeNpc(Player* player, const std::string& cmd, const std::strin
 void Commands::placeMonster(Player* player, const std::string& cmd, const std::string& param)
 {
 	Monster* monster = Monster::createMonster(param);
-
 	if (!monster) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -357,7 +355,6 @@ void Commands::placeMonster(Player* player, const std::string& cmd, const std::s
 void Commands::placeSummon(Player* player, const std::string& cmd, const std::string& param)
 {
 	Monster* monster = Monster::createMonster(param);
-
 	if (!monster) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -400,7 +397,6 @@ void Commands::teleportMasterPos(Player* player, const std::string& cmd, const s
 void Commands::teleportHere(Player* player, const std::string& cmd, const std::string& param)
 {
 	Creature* paramCreature = g_game.getCreatureByName(param);
-
 	if (paramCreature) {
 		Position oldPosition = paramCreature->getPosition();
 		Position destPos = paramCreature->getPosition();
@@ -438,16 +434,13 @@ void Commands::createItemById(Player* player, const std::string& cmd, const std:
 	}
 
 	Item* newItem = Item::CreateItem(type, count);
-
 	if (!newItem) {
 		return;
 	}
 
 	ReturnValue ret = g_game.internalAddItem(player, newItem);
-
 	if (ret != RET_NOERROR) {
 		ret = g_game.internalAddItem(player->getTile(), newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-
 		if (ret != RET_NOERROR) {
 			delete newItem;
 			return;
@@ -464,7 +457,6 @@ void Commands::createItemByName(Player* player, const std::string& cmd, const st
 	pos1 = (std::string::npos == pos1 ? 0 : pos1 + 1);
 
 	std::string::size_type pos2 = param.rfind("\"");
-
 	if (pos2 == pos1 || pos2 == std::string::npos) {
 		pos2 = param.rfind(' ');
 
@@ -483,14 +475,12 @@ void Commands::createItemByName(Player* player, const std::string& cmd, const st
 	}
 
 	int32_t itemId = Item::items.getItemIdByName(itemName);
-
 	if (itemId == -1) {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_RED, "Item could not be summoned.");
 		return;
 	}
 
 	Item* newItem = Item::CreateItem(itemId, count);
-
 	if (!newItem) {
 		return;
 	}
@@ -520,7 +510,6 @@ void Commands::subtractMoney(Player* player, const std::string& cmd, const std::
 void Commands::reloadInfo(Player* player, const std::string& cmd, const std::string& param)
 {
 	std::string tmpParam = asLowerCaseString(param);
-
 	if (tmpParam == "action" || tmpParam == "actions") {
 		g_actions->reload();
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded actions.");
@@ -579,7 +568,6 @@ void Commands::teleportToTown(Player* player, const std::string& cmd, const std:
 {
 	std::string tmp = param;
 	Town* town = Towns::getInstance().getTown(tmp);
-
 	if (town) {
 		Position oldPosition = player->getPosition();
 		Position newPosition = g_game.getClosestFreeTile(player, 0, town->getTemplePosition(), true);
@@ -734,7 +722,6 @@ void Commands::teleportNTiles(Player* player, const std::string& cmd, const std:
 void Commands::kickPlayer(Player* player, const std::string& cmd, const std::string& param)
 {
 	Player* playerKick = g_game.getPlayerByName(param);
-
 	if (playerKick) {
 		if (playerKick->group->access) {
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You cannot kick this player.");
@@ -752,7 +739,6 @@ void Commands::setHouseOwner(Player* player, const std::string& cmd, const std::
 		if (houseTile) {
 			uint32_t guid;
 			std::string name = param;
-
 			if (name == "none") {
 				houseTile->getHouse()->setHouseOwner(0);
 			} else if (IOLoginData::getInstance()->getGuidByName(guid, name)) {
@@ -767,14 +753,12 @@ void Commands::setHouseOwner(Player* player, const std::string& cmd, const std::
 void Commands::sellHouse(Player* player, const std::string& cmd, const std::string& param)
 {
 	House* house = Houses::getInstance().getHouseByPlayerId(player->guid);
-
 	if (!house) {
 		player->sendCancel("You do not own any house.");
 		return;
 	}
 
 	Player* tradePartner = g_game.getPlayerByName(param);
-
 	if (!(tradePartner && tradePartner != player)) {
 		player->sendCancel("Trade player not found.");
 		return;
@@ -806,7 +790,6 @@ void Commands::sellHouse(Player* player, const std::string& cmd, const std::stri
 	}
 
 	Item* transferItem = house->getTransferItem();
-
 	if (!transferItem) {
 		player->sendCancel("You can not trade this house.");
 		return;
@@ -828,11 +811,8 @@ void Commands::getHouse(Player* player, const std::string& cmd, const std::strin
 		return;
 	}
 
-	std::ostringstream str;
-	str << name;
-
+	std::ostringstream str(name);
 	House* house = Houses::getInstance().getHouseByPlayerId(guid);
-
 	if (house) {
 		str << " owns house: " << house->getName() << ".";
 	} else {
@@ -1216,9 +1196,8 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 
 	SpectatorVec list;
 	g_game.getSpectators(list, player->getPosition(), true, true);
-
-	for (SpectatorVec::const_iterator it = list.begin(), end = list.end(); it != end; ++it) {
-		Player* tmpPlayer = (*it)->getPlayer();
+	for (Creature* spectator : list) {
+		Player* tmpPlayer = spectator->getPlayer();
 		tmpPlayer->sendCreatureChangeVisible(player, !player->isInGhostMode());
 
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {

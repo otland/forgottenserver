@@ -414,10 +414,9 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 					}
 				} else {
 					const SpectatorVec& cachedList = *it->second;
-
-					for (SpectatorVec::const_iterator iter = cachedList.begin(), end = cachedList.end(); iter != end; ++iter) {
-						if ((*iter)->getPlayer()) {
-							list.insert(*iter);
+					for (Creature* spectator : cachedList) {
+						if (spectator->getPlayer()) {
+							list.insert(spectator);
 						}
 					}
 				}

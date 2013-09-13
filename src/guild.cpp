@@ -73,7 +73,6 @@ GuildRank* Guild::getRankByLevel(uint8_t level)
 			return &ranks[i];
 		}
 	}
-
 	return NULL;
 }
 

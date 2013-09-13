@@ -303,8 +303,6 @@ class Tile : public Cylinder
 		void moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport = false);
 		int32_t getClientIndexOfThing(const Player* player, const Thing* thing) const;
 
-		int32_t getNewCreatureStackpos(const Player* player);
-
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
 		                               uint32_t flags, Creature* actor = NULL) const;

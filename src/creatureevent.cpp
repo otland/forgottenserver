@@ -31,20 +31,17 @@ CreatureEvents::CreatureEvents() :
 
 CreatureEvents::~CreatureEvents()
 {
-	CreatureEventList::iterator it;
-
-	for (it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
-		delete it->second;
+	for (const auto& it : m_creatureEvents) {
+		delete it.second;
 	}
-
 	m_creatureEvents.clear();
 }
 
 void CreatureEvents::clear()
 {
 	//clear creature events
-	for (CreatureEventList::iterator it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
-		it->second->clearEvent();
+	for (const auto& it : m_creatureEvents) {
+		it.second->clearEvent();
 	}
 
 	//clear lua state
@@ -73,7 +70,6 @@ Event* CreatureEvents::getEvent(const std::string& nodeName)
 bool CreatureEvents::registerEvent(Event* event, xmlNodePtr p)
 {
 	CreatureEvent* creatureEvent = dynamic_cast<CreatureEvent*>(event);
-
 	if (!creatureEvent) {
 		return false;
 	}
@@ -84,7 +80,6 @@ bool CreatureEvents::registerEvent(Event* event, xmlNodePtr p)
 	}
 
 	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
-
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
 		//(happens when realoading), it is reused
@@ -114,9 +109,9 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 bool CreatureEvents::playerLogin(Player* player)
 {
 	//fire global event if is registered
-	for (CreatureEventList::iterator it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
-		if (it->second->getEventType() == CREATURE_EVENT_LOGIN) {
-			if (!it->second->executeOnLogin(player)) {
+	for (const auto& it : m_creatureEvents) {
+		if (it.second->getEventType() == CREATURE_EVENT_LOGIN) {
+			if (!it.second->executeOnLogin(player)) {
 				return false;
 			}
 		}
@@ -127,9 +122,9 @@ bool CreatureEvents::playerLogin(Player* player)
 bool CreatureEvents::playerLogout(Player* player)
 {
 	//fire global event if is registered
-	for (CreatureEventList::iterator it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
-		if (it->second->getEventType() == CREATURE_EVENT_LOGOUT) {
-			if (!it->second->executeOnLogout(player)) {
+	for (const auto& it : m_creatureEvents) {
+		if (it.second->getEventType() == CREATURE_EVENT_LOGOUT) {
+			if (!it.second->executeOnLogout(player)) {
 				return false;
 			}
 		}
@@ -140,9 +135,9 @@ bool CreatureEvents::playerLogout(Player* player)
 bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldLevel,
                                        uint32_t newLevel)
 {
-	for (CreatureEventList::iterator it = m_creatureEvents.begin(); it != m_creatureEvents.end(); ++it) {
-		if (it->second->getEventType() == CREATURE_EVENT_ADVANCE) {
-			if (!it->second->executeAdvance(player, skill, oldLevel, newLevel)) {
+	for (const auto& it : m_creatureEvents) {
+		if (it.second->getEventType() == CREATURE_EVENT_ADVANCE) {
+			if (!it.second->executeAdvance(player, skill, oldLevel, newLevel)) {
 				return false;
 			}
 		}

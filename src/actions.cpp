@@ -57,10 +57,9 @@ Actions::~Actions()
 
 inline void Actions::clearMap(ActionUseMap& map)
 {
-	for (ActionUseMap::const_iterator it = map.begin(), end = map.end(); it != end; ++it) {
-		delete it->second;
+	for (const auto& it : map) {
+		delete it.second;
 	}
-
 	map.clear();
 }
 

@@ -245,16 +245,14 @@ void Container::onAddContainerItem(Item* item)
 	SpectatorVec list;
 	g_game.getSpectators(list, cylinderMapPos, false, true, 2, 2, 2, 2);
 
-	SpectatorVec::const_iterator end = list.end();
-
 	//send to client
-	for (SpectatorVec::const_iterator it = list.begin(); it != end; ++it) {
-		(*it)->getPlayer()->sendAddContainerItem(this, item);
+	for (Creature* spectator : list) {
+		spectator->getPlayer()->sendAddContainerItem(this, item);
 	}
 
 	//event methods
-	for (SpectatorVec::const_iterator it = list.begin(); it != end; ++it) {
-		(*it)->getPlayer()->onAddContainerItem(this, item);
+	for (Creature* spectator : list) {
+		spectator->getPlayer()->onAddContainerItem(this, item);
 	}
 }
 
@@ -266,16 +264,14 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, const ItemT
 	SpectatorVec list;
 	g_game.getSpectators(list, cylinderMapPos, false, true, 2, 2, 2, 2);
 
-	SpectatorVec::const_iterator end = list.end();
-
 	//send to client
-	for (SpectatorVec::const_iterator it = list.begin(); it != end; ++it) {
-		(*it)->getPlayer()->sendUpdateContainerItem(this, index, oldItem, newItem);
+	for (Creature* spectator : list) {
+		spectator->getPlayer()->sendUpdateContainerItem(this, index, oldItem, newItem);
 	}
 
 	//event methods
-	for (SpectatorVec::const_iterator it = list.begin(); it != end; ++it) {
-		(*it)->getPlayer()->onUpdateContainerItem(this, index, oldItem, oldType, newItem, newType);
+	for (Creature* spectator : list) {
+		spectator->getPlayer()->onUpdateContainerItem(this, index, oldItem, oldType, newItem, newType);
 	}
 }
 
@@ -286,16 +282,14 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 	SpectatorVec list;
 	g_game.getSpectators(list, cylinderMapPos, false, true, 2, 2, 2, 2);
 
-	SpectatorVec::const_iterator end = list.end();
-
 	//send change to client
-	for (SpectatorVec::const_iterator it = list.begin(); it != end; ++it) {
-		(*it)->getPlayer()->sendRemoveContainerItem(this, index);
+	for (Creature* spectator : list) {
+		spectator->getPlayer()->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
-	for (SpectatorVec::const_iterator it = list.begin(); it != end; ++it) {
-		(*it)->getPlayer()->onRemoveContainerItem(this, index, item);
+	for (Creature* spectator : list) {
+		spectator->getPlayer()->onRemoveContainerItem(this, index, item);
 	}
 }
 

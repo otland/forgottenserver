@@ -2232,9 +2232,8 @@ void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText
 
 		SpectatorVec list;
 		g_game.getSpectators(list, targetPos, false, true);
-
-		for (SpectatorVec::const_iterator it = list.begin(), end = list.end(); it != end; ++it) {
-			Player* tmpPlayer = (*it)->getPlayer();
+		for (Creature* spectator : list) {
+			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer != this) {
 				tmpPlayer->sendExperienceMessage(MSG_EXPERIENCE_OTHERS, strExp, targetPos, exp, TEXTCOLOR_WHITE_EXP);
 			}

@@ -1948,9 +1948,8 @@ bool Monster::convinceCreature(Creature* creature)
 			SpectatorVec list;
 			g_game.getSpectators(list, getPosition(), true);
 			g_game.getSpectators(list, creature->getPosition(), true);
-
-			for (SpectatorVec::iterator it = list.begin(); it != list.end(); ++it) {
-				(*it)->onCreatureConvinced(creature, this);
+			for (Creature* spectator : list) {
+				spectator->onCreatureConvinced(creature, this);
 			}
 
 			if (spawn) {
@@ -1982,9 +1981,8 @@ bool Monster::convinceCreature(Creature* creature)
 		SpectatorVec list;
 		g_game.getSpectators(list, getPosition(), true);
 		g_game.getSpectators(list, creature->getPosition(), true);
-
-		for (SpectatorVec::iterator it = list.begin(); it != list.end(); ++it) {
-			(*it)->onCreatureConvinced(creature, this);
+		for (Creature* spectator : list) {
+			spectator->onCreatureConvinced(creature, this);
 		}
 
 		if (spawn) {

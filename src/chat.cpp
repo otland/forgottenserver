@@ -609,10 +609,10 @@ ChannelList Chat::getChannelList(const Player& player)
 		}
 	}
 
-	for (NormalChannelMap::iterator it = normalChannels.begin(); it != normalChannels.end(); ++it) {
-		ChatChannel* channel = getChannel(player, it->first);
+	for (const auto& it : normalChannels) {
+		ChatChannel* channel = getChannel(player, it.first);
 		if (channel) {
-			list.push_back(&it->second);
+			list.push_back(channel);
 		}
 	}
 
