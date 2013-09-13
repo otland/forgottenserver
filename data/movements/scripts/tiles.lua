@@ -7,14 +7,14 @@ function onStepIn(cid, item, position, fromPosition)
 		if item.actionid > 1000 then
 			getLevelTile(cid, item, position)
 		elseif getTilePzInfo(position) then
-			getDepotItems(cid, item)
+			getDepotItems(cid, position)
 		end
 	elseif item.itemid == 426 then
 		doTransformItem(item.uid, 425)
 		if item.actionid > 1000 then
 			getLevelTile(cid, item, position)
 		elseif getTilePzInfo(position) then
-			getDepotItems(cid, item)
+			getDepotItems(cid, position)
 		end
 	end
 	return true
