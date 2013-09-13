@@ -41,7 +41,7 @@ void Dispatcher::dispatcherThread(void* p)
 {
 	Dispatcher* dispatcher = (Dispatcher*)p;
 
-	OutputMessagePool* outputPool;
+	OutputMessagePool* outputPool = OutputMessagePool::getInstance();
 
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	boost::unique_lock<boost::mutex> taskLockUnique(dispatcher->m_taskLock, boost::defer_lock);
@@ -68,14 +68,9 @@ void Dispatcher::dispatcherThread(void* p)
 		// finally execute the task...
 		if (task) {
 			if (!task->hasExpired()) {
-				OutputMessagePool::getInstance()->startExecutionFrame();
+				outputPool->startExecutionFrame();
 				(*task)();
-
-				outputPool = OutputMessagePool::getInstance();
-
-				if (outputPool) {
-					outputPool->sendAll();
-				}
+				outputPool->sendAll();
 
 				g_game.clearSpectatorCache();
 			}
