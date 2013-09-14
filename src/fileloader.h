@@ -334,12 +334,25 @@ class PropWriteStream
 			return buffer;
 		}
 
+		bool alloc_grow(uint32_t bufsize)
+		{
+			char *tmpbuf = (char *)realloc(buffer, bufsize);
+			if (!tmpbuf) {
+				std::clog << "PropWriteStream: failed to grow buffer size to:" << bufsize << std::endl;
+				return false;
+			}
+
+			buffer = tmpbuf;
+			return true;
+		}
+
 		//TODO: might need temp buffer and zero fill the memory chunk allocated by realloc
 		template <typename T>
 		inline void ADD_TYPE(T* add) {
 			if ((buffer_size - size) < sizeof(T)) {
 				buffer_size = buffer_size + ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
+				if (!alloc_grow(buffer_size))
+					return;
 			}
 
 			memcpy(&buffer[size], (char*)add, sizeof(T));
@@ -350,7 +363,8 @@ class PropWriteStream
 		inline void ADD_VALUE(T add) {
 			if ((buffer_size - size) < sizeof(T)) {
 				buffer_size = buffer_size + ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
+				if (!alloc_grow(buffer_size))
+					return;
 			}
 
 			memcpy(&buffer[size], &add, sizeof(T));
@@ -375,7 +389,8 @@ class PropWriteStream
 
 			if ((buffer_size - size) < str_len) {
 				buffer_size += ((str_len + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
+				if (!alloc_grow(buffer_size))
+					return;
 			}
 
 			memcpy(&buffer[size], add.c_str(), str_len);
@@ -389,7 +404,8 @@ class PropWriteStream
 
 			if ((buffer_size - size) < str_len) {
 				buffer_size = buffer_size + ((str_len + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
+				if (!alloc_grow(buffer_size))
+					return;
 			}
 
 			memcpy(&buffer[size], add.c_str(), str_len);
