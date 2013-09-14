@@ -1505,25 +1505,6 @@ void ProtocolGame::sendBasicData()
 	msg.AddByte(0x9F);
 	msg.AddByte(player->isPremium() ? 0x01 : 0x00);
 	msg.AddByte(player->getVocation()->getClientId());
-	/*
-	std::list<uint8_t> spellIdList;
-
-	const InstantsMap& instantsMap = g_spells->getInstantsMap();
-	for(InstantsMap::const_iterator it = instantsMap.begin(), end = instantsMap.end(); it != end; ++it)
-	{
-		Spell* spell = it->second;
-		if(spell->getSpellId() == 0) continue;
-		if(spell->isInstant() && spell->isLearnable()) continue;
-		const VocSpellMap& vocSpellMap = spell->getVocMap();
-		if(!vocSpellMap.empty() && vocSpellMap.find(player->getVocationId()) == vocSpellMap.end()) continue;
-		spellIdList.push_back(spell->getSpellId());
-	}
-
-	// known spells
-	msg.AddU16(spellIdList.size());
-	for(std::list<uint8_t>::const_iterator it = spellIdList.begin(), end = spellIdList.end(); it != end; ++it)
-		msg.AddByte(*it);
-	*/
 	msg.AddU16(0x00);
 	writeToOutputBuffer(msg);
 }
@@ -1531,7 +1512,6 @@ void ProtocolGame::sendBasicData()
 void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos/* = NULL*/, uint32_t value/* = 0*/, TextColor_t color/* = TEXTCOLOR_NONE*/)
 {
 	NetworkMessage msg;
-
 	if (pos != NULL && (mclass == MSG_DAMAGE_DEALT || mclass == MSG_DAMAGE_RECEIVED || mclass == MSG_HEALED || mclass == MSG_EXPERIENCE || mclass == MSG_DAMAGE_OTHERS || mclass == MSG_HEALED_OTHERS || mclass == MSG_EXPERIENCE_OTHERS)) {
 		AddTextMessageEx(msg, mclass, message, *pos, value, color);
 	} else {
@@ -2595,12 +2575,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 			if (!vipPlayer) {
 				vipStatus = VIPSTATUS_OFFLINE;
-			}
-			/*
-			else if(vipPlayer->isPending)
-				vipStatus = VIPSTATUS_PENDING;
-			*/
-			else {
+			} else {
 				vipStatus = VIPSTATUS_ONLINE;
 			}
 
@@ -2616,12 +2591,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 			if (!vipPlayer || vipPlayer->isInGhostMode()) {
 				vipStatus = VIPSTATUS_OFFLINE;
-			}
-			/*
-			else if(vipPlayer->isPending)
-				vipStatus = VIPSTATUS_PENDING;
-			*/
-			else {
+			} else {
 				vipStatus = VIPSTATUS_ONLINE;
 			}
 

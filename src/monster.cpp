@@ -82,9 +82,6 @@ Monster::Monster(MonsterType* _mtype) :
 	maxCombatValue = 0;
 
 	masterRadius = -1;
-	masterPos.x = 0;
-	masterPos.y = 0;
-	masterPos.z = 0;
 
 	targetTicks = 0;
 	targetChangeTicks = 0;

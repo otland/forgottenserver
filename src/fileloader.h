@@ -142,7 +142,6 @@ class FileLoader
 				if (unescape && (c == NODE_START || c == NODE_END || c == ESCAPE_CHAR)) {
 					uint8_t escape = ESCAPE_CHAR;
 					size_t value = fwrite(&escape, 1, 1, m_file);
-
 					if (value != 1) {
 						m_lastError = ERROR_COULDNOTWRITE;
 						return false;
@@ -150,7 +149,6 @@ class FileLoader
 				}
 
 				size_t value = fwrite(&c, 1, 1, m_file);
-
 				if (value != 1) {
 					m_lastError = ERROR_COULDNOTWRITE;
 					return false;
@@ -244,7 +242,6 @@ class PropStream
 
 		inline bool GET_STRING(std::string& ret) {
 			uint16_t str_len;
-
 			if (!GET_USHORT(str_len)) {
 				return false;
 			}
@@ -267,9 +264,7 @@ class PropStream
 		}
 
 		inline bool GET_LSTRING(std::string& ret) {
-			char* str;
 			uint32_t str_len;
-
 			if (!GET_ULONG(str_len)) {
 				return false;
 			}
@@ -278,7 +273,7 @@ class PropStream
 				return false;
 			}
 
-			str = new char[str_len + 1];
+			char* str = new char[str_len + 1];
 			memcpy(str, p, str_len);
 			str[str_len] = 0;
 			ret.assign(str, str_len);
@@ -338,23 +333,23 @@ class PropWriteStream
 		template <typename T>
 		inline void ADD_TYPE(T* add) {
 			if ((buffer_size - size) < sizeof(T)) {
-				buffer_size = buffer_size + ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
+				buffer_size += ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
 				buffer = (char*)realloc(buffer, buffer_size);
 			}
 
 			memcpy(&buffer[size], (char*)add, sizeof(T));
-			size = size + sizeof(T);
+			size += sizeof(T);
 		}
 
 		template <typename T>
 		inline void ADD_VALUE(T add) {
 			if ((buffer_size - size) < sizeof(T)) {
-				buffer_size = buffer_size + ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
+				buffer_size += ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
 				buffer = (char*)realloc(buffer, buffer_size);
 			}
 
 			memcpy(&buffer[size], &add, sizeof(T));
-			size = size + sizeof(T);
+			size += sizeof(T);
 		}
 
 		inline void ADD_ULONG(uint32_t ret) {
@@ -379,7 +374,7 @@ class PropWriteStream
 			}
 
 			memcpy(&buffer[size], add.c_str(), str_len);
-			size = size + str_len;
+			size += str_len;
 		}
 
 		inline void ADD_LSTRING(const std::string& add) {
@@ -388,12 +383,12 @@ class PropWriteStream
 			ADD_ULONG(str_len);
 
 			if ((buffer_size - size) < str_len) {
-				buffer_size = buffer_size + ((str_len + 0x1F) & 0xFFFFFFE0);
+				buffer_size += ((str_len + 0x1F) & 0xFFFFFFE0);
 				buffer = (char*)realloc(buffer, buffer_size);
 			}
 
 			memcpy(&buffer[size], add.c_str(), str_len);
-			size = size + str_len;
+			size += str_len;
 		}
 
 	protected:

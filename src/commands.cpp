@@ -896,37 +896,29 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
 
 	auto it = players.begin();
-	if(!g_config.getBoolean(ConfigManager::SHOW_GAMEMASTERS_ONLINE))
-	{
-		while(it != players.end())
-		{
+	if (!g_config.getBoolean(ConfigManager::SHOW_GAMEMASTERS_ONLINE)) {
+		while (it != players.end()) {
 			Player* tmpPlayer = it->second;
-			if(!tmpPlayer->isAccessPlayer() || player->isAccessPlayer())
-			{
+			if (!tmpPlayer->isAccessPlayer() || player->isAccessPlayer()) {
 				ss << (i > 0 ? ", " : "") << tmpPlayer->name << " [" << tmpPlayer->level << "]";
 				++i;
 			}
 			++it;
 
-			if(i == 10)
-			{
+			if (i == 10) {
 				ss << (it != players.end() ? "," : ".");
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 				ss.str("");
 				i = 0;
 			}
 		}
-	}
-	else
-	{
-		while(it != players.end())
-		{
+	} else {
+		while (it != players.end()) {
 			ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << "]";
 			++it;
 			++i;
 
-			if(i == 10)
-			{
+			if (i == 10) {
 				ss << (it != players.end() ? "," : ".");
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 				ss.str("");
@@ -935,8 +927,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 		}
 	}
 
-	if(i > 0)
-	{
+	if (i > 0) {
 		ss << ".";
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 	}

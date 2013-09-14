@@ -5818,7 +5818,7 @@ int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
 	{ \
 		int32_t n = lua_gettop(L); \
 		type w = popNumber<type>(L); \
-		for(int32_t i = 2; i <= n; ++i) \
+		for (int32_t i = 2; i <= n; ++i) \
 			w op popNumber(L); \
 		lua_pushnumber(L, w); \
 		return 1; \

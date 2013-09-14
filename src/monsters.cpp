@@ -884,9 +884,6 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 						} else if (readXMLInteger(tmpNode, "lightcolor", intValue)) {
 							mType->lightColor = intValue;
 						} else if (readXMLInteger(tmpNode, "targetdistance", intValue)) {
-							/*if(intValue > 6){
-								SHOW_XML_WARNING("targetdistance greater than 6");
-							}*/
 							mType->targetDistance = std::max<int32_t>(1, intValue);
 						} else if (readXMLInteger(tmpNode, "runonhealth", intValue)) {
 							mType->runAwayHealth = intValue;

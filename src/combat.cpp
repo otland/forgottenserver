@@ -985,8 +985,11 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 			params.targetCallback->onTargetCombat(caster, target);
 		}
 
-		//if(params.impactEffect != NM_ME_NONE)
-		//	g_game.addMagicEffect(target->getPosition(), params.impactEffect);
+		/*
+		if (params.impactEffect != NM_ME_NONE) {
+			g_game.addMagicEffect(target->getPosition(), params.impactEffect);
+		}
+		*/
 
 		if (caster && params.distanceEffect != NM_ME_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);

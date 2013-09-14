@@ -630,7 +630,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 			} else if (tmpStrValue == "floorchange") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					tmpStrValue = asLowerCaseString(strValue);
-
 					if (tmpStrValue == "down") {
 						it.floorChangeDown = true;
 					} else if (tmpStrValue == "north") {
@@ -1262,7 +1261,7 @@ ItemType& Items::getItemType(size_t id)
 {
 	if (id < items.size()) {
 		ItemType* itemType = items[id];
-		if (itemType != NULL) {
+		if (itemType) {
 			return *itemType;
 		}
 	}
@@ -1275,7 +1274,7 @@ const ItemType& Items::getItemType(size_t id) const
 {
 	if (id < items.size()) {
 		const ItemType* itemType = items[id];
-		if (itemType != NULL) {
+		if (itemType) {
 			return *itemType;
 		}
 	}

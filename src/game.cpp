@@ -3725,11 +3725,6 @@ bool Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
 	if (!vipPlayer) {
 		status = VIPSTATUS_OFFLINE;
 	} else if (player->isAccessPlayer() || !vipPlayer->isInGhostMode()) {
-		/*
-		if(vipPlayer->isPending)
-			status = VIPSTATUS_PENDING;
-		else
-		*/
 		status = VIPSTATUS_ONLINE;
 	} else {
 		status = VIPSTATUS_OFFLINE;

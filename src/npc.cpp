@@ -88,9 +88,6 @@ Npc::Npc(const std::string& _name) :
 	loaded = false;
 
 	masterRadius = -1;
-	masterPos.x = 0;
-	masterPos.y = 0;
-	masterPos.z = 0;
 
 	m_npcEventHandler = NULL;
 	reset();
@@ -819,7 +816,7 @@ int32_t NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 int32_t NpcScriptInterface::luaGetNpcPos(lua_State* L)
 {
 	//getNpcPos()
-	Position pos(0, 0, 0);
+	Position pos;
 	uint32_t stackpos = 0;
 
 	Npc* npc = getScriptEnv()->getNpc();
@@ -1028,7 +1025,6 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 		while (amount > 0) {
 			int32_t stackCount = std::min<int32_t>(100, amount);
 			Item* item = Item::CreateItem(it.id, stackCount);
-
 			if (item && actionId != 0) {
 				item->setActionId(actionId);
 			}
@@ -1045,7 +1041,6 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 	} else {
 		for (uint32_t i = 0; i < amount; ++i) {
 			Item* item = Item::CreateItem(it.id, subType);
-
 			if (item && actionId != 0) {
 				item->setActionId(actionId);
 			}
@@ -1099,7 +1094,7 @@ int32_t NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 int32_t NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 {
 	// npc:openShopWindow(cid, items, buyCallback, sellCallback)
-	if(!isTable(L, 3)) {
+	if (!isTable(L, 3)) {
 		reportErrorFunc("item list is not a table.");
 		pushBoolean(L, false);
 		return 1;
