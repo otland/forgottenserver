@@ -97,7 +97,7 @@ class Scheduler
 		};
 
 	protected:
-		static void schedulerThread(void* p);
+		void schedulerThread();
 
 		boost::thread m_thread;
 		boost::mutex m_eventLock;

@@ -91,7 +91,7 @@ class Dispatcher
 		void join();
 
 	protected:
-		static void dispatcherThread(void* p);
+		void dispatcherThread();
 
 		void flush();
 
