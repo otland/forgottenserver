@@ -34,14 +34,12 @@ void Scheduler::start()
 	m_thread = boost::thread(boost::bind(&Scheduler::schedulerThread, (void*)this));
 }
 
-void Scheduler::schedulerThread(void* p)
+void Scheduler::schedulerThread()
 {
-	Scheduler* scheduler = (Scheduler*)p;
-
 	// NOTE: second argument defer_lock is to prevent from immediate locking
-	boost::unique_lock<boost::mutex> eventLockUnique(scheduler->m_eventLock, boost::defer_lock);
+	boost::unique_lock<boost::mutex> eventLockUnique(m_eventLock, boost::defer_lock);
 
-	while (scheduler->m_threadState != STATE_TERMINATED) {
+	while (m_threadState != STATE_TERMINATED) {
 		SchedulerTask* task = NULL;
 		bool runTask = false;
 		bool ret = true;
@@ -49,24 +47,24 @@ void Scheduler::schedulerThread(void* p)
 		// check if there are events waiting...
 		eventLockUnique.lock();
 
-		if (scheduler->m_eventList.empty()) {
-			scheduler->m_eventSignal.wait(eventLockUnique);
+		if (m_eventList.empty()) {
+			m_eventSignal.wait(eventLockUnique);
 		} else {
-			ret = scheduler->m_eventSignal.timed_wait(eventLockUnique, scheduler->m_eventList.top()->getCycle());
+			ret = m_eventSignal.timed_wait(eventLockUnique, m_eventList.top()->getCycle());
 		}
 
 		// the mutex is locked again now...
-		if (!ret && (scheduler->m_threadState != STATE_TERMINATED)) {
+		if (!ret && m_threadState != STATE_TERMINATED) {
 			// ok we had a timeout, so there has to be an event we have to execute...
-			task = scheduler->m_eventList.top();
-			scheduler->m_eventList.pop();
+			task = m_eventList.top();
+			m_eventList.pop();
 
 			// check if the event was stopped
-			EventIdSet::iterator it = scheduler->m_eventIds.find(task->getEventId());
-			if (it != scheduler->m_eventIds.end()) {
+			EventIdSet::iterator it = m_eventIds.find(task->getEventId());
+			if (it != m_eventIds.end()) {
 				// was not stopped so we should run it
 				runTask = true;
-				scheduler->m_eventIds.erase(it);
+				m_eventIds.erase(it);
 			}
 		}
 
