@@ -164,10 +164,13 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	std::cout << "x64" << std::endl;
 #elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
 	std::cout << "x86" << std::endl;
+#elif defined(__arm__)
+	std::cout << "ARM" << std::endl;
+#elif defined(__mips__)
+	std::cout << "MIPS" << std::endl;
 #else
 	std::cout << "unk" << std::endl;
 #endif
-
 	std::cout << std::endl;
 
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
