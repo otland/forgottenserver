@@ -144,9 +144,9 @@ ItemType::~ItemType()
 	delete abilities;
 }
 
-Items::Items() // : items(35000)
+Items::Items()
 {
-	this->items = new Array<ItemType*>(20500);
+	items.resize(21500);
 }
 
 Items::~Items()
@@ -156,19 +156,15 @@ Items::~Items()
 
 void Items::clear()
 {
-	if (this->items) {
-		this->items->reset();
+	for (const ItemType* itemType : items) {
+		delete itemType;
 	}
+	items.clear();
 }
 
 bool Items::reload()
 {
-	// TODO: make this atomic somehow.
-	if (!this->items) {
-		return false;
-	}
-
-	this->items->reset();
+	clear();
 	loadFromOtb("data/items/items.otb");
 
 	if (!loadFromXml()) {
@@ -184,7 +180,6 @@ bool Items::reload()
 int32_t Items::loadFromOtb(const std::string& file)
 {
 	FileLoader f;
-
 	if (!f.openFile(file.c_str(), "OTBI", false, true)) {
 		return f.getError();
 	}
@@ -193,7 +188,6 @@ int32_t Items::loadFromOtb(const std::string& file)
 	NODE node = f.getChildNode(NO_NODE, type);
 
 	PropStream props;
-
 	if (f.getProps(node, props)) {
 		//4 byte flags
 		//attributes
@@ -222,7 +216,6 @@ int32_t Items::loadFromOtb(const std::string& file)
 			}
 
 			VERSIONINFO* vi;
-
 			if (!props.GET_STRUCT(vi)) {
 				return ERROR_INVALID_FORMAT;
 			}
@@ -278,12 +271,13 @@ int32_t Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_DEPRECATED:
 				break;
 			default:
+				delete iType;
 				return ERROR_INVALID_FORMAT;
-				break;
 		}
 
 		//read 4 byte flags
 		if (!stream.GET_VALUE(flags)) {
+			delete iType;
 			return ERROR_INVALID_FORMAT;
 		}
 
@@ -320,17 +314,19 @@ int32_t Items::loadFromOtb(const std::string& file)
 			switch (attrib) {
 				case ITEM_ATTR_SERVERID: {
 					if (datalen != sizeof(uint16_t)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
 					uint16_t serverid;
 
 					if (!stream.GET_USHORT(serverid)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
 					if (serverid > 30000 && serverid < 30100) {
-						serverid = serverid - 30000;
+						serverid -= 30000;
 					}
 
 					iType->id = serverid;
@@ -339,12 +335,13 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 				case ITEM_ATTR_CLIENTID: {
 					if (datalen != sizeof(uint16_t)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
 					uint16_t clientid;
-
 					if (!stream.GET_USHORT(clientid)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -354,12 +351,13 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 				case ITEM_ATTR_SPEED: {
 					if (datalen != sizeof(uint16_t)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
 					uint16_t speed;
-
 					if (!stream.GET_USHORT(speed)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -369,12 +367,13 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 				case ITEM_ATTR_LIGHT2: {
 					if (datalen != sizeof(lightBlock2)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
 					lightBlock2* lb2;
-
 					if (!stream.GET_STRUCT(lb2)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -385,12 +384,13 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 				case ITEM_ATTR_TOPORDER: {
 					if (datalen != sizeof(uint8_t)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
 					uint8_t v;
-
 					if (!stream.GET_UCHAR(v)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -400,6 +400,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 				case ITEM_ATTR_WAREID: {
 					if (!stream.SKIP_N(datalen)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -411,8 +412,10 @@ int32_t Items::loadFromOtb(const std::string& file)
 				case ITEM_ATTR_NAME:
 				{
 					std::string name;
-					if(!stream.GET_STRING(name, datalen))
+					if (!stream.GET_STRING(name, datalen)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
+					}
 
 					iType->marketName = name;
 					break;
@@ -422,9 +425,9 @@ int32_t Items::loadFromOtb(const std::string& file)
 				default: {
 					//skip unknown attributes
 					if (!stream.SKIP_N(datalen)) {
+						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
-
 					break;
 				}
 			}
@@ -435,8 +438,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 		}
 
 		// store the found item
-		items->addElement(iType, iType->id);
-
+		addItemType(iType);
 		node = f.getNextNode(node, type);
 	}
 
@@ -504,28 +506,7 @@ bool Items::loadFromXml()
 		}
 		itemNode = itemNode->next;
 	}
-
 	xmlFreeDoc(doc);
-
-	//Lets do some checks...
-	for (uint32_t i = 0; i < items->size(); ++i) {
-		const ItemType* it = items->getElement(i);
-		if (!it) {
-			continue;
-		}
-
-		//check bed items
-		if ((it->transformToFree != 0 || it->transformToOnUse[PLAYERSEX_FEMALE] != 0 || it->transformToOnUse[PLAYERSEX_MALE] != 0) && it->type != ITEM_TYPE_BED) {
-			std::cout << "Warning: [Items::loadFromXml] Item " << it->id << " is not set as a bed-type." << std::endl;
-		}
-
-		/*
-		if (!it->marketName.empty() && it->marketName != it->name) {
-			std::cout << "ID: " << it->id << ". Market Name: " << it->marketName << ". Item Name: " << it->name << "." << std::endl;
-		}
-		*/
-	}
-
 	return true;
 }
 
@@ -538,12 +519,10 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 		id -= 30000;
 		ItemType* iType = new ItemType();
 		iType->id = id;
-
-		items->addElement(iType, id);
+		addItemType(iType);
 	}
 
 	ItemType& it = getItemType(id);
-
 	if (readXMLString(itemNode, "name", strValue)) {
 		it.name = strValue;
 	}
@@ -557,15 +536,12 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 	}
 
 	xmlNodePtr itemAttributesNode = itemNode->children;
-
 	while (itemAttributesNode) {
 		if (readXMLString(itemAttributesNode, "key", strValue)) {
 			std::string tmpStrValue = asLowerCaseString(strValue);
-
 			if (tmpStrValue == "type") {
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					tmpStrValue = asLowerCaseString(strValue);
-
 					if (tmpStrValue == "key") {
 						it.type = ITEM_TYPE_KEY;
 					} else if (tmpStrValue == "magicfield") {
@@ -673,10 +649,8 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				}
 			} else if (tmpStrValue == "corpsetype") {
 				tmpStrValue = asLowerCaseString(strValue);
-
 				if (readXMLString(itemAttributesNode, "value", strValue)) {
 					tmpStrValue = asLowerCaseString(strValue);
-
 					if (tmpStrValue == "venom") {
 						it.corpseType = RACE_VENOM;
 					} else if (tmpStrValue == "blood") {
@@ -1211,7 +1185,6 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 				}
 
 				ItemType& other = getItemType(intValue);
-
 				if (other.transformToFree == 0) {
 					other.transformToFree = it.id;
 				}
@@ -1271,39 +1244,51 @@ bool Items::parseItemNode(xmlNodePtr itemNode, uint32_t id)
 		itemAttributesNode = itemAttributesNode->next;
 	}
 
+	//check bed items
+	if ((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 || it.transformToOnUse[PLAYERSEX_MALE] != 0) && it.type != ITEM_TYPE_BED) {
+		std::cout << "Warning: [Items::parseItemNode] Item " << it.id << " is not set as a bed-type." << std::endl;
+	}
+
+	/*
+	if (!it.marketName.empty() && it.marketName != it.name) {
+		std::cout << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << "." << std::endl;
+	}
+	*/
+
 	return true;
 }
 
-ItemType& Items::getItemType(int32_t id)
+ItemType& Items::getItemType(size_t id)
 {
-	ItemType* iType = items->getElement(id);
-	if (iType) {
-		return *iType;
-	}
-
-	static ItemType dummyItemType; // use this for invalid ids
-	return dummyItemType;
-}
-
-const ItemType& Items::getItemType(int32_t id) const
-{
-	ItemType* iType = items->getElement(id);
-	if (iType) {
-		return *iType;
-	}
-
-	static ItemType dummyItemType; // use this for invalid ids
-	return dummyItemType;
-}
-
-const ItemType& Items::getItemIdByClientId(int32_t spriteId) const
-{
-	ReverseItemMap::const_iterator it = reverseItemMap.find(spriteId);
-	if (it != reverseItemMap.end()) {
-		ItemType* iType = items->getElement(it->second);
-		if (iType) {
-			return *iType;
+	if (id < items.size()) {
+		ItemType* itemType = items[id];
+		if (itemType != NULL) {
+			return *itemType;
 		}
+	}
+
+	static ItemType dummyItemType; // use this for invalid ids
+	return dummyItemType;
+}
+
+const ItemType& Items::getItemType(size_t id) const
+{
+	if (id < items.size()) {
+		const ItemType* itemType = items[id];
+		if (itemType != NULL) {
+			return *itemType;
+		}
+	}
+
+	static ItemType dummyItemType; // use this for invalid ids
+	return dummyItemType;
+}
+
+const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
+{
+	auto it = reverseItemMap.find(spriteId);
+	if (it != reverseItemMap.end()) {
+		return getItemType(it->second);
 	}
 
 	static ItemType dummyItemType; // use this for invalid ids
@@ -1316,17 +1301,24 @@ int32_t Items::getItemIdByName(const std::string& name)
 		return -1;
 	}
 
-	const char* tmpName = name.c_str();
-
-	uint32_t i = 100;
-
-	ItemType* iType = items->getElement(i);
-	while (iType) {
-		if (strcasecmp(tmpName, iType->name.c_str()) == 0) {
-			return i;
+	const char* itemName = name.c_str();
+	for (size_t i = 100, size = items.size(); i < size; ++i) {
+		if (!items[i]) {
+			break;
 		}
 
-		iType = items->getElement(++i);
+		if (strcasecmp(itemName, items[i]->name.c_str()) == 0) {
+			return i;
+		}
 	}
 	return -1;
+}
+
+void Items::addItemType(ItemType* itemType)
+{
+	size_t pos = itemType->id;
+	if (pos >= items.size()) {
+		items.resize(pos + 500);
+	}
+	items[pos] = itemType;
 }

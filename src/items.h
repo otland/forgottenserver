@@ -120,10 +120,7 @@ class ItemType
 
 	public:
 		ItemType();
-		virtual ~ItemType();
-
-		itemgroup_t group;
-		ItemTypes_t type;
+		~ItemType();
 
 		bool isGroundTile() const {
 			return (group == ITEM_GROUP_GROUND);
@@ -162,7 +159,6 @@ class ItemType
 		bool isBed() const {
 			return (type == ITEM_TYPE_BED);
 		}
-
 		bool isRune() const {
 			return type == ITEM_TYPE_RUNE;
 		}
@@ -194,67 +190,67 @@ class ItemType
 			return str;
 		}
 
-		Direction bedPartnerDir;
-		uint16_t transformToOnUse[2];
-		uint16_t transformToFree;
-
+		itemgroup_t group;
+		ItemTypes_t type;
 		uint16_t id;
 		uint16_t clientId;
+		bool stackable;
+		bool isAnimation;
 
 		std::string name;
 		std::string article;
 		std::string pluralName;
 		std::string description;
-		uint16_t maxItems;
+		std::string runeSpellName;
+		//std::string marketName;
+		std::string vocationString;
+
+		Abilities* abilities;
+		Condition* condition;
+
 		float weight;
-		bool showCount;
-		WeaponType_t weaponType;
-		Ammo_t ammoType;
-		ShootType_t shootType;
-		MagicEffectClasses magicEffect;
+
+		uint32_t levelDoor;
+		uint32_t decayTime;
+		uint32_t wieldInfo;
+		uint32_t minReqLevel;
+		uint32_t minReqMagicLevel;
+		uint32_t charges;
+		uint32_t shootRange;
+		int32_t breakChance;
+		int32_t hitChance;
+		int32_t maxHitChance;
+		int32_t decayTo;
 		int32_t attack;
 		int32_t defense;
 		int32_t extraDefense;
 		int32_t armor;
-		uint16_t slotPosition;
-		uint32_t levelDoor;
-		bool isVertical;
-		bool isHorizontal;
-		bool isHangable;
-		bool allowDistRead;
-		bool lookThrough;
-		bool isAnimation;
-		uint16_t speed;
-		int32_t decayTo;
-		uint32_t decayTime;
-		bool stopTime;
-		RaceType_t corpseType;
-
-		bool canReadText;
-		bool canWriteText;
-		uint16_t maxTextLen;
-		uint16_t writeOnceItemId;
-
-		bool stackable;
-		bool useable;
-		bool moveable;
-		bool alwaysOnTop;
 		int32_t alwaysOnTopOrder;
-		bool pickupable;
-		bool rotable;
 		int32_t rotateTo;
-
 		int32_t runeMagLevel;
 		int32_t runeLevel;
-		std::string runeSpellName;
-
-		uint32_t wieldInfo;
-		std::string vocationString;
-		uint32_t minReqLevel;
-		uint32_t minReqMagicLevel;
-
 		int32_t lightLevel;
 		int32_t lightColor;
+
+		WeaponType_t weaponType;
+		Ammo_t ammoType;
+		ShootType_t shootType;
+		MagicEffectClasses magicEffect;
+		RaceType_t corpseType;
+		Direction bedPartnerDir;
+		AmmoAction_t ammoAction;
+		FluidTypes_t fluidSource;
+		CombatType_t combatType;
+
+		uint16_t transformToOnUse[2];
+		uint16_t transformToFree;
+		uint16_t maxTextLen;
+		uint16_t writeOnceItemId;
+		uint16_t transformEquipTo;
+		uint16_t transformDeEquipTo;
+		uint16_t maxItems;
+		uint16_t slotPosition;
+		uint16_t speed;
 
 		bool floorChangeDown;
 		bool floorChangeNorth;
@@ -264,59 +260,31 @@ class ItemType
 		bool floorChangeEastAlt;
 		bool floorChangeWest;
 		bool hasHeight;
-
 		bool walkStack;
-
 		bool blockSolid;
 		bool blockPickupable;
 		bool blockProjectile;
 		bool blockPathFind;
-
 		bool allowPickupable;
-
-		unsigned short transformEquipTo;
-		unsigned short transformDeEquipTo;
 		bool showDuration;
 		bool showCharges;
 		bool showAttributes;
-		uint32_t charges;
-		int32_t breakChance;
-		int32_t hitChance;
-		int32_t maxHitChance;
-		uint32_t shootRange;
-		AmmoAction_t ammoAction;
-		FluidTypes_t fluidSource;
-
-		Abilities* abilities;
-
-		Condition* condition;
-		CombatType_t combatType;
 		bool replaceable;
 		bool ware;
-
-		//		std::string marketName;
-};
-
-template<typename A>
-class Array
-{
-	public:
-		Array(uint32_t n);
-		~Array();
-
-		A getElement(uint32_t id);
-		const A getElement(uint32_t id) const;
-		void addElement(A a, uint32_t pos);
-
-		void reset();
-
-		uint32_t size() {
-			return m_size;
-		}
-
-	private:
-		A* m_data;
-		uint32_t m_size;
+		bool pickupable;
+		bool rotable;
+		bool useable;
+		bool moveable;
+		bool alwaysOnTop;
+		bool canReadText;
+		bool canWriteText;
+		bool isVertical;
+		bool isHorizontal;
+		bool isHangable;
+		bool allowDistRead;
+		bool lookThrough;
+		bool stopTime;
+		bool showCount;
 };
 
 class Items
@@ -330,12 +298,12 @@ class Items
 
 		int32_t loadFromOtb(const std::string& file);
 
-		const ItemType& operator[](int32_t id) const {
+		const ItemType& operator[](size_t id) const {
 			return getItemType(id);
 		}
-		const ItemType& getItemType(int32_t id) const;
-		ItemType& getItemType(int32_t id);
-		const ItemType& getItemIdByClientId(int32_t spriteId) const;
+		const ItemType& getItemType(size_t id) const;
+		ItemType& getItemType(size_t id);
+		const ItemType& getItemIdByClientId(uint16_t spriteId) const;
 
 		int32_t getItemIdByName(const std::string& name);
 
@@ -346,78 +314,14 @@ class Items
 		bool loadFromXml();
 		bool parseItemNode(xmlNodePtr itemNode, uint32_t id);
 
-		void addItemType(ItemType* iType);
+		void addItemType(ItemType* itemType);
 
-		const ItemType* getElement(uint32_t id) const {
-			return items->getElement(id);
-		}
-		uint32_t size() {
-			return items->size();
+		inline size_t size() const {
+			return items.size();
 		}
 
 	protected:
-		typedef std::map<int32_t, int32_t> ReverseItemMap;
-		ReverseItemMap reverseItemMap;
-
-		Array<ItemType*>* items;
+		std::map<uint16_t, uint16_t> reverseItemMap;
+		std::vector<ItemType*> items;
 };
-
-template<typename A>
-Array<A>::Array(uint32_t n)
-{
-	m_data = (A*)malloc(sizeof(A) * n);
-	memset(m_data, 0, sizeof(A)*n);
-	m_size = n;
-}
-
-template<typename A>
-Array<A>::~Array()
-{
-	free(m_data);
-}
-
-template<typename A>
-A Array<A>::getElement(uint32_t id)
-{
-	if (id < m_size) {
-		return m_data[id];
-	}
-
-	return 0;
-}
-
-template<typename A>
-const A Array<A>::getElement(uint32_t id) const
-{
-	if (id < m_size) {
-		return m_data[id];
-	}
-
-	return 0;
-}
-
-template<typename A>
-void Array<A>::addElement(A a, uint32_t pos)
-{
-#define INCREMENT 5000
-
-	if (pos >= m_size) {
-		m_data = (A*)realloc(m_data, sizeof(A) * (pos + INCREMENT));
-		memset(m_data + m_size, 0, sizeof(A) * (pos + INCREMENT - m_size));
-		m_size = pos + INCREMENT;
-	}
-
-	m_data[pos] = a;
-}
-
-template<typename A>
-void Array<A>::reset()
-{
-	for (uint32_t i = 0; i < m_size; i++) {
-		delete m_data[i];
-		m_data[i] = NULL;
-	}
-
-	memset(this->m_data, 0, sizeof(A) * this->m_size);
-}
 #endif
