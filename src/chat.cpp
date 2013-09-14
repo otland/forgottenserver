@@ -25,123 +25,9 @@
 #include "game.h"
 #include "iologindata.h"
 
+extern Chat g_chat;
 extern ConfigManager g_config;
 extern Game g_game;
-extern Chat g_chat;
-
-CanJoinChannelEvent::CanJoinChannelEvent()
-	: Event(g_chat.getScriptInterface())
-{
-}
-
-bool CanJoinChannelEvent::execute(const Player& player)
-{
-	//canJoin(cid)
-	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CanJoinChannelEvent::execute] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	lua_State* L = m_scriptInterface->getLuaState();
-
-	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player.getID());
-
-	return m_scriptInterface->callFunction(1);
-}
-
-OnJoinChannelEvent::OnJoinChannelEvent()
-	: Event(g_chat.getScriptInterface())
-{
-}
-
-bool OnJoinChannelEvent::execute(const Player& player)
-{
-	//onJoin(cid)
-	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - OnJoinChannelEvent::execute] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	lua_State* L = m_scriptInterface->getLuaState();
-
-	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player.getID());
-
-	return m_scriptInterface->callFunction(1);
-}
-
-OnLeaveChannelEvent::OnLeaveChannelEvent()
-	: Event(g_chat.getScriptInterface())
-{
-}
-
-bool OnLeaveChannelEvent::execute(const Player& player)
-{
-	//onLeave(cid)
-	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - OnLeaveChannelEvent::execute] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	lua_State* L = m_scriptInterface->getLuaState();
-
-	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player.getID());
-
-	return m_scriptInterface->callFunction(1);
-}
-
-OnSpeakChannelEvent::OnSpeakChannelEvent()
-	: Event(g_chat.getScriptInterface())
-{
-}
-
-bool OnSpeakChannelEvent::execute(const Player& player, SpeakClasses& type, const std::string& message)
-{
-	//onSpeak(cid, type, message)
-	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - OnSpeakChannelEvent::execute] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	lua_State* L = m_scriptInterface->getLuaState();
-
-	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player.getID());
-	lua_pushnumber(L, type);
-	LuaScriptInterface::pushString(L, message);
-
-	bool result = false;
-	int32_t size0 = lua_gettop(L);
-	int32_t ret = m_scriptInterface->protectedCall(L, 3, 1);
-	if (ret != 0) {
-		LuaScriptInterface::reportError(NULL, LuaScriptInterface::popString(L));
-	} else if (lua_isboolean(L, -1)) {
-		result = LuaScriptInterface::popBoolean(L);
-	} else if (lua_gettop(L) > 0 && lua_isnumber(L, -1)) {
-		result = true;
-		type = static_cast<SpeakClasses>(LuaScriptInterface::popNumber(L));
-	}
-
-	if ((lua_gettop(L) + 4) != size0) {
-		LuaScriptInterface::reportError(NULL, "Stack size changed!");
-	}
-	m_scriptInterface->resetScriptEnv();
-	return result;
-}
 
 PrivateChatChannel::PrivateChatChannel(uint16_t channelId, const std::string& channelName) :
 	ChatChannel(channelId, channelName)
@@ -222,10 +108,10 @@ void PrivateChatChannel::closeChannel()
 
 ChatChannel::ChatChannel()
 {
-	canJoinEvent = NULL;
-	onJoinEvent = NULL;
-	onLeaveEvent = NULL;
-	onSpeakEvent = NULL;
+	canJoinEvent = -1;
+	onJoinEvent = -1;
+	onLeaveEvent = -1;
+	onSpeakEvent = -1;
 	publicChannel = false;
 }
 
@@ -233,10 +119,10 @@ ChatChannel::ChatChannel(uint16_t channelId, const std::string& channelName)
 {
 	id = channelId;
 	name = channelName;
-	canJoinEvent = NULL;
-	onJoinEvent = NULL;
-	onLeaveEvent = NULL;
-	onSpeakEvent = NULL;
+	canJoinEvent = -1;
+	onJoinEvent = -1;
+	onLeaveEvent = -1;
+	onSpeakEvent = -1;
 	publicChannel = false;
 }
 
@@ -246,7 +132,7 @@ bool ChatChannel::addUser(Player& player)
 		return false;
 	}
 
-	if (onJoinEvent && onJoinEvent->execute(player)) {
+	if (!executeOnJoinEvent(player)) {
 		return false;
 	}
 
@@ -282,9 +168,8 @@ bool ChatChannel::removeUser(const Player& player)
 		}
 	}
 
-	if (onLeaveEvent && onLeaveEvent->execute(player)) {
-		return false;
-	}
+	executeOnLeaveEvent(player);
+
 	return true;
 }
 
@@ -305,6 +190,120 @@ bool ChatChannel::talk(const Player& fromPlayer, SpeakClasses type, const std::s
 		it.second->sendToChannel(&fromPlayer, type, text, getId());
 	}
 	return true;
+}
+
+bool ChatChannel::executeCanJoinEvent(const Player& player)
+{
+	if (canJoinEvent == -1) {
+		return true;
+	}
+
+	//canJoin(cid)
+	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CanJoinChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(canJoinEvent, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(canJoinEvent);
+	lua_pushnumber(L, player.getID());
+
+	return m_scriptInterface->callFunction(1);
+}
+
+bool ChatChannel::executeOnJoinEvent(const Player& player)
+{
+	if (onJoinEvent == -1) {
+		return true;
+	}
+
+	//onJoin(cid)
+	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - OnJoinChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(onJoinEvent, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(onJoinEvent);
+	lua_pushnumber(L, player.getID());
+
+	return m_scriptInterface->callFunction(1);
+}
+
+bool ChatChannel::executeOnLeaveEvent(const Player& player)
+{
+	if (onLeaveEvent == -1) {
+		return true;
+	}
+
+	//onLeave(cid)
+	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - OnLeaveChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(onLeaveEvent, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(onLeaveEvent);
+	lua_pushnumber(L, player.getID());
+
+	return m_scriptInterface->callFunction(1);
+}
+
+bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, const std::string& message)
+{
+	if (onSpeakEvent == -1) {
+		return true;
+	}
+
+	//onSpeak(cid, type, message)
+	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - OnSpeakChannelEvent::execute] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(onSpeakEvent, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(onSpeakEvent);
+	lua_pushnumber(L, player.getID());
+	lua_pushnumber(L, type);
+	LuaScriptInterface::pushString(L, message);
+
+	bool result = false;
+	int32_t size0 = lua_gettop(L);
+	int32_t ret = m_scriptInterface->protectedCall(L, 3, 1);
+	if (ret != 0) {
+		LuaScriptInterface::reportError(NULL, LuaScriptInterface::popString(L));
+	} else if (lua_isboolean(L, -1)) {
+		result = LuaScriptInterface::popBoolean(L);
+	} else if (lua_gettop(L) > 0 && lua_isnumber(L, -1)) {
+		result = true;
+		type = static_cast<SpeakClasses>(LuaScriptInterface::popNumber(L));
+	}
+
+	if ((lua_gettop(L) + 4) != size0) {
+		LuaScriptInterface::reportError(NULL, "Stack size changed!");
+	}
+	m_scriptInterface->resetScriptEnv();
+	return result;
 }
 
 Chat::Chat()
@@ -358,41 +357,17 @@ bool Chat::load()
 			channel.publicChannel = readXMLValue<int32_t>(p, "public") > 0;
 
 			std::string scriptFile;
-			if (readXMLString(p, "onspeak", scriptFile)) {
-				OnSpeakChannelEvent* scriptedEvent = new OnSpeakChannelEvent;
-				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.onSpeakEvent = scriptedEvent;
+			if (readXMLString(p, "script", scriptFile)) {
+				if (m_scriptInterface.loadFile("data/chatchannels/scripts/" + scriptFile) == 0) {
+					channel.onSpeakEvent = m_scriptInterface.getEvent("onSpeak");
+					channel.canJoinEvent = m_scriptInterface.getEvent("canJoin");
+					channel.onJoinEvent = m_scriptInterface.getEvent("onJoin");
+					channel.onLeaveEvent = m_scriptInterface.getEvent("onLeave");
 				} else {
-					delete scriptedEvent;
+					std::cout << "[Warning - Chat::load] Can not load script: " << scriptFile << std::endl;
 				}
 			}
 
-			if (readXMLString(p, "canjoin", scriptFile)) {
-				CanJoinChannelEvent* scriptedEvent = new CanJoinChannelEvent;
-				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.canJoinEvent = scriptedEvent;
-				} else {
-					delete scriptedEvent;
-				}
-			}
-
-			if (readXMLString(p, "onjoin", scriptFile)) {
-				OnJoinChannelEvent* scriptedEvent = new OnJoinChannelEvent;
-				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.onJoinEvent = scriptedEvent;
-				} else {
-					delete scriptedEvent;
-				}
-			}
-
-			if (readXMLString(p, "onleave", scriptFile)) {
-				OnLeaveChannelEvent* scriptedEvent = new OnLeaveChannelEvent;
-				if (scriptedEvent->loadScript("data/chatchannels/scripts/" + scriptFile)) {
-					channel.onLeaveEvent = scriptedEvent;
-				} else {
-					delete scriptedEvent;
-				}
-			}
 			normalChannels[channel.id] = channel;
 		}
 		p = p->next;
@@ -566,7 +541,7 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 		type = SPEAK_CHANNEL_Y;
 	}
 
-	if (channel->onSpeakEvent && !channel->onSpeakEvent->execute(player, type, text)) {
+	if (!channel->executeOnSpeakEvent(player, type, text)) {
 		return false;
 	}
 
@@ -664,7 +639,7 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 			NormalChannelMap::iterator nit = normalChannels.find(channelId);
 			if (nit != normalChannels.end()) {
 				ChatChannel& channel = nit->second;
-				if (channel.canJoinEvent && !channel.canJoinEvent->execute(player)) {
+				if (!channel.executeCanJoinEvent(player)) {
 					return NULL;
 				}
 				return &channel;

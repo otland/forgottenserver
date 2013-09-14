@@ -33,74 +33,6 @@ class Player;
 typedef std::map<uint32_t, Player*> UsersMap;
 typedef std::map<uint32_t, Player*> InvitedMap;
 
-class CanJoinChannelEvent : public Event
-{
-	public:
-		CanJoinChannelEvent();
-
-		bool execute(const Player& player);
-
-		bool configureEvent(xmlNodePtr p) {
-			return false;
-		}
-
-	protected:
-		std::string getScriptEventName() {
-			return "canJoin";
-		}
-};
-
-class OnJoinChannelEvent : public Event
-{
-	public:
-		OnJoinChannelEvent();
-
-		bool execute(const Player& player);
-
-		bool configureEvent(xmlNodePtr p) {
-			return false;
-		}
-
-	protected:
-		std::string getScriptEventName() {
-			return "onJoin";
-		}
-};
-
-class OnLeaveChannelEvent : public Event
-{
-	public:
-		OnLeaveChannelEvent();
-
-		bool execute(const Player& player);
-
-		bool configureEvent(xmlNodePtr p) {
-			return false;
-		}
-
-	protected:
-		std::string getScriptEventName() {
-			return "onLeave";
-		}
-};
-
-class OnSpeakChannelEvent : public Event
-{
-	public:
-		OnSpeakChannelEvent();
-
-		bool execute(const Player& player, SpeakClasses& type, const std::string& message);
-
-		bool configureEvent(xmlNodePtr p) {
-			return false;
-		}
-
-	protected:
-		std::string getScriptEventName() {
-			return "onSpeak";
-		}
-};
-
 class ChatChannel
 {
 	public:
@@ -133,13 +65,18 @@ class ChatChannel
 
 		bool isPublicChannel() const { return publicChannel; }
 
+		bool executeOnJoinEvent(const Player& player);
+		bool executeCanJoinEvent(const Player& player);
+		bool executeOnLeaveEvent(const Player& player);
+		bool executeOnSpeakEvent(const Player& player, SpeakClasses& type, const std::string& message);
+
 	protected:
 		UsersMap users;
 
-		CanJoinChannelEvent* canJoinEvent;
-		OnJoinChannelEvent* onJoinEvent;
-		OnLeaveChannelEvent* onLeaveEvent;
-		OnSpeakChannelEvent* onSpeakEvent;
+		int32_t canJoinEvent;
+		int32_t onJoinEvent;
+		int32_t onLeaveEvent;
+		int32_t onSpeakEvent;
 
 		std::string name;
 		uint16_t id;

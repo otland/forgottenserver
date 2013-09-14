@@ -1213,11 +1213,10 @@ NpcScript::NpcScript(const std::string& file, Npc* npc) :
 	NpcEventsHandler(npc)
 {
 	m_scriptInterface = npc->getScriptInterface();
-	if (m_scriptInterface->loadFile("data/npc/scripts/" + file, npc) == -1) {
+	m_loaded = m_scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
+	if (!m_loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
 		std::cout << m_scriptInterface->getLastLuaError() << std::endl;
-		m_loaded = false;
-		m_scriptInterface->resetScriptEnv();
 	} else {
 		m_onCreatureSay = m_scriptInterface->getEvent("onCreatureSay");
 		m_onCreatureDisappear = m_scriptInterface->getEvent("onCreatureDisappear");
@@ -1226,7 +1225,6 @@ NpcScript::NpcScript(const std::string& file, Npc* npc) :
 		m_onPlayerCloseChannel = m_scriptInterface->getEvent("onPlayerCloseChannel");
 		m_onPlayerEndTrade = m_scriptInterface->getEvent("onPlayerEndTrade");
 		m_onThink = m_scriptInterface->getEvent("onThink");
-		m_loaded = true;
 	}
 }
 
