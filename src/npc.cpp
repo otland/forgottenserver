@@ -1388,7 +1388,7 @@ void NpcScript::onPlayerEndTrade(const Player* player)
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_onPlayerCloseChannel, m_scriptInterface);
+	env->setScriptId(m_onPlayerEndTrade, m_scriptInterface);
 	env->setNpc(m_npc);
 
 	lua_State* L = m_scriptInterface->getLuaState();
