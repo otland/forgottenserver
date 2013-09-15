@@ -59,6 +59,7 @@ function doCreatureAddHealth(cid, health) local c = Creature(cid) return c ~= ni
 function doRemoveCreature(cid) local c = Creature(cid) return c ~= nil and c:remove() or false end
 function doCreatureSetLookDir(cid, direction) local c = Creature(cid) return c ~= nil and c:setDirection(direction) or false end
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c ~= nil and c:say(text, type, ...) or false end
+function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c ~= nil and c:setOutfit(outfit) or false end
 
 doSetCreatureDirection = doCreatureSetLookDir
 

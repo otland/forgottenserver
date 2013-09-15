@@ -169,7 +169,6 @@ bool ChatChannel::removeUser(const Player& player)
 	}
 
 	executeOnLeaveEvent(player);
-
 	return true;
 }
 

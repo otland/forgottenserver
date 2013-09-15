@@ -1627,9 +1627,6 @@ void LuaScriptInterface::registerFunctions()
 	//doChangeSpeed(cid, delta)
 	lua_register(m_luaState, "doChangeSpeed", LuaScriptInterface::luaDoChangeSpeed);
 
-	//doCreatureChangeOutfit(cid, outfit)
-	lua_register(m_luaState, "doCreatureChangeOutfit", LuaScriptInterface::luaDoCreatureChangeOutfit);
-
 	//doSetMonsterOutfit(cid, name, time)
 	lua_register(m_luaState, "doSetMonsterOutfit", LuaScriptInterface::luaSetMonsterOutfit);
 
@@ -5244,24 +5241,6 @@ int32_t LuaScriptInterface::luaCanPlayerWearOutfit(lua_State* L)
 	}
 
 	pushBoolean(L, player->canWear(looktype, addon));
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoCreatureChangeOutfit(lua_State* L)
-{
-	//doCreatureChangeOutfit(cid, outfit)
-	Outfit_t outfit = popOutfit(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		creature->defaultOutfit = outfit;
-		g_game.internalCreatureChangeOutfit(creature, outfit);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 

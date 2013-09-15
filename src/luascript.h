@@ -623,7 +623,6 @@ class LuaScriptInterface
 
 		static int32_t luaDoChangeSpeed(lua_State* L);
 
-		static int32_t luaDoCreatureChangeOutfit(lua_State* L);
 		static int32_t luaSetCreatureOutfit(lua_State* L);
 		static int32_t luaGetCreatureOutfit(lua_State* L);
 		static int32_t luaSetMonsterOutfit(lua_State* L);
