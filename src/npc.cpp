@@ -1377,7 +1377,7 @@ void NpcScript::onPlayerCloseChannel(const Player* player)
 
 void NpcScript::onPlayerEndTrade(const Player* player)
 {
-	if (m_onPlayerCloseChannel == -1) {
+	if (m_onPlayerEndTrade == -1) {
 		return;
 	}
 
