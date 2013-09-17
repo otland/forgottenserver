@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\ext\pugixml.cpp" />
     <ClCompile Include="..\src\actions.cpp" />
     <ClCompile Include="..\src\admin.cpp" />
     <ClCompile Include="..\src\ban.cpp" />
@@ -212,6 +213,9 @@
     <ClCompile Include="..\src\wildcardtree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\ext\pugicast.h" />
+    <ClInclude Include="..\src\ext\pugiconfig.hpp" />
+    <ClInclude Include="..\src\ext\pugixml.hpp" />
     <ClInclude Include="..\src\account.h" />
     <ClInclude Include="..\src\actions.h" />
     <ClInclude Include="..\src\admin.h" />

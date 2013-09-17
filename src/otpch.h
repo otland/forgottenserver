@@ -36,6 +36,9 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/threads.h>
+
+#include "ext/pugixml.hpp"
+
 //boost
 #include <boost/config.hpp>
 #include <boost/shared_ptr.hpp>

@@ -55,6 +55,7 @@ std::string asUpperCaseString(const std::string& source);
 
 bool utf8ToLatin1(const char* intext, std::string& outtext);
 bool readXMLInteger(xmlNodePtr node, const char* tag, int32_t& value);
+
 template<typename T>
 T readXMLValue(xmlNodePtr node, const char* tag)
 {

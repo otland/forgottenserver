@@ -19,6 +19,9 @@
 
 #include "otpch.h"
 
+#include "ext/pugixml.hpp"
+#include "ext/pugicast.h"
+
 #include "chat.h"
 #include "configmanager.h"
 #include "player.h"
@@ -336,43 +339,32 @@ Chat::~Chat()
 
 bool Chat::load()
 {
-	xmlDocPtr doc = xmlParseFile("data/chatchannels/chatchannels.xml");
-	if (!doc) {
+	pugi::xml_document doc;
+	if (!doc.load_file("data/chatchannels/chatchannels.xml")) {
 		return false;
 	}
 
-	xmlNodePtr root = xmlDocGetRootElement(doc);
-	if (xmlStrcmp(root->name, (const xmlChar*)"channels") != 0) {
-		xmlFreeDoc(doc);
-		return false;
-	}
+	pugi::xml_node channels = doc.child("channels");
+	for (pugi::xml_node channelNode = channels.first_child(); channelNode; channelNode = channelNode.next_sibling()) {
+		ChatChannel channel;
+		channel.id = pugi::cast<uint16_t>(channelNode.attribute("id").value());
+		channel.name = channelNode.attribute("name").as_string();
+		channel.publicChannel = channelNode.attribute("public").as_bool();
 
-	xmlNodePtr p = root->children;
-	while (p) {
-		if (xmlStrcmp(p->name, (const xmlChar*)"channel") == 0) {
-			ChatChannel channel;
-			channel.id = readXMLValue<uint16_t>(p, "id");
-			readXMLString(p, "name", channel.name);
-			channel.publicChannel = readXMLValue<int32_t>(p, "public") > 0;
-
-			std::string scriptFile;
-			if (readXMLString(p, "script", scriptFile)) {
-				if (m_scriptInterface.loadFile("data/chatchannels/scripts/" + scriptFile) == 0) {
-					channel.onSpeakEvent = m_scriptInterface.getEvent("onSpeak");
-					channel.canJoinEvent = m_scriptInterface.getEvent("canJoin");
-					channel.onJoinEvent = m_scriptInterface.getEvent("onJoin");
-					channel.onLeaveEvent = m_scriptInterface.getEvent("onLeave");
-				} else {
-					std::cout << "[Warning - Chat::load] Can not load script: " << scriptFile << std::endl;
-				}
+		pugi::xml_attribute scriptAttribute = channelNode.attribute("script");
+		if (scriptAttribute) {
+			if (m_scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
+				channel.onSpeakEvent = m_scriptInterface.getEvent("onSpeak");
+				channel.canJoinEvent = m_scriptInterface.getEvent("canJoin");
+				channel.onJoinEvent = m_scriptInterface.getEvent("onJoin");
+				channel.onLeaveEvent = m_scriptInterface.getEvent("onLeave");
+			} else {
+				std::cout << "[Warning - Chat::load] Can not load script: " << scriptAttribute.as_string() << std::endl;
 			}
-
-			normalChannels[channel.id] = channel;
 		}
-		p = p->next;
-	}
 
-	xmlFreeDoc(doc);
+		normalChannels[channel.id] = channel;
+	}
 	return true;
 }
 
