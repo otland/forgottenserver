@@ -829,7 +829,6 @@ void Player::addContainer(uint8_t cid, Container* container)
 void Player::closeContainer(uint8_t cid)
 {
 	ContainerMap::iterator it = openContainers.find(cid);
-
 	if (it == openContainers.end()) {
 		return;
 	}
@@ -1014,7 +1013,6 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 bool Player::getStorageValue(const uint32_t key, int32_t& value) const
 {
 	StorageMap::const_iterator it = storageMap.find(key);
-
 	if (it == storageMap.end()) {
 		value = -1;
 		return false;
@@ -1026,11 +1024,10 @@ bool Player::getStorageValue(const uint32_t key, int32_t& value) const
 
 bool Player::canSee(const Position& pos) const
 {
-	if (client) {
-		return client->canSee(pos);
+	if (!client) {
+		return false;
 	}
-
-	return false;
+	return client->canSee(pos);
 }
 
 bool Player::canSeeCreature(const Creature* creature) const
@@ -1057,19 +1054,16 @@ bool Player::canWalkthrough(const Creature* creature) const
 	}
 
 	const Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
 
 	const Tile* playerTile = player->getTile();
-
 	if (playerTile && playerTile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		Item* playerTileGround = playerTile->ground;
 
 		if (playerTileGround && playerTileGround->hasWalkStack()) {
 			Player* thisPlayer = const_cast<Player*>(this);
-
 			if ((OTSYS_TIME() - lastWalkthroughAttempt) > 2000) {
 				thisPlayer->setLastWalkthroughAttempt(OTSYS_TIME());
 				return false;
@@ -1095,13 +1089,11 @@ bool Player::canWalkthroughEx(const Creature* creature) const
 	}
 
 	const Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
 
 	const Tile* playerTile = player->getTile();
-
 	return playerTile && playerTile->hasFlag(TILESTATE_PROTECTIONZONE);
 }
 
@@ -1114,12 +1106,10 @@ void Player::onReceiveMail()
 
 bool Player::isNearDepotBox()
 {
-	Position pos = getPosition();
-
+	const Position& pos = getPosition();
 	for (int32_t cx = -1; cx <= 1; ++cx) {
 		for (int32_t cy = -1; cy <= 1; ++cy) {
 			Tile* tile = g_game.getTile(pos.x + cx, pos.y + cy, pos.z);
-
 			if (!tile) {
 				continue;
 			}
@@ -1129,14 +1119,12 @@ bool Player::isNearDepotBox()
 			}
 		}
 	}
-
 	return false;
 }
 
 DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
 	DepotMap::iterator it = depotChests.find(depotId);
-
 	if (it != depotChests.end()) {
 		return it->second;
 	}
@@ -1155,7 +1143,6 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 DepotLocker* Player::getDepotLocker(uint32_t depotId)
 {
 	DepotLockerMap::iterator it = depotLockerMap.find(depotId);
-
 	if (it != depotLockerMap.end()) {
 		inbox->setParent(it->second);
 		return it->second;
@@ -1496,12 +1483,13 @@ void Player::setEditHouse(House* house, uint32_t listId /*= 0*/)
 
 void Player::sendHouseWindow(House* house, uint32_t listId) const
 {
-	if (client) {
-		std::string text;
+	if (!client) {
+		return;
+	}
 
-		if (house->getAccessList(listId, text)) {
-			client->sendHouseWindow(windowTextId, house, listId, text);
-		}
+	std::string text;
+	if (house->getAccessList(listId, text)) {
+		client->sendHouseWindow(windowTextId, house, listId, text);
 	}
 }
 
@@ -1514,7 +1502,6 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 
 	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
 		const OpenContainer& openContainer = it->second;
-
 		if (openContainer.container != container) {
 			continue;
 		}
@@ -1547,16 +1534,20 @@ void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, 
 
 	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
 		const OpenContainer& openContainer = it->second;
-
 		if (openContainer.container != container) {
 			continue;
 		}
 
-		uint16_t pageEnd = openContainer.index + container->capacity();
-
-		if (slot >= openContainer.index && slot < pageEnd) {
-			client->sendUpdateContainerItem(it->first, slot, newItem);
+		if (slot < openContainer.index) {
+			continue;
 		}
+
+		uint16_t pageEnd = openContainer.index + container->capacity();
+		if (slot >= pageEnd) {
+			continue;
+		}
+
+		client->sendUpdateContainerItem(it->first, slot, newItem);
 	}
 }
 
@@ -1568,13 +1559,11 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 
 	for (ContainerMap::iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
 		OpenContainer& openContainer = it->second;
-
 		if (openContainer.container != container) {
 			continue;
 		}
 
 		uint16_t& firstIndex = openContainer.index;
-
 		if (firstIndex > 0 && firstIndex >= container->size() - 1) {
 			firstIndex -= container->capacity();
 			sendContainer(it->first, container, false, firstIndex);
@@ -1639,7 +1628,6 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 		}
 
 		BedItem* bed = Beds::getInstance().getBedBySleeper(getGUID());
-
 		if (bed) {
 			bed->wakeUp(this);
 		}
@@ -1754,7 +1742,6 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 		IOLoginData::getInstance()->updateOnlineStatus(guid, false);
 
 		bool saved = false;
-
 		for (uint32_t tries = 0; tries < 3; ++tries) {
 			if (IOLoginData::getInstance()->savePlayer(this)) {
 				saved = true;
@@ -1851,8 +1838,8 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 		inMarket = false;
 	}
 
-	if (getParty()) {
-		getParty()->updateSharedExperience();
+	if (party) {
+		party->updateSharedExperience();
 	}
 
 	if (teleport || oldPos.z != newPos.z) {
@@ -2275,8 +2262,8 @@ void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
 
-		if (getParty()) {
-			getParty()->updateSharedExperience();
+		if (party) {
+			party->updateSharedExperience();
 		}
 
 		g_creatureEvents->playerAdvance(this, SKILL__LEVEL, prevLevel, newLevel);
@@ -4127,8 +4114,8 @@ void Player::onIdleStatus()
 {
 	Creature::onIdleStatus();
 
-	if (getParty()) {
-		getParty()->clearPlayerPoints(this);
+	if (party) {
+		party->clearPlayerPoints(this);
 	}
 }
 
@@ -4150,12 +4137,12 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 	Creature::onAttackedCreatureDrainHealth(target, points);
 
 	if (target) {
-		if (getParty() && !Combat::isPlayerCombat(target)) {
+		if (party && !Combat::isPlayerCombat(target)) {
 			Monster* tmpMonster = target->getMonster();
 
 			if (tmpMonster && tmpMonster->isHostile()) {
 				//We have fulfilled a requirement for shared experience
-				getParty()->addPlayerDamageMonster(this, points);
+				party->addPlayerDamageMonster(this, points);
 			}
 		}
 	}
@@ -4247,7 +4234,6 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 			useStamina();
 		}
 
-		Party* party = getParty();
 		if (!target->getPlayer() && party && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
 			party->shareExperience(gainExp);
 			//We will get a share of the experience through the sharing mechanism
@@ -4656,8 +4642,6 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 		return SHIELD_NONE;
 	}
 
-	Party* party = getParty();
-
 	if (party) {
 		if (party->getLeader() == player) {
 			if (party->isSharedExperienceActive()) {
@@ -4675,7 +4659,7 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 			return SHIELD_YELLOW;
 		}
 
-		if (player->getParty() == party) {
+		if (player->party == party) {
 			if (party->isSharedExperienceActive()) {
 				if (party->isSharedExperienceEnabled()) {
 					return SHIELD_BLUE_SHAREDEXP;
@@ -4700,7 +4684,7 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 		return SHIELD_WHITEYELLOW;
 	}
 
-	if (player->getParty()) {
+	if (player->party) {
 		return SHIELD_GRAY;
 	}
 
@@ -4709,18 +4693,18 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 
 bool Player::isInviting(const Player* player) const
 {
-	if (!player || !getParty() || getParty()->getLeader() != this) {
+	if (!player || !party || party->getLeader() != this) {
 		return false;
 	}
-	return getParty()->isPlayerInvited(player);
+	return party->isPlayerInvited(player);
 }
 
 bool Player::isPartner(const Player* player) const
 {
-	if (!player || !party || !player->getParty()) {
+	if (!player || !party) {
 		return false;
 	}
-	return (getParty() == player->getParty());
+	return party == player->party;
 }
 
 bool Player::isGuildMate(const Player* player) const
@@ -4728,8 +4712,7 @@ bool Player::isGuildMate(const Player* player) const
 	if (!player || !guild) {
 		return false;
 	}
-
-	return guild == player->getGuild();
+	return guild == player->guild;
 }
 
 void Player::sendPlayerPartyIcons(Player* player)

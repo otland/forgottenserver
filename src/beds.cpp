@@ -39,14 +39,12 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 	switch (attr) {
 		case ATTR_SLEEPERGUID: {
 			uint32_t _guid;
-
 			if (!propStream.GET_ULONG(_guid)) {
 				return ATTR_READ_ERROR;
 			}
 
 			if (_guid != 0) {
 				std::string name;
-
 				if (IOLoginData::getInstance()->getNameByGuid(_guid, name)) {
 					setSpecialDescription(name + " is sleeping there.");
 					Beds::getInstance().setBedSleeper(this, _guid);
@@ -59,7 +57,6 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_SLEEPSTART: {
 			uint32_t sleep_start;
-
 			if (!propStream.GET_ULONG(sleep_start)) {
 				return ATTR_READ_ERROR;
 			}
@@ -71,7 +68,6 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 		default:
 			break;
 	}
-
 	return Item::readAttr(attr, propStream);
 }
 
@@ -96,12 +92,10 @@ BedItem* BedItem::getNextBedItem()
 	Position targetPos = getNextPosition(dir, getPosition());
 
 	Tile* tile = g_game.getMap()->getTile(targetPos);
-
-	if (tile) {
-		return tile->getBedItem();
+	if (!tile) {
+		return NULL;
 	}
-
-	return NULL;
+	return tile->getBedItem();
 }
 
 bool BedItem::canUse(Player* player)
@@ -232,17 +226,13 @@ void BedItem::regeneratePlayer(Player* player) const
 	int32_t sleptTime = int32_t(time(NULL) - sleepStart);
 
 	Condition* condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-
 	if (condition) {
-		int32_t regen = 0;
-
+		int32_t regen;
 		if (condition->getTicks() != -1) {
 			regen = std::min<int32_t>((condition->getTicks() / 1000), sleptTime) / 30;
 			int32_t newRegenTicks = condition->getTicks() - (regen * 30000);
-
 			if (newRegenTicks <= 0) {
 				player->removeCondition(condition);
-				condition = NULL;
 			} else {
 				condition->setTicks(newRegenTicks);
 			}
@@ -261,17 +251,14 @@ void BedItem::regeneratePlayer(Player* player) const
 void BedItem::updateAppearance(const Player* player)
 {
 	const ItemType& it = Item::items[getID()];
-
 	if (it.type == ITEM_TYPE_BED) {
 		if (player && it.transformToOnUse[player->getSex()] != 0) {
 			const ItemType& newType = Item::items[it.transformToOnUse[player->getSex()]];
-
 			if (newType.type == ITEM_TYPE_BED) {
 				g_game.transformItem(this, it.transformToOnUse[player->getSex()]);
 			}
 		} else if (it.transformToFree != 0) {
 			const ItemType& newType = Item::items[it.transformToFree];
-
 			if (newType.type == ITEM_TYPE_BED) {
 				g_game.transformItem(this, it.transformToFree);
 			}
@@ -297,13 +284,11 @@ void BedItem::internalRemoveSleeper()
 
 BedItem* Beds::getBedBySleeper(uint32_t guid)
 {
-	std::map<uint32_t, BedItem*>::iterator it = BedSleepersMap.find(guid);
-
-	if (it != BedSleepersMap.end()) {
-		return it->second;
+	auto it = BedSleepersMap.find(guid);
+	if (it == BedSleepersMap.end()) {
+		return NULL;
 	}
-
-	return NULL;
+	return it->second;
 }
 
 void Beds::setBedSleeper(BedItem* bed, uint32_t guid)

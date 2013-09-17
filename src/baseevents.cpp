@@ -41,79 +41,61 @@ bool BaseEvents::loadFromXml()
 		return false;
 	}
 
-	Event* event = NULL;
 	std::string scriptsName = getScriptBaseName();
-
 	if (getScriptInterface().loadFile(std::string("data/" + scriptsName + "/lib/" + scriptsName + ".lua")) == -1) {
 		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
 	}
 
 	std::string filename = "data/" + scriptsName + "/" + scriptsName + ".xml";
 	xmlDocPtr doc = xmlParseFile(filename.c_str());
-
-	if (doc) {
-		m_loaded = true;
-		xmlNodePtr root, p;
-		root = xmlDocGetRootElement(doc);
-
-		if (xmlStrcmp(root->name, (const xmlChar*)scriptsName.c_str())) {
-			std::cout << "[Error - BaseEvents::loadFromXml] Malformed " << scriptsName << " file."
-			          << std::endl;
-			xmlFreeDoc(doc);
-			return false;
-		}
-
-		p = root->children;
-
-		while (p) {
-			if (p->name) {
-				std::string nodeName = (const char*)p->name;
-
-				event = getEvent(nodeName);
-				if (event) {
-					if (event->configureEvent(p)) {
-						bool success = true;
-						std::string scriptfile;
-
-						if (readXMLString(p, "script", scriptfile)) {
-							if (!event->checkScript("data/", scriptsName, "/scripts/" + scriptfile) ||
-							        !event->loadScript("data/" + scriptsName + "/scripts/" + scriptfile)) {
-								success = false;
-							}
-						} else if (readXMLString(p, "function", scriptfile)) {
-							if (!event->loadFunction(scriptfile)) {
-								success = false;
-							}
-						} else {
-							success = false;
-						}
-
-						if (success) {
-							if (!registerEvent(event, p)) {
-								success = false;
-								delete event;
-							}
-						} else {
-							delete event;
-						}
-					} else {
-						std::cout << "Warning: [BaseEvents::loadFromXml] Can not configure event" << std::endl;
-						delete event;
-					}
-
-					event = NULL;
-				}
-			}
-
-			p = p->next;
-		}
-
-		xmlFreeDoc(doc);
-	} else {
+	if (!doc) {
 		std::cout << "Warning: [BaseEvents::loadFromXml] Can not open " << scriptsName << ".xml" << std::endl;
+		return false;
 	}
 
-	return m_loaded;
+	m_loaded = true;
+
+	xmlNodePtr root = xmlDocGetRootElement(doc);
+	if (xmlStrcmp(root->name, (const xmlChar*)scriptsName.c_str())) {
+		std::cout << "[Error - BaseEvents::loadFromXml] Malformed " << scriptsName << " file."
+			        << std::endl;
+		xmlFreeDoc(doc);
+		return false;
+	}
+
+	for (xmlNodePtr p = root->children; p; p = p->next) {
+		if (!p->name) {
+			continue;
+		}
+
+		Event* event = getEvent((const char*)p->name);
+		if (!event) {
+			continue;
+		}
+
+		if (!event->configureEvent(p)) {
+			std::cout << "Warning: [BaseEvents::loadFromXml] Can not configure event" << std::endl;
+			delete event;
+			continue;
+		}
+
+		bool success;
+		std::string scriptfile;
+		if (readXMLString(p, "script", scriptfile)) {
+			success = event->checkScript("data/", scriptsName, "/scripts/" + scriptfile) && event->loadScript("data/" + scriptsName + "/scripts/" + scriptfile);
+		} else if (readXMLString(p, "function", scriptfile)) {
+			success = event->loadFunction(scriptfile);
+		} else {
+			success = false;
+		}
+
+		if (!success || !registerEvent(event, p)) {
+			delete event;
+		}
+	}
+
+	xmlFreeDoc(doc);
+	return true;
 }
 
 bool BaseEvents::reload()
@@ -163,7 +145,6 @@ bool Event::checkScript(const std::string& datadir, const std::string& scriptsNa
 	}
 
 	int32_t id = testInterface.getEvent(getScriptEventName());
-
 	if (id == -1) {
 		std::cout << "Warning: [Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
@@ -186,7 +167,6 @@ bool Event::loadScript(const std::string& scriptFile)
 	}
 
 	int32_t id = m_scriptInterface->getEvent(getScriptEventName());
-
 	if (id == -1) {
 		std::cout << "Warning: [Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
@@ -224,7 +204,6 @@ bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& n
 	m_scriptInterface = _interface;
 
 	int32_t id = m_scriptInterface->getEvent(name);
-
 	if (id == -1) {
 		std::cout << "Warning: [CallBack::loadCallBack] Event " << name << " not found." << std::endl;
 		return false;

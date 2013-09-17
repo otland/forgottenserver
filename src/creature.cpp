@@ -1260,7 +1260,6 @@ void Creature::removeSummon(const Creature* creature)
 {
 	//std::cout << "removeSummon: " << this << " summon=" << creature << std::endl;
 	std::list<Creature*>::iterator cit = std::find(summons.begin(), summons.end(), creature);
-
 	if (cit != summons.end()) {
 		(*cit)->setDropLoot(false);
 		(*cit)->setLossSkill(true);
@@ -1278,7 +1277,6 @@ bool Creature::addCondition(Condition* condition, bool force/* = false*/)
 
 	if (!force && condition->getType() == CONDITION_HASTE && hasCondition(CONDITION_PARALYZE)) {
 		int64_t walkDelay = getWalkDelay();
-
 		if (walkDelay > 0) {
 			g_scheduler.addEvent(createSchedulerTask(walkDelay, boost::bind(&Game::forceAddCondition, &g_game, getID(), condition)));
 			return false;
@@ -1286,7 +1284,6 @@ bool Creature::addCondition(Condition* condition, bool force/* = false*/)
 	}
 
 	Condition* prevCond = getCondition(condition->getType(), condition->getId(), condition->getSubId());
-
 	if (prevCond) {
 		prevCond->addCondition(this, condition);
 		delete condition;
@@ -1318,15 +1315,15 @@ bool Creature::addCombatCondition(Condition* condition)
 
 void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 {
-	for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
-		if ((*it)->getType() != type) {
+	ConditionList::iterator it = conditions.begin();
+	while (it != conditions.end()) {
+		Condition* condition = *it;
+		if (condition->getType() != type) {
 			++it;
 			continue;
 		}
 
-		Condition* condition = *it;
-
-		if (!force && (*it)->getType() == CONDITION_PARALYZE) {
+		if (!force && condition->getType() == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 			if (walkDelay > 0) {
 				g_scheduler.addEvent(createSchedulerTask(walkDelay, boost::bind(&Game::forceRemoveCondition, &g_game, getID(), type)));
@@ -1345,7 +1342,8 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 
 void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool force/* = false*/)
 {
-	for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
+	ConditionList::iterator it = conditions.begin();
+	while (it != conditions.end()) {
 		Condition* condition = *it;
 		if (condition->getType() != type || condition->getId() != id) {
 			++it;
@@ -1371,26 +1369,27 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool forc
 
 void Creature::removeCondition(const Creature* attacker, ConditionType_t type)
 {
-	ConditionList tmpList = conditions;
-
-	for (ConditionList::iterator it = tmpList.begin(), end = tmpList.end(); it != end; ++it) {
-		if ((*it)->getType() == type) {
-			onCombatRemoveCondition(attacker, *it);
+	std::vector<Condition*> removeConditions;
+	for (Condition* condition : conditions) {
+		if (condition->getType() == type) {
+			removeConditions.push_back(condition);
 		}
+	}
+
+	for (Condition* condition : removeConditions) {
+		onCombatRemoveCondition(attacker, condition);
 	}
 }
 
 void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 {
 	ConditionList::iterator it = std::find(conditions.begin(), conditions.end(), condition);
-
 	if (it == conditions.end()) {
 		return;
 	}
 
 	if (!force && condition->getType() == CONDITION_PARALYZE) {
 		int64_t walkDelay = getWalkDelay();
-
 		if (walkDelay > 0) {
 			g_scheduler.addEvent(createSchedulerTask(walkDelay, boost::bind(&Game::forceRemoveCondition, &g_game, getID(), condition->getType())));
 			return;
@@ -1406,23 +1405,21 @@ void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 
 Condition* Creature::getCondition(ConditionType_t type) const
 {
-	for (ConditionList::const_iterator it = conditions.begin(), end = conditions.end(); it != end; ++it) {
-		if ((*it)->getType() == type) {
-			return *it;
+	for (Condition* condition : conditions) {
+		if (condition->getType() == type) {
+			return condition;
 		}
 	}
-
 	return NULL;
 }
 
 Condition* Creature::getCondition(ConditionType_t type, ConditionId_t id, uint32_t subId/* = 0*/) const
 {
-	for (ConditionList::const_iterator it = conditions.begin(), end = conditions.end(); it != end; ++it) {
-		if ((*it)->getType() == type && (*it)->getId() == id && (*it)->getSubId() == subId) {
-			return *it;
+	for (Condition* condition : conditions) {
+		if (condition->getType() == type && condition->getId() == id && condition->getSubId() == subId) {
+			return condition;
 		}
 	}
-
 	return NULL;
 }
 
