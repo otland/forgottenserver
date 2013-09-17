@@ -37,7 +37,7 @@
 #include <libxml/parser.h>
 #include <libxml/threads.h>
 
-#include "ext/pugixml.hpp"
+#include "pugixml.hpp"
 
 //boost
 #include <boost/config.hpp>

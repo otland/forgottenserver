@@ -126,7 +126,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\ext\pugixml.cpp" />
     <ClCompile Include="..\src\actions.cpp" />
     <ClCompile Include="..\src\admin.cpp" />
     <ClCompile Include="..\src\ban.cpp" />
@@ -190,6 +189,7 @@
     <ClCompile Include="..\src\protocolgame.cpp" />
     <ClCompile Include="..\src\protocollogin.cpp" />
     <ClCompile Include="..\src\protocolold.cpp" />
+    <ClCompile Include="..\src\pugixml.cpp" />
     <ClCompile Include="..\src\quests.cpp" />
     <ClCompile Include="..\src\raids.cpp" />
     <ClCompile Include="..\src\rsa.cpp" />
@@ -213,9 +213,6 @@
     <ClCompile Include="..\src\wildcardtree.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\ext\pugicast.h" />
-    <ClInclude Include="..\src\ext\pugiconfig.hpp" />
-    <ClInclude Include="..\src\ext\pugixml.hpp" />
     <ClInclude Include="..\src\account.h" />
     <ClInclude Include="..\src\actions.h" />
     <ClInclude Include="..\src\admin.h" />
@@ -277,6 +274,9 @@
     <ClInclude Include="..\src\protocolgame.h" />
     <ClInclude Include="..\src\protocollogin.h" />
     <ClInclude Include="..\src\protocolold.h" />
+    <ClInclude Include="..\src\pugicast.h" />
+    <ClInclude Include="..\src\pugiconfig.hpp" />
+    <ClInclude Include="..\src\pugixml.hpp" />
     <ClInclude Include="..\src\quests.h" />
     <ClInclude Include="..\src\raids.h" />
     <ClInclude Include="..\src\rsa.h" />

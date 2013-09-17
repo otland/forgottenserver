@@ -19,8 +19,8 @@
 
 #include "otpch.h"
 
-#include "ext/pugixml.hpp"
-#include "ext/pugicast.h"
+#include "pugixml.hpp"
+#include "pugicast.h"
 
 #include "chat.h"
 #include "configmanager.h"
