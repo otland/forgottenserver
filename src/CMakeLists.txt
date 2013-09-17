@@ -1,5 +1,4 @@
 set(tfs_SRC
-	${CMAKE_CURRENT_LIST_DIR}/ext/pugixml.cpp
 	${CMAKE_CURRENT_LIST_DIR}/actions.cpp
 	${CMAKE_CURRENT_LIST_DIR}/admin.cpp
 	${CMAKE_CURRENT_LIST_DIR}/ban.cpp
