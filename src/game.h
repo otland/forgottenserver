@@ -80,7 +80,7 @@ enum LightState_t {
 #define EVENT_DECAY_BUCKETS 4
 #define STATE_TIME 1000
 
-typedef std::map<int32_t, int32_t> StageList;
+typedef std::map<uint32_t, uint32_t> StageList;
 typedef std::unordered_map<std::string, Player*> PlayerNameMap;
 
 /**

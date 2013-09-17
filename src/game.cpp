@@ -28,6 +28,9 @@
 #include <boost/config.hpp>
 #include <boost/bind.hpp>
 
+#include "pugixml.hpp"
+#include "pugicast.h"
+
 #include "tasks.h"
 #include "items.h"
 #include "commands.h"
@@ -5399,62 +5402,49 @@ uint64_t Game::getExperienceStage(uint32_t level)
 
 bool Game::loadExperienceStages()
 {
-	std::string filename = "data/XML/stages.xml";
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-
-	if (doc) {
-		xmlNodePtr root, p;
-		int32_t intVal, low, high, mult;
-		root = xmlDocGetRootElement(doc);
-
-		if (xmlStrcmp(root->name, (const xmlChar*)"stages")) {
-			xmlFreeDoc(doc);
-			return false;
-		}
-
-		p = root->children;
-
-		while (p) {
-			if (!xmlStrcmp(p->name, (const xmlChar*)"config")) {
-				if (readXMLInteger(p, "enabled", intVal)) {
-					stagesEnabled = (intVal != 0);
-				}
-			} else if (!xmlStrcmp(p->name, (const xmlChar*)"stage")) {
-				if (readXMLInteger(p, "minlevel", intVal)) {
-					low = intVal;
-				} else {
-					low = 1;
-				}
-
-				if (readXMLInteger(p, "maxlevel", intVal)) {
-					high = intVal;
-				} else {
-					high = 0;
-					lastStageLevel = low;
-					useLastStageLevel = true;
-				}
-
-				if (readXMLInteger(p, "multiplier", intVal)) {
-					mult = intVal;
-				} else {
-					mult = 1;
-				}
-
-				if (useLastStageLevel) {
-					stages[lastStageLevel] = mult;
-				} else {
-					for (int32_t iteratorValue = low; iteratorValue <= high; iteratorValue++) {
-						stages[iteratorValue] = mult;
-					}
-				}
-			}
-
-			p = p->next;
-		}
-
-		xmlFreeDoc(doc);
+	pugi::xml_document doc;
+	if (!doc.load_file("data/XML/stages.xml")) {
+		return false;
 	}
 
+	for (pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
+		if (strcasecmp(stageNode.name(), "config") == 0) {
+			stagesEnabled = stageNode.attribute("enabled").as_bool();
+		} else {
+			uint32_t minLevel, maxLevel, multiplier, lastStageLevel;
+
+			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
+			if (minLevelAttribute) {
+				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
+			} else {
+				minLevel = 1;
+			}
+
+			pugi::xml_attribute maxLevelAttribute = stageNode.attribute("maxlevel");
+			if (maxLevelAttribute) {
+				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
+			} else {
+				maxLevel = 0;
+				lastStageLevel = minLevel;
+				useLastStageLevel = true;
+			}
+
+			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
+			if (multiplierAttribute) {
+				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
+			} else {
+				multiplier = 1;
+			}
+
+			if (useLastStageLevel) {
+				stages[lastStageLevel] = multiplier;
+			} else {
+				for (uint32_t i = minLevel; i <= maxLevel; ++i) {
+					stages[i] = multiplier;
+				}
+			}
+		}
+	}
 	return true;
 }
 
@@ -5880,13 +5870,11 @@ bool Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	}
 
 	uint32_t offerId = IOMarket::getInstance()->getOfferIdByCounter(timestamp, counter);
-
 	if (offerId == 0) {
 		return false;
 	}
 
 	MarketOfferEx offer = IOMarket::getInstance()->getOfferById(offerId);
-
 	if (offer.playerId != player->getGUID()) {
 		return false;
 	}
@@ -5896,14 +5884,12 @@ bool Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		player->sendMarketEnter(player->getLastDepotId());
 	} else {
 		const ItemType& it = Item::items[offer.itemId];
-
 		if (it.id == 0) {
 			return false;
 		}
 
 		if (it.stackable) {
 			uint16_t tmpAmount = offer.amount;
-
 			while (tmpAmount > 0) {
 				int32_t stackCount = std::min<int32_t>(100, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
@@ -5916,10 +5902,11 @@ bool Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				tmpAmount -= stackCount;
 			}
 		} else {
-			int32_t subType = -1;
-
+			int32_t subType;
 			if (it.charges != 0) {
 				subType = it.charges;
+			} else {
+				subType = -1;
 			}
 
 			for (uint16_t i = 0; i < offer.amount; ++i) {
@@ -6061,7 +6048,6 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(100, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
@@ -6073,9 +6059,11 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				tmpAmount -= stackCount;
 			}
 		} else {
-			int32_t subType = -1;
+			int32_t subType;
 			if (it.charges != 0) {
 				subType = it.charges;
+			} else {
+				subType = -1;
 			}
 
 			for (uint16_t i = 0; i < amount; ++i) {
@@ -6102,11 +6090,9 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(100, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-
 				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;
@@ -6115,15 +6101,15 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				tmpAmount -= stackCount;
 			}
 		} else {
-			int32_t subType = -1;
-
+			int32_t subType;
 			if (it.charges != 0) {
 				subType = it.charges;
+			} else {
+				subType = -1;
 			}
 
 			for (uint16_t i = 0; i < amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-
 				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;
@@ -6164,13 +6150,10 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 void Game::checkExpiredMarketOffers()
 {
 	const ExpiredMarketOfferList& expiredBuyOffers = IOMarket::getInstance()->getExpiredOffers(MARKETACTION_BUY);
-
-	for (ExpiredMarketOfferList::const_iterator it = expiredBuyOffers.begin(), end = expiredBuyOffers.end(); it != end; ++it) {
-		ExpiredMarketOffer offer = *it;
-
-		Player* player = getPlayerByGUID(offer.playerId);
+	for (const ExpiredMarketOffer& offer : expiredBuyOffers) {
 		uint64_t totalPrice = (uint64_t)offer.price * offer.amount;
 
+		Player* player = getPlayerByGUID(offer.playerId);
 		if (player) {
 			player->bankBalance += totalPrice;
 		} else {
@@ -6181,10 +6164,7 @@ void Game::checkExpiredMarketOffers()
 	}
 
 	const ExpiredMarketOfferList& expiredSellOffers = IOMarket::getInstance()->getExpiredOffers(MARKETACTION_SELL);
-
-	for (ExpiredMarketOfferList::const_iterator it = expiredSellOffers.begin(), end = expiredSellOffers.end(); it != end; ++it) {
-		ExpiredMarketOffer offer = *it;
-
+	for (const ExpiredMarketOffer& offer : expiredSellOffers) {
 		Player* player = getPlayerByGUID(offer.playerId);
 		if (!player) {
 			player = new Player(NULL);
@@ -6212,9 +6192,11 @@ void Game::checkExpiredMarketOffers()
 				tmpAmount -= stackCount;
 			}
 		} else {
-			int32_t subType = -1;
+			int32_t subType;
 			if (itemType.charges != 0) {
 				subType = itemType.charges;
+			} else {
+				subType = -1;
 			}
 
 			for (uint16_t i = 0; i < offer.amount; ++i) {
@@ -6360,11 +6342,9 @@ void Game::removeMonster(Monster* monster)
 Guild* Game::getGuild(uint32_t id) const
 {
 	std::unordered_map<uint32_t, Guild*>::const_iterator it = guilds.find(id);
-
 	if (it == guilds.end()) {
 		return NULL;
 	}
-
 	return it->second;
 }
 
@@ -6376,13 +6356,11 @@ void Game::addGuild(Guild* guild)
 void Game::decreaseBrowseFieldRef(const Position& pos)
 {
 	Tile* tile = getTile(pos);
-
 	if (!tile) {
 		return;
 	}
 
 	BrowseFieldMap::const_iterator it = browseFields.find(tile);
-
 	if (it != browseFields.end()) {
 		it->second->releaseThing2();
 	}
