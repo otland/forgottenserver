@@ -45,7 +45,9 @@ Vocations::~Vocations()
 bool Vocations::loadFromXml()
 {
 	pugi::xml_document doc;
-	if (!doc.load_file("data/XML/vocations.xml")) {
+	pugi::xml_parse_result result = doc.load_file("data/XML/vocations.xml");
+	if (!result) {
+		std::cout << "[Error - Vocations::loadFromXml] Failed to load data/XML/vocations.xml: " << result.description() << std::endl;
 		return false;
 	}
 

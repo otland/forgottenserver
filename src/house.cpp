@@ -708,7 +708,9 @@ House* Houses::getHouseByPlayerId(uint32_t playerId)
 bool Houses::loadHousesXML(const std::string& filename)
 {
 	pugi::xml_document doc;
-	if (!doc.load_file(filename.c_str())) {
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
+	if (!result) {
+		std::cout << "[Error - Houses::loadHousesXML] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
 

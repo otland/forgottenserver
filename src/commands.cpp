@@ -141,7 +141,9 @@ Commands::~Commands()
 bool Commands::loadFromXml()
 {
 	pugi::xml_document doc;
-	if (!doc.load_file("data/XML/commands.xml")) {
+	pugi::xml_parse_result result = doc.load_file("data/XML/commands.xml");
+	if (!result) {
+		std::cout << "[Error - Commands::loadFromXml] Failed to load data/XML/commands.xml: " << result.description() << std::endl;
 		return false;
 	}
 

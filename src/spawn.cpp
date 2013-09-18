@@ -53,9 +53,11 @@ bool Spawns::loadFromXml(const std::string& _filename)
 	if (loaded) {
 		return true;
 	}
-	
+
 	pugi::xml_document doc;
-	if (!doc.load_file(_filename.c_str())) {
+	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
+	if (!result) {
+		std::cout << "[Error - Spawns::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
 		return false;
 	}
 

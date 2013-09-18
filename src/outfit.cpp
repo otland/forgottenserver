@@ -34,10 +34,9 @@ OutfitList::OutfitList()
 
 OutfitList::~OutfitList()
 {
-	for (OutfitListType::iterator it = m_list.begin(), end = m_list.end(); it != end; ++it) {
-		delete *it;
+	for (Outfit* outfit : m_list) {
+		delete outfit;
 	}
-
 	m_list.clear();
 }
 
@@ -45,7 +44,7 @@ void OutfitList::addOutfit(const Outfit& outfit)
 {
 	for (OutfitListType::iterator it = m_list.begin(), end = m_list.end(); it != end; ++it) {
 		if ((*it)->looktype == outfit.looktype) {
-			(*it)->addons = (*it)->addons | outfit.addons;
+			(*it)->addons |= outfit.addons;
 			return;
 		}
 	}

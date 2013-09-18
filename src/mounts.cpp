@@ -66,7 +66,9 @@ bool Mounts::reload()
 bool Mounts::loadFromXml()
 {
 	pugi::xml_document doc;
-	if (!doc.load_file("data/XML/mounts.xml")) {
+	pugi::xml_parse_result result = doc.load_file("data/XML/mounts.xml");
+	if (!result) {
+		std::cout << "[Error - Mounts::loadFromXml] Failed to load data/XML/mounts.xml: " << result.description() << std::endl;
 		return false;
 	}
 

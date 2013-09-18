@@ -340,12 +340,13 @@ Chat::~Chat()
 bool Chat::load()
 {
 	pugi::xml_document doc;
-	if (!doc.load_file("data/chatchannels/chatchannels.xml")) {
+	pugi::xml_parse_result result = doc.load_file("data/chatchannels/chatchannels.xml");
+	if (!result) {
+		std::cout << "[Error - Chat::load] Failed to load data/chatchannels/chatchannels.xml: " << result.description() << std::endl;
 		return false;
 	}
 
-	pugi::xml_node channels = doc.child("channels");
-	for (pugi::xml_node channelNode = channels.first_child(); channelNode; channelNode = channelNode.next_sibling()) {
+	for (pugi::xml_node channelNode = doc.child("channels").first_child(); channelNode; channelNode = channelNode.next_sibling()) {
 		ChatChannel channel;
 		channel.id = pugi::cast<uint16_t>(channelNode.attribute("id").value());
 		channel.name = channelNode.attribute("name").as_string();

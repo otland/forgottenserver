@@ -5403,7 +5403,9 @@ uint64_t Game::getExperienceStage(uint32_t level)
 bool Game::loadExperienceStages()
 {
 	pugi::xml_document doc;
-	if (!doc.load_file("data/XML/stages.xml")) {
+	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
+	if (!result) {
+		std::cout << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
 		return false;
 	}
 

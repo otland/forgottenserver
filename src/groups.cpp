@@ -27,7 +27,9 @@
 bool Groups::load()
 {
 	pugi::xml_document doc;
-	if (!doc.load_file("data/XML/groups.xml")) {
+	pugi::xml_parse_result result = doc.load_file("data/XML/groups.xml");
+	if (!result) {
+		std::cout << "[Error - Groups::load] Failed to load data/XML/groups.xml: " << result.description() << std::endl;
 		return false;
 	}
 
