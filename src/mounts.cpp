@@ -49,14 +49,12 @@ bool Mount::isTamed(Player* player) const
 
 	uint8_t tmpId = id - 1;
 
-	int32_t value = 0;
-
+	int32_t value;
 	if (!player->getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpId / 31), value)) {
 		return false;
 	}
 
-	int32_t tmp = (1 << (tmpId % 31));
-	return (tmp & value) == tmp;
+	return ((1 << (tmpId % 31)) & value) != 0;
 }
 
 bool Mounts::reload()

@@ -745,7 +745,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 
 		house->setHouseOwner(0, false);
 	}
-	return false;
+	return true;
 }
 
 bool Houses::payHouses()

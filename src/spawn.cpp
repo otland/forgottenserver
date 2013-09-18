@@ -55,7 +55,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 	}
 	
 	pugi::xml_document doc;
-	if (!doc.load_file(filename.c_str())) {
+	if (!doc.load_file(_filename.c_str())) {
 		return false;
 	}
 
