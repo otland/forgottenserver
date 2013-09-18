@@ -3813,12 +3813,12 @@ bool Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 		if (player->isMounted()) {
 			Mount* prevMount = Mounts::getInstance()->getMountByID(player->getCurrentMount());
 			if (prevMount) {
-				changeSpeed(player, mount->getSpeed() - prevMount->getSpeed());
+				changeSpeed(player, mount->speed - prevMount->speed);
 			}
 
-			player->setCurrentMount(mount->getID());
+			player->setCurrentMount(mount->id);
 		} else {
-			player->setCurrentMount(mount->getID());
+			player->setCurrentMount(mount->id);
 			outfit.lookMount = 0;
 		}
 	} else if (player->isMounted()) {

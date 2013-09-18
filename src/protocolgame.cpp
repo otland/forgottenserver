@@ -2795,9 +2795,8 @@ void ProtocolGame::sendOutfitWindow()
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
 	Mount* currentMount = Mounts::getInstance()->getMountByID(player->getCurrentMount());
-
 	if (currentMount) {
-		currentOutfit.lookMount = currentMount->getClientID();
+		currentOutfit.lookMount = currentMount->clientId;
 	}
 
 	AddCreatureOutfit(msg, player, currentOutfit);
@@ -2858,19 +2857,16 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	MountsList mounts;
-
-	for (MountsList::const_iterator it = Mounts::getInstance()->getFirstMount(),
-	        end = Mounts::getInstance()->getLastMount(); it != end; ++it) {
-		if ((*it)->isTamed(player)) {
-			mounts.push_back(*it);
+	for (const Mount& mount : Mounts::getInstance()->getMounts()) {
+		if (mount.isTamed(player)) {
+			mounts.push_back(mount);
 		}
 	}
 
 	msg.AddByte(mounts.size());
-
-	for (MountsList::const_iterator it = mounts.begin(), end = mounts.end(); it != end; ++it) {
-		msg.AddU16((*it)->getClientID());
-		msg.AddString((*it)->getName());
+	for (const Mount& mount : mounts) {
+		msg.AddU16(mount.clientId);
+		msg.AddString(mount.name);
 	}
 
 	player->hasRequestedOutfit(true);

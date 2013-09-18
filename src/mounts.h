@@ -25,47 +25,23 @@
 #include "player.h"
 #include "networkmessage.h"
 
-class Mount;
-
-typedef std::list<Mount*> MountsList;
-
-class Mount
+struct Mount
 {
-	public:
-		Mount(uint8_t _id, uint16_t _clientId, const std::string& _name, int32_t _speed, bool _premium);
-		~Mount() {}
+	Mount(uint8_t _id, uint16_t _clientId, const std::string& _name, int32_t _speed, bool _premium);
+	bool isTamed(Player* player) const;
 
-		bool isTamed(Player* player) const;
-		uint8_t getID() const {
-			return id;
-		}
-		uint16_t getClientID() const {
-			return clientId;
-		}
-		std::string getName() const {
-			return name;
-		}
-		int32_t getSpeed() const {
-			return speed;
-		}
-		bool isPremium() const {
-			return premium;
-		}
-
-	private:
-		uint8_t id;
-		uint16_t clientId;
-		std::string name;
-		int32_t speed;
-		bool premium;
+	std::string name;
+	int32_t speed;
+	uint16_t clientId;
+	uint8_t id;
+	bool premium;
 };
+
+typedef std::list<Mount> MountsList;
 
 class Mounts
 {
 	public:
-		Mounts() {}
-		~Mounts();
-
 		static Mounts* getInstance() {
 			static Mounts instance;
 			return &instance;
@@ -76,15 +52,12 @@ class Mounts
 		Mount* getMountByID(uint8_t id);
 		Mount* getMountByClientID(uint16_t clientId);
 
-		MountsList::const_iterator getFirstMount() const {
-			return mounts.begin();
-		}
-		MountsList::const_iterator getLastMount() const {
-			return mounts.end();
+		const MountsList& getMounts() const {
+			return mounts;
 		}
 
 	private:
-		MountsList mounts;
+		std::list<Mount> mounts;
 };
 
 #endif

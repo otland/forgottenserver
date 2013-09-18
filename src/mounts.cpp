@@ -57,21 +57,8 @@ bool Mount::isTamed(Player* player) const
 	return (tmp & value) == tmp;
 }
 
-Mounts::~Mounts()
-{
-	for (MountsList::iterator it = mounts.begin(), end = mounts.end(); it != end; ++it) {
-		delete (*it);
-	}
-
-	mounts.clear();
-}
-
 bool Mounts::reload()
 {
-	for (MountsList::iterator it = mounts.begin(), end = mounts.end(); it != end; ++it) {
-		delete (*it);
-	}
-
 	mounts.clear();
 	return loadFromXml();
 }
@@ -124,7 +111,7 @@ bool Mounts::loadFromXml()
 				premium = booleanString(strValue);
 			}
 
-			mounts.push_back(new Mount(id, clientid, name, speed, premium));
+			mounts.emplace_back(id, clientid, name, speed, premium);
 		}
 
 		p = p->next;
@@ -136,22 +123,20 @@ bool Mounts::loadFromXml()
 
 Mount* Mounts::getMountByID(uint8_t id)
 {
-	for (MountsList::iterator it = mounts.begin(), end = mounts.end(); it != end; ++it) {
-		if ((*it)->getID() == id) {
-			return (*it);
+	for (Mount& mount : mounts) {
+		if (mount.id == id) {
+			return &mount;
 		}
 	}
-
 	return NULL;
 }
 
 Mount* Mounts::getMountByClientID(uint16_t clientId)
 {
-	for (MountsList::iterator it = mounts.begin(), end = mounts.end(); it != end; ++it) {
-		if ((*it)->getClientID() == clientId) {
-			return (*it);
+	for (Mount& mount : mounts) {
+		if (mount.clientId == clientId) {
+			return &mount;
 		}
 	}
-
 	return NULL;
 }

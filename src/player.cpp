@@ -4849,7 +4849,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		if (currentMount->isPremium() && !isPremium()) {
+		if (currentMount->premium && !isPremium()) {
 			sendCancelMessage(RET_YOUNEEDPREMIUMACCOUNT);
 			return false;
 		}
@@ -4859,10 +4859,10 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		defaultOutfit.lookMount = currentMount->getClientID();
+		defaultOutfit.lookMount = currentMount->clientId;
 
-		if (currentMount->getSpeed() != 0) {
-			g_game.changeSpeed(this, currentMount->getSpeed());
+		if (currentMount->speed != 0) {
+			g_game.changeSpeed(this, currentMount->speed);
 		}
 	} else {
 		if (!isMounted()) {
@@ -4929,9 +4929,8 @@ bool Player::untameMount(uint8_t mountId)
 void Player::dismount()
 {
 	Mount* mount = Mounts::getInstance()->getMountByID(getCurrentMount());
-
-	if (mount && mount->getSpeed() > 0) {
-		g_game.changeSpeed(this, -mount->getSpeed());
+	if (mount && mount->speed > 0) {
+		g_game.changeSpeed(this, -mount->speed);
 	}
 
 	defaultOutfit.lookMount = 0;
