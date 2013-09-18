@@ -19,9 +19,6 @@
 
 #include "otpch.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 #include "status.h"
 #include "configmanager.h"
 #include "game.h"
@@ -72,7 +69,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 	ipConnectMap[ip] = OTSYS_TIME();
 
 	switch (msg.GetByte()) {
-			//XML info protocol
+		//XML info protocol
 		case 0xFF: {
 			if (msg.GetString(4) == "info") {
 				OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
@@ -125,87 +122,54 @@ void Status::removePlayer()
 	m_playersOnline--;
 }
 
-void addXMLProperty(xmlNodePtr p, const std::string& tag, const char* val)
-{
-	xmlSetProp(p, (const xmlChar*)tag.c_str(), (const xmlChar*)val);
-}
-
-void addXMLProperty(xmlNodePtr p, const std::string& tag, const std::string& val)
-{
-	xmlSetProp(p, (const xmlChar*)tag.c_str(), (const xmlChar*)val.c_str());
-}
-
-template <typename T>
-void addXMLProperty(xmlNodePtr p, const std::string& tag, T val)
-{
-	xmlSetProp(p, (const xmlChar*)tag.c_str(), (const xmlChar*)std::to_string(val).c_str());
-}
-
 std::string Status::getStatusString() const
 {
-	std::string xml;
+	pugi::xml_document doc;
 
-	xmlDocPtr doc;
-	xmlNodePtr p, root;
+	pugi::xml_node decl = doc.prepend_child(pugi::node_declaration);
+	decl.append_attribute("version") = "1.0";
 
-	doc = xmlNewDoc((const xmlChar*)"1.0");
-	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar*)"tsqp", NULL);
-	root = doc->children;
+	pugi::xml_node tsqp = doc.append_child("tsqp");
+	tsqp.append_attribute("version") = "1.0";
 
-	xmlSetProp(root, (const xmlChar*)"version", (const xmlChar*)"1.0");
+	pugi::xml_node serverinfo = tsqp.append_child("serverinfo");
+	serverinfo.append_attribute("uptime") = std::to_string(getUptime()).c_str();
+	serverinfo.append_attribute("ip") = g_config.getString(ConfigManager::IP).c_str();
+	serverinfo.append_attribute("servername") = g_config.getString(ConfigManager::SERVER_NAME).c_str();
+	serverinfo.append_attribute("port") = std::to_string(g_config.getNumber(ConfigManager::LOGIN_PORT)).c_str();
+	serverinfo.append_attribute("location") = g_config.getString(ConfigManager::LOCATION).c_str();
+	serverinfo.append_attribute("url") = g_config.getString(ConfigManager::URL).c_str();
+	serverinfo.append_attribute("server") = STATUS_SERVER_NAME;
+	serverinfo.append_attribute("version") = STATUS_SERVER_VERSION;
+	serverinfo.append_attribute("client") = STATUS_SERVER_PROTOCOL;
 
-	p = xmlNewNode(NULL, (const xmlChar*)"serverinfo");
-	addXMLProperty(p, "uptime", getUptime());
-	addXMLProperty(p, "ip", g_config.getString(ConfigManager::IP));
-	addXMLProperty(p, "servername", g_config.getString(ConfigManager::SERVER_NAME));
-	addXMLProperty(p, "port", g_config.getNumber(ConfigManager::LOGIN_PORT));
-	addXMLProperty(p, "location", g_config.getString(ConfigManager::LOCATION).c_str());
-	addXMLProperty(p, "url", g_config.getString(ConfigManager::URL).c_str());
-	addXMLProperty(p, "server", STATUS_SERVER_NAME);
-	addXMLProperty(p, "version", STATUS_SERVER_VERSION);
-	addXMLProperty(p, "client", STATUS_SERVER_PROTOCOL);
-	xmlAddChild(root, p);
+	pugi::xml_node owner = tsqp.append_child("owner");
+	owner.append_attribute("name") = g_config.getString(ConfigManager::OWNER_NAME).c_str();
+	owner.append_attribute("email") = g_config.getString(ConfigManager::OWNER_EMAIL).c_str();
 
-	p = xmlNewNode(NULL, (const xmlChar*)"owner");
-	addXMLProperty(p, "name", g_config.getString(ConfigManager::OWNER_NAME));
-	addXMLProperty(p, "email", g_config.getString(ConfigManager::OWNER_EMAIL));
-	xmlAddChild(root, p);
+	pugi::xml_node players = tsqp.append_child("players");
+	players.append_attribute("online") = std::to_string(m_playersOnline).c_str();
+	players.append_attribute("max") = std::to_string(g_config.getNumber(ConfigManager::MAX_PLAYERS)).c_str();
+	players.append_attribute("peak") = std::to_string(g_game.getPlayersRecord()).c_str();
 
-	p = xmlNewNode(NULL, (const xmlChar*)"players");
-	addXMLProperty(p, "online", m_playersOnline);
-	addXMLProperty(p, "max", g_config.getNumber(ConfigManager::MAX_PLAYERS));
-	addXMLProperty(p, "peak", g_game.getPlayersRecord());
-	xmlAddChild(root, p);
+	pugi::xml_node monsters = tsqp.append_child("monsters");
+	monsters.append_attribute("total") = std::to_string(g_game.getMonstersOnline()).c_str();
 
-	p = xmlNewNode(NULL, (const xmlChar*)"monsters");
-	addXMLProperty(p, "total", g_game.getMonstersOnline());
-	xmlAddChild(root, p);
+	pugi::xml_node map = tsqp.append_child("map");
+	map.append_attribute("name") = g_config.getString(ConfigManager::MAP_NAME).c_str();
+	map.append_attribute("author") = g_config.getString(ConfigManager::MAP_AUTHOR).c_str();
 
 	uint32_t mapWidth, mapHeight;
 	g_game.getMapDimensions(mapWidth, mapHeight);
+	map.append_attribute("width") = std::to_string(mapWidth).c_str();
+	map.append_attribute("height") = std::to_string(mapHeight).c_str();
 
-	p = xmlNewNode(NULL, (const xmlChar*)"map");
-	addXMLProperty(p, "name", g_config.getString(ConfigManager::MAP_NAME));
-	addXMLProperty(p, "author", g_config.getString(ConfigManager::MAP_AUTHOR));
-	addXMLProperty(p, "width", mapWidth);
-	addXMLProperty(p, "height", mapHeight);
-	xmlAddChild(root, p);
+	pugi::xml_node motd = tsqp.append_child("motd");
+	motd.text() = g_config.getString(ConfigManager::MOTD).c_str();
 
-	xmlNewTextChild(root, NULL, (const xmlChar*)"motd", (const xmlChar*)g_config.getString(ConfigManager::MOTD).c_str());
-
-	xmlChar* s = NULL;
-	int32_t len = 0;
-	xmlDocDumpMemory(doc, (xmlChar**)&s, &len);
-
-	if (s) {
-		xml = std::string((char*)s, len);
-	} else {
-		xml = "";
-	}
-
-	xmlFree(s);
-	xmlFreeDoc(doc);
-	return xml;
+	std::ostringstream ss;
+	doc.save(ss);
+	return ss.str();
 }
 
 void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMessage& msg) const
