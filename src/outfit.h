@@ -67,27 +67,20 @@ class Outfits
 		}
 
 		const OutfitList& getOutfitList(uint32_t type) {
-			if (type < m_list.size()) {
-				return *m_list[type];
-			} else {
-				if (type == PLAYERSEX_FEMALE) {
-					return m_female_list;
-				} else {
-					return m_male_list;
-				}
+			if (type >= m_list.size()) {
+				static const OutfitList dummyList;
+				return dummyList;
 			}
+			return *m_list[type];
 		}
 
 		const std::string& getOutfitName(uint32_t looktype) const {
-			std::map<uint32_t, std::string>::const_iterator it;
-			it = outfitNamesMap.find(looktype);
-
-			if (it != outfitNamesMap.end()) {
-				return it->second;
-			} else {
-				static const std::string d = "Outfit";
-				return d;
+			auto it = outfitNamesMap.find(looktype);
+			if (it == outfitNamesMap.end()) {
+				static const std::string dummyName = "Outfit";
+				return dummyName;
 			}
+			return it->second;
 		}
 
 	private:
@@ -96,9 +89,6 @@ class Outfits
 		OutfitsListVector m_list;
 
 		std::map<uint32_t, std::string> outfitNamesMap;
-
-		OutfitList m_female_list;
-		OutfitList m_male_list;
 };
 
 #endif
