@@ -221,7 +221,6 @@ class House
 
 		void addDoor(Door* door);
 		void removeDoor(Door* door);
-		Door* getDoorByNumber(uint32_t doorId);
 		Door* getDoorByNumber(uint32_t doorId) const;
 		Door* getDoorByPosition(const Position& pos);
 

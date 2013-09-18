@@ -21,6 +21,9 @@
 
 #include <algorithm>
 
+#include "pugixml.hpp"
+#include "pugicast.h"
+
 #include "house.h"
 #include "iologindata.h"
 #include "game.h"
@@ -264,12 +267,9 @@ bool House::transferToDepot(Player* player)
 		}
 	}
 
-	for (ItemList::iterator it = moveItemList.begin(); it != moveItemList.end(); ++it) {
-		Item* item = *it;
-		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                        item, item->getItemCount(), NULL, FLAG_NOLIMIT);
+	for (Item* item : moveItemList) {
+		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), NULL, FLAG_NOLIMIT);
 	}
-
 	return true;
 }
 
@@ -284,7 +284,6 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 	}
 
 	Door* door = getDoorByNumber(listId);
-
 	if (!door) {
 		return false;
 	}
@@ -308,9 +307,8 @@ void House::addDoor(Door* door)
 void House::removeDoor(Door* door)
 {
 	HouseDoorList::iterator it = std::find(doorList.begin(), doorList.end(), door);
-
 	if (it != doorList.end()) {
-		(*it)->releaseThing2();
+		door->releaseThing2();
 		doorList.erase(it);
 	}
 }
@@ -321,40 +319,23 @@ void House::addBed(BedItem* bed)
 	bed->setHouse(this);
 }
 
-Door* House::getDoorByNumber(uint32_t doorId)
-{
-	HouseDoorList::iterator it;
-
-	for (it = doorList.begin(); it != doorList.end(); ++it) {
-		if ((*it)->getDoorId() == doorId) {
-			return *it;
-		}
-	}
-
-	return NULL;
-}
-
 Door* House::getDoorByNumber(uint32_t doorId) const
 {
-	HouseDoorList::const_iterator it;
-
-	for (it = doorList.begin(); it != doorList.end(); ++it) {
-		if ((*it)->getDoorId() == doorId) {
-			return *it;
+	for (Door* door : doorList) {
+		if (door->getDoorId() == doorId) {
+			return door;
 		}
 	}
-
 	return NULL;
 }
 
 Door* House::getDoorByPosition(const Position& pos)
 {
-	for (HouseDoorList::iterator it = doorList.begin(); it != doorList.end(); ++it) {
-		if ((*it)->getPosition() == pos) {
-			return *it;
+	for (Door* door : doorList) {
+		if (door->getPosition() == pos) {
+			return door;
 		}
 	}
-
 	return NULL;
 }
 
@@ -410,12 +391,9 @@ HouseTransferItem* HouseTransferItem::createHouseTransferItem(House* house)
 
 bool HouseTransferItem::onTradeEvent(TradeEvents_t event, Player* owner)
 {
-	House* house;
-
 	switch (event) {
 		case ON_TRADE_TRANSFER: {
-			house = getHouse();
-
+			House* house = getHouse();
 			if (house) {
 				house->executeTransfer(this, owner);
 			}
@@ -425,8 +403,7 @@ bool HouseTransferItem::onTradeEvent(TradeEvents_t event, Player* owner)
 		}
 
 		case ON_TRADE_CANCEL: {
-			house = getHouse();
-
+			House* house = getHouse();
 			if (house) {
 				house->resetTransferItem();
 			}
@@ -557,7 +534,7 @@ bool AccessList::addExpression(const std::string& expression)
 		if (!outExp.empty()) {
 			expressionList.push_back(outExp);
 
-			if (outExp.substr(0, 1) == "!") {
+			if (outExp[0] == '!') {
 				if (outExp.length() > 1) {
 					regExList.push_front(std::make_pair(std::regex(outExp.substr(1)), false));
 				}
@@ -566,7 +543,6 @@ bool AccessList::addExpression(const std::string& expression)
 			}
 		}
 	} catch (...) {}
-
 	return true;
 }
 
@@ -585,21 +561,17 @@ bool AccessList::isInList(const Player* player)
 	}
 
 	PlayerList::iterator playerIt = playerList.find(player->getGUID());
-
 	if (playerIt != playerList.end()) {
 		return true;
 	}
 
 	Guild* guild = player->getGuild();
-
 	if (guild) {
 		GuildList::iterator guildIt = guildList.find(guild->getId());
-
 		if (guildIt != guildList.end()) {
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -692,7 +664,6 @@ void Door::copyAttributes(Item* item)
 
 	if (Door* door = item->getDoor()) {
 		std::string list;
-
 		if (door->getAccessList(list)) {
 			setAccessList(list);
 		}
@@ -711,8 +682,8 @@ void Door::onRemoved()
 Houses::Houses()
 {
 	rentPeriod = RENTPERIOD_NEVER;
-	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 
+	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 	if (strRentPeriod == "yearly") {
 		rentPeriod = RENTPERIOD_YEARLY;
 	} else if (strRentPeriod == "weekly") {
@@ -726,95 +697,54 @@ Houses::Houses()
 
 House* Houses::getHouseByPlayerId(uint32_t playerId)
 {
-	for (HouseMap::iterator it = houseMap.begin(); it != houseMap.end(); ++it) {
-		House* house = it->second;
-
-		if (house->getHouseOwner() == playerId) {
-			return house;
+	for (const auto& it : houseMap) {
+		if (it.second->getHouseOwner() == playerId) {
+			return it.second;
 		}
 	}
-
 	return NULL;
 }
 
 bool Houses::loadHousesXML(const std::string& filename)
 {
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
+	pugi::xml_document doc;
+	if (!doc.load_file(filename.c_str())) {
+		return false;
+	}
 
-	if (doc) {
-		xmlNodePtr root, houseNode;
-		root = xmlDocGetRootElement(doc);
-
-		if (xmlStrcmp(root->name, (const xmlChar*)"houses") != 0) {
-			xmlFreeDoc(doc);
+	for (pugi::xml_node houseNode = doc.child("houses").first_child(); houseNode; houseNode = houseNode.next_sibling()) {
+		pugi::xml_attribute houseIdAttribute = houseNode.attribute("houseid");
+		if (!houseIdAttribute) {
 			return false;
 		}
 
-		int32_t intValue;
-		std::string strValue;
+		int32_t _houseid = pugi::cast<int32_t>(houseIdAttribute.value());
 
-		houseNode = root->children;
-
-		while (houseNode) {
-			if (xmlStrcmp(houseNode->name, (const xmlChar*)"house") == 0) {
-				int32_t _houseid = 0;
-				Position entryPos(0, 0, 0);
-
-				if (!readXMLInteger(houseNode, "houseid", _houseid)) {
-					xmlFreeDoc(doc);
-					return false;
-				}
-
-				House* house = Houses::getInstance().getHouse(_houseid);
-
-				if (!house) {
-					std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
-					xmlFreeDoc(doc);
-					return false;
-				}
-
-				if (readXMLString(houseNode, "name", strValue)) {
-					house->setName(strValue);
-				}
-
-				if (readXMLInteger(houseNode, "entryx", intValue)) {
-					entryPos.x = intValue;
-				}
-
-				if (readXMLInteger(houseNode, "entryy", intValue)) {
-					entryPos.y = intValue;
-				}
-
-				if (readXMLInteger(houseNode, "entryz", intValue)) {
-					entryPos.z = intValue;
-				}
-
-				if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
-					std::cout << "Warning: [Houses::loadHousesXML] House entry not set"
-					          << " - Name: " << house->getName()
-					          << " - House id: " << _houseid << std::endl;
-				}
-
-				house->setEntryPos(entryPos);
-
-				if (readXMLInteger(houseNode, "rent", intValue)) {
-					house->setRent(intValue);
-				}
-
-				if (readXMLInteger(houseNode, "townid", intValue)) {
-					house->setTownId(intValue);
-				}
-
-				house->setHouseOwner(0, false);
-			}
-
-			houseNode = houseNode->next;
+		House* house = Houses::getInstance().getHouse(_houseid);
+		if (!house) {
+			std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
+			return false;
 		}
 
-		xmlFreeDoc(doc);
-		return true;
-	}
+		house->setName(houseNode.attribute("name").as_string());
 
+		Position entryPos(
+			pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
+			pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
+			pugi::cast<uint8_t>(houseNode.attribute("entryz").value())
+		);
+		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
+			std::cout << "Warning: [Houses::loadHousesXML] House entry not set"
+					    << " - Name: " << house->getName()
+					    << " - House id: " << _houseid << std::endl;
+		}
+		house->setEntryPos(entryPos);
+
+		house->setRent(pugi::cast<uint32_t>(houseNode.attribute("rent").value()));
+		house->setTownId(pugi::cast<uint32_t>(houseNode.attribute("townid").value()));
+
+		house->setHouseOwner(0, false);
+	}
 	return false;
 }
 

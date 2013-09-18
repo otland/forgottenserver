@@ -55,8 +55,7 @@
 #include "protocollogin.h"
 #endif
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "pugicast.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -141,96 +140,80 @@ Commands::~Commands()
 
 bool Commands::loadFromXml()
 {
-	std::string filename = "data/XML/commands.xml";
-
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-
-	if (doc) {
-		loaded = true;
-		xmlNodePtr root, p;
-		root = xmlDocGetRootElement(doc);
-
-		if (xmlStrcmp(root->name, (const xmlChar*)"commands")) {
-			std::cout << "[Error - Commands::loadFromXml] Malformed commands file." << std::endl;
-			xmlFreeDoc(doc);
-			return false;
-		}
-
-		std::string strCmd;
-		p = root->children;
-
-		while (p) {
-			if (xmlStrcmp(p->name, (const xmlChar*)"command") == 0) {
-				if (readXMLString(p, "cmd", strCmd)) {
-					CommandMap::iterator it = commandMap.find(strCmd);
-					int32_t gId;
-					int32_t aTypeLevel;
-					std::string strValue;
-
-					if (it != commandMap.end()) {
-						Command* command = it->second;
-
-						if (readXMLInteger(p, "group", gId)) {
-							if (!command->loadedGroupId) {
-								command->groupId = gId;
-								command->loadedGroupId = true;
-							} else {
-								std::cout << "Duplicated command " << strCmd << std::endl;
-							}
-						} else {
-							std::cout << "missing group tag for " << strCmd << std::endl;
-						}
-
-						if (readXMLInteger(p, "acctype", aTypeLevel)) {
-							if (!command->loadedAccountType) {
-								command->accountType = (AccountType_t)aTypeLevel;
-								command->loadedAccountType = true;
-							} else {
-								std::cout << "Duplicated command " << strCmd << std::endl;
-							}
-						} else {
-							std::cout << "missing acctype tag for " << strCmd << std::endl;
-						}
-
-						if (readXMLString(p, "log", strValue)) {
-							if (!command->loadedLogging) {
-								command->logged = booleanString(strValue);
-								command->loadedLogging = true;
-							} else {
-								std::cout << "Duplicated log tag for " << strCmd << std::endl;
-							}
-						} else {
-							std::cout << "Missing log tag for " << strCmd << std::endl;
-						}
-					} else {
-						std::cout << "Unknown command " << strCmd << std::endl;
-					}
-				} else {
-					std::cout << "missing cmd." << std::endl;
-				}
-			}
-
-			p = p->next;
-		}
-
-		xmlFreeDoc(doc);
+	pugi::xml_document doc;
+	if (!doc.load_file("data/XML/commands.xml")) {
+		return false;
 	}
 
-	for (CommandMap::iterator it = commandMap.begin(), end = commandMap.end(); it != end; ++it) {
+	loaded = true;
+
+	for (pugi::xml_node commandNode = doc.child("commands").first_child(); commandNode; commandNode = commandNode.next_sibling()) {
+		pugi::xml_attribute cmdAttribute = commandNode.attribute("cmd");
+		if (!cmdAttribute) {
+			std::cout << "[Warning - Commands::loadFromXml] Missing cmd" << std::endl;
+			continue;
+		}
+
+		auto it = commandMap.find(cmdAttribute.as_string());
+		if (it == commandMap.end()) {
+			std::cout << "Unknown command " << cmdAttribute.as_string() << std::endl;
+			continue;
+		}
+
 		Command* command = it->second;
+
+		pugi::xml_attribute groupAttribute = commandNode.attribute("group");
+		if (groupAttribute) {
+			if (!command->loadedGroupId) {
+				command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
+				command->loadedGroupId = true;
+			} else {
+				std::cout << "Duplicated command " << it->first << std::endl;
+			}
+		} else {
+			std::cout << "missing group tag for " << it->first << std::endl;
+		}
+
+		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
+		if (acctypeAttribute) {
+			if (!command->loadedAccountType) {
+				command->accountType = (AccountType_t)pugi::cast<uint32_t>(acctypeAttribute.value());
+				command->loadedAccountType = true;
+			} else {
+				std::cout << "Duplicated command " << it->first << std::endl;
+			}
+		} else {
+			std::cout << "missing acctype tag for " << it->first << std::endl;
+		}
+
+		pugi::xml_attribute logAttribute = commandNode.attribute("log");
+		if (logAttribute) {
+			if (!command->loadedLogging) {
+				command->logged = booleanString(logAttribute.as_string());
+				command->loadedLogging = true;
+			} else {
+				std::cout << "Duplicated log tag for " << it->first << std::endl;
+			}
+		} else {
+			std::cout << "Missing log tag for " << it->first << std::endl;
+		}
+	}
+
+	for (const auto& it : commandMap) {
+		Command* command = it.second;
 		if (!command->loadedGroupId) {
-			std::cout << "Warning: Missing group id for command " << it->first << std::endl;
+			std::cout << "Warning: Missing group id for command " << it.first << std::endl;
 		}
 
 		if (!command->loadedAccountType) {
-			std::cout << "Warning: Missing acctype level for command " << it->first << std::endl;
+			std::cout << "Warning: Missing acctype level for command " << it.first << std::endl;
 		}
 
 		if (!command->loadedLogging) {
-			std::cout << "Warning: Missing log command " << it->first << std::endl;
+			std::cout << "Warning: Missing log command " << it.first << std::endl;
 		}
 
-		g_game.addCommandTag(it->first[0]);
+		g_game.addCommandTag(it.first[0]);
 	}
 	return loaded;
 }
@@ -268,7 +251,6 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	std::string str_param;
 
 	std::string::size_type loc = cmd.find(' ', 0);
-
 	if (loc != std::string::npos) {
 		str_command = std::string(cmd, 0, loc);
 		str_param = std::string(cmd, (loc + 1), cmd.size() - loc - 1);
@@ -486,10 +468,8 @@ void Commands::createItemByName(Player* player, const std::string& cmd, const st
 	}
 
 	ReturnValue ret = g_game.internalAddItem(player, newItem);
-
 	if (ret != RET_NOERROR) {
 		ret = g_game.internalAddItem(player->getTile(), newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-
 		if (ret != RET_NOERROR) {
 			delete newItem;
 			return;
@@ -566,13 +546,11 @@ void Commands::reloadInfo(Player* player, const std::string& cmd, const std::str
 
 void Commands::teleportToTown(Player* player, const std::string& cmd, const std::string& param)
 {
-	std::string tmp = param;
-	Town* town = Towns::getInstance().getTown(tmp);
+	Town* town = Towns::getInstance().getTown(param);
 	if (town) {
 		Position oldPosition = player->getPosition();
 		Position newPosition = g_game.getClosestFreeTile(player, 0, town->getTemplePosition(), true);
-
-		if (player->getPosition() != town->getTemplePosition()) {
+		if (oldPosition != newPosition) {
 			if (newPosition.x == 0) {
 				player->sendCancel("You can not teleport there.");
 			} else if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
@@ -592,7 +570,6 @@ void Commands::teleportTo(Player* player, const std::string& cmd, const std::str
 	if (paramCreature) {
 		Position oldPosition = player->getPosition();
 		Position newPosition = g_game.getClosestFreeTile(player, 0, paramCreature->getPosition(), true);
-
 		if (newPosition.x > 0) {
 			if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
 				bool ghostMode = false;
@@ -615,7 +592,6 @@ void Commands::teleportTo(Player* player, const std::string& cmd, const std::str
 void Commands::getInfo(Player* player, const std::string& cmd, const std::string& param)
 {
 	Player* paramPlayer = g_game.getPlayerByName(param);
-
 	if (!paramPlayer) {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
 		return;
@@ -640,7 +616,6 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 
 	if (playerIp != 0) {
 		PlayerVector vec;
-
 		for (const auto& it : g_game.getPlayers()) {
 			if (it.second->getIP() != playerIp || it.second == paramPlayer) {
 				continue;
@@ -685,36 +660,37 @@ void Commands::openServer(Player* player, const std::string& cmd, const std::str
 void Commands::teleportNTiles(Player* player, const std::string& cmd, const std::string& param)
 {
 	int32_t ntiles = atoi(param.c_str());
+	if (ntiles == 0) {
+		return;
+	}
 
-	if (ntiles != 0) {
-		Position oldPosition = player->getPosition();
-		Position newPos = player->getPosition();
+	Position oldPosition = player->getPosition();
+	Position newPos = player->getPosition();
 
-		switch (player->direction) {
-			case NORTH:
-				newPos.y -= ntiles;
-				break;
-			case SOUTH:
-				newPos.y += ntiles;
-				break;
-			case EAST:
-				newPos.x += ntiles;
-				break;
-			case WEST:
-				newPos.x -= ntiles;
-				break;
-			default:
-				break;
-		}
+	switch (player->direction) {
+		case NORTH:
+			newPos.y -= ntiles;
+			break;
+		case SOUTH:
+			newPos.y += ntiles;
+			break;
+		case EAST:
+			newPos.x += ntiles;
+			break;
+		case WEST:
+			newPos.x -= ntiles;
+			break;
+		default:
+			break;
+	}
 
-		Position newPosition = g_game.getClosestFreeTile(player, 0, newPos, true);
-		if (newPosition.x == 0) {
-			player->sendCancel("You can not teleport there.");
-		} else if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
-			if (ntiles != 1) {
-				g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-				g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, player->isInGhostMode());
-			}
+	Position newPosition = g_game.getClosestFreeTile(player, 0, newPos, true);
+	if (newPosition.x == 0) {
+		player->sendCancel("You can not teleport there.");
+	} else if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
+		if (ntiles != 1) {
+			g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
+			g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, player->isInGhostMode());
 		}
 	}
 }
@@ -843,8 +819,7 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 	Position pos = player->getPosition();
 	pos = getNextPosition(player->direction, pos);
 
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-
+	Tile* tile = g_game.getTile(pos);
 	if (!tile) {
 		player->sendCancel("You have to be looking at the door of the house you would like to buy.");
 		return;
@@ -916,9 +891,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 		while (it != players.end()) {
 			ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << "]";
 			++it;
-			++i;
-
-			if (i == 10) {
+			if (++i == 10) {
 				ss << (it != players.end() ? "," : ".");
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 				ss.str("");
@@ -937,7 +910,6 @@ void Commands::showPosition(Player* player, const std::string& cmd, const std::s
 {
 	if (!param.empty() && player->isAccessPlayer()) {
 		StringVec exploded = explodeString(param, ", ", 2);
-
 		if (!exploded.size() || exploded.size() < 3) {
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Not enough params.");
 			return;
@@ -968,7 +940,6 @@ void Commands::removeThing(Player* player, const std::string& cmd, const std::st
 	Position pos = player->getPosition();
 	pos = getNextPosition(player->direction, pos);
 	Tile* removeTile = g_game.getMap()->getTile(pos);
-
 	if (!removeTile) {
 		player->sendTextMessage(MSG_STATUS_SMALL, "Tile not found.");
 		g_game.addMagicEffect(pos, NM_ME_POFF);
@@ -976,7 +947,6 @@ void Commands::removeThing(Player* player, const std::string& cmd, const std::st
 	}
 
 	Thing* thing = removeTile->getTopVisibleThing(player);
-
 	if (!thing) {
 		player->sendTextMessage(MSG_STATUS_SMALL, "Object not found.");
 		g_game.addMagicEffect(pos, NM_ME_POFF);
@@ -1050,7 +1020,6 @@ void Commands::newItem(Player* player, const std::string& cmd, const std::string
 void Commands::forceRaid(Player* player, const std::string& cmd, const std::string& param)
 {
 	Raid* raid = Raids::getInstance()->getRaidByName(param);
-
 	if (!raid || !raid->isLoaded()) {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "No such raid exists.");
 		return;
@@ -1064,7 +1033,6 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 	Raids::getInstance()->setRunning(raid);
 
 	RaidEvent* event = raid->getNextRaidEvent();
-
 	if (!event) {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
 		return;
@@ -1073,7 +1041,6 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 	raid->setState(RAIDSTATE_EXECUTING);
 
 	uint32_t ticks = event->getDelay();
-
 	if (ticks > 0) {
 		g_scheduler.addEvent(createSchedulerTask(ticks,
 		                     boost::bind(&Raid::executeRaidEvent, raid, event)));
@@ -1098,7 +1065,6 @@ void Commands::addSkill(Player* player, const std::string& cmd, const std::strin
 	toLowerCaseString(param2);
 
 	Player* paramPlayer = g_game.getPlayerByName(param1);
-
 	if (!paramPlayer) {
 		player->sendTextMessage(MSG_STATUS_SMALL, "Couldn't find target.");
 		return;
@@ -1117,7 +1083,6 @@ void Commands::addSkill(Player* player, const std::string& cmd, const std::strin
 void Commands::playerKills(Player* player, const std::string& cmd, const std::string& param)
 {
 	int32_t fragTime = g_config.getNumber(ConfigManager::FRAG_TIME);
-
 	if (player->skullTicks && fragTime > 0) {
 		int32_t frags = (int32_t)ceil(player->skullTicks / (double)fragTime);
 		int32_t remainingTime = (player->skullTicks % fragTime) / 1000;
@@ -1135,7 +1100,6 @@ void Commands::playerKills(Player* player, const std::string& cmd, const std::st
 void Commands::clean(Player* player, const std::string& cmd, const std::string& param)
 {
 	uint32_t count = g_game.getMap()->clean();
-
 	if (count != 1) {
 		std::ostringstream ss;
 		ss << "Cleaned " << count << " items from the map.";
@@ -1172,8 +1136,8 @@ void Commands::serverDiag(Player* player, const std::string& cmd, const std::str
 	text << "\nLibraries:\n";
 	text << "--------------------\n";
 	text << "asio: " << BOOST_ASIO_VERSION << "\n";
-	text << "libxml: " << XML_DEFAULT_VERSION << "\n";
 	text << "lua: " << LUA_VERSION << "\n";
+	text << "pugixml: " << PUGIXML_VERSION << "\n";
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
 #else

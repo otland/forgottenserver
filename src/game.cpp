@@ -5310,7 +5310,7 @@ Position Game::getClosestFreeTile(Player* player, Creature* teleportedCreature, 
 			}
 		}
 	}
-	return Position(0, 0, 0);
+	return Position();
 }
 
 void Game::loadMotdNum()

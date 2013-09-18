@@ -3639,7 +3639,7 @@ int32_t LuaScriptInterface::luaGetThingPos(lua_State* L)
 	//getThingPos(uid)
 	uint32_t uid = popNumber(L);
 
-	Position pos(0, 0, 0);
+	Position pos;
 	uint32_t stackpos = 0;
 
 	Thing* thing = getScriptEnv()->getThingByUID(uid);
@@ -4692,8 +4692,7 @@ int32_t LuaScriptInterface::luaVariantToPosition(lua_State* L)
 	//luaVariantToPosition(var)
 	LuaVariant var = popVariant(L);
 
-	PositionEx pos(0, 0, 0, 0);
-
+	PositionEx pos;
 	if (var.type == VARIANT_POSITION || var.type == VARIANT_TARGETPOSITION) {
 		pos = var.pos;
 	}
