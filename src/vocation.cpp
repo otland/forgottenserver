@@ -67,7 +67,7 @@ bool Vocations::loadFromXml()
 
 		pugi::xml_attribute clientIdAttribute = vocationNode.attribute("clientid");
 		if (clientIdAttribute) {
-			voc->clientId = pugi::cast<uint8_t>(clientIdAttribute.value());
+			voc->clientId = pugi::cast<uint16_t>(clientIdAttribute.value());
 		}
 
 		pugi::xml_attribute descriptionAttribute = vocationNode.attribute("description");
@@ -144,7 +144,7 @@ bool Vocations::loadFromXml()
 			if (strcasecmp(childNode.name(), "skill") == 0) {
 				pugi::xml_attribute skillIdAttribute = childNode.attribute("id");
 				if (skillIdAttribute) {
-					uint8_t skill_id = pugi::cast<uint8_t>(skillIdAttribute.value());
+					uint16_t skill_id = pugi::cast<uint16_t>(skillIdAttribute.value());
 					if (skill_id <= SKILL_LAST) {
 						voc->skillMultipliers[skill_id] = pugi::cast<float>(childNode.attribute("multiplier").value());
 					} else {

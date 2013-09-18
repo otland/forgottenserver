@@ -66,7 +66,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 		Position centerPos(
 			pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
 			pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
-			pugi::cast<uint8_t>(spawnNode.attribute("centerz").value())
+			pugi::cast<uint16_t>(spawnNode.attribute("centerz").value())
 		);
 
 		int32_t radius;
@@ -91,7 +91,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 
 				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
 				if (directionAttribute) {
-					dir = static_cast<Direction>(pugi::cast<uint8_t>(directionAttribute.value()));
+					dir = static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value()));
 				} else {
 					dir = NORTH;
 				}
@@ -120,7 +120,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 
 				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
 				if (directionAttribute) {
-					npc->setDirection(static_cast<Direction>(pugi::cast<uint8_t>(directionAttribute.value())));
+					npc->setDirection(static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value())));
 				}
 
 				npc->setMasterPos(Position(
