@@ -156,7 +156,7 @@ bool Commands::loadFromXml()
 
 		auto it = commandMap.find(cmdAttribute.as_string());
 		if (it == commandMap.end()) {
-			std::cout << "Unknown command " << cmdAttribute.as_string() << std::endl;
+			std::cout << "[Warning - Commands::loadFromXml] Unknown command " << cmdAttribute.as_string() << std::endl;
 			continue;
 		}
 
@@ -168,10 +168,8 @@ bool Commands::loadFromXml()
 				command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
 				command->loadedGroupId = true;
 			} else {
-				std::cout << "Duplicated command " << it->first << std::endl;
+				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
 			}
-		} else {
-			std::cout << "missing group tag for " << it->first << std::endl;
 		}
 
 		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
@@ -180,10 +178,8 @@ bool Commands::loadFromXml()
 				command->accountType = (AccountType_t)pugi::cast<uint32_t>(acctypeAttribute.value());
 				command->loadedAccountType = true;
 			} else {
-				std::cout << "Duplicated command " << it->first << std::endl;
+				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
 			}
-		} else {
-			std::cout << "missing acctype tag for " << it->first << std::endl;
 		}
 
 		pugi::xml_attribute logAttribute = commandNode.attribute("log");
@@ -192,25 +188,23 @@ bool Commands::loadFromXml()
 				command->logged = booleanString(logAttribute.as_string());
 				command->loadedLogging = true;
 			} else {
-				std::cout << "Duplicated log tag for " << it->first << std::endl;
+				std::cout << "[Notice - Commands::loadFromXml] Duplicate log tag for: " << it->first << std::endl;
 			}
-		} else {
-			std::cout << "Missing log tag for " << it->first << std::endl;
 		}
 	}
 
 	for (const auto& it : commandMap) {
 		Command* command = it.second;
 		if (!command->loadedGroupId) {
-			std::cout << "Warning: Missing group id for command " << it.first << std::endl;
+			std::cout << "[Warning - Commands::loadFromXml] Missing group id for command " << it.first << std::endl;
 		}
 
 		if (!command->loadedAccountType) {
-			std::cout << "Warning: Missing acctype level for command " << it.first << std::endl;
+			std::cout << "[Warning - Commands::loadFromXml] Missing acctype level for command " << it.first << std::endl;
 		}
 
 		if (!command->loadedLogging) {
-			std::cout << "Warning: Missing log command " << it.first << std::endl;
+			std::cout << "[Warning - Commands::loadFromXml] Missing log command " << it.first << std::endl;
 		}
 
 		g_game.addCommandTag(it.first[0]);
