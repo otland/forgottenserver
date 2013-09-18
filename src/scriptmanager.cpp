@@ -22,9 +22,6 @@
 #include "scriptmanager.h"
 #include "luascript.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 #include "actions.h"
 #include "talkaction.h"
 #include "spells.h"

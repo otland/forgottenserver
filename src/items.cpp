@@ -25,8 +25,6 @@
 #include "movement.h"
 #include "weapons.h"
 
-#include <libxml/xmlschemas.h>
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -450,32 +448,6 @@ bool Items::loadFromXml()
 	xmlDocPtr doc = xmlParseFile("data/items/items.xml");
 	if (!doc) {
 		return false;
-	}
-
-	//validation against xml-schema
-	xmlDocPtr schemaDoc = xmlReadFile("data/items/items.xsd", NULL, XML_PARSE_NONET);
-	if (schemaDoc != NULL) {
-		xmlSchemaParserCtxtPtr schemaParserContext = xmlSchemaNewDocParserCtxt(schemaDoc);
-		if (schemaParserContext != NULL) {
-			xmlSchemaPtr schema = xmlSchemaParse(schemaParserContext);
-			if (schema != NULL) {
-				xmlSchemaValidCtxtPtr validContext = xmlSchemaNewValidCtxt(schema);
-				if (validContext != NULL) {
-					int returnVal = xmlSchemaValidateDoc(validContext, doc);
-					if (returnVal != 0) {
-						if (returnVal > 0) {
-							std::cout << std::endl << "Warning: [XMLSCHEMA] items.xml could not be validated against XSD" << std::endl;
-						} else {
-							std::cout << std::endl << "Warning: [XMLSCHEMA] validation generated an internal error." << std::endl;
-						}
-					}
-					xmlSchemaFreeValidCtxt(validContext);
-				}
-				xmlSchemaFree(schema);
-			}
-			xmlSchemaFreeParserCtxt(schemaParserContext);
-		}
-		xmlFreeDoc(schemaDoc);
 	}
 
 	xmlNodePtr root = xmlDocGetRootElement(doc);
