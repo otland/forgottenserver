@@ -31,6 +31,9 @@
 #include "tools.h"
 #include "rsa.h"
 
+#include "pugixml.hpp"
+#include "pugicast.h"
+
 #include "logger.h"
 
 static void addLogLine(ProtocolAdmin* conn, eLogType type, int level, const std::string& message);
@@ -124,7 +127,6 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 	OutputMessagePool* outputPool = OutputMessagePool::getInstance();
 
 	OutputMessage_ptr output = outputPool->getOutputMessage(this, false);
-
 	if (!output) {
 		return;
 	}
@@ -387,7 +389,6 @@ void ProtocolAdmin::adminCommandCloseServer()
 	addLogLine(this, LOGTYPE_EVENT, 1, "close server ok");
 
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		output->AddByte(AP_MSG_COMMAND_OK);
 		OutputMessagePool::getInstance()->send(output);
@@ -397,7 +398,6 @@ void ProtocolAdmin::adminCommandCloseServer()
 void ProtocolAdmin::adminCommandPayHouses()
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		if (Houses::getInstance().payHouses()) {
 			addLogLine(this, LOGTYPE_EVENT, 1, "pay houses ok");
@@ -419,7 +419,6 @@ void ProtocolAdmin::adminCommandOpenServer()
 	addLogLine(this, LOGTYPE_EVENT, 1, "open server ok");
 
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		output->AddByte(AP_MSG_COMMAND_OK);
 		OutputMessagePool::getInstance()->send(output);
@@ -433,7 +432,6 @@ void ProtocolAdmin::adminCommandShutdownServer()
 	addLogLine(this, LOGTYPE_EVENT, 1, "starting server shutdown");
 
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		output->AddByte(AP_MSG_COMMAND_OK);
 		OutputMessagePool::getInstance()->send(output);
@@ -443,10 +441,8 @@ void ProtocolAdmin::adminCommandShutdownServer()
 void ProtocolAdmin::adminCommandKickPlayer(const std::string& name)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		Player* player = g_game.getPlayerByName(name);
-
 		if (player) {
 			player->kickPlayer(false);
 			addLogLine(this, LOGTYPE_EVENT, 1, "kicked player " + name);
@@ -466,7 +462,6 @@ void ProtocolAdmin::adminCommandKickPlayer(const std::string& name)
 void ProtocolAdmin::adminCommandSetOwner(const std::string& param)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		boost::char_separator<char> sep(", ");
 		tokenizer cmdtokens(param, sep);
@@ -520,89 +515,56 @@ AdminProtocolConfig::~AdminProtocolConfig()
 
 bool AdminProtocolConfig::loadXMLConfig()
 {
-	xmlDocPtr doc = xmlParseFile("data/XML/admin.xml");
-
-	if (!doc) {
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/XML/admin.xml");
+	if (!result) {
+		std::cout << "[Error - AdminProtocolConfig::loadXMLConfig] Failed to load data/XML/admin.xml: " << result.description() << std::endl;
 		return false;
 	}
 
-	xmlNodePtr root, p, q;
-	root = xmlDocGetRootElement(doc);
-
-	if (!xmlStrEqual(root->name, (const xmlChar*)"otadmin")) {
-		xmlFreeDoc(doc);
+	pugi::xml_node otadminNode = doc.child("otadmin");
+	if (!otadminNode) {
 		return false;
 	}
 
-	int enabled;
+	m_enabled = otadminNode.attribute("enabled").as_bool();
+	for (pugi::xml_node node = otadminNode.first_child(); node; node = node.next_sibling()) {
+		if (strcasecmp(node.name(), "security") == 0) {
+			m_onlyLocalHost = node.attribute("onlylocalhost").as_bool();
+			m_maxConnections = pugi::cast<int32_t>(node.attribute("maxconnections").value());
+			m_requireLogin = node.attribute("loginrequired").as_bool();
 
-	if (readXMLInteger(root, "enabled", enabled)) {
-		m_enabled = enabled != 0;
-	}
-
-	int value;
-
-	p = root->children;
-
-	while (p) {
-		if (xmlStrEqual(p->name, (const xmlChar*)"security")) {
-			if (readXMLInteger(p, "onlylocalhost", value)) {
-				m_onlyLocalHost = value != 0;
-			}
-
-			if (readXMLInteger(p, "maxconnections", value) && value > 0) {
-				m_maxConnections = value;
-			}
-
-			if (readXMLInteger(p, "loginrequired", value)) {
-				m_requireLogin = value != 0;
-			}
-
-			std::string password;
-
-			if (readXMLString(p, "loginpassword", password)) {
-				m_password = password;
+			pugi::xml_attribute loginPasswordAttribute = node.attribute("loginpassword");
+			if (loginPasswordAttribute) {
+				m_password = loginPasswordAttribute.as_string();
 			} else if (m_requireLogin) {
-				std::cout << "Security warning: require login but use default password." << std::endl;
+				std::cout << "[AdminProtocolConfig::loadXMLConfig - Security warning] Login required, but using default password." << std::endl;
 			}
-		} else if (xmlStrEqual(p->name, (const xmlChar*)"encryption")) {
-			if (readXMLInteger(p, "required", value)) {
-				m_requireEncryption = value != 0;
-			}
+		} else if (strcasecmp(node.name(), "encryption") == 0) {
+			m_requireEncryption = node.attribute("required").as_bool();
 
-			q = p->children;
-
-			while (q) {
-				if (xmlStrEqual(q->name, (const xmlChar*)"key")) {
-					std::string str;
-
-					if (readXMLString(q, "type", str)) {
-						if (asLowerCaseString(str) == "rsa1024xtea") {
-							if (readXMLString(q, "file", str)) {
-								m_key_RSA1024XTEA = new RSA();
-
-								if (!m_key_RSA1024XTEA->setKey("data/XML/" + str)) {
-									delete m_key_RSA1024XTEA;
-									m_key_RSA1024XTEA = NULL;
-									std::cout << "Can not load key from data/XML/" << str << std::endl;
-								}
-							} else {
-								std::cout << "Missing file for RSA1024XTEA key." << std::endl;
-							}
-						} else {
-							std::cout << str << " is not a valid key type." << std::endl;
-						}
-					}
+			for (pugi::xml_node encryptionNode = node.first_child(); node; node = node.next_sibling()) {
+				std::string encryptionType = encryptionNode.attribute("type").as_string();
+				if (asLowerCaseString(encryptionType) != "rsa1024xtea") {
+					std::cout << "[AdminProtocolConfig::loadXMLConfig - Warning] " << encryptionType << " is not a valid key type." << std::endl;
+					continue;
 				}
 
-				q = q->next;
+				pugi::xml_attribute encryptionFile = encryptionNode.attribute("file");
+				if (!encryptionFile) {
+					std::cout << "[AdminProtocolConfig::loadXMLConfig - Warning] Missing file for RSA1024XTEA key." << std::endl;
+					continue;
+				}
+
+				m_key_RSA1024XTEA = new RSA();
+				if (!m_key_RSA1024XTEA->setKey("data/XML/" + std::string(encryptionFile.as_string()))) {
+					delete m_key_RSA1024XTEA;
+					m_key_RSA1024XTEA = NULL;
+					std::cout << "[AdminProtocolConfig::loadXMLConfig - Warning] Can not load key from data/XML/" << encryptionFile.as_string() << std::endl;
+				}
 			}
 		}
-
-		p = p->next;
 	}
-
-	xmlFreeDoc(doc);
 	return true;
 }
 
