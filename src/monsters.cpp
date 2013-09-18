@@ -33,6 +33,9 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
+#include "pugixml.hpp"
+#include "pugicast.h"
+
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
@@ -131,11 +134,9 @@ uint32_t Monsters::getLootRandom()
 void MonsterType::createLoot(Container* corpse)
 {
 	Player* owner = g_game.getPlayerByID(corpse->getCorpseOwner());
-
 	if (!owner || owner->getStaminaMinutes() > 840) {
 		for (LootItems::const_reverse_iterator it = lootItems.rbegin(), end = lootItems.rend(); it != end; ++it) {
 			std::list<Item*> itemList = createLootItem(*it);
-
 			if (itemList.empty()) {
 				continue;
 			}
@@ -186,7 +187,6 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 	int32_t itemCount = 0;
 
 	uint32_t randvalue = Monsters::getLootRandom();
-
 	if (randvalue < lootBlock.chance) {
 		if (Item::items[lootBlock.id].stackable) {
 			itemCount = randvalue % lootBlock.countmax + 1;
@@ -260,60 +260,38 @@ Monsters::Monsters()
 
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
-	loaded = false;
-	std::string filename = "data/monster/monsters.xml";
-
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-
-	if (doc) {
-		loaded = true;
-		xmlNodePtr root, p;
-		root = xmlDocGetRootElement(doc);
-
-		if (xmlStrcmp(root->name, (const xmlChar*)"monsters") != 0) {
-			xmlFreeDoc(doc);
-			loaded = false;
-			return false;
-		}
-
-		p = root->children;
-
-		while (p) {
-			if (p->type != XML_ELEMENT_NODE) {
-				p = p->next;
-				continue;
-			}
-
-			if (xmlStrcmp(p->name, (const xmlChar*)"monster") == 0) {
-				std::string file;
-				std::string name;
-
-				if (readXMLString(p, "file", file) && readXMLString(p, "name", name)) {
-					file = "data/monster/" + file;
-					loadMonster(file, name, reloading);
-				}
-			} else {
-				std::cout << "[Warning - Monsters::loadFromXml]. Unknown node name. " << p->name << std::endl;
-			}
-
-			p = p->next;
-		}
-
-		xmlFreeDoc(doc);
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/monster/monsters.xml");
+	if (!result) {
+		std::cout << "[Error - Monsters::loadFromXml] Failed to load data/monster/monsters.xml: " << result.description() << std::endl;
+		return false;
 	}
 
-	return loaded;
+	loaded = true;
+
+	for (pugi::xml_node monsterNode = doc.child("monsters").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
+		if (strcasecmp(monsterNode.name(), "monster") != 0) {
+			std::cout << "[Warning - Monsters::loadFromXml] Unknown node name: " << monsterNode.name() << std::endl;
+			continue;
+		}
+
+		std::ostringstream file("data/monster");
+		file << monsterNode.attribute("file").as_string();
+		loadMonster(file.str(), monsterNode.attribute("name").as_string(), reloading);
+	}
+	return true;
 }
 
 bool Monsters::reload()
 {
+	loaded = false;
 	return loadFromXml(true);
 }
 
 ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType,
         int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval)
 {
-	ConditionDamage* condition = dynamic_cast<ConditionDamage*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, 0, 0));
+	ConditionDamage* condition = static_cast<ConditionDamage*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, 0, 0));
 	condition->setParam(CONDITIONPARAM_TICKINTERVAL, tickInterval);
 	condition->setParam(CONDITIONPARAM_MINVALUE, minDamage);
 	condition->setParam(CONDITIONPARAM_MAXVALUE, maxDamage);
