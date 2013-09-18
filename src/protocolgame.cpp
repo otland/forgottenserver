@@ -2181,13 +2181,11 @@ void ProtocolGame::sendQuestLog()
 	msg.AddByte(0xF0);
 	msg.AddU16(Quests::getInstance()->getQuestsCount(player));
 
-	for (QuestsList::const_iterator it = Quests::getInstance()->getFirstQuest(), end = Quests::getInstance()->getLastQuest(); it != end; ++it) {
-		Quest* quest = *it;
-
-		if (quest->isStarted(player)) {
-			msg.AddU16(quest->getID());
-			msg.AddString(quest->getName());
-			msg.AddByte(quest->isCompleted(player));
+	for (const Quest& quest : Quests::getInstance()->getQuests()) {
+		if (quest.isStarted(player)) {
+			msg.AddU16(quest.getID());
+			msg.AddString(quest.getName());
+			msg.AddByte(quest.isCompleted(player));
 		}
 	}
 
@@ -2201,12 +2199,10 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 	msg.AddU16(quest->getID());
 	msg.AddByte(quest->getMissionsCount(player));
 
-	for (MissionsList::const_iterator it = quest->getFirstMission(), end = quest->getLastMission(); it != end; ++it) {
-		Mission* mission = *it;
-
-		if (mission->isStarted(player)) {
-			msg.AddString(mission->getName(player));
-			msg.AddString(mission->getDescription(player));
+	for (const Mission& mission : quest->getMissions()) {
+		if (mission.isStarted(player)) {
+			msg.AddString(mission.getName(player));
+			msg.AddString(mission.getDescription(player));
 		}
 	}
 

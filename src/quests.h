@@ -29,13 +29,14 @@ class MissionState;
 class Mission;
 class Quest;
 
-typedef std::map<int32_t, MissionState*> StateList;
-typedef std::list<Mission*> MissionsList;
-typedef std::list<Quest*> QuestsList;
+typedef std::map<int32_t, MissionState> StateList;
+typedef std::list<Mission> MissionsList;
+typedef std::list<Quest> QuestsList;
 
 class MissionState
 {
 	public:
+		MissionState() {}
 		MissionState(const std::string& _description, int32_t _missionID);
 
 		int32_t getMissionID() const {
@@ -54,11 +55,11 @@ class Mission
 {
 	public:
 		Mission(const std::string& _missionName, int32_t _storageID, int32_t _startValue, int32_t _endValue, bool _ignoreEndValue);
-		~Mission();
+
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;
-		std::string getName(Player* player);
-		std::string getDescription(Player* player);
+		std::string getName(Player* player) const;
+		std::string getDescription(Player* player) const;
 
 		uint32_t getStorageId() const {
 			return storageID;
@@ -84,9 +85,8 @@ class Quest
 {
 	public:
 		Quest(const std::string& _name, uint16_t _id, int32_t _startStorageID, int32_t _startStorageValue);
-		~Quest();
 
-		bool isCompleted(Player* player);
+		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;
 		uint16_t getID() const {
 			return id;
@@ -103,15 +103,8 @@ class Quest
 			return startStorageValue;
 		}
 
-		void addMission(Mission* mission) {
-			missions.push_back(mission);
-		}
-
-		MissionsList::const_iterator getFirstMission() const {
-			return missions.begin();
-		}
-		MissionsList::const_iterator getLastMission() const {
-			return missions.end();
+		const MissionsList& getMissions() const {
+			return missions;
 		}
 
 	private:
@@ -122,30 +115,26 @@ class Quest
 		uint16_t id;
 
 		MissionsList missions;
+
+	friend class Quests;
 };
 
 class Quests
 {
 	public:
-		Quests();
-		~Quests();
-
 		static Quests* getInstance() {
 			static Quests instance;
 			return &instance;
 		}
 
-		QuestsList::const_iterator getFirstQuest() const {
-			return quests.begin();
-		}
-		QuestsList::const_iterator getLastQuest() const {
-			return quests.end();
+		const QuestsList& getQuests() const {
+			return quests;
 		}
 
 		bool loadFromXml();
 		Quest* getQuestByID(uint16_t id);
-		bool isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue);
-		uint16_t getQuestsCount(Player* player);
+		bool isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const;
+		uint16_t getQuestsCount(Player* player) const;
 		bool reload();
 
 	private:

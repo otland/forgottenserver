@@ -43,16 +43,7 @@ Mission::Mission(const std::string& _missionName, int32_t _storageID, int32_t _s
 	mainState = NULL;
 }
 
-Mission::~Mission()
-{
-	for (uint32_t it = 0; it != state.size(); it++) {
-		delete state[it];
-	}
-
-	state.clear();
-}
-
-std::string Mission::getDescription(Player* player)
+std::string Mission::getDescription(Player* player) const
 {
 	int32_t value;
 	player->getStorageValue(storageID, value);
@@ -70,9 +61,8 @@ std::string Mission::getDescription(Player* player)
 		while (current >= startValue) {
 			if (value >= current) {
 				StateList::const_iterator sit = state.find(current);
-
 				if (sit != state.end()) {
-					return sit->second->getMissionDescription();
+					return sit->second.getMissionDescription();
 				}
 			}
 
@@ -82,9 +72,8 @@ std::string Mission::getDescription(Player* player)
 		while (current >= startValue) {
 			if (value == current) {
 				StateList::const_iterator sit = state.find(current);
-
 				if (sit != state.end()) {
-					return sit->second->getMissionDescription();
+					return sit->second.getMissionDescription();
 				}
 			}
 
@@ -102,7 +91,6 @@ bool Mission::isStarted(Player* player) const
 	}
 
 	int32_t value;
-
 	if (!player->getStorageValue(storageID, value)) {
 		return false;
 	}
@@ -125,7 +113,6 @@ bool Mission::isCompleted(Player* player) const
 	}
 
 	int32_t value;
-
 	if (!player->getStorageValue(storageID, value)) {
 		return false;
 	}
@@ -137,12 +124,11 @@ bool Mission::isCompleted(Player* player) const
 	return value == endValue;
 }
 
-std::string Mission::getName(Player* player)
+std::string Mission::getName(Player* player) const
 {
 	if (isCompleted(player)) {
 		return missionName + " (completed)";
 	}
-
 	return missionName;
 }
 
@@ -154,36 +140,24 @@ Quest::Quest(const std::string& _name, uint16_t _id, int32_t _startStorageID, in
 	startStorageValue = _startStorageValue;
 }
 
-Quest::~Quest()
-{
-	for (MissionsList::iterator it = missions.begin(), end = missions.end(); it != end; ++it) {
-		delete (*it);
-	}
-
-	missions.clear();
-}
-
 uint16_t Quest::getMissionsCount(Player* player) const
 {
 	uint16_t count = 0;
-
-	for (MissionsList::const_iterator it = missions.begin(), end = missions.end(); it != end; ++it) {
-		if ((*it)->isStarted(player)) {
+	for (const Mission& mission : missions) {
+		if (mission.isStarted(player)) {
 			count++;
 		}
 	}
-
 	return count;
 }
 
-bool Quest::isCompleted(Player* player)
+bool Quest::isCompleted(Player* player) const
 {
-	for (MissionsList::const_iterator it = missions.begin(), end = missions.end(); it != end; ++it) {
-		if (!(*it)->isCompleted(player)) {
+	for (const Mission& mission : missions) {
+		if (!mission.isCompleted(player)) {
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -194,7 +168,6 @@ bool Quest::isStarted(Player* player) const
 	}
 
 	int32_t value;
-
 	if (!player->getStorageValue(startStorageID, value) || value < startStorageValue) {
 		return false;
 	}
@@ -202,26 +175,8 @@ bool Quest::isStarted(Player* player) const
 	return true;
 }
 
-Quests::Quests()
-{
-	//
-}
-
-Quests::~Quests()
-{
-	for (QuestsList::iterator it = quests.begin(), end = quests.end(); it != end; ++it) {
-		delete (*it);
-	}
-
-	quests.clear();
-}
-
 bool Quests::reload()
 {
-	for (QuestsList::iterator it = quests.begin(), end = quests.end(); it != end; ++it) {
-		delete (*it);
-	}
-
 	quests.clear();
 	return loadFromXml();
 }
@@ -237,31 +192,35 @@ bool Quests::loadFromXml()
 
 	for (pugi::xml_node questNode = doc.child("quests").first_child(); questNode; questNode = questNode.next_sibling()) {
 		uint16_t id = 0;
-		Quest* quest = new Quest(
+
+		quests.emplace_back(
 			questNode.attribute("name").as_string(),
 			id++,
 			pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
 			pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value())
 		);
+		Quest& quest = quests.back();
+
 		for (pugi::xml_node missionNode = questNode.first_child(); missionNode; missionNode = missionNode.next_sibling()) {
 			std::string missionState = missionNode.attribute("description").as_string();
 
-			Mission* mission = new Mission(
+			quest.missions.emplace_back(
 				missionNode.attribute("name").as_string(),
 				pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
 				pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
 				pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
 				missionNode.attribute("ignoreendvalue").as_bool()
 			);
+			Mission& mission = quest.missions.back();
+
 			if (missionState.empty()) {
 				for (pugi::xml_node missionStateNode = missionNode.first_child(); missionStateNode; missionStateNode = missionStateNode.next_sibling()) {
 					int32_t missionId = pugi::cast<int32_t>(missionStateNode.attribute("id").value());
-					mission->state[missionId] = new MissionState(missionStateNode.attribute("description").as_string(), missionId);
+					mission.state[missionId] = MissionState(missionStateNode.attribute("description").as_string(), missionId); // TODO: Use emplace
 				}
 			} else {
-				mission->mainState = new MissionState(missionState, 0);
+				mission.mainState = new MissionState(missionState, 0);
 			}
-			quest->addMission(mission);
 		}
 		quests.push_back(quest);
 	}
@@ -270,50 +229,43 @@ bool Quests::loadFromXml()
 
 Quest* Quests::getQuestByID(uint16_t id)
 {
-	for (QuestsList::iterator it = quests.begin(), end = quests.end(); it != end; ++it) {
-		if ((*it)->getID() == id) {
-			return (*it);
+	for (Quest& quest : quests) {
+		if (quest.id == id) {
+			return &quest;
 		}
 	}
 	return NULL;
 }
 
-uint16_t Quests::getQuestsCount(Player* player)
+uint16_t Quests::getQuestsCount(Player* player) const
 {
 	uint16_t count = 0;
-
-	for (QuestsList::const_iterator it = quests.begin(), end = quests.end(); it != end; ++it) {
-		if ((*it)->isStarted(player)) {
+	for (const Quest& quest : quests) {
+		if (quest.isStarted(player)) {
 			count++;
 		}
 	}
-
 	return count;
 }
 
-bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue)
+bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const
 {
-	for (QuestsList::const_iterator it = quests.begin(), end = quests.end(); it != end; ++it) {
-		Quest* quest = *it;
-
-		if (quest->getStartStorageId() == key && quest->getStartStorageValue() == value) {
+	for (const Quest& quest : quests) {
+		if (quest.getStartStorageId() == key && quest.getStartStorageValue() == value) {
 			return true;
 		}
 
-		for (MissionsList::const_iterator m_it = quest->getFirstMission(), m_end = quest->getLastMission(); m_it != m_end; ++m_it) {
-			Mission* mission = *m_it;
-
-			if (mission->mainState) {
-				if (mission->getStorageId() == key && value >= mission->getStartStorageValue() && value <= mission->getEndStorageValue() && (oldValue < mission->getStartStorageValue() || oldValue > mission->getEndStorageValue())) {
+		for (const Mission& mission : quest.getMissions()) {
+			if (mission.mainState) {
+				if (mission.getStorageId() == key && value >= mission.getStartStorageValue() && value <= mission.getEndStorageValue() && (oldValue < mission.getStartStorageValue() || oldValue > mission.getEndStorageValue())) {
 					return true;
 				}
 			} else {
-				if (mission->getStorageId() == key && value >= mission->getStartStorageValue() && value <= mission->getEndStorageValue()) {
+				if (mission.getStorageId() == key && value >= mission.getStartStorageValue() && value <= mission.getEndStorageValue()) {
 					return true;
 				}
 			}
 		}
 	}
-
 	return false;
 }
