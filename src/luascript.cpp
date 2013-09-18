@@ -4692,7 +4692,7 @@ int32_t LuaScriptInterface::luaVariantToPosition(lua_State* L)
 	//luaVariantToPosition(var)
 	LuaVariant var = popVariant(L);
 
-	PositionEx pos;
+	PositionEx pos(0, 0, 0, 0);
 	if (var.type == VARIANT_POSITION || var.type == VARIANT_TARGETPOSITION) {
 		pos = var.pos;
 	}
