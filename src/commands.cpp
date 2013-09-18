@@ -1110,12 +1110,12 @@ void Commands::serverDiag(Player* player, const std::string& cmd, const std::str
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	std::ostringstream text;
 	text << "Server diagonostic:\n";
-	text << "World:" << "\n";
+	text << "World:\n";
 	text << "Player: " << g_game.getPlayersOnline() << " (" << Player::playerCount << ")\n";
 	text << "Npc: " << g_game.getNpcsOnline() << " (" << Npc::npcCount << ")\n";
 	text << "Monster: " << g_game.getMonstersOnline() << " (" << Monster::monsterCount << ")\n";
 
-	text << "\nProtocols:" << "\n";
+	text << "\nProtocols:\n";
 	text << "--------------------\n";
 	text << "ProtocolGame: " << ProtocolGame::protocolGameCount << "\n";
 	text << "ProtocolLogin: " << ProtocolLogin::protocolLoginCount << "\n";

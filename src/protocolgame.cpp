@@ -184,7 +184,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			int32_t retryTime = WaitingList::getTime(currentSlot);
 			std::ostringstream ss;
 
-			ss << "Too many players online.\n" << "You are at place "
+			ss << "Too many players online.\nYou are at place "
 			   << currentSlot << " on the waiting list.";
 
 			OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
@@ -2114,7 +2114,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 				ss << ", ";
 			}
 
-			ss << "speed" << " " << std::showpos << (int32_t)(it.abilities->speed / 2) << std::noshowpos;
+			ss << "speed " << std::showpos << (int32_t)(it.abilities->speed / 2) << std::noshowpos;
 		}
 
 		msg.AddString(ss.str());

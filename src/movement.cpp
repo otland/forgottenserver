@@ -590,7 +590,7 @@ bool MoveEvent::configureEvent(xmlNodePtr p)
 				} else if (tmpStr == "ammo") {
 					slot = SLOTP_AMMO;
 				} else {
-					std::cout << "Warning: [MoveEvent::configureMoveEvent] " << "Unknown slot type " << str << std::endl;
+					std::cout << "[Warning - MoveEvent::configureMoveEvent] Unknown slot type " << str << std::endl;
 				}
 			}
 

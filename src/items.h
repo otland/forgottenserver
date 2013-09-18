@@ -27,8 +27,7 @@
 #include "position.h"
 #include <map>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "pugixml.hpp"
 
 #define SLOTP_WHEREEVER 0xFFFFFFFF
 #define SLOTP_HEAD 1
@@ -312,7 +311,7 @@ class Items
 		static uint32_t dwBuildNumber;
 
 		bool loadFromXml();
-		bool parseItemNode(xmlNodePtr itemNode, uint32_t id);
+		bool parseItemNode(const pugi::xml_node& itemNode, uint32_t id);
 
 		void addItemType(ItemType* itemType);
 
