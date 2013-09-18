@@ -692,7 +692,7 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Item* item) co
 		maxValue <<= 1;
 	}
 
-	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultipler);
+	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultiplier);
 	return -random_range(0, maxValue, DISTRO_NORMAL);
 }
 
@@ -708,7 +708,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 		maxValue <<= 1;
 	}
 
-	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultipler);
+	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultiplier);
 
 	if (maxDamage) {
 		return -maxValue;
@@ -1033,7 +1033,7 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 		maxValue <<= 1;
 	}
 
-	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultipler);
+	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultiplier);
 
 	int32_t minValue = 0;
 
@@ -1068,7 +1068,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 		maxValue <<= 1;
 	}
 
-	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultipler);
+	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
 	}

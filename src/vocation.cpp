@@ -22,8 +22,9 @@
 #include "definitions.h"
 #include "vocation.h"
 #include <iostream>
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+
+#include "pugixml.hpp"
+#include "pugicast.h"
 
 #include "tools.h"
 
@@ -43,150 +44,139 @@ Vocations::~Vocations()
 
 bool Vocations::loadFromXml()
 {
-	std::string filename = "data/XML/vocations.xml";
-
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
-
-	if (doc) {
-		xmlNodePtr root, p;
-		root = xmlDocGetRootElement(doc);
-
-		if (xmlStrcmp(root->name, (const xmlChar*)"vocations") != 0) {
-			xmlFreeDoc(doc);
-			return false;
-		}
-
-		p = root->children;
-
-		while (p) {
-			std::string str;
-			int32_t intVal;
-
-			if (xmlStrcmp(p->name, (const xmlChar*)"vocation") == 0) {
-				Vocation* voc = new Vocation();
-				xmlNodePtr configNode;
-
-				if (readXMLInteger(p, "id", intVal)) {
-					float floatVal;
-
-					voc->id = intVal;
-
-					if (readXMLString(p, "name", str)) {
-						voc->name = str;
-					}
-
-					if (readXMLInteger(p, "clientid", intVal)) {
-						voc->clientId = intVal;
-					}
-
-					if (readXMLString(p, "description", str)) {
-						voc->description = str;
-					}
-
-					if (readXMLInteger(p, "gaincap", intVal)) {
-						voc->gainCap = intVal;
-					}
-
-					if (readXMLInteger(p, "gainhp", intVal)) {
-						voc->gainHP = intVal;
-					}
-
-					if (readXMLInteger(p, "gainmana", intVal)) {
-						voc->gainMana = intVal;
-					}
-
-					if (readXMLInteger(p, "gainhpticks", intVal)) {
-						voc->gainHealthTicks = intVal;
-					}
-
-					if (readXMLInteger(p, "gainhpamount", intVal)) {
-						voc->gainHealthAmount = intVal;
-					}
-
-					if (readXMLInteger(p, "gainmanaticks", intVal)) {
-						voc->gainManaTicks = intVal;
-					}
-
-					if (readXMLInteger(p, "gainmanaamount", intVal)) {
-						voc->gainManaAmount = intVal;
-					}
-
-					if (readXMLFloat(p, "manamultiplier", floatVal)) {
-						voc->manaMultiplier = floatVal;
-					}
-
-					if (readXMLInteger(p, "attackspeed", intVal)) {
-						voc->attackSpeed = intVal;
-					}
-
-					if (readXMLInteger(p, "basespeed", intVal)) {
-						voc->baseSpeed = intVal;
-					}
-
-					if (readXMLInteger(p, "soulmax", intVal)) {
-						voc->soulMax = intVal;
-					}
-
-					if (readXMLInteger(p, "gainsoulticks", intVal)) {
-						voc->gainSoulTicks = intVal;
-					}
-
-					if (readXMLInteger(p, "fromvoc", intVal)) {
-						voc->fromVocation = intVal;
-					}
-
-					configNode = p->children;
-
-					while (configNode) {
-						if (xmlStrcmp(configNode->name, (const xmlChar*)"skill") == 0) {
-							uint32_t skill_id;
-
-							if (readXMLInteger(configNode, "id", intVal)) {
-								skill_id = intVal;
-
-								if (skill_id > SKILL_LAST) {
-									std::cout << "No valid skill id. " << skill_id << std::endl;
-								} else {
-									if (readXMLFloat(configNode, "multiplier", floatVal)) {
-										voc->skillMultipliers[skill_id] = floatVal;
-									}
-								}
-							} else {
-								std::cout << "Missing skill id." << std::endl;
-							}
-						} else if (xmlStrcmp(configNode->name, (const xmlChar*)"formula") == 0) {
-							if (readXMLFloat(configNode, "meleeDamage", floatVal)) {
-								voc->meleeDamageMultipler = floatVal;
-							}
-
-							if (readXMLFloat(configNode, "distDamage", floatVal)) {
-								voc->distDamageMultipler = floatVal;
-							}
-
-							if (readXMLFloat(configNode, "defense", floatVal)) {
-								voc->defenseMultipler = floatVal;
-							}
-
-							if (readXMLFloat(configNode, "armor", floatVal)) {
-								voc->armorMultipler = floatVal;
-							}
-						}
-
-						configNode = configNode->next;
-					}
-
-					vocationsMap[voc->id] = voc;
-				} else {
-					std::cout << "Missing vocation id." << std::endl;
-				}
-			}
-
-			p = p->next;
-		}
-
-		xmlFreeDoc(doc);
+	pugi::xml_document doc;
+	if (!doc.load_file("data/XML/vocations.xml")) {
+		return false;
 	}
 
+	for (pugi::xml_node vocationNode = doc.child("vocations").first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
+		Vocation* voc = new Vocation();
+
+		pugi::xml_attribute idAttribute = vocationNode.attribute("id");
+		if (!idAttribute) {
+			std::cout << "[Warning - Vocations::loadFromXml] Missing vocation id" << std::endl;
+			continue;
+		}
+
+		voc->id = pugi::cast<uint32_t>(idAttribute.value());
+
+		pugi::xml_attribute nameAttribute = vocationNode.attribute("name");
+		if (nameAttribute) {
+			voc->name = nameAttribute.as_string();
+		}
+
+		pugi::xml_attribute clientIdAttribute = vocationNode.attribute("clientid");
+		if (clientIdAttribute) {
+			voc->clientId = pugi::cast<uint8_t>(clientIdAttribute.value());
+		}
+
+		pugi::xml_attribute descriptionAttribute = vocationNode.attribute("description");
+		if (descriptionAttribute) {
+			voc->description = descriptionAttribute.as_string();
+		}
+
+		pugi::xml_attribute gainCapAttribute = vocationNode.attribute("gaincap");
+		if (gainCapAttribute) {
+			voc->gainCap = pugi::cast<uint32_t>(gainCapAttribute.value());
+		}
+
+		pugi::xml_attribute gainHpAttribute = vocationNode.attribute("gainhp");
+		if (gainHpAttribute) {
+			voc->gainHP = pugi::cast<uint32_t>(gainHpAttribute.value());
+		}
+
+		pugi::xml_attribute gainManaAttribute = vocationNode.attribute("gainmana");
+		if (gainManaAttribute) {
+			voc->gainMana = pugi::cast<uint32_t>(gainManaAttribute.value());
+		}
+
+		pugi::xml_attribute gainHpTicksAttribute = vocationNode.attribute("gainhpticks");
+		if (gainHpTicksAttribute) {
+			voc->gainHealthTicks = pugi::cast<uint32_t>(gainHpTicksAttribute.value());
+		}
+
+		pugi::xml_attribute gainHpAmountAttribute = vocationNode.attribute("gainhpamount");
+		if (gainHpAmountAttribute) {
+			voc->gainHealthAmount = pugi::cast<uint32_t>(gainHpAmountAttribute.value());
+		}
+
+		pugi::xml_attribute gainManaTicksAttribute = vocationNode.attribute("gainmanaticks");
+		if (gainManaTicksAttribute) {
+			voc->gainManaTicks = pugi::cast<uint32_t>(gainManaTicksAttribute.value());
+		}
+
+		pugi::xml_attribute gainManaAmountAttribute = vocationNode.attribute("gainmanaamount");
+		if (gainManaAmountAttribute) {
+			voc->gainManaAmount = pugi::cast<uint32_t>(gainManaAmountAttribute.value());
+		}
+
+		pugi::xml_attribute manaMultiplierAttribute = vocationNode.attribute("manamultiplier");
+		if (manaMultiplierAttribute) {
+			voc->manaMultiplier = pugi::cast<float>(manaMultiplierAttribute.value());
+		}
+
+		pugi::xml_attribute attackSpeedAttribute = vocationNode.attribute("attackspeed");
+		if (attackSpeedAttribute) {
+			voc->attackSpeed = pugi::cast<uint32_t>(attackSpeedAttribute.value());
+		}
+
+		pugi::xml_attribute baseSpeedAttribute = vocationNode.attribute("basespeed");
+		if (baseSpeedAttribute) {
+			voc->baseSpeed = pugi::cast<uint32_t>(baseSpeedAttribute.value());
+		}
+
+		pugi::xml_attribute soulMaxAttribute = vocationNode.attribute("soulmax");
+		if (soulMaxAttribute) {
+			voc->soulMax = pugi::cast<uint16_t>(soulMaxAttribute.value());
+		}
+
+		pugi::xml_attribute gainSoulTicksAttribute = vocationNode.attribute("gainsoulticks");
+		if (gainSoulTicksAttribute) {
+			voc->gainSoulTicks = pugi::cast<uint16_t>(gainSoulTicksAttribute.value());
+		}
+
+		pugi::xml_attribute fromVocAttribute = vocationNode.attribute("fromvoc");
+		if (fromVocAttribute) {
+			voc->fromVocation = pugi::cast<uint32_t>(fromVocAttribute.value());
+		}
+
+		for (pugi::xml_node childNode = vocationNode.first_child(); childNode; childNode = childNode.next_sibling()) {
+			if (strcasecmp(childNode.name(), "skill") == 0) {
+				pugi::xml_attribute skillIdAttribute = childNode.attribute("id");
+				if (skillIdAttribute) {
+					uint8_t skill_id = pugi::cast<uint8_t>(skillIdAttribute.value());
+					if (skill_id <= SKILL_LAST) {
+						voc->skillMultipliers[skill_id] = pugi::cast<float>(childNode.attribute("multiplier").value());
+					} else {
+						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skill_id << " for vocation: " << voc->id << std::endl;
+					}
+				} else {
+					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << voc->id << std::endl;
+				}
+			} else if (strcasecmp(childNode.name(), "formula") == 0) {
+				pugi::xml_attribute meleeDamageAttribute = childNode.attribute("meleeDamage");
+				if (meleeDamageAttribute) {
+					voc->meleeDamageMultiplier = pugi::cast<float>(meleeDamageAttribute.value());
+				}
+
+				pugi::xml_attribute distDamageAttribute = childNode.attribute("distDamage");
+				if (distDamageAttribute) {
+					voc->distDamageMultiplier = pugi::cast<float>(distDamageAttribute.value());
+				}
+
+				pugi::xml_attribute defenseAttribute = childNode.attribute("defense");
+				if (defenseAttribute) {
+					voc->defenseMultiplier = pugi::cast<float>(defenseAttribute.value());
+				}
+
+				pugi::xml_attribute armorAttribute = childNode.attribute("armor");
+				if (armorAttribute) {
+					voc->armorMultiplier = pugi::cast<float>(armorAttribute.value());
+				}
+			}
+		}
+		vocationsMap[voc->id] = voc;
+	}
 	return true;
 }
 
@@ -243,10 +233,10 @@ Vocation::Vocation()
 	attackSpeed = 1500;
 	baseSpeed = 220;
 	manaMultiplier = 4.0;
-	meleeDamageMultipler = 1.0;
-	distDamageMultipler = 1.0;
-	defenseMultipler = 1.0;
-	armorMultipler = 1.0;
+	meleeDamageMultiplier = 1.0;
+	distDamageMultiplier = 1.0;
+	defenseMultiplier = 1.0;
+	armorMultiplier = 1.0;
 	skillMultipliers[0] = 1.5f;
 	skillMultipliers[1] = 2.0f;
 	skillMultipliers[2] = 2.0f;

@@ -500,7 +500,7 @@ int32_t Player::getArmor() const
 		armor += getInventoryItem(SLOT_RING)->getArmor();
 	}
 
-	return int32_t(armor * vocation->armorMultipler);
+	return int32_t(armor * vocation->armorMultiplier);
 }
 
 void Player::getShieldAndWeapon(const Item* &shield, const Item* &weapon) const
@@ -558,7 +558,7 @@ int32_t Player::getDefense() const
 		defenseSkill = getSkill(SKILL_SHIELD, SKILL_LEVEL);
 	}
 
-	defenseValue = int32_t(defenseValue * vocation->defenseMultipler);
+	defenseValue = int32_t(defenseValue * vocation->defenseMultiplier);
 
 	if (defenseSkill == 0) {
 		return 0;

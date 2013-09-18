@@ -87,7 +87,7 @@ class Vocation
 			return fromVocation;
 		}
 
-		float meleeDamageMultipler, distDamageMultipler, defenseMultipler, armorMultipler;
+		float meleeDamageMultiplier, distDamageMultiplier, defenseMultiplier, armorMultiplier;
 
 	protected:
 		friend class Vocations;
