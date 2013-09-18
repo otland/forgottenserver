@@ -74,7 +74,7 @@ bool Mounts::loadFromXml()
 
 	for (pugi::xml_node mountNode = doc.child("mounts").first_child(); mountNode; mountNode = mountNode.next_sibling()) {
 		mounts.emplace_back(
-			pugi::cast<uint16_t>(mountNode.attribute("id").value()),
+			static_cast<uint8_t>(pugi::cast<uint16_t>(mountNode.attribute("id").value())),
 			pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
 			mountNode.attribute("name").as_string(),
 			pugi::cast<int32_t>(mountNode.attribute("speed").value()),
