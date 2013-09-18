@@ -542,8 +542,8 @@ bool AdminProtocolConfig::loadXMLConfig()
 			}
 		} else if (strcasecmp(node.name(), "encryption") == 0) {
 			m_requireEncryption = node.attribute("required").as_bool();
-
-			for (pugi::xml_node encryptionNode = node.first_child(); node; node = node.next_sibling()) {
+			pugi::xml_node encryptionNode = node.child("key");
+			if (encryptionNode) {
 				std::string encryptionType = encryptionNode.attribute("type").as_string();
 				if (asLowerCaseString(encryptionType) != "rsa1024xtea") {
 					std::cout << "[AdminProtocolConfig::loadXMLConfig - Warning] " << encryptionType << " is not a valid key type." << std::endl;
