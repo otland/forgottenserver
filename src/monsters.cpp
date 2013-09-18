@@ -274,10 +274,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 			std::cout << "[Warning - Monsters::loadFromXml] Unknown node name: " << monsterNode.name() << std::endl;
 			continue;
 		}
-
-		std::ostringstream file("data/monster");
-		file << monsterNode.attribute("file").as_string();
-		loadMonster(file.str(), monsterNode.attribute("name").as_string(), reloading);
+		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), reloading);
 	}
 	return true;
 }

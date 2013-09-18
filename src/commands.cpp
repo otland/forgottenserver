@@ -783,12 +783,12 @@ void Commands::getHouse(Player* player, const std::string& cmd, const std::strin
 		return;
 	}
 
-	std::ostringstream str(name);
+	std::ostringstream str;
 	House* house = Houses::getInstance().getHouseByPlayerId(guid);
 	if (house) {
-		str << " owns house: " << house->getName() << ".";
+		str << name << " owns house: " << house->getName() << ".";
 	} else {
-		str << " does not own any house.";
+		str << name << " does not own any house.";
 	}
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, str.str());
