@@ -28,9 +28,7 @@
 #include "const.h"
 #include "position.h"
 #include "baseevents.h"
-
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "pugixml.hpp"
 
 enum RaidState_t {
 	RAIDSTATE_IDLE = 0,
@@ -163,7 +161,7 @@ class RaidEvent
 		RaidEvent() {}
 		virtual ~RaidEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent() {
 			return false;
@@ -191,7 +189,7 @@ class AnnounceEvent : public RaidEvent
 		}
 		virtual ~AnnounceEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent();
 
@@ -206,7 +204,7 @@ class SingleSpawnEvent : public RaidEvent
 		SingleSpawnEvent() {}
 		virtual ~SingleSpawnEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent();
 
@@ -221,7 +219,7 @@ class AreaSpawnEvent : public RaidEvent
 		AreaSpawnEvent() {}
 		virtual ~AreaSpawnEvent();
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		void addMonster(MonsterSpawn* monsterSpawn);
 		void addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount);
@@ -240,7 +238,7 @@ class ScriptEvent : public RaidEvent, public Event
 		ScriptEvent(const ScriptEvent* copy);
 		~ScriptEvent() {}
 
-		virtual bool configureRaidEvent(xmlNodePtr eventNode);
+		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 		virtual bool configureEvent(xmlNodePtr p) {
 			return false;
 		}
