@@ -20,7 +20,9 @@
 #include "otpch.h"
 
 #include "mounts.h"
-#include "tools.h"
+
+#include "pugixml.hpp"
+#include "pugicast.h"
 
 Mount::Mount(uint8_t _id, uint16_t _clientId, const std::string& _name, int32_t _speed, bool _premium)
 {
@@ -65,59 +67,20 @@ bool Mounts::reload()
 
 bool Mounts::loadFromXml()
 {
-	xmlDocPtr doc = xmlParseFile("data/XML/mounts.xml");
-
-	if (!doc) {
+	pugi::xml_document doc;
+	if (!doc.load_file("data/XML/mounts.xml")) {
 		return false;
 	}
 
-	xmlNodePtr root, p;
-	root = xmlDocGetRootElement(doc);
-
-	if (xmlStrcmp(root->name, (const xmlChar*)"mounts") != 0) {
-		xmlFreeDoc(doc);
-		return false;
+	for (pugi::xml_node mountNode = doc.child("mounts").first_child(); mountNode; mountNode = mountNode.next_sibling()) {
+		mounts.emplace_back(
+			pugi::cast<uint16_t>(mountNode.attribute("id").value()),
+			pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
+			mountNode.attribute("name").as_string(),
+			pugi::cast<int32_t>(mountNode.attribute("speed").value()),
+			mountNode.attribute("premium").as_bool()
+		);
 	}
-
-	int32_t intValue;
-	std::string strValue;
-	p = root->children;
-
-	while (p) {
-		if (xmlStrcmp(p->name, (const xmlChar*)"mount") == 0) {
-			int8_t id = 0;
-			int16_t clientid = 0;
-			std::string name;
-			int32_t speed = 0;
-			bool premium = true;
-
-			if (readXMLInteger(p, "id", intValue)) {
-				id = intValue;
-			}
-
-			if (readXMLInteger(p, "clientid", intValue)) {
-				clientid = intValue;
-			}
-
-			if (readXMLString(p, "name", strValue)) {
-				name = strValue;
-			}
-
-			if (readXMLInteger(p, "speed", intValue)) {
-				speed = intValue;
-			}
-
-			if (readXMLString(p, "premium", strValue)) {
-				premium = booleanString(strValue);
-			}
-
-			mounts.emplace_back(id, clientid, name, speed, premium);
-		}
-
-		p = p->next;
-	}
-
-	xmlFreeDoc(doc);
 	return true;
 }
 
