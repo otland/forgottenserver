@@ -19,39 +19,28 @@
 
 #include "otpch.h"
 
-#include "groups.h"
+#include "pugixml.hpp"
+#include "pugicast.h"
 
-#include "tools.h"
+#include "groups.h"
 
 bool Groups::load()
 {
-	xmlDocPtr doc = xmlParseFile("data/XML/groups.xml");
-	if (!doc) {
+	pugi::xml_document doc;
+	if (!doc.load_file("data/XML/groups.xml")) {
 		return false;
 	}
 
-	xmlNodePtr root = xmlDocGetRootElement(doc);
-	if (xmlStrcmp(root->name, (const xmlChar*)"groups") != 0) {
-		xmlFreeDoc(doc);
-		return false;
+	for (pugi::xml_node groupNode = doc.child("groups").first_child(); groupNode; groupNode = groupNode.next_sibling()) {
+		Group group;
+		group.id = pugi::cast<uint32_t>(groupNode.attribute("id").value());
+		group.name = groupNode.attribute("name").as_string();
+		group.flags = pugi::cast<uint64_t>(groupNode.attribute("flags").value());
+		group.access = groupNode.attribute("access").as_bool();
+		group.maxDepotItems = pugi::cast<uint32_t>(groupNode.attribute("maxdepotitems").value());
+		group.maxVipEntries = pugi::cast<uint32_t>(groupNode.attribute("maxvipentries").value());
+		groups.push_back(group);
 	}
-
-	xmlNodePtr p = root->children;
-	while (p) {
-		if (xmlStrcmp(p->name, (const xmlChar*)"group") == 0) {
-			Group group;
-			group.id = readXMLValue<uint32_t>(p, "id");
-			readXMLString(p, "name", group.name);
-			group.flags = readXMLValue<uint64_t>(p, "flags");
-			group.access = readXMLValue<int32_t>(p, "access") > 0;
-			group.maxDepotItems = readXMLValue<uint32_t>(p, "maxdepotitems");
-			group.maxVipEntries = readXMLValue<uint32_t>(p, "maxvipentries");
-			groups.push_back(group);
-		}
-		p = p->next;
-	}
-
-	xmlFreeDoc(doc);
 	return true;
 }
 
