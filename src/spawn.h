@@ -49,9 +49,6 @@ class Spawns
 		void startup();
 		void clear();
 
-		bool isLoaded() const {
-			return loaded;
-		}
 		bool isStarted() const {
 			return started;
 		}

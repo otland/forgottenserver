@@ -26,8 +26,8 @@
 #include "tools.h"
 #include "configmanager.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "pugixml.hpp"
+#include "pugicast.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;
@@ -50,207 +50,104 @@ Spawns::~Spawns()
 
 bool Spawns::loadFromXml(const std::string& _filename)
 {
-	if (isLoaded()) {
+	if (loaded) {
 		return true;
+	}
+	
+	pugi::xml_document doc;
+	if (!doc.load_file(filename.c_str())) {
+		return false;
 	}
 
 	filename = _filename;
+	loaded = true;
 
-	xmlDocPtr doc = xmlParseFile(filename.c_str());
+	for (pugi::xml_node spawnNode = doc.child("spawns").first_child(); spawnNode; spawnNode = spawnNode.next_sibling()) {
+		Position centerPos(
+			pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
+			pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
+			pugi::cast<uint8_t>(spawnNode.attribute("centerz").value())
+		);
 
-	if (doc) {
-		xmlNodePtr root, spawnNode;
-		root = xmlDocGetRootElement(doc);
-
-		if (xmlStrcmp(root->name, (const xmlChar*)"spawns") != 0) {
-			xmlFreeDoc(doc);
-			return false;
+		int32_t radius;
+		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
+		if (radiusAttribute) {
+			radius = pugi::cast<int32_t>(radiusAttribute.value());
+		} else {
+			radius = -1;
 		}
 
-		int32_t intValue;
-		std::string strValue;
+		Spawn* spawn = new Spawn(centerPos, radius);
+		spawnList.push_back(spawn);
 
-		spawnNode = root->children;
+		for (pugi::xml_node childNode = spawnNode.first_child(); childNode; childNode = childNode.next_sibling()) {
+			if (strcasecmp(childNode.name(), "monster") == 0) {
+				pugi::xml_attribute nameAttribute = childNode.attribute("name");
+				if (!nameAttribute) {
+					continue;
+				}
 
-		while (spawnNode) {
-			if (xmlStrcmp(spawnNode->name, (const xmlChar*)"spawn") == 0) {
-				Position centerPos;
-				int32_t radius = -1;
+				Direction dir;
 
-				if (readXMLInteger(spawnNode, "centerx", intValue)) {
-					centerPos.x = intValue;
+				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
+				if (directionAttribute) {
+					dir = static_cast<Direction>(pugi::cast<uint8_t>(directionAttribute.value()));
 				} else {
-					xmlFreeDoc(doc);
-					return false;
+					dir = NORTH;
 				}
 
-				if (readXMLInteger(spawnNode, "centery", intValue)) {
-					centerPos.y = intValue;
+				Position pos(
+					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
+					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
+					centerPos.z
+				);
+				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
+				if (interval > MINSPAWN_INTERVAL) {
+					spawn->addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {
-					xmlFreeDoc(doc);
-					return false;
+					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << " " << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
+				}
+			} else if (strcasecmp(childNode.name(), "npc") == 0) {
+				pugi::xml_attribute nameAttribute = childNode.attribute("name");
+				if (!nameAttribute) {
+					continue;
 				}
 
-				if (readXMLInteger(spawnNode, "centerz", intValue)) {
-					centerPos.z = intValue;
-				} else {
-					xmlFreeDoc(doc);
-					return false;
+				Npc* npc = Npc::createNpc(nameAttribute.as_string());
+				if (!npc) {
+					continue;
 				}
 
-				if (readXMLInteger(spawnNode, "radius", intValue)) {
-					radius = intValue;
-				} else {
-					xmlFreeDoc(doc);
-					return false;
+				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
+				if (directionAttribute) {
+					npc->setDirection(static_cast<Direction>(pugi::cast<uint8_t>(directionAttribute.value())));
 				}
 
-				Spawn* spawn = new Spawn(centerPos, radius);
-				spawnList.push_back(spawn);
-
-				xmlNodePtr tmpNode = spawnNode->children;
-
-				while (tmpNode) {
-					if (xmlStrcmp(tmpNode->name, (const xmlChar*)"monster") == 0) {
-						std::string name;
-						Position pos = centerPos;
-						Direction dir = NORTH;
-						uint32_t interval = 0;
-
-						if (readXMLString(tmpNode, "name", strValue)) {
-							name = strValue;
-						} else {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						if (readXMLInteger(tmpNode, "direction", intValue)) {
-							switch (intValue) {
-								case 0:
-									dir = NORTH;
-									break;
-								case 1:
-									dir = EAST;
-									break;
-								case 2:
-									dir = SOUTH;
-									break;
-								case 3:
-									dir = WEST;
-									break;
-							}
-						}
-
-						if (readXMLInteger(tmpNode, "x", intValue)) {
-							pos.x += intValue;
-						} else {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						if (readXMLInteger(tmpNode, "y", intValue)) {
-							pos.y += intValue;
-						} else {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						if (readXMLInteger(tmpNode, "spawntime", intValue) || readXMLInteger(tmpNode, "interval", intValue)) {
-							interval = intValue * 1000;
-						} else {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						if (interval > MINSPAWN_INTERVAL) {
-							spawn->addMonster(name, pos, dir, interval);
-						} else {
-							std::cout << "[Warning] Spawns::loadFromXml " << name << " " << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
-						}
-					} else if (xmlStrcmp(tmpNode->name, (const xmlChar*)"npc") == 0) {
-						Direction direction = NORTH;
-						std::string name;
-						Position placePos = centerPos;
-
-						if (readXMLString(tmpNode, "name", strValue)) {
-							name = strValue;
-						} else {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						if (readXMLInteger(tmpNode, "direction", intValue)) {
-							switch (intValue) {
-								case 0:
-									direction = NORTH;
-									break;
-								case 1:
-									direction = EAST;
-									break;
-								case 2:
-									direction = SOUTH;
-									break;
-								case 3:
-									direction = WEST;
-									break;
-							}
-						}
-
-						if (readXMLInteger(tmpNode, "x", intValue)) {
-							placePos.x += intValue;
-						} else {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						if (readXMLInteger(tmpNode, "y", intValue)) {
-							placePos.y += intValue;
-						} else {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						Npc* npc = Npc::createNpc(name);
-
-						if (!npc) {
-							tmpNode = tmpNode->next;
-							continue;
-						}
-
-						npc->setDirection(direction);
-						npc->setMasterPos(placePos, radius);
-						npcList.push_back(npc);
-					}
-
-					tmpNode = tmpNode->next;
-				}
+				npc->setMasterPos(Position(
+					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
+					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
+					centerPos.z
+				), radius);
+				npcList.push_back(npc);
 			}
-
-			spawnNode = spawnNode->next;
 		}
-
-		xmlFreeDoc(doc);
-		loaded = true;
-		return true;
 	}
-
-	return false;
+	return true;
 }
 
 void Spawns::startup()
 {
-	if (!isLoaded() || isStarted()) {
+	if (!loaded || isStarted()) {
 		return;
 	}
 
-	for (NpcList::iterator it = npcList.begin(); it != npcList.end(); ++it) {
-		g_game.placeCreature((*it), (*it)->getMasterPos(), false, true);
+	for (Npc* npc : npcList) {
+		g_game.placeCreature(npc, npc->getMasterPos(), false, true);
 	}
-
 	npcList.clear();
 
-	for (SpawnList::iterator it = spawnList.begin(); it != spawnList.end(); ++it) {
-		(*it)->startup();
+	for (Spawn* spawn : spawnList) {
+		spawn->startup();
 	}
 
 	started = true;
@@ -258,8 +155,8 @@ void Spawns::startup()
 
 void Spawns::clear()
 {
-	for (SpawnList::iterator it = spawnList.begin(); it != spawnList.end(); ++it) {
-		delete (*it);
+	for (Spawn* spawn : spawnList) {
+		delete spawn;
 	}
 
 	spawnList.clear();
