@@ -166,7 +166,7 @@ std::string Status::getStatusString() const
 	motd.text() = g_config.getString(ConfigManager::MOTD).c_str();
 
 	std::ostringstream ss;
-	doc.save(ss);
+	doc.save(ss, "", pugi::format_raw);
 	return ss.str();
 }
 
