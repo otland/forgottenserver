@@ -182,35 +182,31 @@ bool Npc::loadFromXml(const std::string& filename)
 	attackable = npcNode.attribute("attackable").as_bool();
 	floorChange = npcNode.attribute("floorchange").as_bool();
 
-	pugi::xml_attribute speedAttribute = npcNode.attribute("speed");
-	if (speedAttribute) {
-		baseSpeed = pugi::cast<uint32_t>(speedAttribute.value());
+	pugi::xml_attribute attr;
+	if ((attr = npcNode.attribute("speed"))) {
+		baseSpeed = pugi::cast<uint32_t>(attr.value());
 	} else {
 		baseSpeed = 100;
 	}
 
-	pugi::xml_attribute walkIntervalAttribute = npcNode.attribute("walkinterval");
-	if (walkIntervalAttribute) {
-		walkTicks = pugi::cast<uint32_t>(walkIntervalAttribute.value());
+	if ((attr = npcNode.attribute("walkinterval"))) {
+		walkTicks = pugi::cast<uint32_t>(attr.value());
 	}
 
-	pugi::xml_attribute walkRadiusAttribute = npcNode.attribute("walkradius");
-	if (walkRadiusAttribute) {
-		masterRadius = pugi::cast<int32_t>(walkRadiusAttribute.value());
+	if ((attr = npcNode.attribute("walkradius"))) {
+		masterRadius = pugi::cast<int32_t>(attr.value());
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");
 	if (healthNode) {
-		pugi::xml_attribute healthAttribute = healthNode.attribute("now");
-		if (healthAttribute) {
-			health = pugi::cast<int32_t>(healthAttribute.value());
+		if ((attr = healthNode.attribute("now"))) {
+			health = pugi::cast<int32_t>(attr.value());
 		} else {
 			health = 100;
 		}
 
-		pugi::xml_attribute healthMaxAttribute = healthNode.attribute("max");
-		if (healthMaxAttribute) {
-			healthMax = pugi::cast<int32_t>(healthMaxAttribute.value());
+		if ((attr = healthNode.attribute("max"))) {
+			healthMax = pugi::cast<int32_t>(attr.value());
 		} else {
 			healthMax = 100;
 		}
@@ -226,11 +222,8 @@ bool Npc::loadFromXml(const std::string& filename)
 			defaultOutfit.lookLegs = pugi::cast<uint16_t>(lookNode.attribute("legs").value());
 			defaultOutfit.lookFeet = pugi::cast<uint16_t>(lookNode.attribute("feet").value());
 			defaultOutfit.lookAddons = pugi::cast<uint16_t>(lookNode.attribute("addons").value());
-		} else {
-			pugi::xml_attribute lookTypeExAttribute = lookNode.attribute("typeex");
-			if (lookTypeExAttribute) {
-				defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(lookTypeExAttribute.value());
-			}
+		} else if ((attr = lookNode.attribute("typeex"))) {
+			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		}
 		defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
 
