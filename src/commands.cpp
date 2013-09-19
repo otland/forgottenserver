@@ -579,7 +579,7 @@ void Commands::teleportTo(Player* player, const std::string& cmd, const std::str
 			}
 		} else {
 			std::ostringstream ss;
-			ss << "You can not teleport to " << paramCreature->getName() << ".";
+			ss << "You can not teleport to " << paramCreature->getName() << '.';
 			player->sendCancel(ss.str());
 		}
 	}
@@ -631,7 +631,7 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 				ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
 			}
 
-			ss << ".";
+			ss << '.';
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 		}
 	}
@@ -786,7 +786,7 @@ void Commands::getHouse(Player* player, const std::string& cmd, const std::strin
 	std::ostringstream str;
 	House* house = Houses::getInstance().getHouseByPlayerId(guid);
 	if (house) {
-		str << name << " owns house: " << house->getName() << ".";
+		str << name << " owns house: " << house->getName() << '.';
 	} else {
 		str << name << " does not own any house.";
 	}
@@ -877,7 +877,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 			++it;
 
 			if (i == 10) {
-				ss << (it != players.end() ? "," : ".");
+				ss << (it != players.end() ? ',' : '.');
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 				ss.str("");
 				i = 0;
@@ -888,7 +888,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 			ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << "]";
 			++it;
 			if (++i == 10) {
-				ss << (it != players.end() ? "," : ".");
+				ss << (it != players.end() ? ',' : '.');
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 				ss.str("");
 				i = 0;
@@ -897,7 +897,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 	}
 
 	if (i > 0) {
-		ss << ".";
+		ss << '.';
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 	}
 }
@@ -1086,7 +1086,7 @@ void Commands::playerKills(Player* player, const std::string& cmd, const std::st
 		int32_t minutes = (remainingTime % 3600) / 60;
 
 		std::ostringstream ss;
-		ss << "You have " << frags << " unjustified kill" << (frags > 1 ? "s" : "") << ". The amount of unjustified kills will decrease after: " << hours << " hour" << (hours != 1 ? "s" : "") << " and " << minutes << " minute" << (minutes != 1 ? "s" : "") << ".";
+		ss << "You have " << frags << " unjustified kill" << (frags > 1 ? "s" : "") << ". The amount of unjustified kills will decrease after: " << hours << " hour" << (hours != 1 ? "s" : "") << " and " << minutes << " minute" << (minutes != 1 ? "s" : "") << '.';
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 	} else {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You do not have any unjustified frag.");
@@ -1215,7 +1215,7 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 			ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
 		}
 
-		ss << ".";
+		ss << '.';
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 	}
 }

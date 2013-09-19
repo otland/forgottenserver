@@ -783,7 +783,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 						}
 					}
 
-					ss << ".";
+					ss << '.';
 					player->sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 
 					Vocation* vocation;
@@ -2020,9 +2020,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 		return false;
 	}
 
-	MoneyMap::iterator mit, mend;
-
-	for (mit = moneyMap.begin(), mend = moneyMap.end(); mit != mend && money > 0; ++mit) {
+	for (MoneyMap::const_iterator mit = moneyMap.begin(), mend = moneyMap.end(); mit != mend && money > 0; ++mit) {
 		Item* item = mit->second;
 		internalRemoveItem(item);
 
@@ -2116,7 +2114,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 			return item;
 		}
 
-		Item* newItem = NULL;
+		Item* newItem;
 		if (newCount == -1) {
 			newItem = Item::CreateItem(newId);
 		} else {
@@ -2130,7 +2128,6 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		newItem->copyAttributes(item);
 
 		ret = internalAddItem(cylinder, newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-
 		if (ret != RET_NOERROR) {
 			delete newItem;
 			return NULL;
@@ -2197,8 +2194,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		}
 	} else {
 		//Replacing the the old item with the new while maintaining the old position
-		Item* newItem = NULL;
-
+		Item* newItem;
 		if (newCount == -1) {
 			newItem = Item::CreateItem(newId);
 		} else {
@@ -3238,10 +3234,10 @@ std::string Game::getTradeErrorDescription(ReturnValue ret, Item* item)
 			if (item->isStackable() && item->getItemCount() > 1) {
 				ss << " these objects.";
 			} else {
-				ss << " this object." ;
+				ss << " this object.";
 			}
 
-			ss << std::endl << " " << item->getWeightDescription();
+			ss << std::endl << ' ' << item->getWeightDescription();
 			return ss.str();
 		} else if (ret == RET_NOTENOUGHROOM || ret == RET_CONTAINERNOTENOUGHROOM) {
 			std::ostringstream ss;
@@ -3545,7 +3541,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 				ss << ", UniqueID: [" << item->getUniqueId() << "]";
 			}
 
-			ss << ".";
+			ss << '.';
 			const ItemType& it = Item::items[item->getID()];
 
 			if (it.transformEquipTo) {
@@ -3566,7 +3562,7 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 				ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << "]";
 			}
 
-			ss << ".";
+			ss << '.';
 		}
 
 		ss << std::endl << "Position: [X: " << thingPos.x << "] [Y: " << thingPos.y << "] [Z: " << thingPos.getZ() << "].";
@@ -3618,7 +3614,7 @@ bool Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 			ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << "]";
 		}
 
-		ss << "." << std::endl;
+		ss << '.' << std::endl;
 		ss << "Position: [X: " << creaturePos.x << "] [Y: " << creaturePos.y << "] [Z: " << creaturePos.getZ() << "].";
 	}
 
@@ -4036,7 +4032,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 		player->sendTextMessage(MSG_STATUS_SMALL, "A player with this name is not online.");
 	} else {
 		std::ostringstream ss;
-		ss << "Message sent to " << toPlayer->getName() << ".";
+		ss << "Message sent to " << toPlayer->getName() << '.';
 		player->sendTextMessage(MSG_STATUS_SMALL, ss.str());
 	}
 	return true;
@@ -4519,7 +4515,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				} else if (attacker == target) {
 					ss << ucfirst(target->getNameDescription()) << " loses " << manaDamage << " mana blocking an attack by " << (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "herself." : "himself.") : "itself.");
 				} else {
-					ss << ucfirst(target->getNameDescription()) << " loses " << manaDamage << " mana blocking an attack by " << attacker->getNameDescription() << ".";
+					ss << ucfirst(target->getNameDescription()) << " loses " << manaDamage << " mana blocking an attack by " << attacker->getNameDescription() << '.';
 				}
 
 				std::string message = ss.str();
@@ -4539,7 +4535,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 							} else if (targetPlayer == attackerPlayer) {
 								tmpSs << "You lose " << manaDamage << " mana blocking an attack by yourself.";
 							} else {
-								tmpSs << "You lose " << manaDamage << " mana blocking an attack by " << attacker->getNameDescription() << ".";
+								tmpSs << "You lose " << manaDamage << " mana blocking an attack by " << attacker->getNameDescription() << '.';
 							}
 
 							targetPlayer->sendDamageMessage(MSG_DAMAGE_RECEIVED, tmpSs.str(), targetPos, manaDamage, TEXTCOLOR_BLUE);
@@ -4675,7 +4671,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				} else if (attacker == target) {
 					ss << ucfirst(target->getNameDescription()) << " loses " << damage << " hitpoint" << (damage != 1 ? "s" : "") << " due to " << (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its") << " own attack.";
 				} else {
-					ss << ucfirst(target->getNameDescription()) << " loses " << damage << " hitpoint" << (damage != 1 ? "s" : "") << " due to an attack by " << attacker->getNameDescription() << ".";
+					ss << ucfirst(target->getNameDescription()) << " loses " << damage << " hitpoint" << (damage != 1 ? "s" : "") << " due to an attack by " << attacker->getNameDescription() << '.';
 				}
 
 				std::string message = ss.str();
@@ -4694,7 +4690,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 							} else if (targetPlayer == attackerPlayer) {
 								tmpSs << "You lose " << damage << " hitpoint" << (damage != 1 ? "s" : "") << " due to your own attack.";
 							} else {
-								tmpSs << "You lose " << damage << " hitpoint" << (damage != 1 ? "s" : "") << " due to an attack by " << attacker->getNameDescription() << ".";
+								tmpSs << "You lose " << damage << " hitpoint" << (damage != 1 ? "s" : "") << " due to an attack by " << attacker->getNameDescription() << '.';
 							}
 
 							tmpPlayer->sendDamageMessage(MSG_DAMAGE_RECEIVED, tmpSs.str(), targetPos, damage, textColor);
@@ -4776,7 +4772,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		} else if (attacker == target) {
 			ss << ucfirst(target->getNameDescription()) << " loses " << manaLoss << " mana blocking an attack by " << (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "herself." : "himself.") : "itself.");
 		} else {
-			ss << ucfirst(target->getNameDescription()) << " loses " << manaLoss << " mana blocking an attack by " << attacker->getNameDescription() << ".";
+			ss << ucfirst(target->getNameDescription()) << " loses " << manaLoss << " mana blocking an attack by " << attacker->getNameDescription() << '.';
 		}
 
 		std::string message = ss.str();
@@ -4797,7 +4793,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 				} else if (targetPlayer == attackerPlayer) {
 					tmpSs << "You lose " << manaLoss << " mana blocking an attack by yourself.";
 				} else {
-					tmpSs << "You lose " << manaLoss << " mana blocking an attack by " << attacker->getNameDescription() << ".";
+					tmpSs << "You lose " << manaLoss << " mana blocking an attack by " << attacker->getNameDescription() << '.';
 				}
 
 				tmpPlayer->sendDamageMessage(MSG_DAMAGE_RECEIVED, tmpSs.str(), targetPos, manaLoss, TEXTCOLOR_BLUE);

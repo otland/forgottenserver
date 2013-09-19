@@ -116,12 +116,11 @@ std::string ServicePort::get_protocol_names() const
 	}
 
 	std::string str = m_services.front()->get_protocol_name();
-
 	for (uint32_t i = 1; i < m_services.size(); ++i) {
-		str += ", ";
-		str += m_services[i]->get_protocol_name();
+		str.push_back(',');
+		str.push_back(' ');
+		str.append(m_services[i]->get_protocol_name());
 	}
-
 	return str;
 }
 

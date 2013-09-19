@@ -251,9 +251,11 @@ bool Npc::canSee(const Position& pos) const
 
 std::string Npc::getDescription(int32_t lookDistance) const
 {
-	std::ostringstream s;
-	s << name << ".";
-	return s.str();
+	std::string descr;
+	descr.reserve(name.length() + 1);
+	descr.assign(name);
+	descr.push_back('.');
+	return descr;
 }
 
 void Npc::onCreatureAppear(const Creature* creature, bool isLogin)

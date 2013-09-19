@@ -49,18 +49,17 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 		return NULL;
 	}
 
-	WeaponMap::const_iterator it = weapons.find(item->getID());
-	if (it != weapons.end()) {
-		return it->second;
+	auto it = weapons.find(item->getID());
+	if (it == weapons.end()) {
+		return NULL;
 	}
-
-	return NULL;
+	return it->second;
 }
 
 void Weapons::clear()
 {
-	for (WeaponMap::iterator it = weapons.begin(); it != weapons.end(); ++it) {
-		delete it->second;
+	for (const auto& it : weapons) {
+		delete it.second;
 	}
 	weapons.clear();
 }
@@ -253,14 +252,15 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	for (const std::string& str : vocStringList) {
 		if (!vocationString.empty()) {
 			if (str != vocStringList.back()) {
-				vocationString += ", ";
+				vocationString.push_back(',');
+				vocationString.push_back(' ');
 			} else {
 				vocationString += " and ";
 			}
 		}
 
 		vocationString += str;
-		vocationString += "s";
+		vocationString.push_back('s');
 	}
 
 	uint32_t wieldInfo = 0;

@@ -317,15 +317,26 @@ bool DBInsert::addRow(const std::string& row)
 	// adds new row to buffer
 	size_t size = m_buf.length();
 	if (size == 0) {
-		m_buf = "(" + row + ")";
+		m_buf.reserve(row.length() + 2);
+		m_buf.push_back('(');
+		m_buf.append(row);
+		m_buf.push_back(')');
 	} else if (size > 32768) {
 		if (!execute()) {
 			return false;
 		}
 
-		m_buf = "(" + row + ")";
+		m_buf.clear();
+		m_buf.reserve(row.length() + 2);
+		m_buf.push_back('(');
+		m_buf.append(row);
+		m_buf.push_back(')');
 	} else {
-		m_buf += ",(" + row + ")";
+		m_buf.reserve(m_buf.length() + row.length() + 3);
+		m_buf.push_back(',');
+		m_buf.push_back('(');
+		m_buf.append(row);
+		m_buf.push_back(')');
 	}
 	return true;
 }

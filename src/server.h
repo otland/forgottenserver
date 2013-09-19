@@ -157,7 +157,7 @@ bool ServiceManager::add(uint16_t port)
 		if (service_port->is_single_socket() || ProtocolType::server_sends_first) {
 			std::cout << "ERROR: " << ProtocolType::protocol_name() <<
 			          " and " << service_port->get_protocol_names() <<
-			          " cannot use the same port " << port << "." << std::endl;
+			          " cannot use the same port " << port << '.' << std::endl;
 			return false;
 		}
 	}

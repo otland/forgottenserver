@@ -269,9 +269,9 @@ std::string Player::getDescription(int32_t lookDistance) const
 		s << "yourself.";
 
 		if (group->access) {
-			s << " You are " << group->name << ".";
+			s << " You are " << group->name << '.';
 		} else if (vocation->getId() != VOCATION_NONE) {
-			s << " You are " << vocation->getVocDescription() << ".";
+			s << " You are " << vocation->getVocDescription() << '.';
 		} else {
 			s << " You have no vocation.";
 		}
@@ -279,10 +279,10 @@ std::string Player::getDescription(int32_t lookDistance) const
 		s << name;
 
 		if (!group->access) {
-			s << " (Level " << level << ")";
+			s << " (Level " << level << ')';
 		}
 
-		s << ".";
+		s << '.';
 
 		if (sex == PLAYERSEX_FEMALE) {
 			s << " She";
@@ -291,9 +291,9 @@ std::string Player::getDescription(int32_t lookDistance) const
 		}
 
 		if (group->access) {
-			s << " is " << group->name << ".";
+			s << " is " << group->name << '.';
 		} else if (vocation->getId() != VOCATION_NONE) {
-			s << " is " << vocation->getVocDescription() << ".";
+			s << " is " << vocation->getVocDescription() << '.';
 		} else {
 			s << " has no vocation.";
 		}
@@ -340,7 +340,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << rank->name << " of the " << guild->getName();
 
 			if (!guildNick.empty()) {
-				s << " (" << guildNick << ")";
+				s << " (" << guildNick << ')';
 			}
 
 			size_t memberCount = guild->getMemberCount();
@@ -716,7 +716,7 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 		skills[skill][SKILL_PERCENT] = 0;
 
 		std::ostringstream ss;
-		ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILL_LEVEL] << ".";
+		ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILL_LEVEL] << '.';
 		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 
 		g_creatureEvents->playerAdvance(this, skill, (skills[skill][SKILL_LEVEL] - 1), skills[skill][SKILL_LEVEL]);
@@ -2146,7 +2146,7 @@ void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
 		manaSpent = 0;
 
 		std::ostringstream ss;
-		ss << "You advanced to magic level " << magLevel << ".";
+		ss << "You advanced to magic level " << magLevel << '.';
 		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 
 		g_creatureEvents->playerAdvance(this, SKILL__MAGLEVEL, magLevel - 1, magLevel);
@@ -2269,7 +2269,7 @@ void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText
 		g_creatureEvents->playerAdvance(this, SKILL__LEVEL, prevLevel, newLevel);
 
 		std::ostringstream ss;
-		ss << "You advanced from Level " << prevLevel << " to Level " << newLevel << ".";
+		ss << "You advanced from Level " << prevLevel << " to Level " << newLevel << '.';
 		sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 	}
 
@@ -2538,7 +2538,7 @@ void Player::death()
 
 		if (oldLevel != level) {
 			std::ostringstream ss;
-			ss << "You were downgraded from Level " << oldLevel << " to Level " << level << ".";
+			ss << "You were downgraded from Level " << oldLevel << " to Level " << level << '.';
 			sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 		}
 
@@ -2648,9 +2648,9 @@ Item* Player::getCorpse()
 		std::ostringstream ss;
 
 		if (getKillers(&lastHitCreature_, &mostDamageCreature) && lastHitCreature_) {
-			ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << lastHitCreature_->getNameDescription() << ".";
+			ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << lastHitCreature_->getNameDescription() << '.';
 		} else {
-			ss << "You recognize " << getNameDescription() << ".";
+			ss << "You recognize " << getNameDescription() << '.';
 		}
 
 		corpse->setSpecialDescription(ss.str());
@@ -4982,7 +4982,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 
 		if (magLevel != currMagLevel) {
 			std::ostringstream ss;
-			ss << "You advanced to magic level " << magLevel << ".";
+			ss << "You advanced to magic level " << magLevel << '.';
 			sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 		}
 
@@ -5039,7 +5039,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 
 		if (currSkillLevel != skills[skill][SKILL_LEVEL]) {
 			std::ostringstream ss;
-			ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILL_LEVEL] << ".";
+			ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILL_LEVEL] << '.';
 			sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 		}
 
@@ -5062,7 +5062,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 	}
 
 	std::ostringstream ss;
-	ss << std::fixed << std::setprecision(2) << "Your " << ucwords(getSkillName(skill)) << " skill changed from level " << oldSkillValue << " (with " << oldPercentToNextLevel << "% progress towards level " << (oldSkillValue + 1) << ") to level " << newSkillValue << " (with " << newPercentToNextLevel << "% progress towards level " << (newSkillValue + 1) << ")";
+	ss << std::fixed << std::setprecision(2) << "Your " << ucwords(getSkillName(skill)) << " skill changed from level " << oldSkillValue << " (with " << oldPercentToNextLevel << "% progress towards level " << (oldSkillValue + 1) << ") to level " << newSkillValue << " (with " << newPercentToNextLevel << "% progress towards level " << (newSkillValue + 1) << ')';
 	sendTextMessage(MSG_EVENT_ADVANCE, ss.str());
 	return sendUpdate;
 }

@@ -1183,7 +1183,7 @@ void Creature::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 	Player* masterPlayer = masterCreature->getPlayer();
 	if (masterPlayer) {
 		std::ostringstream ss;
-		ss << "Your " << asLowerCaseString(getName()) << " deals " << points << " to " << target->getNameDescription() << ".";
+		ss << "Your " << asLowerCaseString(getName()) << " deals " << points << " to " << target->getNameDescription() << '.';
 		masterPlayer->sendTextMessage(MSG_EVENT_DEFAULT, ss.str());
 	}
 }

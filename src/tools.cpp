@@ -92,12 +92,12 @@ void replaceString(std::string& str, const std::string& sought, const std::strin
 	}
 }
 
-void trim_right(std::string& source, const std::string& t)
+void trim_right(std::string& source, char t)
 {
 	source.erase(source.find_last_not_of(t) + 1);
 }
 
-void trim_left(std::string& source, const std::string& t)
+void trim_left(std::string& source, char t)
 {
 	source.erase(0, source.find_first_not_of(t));
 }
@@ -233,8 +233,8 @@ bool isNumber(char character)
 
 std::string trimString(std::string& str)
 {
-	str.erase(str.find_last_not_of(" ") + 1);
-	return str.erase(0, str.find_first_not_of(" "));
+	str.erase(str.find_last_not_of(' ') + 1);
+	return str.erase(0, str.find_first_not_of(' '));
 }
 
 std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
@@ -245,18 +245,17 @@ std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
 	}
 
 	tmp = *it;
-	++it;
 
 	if (tmp[0] == '"') {
 		tmp.erase(0, 1);
 
-		while (it != end && tmp[tmp.length() - 1] != '"') {
-			tmp += " " + *it;
-			++it;
+		while (++it != end && tmp.back() != '"') {
+			tmp.push_back(' ');
+			tmp += *it;
 		}
 
-		if (!tmp.empty() && tmp[tmp.length() - 1] == '"') {
-			tmp.erase(tmp.length() - 1);
+		if (!tmp.empty() && tmp.back() == '"') {
+			tmp.erase(tmp.length() - 1); // TODO: Use pop_back
 		}
 	}
 

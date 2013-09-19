@@ -1995,7 +1995,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		// "attack +x, chance to hit +y%, z fields"
 		if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.decayTo > 0) {
 			std::ostringstream ss;
-			ss << it.attack << " physical +" << it.abilities->elementDamage << " " << getCombatName(it.abilities->elementType);
+			ss << it.attack << " physical +" << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
 			msg.AddString(ss.str());
 		} else {
 			msg.AddString(std::to_string(it.attack));
@@ -2013,7 +2013,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	if (it.defense != 0) {
 		if (it.extraDefense != 0) {
 			std::ostringstream ss;
-			ss << it.defense << " " << std::showpos << it.extraDefense << std::noshowpos;
+			ss << it.defense << ' ' << std::showpos << it.extraDefense << std::noshowpos;
 			msg.AddString(ss.str());
 		} else {
 			msg.AddString(std::to_string(it.defense));
@@ -2025,8 +2025,8 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	if (!it.description.empty()) {
 		std::string descr = it.description;
 
-		if (descr[descr.length() - 1] == '.') {
-			descr.erase(descr.length() - 1);
+		if (descr.back() == '.') {
+			descr.erase(descr.length() - 1); // TODO: Use pop_back
 		}
 
 		msg.AddString(descr);
@@ -2057,7 +2057,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 				separator = true;
 			}
 
-			ss << getCombatName(indexToCombatType(i)) << " " << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << "%";
+			ss << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
 		}
 
 		msg.AddString(ss.str());
@@ -2096,7 +2096,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 				separator = true;
 			}
 
-			ss << getSkillName(i) << " " << std::showpos << it.abilities->skills[i] << std::noshowpos;
+			ss << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
 		}
 
 		if (it.abilities->stats[STAT_MAGICPOINTS] != 0) {
@@ -2552,8 +2552,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 			std::ostringstream ss;
 			ss << "Your last visit was on " << ctime(&lastLogin);
 			loginStr = ss.str();
-			loginStr.erase(loginStr.length() - 1);
-			loginStr += ".";
+			loginStr.erase(loginStr.length() - 1); // TODO: Use pop_back
+			loginStr.push_back('.');
 		}
 
 		sendTextMessage(MSG_STATUS_DEFAULT, loginStr);

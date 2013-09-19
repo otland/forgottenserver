@@ -107,7 +107,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 				if (interval > MINSPAWN_INTERVAL) {
 					spawn->addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {
-					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << " " << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
+					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
 				}
 			} else if (strcasecmp(childNode.name(), "npc") == 0) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");

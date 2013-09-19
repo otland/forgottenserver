@@ -634,14 +634,15 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 		for (const std::string& str : vocStringList) {
 			if (!vocationString.empty()) {
 				if (str != vocStringList.back()) {
-					vocationString += ", ";
+					vocationString.push_back(',');
+					vocationString.push_back(' ');
 				} else {
 					vocationString += " and ";
 				}
 			}
 
 			vocationString += str;
-			vocationString += "s";
+			vocationString.push_back('s');
 		}
 	}
 	return true;
@@ -650,7 +651,6 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 bool MoveEvent::loadFunction(const std::string& functionName)
 {
 	std::string tmpFunctionName = asLowerCaseString(functionName);
-
 	if (tmpFunctionName == "onstepinfield") {
 		stepFunction = StepInField;
 	} else if (tmpFunctionName == "onstepoutfield") {
@@ -690,7 +690,6 @@ void MoveEvent::setEventType(MoveEvent_t type)
 uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position& pos)
 {
 	MagicField* field = item->getMagicField();
-
 	if (field) {
 		field->onStepInField(creature);
 		return 1;

@@ -834,7 +834,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << ", Hit% " << std::showpos << it.hitChance << std::noshowpos;
 			}
 
-			s << ")";
+			s << ')';
 		} else if (it.weaponType != WEAPON_AMMO) {
 			bool begin = true;
 
@@ -843,7 +843,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << " (Atk:" << it.attack;
 
 				if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
-					s << " physical + " << it.abilities->elementDamage << " " << getCombatName(it.abilities->elementType);
+					s << " physical + " << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
 				}
 			}
 
@@ -858,7 +858,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "Def:" << it.defense;
 
 				if (it.extraDefense != 0 || (item && item->getExtraDefense() != 0)) {
-					s << " " << std::showpos << it.extraDefense << std::noshowpos;
+					s << ' ' << std::showpos << it.extraDefense << std::noshowpos;
 				}
 			}
 
@@ -875,7 +875,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << getSkillName(i) << " " << std::showpos << it.abilities->skills[i] << std::noshowpos;
+					s << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
 				}
 
 				if (it.abilities->stats[STAT_MAGICPOINTS]) {
@@ -923,7 +923,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 							s << ", ";
 						}
 
-						s << getCombatName(indexToCombatType(i)) << " " << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << "%";
+						s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
 					}
 				} else {
 					if (begin) {
@@ -933,7 +933,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << "protection all " << std::showpos << show << std::noshowpos << "%";
+					s << "protection all " << std::showpos << show << std::noshowpos << '%';
 				}
 
 				if (it.abilities->speed) {
@@ -949,7 +949,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 
 			if (!begin) {
-				s << ")";
+				s << ')';
 			}
 		}
 	} else if (it.armor || (item && item->getArmor()) || it.showAttributes) {
@@ -979,7 +979,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << getSkillName(i) << " " << std::showpos << it.abilities->skills[i] << std::noshowpos;
+				s << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
 			}
 
 			if (it.abilities->stats[STAT_MAGICPOINTS]) {
@@ -1026,7 +1026,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << getCombatName(indexToCombatType(i)) << " " << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << "%";
+					s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
 				}
 			} else {
 				if (begin) {
@@ -1036,7 +1036,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "protection all " << std::showpos << show << std::noshowpos << "%";
+				s << "protection all " << std::showpos << show << std::noshowpos << '%';
 			}
 
 			if (it.abilities->speed) {
@@ -1052,16 +1052,16 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 
 		if (!begin) {
-			s << ")";
+			s << ')';
 		}
 	} else if (it.isContainer()) {
-		s << " (Vol:" << (int32_t)it.maxItems << ")";
+		s << " (Vol:" << (int32_t)it.maxItems << ')';
 	} else {
 		bool found = true;
 
 		if (it.abilities) {
 			if (it.abilities->speed > 0) {
-				s << " (speed " << std::showpos << (it.abilities->speed / 2) << std::noshowpos << ")";
+				s << " (speed " << std::showpos << (it.abilities->speed / 2) << std::noshowpos << ')';
 			} else if (it.abilities && hasBitSet(CONDITION_DRUNK, it.abilities->conditionSuppressions)) {
 				s << " (hard drinking)";
 			} else if (it.abilities->invisible) {
@@ -1079,7 +1079,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 		if (!found) {
 			if (it.isKey()) {
-				s << " (Key:" << (item ? (int32_t)item->getActionId() : 0) << ")";
+				s << " (Key:" << (item ? (int32_t)item->getActionId() : 0) << ')';
 			} else if (it.isFluidContainer()) {
 				if (subType > 0) {
 					const std::string& itemName = items[subType].name;
@@ -1096,7 +1096,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << "unknown";
 				}
 			} else if (it.allowDistRead && it.id != 7369 && it.id != 7370 && it.id != 7371) {
-				s << "." << std::endl;
+				s << '.' << std::endl;
 
 				if (lookDistance <= 4) {
 					if (item && !item->getText().empty()) {
@@ -1167,7 +1167,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 
 	if (!it.allowDistRead || item->getText().empty() || (it.id >= 7369 && it.id <= 7371)) {
-		s << ".";
+		s << '.';
 	}
 
 	if (it.wieldInfo != 0) {
@@ -1197,12 +1197,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << " magic level " << (int32_t)it.minReqMagicLevel << " or higher";
 		}
 
-		s << ".";
+		s << '.';
 	}
 
 	if (lookDistance <= 1) {
 		double weight = (item == NULL ? it.weight : item->getWeight());
-
 		if (weight > 0 && it.pickupable) {
 			int32_t count = weight / it.weight;
 			s << std::endl << getWeightDescription(it, weight, count);
@@ -1239,13 +1238,13 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= NU
 	if (it.name.length()) {
 		if (it.stackable && subType > 1) {
 			if (it.showCount) {
-				s << subType << " ";
+				s << subType << ' ';
 			}
 
 			s << it.getPluralName();
 		} else {
 			if (addArticle && !it.article.empty()) {
-				s << it.article << " ";
+				s << it.article << ' ';
 			}
 
 			s << it.name;

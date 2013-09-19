@@ -456,8 +456,8 @@ bool AccessList::parseList(const std::string& _list)
 
 	while (getline(listStream, line)) {
 		trimString(line);
-		trim_left(line, "\t");
-		trim_right(line, "\t");
+		trim_left(line, '\t');
+		trim_right(line, '\t');
 		trimString(line);
 
 		if (line.empty() || line[0] == '#' || line.length() > 100) {

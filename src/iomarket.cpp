@@ -237,7 +237,7 @@ uint32_t IOMarket::getOfferIdByCounter(uint32_t timestamp, uint16_t counter)
 void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous)
 {
 	std::ostringstream query;
-	query << "INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES (" << playerId << ", " << action << ", " << itemId << ", " << amount << ", " << price << ", " << time(NULL) << ", " << anonymous << ")";
+	query << "INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES (" << playerId << ',' << action << ',' << itemId << ',' << amount << ',' << price << ',' << time(NULL) << ',' << anonymous << ')';
 	Database::getInstance()->executeQuery(query.str());
 }
 
@@ -258,9 +258,9 @@ void IOMarket::deleteOffer(uint32_t offerId)
 void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint32_t price, time_t timestamp, MarketOfferState_t state)
 {
 	std::ostringstream query;
-	query << "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES "
-	      << "(" << playerId << ", " << type << ", " << itemId << ", " << amount << ", " << price << ", "
-	      << timestamp << ", " << time(NULL) << ", " << state << ")";
+	query << "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES ("
+		<< playerId << ',' << type << ',' << itemId << ',' << amount << ',' << price << ','
+	    << timestamp << ',' << time(NULL) << ',' << state << ')';
 	Database::getInstance()->executeQuery(query.str());
 }
 

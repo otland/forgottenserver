@@ -168,7 +168,7 @@ void DatabaseManager::updateDatabase()
 		}
 
 		version++;
-		std::cout << "> Database has been updated to version " << version << "." << std::endl;
+		std::cout << "> Database has been updated to version " << version << '.' << std::endl;
 		registerDatabaseConfig("db_version", version);
 		
 		LuaScriptInterface::resetScriptEnv();
@@ -232,7 +232,7 @@ void DatabaseManager::registerDatabaseConfig(const std::string& config, const st
 	std::string tmp;
 
 	if (!getDatabaseConfig(config, tmp)) {
-		query << "INSERT INTO `server_config` VALUES (" << db->escapeString(config) << ", " << db->escapeString(value) << ")";
+		query << "INSERT INTO `server_config` VALUES (" << db->escapeString(config) << ',' << db->escapeString(value) << ')';
 	} else {
 		query << "UPDATE `server_config` SET `value` = " << db->escapeString(value) << " WHERE `config` = " << db->escapeString(config);
 	}

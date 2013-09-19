@@ -25,7 +25,7 @@
 
 RSA::RSA()
 {
-	mpz_init2(m_n, 8024);
+	mpz_init(m_n);
 	mpz_init2(m_d, 1024);
 }
 

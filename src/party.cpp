@@ -220,7 +220,7 @@ bool Party::joinParty(Player& player)
 
 	const std::string& leaderName = leader->getName();
 	ss.str("");
-	ss << "You have joined " << leaderName << "'" << (leaderName[leaderName.length() - 1] == 's' ? "" : "s") <<
+	ss << "You have joined " << leaderName << "'" << (leaderName.back() == 's' ? "" : "s") <<
 	   " party. Open the party channel to communicate with your companions.";
 	player.sendTextMessage(MSG_INFO_DESCR, ss.str());
 	return true;

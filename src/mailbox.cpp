@@ -164,7 +164,7 @@ bool Mailbox::getReceiver(Item* item, std::string& name)
 			}
 		}
 	} else if (item->getID() != ITEM_LETTER) { /**The item is somehow not a parcel or letter**/
-		std::cout << "Mailbox::getReciver error, trying to get reciecer from unkown item! ID: " << item->getID() << "." << std::endl;
+		std::cout << "Mailbox::getReciver error, trying to get reciecer from unkown item! ID: " << item->getID() << '.' << std::endl;
 		return false;
 	}
 

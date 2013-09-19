@@ -234,11 +234,9 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos)
 ReturnValue Actions::canUse(const Player* player, const Position& pos, const Item* item)
 {
 	Action* action = getAction(item);
-
 	if (action) {
 		return action->canExecuteAction(player, pos);
 	}
-
 	return RET_NOERROR;
 }
 
@@ -249,7 +247,6 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 	}
 
 	const Position& creaturePos = creature->getPosition();
-
 	if (creaturePos.z > toPos.z) {
 		return RET_FIRSTGOUPSTAIRS;
 	} else if (creaturePos.z < toPos.z) {
@@ -269,7 +266,6 @@ Action* Actions::getAction(const Item* item)
 {
 	if (item->getUniqueId() != 0) {
 		ActionUseMap::const_iterator it = uniqueItemMap.find(item->getUniqueId());
-
 		if (it != uniqueItemMap.end()) {
 			return it->second;
 		}
@@ -277,21 +273,18 @@ Action* Actions::getAction(const Item* item)
 
 	if (item->getActionId() != 0) {
 		ActionUseMap::const_iterator it = actionItemMap.find(item->getActionId());
-
 		if (it != actionItemMap.end()) {
 			return it->second;
 		}
 	}
 
 	ActionUseMap::const_iterator it = useItemMap.find(item->getID());
-
 	if (it != useItemMap.end()) {
 		return it->second;
 	}
 
 	//rune items
 	Action* runeSpell = g_spells->getRuneSpell(item->getID());
-
 	if (runeSpell) {
 		return runeSpell;
 	}
@@ -309,7 +302,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 	}
 
 	Action* action = getAction(item);
-
 	if (action) {
 		int32_t stack = item->getParent()->__getIndexOfThing(item);
 		PositionEx posEx(pos, stack);
@@ -419,14 +411,12 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	player->stopWalk();
 
 	Action* action = getAction(item);
-
 	if (!action) {
 		player->sendCancelMessage(RET_CANNOTUSETHISOBJECT);
 		return false;
 	}
 
 	ReturnValue ret = action->canExecuteAction(player, toPos);
-
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
 		return false;
@@ -461,7 +451,7 @@ void Actions::showUseHotkeyMessage(Player* player, int32_t id, uint32_t count)
 	} else if (count == 1) {
 		ss << "Using the last " << it.name << "...";
 	} else {
-		ss << "Using one of " << count << " " << it.getPluralName() << "...";
+		ss << "Using one of " << count << ' ' << it.getPluralName() << "...";
 	}
 
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
@@ -510,7 +500,6 @@ bool Action::configureEvent(const pugi::xml_node& node)
 bool Action::loadFunction(const std::string& functionName)
 {
 	const std::string& tmpFunctionName = asLowerCaseString(functionName);
-
 	if (tmpFunctionName == "increaseitemid") {
 		function = increaseItemId;
 	} else if (tmpFunctionName == "decreaseitemid") {

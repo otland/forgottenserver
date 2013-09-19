@@ -1023,7 +1023,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 
 	/*
 	if (!it.marketName.empty() && it.marketName != it.name) {
-		std::cout << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << "." << std::endl;
+		std::cout << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << '.' << std::endl;
 	}
 	*/
 

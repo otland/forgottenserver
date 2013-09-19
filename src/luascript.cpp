@@ -152,7 +152,7 @@ bool ScriptEnvironment::saveGameState()
 
 	std::ostringstream query;
 	for (StorageMap::const_iterator it = m_globalStorageMap.begin(); it != m_globalStorageMap.end(); ++it) {
-		query << it->first << "," << it->second;
+		query << it->first << ',' << it->second;
 		if (!stmt.addRow(query)) {
 			return false;
 		}
@@ -2854,7 +2854,7 @@ int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
 	if (!tile) {
 		std::ostringstream ss;
-		ss << pos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
+		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 		return 1;
@@ -2892,7 +2892,7 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 	Tile* fromTile = g_game.getTile(fromPos.x, fromPos.y, fromPos.z);
 	if (!fromTile) {
 		std::ostringstream ss;
-		ss << fromPos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
+		ss << fromPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 		return 1;
@@ -2901,7 +2901,7 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 	Tile* toTile = g_game.getTile(toPos.x, toPos.y, toPos.z);
 	if (!toTile) {
 		std::ostringstream ss;
-		ss << toPos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
+		ss << toPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 		return 1;
@@ -3149,7 +3149,7 @@ int32_t LuaScriptInterface::luaDoCreateItem(lua_State* L)
 	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
 	if (!tile) {
 		std::ostringstream ss;
-		ss << pos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
+		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 		return 1;
@@ -3255,7 +3255,7 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 	Tile* tile = g_game.getMap()->getTile(createPos);
 	if (!tile) {
 		std::ostringstream ss;
-		ss << createPos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
+		ss << createPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 		return 1;
@@ -3354,7 +3354,7 @@ int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
 		}
 	} else {
 		std::ostringstream ss;
-		ss << pos << " " << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
+		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
 		reportErrorFunc(ss.str());
 		pushBoolean(L, false);
 	}

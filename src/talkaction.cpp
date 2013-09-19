@@ -98,8 +98,8 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 		str_words = words;
 	}
 
-	trim_left(str_words, " ");
-	trim_right(str_words, " ");
+	trim_left(str_words, ' ');
+	trim_right(str_words, ' ');
 
 	for (const auto& it : wordsMap) {
 		if (it.first == str_words) {

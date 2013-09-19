@@ -1509,70 +1509,64 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 	}
 
 	std::ostringstream ss;
-	ss << playerExiva->getName() << " ";
+	ss << playerExiva->getName();
 
 	if (distance == DISTANCE_BESIDE) {
 		if (level == LEVEL_SAME) {
-			ss << "is standing next to you";
+			ss << " is standing next to you.";
 		} else if (level == LEVEL_HIGHER) {
-			ss << "is above you";
+			ss << " is above you.";
 		} else if (level == LEVEL_LOWER) {
-			ss << "is below you";
+			ss << " is below you.";
 		}
 	} else {
 		switch (distance) {
 			case DISTANCE_CLOSE:
-
 				if (level == LEVEL_SAME) {
-					ss << "is to the";
+					ss << " is to the ";
 				} else if (level == LEVEL_HIGHER) {
-					ss << "is on a higher level to the";
+					ss << " is on a higher level to the ";
 				} else if (level == LEVEL_LOWER) {
-					ss << "is on a lower level to the";
+					ss << " is on a lower level to the ";
 				}
-
 				break;
 			case DISTANCE_FAR:
-				ss << "is far to the";
+				ss << " is far to the ";
 				break;
 			case DISTANCE_VERYFAR:
-				ss << "is very far to the";
+				ss << " is very far to the ";
 				break;
 			default:
 				break;
 		}
 
-		ss << " ";
-
 		switch (direction) {
 			case DIR_N:
-				ss << "north";
+				ss << "north.";
 				break;
 			case DIR_S:
-				ss << "south";
+				ss << "south.";
 				break;
 			case DIR_E:
-				ss << "east";
+				ss << "east.";
 				break;
 			case DIR_W:
-				ss << "west";
+				ss << "west.";
 				break;
 			case DIR_NE:
-				ss << "north-east";
+				ss << "north-east.";
 				break;
 			case DIR_NW:
-				ss << "north-west";
+				ss << "north-west.";
 				break;
 			case DIR_SE:
-				ss << "south-east";
+				ss << "south-east.";
 				break;
 			case DIR_SW:
-				ss << "south-west";
+				ss << "south-west.";
 				break;
 		}
 	}
-
-	ss << ".";
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
 	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_ENERGY);
 	return true;

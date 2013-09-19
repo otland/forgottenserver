@@ -90,7 +90,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 	if (!f.openFile(identifier.c_str(), "OTBM", false, true)) {
 		std::ostringstream ss;
-		ss << "Could not open the file " << identifier << ".";
+		ss << "Could not open the file " << identifier << '.';
 		setLastErrorString(ss.str());
 		return false;
 	}
@@ -146,7 +146,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		std::cout << "Warning: [OTBM loader] This map needs an updated items.otb." << std::endl;
 	}
 
-	std::cout << "> Map size: " << root_header->width << "x" << root_header->height << "." << std::endl;
+	std::cout << "> Map size: " << root_header->width << "x" << root_header->height << '.' << std::endl;
 	map->mapWidth = root_header->width;
 	map->mapHeight = root_header->height;
 
@@ -401,7 +401,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 								}
 							} else {
 								std::ostringstream ss;
-								ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Failed to load item " << item->getID() << ".";
+								ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Failed to load item " << item->getID() << '.';
 								setLastErrorString(ss.str());
 								delete item;
 								return false;
