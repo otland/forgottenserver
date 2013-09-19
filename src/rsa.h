@@ -29,7 +29,8 @@ class RSA
 	public:
 		RSA();
 		~RSA();
-		void setKey(const char* p, const char* q, const char* d);
+
+		void setKey(const char* p, const char* q);
 		bool setKey(const std::string& file);
 		void decrypt(char* msg, int32_t size);
 
@@ -41,7 +42,7 @@ class RSA
 		boost::recursive_mutex rsaLock;
 
 		//use only GMP
-		mpz_t m_p, m_q, m_u, m_d, m_dp, m_dq, m_mod;
+		mpz_t m_p, m_q, m_n, m_d, m_e;
 };
 
 #endif
