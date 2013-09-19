@@ -104,14 +104,14 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 	}
 
 	pugi::xml_attribute attr;
-	if (attr = node.attribute("itemid")) {
+	if ((attr = node.attribute("itemid"))) {
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
 		if (useItemMap.find(id) != useItemMap.end()) {
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
 			return false;
 		}
 		useItemMap[id] = action;
-	} else if (attr = node.attribute("fromid")) {
+	} else if ((attr = node.attribute("fromid"))) {
 		pugi::xml_attribute toIdAttribute = node.attribute("toid");
 		if (toIdAttribute) {
 			uint16_t fromId = pugi::cast<uint16_t>(attr.value());
@@ -139,14 +139,14 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 			std::cout << "[Warning - Actions::registerEvent] Missing toid in fromid: " << attr.as_string() << std::endl;
 			return false;
 		}
-	} else if (attr = node.attribute("uniqueid")) {
+	} else if ((attr = node.attribute("uniqueid"))) {
 		uint16_t uid = pugi::cast<uint16_t>(attr.value());
 		if (uniqueItemMap.find(uid) != uniqueItemMap.end()) {
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
 			return false;
 		}
 		uniqueItemMap[uid] = action;
-	} else if (attr = node.attribute("fromuid")) {
+	} else if ((attr = node.attribute("fromuid"))) {
 		pugi::xml_attribute toUidAttribute = node.attribute("touid");
 		if (toUidAttribute) {
 			uint16_t fromUid = pugi::cast<uint16_t>(attr.value());
@@ -174,14 +174,14 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 			std::cout << "[Warning - Actions::registerEvent] Missing touid in fromuid: " << attr.as_string() << std::endl;
 			return false;
 		}
-	} else if (attr = node.attribute("actionid")) {
+	} else if ((attr = node.attribute("actionid"))) {
 		uint16_t aid = pugi::cast<uint16_t>(attr.value());
 		if (actionItemMap.find(aid) != actionItemMap.end()) {
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
 			return false;
 		}
 		actionItemMap[aid] = action;
-	} else if (attr = node.attribute("fromaid")) {
+	} else if ((attr = node.attribute("fromaid"))) {
 		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
 		if (toAidAttribute) {
 			uint16_t fromAid = pugi::cast<uint16_t>(attr.value());

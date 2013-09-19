@@ -153,7 +153,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 	}
 
 	pugi::xml_attribute attr;
-	if (attr = node.attribute("itemid")) {
+	if ((attr = node.attribute("itemid"))) {
 		int32_t id = pugi::cast<int32_t>(attr.value());
 		addEvent(moveEvent, id, m_itemIdMap);
 		if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
@@ -163,7 +163,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 			it.minReqMagicLevel = moveEvent->getReqMagLv();
 			it.vocationString = moveEvent->getVocationString();
 		}
-	} else if (attr = node.attribute("fromid")) {
+	} else if ((attr = node.attribute("fromid"))) {
 		int32_t id = pugi::cast<int32_t>(attr.value());
 		int32_t endId = pugi::cast<int32_t>(node.attribute("toid").value());
 
@@ -190,25 +190,25 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 				addEvent(new MoveEvent(moveEvent), id, m_itemIdMap);
 			}
 		}
-	} else if (attr = node.attribute("uniqueid")) {
+	} else if ((attr = node.attribute("uniqueid"))) {
 		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), m_uniqueIdMap);
-	} else if (attr = node.attribute("fromuid")) {
+	} else if ((attr = node.attribute("fromuid"))) {
 		int32_t id = pugi::cast<int32_t>(attr.value());
 		int32_t endId = pugi::cast<int32_t>(node.attribute("touid").value());
 		addEvent(moveEvent, id, m_uniqueIdMap);
 		while (++id <= endId) {
 			addEvent(new MoveEvent(moveEvent), id, m_uniqueIdMap);
 		}
-	} else if (attr = node.attribute("actionid")) {
+	} else if ((attr = node.attribute("actionid"))) {
 		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), m_actionIdMap);
-	} else if (attr = node.attribute("fromaid")) {
+	} else if ((attr = node.attribute("fromaid"))) {
 		int32_t id = pugi::cast<int32_t>(attr.value());
 		int32_t endId = pugi::cast<int32_t>(node.attribute("toaid").value());
 		addEvent(moveEvent, id, m_actionIdMap);
 		while (++id <= endId) {
 			addEvent(new MoveEvent(moveEvent), id, m_actionIdMap);
 		}
-	} else if (attr = node.attribute("pos")) {
+	} else if ((attr = node.attribute("pos"))) {
 		std::vector<int32_t> posList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		if (posList.size() >= 3) {
 			Position pos(posList[0], posList[1], posList[2]);

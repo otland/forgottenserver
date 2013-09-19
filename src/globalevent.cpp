@@ -259,7 +259,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	m_eventType = GLOBALEVENT_NONE;
 
 	pugi::xml_attribute attr;
-	if (attr = node.attribute("time")) {
+	if ((attr = node.attribute("time"))) {
 		std::vector<int32_t> params = vectorAtoi(explodeString(attr.as_string(), ":"));
 		if (params[0] < 0 || params[0] > 23) {
 			std::cout << "[Error - GlobalEvent::configureEvent] Invalid hour \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
@@ -302,7 +302,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 
 		m_nextExecution = current_time + difference;
 		m_eventType = GLOBALEVENT_TIMER;
-	} else if (attr = node.attribute("type")) {
+	} else if ((attr = node.attribute("type"))) {
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
 		if (tmpStrValue == "startup" || tmpStrValue == "start" || tmpStrValue == "load") {
 			m_eventType = GLOBALEVENT_STARTUP;
@@ -314,7 +314,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string() << "\" for globalevent with name " << m_name << std::endl;
 			return false;
 		}
-	} else if (attr = node.attribute("interval")) {
+	} else if ((attr = node.attribute("interval"))) {
 		m_interval = std::max<int32_t>(SCHEDULER_MINTICKS, pugi::cast<int32_t>(attr.value()));
 		m_nextExecution = OTSYS_TIME() + m_interval;
 	} else {
