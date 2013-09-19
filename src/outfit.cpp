@@ -81,10 +81,8 @@ bool OutfitList::remOutfit(const Outfit& outfit)
 
 bool OutfitList::isInList(uint32_t looktype, uint32_t addons, bool playerPremium, int32_t playerSex) const
 {
-	OutfitListType::const_iterator it, it_;
 	const OutfitListType& global_outfits = Outfits::getInstance()->getOutfits(playerSex);
-
-	for (it = global_outfits.begin(); it != global_outfits.end(); ++it) {
+	for (OutfitListType::const_iterator it = global_outfits.begin(); it != global_outfits.end(); ++it) {
 		if ((*it)->looktype == looktype) {
 			for (Outfit* outfit : m_list) {
 				if (outfit->looktype == looktype) {
@@ -96,11 +94,9 @@ bool OutfitList::isInList(uint32_t looktype, uint32_t addons, bool playerPremium
 					return false;
 				}
 			}
-
 			return false;
 		}
 	}
-
 	return false;
 }
 
