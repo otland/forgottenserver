@@ -23,7 +23,7 @@
 #include "vocation.h"
 #include <iostream>
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "tools.h"

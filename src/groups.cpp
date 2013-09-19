@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "groups.h"

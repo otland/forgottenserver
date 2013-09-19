@@ -31,7 +31,7 @@
 #include "tools.h"
 #include "rsa.h"
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "logger.h"

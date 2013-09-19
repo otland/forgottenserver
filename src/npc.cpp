@@ -34,7 +34,7 @@
 #include <sstream>
 #include <fstream>
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "luascript.h"

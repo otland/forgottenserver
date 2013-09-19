@@ -22,7 +22,7 @@
 #include "definitions.h"
 #include "outfit.h"
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "creature.h"

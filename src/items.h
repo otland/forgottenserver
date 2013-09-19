@@ -27,7 +27,7 @@
 #include "position.h"
 #include <map>
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 
 #define SLOTP_WHEREEVER 0xFFFFFFFF
 #define SLOTP_HEAD 1

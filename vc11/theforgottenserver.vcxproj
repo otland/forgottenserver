@@ -274,8 +274,6 @@
     <ClInclude Include="..\src\protocollogin.h" />
     <ClInclude Include="..\src\protocolold.h" />
     <ClInclude Include="..\src\pugicast.h" />
-    <ClInclude Include="..\src\pugiconfig.hpp" />
-    <ClInclude Include="..\src\pugixml.hpp" />
     <ClInclude Include="..\src\quests.h" />
     <ClInclude Include="..\src\raids.h" />
     <ClInclude Include="..\src\rsa.h" />

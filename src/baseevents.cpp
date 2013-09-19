@@ -19,12 +19,11 @@
 
 #include "otpch.h"
 
-#include "pugixml.hpp"
-#include "pugicast.h"
-
 #include "tools.h"
 
 #include "baseevents.h"
+
+#include "pugicast.h"
 
 BaseEvents::BaseEvents()
 {

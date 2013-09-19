@@ -24,7 +24,7 @@
 #include "quests.h"
 #include "tools.h"
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 MissionState::MissionState(const std::string& _description, int32_t _missionID)

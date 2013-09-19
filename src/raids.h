@@ -28,7 +28,7 @@
 #include "const.h"
 #include "position.h"
 #include "baseevents.h"
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 
 enum RaidState_t {
 	RAIDSTATE_IDLE = 0,

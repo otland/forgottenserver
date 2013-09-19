@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "house.h"

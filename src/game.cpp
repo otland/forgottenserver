@@ -28,7 +28,7 @@
 #include <boost/config.hpp>
 #include <boost/bind.hpp>
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "tasks.h"

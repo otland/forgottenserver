@@ -21,7 +21,7 @@
 
 #include "mounts.h"
 
-#include "pugixml.hpp"
+#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 Mount::Mount(uint8_t _id, uint16_t _clientId, const std::string& _name, int32_t _speed, bool _premium)
