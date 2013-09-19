@@ -56,7 +56,7 @@ class GlobalEvents : public BaseEvents
 		virtual void clear();
 
 		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, xmlNodePtr p);
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
 		virtual LuaScriptInterface& getScriptInterface() {
 			return m_scriptInterface;
@@ -73,7 +73,7 @@ class GlobalEvent : public Event
 		GlobalEvent(LuaScriptInterface* _interface);
 		virtual ~GlobalEvent() {}
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 
 		bool executeRecord(uint32_t current, uint32_t old);
 		bool executeEvent();

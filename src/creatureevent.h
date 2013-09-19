@@ -56,7 +56,7 @@ class CreatureEvents : public BaseEvents
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual std::string getScriptBaseName();
 		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, xmlNodePtr p);
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 		virtual void clear();
 
 		//creature events
@@ -72,7 +72,7 @@ class CreatureEvent : public Event
 		CreatureEvent(LuaScriptInterface* _interface);
 		virtual ~CreatureEvent() {}
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 
 		CreatureEventType_t getEventType() const {
 			return m_type;

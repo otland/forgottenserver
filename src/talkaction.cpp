@@ -23,9 +23,6 @@
 #include "player.h"
 #include "tools.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 #include "talkaction.h"
 
 extern Game g_game;
@@ -73,10 +70,9 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	return NULL;
 }
 
-bool TalkActions::registerEvent(Event* event, xmlNodePtr p)
+bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	TalkAction* talkAction = dynamic_cast<TalkAction*>(event);
-
 	if (!talkAction) {
 		return false;
 	}
@@ -128,17 +124,15 @@ TalkAction::~TalkAction()
 	//
 }
 
-bool TalkAction::configureEvent(xmlNodePtr p)
+bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
-	std::string strValue;
-
-	if (readXMLString(p, "words", strValue)) {
-		m_words = strValue;
-	} else {
-		std::cout << "Error: [TalkAction::configureEvent] No words for TalkAction or Spell." << std::endl;
+	pugi::xml_attribute wordsAttribute = node.attribute("words");
+	if (!wordsAttribute) {
+		std::cout << "[Error - TalkAction::configureEvent] No words for talk action or spell" << std::endl;
 		return false;
 	}
 
+	m_words = wordsAttribute.as_string();
 	return true;
 }
 

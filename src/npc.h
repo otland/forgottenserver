@@ -244,8 +244,6 @@ class Npc : public Creature
 		void reset();
 		bool loadFromXml(const std::string& name);
 
-		uint32_t loadParams(xmlNodePtr node);
-
 		void addShopPlayer(Player* player);
 		void removeShopPlayer(Player* player);
 		void closeAllShopWindows();

@@ -30,8 +30,7 @@
 #include "configmanager.h"
 #include "const.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "pugicast.h"
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -58,7 +57,6 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 	trimString(str_words);
 
 	InstantSpell* instantSpell = getInstantSpell(str_words);
-
 	if (!instantSpell) {
 		return TALKACTION_CONTINUE;
 	}
@@ -69,13 +67,10 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 		size_t spellLen = instantSpell->getWords().length();
 		size_t paramLen = str_words.length() - spellLen;
 		std::string paramText = str_words.substr(spellLen, paramLen);
-
 		if (!paramText.empty() && paramText[0] == ' ') {
 			size_t loc1 = paramText.find('"', 1);
-
 			if (loc1 != std::string::npos) {
 				size_t loc2 = paramText.find('"', loc1 + 1);
-
 				if (loc2 == std::string::npos) {
 					loc2 = paramText.length();
 				} else if (paramText.find_last_not_of(' ') != loc2) {
@@ -86,7 +81,6 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 			} else {
 				trimString(paramText);
 				loc1 = paramText.find(' ', 0);
-
 				if (loc1 == std::string::npos) {
 					param = paramText;
 				} else {
@@ -111,20 +105,14 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 
 void Spells::clear()
 {
-	RunesMap::iterator it;
-
-	for (it = runes.begin(); it != runes.end(); ++it) {
-		delete it->second;
+	for (const auto& it : runes) {
+		delete it.second;
 	}
-
 	runes.clear();
 
-	InstantsMap::iterator it2;
-
-	for (it2 = instants.begin(); it2 != instants.end(); ++it2) {
-		delete it2->second;
+	for (const auto& it : instants) {
+		delete it.second;
 	}
-
 	instants.clear();
 }
 
@@ -141,7 +129,6 @@ std::string Spells::getScriptBaseName()
 Event* Spells::getEvent(const std::string& nodeName)
 {
 	std::string tmpNodeName = asLowerCaseString(nodeName);
-
 	if (tmpNodeName == "rune") {
 		return new RuneSpell(&m_scriptInterface);
 	} else if (tmpNodeName == "instant") {
@@ -149,15 +136,12 @@ Event* Spells::getEvent(const std::string& nodeName)
 	} else if (tmpNodeName == "conjure") {
 		return new ConjureSpell(&m_scriptInterface);
 	}
-
 	return NULL;
 }
 
-bool Spells::registerEvent(Event* event, xmlNodePtr p)
+bool Spells::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
-	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
-
 	if (instant) {
 		if (instants.find(instant->getWords()) != instants.end()) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
@@ -166,16 +150,18 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p)
 
 		instants[instant->getWords()] = instant;
 		return true;
-	} else if (rune) {
-		if (runes.find(rune->getRuneItemId()) != runes.end()) {
-			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
-			return false;
+	} else {
+		RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
+		if (rune) {
+			if (runes.find(rune->getRuneItemId()) != runes.end()) {
+				std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
+				return false;
+			}
+
+			runes[rune->getRuneItemId()] = rune;
+			return true;
 		}
-
-		runes[rune->getRuneItemId()] = rune;
-		return true;
 	}
-
 	return false;
 }
 
@@ -226,7 +212,6 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 
 	if (result) {
 		const std::string& resultWords = result->getWords();
-
 		if (words.length() > resultWords.length()) {
 			if (!result->getHasParam()) {
 				return NULL;
@@ -234,57 +219,47 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 
 			size_t spellLen = resultWords.length();
 			size_t paramLen = words.length() - spellLen;
-
 			if (paramLen < 2 || words[spellLen] != ' ') {
 				return NULL;
 			}
 		}
-
 		return result;
 	}
-
 	return NULL;
 }
 
 uint32_t Spells::getInstantSpellCount(const Player* player)
 {
 	uint32_t count = 0;
-
-	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
-		InstantSpell* instantSpell = it->second;
-
+	for (const auto& it : instants) {
+		InstantSpell* instantSpell = it.second;
 		if (instantSpell->canCast(player)) {
 			++count;
 		}
 	}
-
 	return count;
 }
 
 InstantSpell* Spells::getInstantSpellByIndex(const Player* player, uint32_t index)
 {
 	uint32_t count = 0;
-
 	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
 		InstantSpell* instantSpell = it->second;
-
 		if (instantSpell->canCast(player)) {
 			if (count == index) {
 				return instantSpell;
 			}
-
 			++count;
 		}
 	}
-
 	return NULL;
 }
 
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
-	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
-		if (strcasecmp(it->second->getName().c_str(), name.c_str()) == 0) {
-			return it->second;
+	for (const auto& it : instants) {
+		if (strcasecmp(it.second->getName().c_str(), name.c_str()) == 0) {
+			return it.second;
 		}
 	}
 	return NULL;
@@ -332,7 +307,6 @@ bool CombatSpell::castSpell(Creature* creature)
 	}
 
 	Position pos;
-
 	if (needDirection) {
 		pos = Spells::getCasterPosition(creature, creature->getDirection());
 	} else {
@@ -362,7 +336,6 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 			var.type = VARIANT_NUMBER;
 			var.number = target->getID();
 		}
-
 		return executeCastSpell(creature, var);
 	}
 
@@ -423,57 +396,58 @@ Spell::Spell()
 	secondaryGroupCooldown = 0;
 }
 
-bool Spell::configureSpell(xmlNodePtr p)
+bool Spell::configureSpell(const pugi::xml_node& node)
 {
-	int32_t intValue;
-	std::string strValue;
-
-	if (readXMLString(p, "name", strValue)) {
-		name = strValue;
-		const char* reservedList[] = {
-			"melee",
-			"physical",
-			"poison",
-			"fire",
-			"energy",
-			"drown",
-			"lifedrain",
-			"manadrain",
-			"healing",
-			"speed",
-			"outfit",
-			"invisible",
-			"drunk",
-			"firefield",
-			"poisonfield",
-			"energyfield",
-			"firecondition",
-			"poisoncondition",
-			"energycondition",
-			"drowncondition",
-			"freezecondition",
-			"cursecondition",
-			"dazzlecondition"
-		};
-
-		for (size_t i = 0, size = sizeof(reservedList) / sizeof(const char*); i < size; ++i) {
-			if (strcasecmp(reservedList[i], name.c_str()) == 0) {
-				std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
-				return false;
-			}
-		}
-	} else {
-		std::cout << "[Error - Spell::configureSpell] Spell without name." << std::endl;
+	pugi::xml_attribute nameAttribute = node.attribute("name");
+	if (!nameAttribute) {
+		std::cout << "[Error - Spell::configureSpell] Spell without name" << std::endl;
 		return false;
 	}
 
-	if (readXMLInteger(p, "spellid", intValue) || readXMLInteger(p, "icon", intValue)) {
-		spellId = intValue;
+	name = nameAttribute.as_string();
+
+	static const char* reservedList[] = {
+		"melee",
+		"physical",
+		"poison",
+		"fire",
+		"energy",
+		"drown",
+		"lifedrain",
+		"manadrain",
+		"healing",
+		"speed",
+		"outfit",
+		"invisible",
+		"drunk",
+		"firefield",
+		"poisonfield",
+		"energyfield",
+		"firecondition",
+		"poisoncondition",
+		"energycondition",
+		"drowncondition",
+		"freezecondition",
+		"cursecondition",
+		"dazzlecondition"
+	};
+
+	//static size_t size = sizeof(reservedList) / sizeof(const char*);
+	//for (size_t i = 0; i < size; ++i) {
+	for (const char* reserved : reservedList) {
+		if (strcasecmp(reserved, name.c_str()) == 0) {
+			std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reserved << std::endl;
+			return false;
+		}
 	}
 
-	if (readXMLString(p, "group", strValue)) {
-		std::string tmpStr = asLowerCaseString(strValue);
+	pugi::xml_attribute attr;
+	if (attr = node.attribute("spellid")) {
+		spellId = pugi::cast<uint16_t>(attr.value());
+	}
 
+	if (attr = node.attribute("group")) {
+		std::string tmpStr = asLowerCaseString(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			group = SPELLGROUP_NONE;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
@@ -485,17 +459,16 @@ bool Spell::configureSpell(xmlNodePtr p)
 		} else if (tmpStr == "special" || tmpStr == "4") {
 			group = SPELLGROUP_SPECIAL;
 		} else {
-			std::cout << "[Warning - Spell::configureSpell] Unknown group: " << strValue << std::endl;
+			std::cout << "[Warning - Spell::configureSpell] Unknown group: " << attr.as_string() << std::endl;
 		}
 	}
 
-	if (readXMLInteger(p, "groupcooldown", intValue)) {
-		groupCooldown = intValue;
+	if (attr = node.attribute("groupcooldown")) {
+		groupCooldown = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if (readXMLString(p, "secondarygroup", strValue)) {
-		std::string tmpStr = asLowerCaseString(strValue);
-
+	if (attr = node.attribute("secondarygroup")) {
+		std::string tmpStr = asLowerCaseString(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			secondaryGroup = SPELLGROUP_NONE;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
@@ -507,74 +480,73 @@ bool Spell::configureSpell(xmlNodePtr p)
 		} else if (tmpStr == "special" || tmpStr == "4") {
 			secondaryGroup = SPELLGROUP_SPECIAL;
 		} else {
-			std::cout << "[Warning - Spell::configureSpell] Unknown secondarygroup: " << strValue << std::endl;
+			std::cout << "[Warning - Spell::configureSpell] Unknown secondarygroup: " << attr.as_string() << std::endl;
 		}
 	}
 
-	if (readXMLInteger(p, "secondarygroupcooldown", intValue)) {
-		secondaryGroupCooldown = intValue;
+	if (attr = node.attribute("secondarygroupcooldown")) {
+		secondaryGroupCooldown = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "lvl", intValue)) {
-		level = intValue;
+	if (attr = node.attribute("lvl")) {
+		level = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "maglv", intValue)) {
-		magLevel = intValue;
+	if (attr = node.attribute("maglv")) {
+		magLevel = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "mana", intValue)) {
-		mana = intValue;
+	if (attr = node.attribute("mana")) {
+		mana = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "manapercent", intValue)) {
-		manaPercent = intValue;
+	if (attr = node.attribute("manapercent")) {
+		manaPercent = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "soul", intValue)) {
-		soul = intValue;
+	if (attr = node.attribute("soul")) {
+		soul = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "exhaustion", intValue) || readXMLInteger(p, "cooldown", intValue)) {
-		cooldown = intValue;
+	if (attr = node.attribute("range")) {
+		range = pugi::cast<int32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "prem", intValue)) {
-		premium = (intValue == 1);
+	if ((attr = node.attribute("exhaustion")) || (attr = node.attribute("cooldown"))) {
+		cooldown = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "enabled", intValue)) {
-		enabled = (intValue == 1);
+	if (attr = node.attribute("prem")) {
+		premium = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "needtarget", intValue)) {
-		needTarget = (intValue == 1);
+	if (attr = node.attribute("enabled")) {
+		enabled = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "needweapon", intValue)) {
-		needWeapon = (intValue == 1);
+	if (attr = node.attribute("needtarget")) {
+		needTarget = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "selftarget", intValue)) {
-		selfTarget = (intValue == 1);
+	if (attr = node.attribute("needweapon")) {
+		needWeapon = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "needlearn", intValue)) {
-		learnable = (intValue == 1);
+	if (attr = node.attribute("selftarget")) {
+		selfTarget = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "range", intValue)) {
-		range = intValue;
+	if (attr = node.attribute("needlearn")) {
+		learnable = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "blocking", intValue)) {
-		blockingSolid = (intValue == 1);
-		blockingCreature = (intValue == 1);
+	if (attr = node.attribute("blocking")) {
+		blockingSolid = attr.as_bool();
+		blockingCreature = blockingSolid;
 	}
 
-	if (readXMLString(p, "blocktype", strValue)) {
-		std::string tmpStrValue = asLowerCaseString(strValue);
-
+	if (attr = node.attribute("blocktype")) {
+		std::string tmpStrValue = asLowerCaseString(attr.as_string());
 		if (tmpStrValue == "all") {
 			blockingSolid = true;
 			blockingCreature = true;
@@ -583,21 +555,19 @@ bool Spell::configureSpell(xmlNodePtr p)
 		} else if (tmpStrValue == "creature") {
 			blockingCreature = true;
 		} else {
-			std::cout << "[Warning - Spell::configureSpell] Blocktype \"" << strValue << "\" does not exist." << std::endl;
+			std::cout << "[Warning - Spell::configureSpell] Blocktype \"" << attr.as_string() << "\" does not exist." << std::endl;
 		}
 	}
 
-	if (readXMLString(p, "aggressive", strValue)) {
-		isAggressive = booleanString(strValue);
+	if (attr = node.attribute("aggressive")) {
+		isAggressive = booleanString(attr.as_string());
 	}
 
-	if (readXMLString(p, "groups", strValue)) {
-		std::vector<std::string> split = explodeString(strValue, ",", 2);
+	if (attr = node.attribute("groups")) {
+		std::vector<std::string> split = explodeString(attr.as_string(), ",", 2);
 		std::vector<std::string>::iterator it = split.begin();
-
 		if (it != split.end()) {
 			std::string tmpStr = asLowerCaseString(*it);
-
 			if (tmpStr == "none" || tmpStr == "0") {
 				group = SPELLGROUP_NONE;
 			} else if (tmpStr == "attack" || tmpStr == "1") {
@@ -609,7 +579,7 @@ bool Spell::configureSpell(xmlNodePtr p)
 			} else if (tmpStr == "special" || tmpStr == "4") {
 				group = SPELLGROUP_SPECIAL;
 			} else {
-				std::cout << "[Warning - Spell::configureSpell] Unknown groups (primary): " << strValue << std::endl;
+				std::cout << "[Warning - Spell::configureSpell] Unknown groups (primary): " << attr.as_string() << std::endl;
 			}
 		}
 
@@ -617,7 +587,6 @@ bool Spell::configureSpell(xmlNodePtr p)
 
 		if (it != split.end()) {
 			std::string tmpStr = asLowerCaseString(*it);
-
 			if (tmpStr == "none" || tmpStr == "0") {
 				secondaryGroup = SPELLGROUP_NONE;
 			} else if (tmpStr == "attack" || tmpStr == "1") {
@@ -629,22 +598,19 @@ bool Spell::configureSpell(xmlNodePtr p)
 			} else if (tmpStr == "special" || tmpStr == "4") {
 				secondaryGroup = SPELLGROUP_SPECIAL;
 			} else {
-				std::cout << "[Warning - Spell::configureSpell] Unknown groups (secondary): " << strValue << std::endl;
+				std::cout << "[Warning - Spell::configureSpell] Unknown groups (secondary): " << attr.as_string() << std::endl;
 			}
 		}
 	}
 
-	if (readXMLString(p, "groupexhaustions", strValue)) {
-		std::vector<std::string> split = explodeString(strValue, ",", 2);
+	if (attr = node.attribute("groupexhaustions")) {
+		std::vector<std::string> split = explodeString(attr.as_string(), ",", 2);
 		std::vector<std::string>::iterator it = split.begin();
-
 		if (it != split.end()) {
 			groupCooldown = atoi(it->c_str());
 		}
 
-		++it;
-
-		if (it != split.end()) {
+		if (++it != split.end()) {
 			secondaryGroupCooldown = atoi(it->c_str());
 		}
 	}
@@ -653,29 +619,22 @@ bool Spell::configureSpell(xmlNodePtr p)
 		group = (isAggressive ? SPELLGROUP_ATTACK : SPELLGROUP_HEALING);
 	}
 
-	xmlNodePtr vocationNode = p->children;
-
-	while (vocationNode) {
-		if (xmlStrcmp(vocationNode->name, (const xmlChar*)"vocation") == 0) {
-			if (readXMLString(vocationNode, "name", strValue)) {
-				int32_t vocationId = g_vocations.getVocationId(strValue);
-
-				if (vocationId != -1) {
-					vocSpellMap[vocationId] = true;
-					int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-
-					if (promotedVocation != 0) {
-						vocSpellMap[promotedVocation] = true;
-					}
-				} else {
-					std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << strValue << std::endl;
-				}
-			}
+	for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
+		if (!(attr = vocationNode.attribute("name"))) {
+			continue;
 		}
 
-		vocationNode = vocationNode->next;
+		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
+		if (vocationId != -1) {
+			vocSpellMap[vocationId] = true;
+			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
+			if (promotedVocation != 0) {
+				vocSpellMap[promotedVocation] = true;
+			}
+		} else {
+			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
+		}
 	}
-
 	return true;
 }
 
@@ -1025,45 +984,40 @@ std::string InstantSpell::getScriptEventName()
 	return "onCastSpell";
 }
 
-bool InstantSpell::configureEvent(xmlNodePtr p)
+bool InstantSpell::configureEvent(const pugi::xml_node& node)
 {
-	if (!Spell::configureSpell(p)) {
+	if (!Spell::configureSpell(node)) {
 		return false;
 	}
 
-	if (!TalkAction::configureEvent(p)) {
+	if (!TalkAction::configureEvent(node)) {
 		return false;
 	}
 
-	int32_t intValue;
-
-	if (readXMLInteger(p, "params", intValue)) {
-		if (intValue == 1) {
-			hasParam = true;
-		}
+	pugi::xml_attribute attr;
+	if (attr = node.attribute("params")) {
+		hasParam = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "playernameparam", intValue)) {
-		hasPlayerNameParam = (intValue > 0);
+	if (attr = node.attribute("playernameparam")) {
+		hasPlayerNameParam = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "direction", intValue)) {
-		needDirection = (intValue == 1);
-	} else if (readXMLInteger(p, "casterTargetOrDirection", intValue)) {
-		casterTargetOrDirection = (intValue == 1);
+	if (attr = node.attribute("direction")) {
+		needDirection = attr.as_bool();
+	} else if (attr = node.attribute("casterTargetOrDirection")) {
+		casterTargetOrDirection = attr.as_bool();
 	}
 
-	if (readXMLInteger(p, "blockwalls", intValue)) {
-		checkLineOfSight = (intValue == 1);
+	if (attr = node.attribute("blockwalls")) {
+		checkLineOfSight = attr.as_bool();
 	}
-
 	return true;
 }
 
 bool InstantSpell::loadFunction(const std::string& functionName)
 {
 	std::string tmpFunctionName = asLowerCaseString(functionName);
-
 	if (tmpFunctionName == "edithouseguest") {
 		isAggressive = false;
 		function = HouseGuestList;
@@ -1800,31 +1754,29 @@ std::string ConjureSpell::getScriptEventName()
 	return "onCastSpell";
 }
 
-bool ConjureSpell::configureEvent(xmlNodePtr p)
+bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 {
-	if (!InstantSpell::configureEvent(p)) {
+	if (!InstantSpell::configureEvent(node)) {
 		return false;
 	}
 
-	int32_t intValue;
-
-	if (readXMLInteger(p, "conjureId", intValue)) {
-		conjureId = intValue;
+	pugi::xml_attribute attr;
+	if (attr = node.attribute("conjureId")) {
+		conjureId = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if (readXMLInteger(p, "conjureCount", intValue)) {
-		conjureCount = intValue;
+	if (attr = node.attribute("conjureCount")) {
+		conjureCount = pugi::cast<uint32_t>(attr.value());
 	} else if (conjureId != 0) {
-		//load the default charge from items.xml
+		// load default charges from items.xml
 		const ItemType& it = Item::items[conjureId];
-
 		if (it.charges != 0) {
 			conjureCount = it.charges;
 		}
 	}
 
-	if (readXMLInteger(p, "reagentId", intValue)) {
-		conjureReagentId = intValue;
+	if (attr = node.attribute("reagentId")) {
+		conjureReagentId = pugi::cast<uint32_t>(attr.value());
 	}
 
 	return true;
@@ -1833,7 +1785,6 @@ bool ConjureSpell::configureEvent(xmlNodePtr p)
 bool ConjureSpell::loadFunction(const std::string& functionName)
 {
 	std::string tmpFunctionName = asLowerCaseString(functionName);
-
 	if (tmpFunctionName == "conjureitem" || tmpFunctionName == "conjurerune") {
 		function = ConjureItem;
 	} else if (tmpFunctionName == "conjurefood") {
@@ -1850,17 +1801,14 @@ bool ConjureSpell::loadFunction(const std::string& functionName)
 ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount)
 {
 	Item* newItem = Item::CreateItem(conjureId, conjureCount);
-
 	if (!newItem) {
 		return RET_NOTPOSSIBLE;
 	}
 
 	ReturnValue result = g_game.internalPlayerAddItem(player, newItem);
-
 	if (result != RET_NOERROR) {
 		delete newItem;
 	}
-
 	return result;
 }
 
@@ -1869,7 +1817,6 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 {
 	if (reagentId != 0) {
 		Item* item = player->getInventoryItem(slot);
-
 		if (item && item->getID() == reagentId) {
 			if (item->isStackable() && item->getItemCount() != 1) {
 				return RET_YOUNEEDTOSPLITYOURSPEARS;
@@ -1880,7 +1827,6 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 			}
 
 			Item* newItem = g_game.transformItem(item, conjureId, conjureCount);
-
 			if (newItem) {
 				g_game.startDecay(newItem);
 			}
@@ -1909,13 +1855,11 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 		}
 
 		Item* newItem = Item::CreateItem(spell->getConjureId(), spell->getConjureCount());
-
 		if (!newItem) {
 			return false;
 		}
 
 		ReturnValue ret = g_game.internalPlayerAddItem(player, newItem);
-
 		if (ret != RET_NOERROR) {
 			delete newItem;
 			return false;
@@ -1940,7 +1884,6 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
@@ -1957,12 +1900,10 @@ bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, co
 	};
 
 	bool result = (internalConjureItem(player, foodType[random_range(0, 7)], 1) == RET_NOERROR);
-
 	if (result) {
 		spell->postCastSpell(player);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
 	}
-
 	return result;
 }
 
@@ -2004,33 +1945,31 @@ std::string RuneSpell::getScriptEventName()
 	return "onCastSpell";
 }
 
-bool RuneSpell::configureEvent(xmlNodePtr p)
+bool RuneSpell::configureEvent(const pugi::xml_node& node)
 {
-	if (!Spell::configureSpell(p)) {
+	if (!Spell::configureSpell(node)) {
 		return false;
 	}
 
-	if (!Action::configureEvent(p)) {
+	if (!Action::configureEvent(node)) {
 		return false;
 	}
 
-	int32_t intValue;
-
-	if (readXMLInteger(p, "id", intValue)) {
-		runeId = intValue;
-	} else {
+	pugi::xml_attribute attr;
+	if (!(attr = node.attribute("id"))) {
 		std::cout << "[Error - RuneSpell::configureSpell] Rune spell without id." << std::endl;
 		return false;
 	}
+	runeId = pugi::cast<uint32_t>(attr.value());
 
-	uint32_t charges = 0;
-
-	if (readXMLInteger(p, "charges", intValue)) {
-		charges = (uint32_t)intValue;
+	uint32_t charges;
+	if (attr = node.attribute("charges")) {
+		charges = pugi::cast<uint32_t>(attr.value());
+	} else {
+		charges = 0;
 	}
 
 	hasCharges = (charges > 0);
-
 	if (magLevel != 0 || level != 0) {
 		//Change information in the ItemType to get accurate description
 		ItemType& iType = Item::items.getItemType(runeId);
@@ -2045,7 +1984,6 @@ bool RuneSpell::configureEvent(xmlNodePtr p)
 bool RuneSpell::loadFunction(const std::string& functionName)
 {
 	std::string tmpFunctionName = asLowerCaseString(functionName);
-
 	if (tmpFunctionName == "chameleon") {
 		function = Illusion;
 	} else if (tmpFunctionName == "convince") {
@@ -2063,13 +2001,11 @@ bool RuneSpell::Illusion(const RuneSpell* spell, Creature* creature, Item* item,
                          const Position& posFrom, const Position& posTo)
 {
 	Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
 
 	Thing* thing = g_game.internalGetThing(player, posTo, 0, 0, STACKPOS_MOVE);
-
 	if (!thing) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -2077,7 +2013,6 @@ bool RuneSpell::Illusion(const RuneSpell* spell, Creature* creature, Item* item,
 	}
 
 	Item* illusionItem = thing->getItem();
-
 	if (!illusionItem || illusionItem->isNotMoveable()) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -2085,7 +2020,6 @@ bool RuneSpell::Illusion(const RuneSpell* spell, Creature* creature, Item* item,
 	}
 
 	ReturnValue ret = CreateIllusion(creature, illusionItem->getID(), 200000);
-
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -2099,7 +2033,6 @@ bool RuneSpell::Illusion(const RuneSpell* spell, Creature* creature, Item* item,
 bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item, const Position& posFrom, const Position& posTo)
 {
 	Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
@@ -2113,7 +2046,6 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item,
 	}
 
 	Thing* thing = g_game.internalGetThing(player, posTo, 0, 0, STACKPOS_LOOK);
-
 	if (!thing) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -2121,7 +2053,6 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item,
 	}
 
 	Creature* convinceCreature = thing->getCreature();
-
 	if (!convinceCreature) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
@@ -2129,7 +2060,6 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item,
 	}
 
 	int32_t manaCost = 0;
-
 	if (convinceCreature->getMonster()) {
 		manaCost = convinceCreature->getMonster()->getManaCost();
 	}
@@ -2159,7 +2089,6 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 	}
 
 	ReturnValue ret = Action::canExecuteAction(player, toPos);
-
 	if (ret != RET_NOERROR) {
 		return ret;
 	}
@@ -2190,10 +2119,8 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 		if (needTarget) {
 			if (creatureId == 0) {
 				Tile* tileTo = g_game.getTile(posTo);
-
 				if (tileTo) {
 					const Creature* creature = tileTo->getBottomVisibleCreature(player);
-
 					if (creature) {
 						creatureId = creature->getID();
 					}
@@ -2208,10 +2135,8 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 		}
 
 		result = internalCastSpell(player, var);
-	} else {
-		if (function) {
-			result = function(this, player, item, posFrom, posTo);
-		}
+	} else if (function) {
+		result = function(this, player, item, posFrom, posTo);
 	}
 
 	if (result) {
@@ -2246,14 +2171,12 @@ bool RuneSpell::castSpell(Creature* creature, Creature* target)
 
 bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 {
-	bool result = false;
-
+	bool result;
 	if (m_scripted) {
 		result = executeCastSpell(creature, var);
 	} else {
 		result = false;
 	}
-
 	return result;
 }
 

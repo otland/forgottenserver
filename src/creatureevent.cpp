@@ -67,7 +67,7 @@ Event* CreatureEvents::getEvent(const std::string& nodeName)
 	return NULL;
 }
 
-bool CreatureEvents::registerEvent(Event* event, xmlNodePtr p)
+bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	CreatureEvent* creatureEvent = dynamic_cast<CreatureEvent*>(event);
 	if (!creatureEvent) {
@@ -154,46 +154,45 @@ CreatureEvent::CreatureEvent(LuaScriptInterface* _interface) :
 	m_isLoaded = false;
 }
 
-bool CreatureEvent::configureEvent(xmlNodePtr p)
+bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 {
-	std::string str;
-
-	//Name that will be used in monster xml files and
+	// Name that will be used in monster xml files and
 	// lua function to register events to reference this event
-	if (readXMLString(p, "name", str)) {
-		m_eventName = str;
-	} else {
-		std::cout << "Error: [CreatureEvent::configureEvent] No name for creature event." << std::endl;
+	pugi::xml_attribute nameAttribute = node.attribute("name");
+	if (!nameAttribute) {
+		std::cout << "[Error - CreatureEvent::configureEvent] Missing name for creature event" << std::endl;
 		return false;
 	}
 
-	if (readXMLString(p, "type", str)) {
-		std::string tmpStr = asLowerCaseString(str);
+	m_eventName = nameAttribute.as_string();
 
-		if (tmpStr == "login") {
-			m_type = CREATURE_EVENT_LOGIN;
-		} else if (tmpStr == "logout") {
-			m_type = CREATURE_EVENT_LOGOUT;
-		} else if (tmpStr == "think") {
-			m_type = CREATURE_EVENT_THINK;
-		} else if (tmpStr == "preparedeath") {
-			m_type = CREATURE_EVENT_PREPAREDEATH;
-		} else if (tmpStr == "death") {
-			m_type = CREATURE_EVENT_DEATH;
-		} else if (tmpStr == "kill") {
-			m_type = CREATURE_EVENT_KILL;
-		} else if (tmpStr == "advance") {
-			m_type = CREATURE_EVENT_ADVANCE;
-		} else if (tmpStr == "modalwindow") {
-			m_type = CREATURE_EVENT_MODALWINDOW;
-		} else if (tmpStr == "textedit") {
-			m_type = CREATURE_EVENT_TEXTEDIT;
-		} else {
-			std::cout << "[Error - CreatureEvent::configureEvent] No valid type for creature event." << str << std::endl;
-			return false;
-		}
+	pugi::xml_attribute typeAttribute = node.attribute("type");
+	if (!typeAttribute) {
+		std::cout << "[Error - CreatureEvent::configureEvent] Missing type for creature event: " << m_eventName << std::endl;
+		return false;
+	}
+
+	std::string tmpStr = asLowerCaseString(typeAttribute.as_string());
+	if (tmpStr == "login") {
+		m_type = CREATURE_EVENT_LOGIN;
+	} else if (tmpStr == "logout") {
+		m_type = CREATURE_EVENT_LOGOUT;
+	} else if (tmpStr == "think") {
+		m_type = CREATURE_EVENT_THINK;
+	} else if (tmpStr == "preparedeath") {
+		m_type = CREATURE_EVENT_PREPAREDEATH;
+	} else if (tmpStr == "death") {
+		m_type = CREATURE_EVENT_DEATH;
+	} else if (tmpStr == "kill") {
+		m_type = CREATURE_EVENT_KILL;
+	} else if (tmpStr == "advance") {
+		m_type = CREATURE_EVENT_ADVANCE;
+	} else if (tmpStr == "modalwindow") {
+		m_type = CREATURE_EVENT_MODALWINDOW;
+	} else if (tmpStr == "textedit") {
+		m_type = CREATURE_EVENT_TEXTEDIT;
 	} else {
-		std::cout << "[Error - CreatureEvent::configureEvent] No type for creature event."  << std::endl;
+		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
 	}
 

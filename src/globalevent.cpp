@@ -23,6 +23,7 @@
 #include "tools.h"
 #include "player.h"
 #include "scheduler.h"
+#include "pugicast.h"
 
 extern ConfigManager g_config;
 
@@ -71,7 +72,7 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 	return NULL;
 }
 
-bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
+bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	GlobalEvent* globalEvent = dynamic_cast<GlobalEvent*>(event);
 	if (!globalEvent) {
@@ -246,38 +247,22 @@ GlobalEvent::GlobalEvent(LuaScriptInterface* _interface):
 	m_interval = 0;
 }
 
-bool GlobalEvent::configureEvent(xmlNodePtr p)
+bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 {
-	std::string strValue;
-
-	if (!readXMLString(p, "name", strValue)) {
-		std::cout << "[Error - GlobalEvent::configureEvent] No name for a globalevent." << std::endl;
+	pugi::xml_attribute nameAttribute = node.attribute("name");
+	if (!nameAttribute) {
+		std::cout << "[Error - GlobalEvent::configureEvent] Missing name for a globalevent" << std::endl;
 		return false;
 	}
 
-	m_name = strValue;
+	m_name = nameAttribute.as_string();
 	m_eventType = GLOBALEVENT_NONE;
 
-	if (readXMLString(p, "type", strValue)) {
-		std::string tmpStrValue = asLowerCaseString(strValue);
-
-		if (tmpStrValue == "startup" || tmpStrValue == "start" || tmpStrValue == "load") {
-			m_eventType = GLOBALEVENT_STARTUP;
-		} else if (tmpStrValue == "shutdown" || tmpStrValue == "quit" || tmpStrValue == "exit") {
-			m_eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (tmpStrValue == "record" || tmpStrValue == "playersrecord") {
-			m_eventType = GLOBALEVENT_RECORD;
-		} else {
-			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << strValue << "\" for globalevent with name " << m_name << std::endl;
-			return false;
-		}
-
-		return true;
-	} else if (readXMLString(p, "time", strValue) || readXMLString(p, "at", strValue)) {
-		std::vector<int32_t> params = vectorAtoi(explodeString(strValue, ":"));
-
+	pugi::xml_attribute attr;
+	if (attr = node.attribute("time")) {
+		std::vector<int32_t> params = vectorAtoi(explodeString(attr.as_string(), ":"));
 		if (params[0] < 0 || params[0] > 23) {
-			std::cout << "[Error - GlobalEvent::configureEvent] No valid hour \"" << strValue << "\" for globalevent with name " << m_name << std::endl;
+			std::cout << "[Error - GlobalEvent::configureEvent] Invalid hour \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 			return false;
 		}
 
@@ -288,7 +273,7 @@ bool GlobalEvent::configureEvent(xmlNodePtr p)
 
 		if (params.size() > 1) {
 			if (params[1] < 0 || params[1] > 59) {
-				std::cout << "[Error - GlobalEvent::configureEvent] No valid minute \"" << strValue << "\" for globalevent with name " << m_name << std::endl;
+				std::cout << "[Error - GlobalEvent::configureEvent] Invalid minute \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 				return false;
 			}
 
@@ -296,7 +281,7 @@ bool GlobalEvent::configureEvent(xmlNodePtr p)
 
 			if (params.size() > 2) {
 				if (params[2] < 0 || params[2] > 59) {
-					std::cout << "[Error - GlobalEvent::configureEvent] No valid second \"" << strValue << "\" for globalevent with name " << m_name << std::endl;
+					std::cout << "[Error - GlobalEvent::configureEvent] Invalid second \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 					return false;
 				}
 
@@ -317,19 +302,26 @@ bool GlobalEvent::configureEvent(xmlNodePtr p)
 
 		m_nextExecution = current_time + difference;
 		m_eventType = GLOBALEVENT_TIMER;
-		return true;
-	}
-
-	int32_t intValue;
-
-	if (readXMLInteger(p, "interval", intValue)) {
-		m_interval = std::max<int32_t>(SCHEDULER_MINTICKS, intValue);
+	} else if (attr = node.attribute("type")) {
+		std::string tmpStrValue = asLowerCaseString(attr.as_string());
+		if (tmpStrValue == "startup" || tmpStrValue == "start" || tmpStrValue == "load") {
+			m_eventType = GLOBALEVENT_STARTUP;
+		} else if (tmpStrValue == "shutdown" || tmpStrValue == "quit" || tmpStrValue == "exit") {
+			m_eventType = GLOBALEVENT_SHUTDOWN;
+		} else if (tmpStrValue == "record" || tmpStrValue == "playersrecord") {
+			m_eventType = GLOBALEVENT_RECORD;
+		} else {
+			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string() << "\" for globalevent with name " << m_name << std::endl;
+			return false;
+		}
+	} else if (attr = node.attribute("interval")) {
+		m_interval = std::max<int32_t>(SCHEDULER_MINTICKS, pugi::cast<int32_t>(attr.value()));
 		m_nextExecution = OTSYS_TIME() + m_interval;
-		return true;
+	} else {
+		std::cout << "[Error - GlobalEvent::configureEvent] No interval for globalevent with name " << m_name << std::endl;
+		return false;
 	}
-
-	std::cout << "[Error - GlobalEvent::configureEvent] No interval for globalevent with name " << m_name << std::endl;
-	return false;
+	return true;
 }
 
 std::string GlobalEvent::getScriptEventName()

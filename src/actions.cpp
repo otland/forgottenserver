@@ -34,8 +34,7 @@
 #include "configmanager.h"
 #include "beds.h"
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "pugicast.h"
 
 #include "actions.h"
 
@@ -57,10 +56,16 @@ Actions::~Actions()
 
 inline void Actions::clearMap(ActionUseMap& map)
 {
+	// Filter out duplicates to avoid double-free
+	std::set<Action*> set;
 	for (const auto& it : map) {
-		delete it.second;
+		set.insert(it.second);
 	}
 	map.clear();
+
+	for (Action* action : set) {
+		delete action;
+	}
 }
 
 void Actions::clear()
@@ -91,103 +96,123 @@ Event* Actions::getEvent(const std::string& nodeName)
 	}
 }
 
-bool Actions::registerEvent(Event* event, xmlNodePtr p)
+bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 {
 	Action* action = dynamic_cast<Action*>(event);
-
 	if (!action) {
 		return false;
 	}
 
-	int32_t id, id2, from;
-	bool success = true;
-
-	if (readXMLInteger(p, "itemid", id)) {
+	pugi::xml_attribute attr;
+	if (attr = node.attribute("itemid")) {
+		uint16_t id = pugi::cast<uint16_t>(attr.value());
 		if (useItemMap.find(id) != useItemMap.end()) {
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
 			return false;
 		}
-
 		useItemMap[id] = action;
-	} else if (readXMLInteger(p, "fromid", id) && readXMLInteger(p, "toid", id2)) {
-		from = id;
+	} else if (attr = node.attribute("fromid")) {
+		pugi::xml_attribute toIdAttribute = node.attribute("toid");
+		if (toIdAttribute) {
+			uint16_t fromId = pugi::cast<uint16_t>(attr.value());
+			uint16_t iterId = fromId;
+			uint16_t toId = pugi::cast<uint16_t>(toIdAttribute.value());
 
-		if (useItemMap.find(id) != useItemMap.end()) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << " in fromid: " << from << ", toid: " << id2 << std::endl;
-			success = false;
-		} else {
-			useItemMap[id] = action;
-		}
-
-		while (id < id2) {
-			id++;
-
-			if (useItemMap.find(id) != useItemMap.end()) {
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << " in fromid: " << from << ", toid: " << id2 << std::endl;
-				continue;
+			bool success = false;
+			if (useItemMap.find(iterId) != useItemMap.end()) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
+			} else {
+				useItemMap[iterId] = action;
+				success = true;
 			}
 
-			useItemMap[id] = new Action(action);
-		}
-	} else if (readXMLInteger(p, "uniqueid", id)) {
-		if (uniqueItemMap.find(id) != uniqueItemMap.end()) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << id << std::endl;
+			while (++iterId <= toId) {
+				if (useItemMap.find(iterId) != useItemMap.end()) {
+					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
+					continue;
+				}
+				useItemMap[iterId] = action;
+				success = true;
+			}
+			return success;
+		} else {
+			std::cout << "[Warning - Actions::registerEvent] Missing toid in fromid: " << attr.as_string() << std::endl;
 			return false;
 		}
-
-		uniqueItemMap[id] = action;
-	} else if (readXMLInteger(p, "fromuid", id) && readXMLInteger(p, "touid", id2)) {
-		from = id;
-
-		if (uniqueItemMap.find(id) != uniqueItemMap.end()) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << id << " in fromuid: " << from << ", touid: " << id2 << std::endl;
-			success = false;
-		} else {
-			uniqueItemMap[id] = action;
-		}
-
-		while (id < id2) {
-			id++;
-
-			if (uniqueItemMap.find(id) != uniqueItemMap.end()) {
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << id << " in fromuid: " << from << ", touid: " << id2 << std::endl;
-				continue;
-			}
-
-			uniqueItemMap[id] = new Action(action);
-		}
-	} else if (readXMLInteger(p, "actionid", id) || readXMLInteger(p, "aid", id)) {
-		if (actionItemMap.find(id) != actionItemMap.end()) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << id << std::endl;
+	} else if (attr = node.attribute("uniqueid")) {
+		uint16_t uid = pugi::cast<uint16_t>(attr.value());
+		if (uniqueItemMap.find(uid) != uniqueItemMap.end()) {
+			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
 			return false;
 		}
+		uniqueItemMap[uid] = action;
+	} else if (attr = node.attribute("fromuid")) {
+		pugi::xml_attribute toUidAttribute = node.attribute("touid");
+		if (toUidAttribute) {
+			uint16_t fromUid = pugi::cast<uint16_t>(attr.value());
+			uint16_t iterUid = fromUid;
+			uint16_t toUid = pugi::cast<uint16_t>(toUidAttribute.value());
 
-		actionItemMap[id] = action;
-	} else if (readXMLInteger(p, "fromaid", id) && readXMLInteger(p, "toaid", id2)) {
-		from = id;
-
-		if (actionItemMap.find(id) != actionItemMap.end()) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << id << " in fromaid: " << from << ", toaid: " << id2 << std::endl;
-			success = false;
-		} else {
-			actionItemMap[id] = action;
-		}
-
-		while (id < id2) {
-			id++;
-
-			if (actionItemMap.find(id) != actionItemMap.end()) {
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << id << " in fromaid: " << from << ", toaid: " << id2 << std::endl;
-				continue;
+			bool success = false;
+			if (uniqueItemMap.find(iterUid) != uniqueItemMap.end()) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
+			} else {
+				uniqueItemMap[iterUid] = action;
+				success = true;
 			}
 
-			actionItemMap[id] = new Action(action);
+			while (++iterUid <= toUid) {
+				if (uniqueItemMap.find(iterUid) != uniqueItemMap.end()) {
+					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
+					continue;
+				}
+				uniqueItemMap[iterUid] = action;
+				success = true;
+			}
+			return success;
+		} else {
+			std::cout << "[Warning - Actions::registerEvent] Missing touid in fromuid: " << attr.as_string() << std::endl;
+			return false;
+		}
+	} else if (attr = node.attribute("actionid")) {
+		uint16_t aid = pugi::cast<uint16_t>(attr.value());
+		if (actionItemMap.find(aid) != actionItemMap.end()) {
+			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
+			return false;
+		}
+		actionItemMap[aid] = action;
+	} else if (attr = node.attribute("fromaid")) {
+		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
+		if (toAidAttribute) {
+			uint16_t fromAid = pugi::cast<uint16_t>(attr.value());
+			uint16_t iterAid = fromAid;
+			uint16_t toAid = pugi::cast<uint16_t>(toAidAttribute.value());
+
+			bool success = false;
+			if (actionItemMap.find(iterAid) != actionItemMap.end()) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
+			} else {
+				actionItemMap[iterAid] = action;
+				success = true;
+			}
+
+			while (++iterAid <= toAid) {
+				if (actionItemMap.find(iterAid) != actionItemMap.end()) {
+					std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
+					continue;
+				}
+				actionItemMap[iterAid] = action;
+				success = true;
+			}
+			return success;
+		} else {
+			std::cout << "[Warning - Actions::registerEvent] Missing toaid in fromaid: " << attr.as_string() << std::endl;
+			return false;
 		}
 	} else {
-		success = false;
+		return false;
 	}
-
-	return success;
+	return true;
 }
 
 ReturnValue Actions::canUse(const Player* player, const Position& pos)
@@ -468,22 +493,17 @@ Action::~Action()
 	//
 }
 
-bool Action::configureEvent(xmlNodePtr p)
+bool Action::configureEvent(const pugi::xml_node& node)
 {
-	int32_t intValue;
-
-	if (readXMLInteger(p, "allowfaruse", intValue)) {
-		if (intValue != 0) {
-			setAllowFarUse(true);
-		}
+	pugi::xml_attribute allowFarUseAttr = node.attribute("allowfaruse");
+	if (allowFarUseAttr) {
+		setAllowFarUse(allowFarUseAttr.as_bool());
 	}
 
-	if (readXMLInteger(p, "blockwalls", intValue)) {
-		if (intValue == 0) {
-			setCheckLineOfSight(false);
-		}
+	pugi::xml_attribute blockWallsAttr = node.attribute("blockwalls");
+	if (blockWallsAttr) {
+		setCheckLineOfSight(blockWallsAttr.as_bool());
 	}
-
 	return true;
 }
 

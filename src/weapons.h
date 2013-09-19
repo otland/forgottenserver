@@ -51,7 +51,7 @@ class Weapons : public BaseEvents
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual std::string getScriptBaseName();
 		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, xmlNodePtr p);
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
 		typedef std::map<uint32_t, Weapon*> WeaponMap;
 		WeaponMap weapons;
@@ -65,7 +65,7 @@ class Weapon : public Event
 		Weapon(LuaScriptInterface* _interface);
 		virtual ~Weapon();
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool loadFunction(const std::string& functionName);
 		virtual bool configureWeapon(const ItemType& it);
 		virtual bool interruptSwing() const {
@@ -139,7 +139,7 @@ class WeaponMelee : public Weapon
 		WeaponMelee(LuaScriptInterface* _interface);
 		virtual ~WeaponMelee() {}
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool configureWeapon(const ItemType& it);
 
 		virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
@@ -162,7 +162,7 @@ class WeaponDistance : public Weapon
 		WeaponDistance(LuaScriptInterface* _interface);
 		virtual ~WeaponDistance() {}
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool configureWeapon(const ItemType& it);
 		virtual bool interruptSwing() const {
 			return true;
@@ -194,7 +194,7 @@ class WeaponWand : public Weapon
 		WeaponWand(LuaScriptInterface* _interface);
 		virtual ~WeaponWand() {}
 
-		virtual bool configureEvent(xmlNodePtr p);
+		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool configureWeapon(const ItemType& it);
 
 		virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
