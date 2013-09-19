@@ -102,7 +102,6 @@ void Protocol::XTEA_encrypt(OutputMessage& msg)
 
 	//add bytes until reach 8 multiple
 	int32_t paddingBytes = msg.getMessageLength() % 8;
-
 	if (paddingBytes != 0) {
 		uint32_t n = 8 - paddingBytes;
 		msg.AddPaddingBytes(n);
@@ -111,7 +110,6 @@ void Protocol::XTEA_encrypt(OutputMessage& msg)
 	uint32_t* buffer = (uint32_t*)msg.getOutputBuffer();
 	const int32_t messageLength = msg.getMessageLength() / 4;
 	int32_t read_pos = 0;
-
 	while (read_pos < messageLength) {
 		uint32_t v0 = buffer[read_pos], v1 = buffer[read_pos + 1];
 		uint32_t sum = 0;
@@ -139,19 +137,14 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg)
 
 	//
 	uint32_t k[4];
-
 	k[0] = m_key[0];
-
 	k[1] = m_key[1];
-
 	k[2] = m_key[2];
-
 	k[3] = m_key[3];
 
 	uint32_t* buffer = (uint32_t*)(msg.getBuffer() + msg.getReadPos());
 
 	int32_t read_pos = 0;
-
 	while (read_pos < messageLength) {
 		uint32_t v0 = buffer[read_pos], v1 = buffer[read_pos + 1];
 		uint32_t sum = 0xC6EF3720;
@@ -169,7 +162,6 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg)
 	//
 
 	int tmp = msg.GetU16();
-
 	if (tmp > msg.getMessageLength() - 8) {
 		return false;
 	}
@@ -189,7 +181,7 @@ bool Protocol::RSA_decrypt(RSA* rsa, NetworkMessage& msg)
 		return false;
 	}
 
-	rsa->decrypt((char*)(msg.getBuffer() + msg.getReadPos()), 128);
+	rsa->decrypt((char*)(msg.getBuffer() + msg.getReadPos()));
 	return msg.GetByte() == 0;
 }
 

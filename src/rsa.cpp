@@ -25,21 +25,14 @@
 
 RSA::RSA()
 {
-	m_keySet = false;
-	mpz_init2(m_p, 1024);
-	mpz_init2(m_q, 1024);
 	mpz_init2(m_n, 8024);
 	mpz_init2(m_d, 1024);
-	mpz_init(m_e);
 }
 
 RSA::~RSA()
 {
-	mpz_clear(m_p);
-	mpz_clear(m_q);
 	mpz_clear(m_n);
 	mpz_clear(m_d);
-	mpz_clear(m_e);
 }
 
 bool RSA::setKey(const std::string& file)
@@ -64,6 +57,11 @@ bool RSA::setKey(const std::string& file)
 void RSA::setKey(const char* p, const char* q)
 {
 	boost::recursive_mutex::scoped_lock lockClass(rsaLock);
+
+	mpz_t m_p, m_q, m_e;
+	mpz_init2(m_p, 1024);
+	mpz_init2(m_q, 1024);
+	mpz_init(m_e);
 
 	mpz_set_str(m_p, p, 10);
 	mpz_set_str(m_q, q, 10);
@@ -92,9 +90,13 @@ void RSA::setKey(const char* p, const char* q)
 	mpz_clear(p_1);
 	mpz_clear(q_1);
 	mpz_clear(pq_1);
+
+	mpz_clear(m_p);
+	mpz_clear(m_q);
+	mpz_clear(m_e);
 }
 
-void RSA::decrypt(char* msg, int32_t size)
+void RSA::decrypt(char* msg)
 {
 	boost::recursive_mutex::scoped_lock lockClass(rsaLock);
 

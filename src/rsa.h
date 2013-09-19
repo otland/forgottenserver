@@ -32,17 +32,15 @@ class RSA
 
 		void setKey(const char* p, const char* q);
 		bool setKey(const std::string& file);
-		void decrypt(char* msg, int32_t size);
+		void decrypt(char* msg);
 
 		void getPublicKey(char* buffer);
 
 	protected:
-		bool m_keySet;
-
 		boost::recursive_mutex rsaLock;
 
 		//use only GMP
-		mpz_t m_p, m_q, m_n, m_d, m_e;
+		mpz_t m_n, m_d;
 };
 
 #endif
