@@ -303,7 +303,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	}
 
 	std::string passwordType = asLowerCaseString(g_config.getString(ConfigManager::PASSWORDTYPE));
-
 	if (passwordType == "md5") {
 		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_MD5);
 		std::cout << ">> Using MD5 passwords" << std::endl;

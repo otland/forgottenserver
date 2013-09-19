@@ -73,7 +73,6 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		case 0xFF: {
 			if (msg.GetString(4) == "info") {
 				OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 				if (output) {
 					Status* status = Status::getInstance();
 					std::string str = status->getStatusString();
@@ -90,7 +89,6 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		case 0x01: {
 			uint32_t requestedInfo = msg.GetU16(); //Only a Byte is necessary, though we could add new infos here
 			OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 			if (output) {
 				Status* status = Status::getInstance();
 				status->getInfo(requestedInfo, output, msg);
