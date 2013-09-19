@@ -62,16 +62,16 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance1="100000" chancemax="0"/>
-		<item id="2401" chance="10000"/> --staff
-		<item id="2171" chance="1666"/> --platinium amulet
-		<item id="2656" chance="709"/> --blue robe
-		<item id="7893" chance="688"/> --lightning boots
-		<item id="2535" chance="588"/> --castle shield
-		<item id="2165" chance="888"/> --stealth ring
-		<item id="2237" chance="10000"/> --dirty cape
+		<item id="2401" chance="10000"/> <!-- staff -->
+		<item id="2171" chance="1666"/> <!-- platinium amulet -->
+		<item id="2656" chance="709"/> <!-- blue robe -->
+		<item id="7893" chance="688"/> <!-- lightning boots -->
+		<item id="2535" chance="588"/> <!-- castle shield -->
+		<item id="2165" chance="888"/> <!-- stealth ring -->
+		<item id="2237" chance="10000"/> <!-- dirty cape -->
 		<item id="2148" countmax="12" chance1="80000" chancemax="0"/>
-		<item id="2175" chance="10000"/> --spell book
-		<item id="2179" chance="900"/> --gold ring
-		<item id="3961" chance="1000"/> --liche staff
+		<item id="2175" chance="10000"/> <!-- spell book -->
+		<item id="2179" chance="900"/> <!-- gold ring -->
+		<item id="3961" chance="1000"/> <!-- liche staff -->
 	</loot>
 </monster>

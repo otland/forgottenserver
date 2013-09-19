@@ -19,8 +19,9 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="70" attack="100" poison="65"/>
-		<attack name="physical" interval="1600" chance="7" range="1" min="-60" max="-600"/>
+		<attack name="physical" interval="1600" chance="7" range="1" min="-60" max="-600">
 			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
 		<attack name="fire" interval="1000" chance="7" range="7" min="-60" max="-600">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="firearea"/>
