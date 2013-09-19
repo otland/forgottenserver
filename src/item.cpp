@@ -1112,14 +1112,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						} else {
 							s << "You read: ";
 						}
-
-						std::string outtext;
-
-						if (utf8ToLatin1(item->getText().c_str(), outtext)) {
-							s << outtext;
-						} else {
-							s << item->getText();
-						}
+						s << item->getText();
 					} else {
 						s << "Nothing is written on it";
 					}

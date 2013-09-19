@@ -17,7 +17,6 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 include(FindCXX11)
 
 # Find packages.
-find_package(LibXml2 REQUIRED)
 find_package(GMP REQUIRED)
 find_package(MySQL)
 find_package(LuaJIT)
@@ -33,5 +32,5 @@ find_package(Boost 1.42.0 COMPONENTS system thread REQUIRED)
 include(src/CMakeLists.txt)
 add_executable(tfs ${tfs_SRC})
 
-include_directories(${LIBXML2_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${GMP_INCLUDE_DIR})
-target_link_libraries(tfs ${LIBXML2_LIBRARIES} ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${GMP_LIBRARIES})
+include_directories(${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${GMP_INCLUDE_DIR})
+target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${GMP_LIBRARIES})

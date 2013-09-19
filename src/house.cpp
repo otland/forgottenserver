@@ -460,22 +460,21 @@ bool AccessList::parseList(const std::string& _list)
 		trim_right(line, "\t");
 		trimString(line);
 
-		std::transform(line.begin(), line.end(), line.begin(), tolower);
-
-		if (line.substr(0, 1) == "#" || line.length() > 100) {
+		if (line.empty() || line[0] == '#' || line.length() > 100) {
 			continue;
 		}
 
-		if (line.find("@") != std::string::npos) {
-			std::string::size_type pos = line.find("@");
-			addGuild(line.substr(pos + 1), "");
+		toLowerCaseString(line);
+
+		std::string::size_type at_pos = line.find("@");
+		if (at_pos != std::string::npos) {
+			addGuild(line.substr(at_pos + 1), "");
 		} else if (line.find("!") != std::string::npos || line.find("*") != std::string::npos || line.find("?") != std::string::npos) {
 			addExpression(line);
 		} else {
 			addPlayer(line);
 		}
 	}
-
 	return true;
 }
 
@@ -552,7 +551,7 @@ bool AccessList::isInList(const Player* player)
 	std::string name = player->getName();
 	std::cmatch what;
 
-	std::transform(name.begin(), name.end(), name.begin(), tolower);
+	toLowerCaseString(name);
 
 	for (it = regExList.begin(); it != regExList.end(); ++it) {
 		if (std::regex_match(name.c_str(), what, it->first)) {

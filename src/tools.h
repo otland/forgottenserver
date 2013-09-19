@@ -28,8 +28,6 @@
 #include <string>
 #include <algorithm>
 
-#include <libxml/parser.h>
-
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 
@@ -52,30 +50,6 @@ void toLowerCaseString(std::string& source);
 void toUpperCaseString(std::string& source);
 std::string asLowerCaseString(const std::string& source);
 std::string asUpperCaseString(const std::string& source);
-
-bool utf8ToLatin1(const char* intext, std::string& outtext);
-bool readXMLInteger(xmlNodePtr node, const char* tag, int32_t& value);
-
-template<typename T>
-T readXMLValue(xmlNodePtr node, const char* tag)
-{
-	char* nodeValue = (char*)xmlGetProp(node, (xmlChar*)tag);
-	if (!nodeValue) {
-		return T();
-	}
-
-	T value;
-	try {
-		value = boost::lexical_cast<T>(nodeValue);
-	} catch (boost::bad_lexical_cast&) {
-		value = T();
-	}
-	xmlFree(nodeValue);
-	return value;
-}
-bool readXMLFloat(xmlNodePtr node, const char* tag, float& value);
-bool readXMLString(xmlNodePtr node, const char* tag, std::string& value);
-bool readXMLContentString(xmlNodePtr node, std::string& value);
 
 typedef std::vector<std::string> StringVec;
 typedef std::vector<int32_t> IntegerVec;
