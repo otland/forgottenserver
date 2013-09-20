@@ -2016,6 +2016,8 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Player", "addBlessing", LuaScriptInterface::luaPlayerAddBlessing);
 	registerClassMethod("Player", "removeBlessing", LuaScriptInterface::luaPlayerRemoveBlessing);
 
+	registerClassMethod("Player", "sendOutfitWindow", LuaScriptInterface::luaPlayerSendOutfitWindow);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 
@@ -9508,6 +9510,18 @@ int32_t LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 		} else {
 			pushBoolean(L, false);
 		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
+{
+	// player:sendOutfitWindow()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendOutfitWindow();
 	} else {
 		pushNil(L);
 	}
