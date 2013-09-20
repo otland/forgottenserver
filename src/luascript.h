@@ -983,6 +983,8 @@ class LuaScriptInterface
 		static int32_t luaPlayerAddBlessing(lua_State* L);
 		static int32_t luaPlayerRemoveBlessing(lua_State* L);
 
+		static int32_t luaPlayerSendOutfitWindow(lua_State* L);
+
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
 
