@@ -56,12 +56,12 @@ uint32_t ModalWindow::getChoiceCount() const
 
 void ModalWindow::addChoice(uint8_t choiceId, const std::string& text)
 {
-	choices.push_back(make_pair(text, choiceId));
+	choices.emplace_back(text, choiceId);
 }
 
 void ModalWindow::addButton(uint8_t buttonId, const std::string& text)
 {
-	buttons.push_back(make_pair(text, buttonId));
+	buttons.emplace_back(text, buttonId);
 }
 
 const ModalWindowChoiceList& ModalWindow::getButtons() const

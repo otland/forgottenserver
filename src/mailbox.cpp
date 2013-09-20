@@ -154,9 +154,9 @@ bool Mailbox::getReceiver(Item* item, std::string& name)
 	if (item->getID() == ITEM_PARCEL) { /**We need to get the text from the label incase its a parcel**/
 		Container* parcel = item->getContainer();
 		if (parcel) {
-			for (ItemDeque::const_iterator cit = parcel->getItems(), end = parcel->getEnd(); cit != end; ++cit) {
-				if ((*cit)->getID() == ITEM_LABEL) {
-					item = (*cit);
+			for (Item* parcelItem : parcel->getItemList()) {
+				if (parcelItem->getID() == ITEM_LABEL) {
+					item = parcelItem;
 					if (!item->getText().empty()) {
 						break;
 					}

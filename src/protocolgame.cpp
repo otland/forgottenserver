@@ -1629,23 +1629,28 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	msg.AddByte(container->isUnlocked() ? 0x01 : 0x00); // Drag and drop
 	msg.AddByte(container->hasPages() ? 0x01 : 0x00); // Pagination
 
-	msg.AddU16(container->size());
+	uint32_t containerSize = container->size();
+	msg.AddU16(containerSize);
 	msg.AddU16(firstIndex);
 
 	uint32_t maxItemsToSend;
 	if (container->hasPages() && firstIndex > 0) {
-		maxItemsToSend = std::min<uint32_t>(container->capacity(), container->size() - firstIndex);
+		maxItemsToSend = std::min<uint32_t>(container->capacity(), containerSize - firstIndex);
 	} else {
 		maxItemsToSend = container->capacity();
 	}
 
-	msg.AddByte(std::min<uint32_t>(maxItemsToSend, container->size()));
+	if (firstIndex >= containerSize) {
+		msg.AddByte(0x00);
+	} else {
+		msg.AddByte(std::min<uint32_t>(maxItemsToSend, containerSize));
 
-	uint32_t i = 0;
-	for (ItemDeque::const_iterator cit = container->getItems() + firstIndex, end = container->getEnd(); i < maxItemsToSend && cit != end; ++cit, ++i) {
-		msg.AddItem(*cit);
+		uint32_t i = 0;
+		const ItemDeque& itemList = container->getItemList();
+		for (ItemDeque::const_iterator it = itemList.begin() + firstIndex, end = itemList.end(); i < maxItemsToSend && it != end; ++it, ++i) {
+			msg.AddItem(*it);
+		}
 	}
-
 	writeToOutputBuffer(msg);
 }
 
@@ -1763,7 +1768,6 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	msg.AddByte(std::min<int32_t>(0xFF, IOMarket::getInstance()->getPlayerOfferCount(player->getGUID())));
 
 	DepotChest* depotChest = player->getDepotChest(depotId, false);
-
 	if (!depotChest) {
 		msg.AddU16(0x00);
 		writeToOutputBuffer(msg);
@@ -1781,9 +1785,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		Container* container = containerList.front();
 		containerList.pop_front();
 
-		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
-			Item* item = *it;
-
+		for (Item* item : container->getItemList()) {
 			Container* c = item->getContainer();
 			if (c && !c->empty()) {
 				containerList.push_back(c);
@@ -1791,7 +1793,6 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 			}
 
 			const ItemType& itemType = Item::items[item->getID()];
-
 			if (!itemType.ware) {
 				continue;
 			}
@@ -2223,37 +2224,32 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 
 	if (const Container* tradeContainer = item->getContainer()) {
 		std::list<const Container*> listContainer;
-		ItemDeque::const_iterator it;
-
 		listContainer.push_back(tradeContainer);
 
-		std::list<const Item*> listItem;
-		listItem.push_back(tradeContainer);
+		std::list<const Item*> itemList;
+		itemList.push_back(tradeContainer);
 
 		while (!listContainer.empty()) {
 			const Container* container = listContainer.front();
 			listContainer.pop_front();
 
-			for (it = container->getItems(); it != container->getEnd(); ++it) {
-				Container* tmpContainer = (*it)->getContainer();
+			for (Item* containerItem : container->getItemList()) {
+				Container* tmpContainer = containerItem->getContainer();
 				if (tmpContainer) {
 					listContainer.push_back(tmpContainer);
 				}
-				listItem.push_back(*it);
+				itemList.push_back(containerItem);
 			}
 		}
 
-		msg.AddByte(listItem.size());
-
-		while (!listItem.empty()) {
-			msg.AddItem(listItem.front());
-			listItem.pop_front();
+		msg.AddByte(itemList.size());
+		for (const Item* listItem : itemList) {
+			msg.AddItem(listItem);
 		}
 	} else {
 		msg.AddByte(0x01);
 		msg.AddItem(item);
 	}
-
 	writeToOutputBuffer(msg);
 }
 

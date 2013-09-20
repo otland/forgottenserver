@@ -665,7 +665,7 @@ void LuaScriptInterface::reportError(const char* function, const std::string& er
 	std::cout << std::endl << "Lua Script Error: ";
 
 	if (scriptInterface) {
-		std::cout << "[" << scriptInterface->getInterfaceName() << "] " << std::endl;
+		std::cout << '[' << scriptInterface->getInterfaceName() << "] " << std::endl;
 
 		if (timerEvent) {
 			std::cout << "in a timer event called from: " << std::endl;

@@ -35,7 +35,6 @@ uint32_t ProtocolOld::protocolOldCount = 0;
 void ProtocolOld::disconnectClient(uint8_t error, const char* message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		output->AddByte(error);
 		output->AddString(message);

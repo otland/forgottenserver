@@ -133,8 +133,8 @@ Commands::Commands()
 
 Commands::~Commands()
 {
-	for (CommandMap::iterator it = commandMap.begin(); it != commandMap.end(); ++it) {
-		delete it->second;
+	for (const auto& it : commandMap) {
+		delete it.second;
 	}
 }
 
@@ -255,7 +255,7 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	}
 
 	//find command
-	CommandMap::iterator it = commandMap.find(str_command);
+	auto it = commandMap.find(str_command);
 	if (it == commandMap.end()) {
 		return false;
 	}
@@ -285,7 +285,7 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 			char buf[32];
 			strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M", now);
 
-			out << "[" << buf << "] " << cmd << std::endl;
+			out << '[' << buf << "] " << cmd << std::endl;
 			out.close();
 		}
 	}
@@ -431,13 +431,12 @@ void Commands::createItemById(Player* player, const std::string& cmd, const std:
 
 void Commands::createItemByName(Player* player, const std::string& cmd, const std::string& param)
 {
-	std::string::size_type pos1 = param.find("\"");
-	pos1 = (std::string::npos == pos1 ? 0 : pos1 + 1);
+	std::string::size_type pos1 = param.find('"');
+	pos1 = (pos1 == std::string::npos ? 0 : pos1 + 1);
 
-	std::string::size_type pos2 = param.rfind("\"");
+	std::string::size_type pos2 = param.rfind('"');
 	if (pos2 == pos1 || pos2 == std::string::npos) {
 		pos2 = param.rfind(' ');
-
 		if (pos2 == std::string::npos) {
 			pos2 = param.size();
 		}
@@ -624,11 +623,11 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 			std::ostringstream ss;
 
 			Player* tmpPlayer = vec[0];
-			ss << "Other players on same IP: " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
+			ss << "Other players on same IP: " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
 
 			for (PlayerVector::size_type i = 1, size = vec.size(); i < size; ++i) {
 				tmpPlayer = vec[i];
-				ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
+				ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
 			}
 
 			ss << '.';
@@ -871,7 +870,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 		while (it != players.end()) {
 			Player* tmpPlayer = it->second;
 			if (!tmpPlayer->isAccessPlayer() || player->isAccessPlayer()) {
-				ss << (i > 0 ? ", " : "") << tmpPlayer->name << " [" << tmpPlayer->level << "]";
+				ss << (i > 0 ? ", " : "") << tmpPlayer->name << " [" << tmpPlayer->level << ']';
 				++i;
 			}
 			++it;
@@ -885,7 +884,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 		}
 	} else {
 		while (it != players.end()) {
-			ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << "]";
+			ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << ']';
 			++it;
 			if (++i == 10) {
 				ss << (it != players.end() ? ',' : '.');
@@ -1208,11 +1207,11 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 
 		Player* tmpPlayer = it.second[0];
 		std::ostringstream ss;
-		ss << convertIPToString(it.first) << ": " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
+		ss << convertIPToString(it.first) << ": " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
 
 		for (std::vector<Player*>::size_type i = 1, size = it.second.size(); i < size; ++i) {
 			tmpPlayer = it.second[i];
-			ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << "]";
+			ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
 		}
 
 		ss << '.';

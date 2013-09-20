@@ -49,8 +49,8 @@ Combat::Combat()
 
 Combat::~Combat()
 {
-	for (std::list<const Condition*>::iterator it = params.conditionList.begin(); it != params.conditionList.end(); ++it) {
-		delete (*it);
+	for (const Condition* condition : params.conditionList) {
+		delete condition;
 	}
 
 	params.conditionList.clear();
@@ -776,8 +776,8 @@ void Combat::CombatFunc(Creature* caster, const Position& pos,
 	uint32_t diff;
 
 	//calculate the max viewable range
-	for (std::list<Tile*>::iterator it = tileList.begin(); it != tileList.end(); ++it) {
-		const Position& tilePos = (*it)->getPosition();
+	for (Tile* tile : tileList) {
+		const Position& tilePos = tile->getPosition();
 
 		diff = Position::getDistanceX(tilePos, pos);
 		if (diff > maxX) {
@@ -792,39 +792,39 @@ void Combat::CombatFunc(Creature* caster, const Position& pos,
 
 	g_game.getSpectators(list, pos, true, true, maxX + Map::maxViewportX, maxX + Map::maxViewportX, maxY + Map::maxViewportY, maxY + Map::maxViewportY);
 
-	for (std::list<Tile*>::iterator it = tileList.begin(); it != tileList.end(); ++it) {
-		Tile* iter_tile = *it;
-		bool bContinue = true;
+	for (Tile* tile : tileList) {
+		if (canDoCombat(caster, tile, params.isAggressive) != RET_NOERROR) {
+			continue;
+		}
 
-		if (canDoCombat(caster, iter_tile, params.isAggressive) == RET_NOERROR) {
-			if (CreatureVector* creatures = iter_tile->getCreatures()) {
-				for (CreatureVector::iterator cit = creatures->begin(), cend = creatures->end(); bContinue && cit != cend; ++cit) {
-					if (params.targetCasterOrTopMost) {
-						if (caster && caster->getTile() == iter_tile) {
-							if (*cit == caster) {
-								bContinue = false;
-							}
-						} else if (*cit == iter_tile->getTopCreature()) {
+		if (CreatureVector* creatures = tile->getCreatures()) {
+			bool bContinue = true;
+			for (CreatureVector::iterator cit = creatures->begin(), cend = creatures->end(); bContinue && cit != cend; ++cit) {
+				if (params.targetCasterOrTopMost) {
+					if (caster && caster->getTile() == tile) {
+						if (*cit == caster) {
 							bContinue = false;
 						}
-
-						if (bContinue) {
-							continue;
-						}
+					} else if (*cit == tile->getTopCreature()) {
+						bContinue = false;
 					}
 
-					if (!params.isAggressive || (caster != *cit && Combat::canDoCombat(caster, *cit) == RET_NOERROR)) {
-						func(caster, *cit, params, data);
+					if (bContinue) {
+						continue;
+					}
+				}
 
-						if (params.targetCallback) {
-							params.targetCallback->onTargetCombat(caster, *cit);
-						}
+				if (!params.isAggressive || (caster != *cit && Combat::canDoCombat(caster, *cit) == RET_NOERROR)) {
+					func(caster, *cit, params, data);
+
+					if (params.targetCallback) {
+						params.targetCallback->onTargetCombat(caster, *cit);
 					}
 				}
 			}
-
-			combatTileEffects(list, caster, iter_tile, params);
 		}
+
+		combatTileEffects(list, caster, tile, params);
 	}
 
 	postCombatEffects(caster, pos, params);

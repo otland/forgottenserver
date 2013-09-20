@@ -1337,10 +1337,8 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	Tile* fromTile = fromCylinder->getTile();
-
 	if (fromTile) {
-		BrowseFieldMap::const_iterator it = browseFields.find(fromTile);
-
+		auto it = browseFields.find(fromTile);
 		if (it != browseFields.end() && it->second == fromCylinder) {
 			fromCylinder = fromTile;
 		}
@@ -1513,10 +1511,8 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 	}
 
 	Tile* fromTile = fromCylinder->getTile();
-
 	if (fromTile) {
-		BrowseFieldMap::const_iterator it = browseFields.find(fromTile);
-
+		auto it = browseFields.find(fromTile);
 		if (it != browseFields.end() && it->second == fromCylinder) {
 			fromCylinder = fromTile;
 		}
@@ -1798,10 +1794,8 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 	}
 
 	Tile* fromTile = cylinder->getTile();
-
 	if (fromTile) {
-		BrowseFieldMap::const_iterator it = browseFields.find(fromTile);
-
+		auto it = browseFields.find(fromTile);
 		if (it != browseFields.end() && it->second == cylinder) {
 			cylinder = fromTile;
 		}
@@ -1897,8 +1891,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		Container* container = listContainer.front();
 		listContainer.pop_front();
 
-		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
-			Item* item = *it;
+		for (Item* item : container->getItemList()) {
 			if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
 				return item;
 			}
@@ -1919,8 +1912,6 @@ uint64_t Game::getMoney(const Cylinder* cylinder)
 	}
 
 	std::list<Container*> listContainer;
-	ItemDeque::const_iterator it;
-
 	uint64_t moneyCount = 0;
 
 	for (int32_t i = cylinder->__getFirstIndex(), j = cylinder->__getLastIndex(); i < j; ++i) {
@@ -1946,9 +1937,7 @@ uint64_t Game::getMoney(const Cylinder* cylinder)
 		Container* container = listContainer.front();
 		listContainer.pop_front();
 
-		for (it = container->getItems(); it != container->getEnd(); ++it) {
-			Item* item = *it;
-
+		for (Item* item : container->getItemList()) {
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
 				listContainer.push_back(tmpContainer);
@@ -2002,9 +1991,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 		Container* container = listContainer.front();
 		listContainer.pop_front();
 
-		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
-			Item* item = *it;
-
+		for (Item* item : container->getItemList()) {
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
 				listContainer.push_back(tmpContainer);
@@ -3299,22 +3286,20 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 
 	bool foundItem = false;
 	std::list<const Container*> listContainer;
-	ItemDeque::const_iterator it;
-
 	listContainer.push_back(tradeContainer);
 
 	while (!foundItem && !listContainer.empty()) {
 		const Container* container = listContainer.front();
 		listContainer.pop_front();
 
-		for (it = container->getItems(); it != container->getEnd(); ++it) {
-			Container* tmpContainer = (*it)->getContainer();
+		for (Item* item : container->getItemList()) {
+			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
 				listContainer.push_back(tmpContainer);
 			}
 
 			if (--index == 0) {
-				tradeItem = *it;
+				tradeItem = item;
 				foundItem = true;
 				break;
 			}
@@ -3325,7 +3310,6 @@ bool Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 		ss << "You see " << tradeItem->getDescription(lookDistance);
 		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
 	}
-
 	return foundItem;
 }
 
@@ -3531,14 +3515,14 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 	if (player->isAccessPlayer()) {
 		Item* item = thing->getItem();
 		if (item) {
-			ss << std::endl << "ItemID: [" << item->getID() << "]";
+			ss << std::endl << "ItemID: [" << item->getID() << ']';
 
 			if (item->getActionId() > 0) {
-				ss << ", ActionID: [" << item->getActionId() << "]";
+				ss << ", ActionID: [" << item->getActionId() << ']';
 			}
 
 			if (item->getUniqueId() > 0) {
-				ss << ", UniqueID: [" << item->getUniqueId() << "]";
+				ss << ", UniqueID: [" << item->getUniqueId() << ']';
 			}
 
 			ss << '.';
@@ -3556,10 +3540,10 @@ bool Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 		}
 
 		if (const Creature* creature = thing->getCreature()) {
-			ss << std::endl << "Health: [" << creature->getHealth() << " / " << creature->getMaxHealth() << "]";
+			ss << std::endl << "Health: [" << creature->getHealth() << " / " << creature->getMaxHealth() << ']';
 
 			if (creature->getMaxMana() > 0) {
-				ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << "]";
+				ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << ']';
 			}
 
 			ss << '.';
@@ -3608,10 +3592,10 @@ bool Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 	ss << "You see " << creature->getDescription(lookDistance);
 
 	if (player->isAccessPlayer()) {
-		ss << std::endl << "Health: [" << creature->getHealth() << " / " << creature->getMaxHealth() << "]";
+		ss << std::endl << "Health: [" << creature->getHealth() << " / " << creature->getMaxHealth() << ']';
 
 		if (creature->getMaxMana() > 0) {
-			ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << "]";
+			ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << ']';
 		}
 
 		ss << '.' << std::endl;
@@ -5777,9 +5761,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			Container* container = containerList.front();
 			containerList.pop_front();
 
-			for (ItemDeque::const_iterator iter = container->getItems(), end = container->getEnd(); iter != end; ++iter) {
-				Item* item = (*iter);
-
+			for (Item* item : container->getItemList()) {
 				Container* c = item->getContainer();
 				if (c && !c->empty()) {
 					containerList.push_back(c);
@@ -5819,11 +5801,10 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-
-			for (ItemList::const_iterator iter = itemList.begin(), end = itemList.end(); iter != end; ++iter) {
-				uint16_t removeCount = std::min<uint16_t>(tmpAmount, (*iter)->getItemCount());
+			for (Item* item : itemList) {
+				uint16_t removeCount = std::min<uint16_t>(tmpAmount, item->getItemCount());
 				tmpAmount -= removeCount;
-				internalRemoveItem(*iter, removeCount);
+				internalRemoveItem(item, removeCount);
 
 				if (tmpAmount == 0) {
 					break;
@@ -5974,9 +5955,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			Container* container = containerList.front();
 			containerList.pop_front();
 
-			for (ItemDeque::const_iterator iter = container->getItems(), end = container->getEnd(); iter != end; ++iter) {
-				Item* item = (*iter);
-
+			for (Item* item : container->getItemList()) {
 				Container* c = item->getContainer();
 				if (c && !c->empty()) {
 					containerList.push_back(c);

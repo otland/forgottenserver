@@ -214,26 +214,23 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 
 	typedef std::vector<std::pair<int32_t, int32_t> > RelPosList;
 	RelPosList relPosList;
-
 	if (extendedPos) {
-		relPosList.push_back(std::make_pair(0, -2));
-		relPosList.push_back(std::make_pair(-2, 0));
-		relPosList.push_back(std::make_pair(0, 2));
-		relPosList.push_back(std::make_pair(2, 0));
-
-		std::random_shuffle(relPosList.begin(), relPosList.end());
+		relPosList.emplace_back(0, -2);
+		relPosList.emplace_back(-2, 0);
+		relPosList.emplace_back(0, 2);
+		relPosList.emplace_back(2, 0);
 	}
 
-	relPosList.push_back(std::make_pair(-1, -1));
-	relPosList.push_back(std::make_pair(-1, 0));
-	relPosList.push_back(std::make_pair(-1, 1));
-	relPosList.push_back(std::make_pair(0, -1));
-	relPosList.push_back(std::make_pair(0, 1));
-	relPosList.push_back(std::make_pair(1, -1));
-	relPosList.push_back(std::make_pair(1, 0));
-	relPosList.push_back(std::make_pair(1, 1));
+	relPosList.emplace_back(-1, -1);
+	relPosList.emplace_back(-1, 0);
+	relPosList.emplace_back(-1, 1);
+	relPosList.emplace_back(0, -1);
+	relPosList.emplace_back(0, 1);
+	relPosList.emplace_back(1, -1);
+	relPosList.emplace_back(1, 0);
+	relPosList.emplace_back(1, 1);
+	std::random_shuffle(relPosList.begin(), relPosList.end());
 
-	std::random_shuffle(relPosList.begin() + (extendedPos ? 4 : 0), relPosList.end());
 	uint32_t radius = 1;
 
 	Position tryPos;

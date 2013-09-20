@@ -103,11 +103,8 @@ class Container : public Item, public Cylinder
 		ContainerIterator begin() const;
 		ContainerIterator end() const;
 
-		ItemDeque::const_iterator getItems() const {
-			return itemlist.begin();
-		}
-		ItemDeque::const_iterator getEnd() const {
-			return itemlist.end();
+		const ItemDeque& getItemList() const {
+			return itemlist;
 		}
 
 		ItemDeque::const_reverse_iterator getReversedItems() const {

@@ -78,5 +78,5 @@ GuildRank* Guild::getRankByLevel(uint8_t level)
 
 void Guild::addRank(uint32_t id, const std::string& name, uint8_t level)
 {
-	ranks.push_back(GuildRank(id, name, level));
+	ranks.emplace_back(id, name, level);
 }

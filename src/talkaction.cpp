@@ -77,7 +77,7 @@ bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 		return false;
 	}
 
-	wordsMap.push_back(std::make_pair(talkAction->getWords(), talkAction));
+	wordsMap.emplace_back(talkAction->getWords(), talkAction);
 	return true;
 }
 

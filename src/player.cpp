@@ -3192,7 +3192,6 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 		for (uint32_t slotIndex = SLOT_FIRST; slotIndex < SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
-
 			if (inventoryItem) {
 				if (inventoryItem == tradeItem) {
 					continue;
@@ -3248,8 +3247,8 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 					n--;
 				}
 
-				for (ItemDeque::const_iterator it = tmpContainer->getItems(), end = tmpContainer->getEnd(); it != end; ++it) {
-					if (Container* subContainer = (*it)->getContainer()) {
+				for (Item* tmpContainerItem : tmpContainer->getItemList()) {
+					if (Container* subContainer = tmpContainerItem->getContainer()) {
 						containerList.push_back(subContainer);
 					}
 				}
@@ -3259,8 +3258,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 			uint32_t n = 0;
 
-			for (ItemDeque::const_iterator it = tmpContainer->getItems(), end = tmpContainer->getEnd(); it != end; ++it) {
-				Item* tmpItem = *it;
+			for (Item* tmpItem : tmpContainer->getItemList()) {
 				if (tmpItem == tradeItem) {
 					continue;
 				}

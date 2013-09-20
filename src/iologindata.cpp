@@ -621,12 +621,9 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	int32_t runningId = 100;
 
 	Database* db = Database::getInstance();
-	Item* item;
-	int32_t pid;
-
 	for (ItemBlockList::const_iterator it = itemList.begin(); it != itemList.end(); ++it) {
-		pid = it->first;
-		item = it->second;
+		int32_t pid = it->first;
+		Item* item = it->second;
 		++runningId;
 
 		uint32_t attributesSize = 0;
@@ -636,13 +633,12 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		const char* attributes = propWriteStream.getStream(attributesSize);
 
 		stream << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
-
 		if (!query_insert.addRow(stream)) {
 			return false;
 		}
 
 		if (Container* container = item->getContainer()) {
-			stack.push_back(containerBlock(container, runningId));
+			stack.emplace_back(container, runningId);
 		}
 	}
 
@@ -652,13 +648,12 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		parentId = cb.second;
 		stack.pop_front();
 
-		for (ItemDeque::const_iterator it = container->getItems(), end = container->getEnd(); it != end; ++it) {
+		for (Item* item : container->getItemList()) {
 			++runningId;
-			item = *it;
 
 			Container* subContainer = item->getContainer();
 			if (subContainer) {
-				stack.push_back(containerBlock(subContainer, runningId));
+				stack.emplace_back(subContainer, runningId);
 			}
 
 			uint32_t attributesSize = 0;
@@ -667,13 +662,11 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			const char* attributes = propWriteStream.getStream(attributesSize);
 
 			stream << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
-
 			if (!query_insert.addRow(stream)) {
 				return false;
 			}
 		}
 	}
-
 	return query_insert.execute();
 }
 
@@ -831,7 +824,6 @@ bool IOLoginData::savePlayer(Player* player)
 	for (LearnedInstantSpellList::const_iterator it = player->learnedInstantSpellList.begin();
 	        it != player->learnedInstantSpellList.end(); ++it) {
 		query << player->getGUID() << ',' << db->escapeString(*it);
-
 		if (!stmt.addRow(query)) {
 			return false;
 		}
@@ -854,7 +846,7 @@ bool IOLoginData::savePlayer(Player* player)
 	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
 		Item* item = player->inventory[slotId];
 		if (item) {
-			itemList.push_back(itemBlock(slotId, item));
+			itemList.emplace_back(slotId, item);
 		}
 	}
 
@@ -874,11 +866,10 @@ bool IOLoginData::savePlayer(Player* player)
 		stmt.setQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 		itemList.clear();
 
-		for (DepotMap::iterator it = player->depotChests.begin(); it != player->depotChests.end() ; ++it) {
-			DepotChest* depotChest = it->second;
-
-			for (ItemDeque::const_iterator iit = depotChest->getItems(), end = depotChest->getEnd(); iit != end; ++iit) {
-				itemList.push_back(itemBlock(it->first, *iit));
+		for (const auto& it : player->depotChests) {
+			DepotChest* depotChest = it.second;
+			for (Item* item : depotChest->getItemList()) {
+				itemList.emplace_back(it.first, item);
 			}
 		}
 
@@ -898,8 +889,8 @@ bool IOLoginData::savePlayer(Player* player)
 	stmt.setQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
-	for (ItemDeque::const_iterator it = player->getInbox()->getItems(), end = player->getInbox()->getEnd(); it != end; ++it) {
-		itemList.push_back(itemBlock(0, *it));
+	for (Item* item : player->getInbox()->getItemList()) {
+		itemList.emplace_back(0, item);
 	}
 
 	if (!saveItems(player, itemList, stmt)) {

@@ -265,20 +265,20 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 Action* Actions::getAction(const Item* item)
 {
 	if (item->getUniqueId() != 0) {
-		ActionUseMap::const_iterator it = uniqueItemMap.find(item->getUniqueId());
+		auto it = uniqueItemMap.find(item->getUniqueId());
 		if (it != uniqueItemMap.end()) {
 			return it->second;
 		}
 	}
 
 	if (item->getActionId() != 0) {
-		ActionUseMap::const_iterator it = actionItemMap.find(item->getActionId());
+		auto it = actionItemMap.find(item->getActionId());
 		if (it != actionItemMap.end()) {
 			return it->second;
 		}
 	}
 
-	ActionUseMap::const_iterator it = useItemMap.find(item->getID());
+	auto it = useItemMap.find(item->getID());
 	if (it != useItemMap.end()) {
 		return it->second;
 	}
@@ -288,7 +288,6 @@ Action* Actions::getAction(const Item* item)
 	if (runeSpell) {
 		return runeSpell;
 	}
-
 	return NULL;
 }
 

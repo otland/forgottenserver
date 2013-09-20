@@ -475,14 +475,12 @@ Cylinder* Container::__queryDestination(int32_t& index, const Thing* thing, Item
 	if (autoStack && item->isStackable() && item->getParent() != this) {
 		//try find a suitable item to stack with
 		uint32_t n = 0;
-
-		for (ItemDeque::iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit) {
-			if ((*cit) != item && (*cit)->getID() == item->getID() && (*cit)->getItemCount() < 100) {
-				*destItem = (*cit);
+		for (Item* listItem : itemlist) {
+			if (listItem != item && listItem->getID() == item->getID() && listItem->getItemCount() < 100) {
+				*destItem = listItem;
 				index = n;
 				return this;
 			}
-
 			++n;
 		}
 	}
@@ -667,8 +665,8 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 int32_t Container::__getIndexOfThing(const Thing* thing) const
 {
 	uint32_t index = 0;
-	for (ItemDeque::const_iterator cit = getItems(); cit != getEnd(); ++cit) {
-		if (*cit == thing) {
+	for (Item* item : itemlist) {
+		if (item == thing) {
 			return index;
 		} else {
 			++index;
@@ -764,8 +762,8 @@ void Container::__internalAddThing(uint32_t index, Thing* thing)
 
 void Container::__startDecaying()
 {
-	for (ItemDeque::const_iterator it = itemlist.begin(); it != itemlist.end(); ++it) {
-		(*it)->__startDecaying();
+	for (Item* item : itemlist) {
+		item->__startDecaying();
 	}
 }
 

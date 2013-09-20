@@ -48,7 +48,7 @@ bool PrivateChatChannel::isInvited(const Player& player) const
 
 bool PrivateChatChannel::addInvited(Player& player)
 {
-	InvitedMap::const_iterator it = m_invites.find(player.getGUID());
+	auto it = m_invites.find(player.getGUID());
 	if (it != m_invites.end()) {
 		return false;
 	}
@@ -59,7 +59,7 @@ bool PrivateChatChannel::addInvited(Player& player)
 
 bool PrivateChatChannel::removeInvited(const Player& player)
 {
-	InvitedMap::iterator it = m_invites.find(player.getGUID());
+	auto it = m_invites.find(player.getGUID());
 	if (it == m_invites.end()) {
 		return false;
 	}
@@ -429,7 +429,7 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 				return false;
 			}
 
-			GuildChannelMap::iterator it = guildChannels.find(guild->getId());
+			auto it = guildChannels.find(guild->getId());
 			if (it == guildChannels.end()) {
 				return false;
 			}
@@ -445,7 +445,7 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 				return false;
 			}
 
-			PartyChannelMap::iterator it = partyChannels.find(party);
+			auto it = partyChannels.find(party);
 			if (it == partyChannels.end()) {
 				return false;
 			}
@@ -456,7 +456,7 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 		}
 
 		default: {
-			PrivateChannelMap::iterator it = privateChannels.find(channelId);
+			auto it = privateChannels.find(channelId);
 			if (it == privateChannels.end()) {
 				return false;
 			}
@@ -584,8 +584,8 @@ ChannelList Chat::getChannelList(const Player& player)
 	}
 
 	bool hasPrivate = false;
-	for (PrivateChannelMap::iterator pit = privateChannels.begin(); pit != privateChannels.end(); ++pit) {
-		if (PrivateChatChannel* channel = pit->second) {
+	for (const auto& it : privateChannels) {
+		if (PrivateChatChannel* channel = it.second) {
 			if (channel->isInvited(player)) {
 				list.push_back(channel);
 			}
@@ -608,9 +608,9 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 		case CHANNEL_GUILD: {
 			Guild* guild = player.getGuild();
 			if (guild) {
-				GuildChannelMap::iterator git = guildChannels.find(guild->getId());
-				if (git != guildChannels.end()) {
-					return git->second;
+				auto it = guildChannels.find(guild->getId());
+				if (it != guildChannels.end()) {
+					return it->second;
 				}
 			}
 			break;
@@ -619,7 +619,7 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 		case CHANNEL_PARTY: {
 			Party* party = player.getParty();
 			if (party) {
-				PartyChannelMap::iterator it = partyChannels.find(party);
+				auto it = partyChannels.find(party);
 				if (it != partyChannels.end()) {
 					return it->second;
 				}
@@ -628,17 +628,17 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 		}
 
 		default: {
-			NormalChannelMap::iterator nit = normalChannels.find(channelId);
-			if (nit != normalChannels.end()) {
-				ChatChannel& channel = nit->second;
+			auto it = normalChannels.find(channelId);
+			if (it != normalChannels.end()) {
+				ChatChannel& channel = it->second;
 				if (!channel.executeCanJoinEvent(player)) {
 					return NULL;
 				}
 				return &channel;
 			} else {
-				PrivateChannelMap::iterator pit = privateChannels.find(channelId);
-				if (pit != privateChannels.end() && pit->second->isInvited(player)) {
-					return pit->second;
+				auto it2 = privateChannels.find(channelId);
+				if (it2 != privateChannels.end() && it2->second->isInvited(player)) {
+					return it2->second;
 				}
 			}
 			break;
@@ -649,7 +649,7 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 
 ChatChannel* Chat::getGuildChannelById(uint32_t guildId)
 {
-	GuildChannelMap::iterator it = guildChannels.find(guildId);
+	auto it = guildChannels.find(guildId);
 	if (it == guildChannels.end()) {
 		return NULL;
 	}
@@ -658,7 +658,7 @@ ChatChannel* Chat::getGuildChannelById(uint32_t guildId)
 
 ChatChannel* Chat::getChannelById(uint16_t channelId)
 {
-	NormalChannelMap::iterator it = normalChannels.find(channelId);
+	auto it = normalChannels.find(channelId);
 	if (it == normalChannels.end()) {
 		return NULL;
 	}
@@ -667,10 +667,9 @@ ChatChannel* Chat::getChannelById(uint16_t channelId)
 
 PrivateChatChannel* Chat::getPrivateChannel(const Player& player)
 {
-	for (PrivateChannelMap::iterator it = privateChannels.begin(); it != privateChannels.end(); ++it) {
-		PrivateChatChannel* channel = it->second;
-		if (channel->getOwner() == player.getGUID()) {
-			return channel;
+	for (const auto& it : privateChannels) {
+		if (it.second->getOwner() == player.getGUID()) {
+			return it.second;
 		}
 	}
 	return NULL;

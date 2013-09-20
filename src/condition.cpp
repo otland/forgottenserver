@@ -1126,11 +1126,10 @@ bool ConditionDamage::serialize(PropWriteStream& propWriteStream)
 	// propWriteStream.ADD_UCHAR(CONDITIONATTR_OWNER);
 	// propWriteStream.ADD_VALUE(owner);
 
-	for (DamageList::const_iterator it = damageList.begin(); it != damageList.end(); ++it) {
+	for (const IntervalInfo& intervalInfo : damageList) {
 		propWriteStream.ADD_UCHAR(CONDITIONATTR_INTERVALDATA);
-		propWriteStream.ADD_VALUE((*it));
+		propWriteStream.ADD_VALUE(intervalInfo);
 	}
-
 	return true;
 }
 
@@ -1211,9 +1210,8 @@ bool ConditionDamage::init()
 
 			std::list<int32_t> list;
 			ConditionDamage::generateDamageList(amount, startDamage, list);
-
-			for (std::list<int32_t>::iterator it = list.begin(); it != list.end(); ++it) {
-				addDamage(1, tickInterval, -*it);
+			for (int32_t value : list) {
+				addDamage(1, tickInterval, -value);
 			}
 		}
 	}
@@ -1369,15 +1367,13 @@ void ConditionDamage::addCondition(Creature* creature, const Condition* addCondi
 int32_t ConditionDamage::getTotalDamage() const
 {
 	int32_t result = 0;
-
 	if (!damageList.empty()) {
-		for (DamageList::const_iterator it = damageList.begin(); it != damageList.end(); ++it) {
-			result += it->value;
+		for (const IntervalInfo& intervalInfo : damageList) {
+			result += intervalInfo.value;
 		}
 	} else {
 		result = maxDamage + (maxDamage - minDamage) / 2;
 	}
-
 	return std::abs(result);
 }
 
@@ -1700,11 +1696,10 @@ bool ConditionOutfit::serialize(PropWriteStream& propWriteStream)
 		return false;
 	}
 
-	for (std::vector<Outfit_t>::const_iterator it = outfits.begin(); it != outfits.end(); ++it) {
+	for (const Outfit_t& outfit : outfits) {
 		propWriteStream.ADD_UCHAR(CONDITIONATTR_OUTFIT);
-		propWriteStream.ADD_VALUE(*it);
+		propWriteStream.ADD_VALUE(outfit);
 	}
-
 	return true;
 }
 

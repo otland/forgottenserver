@@ -30,26 +30,23 @@ WildcardTreeNode::WildcardTreeNode(bool breakpoint)
 
 WildcardTreeNode::~WildcardTreeNode()
 {
-	for (std::map<char, WildcardTreeNode*>::const_iterator it = children.begin(), end = children.end(); it != end; ++it) {
-		delete it->second;
+	for (const auto& it : children) {
+		delete it.second;
 	}
 }
 
 WildcardTreeNode* WildcardTreeNode::getChild(char ch) const
 {
-	std::map<char, WildcardTreeNode*>::const_iterator it = children.find(ch);
-
+	auto it = children.find(ch);
 	if (it == children.end()) {
 		return NULL;
 	}
-
 	return it->second;
 }
 
 WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 {
 	WildcardTreeNode* child = getChild(ch);
-
 	if (child) {
 		if (breakpoint && !child->breakpoint) {
 			child->breakpoint = true;
@@ -58,7 +55,6 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 		child = new WildcardTreeNode(breakpoint);
 		children[ch] = child;
 	}
-
 	return child;
 }
 
@@ -67,7 +63,6 @@ void WildcardTreeNode::insert(const std::string& str)
 	WildcardTreeNode* cur = this;
 
 	size_t length = str.length() - 1;
-
 	for (size_t pos = 0; pos < length; ++pos) {
 		cur = cur->addChild(str[pos], false);
 	}
@@ -82,7 +77,6 @@ void WildcardTreeNode::remove(const std::string& str)
 	std::stack<WildcardTreeNode*> path;
 	path.push(cur);
 	size_t len = str.length();
-
 	for (size_t pos = 0; pos < len; ++pos) {
 		cur = cur->getChild(str[pos]);
 		path.push(cur);
@@ -100,8 +94,7 @@ void WildcardTreeNode::remove(const std::string& str)
 
 		cur = path.top();
 
-		std::map<char, WildcardTreeNode*>::iterator it = cur->children.find(str[--len]);
-
+		auto it = cur->children.find(str[--len]);
 		if (it != cur->children.end()) {
 			delete it->second;
 			cur->children.erase(it);
@@ -132,7 +125,7 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 			return RET_NAMEISTOOAMBIGIOUS;
 		}
 
-		std::map<char, WildcardTreeNode*>::const_iterator it = cur->children.begin();
+		auto it = cur->children.begin();
 		result += it->first;
 		cur = it->second;
 	} while (true);

@@ -40,7 +40,6 @@ Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (ATTR_TELE_DEST == attr) {
 		TeleportDest* tele_dest;
-
 		if (!propStream.GET_STRUCT(tele_dest)) {
 			return ATTR_READ_ERROR;
 		}
@@ -59,11 +58,9 @@ bool Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 	propWriteStream.ADD_UCHAR(ATTR_TELE_DEST);
 
 	TeleportDest tele_dest;
-
 	tele_dest._x = destPos.x;
 	tele_dest._y = destPos.y;
 	tele_dest._z = (uint8_t)destPos.z;
-
 	propWriteStream.ADD_VALUE(tele_dest);
 
 	return ret;

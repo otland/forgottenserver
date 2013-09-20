@@ -892,17 +892,17 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		Tile* destTile = target->getTile();
 
 		if (!Position::areInRange<1, 1, 0>(player->getPosition(), target->getPosition())) {
+			// TODO: Don't generate destList everytime, only shuffle it
 			std::vector<std::pair<int32_t, int32_t>> destList;
-			destList.push_back(std::make_pair(-1, -1));
-			destList.push_back(std::make_pair(-1, 0));
-			destList.push_back(std::make_pair(-1, 1));
-			destList.push_back(std::make_pair(0, -1));
-			destList.push_back(std::make_pair(0, 0));
-			destList.push_back(std::make_pair(0, 1));
-			destList.push_back(std::make_pair(1, -1));
-			destList.push_back(std::make_pair(1, 0));
-			destList.push_back(std::make_pair(1, 1));
-
+			destList.emplace_back(-1, -1);
+			destList.emplace_back(-1, 0);
+			destList.emplace_back(-1, 1);
+			destList.emplace_back(0, -1);
+			destList.emplace_back(0, 0);
+			destList.emplace_back(0, 1);
+			destList.emplace_back(1, -1);
+			destList.emplace_back(1, 0);
+			destList.emplace_back(1, 1);
 			std::random_shuffle(destList.begin(), destList.end());
 
 			Position destPos = target->getPosition();

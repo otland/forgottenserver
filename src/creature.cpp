@@ -568,7 +568,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 			for (cit = summons.begin(); cit != summons.end(); ++cit) {
 				const Position pos = (*cit)->getPosition();
 				if (Position::getDistanceZ(newPos, pos) > 2 || (std::max<int32_t>(Position::getDistanceX(newPos, pos), Position::getDistanceY(newPos, pos)) > 30)) {
-					despawnList.push_back((*cit));
+					despawnList.push_back(*cit);
 				}
 			}
 

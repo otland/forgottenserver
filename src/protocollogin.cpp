@@ -44,7 +44,6 @@ uint32_t ProtocolLogin::protocolLoginCount = 0;
 void ProtocolLogin::disconnectClient(uint8_t error, const char* message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		output->AddByte(error);
 		output->AddString(message);

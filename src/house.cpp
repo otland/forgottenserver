@@ -258,8 +258,8 @@ bool House::transferToDepot(Player* player)
 				} else {
 					Container* container = item->getContainer();
 					if (container) {
-						for (ItemDeque::const_iterator cit = container->getItems(); cit != container->getEnd(); ++cit) {
-							moveItemList.push_back(*cit);
+						for (Item* containerItem : container->getItemList()) {
+							moveItemList.push_back(containerItem);
 						}
 					}
 				}
@@ -535,10 +535,10 @@ bool AccessList::addExpression(const std::string& expression)
 
 			if (outExp[0] == '!') {
 				if (outExp.length() > 1) {
-					regExList.push_front(std::make_pair(std::regex(outExp.substr(1)), false));
+					regExList.emplace_front(std::regex(outExp.substr(1)), false);
 				}
 			} else {
-				regExList.push_back(std::make_pair(std::regex(outExp), true));
+				regExList.emplace_back(std::regex(outExp), true);
 			}
 		}
 	} catch (...) {}
