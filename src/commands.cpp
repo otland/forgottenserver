@@ -109,8 +109,7 @@ s_defcommands Commands::defined_commands[] = {
 	{"!online", &Commands::whoIsOnline},
 	{"!buyhouse", &Commands::buyHouse},
 	{"!sellhouse", &Commands::sellHouse},
-	{"!serverinfo", &Commands::serverInfo},
-	{"!kills", &Commands::playerKills}
+	{"!serverinfo", &Commands::serverInfo}
 };
 
 Commands::Commands()
@@ -1072,23 +1071,6 @@ void Commands::addSkill(Player* player, const std::string& cmd, const std::strin
 	} else {
 		skills_t skillId = getSkillId(param2);
 		paramPlayer->addSkillAdvance(skillId, paramPlayer->vocation->getReqSkillTries(skillId, paramPlayer->getSkill(skillId, SKILL_LEVEL) + 1));
-	}
-}
-
-void Commands::playerKills(Player* player, const std::string& cmd, const std::string& param)
-{
-	int32_t fragTime = g_config.getNumber(ConfigManager::FRAG_TIME);
-	if (player->skullTicks && fragTime > 0) {
-		int32_t frags = (int32_t)ceil(player->skullTicks / (double)fragTime);
-		int32_t remainingTime = (player->skullTicks % fragTime) / 1000;
-		int32_t hours = remainingTime / 3600;
-		int32_t minutes = (remainingTime % 3600) / 60;
-
-		std::ostringstream ss;
-		ss << "You have " << frags << " unjustified kill" << (frags > 1 ? "s" : "") << ". The amount of unjustified kills will decrease after: " << hours << " hour" << (hours != 1 ? "s" : "") << " and " << minutes << " minute" << (minutes != 1 ? "s" : "") << '.';
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-	} else {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You do not have any unjustified frag.");
 	}
 }
 

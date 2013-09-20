@@ -9296,7 +9296,7 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
-	// player:sendChannelMessage(type, text[, position, value = 0, color = TEXTCOLOR_NONE])
+	// player:sendTextMessage(type, text[, position, value = 0, color = TEXTCOLOR_NONE])
 	int32_t parameters = getStackTop(L);
 
 	Position position;
