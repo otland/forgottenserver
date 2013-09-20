@@ -222,7 +222,6 @@ bool Quests::loadFromXml()
 				mission.mainState = new MissionState(missionState, 0);
 			}
 		}
-		quests.push_back(quest);
 	}
 	return true;
 }
