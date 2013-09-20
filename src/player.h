@@ -721,6 +721,8 @@ class Player : public Creature, public Cylinder
 
 		Skulls_t getSkull() const;
 		Skulls_t getSkullClient(const Player* player) const;
+		int64_t getSkullTicks() const { return skullTicks; }
+		void setSkullTicks(int64_t ticks) { skullTicks = ticks; }
 
 		bool hasAttacked(const Player* attacked) const;
 		void addAttacked(const Player* attacked);

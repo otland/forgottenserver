@@ -1939,6 +1939,8 @@ void LuaScriptInterface::registerFunctions()
 	
 	registerClassMethod("Player", "getSkull", LuaScriptInterface::luaPlayerGetSkull);
 	registerClassMethod("Player", "setSkull", LuaScriptInterface::luaPlayerSetSkull);
+	registerClassMethod("Player", "getSkullTime", LuaScriptInterface::luaPlayerGetSkullTime);
+	registerClassMethod("Player", "setSkullTime", LuaScriptInterface::luaPlayerSetSkullTime);
 	registerClassMethod("Player", "getDeathPenalty", LuaScriptInterface::luaPlayerGetDeathPenalty);
 
 	registerClassMethod("Player", "getExperience", LuaScriptInterface::luaPlayerGetExperience);
@@ -8497,6 +8499,32 @@ int32_t LuaScriptInterface::luaPlayerSetSkull(lua_State* L)
 	if (player) {
 		player->setSkull(skull);
 		g_game.updatePlayerSkull(player);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetSkullTime(lua_State* L)
+{
+	// player:getSkullTime()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getSkullTicks());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetSkullTime(lua_State* L)
+{
+	// player:setSkullTime(skullTime)
+	int64_t skullTime = getNumber<int64_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setSkullTicks(skullTime);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);

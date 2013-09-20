@@ -906,6 +906,8 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerGetSkull(lua_State* L);
 		static int32_t luaPlayerSetSkull(lua_State* L);
+		static int32_t luaPlayerGetSkullTime(lua_State* L);
+		static int32_t luaPlayerSetSkullTime(lua_State* L);
 		static int32_t luaPlayerGetDeathPenalty(lua_State* L);
 
 		static int32_t luaPlayerGetExperience(lua_State* L);
