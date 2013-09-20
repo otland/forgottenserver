@@ -2531,30 +2531,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	//player light level
 	sendCreatureLight(creature);
 
-	if (isLogin) {
-		// TODO: Move to onLogin script
-		std::string loginStr = g_config.getString(ConfigManager::LOGIN_MSG);
-
-		if (player->getLastLoginSaved() <= 0) {
-			loginStr += " Please choose your outfit.";
-			sendOutfitWindow();
-		} else {
-			if (!loginStr.empty()) {
-				sendTextMessage(MSG_STATUS_DEFAULT, loginStr.c_str());
-			}
-
-			time_t lastLogin = player->getLastLoginSaved();
-
-			std::ostringstream ss;
-			ss << "Your last visit was on " << ctime(&lastLogin);
-			loginStr = ss.str();
-			loginStr.erase(loginStr.length() - 1); // TODO: Use pop_back
-			loginStr.push_back('.');
-		}
-
-		sendTextMessage(MSG_STATUS_DEFAULT, loginStr);
-	}
-
 	const std::list<VIPEntry>& vipEntries = IOLoginData::getInstance()->getVIPEntries(player->getAccount());
 
 	if (player->isAccessPlayer()) {
