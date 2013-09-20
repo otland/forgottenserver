@@ -246,7 +246,10 @@ bool Npc::loadFromXml(const std::string& filename)
 
 bool Npc::canSee(const Position& pos) const
 {
-	return Creature::canSee(getPosition(), pos, 9, 7);
+	if (pos.z != getPosition().z) {
+		return false;
+	}
+	return Creature::canSee(getPosition(), pos, 3, 3);
 }
 
 std::string Npc::getDescription(int32_t lookDistance) const
