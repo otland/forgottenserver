@@ -9522,6 +9522,7 @@ int32_t LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->sendOutfitWindow();
+        pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}
