@@ -19,6 +19,7 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "globalevent.h"
 #include "tools.h"
 #include "player.h"

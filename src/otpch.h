@@ -28,10 +28,6 @@
 // Definitions should be global.
 #include "definitions.h"
 
-#ifdef WIN32
-#include <winerror.h>
-#endif
-
 //boost
 #include <boost/config.hpp>
 #include <boost/shared_ptr.hpp>
@@ -41,12 +37,10 @@
 #include <boost/asio.hpp>
 
 //std
-//#include <list>
-//#include <vector>
-//#include <map>
-//#include <string>
+#include <list>
+#include <vector>
+#include <map>
+#include <string>
 
-//otserv
-#include "configmanager.h"
-#include "thing.h"
-
+//pugixml
+#include "ext/pugixml.hpp"

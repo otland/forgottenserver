@@ -21,10 +21,6 @@
 
 #include "definitions.h"
 
-#ifdef WIN32
-#include <winerror.h>
-#endif
-
 #include "protocol.h"
 #include "scheduler.h"
 #include "connection.h"

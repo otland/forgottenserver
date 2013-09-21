@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include <iostream>
+
 #include "ext/pugixml.hpp"
 #include "pugicast.h"
 
