@@ -674,7 +674,7 @@ class Game
 		bool useLastStageLevel;
 
 		PlayerNameMap mappedPlayerNames;
-		WildcardTreeNode* wildcardTree;
+		WildcardTreeNode wildcardTree;
 
 		ModalWindow* offlineTrainingWindow;
 

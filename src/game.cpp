@@ -69,6 +69,7 @@ extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 
 Game::Game()
+	: wildcardTree(false)
 {
 	gameState = GAME_STATE_NORMAL;
 	worldType = WORLD_TYPE_PVP;
@@ -109,8 +110,6 @@ Game::Game()
 	offlineTrainingWindow->setDefaultEnterButton(1);
 	offlineTrainingWindow->setDefaultEscapeButton(0);
 	offlineTrainingWindow->setPriority(true);
-
-	wildcardTree = new WildcardTreeNode(false);
 }
 
 Game::~Game()
@@ -121,7 +120,6 @@ Game::~Game()
 
 	delete map;
 	delete offlineTrainingWindow;
-	delete wildcardTree;
 
 	g_scheduler.stopEvent(checkLightEvent);
 	g_scheduler.stopEvent(checkCreatureEvent);
@@ -580,7 +578,7 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 	if ((*s.rbegin()) == '~') {
 		const std::string& query = asLowerCaseString(s.substr(0, strlen - 1));
 		std::string result;
-		ReturnValue ret = wildcardTree->findOne(query, result);
+		ReturnValue ret = wildcardTree.findOne(query, result);
 		if (ret != RET_NOERROR) {
 			return ret;
 		}
@@ -6291,7 +6289,7 @@ void Game::addPlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
 	mappedPlayerNames[lowercase_name] = player;
-	wildcardTree->insert(lowercase_name);
+	wildcardTree.insert(lowercase_name);
 	players[player->getID()] = player;
 }
 
@@ -6299,7 +6297,7 @@ void Game::removePlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
 	mappedPlayerNames.erase(lowercase_name);
-	wildcardTree->remove(lowercase_name);
+	wildcardTree.remove(lowercase_name);
 	players.erase(player->getID());
 }
 

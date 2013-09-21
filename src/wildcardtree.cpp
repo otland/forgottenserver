@@ -23,25 +23,22 @@
 
 #include "wildcardtree.h"
 
-WildcardTreeNode::WildcardTreeNode(bool breakpoint)
-{
-	this->breakpoint = breakpoint;
-}
-
-WildcardTreeNode::~WildcardTreeNode()
-{
-	for (const auto& it : children) {
-		delete it.second;
-	}
-}
-
-WildcardTreeNode* WildcardTreeNode::getChild(char ch) const
+WildcardTreeNode* WildcardTreeNode::getChild(char ch)
 {
 	auto it = children.find(ch);
 	if (it == children.end()) {
 		return NULL;
 	}
-	return it->second;
+	return &it->second;
+}
+
+const WildcardTreeNode* WildcardTreeNode::getChild(char ch) const
+{
+	auto it = children.find(ch);
+	if (it == children.end()) {
+		return NULL;
+	}
+	return &it->second;
 }
 
 WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
@@ -52,8 +49,7 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 			child->breakpoint = true;
 		}
 	} else {
-		child = new WildcardTreeNode(breakpoint);
-		children[ch] = child;
+		children.emplace(ch, breakpoint);
 	}
 	return child;
 }
@@ -96,7 +92,6 @@ void WildcardTreeNode::remove(const std::string& str)
 
 		auto it = cur->children.find(str[--len]);
 		if (it != cur->children.end()) {
-			delete it->second;
 			cur->children.erase(it);
 		}
 	} while (true);
@@ -105,10 +100,8 @@ void WildcardTreeNode::remove(const std::string& str)
 ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& result) const
 {
 	const WildcardTreeNode* cur = this;
-
 	for (size_t pos = 0; pos < query.length(); ++pos) {
 		cur = cur->getChild(query[pos]);
-
 		if (!cur) {
 			return RET_PLAYERWITHTHISNAMEISNOTONLINE;
 		}
@@ -118,7 +111,6 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 
 	do {
 		size_t size = cur->children.size();
-
 		if (size == 0) {
 			return RET_NOERROR;
 		} else if (size > 1 || cur->breakpoint) {
@@ -127,6 +119,6 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 
 		auto it = cur->children.begin();
 		result += it->first;
-		cur = it->second;
+		cur = &it->second;
 	} while (true);
 }

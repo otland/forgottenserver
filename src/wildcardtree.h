@@ -28,10 +28,10 @@
 class WildcardTreeNode
 {
 	public:
-		WildcardTreeNode(bool breakpoint);
-		~WildcardTreeNode();
+		WildcardTreeNode(bool breakpoint) : breakpoint(breakpoint) {}
 
-		WildcardTreeNode* getChild(char ch) const;
+		WildcardTreeNode* getChild(char ch);
+		const WildcardTreeNode* getChild(char ch) const;
 		WildcardTreeNode* addChild(char ch, bool breakpoint);
 
 		void insert(const std::string& str);
@@ -40,7 +40,7 @@ class WildcardTreeNode
 		ReturnValue findOne(const std::string& query, std::string& result) const;
 
 	private:
-		std::map<char, WildcardTreeNode*> children;
+		std::map<char, WildcardTreeNode> children;
 		bool breakpoint;
 };
 
