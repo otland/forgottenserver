@@ -1,6 +1,6 @@
 language: cpp
 compiler:
-  - gcc
+  - clang
 before_script:
   - sudo apt-get install libboost-thread-dev libboost-system-dev liblua5.2-dev libgmp3-dev libmysqlclient-dev
 script: |
