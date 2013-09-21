@@ -4358,16 +4358,23 @@ void Player::addOutfit(uint16_t lookType, uint8_t addons)
 	outfits.emplace_back(lookType, addons);
 }
 
-bool Player::remOutfit(uint16_t lookType, uint8_t addons)
+bool Player::removeOutfit(uint16_t lookType)
 {
 	for (auto it = outfits.begin(); it != outfits.end(); ++it) {
 		OutfitEntry& entry = *it;
 		if (entry.lookType == lookType) {
-			if (addons == std::numeric_limits<uint8_t>::max()) {
-				outfits.erase(it);
-			} else {
-				entry.addons &= ~addons;
-			}
+			outfits.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Player::removeOutfitAddon(uint16_t lookType, uint8_t addons)
+{
+	for (OutfitEntry& outfitEntry : outfits) {
+		if (outfitEntry.lookType == lookType) {
+			outfitEntry.addons &= ~addons;
 			return true;
 		}
 	}

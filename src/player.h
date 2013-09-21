@@ -747,7 +747,8 @@ class Player : public Creature, public Cylinder
 
 		bool canWear(uint32_t lookType, uint8_t addons) const;
 		void addOutfit(uint16_t lookType, uint8_t addons);
-		bool remOutfit(uint16_t lookType, uint8_t addons);
+		bool removeOutfit(uint16_t lookType);
+		bool removeOutfitAddon(uint16_t lookType, uint8_t addons);
 		bool getOutfitAddons(const Outfit& outfit, uint8_t& addons) const;
 
 		bool canLogout();
