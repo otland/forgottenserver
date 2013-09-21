@@ -556,13 +556,6 @@ class LuaScriptInterface
 		static int32_t luaGetGlobalStorageValue(lua_State* L);
 		static int32_t luaSetGlobalStorageValue(lua_State* L);
 
-		static int32_t luaDoPlayerAddOutfit(lua_State* L);
-		static int32_t luaDoPlayerRemOutfit(lua_State* L);
-		static int32_t luaCanPlayerWearOutfit(lua_State* L);
-
-		static int32_t luaDoPlayerAddMount(lua_State* L);
-		static int32_t luaDoPlayerRemoveMount(lua_State* L);
-
 		static int32_t luaGetWorldType(lua_State* L);
 		static int32_t luaGetWorldTime(lua_State* L);
 		static int32_t luaGetWorldLight(lua_State* L);
@@ -972,7 +965,16 @@ class LuaScriptInterface
 		static int32_t luaPlayerOpenChannel(lua_State* L);
 
 		static int32_t luaPlayerGetSlotItem(lua_State* L);
+
+		static int32_t luaPlayerAddOutfit(lua_State* L);
+		static int32_t luaPlayerAddOutfitAddon(lua_State* L);
+		static int32_t luaPlayerRemoveOutfit(lua_State* L);
+		static int32_t luaPlayerRemoveOutfitAddon(lua_State* L);
+		static int32_t luaPlayerHasOutfit(lua_State* L);
+		static int32_t luaPlayerSendOutfitWindow(lua_State* L);
 		
+		static int32_t luaPlayerAddMount(lua_State* L);
+		static int32_t luaPlayerRemoveMount(lua_State* L);
 		static int32_t luaPlayerHasMount(lua_State* L);
 		
 		static int32_t luaPlayerGetPremiumDays(lua_State* L);
@@ -983,7 +985,7 @@ class LuaScriptInterface
 		static int32_t luaPlayerAddBlessing(lua_State* L);
 		static int32_t luaPlayerRemoveBlessing(lua_State* L);
 
-		static int32_t luaPlayerSendOutfitWindow(lua_State* L);
+		static int32_t luaPlayerSave(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);

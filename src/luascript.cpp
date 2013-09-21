@@ -1434,21 +1434,6 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerSetGuildNick(cid, nick)
 	lua_register(m_luaState, "doPlayerSetGuildNick", LuaScriptInterface::luaDoPlayerSetGuildNick);
 
-	//doPlayerAddOutfit(cid,looktype,addons)
-	lua_register(m_luaState, "doPlayerAddOutfit", LuaScriptInterface::luaDoPlayerAddOutfit);
-
-	//doPlayerRemOutfit(cid,looktype,addons)
-	lua_register(m_luaState, "doPlayerRemOutfit", LuaScriptInterface::luaDoPlayerRemOutfit);
-
-	//canPlayerWearOutfit(cid, looktype, addons)
-	lua_register(m_luaState, "canPlayerWearOutfit", LuaScriptInterface::luaCanPlayerWearOutfit);
-
-	//doPlayerAddMount(cid, mountid)
-	lua_register(m_luaState, "doPlayerAddMount", LuaScriptInterface::luaDoPlayerAddMount);
-
-	//doPlayerRemoveMount(cid, mountid)
-	lua_register(m_luaState, "doPlayerRemoveMount", LuaScriptInterface::luaDoPlayerRemoveMount);
-
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
@@ -2006,6 +1991,15 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 	
+	registerClassMethod("Player", "addOutfit", LuaScriptInterface::luaPlayerAddOutfit);
+	registerClassMethod("Player", "addOutfitAddon", LuaScriptInterface::luaPlayerAddOutfitAddon);
+	registerClassMethod("Player", "removeOutfit", LuaScriptInterface::luaPlayerRemoveOutfit);
+	registerClassMethod("Player", "removeOutfitAddon", LuaScriptInterface::luaPlayerRemoveOutfitAddon);
+	registerClassMethod("Player", "hasOutfit", LuaScriptInterface::luaPlayerHasOutfit);
+	registerClassMethod("Player", "sendOutfitWindow", LuaScriptInterface::luaPlayerSendOutfitWindow);
+
+	registerClassMethod("Player", "addMount", LuaScriptInterface::luaPlayerAddMount);
+	registerClassMethod("Player", "removeMount", LuaScriptInterface::luaPlayerRemoveMount);
 	registerClassMethod("Player", "hasMount", LuaScriptInterface::luaPlayerHasMount);
 	
 	registerClassMethod("Player", "getPremiumDays", LuaScriptInterface::luaPlayerGetPremiumDays);
@@ -2015,8 +2009,8 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Player", "hasBlessing", LuaScriptInterface::luaPlayerHasBlessing);
 	registerClassMethod("Player", "addBlessing", LuaScriptInterface::luaPlayerAddBlessing);
 	registerClassMethod("Player", "removeBlessing", LuaScriptInterface::luaPlayerRemoveBlessing);
-
-	registerClassMethod("Player", "sendOutfitWindow", LuaScriptInterface::luaPlayerSendOutfitWindow);
+	
+	registerClassMethod("Player", "save", LuaScriptInterface::luaPlayerSave);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -5148,101 +5142,6 @@ int32_t LuaScriptInterface::luaIsInArray(lua_State* L)
 	}
 
 	pushBoolean(L, false);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddOutfit(lua_State* L)
-{
-	//doPlayerAddOutfit(cid, looktype, addon)
-	uint32_t addon = popNumber(L);
-	uint32_t looktype = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		player->addOutfit(looktype, addon);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerRemOutfit(lua_State* L)
-{
-	//doPlayerRemOutfit(cid, looktype, addon)
-	uint32_t addon = popNumber(L);
-	uint32_t looktype = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		pushBoolean(L, player->remOutfit(looktype, addon));
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddMount(lua_State* L)
-{
-	//doPlayerAddMount(cid, mountid)
-	uint8_t mountid = popNumber<uint8_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (!player->tameMount(mountid)) {
-			reportErrorFunc("There is no mount with the specified id.");
-			pushBoolean(L, false);
-		} else {
-			pushBoolean(L, true);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerRemoveMount(lua_State* L)
-{
-	//doPlayerRemoveMount(cid, mountid)
-	uint8_t mountid = popNumber<uint8_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (!player->untameMount(mountid)) {
-			reportErrorFunc("There is no mount with the specified id.");
-			pushBoolean(L, false);
-		} else {
-			pushBoolean(L, true);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaCanPlayerWearOutfit(lua_State* L)
-{
-	//canPlayerWearOutfit(cid, looktype, addon)
-	uint32_t addon = popNumber(L);
-	uint32_t looktype = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	pushBoolean(L, player->canWear(looktype, addon));
 	return 1;
 }
 
@@ -9396,10 +9295,124 @@ int32_t LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerAddOutfit(lua_State* L)
+{
+	// player:addOutfit(lookType)
+	uint16_t lookType = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->addOutfit(lookType, 0);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerAddOutfitAddon(lua_State* L)
+{
+	// player:addOutfitAddon(lookType, addon)
+	uint8_t addon = getNumber<uint8_t>(L, 3);
+	uint16_t lookType = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->addOutfit(lookType, addon);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerRemoveOutfit(lua_State* L)
+{
+	// player:removeOutfit(lookType)
+	uint16_t lookType = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->removeOutfit(lookType));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerRemoveOutfitAddon(lua_State* L)
+{
+	// player:removeOutfitAddon(lookType, addon)
+	uint8_t addon = getNumber<uint8_t>(L, 3);
+	uint16_t lookType = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->removeOutfitAddon(lookType, addon));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerHasOutfit(lua_State* L)
+{
+	// player:hasOutfit(lookType[, addon = 0])
+	uint8_t addon;
+	if (getStackTop(L) >= 3) {
+		addon = getNumber<uint8_t>(L, 3);
+	} else {
+		addon = 0;
+	}
+	uint16_t lookType = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->canWear(lookType, addon));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
+{
+	// player:sendOutfitWindow()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendOutfitWindow();
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerAddMount(lua_State* L)
+{
+	// player:addMount(mountId)
+	uint8_t mountId = getNumber<uint8_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->tameMount(mountId));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerRemoveMount(lua_State* L)
+{
+	// player:removeMount(mountId)
+	uint8_t mountId = getNumber<uint8_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->untameMount(mountId));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerHasMount(lua_State* L)
 {
 	// player:hasMount(mountId)
-	uint32_t mountId = getNumber<uint32_t>(L, 2);
+	uint8_t mountId = getNumber<uint8_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		Mount* mount = Mounts::getInstance()->getMountByID(mountId);
@@ -9515,13 +9528,13 @@ int32_t LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerSave(lua_State* L)
 {
-	// player:sendOutfitWindow()
+	// player:save()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->sendOutfitWindow();
-		pushBoolean(L, true);
+		player->loginPosition = player->getPosition();
+		pushBoolean(L, IOLoginData::getInstance()->savePlayer(player));
 	} else {
 		pushNil(L);
 	}
