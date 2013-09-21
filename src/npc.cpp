@@ -230,7 +230,7 @@ bool Npc::loadFromXml(const std::string& filename)
 		currentOutfit = defaultOutfit;
 	}
 
-	for (pugi::xml_node parameterNode = doc.child("parameters").first_child(); parameterNode; parameterNode = parameterNode.next_sibling()) {
+	for (pugi::xml_node parameterNode = npcNode.child("parameters").first_child(); parameterNode; parameterNode = parameterNode.next_sibling()) {
 		m_parameters[parameterNode.attribute("key").as_string()] = parameterNode.attribute("value").as_string();
 	}
 
