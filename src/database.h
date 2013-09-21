@@ -214,9 +214,6 @@ class DBResult
 class DBInsert
 {
 	public:
-		DBInsert();
-		~DBInsert() {}
-
 		/**
 		* Sets query prototype.
 		*
@@ -243,8 +240,6 @@ class DBInsert
 	protected:
 		std::string m_query;
 		std::string m_buf;
-
-		uint32_t m_rows;
 };
 
 class DBTransaction

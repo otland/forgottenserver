@@ -300,22 +300,14 @@ bool DBResult::next()
 	return m_row != NULL;
 }
 
-DBInsert::DBInsert()
-{
-	m_rows = 0;
-}
-
 void DBInsert::setQuery(const std::string& query)
 {
 	m_query = query;
 	m_buf = "";
-	m_rows = 0;
 }
 
 bool DBInsert::addRow(const std::string& row)
 {
-	m_rows++;
-
 	// adds new row to buffer
 	size_t size = m_buf.length();
 	if (size == 0) {
@@ -328,7 +320,6 @@ bool DBInsert::addRow(const std::string& row)
 			return false;
 		}
 
-		m_buf.clear();
 		m_buf.reserve(row.length() + 2);
 		m_buf.push_back('(');
 		m_buf.append(row);
@@ -352,14 +343,12 @@ bool DBInsert::addRow(std::ostringstream& row)
 
 bool DBInsert::execute()
 {
-	if (m_buf.empty() || m_rows == 0) {
+	if (m_buf.empty()) {
 		return true;
 	}
 
-	m_rows = 0;
-
 	// executes buffer
 	bool res = Database::getInstance()->executeQuery(m_query + m_buf);
-	m_buf = "";
+	m_buf.clear();
 	return res;
 }
