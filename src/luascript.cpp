@@ -9533,6 +9533,7 @@ int32_t LuaScriptInterface::luaPlayerSave(lua_State* L)
 	// player:save()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
+		player->loginPosition = player->getPosition();
 		pushBoolean(L, IOLoginData::getInstance()->savePlayer(player));
 	} else {
 		pushNil(L);
