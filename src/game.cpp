@@ -792,6 +792,9 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 					} else {
 						int32_t promotedVocationId = g_vocations.getPromotedVocation(player->getVocationId());
 						vocation = g_vocations.getVocation(promotedVocationId);
+						if (!vocation) {
+							vocation = player->getVocation();
+						}
 					}
 
 					bool sendUpdateSkills = false;

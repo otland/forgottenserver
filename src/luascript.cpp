@@ -10097,7 +10097,7 @@ int32_t LuaScriptInterface::luaVocationGetDemotion(lua_State* L)
 	Vocation* vocation = getUserdata<Vocation>(L, 1);
 	if (vocation) {
 		Vocation* demotedVocation = g_vocations.getVocation(vocation->getFromVocation());
-		if (demotedVocation != vocation) {
+		if (demotedVocation && demotedVocation != vocation) {
 			pushUserdata<Vocation>(L, demotedVocation);
 			setMetatable(L, -1, "Vocation");
 		} else {
@@ -10115,7 +10115,7 @@ int32_t LuaScriptInterface::luaVocationGetPromotion(lua_State* L)
 	Vocation* vocation = getUserdata<Vocation>(L, 1);
 	if (vocation) {
 		Vocation* promotedVocation = g_vocations.getVocation(g_vocations.getPromotedVocation(vocation->getId()));
-		if (promotedVocation != vocation) {
+		if (promotedVocation && promotedVocation != vocation) {
 			pushUserdata<Vocation>(L, promotedVocation);
 			setMetatable(L, -1, "Vocation");
 		} else {

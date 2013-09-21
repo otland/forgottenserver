@@ -28,7 +28,8 @@
 class Vocation
 {
 	public:
-		~Vocation();
+		Vocation(uint16_t id);
+
 		const std::string& getVocName() const {
 			return name;
 		}
@@ -91,7 +92,6 @@ class Vocation
 
 	protected:
 		friend class Vocations;
-		Vocation();
 
 		typedef std::map<uint32_t, uint64_t> manaCacheMap;
 		manaCacheMap cacheMana;
@@ -115,7 +115,7 @@ class Vocation
 		uint32_t fromVocation;
 		uint32_t attackSpeed;
 		uint32_t baseSpeed;
-		int32_t id;
+		uint16_t id;
 
 		uint16_t gainSoulTicks;
 		uint16_t soulMax;
@@ -128,17 +128,14 @@ class Vocation
 class Vocations
 {
 	public:
-		Vocations();
-		~Vocations();
-
 		bool loadFromXml();
-		Vocation* getVocation(uint32_t id);
-		int32_t getVocationId(const std::string& name);
-		int32_t getPromotedVocation(uint32_t vocationId);
+
+		Vocation* getVocation(uint16_t id);
+		int32_t getVocationId(const std::string& name) const;
+		uint16_t getPromotedVocation(uint16_t vocationId) const;
 
 	private:
-		std::map<uint32_t, Vocation*> vocationsMap;
-		Vocation def_voc;
+		std::map<uint16_t, Vocation> vocationsMap;
 };
 
 #endif
