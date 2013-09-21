@@ -5178,8 +5178,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemOutfit(lua_State* L)
 
 	Player* player = g_game.getPlayerByID(cid);
 	if (player) {
-		player->remOutfit(looktype, addon);
-		pushBoolean(L, true);
+		pushBoolean(L, player->remOutfit(looktype, addon));
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);

@@ -1,86 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <outfits>
 	<!-- Female outfits -->
-	<outfit type="0" looktype="136" enabled="1" name="Citizen" premium="0"/>
-	<outfit type="0" looktype="137" enabled="1" name="Hunter" premium="0"/>
-	<outfit type="0" looktype="138" enabled="1" name="Mage" premium="0"/>
-	<outfit type="0" looktype="139" enabled="1" name="Knight" premium="0"/>
-	<outfit type="0" looktype="140" enabled="1" name="Noblewoman" premium="1"/>
-	<outfit type="0" looktype="141" enabled="1" name="Summoner" premium="1"/>
-	<outfit type="0" looktype="142" enabled="1" name="Warrior" premium="1"/>
-	<outfit type="0" looktype="147" enabled="1" name="Barbarian" premium="1"/>
-	<outfit type="0" looktype="148" enabled="1" name="Druid" premium="1"/>
-	<outfit type="0" looktype="149" enabled="1" name="Wizard" premium="1"/>
-	<outfit type="0" looktype="150" enabled="1" name="Oriental" premium="1"/>
-	<outfit type="0" looktype="155" enabled="1" name="Pirate" premium="1"/>
-	<outfit type="0" looktype="156" enabled="1" name="Assassin" premium="1"/>
-	<outfit type="0" looktype="157" enabled="1" name="Beggar" premium="1"/>
-	<outfit type="0" looktype="158" enabled="1" name="Shaman" premium="1"/>
-	<outfit type="0" looktype="252" enabled="1" name="Norsewoman" premium="1"/>
-	<outfit type="0" looktype="269" enabled="1" name="Nightmare" premium="1"/>
-	<outfit type="0" looktype="270" enabled="1" name="Jester" premium="1"/>
-	<outfit type="0" looktype="279" enabled="1" name="Brotherhood" premium="1"/>
-	<outfit type="0" looktype="288"	enabled="1" name="Demonhunter" premium="1"/>
-	<outfit type="0" looktype="324" enabled="1" name="Yalaharian" premium="1"/>
-	<outfit type="0" looktype="329" enabled="1" name="Wife" premium="0"/>
-	<outfit type="0" looktype="336" enabled="1" name="Warmaster" premium="1"/>
-	<outfit type="0" looktype="366" enabled="1" name="Wayfarer" premium="1"/>
-	<outfit type="0" looktype="431" enabled="1" name="Afflicted" premium="1"/>
-	<outfit type="0" looktype="433" enabled="1" name="Elementalist" premium="1"/>
-	<outfit type="0" looktype="464" enabled="1" name="Deepling" premium="1"/>
-	<outfit type="0" looktype="466" enabled="1" name="Insectoid" premium="1"/>
-	<outfit type="0" looktype="471" enabled="1" name="Entrepreneur" premium="1"/>
-	<outfit type="0" looktype="513" enabled="1" name="Crystal Warlord" premium="1"/>
-	<outfit type="0" looktype="514" enabled="1" name="Soil Guardian" premium="1"/>
-	<outfit type="0" looktype="542" enabled="1" name="Demon" premium="1"/>
+	<outfit type="0" looktype="136" name="Citizen" premium="0" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="137" name="Hunter" premium="0" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="138" name="Mage" premium="0" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="139" name="Knight" premium="0" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="140" name="Noblewoman" premium="1" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="141" name="Summoner" premium="1" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="142" name="Warrior" premium="1" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="147" name="Barbarian" premium="1" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="148" name="Druid" premium="1" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="149" name="Wizard" premium="1" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="150" name="Oriental" premium="1" unlocked="1" enabled="1" />
+	<outfit type="0" looktype="155" name="Pirate" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="156" name="Assassin" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="157" name="Beggar" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="158" name="Shaman" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="252" name="Norsewoman" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="269" name="Nightmare" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="270" name="Jester" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="279" name="Brotherhood" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="288"	name="Demonhunter" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="324" name="Yalaharian" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="329" name="Wife" premium="0" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="336" name="Warmaster" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="366" name="Wayfarer" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="431" name="Afflicted" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="433" name="Elementalist" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="464" name="Deepling" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="466" name="Insectoid" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="471" name="Entrepreneur" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="513" name="Crystal Warlord" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="514" name="Soil Guardian" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="542" name="Demon" premium="1" unlocked="0" enabled="1" />
 
 	<!-- Male outfits -->
-	<outfit type="1" looktype="128" enabled="1" name="Citizen" premium="0"/>
-	<outfit type="1" looktype="129" enabled="1" name="Hunter" premium="0"/>
-	<outfit type="1" looktype="130" enabled="1" name="Mage" premium="0"/>
-	<outfit type="1" looktype="131" enabled="1" name="Knight" premium="0"/>
-	<outfit type="1" looktype="132" enabled="1" name="Nobleman" premium="1"/>
-	<outfit type="1" looktype="133" enabled="1" name="Summoner" premium="1"/>
-	<outfit type="1" looktype="134" enabled="1" name="Warrior" premium="1"/>
-	<outfit type="1" looktype="143" enabled="1" name="Barbarian" premium="1"/>
-	<outfit type="1" looktype="144" enabled="1" name="Druid" premium="1"/>
-	<outfit type="1" looktype="145" enabled="1" name="Wizard" premium="1"/>
-	<outfit type="1" looktype="146" enabled="1" name="Oriental" premium="1"/>
-	<outfit type="1" looktype="151" enabled="1" name="Pirate" premium="1"/>
-	<outfit type="1" looktype="152" enabled="1" name="Assassin" premium="1"/>
-	<outfit type="1" looktype="153" enabled="1" name="Beggar" premium="1"/>
-	<outfit type="1" looktype="154" enabled="1" name="Shaman" premium="1"/>
-	<outfit type="1" looktype="251" enabled="1" name="Norseman" premium="1"/>
-	<outfit type="1" looktype="268" enabled="1" name="Nightmare" premium="1"/>
-	<outfit type="1" looktype="273" enabled="1" name="Jester" premium="1"/>
-	<outfit type="1" looktype="278" enabled="1" name="Brotherhood" premium="1"/>
-	<outfit type="1" looktype="289"	enabled="1" name="Demonhunter" premium="1"/>
-	<outfit type="1" looktype="325" enabled="1" name="Yalaharian" premium="1"/>
-	<outfit type="1" looktype="328" enabled="1" name="Husband" premium="0"/>
-	<outfit type="1" looktype="335" enabled="1" name="Warmaster" premium="1"/>
-	<outfit type="1" looktype="367" enabled="1" name="Wayfarer" premium="1"/>
-	<outfit type="1" looktype="430" enabled="1" name="Afflicted" premium="1"/>
-	<outfit type="1" looktype="432" enabled="1" name="Elementalist" premium="1"/>
-	<outfit type="1" looktype="463" enabled="1" name="Deepling" premium="1"/>
-	<outfit type="1" looktype="465" enabled="1" name="Insectoid" premium="1"/>
-	<outfit type="1" looktype="472" enabled="1" name="Entrepreneur" premium="1"/>
-	<outfit type="1" looktype="512" enabled="1" name="Crystal Warlord" premium="1"/>
-	<outfit type="1" looktype="516" enabled="1" name="Soil Guardian" premium="1"/>
-	<outfit type="1" looktype="541" enabled="1" name="Demon" premium="1"/>
-
-	<!-- Archdemon Outfit -->
-	<outfit type="2" looktype="12" enabled="1" name="Archdemon" premium="0"/>
-	<!-- Elf outfit -->
-	<outfit type="2" looktype="159" enabled="1" name="Elf" premium="0"/>
-	<!-- Dwarf outfit -->
-	<outfit type="2" looktype="160" enabled="1" name="Dwarf" premium="0"/>
-	<!-- Frog outfit -->
-	<outfit type="2" looktype="226" enabled="1" name="Frog" premium="0"/>
-	<!-- Cult Outfit-->
-	<outfit type="2" looktype="194" enabled="1" name="Cult" premium="0"/>
-	<!-- Barbarian Outfits -->
-	<outfit type="2" looktype="253" enabled="1" name="Headsplitter" premium="0"/>
-	<outfit type="2" looktype="254" enabled="1" name="Skullhunter" premium="0"/>
-	<outfit type="2" looktype="255" enabled="1" name="Bloodwalker" premium="0"/>
-	<outfit type="2" looktype="264" enabled="1" name="Brutetamer" premium="0"/>
+	<outfit type="1" looktype="128" name="Citizen" premium="0" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="129" name="Hunter" premium="0" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="130" name="Mage" premium="0" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="131" name="Knight" premium="0" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="132" name="Nobleman" premium="1" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="133" name="Summoner" premium="1" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="134" name="Warrior" premium="1" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="143" name="Barbarian" premium="1" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="144" name="Druid" premium="1" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="145" name="Wizard" premium="1" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="146" name="Oriental" premium="1" unlocked="1" enabled="1" />
+	<outfit type="1" looktype="151" name="Pirate" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="152" name="Assassin" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="153" name="Beggar" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="154" name="Shaman" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="251" name="Norseman" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="268" name="Nightmare" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="273" name="Jester" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="278" name="Brotherhood" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="289"	name="Demonhunter" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="325" name="Yalaharian" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="328" name="Husband" premium="0" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="335" name="Warmaster" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="367" name="Wayfarer" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="430" name="Afflicted" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="432" name="Elementalist" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="463" name="Deepling" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="465" name="Insectoid" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="472" name="Entrepreneur" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="512" name="Crystal Warlord" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="516" name="Soil Guardian" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="541" name="Demon" premium="1" unlocked="0" enabled="1" />
 </outfits>

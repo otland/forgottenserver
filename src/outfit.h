@@ -17,78 +17,48 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_OUTFIT_H__
-#define __OTSERV_OUTFIT_H__
+#ifndef __OUTFIT_H__
+#define __OUTFIT_H__
 
-#include <list>
 #include <vector>
 #include <string>
-#include <map>
+
 #include "enums.h"
 
 struct Outfit {
-	uint32_t looktype;
-	uint32_t addons;
+	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) : name(name), lookType(lookType), premium(premium), unlocked(unlocked) {}
+
+	std::string name;
+	uint16_t lookType;
 	bool premium;
+	bool unlocked;
 };
 
-typedef std::list<Outfit*> OutfitListType;
+struct ProtocolOutfit {
+	ProtocolOutfit(uint16_t lookType, const std::string* name, uint8_t addons) : lookType(lookType), addons(addons) { this->name = name; }
 
-class OutfitList
-{
-	public:
-		OutfitList();
-		~OutfitList();
-
-		void addOutfit(const Outfit& outfit);
-		bool remOutfit(const Outfit& outfit);
-		const OutfitListType& getOutfits() const {
-			return m_list;
-		}
-		bool isInList(uint32_t looktype, uint32_t addons, bool playerPremium, int32_t playerSex) const;
-
-	private:
-		OutfitListType m_list;
+	uint16_t lookType;
+	const std::string* name;
+	uint8_t addons;
 };
 
 class Outfits
 {
 	public:
-		~Outfits();
-
 		static Outfits* getInstance() {
 			static Outfits instance;
 			return &instance;
 		}
 
 		bool loadFromXml();
-		const OutfitListType& getOutfits(uint32_t type) {
-			return getOutfitList(type).getOutfits();
-		}
 
-		const OutfitList& getOutfitList(uint32_t type) {
-			if (type >= m_list.size()) {
-				static const OutfitList dummyList;
-				return dummyList;
-			}
-			return *m_list[type];
-		}
-
-		const std::string& getOutfitName(uint32_t looktype) const {
-			auto it = outfitNamesMap.find(looktype);
-			if (it == outfitNamesMap.end()) {
-				static const std::string dummyName = "Outfit";
-				return dummyName;
-			}
-			return it->second;
+		const Outfit* getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) const;
+		const std::vector<Outfit>& getOutfits(PlayerSex_t sex) const {
+			return outfits[sex];
 		}
 
 	private:
-		Outfits();
-		typedef std::vector<OutfitList*> OutfitsListVector;
-		OutfitsListVector m_list;
-
-		std::map<uint32_t, std::string> outfitNamesMap;
+		std::vector<Outfit> outfits[PLAYERSEX_LAST + 1];
 };
 
 #endif

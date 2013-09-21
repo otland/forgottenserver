@@ -3784,6 +3784,11 @@ bool Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 		return false;
 	}
 
+	if (!player->hasRequestedOutfit()) {
+		return false;
+	}
+	player->hasRequestedOutfit(false);
+
 	if (outfit.lookMount != 0) {
 		Mount* mount = Mounts::getInstance()->getMountByClientID(outfit.lookMount);
 		if (!mount || !mount->isTamed(player)) {
@@ -3805,8 +3810,7 @@ bool Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 		player->dismount();
 	}
 
-	if (player->canWear(outfit.lookType, outfit.lookAddons) && player->hasRequestedOutfit()) {
-		player->hasRequestedOutfit(false);
+	if (player->canWear(outfit.lookType, outfit.lookAddons)) {
 		player->defaultOutfit = outfit;
 
 		if (player->hasCondition(CONDITION_OUTFIT)) {

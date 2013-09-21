@@ -111,6 +111,13 @@ struct OpenContainer {
 	uint16_t index;
 };
 
+struct OutfitEntry {
+	OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
+
+	uint16_t lookType;
+	uint8_t addons;
+};
+
 typedef std::map<uint8_t, OpenContainer> ContainerMap;
 typedef std::map<uint32_t, DepotChest*> DepotMap;
 typedef std::map<uint32_t, DepotLocker*> DepotLockerMap;
@@ -738,11 +745,11 @@ class Player : public Creature, public Cylinder
 		}
 		void checkSkullTicks(int32_t ticks);
 
-		const OutfitListType& getPlayerOutfits();
-		bool canWear(uint32_t _looktype, uint32_t _addons);
-		void addOutfit(uint32_t _looktype, uint32_t _addons);
-		bool remOutfit(uint32_t _looktype, uint32_t _addons);
-		uint32_t getOutfitAddons(uint32_t looktype);
+		bool canWear(uint32_t lookType, uint8_t addons) const;
+		void addOutfit(uint16_t lookType, uint8_t addons);
+		bool remOutfit(uint16_t lookType, uint8_t addons);
+		bool getOutfitAddons(const Outfit& outfit, uint8_t& addons) const;
+
 		bool canLogout();
 
 		//tile
@@ -1225,7 +1232,7 @@ class Player : public Creature, public Cylinder
 		DepotLockerMap depotLockerMap;
 		DepotMap depotChests;
 		StorageMap storageMap;
-		OutfitList m_playerOutfits;
+		std::vector<OutfitEntry> outfits;
 
 		PartyList invitePartyList;
 		std::list<uint32_t> modalWindows;

@@ -268,7 +268,8 @@ enum ConditionId_t {
 
 enum PlayerSex_t {
 	PLAYERSEX_FEMALE = 0,
-	PLAYERSEX_MALE = 1
+	PLAYERSEX_MALE = 1,
+	PLAYERSEX_LAST = PLAYERSEX_MALE
 };
 
 enum Vocation_t {

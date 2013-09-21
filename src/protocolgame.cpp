@@ -2769,59 +2769,39 @@ void ProtocolGame::sendOutfitWindow()
 
 	AddCreatureOutfit(msg, player, currentOutfit);
 
-	const OutfitListType& globalOutfits = Outfits::getInstance()->getOutfits(player->getSex());
-	std::list<Outfit> outfits;
-
+	std::vector<ProtocolOutfit> protocolOutfits;
 	if (player->isAccessPlayer()) {
-		Outfit _outfit;
-		_outfit.looktype = 75;
-		_outfit.addons = 3;
-		outfits.push_back(_outfit);
+		static std::string gamemasterOutfitName = "Gamemaster";
+		protocolOutfits.emplace_back(
+			75,
+			&gamemasterOutfitName,
+			0
+		);
+	}
 
-		for (OutfitListType::const_iterator it = globalOutfits.begin(), end = globalOutfits.end(); it != end; ++it) {
-			Outfit outfit;
-			outfit.looktype = (*it)->looktype;
-			outfit.addons = 3;
-			outfits.push_back(outfit);
-
-			if (outfits.size() >= 50) { // Tibia client doesn't allow more than 50 outfits
-				break;
-			}
+	const auto& outfits = Outfits::getInstance()->getOutfits(player->getSex());
+	protocolOutfits.reserve(outfits.size());
+	for (const Outfit& outfit : outfits) {
+		uint8_t addons;
+		if (!player->getOutfitAddons(outfit, addons)) {
+			continue;
 		}
-	} else if (player->isPremium()) {
-		for (OutfitListType::const_iterator it = globalOutfits.begin(), end = globalOutfits.end(); it != end; ++it) {
-			Outfit outfit;
-			outfit.looktype = (*it)->looktype;
-			outfit.addons = player->getOutfitAddons((*it)->looktype);
-			outfits.push_back(outfit);
 
-			if (outfits.size() >= 50) { // Read the previous comment
-				break;
-			}
-		}
-	} else {
-		for (OutfitListType::const_iterator it = globalOutfits.begin(), end = globalOutfits.end(); it != end; ++it) {
-			if ((*it)->premium) {
-				continue;
-			}
-
-			Outfit outfit;
-			outfit.looktype = (*it)->looktype;
-			outfit.addons = player->getOutfitAddons((*it)->looktype);
-			outfits.push_back(outfit);
-
-			if (outfits.size() >= 50) { // Read the previous comment
-				break;
-			}
+		protocolOutfits.emplace_back(
+			outfit.lookType,
+			&outfit.name,
+			addons
+		);
+		if (protocolOutfits.size() == 50) { // Tibia client doesn't allow more than 50 outfits
+			break;
 		}
 	}
 
-	msg.AddByte(outfits.size());
-
-	for (std::list<Outfit>::const_iterator it = outfits.begin(), end = outfits.end(); it != end; ++it) {
-		msg.AddU16(it->looktype);
-		msg.AddString(Outfits::getInstance()->getOutfitName(it->looktype));
-		msg.AddByte(it->addons);
+	msg.AddByte(protocolOutfits.size());
+	for (const ProtocolOutfit& outfit : protocolOutfits) {
+		msg.AddU16(outfit.lookType);
+		msg.AddString(*outfit.name);
+		msg.AddByte(outfit.addons);
 	}
 
 	MountsList mounts;
