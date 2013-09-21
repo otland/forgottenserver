@@ -195,20 +195,22 @@ std::string Database::escapeString(const std::string& s) const
 
 std::string Database::escapeBlob(const char* s, uint32_t length) const
 {
-	if (!s) {
-		return std::string("''");
+	// the worst case is 2n + 1
+	size_t maxLength = (length * 2) + 1;
+
+	std::string escaped;
+	escaped.reserve(maxLength + 2);
+	escaped.push_back('\'');
+
+	if (length != 0) {
+		char* output = new char[maxLength];
+		mysql_real_escape_string(m_handle, output, s, length);
+		escaped.append(output);
+		delete[] output;
 	}
 
-	// the worst case is 2n + 1
-	char* output = new char[length * 2 + 1];
-
-	// quotes escaped string and frees temporary buffer
-	mysql_real_escape_string(m_handle, output, s, length);
-	std::string r = "'";
-	r += output;
-	r += "'";
-	delete[] output;
-	return r;
+	escaped.push_back('\'');
+	return escaped;
 }
 
 void Database::freeResult(DBResult* res)
