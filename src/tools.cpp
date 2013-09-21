@@ -241,24 +241,10 @@ std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
 {
 	std::string tmp;
 	if (it == end) {
-		return "";
+		return tmp;
 	}
 
-	tmp = *it;
-
-	if (tmp[0] == '"') {
-		tmp.erase(0, 1);
-
-		while (++it != end && tmp.back() != '"') {
-			tmp.push_back(' ');
-			tmp += *it;
-		}
-
-		if (!tmp.empty() && tmp.back() == '"') {
-			tmp.erase(tmp.length() - 1); // TODO: Use pop_back
-		}
-	}
-
+	tmp = *it++;
 	return tmp;
 }
 
