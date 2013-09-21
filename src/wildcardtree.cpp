@@ -49,7 +49,7 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 			child->breakpoint = true;
 		}
 	} else {
-		children.emplace(ch, breakpoint);
+		children[ch] = WildcardTreeNode(breakpoint); // TODO: Use emplace
 	}
 	return child;
 }

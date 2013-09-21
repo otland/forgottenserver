@@ -37,7 +37,7 @@
 #define _USE_MATH_DEFINES
 #endif
 
-#include "assert.h"
+#include <cassert>
 #include <cmath>
 #include <cstdint>
 #include <string>

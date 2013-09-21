@@ -28,6 +28,7 @@
 class WildcardTreeNode
 {
 	public:
+		WildcardTreeNode() {} // TODO: Remove this constructor when we can use emplace
 		WildcardTreeNode(bool breakpoint) : breakpoint(breakpoint) {}
 
 		WildcardTreeNode* getChild(char ch);
