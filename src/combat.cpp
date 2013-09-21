@@ -1296,12 +1296,12 @@ MatrixArea* AreaCombat::createArea(const std::list<uint32_t>& list, uint32_t row
 	uint32_t x = 0;
 	uint32_t y = 0;
 
-	for (std::list<uint32_t>::const_iterator it = list.begin(); it != list.end(); ++it) {
-		if (*it == 1 || *it == 3) {
+	for (uint32_t value : list) {
+		if (value == 1 || value == 3) {
 			area->setValue(y, x, true);
 		}
 
-		if (*it == 2 || *it == 3) {
+		if (value == 2 || value == 3) {
 			area->setCenter(y, x);
 		}
 
@@ -1312,7 +1312,6 @@ MatrixArea* AreaCombat::createArea(const std::list<uint32_t>& list, uint32_t row
 			++y;
 		}
 	}
-
 	return area;
 }
 

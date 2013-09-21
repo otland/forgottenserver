@@ -60,7 +60,7 @@ void ConnectionManager::releaseConnection(Connection_ptr connection)
 	if (it != m_connections.end()) {
 		m_connections.erase(it);
 	} else {
-		std::cout << "Error: [ConnectionManager::releaseConnection] Connection not found" << std::endl;
+		std::cout << "[Error - ConnectionManager::releaseConnection] Connection not found" << std::endl;
 	}
 }
 
@@ -154,8 +154,8 @@ void Connection::releaseConnection()
 {
 	if (m_refCount > 0) {
 		//Reschedule it and try again.
-		g_scheduler.addEvent( createSchedulerTask(SCHEDULER_MINTICKS,
-		                      boost::bind(&Connection::releaseConnection, this)));
+		g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
+		                     boost::bind(&Connection::releaseConnection, this)));
 	} else {
 		deleteConnectionTask();
 	}

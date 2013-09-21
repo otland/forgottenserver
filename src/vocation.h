@@ -125,8 +125,6 @@ class Vocation
 		static uint32_t skillBase[SKILL_LAST + 1];
 };
 
-typedef std::map<uint32_t, Vocation*> VocationsMap;
-
 class Vocations
 {
 	public:
@@ -138,15 +136,8 @@ class Vocations
 		int32_t getVocationId(const std::string& name);
 		int32_t getPromotedVocation(uint32_t vocationId);
 
-		VocationsMap::iterator getFirstVocation() {
-			return vocationsMap.begin();
-		}
-		VocationsMap::iterator getLastVocation() {
-			return vocationsMap.end();
-		}
-
 	private:
-		VocationsMap vocationsMap;
+		std::map<uint32_t, Vocation*> vocationsMap;
 		Vocation def_voc;
 };
 

@@ -35,11 +35,9 @@ Vocations::Vocations()
 
 Vocations::~Vocations()
 {
-	for (VocationsMap::iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it) {
-		delete it->second;
+	for (const auto& it : vocationsMap) {
+		delete it.second;
 	}
-
-	vocationsMap.clear();
 }
 
 bool Vocations::loadFromXml()
@@ -168,7 +166,7 @@ bool Vocations::loadFromXml()
 
 Vocation* Vocations::getVocation(uint32_t id)
 {
-	VocationsMap::iterator it = vocationsMap.find(id);
+	auto it = vocationsMap.find(id);
 	if (it == vocationsMap.end()) {
 		std::cout << "Warning: [Vocations::getVocation] Vocation " << id << " not found." << std::endl;
 		return &def_voc;
@@ -178,9 +176,9 @@ Vocation* Vocations::getVocation(uint32_t id)
 
 int32_t Vocations::getVocationId(const std::string& name)
 {
-	for (VocationsMap::iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it) {
-		if (strcasecmp(it->second->name.c_str(), name.c_str()) == 0) {
-			return it->first;
+	for (const auto& it : vocationsMap) {
+		if (strcasecmp(it.second->name.c_str(), name.c_str()) == 0) {
+			return it.first;
 		}
 	}
 	return -1;
@@ -188,12 +186,11 @@ int32_t Vocations::getVocationId(const std::string& name)
 
 int32_t Vocations::getPromotedVocation(uint32_t vocationId)
 {
-	for (VocationsMap::iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it) {
-		if (it->second->fromVocation == vocationId && it->first != vocationId) {
-			return it->first;
+	for (const auto& it : vocationsMap) {
+		if (it.second->fromVocation == vocationId && it.first != vocationId) {
+			return it.first;
 		}
 	}
-
 	return 0;
 }
 

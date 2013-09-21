@@ -114,26 +114,19 @@ void ScriptEnvironment::resetEnv()
 	m_interface = NULL;
 	m_localMap.clear();
 
-	for (TempItemListMap::iterator mit = m_tempItems.begin(); mit != m_tempItems.end(); ++mit) {
-		ItemList& itemList = mit->second;
-		for (ItemList::iterator it = itemList.begin(); it != itemList.end(); ++it) {
-			if ((*it)->getParent() == VirtualCylinder::virtualCylinder) {
-				g_game.ReleaseItem(*it);
+	for (const auto& it : m_tempItems) {
+		for (Item* item : it.second) {
+			if (item->getParent() == VirtualCylinder::virtualCylinder) {
+				g_game.ReleaseItem(item);
 			}
 		}
 	}
-
 	m_tempItems.clear();
 
-	if (!m_tempResults.empty()) {
-		Database* db = Database::getInstance();
-		for (DBResultMap::iterator it = m_tempResults.begin(); it != m_tempResults.end(); ++it) {
-			if (it->second) {
-				db->freeResult(it->second);
-			}
-		}
+	Database* db = Database::getInstance();
+	for (const auto& it : m_tempResults) {
+		db->freeResult(it.second);
 	}
-
 	m_tempResults.clear();
 }
 
@@ -151,8 +144,8 @@ bool ScriptEnvironment::saveGameState()
 	stmt.setQuery("INSERT INTO `global_storage` (`key`, `value`) VALUES ");
 
 	std::ostringstream query;
-	for (StorageMap::const_iterator it = m_globalStorageMap.begin(); it != m_globalStorageMap.end(); ++it) {
-		query << it->first << ',' << it->second;
+	for (const auto& it : m_globalStorageMap) {
+		query << it.first << ',' << it.second;
 		if (!stmt.addRow(query)) {
 			return false;
 		}

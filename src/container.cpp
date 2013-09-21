@@ -39,8 +39,7 @@ Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 {
 	TileItemVector* itemVector = tile->getItemList();
 	if (itemVector) {
-		for (ItemVector::reverse_iterator rit = itemVector->rbegin(), end = itemVector->rend(); rit != end; ++rit) {
-			Item* item = *rit;
+		for (Item* item : *itemVector) {
 			if (item->getContainer() || item->hasProperty(MOVEABLE)) {
 				addItem(item);
 			}
@@ -61,35 +60,34 @@ Container::~Container()
 	if (getID() == ITEM_BROWSEFIELD) {
 		g_game.browseFields.erase(getTile());
 
-		for (ItemDeque::const_iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit) {
-			(*cit)->setParent(getParent());
+		for (Item* item : itemlist) {
+			item->setParent(parent);
 		}
 	} else {
-		for (ItemDeque::const_iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit) {
-			(*cit)->setParent(NULL);
-			(*cit)->releaseThing2();
+		for (Item* item : itemlist) {
+			item->setParent(NULL);
+			item->releaseThing2();
 		}
-
 		itemlist.clear();
 	}
 }
 
 Item* Container::clone() const
 {
-	Container* _item = static_cast<Container*>(Item::clone());
-	for (ItemDeque::const_iterator it = itemlist.begin(); it != itemlist.end(); ++it) {
-		_item->addItem((*it)->clone());
+	Container* clone = static_cast<Container*>(Item::clone());
+	for (Item* item : itemlist) {
+		clone->addItem(item->clone());
 	}
-	return _item;
+	return clone;
 }
 
 Container* Container::getParentContainer()
 {
 	Thing* thing = getParent();
-	if (thing) {
-		return thing->getContainer();
+	if (!thing) {
+		return NULL;
 	}
-	return NULL;
+	return thing->getContainer();
 }
 
 bool Container::hasParent() const
@@ -108,7 +106,6 @@ Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 	switch (attr) {
 		case ATTR_CONTAINER_ITEMS: {
 			uint32_t count;
-
 			if (!propStream.GET_ULONG(count)) {
 				return ATTR_READ_ERROR;
 			}

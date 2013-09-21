@@ -3700,7 +3700,6 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType)
 	for (std::list<ShopInfo>::const_iterator it = shopItemList.begin(); it != shopItemList.end(); ++it) {
 		if (it->itemId == itemId && it->buyPrice > 0) {
 			const ItemType& iit = Item::items[itemId];
-
 			if (iit.isFluidContainer() || iit.isSplash()) {
 				if (it->subType == subType) {
 					return true;
@@ -3722,7 +3721,6 @@ void Player::__internalAddThing(Thing* thing)
 void Player::__internalAddThing(uint32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
-
 	if (!item) {
 		return;
 	}
@@ -3818,11 +3816,10 @@ void Player::doAttacking(uint32_t interval)
 	}
 
 	if ((OTSYS_TIME() - lastAttack) >= getAttackSpeed()) {
-		Item* tool = getWeapon();
-		const Weapon* weapon = g_weapons->getWeapon(tool);
-
 		bool result = false;
 
+		Item* tool = getWeapon();
+		const Weapon* weapon = g_weapons->getWeapon(tool);
 		if (weapon) {
 			if (!weapon->interruptSwing()) {
 				result = weapon->useWeapon(this, tool, attackedCreature);
@@ -3848,7 +3845,6 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 {
 	if (g_config.getBoolean(ConfigManager::EXPERIENCE_FROM_PLAYERS)) {
 		Player* attackerPlayer = attacker->getPlayer();
-
 		if (attackerPlayer && attackerPlayer != this && skillLoss && std::abs((int32_t)(attackerPlayer->getLevel() - level)) <= g_config.getNumber(ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)) {
 			return std::max<uint64_t>(0, std::floor(getLostExperience() * getDamageRatio(attacker) * 0.75));
 		}
@@ -3922,7 +3918,6 @@ void Player::updateItemsLight(bool internal /*=false*/)
 
 	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
 		Item* item = getInventoryItem((slots_t)i);
-
 		if (item) {
 			item->getLight(curLight);
 
@@ -4013,15 +4008,10 @@ void Player::onEndCondition(ConditionType_t type)
 void Player::onCombatRemoveCondition(const Creature* attacker, Condition* condition)
 {
 	//Creature::onCombatRemoveCondition(attacker, condition);
-	bool remove = true;
-
 	if (condition->getId() > 0) {
-		remove = false;
-
 		//Means the condition is from an item, id == slot
 		if (g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
 			Item* item = getInventoryItem((slots_t)condition->getId());
-
 			if (item) {
 				//25% chance to destroy the item
 				if (25 >= random_range(0, 100)) {
@@ -4029,9 +4019,7 @@ void Player::onCombatRemoveCondition(const Creature* attacker, Condition* condit
 				}
 			}
 		}
-	}
-
-	if (remove) {
+	} else {
 		if (!canDoAction()) {
 			int32_t delay = getNextActionTime();
 			delay -= (delay % EVENT_CREATURE_THINK_INTERVAL);
@@ -4132,7 +4120,6 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 	if (target) {
 		if (party && !Combat::isPlayerCombat(target)) {
 			Monster* tmpMonster = target->getMonster();
-
 			if (tmpMonster && tmpMonster->isHostile()) {
 				//We have fulfilled a requirement for shared experience
 				party->addPlayerDamageMonster(this, points);
@@ -4206,7 +4193,6 @@ void Player::gainExperience(uint64_t gainExp)
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;
-
 		if (gainedExperience >= level) {
 			Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
 			condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
