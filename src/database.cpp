@@ -22,7 +22,6 @@
 #include "configmanager.h"
 #include "database.h"
 
-#include <iostream>
 #include <string>
 
 #if defined(WIN32) && !defined(_MSC_VER)
