@@ -23,7 +23,6 @@
 
 #include "tools.h"
 #include "configmanager.h"
-#include "md5.h"
 #include "sha1.h"
 
 #include <sstream>
@@ -49,34 +48,12 @@ std::string transformToSHA1(const std::string& plainText)
 	return hexStream.str();
 }
 
-std::string transformToMD5(const std::string& plainText)
-{
-	MD5_CTX m_md5;
-
-	MD5Init(&m_md5, 0);
-	MD5Update(&m_md5, (const unsigned char*)plainText.c_str(), plainText.length());
-	MD5Final(&m_md5);
-
-	std::ostringstream hexStream;
-	hexStream.flags(std::ios::hex);
-	for (uint32_t i = 0; i < 16; ++i) {
-		hexStream << std::setw(2) << std::setfill('0') << (uint32_t)m_md5.digest[i];
-	}
-	return hexStream.str();
-}
-
 bool passwordTest(const std::string& plain, const std::string& hash)
 {
-	switch (g_config.getNumber(ConfigManager::PASSWORD_TYPE)) {
-		case PASSWORD_TYPE_MD5:
-			return transformToMD5(plain) == hash;
-
-		case PASSWORD_TYPE_SHA1:
-			return transformToSHA1(plain) == hash;
-
-		default:
-			return plain == hash;
+	if (g_config.getNumber(ConfigManager::PASSWORD_TYPE) == PASSWORD_TYPE_SHA1) {
+		return transformToSHA1(plain) == hash;
 	}
+	return plain == hash;
 }
 
 void replaceString(std::string& str, const std::string& sought, const std::string& replacement)

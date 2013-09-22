@@ -164,7 +164,6 @@
     <ClCompile Include="..\src\luascript.cpp" />
     <ClCompile Include="..\src\mailbox.cpp" />
     <ClCompile Include="..\src\map.cpp" />
-    <ClCompile Include="..\src\md5.cpp" />
     <ClCompile Include="..\src\modalwindow.cpp" />
     <ClCompile Include="..\src\monster.cpp" />
     <ClCompile Include="..\src\monsters.cpp" />
@@ -255,7 +254,6 @@
     <ClInclude Include="..\src\luascript.h" />
     <ClInclude Include="..\src\mailbox.h" />
     <ClInclude Include="..\src\map.h" />
-    <ClInclude Include="..\src\md5.h" />
     <ClInclude Include="..\src\modalwindow.h" />
     <ClInclude Include="..\src\monster.h" />
     <ClInclude Include="..\src\monsters.h" />

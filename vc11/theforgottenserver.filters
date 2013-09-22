@@ -123,9 +123,6 @@
     <ClCompile Include="..\src\map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\md5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\monster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -378,9 +375,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\md5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\monster.h">

@@ -39,7 +39,6 @@ enum DistributionType_t {
 	DISTRO_NORMAL
 };
 
-std::string transformToMD5(const std::string& plainText);
 std::string transformToSHA1(const std::string& plainText);
 bool passwordTest(const std::string& plain, const std::string& hash);
 

@@ -243,44 +243,22 @@ void DatabaseManager::registerDatabaseConfig(const std::string& config, const st
 void DatabaseManager::checkEncryption()
 {
 	int32_t currentValue = g_config.getNumber(ConfigManager::PASSWORD_TYPE);
-	int32_t oldValue = 0;
 
+	int32_t oldValue;
 	if (getDatabaseConfig("encryption", oldValue)) {
 		if (currentValue == oldValue) {
 			return;
 		}
 
 		if (oldValue != PASSWORD_TYPE_PLAIN) {
-			std::string oldName;
-
-			if (oldValue == PASSWORD_TYPE_MD5) {
-				oldName = "md5";
-			} else if (oldValue == PASSWORD_TYPE_SHA1) {
-				oldName = "sha1";
-			} else {
-				oldName = "plain";
-			}
-
 			g_config.setNumber(ConfigManager::PASSWORD_TYPE, oldValue);
-			std::cout << "> WARNING: Unsupported password hashing switch! Change back passwordType in config.lua to \"" << oldName << "\"!" << std::endl;
+			std::cout << "> WARNING: Unsupported password hashing switch! Change back passwordType in config.lua to sha1." << std::endl;
 			return;
 		}
 
-		switch (currentValue) {
-			case PASSWORD_TYPE_MD5: {
-				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = MD5(`password`)");
-				std::cout << "> Password type has been updated to MD5." << std::endl;
-				break;
-			}
-
-			case PASSWORD_TYPE_SHA1: {
-				Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`)");
-				std::cout << "> Password type has been updated to SHA1." << std::endl;
-				break;
-			}
-
-			default:
-				break;
+		if (currentValue == PASSWORD_TYPE_SHA1) {
+			Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`)");
+			std::cout << "> Password type has been updated to SHA1." << std::endl;
 		}
 	}
 
