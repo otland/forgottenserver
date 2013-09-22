@@ -2898,7 +2898,6 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 	msg.AddString(modalWindow.getMessage());
 
 	msg.AddByte(modalWindow.getButtonCount());
-
 	for (const ModalWindowChoice& button : modalWindow.getButtons()) {
 		msg.AddString(button.first);
 		msg.AddByte(button.second);

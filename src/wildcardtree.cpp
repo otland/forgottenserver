@@ -50,6 +50,7 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 		}
 	} else {
 		children[ch] = WildcardTreeNode(breakpoint); // TODO: Use emplace
+		child = &children[ch];
 	}
 	return child;
 }
