@@ -305,7 +305,7 @@ bool IOMapSerialize::loadHouseInfo(Map* map)
 	do {
 		House* house = Houses::getInstance().getHouse(result->getDataInt("id"));
 		if (house) {
-			house->setHouseOwner(result->getDataInt("owner"));
+			house->setHouseOwner(result->getDataInt("owner"), false);
 			house->setPaidUntil(result->getDataInt("paid"));
 			house->setPayRentWarnings(result->getDataInt("warnings"));
 		}
