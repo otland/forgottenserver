@@ -2771,7 +2771,7 @@ void ProtocolGame::sendOutfitWindow()
 
 	std::vector<ProtocolOutfit> protocolOutfits;
 	if (player->isAccessPlayer()) {
-		static std::string gamemasterOutfitName = "Gamemaster";
+		static const std::string gamemasterOutfitName = "Gamemaster";
 		protocolOutfits.emplace_back(
 			75,
 			&gamemasterOutfitName,
