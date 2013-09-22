@@ -90,22 +90,18 @@ void MonsterType::reset()
 	lootItems.clear();
 	elementMap.clear();
 
-	for (SpellList::iterator it = spellAttackList.begin(); it != spellAttackList.end(); ++it) {
-		if (it->combatSpell) {
-			delete it->spell;
-			it->spell = nullptr;
+	for (const spellBlock_t& spellBlock : spellAttackList) {
+		if (spellBlock.combatSpell) {
+			delete spellBlock.spell;
 		}
 	}
-
 	spellAttackList.clear();
 
-	for (SpellList::iterator it = spellDefenseList.begin(); it != spellDefenseList.end(); ++it) {
-		if (it->combatSpell) {
-			delete it->spell;
-			it->spell = nullptr;
+	for (const spellBlock_t& spellBlock : spellDefenseList) {
+		if (spellBlock.combatSpell) {
+			delete spellBlock.spell;
 		}
 	}
-
 	spellDefenseList.clear();
 
 	yellSpeedTicks = 0;

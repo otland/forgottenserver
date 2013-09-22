@@ -5058,16 +5058,14 @@ void Game::cleanup()
 	}
 	ToReleaseItems.clear();
 
-	for (DecayList::iterator it = toDecayItems.begin(); it != toDecayItems.end(); ++it) {
-		int32_t dur = (*it)->getDuration();
-
+	for (Item* item : toDecayItems) {
+		int32_t dur = item->getDuration();
 		if (dur >= EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS) {
-			decayItems[lastBucket].push_back(*it);
+			decayItems[lastBucket].push_back(item);
 		} else {
-			decayItems[(lastBucket + 1 + (*it)->getDuration() / 1000) % EVENT_DECAY_BUCKETS].push_back(*it);
+			decayItems[(lastBucket + 1 + dur / 1000) % EVENT_DECAY_BUCKETS].push_back(item);
 		}
 	}
-
 	toDecayItems.clear();
 }
 
@@ -5820,8 +5818,8 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 				}
 			}
 		} else {
-			for (ItemList::const_iterator iter = itemList.begin(), end = itemList.end(); iter != end; ++iter) {
-				internalRemoveItem(*iter);
+			for (Item* item : itemList) {
+				internalRemoveItem(item);
 			}
 		}
 
@@ -6014,19 +6012,18 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-
-			for (ItemList::const_iterator iter = itemList.begin(), end = itemList.end(); iter != end; ++iter) {
-				uint16_t removeCount = std::min<uint16_t>(tmpAmount, (*iter)->getItemCount());
+			for (Item* item : itemList) {
+				uint16_t removeCount = std::min<uint16_t>(tmpAmount, item->getItemCount());
 				tmpAmount -= removeCount;
-				internalRemoveItem(*iter, removeCount);
+				internalRemoveItem(item, removeCount);
 
 				if (tmpAmount == 0) {
 					break;
 				}
 			}
 		} else {
-			for (ItemList::const_iterator iter = itemList.begin(), end = itemList.end(); iter != end; ++iter) {
-				internalRemoveItem(*iter);
+			for (Item* item : itemList) {
+				internalRemoveItem(item);
 			}
 		}
 

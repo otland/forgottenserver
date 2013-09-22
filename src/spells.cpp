@@ -185,9 +185,9 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 
 RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 {
-	for (RunesMap::iterator it = runes.begin(); it != runes.end(); ++it) {
-		if (strcasecmp(it->second->getName().c_str(), name.c_str()) == 0) {
-			return it->second;
+	for (const auto& it : runes) {
+		if (strcasecmp(it.second->getName().c_str(), name.c_str()) == 0) {
+			return it.second;
 		}
 	}
 	return nullptr;
@@ -197,8 +197,8 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 {
 	InstantSpell* result = nullptr;
 
-	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
-		InstantSpell* instantSpell = it->second;
+	for (const auto& it : instants) {
+		InstantSpell* instantSpell = it.second;
 
 		const std::string& instantSpellWords = instantSpell->getWords();
 		size_t spellLen = instantSpellWords.length();

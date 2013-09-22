@@ -282,8 +282,8 @@ class Houses
 {
 		Houses();
 		~Houses() {
-			for (HouseMap::iterator it = houseMap.begin(); it != houseMap.end(); ++it) {
-				delete it->second;
+			for (const auto& it : houseMap) {
+				delete it.second;
 			}
 		}
 
