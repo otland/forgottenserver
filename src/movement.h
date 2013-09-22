@@ -23,7 +23,6 @@
 #include "luascript.h"
 #include "baseevents.h"
 #include <map>
-#include <unordered_set>
 
 enum MoveEvent_t {
 	MOVE_EVENT_STEP_IN = 0,
@@ -61,7 +60,7 @@ class MoveEvents : public BaseEvents
 
 	protected:
 		typedef std::map<int32_t, MoveEventList> MoveListMap;
-		void clearMap(MoveListMap& map, std::unordered_set<MoveEvent*>& set);
+		void clearMap(MoveListMap& map);
 
 		typedef std::map<Position, MoveEventList> MovePosListMap;
 		virtual void clear();

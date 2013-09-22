@@ -46,8 +46,9 @@ MoveEvents::~MoveEvents()
 	clear();
 }
 
-void MoveEvents::clearMap(MoveListMap& map, std::unordered_set<MoveEvent*>& set)
+void MoveEvents::clearMap(MoveListMap& map)
 {
+	std::unordered_set<MoveEvent*> set;
 	for (const auto& it : map) {
 		const MoveEventList& moveEventList = it.second;
 		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
@@ -57,28 +58,27 @@ void MoveEvents::clearMap(MoveListMap& map, std::unordered_set<MoveEvent*>& set)
 		}
 	}
 	map.clear();
+
+	for (MoveEvent* moveEvent : set) {
+		delete moveEvent;
+	}
 }
 
 void MoveEvents::clear()
 {
-	std::unordered_set<MoveEvent*> set;
-	clearMap(m_itemIdMap, set);
-	clearMap(m_actionIdMap, set);
-	clearMap(m_uniqueIdMap, set);
+	clearMap(m_itemIdMap);
+	clearMap(m_actionIdMap);
+	clearMap(m_uniqueIdMap);
 
 	for (const auto& it : m_positionMap) {
 		const MoveEventList& moveEventList = it.second;
 		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
 			for (MoveEvent* moveEvent : moveEventList.moveEvent[i]) {
-				set.insert(moveEvent);
+				delete moveEvent;
 			}
 		}
 	}
 	m_positionMap.clear();
-
-	for (MoveEvent* moveEvent : set) {
-		delete moveEvent;
-	}
 
 	m_scriptInterface.reInitState();
 }
