@@ -104,9 +104,7 @@ class Beds
 		void setBedSleeper(BedItem* bed, uint32_t guid);
 
 	protected:
-		Beds() {
-			BedSleepersMap.clear();
-		}
+		Beds() {}
 
 		std::map<uint32_t, BedItem*> BedSleepersMap;
 };

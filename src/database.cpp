@@ -230,7 +230,6 @@ DBResult* Database::verifyResult(DBResult* result)
 DBResult::DBResult(MYSQL_RES* res)
 {
 	m_handle = res;
-	m_listNames.clear();
 
 	int32_t i = 0;
 

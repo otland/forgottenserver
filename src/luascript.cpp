@@ -90,20 +90,17 @@ ScriptEnvironment::~ScriptEnvironment()
 {
 	resetEnv();
 
-	for (CombatMap::iterator it = m_combatMap.begin(); it != m_combatMap.end(); ++it) {
-		delete it->second;
+	for (const auto& it : m_combatMap) {
+		delete it.second;
 	}
-	m_combatMap.clear();
 
-	for (AreaMap::iterator it = m_areaMap.begin(); it != m_areaMap.end(); ++it) {
-		delete it->second;
+	for (const auto& it : m_areaMap) {
+		delete it.second;
 	}
-	m_areaMap.clear();
 
-	for (ConditionMap::iterator it = m_conditionMap.begin(); it != m_conditionMap.end(); ++it) {
-		delete it->second;
+	for (const auto& it : m_conditionMap) {
+		delete it.second;
 	}
-	m_conditionMap.clear();
 }
 
 void ScriptEnvironment::resetEnv()

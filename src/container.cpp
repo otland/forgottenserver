@@ -68,7 +68,6 @@ Container::~Container()
 			item->setParent(nullptr);
 			item->releaseThing2();
 		}
-		itemlist.clear();
 	}
 }
 

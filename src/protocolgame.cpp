@@ -660,8 +660,7 @@ void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y
 
 void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown)
 {
-	std::pair<std::unordered_set<uint32_t>::const_iterator, bool> result = knownCreatureSet.insert(id);
-
+	auto result = knownCreatureSet.insert(id);
 	if (!result.second) {
 		known = true;
 		return;
@@ -682,7 +681,6 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 
 		// Bad situation. Let's just remove anyone.
 		std::unordered_set<uint32_t>::iterator it = knownCreatureSet.begin();
-
 		if (*it == id) {
 			++it;
 		}
@@ -1548,9 +1546,7 @@ void ProtocolGame::sendChannelsDialog()
 
 	const ChannelList& list = g_chat.getChannelList(*player);
 	msg.AddByte(list.size());
-
-	for (ChannelList::const_iterator it = list.begin(); it != list.end(); ++it) {
-		ChatChannel* channel = *it;
+	for (ChatChannel* channel : list) {
 		msg.AddU16(channel->getId());
 		msg.AddString(channel->getName());
 	}
@@ -1687,20 +1683,18 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 
 	if (shop.size() <= 5) {
 		// For very small shops it's not worth it to create the complete map
-		for (std::list<ShopInfo>::const_iterator it = shop.begin(); it != shop.end(); ++it) {
-			const ShopInfo& sInfo = *it;
-
-			if (sInfo.sellPrice > 0) {
+		for (const ShopInfo& shopInfo : shop) {
+			if (shopInfo.sellPrice > 0) {
 				int8_t subtype = -1;
 
-				const ItemType& itemType = Item::items[sInfo.itemId];
+				const ItemType& itemType = Item::items[shopInfo.itemId];
 				if (itemType.hasSubType() && !itemType.stackable) {
-					subtype = (sInfo.subType == 0 ? -1 : sInfo.subType);
+					subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
 				}
 
-				uint32_t count = player->__getItemTypeCount(sInfo.itemId, subtype);
+				uint32_t count = player->__getItemTypeCount(shopInfo.itemId, subtype);
 				if (count > 0) {
-					saleMap[sInfo.itemId] = count;
+					saleMap[shopInfo.itemId] = count;
 				}
 			}
 		}
@@ -1714,33 +1708,31 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 		// We must still check manually for the special items that require subtype matches
 		// (That is, fluids such as potions etc., actually these items are very few since
 		// health potions now use their own ID)
-		for (std::list<ShopInfo>::const_iterator it = shop.begin(); it != shop.end(); ++it) {
-			const ShopInfo& sInfo = *it;
-
-			if (sInfo.sellPrice > 0) {
+		for (const ShopInfo& shopInfo : shop) {
+			if (shopInfo.sellPrice > 0) {
 				int8_t subtype = -1;
 
-				const ItemType& itemType = Item::items[sInfo.itemId];
+				const ItemType& itemType = Item::items[shopInfo.itemId];
 				if (itemType.hasSubType() && !itemType.stackable) {
-					subtype = (sInfo.subType == 0 ? -1 : sInfo.subType);
+					subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
 				}
 
 				if (subtype != -1) {
 					uint32_t count;
 
 					if (!itemType.isFluidContainer() && !itemType.isSplash()) {
-						count = player->__getItemTypeCount(sInfo.itemId, subtype);    // This shop item requires extra checks
+						count = player->__getItemTypeCount(shopInfo.itemId, subtype);    // This shop item requires extra checks
 					} else {
 						count = subtype;
 					}
 
 					if (count > 0) {
-						saleMap[sInfo.itemId] = count;
+						saleMap[shopInfo.itemId] = count;
 					}
 				} else {
-					std::map<uint32_t, uint32_t>::const_iterator findIt = tempSaleMap.find(sInfo.itemId);
+					std::map<uint32_t, uint32_t>::const_iterator findIt = tempSaleMap.find(shopInfo.itemId);
 					if (findIt != tempSaleMap.end() && findIt->second > 0) {
-						saleMap[sInfo.itemId] = findIt->second;
+						saleMap[shopInfo.itemId] = findIt->second;
 					}
 				}
 			}
@@ -1836,23 +1828,21 @@ void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& 
 	msg.AddItemId(itemId);
 
 	msg.AddU32(buyOffers.size());
-
-	for (MarketOfferList::const_iterator it = buyOffers.begin(), end = buyOffers.end(); it != end; ++it) {
-		msg.AddU32(it->timestamp);
-		msg.AddU16(it->counter);
-		msg.AddU16(it->amount);
-		msg.AddU32(it->price);
-		msg.AddString(it->playerName);
+	for (const MarketOffer& offer : buyOffers) {
+		msg.AddU32(offer.timestamp);
+		msg.AddU16(offer.counter);
+		msg.AddU16(offer.amount);
+		msg.AddU32(offer.price);
+		msg.AddString(offer.playerName);
 	}
 
 	msg.AddU32(sellOffers.size());
-
-	for (MarketOfferList::const_iterator it = sellOffers.begin(), end = sellOffers.end(); it != end; ++it) {
-		msg.AddU32(it->timestamp);
-		msg.AddU16(it->counter);
-		msg.AddU16(it->amount);
-		msg.AddU32(it->price);
-		msg.AddString(it->playerName);
+	for (const MarketOffer& offer : sellOffers) {
+		msg.AddU32(offer.timestamp);
+		msg.AddU16(offer.counter);
+		msg.AddU16(offer.amount);
+		msg.AddU32(offer.price);
+		msg.AddString(offer.playerName);
 	}
 
 	writeToOutputBuffer(msg);
@@ -1892,21 +1882,21 @@ void ProtocolGame::sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, c
 	msg.AddU16(MARKETREQUEST_OWN_OFFERS);
 
 	msg.AddU32(buyOffers.size());
-	for (MarketOfferList::const_iterator it = buyOffers.begin(), end = buyOffers.end(); it != end; ++it) {
-		msg.AddU32(it->timestamp);
-		msg.AddU16(it->counter);
-		msg.AddItemId(it->itemId);
-		msg.AddU16(it->amount);
-		msg.AddU32(it->price);
+	for (const MarketOffer& offer : buyOffers) {
+		msg.AddU32(offer.timestamp);
+		msg.AddU16(offer.counter);
+		msg.AddItemId(offer.itemId);
+		msg.AddU16(offer.amount);
+		msg.AddU32(offer.price);
 	}
 
 	msg.AddU32(sellOffers.size());
-	for (MarketOfferList::const_iterator it = sellOffers.begin(), end = sellOffers.end(); it != end; ++it) {
-		msg.AddU32(it->timestamp);
-		msg.AddU16(it->counter);
-		msg.AddItemId(it->itemId);
-		msg.AddU16(it->amount);
-		msg.AddU32(it->price);
+	for (const MarketOffer& offer : sellOffers) {
+		msg.AddU32(offer.timestamp);
+		msg.AddU16(offer.counter);
+		msg.AddItemId(offer.itemId);
+		msg.AddU16(offer.amount);
+		msg.AddU32(offer.price);
 	}
 
 	writeToOutputBuffer(msg);
@@ -1983,7 +1973,6 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	msg.AddItemId(itemId);
 
 	const ItemType& it = Item::items[itemId];
-
 	if (it.armor != 0) {
 		msg.AddString(std::to_string(it.armor));
 	} else {
@@ -2534,13 +2523,10 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	const std::list<VIPEntry>& vipEntries = IOLoginData::getInstance()->getVIPEntries(player->getAccount());
 
 	if (player->isAccessPlayer()) {
-		for (std::list<VIPEntry>::const_iterator it = vipEntries.begin(), end = vipEntries.end(); it != end; ++it) {
-			const VIPEntry& entry = (*it);
-
+		for (const VIPEntry& entry : vipEntries) {
 			VipStatus_t vipStatus;
 
 			Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
-
 			if (!vipPlayer) {
 				vipStatus = VIPSTATUS_OFFLINE;
 			} else {
@@ -2550,13 +2536,10 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 			sendVIP(entry.guid, entry.name, entry.description, entry.icon, entry.notify, vipStatus);
 		}
 	} else {
-		for (std::list<VIPEntry>::const_iterator it = vipEntries.begin(), end = vipEntries.end(); it != end; ++it) {
-			const VIPEntry& entry = (*it);
-
+		for (const VIPEntry& entry : vipEntries) {
 			VipStatus_t vipStatus;
 
 			Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
-
 			if (!vipPlayer || vipPlayer->isInGhostMode()) {
 				vipStatus = VIPSTATUS_OFFLINE;
 			} else {
@@ -2916,16 +2899,15 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 
 	msg.AddByte(modalWindow.getButtonCount());
 
-	for (ModalWindowChoiceList::const_iterator it = modalWindow.getButtons().begin(), end = modalWindow.getButtons().end(); it != end; ++it) {
-		msg.AddString(it->first);
-		msg.AddByte(it->second);
+	for (const ModalWindowChoice& button : modalWindow.getButtons()) {
+		msg.AddString(button.first);
+		msg.AddByte(button.second);
 	}
 
 	msg.AddByte(modalWindow.getChoiceCount());
-
-	for (ModalWindowChoiceList::const_iterator it = modalWindow.getChoices().begin(), end = modalWindow.getChoices().end(); it != end; ++it) {
-		msg.AddString(it->first);
-		msg.AddByte(it->second);
+	for (const ModalWindowChoice& choice : modalWindow.getChoices()) {
+		msg.AddString(choice.first);
+		msg.AddByte(choice.second);
 	}
 
 	msg.AddByte(modalWindow.getDefaultEscapeButton());

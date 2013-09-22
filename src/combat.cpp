@@ -53,7 +53,6 @@ Combat::~Combat()
 		delete condition;
 	}
 
-	params.conditionList.clear();
 	delete params.valueCallback;
 	delete params.tileCallback;
 	delete params.targetCallback;
@@ -1158,19 +1157,17 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 
 void AreaCombat::clear()
 {
-	for (AreaCombatMap::iterator it = areas.begin(); it != areas.end(); ++it) {
-		delete it->second;
+	for (const auto& it : areas) {
+		delete it.second;
 	}
-
 	areas.clear();
 }
 
 AreaCombat::AreaCombat(const AreaCombat& rhs)
 {
 	hasExtArea = rhs.hasExtArea;
-
-	for (AreaCombatMap::const_iterator it = rhs.areas.begin(); it != rhs.areas.end(); ++it) {
-		areas[it->first] = new MatrixArea(*it->second);
+	for (const auto& it : rhs.areas) {
+		areas[it.first] = new MatrixArea(*it.second);
 	}
 }
 

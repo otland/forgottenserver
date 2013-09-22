@@ -155,10 +155,9 @@ void Raids::clear()
 	g_scheduler.stopEvent(checkRaidsEvent);
 	checkRaidsEvent = 0;
 
-	for (RaidList::const_iterator it = raidList.begin(), end = raidList.end(); it != end; ++it) {
-		delete *it;
+	for (Raid* raid : raidList) {
+		delete raid;
 	}
-
 	raidList.clear();
 
 	loaded = false;
@@ -200,11 +199,9 @@ Raid::~Raid()
 {
 	stopEvents();
 
-	for (RaidEventVector::iterator it = raidEvents.begin(), end = raidEvents.end(); it != end; ++it) {
-		delete (*it);
+	for (RaidEvent* raidEvent : raidEvents) {
+		delete raidEvent;
 	}
-
-	raidEvents.clear();
 }
 
 bool Raid::loadFromXml(const std::string& _filename)
@@ -564,7 +561,6 @@ AreaSpawnEvent::~AreaSpawnEvent()
 	for (MonsterSpawn* spawn : m_spawnList) {
 		delete spawn;
 	}
-	m_spawnList.clear();
 }
 
 void AreaSpawnEvent::addMonster(MonsterSpawn* monsterSpawn)

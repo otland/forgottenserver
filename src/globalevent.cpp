@@ -43,10 +43,9 @@ GlobalEvents::~GlobalEvents()
 
 void GlobalEvents::clearMap(GlobalEventMap& map)
 {
-	for (GlobalEventMap::iterator it = map.begin(); it != map.end(); ++it) {
-		delete it->second;
+	for (const auto& it : map) {
+		delete it.second;
 	}
-
 	map.clear();
 }
 

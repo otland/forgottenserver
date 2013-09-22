@@ -317,22 +317,17 @@ Chat::Chat()
 
 Chat::~Chat()
 {
-	normalChannels.clear();
-
 	for (const auto& it : guildChannels) {
 		delete it.second;
 	}
-	guildChannels.clear();
 
 	for (const auto& it : partyChannels) {
 		delete it.second;
 	}
-	partyChannels.clear();
 
 	for (const auto& it : privateChannels) {
 		delete it.second;
 	}
-	privateChannels.clear();
 
 	delete dummyPrivate;
 }

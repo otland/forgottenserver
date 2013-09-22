@@ -93,26 +93,16 @@ Creature::Creature() :
 
 Creature::~Creature()
 {
-	std::list<Creature*>::iterator cit;
-
-	for (cit = summons.begin(); cit != summons.end(); ++cit) {
-		(*cit)->setAttackedCreature(nullptr);
-		(*cit)->setMaster(nullptr);
-		(*cit)->releaseThing2();
+	for (Creature* summon : summons) {
+		summon->setAttackedCreature(nullptr);
+		summon->setMaster(nullptr);
+		summon->releaseThing2();
 	}
 
-	summons.clear();
-
-	for (ConditionList::iterator it = conditions.begin(); it != conditions.end(); ++it) {
-		(*it)->endCondition(this, CONDITIONEND_CLEANUP);
-		delete *it;
+	for (Condition* condition : conditions) {
+		condition->endCondition(this, CONDITIONEND_CLEANUP);
+		delete condition;
 	}
-
-	conditions.clear();
-
-	attackedCreature = nullptr;
-
-	//std::cout << "Creature destructor " << this->getID() << std::endl;
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)

@@ -34,7 +34,6 @@ CreatureEvents::~CreatureEvents()
 	for (const auto& it : m_creatureEvents) {
 		delete it.second;
 	}
-	m_creatureEvents.clear();
 }
 
 void CreatureEvents::clear()

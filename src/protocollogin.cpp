@@ -162,11 +162,11 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		output->AddByte(0x64);
 		output->AddByte((uint8_t)account.charList.size());
 
-		for (std::list<std::string>::iterator it = account.charList.begin(), end = account.charList.end(); it != end; ++it) {
-			output->AddString(*it);
+		for (const std::string& characterName : account.charList) {
+			output->AddString(characterName);
 
 			if (g_config.getBoolean(ConfigManager::ON_OR_OFF_CHARLIST)) {
-				if (g_game.getPlayerByName(*it)) {
+				if (g_game.getPlayerByName(characterName)) {
 					output->AddString("Online");
 				} else {
 					output->AddString("Offline");

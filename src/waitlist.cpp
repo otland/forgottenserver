@@ -28,23 +28,12 @@
 
 extern ConfigManager g_config;
 
-WaitingList::WaitingList()
-{
-	//
-}
-
-WaitingList::~WaitingList()
-{
-	waitList.clear();
-}
-
 WaitListIterator WaitingList::findClient(const Player* player, uint32_t& slot)
 {
 	slot = 1;
 
 	for (WaitListIterator it = waitList.begin(); it != waitList.end(); ++it) {
 		Wait* wait = *it;
-
 		if (wait->acc == player->getAccount() && wait->ip == player->getIP() && wait->name == player->getName()) {
 			return it;
 		}

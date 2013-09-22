@@ -243,8 +243,8 @@ uint32_t Spells::getInstantSpellCount(const Player* player)
 InstantSpell* Spells::getInstantSpellByIndex(const Player* player, uint32_t index)
 {
 	uint32_t count = 0;
-	for (InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it) {
-		InstantSpell* instantSpell = it->second;
+	for (const auto& it : instants) {
+		InstantSpell* instantSpell = it.second;
 		if (instantSpell->canCast(player)) {
 			if (count == index) {
 				return instantSpell;

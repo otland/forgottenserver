@@ -55,13 +55,9 @@ void OutputMessagePool::startExecutionFrame()
 
 OutputMessagePool::~OutputMessagePool()
 {
-	InternalOutputMessageList::iterator it;
-
-	for (it = m_outputMessages.begin(); it != m_outputMessages.end(); ++it) {
-		delete *it;
+	for (OutputMessage* msg : m_outputMessages) {
+		delete msg;
 	}
-
-	m_outputMessages.clear();
 }
 
 void OutputMessagePool::send(OutputMessage_ptr msg)

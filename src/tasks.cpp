@@ -27,7 +27,6 @@ extern Game g_game;
 
 Dispatcher::Dispatcher()
 {
-	m_taskList.clear();
 	m_threadState = STATE_TERMINATED;
 }
 

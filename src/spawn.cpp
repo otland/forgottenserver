@@ -201,9 +201,6 @@ Spawn::~Spawn()
 		monster->releaseThing2();
 	}
 
-	spawnedMap.clear();
-	spawnMap.clear();
-
 	stopEvent();
 }
 
