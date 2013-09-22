@@ -37,7 +37,7 @@ Raids::Raids()
 {
 	loaded = false;
 	started = false;
-	running = NULL;
+	running = nullptr;
 	lastRaidEnd = 0;
 	checkRaidsEvent = 0;
 
@@ -163,7 +163,7 @@ void Raids::clear()
 
 	loaded = false;
 	started = false;
-	running = NULL;
+	running = nullptr;
 	lastRaidEnd = 0;
 
 	m_scriptInterface.reInitState();
@@ -182,7 +182,7 @@ Raid* Raids::getRaidByName(const std::string& name)
 			return raid;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 Raid::Raid(const std::string& _name, uint32_t _interval, uint32_t _marginTime)
@@ -280,7 +280,7 @@ void Raid::resetRaid()
 {
 	nextEvent = 0;
 	state = RAIDSTATE_IDLE;
-	Raids::getInstance()->setRunning(NULL);
+	Raids::getInstance()->setRunning(nullptr);
 	Raids::getInstance()->setLastRaidEnd(OTSYS_TIME());
 }
 
@@ -297,7 +297,7 @@ RaidEvent* Raid::getNextRaidEvent()
 	if (nextEvent < raidEvents.size()) {
 		return raidEvents[nextEvent];
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -596,7 +596,7 @@ bool AreaSpawnEvent::executeEvent()
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
 				Position pos(random_range(m_fromPos.x, m_toPos.x), random_range(m_fromPos.y, m_toPos.y), random_range(m_fromPos.z, m_toPos.z));
 				Tile* tile = g_game.getTile(pos);
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == NULL && g_game.placeCreature(monster, pos, false, true)) {
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, pos, false, true)) {
 					success = true;
 					break;
 				}

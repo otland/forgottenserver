@@ -272,7 +272,7 @@ class LuaScriptInterface
 		virtual bool initState();
 		bool reInitState();
 
-		int32_t loadFile(const std::string& file, Npc* npc = NULL);
+		int32_t loadFile(const std::string& file, Npc* npc = nullptr);
 
 		const std::string& getFileById(int32_t scriptId);
 		int32_t getEvent(const std::string& eventName);
@@ -364,7 +364,7 @@ class LuaScriptInterface
 		{
 			T** userdata = getRawUserdata<T>(L, arg);
 			if (!userdata) {
-				return NULL;
+				return nullptr;
 			}
 			return *userdata;
 		}
@@ -459,7 +459,7 @@ class LuaScriptInterface
 
 		void registerFunctions();
 		
-		void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = NULL);
+		void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = nullptr);
 		void registerClassMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerMetaMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);

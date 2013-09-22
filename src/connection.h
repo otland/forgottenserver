@@ -92,7 +92,7 @@ class Connection : public boost::enable_shared_from_this<Connection>, boost::non
 			m_io_service(io_service),
 			m_service_port(service_port) {
 			m_refCount = 0;
-			m_protocol = NULL;
+			m_protocol = nullptr;
 			m_pendingWrite = 0;
 			m_pendingRead = 0;
 			m_connectionState = CONNECTION_STATE_OPEN;
@@ -100,7 +100,7 @@ class Connection : public boost::enable_shared_from_this<Connection>, boost::non
 			m_writeError = false;
 			m_readError = false;
 			m_packetsSent = 0;
-			m_timeConnected = time(NULL);
+			m_timeConnected = time(nullptr);
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 			connectionCount++;

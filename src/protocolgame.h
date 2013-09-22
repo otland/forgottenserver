@@ -215,7 +215,7 @@ class ProtocolGame : public Protocol
 		void sendPing();
 		void sendPingBack();
 		void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
-		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = NULL);
+		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr);
 
 		void sendQuestLog();
 		void sendQuestLine(const Quest* quest);
@@ -229,7 +229,7 @@ class ProtocolGame : public Protocol
 		void sendCreatureInvisible(const Creature* creature);
 		void sendStats();
 		void sendBasicData();
-		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = NULL, uint32_t exp = 0, TextColor_t color = TEXTCOLOR_NONE);
+		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t exp = 0, TextColor_t color = TEXTCOLOR_NONE);
 		void sendReLoginWindow(uint8_t unfairFightReduction);
 
 		void sendTutorial(uint8_t tutorialId);
@@ -326,7 +326,7 @@ class ProtocolGame : public Protocol
 		void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
 		void AddPlayerStats(NetworkMessage& msg);
 		void AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-		                      const std::string& text, uint16_t channelId, Position* pos = NULL);
+		                      const std::string& text, uint16_t channelId, Position* pos = nullptr);
 		void AddCreatureHealth(NetworkMessage& msg, const Creature* creature);
 		void AddCreatureOutfit(NetworkMessage& msg, const Creature* creature, const Outfit_t& outfit);
 		void AddCreatureInvisible(NetworkMessage& msg, const Creature* creature);

@@ -46,12 +46,12 @@ Items Item::items;
 
 Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 {
-	Item* newItem = NULL;
+	Item* newItem = nullptr;
 
 	const ItemType& it = Item::items[_type];
 
 	if (it.group == ITEM_GROUP_DEPRECATED) {
-		return NULL;
+		return nullptr;
 	}
 
 	if (it.stackable && _count == 0) {
@@ -102,7 +102,7 @@ Item* Item::CreateItem(PropStream& propStream)
 	uint16_t _id;
 
 	if (!propStream.GET_USHORT(_id)) {
-		return NULL;
+		return nullptr;
 	}
 
 	switch (_id) {
@@ -143,11 +143,11 @@ Item* Item::CreateItem(PropStream& propStream)
 
 Item::Item(const uint16_t _type, uint16_t _count /*= 0*/)
 {
-	parent = NULL;
+	parent = nullptr;
 	useCount = 0;
 
 	id = _type;
-	attributes = NULL;
+	attributes = nullptr;
 
 	const ItemType& it = items[id];
 
@@ -186,7 +186,7 @@ Item::Item(const Item& i) :
 	if (i.attributes) {
 		attributes = new ItemAttributes(*i.attributes);
 	} else {
-		attributes = NULL;
+		attributes = nullptr;
 	}
 }
 
@@ -270,7 +270,7 @@ Cylinder* Item::getTopParent()
 		return prevaux;
 	}
 
-	while (aux->getParent() != NULL) {
+	while (aux->getParent() != nullptr) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -289,7 +289,7 @@ const Cylinder* Item::getTopParent() const
 		return prevaux;
 	}
 
-	while (aux->getParent() != NULL) {
+	while (aux->getParent() != nullptr) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -353,7 +353,7 @@ Player* Item::getHoldingPlayer()
 		p = p->getParent();
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 const Player* Item::getHoldingPlayer() const
@@ -785,7 +785,7 @@ double Item::getWeight() const
 }
 
 std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
-                                 const Item* item /*= NULL*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
+                                 const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
 	std::ostringstream s;
 	s << getNameDescription(it, item, subType, addArticle);
@@ -1201,7 +1201,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 
 	if (lookDistance <= 1) {
-		double weight = (item == NULL ? it.weight : item->getWeight());
+		double weight = (item == nullptr ? it.weight : item->getWeight());
 		if (weight > 0 && it.pickupable) {
 			int32_t count = weight / it.weight;
 			s << std::endl << getWeightDescription(it, weight, count);
@@ -1227,7 +1227,7 @@ std::string Item::getDescription(int32_t lookDistance) const
 	return getDescription(it, lookDistance, this);
 }
 
-std::string Item::getNameDescription(const ItemType& it, const Item* item /*= NULL*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
+std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
 	if (item) {
 		subType = item->getSubType();
@@ -1398,10 +1398,10 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 	//check if we have it
 	if ((type & m_attributes) != 0) {
 		//go trough the linked list until find it
-		Attribute* prevAttr = NULL;
+		Attribute* prevAttr = nullptr;
 		Attribute* curAttr = m_firstAttr;
 
-		while (curAttr != NULL) {
+		while (curAttr != nullptr) {
 			if (curAttr->type == type) {
 				//found so remove it from the linked list
 				if (prevAttr) {
@@ -1528,7 +1528,7 @@ void ItemAttributes::addAttr(Attribute* attr)
 ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) const
 {
 	if ((type & m_attributes) == 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	Attribute* curAttr = m_firstAttr;
@@ -1542,7 +1542,7 @@ ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) cons
 	}
 
 	std::cout << "Warning: [ItemAttributes::getAttrConst] (type & m_attributes) != 0 but attribute not found" << std::endl;
-	return NULL;
+	return nullptr;
 }
 
 ItemAttributes::Attribute* ItemAttributes::getAttr(itemAttrTypes type)
@@ -1579,7 +1579,7 @@ void ItemAttributes::deleteAttrs(Attribute* attr)
 		}
 
 		Attribute* next_attr = attr->next;
-		attr->next = NULL;
+		attr->next = nullptr;
 
 		if (next_attr) {
 			deleteAttrs(next_attr);

@@ -86,7 +86,7 @@ class NpcEventsHandler
 		virtual void onCreatureAppear(const Creature* creature) {}
 		virtual void onCreatureDisappear(const Creature* creature) {}
 		virtual void onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos) {}
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text, Position* pos = NULL) {}
+		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text, Position* pos = nullptr) {}
 		virtual void onPlayerTrade(const Player* player, int32_t callback, uint16_t itemid,
 		                           uint8_t count, uint8_t amount, bool ignore = false, bool inBackpacks = false) {}
 		virtual void onPlayerCloseChannel(const Player* player) {}
@@ -110,7 +110,7 @@ class NpcScript : public NpcEventsHandler
 		virtual void onCreatureAppear(const Creature* creature);
 		virtual void onCreatureDisappear(const Creature* creature);
 		virtual void onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos);
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text, Position* pos = NULL);
+		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text, Position* pos = nullptr);
 		virtual void onPlayerTrade(const Player* player, int32_t callback, uint16_t itemid,
 		                           uint8_t count, uint8_t amount, bool ignore, bool inBackpacks);
 		virtual void onPlayerCloseChannel(const Player* player);
@@ -223,7 +223,7 @@ class Npc : public Creature
 		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport);
 
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = NULL);
+		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr);
 		virtual void onThink(uint32_t interval);
 		virtual std::string getDescription(int32_t lookDistance) const;
 

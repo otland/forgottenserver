@@ -78,7 +78,7 @@ Game::Game()
 	checkCreatureEvent = 0;
 	checkDecayEvent = 0;
 
-	map = NULL;
+	map = nullptr;
 	lastStageLevel = 0;
 	playersRecord = 0;
 	motdNum = 0;
@@ -367,11 +367,11 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 				if (thing && thing->getItem()) {
 					if (tile->hasProperty(ISVERTICAL)) {
 						if (player->getPosition().x + 1 == tile->getPosition().x) {
-							thing = NULL;
+							thing = nullptr;
 						}
 					} else { // horizontal
 						if (player->getPosition().y + 1 == tile->getPosition().y) {
-							thing = NULL;
+							thing = nullptr;
 						}
 					}
 				}
@@ -386,7 +386,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 
 			Container* parentContainer = player->getContainerByID(fromCid);
 			if (!parentContainer) {
-				return NULL;
+				return nullptr;
 			}
 
 			if (parentContainer->getID() == ITEM_BROWSEFIELD) {
@@ -394,11 +394,11 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 				if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 					if (tile->hasProperty(ISVERTICAL)) {
 						if (player->getPosition().x + 1 == tile->getPosition().x) {
-							return NULL;
+							return nullptr;
 						}
 					} else { // horizontal
 						if (player->getPosition().y + 1 == tile->getPosition().y) {
-							return NULL;
+							return nullptr;
 						}
 					}
 				}
@@ -407,7 +407,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 		} else if (pos.y == 0 && pos.z == 0) {
 			const ItemType& it = Item::items.getItemIdByClientId(spriteId);
 			if (it.id == 0) {
-				return NULL;
+				return nullptr;
 			}
 
 			int32_t subType;
@@ -423,7 +423,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			return player->getInventoryItem(slot);
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
@@ -477,12 +477,12 @@ QTreeLeafNode* Game::getLeaf(uint32_t x, uint32_t y)
 Creature* Game::getCreatureByID(uint32_t id)
 {
 	if (id == 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	auto it = creatures.find(id);
 	if (it == creatures.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -490,12 +490,12 @@ Creature* Game::getCreatureByID(uint32_t id)
 Monster* Game::getMonsterByID(uint32_t id)
 {
 	if (id == 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	auto it = monsters.find(id);
 	if (it == monsters.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -503,12 +503,12 @@ Monster* Game::getMonsterByID(uint32_t id)
 Npc* Game::getNpcByID(uint32_t id)
 {
 	if (id == 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	auto it = npcs.find(id);
 	if (it == npcs.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -516,12 +516,12 @@ Npc* Game::getNpcByID(uint32_t id)
 Player* Game::getPlayerByID(uint32_t id)
 {
 	if (id == 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	auto it = players.find(id);
 	if (it == players.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -529,7 +529,7 @@ Player* Game::getPlayerByID(uint32_t id)
 Creature* Game::getCreatureByName(const std::string& s)
 {
 	if (s.empty()) {
-		return NULL;
+		return nullptr;
 	}
 
 	const std::string& upperCaseInput = asUpperCaseString(s);
@@ -538,18 +538,18 @@ Creature* Game::getCreatureByName(const std::string& s)
 			return it.second;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 Player* Game::getPlayerByName(const std::string& s)
 {
 	if (s.empty()) {
-		return NULL;
+		return nullptr;
 	}
 
 	PlayerNameMap::const_iterator it = mappedPlayerNames.find(asLowerCaseString(s));
 	if (it == mappedPlayerNames.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -557,7 +557,7 @@ Player* Game::getPlayerByName(const std::string& s)
 Player* Game::getPlayerByGUID(const uint32_t& guid)
 {
 	if (guid == 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	for (const auto& it : players) {
@@ -565,7 +565,7 @@ Player* Game::getPlayerByGUID(const uint32_t& guid)
 			return it.second;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
@@ -602,7 +602,7 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 			return it.second;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 PlayerVector Game::getPlayersByAccount(uint32_t acc)
@@ -629,7 +629,7 @@ PlayerVector Game::getPlayersByIP(uint32_t ipadress, uint32_t mask)
 
 bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/)
 {
-	if (creature->getParent() != NULL) {
+	if (creature->getParent() != nullptr) {
 		return false;
 	}
 
@@ -664,7 +664,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 
 	Cylinder* creatureParent = creature->getParent();
 	int32_t newIndex = creatureParent->__getIndexOfThing(creature);
-	creatureParent->postAddNotification(creature, NULL, newIndex);
+	creatureParent->postAddNotification(creature, nullptr, newIndex);
 
 	// TODO: Move this code to Player::onCreatureAppear where creature == this.
 	Player* player = creature->getPlayer();
@@ -672,7 +672,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		int32_t offlineTime;
 		if (player->getLastLogout() != 0) {
 			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
-			offlineTime = std::min<int32_t>(time(NULL) - player->getLastLogout(), 86400 * 21);
+			offlineTime = std::min<int32_t>(time(nullptr) - player->getLastLogout(), 86400 * 21);
 		} else {
 			offlineTime = 0;
 		}
@@ -884,7 +884,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 		spectator->onCreatureDisappear(creature, index, isLogout);
 	}
 
-	creature->getParent()->postRemoveNotification(creature, NULL, index, true);
+	creature->getParent()->postRemoveNotification(creature, nullptr, index, true);
 
 	creatures.erase(creature->getID());
 	creature->removeList();
@@ -975,7 +975,7 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return false;
 	}
 
-	player->setNextActionTask(NULL);
+	player->setNextActionTask(nullptr);
 
 	Creature* movingCreature = getCreatureByID(movingCreatureId);
 	if (!movingCreature) {
@@ -1059,7 +1059,7 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
 	Cylinder* fromTile = creature->getTile();
-	Cylinder* toTile = NULL;
+	Cylinder* toTile = nullptr;
 
 	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
@@ -1085,7 +1085,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		//try go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
 			Tile* tmpTile = getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
-			if (tmpTile == NULL || (tmpTile->ground == NULL && !tmpTile->hasProperty(BLOCKSOLID))) {
+			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(BLOCKSOLID))) {
 				tmpTile = getTile(destPos.x, destPos.y, destPos.getZ() - 1);
 				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(BLOCKSOLID)) {
 					flags = flags | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
@@ -1098,7 +1098,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		} else {
 			//try go down
 			Tile* tmpTile = getTile(destPos);
-			if (currentPos.z != 7 && (tmpTile == NULL || (tmpTile->ground == NULL && !tmpTile->hasProperty(BLOCKSOLID)))) {
+			if (currentPos.z != 7 && (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(BLOCKSOLID)))) {
 				tmpTile = getTile(destPos.x, destPos.y, destPos.z + 1);
 				if (tmpTile && tmpTile->hasHeight(3)) {
 					flags = flags | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
@@ -1111,7 +1111,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	toTile = getTile(destPos);
 	ReturnValue ret = RET_NOTPOSSIBLE;
 
-	if (toTile != NULL) {
+	if (toTile != nullptr) {
 		ret = internalMoveCreature(creature, fromTile, toTile, flags);
 	}
 
@@ -1130,8 +1130,8 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 	fromCylinder->getTile()->moveCreature(creature, toCylinder);
 
 	int32_t index = 0;
-	Item* toItem = NULL;
-	Cylinder* subCylinder = NULL;
+	Item* toItem = nullptr;
+	Cylinder* subCylinder = nullptr;
 
 	uint32_t n = 0;
 
@@ -1171,7 +1171,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return false;
 	}
 
-	player->setNextActionTask(NULL);
+	player->setNextActionTask(nullptr);
 
 	Cylinder* fromCylinder = internalGetCylinder(player, fromPos);
 	uint8_t fromIndex = 0;
@@ -1205,7 +1205,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		}
 	}
 
-	if (fromCylinder == NULL || toCylinder == NULL || item == NULL || item->getClientID() != spriteId) {
+	if (fromCylinder == nullptr || toCylinder == nullptr || item == nullptr || item->getClientID() != spriteId) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return false;
 	}
@@ -1278,7 +1278,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1, 0>(mapFromPos, player->getPosition())
 			        && !Position::areInRange<1, 1, 0>(mapFromPos, walkPos)) {
 				//need to pickup the item first
-				Item* moveItem = NULL;
+				Item* moveItem = nullptr;
 
 				ReturnValue ret = internalMoveItem(fromCylinder, player, INDEX_WHEREEVER, item, count, &moveItem);
 
@@ -1320,7 +1320,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return false;
 	}
 
-	ReturnValue ret = internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, NULL, 0, player);
+	ReturnValue ret = internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, nullptr, 0, player);
 
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
@@ -1331,7 +1331,7 @@ bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 }
 
 ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-                                   Item* item, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = NULL*/)
+                                   Item* item, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = nullptr*/)
 {
 	if (!toCylinder) {
 		return RET_NOTPOSSIBLE;
@@ -1345,7 +1345,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 	}
 
-	Item* toItem = NULL;
+	Item* toItem = nullptr;
 
 	Cylinder* subCylinder;
 	int floorN = 0;
@@ -1399,7 +1399,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 				}
 
 				ret = toCylinder->__queryAdd(index, item, count, flags);
-				toItem = NULL;
+				toItem = nullptr;
 			}
 		}
 	}
@@ -1435,7 +1435,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	//remove the item
 	int32_t itemIndex = fromCylinder->__getIndexOfThing(item);
-	Item* updateItem = NULL;
+	Item* updateItem = nullptr;
 	fromCylinder->__removeThing(item, m);
 	bool isCompleteRemoval = item->isRemoved();
 
@@ -1455,7 +1455,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		if (newCount > 0) {
 			moveItem = Item::CreateItem(item->getID(), newCount);
 		} else {
-			moveItem = NULL;
+			moveItem = nullptr;
 		}
 
 		if (item->isRemoved()) {
@@ -1505,7 +1505,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 }
 
 ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-                                        Item* item, Item* tradeItem, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = NULL*/)
+                                        Item* item, Item* tradeItem, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = nullptr*/)
 {
 	if (!toCylinder) {
 		return RET_NOTPOSSIBLE;
@@ -1519,7 +1519,7 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 		}
 	}
 
-	Item* toItem = NULL;
+	Item* toItem = nullptr;
 
 	Cylinder* subCylinder;
 	int floorN = 0;
@@ -1573,7 +1573,7 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 				}
 
 				ret = toCylinder->__queryAdd(index, item, count, flags);
-				toItem = NULL;
+				toItem = nullptr;
 			}
 		}
 	}
@@ -1623,7 +1623,7 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 
 	//remove the item
 	int32_t itemIndex = fromCylinder->__getIndexOfThing(item);
-	Item* updateItem = NULL;
+	Item* updateItem = nullptr;
 	fromCylinder->__removeThing(item, m);
 	bool isCompleteRemoval = item->isRemoved();
 
@@ -1643,7 +1643,7 @@ ReturnValue Game::internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCyli
 		if (newCount > 0) {
 			moveItem = Item::CreateItem(item->getID(), newCount);
 		} else {
-			moveItem = NULL;
+			moveItem = nullptr;
 		}
 
 		if (item->isRemoved()) {
@@ -1704,12 +1704,12 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 {
 	remainderCount = 0;
 
-	if (toCylinder == NULL || item == NULL) {
+	if (toCylinder == nullptr || item == nullptr) {
 		return RET_NOTPOSSIBLE;
 	}
 
 	Cylinder* destCylinder = toCylinder;
-	Item* toItem = NULL;
+	Item* toItem = nullptr;
 	toCylinder = toCylinder->__queryDestination(index, item, &toItem, flags);
 
 	//check if we can add this item
@@ -1759,7 +1759,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 				int32_t itemIndex = toCylinder->__getIndexOfThing(item);
 
 				if (itemIndex != -1) {
-					toCylinder->postAddNotification(item, NULL, itemIndex);
+					toCylinder->postAddNotification(item, nullptr, itemIndex);
 				}
 			}
 		} else {
@@ -1770,7 +1770,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 			int32_t itemIndex = toCylinder->__getIndexOfThing(toItem);
 
 			if (itemIndex != -1) {
-				toCylinder->postAddNotification(toItem, NULL, itemIndex);
+				toCylinder->postAddNotification(toItem, nullptr, itemIndex);
 			}
 		}
 	} else {
@@ -1779,7 +1779,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		int32_t itemIndex = toCylinder->__getIndexOfThing(item);
 
 		if (itemIndex != -1) {
-			toCylinder->postAddNotification(item, NULL, itemIndex);
+			toCylinder->postAddNotification(item, nullptr, itemIndex);
 		}
 	}
 
@@ -1790,7 +1790,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 {
 	Cylinder* cylinder = item->getParent();
 
-	if (cylinder == NULL) {
+	if (cylinder == nullptr) {
 		return RET_NOTPOSSIBLE;
 	}
 
@@ -1829,7 +1829,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 			ReleaseItem(item);
 		}
 
-		cylinder->postRemoveNotification(item, NULL, index, isCompleteRemoval);
+		cylinder->postRemoveNotification(item, nullptr, index, isCompleteRemoval);
 	}
 
 	item->onRemoved();
@@ -1860,8 +1860,8 @@ ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnM
 Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
                            bool depthSearch /*= true*/, int32_t subType /*= -1*/)
 {
-	if (cylinder == NULL) {
-		return NULL;
+	if (cylinder == nullptr) {
+		return nullptr;
 	}
 
 	std::list<Container*> listContainer;
@@ -1903,12 +1903,12 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 uint64_t Game::getMoney(const Cylinder* cylinder)
 {
-	if (cylinder == NULL) {
+	if (cylinder == nullptr) {
 		return 0;
 	}
 
@@ -1953,7 +1953,7 @@ uint64_t Game::getMoney(const Cylinder* cylinder)
 
 bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 {
-	if (cylinder == NULL) {
+	if (cylinder == nullptr) {
 		return false;
 	}
 
@@ -2069,8 +2069,8 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	}
 
 	Cylinder* cylinder = item->getParent();
-	if (cylinder == NULL) {
-		return NULL;
+	if (cylinder == nullptr) {
+		return nullptr;
 	}
 
 	Tile* fromTile = cylinder->getTile();
@@ -2110,7 +2110,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		}
 
 		if (!newItem) {
-			return NULL;
+			return nullptr;
 		}
 
 		newItem->copyAttributes(item);
@@ -2118,7 +2118,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		ret = internalAddItem(cylinder, newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 		if (ret != RET_NOERROR) {
 			delete newItem;
-			return NULL;
+			return nullptr;
 		}
 
 		return newItem;
@@ -2129,7 +2129,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		if (newCount == 0 && (item->isStackable() || item->hasCharges())) {
 			if (item->isStackable()) {
 				internalRemoveItem(item);
-				return NULL;
+				return nullptr;
 			} else {
 				int32_t newItemId = newId;
 
@@ -2139,18 +2139,18 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 
 				if (newItemId == -1) {
 					internalRemoveItem(item);
-					return NULL;
+					return nullptr;
 				} else if (newItemId != newId) {
 					//Replacing the the old item with the new while maintaining the old position
 					Item* newItem = Item::CreateItem(newItemId, 1);
-					if (newItem == NULL) {
-						return NULL;
+					if (newItem == nullptr) {
+						return nullptr;
 					}
 
 					cylinder->__replaceThing(itemIndex, newItem);
 					cylinder->postAddNotification(newItem, cylinder, itemIndex);
 
-					item->setParent(NULL);
+					item->setParent(nullptr);
 					cylinder->postRemoveNotification(item, cylinder, itemIndex, true);
 					ReleaseItem(item);
 					return newItem;
@@ -2189,20 +2189,20 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 			newItem = Item::CreateItem(newId, newCount);
 		}
 
-		if (newItem == NULL) {
-			return NULL;
+		if (newItem == nullptr) {
+			return nullptr;
 		}
 
 		cylinder->__replaceThing(itemIndex, newItem);
 		cylinder->postAddNotification(newItem, cylinder, itemIndex);
 
-		item->setParent(NULL);
+		item->setParent(nullptr);
 		cylinder->postRemoveNotification(item, cylinder, itemIndex, true);
 		ReleaseItem(item);
 
 		return newItem;
 	}
-	return NULL;
+	return nullptr;
 }
 
 ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pushMove/* = true*/, uint32_t flags /*= 0*/)
@@ -2224,7 +2224,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 			creature->getTile()->moveCreature(creature, toTile, !pushMove);
 			return RET_NOERROR;
 		} else if (Item* item = thing->getItem()) {
-			return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), NULL, flags);
+			return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
 		}
 	}
 	return RET_NOTPOSSIBLE;
@@ -2239,7 +2239,7 @@ bool Game::playerMove(uint32_t playerId, Direction direction)
 	}
 
 	player->resetIdleTime();
-	player->setNextWalkActionTask(NULL);
+	player->setNextWalkActionTask(nullptr);
 
 	std::list<Direction> dirs;
 	dirs.push_back(direction);
@@ -2353,7 +2353,7 @@ bool Game::playerOpenChannel(uint32_t playerId, uint16_t channelId)
 	if (!channel->isPublicChannel()) {
 		users = &channel->getUsers();
 	} else {
-		users = NULL;
+		users = nullptr;
 	}
 
 	player->sendChannel(channel->getId(), channel->getName(), users, invitedUsers);
@@ -2434,7 +2434,7 @@ bool Game::playerAutoWalk(uint32_t playerId, std::list<Direction>& listDir)
 	}
 
 	player->resetIdleTime();
-	player->setNextWalkTask(NULL);
+	player->setNextWalkTask(nullptr);
 	return player->startAutoWalk(listDir);
 }
 
@@ -2489,7 +2489,7 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 
 			if (fromPos.x != 0xFFFF && toPos.x != 0xFFFF && Position::areInRange<1, 1, 0>(fromPos, player->getPosition()) &&
 			        !Position::areInRange<1, 1, 0>(fromPos, toPos)) {
-				Item* moveItem = NULL;
+				Item* moveItem = nullptr;
 
 				ret = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem);
 				if (ret != RET_NOERROR) {
@@ -2528,7 +2528,7 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	}
 
 	player->resetIdleTime();
-	player->setNextActionTask(NULL);
+	player->setNextActionTask(nullptr);
 
 	return g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
 }
@@ -2587,7 +2587,7 @@ bool Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	}
 
 	player->resetIdleTime();
-	player->setNextActionTask(NULL);
+	player->setNextActionTask(nullptr);
 
 	g_actions->useItem(player, pos, index, item, isHotkey);
 	return true;
@@ -2645,7 +2645,7 @@ bool Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 			uint8_t itemStackPos = fromStackPos;
 
 			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1, 0>(fromPos, player->getPosition()) && !Position::areInRange<1, 1, 0>(fromPos, toPos)) {
-				Item* moveItem = NULL;
+				Item* moveItem = nullptr;
 				ret = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem);
 				if (ret != RET_NOERROR) {
 					player->sendCancelMessage(ret);
@@ -2685,7 +2685,7 @@ bool Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 	}
 
 	player->resetIdleTime();
-	player->setNextActionTask(NULL);
+	player->setNextActionTask(nullptr);
 
 	return g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->__getIndexOfThing(creature), item, isHotkey, creatureId);
 }
@@ -2849,7 +2849,7 @@ bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 
 	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_TEXTEDIT)) {
 		if (!creatureEvent->executeTextEdit(player, writeItem, text)) {
-			player->setWriteItem(NULL);
+			player->setWriteItem(nullptr);
 			return false;
 		}
 	}
@@ -2858,7 +2858,7 @@ bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 		if (writeItem->getText() != text) {
 			writeItem->setText(text);
 			writeItem->setWriter(player->getName());
-			writeItem->setDate(time(NULL));
+			writeItem->setDate(time(nullptr));
 		}
 	} else {
 		writeItem->resetText();
@@ -2871,7 +2871,7 @@ bool Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 		transformItem(writeItem, newId);
 	}
 
-	player->setWriteItem(NULL);
+	player->setWriteItem(nullptr);
 	return true;
 }
 
@@ -2973,7 +2973,7 @@ bool Game::playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t w
 	House* house = player->getEditHouse(internalWindowTextId, internalListId);
 	if (house && internalWindowTextId == windowTextId && listId == 0) {
 		house->setAccessList(internalListId, text);
-		player->setEditHouse(NULL);
+		player->setEditHouse(nullptr);
 	}
 	return true;
 }
@@ -3169,9 +3169,9 @@ bool Game::playerAcceptTrade(uint32_t playerId)
 				uint32_t count1 = tradeItem1->getItemCount();
 				uint32_t count2 = tradeItem2->getItemCount();
 
-				ret1 = internalMoveTradeItem(cylinder1, tradePartner, INDEX_WHEREEVER, tradeItem1, tradeItem2, count1, NULL, FLAG_IGNOREAUTOSTACK);
+				ret1 = internalMoveTradeItem(cylinder1, tradePartner, INDEX_WHEREEVER, tradeItem1, tradeItem2, count1, nullptr, FLAG_IGNOREAUTOSTACK);
 				if (ret1 == RET_NOERROR) {
-					internalMoveItem(cylinder2, player, INDEX_WHEREEVER, tradeItem2, count2, NULL, FLAG_IGNOREAUTOSTACK);
+					internalMoveItem(cylinder2, player, INDEX_WHEREEVER, tradeItem2, count2, nullptr, FLAG_IGNOREAUTOSTACK);
 
 					tradeItem1->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
 					tradeItem2->onTradeEvent(ON_TRADE_TRANSFER, player);
@@ -3198,13 +3198,13 @@ bool Game::playerAcceptTrade(uint32_t playerId)
 		}
 
 		player->setTradeState(TRADE_NONE);
-		player->tradeItem = NULL;
-		player->tradePartner = NULL;
+		player->tradeItem = nullptr;
+		player->tradePartner = nullptr;
 		player->sendTradeClose();
 
 		tradePartner->setTradeState(TRADE_NONE);
-		tradePartner->tradeItem = NULL;
-		tradePartner->tradePartner = NULL;
+		tradePartner->tradeItem = nullptr;
+		tradePartner->tradePartner = nullptr;
 		tradePartner->sendTradeClose();
 		return isSuccess;
 	}
@@ -3339,11 +3339,11 @@ bool Game::internalCloseTrade(Player* player)
 		}
 
 		player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
-		player->tradeItem = NULL;
+		player->tradeItem = nullptr;
 	}
 
 	player->setTradeState(TRADE_NONE);
-	player->tradePartner = NULL;
+	player->tradePartner = nullptr;
 
 	player->sendTextMessage(MSG_STATUS_SMALL, "Trade cancelled.");
 	player->sendTradeClose();
@@ -3357,11 +3357,11 @@ bool Game::internalCloseTrade(Player* player)
 			}
 
 			tradePartner->tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
-			tradePartner->tradeItem = NULL;
+			tradePartner->tradeItem = nullptr;
 		}
 
 		tradePartner->setTradeState(TRADE_NONE);
-		tradePartner->tradePartner = NULL;
+		tradePartner->tradePartner = nullptr;
 
 		tradePartner->sendTextMessage(MSG_STATUS_SMALL, "Trade cancelled.");
 		tradePartner->sendTradeClose();
@@ -3385,7 +3385,7 @@ bool Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t coun
 	int32_t onSell;
 
 	Npc* merchant = player->getShopOwner(onBuy, onSell);
-	if (merchant == NULL) {
+	if (merchant == nullptr) {
 		return false;
 	}
 
@@ -3474,7 +3474,7 @@ bool Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 	}
 
 	std::ostringstream ss;
-	ss << "You see " << Item::getDescription(it, 1, NULL, subType);
+	ss << "You see " << Item::getDescription(it, 1, nullptr, subType);
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
 	return true;
 }
@@ -3628,14 +3628,14 @@ bool Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	if (player->getAttackedCreature() && creatureId == 0) {
-		player->setAttackedCreature(NULL);
+		player->setAttackedCreature(nullptr);
 		player->sendCancelTarget();
 		return true;
 	}
 
 	Creature* attackCreature = getCreatureByID(creatureId);
 	if (!attackCreature) {
-		player->setAttackedCreature(NULL);
+		player->setAttackedCreature(nullptr);
 		player->sendCancelTarget();
 		return false;
 	}
@@ -3644,7 +3644,7 @@ bool Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
 		player->sendCancelTarget();
-		player->setAttackedCreature(NULL);
+		player->setAttackedCreature(nullptr);
 		return false;
 	}
 
@@ -3660,7 +3660,7 @@ bool Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
 		return false;
 	}
 
-	player->setAttackedCreature(NULL);
+	player->setAttackedCreature(nullptr);
 	g_dispatcher.addTask(createTask(boost::bind(&Game::updateCreatureWalk, this, player->getID())));
 	return player->setFollowCreature(getCreatureByID(creatureId));
 }
@@ -4041,7 +4041,7 @@ bool Game::playerSpeakToNpc(Player* player, const std::string& text)
 
 bool Game::npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, bool publicize)
 {
-	if (player != NULL) {
+	if (player != nullptr) {
 		player->sendCreatureSay(npc, SPEAK_PRIVATE_NP, text);
 		player->onCreatureSay(npc, SPEAK_PRIVATE_NP, text);
 	}
@@ -4099,7 +4099,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 }
 
 bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-                               bool ghostMode, SpectatorVec* listPtr/* = NULL*/, Position* pos/* = NULL*/)
+                               bool ghostMode, SpectatorVec* listPtr/* = nullptr*/, Position* pos/* = nullptr*/)
 {
 	if (text.empty()) {
 		return false;
@@ -4402,7 +4402,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		if (attacker) {
 			attackerPlayer = attacker->getPlayer();
 		} else {
-			attackerPlayer = NULL;
+			attackerPlayer = nullptr;
 		}
 
 		Player* targetPlayer = target->getPlayer();
@@ -4472,7 +4472,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		if (attacker) {
 			attackerPlayer = attacker->getPlayer();
 		} else {
-			attackerPlayer = NULL;
+			attackerPlayer = nullptr;
 		}
 
 		Player* targetPlayer = target->getPlayer();
@@ -4556,7 +4556,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 
 			switch (combatType) {
 				case COMBAT_PHYSICALDAMAGE: {
-					Item* splash = NULL;
+					Item* splash = nullptr;
 
 					switch (target->getRace()) {
 						case RACE_VENOM:
@@ -4722,7 +4722,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			return false;
 		}
 
-		Player* attackerPlayer = NULL;
+		Player* attackerPlayer = nullptr;
 
 		if (attacker) {
 			attackerPlayer = attacker->getPlayer();
@@ -5134,7 +5134,7 @@ void Game::updatePlayerHelpers(Player& player)
 
 void Game::updateCreatureType(Creature* creature)
 {
-	const Player* masterPlayer = NULL;
+	const Player* masterPlayer = nullptr;
 
 	uint32_t creatureId = creature->getID();
 	CreatureType_t creatureType = creature->getType();
@@ -5171,7 +5171,7 @@ void Game::updateCreatureType(Creature* creature)
 void Game::updatePremium(Account& account)
 {
 	bool save = false;
-	time_t timeNow = time(NULL);
+	time_t timeNow = time(nullptr);
 
 	if (account.premiumDays != 0 && account.premiumDays != 0xFFFF) {
 		if (account.lastDay == 0) {
@@ -5614,7 +5614,7 @@ bool Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 
 	FILE* file = fopen("client_assertions.txt", "a");
 	if (file) {
-		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(NULL)).c_str(), player->getName().c_str(), convertIPToString(player->getIP()).c_str());
+		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(nullptr)).c_str(), player->getName().c_str(), convertIPToString(player->getIP()).c_str());
 		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
 		fclose(file);
 	}
@@ -6001,7 +6001,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		Player* buyerPlayer = getPlayerByGUID(offer.playerId);
 		if (!buyerPlayer) {
-			buyerPlayer = new Player(NULL);
+			buyerPlayer = new Player(nullptr);
 			if (!IOLoginData::getInstance()->loadPlayerById(buyerPlayer, offer.playerId)) {
 				delete buyerPlayer;
 				return false;
@@ -6149,7 +6149,7 @@ void Game::checkExpiredMarketOffers()
 	for (const ExpiredMarketOffer& offer : expiredSellOffers) {
 		Player* player = getPlayerByGUID(offer.playerId);
 		if (!player) {
-			player = new Player(NULL);
+			player = new Player(nullptr);
 			if (!IOLoginData::getInstance()->loadPlayerById(player, offer.playerId)) {
 				delete player;
 				continue;
@@ -6264,7 +6264,7 @@ bool Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 			player->sendTextMessage(MSG_EVENT_ADVANCE, "Offline training aborted.");
 		}
 
-		player->setBedItem(NULL);
+		player->setBedItem(nullptr);
 	} else {
 		for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_MODALWINDOW)) {
 			creatureEvent->executeModalWindow(player, modalWindowId, button, choice);
@@ -6325,7 +6325,7 @@ Guild* Game::getGuild(uint32_t id) const
 {
 	std::unordered_map<uint32_t, Guild*>::const_iterator it = guilds.find(id);
 	if (it == guilds.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }

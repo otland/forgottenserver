@@ -235,7 +235,7 @@ Command* Commands::getCommand(const std::string& cmd)
 {
 	auto it = commandMap.find(cmd);
 	if (it == commandMap.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -279,7 +279,7 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 		logFile << "data/logs/" << player->getName() << " commands.log";
 		std::ofstream out(logFile.str(), std::ios::app);
 		if (out.is_open()) {
-			time_t ticks = time(NULL);
+			time_t ticks = time(nullptr);
 			const tm* now = localtime(&ticks);
 			char buf[32];
 			strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M", now);

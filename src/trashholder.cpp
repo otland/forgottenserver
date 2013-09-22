@@ -35,7 +35,7 @@ TrashHolder::~TrashHolder()
 }
 
 ReturnValue TrashHolder::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                    uint32_t flags, Creature* actor/* = NULL*/) const
+                                    uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	return RET_NOERROR;
 }

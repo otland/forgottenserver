@@ -27,7 +27,7 @@ WildcardTreeNode* WildcardTreeNode::getChild(char ch)
 {
 	auto it = children.find(ch);
 	if (it == children.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return &it->second;
 }
@@ -36,7 +36,7 @@ const WildcardTreeNode* WildcardTreeNode::getChild(char ch) const
 {
 	auto it = children.find(ch);
 	if (it == children.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return &it->second;
 }

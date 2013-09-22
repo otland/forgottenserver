@@ -92,7 +92,7 @@ Event* Actions::getEvent(const std::string& nodeName)
 	if (asLowerCaseString(nodeName) == "action") {
 		return new Action(&m_scriptInterface);
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -288,7 +288,7 @@ Action* Actions::getAction(const Item* item)
 	if (runeSpell) {
 		return runeSpell;
 	}
-	return NULL;
+	return nullptr;
 }
 
 ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
@@ -330,7 +330,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 	}
 
 	if (Container* container = item->getContainer()) {
-		Container* openContainer = NULL;
+		Container* openContainer = nullptr;
 
 		//depot container
 		if (DepotLocker* depot = container->getDepotLocker()) {
@@ -364,7 +364,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 			player->setWriteItem(item, item->getMaxWriteLength());
 			player->sendTextWindow(item, item->getMaxWriteLength(), true);
 		} else {
-			player->setWriteItem(NULL);
+			player->setWriteItem(nullptr);
 			player->sendTextWindow(item, 0, false);
 		}
 
@@ -380,7 +380,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 		return false;
 	}
 
-	player->setNextActionTask(NULL);
+	player->setNextActionTask(nullptr);
 	player->setNextAction(OTSYS_TIME() + g_config.getNumber(ConfigManager::ACTIONS_DELAY_INTERVAL));
 	player->stopWalk();
 
@@ -405,7 +405,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 		return false;
 	}
 
-	player->setNextActionTask(NULL);
+	player->setNextActionTask(nullptr);
 	player->setNextAction(OTSYS_TIME() + g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL));
 	player->stopWalk();
 
@@ -458,7 +458,7 @@ void Actions::showUseHotkeyMessage(Player* player, int32_t id, uint32_t count)
 
 bool Actions::hasAction(const Item* item)
 {
-	return getAction(item) != NULL;
+	return getAction(item) != nullptr;
 }
 
 Action::Action(LuaScriptInterface* _interface) :
@@ -466,7 +466,7 @@ Action::Action(LuaScriptInterface* _interface) :
 {
 	allowFarUse = false;
 	checkLineOfSight = true;
-	function = NULL;
+	function = nullptr;
 }
 
 Action::Action(const Action* copy) :
@@ -579,7 +579,7 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 		LuaScriptInterface::pushThing(L, thing, env->addThing(thing));
 		LuaScriptInterface::pushPosition(L, toPos, toPos.stackpos);
 	} else {
-		LuaScriptInterface::pushThing(L, NULL, 0);
+		LuaScriptInterface::pushThing(L, nullptr, 0);
 		Position posEx;
 		LuaScriptInterface::pushPosition(L, posEx, 0);
 	}

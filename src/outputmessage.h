@@ -111,7 +111,7 @@ class OutputMessage : public NetworkMessage, boost::noncopyable
 
 		void freeMessage() {
 			setConnection(Connection_ptr());
-			setProtocol(NULL);
+			setProtocol(nullptr);
 			m_frame = 0;
 			//allocate enough size for headers
 			//2 bytes for unencrypted message size

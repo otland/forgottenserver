@@ -105,10 +105,10 @@ class Thing
 		virtual std::string getDescription(int32_t lookDistance) const = 0;
 
 		virtual Cylinder* getParent() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Cylinder* getParent() const {
-			return NULL;
+			return nullptr;
 		}
 
 		virtual void setParent(Cylinder* cylinder) {
@@ -123,22 +123,22 @@ class Thing
 		virtual bool isPushable() const = 0;
 
 		virtual Container* getContainer() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Container* getContainer() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual Item* getItem() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Item* getItem() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual Creature* getCreature() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Creature* getCreature() const {
-			return NULL;
+			return nullptr;
 		}
 
 		virtual bool isRemoved() const {

@@ -77,7 +77,7 @@ void ProtocolGame::addGameTaskInternal(bool droppable, uint32_t delay, const Fun
 ProtocolGame::ProtocolGame(Connection_ptr connection) :
 	Protocol(connection)
 {
-	player = NULL;
+	player = nullptr;
 	m_debugAssertSent = false;
 	m_acceptPackets = false;
 	eventConnect = 0;
@@ -89,7 +89,7 @@ ProtocolGame::ProtocolGame(Connection_ptr connection) :
 
 ProtocolGame::~ProtocolGame()
 {
-	player = NULL;
+	player = nullptr;
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	protocolGameCount--;
 #endif
@@ -104,7 +104,7 @@ void ProtocolGame::releaseProtocol()
 {
 	//dispatcher thread
 	if (player && player->client == this) {
-		player->client = NULL;
+		player->client = nullptr;
 	}
 	Protocol::releaseProtocol();
 }
@@ -114,7 +114,7 @@ void ProtocolGame::deleteProtocolTask()
 	//dispatcher thread
 	if (player) {
 		g_game.ReleaseCreature(player);
-		player = NULL;
+		player = nullptr;
 	}
 
 	Protocol::deleteProtocolTask();
@@ -214,7 +214,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		}
 
 		player->lastIP = player->getIP();
-		player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
+		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 		m_acceptPackets = true;
 		return true;
 	} else {
@@ -261,7 +261,7 @@ bool ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->client = this;
 	sendAddCreature(player, player->getPosition(), player->getTile()->__getIndexOfThing(player), false);
 	player->lastIP = player->getIP();
-	player->lastLoginSaved = std::max<time_t>(time(NULL), player->lastLoginSaved + 1);
+	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 	m_acceptPackets = true;
 	return true;
 }
@@ -1509,10 +1509,10 @@ void ProtocolGame::sendBasicData()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos/* = NULL*/, uint32_t value/* = 0*/, TextColor_t color/* = TEXTCOLOR_NONE*/)
+void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos/* = nullptr*/, uint32_t value/* = 0*/, TextColor_t color/* = TEXTCOLOR_NONE*/)
 {
 	NetworkMessage msg;
-	if (pos != NULL && (mclass == MSG_DAMAGE_DEALT || mclass == MSG_DAMAGE_RECEIVED || mclass == MSG_HEALED || mclass == MSG_EXPERIENCE || mclass == MSG_DAMAGE_OTHERS || mclass == MSG_HEALED_OTHERS || mclass == MSG_EXPERIENCE_OTHERS)) {
+	if (pos != nullptr && (mclass == MSG_DAMAGE_DEALT || mclass == MSG_DAMAGE_RECEIVED || mclass == MSG_HEALED || mclass == MSG_EXPERIENCE || mclass == MSG_DAMAGE_OTHERS || mclass == MSG_HEALED_OTHERS || mclass == MSG_EXPERIENCE_OTHERS)) {
 		AddTextMessageEx(msg, mclass, message, *pos, value, color);
 	} else {
 		AddTextMessage(msg, mclass, message);
@@ -2285,7 +2285,7 @@ void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackPos)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = NULL*/)
+void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = nullptr*/)
 {
 	NetworkMessage msg;
 	AddCreatureSpeak(msg, creature, type, text, 0, pos);
@@ -3108,7 +3108,7 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 }
 
 void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-                                    const std::string& text, uint16_t channelId, Position* pos/* = NULL*/)
+                                    const std::string& text, uint16_t channelId, Position* pos/* = nullptr*/)
 {
 	if (!creature) {
 		return;

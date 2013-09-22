@@ -67,7 +67,7 @@ bool Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 }
 
 ReturnValue Teleport::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                 uint32_t flags, Creature* actor/* = NULL*/) const
+                                 uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	return RET_NOTPOSSIBLE;
 }
@@ -110,7 +110,7 @@ void Teleport::__addThing(int32_t index, Thing* thing)
 		g_game.addMagicEffect(destTile->getPosition(), NM_ME_TELEPORT);
 	} else if (Item* item = thing->getItem()) {
 		g_game.addMagicEffect(item->getPosition(), NM_ME_TELEPORT);
-		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), NULL);
+		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr);
 		g_game.addMagicEffect(destTile->getPosition(), NM_ME_TELEPORT);
 	}
 }

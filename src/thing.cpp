@@ -41,7 +41,7 @@ const Position& Thing::getPosition() const
 {
 	const Tile* tile = getTile();
 	if (!tile) {
-		return Tile::null_tile.getTilePosition();
+		return Tile::nullptr_tile.getTilePosition();
 	}
 	return tile->getTilePosition();
 }

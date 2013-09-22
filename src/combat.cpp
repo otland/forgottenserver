@@ -35,10 +35,10 @@ extern ConfigManager g_config;
 
 Combat::Combat()
 {
-	params.valueCallback = NULL;
-	params.tileCallback = NULL;
-	params.targetCallback = NULL;
-	area = NULL;
+	params.valueCallback = nullptr;
+	params.tileCallback = nullptr;
+	params.targetCallback = nullptr;
+	area = nullptr;
 
 	formulaType = FORMULA_UNDEFINED;
 	mina = 0.0;
@@ -553,7 +553,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
@@ -578,8 +578,8 @@ bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 	bool result = g_game.combatChangeHealth(params.combatType, caster, target, healthChange);
 
 	if (result) {
-		CombatConditionFunc(caster, target, params, NULL);
-		CombatDispelFunc(caster, target, params, NULL);
+		CombatConditionFunc(caster, target, params, nullptr);
+		CombatDispelFunc(caster, target, params, nullptr);
 	}
 
 	return result;
@@ -599,8 +599,8 @@ bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 	bool result = g_game.combatChangeMana(caster, target, manaChange);
 
 	if (result) {
-		CombatConditionFunc(caster, target, params, NULL);
-		CombatDispelFunc(caster, target, params, NULL);
+		CombatConditionFunc(caster, target, params, nullptr);
+		CombatDispelFunc(caster, target, params, nullptr);
 	}
 
 	return result;
@@ -633,10 +633,10 @@ bool Combat::CombatDispelFunc(Creature* caster, Creature* target, const CombatPa
 	return true;
 }
 
-bool Combat::CombatNullFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
+bool Combat::CombatnullptrFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
 {
-	CombatConditionFunc(caster, target, params, NULL);
-	CombatDispelFunc(caster, target, params, NULL);
+	CombatConditionFunc(caster, target, params, nullptr);
+	CombatDispelFunc(caster, target, params, nullptr);
 	return true;
 }
 
@@ -644,7 +644,7 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 {
 	if (params.itemId != 0) {
 		uint32_t itemId = params.itemId;
-		Player* _caster = NULL;
+		Player* _caster = nullptr;
 
 		if (caster) {
 			if (caster->getPlayer()) {
@@ -854,7 +854,7 @@ void Combat::doCombat(Creature* caster, const Position& pos) const
 	if (params.combatType != COMBAT_NONE) {
 		int32_t minChange = 0;
 		int32_t maxChange = 0;
-		getMinMaxValues(caster, NULL, minChange, maxChange);
+		getMinMaxValues(caster, nullptr, minChange, maxChange);
 
 		if (params.combatType != COMBAT_MANADRAIN) {
 			doCombatHealth(caster, pos, area, minChange, maxChange, params);
@@ -862,7 +862,7 @@ void Combat::doCombat(Creature* caster, const Position& pos) const
 			doCombatMana(caster, pos, area, minChange, maxChange, params);
 		}
 	} else {
-		CombatFunc(caster, pos, area, params, CombatNullFunc, NULL);
+		CombatFunc(caster, pos, area, params, CombatnullptrFunc, nullptr);
 	}
 }
 
@@ -925,13 +925,13 @@ void Combat::doCombatMana(Creature* caster, const Position& pos,
 void Combat::doCombatCondition(Creature* caster, const Position& pos, const AreaCombat* area,
                                const CombatParams& params)
 {
-	CombatFunc(caster, pos, area, params, CombatConditionFunc, NULL);
+	CombatFunc(caster, pos, area, params, CombatConditionFunc, nullptr);
 }
 
 void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatParams& params)
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
-		CombatConditionFunc(caster, target, params, NULL);
+		CombatConditionFunc(caster, target, params, nullptr);
 
 		if (params.targetCallback) {
 			params.targetCallback->onTargetCombat(caster, target);
@@ -950,13 +950,13 @@ void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatP
 void Combat::doCombatDispel(Creature* caster, const Position& pos, const AreaCombat* area,
                             const CombatParams& params)
 {
-	CombatFunc(caster, pos, area, params, CombatDispelFunc, NULL);
+	CombatFunc(caster, pos, area, params, CombatDispelFunc, nullptr);
 }
 
 void Combat::doCombatDispel(Creature* caster, Creature* target, const CombatParams& params)
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
-		CombatDispelFunc(caster, target, params, NULL);
+		CombatDispelFunc(caster, target, params, nullptr);
 
 		if (params.targetCallback) {
 			params.targetCallback->onTargetCombat(caster, target);
@@ -978,7 +978,7 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 		SpectatorVec list;
 		g_game.getSpectators(list, target->getPosition(), true, true);
 
-		CombatNullFunc(caster, target, params, NULL);
+		CombatnullptrFunc(caster, target, params, nullptr);
 		combatTileEffects(list, caster, target->getTile(), params);
 
 		if (params.targetCallback) {
@@ -1062,14 +1062,14 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 	int32_t size0 = lua_gettop(L);
 
 	if (lua_pcall(L, parameters, 2 /*nReturnValues*/, 0) != 0) {
-		LuaScriptInterface::reportError(NULL, LuaScriptInterface::popString(L));
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
 		max = LuaScriptInterface::popNumber(L);
 		min = LuaScriptInterface::popNumber(L);
 	}
 
 	if ((lua_gettop(L) + parameters /*nParams*/ + 1) != size0) {
-		LuaScriptInterface::reportError(NULL, "Stack size changed!");
+		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
 	}
 
 	m_scriptInterface->resetScriptEnv();
@@ -1144,11 +1144,11 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 	int32_t size0 = lua_gettop(L);
 
 	if (lua_pcall(L, 2, 0 /*nReturnValues*/, 0) != 0) {
-		LuaScriptInterface::reportError(NULL, LuaScriptInterface::popString(L));
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	}
 
 	if ((lua_gettop(L) + 2 /*nParams*/ + 1) != size0) {
-		LuaScriptInterface::reportError(NULL, "Stack size changed!");
+		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
 	}
 
 	m_scriptInterface->resetScriptEnv();

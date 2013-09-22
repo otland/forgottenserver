@@ -41,7 +41,7 @@ extern Weapons* g_weapons;
 
 ItemType::ItemType()
 {
-	abilities = NULL;
+	abilities = nullptr;
 	article = "";
 	group = ITEM_GROUP_NONE;
 	type = ITEM_TYPE_NONE;
@@ -123,7 +123,7 @@ ItemType::ItemType()
 	breakChance = -1;
 	shootRange = 1;
 
-	condition = NULL;
+	condition = nullptr;
 	combatType = COMBAT_NONE;
 
 	replaceable = true;
@@ -888,7 +888,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			it.type = ITEM_TYPE_MAGICFIELD;
 
 			CombatType_t combatType = COMBAT_NONE;
-			ConditionDamage* conditionDamage = NULL;
+			ConditionDamage* conditionDamage = nullptr;
 
 			tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 			if (tmpStrValue == "fire") {

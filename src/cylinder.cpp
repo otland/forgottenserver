@@ -50,7 +50,7 @@ std::map<uint32_t, uint32_t>& Cylinder::__getAllItemTypeCount(std::map<uint32_t,
 
 Thing* Cylinder::__getThing(uint32_t index) const
 {
-	return NULL;
+	return nullptr;
 }
 
 void Cylinder::__internalAddThing(Thing* thing)

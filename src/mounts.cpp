@@ -91,7 +91,7 @@ Mount* Mounts::getMountByID(uint8_t id)
 			return &mount;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 Mount* Mounts::getMountByClientID(uint16_t clientId)
@@ -101,5 +101,5 @@ Mount* Mounts::getMountByClientID(uint16_t clientId)
 			return &mount;
 		}
 	}
-	return NULL;
+	return nullptr;
 }

@@ -45,7 +45,7 @@ Party::~Party()
 
 void Party::disband()
 {
-	leader->setParty(NULL);
+	leader->setParty(nullptr);
 	leader->sendClosePrivate(CHANNEL_PARTY);
 	g_game.updatePlayerShield(leader);
 	g_game.updatePlayerHelpers(*leader);
@@ -60,7 +60,7 @@ void Party::disband()
 
 	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
 		Player* player = *it;
-		player->setParty(NULL);
+		player->setParty(nullptr);
 		player->sendClosePrivate(CHANNEL_PARTY);
 		player->sendTextMessage(MSG_INFO_DESCR, "Your party has been disbanded.");
 	}
@@ -78,7 +78,7 @@ void Party::disband()
 	}
 	memberList.clear();
 
-	setLeader(NULL);
+	setLeader(nullptr);
 	delete this;
 }
 
@@ -113,7 +113,7 @@ bool Party::leaveParty(Player* player)
 		memberList.erase(it);
 	}
 
-	player->setParty(NULL);
+	player->setParty(nullptr);
 	player->sendClosePrivate(CHANNEL_PARTY);
 	g_game.updatePlayerShield(player);
 	g_game.updatePlayerHelpers(*player);

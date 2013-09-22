@@ -112,7 +112,7 @@ class ItemAttributes
 	public:
 		ItemAttributes() {
 			m_attributes = 0;
-			m_firstAttr = NULL;
+			m_firstAttr = nullptr;
 		}
 
 		~ItemAttributes() {
@@ -250,8 +250,8 @@ class ItemAttributes
 				Attribute* next;
 				Attribute(itemAttrTypes _type) {
 					type = _type;
-					value = NULL;
-					next = NULL;
+					value = nullptr;
+					next = nullptr;
 				}
 
 				Attribute(const Attribute& i) {
@@ -262,10 +262,10 @@ class ItemAttributes
 					} else if (ItemAttributes::validateStrAttrType(type)) {
 						value = (void*)new std::string( *((std::string*)i.value) );
 					} else {
-						value = NULL;
+						value = nullptr;
 					}
 
-					next = NULL;
+					next = nullptr;
 
 					if (i.next) {
 						next = new Attribute(*i.next);
@@ -318,46 +318,46 @@ class Item : virtual public Thing
 			return this;
 		}
 		virtual Container* getContainer() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Container* getContainer() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual Teleport* getTeleport() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Teleport* getTeleport() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual TrashHolder* getTrashHolder() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const TrashHolder* getTrashHolder() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual Mailbox* getMailbox() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Mailbox* getMailbox() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual Door* getDoor() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Door* getDoor() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual MagicField* getMagicField() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const MagicField* getMagicField() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual BedItem* getBed() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const BedItem* getBed() const {
-			return NULL;
+			return nullptr;
 		}
 
 		const std::string& getStrAttr(itemAttrTypes type) const {
@@ -519,8 +519,8 @@ class Item : virtual public Thing
 			return (ItemDecayState_t)getIntAttr(ATTR_ITEM_DECAYING);
 		}
 
-		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = NULL, int32_t subType = -1, bool addArticle = true);
-		static std::string getNameDescription(const ItemType& it, const Item* item = NULL, int32_t subType = -1, bool addArticle = true);
+		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
+		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, double weight, uint32_t count = 1);
 
 		virtual std::string getDescription(int32_t lookDistance) const;

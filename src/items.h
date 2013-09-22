@@ -166,7 +166,7 @@ class ItemType
 		}
 
 		Abilities* getAbilities() {
-			if (abilities == NULL) {
+			if (abilities == nullptr) {
 				abilities = new Abilities();
 			}
 

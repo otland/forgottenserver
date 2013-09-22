@@ -120,7 +120,7 @@ int main(int argc, char* argv[])
 	sigh.sa_handler = SIG_IGN;
 	sigh.sa_flags = 0;
 	sigemptyset(&sigh.sa_mask);
-	sigaction(SIGPIPE, &sigh, NULL);
+	sigaction(SIGPIPE, &sigh, nullptr);
 #endif
 
 	ServiceManager servicer;
@@ -197,7 +197,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	std::ostringstream mutexName;
 	mutexName << "forgottenserver_" << g_config.getNumber(ConfigManager::LOGIN_PORT);
-	CreateMutex(NULL, FALSE, mutexName.str().c_str());
+	CreateMutex(nullptr, FALSE, mutexName.str().c_str());
 	if (GetLastError() == ERROR_ALREADY_EXISTS) {
 		startupErrorMessage("Another instance of The Forgotten Server is already running with the same login port, please shut it down first or change ports for this one.");
 		return;
@@ -361,7 +361,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	if (g_config.getBoolean(ConfigManager::SERVERSAVE_ENABLED)) {
 		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
 		if (serverSaveHour >= 0 && serverSaveHour <= 24) {
-			time_t timeNow = time(NULL);
+			time_t timeNow = time(nullptr);
 			tm* timeinfo = localtime(&timeNow);
 
 			if (serverSaveHour == 0) {
@@ -404,7 +404,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		hostent* he = gethostbyname(szHostName);
 		if (he) {
 			unsigned char** addr = (unsigned char**)he->h_addr_list;
-			while (addr[0] != NULL) {
+			while (addr[0] != nullptr) {
 				IpNetMask.first = *(uint32_t*)(*addr);
 				IpNetMask.second = 0xFFFFFFFF;
 				serverIPs.push_back(IpNetMask);

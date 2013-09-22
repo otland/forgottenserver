@@ -187,8 +187,8 @@ class PropStream
 {
 	public:
 		PropStream() {
-			end = NULL;
-			p = NULL;
+			end = nullptr;
+			p = nullptr;
 		}
 		~PropStream() {}
 
@@ -204,7 +204,7 @@ class PropStream
 		template <typename T>
 		inline bool GET_STRUCT(T* &ret) {
 			if (size() < (long)sizeof(T)) {
-				ret = NULL;
+				ret = nullptr;
 				return false;
 			}
 

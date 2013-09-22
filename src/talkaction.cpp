@@ -67,7 +67,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 		return new TalkAction(&m_scriptInterface);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)

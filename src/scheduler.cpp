@@ -40,7 +40,7 @@ void Scheduler::schedulerThread()
 	boost::unique_lock<boost::mutex> eventLockUnique(m_eventLock, boost::defer_lock);
 
 	while (m_threadState != STATE_TERMINATED) {
-		SchedulerTask* task = NULL;
+		SchedulerTask* task = nullptr;
 		bool runTask = false;
 		bool ret = true;
 
@@ -114,7 +114,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	} else {
 		m_eventLock.unlock();
 		delete task;
-		task = NULL;
+		task = nullptr;
 		return 0;
 	}
 

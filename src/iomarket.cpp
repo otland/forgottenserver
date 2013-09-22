@@ -136,7 +136,7 @@ ExpiredMarketOfferList IOMarket::getExpiredOffers(MarketAction_t action)
 {
 	ExpiredMarketOfferList offerList;
 
-	const time_t lastExpireDate = time(NULL) - g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
+	const time_t lastExpireDate = time(nullptr) - g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
 	std::ostringstream query;
 	query << "SELECT `id`, `amount`, `price`, `itemtype`, `player_id` FROM `market_offers` WHERE `sale` = " << action << " AND `created` <= " << lastExpireDate;
@@ -237,7 +237,7 @@ uint32_t IOMarket::getOfferIdByCounter(uint32_t timestamp, uint16_t counter)
 void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous)
 {
 	std::ostringstream query;
-	query << "INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES (" << playerId << ',' << action << ',' << itemId << ',' << amount << ',' << price << ',' << time(NULL) << ',' << anonymous << ')';
+	query << "INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES (" << playerId << ',' << action << ',' << itemId << ',' << amount << ',' << price << ',' << time(nullptr) << ',' << anonymous << ')';
 	Database::getInstance()->executeQuery(query.str());
 }
 
@@ -260,7 +260,7 @@ void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t it
 	std::ostringstream query;
 	query << "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES ("
 		<< playerId << ',' << type << ',' << itemId << ',' << amount << ',' << price << ','
-	    << timestamp << ',' << time(NULL) << ',' << state << ')';
+	    << timestamp << ',' << time(nullptr) << ',' << state << ')';
 	Database::getInstance()->executeQuery(query.str());
 }
 
@@ -323,7 +323,7 @@ MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)
 {
 	std::map<uint16_t, MarketStatistics>::iterator it = purchaseStatistics.find(itemId);
 	if (it == purchaseStatistics.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return &it->second;
 }
@@ -332,7 +332,7 @@ MarketStatistics* IOMarket::getSaleStatistics(uint16_t itemId)
 {
 	std::map<uint16_t, MarketStatistics>::iterator it = saleStatistics.find(itemId);
 	if (it == saleStatistics.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return &it->second;
 }

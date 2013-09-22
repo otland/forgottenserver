@@ -55,5 +55,5 @@ Group* Groups::getGroup(uint32_t id)
 			return &group;
 		}
 	}
-	return NULL;
+	return nullptr;
 }

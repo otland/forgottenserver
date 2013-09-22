@@ -293,7 +293,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	int32_t size0 = lua_gettop(L);
 	int32_t ret = m_scriptInterface->protectedCall(L, 3, 1);
 	if (ret != 0) {
-		LuaScriptInterface::reportError(NULL, LuaScriptInterface::popString(L));
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else if (lua_isboolean(L, -1)) {
 		result = LuaScriptInterface::popBoolean(L);
 	} else if (lua_gettop(L) > 0 && lua_isnumber(L, -1)) {
@@ -302,7 +302,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	}
 
 	if ((lua_gettop(L) + 4) != size0) {
-		LuaScriptInterface::reportError(NULL, "Stack size changed!");
+		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
 	}
 	m_scriptInterface->resetScriptEnv();
 	return result;
@@ -372,7 +372,7 @@ bool Chat::load()
 ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 {
 	if (getChannel(player, channelId)) {
-		return NULL;
+		return nullptr;
 	}
 
 	switch (channelId) {
@@ -399,7 +399,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 		case CHANNEL_PRIVATE: {
 			//only 1 private channel for each premium player
 			if (!player.isPremium() || getPrivateChannel(player)) {
-				return NULL;
+				return nullptr;
 			}
 
 			//find a free private channel slot
@@ -417,7 +417,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 		default:
 			break;
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool Chat::deleteChannel(const Player& player, uint16_t channelId)
@@ -477,7 +477,7 @@ ChatChannel* Chat::addUserToChannel(Player& player, uint16_t channelId)
 	if (channel && channel->addUser(player)) {
 		return channel;
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool Chat::removeUserFromChannel(const Player& player, uint16_t channelId)
@@ -632,7 +632,7 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 			if (it != normalChannels.end()) {
 				ChatChannel& channel = it->second;
 				if (!channel.executeCanJoinEvent(player)) {
-					return NULL;
+					return nullptr;
 				}
 				return &channel;
 			} else {
@@ -644,14 +644,14 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 			break;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 ChatChannel* Chat::getGuildChannelById(uint32_t guildId)
 {
 	auto it = guildChannels.find(guildId);
 	if (it == guildChannels.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -660,7 +660,7 @@ ChatChannel* Chat::getChannelById(uint16_t channelId)
 {
 	auto it = normalChannels.find(channelId);
 	if (it == normalChannels.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return &it->second;
 }
@@ -672,5 +672,5 @@ PrivateChatChannel* Chat::getPrivateChannel(const Player& player)
 			return it.second;
 		}
 	}
-	return NULL;
+	return nullptr;
 }

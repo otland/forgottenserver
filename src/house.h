@@ -182,7 +182,7 @@ class House
 			return houseName;
 		}
 
-		void setHouseOwner(uint32_t guid, bool updateDatabase = true, Player* player = NULL);
+		void setHouseOwner(uint32_t guid, bool updateDatabase = true, Player* player = nullptr);
 		uint32_t getHouseOwner() const {
 			return houseOwner;
 		}
@@ -311,7 +311,7 @@ class Houses
 				houseMap[houseid] = house;
 				return house;
 			} else {
-				return NULL;
+				return nullptr;
 			}
 		}
 

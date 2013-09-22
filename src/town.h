@@ -89,13 +89,13 @@ class Towns
 					return it.second;
 				}
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		Town* getTown(uint32_t townId) const {
 			auto it = townMap.find(townId);
 			if (it == townMap.end()) {
-				return NULL;
+				return nullptr;
 			}
 			return it->second;
 		}

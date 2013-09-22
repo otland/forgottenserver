@@ -56,7 +56,7 @@ class ChatChannel
 			return users;
 		}
 		virtual const InvitedMap* getInvitedUsersPtr() const {
-			return NULL;
+			return nullptr;
 		}
 
 		virtual uint32_t getOwner() const {

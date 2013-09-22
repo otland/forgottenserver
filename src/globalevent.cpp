@@ -70,7 +70,7 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 		return new GlobalEvent(&m_scriptInterface);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
@@ -123,7 +123,7 @@ void GlobalEvents::startup()
 
 void GlobalEvents::timer()
 {
-	time_t now = time(NULL);
+	time_t now = time(nullptr);
 
 	int64_t nextScheduledTime = std::numeric_limits<int64_t>::max();
 
@@ -290,7 +290,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 			}
 		}
 
-		time_t current_time = time(NULL);
+		time_t current_time = time(nullptr);
 		tm* timeinfo = localtime(&current_time);
 		timeinfo->tm_hour = hour;
 		timeinfo->tm_min = min;

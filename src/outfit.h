@@ -37,8 +37,8 @@ struct Outfit {
 struct ProtocolOutfit {
 	ProtocolOutfit(uint16_t lookType, const std::string* name, uint8_t addons) : lookType(lookType), addons(addons) { this->name = name; }
 
-	uint16_t lookType;
 	const std::string* name;
+	uint16_t lookType;
 	uint8_t addons;
 };
 

@@ -63,7 +63,7 @@ GuildRank* Guild::getRankById(uint32_t id)
 			return &ranks[i];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 GuildRank* Guild::getRankByLevel(uint8_t level)
@@ -73,7 +73,7 @@ GuildRank* Guild::getRankByLevel(uint8_t level)
 			return &ranks[i];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void Guild::addRank(uint32_t id, const std::string& name, uint8_t level)

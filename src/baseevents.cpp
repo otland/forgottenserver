@@ -150,7 +150,7 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 bool Event::loadScript(const std::string& scriptFile)
 {
 	if (!m_scriptInterface || m_scriptId != 0) {
-		std::cout << "Failure: [Event::loadScript] m_scriptInterface == NULL. scriptid = " << m_scriptId << std::endl;
+		std::cout << "Failure: [Event::loadScript] m_scriptInterface == nullptr. scriptid = " << m_scriptId << std::endl;
 		return false;
 	}
 
@@ -179,7 +179,7 @@ bool Event::loadFunction(const std::string& functionName)
 CallBack::CallBack()
 {
 	m_scriptId = 0;
-	m_scriptInterface = NULL;
+	m_scriptInterface = nullptr;
 	m_loaded = false;
 }
 
@@ -191,7 +191,7 @@ CallBack::~CallBack()
 bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& name)
 {
 	if (!_interface) {
-		std::cout << "Failure: [CallBack::loadCallBack] m_scriptInterface == NULL" << std::endl;
+		std::cout << "Failure: [CallBack::loadCallBack] m_scriptInterface == nullptr" << std::endl;
 		return false;
 	}
 

@@ -45,7 +45,7 @@ void Dispatcher::dispatcherThread()
 	boost::unique_lock<boost::mutex> taskLockUnique(m_taskLock, boost::defer_lock);
 
 	while (m_threadState != STATE_TERMINATED) {
-		Task* task = NULL;
+		Task* task = nullptr;
 
 		// check if there are tasks waiting
 		taskLockUnique.lock();
@@ -94,7 +94,7 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 		}
 	} else {
 		delete task;
-		task = NULL;
+		task = nullptr;
 	}
 
 	m_taskLock.unlock();
@@ -107,7 +107,7 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 
 void Dispatcher::flush()
 {
-	Task* task = NULL;
+	Task* task = nullptr;
 
 	while (!m_taskList.empty()) {
 		task = m_taskList.front();

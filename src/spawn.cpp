@@ -197,7 +197,7 @@ Spawn::~Spawn()
 {
 	for (SpawnedMap::iterator it = spawnedMap.begin(); it != spawnedMap.end(); ++it) {
 		Monster* monster = it->second;
-		monster->setSpawn(NULL);
+		monster->setSpawn(nullptr);
 		monster->releaseThing2();
 	}
 

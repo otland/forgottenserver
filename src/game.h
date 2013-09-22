@@ -297,10 +297,10 @@ class Game
 		ReturnValue internalMoveCreature(Creature* creature, Cylinder* fromCylinder, Cylinder* toCylinder, uint32_t flags = 0);
 
 		ReturnValue internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-		                             Item* item, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = NULL);
+		                             Item* item, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr);
 
 		ReturnValue internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-		                                  Item* item, Item* tradeItem, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = NULL);
+		                                  Item* item, Item* tradeItem, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr);
 
 		ReturnValue internalAddItem(Cylinder* toCylinder, Item* item, int32_t index = INDEX_WHEREEVER,
 		                            uint32_t flags = 0, bool test = false);
@@ -317,7 +317,7 @@ class Game
 		  * \param subType is the extra type an item can have such as charges/fluidtype, default is -1
 			* meaning it's not used
 		  * \param depthSearch if true it will check child containers aswell
-		  * \returns A pointer to the item to an item and NULL if not found
+		  * \returns A pointer to the item to an item and nullptr if not found
 		  */
 		Item* findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		                     bool depthSearch = true, int32_t subType = -1);
@@ -378,7 +378,7 @@ class Game
 		  * \param text The text to say
 		  */
 		bool internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-		                         bool ghostMode, SpectatorVec* listPtr = NULL, Position* pos = NULL);
+		                         bool ghostMode, SpectatorVec* listPtr = nullptr, Position* pos = nullptr);
 
 		Position getClosestFreeTile(Player* player, Creature* teleportedCreature, const Position& toPos, bool toCreature);
 

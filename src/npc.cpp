@@ -50,7 +50,7 @@ enum {
 };
 
 uint32_t Npc::npcAutoID = 0x80000000;
-NpcScriptInterface* Npc::m_scriptInterface = NULL;
+NpcScriptInterface* Npc::m_scriptInterface = nullptr;
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 uint32_t Npc::npcCount = 0;
@@ -64,7 +64,7 @@ void Npcs::reload()
 	}
 
 	delete Npc::m_scriptInterface;
-	Npc::m_scriptInterface = NULL;
+	Npc::m_scriptInterface = nullptr;
 
 	for (const auto& it : npcs) {
 		it.second->reload();
@@ -76,7 +76,7 @@ Npc* Npc::createNpc(const std::string& name)
 	Npc* npc = new Npc(name);
 	if (!npc->load()) {
 		delete npc;
-		return NULL;
+		return nullptr;
 	}
 	return npc;
 }
@@ -89,7 +89,7 @@ Npc::Npc(const std::string& _name) :
 
 	masterRadius = -1;
 
-	m_npcEventHandler = NULL;
+	m_npcEventHandler = nullptr;
 	reset();
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
@@ -142,7 +142,7 @@ void Npc::reset()
 	focusCreature = 0;
 
 	delete m_npcEventHandler;
-	m_npcEventHandler = NULL;
+	m_npcEventHandler = nullptr;
 
 	m_parameters.clear();
 	shopPlayerSet.clear();
@@ -308,7 +308,7 @@ void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Po
 	}
 }
 
-void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = NULL*/)
+void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = nullptr*/)
 {
 	if (creature->getID() == this->getID()) {
 		return;
@@ -930,7 +930,7 @@ int32_t NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 			luaL_unref(L, LUA_REGISTRYINDEX, sellCallback);
 		}
 
-		player->setShopOwner(NULL, -1, -1);
+		player->setShopOwner(nullptr, -1, -1);
 		npc->removeShopPlayer(player);
 	}
 
@@ -1140,7 +1140,7 @@ int32_t NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 			luaL_unref(L, LUA_REGISTRYINDEX, sellCallback);
 		}
 
-		player->setShopOwner(NULL, -1, -1);
+		player->setShopOwner(nullptr, -1, -1);
 		npc->removeShopPlayer(player);
 	}
 
@@ -1256,7 +1256,7 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 	m_scriptInterface->callFunction(3);
 }
 
-void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = NULL*/)
+void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = nullptr*/)
 {
 	if (m_onCreatureSay == -1) {
 		return;

@@ -46,12 +46,12 @@ Weapons::~Weapons()
 const Weapon* Weapons::getWeapon(const Item* item) const
 {
 	if (!item) {
-		return NULL;
+		return nullptr;
 	}
 
 	auto it = weapons.find(item->getID());
 	if (it == weapons.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -123,7 +123,7 @@ Event* Weapons::getEvent(const std::string& nodeName)
 		return new WeaponWand(&m_scriptInterface);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool Weapons::registerEvent(Event* event, const pugi::xml_node& node)
@@ -494,7 +494,7 @@ void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 
 		g_game.transformItem(item, item->getID(), newCharge);
 	} else if (ammoAction == AMMOACTION_MOVE) {
-		g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, NULL, FLAG_NOLIMIT);
+		g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, nullptr, FLAG_NOLIMIT);
 	} else if (ammoAction == AMMOACTION_MOVEBACK) {
 		/* do nothing */
 	} else if (item->hasCharges()) {
@@ -911,7 +911,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 				Tile* tmpTile = g_game.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
 
 				// Blocking tiles or tiles without ground ain't valid targets for spears
-				if (tmpTile && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && tmpTile->ground != NULL) {
+				if (tmpTile && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && tmpTile->ground != nullptr) {
 					destTile = tmpTile;
 					break;
 				}

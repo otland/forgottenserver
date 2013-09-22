@@ -93,7 +93,7 @@ void MonsterType::reset()
 	for (SpellList::iterator it = spellAttackList.begin(); it != spellAttackList.end(); ++it) {
 		if (it->combatSpell) {
 			delete it->spell;
-			it->spell = NULL;
+			it->spell = nullptr;
 		}
 	}
 
@@ -102,7 +102,7 @@ void MonsterType::reset()
 	for (SpellList::iterator it = spellDefenseList.begin(); it != spellDefenseList.end(); ++it) {
 		if (it->combatSpell) {
 			delete it->spell;
-			it->spell = NULL;
+			it->spell = nullptr;
 		}
 	}
 
@@ -180,7 +180,7 @@ void MonsterType::createLoot(Container* corpse)
 
 std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 {
-	Item* tmpItem = NULL;
+	Item* tmpItem = nullptr;
 	int32_t itemCount = 0;
 
 	uint32_t randvalue = Monsters::getLootRandom();
@@ -357,7 +357,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		return true;
 	}
 
-	CombatSpell* combatSpell = NULL;
+	CombatSpell* combatSpell = nullptr;
 	bool needTarget = false;
 	bool needDirection = false;
 
@@ -370,7 +370,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			needTarget = attr.as_bool();
 		}
 
-		combatSpell = new CombatSpell(NULL, needTarget, needDirection);
+		combatSpell = new CombatSpell(nullptr, needTarget, needDirection);
 		if (!combatSpell->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
 			delete combatSpell;
 			return false;
@@ -704,14 +704,14 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 bool Monsters::loadMonster(const std::string& file, const std::string& monster_name, bool reloading /*= false*/)
 {
-	MonsterType* mType = NULL;
+	MonsterType* mType = nullptr;
 	bool new_mType = true;
 
 	if (reloading) {
 		uint32_t id = getIdByName(monster_name);
 		if (id != 0) {
 			mType = getMonsterType(id);
-			if (mType != NULL) {
+			if (mType != nullptr) {
 				new_mType = false;
 				mType->reset();
 			}
@@ -1244,7 +1244,7 @@ MonsterType* Monsters::getMonsterType(const std::string& name)
 {
 	uint32_t mId = getIdByName(name);
 	if (mId == 0) {
-		return NULL;
+		return nullptr;
 	}
 	return getMonsterType(mId);
 }
@@ -1253,7 +1253,7 @@ MonsterType* Monsters::getMonsterType(uint32_t mid)
 {
 	MonsterMap::iterator it = monsters.find(mid);
 	if (it == monsters.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second;
 }

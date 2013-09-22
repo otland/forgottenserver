@@ -47,7 +47,7 @@ class BedItem : public Item
 		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
 
 		virtual bool canRemove() const {
-			return (house == NULL);
+			return (house == nullptr);
 		}
 
 		uint32_t getSleeper() const {

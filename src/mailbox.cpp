@@ -38,7 +38,7 @@ Mailbox::~Mailbox()
 }
 
 ReturnValue Mailbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                uint32_t flags, Creature* actor/* = NULL*/) const
+                                uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	if (const Item* item = thing->getItem()) {
 		if (canSend(item)) {
@@ -121,20 +121,20 @@ bool Mailbox::sendItem(Item* item)
 	Player* player = g_game.getPlayerByName(receiver);
 	if (player) {
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), NULL, FLAG_NOLIMIT) == RET_NOERROR) {
+		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			player->onReceiveMail();
 			return true;
 		}
 	} else {
-		player = new Player(NULL);
+		player = new Player(nullptr);
 		if (!IOLoginData::getInstance()->loadPlayerByName(player, receiver)) {
 			delete player;
 			return false;
 		}
 
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), NULL, FLAG_NOLIMIT) == RET_NOERROR) {
+		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			IOLoginData::getInstance()->savePlayer(player);
 			delete player;

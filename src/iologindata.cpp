@@ -364,7 +364,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	player->currentOutfit = player->defaultOutfit;
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
-		int32_t skullSeconds = result->getDataInt("skulltime") - time(NULL);
+		int32_t skullSeconds = result->getDataInt("skulltime") - time(nullptr);
 
 		if (skullSeconds > 0) {
 			//ensure that we round up the number of ticks
@@ -758,7 +758,7 @@ bool IOLoginData::savePlayer(Player* player)
 		int32_t skullTime = 0;
 
 		if (player->skullTicks > 0) {
-			skullTime = time(NULL) + player->skullTicks / 1000;
+			skullTime = time(nullptr) + player->skullTicks / 1000;
 		}
 
 		query << "`skulltime` = " << skullTime << ',';
@@ -795,7 +795,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`skill_fishing_tries` = " << player->skills[SKILL_FISH][SKILL_TRIES] << ',';
 
 	if (!player->isOffline()) {
-		query << "`onlinetime` = `onlinetime` + " << (time(NULL) - player->lastLoginSaved) << ',';
+		query << "`onlinetime` = `onlinetime` + " << (time(nullptr) - player->lastLoginSaved) << ',';
 	}
 	query << "`blessings` = " << player->blessings;
 	query << " WHERE `id` = " << player->getGUID();
@@ -1104,7 +1104,7 @@ void IOLoginData::updateHouseOwners()
 
 	std::ostringstream query;
 	DBResult* result;
-	query << "SELECT `id`, `highest_bidder`, `last_bid` FROM `houses` WHERE `owner` = 0 AND `bid_end` != 0 AND `bid_end` < " << time(NULL);
+	query << "SELECT `id`, `highest_bidder`, `last_bid` FROM `houses` WHERE `owner` = 0 AND `bid_end` != 0 AND `bid_end` < " << time(nullptr);
 
 	if ((result = db->storeQuery(query.str()))) {
 		do {

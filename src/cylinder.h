@@ -63,7 +63,7 @@ class Cylinder : virtual public Thing
 		  * \returns ReturnValue holds the return value
 		  */
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = NULL) const = 0;
+		                               uint32_t flags, Creature* actor = nullptr) const = 0;
 
 		/**
 		  * Query the cylinder how much it can accept
@@ -173,7 +173,7 @@ class Cylinder : virtual public Thing
 
 		/**
 		  * Gets the object based on index
-		  * \returns the object, returns NULL if not found
+		  * \returns the object, returns nullptr if not found
 		  */
 		virtual Thing* __getThing(uint32_t index) const;
 
@@ -214,7 +214,7 @@ class VirtualCylinder : public Cylinder
 		static VirtualCylinder* virtualCylinder;
 
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = NULL) const {
+		                               uint32_t flags, Creature* actor = nullptr) const {
 			return RET_NOTPOSSIBLE;
 		}
 		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count,
@@ -226,7 +226,7 @@ class VirtualCylinder : public Cylinder
 		}
 		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
 		                                     uint32_t& flags) {
-			return NULL;
+			return nullptr;
 		}
 
 		virtual void __addThing(Thing* thing) {}

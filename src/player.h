@@ -807,7 +807,7 @@ class Player : public Creature, public Cylinder
 				client->sendCreatureTurn(creature, creature->getTile()->getClientIndexOfThing(this, creature));
 			}
 		}
-		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = NULL) {
+		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr) {
 			if (client) {
 				client->sendCreatureSay(creature, type, text, pos);
 			}
@@ -998,7 +998,7 @@ class Player : public Creature, public Cylinder
 				client->sendSkills();
 			}
 		}
-		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = NULL, uint32_t value = 0, TextColor_t color = TEXTCOLOR_NONE) const {
+		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t value = 0, TextColor_t color = TEXTCOLOR_NONE) const {
 			if (client) {
 				client->sendTextMessage(mclass, message, pos, value, color);
 			}
@@ -1200,7 +1200,7 @@ class Player : public Creature, public Cylinder
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = NULL) const;
+		                               uint32_t flags, Creature* actor = nullptr) const;
 		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
 		                                    uint32_t flags) const;
 		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const;

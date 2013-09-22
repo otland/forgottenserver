@@ -40,7 +40,7 @@ Mission::Mission(const std::string& _missionName, int32_t _storageID, int32_t _s
 	ignoreEndValue = _ignoreEndValue;
 	startValue = _startValue;
 	storageID = _storageID;
-	mainState = NULL;
+	mainState = nullptr;
 }
 
 std::string Mission::getDescription(Player* player) const
@@ -233,7 +233,7 @@ Quest* Quests::getQuestByID(uint16_t id)
 			return &quest;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 uint16_t Quests::getQuestsCount(Player* player) const

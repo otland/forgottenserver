@@ -74,7 +74,7 @@ Tile* IOMap::createTile(Item*& ground, Item* item, int px, int py, int pz)
 
 		tile->__internalAddThing(ground);
 		ground->__startDecaying();
-		ground = NULL;
+		ground = nullptr;
 	} else {
 		tile = new StaticTile(px, py, pz);
 	}
@@ -98,7 +98,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	uint32_t type;
 	PropStream propStream;
 
-	NODE root = f.getChildNode((NODE)NULL, type);
+	NODE root = f.getChildNode((NODE)nullptr, type);
 
 	if (!f.getProps(root, propStream)) {
 		setLastErrorString("Could not read root property.");
@@ -258,9 +258,9 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					pz = base_z;
 
 					bool isHouseTile = false;
-					House* house = NULL;
-					Tile* tile = NULL;
-					Item* ground_item = NULL;
+					House* house = nullptr;
+					Tile* tile = nullptr;
+					Item* ground_item = nullptr;
 					uint32_t tileflags = TILESTATE_NONE;
 
 					if (type == OTBM_HOUSETILE) {
@@ -328,7 +328,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 								if (isHouseTile && !item->isNotMoveable()) {
 									std::cout << "Warning: [OTBM loader] Moveable item with ID: " << item->getID() << ", in house: " << house->getHouseId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
 									delete item;
-									item = NULL;
+									item = nullptr;
 								} else {
 									if (item->getItemCount() <= 0) {
 										item->setItemCount(1);
@@ -416,7 +416,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					}
 
 					if (!tile) {
-						tile = createTile(ground_item, NULL, px, py, pz);
+						tile = createTile(ground_item, nullptr, px, py, pz);
 					}
 
 					tile->setFlag((tileflags_t)tileflags);

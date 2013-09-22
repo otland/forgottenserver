@@ -34,7 +34,7 @@ Inbox::~Inbox()
 }
 
 ReturnValue Inbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                              uint32_t flags, Creature* actor/* = NULL*/) const
+                              uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
 	if (!skipLimit) {
@@ -46,14 +46,14 @@ ReturnValue Inbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 
 void Inbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
-	if (getParent() != NULL) {
+	if (getParent() != nullptr) {
 		getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
 void Inbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
 {
-	if (getParent() != NULL) {
+	if (getParent() != nullptr) {
 		getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 	}
 }

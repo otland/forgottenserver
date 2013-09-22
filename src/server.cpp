@@ -92,7 +92,7 @@ void ServiceManager::stop()
 
 ServicePort::ServicePort(boost::asio::io_service& io_service) :
 	m_io_service(io_service),
-	m_acceptor(NULL),
+	m_acceptor(nullptr),
 	m_serverPort(0),
 	m_pendingStart(false)
 {
@@ -193,7 +193,7 @@ Protocol* ServicePort::make_protocol(bool checksummed, NetworkMessage& msg) cons
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void ServicePort::onStopServer()
@@ -249,7 +249,7 @@ void ServicePort::close()
 		}
 
 		delete m_acceptor;
-		m_acceptor = NULL;
+		m_acceptor = nullptr;
 	}
 }
 

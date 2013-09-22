@@ -73,5 +73,5 @@ const Outfit* Outfits::getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) c
 			return &outfit;
 		}
 	}
-	return NULL;
+	return nullptr;
 }

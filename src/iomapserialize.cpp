@@ -152,15 +152,15 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 
 bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 {
-	Item* item = NULL;
+	Item* item = nullptr;
 
 	uint16_t id = 0;
 	propStream.GET_USHORT(id);
 
 	const ItemType& iType = Item::items[id];
-	Tile* tile = NULL;
+	Tile* tile = nullptr;
 
-	if (parent->getParent() == NULL) {
+	if (parent->getParent() == nullptr) {
 		tile = parent->getTile();
 	}
 

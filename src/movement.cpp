@@ -122,7 +122,7 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 	if (asLowerCaseString(nodeName) == "movevent") {
 		return new MoveEvent(&m_scriptInterface);
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -288,7 +288,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
@@ -329,7 +329,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void MoveEvents::addEvent(MoveEvent* moveEvent, const Position& pos, MovePosListMap& map)
@@ -363,7 +363,7 @@ MoveEvent* MoveEvents::getEvent(const Tile* tile, MoveEvent_t eventType)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool isIn)
@@ -382,7 +382,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool i
 
 	MoveEvent* moveEvent = getEvent(tile, eventType);
 	if (moveEvent) {
-		ret = ret & moveEvent->fireStepEvent(creature, NULL, pos);
+		ret = ret & moveEvent->fireStepEvent(creature, nullptr, pos);
 	}
 
 	for (int32_t i = tile->__getFirstIndex(), j = tile->__getLastIndex(); i < j; ++i) {
@@ -439,12 +439,12 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 	uint32_t ret = 1;
 	MoveEvent* moveEvent = getEvent(tile, eventType1);
 	if (moveEvent) {
-		ret &= moveEvent->fireAddRemItem(item, NULL, tile->getPosition());
+		ret &= moveEvent->fireAddRemItem(item, nullptr, tile->getPosition());
 	}
 
 	moveEvent = getEvent(item, eventType1);
 	if (moveEvent) {
-		ret &= moveEvent->fireAddRemItem(item, NULL, tile->getPosition());
+		ret &= moveEvent->fireAddRemItem(item, nullptr, tile->getPosition());
 	}
 
 	for (int32_t i = tile->__getFirstIndex(), j = tile->__getLastIndex(); i < j; ++i) {
@@ -466,9 +466,9 @@ MoveEvent::MoveEvent(LuaScriptInterface* _interface) :
 	Event(_interface)
 {
 	m_eventType = MOVE_EVENT_NONE;
-	stepFunction = NULL;
-	moveFunction = NULL;
-	equipFunction = NULL;
+	stepFunction = nullptr;
+	moveFunction = nullptr;
+	equipFunction = nullptr;
 	slot = SLOTP_WHEREEVER;
 	wieldInfo = 0;
 	reqLevel = 0;

@@ -80,7 +80,7 @@ Player::Player(ProtocolGame* p) :
 	soul = 0;
 	soulMax = 100;
 	guildLevel = 0;
-	guild = NULL;
+	guild = nullptr;
 
 	level = 1;
 	levelPercent = 0;
@@ -91,7 +91,7 @@ Player::Player(ProtocolGame* p) :
 	damageImmunities = 0;
 	conditionImmunities = 0;
 	conditionSuppressions = 0;
-	group = NULL;
+	group = nullptr;
 	lastLoginSaved = 0;
 	lastLogout = 0;
 	lastIP = 0;
@@ -102,13 +102,13 @@ Player::Player(ProtocolGame* p) :
 	nextAction = 0;
 
 	windowTextId = 0;
-	writeItem = NULL;
+	writeItem = nullptr;
 	maxWriteLen = 0;
 
-	editHouse = NULL;
+	editHouse = nullptr;
 	editListId = 0;
 
-	shopOwner = NULL;
+	shopOwner = nullptr;
 	purchaseCallback = -1;
 	saleCallback = -1;
 
@@ -130,13 +130,13 @@ Player::Player(ProtocolGame* p) :
 	chaseMode = CHASEMODE_STANDSTILL;
 	fightMode = FIGHTMODE_ATTACK;
 
-	bedItem = NULL;
+	bedItem = nullptr;
 
-	tradePartner = NULL;
+	tradePartner = nullptr;
 	tradeState = TRADE_NONE;
-	tradeItem = NULL;
+	tradeItem = nullptr;
 
-	walkTask = NULL;
+	walkTask = nullptr;
 	walkTaskEvent = 0;
 	actionTaskEvent = 0;
 	nextStepEvent = 0;
@@ -146,7 +146,7 @@ Player::Player(ProtocolGame* p) :
 	lastToggleMount = 0;
 
 	for (int32_t i = 0; i < 11; i++) {
-		inventory[i] = NULL;
+		inventory[i] = nullptr;
 		inventoryAbilities[i] = false;
 	}
 
@@ -169,7 +169,7 @@ Player::Player(ProtocolGame* p) :
 
 	sex = PLAYERSEX_FEMALE;
 
-	town = NULL;
+	town = nullptr;
 
 	accountType = ACCOUNT_TYPE_NORMAL;
 	premiumDays = 0;
@@ -178,7 +178,7 @@ Player::Player(ProtocolGame* p) :
 
 	skullTicks = 0;
 	skull = SKULL_NONE;
-	setParty(NULL);
+	setParty(nullptr);
 
 	bankBalance = 0;
 
@@ -208,9 +208,9 @@ Player::~Player()
 {
 	for (int i = 0; i < 11; ++i) {
 		if (inventory[i]) {
-			inventory[i]->setParent(NULL);
+			inventory[i]->setParent(nullptr);
 			inventory[i]->releaseThing2();
-			inventory[i] = NULL;
+			inventory[i] = nullptr;
 			inventoryAbilities[i] = false;
 		}
 	}
@@ -224,8 +224,8 @@ Player::~Player()
 
 	//std::cout << "Player destructor " << this << std::endl;
 
-	setWriteItem(NULL);
-	setEditHouse(NULL);
+	setWriteItem(nullptr);
+	setEditHouse(nullptr);
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	playerCount--;
@@ -359,7 +359,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 Item* Player::getInventoryItem(slots_t slot) const
 {
 	if (slot < SLOT_FIRST || slot >= SLOT_LAST) {
-		return NULL;
+		return nullptr;
 	}
 
 	return inventory[slot];
@@ -419,7 +419,7 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 WeaponType_t Player::getWeaponType()
@@ -506,8 +506,8 @@ int32_t Player::getArmor() const
 void Player::getShieldAndWeapon(const Item* &shield, const Item* &weapon) const
 {
 	Item* item;
-	shield = NULL;
-	weapon = NULL;
+	shield = nullptr;
+	weapon = nullptr;
 
 	for (uint32_t slot = SLOT_RIGHT; slot <= SLOT_LEFT; slot++) {
 		item = getInventoryItem((slots_t)slot);
@@ -543,8 +543,8 @@ int32_t Player::getDefense() const
 	int32_t defenseSkill = 0;
 	int32_t extraDefense = 0;
 	float defenseFactor = getDefenseFactor();
-	const Item* weapon = NULL;
-	const Item* shield = NULL;
+	const Item* weapon = nullptr;
+	const Item* shield = nullptr;
 	getShieldAndWeapon(shield, weapon);
 
 	if (weapon) {
@@ -855,7 +855,7 @@ Container* Player::getContainerByID(uint8_t cid)
 {
 	ContainerMap::const_iterator it = openContainers.find(cid);
 	if (it == openContainers.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return it->second.container;
 }
@@ -945,7 +945,7 @@ void Player::dropLoot(Container* corpse)
 					}
 				}
 			} else {
-				lastHitPlayer = NULL;
+				lastHitPlayer = nullptr;
 			}
 
 			if (!lastHitPlayer || blessings < 32) {
@@ -958,7 +958,7 @@ void Player::dropLoot(Container* corpse)
 				if (item) {
 					if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || random_range(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
 						g_game.internalMoveItem(this, corpse, INDEX_WHEREEVER, item, item->getItemCount(), 0);
-						sendInventoryItem((slots_t)i, NULL);
+						sendInventoryItem((slots_t)i, nullptr);
 					}
 				}
 			}
@@ -1125,7 +1125,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 	}
 
 	if (!autoCreate) {
-		return NULL;
+		return nullptr;
 	}
 
 	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
@@ -1423,7 +1423,7 @@ void Player::sendPing()
 
 	int64_t noPongTime = timeNow - lastPong;
 	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
-		setAttackedCreature(NULL);
+		setAttackedCreature(nullptr);
 	}
 
 	if (noPongTime >= 60000 && canLogout()) {
@@ -1457,7 +1457,7 @@ void Player::setWriteItem(Item* item, uint16_t _maxWriteLen /*= 0*/)
 		maxWriteLen = _maxWriteLen;
 		writeItem->useThing2();
 	} else {
-		writeItem = NULL;
+		writeItem = nullptr;
 		maxWriteLen = 0;
 	}
 }
@@ -1660,7 +1660,7 @@ void Player::onChangeZone(ZoneType_t zone)
 {
 	if (zone == ZONE_PROTECTION) {
 		if (attackedCreature && !hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-			setAttackedCreature(NULL);
+			setAttackedCreature(nullptr);
 			onAttackedCreatureDisappear(false);
 		}
 
@@ -1678,13 +1678,13 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 {
 	if (zone == ZONE_PROTECTION) {
 		if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-			setAttackedCreature(NULL);
+			setAttackedCreature(nullptr);
 			onAttackedCreatureDisappear(false);
 		}
 	} else if (zone == ZONE_NOPVP) {
 		if (attackedCreature->getPlayer()) {
 			if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-				setAttackedCreature(NULL);
+				setAttackedCreature(nullptr);
 				onAttackedCreatureDisappear(false);
 			}
 		}
@@ -1692,7 +1692,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 		//attackedCreature can leave a pvp zone if not pzlocked
 		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
 			if (attackedCreature->getPlayer()) {
-				setAttackedCreature(NULL);
+				setAttackedCreature(nullptr);
 				onAttackedCreatureDisappear(false);
 			}
 		}
@@ -1708,10 +1708,10 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 			loginPosition = getPosition();
 		}
 
-		lastLogout = time(NULL);
+		lastLogout = time(nullptr);
 
 		if (eventWalk != 0) {
-			setFollowCreature(NULL);
+			setFollowCreature(nullptr);
 		}
 
 		if (tradePartner) {
@@ -1769,7 +1769,7 @@ bool Player::closeShopWindow(bool sendCloseShopWindow /*= true*/)
 		return false;
 	}
 
-	setShopOwner(NULL, -1, -1);
+	setShopOwner(nullptr, -1, -1);
 	npc->onPlayerEndTrade(this, onBuy, onSell);
 
 	if (sendCloseShopWindow) {
@@ -1783,7 +1783,7 @@ bool Player::closeShopWindow(bool sendCloseShopWindow /*= true*/)
 void Player::onWalk(Direction& dir)
 {
 	Creature::onWalk(dir);
-	setNextActionTask(NULL);
+	setNextActionTask(nullptr);
 	setNextAction(OTSYS_TIME() + getStepDuration(dir));
 }
 
@@ -1949,7 +1949,7 @@ void Player::checkTradeState(const Item* item)
 		} else {
 			const Container* container = dynamic_cast<const Container*>(item->getParent());
 
-			while (container != NULL) {
+			while (container != nullptr) {
 				if (container == tradeItem) {
 					g_game.internalCloseTrade(this);
 					break;
@@ -2560,7 +2560,7 @@ void Player::death()
 					}
 				}
 			} else {
-				lastHitPlayer = NULL;
+				lastHitPlayer = nullptr;
 			}
 
 			if (lastHitPlayer) {
@@ -2638,8 +2638,8 @@ Item* Player::getCorpse()
 {
 	Item* corpse = Creature::getCorpse();
 	if (corpse && corpse->getContainer()) {
-		Creature* lastHitCreature_ = NULL;
-		Creature* mostDamageCreature = NULL;
+		Creature* lastHitCreature_ = nullptr;
+		Creature* mostDamageCreature = nullptr;
 		std::ostringstream ss;
 
 		if (getKillers(&lastHitCreature_, &mostDamageCreature) && lastHitCreature_) {
@@ -2867,11 +2867,11 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 	return itemWeight <= getFreeCapacity();
 }
 
-ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags, Creature* actor/* = NULL*/) const
+ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	const Item* item = thing->getItem();
 
-	if (item == NULL) {
+	if (item == nullptr) {
 		return RET_NOTPOSSIBLE;
 	}
 
@@ -3050,7 +3050,7 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 
 	if (ret == RET_NOERROR || ret == RET_NOTENOUGHROOM) {
 		//need an exchange with source?
-		if (getInventoryItem((slots_t)index) != NULL && (!getInventoryItem((slots_t)index)->isStackable()
+		if (getInventoryItem((slots_t)index) != nullptr && (!getInventoryItem((slots_t)index)->isStackable()
 		        || getInventoryItem((slots_t)index)->getID() != item->getID())) {
 			return RET_NEEDEXCHANGE;
 		}
@@ -3072,7 +3072,7 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
                                     uint32_t flags) const
 {
 	const Item* item = thing->getItem();
-	if (item == NULL) {
+	if (item == nullptr) {
 		maxQueryCount = 0;
 		return RET_NOTPOSSIBLE;
 	}
@@ -3114,7 +3114,7 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 		maxQueryCount = n;
 	} else {
 		const Thing* destThing = __getThing(index);
-		const Item* destItem = NULL;
+		const Item* destItem = nullptr;
 
 		if (destThing) {
 			destItem = destThing->getItem();
@@ -3154,7 +3154,7 @@ ReturnValue Player::__queryRemove(const Thing* thing, uint32_t count, uint32_t f
 
 	const Item* item = thing->getItem();
 
-	if (item == NULL) {
+	if (item == nullptr) {
 		return RET_NOTPOSSIBLE;
 	}
 
@@ -3173,10 +3173,10 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
                                      uint32_t& flags)
 {
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
-		*destItem = NULL;
+		*destItem = nullptr;
 
 		const Item* item = thing->getItem();
-		if (item == NULL) {
+		if (item == nullptr) {
 			return this;
 		}
 
@@ -3212,7 +3212,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				} else if (Container* subContainer = inventoryItem->getContainer()) {
 					if (subContainer->__queryAdd(INDEX_WHEREEVER, item, item->getItemCount(), flags) == RET_NOERROR) {
 						index = INDEX_WHEREEVER;
-						*destItem = NULL;
+						*destItem = nullptr;
 						return subContainer;
 					}
 
@@ -3220,7 +3220,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				}
 			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RET_NOERROR) { //empty slot
 				index = slotIndex;
-				*destItem = NULL;
+				*destItem = nullptr;
 				return this;
 			}
 		}
@@ -3235,7 +3235,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				while (n) {
 					if (tmpContainer->__queryAdd(tmpContainer->capacity() - n, item, item->getItemCount(), flags) == RET_NOERROR) {
 						index = tmpContainer->capacity() - n;
-						*destItem = NULL;
+						*destItem = nullptr;
 						return tmpContainer;
 					}
 
@@ -3278,7 +3278,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 			if (n < tmpContainer->capacity() && tmpContainer->__queryAdd(n, item, item->getItemCount(), flags) == RET_NOERROR) {
 				index = n;
-				*destItem = NULL;
+				*destItem = nullptr;
 				return tmpContainer;
 			}
 		}
@@ -3295,7 +3295,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 	if (subCylinder) {
 		index = INDEX_WHEREEVER;
-		*destItem = NULL;
+		*destItem = nullptr;
 		return subCylinder;
 	} else {
 		return this;
@@ -3319,7 +3319,7 @@ void Player::__addThing(int32_t index, Thing* thing)
 
 	Item* item = thing->getItem();
 
-	if (item == NULL) {
+	if (item == nullptr) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
@@ -3343,7 +3343,7 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 	Item* item = thing->getItem();
 
-	if (item == NULL) {
+	if (item == nullptr) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
@@ -3409,13 +3409,13 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 	if (item->isStackable()) {
 		if (count == item->getItemCount()) {
 			//send change to client
-			sendInventoryItem((slots_t)index, NULL);
+			sendInventoryItem((slots_t)index, nullptr);
 
 			//event methods
 			onRemoveInventoryItem((slots_t)index, item);
 
-			item->setParent(NULL);
-			inventory[index] = NULL;
+			item->setParent(nullptr);
+			inventory[index] = nullptr;
 		} else {
 			uint8_t newCount = (uint8_t)std::max<int32_t>(0, item->getItemCount() - count);
 			item->setItemCount(newCount);
@@ -3430,13 +3430,13 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 		}
 	} else {
 		//send change to client
-		sendInventoryItem((slots_t)index, NULL);
+		sendInventoryItem((slots_t)index, nullptr);
 
 		//event methods
 		onRemoveInventoryItem((slots_t)index, item);
 
-		item->setParent(NULL);
-		inventory[index] = NULL;
+		item->setParent(nullptr);
+		inventory[index] = nullptr;
 	}
 }
 
@@ -3563,7 +3563,7 @@ Thing* Player::__getThing(uint32_t index) const
 		return inventory[index];
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
@@ -3576,11 +3576,11 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 	bool requireListUpdate = true;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const Item* i = (oldParent ? oldParent->getItem() : NULL);
+		const Item* i = (oldParent ? oldParent->getItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != NULL : true);
+		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
 			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
@@ -3631,11 +3631,11 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 	bool requireListUpdate = true;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const Item* i = (newParent ? newParent->getItem() : NULL);
+		const Item* i = (newParent ? newParent->getItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != NULL : true);
+		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
 			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
@@ -3743,8 +3743,8 @@ void Player::__internalAddThing(uint32_t index, Thing* thing)
 bool Player::setFollowCreature(Creature* creature, bool fullPathSearch /*= false*/)
 {
 	if (!Creature::setFollowCreature(creature, fullPathSearch)) {
-		setFollowCreature(NULL);
-		setAttackedCreature(NULL);
+		setFollowCreature(nullptr);
+		setAttackedCreature(nullptr);
 
 		sendCancelMessage(RET_THEREISNOWAY);
 		sendCancelTarget();
@@ -3768,7 +3768,7 @@ bool Player::setAttackedCreature(Creature* creature)
 			setFollowCreature(creature);
 		}
 	} else {
-		setFollowCreature(NULL);
+		setFollowCreature(nullptr);
 	}
 
 	if (creature) {
@@ -3872,7 +3872,7 @@ void Player::setChaseMode(chaseMode_t mode)
 				setFollowCreature(attackedCreature);
 			}
 		} else if (attackedCreature) {
-			setFollowCreature(NULL);
+			setFollowCreature(nullptr);
 			cancelNextWalk = true;
 		}
 	}
@@ -3885,7 +3885,7 @@ void Player::setFightMode(fightMode_t mode)
 
 void Player::onWalkAborted()
 {
-	setNextWalkActionTask(NULL);
+	setNextWalkActionTask(nullptr);
 	sendCancelWalk();
 }
 
@@ -3893,7 +3893,7 @@ void Player::onWalkComplete()
 {
 	if (walkTask) {
 		walkTaskEvent = g_scheduler.addEvent(walkTask);
-		walkTask = NULL;
+		walkTask = nullptr;
 	}
 }
 
@@ -4131,7 +4131,7 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 {
 	if (target && party) {
-		Player* tmpPlayer = NULL;
+		Player* tmpPlayer = nullptr;
 
 		if (target->getPlayer()) {
 			tmpPlayer = target->getPlayer();
@@ -4591,7 +4591,7 @@ bool Player::isInWarList(uint32_t guildId) const
 void Player::leaveGuild()
 {
 	sendClosePrivate(CHANNEL_GUILD);
-	guild = NULL;
+	guild = nullptr;
 	guildNick = "";
 	guildLevel = 0;
 	guildWarList.clear();
@@ -5119,7 +5119,7 @@ void Player::useStamina()
 		return;
 	}
 
-	time_t currentTime = time(NULL);
+	time_t currentTime = time(nullptr);
 
 	if (currentTime > nextUseStaminaTime) {
 		time_t timePassed = currentTime - nextUseStaminaTime;

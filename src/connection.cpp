@@ -111,7 +111,7 @@ void Connection::closeConnectionTask()
 	if (m_protocol) {
 		m_protocol->setConnection(Connection_ptr());
 		m_protocol->releaseProtocol();
-		m_protocol = NULL;
+		m_protocol = nullptr;
 	}
 
 	m_connectionState = CONNECTION_STATE_CLOSING;
@@ -180,7 +180,7 @@ void Connection::onStopOperation()
 	}
 
 	delete m_socket;
-	m_socket = NULL;
+	m_socket = nullptr;
 
 	m_connectionLock.unlock();
 	ConnectionManager::getInstance()->releaseConnection(shared_from_this());
@@ -286,7 +286,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		return;
 	}
 
-	uint32_t timePassed = std::max<uint32_t>(1, (time(NULL) - m_timeConnected) + 1);
+	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - m_timeConnected) + 1);
 	if ((++m_packetsSent / timePassed) > (uint32_t)g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND)) {
 		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
 		closeConnection();
@@ -295,7 +295,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 
 	if (timePassed > 2) {
-		m_timeConnected = time(NULL);
+		m_timeConnected = time(nullptr);
 		m_packetsSent = 0;
 	}
 

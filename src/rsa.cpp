@@ -111,7 +111,7 @@ void RSA::decrypt(char* msg)
 
 	size_t count = (mpz_sizeinbase(m, 2) + 7)/8;
 	memset(msg, 0, 128 - count);
-	mpz_export(&msg[128 - count], NULL, 1, 1, 0, 0, m);
+	mpz_export(&msg[128 - count], nullptr, 1, 1, 0, 0, m);
 
 	mpz_clear(c);
 	mpz_clear(m);
@@ -121,5 +121,5 @@ void RSA::getPublicKey(char* buffer)
 {
 	size_t count = (mpz_sizeinbase(m_n, 2) + 7) / 8;
 	memset(buffer, 0, 128 - count);
-	mpz_export(&buffer[128 - count], NULL, 1, 1, 0, 0, m_n);
+	mpz_export(&buffer[128 - count], nullptr, 1, 1, 0, 0, m_n);
 }

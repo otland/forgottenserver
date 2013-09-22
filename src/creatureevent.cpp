@@ -64,7 +64,7 @@ Event* CreatureEvents::getEvent(const std::string& nodeName)
 		return new CreatureEvent(&m_scriptInterface);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node& node)
@@ -103,7 +103,7 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 			return it->second;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool CreatureEvents::playerLogin(Player* player)
@@ -248,7 +248,7 @@ void CreatureEvent::copyEvent(CreatureEvent* creatureEvent)
 void CreatureEvent::clearEvent()
 {
 	m_scriptId = 0;
-	m_scriptInterface = NULL;
+	m_scriptInterface = nullptr;
 	m_scripted = false;
 	m_isLoaded = false;
 }

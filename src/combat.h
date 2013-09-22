@@ -79,9 +79,9 @@ struct CombatParams {
 		dispelType = CONDITION_NONE;
 		useCharges = false;
 
-		valueCallback = NULL;
-		tileCallback = NULL;
-		targetCallback = NULL;
+		valueCallback = nullptr;
+		tileCallback = nullptr;
+		targetCallback = nullptr;
 	}
 
 	std::list<const Condition*> conditionList;
@@ -259,7 +259,7 @@ class AreaCombat
 			if (it != areas.end()) {
 				return it->second;
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		AreaCombatMap areas;
@@ -319,7 +319,7 @@ class Combat
 			area = _area;
 		}
 		bool hasArea() const {
-			return area != NULL;
+			return area != nullptr;
 		}
 		void setCondition(const Condition* _condition) {
 			params.conditionList.push_back(_condition);
@@ -339,7 +339,7 @@ class Combat
 		static bool CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
 		static bool CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
 		static bool CombatDispelFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static bool CombatNullFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
+		static bool CombatnullptrFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
 
 		static void combatTileEffects(const SpectatorVec& list, Creature* caster, Tile* tile, const CombatParams& params);
 		bool getMinMaxValues(Creature* creature, Creature* target, int32_t& min, int32_t& max) const;

@@ -87,7 +87,7 @@ class Database
 		* Executes query which generates results (mostly SELECT).
 		*
 		* @param std::string query
-		* @return results object (null on error)
+		* @return results object (nullptr on error)
 		*/
 		DBResult* storeQuery(const std::string& query);
 
@@ -176,7 +176,7 @@ class DBResult
 				return static_cast<T>(0);
 			}
 
-			if (m_row[it->second] == NULL) {
+			if (m_row[it->second] == nullptr) {
 				return static_cast<T>(0);
 			}
 

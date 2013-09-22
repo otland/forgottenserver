@@ -122,22 +122,22 @@ class Creature : virtual public Thing
 			return this;
 		}
 		virtual Player* getPlayer() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Player* getPlayer() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual Npc* getNpc() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Npc* getNpc() const {
-			return NULL;
+			return nullptr;
 		}
 		virtual Monster* getMonster() {
-			return NULL;
+			return nullptr;
 		}
 		virtual const Monster* getMonster() const {
-			return NULL;
+			return nullptr;
 		}
 
 		virtual const std::string& getName() const = 0;
@@ -290,7 +290,7 @@ class Creature : virtual public Thing
 			return master;
 		}
 		bool isSummon() const {
-			return master != NULL;
+			return master != nullptr;
 		}
 		const Creature* getMaster() const {
 			return master;
@@ -406,7 +406,7 @@ class Creature : virtual public Thing
 		virtual void onFollowCreatureDisappear(bool isLogout) {}
 
 		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
-		                           Position* pos = NULL) {}
+		                           Position* pos = nullptr) {}
 
 		virtual void onCreatureConvinced(const Creature* convincer, const Creature* creature) {}
 		virtual void onPlacedCreature() {}

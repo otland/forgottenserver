@@ -42,7 +42,7 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern Ban g_bans;
 
-AdminProtocolConfig* g_adminConfig = NULL;
+AdminProtocolConfig* g_adminConfig = nullptr;
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 uint32_t ProtocolAdmin::protocolAdminCount = 0;
@@ -54,7 +54,7 @@ ProtocolAdmin::ProtocolAdmin(Connection_ptr connection) :
 	m_state = NO_CONNECTED;
 	m_loginTries = 0;
 	m_lastCommand = 0;
-	m_startTime = time(NULL);
+	m_startTime = time(nullptr);
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	protocolAdminCount++;
 #endif
@@ -104,13 +104,13 @@ void ProtocolAdmin::onRecvFirstMessage(NetworkMessage& msg)
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	m_lastCommand = time(NULL);
+	m_lastCommand = time(nullptr);
 	m_state = ENCRYPTION_NO_SET;
 }
 
 void ProtocolAdmin::deleteProtocolTask()
 {
-	addLogLine(NULL, LOGTYPE_EVENT, 1, "end connection");
+	addLogLine(nullptr, LOGTYPE_EVENT, 1, "end connection");
 	g_adminConfig->removeConnection();
 	Protocol::deleteProtocolTask();
 }
@@ -134,7 +134,7 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 	switch (m_state) {
 		case ENCRYPTION_NO_SET: {
 			if (g_adminConfig->requireEncryption()) {
-				if ((time(NULL) - m_startTime) > 30000) {
+				if ((time(nullptr) - m_startTime) > 30000) {
 					getConnection()->closeConnection();
 					addLogLine(this, LOGTYPE_WARNING, 1, "encryption timeout");
 					return;
@@ -157,7 +157,7 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 
 		case NO_LOGGED_IN: {
 			if (g_adminConfig->requireLogin()) {
-				if ((time(NULL) - m_startTime) > 30000) {
+				if ((time(nullptr) - m_startTime) > 30000) {
 					//login timeout
 					getConnection()->closeConnection();
 					addLogLine(this, LOGTYPE_WARNING, 1, "login timeout");
@@ -199,7 +199,7 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 		}
 	}
 
-	m_lastCommand = time(NULL);
+	m_lastCommand = time(nullptr);
 
 	switch (recvbyte) {
 		case AP_MSG_LOGIN: {
@@ -503,7 +503,7 @@ AdminProtocolConfig::AdminProtocolConfig()
 	m_maxConnections = 1;
 	m_currrentConnections = 0;
 	m_password = "";
-	m_key_RSA1024XTEA = NULL;
+	m_key_RSA1024XTEA = nullptr;
 	m_requireLogin = true;
 	m_requireEncryption = false;
 }
@@ -559,7 +559,7 @@ bool AdminProtocolConfig::loadXMLConfig()
 				m_key_RSA1024XTEA = new RSA();
 				if (!m_key_RSA1024XTEA->setKey("data/XML/" + std::string(encryptionFile.as_string()))) {
 					delete m_key_RSA1024XTEA;
-					m_key_RSA1024XTEA = NULL;
+					m_key_RSA1024XTEA = nullptr;
 					std::cout << "[AdminProtocolConfig::loadXMLConfig - Warning] Can not load key from data/XML/" << encryptionFile.as_string() << std::endl;
 				}
 			}
@@ -602,7 +602,7 @@ bool AdminProtocolConfig::passwordMatch(const std::string& password)
 bool AdminProtocolConfig::allowIP(uint32_t ip)
 {
 	if (m_onlyLocalHost && ip != 0x0100007F) { //127.0.0.1
-		addLogLine(NULL, LOGTYPE_WARNING, 1, std::string("forbidden connection try from ") + convertIPToString(ip));
+		addLogLine(nullptr, LOGTYPE_WARNING, 1, std::string("forbidden connection try from ") + convertIPToString(ip));
 		return false;
 	}
 	return true;
@@ -653,7 +653,7 @@ RSA* AdminProtocolConfig::getRSAKey(uint8_t type)
 			return m_key_RSA1024XTEA;
 
 		default:
-			return NULL;
+			return nullptr;
 	}
 }
 

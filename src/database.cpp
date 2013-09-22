@@ -35,12 +35,12 @@ extern ConfigManager g_config;
 Database::Database()
 {
 	m_connected = false;
-	m_handle = NULL;
+	m_handle = nullptr;
 }
 
 Database::~Database()
 {
-	if (m_handle != NULL) {
+	if (m_handle != nullptr) {
 		mysql_close(m_handle);
 	}
 }
@@ -48,7 +48,7 @@ Database::~Database()
 bool Database::connect()
 {
 	// connection handle initialization
-	m_handle = mysql_init(NULL);
+	m_handle = mysql_init(nullptr);
 	if (!m_handle) {
 		std::cout << std::endl << "Failed to initialize MySQL connection handle." << std::endl;
 		return false;
@@ -59,7 +59,7 @@ bool Database::connect()
 	mysql_options(m_handle, MYSQL_OPT_RECONNECT, &reconnect);
 
 	// connects to database
-	if (!mysql_real_connect(m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), NULL, 0)) {
+	if (!mysql_real_connect(m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), nullptr, 0)) {
 		std::cout << std::endl << "MySQL Error Message: " << mysql_error(m_handle) << std::endl;
 		return false;
 	}
@@ -154,7 +154,7 @@ bool Database::executeQuery(const std::string& query)
 DBResult* Database::storeQuery(const std::string& query)
 {
 	if (!m_connected) {
-		return NULL;
+		return nullptr;
 	}
 
 	// executes the query
@@ -180,7 +180,7 @@ DBResult* Database::storeQuery(const std::string& query)
 		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
 			m_connected = false;
 		}
-		return NULL;
+		return nullptr;
 	}
 	database_lock.unlock();
 
@@ -222,7 +222,7 @@ DBResult* Database::verifyResult(DBResult* result)
 {
 	if (!result->next()) {
 		freeResult(result);
-		return NULL;
+		return nullptr;
 	}
 	return result;
 }
@@ -254,7 +254,7 @@ int32_t DBResult::getDataInt(const std::string& s) const
 		return 0;
 	}
 
-	if (m_row[it->second] == NULL) {
+	if (m_row[it->second] == nullptr) {
 		return 0;
 	}
 
@@ -269,7 +269,7 @@ std::string DBResult::getDataString(const std::string& s) const
 		return std::string();
 	}
 
-	if (m_row[it->second] == NULL) {
+	if (m_row[it->second] == nullptr) {
 		return std::string();
 	}
 
@@ -282,12 +282,12 @@ const char* DBResult::getDataStream(const std::string& s, unsigned long& size) c
 	if (it == m_listNames.end()) {
 		std::cout << "[Error - DBResult::getDataStream] Column '" << s << "' does not exist in result set." << std::endl;
 		size = 0;
-		return NULL;
+		return nullptr;
 	}
 
-	if (m_row[it->second] == NULL) {
+	if (m_row[it->second] == nullptr) {
 		size = 0;
-		return NULL;
+		return nullptr;
 	}
 
 	size = mysql_fetch_lengths(m_handle)[it->second];
@@ -297,7 +297,7 @@ const char* DBResult::getDataStream(const std::string& s, unsigned long& size) c
 bool DBResult::next()
 {
 	m_row = mysql_fetch_row(m_handle);
-	return m_row != NULL;
+	return m_row != nullptr;
 }
 
 void DBInsert::setQuery(const std::string& query)
