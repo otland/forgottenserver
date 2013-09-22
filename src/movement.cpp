@@ -46,7 +46,7 @@ MoveEvents::~MoveEvents()
 	clear();
 }
 
-void MoveEvents::clearMap(MoveListMap& map, std::set<MoveEvent*>& set)
+void MoveEvents::clearMap(MoveListMap& map, std::unordered_set<MoveEvent*>& set)
 {
 	for (const auto& it : map) {
 		const MoveEventList& moveEventList = it.second;
@@ -61,7 +61,7 @@ void MoveEvents::clearMap(MoveListMap& map, std::set<MoveEvent*>& set)
 
 void MoveEvents::clear()
 {
-	std::set<MoveEvent*> set;
+	std::unordered_set<MoveEvent*> set;
 	clearMap(m_itemIdMap, set);
 	clearMap(m_actionIdMap, set);
 	clearMap(m_uniqueIdMap, set);

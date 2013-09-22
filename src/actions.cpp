@@ -57,7 +57,7 @@ Actions::~Actions()
 inline void Actions::clearMap(ActionUseMap& map)
 {
 	// Filter out duplicates to avoid double-free
-	std::set<Action*> set;
+	std::unordered_set<Action*> set;
 	for (const auto& it : map) {
 		set.insert(it.second);
 	}
