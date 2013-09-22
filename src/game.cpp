@@ -5025,6 +5025,10 @@ void Game::resetCommandTag()
 
 void Game::shutdown()
 {
+	ScriptEnvironment::freeCombatObjects();
+	ScriptEnvironment::freeAreaObjects();
+	ScriptEnvironment::freeConditionObjects();
+
 	std::cout << "Shutting down server..." << std::flush;
 
 	g_scheduler.shutdown();

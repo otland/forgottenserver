@@ -183,6 +183,10 @@ class ScriptEnvironment
 		static uint32_t addConditionObject(Condition* condition);
 		static Condition* getConditionObject(uint32_t conditionId);
 
+		static void freeCombatObjects();
+		static void freeAreaObjects();
+		static void freeConditionObjects();
+
 		static uint32_t getLastCombatId() {
 			return m_lastCombatId;
 		}

@@ -89,18 +89,6 @@ ScriptEnvironment::ScriptEnvironment()
 ScriptEnvironment::~ScriptEnvironment()
 {
 	resetEnv();
-
-	for (const auto& it : m_combatMap) {
-		delete it.second;
-	}
-
-	for (const auto& it : m_areaMap) {
-		delete it.second;
-	}
-
-	for (const auto& it : m_conditionMap) {
-		delete it.second;
-	}
 }
 
 void ScriptEnvironment::resetEnv()
@@ -125,6 +113,27 @@ void ScriptEnvironment::resetEnv()
 		db->freeResult(it.second);
 	}
 	m_tempResults.clear();
+}
+
+void ScriptEnvironment::freeCombatObjects()
+{
+	for (const auto& it : m_combatMap) {
+		delete it.second;
+	}
+}
+
+void ScriptEnvironment::freeAreaObjects()
+{
+	for (const auto& it : m_areaMap) {
+		delete it.second;
+	}
+}
+
+void ScriptEnvironment::freeConditionObjects()
+{
+	for (const auto& it : m_conditionMap) {
+		delete it.second;
+	}
 }
 
 bool ScriptEnvironment::saveGameState()
