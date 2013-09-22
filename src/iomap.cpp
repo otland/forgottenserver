@@ -273,8 +273,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 							return false;
 						}
 
-						house = Houses::getInstance().getHouse(_houseid, true);
-
+						house = Houses::getInstance().addHouse(_houseid);
 						if (!house) {
 							std::ostringstream ss;
 							ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Could not create house id: " << _houseid;

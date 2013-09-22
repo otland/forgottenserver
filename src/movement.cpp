@@ -46,62 +46,38 @@ MoveEvents::~MoveEvents()
 	clear();
 }
 
+void MoveEvents::clearMap(MoveListMap& map, std::set<MoveEvent*>& set)
+{
+	for (const auto& it : map) {
+		const MoveEventList& moveEventList = it.second;
+		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
+			for (MoveEvent* moveEvent : moveEventList.moveEvent[i]) {
+				set.insert(moveEvent);
+			}
+		}
+	}
+	map.clear();
+}
+
 void MoveEvents::clear()
 {
-	MoveListMap::iterator it1 = m_itemIdMap.begin();
-	while (it1 != m_itemIdMap.end()) {
-		MoveEventList& tmpMoveEventList = it1->second;
+	std::set<MoveEvent*> set;
+	clearMap(m_itemIdMap, set);
+	clearMap(m_actionIdMap, set);
+	clearMap(m_uniqueIdMap, set);
+
+	for (const auto& it : m_positionMap) {
+		const MoveEventList& moveEventList = it.second;
 		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
-			std::list<MoveEvent*>& moveEventList = tmpMoveEventList.moveEvent[i];
-			for (std::list<MoveEvent*>::iterator it = moveEventList.begin(), end = moveEventList.end(); it != end; ++it) {
-				delete (*it);
+			for (MoveEvent* moveEvent : moveEventList.moveEvent[i]) {
+				set.insert(moveEvent);
 			}
 		}
-
-		m_itemIdMap.erase(it1);
-		it1 = m_itemIdMap.begin();
 	}
+	m_positionMap.clear();
 
-	MoveListMap::iterator it2 = m_actionIdMap.begin();
-	while (it2 != m_actionIdMap.end()) {
-		MoveEventList& tmpMoveEventList = it2->second;
-		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
-			std::list<MoveEvent*>& moveEventList = tmpMoveEventList.moveEvent[i];
-			for (std::list<MoveEvent*>::iterator it = moveEventList.begin(), end = moveEventList.end(); it != end; ++it) {
-				delete (*it);
-			}
-		}
-
-		m_actionIdMap.erase(it2);
-		it2 = m_actionIdMap.begin();
-	}
-
-	MoveListMap::iterator it3 = m_uniqueIdMap.begin();
-	while (it3 != m_uniqueIdMap.end()) {
-		MoveEventList& tmpMoveEventList = it3->second;
-		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
-			std::list<MoveEvent*>& moveEventList = tmpMoveEventList.moveEvent[i];
-			for (std::list<MoveEvent*>::iterator it = moveEventList.begin(), end = moveEventList.end(); it != end; ++it) {
-				delete (*it);
-			}
-		}
-
-		m_uniqueIdMap.erase(it3);
-		it3 = m_uniqueIdMap.begin();
-	}
-
-	MovePosListMap::iterator posIter = m_positionMap.begin();
-	while (posIter != m_positionMap.end()) {
-		MoveEventList& tmpMoveEventList = posIter->second;
-		for (int i = 0; i < MOVE_EVENT_LAST; ++i) {
-			std::list<MoveEvent*>& moveEventList = tmpMoveEventList.moveEvent[i];
-			for (std::list<MoveEvent*>::iterator it = moveEventList.begin(), end = moveEventList.end(); it != end; ++it) {
-				delete (*it);
-			}
-		}
-
-		m_positionMap.erase(posIter);
-		posIter = m_positionMap.begin();
+	for (MoveEvent* moveEvent : set) {
+		delete moveEvent;
 	}
 
 	m_scriptInterface.reInitState();
@@ -177,7 +153,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 			it.vocationString = moveEvent->getVocationString();
 
 			while (++id <= endId) {
-				addEvent(new MoveEvent(moveEvent), id, m_itemIdMap);
+				addEvent(moveEvent, id, m_itemIdMap);
 
 				ItemType& tit = Item::items.getItemType(id);
 				tit.wieldInfo = moveEvent->getWieldInfo();
@@ -187,7 +163,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 			}
 		} else {
 			while (++id <= endId) {
-				addEvent(new MoveEvent(moveEvent), id, m_itemIdMap);
+				addEvent(moveEvent, id, m_itemIdMap);
 			}
 		}
 	} else if ((attr = node.attribute("uniqueid"))) {
@@ -197,7 +173,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 		int32_t endId = pugi::cast<int32_t>(node.attribute("touid").value());
 		addEvent(moveEvent, id, m_uniqueIdMap);
 		while (++id <= endId) {
-			addEvent(new MoveEvent(moveEvent), id, m_uniqueIdMap);
+			addEvent(moveEvent, id, m_uniqueIdMap);
 		}
 	} else if ((attr = node.attribute("actionid"))) {
 		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), m_actionIdMap);
@@ -206,7 +182,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 		int32_t endId = pugi::cast<int32_t>(node.attribute("toaid").value());
 		addEvent(moveEvent, id, m_actionIdMap);
 		while (++id <= endId) {
-			addEvent(new MoveEvent(moveEvent), id, m_actionIdMap);
+			addEvent(moveEvent, id, m_actionIdMap);
 		}
 	} else if ((attr = node.attribute("pos"))) {
 		std::vector<int32_t> posList = vectorAtoi(explodeString(attr.as_string(), ";"));
@@ -233,7 +209,7 @@ void MoveEvents::addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map)
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[moveEvent->getEventType()];
 		for (MoveEvent* existingMoveEvent : moveEventList) {
 			if (existingMoveEvent->getSlot() == moveEvent->getSlot()) {
-				std::cout << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << id << std::endl;
+				std::cout << "[Warning - MoveEvents::addEvent] Duplicate move event found: " << id << std::endl;
 			}
 		}
 		moveEventList.push_back(moveEvent);
@@ -279,7 +255,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 			break;
 	}
 
-	MoveListMap::iterator it = m_itemIdMap.find(item->getID());
+	auto it = m_itemIdMap.find(item->getID());
 	if (it != m_itemIdMap.end()) {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
 		for (MoveEvent* moveEvent : moveEventList) {
@@ -297,10 +273,8 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 
 	if (item->getUniqueId() != 0) {
 		it = m_uniqueIdMap.find(item->getUniqueId());
-
 		if (it != m_uniqueIdMap.end()) {
 			std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
-
 			if (!moveEventList.empty()) {
 				return *moveEventList.begin();
 			}
@@ -309,10 +283,8 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 
 	if (item->getActionId() != 0) {
 		it = m_actionIdMap.find(item->getActionId());
-
 		if (it != m_actionIdMap.end()) {
 			std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
-
 			if (!moveEventList.empty()) {
 				return *moveEventList.begin();
 			}
@@ -320,29 +292,24 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 	}
 
 	it = m_itemIdMap.find(item->getID());
-
 	if (it != m_itemIdMap.end()) {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
-
 		if (!moveEventList.empty()) {
 			return *moveEventList.begin();
 		}
 	}
-
 	return nullptr;
 }
 
 void MoveEvents::addEvent(MoveEvent* moveEvent, const Position& pos, MovePosListMap& map)
 {
 	MovePosListMap::iterator it = map.find(pos);
-
 	if (it == map.end()) {
 		MoveEventList moveEventList;
 		moveEventList.moveEvent[moveEvent->getEventType()].push_back(moveEvent);
 		map[pos] = moveEventList;
 	} else {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[moveEvent->getEventType()];
-
 		if (!moveEventList.empty()) {
 			std::cout << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << pos << std::endl;
 		}

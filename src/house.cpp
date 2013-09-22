@@ -680,8 +680,6 @@ void Door::onRemoved()
 
 Houses::Houses()
 {
-	rentPeriod = RENTPERIOD_NEVER;
-
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 	if (strRentPeriod == "yearly") {
 		rentPeriod = RENTPERIOD_YEARLY;
@@ -691,6 +689,8 @@ Houses::Houses()
 		rentPeriod = RENTPERIOD_MONTHLY;
 	} else if (strRentPeriod == "daily") {
 		rentPeriod = RENTPERIOD_DAILY;
+	} else {
+		rentPeriod = RENTPERIOD_NEVER;
 	}
 }
 

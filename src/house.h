@@ -293,19 +293,23 @@ class Houses
 			return instance;
 		}
 
-		House* getHouse(uint32_t houseid, bool add = false) {
-			HouseMap::iterator it = houseMap.find(houseid);
+		House* addHouse(uint32_t id) {
+			HouseMap::iterator it = houseMap.find(id);
 			if (it != houseMap.end()) {
 				return it->second;
 			}
 
-			if (add) {
-				House* house = new House(houseid);
-				houseMap[houseid] = house;
-				return house;
-			} else {
+			House* house = new House(id);
+			houseMap[id] = house;
+			return house;
+		}
+
+		House* getHouse(uint32_t houseid) {
+			auto it = houseMap.find(houseid);
+			if (it == houseMap.end()) {
 				return nullptr;
 			}
+			return it->second;	
 		}
 
 		House* getHouseByPlayerId(uint32_t playerId);
