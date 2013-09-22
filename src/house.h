@@ -228,26 +228,20 @@ class House
 		void resetTransferItem();
 		bool executeTransfer(HouseTransferItem* item, Player* player);
 
-		const HouseTileList& getHouseTiles() const {
+		const HouseTileList& getTiles() const {
 			return houseTiles;
 		}
 
-		const HouseDoorList& getHouseDoors() const {
+		const HouseDoorList& getDoors() const {
 			return doorList;
 		}
 
 		void addBed(BedItem* bed);
-		HouseBedItemList::iterator getHouseBedsBegin() {
-			return bedsList.begin();
-		}
-		HouseBedItemList::iterator getHouseBedsEnd() {
-			return bedsList.end();
-		}
-		size_t getBedTiles() {
-			return bedsList.size();
+		const HouseBedItemList& getBeds() const {
+			return bedsList;
 		}
 		uint32_t getBedCount() {
-			return (uint32_t)std::ceil((double)getBedTiles() / 2);   //each bed takes 2 sqms of space, ceil is just for bad maps
+			return (uint32_t)std::ceil((double)bedsList.size() / 2);   //each bed takes 2 sqms of space, ceil is just for bad maps
 		}
 
 	private:
@@ -301,7 +295,6 @@ class Houses
 
 		House* getHouse(uint32_t houseid, bool add = false) {
 			HouseMap::iterator it = houseMap.find(houseid);
-
 			if (it != houseMap.end()) {
 				return it->second;
 			}

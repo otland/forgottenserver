@@ -10271,10 +10271,10 @@ int32_t LuaScriptInterface::luaHouseGetBeds(lua_State* L)
 	if (house) {
 		uint32_t i = 0;
 		lua_newtable(L);
-		for (auto it = house->getHouseBedsBegin(); it != house->getHouseBedsEnd(); ++it) {
+		for (BedItem* bedItem : house->getBeds()) {
 			pushNumber(L, ++i);
-			pushUserdata<Item>(L, *it);
-			setItemMetatable(L, -1, *it);
+			pushUserdata<Item>(L, bedItem);
+			setItemMetatable(L, -1, bedItem);
 			lua_settable(L, -3);
 		}
 	} else {
@@ -10302,7 +10302,7 @@ int32_t LuaScriptInterface::luaHouseGetDoors(lua_State* L)
 	if (house) {
 		uint32_t i = 0;
 		lua_newtable(L);
-		for (Door* door : house->getHouseDoors()) {
+		for (Door* door : house->getDoors()) {
 			pushNumber(L, ++i);
 			pushUserdata<Item>(L, door);
 			setItemMetatable(L, -1, door);
@@ -10319,7 +10319,7 @@ int32_t LuaScriptInterface::luaHouseGetDoorCount(lua_State* L)
 	// house:getDoorCount()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		pushNumber(L, house->getHouseDoors().size());
+		pushNumber(L, house->getDoors().size());
 	} else {
 		pushNil(L);
 	}
@@ -10333,7 +10333,7 @@ int32_t LuaScriptInterface::luaHouseGetTiles(lua_State* L)
 	if (house) {
 		uint32_t i = 0;
 		lua_newtable(L);
-		for (Tile* tile : house->getHouseTiles()) {
+		for (Tile* tile : house->getTiles()) {
 			pushNumber(L, ++i);
 			pushUserdata<Tile>(L, tile);
 			setMetatable(L, -1, "Tile");
@@ -10350,7 +10350,7 @@ int32_t LuaScriptInterface::luaHouseGetTileCount(lua_State* L)
 	// house:getTileCount()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		pushNumber(L, house->getHouseTiles().size());
+		pushNumber(L, house->getTiles().size());
 	} else {
 		pushNil(L);
 	}

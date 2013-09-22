@@ -757,13 +757,11 @@ bool Houses::payHouses()
 
 	time_t currentTime = time(nullptr);
 
-	for (HouseMap::iterator it = houseMap.begin(); it != houseMap.end(); ++it) {
-		House* house = it->second;
-
+	for (const auto& it : houseMap) {
+		House* house = it.second;
 		if (house->getHouseOwner() != 0) {
 			uint32_t ownerid = house->getHouseOwner();
 			Town* town = Towns::getInstance().getTown(house->getTownId());
-
 			if (!town) {
 #ifdef __DEBUG_HOUSES__
 				std::cout << "Warning: [Houses::payHouses] town = nullptr, townid = " <<

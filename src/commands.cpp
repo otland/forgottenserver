@@ -843,7 +843,7 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 		}
 	}
 
-	uint64_t price = house->getHouseTiles().size() * g_config.getNumber(ConfigManager::HOUSE_PRICE);
+	uint64_t price = house->getTiles().size() * g_config.getNumber(ConfigManager::HOUSE_PRICE);
 	if (!g_game.removeMoney(player, price)) {
 		player->sendCancel("You do not have enough money.");
 		return;
