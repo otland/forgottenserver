@@ -218,13 +218,13 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 
 			{-1, -1}, {0, -1}, {1, -1},
 			{-1,  0},          {1,  0},
-			{-1,  1}, {0,  1}, {1, -1}
+			{-1,  1}, {0,  1}, {1,  1}
 		};
 
 		static std::vector<std::pair<int32_t, int32_t>> normalRelList {
 			{-1, -1}, {0, -1}, {1, -1},
 			{-1,  0},          {1,  0},
-			{-1,  1}, {0,  1}, {1, -1}
+			{-1,  1}, {0,  1}, {1,  1}
 		};
 
 		std::vector<std::pair<int32_t, int32_t>>& relList = (extendedPos ? extendedRelList : normalRelList);

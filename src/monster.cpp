@@ -878,7 +878,7 @@ bool Monster::pushItem(Item* item)
 	static std::vector<std::pair<int32_t, int32_t>> relList {
 		{-1, -1}, {0, -1}, {1, -1},
 		{-1,  0},          {1,  0},
-		{-1,  1}, {0,  1}, {1, -1}
+		{-1,  1}, {0,  1}, {1,  1}
 	};
 #else
 	// TODO: Remove this when we no longer support VS2012

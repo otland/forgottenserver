@@ -896,7 +896,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			static std::vector<std::pair<int32_t, int32_t>> destList {
 				{-1, -1}, {0, -1}, {1, -1},
 				{-1,  0}, {0,  0}, {1,  0},
-				{-1,  1}, {0,  1}, {1, -1}
+				{-1,  1}, {0,  1}, {1,  1}
 			};
 #else
 			// TODO: Remove this when we no longer support VS2012
