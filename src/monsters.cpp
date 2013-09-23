@@ -262,10 +262,6 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	loaded = true;
 
 	for (pugi::xml_node monsterNode = doc.child("monsters").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
-		if (strcasecmp(monsterNode.name(), "monster") != 0) {
-			std::cout << "[Warning - Monsters::loadFromXml] Unknown node name: " << monsterNode.name() << std::endl;
-			continue;
-		}
 		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), reloading);
 	}
 	return true;
