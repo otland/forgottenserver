@@ -195,7 +195,7 @@ bool Quests::loadFromXml()
 
 		quests.emplace_back(
 			questNode.attribute("name").as_string(),
-			id++,
+			++id,
 			pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
 			pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value())
 		);
