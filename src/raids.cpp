@@ -66,17 +66,16 @@ bool Raids::loadFromXml()
 		std::string name, file;
 		uint32_t interval, margin;
 
-		pugi::xml_attribute nameAttribute = raidNode.attribute("name");
-		if (nameAttribute) {
-			name = nameAttribute.as_string();
+		pugi::xml_attribute attr;
+		if ((attr = raidNode.attribute("name"))) {
+			name = attr.as_string();
 		} else {
 			std::cout << "[Error - Raids::loadFromXml] Name tag missing for raid" << std::endl;
 			continue;
 		}
 
-		pugi::xml_attribute fileAttribute = raidNode.attribute("file");
-		if (fileAttribute) {
-			file = fileAttribute.as_string();
+		if ((attr = raidNode.attribute("file"))) {
+			file = attr.as_string();
 		} else {
 			std::ostringstream ss;
 			ss << "raids/" << name << ".xml";
@@ -90,9 +89,8 @@ bool Raids::loadFromXml()
 			continue;
 		}
 
-		pugi::xml_attribute marginAttribute = raidNode.attribute("margin");
-		if (marginAttribute) {
-			margin = pugi::cast<uint32_t>(marginAttribute.value()) * 60 * 1000;
+		if ((attr = raidNode.attribute("margin"))) {
+			margin = pugi::cast<uint32_t>(attr.value()) * 60 * 1000;
 		} else {
 			std::cout << "[Warning - Raids::loadFromXml] margin tag missing for raid: " << name << std::endl;
 			margin = 0;
@@ -371,33 +369,30 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		return false;
 	}
 
-	pugi::xml_attribute nameAttribute = eventNode.attribute("name");
-	if (nameAttribute) {
-		m_monsterName = nameAttribute.as_string();
+	pugi::xml_attribute attr;
+	if ((attr = eventNode.attribute("name"))) {
+		m_monsterName = attr.as_string();
 	} else {
 		std::cout << "[Error] Raid: name tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
-	pugi::xml_attribute xAttribute = eventNode.attribute("x");
-	if (xAttribute) {
-		m_position.x = pugi::cast<uint16_t>(xAttribute.value());
+	if ((attr = eventNode.attribute("x"))) {
+		m_position.x = pugi::cast<uint16_t>(attr.value());
 	} else {
 		std::cout << "[Error] Raid: x tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
-	pugi::xml_attribute yAttribute = eventNode.attribute("y");
-	if (yAttribute) {
-		m_position.y = pugi::cast<uint16_t>(yAttribute.value());
+	if ((attr = eventNode.attribute("y"))) {
+		m_position.y = pugi::cast<uint16_t>(attr.value());
 	} else {
 		std::cout << "[Error] Raid: y tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
-	pugi::xml_attribute zAttribute = eventNode.attribute("z");
-	if (zAttribute) {
-		m_position.z = pugi::cast<uint16_t>(zAttribute.value());
+	if ((attr = eventNode.attribute("z"))) {
+		m_position.z = pugi::cast<uint16_t>(attr.value());
 	} else {
 		std::cout << "[Error] Raid: z tag missing for singlespawn event." << std::endl;
 		return false;
@@ -427,30 +422,27 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		return false;
 	}
 
-	pugi::xml_attribute radiusAttribute = eventNode.attribute("radius");
-	if (radiusAttribute) {
-		int32_t radius = pugi::cast<int32_t>(radiusAttribute.value());
+	pugi::xml_attribute attr;
+	if ((attr = eventNode.attribute("radius"))) {
+		int32_t radius = pugi::cast<int32_t>(attr.value());
 		Position centerPos;
 
-		pugi::xml_attribute xAttribute = eventNode.attribute("centerx");
-		if (xAttribute) {
-			centerPos.x = pugi::cast<uint16_t>(xAttribute.value());
+		if ((attr = eventNode.attribute("centerx"))) {
+			centerPos.x = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: centerx tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		pugi::xml_attribute yAttribute = eventNode.attribute("centery");
-		if (yAttribute) {
-			centerPos.y = pugi::cast<uint16_t>(yAttribute.value());
+		if ((attr = eventNode.attribute("centery"))) {
+			centerPos.y = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: centery tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		pugi::xml_attribute zAttribute = eventNode.attribute("centerz");
-		if (zAttribute) {
-			centerPos.z = pugi::cast<uint16_t>(zAttribute.value());
+		if ((attr = eventNode.attribute("centerz"))) {
+			centerPos.z = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: centerz tag missing for areaspawn event." << std::endl;
 			return false;
@@ -464,49 +456,43 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		m_toPos.y = std::min<int32_t>(0xFFFF, centerPos.getY() + radius);
 		m_toPos.z = centerPos.z;
 	} else {
-		pugi::xml_attribute fromxAttribute = eventNode.attribute("fromx");
-		if (fromxAttribute) {
-			m_fromPos.x = pugi::cast<uint16_t>(fromxAttribute.value());
+		if ((attr = eventNode.attribute("fromx"))) {
+			m_fromPos.x = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: fromx tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		pugi::xml_attribute fromyAttribute = eventNode.attribute("fromy");
-		if (fromyAttribute) {
-			m_fromPos.y = pugi::cast<uint16_t>(fromyAttribute.value());
+		if ((attr = eventNode.attribute("fromy"))) {
+			m_fromPos.y = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: fromy tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		pugi::xml_attribute fromzAttribute = eventNode.attribute("fromz");
-		if (fromzAttribute) {
-			m_fromPos.z = pugi::cast<uint16_t>(fromzAttribute.value());
+		if ((attr = eventNode.attribute("fromz"))) {
+			m_fromPos.z = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: fromz tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		pugi::xml_attribute toxAttribute = eventNode.attribute("tox");
-		if (toxAttribute) {
-			m_toPos.x = pugi::cast<uint16_t>(toxAttribute.value());
+		if ((attr = eventNode.attribute("tox"))) {
+			m_toPos.x = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: tox tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		pugi::xml_attribute toyAttribute = eventNode.attribute("toy");
-		if (toyAttribute) {
-			m_toPos.y = pugi::cast<uint16_t>(toyAttribute.value());
+		if ((attr = eventNode.attribute("toy"))) {
+			m_toPos.y = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: toy tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		pugi::xml_attribute tozAttribute = eventNode.attribute("toz");
-		if (tozAttribute) {
-			m_toPos.z = pugi::cast<uint16_t>(tozAttribute.value());
+		if ((attr = eventNode.attribute("toz"))) {
+			m_toPos.z = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: toz tag missing for areaspawn event." << std::endl;
 			return false;
@@ -516,34 +502,30 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	for (pugi::xml_node monsterNode = eventNode.child("monster").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
 		std::string name;
 
-		pugi::xml_attribute nameAttribute = monsterNode.attribute("name");
-		if (nameAttribute) {
-			name = nameAttribute.as_string();
+		if ((attr = monsterNode.attribute("name"))) {
+			name = attr.as_string();
 		} else {
 			std::cout << "[Error] Raid: name tag missing for monster node." << std::endl;
 			return false;
 		}
 
 		int32_t minAmount;
-		pugi::xml_attribute minAmountAttribute = monsterNode.attribute("minamount");
-		if (minAmountAttribute) {
-			minAmount = pugi::cast<uint32_t>(minAmountAttribute.value());
+		if ((attr = monsterNode.attribute("minamount"))) {
+			minAmount = pugi::cast<uint32_t>(attr.value());
 		} else {
 			minAmount = 0;
 		}
 
 		int32_t maxAmount;
-		pugi::xml_attribute maxAmountAttribute = monsterNode.attribute("maxamount");
-		if (maxAmountAttribute) {
-			maxAmount = pugi::cast<uint32_t>(maxAmountAttribute.value());
+		if ((attr = monsterNode.attribute("maxamount"))) {
+			maxAmount = pugi::cast<uint32_t>(attr.value());
 		} else {
 			maxAmount = 0;
 		}
 
 		if (maxAmount == 0 && minAmount == 0) {
-			pugi::xml_attribute amountAttribute = monsterNode.attribute("amount");
-			if (amountAttribute) {
-				minAmount = pugi::cast<uint32_t>(amountAttribute.value());
+			if ((attr = monsterNode.attribute("amount"))) {
+				minAmount = pugi::cast<uint32_t>(attr.value());
 				maxAmount = minAmount;
 			} else {
 				std::cout << "[Error] Raid: amount tag missing for monster node." << std::endl;
