@@ -892,7 +892,14 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		Tile* destTile = target->getTile();
 
 		if (!Position::areInRange<1, 1, 0>(player->getPosition(), target->getPosition())) {
-			// TODO: Don't generate destList everytime, only shuffle it
+#ifndef _MSC_VER
+			static std::vector<std::pair<int32_t, int32_t>> destList {
+				{-1, -1}, {0, -1}, {1, -1},
+				{-1,  0}, {0,  0}, {1,  0},
+				{-1,  1}, {0,  1}, {1, -1}
+			};
+#else
+			// TODO: Remove this when we no longer support VS2012
 			std::vector<std::pair<int32_t, int32_t>> destList;
 			destList.emplace_back(-1, -1);
 			destList.emplace_back(-1, 0);
@@ -903,6 +910,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			destList.emplace_back(1, -1);
 			destList.emplace_back(1, 0);
 			destList.emplace_back(1, 1);
+#endif
 			std::random_shuffle(destList.begin(), destList.end());
 
 			Position destPos = target->getPosition();

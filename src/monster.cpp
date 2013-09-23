@@ -938,12 +938,20 @@ void Monster::pushItems(Tile* tile)
 
 bool Monster::pushCreature(Creature* creature)
 {
-	// TODO: Make this static and use initializer list
+#ifndef _MSC_VER
+	static std::vector<Direction> dirList {
+		     NORTH,
+		WEST,      EAST,
+		     SOUTH
+	};
+#else
+	// TODO: Remove this when we no longer support VS2012
 	std::vector<Direction> dirList;
 	dirList.push_back(NORTH);
 	dirList.push_back(SOUTH);
 	dirList.push_back(WEST);
 	dirList.push_back(EAST);
+#endif
 	std::random_shuffle(dirList.begin(), dirList.end());
 
 	for (Direction dir : dirList) {
@@ -1040,22 +1048,28 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 
 bool Monster::getRandomStep(const Position& creaturePos, Direction& dir)
 {
+#ifndef _MSC_VER
+	static std::vector<Direction> dirList {
+		     NORTH,
+		WEST,      EAST,
+		     SOUTH
+	};
+#else
+	// TODO: Remove this when we no longer support VS2012
 	std::vector<Direction> dirList;
-
 	dirList.push_back(NORTH);
 	dirList.push_back(SOUTH);
 	dirList.push_back(WEST);
 	dirList.push_back(EAST);
-
+#endif
 	std::random_shuffle(dirList.begin(), dirList.end());
 
-	for (std::vector<Direction>::iterator it = dirList.begin(); it != dirList.end(); ++it) {
-		if (canWalkTo(creaturePos, *it)) {
-			dir = *it;
+	for (Direction _dir : dirList) {
+		if (canWalkTo(creaturePos, _dir)) {
+			dir = _dir;
 			return true;
 		}
 	}
-
 	return false;
 }
 

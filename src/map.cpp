@@ -249,6 +249,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 #endif
 
 		if (extendedPos) {
+			std::random_shuffle(relList.begin(), relList.begin() + 4);
 			std::random_shuffle(relList.begin() + 4, relList.end());
 		} else {
 			std::random_shuffle(relList.begin(), relList.end());
