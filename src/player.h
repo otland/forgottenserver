@@ -1228,7 +1228,6 @@ class Player : public Creature, public Cylinder
 		std::unordered_set<uint32_t> attackedSet;
 		VIPListSet VIPList;
 
-		std::map<uint32_t, uint32_t> goodsMap;
 		ContainerMap openContainers;
 		DepotLockerMap depotLockerMap;
 		DepotMap depotChests;
