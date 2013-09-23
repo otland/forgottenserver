@@ -27,11 +27,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 
-#if defined(WIN32) && !defined(_MSC_VER)
-#include <mysql/mysql.h>
-#else
 #include <mysql.h>
-#endif
 
 typedef std::map<const std::string, uint32_t> listNames_t;
 

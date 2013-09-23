@@ -24,11 +24,7 @@
 
 #include <string>
 
-#if defined(WIN32) && !defined(_MSC_VER)
-#include <mysql/errmsg.h>
-#else
 #include <errmsg.h>
-#endif
 
 extern ConfigManager g_config;
 

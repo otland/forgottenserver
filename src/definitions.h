@@ -44,13 +44,7 @@
 #include <vector>
 #include <chrono>
 
-#ifndef WIN32
 #ifdef _WIN32
-#define WIN32
-#endif
-#endif
-
-#ifdef WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif

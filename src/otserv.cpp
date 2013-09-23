@@ -39,7 +39,7 @@
 #include "iologindata.h"
 #include "iomarket.h"
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <csignal> // for sigemptyset()
 #endif
 
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 	// Setup bad allocation handler
 	std::set_new_handler(badAllocationHandler);
 
-#ifndef WIN32
+#ifndef _WIN32
 	// ignore sigpipe...
 	struct sigaction sigh;
 	sigh.sa_handler = SIG_IGN;
@@ -154,7 +154,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	g_game.setGameState(GAME_STATE_STARTUP);
 
 	srand((unsigned int)OTSYS_TIME());
-#ifdef WIN32
+#ifdef _WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
 #endif
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
@@ -185,7 +185,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		return;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	std::string defaultPriority = asLowerCaseString(g_config.getString(ConfigManager::DEFAULT_PRIORITY));
 	if (defaultPriority == "realtime") {
 		SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
