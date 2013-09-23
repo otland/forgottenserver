@@ -176,7 +176,7 @@ Spell* Spells::getSpellByName(const std::string& name)
 
 RuneSpell* Spells::getRuneSpell(uint32_t id)
 {
-	RunesMap::iterator it = runes.find(id);
+	auto it = runes.find(id);
 	if (it == runes.end()) {
 		return nullptr;
 	}

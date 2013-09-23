@@ -198,54 +198,66 @@ void Map::setTile(int32_t x, int32_t y, int32_t z, Tile* newTile)
 
 bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos /*=false*/, bool forceLogin /*=false*/)
 {
+	bool foundTile;
+	bool placeInPZ;
+
 	Tile* tile = getTile(centerPos);
-
-	bool foundTile = false;
-	bool placeInPZ = false;
-
 	if (tile) {
 		placeInPZ = tile->hasFlag(TILESTATE_PROTECTIONZONE);
 		ReturnValue ret = tile->__queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM);
+		foundTile = forceLogin || ret == RET_NOERROR || ret == RET_PLAYERISNOTINVITED;
+	} else {
+		placeInPZ = false;
+		foundTile = false;
+	}
 
-		if (forceLogin || ret == RET_NOERROR || ret == RET_PLAYERISNOTINVITED) {
-			foundTile = true;
+	if (!foundTile) {
+#ifndef _MSC_VER
+		static std::vector<std::pair<int32_t, int32_t>> extendedRelList {
+			{0, -2}, {-2, 0}, {0, 2}, {2, 0},
+
+			{-1, -1}, {0, -1}, {1, -1},
+			{-1,  0},          {1,  0},
+			{-1,  1}, {0,  1}, {1, -1}
+		};
+
+		static std::vector<std::pair<int32_t, int32_t>> normalRelList {
+			{-1, -1}, {0, -1}, {1, -1},
+			{-1,  0},          {1,  0},
+			{-1,  1}, {0,  1}, {1, -1}
+		};
+
+		std::vector<std::pair<int32_t, int32_t>>& relList = (extendedPos ? extendedRelList : normalRelList);
+#else
+		// TODO: Remove this when we no longer support VS2012
+		std::vector<std::pair<int32_t, int32_t>> relList;
+		if (extendedPos) {
+			relList.emplace_back(0, -2);
+			relList.emplace_back(-2, 0);
+			relList.emplace_back(0, 2);
+			relList.emplace_back(2, 0);
 		}
-	}
 
-	typedef std::vector<std::pair<int32_t, int32_t> > RelPosList;
-	RelPosList relPosList;
-	if (extendedPos) {
-		relPosList.emplace_back(0, -2);
-		relPosList.emplace_back(-2, 0);
-		relPosList.emplace_back(0, 2);
-		relPosList.emplace_back(2, 0);
-	}
+		relList.emplace_back(-1, -1);
+		relList.emplace_back(-1, 0);
+		relList.emplace_back(-1, 1);
+		relList.emplace_back(0, -1);
+		relList.emplace_back(0, 1);
+		relList.emplace_back(1, -1);
+		relList.emplace_back(1, 0);
+		relList.emplace_back(1, 1);
+#endif
 
-	relPosList.emplace_back(-1, -1);
-	relPosList.emplace_back(-1, 0);
-	relPosList.emplace_back(-1, 1);
-	relPosList.emplace_back(0, -1);
-	relPosList.emplace_back(0, 1);
-	relPosList.emplace_back(1, -1);
-	relPosList.emplace_back(1, 0);
-	relPosList.emplace_back(1, 1);
-	std::random_shuffle(relPosList.begin(), relPosList.end());
+		if (extendedPos) {
+			std::random_shuffle(relList.begin() + 4, relList.end());
+		} else {
+			std::random_shuffle(relList.begin(), relList.end());
+		}
 
-	uint32_t radius = 1;
-
-	Position tryPos;
-
-	for (uint32_t n = 1; n <= radius && !foundTile; ++n) {
-		for (RelPosList::iterator it = relPosList.begin(); it != relPosList.end() && !foundTile; ++it) {
-			int32_t dx = it->first * n;
-			int32_t dy = it->second * n;
-
-			tryPos = centerPos;
-			tryPos.x = tryPos.x + dx;
-			tryPos.y = tryPos.y + dy;
+		for (const auto& it : relList) {
+			Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
 
 			tile = getTile(tryPos);
-
 			if (!tile || (placeInPZ && !tile->hasFlag(TILESTATE_PROTECTIONZONE))) {
 				continue;
 			}
@@ -262,10 +274,10 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 				}
 			}
 		}
-	}
 
-	if (!foundTile) {
-		return false;
+		if (!foundTile) {
+			return false;
+		}
 	}
 
 	int32_t index = 0;
@@ -1183,7 +1195,7 @@ QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
 				QTreeLeafNode::newLeaf = true;
 			}
 		}
-		return m_child[index]->createLeaf(x << 1, y << 1, level - 1);
+		return m_child[index]->createLeaf(x * 2, y * 2, level - 1);
 	}
 	return static_cast<QTreeLeafNode*>(this);
 }

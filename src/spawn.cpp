@@ -254,10 +254,9 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 
 void Spawn::startup()
 {
-	for (SpawnMap::iterator it = spawnMap.begin(); it != spawnMap.end(); ++it) {
-		uint32_t spawnId = it->first;
-		spawnBlock_t& sb = it->second;
-
+	for (const auto& it : spawnMap) {
+		uint32_t spawnId = it.first;
+		const spawnBlock_t& sb = it.second;
 		spawnMonster(spawnId, sb.mType, sb.pos, sb.direction, true);
 	}
 }
@@ -269,26 +268,23 @@ void Spawn::checkSpawn()
 	cleanup();
 
 	uint32_t spawnCount = 0;
-	uint32_t spawnId;
 
-	for (SpawnMap::iterator it = spawnMap.begin(); it != spawnMap.end(); ++it) {
-		spawnId = it->first;
-		spawnBlock_t& sb = it->second;
+	for (auto& it : spawnMap) {
+		uint32_t spawnId = it.first;
+		if (spawnedMap.find(spawnId) != spawnedMap.end()) {
+			continue;
+		}
 
-		if (spawnedMap.find(spawnId) == spawnedMap.end()) {
-			if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
-				if (findPlayer(sb.pos)) {
-					sb.lastSpawn = OTSYS_TIME();
-					continue;
-				}
+		spawnBlock_t& sb = it.second;
+		if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
+			if (findPlayer(sb.pos)) {
+				sb.lastSpawn = OTSYS_TIME();
+				continue;
+			}
 
-				spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
-
-				++spawnCount;
-
-				if (spawnCount >= (uint32_t)g_config.getNumber(ConfigManager::RATE_SPAWN)) {
-					break;
-				}
+			spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
+			if (++spawnCount >= (uint32_t)g_config.getNumber(ConfigManager::RATE_SPAWN)) {
+				break;
 			}
 		}
 	}

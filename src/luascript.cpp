@@ -433,7 +433,7 @@ uint32_t ScriptEnvironment::addResult(DBResult* res)
 
 bool ScriptEnvironment::removeResult(uint32_t id)
 {
-	DBResultMap::iterator it = m_tempResults.find(id);
+	auto it = m_tempResults.find(id);
 	if (it == m_tempResults.end()) {
 		return false;
 	}
@@ -445,7 +445,7 @@ bool ScriptEnvironment::removeResult(uint32_t id)
 
 DBResult* ScriptEnvironment::getResultByID(uint32_t id)
 {
-	DBResultMap::iterator it = m_tempResults.find(id);
+	auto it = m_tempResults.find(id);
 	if (it == m_tempResults.end()) {
 		return nullptr;
 	}

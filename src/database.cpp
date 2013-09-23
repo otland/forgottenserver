@@ -247,7 +247,7 @@ DBResult::~DBResult()
 
 int32_t DBResult::getDataInt(const std::string& s) const
 {
-	listNames_t::const_iterator it = m_listNames.find(s);
+	auto it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "[Error - DBResult::getDataInt] Column '" << s << "' does not exist in result set." << std::endl;
 		return 0;
@@ -262,7 +262,7 @@ int32_t DBResult::getDataInt(const std::string& s) const
 
 std::string DBResult::getDataString(const std::string& s) const
 {
-	listNames_t::const_iterator it = m_listNames.find(s);
+	auto it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "[Error - DBResult::getDataString] Column '" << s << "' does not exist in result set." << std::endl;
 		return std::string();
@@ -277,7 +277,7 @@ std::string DBResult::getDataString(const std::string& s) const
 
 const char* DBResult::getDataStream(const std::string& s, unsigned long& size) const
 {
-	listNames_t::const_iterator it = m_listNames.find(s);
+	auto it = m_listNames.find(s);
 	if (it == m_listNames.end()) {
 		std::cout << "[Error - DBResult::getDataStream] Column '" << s << "' does not exist in result set." << std::endl;
 		size = 0;

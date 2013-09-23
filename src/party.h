@@ -60,7 +60,7 @@ class Party
 		bool passPartyLeadership(Player* player);
 		bool leaveParty(Player* player);
 
-		bool removeInvite(Player& player);
+		bool removeInvite(Player& player, bool removeFromPlayer = true);
 
 		bool isPlayerInvited(const Player* player) const;
 		void updateAllPartyIcons();

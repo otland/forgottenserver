@@ -1308,7 +1308,6 @@ bool Item::canDecay()
 	}
 
 	const ItemType& it = Item::items[id];
-
 	if (it.decayTo == -1 || it.decayTime == 0) {
 		return false;
 	}
@@ -1340,7 +1339,7 @@ void Item::getLight(LightInfo& lightInfo)
 	lightInfo.level = it.lightLevel;
 }
 
-std::string ItemAttributes::emptyString("");
+std::string ItemAttributes::emptyString;
 
 const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 {
@@ -1349,7 +1348,6 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 	}
 
 	Attribute* attr = getAttrConst(type);
-
 	if (attr) {
 		return *(std::string*)attr->value;
 	} else {
@@ -1437,7 +1435,6 @@ uint32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 	}
 
 	Attribute* attr = getAttrConst(type);
-
 	if (attr) {
 		return static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr->value));
 	} else {
@@ -1452,7 +1449,6 @@ void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
 	}
 
 	Attribute* attr = getAttr(type);
-
 	if (attr) {
 		attr->value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(value));
 	}
@@ -1465,7 +1461,6 @@ void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
 	}
 
 	Attribute* attr = getAttr(type);
-
 	if (attr) {
 		attr->value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr->value)) + value));
 	}
@@ -1489,7 +1484,6 @@ bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
 		default:
 			break;
 	}
-
 	return false;
 }
 
@@ -1504,7 +1498,6 @@ bool ItemAttributes::validateStrAttrType(itemAttrTypes type)
 		default:
 			break;
 	}
-
 	return false;
 }
 
@@ -1512,17 +1505,14 @@ void ItemAttributes::addAttr(Attribute* attr)
 {
 	if (m_firstAttr) {
 		Attribute* curAttr = m_firstAttr;
-
 		while (curAttr->next) {
 			curAttr = curAttr->next;
 		}
-
 		curAttr->next = attr;
 	} else {
 		m_firstAttr = attr;
 	}
-
-	m_attributes = m_attributes | attr->type;
+	m_attributes |= attr->type;
 }
 
 ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) const
@@ -1532,12 +1522,10 @@ ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) cons
 	}
 
 	Attribute* curAttr = m_firstAttr;
-
 	while (curAttr) {
 		if (curAttr->type == type) {
 			return curAttr;
 		}
-
 		curAttr = curAttr->next;
 	}
 
@@ -1555,12 +1543,10 @@ ItemAttributes::Attribute* ItemAttributes::getAttr(itemAttrTypes type)
 		return curAttr;
 	} else {
 		curAttr = m_firstAttr;
-
 		while (curAttr) {
 			if (curAttr->type == type) {
 				return curAttr;
 			}
-
 			curAttr = curAttr->next;
 		}
 	}

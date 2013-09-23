@@ -327,8 +327,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 	if ((attr = node.attribute("range"))) {
 		uint32_t range = pugi::cast<uint32_t>(attr.value());
-		if (range > (Map::maxViewportX << 1)) {
-			range = Map::maxViewportX << 1;
+		if (range > (Map::maxViewportX * 2)) {
+			range = Map::maxViewportX * 2;
 		}
 		sb.range = range;
 	}

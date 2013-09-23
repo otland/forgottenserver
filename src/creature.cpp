@@ -798,17 +798,16 @@ bool Creature::getKillers(Creature** _lastHitCreature, Creature** _mostDamageCre
 
 	int32_t mostDamage = 0;
 
-	for (CountMap::const_iterator it = damageMap.begin(), end = damageMap.end(); it != end; ++it) {
-		CountBlock_t cb = it->second;
+	for (const auto& it : damageMap) {
+		CountBlock_t cb = it.second;
 		if ((cb.total > mostDamage && (OTSYS_TIME() - cb.ticks <= g_game.getInFightTicks()))) {
-			Creature* creature = g_game.getCreatureByID(it->first);
+			Creature* creature = g_game.getCreatureByID(it.first);
 			if (creature) {
 				mostDamage = cb.total;
 				*_mostDamageCreature = creature;
 			}
 		}
 	}
-
 	return (*_lastHitCreature || *_mostDamageCreature);
 }
 
@@ -1049,13 +1048,10 @@ double Creature::getDamageRatio(Creature* attacker) const
 	int32_t totalDamage = 0;
 	int32_t attackerDamage = 0;
 
-	CountBlock_t cb;
-
-	for (CountMap::const_iterator it = damageMap.begin(), end = damageMap.end(); it != end; ++it) {
-		cb = it->second;
+	for (const auto& it : damageMap) {
+		const CountBlock_t& cb = it.second;
 		totalDamage += cb.total;
-
-		if (it->first == attacker->getID()) {
+		if (it.first == attacker->getID()) {
 			attackerDamage += cb.total;
 		}
 	}
@@ -1443,8 +1439,8 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 		return false;
 	}
 
-	for (ConditionList::const_iterator it = conditions.begin(), end = conditions.end(); it != end; ++it) {
-		if ((*it)->getType() != type || (*it)->getSubId() != subId) {
+	for (Condition* condition : conditions) {
+		if (condition->getType() != type || condition->getSubId() != subId) {
 			continue;
 		}
 
@@ -1452,25 +1448,23 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 			return true;
 		}
 
-		if ((*it)->getEndTime() == 0) {
+		if (condition->getEndTime() == 0) {
 			return true;
 		}
 
 		int64_t seekTime = g_game.getStateTime();
-
 		if (seekTime == 0) {
 			return true;
 		}
 
-		if ((*it)->getEndTime() >= seekTime) {
-			seekTime = (*it)->getEndTime();
+		if (condition->getEndTime() >= seekTime) {
+			seekTime = condition->getEndTime();
 		}
 
 		if (seekTime >= OTSYS_TIME()) {
 			return true;
 		}
 	}
-
 	return false;
 }
 

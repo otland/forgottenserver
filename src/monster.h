@@ -242,7 +242,7 @@ class Monster : public Creature
 		bool isInSpawnRange(const Position& toPos);
 		bool canWalkTo(Position pos, Direction dir);
 
-		bool pushItem(Item* item, int32_t radius);
+		bool pushItem(Item* item);
 		void pushItems(Tile* tile);
 		bool pushCreature(Creature* creature);
 		void pushCreatures(Tile* tile);

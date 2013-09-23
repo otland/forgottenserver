@@ -870,10 +870,18 @@ void Monster::onWalk()
 	Creature::onWalk();
 }
 
-bool Monster::pushItem(Item* item, int32_t radius)
+bool Monster::pushItem(Item* item)
 {
 	const Position& centerPos = item->getPosition();
 
+#ifndef _MSC_VER
+	static std::vector<std::pair<int32_t, int32_t>> relList {
+		{-1, -1}, {0, -1}, {1, -1},
+		{-1,  0},          {1,  0},
+		{-1,  1}, {0,  1}, {1, -1}
+	};
+#else
+	// TODO: Remove this when we no longer support VS2012
 	std::vector<std::pair<int32_t, int32_t>> relList;
 	relList.emplace_back(-1, -1);
 	relList.emplace_back(-1, 0);
@@ -883,23 +891,16 @@ bool Monster::pushItem(Item* item, int32_t radius)
 	relList.emplace_back(1, -1);
 	relList.emplace_back(1, 0);
 	relList.emplace_back(1, 1);
+#endif
 
 	std::random_shuffle(relList.begin(), relList.end());
 
-	for (int32_t n = 1; n <= radius; ++n) {
-		for (const auto& it : relList) {
-			int32_t dx = it.first * n;
-			int32_t dy = it.second * n;
-
-			Position tryPos(centerPos);
-			tryPos.x += dx;
-			tryPos.y += dy;
-
-			Tile* tile = g_game.getTile(tryPos);
-			if (tile && g_game.canThrowObjectTo(centerPos, tryPos)) {
-				if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr) == RET_NOERROR) {
-					return true;
-				}
+	for (const auto& it : relList) {
+		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
+		Tile* tile = g_game.getTile(tryPos);
+		if (tile && g_game.canThrowObjectTo(centerPos, tryPos)) {
+			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr) == RET_NOERROR) {
+				return true;
 			}
 		}
 	}
@@ -919,10 +920,9 @@ void Monster::pushItems(Tile* tile)
 		for (int32_t i = downItemSize - 1; i >= 0; --i) {
 			assert(i >= 0 && i < downItemSize);
 			Item* item = items->at(i);
-
 			if (item && item->hasProperty(MOVEABLE) && (item->hasProperty(BLOCKPATH)
 			        || item->hasProperty(BLOCKSOLID))) {
-				if (moveCount < 20 && pushItem(item, 1)) {
+				if (moveCount < 20 && pushItem(item)) {
 					moveCount++;
 				} else if (g_game.internalRemoveItem(item) == RET_NOERROR) {
 					++removeCount;
@@ -938,26 +938,23 @@ void Monster::pushItems(Tile* tile)
 
 bool Monster::pushCreature(Creature* creature)
 {
-	Position monsterPos = creature->getPosition();
-
+	// TODO: Make this static and use initializer list
 	std::vector<Direction> dirList;
 	dirList.push_back(NORTH);
 	dirList.push_back(SOUTH);
 	dirList.push_back(WEST);
 	dirList.push_back(EAST);
-
 	std::random_shuffle(dirList.begin(), dirList.end());
 
-	for (std::vector<Direction>::iterator it = dirList.begin(); it != dirList.end(); ++it) {
-		const Position& tryPos = Spells::getCasterPosition(creature, *it);
+	for (Direction dir : dirList) {
+		const Position& tryPos = Spells::getCasterPosition(creature, dir);
 		Tile* toTile = g_game.getTile(tryPos.x, tryPos.y, tryPos.z);
 		if (toTile && !toTile->hasProperty(BLOCKPATH)) {
-			if (g_game.internalMoveCreature(creature, *it) == RET_NOERROR) {
+			if (g_game.internalMoveCreature(creature, dir) == RET_NOERROR) {
 				return true;
 			}
 		}
 	}
-
 	return false;
 }
 

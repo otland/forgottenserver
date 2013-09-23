@@ -242,35 +242,34 @@ class ItemAttributes
 
 		static std::string emptyString;
 
-		class Attribute
+		struct Attribute
 		{
-			public:
-				itemAttrTypes type;
-				void* value;
-				Attribute* next;
-				Attribute(itemAttrTypes _type) {
-					type = _type;
+			itemAttrTypes type;
+			void* value;
+			Attribute* next;
+			Attribute(itemAttrTypes _type) {
+				type = _type;
+				value = nullptr;
+				next = nullptr;
+			}
+
+			Attribute(const Attribute& i) {
+				type = i.type;
+
+				if (ItemAttributes::validateIntAttrType(type)) {
+					value = i.value;
+				} else if (ItemAttributes::validateStrAttrType(type)) {
+					value = (void*)new std::string( *((std::string*)i.value) );
+				} else {
 					value = nullptr;
-					next = nullptr;
 				}
 
-				Attribute(const Attribute& i) {
-					type = i.type;
+				next = nullptr;
 
-					if (ItemAttributes::validateIntAttrType(type)) {
-						value = i.value;
-					} else if (ItemAttributes::validateStrAttrType(type)) {
-						value = (void*)new std::string( *((std::string*)i.value) );
-					} else {
-						value = nullptr;
-					}
-
-					next = nullptr;
-
-					if (i.next) {
-						next = new Attribute(*i.next);
-					}
+				if (i.next) {
+					next = new Attribute(*i.next);
 				}
+			}
 		};
 
 		uint32_t m_attributes;

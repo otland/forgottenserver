@@ -238,13 +238,13 @@ uint32_t Vocation::getReqSkillTries(int32_t skill, int32_t level)
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)
 {
-	manaCacheMap::iterator it = cacheMana.find(magLevel);
+	auto it = cacheMana.find(magLevel);
 	if (it != cacheMana.end()) {
 		return it->second;
 	}
 
 	uint64_t reqMana = (uint64_t)(400 * pow(manaMultiplier, (int32_t)magLevel - 1));
-	uint8_t modResult = reqMana % 20;
+	uint32_t modResult = reqMana % 20;
 	if (modResult < 10) {
 		reqMana -= modResult;
 	} else {

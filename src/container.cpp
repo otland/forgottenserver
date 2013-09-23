@@ -373,11 +373,10 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 		if (index == INDEX_WHEREEVER) {
 			//Iterate through every item and check how much free stackable slots there is.
 			uint32_t slotIndex = 0;
-
-			for (ItemDeque::const_iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit, ++slotIndex) {
-				if ((*cit) != item && (*cit)->getID() == item->getID() && (*cit)->getItemCount() < 100) {
-					uint32_t remainder = (100 - (*cit)->getItemCount());
-					if (__queryAdd(slotIndex, item, remainder, flags) == RET_NOERROR) {
+			for (Item* containerItem : itemlist) {
+				if (containerItem != item && containerItem->getID() == item->getID() && containerItem->getItemCount() < 100) {
+					uint32_t remainder = (100 - containerItem->getItemCount());
+					if (__queryAdd(slotIndex++, item, remainder, flags) == RET_NOERROR) {
 						n += remainder;
 					}
 				}
@@ -386,7 +385,6 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 			const Item* destItem = getItemByIndex(index);
 			if (destItem && destItem->getID() == item->getID() && destItem->getItemCount() < 100) {
 				uint32_t remainder = 100 - destItem->getItemCount();
-
 				if (__queryAdd(index, item, remainder, flags) == RET_NOERROR) {
 					n = remainder;
 				}

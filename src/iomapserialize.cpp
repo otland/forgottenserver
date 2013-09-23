@@ -187,9 +187,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 	} else {
 		// Stationary items like doors/beds/blackboards/bookcases
 		if (const TileItemVector* items = tile->getItemList()) {
-			for (ItemVector::const_iterator it = items->begin(), end = items->end(); it != end; ++it) {
-				Item* findItem = (*it);
-
+			for (Item* findItem : *items) {
 				if (findItem->getID() == id) {
 					item = findItem;
 					break;

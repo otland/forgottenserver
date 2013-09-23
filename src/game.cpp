@@ -114,8 +114,8 @@ Game::Game()
 
 Game::~Game()
 {
-	for (std::unordered_map<uint32_t, Guild*>::iterator it = guilds.begin(); it != guilds.end(); ++it) {
-		delete it->second;
+	for (const auto& it : guilds) {
+		delete it.second;
 	}
 
 	delete map;
@@ -547,7 +547,7 @@ Player* Game::getPlayerByName(const std::string& s)
 		return nullptr;
 	}
 
-	PlayerNameMap::const_iterator it = mappedPlayerNames.find(asLowerCaseString(s));
+	auto it = mappedPlayerNames.find(asLowerCaseString(s));
 	if (it == mappedPlayerNames.end()) {
 		return nullptr;
 	}
@@ -575,7 +575,7 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 		return RET_PLAYERWITHTHISNAMEISNOTONLINE;
 	}
 
-	if ((*s.rbegin()) == '~') {
+	if (s.back() == '~') {
 		const std::string& query = asLowerCaseString(s.substr(0, strlen - 1));
 		std::string result;
 		ReturnValue ret = wildcardTree.findOne(query, result);
@@ -803,7 +803,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 						float modifier = vocation->getAttackSpeed() / 1000.f;
 						sendUpdateSkills = player->addOfflineTrainingTries((skills_t)offlineTrainingSkill, (offlineTrainingTime / modifier) / 4);
 					} else if (offlineTrainingSkill == SKILL__MAGLEVEL) {
-						int32_t gainTicks = vocation->getManaGainTicks() << 1;
+						int32_t gainTicks = vocation->getManaGainTicks() * 2;
 						if (gainTicks == 0) {
 							gainTicks = 1;
 						}
@@ -2075,8 +2075,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 
 	Tile* fromTile = cylinder->getTile();
 	if (fromTile) {
-		BrowseFieldMap::const_iterator it = browseFields.find(fromTile);
-
+		auto it = browseFields.find(fromTile);
 		if (it != browseFields.end() && it->second == cylinder) {
 			cylinder = fromTile;
 		}
@@ -2721,7 +2720,7 @@ bool Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 			return false;
 		}
 
-		BrowseFieldMap::const_iterator it = browseFields.find(tile);
+		auto it = browseFields.find(tile);
 		if (it == browseFields.end()) {
 			parentContainer = new Container(tile);
 			parentContainer->useThing2();
@@ -2916,7 +2915,7 @@ bool Game::playerBrowseField(uint32_t playerId, const Position& pos)
 
 	Container* container;
 
-	BrowseFieldMap::const_iterator it = browseFields.find(tile);
+	auto it = browseFields.find(tile);
 	if (it == browseFields.end()) {
 		container = new Container(tile);
 		container->useThing2();
@@ -4542,9 +4541,9 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		if (damage > 0) {
 			if (damage >= target->getHealth()) {
 				//scripting event - onPrepareDeath
-				CreatureEventList prepareDeathEvents = target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH);
-				for (CreatureEventList::const_iterator it = prepareDeathEvents.begin(); it != prepareDeathEvents.end(); ++it) {
-					(*it)->executeOnPrepareDeath(target, attacker);
+				const CreatureEventList& prepareDeathEvents = target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH);
+				for (CreatureEvent* creatureEvent : prepareDeathEvents) {
+					creatureEvent->executeOnPrepareDeath(target, attacker);
 				}
 			}
 
@@ -4915,22 +4914,22 @@ void Game::checkDecay()
 		}
 
 		int32_t decreaseTime = EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS;
+		int32_t duration = item->getDuration();
 
-		if ((int32_t)item->getDuration() - decreaseTime < 0) {
-			decreaseTime = item->getDuration();
+		if (duration - decreaseTime < 0) {
+			decreaseTime = duration;
 		}
 
+		duration -= decreaseTime;
 		item->decreaseDuration(decreaseTime);
 
-		int32_t dur = item->getDuration();
-
-		if (dur <= 0) {
+		if (duration <= 0) {
 			it = decayItems[bucket].erase(it);
 			internalDecayItem(item);
 			ReleaseItem(item);
-		} else if (dur < EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS) {
+		} else if (duration < EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS) {
 			it = decayItems[bucket].erase(it);
-			size_t newBucket = (bucket + ((dur + EVENT_DECAYINTERVAL / 2) / 1000)) % EVENT_DECAY_BUCKETS;
+			size_t newBucket = (bucket + ((duration + EVENT_DECAYINTERVAL / 2) / 1000)) % EVENT_DECAY_BUCKETS;
 
 			if (newBucket == bucket) {
 				internalDecayItem(item);
@@ -6324,7 +6323,7 @@ void Game::removeMonster(Monster* monster)
 
 Guild* Game::getGuild(uint32_t id) const
 {
-	std::unordered_map<uint32_t, Guild*>::const_iterator it = guilds.find(id);
+	auto it = guilds.find(id);
 	if (it == guilds.end()) {
 		return nullptr;
 	}
@@ -6343,7 +6342,7 @@ void Game::decreaseBrowseFieldRef(const Position& pos)
 		return;
 	}
 
-	BrowseFieldMap::const_iterator it = browseFields.find(tile);
+	auto it = browseFields.find(tile);
 	if (it != browseFields.end()) {
 		it->second->releaseThing2();
 	}

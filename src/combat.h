@@ -255,11 +255,11 @@ class AreaCombat
 				}
 			}
 
-			AreaCombatMap::const_iterator it = areas.find(dir);
-			if (it != areas.end()) {
-				return it->second;
+			auto it = areas.find(dir);
+			if (it == areas.end()) {
+				return nullptr;
 			}
-			return nullptr;
+			return it->second;
 		}
 
 		AreaCombatMap areas;

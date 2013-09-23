@@ -853,7 +853,7 @@ void Player::setContainerIndex(uint8_t cid, uint16_t index)
 
 Container* Player::getContainerByID(uint8_t cid)
 {
-	ContainerMap::const_iterator it = openContainers.find(cid);
+	auto it = openContainers.find(cid);
 	if (it == openContainers.end()) {
 		return nullptr;
 	}
@@ -862,9 +862,9 @@ Container* Player::getContainerByID(uint8_t cid)
 
 int8_t Player::getContainerID(const Container* container) const
 {
-	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-		if (it->second.container == container) {
-			return it->first;
+	for (const auto& it : openContainers) {
+		if (it.second.container == container) {
+			return it.first;
 		}
 	}
 	return -1;
@@ -872,7 +872,7 @@ int8_t Player::getContainerID(const Container* container) const
 
 uint16_t Player::getContainerIndex(uint8_t cid) const
 {
-	ContainerMap::const_iterator it = openContainers.find(cid);
+	auto it = openContainers.find(cid);
 	if (it == openContainers.end()) {
 		return 0;
 	}
@@ -1495,8 +1495,8 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 		return;
 	}
 
-	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-		const OpenContainer& openContainer = it->second;
+	for (const auto& it : openContainers) {
+		const OpenContainer& openContainer = it.second;
 		if (openContainer.container != container) {
 			continue;
 		}
@@ -1506,7 +1506,6 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 		if (container->getID() == ITEM_BROWSEFIELD) {
 			uint16_t containerSize = container->size() - 1;
 			uint16_t pageEnd = openContainer.index + container->capacity();
-
 			if (containerSize > pageEnd) {
 				slot = pageEnd;
 				item = container->getItemByIndex(pageEnd);
@@ -1517,7 +1516,7 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 			item = container->getItemByIndex(openContainer.index - 1);
 		}
 
-		client->sendAddContainerItem(it->first, slot, item);
+		client->sendAddContainerItem(it.first, slot, item);
 	}
 }
 
@@ -1527,8 +1526,8 @@ void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, 
 		return;
 	}
 
-	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-		const OpenContainer& openContainer = it->second;
+	for (const auto& it : openContainers) {
+		const OpenContainer& openContainer = it.second;
 		if (openContainer.container != container) {
 			continue;
 		}
@@ -1542,7 +1541,7 @@ void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, 
 			continue;
 		}
 
-		client->sendUpdateContainerItem(it->first, slot, newItem);
+		client->sendUpdateContainerItem(it.first, slot, newItem);
 	}
 }
 
@@ -1552,8 +1551,8 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 		return;
 	}
 
-	for (ContainerMap::iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-		OpenContainer& openContainer = it->second;
+	for (auto& it : openContainers) {
+		OpenContainer& openContainer = it.second;
 		if (openContainer.container != container) {
 			continue;
 		}
@@ -1561,10 +1560,10 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 		uint16_t& firstIndex = openContainer.index;
 		if (firstIndex > 0 && firstIndex >= container->size() - 1) {
 			firstIndex -= container->capacity();
-			sendContainer(it->first, container, false, firstIndex);
+			sendContainer(it.first, container, false, firstIndex);
 		}
 
-		client->sendRemoveContainerItem(it->first, std::max<uint16_t>(slot, firstIndex), container->getItemByIndex(container->capacity() + firstIndex));
+		client->sendRemoveContainerItem(it.first, std::max<uint16_t>(slot, firstIndex), container->getItemByIndex(container->capacity() + firstIndex));
 	}
 }
 
@@ -1614,13 +1613,10 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 			}
 		}
 
-		if (!storedConditionList.empty()) {
-			for (ConditionList::const_iterator it = storedConditionList.begin(); it != storedConditionList.end(); ++it) {
-				addCondition(*it);
-			}
-
-			storedConditionList.clear();
+		for (Condition* condition : storedConditionList) {
+			addCondition(condition);
 		}
+		storedConditionList.clear();
 
 		BedItem* bed = Beds::getInstance().getBedBySleeper(getGUID());
 		if (bed) {
@@ -1887,9 +1883,9 @@ void Player::onCloseContainer(const Container* container)
 		return;
 	}
 
-	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-		if (it->second.container == container) {
-			client->sendCloseContainer(it->first);
+	for (const auto& it : openContainers) {
+		if (it.second.container == container) {
+			client->sendCloseContainer(it.first);
 		}
 	}
 }
@@ -1901,10 +1897,10 @@ void Player::onSendContainer(const Container* container)
 	}
 
 	bool hasParent = container->hasParent();
-	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-		const OpenContainer& openContainer = it->second;
+	for (const auto& it : openContainers) {
+		const OpenContainer& openContainer = it.second;
 		if (openContainer.container == container) {
-			client->sendContainer(it->first, container, hasParent, openContainer.index);
+			client->sendContainer(it.first, container, hasParent, openContainer.index);
 		}
 	}
 }
@@ -2060,10 +2056,9 @@ uint32_t Player::isMuted()
 	}
 
 	int32_t muteTicks = 0;
-
-	for (ConditionList::iterator it = conditions.begin(); it != conditions.end(); ++it) {
-		if ((*it)->getType() == CONDITION_MUTED && (*it)->getTicks() > muteTicks) {
-			muteTicks = (*it)->getTicks();
+	for (Condition* condition : conditions) {
+		if (condition->getType() == CONDITION_MUTED && condition->getTicks() > muteTicks) {
+			muteTicks = condition->getTicks();
 		}
 	}
 
@@ -2084,14 +2079,13 @@ void Player::removeMessageBuffer()
 
 		if (MessageBufferCount > Player::maxMessageBuffer) {
 			uint32_t muteCount = 1;
-			MuteCountMap::iterator it = muteCountMap.find(getGUID());
-
+			auto it = muteCountMap.find(getGUID());
 			if (it != muteCountMap.end()) {
 				muteCount = it->second;
 			}
 
 			uint32_t muteTime = 5 * muteCount * muteCount;
-			muteCountMap[getGUID()] = muteCount + 1;
+			muteCountMap[guid] = muteCount + 1;
 			Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_MUTED, muteTime * 1000, 0);
 			addCondition(condition);
 
@@ -2122,7 +2116,6 @@ void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
 
 	uint64_t currReqMana = vocation->getReqMana(magLevel);
 	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
-
 	if (currReqMana >= nextReqMana) {
 		//player has reached max magic level
 		return;
@@ -2438,10 +2431,10 @@ void Player::death()
 
 			if (lastHitPlayer) {
 				uint32_t sumLevels = 0;
-				for (CountMap::const_iterator it = damageMap.begin(), end = damageMap.end(); it != end; ++it) {
-					CountBlock_t cb = it->second;
+				for (const auto& it : damageMap) {
+					CountBlock_t cb = it.second;
 					if ((OTSYS_TIME() - cb.ticks) <= g_game.getInFightTicks()) {
-						Player* damageDealer = g_game.getPlayerByID(it->first);
+						Player* damageDealer = g_game.getPlayerByID(it.first);
 						if (damageDealer) {
 							sumLevels += damageDealer->getLevel();
 						}
@@ -2554,7 +2547,6 @@ void Player::death()
 				lastHitPlayer = _lastHitCreature->getPlayer();
 				if (!lastHitPlayer) {
 					Creature* lastHitMaster = _lastHitCreature->getMaster();
-
 					if (lastHitMaster) {
 						lastHitPlayer = lastHitMaster->getPlayer();
 					}
@@ -2838,10 +2830,10 @@ void Player::autoCloseContainers(const Container* container)
 		}
 	}
 
-	for (std::vector<uint32_t>::const_iterator it = closeList.begin(); it != closeList.end(); ++it) {
-		closeContainer(*it);
+	for (uint32_t containerId : closeList) {
+		closeContainer(containerId);
 		if (client) {
-			client->sendCloseContainer(*it);
+			client->sendCloseContainer(containerId);
 		}
 	}
 }
@@ -4742,7 +4734,6 @@ bool Player::removePartyInvitation(Party* party)
 	}
 
 	PartyList::iterator it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
-
 	if (it == invitePartyList.end()) {
 		return false;
 	}
@@ -4753,19 +4744,10 @@ bool Player::removePartyInvitation(Party* party)
 
 void Player::clearPartyInvitations()
 {
-	if (!invitePartyList.empty()) {
-		PartyList list;
-
-		for (PartyList::iterator it = invitePartyList.begin(); it != invitePartyList.end(); ++it) {
-			list.push_back(*it);
-		}
-
-		invitePartyList.clear();
-
-		for (PartyList::iterator it = list.begin(); it != list.end(); ++it) {
-			(*it)->removeInvite(*this);
-		}
+	for (Party* invitingParty : invitePartyList) {
+		invitingParty->removeInvite(*this, false);
 	}
+	invitePartyList.clear();
 }
 
 GuildEmblems_t Player::getGuildEmblem(const Player* player) const
@@ -4775,7 +4757,6 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 	}
 
 	const Guild* playerGuild = player->getGuild();
-
 	if (!playerGuild) {
 		return GUILDEMBLEM_NONE;
 	}

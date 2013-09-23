@@ -511,10 +511,9 @@ inline StaticTile::StaticTile(uint16_t x, uint16_t y, uint16_t z) :
 inline StaticTile::~StaticTile()
 {
 	if (items) {
-		for (ItemVector::const_iterator it = items->begin(); it != items->end(); ++it) {
-			(*it)->releaseThing2();
+		for (Item* item : *items) {
+			item->releaseThing2();
 		}
-
 		delete items;
 	}
 
@@ -529,8 +528,8 @@ inline DynamicTile::DynamicTile(uint16_t x, uint16_t y, uint16_t z) :
 
 inline DynamicTile::~DynamicTile()
 {
-	for (ItemVector::const_iterator it = items.begin(); it != items.end(); ++it) {
-		(*it)->releaseThing2();
+	for (Item* item : items) {
+		item->releaseThing2();
 	}
 }
 

@@ -519,11 +519,11 @@ bool AccessList::addExpression(const std::string& expression)
 	outExp.reserve(expression.length());
 
 	std::string metachars = ".[{}()\\+|^$";
-	for (std::string::const_iterator it = expression.begin(); it != expression.end(); ++it) {
-		if (metachars.find(*it) != std::string::npos) {
-			outExp += "\\";
+	for (const char c : expression) {
+		if (metachars.find(c) != std::string::npos) {
+			outExp.push_back('\\');
 		}
-		outExp += (*it);
+		outExp.push_back(c);
 	}
 
 	replaceString(outExp, "*", ".*");

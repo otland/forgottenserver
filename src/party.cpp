@@ -58,23 +58,22 @@ void Party::disband()
 	}
 	inviteList.clear();
 
-	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		Player* player = *it;
-		player->setParty(nullptr);
-		player->sendClosePrivate(CHANNEL_PARTY);
-		player->sendTextMessage(MSG_INFO_DESCR, "Your party has been disbanded.");
+	for (Player* member : memberList) {
+		member->setParty(nullptr);
+		member->sendClosePrivate(CHANNEL_PARTY);
+		member->sendTextMessage(MSG_INFO_DESCR, "Your party has been disbanded.");
 	}
 
-	for (Player* player : memberList) {
-		g_game.updatePlayerShield(player);
+	for (Player* member : memberList) {
+		g_game.updatePlayerShield(member);
 
-		for (Player* player2 : memberList) {
-			player2->sendCreatureSkull(player);
+		for (Player* otherMember : memberList) {
+			otherMember->sendCreatureSkull(member);
 		}
 
-		player->sendCreatureSkull(leader);
-		leader->sendCreatureSkull(player);
-		g_game.updatePlayerHelpers(*player);
+		member->sendCreatureSkull(leader);
+		leader->sendCreatureSkull(member);
+		g_game.updatePlayerHelpers(*member);
 	}
 	memberList.clear();
 
@@ -107,8 +106,7 @@ bool Party::leaveParty(Player* player)
 	}
 
 	//since we already passed the leadership, we remove the player from the list
-	PlayerVector::iterator it = std::find(memberList.begin(), memberList.end(), player);
-
+	auto it = std::find(memberList.begin(), memberList.end(), player);
 	if (it != memberList.end()) {
 		memberList.erase(it);
 	}
@@ -152,7 +150,6 @@ bool Party::passPartyLeadership(Player* player)
 
 	//Remove it before to broadcast the message correctly
 	PlayerVector::iterator it = std::find(memberList.begin(), memberList.end(), player);
-
 	if (it != memberList.end()) {
 		memberList.erase(it);
 	}
@@ -168,14 +165,14 @@ bool Party::passPartyLeadership(Player* player)
 
 	updateSharedExperience();
 
-	for (PlayerVector::const_iterator m_it = memberList.begin(); m_it != memberList.end(); ++m_it) {
-		(*m_it)->sendCreatureShield(oldLeader);
-		(*m_it)->sendCreatureShield(leader);
+	for (Player* member : memberList) {
+		member->sendCreatureShield(oldLeader);
+		member->sendCreatureShield(leader);
 	}
 
-	for (PlayerVector::iterator i_it = inviteList.begin(); i_it != inviteList.end(); ++i_it) {
-		(*i_it)->sendCreatureShield(oldLeader);
-		(*i_it)->sendCreatureShield(leader);
+	for (Player* invitee : inviteList) {
+		invitee->sendCreatureShield(oldLeader);
+		invitee->sendCreatureShield(leader);
 	}
 
 	leader->sendCreatureShield(oldLeader);
@@ -202,9 +199,9 @@ bool Party::joinParty(Player& player)
 
 	g_game.updatePlayerShield(&player);
 
-	for (PlayerVector::iterator m_it = memberList.begin(); m_it != memberList.end(); ++m_it) {
-		(*m_it)->sendCreatureSkull(&player);
-		player.sendPlayerPartyIcons(*m_it);
+	for (Player* member : memberList) {
+		member->sendCreatureSkull(&player);
+		player.sendPlayerPartyIcons(member);
 	}
 
 	player.sendCreatureSkull(&player);
@@ -226,7 +223,7 @@ bool Party::joinParty(Player& player)
 	return true;
 }
 
-bool Party::removeInvite(Player& player)
+bool Party::removeInvite(Player& player, bool removeFromPlayer/* = true*/)
 {
 	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), &player);
 	if (it == inviteList.end()) {
@@ -238,7 +235,9 @@ bool Party::removeInvite(Player& player)
 	leader->sendCreatureShield(&player);
 	player.sendCreatureShield(leader);
 
-	player.removePartyInvitation(this);
+	if (removeFromPlayer) {
+		player.removePartyInvitation(this);
+	}
 
 	if (disbandParty()) {
 		disband();
@@ -303,35 +302,33 @@ bool Party::invitePlayer(Player& player)
 
 bool Party::isPlayerInvited(const Player* player) const
 {
-	PlayerVector::const_iterator it = std::find(inviteList.begin(), inviteList.end(), player);
-	return it != inviteList.end();
+	return std::find(inviteList.begin(), inviteList.end(), player) != inviteList.end();
 }
 
 void Party::updateAllPartyIcons()
 {
-	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		for (PlayerVector::iterator it2 = memberList.begin(); it2 != memberList.end(); ++it2) {
-			(*it)->sendCreatureShield(*it2);
+	for (Player* member : memberList) {
+		for (Player* otherMember : memberList) {
+			member->sendCreatureShield(otherMember);
 		}
 
-		(*it)->sendCreatureShield(leader);
-		leader->sendCreatureShield(*it);
+		member->sendCreatureShield(leader);
+		leader->sendCreatureShield(member);
 	}
-
 	leader->sendCreatureShield(leader);
 }
 
 void Party::broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations /*= false*/)
 {
-	for (PlayerVector::const_iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		(*it)->sendTextMessage(msgClass, msg);
+	for (Player* member : memberList) {
+		member->sendTextMessage(msgClass, msg);
 	}
 
 	leader->sendTextMessage(msgClass, msg);
 
 	if (sendToInvitations) {
-		for (PlayerVector::const_iterator it = inviteList.begin(); it != inviteList.end(); ++it) {
-			(*it)->sendTextMessage(msgClass, msg);
+		for (Player* invitee : inviteList) {
+			invitee->sendTextMessage(msgClass, msg);
 		}
 	}
 }
@@ -340,8 +337,8 @@ void Party::broadcastPartyLoot(const std::string& loot)
 {
 	leader->sendTextMessage(MSG_INFO_DESCR, loot);
 
-	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		(*it)->sendTextMessage(MSG_INFO_DESCR, loot);
+	for (Player* member : memberList) {
+		member->sendTextMessage(MSG_INFO_DESCR, loot);
 	}
 }
 
@@ -403,15 +400,13 @@ bool Party::canUseSharedExperience(const Player* player) const
 	}
 
 	uint32_t highestLevel = leader->getLevel();
-
-	for (PlayerVector::const_iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		if ((*it)->getLevel() > highestLevel) {
-			highestLevel = (*it)->getLevel();
+	for (Player* member : memberList) {
+		if (member->getLevel() > highestLevel) {
+			highestLevel = member->getLevel();
 		}
 	}
 
 	uint32_t minLevel = (int32_t)std::ceil(((float)(highestLevel) * 2) / 3);
-
 	if (player->getLevel() < minLevel) {
 		return false;
 	}
@@ -424,19 +419,16 @@ bool Party::canUseSharedExperience(const Player* player) const
 
 	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
 		//check if the player has healed/attacked anything recently
-		CountMap::const_iterator it = pointMap.find(player->getID());
-
+		auto it = pointMap.find(player->getID());
 		if (it == pointMap.end()) {
 			return false;
 		}
 
 		uint64_t timeDiff = OTSYS_TIME() - it->second.ticks;
-
 		if (timeDiff > (uint64_t)g_game.getInFightTicks()) {
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -446,12 +438,11 @@ bool Party::canEnableSharedExperience()
 		return false;
 	}
 
-	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		if (!canUseSharedExperience(*it)) {
+	for (Player* member : memberList) {
+		if (!canUseSharedExperience(member)) {
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -460,7 +451,6 @@ void Party::addPlayerHealedMember(Player* player, uint32_t points)
 	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
 		if (points > 0) {
 			CountMap::iterator it = pointMap.find(player->getID());
-
 			if (it == pointMap.end()) {
 				CountBlock_t cb;
 				cb.ticks = OTSYS_TIME();
@@ -471,7 +461,6 @@ void Party::addPlayerHealedMember(Player* player, uint32_t points)
 				it->second.totalHeal += points;
 				it->second.ticks = OTSYS_TIME();
 			}
-
 			updateSharedExperience();
 		}
 	}
@@ -482,7 +471,6 @@ void Party::addPlayerDamageMonster(Player* player, uint32_t points)
 	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
 		if (points > 0) {
 			CountMap::iterator it = pointMap.find(player->getID());
-
 			if (it == pointMap.end()) {
 				CountBlock_t cb;
 				cb.ticks = OTSYS_TIME();
@@ -493,7 +481,6 @@ void Party::addPlayerDamageMonster(Player* player, uint32_t points)
 				it->second.totalDamage += points;
 				it->second.ticks = OTSYS_TIME();
 			}
-
 			updateSharedExperience();
 		}
 	}
@@ -502,7 +489,6 @@ void Party::addPlayerDamageMonster(Player* player, uint32_t points)
 void Party::clearPlayerPoints(Player* player)
 {
 	CountMap::iterator it = pointMap.find(player->getID());
-
 	if (it != pointMap.end()) {
 		pointMap.erase(it);
 		updateSharedExperience();
