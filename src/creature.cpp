@@ -1727,3 +1727,10 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 	}
 	return false;
 }
+
+bool Creature::isInvisible() const
+{
+	return std::find_if(conditions.begin(), conditions.end(), [] (const Condition* condition) {
+		return condition->getType() == CONDITION_INVISIBLE;
+	}) != conditions.end();
+}
