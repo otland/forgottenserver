@@ -876,7 +876,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 		if (Player* player = spectator->getPlayer()) {
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				player->sendCreatureDisappear(creature, oldStackPosVector[i]);
+				player->sendCreatureDisappear(creature, stackpos);
 			}
 		}
 	}

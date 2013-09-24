@@ -585,7 +585,7 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				tmpPlayer->sendCreatureMove(creature, newTile, newPos, this, oldPos, oldStackPosVector[i], teleport);
+				tmpPlayer->sendCreatureMove(creature, newTile, newPos, this, oldPos, stackpos, teleport);
 			}
 		}
 	}
