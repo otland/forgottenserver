@@ -1081,8 +1081,6 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 			} else {
 				tmpPlayer->sendCreatureAppear(player, player->getPosition(), true);
 			}
-
-			tmpPlayer->sendUpdateTile(player->getTile(), player->getPosition());
 		} else {
 			tmpPlayer->sendCreatureChangeVisible(player, !player->isInGhostMode());
 		}

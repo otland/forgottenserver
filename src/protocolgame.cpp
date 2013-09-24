@@ -2537,10 +2537,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 void ProtocolGame::sendRemoveCreature(const Creature* creature, const Position& pos, uint32_t stackpos)
 {
-	if (creature->isInGhostMode() && !player->isAccessPlayer()) {
-		return;
-	}
-
 	if (!canSee(pos)) {
 		return;
 	}
