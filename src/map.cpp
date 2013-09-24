@@ -411,7 +411,6 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 
 		if (!foundCache) {
 			SpectatorCache::iterator it = spectatorCache.find(centerPos);
-
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
 					if (!list.empty()) {
@@ -485,7 +484,6 @@ const SpectatorVec& Map::getSpectators(const Position& centerPos)
 	}
 
 	SpectatorCache::iterator it = spectatorCache.find(centerPos);
-
 	if (it != spectatorCache.end()) {
 		return *it->second;
 	}

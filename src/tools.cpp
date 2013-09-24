@@ -208,13 +208,13 @@ bool isNumber(char character)
 	return (character >= 48 && character <= 57);
 }
 
-std::string trimString(std::string& str)
+void trimString(std::string& str)
 {
 	str.erase(str.find_last_not_of(' ') + 1);
-	return str.erase(0, str.find_first_not_of(' '));
+	str.erase(0, str.find_first_not_of(' '));
 }
 
-std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
+std::string parseNextParam(Tokenizer::iterator& it, Tokenizer::iterator end)
 {
 	std::string tmp;
 	if (it == end) {
@@ -222,6 +222,7 @@ std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end)
 	}
 
 	tmp = *it++;
+	trimString(tmp);
 	return tmp;
 }
 

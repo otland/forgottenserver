@@ -3670,14 +3670,13 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 
 void Player::updateSaleShopList(uint32_t itemId)
 {
-	for (std::list<ShopInfo>::const_iterator it = shopItemList.begin(); it != shopItemList.end(); ++it) {
-		if (it->itemId == itemId) {
-			if (client) {
-				client->sendSaleItemList(shopItemList);
-			}
+	auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId] (const ShopInfo& shopInfo) { return shopInfo.itemId == itemId; });
+	if (it == shopItemList.end()) {
+		return;
+	}
 
-			break;
-		}
+	if (client) {
+		client->sendSaleItemList(shopItemList);
 	}
 }
 
@@ -3758,10 +3757,8 @@ bool Player::setAttackedCreature(Creature* creature)
 	}
 
 	if (creature) {
-		g_dispatcher.addTask(createTask(
-		                         boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
+		g_dispatcher.addTask(createTask(boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
 	}
-
 	return true;
 }
 

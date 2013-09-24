@@ -1002,28 +1002,24 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 
 void Commands::addSkill(Player* player, const std::string& cmd, const std::string& param)
 {
-	boost::char_separator<char> sep(",");
-	tokenizer cmdtokens(param, sep);
-	tokenizer::iterator cmdit = cmdtokens.begin();
-	std::string param1, param2;
-	param1 = parseParams(cmdit, cmdtokens.end());
-	param2 = parseParams(cmdit, cmdtokens.end());
-	trimString(param1);
-	trimString(param2);
-	toLowerCaseString(param2);
+	Tokenizer tokens(param, boost::char_separator<char>(","));
 
-	Player* paramPlayer = g_game.getPlayerByName(param1);
+	auto it = tokens.begin();
+	std::string playerName = parseNextParam(it, tokens.end());
+
+	Player* paramPlayer = g_game.getPlayerByName(playerName);
 	if (!paramPlayer) {
 		player->sendTextMessage(MSG_STATUS_SMALL, "Couldn't find target.");
 		return;
 	}
 
-	if (param2[0] == 'l' || param2[0] == 'e') {
+	std::string skill = asLowerCaseString(parseNextParam(it, tokens.end()));
+	if (!skill.empty() && skill[0] == 'l' || skill[0] == 'e') {
 		paramPlayer->addExperience(Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience, false, false);
-	} else if (param2[0] == 'm') {
+	} else if (!skill.empty() && skill[0] == 'm') {
 		paramPlayer->addManaSpent(paramPlayer->vocation->getReqMana(paramPlayer->getBaseMagicLevel() + 1) - paramPlayer->manaSpent, false);
 	} else {
-		skills_t skillId = getSkillId(param2);
+		skills_t skillId = getSkillId(skill);
 		paramPlayer->addSkillAdvance(skillId, paramPlayer->vocation->getReqSkillTries(skillId, paramPlayer->getSkill(skillId, SKILL_LEVEL) + 1));
 	}
 }

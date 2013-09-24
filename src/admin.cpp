@@ -94,7 +94,6 @@ void ProtocolAdmin::onRecvFirstMessage(NetworkMessage& msg)
 	addLogLine(this, LOGTYPE_EVENT, 1, "sending HELLO");
 	//send hello
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-
 	if (output) {
 		output->AddByte(AP_MSG_HELLO);
 		output->AddU32(1); //version
@@ -205,7 +204,6 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 		case AP_MSG_LOGIN: {
 			if (m_state == NO_LOGGED_IN && g_adminConfig->requireLogin()) {
 				std::string password = msg.GetString();
-
 				if (g_adminConfig->passwordMatch(password)) {
 					m_state = LOGGED_IN;
 					output->AddByte(AP_MSG_LOGIN_OK);
@@ -310,7 +308,6 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 			}
 
 			uint8_t command = msg.GetByte();
-
 			switch (command) {
 				case CMD_BROADCAST: {
 					const std::string message = msg.GetString();
@@ -463,18 +460,14 @@ void ProtocolAdmin::adminCommandSetOwner(const std::string& param)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		boost::char_separator<char> sep(", ");
-		tokenizer cmdtokens(param, sep);
-		tokenizer::iterator cmdit = cmdtokens.begin();
-		std::string _house, name;
-		_house = parseParams(cmdit, cmdtokens.end());
-		name = parseParams(cmdit, cmdtokens.end());
-		trimString(_house);
-		trimString(name);
+		Tokenizer tokens(param, boost::char_separator<char>(","));
 
+		auto it = tokens.begin();
+		std::string _house = parseNextParam(it, tokens.end());
 		if (House* house = Houses::getInstance().getHouse(atoi(_house.c_str()))) {
 			uint32_t _guid;
 
+			std::string name = parseNextParam(it, tokens.end());
 			if (IOLoginData::getInstance()->getGuidByName(_guid, name)) {
 				house->setHouseOwner(_guid);
 				addLogLine(this, LOGTYPE_EVENT, 1, "set " + name + " as new owner of house with id " + _house);
@@ -621,28 +614,24 @@ bool AdminProtocolConfig::requireEncryption() const
 uint16_t AdminProtocolConfig::getProtocolPolicy()
 {
 	uint16_t policy = 0;
-
 	if (requireLogin()) {
-		policy = policy | REQUIRE_LOGIN;
+		policy |= REQUIRE_LOGIN;
 	}
 
 	if (requireEncryption()) {
-		policy = policy | REQUIRE_ENCRYPTION;
+		policy |= REQUIRE_ENCRYPTION;
 	}
-
 	return policy;
 }
 
 uint32_t AdminProtocolConfig::getProtocolOptions()
 {
 	uint32_t ret = 0;
-
 	if (requireEncryption()) {
 		if (m_key_RSA1024XTEA) {
-			ret = ret | ENCRYPTION_RSA1024XTEA;
+			ret |= ENCRYPTION_RSA1024XTEA;
 		}
 	}
-
 	return ret;
 }
 
@@ -666,7 +655,6 @@ static void addLogLine(ProtocolAdmin* conn, eLogType type, int level, const std:
 	}
 
 	std::string logMsg;
-
 	if (conn) {
 		logMsg = "[" + convertIPToString(conn->getIP()) + "] - ";
 	}

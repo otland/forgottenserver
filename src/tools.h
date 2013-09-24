@@ -31,7 +31,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 
-typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+typedef boost::tokenizer<boost::char_separator<char>> Tokenizer;
 
 enum DistributionType_t {
 	DISTRO_UNIFORM,
@@ -67,13 +67,13 @@ Direction getDirectionTo(const Position& from, const Position& to);
 
 std::string getFirstLine(const std::string& str);
 
-std::string parseParams(tokenizer::iterator& it, tokenizer::iterator end);
+std::string parseNextParam(Tokenizer::iterator& it, Tokenizer::iterator end);
 
 std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 std::string convertIPToString(uint32_t ip);
 
-std::string trimString(std::string& str);
+void trimString(std::string& str);
 
 MagicEffectClasses getMagicEffect(const std::string& strValue);
 ShootType_t getShootType(const std::string& strValue);
