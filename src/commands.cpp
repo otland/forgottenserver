@@ -1014,7 +1014,7 @@ void Commands::addSkill(Player* player, const std::string& cmd, const std::strin
 	}
 
 	std::string skill = asLowerCaseString(parseNextParam(it, tokens.end()));
-	if (!skill.empty() && skill[0] == 'l' || skill[0] == 'e') {
+	if (!skill.empty() && (skill[0] == 'l' || skill[0] == 'e')) {
 		paramPlayer->addExperience(Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience, false, false);
 	} else if (!skill.empty() && skill[0] == 'm') {
 		paramPlayer->addManaSpent(paramPlayer->vocation->getReqMana(paramPlayer->getBaseMagicLevel() + 1) - paramPlayer->manaSpent, false);
