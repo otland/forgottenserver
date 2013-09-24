@@ -79,7 +79,7 @@ ItemType::ItemType()
 
 	speed = 0;
 	id = 0;
-	clientId = 100;
+	clientId = 0;
 	maxItems = 8;  // maximum size if this is a container
 	weight = 0;  // weight of the item, e.g. throwing distance depends on it
 	showCount = true;
