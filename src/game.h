@@ -80,9 +80,6 @@ enum LightState_t {
 #define EVENT_DECAY_BUCKETS 4
 #define STATE_TIME 1000
 
-typedef std::map<uint32_t, uint32_t> StageList;
-typedef std::unordered_map<std::string, Player*> PlayerNameMap;
-
 /**
   * Main Game class.
   * This class is responsible to control everything that happens
@@ -596,8 +593,7 @@ class Game
 		void addGuild(Guild* guild);
 		void decreaseBrowseFieldRef(const Position& pos);
 
-		typedef std::unordered_map<const Tile*, Container*> BrowseFieldMap;
-		BrowseFieldMap browseFields;
+		std::unordered_map<Tile*, Container*> browseFields;
 
 		Group* getGroup(uint32_t id);
 
@@ -640,9 +636,8 @@ class Game
 		void checkDecay();
 		void internalDecayItem(Item* item);
 
-		typedef std::list<Item*> DecayList;
-		DecayList decayItems[EVENT_DECAY_BUCKETS];
-		DecayList toDecayItems;
+		std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
+		std::list<Item*> toDecayItems;
 		size_t lastBucket;
 
 		static const int32_t LIGHT_LEVEL_DAY = 250;
@@ -668,12 +663,12 @@ class Game
 		std::string motdHash;
 		int32_t motdNum;
 
-		StageList stages;
+		std::map<uint32_t, uint32_t> stages;
 		bool stagesEnabled;
 		uint32_t lastStageLevel;
 		bool useLastStageLevel;
 
-		PlayerNameMap mappedPlayerNames;
+		std::unordered_map<std::string, Player*> mappedPlayerNames;
 		WildcardTreeNode wildcardTree;
 
 		ModalWindow* offlineTrainingWindow;

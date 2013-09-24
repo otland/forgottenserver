@@ -83,8 +83,7 @@ class Commands
 		//table of commands
 		static s_defcommands defined_commands[];
 
-		typedef std::map<std::string, Command*> CommandMap;
-		CommandMap commandMap;
+		std::map<std::string, Command*> commandMap;
 };
 
 typedef void (Commands::*CommandFunc)(Player*, const std::string&, const std::string&);

@@ -225,14 +225,13 @@ uint32_t Vocation::getReqSkillTries(int32_t skill, int32_t level)
 		return 0;
 	}
 
-	skillCacheMap& skillMap = cacheSkill[skill];
-	skillCacheMap::iterator it = skillMap.find(level);
+	auto it = cacheSkill[skill].find(level);
 	if (it != cacheSkill[skill].end()) {
 		return it->second;
 	}
 
 	uint32_t tries = (uint32_t)(skillBase[skill] * pow((float)skillMultipliers[skill], (float)(level - 11)));
-	skillMap[level] = tries;
+	cacheSkill[skill][level] = tries;
 	return tries;
 }
 

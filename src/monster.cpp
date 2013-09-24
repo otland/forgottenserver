@@ -99,11 +99,9 @@ Monster::Monster(MonsterType* _mtype) :
 	lastMeleeAttack = 0;
 
 	// register creature events
-	MonsterScriptList::iterator it;
-
-	for (it = mType->scriptList.begin(); it != mType->scriptList.end(); ++it) {
-		if (!registerCreatureEvent(*it)) {
-			std::cout << "Warning: [Monster::Monster]. Unknown event name - " << *it << std::endl;
+	for (const std::string& scriptName : mType->scriptList) {
+		if (!registerCreatureEvent(scriptName)) {
+			std::cout << "[Warning - Monster::Monster] Unknown event name: " << scriptName << std::endl;
 		}
 	}
 
@@ -265,19 +263,17 @@ void Monster::updateTargetList()
 
 void Monster::clearTargetList()
 {
-	for (CreatureList::iterator it = targetList.begin(); it != targetList.end(); ++it) {
-		(*it)->releaseThing2();
+	for (Creature* creature : targetList) {
+		creature->releaseThing2();
 	}
-
 	targetList.clear();
 }
 
 void Monster::clearFriendList()
 {
-	for (CreatureHashSet::iterator it = friendList.begin(), end = friendList.end(); it != end; ++it) {
-		(*it)->releaseThing2();
+	for (Creature* creature : friendList) {
+		creature->releaseThing2();
 	}
-
 	friendList.clear();
 }
 
@@ -490,7 +486,7 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 
 	if (damage != 0) {
 		int32_t elementMod = 0;
-		ElementMap::iterator it = mType->elementMap.find(combatType);
+		auto it = mType->elementMap.find(combatType);
 		if (it != mType->elementMap.end()) {
 			elementMod = it->second;
 		}
@@ -803,8 +799,8 @@ void Monster::onThinkDefense(uint32_t interval)
 	}
 
 	if (!isSummon() && (int32_t)summons.size() < mType->maxSummons) {
-		for (SummonList::iterator it = mType->summonList.begin(); it != mType->summonList.end(); ++it) {
-			if (it->speed > defenseTicks) {
+		for (const summonBlock_t& summonBlock : mType->summonList) {
+			if (summonBlock.speed > defenseTicks) {
 				resetTicks = false;
 				continue;
 			}
@@ -813,25 +809,26 @@ void Monster::onThinkDefense(uint32_t interval)
 				continue;
 			}
 
-			if (defenseTicks % it->speed >= interval) {
+			if (defenseTicks % summonBlock.speed >= interval) {
 				//already used this spell for this round
 				continue;
 			}
 
-			if ((it->chance >= (uint32_t)random_range(1, 100))) {
-				Monster* summon = Monster::createMonster(it->name);
+			if (summonBlock.chance < (uint32_t)random_range(1, 100)) {
+				continue;
+			}
 
-				if (summon) {
-					const Position& summonPos = getPosition();
+			Monster* summon = Monster::createMonster(summonBlock.name);
+			if (summon) {
+				const Position& summonPos = getPosition();
 
-					addSummon(summon);
+				addSummon(summon);
 
-					if (!g_game.placeCreature(summon, summonPos)) {
-						removeSummon(summon);
-					} else {
-						g_game.addMagicEffect(getPosition(), NM_ME_MAGIC_ENERGY);
-						g_game.addMagicEffect(summon->getPosition(), NM_ME_TELEPORT);
-					}
+				if (!g_game.placeCreature(summon, summonPos)) {
+					removeSummon(summon);
+				} else {
+					g_game.addMagicEffect(getPosition(), NM_ME_MAGIC_ENERGY);
+					g_game.addMagicEffect(summon->getPosition(), NM_ME_TELEPORT);
 				}
 			}
 		}

@@ -103,15 +103,13 @@ void OutputMessagePool::sendAll()
 
 	m_toAddQueue.clear();
 
-	for (OutputMessageMessageList::iterator it = m_autoSendOutputMessages.begin(), end = m_autoSendOutputMessages.end(); it != end; it = m_autoSendOutputMessages.erase(it)) {
+	for (auto it = m_autoSendOutputMessages.begin(), end = m_autoSendOutputMessages.end(); it != end; it = m_autoSendOutputMessages.erase(it)) {
 		OutputMessage_ptr omsg = *it;
-
 		if (frameTime <= omsg->getFrame()) {
 			break;
 		}
 
 		Connection_ptr connection = omsg->getConnection();
-
 		if (connection && !connection->send(omsg)) {
 			// Send only fails when connection is closing (or in error state)
 			// This call will free the message

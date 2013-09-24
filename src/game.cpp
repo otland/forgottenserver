@@ -270,8 +270,8 @@ int32_t Game::loadMap(const std::string& filename)
 
 void Game::refreshMap()
 {
-	for (Map::TileMap::iterator it = map->refreshTileMap.begin(); it != map->refreshTileMap.end(); ++it) {
-		Tile* tile = it->first;
+	for (auto& it : map->refreshTileMap) {
+		Tile* tile = it.first;
 		if (TileItemVector* items = tile->getItemList()) {
 			//remove garbage
 			int32_t downItemSize = tile->getDownItemCount();
@@ -286,7 +286,7 @@ void Game::refreshMap()
 		cleanup();
 
 		//restore to original state
-		TileItemVector& list = it->second.list;
+		TileItemVector& list = it.second.list;
 		for (ItemVector::reverse_iterator rit = list.rbegin(); rit != list.rend(); ++rit) {
 			Item* item = (*rit)->clone();
 
@@ -1963,7 +1963,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 
 	std::list<Container*> listContainer;
 
-	typedef std::multimap<uint64_t, Item*, std::less<uint64_t> > MoneyMap;
+	typedef std::multimap<uint64_t, Item*, std::less<uint64_t>> MoneyMap;
 	typedef MoneyMap::value_type moneymap_pair;
 	MoneyMap moneyMap;
 	uint64_t moneyCount = 0;
@@ -4889,7 +4889,6 @@ void Game::internalDecayItem(Item* item)
 		startDecay(newItem);
 	} else {
 		ReturnValue ret = internalRemoveItem(item);
-
 		if (ret != RET_NOERROR) {
 			std::cout << "DEBUG, internalDecayItem failed, error code: " << (int32_t) ret << "item id: " << item->getID() << std::endl;
 		}
@@ -4903,9 +4902,8 @@ void Game::checkDecay()
 
 	size_t bucket = (lastBucket + 1) % EVENT_DECAY_BUCKETS;
 
-	for (DecayList::iterator it = decayItems[bucket].begin(); it != decayItems[bucket].end();) {
+	for (auto it = decayItems[bucket].begin(); it != decayItems[bucket].end();) {
 		Item* item = *it;
-
 		if (!item->canDecay()) {
 			item->setDecaying(DECAYING_FALSE);
 			ReleaseItem(item);
@@ -4930,7 +4928,6 @@ void Game::checkDecay()
 		} else if (duration < EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS) {
 			it = decayItems[bucket].erase(it);
 			size_t newBucket = (bucket + ((duration + EVENT_DECAYINTERVAL / 2) / 1000)) % EVENT_DECAY_BUCKETS;
-
 			if (newBucket == bucket) {
 				internalDecayItem(item);
 				ReleaseItem(item);

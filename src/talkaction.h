@@ -49,8 +49,7 @@ class TalkActions : public BaseEvents
 		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 		virtual void clear();
 
-		typedef std::list< std::pair<std::string, TalkAction* > > TalkActionList;
-		TalkActionList wordsMap;
+		std::list<std::pair<std::string, TalkAction*>> wordsMap;
 
 		LuaScriptInterface m_scriptInterface;
 };

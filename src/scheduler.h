@@ -105,8 +105,7 @@ class Scheduler
 
 		uint32_t m_lastEventId;
 		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > m_eventList;
-		typedef std::unordered_set<uint32_t> EventIdSet;
-		EventIdSet m_eventIds;
+		std::unordered_set<uint32_t> m_eventIds;
 		SchedulerState m_threadState;
 };
 

@@ -195,8 +195,8 @@ Spawn::Spawn(const Position& _pos, int32_t _radius)
 
 Spawn::~Spawn()
 {
-	for (SpawnedMap::iterator it = spawnedMap.begin(); it != spawnedMap.end(); ++it) {
-		Monster* monster = it->second;
+	for (const auto& it : spawnedMap) {
+		Monster* monster = it.second;
 		monster->setSpawn(nullptr);
 		monster->releaseThing2();
 	}
@@ -346,7 +346,7 @@ bool Spawn::addMonster(const std::string& _name, const Position& _pos, Direction
 
 void Spawn::removeMonster(Monster* monster)
 {
-	for (SpawnedMap::iterator it = spawnedMap.begin(); it != spawnedMap.end(); ++it) {
+	for (auto it = spawnedMap.begin(); it != spawnedMap.end(); ++it) {
 		if (it->second == monster) {
 			monster->releaseThing2();
 			spawnedMap.erase(it);

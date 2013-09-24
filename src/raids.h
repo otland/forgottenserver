@@ -49,10 +49,6 @@ struct MonsterSpawn {
 class Raid;
 class RaidEvent;
 
-typedef std::list<Raid*> RaidList;
-typedef std::vector<RaidEvent*> RaidEventVector;
-typedef std::list<MonsterSpawn*> MonsterSpawnList;
-
 class Raids
 {
 	public:
@@ -100,7 +96,7 @@ class Raids
 
 	private:
 		Raids();
-		RaidList raidList;
+		std::list<Raid*> raidList;
 		bool loaded, started;
 		Raid* running;
 		uint64_t lastRaidEnd;
@@ -145,7 +141,7 @@ class Raid
 		void stopEvents();
 
 	private:
-		RaidEventVector raidEvents;
+		std::vector<RaidEvent*> raidEvents;
 		std::string name;
 		uint32_t interval;
 		uint32_t nextEvent;
@@ -227,7 +223,7 @@ class AreaSpawnEvent : public RaidEvent
 		virtual bool executeEvent();
 
 	private:
-		MonsterSpawnList m_spawnList;
+		std::list<MonsterSpawn*> m_spawnList;
 		Position m_fromPos, m_toPos;
 };
 

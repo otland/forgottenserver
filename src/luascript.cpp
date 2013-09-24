@@ -207,7 +207,7 @@ void ScriptEnvironment::addUniqueThing(Thing* thing)
 	Item* item = thing->getItem();
 	if (item && item->getUniqueId() != 0) {
 		uint16_t uid = item->getUniqueId();
-		ThingMap::const_iterator it = m_globalMap.find(uid);
+		auto it = m_globalMap.find(uid);
 		if (it == m_globalMap.end()) {
 			m_globalMap[uid] = thing;
 		} else {
@@ -220,7 +220,7 @@ void ScriptEnvironment::removeUniqueThing(Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (item && item->getUniqueId() != 0) {
-		ThingMap::iterator it = m_globalMap.find(item->getUniqueId());
+		auto it = m_globalMap.find(item->getUniqueId());
 		if (it != m_globalMap.end()) {
 			m_globalMap.erase(it);
 		}
@@ -293,7 +293,7 @@ Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 			return thing;
 		}
 	} else {
-		ThingMap::const_iterator it = m_localMap.find(uid);
+		auto it = m_localMap.find(uid);
 		if (it != m_localMap.end()) {
 			Thing* thing = it->second;
 			if (thing && !thing->isRemoved()) {
@@ -332,7 +332,7 @@ Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
 
 void ScriptEnvironment::removeItemByUID(uint32_t uid)
 {
-	ThingMap::iterator it = m_localMap.find(uid);
+	auto it = m_localMap.find(uid);
 	if (it != m_localMap.end()) {
 		m_localMap.erase(it);
 	}
@@ -4471,10 +4471,10 @@ int32_t LuaScriptInterface::luaGetMonsterTargetList(lua_State* L)
 	lua_newtable(L);
 	uint32_t index = 0;
 	const CreatureList& targetList = monster->getTargetList();
-	for (CreatureList::const_iterator it = targetList.begin(); it != targetList.end(); ++it) {
-		if (monster->isTarget(*it)) {
+	for (Creature* creature : targetList) {
+		if (monster->isTarget(creature)) {
 			lua_pushnumber(L, ++index);
-			lua_pushnumber(L, (*it)->getID());
+			lua_pushnumber(L, creature->getID());
 			lua_settable(L, -3);
 		}
 	}

@@ -215,9 +215,9 @@ Player::~Player()
 		}
 	}
 
-	for (DepotLockerMap::iterator it = depotLockerMap.begin(), end = depotLockerMap.end(); it != end; ++it) {
-		it->second->removeInbox(inbox);
-		it->second->releaseThing2();
+	for (const auto& it : depotLockerMap) {
+		it.second->removeInbox(inbox);
+		it.second->releaseThing2();
 	}
 
 	inbox->releaseThing2();
@@ -346,9 +346,9 @@ std::string Player::getDescription(int32_t lookDistance) const
 			size_t memberCount = guild->getMemberCount();
 
 			if (memberCount == 1) {
-				s << ", which has 1 member, " << guild->getMembersOnlineCount() << " of them online.";
+				s << ", which has 1 member, " << guild->getMembersOnline().size() << " of them online.";
 			} else {
-				s << ", which has " << memberCount << " members, " << guild->getMembersOnlineCount() << " of them online.";
+				s << ", which has " << memberCount << " members, " << guild->getMembersOnline().size() << " of them online.";
 			}
 		}
 	}
@@ -806,8 +806,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 		container->useThing2();
 	}
 
-	ContainerMap::iterator it = openContainers.find(cid);
-
+	auto it = openContainers.find(cid);
 	if (it != openContainers.end()) {
 		OpenContainer& openContainer = it->second;
 		Container* oldContainer = openContainer.container;
@@ -828,7 +827,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 
 void Player::closeContainer(uint8_t cid)
 {
-	ContainerMap::iterator it = openContainers.find(cid);
+	auto it = openContainers.find(cid);
 	if (it == openContainers.end()) {
 		return;
 	}
@@ -844,7 +843,7 @@ void Player::closeContainer(uint8_t cid)
 
 void Player::setContainerIndex(uint8_t cid, uint16_t index)
 {
-	ContainerMap::iterator it = openContainers.find(cid);
+	auto it = openContainers.find(cid);
 	if (it == openContainers.end()) {
 		return;
 	}
@@ -1007,7 +1006,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 
 bool Player::getStorageValue(const uint32_t key, int32_t& value) const
 {
-	StorageMap::const_iterator it = storageMap.find(key);
+	auto it = storageMap.find(key);
 	if (it == storageMap.end()) {
 		value = -1;
 		return false;
@@ -1119,7 +1118,7 @@ bool Player::isNearDepotBox()
 
 DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
-	DepotMap::iterator it = depotChests.find(depotId);
+	auto it = depotChests.find(depotId);
 	if (it != depotChests.end()) {
 		return it->second;
 	}
@@ -1137,7 +1136,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 DepotLocker* Player::getDepotLocker(uint32_t depotId)
 {
-	DepotLockerMap::iterator it = depotLockerMap.find(depotId);
+	auto it = depotLockerMap.find(depotId);
 	if (it != depotLockerMap.end()) {
 		inbox->setParent(it->second);
 		return it->second;
@@ -2079,7 +2078,7 @@ void Player::removeMessageBuffer()
 
 		if (MessageBufferCount > Player::maxMessageBuffer) {
 			uint32_t muteCount = 1;
-			auto it = muteCountMap.find(getGUID());
+			auto it = muteCountMap.find(guid);
 			if (it != muteCountMap.end()) {
 				muteCount = it->second;
 			}
@@ -2727,8 +2726,7 @@ void Player::notifyStatusChange(Player* loginPlayer, VipStatus_t status)
 		return;
 	}
 
-	VIPListSet::iterator it = VIPList.find(loginPlayer->getGUID());
-
+	auto it = VIPList.find(loginPlayer->getGUID());
 	if (it == VIPList.end()) {
 		return;
 	}
@@ -2764,7 +2762,7 @@ bool Player::addVIP(uint32_t _guid, const std::string& name, VipStatus_t status)
 		return false;
 	}
 
-	VIPListSet::iterator it = VIPList.find(_guid);
+	auto it = VIPList.find(_guid);
 	if (it != VIPList.end()) {
 		sendTextMessage(MSG_STATUS_SMALL, "This player is already in your list.");
 		return false;
@@ -2791,8 +2789,7 @@ bool Player::addVIPInternal(uint32_t _guid)
 		return false;
 	}
 
-	VIPListSet::iterator it = VIPList.find(_guid);
-
+	auto it = VIPList.find(_guid);
 	if (it != VIPList.end()) {
 		return false;
 	}
@@ -2803,8 +2800,7 @@ bool Player::addVIPInternal(uint32_t _guid)
 
 bool Player::editVIP(uint32_t _guid, const std::string& description, uint32_t icon, bool notify)
 {
-	VIPListSet::iterator it = VIPList.find(_guid);
-
+	auto it = VIPList.find(_guid);
 	if (it == VIPList.end()) {
 		return false;    // player is not in VIP
 	}
@@ -2817,12 +2813,11 @@ bool Player::editVIP(uint32_t _guid, const std::string& description, uint32_t ic
 void Player::autoCloseContainers(const Container* container)
 {
 	std::vector<uint32_t> closeList;
-
-	for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-		Container* tmpContainer = it->second.container;
+	for (const auto& it : openContainers) {
+		Container* tmpContainer = it.second.container;
 		while (tmpContainer) {
 			if (tmpContainer->isRemoved() || tmpContainer == container) {
-				closeList.push_back(it->first);
+				closeList.push_back(it.first);
 				break;
 			}
 
@@ -3598,16 +3593,15 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 			//check containers
 			std::vector<Container*> containers;
 
-			for (ContainerMap::const_iterator it = openContainers.begin(), end = openContainers.end(); it != end; ++it) {
-				Container* container = it->second.container;
-
+			for (const auto& it : openContainers) {
+				Container* container = it.second.container;
 				if (!Position::areInRange<1, 1, 0>(container->getPosition(), getPosition())) {
 					containers.push_back(container);
 				}
 			}
 
-			for (std::vector<Container*>::const_iterator it = containers.begin(); it != containers.end(); ++it) {
-				autoCloseContainers(*it);
+			for (const Container* container : containers) {
+				autoCloseContainers(container);
 			}
 		}
 	}
@@ -3650,8 +3644,8 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 				if (const DepotChest* depotChest = dynamic_cast<const DepotChest*>(topContainer)) {
 					bool isOwner = false;
 
-					for (DepotMap::iterator it = depotChests.begin(); it != depotChests.end(); ++it) {
-						if (it->second == depotChest) {
+					for (const auto& it : depotChests) {
+						if (it.second == depotChest) {
 							isOwner = true;
 							onSendContainer(container);
 						}
@@ -4571,13 +4565,7 @@ bool Player::isInWar(const Player* player) const
 
 bool Player::isInWarList(uint32_t guildId) const
 {
-	for (GuildWarList::const_iterator it = guildWarList.begin(); it != guildWarList.end(); ++it) {
-		if (*it == guildId) {
-			return true;
-		}
-	}
-
-	return false;
+	return std::find(guildWarList.begin(), guildWarList.end(), guildId) != guildWarList.end();
 }
 
 void Player::leaveGuild()
@@ -4717,8 +4705,7 @@ bool Player::addPartyInvitation(Party* party)
 		return false;
 	}
 
-	PartyList::iterator it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
-
+	auto it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
 	if (it != invitePartyList.end()) {
 		return false;
 	}
@@ -4733,7 +4720,7 @@ bool Player::removePartyInvitation(Party* party)
 		return false;
 	}
 
-	PartyList::iterator it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
+	auto it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
 	if (it == invitePartyList.end()) {
 		return false;
 	}
@@ -5129,7 +5116,7 @@ uint16_t Player::getHelpers() const
 	if (guild && party) {
 		std::unordered_set<Player*> helperSet;
 
-		const PlayerVector& guildMembers = guild->getMembersOnline();
+		const PlayerList& guildMembers = guild->getMembersOnline();
 		helperSet.insert(guildMembers.begin(), guildMembers.end());
 
 		const PlayerVector& partyMembers = party->getMembers();
@@ -5142,7 +5129,7 @@ uint16_t Player::getHelpers() const
 
 		helpers = helperSet.size();
 	} else if (guild) {
-		helpers = guild->getMembersOnlineCount();
+		helpers = guild->getMembersOnline().size();
 	} else if (party) {
 		helpers = party->getMemberCount() + party->getInvitationCount() + 1;
 	} else {

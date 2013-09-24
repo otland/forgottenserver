@@ -60,7 +60,7 @@ std::string Mission::getDescription(Player* player) const
 	if (ignoreEndValue) {
 		while (current >= startValue) {
 			if (value >= current) {
-				StateList::const_iterator sit = state.find(current);
+				auto sit = state.find(current);
 				if (sit != state.end()) {
 					return sit->second.getMissionDescription();
 				}
@@ -71,7 +71,7 @@ std::string Mission::getDescription(Player* player) const
 	} else {
 		while (current >= startValue) {
 			if (value == current) {
-				StateList::const_iterator sit = state.find(current);
+				auto sit = state.find(current);
 				if (sit != state.end()) {
 					return sit->second.getMissionDescription();
 				}

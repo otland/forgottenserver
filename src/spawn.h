@@ -28,7 +28,6 @@
 #include <map>
 
 class Spawn;
-typedef std::list<Spawn*> SpawnList;
 
 class Spawns
 {
@@ -54,9 +53,8 @@ class Spawns
 		}
 
 	private:
-		typedef std::list<Npc*> NpcList;
-		NpcList npcList;
-		SpawnList spawnList;
+		std::list<Npc*> npcList;
+		std::list<Spawn*> spawnList;
 		bool loaded, started;
 		std::string filename;
 };
@@ -94,11 +92,10 @@ class Spawn
 		int32_t radius;
 
 		//map of creatures in the spawn
-		typedef std::map<uint32_t, spawnBlock_t> SpawnMap;
-		SpawnMap spawnMap;
+		std::map<uint32_t, spawnBlock_t> spawnMap;
 
 		//map of the spawned creatures
-		typedef std::multimap<uint32_t, Monster*, std::less<uint32_t> > SpawnedMap;
+		typedef std::multimap<uint32_t, Monster*, std::less<uint32_t>> SpawnedMap;
 		typedef SpawnedMap::value_type spawned_pair;
 		SpawnedMap spawnedMap;
 

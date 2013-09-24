@@ -297,7 +297,7 @@ class Creature : virtual public Thing
 		}
 
 		virtual void addSummon(Creature* creature);
-		virtual void removeSummon(const Creature* creature);
+		virtual void removeSummon(Creature* creature);
 		const std::list<Creature*>& getSummons() {
 			return summons;
 		}

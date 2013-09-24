@@ -42,17 +42,10 @@ void Guild::addMember(Player* player)
 
 void Guild::removeMember(Player* player)
 {
-	for (PlayerVector::iterator it = membersOnline.begin(); it != membersOnline.end(); ++it) {
-		if (*it == player) {
-			membersOnline.erase(it);
-			break;
-		}
-	}
-
+	membersOnline.remove(player);
 	for (Player* member : membersOnline) {
 		g_game.updatePlayerHelpers(*member);
 	}
-
 	g_game.updatePlayerHelpers(*player);
 }
 

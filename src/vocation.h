@@ -94,11 +94,8 @@ class Vocation
 	protected:
 		friend class Vocations;
 
-		typedef std::map<uint32_t, uint64_t> manaCacheMap;
-		manaCacheMap cacheMana;
-
-		typedef std::map<uint32_t, uint32_t> skillCacheMap;
-		skillCacheMap cacheSkill[SKILL_LAST + 1];
+		std::map<uint32_t, uint64_t> cacheMana;
+		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
 
 		std::string name;
 		std::string description;

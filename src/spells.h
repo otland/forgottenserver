@@ -32,8 +32,6 @@ class ConjureSpell;
 class RuneSpell;
 class Spell;
 
-typedef std::map<uint32_t, RuneSpell*> RunesMap;
-typedef std::map<std::string, InstantSpell*> InstantsMap;
 typedef std::map<int32_t, bool> VocSpellMap;
 
 class Spells : public BaseEvents
@@ -57,18 +55,14 @@ class Spells : public BaseEvents
 		static Position getCasterPosition(Creature* creature, Direction dir);
 		virtual std::string getScriptBaseName();
 
-		const InstantsMap& getInstantsMap() const {
-			return instants;
-		}
-
 	protected:
 		virtual void clear();
 		virtual LuaScriptInterface& getScriptInterface();
 		virtual Event* getEvent(const std::string& nodeName);
 		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
-		RunesMap runes;
-		InstantsMap instants;
+		std::map<uint32_t, RuneSpell*> runes;
+		std::map<std::string, InstantSpell*> instants;
 
 		friend class CombatSpell;
 		LuaScriptInterface m_scriptInterface;

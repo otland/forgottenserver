@@ -337,8 +337,7 @@ class ConditionDamage: public Condition
 
 		bool init();
 
-		typedef std::list<IntervalInfo> DamageList;
-		DamageList damageList;
+		std::list<IntervalInfo> damageList;
 
 		bool getNextDamage(int32_t& damage);
 		bool doDamage(Creature* creature, int32_t damage);

@@ -60,7 +60,7 @@ void Scheduler::schedulerThread()
 			m_eventList.pop();
 
 			// check if the event was stopped
-			EventIdSet::iterator it = m_eventIds.find(task->getEventId());
+			auto it = m_eventIds.find(task->getEventId());
 			if (it != m_eventIds.end()) {
 				// was not stopped so we should run it
 				runTask = true;
@@ -136,7 +136,7 @@ bool Scheduler::stopEvent(uint32_t eventid)
 	m_eventLock.lock();
 
 	// search the event id..
-	EventIdSet::iterator it = m_eventIds.find(eventid);
+	auto it = m_eventIds.find(eventid);
 	if (it == m_eventIds.end()) {
 		m_eventLock.unlock();
 		return false;

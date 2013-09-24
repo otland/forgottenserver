@@ -718,8 +718,8 @@ void Creature::onDeath()
 		}
 	}
 
-	for (CountMap::iterator it = damageMap.begin(), end = damageMap.end(); it != end; ++it) {
-		if (Creature* attacker = g_game.getCreatureByID(it->first)) {
+	for (const auto& it : damageMap) {
+		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
 			attacker->onAttackedCreatureKilled(this);
 		}
 	}
@@ -1234,7 +1234,6 @@ void Creature::onBlockHit(BlockType_t blockType)
 
 void Creature::addSummon(Creature* creature)
 {
-	//std::cout << "addSummon: " << this << " summon=" << creature << std::endl;
 	creature->setDropLoot(false);
 	creature->setLossSkill(false);
 	creature->setMaster(this);
@@ -1242,15 +1241,14 @@ void Creature::addSummon(Creature* creature)
 	summons.push_back(creature);
 }
 
-void Creature::removeSummon(const Creature* creature)
+void Creature::removeSummon(Creature* creature)
 {
-	//std::cout << "removeSummon: " << this << " summon=" << creature << std::endl;
 	std::list<Creature*>::iterator cit = std::find(summons.begin(), summons.end(), creature);
 	if (cit != summons.end()) {
-		(*cit)->setDropLoot(false);
-		(*cit)->setLossSkill(true);
-		(*cit)->setMaster(nullptr);
-		(*cit)->releaseThing2();
+		creature->setDropLoot(false);
+		creature->setLossSkill(true);
+		creature->setMaster(nullptr);
+		creature->releaseThing2();
 		summons.erase(cit);
 	}
 }

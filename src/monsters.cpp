@@ -128,7 +128,7 @@ void MonsterType::createLoot(Container* corpse)
 {
 	Player* owner = g_game.getPlayerByID(corpse->getCorpseOwner());
 	if (!owner || owner->getStaminaMinutes() > 840) {
-		for (LootItems::const_reverse_iterator it = lootItems.rbegin(), end = lootItems.rend(); it != end; ++it) {
+		for (auto it = lootItems.rbegin(), end = lootItems.rend(); it != end; ++it) {
 			std::list<Item*> itemList = createLootItem(*it);
 			if (itemList.empty()) {
 				continue;
@@ -219,26 +219,22 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 
 bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootblock)
 {
-	LootItems::const_iterator it = lootblock.childLoot.begin(), end = lootblock.childLoot.end();
+	auto it = lootblock.childLoot.begin(), end = lootblock.childLoot.end();
 	if (it == end) {
 		return true;
 	}
 
 	for (; it != end && parent->size() < parent->capacity(); ++it) {
 		std::list<Item*> itemList = createLootItem(*it);
-		if (!itemList.empty()) {
-			for (std::list<Item*>::iterator iit = itemList.begin(), iend = itemList.end(); iit != iend; ++iit) {
-				Item* tmpItem = *iit;
-
-				if (Container* container = tmpItem->getContainer()) {
-					if (!createLootContainer(container, *it)) {
-						delete container;
-					} else {
-						parent->__internalAddThing(container);
-					}
+		for (Item* tmpItem : itemList) {
+			if (Container* container = tmpItem->getContainer()) {
+				if (!createLootContainer(container, *it)) {
+					delete container;
 				} else {
-					parent->__internalAddThing(tmpItem);
+					parent->__internalAddThing(container);
 				}
+			} else {
+				parent->__internalAddThing(tmpItem);
 			}
 		}
 	}
@@ -1243,7 +1239,7 @@ MonsterType* Monsters::getMonsterType(const std::string& name)
 
 MonsterType* Monsters::getMonsterType(uint32_t mid)
 {
-	MonsterMap::iterator it = monsters.find(mid);
+	auto it = monsters.find(mid);
 	if (it == monsters.end()) {
 		return nullptr;
 	}
@@ -1252,7 +1248,7 @@ MonsterType* Monsters::getMonsterType(uint32_t mid)
 
 uint32_t Monsters::getIdByName(const std::string& name)
 {
-	MonsterNameMap::iterator it = monsterNames.find(asLowerCaseString(name));
+	auto it = monsterNames.find(asLowerCaseString(name));
 	if (it == monsterNames.end()) {
 		return 0;
 	}
@@ -1261,7 +1257,7 @@ uint32_t Monsters::getIdByName(const std::string& name)
 
 Monsters::~Monsters()
 {
-	for (MonsterMap::iterator it = monsters.begin(), end = monsters.end(); it != end; ++it) {
-		delete it->second;
+	for (const auto& it : monsters) {
+		delete it.second;
 	}
 }

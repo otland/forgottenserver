@@ -53,8 +53,7 @@ class Weapons : public BaseEvents
 		virtual Event* getEvent(const std::string& nodeName);
 		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
-		typedef std::map<uint32_t, Weapon*> WeaponMap;
-		WeaponMap weapons;
+		std::map<uint32_t, Weapon*> weapons;
 
 		LuaScriptInterface m_scriptInterface;
 };
@@ -129,8 +128,7 @@ class Weapon : public Event
 		CombatParams params;
 
 	private:
-		typedef std::map<int32_t, bool> VocWeaponMap;
-		VocWeaponMap vocWeaponMap;
+		std::map<int32_t, bool> vocWeaponMap;
 };
 
 class WeaponMelee : public Weapon

@@ -1173,83 +1173,83 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item) {
-		int32_t index = __getIndexOfThing(item);
-		if (index == -1) {
+	if (!item) {
+		return;
+	}
+
+	int32_t index = __getIndexOfThing(item);
+	if (index == -1) {
+		return;
+	}
+
+	if (item == ground) {
+		std::vector<uint32_t> oldStackPosVector;
+
+		const SpectatorVec& list = g_game.getSpectators(getPosition());
+		for (Creature* spectator : list) {
+			if (Player* tmpPlayer = spectator->getPlayer()) {
+				oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, ground));
+			}
+		}
+
+		ground->setParent(nullptr);
+		ground = nullptr;
+		onRemoveTileItem(list, oldStackPosVector, item);
+		return;
+	}
+
+	TileItemVector* items = getItemList();
+	if (!items) {
+		return;
+	}
+
+	if (item->isAlwaysOnTop()) {
+		auto it = std::find(items->getBeginTopItem(), items->getEndTopItem(), item);
+		if (it == items->getEndTopItem()) {
 			return;
 		}
 
-		if (item == ground) {
+		std::vector<uint32_t> oldStackPosVector;
+
+		const SpectatorVec& list = g_game.getSpectators(getPosition());
+		for (Creature* spectator : list) {
+			if (Player* tmpPlayer = spectator->getPlayer()) {
+				oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, item));
+			}
+		}
+
+		item->setParent(nullptr);
+		items->erase(it);
+		onRemoveTileItem(list, oldStackPosVector, item);
+	} else {
+		auto it = std::find(items->getBeginDownItem(), items->getEndDownItem(), item);
+		if (it == items->getEndDownItem()) {
+			return;
+		}
+
+		if (item->isStackable() && count != item->getItemCount()) {
+			uint8_t newCount = (uint8_t)std::max<int32_t>(0, (int32_t)(item->getItemCount() - count));
+
+			updateTileFlags(item, true);
+			item->setItemCount(newCount);
+			updateTileFlags(item, false);
+
+			const ItemType& itemType = Item::items[item->getID()];
+			onUpdateTileItem(item, itemType, item, itemType);
+		} else {
 			std::vector<uint32_t> oldStackPosVector;
 
 			const SpectatorVec& list = g_game.getSpectators(getPosition());
 			for (Creature* spectator : list) {
 				if (Player* tmpPlayer = spectator->getPlayer()) {
-					oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, ground));
+					oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, item));
 				}
 			}
 
-			ground->setParent(nullptr);
-			ground = nullptr;
+			item->setParent(nullptr);
+			items->erase(it);
+			--items->downItemCount;
 			onRemoveTileItem(list, oldStackPosVector, item);
-			return;
-		}
-
-		if (item->isAlwaysOnTop()) {
-			TileItemVector* items = getItemList();
-			if (items) {
-				for (ItemVector::iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
-					if (*it == item) {
-						std::vector<uint32_t> oldStackPosVector;
-
-						const SpectatorVec& list = g_game.getSpectators(getPosition());
-						for (Creature* spectator : list) {
-							if (Player* tmpPlayer = spectator->getPlayer()) {
-								oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, *it));
-							}
-						}
-
-						(*it)->setParent(nullptr);
-						items->erase(it);
-						onRemoveTileItem(list, oldStackPosVector, item);
-						return;
-					}
-				}
-			}
-		} else {
-			TileItemVector* items = getItemList();
-			if (items) {
-				for (ItemVector::iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
-					if (*it == item) {
-						if (item->isStackable() && count != item->getItemCount()) {
-							uint8_t newCount = (uint8_t)std::max<int32_t>(0, (int32_t)(item->getItemCount() - count));
-
-							updateTileFlags(item, true);
-							item->setItemCount(newCount);
-							updateTileFlags(item, false);
-
-							const ItemType& itemType = Item::items[item->getID()];
-							onUpdateTileItem(item, itemType, item, itemType);
-						} else {
-							std::vector<uint32_t> oldStackPosVector;
-
-							const SpectatorVec& list = g_game.getSpectators(getPosition());
-							for (Creature* spectator : list) {
-								if (Player* tmpPlayer = spectator->getPlayer()) {
-									oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, *it));
-								}
-							}
-
-							(*it)->setParent(nullptr);
-							items->erase(it);
-							--items->downItemCount;
-							onRemoveTileItem(list, oldStackPosVector, item);
-						}
-
-						return;
-					}
-				}
-			}
 		}
 	}
 }

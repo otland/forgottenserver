@@ -87,7 +87,7 @@ template<class T> class lessPointer : public std::binary_function<T*, T*, bool>
 };
 
 typedef std::unordered_set<Creature*> SpectatorVec;
-typedef std::map<Position, std::shared_ptr<SpectatorVec> > SpectatorCache;
+typedef std::map<Position, std::shared_ptr<SpectatorVec>> SpectatorCache;
 
 #define FLOOR_BITS 3
 #define FLOOR_SIZE (1 << FLOOR_BITS)
@@ -296,8 +296,7 @@ class Map
 			uint64_t lastRefresh;
 		};
 
-		typedef std::map<Tile*, RefreshBlock_t> TileMap;
-		TileMap refreshTileMap;
+		std::map<Tile*, RefreshBlock_t> refreshTileMap;
 
 		friend class Game;
 

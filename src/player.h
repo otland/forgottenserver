@@ -118,14 +118,7 @@ struct OutfitEntry {
 	uint8_t addons;
 };
 
-typedef std::map<uint8_t, OpenContainer> ContainerMap;
-typedef std::map<uint32_t, DepotChest*> DepotMap;
-typedef std::map<uint32_t, DepotLocker*> DepotLockerMap;
-typedef std::map<uint32_t, int32_t> StorageMap;
-typedef std::unordered_set<uint32_t> VIPListSet;
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
-typedef std::list<std::string> LearnedInstantSpellList;
-typedef std::list<Party*> PartyList;
 typedef std::vector<uint32_t> GuildWarList;
 
 #define PLAYER_MAX_SPEED 1500
@@ -296,9 +289,6 @@ class Player : public Creature, public Cylinder
 		Inbox* getInbox() const {
 			return inbox;
 		}
-		const DepotMap& getDepotChests() const {
-			return depotChests;
-		}
 
 		uint16_t getClientIcons() const;
 
@@ -405,13 +395,6 @@ class Player : public Creature, public Cylinder
 		void addStorageValue(const uint32_t key, const int32_t value, const bool isLogin = false);
 		bool getStorageValue(const uint32_t key, int32_t& value) const;
 		void genReservedStorageRange();
-
-		inline StorageMap::const_iterator getStorageIteratorBegin() const {
-			return storageMap.begin();
-		}
-		inline StorageMap::const_iterator getStorageIteratorEnd() const {
-			return storageMap.end();
-		}
 
 		void setGroup(Group* newGroup);
 		Group* getGroup() const {
@@ -1226,20 +1209,20 @@ class Player : public Creature, public Cylinder
 		virtual void __internalAddThing(uint32_t index, Thing* thing);
 
 		std::unordered_set<uint32_t> attackedSet;
-		VIPListSet VIPList;
+		std::unordered_set<uint32_t> VIPList;
 
-		ContainerMap openContainers;
-		DepotLockerMap depotLockerMap;
-		DepotMap depotChests;
-		StorageMap storageMap;
+		std::map<uint8_t, OpenContainer> openContainers;
+		std::map<uint32_t, DepotLocker*> depotLockerMap;
+		std::map<uint32_t, DepotChest*> depotChests;
+		std::map<uint32_t, int32_t> storageMap;
+
 		std::vector<OutfitEntry> outfits;
 
-		PartyList invitePartyList;
+		std::list<Party*> invitePartyList;
 		std::list<uint32_t> modalWindows;
 		std::list<ShopInfo> shopItemList;
-		LearnedInstantSpellList learnedInstantSpellList;
+		std::list<std::string> learnedInstantSpellList;
 		ConditionList storedConditionList;
-
 		GuildWarList guildWarList;
 
 		std::string name;
@@ -1321,12 +1304,6 @@ class Player : public Creature, public Cylinder
 		int32_t idleTime;
 		int32_t shootRange;
 
-		uint16_t lastStatsTrainingTime;
-		uint16_t staminaMinutes;
-		uint16_t maxWriteLen;
-		int16_t lastDepotId;
-		int16_t blessings;
-
 		AccountType_t accountType;
 		PlayerSex_t sex;
 		Skulls_t skull;
@@ -1336,6 +1313,12 @@ class Player : public Creature, public Cylinder
 		secureMode_t secureMode;
 		BlockType_t lastAttackBlockType;
 		tradestate_t tradeState;
+
+		uint16_t lastStatsTrainingTime;
+		uint16_t staminaMinutes;
+		uint16_t maxWriteLen;
+		int16_t lastDepotId;
+		int16_t blessings;
 
 		uint8_t guildLevel;
 

@@ -192,8 +192,6 @@ class MatrixArea
 		bool** data_;
 };
 
-typedef std::map<Direction, MatrixArea* > AreaCombatMap;
-
 class AreaCombat
 {
 	public:
@@ -262,7 +260,7 @@ class AreaCombat
 			return it->second;
 		}
 
-		AreaCombatMap areas;
+		std::map<Direction, MatrixArea*> areas;
 		bool hasExtArea;
 };
 

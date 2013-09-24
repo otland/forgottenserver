@@ -424,7 +424,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 
 	std::ostringstream query;
 	query << "SELECT `guild_id`, `rank_id`, `nick` FROM `guild_membership` WHERE `player_id` = " << player->getGUID();
-
 	if ((result = db->storeQuery(query.str()))) {
 		uint32_t guildId = result->getDataInt("guild_id");
 		uint32_t playerRankId = result->getDataInt("rank_id");
@@ -432,11 +431,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 		db->freeResult(result);
 
 		Guild* guild = g_game.getGuild(guildId);
-
 		if (!guild) {
 			query.str("");
 			query << "SELECT `name` FROM `guilds` WHERE `id` = " << guildId;
-
 			if ((result = db->storeQuery(query.str()))) {
 				guild = new Guild(guildId, result->getDataString("name"));
 				db->freeResult(result);
@@ -449,7 +446,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 					do {
 						guild->addRank(result->getDataInt("id"), result->getDataString("name"), result->getDataInt("level"));
 					} while (result->next());
-
 					db->freeResult(result);
 				}
 			}
@@ -458,7 +454,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 		if (guild) {
 			player->guild = guild;
 			GuildRank* rank = guild->getRankById(playerRankId);
-
 			if (rank) {
 				player->guildLevel = rank->level;
 			} else {
@@ -469,7 +464,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 
 			query.str("");
 			query << "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = " << guildId;
-
 			if ((result = db->storeQuery(query.str()))) {
 				guild->setMemberCount(result->getDataInt("members"));
 				db->freeResult(result);
@@ -554,7 +548,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 
 	query.str("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
-
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 		db->freeResult(result);
@@ -584,7 +577,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	//load storage map
 	query.str("");
 	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
-
 	if ((result = db->storeQuery(query.str()))) {
 		do {
 			player->addStorageValue(result->getDataInt("key"), result->getDataInt("value"), true);
@@ -595,12 +587,10 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	//load vip
 	query.str("");
 	query << "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = " << player->getAccount();
-
 	if ((result = db->storeQuery(query.str()))) {
 		do {
 			player->addVIPInternal(result->getDataInt("player_id"));
 		} while (result->next());
-
 		db->freeResult(result);
 	}
 
@@ -682,7 +672,6 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "SELECT `save` FROM `players` WHERE `id` = " << player->getGUID();
 
 	DBResult* result = db->storeQuery(query.str());
-
 	if (!result) {
 		return false;
 	}
@@ -821,9 +810,8 @@ bool IOLoginData::savePlayer(Player* player)
 	DBInsert stmt;
 	stmt.setQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
 
-	for (LearnedInstantSpellList::const_iterator it = player->learnedInstantSpellList.begin();
-	        it != player->learnedInstantSpellList.end(); ++it) {
-		query << player->getGUID() << ',' << db->escapeString(*it);
+	for (const std::string& spellName : player->learnedInstantSpellList) {
+		query << player->getGUID() << ',' << db->escapeString(spellName);
 		if (!stmt.addRow(query)) {
 			return false;
 		}
@@ -835,7 +823,6 @@ bool IOLoginData::savePlayer(Player* player)
 
 	//item saving
 	query << "DELETE FROM `player_items` WHERE `player_id` = " << player->getGUID();
-
 	if (!db->executeQuery(query.str())) {
 		return false;
 	}
@@ -881,7 +868,6 @@ bool IOLoginData::savePlayer(Player* player)
 	//save inbox items
 	query.str("");
 	query << "DELETE FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID();
-
 	if (!db->executeQuery(query.str())) {
 		return false;
 	}
@@ -909,8 +895,8 @@ bool IOLoginData::savePlayer(Player* player)
 	stmt.setQuery("INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES ");
 	player->genReservedStorageRange();
 
-	for (StorageMap::const_iterator cit = player->getStorageIteratorBegin(), end = player->getStorageIteratorEnd(); cit != end; ++cit) {
-		query << player->getGUID() << ',' << cit->first << ',' << cit->second;
+	for (const auto& it : player->storageMap) {
+		query << player->getGUID() << ',' << it.first << ',' << it.second;
 		if (!stmt.addRow(query)) {
 			return false;
 		}

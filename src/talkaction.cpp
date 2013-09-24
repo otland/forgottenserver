@@ -40,13 +40,10 @@ TalkActions::~TalkActions()
 
 void TalkActions::clear()
 {
-	TalkActionList::iterator it = wordsMap.begin();
-
-	while (it != wordsMap.end()) {
-		delete it->second;
-		wordsMap.erase(it);
-		it = wordsMap.begin();
+	for (const auto& it : wordsMap) {
+		delete it.second;
 	}
+	wordsMap.clear();
 
 	m_scriptInterface.reInitState();
 }

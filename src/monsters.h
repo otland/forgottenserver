@@ -36,8 +36,7 @@ struct LootBlock {
 	int32_t actionId;
 	std::string text;
 
-	typedef std::list<LootBlock> LootItems;
-	LootItems childLoot;
+	std::list<LootBlock> childLoot;
 	LootBlock() {
 		id = 0;
 		countmax = 0;
@@ -73,13 +72,6 @@ struct voiceBlock_t {
 	bool yellText;
 };
 
-typedef std::list<LootBlock> LootItems;
-typedef std::list<summonBlock_t> SummonList;
-typedef std::list<spellBlock_t> SpellList;
-typedef std::vector<voiceBlock_t> VoiceVector;
-typedef std::list<std::string> MonsterScriptList;
-typedef std::map<CombatType_t, int32_t> ElementMap;
-
 class MonsterType
 {
 	public:
@@ -88,54 +80,55 @@ class MonsterType
 
 		void reset();
 
+		std::map<CombatType_t, int32_t> elementMap;
+
+		std::vector<voiceBlock_t> voiceVector;
+
+		std::list<LootBlock> lootItems;
+		std::list<std::string> scriptList;
+		std::list<spellBlock_t> spellAttackList;
+		std::list<spellBlock_t> spellDefenseList;
+		std::list<summonBlock_t> summonList;
+
 		std::string name;
 		std::string nameDescription;
+
 		uint64_t experience;
 
-		int32_t defense;
-		int32_t armor;
+		Outfit_t outfit;
 
-		bool canPushItems;
-		bool canPushCreatures;
+		uint32_t manaCost;
+		uint32_t yellChance;
+		uint32_t yellSpeedTicks;
 		uint32_t staticAttackChance;
 		int32_t maxSummons;
 		int32_t targetDistance;
 		int32_t runAwayHealth;
-		bool pushable;
 		int32_t baseSpeed;
 		int32_t health;
 		int32_t healthMax;
-
-		Outfit_t outfit;
-		uint16_t lookcorpse;
+		int32_t changeTargetSpeed;
+		int32_t changeTargetChance;
+		int32_t lightLevel;
+		int32_t lightColor;
 		int32_t conditionImmunities;
 		int32_t damageImmunities;
+		int32_t defense;
+		int32_t armor;
+
 		RaceType_t race;
+
+		uint16_t lookcorpse;
+
+		bool canPushItems;
+		bool canPushCreatures;
+		bool pushable;
 		bool isSummonable;
 		bool isIllusionable;
 		bool isConvinceable;
 		bool isAttackable;
 		bool isHostile;
 		bool hiddenHealth;
-
-		int32_t lightLevel;
-		int32_t lightColor;
-
-		uint32_t manaCost;
-		SummonList summonList;
-		LootItems lootItems;
-		ElementMap elementMap;
-		SpellList spellAttackList;
-		SpellList spellDefenseList;
-
-		uint32_t yellChance;
-		uint32_t yellSpeedTicks;
-		VoiceVector voiceVector;
-
-		int32_t changeTargetSpeed;
-		int32_t changeTargetChance;
-
-		MonsterScriptList scriptList;
 
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);
@@ -170,11 +163,8 @@ class Monsters
 		void loadLootContainer(const pugi::xml_node& node, LootBlock&);
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
-		typedef std::map<std::string, uint32_t> MonsterNameMap;
-		MonsterNameMap monsterNames;
-
-		typedef std::map<uint32_t, MonsterType*> MonsterMap;
-		MonsterMap monsters;
+		std::map<std::string, uint32_t> monsterNames;
+		std::map<uint32_t, MonsterType*> monsters;
 
 		bool loaded;
 };

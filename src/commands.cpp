@@ -1171,7 +1171,7 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 void Commands::multiClientCheck(Player* player, const std::string& cmd, const std::string& param)
 {
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Multiclient Check List:");
-	std::map< uint32_t, std::vector<Player*> > ipMap;
+	std::map<uint32_t, std::vector<Player*>> ipMap;
 
 	for (const auto& it : g_game.getPlayers()) {
 		Player* tmpPlayer = it.second;

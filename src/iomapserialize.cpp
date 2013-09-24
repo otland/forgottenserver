@@ -257,7 +257,6 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 {
 	const Position& tilePosition = tile->getPosition();
-
 	if (tilePosition.x == 0 || tilePosition.y == 0) {
 		return;
 	}
@@ -283,9 +282,8 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 		stream.ADD_UCHAR(tilePosition.z);
 
 		stream.ADD_ULONG(items.size());
-
-		for (std::vector<Item*>::iterator iter = items.begin(), end = items.end(); iter != end; ++iter) {
-			saveItem(stream, *iter);
+		for (const Item* item : items) {
+			saveItem(stream, item);
 		}
 	}
 }

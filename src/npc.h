@@ -248,8 +248,7 @@ class Npc : public Creature
 		void removeShopPlayer(Player* player);
 		void closeAllShopWindows();
 
-		typedef std::map<std::string, std::string> ParametersMap;
-		ParametersMap m_parameters;
+		std::map<std::string, std::string> m_parameters;
 
 		std::set<Player*> shopPlayerSet;
 

@@ -130,7 +130,7 @@ void Raids::checkRaids()
 	if (!getRunning()) {
 		uint64_t now = OTSYS_TIME();
 
-		for (RaidList::iterator it = raidList.begin(); it != raidList.end(); ++it) {
+		for (auto it = raidList.begin(); it != raidList.end(); ++it) {
 			if (now >= (getLastRaidEnd() + (*it)->getMargin())) {
 				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / (*it)->getInterval() >= (uint32_t)random_range(0, MAX_RAND_RANGE)) {
 					setRunning(*it);

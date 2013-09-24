@@ -179,7 +179,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
-
 	if (!g_config.load()) {
 		startupErrorMessage("Unable to load config.lua!");
 		return;
@@ -238,7 +237,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	//load vocations
 	std::cout << ">> Loading vocations" << std::endl;
-
 	if (!g_vocations.loadFromXml()) {
 		startupErrorMessage("Unable to load vocations!");
 		return;
@@ -246,7 +244,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	//load commands
 	std::cout << ">> Loading commands" << std::endl;
-
 	if (!g_commands.loadFromXml()) {
 		startupErrorMessage("Unable to load commands!");
 		return;
@@ -254,7 +251,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	// load item data
 	std::cout << ">> Loading items" << std::endl;
-
 	if (Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
@@ -266,14 +262,12 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	}
 
 	std::cout << ">> Loading script systems" << std::endl;
-
 	if (!ScriptingManager::getInstance()->loadScriptSystems()) {
 		startupErrorMessage("Failed to load script systems");
 		return;
 	}
 
 	std::cout << ">> Loading monsters" << std::endl;
-
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
 		return;
@@ -288,14 +282,12 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	g_adminConfig = new AdminProtocolConfig();
 	std::cout << ">> Loading admin protocol config" << std::endl;
-
 	if (!g_adminConfig->loadXMLConfig()) {
 		startupErrorMessage("Unable to load admin protocol config!");
 		return;
 	}
 
 	std::cout << ">> Loading experience stages" << std::endl;
-
 	if (!g_game.loadExperienceStages()) {
 		startupErrorMessage("Unable to load experience stages!");
 		return;

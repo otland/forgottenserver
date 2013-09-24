@@ -57,14 +57,12 @@ class Town
 		Position templePosition;
 };
 
-typedef std::map<uint32_t, Town*> TownMap;
-
 class Towns
 {
 	public:
 		~Towns() {
-			for (TownMap::iterator it = townMap.begin(); it != townMap.end(); ++it) {
-				delete it->second;
+			for (const auto& it : townMap) {
+				delete it.second;
 			}
 		}
 
@@ -74,7 +72,7 @@ class Towns
 		}
 
 		bool addTown(uint32_t townId, Town* town) {
-			TownMap::iterator it = townMap.find(townId);
+			auto it = townMap.find(townId);
 			if (it != townMap.end()) {
 				return false;
 			}
@@ -101,7 +99,7 @@ class Towns
 		}
 
 	private:
-		TownMap townMap;
+		std::map<uint32_t, Town*> townMap;
 };
 
 #endif

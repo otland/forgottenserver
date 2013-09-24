@@ -29,7 +29,6 @@ class MissionState;
 class Mission;
 class Quest;
 
-typedef std::map<int32_t, MissionState> StateList;
 typedef std::list<Mission> MissionsList;
 typedef std::list<Quest> QuestsList;
 
@@ -72,7 +71,7 @@ class Mission
 		}
 
 		MissionState* mainState;
-		StateList state;
+		std::map<int32_t, MissionState> state;
 
 	private:
 		std::string missionName;

@@ -29,8 +29,6 @@
 
 #include <mysql.h>
 
-typedef std::map<const std::string, uint32_t> listNames_t;
-
 class DBResult;
 
 class Database
@@ -199,7 +197,7 @@ class DBResult
 		MYSQL_RES* m_handle;
 		MYSQL_ROW m_row;
 
-		listNames_t m_listNames;
+		std::map<std::string, uint32_t> m_listNames;
 
 	friend class Database;
 };

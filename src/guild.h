@@ -22,7 +22,7 @@
 
 #include "player.h"
 
-typedef std::vector<Player*> PlayerVector;
+typedef std::list<Player*> PlayerList;
 
 struct GuildRank {
 	uint32_t id;
@@ -51,13 +51,9 @@ class Guild
 		const std::string& getName() const {
 			return name;
 		}
-		const PlayerVector& getMembersOnline() const {
+		const PlayerList& getMembersOnline() const {
 			return membersOnline;
 		}
-		size_t getMembersOnlineCount() const {
-			return membersOnline.size();
-		}
-
 		uint32_t getMemberCount() const {
 			return memberCount;
 		}
@@ -77,7 +73,7 @@ class Guild
 		}
 
 	private:
-		PlayerVector membersOnline;
+		PlayerList membersOnline;
 		std::vector<GuildRank> ranks;
 		std::string name;
 		std::string motd;

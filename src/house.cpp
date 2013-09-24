@@ -547,26 +547,23 @@ bool AccessList::addExpression(const std::string& expression)
 
 bool AccessList::isInList(const Player* player)
 {
-	RegExList::iterator it;
-	std::string name = player->getName();
+	std::string name = asLowerCaseString(player->getName());
 	std::cmatch what;
 
-	toLowerCaseString(name);
-
-	for (it = regExList.begin(); it != regExList.end(); ++it) {
-		if (std::regex_match(name.c_str(), what, it->first)) {
-			return it->second;
+	for (const auto& it : regExList) {
+		if (std::regex_match(name.c_str(), what, it.first)) {
+			return it.second;
 		}
 	}
 
-	PlayerList::iterator playerIt = playerList.find(player->getGUID());
+	auto playerIt = playerList.find(player->getGUID());
 	if (playerIt != playerList.end()) {
 		return true;
 	}
 
 	Guild* guild = player->getGuild();
 	if (guild) {
-		GuildList::iterator guildIt = guildList.find(guild->getId());
+		auto guildIt = guildList.find(guild->getId());
 		if (guildIt != guildList.end()) {
 			return true;
 		}
@@ -595,7 +592,6 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (ATTR_HOUSEDOORID == attr) {
 		unsigned char _doorId = 0;
-
 		if (!propStream.GET_UCHAR(_doorId)) {
 			return ATTR_READ_ERROR;
 		}
@@ -735,7 +731,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 			pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
 		);
 		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
-			std::cout << "Warning: [Houses::loadHousesXML] House entry not set"
+			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
 					    << " - Name: " << house->getName()
 					    << " - House id: " << _houseid << std::endl;
 		}

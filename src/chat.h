@@ -153,14 +153,10 @@ class Chat
 		}
 
 	private:
-		typedef std::map<uint16_t, ChatChannel> NormalChannelMap;
-		typedef std::map<uint16_t, PrivateChatChannel*> PrivateChannelMap;
-		typedef std::map<Party*, ChatChannel*> PartyChannelMap;
-		typedef std::map<uint32_t, ChatChannel*> GuildChannelMap;
-		NormalChannelMap normalChannels;
-		PrivateChannelMap privateChannels;
-		PartyChannelMap partyChannels;
-		GuildChannelMap guildChannels;
+		std::map<uint16_t, ChatChannel> normalChannels;
+		std::map<uint16_t, PrivateChatChannel*> privateChannels;
+		std::map<Party*, ChatChannel*> partyChannels;
+		std::map<uint32_t, ChatChannel*> guildChannels;
 
 		LuaScriptInterface m_scriptInterface;
 
