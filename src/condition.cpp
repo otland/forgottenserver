@@ -1652,18 +1652,14 @@ bool ConditionInvisible::startCondition(Creature* creature)
 		return false;
 	}
 
-	if (!creature->getMonster()) {
-		g_game.internalCreatureChangeVisible(creature, false);
-	}
+	g_game.internalCreatureChangeVisible(creature, false);
 	return true;
 }
 
 void ConditionInvisible::endCondition(Creature* creature, ConditionEnd_t reason)
 {
 	if (!creature->isInvisible()) {
-		if (!creature->getMonster()) {
-			g_game.internalCreatureChangeVisible(creature, true);
-		}
+		g_game.internalCreatureChangeVisible(creature, true);
 	}
 }
 
