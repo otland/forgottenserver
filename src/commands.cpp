@@ -540,12 +540,7 @@ void Commands::teleportTo(Player* player, const std::string& cmd, const std::str
 		Position newPosition = g_game.getClosestFreeTile(player, 0, paramCreature->getPosition(), true);
 		if (newPosition.x > 0) {
 			if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
-				bool ghostMode = false;
-
-				if (player->isInGhostMode() || paramCreature->isInGhostMode()) {
-					ghostMode = true;
-				}
-
+				bool ghostMode = player->isInGhostMode() || paramCreature->isInGhostMode();
 				g_game.addMagicEffect(oldPosition, NM_ME_POFF, ghostMode);
 				g_game.addMagicEffect(player->getPosition(), NM_ME_TELEPORT, ghostMode);
 			}
@@ -1080,16 +1075,16 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 	g_game.getSpectators(list, player->getPosition(), true, true);
 	for (Creature* spectator : list) {
 		Player* tmpPlayer = spectator->getPlayer();
-		tmpPlayer->sendCreatureChangeVisible(player, !player->isInGhostMode());
-
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
 			if (player->isInGhostMode()) {
-				tmpPlayer->sendCreatureDisappear(player, player->getTile()->getClientIndexOfThing(tmpPlayer, player), true);
+				tmpPlayer->sendCreatureDisappear(player, player->getTile()->getClientIndexOfThing(tmpPlayer, player));
 			} else {
 				tmpPlayer->sendCreatureAppear(player, player->getPosition(), true);
 			}
 
 			tmpPlayer->sendUpdateTile(player->getTile(), player->getPosition());
+		} else {
+			tmpPlayer->sendCreatureChangeVisible(player, !player->isInGhostMode());
 		}
 	}
 

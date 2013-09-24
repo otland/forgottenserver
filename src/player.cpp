@@ -1034,10 +1034,9 @@ bool Player::canSeeCreature(const Creature* creature) const
 		return false;
 	}
 
-	if (creature->isInvisible() && !creature->getPlayer() && !canSeeInvisibility()) {
+	if (!creature->getPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -1055,7 +1054,6 @@ bool Player::canWalkthrough(const Creature* creature) const
 	const Tile* playerTile = player->getTile();
 	if (playerTile && playerTile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		Item* playerTileGround = playerTile->ground;
-
 		if (playerTileGround && playerTileGround->hasWalkStack()) {
 			Player* thisPlayer = const_cast<Player*>(this);
 			if ((OTSYS_TIME() - lastWalkthroughAttempt) > 2000) {

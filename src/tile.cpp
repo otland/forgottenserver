@@ -24,6 +24,8 @@
 #include <string>
 #include <iostream>
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include "definitions.h"
 #include "tile.h"
 #include "game.h"
@@ -537,11 +539,14 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 	g_game.getSpectators(list, oldPos, true);
 	g_game.getSpectators(list, newPos, true);
 
-	std::vector<uint32_t> oldStackPosVector;
-
+	std::vector<int32_t> oldStackPosVector;
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, creature));
+			if (tmpPlayer->canSeeCreature(creature)) {
+				oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, creature));
+			} else {
+				oldStackPosVector.push_back(-1);
+			}
 		}
 	}
 
@@ -578,11 +583,10 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			//Use the correct stackpos
-			if (!creature->isInGhostMode() || tmpPlayer->isAccessPlayer()) {
+			int32_t stackpos = oldStackPosVector[i++];
+			if (stackpos != -1) {
 				tmpPlayer->sendCreatureMove(creature, newTile, newPos, this, oldPos, oldStackPosVector[i], teleport);
 			}
-
-			++i;
 		}
 	}
 
@@ -711,8 +715,8 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 				return RET_PLAYERISPZLOCKED;
 			}
 		} else if (creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags)) {
-			for (CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit) {
-				if (!(*cit)->isInGhostMode()) {
+			for (const Creature* tileCreature : *creatures) {
+				if (!tileCreature->isInGhostMode()) {
 					return RET_NOTENOUGHROOM;
 				}
 			}
@@ -756,8 +760,8 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 		}
 
 		if (creatures && !creatures->empty() && item->isBlocking() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags)) {
-			for (CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit) {
-				if (!(*cit)->isInGhostMode()) {
+			for (const Creature* tileCreature : *creatures) {
+				if (!tileCreature->isInGhostMode()) {
 					return RET_NOTENOUGHROOM;
 				}
 			}
@@ -1312,13 +1316,11 @@ int32_t Tile::__getIndexOfThing(const Thing* thing) const
 
 int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) const
 {
-	int n = -1;
-
+	int32_t n = 0;
 	if (ground) {
 		if (ground == thing) {
-			return 0;
+			return n;
 		}
-
 		++n;
 	}
 
@@ -1326,9 +1328,10 @@ int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) co
 	if (items) {
 		if (thing->getItem()) {
 			for (ItemVector::const_iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
-				++n;
-				if ((*it) == thing) {
+				if (*it == thing) {
 					return n;
+				} else {
+					++n;
 				}
 			}
 		} else {
@@ -1337,13 +1340,11 @@ int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) co
 	}
 
 	if (const CreatureVector* creatures = getCreatures()) {
-		for (CreatureVector::const_reverse_iterator cit = creatures->rbegin(); cit != creatures->rend(); ++cit) {
-			if ((*cit) == thing || !(*cit)->isInGhostMode() || player->isAccessPlayer()) {
-				++n;
-			}
-
-			if ((*cit) == thing) {
+		for (const Creature* creature : boost::adaptors::reverse(*creatures)) {
+			if (creature == thing) {
 				return n;
+			} else if (player->canSeeCreature(creature)) {
+				++n;
 			}
 		}
 	}
@@ -1351,14 +1352,11 @@ int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) co
 	if (items) {
 		if (thing->getItem()) {
 			for (ItemVector::const_iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
-				++n;
-
-				if ((*it) == thing) {
+				if (*it == thing) {
 					return n;
 				}
+				++n;
 			}
-		} else {
-			n += items->getDownItemCount();
 		}
 	}
 	return -1;

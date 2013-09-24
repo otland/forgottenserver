@@ -849,14 +849,16 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 
 	Tile* tile = creature->getTile();
 
-	std::vector<uint32_t> oldStackPosVector;
+	std::vector<int32_t> oldStackPosVector;
 
 	SpectatorVec list;
 	getSpectators(list, tile->getPosition(), true);
 	for (Creature* spectator : list) {
 		if (Player* player = spectator->getPlayer()) {
-			if (!creature->isInGhostMode() || player->isAccessPlayer()) {
+			if (player->canSeeCreature(creature)) {
 				oldStackPosVector.push_back(tile->getClientIndexOfThing(player, creature));
+			} else {
+				oldStackPosVector.push_back(-1);
 			}
 		}
 	}
@@ -868,13 +870,13 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 	}
 
 	//send to client
-	uint32_t i = 0;
+	size_t i = 0;
 
 	for (Creature* spectator : list) {
 		if (Player* player = spectator->getPlayer()) {
-			if (!creature->isInGhostMode() || player->isAccessPlayer()) {
-				player->sendCreatureDisappear(creature, oldStackPosVector[i], isLogout);
-				++i;
+			int32_t stackpos = oldStackPosVector[i++];
+			if (stackpos != -1) {
+				player->sendCreatureDisappear(creature, oldStackPosVector[i]);
 			}
 		}
 	}

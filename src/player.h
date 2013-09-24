@@ -774,9 +774,9 @@ class Player : public Creature, public Cylinder
 				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfThing(this, creature), isLogin);
 			}
 		}
-		void sendCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout) {
+		void sendCreatureDisappear(const Creature* creature, uint32_t stackpos) {
 			if (client) {
-				client->sendRemoveCreature(creature, creature->getPosition(), stackpos, isLogout);
+				client->sendRemoveCreature(creature, creature->getPosition(), stackpos);
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
@@ -807,10 +807,23 @@ class Player : public Creature, public Cylinder
 		}
 		void sendCreatureChangeVisible(const Creature* creature, bool visible) {
 			if (client) {
-				if (visible) {
-					client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+				if (creature->getPlayer()) {
+					if (visible) {
+						client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+					} else {
+						static Outfit_t outfit;
+						client->sendCreatureOutfit(creature, outfit);
+					}
 				} else {
-					client->sendCreatureInvisible(creature);
+					if (canSeeInvisibility()) {
+						client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+					} else {
+						if (visible) {
+							client->sendAddCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature), false);
+						} else {
+							client->sendRemoveCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
+						}
+					}
 				}
 			}
 		}

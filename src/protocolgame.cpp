@@ -1349,26 +1349,7 @@ void ProtocolGame::sendCreatureOutfit(const Creature* creature, const Outfit_t& 
 	NetworkMessage msg;
 	msg.AddByte(0x8E);
 	msg.AddU32(creature->getID());
-
-	if (creature->isInGhostMode()) {
-		AddCreatureInvisible(msg, creature);
-	} else {
-		AddCreatureOutfit(msg, creature, outfit);
-	}
-
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendCreatureInvisible(const Creature* creature)
-{
-	if (!canSee(creature)) {
-		return;
-	}
-
-	NetworkMessage msg;
-	msg.AddByte(0x8E);
-	msg.AddU32(creature->getID());
-	AddCreatureInvisible(msg, creature);
+	AddCreatureOutfit(msg, creature, outfit);
 	writeToOutputBuffer(msg);
 }
 
@@ -2554,7 +2535,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	player->sendIcons();
 }
 
-void ProtocolGame::sendRemoveCreature(const Creature* creature, const Position& pos, uint32_t stackpos, bool isLogout)
+void ProtocolGame::sendRemoveCreature(const Creature* creature, const Position& pos, uint32_t stackpos)
 {
 	if (creature->isInGhostMode() && !player->isAccessPlayer()) {
 		return;
@@ -2616,7 +2597,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 		}
 	} else if (canSee(oldPos) && canSee(creature->getPosition())) {
 		if (teleport || (oldPos.z == 7 && newPos.z >= 8) || oldStackPos >= 10) {
-			sendRemoveCreature(creature, oldPos, oldStackPos, false);
+			sendRemoveCreature(creature, oldPos, oldStackPos);
 			sendAddCreature(creature, newPos, newStackPos, false);
 		} else {
 			NetworkMessage msg;
@@ -2627,7 +2608,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 			writeToOutputBuffer(msg);
 		}
 	} else if (canSee(oldPos)) {
-		sendRemoveCreature(creature, oldPos, oldStackPos, false);
+		sendRemoveCreature(creature, oldPos, oldStackPos);
 	} else if (canSee(creature->getPosition())) {
 		sendAddCreature(creature, newPos, newStackPos, false);
 	}
@@ -2978,7 +2959,8 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	if (!creature->isInvisible() && !creature->isInGhostMode()) {
 		AddCreatureOutfit(msg, creature, creature->getCurrentOutfit());
 	} else {
-		AddCreatureInvisible(msg, creature);
+		static Outfit_t outfit;
+		AddCreatureOutfit(msg, creature, outfit);
 	}
 
 	LightInfo lightInfo;
@@ -3154,17 +3136,6 @@ void ProtocolGame::AddCreatureHealth(NetworkMessage& msg, const Creature* creatu
 		msg.AddByte(0x00);
 	} else {
 		msg.AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1)));
-	}
-}
-
-void ProtocolGame::AddCreatureInvisible(NetworkMessage& msg, const Creature* creature)
-{
-	if (player->canSeeInvisibility() && !creature->isInGhostMode()) {
-		AddCreatureOutfit(msg, creature, creature->getCurrentOutfit());
-	} else {
-		msg.AddU16(0x00);
-		msg.AddU16(0x00);
-		msg.AddU16(0x00);
 	}
 }
 
