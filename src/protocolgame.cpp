@@ -587,7 +587,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 
 	if (creatures) {
 		for (CreatureVector::const_reverse_iterator cit = creatures->rbegin(); ((cit != creatures->rend()) && (count < 10)); ++cit) {
-			if ((*cit)->isInGhostMode() && !player->isAccessPlayer()) {
+			if (!player->canSeeCreature(*cit)) {
 				continue;
 			}
 
@@ -698,7 +698,7 @@ bool ProtocolGame::canSee(const Creature* c) const
 		return false;
 	}
 
-	if (c->isInGhostMode() && !player->isAccessPlayer()) {
+	if (!player->canSeeCreature(c)) {
 		return false;
 	}
 
@@ -2956,7 +2956,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.AddByte((uint8_t)creature->getDirection());
 
-	if (!creature->isInvisible() && !creature->isInGhostMode()) {
+	if (player->canSeeCreature(creature)) {
 		AddCreatureOutfit(msg, creature, creature->getCurrentOutfit());
 	} else {
 		static Outfit_t outfit;
