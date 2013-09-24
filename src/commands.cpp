@@ -76,11 +76,9 @@ s_defcommands Commands::defined_commands[] = {
 	{"/m", &Commands::placeMonster},
 	{"/summon", &Commands::placeSummon},
 	{"/B", &Commands::broadcastMessage},
-	{"/t", &Commands::teleportMasterPos},
 	{"/c", &Commands::teleportHere},
 	{"/i", &Commands::createItemById},
 	{"/n", &Commands::createItemByName},
-	{"/q", &Commands::subtractMoney},
 	{"/reload", &Commands::reloadInfo},
 	{"/goto", &Commands::teleportTo},
 	{"/info", &Commands::getInfo},
@@ -89,7 +87,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/a", &Commands::teleportNTiles},
 	{"/kick", &Commands::kickPlayer},
 	{"/owner", &Commands::setHouseOwner},
-	{"/gethouse", &Commands::getHouse},
 	{"/town", &Commands::teleportToTown},
 	{"/pos", &Commands::showPosition},
 	{"/r", &Commands::removeThing},
@@ -355,22 +352,6 @@ void Commands::broadcastMessage(Player* player, const std::string& cmd, const st
 	g_game.playerBroadcastMessage(player, param);
 }
 
-void Commands::teleportMasterPos(Player* player, const std::string& cmd, const std::string& param)
-{
-	Position oldPosition = player->getPosition();
-	Position destPos = player->getTemplePosition();
-	Position newPosition = g_game.getClosestFreeTile(player, 0, destPos, true);
-
-	if (player->getPosition() != destPos) {
-		if (newPosition.x == 0) {
-			player->sendCancel("You can not teleport there.");
-		} else if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
-			g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-			g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, player->isInGhostMode());
-		}
-	}
-}
-
 void Commands::teleportHere(Player* player, const std::string& cmd, const std::string& param)
 {
 	Creature* paramCreature = g_game.getCreatureByName(param);
@@ -472,13 +453,6 @@ void Commands::createItemByName(Player* player, const std::string& cmd, const st
 
 	g_game.startDecay(newItem);
 	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
-}
-
-void Commands::subtractMoney(Player* player, const std::string& cmd, const std::string& param)
-{
-	std::ostringstream ss;
-	ss << "You have " << g_game.getMoney(player) << " gold.";
-	player->sendCancel(ss.str());
 }
 
 void Commands::reloadInfo(Player* player, const std::string& cmd, const std::string& param)
@@ -770,26 +744,6 @@ void Commands::sellHouse(Player* player, const std::string& cmd, const std::stri
 	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
 		house->resetTransferItem();
 	}
-}
-
-void Commands::getHouse(Player* player, const std::string& cmd, const std::string& param)
-{
-	std::string name = param;
-	uint32_t guid;
-
-	if (!IOLoginData::getInstance()->getGuidByName(guid, name)) {
-		return;
-	}
-
-	std::ostringstream str;
-	House* house = Houses::getInstance().getHouseByPlayerId(guid);
-	if (house) {
-		str << name << " owns house: " << house->getName() << '.';
-	} else {
-		str << name << " does not own any house.";
-	}
-
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, str.str());
 }
 
 void Commands::serverInfo(Player* player, const std::string& cmd, const std::string& param)

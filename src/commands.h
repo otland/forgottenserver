@@ -47,13 +47,11 @@ class Commands
 		void placeMonster(Player* player, const std::string& cmd, const std::string& param);
 		void placeSummon(Player* player, const std::string& cmd, const std::string& param);
 		void broadcastMessage(Player* player, const std::string& cmd, const std::string& param);
-		void teleportMasterPos(Player* player, const std::string& cmd, const std::string& param);
 		void teleportHere(Player* player, const std::string& cmd, const std::string& param);
 		void teleportToTown(Player* player, const std::string& cmd, const std::string& param);
 		void teleportTo(Player* player, const std::string& cmd, const std::string& param);
 		void createItemById(Player* player, const std::string& cmd, const std::string& param);
 		void createItemByName(Player* player, const std::string& cmd, const std::string& param);
-		void subtractMoney(Player* player, const std::string& cmd, const std::string& param);
 		void reloadInfo(Player* player, const std::string& cmd, const std::string& param);
 		void getInfo(Player* player, const std::string& cmd, const std::string& param);
 		void closeServer(Player* player, const std::string& cmd, const std::string& param);
@@ -62,7 +60,6 @@ class Commands
 		void kickPlayer(Player* player, const std::string& cmd, const std::string& param);
 		void setHouseOwner(Player* player, const std::string& cmd, const std::string& param);
 		void sellHouse(Player* player, const std::string& cmd, const std::string& param);
-		void getHouse(Player* player, const std::string& cmd, const std::string& param);
 		void serverInfo(Player* player, const std::string& cmd, const std::string& param);
 		void whoIsOnline(Player* player, const std::string& cmd, const std::string& param);
 		void showPosition(Player* player, const std::string& cmd, const std::string& param);

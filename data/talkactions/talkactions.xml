@@ -7,6 +7,8 @@
 
 	<talkaction words="/up" script="up.lua" />
 	<talkaction words="/down" script="down.lua" />
+	
+	<talkaction words="/t" script="teleport_home.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
