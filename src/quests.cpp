@@ -190,9 +190,8 @@ bool Quests::loadFromXml()
 		return false;
 	}
 
+	uint16_t id = 0;
 	for (pugi::xml_node questNode = doc.child("quests").first_child(); questNode; questNode = questNode.next_sibling()) {
-		uint16_t id = 0;
-
 		quests.emplace_back(
 			questNode.attribute("name").as_string(),
 			++id,
