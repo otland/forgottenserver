@@ -33,9 +33,9 @@ MissionState::MissionState(const std::string& _description, int32_t _missionID)
 	missionID = _missionID;
 }
 
-Mission::Mission(const std::string& _missionName, int32_t _storageID, int32_t _startValue, int32_t _endValue, bool _ignoreEndValue)
+Mission::Mission(const std::string& _name, int32_t _storageID, int32_t _startValue, int32_t _endValue, bool _ignoreEndValue)
 {
-	missionName = _missionName;
+	name = _name;
 	endValue = _endValue;
 	ignoreEndValue = _ignoreEndValue;
 	startValue = _startValue;
@@ -127,9 +127,9 @@ bool Mission::isCompleted(Player* player) const
 std::string Mission::getName(Player* player) const
 {
 	if (isCompleted(player)) {
-		return missionName + " (completed)";
+		return name + " (completed)";
 	}
-	return missionName;
+	return name;
 }
 
 Quest::Quest(const std::string& _name, uint16_t _id, int32_t _startStorageID, int32_t _startStorageValue)

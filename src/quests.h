@@ -53,7 +53,7 @@ class MissionState
 class Mission
 {
 	public:
-		Mission(const std::string& _missionName, int32_t _storageID, int32_t _startValue, int32_t _endValue, bool _ignoreEndValue);
+		Mission(const std::string& _name, int32_t _storageID, int32_t _startValue, int32_t _endValue, bool _ignoreEndValue);
 
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;
@@ -74,7 +74,7 @@ class Mission
 		std::map<int32_t, MissionState> state;
 
 	private:
-		std::string missionName;
+		std::string name;
 		uint32_t storageID;
 		int32_t startValue, endValue;
 		bool ignoreEndValue;
