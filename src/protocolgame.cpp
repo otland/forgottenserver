@@ -2952,7 +2952,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.AddByte((uint8_t)creature->getDirection());
 
-	if (player->canSeeCreature(creature)) {
+	if (!creature->isInGhostMode() && !creature->isInvisible()) {
 		AddCreatureOutfit(msg, creature, creature->getCurrentOutfit());
 	} else {
 		static Outfit_t outfit;
