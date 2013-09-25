@@ -155,14 +155,14 @@ bool Event::loadScript(const std::string& scriptFile)
 	}
 
 	if (m_scriptInterface->loadFile(scriptFile) == -1) {
-		std::cout << "Warning: [Event::loadScript] Can not load script. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::loadScript] Can not load script. " << scriptFile << std::endl;
 		std::cout << m_scriptInterface->getLastLuaError() << std::endl;
 		return false;
 	}
 
 	int32_t id = m_scriptInterface->getEvent(getScriptEventName());
 	if (id == -1) {
-		std::cout << "Warning: [Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
 	}
 
@@ -199,7 +199,7 @@ bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& n
 
 	int32_t id = m_scriptInterface->getEvent(name);
 	if (id == -1) {
-		std::cout << "Warning: [CallBack::loadCallBack] Event " << name << " not found." << std::endl;
+		std::cout << "[Warning - CallBack::loadCallBack] Event " << name << " not found." << std::endl;
 		return false;
 	}
 

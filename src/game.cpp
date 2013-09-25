@@ -4237,9 +4237,7 @@ void Game::checkCreatures()
 
 	toAddCheckCreatureVector.clear();
 
-	checkCreatureLastIndex++;
-
-	if (checkCreatureLastIndex == EVENT_CREATURECOUNT) {
+	if (++checkCreatureLastIndex == EVENT_CREATURECOUNT) {
 		checkCreatureLastIndex = 0;
 	}
 

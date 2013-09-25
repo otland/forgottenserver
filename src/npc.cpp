@@ -583,7 +583,7 @@ bool NpcScriptInterface::loadNpcLib(const std::string& file)
 	}
 
 	if (loadFile(file) == -1) {
-		std::cout << "Warning: [NpcScriptInterface::loadNpcLib] Can not load " << file << std::endl;
+		std::cout << "[Warning - NpcScriptInterface::loadNpcLib] Can not load " << file << std::endl;
 		return false;
 	}
 

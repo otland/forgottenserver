@@ -575,7 +575,6 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	ItemVector::const_iterator it;
 
 	const TileItemVector* items = tile->getItemList();
-
 	if (items) {
 		for (it = items->getBeginTopItem(); ((it != items->getEndTopItem()) && (count < 10)); ++it) {
 			msg.AddItem(*it);
@@ -584,7 +583,6 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	}
 
 	const CreatureVector* creatures = tile->getCreatures();
-
 	if (creatures) {
 		for (CreatureVector::const_reverse_iterator cit = creatures->rbegin(); ((cit != creatures->rend()) && (count < 10)); ++cit) {
 			if (!player->canSeeCreature(*cit)) {

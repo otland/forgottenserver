@@ -106,9 +106,6 @@ class IOMap
 {
 		static Tile* createTile(Item*& ground, Item* item, int px, int py, int pz);
 	public:
-		IOMap() {}
-		~IOMap() {}
-
 		bool loadMap(Map* map, const std::string& identifier);
 
 		/* Load the spawns

@@ -83,10 +83,8 @@ void OutputMessagePool::sendAll()
 	const int64_t dropTime = m_frameTime - 10000;
 	const int64_t frameTime = m_frameTime - 10;
 
-	for (OutputMessageMessageList::const_iterator it = m_toAddQueue.begin(), end = m_toAddQueue.end(); it != end; ++it) {
-		OutputMessage_ptr omsg = *it;
+	for (OutputMessage_ptr omsg : m_toAddQueue) {
 		const int64_t msgFrame = omsg->getFrame();
-
 		if (msgFrame >= dropTime) {
 			omsg->setState(OutputMessage::STATE_ALLOCATED);
 
@@ -100,7 +98,6 @@ void OutputMessagePool::sendAll()
 			omsg->getProtocol()->onSendMessage(omsg);
 		}
 	}
-
 	m_toAddQueue.clear();
 
 	for (auto it = m_autoSendOutputMessages.begin(), end = m_autoSendOutputMessages.end(); it != end; it = m_autoSendOutputMessages.erase(it)) {

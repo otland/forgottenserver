@@ -149,7 +149,7 @@ bool Party::passPartyLeadership(Player* player)
 	}
 
 	//Remove it before to broadcast the message correctly
-	PlayerVector::iterator it = std::find(memberList.begin(), memberList.end(), player);
+	auto it = std::find(memberList.begin(), memberList.end(), player);
 	if (it != memberList.end()) {
 		memberList.erase(it);
 	}
@@ -184,7 +184,7 @@ bool Party::passPartyLeadership(Player* player)
 
 bool Party::joinParty(Player& player)
 {
-	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), &player);
+	auto it = std::find(inviteList.begin(), inviteList.end(), &player);
 	if (it == inviteList.end()) {
 		return false;
 	}
@@ -225,7 +225,7 @@ bool Party::joinParty(Player& player)
 
 bool Party::removeInvite(Player& player, bool removeFromPlayer/* = true*/)
 {
-	PlayerVector::iterator it = std::find(inviteList.begin(), inviteList.end(), &player);
+	auto it = std::find(inviteList.begin(), inviteList.end(), &player);
 	if (it == inviteList.end()) {
 		return false;
 	}
@@ -385,11 +385,9 @@ bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 void Party::shareExperience(uint64_t experience)
 {
 	uint32_t shareExperience = (uint64_t)std::ceil((((double)experience / (memberList.size() + 1)) + ((double)experience * 0.05)));
-
-	for (PlayerVector::iterator it = memberList.begin(); it != memberList.end(); ++it) {
-		(*it)->onGainSharedExperience(shareExperience);
+	for (Player* member : memberList) {
+		member->onGainSharedExperience(shareExperience);
 	}
-
 	leader->onGainSharedExperience(shareExperience);
 }
 
@@ -450,7 +448,7 @@ void Party::addPlayerHealedMember(Player* player, uint32_t points)
 {
 	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
 		if (points > 0) {
-			CountMap::iterator it = pointMap.find(player->getID());
+			auto it = pointMap.find(player->getID());
 			if (it == pointMap.end()) {
 				CountBlock_t cb;
 				cb.ticks = OTSYS_TIME();
@@ -488,7 +486,7 @@ void Party::addPlayerDamageMonster(Player* player, uint32_t points)
 
 void Party::clearPlayerPoints(Player* player)
 {
-	CountMap::iterator it = pointMap.find(player->getID());
+	auto it = pointMap.find(player->getID());
 	if (it != pointMap.end()) {
 		pointMap.erase(it);
 		updateSharedExperience();

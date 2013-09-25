@@ -200,7 +200,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 
 void MoveEvents::addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map)
 {
-	MoveListMap::iterator it = map.find(id);
+	auto it = map.find(id);
 	if (it == map.end()) {
 		MoveEventList moveEventList;
 		moveEventList.moveEvent[moveEvent->getEventType()].push_back(moveEvent);
@@ -303,7 +303,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 
 void MoveEvents::addEvent(MoveEvent* moveEvent, const Position& pos, MovePosListMap& map)
 {
-	MovePosListMap::iterator it = map.find(pos);
+	auto it = map.find(pos);
 	if (it == map.end()) {
 		MoveEventList moveEventList;
 		moveEventList.moveEvent[moveEvent->getEventType()].push_back(moveEvent);
@@ -311,7 +311,7 @@ void MoveEvents::addEvent(MoveEvent* moveEvent, const Position& pos, MovePosList
 	} else {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[moveEvent->getEventType()];
 		if (!moveEventList.empty()) {
-			std::cout << "Warning: [MoveEvents::addEvent] Duplicate move event found: " << pos << std::endl;
+			std::cout << "[Warning - MoveEvents::addEvent] Duplicate move event found: " << pos << std::endl;
 		}
 
 		moveEventList.push_back(moveEvent);
@@ -674,16 +674,13 @@ uint32_t MoveEvent::AddItemField(Item* item, Item* tileItem, const Position& pos
 {
 	if (MagicField* field = item->getMagicField()) {
 		Tile* tile = item->getTile();
-
 		if (CreatureVector* creatures = tile->getCreatures()) {
-			for (CreatureVector::iterator cit = creatures->begin(); cit != creatures->end(); ++cit) {
-				field->onStepInField(*cit);
+			for (Creature* creature : *creatures) {
+				field->onStepInField(creature);
 			}
 		}
-
 		return 1;
 	}
-
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 

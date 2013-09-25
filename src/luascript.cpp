@@ -354,7 +354,7 @@ uint32_t ScriptEnvironment::addCombatArea(AreaCombat* area)
 
 AreaCombat* ScriptEnvironment::getCombatArea(uint32_t areaId)
 {
-	AreaMap::const_iterator it = m_areaMap.find(areaId);
+	auto it = m_areaMap.find(areaId);
 	if (it == m_areaMap.end()) {
 		return nullptr;
 	}
@@ -406,7 +406,7 @@ void ScriptEnvironment::removeTempItem(ScriptEnvironment* env, Item* item)
 {
 	ItemList& itemList = m_tempItems[env];
 
-	ItemList::iterator it = std::find(itemList.begin(), itemList.end(), item);
+	auto it = std::find(itemList.begin(), itemList.end(), item);
 	if (it != itemList.end()) {
 		itemList.erase(it);
 	}
@@ -414,12 +414,11 @@ void ScriptEnvironment::removeTempItem(ScriptEnvironment* env, Item* item)
 
 void ScriptEnvironment::removeTempItem(Item* item)
 {
-	for (TempItemListMap::iterator mit = m_tempItems.begin(); mit != m_tempItems.end(); ++mit) {
-		ItemList& itemList = mit->second;
-
-		ItemList::iterator it = std::find(itemList.begin(), itemList.end(), item);
-		if (it != itemList.end()) {
-			itemList.erase(it);
+	for (auto& it : m_tempItems) {
+		ItemList& itemList = it.second;
+		auto it_ = std::find(itemList.begin(), itemList.end(), item);
+		if (it_ != itemList.end()) {
+			itemList.erase(it_);
 			break;
 		}
 	}
@@ -4496,8 +4495,7 @@ int32_t LuaScriptInterface::luaGetMonsterFriendList(lua_State* L)
 	lua_newtable(L);
 	uint32_t index = 0;
 	const CreatureHashSet& friendList = monster->getFriendList();
-	for (CreatureHashSet::const_iterator it = friendList.begin(); it != friendList.end(); ++it) {
-		Creature* friendCreature = *it;
+	for (Creature* friendCreature : friendList) {
 		if (!friendCreature->isRemoved() && friendCreature->getPosition().z == monster->getPosition().z) {
 			lua_pushnumber(L, ++index);
 			lua_pushnumber(L, friendCreature->getID());

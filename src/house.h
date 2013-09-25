@@ -289,7 +289,7 @@ class Houses
 		}
 
 		House* addHouse(uint32_t id) {
-			HouseMap::iterator it = houseMap.find(id);
+			auto it = houseMap.find(id);
 			if (it != houseMap.end()) {
 				return it->second;
 			}

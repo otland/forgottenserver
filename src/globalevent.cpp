@@ -97,16 +97,13 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
 			return true;
 		}
 	} else { // think event
-		GlobalEventMap::iterator it = thinkMap.find(globalEvent->getName());
-
+		auto it = thinkMap.find(globalEvent->getName());
 		if (it == thinkMap.end()) {
 			thinkMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
-
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
 				                                    boost::bind(&GlobalEvents::think, this)));
 			}
-
 			return true;
 		}
 	}
@@ -202,8 +199,8 @@ void GlobalEvents::think()
 
 void GlobalEvents::execute(GlobalEvent_t type)
 {
-	for (GlobalEventMap::iterator it = serverMap.begin(); it != serverMap.end(); ++it) {
-		GlobalEvent* globalEvent = it->second;
+	for (const auto& it : serverMap) {
+		GlobalEvent* globalEvent = it.second;
 		if (globalEvent->getEventType() == type) {
 			globalEvent->executeEvent();
 		}
@@ -223,21 +220,17 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 		case GLOBALEVENT_SHUTDOWN:
 		case GLOBALEVENT_RECORD: {
 			GlobalEventMap retMap;
-
-			for (GlobalEventMap::iterator it = serverMap.begin(); it != serverMap.end(); ++it) {
-				if (it->second->getEventType() == type) {
-					retMap[it->first] = it->second;
+			for (const auto& it : serverMap) {
+				if (it.second->getEventType() == type) {
+					retMap[it.first] = it.second;
 				}
 			}
-
 			return retMap;
 		}
 
 		default:
-			break;
+			return GlobalEventMap();
 	}
-
-	return GlobalEventMap();
 }
 
 GlobalEvent::GlobalEvent(LuaScriptInterface* _interface):

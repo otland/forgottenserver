@@ -62,21 +62,19 @@ Map::~Map()
 
 bool Map::loadMap(const std::string& identifier)
 {
-	IOMap* loader = new IOMap();
-	if (!loader->loadMap(this, identifier)) {
-		std::cout << "FATAL: [OTBM loader] " << loader->getLastErrorString() << std::endl;
+	IOMap loader;
+	if (!loader.loadMap(this, identifier)) {
+		std::cout << "[Fatal - Map::loadMap] " << loader.getLastErrorString() << std::endl;
 		return false;
 	}
 
-	if (!loader->loadSpawns(this)) {
-		std::cout << "WARNING: could not load spawn data." << std::endl;
+	if (!loader.loadSpawns(this)) {
+		std::cout << "[Warning - Map::loadMap] Failed to load spawn data." << std::endl;
 	}
 
-	if (!loader->loadHouses(this)) {
-		std::cout << "WARNING: could not load house data." << std::endl;
+	if (!loader.loadHouses(this)) {
+		std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
 	}
-
-	delete loader;
 
 	IOMapSerialize.loadHouseInfo(this);
 	IOMapSerialize.loadMap(this);
@@ -144,28 +142,24 @@ void Map::setTile(int32_t x, int32_t y, int32_t z, Tile* newTile)
 	if (QTreeLeafNode::newLeaf) {
 		//update north
 		QTreeLeafNode* northLeaf = root.getLeaf(x, y - FLOOR_SIZE);
-
 		if (northLeaf) {
 			northLeaf->m_leafS = leaf;
 		}
 
 		//update west leaf
 		QTreeLeafNode* westLeaf = root.getLeaf(x - FLOOR_SIZE, y);
-
 		if (westLeaf) {
 			westLeaf->m_leafE = leaf;
 		}
 
 		//update south
 		QTreeLeafNode* southLeaf = root.getLeaf(x, y + FLOOR_SIZE);
-
 		if (southLeaf) {
 			leaf->m_leafS = southLeaf;
 		}
 
 		//update east
 		QTreeLeafNode* eastLeaf = root.getLeaf(x + FLOOR_SIZE, y);
-
 		if (eastLeaf) {
 			leaf->m_leafE = eastLeaf;
 		}
@@ -328,39 +322,32 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 
 	for (int32_t ny = starty1; ny <= endy2; ny += FLOOR_SIZE) {
 		leafE = leafS;
-
 		for (int32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
 				CreatureVector node_list;
-
 				if (onlyPlayers) {
 					node_list = leafE->player_list;
 				} else {
 					node_list = leafE->creature_list;
 				}
 
-				CreatureVector::const_iterator node_iter = node_list.begin();
-				CreatureVector::const_iterator node_end = node_list.end();
-				if (node_iter != node_end) {
-					do {
-						Creature* creature = *node_iter;
-						const Position& cpos = creature->getPosition();
+				for (Creature* creature : node_list) {
+					const Position& cpos = creature->getPosition();
 
-						int32_t offsetZ = Position::getOffsetZ(centerPos, cpos);
-						if (cpos.z < minRangeZ || cpos.z > maxRangeZ) {
-							continue;
-						}
+					int32_t offsetZ = Position::getOffsetZ(centerPos, cpos);
+					if (cpos.z < minRangeZ || cpos.z > maxRangeZ) {
+						continue;
+					}
 
-						if (cpos.y < (centerPos.y + minRangeY + offsetZ) || cpos.y > (centerPos.y + maxRangeY + offsetZ)) {
-							continue;
-						}
+					if (cpos.y < (centerPos.y + minRangeY + offsetZ) || cpos.y > (centerPos.y + maxRangeY + offsetZ)) {
+						continue;
+					}
 
-						if (cpos.x < (centerPos.x + minRangeX + offsetZ) || cpos.x > (centerPos.x + maxRangeX + offsetZ)) {
-							continue;
-						}
+					if (cpos.x < (centerPos.x + minRangeX + offsetZ) || cpos.x > (centerPos.x + maxRangeX + offsetZ)) {
+						continue;
+					}
 
-						list.insert(creature);
-					} while (++node_iter != node_end);
+					list.insert(creature);
 				}
 
 				leafE = leafE->stepEast();
@@ -395,8 +382,7 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 
 	if (minRangeX == -maxViewportX && maxRangeX == maxViewportX && minRangeY == -maxViewportY && maxRangeY == maxViewportY && multifloor) {
 		if (onlyPlayers) {
-			SpectatorCache::iterator it = playersSpectatorCache.find(centerPos);
-
+			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
 				if (!list.empty()) {
 					const SpectatorVec& cachedList = *it->second;
@@ -410,7 +396,7 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 		}
 
 		if (!foundCache) {
-			SpectatorCache::iterator it = spectatorCache.find(centerPos);
+			auto it = spectatorCache.find(centerPos);
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
 					if (!list.empty()) {
@@ -483,7 +469,7 @@ const SpectatorVec& Map::getSpectators(const Position& centerPos)
 		return list;
 	}
 
-	SpectatorCache::iterator it = spectatorCache.find(centerPos);
+	auto it = spectatorCache.find(centerPos);
 	if (it != spectatorCache.end()) {
 		return *it->second;
 	}
@@ -595,7 +581,6 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 	// now we need to perform a jump between floors to see if everything is clear (literally)
 	while (start.z != destination.z) {
 		const Tile* tile = const_cast<Map*>(this)->getTile(start.x, start.y, start.z);
-
 		if (tile && tile->getThingCount() > 0) {
 			return false;
 		}
@@ -619,7 +604,6 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 {
 	int32_t walkCache = creature->getWalkCache(pos);
-
 	if (walkCache == 0) {
 		return nullptr;
 	} else if (walkCache == 1) {
@@ -628,13 +612,11 @@ const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 
 	//used for none-cached tiles
 	Tile* tile = getTile(pos);
-
 	if (creature->getTile() != tile) {
 		if (!tile || tile->__queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RET_NOERROR) {
 			return nullptr;
 		}
 	}
-
 	return tile;
 }
 
@@ -647,10 +629,8 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 
 	listDir.clear();
 
-	Position startPos = destPos;
 	Position endPos = creature->getPosition();
-
-	if (startPos.z != endPos.z) {
+	if (destPos.z != endPos.z) {
 		return false;
 	}
 
@@ -659,18 +639,18 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 	AStarNodes nodes;
 	AStarNode* startNode = nodes.createOpenNode();
 
-	nodeTable[(startPos.x * 0xFFFF) + startPos.y] = startNode;
+	nodeTable[(destPos.x * 0xFFFF) + destPos.y] = startNode;
 
-	startNode->x = startPos.x;
-	startNode->y = startPos.y;
+	startNode->x = destPos.x;
+	startNode->y = destPos.y;
 
 	startNode->g = 0;
-	startNode->h = nodes.getEstimatedDistance(startPos.x, startPos.y, endPos.x, endPos.y);
+	startNode->h = nodes.getEstimatedDistance(destPos.x, destPos.y, endPos.x, endPos.y);
 	startNode->f = startNode->h;
 	startNode->parent = nullptr;
 
 	Position pos;
-	pos.z = startPos.z;
+	pos.z = destPos.z;
 
 	static int32_t neighbourOrderList[8][2] = {
 		{ -1, 0},
@@ -722,7 +702,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 						//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
 						AStarNode* neighbourNode;
-						std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+						auto it = nodeTable.find(tableIndex);
 						if (it != nodeTable.end()) {
 							neighbourNode = it->second;
 						} else {
@@ -823,8 +803,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 	startNode->f = 0;
 	startNode->parent = nullptr;
 
-	Position pos;
-	pos.z = startPos.z;
+	Position pos(0, 0, startPos.z);
 	int32_t bestMatch = 0;
 
 	static int32_t neighbourOrderList[8][2] = {
@@ -844,7 +823,6 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 
 	while (fpp.maxSearchDist != -1 || nodes.countClosedNodes() < 100) {
 		AStarNode* n = nodes.getBestNode();
-
 		if (!n) {
 			if (found) {
 				//not quite what we want, but we found something
@@ -895,8 +873,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
 
 					AStarNode* neighbourNode;
-
-					std::unordered_map<uint32_t, AStarNode*>::iterator it = nodeTable.find(tableIndex);
+					auto it = nodeTable.find(tableIndex);
 					if (it != nodeTable.end()) {
 						neighbourNode = it->second;
 					} else {
@@ -941,16 +918,15 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		nodes.closeNode(n);
 	}
 
-	int_fast32_t prevx = endPos.x;
-	int_fast32_t prevy = endPos.y;
-	int_fast32_t dx, dy;
-
 	if (!found) {
 		return false;
 	}
 
-	found = found->parent;
+	int_fast32_t prevx = endPos.x;
+	int_fast32_t prevy = endPos.y;
+	int_fast32_t dx, dy;
 
+	found = found->parent;
 	while (found) {
 		pos.x = found->x;
 		pos.y = found->y;
@@ -981,7 +957,6 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 
 		found = found->parent;
 	}
-
 	return true;
 }
 
@@ -999,8 +974,7 @@ AStarNode* AStarNodes::createOpenNode()
 		return nullptr;
 	}
 
-	uint32_t ret_node = curNode;
-	curNode++;
+	uint32_t ret_node = curNode++;
 	openNodes[ret_node] = 1;
 	return &nodes[ret_node];
 }
@@ -1033,7 +1007,6 @@ AStarNode* AStarNodes::getBestNode()
 void AStarNodes::closeNode(AStarNode* node)
 {
 	uint32_t pos = GET_NODE_INDEX(node);
-
 	if (pos >= MAX_NODES) {
 		assert(pos >= MAX_NODES);
 		std::cout << "AStarNodes. trying to close node out of range" << std::endl;
@@ -1046,7 +1019,6 @@ void AStarNodes::closeNode(AStarNode* node)
 void AStarNodes::openNode(AStarNode* node)
 {
 	uint32_t pos = GET_NODE_INDEX(node);
-
 	if (pos >= MAX_NODES) {
 		assert(pos >= MAX_NODES);
 		std::cout << "AStarNodes. trying to open node out of range" << std::endl;
@@ -1059,26 +1031,22 @@ void AStarNodes::openNode(AStarNode* node)
 uint32_t AStarNodes::countClosedNodes()
 {
 	uint32_t counter = 0;
-
 	for (uint32_t i = 0; i < curNode; i++) {
 		if (openNodes[i] == 0) {
 			counter++;
 		}
 	}
-
 	return counter;
 }
 
 uint32_t AStarNodes::countOpenNodes()
 {
 	uint32_t counter = 0;
-
 	for (uint32_t i = 0; i < curNode; i++) {
 		if (openNodes[i] == 1) {
 			counter++;
 		}
 	}
-
 	return counter;
 }
 
@@ -1095,7 +1063,6 @@ int32_t AStarNodes::getMapWalkCost(const Creature* creature, AStarNode* node,
 int32_t AStarNodes::getTileWalkCost(const Creature* creature, const Tile* tile)
 {
 	int cost = 0;
-
 	if (tile->getTopVisibleCreature(creature) != nullptr) {
 		//destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
@@ -1103,12 +1070,10 @@ int32_t AStarNodes::getTileWalkCost(const Creature* creature, const Tile* tile)
 
 	if (const MagicField* field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
-
 		if (!creature->isImmune(combatType) && !creature->hasCondition(Combat::DamageToConditionType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;
 		}
 	}
-
 	return cost;
 }
 
@@ -1170,8 +1135,8 @@ QTreeLeafNode* QTreeNode::getLeafStatic(QTreeNode* root, uint32_t x, uint32_t y)
 			uint32_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
 			if (currentNode->m_child[index]) {
 				currentNode = currentNode->m_child[index];
-				x <<= 1;
-				y <<= 1;
+				x *= 2;
+				y *= 2;
 			} else {
 				return nullptr;
 			}

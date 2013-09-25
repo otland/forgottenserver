@@ -135,7 +135,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 {
 	while (container->serializationCount > 0) {
 		if (!loadItem(propStream, container)) {
-			std::cout << "WARNING: Unserialization error for containing item in IOMapSerialize::loadContainer() - " << container->getID() << std::endl;
+			std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 			return false;
 		}
 		container->serializationCount--;
@@ -144,7 +144,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	uint8_t endAttr = 0;
 	propStream.GET_UCHAR(endAttr);
 	if (endAttr != 0x00) {
-		std::cout << "WARNING: Unserialization error for containing item in IOMapSerialize::loadContainer() - " << container->getID() << std::endl;
+		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 		return false;
 	}
 	return true;

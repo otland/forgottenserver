@@ -134,18 +134,16 @@ void MonsterType::createLoot(Container* corpse)
 				continue;
 			}
 
-			for (std::list<Item*>::iterator iit = itemList.begin(), iend = itemList.end(); iit != iend; ++iit) {
-				Item* tmpItem = *iit;
-
+			for (Item* item : itemList) {
 				//check containers
-				if (Container* container = tmpItem->getContainer()) {
+				if (Container* container = item->getContainer()) {
 					if (!createLootContainer(container, *it)) {
 						delete container;
-					} else if (g_game.internalAddItem(corpse, tmpItem) != RET_NOERROR) {
-						corpse->__internalAddThing(tmpItem);
+					} else if (g_game.internalAddItem(corpse, item) != RET_NOERROR) {
+						corpse->__internalAddThing(item);
 					}
-				} else if (g_game.internalAddItem(corpse, tmpItem) != RET_NOERROR) {
-					corpse->__internalAddThing(tmpItem);
+				} else if (g_game.internalAddItem(corpse, item) != RET_NOERROR) {
+					corpse->__internalAddThing(item);
 				}
 			}
 		}

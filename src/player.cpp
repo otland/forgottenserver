@@ -2576,7 +2576,6 @@ void Player::death()
 
 		for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
 			Condition* condition = *it;
-
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
 
@@ -2592,7 +2591,6 @@ void Player::death()
 
 		for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
 			Condition* condition = *it;
-
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
 
@@ -3680,20 +3678,16 @@ void Player::updateSaleShopList(uint32_t itemId)
 
 bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType)
 {
-	for (std::list<ShopInfo>::const_iterator it = shopItemList.begin(); it != shopItemList.end(); ++it) {
-		if (it->itemId == itemId && it->buyPrice > 0) {
-			const ItemType& iit = Item::items[itemId];
-			if (iit.isFluidContainer() || iit.isSplash()) {
-				if (it->subType == subType) {
-					return true;
-				}
-			} else {
-				return true;
-			}
-		}
+	auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId] (const ShopInfo& shopInfo) { return shopInfo.itemId == itemId && shopInfo.buyPrice > 0; });
+	if (it == shopItemList.end()) {
+		return false;
 	}
 
-	return false;
+	const ItemType& itemType = Item::items[itemId];
+	if (itemType.isFluidContainer() || itemType.isSplash()) {
+		return it->subType == subType;
+	}
+	return true;
 }
 
 void Player::__internalAddThing(Thing* thing)

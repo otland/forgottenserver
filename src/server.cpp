@@ -180,10 +180,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 Protocol* ServicePort::make_protocol(bool checksummed, NetworkMessage& msg) const
 {
 	uint8_t protocolID = msg.GetByte();
-
-	for (std::vector<Service_ptr>::const_iterator service_iter = m_services.begin(); service_iter != m_services.end(); ++service_iter) {
-		Service_ptr service = *service_iter;
-
+	for (Service_ptr service : m_services) {
 		if (protocolID != service->get_protocol_identifier()) {
 			continue;
 		}
@@ -192,7 +189,6 @@ Protocol* ServicePort::make_protocol(bool checksummed, NetworkMessage& msg) cons
 			return service->make_protocol(Connection_ptr());
 		}
 	}
-
 	return nullptr;
 }
 

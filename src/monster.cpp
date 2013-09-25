@@ -234,7 +234,7 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 
 void Monster::updateTargetList()
 {
-	CreatureHashSet::iterator friendIterator = friendList.begin();
+	auto friendIterator = friendList.begin();
 	while (friendIterator != friendList.end()) {
 		if ((*friendIterator)->getHealth() <= 0 || !canSee((*friendIterator)->getPosition())) {
 			(*friendIterator)->releaseThing2();
@@ -244,7 +244,7 @@ void Monster::updateTargetList()
 		}
 	}
 
-	CreatureList::iterator targetIterator = targetList.begin();
+	auto targetIterator = targetList.begin();
 	while (targetIterator != targetList.end()) {
 		if ((*targetIterator)->getHealth() <= 0 || !canSee((*targetIterator)->getPosition())) {
 			(*targetIterator)->releaseThing2();
@@ -379,10 +379,9 @@ void Monster::onCreatureLeave(Creature* creature)
 
 	//update targetList
 	if (isOpponent(creature)) {
-		CreatureList::iterator it = std::find(targetList.begin(), targetList.end(), creature);
-
+		auto it = std::find(targetList.begin(), targetList.end(), creature);
 		if (it != targetList.end()) {
-			(*it)->releaseThing2();
+			creature->releaseThing2();
 			targetList.erase(it);
 
 			if (targetList.empty()) {
@@ -437,9 +436,8 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 		case TARGETSEARCH_RANDOM:
 		default: {
 			if (!resultList.empty()) {
-				uint32_t index = random_range(0, resultList.size() - 1);
-				CreatureList::iterator it = resultList.begin();
-				std::advance(it, index);
+				auto it = resultList.begin();
+				std::advance(it, random_range(0, resultList.size() - 1));
 				return selectTarget(*it);
 			}
 
@@ -463,7 +461,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 void Monster::onFollowCreatureComplete(const Creature* creature)
 {
 	if (creature) {
-		CreatureList::iterator it = std::find(targetList.begin(), targetList.end(), creature);
+		auto it = std::find(targetList.begin(), targetList.end(), creature);
 		if (it != targetList.end()) {
 			Creature* target = (*it);
 			targetList.erase(it);
@@ -523,7 +521,7 @@ bool Monster::selectTarget(Creature* creature)
 		return false;
 	}
 
-	CreatureList::iterator it = std::find(targetList.begin(), targetList.end(), creature);
+	auto it = std::find(targetList.begin(), targetList.end(), creature);
 	if (it == targetList.end()) {
 		//Target not found in our target list.
 		return false;
@@ -1718,12 +1716,11 @@ void Monster::death()
 {
 	setAttackedCreature(nullptr);
 
-	for (std::list<Creature*>::iterator cit = summons.begin(); cit != summons.end(); ++cit) {
-		(*cit)->changeHealth(-(*cit)->getHealth());
-		(*cit)->setMaster(nullptr);
-		(*cit)->releaseThing2();
+	for (Creature* summon : summons) {
+		summon->changeHealth(-summon->getHealth());
+		summon->setMaster(nullptr);
+		summon->releaseThing2();
 	}
-
 	summons.clear();
 
 	clearTargetList();
@@ -1734,7 +1731,6 @@ void Monster::death()
 Item* Monster::getCorpse()
 {
 	Item* corpse = Creature::getCorpse();
-
 	if (corpse) {
 		Creature* lastHitCreature_ = nullptr;
 		Creature* mostDamageCreature = nullptr;
@@ -1746,7 +1742,6 @@ Item* Monster::getCorpse()
 				corpseOwner = mostDamageCreature->getID();
 			} else {
 				const Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-
 				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
 					corpseOwner = mostDamageCreatureMaster->getID();
 				}
@@ -1924,12 +1919,11 @@ bool Monster::convinceCreature(Creature* creature)
 			setAttackedCreature(nullptr);
 
 			//destroy summons
-			for (std::list<Creature*>::iterator cit = summons.begin(); cit != summons.end(); ++cit) {
-				(*cit)->changeHealth(-(*cit)->getHealth());
-				(*cit)->setMaster(nullptr);
-				(*cit)->releaseThing2();
+			for (Creature* summon : summons) {
+				summon->changeHealth(-summon->getHealth());
+				summon->setMaster(nullptr);
+				summon->releaseThing2();
 			}
-
 			summons.clear();
 
 			isMasterInRange = true;

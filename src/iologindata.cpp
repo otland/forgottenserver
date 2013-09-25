@@ -611,9 +611,9 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	int32_t runningId = 100;
 
 	Database* db = Database::getInstance();
-	for (ItemBlockList::const_iterator it = itemList.begin(); it != itemList.end(); ++it) {
-		int32_t pid = it->first;
-		Item* item = it->second;
+	for (const auto& it : itemList) {
+		int32_t pid = it.first;
+		Item* item = it.second;
 		++runningId;
 
 		uint32_t attributesSize = 0;
@@ -688,9 +688,7 @@ bool IOLoginData::savePlayer(Player* player)
 	//serialize conditions
 	PropWriteStream propWriteStream;
 
-	for (ConditionList::const_iterator it = player->conditions.begin(); it != player->conditions.end(); ++it) {
-		Condition* condition = *it;
-
+	for (Condition* condition : player->conditions) {
 		if (condition->isPersistent()) {
 			if (!condition->serialize(propWriteStream)) {
 				return false;

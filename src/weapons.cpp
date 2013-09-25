@@ -392,7 +392,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 
 		int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 		if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-			maxDamage <<= 1;
+			maxDamage *= 2;
 		}
 
 		int32_t damage = -random_range(0, maxDamage, DISTRO_NORMAL);
@@ -637,7 +637,7 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Item* item) co
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue <<= 1;
+		maxValue *= 2;
 	}
 
 	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultiplier);
@@ -652,7 +652,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue <<= 1;
+		maxValue *= 2;
 	}
 
 	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultiplier);
@@ -966,7 +966,7 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue <<= 1;
+		maxValue *= 2;
 	}
 
 	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultiplier);
@@ -999,7 +999,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue <<= 1;
+		maxValue *= 2;
 	}
 
 	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultiplier);

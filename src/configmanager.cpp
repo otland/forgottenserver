@@ -167,7 +167,7 @@ const std::string& ConfigManager::getString(string_config_t _what) const
 	if (m_isLoaded && _what < LAST_STRING_CONFIG) {
 		return m_confString[_what];
 	} else {
-		std::cout << "Warning: [ConfigManager::getString] " << _what << std::endl;
+		std::cout << "[Warning - ConfigManager::getString] " << _what << std::endl;
 		return m_confString[DUMMY_STR];
 	}
 }
@@ -177,7 +177,7 @@ int32_t ConfigManager::getNumber(integer_config_t _what) const
 	if (m_isLoaded && _what < LAST_INTEGER_CONFIG) {
 		return m_confInteger[_what];
 	} else {
-		std::cout << "Warning: [ConfigManager::getNumber] " << _what << std::endl;
+		std::cout << "[Warning - ConfigManager::getNumber] " << _what << std::endl;
 		return 0;
 	}
 }
@@ -187,7 +187,7 @@ bool ConfigManager::getBoolean(boolean_config_t _what) const
 	if (m_isLoaded && _what < LAST_BOOLEAN_CONFIG) {
 		return m_confBoolean[_what];
 	} else {
-		std::cout << "Warning: [ConfigManager::getBoolean] " << _what << std::endl;
+		std::cout << "[Warning - ConfigManager::getBoolean] " << _what << std::endl;
 		return false;
 	}
 }
@@ -198,7 +198,7 @@ bool ConfigManager::setNumber(integer_config_t _what, int32_t _value)
 		m_confInteger[_what] = _value;
 		return true;
 	} else {
-		std::cout << "Warning: [ConfigManager::setNumber] " << _what << std::endl;
+		std::cout << "[Warning - ConfigManager::setNumber] " << _what << std::endl;
 		return false;
 	}
 }

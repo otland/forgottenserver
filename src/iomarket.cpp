@@ -295,7 +295,6 @@ void IOMarket::updateStatistics()
 
 	std::ostringstream query;
 	query << "SELECT `sale` AS `sale`, `itemtype` AS `itemtype`, COUNT(`price`) AS `num`, MIN(`price`) AS `min`, MAX(`price`) AS `max`, SUM(`price`) AS `sum` FROM `market_history` WHERE `state` = " << OFFERSTATE_ACCEPTED << " GROUP BY `itemtype`, `sale`";
-
 	DBResult* result = db->storeQuery(query.str());
 	if (!result) {
 		return;
@@ -303,7 +302,6 @@ void IOMarket::updateStatistics()
 
 	do {
 		MarketStatistics* statistics;
-
 		if (result->getDataInt("sale") == MARKETACTION_BUY) {
 			statistics = &purchaseStatistics[result->getDataInt("itemtype")];
 		} else {
@@ -315,13 +313,12 @@ void IOMarket::updateStatistics()
 		statistics->totalPrice = result->getNumber<uint64_t>("sum");
 		statistics->highestPrice = result->getDataInt("max");
 	} while (result->next());
-
 	db->freeResult(result);
 }
 
 MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)
 {
-	std::map<uint16_t, MarketStatistics>::iterator it = purchaseStatistics.find(itemId);
+	auto it = purchaseStatistics.find(itemId);
 	if (it == purchaseStatistics.end()) {
 		return nullptr;
 	}
@@ -330,7 +327,7 @@ MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)
 
 MarketStatistics* IOMarket::getSaleStatistics(uint16_t itemId)
 {
-	std::map<uint16_t, MarketStatistics>::iterator it = saleStatistics.find(itemId);
+	auto it = saleStatistics.find(itemId);
 	if (it == saleStatistics.end()) {
 		return nullptr;
 	}

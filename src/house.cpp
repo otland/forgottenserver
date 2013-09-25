@@ -759,10 +759,6 @@ bool Houses::payHouses()
 			uint32_t ownerid = house->getHouseOwner();
 			Town* town = Towns::getInstance().getTown(house->getTownId());
 			if (!town) {
-#ifdef __DEBUG_HOUSES__
-				std::cout << "Warning: [Houses::payHouses] town = nullptr, townid = " <<
-				          house->getTownId() << ", houseid = " << house->getHouseId() << std::endl;
-#endif
 				continue;
 			}
 

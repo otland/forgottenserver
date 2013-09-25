@@ -553,17 +553,15 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 		if (!summons.empty()) {
 			//check if any of our summons is out of range (+/- 2 floors or 30 tiles away)
 			std::list<Creature*> despawnList;
-			std::list<Creature*>::iterator cit;
-
-			for (cit = summons.begin(); cit != summons.end(); ++cit) {
-				const Position pos = (*cit)->getPosition();
+			for (Creature* summon : summons) {
+				const Position pos = summon->getPosition();
 				if (Position::getDistanceZ(newPos, pos) > 2 || (std::max<int32_t>(Position::getDistanceX(newPos, pos), Position::getDistanceY(newPos, pos)) > 30)) {
-					despawnList.push_back(*cit);
+					despawnList.push_back(summon);
 				}
 			}
 
-			for (cit = despawnList.begin(); cit != despawnList.end(); ++cit) {
-				g_game.removeCreature((*cit), true);
+			for (Creature* despawnCreature : despawnList) {
+				g_game.removeCreature(despawnCreature, true);
 			}
 		}
 
@@ -813,11 +811,11 @@ bool Creature::getKillers(Creature** _lastHitCreature, Creature** _mostDamageCre
 
 bool Creature::hasBeenAttacked(uint32_t attackerId)
 {
-	CountMap::iterator it = damageMap.find(attackerId);
+	auto it = damageMap.find(attackerId);
 	if (it == damageMap.end()) {
 		return false;
 	}
-	return (OTSYS_TIME() - it->second.ticks <= g_game.getInFightTicks());
+	return (OTSYS_TIME() - it->second.ticks) <= g_game.getInFightTicks();
 }
 
 Item* Creature::getCorpse()
@@ -892,7 +890,6 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 			int32_t maxDefense = getDefense();
 			int32_t minDefense = maxDefense / 2;
 			damage -= random_range(minDefense, maxDefense);
-
 			if (damage <= 0) {
 				damage = 0;
 				blockType = BLOCK_DEFENSE;
@@ -914,7 +911,6 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 			}
 
 			damage -= random_range(minArmorReduction, maxArmorReduction);
-
 			if (damage <= 0) {
 				damage = 0;
 				blockType = BLOCK_ARMOR;
@@ -1072,7 +1068,7 @@ void Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 
 	uint32_t attackerId = (attacker ? attacker->getID() : 0);
 
-	CountMap::iterator it = damageMap.find(attackerId);
+	auto it = damageMap.find(attackerId);
 	if (it == damageMap.end()) {
 		CountBlock_t cb;
 		cb.ticks = OTSYS_TIME();
@@ -1243,7 +1239,7 @@ void Creature::addSummon(Creature* creature)
 
 void Creature::removeSummon(Creature* creature)
 {
-	std::list<Creature*>::iterator cit = std::find(summons.begin(), summons.end(), creature);
+	auto cit = std::find(summons.begin(), summons.end(), creature);
 	if (cit != summons.end()) {
 		creature->setDropLoot(false);
 		creature->setLossSkill(true);
@@ -1299,7 +1295,7 @@ bool Creature::addCombatCondition(Condition* condition)
 
 void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 {
-	ConditionList::iterator it = conditions.begin();
+	auto it = conditions.begin();
 	while (it != conditions.end()) {
 		Condition* condition = *it;
 		if (condition->getType() != type) {
@@ -1326,7 +1322,7 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 
 void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool force/* = false*/)
 {
-	ConditionList::iterator it = conditions.begin();
+	auto it = conditions.begin();
 	while (it != conditions.end()) {
 		Condition* condition = *it;
 		if (condition->getType() != type || condition->getId() != id) {
@@ -1367,7 +1363,7 @@ void Creature::removeCondition(const Creature* attacker, ConditionType_t type)
 
 void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 {
-	ConditionList::iterator it = std::find(conditions.begin(), conditions.end(), condition);
+	auto it = std::find(conditions.begin(), conditions.end(), condition);
 	if (it == conditions.end()) {
 		return;
 	}
@@ -1539,7 +1535,7 @@ int32_t Creature::getStepDuration() const
 	const Monster* monster = getMonster();
 
 	if (monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
-		stepDuration <<= 1;
+		stepDuration *= 2;
 	}
 
 	return stepDuration;
