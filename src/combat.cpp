@@ -501,35 +501,31 @@ bool Combat::setCallback(CallBackParam_t key)
 			delete params.valueCallback;
 			params.valueCallback = new ValueCallback(FORMULA_LEVELMAGIC);
 			return true;
-			break;
 		}
 
 		case CALLBACKPARAM_SKILLVALUE: {
 			delete params.valueCallback;
 			params.valueCallback = new ValueCallback(FORMULA_SKILL);
 			return true;
-			break;
 		}
 
 		case CALLBACKPARAM_TARGETTILECALLBACK: {
 			delete params.tileCallback;
 			params.tileCallback = new TileCallback();
-			break;
+			return true;
 		}
 
 		case CALLBACKPARAM_TARGETCREATURECALLBACK: {
 			delete params.targetCallback;
 			params.targetCallback = new TargetCallback();
-			break;
+			return true;
 		}
 
 		default: {
 			std::cout << "Combat::setCallback - Unknown callback type: " << (uint32_t)key << std::endl;
-			break;
+			return false;
 		}
 	}
-
-	return false;
 }
 
 CallBack* Combat::getCallback(CallBackParam_t key)
@@ -538,21 +534,20 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 		case CALLBACKPARAM_LEVELMAGICVALUE:
 		case CALLBACKPARAM_SKILLVALUE: {
 			return params.valueCallback;
-			break;
 		}
 
 		case CALLBACKPARAM_TARGETTILECALLBACK: {
 			return params.tileCallback;
-			break;
 		}
 
 		case CALLBACKPARAM_TARGETCREATURECALLBACK: {
 			return params.targetCallback;
-			break;
+		}
+
+		default: {
+			return nullptr;
 		}
 	}
-
-	return nullptr;
 }
 
 bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)

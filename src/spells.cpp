@@ -37,6 +37,7 @@ extern Spells* g_spells;
 extern Monsters g_monsters;
 extern Vocations g_vocations;
 extern ConfigManager g_config;
+extern LuaEnvironment g_luaEnvironment;
 
 Spells::Spells():
 	m_scriptInterface("Spell Interface")
@@ -114,6 +115,8 @@ void Spells::clear()
 		delete it.second;
 	}
 	instants.clear();
+	
+	m_scriptInterface.reInitState();
 }
 
 LuaScriptInterface& Spells::getScriptInterface()
@@ -267,9 +270,7 @@ InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 
 Position Spells::getCasterPosition(Creature* creature, Direction dir)
 {
-	Position pos = creature->getPosition();
-	pos = getNextPosition(dir, pos);
-	return pos;
+	return getNextPosition(dir, creature->getPosition());
 }
 
 CombatSpell::CombatSpell(Combat* _combat, bool _needTarget, bool _needDirection) :
@@ -287,7 +288,8 @@ CombatSpell::~CombatSpell()
 
 bool CombatSpell::loadScriptCombat()
 {
-	combat = ScriptEnvironment::getCombatObject(ScriptEnvironment::getLastCombatId());
+	combat = g_luaEnvironment.getCombatObject(g_luaEnvironment.m_lastCombatId);
+	g_luaEnvironment.m_combatMap.erase(g_luaEnvironment.m_lastCombatId);
 	return combat != nullptr;
 }
 
