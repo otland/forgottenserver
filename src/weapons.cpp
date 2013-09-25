@@ -62,6 +62,8 @@ void Weapons::clear()
 		delete it.second;
 	}
 	weapons.clear();
+
+	m_scriptInterface.reInitState();
 }
 
 LuaScriptInterface& Weapons::getScriptInterface()
