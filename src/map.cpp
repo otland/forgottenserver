@@ -313,6 +313,11 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	int32_t endx2 = x2 - (x2 % FLOOR_SIZE);
 	int32_t endy2 = y2 - (y2 % FLOOR_SIZE);
 
+	int_fast16_t min_y = centerPos.y + minRangeY;
+	int_fast16_t min_x = centerPos.x + minRangeX;
+	int_fast16_t max_y = centerPos.y + maxRangeY;
+	int_fast16_t max_x = centerPos.x + maxRangeX;
+
 	QTreeLeafNode* startLeaf;
 	QTreeLeafNode* leafE;
 	QTreeLeafNode* leafS;
@@ -324,26 +329,19 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 		leafE = leafS;
 		for (int32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
-				CreatureVector node_list;
-				if (onlyPlayers) {
-					node_list = leafE->player_list;
-				} else {
-					node_list = leafE->creature_list;
-				}
-
+				CreatureVector& node_list = (onlyPlayers ? leafE->player_list : leafE->creature_list);
 				for (Creature* creature : node_list) {
 					const Position& cpos = creature->getPosition();
-
-					int32_t offsetZ = Position::getOffsetZ(centerPos, cpos);
 					if (cpos.z < minRangeZ || cpos.z > maxRangeZ) {
 						continue;
 					}
 
-					if (cpos.y < (centerPos.y + minRangeY + offsetZ) || cpos.y > (centerPos.y + maxRangeY + offsetZ)) {
+					int_fast16_t offsetZ = Position::getOffsetZ(centerPos, cpos);
+					if (cpos.y < (min_y + offsetZ) || cpos.y > (max_y + offsetZ)) {
 						continue;
 					}
 
-					if (cpos.x < (centerPos.x + minRangeX + offsetZ) || cpos.x > (centerPos.x + maxRangeX + offsetZ)) {
+					if (cpos.x < (min_x + offsetZ) || cpos.x > (max_x + offsetZ)) {
 						continue;
 					}
 
