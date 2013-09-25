@@ -1199,7 +1199,7 @@ bool ConditionDamage::init()
 	if (damageList.empty()) {
 		setTicks(0);
 
-		int32_t amount = random_range(minDamage, maxDamage);
+		int32_t amount = uniform_random(minDamage, maxDamage);
 
 		if (amount != 0) {
 			if (startDamage > maxDamage) {
@@ -1569,7 +1569,7 @@ bool ConditionSpeed::startCondition(Creature* creature)
 	if (speedDelta == 0) {
 		int32_t min, max;
 		getFormulaValues(creature->getBaseSpeed(), min, max);
-		speedDelta = random_range(min, max);
+		speedDelta = uniform_random(min, max);
 	}
 
 	g_game.changeSpeed(creature, speedDelta);
@@ -1610,7 +1610,7 @@ void ConditionSpeed::addCondition(Creature* creature, const Condition* addCondit
 		int32_t min;
 		int32_t max;
 		getFormulaValues(creature->getBaseSpeed(), min, max);
-		speedDelta = random_range(min, max);
+		speedDelta = uniform_random(min, max);
 	}
 
 	int32_t newSpeedChange = (speedDelta - oldSpeedDelta);
@@ -1722,7 +1722,7 @@ void ConditionOutfit::changeOutfit(Creature* creature, int32_t index /*= -1*/)
 {
 	if (!outfits.empty()) {
 		if (index == -1) {
-			index = random_range(0, outfits.size() - 1);
+			index = uniform_random(0, outfits.size() - 1);
 		}
 
 		Outfit_t outfit = outfits[index];

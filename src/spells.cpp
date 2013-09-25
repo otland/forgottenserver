@@ -1895,7 +1895,7 @@ bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, co
 		ITEM_BREAD
 	};
 
-	bool result = (internalConjureItem(player, foodType[random_range(0, 7)], 1) == RET_NOERROR);
+	bool result = (internalConjureItem(player, foodType[uniform_random(0, 7)], 1) == RET_NOERROR);
 	if (result) {
 		spell->postCastSpell(player);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);

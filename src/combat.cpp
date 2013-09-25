@@ -865,7 +865,7 @@ void Combat::doCombatHealth(Creature* caster, Creature* target,
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
 		Combat2Var var;
-		var.change = random_range(minChange, maxChange, DISTRO_NORMAL);
+		var.change = normal_random(minChange, maxChange);
 		CombatHealthFunc(caster, target, params, (void*)&var);
 
 		if (params.impactEffect != NM_ME_NONE) {
@@ -882,7 +882,7 @@ void Combat::doCombatHealth(Creature* caster, const Position& pos,
                             const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
 {
 	Combat2Var var;
-	var.change = random_range(minChange, maxChange, DISTRO_NORMAL);
+	var.change = normal_random(minChange, maxChange);
 	CombatFunc(caster, pos, area, params, CombatHealthFunc, (void*)&var);
 }
 
@@ -891,7 +891,7 @@ void Combat::doCombatMana(Creature* caster, Creature* target,
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
 		Combat2Var var;
-		var.change = random_range(minChange, maxChange, DISTRO_NORMAL);
+		var.change = normal_random(minChange, maxChange);
 		CombatManaFunc(caster, target, params, (void*)&var);
 
 		if (params.targetCallback) {
@@ -912,7 +912,7 @@ void Combat::doCombatMana(Creature* caster, const Position& pos,
                           const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
 {
 	Combat2Var var;
-	var.change = random_range(minChange, maxChange, DISTRO_NORMAL);
+	var.change = normal_random(minChange, maxChange);
 	CombatFunc(caster, pos, area, params, CombatManaFunc, (void*)&var);
 }
 

@@ -121,7 +121,7 @@ MonsterType::~MonsterType()
 
 uint32_t Monsters::getLootRandom()
 {
-	return random_range(0, MAX_LOOTCHANCE) / g_config.getNumber(ConfigManager::RATE_LOOT);
+	return uniform_random(0, MAX_LOOTCHANCE) / g_config.getNumber(ConfigManager::RATE_LOOT);
 }
 
 void MonsterType::createLoot(Container* corpse)

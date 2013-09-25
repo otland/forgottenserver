@@ -33,12 +33,6 @@
 
 typedef boost::tokenizer<boost::char_separator<char>> Tokenizer;
 
-enum DistributionType_t {
-	DISTRO_UNIFORM,
-	DISTRO_SQUARE,
-	DISTRO_NORMAL
-};
-
 std::string transformToSHA1(const std::string& plainText);
 bool passwordTest(const std::string& plain, const std::string& hash);
 
@@ -59,7 +53,8 @@ bool hasBitSet(uint32_t flag, uint32_t flags);
 
 bool isNumber(char character);
 
-int random_range(int lowest_number, int highest_number, DistributionType_t type = DISTRO_UNIFORM);
+int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
+int32_t normal_random(int32_t minNumber, int32_t maxNumber);
 
 Direction getDirection(const std::string& string);
 Position getNextPosition(Direction direction, Position pos);

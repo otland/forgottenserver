@@ -437,7 +437,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 		default: {
 			if (!resultList.empty()) {
 				auto it = resultList.begin();
-				std::advance(it, random_range(0, resultList.size() - 1));
+				std::advance(it, uniform_random(0, resultList.size() - 1));
 				return selectTarget(*it);
 			}
 
@@ -653,7 +653,7 @@ void Monster::doAttacking(uint32_t interval)
 		bool inRange = false;
 
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange)) {
-			if (spellBlock.chance >= (uint32_t)random_range(1, 100)) {
+			if (spellBlock.chance >= (uint32_t)uniform_random(1, 100)) {
 				if (updateLook) {
 					updateLookDirection();
 					updateLook = false;
@@ -760,7 +760,7 @@ void Monster::onThinkTarget(uint32_t interval)
 					targetChangeTicks = 0;
 					targetChangeCooldown = (uint32_t)mType->changeTargetSpeed;
 
-					if (mType->changeTargetChance >= random_range(1, 100)) {
+					if (mType->changeTargetChance >= uniform_random(1, 100)) {
 						if (mType->targetDistance <= 1) {
 							searchTarget(TARGETSEARCH_RANDOM);
 						} else {
@@ -789,7 +789,7 @@ void Monster::onThinkDefense(uint32_t interval)
 			continue;
 		}
 
-		if ((spellBlock.chance >= (uint32_t)random_range(1, 100))) {
+		if ((spellBlock.chance >= (uint32_t)uniform_random(1, 100))) {
 			minCombatValue = spellBlock.minCombatValue;
 			maxCombatValue = spellBlock.maxCombatValue;
 			spellBlock.spell->castSpell(this, this);
@@ -812,7 +812,7 @@ void Monster::onThinkDefense(uint32_t interval)
 				continue;
 			}
 
-			if (summonBlock.chance < (uint32_t)random_range(1, 100)) {
+			if (summonBlock.chance < (uint32_t)uniform_random(1, 100)) {
 				continue;
 			}
 
@@ -847,8 +847,8 @@ void Monster::onThinkYell(uint32_t interval)
 	if (yellTicks >= mType->yellSpeedTicks) {
 		yellTicks = 0;
 
-		if (!mType->voiceVector.empty() && (mType->yellChance >= (uint32_t)random_range(1, 100))) {
-			uint32_t index = random_range(0, mType->voiceVector.size() - 1);
+		if (!mType->voiceVector.empty() && (mType->yellChance >= (uint32_t)uniform_random(1, 100))) {
+			uint32_t index = uniform_random(0, mType->voiceVector.size() - 1);
 			const voiceBlock_t& vb = mType->voiceVector[index];
 
 			if (vb.yellText) {
@@ -1016,7 +1016,7 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 			if (attackedCreature && attackedCreature == followCreature) {
 				if (isFleeing()) {
 					result = getDanceStep(getPosition(), dir, false, false);
-				} else if (mType->staticAttackChance < (uint32_t)random_range(1, 100)) {
+				} else if (mType->staticAttackChance < (uint32_t)uniform_random(1, 100)) {
 					result = getDanceStep(getPosition(), dir);
 				}
 			}
@@ -1148,7 +1148,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 
 	if (!dirList.empty()) {
 		std::random_shuffle(dirList.begin(), dirList.end());
-		dir = dirList[random_range(0, dirList.size() - 1)];
+		dir = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
 	return false;
@@ -1194,7 +1194,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool e = canWalkTo(creaturePos, EAST);
 
 			if (s && e) {
-				dir = random_range(1, 2) == 1 ? SOUTH : EAST;
+				dir = uniform_random(1, 2) == 1 ? SOUTH : EAST;
 				return true;
 			} else if (s) {
 				dir = SOUTH;
@@ -1213,7 +1213,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (n && w) {
-					dir = random_range(1, 2) == 1 ? NORTH : WEST;
+					dir = uniform_random(1, 2) == 1 ? NORTH : WEST;
 					return true;
 				} else if (n) {
 					dir = NORTH;
@@ -1240,7 +1240,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool n = canWalkTo(creaturePos, NORTH);
 
 			if (w && n) {
-				dir = random_range(1, 2) == 1 ? WEST : NORTH;
+				dir = uniform_random(1, 2) == 1 ? WEST : NORTH;
 				return true;
 			} else if (w) {
 				dir = WEST;
@@ -1261,7 +1261,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (s && e) {
-					dir = random_range(1, 2) == 1 ? SOUTH : EAST;
+					dir = uniform_random(1, 2) == 1 ? SOUTH : EAST;
 					return true;
 				} else if (s) {
 					dir = SOUTH;
@@ -1288,7 +1288,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool e = canWalkTo(creaturePos, EAST);
 
 			if (n && e) {
-				dir = random_range(1, 2) == 1 ? NORTH : EAST;
+				dir = uniform_random(1, 2) == 1 ? NORTH : EAST;
 				return true;
 			} else if (n) {
 				dir = NORTH;
@@ -1309,7 +1309,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (s && w) {
-					dir = random_range(1, 2) == 1 ? SOUTH : WEST;
+					dir = uniform_random(1, 2) == 1 ? SOUTH : WEST;
 					return true;
 				} else if (s) {
 					dir = SOUTH;
@@ -1336,7 +1336,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool s = canWalkTo(creaturePos, SOUTH);
 
 			if (w && s) {
-				dir = random_range(1, 2) == 1 ? WEST : SOUTH;
+				dir = uniform_random(1, 2) == 1 ? WEST : SOUTH;
 				return true;
 			} else if (w) {
 				dir = WEST;
@@ -1355,7 +1355,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (n && e) {
-					dir = random_range(1, 2) == 1 ? NORTH : EAST;
+					dir = uniform_random(1, 2) == 1 ? NORTH : EAST;
 					return true;
 				} else if (n) {
 					dir = NORTH;
@@ -1393,7 +1393,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool e = canWalkTo(creaturePos, EAST);
 
 				if (w && e && offsetx == 0) {
-					dir = random_range(1, 2) == 1 ? WEST : EAST;
+					dir = uniform_random(1, 2) == 1 ? WEST : EAST;
 					return true;
 				} else if (w && offsetx <= 0) {
 					dir = WEST;
@@ -1406,7 +1406,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee) {
 					if (w && e) {
-						dir = random_range(1, 2) == 1 ? WEST : EAST;
+						dir = uniform_random(1, 2) == 1 ? WEST : EAST;
 						return true;
 					} else if (w) {
 						dir = WEST;
@@ -1425,7 +1425,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				if (sw || se) {
 					// we can move both dirs
 					if (sw && se) {
-						dir = random_range(1, 2) == 1 ? SOUTHWEST : SOUTHEAST;
+						dir = uniform_random(1, 2) == 1 ? SOUTHWEST : SOUTHEAST;
 						return true;
 					} else if (sw && !w) {
 						dir = SOUTHWEST;
@@ -1463,7 +1463,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool e = canWalkTo(creaturePos, EAST);
 
 				if (w && e && offsetx == 0) {
-					dir = random_range(1, 2) == 1 ? WEST : EAST;
+					dir = uniform_random(1, 2) == 1 ? WEST : EAST;
 					return true;
 				} else if (w && offsetx <= 0) {
 					dir = WEST;
@@ -1476,7 +1476,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee) {
 					if (w && e) {
-						dir = random_range(1, 2) == 1 ? WEST : EAST;
+						dir = uniform_random(1, 2) == 1 ? WEST : EAST;
 						return true;
 					} else if (w) {
 						dir = WEST;
@@ -1495,7 +1495,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				if (nw || ne) {
 					// we can move both dirs
 					if (nw && ne) {
-						dir = random_range(1, 2) == 1 ? NORTHWEST : NORTHEAST;
+						dir = uniform_random(1, 2) == 1 ? NORTHWEST : NORTHEAST;
 						return true;
 					} else if (nw && !w) {
 						dir = NORTHWEST;
@@ -1538,7 +1538,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool n = canWalkTo(creaturePos, NORTH);
 				bool s = canWalkTo(creaturePos, SOUTH);
 				if (n && s && offsety == 0) {
-					dir = random_range(1, 2) == 1 ? NORTH : SOUTH;
+					dir = uniform_random(1, 2) == 1 ? NORTH : SOUTH;
 					return true;
 				} else if (n && offsety <= 0) {
 					dir = NORTH;
@@ -1551,7 +1551,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee) {
 					if (n && s) {
-						dir = random_range(1, 2) == 1 ? NORTH : SOUTH;
+						dir = uniform_random(1, 2) == 1 ? NORTH : SOUTH;
 						return true;
 					} else if (n) {
 						dir = NORTH;
@@ -1568,7 +1568,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool ne = canWalkTo(creaturePos, NORTHEAST);
 				if (se || ne) {
 					if (se && ne) {
-						dir = random_range(1, 2) == 1 ? SOUTHEAST : NORTHEAST;
+						dir = uniform_random(1, 2) == 1 ? SOUTHEAST : NORTHEAST;
 						return true;
 					} else if (se && !s) {
 						dir = SOUTHEAST;
@@ -1605,7 +1605,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool n = canWalkTo(creaturePos, NORTH);
 				bool s = canWalkTo(creaturePos, SOUTH);
 				if (n && s && offsety == 0) {
-					dir = random_range(1, 2) == 1 ? NORTH : SOUTH;
+					dir = uniform_random(1, 2) == 1 ? NORTH : SOUTH;
 					return true;
 				} else if (n && offsety <= 0) {
 					dir = NORTH;
@@ -1618,7 +1618,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee) {
 					if (n && s) {
-						dir = random_range(1, 2) == 1 ? NORTH : SOUTH;
+						dir = uniform_random(1, 2) == 1 ? NORTH : SOUTH;
 						return true;
 					} else if (n) {
 						dir = NORTH;
@@ -1635,7 +1635,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool sw = canWalkTo(creaturePos, SOUTHWEST);
 				if (nw || sw) {
 					if (nw && sw) {
-						dir = random_range(1, 2) == 1 ? NORTHWEST : SOUTHWEST;
+						dir = uniform_random(1, 2) == 1 ? NORTHWEST : SOUTHWEST;
 						return true;
 					} else if (nw && !n) {
 						dir = NORTHWEST;
