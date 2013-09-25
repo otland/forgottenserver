@@ -393,11 +393,11 @@ bool Weapon::useFist(Player* player, Creature* target)
 		int32_t attackValue = 7;
 
 		int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-		if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
+		if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
 			maxDamage *= 2;
 		}
 
-		int32_t damage = -random_range(0, maxDamage, DISTRO_NORMAL);
+		int32_t damage = -normal_random(0, maxDamage);
 
 		CombatParams params;
 		params.combatType = COMBAT_PHYSICALDAMAGE;
@@ -638,12 +638,12 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Item* item) co
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
+	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
 		maxValue *= 2;
 	}
 
 	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultiplier);
-	return -random_range(0, maxValue, DISTRO_NORMAL);
+	return -normal_random(0, maxValue);
 }
 
 int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
@@ -653,7 +653,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
+	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
 		maxValue *= 2;
 	}
 
@@ -663,7 +663,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 		return -maxValue;
 	}
 
-	return -random_range(0, maxValue, DISTRO_NORMAL);
+	return -normal_random(0, maxValue);
 }
 
 WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
@@ -878,7 +878,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		}
 	}
 
-	if (chance >= random_range(1, 100)) {
+	if (chance >= uniform_random(1, 100)) {
 		if (elementDamage != 0) {
 			int32_t damage = getElementDamage(player, target, item);
 			CombatParams eParams;
@@ -940,7 +940,7 @@ void WeaponDistance::onUsedWeapon(Player* player, Item* item, Tile* destTile) co
 
 void WeaponDistance::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 {
-	if (ammoAction == AMMOACTION_MOVEBACK && breakChance > 0 && random_range(1, 100) <= breakChance) {
+	if (ammoAction == AMMOACTION_MOVEBACK && breakChance > 0 && uniform_random(1, 100) <= breakChance) {
 		uint16_t newCount = item->getItemCount();
 		if (newCount > 0) {
 			newCount--;
@@ -967,7 +967,7 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
+	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
 		maxValue *= 2;
 	}
 
@@ -982,7 +982,7 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 		}
 	}
 
-	return -random_range(minValue, maxValue, DISTRO_NORMAL);
+	return -normal_random(minValue, maxValue);
 }
 
 int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
@@ -1000,7 +1000,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (random_range(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
+	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
 		maxValue *= 2;
 	}
 
@@ -1019,7 +1019,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	} else {
 		minValue = 0;
 	}
-	return -random_range(minValue, maxValue, DISTRO_NORMAL);
+	return -normal_random(minValue, maxValue);
 }
 
 bool WeaponDistance::getSkillType(const Player* player, const Item* item,
@@ -1105,5 +1105,5 @@ int32_t WeaponWand::getWeaponDamage(const Player* player, const Creature* target
 	if (maxDamage) {
 		return -maxChange;
 	}
-	return random_range(-minChange, -maxChange, DISTRO_NORMAL);
+	return -normal_random(minChange, maxChange);
 }

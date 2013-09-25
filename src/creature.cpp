@@ -278,7 +278,7 @@ void Creature::onWalk()
 void Creature::onWalk(Direction& dir)
 {
 	if (hasCondition(CONDITION_DRUNK)) {
-		uint32_t r = random_range(0, 20);
+		uint32_t r = uniform_random(0, 20);
 
 		if (r <= 4) {
 			switch (r) {
@@ -889,7 +889,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 		if (checkDefense && hasDefense) {
 			int32_t maxDefense = getDefense();
 			int32_t minDefense = maxDefense / 2;
-			damage -= random_range(minDefense, maxDefense);
+			damage -= uniform_random(minDefense, maxDefense);
 			if (damage <= 0) {
 				damage = 0;
 				blockType = BLOCK_DEFENSE;
@@ -910,7 +910,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 				maxArmorReduction = 1;
 			}
 
-			damage -= random_range(minArmorReduction, maxArmorReduction);
+			damage -= uniform_random(minArmorReduction, maxArmorReduction);
 			if (damage <= 0) {
 				damage = 0;
 				blockType = BLOCK_ARMOR;
