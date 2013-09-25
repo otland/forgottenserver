@@ -403,7 +403,7 @@ struct ModalWindow
 	bool priority;
 
 	ModalWindow(uint32_t id, const std::string& title, const std::string& message)
-		: id(id), title(title), message(message), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
+		: title(title), message(message), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
 };
 
 typedef std::list<MarketOffer> MarketOfferList;
