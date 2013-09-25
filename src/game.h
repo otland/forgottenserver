@@ -34,7 +34,6 @@
 #include "scheduler.h"
 #include "npc.h"
 #include "iologindata.h"
-#include "modalwindow.h"
 #include "wildcardtree.h"
 
 class ServiceManager;
@@ -671,7 +670,7 @@ class Game
 		std::unordered_map<std::string, Player*> mappedPlayerNames;
 		WildcardTreeNode wildcardTree;
 
-		ModalWindow* offlineTrainingWindow;
+		ModalWindow offlineTrainingWindow;
 
 		Groups groups;
 

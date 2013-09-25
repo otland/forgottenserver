@@ -6866,7 +6866,7 @@ int32_t LuaScriptInterface::luaModalWindowGetId(lua_State* L)
 	// modalWindow:getId()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushNumber(L, window->getID());
+		pushNumber(L, window->id);
 	} else {
 		pushNil(L);
 	}
@@ -6878,7 +6878,7 @@ int32_t LuaScriptInterface::luaModalWindowGetTitle(lua_State* L)
 	// modalWindow:getTitle()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushString(L, window->getTitle());
+		pushString(L, window->title);
 	} else {
 		pushNil(L);
 	}
@@ -6890,7 +6890,7 @@ int32_t LuaScriptInterface::luaModalWindowGetMessage(lua_State* L)
 	// modalWindow:getMessage()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushString(L, window->getMessage());
+		pushString(L, window->message);
 	} else {
 		pushNil(L);
 	}
@@ -6902,7 +6902,7 @@ int32_t LuaScriptInterface::luaModalWindowGetButtonCount(lua_State* L)
 	// modalWindow:getButtonCount()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushNumber(L, window->getButtonCount());
+		pushNumber(L, window->buttons.size());
 	} else {
 		pushNil(L);
 	}
@@ -6914,7 +6914,7 @@ int32_t LuaScriptInterface::luaModalWindowGetChoiceCount(lua_State* L)
 	// modalWindow:getChoiceCount()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushNumber(L, window->getChoiceCount());
+		pushNumber(L, window->choices.size());
 	} else {
 		pushNil(L);
 	}
@@ -6928,7 +6928,7 @@ int32_t LuaScriptInterface::luaModalWindowAddButton(lua_State* L)
 	uint8_t id = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->addButton(id, text);
+		window->buttons.emplace_back(text, id);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
@@ -6943,7 +6943,7 @@ int32_t LuaScriptInterface::luaModalWindowAddChoice(lua_State* L)
 	uint8_t id = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->addChoice(id, text);
+		window->choices.emplace_back(text, id);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
@@ -6956,7 +6956,7 @@ int32_t LuaScriptInterface::luaModalWindowGetDefaultEnterButton(lua_State* L)
 	// modalWindow:getDefaultEnterButton()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushNumber(L, window->getDefaultEnterButton());
+		pushNumber(L, window->defaultEnterButton);
 	} else {
 		pushNil(L);
 	}
@@ -6969,7 +6969,7 @@ int32_t LuaScriptInterface::luaModalWindowSetDefaultEnterButton(lua_State* L)
 	uint8_t buttonId = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->setDefaultEnterButton(buttonId);
+		window->defaultEnterButton = buttonId;
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
@@ -6982,7 +6982,7 @@ int32_t LuaScriptInterface::luaModalWindowGetDefaultEscapeButton(lua_State* L)
 	// modalWindow:getDefaultEscapeButton()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushNumber(L, window->getDefaultEscapeButton());
+		pushNumber(L, window->defaultEscapeButton);
 	} else {
 		pushNil(L);
 	}
@@ -6995,7 +6995,7 @@ int32_t LuaScriptInterface::luaModalWindowSetDefaultEscapeButton(lua_State* L)
 	uint8_t buttonId = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->setDefaultEscapeButton(buttonId);
+		window->defaultEscapeButton = buttonId;
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
@@ -7008,7 +7008,7 @@ int32_t LuaScriptInterface::luaModalWindowHasPriority(lua_State* L)
 	// modalWindow:hasPriority()
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		pushBoolean(L, window->hasPriority());
+		pushBoolean(L, window->priority);
 	} else {
 		pushNil(L);
 	}
@@ -7021,7 +7021,7 @@ int32_t LuaScriptInterface::luaModalWindowSetPriority(lua_State* L)
 	bool priority = getBoolean(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->setPriority(priority);
+		window->priority = priority;
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
@@ -7040,7 +7040,7 @@ int32_t LuaScriptInterface::luaModalWindowSendToPlayer(lua_State* L)
 
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		if (!player->hasModalWindowOpen(window->getID())) {
+		if (!player->hasModalWindowOpen(window->id)) {
 			player->sendModalWindow(*window);
 		}
 		pushBoolean(L, true);

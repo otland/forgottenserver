@@ -24,7 +24,6 @@
 #include "protocol.h"
 #include "enums.h"
 #include "creature.h"
-#include "modalwindow.h"
 
 enum connectResult_t {
 	CONNECT_SUCCESS = 1,

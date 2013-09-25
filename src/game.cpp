@@ -68,8 +68,9 @@ extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 
-Game::Game()
-	: wildcardTree(false)
+Game::Game() :
+	wildcardTree(false),
+	offlineTrainingWindow(0xFFFFFFFF, "Choose a Skill", "Please choose a skill:")
 {
 	gameState = GAME_STATE_NORMAL;
 	worldType = WORLD_TYPE_PVP;
@@ -99,17 +100,16 @@ Game::Game()
 	lightLevel = LIGHT_LEVEL_DAY;
 	lightState = LIGHT_STATE_DAY;
 
-	offlineTrainingWindow = new ModalWindow(0xFFFFFFFF, "Choose a Skill", "Please choose a skill:");
-	offlineTrainingWindow->addChoice(SKILL_SWORD, "Sword Fighting and Shielding");
-	offlineTrainingWindow->addChoice(SKILL_AXE, "Axe Fighting and Shielding");
-	offlineTrainingWindow->addChoice(SKILL_CLUB, "Club Fighting and Shielding");
-	offlineTrainingWindow->addChoice(SKILL_DIST, "Distance Fighting and Shielding");
-	offlineTrainingWindow->addChoice(SKILL__MAGLEVEL, "Magic Level and Shielding");
-	offlineTrainingWindow->addButton(1, "Okay");
-	offlineTrainingWindow->addButton(0, "Cancel");
-	offlineTrainingWindow->setDefaultEnterButton(1);
-	offlineTrainingWindow->setDefaultEscapeButton(0);
-	offlineTrainingWindow->setPriority(true);
+	offlineTrainingWindow.choices.emplace_back("Sword Fighting and Shielding", SKILL_SWORD);
+	offlineTrainingWindow.choices.emplace_back("Axe Fighting and Shielding", SKILL_AXE);
+	offlineTrainingWindow.choices.emplace_back("Club Fighting and Shielding", SKILL_CLUB);
+	offlineTrainingWindow.choices.emplace_back("Distance Fighting and Shielding", SKILL_DIST);
+	offlineTrainingWindow.choices.emplace_back("Magic Level and Shielding", SKILL__MAGLEVEL);
+	offlineTrainingWindow.buttons.emplace_back("Okay", 1);
+	offlineTrainingWindow.buttons.emplace_back("Cancel", 0);
+	offlineTrainingWindow.defaultEnterButton = 1;
+	offlineTrainingWindow.defaultEscapeButton = 0;
+	offlineTrainingWindow.priority = true;
 }
 
 Game::~Game()
@@ -119,7 +119,6 @@ Game::~Game()
 	}
 
 	delete map;
-	delete offlineTrainingWindow;
 
 	g_scheduler.stopEvent(checkLightEvent);
 	g_scheduler.stopEvent(checkCreatureEvent);
@@ -6228,8 +6227,8 @@ void Game::sendOfflineTrainingDialog(Player* player)
 		return;
 	}
 
-	if (!player->hasModalWindowOpen(offlineTrainingWindow->getID())) {
-		player->sendModalWindow(*offlineTrainingWindow);
+	if (!player->hasModalWindowOpen(offlineTrainingWindow.id)) {
+		player->sendModalWindow(offlineTrainingWindow);
 	}
 }
 

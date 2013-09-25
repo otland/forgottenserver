@@ -394,6 +394,18 @@ struct MarketStatistics {
 	uint32_t lowestPrice;
 };
 
+struct ModalWindow
+{
+	std::list<std::pair<std::string, uint8_t>> buttons, choices;
+	std::string title, message;
+	uint32_t id;
+	uint8_t defaultEnterButton, defaultEscapeButton;
+	bool priority;
+
+	ModalWindow(uint32_t id, const std::string& title, const std::string& message)
+		: id(id), title(title), message(message), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
+};
+
 typedef std::list<MarketOffer> MarketOfferList;
 typedef std::list<ExpiredMarketOffer> ExpiredMarketOfferList;
 typedef std::list<HistoryMarketOffer> HistoryMarketOfferList;

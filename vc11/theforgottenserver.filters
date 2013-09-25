@@ -249,9 +249,6 @@
     <ClCompile Include="..\src\inbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\modalwindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\account.h">
@@ -504,9 +501,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\inbox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\modalwindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -288,7 +288,6 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 bool Map::removeCreature(Creature* creature)
 {
 	Tile* tile = creature->getTile();
-
 	if (!tile) {
 		return false;
 	}
@@ -318,12 +317,9 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	int32_t endx2 = x2 - (x2 % FLOOR_SIZE);
 	int32_t endy2 = y2 - (y2 % FLOOR_SIZE);
 
-	QTreeLeafNode* startLeaf;
+	QTreeLeafNode* startLeaf = getLeaf(startx1, starty1);
+	QTreeLeafNode* leafS = startLeaf;
 	QTreeLeafNode* leafE;
-	QTreeLeafNode* leafS;
-
-	startLeaf = getLeaf(startx1, starty1);
-	leafS = startLeaf;
 
 	for (int32_t ny = starty1; ny <= endy2; ny += FLOOR_SIZE) {
 		leafE = leafS;

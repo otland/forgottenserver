@@ -2868,25 +2868,25 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 	NetworkMessage msg;
 	msg.AddByte(0xFA);
 
-	msg.AddU32(modalWindow.getID());
-	msg.AddString(modalWindow.getTitle());
-	msg.AddString(modalWindow.getMessage());
+	msg.AddU32(modalWindow.id);
+	msg.AddString(modalWindow.title);
+	msg.AddString(modalWindow.message);
 
-	msg.AddByte(modalWindow.getButtonCount());
-	for (const ModalWindowChoice& button : modalWindow.getButtons()) {
-		msg.AddString(button.first);
-		msg.AddByte(button.second);
+	msg.AddByte(modalWindow.buttons.size());
+	for (const auto& it : modalWindow.buttons) {
+		msg.AddString(it.first);
+		msg.AddByte(it.second);
 	}
 
-	msg.AddByte(modalWindow.getChoiceCount());
-	for (const ModalWindowChoice& choice : modalWindow.getChoices()) {
-		msg.AddString(choice.first);
-		msg.AddByte(choice.second);
+	msg.AddByte(modalWindow.choices.size());
+	for (const auto& it : modalWindow.choices) {
+		msg.AddString(it.first);
+		msg.AddByte(it.second);
 	}
 
-	msg.AddByte(modalWindow.getDefaultEscapeButton());
-	msg.AddByte(modalWindow.getDefaultEnterButton());
-	msg.AddByte(modalWindow.hasPriority() ? 0x01 : 0x00);
+	msg.AddByte(modalWindow.defaultEscapeButton);
+	msg.AddByte(modalWindow.defaultEnterButton);
+	msg.AddByte(modalWindow.priority ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
 }

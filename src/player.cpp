@@ -5038,7 +5038,7 @@ void Player::sendModalWindow(const ModalWindow& modalWindow)
 		return;
 	}
 
-	modalWindows.push_back(modalWindow.getID());
+	modalWindows.push_back(modalWindow.id);
 	client->sendModalWindow(modalWindow);
 }
 

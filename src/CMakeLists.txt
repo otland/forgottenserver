@@ -37,7 +37,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/luascript.cpp
 	${CMAKE_CURRENT_LIST_DIR}/mailbox.cpp
 	${CMAKE_CURRENT_LIST_DIR}/map.cpp
-	${CMAKE_CURRENT_LIST_DIR}/modalwindow.cpp
 	${CMAKE_CURRENT_LIST_DIR}/monster.cpp
 	${CMAKE_CURRENT_LIST_DIR}/monsters.cpp
 	${CMAKE_CURRENT_LIST_DIR}/mounts.cpp
