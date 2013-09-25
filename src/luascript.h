@@ -174,29 +174,9 @@ class ScriptEnvironment
 		Container* getContainerByUID(uint32_t uid);
 		void removeItemByUID(uint32_t uid);
 
-		static uint32_t addCombatArea(AreaCombat* area);
-		static AreaCombat* getCombatArea(uint32_t areaId);
-
-		static uint32_t addCombatObject(Combat* combat);
-		static Combat* getCombatObject(uint32_t combatId);
-
-		static uint32_t addConditionObject(Condition* condition);
-		static Condition* getConditionObject(uint32_t conditionId);
-
-		static void freeCombatObjects();
-		static void freeAreaObjects();
-		static void freeConditionObjects();
-
-		static uint32_t getLastCombatId() {
-			return m_lastCombatId;
-		}
-
 	private:
 		typedef std::unordered_map<uint32_t, Thing*> ThingMap;
 		typedef std::vector<const LuaVariant*> VariantVector;
-		typedef std::map<uint32_t, AreaCombat*> AreaMap;
-		typedef std::map<uint32_t, Combat*> CombatMap;
-		typedef std::map<uint32_t, Condition*> ConditionMap;
 		typedef std::map<uint32_t, int32_t> StorageMap;
 		typedef std::map<uint32_t, DBResult*> DBResultMap;
 		typedef std::list<Item*> ItemList;
@@ -220,18 +200,6 @@ class ScriptEnvironment
 		//temporary item list
 		typedef std::map<ScriptEnvironment*, ItemList> TempItemListMap;
 		static TempItemListMap m_tempItems;
-
-		//area map
-		static uint32_t m_lastAreaId;
-		static AreaMap m_areaMap;
-
-		//combat map
-		static uint32_t m_lastCombatId;
-		static CombatMap m_combatMap;
-
-		//condition map
-		static uint32_t m_lastConditionId;
-		static ConditionMap m_conditionMap;
 
 		//result map
 		static uint32_t m_lastResultId;
@@ -344,13 +312,6 @@ class LuaScriptInterface
 			T** userdata = static_cast<T**>(lua_newuserdata(L, sizeof(T*)));
 			*userdata = value;
 		}
-		template<class T>
-		static T* popUserdata(lua_State* L)
-		{
-			T* userdata = *static_cast<T**>(lua_touserdata(L, -1));
-			lua_pop(L, 1);
-			return userdata;
-		}
 
 		// Metatables
 		static void setMetatable(lua_State* L, int32_t index, const std::string& string);
@@ -382,6 +343,8 @@ class LuaScriptInterface
 		static bool getBoolean(lua_State* L, int32_t arg);
 		static Position getPosition(lua_State* L, int32_t arg, uint32_t& stackpos);
 		static Position getPosition(lua_State* L, int32_t arg);
+		static Outfit_t getOutfit(lua_State* L, int32_t arg);
+		static LuaVariant getVariant(lua_State* L, int32_t arg);
 
 		static Thing* getThing(lua_State* L, int32_t arg);
 		static Creature* getCreature(lua_State* L, int32_t arg);
@@ -394,8 +357,8 @@ class LuaScriptInterface
 			return getNumber<T>(L, -1);
 		}
 
-		static std::string getFieldString(lua_State* L, const std::string& key);
-		static bool getFieldBoolean(lua_State* L, const std::string& key);
+		static std::string getFieldString(lua_State* L, int32_t arg, const std::string& key);
+		static bool getFieldBoolean(lua_State* L, int32_t arg, const std::string& key);
 
 		// Other
 		static int32_t getStackTop(lua_State* L);
@@ -1093,6 +1056,8 @@ class LuaScriptInterface
 		static int32_t luaItemTypeIsMovable(lua_State* L);
 		static int32_t luaItemTypeIsRune(lua_State* L);
 		static int32_t luaItemTypeIsStackable(lua_State* L);
+		static int32_t luaItemTypeIsReadable(lua_State* L);
+		static int32_t luaItemTypeIsWritable(lua_State* L);
 		
 		static int32_t luaItemTypeGetType(lua_State* L);
 		static int32_t luaItemTypeGetId(lua_State* L);
@@ -1104,6 +1069,40 @@ class LuaScriptInterface
 		static int32_t luaItemTypeGetFluidSource(lua_State* L);
 		static int32_t luaItemTypeGetCapacity(lua_State* L);
 		static int32_t luaItemTypeGetWeight(lua_State* L);
+
+		// Combat
+		static int32_t luaCombatCreate(lua_State* L);
+		static int32_t luaCombatDelete(lua_State* L);
+
+		static int32_t luaCombatSetParameter(lua_State* L);
+		static int32_t luaCombatSetFormula(lua_State* L);
+
+		static int32_t luaCombatSetArea(lua_State* L);
+		static int32_t luaCombatSetCondition(lua_State* L);
+		static int32_t luaCombatSetCallback(lua_State* L);
+	
+		static int32_t luaCombatExecute(lua_State* L);
+
+		// Condition
+		static int32_t luaConditionCreate(lua_State* L);
+		static int32_t luaConditionDelete(lua_State* L);
+
+		static int32_t luaConditionGetId(lua_State* L);
+		static int32_t luaConditionGetSubId(lua_State* L);
+		static int32_t luaConditionGetType(lua_State* L);
+		static int32_t luaConditionGetIcons(lua_State* L);
+		static int32_t luaConditionGetEndTime(lua_State* L);
+
+		static int32_t luaConditionClone(lua_State* L);
+
+		static int32_t luaConditionGetTicks(lua_State* L);
+		static int32_t luaConditionSetTicks(lua_State* L);
+
+		static int32_t luaConditionSetParameter(lua_State* L);
+		static int32_t luaConditionSetFormula(lua_State* L);
+
+		static int32_t luaConditionAddDamage(lua_State* L);
+		static int32_t luaConditionAddOutfit(lua_State* L);
 
 		//
 		lua_State* m_luaState;
@@ -1130,17 +1129,46 @@ class LuaEnvironment : public LuaScriptInterface
 
 		bool initState();
 		bool reInitState();
-
-	protected:
 		bool closeState();
 
-	private:
-		uint32_t m_lastEventTimerId;
-		std::map<uint32_t, LuaTimerEventDesc> m_timerEvents;
+		LuaScriptInterface* getTestInterface();
 
+		Combat* getCombatObject(uint32_t id) const;
+		uint32_t createCombatObject(LuaScriptInterface* interface);
+		void clearCombatObjects(LuaScriptInterface* interface);
+
+		Condition* getConditionObject(uint32_t id) const;
+		bool createConditionObject(LuaScriptInterface* interface, ConditionType_t conditionType, ConditionId_t conditionId, uint32_t& id);
+		void clearConditionObjects(LuaScriptInterface* interface);
+
+		AreaCombat* getAreaObject(uint32_t id) const;
+		uint32_t createAreaObject(LuaScriptInterface* interface);
+		void clearAreaObjects(LuaScriptInterface* interface);
+
+	private:
 		void executeTimerEvent(uint32_t eventIndex);
 
+		//
+		LuaScriptInterface* m_testInterface;
+
+		std::map<uint32_t, LuaTimerEventDesc> m_timerEvents;
+		uint32_t m_lastEventTimerId;
+
+		std::unordered_map<uint32_t, Combat*> m_combatMap;
+		std::unordered_map<uint32_t, Condition*> m_conditionMap;
+		std::unordered_map<uint32_t, AreaCombat*> m_areaMap;
+
+		std::map<LuaScriptInterface*, std::vector<uint32_t>> m_combatIdMap;
+		std::map<LuaScriptInterface*, std::vector<uint32_t>> m_conditionIdMap;
+		std::map<LuaScriptInterface*, std::vector<uint32_t>> m_areaIdMap;
+
+		uint32_t m_lastCombatId;
+		uint32_t m_lastConditionId;
+		uint32_t m_lastAreaId;
+
+		//
 		friend class LuaScriptInterface;
+		friend class CombatSpell;
 };
 
 #endif

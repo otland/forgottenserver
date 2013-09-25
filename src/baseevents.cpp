@@ -25,6 +25,8 @@
 
 #include "pugicast.h"
 
+extern LuaEnvironment g_luaEnvironment;
+
 BaseEvents::BaseEvents()
 {
 	m_loaded = false;
@@ -121,10 +123,10 @@ Event::~Event()
 
 bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile)
 {
-	LuaScriptInterface testInterface("Test Interface");
-	testInterface.initState();
+	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
+	testInterface->reInitState();
 
-	if (testInterface.loadFile(std::string(basePath + "lib/" + scriptsName + ".lua")) == -1) {
+	if (testInterface->loadFile(std::string(basePath + "lib/" + scriptsName + ".lua")) == -1) {
 		std::cout << "[Warning - Event::checkScript] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
 	}
 
@@ -133,15 +135,16 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 		return false;
 	}
 
-	if (testInterface.loadFile(basePath + scriptFile) == -1) {
+	if (testInterface->loadFile(basePath + scriptFile) == -1) {
 		std::cout << "[Warning - Event::checkScript] Can not load script: " << scriptFile << std::endl;
-		std::cout << testInterface.getLastLuaError() << std::endl;
+		std::cout << testInterface->getLastLuaError() << std::endl;
 		return false;
 	}
 
-	int32_t id = testInterface.getEvent(getScriptEventName());
+	const std::string& eventName = getScriptEventName();
+	int32_t id = testInterface->getEvent(eventName);
 	if (id == -1) {
-		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::checkScript] Event " << eventName << " not found. " << scriptFile << std::endl;
 		return false;
 	}
 	return true;
