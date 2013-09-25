@@ -27,6 +27,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <random>
 
 #include <cctype>
 
@@ -131,76 +132,30 @@ bool hasBitSet(uint32_t flag, uint32_t flags)
 	return ((flags & flag) == flag);
 }
 
-#define RAND_MAX24 16777216
-uint32_t rand24b()
+int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
 {
-	return ((rand() << 12) ^ (rand())) & (0xFFFFFF);
+	static std::random_device rd;
+	static std::mt19937 generator(rd());
+	static std::uniform_int_distribution<int32_t> uniform_dist;
+	if (minNumber == maxNumber) {
+		return minNumber;
+	} else if (minNumber > maxNumber) {
+		std::swap(minNumber, maxNumber);
+	}
+	return uniform_dist(generator, std::uniform_int_distribution<int32_t>::param_type(minNumber, maxNumber));
 }
 
-float box_muller(float m, float s)
+int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 {
-	// normal random variate generator
-	// mean m, standard deviation s
-
-	float y1;
-	static float y2;
-	static int use_last = 0;
-
-	if (use_last) { // use value from previous call
-		y1 = y2;
-		use_last = 0;
-	} else {
-		float x1, x2, w;
-
-		do {
-			double r1 = (((float)(rand()) / RAND_MAX));
-			double r2 = (((float)(rand()) / RAND_MAX));
-
-			x1 = 2.0 * r1 - 1.0;
-			x2 = 2.0 * r2 - 1.0;
-			w = x1 * x1 + x2 * x2;
-		} while (w >= 1.0);
-
-		w = sqrt((-2.0 * log(w)) / w);
-		y1 = x1 * w;
-		y2 = x2 * w;
-		use_last = 1;
+	static std::random_device rd;
+	static std::mt19937 generator(rd());
+	static std::normal_distribution<float> normal_dist(0.5f, 0.25f);
+	if (minNumber == maxNumber) {
+		return minNumber;
+	} else if (minNumber > maxNumber) {
+		std::swap(minNumber, maxNumber);
 	}
-
-	return(m + y1 * s);
-}
-
-int32_t random_range(int32_t lowest_number, int32_t highest_number, DistributionType_t type /*= DISTRO_UNIFORM*/)
-{
-	if (highest_number == lowest_number) {
-		return lowest_number;
-	}
-
-	if (lowest_number > highest_number) {
-		int32_t nTmp = highest_number;
-		highest_number = lowest_number;
-		lowest_number = nTmp;
-	}
-
-	int32_t range = highest_number - lowest_number;
-
-	if (type == DISTRO_UNIFORM) {
-		int32_t r = rand24b() % (range + 1);
-		return lowest_number + r;
-	} else if (type == DISTRO_NORMAL) {
-		float value = box_muller(0.5, 0.25);
-
-		if (value < 0) {
-			value = 0;
-		} else if (value > 1) {
-			value = 1;
-		}
-
-		return lowest_number + (int32_t)((float)range * value);
-	} else {
-		float r = 1.f - sqrt((1.f * rand24b()) / RAND_MAX24);
-		return lowest_number + (int32_t)((float)range * r);
-	}
+	return minNumber + std::max<float>(0.f, std::min<float>(1.f, normal_dist(generator))) * (maxNumber - minNumber);
 }
 
 bool isNumber(char character)

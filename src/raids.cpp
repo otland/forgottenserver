@@ -132,7 +132,7 @@ void Raids::checkRaids()
 
 		for (auto it = raidList.begin(); it != raidList.end(); ++it) {
 			if (now >= (getLastRaidEnd() + (*it)->getMargin())) {
-				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / (*it)->getInterval() >= (uint32_t)random_range(0, MAX_RAND_RANGE)) {
+				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / (*it)->getInterval() >= (uint32_t)uniform_random(0, MAX_RAND_RANGE)) {
 					setRunning(*it);
 					(*it)->startRaid();
 
@@ -562,7 +562,7 @@ void AreaSpawnEvent::addMonster(const std::string& monsterName, uint32_t minAmou
 bool AreaSpawnEvent::executeEvent()
 {
 	for (MonsterSpawn* spawn : m_spawnList) {
-		uint32_t amount = random_range(spawn->minAmount, spawn->maxAmount);
+		uint32_t amount = uniform_random(spawn->minAmount, spawn->maxAmount);
 		for (uint32_t i = 0; i < amount; ++i) {
 			Monster* monster = Monster::createMonster(spawn->name);
 			if (!monster) {
@@ -572,7 +572,7 @@ bool AreaSpawnEvent::executeEvent()
 
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
-				Position pos(random_range(m_fromPos.x, m_toPos.x), random_range(m_fromPos.y, m_toPos.y), random_range(m_fromPos.z, m_toPos.z));
+				Position pos(uniform_random(m_fromPos.x, m_toPos.x), uniform_random(m_fromPos.y, m_toPos.y), uniform_random(m_fromPos.z, m_toPos.z));
 				Tile* tile = g_game.getTile(pos);
 				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, pos, false, true)) {
 					success = true;

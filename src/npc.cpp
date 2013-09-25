@@ -461,7 +461,7 @@ bool Npc::getRandomStep(Direction& dir)
 
 	if (!dirList.empty()) {
 		std::random_shuffle(dirList.begin(), dirList.end());
-		dir = dirList[random_range(0, dirList.size() - 1)];
+		dir = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
 

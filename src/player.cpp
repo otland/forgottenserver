@@ -955,7 +955,7 @@ void Player::dropLoot(Container* corpse)
 				Item* item = inventory[i];
 
 				if (item) {
-					if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || random_range(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
+					if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || uniform_random(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
 						g_game.internalMoveItem(this, corpse, INDEX_WHEREEVER, item, item->getItemCount(), 0);
 						sendInventoryItem((slots_t)i, nullptr);
 					}
@@ -3989,7 +3989,7 @@ void Player::onCombatRemoveCondition(const Creature* attacker, Condition* condit
 			Item* item = getInventoryItem((slots_t)condition->getId());
 			if (item) {
 				//25% chance to destroy the item
-				if (25 >= random_range(0, 100)) {
+				if (25 >= uniform_random(1, 100)) {
 					g_game.internalRemoveItem(item);
 				}
 			}

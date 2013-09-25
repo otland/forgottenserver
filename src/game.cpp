@@ -4208,7 +4208,7 @@ void Game::addCreatureCheck(Creature* creature)
 	}
 
 	toAddCheckCreatureVector.push_back(creature);
-	creature->checkCreatureVectorIndex = random_range(0, EVENT_CREATURECOUNT - 1);
+	creature->checkCreatureVectorIndex = uniform_random(0, EVENT_CREATURECOUNT - 1);
 	creature->useThing2();
 }
 
