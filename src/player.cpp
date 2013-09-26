@@ -3248,6 +3248,9 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
+	const ItemType& oldType = Item::items[item->getID()];
+	const ItemType& newType = Item::items[itemId];
+
 	item->setID(itemId);
 	item->setSubType(count);
 
@@ -3255,8 +3258,6 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	sendInventoryItem((slots_t)index, item);
 
 	//event methods
-	const ItemType& oldType = Item::items[item->getID()];
-	const ItemType& newType = Item::items[itemId];
 	onUpdateInventoryItem((slots_t)index, item, oldType, item, newType);
 }
 
