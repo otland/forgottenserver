@@ -48,7 +48,7 @@ bool IOMapSerialize::loadMap(Map* map)
 		}
 
 		do {
-			unsigned long attrSize = 0;
+			unsigned long attrSize;
 			const char* attr = tileResult->getDataStream("data", attrSize);
 
 			PropStream propStream;

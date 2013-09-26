@@ -296,10 +296,10 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	player->setSex((PlayerSex_t)result->getDataInt("sex"));
 	player->level = std::max<uint32_t>(1, result->getDataInt("level"));
 
-	uint64_t currExpCount = Player::getExpForLevel(player->level);
-	uint64_t nextExpCount = Player::getExpForLevel(player->level + 1);
 	uint64_t experience = result->getNumber<uint64_t>("experience");
 
+	uint64_t currExpCount = Player::getExpForLevel(player->level);
+	uint64_t nextExpCount = Player::getExpForLevel(player->level + 1);
 	if (experience < currExpCount || experience > nextExpCount) {
 		experience = currExpCount;
 	}
@@ -316,7 +316,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	player->capacity = result->getDataInt("cap");
 	player->blessings = result->getDataInt("blessings");
 
-	unsigned long conditionsSize = 0;
+	unsigned long conditionsSize;
 	const char* conditions = result->getDataStream("conditions", conditionsSize);
 	PropStream propStream;
 	propStream.init(conditions, conditionsSize);
@@ -349,8 +349,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	}
 
 	player->manaSpent = manaSpent;
-	player->magLevelPercent = Player::getPercentLevel(player->manaSpent,
-	                          nextManaCount);
+	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
 
 	player->health = result->getDataInt("health");
 	player->healthMax = result->getDataInt("healthmax");
@@ -1013,7 +1012,7 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)
 		int32_t type = result->getDataInt("itemtype");
 		int32_t count = result->getDataInt("count");
 
-		unsigned long attrSize = 0;
+		unsigned long attrSize;
 		const char* attr = result->getDataStream("attributes", attrSize);
 
 		PropStream propStream;

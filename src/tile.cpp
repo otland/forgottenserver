@@ -106,7 +106,7 @@ bool Tile::hasHeight(uint32_t n) const
 	return false;
 }
 
-uint32_t Tile::getCreatureCount() const
+size_t Tile::getCreatureCount() const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
 		return creatures->size();
@@ -114,10 +114,10 @@ uint32_t Tile::getCreatureCount() const
 	return 0;
 }
 
-uint32_t Tile::getItemCount() const
+size_t Tile::getItemCount() const
 {
 	if (const TileItemVector* items = getItemList()) {
-		return (uint32_t)items->size();
+		return items->size();
 	}
 	return 0;
 }

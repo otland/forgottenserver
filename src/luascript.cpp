@@ -2911,10 +2911,8 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 	}
 
 	if (fromTile != toTile) {
-		int32_t thingCount = fromTile->getThingCount();
-		for (int32_t i = thingCount - 1; i >= 0; --i) {
+		for (int32_t i = fromTile->getThingCount() - 1; i >= 0; --i) {
 			Thing* thing = fromTile->__getThing(i);
-
 			if (thing) {
 				if (Item* item = thing->getItem()) {
 					const ItemType& it = Item::items[item->getID()];
@@ -10613,13 +10611,8 @@ int32_t LuaScriptInterface::luaCombatCreate(lua_State* L)
 {
 	// Combat()
 	// Combat.new()
-	Combat* combat = new Combat;
-	if (combat) {
-		pushUserdata<Combat>(L, combat);
-		setMetatable(L, -1, "Combat");
-	} else {
-		pushNil(L);
-	}
+	pushUserdata<Combat>(L, new Combat);
+	setMetatable(L, -1, "Combat");
 	return 1;
 }
 

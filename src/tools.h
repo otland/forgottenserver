@@ -40,7 +40,6 @@ void replaceString(std::string& str, const std::string& sought, const std::strin
 void trim_right(std::string& source, char t);
 void trim_left(std::string& source, char t);
 void toLowerCaseString(std::string& source);
-void toUpperCaseString(std::string& source);
 std::string asLowerCaseString(const std::string& source);
 std::string asUpperCaseString(const std::string& source);
 

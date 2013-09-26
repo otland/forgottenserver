@@ -2426,7 +2426,7 @@ bool Game::playerReceivePingBack(uint32_t playerId)
 	return true;
 }
 
-bool Game::playerAutoWalk(uint32_t playerId, std::list<Direction>& listDir)
+bool Game::playerAutoWalk(uint32_t playerId, const std::list<Direction>& listDir)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -5079,7 +5079,7 @@ bool Game::broadcastMessage(const std::string& text, MessageClasses type)
 	return true;
 }
 
-void Game::updateCreatureWalkthrough(Creature* creature)
+void Game::updateCreatureWalkthrough(const Creature* creature)
 {
 	//send to clients
 	SpectatorVec list;
@@ -5113,7 +5113,7 @@ void Game::updatePlayerShield(Player* player)
 	}
 }
 
-void Game::updatePlayerHelpers(Player& player)
+void Game::updatePlayerHelpers(const Player& player)
 {
 	uint32_t creatureId = player.getID();
 	uint16_t helpers = player.getHelpers();
@@ -5172,7 +5172,6 @@ void Game::updatePremium(Account& account)
 			save = true;
 		} else {
 			uint32_t days = (timeNow - account.lastDay) / 86400;
-
 			if (days > 0) {
 				if (days >= account.premiumDays) {
 					account.premiumDays = 0;

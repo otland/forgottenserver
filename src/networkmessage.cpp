@@ -112,7 +112,7 @@ void NetworkMessage::AddBytes(const char* bytes, size_t size)
 	m_MsgSize += size;
 }
 
-void NetworkMessage::AddPaddingBytes(uint32_t n)
+void NetworkMessage::AddPaddingBytes(size_t n)
 {
 	if (!canAdd(n)) {
 		return;

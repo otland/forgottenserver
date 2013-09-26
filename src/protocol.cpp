@@ -99,8 +99,7 @@ void Protocol::XTEA_encrypt(OutputMessage& msg)
 	//add bytes until reach 8 multiple
 	int32_t paddingBytes = msg.getMessageLength() % 8;
 	if (paddingBytes != 0) {
-		uint32_t n = 8 - paddingBytes;
-		msg.AddPaddingBytes(n);
+		msg.AddPaddingBytes(8 - paddingBytes);
 	}
 
 	uint32_t* buffer = (uint32_t*)msg.getOutputBuffer();

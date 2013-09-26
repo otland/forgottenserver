@@ -85,11 +85,6 @@ void toLowerCaseString(std::string& source)
 	std::transform(source.begin(), source.end(), source.begin(), tolower);
 }
 
-void toUpperCaseString(std::string& source)
-{
-	std::transform(source.begin(), source.end(), source.begin(), toupper);
-}
-
 std::string asLowerCaseString(const std::string& source)
 {
 	std::string s = source;
@@ -100,7 +95,7 @@ std::string asLowerCaseString(const std::string& source)
 std::string asUpperCaseString(const std::string& source)
 {
 	std::string s = source;
-	toUpperCaseString(s);
+	std::transform(s.begin(), s.end(), s.begin(), toupper);
 	return s;
 }
 
@@ -201,7 +196,7 @@ std::string formatDate(time_t time)
 	if (tms) {
 		res = sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900, tms->tm_hour, tms->tm_min, tms->tm_sec);
 	} else {
-		res = sprintf(buffer, "UNIX Time : %d", (int32_t)time);
+		res = sprintf(buffer, "UNIX Time : %d", time);
 	}
 
 	if (res < 0) {
@@ -222,7 +217,7 @@ std::string formatDateShort(time_t time)
 			return "";
 		}
 	} else {
-		int32_t res = sprintf(buffer, "UNIX Time : %d", (int32_t)time);
+		int32_t res = sprintf(buffer, "UNIX Time : %d", time);
 		if (res < 0) {
 			return "";
 		}

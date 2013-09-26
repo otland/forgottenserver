@@ -667,7 +667,7 @@ class Player : public Creature, public Cylinder
 		Item* getWeapon(bool ignoreAmmo = false);
 		virtual WeaponType_t getWeaponType();
 		int32_t getWeaponSkill(const Item* item) const;
-		void getShieldAndWeapon(const Item* &shield, const Item* &weapon) const;
+		void getShieldAndWeapon(const Item*& shield, const Item*& weapon) const;
 
 		virtual void drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage);
 		virtual void drainMana(Creature* attacker, int32_t manaLoss);

@@ -224,16 +224,16 @@ class Tile : public Cylinder
 		Thing* getTopVisibleThing(const Creature* creature);
 		Item* getItemByTopOrder(int32_t topOrder);
 
-		uint32_t getThingCount() const {
-			uint32_t thingCount = getCreatureCount() + getItemCount();
+		size_t getThingCount() const {
+			size_t thingCount = getCreatureCount() + getItemCount();
 			if (ground) {
 				thingCount++;
 			}
 			return thingCount;
 		}
 		// If these return != 0 the associated vectors are guaranteed to exists
-		uint32_t getCreatureCount() const;
-		uint32_t getItemCount() const;
+		size_t getCreatureCount() const;
+		size_t getItemCount() const;
 		uint32_t getTopItemCount() const;
 		uint32_t getDownItemCount() const;
 

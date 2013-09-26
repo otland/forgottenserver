@@ -148,7 +148,7 @@ class NetworkMessage
 			m_MsgSize += 8;
 		}
 		void AddBytes(const char* bytes, size_t size);
-		void AddPaddingBytes(uint32_t n);
+		void AddPaddingBytes(size_t n);
 
 		void AddString(const std::string& value);
 		void AddString(const char* value);

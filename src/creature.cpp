@@ -279,7 +279,6 @@ void Creature::onWalk(Direction& dir)
 {
 	if (hasCondition(CONDITION_DRUNK)) {
 		uint32_t r = uniform_random(0, 20);
-
 		if (r <= 4) {
 			switch (r) {
 				case 0:

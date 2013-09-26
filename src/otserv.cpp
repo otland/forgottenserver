@@ -362,12 +362,11 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 			timeinfo->tm_hour = serverSaveHour;
 			timeinfo->tm_min = 55;
 			timeinfo->tm_sec = 0;
-			time_t difference = (time_t)difftime(mktime(timeinfo), timeNow);
 
+			double difference = difftime(mktime(timeinfo), timeNow);
 			if (difference < 0) {
 				difference += 86400;
 			}
-
 			g_scheduler.addEvent(createSchedulerTask(difference * 1000, boost::bind(&Game::prepareServerSave, &g_game)));
 		}
 	}
