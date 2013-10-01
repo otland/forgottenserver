@@ -127,30 +127,39 @@ bool hasBitSet(uint32_t flag, uint32_t flags)
 	return ((flags & flag) == flag);
 }
 
-int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
+std::mt19937& getRandomGenerator()
 {
 	static std::random_device rd;
 	static std::mt19937 generator(rd());
-	static std::uniform_int_distribution<int32_t> uniform_dist;
+	return generator;
+}
+
+int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
+{
+	static std::uniform_int_distribution<int32_t> uniformRand;
 	if (minNumber == maxNumber) {
 		return minNumber;
 	} else if (minNumber > maxNumber) {
 		std::swap(minNumber, maxNumber);
 	}
-	return uniform_dist(generator, std::uniform_int_distribution<int32_t>::param_type(minNumber, maxNumber));
+	return uniformRand(getRandomGenerator(), std::uniform_int_distribution<int32_t>::param_type(minNumber, maxNumber));
 }
 
 int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 {
-	static std::random_device rd;
-	static std::mt19937 generator(rd());
-	static std::normal_distribution<float> normal_dist(0.5f, 0.25f);
+	static std::normal_distribution<float> normalRand(0.5f, 0.25f);
 	if (minNumber == maxNumber) {
 		return minNumber;
 	} else if (minNumber > maxNumber) {
 		std::swap(minNumber, maxNumber);
 	}
-	return minNumber + std::max<float>(0.f, std::min<float>(1.f, normal_dist(generator))) * (maxNumber - minNumber);
+	return minNumber + std::max<float>(0.f, std::min<float>(1.f, normalRand(getRandomGenerator()))) * (maxNumber - minNumber);
+}
+
+bool boolean_random(double probability/* = 0.5*/)
+{
+	static std::bernoulli_distribution booleanRand;
+	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
 bool isNumber(char character)

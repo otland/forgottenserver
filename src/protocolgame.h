@@ -366,6 +366,10 @@ class ProtocolGame : public Protocol
 
 		uint32_t eventConnect;
 		// uint16_t version;
+
+		uint32_t m_challengeTimestamp;
+		uint8_t m_challengeRandom;
+
 		bool m_debugAssertSent;
 		bool m_acceptPackets;
 };
