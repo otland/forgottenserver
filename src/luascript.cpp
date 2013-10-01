@@ -1821,6 +1821,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerClassMethod("Item", "moveTo", LuaScriptInterface::luaItemMoveTo);
 	registerClassMethod("Item", "transform", LuaScriptInterface::luaItemTransform);
+	registerClassMethod("Item", "decay", LuaScriptInterface::luaItemDecay);
 
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
@@ -7534,6 +7535,19 @@ int32_t LuaScriptInterface::luaItemTransform(lua_State* L)
 		}
 
 		*itemPtr = newItem;
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemDecay(lua_State* L)
+{
+	// item:decay()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		g_game.startDecay(item);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);

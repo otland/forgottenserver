@@ -54,6 +54,7 @@ bool isNumber(char character);
 
 int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
 int32_t normal_random(int32_t minNumber, int32_t maxNumber);
+bool boolean_random(double probability = 0.5);
 
 Direction getDirection(const std::string& string);
 Position getNextPosition(Direction direction, Position pos);

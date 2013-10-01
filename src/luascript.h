@@ -794,6 +794,7 @@ class LuaScriptInterface
 
 		static int32_t luaItemMoveTo(lua_State* L);
 		static int32_t luaItemTransform(lua_State* L);
+		static int32_t luaItemDecay(lua_State* L);
 
 		// Container
 		static int32_t luaContainerCreate(lua_State* L);
