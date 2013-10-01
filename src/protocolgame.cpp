@@ -49,6 +49,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <random>
 
 #include <boost/function.hpp>
 
@@ -75,13 +76,15 @@ void ProtocolGame::addGameTaskInternal(bool droppable, uint32_t delay, const Fun
 }
 
 ProtocolGame::ProtocolGame(Connection_ptr connection) :
-	Protocol(connection)
+	Protocol(connection),
+	player(nullptr),
+	eventConnect(0),
+	// version(CLIENT_VERSION_MIN),
+	m_challengeTimestamp(0),
+	m_challengeRandom(0),
+	m_debugAssertSent(false),
+	m_acceptPackets(false)
 {
-	player = nullptr;
-	m_debugAssertSent = false;
-	m_acceptPackets = false;
-	eventConnect = 0;
-	// version = CLIENT_VERSION_MIN;
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 	protocolGameCount++;
 #endif
@@ -333,8 +336,12 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	std::string characterName = msg.GetString();
 	std::string password = msg.GetString();
 
-	msg.SkipBytes(4); // challenge timestamp
-	msg.SkipBytes(1); // challenge random
+	uint32_t timeStamp = msg.GetU32();
+	uint8_t randNumber = msg.GetByte();
+	if (m_challengeTimestamp != timeStamp || m_challengeRandom != randNumber) {
+		getConnection()->closeConnection();
+		return false;
+	}
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
 		disconnectClient(0x14, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
@@ -387,29 +394,27 @@ void ProtocolGame::onConnect()
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		// TODO: Use a real timestamp and random number to prevent anyone
-		// sniffing the login packet and re-send it to successfully login
-		//
-		// Requires calculating Adler after setting timestamp and random number
+		static std::random_device rd;
+		static std::ranlux24 generator(rd());
+		static std::uniform_int_distribution<uint8_t> randNumber(0x00, 0xFF);
 
-		// Adler checksum
-		output->AddByte(0xEF);
-		output->AddByte(0x00);
-		output->AddByte(0x82);
-		output->AddByte(0x02);
+		// Skip checksum
+		output->SkipBytes(sizeof(uint32_t));
 
-		// Packet length
-		output->AddByte(0x06);
-		output->AddByte(0x00);
-
-		// Packet type
+		// Packet length & type
+		output->AddU16(0x0006);
 		output->AddByte(0x1F);
 
-		// challenge timestamp
-		output->AddU32(0x00004101);
+		// Add timestamp & random number
+		m_challengeTimestamp = static_cast<uint32_t>(time(nullptr));
+		output->AddU32(m_challengeTimestamp);
 
-		// challenge random
-		output->AddByte(0x87);
+		m_challengeRandom = randNumber(generator);
+		output->AddByte(m_challengeRandom);
+
+		// Go back and write checksum
+		output->SkipBytes(-12);
+		output->AddU32(adlerChecksum(reinterpret_cast<uint8_t*>(output->getOutputBuffer() + sizeof(uint32_t)), 0x08));
 
 		OutputMessagePool::getInstance()->send(output);
 	}
