@@ -1274,3 +1274,7 @@ function doForceSummonCreature(name, pos)
 	end
 	return creature
 end
+
+function Player.sendCancelMessage(self, message)
+	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
+end

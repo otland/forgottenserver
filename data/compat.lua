@@ -192,6 +192,7 @@ end
 function canPlayerWearOutfit(cid, lookType, addons) local p = Player(cid) return p ~= nil and p:hasOutfit(lookType, addons) or false end
 function doPlayerAddMount(cid, mountId) local p = Player(cid) return p ~= nil and p:addMount(mountId) or false end
 function doPlayerRemoveMount(cid, mountId) local p = Player(cid) return p ~= nil and p:removeMount(mountId) or false end
+function doPlayerSendCancel(cid, text) local p = Player(cid) return p ~= nil and p:sendCancelMessage(text) or false end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end

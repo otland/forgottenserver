@@ -219,7 +219,6 @@ class ProtocolGame : public Protocol
 		void sendQuestLog();
 		void sendQuestLine(const Quest* quest);
 
-		void sendCancel(const std::string& message);
 		void sendCancelWalk();
 		void sendChangeSpeed(const Creature* creature, uint32_t speed);
 		void sendCancelTarget();

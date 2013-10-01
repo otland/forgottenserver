@@ -931,7 +931,7 @@ class Player : public Creature, public Cylinder
 
 		void sendCancel(const std::string& msg) const {
 			if (client) {
-				client->sendCancel(msg);
+				client->sendTextMessage(MSG_STATUS_SMALL, msg);
 			}
 		}
 		void sendCancelMessage(ReturnValue message) const;

@@ -1294,9 +1294,6 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerFeed(cid, food)
 	lua_register(m_luaState, "doPlayerFeed", LuaScriptInterface::luaDoFeedPlayer);
 
-	//doPlayerSendCancel(cid, text)
-	lua_register(m_luaState, "doPlayerSendCancel", LuaScriptInterface::luaDoPlayerSendCancel);
-
 	//doPlayerSendDefaultCancel(cid, ReturnValue)
 	lua_register(m_luaState, "doPlayerSendDefaultCancel", LuaScriptInterface::luaDoSendDefaultCancel);
 
@@ -2537,23 +2534,6 @@ int32_t LuaScriptInterface::luaDoFeedPlayer(lua_State* L)
 		pushBoolean(L, false);
 	}
 
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerSendCancel(lua_State* L)
-{
-	//doPlayerSendCancel(cid, text)
-	std::string text = popString(L);
-	uint32_t cid = popNumber(L);
-
-	const Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		player->sendCancel(text);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 

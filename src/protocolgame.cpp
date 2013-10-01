@@ -2272,13 +2272,6 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCancel(const std::string& message)
-{
-	NetworkMessage msg;
-	AddTextMessage(msg, MSG_STATUS_SMALL, message);
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendCancelTarget()
 {
 	NetworkMessage msg;
