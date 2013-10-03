@@ -839,7 +839,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		}
 	}
 
-	if ((node = monsterNode.child("targetchance"))) {
+	if ((node = monsterNode.child("targetchange"))) {
 		if ((attr = node.attribute("speed")) || (attr = node.attribute("interval"))) {
 			mType->changeTargetSpeed = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
 		} else {
