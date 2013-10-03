@@ -543,7 +543,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 				lastStepCost = 2;
 			} else if (Position::getDistanceX(newPos, oldPos) >= 1 && Position::getDistanceY(newPos, oldPos) >= 1) {
 				//diagonal extra cost
-				lastStepCost = 2;
+				lastStepCost = 3;
 			}
 		} else {
 			stopEventWalk();
