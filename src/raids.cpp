@@ -499,7 +499,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		}
 	}
 
-	for (pugi::xml_node monsterNode = eventNode.child("monster").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
+	for (pugi::xml_node monsterNode = eventNode.first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
 		std::string name;
 
 		if ((attr = monsterNode.attribute("name"))) {
