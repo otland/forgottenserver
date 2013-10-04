@@ -95,17 +95,15 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	query.str("");
 	query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
 	result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
+	if (result) {
+		do {
+			if (result->getDataInt("deletion") == 0) {
+				account.charList.push_back(result->getDataString("name"));
+			}
+		} while (result->next());
+		db->freeResult(result);
+		account.charList.sort();
 	}
-
-	do {
-		if (result->getDataInt("deletion") == 0) {
-			account.charList.push_back(result->getDataString("name"));
-		}
-	} while (result->next());
-	db->freeResult(result);
-	account.charList.sort();
 	return true;
 }
 
