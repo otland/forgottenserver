@@ -41,7 +41,8 @@ Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 	if (itemVector) {
 		for (Item* item : *itemVector) {
 			if (item->getContainer() || item->hasProperty(MOVEABLE)) {
-				addItem(item);
+				itemlist.push_front(item);
+				item->setParent(this);
 			}
 		}
 	}
