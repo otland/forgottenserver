@@ -661,9 +661,6 @@ configKeys = {
 	MAX_PACKETS_PER_SECOND = 36
 }
 
-maleOutfits = {128, 129, 130, 131, 132, 133, 134, 143, 144, 145, 146, 151, 152, 153, 154, 251, 268, 273, 278, 289, 325, 328, 335, 367, 430, 432, 463, 465, 472, 512, 516}
-femaleOutfits = {136, 137, 138, 139, 140, 141, 142, 147, 148, 149, 150, 155, 156, 157, 158, 252, 269, 270, 279, 288, 324, 329, 336, 366, 431, 433, 464, 466, 471, 513, 514}
-
 ropeSpots = {384, 418, 8278, 8592, 13189, 14435, 14436, 15635, 19518}
 
 doors = {[1209] = 1211, [1210] = 1211, [1212] = 1214, [1213] = 1214, [1219] = 1220, [1221] = 1222, [1231] = 1233, [1232] = 1233, [1234] = 1236, [1235] = 1236, [1237] = 1238, [1239] = 1240, [1249] = 1251, [1250] = 1251, [1252] = 1254, [1253] = 1254, [1539] = 1540, [1541] = 1542, [3535] = 3537, [3536] = 3537, [3538] = 3539, [3544] = 3546, [3545] = 3546, [3547] = 3548, [4913] = 4915, [4914] = 4915, [4916] = 4918, [4917] = 4918, [5082] = 5083, [5084] = 5085, [5098] = 5100, [5099] = 5100, [5101] = 5102, [5107] = 5109, [5108] = 5109, [5110] = 5111, [5116] = 5118, [5117] = 5118, [5119] = 5120, [5125] = 5127, [5126] = 5127, [5128] = 5129, [5134] = 5136, [5135] = 5136, [5137] = 5139, [5138] = 5139, [5140] = 5142, [5141] = 5142, [5143] = 5145, [5144] = 5145, [5278] = 5280, [5279] = 5280, [5281] = 5283, [5282] = 5283, [5284] = 5285, [5286] = 5287, [5515] = 5516, [5517] = 5518, [5732] = 5734, [5733] = 5734, [5735] = 5737, [5736] = 5737, [6192] = 6194, [6193] = 6194, [6195] = 6197, [6196] = 6197, [6198] = 6199, [6200] = 6201, [6249] = 6251, [6250] = 6251, [6252] = 6254, [6253] = 6254, [6255] = 6256, [6257] = 6258, [6795] = 6796, [6797] = 6798, [6799] = 6800, [6801] = 6802, [6891] = 6893, [6892] = 6893, [6894] = 6895, [6900] = 6902, [6901] = 6902, [6903] = 6904, [7033] = 7035, [7034] = 7035, [7036] = 7037, [7042] = 7044, [7043] = 7044, [7045] = 7046, [7054] = 7055, [7056] = 7057, [8541] = 8543, [8542] = 8543, [8544] = 8546, [8545] = 8546, [8547] = 8548, [8549] = 8550, [9165] = 9167, [9166] = 9167, [9168] = 9170, [9169] = 9170, [9171] = 9172, [9173] = 9174, [9267] = 9269, [9268] = 9269, [9270] = 9272, [9271] = 9272, [9273] = 9274, [9275] = 9276, [10276] = 10277, [10274] = 10275, [10268] = 10270, [10269] = 10270, [10271] = 10273, [10272] = 10273, [10471] = 10472, [10480] = 10481, [10477] = 10479, [10478] = 10479, [10468] = 10470, [10469] = 10470, [10775] = 10777, [10776] = 10777, [12092] = 12094, [12093] = 12094, [12188] = 12190, [12189] = 12190, [19840] = 19842, [19841] = 19842, [19843] = 19844, [19980] = 19982, [19981] = 19982, [19983] = 19984, [20273] = 20275, [20274] = 20275, [20276] = 20277, [17235] = 17236, [18208] = 18209, [13022] = 13023, [10784] = 10786, [10785] = 10786, [12099] = 12101, [12100] = 12101, [12197] = 12199, [12198] = 12199, [19849] = 19851, [19850] = 19851, [19852] = 19853, [19989] = 19991, [19990] = 19991, [19992] = 19993, [20282] = 20284, [20283] = 20284, [20285] = 20286, [17237] = 17238, [13020] = 13021, [10780] = 10781, [12095] = 12096, [12195] = 12196, [19845] = 19846, [19985] = 19986, [20278] = 20279, [10789] = 10790, [12102] = 12103, [12204] = 12205, [19854] = 19855, [19994] = 19995, [20287] = 20288, [10782] = 10783, [12097] = 12098, [12193] = 12194, [19847] = 19848, [19987] = 19988, [20280] = 20281, [10791] = 10792, [12104] = 12105, [12202] = 12203, [19856] = 19857, [19996] = 19997, [20289] = 20290}
@@ -714,23 +711,24 @@ ITEM_WILDGROWTH_PERSISTENT = 2721
 ITEM_WILDGROWTH_SAFE = 11099
 
 function doPlayerGiveItem(cid, itemid, count, charges)
-	local isFluidContainer = isItemFluidContainer(itemid) == TRUE
+	local isFluidContainer = isItemFluidContainer(itemid)
 	if isFluidContainer and charges == nil then
 		charges = 1
 	end
+
 	while count > 0 do
 		local tempcount = 1
-		if(isItemStackable(itemid) == TRUE) then
+		if isItemStackable(itemid) then
 			tempcount = math.min(100, count)
 		end
 
-		local ret = doPlayerAddItem(cid, itemid, tempcount, TRUE, charges)
+		local ret = doPlayerAddItem(cid, itemid, tempcount, true, charges)
 		if ret == false then
 			ret = doCreateItem(itemid, tempcount, getPlayerPosition(cid))
 		end
 
-		if(ret) then
-			if(isFluidContainer) then
+		if ret then
+			if isFluidContainer then
 				count = count - 1
 			elseif isItemRune(itemid) then
 				return LUA_NO_ERROR
@@ -758,27 +756,30 @@ function doCreatureSayWithRadius(cid, text, type, radiusx, radiusy, position)
 end
 
 function doPlayerTakeItem(cid, itemid, count)
-	if(getPlayerItemCount(cid,itemid) >= count) then
-		while count > 0 do
-			local tempcount = 0
-			if(isItemStackable(itemid) == TRUE) then
-				tempcount = math.min (100, count)
-			else
-				tempcount = 1
-			end
-			local ret = doPlayerRemoveItem(cid, itemid, tempcount)
-			if(ret ~= LUA_ERROR) then
-				count = count-tempcount
-			else
-				return LUA_ERROR
-			end
-		end
-		if(count == 0) then
-			return LUA_NO_ERROR
-		end
-	else
+	if getPlayerItemCount(cid,itemid) < count then
 		return LUA_ERROR
 	end
+
+	while count > 0 do
+		local tempcount = 0
+		if isItemStackable(itemid) then
+			tempcount = math.min (100, count)
+		else
+			tempcount = 1
+		end
+
+		local ret = doPlayerRemoveItem(cid, itemid, tempcount)
+		if ret ~= LUA_ERROR then
+			count = count - tempcount
+		else
+			return LUA_ERROR
+		end
+	end
+
+	if count ~= 0 then
+		return LUA_ERROR
+	end
+	return LUA_NO_ERROR
 end
 
 function doPlayerBuyItem(cid, itemid, count, cost, charges)
@@ -789,8 +790,8 @@ function doPlayerBuyItem(cid, itemid, count, cost, charges)
 end
 
 function doPlayerSellItem(cid, itemid, count, cost)
-	if(doPlayerTakeItem(cid, itemid, count) == LUA_NO_ERROR) then
-		if doPlayerAddMoney(cid, cost) ~= TRUE then
+	if doPlayerTakeItem(cid, itemid, count) == LUA_NO_ERROR then
+		if not doPlayerAddMoney(cid, cost) then
 			error('Could not add money to ' .. getPlayerName(cid) .. '(' .. cost .. 'gp)')
 		end
 		return LUA_NO_ERROR
@@ -853,52 +854,47 @@ end
 function getDistanceBetween(firstPosition, secondPosition)
 	local xDif = math.abs(firstPosition.x - secondPosition.x)
 	local yDif = math.abs(firstPosition.y - secondPosition.y)
-
 	local posDif = math.max(xDif, yDif)
-	if(firstPosition.z ~= secondPosition.z) then
-		posDif = posDif + 9 + 6
+	if firstPosition.z ~= secondPosition.z then
+		posDif = posDif + 15
 	end
 	return posDif
 end
 
 function isSorcerer(cid)
-	if(isPlayer(cid) == FALSE) then
+	if not isPlayer(cid) then
 		debugPrint("isSorcerer: Player not found.")
 		return false
 	end
-
-	return (isInArray({1,5}, getPlayerVocation(cid)) == TRUE)
+	return isInArray({1, 5}, getPlayerVocation(cid))
 end
 
 function isDruid(cid)
-	if(isPlayer(cid) == FALSE) then
+	if not isPlayer(cid) then
 		debugPrint("isDruid: Player not found.")
 		return false
 	end
-
-	return (isInArray({2,6}, getPlayerVocation(cid)) == TRUE)
+	return isInArray({2, 6}, getPlayerVocation(cid))
 end
 
 function isPaladin(cid)
-	if(isPlayer(cid) == FALSE) then
+	if not isPlayer(cid) then
 		debugPrint("isPaladin: Player not found.")
 		return false
 	end
-
-	return (isInArray({3,7}, getPlayerVocation(cid)) == TRUE)
+	return isInArray({3, 7}, getPlayerVocation(cid))
 end
 
 function isKnight(cid)
-	if(isPlayer(cid) == FALSE) then
+	if not isPlayer(cid) then
 		debugPrint("isKnight: Player not found.")
 		return false
 	end
-
-	return (isInArray({4,8}, getPlayerVocation(cid)) == TRUE)
+	return isInArray({4, 8}, getPlayerVocation(cid))
 end
 
 function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges)
-	if(doPlayerRemoveMoney(cid, cost) ~= TRUE) then
+	if not doPlayerRemoveMoney(cid, cost) then
 		return LUA_ERROR
 	end
 
@@ -908,152 +904,16 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 			doAddContainerItem(container, itemid, charges)
 		end
 
-		if(doPlayerAddItemEx(cid, container, true) ~= RETURNVALUE_NOERROR) then
+		if doPlayerAddItemEx(cid, container, true) ~= RETURNVALUE_NOERROR then
 			return LUA_ERROR
 		end
 	end
-
 	return LUA_NO_ERROR
-end
-
-function getDirectionTo(pos1, pos2)
-	local dir = NORTH
-	if(pos1.x > pos2.x) then
-		dir = WEST
-		if(pos1.y > pos2.y) then
-			dir = NORTHWEST
-		elseif(pos1.y < pos2.y) then
-			dir = SOUTHWEST
-		end
-	elseif(pos1.x < pos2.x) then
-		dir = EAST
-		if(pos1.y > pos2.y) then
-			dir = NORTHEAST
-		elseif(pos1.y < pos2.y) then
-			dir = SOUTHEAST
-		end
-	else
-		if(pos1.y > pos2.y) then
-			dir = NORTH
-		elseif(pos1.y < pos2.y) then
-			dir = SOUTH
-		end
-	end
-	return dir
-end
-
-function getPlayerLookPos(cid)
-	return getPosByDir(getThingPos(cid), getPlayerLookDir(cid))
-end
-
-function getPosByDir(fromPosition, direction, size)
-	local n = size or 1
-
-	local pos = fromPosition
-	if(direction == NORTH) then
-		pos.y = pos.y - n
-	elseif(direction == SOUTH) then
-		pos.y = pos.y + n
-	elseif(direction == WEST) then
-		pos.x = pos.x - n
-	elseif(direction == EAST) then
-		pos.x = pos.x + n
-	elseif(direction == NORTHWEST) then
-		pos.y = pos.y - n
-		pos.x = pos.x - n
-	elseif(direction == NORTHEAST) then
-		pos.y = pos.y - n
-		pos.x = pos.x + n
-	elseif(direction == SOUTHWEST) then
-		pos.y = pos.y + n
-		pos.x = pos.x - n
-	elseif(direction == SOUTHEAST) then
-		pos.y = pos.y + n
-		pos.x = pos.x + n
-	end
-
-	return pos
-end
-
-function getCreaturesInRange(position, radiusx, radiusy, showMonsters, showPlayers, showSummons)
-	local creaturesList = {}
-	for x = -radiusx, radiusx do
-		for y = -radiusy, radiusy do
-			if not (x == 0 and y == 0) then
-				local creature = getTopCreature({x = position.x + x, y = position.y + y, z = position.z})
-				if (creature.type == 1 and showPlayers) or (creature.type == 2 and showMonsters and (not showSummons or (showSummons and getCreatureMaster(creature.uid) == (creature.uid)))) then
-					table.insert(creaturesList, creature.uid)
-				end
-			end
-		end
-	end
-
-	local creature = getTopCreature(position)
-	if (creature.type == 1 and showPlayers) or (creature.type == 2 and showMonsters and not (showSummons or (showSummons and getCreatureMaster(creature.uid) == (creature.uid)))) then
-		if not(table.find(creaturesList, creature.uid)) then
-			table.insert(creaturesList, creature.uid)
-		end
-	end
-	return creaturesList
-end
-
-function addContainerWithItems(cid, container, item, item_count, count)
-	local Container = doPlayerAddItem(cid, container, 1)
-	for i = 1, count do
-		doAddContainerItem(Container, item, item_count)
-	end
-end
-
-function tableToPos(t)
-	if type(t) == "table" and #t == 3 and tonumber(table.concat(t)) then
-		return {x = tonumber(t[1]), y = tonumber(t[2]), z = tonumber(t[3])}
-	end
-	return FALSE
 end
 
 function getCount(string)
 	local b, e = string:find("%d+")
 	return b and e and tonumber(string:sub(b, e)) or -1
-end
-
- -- Returns player name if player exists in database or empty string
-function playerExists(name)
-	local resultId = db.storeQuery("SELECT `name` FROM `players` WHERE `name` = " .. db.escapeString(name))
-	if resultId == false then
-		return ""
-	end
-
-	local playerName = result.getDataString(resultId, "name")
-	result.free(resultId)
-	return playerName
-end
-
- -- Updates bank account balance of an offline player
-function transferGold(player, amount)
-	db.query("UPDATE `players` SET `balance` = `balance` + " .. amount .. " WHERE `name` = " .. db.escapeString(player))
-	return true
-end
-
-function doCopyItem(item, attributes)
-	local attributes = attributes or false
-
-	local ret = doCreateItemEx(item.itemid, item.type)
-	if(attributes) then
-		if(item.actionid > 0) then
-			doSetItemActionId(ret, item.actionid)
-		end
-	end
-
-	if(isContainer(item.uid) == TRUE) then
-		for i = (getContainerSize(item.uid) - 1), 0, -1 do
-			local tmp = getContainerItem(item.uid, i)
-			if(tmp.itemid > 0) then
-				doAddContainerItemEx(ret, doCopyItem(tmp, true).uid)
-			end
-		end
-	end
-
-	return getThing(ret)
 end
 
 function getTibianTime()
@@ -1065,193 +925,6 @@ function getTibianTime()
 		minutes = '0' .. minutes
 	end
 	return hours .. ':' .. minutes
-end
-
-looktypes = {
-	["citizen"] = {
-		looktypeMale = 128,
-		looktypeFemale = 136
-	},
-	["hunter"] = {
-		looktypeMale = 129,
-		looktypeFemale = 137
-	},
-	["mage"] = {
-		looktypeMale = 130,
-		looktypeFemale = 138
-	},
-	["knight"] = {
-		looktypeMale = 131,
-		looktypeFemale = 139
-	},
-	["nobleman"] = {
-		looktypeMale = 132,
-		looktypeFemale = 140
-	},
-	["summoner"] = {
-		looktypeMale = 133,
-		looktypeFemale = 141
-	},
-	["warrior"] = {
-		looktypeMale = 134,
-		looktypeFemale = 142
-	},
-	["barbarian"] = {
-		looktypeMale = 143,
-		looktypeFemale = 147
-	},
-	["druid"] = {
-		looktypeMale = 144,
-		looktypeFemale = 148
-	},
-	["wizard"] = {
-		looktypeMale = 145,
-		looktypeFemale = 149
-	},
-	["oriental"] = {
-		looktypeMale = 146,
-		looktypeFemale = 150
-	},
-	["pirate"] = {
-		looktypeMale = 151,
-		looktypeFemale = 155
-	},
-	["assassin"] = {
-		looktypeMale = 152,
-		looktypeFemale = 156
-	},
-	["beggar"] = {
-		looktypeMale = 153,
-		looktypeFemale = 157
-	},
-	["shaman"] = {
-		looktypeMale = 154,
-		looktypeFemale = 158
-	},
-	["norseman"] = {
-		looktypeMale = 251,
-		looktypeFemale = 252
-	},
-	["nightmare"] = {
-		looktypeMale = 268,
-		looktypeFemale = 269
-	},
-	["jester"] = {
-		looktypeMale = 273,
-		looktypeFemale = 270
-	},
-	["brotherhood"] = {
-		looktypeMale = 278,
-		looktypeFemale = 279
-	},
-	["demonhunter"] = {
-		looktypeMale = 289,
-		looktypeFemale = 288
-	},
-	["yalaharian"] = {
-		looktypeMale = 325,
-		looktypeFemale = 324
-	},
-	["warmaster"] = {
-		looktypeMale = 335,
-		looktypeFemale = 336
-	},
-	["elementalist"] = {
-		looktypeMale = 433,
-		looktypeFemale = 432
-	},
-	["afflicted"] = {
-		looktypeMale = 430,
-		looktypeFemale = 431
-	},
-	["crystalwarlord"] = {
-		looktypeMale = 512,
-		looktypeFemale = 513
-	},
-	["soilguardian"] = {
-		looktypeMale = 516,
-		looktypeFemale = 514
-	},
-	["demon"] = {
-		looktypeMale = 541,
-		looktypeFemale = 542
-	},
-	["deepling"] = {
-		looktypeMale = 463,
-		looktypeFemale = 464
-	},
-
-	["potionbelt"] = {
-		looktypeMale = 133,
-		looktypeFemale = 138
-	},
-	["tiara"] = {
-		looktypeMale = 133,
-		looktypeFemale = 138
-	},
-	["ferumbrashat"] = {
-		looktypeMale = 130,
-		looktypeFemale = 141
-	},
-	["wand"] = {
-		looktypeMale = 130,
-		looktypeFemale = 141
-	}
-}
-
-function hasAddon(cid, looktype, addon)
-	if looktypes[looktype] ~= nil then
-		if looktype == "beggar" or looktype == "hunter" then
-			if addon == 1 then
-				return canPlayerWearOutfit(cid, looktypes[looktype].looktypeMale, 1) or canPlayerWearOutfit(cid, looktypes[looktype].looktypeFemale, 2)
-			else
-				return canPlayerWearOutfit(cid, looktypes[looktype].looktypeMale, 2) or canPlayerWearOutfit(cid, looktypes[looktype].looktypeFemale, 1)
-			end
-		end
-		return canPlayerWearOutfit(cid, looktypes[looktype].looktypeMale, addon) or canPlayerWearOutfit(cid, looktypes[looktype].looktypeFemale, addon)
-	end
-	return false
-end
-
-function addAddon(cid, looktype, addon)
-	if looktypes[looktype] ~= nil then
-		if looktype == "beggar" or looktype == "hunter" then
-			if addon == 1 then
-				doPlayerAddOutfit(cid, looktypes[looktype].looktypeMale, 1)
-				doPlayerAddOutfit(cid, looktypes[looktype].looktypeFemale, 2)
-			else
-				doPlayerAddOutfit(cid, looktypes[looktype].looktypeMale, 2)
-				doPlayerAddOutfit(cid, looktypes[looktype].looktypeFemale, 1)
-			end
-		else
-			doPlayerAddOutfit(cid, looktypes[looktype].looktypeMale, addon)
-			doPlayerAddOutfit(cid, looktypes[looktype].looktypeFemale, addon)
-		end
-		doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
-	end
-end
-
-table.find = function(table, value)
-	for i, v in pairs(table) do
-		if v == value then
-			return i
-		end
-	end
-	return nil
-end
-
-function isMonsterInRange(monsterName, fromPos, toPos)
-	for _x = fromPos.x, toPos.x do
-		for _y = fromPos.y, toPos.y do
-			for _z = fromPos.z, toPos.z do
-				creature = getTopCreature({x = _x, y = _y, z = _z})
-				if creature.type == THING_TYPE_MONSTER and getCreatureName(creature.uid):lower() == monsterName:lower() then
-					return true
-				end
-			end
-		end
-	end
-	return false
 end
 
 function doForceSummonCreature(name, pos)
