@@ -645,9 +645,6 @@ class Item : virtual public Thing
 		bool isBed() const {
 			return items[id].isBed();
 		}
-		bool hasCharges() const {
-			return getCharges() > 0;
-		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;
 		}
@@ -733,7 +730,7 @@ class Item : virtual public Thing
 			loadedFromMap = value;
 		}
 		bool isCleanable() const {
-			return(!loadedFromMap && (getUniqueId() == 0 && getActionId() == 0) && isPickupable() && canRemove());
+			return !loadedFromMap && canRemove() && isPickupable() && getUniqueId() == 0 && getActionId() == 0;
 		}
 
 		ItemAttributes* getAttributes() {

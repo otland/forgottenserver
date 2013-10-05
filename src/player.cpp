@@ -2329,8 +2329,9 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				if (absorbPercent != 0) {
 					damage -= std::ceil(damage * (absorbPercent / 100.));
 
-					if (item->hasCharges()) {
-						g_game.transformItem(item, item->getID(), std::max<int32_t>(0, item->getCharges() - 1));
+					uint16_t charges = item->getCharges();
+					if (charges != 0) {
+						g_game.transformItem(item, item->getID(), charges - 1);
 					}
 				}
 			}

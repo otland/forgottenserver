@@ -88,9 +88,11 @@ bool Combat::getMinMaxValues(Creature* creature, Creature* target, int32_t& min,
 					if (weapon) {
 						max = (int32_t)(weapon->getWeaponDamage(player, target, tool, true) * maxa + maxb);
 
-						if (params.useCharges && tool->hasCharges()) {
-							int32_t newCharge = std::max<int32_t>(0, tool->getCharges() - 1);
-							g_game.transformItem(tool, tool->getID(), newCharge);
+						if (params.useCharges) {
+							uint16_t charges = tool->getCharges();
+							if (charges != 0) {
+								g_game.transformItem(tool, tool->getID(), charges - 1);
+							}
 						}
 					} else {
 						max = (int32_t)maxb;
@@ -1031,9 +1033,11 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 			if (tool) {
 				attackValue = tool->getAttack();
 
-				if (useCharges && tool->hasCharges()) {
-					int32_t newCharge = std::max<int32_t>(0, tool->getCharges() - 1);
-					g_game.transformItem(tool, tool->getID(), newCharge);
+				if (useCharges) {
+					uint16_t charges = tool->getCharges();
+					if (charges != 0) {
+						g_game.transformItem(tool, tool->getID(), charges - 1);
+					}
 				}
 			}
 

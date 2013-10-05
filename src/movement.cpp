@@ -271,8 +271,9 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 {
 	MoveListMap::iterator it;
 
-	if (item->getUniqueId() != 0) {
-		it = m_uniqueIdMap.find(item->getUniqueId());
+	uint16_t uniqueId = item->getUniqueId();
+	if (uniqueId != 0) {
+		it = m_uniqueIdMap.find(uniqueId);
 		if (it != m_uniqueIdMap.end()) {
 			std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
 			if (!moveEventList.empty()) {
@@ -281,8 +282,9 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 		}
 	}
 
-	if (item->getActionId() != 0) {
-		it = m_actionIdMap.find(item->getActionId());
+	uint16_t actionId = item->getActionId();
+	if (actionId != 0) {
+		it = m_actionIdMap.find(actionId);
 		if (it != m_actionIdMap.end()) {
 			std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
 			if (!moveEventList.empty()) {

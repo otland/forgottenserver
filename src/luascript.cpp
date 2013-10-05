@@ -175,13 +175,17 @@ void ScriptEnvironment::getEventInfo(int32_t& scriptId, std::string& desc, LuaSc
 void ScriptEnvironment::addUniqueThing(Thing* thing)
 {
 	Item* item = thing->getItem();
-	if (item && item->getUniqueId() != 0) {
-		uint16_t uid = item->getUniqueId();
-		auto it = m_globalMap.find(uid);
+	if (!item) {
+		return;
+	}
+
+	uint16_t uniqueId = item->getUniqueId();
+	if (uniqueId != 0) {
+		auto it = m_globalMap.find(uniqueId);
 		if (it == m_globalMap.end()) {
-			m_globalMap[uid] = thing;
+			m_globalMap[uniqueId] = thing;
 		} else {
-			std::cout << "Duplicate uniqueId " << uid << std::endl;
+			std::cout << "Duplicate uniqueId " << uniqueId << std::endl;
 		}
 	}
 }
@@ -189,8 +193,13 @@ void ScriptEnvironment::addUniqueThing(Thing* thing)
 void ScriptEnvironment::removeUniqueThing(Thing* thing)
 {
 	Item* item = thing->getItem();
-	if (item && item->getUniqueId() != 0) {
-		auto it = m_globalMap.find(item->getUniqueId());
+	if (!item) {
+		return;
+	}
+
+	uint16_t uniqueId = item->getUniqueId();
+	if (uniqueId != 0) {
+		auto it = m_globalMap.find(uniqueId);
 		if (it != m_globalMap.end()) {
 			m_globalMap.erase(it);
 		}

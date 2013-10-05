@@ -613,15 +613,15 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.ADD_UCHAR(_count);
 	}
 
-	if (hasCharges()) {
-		uint16_t _count = getCharges();
+	uint16_t charges = getCharges();
+	if (charges != 0) {
 		propWriteStream.ADD_UCHAR(ATTR_CHARGES);
-		propWriteStream.ADD_USHORT(_count);
+		propWriteStream.ADD_USHORT(charges);
 	}
 
 	if (!isNotMoveable()) {
 		uint16_t _actionId = getActionId();
-		if (_actionId) {
+		if (_actionId != 0) {
 			propWriteStream.ADD_UCHAR(ATTR_ACTION_ID);
 			propWriteStream.ADD_USHORT(_actionId);
 		}
@@ -1079,7 +1079,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 		if (!found) {
 			if (it.isKey()) {
-				s << " (Key:" << (item ? (int32_t)item->getActionId() : 0) << ')';
+				s << " (Key:" << (item ? item->getActionId() : 0) << ')';
 			} else if (it.isFluidContainer()) {
 				if (subType > 0) {
 					const std::string& itemName = items[subType].name;
@@ -1119,8 +1119,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				} else {
 					s << "You are too far away to read it";
 				}
-			} else if (it.levelDoor && item && item->getActionId() >= (int32_t)it.levelDoor) {
-				s << " for level " << item->getActionId() - it.levelDoor;
+			} else if (it.levelDoor != 0 && item) {
+				uint16_t actionId = item->getActionId();
+				if (actionId >= it.levelDoor) {
+					s << " for level " << (actionId - it.levelDoor);
+				}
 			}
 		}
 	}
@@ -1303,15 +1306,14 @@ bool Item::canDecay()
 		return false;
 	}
 
-	if (getUniqueId() != 0) {
-		return false;
-	}
-
 	const ItemType& it = Item::items[id];
 	if (it.decayTo == -1 || it.decayTime == 0) {
 		return false;
 	}
 
+	if (getUniqueId() != 0) {
+		return false;
+	}
 	return true;
 }
 

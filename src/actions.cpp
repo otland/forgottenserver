@@ -264,15 +264,17 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 
 Action* Actions::getAction(const Item* item)
 {
-	if (item->getUniqueId() != 0) {
-		auto it = uniqueItemMap.find(item->getUniqueId());
+	uint16_t uniqueId = item->getUniqueId();
+	if (uniqueId != 0) {
+		auto it = uniqueItemMap.find(uniqueId);
 		if (it != uniqueItemMap.end()) {
 			return it->second;
 		}
 	}
 
-	if (item->getActionId() != 0) {
-		auto it = actionItemMap.find(item->getActionId());
+	uint16_t actionId = item->getActionId();
+	if (actionId != 0) {
+		auto it = actionItemMap.find(actionId);
 		if (it != actionItemMap.end()) {
 			return it->second;
 		}
@@ -342,7 +344,8 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 			openContainer = container;
 		}
 
-		if (container->getCorpseOwner() != 0 && !player->canOpenCorpse(container->getCorpseOwner())) {
+		uint32_t corpseOwner = container->getCorpseOwner();
+		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RET_YOUARENOTTHEOWNER;
 		}
 

@@ -488,24 +488,16 @@ void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 		}
 
 		g_game.transformItem(item, item->getID(), newCount);
-	} else if (ammoAction == AMMOACTION_REMOVECHARGE) {
-		uint16_t newCharge = item->getCharges();
-		if (newCharge > 0) {
-			newCharge--;
-		}
-
-		g_game.transformItem(item, item->getID(), newCharge);
 	} else if (ammoAction == AMMOACTION_MOVE) {
 		g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, nullptr, FLAG_NOLIMIT);
 	} else if (ammoAction == AMMOACTION_MOVEBACK) {
 		/* do nothing */
-	} else if (item->hasCharges()) {
-		uint16_t newCharge = item->getCharges();
-		if (newCharge > 0) {
-			newCharge--;
+	} else {
+		/* remove charges */
+		uint16_t charges = item->getCharges();
+		if (charges != 0) {
+			g_game.transformItem(item, item->getID(), charges - 1);
 		}
-
-		g_game.transformItem(item, item->getID(), newCharge);
 	}
 }
 
