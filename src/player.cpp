@@ -3589,16 +3589,23 @@ void Player::updateSaleShopList(uint32_t itemId)
 
 bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType)
 {
-	auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId] (const ShopInfo& shopInfo) { return shopInfo.itemId == itemId && shopInfo.buyPrice > 0; });
-	if (it == shopItemList.end()) {
-		return false;
-	}
-
 	const ItemType& itemType = Item::items[itemId];
-	if (itemType.isFluidContainer() || itemType.isSplash()) {
-		return it->subType == subType;
+	for (const ShopInfo& shopInfo : shopItemList) {
+		if (shopInfo.itemId != itemId) {
+			continue;
+		}
+
+		if (shopInfo.buyPrice == 0) {
+			continue;
+		}
+
+		if (itemType.isFluidContainer() && shopInfo.subType != subType) {
+			continue;
+		}
+
+		return true;
 	}
-	return true;
+	return false;
 }
 
 void Player::__internalAddThing(Thing* thing)
