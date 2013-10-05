@@ -787,6 +787,8 @@ double Item::getWeight() const
 std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
                                  const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
+	const std::string* text = nullptr;
+
 	std::ostringstream s;
 	s << getNameDescription(it, item, subType, addArticle);
 
@@ -1083,14 +1085,14 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			} else if (it.isFluidContainer()) {
 				if (subType > 0) {
 					const std::string& itemName = items[subType].name;
-					s << " of " << (itemName.length() ? itemName : "unknown");
+					s << " of " << (!itemName.empty() ? itemName : "unknown");
 				} else {
 					s << ". It is empty";
 				}
 			} else if (it.isSplash()) {
 				s << " of ";
 
-				if (subType > 0 && items[subType].name.length()) {
+				if (subType > 0 && !items[subType].name.empty()) {
 					s << items[subType].name;
 				} else {
 					s << "unknown";
@@ -1099,20 +1101,24 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << '.' << std::endl;
 
 				if (lookDistance <= 4) {
-					if (item && !item->getText().empty()) {
-						if (item->getWriter().length()) {
-							s << item->getWriter() << " wrote";
-							time_t date = item->getDate();
-
-							if (date > 0) {
-								s << " on " << formatDateShort(date);
+					if (item) {
+						text = &item->getText();
+						if (!text->empty()) {
+							const std::string& writer = item->getWriter();
+							if (!writer.empty()) {
+								s << writer << " wrote";
+								time_t date = item->getDate();
+								if (date > 0) {
+									s << " on " << formatDateShort(date);
+								}
+								s << ": ";
+							} else {
+								s << "You read: ";
 							}
-
-							s << ": ";
+							s << *text;
 						} else {
-							s << "You read: ";
+							s << "Nothing is written on it";
 						}
-						s << item->getText();
 					} else {
 						s << "Nothing is written on it";
 					}
@@ -1169,8 +1175,16 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	}
 
-	if (!it.allowDistRead || item->getText().empty() || (it.id >= 7369 && it.id <= 7371)) {
+	if (!it.allowDistRead || (it.id >= 7369 && it.id <= 7371)) {
 		s << '.';
+	} else {
+		if (!text && item) {
+			text = &item->getText();
+		}
+
+		if (!text || text->empty()) {
+			s << '.';
+		}
 	}
 
 	if (it.wieldInfo != 0) {
@@ -1211,16 +1225,26 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	}
 
-	if (item && !item->getSpecialDescription().empty()) {
-		s << std::endl << item->getSpecialDescription();
-	} else if (it.description.length() && lookDistance <= 1) {
+	if (item) {
+		const std::string& specialDescription = item->getSpecialDescription();
+		if (!specialDescription.empty()) {
+			s << std::endl << specialDescription;
+		} else if (lookDistance <= 1 && !it.description.empty()) {
+			s << std::endl << it.description;
+		}
+	} else if (lookDistance <= 1 && !it.description.empty()) {
 		s << std::endl << it.description;
 	}
 
-	if (it.allowDistRead && it.id >= 7369 && it.id <= 7371 && !item->getText().empty()) {
-		s << std::endl << item->getText();
-	}
+	if (it.allowDistRead && it.id >= 7369 && it.id <= 7371) {
+		if (!text && item) {
+			text = &item->getText();
+		}
 
+		if (text && !text->empty()) {
+			s << std::endl << *text;
+		}
+	}
 	return s.str();
 }
 
@@ -1238,7 +1262,7 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 
 	std::ostringstream s;
 
-	if (it.name.length()) {
+	if (!it.name.empty()) {
 		if (it.stackable && subType > 1) {
 			if (it.showCount) {
 				s << subType << ' ';
@@ -1363,12 +1387,11 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 		return;
 	}
 
-	if (value.length() == 0) {
+	if (value.empty()) {
 		return;
 	}
 
 	Attribute* attr = getAttr(type);
-
 	if (attr) {
 		if (attr->value) {
 			delete (std::string*)attr->value;

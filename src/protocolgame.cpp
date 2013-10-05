@@ -2667,8 +2667,9 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 		msg.AddU16(maxlen);
 		msg.AddString(item->getText());
 	} else {
-		msg.AddU16(item->getText().size());
-		msg.AddString(item->getText());
+		const std::string& text = item->getText();
+		msg.AddU16(text.size());
+		msg.AddString(text);
 	}
 
 	const std::string& writer = item->getWriter();

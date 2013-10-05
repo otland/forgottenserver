@@ -151,13 +151,16 @@ bool Mailbox::getReceiver(Item* item, std::string& name)
 		return false;
 	}
 
+	const std::string* text = nullptr;
+
 	if (item->getID() == ITEM_PARCEL) { /**We need to get the text from the label incase its a parcel**/
 		Container* parcel = item->getContainer();
 		if (parcel) {
 			for (Item* parcelItem : parcel->getItemList()) {
 				if (parcelItem->getID() == ITEM_LABEL) {
 					item = parcelItem;
-					if (!item->getText().empty()) {
+					text = &item->getText();
+					if (!text->empty()) {
 						break;
 					}
 				}
@@ -168,11 +171,19 @@ bool Mailbox::getReceiver(Item* item, std::string& name)
 		return false;
 	}
 
-	if (!item || item->getText().empty()) { /**No label/letter found or its empty.**/
+	if (!item) {
 		return false;
 	}
 
-	name = getFirstLine(item->getText());
+	if (!text) {
+		text = &item->getText();
+	}
+
+	if (text->empty()) {
+		return false;
+	}
+
+	name = getFirstLine(*text);
 	trimString(name);
 	return true;
 }
