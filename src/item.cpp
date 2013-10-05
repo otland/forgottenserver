@@ -1399,11 +1399,6 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 	}
 }
 
-bool ItemAttributes::hasAttribute(itemAttrTypes type) const
-{
-	return (type & m_attributes) != 0;
-}
-
 void ItemAttributes::removeAttribute(itemAttrTypes type)
 {
 	//check if we have it
