@@ -10877,7 +10877,6 @@ int32_t LuaScriptInterface::luaConditionClone(lua_State* L)
 	// condition:clone()
 	Condition* condition = getUserdata<Condition>(L, 1);
 	if (condition) {
-		pushNumber(L, condition->getEndTime());
 		pushUserdata<Condition>(L, condition->clone());
 		setMetatable(L, -1, "Condition");
 	} else {
