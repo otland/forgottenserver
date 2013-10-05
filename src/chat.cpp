@@ -504,6 +504,7 @@ void Chat::removeUserFromAllChannels(const Player& player)
 
 	for (const auto& it : privateChannels) {
 		PrivateChatChannel* channel = it.second;
+		channel->removeInvited(player);
 		channel->removeUser(player);
 		if (channel->getOwner() == player.getGUID()) {
 			deleteChannel(player, channel->getId());
