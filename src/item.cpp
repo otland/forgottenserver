@@ -252,9 +252,7 @@ void Item::setID(uint16_t newid)
 		removeAttribute(ATTR_ITEM_DURATION);
 	}
 
-	if (hasAttribute(ATTR_ITEM_CORPSEOWNER)) {
-		removeAttribute(ATTR_ITEM_CORPSEOWNER);
-	}
+	removeAttribute(ATTR_ITEM_CORPSEOWNER);
 
 	if (newDuration > 0 && (!prevIt.stopTime || !hasAttribute(ATTR_ITEM_DURATION))) {
 		setDecaying(DECAYING_FALSE);
@@ -1403,53 +1401,45 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 
 bool ItemAttributes::hasAttribute(itemAttrTypes type) const
 {
-	if (!validateIntAttrType(type)) {
-		return false;
-	}
-
-	Attribute* attr = getAttrConst(type);
-
-	if (attr) {
-		return true;
-	}
-
-	return false;
+	return (type & m_attributes) != 0;
 }
 
 void ItemAttributes::removeAttribute(itemAttrTypes type)
 {
 	//check if we have it
-	if ((type & m_attributes) != 0) {
-		//go trough the linked list until find it
-		Attribute* prevAttr = nullptr;
-		Attribute* curAttr = m_firstAttr;
+	if (!hasAttribute(type)) {
+		return;
+	}
 
-		while (curAttr != nullptr) {
-			if (curAttr->type == type) {
-				//found so remove it from the linked list
-				if (prevAttr) {
-					prevAttr->next = curAttr->next;
-				} else {
-					m_firstAttr = curAttr->next;
-				}
+	//go trough the linked list until find it
+	Attribute* prevAttr = nullptr;
+	Attribute* curAttr = m_firstAttr;
 
-				//remove it from flags
-				m_attributes = m_attributes & ~type;
-
-				//delete string if it is string type
-				if (validateStrAttrType(type)) {
-					delete (std::string*)curAttr->value;
-				}
-
-				//finally delete the attribute and return
-				delete curAttr;
-				return;
+	while (curAttr != nullptr) {
+		if (curAttr->type == type) {
+			//found so remove it from the linked list
+			if (prevAttr) {
+				prevAttr->next = curAttr->next;
+			} else {
+				m_firstAttr = curAttr->next;
 			}
 
-			//advance in the linked list
-			prevAttr = curAttr;
-			curAttr = curAttr->next;
+			//remove it from flags
+			m_attributes = m_attributes & ~type;
+
+			//delete string if it is string type
+			if (validateStrAttrType(type)) {
+				delete (std::string*)curAttr->value;
+			}
+
+			//finally delete the attribute and return
+			delete curAttr;
+			return;
 		}
+
+		//advance in the linked list
+		prevAttr = curAttr;
+		curAttr = curAttr->next;
 	}
 }
 
@@ -1542,7 +1532,7 @@ void ItemAttributes::addAttr(Attribute* attr)
 
 ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) const
 {
-	if ((type & m_attributes) == 0) {
+	if (!hasAttribute(type)) {
 		return nullptr;
 	}
 
@@ -1562,7 +1552,7 @@ ItemAttributes::Attribute* ItemAttributes::getAttr(itemAttrTypes type)
 {
 	Attribute* curAttr;
 
-	if ((type & m_attributes) == 0) {
+	if (!hasAttribute(type)) {
 		curAttr = new Attribute(type);
 		addAttr(curAttr);
 		return curAttr;
