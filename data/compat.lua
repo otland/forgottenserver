@@ -161,7 +161,7 @@ function getPlayerItemById(cid, deepSearch, itemId, ...)
 end
 
 getPlayerAccountBalance = getPlayerBalance
-getIPByName = getIPByPlayerName
+getIpByName = getIPByPlayerName
 
 function setPlayerStorageValue(cid, key, value) local p = Player(cid) return p ~= nil and p:setStorageValue(key, value) or false end
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p ~= nil and p:setBankBalance(balance) or false end
