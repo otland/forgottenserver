@@ -570,25 +570,25 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 
 				if (oldPos.y > newPos.y) { //north
 					//shift y south
-					for (int32_t y = mapWalkHeight - 1 - 1; y >= 0; --y) {
+					for (int32_t y = mapWalkHeight - 2; y >= 0; --y) {
 						memcpy(localMapCache[y + 1], localMapCache[y], sizeof(localMapCache[y]));
 					}
 
 					//update 0
-					for (int32_t x = -((mapWalkWidth - 1) / 2); x <= ((mapWalkWidth - 1) / 2); ++x) {
-						tile = g_game.getTile(myPos.getX() + x, myPos.getY() - ((mapWalkHeight - 1) / 2), myPos.z);
-						updateTileCache(tile, x, -((mapWalkHeight - 1) / 2));
+					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
+						tile = g_game.getTile(myPos.getX() + x, myPos.getY() - maxWalkCacheHeight, myPos.z);
+						updateTileCache(tile, x, -maxWalkCacheHeight);
 					}
 				} else if (oldPos.y < newPos.y) { // south
 					//shift y north
-					for (int32_t y = 0; y <= mapWalkHeight - 1 - 1; ++y) {
+					for (int32_t y = 0; y <= mapWalkHeight - 2; ++y) {
 						memcpy(localMapCache[y], localMapCache[y + 1], sizeof(localMapCache[y]));
 					}
 
 					//update mapWalkHeight - 1
-					for (int32_t x = -((mapWalkWidth - 1) / 2); x <= ((mapWalkWidth - 1) / 2); ++x) {
-						tile = g_game.getTile(myPos.getX() + x, myPos.getY() + ((mapWalkHeight - 1) / 2), myPos.z);
-						updateTileCache(tile, x, (mapWalkHeight - 1) / 2);
+					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
+						tile = g_game.getTile(myPos.getX() + x, myPos.getY() + maxWalkCacheHeight, myPos.z);
+						updateTileCache(tile, x, maxWalkCacheHeight);
 					}
 				}
 
@@ -611,9 +611,9 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 					}
 
 					//update mapWalkWidth - 1
-					for (int32_t y = -((mapWalkHeight - 1) / 2); y <= ((mapWalkHeight - 1) / 2); ++y) {
-						tile = g_game.getTile(myPos.x + ((mapWalkWidth - 1) / 2), myPos.y + y, myPos.z);
-						updateTileCache(tile, (mapWalkWidth - 1) / 2, y);
+					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
+						tile = g_game.getTile(myPos.x + maxWalkCacheWidth, myPos.y + y, myPos.z);
+						updateTileCache(tile, maxWalkCacheWidth, y);
 					}
 				} else if (oldPos.x > newPos.x) { // west
 					//shift y east
@@ -634,9 +634,9 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 					}
 
 					//update 0
-					for (int32_t y = -((mapWalkHeight - 1) / 2); y <= ((mapWalkHeight - 1) / 2); ++y) {
-						tile = g_game.getTile(myPos.x - ((mapWalkWidth - 1) / 2), myPos.y + y, myPos.z);
-						updateTileCache(tile, -((mapWalkWidth - 1) / 2), y);
+					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
+						tile = g_game.getTile(myPos.x - maxWalkCacheWidth, myPos.y + y, myPos.z);
+						updateTileCache(tile, -maxWalkCacheWidth, y);
 					}
 				}
 
