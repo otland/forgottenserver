@@ -1532,25 +1532,17 @@ ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) cons
 	Attribute* curAttr = m_firstAttr;
 	while (curAttr) {
 		if (curAttr->type == type) {
-			return curAttr;
+			break;
 		}
 		curAttr = curAttr->next;
 	}
-	return nullptr;
+	return curAttr;
 }
 
 ItemAttributes::Attribute* ItemAttributes::getAttr(itemAttrTypes type)
 {
-	Attribute* curAttr;
-	if (hasAttribute(type)) {
-		curAttr = m_firstAttr;
-		while (curAttr) {
-			if (curAttr->type == type) {
-				return curAttr;
-			}
-			curAttr = curAttr->next;
-		}
-	} else {
+	Attribute* curAttr = getAttrConst(type);
+	if (!curAttr) {
 		curAttr = new Attribute(type);
 		addAttr(curAttr);
 	}
