@@ -526,6 +526,7 @@ class Creature : virtual public Thing
 		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
 		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
 		bool localMapCache[mapWalkHeight][mapWalkWidth];
+
 		bool isInternalRemoved;
 		bool isMapLoaded;
 		bool isUpdatingPath;

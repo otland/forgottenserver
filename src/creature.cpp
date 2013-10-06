@@ -381,20 +381,16 @@ void Creature::updateMapCache()
 
 void Creature::updateTileCache(const Tile* tile, int32_t dx, int32_t dy)
 {
-	if ((std::abs(dx) <= (mapWalkWidth - 1) / 2) &&
-	        (std::abs(dy) <= (mapWalkHeight - 1) / 2)) {
-		int32_t x = (mapWalkWidth - 1) / 2 + dx;
-		int32_t y = (mapWalkHeight - 1) / 2 + dy;
-
-		localMapCache[y][x] = (tile && tile->__queryAdd(0, this, 1,
-		                       FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR);
+	static const int32_t max_x = (mapWalkWidth - 1) / 2;
+	static const int32_t max_y = (mapWalkHeight - 1) / 2;
+	if (std::abs(dx) <= max_x && std::abs(dy) <= max_y) {
+		localMapCache[max_y + dy][max_x + dx] = tile && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR;
 	}
 }
 
 void Creature::updateTileCache(const Tile* tile, const Position& pos)
 {
 	const Position& myPos = getPosition();
-
 	if (pos.z == myPos.z) {
 		int32_t dx = Position::getOffsetX(pos, myPos);
 		int32_t dy = Position::getOffsetY(pos, myPos);
@@ -409,7 +405,6 @@ int32_t Creature::getWalkCache(const Position& pos) const
 	}
 
 	const Position& myPos = getPosition();
-
 	if (myPos.z != pos.z) {
 		return 0;
 	}
@@ -421,11 +416,10 @@ int32_t Creature::getWalkCache(const Position& pos) const
 	int32_t dx = Position::getOffsetX(pos, myPos);
 	int32_t dy = Position::getOffsetY(pos, myPos);
 
-	if ((std::abs(dx) <= (mapWalkWidth - 1) / 2) &&
-	        (std::abs(dy) <= (mapWalkHeight - 1) / 2)) {
-		int32_t x = (mapWalkWidth - 1) / 2 + dx;
-		int32_t y = (mapWalkHeight - 1) / 2 + dy;
-		if (localMapCache[y][x]) {
+	static const int32_t max_x = (mapWalkWidth - 1) / 2;
+	static const int32_t max_y = (mapWalkHeight - 1) / 2;
+	if (std::abs(dx) <= max_x && std::abs(dy) <= max_y) {
+		if (localMapCache[max_y + dy][max_x + dx]) {
 			return 1;
 		} else {
 			return 0;
@@ -1545,17 +1539,14 @@ int32_t Creature::getStepDuration() const
 int64_t Creature::getEventStepTicks(bool onlyDelay) const
 {
 	int64_t ret = getWalkDelay();
-
 	if (ret <= 0) {
 		int32_t stepDuration = getStepDuration();
-
 		if (onlyDelay && stepDuration > 0) {
 			ret = 1;
 		} else {
 			ret = stepDuration * lastStepCost;
 		}
 	}
-
 	return ret;
 }
 

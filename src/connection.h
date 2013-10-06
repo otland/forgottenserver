@@ -21,6 +21,9 @@
 #define __OTSERV_CONNECTION_H__
 
 #include "definitions.h"
+
+#include <set>
+
 #include <boost/asio.hpp>
 
 #include <boost/utility.hpp>
@@ -61,7 +64,8 @@ class ConnectionManager
 		ConnectionManager() {
 		}
 
-		std::list<Connection_ptr> m_connections;
+		// TODO: Use unordered_set (we need to specify a hash function)
+		std::set<Connection_ptr> m_connections;
 		boost::recursive_mutex m_connectionManagerLock;
 };
 

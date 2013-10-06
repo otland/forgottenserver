@@ -52,6 +52,7 @@
 #include <random>
 
 #include <boost/function.hpp>
+#include <boost/range/adaptor/reversed.hpp>
 
 extern Game g_game;
 extern ConfigManager g_config;
@@ -570,42 +571,50 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 {
 	msg.AddU16(0x00); //environmental effects
 
-	int32_t count = 0;
-
+	int32_t count;
 	if (tile->ground) {
 		msg.AddItem(tile->ground);
-		count++;
+		count = 1;
+	} else {
+		count = 0;
 	}
-
-	ItemVector::const_iterator it;
 
 	const TileItemVector* items = tile->getItemList();
 	if (items) {
-		for (it = items->getBeginTopItem(); ((it != items->getEndTopItem()) && (count < 10)); ++it) {
+		for (auto it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
 			msg.AddItem(*it);
-			count++;
+
+			if (++count == 10) {
+				return;
+			}
 		}
 	}
 
 	const CreatureVector* creatures = tile->getCreatures();
 	if (creatures) {
-		for (CreatureVector::const_reverse_iterator cit = creatures->rbegin(); ((cit != creatures->rend()) && (count < 10)); ++cit) {
-			if (!player->canSeeCreature(*cit)) {
+		for (const Creature* creature : boost::adaptors::reverse(*creatures)) {
+			if (!player->canSeeCreature(creature)) {
 				continue;
 			}
 
 			bool known;
 			uint32_t removedKnown;
-			checkCreatureAsKnown((*cit)->getID(), known, removedKnown);
-			AddCreature(msg, *cit, known, removedKnown);
-			count++;
+			checkCreatureAsKnown(creature->getID(), known, removedKnown);
+			AddCreature(msg, creature, known, removedKnown);
+
+			if (++count == 10) {
+				return;
+			}
 		}
 	}
 
 	if (items) {
-		for (it = items->getBeginDownItem(); ((it != items->getEndDownItem()) && (count < 10)); ++it) {
+		for (auto it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
 			msg.AddItem(*it);
-			count++;
+
+			if (++count == 10) {
+				return;
+			}
 		}
 	}
 }
