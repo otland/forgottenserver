@@ -439,10 +439,11 @@ class Creature : virtual public Thing
 		}
 		virtual void setParent(Cylinder* cylinder) {
 			_tile = dynamic_cast<Tile*>(cylinder);
+			_position = _tile->getTilePosition();
 		}
 
-		const Position& getPosition() const {
-			return _tile->getPosition();
+		inline const Position& getPosition() const {
+			return _position;
 		}
 
 		Tile* getTile() {
@@ -483,6 +484,8 @@ class Creature : virtual public Thing
 			int32_t total;
 			int64_t ticks;
 		};
+
+		Position _position;
 
 		typedef std::map<uint32_t, CountBlock_t> CountMap;
 		CountMap damageMap;
