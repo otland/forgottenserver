@@ -425,7 +425,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 		}
 
 		uint64_t timeDiff = OTSYS_TIME() - it->second.ticks;
-		if (timeDiff > g_config.getNumber(ConfigManager::PZ_LOCKED)) {
+		if (timeDiff > (uint64_t)g_config.getNumber(ConfigManager::PZ_LOCKED)) {
 			return false;
 		}
 	}
