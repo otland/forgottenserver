@@ -369,8 +369,8 @@ void Creature::updateMapCache()
 	const Position& myPos = getPosition();
 	Position pos(0, 0, myPos.z);
 
-	for (int32_t y = -((mapWalkHeight - 1) / 2); y <= ((mapWalkHeight - 1) / 2); ++y) {
-		for (int32_t x = -((mapWalkWidth - 1) / 2); x <= ((mapWalkWidth - 1) / 2); ++x) {
+	for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
+		for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
 			pos.x = myPos.getX() + x;
 			pos.y = myPos.getY() + y;
 			tile = g_game.getTile(pos.x, pos.y, myPos.z);
@@ -381,10 +381,8 @@ void Creature::updateMapCache()
 
 void Creature::updateTileCache(const Tile* tile, int32_t dx, int32_t dy)
 {
-	static const int32_t max_x = (mapWalkWidth - 1) / 2;
-	static const int32_t max_y = (mapWalkHeight - 1) / 2;
-	if (std::abs(dx) <= max_x && std::abs(dy) <= max_y) {
-		localMapCache[max_y + dy][max_x + dx] = tile && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR;
+	if (std::abs(dx) <= maxWalkCacheWidth && std::abs(dy) <= maxWalkCacheHeight) {
+		localMapCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx] = tile && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR;
 	}
 }
 
@@ -414,15 +412,14 @@ int32_t Creature::getWalkCache(const Position& pos) const
 	}
 
 	int32_t dx = Position::getOffsetX(pos, myPos);
-	int32_t dy = Position::getOffsetY(pos, myPos);
-
-	static const int32_t max_x = (mapWalkWidth - 1) / 2;
-	static const int32_t max_y = (mapWalkHeight - 1) / 2;
-	if (std::abs(dx) <= max_x && std::abs(dy) <= max_y) {
-		if (localMapCache[max_y + dy][max_x + dx]) {
-			return 1;
-		} else {
-			return 0;
+	if (std::abs(dx) <= maxWalkCacheWidth) {
+		int32_t dy = Position::getOffsetY(pos, myPos);
+		if (std::abs(dy) <= maxWalkCacheHeight) {
+			if (localMapCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx]) {
+				return 1;
+			} else {
+				return 0;
+			}
 		}
 	}
 
