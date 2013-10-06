@@ -23,9 +23,11 @@
 #include "player.h"
 #include "game.h"
 #include "chat.h"
+#include "configmanager.h"
 
 extern Game g_game;
 extern Chat g_chat;
+extern ConfigManager g_config;
 
 Party::Party(Player* _leader)
 {
@@ -423,7 +425,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 		}
 
 		uint64_t timeDiff = OTSYS_TIME() - it->second.ticks;
-		if (timeDiff > (uint64_t)g_game.getInFightTicks()) {
+		if (timeDiff > g_config.getNumber(ConfigManager::PZ_LOCKED)) {
 			return false;
 		}
 	}

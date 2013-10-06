@@ -811,7 +811,7 @@ void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::st
 
 	uint32_t i = 0;
 
-	const std::map<uint32_t, Player*>& players = g_game.getPlayers();
+	const auto& players = g_game.getPlayers();
 
 	auto it = players.begin();
 	if (!g_config.getBoolean(ConfigManager::SHOW_GAMEMASTERS_ONLINE)) {

@@ -795,9 +795,11 @@ bool Creature::getKillers(Creature** _lastHitCreature, Creature** _mostDamageCre
 
 	int32_t mostDamage = 0;
 
+	uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+
 	for (const auto& it : damageMap) {
 		CountBlock_t cb = it.second;
-		if ((cb.total > mostDamage && (OTSYS_TIME() - cb.ticks <= g_game.getInFightTicks()))) {
+		if ((cb.total > mostDamage && (OTSYS_TIME() - cb.ticks <= inFightTicks))) {
 			Creature* creature = g_game.getCreatureByID(it.first);
 			if (creature) {
 				mostDamage = cb.total;
@@ -814,7 +816,7 @@ bool Creature::hasBeenAttacked(uint32_t attackerId)
 	if (it == damageMap.end()) {
 		return false;
 	}
-	return (OTSYS_TIME() - it->second.ticks) <= g_game.getInFightTicks();
+	return (OTSYS_TIME() - it->second.ticks) <= g_config.getNumber(ConfigManager::PZ_LOCKED);
 }
 
 Item* Creature::getCorpse()
