@@ -160,25 +160,63 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 		//Add char list
 		output->AddByte(0x64);
-		output->AddByte((uint8_t)account.charList.size());
+	
+	    if (version > 1010) {
+            if (g_config.getBoolean(ConfigManager::ON_OR_OFF_CHARLIST)) {
+                output->AddByte(2);
 
-		for (const std::string& characterName : account.charList) {
-			output->AddString(characterName);
+                output->AddByte(0);
+                output->AddString("Offline");
+                output->AddString(g_config.getString(ConfigManager::IP));
+                output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+                output->AddByte(0);
 
-			if (g_config.getBoolean(ConfigManager::ON_OR_OFF_CHARLIST)) {
-				if (g_game.getPlayerByName(characterName)) {
-					output->AddString("Online");
-				} else {
-					output->AddString("Offline");
-				}
-			} else {
-				output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
-			}
+                output->AddByte(1);
+                output->AddString("Online");
+                output->AddString(g_config.getString(ConfigManager::IP));
+                output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+                output->AddByte(0);
+            } else {
+                output->AddByte(1); // number of worlds
 
-			output->AddU32(serverip);
-			output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
-			output->AddByte(0x00);
-		}
+                output->AddByte(0); // world id
+                output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
+                output->AddString(g_config.getString(ConfigManager::IP));
+                output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+                output->AddByte(0);           
+            }
+
+            output->AddByte((uint8_t)account.charList.size());
+            for (const std::string& characterName : account.charList) {
+                if (g_config.getBoolean(ConfigManager::ON_OR_OFF_CHARLIST)) {
+                    output->AddByte(g_game.getPlayerByName(characterName) != NULL);
+                } else { 
+                    output->AddByte(0);
+                }
+
+                output->AddString(characterName);
+            }
+        } else {
+            output->AddByte((uint8_t)account.charList.size());
+
+            for (const std::string& characterName : account.charList) {
+                output->AddString(characterName);
+
+                if (g_config.getBoolean(ConfigManager::ON_OR_OFF_CHARLIST)) {
+                    if (g_game.getPlayerByName(characterName)) {
+                        output->AddString("Online");
+                    } else {
+                        output->AddString("Offline");
+                    }
+                } else {
+                    output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
+                }
+
+                output->AddU32(serverip);
+                output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+                output->AddByte(0x00);
+            }
+        }
 
 		//Add premium days
 		if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
