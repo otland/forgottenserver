@@ -847,7 +847,7 @@ void Creature::gainHealth(Creature* healer, int32_t healthGain)
 	}
 }
 
-void Creature::drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage)
+void Creature::drainHealth(Creature* attacker, int32_t damage)
 {
 	changeHealth(-damage, false);
 

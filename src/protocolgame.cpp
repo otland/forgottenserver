@@ -1512,6 +1512,39 @@ void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& mes
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendTextMessage(const TextMessage& message)
+{
+	NetworkMessage msg;
+	msg.AddByte(0xB4);
+	msg.AddByte(message.type);
+	switch (message.type) {
+		case MSG_DAMAGE_DEALT:
+		case MSG_DAMAGE_RECEIVED:
+		case MSG_DAMAGE_OTHERS: {
+			msg.AddPosition(message.position);
+			msg.AddU32(message.primary.value);
+			msg.AddByte(message.primary.color);
+			msg.AddU32(message.secondary.value);
+			msg.AddByte(message.secondary.color);
+			break;
+		}
+		case MSG_HEALED:
+		case MSG_HEALED_OTHERS:
+		case MSG_EXPERIENCE:
+		case MSG_EXPERIENCE_OTHERS: {
+			msg.AddPosition(message.position);
+			msg.AddU32(message.primary.value);
+			msg.AddByte(message.primary.color);
+			break;
+		}
+		default: {
+			break;
+		}
+	}
+	msg.AddString(message.text);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendClosePrivate(uint16_t channelId)
 {
 	NetworkMessage msg;

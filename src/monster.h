@@ -135,7 +135,7 @@ class Monster : public Creature
 		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport);
 
-		virtual void drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage);
+		virtual void drainHealth(Creature* attacker, int32_t damage);
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
 		virtual void onWalk();
 		virtual bool getNextStep(Direction& dir, uint32_t& flags);

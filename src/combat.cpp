@@ -888,6 +888,37 @@ void Combat::doCombatHealth(Creature* caster, const Position& pos,
 	CombatFunc(caster, pos, area, params, CombatHealthFunc, (void*)&var);
 }
 
+void Combat::doCombatHealth(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params)
+{
+	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
+		if (params.impactEffect != NM_ME_NONE) {
+			g_game.addMagicEffect(target->getPosition(), params.impactEffect);
+		}
+
+		if (caster && params.distanceEffect != NM_ME_NONE) {
+			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
+		}
+
+		if (g_game.combatBlockHit(params.combatType, caster, target, damage.primary, params.blockedByShield, params.blockedByArmor) &&
+			g_game.combatBlockHit(params.element.type, caster, target, damage.secondary, false, false)) {
+			return;
+		}
+
+		if ((damage.primary < 0 || damage.secondary < 0) && caster) {
+			Player* targetPlayer = target->getPlayer();
+			if (targetPlayer && caster->getPlayer() && targetPlayer->getSkull() != SKULL_BLACK) {
+				damage.primary /= 2;
+				damage.secondary /= 2;
+			}
+		}
+
+		if (g_game.combatChangeHealth(caster, target, damage, params)) {
+			CombatConditionFunc(caster, target, params, nullptr);
+			CombatDispelFunc(caster, target, params, nullptr);
+		}
+	}
+}
+
 void Combat::doCombatMana(Creature* caster, Creature* target,
                           int32_t minChange, int32_t maxChange, const CombatParams& params)
 {

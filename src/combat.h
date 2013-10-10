@@ -66,6 +66,22 @@ class TargetCallback : public CallBack
 		formulaType_t type;
 };
 
+struct CombatDamage {
+	int32_t primary;
+	int32_t secondary;
+	
+	CombatDamage()
+		: primary(0), secondary(0) {}
+};
+
+struct CombatElement {
+	CombatType_t type;
+	int32_t damage;
+
+	CombatElement()
+		: type(COMBAT_NONE), damage(0) {}
+};
+
 struct CombatParams {
 	CombatParams() {
 		combatType = COMBAT_NONE;
@@ -83,6 +99,8 @@ struct CombatParams {
 		tileCallback = nullptr;
 		targetCallback = nullptr;
 	}
+
+	CombatElement element;
 
 	std::list<const Condition*> conditionList;
 	ConditionType_t dispelType;
@@ -274,6 +292,7 @@ class Combat
 		                           int32_t minChange, int32_t maxChange, const CombatParams& params);
 		static void doCombatHealth(Creature* caster, const Position& pos,
 		                           const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params);
+		static void doCombatHealth(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params);
 
 		static void doCombatMana(Creature* caster, Creature* target,
 		                         int32_t minChange, int32_t maxChange, const CombatParams& params);
