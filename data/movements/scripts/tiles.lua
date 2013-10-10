@@ -30,16 +30,24 @@ function onStepOut(cid, item, position, fromPosition)
 end
 
 function getLevelTile(cid, item, position)
-	if isPlayer(cid) then
-		if getPlayerLevel(cid) < item.actionid - 1000 then
-			local playerPosition = getPlayerPosition(cid)
-			doTeleportThing(cid, {x = playerPosition.x, y = playerPosition.y, z = playerPosition.z + 1})
-			doSendMagicEffect(position, CONST_ME_MAGIC_BLUE)
-		end
+	local player = Player(cid)
+	if player == nil then
+		return
+	end
+
+	if player:getLevel() < item.actionid - 1000 then
+		local playerPosition = player:getPosition()
+		doTeleportThing(cid, {x = playerPosition.x, y = playerPosition.y, z = playerPosition.z + 1})
+		playerPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	end
 end
 
 function getDepotItems(cid, position)
+	local player = Player(cid)
+	if player == nil then
+		return
+	end
+
 	local possiblePositions = {
 		{x = position.x - 1, y = position.y, z = position.z},
 		{x = position.x + 1, y = position.y, z = position.z},
@@ -48,15 +56,18 @@ function getDepotItems(cid, position)
 	}
 
 	for i = 1, #possiblePositions do
-		local thing = getTileItemByType(possiblePositions[i], ITEM_TYPE_DEPOT)
-		if thing.itemid ~= 0 and isDepot(thing.uid) then
-			local depotItems = getPlayerDepotItems(cid, getDepotId(thing.uid))
-			if depotItems == 1 then
-				doPlayerSendTextMessage(cid, MESSAGE_EVENT_DEFAULT, 'Your depot contains 1 item.')
-			else
-				doPlayerSendTextMessage(cid, MESSAGE_EVENT_DEFAULT, 'Your depot contains '  .. depotItems .. ' items.')
+		local tile = Tile(possiblePositions[i])
+		if tile ~= nil then
+			local item = tile:getItemByType(ITEM_TYPE_DEPOT)
+			if item ~= nil then
+				local depotItems = player:getDepotItems(getDepotId(item:getUniqueId()))
+				if depotItems == 1 then
+					player:sendTextMessage(MESSAGE_EVENT_DEFAULT, 'Your depot contains 1 item.')
+				else
+					player:sendTextMessage(MESSAGE_EVENT_DEFAULT, 'Your depot contains '  .. depotItems .. ' items.')
+				end
+				break
 			end
-			break
 		end
 	end
 end
