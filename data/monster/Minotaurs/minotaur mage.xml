@@ -47,7 +47,7 @@
 		<voice sentence="Kaplar!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="85810"/><!-- gold coin -->
+		<item id="2148" countmax="35" chance="85810"/><!-- gold coin -->
 		<item id="2684" countmax="8" chance="15030"/><!-- carrot -->
 		<item id="12429" chance="6400"/><!-- purple robe -->
 		<item id="2649" chance="5160"/><!-- leather legs -->
