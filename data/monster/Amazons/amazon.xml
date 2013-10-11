@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="20" attack="30"/>
-		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
+		<attack name="physical" interval="1000" chance="10" range="7" min="0" max="-45">
 			<attribute key="shootEffect" value="throwingknife"/>
 		</attack>
 	</attacks>
@@ -34,15 +34,15 @@
 		<voice sentence="Your head will be mine!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="10" chance="23000"/><!-- gold coin -->
-		<item id="2229" countmax="2" chance="55500"/><!-- skull -->
-		<item id="2379" chance="81000"/><!-- dagger -->
-		<item id="2467" chance="43000"/><!-- leather armor -->
-		<item id="2691" chance="26000"/><!-- brown bread -->
-		<item id="2385" chance="22000"/><!-- sabre -->
-		<item id="2526" chance="7000"/><!-- studded shield -->
-		<item id="2050" chance="5000"/><!-- torch -->
-		<item id="2125" chance="500"/><!-- crystal necklace -->
-		<item id="2147" chance="200"/><!-- small ruby -->
+		<item id="2148" countmax="20" chance="40030"/><!-- gold coin -->
+		<item id="2229" countmax="2" chance="80320"/><!-- skull -->
+		<item id="2379" chance="80150"/><!-- dagger -->
+		<item id="2691" chance="29300"/><!-- brown bread -->
+		<item id="2385" chance="23000"/><!-- sabre -->
+		<item id="2050" chance="1050"/><!-- torch -->
+		<item id="2125" chance="280"/><!-- crystal necklace -->
+		<item id="2147" chance="160"/><!-- small ruby -->
+		<item id="12399" chance="10110"/><!-- girlish hair decoration -->
+		<item id="2147" chance="5200"/><!-- protective charm -->
 	</loot>
 </monster>
