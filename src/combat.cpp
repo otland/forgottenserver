@@ -59,35 +59,43 @@ Combat::~Combat()
 	delete area;
 }
 
-bool Combat::getMinMaxValues(Creature* creature, Creature* target, int32_t& min, int32_t& max) const
+CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 {
+	CombatDamage damage;
 	if (!creature) {
-		return false;
+		return damage;
 	}
 
+	damage.primary.type = params.combatType;
+
+	int32_t min, max;
 	if (creature->getCombatValues(min, max)) {
-		return true;
+		damage.primary.value = normal_random(min, max);
 	} else if (Player* player = creature->getPlayer()) {
 		if (params.valueCallback) {
-			params.valueCallback->getMinMaxValues(player, min, max, params.useCharges);
-			return true;
+			params.valueCallback->getMinMaxValues(player, damage, params.useCharges);
 		} else {
 			switch (formulaType) {
 				case FORMULA_LEVELMAGIC: {
-					max = (int32_t)((player->getLevel() * 2 + player->getMagicLevel() * 3) * 1. * mina + minb);
-					min = (int32_t)((player->getLevel() * 2 + player->getMagicLevel() * 3) * 1. * maxa + maxb);
-					return true;
+					int32_t levelFormula = player->getLevel() * 2 + player->getMagicLevel() * 3;
+					damage.primary.value = normal_random(
+						static_cast<int32_t>(levelFormula * maxa + maxb),
+						static_cast<int32_t>(levelFormula * mina + minb)
+					);
+					break;
 				}
 
 				case FORMULA_SKILL: {
 					Item* tool = player->getWeapon();
 					const Weapon* weapon = g_weapons->getWeapon(tool);
-
-					min = (int32_t)minb;
-
 					if (weapon) {
-						max = (int32_t)(weapon->getWeaponDamage(player, target, tool, true) * maxa + maxb);
+						damage.primary.value = normal_random(
+							static_cast<int32_t>(minb),
+							static_cast<int32_t>(weapon->getWeaponDamage(player, target, tool, true) * maxa + maxb)
+						);
 
+						damage.secondary.type = weapon->getElementType();
+						damage.secondary.value = weapon->getElementDamage(player, target, tool);
 						if (params.useCharges) {
 							uint16_t charges = tool->getCharges();
 							if (charges != 0) {
@@ -95,32 +103,32 @@ bool Combat::getMinMaxValues(Creature* creature, Creature* target, int32_t& min,
 							}
 						}
 					} else {
-						max = (int32_t)maxb;
+						damage.primary.value = normal_random(
+							static_cast<int32_t>(minb),
+							static_cast<int32_t>(maxb)
+						);
 					}
-
-					return true;
+					break;
 				}
 
 				case FORMULA_VALUE: {
-					min = (int32_t)mina;
-					max = (int32_t)maxa;
-					return true;
+					damage.primary.value = normal_random(
+						static_cast<int32_t>(mina),
+						static_cast<int32_t>(maxa)
+					);
+					break;
 				}
-
-				default: {
-					min = 0;
-					max = 0;
-					return false;
-				}
+				default:
+					break;
 			}
 		}
 	} else if (formulaType == FORMULA_VALUE) {
-		min = (int32_t)mina;
-		max = (int32_t)maxa;
-		return true;
+		damage.primary.value = normal_random(
+			static_cast<int32_t>(mina),
+			static_cast<int32_t>(maxa)
+		);
 	}
-
-	return false;
+	return damage;
 }
 
 void Combat::getCombatArea(const Position& centerPos, const Position& targetPos, const AreaCombat* area,
@@ -554,25 +562,28 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 
 bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
 {
-	Combat2Var* var = (Combat2Var*)data;
-	int32_t healthChange = var->change;
+	CombatDamage damage = *reinterpret_cast<CombatDamage*>(data);
 
-	if (g_game.combatBlockHit(params.combatType, caster, target, healthChange, params.blockedByShield, params.blockedByArmor)) {
-		return false;
+	bool blockPrimary = g_game.combatBlockHit(damage.primary.type, caster, target, damage.primary.value, params.blockedByShield, params.blockedByArmor);
+	bool blockSecondary = g_game.combatBlockHit(damage.secondary.type, caster, target, damage.secondary.value, false, false);
+	if (blockPrimary) {
+		if (blockSecondary) {
+			return false;
+		}
+		damage.primary.value = 0;
+	} else if (blockSecondary) {
+		damage.secondary.value = 0;
 	}
 
-	if (healthChange < 0) {
-		if (caster) {
-			Player* targetPlayer = target->getPlayer();
-
-			if (targetPlayer && caster->getPlayer() && targetPlayer->getSkull() != SKULL_BLACK) {
-				healthChange = healthChange / 2;
-			}
+	if ((damage.primary.value < 0 || damage.secondary.value < 0) && caster) {
+		Player* targetPlayer = target->getPlayer();
+		if (targetPlayer && caster->getPlayer() && targetPlayer->getSkull() != SKULL_BLACK) {
+			damage.primary.value /= 2;
+			damage.secondary.value /= 2;
 		}
 	}
 
-	bool result = g_game.combatChangeHealth(params.combatType, caster, target, healthChange);
-
+	bool result = g_game.combatChangeHealth(caster, target, damage, params);
 	if (result) {
 		CombatConditionFunc(caster, target, params, nullptr);
 		CombatDispelFunc(caster, target, params, nullptr);
@@ -583,17 +594,14 @@ bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 
 bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
 {
-	Combat2Var* var = (Combat2Var*)data;
-	int32_t manaChange = var->change;
-
-	if (manaChange < 0) {
+	CombatDamage damage = *reinterpret_cast<CombatDamage*>(data);
+	if (damage.primary.value < 0) {
 		if (caster && caster->getPlayer() && target->getPlayer()) {
-			manaChange = manaChange / 2;
+			damage.primary.value /= 2;
 		}
 	}
 
-	bool result = g_game.combatChangeMana(caster, target, manaChange);
-
+	bool result = g_game.combatChangeMana(caster, target, damage.primary.value);
 	if (result) {
 		CombatConditionFunc(caster, target, params, nullptr);
 		CombatDispelFunc(caster, target, params, nullptr);
@@ -830,103 +838,55 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 {
 	//target combat callback function
 	if (params.combatType != COMBAT_NONE) {
-		int32_t minChange = 0;
-		int32_t maxChange = 0;
-		getMinMaxValues(caster, target, minChange, maxChange);
-
-		if (params.combatType != COMBAT_MANADRAIN) {
-			doCombatHealth(caster, target, minChange, maxChange, params);
+		CombatDamage damage = getCombatDamage(caster, target);
+		if (damage.primary.type != COMBAT_MANADRAIN) {
+			doCombatHealth(caster, target, damage, params);
 		} else {
-			doCombatMana(caster, target, minChange, maxChange, params);
+			doCombatMana(caster, target, damage, params);
 		}
 	} else {
 		doCombatDefault(caster, target, params);
 	}
 }
 
-void Combat::doCombat(Creature* caster, const Position& pos) const
+void Combat::doCombat(Creature* caster, const Position& position) const
 {
 	//area combat callback function
 	if (params.combatType != COMBAT_NONE) {
-		int32_t minChange = 0;
-		int32_t maxChange = 0;
-		getMinMaxValues(caster, nullptr, minChange, maxChange);
-
-		if (params.combatType != COMBAT_MANADRAIN) {
-			doCombatHealth(caster, pos, area, minChange, maxChange, params);
+		CombatDamage damage = getCombatDamage(caster, nullptr);
+		if (damage.primary.type != COMBAT_MANADRAIN) {
+			doCombatHealth(caster, position, area, damage, params);
 		} else {
-			doCombatMana(caster, pos, area, minChange, maxChange, params);
+			doCombatMana(caster, position, area, damage, params);
 		}
 	} else {
-		CombatFunc(caster, pos, area, params, CombatnullptrFunc, nullptr);
+		CombatFunc(caster, position, area, params, CombatnullptrFunc, nullptr);
 	}
-}
-
-void Combat::doCombatHealth(Creature* caster, Creature* target,
-                            int32_t minChange, int32_t maxChange, const CombatParams& params)
-{
-	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
-		Combat2Var var;
-		var.change = normal_random(minChange, maxChange);
-		CombatHealthFunc(caster, target, params, (void*)&var);
-
-		if (params.impactEffect != NM_ME_NONE) {
-			g_game.addMagicEffect(target->getPosition(), params.impactEffect);
-		}
-
-		if (caster && params.distanceEffect != NM_ME_NONE) {
-			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
-		}
-	}
-}
-
-void Combat::doCombatHealth(Creature* caster, const Position& pos,
-                            const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
-{
-	Combat2Var var;
-	var.change = normal_random(minChange, maxChange);
-	CombatFunc(caster, pos, area, params, CombatHealthFunc, (void*)&var);
 }
 
 void Combat::doCombatHealth(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params)
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
+		CombatHealthFunc(caster, target, params, &damage);
 		if (params.impactEffect != NM_ME_NONE) {
 			g_game.addMagicEffect(target->getPosition(), params.impactEffect);
 		}
 
-		if (caster && params.distanceEffect != NM_ME_NONE) {
+		if (caster && params.distanceEffect != NM_SHOOT_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
-		}
-
-		if (g_game.combatBlockHit(params.combatType, caster, target, damage.primary, params.blockedByShield, params.blockedByArmor) &&
-			g_game.combatBlockHit(params.element.type, caster, target, damage.secondary, false, false)) {
-			return;
-		}
-
-		if ((damage.primary < 0 || damage.secondary < 0) && caster) {
-			Player* targetPlayer = target->getPlayer();
-			if (targetPlayer && caster->getPlayer() && targetPlayer->getSkull() != SKULL_BLACK) {
-				damage.primary /= 2;
-				damage.secondary /= 2;
-			}
-		}
-
-		if (g_game.combatChangeHealth(caster, target, damage, params)) {
-			CombatConditionFunc(caster, target, params, nullptr);
-			CombatDispelFunc(caster, target, params, nullptr);
 		}
 	}
 }
 
-void Combat::doCombatMana(Creature* caster, Creature* target,
-                          int32_t minChange, int32_t maxChange, const CombatParams& params)
+void Combat::doCombatHealth(Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage, const CombatParams& params)
+{
+	CombatFunc(caster, position, area, params, CombatHealthFunc, &damage);
+}
+
+void Combat::doCombatMana(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params)
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
-		Combat2Var var;
-		var.change = normal_random(minChange, maxChange);
-		CombatManaFunc(caster, target, params, (void*)&var);
-
+		CombatManaFunc(caster, target, params, &damage);
 		if (params.targetCallback) {
 			params.targetCallback->onTargetCombat(caster, target);
 		}
@@ -935,31 +895,26 @@ void Combat::doCombatMana(Creature* caster, Creature* target,
 			g_game.addMagicEffect(target->getPosition(), params.impactEffect);
 		}
 
-		if (caster && params.distanceEffect != NM_ME_NONE) {
+		if (caster && params.distanceEffect != NM_SHOOT_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
 }
 
-void Combat::doCombatMana(Creature* caster, const Position& pos,
-                          const AreaCombat* area, int32_t minChange, int32_t maxChange, const CombatParams& params)
+void Combat::doCombatMana(Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage, const CombatParams& params)
 {
-	Combat2Var var;
-	var.change = normal_random(minChange, maxChange);
-	CombatFunc(caster, pos, area, params, CombatManaFunc, (void*)&var);
+	CombatFunc(caster, position, area, params, CombatManaFunc, &damage);
 }
 
-void Combat::doCombatCondition(Creature* caster, const Position& pos, const AreaCombat* area,
-                               const CombatParams& params)
+void Combat::doCombatCondition(Creature* caster, const Position& position, const AreaCombat* area, const CombatParams& params)
 {
-	CombatFunc(caster, pos, area, params, CombatConditionFunc, nullptr);
+	CombatFunc(caster, position, area, params, CombatConditionFunc, nullptr);
 }
 
 void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatParams& params)
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
 		CombatConditionFunc(caster, target, params, nullptr);
-
 		if (params.targetCallback) {
 			params.targetCallback->onTargetCombat(caster, target);
 		}
@@ -974,10 +929,9 @@ void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatP
 	}
 }
 
-void Combat::doCombatDispel(Creature* caster, const Position& pos, const AreaCombat* area,
-                            const CombatParams& params)
+void Combat::doCombatDispel(Creature* caster, const Position& position, const AreaCombat* area, const CombatParams& params)
 {
-	CombatFunc(caster, pos, area, params, CombatDispelFunc, nullptr);
+	CombatFunc(caster, position, area, params, CombatDispelFunc, nullptr);
 }
 
 void Combat::doCombatDispel(Creature* caster, Creature* target, const CombatParams& params)
@@ -1026,7 +980,7 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 
 //**********************************************************//
 
-void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, bool useCharges) const
+void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool useCharges) const
 {
 	//"onGetPlayerMinMaxValues"(...)
 	if (!m_scriptInterface->reserveScriptEnv()) {
@@ -1036,21 +990,21 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
 	if (!env->setCallbackId(m_scriptId, m_scriptInterface)) {
+		m_scriptInterface->resetScriptEnv();
 		return;
 	}
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player->getID());
+	LuaScriptInterface::pushNumber(L, player->getID());
 
 	int32_t parameters = 1;
-
 	switch (type) {
 		case FORMULA_LEVELMAGIC: {
 			//"onGetPlayerMinMaxValues"(cid, level, maglevel)
-			lua_pushnumber(L, player->getLevel());
-			lua_pushnumber(L, player->getMagicLevel());
+			LuaScriptInterface::pushNumber(L, player->getLevel());
+			LuaScriptInterface::pushNumber(L, player->getMagicLevel());
 			parameters += 2;
 			break;
 		}
@@ -1058,12 +1012,14 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 		case FORMULA_SKILL: {
 			//"onGetPlayerMinMaxValues"(cid, attackSkill, attackValue, attackFactor)
 			Item* tool = player->getWeapon();
-			int32_t attackSkill = player->getWeaponSkill(tool);
-			int32_t attackValue = 7;
+			const Weapon* weapon = g_weapons->getWeapon(tool);
 
-			if (tool) {
+			int32_t attackValue = 7;
+			if (weapon) {
 				attackValue = tool->getAttack();
 
+				damage.secondary.type = weapon->getElementType();
+				damage.secondary.value = weapon->getElementDamage(player, nullptr, tool);
 				if (useCharges) {
 					uint16_t charges = tool->getCharges();
 					if (charges != 0) {
@@ -1072,32 +1028,32 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 				}
 			}
 
-			float attackFactor = player->getAttackFactor();
-
-			lua_pushnumber(L, attackSkill);
-			lua_pushnumber(L, attackValue);
-			lua_pushnumber(L, attackFactor);
+			LuaScriptInterface::pushNumber(L, player->getWeaponSkill(tool));
+			LuaScriptInterface::pushNumber(L, attackValue);
+			LuaScriptInterface::pushNumber(L, player->getAttackFactor());
 			parameters += 3;
 			break;
 		}
 
 		default: {
 			std::cout << "ValueCallback::getMinMaxValues - unknown callback type" << std::endl;
+			m_scriptInterface->resetScriptEnv();
 			return;
-			break;
 		}
 	}
 
 	int32_t size0 = lua_gettop(L);
-
-	if (lua_pcall(L, parameters, 2 /*nReturnValues*/, 0) != 0) {
+	if (lua_pcall(L, parameters, 2, 0) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		max = LuaScriptInterface::popNumber(L);
-		min = LuaScriptInterface::popNumber(L);
+		damage.primary.value = normal_random(
+			LuaScriptInterface::getNumber<int32_t>(L, -2),
+			LuaScriptInterface::getNumber<int32_t>(L, -1)
+		);
+		lua_pop(L, 2);
 	}
 
-	if ((lua_gettop(L) + parameters /*nParams*/ + 1) != size0) {
+	if ((lua_gettop(L) + parameters + 1) != size0) {
 		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
 	}
 

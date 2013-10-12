@@ -4640,102 +4640,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 			TextColor_t textColor = TEXTCOLOR_NONE;
 			uint8_t hitEffect = 0;
 
-			switch (combatType) {
-				case COMBAT_PHYSICALDAMAGE: {
-					Item* splash = nullptr;
-
-					switch (target->getRace()) {
-						case RACE_VENOM:
-							textColor = TEXTCOLOR_LIGHTGREEN;
-							hitEffect = NM_ME_POISON;
-							splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_GREEN);
-							break;
-
-						case RACE_BLOOD:
-							textColor = TEXTCOLOR_RED;
-							hitEffect = NM_ME_DRAW_BLOOD;
-							splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_BLOOD);
-							break;
-
-						case RACE_UNDEAD:
-							textColor = TEXTCOLOR_LIGHTGREY;
-							hitEffect = NM_ME_HIT_AREA;
-							break;
-
-						case RACE_FIRE:
-							textColor = TEXTCOLOR_ORANGE;
-							hitEffect = NM_ME_DRAW_BLOOD;
-							break;
-
-						case RACE_ENERGY:
-							textColor = TEXTCOLOR_PURPLE;
-							hitEffect = NM_ME_ENERGY_DAMAGE;
-							break;
-
-						default:
-							break;
-					}
-
-					if (splash) {
-						internalAddItem(target->getTile(), splash, INDEX_WHEREEVER, FLAG_NOLIMIT);
-						startDecay(splash);
-					}
-
-					break;
-				}
-
-				case COMBAT_ENERGYDAMAGE: {
-					textColor = TEXTCOLOR_PURPLE;
-					hitEffect = NM_ME_ENERGY_DAMAGE;
-					break;
-				}
-
-				case COMBAT_EARTHDAMAGE: {
-					textColor = TEXTCOLOR_LIGHTGREEN;
-					hitEffect = NM_ME_POISON_RINGS;
-					break;
-				}
-
-				case COMBAT_DROWNDAMAGE: {
-					textColor = TEXTCOLOR_LIGHTBLUE;
-					hitEffect = NM_ME_LOSE_ENERGY;
-					break;
-				}
-
-				case COMBAT_FIREDAMAGE: {
-					textColor = TEXTCOLOR_ORANGE;
-					hitEffect = NM_ME_HITBY_FIRE;
-					break;
-				}
-
-				case COMBAT_ICEDAMAGE: {
-					textColor = TEXTCOLOR_SKYBLUE;
-					hitEffect = NM_ME_ICEATTACK;
-					break;
-				}
-
-				case COMBAT_HOLYDAMAGE: {
-					textColor = TEXTCOLOR_YELLOW;
-					hitEffect = NM_ME_HOLYDAMAGE;
-					break;
-				}
-
-				case COMBAT_DEATHDAMAGE: {
-					textColor = TEXTCOLOR_DARKRED;
-					hitEffect = NM_ME_SMALLCLOUDS;
-					break;
-				}
-
-				case COMBAT_LIFEDRAIN: {
-					textColor = TEXTCOLOR_RED;
-					hitEffect = NM_ME_MAGIC_BLOOD;
-					break;
-				}
-
-				default:
-					break;
-			}
-
+			combatGetTypeInfo(combatType, target, textColor, hitEffect);
 			if (textColor != TEXTCOLOR_NONE) {
 				addMagicEffect(list, targetPos, hitEffect);
 
@@ -4784,7 +4689,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage& damage, const CombatParams& params)
 {
 	const Position& targetPos = target->getPosition();
-	int32_t healthChange = damage.primary + damage.secondary;
+	int32_t healthChange = damage.primary.value + damage.secondary.value;
 	if (healthChange > 0) {
 		if (target->getHealth() <= 0) {
 			return false;
@@ -4799,7 +4704,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 		Player* targetPlayer = target->getPlayer();
 		if (attackerPlayer && targetPlayer) {
-			if (g_config.getBoolean(ConfigManager::CANNOT_ATTACK_SAME_LOOKFEET) && attackerPlayer->defaultOutfit.lookFeet == target->defaultOutfit.lookFeet && params.combatType != COMBAT_HEALING) {
+			if (g_config.getBoolean(ConfigManager::CANNOT_ATTACK_SAME_LOOKFEET) && attackerPlayer->defaultOutfit.lookFeet == target->defaultOutfit.lookFeet && damage.primary.type != COMBAT_HEALING) {
 				return false;
 			}
 
@@ -4875,7 +4780,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 		Player* targetPlayer = target->getPlayer();
 		if (attackerPlayer && targetPlayer) {
-			if (g_config.getBoolean(ConfigManager::CANNOT_ATTACK_SAME_LOOKFEET) && attacker->defaultOutfit.lookFeet == target->defaultOutfit.lookFeet && params.combatType != COMBAT_HEALING) {
+			if (g_config.getBoolean(ConfigManager::CANNOT_ATTACK_SAME_LOOKFEET) && attacker->defaultOutfit.lookFeet == target->defaultOutfit.lookFeet && damage.primary.type != COMBAT_HEALING) {
 				return false;
 			}
 
@@ -4884,13 +4789,13 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			}
 		}
 	
-		damage.primary = std::abs(damage.primary);
-		damage.secondary = std::abs(damage.secondary);
+		damage.primary.value = std::abs(damage.primary.value);
+		damage.secondary.value = std::abs(damage.secondary.value);
 
 		TextMessage message;
 		message.position = targetPos;
 
-		if (target->hasCondition(CONDITION_MANASHIELD) && params.combatType != COMBAT_UNDEFINEDDAMAGE) {
+		if (target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
 			int32_t manaDamage = std::min<int32_t>(target->getMana(), -healthChange);
 			if (manaDamage != 0) {
 				target->drainMana(attacker, manaDamage);
@@ -4937,23 +4842,23 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					}
 				}
 
-				damage.primary -= manaDamage;
-				if (damage.primary < 0) {
-					damage.secondary = std::max<int32_t>(0, damage.secondary + damage.primary);
-					damage.primary = 0;
+				damage.primary.value -= manaDamage;
+				if (damage.primary.value < 0) {
+					damage.secondary.value = std::max<int32_t>(0, damage.secondary.value + damage.primary.value);
+					damage.primary.value = 0;
 				}
 			}
 		}
 
 		int32_t targetHealth = target->getHealth();
-		if (damage.primary >= targetHealth) {
-			damage.primary = targetHealth;
-			damage.secondary = 0;
-		} else if (damage.secondary) {
-			damage.secondary = std::min<int32_t>(damage.secondary, targetHealth - damage.primary);
+		if (damage.primary.value >= targetHealth) {
+			damage.primary.value = targetHealth;
+			damage.secondary.value = 0;
+		} else if (damage.secondary.value) {
+			damage.secondary.value = std::min<int32_t>(damage.secondary.value, targetHealth - damage.primary.value);
 		}
 
-		int32_t realDamage = damage.primary + damage.secondary;
+		int32_t realDamage = damage.primary.value + damage.secondary.value;
 		if (realDamage) {
 			if (realDamage >= targetHealth) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
@@ -4964,23 +4869,29 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			target->drainHealth(attacker, realDamage);
 			addCreatureHealth(list, target);
 
-			message.primary.value = damage.primary;
-			message.secondary.value = damage.secondary;
+			message.primary.value = damage.primary.value;
+			message.secondary.value = damage.secondary.value;
 
-			uint8_t hitEffect[2] = {0, 0};
+			uint8_t hitEffect;
 			if (message.primary.value) {
-				combatGetTypeInfo(params.combatType, target, message.primary.color, hitEffect[0]);
+				hitEffect = NM_ME_NONE;
+				combatGetTypeInfo(damage.primary.type, target, message.primary.color, hitEffect);
+
+				if (hitEffect != NM_ME_NONE) {
+					addMagicEffect(list, targetPos, hitEffect);
+				}
 			}
 
 			if (message.secondary.value) {
-				combatGetTypeInfo(params.element.type, target, message.secondary.color, hitEffect[1]);
+				hitEffect = NM_ME_NONE;
+				combatGetTypeInfo(damage.secondary.type, target, message.secondary.color, hitEffect);
+				
+				if (hitEffect != NM_ME_NONE) {
+					addMagicEffect(list, targetPos, hitEffect);
+				}
 			}
 
 			if (message.primary.color != TEXTCOLOR_NONE || message.secondary.color != TEXTCOLOR_NONE) {
-				for (uint8_t i = 0; i < 2; ++i) {
-					addMagicEffect(list, targetPos, hitEffect[i]);
-				}
-
 				std::string pluralString = (realDamage != 1 ? "s" : "");
 				std::ostringstream ss;
 				if (!attacker) {
