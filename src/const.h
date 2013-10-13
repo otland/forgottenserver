@@ -487,14 +487,6 @@ enum item_t {
 	ITEM_DOCUMENT_RO	= 1968 //read-only
 };
 
-enum PlayerBlessings {
-	PlayerBlessing_First = 0,
-	PlayerBlessing_Second,
-	PlayerBlessing_Third,
-	PlayerBlessing_Fourth,
-	PlayerBlessing_Fifth
-};
-
 enum PlayerFlags {
 	PlayerFlag_CannotUseCombat = 0,         //2^0 = 1
 	PlayerFlag_CannotAttackPlayer,          //2^1 = 2
@@ -537,67 +529,6 @@ enum PlayerFlags {
 
 	//add new flags here
 	PlayerFlag_LastFlag
-};
-
-enum ViolationActions_t {
-	Action_None			= 0,
-	Action_Notation			= 1,
-	Action_Namelock			= 2,
-	Action_Banishment		= 4,
-	Action_NamelockBan		= 8,
-	Action_BanFinalWarning		= 16,
-	Action_NamelockBanFinalWarning	= 32,
-	Action_StatementReport		= 64,
-	Action_IpBan			= 128
-};
-
-const int violationActions[6] = {
-	//ignore this
-	Action_None,
-
-	//player
-	Action_None,
-
-	//tutor
-	Action_None,
-
-	//senior tutor
-	Action_None,
-
-	//gamemaster
-	Action_Notation | Action_Namelock | Action_Banishment | Action_NamelockBan | Action_StatementReport,
-
-	//god
-	Action_Notation | Action_Namelock | Action_Banishment | Action_NamelockBan | Action_BanFinalWarning | Action_NamelockBanFinalWarning | Action_StatementReport | Action_IpBan
-};
-
-const int violationReasons[6] = {
-	//ignore this
-	0,
-
-	//player
-	0,
-
-	//tutor
-	0,
-
-	/*
-	 * senior tutor
-	 * all name reasons
-	 */
-	4,
-
-	/*
-	 * gamemaster
-	 * all name, statement & cheating reasons
-	 */
-	18,
-
-	/*
-	 * god
-	 * all reasons
-	 */
-	20,
 };
 
 #define CHANNEL_GUILD 0x00
