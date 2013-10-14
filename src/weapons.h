@@ -77,10 +77,13 @@ class Weapon : public Event
 
 		void setCombatParam(const CombatParams& _params);
 
+		virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const = 0;
+		virtual int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const = 0;
+		virtual CombatType_t getElementType() const = 0;
+
 		uint16_t getID() const {
 			return id;
 		}
-		virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const = 0;
 
 		uint32_t getReqLevel() const {
 			return level;
@@ -129,6 +132,7 @@ class Weapon : public Event
 
 	private:
 		std::map<int32_t, bool> vocWeaponMap;
+		friend class Combat;
 };
 
 class WeaponMelee : public Weapon
@@ -141,9 +145,10 @@ class WeaponMelee : public Weapon
 		virtual bool configureWeapon(const ItemType& it);
 
 		virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
-		virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
 
-		int32_t getElementDamage(const Player* player, const Item* item) const;
+		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
+		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const;
+		CombatType_t getElementType() const { return elementType; }
 
 	protected:
 		virtual void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;
@@ -168,9 +173,10 @@ class WeaponDistance : public Weapon
 
 		virtual int32_t playerWeaponCheck(Player* player, Creature* target) const;
 		virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
-		virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
 
+		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
 		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const;
+		CombatType_t getElementType() const { return elementType; }
 
 	protected:
 		virtual void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;
@@ -195,7 +201,9 @@ class WeaponWand : public Weapon
 		virtual bool configureEvent(const pugi::xml_node& node);
 		virtual bool configureWeapon(const ItemType& it);
 
-		virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
+		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
+		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const { return 0; }
+		CombatType_t getElementType() const { return COMBAT_NONE; }
 
 	protected:
 		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const {

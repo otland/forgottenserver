@@ -379,7 +379,6 @@ bool Weapon::useWeapon(Player* player, Item* item, Creature* target) const
 	if (damageModifier == 0) {
 		return false;
 	}
-
 	return internalUseWeapon(player, item, target, damageModifier);
 }
 
@@ -397,14 +396,16 @@ bool Weapon::useFist(Player* player, Creature* target)
 			maxDamage *= 2;
 		}
 
-		int32_t damage = -normal_random(0, maxDamage);
-
 		CombatParams params;
 		params.combatType = COMBAT_PHYSICALDAMAGE;
 		params.blockedByArmor = true;
 		params.blockedByShield = true;
-		Combat::doCombatHealth(player, target, damage, damage, params);
 
+		CombatDamage damage;
+		damage.primary.type = params.combatType;
+		damage.primary.value = -normal_random(0, maxDamage);
+
+		Combat::doCombatHealth(player, target, damage, params);
 		if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
 			player->addSkillAdvance(SKILL_FIST, 1);
 		}
@@ -423,8 +424,12 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		var.number = target->getID();
 		executeUseWeapon(player, var);
 	} else {
-		int32_t damage = (getWeaponDamage(player, target, item) * damageModifier) / 100;
-		Combat::doCombatHealth(player, target, damage, damage, params);
+		CombatDamage damage;
+		damage.primary.type = params.combatType;
+		damage.primary.value = (getWeaponDamage(player, target, item) * damageModifier) / 100;
+		damage.secondary.type = getElementType();
+		damage.secondary.value = getElementDamage(player, target, item);
+		Combat::doCombatHealth(player, target, damage, params);
 	}
 
 	onUsedAmmo(player, item, target->getTile());
@@ -540,8 +545,6 @@ WeaponMelee::WeaponMelee(LuaScriptInterface* _interface) :
 	params.blockedByArmor = true;
 	params.blockedByShield = true;
 	params.combatType = COMBAT_PHYSICALDAMAGE;
-	elementType = COMBAT_NONE;
-	elementDamage = 0;
 }
 
 bool WeaponMelee::configureEvent(const pugi::xml_node& node)
@@ -558,6 +561,8 @@ bool WeaponMelee::configureWeapon(const ItemType& it)
 	if (it.abilities) {
 		elementType = it.abilities->elementType;
 		elementDamage = it.abilities->elementDamage;
+		params.isAggressive = true;
+		params.useCharges = true;
 	}
 
 	return Weapon::configureWeapon(it);
@@ -569,16 +574,6 @@ bool WeaponMelee::useWeapon(Player* player, Item* item, Creature* target) const
 	if (damageModifier == 0) {
 		return false;
 	}
-
-	if (elementDamage != 0) {
-		int32_t damage = getElementDamage(player, item);
-		CombatParams eParams;
-		eParams.combatType = elementType;
-		eParams.isAggressive = true;
-		eParams.useCharges = true;
-		Combat::doCombatHealth(player, target, damage, damage, eParams);
-	}
-
 	return internalUseWeapon(player, item, target, damageModifier);
 }
 
@@ -623,8 +618,12 @@ bool WeaponMelee::getSkillType(const Player* player, const Item* item,
 	return false;
 }
 
-int32_t WeaponMelee::getElementDamage(const Player* player, const Item* item) const
+int32_t WeaponMelee::getElementDamage(const Player* player, const Creature* target, const Item* item) const
 {
+	if (elementType == COMBAT_NONE) {
+		return 0;
+	}
+
 	int32_t attackSkill = player->getWeaponSkill(item);
 	int32_t attackValue = std::max<int32_t>(0, elementDamage);
 	float attackFactor = player->getAttackFactor();
@@ -634,8 +633,7 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Item* item) co
 		maxValue *= 2;
 	}
 
-	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultiplier);
-	return -normal_random(0, maxValue);
+	return -normal_random(0, static_cast<int32_t>(maxValue * player->getVocation()->meleeDamageMultiplier));
 }
 
 int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
@@ -667,8 +665,6 @@ WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
 	ammuAttackValue = 0;
 	params.blockedByArmor = true;
 	params.combatType = COMBAT_PHYSICALDAMAGE;
-	elementType = COMBAT_NONE;
-	elementDamage = 0;
 }
 
 bool WeaponDistance::configureEvent(const pugi::xml_node& node)
@@ -740,6 +736,8 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 	if (it.abilities) {
 		elementType = it.abilities->elementType;
 		elementDamage = it.abilities->elementDamage;
+		params.isAggressive = true;
+		params.useCharges = true;
 	}
 
 	return Weapon::configureWeapon(it);
@@ -871,15 +869,6 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 	}
 
 	if (chance >= uniform_random(1, 100)) {
-		if (elementDamage != 0) {
-			int32_t damage = getElementDamage(player, target, item);
-			CombatParams eParams;
-			eParams.combatType = elementType;
-			eParams.isAggressive = true;
-			eParams.useCharges = true;
-			Combat::doCombatHealth(player, target, damage, damage, eParams);
-		}
-
 		Weapon::internalUseWeapon(player, item, target, damageModifier);
 	} else {
 		//miss target
@@ -946,8 +935,11 @@ void WeaponDistance::onUsedAmmo(Player* player, Item* item, Tile* destTile) cons
 
 int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* target, const Item* item) const
 {
-	int32_t attackValue = elementDamage;
+	if (elementType == COMBAT_NONE) {
+		return 0;
+	}
 
+	int32_t attackValue = elementDamage;
 	if (item->getWeaponType() == WEAPON_AMMO) {
 		Item* bow = const_cast<Player*>(player)->getWeapon(true);
 		if (bow) {
@@ -963,18 +955,16 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 		maxValue *= 2;
 	}
 
-	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultiplier);
-
 	int32_t minValue = 0;
 	if (target) {
 		if (target->getPlayer()) {
-			minValue = (int32_t)std::ceil(player->getLevel() * 0.1);
+			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.1));
 		} else {
-			minValue = (int32_t)std::ceil(player->getLevel() * 0.2);
+			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.2));
 		}
 	}
 
-	return -normal_random(minValue, maxValue);
+	return -normal_random(minValue, static_cast<int32_t>(maxValue * player->getVocation()->distDamageMultiplier));
 }
 
 int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const

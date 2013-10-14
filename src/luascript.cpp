@@ -4132,8 +4132,12 @@ int32_t LuaScriptInterface::luaDoAreaCombatHealth(lua_State* L)
 		CombatParams params;
 		params.combatType = combatType;
 		params.impactEffect = effect;
-		Combat::doCombatHealth(creature, pos, area, minChange, maxChange, params);
 
+		CombatDamage damage;
+		damage.primary.type = combatType;
+		damage.primary.value = normal_random(minChange, maxChange);
+
+		Combat::doCombatHealth(creature, pos, area, damage, params);
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_AREA_NOT_FOUND));
@@ -4167,7 +4171,12 @@ int32_t LuaScriptInterface::luaDoTargetCombatHealth(lua_State* L)
 		CombatParams params;
 		params.combatType = combatType;
 		params.impactEffect = effect;
-		Combat::doCombatHealth(creature, target, minChange, maxChange, params);
+
+		CombatDamage damage;
+		damage.primary.type = combatType;
+		damage.primary.value = normal_random(minChange, maxChange);
+
+		Combat::doCombatHealth(creature, target, damage, params);
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -4203,8 +4212,12 @@ int32_t LuaScriptInterface::luaDoAreaCombatMana(lua_State* L)
 	if (area || areaId == 0) {
 		CombatParams params;
 		params.impactEffect = effect;
-		Combat::doCombatMana(creature, pos, area, minChange, maxChange, params);
 
+		CombatDamage damage;
+		damage.primary.type = COMBAT_MANADRAIN;
+		damage.primary.value = normal_random(minChange, maxChange);
+
+		Combat::doCombatMana(creature, pos, area, damage, params);
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_AREA_NOT_FOUND));
@@ -4233,7 +4246,12 @@ int32_t LuaScriptInterface::luaDoTargetCombatMana(lua_State* L)
 	if (target) {
 		CombatParams params;
 		params.impactEffect = effect;
-		Combat::doCombatMana(creature, target, minChange, maxChange, params);
+
+		CombatDamage damage;
+		damage.primary.type = COMBAT_MANADRAIN;
+		damage.primary.value = normal_random(minChange, maxChange);
+
+		Combat::doCombatMana(creature, target, damage, params);
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
