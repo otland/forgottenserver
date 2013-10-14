@@ -357,9 +357,7 @@ void Commands::teleportHere(Player* player, const std::string& cmd, const std::s
 	Creature* paramCreature = g_game.getCreatureByName(param);
 	if (paramCreature) {
 		Position oldPosition = paramCreature->getPosition();
-		Position destPos = paramCreature->getPosition();
 		Position newPosition = g_game.getClosestFreeTile(player, paramCreature, player->getPosition(), false);
-
 		if (newPosition.x == 0) {
 			std::ostringstream ss;
 			ss << "You can not teleport " << paramCreature->getName() << std::endl;
@@ -628,7 +626,7 @@ void Commands::teleportNTiles(Player* player, const std::string& cmd, const std:
 	}
 
 	Position oldPosition = player->getPosition();
-	Position newPos = player->getPosition();
+	Position newPos = oldPosition;
 
 	switch (player->direction) {
 		case NORTH:
