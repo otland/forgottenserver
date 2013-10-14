@@ -669,7 +669,7 @@ class Player : public Creature, public Cylinder
 		int32_t getWeaponSkill(const Item* item) const;
 		void getShieldAndWeapon(const Item*& shield, const Item*& weapon) const;
 
-		virtual void drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage);
+		virtual void drainHealth(Creature* attacker, int32_t damage);
 		virtual void drainMana(Creature* attacker, int32_t manaLoss);
 		void addManaSpent(uint64_t amount, bool withMultiplier = true);
 		void addSkillAdvance(skills_t skill, uint32_t count);
@@ -997,6 +997,11 @@ class Player : public Creature, public Cylinder
 		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t value = 0, TextColor_t color = TEXTCOLOR_NONE) const {
 			if (client) {
 				client->sendTextMessage(mclass, message, pos, value, color);
+			}
+		}
+		void sendTextMessage(const TextMessage& message) const {
+			if (client) {
+				client->sendTextMessage(message);
 			}
 		}
 		void sendReLoginWindow(uint8_t unfairFightReduction) const {

@@ -2059,9 +2059,9 @@ void Player::removeMessageBuffer()
 	}
 }
 
-void Player::drainHealth(Creature* attacker, CombatType_t combatType, int32_t damage)
+void Player::drainHealth(Creature* attacker, int32_t damage)
 {
-	Creature::drainHealth(attacker, combatType, damage);
+	Creature::drainHealth(attacker, damage);
 	sendStats();
 }
 

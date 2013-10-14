@@ -44,6 +44,17 @@ class Quest;
 typedef std::map<uint32_t, Player*> UsersMap;
 typedef std::map<uint32_t, Player*> InvitedMap;
 
+struct TextMessage
+{
+	MessageClasses type;
+	std::string text;
+	Position position;
+	struct {
+		int32_t value;
+		TextColor_t color;
+	} primary, secondary;
+};
+
 class ProtocolGame : public Protocol
 {
 	public:
@@ -227,6 +238,7 @@ class ProtocolGame : public Protocol
 		void sendStats();
 		void sendBasicData();
 		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t exp = 0, TextColor_t color = TEXTCOLOR_NONE);
+		void sendTextMessage(const TextMessage& message);
 		void sendReLoginWindow(uint8_t unfairFightReduction);
 
 		void sendTutorial(uint8_t tutorialId);
