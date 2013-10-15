@@ -39,7 +39,7 @@ void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 {
 	uint32_t W[80];
 	for (int i = 0; i < 16; ++i) {
-		size_t offset = i * 4;
+		const size_t offset = i * 4;
 		W[i] = messageBlock[offset] << 24 | messageBlock[offset + 1] << 16 | messageBlock[offset + 2] << 8 | messageBlock[offset + 3];
 	}
 
@@ -50,22 +50,22 @@ void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 	uint32_t A = H[0], B = H[1], C = H[2], D = H[3], E = H[4];
 
 	for (int i = 0; i < 20; ++i) {
-		uint32_t tmp = circularShift(5, A) + ((B & C) | ((~B) & D)) + E + W[i] + 0x5A827999;
+		const uint32_t tmp = circularShift(5, A) + ((B & C) | ((~B) & D)) + E + W[i] + 0x5A827999;
 		E = D; D = C; C = circularShift(30, B); B = A; A = tmp;
 	}
 
 	for (int i = 20; i < 40; ++i) {
-		uint32_t tmp = circularShift(5, A) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1;
+		const uint32_t tmp = circularShift(5, A) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1;
 		E = D; D = C; C = circularShift(30, B); B = A; A = tmp;
 	}
 
 	for (int i = 40; i < 60; ++i) {
-		uint32_t tmp = circularShift(5, A) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC;
+		const uint32_t tmp = circularShift(5, A) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC;
 		E = D; D = C; C = circularShift(30, B); B = A; A = tmp;
 	}
 
 	for (int i = 60; i < 80; ++i) {
-		uint32_t tmp = circularShift(5, A) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6;
+		const uint32_t tmp = circularShift(5, A) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6;
 		E = D; D = C; C = circularShift(30, B); B = A; A = tmp;
 	}
 
@@ -134,9 +134,15 @@ std::string transformToSHA1(const std::string& input)
 
 	processSHA1MessageBlock(messageBlock, H);
 
-	char hashed[41];
-	sprintf(hashed, "%08x%08x%08x%08x%08x", H[0], H[1], H[2], H[3], H[4]);
-	return std::string(hashed, 40);
+	char hexstring[41];
+	static const char hexDigits[] = {"0123456789abcdef"};
+	for (int hashByte = 20; --hashByte >= 0;) {
+		const uint8_t byte = H[hashByte >> 2] >> (((3 - hashByte) & 3) << 3);
+		size_t index = hashByte << 1;
+		hexstring[index++] = hexDigits[byte >> 4];
+		hexstring[index] = hexDigits[byte & 15];
+	}
+	return std::string(hexstring, 40);
 }
 
 bool passwordTest(const std::string& plain, const std::string& hash)
