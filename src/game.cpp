@@ -4320,6 +4320,10 @@ void Game::changeLight(const Creature* creature)
 bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature* target,
                           int32_t& healthChange, bool checkDefense, bool checkArmor)
 {
+	if (combatType == COMBAT_NONE) {
+		return true;
+	}
+
 	if (target->getPlayer() && target->getPlayer()->isInGhostMode()) {
 		return true;
 	}
