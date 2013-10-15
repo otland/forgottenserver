@@ -192,9 +192,6 @@
     <ClCompile Include="..\src\server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sha1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\spawn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -444,9 +441,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\sha1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\spawn.h">
