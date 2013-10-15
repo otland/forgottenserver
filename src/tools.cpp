@@ -773,7 +773,7 @@ uint32_t adlerChecksum(uint8_t* data, size_t length)
 
 std::string ucfirst(std::string str)
 {
-	for (uint32_t i = 0; i < str.length(); ++i) {
+	for (size_t i = 0; i < str.length(); ++i) {
 		if (str[i] != ' ') {
 			str[i] = toupper(str[i]);
 			break;
