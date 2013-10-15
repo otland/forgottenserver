@@ -115,6 +115,7 @@ std::string transformToSHA1(const std::string& input)
 		}
 
 		processSHA1MessageBlock(messageBlock, H);
+		index = 0;
 	}
 
 	while (index < 56) {
