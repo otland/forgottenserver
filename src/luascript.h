@@ -818,6 +818,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureIsMonster(lua_State* L);
 		static int32_t luaCreatureIsNpc(lua_State* L);
 		static int32_t luaCreatureIsItem(lua_State* L);
+		static int32_t luaCreatureIsGhost(lua_State* L);
 
 		static int32_t luaCreatureGetId(lua_State* L);
 		static int32_t luaCreatureGetName(lua_State* L);
@@ -905,6 +906,7 @@ class LuaScriptInterface
 		static int32_t luaPlayerSetGroup(lua_State* L);
 
 		static int32_t luaPlayerGetStamina(lua_State* L);
+		static int32_t luaPlayerSetStamina(lua_State* L);
 
 		static int32_t luaPlayerGetSoul(lua_State* L);
 		static int32_t luaPlayerAddSoul(lua_State* L);

@@ -1852,6 +1852,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "isMonster", LuaScriptInterface::luaCreatureIsMonster);
 	registerClassMethod("Creature", "isNpc", LuaScriptInterface::luaCreatureIsNpc);
 	registerClassMethod("Creature", "isItem", LuaScriptInterface::luaCreatureIsItem);
+	registerClassMethod("Creature", "isGhost", LuaScriptInterface::luaCreatureIsGhost);
 
 	registerClassMethod("Creature", "getId", LuaScriptInterface::luaCreatureGetId);
 	registerClassMethod("Creature", "getName", LuaScriptInterface::luaCreatureGetName);
@@ -1939,6 +1940,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Player", "setGroup", LuaScriptInterface::luaPlayerSetGroup);
 
 	registerClassMethod("Player", "getStamina", LuaScriptInterface::luaPlayerGetStamina);
+	registerClassMethod("Player", "setStamina", LuaScriptInterface::luaPlayerSetStamina);
 
 	registerClassMethod("Player", "getSoul", LuaScriptInterface::luaPlayerGetSoul);
 	registerClassMethod("Player", "addSoul", LuaScriptInterface::luaPlayerAddSoul);
@@ -7846,6 +7848,18 @@ int32_t LuaScriptInterface::luaCreatureIsItem(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureIsGhost(lua_State* L)
+{
+	// creature:isGhost()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->isInGhostMode());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureGetId(lua_State* L)
 {
 	// creature:getId()
@@ -8834,6 +8848,20 @@ int32_t LuaScriptInterface::luaPlayerGetStamina(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushNumber(L, player->getStaminaMinutes());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetStamina(lua_State* L)
+{
+	// player:setStamina(stamina)
+	uint16_t stamina = getNumber<uint16_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->staminaMinutes = std::min<uint16_t>(2520, stamina);
+		player->sendStats();
 	} else {
 		pushNil(L);
 	}
