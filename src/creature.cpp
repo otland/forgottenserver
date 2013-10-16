@@ -879,9 +879,8 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 		}
 
 		if (checkDefense && hasDefense) {
-			int32_t maxDefense = getDefense();
-			int32_t minDefense = maxDefense / 2;
-			damage -= uniform_random(minDefense, maxDefense);
+			int32_t defense = getDefense();
+			damage -= uniform_random(defense / 2, defense);
 			if (damage <= 0) {
 				damage = 0;
 				blockType = BLOCK_DEFENSE;
@@ -891,18 +890,17 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 
 		if (checkArmor) {
 			int32_t armorValue = getArmor();
-			int32_t minArmorReduction = 0;
-			int32_t maxArmorReduction = 0;
-
 			if (armorValue > 1) {
-				minArmorReduction = (int32_t)std::ceil(armorValue * 0.475);
-				maxArmorReduction = (int32_t)std::ceil(((armorValue * 0.475) - 1) + minArmorReduction);
+				double armorFormula = armorValue * 0.475;
+				int32_t armorReduction = static_cast<int32_t>(std::ceil(armorFormula));
+				damage -= uniform_random(
+					armorReduction,
+					armorReduction + static_cast<int32_t>(std::floor(armorFormula))
+				);
 			} else if (armorValue == 1) {
-				minArmorReduction = 1;
-				maxArmorReduction = 1;
+				--damage;
 			}
 
-			damage -= uniform_random(minArmorReduction, maxArmorReduction);
 			if (damage <= 0) {
 				damage = 0;
 				blockType = BLOCK_ARMOR;

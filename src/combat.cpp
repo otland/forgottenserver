@@ -33,18 +33,12 @@ extern Game g_game;
 extern Weapons* g_weapons;
 extern ConfigManager g_config;
 
-Combat::Combat()
+Combat::Combat() :
+	formulaType(FORMULA_UNDEFINED),
+	mina(0.0), minb(0.0), maxa(0.0), maxb(0.0),
+	area(nullptr)
 {
-	params.valueCallback = nullptr;
-	params.tileCallback = nullptr;
-	params.targetCallback = nullptr;
-	area = nullptr;
-
-	formulaType = FORMULA_UNDEFINED;
-	mina = 0.0;
-	minb = 0.0;
-	maxa = 0.0;
-	maxb = 0.0;
+	//
 }
 
 Combat::~Combat()
@@ -79,8 +73,8 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 				case FORMULA_LEVELMAGIC: {
 					int32_t levelFormula = player->getLevel() * 2 + player->getMagicLevel() * 3;
 					damage.primary.value = normal_random(
-						static_cast<int32_t>(levelFormula * maxa + maxb),
-						static_cast<int32_t>(levelFormula * mina + minb)
+						static_cast<int32_t>(levelFormula * mina + minb),
+						static_cast<int32_t>(levelFormula * maxa + maxb)
 					);
 					break;
 				}
@@ -648,14 +642,16 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 {
 	if (params.itemId != 0) {
 		uint32_t itemId = params.itemId;
-		Player* _caster = nullptr;
 
+		Player* _caster;
 		if (caster) {
 			if (caster->getPlayer()) {
 				_caster = caster->getPlayer();
 			} else if (caster->isSummon()) {
 				_caster = caster->getMaster()->getPlayer();
 			}
+		} else {
+			_caster = nullptr;
 		}
 
 		switch (itemId) {
@@ -736,35 +732,31 @@ void Combat::postCombatEffects(Creature* caster, const Position& pos, const Comb
 	}
 }
 
-void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos,
-                               uint8_t effect)
+void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	uint8_t distanceEffect = effect;
-
-	if (caster && distanceEffect == NM_SHOOT_WEAPONTYPE) {
+	if (caster && effect == NM_SHOOT_WEAPONTYPE) {
 		switch (caster->getWeaponType()) {
 			case WEAPON_AXE:
-				distanceEffect = NM_SHOOT_WHIRLWINDAXE;
+				effect = NM_SHOOT_WHIRLWINDAXE;
 				break;
 			case WEAPON_SWORD:
-				distanceEffect = NM_SHOOT_WHIRLWINDSWORD;
+				effect = NM_SHOOT_WHIRLWINDSWORD;
 				break;
 			case WEAPON_CLUB:
-				distanceEffect = NM_SHOOT_WHIRLWINDCLUB;
+				effect = NM_SHOOT_WHIRLWINDCLUB;
 				break;
 			default:
-				distanceEffect = NM_ME_NONE;
+				effect = NM_SHOOT_NONE;
 				break;
 		}
 	}
 
-	if (distanceEffect != NM_ME_NONE) {
-		g_game.addDistanceEffect(fromPos, toPos, distanceEffect);
+	if (effect != NM_SHOOT_NONE) {
+		g_game.addDistanceEffect(fromPos, toPos, effect);
 	}
 }
 
-void Combat::CombatFunc(Creature* caster, const Position& pos,
-                        const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data)
+void Combat::CombatFunc(Creature* caster, const Position& pos, const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data)
 {
 	std::list<Tile*> tileList;
 
@@ -794,7 +786,9 @@ void Combat::CombatFunc(Creature* caster, const Position& pos,
 		}
 	}
 
-	g_game.getSpectators(list, pos, true, true, maxX + Map::maxViewportX, maxX + Map::maxViewportX, maxY + Map::maxViewportY, maxY + Map::maxViewportY);
+	const int32_t rangeX = maxX + Map::maxViewportX;
+	const int32_t rangeY = maxY + Map::maxViewportY;
+	g_game.getSpectators(list, pos, true, true, rangeX, rangeX, rangeY, rangeY);
 
 	for (Tile* tile : tileList) {
 		if (canDoCombat(caster, tile, params.isAggressive) != RET_NOERROR) {
@@ -802,35 +796,32 @@ void Combat::CombatFunc(Creature* caster, const Position& pos,
 		}
 
 		if (CreatureVector* creatures = tile->getCreatures()) {
-			bool bContinue = true;
-			for (CreatureVector::iterator cit = creatures->begin(), cend = creatures->end(); bContinue && cit != cend; ++cit) {
+			const Creature* topCreature = tile->getTopCreature();
+			for (Creature* creature : *creatures) {
 				if (params.targetCasterOrTopMost) {
 					if (caster && caster->getTile() == tile) {
-						if (*cit == caster) {
-							bContinue = false;
+						if (creature != caster) {
+							continue;
 						}
-					} else if (*cit == tile->getTopCreature()) {
-						bContinue = false;
-					}
-
-					if (bContinue) {
+					} else if (creature != topCreature) {
 						continue;
 					}
 				}
 
-				if (!params.isAggressive || (caster != *cit && Combat::canDoCombat(caster, *cit) == RET_NOERROR)) {
-					func(caster, *cit, params, data);
-
+				if (!params.isAggressive || (caster != creature && Combat::canDoCombat(caster, creature) == RET_NOERROR)) {
+					func(caster, creature, params, data);
 					if (params.targetCallback) {
-						params.targetCallback->onTargetCombat(caster, *cit);
+						params.targetCallback->onTargetCombat(caster, creature);
+					}
+
+					if (params.targetCasterOrTopMost) {
+						break;
 					}
 				}
 			}
 		}
-
 		combatTileEffects(list, caster, tile, params);
 	}
-
 	postCombatEffects(caster, pos, params);
 }
 
@@ -938,7 +929,6 @@ void Combat::doCombatDispel(Creature* caster, Creature* target, const CombatPara
 {
 	if (!params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR)) {
 		CombatDispelFunc(caster, target, params, nullptr);
-
 		if (params.targetCallback) {
 			params.targetCallback->onTargetCombat(caster, target);
 		}

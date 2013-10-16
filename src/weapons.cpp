@@ -563,6 +563,9 @@ bool WeaponMelee::configureWeapon(const ItemType& it)
 		elementDamage = it.abilities->elementDamage;
 		params.isAggressive = true;
 		params.useCharges = true;
+	} else {
+		elementType = COMBAT_NONE;
+		elementDamage = 0;
 	}
 
 	return Weapon::configureWeapon(it);
@@ -738,6 +741,9 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 		elementDamage = it.abilities->elementDamage;
 		params.isAggressive = true;
 		params.useCharges = true;
+	} else {
+		elementType = COMBAT_NONE;
+		elementDamage = 0;
 	}
 
 	return Weapon::configureWeapon(it);
@@ -986,7 +992,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 		maxValue *= 2;
 	}
 
-	maxValue = int32_t(maxValue * player->getVocation()->distDamageMultiplier);
+	maxValue = static_cast<int32_t>(maxValue * player->getVocation()->distDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
 	}
