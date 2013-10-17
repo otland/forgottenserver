@@ -44,6 +44,6 @@
 		<item id="2386" chance="3950"/><!-- axe -->
 		<item id="2554" chance="320"/><!-- shovel -->
 		<item id="5878" chance="980"/><!-- minotaur leather -->
-		<item id="2172" chance="110"/><!-- bronze amulet -->
+		<item id="2172" subtype="200" chance="110"/><!-- bronze amulet -->
 	</loot>
 </monster>
