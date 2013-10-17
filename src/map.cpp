@@ -206,7 +206,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	}
 
 	if (!foundTile) {
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
 		static std::vector<std::pair<int32_t, int32_t>> extendedRelList {
 			{0, -2}, {-2, 0}, {0, 2}, {2, 0},
 

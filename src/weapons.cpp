@@ -881,7 +881,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		Tile* destTile = target->getTile();
 
 		if (!Position::areInRange<1, 1, 0>(player->getPosition(), target->getPosition())) {
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
 			static std::vector<std::pair<int32_t, int32_t>> destList {
 				{-1, -1}, {0, -1}, {1, -1},
 				{-1,  0}, {0,  0}, {1,  0},
