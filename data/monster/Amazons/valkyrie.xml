@@ -52,6 +52,6 @@
 		<item id="7618" chance="510"/><!-- health potion -->
 		<item id="2145" chance="180"/><!-- small diamond -->
 		<item id="12399" chance="5880"/><!-- girlish hair decoration -->
-		<item id="12400" chance="12400"/><!-- protective charm -->
+		<item id="12400" chance="3360"/><!-- protective charm -->
 	</loot>
 </monster>
