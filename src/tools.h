@@ -96,6 +96,8 @@ uint8_t clientFluidToServer(uint8_t clientFluid);
 
 itemAttrTypes stringToItemAttribute(const std::string& str);
 
+#if !defined(_MSC_VER) || _MSC_VER < 1800
 double round(double v);
+#endif
 
 #endif

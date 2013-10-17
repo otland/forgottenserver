@@ -397,7 +397,7 @@ void ProtocolGame::onConnect()
 	if (output) {
 		static std::random_device rd;
 		static std::ranlux24 generator(rd());
-		static std::uniform_int_distribution<uint8_t> randNumber(0x00, 0xFF);
+		static std::uniform_int_distribution<uint16_t> randNumber(0x00, 0xFF);
 
 		// Skip checksum
 		output->SkipBytes(sizeof(uint32_t));

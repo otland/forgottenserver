@@ -869,7 +869,7 @@ bool Monster::pushItem(Item* item)
 {
 	const Position& centerPos = item->getPosition();
 
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
 	static std::vector<std::pair<int32_t, int32_t>> relList {
 		{-1, -1}, {0, -1}, {1, -1},
 		{-1,  0},          {1,  0},
@@ -933,7 +933,7 @@ void Monster::pushItems(Tile* tile)
 
 bool Monster::pushCreature(Creature* creature)
 {
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
 	static std::vector<Direction> dirList {
 		     NORTH,
 		WEST,      EAST,
@@ -1043,7 +1043,7 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 
 bool Monster::getRandomStep(const Position& creaturePos, Direction& dir)
 {
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
 	static std::vector<Direction> dirList {
 		     NORTH,
 		WEST,      EAST,
