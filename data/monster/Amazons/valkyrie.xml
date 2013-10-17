@@ -48,7 +48,7 @@
 		<item id="3965" chance="5110"/><!-- hunting spear -->
 		<item id="2463" chance="840"/><!-- plate armor -->
 		<item id="2387" chance="470"/><!-- double axe -->
-		<item id="2200" chance="1190"/><!-- protection amulet -->
+		<item id="2200" subtype="250" chance="1190"/><!-- protection amulet -->
 		<item id="7618" chance="510"/><!-- health potion -->
 		<item id="2145" chance="180"/><!-- small diamond -->
 		<item id="12399" chance="5880"/><!-- girlish hair decoration -->
