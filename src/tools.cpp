@@ -945,6 +945,7 @@ std::string getFirstLine(const std::string& str)
 	return firstLine;
 }
 
+#if !defined(_MSC_VER) || _MSC_VER < 1800
 double round(double v)
 {
 	if (v >= 0.0) {
@@ -953,3 +954,4 @@ double round(double v)
 		return std::ceil(v - 0.5);
 	}
 }
+#endif
