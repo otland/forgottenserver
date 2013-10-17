@@ -43,6 +43,6 @@
 		<item id="2125" chance="280"/><!-- crystal necklace -->
 		<item id="2147" chance="160"/><!-- small ruby -->
 		<item id="12399" chance="10110"/><!-- girlish hair decoration -->
-		<item id="2147" chance="12400"/><!-- protective charm -->
+		<item id="12400" chance="5200"/><!-- protective charm -->
 	</loot>
 </monster>
