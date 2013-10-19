@@ -111,6 +111,13 @@ void MonsterType::reset()
 	changeTargetSpeed = 0;
 	changeTargetChance = 0;
 
+	scriptInterface = nullptr;
+	creatureAppearEvent = -1;
+	creatureDisappearEvent = -1;
+	creatureMoveEvent = -1;
+	creatureSayEvent = -1;
+	thinkEvent = -1;
+
 	scriptList.clear();
 }
 
@@ -242,7 +249,17 @@ bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootbl
 Monsters::Monsters()
 {
 	loaded = false;
+	scriptInterface = nullptr;
 }
+
+Monsters::~Monsters()
+{
+	for (const auto& it : monsters) {
+		delete it.second;
+	}
+	delete scriptInterface;
+}
+
 
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
@@ -264,6 +281,10 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 bool Monsters::reload()
 {
 	loaded = false;
+
+	delete scriptInterface;
+	scriptInterface = nullptr;
+
 	return loadFromXml(true);
 }
 
@@ -853,6 +874,30 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		}
 	}
 
+	if ((node = monsterNode.child("script"))) {
+		if ((attr = node.attribute("value"))) {
+			if (!scriptInterface) {
+				scriptInterface = new LuaScriptInterface("Monster Interface");
+				scriptInterface->initState();
+			}
+
+			const std::string& script = attr.as_string();
+			if (scriptInterface->loadFile("data/monster/scripts/" + script) == 0) {
+				mType->scriptInterface = scriptInterface;
+				mType->creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
+				mType->creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
+				mType->creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
+				mType->creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
+				mType->thinkEvent = scriptInterface->getEvent("onThink");
+			} else {
+				std::cout << "[Warning - Monsters::loadMonster] Can not load script: " << script << std::endl;
+				std::cout << scriptInterface->getLastLuaError() << std::endl;
+			}
+		} else {
+			SHOW_XML_WARNING("Missing monster script");
+		}
+	}
+
 	/*
 	if ((node = monsterNode.child("strategy"))) {
 		if (readXMLInteger(p, "attack", intValue)) {
@@ -1251,11 +1296,4 @@ uint32_t Monsters::getIdByName(const std::string& name)
 		return 0;
 	}
 	return it->second;
-}
-
-Monsters::~Monsters()
-{
-	for (const auto& it : monsters) {
-		delete it.second;
-	}
 }

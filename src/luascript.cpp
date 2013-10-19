@@ -648,7 +648,7 @@ bool LuaScriptInterface::initState()
 
 bool LuaScriptInterface::closeState()
 {
-	if (!m_luaState) {
+	if (!g_luaEnvironment.getLuaState() || !m_luaState) {
 		return false;
 	}
 
@@ -1709,8 +1709,9 @@ void LuaScriptInterface::registerFunctions()
 
 	// Tile
 	registerClass("Tile", "", LuaScriptInterface::luaTileCreate);
-	registerClassMethod("Tile", "getPosition", LuaScriptInterface::luaTileGetPosition);
+	registerMetaMethod("Tile", "__eq", LuaScriptInterface::luaUserdataCompare);
 
+	registerClassMethod("Tile", "getPosition", LuaScriptInterface::luaTileGetPosition);
 	registerClassMethod("Tile", "getGround", LuaScriptInterface::luaTileGetGround);
 	registerClassMethod("Tile", "getThing", LuaScriptInterface::luaTileGetThing);
 	registerClassMethod("Tile", "getThingCount", LuaScriptInterface::luaTileGetThingCount);
@@ -1743,6 +1744,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// NetworkMessage
 	registerClass("NetworkMessage", "", LuaScriptInterface::luaNetworkMessageCreate);
+	registerMetaMethod("NetworkMessage", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("NetworkMessage", "__gc", LuaScriptInterface::luaNetworkMessageDelete);
 
 	registerClassMethod("NetworkMessage", "getByte", LuaScriptInterface::luaNetworkMessageGetByte);
@@ -1768,6 +1770,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// ModalWindow
 	registerClass("ModalWindow", "", LuaScriptInterface::luaModalWindowCreate);
+	registerMetaMethod("ModalWindow", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("ModalWindow", "__gc", LuaScriptInterface::luaModalWindowDelete);
 
 	registerClassMethod("ModalWindow", "getId", LuaScriptInterface::luaModalWindowGetId);
@@ -1793,6 +1796,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Item
 	registerClass("Item", "", LuaScriptInterface::luaItemCreate);
+	registerMetaMethod("Item", "__eq", LuaScriptInterface::luaUserdataCompare);
 	
 	registerClassMethod("Item", "isCreature", LuaScriptInterface::luaItemIsCreature);
 	registerClassMethod("Item", "isItem", LuaScriptInterface::luaItemIsItem);
@@ -1831,6 +1835,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
+	registerMetaMethod("Container", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerClassMethod("Container", "getSize", LuaScriptInterface::luaContainerGetSize);
 	registerClassMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
@@ -1843,6 +1848,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Creature
 	registerClass("Creature", "", LuaScriptInterface::luaCreatureCreate);
+	registerMetaMethod("Creature", "__eq", LuaScriptInterface::luaUserdataCompare);
 	
 	registerClassMethod("Creature", "registerEvent", LuaScriptInterface::luaCreatureRegisterEvent);
 	registerClassMethod("Creature", "unregisterEvent", LuaScriptInterface::luaCreatureUnregisterEvent);
@@ -1854,10 +1860,20 @@ void LuaScriptInterface::registerFunctions()
 	registerClassMethod("Creature", "isItem", LuaScriptInterface::luaCreatureIsItem);
 	registerClassMethod("Creature", "isGhost", LuaScriptInterface::luaCreatureIsGhost);
 
+	registerClassMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
+	registerClassMethod("Creature", "canSeeCreature", LuaScriptInterface::luaCreatureCanSeeCreature);
+
 	registerClassMethod("Creature", "getId", LuaScriptInterface::luaCreatureGetId);
 	registerClassMethod("Creature", "getName", LuaScriptInterface::luaCreatureGetName);
+
 	registerClassMethod("Creature", "getTarget", LuaScriptInterface::luaCreatureGetTarget);
+	registerClassMethod("Creature", "setTarget", LuaScriptInterface::luaCreatureSetTarget);
+
+	registerClassMethod("Creature", "getFollowCreature", LuaScriptInterface::luaCreatureGetFollowCreature);
+	registerClassMethod("Creature", "setFollowCreature", LuaScriptInterface::luaCreatureSetFollowCreature);
+
 	registerClassMethod("Creature", "getMaster", LuaScriptInterface::luaCreatureGetMaster);
+	registerClassMethod("Creature", "setMaster", LuaScriptInterface::luaCreatureSetMaster);
 	
 	registerClassMethod("Creature", "getLight", LuaScriptInterface::luaCreatureGetLight);
 	registerClassMethod("Creature", "setLight", LuaScriptInterface::luaCreatureSetLight);
@@ -1888,6 +1904,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
+	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerClassMethod("Player", "isPlayer", LuaScriptInterface::luaPlayerIsPlayer);
 
@@ -1992,16 +2009,24 @@ void LuaScriptInterface::registerFunctions()
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
+	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerClassMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
+	registerClassMethod("Monster", "isOpponent", LuaScriptInterface::luaMonsterIsOpponent);
+	registerClassMethod("Monster", "isFriend", LuaScriptInterface::luaMonsterIsFriend);
+
+	registerClassMethod("Monster", "selectTarget", LuaScriptInterface::luaMonsterSelectTarget);
 
 	// Npc
 	registerClass("Npc", "Creature", LuaScriptInterface::luaNpcCreate);
+	registerMetaMethod("Npc", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerClassMethod("Npc", "isNpc", LuaScriptInterface::luaNpcIsNpc);
 
 	// Guild
 	registerClass("Guild", "", LuaScriptInterface::luaGuildCreate);
+	registerMetaMethod("Guild", "__eq", LuaScriptInterface::luaUserdataCompare);
+
 	registerClassMethod("Guild", "getId", LuaScriptInterface::luaGuildGetId);
 	registerClassMethod("Guild", "getName", LuaScriptInterface::luaGuildGetName);
 	registerClassMethod("Guild", "getMembersOnline", LuaScriptInterface::luaGuildGetMembersOnline);
@@ -2018,6 +2043,8 @@ void LuaScriptInterface::registerFunctions()
 
 	// Group
 	registerClass("Group", "", LuaScriptInterface::luaGroupCreate);
+	registerMetaMethod("Group", "__eq", LuaScriptInterface::luaUserdataCompare);
+
 	registerClassMethod("Group", "getId", LuaScriptInterface::luaGroupGetId);
 	registerClassMethod("Group", "getName", LuaScriptInterface::luaGroupGetName);
 	registerClassMethod("Group", "getFlags", LuaScriptInterface::luaGroupGetFlags);
@@ -2027,6 +2054,8 @@ void LuaScriptInterface::registerFunctions()
 
 	// Vocation
 	registerClass("Vocation", "", LuaScriptInterface::luaVocationCreate);
+	registerMetaMethod("Vocation", "__eq", LuaScriptInterface::luaUserdataCompare);
+
 	registerClassMethod("Vocation", "getId", LuaScriptInterface::luaVocationGetId);
 	registerClassMethod("Vocation", "getClientId", LuaScriptInterface::luaVocationGetClientId);
 	registerClassMethod("Vocation", "getName", LuaScriptInterface::luaVocationGetName);
@@ -2056,12 +2085,15 @@ void LuaScriptInterface::registerFunctions()
 
 	// Town
 	registerClass("Town", "", LuaScriptInterface::luaTownCreate);
+	registerMetaMethod("Town", "__eq", LuaScriptInterface::luaUserdataCompare);
+
 	registerClassMethod("Town", "getId", LuaScriptInterface::luaTownGetId);
 	registerClassMethod("Town", "getName", LuaScriptInterface::luaTownGetName);
 	registerClassMethod("Town", "getTemplePosition", LuaScriptInterface::luaTownGetTemplePosition);
 
 	// House
 	registerClass("House", "", LuaScriptInterface::luaHouseCreate);
+	registerMetaMethod("House", "__eq", LuaScriptInterface::luaUserdataCompare);
 	
 	registerClassMethod("House", "getId", LuaScriptInterface::luaHouseGetId);
 	registerClassMethod("House", "getName", LuaScriptInterface::luaHouseGetName);
@@ -2080,6 +2112,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
+	registerMetaMethod("ItemType", "__eq", LuaScriptInterface::luaUserdataCompare);
 	
 	registerClassMethod("ItemType", "isCorpse", LuaScriptInterface::luaItemTypeIsCorpse);
 	registerClassMethod("ItemType", "isDoor", LuaScriptInterface::luaItemTypeIsDoor);
@@ -2104,6 +2137,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
+	registerMetaMethod("Combat", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("Combat", "__gc", LuaScriptInterface::luaCombatDelete);
 	
 	registerClassMethod("Combat", "setParameter", LuaScriptInterface::luaCombatSetParameter);
@@ -2117,6 +2151,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Condition
 	registerClass("Condition", "", LuaScriptInterface::luaConditionCreate);
+	registerMetaMethod("Condition", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("Condition", "__gc", LuaScriptInterface::luaConditionDelete);
 
 	registerClassMethod("Condition", "getId", LuaScriptInterface::luaConditionGetId);
@@ -5892,6 +5927,14 @@ int32_t LuaScriptInterface::luaResultFree(lua_State* L)
 	return 1;
 }
 
+// Userdata
+int32_t LuaScriptInterface::luaUserdataCompare(lua_State* L)
+{
+	// userdataA == userdataB
+	pushBoolean(L, getUserdata<void>(L, 1) == getUserdata<void>(L, 2));
+	return 1;
+}
+
 // _G
 int32_t LuaScriptInterface::luaIsType(lua_State* L)
 {
@@ -7860,6 +7903,32 @@ int32_t LuaScriptInterface::luaCreatureIsGhost(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureCanSee(lua_State* L)
+{
+	// creature:canSee(position)
+	const Position& position = getPosition(L, 2);
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->canSee(position));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureCanSeeCreature(lua_State* L)
+{
+	// creature:canSeeCreature(creature)
+	const Creature* otherCreature = getCreature(L, 2);
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->canSeeCreature(otherCreature));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureGetId(lua_State* L)
 {
 	// creature:getId()
@@ -7902,6 +7971,50 @@ int32_t LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
+{
+	// creature:setTarget(target)
+	Creature* target = getCreature(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->setAttackedCreature(target));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
+{
+	// creature:getFollowCreature()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		Creature* followCreature = creature->getFollowCreature();
+		if (followCreature) {
+			pushUserdata<Creature>(L, followCreature);
+			setCreatureMetatable(L, -1, followCreature);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
+{
+	// creature:setFollowCreature(followedCreature)
+	Creature* followCreature = getCreature(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->setFollowCreature(followCreature));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 {
 	// creature:getMaster()
@@ -7914,6 +8027,30 @@ int32_t LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 		} else {
 			pushNil(L);
 		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
+{
+	// creature:setMaster(master)
+	Creature* master = getCreature(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		if (master) {
+			pushBoolean(L, master->convinceCreature(creature));
+		} else {
+			master = creature->getMaster();
+			if (master) {
+				master->removeSummon(creature);
+				creature->useThing2();
+				creature->setDropLoot(true);
+			}
+			pushBoolean(L, true);
+		}
+		g_game.updateCreatureType(creature);
 	} else {
 		pushNil(L);
 	}
@@ -9599,6 +9736,45 @@ int32_t LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 	// monster:isMonster()
 	const Monster* monster = getUserdata<const Monster>(L, 1);
 	pushBoolean(L, monster != nullptr);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterIsOpponent(lua_State* L)
+{
+	// monster:isOpponent(creature)
+	const Creature* creature = getCreature(L, 2);
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->isOpponent(creature));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterIsFriend(lua_State* L)
+{
+	// monster:isFriend(creature)
+	const Creature* creature = getCreature(L, 2);
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->isFriend(creature));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterSelectTarget(lua_State* L)
+{
+	// monster:selectTarget(creature)
+	Creature* creature = getCreature(L, 2);
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->selectTarget(creature));
+	} else {
+		pushNil(L);
+	}
 	return 1;
 }
 

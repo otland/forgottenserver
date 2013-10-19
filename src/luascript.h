@@ -656,6 +656,9 @@ class LuaScriptInterface
 		static int32_t luaResultGetDataStream(lua_State* L);
 		static int32_t luaResultNext(lua_State* L);
 		static int32_t luaResultFree(lua_State* L);
+
+		// Userdata
+		static int32_t luaUserdataCompare(lua_State* L);
 		
 		// _G
 		static int32_t luaIsType(lua_State* L);
@@ -675,8 +678,8 @@ class LuaScriptInterface
 
 		// Tile
 		static int32_t luaTileCreate(lua_State* L);
+
 		static int32_t luaTileGetPosition(lua_State* L);
-		
 		static int32_t luaTileGetGround(lua_State* L);
 		static int32_t luaTileGetThing(lua_State* L);
 		static int32_t luaTileGetThingCount(lua_State* L);
@@ -820,10 +823,20 @@ class LuaScriptInterface
 		static int32_t luaCreatureIsItem(lua_State* L);
 		static int32_t luaCreatureIsGhost(lua_State* L);
 
+		static int32_t luaCreatureCanSee(lua_State* L);
+		static int32_t luaCreatureCanSeeCreature(lua_State* L);
+
 		static int32_t luaCreatureGetId(lua_State* L);
 		static int32_t luaCreatureGetName(lua_State* L);
+
 		static int32_t luaCreatureGetTarget(lua_State* L);
+		static int32_t luaCreatureSetTarget(lua_State* L);
+
+		static int32_t luaCreatureGetFollowCreature(lua_State* L);
+		static int32_t luaCreatureSetFollowCreature(lua_State* L);
+
 		static int32_t luaCreatureGetMaster(lua_State* L);
+		static int32_t luaCreatureSetMaster(lua_State* L);
 		
 		static int32_t luaCreatureGetLight(lua_State* L);
 		static int32_t luaCreatureSetLight(lua_State* L);
@@ -960,6 +973,10 @@ class LuaScriptInterface
 		static int32_t luaMonsterCreate(lua_State* L);
 
 		static int32_t luaMonsterIsMonster(lua_State* L);
+		static int32_t luaMonsterIsOpponent(lua_State* L);
+		static int32_t luaMonsterIsFriend(lua_State* L);
+
+		static int32_t luaMonsterSelectTarget(lua_State* L);
 
 		// Npc
 		static int32_t luaNpcCreate(lua_State* L);

@@ -149,6 +149,31 @@ void Monster::onCreatureAppear(const Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
+	if (mType->creatureAppearEvent != -1) {
+		// onCreatureAppear(self, creature)
+		LuaScriptInterface* scriptInterface = mType->scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Monster::onCreatureAppear] Call stack overflow" << std::endl;
+			return;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(mType->creatureAppearEvent, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(mType->creatureAppearEvent);
+
+		LuaScriptInterface::pushUserdata<Monster>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Monster");
+
+		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+		
+		if (scriptInterface->callFunction(2)) {
+			return;
+		}
+	}
+
 	if (creature == this) {
 		//We just spawned lets look around to see who is there.
 		if (isSummon()) {
@@ -166,6 +191,31 @@ void Monster::onCreatureDisappear(const Creature* creature, uint32_t stackpos, b
 {
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
 
+	if (mType->creatureDisappearEvent != -1) {
+		// onCreatureDisappear(self, creature)
+		LuaScriptInterface* scriptInterface = mType->scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Monster::onCreatureDisappear] Call stack overflow" << std::endl;
+			return;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(mType->creatureDisappearEvent, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(mType->creatureDisappearEvent);
+
+		LuaScriptInterface::pushUserdata<Monster>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Monster");
+
+		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+		if (scriptInterface->callFunction(2)) {
+			return;
+		}
+	}
+
 	if (creature == this) {
 		if (spawn) {
 			spawn->startSpawnCheck();
@@ -181,6 +231,34 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
                              const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
+
+	if (mType->creatureMoveEvent != -1) {
+		// onCreatureMove(self, creature, oldPosition, newPosition)
+		LuaScriptInterface* scriptInterface = mType->scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Monster::onCreatureMove] Call stack overflow" << std::endl;
+			return;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(mType->creatureMoveEvent, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(mType->creatureMoveEvent);
+
+		LuaScriptInterface::pushUserdata<Monster>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Monster");
+
+		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+		LuaScriptInterface::pushMetaPosition(L, oldPos, 0);
+		LuaScriptInterface::pushMetaPosition(L, newPos, 0);
+
+		if (scriptInterface->callFunction(4)) {
+			return;
+		}
+	}
 
 	if (creature == this) {
 		if (isSummon()) {
@@ -228,6 +306,39 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 				//we have no target lets try pick this one
 				selectTarget(const_cast<Creature*>(creature));
 			}
+		}
+	}
+}
+
+void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = nullptr*/)
+{
+	Creature::onCreatureSay(creature, type, text, pos);
+
+	if (mType->creatureSayEvent != -1) {
+		// onCreatureSay(self, creature, type, message)
+		LuaScriptInterface* scriptInterface = mType->scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Monster::onCreatureSay] Call stack overflow" << std::endl;
+			return;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(mType->creatureSayEvent, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(mType->creatureSayEvent);
+
+		LuaScriptInterface::pushUserdata<Monster>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Monster");
+
+		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+		LuaScriptInterface::pushNumber(L, type);
+		LuaScriptInterface::pushString(L, text);
+
+		if (scriptInterface->callFunction(4)) {
+			return;
 		}
 	}
 }
@@ -593,6 +704,28 @@ void Monster::onEndCondition(ConditionType_t type)
 void Monster::onThink(uint32_t interval)
 {
 	Creature::onThink(interval);
+
+	if (mType->thinkEvent != -1) {
+		// onThink(self)
+		LuaScriptInterface* scriptInterface = mType->scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Monster::onThink] Call stack overflow" << std::endl;
+			return;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(mType->thinkEvent, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(mType->thinkEvent);
+
+		LuaScriptInterface::pushUserdata<Monster>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Monster");
+
+		if (scriptInterface->callFunction(1)) {
+			return;
+		}
+	}
 
 	if (despawn()) {
 		g_game.internalTeleport(this, masterPos);
