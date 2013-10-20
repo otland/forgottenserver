@@ -973,6 +973,10 @@ class LuaScriptInterface
 		static int32_t luaMonsterCreate(lua_State* L);
 
 		static int32_t luaMonsterIsMonster(lua_State* L);
+
+		static int32_t luaMonsterIsIdle(lua_State* L);
+		static int32_t luaMonsterSetIdle(lua_State* L);
+
 		static int32_t luaMonsterIsOpponent(lua_State* L);
 		static int32_t luaMonsterIsFriend(lua_State* L);
 

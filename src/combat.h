@@ -33,19 +33,6 @@ class Item;
 
 struct Position;
 
-struct CombatDamage {
-	struct {
-		CombatType_t type;
-		int32_t value;
-	} primary, secondary;
-
-	CombatDamage()
-	{
-		primary.type = secondary.type = COMBAT_NONE;
-		primary.value = secondary.value = 0;
-	}
-};
-
 //for luascript callback
 class ValueCallback : public CallBack
 {

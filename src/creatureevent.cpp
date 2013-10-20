@@ -190,6 +190,10 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_MODALWINDOW;
 	} else if (tmpStr == "textedit") {
 		m_type = CREATURE_EVENT_TEXTEDIT;
+	} else if (tmpStr == "changehealth") {
+		m_type = CREATURE_EVENT_CHANGEHEALTH;
+	} else if (tmpStr == "changemana") {
+		m_type = CREATURE_EVENT_CHANGEMANA;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
@@ -229,6 +233,12 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_TEXTEDIT:
 			return "onTextEdit";
+
+		case CREATURE_EVENT_CHANGEHEALTH:
+			return "onChangeHealth";
+
+		case CREATURE_EVENT_CHANGEMANA:
+			return "onChangeMana";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -458,6 +468,59 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	LuaScriptInterface::pushNumber(L, player->getID());
 	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 	LuaScriptInterface::pushString(L, text);
+
+	return m_scriptInterface->callFunction(3);
+}
+
+bool CreatureEvent::executeChangeHealth(Creature* creature, Creature* attacker, const CombatDamage& damage)
+{
+	//onChangeHealth(cid, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeChangeHealth] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	LuaScriptInterface::pushNumber(L, creature->getID());
+	if (attacker) {
+		LuaScriptInterface::pushNumber(L, attacker->getID());
+	} else {
+		LuaScriptInterface::pushNumber(L, 0);
+	}
+	LuaScriptInterface::pushNumber(L, damage.primary.value);
+	LuaScriptInterface::pushNumber(L, damage.primary.type);
+	LuaScriptInterface::pushNumber(L, damage.secondary.value);
+	LuaScriptInterface::pushNumber(L, damage.secondary.type);
+
+	return m_scriptInterface->callFunction(6);
+}
+
+bool CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, int32_t manaChange)
+{
+	//onChangeMana(cid, attacker, manaChange)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeChangeMana] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	LuaScriptInterface::pushNumber(L, creature->getID());
+	if (attacker) {
+		LuaScriptInterface::pushNumber(L, attacker->getID());
+	} else {
+		LuaScriptInterface::pushNumber(L, 0);
+	}
+	LuaScriptInterface::pushNumber(L, manaChange);
 
 	return m_scriptInterface->callFunction(3);
 }

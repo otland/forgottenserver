@@ -2012,6 +2012,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerClassMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
+
+	registerClassMethod("Monster", "isIdle", LuaScriptInterface::luaMonsterIsIdle);
+	registerClassMethod("Monster", "setIdle", LuaScriptInterface::luaMonsterSetIdle);
+
 	registerClassMethod("Monster", "isOpponent", LuaScriptInterface::luaMonsterIsOpponent);
 	registerClassMethod("Monster", "isFriend", LuaScriptInterface::luaMonsterIsFriend);
 
@@ -8004,11 +8008,17 @@ int32_t LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 
 int32_t LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 {
-	// creature:setFollowCreature(followedCreature)
+	// creature:setFollowCreature(followedCreature[, fullPathSearch = false])
+	bool fullPathSearch;
+	if (getStackTop(L) >= 3) {
+		fullPathSearch = getBoolean(L, 3);
+	} else {
+		fullPathSearch = false;
+	}
 	Creature* followCreature = getCreature(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		pushBoolean(L, creature->setFollowCreature(followCreature));
+		pushBoolean(L, creature->setFollowCreature(followCreature, fullPathSearch));
 	} else {
 		pushNil(L);
 	}
@@ -9736,6 +9746,32 @@ int32_t LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 	// monster:isMonster()
 	const Monster* monster = getUserdata<const Monster>(L, 1);
 	pushBoolean(L, monster != nullptr);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterIsIdle(lua_State* L)
+{
+	// monster:isIdle()
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->getIdleStatus());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterSetIdle(lua_State* L)
+{
+	// monster:setIdle(idle)
+	bool idle = getBoolean(L, 2);
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		monster->setIdle(idle);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
 	return 1;
 }
 
