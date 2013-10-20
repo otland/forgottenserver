@@ -825,11 +825,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << " (Range:" << it.shootRange;
 
 			if (it.attack != 0) {
-				s << ", Atk " << std::showpos << it.attack << std::noshowpos;
+				s << ", Atk" << std::showpos << it.attack << std::noshowpos;
 			}
 
 			if (it.hitChance != 0) {
-				s << ", Hit% " << std::showpos << it.hitChance << std::noshowpos;
+				s << ", Hit%" << std::showpos << it.hitChance << std::noshowpos;
 			}
 
 			s << ')';
