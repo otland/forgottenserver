@@ -19,11 +19,11 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="20"/>
-		<attack name="energy" interval="1000" chance="17" range="7" min="-15" max="-45">
+		<attack name="energy" interval="1000" chance="17" range="7" min="0" max="-58">
 			<attribute key="shootEffect" value="energy"/>
 			<attribute key="areaEffect" value="energy"/>
 		</attack>
-		<attack name="fire" interval="2000" chance="10" range="7" radius="1" target="1" min="-35" max="-95">
+		<attack name="fire" interval="2000" chance="10" range="7" radius="1" target="1" min="0" max="-105">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="firearea"/>
 		</attack>
@@ -34,10 +34,10 @@
 	<defenses armor="18" defense="20"/>
 	<elements>
 		<element energyPercent="20"/>
-		<element earthPercent="15"/>
+		<element earthPercent="20"/>
 		<element holyPercent="10"/>
-		<element icePercent="-5"/>
-		<element deathPercent="-5"/>
+		<element icePercent="-10"/>
+		<element deathPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -47,21 +47,16 @@
 		<voice sentence="Kaplar!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="37000"/><!-- gold coin -->
-		<item id="2684" countmax="8" chance="7150"/><!-- carrot -->
-		<item id="2050" chance="20000"/><!-- torch -->
-		<item id="2817" chance="17500"/><!-- dead snake -->
-		<item id="2649" chance="13500"/><!-- leather legs -->
-		<item id="2403" chance="10000"/><!-- knife -->
-		<item id="2461" chance="8000"/><!-- leather helmet -->
-		<item id="2817" chance="17500"/><!-- dead snake -->
-		<item id="2050" chance="20000"/><!-- torch -->
-		<item id="2465" chance="3500"/><!-- brass armor -->
-		<item id="5878" chance="3250"/><!-- minotaur leather -->
-		<item id="2404" chance="3000"/><!-- combat knife -->
-		<item id="2648" chance="2500"/><!-- chain legs -->
-		<item id="7425" chance="1000"/><!-- taurus mace -->
-		<item id="2189" chance="1000"/><!-- wand of cosmic energy -->
-		<item id="7620" chance="750"/><!-- mana potion -->
+		<item id="2148" countmax="35" chance="85810"/><!-- gold coin -->
+		<item id="2684" countmax="8" chance="15030"/><!-- carrot -->
+		<item id="12429" chance="6400"/><!-- purple robe -->
+		<item id="2649" chance="5160"/><!-- leather legs -->
+		<item id="2461" chance="3040"/><!-- leather helmet -->
+		<item id="2050" chance="4970"/><!-- torch -->
+		<item id="5878" chance="2280"/><!-- minotaur leather -->
+		<item id="7425" chance="1060"/><!-- taurus mace -->
+		<item id="2189" chance="600"/><!-- wand of cosmic energy -->
+		<item id="7620" chance="460"/><!-- mana potion -->
+		<item id="12428" countmax="2" chance="3060"/><!-- minotaur horn -->
 	</loot>
 </monster>
