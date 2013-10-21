@@ -140,8 +140,7 @@ void NetworkMessage::AddItem(uint16_t id, uint8_t count)
 	if (it.stackable) {
 		AddByte(count);
 	} else if (it.isSplash() || it.isFluidContainer()) {
-		uint32_t fluidIndex = count % 8;
-		AddByte(fluidMap[fluidIndex]);
+		AddByte(fluidMap[count & 7]);
 	}
 
 	if (it.isAnimation) {
@@ -159,8 +158,7 @@ void NetworkMessage::AddItem(const Item* item)
 	if (it.stackable) {
 		AddByte(std::min<uint16_t>(0xFF, item->getItemCount()));
 	} else if (it.isSplash() || it.isFluidContainer()) {
-		uint32_t fluidIndex = item->getFluidType() % 8;
-		AddByte(fluidMap[fluidIndex]);
+		AddByte(fluidMap[item->getFluidType() & 7]);
 	}
 
 	if (it.isAnimation) {

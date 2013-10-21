@@ -114,11 +114,11 @@ class Protocol : boost::noncopyable
 
 	private:
 		Connection_ptr m_connection;
+		uint32_t m_key[4];
+		uint32_t m_refCount;
 		bool m_encryptionEnabled;
 		bool m_checksumEnabled;
 		bool m_rawMessages;
-		uint32_t m_key[4];
-		uint32_t m_refCount;
 };
 
 #endif

@@ -90,68 +90,55 @@ void Protocol::XTEA_encrypt(OutputMessage& msg)
 {
 	const uint32_t delta = 0x61C88647;
 
-	uint32_t k[4];
-	k[0] = m_key[0];
-	k[1] = m_key[1];
-	k[2] = m_key[2];
-	k[3] = m_key[3];
-
-	//add bytes until reach 8 multiple
-	int32_t paddingBytes = msg.getMessageLength() % 8;
+	// the message must be a multiple of 8
+	size_t paddingBytes = msg.getMessageLength() & 7;
 	if (paddingBytes != 0) {
 		msg.AddPaddingBytes(8 - paddingBytes);
 	}
 
 	uint32_t* buffer = (uint32_t*)msg.getOutputBuffer();
-	const int32_t messageLength = msg.getMessageLength() / 4;
-	int32_t read_pos = 0;
-	while (read_pos < messageLength) {
-		uint32_t v0 = buffer[read_pos], v1 = buffer[read_pos + 1];
+	const size_t messageLength = msg.getMessageLength() / 4;
+	size_t readPos = 0;
+	const uint32_t k[] = {m_key[0], m_key[1], m_key[2], m_key[3]};
+	while (readPos < messageLength) {
+		uint32_t v0 = buffer[readPos], v1 = buffer[readPos + 1];
 		uint32_t sum = 0;
 
-		for (int32_t i = 0; i < 32; ++i) {
+		for (int32_t i = 32; --i >= 0;) {
 			v0 += ((v1 << 4 ^ v1 >> 5) + v1) ^ (sum + k[sum & 3]);
 			sum -= delta;
 			v1 += ((v0 << 4 ^ v0 >> 5) + v0) ^ (sum + k[sum >> 11 & 3]);
 		}
 
-		buffer[read_pos++] = v0;
-		buffer[read_pos++] = v1;
+		buffer[readPos++] = v0;
+		buffer[readPos++] = v1;
 	}
 }
 
 bool Protocol::XTEA_decrypt(NetworkMessage& msg)
 {
-	if ((msg.getMessageLength() - 6) % 8 != 0) {
+	if (((msg.getMessageLength() - 6) & 7) != 0) {
 		return false;
 	}
 
 	const uint32_t delta = 0x61C88647;
 
-	const int32_t messageLength = (msg.getMessageLength() - 6) / 4;
-
-	//
-	uint32_t k[4];
-	k[0] = m_key[0];
-	k[1] = m_key[1];
-	k[2] = m_key[2];
-	k[3] = m_key[3];
-
 	uint32_t* buffer = (uint32_t*)(msg.getBuffer() + msg.getReadPos());
-
-	int32_t read_pos = 0;
-	while (read_pos < messageLength) {
-		uint32_t v0 = buffer[read_pos], v1 = buffer[read_pos + 1];
+	const size_t messageLength = (msg.getMessageLength() - 6) / 4;
+	size_t readPos = 0;
+	const uint32_t k[] = {m_key[0], m_key[1], m_key[2], m_key[3]};
+	while (readPos < messageLength) {
+		uint32_t v0 = buffer[readPos], v1 = buffer[readPos + 1];
 		uint32_t sum = 0xC6EF3720;
 
-		for (int32_t i = 0; i < 32; ++i) {
+		for (int32_t i = 32; --i >= 0;) {
 			v1 -= ((v0 << 4 ^ v0 >> 5) + v0) ^ (sum + k[sum >> 11 & 3]);
 			sum += delta;
 			v0 -= ((v1 << 4 ^ v1 >> 5) + v1) ^ (sum + k[sum & 3]);
 		}
 
-		buffer[read_pos++] = v0;
-		buffer[read_pos++] = v1;
+		buffer[readPos++] = v0;
+		buffer[readPos++] = v1;
 	}
 
 	//
