@@ -948,6 +948,10 @@ function doForceSummonCreature(name, pos)
 	return creature
 end
 
+function isSummon(cid) 
+	return getCreatureMaster(cid) ~= cid 
+end
+
 function Player.sendCancelMessage(self, message)
 	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
 end
