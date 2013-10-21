@@ -190,6 +190,8 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_MODALWINDOW;
 	} else if (tmpStr == "textedit") {
 		m_type = CREATURE_EVENT_TEXTEDIT;
+	} else if (tmpStr == "target") {
+		m_type = CREATURE_EVENT_TARGET;	
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
@@ -229,6 +231,9 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_TEXTEDIT:
 			return "onTextEdit";
+			
+		case CREATURE_EVENT_TARGET:
+			return "onTarget";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -460,4 +465,22 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	LuaScriptInterface::pushString(L, text);
 
 	return m_scriptInterface->callFunction(3);
+}
+
+bool CreatureEvent::executeTarget(Creature* creature, Creature* target)
+
+	//onTarget(cid, target)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeLook] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+	lua_pushnumber(L, creature->getID());
+	lua_pushnumber(L, env->addThing(target));
+
+	return m_scriptInterface->callFunction(2);
 }
