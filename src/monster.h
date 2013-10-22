@@ -214,6 +214,11 @@ class Monster : public Creature
 
 		void updateLookDirection();
 
+		void addFriend(Creature* creature);
+		void removeFriend(Creature* creature);
+		void addTarget(Creature* creature, bool pushFront = false);
+		void removeTarget(Creature* creature);
+
 		void updateTargetList();
 		void clearTargetList();
 		void clearFriendList();

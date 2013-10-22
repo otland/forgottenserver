@@ -174,6 +174,8 @@ class Monsters
 		std::map<uint32_t, MonsterType*> monsters;
 
 		LuaScriptInterface* scriptInterface;
+		std::map<MonsterType*, std::string> monsterScriptList;
+
 		bool loaded;
 };
 

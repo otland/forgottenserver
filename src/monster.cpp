@@ -343,12 +343,53 @@ void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const s
 	}
 }
 
+void Monster::addFriend(Creature* creature)
+{
+	assert(creature != this);
+	auto result = friendList.insert(creature);
+	if (result.second) {
+		creature->useThing2();
+	}
+}
+
+void Monster::removeFriend(Creature* creature)
+{
+	auto it = friendList.find(creature);
+	if (it != friendList.end()) {
+		creature->releaseThing2();
+		friendList.erase(it);
+	}
+}
+
+void Monster::addTarget(Creature* creature, bool pushFront/*= false*/)
+{
+	assert(creature != this);
+	if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
+		creature->useThing2();
+		if (pushFront) {
+			targetList.push_front(creature);
+		} else {
+			targetList.push_back(creature);
+		}
+	}
+}
+
+void Monster::removeTarget(Creature* creature)
+{
+	auto it = std::find(targetList.begin(), targetList.end(), creature);
+	if (it != targetList.end()) {
+		creature->releaseThing2();
+		targetList.erase(it);
+	}
+}
+
 void Monster::updateTargetList()
 {
 	auto friendIterator = friendList.begin();
 	while (friendIterator != friendList.end()) {
-		if ((*friendIterator)->getHealth() <= 0 || !canSee((*friendIterator)->getPosition())) {
-			(*friendIterator)->releaseThing2();
+		Creature* creature = *friendIterator;
+		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+			creature->releaseThing2();
 			friendIterator = friendList.erase(friendIterator);
 		} else {
 			++friendIterator;
@@ -357,8 +398,9 @@ void Monster::updateTargetList()
 
 	auto targetIterator = targetList.begin();
 	while (targetIterator != targetList.end()) {
-		if ((*targetIterator)->getHealth() <= 0 || !canSee((*targetIterator)->getPosition())) {
-			(*targetIterator)->releaseThing2();
+		Creature* creature = *targetIterator;
+		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+			creature->releaseThing2();
 			targetIterator = targetList.erase(targetIterator);
 		} else {
 			++targetIterator;
@@ -388,29 +430,14 @@ void Monster::clearFriendList()
 	friendList.clear();
 }
 
-void Monster::onCreatureFound(Creature* creature, bool pushFront /*= false*/)
+void Monster::onCreatureFound(Creature* creature, bool pushFront/*= false*/)
 {
 	if (isFriend(creature)) {
-		assert(creature != this);
-		std::pair<CreatureHashSet::iterator, bool> res = friendList.insert(creature);
-
-		if (res.second) {
-			creature->useThing2();
-		}
+		addFriend(creature);
 	}
 
 	if (isOpponent(creature)) {
-		assert(creature != this);
-
-		if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
-			creature->useThing2();
-
-			if (pushFront) {
-				targetList.push_front(creature);
-			} else {
-				targetList.push_back(creature);
-			}
-		}
+		addTarget(creature);
 	}
 
 	updateIdleStatus();
@@ -483,21 +510,14 @@ void Monster::onCreatureLeave(Creature* creature)
 
 	//update friendList
 	if (isFriend(creature)) {
-		if (friendList.erase(creature) != 0) {
-			creature->releaseThing2();
-		}
+		removeFriend(creature);
 	}
 
 	//update targetList
 	if (isOpponent(creature)) {
-		auto it = std::find(targetList.begin(), targetList.end(), creature);
-		if (it != targetList.end()) {
-			creature->releaseThing2();
-			targetList.erase(it);
-
-			if (targetList.empty()) {
-				updateIdleStatus();
-			}
+		removeTarget(creature);
+		if (targetList.empty()) {
+			updateIdleStatus();
 		}
 	}
 }

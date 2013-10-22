@@ -271,9 +271,30 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	}
 
 	loaded = true;
-
 	for (pugi::xml_node monsterNode = doc.child("monsters").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
 		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), reloading);
+	}
+
+	if (!monsterScriptList.empty()) {
+		if (!scriptInterface) {
+			scriptInterface = new LuaScriptInterface("Monster Interface");
+			scriptInterface->initState();
+		}
+
+		for (const auto& scriptEntry : monsterScriptList) {
+			MonsterType* mType = scriptEntry.first;
+			if (scriptInterface->loadFile("data/monster/scripts/" + scriptEntry.second) == 0) {
+				mType->scriptInterface = scriptInterface;
+				mType->creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
+				mType->creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
+				mType->creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
+				mType->creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
+				mType->thinkEvent = scriptInterface->getEvent("onThink");
+			} else {
+				std::cout << "[Warning - Monsters::loadMonster] Can not load script: " << scriptEntry.second << std::endl;
+				std::cout << scriptInterface->getLastLuaError() << std::endl;
+			}
+		}
 	}
 	return true;
 }
@@ -284,6 +305,7 @@ bool Monsters::reload()
 
 	delete scriptInterface;
 	scriptInterface = nullptr;
+	monsterScriptList.clear();
 
 	return loadFromXml(true);
 }
@@ -876,23 +898,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 
 	if ((node = monsterNode.child("script"))) {
 		if ((attr = node.attribute("value"))) {
-			if (!scriptInterface) {
-				scriptInterface = new LuaScriptInterface("Monster Interface");
-				scriptInterface->initState();
-			}
-
-			const std::string& script = attr.as_string();
-			if (scriptInterface->loadFile("data/monster/scripts/" + script) == 0) {
-				mType->scriptInterface = scriptInterface;
-				mType->creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
-				mType->creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
-				mType->creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
-				mType->creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
-				mType->thinkEvent = scriptInterface->getEvent("onThink");
-			} else {
-				std::cout << "[Warning - Monsters::loadMonster] Can not load script: " << script << std::endl;
-				std::cout << scriptInterface->getLastLuaError() << std::endl;
-			}
+			monsterScriptList[mType] = attr.as_string();
 		} else {
 			SHOW_XML_WARNING("Missing monster script");
 		}
