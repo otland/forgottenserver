@@ -8200,7 +8200,7 @@ int32_t LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 	const Position& position = getPosition(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		const Position& oldPosition = creature->getPosition();
+		const Position oldPosition = creature->getPosition();
 		if (g_game.internalTeleport(creature, position, pushMovement) == RET_NOERROR) {
 			if (!pushMovement) {
 				if (oldPosition.x == position.x) {
