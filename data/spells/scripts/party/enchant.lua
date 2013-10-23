@@ -8,7 +8,7 @@ local condition = createConditionObject(CONDITION_ATTRIBUTES)
 setConditionParam(condition, CONDITION_PARAM_SUBID, 3)
 setConditionParam(condition, CONDITION_PARAM_BUFF_SPELL, TRUE)
 setConditionParam(condition, CONDITION_PARAM_TICKS, 2 * 60 * 1000)
-setConditionParam(condition, CONDITION_PARAM_STAT_MAGICLEVEL, 1)
+setConditionParam(condition, CONDITION_PARAM_STAT_MAGICPOINTS, 1)
 
 local baseMana = 120
 function onCastSpell(cid, var)
