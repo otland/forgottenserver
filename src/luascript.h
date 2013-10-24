@@ -667,6 +667,7 @@ class LuaScriptInterface
 		// Game
 		static int32_t luaGameGetSpectators(lua_State* L);
 		static int32_t luaGameGetPlayers(lua_State* L);
+		static int32_t luaGameLoadMap(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
@@ -979,6 +980,9 @@ class LuaScriptInterface
 
 		static int32_t luaMonsterIsMonster(lua_State* L);
 
+		static int32_t luaMonsterGetSpawnPosition(lua_State* L);
+		static int32_t luaMonsterDespawn(lua_State* L);
+
 		static int32_t luaMonsterIsIdle(lua_State* L);
 		static int32_t luaMonsterSetIdle(lua_State* L);
 
@@ -996,6 +1000,7 @@ class LuaScriptInterface
 		static int32_t luaMonsterGetTargetCount(lua_State* L);
 
 		static int32_t luaMonsterSelectTarget(lua_State* L);
+		static int32_t luaMonsterSearchTarget(lua_State* L);
 
 		// Npc
 		static int32_t luaNpcCreate(lua_State* L);
@@ -1107,6 +1112,14 @@ class LuaScriptInterface
 		static int32_t luaItemTypeGetFluidSource(lua_State* L);
 		static int32_t luaItemTypeGetCapacity(lua_State* L);
 		static int32_t luaItemTypeGetWeight(lua_State* L);
+
+		static int32_t luaItemTypeGetAttack(lua_State* L);
+		static int32_t luaItemTypeGetDefense(lua_State* L);
+		static int32_t luaItemTypeGetExtraDefense(lua_State* L);
+		static int32_t luaItemTypeGetArmor(lua_State* L);
+
+		static int32_t luaItemTypeGetElementType(lua_State* L);
+		static int32_t luaItemTypeGetElementDamage(lua_State* L);
 
 		// Combat
 		static int32_t luaCombatCreate(lua_State* L);

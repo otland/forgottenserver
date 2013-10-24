@@ -260,7 +260,6 @@ Monsters::~Monsters()
 	delete scriptInterface;
 }
 
-
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
 	pugi::xml_document doc;
@@ -817,6 +816,10 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		mType->manaCost = pugi::cast<uint32_t>(attr.value());
 	}
 
+	if ((attr = monsterNode.attribute("script"))) {
+		monsterScriptList[mType] = attr.as_string();
+	}
+
 	pugi::xml_node node;
 	if ((node = monsterNode.child("health"))) {
 		if ((attr = node.attribute("now"))) {
@@ -893,14 +896,6 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			mType->changeTargetChance = pugi::cast<int32_t>(attr.value());
 		} else {
 			SHOW_XML_WARNING("Missing targetchange chance");
-		}
-	}
-
-	if ((node = monsterNode.child("script"))) {
-		if ((attr = node.attribute("value"))) {
-			monsterScriptList[mType] = attr.as_string();
-		} else {
-			SHOW_XML_WARNING("Missing monster script");
 		}
 	}
 

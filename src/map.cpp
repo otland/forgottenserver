@@ -169,12 +169,16 @@ void Map::setTile(int32_t x, int32_t y, int32_t z, Tile* newTile)
 	uint32_t offsetX = x & FLOOR_MASK;
 	uint32_t offsetY = y & FLOOR_MASK;
 
-	if (!floor->tiles[offsetX][offsetY]) {
-		floor->tiles[offsetX][offsetY] = newTile;
-		newTile->qt_node = leaf;
-	} else {
-		std::cout << "Error: Map::setTile() already exists." << std::endl;
+	Tile*& tile = floor->tiles[offsetX][offsetY];
+	if (tile) {
+		if (tile->hasFlag(TILESTATE_REFRESH)) {
+			refreshTileMap.erase(tile);
+		}
+		delete tile;
 	}
+
+	tile = newTile;
+	newTile->qt_node = leaf;
 
 	if (newTile->hasFlag(TILESTATE_REFRESH)) {
 		RefreshBlock_t rb;

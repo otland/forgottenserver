@@ -254,16 +254,20 @@ void Game::loadGameState()
 	ScriptEnvironment::loadGameState();
 }
 
-int32_t Game::loadMap(const std::string& filename)
+int32_t Game::loadMainMap(const std::string& filename)
+{
+	Player::maxMessageBuffer = g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER);
+	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
+	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
+	return loadMap("data/world/" + filename + ".otbm");
+}
+
+int32_t Game::loadMap(const std::string& path)
 {
 	if (!map) {
 		map = new Map;
 	}
-
-	Player::maxMessageBuffer = g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER);
-	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
-	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
-	return map->loadMap("data/world/" + filename + ".otbm");
+	return map->loadMap(path);
 }
 
 void Game::refreshMap()

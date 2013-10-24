@@ -726,7 +726,7 @@ void Monster::onThink(uint32_t interval)
 	Creature::onThink(interval);
 
 	if (mType->thinkEvent != -1) {
-		// onThink(self)
+		// onThink(self, interval)
 		LuaScriptInterface* scriptInterface = mType->scriptInterface;
 		if (!scriptInterface->reserveScriptEnv()) {
 			std::cout << "[Error - Monster::onThink] Call stack overflow" << std::endl;
@@ -742,7 +742,9 @@ void Monster::onThink(uint32_t interval)
 		LuaScriptInterface::pushUserdata<Monster>(L, this);
 		LuaScriptInterface::setMetatable(L, -1, "Monster");
 
-		if (scriptInterface->callFunction(1)) {
+		LuaScriptInterface::pushNumber(L, interval);
+
+		if (scriptInterface->callFunction(2)) {
 			return;
 		}
 	}

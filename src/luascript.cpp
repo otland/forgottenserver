@@ -1700,6 +1700,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getSpectators", LuaScriptInterface::luaGameGetSpectators);
 	registerMethod("Game", "getPlayers", LuaScriptInterface::luaGameGetPlayers);
+	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
 
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
@@ -2020,6 +2021,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
 
+	registerMethod("Monster", "getSpawnPosition", LuaScriptInterface::luaMonsterGetSpawnPosition);
+	registerMethod("Monster", "despawn", LuaScriptInterface::luaMonsterDespawn);
+
 	registerMethod("Monster", "isIdle", LuaScriptInterface::luaMonsterIsIdle);
 	registerMethod("Monster", "setIdle", LuaScriptInterface::luaMonsterSetIdle);
 
@@ -2037,6 +2041,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Monster", "getTargetCount", LuaScriptInterface::luaMonsterGetTargetCount);
 
 	registerMethod("Monster", "selectTarget", LuaScriptInterface::luaMonsterSelectTarget);
+	registerMethod("Monster", "searchTarget", LuaScriptInterface::luaMonsterSearchTarget);
 
 	// Npc
 	registerClass("Npc", "Creature", LuaScriptInterface::luaNpcCreate);
@@ -2155,6 +2160,14 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getFluidSource", LuaScriptInterface::luaItemTypeGetFluidSource);
 	registerMethod("ItemType", "getCapacity", LuaScriptInterface::luaItemTypeGetCapacity);
 	registerMethod("ItemType", "getWeight", LuaScriptInterface::luaItemTypeGetWeight);
+
+	registerMethod("ItemType", "getAttack", LuaScriptInterface::luaItemTypeGetAttack);
+	registerMethod("ItemType", "getDefense", LuaScriptInterface::luaItemTypeGetDefense);
+	registerMethod("ItemType", "getExtraDefense", LuaScriptInterface::luaItemTypeGetExtraDefense);
+	registerMethod("ItemType", "getArmor", LuaScriptInterface::luaItemTypeGetArmor);
+
+	registerMethod("ItemType", "getElementType", LuaScriptInterface::luaItemTypeGetElementType);
+	registerMethod("ItemType", "getElementDamage", LuaScriptInterface::luaItemTypeGetElementDamage);
 
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
@@ -6126,6 +6139,14 @@ int32_t LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaGameLoadMap(lua_State* L)
+{
+	// Game.loadMap(path)
+	const std::string& path = getString(L, 1);
+	g_dispatcher.addTask(createTask(boost::bind(&Game::loadMap, &g_game, path)));
+	return 1;
+}
+
 // Position
 int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 {
@@ -9908,6 +9929,30 @@ int32_t LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaMonsterGetSpawnPosition(lua_State* L)
+{
+	// monster:getSpawnPosition()
+	const Monster* monster = getUserdata<const Monster>(L, 1);
+	if (monster) {
+		pushMetaPosition(L, monster->getMasterPos());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterDespawn(lua_State* L)
+{
+	// monster:despawn()
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->despawn());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaMonsterIsIdle(lua_State* L)
 {
 	// monster:isIdle()
@@ -10091,6 +10136,24 @@ int32_t LuaScriptInterface::luaMonsterSelectTarget(lua_State* L)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
 		pushBoolean(L, monster->selectTarget(creature));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterSearchTarget(lua_State* L)
+{
+	// monster:searchTarget([searchType = TARGETSEARCH_DEFAULT])
+	TargetSearchType_t searchType;
+	if (getStackTop(L) >= 2) {
+		searchType = static_cast<TargetSearchType_t>(getNumber<int64_t>(L, 2));
+	} else {
+		searchType = TARGETSEARCH_DEFAULT;
+	}
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->searchTarget(searchType));
 	} else {
 		pushNil(L);
 	}
@@ -11144,6 +11207,88 @@ int32_t LuaScriptInterface::luaItemTypeGetWeight(lua_State* L)
 			weight = atof(ws.str().c_str());
 		}
 		pushNumber(L, weight);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetAttack(lua_State* L)
+{
+	// itemType:getAttack()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->attack);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetDefense(lua_State* L)
+{
+	// itemType:getDefense()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->defense);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetExtraDefense(lua_State* L)
+{
+	// itemType:getExtraDefense()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->extraDefense);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetArmor(lua_State* L)
+{
+	// itemType:getArmor()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->armor);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetElementType(lua_State* L)
+{
+	// itemType:getElementType()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		Abilities* abilities = itemType->abilities;
+		if (abilities) {
+			pushNumber(L, abilities->elementType);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetElementDamage(lua_State* L)
+{
+	// itemType:getElementDamage()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		Abilities* abilities = itemType->abilities;
+		if (abilities) {
+			pushNumber(L, abilities->elementDamage);
+		} else {
+			pushNil(L);
+		}
 	} else {
 		pushNil(L);
 	}

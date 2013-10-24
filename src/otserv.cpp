@@ -322,7 +322,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	std::cout << ">> Loading map" << std::endl;
 
-	if (!g_game.loadMap(g_config.getString(ConfigManager::MAP_NAME))) {
+	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
 		startupErrorMessage("Failed to load map");
 		return;
 	}
