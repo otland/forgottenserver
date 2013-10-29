@@ -53,6 +53,12 @@ struct TextMessage
 		int32_t value;
 		TextColor_t color;
 	} primary, secondary;
+
+	TextMessage()
+	{
+		primary.value = 0;
+		secondary.value = 0;
+	}
 };
 
 class ProtocolGame : public Protocol
