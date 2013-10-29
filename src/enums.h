@@ -19,6 +19,7 @@
 
 #ifndef __OTSERV_ENUMS_H__
 #define __OTSERV_ENUMS_H__
+
 #include <string>
 #include <list>
 
@@ -436,6 +437,19 @@ struct ModalWindow
 
 	ModalWindow(uint32_t id, const std::string& title, const std::string& message)
 		: title(title), message(message), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
+};
+
+struct CombatDamage {
+	struct {
+		CombatType_t type;
+		int32_t value;
+	} primary, secondary;
+
+	CombatDamage()
+	{
+		primary.type = secondary.type = COMBAT_NONE;
+		primary.value = secondary.value = 0;
+	}
 };
 
 typedef std::list<MarketOffer> MarketOfferList;

@@ -611,11 +611,11 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "doSellItem", NpcScriptInterface::luaDoSellItem);
 
 	// metatable
-	registerClassMethod("Npc", "getParameter", NpcScriptInterface::luaNpcGetParameter);
-	registerClassMethod("Npc", "setFocus", NpcScriptInterface::luaNpcSetFocus);
+	registerMethod("Npc", "getParameter", NpcScriptInterface::luaNpcGetParameter);
+	registerMethod("Npc", "setFocus", NpcScriptInterface::luaNpcSetFocus);
 
-	registerClassMethod("Npc", "openShopWindow", NpcScriptInterface::luaNpcOpenShopWindow);
-	registerClassMethod("Npc", "closeShopWindow", NpcScriptInterface::luaNpcCloseShopWindow);
+	registerMethod("Npc", "openShopWindow", NpcScriptInterface::luaNpcOpenShopWindow);
+	registerMethod("Npc", "closeShopWindow", NpcScriptInterface::luaNpcCloseShopWindow);
 }
 
 int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)

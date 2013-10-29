@@ -111,6 +111,13 @@ void MonsterType::reset()
 	changeTargetSpeed = 0;
 	changeTargetChance = 0;
 
+	scriptInterface = nullptr;
+	creatureAppearEvent = -1;
+	creatureDisappearEvent = -1;
+	creatureMoveEvent = -1;
+	creatureSayEvent = -1;
+	thinkEvent = -1;
+
 	scriptList.clear();
 }
 
@@ -242,6 +249,15 @@ bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootbl
 Monsters::Monsters()
 {
 	loaded = false;
+	scriptInterface = nullptr;
+}
+
+Monsters::~Monsters()
+{
+	for (const auto& it : monsters) {
+		delete it.second;
+	}
+	delete scriptInterface;
 }
 
 bool Monsters::loadFromXml(bool reloading /*= false*/)
@@ -254,9 +270,30 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	}
 
 	loaded = true;
-
 	for (pugi::xml_node monsterNode = doc.child("monsters").first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
 		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), reloading);
+	}
+
+	if (!monsterScriptList.empty()) {
+		if (!scriptInterface) {
+			scriptInterface = new LuaScriptInterface("Monster Interface");
+			scriptInterface->initState();
+		}
+
+		for (const auto& scriptEntry : monsterScriptList) {
+			MonsterType* mType = scriptEntry.first;
+			if (scriptInterface->loadFile("data/monster/scripts/" + scriptEntry.second) == 0) {
+				mType->scriptInterface = scriptInterface;
+				mType->creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
+				mType->creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
+				mType->creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
+				mType->creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
+				mType->thinkEvent = scriptInterface->getEvent("onThink");
+			} else {
+				std::cout << "[Warning - Monsters::loadMonster] Can not load script: " << scriptEntry.second << std::endl;
+				std::cout << scriptInterface->getLastLuaError() << std::endl;
+			}
+		}
 	}
 	return true;
 }
@@ -264,6 +301,11 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 bool Monsters::reload()
 {
 	loaded = false;
+
+	delete scriptInterface;
+	scriptInterface = nullptr;
+	monsterScriptList.clear();
+
 	return loadFromXml(true);
 }
 
@@ -774,6 +816,10 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		mType->manaCost = pugi::cast<uint32_t>(attr.value());
 	}
 
+	if ((attr = monsterNode.attribute("script"))) {
+		monsterScriptList[mType] = attr.as_string();
+	}
+
 	pugi::xml_node node;
 	if ((node = monsterNode.child("health"))) {
 		if ((attr = node.attribute("now"))) {
@@ -1251,11 +1297,4 @@ uint32_t Monsters::getIdByName(const std::string& name)
 		return 0;
 	}
 	return it->second;
-}
-
-Monsters::~Monsters()
-{
-	for (const auto& it : monsters) {
-		delete it.second;
-	}
 }

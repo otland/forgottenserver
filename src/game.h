@@ -105,7 +105,8 @@ class Game
 		  * \param filename Mapfile to load
 		  * \returns int32_t 0 built-in spawns, 1 needs xml spawns, 2 needs sql spawns, -1 if got error
 		  */
-		int32_t loadMap(const std::string& filename);
+		int32_t loadMainMap(const std::string& filename);
+		int32_t loadMap(const std::string& path);
 
 		/**
 		  * Get the map size - info purpose only
