@@ -30,7 +30,7 @@
 #include "game.h"
 #include "house.h"
 #include "housetile.h"
-#include "status.h"
+#include "protocolstatus.h"
 #include "combat.h"
 #include "spells.h"
 #include "condition.h"
@@ -3679,13 +3679,8 @@ int32_t LuaScriptInterface::luaGetWorldCreatures(lua_State* L)
 int32_t LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
 {
 	//getWorldUpTime()
-	uint32_t uptime = 0;
-	Status* status = Status::getInstance();
-	if (status) {
-		uptime = status->getUptime();
-	}
-
-	lua_pushnumber(L, uptime);
+	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
+	pushNumber(L, uptime);
 	return 1;
 }
 

@@ -24,9 +24,10 @@
 
 #include "configmanager.h"
 #include "waitlist.h"
-#include "status.h"
+#include "protocolstatus.h"
 
 extern ConfigManager g_config;
+extern Game g_game;
 
 WaitListIterator WaitingList::findClient(const Player* player, uint32_t& slot)
 {
@@ -71,7 +72,7 @@ bool WaitingList::clientLogin(const Player* player)
 		return true;
 	}
 
-	if (waitList.empty() && Status::getInstance()->getPlayersOnline() < (uint32_t)g_config.getNumber(ConfigManager::MAX_PLAYERS)) {
+	if (waitList.empty() && g_game.getPlayersOnline() < (uint32_t)g_config.getNumber(ConfigManager::MAX_PLAYERS)) {
 		//no waiting list and enough room
 		return true;
 	}
@@ -82,7 +83,7 @@ bool WaitingList::clientLogin(const Player* player)
 
 	WaitListIterator it = findClient(player, slot);
 	if (it != waitList.end()) {
-		if ((Status::getInstance()->getPlayersOnline() + slot) <= (uint32_t)g_config.getNumber(ConfigManager::MAX_PLAYERS)) {
+		if ((g_game.getPlayersOnline() + slot) <= (uint32_t)g_config.getNumber(ConfigManager::MAX_PLAYERS)) {
 			//should be able to login now
 			delete *it;
 			waitList.erase(it);

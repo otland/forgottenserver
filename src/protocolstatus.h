@@ -56,36 +56,13 @@ class ProtocolStatus : public Protocol
 
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 
+		void sendStatusString();
+		void sendInfo(uint32_t requestedInfo, std::string& characterName);
+
+		static const uint64_t start;
+
 	protected:
 		static std::map<uint32_t, int64_t> ipConnectMap;
-};
-
-class Status
-{
-	public:
-		static Status* getInstance() {
-			static Status status;
-			return &status;
-		}
-
-		void addPlayer();
-		void removePlayer();
-
-		std::string getStatusString() const;
-		void getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMessage& msg) const;
-
-		uint32_t getPlayersOnline() const {
-			return m_playersOnline;
-		}
-
-		uint64_t getUptime() const;
-
-	protected:
-		Status();
-
-	private:
-		uint64_t m_start;
-		uint32_t m_playersOnline;
 };
 
 #endif

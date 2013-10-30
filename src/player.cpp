@@ -38,7 +38,7 @@
 #include "ban.h"
 #include "configmanager.h"
 #include "creatureevent.h"
-#include "status.h"
+#include "protocolstatus.h"
 #include "beds.h"
 #include "mounts.h"
 #include "quests.h"
@@ -2631,8 +2631,6 @@ void Player::removeList()
 	for (const auto& it : g_game.getPlayers()) {
 		it.second->notifyStatusChange(this, VIPSTATUS_OFFLINE);
 	}
-
-	Status::getInstance()->removePlayer();
 }
 
 void Player::addList()
@@ -2642,8 +2640,6 @@ void Player::addList()
 	}
 
 	g_game.addPlayer(this);
-
-	Status::getInstance()->addPlayer();
 }
 
 void Player::kickPlayer(bool displayEffect)

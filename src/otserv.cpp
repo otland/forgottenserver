@@ -57,7 +57,7 @@
 #include "protocolgame.h"
 #include "protocolold.h"
 #include "protocollogin.h"
-#include "status.h"
+#include "protocolstatus.h"
 #include "admin.h"
 #include "globalevent.h"
 #include "mounts.h"

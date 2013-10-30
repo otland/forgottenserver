@@ -24,7 +24,7 @@
 #include "map.h"
 #include "house.h"
 #include "spawn.h"
-#include "status.h"
+#include "protocolstatus.h"
 #include "configmanager.h"
 
 extern ConfigManager g_config;

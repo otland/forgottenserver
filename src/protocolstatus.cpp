@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "status.h"
+#include "protocolstatus.h"
 #include "configmanager.h"
 #include "game.h"
 #include "connection.h"
@@ -46,17 +46,15 @@ enum RequestedInfo_t {
 };
 
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
+uint64_t start = OTSYS_TIME();
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
 	uint32_t ip = getIP();
-
 	if (ip != 0x0100007F) {
 		std::string ipStr = convertIPToString(ip);
-
 		if (ipStr != g_config.getString(ConfigManager::IP)) {
 			std::map<uint32_t, int64_t>::const_iterator it = ipConnectMap.find(ip);
-
 			if (it != ipConnectMap.end()) {
 				if (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT))) {
 					getConnection()->closeConnection();
@@ -72,56 +70,39 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		//XML info protocol
 		case 0xFF: {
 			if (msg.GetString(4) == "info") {
-				OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-				if (output) {
-					Status* status = Status::getInstance();
-					std::string str = status->getStatusString();
-					output->AddBytes(str.c_str(), str.size());
-					setRawMessages(true); // we dont want the size header, nor encryption
-					OutputMessagePool::getInstance()->send(output);
-				}
+				g_dispatcher.addTask(createTask(boost::bind(&ProtocolStatus::sendStatusString, this)));
+				return;
 			}
-
 			break;
 		}
 
 		//Another ServerInfo protocol
 		case 0x01: {
 			uint32_t requestedInfo = msg.GetU16(); //Only a Byte is necessary, though we could add new infos here
-			OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-			if (output) {
-				Status* status = Status::getInstance();
-				status->getInfo(requestedInfo, output, msg);
-				OutputMessagePool::getInstance()->send(output);
+			std::string characterName;
+			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
+				characterName = msg.GetString();
 			}
-
-			break;
+			g_dispatcher.addTask(createTask(boost::bind(&ProtocolStatus::sendStatusString, this, requestedInfo, characterName)));
+			return;
 		}
+
 		default:
 			break;
 	}
-
 	getConnection()->closeConnection();
 }
 
-Status::Status()
+void ProtocolStatus::sendStatusString()
 {
-	m_playersOnline = 0;
-	m_start = OTSYS_TIME();
-}
+	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	if (!output) {
+		getConnection()->closeConnection();
+		return;
+	}
 
-void Status::addPlayer()
-{
-	m_playersOnline++;
-}
+	setRawMessages(true);
 
-void Status::removePlayer()
-{
-	m_playersOnline--;
-}
-
-std::string Status::getStatusString() const
-{
 	pugi::xml_document doc;
 
 	pugi::xml_node decl = doc.prepend_child(pugi::node_declaration);
@@ -131,7 +112,8 @@ std::string Status::getStatusString() const
 	tsqp.append_attribute("version") = "1.0";
 
 	pugi::xml_node serverinfo = tsqp.append_child("serverinfo");
-	serverinfo.append_attribute("uptime") = std::to_string(getUptime()).c_str();
+	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
+	serverinfo.append_attribute("uptime") = std::to_string(uptime).c_str();
 	serverinfo.append_attribute("ip") = g_config.getString(ConfigManager::IP).c_str();
 	serverinfo.append_attribute("servername") = g_config.getString(ConfigManager::SERVER_NAME).c_str();
 	serverinfo.append_attribute("port") = std::to_string(g_config.getNumber(ConfigManager::LOGIN_PORT)).c_str();
@@ -146,7 +128,7 @@ std::string Status::getStatusString() const
 	owner.append_attribute("email") = g_config.getString(ConfigManager::OWNER_EMAIL).c_str();
 
 	pugi::xml_node players = tsqp.append_child("players");
-	players.append_attribute("online") = std::to_string(m_playersOnline).c_str();
+	players.append_attribute("online") = std::to_string(g_game.getPlayersOnline()).c_str();
 	players.append_attribute("max") = std::to_string(g_config.getNumber(ConfigManager::MAX_PLAYERS)).c_str();
 	players.append_attribute("peak") = std::to_string(g_game.getPlayersRecord()).c_str();
 
@@ -167,11 +149,21 @@ std::string Status::getStatusString() const
 
 	std::ostringstream ss;
 	doc.save(ss, "", pugi::format_raw);
-	return ss.str();
+
+	std::string data = ss.str();
+	output->AddBytes(data.c_str(), data.size());
+	OutputMessagePool::getInstance()->send(output);
+	getConnection()->closeConnection();
 }
 
-void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMessage& msg) const
+void ProtocolStatus::sendInfo(uint32_t requestedInfo, std::string& characterName)
 {
+	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	if (!output) {
+		getConnection()->closeConnection();
+		return;
+	}
+
 	if (requestedInfo & REQUEST_BASIC_SERVER_INFO) {
 		output->AddByte(0x10);
 		output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
@@ -186,18 +178,17 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMe
 	}
 
 	if (requestedInfo & REQUEST_MISC_SERVER_INFO) {
-		uint64_t running = getUptime();
+		uint64_t running = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
 		output->AddByte(0x12);
 		output->AddString(g_config.getString(ConfigManager::MOTD));
 		output->AddString(g_config.getString(ConfigManager::LOCATION));
 		output->AddString(g_config.getString(ConfigManager::URL));
-		output->AddU32((uint32_t)(running >> 32));
-		output->AddU32((uint32_t)(running));
+		output->AddU64(running);
 	}
 
 	if (requestedInfo & REQUEST_PLAYERS_INFO) {
 		output->AddByte(0x20);
-		output->AddU32(m_playersOnline);
+		output->AddU32(g_game.getPlayersOnline());
 		output->AddU32(g_config.getNumber(ConfigManager::MAX_PLAYERS));
 		output->AddU32(g_game.getPlayersRecord());
 	}
@@ -214,9 +205,10 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMe
 
 	if (requestedInfo & REQUEST_EXT_PLAYERS_INFO) {
 		output->AddByte(0x21); // players info - online players list
-		output->AddU32(m_playersOnline);
 
-		for (const auto& it : g_game.getPlayers()) {
+		const auto& players = g_game.getPlayers();
+		output->AddU32(players.size());
+		for (const auto& it : players) {
 			output->AddString(it.second->getName());
 			output->AddU32(it.second->getLevel());
 		}
@@ -224,9 +216,7 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMe
 
 	if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 		output->AddByte(0x22); // players info - online status info of a player
-		const std::string name = msg.GetString();
-
-		if (g_game.getPlayerByName(name) != nullptr) {
+		if (g_game.getPlayerByName(characterName) != nullptr) {
 			output->AddByte(0x01);
 		} else {
 			output->AddByte(0x00);
@@ -239,9 +229,6 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMe
 		output->AddString(STATUS_SERVER_VERSION);
 		output->AddString(STATUS_SERVER_PROTOCOL);
 	}
-}
-
-uint64_t Status::getUptime() const
-{
-	return (OTSYS_TIME() - m_start) / 1000;
+	OutputMessagePool::getInstance()->send(output);
+	getConnection()->closeConnection();
 }

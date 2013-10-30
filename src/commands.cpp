@@ -51,7 +51,7 @@
 #include "outputmessage.h"
 #include "connection.h"
 #include "admin.h"
-#include "status.h"
+#include "protocolstatus.h"
 #include "protocollogin.h"
 #endif
 
