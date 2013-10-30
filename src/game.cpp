@@ -6011,7 +6011,16 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		return false;
 	}
 
-	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
+	const ItemType& itt = Item::items.getItemIdByClientId(spriteId);
+	if (itt.id == 0) {
+		return false;
+	}
+
+	if (itt.wareId == 0) {
+		return false;
+	}
+
+	const ItemType& it = Item::items.getItemIdByClientId(itt.wareId);
 	if (it.id == 0) {
 		return false;
 	}
