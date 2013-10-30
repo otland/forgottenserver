@@ -1024,24 +1024,11 @@ bool Monster::pushItem(Item* item)
 {
 	const Position& centerPos = item->getPosition();
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1800
 	static std::vector<std::pair<int32_t, int32_t>> relList {
 		{-1, -1}, {0, -1}, {1, -1},
 		{-1,  0},          {1,  0},
 		{-1,  1}, {0,  1}, {1,  1}
 	};
-#else
-	// TODO: Remove this when we no longer support VS2012
-	std::vector<std::pair<int32_t, int32_t>> relList;
-	relList.emplace_back(-1, -1);
-	relList.emplace_back(-1, 0);
-	relList.emplace_back(-1, 1);
-	relList.emplace_back(0, -1);
-	relList.emplace_back(0, 1);
-	relList.emplace_back(1, -1);
-	relList.emplace_back(1, 0);
-	relList.emplace_back(1, 1);
-#endif
 
 	std::random_shuffle(relList.begin(), relList.end());
 
@@ -1088,20 +1075,11 @@ void Monster::pushItems(Tile* tile)
 
 bool Monster::pushCreature(Creature* creature)
 {
-#if !defined(_MSC_VER) || _MSC_VER >= 1800
 	static std::vector<Direction> dirList {
 		     NORTH,
 		WEST,      EAST,
 		     SOUTH
 	};
-#else
-	// TODO: Remove this when we no longer support VS2012
-	std::vector<Direction> dirList;
-	dirList.push_back(NORTH);
-	dirList.push_back(SOUTH);
-	dirList.push_back(WEST);
-	dirList.push_back(EAST);
-#endif
 	std::random_shuffle(dirList.begin(), dirList.end());
 
 	for (Direction dir : dirList) {
@@ -1198,20 +1176,11 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 
 bool Monster::getRandomStep(const Position& creaturePos, Direction& dir)
 {
-#if !defined(_MSC_VER) || _MSC_VER >= 1800
 	static std::vector<Direction> dirList {
 		     NORTH,
 		WEST,      EAST,
 		     SOUTH
 	};
-#else
-	// TODO: Remove this when we no longer support VS2012
-	std::vector<Direction> dirList;
-	dirList.push_back(NORTH);
-	dirList.push_back(SOUTH);
-	dirList.push_back(WEST);
-	dirList.push_back(EAST);
-#endif
 	std::random_shuffle(dirList.begin(), dirList.end());
 
 	for (Direction _dir : dirList) {

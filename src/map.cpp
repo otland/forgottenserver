@@ -210,7 +210,6 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	}
 
 	if (!foundTile) {
-#if !defined(_MSC_VER) || _MSC_VER >= 1800
 		static std::vector<std::pair<int32_t, int32_t>> extendedRelList {
 			{0, -2}, {-2, 0}, {0, 2}, {2, 0},
 
@@ -226,25 +225,6 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 		};
 
 		std::vector<std::pair<int32_t, int32_t>>& relList = (extendedPos ? extendedRelList : normalRelList);
-#else
-		// TODO: Remove this when we no longer support VS2012
-		std::vector<std::pair<int32_t, int32_t>> relList;
-		if (extendedPos) {
-			relList.emplace_back(0, -2);
-			relList.emplace_back(-2, 0);
-			relList.emplace_back(0, 2);
-			relList.emplace_back(2, 0);
-		}
-
-		relList.emplace_back(-1, -1);
-		relList.emplace_back(-1, 0);
-		relList.emplace_back(-1, 1);
-		relList.emplace_back(0, -1);
-		relList.emplace_back(0, 1);
-		relList.emplace_back(1, -1);
-		relList.emplace_back(1, 0);
-		relList.emplace_back(1, 1);
-#endif
 
 		if (extendedPos) {
 			std::random_shuffle(relList.begin(), relList.begin() + 4);
