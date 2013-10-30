@@ -83,7 +83,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.GetString();
 			}
-			g_dispatcher.addTask(createTask(boost::bind(&ProtocolStatus::sendStatusString, this, requestedInfo, characterName)));
+			g_dispatcher.addTask(createTask(boost::bind(&ProtocolStatus::sendInfo, this, requestedInfo, characterName)));
 			return;
 		}
 
