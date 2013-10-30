@@ -548,6 +548,9 @@ class Item : virtual public Thing
 		uint16_t getClientID() const {
 			return items[id].clientId;
 		}
+		uint16_t getWareID() const {
+			return items[id].wareId;
+		}
 		void setID(uint16_t newid);
 
 		// Returns the player that is holding this item in his inventory

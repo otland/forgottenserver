@@ -1811,7 +1811,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 			}
 
 			const ItemType& itemType = Item::items[item->getID()];
-			if (!itemType.ware) {
+			if (itemType.wareId == 0) {
 				continue;
 			}
 
@@ -1823,7 +1823,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 				continue;
 			}
 
-			depotItems[item->getID()] += Item::countByType(item, -1);
+			depotItems[item->getWareID()] += Item::countByType(item, -1);
 		}
 	} while (!containerList.empty());
 

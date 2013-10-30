@@ -135,7 +135,7 @@ ItemType::ItemType()
 
 	levelDoor = 0;
 
-	ware = false;
+	wareId = 0;
 }
 
 ItemType::~ItemType()
@@ -399,12 +399,18 @@ int32_t Items::loadFromOtb(const std::string& file)
 				}
 
 				case ITEM_ATTR_WAREID: {
-					if (!stream.SKIP_N(datalen)) {
+					if (datalen != sizeof(uint16_t)) {
 						delete iType;
 						return ERROR_INVALID_FORMAT;
 					}
 
-					iType->ware = true;
+					uint16_t v;
+					if (!stream.GET_USHORT(v)) {
+						delete iType;
+						return ERROR_INVALID_FORMAT;
+					}
+
+					iType->wareId = v;
 					break;
 				}
 

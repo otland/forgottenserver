@@ -5938,7 +5938,7 @@ bool Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 		return false;
 	}
 
-	if (!it.ware) {
+	if (it.wareId == 0) {
 		return false;
 	}
 
@@ -6016,7 +6016,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		return false;
 	}
 
-	if (!it.ware) {
+	if (it.wareId == 0) {
 		return false;
 	}
 
@@ -6063,7 +6063,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 					continue;
 				}
 
-				if (item->getID() != it.id) {
+				if (item->getWareID() != it.wareId) {
 					continue;
 				}
 
