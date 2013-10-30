@@ -30,6 +30,8 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
+std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
+const uint64_t ProtocolStatus::start = OTSYS_TIME();
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 uint32_t ProtocolStatus::protocolStatusCount = 0;
 #endif
@@ -44,9 +46,6 @@ enum RequestedInfo_t {
 	REQUEST_PLAYER_STATUS_INFO = 0x40,
 	REQUEST_SERVER_SOFTWARE_INFO = 0x80
 };
-
-std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
-uint64_t start = OTSYS_TIME();
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
