@@ -21,13 +21,13 @@
 #define __OTSERV_DEFINITIONS_H__
 
 #define STATUS_SERVER_NAME "The Forgotten Server"
-#define STATUS_SERVER_PROTOCOL "10.20"
-#define STATUS_SERVER_VERSION "1.1"
+#define STATUS_SERVER_PROTOCOL "10.21"
+#define STATUS_SERVER_VERSION "1.0"
 #define STATUS_SERVER_DEVELOPERS "Mark Samman"
 
-#define CLIENT_VERSION_MIN 1010
-#define CLIENT_VERSION_MAX 1020
-#define CLIENT_VERSION_STR "10.20"
+#define CLIENT_VERSION_MIN 1021
+#define CLIENT_VERSION_MAX 1021
+#define CLIENT_VERSION_STR "10.21"
 
 #ifndef __FUNCTION__
 #define	__FUNCTION__ __func__
@@ -37,11 +37,8 @@
 #define _USE_MATH_DEFINES
 #endif
 
-#include <cassert>
 #include <cmath>
 #include <cstdint>
-#include <string>
-#include <vector>
 #include <chrono>
 
 #ifdef _WIN32
@@ -81,8 +78,6 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-
-typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 
 inline int64_t OTSYS_TIME()
 {

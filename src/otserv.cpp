@@ -68,8 +68,6 @@
 Dispatcher g_dispatcher;
 Scheduler g_scheduler;
 
-IPList serverIPs;
-
 extern AdminProtocolConfig* g_adminConfig;
 Ban g_bans;
 Game g_game;
@@ -381,43 +379,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	}
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
-
-	std::pair<uint32_t, uint32_t> IpNetMask;
-	IpNetMask.first = inet_addr("127.0.0.1");
-	IpNetMask.second = 0xFFFFFFFF;
-	serverIPs.push_back(IpNetMask);
-
-	char szHostName[128];
-	if (gethostname(szHostName, 128) == 0) {
-		hostent* he = gethostbyname(szHostName);
-		if (he) {
-			unsigned char** addr = (unsigned char**)he->h_addr_list;
-			while (addr[0] != nullptr) {
-				IpNetMask.first = *(uint32_t*)(*addr);
-				IpNetMask.second = 0xFFFFFFFF;
-				serverIPs.push_back(IpNetMask);
-				addr++;
-			}
-		}
-	}
-
-	std::string ip = g_config.getString(ConfigManager::IP);
-
-	uint32_t resolvedIp = inet_addr(ip.c_str());
-	if (resolvedIp == INADDR_NONE) {
-		struct hostent* he = gethostbyname(ip.c_str());
-		if (!he) {
-			std::ostringstream ss;
-			ss << "ERROR: Cannot resolve " << ip << "!" << std::endl;
-			startupErrorMessage(ss.str());
-			return;
-		}
-		resolvedIp = *(uint32_t*)he->h_addr;
-	}
-
-	IpNetMask.first = resolvedIp;
-	IpNetMask.second = 0;
-	serverIPs.push_back(IpNetMask);
 
 #if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
 	if (getuid() == 0 || geteuid() == 0) {

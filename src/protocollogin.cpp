@@ -29,11 +29,9 @@
 #include "tools.h"
 #include "iologindata.h"
 #include "ban.h"
-#include <iomanip>
 #include "game.h"
 
 extern ConfigManager g_config;
-extern IPList serverIPs;
 extern Ban g_bans;
 extern Game g_game;
 
@@ -127,14 +125,6 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	uint32_t serverip = serverIPs[0].first;
-	for (uint32_t i = 0; i < serverIPs.size(); i++) {
-		if ((serverIPs[i].first & serverIPs[i].second) == (clientip & serverIPs[i].second)) {
-			serverip = serverIPs[i].first;
-			break;
-		}
-	}
-
 	if (accountName.empty()) {
 		disconnectClient(0x0A, "Invalid account name.");
 		return false;
@@ -161,29 +151,18 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		//Add char list
 		output->AddByte(0x64);
 
-		if (version > 1010) {
-			output->AddByte(1); // number of worlds
+		output->AddByte(1); // number of worlds
 
-			output->AddByte(0); // world id
-			output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
-			output->AddString(g_config.getString(ConfigManager::IP));
-			output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+		output->AddByte(0); // world id
+		output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
+		output->AddString(g_config.getString(ConfigManager::IP));
+		output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+		output->AddByte(0);
+
+		output->AddByte((uint8_t)account.charList.size());
+		for (const std::string& characterName : account.charList) {
 			output->AddByte(0);
-
-			output->AddByte((uint8_t)account.charList.size());
-			for (const std::string& characterName : account.charList) {
-				output->AddByte(0);
-				output->AddString(characterName);
-			}
-		} else {
-			output->AddByte((uint8_t)account.charList.size());
-			for (const std::string& characterName : account.charList) {
-				output->AddString(characterName);
-				output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
-				output->AddU32(serverip);
-				output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
-				output->AddByte(0x00);
-			}
+			output->AddString(characterName);
 		}
 
 		//Add premium days
