@@ -250,6 +250,7 @@ class ItemType
 		uint16_t maxItems;
 		uint16_t slotPosition;
 		uint16_t speed;
+		uint16_t wareId;
 
 		bool floorChangeDown;
 		bool floorChangeNorth;
@@ -269,7 +270,6 @@ class ItemType
 		bool showCharges;
 		bool showAttributes;
 		bool replaceable;
-		bool ware;
 		bool pickupable;
 		bool rotable;
 		bool useable;
