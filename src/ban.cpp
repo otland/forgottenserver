@@ -47,16 +47,16 @@ bool Ban::acceptConnection(uint32_t clientip)
 
 	ConnectBlock& connectBlock = it->second;
 	if (connectBlock.blockTime > currentTime) {
-		connectBlock.blockTime += 225;
+		connectBlock.blockTime += 250;
 		return false;
 	}
 
 	int64_t timeDiff = currentTime - connectBlock.lastAttempt;
 	connectBlock.lastAttempt = currentTime;
-	if (timeDiff <= 8000) {
-		if (++connectBlock.count > 3) {
+	if (timeDiff <= 5000) {
+		if (++connectBlock.count > 5) {
 			connectBlock.count = 0;
-			if (timeDiff <= 800) {
+			if (timeDiff <= 500) {
 				connectBlock.blockTime = currentTime + 3000;
 				return false;
 			}
