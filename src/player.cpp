@@ -24,7 +24,6 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
-#include <iomanip>
 #include <cstdlib>
 
 #include "player.h"

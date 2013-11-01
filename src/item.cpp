@@ -36,7 +36,6 @@
 #include "combat.h"
 
 #include <iostream>
-#include <iomanip>
 
 extern Game g_game;
 extern ConfigManager g_config;

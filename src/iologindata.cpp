@@ -32,7 +32,6 @@
 #include "house.h"
 #include "ban.h"
 #include <iostream>
-#include <iomanip>
 
 extern ConfigManager g_config;
 extern Vocations g_vocations;

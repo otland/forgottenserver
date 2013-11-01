@@ -21,7 +21,6 @@
 
 #include <string>
 #include <iostream>
-#include <iomanip>
 
 #include "luascript.h"
 #include "chat.h"

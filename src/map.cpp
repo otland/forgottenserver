@@ -33,7 +33,6 @@
 #include "iomapserialize.h"
 
 #include <cstdio>
-#include <iomanip>
 
 #include "items.h"
 #include "map.h"
