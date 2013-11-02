@@ -4428,6 +4428,21 @@ void Player::learnInstantSpell(const std::string& name)
 	}
 }
 
+void Player::forgetInstantSpell(const std::string& name)
+{
+	if (hasLearnedInstantSpell(name)) {
+		auto it = learnedInstantSpellList.begin();
+		while (it != learnedInstantSpellList.end()) {
+			if (strcasecmp((*it).c_str(), name.c_str()) == 0) {
+				learnedInstantSpellList.erase(it);
+				break;
+			} else {
+				++it;
+			}
+		}
+	}
+}
+
 bool Player::hasLearnedInstantSpell(const std::string& name) const
 {
 	if (hasFlag(PlayerFlag_CannotUseSpells)) {

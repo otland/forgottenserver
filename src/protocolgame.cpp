@@ -1822,7 +1822,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 				continue;
 			}
 
-			depotItems[item->getWareID()] += Item::countByType(item, -1);
+			depotItems[itemType.wareId] += Item::countByType(item, -1);
 		}
 	} while (!containerList.empty());
 
@@ -1831,7 +1831,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	uint16_t i = 0;
 
 	for (std::map<uint16_t, uint32_t>::const_iterator it = depotItems.begin(), end = depotItems.end(); it != end && i < 0xFFFF; ++it, ++i) {
-		msg.AddItemId(it->first);
+		msg.AddU16(it->first);
 		msg.AddU16(std::min<uint32_t>(0xFFFF, it->second));
 	}
 
