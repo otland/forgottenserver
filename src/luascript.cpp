@@ -2097,7 +2097,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Vocation", "getManaGain", LuaScriptInterface::luaVocationGetManaGain);
 	registerMethod("Vocation", "getManaGainTicks", LuaScriptInterface::luaVocationGetManaGainTicks);
-	registerMethod("Vocation", "getManaGainAmount", LuaScriptInterface::luaVocationGetManaGainTicks);
+	registerMethod("Vocation", "getManaGainAmount", LuaScriptInterface::luaVocationGetManaGainAmount);
 	
 	registerMethod("Vocation", "getMaxSoul", LuaScriptInterface::luaVocationGetMaxSoul);
 	registerMethod("Vocation", "getSoulGainTicks", LuaScriptInterface::luaVocationGetSoulGainTicks);
