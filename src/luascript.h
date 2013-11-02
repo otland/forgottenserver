@@ -865,6 +865,10 @@ class LuaScriptInterface
 		static int32_t luaCreatureGetOutfit(lua_State* L);
 		static int32_t luaCreatureSetOutfit(lua_State* L);
 
+		static int32_t luaCreatureGetCondition(lua_State* L);
+		static int32_t luaCreatureAddCondition(lua_State* L);
+		static int32_t luaCreatureRemoveCondition(lua_State* L);
+
 		static int32_t luaCreatureRemove(lua_State* L);
 		static int32_t luaCreatureTeleportTo(lua_State* L);
 		static int32_t luaCreatureSay(lua_State* L);
@@ -973,7 +977,16 @@ class LuaScriptInterface
 		static int32_t luaPlayerAddBlessing(lua_State* L);
 		static int32_t luaPlayerRemoveBlessing(lua_State* L);
 
+		static int32_t luaPlayerCanLearnSpell(lua_State* L);
+		static int32_t luaPlayerLearnSpell(lua_State* L);
+		static int32_t luaPlayerForgetSpell(lua_State* L);
+		static int32_t luaPlayerHasLearnedSpell(lua_State* L);
+
+		static int32_t luaPlayerSendTutorial(lua_State* L);
+		static int32_t luaPlayerAddMapMark(lua_State* L);
+
 		static int32_t luaPlayerSave(lua_State* L);
+		static int32_t luaPlayerPopupFYI(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
@@ -1123,7 +1136,6 @@ class LuaScriptInterface
 
 		// Combat
 		static int32_t luaCombatCreate(lua_State* L);
-		static int32_t luaCombatDelete(lua_State* L);
 
 		static int32_t luaCombatSetParameter(lua_State* L);
 		static int32_t luaCombatSetFormula(lua_State* L);
@@ -1136,7 +1148,6 @@ class LuaScriptInterface
 
 		// Condition
 		static int32_t luaConditionCreate(lua_State* L);
-		static int32_t luaConditionDelete(lua_State* L);
 
 		static int32_t luaConditionGetId(lua_State* L);
 		static int32_t luaConditionGetSubId(lua_State* L);

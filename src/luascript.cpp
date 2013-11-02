@@ -1903,6 +1903,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getOutfit", LuaScriptInterface::luaCreatureGetOutfit);
 	registerMethod("Creature", "setOutfit", LuaScriptInterface::luaCreatureSetOutfit);
 
+	registerMethod("Creature", "getCondition", LuaScriptInterface::luaCreatureGetCondition);
+	registerMethod("Creature", "addCondition", LuaScriptInterface::luaCreatureAddCondition);
+	registerMethod("Creature", "removeCondition", LuaScriptInterface::luaCreatureRemoveCondition);
+
 	registerMethod("Creature", "remove", LuaScriptInterface::luaCreatureRemove);
 	registerMethod("Creature", "teleportTo", LuaScriptInterface::luaCreatureTeleportTo);
 	registerMethod("Creature", "say", LuaScriptInterface::luaCreatureSay);
@@ -2011,8 +2015,17 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "hasBlessing", LuaScriptInterface::luaPlayerHasBlessing);
 	registerMethod("Player", "addBlessing", LuaScriptInterface::luaPlayerAddBlessing);
 	registerMethod("Player", "removeBlessing", LuaScriptInterface::luaPlayerRemoveBlessing);
+
+	registerMethod("Player", "canLearnSpell", LuaScriptInterface::luaPlayerCanLearnSpell);
+	registerMethod("Player", "learnSpell", LuaScriptInterface::luaPlayerLearnSpell);
+	registerMethod("Player", "forgetSpell", LuaScriptInterface::luaPlayerForgetSpell);
+	registerMethod("Player", "hasLearnedSpell", LuaScriptInterface::luaPlayerHasLearnedSpell);
+	
+	registerMethod("Player", "sendTutorial", LuaScriptInterface::luaPlayerSendTutorial);
+	registerMethod("Player", "addMapMark", LuaScriptInterface::luaPlayerAddMapMark);
 	
 	registerMethod("Player", "save", LuaScriptInterface::luaPlayerSave);
+	registerMethod("Player", "popupFYI", LuaScriptInterface::luaPlayerPopupFYI);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -2171,7 +2184,6 @@ void LuaScriptInterface::registerFunctions()
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
 	registerMetaMethod("Combat", "__eq", LuaScriptInterface::luaUserdataCompare);
-	registerMetaMethod("Combat", "__gc", LuaScriptInterface::luaCombatDelete);
 	
 	registerMethod("Combat", "setParameter", LuaScriptInterface::luaCombatSetParameter);
 	registerMethod("Combat", "setFormula", LuaScriptInterface::luaCombatSetFormula);
@@ -2185,7 +2197,6 @@ void LuaScriptInterface::registerFunctions()
 	// Condition
 	registerClass("Condition", "", LuaScriptInterface::luaConditionCreate);
 	registerMetaMethod("Condition", "__eq", LuaScriptInterface::luaUserdataCompare);
-	registerMetaMethod("Condition", "__gc", LuaScriptInterface::luaConditionDelete);
 
 	registerMethod("Condition", "getId", LuaScriptInterface::luaConditionGetId);
 	registerMethod("Condition", "getSubId", LuaScriptInterface::luaConditionGetSubId);
@@ -8485,6 +8496,109 @@ int32_t LuaScriptInterface::luaCreatureSetOutfit(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureGetCondition(lua_State* L)
+{
+	// creature:getCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0]])
+	int32_t parameters = getStackTop(L);
+	
+	uint32_t subId;
+	if (parameters >= 4) {
+		subId = getNumber<uint32_t>(L, 4);
+	} else {
+		subId = 0;
+	}
+
+	ConditionId_t conditionId;
+	if (parameters >= 3) {
+		conditionId = static_cast<ConditionId_t>(getNumber<int64_t>(L, 3));
+	} else {
+		conditionId = CONDITIONID_COMBAT;
+	}
+
+	ConditionType_t conditionType = static_cast<ConditionType_t>(getNumber<int64_t>(L, 2));
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		Condition* condition = creature->getCondition(conditionType, conditionId, subId);
+		if (condition) {
+			pushUserdata<Condition>(L, condition);
+			setMetatable(L, -1, "Condition");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureAddCondition(lua_State* L)
+{
+	// creature:addCondition(condition[, force = false])
+	bool force;
+	if (getStackTop(L) >= 3) {
+		force = getBoolean(L, 3);
+	} else {
+		force = false;
+	}
+	
+	Condition* condition;
+	if (isNumber(L, 2)) {
+		condition = g_luaEnvironment.getConditionObject(getNumber<uint32_t>(L, 2));
+	} else {
+		condition = getUserdata<Condition>(L, 2);
+	}
+
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature && condition) {
+		pushBoolean(L, creature->addCondition(condition->clone(), force));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
+{
+	// creature:removeCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0[, force = false]]])
+	int32_t parameters = getStackTop(L);
+	
+	bool force;
+	if (parameters >= 5) {
+		force = getBoolean(L, 5);
+	} else {
+		force = false;
+	}
+	
+	uint32_t subId;
+	if (parameters >= 4) {
+		subId = getNumber<uint32_t>(L, 4);
+	} else {
+		subId = 0;
+	}
+
+	ConditionId_t conditionId;
+	if (parameters >= 3) {
+		conditionId = static_cast<ConditionId_t>(getNumber<int64_t>(L, 3));
+	} else {
+		conditionId = CONDITIONID_COMBAT;
+	}
+
+	ConditionType_t conditionType = static_cast<ConditionType_t>(getNumber<int64_t>(L, 2));
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		Condition* condition = creature->getCondition(conditionType, conditionId, subId);
+		if (condition) {
+			creature->removeCondition(condition, force);
+			pushBoolean(L, true);
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureRemove(lua_State* L)
 {
 	// creature:remove()
@@ -9885,6 +9999,109 @@ int32_t LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerCanLearnSpell(lua_State* L)
+{
+	// player:canLearnSpell(spellName)
+	const std::string& spellName = getString(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
+		if (spell) {
+			if (player->hasFlag(PlayerFlag_IgnoreSpellCheck)) {
+				pushBoolean(L, true);
+			} else {
+				const auto& vocMap = spell->getVocMap();
+				if (vocMap.count(player->getVocationId()) == 0) {
+					pushBoolean(L, false);
+				} else if (player->getLevel() < spell->getLevel()) {
+					pushBoolean(L, false);
+				} else if (player->getMagicLevel() < spell->getMagicLevel()) {
+					pushBoolean(L, false);
+				} else {
+					pushBoolean(L, true);
+				}
+			}
+		} else {
+			reportErrorFunc("Spell \"" + spellName + "\" not found");
+			pushBoolean(L, false);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerLearnSpell(lua_State* L)
+{
+	// player:learnSpell(spellName)
+	const std::string& spellName = getString(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->learnInstantSpell(spellName);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerForgetSpell(lua_State* L)
+{
+	// player:forgetSpell(spellName)
+	const std::string& spellName = getString(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->forgetInstantSpell(spellName);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerHasLearnedSpell(lua_State* L)
+{
+	// player:hasLearnedSpell(spellName)
+	const std::string& spellName = getString(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->hasLearnedInstantSpell(spellName));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSendTutorial(lua_State* L)
+{
+	// player:sendTutorial(tutorialId)
+	uint8_t tutorialId = getNumber<uint8_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendTutorial(tutorialId);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerAddMapMark(lua_State* L)
+{
+	// player:addMapMark(position, type, description)
+	const std::string& description = getString(L, 4);
+	uint8_t type = getNumber<uint8_t>(L, 3);
+	const Position& position = getPosition(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendAddMarker(position, type, description);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerSave(lua_State* L)
 {
 	// player:save()
@@ -9892,6 +10109,20 @@ int32_t LuaScriptInterface::luaPlayerSave(lua_State* L)
 	if (player) {
 		player->loginPosition = player->getPosition();
 		pushBoolean(L, IOLoginData::getInstance()->savePlayer(player));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerPopupFYI(lua_State* L)
+{
+	// player:popupFYI(message)
+	const std::string& message = getString(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendFYIBox(message);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}
@@ -11294,19 +11525,10 @@ int32_t LuaScriptInterface::luaCombatCreate(lua_State* L)
 {
 	// Combat()
 	// Combat.new()
-	pushUserdata<Combat>(L, new Combat);
+	uint32_t id = g_luaEnvironment.createCombatObject(getScriptEnv()->getScriptInterface());
+	pushUserdata<Combat>(L, g_luaEnvironment.getCombatObject(id));
 	setMetatable(L, -1, "Combat");
 	return 1;
-}
-
-int32_t LuaScriptInterface::luaCombatDelete(lua_State* L)
-{
-	Combat** combatPtr = getRawUserdata<Combat>(L, 1);
-	if (combatPtr && *combatPtr) {
-		delete *combatPtr;
-		*combatPtr = nullptr;
-	}
-	return 0;
 }
 
 int32_t LuaScriptInterface::luaCombatSetParameter(lua_State* L)
@@ -11481,24 +11703,14 @@ int32_t LuaScriptInterface::luaConditionCreate(lua_State* L)
 	}
 	ConditionType_t conditionType = static_cast<ConditionType_t>(getNumber<int64_t>(L, 2));
 
-	Condition* condition = Condition::createCondition(conditionId, conditionType, 0, 0);
-	if (condition) {
-		pushUserdata<Condition>(L, condition);
+	uint32_t id;
+	if (g_luaEnvironment.createConditionObject(getScriptEnv()->getScriptInterface(), conditionType, conditionId, id)) {
+		pushUserdata<Condition>(L, g_luaEnvironment.getConditionObject(id));
 		setMetatable(L, -1, "Condition");
 	} else {
 		pushNil(L);
 	}
 	return 1;
-}
-
-int32_t LuaScriptInterface::luaConditionDelete(lua_State* L)
-{
-	Condition** conditionPtr = getRawUserdata<Condition>(L, 1);
-	if (conditionPtr && *conditionPtr) {
-		delete *conditionPtr;
-		*conditionPtr = nullptr;
-	}
-	return 0;
 }
 
 int32_t LuaScriptInterface::luaConditionGetId(lua_State* L)

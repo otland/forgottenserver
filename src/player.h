@@ -1179,6 +1179,7 @@ class Player : public Creature, public Cylinder
 		void setEditHouse(House* house, uint32_t listId = 0);
 
 		void learnInstantSpell(const std::string& name);
+		void forgetInstantSpell(const std::string& name);
 		bool hasLearnedInstantSpell(const std::string& name) const;
 
 	protected:

@@ -76,6 +76,19 @@ THING_TYPE_PLAYER = 1
 THING_TYPE_MONSTER = 2
 THING_TYPE_NPC = 3
 
+CONDITIONID_DEFAULT = -1
+CONDITIONID_COMBAT = 0
+CONDITIONID_HEAD = 1
+CONDITIONID_NECKLACE = 2
+CONDITIONID_BACKPACK = 3
+CONDITIONID_ARMOR = 4
+CONDITIONID_RIGHT = 5
+CONDITIONID_LEFT = 6
+CONDITIONID_LEGS = 7
+CONDITIONID_FEET = 8
+CONDITIONID_RING = 9
+CONDITIONID_AMMO = 10
+
 CONDITION_PARAM_OWNER = 1
 CONDITION_PARAM_TICKS = 2
 CONDITION_PARAM_OUTFIT = 3
@@ -950,4 +963,29 @@ end
 
 function Player.sendCancelMessage(self, message)
 	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
+end
+
+function Player.feed(self, food)
+	local condition = self:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
+	if condition then
+		condition:setTicks(condition:getTicks() + food * 1000)
+	else
+		local vocation = self:getVocation()
+		if vocation == nil then
+			return nil
+		end
+		
+		condition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
+		if condition == nil then
+			return nil
+		end
+		
+		condition:setTicks(food * 1000)
+		condition:setParameter(CONDITION_PARAM_HEALTHGAIN, vocation:getHealthGainAmount())
+		condition:setParameter(CONDITION_PARAM_HEALTHTICKS, vocation:getHealthGainTicks() * 1000)
+		condition:setParameter(CONDITION_PARAM_MANAGAIN, vocation:getManaGainAmount())
+		condition:setParameter(CONDITION_PARAM_MANATICKS, vocation:getManaGainTicks() * 1000)
+		self:addCondition(condition)
+	end
+	return true
 end
