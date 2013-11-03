@@ -205,14 +205,6 @@ class ScriptEnvironment
 		Npc* m_curNpc;
 };
 
-struct Position;
-
-enum PlayerInfo_t {
-	PlayerInfoFood,
-	PlayerInfoPzLock,
-	PlayerInfoGhostStatus
-};
-
 #define reportErrorFunc(a)  reportError(__FUNCTION__, a, true)
 
 enum ErrorCode_t {
@@ -431,13 +423,11 @@ class LuaScriptInterface
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
-		static int32_t luaDoFeedPlayer(lua_State* L);
 		static int32_t luaDoSendDefaultCancel(lua_State* L);
 		static int32_t luaDoTeleportThing(lua_State* L);
 		static int32_t luaDoChangeTypeItem(lua_State* L);
 		static int32_t luaDoSendAnimatedText(lua_State* L);
 		static int32_t luaDoShowTextWindow(lua_State* L);
-		static int32_t luaDoDecayItem(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
 		static int32_t luaDoCreateItemEx(lua_State* L);
 		static int32_t luaDoCreateTeleport(lua_State* L);
@@ -474,16 +464,11 @@ class LuaScriptInterface
 		static int32_t luaGetPlayersByIPAddress(lua_State* L);
 
 		//get item info
-		static int32_t luaGetItemRWInfo(lua_State* L);
 		static int32_t luaGetThingfromPos(lua_State* L);
 		static int32_t luaGetThing(lua_State* L);
 		static int32_t luaGetThingPos(lua_State* L);
 		static int32_t luaHasProperty(lua_State* L);
 		static int32_t luaGetDepotId(lua_State* L);
-
-		//set item
-		static int32_t luaDoSetItemText(lua_State* L);
-		static int32_t luaDoSetItemSpecialDescription(lua_State* L);
 
 		//get tile info
 		static int32_t luaGetTileHouseInfo(lua_State* L);
@@ -496,7 +481,6 @@ class LuaScriptInterface
 		static int32_t luaSetHouseAccessList(lua_State* L);
 
 		//get creature info functions
-		static int32_t luaGetPlayerFood(lua_State* L);
 		static int32_t luaGetCreatureSummons(lua_State* L);
 		static int32_t luaGetSpectators(lua_State* L);
 		static int32_t luaGetCreatureSpeed(lua_State* L);
@@ -505,9 +489,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
 
-		static int32_t luaPlayerLearnInstantSpell(lua_State* L);
-		static int32_t luaCanPlayerLearnInstantSpell(lua_State* L);
-		static int32_t luaGetPlayerLearnedInstantSpell(lua_State* L);
 		static int32_t luaGetPlayerInstantSpellInfo(lua_State* L);
 		static int32_t luaGetPlayerInstantSpellCount(lua_State* L);
 		static int32_t luaGetInstantSpellInfoByName(lua_State* L);
@@ -524,10 +505,7 @@ class LuaScriptInterface
 		static int32_t luaBroadcastMessage(lua_State* L);
 
 		//type validation
-		static int32_t luaIsPlayerPzLocked(lua_State* L);
-		static int32_t luaIsPlayerGhost(lua_State* L);
 		static int32_t luaIsDepot(lua_State* L);
-		static int32_t luaIsCorpse(lua_State* L);
 		static int32_t luaIsMoveable(lua_State* L);
 		static int32_t luaIsValidUID(lua_State* L);
 
@@ -577,11 +555,8 @@ class LuaScriptInterface
 		static int32_t luaDoChangeSpeed(lua_State* L);
 
 		static int32_t luaSetCreatureOutfit(lua_State* L);
-		static int32_t luaGetCreatureOutfit(lua_State* L);
 		static int32_t luaSetMonsterOutfit(lua_State* L);
 		static int32_t luaSetItemOutfit(lua_State* L);
-
-		static int32_t luaGetItemWeightByUID(lua_State* L);
 
 		static int32_t luaDebugPrint(lua_State* L);
 		static int32_t luaIsInArray(lua_State* L);
@@ -589,16 +564,12 @@ class LuaScriptInterface
 		static int32_t luaAddEvent(lua_State* L);
 		static int32_t luaStopEvent(lua_State* L);
 
-		static int32_t luaDoPlayerPopupFYI(lua_State* L);
 		static int32_t luaMayNotMove(lua_State* L);
 
 		static int32_t luaGetOnlinePlayers(lua_State* L);
 		static int32_t luaSaveServer(lua_State* L);
 		static int32_t luaRefreshMap(lua_State* L);
 		static int32_t luaCleanMap(lua_State* L);
-
-		static int32_t luaDoSendTutorial(lua_State* L);
-		static int32_t luaDoAddMark(lua_State* L);
 
 		static int32_t luaIsInWar(lua_State* L);
 		static int32_t luaDoPlayerSetOfflineTrainingSkill(lua_State* L);
@@ -612,10 +583,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerParty(lua_State* L);
 		static int32_t luaDoPlayerJoinParty(lua_State* L);
 		static int32_t luaGetPartyMembers(lua_State* L);
-
-		//
-
-		static int32_t internalGetPlayerInfo(lua_State* L, PlayerInfo_t info);
 
 #ifndef __LUAJIT__
 		static int32_t luaBitNot(lua_State* L);
@@ -980,6 +947,8 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerSave(lua_State* L);
 		static int32_t luaPlayerPopupFYI(lua_State* L);
+
+		static int32_t luaPlayerIsPzLocked(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);

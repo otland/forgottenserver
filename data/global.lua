@@ -968,7 +968,7 @@ end
 function Player.feed(self, food)
 	local condition = self:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 	if condition then
-		condition:setTicks(condition:getTicks() + food * 1000)
+		condition:setTicks(condition:getTicks() + (food * 1000))
 	else
 		local vocation = self:getVocation()
 		if vocation == nil then

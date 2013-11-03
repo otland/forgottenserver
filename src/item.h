@@ -132,9 +132,6 @@ class ItemAttributes
 		void setSpecialDescription(const std::string& desc) {
 			setStrAttr(ATTR_ITEM_DESC, desc);
 		}
-		void resetSpecialDescription() {
-			removeAttribute(ATTR_ITEM_DESC);
-		}
 		const std::string& getSpecialDescription() const {
 			return getStrAttr(ATTR_ITEM_DESC);
 		}
@@ -398,9 +395,6 @@ class Item : virtual public Thing
 
 		void setSpecialDescription(const std::string& desc) {
 			setStrAttr(ATTR_ITEM_DESC, desc);
-		}
-		void resetSpecialDescription() {
-			removeAttribute(ATTR_ITEM_DESC);
 		}
 		const std::string& getSpecialDescription() const {
 			return getStrAttr(ATTR_ITEM_DESC);

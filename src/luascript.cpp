@@ -1227,20 +1227,8 @@ std::string LuaScriptInterface::popFieldString(lua_State* L, const std::string& 
 
 void LuaScriptInterface::registerFunctions()
 {
-	//getPlayerFood(cid)
-	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
-
 	//getPlayerFlagValue(cid, flag)
 	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
-
-	//playerLearnInstantSpell(cid, name)
-	lua_register(m_luaState, "playerLearnInstantSpell", LuaScriptInterface::luaPlayerLearnInstantSpell);
-
-	//canPlayerLearnInstantSpell(cid, name)
-	lua_register(m_luaState, "canPlayerLearnInstantSpell", LuaScriptInterface::luaCanPlayerLearnInstantSpell);
-
-	//getPlayerLearnedInstantSpell(cid, name)
-	lua_register(m_luaState, "getPlayerLearnedInstantSpell", LuaScriptInterface::luaGetPlayerLearnedInstantSpell);
 
 	//getPlayerInstantSpellCount(cid)
 	lua_register(m_luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
@@ -1267,9 +1255,6 @@ void LuaScriptInterface::registerFunctions()
 	//0 no house. != 0 house id
 	lua_register(m_luaState, "getTileHouseInfo", LuaScriptInterface::luaGetTileHouseInfo);
 
-	//getItemRWInfo(uid)
-	lua_register(m_luaState, "getItemRWInfo", LuaScriptInterface::luaGetItemRWInfo);
-
 	//getThingfromPos(pos)
 	lua_register(m_luaState, "getThingfromPos", LuaScriptInterface::luaGetThingfromPos);
 
@@ -1278,9 +1263,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getThingPos(uid)
 	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
-
-	//doPlayerFeed(cid, food)
-	lua_register(m_luaState, "doPlayerFeed", LuaScriptInterface::luaDoFeedPlayer);
 
 	//doPlayerSendDefaultCancel(cid, ReturnValue)
 	lua_register(m_luaState, "doPlayerSendDefaultCancel", LuaScriptInterface::luaDoSendDefaultCancel);
@@ -1293,12 +1275,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doChangeTypeItem(uid, newtype)
 	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
-
-	//doSetItemText(uid, text)
-	lua_register(m_luaState, "doSetItemText", LuaScriptInterface::luaDoSetItemText);
-
-	//doSetItemSpecialDescription(uid, desc)
-	lua_register(m_luaState, "doSetItemSpecialDescription", LuaScriptInterface::luaDoSetItemSpecialDescription);
 
 	//doSendAnimatedText(pos, text, color)
 	lua_register(m_luaState, "doSendAnimatedText", LuaScriptInterface::luaDoSendAnimatedText);
@@ -1319,15 +1295,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doPlayerSendTextMessage(cid, MessageClasses, message[, position, value, color])
 	lua_register(m_luaState, "doPlayerSendTextMessage", LuaScriptInterface::luaDoPlayerSendTextMessage);
-
-	//doSendTutorial(cid, tutorialid)
-	lua_register(m_luaState, "doSendTutorial", LuaScriptInterface::luaDoSendTutorial);
-
-	//doAddMapMark(cid, pos, type, <optional> description)
-	lua_register(m_luaState, "doAddMapMark", LuaScriptInterface::luaDoAddMark);
-
-	//doDecayItem(uid)
-	lua_register(m_luaState, "doDecayItem", LuaScriptInterface::luaDoDecayItem);
 
 	//doCreateItem(itemid, type/count, pos)
 	//Returns uid of the created item, only works on tiles.
@@ -1416,22 +1383,11 @@ void LuaScriptInterface::registerFunctions()
 	//isValidUID(uid)
 	lua_register(m_luaState, "isValidUID", LuaScriptInterface::luaIsValidUID);
 
-	//isPlayerGhost(cid)
-	lua_register(m_luaState, "isPlayerGhost", LuaScriptInterface::luaIsPlayerGhost);
-
-	//isPlayerPzLocked(cid)
-	lua_register(m_luaState, "isPlayerPzLocked", LuaScriptInterface::luaIsPlayerPzLocked);
-
 	//isDepot(uid)
 	lua_register(m_luaState, "isDepot", LuaScriptInterface::luaIsDepot);
 
-	//isCorpse(uid)
-	lua_register(m_luaState, "isCorpse", LuaScriptInterface::luaIsCorpse);
-
 	//isMovable(uid)
 	lua_register(m_luaState, "isMovable", LuaScriptInterface::luaIsMoveable);
-	//isMoveable(uid)
-	lua_register(m_luaState, "isMoveable", LuaScriptInterface::luaIsMoveable);
 
 	//getPlayerGUIDByName(name)
 	lua_register(m_luaState, "getPlayerGUIDByName", LuaScriptInterface::luaGetPlayerGUIDByName);
@@ -1575,17 +1531,11 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureOutfit(cid, outfit, time)
 	lua_register(m_luaState, "doSetCreatureOutfit", LuaScriptInterface::luaSetCreatureOutfit);
 
-	//getCreatureOutfit(cid)
-	lua_register(m_luaState, "getCreatureOutfit", LuaScriptInterface::luaGetCreatureOutfit);
-
 	//getCreatureSpeed(cid)
 	lua_register(m_luaState, "getCreatureSpeed", LuaScriptInterface::luaGetCreatureSpeed);
 
 	//getCreatureBaseSpeed(cid)
 	lua_register(m_luaState, "getCreatureBaseSpeed", LuaScriptInterface::luaGetCreatureBaseSpeed);
-
-	//getItemWeightByUID(uid)
-	lua_register(m_luaState, "getItemWeightByUID", LuaScriptInterface::luaGetItemWeightByUID);
 
 	//hasProperty(uid, prop)
 	lua_register(m_luaState, "hasProperty", LuaScriptInterface::luaHasProperty);
@@ -1601,9 +1551,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//stopEvent(eventid)
 	lua_register(m_luaState, "stopEvent", LuaScriptInterface::luaStopEvent);
-
-	//doPlayerPopupFYI(cid, message)
-	lua_register(m_luaState, "doPlayerPopupFYI", LuaScriptInterface::luaDoPlayerPopupFYI);
 
 	//mayNotMove(cid, value)
 	lua_register(m_luaState, "mayNotMove", LuaScriptInterface::luaMayNotMove);
@@ -2007,6 +1954,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "save", LuaScriptInterface::luaPlayerSave);
 	registerMethod("Player", "popupFYI", LuaScriptInterface::luaPlayerPopupFYI);
 
+	registerMethod("Player", "isPzLocked", LuaScriptInterface::luaPlayerIsPzLocked);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2357,63 +2306,6 @@ void LuaScriptInterface::registerGlobalMethod(const std::string& functionName, l
 	lua_setglobal(m_luaState, functionName.c_str());
 }
 
-int32_t LuaScriptInterface::internalGetPlayerInfo(lua_State* L, PlayerInfo_t info)
-{
-	uint32_t cid = popNumber(L);
-
-	const Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	int32_t value;
-	switch (info) {
-		case PlayerInfoFood: {
-			Condition* condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-			if (condition) {
-				value = condition->getTicks() / 1000;
-			} else {
-				value = 0;
-			}
-			break;
-		}
-
-		case PlayerInfoPzLock:
-			pushBoolean(L, player->isPzLocked());
-			return 1;
-
-		case PlayerInfoGhostStatus:
-			pushBoolean(L, player->isInGhostMode());
-			return 1;
-
-		default:
-		{
-			std::ostringstream ss;
-			ss << "Unknown player info: " << info;
-			reportErrorFunc(ss.str());
-			value = 0;
-			break;
-		}
-	}
-
-	lua_pushnumber(L, value);
-	return 1;
-}
-//getPlayer[Info](uid)
-int32_t LuaScriptInterface::luaGetPlayerFood(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoFood);
-}
-int32_t LuaScriptInterface::luaIsPlayerPzLocked(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoPzLock);
-}
-int32_t LuaScriptInterface::luaIsPlayerGhost(lua_State* L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoGhostStatus);
-}
-
 int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 {
 	//getPlayerFlagValue(cid, flag)
@@ -2432,99 +2324,6 @@ int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaPlayerLearnInstantSpell(lua_State* L)
-{
-	//playerLearnInstantSpell(cid, name)
-	std::string spellName = popString(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
-	if (!spell) {
-		std::string error_str = (std::string)"Spell \"" + spellName + (std::string)"\" not found";
-		reportErrorFunc(error_str);
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	player->learnInstantSpell(spell->getName());
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaCanPlayerLearnInstantSpell(lua_State* L)
-{
-	//canPlayerLearnInstantSpell(cid, name)
-	std::string spellName = popString(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
-	if (!spell) {
-		std::string error_str = (std::string)"Spell \"" + spellName + (std::string)"\" not found";
-		reportErrorFunc(error_str);
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!player->hasFlag(PlayerFlag_IgnoreSpellCheck)) {
-		if (player->getLevel() < spell->getLevel()) {
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (player->getMagicLevel() < spell->getMagicLevel()) {
-			pushBoolean(L, false);
-			return 1;
-		}
-	}
-
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerLearnedInstantSpell(lua_State* L)
-{
-	//getPlayerLearnedInstantSpell(cid, name)
-	std::string spellName = popString(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
-	if (!spell) {
-		std::string error_str = (std::string)"Spell \"" + spellName + (std::string)"\" not found";
-		reportErrorFunc(error_str);
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!player->hasLearnedInstantSpell(spellName)) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -2641,24 +2440,6 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 	Player* player = g_game.getPlayerByID(cid);
 	if (player) {
 		pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoFeedPlayer(lua_State* L)
-{
-	//doFeedPlayer(cid, food)
-	int32_t food = popNumber<int32_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		player->addDefaultRegeneration(food * 1000);
-		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -3107,94 +2888,6 @@ int32_t LuaScriptInterface::luaDoSetCreatureDropLoot(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoSendTutorial(lua_State* L)
-{
-	//doSendTutorial(cid, tutorialid)
-	uint32_t tutorial = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	player->sendTutorial(tutorial);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoAddMark(lua_State* L)
-{
-	//doAddMapMark(cid, pos, type, <optional> description)
-	int32_t parameters = lua_gettop(L);
-	std::string description;
-	Position pos;
-	uint32_t stackpos;
-
-	if (parameters > 3) {
-		description = popString(L);
-	}
-
-	uint32_t type = popNumber(L);
-	popPosition(L, pos, stackpos);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	player->sendAddMarker(pos, type, description);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetItemRWInfo(lua_State* L)
-{
-	//getItemRWInfo(uid)
-	uint32_t uid = popNumber(L);
-
-	const Item* item = getScriptEnv()->getItemByUID(uid);
-	if (item) {
-		uint32_t rwflags = 0;
-
-		if (item->isReadable()) {
-			rwflags |= 1;
-		}
-
-		if (item->canWriteText()) {
-			rwflags |= 2;
-		}
-
-		lua_pushnumber(L, rwflags);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoDecayItem(lua_State* L)
-{
-	//doDecayItem(uid)
-	//Note: to stop decay set decayTo = 0 in items.otb
-	uint32_t uid = popNumber(L);
-
-	Item* item = getScriptEnv()->getItemByUID(uid);
-	if (!item) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	g_game.startDecay(item);
-	pushBoolean(L, true);
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 {
 	//Consider using getTileItemById/getTileItemByType/getTileThingByPos/getTopCreature instead.
@@ -3403,45 +3096,6 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 		lua_pushnumber(L, uid);
 	} else {
 		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSetItemText(lua_State* L)
-{
-	//doSetItemText(uid, text)
-	std::string text = popString(L);
-	uint32_t uid = popNumber(L);
-
-	Item* item = getScriptEnv()->getItemByUID(uid);
-	if (item) {
-		std::string str(text);
-		item->setText(str);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSetItemSpecialDescription(lua_State* L)
-{
-	//doSetItemSpecialDescription(uid, desc)
-	std::string desc = popString(L);
-	uint32_t uid = popNumber(L);
-
-	Item* item = getScriptEnv()->getItemByUID(uid);
-	if (item) {
-		if (desc.empty()) {
-			item->resetSpecialDescription();
-		} else {
-			item->setSpecialDescription(desc);
-		}
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
 	}
 	return 1;
 }
@@ -4851,29 +4505,6 @@ int32_t LuaScriptInterface::luaSetCreatureOutfit(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetCreatureOutfit(lua_State* L)
-{
-	//getCreatureOutfit(cid)
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		const Outfit_t outfit = creature->getCurrentOutfit();
-
-		lua_newtable(L);
-		setField(L, "lookType", outfit.lookType);
-		setField(L, "lookHead", outfit.lookHead);
-		setField(L, "lookBody", outfit.lookBody);
-		setField(L, "lookLegs", outfit.lookLegs);
-		setField(L, "lookFeet", outfit.lookFeet);
-		setField(L, "lookAddons", outfit.lookAddons);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaSetMonsterOutfit(lua_State* L)
 {
 	//doSetMonsterOutfit(cid, name, time)
@@ -5022,19 +4653,6 @@ int32_t LuaScriptInterface::luaIsDepot(lua_State* L)
 	//isDepot(uid)
 	Container* container = getScriptEnv()->getContainerByUID(popNumber(L));
 	pushBoolean(L, container && container->getDepotLocker());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsCorpse(lua_State* L)
-{
-	//isCorpse(uid)
-	Item* item = getScriptEnv()->getItemByUID(popNumber(L));
-	if (item) {
-		const ItemType& it = Item::items[item->getID()];
-		pushBoolean(L, it.corpseType != RACE_NONE);
-	} else {
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
@@ -5277,23 +4895,6 @@ int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoPlayerPopupFYI(lua_State* L)
-{
-	//doPlayerPopupFYI(cid, message)
-	std::string message = popString(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		player->sendFYIBox(message);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 {
 	//mayNotMove(cid, value)
@@ -5312,34 +4913,6 @@ int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetItemWeightByUID(lua_State* L)
-{
-	//getItemWeight(itemid[, precise = true])
-	bool precise = true;
-	if (lua_gettop(L) > 2) {
-		precise = popBoolean(L);
-	} else {
-		precise = false;
-	}
-
-	Item* item = getScriptEnv()->getItemByUID(popNumber(L));
-	if (!item) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	double weight = item->getWeight();
-	if (precise) {
-		std::ostringstream ws;
-		ws << std::fixed << std::setprecision(2) << weight;
-		weight = atof(ws.str().c_str());
-	}
-
-	lua_pushnumber(L, weight);
 	return 1;
 }
 
@@ -10103,6 +9676,18 @@ int32_t LuaScriptInterface::luaPlayerPopupFYI(lua_State* L)
 	if (player) {
 		player->sendFYIBox(message);
 		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerIsPzLocked(lua_State* L)
+{
+	// player:isPzLocked()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->isPzLocked());
 	} else {
 		pushNil(L);
 	}

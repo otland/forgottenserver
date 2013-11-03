@@ -34,6 +34,7 @@ function getCreatureName(cid) local c = Creature(cid) return c ~= nil and c:getN
 function getCreatureHealth(cid) local c = Creature(cid) return c ~= nil and c:getHealth() or false end
 function getCreatureMaxHealth(cid) local c = Creature(cid) return c ~= nil and c:getMaxHealth() or false end
 function getCreaturePosition(cid) local c = Creature(cid) return c ~= nil and c:getPosition() or false end
+function getCreatureOutfit(cid) local c = Creature(cid) return c ~= nil and c:getOutfit() or false end
 
 function getCreatureTarget(cid)
 	local c = Creature(cid)
@@ -159,6 +160,17 @@ function getPlayerItemById(cid, deepSearch, itemId, ...)
 	end
 	return pushThing(player:getItemById(itemId, deepSearch, ...))
 end
+function getPlayerFood(cid)
+	local player = Player(cid)
+	if player == nil then
+		return false
+	end
+	local c = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT) return c ~= nil and math.floor(c:getTicks() / 1000) or 0
+end
+function canPlayerLearnInstantSpell(cid, name) local p = Player(cid) return p ~= nil and p:canLearnSpell(name) or false end
+function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p ~= nil and p:hasLearnedSpell(name) or false end
+function isPlayerGhost(cid) local p = Player(cid) return p ~= nil and p:isGhost() or false end
+function isPlayerPzLocked(cid) local p = Player(cid) return p ~= nil and p:isPzLocked() or false end
 
 getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
@@ -193,6 +205,14 @@ function canPlayerWearOutfit(cid, lookType, addons) local p = Player(cid) return
 function doPlayerAddMount(cid, mountId) local p = Player(cid) return p ~= nil and p:addMount(mountId) or false end
 function doPlayerRemoveMount(cid, mountId) local p = Player(cid) return p ~= nil and p:removeMount(mountId) or false end
 function doPlayerSendCancel(cid, text) local p = Player(cid) return p ~= nil and p:sendCancelMessage(text) or false end
+function doPlayerFeed(cid, food) local p = Player(cid) return p ~= nil and p:feed(food) or false end
+function playerLearnInstantSpell(cid, name) local p = Player(cid) return p ~= nil and p:learnSpell(name) or false end
+function doPlayerPopupFYI(cid, message) local p = Player(cid) return p ~= nil and p:popupFYI(message) or false end
+function doSendTutorial(cid, tutorialId) local p = Player(cid) return p ~= nil and p:sendTutorial(tutorialId) or false end
+function doAddMapMark(cid, pos, type, description)
+	if description == nil then description == "" end
+	local p = Player(cid) return p ~= nil and p:addMapMark(pos, type, description) or false end
+end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end
@@ -265,8 +285,10 @@ function isItemDoor(itemId) return ItemType(itemId):isDoor() end
 function isItemContainer(itemId) return ItemType(itemId):isContainer() end
 function isItemFluidContainer(itemId) return ItemType(itemId):isFluidContainer() end
 function isItemMovable(itemId) return ItemType(itemId):isMovable() end
+function isCorpse(uid) local i = Item(uid) return i ~= nil and ItemType(i:getId()):isCorpse() or false end
 
 isItemMoveable = isItemMovable
+isMoveable = isMovable
 
 function getItemName(itemId) return ItemType(itemId):getName() end
 function getItemWeight(itemId, ...) return ItemType(itemId):getWeight(...) end
@@ -286,7 +308,61 @@ function getItemIdByName(name)
 	end
 	return id
 end
+function getItemWeightByUID(uid, ...)
+	local item = Item(uid)
+	if item == nil then
+		return false
+	end
+
+	local itemType = ItemType(item:getId())
+	return itemType:isStackable() and itemType:getWeight(item:getCount(), ...) or itemType:getWeight(1, ...)
+end
+function getItemRWInfo(uid)
+	local item = Item(uid)
+	if item == nil then
+		return false
+	end
+
+	local rwFlags = 0
+	local itemType = ItemType(item:getId())
+	if itemType:isReadable() then
+		rwFlags = bit.bor(rwFlags, 1)
+	end
+
+	if itemType:isWritable() then
+		rwFlags = bit.bor(rwFlags, 2)
+	end
+	return rwFlags
+end
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
+
+function doSetItemText(uid, text)
+	local item = Item(uid)
+	if item == nil then
+		return false
+	end
+
+	if text ~= "" then
+		item:setAttribute(ITEM_ATTRIBUTE_TEXT, text)
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_TEXT)
+	end
+	return true
+end
+function doSetItemSpecialDesrciption(uid, desc)
+	local item = Item(uid)
+	if item == nil then
+		return false
+	end
+
+	if desc ~= "" then
+		item:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, desc)
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_DESCRIPTION)
+	end
+	return true
+end
+function doDecayItem(uid) local i = Item(uid) return i ~= nil and i:decay() or false end
 
 function getTilePzInfo(position)
 	local t = Tile(position)
