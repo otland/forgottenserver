@@ -105,7 +105,7 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 	return nullptr;
 }
 
-bool CreatureEvents::playerLogin(Player* player)
+bool CreatureEvents::playerLogin(Player* player) const
 {
 	//fire global event if is registered
 	for (const auto& it : m_creatureEvents) {
@@ -118,7 +118,7 @@ bool CreatureEvents::playerLogin(Player* player)
 	return true;
 }
 
-bool CreatureEvents::playerLogout(Player* player)
+bool CreatureEvents::playerLogout(Player* player) const
 {
 	//fire global event if is registered
 	for (const auto& it : m_creatureEvents) {

@@ -24,7 +24,6 @@
 
 #include "configmanager.h"
 #include "waitlist.h"
-#include "protocolstatus.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

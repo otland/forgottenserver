@@ -80,10 +80,6 @@ enum LuaDataType {
 struct LuaVariant {
 	LuaVariant() {
 		type = VARIANT_NONE;
-		text = "";
-		pos.x = 0;
-		pos.y = 0;
-		pos.z = 0;
 		pos.stackpos = 0;
 		number = 0;
 	}
@@ -155,9 +151,9 @@ class ScriptEnvironment
 		uint32_t addThing(Thing* thing);
 		void insertThing(uint32_t uid, Thing* thing);
 
-		DBResult* getResultByID(uint32_t id);
-		uint32_t addResult(DBResult* res);
-		bool removeResult(uint32_t id);
+		static DBResult* getResultByID(uint32_t id);
+		static uint32_t addResult(DBResult* res);
+		static bool removeResult(uint32_t id);
 
 		void addGlobalStorageValue(const uint32_t key, const int32_t value);
 		bool getGlobalStorageValue(const uint32_t key, int32_t& value) const;
@@ -358,7 +354,6 @@ class LuaScriptInterface
 		}
 
 		static std::string getFieldString(lua_State* L, int32_t arg, const std::string& key);
-		static bool getFieldBoolean(lua_State* L, int32_t arg, const std::string& key);
 
 		// Other
 		static int32_t getStackTop(lua_State* L);
@@ -405,11 +400,9 @@ class LuaScriptInterface
 		}
 
 		static std::string popFieldString(lua_State* L, const std::string& key);
-		static bool popFieldBoolean(lua_State* L, const std::string& key);
 
 		static void setField(lua_State* L, const char* index, double val);
 		static void setField(lua_State* L, const char* index, const std::string& val);
-		static void setFieldBool(lua_State* L, const char* index, bool val);
 		static std::string escapeString(const std::string& string);
 
 #ifndef __LUAJIT__
@@ -425,7 +418,7 @@ class LuaScriptInterface
 		virtual bool closeState();
 
 		void registerFunctions();
-		
+
 		void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = nullptr);
 		void registerTable(const std::string& tableName);
 		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
@@ -660,7 +653,7 @@ class LuaScriptInterface
 
 		// Userdata
 		static int32_t luaUserdataCompare(lua_State* L);
-		
+
 		// _G
 		static int32_t luaIsType(lua_State* L);
 

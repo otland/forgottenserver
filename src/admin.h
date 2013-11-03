@@ -146,12 +146,12 @@ class AdminProtocolConfig
 		bool requireLogin() const;
 		bool requireEncryption() const;
 
-		uint16_t getProtocolPolicy();
-		uint32_t getProtocolOptions();
+		uint16_t getProtocolPolicy() const;
+		uint32_t getProtocolOptions() const;
 
-		bool allowIP(uint32_t ip);
+		bool allowIP(uint32_t ip) const;
 
-		bool passwordMatch(const std::string& password);
+		bool passwordMatch(const std::string& password) const;
 
 		RSA* getRSAKey(uint8_t type);
 

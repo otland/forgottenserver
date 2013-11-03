@@ -46,7 +46,6 @@
 
 extern Game g_game;
 extern ConfigManager g_config;
-IOMapSerialize IOMapSerialize;
 
 Map::Map()
 {
@@ -67,25 +66,24 @@ bool Map::loadMap(const std::string& identifier)
 		return false;
 	}
 
-	if (!loader.loadSpawns(this)) {
+	if (!IOMap::loadSpawns(this)) {
 		std::cout << "[Warning - Map::loadMap] Failed to load spawn data." << std::endl;
 	}
 
-	if (!loader.loadHouses(this)) {
+	if (!IOMap::loadHouses(this)) {
 		std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
 	}
 
-	IOMapSerialize.loadHouseInfo(this);
-	IOMapSerialize.loadMap(this);
+	IOMapSerialize::loadHouseInfo(this);
+	IOMapSerialize::loadMap(this);
 	return true;
 }
 
 bool Map::saveMap()
 {
 	bool saved = false;
-
 	for (uint32_t tries = 0; tries < 3; tries++) {
-		if (IOMapSerialize.saveHouseInfo(this)) {
+		if (IOMapSerialize::saveHouseInfo(this)) {
 			saved = true;
 			break;
 		}
@@ -98,7 +96,7 @@ bool Map::saveMap()
 	saved = false;
 
 	for (uint32_t tries = 0; tries < 3; tries++) {
-		if (IOMapSerialize.saveMap(this)) {
+		if (IOMapSerialize::saveMap(this)) {
 			saved = true;
 			break;
 		}
@@ -309,24 +307,29 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 		for (int32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
 				const CreatureVector& node_list = (onlyPlayers ? leafE->player_list : leafE->creature_list);
-				for (Creature* creature : node_list) {
-					const Position& cpos = creature->getPosition();
-					if (cpos.z < minRangeZ || cpos.z > maxRangeZ) {
-						continue;
-					}
+				CreatureVector::const_iterator node_iter = node_list.begin();
+				CreatureVector::const_iterator node_end = node_list.end();
+				if (node_iter != node_end) {
+					do {
+						Creature* creature = *node_iter;
 
-					int_fast16_t offsetZ = Position::getOffsetZ(centerPos, cpos);
-					if (cpos.y < (min_y + offsetZ) || cpos.y > (max_y + offsetZ)) {
-						continue;
-					}
+						const Position& cpos = creature->getPosition();
+						if (cpos.z < minRangeZ || cpos.z > maxRangeZ) {
+							continue;
+						}
 
-					if (cpos.x < (min_x + offsetZ) || cpos.x > (max_x + offsetZ)) {
-						continue;
-					}
+						int_fast16_t offsetZ = Position::getOffsetZ(centerPos, cpos);
+						if (cpos.y < (min_y + offsetZ) || cpos.y > (max_y + offsetZ)) {
+							continue;
+						}
 
-					list.insert(creature);
+						if (cpos.x < (min_x + offsetZ) || cpos.x > (max_x + offsetZ)) {
+							continue;
+						}
+
+						list.insert(creature);
+					} while (++node_iter != node_end);
 				}
-
 				leafE = leafE->stepEast();
 			} else {
 				leafE = getLeaf(nx + FLOOR_SIZE, ny);
@@ -491,7 +494,7 @@ void Map::clearSpectatorCache()
 }
 
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-                           int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
+                           int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
 	//z checks
 	//underground 8->15
@@ -1000,22 +1003,11 @@ void AStarNodes::openNode(AStarNode* node)
 	openNodes[pos] = 1;
 }
 
-uint32_t AStarNodes::countClosedNodes()
+uint32_t AStarNodes::countClosedNodes() const
 {
 	uint32_t counter = 0;
 	for (uint32_t i = 0; i < curNode; i++) {
 		if (openNodes[i] == 0) {
-			counter++;
-		}
-	}
-	return counter;
-}
-
-uint32_t AStarNodes::countOpenNodes()
-{
-	uint32_t counter = 0;
-	for (uint32_t i = 0; i < curNode; i++) {
-		if (openNodes[i] == 1) {
 			counter++;
 		}
 	}

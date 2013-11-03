@@ -75,11 +75,14 @@ Game::Game() :
 	gameState = GAME_STATE_NORMAL;
 	worldType = WORLD_TYPE_PVP;
 
+	checkCreatureLastIndex = 0;
+
 	checkLightEvent = 0;
 	checkCreatureEvent = 0;
 	checkDecayEvent = 0;
 
 	map = nullptr;
+	services = nullptr;
 	lastStageLevel = 0;
 	playersRecord = 0;
 	motdNum = 0;
@@ -131,11 +134,8 @@ void Game::start(ServiceManager* servicer)
 
 	checkLightEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
 	                                       boost::bind(&Game::checkLight, this)));
-
-	checkCreatureLastIndex = 0;
 	checkCreatureEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL,
 	                     boost::bind(&Game::checkCreatures, this)));
-
 	checkDecayEvent = g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL,
 	                                       boost::bind(&Game::checkDecay, this)));
 }
@@ -233,11 +233,10 @@ void Game::saveGameState()
 
 	stateTime = 0;
 	std::cout << "Saving server..." << std::endl;
-	IOLoginData* ioLoginData = IOLoginData::getInstance();
 
 	for (const auto& it : players) {
 		it.second->loginPosition = it.second->getPosition();
-		ioLoginData->savePlayer(it.second);
+		IOLoginData::savePlayer(it.second);
 	}
 
 	map->saveMap();
@@ -2381,7 +2380,7 @@ bool Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 		return false;
 	}
 
-	if (!IOLoginData::getInstance()->formatPlayerName(receiver)) {
+	if (!IOLoginData::formatPlayerName(receiver)) {
 		player->sendCancel("A player with this name does not exist.");
 		return true;
 	}
@@ -2737,26 +2736,6 @@ bool Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 
 	player->addContainer(cid, parentContainer);
 	player->sendContainer(cid, parentContainer, parentContainer->hasParent(), player->getContainerIndex(cid));
-	return true;
-}
-
-bool Game::playerUpdateTile(uint32_t playerId, const Position& pos)
-{
-	Player* player = getPlayerByID(playerId);
-	if (!player) {
-		return false;
-	}
-
-	if (!player->canSee(pos)) {
-		return false;
-	}
-
-	Tile* tile = getTile(pos);
-	if (!tile) {
-		return false;
-	}
-
-	player->sendUpdateTile(tile, pos);
 	return true;
 }
 
@@ -3699,7 +3678,7 @@ bool Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
 	uint32_t guid;
 	bool specialVip;
 
-	if (!IOLoginData::getInstance()->getGuidByNameEx(guid, specialVip, real_name)) {
+	if (!IOLoginData::getGuidByNameEx(guid, specialVip, real_name)) {
 		player->sendTextMessage(MSG_STATUS_SMALL, "A player with that name does not exist.");
 		return false;
 	}
@@ -3921,7 +3900,7 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	return false;
 }
 
-bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string& text)
+bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string& text) const
 {
 	if (text.empty()) {
 		return false;
@@ -4044,44 +4023,14 @@ bool Game::playerSpeakToNpc(Player* player, const std::string& text)
 	return true;
 }
 
-bool Game::npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, bool publicize)
-{
-	if (player != nullptr) {
-		player->sendCreatureSay(npc, SPEAK_PRIVATE_NP, text);
-		player->onCreatureSay(npc, SPEAK_PRIVATE_NP, text);
-	}
-
-	if (publicize) {
-		SpectatorVec list;
-		getSpectators(list, npc->getPosition());
-
-		//send to client
-		for (Creature* spectator : list) {
-			if (spectator != player) {
-				if (Player* tmpPlayer = spectator->getPlayer()) {
-					tmpPlayer->sendCreatureSay(npc, SPEAK_SAY, text);
-				}
-			}
-		}
-
-		//event method
-		for (Creature* spectator : list) {
-			if (spectator != player) {
-				spectator->onCreatureSay(npc, SPEAK_SAY, text);
-			}
-		}
-	}
-	return true;
-}
-
 //--
 bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-                            int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
+                            int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
 	return map->canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
 }
 
-bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck)
+bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
 {
 	return map->isSightClear(fromPos, toPos, floorCheck);
 }
@@ -5489,7 +5438,7 @@ void Game::updatePremium(Account& account)
 		save = true;
 	}
 
-	if (save && !IOLoginData::getInstance()->saveAccount(account)) {
+	if (save && !IOLoginData::saveAccount(account)) {
 		std::cout << "> ERROR: Failed to save account: " << account.name << "!" << std::endl;
 	}
 }
@@ -5613,7 +5562,7 @@ void Game::loadMotdNum()
 	}
 }
 
-void Game::saveMotdNum()
+void Game::saveMotdNum() const
 {
 	Database* db = Database::getInstance();
 
@@ -5640,7 +5589,7 @@ void Game::checkPlayersRecord()
 	}
 }
 
-void Game::updatePlayersRecord()
+void Game::updatePlayersRecord() const
 {
 	Database* db = Database::getInstance();
 
@@ -5942,8 +5891,8 @@ bool Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 		return false;
 	}
 
-	const MarketOfferList& buyOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_BUY, it.id);
-	const MarketOfferList& sellOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_SELL, it.id);
+	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
+	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
 	player->sendMarketDetail(it.id);
 	return true;
@@ -5960,8 +5909,8 @@ bool Game::playerBrowseMarketOwnOffers(uint32_t playerId)
 		return false;
 	}
 
-	const MarketOfferList& buyOffers = IOMarket::getInstance()->getOwnOffers(MARKETACTION_BUY, player->getGUID());
-	const MarketOfferList& sellOffers = IOMarket::getInstance()->getOwnOffers(MARKETACTION_SELL, player->getGUID());
+	const MarketOfferList& buyOffers = IOMarket::getOwnOffers(MARKETACTION_BUY, player->getGUID());
+	const MarketOfferList& sellOffers = IOMarket::getOwnOffers(MARKETACTION_SELL, player->getGUID());
 	player->sendMarketBrowseOwnOffers(buyOffers, sellOffers);
 	return true;
 }
@@ -5977,8 +5926,8 @@ bool Game::playerBrowseMarketOwnHistory(uint32_t playerId)
 		return false;
 	}
 
-	const HistoryMarketOfferList& buyOffers = IOMarket::getInstance()->getOwnHistory(MARKETACTION_BUY, player->getGUID());
-	const HistoryMarketOfferList& sellOffers = IOMarket::getInstance()->getOwnHistory(MARKETACTION_SELL, player->getGUID());
+	const HistoryMarketOfferList& buyOffers = IOMarket::getOwnHistory(MARKETACTION_BUY, player->getGUID());
+	const HistoryMarketOfferList& sellOffers = IOMarket::getOwnHistory(MARKETACTION_SELL, player->getGUID());
 	player->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
 	return true;
 }
@@ -6031,7 +5980,7 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 	const int32_t maxOfferCount = g_config.getNumber(ConfigManager::MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER);
 	if (maxOfferCount > 0) {
-		const int32_t offerCount = IOMarket::getInstance()->getPlayerOfferCount(player->getGUID());
+		const int32_t offerCount = IOMarket::getPlayerOfferCount(player->getGUID());
 		if (offerCount == -1 || offerCount >= maxOfferCount) {
 			return false;
 		}
@@ -6132,11 +6081,11 @@ bool Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		player->bankBalance -= totalPrice;
 	}
 
-	IOMarket::getInstance()->createOffer(player->getGUID(), (MarketAction_t)type, it.id, amount, price, anonymous);
+	IOMarket::createOffer(player->getGUID(), (MarketAction_t)type, it.id, amount, price, anonymous);
 
 	player->sendMarketEnter(player->getLastDepotId());
-	const MarketOfferList& buyOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_BUY, it.id);
-	const MarketOfferList& sellOffers = IOMarket::getInstance()->getActiveOffers(MARKETACTION_SELL, it.id);
+	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
+	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
 	return true;
 }
@@ -6152,12 +6101,12 @@ bool Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return false;
 	}
 
-	uint32_t offerId = IOMarket::getInstance()->getOfferIdByCounter(timestamp, counter);
+	uint32_t offerId = IOMarket::getOfferIdByCounter(timestamp, counter);
 	if (offerId == 0) {
 		return false;
 	}
 
-	MarketOfferEx offer = IOMarket::getInstance()->getOfferById(offerId);
+	MarketOfferEx offer = IOMarket::getOfferById(offerId);
 	if (offer.playerId != player->getGUID()) {
 		return false;
 	}
@@ -6203,7 +6152,7 @@ bool Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		}
 	}
 
-	IOMarket::getInstance()->moveOfferToHistory(offerId, OFFERSTATE_CANCELLED);
+	IOMarket::moveOfferToHistory(offerId, OFFERSTATE_CANCELLED);
 	offer.amount = 0;
 	offer.timestamp += g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
 	player->sendMarketCancelOffer(offer);
@@ -6225,12 +6174,12 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return false;
 	}
 
-	uint32_t offerId = IOMarket::getInstance()->getOfferIdByCounter(timestamp, counter);
+	uint32_t offerId = IOMarket::getOfferIdByCounter(timestamp, counter);
 	if (offerId == 0) {
 		return false;
 	}
 
-	MarketOfferEx offer = IOMarket::getInstance()->getOfferById(offerId);
+	MarketOfferEx offer = IOMarket::getOfferById(offerId);
 	if (amount > offer.amount) {
 		return false;
 	}
@@ -6300,7 +6249,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		Player* buyerPlayer = getPlayerByGUID(offer.playerId);
 		if (!buyerPlayer) {
 			buyerPlayer = new Player(nullptr);
-			if (!IOLoginData::getInstance()->loadPlayerById(buyerPlayer, offer.playerId)) {
+			if (!IOLoginData::loadPlayerById(buyerPlayer, offer.playerId)) {
 				delete buyerPlayer;
 				return false;
 			}
@@ -6355,7 +6304,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		}
 
 		if (buyerPlayer->isOffline()) {
-			IOLoginData::getInstance()->savePlayer(buyerPlayer);
+			IOLoginData::savePlayer(buyerPlayer);
 			delete buyerPlayer;
 		} else {
 			buyerPlayer->onReceiveMail();
@@ -6400,7 +6349,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		if (sellerPlayer) {
 			sellerPlayer->bankBalance += totalPrice;
 		} else {
-			IOLoginData::getInstance()->increaseBankBalance(offer.playerId, totalPrice);
+			IOLoginData::increaseBankBalance(offer.playerId, totalPrice);
 		}
 
 		player->onReceiveMail();
@@ -6408,16 +6357,16 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 	const int32_t marketOfferDuration = g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	IOMarket::getInstance()->appendHistory(player->getGUID(), (offer.type == MARKETACTION_BUY ? MARKETACTION_SELL : MARKETACTION_BUY), offer.itemId, amount, offer.price, offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTEDEX);
+	IOMarket::appendHistory(player->getGUID(), (offer.type == MARKETACTION_BUY ? MARKETACTION_SELL : MARKETACTION_BUY), offer.itemId, amount, offer.price, offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTEDEX);
 
-	IOMarket::getInstance()->appendHistory(offer.playerId, offer.type, offer.itemId, amount, offer.price, offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTED);
+	IOMarket::appendHistory(offer.playerId, offer.type, offer.itemId, amount, offer.price, offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTED);
 
 	offer.amount -= amount;
 
 	if (offer.amount == 0) {
-		IOMarket::getInstance()->deleteOffer(offerId);
+		IOMarket::deleteOffer(offerId);
 	} else {
-		IOMarket::getInstance()->acceptOffer(offerId, amount);
+		IOMarket::acceptOffer(offerId, amount);
 	}
 
 	player->sendMarketEnter(player->getLastDepotId());
@@ -6428,7 +6377,7 @@ bool Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 void Game::checkExpiredMarketOffers()
 {
-	const ExpiredMarketOfferList& expiredBuyOffers = IOMarket::getInstance()->getExpiredOffers(MARKETACTION_BUY);
+	const ExpiredMarketOfferList& expiredBuyOffers = IOMarket::getExpiredOffers(MARKETACTION_BUY);
 	for (const ExpiredMarketOffer& offer : expiredBuyOffers) {
 		uint64_t totalPrice = (uint64_t)offer.price * offer.amount;
 
@@ -6436,18 +6385,18 @@ void Game::checkExpiredMarketOffers()
 		if (player) {
 			player->bankBalance += totalPrice;
 		} else {
-			IOLoginData::getInstance()->increaseBankBalance(offer.playerId, totalPrice);
+			IOLoginData::increaseBankBalance(offer.playerId, totalPrice);
 		}
 
-		IOMarket::getInstance()->moveOfferToHistory(offer.id, OFFERSTATE_EXPIRED);
+		IOMarket::moveOfferToHistory(offer.id, OFFERSTATE_EXPIRED);
 	}
 
-	const ExpiredMarketOfferList& expiredSellOffers = IOMarket::getInstance()->getExpiredOffers(MARKETACTION_SELL);
+	const ExpiredMarketOfferList& expiredSellOffers = IOMarket::getExpiredOffers(MARKETACTION_SELL);
 	for (const ExpiredMarketOffer& offer : expiredSellOffers) {
 		Player* player = getPlayerByGUID(offer.playerId);
 		if (!player) {
 			player = new Player(nullptr);
-			if (!IOLoginData::getInstance()->loadPlayerById(player, offer.playerId)) {
+			if (!IOLoginData::loadPlayerById(player, offer.playerId)) {
 				delete player;
 				continue;
 			}
@@ -6488,11 +6437,11 @@ void Game::checkExpiredMarketOffers()
 		}
 
 		if (player->isOffline()) {
-			IOLoginData::getInstance()->savePlayer(player);
+			IOLoginData::savePlayer(player);
 			delete player;
 		}
 
-		IOMarket::getInstance()->moveOfferToHistory(offer.id, OFFERSTATE_EXPIRED);
+		IOMarket::moveOfferToHistory(offer.id, OFFERSTATE_EXPIRED);
 	}
 
 	int32_t checkExpiredMarketOffersEachMinutes = g_config.getNumber(ConfigManager::CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES);
@@ -6568,17 +6517,6 @@ bool Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 		}
 	}
 
-	return true;
-}
-
-bool Game::playerCancelWalk(uint32_t playerId)
-{
-	Player* player = getPlayerByID(playerId);
-	if (!player) {
-		return false;
-	}
-
-	player->sendCancelWalk();
 	return true;
 }
 

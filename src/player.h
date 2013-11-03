@@ -205,10 +205,10 @@ class Player : public Creature, public Cylinder
 		void incrementMoveItemsBuffer(int32_t modifier) {
 			moveItemsBuffer += modifier;
 		}
-		uint32_t getMoveItemsBuffer() {
+		uint32_t getMoveItemsBuffer() const {
 			return moveItemsBuffer;
 		}
-		int64_t getLastMoveItemTime() {
+		int64_t getLastMoveItemTime() const {
 			return lastMoveItemTime;
 		}
 		void updateLastMoveItemTime() {
@@ -270,7 +270,6 @@ class Player : public Creature, public Cylinder
 
 		bool isInWar(const Player* player) const;
 		bool isInWarList(uint32_t guild_id) const;
-		void leaveGuild();
 
 		void setLastWalkthroughAttempt(int64_t walkthroughAttempt) {
 			lastWalkthroughAttempt = walkthroughAttempt;
@@ -390,7 +389,7 @@ class Player : public Creature, public Cylinder
 		int8_t getContainerID(const Container* container) const;
 		uint16_t getContainerIndex(uint8_t cid) const;
 
-		bool canOpenCorpse(uint32_t ownerId);
+		bool canOpenCorpse(uint32_t ownerId) const;
 
 		void addStorageValue(const uint32_t key, const int32_t value, const bool isLogin = false);
 		bool getStorageValue(const uint32_t key, int32_t& value) const;
@@ -495,11 +494,11 @@ class Player : public Creature, public Cylinder
 		virtual int32_t getThrowRange() const {
 			return 1;
 		}
-		uint32_t isMuted();
+		uint32_t isMuted() const;
 		void addMessageBuffer();
 		void removeMessageBuffer();
 
-		bool removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped = false);
+		bool removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped = false) const;
 
 		double getCapacity() const {
 			if (hasFlag(PlayerFlag_CannotPickupItem)) {
@@ -552,14 +551,14 @@ class Player : public Creature, public Cylinder
 			return varStats[stat];
 		}
 		void setVarStats(stats_t stat, int32_t modifier);
-		int32_t getDefaultStats(stats_t stat);
+		int32_t getDefaultStats(stats_t stat) const;
 
 		void setConditionSuppressions(uint32_t conditions, bool remove);
 
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
 		DepotLocker* getDepotLocker(uint32_t depotId);
 		void onReceiveMail();
-		bool isNearDepotBox();
+		bool isNearDepotBox() const;
 
 		virtual bool canSee(const Position& pos) const;
 		virtual bool canSeeCreature(const Creature* creature) const;
@@ -575,7 +574,7 @@ class Player : public Creature, public Cylinder
 		void setTradeState(tradestate_t state) {
 			tradeState = state;
 		}
-		tradestate_t getTradeState() {
+		tradestate_t getTradeState() const {
 			return tradeState;
 		}
 		Item* getTradeItem() {
@@ -624,7 +623,7 @@ class Player : public Creature, public Cylinder
 		void openShopWindow(Npc* npc, const std::list<ShopInfo>& shop);
 		bool closeShopWindow(bool sendCloseShopWindow = true);
 		void updateSaleShopList(uint32_t itemId);
-		bool hasShopItemForSale(uint32_t itemId, uint8_t subType);
+		bool hasShopItemForSale(uint32_t itemId, uint8_t subType) const;
 
 		void setChaseMode(chaseMode_t mode);
 		void setFightMode(fightMode_t mode);
@@ -681,7 +680,6 @@ class Player : public Creature, public Cylinder
 
 		void addWeaponExhaust(uint32_t ticks);
 		void addCombatExhaust(uint32_t ticks);
-		void addHealExhaust(uint32_t ticks);
 		void addInFightTicks(bool pzlock = false);
 		void addDefaultRegeneration(uint32_t addTicks);
 

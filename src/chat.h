@@ -127,7 +127,11 @@ class Chat
 {
 	public:
 		Chat();
-		virtual ~Chat();
+		~Chat();
+
+		// non-copyable
+		Chat(const Chat&) = delete;
+		Chat& operator=(const Chat&) = delete;
 
 		bool load();
 

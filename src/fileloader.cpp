@@ -272,29 +272,6 @@ bool FileLoader::getProps(const NODE node, PropStream& props)
 	return false;
 }
 
-int32_t FileLoader::setProps(void* data, uint16_t size)
-{
-	//data
-	if (!writeData(data, size, true)) {
-		return getError();
-	}
-
-	return ERROR_NONE;
-}
-
-void FileLoader::startNode(uint8_t type)
-{
-	uint8_t nodeBegin = NODE_START;
-	writeData(&nodeBegin, sizeof(nodeBegin), false);
-	writeData(&type, sizeof(type), true);
-}
-
-void FileLoader::endNode()
-{
-	uint8_t nodeEnd = NODE_END;
-	writeData(&nodeEnd, sizeof(nodeEnd), false);
-}
-
 NODE FileLoader::getChildNode(const NODE parent, uint32_t& type)
 {
 	if (parent) {
@@ -409,21 +386,6 @@ inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 
 	m_lastError = ERROR_EOF;
 	return false;
-}
-
-inline bool FileLoader::checks(const NODE node)
-{
-	if (!m_file) {
-		m_lastError = ERROR_NOT_OPEN;
-		return false;
-	}
-
-	if (!node) {
-		m_lastError = ERROR_INVALID_NODE;
-		return false;
-	}
-
-	return true;
 }
 
 inline bool FileLoader::safeSeek(uint32_t pos)

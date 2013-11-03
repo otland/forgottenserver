@@ -45,7 +45,7 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 			if (_guid != 0) {
 				std::string name;
-				if (IOLoginData::getInstance()->getNameByGuid(_guid, name)) {
+				if (IOLoginData::getNameByGuid(_guid, name)) {
 					setSpecialDescription(name + " is sleeping there.");
 					Beds::getInstance().setBedSleeper(this, _guid);
 				}
@@ -113,7 +113,7 @@ bool BedItem::canUse(Player* player)
 	}
 
 	Player sleeper(nullptr);
-	if (!IOLoginData::getInstance()->loadPlayerById(&sleeper, sleeperGUID)) {
+	if (!IOLoginData::loadPlayerById(&sleeper, sleeperGUID)) {
 		return false;
 	}
 
@@ -191,9 +191,9 @@ void BedItem::wakeUp(Player* player)
 	if (sleeperGUID != 0) {
 		if (!player) {
 			Player _player(nullptr);
-			if (IOLoginData::getInstance()->loadPlayerById(&_player, sleeperGUID)) {
+			if (IOLoginData::loadPlayerById(&_player, sleeperGUID)) {
 				regeneratePlayer(&_player);
-				IOLoginData::getInstance()->savePlayer(&_player);
+				IOLoginData::savePlayer(&_player);
 			}
 		} else {
 			regeneratePlayer(player);

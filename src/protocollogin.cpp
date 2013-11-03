@@ -114,7 +114,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	BanInfo banInfo;
-	if (IOBan::getInstance()->isIpBanned(clientip, banInfo)) {
+	if (IOBan::isIpBanned(clientip, banInfo)) {
 		if (banInfo.reason.empty()) {
 			banInfo.reason = "(none)";
 		}
@@ -131,7 +131,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	Account account;
-	if (!IOLoginData::getInstance()->loginserverAuthentication(accountName, password, account)) {
+	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
 		disconnectClient(0x0A, "Account name or password is not correct.");
 		return false;
 	}

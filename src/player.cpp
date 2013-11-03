@@ -37,7 +37,6 @@
 #include "ban.h"
 #include "configmanager.h"
 #include "creatureevent.h"
-#include "protocolstatus.h"
 #include "beds.h"
 #include "mounts.h"
 #include "quests.h"
@@ -755,7 +754,7 @@ void Player::setVarStats(stats_t stat, int32_t modifier)
 	}
 }
 
-int32_t Player::getDefaultStats(stats_t stat)
+int32_t Player::getDefaultStats(stats_t stat) const
 {
 	switch (stat) {
 		case STAT_MAXHITPOINTS:
@@ -853,7 +852,7 @@ uint16_t Player::getContainerIndex(uint8_t cid) const
 	return it->second.index;
 }
 
-bool Player::canOpenCorpse(uint32_t ownerId)
+bool Player::canOpenCorpse(uint32_t ownerId) const
 {
 	return getID() == ownerId || (party && party->canOpenCorpse(ownerId));
 }
@@ -1067,7 +1066,7 @@ void Player::onReceiveMail()
 	}
 }
 
-bool Player::isNearDepotBox()
+bool Player::isNearDepotBox() const
 {
 	const Position& pos = getPosition();
 	for (int32_t cx = -1; cx <= 1; ++cx) {
@@ -1598,7 +1597,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 		}
 
 		g_game.checkPlayersRecord();
-		IOLoginData::getInstance()->updateOnlineStatus(guid, true);
+		IOLoginData::updateOnlineStatus(guid, true);
 	}
 }
 
@@ -1698,11 +1697,11 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 			guild->removeMember(this);
 		}
 
-		IOLoginData::getInstance()->updateOnlineStatus(guid, false);
+		IOLoginData::updateOnlineStatus(guid, false);
 
 		bool saved = false;
 		for (uint32_t tries = 0; tries < 3; ++tries) {
-			if (IOLoginData::getInstance()->savePlayer(this)) {
+			if (IOLoginData::savePlayer(this)) {
 				saved = true;
 				break;
 			}
@@ -2011,7 +2010,7 @@ void Player::onThink(uint32_t interval)
 	}
 }
 
-uint32_t Player::isMuted()
+uint32_t Player::isMuted() const
 {
 	if (hasFlag(PlayerFlag_CannotBeMuted)) {
 		return 0;
@@ -2592,12 +2591,6 @@ void Player::addCombatExhaust(uint32_t ticks)
 	addCondition(condition);
 }
 
-void Player::addHealExhaust(uint32_t ticks)
-{
-	Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST_HEAL, ticks, 0);
-	addCondition(condition);
-}
-
 void Player::addInFightTicks(bool pzlock /*= false*/)
 {
 	if (pzlock) {
@@ -2677,7 +2670,7 @@ bool Player::removeVIP(uint32_t _guid)
 		return false;
 	}
 
-	IOLoginData::getInstance()->removeVIPEntry(accountNumber, _guid);
+	IOLoginData::removeVIPEntry(accountNumber, _guid);
 	return true;
 }
 
@@ -2701,7 +2694,7 @@ bool Player::addVIP(uint32_t _guid, const std::string& name, VipStatus_t status)
 
 	VIPList.insert(_guid);
 
-	IOLoginData::getInstance()->addVIPEntry(accountNumber, _guid, "", 0, false);
+	IOLoginData::addVIPEntry(accountNumber, _guid, "", 0, false);
 
 	if (client) {
 		client->sendVIP(_guid, name, "", 0, false, status);
@@ -2736,7 +2729,7 @@ bool Player::editVIP(uint32_t _guid, const std::string& description, uint32_t ic
 		return false;    // player is not in VIP
 	}
 
-	IOLoginData::getInstance()->editVIPEntry(accountNumber, _guid, description, icon, notify);
+	IOLoginData::editVIPEntry(accountNumber, _guid, description, icon, notify);
 	return true;
 }
 
@@ -3375,7 +3368,7 @@ uint32_t Player::__getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) c
 	return count;
 }
 
-bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped/* = false*/)
+bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped/* = false*/) const
 {
 	if (amount == 0) {
 		return true;
@@ -3406,7 +3399,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 			}
 		}
 	}
-	
+
 	if (count < amount) {
 		return false;
 	}
@@ -3584,7 +3577,7 @@ void Player::updateSaleShopList(uint32_t itemId)
 	}
 }
 
-bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType)
+bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 {
 	const ItemType& itemType = Item::items[itemId];
 	for (const ShopInfo& shopInfo : shopItemList) {
@@ -4478,15 +4471,6 @@ bool Player::isInWar(const Player* player) const
 bool Player::isInWarList(uint32_t guildId) const
 {
 	return std::find(guildWarList.begin(), guildWarList.end(), guildId) != guildWarList.end();
-}
-
-void Player::leaveGuild()
-{
-	sendClosePrivate(CHANNEL_GUILD);
-	guild = nullptr;
-	guildNick = "";
-	guildLevel = 0;
-	guildWarList.clear();
 }
 
 bool Player::isPremium() const

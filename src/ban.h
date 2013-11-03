@@ -52,14 +52,9 @@ class Ban
 class IOBan
 {
 	public:
-		static IOBan* getInstance() {
-			static IOBan instance;
-			return &instance;
-		}
-
-		bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
-		bool isIpBanned(uint32_t ip, BanInfo& banInfo);
-		bool isPlayerNamelocked(uint32_t playerId);
+		static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
+		static bool isIpBanned(uint32_t ip, BanInfo& banInfo);
+		static bool isPlayerNamelocked(uint32_t playerId);
 };
 
 #endif

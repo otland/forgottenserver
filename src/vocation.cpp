@@ -189,7 +189,6 @@ Vocation::Vocation(uint16_t id)
 	: id(id)
 {
 	name = "none";
-	description = "";
 	gainHealthTicks = 6;
 	gainHealthAmount = 1;
 	gainManaTicks = 6;

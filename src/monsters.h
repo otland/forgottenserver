@@ -44,7 +44,6 @@ struct LootBlock {
 
 		subType = -1;
 		actionId = -1;
-		text = "";
 	}
 };
 

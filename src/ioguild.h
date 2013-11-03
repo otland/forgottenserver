@@ -27,16 +27,8 @@ typedef std::vector<uint32_t> GuildWarList;
 class IOGuild
 {
 	public:
-		IOGuild() {}
-		~IOGuild() {}
-
-		static IOGuild* getInstance() {
-			static IOGuild instance;
-			return &instance;
-		}
-
-		bool getGuildIdByName(uint32_t& guildId, const std::string& guildName);
-		void getWarList(uint32_t guildId, GuildWarList& guildWarList);
+		static bool getGuildIdByName(uint32_t& guildId, const std::string& guildName);
+		static void getWarList(uint32_t guildId, GuildWarList& guildWarList);
 };
 
 #endif

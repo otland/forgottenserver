@@ -113,9 +113,6 @@ class TileItemVector
 			return items.rend();
 		}
 
-		size_t size() {
-			return items.size();
-		}
 		size_t size() const {
 			return items.size();
 		}

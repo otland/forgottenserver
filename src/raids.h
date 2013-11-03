@@ -108,7 +108,8 @@ class Raids
 class Raid
 {
 	public:
-		Raid(const std::string& _name, uint32_t _interval, uint32_t _marginTime);
+		Raid(const std::string& name, uint32_t interval, uint32_t marginTime)
+			: name(name), interval(interval), nextEvent(0), margin(marginTime), state(RAIDSTATE_IDLE), nextEventEvent(0), loaded(false) {}
 		~Raid();
 
 		bool loadFromXml(const std::string& _filename);

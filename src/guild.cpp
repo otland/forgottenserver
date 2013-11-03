@@ -25,13 +25,6 @@
 
 extern Game g_game;
 
-Guild::Guild(uint32_t id, const std::string& name)
-{
-	this->id = id;
-	this->name = name;
-	this->memberCount = 0;
-}
-
 void Guild::addMember(Player* player)
 {
 	membersOnline.push_back(player);

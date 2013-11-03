@@ -36,7 +36,8 @@ class MissionState
 {
 	public:
 		MissionState() {}
-		MissionState(const std::string& _description, int32_t _missionID);
+		MissionState(const std::string& description, int32_t missionID)
+			: description(description), missionID(missionID) {}
 
 		int32_t getMissionID() const {
 			return missionID;
@@ -53,7 +54,10 @@ class MissionState
 class Mission
 {
 	public:
-		Mission(const std::string& _name, int32_t _storageID, int32_t _startValue, int32_t _endValue, bool _ignoreEndValue);
+		Mission(const std::string& name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue)
+			: name(name), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {
+			mainState = nullptr;
+		}
 
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;
@@ -83,7 +87,8 @@ class Mission
 class Quest
 {
 	public:
-		Quest(const std::string& _name, uint16_t _id, int32_t _startStorageID, int32_t _startStorageValue);
+		Quest(const std::string& name, uint16_t id, int32_t startStorageID, int32_t startStorageValue)
+			: name(name), startStorageID(startStorageID), startStorageValue(startStorageValue), id(id) {}
 
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;

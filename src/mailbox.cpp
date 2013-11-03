@@ -128,7 +128,7 @@ bool Mailbox::sendItem(Item* item)
 		}
 	} else {
 		player = new Player(nullptr);
-		if (!IOLoginData::getInstance()->loadPlayerByName(player, receiver)) {
+		if (!IOLoginData::loadPlayerByName(player, receiver)) {
 			delete player;
 			return false;
 		}
@@ -136,7 +136,7 @@ bool Mailbox::sendItem(Item* item)
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
 		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
-			IOLoginData::getInstance()->savePlayer(player);
+			IOLoginData::savePlayer(player);
 			delete player;
 			return true;
 		}

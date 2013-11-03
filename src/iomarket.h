@@ -36,22 +36,22 @@ class IOMarket
 			return &instance;
 		}
 
-		MarketOfferList getActiveOffers(MarketAction_t action, uint16_t itemId);
-		MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId);
-		HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId);
+		static MarketOfferList getActiveOffers(MarketAction_t action, uint16_t itemId);
+		static MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId);
+		static HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId);
 
-		ExpiredMarketOfferList getExpiredOffers(MarketAction_t action);
+		static ExpiredMarketOfferList getExpiredOffers(MarketAction_t action);
 
-		int32_t getPlayerOfferCount(uint32_t playerId);
-		uint32_t getOfferIdByCounter(uint32_t timestamp, uint16_t counter);
-		MarketOfferEx getOfferById(uint32_t id);
+		static int32_t getPlayerOfferCount(uint32_t playerId);
+		static uint32_t getOfferIdByCounter(uint32_t timestamp, uint16_t counter);
+		static MarketOfferEx getOfferById(uint32_t id);
 
-		void createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous);
-		void acceptOffer(uint32_t offerId, uint16_t amount);
-		void deleteOffer(uint32_t offerId);
+		static void createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous);
+		static void acceptOffer(uint32_t offerId, uint16_t amount);
+		static void deleteOffer(uint32_t offerId);
 
-		void appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint32_t price, time_t timestamp, MarketOfferState_t state);
-		void moveOfferToHistory(uint32_t offerId, MarketOfferState_t state);
+		static void appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint32_t price, time_t timestamp, MarketOfferState_t state);
+		static void moveOfferToHistory(uint32_t offerId, MarketOfferState_t state);
 
 		void updateStatistics();
 

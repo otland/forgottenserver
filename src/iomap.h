@@ -24,7 +24,6 @@
 #include "map.h"
 #include "house.h"
 #include "spawn.h"
-#include "protocolstatus.h"
 #include "configmanager.h"
 
 extern ConfigManager g_config;
@@ -112,7 +111,7 @@ class IOMap
 		 * \param map pointer to the Map class
 		 * \returns Returns true if the spawns were loaded successfully
 		 */
-		bool loadSpawns(Map* map) {
+		static bool loadSpawns(Map* map) {
 			if (map->spawnfile.empty()) {
 				//OTBM file doesn't tell us about the spawnfile,
 				//lets guess it is mapname-spawn.xml.
@@ -127,7 +126,7 @@ class IOMap
 		 * \param map pointer to the Map class
 		 * \returns Returns true if the houses were loaded successfully
 		 */
-		bool loadHouses(Map* map) {
+		static bool loadHouses(Map* map) {
 			if (map->housefile.empty()) {
 				//OTBM file doesn't tell us about the housefile,
 				//lets guess it is mapname-house.xml.

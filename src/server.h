@@ -34,10 +34,8 @@ class Protocol;
 class NetworkMessage;
 
 class ServiceBase;
-class ServicePort;
 
 typedef boost::shared_ptr<ServiceBase> Service_ptr;
-typedef boost::shared_ptr<ServicePort> ServicePort_ptr;
 
 class ServiceBase : boost::noncopyable
 {
@@ -104,6 +102,7 @@ class ServicePort : boost::noncopyable, public boost::enable_shared_from_this<Se
 };
 
 typedef boost::shared_ptr<ServicePort> ServicePort_ptr;
+
 class ServiceManager : boost::noncopyable
 {
 		ServiceManager(const ServiceManager&);

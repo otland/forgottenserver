@@ -49,7 +49,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 		offer.counter = result->getDataInt("id") & 0xFFFF;
 
 		if (result->getDataInt("anonymous") == 0) {
-			IOLoginData::getInstance()->getNameByGuid(result->getDataInt("player_id"), offer.playerName);
+			IOLoginData::getNameByGuid(result->getDataInt("player_id"), offer.playerName);
 
 			if (offer.playerName.empty()) {
 				offer.playerName = "Anonymous";
@@ -201,7 +201,7 @@ MarketOfferEx IOMarket::getOfferById(uint32_t id)
 		offer.playerId = playerId;
 
 		if (result->getDataInt("anonymous") == 0) {
-			IOLoginData::getInstance()->getNameByGuid(playerId, offer.playerName);
+			IOLoginData::getNameByGuid(playerId, offer.playerName);
 
 			if (offer.playerName.empty()) {
 				offer.playerName = "Anonymous";

@@ -78,7 +78,7 @@ bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 	return true;
 }
 
-TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words)
+TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
 {
 	if (type != SPEAK_SAY) {
 		return TALKACTION_CONTINUE;

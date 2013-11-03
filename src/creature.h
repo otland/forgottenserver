@@ -88,7 +88,7 @@ class Tile;
 class FrozenPathingConditionCall
 {
 	public:
-		FrozenPathingConditionCall(const Position& _targetPos);
+		FrozenPathingConditionCall(const Position& targetPos) : targetPos(targetPos) {}
 		~FrozenPathingConditionCall() {}
 
 		bool operator()(const Position& startPos, const Position& testPos,
@@ -296,7 +296,7 @@ class Creature : virtual public Thing
 
 		virtual void addSummon(Creature* creature);
 		virtual void removeSummon(Creature* creature);
-		const std::list<Creature*>& getSummons() {
+		const std::list<Creature*>& getSummons() const {
 			return summons;
 		}
 
@@ -455,7 +455,7 @@ class Creature : virtual public Thing
 
 		int32_t getWalkCache(const Position& pos) const;
 
-		const Position& getLastPosition() {
+		const Position& getLastPosition() const {
 			return lastPosition;
 		}
 		void setLastPosition(const Position& newLastPos) {
@@ -523,6 +523,10 @@ class Creature : virtual public Thing
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
 
+		Position lastPosition;
+		Direction direction;
+		LightInfo internalLight;
+
 		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
 		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
 		bool localMapCache[mapWalkHeight][mapWalkWidth];
@@ -543,12 +547,8 @@ class Creature : virtual public Thing
 		bool lastHitUnjustified;
 		bool mostDamageUnjustified;
 
-		Position lastPosition;
-		Direction direction;
-		LightInfo internalLight;
-
 		//creature script events
-		bool hasEventRegistered(CreatureEventType_t event) {
+		bool hasEventRegistered(CreatureEventType_t event) const {
 			return (0 != (scriptEventsBitField & ((uint32_t)1 << event)));
 		}
 		CreatureEventList getCreatureEvents(CreatureEventType_t type);

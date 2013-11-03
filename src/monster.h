@@ -157,14 +157,14 @@ class Monster : public Creature
 		bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
 		bool selectTarget(Creature* creature);
 
-		const CreatureList& getTargetList() {
+		const CreatureList& getTargetList() const {
 			return targetList;
 		}
-		const CreatureHashSet& getFriendList() {
+		const CreatureHashSet& getFriendList() const {
 			return friendList;
 		}
 
-		bool isTarget(Creature* creature);
+		bool isTarget(Creature* creature) const;
 		bool isFleeing() const {
 			return getHealth() <= mType->runAwayHealth;
 		}

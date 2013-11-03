@@ -108,10 +108,6 @@ class FileLoader
 		NODE getChildNode(const NODE parent, uint32_t& type);
 		NODE getNextNode(const NODE prev, uint32_t& type);
 
-		void startNode(uint8_t type);
-		void endNode();
-		int32_t setProps(void* data, uint16_t size);
-
 		int32_t getError() const {
 			return m_lastError;
 		}
@@ -130,7 +126,6 @@ class FileLoader
 
 		inline bool readByte(int32_t& value);
 		inline bool readBytes(uint8_t* buffer, uint32_t size, int32_t pos);
-		inline bool checks(const NODE node);
 		inline bool safeSeek(uint32_t pos);
 		inline bool safeTell(int32_t& pos);
 

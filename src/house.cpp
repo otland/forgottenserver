@@ -41,7 +41,6 @@ House::House(uint32_t _houseid) :
 	transfer_container(ITEM_LOCKER1)
 {
 	isLoaded = false;
-	houseName = "Forgotten headquarter (Flat 1, Area 42)";
 	houseOwner = 0;
 	posEntry.x = 0;
 	posEntry.y = 0;
@@ -75,7 +74,7 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 	}
 
 	isLoaded = true;
-	
+
 	if (houseOwner) {
 		//send items to depot
 		if (player) {
@@ -115,7 +114,7 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 
 	std::string name;
 
-	if (guid != 0 && IOLoginData::getInstance()->getNameByGuid(guid, name)) {
+	if (guid != 0 && IOLoginData::getNameByGuid(guid, name)) {
 		houseOwner = guid;
 		houseOwnerName = name;
 	}
@@ -123,7 +122,7 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 	updateDoorDescription();
 }
 
-void House::updateDoorDescription()
+void House::updateDoorDescription() const
 {
 	std::ostringstream ss;
 	if (houseOwner != 0) {
@@ -219,7 +218,7 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 	}
 }
 
-bool House::transferToDepot()
+bool House::transferToDepot() const
 {
 	if (townid == 0 || houseOwner == 0) {
 		return false;
@@ -228,22 +227,22 @@ bool House::transferToDepot()
 	Player* player = g_game.getPlayerByGUID(houseOwner);
 	if (!player) {
 		player = new Player(nullptr);
-		if (!IOLoginData::getInstance()->loadPlayerById(player, houseOwner)) {
+		if (!IOLoginData::loadPlayerById(player, houseOwner)) {
 			delete player;
 			return false;
 		}
 	}
-	
+
 	transferToDepot(player);
 
 	if (player->isOffline()) {
-		IOLoginData::getInstance()->savePlayer(player);
+		IOLoginData::savePlayer(player);
 		delete player;
 	}
 	return true;
 }
 
-bool House::transferToDepot(Player* player)
+bool House::transferToDepot(Player* player) const
 {
 	if (townid == 0 || houseOwner == 0) {
 		return false;
@@ -306,7 +305,7 @@ void House::addDoor(Door* door)
 
 void House::removeDoor(Door* door)
 {
-	HouseDoorList::iterator it = std::find(doorList.begin(), doorList.end(), door);
+	auto it = std::find(doorList.begin(), doorList.end(), door);
 	if (it != doorList.end()) {
 		door->releaseThing2();
 		doorList.erase(it);
@@ -483,7 +482,7 @@ bool AccessList::addPlayer(const std::string& name)
 	uint32_t guid;
 	std::string dbName = name;
 
-	if (IOLoginData::getInstance()->getGuidByName(guid, dbName)) {
+	if (IOLoginData::getGuidByName(guid, dbName)) {
 		if (playerList.find(guid) == playerList.end()) {
 			playerList.insert(guid);
 			return true;
@@ -497,7 +496,7 @@ bool AccessList::addGuild(const std::string& guildName, const std::string& rank)
 {
 	uint32_t guildId;
 
-	if (IOGuild::getInstance()->getGuildIdByName(guildId, guildName)) {
+	if (IOGuild::getGuildIdByName(guildId, guildName)) {
 		if (guildId != 0 && guildList.find(guildId) == guildList.end()) {
 			guildList.insert(guildId);
 			return true;
@@ -745,7 +744,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 	return true;
 }
 
-bool Houses::payHouses()
+bool Houses::payHouses() const
 {
 	if (rentPeriod == RENTPERIOD_NEVER) {
 		return true;
@@ -765,7 +764,7 @@ bool Houses::payHouses()
 			Player* player = g_game.getPlayerByGUID(ownerid);
 			if (!player) {
 				player = new Player(nullptr);
-				if (!IOLoginData::getInstance()->loadPlayerById(player, ownerid)) {
+				if (!IOLoginData::loadPlayerById(player, ownerid)) {
 					//player doesnt exist, reset house owner
 					house->setHouseOwner(0);
 					delete player;
@@ -835,7 +834,7 @@ bool Houses::payHouses()
 			}
 
 			if (player->isOffline()) {
-				IOLoginData::getInstance()->savePlayer(player);
+				IOLoginData::savePlayer(player);
 				delete player;
 			}
 		}

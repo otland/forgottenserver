@@ -27,7 +27,9 @@
 
 struct Mount
 {
-	Mount(uint8_t _id, uint16_t _clientId, const std::string& _name, int32_t _speed, bool _premium);
+	Mount(uint8_t id, uint16_t clientId, const std::string& name, int32_t speed, bool premium)
+		: name(name), speed(speed), clientId(clientId), id(id), premium(premium) {}
+
 	bool isTamed(Player* player) const;
 
 	std::string name;

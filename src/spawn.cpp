@@ -40,7 +40,6 @@ Spawns::Spawns()
 {
 	loaded = false;
 	started = false;
-	filename = "";
 }
 
 Spawns::~Spawns()
@@ -165,7 +164,7 @@ void Spawns::clear()
 
 	loaded = false;
 	started = false;
-	filename = "";
+	filename.clear();
 }
 
 bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position& pos)
@@ -224,7 +223,6 @@ bool Spawn::isInSpawnZone(const Position& pos)
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
 {
 	Monster* monster = Monster::createMonster(mType);
-
 	if (!monster) {
 		return false;
 	}
@@ -296,13 +294,9 @@ void Spawn::checkSpawn()
 
 void Spawn::cleanup()
 {
-	Monster* monster;
-	uint32_t spawnId;
-
 	for (SpawnedMap::iterator it = spawnedMap.begin(); it != spawnedMap.end();) {
-		spawnId = it->first;
-		monster = it->second;
-
+		uint32_t spawnId = it->first;
+		Monster* monster = it->second;
 		if (monster->isRemoved()) {
 			if (spawnId != 0) {
 				spawnMap[spawnId].lastSpawn = OTSYS_TIME();

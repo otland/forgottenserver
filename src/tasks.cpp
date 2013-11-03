@@ -93,7 +93,6 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 		}
 	} else {
 		delete task;
-		task = nullptr;
 	}
 
 	m_taskLock.unlock();
@@ -106,10 +105,8 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 
 void Dispatcher::flush()
 {
-	Task* task = nullptr;
-
 	while (!m_taskList.empty()) {
-		task = m_taskList.front();
+		Task* task = m_taskList.front();
 		m_taskList.pop_front();
 		(*task)();
 		delete task;

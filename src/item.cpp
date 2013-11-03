@@ -48,7 +48,6 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 	Item* newItem = nullptr;
 
 	const ItemType& it = Item::items[_type];
-
 	if (it.group == ITEM_GROUP_DEPRECATED) {
 		return nullptr;
 	}
@@ -339,7 +338,6 @@ uint16_t Item::getSubType() const
 Player* Item::getHoldingPlayer()
 {
 	Cylinder* p = getParent();
-
 	while (p) {
 		if (p->getCreature()) {
 			return p->getCreature()->getPlayer();
@@ -347,7 +345,6 @@ Player* Item::getHoldingPlayer()
 
 		p = p->getParent();
 	}
-
 	return nullptr;
 }
 
@@ -359,7 +356,6 @@ const Player* Item::getHoldingPlayer() const
 void Item::setSubType(uint16_t n)
 {
 	const ItemType& it = items[id];
-
 	if (it.isFluidContainer() || it.isSplash()) {
 		setFluidType(n);
 	} else if (it.stackable) {
@@ -376,7 +372,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 	switch (attr) {
 		case ATTR_COUNT: {
 			uint8_t _count = 0;
-
 			if (!propStream.GET_UCHAR(_count)) {
 				return ATTR_READ_ERROR;
 			}
@@ -387,7 +382,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_ACTION_ID: {
 			uint16_t _actionid = 0;
-
 			if (!propStream.GET_USHORT(_actionid)) {
 				return ATTR_READ_ERROR;
 			}
@@ -398,7 +392,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_UNIQUE_ID: {
 			uint16_t _uniqueid;
-
 			if (!propStream.GET_USHORT(_uniqueid)) {
 				return ATTR_READ_ERROR;
 			}
@@ -409,7 +402,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_TEXT: {
 			std::string _text;
-
 			if (!propStream.GET_STRING(_text)) {
 				return ATTR_READ_ERROR;
 			}
@@ -420,7 +412,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_WRITTENDATE: {
 			uint32_t _writtenDate;
-
 			if (!propStream.GET_ULONG(_writtenDate)) {
 				return ATTR_READ_ERROR;
 			}
@@ -431,7 +422,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_WRITTENBY: {
 			std::string _writer;
-
 			if (!propStream.GET_STRING(_writer)) {
 				return ATTR_READ_ERROR;
 			}
@@ -442,7 +432,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_DESC: {
 			std::string _text;
-
 			if (!propStream.GET_STRING(_text)) {
 				return ATTR_READ_ERROR;
 			}
@@ -453,7 +442,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_RUNE_CHARGES: {
 			uint8_t _charges = 1;
-
 			if (!propStream.GET_UCHAR(_charges)) {
 				return ATTR_READ_ERROR;
 			}
@@ -464,7 +452,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_CHARGES: {
 			uint16_t _charges = 1;
-
 			if (!propStream.GET_USHORT(_charges)) {
 				return ATTR_READ_ERROR;
 			}
@@ -475,7 +462,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_DURATION: {
 			uint32_t duration = 0;
-
 			if (!propStream.GET_ULONG(duration)) {
 				return ATTR_READ_ERROR;
 			}
@@ -490,7 +476,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_DECAYING_STATE: {
 			uint8_t state = 0;
-
 			if (!propStream.GET_UCHAR(state)) {
 				return ATTR_READ_ERROR;
 			}
@@ -509,7 +494,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		//Depot class
 		case ATTR_DEPOT_ID: {
 			uint16_t _depotId;
-
 			if (!propStream.GET_USHORT(_depotId)) {
 				return ATTR_READ_ERROR;
 			}
@@ -520,7 +504,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		//Door class
 		case ATTR_HOUSEDOORID: {
 			uint8_t _doorId;
-
 			if (!propStream.GET_UCHAR(_doorId)) {
 				return ATTR_READ_ERROR;
 			}
@@ -531,7 +514,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		//Bed class
 		case ATTR_SLEEPERGUID: {
 			uint32_t _guid;
-
 			if (!propStream.GET_ULONG(_guid)) {
 				return ATTR_READ_ERROR;
 			}
@@ -541,7 +523,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_SLEEPSTART: {
 			uint32_t sleep_start;
-
 			if (!propStream.GET_ULONG(sleep_start)) {
 				return ATTR_READ_ERROR;
 			}
@@ -552,7 +533,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		//Teleport class
 		case ATTR_TELE_DEST: {
 			TeleportDest* tele_dest;
-
 			if (!propStream.GET_STRUCT(tele_dest)) {
 				return ATTR_READ_ERROR;
 			}
@@ -563,7 +543,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		//Container class
 		case ATTR_CONTAINER_ITEMS: {
 			uint32_t count;
-
 			if (!propStream.GET_ULONG(count)) {
 				return ATTR_READ_ERROR;
 			}
@@ -584,7 +563,6 @@ bool Item::unserializeAttr(PropStream& propStream)
 
 	while (propStream.GET_UCHAR(attr_type) && attr_type != 0) {
 		Attr_ReadValue ret = readAttr((AttrTypes_t)attr_type, propStream);
-
 		if (ret == ATTR_READ_ERROR) {
 			return false;
 		} else if (ret == ATTR_READ_END) {
@@ -1092,7 +1070,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				} else {
 					s << "unknown";
 				}
-			} else if (it.allowDistRead && it.id != 7369 && it.id != 7370 && it.id != 7371) {
+			} else if (it.allowDistRead && (it.id < 7369 || it.id > 7371)) {
 				s << '.' << std::endl;
 
 				if (lookDistance <= 4) {
@@ -1319,7 +1297,7 @@ void Item::setUniqueId(uint16_t n)
 	ScriptEnvironment::addUniqueThing(this);
 }
 
-bool Item::canDecay()
+bool Item::canDecay() const
 {
 	if (isRemoved()) {
 		return false;
@@ -1333,6 +1311,7 @@ bool Item::canDecay()
 	if (getUniqueId() != 0) {
 		return false;
 	}
+
 	return true;
 }
 
@@ -1353,7 +1332,7 @@ int32_t Item::getWorth() const
 	}
 }
 
-void Item::getLight(LightInfo& lightInfo)
+void Item::getLight(LightInfo& lightInfo) const
 {
 	const ItemType& it = items[id];
 	lightInfo.color = it.lightColor;
@@ -1406,7 +1385,6 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 	//go trough the linked list until find it
 	Attribute* prevAttr = nullptr;
 	Attribute* curAttr = m_firstAttr;
-
 	while (curAttr != nullptr) {
 		if (curAttr->type == type) {
 			//found so remove it from the linked list

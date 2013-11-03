@@ -213,22 +213,20 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		return;
 	}
 
-	std::cout << " MySQL " << db->getClientVersion() << std::endl;
+	std::cout << " MySQL " << Database::getClientVersion() << std::endl;
 
 	// run database manager
 	std::cout << ">> Running database manager" << std::endl;
 
-	DatabaseManager* dbManager = DatabaseManager::getInstance();
-	if (!dbManager->isDatabaseSetup()) {
-		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema to the database.");
+	if (!DatabaseManager::isDatabaseSetup()) {
+		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
 
-	dbManager->updateDatabase();
-	dbManager->checkTriggers();
-	dbManager->checkEncryption();
+	DatabaseManager::updateDatabase();
+	DatabaseManager::checkEncryption();
 
-	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !dbManager->optimizeTables()) {
+	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
 	}
 
@@ -369,7 +367,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	}
 
 	Houses::getInstance().payHouses();
-	IOLoginData::getInstance()->updateHouseOwners();
+	IOLoginData::updateHouseOwners();
 	g_npcs.reload();
 
 	if (g_config.getBoolean(ConfigManager::MARKET_ENABLED)) {

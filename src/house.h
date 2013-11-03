@@ -116,7 +116,6 @@ enum AccessHouseLevel_t {
 };
 
 typedef std::list<HouseTile*> HouseTileList;
-typedef std::list<Door*> HouseDoorList;
 typedef std::list<BedItem*> HouseBedItemList;
 
 class HouseTransferItem : public Item
@@ -149,7 +148,7 @@ class House
 		~House() {}
 
 		void addTile(HouseTile* tile);
-		void updateDoorDescription();
+		void updateDoorDescription() const;
 
 		bool canEditAccessList(uint32_t listId, const Player* player);
 		// listId special values:
@@ -227,7 +226,7 @@ class House
 			return houseTiles;
 		}
 
-		const HouseDoorList& getDoors() const {
+		const std::list<Door*>& getDoors() const {
 			return doorList;
 		}
 
@@ -240,15 +239,15 @@ class House
 		}
 
 	private:
-		bool transferToDepot();
-		bool transferToDepot(Player* player);
+		bool transferToDepot() const;
+		bool transferToDepot(Player* player) const;
 
 		bool isLoaded;
 		uint32_t houseid;
 		uint32_t houseOwner;
 		std::string houseOwnerName;
 		HouseTileList houseTiles;
-		HouseDoorList doorList;
+		std::list<Door*> doorList;
 		HouseBedItemList bedsList;
 		AccessList guestList;
 		AccessList subOwnerList;
@@ -304,14 +303,14 @@ class Houses
 			if (it == houseMap.end()) {
 				return nullptr;
 			}
-			return it->second;	
+			return it->second;
 		}
 
 		House* getHouseByPlayerId(uint32_t playerId);
 
 		bool loadHousesXML(const std::string& filename);
 
-		bool payHouses();
+		bool payHouses() const;
 
 		const HouseMap& getHouses() const {
 			return houseMap;

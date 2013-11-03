@@ -40,7 +40,7 @@ class TalkActions : public BaseEvents
 		TalkActions();
 		virtual ~TalkActions();
 
-		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words);
+		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
 
 	protected:
 		virtual LuaScriptInterface& getScriptInterface();

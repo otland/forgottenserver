@@ -111,7 +111,7 @@ class Database
 		*
 		* @param DBResult* resource to be freed
 		*/
-		void freeResult(DBResult* res);
+		static void freeResult(DBResult* res);
 
 		/**
 		 * Retrieve id of last inserted row
@@ -127,7 +127,7 @@ class Database
 		*
 		* @return the database engine version
 		*/
-		const char* getClientVersion() const {
+		static const char* getClientVersion() {
 			return mysql_get_client_info();
 		}
 
@@ -141,7 +141,7 @@ class Database
 		*/
 		bool beginTransaction();
 		bool rollback();
-		bool commit(); 
+		bool commit();
 
 	private:
 		Database();

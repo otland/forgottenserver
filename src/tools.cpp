@@ -287,7 +287,7 @@ std::string convertIPToString(uint32_t ip)
 
 	int res = sprintf(buffer, "%u.%u.%u.%u", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
 	if (res < 0) {
-		return "";
+		return std::string();
 	}
 
 	return buffer;
@@ -829,7 +829,7 @@ std::string getWeaponName(WeaponType_t weaponType)
 		case WEAPON_AMMO:
 			return "ammunition";
 		default:
-			return "";
+			return std::string();
 	}
 }
 

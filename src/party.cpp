@@ -137,7 +137,7 @@ bool Party::leaveParty(Player* player)
 	ss << player->getName() << " has left the party.";
 	broadcastPartyMessage(MSG_INFO_DESCR, ss.str());
 
-	if (missingLeader || disbandParty()) {
+	if (missingLeader || empty()) {
 		disband();
 	}
 
@@ -241,7 +241,7 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer/* = true*/)
 		player.removePartyInvitation(this);
 	}
 
-	if (disbandParty()) {
+	if (empty()) {
 		disband();
 	} else {
 		for (Player* member : memberList) {
@@ -495,11 +495,10 @@ void Party::clearPlayerPoints(Player* player)
 	}
 }
 
-bool Party::canOpenCorpse(uint32_t ownerId)
+bool Party::canOpenCorpse(uint32_t ownerId) const
 {
 	if (Player* player = g_game.getPlayerByID(ownerId)) {
 		return leader->getID() == ownerId || player->getParty() == this;
 	}
-
 	return false;
 }

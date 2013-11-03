@@ -181,7 +181,6 @@ void MonsterType::createLoot(Container* corpse)
 
 std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 {
-	Item* tmpItem = nullptr;
 	int32_t itemCount = 0;
 
 	uint32_t randvalue = Monsters::getLootRandom();
@@ -194,10 +193,9 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 	}
 
 	std::list<Item*> itemList;
-
 	while (itemCount > 0) {
 		uint16_t n = (uint16_t)std::min<int32_t>(itemCount, 100);
-		tmpItem = Item::CreateItem(lootBlock.id, n);
+		Item* tmpItem = Item::CreateItem(lootBlock.id, n);
 		if (!tmpItem) {
 			break;
 		}
@@ -218,7 +216,6 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 
 		itemList.push_back(tmpItem);
 	}
-
 	return itemList;
 }
 

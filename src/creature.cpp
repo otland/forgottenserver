@@ -685,17 +685,17 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 
 void Creature::onDeath()
 {
-	Creature* mostDamageCreatureMaster = nullptr;
-	Creature* lastHitCreatureMaster = nullptr;
-
 	if (getKillers(&_lastHitCreature, &_mostDamageCreature)) {
+		Creature* lastHitCreatureMaster;
 		if (_lastHitCreature) {
 			lastHitUnjustified = _lastHitCreature->onKilledCreature(this);
 			lastHitCreatureMaster = _lastHitCreature->getMaster();
+		} else {
+			lastHitCreatureMaster = nullptr;
 		}
 
 		if (_mostDamageCreature) {
-			mostDamageCreatureMaster = _mostDamageCreature->getMaster();
+			Creature* mostDamageCreatureMaster = _mostDamageCreature->getMaster();
 			bool isNotLastHitMaster = (_mostDamageCreature != lastHitCreatureMaster);
 			bool isNotMostDamageMaster = (_lastHitCreature != mostDamageCreatureMaster);
 			bool isNotSameMaster = lastHitCreatureMaster == nullptr || (mostDamageCreatureMaster != lastHitCreatureMaster);
@@ -726,7 +726,7 @@ void Creature::onDeath()
 
 bool Creature::dropCorpse()
 {
-	if (!lootDrop && getMonster() && !(master && master->getPlayer())) {
+	if (!lootDrop && getMonster()) {
 		if (master) {
 			//scripting event - onDeath
 			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
@@ -737,8 +737,7 @@ bool Creature::dropCorpse()
 
 		g_game.addMagicEffect(getPosition(), NM_ME_POFF);
 	} else {
-		Item* splash = nullptr;
-
+		Item* splash;
 		switch (getRace()) {
 			case RACE_VENOM:
 				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_GREEN);
@@ -749,6 +748,7 @@ bool Creature::dropCorpse()
 				break;
 
 			default:
+				splash = nullptr;
 				break;
 		}
 
@@ -766,8 +766,7 @@ bool Creature::dropCorpse()
 		}
 
 		//scripting event - onDeath
-		const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
-		for (CreatureEvent* deathEvent : deathEvents) {
+		for (CreatureEvent* deathEvent : getCreatureEvents(CREATURE_EVENT_DEATH)) {
 			deathEvent->executeOnDeath(this, corpse, _lastHitCreature, _mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 		}
 
@@ -787,7 +786,6 @@ bool Creature::getKillers(Creature** _lastHitCreature, Creature** _mostDamageCre
 	int32_t mostDamage = 0;
 
 	uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
-
 	for (const auto& it : damageMap) {
 		CountBlock_t cb = it.second;
 		if ((cb.total > mostDamage && (OTSYS_TIME() - cb.ticks <= inFightTicks))) {
@@ -1622,11 +1620,6 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 	}
 
 	return tmpEventList;
-}
-
-FrozenPathingConditionCall::FrozenPathingConditionCall(const Position& _targetPos)
-{
-	targetPos = _targetPos;
 }
 
 bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Position& testPos,

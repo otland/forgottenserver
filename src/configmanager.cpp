@@ -226,11 +226,10 @@ int32_t ConfigManager::getGlobalNumber(lua_State* _L, const std::string& _identi
 
 	int32_t val = (int32_t)lua_tonumber(_L, -1);
 	lua_pop(_L, 1);
-
 	return val;
 }
 
-std::string ConfigManager::getGlobalStringField (lua_State* _L, const std::string& _identifier, const int32_t _key, const std::string& _default)
+std::string ConfigManager::getGlobalStringField(lua_State* _L, const std::string& _identifier, const int32_t _key, const std::string& _default)
 {
 	lua_getglobal(_L, _identifier.c_str());
 

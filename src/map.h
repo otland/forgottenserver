@@ -62,8 +62,7 @@ class AStarNodes
 		AStarNode* getBestNode();
 		void closeNode(AStarNode* node);
 		void openNode(AStarNode* node);
-		uint32_t countClosedNodes();
-		uint32_t countOpenNodes();
+		uint32_t countClosedNodes() const;
 		bool isInList(int32_t x, int32_t y);
 		AStarNode* getNodeInList(int32_t x, int32_t y);
 
@@ -233,7 +232,7 @@ class Map
 		  *	\returns The result if you can throw there or not
 		  */
 		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
-		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY);
+		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY) const;
 
 		/**
 		  * Checks if path is clear from fromPos to toPos

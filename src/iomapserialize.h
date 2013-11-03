@@ -28,22 +28,19 @@
 class IOMapSerialize
 {
 	public:
-		IOMapSerialize() {}
-		~IOMapSerialize() {}
-
-		bool loadMap(Map* map);
-		bool saveMap(Map* map);
-		bool loadHouseInfo(Map* map);
-		bool saveHouseInfo(Map* map);
+		static bool loadMap(Map* map);
+		static bool saveMap(Map* map);
+		static bool loadHouseInfo(Map* map);
+		static bool saveHouseInfo(Map* map);
 
 	protected:
-		void saveItem(PropWriteStream& stream, const Item* item);
-		void saveTile(PropWriteStream& stream, const Tile* tile);
+		static void saveItem(PropWriteStream& stream, const Item* item);
+		static void saveTile(PropWriteStream& stream, const Tile* tile);
 
-		bool loadContainer(PropStream& propStream, Container* container);
-		bool loadItem(PropStream& propStream, Cylinder* parent);
-		bool saveTile(Database* db, uint32_t tileId, const Tile* tile);
-		bool loadTile(Database& db, Tile* tile);
+		static bool loadContainer(PropStream& propStream, Container* container);
+		static bool loadItem(PropStream& propStream, Cylinder* parent);
+		static bool saveTile(Database* db, uint32_t tileId, const Tile* tile);
+		static bool loadTile(Database& db, Tile* tile);
 };
 
 #endif

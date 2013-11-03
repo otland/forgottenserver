@@ -231,7 +231,7 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	return nullptr;
 }
 
-uint32_t Spells::getInstantSpellCount(const Player* player)
+uint32_t Spells::getInstantSpellCount(const Player* player) const
 {
 	uint32_t count = 0;
 	for (const auto& it : instants) {
@@ -1383,9 +1383,8 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 		return false;
 	}
 
-	const Position lookPos = player->getPosition();
-
-	const Position searchPos = playerExiva->getPosition();
+	const Position& lookPos = player->getPosition();
+	const Position& searchPos = playerExiva->getPosition();
 
 	int32_t dx = Position::getOffsetX(lookPos, searchPos);
 	int32_t dy = Position::getOffsetY(lookPos, searchPos);

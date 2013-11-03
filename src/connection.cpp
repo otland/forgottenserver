@@ -46,7 +46,6 @@ Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket*
         boost::asio::io_service& io_service, ServicePort_ptr servicer)
 {
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
-
 	Connection_ptr connection = Connection_ptr(new Connection(socket, io_service, servicer));
 	m_connections.insert(connection);
 	return connection;
@@ -74,7 +73,7 @@ void ConnectionManager::closeAll()
 	m_connections.clear();
 }
 
-//*****************
+// Connection
 
 void Connection::closeConnection()
 {
@@ -434,16 +433,15 @@ void Connection::handleReadError(const boost::system::error_code& error)
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
 
 	if (error == boost::asio::error::operation_aborted) {
-		//Operation aborted because connection will be closed
-		//Do NOT call closeConnection() from here
-	} else if (error == boost::asio::error::eof) {
-		//No more to read
-		closeConnection();
-	} else if (error == boost::asio::error::connection_reset ||
-	           error == boost::asio::error::connection_aborted) {
-		//Connection closed remotely
-		closeConnection();
+		// Operation aborted because connection will be closed
+		// Do NOT call closeConnection() from here
 	} else {
+		/**
+		 * error == boost::asio::error::eof:
+		 *  No more to read
+		 * error == boost::asio::error::connection_reset || error == boost::asio::error::connection_aborted:
+		 *  Connection closed remotely
+		 */
 		closeConnection();
 	}
 
@@ -490,16 +488,15 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
 
 	if (error == boost::asio::error::operation_aborted) {
-		//Operation aborted because connection will be closed
-		//Do NOT call closeConnection() from here
-	} else if (error == boost::asio::error::eof) {
-		//No more to read
-		closeConnection();
-	} else if (error == boost::asio::error::connection_reset ||
-	           error == boost::asio::error::connection_aborted) {
-		//Connection closed remotely
-		closeConnection();
+		// Operation aborted because connection will be closed
+		// Do NOT call closeConnection() from here
 	} else {
+		/**
+		 * error == boost::asio::error::eof:
+		 *  No more to read
+		 * error == boost::asio::error::connection_reset || error == boost::asio::error::connection_aborted:
+		 *  Connection closed remotely
+		 */
 		closeConnection();
 	}
 

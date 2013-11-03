@@ -169,24 +169,6 @@ void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 	db->executeQuery(query.str());
 }
 
-uint32_t IOLoginData::getLastIPByName(const std::string& name)
-{
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	query << "SELECT `lastip` FROM `players` WHERE `name` = " << db->escapeString(name);
-
-	DBResult* result = db->storeQuery(query.str());
-
-	if (!result) {
-		return 0;
-	}
-
-	uint32_t lastIp = result->getDataInt("lastip");
-	db->freeResult(result);
-	return lastIp;
-}
-
 bool IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 {
 	Database* db = Database::getInstance();
@@ -456,7 +438,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 				player->guildLevel = 1;
 			}
 
-			IOGuild::getInstance()->getWarList(guildId, player->guildWarList);
+			IOGuild::getWarList(guildId, player->guildWarList);
 
 			query.str("");
 			query << "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = " << guildId;
@@ -965,23 +947,6 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 
 	specialVip = (0 != (flags & ((uint64_t)1 << PlayerFlag_SpecialVIP)));
 	return true;
-}
-
-bool IOLoginData::playerExists(const std::string& name)
-{
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	DBResult* result;
-
-	query << "SELECT `id` FROM `players` WHERE `name` = " << db->escapeString(name);
-
-	if ((result = db->storeQuery(query.str()))) {
-		db->freeResult(result);
-		return true;
-	}
-
-	return false;
 }
 
 bool IOLoginData::formatPlayerName(std::string& name)

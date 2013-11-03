@@ -430,7 +430,7 @@ void Monster::clearFriendList()
 	friendList.clear();
 }
 
-void Monster::onCreatureFound(Creature* creature, bool pushFront/*= false*/)
+void Monster::onCreatureFound(Creature* creature, bool pushFront/* = false*/)
 {
 	if (isFriend(creature)) {
 		addFriend(creature);
@@ -633,7 +633,7 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 }
 
 
-bool Monster::isTarget(Creature* creature)
+bool Monster::isTarget(Creature* creature) const
 {
 	if (creature->isRemoved() || !creature->isAttackable() ||
 	        creature->getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {

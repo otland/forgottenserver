@@ -112,7 +112,7 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
 	return false;
 }
 
-void GlobalEvents::startup()
+void GlobalEvents::startup() const
 {
 	execute(GLOBALEVENT_STARTUP);
 }
@@ -197,7 +197,7 @@ void GlobalEvents::think()
 	}
 }
 
-void GlobalEvents::execute(GlobalEvent_t type)
+void GlobalEvents::execute(GlobalEvent_t type) const
 {
 	for (const auto& it : serverMap) {
 		GlobalEvent* globalEvent = it.second;

@@ -678,7 +678,7 @@ void Commands::setHouseOwner(Player* player, const std::string& cmd, const std::
 			std::string name = param;
 			if (name == "none") {
 				houseTile->getHouse()->setHouseOwner(0);
-			} else if (IOLoginData::getInstance()->getGuidByName(guid, name)) {
+			} else if (IOLoginData::getGuidByName(guid, name)) {
 				houseTile->getHouse()->setHouseOwner(guid);
 			} else {
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
@@ -689,20 +689,9 @@ void Commands::setHouseOwner(Player* player, const std::string& cmd, const std::
 
 void Commands::sellHouse(Player* player, const std::string& cmd, const std::string& param)
 {
-	House* house = Houses::getInstance().getHouseByPlayerId(player->guid);
-	if (!house) {
-		player->sendCancel("You do not own any house.");
-		return;
-	}
-
 	Player* tradePartner = g_game.getPlayerByName(param);
-	if (!(tradePartner && tradePartner != player)) {
+	if (!tradePartner || tradePartner == player) {
 		player->sendCancel("Trade player not found.");
-		return;
-	}
-
-	if (tradePartner->level < 1) {
-		player->sendCancel("Trade player level is too low.");
 		return;
 	}
 
@@ -716,12 +705,24 @@ void Commands::sellHouse(Player* player, const std::string& cmd, const std::stri
 		return;
 	}
 
+	HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
+	if (!houseTile) {
+		player->sendCancel("You must stand in your house to initiate the trade.");
+		return;
+	}
+
+	House* house = houseTile->getHouse();
+	if (!house || house->getHouseOwner() != player->guid) {
+		player->sendCancel("You don't own this house.");
+		return;
+	}
+
 	if (Houses::getInstance().getHouseByPlayerId(tradePartner->guid)) {
 		player->sendCancel("Trade player already owns a house.");
 		return;
 	}
 
-	if (IOLoginData::getInstance()->hasBiddedOnHouse(tradePartner->guid)) {
+	if (IOLoginData::hasBiddedOnHouse(tradePartner->guid)) {
 		player->sendCancel("Trade player is currently the highest bidder of an auctioned house.");
 		return;
 	}
@@ -915,7 +916,7 @@ void Commands::newType(Player* player, const std::string& cmd, const std::string
 {
 	int32_t lookType = atoi(param.c_str());
 
-	if (lookType >= 0 && lookType != 1 && lookType != 135 && lookType != 411 && lookType != 415 && lookType != 424 && (lookType <= 160 || lookType >= 192) && lookType != 439 && lookType != 440 && lookType != 468 && lookType != 469 && lookType <= 573 && (lookType < 474 || lookType > 485) && lookType != 518 && lookType != 519 && lookType != 520 && lookType != 524 && lookType != 525 && lookType != 536 && lookType != 543 && lookType != 549) {
+	if (lookType >= 0 && lookType != 1 && lookType != 135 && lookType != 411 && lookType != 415 && lookType != 424 && (lookType <= 160 || lookType >= 192) && lookType != 439 && lookType != 440 && lookType != 468 && lookType != 469 && (lookType < 474 || lookType > 485) && lookType != 518 && lookType != 519 && lookType != 520 && lookType != 524 && lookType != 525 && lookType != 536 && lookType != 543 && lookType != 549 && lookType <= 575) {
 		Outfit_t newOutfit = player->getDefaultOutfit();
 		newOutfit.lookType = lookType;
 		g_game.internalCreatureChangeOutfit(player, newOutfit);
@@ -1091,7 +1092,7 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 			}
 		}
 
-		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), false);
+		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 		player->sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
 		g_game.addMagicEffect(list, player->getPosition(), NM_ME_YALAHARIGHOST);
 	} else {
@@ -1101,7 +1102,7 @@ void Commands::ghost(Player* player, const std::string& cmd, const std::string& 
 			}
 		}
 
-		IOLoginData::getInstance()->updateOnlineStatus(player->getGUID(), true);
+		IOLoginData::updateOnlineStatus(player->getGUID(), true);
 		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
 		Position pos = player->getPosition();
 		pos.x += 1;
@@ -1153,13 +1154,13 @@ void Commands::addTutor(Player* player, const std::string& cmd, const std::strin
 		accountId = targetPlayer->getAccount();
 		characterName = targetPlayer->getName();
 	} else {
-		accountId = IOLoginData::getInstance()->getAccountNumberByName(characterName);
+		accountId = IOLoginData::getAccountNumberByName(characterName);
 		uint32_t guid;
-		IOLoginData::getInstance()->getGuidByName(guid, characterName);
+		IOLoginData::getGuidByName(guid, characterName);
 	}
 
-	if (accountId != 0 && IOLoginData::getInstance()->getAccountType(accountId) == ACCOUNT_TYPE_NORMAL) {
-		IOLoginData::getInstance()->setAccountType(accountId, ACCOUNT_TYPE_TUTOR);
+	if (accountId != 0 && IOLoginData::getAccountType(accountId) == ACCOUNT_TYPE_NORMAL) {
+		IOLoginData::setAccountType(accountId, ACCOUNT_TYPE_TUTOR);
 		player->sendTextMessage(MSG_INFO_DESCR, characterName + (" is now a tutor."));
 	} else {
 		player->sendTextMessage(MSG_INFO_DESCR, "A character with that name does not exist, or is already a tutor.");
@@ -1177,13 +1178,13 @@ void Commands::removeTutor(Player* player, const std::string& cmd, const std::st
 		accountId = targetPlayer->getAccount();
 		characterName = targetPlayer->getName();
 	} else {
-		accountId = IOLoginData::getInstance()->getAccountNumberByName(characterName);
+		accountId = IOLoginData::getAccountNumberByName(characterName);
 		uint32_t guid;
-		IOLoginData::getInstance()->getGuidByName(guid, characterName);
+		IOLoginData::getGuidByName(guid, characterName);
 	}
 
-	if (accountId != 0 && IOLoginData::getInstance()->getAccountType(accountId) == ACCOUNT_TYPE_TUTOR) {
-		IOLoginData::getInstance()->setAccountType(accountId, ACCOUNT_TYPE_NORMAL);
+	if (accountId != 0 && IOLoginData::getAccountType(accountId) == ACCOUNT_TYPE_TUTOR) {
+		IOLoginData::setAccountType(accountId, ACCOUNT_TYPE_NORMAL);
 		player->sendTextMessage(MSG_INFO_DESCR, characterName + (" is no longer a tutor."));
 	} else {
 		player->sendTextMessage(MSG_INFO_DESCR, "A character with that name does not exist, or is not a tutor.");

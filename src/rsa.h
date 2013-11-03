@@ -22,7 +22,7 @@
 
 #include <boost/thread/recursive_mutex.hpp>
 
-#include "gmp.h"
+#include <gmp.h>
 
 class RSA
 {

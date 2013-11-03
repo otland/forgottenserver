@@ -215,7 +215,7 @@ class ItemAttributes
 		void setCorpseOwner(uint32_t _corpseOwner) {
 			setIntAttr(ATTR_ITEM_CORPSEOWNER, _corpseOwner);
 		}
-		uint32_t getCorpseOwner() {
+		uint32_t getCorpseOwner() const {
 			return getIntAttr(ATTR_ITEM_CORPSEOWNER);
 		}
 
@@ -490,7 +490,7 @@ class Item : virtual public Thing
 		void setCorpseOwner(uint32_t _corpseOwner) {
 			setIntAttr(ATTR_ITEM_CORPSEOWNER, _corpseOwner);
 		}
-		uint32_t getCorpseOwner() {
+		uint32_t getCorpseOwner() const {
 			if (!attributes) {
 				return 0;
 			}
@@ -598,7 +598,7 @@ class Item : virtual public Thing
 		}
 
 		int32_t getWorth() const;
-		void getLight(LightInfo& lightInfo);
+		void getLight(LightInfo& lightInfo) const;
 
 		bool hasProperty(enum ITEMPROPERTY prop) const;
 		bool isBlocking() const {
@@ -713,7 +713,7 @@ class Item : virtual public Thing
 		uint32_t getDefaultDuration() const {
 			return items[id].decayTime * 1000;
 		}
-		bool canDecay();
+		bool canDecay() const;
 
 		virtual bool canRemove() const {
 			return true;

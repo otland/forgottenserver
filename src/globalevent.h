@@ -40,11 +40,11 @@ class GlobalEvents : public BaseEvents
 	public:
 		GlobalEvents();
 		virtual ~GlobalEvents();
-		void startup();
+		void startup() const;
 
 		void timer();
 		void think();
-		void execute(GlobalEvent_t type);
+		void execute(GlobalEvent_t type) const;
 
 		GlobalEventMap getEventMap(GlobalEvent_t type);
 		void clearMap(GlobalEventMap& map);

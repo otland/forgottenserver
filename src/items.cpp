@@ -42,18 +42,9 @@ extern Weapons* g_weapons;
 ItemType::ItemType()
 {
 	abilities = nullptr;
-	article = "";
-	group = ITEM_GROUP_NONE;
 	type = ITEM_TYPE_NONE;
-	stackable = false;
-	useable	= false;
-	moveable = true;
-	alwaysOnTop = false;
 	alwaysOnTopOrder = 0;
-	pickupable = false;
-	rotable = false;
 	rotateTo = 0;
-	hasHeight = false;
 	walkStack = true;
 
 	floorChangeDown = false;
@@ -63,10 +54,6 @@ ItemType::ItemType()
 	floorChangeEast = false;
 	floorChangeEastAlt = false;
 	floorChangeWest = false;
-
-	blockSolid = false;
-	blockProjectile = false;
-	blockPathFind = false;
 
 	allowPickupable = false;
 
@@ -98,17 +85,11 @@ ItemType::ItemType()
 	stopTime = false;
 	corpseType = RACE_NONE;
 	fluidSource = FLUID_NONE;
-	allowDistRead = false;
-
-	isVertical = false;
-	isHorizontal = false;
-	isHangable = false;
 
 	lightLevel = 0;
 	lightColor = 0;
 
 	maxTextLen = 0;
-	canReadText = false;
 	canWriteText = false;
 	writeOnceItemId = 0;
 
@@ -482,6 +463,19 @@ bool Items::loadFromXml()
 			}
 		}
 	}
+
+	/*
+	for (size_t i = 100, size = items.size(); i < size; ++i) {
+		if (!items[i]) {
+			break;
+		}
+
+		const ItemType& it = *items[i];
+		if (!it.marketName.empty() && it.marketName != it.name) {
+			std::cout << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << '.' << std::endl;
+		}
+	}
+	*/
 	return true;
 }
 
@@ -1030,13 +1024,6 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 	if ((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 || it.transformToOnUse[PLAYERSEX_MALE] != 0) && it.type != ITEM_TYPE_BED) {
 		std::cout << "[Warning - Items::parseItemNode] Item " << it.id << " is not set as a bed-type" << std::endl;
 	}
-
-	/*
-	if (!it.marketName.empty() && it.marketName != it.name) {
-		std::cout << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << '.' << std::endl;
-	}
-	*/
-
 	return true;
 }
 

@@ -468,7 +468,7 @@ void ProtocolAdmin::adminCommandSetOwner(const std::string& param)
 			uint32_t _guid;
 
 			std::string name = parseNextParam(it, tokens.end());
-			if (IOLoginData::getInstance()->getGuidByName(_guid, name)) {
+			if (IOLoginData::getGuidByName(_guid, name)) {
 				house->setHouseOwner(_guid);
 				addLogLine(this, LOGTYPE_EVENT, 1, "set " + name + " as new owner of house with id " + _house);
 				output->AddByte(AP_MSG_COMMAND_OK);
@@ -495,7 +495,6 @@ AdminProtocolConfig::AdminProtocolConfig()
 	m_onlyLocalHost = true;
 	m_maxConnections = 1;
 	m_currrentConnections = 0;
-	m_password = "";
 	m_key_RSA1024XTEA = nullptr;
 	m_requireLogin = true;
 	m_requireEncryption = false;
@@ -583,7 +582,7 @@ void AdminProtocolConfig::removeConnection()
 	}
 }
 
-bool AdminProtocolConfig::passwordMatch(const std::string& password)
+bool AdminProtocolConfig::passwordMatch(const std::string& password) const
 {
 	//prevent empty password login
 	if (m_password.empty()) {
@@ -592,7 +591,7 @@ bool AdminProtocolConfig::passwordMatch(const std::string& password)
 	return password == m_password;
 }
 
-bool AdminProtocolConfig::allowIP(uint32_t ip)
+bool AdminProtocolConfig::allowIP(uint32_t ip) const
 {
 	if (m_onlyLocalHost && ip != 0x0100007F) { //127.0.0.1
 		addLogLine(nullptr, LOGTYPE_WARNING, 1, std::string("forbidden connection try from ") + convertIPToString(ip));
@@ -611,7 +610,7 @@ bool AdminProtocolConfig::requireEncryption() const
 	return m_requireEncryption;
 }
 
-uint16_t AdminProtocolConfig::getProtocolPolicy()
+uint16_t AdminProtocolConfig::getProtocolPolicy() const
 {
 	uint16_t policy = 0;
 	if (requireLogin()) {
@@ -624,7 +623,7 @@ uint16_t AdminProtocolConfig::getProtocolPolicy()
 	return policy;
 }
 
-uint32_t AdminProtocolConfig::getProtocolOptions()
+uint32_t AdminProtocolConfig::getProtocolOptions() const
 {
 	uint32_t ret = 0;
 	if (requireEncryption()) {

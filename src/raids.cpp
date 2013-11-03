@@ -182,17 +182,6 @@ Raid* Raids::getRaidByName(const std::string& name)
 	return nullptr;
 }
 
-Raid::Raid(const std::string& _name, uint32_t _interval, uint32_t _marginTime)
-{
-	loaded = false;
-	name = _name;
-	interval = _interval;
-	nextEvent = 0;
-	state = RAIDSTATE_IDLE;
-	margin = _marginTime;
-	nextEventEvent = 0;
-}
-
 Raid::~Raid()
 {
 	stopEvents();

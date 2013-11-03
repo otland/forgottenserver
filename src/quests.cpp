@@ -27,22 +27,6 @@
 #include "ext/pugixml.hpp"
 #include "pugicast.h"
 
-MissionState::MissionState(const std::string& _description, int32_t _missionID)
-{
-	description = _description;
-	missionID = _missionID;
-}
-
-Mission::Mission(const std::string& _name, int32_t _storageID, int32_t _startValue, int32_t _endValue, bool _ignoreEndValue)
-{
-	name = _name;
-	endValue = _endValue;
-	ignoreEndValue = _ignoreEndValue;
-	startValue = _startValue;
-	storageID = _storageID;
-	mainState = nullptr;
-}
-
 std::string Mission::getDescription(Player* player) const
 {
 	int32_t value;
@@ -130,14 +114,6 @@ std::string Mission::getName(Player* player) const
 		return name + " (completed)";
 	}
 	return name;
-}
-
-Quest::Quest(const std::string& _name, uint16_t _id, int32_t _startStorageID, int32_t _startStorageValue)
-{
-	name = _name;
-	id = _id;
-	startStorageID = _startStorageID;
-	startStorageValue = _startStorageValue;
 }
 
 uint16_t Quest::getMissionsCount(Player* player) const

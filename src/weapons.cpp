@@ -179,11 +179,6 @@ Weapon::~Weapon()
 	//
 }
 
-void Weapon::setCombatParam(const CombatParams& _params)
-{
-	params = _params;
-}
-
 bool Weapon::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute attr;

@@ -58,22 +58,6 @@ bool DatabaseManager::optimizeTables()
 	return true;
 }
 
-bool DatabaseManager::triggerExists(const std::string& triggerName)
-{
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	query << "SELECT `TRIGGER_NAME` FROM `information_schema`.`TRIGGERS` WHERE `TRIGGER_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TRIGGER_NAME` = " << db->escapeString(triggerName);
-
-	DBResult* result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
-
-	db->freeResult(result);
-	return true;
-}
-
 bool DatabaseManager::tableExists(const std::string& tableName)
 {
 	Database* db = Database::getInstance();
@@ -263,9 +247,4 @@ void DatabaseManager::checkEncryption()
 	}
 
 	registerDatabaseConfig("encryption", currentValue);
-}
-
-void DatabaseManager::checkTriggers()
-{
-	//
 }

@@ -66,10 +66,10 @@ class Party
 		void updateAllPartyIcons();
 		void broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations = false);
 		void broadcastPartyLoot(const std::string& loot);
-		bool disbandParty() {
-			return (memberList.empty() && inviteList.empty());
+		bool empty() const {
+			return memberList.empty() && inviteList.empty();
 		}
-		bool canOpenCorpse(uint32_t ownerId);
+		bool canOpenCorpse(uint32_t ownerId) const;
 
 		void shareExperience(uint64_t experience);
 		bool setSharedExperience(Player* player, bool _sharedExpActive);

@@ -134,12 +134,12 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		player->useThing2();
 		player->setID();
 
-		if (!IOLoginData::getInstance()->preloadPlayer(player, name)) {
+		if (!IOLoginData::preloadPlayer(player, name)) {
 			disconnectClient(0x14, "Your character could not be loaded.");
 			return false;
 		}
 
-		if (IOBan::getInstance()->isPlayerNamelocked(player->getGUID())) {
+		if (IOBan::isPlayerNamelocked(player->getGUID())) {
 			disconnectClient(0x14, "Your character has been namelocked.");
 			return false;
 		}
@@ -166,7 +166,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 
 		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
 			BanInfo banInfo;
-			if (IOBan::getInstance()->isAccountBanned(accountId, banInfo)) {
+			if (IOBan::isAccountBanned(accountId, banInfo)) {
 				if (banInfo.reason.empty()) {
 					banInfo.reason = "(none)";
 				}
@@ -202,7 +202,7 @@ bool ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			return false;
 		}
 
-		if (!IOLoginData::getInstance()->loadPlayerByName(player, name)) {
+		if (!IOLoginData::loadPlayerByName(player, name)) {
 			disconnectClient(0x14, "Your character could not be loaded.");
 			return false;
 		}
@@ -364,7 +364,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	BanInfo banInfo;
-	if (IOBan::getInstance()->isIpBanned(getIP(), banInfo)) {
+	if (IOBan::isIpBanned(getIP(), banInfo)) {
 		if (banInfo.reason.empty()) {
 			banInfo.reason = "(none)";
 		}
@@ -375,7 +375,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	uint32_t accountId = IOLoginData::getInstance()->gameworldAuthentication(accountName, password, characterName);
+	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
 	if (accountId == 0) {
 		disconnectClient(0x14, "Account name or password is not correct.");
 		return false;
@@ -618,11 +618,10 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	}
 }
 
-void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z,
-                                     int32_t width, int32_t height, NetworkMessage& msg)
+void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, NetworkMessage& msg)
 {
 	int32_t skip = -1;
-	int32_t startz, endz, zstep = 0;
+	int32_t startz, endz, zstep;
 
 	if (z > 7) {
 		startz = z - 2;
@@ -644,8 +643,7 @@ void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z,
 	}
 }
 
-void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z,
-                                       int32_t width, int32_t height, int32_t offset, int32_t& skip)
+void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, int32_t offset, int32_t& skip)
 {
 	for (int32_t nx = 0; nx < width; nx++) {
 		for (int32_t ny = 0; ny < height; ny++) {
@@ -1782,7 +1780,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	msg.AddByte(0xF6);
 
 	msg.AddU64(player->getBankBalance());
-	msg.AddByte(std::min<int32_t>(0xFF, IOMarket::getInstance()->getPlayerOfferCount(player->getGUID())));
+	msg.AddByte(std::min<int32_t>(0xFF, IOMarket::getPlayerOfferCount(player->getGUID())));
 
 	DepotChest* depotChest = player->getDepotChest(depotId, false);
 	if (!depotChest) {
@@ -2164,7 +2162,6 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	}
 
 	MarketStatistics* statistics = IOMarket::getInstance()->getPurchaseStatistics(itemId);
-
 	if (statistics) {
 		msg.AddByte(0x01);
 		msg.AddU32(statistics->numTransactions);
@@ -2176,7 +2173,6 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	}
 
 	statistics = IOMarket::getInstance()->getSaleStatistics(itemId);
-
 	if (statistics) {
 		msg.AddByte(0x01);
 		msg.AddU32(statistics->numTransactions);
@@ -2538,7 +2534,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	//player light level
 	sendCreatureLight(creature);
 
-	const std::list<VIPEntry>& vipEntries = IOLoginData::getInstance()->getVIPEntries(player->getAccount());
+	const std::list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
 
 	if (player->isAccessPlayer()) {
 		for (const VIPEntry& entry : vipEntries) {

@@ -254,16 +254,16 @@ class Game
 		void addCreatureCheck(Creature* creature);
 		void removeCreatureCheck(Creature* creature);
 
-		uint32_t getPlayersOnline() {
+		uint32_t getPlayersOnline() const {
 			return (uint32_t)players.size();
 		}
-		uint32_t getMonstersOnline() {
+		uint32_t getMonstersOnline() const {
 			return (uint32_t)monsters.size();
 		}
-		uint32_t getNpcsOnline() {
+		uint32_t getNpcsOnline() const {
 			return (uint32_t)npcs.size();
 		}
-		uint32_t getCreaturesOnline() {
+		uint32_t getCreaturesOnline() const {
 			return (uint32_t)creatures.size();
 		}
 		uint32_t getPlayersRecord() const {
@@ -385,7 +385,6 @@ class Game
 		bool playerReportBug(uint32_t playerId, const std::string& bug);
 		bool playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment);
 		bool playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
-		bool playerCancelWalk(uint32_t playerId);
 
 		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
 		bool internalCloseTrade(Player* player);
@@ -421,7 +420,6 @@ class Game
 		bool playerCloseContainer(uint32_t playerId, uint8_t cid);
 		bool playerMoveUpContainer(uint32_t playerId, uint8_t cid);
 		bool playerUpdateContainer(uint32_t playerId, uint8_t cid);
-		bool playerUpdateTile(uint32_t playerId, const Position& pos);
 		bool playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stackPos, const uint16_t spriteId);
 		bool playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text);
 		bool playerBrowseField(uint32_t playerId, const Position& pos);
@@ -478,8 +476,8 @@ class Game
 		void ReleaseItem(Item* item);
 
 		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
-		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY);
-		bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor);
+		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY) const;
+		bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor) const;
 
 		bool getPathTo(const Creature* creature, const Position& destPos,
 		               std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/);
@@ -557,7 +555,6 @@ class Game
 		int32_t getLightHour() const {
 			return lightHour;
 		}
-		bool npcSpeakToPlayer(Npc* npc, Player* player, const std::string& text, bool publicize);
 
 		bool loadExperienceStages();
 		uint64_t getExperienceStage(uint32_t level);
@@ -570,7 +567,7 @@ class Game
 		}
 
 		void loadMotdNum();
-		void saveMotdNum();
+		void saveMotdNum() const;
 		const std::string& getMotdHash() const { return motdHash; }
 		int32_t getMotdNum() const { return motdNum; }
 		void incrementMotdNum() { motdNum++; }
@@ -599,7 +596,7 @@ class Game
 		Group* getGroup(uint32_t id);
 
 	protected:
-		bool playerSayCommand(Player* player, SpeakClasses type, const std::string& text);
+		bool playerSayCommand(Player* player, SpeakClasses type, const std::string& text) const;
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		bool playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);
@@ -667,7 +664,7 @@ class Game
 
 		ServiceManager* services;
 
-		void updatePlayersRecord();
+		void updatePlayersRecord() const;
 		uint32_t playersRecord;
 
 		std::string motdHash;
@@ -678,4 +675,5 @@ class Game
 		bool useLastStageLevel;
 		bool serverSaveMessage[3];
 };
+
 #endif

@@ -98,9 +98,8 @@ void ScriptEnvironment::resetEnv()
 	}
 	m_tempItems.clear();
 
-	Database* db = Database::getInstance();
 	for (const auto& it : m_tempResults) {
-		db->freeResult(it.second);
+		Database::freeResult(it.second);
 	}
 	m_tempResults.clear();
 }
@@ -361,7 +360,7 @@ bool ScriptEnvironment::removeResult(uint32_t id)
 		return false;
 	}
 
-	Database::getInstance()->freeResult(it->second);
+	Database::freeResult(it->second);
 	m_tempResults.erase(it);
 	return true;
 }
@@ -1066,12 +1065,6 @@ std::string LuaScriptInterface::getFieldString(lua_State* L, int32_t arg, const 
 	return getString(L, -1);
 }
 
-bool LuaScriptInterface::getFieldBoolean(lua_State* L, int32_t arg, const std::string& key)
-{
-	lua_getfield(L, arg, key.c_str());
-	return getBoolean(L, -1);
-}
-
 // Other
 int32_t LuaScriptInterface::getStackTop(lua_State* L)
 {
@@ -1224,19 +1217,6 @@ void LuaScriptInterface::setField(lua_State* L, const char* index, const std::st
 	lua_pushstring(L, index);
 	pushString(L, val);
 	lua_settable(L, -3);
-}
-
-void LuaScriptInterface::setFieldBool(lua_State* L, const char* index, bool val)
-{
-	lua_pushstring(L, index);
-	pushBoolean(L, val);
-	lua_settable(L, -3);
-}
-
-bool LuaScriptInterface::popFieldBoolean(lua_State* L, const std::string& key)
-{
-	lua_getfield(L, -1, key.c_str());
-	return popBoolean(L);
 }
 
 std::string LuaScriptInterface::popFieldString(lua_State* L, const std::string& key)
@@ -2858,7 +2838,7 @@ int32_t LuaScriptInterface::luaDoPlayerChangeName(lua_State* L)
 	uint32_t guid = popNumber(L);
 	std::string newName = popString(L);
 
-	if (IOLoginData::getInstance()->changeName(guid, newName)) {
+	if (IOLoginData::changeName(guid, newName)) {
 		if (House* house = Houses::getInstance().getHouseByPlayerId(guid)) {
 			house->updateDoorDescription();
 		}
@@ -5116,7 +5096,7 @@ int32_t LuaScriptInterface::luaGetAccountNumberByPlayerName(lua_State* L)
 	if (player) {
 		value = player->getAccount();
 	} else {
-		value = IOLoginData::getInstance()->getAccountNumberByName(name);
+		value = IOLoginData::getAccountNumberByName(name);
 	}
 
 	lua_pushnumber(L, value);
@@ -5136,7 +5116,7 @@ int32_t LuaScriptInterface::luaGetPlayerGUIDByName(lua_State* L)
 		uint32_t guid;
 		std::string strName(name);
 
-		if (IOLoginData::getInstance()->getGuidByName(guid, strName)) {
+		if (IOLoginData::getGuidByName(guid, strName)) {
 			value = guid;
 		} else {
 			value = 0;
@@ -5902,7 +5882,7 @@ int32_t LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 int32_t LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
 	if (DBResult* res = Database::getInstance()->storeQuery(popString(L))) {
-		lua_pushnumber(L, getScriptEnv()->addResult(res));
+		lua_pushnumber(L, ScriptEnvironment::addResult(res));
 	} else {
 		pushBoolean(L, false);
 	}
@@ -5936,7 +5916,7 @@ int32_t LuaScriptInterface::luaDatabaseConnected(lua_State* L)
 
 int32_t LuaScriptInterface::luaDatabaseTableExists(lua_State* L)
 {
-	pushBoolean(L, DatabaseManager::getInstance()->tableExists(popString(L)));
+	pushBoolean(L, DatabaseManager::tableExists(popString(L)));
 	return 1;
 }
 
@@ -5954,7 +5934,7 @@ int32_t LuaScriptInterface::luaResultGetDataInt(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = getScriptEnv()->getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -5968,7 +5948,7 @@ int32_t LuaScriptInterface::luaResultGetDataLong(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = getScriptEnv()->getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -5982,7 +5962,7 @@ int32_t LuaScriptInterface::luaResultGetDataString(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = getScriptEnv()->getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -5996,7 +5976,7 @@ int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = getScriptEnv()->getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -6010,7 +5990,7 @@ int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
 
 int32_t LuaScriptInterface::luaResultNext(lua_State* L)
 {
-	DBResult* res = getScriptEnv()->getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -6022,7 +6002,7 @@ int32_t LuaScriptInterface::luaResultNext(lua_State* L)
 
 int32_t LuaScriptInterface::luaResultFree(lua_State* L)
 {
-	pushBoolean(L, getScriptEnv()->removeResult(popNumber(L)));
+	pushBoolean(L, ScriptEnvironment::removeResult(popNumber(L)));
 	return 1;
 }
 
@@ -9920,7 +9900,7 @@ int32_t LuaScriptInterface::luaPlayerAddPremiumDays(lua_State* L)
 			int32_t addDays = std::min<int32_t>(0xFFFE - player->premiumDays, days);
 			if (addDays > 0) {
 				player->setPremiumDays(player->premiumDays + addDays);
-				IOLoginData::getInstance()->addPremiumDays(player->getAccount(), addDays);
+				IOLoginData::addPremiumDays(player->getAccount(), addDays);
 			}
 		}
 		pushBoolean(L, true);
@@ -9940,7 +9920,7 @@ int32_t LuaScriptInterface::luaPlayerRemovePremiumDays(lua_State* L)
 			int32_t removeDays = std::min<int32_t>(player->premiumDays, days);
 			if (removeDays > 0) {
 				player->setPremiumDays(player->premiumDays - removeDays);
-				IOLoginData::getInstance()->removePremiumDays(player->getAccount(), removeDays);
+				IOLoginData::removePremiumDays(player->getAccount(), removeDays);
 			}
 		}
 		pushBoolean(L, true);
@@ -10108,7 +10088,7 @@ int32_t LuaScriptInterface::luaPlayerSave(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->loginPosition = player->getPosition();
-		pushBoolean(L, IOLoginData::getInstance()->savePlayer(player));
+		pushBoolean(L, IOLoginData::savePlayer(player));
 	} else {
 		pushNil(L);
 	}

@@ -47,7 +47,7 @@ class Spells : public BaseEvents
 		InstantSpell* getInstantSpell(const std::string& words);
 		InstantSpell* getInstantSpellByName(const std::string& name);
 
-		uint32_t getInstantSpellCount(const Player* player);
+		uint32_t getInstantSpellCount(const Player* player) const;
 		InstantSpell* getInstantSpellByIndex(const Player* player, uint32_t index);
 
 		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, std::string& words);
@@ -322,7 +322,7 @@ class RuneSpell : public Action, public Spell
 		virtual bool isInstant() const {
 			return false;
 		}
-		uint32_t getRuneItemId() {
+		uint32_t getRuneItemId() const {
 			return runeId;
 		}
 
