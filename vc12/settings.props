@@ -10,6 +10,7 @@
     <TFS_LIBS>$(BOOST_ROOT)\lib32-msvc-12.0;$(LUA_DIR)\lib;$(GMP_DIR)\lib;$(MYSQLC_DIR)\lib</TFS_LIBS>
     <TFS_LIBS64>$(BOOST_ROOT)\lib64-msvc-12.0;$(LUA_DIR)\lib64;$(GMP_DIR)\lib64;$(MYSQLC_DIR)\lib64</TFS_LIBS64>
     <TFS_LIBDEPS>lua51.lib;mpir.lib;libmysql.lib</TFS_LIBDEPS>
+    <TFS_LIBDEPS_D>lua51.lib;mpir_d.lib;libmysql.lib</TFS_LIBDEPS_D>
   </PropertyGroup>
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
@@ -64,6 +65,9 @@
     <BuildMacro Include="TFS_LIBDEPS">
       <Value>$(TFS_LIBDEPS)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="TFS_LIBDEPS_D">
+      <Value>$(TFS_LIBDEPS_D)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
