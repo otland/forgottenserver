@@ -210,8 +210,8 @@ function playerLearnInstantSpell(cid, name) local p = Player(cid) return p ~= ni
 function doPlayerPopupFYI(cid, message) local p = Player(cid) return p ~= nil and p:popupFYI(message) or false end
 function doSendTutorial(cid, tutorialId) local p = Player(cid) return p ~= nil and p:sendTutorial(tutorialId) or false end
 function doAddMapMark(cid, pos, type, description)
-	if description == nil then description == "" end
-	local p = Player(cid) return p ~= nil and p:addMapMark(pos, type, description) or false end
+	if description == nil then description = "" end
+	local p = Player(cid) return p ~= nil and p:addMapMark(pos, type, description) or false
 end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
