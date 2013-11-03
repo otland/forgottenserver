@@ -1540,9 +1540,6 @@ void LuaScriptInterface::registerFunctions()
 	//hasProperty(uid, prop)
 	lua_register(m_luaState, "hasProperty", LuaScriptInterface::luaHasProperty);
 
-	//getFluidSourceType(type)
-	lua_register(m_luaState, "getFluidSourceType", LuaScriptInterface::luaGetFluidSourceType);
-
 	//isInArray(array, value)
 	lua_register(m_luaState, "isInArray", LuaScriptInterface::luaIsInArray);
 
@@ -3155,8 +3152,7 @@ int32_t LuaScriptInterface::luaDoSummonCreature(lua_State* L)
 int32_t LuaScriptInterface::luaDebugPrint(lua_State* L)
 {
 	//debugPrint(text)
-	std::string text = popString(L);
-	reportErrorFunc(text);
+	reportErrorFunc(popString(L));
 	return 0;
 }
 
@@ -3236,7 +3232,6 @@ int32_t LuaScriptInterface::luaSetHouseOwner(lua_State* L)
 	uint32_t houseid = popNumber(L);
 
 	House* house = Houses::getInstance().getHouse(houseid);
-
 	if (house) {
 		house->setHouseOwner(owner);
 		pushBoolean(L, true);
@@ -3244,7 +3239,6 @@ int32_t LuaScriptInterface::luaSetHouseOwner(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-
 	return 1;
 }
 
@@ -4834,21 +4828,6 @@ int32_t LuaScriptInterface::luaGetDepotId(lua_State* L)
 		}
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetFluidSourceType(lua_State* L)
-{
-	//getFluidSourceType(type)
-	uint32_t type = popNumber(L);
-
-	const ItemType& it = Item::items[type];
-	if (it.id != 0) {
-		lua_pushnumber(L, it.fluidSource);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		pushBoolean(L, false);
 	}
 	return 1;

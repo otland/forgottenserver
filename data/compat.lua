@@ -209,10 +209,7 @@ function doPlayerFeed(cid, food) local p = Player(cid) return p ~= nil and p:fee
 function playerLearnInstantSpell(cid, name) local p = Player(cid) return p ~= nil and p:learnSpell(name) or false end
 function doPlayerPopupFYI(cid, message) local p = Player(cid) return p ~= nil and p:popupFYI(message) or false end
 function doSendTutorial(cid, tutorialId) local p = Player(cid) return p ~= nil and p:sendTutorial(tutorialId) or false end
-function doAddMapMark(cid, pos, type, description)
-	if description == nil then description = "" end
-	local p = Player(cid) return p ~= nil and p:addMapMark(pos, type, description) or false
-end
+function doAddMapMark(cid, pos, type, description) local p = Player(cid) return p ~= nil and p:addMapMark(pos, type, description or "") or false end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end
@@ -335,6 +332,7 @@ function getItemRWInfo(uid)
 	return rwFlags
 end
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
+function getFluidSourceType(itemId) local it = ItemType(itemId) return it.id ~= 0 and it:getFluidSource() or false end
 
 function doSetItemText(uid, text)
 	local item = Item(uid)

@@ -560,7 +560,6 @@ class LuaScriptInterface
 
 		static int32_t luaDebugPrint(lua_State* L);
 		static int32_t luaIsInArray(lua_State* L);
-		static int32_t luaGetFluidSourceType(lua_State* L);
 		static int32_t luaAddEvent(lua_State* L);
 		static int32_t luaStopEvent(lua_State* L);
 
