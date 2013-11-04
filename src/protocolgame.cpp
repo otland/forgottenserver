@@ -1646,14 +1646,14 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	msg.AddByte(hasParent ? 0x01 : 0x00);
 
 	msg.AddByte(container->isUnlocked() ? 0x01 : 0x00); // Drag and drop
-	msg.AddByte(container->hasPages() ? 0x01 : 0x00); // Pagination
+	msg.AddByte(container->hasPagination() ? 0x01 : 0x00); // Pagination
 
 	uint32_t containerSize = container->size();
 	msg.AddU16(containerSize);
 	msg.AddU16(firstIndex);
 
 	uint32_t maxItemsToSend;
-	if (container->hasPages() && firstIndex > 0) {
+	if (container->hasPagination() && firstIndex > 0) {
 		maxItemsToSend = std::min<uint32_t>(container->capacity(), containerSize - firstIndex);
 	} else {
 		maxItemsToSend = container->capacity();

@@ -32,7 +32,7 @@ Container::Container(uint16_t _type) : Item(_type)
 	totalWeight = 0.0;
 	serializationCount = 0;
 	unlocked = true;
-	pages = false;
+	pagination = false;
 }
 
 Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
@@ -51,7 +51,7 @@ Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 	totalWeight = 0.0;
 	serializationCount = 0;
 	unlocked = false;
-	pages = true;
+	pagination = true;
 	setParent(tile);
 }
 

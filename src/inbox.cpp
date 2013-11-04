@@ -26,6 +26,8 @@ Inbox::Inbox(uint16_t _type) :
 	Container(_type)
 {
 	maxSize = 30;
+	unlocked = false;
+	pagination = true;
 }
 
 Inbox::~Inbox()
@@ -36,12 +38,24 @@ Inbox::~Inbox()
 ReturnValue Inbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
                               uint32_t flags, Creature* actor/* = nullptr*/) const
 {
-	bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
-	if (!skipLimit) {
+	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		return RET_CONTAINERNOTENOUGHROOM;
 	}
 
-	return Container::__queryAdd(index, thing, count, flags, actor);
+	const Item* item = thing->getItem();
+	if (!item) {
+		return RET_NOTPOSSIBLE;
+	}
+
+	if (item == this) {
+		return RET_THISISIMPOSSIBLE;
+	}
+
+	if (!item->isPickupable()) {
+		return RET_CANNOTPICKUP;
+	}
+
+	return RET_NOERROR;
 }
 
 void Inbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)

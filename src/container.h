@@ -125,8 +125,8 @@ class Container : public Item, public Cylinder
 		bool isUnlocked() const {
 			return unlocked;
 		}
-		bool hasPages() const {
-			return pages;
+		bool hasPagination() const {
+			return pagination;
 		}
 
 		//cylinder implementations
@@ -179,7 +179,7 @@ class Container : public Item, public Cylinder
 		uint32_t serializationCount;
 
 		bool unlocked;
-		bool pages;
+		bool pagination;
 
 		friend class ContainerIterator;
 		friend class IOMapSerialize;

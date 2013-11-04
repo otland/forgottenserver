@@ -2911,6 +2911,10 @@ bool Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_
 		return false;
 	}
 
+	if (!container->hasPagination()) {
+		return false;
+	}
+
 	if ((index % container->capacity()) != 0 || index >= container->size()) {
 		return false;
 	}
