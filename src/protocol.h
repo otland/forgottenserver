@@ -20,14 +20,17 @@
 #ifndef __OTSERV_PROTOCOL_H__
 #define __OTSERV_PROTOCOL_H__
 
+#include <boost/utility.hpp>
+#include <boost/shared_ptr.hpp>
+
 class NetworkMessage;
 class OutputMessage;
 class Connection;
-typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
-typedef std::shared_ptr<Connection> Connection_ptr;
+typedef boost::shared_ptr<OutputMessage> OutputMessage_ptr;
+typedef boost::shared_ptr<Connection> Connection_ptr;
 class RSA;
 
-class Protocol
+class Protocol : boost::noncopyable
 {
 	public:
 		Protocol(Connection_ptr connection) {
@@ -41,10 +44,6 @@ class Protocol
 			m_key[3] = 0;
 			m_refCount = 0;
 		}
-
-		// non-copyable
-		Protocol(const Protocol&) = delete;
-		Protocol& operator=(const Protocol&) = delete;
 
 		virtual ~Protocol() {}
 

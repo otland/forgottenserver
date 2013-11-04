@@ -24,14 +24,20 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
+#include <boost/utility.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <list>
 
 class Connection;
-typedef std::shared_ptr<Connection> Connection_ptr;
+typedef boost::shared_ptr<Connection> Connection_ptr;
 class Protocol;
 class NetworkMessage;
 
-class ServiceBase
+class ServiceBase;
+
+typedef boost::shared_ptr<ServiceBase> Service_ptr;
+
+class ServiceBase : boost::noncopyable
 {
 	public:
 		virtual ~ServiceBase() {} // Redundant, but stifles compiler warnings
@@ -43,7 +49,6 @@ class ServiceBase
 
 		virtual Protocol* make_protocol(Connection_ptr c) const = 0;
 };
-typedef std::shared_ptr<ServiceBase> Service_ptr;
 
 template <typename ProtocolType>
 class Service : public ServiceBase
@@ -67,17 +72,13 @@ class Service : public ServiceBase
 		}
 };
 
-class ServicePort : public std::enable_shared_from_this<ServicePort>
+class ServicePort : boost::noncopyable, public boost::enable_shared_from_this<ServicePort>
 {
 	public:
 		ServicePort(boost::asio::io_service& io_service);
 		~ServicePort();
 
-		// non-copyable
-		ServicePort(const ServicePort&) = delete;
-		ServicePort& operator=(const ServicePort&) = delete;
-
-		static void openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port);
+		static void openAcceptor(boost::weak_ptr<ServicePort> weak_service, uint16_t port);
 		void open(uint16_t port);
 		void close();
 		bool is_single_socket() const;
@@ -100,17 +101,14 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		bool m_pendingStart;
 };
 
-typedef std::shared_ptr<ServicePort> ServicePort_ptr;
+typedef boost::shared_ptr<ServicePort> ServicePort_ptr;
 
-class ServiceManager
+class ServiceManager : boost::noncopyable
 {
+		ServiceManager(const ServiceManager&);
 	public:
 		ServiceManager();
 		~ServiceManager();
-
-		// non-copyable
-		ServiceManager(const ServiceManager&) = delete;
-		ServiceManager& operator=(const ServiceManager&) = delete;
 
 		void run();
 		void stop();

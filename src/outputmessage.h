@@ -23,26 +23,25 @@
 #include "networkmessage.h"
 #include "connection.h"
 #include <boost/thread.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include "tools.h"
 
 #include <list>
 
+#include <boost/utility.hpp>
+
 class Protocol;
 
 #define OUTPUT_POOL_SIZE 100
 
-class OutputMessage : public NetworkMessage
+class OutputMessage : public NetworkMessage, boost::noncopyable
 {
 	private:
 		OutputMessage();
 
 	public:
 		~OutputMessage() {}
-
-		// non-copyable
-		OutputMessage(const OutputMessage&) = delete;
-		OutputMessage& operator=(const OutputMessage&) = delete;
 
 		char* getOutputBuffer() {
 			return (char*)&m_MsgBuf[m_outputBufferStart];
@@ -149,7 +148,7 @@ class OutputMessage : public NetworkMessage
 		OutputMessageState m_state;
 };
 
-typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
+typedef boost::shared_ptr<OutputMessage> OutputMessage_ptr;
 
 class OutputMessagePool
 {

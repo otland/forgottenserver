@@ -26,19 +26,22 @@
 
 #include <boost/asio.hpp>
 
+#include <boost/utility.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 #include "networkmessage.h"
 
 class Protocol;
 class OutputMessage;
-typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
+typedef boost::shared_ptr<OutputMessage> OutputMessage_ptr;
 class Connection;
-typedef std::shared_ptr<Connection> Connection_ptr;
+typedef boost::shared_ptr<Connection> Connection_ptr;
 class ServiceBase;
-typedef std::shared_ptr<ServiceBase> Service_ptr;
+typedef boost::shared_ptr<ServiceBase> Service_ptr;
 class ServicePort;
-typedef std::shared_ptr<ServicePort> ServicePort_ptr;
+typedef boost::shared_ptr<ServicePort> ServicePort_ptr;
 
 class ConnectionManager
 {
@@ -66,16 +69,12 @@ class ConnectionManager
 		boost::recursive_mutex m_connectionManagerLock;
 };
 
-class Connection : public std::enable_shared_from_this<Connection>
+class Connection : public boost::enable_shared_from_this<Connection>, boost::noncopyable
 {
 	public:
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 		static uint32_t connectionCount;
 #endif
-
-		// non-copyable
-		Connection(const Connection&) = delete;
-		Connection& operator=(const Connection&) = delete;
 
 		enum { write_timeout = 30 };
 		enum { read_timeout = 30 };
@@ -150,8 +149,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 		void handleReadError(const boost::system::error_code& error);
 		void handleWriteError(const boost::system::error_code& error);
 
-		static void handleReadTimeout(std::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
-		static void handleWriteTimeout(std::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
+		static void handleReadTimeout(boost::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
+		static void handleWriteTimeout(boost::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
 
 		void closeConnectionTask();
 		void deleteConnectionTask();
