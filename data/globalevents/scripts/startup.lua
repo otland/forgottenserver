@@ -10,7 +10,7 @@ function onStartup()
 		repeat
 			local accountId = result.getDataInt(resultId, "account_id")
 			db.query("INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES (" .. accountId .. ", " .. db.escapeString(result.getDataString(resultId, "reason")) .. ", " .. result.getDataLong(resultId, "banned_at") .. ", " .. result.getDataLong(resultId, "expires_at") .. ", " .. result.getDataInt(resultId, "banned_by") .. ")")
-			db.query("DELETE FROM `account_bans WHERE `account_id` = " .. accountId)
+			db.query("DELETE FROM `account_bans` WHERE `account_id` = " .. accountId)
 		until not result.next(resultId)
 		result.free(resultId)
 	end
