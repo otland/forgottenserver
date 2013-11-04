@@ -77,7 +77,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 		//Another ServerInfo protocol
 		case 0x01: {
-			uint32_t requestedInfo = msg.GetU16(); //Only a Byte is necessary, though we could add new infos here
+			uint16_t requestedInfo = msg.GetU16(); //Only a Byte is necessary, though we could add new infos here
 			std::string characterName;
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.GetString();
@@ -155,7 +155,7 @@ void ProtocolStatus::sendStatusString()
 	getConnection()->closeConnection();
 }
 
-void ProtocolStatus::sendInfo(uint32_t requestedInfo, std::string& characterName)
+void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& characterName)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (!output) {
@@ -177,12 +177,11 @@ void ProtocolStatus::sendInfo(uint32_t requestedInfo, std::string& characterName
 	}
 
 	if (requestedInfo & REQUEST_MISC_SERVER_INFO) {
-		uint64_t running = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
 		output->AddByte(0x12);
 		output->AddString(g_config.getString(ConfigManager::MOTD));
 		output->AddString(g_config.getString(ConfigManager::LOCATION));
 		output->AddString(g_config.getString(ConfigManager::URL));
-		output->AddU64(running);
+		output->AddU64((OTSYS_TIME() - ProtocolStatus::start) / 1000);
 	}
 
 	if (requestedInfo & REQUEST_PLAYERS_INFO) {

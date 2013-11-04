@@ -57,7 +57,7 @@ class ProtocolStatus : public Protocol
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 
 		void sendStatusString();
-		void sendInfo(uint32_t requestedInfo, std::string& characterName);
+		void sendInfo(uint16_t requestedInfo, const std::string& characterName);
 
 		static const uint64_t start;
 
