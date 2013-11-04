@@ -87,7 +87,7 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 		db->executeQuery(query.str());
 
 		query.str("");
-		query << "DELETE FROM `account_bans WHERE `account_id` = " << accountId;
+		query << "DELETE FROM `account_bans` WHERE `account_id` = " << accountId;
 		db->executeQuery(query.str());
 
 		db->freeResult(result);
