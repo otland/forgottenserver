@@ -426,7 +426,6 @@ class LuaScriptInterface
 		static int32_t luaDoSendDefaultCancel(lua_State* L);
 		static int32_t luaDoTeleportThing(lua_State* L);
 		static int32_t luaDoChangeTypeItem(lua_State* L);
-		static int32_t luaDoSendAnimatedText(lua_State* L);
 		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
 		static int32_t luaDoCreateItemEx(lua_State* L);
@@ -448,9 +447,7 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerAddItem(lua_State* L);
 		static int32_t luaDoTileAddItemEx(lua_State* L);
 		static int32_t luaDoRelocate(lua_State* L);
-		static int32_t luaDoPlayerSendTextMessage(lua_State* L);
 		static int32_t luaDoPlayerRemoveItem(lua_State* L);
-		static int32_t luaDoPlayerAddExp(lua_State* L);
 		static int32_t luaDoPlayerSetGuildLevel(lua_State* L);
 		static int32_t luaDoPlayerSetGuildNick(lua_State* L);
 		static int32_t luaDoPlayerChangeName(lua_State* L);
@@ -460,8 +457,6 @@ class LuaScriptInterface
 		//queries
 		static int32_t luaGetPlayerGUIDByName(lua_State* L);
 		static int32_t luaGetAccountNumberByPlayerName(lua_State* L);
-		static int32_t luaGetPlayersByAccountNumber(lua_State* L);
-		static int32_t luaGetPlayersByIPAddress(lua_State* L);
 
 		//get item info
 		static int32_t luaGetThingfromPos(lua_State* L);
@@ -565,7 +560,6 @@ class LuaScriptInterface
 
 		static int32_t luaMayNotMove(lua_State* L);
 
-		static int32_t luaGetOnlinePlayers(lua_State* L);
 		static int32_t luaSaveServer(lua_State* L);
 		static int32_t luaRefreshMap(lua_State* L);
 		static int32_t luaCleanMap(lua_State* L);
@@ -573,8 +567,7 @@ class LuaScriptInterface
 		static int32_t luaIsInWar(lua_State* L);
 		static int32_t luaDoPlayerSetOfflineTrainingSkill(lua_State* L);
 
-		static int32_t luaGetWaypointPosition(lua_State* L);
-		static int32_t luaDoWaypointAddTemporial(lua_State* L);
+		static int32_t luaGetWaypointPositionByName(lua_State* L);
 
 		static int32_t luaSendChannelMessage(lua_State* L);
 		static int32_t luaSendGuildChannelMessage(lua_State* L);
@@ -831,7 +824,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureRemove(lua_State* L);
 		static int32_t luaCreatureTeleportTo(lua_State* L);
 		static int32_t luaCreatureSay(lua_State* L);
-		
+
 		static int32_t luaCreatureGetDamageMap(lua_State* L);
 
 		// Player
@@ -841,6 +834,7 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerGetGuid(lua_State* L);
 		static int32_t luaPlayerGetIp(lua_State* L);
+		static int32_t luaPlayerGetAccountId(lua_State* L);
 		static int32_t luaPlayerGetAccountType(lua_State* L);
 		static int32_t luaPlayerGetLastLoginSaved(lua_State* L);
 

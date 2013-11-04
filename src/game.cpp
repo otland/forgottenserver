@@ -606,28 +606,6 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 	return nullptr;
 }
 
-PlayerVector Game::getPlayersByAccount(uint32_t acc)
-{
-	PlayerVector matches;
-	for (const auto& it : players) {
-		if (it.second->getAccount() == acc) {
-			matches.push_back(it.second);
-		}
-	}
-	return matches;
-}
-
-PlayerVector Game::getPlayersByIP(uint32_t ipadress, uint32_t mask)
-{
-	PlayerVector matches;
-	for (const auto& it : players) {
-		if ((it.second->getIP() & mask) == (ipadress & mask)) {
-			matches.push_back(it.second);
-		}
-	}
-	return matches;
-}
-
 bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/)
 {
 	if (creature->getParent() != nullptr) {

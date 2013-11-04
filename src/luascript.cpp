@@ -1248,9 +1248,6 @@ void LuaScriptInterface::registerFunctions()
 	//setGlobalStorageValue(valueid, newvalue)
 	lua_register(m_luaState, "setGlobalStorageValue", LuaScriptInterface::luaSetGlobalStorageValue);
 
-	//getOnlinePlayers()
-	lua_register(m_luaState, "getOnlinePlayers", LuaScriptInterface::luaGetOnlinePlayers);
-
 	//getTileHouseInfo(pos)
 	//0 no house. != 0 house id
 	lua_register(m_luaState, "getTileHouseInfo", LuaScriptInterface::luaGetTileHouseInfo);
@@ -1276,9 +1273,6 @@ void LuaScriptInterface::registerFunctions()
 	//doChangeTypeItem(uid, newtype)
 	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
 
-	//doSendAnimatedText(pos, text, color)
-	lua_register(m_luaState, "doSendAnimatedText", LuaScriptInterface::luaDoSendAnimatedText);
-
 	//doPlayerAddSkillTry(cid, skillid, n)
 	lua_register(m_luaState, "doPlayerAddSkillTry", LuaScriptInterface::luaDoPlayerAddSkillTry);
 
@@ -1292,9 +1286,6 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
 	//Returns uid of the created item
 	lua_register(m_luaState, "doPlayerAddItem", LuaScriptInterface::luaDoPlayerAddItem);
-
-	//doPlayerSendTextMessage(cid, MessageClasses, message[, position, value, color])
-	lua_register(m_luaState, "doPlayerSendTextMessage", LuaScriptInterface::luaDoPlayerSendTextMessage);
 
 	//doCreateItem(itemid, type/count, pos)
 	//Returns uid of the created item, only works on tiles.
@@ -1345,9 +1336,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
 	lua_register(m_luaState, "doPlayerRemoveItem", LuaScriptInterface::luaDoPlayerRemoveItem);
-
-	//doPlayerAddExp(cid, exp, <optional> usemultiplier, <optional> sendtext)
-	lua_register(m_luaState, "doPlayerAddExp", LuaScriptInterface::luaDoPlayerAddExp);
 
 	//doPlayerSetGuildLevel(cid, level)
 	lua_register(m_luaState, "doPlayerSetGuildLevel", LuaScriptInterface::luaDoPlayerSetGuildLevel);
@@ -1563,14 +1551,8 @@ void LuaScriptInterface::registerFunctions()
 	//cleanMap()
 	lua_register(m_luaState, "cleanMap", LuaScriptInterface::luaCleanMap);
 
-	//getPlayersByAccountNumber(accountNumber)
-	lua_register(m_luaState, "getPlayersByAccountNumber", LuaScriptInterface::luaGetPlayersByAccountNumber);
-
 	//getAccountNumberByPlayerName(name)
 	lua_register(m_luaState, "getAccountNumberByPlayerName", LuaScriptInterface::luaGetAccountNumberByPlayerName);
-
-	//getPlayersByIPAddress(ip[, mask = 0xFFFFFFFF])
-	lua_register(m_luaState, "getPlayersByIPAddress", LuaScriptInterface::luaGetPlayersByIPAddress);
 
 	//debugPrint(text)
 	lua_register(m_luaState, "debugPrint", LuaScriptInterface::luaDebugPrint);
@@ -1582,10 +1564,7 @@ void LuaScriptInterface::registerFunctions()
 	lua_register(m_luaState, "doPlayerSetOfflineTrainingSkill", LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill);
 
 	//getWaypointPosition(name)
-	lua_register(m_luaState, "getWaypointPosition", LuaScriptInterface::luaGetWaypointPosition);
-
-	//doWaypointAddTemporial(name, pos)
-	lua_register(m_luaState, "doWaypointAddTemporial", LuaScriptInterface::luaDoWaypointAddTemporial);
+	lua_register(m_luaState, "getWaypointPositionByName", LuaScriptInterface::luaGetWaypointPositionByName);
 
 	//sendChannelMessage(channelId, type, message)
 	lua_register(m_luaState, "sendChannelMessage", LuaScriptInterface::luaSendChannelMessage);
@@ -1845,6 +1824,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getGuid", LuaScriptInterface::luaPlayerGetGuid);
 	registerMethod("Player", "getIp", LuaScriptInterface::luaPlayerGetIp);
+	registerMethod("Player", "getAccountId", LuaScriptInterface::luaPlayerGetAccountId);
 	registerMethod("Player", "getAccountType", LuaScriptInterface::luaPlayerGetAccountType);
 	registerMethod("Player", "getLastLoginSaved", LuaScriptInterface::luaPlayerGetLastLoginSaved);
 
@@ -2819,55 +2799,6 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoPlayerSendTextMessage(lua_State* L)
-{
-	//doPlayerSendTextMessage(cid, MessageClasses, message[, position, value, color])
-	int parameters = lua_gettop(L);
-	PositionEx position;
-	uint32_t value = 0;
-	TextColor_t color = TEXTCOLOR_NONE;
-
-	if (parameters > 5) {
-		color = (TextColor_t)popNumber(L);
-		value = popNumber(L);
-		popPosition(L, position);
-	}
-
-	std::string text = popString(L);
-	uint32_t messageClass = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	const Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (parameters > 5) {
-		player->sendTextMessage((MessageClasses)messageClass, text, &position, value, color);
-	} else {
-		player->sendTextMessage((MessageClasses)messageClass, text);
-	}
-
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSendAnimatedText(lua_State* L)
-{
-	//doSendAnimatedText(pos, text, color)
-	popNumber(L);
-	popString(L);
-	PositionEx pos;
-	popPosition(L, pos);
-
-	reportErrorFunc("Deprecated function.");
-
-	pushBoolean(L, true);
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoSetCreatureDropLoot(lua_State* L)
 {
 	//doSetCreatureDropLoot(cid, doDrop)
@@ -3336,39 +3267,6 @@ int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc("Bad messageClass type.");
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddExp(lua_State* L)
-{
-	//doPlayerAddExp(cid,exp,usemultiplier,sendtext)
-	int32_t parameters = lua_gettop(L);
-
-	bool sendText = false;
-	if (parameters > 3) {
-		sendText = popBoolean(L);
-	}
-
-	bool useMult = false;
-	if (parameters > 2) {
-		useMult = popBoolean(L);
-	}
-
-	uint64_t exp = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (exp > 0) {
-			player->addExperience(exp, useMult, sendText);
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
 	return 1;
@@ -4659,44 +4557,6 @@ int32_t LuaScriptInterface::luaIsMoveable(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetPlayersByAccountNumber(lua_State* L)
-{
-	//getPlayersByAccountNumber(accountNumber)
-	uint32_t accno = popNumber(L);
-
-	lua_newtable(L);
-	int index = 0;
-	for (Player* player : g_game.getPlayersByAccount(accno)) {
-		lua_pushnumber(L, ++index);
-		lua_pushnumber(L, player->getID());
-		lua_settable(L, -3);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayersByIPAddress(lua_State* L)
-{
-	//getPlayersByIPAddress(ip[, mask])
-	int parameters = lua_gettop(L);
-
-	uint32_t mask = 0xFFFFFFFF;
-
-	if (parameters > 1) {
-		mask = popNumber(L);
-	}
-
-	uint32_t ip = popNumber(L);
-
-	lua_newtable(L);
-	int index = 0;
-	for (Player* player : g_game.getPlayersByIP(ip, mask)) {
-		lua_pushnumber(L, ++index);
-		lua_pushnumber(L, player->getID());
-		lua_settable(L, -3);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetAccountNumberByPlayerName(lua_State* L)
 {
 	//getAccountNumberByPlayerName(name)
@@ -5126,19 +4986,6 @@ int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetOnlinePlayers(lua_State* L)
-{
-	//getOnlinePlayers()
-	lua_newtable(L);
-	uint32_t index = 0;
-	for (const auto& it : g_game.getPlayers()) {
-		lua_pushnumber(L, ++index);
-		pushString(L, it.second->getName());
-		lua_settable(L, -3);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetPlayerParty(lua_State* L)
 {
 	//getPlayerParty(cid)
@@ -5254,28 +5101,16 @@ int32_t LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetWaypointPosition(lua_State* L)
+int32_t LuaScriptInterface::luaGetWaypointPositionByName(lua_State* L)
 {
-	//getWaypointPosition(name)
+	//getWaypointPositionByName(name)
 	const std::map<std::string, Position>& waypoints = g_game.getMap()->waypoints;
-
 	auto it = waypoints.find(popString(L));
 	if (it != waypoints.end()) {
 		pushPosition(L, it->second, 0);
 	} else {
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoWaypointAddTemporial(lua_State* L)
-{
-	//doWaypointAddTemporial(name, pos)
-	PositionEx pos;
-	popPosition(L, pos);
-
-	g_game.getMap()->waypoints[popString(L)] = pos;
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -8308,6 +8143,18 @@ int32_t LuaScriptInterface::luaPlayerGetIp(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushNumber(L, player->getIP());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetAccountId(lua_State* L)
+{
+	// player:getAccountId()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getAccount());
 	} else {
 		pushNil(L);
 	}

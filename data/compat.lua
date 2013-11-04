@@ -171,6 +171,33 @@ function canPlayerLearnInstantSpell(cid, name) local p = Player(cid) return p ~=
 function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p ~= nil and p:hasLearnedSpell(name) or false end
 function isPlayerGhost(cid) local p = Player(cid) return p ~= nil and p:isGhost() or false end
 function isPlayerPzLocked(cid) local p = Player(cid) return p ~= nil and p:isPzLocked() or false end
+function getPlayersByIPAddress(ip, mask)
+	if mask == nil then mask = 0xFFFFFFFF end
+	local masked = bit.band(ip, mask)
+	local result = {}
+	for _, player in ipairs(Game.getPlayers()) do
+		if bit.band(player:getIp(), mask) == masked then
+			result[#result + 1] = player:getId()
+		end
+	end
+	return result
+end
+function getOnlinePlayers()
+	local result = {}
+	for _, player in ipairs(Game.getPlayers()) do
+		result[#result + 1] = player:getName()
+	end
+	return result
+end
+function getPlayersByAccountNumber(accountNumber)
+	local result = {}
+	for _, player in ipairs(Game.getPlayers()) do
+		if player:getAccountId() == accountNumber then
+			result[#result + 1] = player:getId()
+		end
+	end
+	return result
+end
 
 getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
@@ -210,6 +237,9 @@ function playerLearnInstantSpell(cid, name) local p = Player(cid) return p ~= ni
 function doPlayerPopupFYI(cid, message) local p = Player(cid) return p ~= nil and p:popupFYI(message) or false end
 function doSendTutorial(cid, tutorialId) local p = Player(cid) return p ~= nil and p:sendTutorial(tutorialId) or false end
 function doAddMapMark(cid, pos, type, description) local p = Player(cid) return p ~= nil and p:addMapMark(pos, type, description or "") or false end
+function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) return p ~= nil and p:sendTextMessage(type, text, ...) or false end
+function doSendAnimatedText() debugPrint("Deprecated function.") return true end
+function doPlayerAddExp(cid, exp, ...) local p = Player(cid) return p ~= nil and p:addExperience(exp, ...) or false end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end

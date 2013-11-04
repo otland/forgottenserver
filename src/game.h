@@ -212,21 +212,6 @@ class Game
 		  */
 		Player* getPlayerByAccount(uint32_t acc);
 
-		/**
-		  * Returns all players based on their account number identifier
-		  * \param acc is the account identifier
-		  * \return A vector of all players with the selected account number
-		  */
-		PlayerVector getPlayersByAccount(uint32_t acc);
-
-		/**
-		  * Returns all players with a certain IP address
-		  * \param ip is the IP address of the clients, as an unsigned long
-		  * \param mask An IP mask, default 255.255.255.255
-		  * \return A vector of all players with the selected IP
-		  */
-		PlayerVector getPlayersByIP(uint32_t ip, uint32_t mask = 0xFFFFFFFF);
-
 		/* Place Creature on the map without sending out events to the surrounding.
 		  * \param creature Creature to place on the map
 		  * \param pos The position to place the creature
