@@ -3037,8 +3037,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 {
 	msg.AddByte(0xA0);
 
-	msg.AddU16(player->getHealth());
-	msg.AddU16(player->getPlayerInfo(PLAYERINFO_MAXHEALTH));
+	msg.AddU16(std::min<int32_t>(0xFFFF, player->getHealth()));
+	msg.AddU16(std::min<int32_t>(0xFFFF, player->getPlayerInfo(PLAYERINFO_MAXHEALTH)));
 
 	msg.AddU32(uint32_t(player->getFreeCapacity() * 100));
 	msg.AddU32(uint32_t(player->getCapacity() * 100));
@@ -3048,11 +3048,11 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.AddU16(player->getPlayerInfo(PLAYERINFO_LEVEL));
 	msg.AddByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
 
-	msg.AddU16(player->getMana());
-	msg.AddU16(player->getPlayerInfo(PLAYERINFO_MAXMANA));
+	msg.AddU16(std::min<int32_t>(0xFFFF, player->getMana()));
+	msg.AddU16(std::min<int32_t>(0xFFFF, player->getPlayerInfo(PLAYERINFO_MAXMANA)));
 
-	msg.AddByte(player->getMagicLevel());
-	msg.AddByte(player->getBaseMagicLevel());
+	msg.AddByte(std::min<uint32_t>(0xFF, player->getMagicLevel()));
+	msg.AddByte(std::min<uint32_t>(0xFF, player->getBaseMagicLevel()));
 	msg.AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
 
 	msg.AddByte(player->getPlayerInfo(PLAYERINFO_SOUL));
