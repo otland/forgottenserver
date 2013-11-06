@@ -492,7 +492,7 @@ std::string MoveEvent::getScriptEventName()
 
 		default:
 			std::cout << "[Error - MoveEvent::getScriptEventName] Invalid event type" << std::endl;
-			return "";
+			return std::string();
 	}
 }
 

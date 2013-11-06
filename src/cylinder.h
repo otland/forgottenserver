@@ -246,7 +246,7 @@ class VirtualCylinder : public Cylinder
 			return 1;
 		}
 		virtual std::string getDescription(int32_t lookDistance) const {
-			return "";
+			return std::string();
 		}
 
 		virtual bool isRemoved() const {

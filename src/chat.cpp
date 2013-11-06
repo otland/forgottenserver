@@ -540,7 +540,7 @@ std::string Chat::getChannelName(const Player& player, uint16_t channelId)
 {
 	ChatChannel* channel = getChannel(player, channelId);
 	if (!channel) {
-		return "";
+		return std::string();
 	}
 	return channel->getName();
 }

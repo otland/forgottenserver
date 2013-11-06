@@ -242,7 +242,7 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_NONE:
 		default:
-			return "";
+			return std::string();
 	}
 }
 

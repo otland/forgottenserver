@@ -112,7 +112,7 @@ bool ServicePort::is_single_socket() const
 std::string ServicePort::get_protocol_names() const
 {
 	if (m_services.empty()) {
-		return "";
+		return std::string();
 	}
 
 	std::string str = m_services.front()->get_protocol_name();

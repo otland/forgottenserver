@@ -298,7 +298,7 @@ bool DBResult::next()
 void DBInsert::setQuery(const std::string& query)
 {
 	m_query = query;
-	m_buf = "";
+	m_buf.clear();
 }
 
 bool DBInsert::addRow(const std::string& row)

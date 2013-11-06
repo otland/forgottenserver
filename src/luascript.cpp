@@ -853,7 +853,7 @@ double LuaScriptInterface::popFloatNumber(lua_State* L)
 std::string LuaScriptInterface::popString(lua_State* L)
 {
 	if (lua_gettop(L) == 0) {
-		return "";
+		return std::string();
 	}
 
 	std::string str;

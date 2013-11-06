@@ -459,13 +459,13 @@ bool Npc::getRandomStep(Direction& dir)
 		dirList.push_back(WEST);
 	}
 
-	if (!dirList.empty()) {
-		std::random_shuffle(dirList.begin(), dirList.end());
-		dir = dirList[uniform_random(0, dirList.size() - 1)];
-		return true;
+	if (dirList.empty()) {
+		return false;
 	}
 
-	return false;
+	std::random_shuffle(dirList.begin(), dirList.end());
+	dir = dirList[uniform_random(0, dirList.size() - 1)];
+	return true;
 }
 
 void Npc::doMoveTo(const Position& target)

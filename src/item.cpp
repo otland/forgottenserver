@@ -1284,7 +1284,10 @@ std::string Item::getWeightDescription(double weight) const
 std::string Item::getWeightDescription() const
 {
 	double weight = getWeight();
-	return (weight > 0 ? getWeightDescription(weight) : "");
+	if (weight <= 0) {
+		return std::string();
+	}
+	return getWeightDescription(weight);
 }
 
 void Item::setUniqueId(uint16_t n)
