@@ -103,7 +103,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/serverdiag", &Commands::serverDiag},
 
 	// player commands - TODO: make them talkactions
-	{"!online", &Commands::whoIsOnline},
 	{"!buyhouse", &Commands::buyHouse},
 	{"!sellhouse", &Commands::sellHouse},
 	{"!serverinfo", &Commands::serverInfo}
@@ -799,53 +798,6 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 
 	house->setHouseOwner(player->guid);
 	player->sendTextMessage(MSG_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in the bank.");
-}
-
-void Commands::whoIsOnline(Player* player, const std::string& cmd, const std::string& param)
-{
-	std::ostringstream ss;
-	ss << g_game.getPlayersOnline() << " players online.";
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-	ss.str("");
-
-	uint32_t i = 0;
-
-	const auto& players = g_game.getPlayers();
-
-	auto it = players.begin();
-	if (!g_config.getBoolean(ConfigManager::SHOW_GAMEMASTERS_ONLINE)) {
-		while (it != players.end()) {
-			Player* tmpPlayer = it->second;
-			if (!tmpPlayer->isAccessPlayer() || player->isAccessPlayer()) {
-				ss << (i > 0 ? ", " : "") << tmpPlayer->name << " [" << tmpPlayer->level << ']';
-				++i;
-			}
-			++it;
-
-			if (i == 10) {
-				ss << (it != players.end() ? ',' : '.');
-				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-				ss.str("");
-				i = 0;
-			}
-		}
-	} else {
-		while (it != players.end()) {
-			ss << (i > 0 ? ", " : "") << it->second->name << " [" << it->second->level << ']';
-			++it;
-			if (++i == 10) {
-				ss << (it != players.end() ? ',' : '.');
-				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-				ss.str("");
-				i = 0;
-			}
-		}
-	}
-
-	if (i > 0) {
-		ss << '.';
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-	}
 }
 
 void Commands::showPosition(Player* player, const std::string& cmd, const std::string& param)

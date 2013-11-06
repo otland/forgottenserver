@@ -110,9 +110,7 @@ bool ScriptEnvironment::saveGameState()
 		return true;
 	}
 
-	Database* db = Database::getInstance();
-
-	db->executeQuery("TRUNCATE TABLE `global_storage`");
+	Database::getInstance()->executeQuery("TRUNCATE TABLE `global_storage`");
 
 	DBInsert stmt;
 	stmt.setQuery("INSERT INTO `global_storage` (`key`, `value`) VALUES ");

@@ -72,7 +72,6 @@ mysqlPort = 3306
 
 -- Misc.
 allowChangeOutfit = "yes"
-displayGamemastersWithOnlineCommand = "no"
 freePremium = "no"
 kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4

@@ -88,7 +88,6 @@ bool ConfigManager::load()
 	m_confBoolean[ONE_PLAYER_ON_ACCOUNT] = booleanString(getGlobalString(L, "onePlayerOnlinePerAccount", "yes"));
 	m_confBoolean[CANNOT_ATTACK_SAME_LOOKFEET] = booleanString(getGlobalString(L, "noDamageToSameLookfeet", "no"));
 	m_confBoolean[AIMBOT_HOTKEY_ENABLED] = booleanString(getGlobalString(L, "hotkeyAimbotEnabled", "yes"));
-	m_confBoolean[SHOW_GAMEMASTERS_ONLINE] = booleanString(getGlobalString(L, "displayGamemastersWithOnlineCommand", "no"));
 	m_confBoolean[REMOVE_AMMO] = booleanString(getGlobalString(L, "removeAmmoWhenUsingDistanceWeapon", "yes"));
 	m_confBoolean[REMOVE_RUNE_CHARGES] = booleanString(getGlobalString(L, "removeChargesFromRunes", "yes"));
 	m_confBoolean[REMOVE_WEAPON_CHARGES] = booleanString(getGlobalString(L, "removeChargesFromWeapons", "yes"));

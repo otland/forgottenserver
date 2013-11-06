@@ -30,7 +30,6 @@
 	<command cmd="/hide" group="2" acctype="5" log="yes"/>
 	<command cmd="/newitem" group="2" acctype="5" log="yes"/>
 
-	<command cmd="!online" group="1" acctype="1" log="no"/>
 	<command cmd="!buyhouse" group="1" acctype="1" log="no"/>
 	<command cmd="!sellhouse" group="1" acctype="1" log="no"/>
 	<command cmd="!serverinfo" group="1" acctype="1" log="no"/>
