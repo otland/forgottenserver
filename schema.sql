@@ -79,19 +79,18 @@ CREATE TABLE IF NOT EXISTS `account_bans` (
   `expires_at` bigint(20) NOT NULL,
   `banned_by` int(11) NOT NULL,
   PRIMARY KEY (`account_id`),
-  KEY `banned_by` (`banned_by`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `account_ban_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `reason` varchar(255) NOT NULL,
   `banned_at` bigint(20) NOT NULL,
   `expired_at` bigint(20) NOT NULL,
   `banned_by` int(11) NOT NULL,
-  PRIMARY KEY (`account_id`),
-  KEY `banned_by` (`banned_by`),
+  PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
@@ -103,7 +102,6 @@ CREATE TABLE IF NOT EXISTS `ip_bans` (
   `expires_at` bigint(20) NOT NULL,
   `banned_by` int(11) NOT NULL,
   PRIMARY KEY (`ip`),
-  KEY `banned_by` (`banned_by`),
   FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
@@ -113,7 +111,6 @@ CREATE TABLE IF NOT EXISTS `player_namelocks` (
   `namelocked_at` bigint(20) NOT NULL,
   `namelocked_by` int(11) NOT NULL,
   PRIMARY KEY (`player_id`),
-  KEY `namelocked_by` (`namelocked_by`),
   FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`namelocked_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
@@ -324,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '16'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '17'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,
