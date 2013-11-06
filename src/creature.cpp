@@ -145,8 +145,7 @@ int64_t Creature::getTimeSinceLastMove() const
 	if (lastStep) {
 		return OTSYS_TIME() - lastStep;
 	}
-
-	return 0x7FFFFFFFFFFFFFFFLL;
+	return std::numeric_limits<int64_t>::max();
 }
 
 int32_t Creature::getWalkDelay(Direction dir) const
