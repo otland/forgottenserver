@@ -120,7 +120,7 @@ void ProtocolStatus::sendStatusString()
 	serverinfo.append_attribute("url") = g_config.getString(ConfigManager::URL).c_str();
 	serverinfo.append_attribute("server") = STATUS_SERVER_NAME;
 	serverinfo.append_attribute("version") = STATUS_SERVER_VERSION;
-	serverinfo.append_attribute("client") = STATUS_SERVER_PROTOCOL;
+	serverinfo.append_attribute("client") = CLIENT_VERSION_STR;
 
 	pugi::xml_node owner = tsqp.append_child("owner");
 	owner.append_attribute("name") = g_config.getString(ConfigManager::OWNER_NAME).c_str();
@@ -225,7 +225,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddByte(0x23); // server software info
 		output->AddString(STATUS_SERVER_NAME);
 		output->AddString(STATUS_SERVER_VERSION);
-		output->AddString(STATUS_SERVER_PROTOCOL);
+		output->AddString(CLIENT_VERSION_STR);
 	}
 	OutputMessagePool::getInstance()->send(output);
 	getConnection()->closeConnection();
