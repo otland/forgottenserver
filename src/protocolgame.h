@@ -87,11 +87,9 @@ class ProtocolGame : public Protocol
 
 		void setPlayer(Player* p);
 
-		/*
 		uint16_t getVersion() const {
 			return version;
 		}
-		*/
 
 		const std::unordered_set<uint32_t>& getKnownCreatures() const {
 			return knownCreatureSet;
@@ -370,6 +368,9 @@ class ProtocolGame : public Protocol
 		//shop
 		void AddShopItem(NetworkMessage& msg, const ShopInfo& item);
 
+		//otclient
+		void parseExtendedOpcode(NetworkMessage& msg);
+
 		friend class Player;
 
 		// Helper so we don't need to bind every time
@@ -382,7 +383,7 @@ class ProtocolGame : public Protocol
 		Player* player;
 
 		uint32_t eventConnect;
-		// uint16_t version;
+		uint16_t version;
 
 		uint32_t m_challengeTimestamp;
 		uint8_t m_challengeRandom;

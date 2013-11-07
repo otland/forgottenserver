@@ -314,7 +314,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	OperatingSystem_t operatingSystem = (OperatingSystem_t)msg.GetU16();
-	uint16_t version = msg.GetU16();
+	version = msg.GetU16();
 
 	msg.SkipBytes(5); // U32 clientVersion, U8 clientType
 
@@ -479,6 +479,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x14: parseLogout(msg); break;
 		case 0x1D: parseReceivePingBack(msg); break;
 		case 0x1E: parseReceivePing(msg); break;
+		case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcode
 		case 0x64: parseAutoWalk(msg); break;
 		case 0x65: parseMove(msg, NORTH); break;
 		case 0x66: parseMove(msg, EAST); break;
@@ -3364,4 +3365,13 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 	msg.AddU32(uint32_t(it.weight * 100));
 	msg.AddU32(item.buyPrice);
 	msg.AddU32(item.sellPrice);
+}
+
+void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
+{
+	uint8_t opcode = msg.GetByte();
+	const std::string& buffer = msg.GetString();
+
+	// process additional opcodes via lua script event
+	addGameTask(&Game::parsePlayerExtendedOpcode, player->getID(), opcode, buffer);
 }

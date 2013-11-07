@@ -6440,6 +6440,18 @@ void Game::checkExpiredMarketOffers()
 	g_scheduler.addEvent(createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, boost::bind(&Game::checkExpiredMarketOffers, this)));
 }
 
+void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	for (CreatureEvent* creatureEvent : player->getCreatureEvents(CREATURE_EVENT_EXTENDED_OPCODE)) {
+		creatureEvent->executeExtendedOpcode(player, opcode, buffer);
+	}
+}
+
 void Game::forceAddCondition(uint32_t creatureId, Condition* condition)
 {
 	Creature* creature = getCreatureByID(creatureId);

@@ -1602,6 +1602,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayers", LuaScriptInterface::luaGameGetPlayers);
 	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
 
+	registerMethod("Game", "getCreatureCount", LuaScriptInterface::luaGameGetCreatureCount);
+	registerMethod("Game", "getMonsterCount", LuaScriptInterface::luaGameGetMonsterCount);
+	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
+	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
+
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
 	registerMetaMethod("Position", "__add", LuaScriptInterface::luaPositionAdd);
@@ -1930,6 +1935,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "popupFYI", LuaScriptInterface::luaPlayerPopupFYI);
 
 	registerMethod("Player", "isPzLocked", LuaScriptInterface::luaPlayerIsPzLocked);
+
+	registerMethod("Player", "getClient", LuaScriptInterface::luaPlayerGetClient);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -5514,6 +5521,34 @@ int32_t LuaScriptInterface::luaGameLoadMap(lua_State* L)
 	// Game.loadMap(path)
 	const std::string& path = getString(L, 1);
 	g_dispatcher.addTask(createTask(boost::bind(&Game::loadMap, &g_game, path)));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetCreatureCount(lua_State* L)
+{
+	// Game.getCreatureCount()
+	pushNumber(L, g_game.getCreaturesOnline());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetMonsterCount(lua_State* L)
+{
+	// Game.getMonsterCount()
+	pushNumber(L, g_game.getMonstersOnline());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetPlayerCount(lua_State* L)
+{
+	// Game.getPlayerCount()
+	pushNumber(L, g_game.getPlayersOnline());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetNpcCount(lua_State* L)
+{
+	// Game.getNpcCount()
+	pushNumber(L, g_game.getNpcsOnline());
 	return 1;
 }
 
@@ -9512,6 +9547,22 @@ int32_t LuaScriptInterface::luaPlayerIsPzLocked(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushBoolean(L, player->isPzLocked());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetClient(lua_State* L)
+{
+	// player:getClient()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_newtable(L);
+		pushNumber(L, player->getProtocolVersion());
+		lua_setfield(L, -2, "version");
+		pushNumber(L, player->getOperatingSystem());
+		lua_setfield(L, -2, "os");
 	} else {
 		pushNil(L);
 	}

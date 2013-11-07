@@ -453,6 +453,8 @@ class Game
 		bool playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
 		void checkExpiredMarketOffers();
 
+		void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
+
 		void updatePremium(Account& account);
 
 		void cleanup();

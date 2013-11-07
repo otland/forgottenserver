@@ -6,6 +6,13 @@ FALSE = false
 LUA_ERROR = false
 LUA_NO_ERROR = true
 
+CLIENTOS_LINUX = 1
+CLIENTOS_WINDOWS = 2
+CLIENTOS_FLASH = 3
+CLIENTOS_OTCLIENT_LINUX = 10
+CLIENTOS_OTCLIENT_WINDOWS = 11
+CLIENTOS_OTCLIENT_MAC = 12
+
 TILESTATE_NONE = 0
 TILESTATE_PROTECTIONZONE = 1
 TILESTATE_DEPRECATED_HOUSE = 2
@@ -985,5 +992,23 @@ function Player.feed(self, food)
 		condition:setParameter(CONDITION_PARAM_MANATICKS, vocation:getManaGainTicks() * 1000)
 		self:addCondition(condition)
 	end
+	return true
+end
+
+function Player.isUsingOtClient(self)
+	return self:getClient().os >= CLIENTOS_OTCLIENT_LINUX
+end
+
+function Player.sendExtendedOpcode(self, opcode, buffer)
+	if not self:isUsingOtClient() then
+		return false
+	end
+	
+	local msg = NetworkMessage()
+	msg:addByte(0x32)
+	msg:addByte(opcode)
+	msg:addString(buffer)
+	msg:sendToPlayer(self)
+	msg:__gc()
 	return true
 end

@@ -241,6 +241,11 @@ function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) ret
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
 function doPlayerAddExp(cid, exp, ...) local p = Player(cid) return p ~= nil and p:addExperience(exp, ...) or false end
 
+-- OTClient
+function isPlayerUsingOtclient(cid) local p = Player(cid) return p ~= nil and p:isUsingOtClient() or false end
+function doPlayerSendExtendedOpcode(cid, opcode, buffer) local p = Player(cid) return p ~= nil and p:sendExtendedOpcode(opcode, buffer) or false end
+--
+
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end
 function getTownTemplePosition(townId) local t = Town(townId) return t ~= nil and t:getTemplePosition() or false end
