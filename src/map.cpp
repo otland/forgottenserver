@@ -41,11 +41,9 @@
 #include "creature.h"
 
 #include "player.h"
-#include "configmanager.h"
 #include "game.h"
 
 extern Game g_game;
-extern ConfigManager g_config;
 
 Map::Map()
 {
