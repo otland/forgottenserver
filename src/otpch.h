@@ -41,6 +41,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <iomanip>
 
 //pugixml
 #include "ext/pugixml.hpp"

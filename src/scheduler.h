@@ -21,11 +21,14 @@
 #define __OTSERV_SCHEDULER_H__
 
 #include "tasks.h"
-#include <boost/bind.hpp>
 #include <unordered_set>
 #include <vector>
 #include <queue>
 #include <set>
+
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #define SCHEDULER_MINTICKS 50
 
@@ -41,7 +44,7 @@ class SchedulerTask : public Task
 			return m_eventid;
 		}
 
-		boost::system_time getCycle() const {
+		std::chrono::system_clock::time_point getCycle() const {
 			return m_expiration;
 		}
 
@@ -61,11 +64,7 @@ class SchedulerTask : public Task
 
 inline SchedulerTask* createSchedulerTask(uint32_t delay, const boost::function<void (void)>& f)
 {
-	if (delay < SCHEDULER_MINTICKS) {
-		delay = SCHEDULER_MINTICKS;
-	}
-
-	return new SchedulerTask(delay, f);
+	return new SchedulerTask(std::max<uint32_t>(delay, SCHEDULER_MINTICKS), f);
 }
 
 class lessSchedTask : public std::binary_function<SchedulerTask*&, SchedulerTask*&, bool>
@@ -99,9 +98,9 @@ class Scheduler
 	protected:
 		void schedulerThread();
 
-		boost::thread m_thread;
-		boost::mutex m_eventLock;
-		boost::condition_variable m_eventSignal;
+		std::thread m_thread;
+		std::mutex m_eventLock;
+		std::condition_variable m_eventSignal;
 
 		uint32_t m_lastEventId;
 		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > m_eventList;

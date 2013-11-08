@@ -78,9 +78,9 @@ Vocations g_vocations;
 RSA g_RSA;
 LuaEnvironment g_luaEnvironment;
 
-boost::mutex g_loaderLock;
-boost::condition_variable g_loaderSignal;
-boost::unique_lock<boost::mutex> g_loaderUniqueLock(g_loaderLock);
+std::mutex g_loaderLock;
+std::condition_variable g_loaderSignal;
+std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 #include "networkmessage.h"
 

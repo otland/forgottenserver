@@ -20,8 +20,7 @@
 #ifndef __OTSERV_RSA_H__
 #define __OTSERV_RSA_H__
 
-#include <boost/thread/recursive_mutex.hpp>
-
+#include <mutex>
 #include <gmp.h>
 
 class RSA
@@ -37,7 +36,7 @@ class RSA
 		void getPublicKey(char* buffer);
 
 	protected:
-		boost::recursive_mutex rsaLock;
+		std::recursive_mutex lock;
 
 		//use only GMP
 		mpz_t m_n, m_d;

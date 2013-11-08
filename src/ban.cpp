@@ -31,7 +31,7 @@ extern ConfigManager g_config;
 
 bool Ban::acceptConnection(uint32_t clientip)
 {
-	boost::recursive_mutex::scoped_lock lockClass(banLock);
+	std::lock_guard<std::recursive_mutex> lockClass(lock);
 
 	uint64_t currentTime = OTSYS_TIME();
 

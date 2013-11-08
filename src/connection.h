@@ -23,12 +23,12 @@
 #include "definitions.h"
 
 #include <set>
+#include <mutex>
 
 #include <boost/asio.hpp>
 
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/thread.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
 #include "networkmessage.h"
@@ -66,7 +66,7 @@ class ConnectionManager
 
 		// TODO: Use unordered_set (we need to specify a hash function)
 		std::set<Connection_ptr> m_connections;
-		boost::recursive_mutex m_connectionManagerLock;
+		std::recursive_mutex m_connectionManagerLock;
 };
 
 class Connection : public boost::enable_shared_from_this<Connection>, boost::noncopyable
@@ -176,7 +176,7 @@ class Connection : public boost::enable_shared_from_this<Connection>, boost::non
 		ConnectionState_t m_connectionState;
 		uint32_t m_refCount;
 		static bool m_logError;
-		boost::recursive_mutex m_connectionLock;
+		std::recursive_mutex m_connectionLock;
 
 		time_t m_timeConnected;
 		uint32_t m_packetsSent;

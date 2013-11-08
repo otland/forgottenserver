@@ -1408,10 +1408,6 @@ void LuaScriptInterface::registerFunctions()
 	//getWorldLight()
 	lua_register(m_luaState, "getWorldLight", LuaScriptInterface::luaGetWorldLight);
 
-	//getWorldCreatures(type)
-	//0 players, 1 monsters, 2 npcs, 3 all
-	lua_register(m_luaState, "getWorldCreatures", LuaScriptInterface::luaGetWorldCreatures);
-
 	//getWorldUpTime()
 	lua_register(m_luaState, "getWorldUpTime", LuaScriptInterface::luaGetWorldUpTime);
 
@@ -3214,40 +3210,6 @@ int32_t LuaScriptInterface::luaGetWorldLight(lua_State* L)
 	lua_pushnumber(L, lightInfo.level);
 	lua_pushnumber(L, lightInfo.color);
 	return 2;
-}
-
-int32_t LuaScriptInterface::luaGetWorldCreatures(lua_State* L)
-{
-	//getWorldCreatures(type)
-	//0 players, 1 monsters, 2 npcs, 3 all
-	uint32_t type = popNumber(L);
-	uint32_t value;
-
-	switch (type) {
-		case 0:
-			value = g_game.getPlayersOnline();
-			break;
-
-		case 1:
-			value = g_game.getMonstersOnline();
-			break;
-
-		case 2:
-			value = g_game.getNpcsOnline();
-			break;
-
-		case 3:
-			value = g_game.getCreaturesOnline();
-			break;
-
-		default:
-			reportErrorFunc("Wrong creature type.");
-			pushBoolean(L, false);
-			return 1;
-	}
-
-	lua_pushnumber(L, value);
-	return 1;
 }
 
 int32_t LuaScriptInterface::luaGetWorldUpTime(lua_State* L)

@@ -22,7 +22,7 @@
 
 #include "networkmessage.h"
 #include "connection.h"
-#include <boost/thread.hpp>
+#include <mutex>
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include "tools.h"
@@ -208,7 +208,7 @@ class OutputMessagePool
 		InternalOutputMessageList m_allOutputMessages;
 		OutputMessageMessageList m_autoSendOutputMessages;
 		OutputMessageMessageList m_toAddQueue;
-		boost::recursive_mutex m_outputPoolLock;
+		std::recursive_mutex m_outputPoolLock;
 		int64_t m_frameTime;
 		bool m_isOpen;
 };

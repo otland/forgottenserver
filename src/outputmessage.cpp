@@ -48,7 +48,7 @@ OutputMessagePool::OutputMessagePool()
 
 void OutputMessagePool::startExecutionFrame()
 {
-	//boost::recursive_mutex::scoped_lock lockClass(m_outputPoolLock);
+	//std::lock_guard<std::recursive_mutex> lockClass(m_outputPoolLock);
 	m_frameTime = OTSYS_TIME();
 	m_isOpen = true;
 }
@@ -78,7 +78,7 @@ void OutputMessagePool::send(OutputMessage_ptr msg)
 
 void OutputMessagePool::sendAll()
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_outputPoolLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_outputPoolLock);
 
 	const int64_t dropTime = m_frameTime - 10000;
 	const int64_t frameTime = m_frameTime - 10;
@@ -148,7 +148,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 		return OutputMessage_ptr();
 	}
 
-	boost::recursive_mutex::scoped_lock lockClass(m_outputPoolLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_outputPoolLock);
 
 	if (!protocol->getConnection()) {
 		return OutputMessage_ptr();

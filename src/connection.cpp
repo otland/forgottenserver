@@ -45,7 +45,8 @@ uint32_t Connection::connectionCount = 0;
 Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket* socket,
         boost::asio::io_service& io_service, ServicePort_ptr servicer)
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionManagerLock);
+
 	Connection_ptr connection = Connection_ptr(new Connection(socket, io_service, servicer));
 	m_connections.insert(connection);
 	return connection;
@@ -53,14 +54,14 @@ Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket*
 
 void ConnectionManager::releaseConnection(Connection_ptr connection)
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionManagerLock);
 
 	m_connections.erase(connection);
 }
 
 void ConnectionManager::closeAll()
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionManagerLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionManagerLock);
 
 	for (const Connection_ptr& connection : m_connections) {
 		try {
@@ -78,7 +79,7 @@ void ConnectionManager::closeAll()
 void Connection::closeConnection()
 {
 	//any thread
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_connectionState == CONNECTION_STATE_CLOSING || m_connectionState == CONNECTION_STATE_CLOSED || m_connectionState == CONNECTION_STATE_REQUEST_CLOSE) {
 		return;
@@ -430,7 +431,7 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 
 void Connection::handleReadError(const boost::system::error_code& error)
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (error == boost::asio::error::operation_aborted) {
 		// Operation aborted because connection will be closed
@@ -450,7 +451,7 @@ void Connection::handleReadError(const boost::system::error_code& error)
 
 void Connection::onReadTimeout()
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_pendingRead > 0 || m_readError) {
 		closeSocket();
@@ -460,7 +461,7 @@ void Connection::onReadTimeout()
 
 void Connection::onWriteTimeout()
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_pendingWrite > 0 || m_writeError) {
 		closeSocket();
@@ -485,7 +486,7 @@ void Connection::handleReadTimeout(boost::weak_ptr<Connection> weak_conn, const 
 
 void Connection::handleWriteError(const boost::system::error_code& error)
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_connectionLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (error == boost::asio::error::operation_aborted) {
 		// Operation aborted because connection will be closed
