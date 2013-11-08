@@ -36,6 +36,7 @@ class NetworkMessage
 		enum { crypto_length = 4 };
 		enum { xtea_multiple = 8 };
 		enum { max_body_length = NETWORKMESSAGE_MAXSIZE - header_length - crypto_length - xtea_multiple };
+		enum { max_protocol_body_length = max_body_length - 10 };
 
 		// constructor/destructor
 		NetworkMessage() {
