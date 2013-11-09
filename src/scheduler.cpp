@@ -31,34 +31,30 @@ Scheduler::Scheduler()
 void Scheduler::start()
 {
 	m_threadState = STATE_RUNNING;
-	m_thread = boost::thread(boost::bind(&Scheduler::schedulerThread, this));
+	m_thread = std::thread(&Scheduler::schedulerThread, this);
 }
 
 void Scheduler::schedulerThread()
 {
-	// NOTE: second argument defer_lock is to prevent from immediate locking
-	boost::unique_lock<boost::mutex> eventLockUnique(m_eventLock, boost::defer_lock);
-
+	std::unique_lock<std::mutex> eventLockUnique(m_eventLock, std::defer_lock);
 	while (m_threadState != STATE_TERMINATED) {
 		SchedulerTask* task = nullptr;
+		std::cv_status ret = std::cv_status::no_timeout;
 		bool runTask = false;
-		bool ret = true;
 
-		// check if there are events waiting...
 		eventLockUnique.lock();
-
 		if (m_eventList.empty()) {
 			m_eventSignal.wait(eventLockUnique);
 		} else {
-			ret = m_eventSignal.timed_wait(eventLockUnique, m_eventList.top()->getCycle());
+			ret = m_eventSignal.wait_until(eventLockUnique, m_eventList.top()->getCycle());
 		}
 
 		// the mutex is locked again now...
-		if (!ret && m_threadState != STATE_TERMINATED) {
+		if (ret == std::cv_status::timeout && m_threadState != STATE_TERMINATED) {
 			// ok we had a timeout, so there has to be an event we have to execute...
 			task = m_eventList.top();
 			m_eventList.pop();
-
+			
 			// check if the event was stopped
 			auto it = m_eventIds.find(task->getEventId());
 			if (it != m_eventIds.end()) {
@@ -76,7 +72,7 @@ void Scheduler::schedulerThread()
 			if (runTask) {
 				// Expiration has another meaning for dispatcher tasks, reset it
 				task->setDontExpire();
-				g_dispatcher.addTask(task);
+				g_dispatcher->addTask(task);
 			} else {
 				// was stopped, have to be deleted here
 				delete task;
@@ -133,30 +129,27 @@ bool Scheduler::stopEvent(uint32_t eventid)
 		return false;
 	}
 
-	m_eventLock.lock();
+	std::lock_guard<std::mutex> lockGuard(m_eventLock);
 
 	// search the event id..
 	auto it = m_eventIds.find(eventid);
-	if (it == m_eventIds.end()) {
-		m_eventLock.unlock();
+	if (it != m_eventIds.end()) {
 		return false;
 	}
 
 	m_eventIds.erase(it);
-	m_eventLock.unlock();
 	return true;
 }
 
 void Scheduler::stop()
 {
-	m_eventLock.lock();
+	std::lock_guard<std::mutex> lockGuard(m_eventLock);
 	m_threadState = Scheduler::STATE_CLOSING;
-	m_eventLock.unlock();
 }
 
 void Scheduler::shutdown()
 {
-	m_eventLock.lock();
+	std::lock_guard<std::mutex> lockGuard(m_eventLock);
 	m_threadState = Scheduler::STATE_TERMINATED;
 
 	//this list should already be empty
@@ -166,7 +159,6 @@ void Scheduler::shutdown()
 	}
 
 	m_eventIds.clear();
-	m_eventLock.unlock();
 }
 
 void Scheduler::join()

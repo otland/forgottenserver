@@ -82,16 +82,14 @@ class ProtocolGame : public Protocol
 			return 0x0A;
 		}
 
-		bool login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem, bool gamemasterLogin);
-		bool logout(bool displayEffect, bool forced);
+		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem, bool gamemasterLogin);
+		void logout(bool displayEffect, bool forced);
 
 		void setPlayer(Player* p);
 
-		/*
 		uint16_t getVersion() const {
 			return version;
 		}
-		*/
 
 		const std::unordered_set<uint32_t>& getKnownCreatures() const {
 			return knownCreatureSet;
@@ -100,7 +98,7 @@ class ProtocolGame : public Protocol
 	private:
 		std::unordered_set<uint32_t> knownCreatureSet;
 
-		bool connect(uint32_t playerId, OperatingSystem_t operatingSystem);
+		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
 		void disconnect();
 		void disconnectClient(uint8_t error, const char* message);
 		void writeToOutputBuffer(const NetworkMessage& msg);
@@ -370,11 +368,14 @@ class ProtocolGame : public Protocol
 		//shop
 		void AddShopItem(NetworkMessage& msg, const ShopInfo& item);
 
+		//otclient
+		void parseExtendedOpcode(NetworkMessage& msg);
+
 		friend class Player;
 
 		// Helper so we don't need to bind every time
-#define addGameTask(f, ...) addGameTaskInternal(false, 0, boost::bind(f, &g_game, __VA_ARGS__))
-#define addGameTaskTimed(delay, f, ...) addGameTaskInternal(true, delay, boost::bind(f, &g_game, __VA_ARGS__))
+#define addGameTask(f, ...) addGameTaskInternal(false, 0, std::bind(f, &g_game, __VA_ARGS__))
+#define addGameTaskTimed(delay, f, ...) addGameTaskInternal(true, delay, std::bind(f, &g_game, __VA_ARGS__))
 
 		template<class FunctionType>
 		void addGameTaskInternal(bool droppable, uint32_t delay, const FunctionType&);
@@ -382,7 +383,7 @@ class ProtocolGame : public Protocol
 		Player* player;
 
 		uint32_t eventConnect;
-		// uint16_t version;
+		uint16_t version;
 
 		uint32_t m_challengeTimestamp;
 		uint8_t m_challengeRandom;

@@ -478,3 +478,14 @@ function getConfigInfo(info)
 	dofile('config.lua')
 	return _G[info]
 end
+
+function getWorldCreatures(type)
+	if type == 0 then
+		return Game.getPlayerCount()
+	elseif type == 1 then
+		return Game.getMonsterCount()
+	elseif type == 2 then
+		return Game.getNpcCount()
+	end
+	return Game.getCreatureCount()
+end

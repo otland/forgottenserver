@@ -33,7 +33,7 @@ Dispatcher::Dispatcher()
 void Dispatcher::start()
 {
 	m_threadState = STATE_RUNNING;
-	m_thread = boost::thread(boost::bind(&Dispatcher::dispatcherThread, this));
+	m_thread = std::thread(&Dispatcher::dispatcherThread, this);
 }
 
 void Dispatcher::dispatcherThread()
@@ -41,7 +41,7 @@ void Dispatcher::dispatcherThread()
 	OutputMessagePool* outputPool = OutputMessagePool::getInstance();
 
 	// NOTE: second argument defer_lock is to prevent from immediate locking
-	boost::unique_lock<boost::mutex> taskLockUnique(m_taskLock, boost::defer_lock);
+	std::unique_lock<std::mutex> taskLockUnique(m_taskLock, std::defer_lock);
 
 	while (m_threadState != STATE_TERMINATED) {
 		Task* task = nullptr;

@@ -169,7 +169,7 @@ bool BedItem::sleep(Player* player)
 
 	// kick player after he sees himself walk onto the bed and it change id
 	uint32_t playerId = player->getID();
-	g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, boost::bind(&Game::kickPlayer, &g_game, playerId, false)));
+	g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Game::kickPlayer, &g_game, playerId, false)));
 
 	// change self and partner's appearance
 	updateAppearance(player);

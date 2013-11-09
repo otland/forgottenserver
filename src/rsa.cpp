@@ -56,7 +56,7 @@ bool RSA::setKey(const std::string& file)
 
 void RSA::setKey(const char* p, const char* q)
 {
-	boost::recursive_mutex::scoped_lock lockClass(rsaLock);
+	std::lock_guard<std::recursive_mutex> lockClass(lock);
 
 	mpz_t m_p, m_q, m_e;
 	mpz_init2(m_p, 1024);
@@ -98,7 +98,7 @@ void RSA::setKey(const char* p, const char* q)
 
 void RSA::decrypt(char* msg)
 {
-	boost::recursive_mutex::scoped_lock lockClass(rsaLock);
+	std::lock_guard<std::recursive_mutex> lockClass(lock);
 
 	mpz_t c, m;
 	mpz_init2(c, 1024);

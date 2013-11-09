@@ -6,6 +6,13 @@ FALSE = false
 LUA_ERROR = false
 LUA_NO_ERROR = true
 
+CLIENTOS_LINUX = 1
+CLIENTOS_WINDOWS = 2
+CLIENTOS_FLASH = 3
+CLIENTOS_OTCLIENT_LINUX = 10
+CLIENTOS_OTCLIENT_WINDOWS = 11
+CLIENTOS_OTCLIENT_MAC = 12
+
 TILESTATE_NONE = 0
 TILESTATE_PROTECTIONZONE = 1
 TILESTATE_DEPRECATED_HOUSE = 2
@@ -959,6 +966,51 @@ function doForceSummonCreature(name, pos)
 	return creature
 end
 
+function Position.getNextPosition(self, direction, steps)
+	steps = steps or 1
+	if direction == WEST then
+		self.x = self.x - steps
+	elseif direction == EAST then
+		self.x = self.x + steps
+	elseif direction == NORTH then
+		self.y = self.y - steps
+	elseif direction == SOUTH then
+		self.y = self.y + steps
+	end
+end
+
+function Creature.getClosestFreePosition(self, position, extended)
+	if self:isPlayer(cid) and self:getAccountType() >= ACCOUNT_TYPE_GOD then
+		return position
+	end
+	
+	local tiles = { position:getTile() }
+	local length = extended and 2 or 1
+	local usePosition = Position(position)
+	
+	local tile
+	for y = -length, length do
+		usePosition.y = position.y + y
+		for x = -length, length do
+			usePosition.x = position.x + x
+			if x ~= 0 and y ~= 0 then
+				tile = usePosition:getTile()
+				if tile then
+					tiles[#tiles + 1] = tile
+				end
+			end
+		end
+	end
+	
+	for i = 1, #tiles do
+		tile = tiles[i]
+		if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_BLOCKINGANDNOTMOVEABLE) then
+			return tile:getPosition()
+		end
+	end
+	return Position()
+end
+
 function Player.sendCancelMessage(self, message)
 	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
 end
@@ -985,5 +1037,23 @@ function Player.feed(self, food)
 		condition:setParameter(CONDITION_PARAM_MANATICKS, vocation:getManaGainTicks() * 1000)
 		self:addCondition(condition)
 	end
+	return true
+end
+
+function Player.isUsingOtClient(self)
+	return self:getClient().os >= CLIENTOS_OTCLIENT_LINUX
+end
+
+function Player.sendExtendedOpcode(self, opcode, buffer)
+	if not self:isUsingOtClient() then
+		return false
+	end
+	
+	local msg = NetworkMessage()
+	msg:addByte(0x32)
+	msg:addByte(opcode)
+	msg:addString(buffer)
+	msg:sendToPlayer(self)
+	msg:__gc()
 	return true
 end

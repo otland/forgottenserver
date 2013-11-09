@@ -76,7 +76,7 @@ void ServiceManager::stop()
 	for (std::map<uint16_t, ServicePort_ptr>::iterator it = m_acceptors.begin();
 	        it != m_acceptors.end(); ++it) {
 		try {
-			m_io_service.post(boost::bind(&ServicePort::onStopServer, it->second));
+			m_io_service.post(std::bind(&ServicePort::onStopServer, it->second));
 		} catch (boost::system::system_error& e) {
 			std::cout << "[ServiceManager::stop] Network Error: " << e.what() << std::endl;
 		}
@@ -87,7 +87,7 @@ void ServiceManager::stop()
 	OutputMessagePool::getInstance()->stop();
 
 	death_timer.expires_from_now(boost::posix_time::seconds(3));
-	death_timer.async_wait(boost::bind(&ServiceManager::die, this));
+	death_timer.async_wait(std::bind(&ServiceManager::die, this));
 }
 
 ServicePort::ServicePort(boost::asio::io_service& io_service) :
@@ -131,9 +131,7 @@ void ServicePort::accept()
 	}
 
 	boost::asio::ip::tcp::socket* socket = new boost::asio::ip::tcp::socket(m_io_service);
-	m_acceptor->async_accept(*socket,
-	                         boost::bind(&ServicePort::onAccept, this, socket,
-	                                     boost::asio::placeholders::error));
+	m_acceptor->async_accept(*socket, std::bind(&ServicePort::onAccept, this, socket, std::placeholders::_1));
 }
 
 void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::system::error_code& error)
@@ -171,8 +169,8 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 		if (!m_pendingStart) {
 			close();
 			m_pendingStart = true;
-			g_scheduler.addEvent(createSchedulerTask(15000,
-			                     boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
+			g_scheduler->addEvent(createSchedulerTask(15000,
+			                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
 		}
 	}
 }
@@ -197,7 +195,7 @@ void ServicePort::onStopServer()
 	close();
 }
 
-void ServicePort::openAcceptor(boost::weak_ptr<ServicePort> weak_service, uint16_t port)
+void ServicePort::openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
 {
 	if (weak_service.expired()) {
 		return;
@@ -231,8 +229,8 @@ void ServicePort::open(uint16_t port)
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		m_pendingStart = true;
-		g_scheduler.addEvent(createSchedulerTask(15000,
-		                     boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), port)));
+		g_scheduler->addEvent(createSchedulerTask(15000,
+		                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), port)));
 	}
 }
 

@@ -312,41 +312,41 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 				case CMD_BROADCAST: {
 					const std::string message = msg.GetString();
 					addLogLine(this, LOGTYPE_EVENT, 1, "broadcast: " + message);
-					g_dispatcher.addTask(createTask(boost::bind(&Game::broadcastMessage, &g_game, message, MSG_STATUS_WARNING)));
+					g_dispatcher->addTask(createTask(std::bind(&Game::broadcastMessage, &g_game, message, MSG_STATUS_WARNING)));
 					output->AddByte(AP_MSG_COMMAND_OK);
 					break;
 				}
 
 				case CMD_CLOSE_SERVER: {
-					g_dispatcher.addTask(createTask(boost::bind(&ProtocolAdmin::adminCommandCloseServer, this)));
+					g_dispatcher->addTask(createTask(std::bind(&ProtocolAdmin::adminCommandCloseServer, this)));
 					break;
 				}
 
 				case CMD_PAY_HOUSES: {
-					g_dispatcher.addTask(createTask(boost::bind(&ProtocolAdmin::adminCommandPayHouses, this)));
+					g_dispatcher->addTask(createTask(std::bind(&ProtocolAdmin::adminCommandPayHouses, this)));
 					break;
 				}
 
 				case CMD_OPEN_SERVER: {
-					g_dispatcher.addTask(createTask(boost::bind(&ProtocolAdmin::adminCommandOpenServer, this)));
+					g_dispatcher->addTask(createTask(std::bind(&ProtocolAdmin::adminCommandOpenServer, this)));
 					break;
 				}
 
 				case CMD_SHUTDOWN_SERVER: {
-					g_dispatcher.addTask(createTask(boost::bind(&ProtocolAdmin::adminCommandShutdownServer, this)));
+					g_dispatcher->addTask(createTask(std::bind(&ProtocolAdmin::adminCommandShutdownServer, this)));
 					getConnection()->closeConnection();
 					return;
 				}
 
 				case CMD_KICK: {
 					const std::string name = msg.GetString();
-					g_dispatcher.addTask(createTask(boost::bind(&ProtocolAdmin::adminCommandKickPlayer, this, name)));
+					g_dispatcher->addTask(createTask(std::bind(&ProtocolAdmin::adminCommandKickPlayer, this, name)));
 					break;
 				}
 
 				case CMD_SETOWNER: {
 					const std::string param = msg.GetString();
-					g_dispatcher.addTask(createTask(boost::bind(&ProtocolAdmin::adminCommandSetOwner, this, param)));
+					g_dispatcher->addTask(createTask(std::bind(&ProtocolAdmin::adminCommandSetOwner, this, param)));
 					break;
 				}
 

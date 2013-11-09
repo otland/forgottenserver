@@ -495,7 +495,6 @@ class LuaScriptInterface
 		static int32_t luaGetWorldType(lua_State* L);
 		static int32_t luaGetWorldTime(lua_State* L);
 		static int32_t luaGetWorldLight(lua_State* L);
-		static int32_t luaGetWorldCreatures(lua_State* L);
 		static int32_t luaGetWorldUpTime(lua_State* L);
 		static int32_t luaBroadcastMessage(lua_State* L);
 
@@ -620,6 +619,11 @@ class LuaScriptInterface
 		static int32_t luaGameGetSpectators(lua_State* L);
 		static int32_t luaGameGetPlayers(lua_State* L);
 		static int32_t luaGameLoadMap(lua_State* L);
+
+		static int32_t luaGameGetCreatureCount(lua_State* L);
+		static int32_t luaGameGetMonsterCount(lua_State* L);
+		static int32_t luaGameGetPlayerCount(lua_State* L);
+		static int32_t luaGameGetNpcCount(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
@@ -942,6 +946,8 @@ class LuaScriptInterface
 		static int32_t luaPlayerPopupFYI(lua_State* L);
 
 		static int32_t luaPlayerIsPzLocked(lua_State* L);
+
+		static int32_t luaPlayerGetClient(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);

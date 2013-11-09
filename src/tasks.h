@@ -20,20 +20,23 @@
 #ifndef __OTSERV_TASKS_H__
 #define __OTSERV_TASKS_H__
 
-#include <boost/function.hpp>
-#include <boost/thread.hpp>
+#include <functional>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 const int DISPATCHER_TASK_EXPIRATION = 2000;
+const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono::milliseconds(0));
 
 class Task
 {
 	public:
 		// DO NOT allocate this class on the stack
-		Task(uint32_t ms, const boost::function<void (void)>& f) : m_f(f) {
-			m_expiration = boost::get_system_time() + boost::posix_time::milliseconds(ms);
+		Task(uint32_t ms, const std::function<void (void)>& f) : m_f(f) {
+			m_expiration = std::chrono::system_clock::now() + std::chrono::milliseconds(ms);
 		}
-		Task(const boost::function<void (void)>& f)
-			: m_expiration(boost::date_time::not_a_date_time), m_f(f) {}
+		Task(const std::function<void (void)>& f)
+			: m_expiration(SYSTEM_TIME_ZERO), m_f(f) {}
 
 		~Task() {}
 
@@ -42,31 +45,30 @@ class Task
 		}
 
 		void setDontExpire() {
-			m_expiration = boost::date_time::not_a_date_time;
+			m_expiration = SYSTEM_TIME_ZERO;
 		}
 
 		bool hasExpired() const {
-			if (m_expiration == boost::date_time::not_a_date_time) {
+			if (m_expiration == SYSTEM_TIME_ZERO) {
 				return false;
 			}
-
-			return m_expiration < boost::get_system_time();
+			return m_expiration < std::chrono::system_clock::now();
 		}
 
 	protected:
 		// Expiration has another meaning for scheduler tasks,
 		// then it is the time the task should be added to the
 		// dispatcher
-		boost::system_time m_expiration;
-		boost::function<void (void)> m_f;
+		std::chrono::system_clock::time_point m_expiration;
+		std::function<void (void)> m_f;
 };
 
-inline Task* createTask(boost::function<void (void)> f)
+inline Task* createTask(std::function<void (void)> f)
 {
 	return new Task(f);
 }
 
-inline Task* createTask(uint32_t expiration, boost::function<void (void)> f)
+inline Task* createTask(uint32_t expiration, std::function<void (void)> f)
 {
 	return new Task(expiration, f);
 }
@@ -95,14 +97,14 @@ class Dispatcher
 
 		void flush();
 
-		boost::thread m_thread;
-		boost::mutex m_taskLock;
-		boost::condition_variable m_taskSignal;
+		std::thread m_thread;
+		std::mutex m_taskLock;
+		std::condition_variable m_taskSignal;
 
 		std::list<Task*> m_taskList;
 		DispatcherState m_threadState;
 };
 
-extern Dispatcher g_dispatcher;
+extern Dispatcher* g_dispatcher;
 
 #endif

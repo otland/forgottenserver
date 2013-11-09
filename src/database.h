@@ -23,9 +23,9 @@
 #include "definitions.h"
 
 #include <iostream>
+#include <mutex>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/thread/recursive_mutex.hpp>
 
 #include <mysql.h>
 
@@ -151,7 +151,7 @@ class Database
 
 		MYSQL* m_handle;
 
-		boost::recursive_mutex database_lock;
+		std::recursive_mutex database_lock;
 
 		bool m_connected;
 

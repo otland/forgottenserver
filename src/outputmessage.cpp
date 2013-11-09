@@ -23,8 +23,6 @@
 #include "protocol.h"
 #include "scheduler.h"
 
-extern Dispatcher g_dispatcher;
-
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 uint32_t OutputMessagePool::OutputMessagePoolCount = OUTPUT_POOL_SIZE;
 #endif
@@ -48,7 +46,7 @@ OutputMessagePool::OutputMessagePool()
 
 void OutputMessagePool::startExecutionFrame()
 {
-	//boost::recursive_mutex::scoped_lock lockClass(m_outputPoolLock);
+	//std::lock_guard<std::recursive_mutex> lockClass(m_outputPoolLock);
 	m_frameTime = OTSYS_TIME();
 	m_isOpen = true;
 }
@@ -78,7 +76,7 @@ void OutputMessagePool::send(OutputMessage_ptr msg)
 
 void OutputMessagePool::sendAll()
 {
-	boost::recursive_mutex::scoped_lock lockClass(m_outputPoolLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_outputPoolLock);
 
 	const int64_t dropTime = m_frameTime - 10000;
 	const int64_t frameTime = m_frameTime - 10;
@@ -117,8 +115,8 @@ void OutputMessagePool::sendAll()
 
 void OutputMessagePool::releaseMessage(OutputMessage* msg)
 {
-	g_dispatcher.addTask(
-	    createTask(boost::bind(&OutputMessagePool::internalReleaseMessage, this, msg)));
+	g_dispatcher->addTask(
+	    createTask(std::bind(&OutputMessagePool::internalReleaseMessage, this, msg)));
 }
 
 void OutputMessagePool::internalReleaseMessage(OutputMessage* msg)
@@ -148,7 +146,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 		return OutputMessage_ptr();
 	}
 
-	boost::recursive_mutex::scoped_lock lockClass(m_outputPoolLock);
+	std::lock_guard<std::recursive_mutex> lockClass(m_outputPoolLock);
 
 	if (!protocol->getConnection()) {
 		return OutputMessage_ptr();
@@ -165,7 +163,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 
 	OutputMessage_ptr outputmessage;
 	outputmessage.reset(m_outputMessages.back(),
-	                    boost::bind(&OutputMessagePool::releaseMessage, this, _1));
+	                    std::bind(&OutputMessagePool::releaseMessage, this, std::placeholders::_1));
 
 	m_outputMessages.pop_back();
 
