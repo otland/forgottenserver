@@ -133,7 +133,7 @@ bool Scheduler::stopEvent(uint32_t eventid)
 
 	// search the event id..
 	auto it = m_eventIds.find(eventid);
-	if (it != m_eventIds.end()) {
+	if (it == m_eventIds.end()) {
 		return false;
 	}
 
