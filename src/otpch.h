@@ -30,9 +30,6 @@
 
 //boost
 #include <boost/config.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/asio.hpp>
 
@@ -42,6 +39,7 @@
 #include <map>
 #include <string>
 #include <iomanip>
+#include <functional>
 
 //pugixml
 #include "ext/pugixml.hpp"

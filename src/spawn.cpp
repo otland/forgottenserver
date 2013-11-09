@@ -180,7 +180,7 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 void Spawn::startSpawnCheck()
 {
 	if (checkSpawnEvent == 0) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), boost::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler->addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
 	}
 }
 
@@ -288,7 +288,7 @@ void Spawn::checkSpawn()
 	}
 
 	if (spawnedMap.size() < spawnMap.size()) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), boost::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler->addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
 	}
 }
 
@@ -352,7 +352,7 @@ void Spawn::removeMonster(Monster* monster)
 void Spawn::stopEvent()
 {
 	if (checkSpawnEvent != 0) {
-		g_scheduler.stopEvent(checkSpawnEvent);
+		g_scheduler->stopEvent(checkSpawnEvent);
 		checkSpawnEvent = 0;
 	}
 }

@@ -72,7 +72,7 @@ void Scheduler::schedulerThread()
 			if (runTask) {
 				// Expiration has another meaning for dispatcher tasks, reset it
 				task->setDontExpire();
-				g_dispatcher.addTask(task);
+				g_dispatcher->addTask(task);
 			} else {
 				// was stopped, have to be deleted here
 				delete task;
@@ -129,30 +129,27 @@ bool Scheduler::stopEvent(uint32_t eventid)
 		return false;
 	}
 
-	m_eventLock.lock();
+	std::lock_guard<std::mutex> lockGuard(m_eventLock);
 
 	// search the event id..
 	auto it = m_eventIds.find(eventid);
-	if (it == m_eventIds.end()) {
-		m_eventLock.unlock();
+	if (it != m_eventIds.end()) {
 		return false;
 	}
 
 	m_eventIds.erase(it);
-	m_eventLock.unlock();
 	return true;
 }
 
 void Scheduler::stop()
 {
-	m_eventLock.lock();
+	std::lock_guard<std::mutex> lockGuard(m_eventLock);
 	m_threadState = Scheduler::STATE_CLOSING;
-	m_eventLock.unlock();
 }
 
 void Scheduler::shutdown()
 {
-	m_eventLock.lock();
+	std::lock_guard<std::mutex> lockGuard(m_eventLock);
 	m_threadState = Scheduler::STATE_TERMINATED;
 
 	//this list should already be empty
@@ -162,7 +159,6 @@ void Scheduler::shutdown()
 	}
 
 	m_eventIds.clear();
-	m_eventLock.unlock();
 }
 
 void Scheduler::join()

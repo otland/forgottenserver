@@ -32,10 +32,10 @@ class Task
 {
 	public:
 		// DO NOT allocate this class on the stack
-		Task(uint32_t ms, const boost::function<void (void)>& f) : m_f(f) {
+		Task(uint32_t ms, const std::function<void (void)>& f) : m_f(f) {
 			m_expiration = std::chrono::system_clock::now() + std::chrono::milliseconds(ms);
 		}
-		Task(const boost::function<void (void)>& f)
+		Task(const std::function<void (void)>& f)
 			: m_expiration(SYSTEM_TIME_ZERO), m_f(f) {}
 
 		~Task() {}
@@ -63,12 +63,12 @@ class Task
 		std::function<void (void)> m_f;
 };
 
-inline Task* createTask(boost::function<void (void)> f)
+inline Task* createTask(std::function<void (void)> f)
 {
 	return new Task(f);
 }
 
-inline Task* createTask(uint32_t expiration, boost::function<void (void)> f)
+inline Task* createTask(uint32_t expiration, std::function<void (void)> f)
 {
 	return new Task(expiration, f);
 }
@@ -105,6 +105,6 @@ class Dispatcher
 		DispatcherState m_threadState;
 };
 
-extern Dispatcher g_dispatcher;
+extern Dispatcher* g_dispatcher;
 
 #endif

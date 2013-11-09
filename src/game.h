@@ -106,7 +106,7 @@ class Game
 		  * \returns int32_t 0 built-in spawns, 1 needs xml spawns, 2 needs sql spawns, -1 if got error
 		  */
 		int32_t loadMainMap(const std::string& filename);
-		int32_t loadMap(const std::string& path);
+		void loadMap(const std::string& path);
 
 		/**
 		  * Get the map size - info purpose only
@@ -367,90 +367,90 @@ class Game
 
 		void sendGuildMotd(uint32_t playerId, uint32_t guildId);
 		void kickPlayer(uint32_t playerId, bool displayEffect);
-		bool playerReportBug(uint32_t playerId, const std::string& bug);
-		bool playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment);
-		bool playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
+		void playerReportBug(uint32_t playerId, const std::string& bug);
+		void playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment);
+		void playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
 
 		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
 		bool internalCloseTrade(Player* player);
 		bool playerBroadcastMessage(Player* player, const std::string& text);
-		bool broadcastMessage(const std::string& text, MessageClasses type);
+		void broadcastMessage(const std::string& text, MessageClasses type);
 
 		//Implementation of player invoked events
-		bool playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos,
+		void playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos,
 		                     const Position& toPos, uint8_t count);
-		bool playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
+		void playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		                        const Position& movingCreatureOrigPos, const Position& toPos);
-		bool playerMoveItem(uint32_t playerId, const Position& fromPos,
+		void playerMoveItem(uint32_t playerId, const Position& fromPos,
 		                    uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count);
-		bool playerMove(uint32_t playerId, Direction direction);
-		bool playerCreatePrivateChannel(uint32_t playerId);
+		void playerMove(uint32_t playerId, Direction direction);
+		void playerCreatePrivateChannel(uint32_t playerId);
 		void playerChannelInvite(uint32_t playerId, const std::string& name);
 		void playerChannelExclude(uint32_t playerId, const std::string& name);
-		bool playerRequestChannels(uint32_t playerId);
-		bool playerOpenChannel(uint32_t playerId, uint16_t channelId);
-		bool playerCloseChannel(uint32_t playerId, uint16_t channelId);
-		bool playerOpenPrivateChannel(uint32_t playerId, std::string& receiver);
-		bool playerCloseNpcChannel(uint32_t playerId);
-		bool playerReceivePing(uint32_t playerId);
-		bool playerReceivePingBack(uint32_t playerId);
-		bool playerAutoWalk(uint32_t playerId, const std::list<Direction>& listDir);
-		bool playerStopAutoWalk(uint32_t playerId);
-		bool playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos,
+		void playerRequestChannels(uint32_t playerId);
+		void playerOpenChannel(uint32_t playerId, uint16_t channelId);
+		void playerCloseChannel(uint32_t playerId, uint16_t channelId);
+		void playerOpenPrivateChannel(uint32_t playerId, std::string& receiver);
+		void playerCloseNpcChannel(uint32_t playerId);
+		void playerReceivePing(uint32_t playerId);
+		void playerReceivePingBack(uint32_t playerId);
+		void playerAutoWalk(uint32_t playerId, const std::list<Direction>& listDir);
+		void playerStopAutoWalk(uint32_t playerId);
+		void playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos,
 		                     uint16_t fromSpriteId, const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId, bool isHotkey);
-		bool playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPos,
+		void playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPos,
 		                   uint8_t index, uint16_t spriteId, bool isHotkey);
-		bool playerUseWithCreature(uint32_t playerId, const Position& fromPos,
+		void playerUseWithCreature(uint32_t playerId, const Position& fromPos,
 		                           uint8_t fromStackPos, uint32_t creatureId, uint16_t spriteId, bool isHotkey);
-		bool playerCloseContainer(uint32_t playerId, uint8_t cid);
-		bool playerMoveUpContainer(uint32_t playerId, uint8_t cid);
-		bool playerUpdateContainer(uint32_t playerId, uint8_t cid);
-		bool playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stackPos, const uint16_t spriteId);
-		bool playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text);
-		bool playerBrowseField(uint32_t playerId, const Position& pos);
-		bool playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index);
-		bool playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text);
-		bool playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t stackPos,
+		void playerCloseContainer(uint32_t playerId, uint8_t cid);
+		void playerMoveUpContainer(uint32_t playerId, uint8_t cid);
+		void playerUpdateContainer(uint32_t playerId, uint8_t cid);
+		void playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stackPos, const uint16_t spriteId);
+		void playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text);
+		void playerBrowseField(uint32_t playerId, const Position& pos);
+		void playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index);
+		void playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text);
+		void playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t stackPos,
 		                        uint32_t tradePlayerId, uint16_t spriteId);
-		bool playerAcceptTrade(uint32_t playerId);
-		bool playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int index);
-		bool playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
+		void playerAcceptTrade(uint32_t playerId);
+		void playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int index);
+		void playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
 		                        bool ignoreCap = false, bool inBackpacks = false);
-		bool playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count,
+		void playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count,
 		                    uint8_t amount, bool ignoreEquipped = false);
-		bool playerCloseShop(uint32_t playerId);
-		bool playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count);
-		bool playerCloseTrade(uint32_t playerId);
-		bool playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId);
-		bool playerFollowCreature(uint32_t playerId, uint32_t creatureId);
-		bool playerCancelAttackAndFollow(uint32_t playerId);
-		bool playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, secureMode_t secureMode);
-		bool playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteId, uint8_t stackPos);
-		bool playerLookInBattleList(uint32_t playerId, uint32_t creatureId);
-		bool playerRequestAddVip(uint32_t playerId, const std::string& name);
-		bool playerRequestRemoveVip(uint32_t playerId, uint32_t guid);
-		bool playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
-		bool playerTurn(uint32_t playerId, Direction dir);
-		bool playerRequestOutfit(uint32_t playerId);
-		bool playerShowQuestLog(uint32_t playerId);
-		bool playerShowQuestLine(uint32_t playerId, uint16_t questId);
-		bool playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
+		void playerCloseShop(uint32_t playerId);
+		void playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count);
+		void playerCloseTrade(uint32_t playerId);
+		void playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId);
+		void playerFollowCreature(uint32_t playerId, uint32_t creatureId);
+		void playerCancelAttackAndFollow(uint32_t playerId);
+		void playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, secureMode_t secureMode);
+		void playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteId, uint8_t stackPos);
+		void playerLookInBattleList(uint32_t playerId, uint32_t creatureId);
+		void playerRequestAddVip(uint32_t playerId, const std::string& name);
+		void playerRequestRemoveVip(uint32_t playerId, uint32_t guid);
+		void playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
+		void playerTurn(uint32_t playerId, Direction dir);
+		void playerRequestOutfit(uint32_t playerId);
+		void playerShowQuestLog(uint32_t playerId);
+		void playerShowQuestLine(uint32_t playerId, uint16_t questId);
+		void playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		               const std::string& receiver, const std::string& text);
-		bool playerChangeOutfit(uint32_t playerId, Outfit_t outfit);
-		bool playerInviteToParty(uint32_t playerId, uint32_t invitedId);
-		bool playerJoinParty(uint32_t playerId, uint32_t leaderId);
-		bool playerRevokePartyInvitation(uint32_t playerId, uint32_t invitedId);
-		bool playerPassPartyLeadership(uint32_t playerId, uint32_t newLeaderId);
-		bool playerLeaveParty(uint32_t playerId);
-		bool playerEnableSharedPartyExperience(uint32_t playerId, bool sharedExpActive);
-		bool playerToggleMount(uint32_t playerId, bool mount);
-		bool playerLeaveMarket(uint32_t playerId);
-		bool playerBrowseMarket(uint32_t playerId, uint16_t spriteId);
-		bool playerBrowseMarketOwnOffers(uint32_t playerId);
-		bool playerBrowseMarketOwnHistory(uint32_t playerId);
-		bool playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spriteId, uint16_t amount, uint32_t price, bool anonymous);
-		bool playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter);
-		bool playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
+		void playerChangeOutfit(uint32_t playerId, Outfit_t outfit);
+		void playerInviteToParty(uint32_t playerId, uint32_t invitedId);
+		void playerJoinParty(uint32_t playerId, uint32_t leaderId);
+		void playerRevokePartyInvitation(uint32_t playerId, uint32_t invitedId);
+		void playerPassPartyLeadership(uint32_t playerId, uint32_t newLeaderId);
+		void playerLeaveParty(uint32_t playerId);
+		void playerEnableSharedPartyExperience(uint32_t playerId, bool sharedExpActive);
+		void playerToggleMount(uint32_t playerId, bool mount);
+		void playerLeaveMarket(uint32_t playerId);
+		void playerBrowseMarket(uint32_t playerId, uint16_t spriteId);
+		void playerBrowseMarketOwnOffers(uint32_t playerId);
+		void playerBrowseMarketOwnHistory(uint32_t playerId);
+		void playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spriteId, uint16_t amount, uint32_t price, bool anonymous);
+		void playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter);
+		void playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
 		void checkExpiredMarketOffers();
 
 		void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);

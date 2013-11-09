@@ -3229,13 +3229,9 @@ int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 		type = popNumber(L);
 	}
 
-	std::string message = popString(L);
-	if (g_game.broadcastMessage(message, (MessageClasses)type)) {
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc("Bad messageClass type.");
-		pushBoolean(L, false);
-	}
+	const std::string& message = popString(L);
+	g_game.broadcastMessage(message, (MessageClasses)type);
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -4863,8 +4859,8 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
 	auto& lastTimerEventId = g_luaEnvironment.m_lastEventTimerId;
-	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(
-		delay, boost::bind(&LuaEnvironment::executeTimerEvent, &g_luaEnvironment, lastTimerEventId)
+	eventDesc.eventId = g_scheduler->addEvent(createSchedulerTask(
+		delay, std::bind(&LuaEnvironment::executeTimerEvent, &g_luaEnvironment, lastTimerEventId)
 	));
 
 	g_luaEnvironment.m_timerEvents[lastTimerEventId] = eventDesc;
@@ -4890,7 +4886,7 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 	}
 
 	const LuaTimerEventDesc& timerEventDesc = it->second;
-	g_scheduler.stopEvent(timerEventDesc.eventId);
+	g_scheduler->stopEvent(timerEventDesc.eventId);
 
 	for (auto parameter : timerEventDesc.parameters) {
 		luaL_unref(g_luaEnvironment.m_luaState, LUA_REGISTRYINDEX, parameter);
@@ -4931,24 +4927,24 @@ int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 
 int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 {
-	g_dispatcher.addTask(
-	    createTask(boost::bind(&Game::saveGameState, &g_game)));
+	g_dispatcher->addTask(
+	    createTask(std::bind(&Game::saveGameState, &g_game)));
 	pushBoolean(L, true);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaRefreshMap(lua_State* L)
 {
-	g_dispatcher.addTask(
-	    createTask(boost::bind(&Game::refreshMap, &g_game)));
+	g_dispatcher->addTask(
+	    createTask(std::bind(&Game::refreshMap, &g_game)));
 	pushBoolean(L, true);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
-	g_dispatcher.addTask(
-	    createTask(boost::bind(&Game::cleanMap, &g_game)));
+	g_dispatcher->addTask(
+	    createTask(std::bind(&Game::cleanMap, &g_game)));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -5482,7 +5478,7 @@ int32_t LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
 	const std::string& path = getString(L, 1);
-	g_dispatcher.addTask(createTask(boost::bind(&Game::loadMap, &g_game, path)));
+	g_dispatcher->addTask(createTask(std::bind(&Game::loadMap, &g_game, path)));
 	return 1;
 }
 
@@ -9109,7 +9105,8 @@ int32_t LuaScriptInterface::luaPlayerOpenChannel(lua_State* L)
 	uint16_t channelId = getNumber<uint16_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		pushBoolean(L, g_game.playerOpenChannel(player->getID(), channelId));
+		g_game.playerOpenChannel(player->getID(), channelId);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}

@@ -53,16 +53,16 @@ class SchedulerTask : public Task
 		}
 
 	protected:
-		SchedulerTask(uint32_t delay, const boost::function<void (void)>& f) : Task(delay, f) {
+		SchedulerTask(uint32_t delay, const std::function<void (void)>& f) : Task(delay, f) {
 			m_eventid = 0;
 		}
 
 		uint32_t m_eventid;
 
-		friend SchedulerTask* createSchedulerTask(uint32_t, const boost::function<void (void)>&);
+		friend SchedulerTask* createSchedulerTask(uint32_t, const std::function<void (void)>&);
 };
 
-inline SchedulerTask* createSchedulerTask(uint32_t delay, const boost::function<void (void)>& f)
+inline SchedulerTask* createSchedulerTask(uint32_t delay, const std::function<void (void)>& f)
 {
 	return new SchedulerTask(std::max<uint32_t>(delay, SCHEDULER_MINTICKS), f);
 }
@@ -108,6 +108,6 @@ class Scheduler
 		SchedulerState m_threadState;
 };
 
-extern Scheduler g_scheduler;
+extern Scheduler* g_scheduler;
 
 #endif

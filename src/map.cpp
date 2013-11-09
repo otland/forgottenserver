@@ -25,9 +25,6 @@
 #include <map>
 #include <algorithm>
 
-#include <boost/config.hpp>
-#include <boost/bind.hpp>
-
 #include "iomap.h"
 
 #include "iomapserialize.h"

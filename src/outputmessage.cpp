@@ -23,8 +23,6 @@
 #include "protocol.h"
 #include "scheduler.h"
 
-extern Dispatcher g_dispatcher;
-
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 uint32_t OutputMessagePool::OutputMessagePoolCount = OUTPUT_POOL_SIZE;
 #endif
@@ -117,8 +115,8 @@ void OutputMessagePool::sendAll()
 
 void OutputMessagePool::releaseMessage(OutputMessage* msg)
 {
-	g_dispatcher.addTask(
-	    createTask(boost::bind(&OutputMessagePool::internalReleaseMessage, this, msg)));
+	g_dispatcher->addTask(
+	    createTask(std::bind(&OutputMessagePool::internalReleaseMessage, this, msg)));
 }
 
 void OutputMessagePool::internalReleaseMessage(OutputMessage* msg)
@@ -165,7 +163,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 
 	OutputMessage_ptr outputmessage;
 	outputmessage.reset(m_outputMessages.back(),
-	                    boost::bind(&OutputMessagePool::releaseMessage, this, _1));
+	                    std::bind(&OutputMessagePool::releaseMessage, this, std::placeholders::_1));
 
 	m_outputMessages.pop_back();
 

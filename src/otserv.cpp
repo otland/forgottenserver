@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "definitions.h"
-#include <boost/asio.hpp>
 #include "server.h"
 
 #include <string>
@@ -64,8 +63,8 @@
 
 #include "databasemanager.h"
 
-Dispatcher g_dispatcher;
-Scheduler g_scheduler;
+Dispatcher* g_dispatcher = new Dispatcher;
+Scheduler* g_scheduler = new Scheduler;
 
 extern AdminProtocolConfig* g_adminConfig;
 Ban g_bans;
@@ -102,8 +101,8 @@ void badAllocationHandler()
 
 void shutdown()
 {
-	g_scheduler.shutdown();
-	g_dispatcher.shutdown();
+	g_scheduler->shutdown();
+	g_dispatcher->shutdown();
 }
 
 int main(int argc, char* argv[])
@@ -122,25 +121,25 @@ int main(int argc, char* argv[])
 
 	ServiceManager servicer;
 
-	g_dispatcher.start();
-	g_scheduler.start();
+	g_dispatcher->start();
+	g_scheduler->start();
 
-	g_dispatcher.addTask(createTask(boost::bind(mainLoader, argc, argv, &servicer)));
+	g_dispatcher->addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (servicer.is_running()) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 		servicer.run();
-		g_scheduler.join();
-		g_dispatcher.join();
+		g_scheduler->join();
+		g_dispatcher->join();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_scheduler.stop();
-		g_dispatcher.stop();
-		g_dispatcher.addTask(createTask(boost::bind(shutdown)));
-		g_scheduler.join();
-		g_dispatcher.join();
+		g_scheduler->stop();
+		g_dispatcher->stop();
+		g_dispatcher->addTask(createTask(std::bind(shutdown)));
+		g_scheduler->join();
+		g_dispatcher->join();
 	}
 	return 0;
 }
@@ -339,7 +338,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	int32_t autoSaveEachMinutes = g_config.getNumber(ConfigManager::AUTO_SAVE_EACH_MINUTES);
 	if (autoSaveEachMinutes > 0) {
-		g_scheduler.addEvent(createSchedulerTask(autoSaveEachMinutes * 1000 * 60, boost::bind(&Game::autoSave, &g_game)));
+		g_scheduler->addEvent(createSchedulerTask(autoSaveEachMinutes * 1000 * 60, std::bind(&Game::autoSave, &g_game)));
 	}
 
 	if (g_config.getBoolean(ConfigManager::SERVERSAVE_ENABLED)) {
@@ -362,7 +361,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 			if (difference < 0) {
 				difference += 86400;
 			}
-			g_scheduler.addEvent(createSchedulerTask(difference * 1000, boost::bind(&Game::prepareServerSave, &g_game)));
+			g_scheduler->addEvent(createSchedulerTask(difference * 1000, std::bind(&Game::prepareServerSave, &g_game)));
 		}
 	}
 
