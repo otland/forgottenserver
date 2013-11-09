@@ -984,9 +984,9 @@ function Creature.getClosestFreePosition(self, position, extended)
 		return position
 	end
 	
-	local tiles = { position:getTile() }
-	local length = extended and 2 or 1
 	local usePosition = Position(position)
+	local tiles = { usePosition:getTile() }
+	local length = extended and 2 or 1
 	
 	local tile
 	for y = -length, length do
