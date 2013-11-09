@@ -99,12 +99,6 @@ void badAllocationHandler()
 	exit(-1);
 }
 
-void shutdown()
-{
-	g_scheduler->shutdown();
-	g_dispatcher->shutdown();
-}
-
 int main(int argc, char* argv[])
 {
 	// Setup bad allocation handler
@@ -137,7 +131,10 @@ int main(int argc, char* argv[])
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
 		g_scheduler->stop();
 		g_dispatcher->stop();
-		g_dispatcher->addTask(createTask(std::bind(shutdown)));
+		g_dispatcher->addTask(createTask([](){
+			g_scheduler->shutdown();
+			g_dispatcher->shutdown();
+		}));
 		g_scheduler->join();
 		g_dispatcher->join();
 	}
