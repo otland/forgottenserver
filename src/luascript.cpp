@@ -51,8 +51,6 @@ extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
 
-LuaEnvironment g_luaEnvironment;
-
 enum {
 	EVENT_ID_LOADING = 1,
 	EVENT_ID_USER = 1000,
@@ -66,6 +64,8 @@ uint32_t ScriptEnvironment::m_lastResultId = 0;
 ScriptEnvironment::StorageMap ScriptEnvironment::m_globalStorageMap;
 
 ScriptEnvironment::TempItemListMap ScriptEnvironment::m_tempItems;
+
+LuaEnvironment g_luaEnvironment;
 
 ScriptEnvironment::ScriptEnvironment()
 {
