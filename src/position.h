@@ -20,8 +20,6 @@
 #ifndef __OTSERV_POS_H
 #define __OTSERV_POS_H
 
-#include <cstdlib>
-
 enum Direction {
 	NORTH = 0,
 	EAST = 1,

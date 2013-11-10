@@ -27,8 +27,6 @@
 #include "spells.h"
 #include "player.h"
 
-#include <fstream>
-
 #include "pugicast.h"
 
 #include "luascript.h"

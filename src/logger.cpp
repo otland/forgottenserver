@@ -22,8 +22,6 @@
 #include "logger.h"
 #include "tools.h"
 
-#include <ctime>
-
 Logger::Logger()
 {
 	m_file = fopen("data/logs/otadmin.log", "a");

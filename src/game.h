@@ -20,9 +20,6 @@
 #ifndef __OTSERV_GAME_H__
 #define __OTSERV_GAME_H__
 
-#include <queue>
-#include <set>
-
 #include "combat.h"
 #include "groups.h"
 #include "map.h"

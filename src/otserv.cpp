@@ -28,7 +28,6 @@
 #include "protocolgame.h"
 
 #include <cstdlib>
-#include <ctime>
 #include "game.h"
 
 #include "iologindata.h"

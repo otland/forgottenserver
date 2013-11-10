@@ -23,7 +23,6 @@
 #include "tasks.h"
 #include <unordered_set>
 #include <queue>
-#include <set>
 
 #include <thread>
 #include <condition_variable>

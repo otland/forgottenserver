@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <cstdlib>
-
 #include "player.h"
 #include "iologindata.h"
 #include "chat.h"

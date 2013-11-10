@@ -20,7 +20,6 @@
 #ifndef __OTSERV_MAP_H__
 #define __OTSERV_MAP_H__
 
-#include <queue>
 #include <bitset>
 
 #include "position.h"

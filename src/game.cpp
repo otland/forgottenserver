@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <fstream>
-
 #include "pugicast.h"
 
 #include "tasks.h"
