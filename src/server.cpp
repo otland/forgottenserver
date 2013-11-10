@@ -27,7 +27,7 @@
 #include "ban.h"
 
 extern ConfigManager g_config;
-extern Ban g_bans;
+Ban g_bans;
 
 ServiceManager::ServiceManager()
 	: m_io_service(), death_timer(m_io_service), running(false)
@@ -152,7 +152,6 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 		if (remote_ip != 0 && g_bans.acceptConnection(remote_ip)) {
 			Connection_ptr connection = ConnectionManager::getInstance()->createConnection(socket, m_io_service, shared_from_this());
 			Service_ptr service = m_services.front();
-
 			if (service->is_single_socket()) {
 				connection->acceptConnection(service->make_protocol(connection));
 			} else {

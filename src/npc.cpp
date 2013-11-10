@@ -22,18 +22,14 @@
 #include "npc.h"
 #include "game.h"
 #include "tools.h"
-#include "configmanager.h"
 #include "position.h"
-#include "spells.h"
 #include "player.h"
 
 #include "pugicast.h"
 
 #include "luascript.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
-extern Spells* g_spells;
 extern LuaEnvironment g_luaEnvironment;
 
 enum {

@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "iomap.h"
-#include "game.h"
 #include "map.h"
 
 #include "tile.h"
@@ -34,8 +33,6 @@
 
 typedef uint8_t attribute_t;
 typedef uint32_t flags_t;
-
-extern Game g_game;
 
 /*
 	OTBM_ROOTV1

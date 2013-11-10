@@ -27,16 +27,12 @@
 #include "house.h"
 #include "game.h"
 #include "luascript.h"
-#include "configmanager.h"
-#include "weapons.h"
 #include "beds.h"
 
 #include "actions.h"
 #include "combat.h"
 
 extern Game g_game;
-extern ConfigManager g_config;
-extern Weapons* g_weapons;
 
 Items Item::items;
 

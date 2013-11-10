@@ -20,8 +20,9 @@
 #ifndef __MOVEMENT_H__
 #define __MOVEMENT_H__
 
-#include "luascript.h"
 #include "baseevents.h"
+#include "item.h"
+#include "luascript.h"
 
 enum MoveEvent_t {
 	MOVE_EVENT_STEP_IN = 0,

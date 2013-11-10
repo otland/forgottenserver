@@ -25,10 +25,8 @@
 #include "spells.h"
 #include "combat.h"
 #include "spawn.h"
-#include "configmanager.h"
 
 extern Game g_game;
-extern ConfigManager g_config;
 extern Monsters g_monsters;
 
 int32_t Monster::despawnRange;

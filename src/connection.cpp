@@ -19,18 +19,14 @@
 
 #include "otpch.h"
 
-#include "protocol.h"
-#include "outputmessage.h"
-#include "tasks.h"
-#include "scheduler.h"
-#include "connection.h"
-#include "tools.h"
-#include "server.h"
-#include "protocolgame.h"
-#include "protocolold.h"
-#include "admin.h"
-#include "protocolstatus.h"
 #include "configmanager.h"
+#include "connection.h"
+#include "logger.h"
+#include "outputmessage.h"
+#include "protocol.h"
+#include "scheduler.h"
+#include "server.h"
+#include "tasks.h"
 
 bool Connection::m_logError = true;
 
@@ -365,8 +361,7 @@ bool Connection::send(OutputMessage_ptr msg)
 		msg->getProtocol()->onSendMessage(msg);
 		internalSend(msg);
 	} else {
-		OutputMessagePool* outputPool = OutputMessagePool::getInstance();
-		outputPool->addToAutoSend(msg);
+		OutputMessagePool::getInstance()->addToAutoSend(msg);
 	}
 
 	m_connectionLock.unlock();

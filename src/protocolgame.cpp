@@ -50,7 +50,6 @@
 extern Game g_game;
 extern ConfigManager g_config;
 extern Actions actions;
-extern Ban g_bans;
 extern CreatureEvents* g_creatureEvents;
 Chat g_chat;
 

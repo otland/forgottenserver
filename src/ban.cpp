@@ -20,12 +20,8 @@
 #include "otpch.h"
 
 #include "ban.h"
-#include "iologindata.h"
-#include "configmanager.h"
-#include "tools.h"
 #include "database.h"
-
-extern ConfigManager g_config;
+#include "tools.h"
 
 bool Ban::acceptConnection(uint32_t clientip)
 {

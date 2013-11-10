@@ -54,9 +54,8 @@ class ConfigManager
 			ALLOW_CLONES = 17,
 			BIND_ONLY_GLOBAL_ADDRESS = 18,
 			OPTIMIZE_DATABASE = 19,
-			MARKET_ENABLED = 20,
-			MARKET_PREMIUM = 21,
-			STAMINA_SYSTEM = 22,
+			MARKET_PREMIUM = 20,
+			STAMINA_SYSTEM = 21,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

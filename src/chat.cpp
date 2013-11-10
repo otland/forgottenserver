@@ -19,16 +19,12 @@
 
 #include "otpch.h"
 
-#include "pugicast.h"
-
 #include "chat.h"
-#include "configmanager.h"
-#include "player.h"
 #include "game.h"
-#include "iologindata.h"
+#include "pugicast.h"
+#include "player.h"
 
 extern Chat g_chat;
-extern ConfigManager g_config;
 extern Game g_game;
 
 PrivateChatChannel::PrivateChatChannel(uint16_t channelId, const std::string& channelName) :
@@ -138,6 +134,7 @@ bool ChatChannel::addUser(Player& player)
 		return false;
 	}
 
+	// TODO: Move to script when guild channels can be scripted
 	if (id == CHANNEL_GUILD) {
 		Guild* guild = player.getGuild();
 		if (guild && !guild->getMotd().empty()) {

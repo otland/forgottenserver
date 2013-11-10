@@ -20,9 +20,6 @@
 #include "otpch.h"
 
 #include <fstream>
-#include <utility>
-#include <cstring>
-#include <cerrno>
 
 #include "commands.h"
 #include "player.h"
@@ -42,7 +39,6 @@
 #include "spells.h"
 #include "weapons.h"
 #include "raids.h"
-#include "chat.h"
 #include "quests.h"
 #include "mounts.h"
 #include "globalevent.h"
@@ -65,7 +61,6 @@ extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
 extern Weapons* g_weapons;
 extern Game g_game;
-extern Chat g_chat;
 extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
 

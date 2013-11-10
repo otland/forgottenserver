@@ -25,8 +25,6 @@
 #include "tools.h"
 #include "combat.h"
 
-#include <utility>
-
 extern Game g_game;
 
 Condition::Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId) :

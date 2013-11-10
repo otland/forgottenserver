@@ -50,7 +50,8 @@ extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
-extern LuaEnvironment g_luaEnvironment;
+
+LuaEnvironment g_luaEnvironment;
 
 enum {
 	EVENT_ID_LOADING = 1,

@@ -19,24 +19,18 @@
 
 #include "otpch.h"
 
-#include "const.h"
-#include "player.h"
-#include "monster.h"
-#include "npc.h"
-#include "game.h"
-#include "item.h"
-#include "container.h"
-#include "combat.h"
-#include "house.h"
-#include "tasks.h"
-#include "tools.h"
-#include "spells.h"
-#include "configmanager.h"
-#include "beds.h"
-
-#include "pugicast.h"
-
 #include "actions.h"
+#include "beds.h"
+#include "configmanager.h"
+#include "const.h"
+#include "container.h"
+#include "game.h"
+#include "house.h"
+#include "item.h"
+#include "player.h"
+#include "pugicast.h"
+#include "spells.h"
+#include "tasks.h"
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -533,11 +527,6 @@ bool Action::decreaseItemId(Player* player, Item* item, const PositionEx& posFro
 
 bool Action::enterMarket(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, uint32_t creatureId)
 {
-	if (!g_config.getBoolean(ConfigManager::MARKET_ENABLED)) {
-		player->sendTextMessage(MSG_INFO_DESCR, "The market is disabled.");
-		return false;
-	}
-
 	if (player->getLastDepotId() == -1) {
 		return false;
 	}

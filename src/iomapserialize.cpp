@@ -21,10 +21,8 @@
 
 #include "iomapserialize.h"
 #include "house.h"
-#include "configmanager.h"
 #include "game.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 bool IOMapSerialize::loadMap(Map* map)

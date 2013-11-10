@@ -22,11 +22,9 @@
 #include "party.h"
 #include "player.h"
 #include "game.h"
-#include "chat.h"
 #include "configmanager.h"
 
 extern Game g_game;
-extern Chat g_chat;
 extern ConfigManager g_config;
 
 Party::Party(Player* _leader)

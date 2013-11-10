@@ -20,8 +20,6 @@
 #ifndef __OTSERV_OUTPUT_MESSAGE_H__
 #define __OTSERV_OUTPUT_MESSAGE_H__
 
-#include <memory>
-
 #include "networkmessage.h"
 #include "connection.h"
 #include "tools.h"

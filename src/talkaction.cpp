@@ -25,8 +25,6 @@
 
 #include "talkaction.h"
 
-extern Game g_game;
-
 TalkActions::TalkActions()
 	: m_scriptInterface("TalkAction Interface")
 {

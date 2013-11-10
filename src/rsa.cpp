@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <cstdio>
-
 #include "rsa.h"
 
 RSA::RSA()

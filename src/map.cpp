@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <cstdio>
-
 #include "iomap.h"
 #include "iomapserialize.h"
 #include "items.h"

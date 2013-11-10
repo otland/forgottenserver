@@ -27,7 +27,6 @@
 #include "configmanager.h"
 #include "house.h"
 #include "iologindata.h"
-#include "ban.h"
 #include "tools.h"
 #include "rsa.h"
 
@@ -39,7 +38,6 @@ static void addLogLine(ProtocolAdmin* conn, eLogType type, int level, const std:
 
 extern Game g_game;
 extern ConfigManager g_config;
-extern Ban g_bans;
 
 AdminProtocolConfig* g_adminConfig = nullptr;
 

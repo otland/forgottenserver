@@ -35,7 +35,6 @@
 #include "iologindata.h"
 #include "iomarket.h"
 #include "chat.h"
-#include "luascript.h"
 #include "talkaction.h"
 #include "spells.h"
 #include "configmanager.h"

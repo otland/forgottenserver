@@ -57,7 +57,6 @@ mapName = "forgotten"
 mapAuthor = "Komic"
 
 -- Market
-marketEnabled = "yes"
 marketOfferDuration = 30 * 24 * 60 * 60
 premiumToCreateMarketOffer = "yes"
 checkExpiredMarketOffersEachMinutes = 60

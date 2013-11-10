@@ -32,7 +32,6 @@
 #include "game.h"
 
 extern ConfigManager g_config;
-extern Ban g_bans;
 extern Game g_game;
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__

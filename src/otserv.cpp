@@ -27,7 +27,6 @@
 #include "networkmessage.h"
 #include "protocolgame.h"
 
-#include <cstdlib>
 #include "game.h"
 
 #include "iologindata.h"
@@ -63,7 +62,6 @@ Dispatcher* g_dispatcher = new Dispatcher;
 Scheduler* g_scheduler = new Scheduler;
 
 extern AdminProtocolConfig* g_adminConfig;
-Ban g_bans;
 Game g_game;
 Commands g_commands;
 Npcs g_npcs;
@@ -71,7 +69,6 @@ ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
 RSA g_RSA;
-LuaEnvironment g_luaEnvironment;
 
 std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
@@ -361,11 +358,8 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	Houses::getInstance().payHouses();
 	IOLoginData::updateHouseOwners();
 	g_npcs.reload();
-
-	if (g_config.getBoolean(ConfigManager::MARKET_ENABLED)) {
-		g_game.checkExpiredMarketOffers();
-		IOMarket::getInstance()->updateStatistics();
-	}
+	g_game.checkExpiredMarketOffers();
+	IOMarket::getInstance()->updateStatistics();
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 

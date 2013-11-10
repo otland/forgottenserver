@@ -20,8 +20,6 @@
 #ifndef __OTSERV_SERVER_H__
 #define __OTSERV_SERVER_H__
 
-#include <memory>
-
 class Connection;
 typedef std::shared_ptr<Connection> Connection_ptr;
 class Protocol;

@@ -20,10 +20,9 @@
 #include "otpch.h"
 
 #include "beds.h"
-
+#include "game.h"
 #include "house.h"
 #include "iologindata.h"
-#include "game.h"
 #include "player.h"
 
 extern Game g_game;

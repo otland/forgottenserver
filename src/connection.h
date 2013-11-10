@@ -20,8 +20,7 @@
 #ifndef __OTSERV_CONNECTION_H__
 #define __OTSERV_CONNECTION_H__
 
-#include <set>
-#include <memory>
+#include <unordered_set>
 
 #include "networkmessage.h"
 
@@ -56,8 +55,7 @@ class ConnectionManager
 		ConnectionManager() {
 		}
 
-		// TODO: Use unordered_set (we need to specify a hash function)
-		std::set<Connection_ptr> m_connections;
+		std::unordered_set<Connection_ptr> m_connections;
 		std::recursive_mutex m_connectionManagerLock;
 };
 

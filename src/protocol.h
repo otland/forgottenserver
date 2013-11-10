@@ -20,8 +20,6 @@
 #ifndef __OTSERV_PROTOCOL_H__
 #define __OTSERV_PROTOCOL_H__
 
-#include <memory>
-
 class NetworkMessage;
 class OutputMessage;
 class Connection;
