@@ -55,7 +55,6 @@ Scheduler* g_scheduler = new Scheduler;
 extern AdminProtocolConfig* g_adminConfig;
 Game g_game;
 Commands g_commands;
-Npcs g_npcs;
 ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
@@ -346,7 +345,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	Houses::getInstance().payHouses();
 	IOLoginData::updateHouseOwners();
-	g_npcs.reload();
 	g_game.checkExpiredMarketOffers();
 	IOMarket::getInstance()->updateStatistics();
 
