@@ -20,10 +20,7 @@
 #ifndef __OTSERV_POS_H
 #define __OTSERV_POS_H
 
-#include "definitions.h"
-
 #include <cstdlib>
-#include <iostream>
 
 enum Direction {
 	NORTH = 0,

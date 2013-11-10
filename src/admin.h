@@ -77,7 +77,6 @@
 
 #include "player.h"
 #include "logger.h"
-#include <string>
 
 class NetworkMessage;
 class RSA;

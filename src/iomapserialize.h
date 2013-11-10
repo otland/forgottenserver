@@ -23,8 +23,6 @@
 #include "database.h"
 #include "map.h"
 
-#include <string>
-
 class IOMapSerialize
 {
 	public:

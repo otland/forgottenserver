@@ -22,7 +22,6 @@
 
 #include "luascript.h"
 #include "baseevents.h"
-#include <map>
 
 enum MoveEvent_t {
 	MOVE_EVENT_STEP_IN = 0,

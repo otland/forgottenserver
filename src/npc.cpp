@@ -19,7 +19,6 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
 #include "npc.h"
 #include "game.h"
 #include "tools.h"
@@ -28,13 +27,8 @@
 #include "spells.h"
 #include "player.h"
 
-#include <algorithm>
-#include <functional>
-#include <string>
-#include <sstream>
 #include <fstream>
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "luascript.h"

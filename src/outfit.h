@@ -20,9 +20,6 @@
 #ifndef __OUTFIT_H__
 #define __OUTFIT_H__
 
-#include <vector>
-#include <string>
-
 #include "enums.h"
 
 struct Outfit {

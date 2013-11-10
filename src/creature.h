@@ -20,8 +20,6 @@
 #ifndef __OTSERV_CREATURE_H__
 #define __OTSERV_CREATURE_H__
 
-#include "definitions.h"
-
 #include "map.h"
 #include "position.h"
 #include "condition.h"
@@ -29,8 +27,6 @@
 #include "tile.h"
 #include "enums.h"
 #include "creatureevent.h"
-
-#include <list>
 
 typedef std::list<Condition*> ConditionList;
 typedef std::list<CreatureEvent*> CreatureEventList;

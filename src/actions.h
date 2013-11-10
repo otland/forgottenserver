@@ -22,7 +22,6 @@
 
 #include "position.h"
 
-#include <map>
 #include "luascript.h"
 #include "baseevents.h"
 #include "thing.h"

@@ -20,7 +20,6 @@
 #ifndef __IOLOGINDATA_H
 #define __IOLOGINDATA_H
 
-#include <string>
 #include "account.h"
 #include "player.h"
 #include "database.h"

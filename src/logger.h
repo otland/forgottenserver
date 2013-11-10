@@ -20,8 +20,6 @@
 #ifndef __OTSERV_LOGGER_H__
 #define __OTSERV_LOGGER_H__
 
-#include "definitions.h"
-
 #ifdef __GNUC__
 #define __OTSERV_PRETTY_FUNCTION__ __PRETTY_FUNCTION__
 #endif
@@ -36,9 +34,6 @@
 
 #define LOG_MESSAGE(channel, type, level, message) \
 	Logger::getInstance()->logMessage(channel, type, level, message, __OTSERV_PRETTY_FUNCTION__);
-
-#include <string>
-#include <map>
 
 enum eLogType {
 	LOGTYPE_EVENT,

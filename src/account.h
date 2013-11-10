@@ -20,9 +20,6 @@
 #ifndef __ACCOUNT__
 #define __ACCOUNT__
 
-#include <list>
-#include <string>
-#include "definitions.h"
 #include "enums.h"
 
 struct Account {

@@ -30,7 +30,6 @@
 #include "configmanager.h"
 #include "game.h"
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 extern Game g_game;

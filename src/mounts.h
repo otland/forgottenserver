@@ -20,8 +20,6 @@
 #ifndef _MOUNTS_H_
 #define _MOUNTS_H_
 
-#include <list>
-#include <string>
 #include "player.h"
 #include "networkmessage.h"
 

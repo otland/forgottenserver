@@ -20,8 +20,6 @@
 #ifndef __OTSERV_CONST_H__
 #define __OTSERV_CONST_H__
 
-#include "definitions.h"
-
 #define NETWORKMESSAGE_MAXSIZE 24590
 
 enum MagicEffectClasses {

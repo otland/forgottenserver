@@ -36,10 +36,6 @@
 #include "groups.h"
 #include "town.h"
 
-#include <vector>
-#include <ctime>
-#include <algorithm>
-
 class House;
 class NetworkMessage;
 class Weapon;

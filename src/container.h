@@ -22,7 +22,6 @@
 
 #include <queue>
 
-#include "definitions.h"
 #include "cylinder.h"
 #include "item.h"
 

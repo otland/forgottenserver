@@ -21,7 +21,6 @@
 
 #include "mounts.h"
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 bool Mount::isTamed(Player* player) const

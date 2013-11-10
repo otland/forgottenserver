@@ -24,9 +24,6 @@
 #include "position.h"
 #include "monster.h"
 
-#include <vector>
-#include <map>
-
 class Spawn;
 
 class Spawns

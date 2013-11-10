@@ -19,9 +19,6 @@
 
 #include "otpch.h"
 
-#include <string>
-#include <iostream>
-
 #include "luascript.h"
 #include "chat.h"
 #include "player.h"

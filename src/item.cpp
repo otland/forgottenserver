@@ -19,7 +19,6 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
 #include "item.h"
 #include "container.h"
 #include "teleport.h"
@@ -34,8 +33,6 @@
 
 #include "actions.h"
 #include "combat.h"
-
-#include <iostream>
 
 extern Game g_game;
 extern ConfigManager g_config;

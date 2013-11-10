@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <iostream>
-
 #include "outfit.h"
 #include "pugicast.h"
 

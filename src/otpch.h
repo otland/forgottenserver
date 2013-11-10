@@ -29,17 +29,21 @@
 #include "definitions.h"
 
 //boost
-#include <boost/config.hpp>
+// #include <boost/config.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/asio.hpp>
 
 //std
-#include <list>
-#include <vector>
-#include <map>
-#include <string>
-#include <iomanip>
+#include <algorithm>
 #include <functional>
+#include <iomanip>
+#include <iostream>
+#include <list>
+#include <map>
+#include <mutex>
+#include <sstream>
+#include <string>
+#include <vector>
 
 //pugixml
 #include "ext/pugixml.hpp"

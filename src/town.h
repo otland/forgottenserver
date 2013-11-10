@@ -20,12 +20,7 @@
 #ifndef __TOWN_H__
 #define __TOWN_H__
 
-#include <string>
-#include <list>
-#include <map>
-
 #include "position.h"
-#include "definitions.h"
 
 class Town
 {

@@ -21,8 +21,6 @@
 #define __OTSERV_VOCATION_H__
 
 #include "enums.h"
-#include <string>
-#include <map>
 #include "item.h"
 
 class Vocation

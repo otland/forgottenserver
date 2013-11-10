@@ -19,7 +19,6 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
 #include "tools.h"
 #include "house.h"
 #include "housetile.h"

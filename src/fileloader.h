@@ -20,7 +20,6 @@
 #ifndef __OTSERV_FILELOADER_H__
 #define __OTSERV_FILELOADER_H__
 
-#include <string>
 #include <cstdio>
 #include <cstdlib>
 

@@ -22,12 +22,10 @@
 
 #include "tasks.h"
 #include <unordered_set>
-#include <vector>
 #include <queue>
 #include <set>
 
 #include <thread>
-#include <mutex>
 #include <condition_variable>
 
 #define SCHEDULER_MINTICKS 50

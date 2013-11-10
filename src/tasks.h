@@ -20,9 +20,7 @@
 #ifndef __OTSERV_TASKS_H__
 #define __OTSERV_TASKS_H__
 
-#include <functional>
 #include <thread>
-#include <mutex>
 #include <condition_variable>
 
 const int DISPATCHER_TASK_EXPIRATION = 2000;

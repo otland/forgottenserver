@@ -19,12 +19,10 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
 #include "configmanager.h"
 #include "game.h"
 #include "tools.h"
 
-#include <iostream>
 #include <stdexcept>
 
 #if LUA_VERSION_NUM >= 502

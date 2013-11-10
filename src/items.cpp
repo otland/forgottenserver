@@ -27,10 +27,6 @@
 
 #include "pugicast.h"
 
-#include <iostream>
-#include <string>
-#include <vector>
-
 uint32_t Items::dwMajorVersion = 0;
 uint32_t Items::dwMinorVersion = 0;
 uint32_t Items::dwBuildNumber = 0;

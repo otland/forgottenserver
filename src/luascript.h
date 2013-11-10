@@ -20,10 +20,6 @@
 #ifndef __OTSERV_LUASCRIPT_H__
 #define __OTSERV_LUASCRIPT_H__
 
-#include <string>
-#include <map>
-#include <list>
-#include <vector>
 #include <unordered_map>
 #include <stack>
 
@@ -45,7 +41,6 @@ extern "C"
 #endif
 
 #include "position.h"
-#include "definitions.h"
 #include "database.h"
 #include "enums.h"
 

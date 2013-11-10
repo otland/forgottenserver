@@ -19,7 +19,6 @@
 
 #include "otpch.h"
 
-#include <string>
 #include <fstream>
 #include <utility>
 #include <cstring>

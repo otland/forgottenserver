@@ -20,7 +20,6 @@
 #ifndef __OTSERV_MONSTERS_H__
 #define __OTSERV_MONSTERS_H__
 
-#include <string>
 #include "creature.h"
 
 #define MAX_LOOTCHANCE 100000

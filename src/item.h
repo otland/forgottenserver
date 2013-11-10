@@ -24,10 +24,7 @@
 #include "thing.h"
 #include "items.h"
 
-#include <iostream>
-#include <list>
 #include <deque>
-#include <vector>
 
 class Creature;
 class Player;

@@ -19,7 +19,6 @@
 
 #include "otpch.h"
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "chat.h"

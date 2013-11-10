@@ -21,7 +21,6 @@
 #define __OTSERV_GAME_H__
 
 #include <queue>
-#include <vector>
 #include <set>
 
 #include "combat.h"

@@ -20,11 +20,7 @@
 #ifndef __OTSERV_SERVER_H__
 #define __OTSERV_SERVER_H__
 
-#include "definitions.h"
-#include <iostream>
-#include <boost/asio.hpp>
 #include <memory>
-#include <list>
 
 class Connection;
 typedef std::shared_ptr<Connection> Connection_ptr;

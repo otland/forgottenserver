@@ -20,8 +20,6 @@
 #ifndef __TALKACTION_H__
 #define __TALKACTION_H__
 
-#include <list>
-#include <string>
 #include "luascript.h"
 #include "baseevents.h"
 #include "const.h"

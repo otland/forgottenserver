@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
-
 #include "protocol.h"
 #include "scheduler.h"
 #include "connection.h"

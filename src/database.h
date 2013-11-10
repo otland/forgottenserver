@@ -20,11 +20,6 @@
 #ifndef __OTSERV_DATABASE_H__
 #define __OTSERV_DATABASE_H__
 
-#include "definitions.h"
-
-#include <iostream>
-#include <mutex>
-
 #include <boost/lexical_cast.hpp>
 
 #include <mysql.h>

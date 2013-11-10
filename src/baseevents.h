@@ -21,7 +21,6 @@
 #define __BASEEVENTS_H__
 
 #include "luascript.h"
-#include "ext/pugixml.hpp"
 
 class Event;
 

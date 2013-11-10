@@ -27,8 +27,6 @@
 #include "player.h"
 #include "configmanager.h"
 
-#include <algorithm>
-
 extern Game g_game;
 extern ConfigManager g_config;
 

@@ -20,8 +20,6 @@
 #ifndef __OTSERV_COMMANDS_H__
 #define __OTSERV_COMMANDS_H__
 
-#include <string>
-#include <map>
 #include "creature.h"
 
 struct Command;

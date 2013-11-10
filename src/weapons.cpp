@@ -19,7 +19,6 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
 #include "weapons.h"
 #include "combat.h"
 #include "tools.h"

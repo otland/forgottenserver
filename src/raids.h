@@ -20,15 +20,9 @@
 #ifndef __OTSERV_RAIDS_H__
 #define __OTSERV_RAIDS_H__
 
-#include <string>
-#include <vector>
-#include <list>
-
-#include "definitions.h"
 #include "const.h"
 #include "position.h"
 #include "baseevents.h"
-#include "ext/pugixml.hpp"
 
 enum RaidState_t {
 	RAIDSTATE_IDLE = 0,

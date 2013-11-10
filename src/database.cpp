@@ -22,8 +22,6 @@
 #include "configmanager.h"
 #include "database.h"
 
-#include <string>
-
 #include <errmsg.h>
 
 extern ConfigManager g_config;

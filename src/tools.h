@@ -20,16 +20,9 @@
 #ifndef __OTSERV_TOOLS_H__
 #define __OTSERV_TOOLS_H__
 
-#include "definitions.h"
 #include "position.h"
 #include "const.h"
 #include "enums.h"
-
-#include <string>
-#include <algorithm>
-
-#include <boost/lexical_cast.hpp>
-#include <boost/tokenizer.hpp>
 
 typedef boost::tokenizer<boost::char_separator<char>> Tokenizer;
 

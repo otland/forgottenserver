@@ -19,14 +19,8 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
-
-#include <string>
-#include <iostream>
-
 #include <boost/range/adaptor/reversed.hpp>
 
-#include "definitions.h"
 #include "tile.h"
 #include "game.h"
 #include "player.h"

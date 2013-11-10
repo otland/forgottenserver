@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
-
 #include "tools.h"
 #include "configmanager.h"
 

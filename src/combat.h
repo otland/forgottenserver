@@ -25,8 +25,6 @@
 #include "map.h"
 #include "baseevents.h"
 
-#include <vector>
-
 class Condition;
 class Creature;
 class Item;

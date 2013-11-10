@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
-
 #include "ban.h"
 #include "iologindata.h"
 #include "configmanager.h"

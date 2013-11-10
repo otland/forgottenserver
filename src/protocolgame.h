@@ -20,7 +20,6 @@
 #ifndef __OTSERV_PROTOCOLGAME_H__
 #define __OTSERV_PROTOCOLGAME_H__
 
-#include <string>
 #include "protocol.h"
 #include "enums.h"
 #include "creature.h"

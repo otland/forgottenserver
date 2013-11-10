@@ -26,7 +26,6 @@
 #include "tools.h"
 #include "configmanager.h"
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 extern ConfigManager g_config;

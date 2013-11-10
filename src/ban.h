@@ -20,8 +20,6 @@
 #ifndef __OTSERV_BAN_H__
 #define __OTSERV_BAN_H__
 
-#include <mutex>
-#include <list>
 #include "player.h"
 
 struct BanInfo {

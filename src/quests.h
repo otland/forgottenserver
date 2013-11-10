@@ -20,8 +20,6 @@
 #ifndef _QUESTS_H_
 #define _QUESTS_H_
 
-#include <list>
-#include <string>
 #include "player.h"
 #include "networkmessage.h"
 

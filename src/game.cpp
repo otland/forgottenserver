@@ -19,13 +19,8 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
-
-#include <string>
-#include <map>
 #include <fstream>
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "tasks.h"

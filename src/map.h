@@ -22,7 +22,6 @@
 
 #include <queue>
 #include <bitset>
-#include <map>
 
 #include "position.h"
 #include "item.h"

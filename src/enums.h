@@ -20,9 +20,6 @@
 #ifndef __OTSERV_ENUMS_H__
 #define __OTSERV_ENUMS_H__
 
-#include <string>
-#include <list>
-
 enum itemAttrTypes {
 	ATTR_ITEM_NONE = 0,
 	ATTR_ITEM_ACTIONID = 1,

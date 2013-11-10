@@ -19,12 +19,9 @@
 
 #include "otpch.h"
 
-#include <sstream>
-
 #include "quests.h"
 #include "tools.h"
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 std::string Mission::getDescription(Player* player) const

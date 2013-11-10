@@ -20,14 +20,8 @@
 #ifndef __OTSERV_CONNECTION_H__
 #define __OTSERV_CONNECTION_H__
 
-#include "definitions.h"
-
 #include <set>
-#include <mutex>
 #include <memory>
-
-#include <boost/asio.hpp>
-#include <boost/utility.hpp>
 
 #include "networkmessage.h"
 

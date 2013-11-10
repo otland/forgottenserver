@@ -19,9 +19,6 @@
 
 #include "otpch.h"
 
-#include <algorithm>
-
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "house.h"

@@ -19,11 +19,8 @@
 
 #include "otpch.h"
 
-#include "definitions.h"
 #include "vocation.h"
-#include <iostream>
 
-#include "ext/pugixml.hpp"
 #include "pugicast.h"
 
 #include "tools.h"

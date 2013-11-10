@@ -20,18 +20,14 @@
 #include "otpch.h"
 
 #include "iologindata.h"
-#include <algorithm>
-#include <functional>
 #include "item.h"
 #include "configmanager.h"
 #include "tools.h"
 #include "town.h"
-#include "definitions.h"
 #include "game.h"
 #include "vocation.h"
 #include "house.h"
 #include "ban.h"
-#include <iostream>
 
 extern ConfigManager g_config;
 extern Vocations g_vocations;

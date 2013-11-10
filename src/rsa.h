@@ -20,7 +20,6 @@
 #ifndef __OTSERV_RSA_H__
 #define __OTSERV_RSA_H__
 
-#include <mutex>
 #include <gmp.h>
 
 class RSA

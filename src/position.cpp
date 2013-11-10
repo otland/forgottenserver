@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "position.h"
-#include <iomanip>
 
 std::ostream& operator<<(std::ostream& os, const Position& pos)
 {
