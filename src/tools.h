@@ -93,4 +93,9 @@ itemAttrTypes stringToItemAttribute(const std::string& str);
 double round(double v);
 #endif
 
+inline int64_t OTSYS_TIME()
+{
+	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
 #endif

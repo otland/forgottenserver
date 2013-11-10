@@ -739,7 +739,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`offlinetraining_time` = " << player->getOfflineTrainingTime() / 1000 << ',';
 	query << "`offlinetraining_skill` = " << player->getOfflineTrainingSkill() << ',';
 	query << "`stamina` = " << player->getStaminaMinutes() << ',';
-	
+
 	query << "`skill_fist` = " << player->skills[SKILL_FIST][SKILL_LEVEL] << ',';
 	query << "`skill_fist_tries` = " << player->skills[SKILL_FIST][SKILL_TRIES] << ',';
 	query << "`skill_club` = " << player->skills[SKILL_CLUB][SKILL_LEVEL] << ',';

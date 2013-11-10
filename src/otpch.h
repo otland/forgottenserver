@@ -32,6 +32,8 @@
 
 //std
 #include <algorithm>
+#include <chrono>
+#include <cstdint>
 #include <functional>
 #include <iomanip>
 #include <iostream>

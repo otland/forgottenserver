@@ -1582,7 +1582,7 @@ bool Creature::unregisterCreatureEvent(const std::string& name)
 	if (!hasEventRegistered(type)) {
 		return false;
 	}
-	
+
 	bool resetTypeBit = true;
 	for (auto it = eventsList.begin(); it != eventsList.end(); ++it) {
 		CreatureEvent* curEvent = *it;

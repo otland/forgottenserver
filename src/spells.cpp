@@ -114,7 +114,7 @@ void Spells::clear()
 		delete it.second;
 	}
 	instants.clear();
-	
+
 	m_scriptInterface.reInitState();
 }
 

@@ -229,7 +229,7 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_ADVANCE:
 			return "onAdvance";
-			
+
 		case CREATURE_EVENT_MODALWINDOW:
 			return "onModalWindow";
 

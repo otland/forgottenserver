@@ -53,7 +53,7 @@ void Scheduler::schedulerThread()
 			// ok we had a timeout, so there has to be an event we have to execute...
 			task = m_eventList.top();
 			m_eventList.pop();
-			
+
 			// check if the event was stopped
 			auto it = m_eventIds.find(task->getEventId());
 			if (it != m_eventIds.end()) {

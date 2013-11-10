@@ -37,8 +37,6 @@
 #endif
 
 #include <cmath>
-#include <cstdint>
-#include <chrono>
 
 #ifdef _WIN32
 #ifndef NOMINMAX
@@ -77,10 +75,5 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-
-inline int64_t OTSYS_TIME()
-{
-	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-}
 
 #endif

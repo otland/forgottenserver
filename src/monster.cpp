@@ -164,7 +164,7 @@ void Monster::onCreatureAppear(const Creature* creature, bool isLogin)
 
 		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-		
+
 		if (scriptInterface->callFunction(2)) {
 			return;
 		}

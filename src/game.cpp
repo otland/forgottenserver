@@ -3683,7 +3683,7 @@ void Game::playerToggleMount(uint32_t playerId, bool mount)
 	if (!player) {
 		return;
 	}
-	
+
 	player->toggleMount(mount);
 }
 
@@ -4704,7 +4704,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				return false;
 			}
 		}
-	
+
 		damage.primary.value = std::abs(damage.primary.value);
 		damage.secondary.value = std::abs(damage.secondary.value);
 
@@ -4809,7 +4809,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			if (message.secondary.value) {
 				hitEffect = NM_ME_NONE;
 				combatGetTypeInfo(damage.secondary.type, target, message.secondary.color, hitEffect);
-				
+
 				if (hitEffect != NM_ME_NONE) {
 					addMagicEffect(list, targetPos, hitEffect);
 				}

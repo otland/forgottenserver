@@ -1323,7 +1323,7 @@ void ConditionDamage::endCondition(Creature* creature, ConditionEnd_t reason)
 
 void ConditionDamage::addCondition(Creature* creature, const Condition* addCondition)
 {
-	if (addCondition->getType() == conditionType) {	
+	if (addCondition->getType() == conditionType) {
 		if (updateCondition(addCondition)) {
 			const ConditionDamage& conditionDamage = static_cast<const ConditionDamage&>(*addCondition);
 
