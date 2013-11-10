@@ -26,7 +26,6 @@
 #include "tile.h"
 #include "combat.h"
 #include "creature.h"
-#include "player.h"
 #include "game.h"
 
 extern Game g_game;

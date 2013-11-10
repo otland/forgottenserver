@@ -25,6 +25,7 @@
 #include "spells.h"
 #include "combat.h"
 #include "spawn.h"
+#include "tasks.h"
 
 extern Game g_game;
 extern Monsters g_monsters;

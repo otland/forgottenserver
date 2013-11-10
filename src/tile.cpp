@@ -30,6 +30,7 @@
 #include "mailbox.h"
 #include "combat.h"
 #include "movement.h"
+#include "monster.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;

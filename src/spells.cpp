@@ -19,17 +19,18 @@
 
 #include "otpch.h"
 
-#include "tools.h"
-#include "house.h"
-#include "housetile.h"
-#include "spells.h"
 #include "combat.h"
 #include "commands.h"
-#include "monsters.h"
 #include "configmanager.h"
 #include "const.h"
-
+#include "game.h"
+#include "house.h"
+#include "housetile.h"
+#include "monster.h"
+#include "monsters.h"
 #include "pugicast.h"
+#include "spells.h"
+#include "tools.h"
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -1560,7 +1561,6 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 
 	ReturnValue ret = RET_NOERROR;
 	Monster* monster = Monster::createMonster(param);
-
 	if (monster) {
 		// Place the monster
 		creature->addSummon(monster);

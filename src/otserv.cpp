@@ -36,18 +36,16 @@
 #include "vocation.h"
 #include "configmanager.h"
 #include "scriptmanager.h"
-
 #include "tools.h"
 #include "rsa.h"
-
 #include "protocolgame.h"
 #include "protocolold.h"
 #include "protocollogin.h"
 #include "protocolstatus.h"
 #include "admin.h"
 #include "house.h"
-
 #include "databasemanager.h"
+#include "scheduler.h"
 
 Dispatcher* g_dispatcher = new Dispatcher;
 Scheduler* g_scheduler = new Scheduler;

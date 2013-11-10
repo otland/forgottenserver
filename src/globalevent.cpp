@@ -22,7 +22,6 @@
 #include "configmanager.h"
 #include "globalevent.h"
 #include "tools.h"
-#include "player.h"
 #include "scheduler.h"
 #include "pugicast.h"
 

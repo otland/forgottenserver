@@ -26,6 +26,7 @@
 #include "networkmessage.h"
 #include "outputmessage.h"
 #include "tools.h"
+#include "tasks.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

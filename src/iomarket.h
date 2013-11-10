@@ -21,7 +21,6 @@
 #define __OTSERV_IOMARKET_H__
 
 #include "account.h"
-#include "player.h"
 #include "database.h"
 
 class IOMarket

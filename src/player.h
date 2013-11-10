@@ -35,6 +35,7 @@
 #include "guild.h"
 #include "groups.h"
 #include "town.h"
+#include "mounts.h"
 
 class House;
 class NetworkMessage;
@@ -168,6 +169,7 @@ class Player : public Creature, public Cylinder
 		bool toggleMount(bool mount);
 		bool tameMount(uint8_t mountId);
 		bool untameMount(uint8_t mountId);
+		bool hasMount(const Mount* mount) const;
 		void dismount();
 
 		void sendFYIBox(const std::string& message) {

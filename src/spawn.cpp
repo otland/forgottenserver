@@ -25,6 +25,7 @@
 #include "npc.h"
 #include "tools.h"
 #include "configmanager.h"
+#include "scheduler.h"
 
 #include "pugicast.h"
 

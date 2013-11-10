@@ -28,6 +28,7 @@
 #include "condition.h"
 #include "combat.h"
 #include "configmanager.h"
+#include "scheduler.h"
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;

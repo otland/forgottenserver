@@ -20,8 +20,6 @@
 #ifndef __OTSERV_IOGUILD_H__
 #define __OTSERV_IOGUILD_H__
 
-#include "player.h"
-
 typedef std::vector<uint32_t> GuildWarList;
 
 class IOGuild

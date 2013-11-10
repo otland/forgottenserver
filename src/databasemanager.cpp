@@ -18,14 +18,13 @@
  */
 
 #include "otpch.h"
-#include "enums.h"
-
-#include "databasemanager.h"
-#include "tools.h"
-
-#include "ban.h"
 
 #include "configmanager.h"
+#include "databasemanager.h"
+#include "enums.h"
+#include "luascript.h"
+#include "tools.h"
+
 extern ConfigManager g_config;
 
 bool DatabaseManager::optimizeTables()

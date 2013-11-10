@@ -24,9 +24,8 @@
 #include "tools.h"
 #include "position.h"
 #include "player.h"
-
+#include "spawn.h"
 #include "pugicast.h"
-
 #include "luascript.h"
 
 extern Game g_game;

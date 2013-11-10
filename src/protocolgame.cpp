@@ -42,6 +42,7 @@
 #include "ban.h"
 #include "connection.h"
 #include "creatureevent.h"
+#include "scheduler.h"
 
 #include <random>
 
@@ -2792,7 +2793,7 @@ void ProtocolGame::sendOutfitWindow()
 
 	MountsList mounts;
 	for (const Mount& mount : Mounts::getInstance()->getMounts()) {
-		if (mount.isTamed(player)) {
+		if (player->hasMount(&mount)) {
 			mounts.push_back(mount);
 		}
 	}

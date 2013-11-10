@@ -29,9 +29,8 @@
 #include "iologindata.h"
 #include "tools.h"
 #include "rsa.h"
-
+#include "tasks.h"
 #include "pugicast.h"
-
 #include "logger.h"
 
 static void addLogLine(ProtocolAdmin* conn, eLogType type, int level, const std::string& message);

@@ -20,8 +20,6 @@
 #ifndef __OTSERV_BAN_H__
 #define __OTSERV_BAN_H__
 
-#include "player.h"
-
 struct BanInfo {
 	std::string bannedBy;
 	std::string reason;

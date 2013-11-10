@@ -41,6 +41,8 @@
 #include "mounts.h"
 #include "databasemanager.h"
 #include "beds.h"
+#include "monster.h"
+#include "scheduler.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 
@@ -9257,7 +9259,7 @@ int32_t LuaScriptInterface::luaPlayerHasMount(lua_State* L)
 	if (player) {
 		Mount* mount = Mounts::getInstance()->getMountByID(mountId);
 		if (mount) {
-			pushBoolean(L, mount->isTamed(player));
+			pushBoolean(L, player->hasMount(mount));
 		} else {
 			pushNil(L);
 		}

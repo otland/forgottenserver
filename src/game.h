@@ -20,6 +20,7 @@
 #ifndef __OTSERV_GAME_H__
 #define __OTSERV_GAME_H__
 
+#include "account.h"
 #include "combat.h"
 #include "groups.h"
 #include "map.h"
@@ -27,10 +28,7 @@
 #include "item.h"
 #include "container.h"
 #include "player.h"
-#include "spawn.h"
-#include "scheduler.h"
 #include "npc.h"
-#include "iologindata.h"
 #include "wildcardtree.h"
 
 class ServiceManager;
@@ -612,10 +610,6 @@ class Game
 		WildcardTreeNode wildcardTree;
 
 		int64_t stateTime;
-
-		uint32_t checkLightEvent;
-		uint32_t checkCreatureEvent;
-		uint32_t checkDecayEvent;
 
 		std::map<uint32_t, Npc*> npcs;
 		std::map<uint32_t, Monster*> monsters;

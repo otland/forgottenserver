@@ -42,6 +42,8 @@
 #include "quests.h"
 #include "mounts.h"
 #include "globalevent.h"
+#include "monster.h"
+#include "scheduler.h"
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
 #include "outputmessage.h"
 #include "connection.h"
@@ -55,7 +57,6 @@
 extern ConfigManager g_config;
 extern Actions* g_actions;
 extern Monsters g_monsters;
-extern Npcs g_npcs;
 extern TalkActions* g_talkActions;
 extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
@@ -469,7 +470,7 @@ void Commands::reloadInfo(Player* player, const std::string& cmd, const std::str
 		g_moveEvents->reload();
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded movements.");
 	} else if (tmpParam == "npc" || tmpParam == "npcs") {
-		g_npcs.reload();
+		Npcs::reload();
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
 	} else if (tmpParam == "raid" || tmpParam == "raids") {
 		Raids::getInstance()->reload();

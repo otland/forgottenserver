@@ -24,6 +24,7 @@
 #include "house.h"
 #include "iologindata.h"
 #include "player.h"
+#include "scheduler.h"
 
 extern Game g_game;
 

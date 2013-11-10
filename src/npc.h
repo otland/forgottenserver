@@ -31,9 +31,7 @@ class Player;
 class Npcs
 {
 	public:
-		Npcs() {}
-		~Npcs() {}
-		void reload();
+		static void reload();
 };
 
 class NpcScriptInterface : public LuaScriptInterface

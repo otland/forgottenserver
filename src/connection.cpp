@@ -26,7 +26,6 @@
 #include "protocol.h"
 #include "scheduler.h"
 #include "server.h"
-#include "tasks.h"
 
 bool Connection::m_logError = true;
 

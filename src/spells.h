@@ -20,7 +20,6 @@
 #ifndef __OTSERV_SPELLS_H__
 #define __OTSERV_SPELLS_H__
 
-#include "game.h"
 #include "luascript.h"
 #include "player.h"
 #include "actions.h"

@@ -19,12 +19,12 @@
 
 #include "otpch.h"
 
-#include "weapons.h"
 #include "combat.h"
-#include "tools.h"
 #include "configmanager.h"
-
+#include "game.h"
 #include "pugicast.h"
+#include "tools.h"
+#include "weapons.h"
 
 extern Game g_game;
 extern Vocations g_vocations;

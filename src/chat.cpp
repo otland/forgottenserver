@@ -23,6 +23,7 @@
 #include "game.h"
 #include "pugicast.h"
 #include "player.h"
+#include "scheduler.h"
 
 extern Chat g_chat;
 extern Game g_game;

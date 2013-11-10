@@ -20,8 +20,7 @@
 #ifndef __WAITLIST_H__
 #define __WAITLIST_H__
 
-#include "game.h"
-#include "networkmessage.h"
+#include "player.h"
 
 struct Wait {
 	uint32_t acc;

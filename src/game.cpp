@@ -21,11 +21,9 @@
 
 #include "pugicast.h"
 
-#include "tasks.h"
 #include "items.h"
 #include "commands.h"
 #include "creature.h"
-#include "player.h"
 #include "monster.h"
 #include "game.h"
 #include "tile.h"
@@ -47,6 +45,9 @@
 #include "globalevent.h"
 #include "mounts.h"
 #include "beds.h"
+#include "scheduler.h"
+#include "monster.h"
+#include "spawn.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -65,10 +66,6 @@ Game::Game() :
 	worldType = WORLD_TYPE_PVP;
 
 	checkCreatureLastIndex = 0;
-
-	checkLightEvent = 0;
-	checkCreatureEvent = 0;
-	checkDecayEvent = 0;
 
 	map = nullptr;
 	services = nullptr;
@@ -111,23 +108,15 @@ Game::~Game()
 	}
 
 	delete map;
-	/*
-	g_scheduler->stopEvent(checkLightEvent);
-	g_scheduler->stopEvent(checkCreatureEvent);
-	g_scheduler->stopEvent(checkDecayEvent);
-	*/
 }
 
 void Game::start(ServiceManager* servicer)
 {
 	services = servicer;
 
-	checkLightEvent = g_scheduler->addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
-	                                       std::bind(&Game::checkLight, this)));
-	checkCreatureEvent = g_scheduler->addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL,
-	                     std::bind(&Game::checkCreatures, this)));
-	checkDecayEvent = g_scheduler->addEvent(createSchedulerTask(EVENT_DECAYINTERVAL,
-	                                       std::bind(&Game::checkDecay, this)));
+	g_scheduler->addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, std::bind(&Game::checkLight, this)));
+	g_scheduler->addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, std::bind(&Game::checkCreatures, this)));
+	g_scheduler->addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, std::bind(&Game::checkDecay, this)));
 }
 
 GameState_t Game::getGameState() const
@@ -3704,7 +3693,11 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 
 	if (outfit.lookMount != 0) {
 		Mount* mount = Mounts::getInstance()->getMountByClientID(outfit.lookMount);
-		if (!mount || !mount->isTamed(player)) {
+		if (!mount) {
+			return;
+		}
+
+		if (!player->hasMount(mount)) {
 			return;
 		}
 
@@ -4107,7 +4100,7 @@ void Game::removeCreatureCheck(Creature* creature)
 
 void Game::checkCreatures()
 {
-	checkCreatureEvent = g_scheduler->addEvent(createSchedulerTask(EVENT_CHECK_CREATURE_INTERVAL, std::bind(&Game::checkCreatures, this)));
+	g_scheduler->addEvent(createSchedulerTask(EVENT_CHECK_CREATURE_INTERVAL, std::bind(&Game::checkCreatures, this)));
 
 	Creature* creature;
 	std::vector<Creature*>::iterator it;
@@ -5074,8 +5067,7 @@ void Game::internalDecayItem(Item* item)
 
 void Game::checkDecay()
 {
-	checkDecayEvent = g_scheduler->addEvent(createSchedulerTask(EVENT_DECAYINTERVAL,
-	                                       std::bind(&Game::checkDecay, this)));
+	g_scheduler->addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, std::bind(&Game::checkDecay, this)));
 
 	size_t bucket = (lastBucket + 1) % EVENT_DECAY_BUCKETS;
 
@@ -5122,8 +5114,7 @@ void Game::checkDecay()
 
 void Game::checkLight()
 {
-	checkLightEvent = g_scheduler->addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
-	                                       std::bind(&Game::checkLight, this)));
+	g_scheduler->addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, std::bind(&Game::checkLight, this)));
 
 	lightHour += lightHourDelta;
 

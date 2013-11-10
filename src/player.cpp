@@ -19,21 +19,22 @@
 
 #include "otpch.h"
 
-#include "player.h"
-#include "iologindata.h"
+#include "beds.h"
 #include "chat.h"
-#include "house.h"
 #include "combat.h"
-#include "movement.h"
-#include "weapons.h"
-#include "town.h"
-#include "ban.h"
 #include "configmanager.h"
 #include "creatureevent.h"
-#include "beds.h"
-#include "mounts.h"
-#include "quests.h"
+#include "game.h"
+#include "house.h"
+#include "iologindata.h"
+#include "monster.h"
+#include "movement.h"
 #include "outputmessage.h"
+#include "player.h"
+#include "quests.h"
+#include "scheduler.h"
+#include "town.h"
+#include "weapons.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -4694,7 +4695,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		if (!currentMount->isTamed(this)) {
+		if (!hasMount(currentMount)) {
 			setCurrentMount(0);
 			sendOutfitWindow();
 			return false;
@@ -4775,6 +4776,26 @@ bool Player::untameMount(uint8_t mountId)
 	}
 
 	return true;
+}
+
+bool Player::hasMount(const Mount* mount) const
+{
+	if (isAccessPlayer()) {
+		return true;
+	}
+
+	if (mount->premium && !isPremium()) {
+		return false;
+	}
+
+	uint8_t tmpId = mount->id - 1;
+
+	int32_t value;
+	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpId / 31), value)) {
+		return false;
+	}
+
+	return ((1 << (tmpId % 31)) & value) != 0;
 }
 
 void Player::dismount()
