@@ -21,7 +21,6 @@
 #define __OTSERV_LUASCRIPT_H__
 
 #include <unordered_map>
-#include <stack>
 
 extern "C"
 {

@@ -21,12 +21,6 @@
 
 #include "server.h"
 
-#include <cstring>
-#include <cerrno>
-
-#include "networkmessage.h"
-#include "protocolgame.h"
-
 #include "game.h"
 
 #include "iologindata.h"
@@ -40,11 +34,10 @@
 #include "commands.h"
 #include "outfit.h"
 #include "vocation.h"
-#include "scriptmanager.h"
 #include "configmanager.h"
+#include "scriptmanager.h"
 
 #include "tools.h"
-#include "ban.h"
 #include "rsa.h"
 
 #include "protocolgame.h"
@@ -52,8 +45,6 @@
 #include "protocollogin.h"
 #include "protocolstatus.h"
 #include "admin.h"
-#include "globalevent.h"
-#include "mounts.h"
 #include "house.h"
 
 #include "databasemanager.h"
@@ -73,8 +64,6 @@ RSA g_RSA;
 std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
 std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
-
-#include "networkmessage.h"
 
 void startupErrorMessage(const std::string& errorStr)
 {
