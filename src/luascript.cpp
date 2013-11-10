@@ -441,7 +441,7 @@ int32_t LuaScriptInterface::m_scriptEnvIndex = -1;
 
 LuaScriptInterface::LuaScriptInterface(const std::string& interfaceName)
 {
-	if (!g_luaEnvironment.getLuaState()) {
+	if (interfaceName != "Main Interface" && !g_luaEnvironment.getLuaState()) {
 		g_luaEnvironment.initState();
 	}
 
