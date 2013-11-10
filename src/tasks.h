@@ -61,12 +61,12 @@ class Task
 		std::function<void (void)> m_f;
 };
 
-inline Task* createTask(std::function<void (void)> f)
+inline Task* createTask(const std::function<void (void)>& f)
 {
 	return new Task(f);
 }
 
-inline Task* createTask(uint32_t expiration, std::function<void (void)> f)
+inline Task* createTask(uint32_t expiration, const std::function<void (void)>& f)
 {
 	return new Task(expiration, f);
 }
