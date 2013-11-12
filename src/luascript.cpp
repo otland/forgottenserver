@@ -1580,7 +1580,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayers", LuaScriptInterface::luaGameGetPlayers);
 	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
 
-	registerMethod("Game", "getCreatureCount", LuaScriptInterface::luaGameGetCreatureCount);
 	registerMethod("Game", "getMonsterCount", LuaScriptInterface::luaGameGetMonsterCount);
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
@@ -5304,13 +5303,6 @@ int32_t LuaScriptInterface::luaGameLoadMap(lua_State* L)
 	// Game.loadMap(path)
 	const std::string& path = getString(L, 1);
 	g_dispatcher->addTask(createTask(std::bind(&Game::loadMap, &g_game, path)));
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGameGetCreatureCount(lua_State* L)
-{
-	// Game.getCreatureCount()
-	pushNumber(L, g_game.getCreaturesOnline());
 	return 1;
 }
 

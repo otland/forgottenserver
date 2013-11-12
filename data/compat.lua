@@ -568,5 +568,5 @@ function getWorldCreatures(type)
 	elseif type == 2 then
 		return Game.getNpcCount()
 	end
-	return Game.getCreatureCount()
+	return Game.getPlayerCount() + Game.getMonsterCount() + Game.getNpcCount()
 end

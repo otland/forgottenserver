@@ -242,9 +242,6 @@ class Game
 		uint32_t getNpcsOnline() const {
 			return (uint32_t)npcs.size();
 		}
-		uint32_t getCreaturesOnline() const {
-			return players.size() + monsters.size() + npcs.size();
-		}
 		uint32_t getPlayersRecord() const {
 			return playersRecord;
 		}
