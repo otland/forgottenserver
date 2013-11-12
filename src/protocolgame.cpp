@@ -210,6 +210,10 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			}
 		}
 
+		if (operatingSystem >= CLIENTOS_OTCLIENT_LINUX) {
+			player->registerCreatureEvent("ExtendedOpcode");
+		}
+
 		player->lastIP = player->getIP();
 		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 		m_acceptPackets = true;
@@ -322,6 +326,14 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	key[3] = msg.GetU32();
 	enableXTEAEncryption();
 	setXTEAKey(key);
+
+	if (operatingSystem >= CLIENTOS_OTCLIENT_LINUX) {
+		NetworkMessage opcodeMessage;
+		opcodeMessage.AddByte(0x32);
+		opcodeMessage.AddByte(0x00);
+		opcodeMessage.AddString(std::string());
+		writeToOutputBuffer(opcodeMessage);
+	}
 
 	bool gamemasterFlag = msg.GetByte() != 0;
 	std::string accountName = msg.GetString();
