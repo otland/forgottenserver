@@ -1048,11 +1048,11 @@ function Player.sendExtendedOpcode(self, opcode, buffer)
 		return false
 	end
 	
-	local msg = NetworkMessage()
-	msg:addByte(0x32)
-	msg:addByte(opcode)
-	msg:addString(buffer)
-	msg:sendToPlayer(self)
-	msg:__gc()
+	local networkMessage = NetworkMessage()
+	networkMessage:addByte(0x32)
+	networkMessage:addByte(opcode)
+	networkMessage:addString(buffer)
+	networkMessage:sendToPlayer(self)
+	networkMessage:delete()
 	return true
 end

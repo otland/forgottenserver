@@ -1655,6 +1655,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("NetworkMessage", "", LuaScriptInterface::luaNetworkMessageCreate);
 	registerMetaMethod("NetworkMessage", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("NetworkMessage", "__gc", LuaScriptInterface::luaNetworkMessageDelete);
+	registerMethod("NetworkMessage", "delete", LuaScriptInterface::luaNetworkMessageDelete);
 
 	registerMethod("NetworkMessage", "getByte", LuaScriptInterface::luaNetworkMessageGetByte);
 	registerMethod("NetworkMessage", "getU16", LuaScriptInterface::luaNetworkMessageGetU16);

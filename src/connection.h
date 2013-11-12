@@ -37,9 +37,7 @@ typedef std::shared_ptr<ServicePort> ServicePort_ptr;
 class ConnectionManager
 {
 	public:
-		~ConnectionManager() {
-			closeAll();
-		}
+		~ConnectionManager() {}
 
 		static ConnectionManager* getInstance() {
 			static ConnectionManager instance;
