@@ -164,7 +164,7 @@ class Monster : public Creature
 			return friendList;
 		}
 
-		bool isTarget(Creature* creature) const;
+		bool isTarget(const Creature* creature) const;
 		bool isFleeing() const {
 			return getHealth() <= mType->runAwayHealth;
 		}
@@ -176,6 +176,8 @@ class Monster : public Creature
 
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
 		                     bool checkDefense = false, bool checkArmor = false);
+
+		static uint32_t monsterAutoID;
 
 	private:
 		CreatureHashSet friendList;
@@ -205,8 +207,6 @@ class Monster : public Creature
 		bool isIdle;
 		bool extraMeleeAttack;
 		bool isMasterInRange;
-
-		static uint32_t monsterAutoID;
 
 		virtual void onCreatureEnter(Creature* creature);
 		virtual void onCreatureLeave(Creature* creature);
