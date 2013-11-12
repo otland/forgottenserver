@@ -79,11 +79,11 @@ class Connection : public std::enable_shared_from_this<Connection>
 		Connection(boost::asio::ip::tcp::socket* socket,
 		           boost::asio::io_service& io_service,
 		           ServicePort_ptr service_port) :
-			m_socket(socket),
 			m_readTimer(io_service),
 			m_writeTimer(io_service),
-			m_io_service(io_service),
-			m_service_port(service_port) {
+			m_service_port(service_port),
+			m_socket(socket),
+			m_io_service(io_service) {
 			m_refCount = 0;
 			m_protocol = nullptr;
 			m_pendingWrite = 0;
