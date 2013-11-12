@@ -544,7 +544,10 @@ bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushNumber(L, player->getID());
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
 	LuaScriptInterface::pushNumber(L, opcode);
 	LuaScriptInterface::pushString(L, buffer);
 
