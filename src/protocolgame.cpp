@@ -331,7 +331,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		NetworkMessage opcodeMessage;
 		opcodeMessage.AddByte(0x32);
 		opcodeMessage.AddByte(0x00);
-		opcodeMessage.AddString(std::string());
+		opcodeMessage.AddU16(0x00);
 		writeToOutputBuffer(opcodeMessage);
 	}
 
