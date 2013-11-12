@@ -20,7 +20,9 @@
 #ifndef __OTSERV_COMMANDS_H__
 #define __OTSERV_COMMANDS_H__
 
-#include "creature.h"
+class Player;
+
+enum AccountType_t;
 
 struct Command;
 struct s_defcommands;

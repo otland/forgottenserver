@@ -223,7 +223,6 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	m_readTimer.cancel();
 
 	int32_t size = m_msg.decodeHeader();
-
 	if (error || size <= 0 || size >= NETWORKMESSAGE_MAXSIZE - 16) {
 		handleReadError(error);
 	}
@@ -234,10 +233,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		return;
 	}
 
-	--m_pendingRead;
-
 	try {
-		++m_pendingRead;
 		m_readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		m_readTimer.async_wait( std::bind(&Connection::handleReadTimeout, std::weak_ptr<Connection>(shared_from_this()),
 		                                    std::placeholders::_1));
@@ -286,17 +282,16 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		m_packetsSent = 0;
 	}
 
-	--m_pendingRead;
-
 	//Check packet checksum
-	uint32_t recvChecksum = m_msg.PeekU32();
-	uint32_t checksum = 0;
+	uint32_t checksum;
 	int32_t len = m_msg.getMessageLength() - m_msg.getReadPos() - 4;
-
 	if (len > 0) {
 		checksum = adlerChecksum((uint8_t*)(m_msg.getBuffer() + m_msg.getReadPos() + 4), len);
+	} else {
+		checksum = 0;
 	}
 
+	uint32_t recvChecksum = m_msg.PeekU32();
 	if (recvChecksum == checksum) {
 		m_msg.GetU32();    // remove the checksum
 	}
@@ -308,7 +303,6 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		if (!m_protocol) {
 			// Game protocol has already been created at this point
 			m_protocol = m_service_port->make_protocol(recvChecksum == checksum, m_msg);
-
 			if (!m_protocol) {
 				closeConnection();
 				m_connectionLock.unlock();
@@ -326,7 +320,6 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 
 	try {
-		++m_pendingRead;
 		m_readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		m_readTimer.async_wait( std::bind(&Connection::handleReadTimeout, std::weak_ptr<Connection>(shared_from_this()),
 		                                    std::placeholders::_1));

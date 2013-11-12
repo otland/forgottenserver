@@ -37,8 +37,6 @@ typedef std::shared_ptr<ServicePort> ServicePort_ptr;
 class ConnectionManager
 {
 	public:
-		~ConnectionManager() {}
-
 		static ConnectionManager* getInstance() {
 			static ConnectionManager instance;
 			return &instance;
@@ -50,8 +48,7 @@ class ConnectionManager
 		void closeAll();
 
 	protected:
-		ConnectionManager() {
-		}
+		ConnectionManager() {}
 
 		std::unordered_set<Connection_ptr> m_connections;
 		std::recursive_mutex m_connectionManagerLock;
@@ -154,26 +151,30 @@ class Connection : public std::enable_shared_from_this<Connection>
 		void internalSend(OutputMessage_ptr msg);
 
 		NetworkMessage m_msg;
-		boost::asio::ip::tcp::socket* m_socket;
+
 		boost::asio::deadline_timer m_readTimer;
 		boost::asio::deadline_timer m_writeTimer;
-		boost::asio::io_service& m_io_service;
+
+		std::recursive_mutex m_connectionLock;
+
 		ServicePort_ptr m_service_port;
+
+		boost::asio::ip::tcp::socket* m_socket;
+		Protocol* m_protocol;
+		boost::asio::io_service& m_io_service;
+
+		time_t m_timeConnected;
+		uint32_t m_packetsSent;
+		uint32_t m_refCount;
+		int32_t m_pendingWrite;
+		int32_t m_pendingRead;
+		ConnectionState_t m_connectionState;
+
 		bool m_receivedFirst;
 		bool m_writeError;
 		bool m_readError;
 
-		int32_t m_pendingWrite;
-		int32_t m_pendingRead;
-		ConnectionState_t m_connectionState;
-		uint32_t m_refCount;
 		static bool m_logError;
-		std::recursive_mutex m_connectionLock;
-
-		time_t m_timeConnected;
-		uint32_t m_packetsSent;
-
-		Protocol* m_protocol;
 };
 
 #endif

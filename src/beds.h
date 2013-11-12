@@ -21,7 +21,6 @@
 #define __OTS_BEDS_H__
 
 #include "item.h"
-#include "position.h"
 
 class House;
 class Player;
@@ -89,8 +88,6 @@ class BedItem : public Item
 class Beds
 {
 	public:
-		virtual ~Beds() {}
-
 		static Beds& getInstance() {
 			static Beds instance;
 			return instance;

@@ -40,8 +40,6 @@ extern "C"
 #endif
 
 #include "position.h"
-#include "database.h"
-#include "enums.h"
 
 class Thing;
 class Creature;
@@ -53,6 +51,12 @@ class Combat;
 class Condition;
 class Npc;
 class Monster;
+class DBResult;
+
+enum ConditionId_t;
+enum ConditionType_t;
+
+struct Outfit_t;
 
 enum LuaVariantType_t {
 	VARIANT_NONE = 0,
@@ -74,7 +78,6 @@ enum LuaDataType {
 struct LuaVariant {
 	LuaVariant() {
 		type = VARIANT_NONE;
-		pos.stackpos = 0;
 		number = 0;
 	}
 

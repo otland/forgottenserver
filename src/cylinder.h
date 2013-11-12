@@ -20,6 +20,7 @@
 #ifndef __OTSERV_CYLINDER_H__
 #define __OTSERV_CYLINDER_H__
 
+#include "enums.h"
 #include "thing.h"
 
 class Item;

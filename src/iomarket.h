@@ -20,15 +20,11 @@
 #ifndef __OTSERV_IOMARKET_H__
 #define __OTSERV_IOMARKET_H__
 
-#include "account.h"
-#include "database.h"
+#include "enums.h"
 
 class IOMarket
 {
 	public:
-		IOMarket() {}
-		~IOMarket() {}
-
 		static IOMarket* getInstance() {
 			static IOMarket instance;
 			return &instance;
@@ -57,6 +53,8 @@ class IOMarket
 		MarketStatistics* getSaleStatistics(uint16_t itemId);
 
 	private:
+		IOMarket() {}
+
 		std::map<uint16_t, MarketStatistics> purchaseStatistics;
 		std::map<uint16_t, MarketStatistics> saleStatistics;
 };

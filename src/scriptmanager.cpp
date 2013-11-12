@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "scriptmanager.h"
-#include "luascript.h"
 
 #include "actions.h"
 #include "talkaction.h"

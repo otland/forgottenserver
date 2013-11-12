@@ -37,9 +37,7 @@ enum Direction {
 struct Position
 {
 	Position() : x(0), y(0), z(0) {}
-	Position(uint16_t _x, uint16_t _y, uint8_t _z)
-		: x(_x), y(_y), z(_z) {}
-	~Position() {}
+	Position(uint16_t x, uint16_t y, uint8_t z) : x(x), y(y), z(z) {}
 
 	template<int_fast32_t deltax, int_fast32_t deltay>
 	inline static bool areInRange(const Position& p1, const Position& p2) {
@@ -133,14 +131,13 @@ std::ostream& operator<<(std::ostream&, const Direction&);
 
 struct PositionEx : public Position
 {
-	PositionEx() {}
-	~PositionEx() {}
+	PositionEx() : stackpos(0) {}
 
-	PositionEx(uint16_t _x, uint16_t _y, uint8_t _z, int32_t _stackpos)
-		: Position(_x, _y, _z), stackpos(_stackpos) {}
+	PositionEx(uint16_t x, uint16_t y, uint8_t z, int32_t stackpos)
+		: Position(x, y, z), stackpos(stackpos) {}
 
-	PositionEx(uint16_t _x, uint16_t _y, uint8_t _z)
-		: Position(_x, _y, _z), stackpos(0) {}
+	PositionEx(uint16_t x, uint16_t y, uint8_t z)
+		: Position(x, y, z), stackpos(0) {}
 
 	PositionEx(const Position& p)
 		: Position(p.x, p.y, p.z), stackpos(0) {}

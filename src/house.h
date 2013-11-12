@@ -22,12 +22,13 @@
 
 #include <regex>
 
-#include "position.h"
+#include "container.h"
 #include "housetile.h"
-#include "player.h"
+#include "position.h"
 
 class House;
 class BedItem;
+class Player;
 
 class AccessList
 {

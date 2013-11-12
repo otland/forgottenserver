@@ -20,13 +20,59 @@
 #ifndef __ACTIONS__
 #define __ACTIONS__
 
-#include "position.h"
-
-#include "luascript.h"
 #include "baseevents.h"
-#include "thing.h"
+#include "luascript.h"
 
-class Action;
+enum ReturnValue;
+
+typedef bool (ActionFunction)(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
+
+class Action : public Event
+{
+	public:
+		Action(const Action* copy);
+		Action(LuaScriptInterface* _interface);
+		virtual ~Action();
+
+		virtual bool configureEvent(const pugi::xml_node& node);
+		virtual bool loadFunction(const std::string& functionName);
+
+		//scripting
+		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
+			const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
+		//
+
+		bool getAllowFarUse() const {
+			return allowFarUse;
+		}
+		void setAllowFarUse(bool v) {
+			allowFarUse = v;
+		}
+
+		bool getCheckLineOfSight() const {
+			return checkLineOfSight;
+		}
+		void setCheckLineOfSight(bool v) {
+			checkLineOfSight = v;
+		}
+
+		virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
+		virtual bool hasOwnErrorHandler() {
+			return false;
+		}
+
+		ActionFunction* function;
+
+	protected:
+		virtual std::string getScriptEventName();
+
+		static ActionFunction increaseItemId;
+		static ActionFunction decreaseItemId;
+		static ActionFunction enterMarket;
+
+		bool allowFarUse;
+		bool checkLineOfSight;
+};
 
 class Actions : public BaseEvents
 {
@@ -68,55 +114,6 @@ class Actions : public BaseEvents
 		void clearMap(ActionUseMap& map);
 
 		LuaScriptInterface m_scriptInterface;
-};
-
-typedef bool (ActionFunction)(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
-
-class Action : public Event
-{
-	public:
-		Action(const Action* copy);
-		Action(LuaScriptInterface* _interface);
-		virtual ~Action();
-
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool loadFunction(const std::string& functionName);
-
-		//scripting
-		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-		                        const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
-		//
-
-		bool getAllowFarUse() const {
-			return allowFarUse;
-		}
-		void setAllowFarUse(bool v) {
-			allowFarUse = v;
-		}
-
-		bool getCheckLineOfSight() const {
-			return checkLineOfSight;
-		}
-		void setCheckLineOfSight(bool v) {
-			checkLineOfSight = v;
-		}
-
-		virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
-		virtual bool hasOwnErrorHandler() {
-			return false;
-		}
-
-		ActionFunction* function;
-
-	protected:
-		virtual std::string getScriptEventName();
-
-		static ActionFunction increaseItemId;
-		static ActionFunction decreaseItemId;
-		static ActionFunction enterMarket;
-
-		bool allowFarUse;
-		bool checkLineOfSight;
 };
 
 #endif
