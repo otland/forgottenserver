@@ -417,7 +417,6 @@ class LuaScriptInterface
 
 		//lua functions
 		static int32_t luaDoSendDefaultCancel(lua_State* L);
-		static int32_t luaDoTeleportThing(lua_State* L);
 		static int32_t luaDoChangeTypeItem(lua_State* L);
 		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
@@ -426,10 +425,6 @@ class LuaScriptInterface
 		static int32_t luaDoCreateNpc(lua_State* L);
 		static int32_t luaDoSummonCreature(lua_State* L);
 		static int32_t luaDoConvinceCreature(lua_State* L);
-		static int32_t luaGetMonsterTargetList(lua_State* L);
-		static int32_t luaGetMonsterFriendList(lua_State* L);
-		static int32_t luaDoSetMonsterTarget(lua_State* L);
-		static int32_t luaDoMonsterChangeTarget(lua_State* L);
 		static int32_t luaDoAddCondition(lua_State* L);
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
@@ -453,7 +448,6 @@ class LuaScriptInterface
 
 		//get item info
 		static int32_t luaGetThingfromPos(lua_State* L);
-		static int32_t luaGetThing(lua_State* L);
 		static int32_t luaGetThingPos(lua_State* L);
 		static int32_t luaHasProperty(lua_State* L);
 		static int32_t luaGetDepotId(lua_State* L);
@@ -771,6 +765,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureRegisterEvent(lua_State* L);
 		static int32_t luaCreatureUnregisterEvent(lua_State* L);
 
+		static int32_t luaCreatureIsRemoved(lua_State* L);
 		static int32_t luaCreatureIsCreature(lua_State* L);
 		static int32_t luaCreatureIsPlayer(lua_State* L);
 		static int32_t luaCreatureIsMonster(lua_State* L);
@@ -953,6 +948,7 @@ class LuaScriptInterface
 		static int32_t luaMonsterIsIdle(lua_State* L);
 		static int32_t luaMonsterSetIdle(lua_State* L);
 
+		static int32_t luaMonsterIsTarget(lua_State* L);
 		static int32_t luaMonsterIsOpponent(lua_State* L);
 		static int32_t luaMonsterIsFriend(lua_State* L);
 

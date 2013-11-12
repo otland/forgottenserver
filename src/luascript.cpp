@@ -264,7 +264,7 @@ Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 {
 	if (uid >= 0x10000000) {
 		Thing* thing = g_game.getCreatureByID(uid);
-		if (thing && !thing->isRemoved()) {
+		if (thing) {
 			return thing;
 		}
 	} else {
@@ -1253,17 +1253,11 @@ void LuaScriptInterface::registerFunctions()
 	//getThingfromPos(pos)
 	lua_register(m_luaState, "getThingfromPos", LuaScriptInterface::luaGetThingfromPos);
 
-	//getThing(uid)
-	lua_register(m_luaState, "getThing", LuaScriptInterface::luaGetThing);
-
 	//getThingPos(uid)
 	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
 
 	//doPlayerSendDefaultCancel(cid, ReturnValue)
 	lua_register(m_luaState, "doPlayerSendDefaultCancel", LuaScriptInterface::luaDoSendDefaultCancel);
-
-	//doTeleportThing(cid, newpos, <optional> pushmove)
-	lua_register(m_luaState, "doTeleportThing", LuaScriptInterface::luaDoTeleportThing);
 
 	//doPlayerChangeName(cid, newName)
 	lua_register(m_luaState, "doPlayerChangeName", LuaScriptInterface::luaDoPlayerChangeName);
@@ -1310,18 +1304,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doConvinceCreature(cid, target)
 	lua_register(m_luaState, "doConvinceCreature", LuaScriptInterface::luaDoConvinceCreature);
-
-	//getMonsterTargetList(cid)
-	lua_register(m_luaState, "getMonsterTargetList", LuaScriptInterface::luaGetMonsterTargetList);
-
-	//getMonsterFriendList(cid)
-	lua_register(m_luaState, "getMonsterFriendList", LuaScriptInterface::luaGetMonsterFriendList);
-
-	//doSetMonsterTarget(cid, target)
-	lua_register(m_luaState, "doSetMonsterTarget", LuaScriptInterface::luaDoSetMonsterTarget);
-
-	//doMonsterChangeTarget(cid)
-	lua_register(m_luaState, "doMonsterChangeTarget", LuaScriptInterface::luaDoMonsterChangeTarget);
 
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
@@ -1763,6 +1745,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "registerEvent", LuaScriptInterface::luaCreatureRegisterEvent);
 	registerMethod("Creature", "unregisterEvent", LuaScriptInterface::luaCreatureUnregisterEvent);
 
+	registerMethod("Creature", "isRemoved", LuaScriptInterface::luaCreatureIsRemoved);
 	registerMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
 	registerMethod("Creature", "isPlayer", LuaScriptInterface::luaCreatureIsPlayer);
 	registerMethod("Creature", "isMonster", LuaScriptInterface::luaCreatureIsMonster);
@@ -1947,6 +1930,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Monster", "isIdle", LuaScriptInterface::luaMonsterIsIdle);
 	registerMethod("Monster", "setIdle", LuaScriptInterface::luaMonsterSetIdle);
 
+	registerMethod("Monster", "isTarget", LuaScriptInterface::luaMonsterIsTarget);
 	registerMethod("Monster", "isOpponent", LuaScriptInterface::luaMonsterIsOpponent);
 	registerMethod("Monster", "isFriend", LuaScriptInterface::luaMonsterIsFriend);
 
@@ -2441,53 +2425,6 @@ int32_t LuaScriptInterface::luaDoSendDefaultCancel(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoTeleportThing(lua_State* L)
-{
-	//doTeleportThing(cid, newpos, <optional> pushmove)
-	int32_t parameters = lua_gettop(L);
-
-	bool pushMovement = false;
-	if (parameters > 2) {
-		pushMovement = popBoolean(L);
-	}
-
-	PositionEx pos;
-	popPosition(L, pos);
-	uint32_t uid = popNumber(L);
-
-	Thing* thing = getScriptEnv()->getThingByUID(uid);
-	if (!thing) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Position oldPos = thing->getPosition();
-	if (g_game.internalTeleport(thing, pos, pushMovement) != RET_NOERROR) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!pushMovement) {
-		Creature* creature = thing->getCreature();
-		if (creature) {
-			if (oldPos.x == pos.x) {
-				if (oldPos.y < pos.y) {
-					g_game.internalCreatureTurn(creature, SOUTH);
-				} else {
-					g_game.internalCreatureTurn(creature, NORTH);
-				}
-			} else if (oldPos.x > pos.x) {
-				g_game.internalCreatureTurn(creature, WEST);
-			} else if (oldPos.x < pos.x) {
-				g_game.internalCreatureTurn(creature, EAST);
-			}
-		}
-	}
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -3233,21 +3170,6 @@ int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 	const std::string& message = popString(L);
 	g_game.broadcastMessage(message, (MessageClasses)type);
 	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetThing(lua_State* L)
-{
-	//getThing(uid)
-	uint32_t uid = popNumber(L);
-
-	Thing* thing = getScriptEnv()->getThingByUID(uid);
-	if (thing) {
-		pushThing(L, thing, uid);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
-		pushThing(L, nullptr, 0);
-	}
 	return 1;
 }
 
@@ -4076,104 +3998,6 @@ int32_t LuaScriptInterface::luaDoConvinceCreature(lua_State* L)
 
 	target->convinceCreature(creature);
 	g_game.updateCreatureType(target);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetMonsterTargetList(lua_State* L)
-{
-	//getMonsterTargetList(cid)
-	uint32_t cid = popNumber(L);
-
-	Monster* monster = g_game.getMonsterByID(cid);
-	if (!monster) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_newtable(L);
-	uint32_t index = 0;
-	const CreatureList& targetList = monster->getTargetList();
-	for (Creature* creature : targetList) {
-		if (monster->isTarget(creature)) {
-			lua_pushnumber(L, ++index);
-			lua_pushnumber(L, creature->getID());
-			lua_settable(L, -3);
-		}
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetMonsterFriendList(lua_State* L)
-{
-	//getMonsterFriendList(cid)
-	uint32_t cid = popNumber(L);
-
-	Monster* monster = g_game.getMonsterByID(cid);
-	if (!monster) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_newtable(L);
-	uint32_t index = 0;
-	const CreatureHashSet& friendList = monster->getFriendList();
-	for (Creature* friendCreature : friendList) {
-		if (!friendCreature->isRemoved() && friendCreature->getPosition().z == monster->getPosition().z) {
-			lua_pushnumber(L, ++index);
-			lua_pushnumber(L, friendCreature->getID());
-			lua_settable(L, -3);
-		}
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSetMonsterTarget(lua_State* L)
-{
-	//doSetMonsterTarget(cid, target)
-	uint32_t targetCid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Monster* monster = g_game.getMonsterByID(cid);
-	if (!monster) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Creature* target = g_game.getCreatureByID(targetCid);
-	if (!target) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!monster->isSummon()) {
-		monster->selectTarget(target);
-	}
-
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoMonsterChangeTarget(lua_State* L)
-{
-	//doMonsterChangeTarget(cid)
-	uint32_t cid = popNumber(L);
-
-	Monster* monster = g_game.getMonsterByID(cid);
-	if (!monster) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!monster->isSummon()) {
-		monster->searchTarget(TARGETSEARCH_RANDOM);
-	}
-
 	pushBoolean(L, true);
 	return 1;
 }
@@ -7403,6 +7227,18 @@ int32_t LuaScriptInterface::luaCreatureUnregisterEvent(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureIsRemoved(lua_State* L)
+{
+	// creature:isRemoved()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->isRemoved());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureIsCreature(lua_State* L)
 {
 	// creature:isCreature()
@@ -9598,6 +9434,19 @@ int32_t LuaScriptInterface::luaMonsterSetIdle(lua_State* L)
 	if (monster) {
 		monster->setIdle(idle);
 		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaMonsterIsTarget(lua_State* L)
+{
+	// monster:isTarget(creature)
+	const Creature* creature = getCreature(L, 2);
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->isTarget(creature));
 	} else {
 		pushNil(L);
 	}
