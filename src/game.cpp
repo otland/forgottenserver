@@ -48,6 +48,7 @@
 #include "scheduler.h"
 #include "monster.h"
 #include "spawn.h"
+#include "connection.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -5201,6 +5202,8 @@ void Game::shutdown()
 	if (services) {
 		services->stop();
 	}
+
+	ConnectionManager::getInstance()->closeAll();
 
 	std::cout << " done!" << std::endl;
 }
