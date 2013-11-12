@@ -20,9 +20,9 @@
 #ifndef __OTSERV_COMMANDS_H__
 #define __OTSERV_COMMANDS_H__
 
-class Player;
+#include "enums.h"
 
-enum AccountType_t;
+class Player;
 
 struct Command;
 struct s_defcommands;
