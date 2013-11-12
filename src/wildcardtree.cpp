@@ -21,7 +21,6 @@
 
 #include <stack>
 
-#include "enums.h"
 #include "wildcardtree.h"
 
 WildcardTreeNode* WildcardTreeNode::getChild(char ch)

@@ -39,6 +39,7 @@ extern "C"
 #endif
 #endif
 
+#include "enums.h"
 #include "position.h"
 
 class Thing;
@@ -52,11 +53,6 @@ class Condition;
 class Npc;
 class Monster;
 class DBResult;
-
-enum ConditionId_t;
-enum ConditionType_t;
-
-struct Outfit_t;
 
 enum LuaVariantType_t {
 	VARIANT_NONE = 0,

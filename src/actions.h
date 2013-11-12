@@ -21,9 +21,8 @@
 #define __ACTIONS__
 
 #include "baseevents.h"
+#include "enums.h"
 #include "luascript.h"
-
-enum ReturnValue;
 
 typedef bool (ActionFunction)(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
 
