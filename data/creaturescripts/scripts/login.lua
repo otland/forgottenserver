@@ -15,10 +15,5 @@ function onLogin(cid)
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 
 	player:registerEvent("PlayerDeath")
-	if player:isUsingOtClient() then
-		player:registerEvent("ExtendedOpcode")
-		player:sendExtendedOpcode(0x00, "")
-	end
-	
 	return true
 end
