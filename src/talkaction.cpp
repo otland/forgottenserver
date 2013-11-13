@@ -22,6 +22,7 @@
 #include "player.h"
 #include "talkaction.h"
 #include "pugicast.h"
+#include "tools.h"
 
 TalkActions::TalkActions()
 	: m_scriptInterface("TalkAction Interface")
@@ -90,7 +91,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			if (param.front() != ' ') {
 				continue;
 			}
-			param.erase(param.begin());
+			trim_left(param, ' ');
 
 			char separator = talkAction->getSeparator();
 			if (separator != ' ') {
