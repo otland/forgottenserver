@@ -19,11 +19,9 @@
 
 #include "otpch.h"
 
-#include "creature.h"
 #include "player.h"
-#include "tools.h"
-
 #include "talkaction.h"
+#include "pugicast.h"
 
 TalkActions::TalkActions()
 	: m_scriptInterface("TalkAction Interface")
@@ -38,10 +36,10 @@ TalkActions::~TalkActions()
 
 void TalkActions::clear()
 {
-	for (const auto& it : wordsMap) {
-		delete it.second;
+	for (TalkAction* talkAction : talkActions) {
+		delete talkAction;
 	}
-	wordsMap.clear();
+	talkActions.clear();
 
 	m_scriptInterface.reInitState();
 }
@@ -72,37 +70,44 @@ bool TalkActions::registerEvent(Event* event, const pugi::xml_node& node)
 		return false;
 	}
 
-	wordsMap.emplace_back(talkAction->getWords(), talkAction);
+	talkActions.push_back(talkAction);
 	return true;
 }
 
 TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
 {
-	if (type != SPEAK_SAY) {
-		return TALKACTION_CONTINUE;
-	}
+	size_t wordsLength = words.length();
+	for (TalkAction* talkAction : talkActions) {
+		const std::string& talkactionWords = talkAction->getWords();
+		size_t talkactionLength = talkactionWords.length();
+		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
+			continue;
+		}
 
-	std::string str_words;
-	std::string str_param;
-	size_t loc = words.find('"', 0);
-
-	if (loc != std::string::npos) {
-		str_words = std::string(words, 0, loc);
-		str_param = std::string(words, (loc + 1), words.size() - loc - 1);
-	} else {
-		str_words = words;
-	}
-
-	trim_left(str_words, ' ');
-	trim_right(str_words, ' ');
-
-	for (const auto& it : wordsMap) {
-		if (it.first == str_words) {
-			if (it.second->executeSay(player, str_words, str_param)) {
-				return TALKACTION_CONTINUE;
-			} else {
-				return TALKACTION_BREAK;
+		std::string param;
+		if (wordsLength != talkactionLength) {
+			param = words.substr(talkactionLength);
+			if (param.front() != ' ') {
+				continue;
 			}
+			param.erase(param.begin());
+
+			char separator = talkAction->getSeparator();
+			if (separator != ' ') {
+				if (!param.empty()) {
+					if (param.front() != separator) {
+						continue;
+					} else {
+						param.erase(param.begin());
+					}
+				}
+			}
+		}
+
+		if (talkAction->executeSay(player, talkactionWords, param, type)) {
+			return TALKACTION_CONTINUE;
+		} else {
+			return TALKACTION_BREAK;
 		}
 	}
 	return TALKACTION_CONTINUE;
@@ -111,7 +116,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 TalkAction::TalkAction(LuaScriptInterface* _interface) :
 	Event(_interface)
 {
-	//
+	separator = '"';
 }
 
 TalkAction::~TalkAction()
@@ -123,11 +128,16 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute wordsAttribute = node.attribute("words");
 	if (!wordsAttribute) {
-		std::cout << "[Error - TalkAction::configureEvent] No words for talk action or spell" << std::endl;
+		std::cout << "[Error - TalkAction::configureEvent] Missing words for talk action or spell" << std::endl;
 		return false;
 	}
 
-	m_words = wordsAttribute.as_string();
+	pugi::xml_attribute separatorAttribute = node.attribute("separator");
+	if (separatorAttribute) {
+		separator = pugi::cast<char>(separatorAttribute.value());
+	}
+
+	words = wordsAttribute.as_string();
 	return true;
 }
 
@@ -136,9 +146,9 @@ std::string TalkAction::getScriptEventName()
 	return "onSay";
 }
 
-bool TalkAction::executeSay(Creature* creature, const std::string& words, const std::string& param)
+bool TalkAction::executeSay(const Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
-	//onSay(cid, words, param)
+	//onSay(cid, words, param, type)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TalkAction::executeSay] Call stack overflow" << std::endl;
 		return false;
@@ -150,9 +160,10 @@ bool TalkAction::executeSay(Creature* creature, const std::string& words, const 
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, creature->getID());
+	lua_pushnumber(L, player->getID());
 	LuaScriptInterface::pushString(L, words);
 	LuaScriptInterface::pushString(L, param);
+	lua_pushnumber(L, type);
 
-	return m_scriptInterface->callFunction(3);
+	return m_scriptInterface->callFunction(4);
 }
