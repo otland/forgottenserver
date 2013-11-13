@@ -242,9 +242,6 @@ class Game
 		uint32_t getNpcsOnline() const {
 			return (uint32_t)npcs.size();
 		}
-		uint32_t getCreaturesOnline() const {
-			return (uint32_t)creatures.size();
-		}
 		uint32_t getPlayersRecord() const {
 			return playersRecord;
 		}
@@ -589,7 +586,6 @@ class Game
 
 		Map* map;
 
-		std::unordered_map<uint32_t, Creature*> creatures;
 		std::unordered_map<uint32_t, Player*> players;
 		std::unordered_map<std::string, Player*> mappedPlayerNames;
 		std::unordered_map<uint32_t, Guild*> guilds;

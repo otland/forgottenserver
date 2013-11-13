@@ -21,8 +21,9 @@
 #define __OTSERV_CHAT_H__
 
 #include "const.h"
-#include "party.h"
+#include "luascript.h"
 
+class Party;
 class Player;
 
 typedef std::map<uint32_t, Player*> UsersMap;

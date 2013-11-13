@@ -241,6 +241,68 @@ function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) ret
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
 function doPlayerAddExp(cid, exp, ...) local p = Player(cid) return p ~= nil and p:addExperience(exp, ...) or false end
 
+function getMonsterTargetList(cid)
+	local monster = Monster(cid)
+	if monster == nil then
+		return false
+	end
+
+	local result = {}
+	for _, creature in ipairs(monster:getTargetList()) do
+		if monster:isTarget(creature) then
+			result[#result + 1] = creature:getId()
+		end
+	end
+	return result
+end
+function getMonsterFriendList(cid)
+	local monster = Monster(cid)
+	if monster == nil then
+		return false
+	end
+
+	local z = monster:getPosition().z
+
+	local result = {}
+	for _, creature in ipairs(monster:getFriendList()) do
+		if not creature:isRemoved() and creature:getPosition().z == z then
+			result[#result + 1] = creature:getId()
+		end
+	end
+	return result
+end
+function doSetMonsterTarget(cid, target)
+	local monster = Monster(cid)
+	if monster == nil then
+		return false
+	end
+
+	if monster:getMaster() ~= nil then
+		return true
+	end
+
+	local target = Creature(cid)
+	if target == nil then
+		return false
+	end
+
+	monster:selectTarget(target)
+	return true
+end
+function doMonsterChangeTarget(cid)
+	local monster = Monster(cid)
+	if monster == nil then
+		return false
+	end
+
+	if monster:getMaster() ~= nil then
+		return true
+	end
+
+	monster:searchTarget(1)
+	return true
+end
+
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end
 function getTownTemplePosition(townId) local t = Town(townId) return t ~= nil and t:getTemplePosition() or false end
@@ -472,6 +534,25 @@ end
 
 function queryTileAddThing(thing, position, ...) local t = Tile(position) return t ~= nil and t:queryAdd(thing, ...) or false end
 
+function doTeleportThing(uid, dest, pushMovement)
+	if uid >= 0x10000000 then
+		local creature = Creature(uid)
+		if creature ~= nil then
+			return creature:teleportTo(dest, pushMovement or false)
+		end
+	else
+		local item = Item(uid)
+		if item ~= nil then
+			return item:moveTo(dest)
+		end
+	end
+	return false
+end
+
+function getThing(uid)
+	return uid >= 0x10000000 and pushThing(Creature(uid)) or pushThing(Item(uid))
+end
+
 function getConfigInfo(info)
 	if (type(info) ~= 'string') then return nil end
 
@@ -487,5 +568,5 @@ function getWorldCreatures(type)
 	elseif type == 2 then
 		return Game.getNpcCount()
 	end
-	return Game.getCreatureCount()
+	return Game.getPlayerCount() + Game.getMonsterCount() + Game.getNpcCount()
 end

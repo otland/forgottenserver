@@ -20,8 +20,7 @@
 #ifndef __GUILD_H__
 #define __GUILD_H__
 
-#include "player.h"
-
+class Player;
 typedef std::list<Player*> PlayerList;
 
 struct GuildRank {

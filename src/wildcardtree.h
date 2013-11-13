@@ -20,7 +20,7 @@
 #ifndef __WILDCARD_TREE_H__
 #define __WILDCARD_TREE_H__
 
-#include "thing.h"
+#include "enums.h"
 
 class WildcardTreeNode
 {

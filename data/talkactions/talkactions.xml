@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <talkactions>
 	<!-- commands -->
-	<talkaction words="/ban" script="ban.lua" />
-	<talkaction words="/ipban" script="ipban.lua" />
-	<talkaction words="/unban" script="unban.lua" />
+	<talkaction words="/ban" separator=" " script="ban.lua" />
+	<talkaction words="/ipban" separator=" " script="ipban.lua" />
+	<talkaction words="/unban" separator=" " script="unban.lua" />
 
 	<talkaction words="/up" script="up.lua" />
 	<talkaction words="/down" script="down.lua" />

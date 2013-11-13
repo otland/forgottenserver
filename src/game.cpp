@@ -48,6 +48,7 @@
 #include "scheduler.h"
 #include "monster.h"
 #include "spawn.h"
+#include "connection.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -459,15 +460,14 @@ QTreeLeafNode* Game::getLeaf(uint32_t x, uint32_t y)
 
 Creature* Game::getCreatureByID(uint32_t id)
 {
-	if (id == 0) {
-		return nullptr;
+	if (id <= Player::playerAutoID) {
+		return getPlayerByID(id);
+	} else if (id <= Monster::monsterAutoID) {
+		return getMonsterByID(id);
+	} else if (id <= Npc::npcAutoID) {
+		return getNpcByID(id);
 	}
-
-	auto it = creatures.find(id);
-	if (it == creatures.end()) {
-		return nullptr;
-	}
-	return it->second;
+	return nullptr;
 }
 
 Monster* Game::getMonsterByID(uint32_t id)
@@ -515,9 +515,21 @@ Creature* Game::getCreatureByName(const std::string& s)
 		return nullptr;
 	}
 
-	const std::string& upperCaseInput = asUpperCaseString(s);
-	for (const auto& it : creatures) {
-		if (upperCaseInput == asUpperCaseString(it.second->getName())) {
+	const std::string& lowerCaseName = asLowerCaseString(s);
+
+	auto m_it = mappedPlayerNames.find(lowerCaseName);
+	if (m_it != mappedPlayerNames.end()) {
+		return m_it->second;
+	}
+
+	for (const auto& it : npcs) {
+		if (lowerCaseName == asLowerCaseString(it.second->getName())) {
+			return it.second;
+		}
+	}
+
+	for (const auto& it : monsters) {
+		if (lowerCaseName == asLowerCaseString(it.second->getName())) {
 			return it.second;
 		}
 	}
@@ -600,7 +612,6 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 
 	creature->useThing2();
 	creature->setID();
-	creatures[creature->getID()] = creature;
 	creature->addList();
 	return true;
 }
@@ -849,7 +860,6 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 
 	creature->getParent()->postRemoveNotification(creature, nullptr, index, true);
 
-	creatures.erase(creature->getID());
 	creature->removeList();
 	creature->setRemoved();
 	ReleaseCreature(creature);
@@ -5201,6 +5211,8 @@ void Game::shutdown()
 	if (services) {
 		services->stop();
 	}
+
+	ConnectionManager::getInstance()->closeAll();
 
 	std::cout << " done!" << std::endl;
 }

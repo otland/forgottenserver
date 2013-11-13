@@ -22,30 +22,6 @@
 
 #include "luascript.h"
 
-class Event;
-
-class BaseEvents
-{
-	public:
-		BaseEvents();
-		virtual ~BaseEvents();
-
-		bool loadFromXml();
-		bool reload();
-		bool isLoaded() const {
-			return m_loaded;
-		}
-
-	protected:
-		virtual LuaScriptInterface& getScriptInterface() = 0;
-		virtual std::string getScriptBaseName() = 0;
-		virtual Event* getEvent(const std::string& nodeName) = 0;
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
-		virtual void clear() = 0;
-
-		bool m_loaded;
-};
-
 class Event
 {
 	public:
@@ -71,6 +47,27 @@ class Event
 		LuaScriptInterface* m_scriptInterface;
 };
 
+class BaseEvents
+{
+	public:
+		BaseEvents();
+		virtual ~BaseEvents();
+
+		bool loadFromXml();
+		bool reload();
+		bool isLoaded() const {
+			return m_loaded;
+		}
+
+	protected:
+		virtual LuaScriptInterface& getScriptInterface() = 0;
+		virtual std::string getScriptBaseName() = 0;
+		virtual Event* getEvent(const std::string& nodeName) = 0;
+		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
+		virtual void clear() = 0;
+
+		bool m_loaded;
+};
 
 class CallBack
 {
