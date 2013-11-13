@@ -28,7 +28,7 @@
 		<attack name="speed" interval="3000" chance="10" range="7" target="1" duration="30000" speedchange="-600">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack> 
-		<attack name="lifedrain" interval="1000" chance="10" range="7" radius="3" target="0" min="-0" max="-50">
+		<attack name="lifedrain" interval="1000" chance="10" range="7" radius="3" target="0" min="-5" max="-70">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
