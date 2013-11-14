@@ -30,5 +30,4 @@
 
 	<command cmd="!buyhouse" group="1" acctype="1" log="no"/>
 	<command cmd="!sellhouse" group="1" acctype="1" log="no"/>
-	<command cmd="!serverinfo" group="1" acctype="1" log="no"/>
 </commands>

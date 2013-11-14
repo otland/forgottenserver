@@ -97,8 +97,7 @@ s_defcommands Commands::defined_commands[] = {
 
 	// player commands - TODO: make them talkactions
 	{"!buyhouse", &Commands::buyHouse},
-	{"!sellhouse", &Commands::sellHouse},
-	{"!serverinfo", &Commands::serverInfo}
+	{"!sellhouse", &Commands::sellHouse}
 };
 
 Commands::Commands()
@@ -690,17 +689,6 @@ void Commands::sellHouse(Player* player, const std::string& cmd, const std::stri
 	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
 		house->resetTransferItem();
 	}
-}
-
-void Commands::serverInfo(Player* player, const std::string& cmd, const std::string& param)
-{
-	std::ostringstream text;
-	text << "Server Info:";
-	text << "\nExp Rate: " << g_game.getExperienceStage(player->level);
-	text << "\nSkill Rate: " << g_config.getNumber(ConfigManager::RATE_SKILL);
-	text << "\nMagic Rate: " << g_config.getNumber(ConfigManager::RATE_MAGIC);
-	text << "\nLoot Rate: " << g_config.getNumber(ConfigManager::RATE_LOOT);
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str());
 }
 
 void Commands::buyHouse(Player* player, const std::string& cmd, const std::string& param)
