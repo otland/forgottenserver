@@ -1,5 +1,6 @@
 function onSay(cid, words, param)
-	if getPlayerAccess(cid) <= 0 then
+	local player = Player(cid)
+	if not player:getGroup():getAccess() then
 		return false
 	end
 
@@ -11,5 +12,6 @@ function onSay(cid, words, param)
 	db:query("DELETE FROM `account_bans` WHERE `account_id` = " .. result.getDataInt(resultId, "account_id"))
 	db:query("DELETE FROM `ip_bans` WHERE `ip` = " .. result.getDataInt(resultId, "lastip"))
 	result.free(resultId)
-	doPlayerSendTextMessage(cid, MESSAGE_EVENT_ADVANCE, param .. " has been unbanned.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, param .. " has been unbanned.")
+	return false
 end

@@ -8,7 +8,6 @@
 	<command cmd="/closeserver" group="1" acctype="5" log="yes"/>
 	<command cmd="/ghost" group="2" acctype="5" log="yes"/>
 	<command cmd="/owner" group="2" acctype="5" log="yes"/>
-	<command cmd="/goto" group="2" acctype="4" log="yes"/>
 	<command cmd="/a" group="2" acctype="5" log="yes"/>
 	<command cmd="/c" group="2" acctype="4" log="yes"/>
 	<command cmd="/m" group="2" acctype="5" log="yes"/>
@@ -19,7 +18,6 @@
 	<command cmd="/newtype" group="2" acctype="5" log="yes"/>
 	<command cmd="/pos" group="1" acctype="2" log="yes"/>
 	<command cmd="/r" group="2" acctype="5" log="yes"/>
-	<command cmd="/town" group="2" acctype="4" log="yes"/>
 	<command cmd="/raid" group="2" acctype="4" log="yes"/>
 	<command cmd="/addskill" group="2" acctype="5" log="yes"/>
 	<command cmd="/clean" group="2" acctype="5" log="yes"/>

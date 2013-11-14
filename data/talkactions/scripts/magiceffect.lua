@@ -1,5 +1,9 @@
 function onSay(cid, words, param)
-	if isPlayer(cid) == TRUE and param ~= "" and getPlayerAccess(cid) > 0 then
-		doSendMagicEffect(getCreaturePosition(cid), param)
+	local player = Player(cid)
+	if not player:getGroup():getAccess() then
+		return false
 	end
+
+	player:getPosition():sendMagicEffect(tonumber(param))
+	return false
 end

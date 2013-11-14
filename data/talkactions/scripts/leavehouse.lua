@@ -11,4 +11,5 @@ function onSay(cid, words, param)
 		doPlayerSendCancel(cid, "You are not inside a house.")
 		doSendMagicEffect(getPlayerPosition(cid), CONST_ME_POFF)
 	end
+	return false
 end

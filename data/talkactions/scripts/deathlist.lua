@@ -38,4 +38,5 @@ function onSay(cid, words, param)
 	else
 		doPlayerSendCancel(cid, "A player with that name does not exist.")
 	end
+	return false
 end

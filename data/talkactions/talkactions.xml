@@ -4,16 +4,15 @@
 	<talkaction words="/ban" separator=" " script="ban.lua" />
 	<talkaction words="/ipban" separator=" " script="ipban.lua" />
 	<talkaction words="/unban" separator=" " script="unban.lua" />
-
 	<talkaction words="/up" script="up.lua" />
 	<talkaction words="/down" script="down.lua" />
-	
+	<talkaction words="/goto" separator=" " script="teleport_to_creature.lua" />
 	<talkaction words="/t" script="teleport_home.lua" />
+	<talkaction words="/town" separator=" " script="teleport_to_town.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
 	<talkaction words="!leavehouse" script="leavehouse.lua"/>
-	<talkaction words="!save" script="save.lua"/>
 	<talkaction words="!changesex" script="changesex.lua"/>
 	<talkaction words="!uptime" script="uptime.lua"/>
 	<talkaction words="!deathlist" script="deathlist.lua"/>

@@ -48,8 +48,6 @@ class Commands
 		void placeSummon(Player* player, const std::string& cmd, const std::string& param);
 		void broadcastMessage(Player* player, const std::string& cmd, const std::string& param);
 		void teleportHere(Player* player, const std::string& cmd, const std::string& param);
-		void teleportToTown(Player* player, const std::string& cmd, const std::string& param);
-		void teleportTo(Player* player, const std::string& cmd, const std::string& param);
 		void createItemById(Player* player, const std::string& cmd, const std::string& param);
 		void createItemByName(Player* player, const std::string& cmd, const std::string& param);
 		void reloadInfo(Player* player, const std::string& cmd, const std::string& param);

@@ -17,4 +17,5 @@ function onSay(cid, words, param)
 		doPlayerSendCancel(cid, "You can not buy more than " .. config.maxDays .. " days of Premium Account.")
 		doSendMagicEffect(getPlayerPosition(cid), CONST_ME_POFF)
 	end
+	return false
 end

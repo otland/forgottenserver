@@ -5288,8 +5288,7 @@ void Game::updatePlayerShield(Player* player)
 	SpectatorVec list;
 	getSpectators(list, player->getPosition(), true, true);
 	for (Creature* spectator : list) {
-		Player* spectatorPlayer = spectator->getPlayer();
-		spectatorPlayer->sendCreatureShield(player);
+		spectator->getPlayer()->sendCreatureShield(player);
 	}
 }
 

@@ -75,14 +75,12 @@ s_defcommands Commands::defined_commands[] = {
 	{"/i", &Commands::createItemById},
 	{"/n", &Commands::createItemByName},
 	{"/reload", &Commands::reloadInfo},
-	{"/goto", &Commands::teleportTo},
 	{"/info", &Commands::getInfo},
 	{"/closeserver", &Commands::closeServer},
 	{"/openserver", &Commands::openServer},
 	{"/a", &Commands::teleportNTiles},
 	{"/kick", &Commands::kickPlayer},
 	{"/owner", &Commands::setHouseOwner},
-	{"/town", &Commands::teleportToTown},
 	{"/pos", &Commands::showPosition},
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
@@ -501,46 +499,6 @@ void Commands::reloadInfo(Player* player, const std::string& cmd, const std::str
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
 	} else {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
-	}
-}
-
-void Commands::teleportToTown(Player* player, const std::string& cmd, const std::string& param)
-{
-	Town* town = Towns::getInstance().getTown(param);
-	if (town) {
-		Position oldPosition = player->getPosition();
-		Position newPosition = g_game.getClosestFreeTile(player, 0, town->getTemplePosition(), true);
-		if (oldPosition != newPosition) {
-			if (newPosition.x == 0) {
-				player->sendCancel("You can not teleport there.");
-			} else if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
-				g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-				g_game.addMagicEffect(newPosition, NM_ME_TELEPORT, player->isInGhostMode());
-			}
-		}
-	} else {
-		player->sendCancel("Could not find the town.");
-	}
-}
-
-void Commands::teleportTo(Player* player, const std::string& cmd, const std::string& param)
-{
-	Creature* paramCreature = g_game.getCreatureByName(param);
-
-	if (paramCreature) {
-		Position oldPosition = player->getPosition();
-		Position newPosition = g_game.getClosestFreeTile(player, 0, paramCreature->getPosition(), true);
-		if (newPosition.x > 0) {
-			if (g_game.internalTeleport(player, newPosition) == RET_NOERROR) {
-				bool ghostMode = player->isInGhostMode() || paramCreature->isInGhostMode();
-				g_game.addMagicEffect(oldPosition, NM_ME_POFF, ghostMode);
-				g_game.addMagicEffect(player->getPosition(), NM_ME_TELEPORT, ghostMode);
-			}
-		} else {
-			std::ostringstream ss;
-			ss << "You can not teleport to " << paramCreature->getName() << '.';
-			player->sendCancel(ss.str());
-		}
 	}
 }
 
