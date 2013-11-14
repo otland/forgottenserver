@@ -1056,3 +1056,11 @@ function Player.sendExtendedOpcode(self, opcode, buffer)
 	networkMessage:delete()
 	return true
 end
+
+string.split = function(str, sep)
+	local res = {}
+	for v in str:gmatch("([^" .. sep .. "]+)") do
+		res[#res + 1] = v
+	end
+	return res
+end

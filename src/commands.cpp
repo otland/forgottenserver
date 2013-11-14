@@ -81,7 +81,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/a", &Commands::teleportNTiles},
 	{"/kick", &Commands::kickPlayer},
 	{"/owner", &Commands::setHouseOwner},
-	{"/pos", &Commands::showPosition},
 	{"/r", &Commands::removeThing},
 	{"/newtype", &Commands::newType},
 	{"/newitem", &Commands::newItem},
@@ -739,35 +738,6 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 
 	house->setHouseOwner(player->guid);
 	player->sendTextMessage(MSG_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in the bank.");
-}
-
-void Commands::showPosition(Player* player, const std::string& cmd, const std::string& param)
-{
-	if (!param.empty() && player->isAccessPlayer()) {
-		StringVec exploded = explodeString(param, ", ", 2);
-		if (!exploded.size() || exploded.size() < 3) {
-			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Not enough params.");
-			return;
-		}
-
-		uint16_t x = atoi(exploded[0].c_str());
-		uint16_t y = atoi(exploded[1].c_str());
-		uint8_t z = atoi(exploded[2].c_str());
-
-		Position oldPosition = player->getPosition();
-
-		if (g_game.internalTeleport(player, Position(x, y, z)) == RET_NOERROR) {
-			g_game.addMagicEffect(oldPosition, NM_ME_POFF, player->isInGhostMode());
-			g_game.addMagicEffect(player->getPosition(), NM_ME_TELEPORT, player->isInGhostMode());
-			return;
-		}
-	}
-
-	const Position& pos = player->getPosition();
-
-	std::ostringstream ss;
-	ss << "Your current position is [X: " << pos.x << " | Y: " << pos.y << " | Z: " << pos.getZ() << "].";
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 }
 
 void Commands::removeThing(Player* player, const std::string& cmd, const std::string& param)

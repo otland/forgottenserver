@@ -9,6 +9,7 @@
 	<talkaction words="/goto" separator=" " script="teleport_to_creature.lua" />
 	<talkaction words="/t" script="teleport_home.lua" />
 	<talkaction words="/town" separator=" " script="teleport_to_town.lua" />
+	<talkaction words="/pos" separator=" " script="position.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
