@@ -4030,7 +4030,9 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 	getSpectators(list, targetPos, false, true);
 
 	if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
-		addMagicEffect(list, targetPos, NM_ME_POFF, target->isInGhostMode());
+		if (!target->isInGhostMode()) {
+			addMagicEffect(list, targetPos, NM_ME_POFF);
+		}
 		return true;
 	}
 
@@ -4796,9 +4798,9 @@ void Game::addCreatureHealth(const SpectatorVec& list, const Creature* target)
 	}
 }
 
-void Game::addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode /* = false */)
+void Game::addMagicEffect(const Position& pos, uint8_t effect)
 {
-	if (ghostMode || effect > NM_ME_LAST) {
+	if (effect > NM_ME_LAST) {
 		return;
 	}
 
@@ -4807,9 +4809,9 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode /*
 	addMagicEffect(list, pos, effect);
 }
 
-void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect, bool ghostMode/* = false */)
+void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect)
 {
-	if (ghostMode || effect > NM_ME_LAST) {
+	if (effect > NM_ME_LAST) {
 		return;
 	}
 
@@ -5236,43 +5238,6 @@ void Game::serverSave()
 		//open server
 		setGameState(GAME_STATE_NORMAL);
 	}
-}
-
-Position Game::getClosestFreeTile(Player* player, Creature* teleportedCreature, const Position& toPos, bool teleport)
-{
-	Tile* tile[9] = {
-		getTile(toPos.x, toPos.y, toPos.z),
-		getTile(toPos.x - 1, toPos.y - 1, toPos.z), getTile(toPos.x, toPos.y - 1, toPos.z),
-		getTile(toPos.x + 1, toPos.y - 1, toPos.z), getTile(toPos.x - 1, toPos.y, toPos.z),
-		getTile(toPos.x + 1, toPos.y, toPos.z), getTile(toPos.x - 1, toPos.y + 1, toPos.z),
-		getTile(toPos.x, toPos.y + 1, toPos.z), getTile(toPos.x + 1, toPos.y + 1, toPos.z),
-	};
-
-	if (teleport) {
-		if (player) {
-			for (int32_t i = 0; i < 9; i++) {
-				if (tile[i] && ((!tile[i]->hasProperty(IMMOVABLEBLOCKSOLID) && tile[i]->getCreatureCount() == 0) || player->getAccountType() == ACCOUNT_TYPE_GOD)) {
-					return tile[i]->getPosition();
-				}
-			}
-		}
-	} else if (teleportedCreature) {
-		Player* teleportedPlayer = teleportedCreature->getPlayer();
-		if (teleportedPlayer) {
-			for (int32_t i = 0; i < 9; i++) {
-				if (tile[i] && ((!tile[i]->hasProperty(IMMOVABLEBLOCKSOLID) && tile[i]->getCreatureCount() == 0) || teleportedPlayer->getAccountType() == ACCOUNT_TYPE_GOD)) {
-					return tile[i]->getPosition();
-				}
-			}
-		} else {
-			for (int32_t i = 0; i < 9; i++) {
-				if (tile[i] && tile[i]->getCreatureCount() == 0 && !tile[i]->hasProperty(IMMOVABLEBLOCKSOLID)) {
-					return tile[i]->getPosition();
-				}
-			}
-		}
-	}
-	return Position();
 }
 
 void Game::loadMotdNum()

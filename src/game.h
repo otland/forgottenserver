@@ -348,8 +348,6 @@ class Game
 		bool internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
 		                         bool ghostMode, SpectatorVec* listPtr = nullptr, Position* pos = nullptr);
 
-		Position getClosestFreeTile(Player* player, Creature* teleportedCreature, const Position& toPos, bool toCreature);
-
 		void loadPlayersRecord();
 		void checkPlayersRecord();
 
@@ -504,8 +502,8 @@ class Game
 		//animation help functions
 		void addCreatureHealth(const Creature* target);
 		void addCreatureHealth(const SpectatorVec& list, const Creature* target);
-		void addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode = false);
-		void addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect, bool ghostMode = false);
+		void addMagicEffect(const Position& pos, uint8_t effect);
+		void addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect);
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 		void addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect);
 
