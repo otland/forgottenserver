@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ice Witch" nameDescription="an ice witch" race="blood" experience="580" speed="188" manacost="0">
-	<health now="680" max="680"/>
+	<health now="650" max="650"/>
 	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="6081"/>
 	<targetchange interval="2000" chance="5"/>
 	<strategy attack="100" defense="0"/>
