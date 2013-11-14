@@ -6,6 +6,14 @@ FALSE = false
 LUA_ERROR = false
 LUA_NO_ERROR = true
 
+GAME_STATE_STARTUP = 0
+GAME_STATE_INIT = 1
+GAME_STATE_NORMAL = 2
+GAME_STATE_CLOSED = 3
+GAME_STATE_SHUTDOWN = 4
+GAME_STATE_CLOSING = 5
+GAME_STATE_MAINTAIN = 6
+
 CLIENTOS_LINUX = 1
 CLIENTOS_WINDOWS = 2
 CLIENTOS_FLASH = 3
@@ -992,7 +1000,7 @@ function Creature.getClosestFreePosition(self, position, extended)
 		usePosition.y = position.y + y
 		for x = -length, length do
 			usePosition.x = position.x + x
-			if x ~= 0 and y ~= 0 then
+			if not(x == 0 and y == 0) then
 				tile = usePosition:getTile()
 				if tile then
 					tiles[#tiles + 1] = tile

@@ -1558,6 +1558,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
 
+	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
+	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
+
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
 	registerMetaMethod("Position", "__add", LuaScriptInterface::luaPositionAdd);
@@ -1579,6 +1582,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Tile", "getGround", LuaScriptInterface::luaTileGetGround);
 	registerMethod("Tile", "getThing", LuaScriptInterface::luaTileGetThing);
 	registerMethod("Tile", "getThingCount", LuaScriptInterface::luaTileGetThingCount);
+	registerMethod("Tile", "getTopVisibleThing", LuaScriptInterface::luaTileGetTopVisibleThing);
 
 	registerMethod("Tile", "getTopTopItem", LuaScriptInterface::luaTileGetTopTopItem);
 	registerMethod("Tile", "getTopDownItem", LuaScriptInterface::luaTileGetTopDownItem);
@@ -5309,6 +5313,22 @@ int32_t LuaScriptInterface::luaGameGetNpcCount(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaGameGetGameState(lua_State* L)
+{
+	// Game.getGameState()
+	pushNumber(L, g_game.getGameState());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameSetGameState(lua_State* L)
+{
+	// Game.setGameState(state)
+	GameState_t state = static_cast<GameState_t>(getNumber<int64_t>(L, 1));
+	g_game.setGameState(state);
+	pushBoolean(L, true);
+	return 1;
+}
+
 // Position
 int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 {
@@ -5565,6 +5585,32 @@ int32_t LuaScriptInterface::luaTileGetThingCount(lua_State* L)
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile) {
 		pushNumber(L, tile->getThingCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
+{
+	// tile:getTopVisibleThing(creature)
+	Creature* creature = getCreature(L, 2);
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Thing* thing = tile->getTopVisibleThing(creature);
+		if (thing) {
+			if (Creature* visibleCreature = thing->getCreature()) {
+				pushUserdata<Creature>(L, visibleCreature);
+				setCreatureMetatable(L, -1, visibleCreature);
+			} else if (Item* visibleItem = thing->getItem()) {
+				pushUserdata<Item>(L, visibleItem);
+				setItemMetatable(L, -1, visibleItem);
+			} else {
+				pushNil(L);
+			}
+		} else {
+			pushNil(L);
+		}
 	} else {
 		pushNil(L);
 	}
@@ -7901,8 +7947,8 @@ int32_t LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 // Player
 int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
-	// Player(id/name)
-	// Player.new(id/name)
+	// Player(id or name)
+	// Player.new(id or name)
 	Player* player = nullptr;
 	if (isNumber(L, 2)) {
 		player = g_game.getPlayerByID(getNumber<uint32_t>(L, 2));

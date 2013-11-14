@@ -610,6 +610,9 @@ class LuaScriptInterface
 		static int32_t luaGameGetPlayerCount(lua_State* L);
 		static int32_t luaGameGetNpcCount(lua_State* L);
 
+		static int32_t luaGameGetGameState(lua_State* L);
+		static int32_t luaGameSetGameState(lua_State* L);
+
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
 		static int32_t luaPositionAdd(lua_State* L);
@@ -630,6 +633,7 @@ class LuaScriptInterface
 		static int32_t luaTileGetGround(lua_State* L);
 		static int32_t luaTileGetThing(lua_State* L);
 		static int32_t luaTileGetThingCount(lua_State* L);
+		static int32_t luaTileGetTopVisibleThing(lua_State* L);
 
 		static int32_t luaTileGetTopTopItem(lua_State* L);
 		static int32_t luaTileGetTopDownItem(lua_State* L);
