@@ -268,10 +268,7 @@ class Game
 		ReturnValue internalMoveCreature(Creature* creature, Cylinder* fromCylinder, Cylinder* toCylinder, uint32_t flags = 0);
 
 		ReturnValue internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-		                             Item* item, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr);
-
-		ReturnValue internalMoveTradeItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-		                                  Item* item, Item* tradeItem, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr);
+		                             Item* item, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr, Item* tradeItem = nullptr);
 
 		ReturnValue internalAddItem(Cylinder* toCylinder, Item* item, int32_t index = INDEX_WHEREEVER,
 		                            uint32_t flags = 0, bool test = false);

@@ -700,7 +700,7 @@ void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
 		case VARIANT_TARGETPOSITION:
 		case VARIANT_POSITION: {
 			lua_pushstring(L, "pos");
-			pushPosition(L, var.pos);
+			pushPosition(L, var.pos, var.pos.stackpos);
 			lua_settable(L, -3);
 			break;
 		}
@@ -747,15 +747,6 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing, uint32_t uid)
 		setField(L, "type", 0);
 		setField(L, "actionid", 0);
 	}
-}
-
-void LuaScriptInterface::pushPosition(lua_State* L, const PositionEx& position)
-{
-	lua_newtable(L);
-	setField(L, "z", position.z);
-	setField(L, "y", position.y);
-	setField(L, "x", position.x);
-	setField(L, "stackpos", position.stackpos);
 }
 
 void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, uint32_t stackpos)
@@ -817,15 +808,6 @@ void LuaScriptInterface::popPosition(lua_State* L, PositionEx& position)
 	lua_pop(L, 1);
 }
 
-void LuaScriptInterface::popPosition(lua_State* L, Position& position, uint32_t& stackpos)
-{
-	position.x = popField<uint16_t>(L, "x");
-	position.y = popField<uint16_t>(L, "y");
-	position.z = popField<uint8_t>(L, "z");
-	stackpos = popField<int32_t>(L, "stackpos");
-	lua_pop(L, 1);
-}
-
 uint32_t LuaScriptInterface::popNumber(lua_State* L)
 {
 	if (lua_gettop(L) == 0) {
@@ -854,14 +836,7 @@ std::string LuaScriptInterface::popString(lua_State* L)
 		return std::string();
 	}
 
-	std::string str;
-
-	size_t len;
-	const char* c_str = lua_tolstring(L, -1, &len);
-	if (c_str && len > 0) {
-		str.assign(c_str, len);
-	}
-
+	std::string str(getString(L, -1));
 	lua_pop(L, 1);
 	return str;
 }
@@ -914,14 +889,12 @@ void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, const
 // Get
 std::string LuaScriptInterface::getString(lua_State* L, int32_t arg)
 {
-	std::string str;
 	size_t len;
-
 	const char* c_str = lua_tolstring(L, arg, &len);
-	if (c_str && len > 0) {
-		str.assign(c_str, len);
+	if (!c_str || len == 0) {
+		return std::string();
 	}
-	return str;
+	return std::string(c_str, len);
 }
 
 bool LuaScriptInterface::getBoolean(lua_State* L, int32_t arg)

@@ -610,8 +610,7 @@ int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
 	//selfGetPosition()
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		Position pos = npc->getPosition();
-		pushPosition(L, pos);
+		pushPosition(L, npc->getPosition(), 0);
 	} else {
 		lua_pushnil(L);
 	}

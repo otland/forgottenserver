@@ -272,14 +272,12 @@ class LuaScriptInterface
 		//push/pop common structures
 		static void pushThing(lua_State* L, Thing* thing, uint32_t uid);
 		static void pushVariant(lua_State* L, const LuaVariant& var);
-		static void pushPosition(lua_State* L, const PositionEx& position);
 		static void pushPosition(lua_State* L, const Position& position, uint32_t stackpos);
 		static void pushString(lua_State* L, const std::string& value);
 		static void pushCallback(lua_State* L, int32_t callback);
 
 		static LuaVariant popVariant(lua_State* L);
 		static void popPosition(lua_State* L, PositionEx& position);
-		static void popPosition(lua_State* L, Position& position, uint32_t& stackpos);
 		static uint32_t popNumber(lua_State* L);
 		static double popFloatNumber(lua_State* L);
 		static std::string popString(lua_State* L);
