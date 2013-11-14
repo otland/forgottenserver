@@ -13,7 +13,7 @@
 	<talkaction words="/a" separator=" " script="teleport_ntiles.lua" />
 	<talkaction words="/pos" separator=" " script="position.lua" />
 	<talkaction words="/r" separator=" " script="removething.lua" />
-	<talkaction words="/openserver" separator=" " script="openserver.lua" />
+	<talkaction words="/openserver" script="openserver.lua" />
 	<talkaction words="/closeserver" separator=" " script="closeserver.lua" />
 
 	<!-- player talkactions -->
