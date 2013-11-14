@@ -24,7 +24,8 @@
 			<attribute key="areaEffect" value="energy"/>
 		</attack>
 		<attack name="ice" interval="1000" chance="15" range="7" min="-50" max="-85">
-			<attribute key="shootEffect" value="icearea"/>
+			<attribute key="shootEffect" value="smallice"/>
+			<attribute key="areaEffect" value="iceattack"/>
 		</attack>
 		<attack name="melee" interval="2000" chance="15" range="7" radius="3" target="0" min="-10" max="-80">
 			<attribute key="areaEffect" value="blackspark"/>
