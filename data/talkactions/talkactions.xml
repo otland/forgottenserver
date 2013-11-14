@@ -6,10 +6,15 @@
 	<talkaction words="/unban" separator=" " script="unban.lua" />
 	<talkaction words="/up" script="up.lua" />
 	<talkaction words="/down" script="down.lua" />
+	<talkaction words="/c" separator=" " script="teleport_creature_here.lua" />
 	<talkaction words="/goto" separator=" " script="teleport_to_creature.lua" />
 	<talkaction words="/t" script="teleport_home.lua" />
 	<talkaction words="/town" separator=" " script="teleport_to_town.lua" />
+	<talkaction words="/a" separator=" " script="teleport_ntiles.lua" />
 	<talkaction words="/pos" separator=" " script="position.lua" />
+	<talkaction words="/r" separator=" " script="removething.lua" />
+	<talkaction words="/openserver" separator=" " script="openserver.lua" />
+	<talkaction words="/closeserver" separator=" " script="closeserver.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
