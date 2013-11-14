@@ -18,6 +18,7 @@
 	<talkaction words="!deathlist" script="deathlist.lua"/>
 	<talkaction words="!kills" script="kills.lua"/>
 	<talkaction words="!online" script="online.lua"/>
+	<talkaction words="!serverinfo" script="serverinfo.lua"/>
 
 	<!-- test talkactions -->
 	<talkaction words="!z" script="magiceffect.lua"/>
