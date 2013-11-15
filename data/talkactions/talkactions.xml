@@ -15,6 +15,8 @@
 	<talkaction words="/r" separator=" " script="removething.lua" />
 	<talkaction words="/openserver" script="openserver.lua" />
 	<talkaction words="/closeserver" separator=" " script="closeserver.lua" />
+	<talkaction words="/B" separator=" " script="broadcast.lua" />
+	<talkaction words="/m" separator=" " script="place_monster.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>

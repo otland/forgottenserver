@@ -68,9 +68,7 @@ extern GlobalEvents* g_globalEvents;
 s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/s", &Commands::placeNpc},
-	{"/m", &Commands::placeMonster},
 	{"/summon", &Commands::placeSummon},
-	{"/B", &Commands::broadcastMessage},
 	{"/i", &Commands::createItemById},
 	{"/n", &Commands::createItemByName},
 	{"/reload", &Commands::reloadInfo},
@@ -291,26 +289,6 @@ void Commands::placeNpc(Player* player, const std::string& cmd, const std::strin
 	}
 }
 
-void Commands::placeMonster(Player* player, const std::string& cmd, const std::string& param)
-{
-	Monster* monster = Monster::createMonster(param);
-	if (!monster) {
-		player->sendCancelMessage(RET_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-		return;
-	}
-
-	// Place the monster
-	if (g_game.placeCreature(monster, player->getPosition())) {
-		g_game.addMagicEffect(monster->getPosition(), NM_ME_TELEPORT);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_BLOOD);
-	} else {
-		delete monster;
-		player->sendCancelMessage(RET_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-	}
-}
-
 void Commands::placeSummon(Player* player, const std::string& cmd, const std::string& param)
 {
 	Monster* monster = Monster::createMonster(param);
@@ -330,11 +308,6 @@ void Commands::placeSummon(Player* player, const std::string& cmd, const std::st
 	} else {
 		g_game.addMagicEffect(monster->getPosition(), NM_ME_TELEPORT);
 	}
-}
-
-void Commands::broadcastMessage(Player* player, const std::string& cmd, const std::string& param)
-{
-	g_game.playerBroadcastMessage(player, param);
 }
 
 void Commands::createItemById(Player* player, const std::string& cmd, const std::string& param)
