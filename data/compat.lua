@@ -4,7 +4,7 @@ function pushThing(thing)
 		if thing:isItem() then
 			t.uid = thing:getUniqueId()
 			t.itemid = thing:getId()
-			if thing:hasSubType() then
+			if ItemType(t.itemid):hasSubType() then
 				t.type = thing:getSubType()
 			end
 			t.actionid = thing:getActionId()

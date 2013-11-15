@@ -69,8 +69,6 @@ s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/s", &Commands::placeNpc},
 	{"/summon", &Commands::placeSummon},
-	{"/i", &Commands::createItemById},
-	{"/n", &Commands::createItemByName},
 	{"/reload", &Commands::reloadInfo},
 	{"/info", &Commands::getInfo},
 	{"/kick", &Commands::kickPlayer},
@@ -308,88 +306,6 @@ void Commands::placeSummon(Player* player, const std::string& cmd, const std::st
 	} else {
 		g_game.addMagicEffect(monster->getPosition(), NM_ME_TELEPORT);
 	}
-}
-
-void Commands::createItemById(Player* player, const std::string& cmd, const std::string& param)
-{
-	std::string tmp = param;
-
-	std::string::size_type pos = tmp.find(' ', 0);
-
-	if (pos == std::string::npos) {
-		pos = tmp.size();
-	}
-
-	int32_t type = atoi(tmp.substr(0, pos).c_str());
-	int32_t count = 1;
-
-	if (pos < tmp.size()) {
-		tmp.erase(0, pos + 1);
-		count = std::max<int32_t>(1, std::min<int32_t>(atoi(tmp.c_str()), 100));
-	}
-
-	Item* newItem = Item::CreateItem(type, count);
-	if (!newItem) {
-		return;
-	}
-
-	ReturnValue ret = g_game.internalAddItem(player, newItem);
-	if (ret != RET_NOERROR) {
-		ret = g_game.internalAddItem(player->getTile(), newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		if (ret != RET_NOERROR) {
-			delete newItem;
-			return;
-		}
-	}
-
-	g_game.startDecay(newItem);
-	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
-}
-
-void Commands::createItemByName(Player* player, const std::string& cmd, const std::string& param)
-{
-	std::string::size_type pos1 = param.find('"');
-	pos1 = (pos1 == std::string::npos ? 0 : pos1 + 1);
-
-	std::string::size_type pos2 = param.rfind('"');
-	if (pos2 == pos1 || pos2 == std::string::npos) {
-		pos2 = param.rfind(' ');
-		if (pos2 == std::string::npos) {
-			pos2 = param.size();
-		}
-	}
-
-	std::string itemName = param.substr(pos1, pos2 - pos1);
-
-	int32_t count = 1;
-
-	if (pos2 < param.size()) {
-		std::string itemCount = param.substr(pos2 + 1, param.size() - (pos2 + 1));
-		count = std::min<int32_t>(atoi(itemCount.c_str()), 100);
-	}
-
-	int32_t itemId = Item::items.getItemIdByName(itemName);
-	if (itemId == -1) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_RED, "Item could not be summoned.");
-		return;
-	}
-
-	Item* newItem = Item::CreateItem(itemId, count);
-	if (!newItem) {
-		return;
-	}
-
-	ReturnValue ret = g_game.internalAddItem(player, newItem);
-	if (ret != RET_NOERROR) {
-		ret = g_game.internalAddItem(player->getTile(), newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		if (ret != RET_NOERROR) {
-			delete newItem;
-			return;
-		}
-	}
-
-	g_game.startDecay(newItem);
-	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
 }
 
 void Commands::reloadInfo(Player* player, const std::string& cmd, const std::string& param)

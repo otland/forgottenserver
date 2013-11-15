@@ -688,7 +688,6 @@ class Item : virtual public Thing
 		static uint32_t countByType(const Item* i, int32_t subType);
 
 		void setDefaultSubtype();
-		bool hasSubType() const;
 		uint16_t getSubType() const;
 		void setSubType(uint16_t n);
 

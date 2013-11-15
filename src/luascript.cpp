@@ -718,7 +718,8 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing, uint32_t uid)
 		setField(L, "uid", uid);
 		setField(L, "itemid", item->getID());
 
-		if (item->hasSubType()) {
+		const ItemType& it = Item::items[item->getID()];
+		if (it.hasSubType()) {
 			setField(L, "type", item->getSubType());
 		} else {
 			setField(L, "type", 0);
@@ -1684,7 +1685,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getCharges", LuaScriptInterface::luaItemGetCharges);
 	registerMethod("Item", "getFluidType", LuaScriptInterface::luaItemGetFluidType);
 
-	registerMethod("Item", "hasSubType", LuaScriptInterface::luaItemHasSubType);
 	registerMethod("Item", "getSubType", LuaScriptInterface::luaItemGetSubType);
 
 	registerMethod("Item", "getName", LuaScriptInterface::luaItemGetName);
@@ -2049,6 +2049,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("ItemType", "getElementType", LuaScriptInterface::luaItemTypeGetElementType);
 	registerMethod("ItemType", "getElementDamage", LuaScriptInterface::luaItemTypeGetElementDamage);
+
+	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
@@ -6733,18 +6735,6 @@ int32_t LuaScriptInterface::luaItemGetFluidType(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaItemHasSubType(lua_State* L)
-{
-	// item:hasSubType()
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		pushBoolean(L, item->hasSubType());
-	} else {
-		pushNil(L);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaItemGetSubType(lua_State* L)
 {
 	// item:getSubType()
@@ -10783,6 +10773,18 @@ int32_t LuaScriptInterface::luaItemTypeGetElementDamage(lua_State* L)
 		} else {
 			pushNil(L);
 		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeHasSubType(lua_State* L)
+{
+	// itemType:hasSubType()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->hasSubType());
 	} else {
 		pushNil(L);
 	}

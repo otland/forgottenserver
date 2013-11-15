@@ -309,12 +309,6 @@ const Tile* Item::getTile() const
 	return dynamic_cast<const Tile*>(cylinder);
 }
 
-bool Item::hasSubType() const
-{
-	const ItemType& it = items[id];
-	return it.hasSubType();
-}
-
 uint16_t Item::getSubType() const
 {
 	const ItemType& it = items[id];

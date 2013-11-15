@@ -731,7 +731,6 @@ class LuaScriptInterface
 		static int32_t luaItemGetCharges(lua_State* L);
 		static int32_t luaItemGetFluidType(lua_State* L);
 
-		static int32_t luaItemHasSubType(lua_State* L);
 		static int32_t luaItemGetSubType(lua_State* L);
 
 		static int32_t luaItemGetName(lua_State* L);
@@ -1085,6 +1084,8 @@ class LuaScriptInterface
 
 		static int32_t luaItemTypeGetElementType(lua_State* L);
 		static int32_t luaItemTypeGetElementDamage(lua_State* L);
+
+		static int32_t luaItemTypeHasSubType(lua_State* L);
 
 		// Combat
 		static int32_t luaCombatCreate(lua_State* L);

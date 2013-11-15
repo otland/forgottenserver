@@ -45,8 +45,6 @@ class Commands
 		//commands
 		void placeNpc(Player* player, const std::string& cmd, const std::string& param);
 		void placeSummon(Player* player, const std::string& cmd, const std::string& param);
-		void createItemById(Player* player, const std::string& cmd, const std::string& param);
-		void createItemByName(Player* player, const std::string& cmd, const std::string& param);
 		void reloadInfo(Player* player, const std::string& cmd, const std::string& param);
 		void getInfo(Player* player, const std::string& cmd, const std::string& param);
 		void kickPlayer(Player* player, const std::string& cmd, const std::string& param);
