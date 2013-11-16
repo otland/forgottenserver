@@ -38,12 +38,12 @@ House::House(uint32_t _houseid) :
 	transfer_container(ITEM_LOCKER1)
 {
 	isLoaded = false;
-	houseOwner = 0;
+	owner = 0;
 	posEntry.x = 0;
 	posEntry.y = 0;
 	posEntry.z = 0;
 	paidUntil = 0;
-	houseid = _houseid;
+	id = _houseid;
 	rentWarnings = 0;
 	rent = 0;
 	townid = 0;
@@ -56,23 +56,23 @@ void House::addTile(HouseTile* tile)
 	houseTiles.push_back(tile);
 }
 
-void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* player/* = nullptr*/)
+void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* player/* = nullptr*/)
 {
-	if (updateDatabase) {
+	if (updateDatabase && owner != guid) {
 		Database* db = Database::getInstance();
 
 		std::ostringstream query;
-		query << "UPDATE `houses` SET `owner` = " << guid << " WHERE `id` = " << houseid;
+		query << "UPDATE `houses` SET `owner` = " << guid << " WHERE `id` = " << id;
 		db->executeQuery(query.str());
 	}
 
-	if (isLoaded && houseOwner == guid) {
+	if (isLoaded && owner == guid) {
 		return;
 	}
 
 	isLoaded = true;
 
-	if (houseOwner) {
+	if (owner != 0) {
 		//send items to depot
 		if (player) {
 			transferToDepot(player);
@@ -96,7 +96,7 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 		}
 
 		//clean access lists
-		houseOwner = 0;
+		owner = 0;
 		setAccessList(SUBOWNER_LIST, "");
 		setAccessList(GUEST_LIST, "");
 
@@ -110,10 +110,9 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 	}
 
 	std::string name;
-
 	if (guid != 0 && IOLoginData::getNameByGuid(guid, name)) {
-		houseOwner = guid;
-		houseOwnerName = name;
+		owner = guid;
+		ownerName = name;
 	}
 
 	updateDoorDescription();
@@ -122,8 +121,8 @@ void House::setHouseOwner(uint32_t guid, bool updateDatabase/* = true*/, Player*
 void House::updateDoorDescription() const
 {
 	std::ostringstream ss;
-	if (houseOwner != 0) {
-		ss << "It belongs to house '" << houseName << "'. " << houseOwnerName << " owns this house.";
+	if (owner != 0) {
+		ss << "It belongs to house '" << houseName << "'. " << ownerName << " owns this house.";
 	} else {
 		ss << "It belongs to house '" << houseName << "'. Nobody owns this house.";
 
@@ -148,7 +147,7 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 		return HOUSE_OWNER;
 	}
 
-	if (player->getGUID() == houseOwner) {
+	if (player->getGUID() == owner) {
 		return HOUSE_OWNER;
 	}
 
@@ -217,14 +216,14 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 
 bool House::transferToDepot() const
 {
-	if (townid == 0 || houseOwner == 0) {
+	if (townid == 0 || owner == 0) {
 		return false;
 	}
 
-	Player* player = g_game.getPlayerByGUID(houseOwner);
+	Player* player = g_game.getPlayerByGUID(owner);
 	if (!player) {
 		player = new Player(nullptr);
-		if (!IOLoginData::loadPlayerById(player, houseOwner)) {
+		if (!IOLoginData::loadPlayerById(player, owner)) {
 			delete player;
 			return false;
 		}
@@ -241,7 +240,7 @@ bool House::transferToDepot() const
 
 bool House::transferToDepot(Player* player) const
 {
-	if (townid == 0 || houseOwner == 0) {
+	if (townid == 0 || owner == 0) {
 		return false;
 	}
 
@@ -420,7 +419,7 @@ bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
 		return false;
 	}
 
-	setHouseOwner(newOwner->getGUID());
+	setOwner(newOwner->getGUID());
 	transferItem = nullptr;
 	return true;
 }
@@ -689,7 +688,7 @@ Houses::Houses()
 House* Houses::getHouseByPlayerId(uint32_t playerId)
 {
 	for (const auto& it : houseMap) {
-		if (it.second->getHouseOwner() == playerId) {
+		if (it.second->getOwner() == playerId) {
 			return it.second;
 		}
 	}
@@ -736,7 +735,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 		house->setRent(pugi::cast<uint32_t>(houseNode.attribute("rent").value()));
 		house->setTownId(pugi::cast<uint32_t>(houseNode.attribute("townid").value()));
 
-		house->setHouseOwner(0, false);
+		house->setOwner(0, false);
 	}
 	return true;
 }
@@ -751,8 +750,8 @@ bool Houses::payHouses() const
 
 	for (const auto& it : houseMap) {
 		House* house = it.second;
-		if (house->getHouseOwner() != 0) {
-			uint32_t ownerid = house->getHouseOwner();
+		if (house->getOwner() != 0) {
+			uint32_t ownerid = house->getOwner();
 			Town* town = Towns::getInstance().getTown(house->getTownId());
 			if (!town) {
 				continue;
@@ -763,7 +762,7 @@ bool Houses::payHouses() const
 				player = new Player(nullptr);
 				if (!IOLoginData::loadPlayerById(player, ownerid)) {
 					//player doesnt exist, reset house owner
-					house->setHouseOwner(0);
+					house->setOwner(0);
 					delete player;
 					continue;
 				}
@@ -826,7 +825,7 @@ bool Houses::payHouses() const
 					g_game.internalAddItem(player->getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 					house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 				} else {
-					house->setHouseOwner(0, true, player);
+					house->setOwner(0, true, player);
 				}
 			}
 

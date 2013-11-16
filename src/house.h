@@ -172,9 +172,9 @@ class House
 			return houseName;
 		}
 
-		void setHouseOwner(uint32_t guid, bool updateDatabase = true, Player* player = nullptr);
-		uint32_t getHouseOwner() const {
-			return houseOwner;
+		void setOwner(uint32_t guid, bool updateDatabase = true, Player* player = nullptr);
+		uint32_t getOwner() const {
+			return owner;
 		}
 
 		void setPaidUntil(uint32_t paid) {
@@ -205,8 +205,8 @@ class House
 			return townid;
 		}
 
-		uint32_t getHouseId() const {
-			return houseid;
+		uint32_t getId() const {
+			return id;
 		}
 
 		void addDoor(Door* door);
@@ -239,9 +239,9 @@ class House
 		bool transferToDepot(Player* player) const;
 
 		bool isLoaded;
-		uint32_t houseid;
-		uint32_t houseOwner;
-		std::string houseOwnerName;
+		uint32_t id;
+		uint32_t owner;
+		std::string ownerName;
 		HouseTileList houseTiles;
 		std::list<Door*> doorList;
 		HouseBedItemList bedsList;

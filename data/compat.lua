@@ -454,6 +454,11 @@ function doSetItemSpecialDesrciption(uid, desc)
 end
 function doDecayItem(uid) local i = Item(uid) return i ~= nil and i:decay() or false end
 
+function setHouseOwner(id, guid) local h = House(id) return h ~= nil and h:setOwnerGuid(guid) or false end
+function getHouseRent(id) local h = House(id) return h ~= nil and h:getRent() or nil end
+function getHouseAccessList(id, listId) local h = House(id) return h ~= nil and h:getAccessList(listId) or nil end
+function setHouseAccessList(id, listId, listText) local h = House(id) return h ~= nil and h:setAccessList(listId, listText) or false end
+
 function getTilePzInfo(position)
 	local t = Tile(position)
 	if t == nil then

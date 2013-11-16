@@ -454,11 +454,7 @@ class LuaScriptInterface
 		static int32_t luaGetTileHouseInfo(lua_State* L);
 
 		//houses
-		static int32_t luaGetHouseRent(lua_State* L);
-		static int32_t luaGetHouseAccessList(lua_State* L);
 		static int32_t luaGetHouseByPlayerGUID(lua_State* L);
-		static int32_t luaSetHouseOwner(lua_State* L);
-		static int32_t luaSetHouseAccessList(lua_State* L);
 
 		//get creature info functions
 		static int32_t luaGetCreatureSummons(lua_State* L);
@@ -1041,8 +1037,11 @@ class LuaScriptInterface
 		static int32_t luaHouseGetId(lua_State* L);
 		static int32_t luaHouseGetName(lua_State* L);
 		static int32_t luaHouseGetTown(lua_State* L);
-		static int32_t luaHouseGetOwnerGuid(lua_State* L);
 		static int32_t luaHouseGetExitPosition(lua_State* L);
+		static int32_t luaHouseGetRent(lua_State* L);
+
+		static int32_t luaHouseGetOwnerGuid(lua_State* L);
+		static int32_t luaHouseSetOwnerGuid(lua_State* L);
 
 		static int32_t luaHouseGetBeds(lua_State* L);
 		static int32_t luaHouseGetBedCount(lua_State* L);
@@ -1052,6 +1051,9 @@ class LuaScriptInterface
 
 		static int32_t luaHouseGetTiles(lua_State* L);
 		static int32_t luaHouseGetTileCount(lua_State* L);
+
+		static int32_t luaHouseGetAccessList(lua_State* L);
+		static int32_t luaHouseSetAccessList(lua_State* L);
 
 		// ItemType
 		static int32_t luaItemTypeCreate(lua_State* L);

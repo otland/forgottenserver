@@ -53,9 +53,7 @@ class IOLoginData
 		static uint32_t getAccountNumberByName(const std::string& name);
 		static bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
-		static time_t getLastLoginSaved(uint32_t guid);
 		static bool hasBiddedOnHouse(uint32_t guid);
-		static void updateHouseOwners();
 
 		static std::list<VIPEntry> getVIPEntries(uint32_t accountId);
 		static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);

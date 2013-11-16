@@ -130,7 +130,7 @@ bool BedItem::trySleep(Player* player)
 	}
 
 	if (sleeperGUID != 0) {
-		if (Item::items[getID()].transformToFree != 0 && house->getHouseOwner() == player->getGUID()) {
+		if (Item::items[getID()].transformToFree != 0 && house->getOwner() == player->getGUID()) {
 			wakeUp(nullptr);
 		}
 

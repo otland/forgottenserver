@@ -1340,20 +1340,8 @@ void LuaScriptInterface::registerFunctions()
 	//getDepotId(uid)
 	lua_register(m_luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
 
-	//getHouseRent(houseid)
-	lua_register(m_luaState, "getHouseRent", LuaScriptInterface::luaGetHouseRent);
-
-	//getHouseAccessList(houseid, listid)
-	lua_register(m_luaState, "getHouseAccessList", LuaScriptInterface::luaGetHouseAccessList);
-
 	//getHouseByPlayerGUID(playerGUID)
 	lua_register(m_luaState, "getHouseByPlayerGUID", LuaScriptInterface::luaGetHouseByPlayerGUID);
-
-	//setHouseAccessList(houseid, listid, listtext)
-	lua_register(m_luaState, "setHouseAccessList", LuaScriptInterface::luaSetHouseAccessList);
-
-	//setHouseOwner(houseid, ownerGUID)
-	lua_register(m_luaState, "setHouseOwner", LuaScriptInterface::luaSetHouseOwner);
 
 	//getWorldType()
 	lua_register(m_luaState, "getWorldType", LuaScriptInterface::luaGetWorldType);
@@ -2005,8 +1993,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("House", "getId", LuaScriptInterface::luaHouseGetId);
 	registerMethod("House", "getName", LuaScriptInterface::luaHouseGetName);
 	registerMethod("House", "getTown", LuaScriptInterface::luaHouseGetTown);
-	registerMethod("House", "getOwnerGuid", LuaScriptInterface::luaHouseGetOwnerGuid);
 	registerMethod("House", "getExitPosition", LuaScriptInterface::luaHouseGetExitPosition);
+	registerMethod("House", "getRent", LuaScriptInterface::luaHouseGetRent);
+
+	registerMethod("House", "getOwnerGuid", LuaScriptInterface::luaHouseGetOwnerGuid);
+	registerMethod("House", "setOwnerGuid", LuaScriptInterface::luaHouseSetOwnerGuid);
 
 	registerMethod("House", "getBeds", LuaScriptInterface::luaHouseGetBeds);
 	registerMethod("House", "getBedCount", LuaScriptInterface::luaHouseGetBedCount);
@@ -2016,6 +2007,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getTiles", LuaScriptInterface::luaHouseGetTiles);
 	registerMethod("House", "getTileCount", LuaScriptInterface::luaHouseGetTileCount);
+
+	registerMethod("House", "getAccessList", LuaScriptInterface::luaHouseGetAccessList);
+	registerMethod("House", "setAccessList", LuaScriptInterface::luaHouseSetAccessList);
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
@@ -2957,7 +2951,7 @@ int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
 		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
 			House* house = houseTile->getHouse();
 			if (house) {
-				lua_pushnumber(L, house->getHouseId());
+				lua_pushnumber(L, house->getId());
 			} else {
 				pushBoolean(L, false);
 			}
@@ -3005,43 +2999,6 @@ int32_t LuaScriptInterface::luaDebugPrint(lua_State* L)
 	return 0;
 }
 
-int32_t LuaScriptInterface::luaGetHouseRent(lua_State* L)
-{
-	//getHouseRent(houseid)
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		lua_pushnumber(L, house->getRent());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetHouseAccessList(lua_State* L)
-{
-	//getHouseAccessList(houseid, listid)
-	uint32_t listid = popNumber(L);
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		std::string list;
-		if (house->getAccessList(listid, list)) {
-			pushString(L, list);
-		} else {
-			reportErrorFunc("No valid listid.");
-			lua_pushnil(L);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetHouseByPlayerGUID(lua_State* L)
 {
 	//getHouseByPlayerGUID(playerGUID)
@@ -3049,44 +3006,9 @@ int32_t LuaScriptInterface::luaGetHouseByPlayerGUID(lua_State* L)
 
 	House* house = Houses::getInstance().getHouseByPlayerId(guid);
 	if (house) {
-		lua_pushnumber(L, house->getHouseId());
+		lua_pushnumber(L, house->getId());
 	} else {
 		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaSetHouseAccessList(lua_State* L)
-{
-	//setHouseAccessList(houseid, listid, listtext)
-	std::string list = popString(L);
-	uint32_t listid = popNumber(L);
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		house->setAccessList(listid, list);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaSetHouseOwner(lua_State* L)
-{
-	//setHouseOwner(houseid, owner)
-	uint32_t owner = popNumber(L);
-	uint32_t houseid = popNumber(L);
-
-	House* house = Houses::getInstance().getHouse(houseid);
-	if (house) {
-		house->setHouseOwner(owner);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_HOUSE_NOT_FOUND));
-		pushBoolean(L, false);
 	}
 	return 1;
 }
@@ -10291,7 +10213,7 @@ int32_t LuaScriptInterface::luaHouseGetId(lua_State* L)
 	// house:getId()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		pushNumber(L, house->getHouseId());
+		pushNumber(L, house->getId());
 	} else {
 		pushNil(L);
 	}
@@ -10328,24 +10250,50 @@ int32_t LuaScriptInterface::luaHouseGetTown(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaHouseGetOwnerGuid(lua_State* L)
-{
-	// house:getOwnerGuid()
-	House* house = getUserdata<House>(L, 1);
-	if (house) {
-		pushNumber(L, house->getHouseOwner());
-	} else {
-		pushNil(L);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaHouseGetExitPosition(lua_State* L)
 {
 	// house:getExitPosition()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
 		pushMetaPosition(L, house->getEntryPosition(), 0);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetRent(lua_State* L)
+{
+	// house:getRent()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushNumber(L, house->getRent());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetOwnerGuid(lua_State* L)
+{
+	// house:getOwnerGuid()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushNumber(L, house->getOwner());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
+{
+	// house:setOwnerGuid(guid)
+	uint32_t guid = getNumber<uint32_t>(L, 2);
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		house->setOwner(guid);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}
@@ -10439,6 +10387,39 @@ int32_t LuaScriptInterface::luaHouseGetTileCount(lua_State* L)
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
 		pushNumber(L, house->getTiles().size());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseGetAccessList(lua_State* L)
+{
+	// house:getAccessList(listId)
+	uint32_t listId = getNumber<uint32_t>(L, 2);
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		std::string list;
+		if (house->getAccessList(listId, list)) {
+			pushString(L, list);
+		} else {
+			pushBoolean(L, false);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaHouseSetAccessList(lua_State* L)
+{
+	// house:setAccessList(listId, list)
+	const std::string& list = getString(L, 3);
+	uint32_t listId = getNumber<uint32_t>(L, 2);
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		house->setAccessList(listId, list);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}

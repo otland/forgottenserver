@@ -1017,69 +1017,6 @@ void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 	Database::getInstance()->executeQuery(query.str());
 }
 
-time_t IOLoginData::getLastLoginSaved(uint32_t guid)
-{
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	query << "SELECT `lastlogin` FROM `players` WHERE `id` = " << guid;
-	DBResult* result;
-	time_t lastLoginSaved;
-
-	if ((result = db->storeQuery(query.str()))) {
-		lastLoginSaved = result->getNumber<uint64_t>("lastlogin");
-		db->freeResult(result);
-	} else {
-		lastLoginSaved = 0;
-	}
-
-	return lastLoginSaved;
-}
-
-void IOLoginData::updateHouseOwners()
-{
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	DBResult* result;
-	query << "SELECT `id`, `highest_bidder`, `last_bid` FROM `houses` WHERE `owner` = 0 AND `bid_end` != 0 AND `bid_end` < " << time(nullptr);
-
-	if ((result = db->storeQuery(query.str()))) {
-		do {
-			House* house = Houses::getInstance().getHouse(result->getDataInt("id"));
-
-			if (house) {
-				DBResult* result2;
-				query.str("");
-				query << "SELECT `balance` FROM `players` WHERE `id` = " << result->getDataInt("highest_bidder");
-				bool canPay = false;
-
-				if ((result2 = db->storeQuery(query.str()))) {
-					if (result2->getDataInt("balance") >= result->getDataInt("last_bid")) {
-						canPay = true;
-					}
-
-					db->freeResult(result2);
-				}
-
-				if (canPay) {
-					query.str("");
-					query << "UPDATE `players` SET `balance` = `balance` - " << result->getDataInt("last_bid") << " WHERE `id` = " << result->getDataInt("highest_bidder");
-					db->executeQuery(query.str());
-
-					house->setHouseOwner(result->getDataInt("highest_bidder"));
-				}
-
-				query.str("");
-				query << "UPDATE `houses` SET `last_bid` = 0, `bid_end` = 0, `highest_bidder` = 0, `bid` = 0 WHERE `id` = " << result->getDataInt("id");
-				db->executeQuery(query.str());
-			}
-		} while (result->next());
-
-		db->freeResult(result);
-	}
-}
-
 bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
 {
 	Database* db = Database::getInstance();

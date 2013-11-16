@@ -371,9 +371,9 @@ void Commands::setHouseOwner(Player* player, const std::string& cmd, const std::
 			uint32_t guid;
 			std::string name = param;
 			if (name == "none") {
-				houseTile->getHouse()->setHouseOwner(0);
+				houseTile->getHouse()->setOwner(0);
 			} else if (IOLoginData::getGuidByName(guid, name)) {
-				houseTile->getHouse()->setHouseOwner(guid);
+				houseTile->getHouse()->setOwner(guid);
 			} else {
 				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
 			}
@@ -406,7 +406,7 @@ void Commands::sellHouse(Player* player, const std::string& cmd, const std::stri
 	}
 
 	House* house = houseTile->getHouse();
-	if (!house || house->getHouseOwner() != player->guid) {
+	if (!house || house->getOwner() != player->guid) {
 		player->sendCancel("You don't own this house.");
 		return;
 	}
@@ -462,13 +462,13 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 		return;
 	}
 
-	if (house->getHouseOwner()) {
+	if (house->getOwner()) {
 		player->sendCancel("This house alreadly has an owner.");
 		return;
 	}
 
 	for (const auto& it : Houses::getInstance().getHouses()) {
-		if (it.second->getHouseOwner() == player->guid) {
+		if (it.second->getOwner() == player->guid) {
 			player->sendCancel("You are already the owner of a house.");
 			return;
 		}
@@ -480,7 +480,7 @@ void Commands::buyHouse(Player* player, const std::string& cmd, const std::strin
 		return;
 	}
 
-	house->setHouseOwner(player->guid);
+	house->setOwner(player->guid);
 	player->sendTextMessage(MSG_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in the bank.");
 }
 

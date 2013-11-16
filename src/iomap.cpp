@@ -322,7 +322,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 								}
 
 								if (isHouseTile && !item->isNotMoveable()) {
-									std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getHouseId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
+									std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
 									delete item;
 									item = nullptr;
 								} else {
@@ -374,7 +374,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 							if (item->unserializeItemNode(f, nodeItem, stream)) {
 								if (isHouseTile && !item->isNotMoveable()) {
-									std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getHouseId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
+									std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
 									delete item;
 								} else {
 									if (item->getItemCount() <= 0) {

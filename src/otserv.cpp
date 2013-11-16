@@ -342,7 +342,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	}
 
 	Houses::getInstance().payHouses();
-	IOLoginData::updateHouseOwners();
 	g_game.checkExpiredMarketOffers();
 	IOMarket::getInstance()->updateStatistics();
 
