@@ -76,10 +76,6 @@ Game::Game() :
 	useLastStageLevel = false;
 	stagesEnabled = false;
 
-	for (int16_t i = 0; i < 3; i++) {
-		serverSaveMessage[i] = false;
-	}
-
 	lastBucket = 0;
 
 	//(1440 minutes/day)/(3600 seconds/day)*10 seconds event interval
@@ -5166,52 +5162,6 @@ void Game::updatePremium(Account& account)
 
 	if (save && !IOLoginData::saveAccount(account)) {
 		std::cout << "> ERROR: Failed to save account: " << account.name << "!" << std::endl;
-	}
-}
-
-void Game::prepareServerSave()
-{
-	if (!serverSaveMessage[0]) {
-		serverSaveMessage[0] = true;
-		broadcastMessage("Server is saving game in 5 minutes. Please logout.", MSG_STATUS_WARNING);
-		g_scheduler->addEvent(createSchedulerTask(120000, std::bind(&Game::prepareServerSave, this)));
-	} else if (!serverSaveMessage[1]) {
-		serverSaveMessage[1] = true;
-		broadcastMessage("Server is saving game in 3 minutes. Please logout.", MSG_STATUS_WARNING);
-		g_scheduler->addEvent(createSchedulerTask(120000, std::bind(&Game::prepareServerSave, this)));
-	} else if (!serverSaveMessage[2]) {
-		serverSaveMessage[2] = true;
-		broadcastMessage("Server is saving game in one minute. Please logout.", MSG_STATUS_WARNING);
-		g_scheduler->addEvent(createSchedulerTask(60000, std::bind(&Game::prepareServerSave, this)));
-	} else {
-		serverSave();
-	}
-}
-
-void Game::serverSave()
-{
-	if (g_config.getBoolean(ConfigManager::SHUTDOWN_AT_SERVERSAVE)) {
-		//shutdown server
-		setGameState(GAME_STATE_SHUTDOWN);
-	} else {
-		//close server
-		setGameState(GAME_STATE_CLOSED);
-
-		//clean map if configured to
-		if (g_config.getBoolean(ConfigManager::CLEAN_MAP_AT_SERVERSAVE)) {
-			map->clean();
-		}
-
-		//reset variables
-		for (int16_t i = 0; i < 3; i++) {
-			setServerSaveMessage(i, false);
-		}
-
-		//prepare for next serversave after 24 hours
-		g_scheduler->addEvent(createSchedulerTask(86100000, std::bind(&Game::prepareServerSave, this)));
-
-		//open server
-		setGameState(GAME_STATE_NORMAL);
 	}
 }
 

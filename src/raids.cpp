@@ -98,7 +98,14 @@ bool Raids::loadFromXml()
 			margin = 0;
 		}
 
-		Raid* newRaid = new Raid(name, interval, margin);
+		bool repeat;
+		if ((attr = raidNode.attribute("repeat"))) {
+			repeat = booleanString(attr.as_string());
+		} else {
+			repeat = false;
+		}
+
+		Raid* newRaid = new Raid(name, interval, margin, repeat);
 		if (newRaid->loadFromXml("data/raids/" + file)) {
 			raidList.push_back(newRaid);
 		} else {
@@ -133,12 +140,13 @@ void Raids::checkRaids()
 		uint64_t now = OTSYS_TIME();
 
 		for (auto it = raidList.begin(); it != raidList.end(); ++it) {
-			if (now >= (getLastRaidEnd() + (*it)->getMargin())) {
-				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / (*it)->getInterval() >= (uint32_t)uniform_random(0, MAX_RAND_RANGE)) {
-					setRunning(*it);
-					(*it)->startRaid();
+			Raid* raid = *it;
+			if (now >= (getLastRaidEnd() + raid->getMargin())) {
+				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / raid->getInterval() >= (uint32_t)uniform_random(0, MAX_RAND_RANGE)) {
+					setRunning(raid);
+					raid->startRaid();
 
-					if (g_config.getBoolean(ConfigManager::SHUTDOWN_AT_SERVERSAVE)) {
+					if (!raid->canBeRepeated()) {
 						raidList.erase(it);
 					}
 					break;

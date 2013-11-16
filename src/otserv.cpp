@@ -302,30 +302,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	services->add<ProtocolOldLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 	services->add<ProtocolOldGame>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
-	if (g_config.getBoolean(ConfigManager::SERVERSAVE_ENABLED)) {
-		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
-		if (serverSaveHour >= 0 && serverSaveHour <= 24) {
-			time_t timeNow = time(nullptr);
-			tm* timeinfo = localtime(&timeNow);
-
-			if (serverSaveHour == 0) {
-				serverSaveHour = 23;
-			} else {
-				serverSaveHour--;
-			}
-
-			timeinfo->tm_hour = serverSaveHour;
-			timeinfo->tm_min = 55;
-			timeinfo->tm_sec = 0;
-
-			double difference = difftime(mktime(timeinfo), timeNow);
-			if (difference < 0) {
-				difference += 86400;
-			}
-			g_scheduler->addEvent(createSchedulerTask(difference * 1000, std::bind(&Game::prepareServerSave, &g_game)));
-		}
-	}
-
 	Houses::getInstance().payHouses();
 	g_game.checkExpiredMarketOffers();
 	IOMarket::getInstance()->updateStatistics();

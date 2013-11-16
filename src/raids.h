@@ -102,8 +102,8 @@ class Raids
 class Raid
 {
 	public:
-		Raid(const std::string& name, uint32_t interval, uint32_t marginTime)
-			: name(name), interval(interval), nextEvent(0), margin(marginTime), state(RAIDSTATE_IDLE), nextEventEvent(0), loaded(false) {}
+		Raid(const std::string& name, uint32_t interval, uint32_t marginTime, bool repeat)
+			: name(name), interval(interval), nextEvent(0), margin(marginTime), state(RAIDSTATE_IDLE), nextEventEvent(0), loaded(false), repeat(repeat) {}
 		~Raid();
 
 		bool loadFromXml(const std::string& _filename);
@@ -132,6 +132,9 @@ class Raid
 		uint32_t getInterval() const {
 			return interval;
 		}
+		bool canBeRepeated() const {
+			return repeat;
+		}
 
 		void stopEvents();
 
@@ -144,6 +147,7 @@ class Raid
 		RaidState_t state;
 		uint32_t nextEventEvent;
 		bool loaded;
+		bool repeat;
 };
 
 class RaidEvent

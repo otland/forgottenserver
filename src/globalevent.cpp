@@ -137,10 +137,6 @@ void GlobalEvents::timer()
 		}
 
 		if (!globalEvent->executeEvent()) {
-			std::cout << "[Error - GlobalEvents::timer] Failed to execute event: " << globalEvent->getName() << std::endl;
-		}
-
-		if (g_config.getBoolean(ConfigManager::SHUTDOWN_AT_SERVERSAVE)) {
 			it = timerMap.erase(it);
 			continue;
 		}

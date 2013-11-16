@@ -89,9 +89,6 @@ class Game
 		void forceAddCondition(uint32_t creatureId, Condition* condition);
 		void forceRemoveCondition(uint32_t creatureId, ConditionType_t type);
 
-		void prepareServerSave();
-		void serverSave();
-
 		/**
 		  * Load a map.
 		  * \param filename Mapfile to load
@@ -523,13 +520,6 @@ class Game
 		bool loadExperienceStages();
 		uint64_t getExperienceStage(uint32_t level);
 
-		void setServerSaveMessage(int16_t key, bool value) {
-			serverSaveMessage[key] = value;
-		}
-		bool getServerSaveMessage(int16_t key) const {
-			return serverSaveMessage[key];
-		}
-
 		void loadMotdNum();
 		void saveMotdNum() const;
 		const std::string& getMotdHash() const { return motdHash; }
@@ -630,7 +620,6 @@ class Game
 		uint32_t lastStageLevel;
 		bool stagesEnabled;
 		bool useLastStageLevel;
-		bool serverSaveMessage[3];
 };
 
 #endif
