@@ -72,7 +72,6 @@ enum LightState_t {
 #define EVENT_LIGHTINTERVAL 10000
 #define EVENT_DECAYINTERVAL 250
 #define EVENT_DECAY_BUCKETS 4
-#define STATE_TIME 1000
 
 /**
   * Main Game class.
