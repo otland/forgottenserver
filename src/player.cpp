@@ -183,8 +183,6 @@ Player::Player(ProtocolGame* p) :
 
 	ghostMode = false;
 	requestedOutfit = false;
-	moveItemsBuffer = 0;
-	lastMoveItemTime = 0;
 
 	staminaMinutes = 2520;
 	nextUseStaminaTime = 0;
@@ -1797,9 +1795,6 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 	if (teleport || oldPos.z != newPos.z) {
 		int32_t ticks = g_config.getNumber(ConfigManager::STAIRHOP_DELAY);
 		if (ticks > 0) {
-			addCombatExhaust(ticks);
-			addWeaponExhaust(ticks);
-
 			if (Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED, ticks, 0)) {
 				addCondition(condition);
 			}
@@ -1988,14 +1983,6 @@ void Player::onThink(uint32_t interval)
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		checkSkullTicks(interval);
-	}
-
-	if (moveItemsBuffer > 0) {
-		if (moveItemsBuffer > 6) {
-			moveItemsBuffer -= 6;
-		} else {
-			moveItemsBuffer = 0;
-		}
 	}
 
 	addOfflineTrainingTime(interval);
@@ -2571,18 +2558,6 @@ Item* Player::getCorpse()
 		corpse->setSpecialDescription(ss.str());
 	}
 	return corpse;
-}
-
-void Player::addWeaponExhaust(uint32_t ticks)
-{
-	Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST_WEAPON, ticks, 0);
-	addCondition(condition);
-}
-
-void Player::addCombatExhaust(uint32_t ticks)
-{
-	Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST_COMBAT, ticks, 0);
-	addCondition(condition);
 }
 
 void Player::addInFightTicks(bool pzlock /*= false*/)
@@ -3704,7 +3679,7 @@ void Player::doAttacking(uint32_t interval)
 				SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::checkCreatureAttack,
 				                      &g_game, getID()));
 				setNextActionTask(task);
-			} else if (!hasCondition(CONDITION_EXHAUST_COMBAT) || !weapon->hasExhaustion()) {
+			} else {
 				result = weapon->useWeapon(this, tool, attackedCreature);
 			}
 		} else {

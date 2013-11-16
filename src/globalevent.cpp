@@ -319,19 +319,12 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 std::string GlobalEvent::getScriptEventName()
 {
 	switch (m_eventType) {
-		case GLOBALEVENT_STARTUP:
-			return "onStartup";
-		case GLOBALEVENT_SHUTDOWN:
-			return "onShutdown";
-		case GLOBALEVENT_RECORD:
-			return "onRecord";
-		case GLOBALEVENT_TIMER:
-			return "onTime";
-		default:
-			break;
+		case GLOBALEVENT_STARTUP: return "onStartup";
+		case GLOBALEVENT_SHUTDOWN: return "onShutdown";
+		case GLOBALEVENT_RECORD: return "onRecord";
+		case GLOBALEVENT_TIMER: return "onTime";
+		default: return "onThink";
 	}
-
-	return "onThink";
 }
 
 bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)

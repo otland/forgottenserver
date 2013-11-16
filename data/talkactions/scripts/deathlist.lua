@@ -1,3 +1,23 @@
+local function getArticle(str)
+	return str:find("[AaEeIiOoUuYy]") == 1 and "an" or "a"
+end
+
+local function getMonthDayEnding(day)
+	if day == "01" or day == "21" or day == "31" then
+		return "st"
+	elseif day == "02" or day == "22" then
+		return "nd"
+	elseif day == "03" or day == "23" then
+		return "rd"
+	else
+		return "th"
+	end
+end
+
+local function getMonthString(m)
+	return os.date("%B", os.time{year = 1970, month = m, day = 1})
+end
+
 function onSay(cid, words, param)
 	local resultId = db.storeQuery("SELECT `id`, `name` FROM `players` WHERE `name` = " .. db.escapeString(param))
 	if resultId ~= false then

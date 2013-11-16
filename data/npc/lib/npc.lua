@@ -1,50 +1,7 @@
 -- Including the Advanced NPC System
 dofile('data/npc/lib/npcsystem/npcsystem.lua')
 
-function getDistanceToCreature(id)
-	if id == 0 or id == nil then
-		selfGotoIdle()
-	end
-
-	local creaturePosition = getCreaturePosition(id)
-	cx = creaturePosition.x
-	cy = creaturePosition.y
-	cz = creaturePosition.z
-	if cx == nil then
-		return nil
-	end
-
-	sx, sy, sz = selfGetPosition()
-	return math.max(math.abs(sx - cx), math.abs(sy - cy))
-end
-
-function moveToPosition(x,y,z)
-	selfMoveTo(x, y, z)
-end
-
-function moveToCreature(id)
-	if id == 0 or id == nil then
-		selfGotoIdle()
-	end
-
-	tx, ty, tz = getCreaturePosition(id)
-	if tx == nil then
-		selfGotoIdle()
-	else
-		moveToPosition(tx, ty, tz)
-	end
-end
-
-function selfGotoIdle()
-	following = false
-	attacking = false
-	selfAttackCreature(0)
-	target = 0
-end
-
-function isPlayerPremiumCallback(cid)
-	return isPremium(cid)
-end
+isPlayerPremiumCallback = isPremium(
 
 function msgcontains(message, keyword)
 	local message, keyword = message:lower(), keyword:lower()
@@ -53,20 +10,6 @@ function msgcontains(message, keyword)
 	end
 
 	return message:find(keyword) and not message:find('(%w+)' .. keyword)
-end
-
-function selfSayChannel(cid, message)
-	return selfSay(message, cid, FALSE)
-end
-
-function doPosRemoveItem(_itemid, n, position)
-	local thing = getThingfromPos({x = position.x, y = position.y, z = position.z, stackpos = 1})
-	if thing.itemid == _itemid then
-		doRemoveItem(thing.uid, n)
-	else
-		return false
-	end
-	return true
 end
 
 function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, backpack)
@@ -124,4 +67,64 @@ function doCreatureSayWithDelay(cid, text, type, delay, e, pcid)
 		e.done = FALSE
 		e.event = addEvent(func, delay < 1 and 1000 or delay, {cid=cid, text=text, type=type, e=e, pcid=pcid})
 	end
+end
+
+function doPlayerTakeItem(cid, itemid, count)
+	if getPlayerItemCount(cid,itemid) < count then
+		return LUA_ERROR
+	end
+
+	while count > 0 do
+		local tempcount = 0
+		if isItemStackable(itemid) then
+			tempcount = math.min (100, count)
+		else
+			tempcount = 1
+		end
+
+		local ret = doPlayerRemoveItem(cid, itemid, tempcount)
+		if ret ~= LUA_ERROR then
+			count = count - tempcount
+		else
+			return LUA_ERROR
+		end
+	end
+
+	if count ~= 0 then
+		return LUA_ERROR
+	end
+	return LUA_NO_ERROR
+end
+
+function doPlayerSellItem(cid, itemid, count, cost)
+	if doPlayerTakeItem(cid, itemid, count) == LUA_NO_ERROR then
+		if not doPlayerAddMoney(cid, cost) then
+			error('Could not add money to ' .. getPlayerName(cid) .. '(' .. cost .. 'gp)')
+		end
+		return LUA_NO_ERROR
+	end
+	return LUA_ERROR
+end
+
+function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges)
+	if not doPlayerRemoveMoney(cid, cost) then
+		return LUA_ERROR
+	end
+
+	for i = 1, count do
+		local container = doCreateItemEx(containerid, 1)
+		for x = 1, getContainerCapById(containerid) do
+			doAddContainerItem(container, itemid, charges)
+		end
+
+		if doPlayerAddItemEx(cid, container, true) ~= RETURNVALUE_NOERROR then
+			return LUA_ERROR
+		end
+	end
+	return LUA_NO_ERROR
+end
+
+function getCount(string)
+	local b, e = string:find("%d+")
+	return b and e and tonumber(string:sub(b, e)) or -1
 end

@@ -514,13 +514,6 @@ class Game
 			return map;
 		}
 
-		int64_t getStateTime() const {
-			return stateTime;
-		}
-		void setStateTime(int64_t _stateTime) {
-			stateTime = _stateTime;
-		}
-
 		void addCommandTag(char tag);
 		void resetCommandTag();
 
@@ -599,8 +592,6 @@ class Game
 		size_t checkCreatureLastIndex;
 
 		WildcardTreeNode wildcardTree;
-
-		int64_t stateTime;
 
 		std::map<uint32_t, Npc*> npcs;
 		std::map<uint32_t, Monster*> monsters;

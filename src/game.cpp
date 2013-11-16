@@ -75,7 +75,6 @@ Game::Game() :
 	motdNum = 0;
 	useLastStageLevel = false;
 	stagesEnabled = false;
-	stateTime = OTSYS_TIME();
 
 	for (int16_t i = 0; i < 3; i++) {
 		serverSaveMessage[i] = false;
@@ -211,7 +210,6 @@ void Game::saveGameState()
 		setGameState(GAME_STATE_MAINTAIN);
 	}
 
-	stateTime = 0;
 	std::cout << "Saving server..." << std::endl;
 
 	for (const auto& it : players) {
@@ -221,7 +219,6 @@ void Game::saveGameState()
 
 	map->saveMap();
 	ScriptEnvironment::saveGameState();
-	stateTime = OTSYS_TIME() + STATE_TIME;
 
 	if (gameState == GAME_STATE_MAINTAIN) {
 		setGameState(GAME_STATE_NORMAL);
@@ -450,7 +447,7 @@ Tile* Game::getTile(int32_t x, int32_t y, int32_t z)
 
 Tile* Game::getTile(const Position& pos)
 {
-	return map->getTile(pos);
+	return map->getTile(pos.x, pos.y, pos.z);
 }
 
 QTreeLeafNode* Game::getLeaf(uint32_t x, uint32_t y)
@@ -895,10 +892,13 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 	}
 
 	Thing* thing = internalGetThing(player, fromPos, fromIndex, spriteId, STACKPOS_MOVE);
+	if (!thing) {
+		player->sendCancelMessage(RET_NOTPOSSIBLE);
+		return;
+	}
 
 	Cylinder* toCylinder = internalGetCylinder(player, toPos);
-
-	if (!thing || !toCylinder) {
+	if (!toCylinder) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return;
 	}
@@ -913,19 +913,6 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 			playerMoveCreature(playerId, movingCreature->getID(), movingCreature->getPosition(), toCylinder->getPosition());
 		}
 	} else if (thing->getItem()) {
-		player->incrementMoveItemsBuffer();
-
-		if ((OTSYS_TIME() - player->getLastMoveItemTime()) < 105) {
-			player->incrementMoveItemsBuffer(3);
-			return;
-		}
-
-		player->updateLastMoveItemTime();
-
-		if (player->getMoveItemsBuffer() > 6) {
-			return;
-		}
-
 		playerMoveItem(playerId, fromPos, spriteId, fromStackPos, toPos, count);
 	}
 }
