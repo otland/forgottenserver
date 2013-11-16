@@ -173,22 +173,6 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 	return true;
 }
 
-bool DatabaseManager::getDatabaseConfig(const std::string& config, std::string& value)
-{
-	Database* db = Database::getInstance();
-	std::ostringstream query;
-	query << "SELECT `value` FROM `server_config` WHERE `config` = " << db->escapeString(config);
-	DBResult* result = db->storeQuery(query.str());
-
-	if (!result) {
-		return false;
-	}
-
-	value = result->getDataString("value");
-	db->freeResult(result);
-	return true;
-}
-
 void DatabaseManager::registerDatabaseConfig(const std::string& config, int32_t value)
 {
 	Database* db = Database::getInstance();
@@ -203,45 +187,4 @@ void DatabaseManager::registerDatabaseConfig(const std::string& config, int32_t 
 	}
 
 	db->executeQuery(query.str());
-}
-
-void DatabaseManager::registerDatabaseConfig(const std::string& config, const std::string& value)
-{
-	Database* db = Database::getInstance();
-	std::ostringstream query;
-
-	std::string tmp;
-
-	if (!getDatabaseConfig(config, tmp)) {
-		query << "INSERT INTO `server_config` VALUES (" << db->escapeString(config) << ',' << db->escapeString(value) << ')';
-	} else {
-		query << "UPDATE `server_config` SET `value` = " << db->escapeString(value) << " WHERE `config` = " << db->escapeString(config);
-	}
-
-	db->executeQuery(query.str());
-}
-
-void DatabaseManager::checkEncryption()
-{
-	int32_t currentValue = g_config.getNumber(ConfigManager::PASSWORD_TYPE);
-
-	int32_t oldValue;
-	if (getDatabaseConfig("encryption", oldValue)) {
-		if (currentValue == oldValue) {
-			return;
-		}
-
-		if (oldValue != PASSWORD_TYPE_PLAIN) {
-			g_config.setNumber(ConfigManager::PASSWORD_TYPE, oldValue);
-			std::cout << "> WARNING: Unsupported password hashing switch! Change back passwordType in config.lua to sha1." << std::endl;
-			return;
-		}
-
-		if (currentValue == PASSWORD_TYPE_SHA1) {
-			Database::getInstance()->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`)");
-			std::cout << "> Password type has been updated to SHA1." << std::endl;
-		}
-	}
-
-	registerDatabaseConfig("encryption", currentValue);
 }

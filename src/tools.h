@@ -27,7 +27,6 @@
 typedef boost::tokenizer<boost::char_separator<char>> Tokenizer;
 
 std::string transformToSHA1(const std::string& input);
-bool passwordTest(const std::string& plain, const std::string& hash);
 
 void replaceString(std::string& str, const std::string& sought, const std::string& replacement);
 void trim_right(std::string& source, char t);

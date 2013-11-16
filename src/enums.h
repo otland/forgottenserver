@@ -37,11 +37,6 @@ enum itemAttrTypes {
 	ATTR_ITEM_DOORID = 4194304
 };
 
-enum passwordType_t {
-	PASSWORD_TYPE_PLAIN = 0,
-	PASSWORD_TYPE_SHA1
-};
-
 enum VipStatus_t {
 	VIPSTATUS_OFFLINE = 0,
 	VIPSTATUS_ONLINE = 1,

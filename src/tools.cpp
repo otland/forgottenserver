@@ -142,14 +142,6 @@ std::string transformToSHA1(const std::string& input)
 	return std::string(hexstring, 40);
 }
 
-bool passwordTest(const std::string& plain, const std::string& hash)
-{
-	if (g_config.getNumber(ConfigManager::PASSWORD_TYPE) == PASSWORD_TYPE_SHA1) {
-		return transformToSHA1(plain) == hash;
-	}
-	return plain == hash;
-}
-
 void replaceString(std::string& str, const std::string& sought, const std::string& replacement)
 {
 	size_t pos = 0;

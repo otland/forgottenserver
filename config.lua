@@ -5,7 +5,6 @@ protectionLevel = 1
 killsToRedSkull = 3
 killsToBlackSkull = 6
 pzLocked = 60000
-criticalHitChance = 0
 removeAmmoWhenUsingDistanceWeapon = "yes"
 removeChargesFromRunes = "yes"
 removeChargesFromWeapons = "yes"
@@ -103,11 +102,8 @@ staminaSystem = "yes"
 defaultPriority = "high"
 startupDatabaseOptimization = "no"
 
--- Storage
-passwordType = "plain"
-
 -- Status server information
-ownerName = "Mark Samman"
-ownerEmail = "mark.samman@gmail.com"
+ownerName = ""
+ownerEmail = ""
 url = "http://otland.net/"
 location = "Sweden"

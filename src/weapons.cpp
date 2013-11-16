@@ -373,36 +373,31 @@ bool Weapon::useWeapon(Player* player, Item* item, Creature* target) const
 
 bool Weapon::useFist(Player* player, Creature* target)
 {
-	const Position& playerPos = player->getPosition();
-	const Position& targetPos = target->getPosition();
-	if (Position::areInRange<1, 1>(playerPos, targetPos)) {
-		float attackFactor = player->getAttackFactor();
-		int32_t attackSkill = player->getSkill(SKILL_FIST, SKILL_LEVEL);
-		int32_t attackValue = 7;
-
-		int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-		if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-			maxDamage *= 2;
-		}
-
-		CombatParams params;
-		params.combatType = COMBAT_PHYSICALDAMAGE;
-		params.blockedByArmor = true;
-		params.blockedByShield = true;
-
-		CombatDamage damage;
-		damage.primary.type = params.combatType;
-		damage.primary.value = -normal_random(0, maxDamage);
-
-		Combat::doCombatHealth(player, target, damage, params);
-		if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
-			player->addSkillAdvance(SKILL_FIST, 1);
-		}
-
-		return true;
+	if (!Position::areInRange<1, 1>(player->getPosition(), target->getPosition())) {
+		return false;
 	}
 
-	return false;
+	float attackFactor = player->getAttackFactor();
+	int32_t attackSkill = player->getSkill(SKILL_FIST, SKILL_LEVEL);
+	int32_t attackValue = 7;
+
+	int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
+
+	CombatParams params;
+	params.combatType = COMBAT_PHYSICALDAMAGE;
+	params.blockedByArmor = true;
+	params.blockedByShield = true;
+
+	CombatDamage damage;
+	damage.primary.type = params.combatType;
+	damage.primary.value = -normal_random(0, maxDamage);
+
+	Combat::doCombatHealth(player, target, damage, params);
+	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
+		player->addSkillAdvance(SKILL_FIST, 1);
+	}
+
+	return true;
 }
 
 bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const
@@ -617,10 +612,6 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Creature* targ
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue *= 2;
-	}
-
 	return -normal_random(0, static_cast<int32_t>(maxValue * player->getVocation()->meleeDamageMultiplier));
 }
 
@@ -630,13 +621,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 	int32_t attackValue = std::max<int32_t>(0, item->getAttack());
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue *= 2;
-	}
-
-	maxValue = int32_t(maxValue * player->getVocation()->meleeDamageMultiplier);
-
+	int32_t maxValue = int32_t(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->meleeDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
 	}
@@ -927,12 +912,8 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 	int32_t attackSkill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue *= 2;
-	}
-
 	int32_t minValue = 0;
+	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	if (target) {
 		if (target->getPlayer()) {
 			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.1));
@@ -958,12 +939,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	int32_t attackSkill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	if (uniform_random(1, 100) <= g_config.getNumber(ConfigManager::CRITICAL_HIT_CHANCE)) {
-		maxValue *= 2;
-	}
-
-	maxValue = static_cast<int32_t>(maxValue * player->getVocation()->distDamageMultiplier);
+	int32_t maxValue = int32_t(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->distDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
 	}

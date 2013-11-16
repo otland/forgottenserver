@@ -34,10 +34,5 @@ class DatabaseManager
 
 		static bool getDatabaseConfig(const std::string& config, int32_t& value);
 		static void registerDatabaseConfig(const std::string& config, int32_t value);
-
-		static bool getDatabaseConfig(const std::string& config, std::string& value);
-		static void registerDatabaseConfig(const std::string& config, const std::string& value);
-
-		static void checkEncryption();
 };
 #endif

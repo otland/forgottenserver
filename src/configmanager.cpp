@@ -69,10 +69,8 @@ bool ConfigManager::load()
 		m_confString[MYSQL_USER] = getGlobalString(L, "mysqlUser", "root");
 		m_confString[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "theforgottenserver");
-		m_confString[PASSWORDTYPE] = getGlobalString(L, "passwordType", "plain");
 
 		m_confInteger[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
-		m_confInteger[PASSWORD_TYPE] = PASSWORD_TYPE_PLAIN;
 		m_confInteger[SERVERSAVE_H] = getGlobalNumber(L, "serverSaveHour", 3);
 		m_confInteger[ADMIN_PORT] = getGlobalNumber(L, "adminProtocolPort", 7171);
 		m_confInteger[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
@@ -124,7 +122,6 @@ bool ConfigManager::load()
 	m_confInteger[ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenActions", 200);
 	m_confInteger[EX_ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenExActions", 1000);
 	m_confInteger[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxMessageBuffer", 4);
-	m_confInteger[CRITICAL_HIT_CHANCE] = getGlobalNumber(L, "criticalHitChance", 5);
 	m_confInteger[KICK_AFTER_MINUTES] = getGlobalNumber(L, "kickIdlePlayerAfterMinutes", 15);
 	m_confInteger[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
 	m_confInteger[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);

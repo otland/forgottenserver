@@ -199,7 +199,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	}
 
 	DatabaseManager::updateDatabase();
-	DatabaseManager::checkEncryption();
 
 	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
@@ -261,15 +260,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	if (!g_game.loadExperienceStages()) {
 		startupErrorMessage("Unable to load experience stages!");
 		return;
-	}
-
-	std::string passwordType = asLowerCaseString(g_config.getString(ConfigManager::PASSWORDTYPE));
-	if (passwordType == "sha1") {
-		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_SHA1);
-		std::cout << ">> Using SHA1 passwords" << std::endl;
-	} else {
-		g_config.setNumber(ConfigManager::PASSWORD_TYPE, PASSWORD_TYPE_PLAIN);
-		std::cout << ">> Using plaintext passwords" << std::endl;
 	}
 
 	std::cout << ">> Checking world type... " << std::flush;
