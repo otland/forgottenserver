@@ -3,7 +3,7 @@ local function convertIPToString(ip)
 		bit.band(ip, 0xFF),
 		bit.band(bit.rshift(ip, 8), 0xFF),
 		bit.band(bit.rshift(ip, 16), 0xFF),
-		bit.band(bit.rshift(ip, 24)
+		bit.rshift(ip, 24)
 	)
 end
 
