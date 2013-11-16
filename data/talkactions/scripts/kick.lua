@@ -1,13 +1,9 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
 	if not player:getGroup():getAccess() then
-		return false
+		return true
 	end
 
-	if player:getAccountType() < ACCOUNT_TYPE_GAMEMASTER then
-		return false
-	end
- 
 	local target = Player(param)
 	if target == nil then
 		player:sendCancelMessage("Player not found.")

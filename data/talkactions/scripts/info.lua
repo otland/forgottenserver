@@ -1,19 +1,16 @@
-local function int_to_ip(val)
+local function convertIPToString(ip)
 	return string.format("%d.%d.%d.%d",
-				bit.band(bit.rshift(val, 0),  	0x000000FF),
-				bit.band(bit.rshift(val, 8),  	0x000000FF),
-				bit.band(bit.rshift(val, 16),  	0x000000FF),
-				bit.band(bit.rshift(val, 24),  	0x000000FF))
+		bit.band(ip, 0xFF),
+		bit.band(bit.rshift(ip, 8), 0xFF),
+		bit.band(bit.rshift(ip, 16), 0xFF),
+		bit.band(bit.rshift(ip, 24)
+	)
 end
 
 function onSay(cid, words, param)
 	local player = Player(cid)	
 	if not player:getGroup():getAccess() then
-		return false
-	end
-
-	if player:getAccountType() < ACCOUNT_TYPE_GAMEMASTER then
-		return false
+		return true
 	end
 
 	local target = Player(param)
@@ -27,24 +24,24 @@ function onSay(cid, words, param)
 		return false
 	end
 
-	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Name: " .. target:getName()
-				.. "\nAccess: " .. (target:getGroup():getAccess() and "1" or "0")
-				.. "\nLevel: " .. target:getLevel()
-				.. "\nMagic Level: " .. target:getMagicLevel()
-				.. "\nSpeed: " .. getCreatureSpeed(player:getId())
-				.. "\nPosition: " .. string.format("(%0.5d / %0.5d / %0.3d)", target:getPosition().x, target:getPosition().y, target:getPosition().z)
-				.. "\nIP: " .. int_to_ip(target:getIp()))
-	
-	
+	local targetIp = target:getIp()
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Name: " .. target:getName())
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Access: " .. (target:getGroup():getAccess() and "1" or "0"))
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Level: " .. target:getLevel())
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Magic Level: " .. target:getMagicLevel())
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Speed: " .. getCreatureSpeed(player:getId()))
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Position: " .. string.format("(%0.5d / %0.5d / %0.3d)", target:getPosition().x, target:getPosition().y, target:getPosition().z))
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "IP: " .. convertIPToString(targetIp))
+
 	local players = {}
-	for _, tmp in ipairs(Game.getPlayers()) do
-		if tmp:getIp() == target:getIp() and tmp ~= target then
-			table.insert(players, tmp:getName() .. " [" .. tmp:getLevel() .. "]")
+	for _, tmpPlayer in ipairs(Game.getPlayers()) do
+		if tmpPlayer:getIp() == targetIp and tmpPlayer ~= target then
+			players[#players + 1] = tmpPlayer:getName() .. " [" .. tmpPlayer:getLevel() .. "]"
 		end
 	end
 
 	if #players > 0 then
-		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "\nOther players on same IP: " .. table.concat(players, ", ") .. ".")
+		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Other players on same IP: " .. table.concat(players, ", ") .. ".")
 	end
 	return false
 end

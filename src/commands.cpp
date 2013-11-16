@@ -69,7 +69,7 @@ s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/s", &Commands::placeNpc},
 	{"/summon", &Commands::placeSummon},
-	{"/reload", &Commands::reloadInfo },
+	{"/reload", &Commands::reloadInfo},
 	{"/owner", &Commands::setHouseOwner},
 	{"/newtype", &Commands::newType},
 	{"/newitem", &Commands::newItem},
