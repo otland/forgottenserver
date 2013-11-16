@@ -1,7 +1,7 @@
 -- Including the Advanced NPC System
 dofile('data/npc/lib/npcsystem/npcsystem.lua')
 
-isPlayerPremiumCallback = isPremium(
+isPlayerPremiumCallback = isPremium
 
 function msgcontains(message, keyword)
 	local message, keyword = message:lower(), keyword:lower()
