@@ -197,22 +197,6 @@ class Player : public Creature, public Cylinder
 			return ((50ULL * lv * lv * lv) - (150ULL * lv * lv) + (400ULL * lv)) / 3ULL;
 		}
 
-		void incrementMoveItemsBuffer() {
-			moveItemsBuffer++;
-		}
-		void incrementMoveItemsBuffer(int32_t modifier) {
-			moveItemsBuffer += modifier;
-		}
-		uint32_t getMoveItemsBuffer() const {
-			return moveItemsBuffer;
-		}
-		int64_t getLastMoveItemTime() const {
-			return lastMoveItemTime;
-		}
-		void updateLastMoveItemTime() {
-			lastMoveItemTime = OTSYS_TIME();
-		}
-
 		uint16_t getStaminaMinutes() const {
 			return staminaMinutes;
 		}
@@ -674,8 +658,6 @@ class Player : public Creature, public Cylinder
 		virtual float getAttackFactor() const;
 		virtual float getDefenseFactor() const;
 
-		void addWeaponExhaust(uint32_t ticks);
-		void addCombatExhaust(uint32_t ticks);
 		void addInFightTicks(bool pzlock = false);
 		void addDefaultRegeneration(uint32_t addTicks);
 
@@ -1257,7 +1239,6 @@ class Player : public Creature, public Cylinder
 		uint64_t lastAttack;
 		uint64_t bankBalance;
 		int64_t lastFailedFollow;
-		int64_t lastMoveItemTime;
 		int64_t skullTicks;
 		int64_t lastQuestlogUpdate;
 		int64_t lastWalkthroughAttempt;
@@ -1298,7 +1279,6 @@ class Player : public Creature, public Cylinder
 		uint32_t guid;
 		uint32_t windowTextId;
 		uint32_t editListId;
-		uint32_t moveItemsBuffer;
 		uint32_t maxDepotItems;
 		uint32_t maxVipEntries;
 		uint32_t skills[SKILL_LAST + 1][3];

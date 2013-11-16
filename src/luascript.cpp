@@ -2747,7 +2747,7 @@ int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 	PositionEx pos;
 	popPosition(L, pos);
 
-	Tile* tile = g_game.getMap()->getTile(pos);
+	Tile* tile = g_game.getTile(pos);
 	if (!tile) {
 		pushThing(L, nullptr, 0);
 		return 1;
@@ -2903,7 +2903,7 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 	popPosition(L, toPos);
 	uint32_t itemId = popNumber(L);
 
-	Tile* tile = g_game.getMap()->getTile(createPos);
+	Tile* tile = g_game.getTile(createPos);
 	if (!tile) {
 		std::ostringstream ss;
 		ss << createPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
@@ -2952,7 +2952,7 @@ int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
 	PositionEx pos;
 	popPosition(L, pos);
 
-	Tile* tile = g_game.getMap()->getTile(pos);
+	Tile* tile = g_game.getTile(pos);
 	if (tile) {
 		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
 			House* house = houseTile->getHouse();

@@ -806,27 +806,24 @@ std::string ucwords(std::string str)
 
 bool booleanString(const std::string& str)
 {
-	const std::string& lowerStr = asLowerCaseString(str);
-	return (lowerStr == "yes" || lowerStr == "true" || lowerStr == "y" || atoi(lowerStr.c_str()) > 0);
+	if (str.empty()) {
+		return false;
+	}
+
+	char ch = tolower(str.front());
+	return ch != 'f' && ch != 'n' && ch != '0';
 }
 
 std::string getWeaponName(WeaponType_t weaponType)
 {
 	switch (weaponType) {
-		case WEAPON_SWORD:
-			return "sword";
-		case WEAPON_CLUB:
-			return "club";
-		case WEAPON_AXE:
-			return "axe";
-		case WEAPON_DIST:
-			return "distance";
-		case WEAPON_WAND:
-			return "wand";
-		case WEAPON_AMMO:
-			return "ammunition";
-		default:
-			return std::string();
+		case WEAPON_SWORD: return "sword";
+		case WEAPON_CLUB: return "club";
+		case WEAPON_AXE: return "axe";
+		case WEAPON_DIST: return "distance";
+		case WEAPON_WAND: return "wand";
+		case WEAPON_AMMO: return "ammunition";
+		default: return std::string();
 	}
 }
 

@@ -781,10 +781,11 @@ bool Creature::getKillers(Creature** _lastHitCreature, Creature** _mostDamageCre
 
 	int32_t mostDamage = 0;
 
+	int64_t timeNow = OTSYS_TIME();
 	uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
 	for (const auto& it : damageMap) {
 		CountBlock_t cb = it.second;
-		if ((cb.total > mostDamage && (OTSYS_TIME() - cb.ticks <= inFightTicks))) {
+		if ((cb.total > mostDamage && (timeNow - cb.ticks <= inFightTicks))) {
 			Creature* creature = g_game.getCreatureByID(it.first);
 			if (creature) {
 				mostDamage = cb.total;
@@ -1409,37 +1410,17 @@ void Creature::executeConditions(uint32_t interval)
 
 bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 {
-	if (type == CONDITION_EXHAUST_COMBAT && g_game.getStateTime() == 0) {
-		return true;
-	}
-
 	if (isSuppress(type)) {
 		return false;
 	}
 
+	int64_t timeNow = OTSYS_TIME();
 	for (Condition* condition : conditions) {
 		if (condition->getType() != type || condition->getSubId() != subId) {
 			continue;
 		}
 
-		if (g_config.getBoolean(ConfigManager::OLD_CONDITION_ACCURACY)) {
-			return true;
-		}
-
-		if (condition->getEndTime() == 0) {
-			return true;
-		}
-
-		int64_t seekTime = g_game.getStateTime();
-		if (seekTime == 0) {
-			return true;
-		}
-
-		if (condition->getEndTime() >= seekTime) {
-			seekTime = condition->getEndTime();
-		}
-
-		if (seekTime >= OTSYS_TIME()) {
+		if (timeNow > condition->getEndTime()) {
 			return true;
 		}
 	}

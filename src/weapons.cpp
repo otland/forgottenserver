@@ -165,7 +165,6 @@ Weapon::Weapon(LuaScriptInterface* _interface) :
 	mana = 0;
 	manaPercent = 0;
 	soul = 0;
-	exhaustion = 0;
 	premium = false;
 	enabled = true;
 	wieldUnproperly = false;
@@ -205,10 +204,6 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 
 	if ((attr = node.attribute("soul"))) {
 		soul = pugi::cast<int32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("exhaustion"))) {
-		exhaustion = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("prem"))) {
@@ -457,10 +452,6 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 		if (getSkillType(player, item, skillType, skillPoint)) {
 			player->addSkillAdvance(skillType, skillPoint);
 		}
-	}
-
-	if (!player->hasFlag(PlayerFlag_HasNoExhaustion) && exhaustion > 0) {
-		player->addWeaponExhaust(exhaustion);
 	}
 
 	int32_t manaCost = getManaCost(player);

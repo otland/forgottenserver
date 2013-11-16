@@ -104,11 +104,6 @@ Tile* Map::getTile(int32_t x, int32_t y, int32_t z)
 	return nullptr;
 }
 
-Tile* Map::getTile(const Position& pos)
-{
-	return getTile(pos.x, pos.y, pos.z);
-}
-
 void Map::setTile(int32_t x, int32_t y, int32_t z, Tile* newTile)
 {
 	if (x < 0 || x >= 0xFFFF || y < 0 || y >= 0xFFFF || z < 0 || z >= MAP_MAX_LAYERS) {
@@ -179,7 +174,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	bool foundTile;
 	bool placeInPZ;
 
-	Tile* tile = getTile(centerPos);
+	Tile* tile = getTile(centerPos.x, centerPos.y, centerPos.z);
 	if (tile) {
 		placeInPZ = tile->hasFlag(TILESTATE_PROTECTIONZONE);
 		ReturnValue ret = tile->__queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM);
@@ -216,7 +211,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 		for (const auto& it : relList) {
 			Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
 
-			tile = getTile(tryPos);
+			tile = getTile(tryPos.x, tryPos.y, tryPos.z);
 			if (!tile || (placeInPZ && !tile->hasFlag(TILESTATE_PROTECTIONZONE))) {
 				continue;
 			}
@@ -570,11 +565,11 @@ const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 	if (walkCache == 0) {
 		return nullptr;
 	} else if (walkCache == 1) {
-		return getTile(pos);
+		return getTile(pos.x, pos.y, pos.z);
 	}
 
 	//used for none-cached tiles
-	Tile* tile = getTile(pos);
+	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature->getTile() != tile) {
 		if (!tile || tile->__queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RET_NOERROR) {
 			return nullptr;

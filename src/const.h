@@ -187,8 +187,8 @@ enum SpeakClasses {
 	SPEAK_MONSTER_SAY	= 0x22,
 	SPEAK_MONSTER_YELL	= 0x23,
 
-	SPEAK_CHANNEL_R2	= 0xFF + 4, //#d
-	SPEAK_CHANNEL_W		= 0xFF + 5
+	SPEAK_CHANNEL_R2	= 0xFF + 1, //#d
+	SPEAK_CHANNEL_W		= 0xFF + 2
 };
 
 enum MessageClasses {

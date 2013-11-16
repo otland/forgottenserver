@@ -1510,7 +1510,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool w = canWalkTo(creaturePos, WEST);
 				bool e = canWalkTo(creaturePos, EAST);
-
 				if (w && e && offsetx == 0) {
 					dir = boolean_random() ? WEST : EAST;
 					return true;
@@ -1540,7 +1539,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool sw = canWalkTo(creaturePos, SOUTHWEST);
 				bool se = canWalkTo(creaturePos, SOUTHEAST);
-
 				if (sw || se) {
 					// we can move both dirs
 					if (sw && se) {
@@ -1580,7 +1578,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool w = canWalkTo(creaturePos, WEST);
 				bool e = canWalkTo(creaturePos, EAST);
-
 				if (w && e && offsetx == 0) {
 					dir = boolean_random() ? WEST : EAST;
 					return true;
@@ -1610,7 +1607,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 				bool nw = canWalkTo(creaturePos, NORTHWEST);
 				bool ne = canWalkTo(creaturePos, NORTHEAST);
-
 				if (nw || ne) {
 					// we can move both dirs
 					if (nw && ne) {
@@ -1801,23 +1797,7 @@ bool Monster::isInSpawnRange(const Position& toPos)
 
 bool Monster::canWalkTo(Position pos, Direction dir)
 {
-	switch (dir) {
-		case NORTH:
-			pos.y--;
-			break;
-		case WEST:
-			pos.x--;
-			break;
-		case EAST:
-			pos.x++;
-			break;
-		case SOUTH:
-			pos.y++;
-			break;
-		default:
-			break;
-	}
-
+	pos = getNextPosition(dir, pos);
 	if (isInSpawnRange(pos)) {
 		if (getWalkCache(pos) == 0) {
 			return false;

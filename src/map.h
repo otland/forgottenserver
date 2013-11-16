@@ -188,7 +188,6 @@ class Map
 		  * \returns A pointer to that tile.
 		  */
 		Tile* getTile(int32_t x, int32_t y, int32_t z);
-		Tile* getTile(const Position& pos);
 
 		uint32_t clean();
 

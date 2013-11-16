@@ -376,11 +376,8 @@ TALKTYPE_PRIVATE = TALKTYPE_PRIVATE_TO
 TALKTYPE_PRIVATE_RED = TALKTYPE_PRIVATE_RED_TO
 
 -- for internal use
-TALKTYPE_RVR_CHANNEL = 256
-TALKTYPE_RVR_ANSWER = 257
-TALKTYPE_RVR_CONTINUE = 258
-TALKTYPE_CHANNEL_R2 = 259
-TALKTYPE_CHANNEL_W = 260
+TALKTYPE_CHANNEL_R2 = 256
+TALKTYPE_CHANNEL_W = 257
 --
 
 MESSAGE_STATUS_CONSOLE_BLUE = 4
@@ -619,13 +616,11 @@ configKeys = {
 	ADMIN_LOGS_ENABLED = 12,
 	SAVE_GLOBAL_STORAGE = 13,
 	REPLACE_KICK_ON_LOGIN = 14,
-	OLD_CONDITION_ACCURACY = 15,
-	FREE_MEMORY_AT_SHUTDOWN = 16,
-	ALLOW_CLONES = 17,
-	BIND_ONLY_GLOBAL_ADDRESS = 18,
-	OPTIMIZE_DATABASE = 19,
-	MARKET_PREMIUM = 20,
-	STAMINA_SYSTEM = 21,
+	ALLOW_CLONES = 15,
+	BIND_ONLY_GLOBAL_ADDRESS = 16,
+	OPTIMIZE_DATABASE = 17,
+	MARKET_PREMIUM = 18,
+	STAMINA_SYSTEM = 19,
 
 	MAP_NAME = 1,
 	HOUSE_RENT_PERIOD = 2,
@@ -735,38 +730,6 @@ ITEM_WILDGROWTH = 1499
 ITEM_WILDGROWTH_PERSISTENT = 2721
 ITEM_WILDGROWTH_SAFE = 11099
 
-function doPlayerGiveItem(cid, itemid, count, charges)
-	local isFluidContainer = isItemFluidContainer(itemid)
-	if isFluidContainer and charges == nil then
-		charges = 1
-	end
-
-	while count > 0 do
-		local tempcount = 1
-		if isItemStackable(itemid) then
-			tempcount = math.min(100, count)
-		end
-
-		local ret = doPlayerAddItem(cid, itemid, tempcount, true, charges)
-		if ret == false then
-			ret = doCreateItem(itemid, tempcount, getPlayerPosition(cid))
-		end
-
-		if ret then
-			if isFluidContainer then
-				count = count - 1
-			elseif isItemRune(itemid) then
-				return LUA_NO_ERROR
-			else
-				count = count - tempcount
-			end
-		else
-			return LUA_ERROR
-		end
-	end
-	return LUA_NO_ERROR
-end
-
 function doCreatureSayWithRadius(cid, text, type, radiusx, radiusy, position)
 	if position == nil then
 		position = getCreaturePosition(cid)
@@ -778,50 +741,6 @@ function doCreatureSayWithRadius(cid, text, type, radiusx, radiusy, position)
 			doCreatureSay(cid, text, type, false, spectator, position)
 		end
 	end
-end
-
-function doPlayerTakeItem(cid, itemid, count)
-	if getPlayerItemCount(cid,itemid) < count then
-		return LUA_ERROR
-	end
-
-	while count > 0 do
-		local tempcount = 0
-		if isItemStackable(itemid) then
-			tempcount = math.min (100, count)
-		else
-			tempcount = 1
-		end
-
-		local ret = doPlayerRemoveItem(cid, itemid, tempcount)
-		if ret ~= LUA_ERROR then
-			count = count - tempcount
-		else
-			return LUA_ERROR
-		end
-	end
-
-	if count ~= 0 then
-		return LUA_ERROR
-	end
-	return LUA_NO_ERROR
-end
-
-function doPlayerBuyItem(cid, itemid, count, cost, charges)
-	if doPlayerRemoveMoney(cid, cost) then
-		return doPlayerGiveItem(cid, itemid, count, charges)
-	end
-	return LUA_ERROR
-end
-
-function doPlayerSellItem(cid, itemid, count, cost)
-	if doPlayerTakeItem(cid, itemid, count) == LUA_NO_ERROR then
-		if not doPlayerAddMoney(cid, cost) then
-			error('Could not add money to ' .. getPlayerName(cid) .. '(' .. cost .. 'gp)')
-		end
-		return LUA_NO_ERROR
-	end
-	return LUA_ERROR
 end
 
 function getBlessingsCost(level)
@@ -852,26 +771,6 @@ function isPremium(cid)
 	return getPlayerPremiumDays(cid) > 0
 end
 
-function getMonthDayEnding(day)
-	if day == "01" or day == "21" or day == "31" then
-		return "st"
-	elseif day == "02" or day == "22" then
-		return "nd"
-	elseif day == "03" or day == "23" then
-		return "rd"
-	else
-		return "th"
-	end
-end
-
-function getMonthString(m)
-	return os.date("%B", os.time{year = 1970, month = m, day = 1})
-end
-
-function getArticle(str)
-	return str:find("[AaEeIiOoUuYy]") == 1 and "an" or "a"
-end
-
 function isNumber(str)
 	return tonumber(str) ~= nil
 end
@@ -887,58 +786,35 @@ function getDistanceBetween(firstPosition, secondPosition)
 end
 
 function isSorcerer(cid)
-	if not isPlayer(cid) then
-		debugPrint("isSorcerer: Player not found.")
+	local player = Player(cid)
+	if player == nil then
 		return false
 	end
-	return isInArray({1, 5}, getPlayerVocation(cid))
+	return isInArray({1, 5}, player:getVocation():getId())
 end
 
 function isDruid(cid)
-	if not isPlayer(cid) then
-		debugPrint("isDruid: Player not found.")
+	local player = Player(cid)
+	if player == nil then
 		return false
 	end
-	return isInArray({2, 6}, getPlayerVocation(cid))
+	return isInArray({2, 6}, player:getVocation():getId())
 end
 
 function isPaladin(cid)
-	if not isPlayer(cid) then
-		debugPrint("isPaladin: Player not found.")
+	local player = Player(cid)
+	if player == nil then
 		return false
 	end
-	return isInArray({3, 7}, getPlayerVocation(cid))
+	return isInArray({3, 7}, player:getVocation():getId())
 end
 
 function isKnight(cid)
-	if not isPlayer(cid) then
-		debugPrint("isKnight: Player not found.")
+	local player = Player(cid)
+	if player == nil then
 		return false
 	end
-	return isInArray({4, 8}, getPlayerVocation(cid))
-end
-
-function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges)
-	if not doPlayerRemoveMoney(cid, cost) then
-		return LUA_ERROR
-	end
-
-	for i = 1, count do
-		local container = doCreateItemEx(containerid, 1)
-		for x = 1, getContainerCapById(containerid) do
-			doAddContainerItem(container, itemid, charges)
-		end
-
-		if doPlayerAddItemEx(cid, container, true) ~= RETURNVALUE_NOERROR then
-			return LUA_ERROR
-		end
-	end
-	return LUA_NO_ERROR
-end
-
-function getCount(string)
-	local b, e = string:find("%d+")
-	return b and e and tonumber(string:sub(b, e)) or -1
+	return isInArray({4, 8}, player:getVocation():getId())
 end
 
 function getTibianTime()
