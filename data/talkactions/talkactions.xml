@@ -12,6 +12,7 @@
 	<talkaction words="/town" separator=" " script="teleport_to_town.lua" />
 	<talkaction words="/a" separator=" " script="teleport_ntiles.lua" />
 	<talkaction words="/pos" separator=" " script="position.lua" />
+	<talkaction words="/info" separator=" " script="info.lua" />
 	<talkaction words="/r" separator=" " script="removething.lua" />
 	<talkaction words="/kick" separator=" " script="kick.lua" />
 	<talkaction words="/openserver" script="openserver.lua" />
