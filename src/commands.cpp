@@ -69,9 +69,7 @@ s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/s", &Commands::placeNpc},
 	{"/summon", &Commands::placeSummon},
-	{"/reload", &Commands::reloadInfo},
-	{"/info", &Commands::getInfo},
-	{"/kick", &Commands::kickPlayer},
+	{"/reload", &Commands::reloadInfo },
 	{"/owner", &Commands::setHouseOwner},
 	{"/newtype", &Commands::newType},
 	{"/newitem", &Commands::newItem},
@@ -362,71 +360,6 @@ void Commands::reloadInfo(Player* player, const std::string& cmd, const std::str
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
 	} else {
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
-	}
-}
-
-void Commands::getInfo(Player* player, const std::string& cmd, const std::string& param)
-{
-	Player* paramPlayer = g_game.getPlayerByName(param);
-	if (!paramPlayer) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
-		return;
-	}
-
-	if (player->getAccountType() < paramPlayer->getAccountType()) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You can not get info about this player.");
-		return;
-	}
-
-	uint32_t playerIp = paramPlayer->getIP();
-
-	std::ostringstream info;
-	info << "Name: " << paramPlayer->name << std::endl <<
-	     "Access: " << paramPlayer->group->access << std::endl <<
-	     "Level: " << paramPlayer->level << std::endl <<
-	     "Magic Level: " << paramPlayer->magLevel << std::endl <<
-	     "Speed: " << paramPlayer->getSpeed() << std::endl <<
-	     "Position: " << paramPlayer->getPosition() << std::endl <<
-	     "IP: " << convertIPToString(playerIp) << std::endl;
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, info.str());
-
-	if (playerIp != 0) {
-		PlayerVector vec;
-		for (const auto& it : g_game.getPlayers()) {
-			if (it.second->getIP() != playerIp || it.second == paramPlayer) {
-				continue;
-			}
-
-			vec.push_back(it.second);
-		}
-
-		if (!vec.empty()) {
-			std::ostringstream ss;
-
-			Player* tmpPlayer = vec[0];
-			ss << "Other players on same IP: " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
-
-			for (PlayerVector::size_type i = 1, size = vec.size(); i < size; ++i) {
-				tmpPlayer = vec[i];
-				ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
-			}
-
-			ss << '.';
-			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-		}
-	}
-}
-
-void Commands::kickPlayer(Player* player, const std::string& cmd, const std::string& param)
-{
-	Player* playerKick = g_game.getPlayerByName(param);
-	if (playerKick) {
-		if (playerKick->group->access) {
-			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You cannot kick this player.");
-			return;
-		}
-
-		playerKick->kickPlayer(true);
 	}
 }
 
