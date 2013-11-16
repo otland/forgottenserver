@@ -69,9 +69,8 @@ s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/s", &Commands::placeNpc},
 	{"/summon", &Commands::placeSummon},
-	{"/reload", &Commands::reloadInfo},
-	{"/info", &Commands::getInfo},
-	{"/kick", &Commands::kickPlayer},
+	{ "/reload", &Commands::reloadInfo },
+	{ "/info", &Commands::getInfo },
 	{"/owner", &Commands::setHouseOwner},
 	{"/newtype", &Commands::newType},
 	{"/newitem", &Commands::newItem},
@@ -382,12 +381,12 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 
 	std::ostringstream info;
 	info << "Name: " << paramPlayer->name << std::endl <<
-	     "Access: " << paramPlayer->group->access << std::endl <<
-	     "Level: " << paramPlayer->level << std::endl <<
-	     "Magic Level: " << paramPlayer->magLevel << std::endl <<
-	     "Speed: " << paramPlayer->getSpeed() << std::endl <<
-	     "Position: " << paramPlayer->getPosition() << std::endl <<
-	     "IP: " << convertIPToString(playerIp) << std::endl;
+		"Access: " << paramPlayer->group->access << std::endl <<
+		"Level: " << paramPlayer->level << std::endl <<
+		"Magic Level: " << paramPlayer->magLevel << std::endl <<
+		"Speed: " << paramPlayer->getSpeed() << std::endl <<
+		"Position: " << paramPlayer->getPosition() << std::endl <<
+		"IP: " << convertIPToString(playerIp) << std::endl;
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, info.str());
 
 	if (playerIp != 0) {
@@ -414,19 +413,6 @@ void Commands::getInfo(Player* player, const std::string& cmd, const std::string
 			ss << '.';
 			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 		}
-	}
-}
-
-void Commands::kickPlayer(Player* player, const std::string& cmd, const std::string& param)
-{
-	Player* playerKick = g_game.getPlayerByName(param);
-	if (playerKick) {
-		if (playerKick->group->access) {
-			player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "You cannot kick this player.");
-			return;
-		}
-
-		playerKick->kickPlayer(true);
 	}
 }
 
