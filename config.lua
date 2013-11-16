@@ -87,7 +87,6 @@ serverSaveEnabled = "no"
 serverSaveHour = 10
 shutdownAtServerSave = "yes"
 cleanMapAtServerSave = "yes"
-autoSaveEachMinutes = 0
 saveGlobalStorage = "no"
 
 -- Monsters

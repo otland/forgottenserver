@@ -302,11 +302,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	services->add<ProtocolOldLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 	services->add<ProtocolOldGame>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
-	int32_t autoSaveEachMinutes = g_config.getNumber(ConfigManager::AUTO_SAVE_EACH_MINUTES);
-	if (autoSaveEachMinutes > 0) {
-		g_scheduler->addEvent(createSchedulerTask(autoSaveEachMinutes * 1000 * 60, std::bind(&Game::autoSave, &g_game)));
-	}
-
 	if (g_config.getBoolean(ConfigManager::SERVERSAVE_ENABLED)) {
 		int32_t serverSaveHour = g_config.getNumber(ConfigManager::SERVERSAVE_H);
 		if (serverSaveHour >= 0 && serverSaveHour <= 24) {

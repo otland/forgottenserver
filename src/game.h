@@ -89,7 +89,6 @@ class Game
 		void forceAddCondition(uint32_t creatureId, Condition* condition);
 		void forceRemoveCondition(uint32_t creatureId, ConditionType_t type);
 
-		void autoSave();
 		void prepareServerSave();
 		void serverSave();
 
