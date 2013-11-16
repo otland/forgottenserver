@@ -1501,9 +1501,6 @@ void LuaScriptInterface::registerFunctions()
 	//cleanMap()
 	lua_register(m_luaState, "cleanMap", LuaScriptInterface::luaCleanMap);
 
-	//printIp(ip)
-	lua_register(m_luaState, "printIp", LuaScriptInterface::luaPrintIp);
-
 	//getAccountNumberByPlayerName(name)
 	lua_register(m_luaState, "getAccountNumberByPlayerName", LuaScriptInterface::luaGetAccountNumberByPlayerName);
 
@@ -4753,13 +4750,6 @@ int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 	g_dispatcher->addTask(
 	    createTask(std::bind(&Game::cleanMap, &g_game)));
 	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaPrintIp(lua_State* L)
-{
-	//printIp(ip)
-	pushString(L, convertIPToString(popNumber(L)));
 	return 1;
 }
 

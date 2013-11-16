@@ -1,3 +1,11 @@
+local function int_to_ip(val)
+	return string.format("%d.%d.%d.%d",
+				bit.band(bit.rshift(val, 0),  	0x000000FF),
+				bit.band(bit.rshift(val, 8),  	0x000000FF),
+				bit.band(bit.rshift(val, 16),  	0x000000FF),
+				bit.band(bit.rshift(val, 24),  	0x000000FF))
+end
+
 function onSay(cid, words, param)
 	local player = Player(cid)	
 	if not player:getGroup():getAccess() then
@@ -20,12 +28,13 @@ function onSay(cid, words, param)
 	end
 
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Name: " .. target:getName()
-				.. "\nAccess: " .. target:getAccountType()
+				.. "\nAccess: " .. (target:getGroup():getAccess() and "1" or "0")
 				.. "\nLevel: " .. target:getLevel()
 				.. "\nMagic Level: " .. target:getMagicLevel()
 				.. "\nSpeed: " .. getCreatureSpeed(player:getId())
 				.. "\nPosition: " .. string.format("(%0.5d / %0.5d / %0.3d)", target:getPosition().x, target:getPosition().y, target:getPosition().z)
-				.. "\nIP: " .. printIp(target:getIp()))
+				.. "\nIP: " .. int_to_ip(target:getIp()))
+	
 	
 	local players = {}
 	for _, tmp in ipairs(Game.getPlayers()) do

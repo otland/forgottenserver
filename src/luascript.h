@@ -548,8 +548,6 @@ class LuaScriptInterface
 		static int32_t luaRefreshMap(lua_State* L);
 		static int32_t luaCleanMap(lua_State* L);
 
-		static int32_t luaPrintIp(lua_State* L);
-
 		static int32_t luaIsInWar(lua_State* L);
 		static int32_t luaDoPlayerSetOfflineTrainingSkill(lua_State* L);
 
