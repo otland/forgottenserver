@@ -91,7 +91,7 @@ BedItem* BedItem::getNextBedItem()
 	Direction dir = Item::items[getID()].bedPartnerDir;
 	Position targetPos = getNextPosition(dir, getPosition());
 
-	Tile* tile = g_game.getMap()->getTile(targetPos);
+	Tile* tile = g_game.getTile(targetPos);
 	if (!tile) {
 		return nullptr;
 	}
