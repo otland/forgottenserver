@@ -1420,7 +1420,7 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 			continue;
 		}
 
-		if (timeNow > condition->getEndTime()) {
+		if (condition->getEndTime() >= timeNow) {
 			return true;
 		}
 	}
