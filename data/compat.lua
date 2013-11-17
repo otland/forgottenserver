@@ -439,7 +439,7 @@ function doSetItemText(uid, text)
 	end
 	return true
 end
-function doSetItemSpecialDesrciption(uid, desc)
+function doSetItemSpecialDescription(uid, desc)
 	local item = Item(uid)
 	if item == nil then
 		return false

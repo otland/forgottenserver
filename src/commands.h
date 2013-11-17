@@ -43,7 +43,6 @@ class Commands
 		bool loaded;
 
 		//commands
-		void placeNpc(Player* player, const std::string& cmd, const std::string& param);
 		void placeSummon(Player* player, const std::string& cmd, const std::string& param);
 		void reloadInfo(Player* player, const std::string& cmd, const std::string& param);
 		void setHouseOwner(Player* player, const std::string& cmd, const std::string& param);
