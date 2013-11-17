@@ -2929,8 +2929,6 @@ int32_t LuaScriptInterface::luaDoSummonCreature(lua_State* L)
 
 	Monster* monster = Monster::createMonster(name);
 	if (!monster) {
-		std::string error_str = (std::string)"Monster name(" + name + (std::string)") not found";
-		reportErrorFunc(error_str);
 		pushBoolean(L, false);
 		return 1;
 	}
