@@ -102,9 +102,6 @@ class ScriptEnvironment
 
 		void resetEnv();
 
-		static bool saveGameState();
-		static bool loadGameState();
-
 		void setScriptId(int32_t scriptId, LuaScriptInterface* scriptInterface) {
 			m_scriptId = scriptId;
 			m_interface = scriptInterface;
@@ -148,8 +145,8 @@ class ScriptEnvironment
 		static uint32_t addResult(DBResult* res);
 		static bool removeResult(uint32_t id);
 
-		void addGlobalStorageValue(const uint32_t key, const int32_t value);
-		bool getGlobalStorageValue(const uint32_t key, int32_t& value) const;
+		static void addGlobalStorageValue(const uint32_t key, const int32_t value);
+		static bool getGlobalStorageValue(const uint32_t key, int32_t& value);
 
 		void setNpc(Npc* npc) {
 			m_curNpc = npc;
@@ -541,7 +538,6 @@ class LuaScriptInterface
 		static int32_t luaMayNotMove(lua_State* L);
 
 		static int32_t luaSaveServer(lua_State* L);
-		static int32_t luaRefreshMap(lua_State* L);
 		static int32_t luaCleanMap(lua_State* L);
 
 		static int32_t luaIsInWar(lua_State* L);

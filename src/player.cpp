@@ -2573,21 +2573,6 @@ void Player::addInFightTicks(bool pzlock /*= false*/)
 	addCondition(condition);
 }
 
-void Player::addDefaultRegeneration(uint32_t addTicks)
-{
-	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-	if (condition) {
-		condition->setTicks(condition->getTicks() + addTicks);
-	} else {
-		condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_REGENERATION, addTicks, 0);
-		condition->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
-		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
-		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
-		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
-		addCondition(condition);
-	}
-}
-
 void Player::removeList()
 {
 	g_game.removePlayer(this);
@@ -4036,11 +4021,11 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 void Player::gainExperience(uint64_t gainExp)
 {
 	if (!hasFlag(PlayerFlag_NotGainExperience) && gainExp > 0) {
-		uint64_t oldExperience = experience;
-
 		if (staminaMinutes == 0) {
 			return;
 		}
+
+		uint64_t oldExperience = experience;
 
 		addExperience(gainExp, true, true, true);
 

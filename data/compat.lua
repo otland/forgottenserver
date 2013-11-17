@@ -575,3 +575,5 @@ function getWorldCreatures(type)
 	end
 	return Game.getPlayerCount() + Game.getMonsterCount() + Game.getNpcCount()
 end
+
+saveData = saveServer

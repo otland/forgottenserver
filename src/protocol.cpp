@@ -83,7 +83,7 @@ void Protocol::deleteProtocolTask()
 	delete this;
 }
 
-void Protocol::XTEA_encrypt(OutputMessage& msg)
+void Protocol::XTEA_encrypt(OutputMessage& msg) const
 {
 	const uint32_t delta = 0x61C88647;
 
@@ -112,7 +112,7 @@ void Protocol::XTEA_encrypt(OutputMessage& msg)
 	}
 }
 
-bool Protocol::XTEA_decrypt(NetworkMessage& msg)
+bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 {
 	if (((msg.getMessageLength() - 6) & 7) != 0) {
 		return false;

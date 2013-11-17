@@ -104,45 +104,6 @@ void ScriptEnvironment::resetEnv()
 	m_tempResults.clear();
 }
 
-bool ScriptEnvironment::saveGameState()
-{
-	if (!g_config.getBoolean(ConfigManager::SAVE_GLOBAL_STORAGE)) {
-		return true;
-	}
-
-	Database::getInstance()->executeQuery("TRUNCATE TABLE `global_storage`");
-
-	DBInsert stmt;
-	stmt.setQuery("INSERT INTO `global_storage` (`key`, `value`) VALUES ");
-
-	std::ostringstream query;
-	for (const auto& it : m_globalStorageMap) {
-		query << it.first << ',' << it.second;
-		if (!stmt.addRow(query)) {
-			return false;
-		}
-	}
-	return stmt.execute();
-}
-
-bool ScriptEnvironment::loadGameState()
-{
-	if (!g_config.getBoolean(ConfigManager::SAVE_GLOBAL_STORAGE)) {
-		return true;
-	}
-
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery("SELECT `key`, `value` FROM `global_storage`");
-	if (result) {
-		do {
-			m_globalStorageMap[result->getDataInt("key")] = result->getDataInt("value");
-		} while (result->next());
-		db->freeResult(result);
-	}
-	return true;
-}
-
 bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
 {
 	if (m_callbackId == 0) {
@@ -377,7 +338,7 @@ void ScriptEnvironment::addGlobalStorageValue(const uint32_t key, const int32_t 
 	m_globalStorageMap[key] = value;
 }
 
-bool ScriptEnvironment::getGlobalStorageValue(const uint32_t key, int32_t& value) const
+bool ScriptEnvironment::getGlobalStorageValue(const uint32_t key, int32_t& value)
 {
 	StorageMap::const_iterator it = m_globalStorageMap.find(key);
 	if (it == m_globalStorageMap.end()) {
@@ -1479,12 +1440,7 @@ void LuaScriptInterface::registerFunctions()
 	lua_register(m_luaState, "mayNotMove", LuaScriptInterface::luaMayNotMove);
 
 	//saveServer()
-	//saveData()
 	lua_register(m_luaState, "saveServer", LuaScriptInterface::luaSaveServer);
-	lua_register(m_luaState, "saveData", LuaScriptInterface::luaSaveServer);
-
-	//refreshMap()
-	lua_register(m_luaState, "refreshMap", LuaScriptInterface::luaRefreshMap);
 
 	//cleanMap()
 	lua_register(m_luaState, "cleanMap", LuaScriptInterface::luaCleanMap);
@@ -4137,7 +4093,7 @@ int32_t LuaScriptInterface::luaGetGlobalStorageValue(lua_State* L)
 	uint32_t key = popNumber(L);
 
 	int32_t value;
-	if (getScriptEnv()->getGlobalStorageValue(key, value)) {
+	if (ScriptEnvironment::getGlobalStorageValue(key, value)) {
 		lua_pushnumber(L, value);
 	} else {
 		lua_pushnumber(L, -1);
@@ -4151,7 +4107,7 @@ int32_t LuaScriptInterface::luaSetGlobalStorageValue(lua_State* L)
 	int32_t value = popNumber<int32_t>(L);
 	uint32_t key = popNumber(L);
 
-	getScriptEnv()->addGlobalStorageValue(key, value);
+	ScriptEnvironment::addGlobalStorageValue(key, value);
 	pushBoolean(L, true);
 	return 1;
 }
@@ -4653,16 +4609,7 @@ int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 
 int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 {
-	g_dispatcher->addTask(
-	    createTask(std::bind(&Game::saveGameState, &g_game)));
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaRefreshMap(lua_State* L)
-{
-	g_dispatcher->addTask(
-	    createTask(std::bind(&Game::refreshMap, &g_game)));
+	g_game.saveGameState();
 	pushBoolean(L, true);
 	return 1;
 }

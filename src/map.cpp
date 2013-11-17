@@ -146,27 +146,10 @@ void Map::setTile(int32_t x, int32_t y, int32_t z, Tile* newTile)
 
 	Tile*& tile = floor->tiles[offsetX][offsetY];
 	if (tile) {
-		if (tile->hasFlag(TILESTATE_REFRESH)) {
-			refreshTileMap.erase(tile);
-		}
 		delete tile;
 	}
-
 	tile = newTile;
 	newTile->qt_node = leaf;
-
-	if (newTile->hasFlag(TILESTATE_REFRESH)) {
-		RefreshBlock_t rb;
-		rb.lastRefresh = OTSYS_TIME();
-
-		if (TileItemVector* newTileItems = newTile->getItemList()) {
-			for (ItemVector::iterator it = newTileItems->getBeginDownItem(); it != newTileItems->getEndDownItem(); ++it) {
-				rb.list.push_back((*it)->clone());
-			}
-		}
-
-		refreshTileMap[newTile] = rb;
-	}
 }
 
 bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos /*=false*/, bool forceLogin /*=false*/)
@@ -650,8 +633,8 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 					const Tile* tile = canWalkTo(creature, pos);
 					if (tile) {
 						//The cost (g) for this neighbour
-						const int_fast32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
-						const int_fast32_t extraCost = nodes.getTileWalkCost(creature, tile);
+						const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
+						const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
 						const int_fast32_t newg = n->g + cost + extraCost;
 						const uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
@@ -821,8 +804,8 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 				const Tile* tile = canWalkTo(creature, pos);
 				if (tile) {
 					//The cost (g) for this neighbour
-					const int_fast32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
-					const int_fast32_t extraCost = nodes.getTileWalkCost(creature, tile);
+					const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
+					const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
 					const int_fast32_t newf = n->f + cost + extraCost;
 					const uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
 
@@ -992,8 +975,7 @@ uint32_t AStarNodes::countClosedNodes() const
 	return counter;
 }
 
-int32_t AStarNodes::getMapWalkCost(const Creature* creature, AStarNode* node,
-                                   const Tile* neighbourTile, const Position& neighbourPos)
+int32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbourPos)
 {
 	if (std::abs(node->x - neighbourPos.x) == std::abs(node->y - neighbourPos.y)) {
 		//diagonal movement extra cost

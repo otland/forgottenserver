@@ -1422,7 +1422,6 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 
 	//getting direction
 	float tan;
-
 	if (dx != 0) {
 		tan = (float)dy / (float)dx;
 	} else {

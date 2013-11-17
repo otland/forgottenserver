@@ -43,13 +43,12 @@ class ConfigManager
 			EXPERIENCE_FROM_PLAYERS = 6,
 			FREE_PREMIUM = 7,
 			ADMIN_LOGS_ENABLED = 8,
-			SAVE_GLOBAL_STORAGE = 9,
-			REPLACE_KICK_ON_LOGIN = 10,
-			ALLOW_CLONES = 11,
-			BIND_ONLY_GLOBAL_ADDRESS = 12,
-			OPTIMIZE_DATABASE = 13,
-			MARKET_PREMIUM = 14,
-			STAMINA_SYSTEM = 15,
+			REPLACE_KICK_ON_LOGIN = 9,
+			ALLOW_CLONES = 10,
+			BIND_ONLY_GLOBAL_ADDRESS = 11,
+			OPTIMIZE_DATABASE = 12,
+			MARKET_PREMIUM = 13,
+			STAMINA_SYSTEM = 14,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
@@ -116,7 +115,6 @@ class ConfigManager
 		const std::string& getString(string_config_t _what) const;
 		int32_t getNumber(integer_config_t _what) const;
 		bool getBoolean(boolean_config_t _what) const;
-		bool setNumber(integer_config_t _what, int32_t _value);
 
 	private:
 		std::string getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default = "");

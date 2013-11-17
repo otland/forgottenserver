@@ -98,8 +98,8 @@ class Protocol
 			m_checksumEnabled = false;
 		}
 
-		void XTEA_encrypt(OutputMessage& msg);
-		bool XTEA_decrypt(NetworkMessage& msg);
+		void XTEA_encrypt(OutputMessage& msg) const;
+		bool XTEA_decrypt(NetworkMessage& msg) const;
 		bool RSA_decrypt(NetworkMessage& msg);
 		bool RSA_decrypt(RSA* rsa, NetworkMessage& msg);
 

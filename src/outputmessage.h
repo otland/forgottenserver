@@ -63,10 +63,10 @@ class OutputMessage : public NetworkMessage
 			STATE_WAITING
 		};
 
-		Protocol* getProtocol() {
+		Protocol* getProtocol() const {
 			return m_protocol;
 		}
-		Connection_ptr getConnection() {
+		Connection_ptr getConnection() const {
 			return m_connection;
 		}
 		int64_t getFrame() const {

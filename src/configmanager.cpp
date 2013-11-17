@@ -56,7 +56,6 @@ bool ConfigManager::load()
 
 	//parse config
 	if (!m_isLoaded) { //info that must be loaded one time (unless we reset the modules involved)
-		m_confBoolean[SAVE_GLOBAL_STORAGE] = booleanString(getGlobalString(L, "saveGlobalStorage", "no"));
 		m_confBoolean[BIND_ONLY_GLOBAL_ADDRESS] = booleanString(getGlobalString(L, "bindOnlyGlobalAddress", "no"));
 		m_confBoolean[OPTIMIZE_DATABASE] = booleanString(getGlobalString(L, "startupDatabaseOptimization", "yes"));
 
@@ -172,17 +171,6 @@ bool ConfigManager::getBoolean(boolean_config_t _what) const
 		return m_confBoolean[_what];
 	} else {
 		std::cout << "[Warning - ConfigManager::getBoolean] " << _what << std::endl;
-		return false;
-	}
-}
-
-bool ConfigManager::setNumber(integer_config_t _what, int32_t _value)
-{
-	if (m_isLoaded && _what < LAST_INTEGER_CONFIG) {
-		m_confInteger[_what] = _value;
-		return true;
-	} else {
-		std::cout << "[Warning - ConfigManager::setNumber] " << _what << std::endl;
 		return false;
 	}
 }

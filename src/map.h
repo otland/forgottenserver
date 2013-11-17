@@ -64,8 +64,7 @@ class AStarNodes
 		bool isInList(int32_t x, int32_t y);
 		AStarNode* getNodeInList(int32_t x, int32_t y);
 
-		int32_t getMapWalkCost(const Creature* creature, AStarNode* node,
-		                       const Tile* neighbourTile, const Position& neighbourPos);
+		static int32_t getMapWalkCost(AStarNode* node, const Position& neighbourPos);
 		static int32_t getTileWalkCost(const Creature* creature, const Tile* tile);
 		int32_t getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, int32_t yGoal);
 
@@ -286,13 +285,6 @@ class Map
 		void clearSpectatorCache();
 
 		QTreeNode root;
-
-		struct RefreshBlock_t {
-			TileItemVector list;
-			uint64_t lastRefresh;
-		};
-
-		std::map<Tile*, RefreshBlock_t> refreshTileMap;
 
 		friend class Game;
 

@@ -658,7 +658,6 @@ class Player : public Creature, public Cylinder
 		virtual float getDefenseFactor() const;
 
 		void addInFightTicks(bool pzlock = false);
-		void addDefaultRegeneration(uint32_t addTicks);
 
 		virtual uint64_t getGainedExperience(Creature* attacker) const;
 

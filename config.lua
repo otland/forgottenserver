@@ -34,8 +34,6 @@ maxPacketsPerSecond = 25
 -- death penalty formula. For the old formula, set it to 10. For
 -- no skill/experience loss, set it to 0.
 deathLosePercent = -1
-deathListEnabled = "yes"
-maxDeathRecords = 5
 
 -- Houses
 housePriceEachSQM = 1000
@@ -76,16 +74,6 @@ rateSkill = 3
 rateLoot = 2
 rateMagic = 3
 rateSpawn = 1
-
--- Server save
--- NOTE: serverSaveHour is the hour of the day when the server save will occur,
--- if you would rather save the server with intervals, disable server save and
--- use autoSaveEachMinutes.
-serverSaveEnabled = "no"
-serverSaveHour = 10
-shutdownAtServerSave = "yes"
-cleanMapAtServerSave = "yes"
-saveGlobalStorage = "no"
 
 -- Monsters
 deSpawnRange = 2

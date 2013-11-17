@@ -153,7 +153,6 @@ void Game::setGameState(GameState_t newState)
 			loadMotdNum();
 			loadPlayersRecord();
 
-			loadGameState();
 			g_globalEvents->startup();
 			break;
 		}
@@ -214,16 +213,10 @@ void Game::saveGameState()
 	}
 
 	map->saveMap();
-	ScriptEnvironment::saveGameState();
 
 	if (gameState == GAME_STATE_MAINTAIN) {
 		setGameState(GAME_STATE_NORMAL);
 	}
-}
-
-void Game::loadGameState()
-{
-	ScriptEnvironment::loadGameState();
 }
 
 int32_t Game::loadMainMap(const std::string& filename)
@@ -243,43 +236,6 @@ void Game::loadMap(const std::string& path)
 		map = new Map;
 	}
 	map->loadMap(path);
-}
-
-void Game::refreshMap()
-{
-	for (auto& it : map->refreshTileMap) {
-		Tile* tile = it.first;
-		if (TileItemVector* items = tile->getItemList()) {
-			//remove garbage
-			int32_t downItemSize = tile->getDownItemCount();
-			for (int32_t i = downItemSize - 1; i >= 0; --i) {
-				Item* item = items->at(i);
-				if (item) {
-					internalRemoveItem(item);
-				}
-			}
-		}
-
-		cleanup();
-
-		//restore to original state
-		TileItemVector& list = it.second.list;
-		for (ItemVector::reverse_iterator rit = list.rbegin(); rit != list.rend(); ++rit) {
-			Item* item = (*rit)->clone();
-
-			ReturnValue ret = internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
-			if (ret == RET_NOERROR) {
-				if (item->getUniqueId() != 0) {
-					ScriptEnvironment::addUniqueThing(item);
-				}
-
-				startDecay(item);
-			} else {
-				std::cout << "Could not refresh item: " << item->getID() << "pos: " << tile->getPosition() << std::endl;
-				delete item;
-			}
-		}
-	}
 }
 
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos)

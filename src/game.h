@@ -472,8 +472,6 @@ class Game
 		GameState_t getGameState() const;
 		void setGameState(GameState_t newState);
 		void saveGameState();
-		void loadGameState();
-		void refreshMap();
 		void cleanMap() {
 			map->clean();
 		}

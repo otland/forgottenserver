@@ -864,7 +864,7 @@ CombatType_t indexToCombatType(uint32_t v)
 
 uint8_t serverFluidToClient(uint8_t serverFluid)
 {
-	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(int8_t);
+	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(uint8_t);
 
 	for (uint8_t i = 0; i < size; ++i) {
 		if (clientToServerFluidMap[i] == serverFluid) {
