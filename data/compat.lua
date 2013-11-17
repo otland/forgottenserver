@@ -302,6 +302,20 @@ function doMonsterChangeTarget(cid)
 	monster:searchTarget(1)
 	return true
 end
+function doConvinceCreature(cid, target)
+	local creature = Creature(cid)
+	if creature == nil then
+		return false
+	end
+
+	local targetCreature = Creature(target)
+	if targetCreature == nil then
+		return false
+	end
+
+	targetCreature:setMaster(creature)
+	return true
+end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end

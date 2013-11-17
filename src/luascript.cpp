@@ -1237,9 +1237,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSummonCreature(name, pos)
 	lua_register(m_luaState, "doSummonCreature", LuaScriptInterface::luaDoSummonCreature);
 
-	//doConvinceCreature(cid, target)
-	lua_register(m_luaState, "doConvinceCreature", LuaScriptInterface::luaDoConvinceCreature);
-
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
@@ -3829,32 +3826,6 @@ int32_t LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 	}
 
 	target->challengeCreature(creature);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoConvinceCreature(lua_State* L)
-{
-	//doConvinceCreature(cid, target)
-	uint32_t targetCid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Creature* target = g_game.getCreatureByID(targetCid);
-	if (!target) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	target->convinceCreature(creature);
-	g_game.updateCreatureType(target);
 	pushBoolean(L, true);
 	return 1;
 }
