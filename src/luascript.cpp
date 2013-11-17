@@ -7278,7 +7278,7 @@ int32_t LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		if (master) {
-			pushBoolean(L, master->convinceCreature(creature));
+			pushBoolean(L, creature->convinceCreature(master));
 		} else {
 			master = creature->getMaster();
 			if (master) {
