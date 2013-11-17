@@ -165,14 +165,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	} else if (defaultPriority == "higher") {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
-
-	std::ostringstream mutexName;
-	mutexName << "forgottenserver_" << g_config.getNumber(ConfigManager::LOGIN_PORT);
-	CreateMutex(nullptr, FALSE, mutexName.str().c_str());
-	if (GetLastError() == ERROR_ALREADY_EXISTS) {
-		startupErrorMessage("Another instance of The Forgotten Server is already running with the same login port, please shut it down first or change ports for this one.");
-		return;
-	}
 #endif
 
 	//set RSA key
