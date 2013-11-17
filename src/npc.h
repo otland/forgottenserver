@@ -248,6 +248,11 @@ class Npc : public Creature
 		void removeShopPlayer(Player* player);
 		void closeAllShopWindows();
 
+		bool isIdle() const 
+		{ 
+			return viewers == 0; 
+		}
+
 		std::map<std::string, std::string> m_parameters;
 
 		std::set<Player*> shopPlayerSet;
@@ -260,6 +265,7 @@ class Npc : public Creature
 		Position masterPos;
 
 		uint32_t walkTicks;
+		uint32_t viewers;
 		int32_t focusCreature;
 		int32_t masterRadius;
 

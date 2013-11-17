@@ -127,6 +127,7 @@ void Npc::reset()
 	floorChange = false;
 	attackable = false;
 	focusCreature = 0;
+	viewers = 0;
 
 	delete m_npcEventHandler;
 	m_npcEventHandler = nullptr;
@@ -261,6 +262,7 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 			m_npcEventHandler->onCreatureAppear(creature);
 		}
 	} else if (creature->getPlayer()) {
+		viewers++;
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureAppear(creature);
 		}
@@ -277,6 +279,7 @@ void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool 
 			m_npcEventHandler->onCreatureDisappear(creature);
 		}
 	} else if (creature->getPlayer()) {
+		viewers--;
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureDisappear(creature);
 		}
@@ -345,12 +348,16 @@ void Npc::doSayToPlayer(Player* player, const std::string& text)
 
 void Npc::doMove(Direction dir)
 {
-	g_game.internalMoveCreature(this, dir);
+	if (!isIdle()) {
+		g_game.internalMoveCreature(this, dir);
+	}
 }
 
 void Npc::doTurn(Direction dir)
 {
-	g_game.internalCreatureTurn(this, dir);
+	if (!isIdle()) {
+		g_game.internalCreatureTurn(this, dir);
+	}
 }
 
 void Npc::onPlayerTrade(Player* player, ShopEvent_t type, int32_t callback, uint16_t itemId,
