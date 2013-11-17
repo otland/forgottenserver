@@ -67,7 +67,6 @@ extern GlobalEvents* g_globalEvents;
 
 s_defcommands Commands::defined_commands[] = {
 	//admin commands
-	{"/s", &Commands::placeNpc},
 	{"/summon", &Commands::placeSummon},
 	{"/reload", &Commands::reloadInfo},
 	{"/owner", &Commands::setHouseOwner},
@@ -265,24 +264,6 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 		}
 	}
 	return true;
-}
-
-void Commands::placeNpc(Player* player, const std::string& cmd, const std::string& param)
-{
-	Npc* npc = Npc::createNpc(param);
-	if (!npc) {
-		return;
-	}
-
-	// Place the npc
-	if (g_game.placeCreature(npc, player->getPosition())) {
-		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_BLOOD);
-		npc->setMasterPos(npc->getPosition());
-	} else {
-		delete npc;
-		player->sendCancelMessage(RET_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-	}
 }
 
 void Commands::placeSummon(Player* player, const std::string& cmd, const std::string& param)
