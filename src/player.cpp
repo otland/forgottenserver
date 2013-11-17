@@ -45,7 +45,6 @@ extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
 
 MuteCountMap Player::muteCountMap;
-int32_t Player::maxMessageBuffer;
 
 uint32_t Player::playerAutoID = 0x10000000;
 
@@ -1972,11 +1971,12 @@ void Player::onThink(uint32_t interval)
 
 	if (!getTile()->hasFlag(TILESTATE_NOLOGOUT) && !mayNotMove && !isAccessPlayer()) {
 		idleTime += interval;
-		if (idleTime > (g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES) * 60000) + 60000) {
+		const int32_t kickAfterMinutes = g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES);
+		if (idleTime > (kickAfterMinutes * 60000) + 60000) {
 			kickPlayer(true);
-		} else if (client && idleTime == 60000 * g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES)) {
+		} else if (client && idleTime == 60000 * kickAfterMinutes) {
 			std::ostringstream ss;
-			ss << "You have been idle for " << g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES) << " minutes. You will be disconnected in one minute if you are still idle then.";
+			ss << "You have been idle for " << kickAfterMinutes << " minutes. You will be disconnected in one minute if you are still idle then.";
 			client->sendTextMessage(MSG_STATUS_WARNING, ss.str());
 		}
 	}
@@ -2009,17 +2009,20 @@ uint32_t Player::isMuted() const
 
 void Player::addMessageBuffer()
 {
-	if (MessageBufferCount > 0 && Player::maxMessageBuffer != 0 && !hasFlag(PlayerFlag_CannotBeMuted)) {
+	if (MessageBufferCount > 0 && g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER) != 0 && !hasFlag(PlayerFlag_CannotBeMuted)) {
 		MessageBufferCount--;
 	}
 }
 
 void Player::removeMessageBuffer()
 {
-	if (!hasFlag(PlayerFlag_CannotBeMuted) && MessageBufferCount <= Player::maxMessageBuffer + 1 && Player::maxMessageBuffer != 0) {
-		MessageBufferCount++;
+	if (hasFlag(PlayerFlag_CannotBeMuted)) {
+		return;
+	}
 
-		if (MessageBufferCount > Player::maxMessageBuffer) {
+	const int32_t maxMessageBuffer = g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER);
+	if (maxMessageBuffer != 0 && MessageBufferCount <= maxMessageBuffer + 1) {
+		if (++MessageBufferCount > maxMessageBuffer) {
 			uint32_t muteCount = 1;
 			auto it = muteCountMap.find(guid);
 			if (it != muteCountMap.end()) {

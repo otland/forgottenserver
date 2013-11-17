@@ -144,7 +144,6 @@ class Player : public Creature, public Cylinder
 		}
 
 		static MuteCountMap muteCountMap;
-		static int32_t maxMessageBuffer;
 
 		virtual const std::string& getName() const {
 			return name;

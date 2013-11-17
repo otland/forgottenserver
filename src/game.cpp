@@ -231,7 +231,7 @@ int32_t Game::loadMainMap(const std::string& filename)
 	if (!map) {
 		map = new Map;
 	}
-	Player::maxMessageBuffer = g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER);
+
 	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
 	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
 	return map->loadMap("data/world/" + filename + ".otbm");
