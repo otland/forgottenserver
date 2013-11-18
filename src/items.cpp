@@ -122,7 +122,7 @@ ItemType::~ItemType()
 
 Items::Items()
 {
-	items.resize(21500);
+	items.reserve(30000);
 }
 
 Items::~Items()
@@ -132,9 +132,6 @@ Items::~Items()
 
 void Items::clear()
 {
-	for (const ItemType* itemType : items) {
-		delete itemType;
-	}
 	items.clear();
 }
 
@@ -174,15 +171,13 @@ int32_t Items::loadFromOtb(const std::string& file)
 			return ERROR_INVALID_FORMAT;
 		}
 
-		attribute_t attr;
-
+		uint8_t attr;
 		if (!props.GET_VALUE(attr)) {
 			return ERROR_INVALID_FORMAT;
 		}
 
 		if (attr == ROOT_ATTR_VERSION) {
-			datasize_t datalen = 0;
-
+			uint16_t datalen;
 			if (!props.GET_VALUE(datalen)) {
 				return ERROR_INVALID_FORMAT;
 			}
@@ -219,25 +214,137 @@ int32_t Items::loadFromOtb(const std::string& file)
 			return f.getError();
 		}
 
-		flags_t flags;
-		ItemType* iType = new ItemType();
-		iType->group = (itemgroup_t)type;
+		uint32_t flags;
+		if (!stream.GET_VALUE(flags)) {
+			return ERROR_INVALID_FORMAT;
+		}
 
+		uint16_t serverId = 0;
+		uint16_t clientId = 0;
+		uint16_t speed = 0;
+		uint16_t lightLevel = 0;
+		uint16_t lightColor = 0;
+		uint16_t wareId = 0;
+		uint8_t alwaysOnTopOrder = 0;
+
+		uint8_t attrib;
+		while (stream.GET_VALUE(attrib)) {
+			uint16_t datalen;
+			if (!stream.GET_VALUE(datalen)) {
+				return ERROR_INVALID_FORMAT;
+			}
+
+			switch (attrib) {
+				case ITEM_ATTR_SERVERID: {
+					if (datalen != sizeof(uint16_t)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					if (!stream.GET_USHORT(serverId)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					if (serverId > 30000 && serverId < 30100) {
+						serverId -= 30000;
+					}
+					break;
+				}
+
+				case ITEM_ATTR_CLIENTID: {
+					if (datalen != sizeof(uint16_t)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					if (!stream.GET_USHORT(clientId)) {
+						return ERROR_INVALID_FORMAT;
+					}
+					break;
+				}
+
+				case ITEM_ATTR_SPEED: {
+					if (datalen != sizeof(uint16_t)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					if (!stream.GET_USHORT(speed)) {
+						return ERROR_INVALID_FORMAT;
+					}
+					break;
+				}
+
+				case ITEM_ATTR_LIGHT2: {
+					if (datalen != sizeof(lightBlock2)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					lightBlock2* lb2;
+					if (!stream.GET_STRUCT(lb2)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					lightLevel = lb2->lightLevel;
+					lightColor = lb2->lightColor;
+					break;
+				}
+
+				case ITEM_ATTR_TOPORDER: {
+					if (datalen != sizeof(uint8_t)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					if (!stream.GET_UCHAR(alwaysOnTopOrder)) {
+						return ERROR_INVALID_FORMAT;
+					}
+					break;
+				}
+
+				case ITEM_ATTR_WAREID: {
+					if (datalen != sizeof(uint16_t)) {
+						return ERROR_INVALID_FORMAT;
+					}
+
+					if (!stream.GET_USHORT(wareId)) {
+						return ERROR_INVALID_FORMAT;
+					}
+					break;
+				}
+
+				default: {
+					//skip unknown attributes
+					if (!stream.SKIP_N(datalen)) {
+						return ERROR_INVALID_FORMAT;
+					}
+					break;
+				}
+			}
+		}
+
+		if (reverseItemMap.find(clientId) == reverseItemMap.end()) {
+			reverseItemMap[clientId] = serverId;
+		}
+
+		// store the found item
+		if (serverId >= items.size()) {
+			items.resize(serverId + 1);
+		}
+		ItemType& iType = items[serverId];
+
+		iType.group = (itemgroup_t)type;
 		switch (type) {
 			case ITEM_GROUP_CONTAINER:
-				iType->type = ITEM_TYPE_CONTAINER;
+				iType.type = ITEM_TYPE_CONTAINER;
 				break;
 			case ITEM_GROUP_DOOR:
 				//not used
-				iType->type = ITEM_TYPE_DOOR;
+				iType.type = ITEM_TYPE_DOOR;
 				break;
 			case ITEM_GROUP_MAGICFIELD:
 				//not used
-				iType->type = ITEM_TYPE_MAGICFIELD;
+				iType.type = ITEM_TYPE_MAGICFIELD;
 				break;
 			case ITEM_GROUP_TELEPORT:
 				//not used
-				iType->type = ITEM_TYPE_TELEPORT;
+				iType.type = ITEM_TYPE_TELEPORT;
 				break;
 			case ITEM_GROUP_NONE:
 			case ITEM_GROUP_GROUND:
@@ -247,183 +354,41 @@ int32_t Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_DEPRECATED:
 				break;
 			default:
-				delete iType;
 				return ERROR_INVALID_FORMAT;
 		}
 
-		//read 4 byte flags
-		if (!stream.GET_VALUE(flags)) {
-			delete iType;
-			return ERROR_INVALID_FORMAT;
-		}
+		iType.blockSolid = hasBitSet(FLAG_BLOCK_SOLID, flags);
+		iType.blockProjectile = hasBitSet(FLAG_BLOCK_PROJECTILE, flags);
+		iType.blockPathFind = hasBitSet(FLAG_BLOCK_PATHFIND, flags);
+		iType.hasHeight = hasBitSet(FLAG_HAS_HEIGHT, flags);
+		iType.useable = hasBitSet(FLAG_USEABLE, flags);
+		iType.pickupable = hasBitSet(FLAG_PICKUPABLE, flags);
+		iType.moveable = hasBitSet(FLAG_MOVEABLE, flags);
+		iType.stackable = hasBitSet(FLAG_STACKABLE, flags);
 
-		iType->blockSolid = hasBitSet(FLAG_BLOCK_SOLID, flags);
-		iType->blockProjectile = hasBitSet(FLAG_BLOCK_PROJECTILE, flags);
-		iType->blockPathFind = hasBitSet(FLAG_BLOCK_PATHFIND, flags);
-		iType->hasHeight = hasBitSet(FLAG_HAS_HEIGHT, flags);
-		iType->useable = hasBitSet(FLAG_USEABLE, flags);
-		iType->pickupable = hasBitSet(FLAG_PICKUPABLE, flags);
-		iType->moveable = hasBitSet(FLAG_MOVEABLE, flags);
-		iType->stackable = hasBitSet(FLAG_STACKABLE, flags);
+		iType.alwaysOnTop = hasBitSet(FLAG_ALWAYSONTOP, flags);
+		iType.isVertical = hasBitSet(FLAG_VERTICAL, flags);
+		iType.isHorizontal = hasBitSet(FLAG_HORIZONTAL, flags);
+		iType.isHangable = hasBitSet(FLAG_HANGABLE, flags);
+		iType.allowDistRead = hasBitSet(FLAG_ALLOWDISTREAD, flags);
+		iType.rotable = hasBitSet(FLAG_ROTABLE, flags);
+		iType.canReadText = hasBitSet(FLAG_READABLE, flags);
+		iType.lookThrough = hasBitSet(FLAG_LOOKTHROUGH, flags);
+		iType.isAnimation = hasBitSet(FLAG_ANIMATION, flags);
+		// iType.walkStack = !hasBitSet(FLAG_FULLTILE, flags);
 
-		iType->alwaysOnTop = hasBitSet(FLAG_ALWAYSONTOP, flags);
-		iType->isVertical = hasBitSet(FLAG_VERTICAL, flags);
-		iType->isHorizontal = hasBitSet(FLAG_HORIZONTAL, flags);
-		iType->isHangable = hasBitSet(FLAG_HANGABLE, flags);
-		iType->allowDistRead = hasBitSet(FLAG_ALLOWDISTREAD, flags);
-		iType->rotable = hasBitSet(FLAG_ROTABLE, flags);
-		iType->canReadText = hasBitSet(FLAG_READABLE, flags);
-		iType->lookThrough = hasBitSet(FLAG_LOOKTHROUGH, flags);
-		iType->isAnimation = hasBitSet(FLAG_ANIMATION, flags);
-		// iType->walkStack = !hasBitSet(FLAG_FULLTILE, flags);
+		iType.id = serverId;
+		iType.clientId = clientId;
+		iType.speed = speed;
+		iType.lightLevel = lightLevel;
+		iType.lightColor = lightColor;
+		iType.wareId = wareId;
+		iType.alwaysOnTopOrder = alwaysOnTopOrder;
 
-		attribute_t attrib;
-		datasize_t datalen = 0;
-
-		while (stream.GET_VALUE(attrib)) {
-			//size of data
-			if (!stream.GET_VALUE(datalen)) {
-				delete iType;
-				return ERROR_INVALID_FORMAT;
-			}
-
-			switch (attrib) {
-				case ITEM_ATTR_SERVERID: {
-					if (datalen != sizeof(uint16_t)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					uint16_t serverid;
-
-					if (!stream.GET_USHORT(serverid)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					if (serverid > 30000 && serverid < 30100) {
-						serverid -= 30000;
-					}
-
-					iType->id = serverid;
-					break;
-				}
-
-				case ITEM_ATTR_CLIENTID: {
-					if (datalen != sizeof(uint16_t)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					uint16_t clientid;
-					if (!stream.GET_USHORT(clientid)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					iType->clientId = clientid;
-					break;
-				}
-
-				case ITEM_ATTR_SPEED: {
-					if (datalen != sizeof(uint16_t)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					uint16_t speed;
-					if (!stream.GET_USHORT(speed)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					iType->speed = speed;
-					break;
-				}
-
-				case ITEM_ATTR_LIGHT2: {
-					if (datalen != sizeof(lightBlock2)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					lightBlock2* lb2;
-					if (!stream.GET_STRUCT(lb2)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					iType->lightLevel = lb2->lightLevel;
-					iType->lightColor = lb2->lightColor;
-					break;
-				}
-
-				case ITEM_ATTR_TOPORDER: {
-					if (datalen != sizeof(uint8_t)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					uint8_t v;
-					if (!stream.GET_UCHAR(v)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					iType->alwaysOnTopOrder = v;
-					break;
-				}
-
-				case ITEM_ATTR_WAREID: {
-					if (datalen != sizeof(uint16_t)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					uint16_t v;
-					if (!stream.GET_USHORT(v)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					iType->wareId = v;
-					break;
-				}
-
-				/*
-				case ITEM_ATTR_NAME:
-				{
-					std::string name;
-					if (!stream.GET_STRING(name, datalen)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-
-					iType->marketName = name;
-					break;
-				}
-				*/
-
-				default: {
-					//skip unknown attributes
-					if (!stream.SKIP_N(datalen)) {
-						delete iType;
-						return ERROR_INVALID_FORMAT;
-					}
-					break;
-				}
-			}
-		}
-
-		if (reverseItemMap.find(iType->clientId) == reverseItemMap.end()) {
-			reverseItemMap[iType->clientId] = iType->id;
-		}
-
-		// store the found item
-		addItemType(iType);
 		node = f.getNextNode(node, type);
 	}
 
+	items.shrink_to_fit();
 	return ERROR_NONE;
 }
 
@@ -458,19 +423,6 @@ bool Items::loadFromXml()
 			}
 		}
 	}
-
-	/*
-	for (size_t i = 100, size = items.size(); i < size; ++i) {
-		if (!items[i]) {
-			break;
-		}
-
-		const ItemType& it = *items[i];
-		if (!it.marketName.empty() && it.marketName != it.name) {
-			std::cout << "ID: " << it.id << ". Market Name: " << it.marketName << ". Item Name: " << it.name << '.' << std::endl;
-		}
-	}
-	*/
 	return true;
 }
 
@@ -478,9 +430,12 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 {
 	if (id > 30000 && id < 30100) {
 		id -= 30000;
-		ItemType* iType = new ItemType();
-		iType->id = id;
-		addItemType(iType);
+
+		if (id >= items.size()) {
+			items.resize(id + 1);
+		}
+		ItemType& iType = items[id];
+		iType.id = id;
 	}
 
 	ItemType& it = getItemType(id);
@@ -962,7 +917,6 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			uint16_t value = pugi::cast<uint16_t>(valueAttribute.value());
 			it.transformToOnUse[PLAYERSEX_MALE] = value;
 			ItemType& other = getItemType(value);
-
 			if (other.transformToFree == 0) {
 				other.transformToFree = it.id;
 			}
@@ -1005,7 +959,7 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 		} else if (tmpStrValue == "alwaysontop") {
 			it.alwaysOnTop = booleanString(valueAttribute.as_string());
 		} else if (tmpStrValue == "toporder") {
-			it.alwaysOnTopOrder = pugi::cast<int32_t>(valueAttribute.value());
+			it.alwaysOnTopOrder = pugi::cast<uint16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "blocking") {
 			it.blockSolid = valueAttribute.as_bool();
 		} else if (tmpStrValue == "allowdistread") {
@@ -1025,27 +979,17 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 ItemType& Items::getItemType(size_t id)
 {
 	if (id < items.size()) {
-		ItemType* itemType = items[id];
-		if (itemType) {
-			return *itemType;
-		}
+		return items[id];
 	}
-
-	static ItemType dummyItemType; // use this for invalid ids
-	return dummyItemType;
+	return items[0];
 }
 
 const ItemType& Items::getItemType(size_t id) const
 {
 	if (id < items.size()) {
-		const ItemType* itemType = items[id];
-		if (itemType) {
-			return *itemType;
-		}
+		return items[id];
 	}
-
-	static ItemType dummyItemType; // use this for invalid ids
-	return dummyItemType;
+	return items[0];
 }
 
 const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
@@ -1054,9 +998,7 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 	if (it != reverseItemMap.end()) {
 		return getItemType(it->second);
 	}
-
-	static ItemType dummyItemType; // use this for invalid ids
-	return dummyItemType;
+	return items[0];
 }
 
 int32_t Items::getItemIdByName(const std::string& name)
@@ -1067,22 +1009,9 @@ int32_t Items::getItemIdByName(const std::string& name)
 
 	const char* itemName = name.c_str();
 	for (size_t i = 100, size = items.size(); i < size; ++i) {
-		if (!items[i]) {
-			break;
-		}
-
-		if (strcasecmp(itemName, items[i]->name.c_str()) == 0) {
+		if (strcasecmp(itemName, items[i].name.c_str()) == 0) {
 			return i;
 		}
 	}
 	return -1;
-}
-
-void Items::addItemType(ItemType* itemType)
-{
-	size_t pos = itemType->id;
-	if (pos >= items.size()) {
-		items.resize(pos + 500);
-	}
-	items[pos] = itemType;
 }

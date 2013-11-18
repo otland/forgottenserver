@@ -22,10 +22,6 @@
 
 #include "fileloader.h"
 
-typedef uint8_t attribute_t;
-typedef uint16_t datasize_t;
-typedef uint32_t flags_t;
-
 enum itemgroup_t {
 	ITEM_GROUP_NONE = 0,
 	ITEM_GROUP_GROUND,

@@ -110,12 +110,12 @@ class Condition;
 
 class ItemType
 {
-	private:
-		ItemType(const ItemType& it) {}
-
 	public:
 		ItemType();
 		~ItemType();
+
+		ItemType(const ItemType&) = delete;
+		ItemType& operator=(const ItemType&) = delete;
 
 		bool isGroundTile() const {
 			return (group == ITEM_GROUP_GROUND);
@@ -197,7 +197,6 @@ class ItemType
 		std::string pluralName;
 		std::string description;
 		std::string runeSpellName;
-		// std::string marketName;
 		std::string vocationString;
 
 		Abilities* abilities;
@@ -220,12 +219,9 @@ class ItemType
 		int32_t defense;
 		int32_t extraDefense;
 		int32_t armor;
-		int32_t alwaysOnTopOrder;
 		int32_t rotateTo;
 		int32_t runeMagLevel;
 		int32_t runeLevel;
-		int32_t lightLevel;
-		int32_t lightColor;
 
 		WeaponType_t weaponType;
 		Ammo_t ammoType;
@@ -247,6 +243,10 @@ class ItemType
 		uint16_t slotPosition;
 		uint16_t speed;
 		uint16_t wareId;
+		uint16_t lightLevel;
+		uint16_t lightColor;
+
+		uint8_t alwaysOnTopOrder;
 
 		bool floorChangeDown;
 		bool floorChangeNorth;
@@ -309,14 +309,12 @@ class Items
 		bool loadFromXml();
 		bool parseItemNode(const pugi::xml_node& itemNode, uint32_t id);
 
-		void addItemType(ItemType* itemType);
-
 		inline size_t size() const {
 			return items.size();
 		}
 
 	protected:
 		std::map<uint16_t, uint16_t> reverseItemMap;
-		std::vector<ItemType*> items;
+		std::vector<ItemType> items;
 };
 #endif

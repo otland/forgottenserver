@@ -31,9 +31,6 @@
 
 #include "beds.h"
 
-typedef uint8_t attribute_t;
-typedef uint32_t flags_t;
-
 /*
 	OTBM_ROOTV1
 	|
