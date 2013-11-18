@@ -426,7 +426,7 @@ bool Items::loadFromXml()
 	return true;
 }
 
-bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
+void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 {
 	if (id > 30000 && id < 30100) {
 		id -= 30000;
@@ -439,6 +439,10 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 	}
 
 	ItemType& it = getItemType(id);
+	if (it.id == 0) {
+		return;
+	}
+
 	it.name = itemNode.attribute("name").as_string();
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
@@ -973,7 +977,6 @@ bool Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 	if ((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 || it.transformToOnUse[PLAYERSEX_MALE] != 0) && it.type != ITEM_TYPE_BED) {
 		std::cout << "[Warning - Items::parseItemNode] Item " << it.id << " is not set as a bed-type" << std::endl;
 	}
-	return true;
 }
 
 ItemType& Items::getItemType(size_t id)
@@ -981,7 +984,7 @@ ItemType& Items::getItemType(size_t id)
 	if (id < items.size()) {
 		return items[id];
 	}
-	return items[0];
+	return items.front();
 }
 
 const ItemType& Items::getItemType(size_t id) const
@@ -989,7 +992,7 @@ const ItemType& Items::getItemType(size_t id) const
 	if (id < items.size()) {
 		return items[id];
 	}
-	return items[0];
+	return items.front();
 }
 
 const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
@@ -998,7 +1001,7 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 	if (it != reverseItemMap.end()) {
 		return getItemType(it->second);
 	}
-	return items[0];
+	return items.front();
 }
 
 int32_t Items::getItemIdByName(const std::string& name)

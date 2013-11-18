@@ -114,9 +114,6 @@ class ItemType
 		ItemType();
 		~ItemType();
 
-		ItemType(const ItemType&) = delete;
-		ItemType& operator=(const ItemType&) = delete;
-
 		bool isGroundTile() const {
 			return (group == ITEM_GROUP_GROUND);
 		}
@@ -307,7 +304,7 @@ class Items
 		static uint32_t dwBuildNumber;
 
 		bool loadFromXml();
-		bool parseItemNode(const pugi::xml_node& itemNode, uint32_t id);
+		void parseItemNode(const pugi::xml_node& itemNode, uint32_t id);
 
 		inline size_t size() const {
 			return items.size();
