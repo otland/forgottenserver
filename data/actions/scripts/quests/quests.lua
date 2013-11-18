@@ -1,6 +1,6 @@
 local annihilatorReward = {1990, 2400, 2431, 2494}
 function onUse(cid, item, fromPosition, itemEx, toPosition)
-	if item.uid > 1000 and item.uid < 21732 then
+	if item.uid > 1000 and item.uid <= 21500 then
 		local itemWeight = getItemWeight(item.uid, 1, FALSE)
 		local playerCap = getPlayerFreeCap(cid)
 		if isInArray(annihilatorReward, item.uid) == TRUE then
