@@ -69,7 +69,6 @@ s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/summon", &Commands::placeSummon},
 	{"/reload", &Commands::reloadInfo},
-	{"/owner", &Commands::setHouseOwner},
 	{"/newtype", &Commands::newType},
 	{"/newitem", &Commands::newItem},
 	{"/hide", &Commands::hide},
@@ -83,7 +82,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/serverdiag", &Commands::serverDiag},
 
 	// player commands - TODO: make them talkactions
-	{"!buyhouse", &Commands::buyHouse},
 	{"!sellhouse", &Commands::sellHouse}
 };
 
@@ -344,24 +342,6 @@ void Commands::reloadInfo(Player* player, const std::string& cmd, const std::str
 	}
 }
 
-void Commands::setHouseOwner(Player* player, const std::string& cmd, const std::string& param)
-{
-	if (player->getTile()->hasFlag(TILESTATE_HOUSE)) {
-		HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
-		if (houseTile) {
-			uint32_t guid;
-			std::string name = param;
-			if (name == "none") {
-				houseTile->getHouse()->setOwner(0);
-			} else if (IOLoginData::getGuidByName(guid, name)) {
-				houseTile->getHouse()->setOwner(guid);
-			} else {
-				player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Player not found.");
-			}
-		}
-	}
-}
-
 void Commands::sellHouse(Player* player, const std::string& cmd, const std::string& param)
 {
 	Player* tradePartner = g_game.getPlayerByName(param);
@@ -413,56 +393,6 @@ void Commands::sellHouse(Player* player, const std::string& cmd, const std::stri
 	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
 		house->resetTransferItem();
 	}
-}
-
-void Commands::buyHouse(Player* player, const std::string& cmd, const std::string& param)
-{
-	if (!player->isPremium()) {
-		player->sendCancelMessage(RET_YOUNEEDPREMIUMACCOUNT);
-		return;
-	}
-
-	Position pos = player->getPosition();
-	pos = getNextPosition(player->direction, pos);
-
-	Tile* tile = g_game.getTile(pos);
-	if (!tile) {
-		player->sendCancel("You have to be looking at the door of the house you would like to buy.");
-		return;
-	}
-
-	HouseTile* houseTile = dynamic_cast<HouseTile*>(tile);
-	if (!houseTile) {
-		player->sendCancel("You have to be looking at the door of the house you would like to buy.");
-		return;
-	}
-
-	House* house = houseTile->getHouse();
-	if (!house || !house->getDoorByPosition(pos)) {
-		player->sendCancel("You have to be looking at the door of the house you would like to buy.");
-		return;
-	}
-
-	if (house->getOwner()) {
-		player->sendCancel("This house alreadly has an owner.");
-		return;
-	}
-
-	for (const auto& it : Houses::getInstance().getHouses()) {
-		if (it.second->getOwner() == player->guid) {
-			player->sendCancel("You are already the owner of a house.");
-			return;
-		}
-	}
-
-	uint64_t price = house->getTiles().size() * g_config.getNumber(ConfigManager::HOUSE_PRICE);
-	if (!g_game.removeMoney(player, price)) {
-		player->sendCancel("You do not have enough money.");
-		return;
-	}
-
-	house->setOwner(player->guid);
-	player->sendTextMessage(MSG_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in the bank.");
 }
 
 void Commands::newType(Player* player, const std::string& cmd, const std::string& param)

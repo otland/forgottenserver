@@ -2,7 +2,6 @@
 <commands>
 	<command cmd="/reload" group="1" acctype="5" log="yes"/>
 	<command cmd="/ghost" group="2" acctype="5" log="yes"/>
-	<command cmd="/owner" group="2" acctype="5" log="yes"/>
 	<command cmd="/summon" group="2" acctype="5" log="yes"/>
 	<command cmd="/newtype" group="2" acctype="5" log="yes"/>
 	<command cmd="/raid" group="2" acctype="4" log="yes"/>
@@ -15,6 +14,5 @@
 	<command cmd="/hide" group="2" acctype="5" log="yes"/>
 	<command cmd="/newitem" group="2" acctype="5" log="yes"/>
 
-	<command cmd="!buyhouse" group="1" acctype="1" log="no"/>
 	<command cmd="!sellhouse" group="1" acctype="1" log="no"/>
 </commands>
