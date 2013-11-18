@@ -39,7 +39,7 @@ int32_t NetworkMessage::decodeHeader()
 std::string NetworkMessage::GetString(uint16_t stringlen/* = 0*/)
 {
 	if (stringlen == 0) {
-		stringlen = GetU16();
+		stringlen = get<uint16_t>();
 	}
 
 	if (!canRead(stringlen)) {
@@ -54,8 +54,8 @@ std::string NetworkMessage::GetString(uint16_t stringlen/* = 0*/)
 Position NetworkMessage::GetPosition()
 {
 	Position pos;
-	pos.x = GetU16();
-	pos.y = GetU16();
+	pos.x = get<uint16_t>();
+	pos.y = get<uint16_t>();
 	pos.z = GetByte();
 	return pos;
 }
@@ -68,7 +68,7 @@ void NetworkMessage::AddString(const std::string& value)
 		return;
 	}
 
-	AddU16(stringlen);
+	add<uint16_t>(stringlen);
 	memcpy(m_MsgBuf + m_ReadPos, value.c_str(), stringlen);
 	m_ReadPos += stringlen;
 	m_MsgSize += stringlen;
@@ -81,8 +81,8 @@ void NetworkMessage::AddString(const char* value)
 		return;
 	}
 
-	AddU16(stringlen);
-	memcpy((char*)m_MsgBuf + m_ReadPos, value, stringlen);
+	add<uint16_t>(stringlen);
+	memcpy(m_MsgBuf + m_ReadPos, value, stringlen);
 	m_ReadPos += stringlen;
 	m_MsgSize += stringlen;
 }
@@ -90,7 +90,7 @@ void NetworkMessage::AddString(const char* value)
 void NetworkMessage::AddDouble(double value, uint8_t precision/* = 2*/)
 {
 	AddByte(precision);
-	AddU32((value * std::pow((float)10, precision)) + INT_MAX);
+	add<uint32_t>((value * std::pow((float)10, precision)) + INT_MAX);
 }
 
 void NetworkMessage::AddBytes(const char* bytes, size_t size)
@@ -110,14 +110,14 @@ void NetworkMessage::AddPaddingBytes(size_t n)
 		return;
 	}
 
-	memset((void*)&m_MsgBuf[m_ReadPos], 0x33, n);
+	memset(&m_MsgBuf[m_ReadPos], 0x33, n);
 	m_MsgSize += n;
 }
 
 void NetworkMessage::AddPosition(const Position& pos)
 {
-	AddU16(pos.x);
-	AddU16(pos.y);
+	add<uint16_t>(pos.x);
+	add<uint16_t>(pos.y);
 	AddByte(pos.z);
 }
 
@@ -125,7 +125,7 @@ void NetworkMessage::AddItem(uint16_t id, uint8_t count)
 {
 	const ItemType& it = Item::items[id];
 
-	AddU16(it.clientId);
+	add<uint16_t>(it.clientId);
 
 	AddByte(0xFF);    // MARK_UNMARKED
 
@@ -144,7 +144,7 @@ void NetworkMessage::AddItem(const Item* item)
 {
 	const ItemType& it = Item::items[item->getID()];
 
-	AddU16(it.clientId);
+	add<uint16_t>(it.clientId);
 	AddByte(0xFF);    // MARK_UNMARKED
 
 	if (it.stackable) {
@@ -161,5 +161,5 @@ void NetworkMessage::AddItem(const Item* item)
 void NetworkMessage::AddItemId(uint16_t itemId)
 {
 	const ItemType& it = Item::items[itemId];
-	AddU16(it.clientId);
+	add<uint16_t>(it.clientId);
 }

@@ -62,44 +62,18 @@ class NetworkMessage
 
 			return m_RealBuf[m_ReadPos++];
 		}
-		uint16_t GetU16() {
-			if (!canRead(2)) {
+
+		template<typename T>
+		T get() {
+			if (!canRead(sizeof(T))) {
 				return 0;
 			}
 
-			uint16_t v = *(uint16_t*)(m_MsgBuf + m_ReadPos);
-			m_ReadPos += 2;
+			T v = *(T*)(m_MsgBuf + m_ReadPos);
+			m_ReadPos += sizeof(T);
 			return v;
 		}
-		uint16_t GetSpriteId() {
-			return GetU16();
-		}
-		uint32_t GetU32() {
-			if (!canRead(4)) {
-				return 0;
-			}
 
-			uint32_t v = *(uint32_t*)(m_MsgBuf + m_ReadPos);
-			m_ReadPos += 4;
-			return v;
-		}
-		uint32_t PeekU32() {
-			if (!canRead(4)) {
-				return 0;
-			}
-
-			uint32_t v = *(uint32_t*)(m_MsgBuf + m_ReadPos);
-			return v;
-		}
-		uint64_t GetU64() {
-			if (!canRead(8)) {
-				return 0;
-			}
-
-			uint64_t v = *(uint64_t*)(m_MsgBuf + m_ReadPos);
-			m_ReadPos += 8;
-			return v;
-		}
 		std::string GetString(uint16_t stringlen = 0);
 		std::string GetRaw() {
 			return GetString(m_MsgSize - m_ReadPos);
@@ -120,33 +94,18 @@ class NetworkMessage
 			m_RealBuf[m_ReadPos++] = value;
 			m_MsgSize++;
 		}
-		void AddU16(uint16_t value) {
-			if (!canAdd(2)) {
+
+		template<typename T>
+		void add(T value) {
+			if (!canAdd(sizeof(T))) {
 				return;
 			}
 
-			*(uint16_t*)(m_MsgBuf + m_ReadPos) = value;
-			m_ReadPos += 2;
-			m_MsgSize += 2;
+			*(T*)(m_MsgBuf + m_ReadPos) = value;
+			m_ReadPos += sizeof(T);
+			m_MsgSize += sizeof(T);
 		}
-		void AddU32(uint32_t value) {
-			if (!canAdd(4)) {
-				return;
-			}
 
-			*(uint32_t*)(m_MsgBuf + m_ReadPos) = value;
-			m_ReadPos += 4;
-			m_MsgSize += 4;
-		}
-		void AddU64(uint64_t value) {
-			if (!canAdd(8)) {
-				return;
-			}
-
-			*(uint64_t*)(m_MsgBuf + m_ReadPos) = value;
-			m_ReadPos += 8;
-			m_MsgSize += 8;
-		}
 		void AddBytes(const char* bytes, size_t size);
 		void AddPaddingBytes(size_t n);
 

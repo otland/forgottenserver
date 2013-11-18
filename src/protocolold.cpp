@@ -51,8 +51,8 @@ bool ProtocolOld::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	/*uint16_t clientOS =*/ msg.GetU16();
-	uint16_t version = msg.GetU16();
+	/*uint16_t clientOS =*/ msg.get<uint16_t>();
+	uint16_t version = msg.get<uint16_t>();
 	msg.SkipBytes(12);
 
 	if (version <= 760) {
@@ -65,10 +65,10 @@ bool ProtocolOld::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	uint32_t key[4];
-	key[0] = msg.GetU32();
-	key[1] = msg.GetU32();
-	key[2] = msg.GetU32();
-	key[3] = msg.GetU32();
+	key[0] = msg.get<uint32_t>();
+	key[1] = msg.get<uint32_t>();
+	key[2] = msg.get<uint32_t>();
+	key[3] = msg.get<uint32_t>();
 	enableXTEAEncryption();
 	setXTEAKey(key);
 

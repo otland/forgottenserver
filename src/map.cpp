@@ -198,12 +198,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 			}
 
 			if (tile->__queryAdd(0, creature, 1, 0) == RET_NOERROR) {
-				if (extendedPos) {
-					if (isSightClear(centerPos, tryPos, false)) {
-						foundTile = true;
-						break;
-					}
-				} else {
+				if (!extendedPos || isSightClear(centerPos, tryPos, false)) {
 					foundTile = true;
 					break;
 				}

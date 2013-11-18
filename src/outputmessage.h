@@ -40,20 +40,20 @@ class OutputMessage : public NetworkMessage
 		OutputMessage(const OutputMessage&) = delete;
 		OutputMessage& operator=(const OutputMessage&) = delete;
 
-		char* getOutputBuffer() {
-			return (char*)&m_MsgBuf[m_outputBufferStart];
+		uint8_t* getOutputBuffer() const {
+			return &m_MsgBuf[m_outputBufferStart];
 		}
 
 		void writeMessageLength() {
-			add_header((uint16_t)(m_MsgSize));
+			add_header<uint16_t>(m_MsgSize);
 		}
 
 		void addCryptoHeader(bool addChecksum) {
 			if (addChecksum) {
-				add_header((uint32_t)(adlerChecksum((uint8_t*)(m_MsgBuf + m_outputBufferStart), m_MsgSize)));
+				add_header<uint32_t>(adlerChecksum(m_MsgBuf + m_outputBufferStart, m_MsgSize));
 			}
 
-			add_header((uint16_t)(m_MsgSize));
+			add_header<uint16_t>(m_MsgSize);
 		}
 
 		enum OutputMessageState {
@@ -100,10 +100,10 @@ class OutputMessage : public NetworkMessage
 				return;
 			}
 
-			m_outputBufferStart = m_outputBufferStart - sizeof(T);
+			m_outputBufferStart -= sizeof(T);
 			*(T*)(m_MsgBuf + m_outputBufferStart) = add;
 			//added header size to the message size
-			m_MsgSize = m_MsgSize + sizeof(T);
+			m_MsgSize += sizeof(T);
 		}
 
 		void freeMessage() {

@@ -286,14 +286,15 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	uint32_t checksum;
 	int32_t len = m_msg.getMessageLength() - m_msg.getReadPos() - 4;
 	if (len > 0) {
-		checksum = adlerChecksum((uint8_t*)(m_msg.getBuffer() + m_msg.getReadPos() + 4), len);
+		checksum = adlerChecksum(m_msg.getBuffer() + m_msg.getReadPos() + 4, len);
 	} else {
 		checksum = 0;
 	}
 
-	uint32_t recvChecksum = m_msg.PeekU32();
-	if (recvChecksum == checksum) {
-		m_msg.GetU32();    // remove the checksum
+	uint32_t recvChecksum = m_msg.get<uint32_t>();
+	if (recvChecksum != checksum) {
+		// it might not have been the checksum, step back
+		m_msg.SkipBytes(-4);
 	}
 
 	if (!m_receivedFirst) {

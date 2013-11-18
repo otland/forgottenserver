@@ -92,10 +92,10 @@ void ProtocolAdmin::onRecvFirstMessage(NetworkMessage& msg)
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
 		output->AddByte(AP_MSG_HELLO);
-		output->AddU32(1); //version
+		output->add<uint32_t>(1); //version
 		output->AddString("OTADMIN");
-		output->AddU16(g_adminConfig->getProtocolPolicy()); //security policy
-		output->AddU32(g_adminConfig->getProtocolOptions()); //protocol options(encryption, ...)
+		output->add<uint16_t>(g_adminConfig->getProtocolPolicy()); //security policy
+		output->add<uint32_t>(g_adminConfig->getProtocolOptions()); //protocol options(encryption, ...)
 		OutputMessagePool::getInstance()->send(output);
 	}
 
@@ -235,10 +235,10 @@ void ProtocolAdmin::parsePacket(NetworkMessage& msg)
 					if (RSA_decrypt(rsa, msg)) {
 						m_state = NO_LOGGED_IN;
 						uint32_t k[4];
-						k[0] = msg.GetU32();
-						k[1] = msg.GetU32();
-						k[2] = msg.GetU32();
-						k[3] = msg.GetU32();
+						k[0] = msg.get<uint32_t>();
+						k[1] = msg.get<uint32_t>();
+						k[2] = msg.get<uint32_t>();
+						k[3] = msg.get<uint32_t>();
 
 						//use for in/out the new key we have
 						enableXTEAEncryption();

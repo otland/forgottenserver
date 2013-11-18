@@ -78,7 +78,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 		//Another ServerInfo protocol
 		case 0x01: {
-			uint16_t requestedInfo = msg.GetU16(); //Only a Byte is necessary, though we could add new infos here
+			uint16_t requestedInfo = msg.get<uint16_t>(); //Only a Byte is necessary, though we could add new infos here
 			std::string characterName;
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.GetString();
@@ -182,14 +182,14 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(g_config.getString(ConfigManager::MOTD));
 		output->AddString(g_config.getString(ConfigManager::LOCATION));
 		output->AddString(g_config.getString(ConfigManager::URL));
-		output->AddU64((OTSYS_TIME() - ProtocolStatus::start) / 1000);
+		output->add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
 	}
 
 	if (requestedInfo & REQUEST_PLAYERS_INFO) {
 		output->AddByte(0x20);
-		output->AddU32(g_game.getPlayersOnline());
-		output->AddU32(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-		output->AddU32(g_game.getPlayersRecord());
+		output->add<uint32_t>(g_game.getPlayersOnline());
+		output->add<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+		output->add<uint32_t>(g_game.getPlayersRecord());
 	}
 
 	if (requestedInfo & REQUEST_MAP_INFO) {
@@ -198,18 +198,18 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(g_config.getString(ConfigManager::MAP_AUTHOR));
 		uint32_t mapWidth, mapHeight;
 		g_game.getMapDimensions(mapWidth, mapHeight);
-		output->AddU16(mapWidth);
-		output->AddU16(mapHeight);
+		output->add<uint16_t>(mapWidth);
+		output->add<uint16_t>(mapHeight);
 	}
 
 	if (requestedInfo & REQUEST_EXT_PLAYERS_INFO) {
 		output->AddByte(0x21); // players info - online players list
 
 		const auto& players = g_game.getPlayers();
-		output->AddU32(players.size());
+		output->add<uint32_t>(players.size());
 		for (const auto& it : players) {
 			output->AddString(it.second->getName());
-			output->AddU32(it.second->getLevel());
+			output->add<uint32_t>(it.second->getLevel());
 		}
 	}
 

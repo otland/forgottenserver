@@ -60,8 +60,8 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	uint32_t clientip = getConnection()->getIP();
 
 	/*uint16_t clientos = */
-	msg.GetU16();
-	uint16_t version = msg.GetU16();
+	msg.get<uint16_t>();
+	uint16_t version = msg.get<uint16_t>();
 
 	if (version >= 971) {
 		msg.SkipBytes(17);
@@ -87,10 +87,10 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	uint32_t key[4];
-	key[0] = msg.GetU32();
-	key[1] = msg.GetU32();
-	key[2] = msg.GetU32();
-	key[3] = msg.GetU32();
+	key[0] = msg.get<uint32_t>();
+	key[1] = msg.get<uint32_t>();
+	key[2] = msg.get<uint32_t>();
+	key[3] = msg.get<uint32_t>();
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
@@ -155,7 +155,7 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		output->AddByte(0); // world id
 		output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
 		output->AddString(g_config.getString(ConfigManager::IP));
-		output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
 		output->AddByte(0);
 
 		output->AddByte((uint8_t)account.charList.size());
@@ -166,9 +166,9 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 		//Add premium days
 		if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-			output->AddU16(0xFFFF);    //client displays free premium
+			output->add<uint16_t>(0xFFFF);    //client displays free premium
 		} else {
-			output->AddU16(account.premiumDays);
+			output->add<uint16_t>(account.premiumDays);
 		}
 
 		OutputMessagePool::getInstance()->send(output);

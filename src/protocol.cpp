@@ -140,7 +140,7 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 
 	//
 
-	int tmp = msg.GetU16();
+	int tmp = msg.get<uint16_t>();
 	if (tmp > msg.getMessageLength() - 8) {
 		return false;
 	}
