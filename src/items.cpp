@@ -122,7 +122,7 @@ ItemType::~ItemType()
 
 Items::Items()
 {
-	items.resize(21500);
+	items.resize(21732);
 }
 
 Items::~Items()
