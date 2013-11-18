@@ -145,9 +145,7 @@ void Map::setTile(int32_t x, int32_t y, int32_t z, Tile* newTile)
 	uint32_t offsetY = y & FLOOR_MASK;
 
 	Tile*& tile = floor->tiles[offsetX][offsetY];
-	if (tile) {
-		delete tile;
-	}
+	delete tile;
 	tile = newTile;
 	newTile->qt_node = leaf;
 }
