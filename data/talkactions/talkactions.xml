@@ -25,6 +25,7 @@
 	<talkaction words="/addtutor" separator=" " script="add_tutor.lua" />
 	<talkaction words="/removetutor" separator=" " script="remove_tutor.lua" />
 	<talkaction words="/looktype" separator=" " script="looktype.lua" />
+	<talkaction words="/summon" separator=" " script="place_summon.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>

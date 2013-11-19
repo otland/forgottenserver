@@ -67,7 +67,6 @@ extern GlobalEvents* g_globalEvents;
 
 s_defcommands Commands::defined_commands[] = {
 	//admin commands
-	{"/summon", &Commands::placeSummon},
 	{"/reload", &Commands::reloadInfo},
 	{"/newitem", &Commands::newItem},
 	{"/hide", &Commands::hide},
@@ -250,27 +249,6 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 		}
 	}
 	return true;
-}
-
-void Commands::placeSummon(Player* player, const std::string& cmd, const std::string& param)
-{
-	Monster* monster = Monster::createMonster(param);
-	if (!monster) {
-		player->sendCancelMessage(RET_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-		return;
-	}
-
-	// Place the monster
-	player->addSummon(monster);
-
-	if (!g_game.placeCreature(monster, player->getPosition())) {
-		player->removeSummon(monster);
-		player->sendCancelMessage(RET_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
-	} else {
-		g_game.addMagicEffect(monster->getPosition(), NM_ME_TELEPORT);
-	}
 }
 
 void Commands::reloadInfo(Player* player, const std::string& cmd, const std::string& param)
