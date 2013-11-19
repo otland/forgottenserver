@@ -3,6 +3,10 @@ function onSay(cid, words, param)
 	if not player:getGroup():getAccess() then
 		return true
 	end
+
+	if player:getAccountType() < ACCOUNT_TYPE_GOD then
+		return false
+	end
 	
 	local house = House(getTileHouseInfo(player:getPosition()))	
 	if not house then
