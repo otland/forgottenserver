@@ -21,8 +21,8 @@ function onSay(cid, words, param)
 	else
 		db.query("UPDATE `accounts` SET `type` = " .. ACCOUNT_TYPE_NORMAL .. " WHERE `id` = " .. result.getDataInt(resultId, "account_id"))
 	end
-	result.free(resultId)
 
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You have demoted " .. result.getDataString(resultId, "name") .. " to a normal player.")
+	result.free(resultId)
 	return false
 end
