@@ -3,7 +3,6 @@
 	<command cmd="/reload" group="1" acctype="5" log="yes"/>
 	<command cmd="/ghost" group="2" acctype="5" log="yes"/>
 	<command cmd="/summon" group="2" acctype="5" log="yes"/>
-	<command cmd="/newtype" group="2" acctype="5" log="yes"/>
 	<command cmd="/raid" group="2" acctype="4" log="yes"/>
 	<command cmd="/addskill" group="2" acctype="5" log="yes"/>
 	<command cmd="/clean" group="2" acctype="5" log="yes"/>

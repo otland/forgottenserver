@@ -45,7 +45,6 @@ class Commands
 		void placeSummon(Player* player, const std::string& cmd, const std::string& param);
 		void reloadInfo(Player* player, const std::string& cmd, const std::string& param);
 		void sellHouse(Player* player, const std::string& cmd, const std::string& param);
-		void newType(Player* player, const std::string& cmd, const std::string& param);
 		void forceRaid(Player* player, const std::string& cmd, const std::string& param);
 		void addSkill(Player* player, const std::string& cmd, const std::string& param);
 		void clean(Player* player, const std::string& cmd, const std::string& param);

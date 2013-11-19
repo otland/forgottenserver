@@ -69,7 +69,6 @@ s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/summon", &Commands::placeSummon},
 	{"/reload", &Commands::reloadInfo},
-	{"/newtype", &Commands::newType},
 	{"/newitem", &Commands::newItem},
 	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
@@ -381,19 +380,6 @@ void Commands::sellHouse(Player* player, const std::string& cmd, const std::stri
 
 	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
 		house->resetTransferItem();
-	}
-}
-
-void Commands::newType(Player* player, const std::string& cmd, const std::string& param)
-{
-	int32_t lookType = atoi(param.c_str());
-
-	if (lookType >= 0 && lookType != 1 && lookType != 135 && lookType != 411 && lookType != 415 && lookType != 424 && (lookType <= 160 || lookType >= 192) && lookType != 439 && lookType != 440 && lookType != 468 && lookType != 469 && (lookType < 474 || lookType > 485) && lookType != 518 && lookType != 519 && lookType != 520 && lookType != 524 && lookType != 525 && lookType != 536 && lookType != 543 && lookType != 549 && lookType <= 575) {
-		Outfit_t newOutfit = player->getDefaultOutfit();
-		newOutfit.lookType = lookType;
-		g_game.internalCreatureChangeOutfit(player, newOutfit);
-	} else {
-		player->sendTextMessage(MSG_STATUS_SMALL, "This looktype does not exist.");
 	}
 }
 
