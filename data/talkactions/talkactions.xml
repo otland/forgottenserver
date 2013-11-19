@@ -8,6 +8,7 @@
 	<talkaction words="/down" script="down.lua" />
 	<talkaction words="/c" separator=" " script="teleport_creature_here.lua" />
 	<talkaction words="/goto" separator=" " script="teleport_to_creature.lua" />
+	<talkaction words="/owner" separator=" " script="owner.lua" />
 	<talkaction words="/t" script="teleport_home.lua" />
 	<talkaction words="/town" separator=" " script="teleport_to_town.lua" />
 	<talkaction words="/a" separator=" " script="teleport_ntiles.lua" />
@@ -24,6 +25,7 @@
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>
+	<talkaction words="!buyhouse" script="buyhouse.lua"/>
 	<talkaction words="!leavehouse" script="leavehouse.lua"/>
 	<talkaction words="!changesex" script="changesex.lua"/>
 	<talkaction words="!uptime" script="uptime.lua"/>
