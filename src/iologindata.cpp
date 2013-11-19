@@ -155,26 +155,20 @@ AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 
 void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `type` = " << accountType << " WHERE `id` = " << accountId;
-	db->executeQuery(query.str());
+	Database::getInstance()->executeQuery(query.str());
 }
 
 bool IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
-
 	if (login) {
 		query << "INSERT INTO `players_online` VALUES (" << guid << ')';
 	} else {
 		query << "DELETE FROM `players_online` WHERE `player_id` = " << guid;
 	}
-
-	return db->executeQuery(query.str());
+	return Database::getInstance()->executeQuery(query.str());
 }
 
 bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
@@ -974,7 +968,6 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)
 		propStream.init(attr, attrSize);
 
 		Item* item = Item::CreateItem(type, count);
-
 		if (item) {
 			if (!item->unserializeAttr(propStream)) {
 				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
@@ -994,22 +987,6 @@ bool IOLoginData::changeName(uint32_t guid, const std::string& newName)
 	return db->executeQuery(query.str());
 }
 
-uint32_t IOLoginData::getAccountNumberByName(const std::string& name)
-{
-	Database* db = Database::getInstance();
-	std::ostringstream query;
-	query << "SELECT `account_id` FROM `players` WHERE `name` = " << db->escapeString(name);
-
-	DBResult* result = db->storeQuery(query.str());
-	if (!result) {
-		return 0;
-	}
-
-	uint32_t accountId = result->getDataInt("account_id");
-	db->freeResult(result);
-	return accountId;
-}
-
 void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 {
 	std::ostringstream query;
@@ -1022,42 +999,38 @@ bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	DBResult* result;
 	query << "SELECT `id` FROM `houses` WHERE `highest_bidder` = " << guid << " LIMIT 1";
 
-	if ((result = db->storeQuery(query.str()))) {
-		db->freeResult(result);
-		return true;
+	DBResult* result = db->storeQuery(query.str());
+	if (!result) {
+		return false;
 	}
 
-	return false;
+	db->freeResult(result);
+	return true;
 }
 
 std::list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 {
 	std::list<VIPEntry> entries;
 
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify` FROM `account_viplist` WHERE `account_id` = " << accountId;
 
-	DBResult* result;
-
-	if ((result = db->storeQuery(query.str()))) {
+	Database* db = Database::getInstance();
+	DBResult* result = db->storeQuery(query.str());
+	if (result) {
 		do {
-			VIPEntry entry;
-			entry.guid = result->getDataInt("player_id");
-			entry.name = result->getDataString("name");
-			entry.description = result->getDataString("description");
-			entry.icon = result->getDataInt("icon");
-			entry.notify = result->getDataInt("notify") != 0;
-			entries.push_back(entry);
+			entries.emplace_back(
+				result->getDataInt("player_id"),
+				result->getDataString("name"),
+				result->getDataString("description"),
+				result->getDataInt("icon"),
+				result->getDataInt("notify") != 0
+			);
 		} while (result->next());
-
 		db->freeResult(result);
 	}
-
 	return entries;
 }
 
@@ -1081,27 +1054,21 @@ void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::str
 
 void IOLoginData::removeVIPEntry(uint32_t accountId, uint32_t guid)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "DELETE FROM `account_viplist` WHERE `account_id` = " << accountId << " AND `player_id` = " << guid;
-	db->executeQuery(query.str());
+	Database::getInstance()->executeQuery(query.str());
 }
 
 void IOLoginData::addPremiumDays(uint32_t accountId, int32_t addDays)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `premdays` = `premdays` + " << addDays << " WHERE `id` = " << accountId;
-	db->executeQuery(query.str());
+	Database::getInstance()->executeQuery(query.str());
 }
 
 void IOLoginData::removePremiumDays(uint32_t accountId, int32_t removeDays)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `premdays` = `premdays` - " << removeDays << " WHERE `id` = " << accountId;
-	db->executeQuery(query.str());
+	Database::getInstance()->executeQuery(query.str());
 }

@@ -1720,8 +1720,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getGuid", LuaScriptInterface::luaPlayerGetGuid);
 	registerMethod("Player", "getIp", LuaScriptInterface::luaPlayerGetIp);
 	registerMethod("Player", "getAccountId", LuaScriptInterface::luaPlayerGetAccountId);
-	registerMethod("Player", "getAccountType", LuaScriptInterface::luaPlayerGetAccountType);
 	registerMethod("Player", "getLastLoginSaved", LuaScriptInterface::luaPlayerGetLastLoginSaved);
+
+	registerMethod("Player", "getAccountType", LuaScriptInterface::luaPlayerGetAccountType);
+	registerMethod("Player", "setAccountType", LuaScriptInterface::luaPlayerSetAccountType);
 
 	registerMethod("Player", "getFreeCapacity", LuaScriptInterface::luaPlayerGetFreeCapacity);
 	registerMethod("Player", "getDepotItems", LuaScriptInterface::luaPlayerGetDepotItems);
@@ -7789,6 +7791,18 @@ int32_t LuaScriptInterface::luaPlayerGetAccountId(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerGetLastLoginSaved(lua_State* L)
+{
+	// player:getLastLoginSaved()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getLastLoginSaved());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerGetAccountType(lua_State* L)
 {
 	// player:getAccountType()
@@ -7801,12 +7815,15 @@ int32_t LuaScriptInterface::luaPlayerGetAccountType(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerGetLastLoginSaved(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerSetAccountType(lua_State* L)
 {
-	// player:getLastLoginSaved()
+	// player:setAccountType(accountType)
+	AccountType_t accountType = static_cast<AccountType_t>(getNumber<uint32_t>(L, 2));
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		pushNumber(L, player->getLastLoginSaved());
+		player->accountType = accountType;
+		IOLoginData::setAccountType(player->getAccount(), accountType);
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}

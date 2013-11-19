@@ -54,8 +54,6 @@ class Commands
 		void multiClientCheck(Player* player, const std::string& cmd, const std::string& param);
 		void newItem(Player* player, const std::string& cmd, const std::string& param);
 		void hide(Player* player, const std::string& cmd, const std::string& param);
-		void addTutor(Player* player, const std::string& cmd, const std::string& param);
-		void removeTutor(Player* player, const std::string& cmd, const std::string& param);
 
 		//table of commands
 		static s_defcommands defined_commands[];

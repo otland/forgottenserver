@@ -815,8 +815,10 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetGuid(lua_State* L);
 		static int32_t luaPlayerGetIp(lua_State* L);
 		static int32_t luaPlayerGetAccountId(lua_State* L);
-		static int32_t luaPlayerGetAccountType(lua_State* L);
 		static int32_t luaPlayerGetLastLoginSaved(lua_State* L);
+
+		static int32_t luaPlayerGetAccountType(lua_State* L);
+		static int32_t luaPlayerSetAccountType(lua_State* L);
 
 		static int32_t luaPlayerGetFreeCapacity(lua_State* L);
 		static int32_t luaPlayerGetDepotItems(lua_State* L);

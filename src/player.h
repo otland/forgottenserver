@@ -96,6 +96,9 @@ enum tradestate_t {
 };
 
 struct VIPEntry {
+	VIPEntry(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify)
+		: guid(guid), name(name), description(description), icon(icon), notify(notify) {}
+
 	uint32_t guid;
 	std::string name;
 	std::string description;

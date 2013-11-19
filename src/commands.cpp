@@ -77,8 +77,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/ghost", &Commands::ghost},
 	{"/clean", &Commands::clean},
 	{"/mccheck", &Commands::multiClientCheck},
-	{"/addtutor", &Commands::addTutor},
-	{"/removetutor", &Commands::removeTutor},
 	{"/serverdiag", &Commands::serverDiag},
 
 	// player commands - TODO: make them talkactions
@@ -614,53 +612,5 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 
 		ss << '.';
 		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-	}
-}
-
-void Commands::addTutor(Player* player, const std::string& cmd, const std::string& param)
-{
-	uint32_t accountId = 0;
-	std::string characterName = param;
-
-	Player* targetPlayer = g_game.getPlayerByName(characterName);
-	if (targetPlayer) {
-		targetPlayer->accountType = ACCOUNT_TYPE_TUTOR;
-		accountId = targetPlayer->getAccount();
-		characterName = targetPlayer->getName();
-	} else {
-		accountId = IOLoginData::getAccountNumberByName(characterName);
-		uint32_t guid;
-		IOLoginData::getGuidByName(guid, characterName);
-	}
-
-	if (accountId != 0 && IOLoginData::getAccountType(accountId) == ACCOUNT_TYPE_NORMAL) {
-		IOLoginData::setAccountType(accountId, ACCOUNT_TYPE_TUTOR);
-		player->sendTextMessage(MSG_INFO_DESCR, characterName + (" is now a tutor."));
-	} else {
-		player->sendTextMessage(MSG_INFO_DESCR, "A character with that name does not exist, or is already a tutor.");
-	}
-}
-
-void Commands::removeTutor(Player* player, const std::string& cmd, const std::string& param)
-{
-	uint32_t accountId = 0;
-	std::string characterName = param;
-
-	Player* targetPlayer = g_game.getPlayerByName(characterName);
-	if (targetPlayer) {
-		targetPlayer->accountType = ACCOUNT_TYPE_NORMAL;
-		accountId = targetPlayer->getAccount();
-		characterName = targetPlayer->getName();
-	} else {
-		accountId = IOLoginData::getAccountNumberByName(characterName);
-		uint32_t guid;
-		IOLoginData::getGuidByName(guid, characterName);
-	}
-
-	if (accountId != 0 && IOLoginData::getAccountType(accountId) == ACCOUNT_TYPE_TUTOR) {
-		IOLoginData::setAccountType(accountId, ACCOUNT_TYPE_NORMAL);
-		player->sendTextMessage(MSG_INFO_DESCR, characterName + (" is no longer a tutor."));
-	} else {
-		player->sendTextMessage(MSG_INFO_DESCR, "A character with that name does not exist, or is not a tutor.");
 	}
 }
