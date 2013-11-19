@@ -126,9 +126,9 @@ void House::updateDoorDescription() const
 	} else {
 		ss << "It belongs to house '" << houseName << "'. Nobody owns this house.";
 
-		Command* command = g_commands.getCommand("!buyhouse");
-		if (command && command->accountType == ACCOUNT_TYPE_NORMAL) {
-			ss << " It costs " << (houseTiles.size() * g_config.getNumber(ConfigManager::HOUSE_PRICE)) << " gold coins.";
+		const int32_t housePrice = g_config.getNumber(ConfigManager::HOUSE_PRICE);
+		if (housePrice != -1) {
+			ss << " It costs " << (houseTiles.size() * housePrice) << " gold coins.";
 		}
 	}
 

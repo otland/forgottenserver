@@ -36,7 +36,6 @@ class Commands
 		bool loadFromXml();
 		bool reload();
 
-		Command* getCommand(const std::string& cmd);
 		bool exeCommand(Player* player, const std::string& cmd);
 
 	protected:
