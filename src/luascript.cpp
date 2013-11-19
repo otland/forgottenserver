@@ -1289,9 +1289,6 @@ void LuaScriptInterface::registerFunctions()
 	//isMovable(uid)
 	lua_register(m_luaState, "isMovable", LuaScriptInterface::luaIsMoveable);
 
-	//getPlayerGUIDByName(name)
-	lua_register(m_luaState, "getPlayerGUIDByName", LuaScriptInterface::luaGetPlayerGUIDByName);
-
 	//doAddContainerItem(uid, itemid, <optional> count/subtype)
 	lua_register(m_luaState, "doAddContainerItem", LuaScriptInterface::luaDoAddContainerItem);
 
@@ -1441,9 +1438,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//cleanMap()
 	lua_register(m_luaState, "cleanMap", LuaScriptInterface::luaCleanMap);
-
-	//getAccountNumberByPlayerName(name)
-	lua_register(m_luaState, "getAccountNumberByPlayerName", LuaScriptInterface::luaGetAccountNumberByPlayerName);
 
 	//debugPrint(text)
 	lua_register(m_luaState, "debugPrint", LuaScriptInterface::luaDebugPrint);
@@ -4168,48 +4162,6 @@ int32_t LuaScriptInterface::luaIsMoveable(lua_State* L)
 	//isMovable(uid)
 	Thing* thing = getScriptEnv()->getThingByUID(popNumber(L));
 	pushBoolean(L, thing && thing->isPushable());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetAccountNumberByPlayerName(lua_State* L)
-{
-	//getAccountNumberByPlayerName(name)
-	std::string name = popString(L);
-
-	Player* player = g_game.getPlayerByName(name);
-	uint32_t value = 0;
-
-	if (player) {
-		value = player->getAccount();
-	} else {
-		value = IOLoginData::getAccountNumberByName(name);
-	}
-
-	lua_pushnumber(L, value);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerGUIDByName(lua_State* L)
-{
-	//getPlayerGUIDByName(name)
-	std::string name = popString(L);
-	uint32_t value;
-
-	Player* player = g_game.getPlayerByName(name);
-	if (player) {
-		value = player->getGUID();
-	} else {
-		uint32_t guid;
-		std::string strName(name);
-
-		if (IOLoginData::getGuidByName(guid, strName)) {
-			value = guid;
-		} else {
-			value = 0;
-		}
-	}
-
-	lua_pushnumber(L, value);
 	return 1;
 }
 
