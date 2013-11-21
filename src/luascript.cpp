@@ -1160,9 +1160,6 @@ std::string LuaScriptInterface::popFieldString(lua_State* L, const std::string& 
 
 void LuaScriptInterface::registerFunctions()
 {
-	//getPlayerFlagValue(cid, flag)
-	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
-
 	//getPlayerInstantSpellCount(cid)
 	lua_register(m_luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
 
@@ -2189,27 +2186,6 @@ void LuaScriptInterface::registerGlobalMethod(const std::string& functionName, l
 	// _G[functionName] = func
 	lua_pushcfunction(m_luaState, func);
 	lua_setglobal(m_luaState, functionName.c_str());
-}
-
-int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
-{
-	//getPlayerFlagValue(cid, flag)
-	uint32_t flagindex = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (flagindex < PlayerFlag_LastFlag) {
-			pushBoolean(L, player->hasFlag((PlayerFlags)flagindex));
-		} else {
-			reportErrorFunc("No valid flag index.");
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
 }
 
 int32_t LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
