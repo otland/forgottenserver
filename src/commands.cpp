@@ -68,7 +68,6 @@ extern GlobalEvents* g_globalEvents;
 s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/reload", &Commands::reloadInfo},
-	{"/newitem", &Commands::newItem},
 	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
 	{"/addskill", &Commands::addSkill},
@@ -365,34 +364,6 @@ void Commands::hide(Player* player, const std::string& cmd, const std::string& p
 {
 	player->setHiddenHealth(!player->isHealthHidden());
 	g_game.addCreatureHealth(player);
-}
-
-void Commands::newItem(Player* player, const std::string& cmd, const std::string& param)
-{
-	int32_t itemId = atoi(param.c_str());
-
-	for (uint32_t i = 0; i < param.length(); i++) {
-		if (!isNumber(param[i])) {
-			itemId = Item::items.getItemIdByName(param);
-			break;
-		}
-	}
-
-	if (itemId <= 0) {
-		return;
-	}
-
-	const ItemType& it = Item::items[itemId];
-	if (it.id == 0) {
-		return;
-	}
-
-	Outfit_t outfit;
-	outfit.lookTypeEx = itemId;
-
-	ConditionOutfit* outfitCondition = new ConditionOutfit(CONDITIONID_COMBAT, CONDITION_OUTFIT, -1);
-	outfitCondition->addOutfit(outfit);
-	player->addCondition(outfitCondition);
 }
 
 void Commands::forceRaid(Player* player, const std::string& cmd, const std::string& param)

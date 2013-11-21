@@ -8,7 +8,6 @@
 	<command cmd="/mccheck" group="2" acctype="5" log="yes"/>
 	<command cmd="/serverdiag" group="2" acctype="5" log="yes"/>
 	<command cmd="/hide" group="2" acctype="5" log="yes"/>
-	<command cmd="/newitem" group="2" acctype="5" log="yes"/>
 
 	<command cmd="!sellhouse" group="1" acctype="1" log="no"/>
 </commands>

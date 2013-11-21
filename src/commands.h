@@ -50,7 +50,6 @@ class Commands
 		void serverDiag(Player* player, const std::string& cmd, const std::string& param);
 		void ghost(Player* player, const std::string& cmd, const std::string& param);
 		void multiClientCheck(Player* player, const std::string& cmd, const std::string& param);
-		void newItem(Player* player, const std::string& cmd, const std::string& param);
 		void hide(Player* player, const std::string& cmd, const std::string& param);
 
 		//table of commands
