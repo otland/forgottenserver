@@ -226,6 +226,14 @@ function getAccountNumberByPlayerName(name)
 	end
 	return 0
 end
+function getPlayerFlagValue(cid, flag)
+	local player = Player(cid)
+	if player == nil then
+			return false
+	end
+
+	return bit.band(player:getGroup():getFlags(), bit.lshift(1, flag)) ~= 0
+end
 
 getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
