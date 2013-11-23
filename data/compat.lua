@@ -269,6 +269,8 @@ function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) ret
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
 function doPlayerAddExp(cid, exp, ...) local p = Player(cid) return p ~= nil and p:addExperience(exp, ...) or false end
 
+doPlayerSendDefaultCancel = doPlayerSendCancel
+
 function getMonsterTargetList(cid)
 	local monster = Monster(cid)
 	if monster == nil then
@@ -601,8 +603,9 @@ function getThing(uid)
 end
 
 function getConfigInfo(info)
-	if (type(info) ~= 'string') then return nil end
-
+	if type(info) ~= "string" then
+		return nil
+	end
 	dofile('config.lua')
 	return _G[info]
 end
@@ -619,3 +622,12 @@ function getWorldCreatures(type)
 end
 
 saveData = saveServer
+
+function getGlobalStorageValue(key)
+	return Game.getStorageValue(key) or -1
+end
+
+function setGlobalStorageValue(key, value)
+	Game.setStorageValue(key, value)
+	return true
+end

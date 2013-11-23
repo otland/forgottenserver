@@ -44,7 +44,9 @@ Spawns::Spawns()
 
 Spawns::~Spawns()
 {
-	clear();
+	for (Spawn* spawn : spawnList) {
+		delete spawn;
+	}
 }
 
 bool Spawns::loadFromXml(const std::string& _filename)
@@ -157,6 +159,7 @@ void Spawns::startup()
 void Spawns::clear()
 {
 	for (Spawn* spawn : spawnList) {
+		spawn->stopEvent();
 		delete spawn;
 	}
 
@@ -199,8 +202,6 @@ Spawn::~Spawn()
 		monster->setSpawn(nullptr);
 		monster->releaseThing2();
 	}
-
-	stopEvent();
 }
 
 bool Spawn::findPlayer(const Position& pos)
