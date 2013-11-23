@@ -6,4 +6,4 @@ before_script:
 script: |
   mkdir build && cd build
   cmake -DCMAKE_BUILD_TYPE=Release ..
-  make
+  make -j `grep processor /proc/cpuinfo | wc -l`
