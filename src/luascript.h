@@ -145,9 +145,6 @@ class ScriptEnvironment
 		static uint32_t addResult(DBResult* res);
 		static bool removeResult(uint32_t id);
 
-		static void addGlobalStorageValue(const uint32_t key, const int32_t value);
-		static bool getGlobalStorageValue(const uint32_t key, int32_t& value);
-
 		void setNpc(Npc* npc) {
 			m_curNpc = npc;
 		}
@@ -175,7 +172,6 @@ class ScriptEnvironment
 		//script event desc
 		std::string m_eventdesc;
 
-		static StorageMap m_globalStorageMap;
 		//unique id map
 		static ThingMap m_globalMap;
 
@@ -404,6 +400,8 @@ class LuaScriptInterface
 		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerMetaMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
+		void registerVariable(const std::string& tableName, const std::string& name, lua_Number value);
+		void registerGlobalVariable(const std::string& name, lua_Number value);
 
 		std::string getStackTrace(const std::string& error_desc);
 
@@ -411,7 +409,6 @@ class LuaScriptInterface
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
-		static int32_t luaDoSendDefaultCancel(lua_State* L);
 		static int32_t luaDoChangeTypeItem(lua_State* L);
 		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
@@ -461,9 +458,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerInstantSpellCount(lua_State* L);
 		static int32_t luaGetInstantSpellInfoByName(lua_State* L);
 		static int32_t luaGetInstantSpellWords(lua_State* L);
-
-		static int32_t luaGetGlobalStorageValue(lua_State* L);
-		static int32_t luaSetGlobalStorageValue(lua_State* L);
 
 		static int32_t luaGetWorldType(lua_State* L);
 		static int32_t luaGetWorldTime(lua_State* L);
@@ -599,6 +593,8 @@ class LuaScriptInterface
 
 		static int32_t luaGameGetGameState(lua_State* L);
 		static int32_t luaGameSetGameState(lua_State* L);
+
+		static int32_t luaGameGetReturnMessage(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);

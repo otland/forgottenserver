@@ -931,6 +931,192 @@ std::string getFirstLine(const std::string& str)
 	return firstLine;
 }
 
+const char* getReturnMessage(ReturnValue value)
+{
+	switch (value) {
+		case RET_DESTINATIONOUTOFREACH:
+			return "Destination is out of reach.";
+
+		case RET_NOTMOVEABLE:
+			return "You cannot move this object.";
+
+		case RET_DROPTWOHANDEDITEM:
+			return "Drop the double-handed object first.";
+
+		case RET_BOTHHANDSNEEDTOBEFREE:
+			return "Both hands need to be free.";
+
+		case RET_CANNOTBEDRESSED:
+			return "You cannot dress this object there.";
+
+		case RET_PUTTHISOBJECTINYOURHAND:
+			return "Put this object in your hand.";
+
+		case RET_PUTTHISOBJECTINBOTHHANDS:
+			return "Put this object in both hands.";
+
+		case RET_CANONLYUSEONEWEAPON:
+			return "You may only use one weapon.";
+
+		case RET_TOOFARAWAY:
+			return "Too far away.";
+
+		case RET_FIRSTGODOWNSTAIRS:
+			return "First go downstairs.";
+
+		case RET_FIRSTGOUPSTAIRS:
+			return "First go upstairs.";
+
+		case RET_NOTENOUGHCAPACITY:
+			return "This object is too heavy for you to carry.";
+
+		case RET_CONTAINERNOTENOUGHROOM:
+			return "You cannot put more objects in this container.";
+
+		case RET_NEEDEXCHANGE:
+		case RET_NOTENOUGHROOM:
+			return "There is not enough room.";
+
+		case RET_CANNOTPICKUP:
+			return "You cannot take this object.";
+
+		case RET_CANNOTTHROW:
+			return "You cannot throw there.";
+
+		case RET_THEREISNOWAY:
+			return "There is no way.";
+
+		case RET_THISISIMPOSSIBLE:
+			return "This is impossible.";
+
+		case RET_PLAYERISPZLOCKED:
+			return "You can not enter a protection zone after attacking another player.";
+
+		case RET_PLAYERISNOTINVITED:
+			return "You are not invited.";
+
+		case RET_CREATUREDOESNOTEXIST:
+			return "Creature does not exist.";
+
+		case RET_DEPOTISFULL:
+			return "You cannot put more items in this depot.";
+
+		case RET_CANNOTUSETHISOBJECT:
+			return "You cannot use this object.";
+
+		case RET_PLAYERWITHTHISNAMEISNOTONLINE:
+			return "A player with this name is not online.";
+
+		case RET_NOTREQUIREDLEVELTOUSERUNE:
+			return "You do not have the required magic level to use this rune.";
+
+		case RET_YOUAREALREADYTRADING:
+			return "You are already trading.";
+
+		case RET_THISPLAYERISALREADYTRADING:
+			return "This player is already trading.";
+
+		case RET_YOUMAYNOTLOGOUTDURINGAFIGHT:
+			return "You may not logout during or immediately after a fight!";
+
+		case RET_DIRECTPLAYERSHOOT:
+			return "You are not allowed to shoot directly on players.";
+
+		case RET_NOTENOUGHLEVEL:
+			return "You do not have enough level.";
+
+		case RET_NOTENOUGHMAGICLEVEL:
+			return "You do not have enough magic level.";
+
+		case RET_NOTENOUGHMANA:
+			return "You do not have enough mana.";
+
+		case RET_NOTENOUGHSOUL:
+			return "You do not have enough soul.";
+
+		case RET_YOUAREEXHAUSTED:
+			return "You are exhausted.";
+
+		case RET_CANONLYUSETHISRUNEONCREATURES:
+			return "You can only use this rune on creatures.";
+
+		case RET_PLAYERISNOTREACHABLE:
+			return "Player is not reachable.";
+
+		case RET_CREATUREISNOTREACHABLE:
+			return "Creature is not reachable.";
+
+		case RET_ACTIONNOTPERMITTEDINPROTECTIONZONE:
+			return "This action is not permitted in a protection zone.";
+
+		case RET_YOUMAYNOTATTACKTHISPLAYER:
+			return "You may not attack this player.";
+
+		case RET_YOUMAYNOTATTACKTHISCREATURE:
+			return "You may not attack this creature.";
+
+		case RET_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE:
+			return "You may not attack a person in a protection zone.";
+
+		case RET_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE:
+			return "You may not attack a person while you are in a protection zone.";
+
+		case RET_YOUCANONLYUSEITONCREATURES:
+			return "You can only use it on creatures.";
+
+		case RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS:
+			return "Turn secure mode off if you really want to attack unmarked players.";
+
+		case RET_YOUNEEDPREMIUMACCOUNT:
+			return "You need a premium account.";
+
+		case RET_YOUNEEDTOLEARNTHISSPELL:
+			return "You need to learn this spell first.";
+
+		case RET_YOURVOCATIONCANNOTUSETHISSPELL:
+			return "Your vocation cannot use this spell.";
+
+		case RET_YOUNEEDAWEAPONTOUSETHISSPELL:
+			return "You need to equip a weapon to use this spell.";
+
+		case RET_PLAYERISPZLOCKEDLEAVEPVPZONE:
+			return "You can not leave a pvp zone after attacking another player.";
+
+		case RET_PLAYERISPZLOCKEDENTERPVPZONE:
+			return "You can not enter a pvp zone after attacking another player.";
+
+		case RET_ACTIONNOTPERMITTEDINANOPVPZONE:
+			return "This action is not permitted in a non pvp zone.";
+
+		case RET_YOUCANNOTLOGOUTHERE:
+			return "You can not logout here.";
+
+		case RET_YOUNEEDAMAGICITEMTOCASTSPELL:
+			return "You need a magic item to cast this spell.";
+
+		case RET_CANNOTCONJUREITEMHERE:
+			return "You cannot conjure items here.";
+
+		case RET_YOUNEEDTOSPLITYOURSPEARS:
+			return "You need to split your spears first.";
+
+		case RET_NAMEISTOOAMBIGIOUS:
+			return "Name is too ambigious.";
+
+		case RET_CANONLYUSEONESHIELD:
+			return "You may use only one shield.";
+
+		case RET_NOPARTYMEMBERSINRANGE:
+			return "No party members in range.";
+
+		case RET_YOUARENOTTHEOWNER:
+			return "You are not the owner.";
+
+		default: // RET_NOTPOSSIBLE, etc
+			return "Sorry, not possible.";
+	}
+}
+
 #if !defined(_MSC_VER) || _MSC_VER < 1800
 double round(double v)
 {

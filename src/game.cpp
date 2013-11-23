@@ -4106,8 +4106,11 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 			effect = NM_ME_MAGIC_BLOOD;
 			break;
 		}
-		default:
+		default: {
+			color = TEXTCOLOR_NONE;
+			effect = NM_ME_NONE;
 			break;
+		}
 	}
 }
 
