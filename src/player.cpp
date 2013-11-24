@@ -4784,6 +4784,9 @@ uint64_t Player::getMoney() const
 
 	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
 		Item* item = inventory[i];
+		if (!item) {
+			continue;
+		}
 
 		Container* container = item->getContainer();
 		if (container) {
