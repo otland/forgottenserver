@@ -4776,3 +4776,35 @@ void Player::sendClosePrivate(uint16_t channelId)
 		client->sendClosePrivate(channelId);
 	}
 }
+
+uint64_t Player::getMoney() const
+{
+	std::list<Container*> listContainer;
+	uint64_t moneyCount = 0;
+
+	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+		Item* item = inventory[i];
+
+		Container* container = item->getContainer();
+		if (container) {
+			listContainer.push_back(container);
+		} else if (item->getWorth() != 0) {
+			moneyCount += item->getWorth();
+		}
+	}
+
+	while (!listContainer.empty()) {
+		Container* container = listContainer.front();
+		listContainer.pop_front();
+
+		for (Item* item : container->getItemList()) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
+				listContainer.push_back(tmpContainer);
+			} else if (item->getWorth() != 0) {
+				moneyCount += item->getWorth();
+			}
+		}
+	}
+	return moneyCount;
+}

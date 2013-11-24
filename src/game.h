@@ -117,7 +117,7 @@ class Game
 		                        uint32_t spriteId = 0, stackPosType_t type = STACKPOS_NORMAL);
 		void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
 
-		std::string getTradeErrorDescription(ReturnValue ret, Item* item);
+		static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
 
 		/**
 		  * Get a single tile of the map.
@@ -284,12 +284,6 @@ class Game
 		  */
 		Item* findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		                     bool depthSearch = true, int32_t subType = -1);
-
-		/**
-		  * Get the amount of money in a a cylinder
-		  * \returns the amount of money found
-		  */
-		uint64_t getMoney(const Cylinder* cylinder);
 
 		/**
 		  * Remove/Add item(s) with a monetary value

@@ -552,6 +552,8 @@ class Player : public Creature, public Cylinder
 			return RACE_BLOOD;
 		}
 
+		uint64_t getMoney() const;
+
 		//safe-trade functions
 		void setTradeState(tradestate_t state) {
 			tradeState = state;

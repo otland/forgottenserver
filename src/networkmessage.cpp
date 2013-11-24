@@ -160,6 +160,5 @@ void NetworkMessage::AddItem(const Item* item)
 
 void NetworkMessage::AddItemId(uint16_t itemId)
 {
-	const ItemType& it = Item::items[itemId];
-	add<uint16_t>(it.clientId);
+	add<uint16_t>(Item::items[itemId].clientId);
 }

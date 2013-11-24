@@ -315,6 +315,10 @@ class PropWriteStream
 			free(buffer);
 		}
 
+		// non-copyable
+		PropWriteStream(const PropWriteStream&) = delete;
+		PropWriteStream& operator=(const PropWriteStream&) = delete;
+
 		const char* getStream(uint32_t& _size) const {
 			_size = size;
 			return buffer;

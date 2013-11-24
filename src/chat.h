@@ -32,8 +32,8 @@ typedef std::map<uint32_t, Player*> InvitedMap;
 class ChatChannel
 {
 	public:
-		ChatChannel();
-		ChatChannel(uint16_t channelId, const std::string& channelName);
+		ChatChannel() {}
+		ChatChannel(uint16_t channelId, const std::string& channelName) : name(channelName), canJoinEvent(-1), onJoinEvent(-1), onLeaveEvent(-1), onSpeakEvent(-1), id(channelId), publicChannel(false) {}
 		virtual ~ChatChannel() {}
 
 		bool addUser(Player& player);
@@ -69,12 +69,13 @@ class ChatChannel
 	protected:
 		UsersMap users;
 
+		std::string name;
+
 		int32_t canJoinEvent;
 		int32_t onJoinEvent;
 		int32_t onLeaveEvent;
 		int32_t onSpeakEvent;
 
-		std::string name;
 		uint16_t id;
 		bool publicChannel;
 

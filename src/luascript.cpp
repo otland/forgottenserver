@@ -8651,7 +8651,7 @@ int32_t LuaScriptInterface::luaPlayerGetMoney(lua_State* L)
 	// player:getMoney()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		pushNumber(L, g_game.getMoney(player));
+		pushNumber(L, player->getMoney());
 	} else {
 		pushNil(L);
 	}

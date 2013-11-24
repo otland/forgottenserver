@@ -150,11 +150,11 @@ struct PositionEx : public Position
 
 	int32_t stackpos;
 
-	bool operator==(const PositionEx& p)  const {
+	bool operator==(const PositionEx& p) const {
 		return p.x == x && p.y == y && p.z == z && p.stackpos == stackpos;
 	}
 
-	bool operator!=(const PositionEx& p)  const {
+	bool operator!=(const PositionEx& p) const {
 		return p.x != x || p.y != y || p.z != z || p.stackpos != stackpos;
 	}
 };

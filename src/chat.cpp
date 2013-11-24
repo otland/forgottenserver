@@ -105,26 +105,6 @@ void PrivateChatChannel::closeChannel()
 	}
 }
 
-ChatChannel::ChatChannel()
-{
-	canJoinEvent = -1;
-	onJoinEvent = -1;
-	onLeaveEvent = -1;
-	onSpeakEvent = -1;
-	publicChannel = false;
-}
-
-ChatChannel::ChatChannel(uint16_t channelId, const std::string& channelName)
-{
-	id = channelId;
-	name = channelName;
-	canJoinEvent = -1;
-	onJoinEvent = -1;
-	onLeaveEvent = -1;
-	onSpeakEvent = -1;
-	publicChannel = false;
-}
-
 bool ChatChannel::addUser(Player& player)
 {
 	if (users.find(player.getID()) != users.end()) {
@@ -339,9 +319,7 @@ bool Chat::load()
 	}
 
 	for (pugi::xml_node channelNode = doc.child("channels").first_child(); channelNode; channelNode = channelNode.next_sibling()) {
-		ChatChannel channel;
-		channel.id = pugi::cast<uint16_t>(channelNode.attribute("id").value());
-		channel.name = channelNode.attribute("name").as_string();
+		ChatChannel channel(pugi::cast<uint16_t>(channelNode.attribute("id").value()), channelNode.attribute("name").as_string());
 		channel.publicChannel = channelNode.attribute("public").as_bool();
 
 		pugi::xml_attribute scriptAttribute = channelNode.attribute("script");

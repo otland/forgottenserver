@@ -34,7 +34,6 @@ extern Monsters g_monsters;
 extern Game g_game;
 
 #define MINSPAWN_INTERVAL 1000
-#define DEFAULTSPAWN_INTERVAL 60000
 
 Spawns::Spawns()
 {
@@ -185,14 +184,6 @@ void Spawn::startSpawnCheck()
 	if (checkSpawnEvent == 0) {
 		checkSpawnEvent = g_scheduler->addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
 	}
-}
-
-Spawn::Spawn(const Position& _pos, int32_t _radius)
-{
-	centerPos = _pos;
-	radius = _radius;
-	interval = DEFAULTSPAWN_INTERVAL;
-	checkSpawnEvent = 0;
 }
 
 Spawn::~Spawn()

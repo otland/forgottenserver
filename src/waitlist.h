@@ -49,7 +49,7 @@ class WaitingList
 		WaitList priorityWaitList;
 		WaitList waitList;
 
-		int32_t getTimeOut(int32_t slot);
+		static int32_t getTimeOut(int32_t slot);
 		WaitListIterator findClient(const Player* player, uint32_t& slot);
 		void cleanUpList();
 };

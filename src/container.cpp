@@ -804,12 +804,12 @@ ContainerIterator::~ContainerIterator() {}
 ContainerIterator::ContainerIterator(const ContainerIterator& rhs):
 	super(rhs.super), over(rhs.over), cur(rhs.cur) {}
 
-bool ContainerIterator::operator==(const ContainerIterator& rhs)
+bool ContainerIterator::operator==(const ContainerIterator& rhs) const
 {
 	return !(*this != rhs);
 }
 
-bool ContainerIterator::operator!=(const ContainerIterator& rhs)
+bool ContainerIterator::operator!=(const ContainerIterator& rhs) const
 {
 	assert(super);
 

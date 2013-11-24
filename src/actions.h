@@ -92,7 +92,7 @@ class Actions : public BaseEvents
 	protected:
 		ReturnValue internalUseItem(Player* player, const Position& pos,
 		                            uint8_t index, Item* item, uint32_t creatureId);
-		void showUseHotkeyMessage(Player* player, int32_t id, uint32_t count);
+		static void showUseHotkeyMessage(Player* player, int32_t id, uint32_t count);
 
 		virtual void clear();
 		virtual LuaScriptInterface& getScriptInterface();
