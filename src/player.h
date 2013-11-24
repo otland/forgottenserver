@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_PLAYER_H__
-#define __OTSERV_PLAYER_H__
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "creature.h"
 #include "container.h"
@@ -127,7 +127,7 @@ typedef std::vector<uint32_t> GuildWarList;
 class Player : public Creature, public Cylinder
 {
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 		static uint32_t playerCount;
 #endif
 		Player(ProtocolGame* p);

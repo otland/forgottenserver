@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,7 +39,7 @@ enum {
 uint32_t Npc::npcAutoID = 0x80000000;
 NpcScriptInterface* Npc::m_scriptInterface = nullptr;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 uint32_t Npc::npcCount = 0;
 #endif
 
@@ -79,7 +79,7 @@ Npc::Npc(const std::string& _name) :
 	m_npcEventHandler = nullptr;
 	reset();
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	npcCount++;
 #endif
 }
@@ -88,7 +88,7 @@ Npc::~Npc()
 {
 	reset();
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	npcCount--;
 #endif
 }

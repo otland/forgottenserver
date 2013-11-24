@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,17 +17,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_LUASCRIPT_H__
-#define __OTSERV_LUASCRIPT_H__
+#ifndef LUASCRIPT_H
+#define LUASCRIPT_H
 
 #include <unordered_map>
 
-extern "C"
-{
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-}
+#include <lua.hpp>
 
 #if LUA_VERSION_NUM >= 502
 // NOTE: Define LUA_COMPAT_ALL as a workaround if this doesn't work
@@ -381,7 +376,7 @@ class LuaScriptInterface
 		static void setField(lua_State* L, const char* index, const std::string& val);
 		static std::string escapeString(const std::string& string);
 
-#ifndef __LUAJIT__
+#ifndef LUAJIT_VERSION
 		static const luaL_Reg luaBitReg[13];
 #endif
 		static const luaL_Reg luaConfigManagerTable[4];
@@ -541,7 +536,7 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerJoinParty(lua_State* L);
 		static int32_t luaGetPartyMembers(lua_State* L);
 
-#ifndef __LUAJIT__
+#ifndef LUAJIT_VERSION
 		static int32_t luaBitNot(lua_State* L);
 		static int32_t luaBitAnd(lua_State* L);
 		static int32_t luaBitOr(lua_State* L);

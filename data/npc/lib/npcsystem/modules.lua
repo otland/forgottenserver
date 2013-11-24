@@ -21,8 +21,8 @@ if(Modules == nil) then
 	SHOPMODULE_BUY_ITEM_CONTAINER = 3
 
 	-- Constants used for shop mode. Notice: addBuyableItemContainer is working on all modes
-	SHOPMODULE_MODE_TALK = 1 -- Old system used before Tibia 8.2: sell/buy item name
-	SHOPMODULE_MODE_TRADE = 2 -- Trade window system introduced in Tibia 8.2
+	SHOPMODULE_MODE_TALK = 1 -- Old system used before client version 8.2: sell/buy item name
+	SHOPMODULE_MODE_TRADE = 2 -- Trade window system introduced in client version 8.2
 	SHOPMODULE_MODE_BOTH = 3 -- Both working at one time
 
 	-- Used shop mode

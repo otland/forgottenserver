@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ MuteCountMap Player::muteCountMap;
 
 uint32_t Player::playerAutoID = 0x10000000;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 uint32_t Player::playerCount = 0;
 #endif
 
@@ -188,7 +188,7 @@ Player::Player(ProtocolGame* p) :
 
 	lastQuestlogUpdate = 0;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	playerCount++;
 #endif
 }
@@ -216,7 +216,7 @@ Player::~Player()
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	playerCount--;
 #endif
 }
@@ -601,7 +601,7 @@ uint16_t Player::getClientIcons() const
 		}
 	}
 
-	// Tibia client debugs with 10 or more icons
+	// Game client debugs with 10 or more icons
 	// so let's prevent that from happening.
 	std::bitset<20> icon_bitset(static_cast<uint64_t>(icons));
 	for (size_t pos = 0, bits_set = icon_bitset.count(); bits_set >= 10; ++pos) {

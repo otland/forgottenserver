@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,15 +17,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _CONFIG_MANAGER_H
-#define _CONFIG_MANAGER_H
+#ifndef CONFIGMANAGER_H
+#define CONFIGMANAGER_H
 
-extern "C"
-{
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-}
+#include <lua.hpp>
 
 class ConfigManager
 {

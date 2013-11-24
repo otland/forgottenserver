@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -282,7 +282,7 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	std::cout << ">> Initializing gamestate" << std::endl;
 	g_game.setGameState(GAME_STATE_INIT);
 
-	// Tibia protocols
+	// Game client protocols
 	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
 	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
@@ -300,9 +300,9 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 
-#if !defined(WIN32) && !defined(__ROOT_PERMISSION__)
+#ifndef WIN32
 	if (getuid() == 0 || geteuid() == 0) {
-		std::cout << "> WARNING: " << STATUS_SERVER_NAME << " has been executed as root user, it is recommended to execute is as a normal user." << std::endl;
+		std::cout << "> Warning: " << STATUS_SERVER_NAME << " has been executed as root user, please consider running it as a normal user." << std::endl;
 	}
 #endif
 

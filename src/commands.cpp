@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@
 #include "globalevent.h"
 #include "monster.h"
 #include "scheduler.h"
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 #include "outputmessage.h"
 #include "connection.h"
 #include "admin.h"
@@ -439,7 +439,7 @@ void Commands::clean(Player* player, const std::string& cmd, const std::string& 
 
 void Commands::serverDiag(Player* player, const std::string& cmd, const std::string& param)
 {
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	std::ostringstream text;
 	text << "Server diagonostic:\n";
 	text << "World:\n";
@@ -469,7 +469,7 @@ void Commands::serverDiag(Player* player, const std::string& cmd, const std::str
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
 #else
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the __ENABLE_SERVER_DIAGNOSTIC__ flag.");
+	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
 #endif
 }
 

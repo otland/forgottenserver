@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_PROTOCOL_LOGIN_H__
-#define __OTSERV_PROTOCOL_LOGIN_H__
+#ifndef PROTOCOLLOGIN_H
+#define PROTOCOLLOGIN_H
 
 #include "protocol.h"
 
@@ -36,16 +36,16 @@ class ProtocolLogin : public Protocol
 			return "login protocol";
 		}
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 		static uint32_t protocolLoginCount;
 #endif
 		ProtocolLogin(Connection_ptr connection) : Protocol(connection) {
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 			protocolLoginCount++;
 #endif
 		}
 		virtual ~ProtocolLogin() {
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 			protocolLoginCount--;
 #endif
 		}

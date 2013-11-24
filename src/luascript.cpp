@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -1432,7 +1432,7 @@ void LuaScriptInterface::registerFunctions()
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(m_luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
-#ifndef __LUAJIT__
+#ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
 	luaL_register(m_luaState, "bit", LuaScriptInterface::luaBitReg);
@@ -4762,7 +4762,7 @@ std::string LuaScriptInterface::escapeString(const std::string& string)
 	return s;
 }
 
-#ifndef __LUAJIT__
+#ifndef LUAJIT_VERSION
 const luaL_Reg LuaScriptInterface::luaBitReg[] = {
 	//{"cast", LuaScriptInterface::luaBitCast},
 	{"bnot", LuaScriptInterface::luaBitNot},
