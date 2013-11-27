@@ -276,7 +276,7 @@ function doPlayerAddExp(cid, exp, useMult, ...)
 	if useMult then
 		exp = exp * Game.getExperienceStage(player:getLevel())
 	end
-	player:addExperience(exp, ...) or false
+	return player:addExperience(exp, ...)
 end
 function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p ~= nil and p:addManaSpent(mana * configManager.getNumber(configKeys.RATE_MAGIC)) or false end
 function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p ~= nil and p:addSkillTries(skillid, n * configManager.getNumber(configKeys.RATE_SKILL)) or false end
