@@ -785,8 +785,7 @@ std::string ucwords(std::string str)
 		return str;
 	}
 
-	str[0] = toupper(str[0]);
-
+	str[0] = toupper(str.front());
 	for (size_t i = 1; i < strLength; ++i) {
 		if (str[i - 1] == ' ') {
 			str[i] = toupper(str[i]);

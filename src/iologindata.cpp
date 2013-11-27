@@ -979,14 +979,6 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)
 	} while (result->next());
 }
 
-bool IOLoginData::changeName(uint32_t guid, const std::string& newName)
-{
-	Database* db = Database::getInstance();
-	std::ostringstream query;
-	query << "UPDATE `players` SET `name` = " << db->escapeString(newName) << " WHERE `id` = " << guid;
-	return db->executeQuery(query.str());
-}
-
 void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 {
 	std::ostringstream query;

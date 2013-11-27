@@ -1169,20 +1169,11 @@ void LuaScriptInterface::registerFunctions()
 	//getThingPos(uid)
 	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
 
-	//doPlayerChangeName(cid, newName)
-	lua_register(m_luaState, "doPlayerChangeName", LuaScriptInterface::luaDoPlayerChangeName);
-
 	//doChangeTypeItem(uid, newtype)
 	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
 
-	//doPlayerAddSkillTry(cid, skillid, n)
-	lua_register(m_luaState, "doPlayerAddSkillTry", LuaScriptInterface::luaDoPlayerAddSkillTry);
-
 	//doPlayerAddMana(cid, mana[, animationOnLoss])
 	lua_register(m_luaState, "doPlayerAddMana", LuaScriptInterface::luaDoPlayerAddMana);
-
-	//doPlayerAddManaSpent(cid, mana)
-	lua_register(m_luaState, "doPlayerAddManaSpent", LuaScriptInterface::luaDoPlayerAddManaSpent);
 
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
@@ -2473,24 +2464,6 @@ int32_t LuaScriptInterface::luaDoChangeTypeItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoPlayerAddSkillTry(lua_State* L)
-{
-	//doPlayerAddSkillTry(uid,skillid,n)
-	uint32_t n = popNumber(L);
-	uint32_t skillid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		player->addSkillAdvance((skills_t)skillid, n);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoPlayerAddMana(lua_State* L)
 {
 	//doPlayerAddMana(uid, mana[, animationOnLoss])
@@ -2514,41 +2487,6 @@ int32_t LuaScriptInterface::luaDoPlayerAddMana(lua_State* L)
 			g_game.combatChangeMana(nullptr, player, manaChange);
 		}
 
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerChangeName(lua_State* L)
-{
-	uint32_t guid = popNumber(L);
-	std::string newName = popString(L);
-
-	if (IOLoginData::changeName(guid, newName)) {
-		if (House* house = Houses::getInstance().getHouseByPlayerId(guid)) {
-			house->updateDoorDescription();
-		}
-
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddManaSpent(lua_State* L)
-{
-	//doPlayerAddManaSpent(cid,mana)
-	uint32_t mana = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		player->addManaSpent(mana);
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));

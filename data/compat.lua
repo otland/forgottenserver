@@ -268,6 +268,8 @@ function doAddMapMark(cid, pos, type, description) local p = Player(cid) return 
 function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) return p ~= nil and p:sendTextMessage(type, text, ...) or false end
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
 function doPlayerAddExp(cid, exp, ...) local p = Player(cid) return p ~= nil and p:addExperience(exp, ...) or false end
+function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p ~= nil and p:addManaSpent(mana) or false end
+function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p ~= nil and p:addSkillTries(skillid, n) or false end
 
 doPlayerSendDefaultCancel = doPlayerSendCancel
 

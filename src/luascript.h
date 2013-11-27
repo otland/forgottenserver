@@ -415,16 +415,13 @@ class LuaScriptInterface
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
 
-		static int32_t luaDoPlayerAddSkillTry(lua_State* L);
 		static int32_t luaDoPlayerAddMana(lua_State* L);
-		static int32_t luaDoPlayerAddManaSpent(lua_State* L);
 		static int32_t luaDoPlayerAddItem(lua_State* L);
 		static int32_t luaDoTileAddItemEx(lua_State* L);
 		static int32_t luaDoRelocate(lua_State* L);
 		static int32_t luaDoPlayerRemoveItem(lua_State* L);
 		static int32_t luaDoPlayerSetGuildLevel(lua_State* L);
 		static int32_t luaDoPlayerSetGuildNick(lua_State* L);
-		static int32_t luaDoPlayerChangeName(lua_State* L);
 		static int32_t luaDoSetCreatureLight(lua_State* L);
 		static int32_t luaDoSetCreatureDropLoot(lua_State* L);
 
