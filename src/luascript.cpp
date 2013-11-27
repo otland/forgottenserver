@@ -1796,6 +1796,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getLevel", LuaScriptInterface::luaPlayerGetLevel);
 
 	registerMethod("Player", "getMagicLevel", LuaScriptInterface::luaPlayerGetMagicLevel);
+	registerMethod("Player", "getBaseMagicLevel", LuaScriptInterface::luaPlayerGetBaseMagicLevel);
 	registerMethod("Player", "getManaSpent", LuaScriptInterface::luaPlayerGetManaSpent);
 	registerMethod("Player", "addManaSpent", LuaScriptInterface::luaPlayerAddManaSpent);
 
@@ -7930,23 +7931,16 @@ int32_t LuaScriptInterface::luaPlayerGetExperience(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 {
-	// player:addExperience(experience[, useMultiplier = false[, sendText = false]])
-	int32_t parameters = getStackTop(L);
-
+	// player:addExperience(experience[, sendText = false])
 	bool sendText = false;
-	if (parameters >= 4) {
-		sendText = getBoolean(L, 4);
-	}
-
-	bool useMultiplier = false;
-	if (parameters >= 3) {
-		useMultiplier = getBoolean(L, 3);
+	if (getStackTop(L) >= 3) {
+		sendText = getBoolean(L, 3);
 	}
 
 	int64_t experience = getNumber<int64_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->addExperience(experience, useMultiplier, sendText);
+		player->addExperience(experience, sendText);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
@@ -7978,6 +7972,18 @@ int32_t LuaScriptInterface::luaPlayerGetMagicLevel(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerGetBaseMagicLevel(lua_State* L)
+{
+	// player:getBaseMagicLevel()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getBaseMagicLevel());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerGetManaSpent(lua_State* L)
 {
 	// player:getManaSpent()
@@ -7992,15 +7998,11 @@ int32_t LuaScriptInterface::luaPlayerGetManaSpent(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerAddManaSpent(lua_State* L)
 {
-	// player:addManaSpent(amount[, useMultiplier = true])
-	bool useMultiplier = true;
-	if (getStackTop(L) >= 3) {
-		useMultiplier = getBoolean(L, 3);
-	}
+	// player:addManaSpent(amount)
 	uint64_t amount = getNumber<uint64_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->addManaSpent(amount, useMultiplier);
+		player->addManaSpent(amount);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);

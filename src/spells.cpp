@@ -835,7 +835,7 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const
 {
 	if (manaCost > 0) {
-		player->addManaSpent(manaCost);
+		player->addManaSpent(manaCost * g_config.getNumber(ConfigManager::RATE_MAGIC));
 		player->changeMana(-(int32_t)manaCost);
 	}
 

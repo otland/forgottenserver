@@ -70,7 +70,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/reload", &Commands::reloadInfo},
 	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
-	{"/addskill", &Commands::addSkill},
 	{"/ghost", &Commands::ghost},
 	{"/clean", &Commands::clean},
 	{"/mccheck", &Commands::multiClientCheck},
@@ -399,30 +398,6 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 	}
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
-}
-
-void Commands::addSkill(Player* player, const std::string& cmd, const std::string& param)
-{
-	Tokenizer tokens(param, boost::char_separator<char>(","));
-
-	auto it = tokens.begin();
-	std::string playerName = parseNextParam(it, tokens.end());
-
-	Player* paramPlayer = g_game.getPlayerByName(playerName);
-	if (!paramPlayer) {
-		player->sendTextMessage(MSG_STATUS_SMALL, "Couldn't find target.");
-		return;
-	}
-
-	std::string skill = asLowerCaseString(parseNextParam(it, tokens.end()));
-	if (!skill.empty() && (skill[0] == 'l' || skill[0] == 'e')) {
-		paramPlayer->addExperience(Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience, false, false);
-	} else if (!skill.empty() && skill[0] == 'm') {
-		paramPlayer->addManaSpent(paramPlayer->vocation->getReqMana(paramPlayer->getBaseMagicLevel() + 1) - paramPlayer->manaSpent, false);
-	} else {
-		skills_t skillId = getSkillId(skill);
-		paramPlayer->addSkillAdvance(skillId, paramPlayer->vocation->getReqSkillTries(skillId, paramPlayer->getSkill(skillId, SKILL_LEVEL) + 1));
-	}
 }
 
 void Commands::clean(Player* player, const std::string& cmd, const std::string& param)

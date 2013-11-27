@@ -676,8 +676,6 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 	}
 
 	bool sendUpdateSkills = false;
-	count *= g_config.getNumber(ConfigManager::RATE_SKILL);
-
 	while ((skills[skill][SKILL_TRIES] + count) >= nextReqTries) {
 		count -= nextReqTries - skills[skill][SKILL_TRIES];
 		skills[skill][SKILL_LEVEL]++;
@@ -1811,7 +1809,7 @@ void Player::drainMana(Creature* attacker, int32_t manaLoss)
 	sendStats();
 }
 
-void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
+void Player::addManaSpent(uint64_t amount)
 {
 	if (amount == 0 || hasFlag(PlayerFlag_NotGainMana)) {
 		return;
@@ -1824,12 +1822,7 @@ void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
 		return;
 	}
 
-	if (withMultiplier) {
-		amount *= g_config.getNumber(ConfigManager::RATE_MAGIC);
-	}
-
 	bool sendUpdateStats = false;
-
 	while ((manaSpent + amount) >= nextReqMana) {
 		amount -= nextReqMana - manaSpent;
 
@@ -1871,7 +1864,7 @@ void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
 	}
 }
 
-void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText/* = false*/, bool applyStaminaChange/* = false*/)
+void Player::addExperience(uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -1880,10 +1873,6 @@ void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText
 		levelPercent = 0;
 		sendStats();
 		return;
-	}
-
-	if (useMult) {
-		exp *= g_game.getExperienceStage(level);
 	}
 
 	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
@@ -1987,7 +1976,7 @@ void Player::onBlockHit(BlockType_t blockType)
 		--shieldBlockCount;
 
 		if (hasShield()) {
-			addSkillAdvance(SKILL_SHIELD, 1);
+			addSkillAdvance(SKILL_SHIELD, g_config.getNumber(ConfigManager::RATE_SKILL));
 		}
 	}
 }
@@ -3785,7 +3774,7 @@ void Player::gainExperience(uint64_t gainExp)
 
 		uint64_t oldExperience = experience;
 
-		addExperience(gainExp, true, true, true);
+		addExperience(gainExp * g_game.getExperienceStage(level), true, true);
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;

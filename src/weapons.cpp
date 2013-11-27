@@ -394,7 +394,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 
 	Combat::doCombatHealth(player, target, damage, params);
 	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
-		player->addSkillAdvance(SKILL_FIST, 1);
+		player->addSkillAdvance(SKILL_FIST, g_config.getNumber(ConfigManager::RATE_SKILL));
 	}
 
 	return true;
@@ -442,16 +442,15 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 {
 	if (!player->hasFlag(PlayerFlag_NotGainSkill)) {
 		skills_t skillType;
-		uint32_t skillPoint = 0;
-
+		uint32_t skillPoint;
 		if (getSkillType(player, item, skillType, skillPoint)) {
-			player->addSkillAdvance(skillType, skillPoint);
+			player->addSkillAdvance(skillType, skillPoint * g_config.getNumber(ConfigManager::RATE_SKILL));
 		}
 	}
 
 	int32_t manaCost = getManaCost(player);
 	if (manaCost > 0) {
-		player->addManaSpent(manaCost);
+		player->addManaSpent(manaCost * g_config.getNumber(ConfigManager::RATE_MAGIC));
 		player->changeMana(-manaCost);
 	}
 
@@ -573,9 +572,10 @@ void WeaponMelee::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 bool WeaponMelee::getSkillType(const Player* player, const Item* item,
                                skills_t& skill, uint32_t& skillpoint) const
 {
-	skillpoint = 0;
 	if (player->getAddAttackSkill() && player->getLastAttackBlockType() != BLOCK_IMMUNITY) {
 		skillpoint = 1;
+	} else {
+		skillpoint = 0;
 	}
 
 	WeaponType_t weaponType = item->getWeaponType();
@@ -961,7 +961,6 @@ bool WeaponDistance::getSkillType(const Player* player, const Item* item,
                                   skills_t& skill, uint32_t& skillpoint) const
 {
 	skill = SKILL_DIST;
-	skillpoint = 0;
 
 	if (player->getAddAttackSkill()) {
 		switch (player->getLastAttackBlockType()) {

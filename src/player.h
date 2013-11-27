@@ -654,7 +654,7 @@ class Player : public Creature, public Cylinder
 
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 		virtual void drainMana(Creature* attacker, int32_t manaLoss);
-		void addManaSpent(uint64_t amount, bool withMultiplier = true);
+		void addManaSpent(uint64_t amount);
 		void addSkillAdvance(skills_t skill, uint32_t count);
 
 		virtual int32_t getArmor() const;
@@ -1166,7 +1166,7 @@ class Player : public Creature, public Cylinder
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
 		void gainExperience(uint64_t exp);
-		void addExperience(uint64_t exp, bool useMult = false, bool sendText = false, bool applyStaminaChange = false);
+		void addExperience(uint64_t exp, bool sendText = false, bool applyStaminaChange = false);
 
 		void updateInventoryWeight();
 		void postUpdateGoods(uint32_t itemId);

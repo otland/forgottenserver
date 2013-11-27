@@ -720,27 +720,6 @@ std::string getSkillName(uint16_t skillid)
 	}
 }
 
-skills_t getSkillId(const std::string& param)
-{
-	if (param == "fist") {
-		return SKILL_FIST;
-	} else if (param == "club") {
-		return SKILL_CLUB;
-	} else if (param == "sword") {
-		return SKILL_SWORD;
-	} else if (param == "axe") {
-		return SKILL_AXE;
-	} else if (param == "distance" || param == "dist") {
-		return SKILL_DIST;
-	} else if (param == "shielding" || param == "shield") {
-		return SKILL_SHIELD;
-	} else if (param == "fishing" || param == "fish") {
-		return SKILL_FISH;
-	} else {
-		return SKILL_FIST;
-	}
-}
-
 uint32_t adlerChecksum(uint8_t* data, size_t length)
 {
 	if (length > NETWORKMESSAGE_MAXSIZE) {
