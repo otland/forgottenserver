@@ -455,7 +455,6 @@ class LuaScriptInterface
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
-		static int32_t luaGetPlayerByNameWildcard(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
 
 		static int32_t luaGetPlayerInstantSpellInfo(lua_State* L);
@@ -600,6 +599,8 @@ class LuaScriptInterface
 
 		static int32_t luaGameGetGameState(lua_State* L);
 		static int32_t luaGameSetGameState(lua_State* L);
+
+		static int32_t luaGameGetPlayerByNameWildcard(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);

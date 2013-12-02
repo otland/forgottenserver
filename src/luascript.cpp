@@ -1163,9 +1163,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFlagValue(cid, flag)
 	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
 
-	//getPlayerByNameWildcard(string[, pushRet = false])
-	lua_register(m_luaState, "getPlayerByNameWildcard", LuaScriptInterface::luaGetPlayerByNameWildcard);
-
 	//getPlayerInstantSpellCount(cid)
 	lua_register(m_luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
 
@@ -1499,6 +1496,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
+
+	registerMethod("Game", "getPlayerByNameWildcard", LuaScriptInterface::luaGameGetPlayerByNameWildcard);
 
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
@@ -2211,27 +2210,6 @@ int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerByNameWildcard(lua_State* L)
-{
-	//getPlayerByNameWildcard(string[, pushRet = false])
-	std::string string = popString(L);
-	Player* player = nullptr;
-	bool pushRet = false;
-	if (lua_gettop(L) > 1) {
-		pushRet = popBoolean(L);
-	}
-
-	ReturnValue ret = g_game.getPlayerByNameWildcard(string, player);
-	if (ret == RET_NOERROR) {
-		lua_pushnumber(L, player->getID());
-	} else if (pushRet) {
-		lua_pushnumber(L, ret);
-	} else {
-		lua_pushnil(L);
 	}
 	return 1;
 }
@@ -5144,6 +5122,26 @@ int32_t LuaScriptInterface::luaGameSetGameState(lua_State* L)
 	GameState_t state = static_cast<GameState_t>(getNumber<int64_t>(L, 1));
 	g_game.setGameState(state);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetPlayerByNameWildcard(lua_State* L)
+{
+	// Game.getPlayerByNameWildcard(string)
+	std::string string = getString(L, 1);
+	Player* player = nullptr;
+
+	ReturnValue ret = g_game.getPlayerByNameWildcard(string, player);
+	if (ret == RET_NOERROR) {
+		if (player) {
+			pushUserdata<Player>(L, player);
+			setMetatable(L, -1, "Player");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNumber(L, ret);
+	}
 	return 1;
 }
 
