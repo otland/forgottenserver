@@ -7727,7 +7727,13 @@ int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 	if (isNumber(L, 2)) {
 		player = g_game.getPlayerByID(getNumber<uint32_t>(L, 2));
 	} else if (isString(L, 2)) {
-		player = g_game.getPlayerByName(getString(L, 2));
+		ReturnValue returnValue = g_game.getPlayerByNameWildcard(getString(L, 2), player);
+
+		if (returnValue != RET_NOERROR) {
+			pushNil(L);
+			pushNumber(L, returnValue);
+			return 2;
+		}
 	}
 
 	if (player) {
