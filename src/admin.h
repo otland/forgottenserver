@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ADMIN_H
-#define ADMIN_H
+#ifndef FS_ADMIN_H_6B5C0B3A0C5E4C49A806E3B224CF6787
+#define FS_ADMIN_H_6B5C0B3A0C5E4C49A806E3B224CF6787
 
 // -> server
 // command(1 byte) | size(2 bytes) | parameters(size bytes)

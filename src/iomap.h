@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef IOMAP_H
-#define IOMAP_H
+#ifndef FS_IOMAP_H_8085D4B1037A44288494A52FDBB775E4
+#define FS_IOMAP_H_8085D4B1037A44288494A52FDBB775E4
 
 #include "item.h"
 #include "map.h"

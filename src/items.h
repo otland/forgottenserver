@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ITEMS_H
-#define ITEMS_H
+#ifndef FS_ITEMS_H_4E2221634ABA45FE85BA50F710669B3C
+#define FS_ITEMS_H_4E2221634ABA45FE85BA50F710669B3C
 
 #include "const.h"
 #include "enums.h"

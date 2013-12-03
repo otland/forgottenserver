@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef GROUPS_H
-#define GROUPS_H
+#ifndef FS_GROUPS_H_EE39438337D148E1983FB79D936DD8F3
+#define FS_GROUPS_H_EE39438337D148E1983FB79D936DD8F3
 
 struct Group {
 	std::string name;

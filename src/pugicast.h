@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef PUGICAST_H
-#define PUGICAST_H
+#ifndef FS_PUGICAST_H_07810DF7954D411EB14A16C3ED2A7548
+#define FS_PUGICAST_H_07810DF7954D411EB14A16C3ED2A7548
 
 #include <boost/lexical_cast.hpp>
 

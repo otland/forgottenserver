@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef STATUS_H
-#define STATUS_H
+#ifndef FS_STATUS_H_8B28B354D65B4C0483E37AD1CA316EB4
+#define FS_STATUS_H_8B28B354D65B4C0483E37AD1CA316EB4
 
 #include "networkmessage.h"
 #include "protocol.h"

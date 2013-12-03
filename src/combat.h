@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef COMBAT_H
-#define COMBAT_H
+#ifndef FS_COMBAT_H_B02CE79230FC43708699EE91FCC8F7CC
+#define FS_COMBAT_H_B02CE79230FC43708699EE91FCC8F7CC
 
 #include "thing.h"
 #include "condition.h"

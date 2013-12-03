@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ITEMLOADER_H
-#define ITEMLOADER_H
+#ifndef FS_ITEMLOADER_H_107F1D3EECC94CD0A0F528843010D5D4
+#define FS_ITEMLOADER_H_107F1D3EECC94CD0A0F528843010D5D4
 
 #include "fileloader.h"
 
