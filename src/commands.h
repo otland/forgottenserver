@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_COMMANDS_H__
-#define __OTSERV_COMMANDS_H__
+#ifndef FS_COMMANDS_H_C95A575CCADF434699D26CD042690970
+#define FS_COMMANDS_H_C95A575CCADF434699D26CD042690970
 
 #include "enums.h"
 
@@ -45,7 +45,6 @@ class Commands
 		void reloadInfo(Player* player, const std::string& cmd, const std::string& param);
 		void sellHouse(Player* player, const std::string& cmd, const std::string& param);
 		void forceRaid(Player* player, const std::string& cmd, const std::string& param);
-		void addSkill(Player* player, const std::string& cmd, const std::string& param);
 		void clean(Player* player, const std::string& cmd, const std::string& param);
 		void serverDiag(Player* player, const std::string& cmd, const std::string& param);
 		void ghost(Player* player, const std::string& cmd, const std::string& param);

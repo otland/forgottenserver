@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@
 #include "globalevent.h"
 #include "monster.h"
 #include "scheduler.h"
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 #include "outputmessage.h"
 #include "connection.h"
 #include "admin.h"
@@ -70,7 +70,6 @@ s_defcommands Commands::defined_commands[] = {
 	{"/reload", &Commands::reloadInfo},
 	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
-	{"/addskill", &Commands::addSkill},
 	{"/ghost", &Commands::ghost},
 	{"/clean", &Commands::clean},
 	{"/mccheck", &Commands::multiClientCheck},
@@ -401,30 +400,6 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
 }
 
-void Commands::addSkill(Player* player, const std::string& cmd, const std::string& param)
-{
-	Tokenizer tokens(param, boost::char_separator<char>(","));
-
-	auto it = tokens.begin();
-	std::string playerName = parseNextParam(it, tokens.end());
-
-	Player* paramPlayer = g_game.getPlayerByName(playerName);
-	if (!paramPlayer) {
-		player->sendTextMessage(MSG_STATUS_SMALL, "Couldn't find target.");
-		return;
-	}
-
-	std::string skill = asLowerCaseString(parseNextParam(it, tokens.end()));
-	if (!skill.empty() && (skill[0] == 'l' || skill[0] == 'e')) {
-		paramPlayer->addExperience(Player::getExpForLevel(paramPlayer->getLevel() + 1) - paramPlayer->experience, false, false);
-	} else if (!skill.empty() && skill[0] == 'm') {
-		paramPlayer->addManaSpent(paramPlayer->vocation->getReqMana(paramPlayer->getBaseMagicLevel() + 1) - paramPlayer->manaSpent, false);
-	} else {
-		skills_t skillId = getSkillId(skill);
-		paramPlayer->addSkillAdvance(skillId, paramPlayer->vocation->getReqSkillTries(skillId, paramPlayer->getSkill(skillId, SKILL_LEVEL) + 1));
-	}
-}
-
 void Commands::clean(Player* player, const std::string& cmd, const std::string& param)
 {
 	uint32_t count = g_game.getMap()->clean();
@@ -439,7 +414,7 @@ void Commands::clean(Player* player, const std::string& cmd, const std::string& 
 
 void Commands::serverDiag(Player* player, const std::string& cmd, const std::string& param)
 {
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	std::ostringstream text;
 	text << "Server diagonostic:\n";
 	text << "World:\n";
@@ -469,7 +444,7 @@ void Commands::serverDiag(Player* player, const std::string& cmd, const std::str
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
 #else
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the __ENABLE_SERVER_DIAGNOSTIC__ flag.");
+	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
 #endif
 }
 

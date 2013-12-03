@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_SPAWN_H__
-#define __OTSERV_SPAWN_H__
+#ifndef FS_SPAWN_H_1A86089E080846A9AE53ED12E7AE863B
+#define FS_SPAWN_H_1A86089E080846A9AE53ED12E7AE863B
 
 #include "tile.h"
 #include "position.h"
@@ -37,7 +37,7 @@ class Spawns
 			return &instance;
 		}
 
-		bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
+		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
 		~Spawns();
 
@@ -67,7 +67,7 @@ struct spawnBlock_t {
 class Spawn
 {
 	public:
-		Spawn(const Position& _pos, int32_t _radius);
+		Spawn(const Position& pos, int32_t radius) : centerPos(pos), radius(radius), interval(60000), checkSpawnEvent() {}
 		~Spawn();
 
 		bool addMonster(const std::string& _name, const Position& _pos, Direction _dir, uint32_t _interval);
@@ -85,21 +85,21 @@ class Spawn
 		void cleanup();
 
 	private:
-		Position centerPos;
-		int32_t radius;
-
-		//map of creatures in the spawn
-		std::map<uint32_t, spawnBlock_t> spawnMap;
-
 		//map of the spawned creatures
 		typedef std::multimap<uint32_t, Monster*, std::less<uint32_t>> SpawnedMap;
 		typedef SpawnedMap::value_type spawned_pair;
 		SpawnedMap spawnedMap;
 
+		//map of creatures in the spawn
+		std::map<uint32_t, spawnBlock_t> spawnMap;
+
+		Position centerPos;
+		int32_t radius;
+
 		uint32_t interval;
 		uint32_t checkSpawnEvent;
 
-		bool findPlayer(const Position& pos);
+		static bool findPlayer(const Position& pos);
 		bool spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup = false);
 		void checkSpawn();
 };

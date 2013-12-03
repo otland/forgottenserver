@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,6 @@ extern Monsters g_monsters;
 extern Game g_game;
 
 #define MINSPAWN_INTERVAL 1000
-#define DEFAULTSPAWN_INTERVAL 60000
 
 Spawns::Spawns()
 {
@@ -44,7 +43,9 @@ Spawns::Spawns()
 
 Spawns::~Spawns()
 {
-	clear();
+	for (Spawn* spawn : spawnList) {
+		delete spawn;
+	}
 }
 
 bool Spawns::loadFromXml(const std::string& _filename)
@@ -157,6 +158,7 @@ void Spawns::startup()
 void Spawns::clear()
 {
 	for (Spawn* spawn : spawnList) {
+		spawn->stopEvent();
 		delete spawn;
 	}
 
@@ -184,14 +186,6 @@ void Spawn::startSpawnCheck()
 	}
 }
 
-Spawn::Spawn(const Position& _pos, int32_t _radius)
-{
-	centerPos = _pos;
-	radius = _radius;
-	interval = DEFAULTSPAWN_INTERVAL;
-	checkSpawnEvent = 0;
-}
-
 Spawn::~Spawn()
 {
 	for (const auto& it : spawnedMap) {
@@ -199,8 +193,6 @@ Spawn::~Spawn()
 		monster->setSpawn(nullptr);
 		monster->releaseThing2();
 	}
-
-	stopEvent();
 }
 
 bool Spawn::findPlayer(const Position& pos)

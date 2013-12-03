@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __GROUPS_H__
-#define __GROUPS_H__
+#ifndef FS_GROUPS_H_EE39438337D148E1983FB79D936DD8F3
+#define FS_GROUPS_H_EE39438337D148E1983FB79D936DD8F3
 
 struct Group {
 	std::string name;

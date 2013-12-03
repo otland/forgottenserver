@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -804,12 +804,12 @@ ContainerIterator::~ContainerIterator() {}
 ContainerIterator::ContainerIterator(const ContainerIterator& rhs):
 	super(rhs.super), over(rhs.over), cur(rhs.cur) {}
 
-bool ContainerIterator::operator==(const ContainerIterator& rhs)
+bool ContainerIterator::operator==(const ContainerIterator& rhs) const
 {
 	return !(*this != rhs);
 }
 
-bool ContainerIterator::operator!=(const ContainerIterator& rhs)
+bool ContainerIterator::operator!=(const ContainerIterator& rhs) const
 {
 	assert(super);
 

@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 Chat g_chat;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 uint32_t ProtocolGame::protocolGameCount = 0;
 #endif
 
@@ -79,7 +79,7 @@ ProtocolGame::ProtocolGame(Connection_ptr connection) :
 	m_debugAssertSent(false),
 	m_acceptPackets(false)
 {
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	protocolGameCount++;
 #endif
 }
@@ -87,7 +87,7 @@ ProtocolGame::ProtocolGame(Connection_ptr connection) :
 ProtocolGame::~ProtocolGame()
 {
 	player = nullptr;
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	protocolGameCount--;
 #endif
 }
@@ -1704,7 +1704,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 {
 	NetworkMessage msg;
 	msg.AddByte(0x7B);
-	msg.add<uint64_t>(g_game.getMoney(player));
+	msg.add<uint64_t>(player->getMoney());
 
 	std::map<uint32_t, uint32_t> saleMap;
 
@@ -2790,7 +2790,7 @@ void ProtocolGame::sendOutfitWindow()
 			&outfit.name,
 			addons
 		);
-		if (protocolOutfits.size() == 50) { // Tibia client doesn't allow more than 50 outfits
+		if (protocolOutfits.size() == 50) { // Game client doesn't allow more than 50 outfits
 			break;
 		}
 	}

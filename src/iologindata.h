@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __IOLOGINDATA_H
-#define __IOLOGINDATA_H
+#ifndef FS_IOLOGINDATA_H_28B0440BEC594654AC0F4E1A5E42B2EF
+#define FS_IOLOGINDATA_H_28B0440BEC594654AC0F4E1A5E42B2EF
 
 #include "account.h"
 #include "player.h"
@@ -49,7 +49,6 @@ class IOLoginData
 		static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
 		static bool getNameByGuid(uint32_t guid, std::string& name);
 		static bool formatPlayerName(std::string& name);
-		static bool changeName(uint32_t guid, const std::string& newName);
 		static bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 		static bool hasBiddedOnHouse(uint32_t guid);

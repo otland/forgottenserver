@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ MuteCountMap Player::muteCountMap;
 
 uint32_t Player::playerAutoID = 0x10000000;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 uint32_t Player::playerCount = 0;
 #endif
 
@@ -188,7 +188,7 @@ Player::Player(ProtocolGame* p) :
 
 	lastQuestlogUpdate = 0;
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	playerCount++;
 #endif
 }
@@ -216,7 +216,7 @@ Player::~Player()
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 	playerCount--;
 #endif
 }
@@ -601,7 +601,7 @@ uint16_t Player::getClientIcons() const
 		}
 	}
 
-	// Tibia client debugs with 10 or more icons
+	// Game client debugs with 10 or more icons
 	// so let's prevent that from happening.
 	std::bitset<20> icon_bitset(static_cast<uint64_t>(icons));
 	for (size_t pos = 0, bits_set = icon_bitset.count(); bits_set >= 10; ++pos) {
@@ -676,8 +676,6 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 	}
 
 	bool sendUpdateSkills = false;
-	count *= g_config.getNumber(ConfigManager::RATE_SKILL);
-
 	while ((skills[skill][SKILL_TRIES] + count) >= nextReqTries) {
 		count -= nextReqTries - skills[skill][SKILL_TRIES];
 		skills[skill][SKILL_LEVEL]++;
@@ -1112,249 +1110,7 @@ DepotLocker* Player::getDepotLocker(uint32_t depotId)
 
 void Player::sendCancelMessage(ReturnValue message) const
 {
-	switch (message) {
-		case RET_DESTINATIONOUTOFREACH:
-			sendCancel("Destination is out of reach.");
-			break;
-
-		case RET_NOTMOVEABLE:
-			sendCancel("You cannot move this object.");
-			break;
-
-		case RET_DROPTWOHANDEDITEM:
-			sendCancel("Drop the double-handed object first.");
-			break;
-
-		case RET_BOTHHANDSNEEDTOBEFREE:
-			sendCancel("Both hands need to be free.");
-			break;
-
-		case RET_CANNOTBEDRESSED:
-			sendCancel("You cannot dress this object there.");
-			break;
-
-		case RET_PUTTHISOBJECTINYOURHAND:
-			sendCancel("Put this object in your hand.");
-			break;
-
-		case RET_PUTTHISOBJECTINBOTHHANDS:
-			sendCancel("Put this object in both hands.");
-			break;
-
-		case RET_CANONLYUSEONEWEAPON:
-			sendCancel("You may only use one weapon.");
-			break;
-
-		case RET_TOOFARAWAY:
-			sendCancel("Too far away.");
-			break;
-
-		case RET_FIRSTGODOWNSTAIRS:
-			sendCancel("First go downstairs.");
-			break;
-
-		case RET_FIRSTGOUPSTAIRS:
-			sendCancel("First go upstairs.");
-			break;
-
-		case RET_NOTENOUGHCAPACITY:
-			sendCancel("This object is too heavy for you to carry.");
-			break;
-
-		case RET_CONTAINERNOTENOUGHROOM:
-			sendCancel("You cannot put more objects in this container.");
-			break;
-
-		case RET_NEEDEXCHANGE:
-		case RET_NOTENOUGHROOM:
-			sendCancel("There is not enough room.");
-			break;
-
-		case RET_CANNOTPICKUP:
-			sendCancel("You cannot take this object.");
-			break;
-
-		case RET_CANNOTTHROW:
-			sendCancel("You cannot throw there.");
-			break;
-
-		case RET_THEREISNOWAY:
-			sendCancel("There is no way.");
-			break;
-
-		case RET_THISISIMPOSSIBLE:
-			sendCancel("This is impossible.");
-			break;
-
-		case RET_PLAYERISPZLOCKED:
-			sendCancel("You can not enter a protection zone after attacking another player.");
-			break;
-
-		case RET_PLAYERISNOTINVITED:
-			sendCancel("You are not invited.");
-			break;
-
-		case RET_CREATUREDOESNOTEXIST:
-			sendCancel("Creature does not exist.");
-			break;
-
-		case RET_DEPOTISFULL:
-			sendCancel("You cannot put more items in this depot.");
-			break;
-
-		case RET_CANNOTUSETHISOBJECT:
-			sendCancel("You cannot use this object.");
-			break;
-
-		case RET_PLAYERWITHTHISNAMEISNOTONLINE:
-			sendCancel("A player with this name is not online.");
-			break;
-
-		case RET_NOTREQUIREDLEVELTOUSERUNE:
-			sendCancel("You do not have the required magic level to use this rune.");
-			break;
-
-		case RET_YOUAREALREADYTRADING:
-			sendCancel("You are already trading.");
-			break;
-
-		case RET_THISPLAYERISALREADYTRADING:
-			sendCancel("This player is already trading.");
-			break;
-
-		case RET_YOUMAYNOTLOGOUTDURINGAFIGHT:
-			sendCancel("You may not logout during or immediately after a fight!");
-			break;
-
-		case RET_DIRECTPLAYERSHOOT:
-			sendCancel("You are not allowed to shoot directly on players.");
-			break;
-
-		case RET_NOTENOUGHLEVEL:
-			sendCancel("You do not have enough level.");
-			break;
-
-		case RET_NOTENOUGHMAGICLEVEL:
-			sendCancel("You do not have enough magic level.");
-			break;
-
-		case RET_NOTENOUGHMANA:
-			sendCancel("You do not have enough mana.");
-			break;
-
-		case RET_NOTENOUGHSOUL:
-			sendCancel("You do not have enough soul.");
-			break;
-
-		case RET_YOUAREEXHAUSTED:
-			sendCancel("You are exhausted.");
-			break;
-
-		case RET_CANONLYUSETHISRUNEONCREATURES:
-			sendCancel("You can only use this rune on creatures.");
-			break;
-
-		case RET_PLAYERISNOTREACHABLE:
-			sendCancel("Player is not reachable.");
-			break;
-
-		case RET_CREATUREISNOTREACHABLE:
-			sendCancel("Creature is not reachable.");
-			break;
-
-		case RET_ACTIONNOTPERMITTEDINPROTECTIONZONE:
-			sendCancel("This action is not permitted in a protection zone.");
-			break;
-
-		case RET_YOUMAYNOTATTACKTHISPLAYER:
-			sendCancel("You may not attack this player.");
-			break;
-
-		case RET_YOUMAYNOTATTACKTHISCREATURE:
-			sendCancel("You may not attack this creature.");
-			break;
-
-		case RET_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE:
-			sendCancel("You may not attack a person in a protection zone.");
-			break;
-
-		case RET_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE:
-			sendCancel("You may not attack a person while you are in a protection zone.");
-			break;
-
-		case RET_YOUCANONLYUSEITONCREATURES:
-			sendCancel("You can only use it on creatures.");
-			break;
-
-		case RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS:
-			sendCancel("Turn secure mode off if you really want to attack unmarked players.");
-			break;
-
-		case RET_YOUNEEDPREMIUMACCOUNT:
-			sendCancel("You need a premium account.");
-			break;
-
-		case RET_YOUNEEDTOLEARNTHISSPELL:
-			sendCancel("You need to learn this spell first.");
-			break;
-
-		case RET_YOURVOCATIONCANNOTUSETHISSPELL:
-			sendCancel("Your vocation cannot use this spell.");
-			break;
-
-		case RET_YOUNEEDAWEAPONTOUSETHISSPELL:
-			sendCancel("You need to equip a weapon to use this spell.");
-			break;
-
-		case RET_PLAYERISPZLOCKEDLEAVEPVPZONE:
-			sendCancel("You can not leave a pvp zone after attacking another player.");
-			break;
-
-		case RET_PLAYERISPZLOCKEDENTERPVPZONE:
-			sendCancel("You can not enter a pvp zone after attacking another player.");
-			break;
-
-		case RET_ACTIONNOTPERMITTEDINANOPVPZONE:
-			sendCancel("This action is not permitted in a non pvp zone.");
-			break;
-
-		case RET_YOUCANNOTLOGOUTHERE:
-			sendCancel("You can not logout here.");
-			break;
-
-		case RET_YOUNEEDAMAGICITEMTOCASTSPELL:
-			sendCancel("You need a magic item to cast this spell.");
-			break;
-
-		case RET_CANNOTCONJUREITEMHERE:
-			sendCancel("You cannot conjure items here.");
-			break;
-
-		case RET_YOUNEEDTOSPLITYOURSPEARS:
-			sendCancel("You need to split your spears first.");
-			break;
-
-		case RET_NAMEISTOOAMBIGIOUS:
-			sendCancel("Name is too ambigious.");
-			break;
-
-		case RET_CANONLYUSEONESHIELD:
-			sendCancel("You may use only one shield.");
-			break;
-
-		case RET_NOPARTYMEMBERSINRANGE:
-			sendCancel("No party members in range.");
-			break;
-
-		case RET_YOUARENOTTHEOWNER:
-			sendCancel("You are not the owner.");
-			break;
-
-		case RET_NOTPOSSIBLE:
-		default:
-			sendCancel("Sorry, not possible.");
-			break;
-	}
+	sendCancel(getReturnMessage(message));
 }
 
 void Player::sendStats()
@@ -2053,7 +1809,7 @@ void Player::drainMana(Creature* attacker, int32_t manaLoss)
 	sendStats();
 }
 
-void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
+void Player::addManaSpent(uint64_t amount)
 {
 	if (amount == 0 || hasFlag(PlayerFlag_NotGainMana)) {
 		return;
@@ -2066,12 +1822,7 @@ void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
 		return;
 	}
 
-	if (withMultiplier) {
-		amount *= g_config.getNumber(ConfigManager::RATE_MAGIC);
-	}
-
 	bool sendUpdateStats = false;
-
 	while ((manaSpent + amount) >= nextReqMana) {
 		amount -= nextReqMana - manaSpent;
 
@@ -2113,7 +1864,7 @@ void Player::addManaSpent(uint64_t amount, bool withMultiplier /*= true*/)
 	}
 }
 
-void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText/* = false*/, bool applyStaminaChange/* = false*/)
+void Player::addExperience(uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -2122,10 +1873,6 @@ void Player::addExperience(uint64_t exp, bool useMult/* = false*/, bool sendText
 		levelPercent = 0;
 		sendStats();
 		return;
-	}
-
-	if (useMult) {
-		exp *= g_game.getExperienceStage(level);
 	}
 
 	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
@@ -2229,7 +1976,7 @@ void Player::onBlockHit(BlockType_t blockType)
 		--shieldBlockCount;
 
 		if (hasShield()) {
-			addSkillAdvance(SKILL_SHIELD, 1);
+			addSkillAdvance(SKILL_SHIELD, g_config.getNumber(ConfigManager::RATE_SKILL));
 		}
 	}
 }
@@ -4027,7 +3774,7 @@ void Player::gainExperience(uint64_t gainExp)
 
 		uint64_t oldExperience = experience;
 
-		addExperience(gainExp, true, true, true);
+		addExperience(gainExp * g_game.getExperienceStage(level), true, true);
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;
@@ -5017,4 +4764,39 @@ void Player::sendClosePrivate(uint16_t channelId)
 	if (client) {
 		client->sendClosePrivate(channelId);
 	}
+}
+
+uint64_t Player::getMoney() const
+{
+	std::list<Container*> listContainer;
+	uint64_t moneyCount = 0;
+
+	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+		Item* item = inventory[i];
+		if (!item) {
+			continue;
+		}
+
+		Container* container = item->getContainer();
+		if (container) {
+			listContainer.push_back(container);
+		} else if (item->getWorth() != 0) {
+			moneyCount += item->getWorth();
+		}
+	}
+
+	while (!listContainer.empty()) {
+		Container* container = listContainer.front();
+		listContainer.pop_front();
+
+		for (Item* item : container->getItemList()) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
+				listContainer.push_back(tmpContainer);
+			} else if (item->getWorth() != 0) {
+				moneyCount += item->getWorth();
+			}
+		}
+	}
+	return moneyCount;
 }

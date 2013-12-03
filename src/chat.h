@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_CHAT_H__
-#define __OTSERV_CHAT_H__
+#ifndef FS_CHAT_H_F1574642D0384ABFAB52B7ED906E5628
+#define FS_CHAT_H_F1574642D0384ABFAB52B7ED906E5628
 
 #include "const.h"
 #include "luascript.h"
@@ -32,8 +32,8 @@ typedef std::map<uint32_t, Player*> InvitedMap;
 class ChatChannel
 {
 	public:
-		ChatChannel();
-		ChatChannel(uint16_t channelId, const std::string& channelName);
+		ChatChannel() {}
+		ChatChannel(uint16_t channelId, const std::string& channelName) : name(channelName), canJoinEvent(-1), onJoinEvent(-1), onLeaveEvent(-1), onSpeakEvent(-1), id(channelId), publicChannel(false) {}
 		virtual ~ChatChannel() {}
 
 		bool addUser(Player& player);
@@ -69,12 +69,13 @@ class ChatChannel
 	protected:
 		UsersMap users;
 
+		std::string name;
+
 		int32_t canJoinEvent;
 		int32_t onJoinEvent;
 		int32_t onLeaveEvent;
 		int32_t onSpeakEvent;
 
-		std::string name;
 		uint16_t id;
 		bool publicChannel;
 

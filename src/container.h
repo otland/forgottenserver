@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_CONTAINER_H__
-#define __OTSERV_CONTAINER_H__
+#ifndef FS_CONTAINER_H_5590165FD8A2451B98D71F13CD3ED8DC
+#define FS_CONTAINER_H_5590165FD8A2451B98D71F13CD3ED8DC
 
 #include <queue>
 
@@ -37,8 +37,8 @@ class ContainerIterator
 		~ContainerIterator();
 
 		ContainerIterator& operator=(const ContainerIterator& rhs);
-		bool operator==(const ContainerIterator& rhs);
-		bool operator!=(const ContainerIterator& rhs);
+		bool operator==(const ContainerIterator& rhs) const;
+		bool operator!=(const ContainerIterator& rhs) const;
 		ContainerIterator& operator++();
 		ContainerIterator operator++(int);
 		Item* operator*();

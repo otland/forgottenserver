@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __WAITLIST_H__
-#define __WAITLIST_H__
+#ifndef FS_WAITLIST_H_7E4299E552E44F10BC4F4E50BF3D7241
+#define FS_WAITLIST_H_7E4299E552E44F10BC4F4E50BF3D7241
 
 #include "player.h"
 
@@ -49,7 +49,7 @@ class WaitingList
 		WaitList priorityWaitList;
 		WaitList waitList;
 
-		int32_t getTimeOut(int32_t slot);
+		static int32_t getTimeOut(int32_t slot);
 		WaitListIterator findClient(const Player* player, uint32_t& slot);
 		void cleanUpList();
 };

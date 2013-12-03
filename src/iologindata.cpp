@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -977,14 +977,6 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult* result)
 			itemMap[sid] = pair;
 		}
 	} while (result->next());
-}
-
-bool IOLoginData::changeName(uint32_t guid, const std::string& newName)
-{
-	Database* db = Database::getInstance();
-	std::ostringstream query;
-	query << "UPDATE `players` SET `name` = " << db->escapeString(newName) << " WHERE `id` = " << guid;
-	return db->executeQuery(query.str());
 }
 
 void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)

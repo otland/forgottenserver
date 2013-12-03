@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_ENUMS_H__
-#define __OTSERV_ENUMS_H__
+#ifndef FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
+#define FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
 
 enum itemAttrTypes {
 	ATTR_ITEM_NONE = 0,

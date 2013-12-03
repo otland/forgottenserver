@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _QUESTS_H_
-#define _QUESTS_H_
+#ifndef FS_QUESTS_H_16E44051F23547BE8097F8EA9FCAACA0
+#define FS_QUESTS_H_16E44051F23547BE8097F8EA9FCAACA0
 
 #include "player.h"
 #include "networkmessage.h"

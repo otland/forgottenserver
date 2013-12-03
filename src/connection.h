@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_CONNECTION_H__
-#define __OTSERV_CONNECTION_H__
+#ifndef FS_CONNECTION_H_FC8E1B4392D24D27A2F129D8B93A6348
+#define FS_CONNECTION_H_FC8E1B4392D24D27A2F129D8B93A6348
 
 #include <unordered_set>
 
@@ -57,7 +57,7 @@ class ConnectionManager
 class Connection : public std::enable_shared_from_this<Connection>
 {
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 		static uint32_t connectionCount;
 #endif
 
@@ -95,7 +95,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 			m_packetsSent = 0;
 			m_timeConnected = time(nullptr);
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 			connectionCount++;
 #endif
 		}
@@ -103,7 +103,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 	public:
 		~Connection() {
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 			connectionCount--;
 #endif
 		}

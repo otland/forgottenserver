@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,17 +17,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_LUASCRIPT_H__
-#define __OTSERV_LUASCRIPT_H__
+#ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
+#define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 
 #include <unordered_map>
 
-extern "C"
-{
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-}
+#include <lua.hpp>
 
 #if LUA_VERSION_NUM >= 502
 // NOTE: Define LUA_COMPAT_ALL as a workaround if this doesn't work
@@ -145,9 +140,6 @@ class ScriptEnvironment
 		static uint32_t addResult(DBResult* res);
 		static bool removeResult(uint32_t id);
 
-		static void addGlobalStorageValue(const uint32_t key, const int32_t value);
-		static bool getGlobalStorageValue(const uint32_t key, int32_t& value);
-
 		void setNpc(Npc* npc) {
 			m_curNpc = npc;
 		}
@@ -175,7 +167,6 @@ class ScriptEnvironment
 		//script event desc
 		std::string m_eventdesc;
 
-		static StorageMap m_globalStorageMap;
 		//unique id map
 		static ThingMap m_globalMap;
 
@@ -385,7 +376,7 @@ class LuaScriptInterface
 		static void setField(lua_State* L, const char* index, const std::string& val);
 		static std::string escapeString(const std::string& string);
 
-#ifndef __LUAJIT__
+#ifndef LUAJIT_VERSION
 		static const luaL_Reg luaBitReg[13];
 #endif
 		static const luaL_Reg luaConfigManagerTable[4];
@@ -404,6 +395,8 @@ class LuaScriptInterface
 		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerMetaMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
+		void registerVariable(const std::string& tableName, const std::string& name, lua_Number value);
+		void registerGlobalVariable(const std::string& name, lua_Number value);
 
 		std::string getStackTrace(const std::string& error_desc);
 
@@ -411,7 +404,6 @@ class LuaScriptInterface
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
-		static int32_t luaDoSendDefaultCancel(lua_State* L);
 		static int32_t luaDoChangeTypeItem(lua_State* L);
 		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
@@ -423,16 +415,13 @@ class LuaScriptInterface
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
 
-		static int32_t luaDoPlayerAddSkillTry(lua_State* L);
 		static int32_t luaDoPlayerAddMana(lua_State* L);
-		static int32_t luaDoPlayerAddManaSpent(lua_State* L);
 		static int32_t luaDoPlayerAddItem(lua_State* L);
 		static int32_t luaDoTileAddItemEx(lua_State* L);
 		static int32_t luaDoRelocate(lua_State* L);
 		static int32_t luaDoPlayerRemoveItem(lua_State* L);
 		static int32_t luaDoPlayerSetGuildLevel(lua_State* L);
 		static int32_t luaDoPlayerSetGuildNick(lua_State* L);
-		static int32_t luaDoPlayerChangeName(lua_State* L);
 		static int32_t luaDoSetCreatureLight(lua_State* L);
 		static int32_t luaDoSetCreatureDropLoot(lua_State* L);
 
@@ -461,9 +450,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerInstantSpellCount(lua_State* L);
 		static int32_t luaGetInstantSpellInfoByName(lua_State* L);
 		static int32_t luaGetInstantSpellWords(lua_State* L);
-
-		static int32_t luaGetGlobalStorageValue(lua_State* L);
-		static int32_t luaSetGlobalStorageValue(lua_State* L);
 
 		static int32_t luaGetWorldType(lua_State* L);
 		static int32_t luaGetWorldTime(lua_State* L);
@@ -547,7 +533,7 @@ class LuaScriptInterface
 		static int32_t luaDoPlayerJoinParty(lua_State* L);
 		static int32_t luaGetPartyMembers(lua_State* L);
 
-#ifndef __LUAJIT__
+#ifndef LUAJIT_VERSION
 		static int32_t luaBitNot(lua_State* L);
 		static int32_t luaBitAnd(lua_State* L);
 		static int32_t luaBitOr(lua_State* L);
@@ -600,7 +586,7 @@ class LuaScriptInterface
 		static int32_t luaGameGetGameState(lua_State* L);
 		static int32_t luaGameSetGameState(lua_State* L);
 
-		static int32_t luaGameGetPlayerByNameWildcard(lua_State* L);
+		static int32_t luaGameGetReturnMessage(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
@@ -836,6 +822,7 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetLevel(lua_State* L);
 
 		static int32_t luaPlayerGetMagicLevel(lua_State* L);
+		static int32_t luaPlayerGetBaseMagicLevel(lua_State* L);
 		static int32_t luaPlayerGetManaSpent(lua_State* L);
 		static int32_t luaPlayerAddManaSpent(lua_State* L);
 

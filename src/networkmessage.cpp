@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -160,6 +160,5 @@ void NetworkMessage::AddItem(const Item* item)
 
 void NetworkMessage::AddItemId(uint16_t itemId)
 {
-	const ItemType& it = Item::items[itemId];
-	add<uint16_t>(it.clientId);
+	add<uint16_t>(Item::items[itemId].clientId);
 }

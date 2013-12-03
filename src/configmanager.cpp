@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -47,6 +47,8 @@ bool ConfigManager::load()
 	if (!L) {
 		throw std::runtime_error("Failed to allocate memory");
 	}
+
+	luaL_openlibs(L);
 
 	if (luaL_dofile(L, "config.lua")) {
 		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;

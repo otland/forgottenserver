@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_POS_H
-#define __OTSERV_POS_H
+#ifndef FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
+#define FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
 
 enum Direction {
 	NORTH = 0,
@@ -150,11 +150,11 @@ struct PositionEx : public Position
 
 	int32_t stackpos;
 
-	bool operator==(const PositionEx& p)  const {
+	bool operator==(const PositionEx& p) const {
 		return p.x == x && p.y == y && p.z == z && p.stackpos == stackpos;
 	}
 
-	bool operator!=(const PositionEx& p)  const {
+	bool operator!=(const PositionEx& p) const {
 		return p.x != x || p.y != y || p.z != z || p.stackpos != stackpos;
 	}
 };

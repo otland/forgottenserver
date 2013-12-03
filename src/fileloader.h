@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_FILELOADER_H__
-#define __OTSERV_FILELOADER_H__
+#ifndef FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
+#define FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
 
 struct NodeStruct;
 
@@ -314,6 +314,10 @@ class PropWriteStream
 		~PropWriteStream() {
 			free(buffer);
 		}
+
+		// non-copyable
+		PropWriteStream(const PropWriteStream&) = delete;
+		PropWriteStream& operator=(const PropWriteStream&) = delete;
 
 		const char* getStream(uint32_t& _size) const {
 			_size = size;

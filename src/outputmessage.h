@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_OUTPUT_MESSAGE_H__
-#define __OTSERV_OUTPUT_MESSAGE_H__
+#ifndef FS_OUTPUTMESSAGE_H_C06AAED85C7A43939F22D229297C0CC1
+#define FS_OUTPUTMESSAGE_H_C06AAED85C7A43939F22D229297C0CC1
 
 #include "networkmessage.h"
 #include "connection.h"
@@ -160,7 +160,7 @@ class OutputMessagePool
 			return &instance;
 		}
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 		static uint32_t OutputMessagePoolCount;
 #endif
 
@@ -176,7 +176,7 @@ class OutputMessagePool
 			return m_frameTime;
 		}
 
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 		size_t getTotalMessageCount() const {
 			return OutputMessagePoolCount;
 		}

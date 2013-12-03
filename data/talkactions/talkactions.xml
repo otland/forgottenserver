@@ -27,6 +27,7 @@
 	<talkaction words="/looktype" separator=" " script="looktype.lua" />
 	<talkaction words="/summon" separator=" " script="place_summon.lua" />
 	<talkaction words="/chameleon" separator=" " script="chameleon.lua" />
+	<talkaction words="/addskill" separator=" " script="add_skill.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>

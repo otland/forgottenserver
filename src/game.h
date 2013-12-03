@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_GAME_H__
-#define __OTSERV_GAME_H__
+#ifndef FS_GAME_H_3EC96D67DD024E6093B3BAC29B7A6D7F
+#define FS_GAME_H_3EC96D67DD024E6093B3BAC29B7A6D7F
 
 #include "account.h"
 #include "combat.h"
@@ -117,7 +117,7 @@ class Game
 		                        uint32_t spriteId = 0, stackPosType_t type = STACKPOS_NORMAL);
 		void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
 
-		std::string getTradeErrorDescription(ReturnValue ret, Item* item);
+		static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
 
 		/**
 		  * Get a single tile of the map.
@@ -284,12 +284,6 @@ class Game
 		  */
 		Item* findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		                     bool depthSearch = true, int32_t subType = -1);
-
-		/**
-		  * Get the amount of money in a a cylinder
-		  * \returns the amount of money found
-		  */
-		uint64_t getMoney(const Cylinder* cylinder);
 
 		/**
 		  * Remove/Add item(s) with a monetary value

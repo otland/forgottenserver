@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -283,14 +283,14 @@ CombatSpell::CombatSpell(Combat* _combat, bool _needTarget, bool _needDirection)
 
 CombatSpell::~CombatSpell()
 {
-	delete combat;
+	if (!m_scripted) {
+		delete combat;
+	}
 }
 
 bool CombatSpell::loadScriptCombat()
 {
-	combat = g_luaEnvironment.getCombatObject(g_luaEnvironment.m_lastCombatId);
-	g_luaEnvironment.m_combatMap.erase(g_luaEnvironment.m_lastCombatId);
-	return combat != nullptr;
+	return (combat = g_luaEnvironment.getCombatObject(g_luaEnvironment.m_lastCombatId)) != nullptr;
 }
 
 bool CombatSpell::castSpell(Creature* creature)
@@ -835,7 +835,7 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const
 {
 	if (manaCost > 0) {
-		player->addManaSpent(manaCost);
+		player->addManaSpent(manaCost * g_config.getNumber(ConfigManager::RATE_MAGIC));
 		player->changeMana(-(int32_t)manaCost);
 	}
 
@@ -1558,7 +1558,7 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 		}
 	}
 
-	ReturnValue ret = RET_NOERROR;
+	ReturnValue ret;
 	Monster* monster = Monster::createMonster(param);
 	if (monster) {
 		// Place the monster
@@ -1567,6 +1567,8 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 		if (!g_game.placeCreature(monster, creature->getPosition(), true)) {
 			creature->removeSummon(monster);
 			ret = RET_NOTENOUGHROOM;
+		} else {
+			ret = RET_NOERROR;
 		}
 	} else {
 		ret = RET_NOTPOSSIBLE;

@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __ACTIONS__
-#define __ACTIONS__
+#ifndef FS_ACTIONS_H_87F60C5F587E4B84948F304A6451E6E6
+#define FS_ACTIONS_H_87F60C5F587E4B84948F304A6451E6E6
 
 #include "baseevents.h"
 #include "enums.h"
@@ -92,7 +92,7 @@ class Actions : public BaseEvents
 	protected:
 		ReturnValue internalUseItem(Player* player, const Position& pos,
 		                            uint8_t index, Item* item, uint32_t creatureId);
-		void showUseHotkeyMessage(Player* player, int32_t id, uint32_t count);
+		static void showUseHotkeyMessage(Player* player, int32_t id, uint32_t count);
 
 		virtual void clear();
 		virtual LuaScriptInterface& getScriptInterface();

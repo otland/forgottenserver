@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_TOOLS_H__
-#define __OTSERV_TOOLS_H__
+#ifndef FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
+#define FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
 
 #include "position.h"
 #include "const.h"
@@ -70,7 +70,6 @@ CombatType_t getCombatType(const std::string& strValue);
 std::string getCombatName(CombatType_t combatType);
 
 std::string getSkillName(uint16_t skillid);
-skills_t getSkillId(const std::string& param);
 
 uint32_t adlerChecksum(uint8_t* data, size_t len);
 
@@ -87,6 +86,8 @@ uint8_t serverFluidToClient(uint8_t serverFluid);
 uint8_t clientFluidToServer(uint8_t clientFluid);
 
 itemAttrTypes stringToItemAttribute(const std::string& str);
+
+const char* getReturnMessage(ReturnValue value);
 
 #if !defined(_MSC_VER) || _MSC_VER < 1800
 double round(double v);

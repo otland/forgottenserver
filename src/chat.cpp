@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -103,26 +103,6 @@ void PrivateChatChannel::closeChannel()
 	for (const auto& it : users) {
 		it.second->sendClosePrivate(getId());
 	}
-}
-
-ChatChannel::ChatChannel()
-{
-	canJoinEvent = -1;
-	onJoinEvent = -1;
-	onLeaveEvent = -1;
-	onSpeakEvent = -1;
-	publicChannel = false;
-}
-
-ChatChannel::ChatChannel(uint16_t channelId, const std::string& channelName)
-{
-	id = channelId;
-	name = channelName;
-	canJoinEvent = -1;
-	onJoinEvent = -1;
-	onLeaveEvent = -1;
-	onSpeakEvent = -1;
-	publicChannel = false;
 }
 
 bool ChatChannel::addUser(Player& player)
@@ -339,9 +319,7 @@ bool Chat::load()
 	}
 
 	for (pugi::xml_node channelNode = doc.child("channels").first_child(); channelNode; channelNode = channelNode.next_sibling()) {
-		ChatChannel channel;
-		channel.id = pugi::cast<uint16_t>(channelNode.attribute("id").value());
-		channel.name = channelNode.attribute("name").as_string();
+		ChatChannel channel(pugi::cast<uint16_t>(channelNode.attribute("id").value()), channelNode.attribute("name").as_string());
 		channel.publicChannel = channelNode.attribute("public").as_bool();
 
 		pugi::xml_attribute scriptAttribute = channelNode.attribute("script");

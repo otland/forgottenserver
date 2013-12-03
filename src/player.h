@@ -1,5 +1,5 @@
 /**
- * The Forgotten Server - a server application for the MMORPG Tibia
+ * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __OTSERV_PLAYER_H__
-#define __OTSERV_PLAYER_H__
+#ifndef FS_PLAYER_H_4083D3D3A05B4EDE891B31BB720CD06F
+#define FS_PLAYER_H_4083D3D3A05B4EDE891B31BB720CD06F
 
 #include "creature.h"
 #include "container.h"
@@ -127,7 +127,7 @@ typedef std::vector<uint32_t> GuildWarList;
 class Player : public Creature, public Cylinder
 {
 	public:
-#ifdef __ENABLE_SERVER_DIAGNOSTIC__
+#ifdef ENABLE_SERVER_DIAGNOSTIC
 		static uint32_t playerCount;
 #endif
 		Player(ProtocolGame* p);
@@ -552,6 +552,8 @@ class Player : public Creature, public Cylinder
 			return RACE_BLOOD;
 		}
 
+		uint64_t getMoney() const;
+
 		//safe-trade functions
 		void setTradeState(tradestate_t state) {
 			tradeState = state;
@@ -652,7 +654,7 @@ class Player : public Creature, public Cylinder
 
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 		virtual void drainMana(Creature* attacker, int32_t manaLoss);
-		void addManaSpent(uint64_t amount, bool withMultiplier = true);
+		void addManaSpent(uint64_t amount);
 		void addSkillAdvance(skills_t skill, uint32_t count);
 
 		virtual int32_t getArmor() const;
@@ -1164,7 +1166,7 @@ class Player : public Creature, public Cylinder
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
 		void gainExperience(uint64_t exp);
-		void addExperience(uint64_t exp, bool useMult = false, bool sendText = false, bool applyStaminaChange = false);
+		void addExperience(uint64_t exp, bool sendText = false, bool applyStaminaChange = false);
 
 		void updateInventoryWeight();
 		void postUpdateGoods(uint32_t itemId);
