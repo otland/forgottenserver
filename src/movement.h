@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MOVEMENT_H
-#define MOVEMENT_H
+#ifndef FS_MOVEMENT_H_5E0D2626D4634ACA83AC6509518E5F49
+#define FS_MOVEMENT_H_5E0D2626D4634ACA83AC6509518E5F49
 
 #include "baseevents.h"
 #include "item.h"

@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef BAN_H
-#define BAN_H
+#ifndef FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
+#define FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
 
 struct BanInfo {
 	std::string bannedBy;

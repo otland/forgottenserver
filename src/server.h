@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef FS_SERVER_H_984DA68ABF744127850F90CC710F281B
+#define FS_SERVER_H_984DA68ABF744127850F90CC710F281B
 
 class Connection;
 typedef std::shared_ptr<Connection> Connection_ptr;

@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef FS_COMMANDS_H_C95A575CCADF434699D26CD042690970
+#define FS_COMMANDS_H_C95A575CCADF434699D26CD042690970
 
 #include "enums.h"
 

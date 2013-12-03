@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef NPC_H
-#define NPC_H
+#ifndef FS_NPC_H_B090D0CB549D4435AFA03647195D156F
+#define FS_NPC_H_B090D0CB549D4435AFA03647195D156F
 
 #include "creature.h"
 #include "luascript.h"

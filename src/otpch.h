@@ -17,11 +17,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifdef OTPCH_H
+#ifdef FS_OTPCH_H_F00C737DA6CA4C8D90F57430C614367F
 #error "Precompiled header should only be included once."
 #endif
 
-#define OTPCH_H
+#define FS_OTPCH_H_F00C737DA6CA4C8D90F57430C614367F
 
 // Definitions should be global.
 #include "definitions.h"

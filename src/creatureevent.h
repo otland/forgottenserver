@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef CREATUREEVENT_H
-#define CREATUREEVENT_H
+#ifndef FS_CREATUREEVENT_H_73FCAF4608CB41399D53C919316646A9
+#define FS_CREATUREEVENT_H_73FCAF4608CB41399D53C919316646A9
 
 #include "luascript.h"
 #include "baseevents.h"

@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef WEAPONS_H
-#define WEAPONS_H
+#ifndef FS_WEAPONS_H_69D1993478AA42948E24C0B90B8F5BF5
+#define FS_WEAPONS_H_69D1993478AA42948E24C0B90B8F5BF5
 
 #include "luascript.h"
 #include "player.h"

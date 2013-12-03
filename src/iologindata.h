@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef IOLOGINDATA_H
-#define IOLOGINDATA_H
+#ifndef FS_IOLOGINDATA_H_28B0440BEC594654AC0F4E1A5E42B2EF
+#define FS_IOLOGINDATA_H_28B0440BEC594654AC0F4E1A5E42B2EF
 
 #include "account.h"
 #include "player.h"

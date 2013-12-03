@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef ENUMS_H
-#define ENUMS_H
+#ifndef FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
+#define FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
 
 enum itemAttrTypes {
 	ATTR_ITEM_NONE = 0,

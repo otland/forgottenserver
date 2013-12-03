@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
+#define FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 
 #include <boost/lexical_cast.hpp>
 

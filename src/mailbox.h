@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MAILBOX_H
-#define MAILBOX_H
+#ifndef FS_MAILBOX_H_D231C6BE8D384CAAA3AE410C1323F9DB
+#define FS_MAILBOX_H_D231C6BE8D384CAAA3AE410C1323F9DB
 
 #include "item.h"
 #include "cylinder.h"
