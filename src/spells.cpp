@@ -283,14 +283,14 @@ CombatSpell::CombatSpell(Combat* _combat, bool _needTarget, bool _needDirection)
 
 CombatSpell::~CombatSpell()
 {
-	delete combat;
+	if (!m_scripted) {
+		delete combat;
+	}
 }
 
 bool CombatSpell::loadScriptCombat()
 {
-	combat = g_luaEnvironment.getCombatObject(g_luaEnvironment.m_lastCombatId);
-	g_luaEnvironment.m_combatMap.erase(g_luaEnvironment.m_lastCombatId);
-	return combat != nullptr;
+	return (combat = g_luaEnvironment.getCombatObject(g_luaEnvironment.m_lastCombatId)) != nullptr;
 }
 
 bool CombatSpell::castSpell(Creature* creature)
