@@ -272,15 +272,17 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 	}
 
 	if (!player->isRemoved()) {
-		if (!forced && player->getAccountType() != ACCOUNT_TYPE_GOD) {
-			if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
-				player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
-				return;
-			}
+		if (!forced) {
+			if (!player->isAccessPlayer()) {
+				if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
+					player->sendCancelMessage(RET_YOUCANNOTLOGOUTHERE);
+					return;
+				}
 
-			if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT)) {
-				player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
-				return;
+				if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT)) {
+					player->sendCancelMessage(RET_YOUMAYNOTLOGOUTDURINGAFIGHT);
+					return;
+				}
 			}
 
 			//scripting event - onLogout
