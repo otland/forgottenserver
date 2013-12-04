@@ -151,16 +151,11 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 
 bool Protocol::RSA_decrypt(NetworkMessage& msg)
 {
-	return RSA_decrypt(&g_RSA, msg);
-}
-
-bool Protocol::RSA_decrypt(RSA* rsa, NetworkMessage& msg)
-{
 	if (msg.getMessageLength() - msg.getReadPos() != 128) {
 		return false;
 	}
 
-	rsa->decrypt((char*)(msg.getBuffer() + msg.getReadPos()));
+	g_RSA.decrypt((char*)(msg.getBuffer() + msg.getReadPos()));
 	return msg.GetByte() == 0;
 }
 

@@ -127,7 +127,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\actions.cpp" />
-    <ClCompile Include="..\src\admin.cpp" />
     <ClCompile Include="..\src\ban.cpp" />
     <ClCompile Include="..\src\baseevents.cpp" />
     <ClCompile Include="..\src\beds.cpp" />
@@ -160,7 +159,6 @@
     <ClCompile Include="..\src\iomarket.cpp" />
     <ClCompile Include="..\src\item.cpp" />
     <ClCompile Include="..\src\items.cpp" />
-    <ClCompile Include="..\src\logger.cpp" />
     <ClCompile Include="..\src\luascript.cpp" />
     <ClCompile Include="..\src\mailbox.cpp" />
     <ClCompile Include="..\src\map.cpp" />
@@ -211,7 +209,6 @@
   <ItemGroup>
     <ClInclude Include="..\src\account.h" />
     <ClInclude Include="..\src\actions.h" />
-    <ClInclude Include="..\src\admin.h" />
     <ClInclude Include="..\src\ban.h" />
     <ClInclude Include="..\src\baseevents.h" />
     <ClInclude Include="..\src\beds.h" />
@@ -248,7 +245,6 @@
     <ClInclude Include="..\src\item.h" />
     <ClInclude Include="..\src\itemloader.h" />
     <ClInclude Include="..\src\items.h" />
-    <ClInclude Include="..\src\logger.h" />
     <ClInclude Include="..\src\luascript.h" />
     <ClInclude Include="..\src\mailbox.h" />
     <ClInclude Include="..\src\map.h" />

@@ -27,7 +27,6 @@
 #include "definitions.h"
 
 //boost
-#include <boost/tokenizer.hpp>
 #include <boost/asio.hpp>
 
 //std

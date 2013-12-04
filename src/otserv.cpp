@@ -31,7 +31,6 @@
 #endif
 
 #include "monsters.h"
-#include "commands.h"
 #include "outfit.h"
 #include "vocation.h"
 #include "configmanager.h"
@@ -42,7 +41,6 @@
 #include "protocolold.h"
 #include "protocollogin.h"
 #include "protocolstatus.h"
-#include "admin.h"
 #include "house.h"
 #include "databasemanager.h"
 #include "scheduler.h"
@@ -50,9 +48,7 @@
 Dispatcher* g_dispatcher = new Dispatcher;
 Scheduler* g_scheduler = new Scheduler;
 
-extern AdminProtocolConfig* g_adminConfig;
 Game g_game;
-Commands g_commands;
 ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
@@ -203,13 +199,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		return;
 	}
 
-	//load commands
-	std::cout << ">> Loading commands" << std::endl;
-	if (!g_commands.loadFromXml()) {
-		startupErrorMessage("Unable to load commands!");
-		return;
-	}
-
 	// load item data
 	std::cout << ">> Loading items" << std::endl;
 	if (Item::items.loadFromOtb("data/items/items.otb")) {
@@ -241,19 +230,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 		return;
 	}
 
-	g_adminConfig = new AdminProtocolConfig();
-	std::cout << ">> Loading admin protocol config" << std::endl;
-	if (!g_adminConfig->loadXMLConfig()) {
-		startupErrorMessage("Unable to load admin protocol config!");
-		return;
-	}
-
-	std::cout << ">> Loading experience stages" << std::endl;
-	if (!g_game.loadExperienceStages()) {
-		startupErrorMessage("Unable to load experience stages!");
-		return;
-	}
-
 	std::cout << ">> Checking world type... " << std::flush;
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if (worldType == "pvp") {
@@ -273,7 +249,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	std::cout << asUpperCaseString(worldType) << std::endl;
 
 	std::cout << ">> Loading map" << std::endl;
-
 	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
 		startupErrorMessage("Failed to load map");
 		return;
@@ -287,7 +262,6 @@ void mainLoader(int argc, char* argv[], ServiceManager* services)
 	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
 	// OT protocols
-	services->add<ProtocolAdmin>(g_config.getNumber(ConfigManager::ADMIN_PORT));
 	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
 
 	// Legacy protocols

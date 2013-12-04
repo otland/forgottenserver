@@ -28,9 +28,7 @@
 #include "configmanager.h"
 #include "tools.h"
 #include "beds.h"
-#include "commands.h"
 
-extern Commands g_commands;
 extern ConfigManager g_config;
 extern Game g_game;
 
@@ -455,7 +453,7 @@ bool AccessList::parseList(const std::string& _list)
 		trim_right(line, '\t');
 		trimString(line);
 
-		if (line.empty() || line[0] == '#' || line.length() > 100) {
+		if (line.empty() || line.front() == '#' || line.length() > 100) {
 			continue;
 		}
 
@@ -528,7 +526,7 @@ bool AccessList::addExpression(const std::string& expression)
 		if (!outExp.empty()) {
 			expressionList.push_back(outExp);
 
-			if (outExp[0] == '!') {
+			if (outExp.front() == '!') {
 				if (outExp.length() > 1) {
 					regExList.emplace_front(std::regex(outExp.substr(1)), false);
 				}

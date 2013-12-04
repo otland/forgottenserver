@@ -258,18 +258,6 @@ void trimString(std::string& str)
 	str.erase(0, str.find_first_not_of(' '));
 }
 
-std::string parseNextParam(Tokenizer::iterator& it, Tokenizer::iterator end)
-{
-	std::string tmp;
-	if (it == end) {
-		return tmp;
-	}
-
-	tmp = *it++;
-	trimString(tmp);
-	return tmp;
-}
-
 std::string convertIPToString(uint32_t ip)
 {
 	char buffer[17];

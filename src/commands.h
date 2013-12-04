@@ -36,28 +36,27 @@ class Commands
 		bool loadFromXml();
 		bool reload();
 
-		bool exeCommand(Player* player, const std::string& cmd);
+		bool exeCommand(Player& player, const std::string& cmd);
 
 	protected:
-		bool loaded;
-
 		//commands
-		void reloadInfo(Player* player, const std::string& cmd, const std::string& param);
-		void sellHouse(Player* player, const std::string& cmd, const std::string& param);
-		void forceRaid(Player* player, const std::string& cmd, const std::string& param);
-		void clean(Player* player, const std::string& cmd, const std::string& param);
-		void serverDiag(Player* player, const std::string& cmd, const std::string& param);
-		void ghost(Player* player, const std::string& cmd, const std::string& param);
-		void multiClientCheck(Player* player, const std::string& cmd, const std::string& param);
-		void hide(Player* player, const std::string& cmd, const std::string& param);
+		void reloadInfo(Player& player, const std::string& param);
+		void sellHouse(Player& player, const std::string& param);
+		void forceRaid(Player& player, const std::string& param);
+		void clean(Player& player, const std::string& param);
+		void serverDiag(Player& player, const std::string& param);
+		void ghost(Player& player, const std::string& param);
+		void multiClientCheck(Player& player, const std::string& param);
+		void hide(Player& player, const std::string& param);
 
 		//table of commands
 		static s_defcommands defined_commands[];
 
 		std::map<std::string, Command*> commandMap;
+		bool loaded;
 };
 
-typedef void (Commands::*CommandFunc)(Player*, const std::string&, const std::string&);
+typedef void (Commands::*CommandFunc)(Player&, const std::string&);
 
 struct Command {
 	CommandFunc f;

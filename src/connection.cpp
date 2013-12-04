@@ -21,7 +21,6 @@
 
 #include "configmanager.h"
 #include "connection.h"
-#include "logger.h"
 #include "outputmessage.h"
 #include "protocol.h"
 #include "scheduler.h"
@@ -128,7 +127,7 @@ void Connection::closeSocket()
 			m_socket->close(error);
 		} catch (boost::system::system_error& e) {
 			if (m_logError) {
-				LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
+				std::cout << "[Network error - Connection::closeSocket] " << e.what() << std::endl;
 				m_logError = false;
 			}
 		}
@@ -182,7 +181,7 @@ void Connection::deleteConnectionTask()
 		m_io_service.dispatch(std::bind(&Connection::onStopOperation, this));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
-			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
+			std::cout << "[Network error - Connection::deleteConnectionTask] " << e.what() << std::endl;
 			m_logError = false;
 		}
 	}
@@ -209,7 +208,7 @@ void Connection::acceptConnection()
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
-			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
+			std::cout << "[Network error - Connection::acceptConnection] " << e.what() << std::endl;
 			m_logError = false;
 		}
 
@@ -244,7 +243,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		                        std::bind(&Connection::parsePacket, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
-			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
+			std::cout << "[Network error - Connection::parseHeader] " << e.what() << std::endl;
 			m_logError = false;
 		}
 
@@ -331,7 +330,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
-			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
+			std::cout << "[Network error - Connection::parsePacket] " << e.what() << std::endl;
 			m_logError = false;
 		}
 
@@ -374,7 +373,7 @@ void Connection::internalSend(OutputMessage_ptr msg)
 		                         std::bind(&Connection::onWriteOperation, shared_from_this(), msg, std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
-			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
+			std::cout << "[Network error - Connection::internalSend] " << e.what() << std::endl;
 			m_logError = false;
 		}
 	}

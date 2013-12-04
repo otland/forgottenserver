@@ -71,7 +71,6 @@ bool ConfigManager::load()
 		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "theforgottenserver");
 
 		m_confInteger[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
-		m_confInteger[ADMIN_PORT] = getGlobalNumber(L, "adminProtocolPort", 7171);
 		m_confInteger[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
 		m_confInteger[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
 		m_confInteger[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
@@ -87,7 +86,6 @@ bool ConfigManager::load()
 	m_confBoolean[REMOVE_RUNE_CHARGES] = booleanString(getGlobalString(L, "removeChargesFromRunes", "yes"));
 	m_confBoolean[EXPERIENCE_FROM_PLAYERS] = booleanString(getGlobalString(L, "experienceByKillingPlayers", "no"));
 	m_confBoolean[FREE_PREMIUM] = booleanString(getGlobalString(L, "freePremium", "no"));
-	m_confBoolean[ADMIN_LOGS_ENABLED] = booleanString(getGlobalString(L, "adminLogsEnabled", "no"));
 	m_confBoolean[REPLACE_KICK_ON_LOGIN] = booleanString(getGlobalString(L, "replaceKickOnLogin", "yes"));
 	m_confBoolean[ALLOW_CLONES] = booleanString(getGlobalString(L, "allowClones", "no"));
 	m_confBoolean[MARKET_PREMIUM] = booleanString(getGlobalString(L, "premiumToCreateMarketOffer", "yes"));

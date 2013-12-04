@@ -88,7 +88,6 @@ class Protocol
 		void XTEA_encrypt(OutputMessage& msg) const;
 		bool XTEA_decrypt(NetworkMessage& msg) const;
 		bool RSA_decrypt(NetworkMessage& msg);
-		bool RSA_decrypt(RSA* rsa, NetworkMessage& msg);
 
 		void setRawMessages(bool value) {
 			m_rawMessages = value;

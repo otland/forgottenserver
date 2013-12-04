@@ -33,25 +33,6 @@ RSA::~RSA()
 	mpz_clear(m_d);
 }
 
-bool RSA::setKey(const std::string& file)
-{
-	//loads p, q and d from a file
-	FILE* f = fopen(file.c_str(), "r");
-	if (!f) {
-		return false;
-	}
-
-	char p[513], q[513];
-	if (!fgets(p, 513, f) || !fgets(q, 513, f)) {
-		fclose(f);
-		return false;
-	}
-	fclose(f);
-
-	setKey(p, q);
-	return true;
-}
-
 void RSA::setKey(const char* p, const char* q)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(lock);
@@ -113,11 +94,4 @@ void RSA::decrypt(char* msg)
 
 	mpz_clear(c);
 	mpz_clear(m);
-}
-
-void RSA::getPublicKey(char* buffer)
-{
-	size_t count = (mpz_sizeinbase(m_n, 2) + 7) / 8;
-	memset(buffer, 0, 128 - count);
-	mpz_export(&buffer[128 - count], nullptr, 1, 1, 0, 0, m_n);
 }

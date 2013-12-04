@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "combat.h"
-#include "commands.h"
 #include "configmanager.h"
 #include "const.h"
 #include "game.h"
@@ -68,7 +67,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 		size_t spellLen = instantSpell->getWords().length();
 		size_t paramLen = str_words.length() - spellLen;
 		std::string paramText = str_words.substr(spellLen, paramLen);
-		if (!paramText.empty() && paramText[0] == ' ') {
+		if (!paramText.empty() && paramText.front() == ' ') {
 			size_t loc1 = paramText.find('"', 1);
 			if (loc1 != std::string::npos) {
 				size_t loc2 = paramText.find('"', loc1 + 1);

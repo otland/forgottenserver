@@ -52,7 +52,6 @@
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
-extern Commands g_commands;
 extern Chat g_chat;
 extern TalkActions* g_talkActions;
 extern Spells* g_spells;
@@ -138,6 +137,10 @@ void Game::setGameState(GameState_t newState)
 	gameState = newState;
 	switch (newState) {
 		case GAME_STATE_INIT: {
+			commands.loadFromXml();
+
+			loadExperienceStages();
+
 			groups.load();
 			g_chat.load();
 
@@ -3488,7 +3491,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return;
 	}
 
-	if (!text.empty() && text[0] == '/' && player->isAccessPlayer()) {
+	if (!text.empty() && text.front() == '/' && player->isAccessPlayer()) {
 		return;
 	}
 
@@ -3533,16 +3536,16 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	}
 }
 
-bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string& text) const
+bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string& text)
 {
 	if (text.empty()) {
 		return false;
 	}
 
-	char firstCharacter = text[0];
+	char firstCharacter = text.front();
 	for (char commandTag : commandTags) {
 		if (commandTag == firstCharacter) {
-			if (g_commands.exeCommand(player, text)) {
+			if (commands.exeCommand(*player, text)) {
 				return true;
 			}
 		}

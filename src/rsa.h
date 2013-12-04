@@ -29,10 +29,7 @@ class RSA
 		~RSA();
 
 		void setKey(const char* p, const char* q);
-		bool setKey(const std::string& file);
 		void decrypt(char* msg);
-
-		void getPublicKey(char* buffer);
 
 	protected:
 		std::recursive_mutex lock;

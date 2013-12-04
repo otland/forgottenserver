@@ -30,9 +30,7 @@
 #include "house.h"
 #include "iologindata.h"
 #include "tools.h"
-#include "ban.h"
 #include "configmanager.h"
-#include "town.h"
 #include "spells.h"
 #include "talkaction.h"
 #include "movement.h"
@@ -47,7 +45,6 @@
 #ifdef ENABLE_SERVER_DIAGNOSTIC
 #include "outputmessage.h"
 #include "connection.h"
-#include "admin.h"
 #include "protocolstatus.h"
 #include "protocollogin.h"
 #endif
@@ -175,7 +172,7 @@ bool Commands::loadFromXml()
 			std::cout << "[Warning - Commands::loadFromXml] Missing log command " << it.first << std::endl;
 		}
 
-		g_game.addCommandTag(it.first[0]);
+		g_game.addCommandTag(it.first.front());
 	}
 	return loaded;
 }
@@ -198,7 +195,7 @@ bool Commands::reload()
 	return loadFromXml();
 }
 
-bool Commands::exeCommand(Player* player, const std::string& cmd)
+bool Commands::exeCommand(Player& player, const std::string& cmd)
 {
 	std::string str_command;
 	std::string str_param;
@@ -218,9 +215,9 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	}
 
 	Command* command = it->second;
-	if (command->groupId > player->group->id || command->accountType > player->accountType) {
-		if (player->group->access) {
-			player->sendTextMessage(MSG_STATUS_SMALL, "You can not execute this command.");
+	if (command->groupId > player.getGroup()->id || command->accountType > player.getAccountType()) {
+		if (player.getGroup()->access) {
+			player.sendTextMessage(MSG_STATUS_SMALL, "You can not execute this command.");
 		}
 
 		return false;
@@ -228,13 +225,13 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 
 	//execute command
 	CommandFunc cfunc = command->f;
-	(this->*cfunc)(player, str_command, str_param);
+	(this->*cfunc)(player, str_param);
 
 	if (command->logged) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd);
+		player.sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd);
 
 		std::ostringstream logFile;
-		logFile << "data/logs/" << player->getName() << " commands.log";
+		logFile << "data/logs/" << player.getName() << " commands.log";
 		std::ofstream out(logFile.str(), std::ios::app);
 		if (out.is_open()) {
 			time_t ticks = time(nullptr);
@@ -249,132 +246,132 @@ bool Commands::exeCommand(Player* player, const std::string& cmd)
 	return true;
 }
 
-void Commands::reloadInfo(Player* player, const std::string& cmd, const std::string& param)
+void Commands::reloadInfo(Player& player, const std::string& param)
 {
 	std::string tmpParam = asLowerCaseString(param);
 	if (tmpParam == "action" || tmpParam == "actions") {
 		g_actions->reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded actions.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded actions.");
 	} else if (tmpParam == "config" || tmpParam == "configuration") {
 		g_config.reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded config.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded config.");
 	} else if (tmpParam == "command" || tmpParam == "commands") {
 		reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded commands.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded commands.");
 	} else if (tmpParam == "creaturescript" || tmpParam == "creaturescripts") {
 		g_creatureEvents->reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded creature scripts.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded creature scripts.");
 	} else if (tmpParam == "monster" || tmpParam == "monsters") {
 		g_monsters.reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
 	} else if (tmpParam == "move" || tmpParam == "movement" || tmpParam == "movements"
 	           || tmpParam == "moveevents" || tmpParam == "moveevent") {
 		g_moveEvents->reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded movements.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded movements.");
 	} else if (tmpParam == "npc" || tmpParam == "npcs") {
 		Npcs::reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
 	} else if (tmpParam == "raid" || tmpParam == "raids") {
 		Raids::getInstance()->reload();
 		Raids::getInstance()->startup();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded raids.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded raids.");
 	} else if (tmpParam == "spell" || tmpParam == "spells") {
 		g_spells->reload();
 		g_monsters.reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded spells.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded spells.");
 	} else if (tmpParam == "talk" || tmpParam == "talkaction" || tmpParam == "talkactions") {
 		g_talkActions->reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded talk actions.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded talk actions.");
 	} else if (tmpParam == "items") {
 		Item::items.reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded items.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded items.");
 	} else if (tmpParam == "weapon" || tmpParam == "weapons") {
 		g_weapons->reload();
 		g_weapons->loadDefaults();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded weapons.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded weapons.");
 	} else if (tmpParam == "quest" || tmpParam == "quests") {
 		Quests::getInstance()->reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded quests.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded quests.");
 	} else if (tmpParam == "mount" || tmpParam == "mounts") {
 		Mounts::getInstance()->reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded mounts.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded mounts.");
 	} else if (tmpParam == "globalevents" || tmpParam == "globalevent") {
 		g_globalEvents->reload();
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
 	} else {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}
 }
 
-void Commands::sellHouse(Player* player, const std::string& cmd, const std::string& param)
+void Commands::sellHouse(Player& player, const std::string& param)
 {
 	Player* tradePartner = g_game.getPlayerByName(param);
-	if (!tradePartner || tradePartner == player) {
-		player->sendCancel("Trade player not found.");
+	if (!tradePartner || tradePartner == &player) {
+		player.sendCancel("Trade player not found.");
 		return;
 	}
 
-	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
-		player->sendCancel("Trade player is too far away.");
+	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player.getPosition())) {
+		player.sendCancel("Trade player is too far away.");
 		return;
 	}
 
 	if (!tradePartner->isPremium()) {
-		player->sendCancel("Trade player does not have a premium account.");
+		player.sendCancel("Trade player does not have a premium account.");
 		return;
 	}
 
-	HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
+	HouseTile* houseTile = dynamic_cast<HouseTile*>(player.getTile());
 	if (!houseTile) {
-		player->sendCancel("You must stand in your house to initiate the trade.");
+		player.sendCancel("You must stand in your house to initiate the trade.");
 		return;
 	}
 
 	House* house = houseTile->getHouse();
-	if (!house || house->getOwner() != player->guid) {
-		player->sendCancel("You don't own this house.");
+	if (!house || house->getOwner() != player.getGUID()) {
+		player.sendCancel("You don't own this house.");
 		return;
 	}
 
-	if (Houses::getInstance().getHouseByPlayerId(tradePartner->guid)) {
-		player->sendCancel("Trade player already owns a house.");
+	if (Houses::getInstance().getHouseByPlayerId(tradePartner->getGUID())) {
+		player.sendCancel("Trade player already owns a house.");
 		return;
 	}
 
-	if (IOLoginData::hasBiddedOnHouse(tradePartner->guid)) {
-		player->sendCancel("Trade player is currently the highest bidder of an auctioned house.");
+	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+		player.sendCancel("Trade player is currently the highest bidder of an auctioned house.");
 		return;
 	}
 
 	Item* transferItem = house->getTransferItem();
 	if (!transferItem) {
-		player->sendCancel("You can not trade this house.");
+		player.sendCancel("You can not trade this house.");
 		return;
 	}
 
-	transferItem->getParent()->setParent(player);
+	transferItem->getParent()->setParent(&player);
 
-	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+	if (!g_game.internalStartTrade(&player, tradePartner, transferItem)) {
 		house->resetTransferItem();
 	}
 }
 
-void Commands::hide(Player* player, const std::string& cmd, const std::string& param)
+void Commands::hide(Player& player, const std::string& param)
 {
-	player->setHiddenHealth(!player->isHealthHidden());
-	g_game.addCreatureHealth(player);
+	player.setHiddenHealth(!player.isHealthHidden());
+	g_game.addCreatureHealth(&player);
 }
 
-void Commands::forceRaid(Player* player, const std::string& cmd, const std::string& param)
+void Commands::forceRaid(Player& player, const std::string& param)
 {
 	Raid* raid = Raids::getInstance()->getRaidByName(param);
 	if (!raid || !raid->isLoaded()) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "No such raid exists.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "No such raid exists.");
 		return;
 	}
 
 	if (Raids::getInstance()->getRunning()) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
 		return;
 	}
 
@@ -382,7 +379,7 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 
 	RaidEvent* event = raid->getNextRaidEvent();
 	if (!event) {
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
 		return;
 	}
 
@@ -397,10 +394,10 @@ void Commands::forceRaid(Player* player, const std::string& cmd, const std::stri
 		                         std::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
+	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
 }
 
-void Commands::clean(Player* player, const std::string& cmd, const std::string& param)
+void Commands::clean(Player& player, const std::string& param)
 {
 	uint32_t count = g_game.getMap()->clean();
 	if (count != 1) {
@@ -412,7 +409,7 @@ void Commands::clean(Player* player, const std::string& cmd, const std::string& 
 	}
 }
 
-void Commands::serverDiag(Player* player, const std::string& cmd, const std::string& param)
+void Commands::serverDiag(Player& player, const std::string& param)
 {
 #ifdef ENABLE_SERVER_DIAGNOSTIC
 	std::ostringstream text;
@@ -426,7 +423,6 @@ void Commands::serverDiag(Player* player, const std::string& cmd, const std::str
 	text << "--------------------\n";
 	text << "ProtocolGame: " << ProtocolGame::protocolGameCount << "\n";
 	text << "ProtocolLogin: " << ProtocolLogin::protocolLoginCount << "\n";
-	text << "ProtocolAdmin: " << ProtocolAdmin::protocolAdminCount << "\n";
 	text << "ProtocolStatus: " << ProtocolStatus::protocolStatusCount << "\n\n";
 
 	text << "\nConnections:\n";
@@ -442,59 +438,61 @@ void Commands::serverDiag(Player* player, const std::string& cmd, const std::str
 	text << "lua: " << LUA_VERSION << "\n";
 	text << "pugixml: " << PUGIXML_VERSION << "\n";
 
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
+	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
 #else
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
+	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
 #endif
 }
 
-void Commands::ghost(Player* player, const std::string& cmd, const std::string& param)
+void Commands::ghost(Player& player, const std::string& param)
 {
-	player->switchGhostMode();
+	player.switchGhostMode();
+
+	Player* playerPtr = &player;
 
 	SpectatorVec list;
-	g_game.getSpectators(list, player->getPosition(), true, true);
+	g_game.getSpectators(list, player.getPosition(), true, true);
 	for (Creature* spectator : list) {
 		Player* tmpPlayer = spectator->getPlayer();
-		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
-			if (player->isInGhostMode()) {
-				tmpPlayer->sendCreatureDisappear(player, player->getTile()->getClientIndexOfThing(tmpPlayer, player));
+		if (tmpPlayer != playerPtr && !tmpPlayer->isAccessPlayer()) {
+			if (player.isInGhostMode()) {
+				tmpPlayer->sendCreatureDisappear(playerPtr, player.getTile()->getClientIndexOfThing(tmpPlayer, playerPtr));
 			} else {
-				tmpPlayer->sendCreatureAppear(player, player->getPosition(), true);
+				tmpPlayer->sendCreatureAppear(playerPtr, player.getPosition(), true);
 			}
 		} else {
-			tmpPlayer->sendCreatureChangeVisible(player, !player->isInGhostMode());
+			tmpPlayer->sendCreatureChangeVisible(playerPtr, !player.isInGhostMode());
 		}
 	}
 
-	if (player->isInGhostMode()) {
+	if (player.isInGhostMode()) {
 		for (const auto& it : g_game.getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+				it.second->notifyStatusChange(playerPtr, VIPSTATUS_OFFLINE);
 			}
 		}
 
-		IOLoginData::updateOnlineStatus(player->getGUID(), false);
-		player->sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
-		g_game.addMagicEffect(list, player->getPosition(), NM_ME_YALAHARIGHOST);
+		IOLoginData::updateOnlineStatus(player.getGUID(), false);
+		player.sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
+		g_game.addMagicEffect(list, player.getPosition(), NM_ME_YALAHARIGHOST);
 	} else {
 		for (const auto& it : g_game.getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
+				it.second->notifyStatusChange(playerPtr, VIPSTATUS_ONLINE);
 			}
 		}
 
-		IOLoginData::updateOnlineStatus(player->getGUID(), true);
-		player->sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
-		Position pos = player->getPosition();
+		IOLoginData::updateOnlineStatus(player.getGUID(), true);
+		player.sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
+		Position pos = player.getPosition();
 		pos.x += 1;
 		g_game.addMagicEffect(list, pos, NM_ME_SMOKE);
 	}
 }
 
-void Commands::multiClientCheck(Player* player, const std::string& cmd, const std::string& param)
+void Commands::multiClientCheck(Player& player, const std::string& param)
 {
-	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Multiclient Check List:");
+	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Multiclient Check List:");
 	std::map<uint32_t, std::vector<Player*>> ipMap;
 
 	for (const auto& it : g_game.getPlayers()) {
@@ -511,7 +509,7 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 			continue;
 		}
 
-		Player* tmpPlayer = it.second[0];
+		Player* tmpPlayer = it.second.front();
 		std::ostringstream ss;
 		ss << convertIPToString(it.first) << ": " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
 
@@ -521,6 +519,6 @@ void Commands::multiClientCheck(Player* player, const std::string& cmd, const st
 		}
 
 		ss << '.';
-		player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
 	}
 }

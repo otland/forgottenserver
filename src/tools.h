@@ -24,8 +24,6 @@
 #include "const.h"
 #include "enums.h"
 
-typedef boost::tokenizer<boost::char_separator<char>> Tokenizer;
-
 std::string transformToSHA1(const std::string& input);
 
 void replaceString(std::string& str, const std::string& sought, const std::string& replacement);
@@ -53,8 +51,6 @@ Position getNextPosition(Direction direction, Position pos);
 Direction getDirectionTo(const Position& from, const Position& to);
 
 std::string getFirstLine(const std::string& str);
-
-std::string parseNextParam(Tokenizer::iterator& it, Tokenizer::iterator end);
 
 std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);

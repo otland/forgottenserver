@@ -249,13 +249,13 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("time"))) {
 		std::vector<int32_t> params = vectorAtoi(explodeString(attr.as_string(), ":"));
-		if (params[0] < 0 || params[0] > 23) {
+		if (params.front() < 0 || params.front() > 23) {
 			std::cout << "[Error - GlobalEvent::configureEvent] Invalid hour \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 			return false;
 		}
 
-		m_interval |= params[0] << 16;
-		int32_t hour = params[0];
+		m_interval |= params.front() << 16;
+		int32_t hour = params.front();
 		int32_t min = 0;
 		int32_t sec = 0;
 

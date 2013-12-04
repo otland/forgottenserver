@@ -22,6 +22,7 @@
 
 #include "account.h"
 #include "combat.h"
+#include "commands.h"
 #include "groups.h"
 #include "map.h"
 #include "position.h"
@@ -36,7 +37,6 @@ class Creature;
 class Monster;
 class Npc;
 class CombatInfo;
-class Commands;
 
 enum stackPosType_t {
 	STACKPOS_NORMAL,
@@ -542,7 +542,7 @@ class Game
 		Group* getGroup(uint32_t id);
 
 	protected:
-		bool playerSayCommand(Player* player, SpeakClasses type, const std::string& text) const;
+		bool playerSayCommand(Player* player, SpeakClasses type, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		bool playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);
@@ -580,6 +580,7 @@ class Game
 		std::map<Item*, uint32_t> tradeItems;
 
 		ModalWindow offlineTrainingWindow;
+		Commands commands;
 		Groups groups;
 
 		struct GameEvent {
