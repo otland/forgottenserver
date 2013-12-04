@@ -12,6 +12,29 @@
 	<action itemid="2554" script="tools/shovel.lua"/>
 	<action itemid="2120" script="tools/rope.lua"/>
 	<action itemid="2553" script="tools/pick.lua"/>
+	
+	<!-- Taming Items -->
+        <action itemid="5907" script="other/taming.lua"/>
+	<action itemid="13247" script="other/taming.lua"/>
+	<action itemid="13291" script="other/taming.lua"/>
+	<action itemid="13292" script="other/taming.lua"/>
+	<action itemid="13293" script="other/taming.lua"/>
+	<action itemid="13294" script="other/taming.lua"/>
+	<action itemid="13295" script="other/taming.lua"/>
+	<action itemid="13298" script="other/taming.lua"/>
+	<action itemid="13305" script="other/taming.lua"/>
+	<action itemid="13307" script="other/taming.lua"/>
+	<action itemid="13508" script="other/taming.lua"/>
+	<action itemid="13535" script="other/taming.lua"/>
+	<action itemid="13536" script="other/taming.lua"/>
+	<action itemid="13537" script="other/taming.lua"/>
+	<action itemid="13538" script="other/taming.lua"/>
+	<action itemid="13539" script="other/taming.lua"/>
+	<action itemid="13938" script="other/taming.lua"/>
+	<action itemid="13939" script="other/taming.lua"/>
+	<action itemid="13498" script="other/taming.lua"/>
+	<action itemid="15545" script="other/taming.lua"/>
+	<action itemid="15546" script="other/taming.lua"/>
 
 	<!-- Increase/Decrease ItemId -->
 	<action itemid="1873" function="increaseItemId"/>
@@ -235,6 +258,9 @@
 	<action fromid="17235" toid="17238" script="other/doors.lua" />
 	<action fromid="18208" toid="18209" script="other/doors.lua" />
 	<action fromid="13020" toid="13023" script="other/doors.lua" />
+	<action fromid="14755" toid="14760" script="other/hive_gate.lua" />
+	<action fromid="14767" toid="14771" script="other/hive_gate.lua" />
 	<action itemid="14405" function="market"/>
 	<action fromid="18488" toid="18492" script="other/skilltrainer.lua" />
+	<action itemid="12397" script="other/trainingbook.lua"/>
 </actions>

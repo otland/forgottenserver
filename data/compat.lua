@@ -55,6 +55,7 @@ function getCreatureMaster(cid)
 end
 
 getCreaturePos = getCreaturePosition
+getThingFromPos = getThingfromPos
 
 function doCreatureAddHealth(cid, health) local c = Creature(cid) return c ~= nil and c:addHealth(health) or false end
 function doRemoveCreature(cid) local c = Creature(cid) return c ~= nil and c:remove() or false end
