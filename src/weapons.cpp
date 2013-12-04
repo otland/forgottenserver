@@ -979,6 +979,8 @@ bool WeaponDistance::getSkillType(const Player* player, const Item* item,
 				skillpoint = 0;
 				break;
 		}
+	} else {
+		skillpoint = 0;
 	}
 	return true;
 }
