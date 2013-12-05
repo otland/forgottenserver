@@ -205,8 +205,7 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		}
 	}
 
-	++m_lastUID;
-	m_localMap[m_lastUID] = thing;
+	m_localMap[++m_lastUID] = thing;
 	return m_lastUID;
 }
 
@@ -845,7 +844,7 @@ bool LuaScriptInterface::getBoolean(lua_State* L, int32_t arg)
 	return lua_toboolean(L, arg) != 0;
 }
 
-Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg, uint32_t& stackpos)
+Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg, int32_t& stackpos)
 {
 	Position position;
 	position.x = getField<uint16_t>(L, arg, "x");
@@ -1051,26 +1050,7 @@ void LuaScriptInterface::pushNil(lua_State* L)
 	lua_pushnil(L);
 }
 
-void LuaScriptInterface::pushMetaPosition(lua_State* L, const PositionEx& position)
-{
-	lua_newtable(L);
-
-	pushNumber(L, position.x);
-	lua_setfield(L, -2, "x");
-
-	pushNumber(L, position.y);
-	lua_setfield(L, -2, "y");
-
-	pushNumber(L, position.z);
-	lua_setfield(L, -2, "z");
-
-	pushNumber(L, position.stackpos);
-	lua_setfield(L, -2, "stackpos");
-
-	setMetatable(L, -1, "Position");
-}
-
-void LuaScriptInterface::pushMetaPosition(lua_State* L, const Position& position, uint32_t stackpos)
+void LuaScriptInterface::pushMetaPosition(lua_State* L, const Position& position, int32_t stackpos/* = 0*/)
 {
 	lua_newtable(L);
 
@@ -1171,9 +1151,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doChangeTypeItem(uid, newtype)
 	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
-
-	//doPlayerAddMana(cid, mana[, animationOnLoss])
-	lua_register(m_luaState, "doPlayerAddMana", LuaScriptInterface::luaDoPlayerAddMana);
 
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
@@ -2460,37 +2437,6 @@ int32_t LuaScriptInterface::luaDoChangeTypeItem(lua_State* L)
 	}
 
 	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddMana(lua_State* L)
-{
-	//doPlayerAddMana(uid, mana[, animationOnLoss])
-	int32_t parameters = lua_gettop(L);
-
-	bool animationOnLoss;
-	if (parameters > 2) {
-		animationOnLoss = popBoolean(L);
-	} else {
-		animationOnLoss = false;
-	}
-
-	int32_t manaChange = popNumber<int32_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (!animationOnLoss && manaChange < 0) {
-			player->changeMana(manaChange);
-		} else {
-			g_game.combatChangeMana(nullptr, player, manaChange);
-		}
-
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
@@ -5122,18 +5068,19 @@ int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 	// Position.new([position])
 	int32_t parameters = getStackTop(L);
 	if (parameters <= 1) {
-		pushMetaPosition(L, Position(), 0);
+		pushMetaPosition(L, Position());
 		return 1;
 	}
 
+	int32_t stackpos;
 	if (isTable(L, 2)) {
-		uint32_t stackpos;
 		const Position& position = getPosition(L, 2, stackpos);
 		pushMetaPosition(L, position, stackpos);
 	} else {
-		int32_t stackpos = 0;
 		if (parameters >= 5) {
 			stackpos = getNumber<int32_t>(L, 5);
+		} else {
+			stackpos = 0;
 		}
 
 		uint8_t z = 0;
@@ -5156,7 +5103,7 @@ int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 int32_t LuaScriptInterface::luaPositionAdd(lua_State* L)
 {
 	// positionValue = position + positionEx
-	uint32_t stackpos;
+	int32_t stackpos;
 	const Position& position = getPosition(L, 1, stackpos);
 
 	Position positionEx;
@@ -5173,7 +5120,7 @@ int32_t LuaScriptInterface::luaPositionAdd(lua_State* L)
 int32_t LuaScriptInterface::luaPositionSub(lua_State* L)
 {
 	// positionValue = position - positionEx
-	uint32_t stackpos;
+	int32_t stackpos;
 	const Position& position = getPosition(L, 1, stackpos);
 
 	Position positionEx;
@@ -5317,7 +5264,7 @@ int32_t LuaScriptInterface::luaTileGetPosition(lua_State* L)
 	// tile:getPosition()
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile) {
-		pushMetaPosition(L, tile->getPosition(), 0);
+		pushMetaPosition(L, tile->getPosition());
 	} else {
 		pushNil(L);
 	}
@@ -5867,7 +5814,7 @@ int32_t LuaScriptInterface::luaNetworkMessageGetPosition(lua_State* L)
 	// networkMessage:getPosition()
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		pushMetaPosition(L, message->GetPosition(), 0);
+		pushMetaPosition(L, message->GetPosition());
 	} else {
 		pushNil(L);
 	}
@@ -6570,7 +6517,7 @@ int32_t LuaScriptInterface::luaItemGetPosition(lua_State* L)
 	// item:getPosition()
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		pushMetaPosition(L, item->getPosition(), 0);
+		pushMetaPosition(L, item->getPosition());
 	} else {
 		pushNil(L);
 	}
@@ -7279,7 +7226,7 @@ int32_t LuaScriptInterface::luaCreatureGetPosition(lua_State* L)
 	// creature:getPosition()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
-		pushMetaPosition(L, creature->getPosition(), 0);
+		pushMetaPosition(L, creature->getPosition());
 	} else {
 		pushNil(L);
 	}
@@ -7406,22 +7353,26 @@ int32_t LuaScriptInterface::luaCreatureGetMana(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureAddMana(lua_State* L)
 {
 	// creature:addMana(manaChange[, animationOnLoss = false])
-	bool animationOnLoss = true;
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		pushNil(L);
+		return 1;
+	}
+
+	int32_t manaChange = getNumber<int32_t>(L, 2);
+	bool animationOnLoss;
 	if (getStackTop(L) >= 3) {
 		animationOnLoss = getBoolean(L, 3);
-	}
-	int32_t manaChange = getNumber<int32_t>(L, 2);
-	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		if (!animationOnLoss && manaChange < 0) {
-			creature->changeMana(manaChange);
-		} else {
-			g_game.combatChangeMana(nullptr, creature, manaChange);
-		}
-		pushBoolean(L, true);
 	} else {
-		pushNil(L);
+		animationOnLoss = false;
 	}
+
+	if (!animationOnLoss && manaChange < 0) {
+		creature->changeMana(manaChange);
+	} else {
+		g_game.combatChangeMana(nullptr, creature, manaChange);
+	}
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -10067,7 +10018,7 @@ int32_t LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
 	// town:getTemplePosition()
 	Town* town = getUserdata<Town>(L, 1);
 	if (town) {
-		pushMetaPosition(L, town->getTemplePosition(), 0);
+		pushMetaPosition(L, town->getTemplePosition());
 	} else {
 		pushNil(L);
 	}
@@ -10136,7 +10087,7 @@ int32_t LuaScriptInterface::luaHouseGetExitPosition(lua_State* L)
 	// house:getExitPosition()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		pushMetaPosition(L, house->getEntryPosition(), 0);
+		pushMetaPosition(L, house->getEntryPosition());
 	} else {
 		pushNil(L);
 	}

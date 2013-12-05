@@ -247,8 +247,8 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 
-		LuaScriptInterface::pushMetaPosition(L, oldPos, 0);
-		LuaScriptInterface::pushMetaPosition(L, newPos, 0);
+		LuaScriptInterface::pushMetaPosition(L, oldPos);
+		LuaScriptInterface::pushMetaPosition(L, newPos);
 
 		if (scriptInterface->callFunction(4)) {
 			return;

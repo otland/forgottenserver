@@ -308,7 +308,7 @@ class LuaScriptInterface
 
 		static std::string getString(lua_State* L, int32_t arg);
 		static bool getBoolean(lua_State* L, int32_t arg);
-		static Position getPosition(lua_State* L, int32_t arg, uint32_t& stackpos);
+		static Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos);
 		static Position getPosition(lua_State* L, int32_t arg);
 		static Outfit_t getOutfit(lua_State* L, int32_t arg);
 		static LuaVariant getVariant(lua_State* L, int32_t arg);
@@ -358,8 +358,7 @@ class LuaScriptInterface
 
 		static void pushBoolean(lua_State* L, bool value);
 		static void pushNil(lua_State* L);
-		static void pushMetaPosition(lua_State* L, const PositionEx& position);
-		static void pushMetaPosition(lua_State* L, const Position& position, uint32_t stackpos);
+		static void pushMetaPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
 		//
@@ -415,7 +414,6 @@ class LuaScriptInterface
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
 
-		static int32_t luaDoPlayerAddMana(lua_State* L);
 		static int32_t luaDoPlayerAddItem(lua_State* L);
 		static int32_t luaDoTileAddItemEx(lua_State* L);
 		static int32_t luaDoRelocate(lua_State* L);
