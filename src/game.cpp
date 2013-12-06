@@ -67,7 +67,6 @@ Game::Game() :
 
 	checkCreatureLastIndex = 0;
 
-	map = nullptr;
 	services = nullptr;
 	lastStageLevel = 0;
 	playersRecord = 0;
@@ -101,8 +100,6 @@ Game::~Game()
 	for (const auto& it : guilds) {
 		delete it.second;
 	}
-
-	delete map;
 }
 
 void Game::start(ServiceManager* servicer)
@@ -215,7 +212,7 @@ void Game::saveGameState()
 		IOLoginData::savePlayer(it.second);
 	}
 
-	map->saveMap();
+	map.saveMap();
 
 	if (gameState == GAME_STATE_MAINTAIN) {
 		setGameState(GAME_STATE_NORMAL);
@@ -224,21 +221,14 @@ void Game::saveGameState()
 
 int32_t Game::loadMainMap(const std::string& filename)
 {
-	if (!map) {
-		map = new Map;
-	}
-
 	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
 	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
-	return map->loadMap("data/world/" + filename + ".otbm");
+	return map.loadMap("data/world/" + filename + ".otbm");
 }
 
 void Game::loadMap(const std::string& path)
 {
-	if (!map) {
-		map = new Map;
-	}
-	map->loadMap(path);
+	map.loadMap(path);
 }
 
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos)
@@ -392,22 +382,22 @@ void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
 
 void Game::setTile(Tile* newTile)
 {
-	return map->setTile(newTile->getPosition(), newTile);
+	return map.setTile(newTile->getPosition(), newTile);
 }
 
 Tile* Game::getTile(int32_t x, int32_t y, int32_t z)
 {
-	return map->getTile(x, y, z);
+	return map.getTile(x, y, z);
 }
 
 Tile* Game::getTile(const Position& pos)
 {
-	return map->getTile(pos.x, pos.y, pos.z);
+	return map.getTile(pos.x, pos.y, pos.z);
 }
 
 QTreeLeafNode* Game::getLeaf(uint32_t x, uint32_t y)
 {
-	return map->getLeaf(x, y);
+	return map.getLeaf(x, y);
 }
 
 Creature* Game::getCreatureByID(uint32_t id)
@@ -558,7 +548,7 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 		return false;
 	}
 
-	if (!map->placeCreature(pos, creature, extendedPos, forced)) {
+	if (!map.placeCreature(pos, creature, extendedPos, forced)) {
 		return false;
 	}
 
@@ -789,7 +779,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 
 	int32_t index = tile->__getIndexOfThing(creature);
 
-	if (!map->removeCreature(creature)) {
+	if (!map.removeCreature(creature)) {
 		return false;
 	}
 
@@ -1208,7 +1198,7 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 			std::list<Direction> listDir;
 
-			if (map->getPathTo(player, walkPos, listDir)) {
+			if (map.getPathTo(player, walkPos, listDir)) {
 				g_dispatcher->addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
 
@@ -3663,12 +3653,12 @@ bool Game::playerSpeakToNpc(Player* player, const std::string& text)
 bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
                             int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	return map->canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
+	return map.canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
 }
 
 bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
 {
-	return map->isSightClear(fromPos, toPos, floorCheck);
+	return map.isSightClear(fromPos, toPos, floorCheck);
 }
 
 bool Game::internalCreatureTurn(Creature* creature, Direction dir)
@@ -3737,13 +3727,13 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 bool Game::getPathTo(const Creature* creature, const Position& destPos,
                      std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/)
 {
-	return map->getPathTo(creature, destPos, listDir, maxSearchDist);
+	return map.getPathTo(creature, destPos, listDir, maxSearchDist);
 }
 
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos,
                        std::list<Direction>& dirList, const FindPathParams& fpp)
 {
-	return map->getPathMatching(creature, dirList, FrozenPathingConditionCall(targetPos), fpp);
+	return map.getPathMatching(creature, dirList, FrozenPathingConditionCall(targetPos), fpp);
 }
 
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,

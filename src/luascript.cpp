@@ -4467,8 +4467,7 @@ int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 
 int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
-	g_dispatcher->addTask(
-	    createTask(std::bind(&Game::cleanMap, &g_game)));
+	g_game.getMap()->clean();
 	pushBoolean(L, true);
 	return 1;
 }

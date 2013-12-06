@@ -103,8 +103,8 @@ class Game
 		  * \param height height of the map
 		  */
 		void getMapDimensions(uint32_t& width, uint32_t& height) const {
-			width = map->mapWidth;
-			height = map->mapHeight;
+			width = map.mapWidth;
+			height = map.mapHeight;
 		}
 
 		void setWorldType(WorldType_t type);
@@ -246,17 +246,15 @@ class Game
 		void getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
 		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
 		                   int32_t minRangeY = 0, int32_t maxRangeY = 0) {
-			map->getSpectators(list, centerPos, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
+			map.getSpectators(list, centerPos, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 		}
 
 		const SpectatorVec& getSpectators(const Position& centerPos) {
-			return map->getSpectators(centerPos);
+			return map.getSpectators(centerPos);
 		}
 
 		void clearSpectatorCache() {
-			if (map) {
-				map->clearSpectatorCache();
-			}
+			map.clearSpectatorCache();
 		}
 
 		ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
@@ -466,9 +464,6 @@ class Game
 		GameState_t getGameState() const;
 		void setGameState(GameState_t newState);
 		void saveGameState();
-		void cleanMap() {
-			map->clean();
-		}
 
 		//Events
 		void checkCreatureWalk(uint32_t creatureId);
@@ -495,10 +490,7 @@ class Game
 		void addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect);
 
 		Map* getMap() {
-			return map;
-		}
-		const Map* getMap() const {
-			return map;
+			return &map;
 		}
 
 		void addCommandTag(char tag);
@@ -552,7 +544,7 @@ class Game
 		void checkDecay();
 		void internalDecayItem(Item* item);
 
-		Map* map;
+		Map map;
 
 		std::unordered_map<uint32_t, Player*> players;
 		std::unordered_map<std::string, Player*> mappedPlayerNames;

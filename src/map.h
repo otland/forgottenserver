@@ -260,11 +260,15 @@ class Map
 		std::map<std::string, Position> waypoints;
 
 	protected:
-		uint32_t mapWidth, mapHeight;
-		std::string spawnfile;
-		std::string housefile;
 		SpectatorCache spectatorCache;
 		SpectatorCache playersSpectatorCache;
+
+		QTreeNode root;
+
+		std::string spawnfile;
+		std::string housefile;
+
+		uint32_t mapWidth, mapHeight;
 
 		// Actually scans the map for spectators
 		void getSpectatorsInternal(SpectatorVec& list, const Position& centerPos,
@@ -284,10 +288,7 @@ class Map
 
 		void clearSpectatorCache();
 
-		QTreeNode root;
-
 		friend class Game;
-
 		friend class IOMap;
 };
 
