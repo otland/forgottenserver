@@ -27,7 +27,7 @@ function onStartup()
 				local lastBid = result.getDataInt(resultId, "last_bid")
 				if balance >= lastBid then
 					db.query("UPDATE `players` SET `balance` = " .. (balance - lastBid) .. " WHERE `id` = " .. highestBidder)
-					house:setOwner(highestBidder)
+					house:setOwnerGuid(highestBidder)
 				end
 			end
 		until not result.next(resultId)
