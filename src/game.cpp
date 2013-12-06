@@ -3096,11 +3096,14 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		subType = count;
 	}
 	
+	Item* item = Item::CreateItem(it.id);
 	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
-		if (!creatureEvent->executeOnLook(player, Item::CreateItem(it.id, count), player->getPosition(), 0)) {
+		if (!creatureEvent->executeOnLook(player, item, player->getPosition(), 0)) {
+			delete item;
 			return;
 		}
 	}
+	delete item;
 
 	std::ostringstream ss;
 	ss << "You see " << Item::getDescription(it, 1, nullptr, subType);

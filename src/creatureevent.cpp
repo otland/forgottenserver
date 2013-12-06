@@ -561,9 +561,9 @@ bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 
 bool CreatureEvent::executeOnLook(Player* player, Thing* thing, const Position& position, int32_t lookDistance)
 {
-	//onLook(cid, thing, position, lookDist)
+	//onLook(player, thing, position, lookDistance)
 	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::executeExtendedOpcode] Call stack overflow" << std::endl;
+		std::cout << "[Error - CreatureEvent::executeOnLook] Call stack overflow" << std::endl;
 		return false;
 	}
 
@@ -574,8 +574,19 @@ bool CreatureEvent::executeOnLook(Player* player, Thing* thing, const Position& 
 
 	m_scriptInterface->pushFunction(m_scriptId);
 
-	LuaScriptInterface::pushNumber(L, player->getID());
-	LuaScriptInterface::pushThing(L, thing, env->addThing(thing));
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	if (Creature* creature = thing->getCreature()) {
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+	} else if (Item* item = thing->getItem()) {
+		LuaScriptInterface::pushUserdata<Item>(L, item);
+		LuaScriptInterface::setItemMetatable(L, -1, item);
+	} else {
+		LuaScriptInterface::pushNil(L);
+	}
+
 	LuaScriptInterface::pushPosition(L, position, 0);
 	LuaScriptInterface::pushNumber(L, lookDistance);
 
