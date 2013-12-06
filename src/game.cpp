@@ -2892,6 +2892,12 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 
 	int32_t lookDistance = std::max<int32_t>(Position::getDistanceX(playerPosition, tradeItemPosition),
 	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
+		
+	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
+		if (!creatureEvent->executeOnLook(player, tradeItem, tradeItemPosition, lookDistance)) {
+			return;
+		}
+	}
 
 	std::ostringstream ss;
 
@@ -3089,6 +3095,12 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 	} else {
 		subType = count;
 	}
+	
+	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
+		if (!creatureEvent->executeOnLook(player, Item::CreateItem(it.id, count), player->getPosition(), 0)) {
+			return;
+		}
+	}
 
 	std::ostringstream ss;
 	ss << "You see " << Item::getDescription(it, 1, nullptr, subType);
@@ -3124,6 +3136,12 @@ void Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 		}
 	} else {
 		lookDistance = -1;
+	}
+
+	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
+		if (!creatureEvent->executeOnLook(player, thing, thingPos, lookDistance)) {
+			return;
+		}
 	}
 
 	std::ostringstream ss;
@@ -3204,6 +3222,12 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		}
 	} else {
 		lookDistance = -1;
+	}
+
+	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
+		if (!creatureEvent->executeOnLook(player, creature, creaturePos, lookDistance)) {
+			return;
+		}
 	}
 
 	std::ostringstream ss;
