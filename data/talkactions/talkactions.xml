@@ -41,6 +41,6 @@
 	<talkaction words="!serverinfo" script="serverinfo.lua"/>
 
 	<!-- test talkactions -->
-	<talkaction words="!z" script="magiceffect.lua"/>
-	<talkaction words="!x" script="animationeffect.lua"/>
+	<talkaction words="!z" separator=" " script="magiceffect.lua"/>
+	<talkaction words="!x" separator=" " script="animationeffect.lua"/>
 </talkactions>
