@@ -8684,14 +8684,14 @@ int32_t LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerChannelSay(lua_State* L)
 {
-	// player:channelSay(target, type, text, channelId)
+	// player:channelSay(speaker, type, text, channelId)
 	uint16_t channelId = getNumber<uint16_t>(L, 5);
 	const std::string& text = getString(L, 4);
 	SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 3));
-	Creature* target = getCreature(L, 2);
+	Creature* speaker = getCreature(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->sendToChannel(target, type, text, channelId);
+		player->sendToChannel(speaker, type, text, channelId);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
