@@ -104,7 +104,7 @@ class CreatureEvent : public Event
 		bool executeChangeHealth(Creature* creature, Creature* attacker, const CombatDamage& damage);
 		bool executeChangeMana(Creature* creature, Creature* attacker, int32_t manaChange);
 		bool executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
-		bool executeOnLook(Player* player, Thing* thing, const Position& position, int32_t lookDist);
+		bool executeOnLook(Player* player, Thing* thing, const Position& position, int32_t lookDistance);
 		//
 
 	protected:
