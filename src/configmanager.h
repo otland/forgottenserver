@@ -61,6 +61,7 @@ class ConfigManager
 			MARKET_ENABLED,
 			MARKET_PREMIUM,
 			STAMINA_SYSTEM,
+			PVPZONE_ADDMANASPENT,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

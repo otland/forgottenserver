@@ -111,6 +111,9 @@ deSpawnRadius = 50
 -- Stamina
 staminaSystem = "yes"
 
+-- PvP Zone Skills
+addSkillsInPvPZone = "yes"
+
 -- Startup
 -- NOTE: defaultPriority only works on Windows and sets process priority.
 defaultPriority = "high"

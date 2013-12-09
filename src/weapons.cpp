@@ -497,7 +497,8 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 		skills_t skillType;
 		uint32_t skillPoint = 0;
 
-		if (getSkillType(player, item, skillType, skillPoint)) {
+		if (getSkillType(player, item, skillType, skillPoint) && player->getZone() != ZONE_PVP 
+			|| g_config.getBoolean(ConfigManager::PVPZONE_ADDSKILLS)) {
 			player->addSkillAdvance(skillType, skillPoint);
 		}
 	}
@@ -509,8 +510,9 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	int32_t manaCost = getManaCost(player);
 
 	if (manaCost > 0) {
-		player->addManaSpent(manaCost);
-		player->changeMana(-manaCost);
+		player->changeMana(-(int32_t)manaCost);
+		if(player->getZone() != ZONE_PVP || g_config.getBoolean(ConfigManager::PVPZONE_ADDSKILLS))
+			player->addManaSpent(manaCost);	
 	}
 
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {

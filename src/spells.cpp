@@ -938,8 +938,9 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const
 {
 	if (manaCost > 0) {
-		player->addManaSpent(manaCost);
 		player->changeMana(-(int32_t)manaCost);
+		if(player->getZone() != ZONE_PVP || g_config.getBoolean(ConfigManager::PVPZONE_ADDSKILLS))
+			player->addManaSpent(manaCost);	
 	}
 
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul)) {
