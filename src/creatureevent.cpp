@@ -559,7 +559,7 @@ bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	return m_scriptInterface->callFunction(3);
 }
 
-bool CreatureEvent::executeOnLook(Player* player, Thing* thing, const Position& position, int32_t lookDistance)
+bool CreatureEvent::executeOnLook(Player* player, Thing* thing, const Position& position, uint32_t stackPos, int32_t lookDistance)
 {
 	//onLook(player, thing, position, lookDistance)
 	if (!m_scriptInterface->reserveScriptEnv()) {
@@ -587,7 +587,7 @@ bool CreatureEvent::executeOnLook(Player* player, Thing* thing, const Position& 
 		LuaScriptInterface::pushNil(L);
 	}
 
-	LuaScriptInterface::pushPosition(L, position, 0);
+	LuaScriptInterface::pushMetaPosition(L, position, stackPos);
 	LuaScriptInterface::pushNumber(L, lookDistance);
 
 	return m_scriptInterface->callFunction(4);

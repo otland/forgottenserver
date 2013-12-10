@@ -2894,7 +2894,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
 		
 	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
-		if (!creatureEvent->executeOnLook(player, tradeItem, tradeItemPosition, lookDistance)) {
+		if (!creatureEvent->executeOnLook(player, tradeItem, tradeItemPosition, 0, lookDistance)) {
 			return;
 		}
 	}
@@ -3084,6 +3084,12 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		return;
 	}
 
+	int32_t onBuy, onSell;
+	Npc* merchant = player->getShopOwner(onBuy, onSell);
+	if (!merchant) {
+		return;
+	}
+
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
 	if (it.id == 0) {
 		return;
@@ -3096,14 +3102,25 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		subType = count;
 	}
 	
-	Item* item = Item::CreateItem(it.id);
+	if (!player->hasShopItemForSale(it.id, subType)) {
+		return;
+	}
+
+	Position playerPos = player->getPosition();
+	Position merchantPos = merchant->getPosition();
+
+	int32_t lookDistance;
+	lookDistance = std::max<int32_t>(Position::getDistanceX(playerPos, merchantPos), Position::getDistanceY(playerPos, merchantPos));
+	if (playerPos.z != merchantPos.z) {
+		lookDistance += 15;
+	}
+
+	Item item(it.id, subType);
 	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
-		if (!creatureEvent->executeOnLook(player, item, player->getPosition(), 0)) {
-			delete item;
+		if (!creatureEvent->executeOnLook(player, &item, merchant->getPosition(), 0, lookDistance)) {
 			return;
 		}
 	}
-	delete item;
 
 	std::ostringstream ss;
 	ss << "You see " << Item::getDescription(it, 1, nullptr, subType);
@@ -3142,7 +3159,7 @@ void Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 	}
 
 	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
-		if (!creatureEvent->executeOnLook(player, thing, thingPos, lookDistance)) {
+		if (!creatureEvent->executeOnLook(player, thing, thingPos, stackPos, lookDistance)) {
 			return;
 		}
 	}
@@ -3228,7 +3245,7 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 	}
 
 	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_LOOK)) {
-		if (!creatureEvent->executeOnLook(player, creature, creaturePos, lookDistance)) {
+		if (!creatureEvent->executeOnLook(player, creature, creaturePos, 0, lookDistance)) {
 			return;
 		}
 	}
