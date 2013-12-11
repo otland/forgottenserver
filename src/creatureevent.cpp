@@ -196,6 +196,8 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_CHANGEMANA;
 	} else if (tmpStr == "extendedopcode") {
 		m_type = CREATURE_EVENT_EXTENDED_OPCODE;
+	} else if (tmpStr == "look") {
+		m_type = CREATURE_EVENT_LOOK;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
@@ -244,6 +246,9 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_EXTENDED_OPCODE:
 			return "onExtendedOpcode";
+
+		case CREATURE_EVENT_LOOK:
+			return "onLook";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -552,4 +557,38 @@ bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	LuaScriptInterface::pushString(L, buffer);
 
 	return m_scriptInterface->callFunction(3);
+}
+
+bool CreatureEvent::executeOnLook(Player* player, Thing* thing, const Position& position, uint32_t stackPos, int32_t lookDistance)
+{
+	//onLook(player, thing, position, lookDistance)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnLook] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	if (Creature* creature = thing->getCreature()) {
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+	} else if (Item* item = thing->getItem()) {
+		LuaScriptInterface::pushUserdata<Item>(L, item);
+		LuaScriptInterface::setItemMetatable(L, -1, item);
+	} else {
+		LuaScriptInterface::pushNil(L);
+	}
+
+	LuaScriptInterface::pushMetaPosition(L, position, stackPos);
+	LuaScriptInterface::pushNumber(L, lookDistance);
+
+	return m_scriptInterface->callFunction(4);
 }
