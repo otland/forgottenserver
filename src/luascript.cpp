@@ -484,6 +484,38 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 	return m_runningEventId++;
 }
 
+int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const std::string& eventName)
+{
+	//get our events table
+	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, m_eventTableRef);
+	if (!isTable(m_luaState, -1)) {
+		lua_pop(m_luaState, 1);
+		return -1;
+	}
+
+	//get current event function pointer
+	lua_getglobal(m_luaState, globalName.c_str());
+	lua_getfield(m_luaState, -1, eventName.c_str());
+	if (!isFunction(m_luaState, -1)) {
+		lua_pop(m_luaState, 3);
+		return -1;
+	}
+
+	//save in our events table
+	lua_pushnumber(m_luaState, m_runningEventId);
+	lua_pushvalue(m_luaState, -2);
+	lua_rawset(m_luaState, -5);
+	lua_pop(m_luaState, 1);
+
+	//reset global value of this event
+	lua_pushnil(m_luaState);
+	lua_setfield(m_luaState, -2, eventName.c_str());
+	lua_pop(m_luaState, 2);
+
+	m_cacheFiles[m_runningEventId] = m_loadingFile + ":" + globalName + "@" + eventName;
+	return m_runningEventId++;
+}
+
 const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 {
 	if (scriptId == EVENT_ID_LOADING) {
@@ -610,14 +642,14 @@ bool LuaScriptInterface::callFunction(uint32_t nParams)
 {
 	bool result = false;
 	int32_t size0 = lua_gettop(m_luaState);
-
 	int32_t ret = protectedCall(m_luaState, nParams, 1);
 	if (ret != 0) {
-		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(m_luaState));
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(m_luaState, -1));
 	} else {
-		result = LuaScriptInterface::popBoolean(m_luaState);
+		result = LuaScriptInterface::getBoolean(m_luaState, -1);
 	}
 
+	lua_pop(m_luaState, 1);
 	if ((lua_gettop(m_luaState) + (int)nParams + 1) != size0) {
 		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
 	}
@@ -689,15 +721,6 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing, uint32_t uid)
 		setField(L, "type", 0);
 		setField(L, "actionid", 0);
 	}
-}
-
-void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, uint32_t stackpos)
-{
-	lua_newtable(L);
-	setField(L, "z", position.z);
-	setField(L, "y", position.y);
-	setField(L, "x", position.x);
-	setField(L, "stackpos", stackpos);
 }
 
 void LuaScriptInterface::pushString(lua_State* L, const std::string& value)
@@ -1050,7 +1073,7 @@ void LuaScriptInterface::pushNil(lua_State* L)
 	lua_pushnil(L);
 }
 
-void LuaScriptInterface::pushMetaPosition(lua_State* L, const Position& position, int32_t stackpos/* = 0*/)
+void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, int32_t stackpos/* = 0*/)
 {
 	lua_newtable(L);
 
@@ -1831,6 +1854,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
+	registerMethod("Player", "getParty", LuaScriptInterface::luaPlayerGetParty);
+
 	registerMethod("Player", "addOutfit", LuaScriptInterface::luaPlayerAddOutfit);
 	registerMethod("Player", "addOutfitAddon", LuaScriptInterface::luaPlayerAddOutfitAddon);
 	registerMethod("Player", "removeOutfit", LuaScriptInterface::luaPlayerRemoveOutfit);
@@ -2114,6 +2139,32 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "getYellSpeedTicks", LuaScriptInterface::luaMonsterTypeGetYellSpeedTicks);
 	registerMethod("MonsterType", "getChangeTargetChance", LuaScriptInterface::luaMonsterTypeGetChangeTargetChance);
 	registerMethod("MonsterType", "getChangeTargetSpeed", LuaScriptInterface::luaMonsterTypeGetChangeTargetSpeed);
+
+	// Party
+	registerClass("Party", "", nullptr);
+	registerMetaMethod("Party", "__eq", LuaScriptInterface::luaUserdataCompare);
+
+	registerMethod("Party", "disband", LuaScriptInterface::luaPartyDisband);
+
+	registerMethod("Party", "getLeader", LuaScriptInterface::luaPartyGetLeader);
+	registerMethod("Party", "setLeader", LuaScriptInterface::luaPartySetLeader);
+	
+	registerMethod("Party", "getMembers", LuaScriptInterface::luaPartyGetMembers);
+	registerMethod("Party", "getMemberCount", LuaScriptInterface::luaPartyGetMemberCount);
+
+	registerMethod("Party", "getInvitees", LuaScriptInterface::luaPartyGetInvitees);
+	registerMethod("Party", "getInviteeCount", LuaScriptInterface::luaPartyGetInviteeCount);
+
+	registerMethod("Party", "addInvite", LuaScriptInterface::luaPartyAddInvite);
+	registerMethod("Party", "removeInvite", LuaScriptInterface::luaPartyRemoveInvite);
+
+	registerMethod("Party", "addMember", LuaScriptInterface::luaPartyAddMember);
+	registerMethod("Party", "removeMember", LuaScriptInterface::luaPartyRemoveMember);
+
+	registerMethod("Party", "isSharedExperienceActive", LuaScriptInterface::luaPartyIsSharedExperienceActive);
+	registerMethod("Party", "isSharedExperienceEnabled", LuaScriptInterface::luaPartyIsSharedExperienceEnabled);
+	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
+	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
 }
 
 #undef registerEnum
@@ -4593,7 +4644,7 @@ int32_t LuaScriptInterface::luaGetWaypointPositionByName(lua_State* L)
 	const std::map<std::string, Position>& waypoints = g_game.getMap()->waypoints;
 	auto it = waypoints.find(popString(L));
 	if (it != waypoints.end()) {
-		pushPosition(L, it->second, 0);
+		pushPosition(L, it->second);
 	} else {
 		pushBoolean(L, false);
 	}
@@ -5067,14 +5118,14 @@ int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 	// Position.new([position])
 	int32_t parameters = getStackTop(L);
 	if (parameters <= 1) {
-		pushMetaPosition(L, Position());
+		pushPosition(L, Position());
 		return 1;
 	}
 
 	int32_t stackpos;
 	if (isTable(L, 2)) {
 		const Position& position = getPosition(L, 2, stackpos);
-		pushMetaPosition(L, position, stackpos);
+		pushPosition(L, position, stackpos);
 	} else {
 		if (parameters >= 5) {
 			stackpos = getNumber<int32_t>(L, 5);
@@ -5093,7 +5144,7 @@ int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 		}
 
 		uint16_t x = getNumber<uint16_t>(L, 2);
-		pushMetaPosition(L, Position(x, y, z), stackpos);
+		pushPosition(L, Position(x, y, z), stackpos);
 	}
 
 	return 1;
@@ -5112,7 +5163,7 @@ int32_t LuaScriptInterface::luaPositionAdd(lua_State* L)
 		positionEx = getPosition(L, 2);
 	}
 
-	pushMetaPosition(L, position + positionEx, stackpos);
+	pushPosition(L, position + positionEx, stackpos);
 	return 1;
 }
 
@@ -5129,7 +5180,7 @@ int32_t LuaScriptInterface::luaPositionSub(lua_State* L)
 		positionEx = getPosition(L, 2);
 	}
 
-	pushMetaPosition(L, position - positionEx, stackpos);
+	pushPosition(L, position - positionEx, stackpos);
 	return 1;
 }
 
@@ -5263,7 +5314,7 @@ int32_t LuaScriptInterface::luaTileGetPosition(lua_State* L)
 	// tile:getPosition()
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile) {
-		pushMetaPosition(L, tile->getPosition());
+		pushPosition(L, tile->getPosition());
 	} else {
 		pushNil(L);
 	}
@@ -5813,7 +5864,7 @@ int32_t LuaScriptInterface::luaNetworkMessageGetPosition(lua_State* L)
 	// networkMessage:getPosition()
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		pushMetaPosition(L, message->GetPosition());
+		pushPosition(L, message->GetPosition());
 	} else {
 		pushNil(L);
 	}
@@ -6516,7 +6567,7 @@ int32_t LuaScriptInterface::luaItemGetPosition(lua_State* L)
 	// item:getPosition()
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		pushMetaPosition(L, item->getPosition());
+		pushPosition(L, item->getPosition());
 	} else {
 		pushNil(L);
 	}
@@ -7225,7 +7276,7 @@ int32_t LuaScriptInterface::luaCreatureGetPosition(lua_State* L)
 	// creature:getPosition()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
-		pushMetaPosition(L, creature->getPosition());
+		pushPosition(L, creature->getPosition());
 	} else {
 		pushNil(L);
 	}
@@ -8737,6 +8788,24 @@ int32_t LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerGetParty(lua_State* L)
+{
+	// player:getParty()
+	const Player* player = getUserdata<const Player>(L, 1);
+	if (player) {
+		Party* party = player->getParty();
+		if (party) {
+			pushUserdata<Party>(L, party);
+			setMetatable(L, -1, "Party");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerAddOutfit(lua_State* L)
 {
 	// player:addOutfit(lookType)
@@ -9158,7 +9227,7 @@ int32_t LuaScriptInterface::luaMonsterGetSpawnPosition(lua_State* L)
 	// monster:getSpawnPosition()
 	const Monster* monster = getUserdata<const Monster>(L, 1);
 	if (monster) {
-		pushMetaPosition(L, monster->getMasterPos());
+		pushPosition(L, monster->getMasterPos());
 	} else {
 		pushNil(L);
 	}
@@ -10017,7 +10086,7 @@ int32_t LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
 	// town:getTemplePosition()
 	Town* town = getUserdata<Town>(L, 1);
 	if (town) {
-		pushMetaPosition(L, town->getTemplePosition());
+		pushPosition(L, town->getTemplePosition());
 	} else {
 		pushNil(L);
 	}
@@ -10086,7 +10155,7 @@ int32_t LuaScriptInterface::luaHouseGetExitPosition(lua_State* L)
 	// house:getExitPosition()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		pushMetaPosition(L, house->getEntryPosition());
+		pushPosition(L, house->getEntryPosition());
 	} else {
 		pushNil(L);
 	}
@@ -11573,6 +11642,218 @@ int32_t LuaScriptInterface::luaMonsterTypeGetChangeTargetSpeed(lua_State* L)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		pushNumber(L, monsterType->changeTargetSpeed);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+// Party
+int32_t LuaScriptInterface::luaPartyDisband(lua_State* L)
+{
+	// party:disband()
+	Party** partyPtr = getRawUserdata<Party>(L, 1);
+	if (partyPtr && *partyPtr) {
+		Party*& party = *partyPtr;
+		party->disband();
+		party = nullptr;
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyGetLeader(lua_State* L)
+{
+	// party:getLeader()
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		Player* leader = party->getLeader();
+		if (leader) {
+			pushUserdata<Player>(L, leader);
+			setMetatable(L, -1, "Player");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartySetLeader(lua_State* L)
+{
+	// party:setLeader(player)
+	Player* player = getPlayer(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party && player) {
+		pushBoolean(L, party->passPartyLeadership(player));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyGetMembers(lua_State* L)
+{
+	// party:getMembers()
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		uint32_t i = 0;
+		lua_newtable(L);
+		for (Player* player : party->getMembers()) {
+			pushNumber(L, ++i);
+			pushUserdata<Player>(L, player);
+			setMetatable(L, -1, "Player");
+			lua_settable(L, -3);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyGetMemberCount(lua_State* L)
+{
+	// party:getMemberCount()
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		pushNumber(L, party->getMemberCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyGetInvitees(lua_State* L)
+{
+	// party:getInvitees()
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		uint32_t i = 0;
+		lua_newtable(L);
+		for (Player* player : party->getInvitees()) {
+			pushNumber(L, ++i);
+			pushUserdata<Player>(L, player);
+			setMetatable(L, -1, "Player");
+			lua_settable(L, -3);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyGetInviteeCount(lua_State* L)
+{
+	// party:getInviteeCount()
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		pushNumber(L, party->getInvitationCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyAddInvite(lua_State* L)
+{
+	// party:addInvite(player)
+	Player* player = getPlayer(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party && player) {
+		pushBoolean(L, party->invitePlayer(*player));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyRemoveInvite(lua_State* L)
+{
+	// party:removeInvite(player)
+	Player* player = getPlayer(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party && player) {
+		pushBoolean(L, party->removeInvite(*player));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyAddMember(lua_State* L)
+{
+	// party:addMember(player)
+	Player* player = getPlayer(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party && player) {
+		pushBoolean(L, party->joinParty(*player));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyRemoveMember(lua_State* L)
+{
+	// party:removeMember(player)
+	Player* player = getPlayer(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party && player) {
+		pushBoolean(L, party->leaveParty(player));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyIsSharedExperienceActive(lua_State* L)
+{
+	// party:isSharedExperienceActive()
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		pushBoolean(L, party->isSharedExperienceActive());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyIsSharedExperienceEnabled(lua_State* L)
+{
+	// party:isSharedExperienceEnabled()
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		pushBoolean(L, party->isSharedExperienceEnabled());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartyShareExperience(lua_State* L)
+{
+	// party:shareExperience(experience)
+	uint64_t experience = getNumber<uint64_t>(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		party->shareExperience(experience);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
+{
+	// party:setSharedExperience(active)
+	bool active = getBoolean(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party) {
+		pushBoolean(L, party->setSharedExperience(party->getLeader(), active));
 	} else {
 		pushNil(L);
 	}

@@ -610,7 +610,7 @@ int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
 	//selfGetPosition()
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		pushPosition(L, npc->getPosition(), 0);
+		pushPosition(L, npc->getPosition());
 	} else {
 		lua_pushnil(L);
 	}
@@ -1237,8 +1237,8 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureMove);
 	lua_pushnumber(L, creature->getID());
-	LuaScriptInterface::pushPosition(L, oldPos, 0);
-	LuaScriptInterface::pushPosition(L, newPos, 0);
+	LuaScriptInterface::pushPosition(L, oldPos);
+	LuaScriptInterface::pushPosition(L, newPos);
 	m_scriptInterface->callFunction(3);
 }
 

@@ -144,6 +144,7 @@
     <ClCompile Include="..\src\databasemanager.cpp" />
     <ClCompile Include="..\src\depotchest.cpp" />
     <ClCompile Include="..\src\depotlocker.cpp" />
+    <ClCompile Include="..\src\events.cpp" />
     <ClCompile Include="..\src\fileloader.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\globalevent.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="..\src\depotchest.h" />
     <ClInclude Include="..\src\depotlocker.h" />
     <ClInclude Include="..\src\enums.h" />
+    <ClInclude Include="..\src\events.h" />
     <ClInclude Include="..\src\fileloader.h" />
     <ClInclude Include="..\src\game.h" />
     <ClInclude Include="..\src\globalevent.h" />

@@ -96,9 +96,8 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 {
 	if (asLowerCaseString(nodeName) == "movevent") {
 		return new MoveEvent(&m_scriptInterface);
-	} else {
-		return nullptr;
 	}
+	return nullptr;
 }
 
 bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
@@ -866,8 +865,8 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	m_scriptInterface->pushFunction(m_scriptId);
 	lua_pushnumber(L, creature->getID());
 	LuaScriptInterface::pushThing(L, item, env->addThing(item));
-	LuaScriptInterface::pushPosition(L, pos, 0);
-	LuaScriptInterface::pushPosition(L, creature->getLastPosition(), 0);
+	LuaScriptInterface::pushPosition(L, pos);
+	LuaScriptInterface::pushPosition(L, creature->getLastPosition());
 
 	return m_scriptInterface->callFunction(4);
 }
@@ -929,7 +928,7 @@ bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& po
 	m_scriptInterface->pushFunction(m_scriptId);
 	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 	LuaScriptInterface::pushThing(L, tileItem, env->addThing(tileItem));
-	LuaScriptInterface::pushPosition(L, pos, 0);
+	LuaScriptInterface::pushPosition(L, pos);
 
 	return m_scriptInterface->callFunction(3);
 }

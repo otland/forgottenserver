@@ -60,7 +60,6 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	if (asLowerCaseString(nodeName) == "talkaction") {
 		return new TalkAction(&m_scriptInterface);
 	}
-
 	return nullptr;
 }
 

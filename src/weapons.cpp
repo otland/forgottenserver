@@ -123,7 +123,6 @@ Event* Weapons::getEvent(const std::string& nodeName)
 	} else if (tmpNodeName == "wand" || tmpNodeName == "rod") {
 		return new WeaponWand(&m_scriptInterface);
 	}
-
 	return nullptr;
 }
 

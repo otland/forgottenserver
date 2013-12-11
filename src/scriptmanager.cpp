@@ -28,9 +28,11 @@
 #include "weapons.h"
 #include "creatureevent.h"
 #include "globalevent.h"
+#include "events.h"
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
+Events* g_events = nullptr;
 GlobalEvents* g_globalEvents = nullptr;
 Spells* g_spells = nullptr;
 TalkActions* g_talkActions = nullptr;
@@ -44,6 +46,7 @@ ScriptingManager::ScriptingManager()
 
 ScriptingManager::~ScriptingManager()
 {
+	delete g_events;
 	delete g_weapons;
 	delete g_spells;
 	delete g_actions;
@@ -96,6 +99,12 @@ bool ScriptingManager::loadScriptSystems()
 	g_globalEvents = new GlobalEvents();
 	if (!g_globalEvents->loadFromXml()) {
 		std::cout << "> ERROR: Unable to load global events!" << std::endl;
+		return false;
+	}
+
+	g_events = new Events();
+	if (!g_events->load()) {
+		std::cout << "> ERROR: Unable to load events!" << std::endl;
 		return false;
 	}
 
