@@ -357,7 +357,7 @@ void Player::setConditionSuppressions(uint32_t conditions, bool remove)
 Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 {
 	for (uint32_t slot = SLOT_RIGHT; slot <= SLOT_LEFT; slot++) {
-		Item* item = getInventoryItem((slots_t)slot);
+		Item* item = inventory[slot];
 		if (!item) {
 			continue;
 		}
@@ -376,7 +376,7 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 
 			case WEAPON_DIST: {
 				if (!ignoreAmmo && item->getAmmoType() != AMMO_NONE) {
-					Item* ammoItem = getInventoryItem(SLOT_AMMO);
+					Item* ammoItem = inventory[SLOT_AMMO];
 					if (ammoItem && ammoItem->getAmmoType() == item->getAmmoType()) {
 						const Weapon* weapon = g_weapons->getWeapon(ammoItem);
 						if (weapon) {
@@ -453,30 +453,13 @@ int32_t Player::getArmor() const
 {
 	int32_t armor = 0;
 
-	if (getInventoryItem(SLOT_HEAD)) {
-		armor += getInventoryItem(SLOT_HEAD)->getArmor();
+	static const slots_t armorSlots[] = {SLOT_HEAD, SLOT_NECKLACE, SLOT_ARMOR, SLOT_LEGS, SLOT_FEET, SLOT_RING};
+	for (slots_t slot : armorSlots) {
+		Item* inventoryItem = inventory[slot];
+		if (inventoryItem) {
+			armor += inventoryItem->getArmor();
+		}
 	}
-
-	if (getInventoryItem(SLOT_NECKLACE)) {
-		armor += getInventoryItem(SLOT_NECKLACE)->getArmor();
-	}
-
-	if (getInventoryItem(SLOT_ARMOR)) {
-		armor += getInventoryItem(SLOT_ARMOR)->getArmor();
-	}
-
-	if (getInventoryItem(SLOT_LEGS)) {
-		armor += getInventoryItem(SLOT_LEGS)->getArmor();
-	}
-
-	if (getInventoryItem(SLOT_FEET)) {
-		armor += getInventoryItem(SLOT_FEET)->getArmor();
-	}
-
-	if (getInventoryItem(SLOT_RING)) {
-		armor += getInventoryItem(SLOT_RING)->getArmor();
-	}
-
 	return int32_t(armor * vocation->armorMultiplier);
 }
 
@@ -487,24 +470,25 @@ void Player::getShieldAndWeapon(const Item*& shield, const Item*& weapon) const
 	weapon = nullptr;
 
 	for (uint32_t slot = SLOT_RIGHT; slot <= SLOT_LEFT; slot++) {
-		item = getInventoryItem((slots_t)slot);
-		if (item) {
-			switch (item->getWeaponType()) {
-				case WEAPON_NONE:
-					break;
+		Item* item = inventory[slot];
+		if (!item) {
+			continue;
+		}
 
-				case WEAPON_SHIELD: {
-					if (!shield || (shield && item->getDefense() > shield->getDefense())) {
-						shield = item;
-					}
+		switch (item->getWeaponType()) {
+			case WEAPON_NONE:
+				break;
 
-					break;
+			case WEAPON_SHIELD: {
+				if (!shield || (shield && item->getDefense() > shield->getDefense())) {
+					shield = item;
 				}
+				break;
+			}
 
-				default: { // weapons that are not shields
-					weapon = item;
-					break;
-				}
+			default: { // weapons that are not shields
+				weapon = item;
+				break;
 			}
 		}
 	}
@@ -619,7 +603,7 @@ void Player::updateInventoryWeight()
 		inventoryWeight = 0.00;
 
 		for (int i = SLOT_FIRST; i < SLOT_LAST; ++i) {
-			Item* item = getInventoryItem((slots_t)i);
+			Item* item = inventory[i];
 			if (item) {
 				inventoryWeight += item->getWeight();
 			}
@@ -630,26 +614,16 @@ void Player::updateInventoryWeight()
 int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 {
 	switch (playerinfo) {
-		case PLAYERINFO_LEVEL:
-			return level;
-		case PLAYERINFO_LEVELPERCENT:
-			return levelPercent;
-		case PLAYERINFO_MAGICLEVEL:
-			return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]);
-		case PLAYERINFO_MAGICLEVELPERCENT:
-			return magLevelPercent;
-		case PLAYERINFO_HEALTH:
-			return health;
-		case PLAYERINFO_MAXHEALTH:
-			return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]);
-		case PLAYERINFO_MANA:
-			return mana;
-		case PLAYERINFO_MAXMANA:
-			return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]);
-		case PLAYERINFO_SOUL:
-			return std::max<int32_t>(0, soul + varStats[STAT_SOULPOINTS]);
-		default:
-			return 0;
+		case PLAYERINFO_LEVEL: return level;
+		case PLAYERINFO_LEVELPERCENT: return levelPercent;
+		case PLAYERINFO_MAGICLEVEL: return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]);
+		case PLAYERINFO_MAGICLEVELPERCENT: return magLevelPercent;
+		case PLAYERINFO_HEALTH: return health;
+		case PLAYERINFO_MAXHEALTH: return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]);
+		case PLAYERINFO_MANA: return mana;
+		case PLAYERINFO_MAXMANA: return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]);
+		case PLAYERINFO_SOUL: return std::max<int32_t>(0, soul + varStats[STAT_SOULPOINTS]);
+		default: return 0;
 	}
 }
 
@@ -746,16 +720,11 @@ void Player::setVarStats(stats_t stat, int32_t modifier)
 int32_t Player::getDefaultStats(stats_t stat) const
 {
 	switch (stat) {
-		case STAT_MAXHITPOINTS:
-			return getMaxHealth() - getVarStats(STAT_MAXHITPOINTS);
-		case STAT_MAXMANAPOINTS:
-			return getMaxMana() - getVarStats(STAT_MAXMANAPOINTS);
-		case STAT_SOULPOINTS:
-			return getPlayerInfo(PLAYERINFO_SOUL) - getVarStats(STAT_SOULPOINTS);
-		case STAT_MAGICPOINTS:
-			return getBaseMagicLevel();
-		default:
-			return 0;
+		case STAT_MAXHITPOINTS: return getMaxHealth() - getVarStats(STAT_MAXHITPOINTS);
+		case STAT_MAXMANAPOINTS: return getMaxMana() - getVarStats(STAT_MAXMANAPOINTS);
+		case STAT_SOULPOINTS: return getPlayerInfo(PLAYERINFO_SOUL) - getVarStats(STAT_SOULPOINTS);
+		case STAT_MAGICPOINTS: return getBaseMagicLevel();
+		default: return 0;
 	}
 }
 
@@ -773,7 +742,6 @@ void Player::addContainer(uint8_t cid, Container* container)
 	if (it != openContainers.end()) {
 		OpenContainer& openContainer = it->second;
 		Container* oldContainer = openContainer.container;
-
 		if (oldContainer->getID() == ITEM_BROWSEFIELD) {
 			oldContainer->releaseThing2();
 		}
@@ -1320,7 +1288,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 
 	if (isLogin && creature == this) {
 		for (int32_t slot = SLOT_FIRST; slot < SLOT_LAST; ++slot) {
-			Item* item = getInventoryItem((slots_t)slot);
+			Item* item = inventory[slot];
 			if (item) {
 				item->__startDecaying();
 				g_moveEvents->onPlayerEquip(this, item, (slots_t)slot, false);
@@ -2016,12 +1984,12 @@ void Player::onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType)
 
 bool Player::hasShield() const
 {
-	Item* item = getInventoryItem(SLOT_LEFT);
+	Item* item = inventory[SLOT_LEFT];
 	if (item && item->getWeaponType() == WEAPON_SHIELD) {
 		return true;
 	}
 
-	item = getInventoryItem(SLOT_RIGHT);
+	item = inventory[SLOT_RIGHT];
 	if (item && item->getWeaponType() == WEAPON_SHIELD) {
 		return true;
 	}
@@ -2047,7 +2015,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				continue;
 			}
 
-			Item* item = getInventoryItem((slots_t)slot);
+			Item* item = inventory[slot];
 			if (!item) {
 				continue;
 			}
@@ -2471,14 +2439,12 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 		return true;
 	}
 
-	double itemWeight = 0;
-
+	double itemWeight;
 	if (item->isStackable()) {
 		itemWeight = Item::items[item->getID()].weight * count;
 	} else {
 		itemWeight = item->getWeight();
 	}
-
 	return itemWeight <= getFreeCapacity();
 }
 
@@ -2652,18 +2618,18 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 
 	if (ret == RET_NOERROR || ret == RET_NOTENOUGHROOM) {
 		//need an exchange with source?
-		if (getInventoryItem((slots_t)index) != nullptr && (!getInventoryItem((slots_t)index)->isStackable()
-		        || getInventoryItem((slots_t)index)->getID() != item->getID())) {
+		const Item* inventoryItem = getInventoryItem((slots_t)index);
+		if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
 			return RET_NEEDEXCHANGE;
-		}
-
-		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), (slots_t)index, true)) {
-			return RET_CANNOTBEDRESSED;
 		}
 
 		//check if enough capacity
 		if (!hasCapacity(item, count)) {
 			return RET_NOTENOUGHCAPACITY;
+		}
+
+		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), (slots_t)index, true)) {
+			return RET_CANNOTBEDRESSED;
 		}
 	}
 	return ret;
@@ -3502,7 +3468,7 @@ void Player::updateItemsLight(bool internal /*=false*/)
 	LightInfo curLight;
 
 	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
-		Item* item = getInventoryItem((slots_t)i);
+		Item* item = inventory[i];
 		if (item) {
 			item->getLight(curLight);
 

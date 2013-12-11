@@ -1028,7 +1028,6 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 {
 	//check if we can move the creature to the destination
 	ReturnValue ret = toCylinder->__queryAdd(0, creature, 1, flags);
-
 	if (ret != RET_NOERROR) {
 		return ret;
 	}

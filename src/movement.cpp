@@ -219,39 +219,17 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 {
 	uint32_t slotp;
 	switch (slot) {
-		case SLOT_HEAD:
-			slotp = SLOTP_HEAD;
-			break;
-		case SLOT_NECKLACE:
-			slotp = SLOTP_NECKLACE;
-			break;
-		case SLOT_BACKPACK:
-			slotp = SLOTP_BACKPACK;
-			break;
-		case SLOT_ARMOR:
-			slotp = SLOTP_ARMOR;
-			break;
-		case SLOT_RIGHT:
-			slotp = SLOTP_RIGHT;
-			break;
-		case SLOT_LEFT:
-			slotp = SLOTP_LEFT;
-			break;
-		case SLOT_LEGS:
-			slotp = SLOTP_LEGS;
-			break;
-		case SLOT_FEET:
-			slotp = SLOTP_FEET;
-			break;
-		case SLOT_AMMO:
-			slotp = SLOTP_AMMO;
-			break;
-		case SLOT_RING:
-			slotp = SLOTP_RING;
-			break;
-		default:
-			slotp = 0;
-			break;
+		case SLOT_HEAD: slotp = SLOTP_HEAD; break;
+		case SLOT_NECKLACE: slotp = SLOTP_NECKLACE; break;
+		case SLOT_BACKPACK: slotp = SLOTP_BACKPACK; break;
+		case SLOT_ARMOR: slotp = SLOTP_ARMOR; break;
+		case SLOT_RIGHT: slotp = SLOTP_RIGHT; break;
+		case SLOT_LEFT: slotp = SLOTP_LEFT; break;
+		case SLOT_LEGS: slotp = SLOTP_LEGS; break;
+		case SLOT_FEET: slotp = SLOTP_FEET; break;
+		case SLOT_AMMO: slotp = SLOTP_AMMO; break;
+		case SLOT_RING: slotp = SLOTP_RING; break;
+		default: slotp = 0; break;
 	}
 
 	auto it = m_itemIdMap.find(item->getID());
@@ -322,22 +300,18 @@ void MoveEvents::addEvent(MoveEvent* moveEvent, const Position& pos, MovePosList
 MoveEvent* MoveEvents::getEvent(const Tile* tile, MoveEvent_t eventType)
 {
 	MovePosListMap::iterator it = m_positionMap.find(tile->getPosition());
-
 	if (it != m_positionMap.end()) {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
-
 		if (!moveEventList.empty()) {
 			return *moveEventList.begin();
 		}
 	}
-
 	return nullptr;
 }
 
 uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool isIn)
 {
 	MoveEvent_t eventType;
-
 	if (isIn) {
 		eventType = MOVE_EVENT_STEP_IN;
 	} else {
@@ -350,7 +324,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool i
 
 	MoveEvent* moveEvent = getEvent(tile, eventType);
 	if (moveEvent) {
-		ret = ret & moveEvent->fireStepEvent(creature, nullptr, pos);
+		ret &= moveEvent->fireStepEvent(creature, nullptr, pos);
 	}
 
 	for (int32_t i = tile->__getFirstIndex(), j = tile->__getLastIndex(); i < j; ++i) {
@@ -360,7 +334,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool i
 			if (tileItem) {
 				moveEvent = getEvent(tileItem, eventType);
 				if (moveEvent) {
-					ret = ret & moveEvent->fireStepEvent(creature, tileItem, pos);
+					ret &= moveEvent->fireStepEvent(creature, tileItem, pos);
 				}
 			}
 		}
@@ -372,7 +346,6 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool i
 uint32_t MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_EQUIP, slot);
-
 	if (moveEvent) {
 		return moveEvent->fireEquip(player, item, slot, isCheck);
 	}
@@ -383,7 +356,6 @@ uint32_t MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, boo
 uint32_t MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot, bool isRemoval)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
-
 	if (moveEvent) {
 		return moveEvent->fireEquip(player, item, slot, isRemoval);
 	}
@@ -393,9 +365,7 @@ uint32_t MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot, b
 
 uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 {
-	MoveEvent_t eventType1;
-	MoveEvent_t eventType2;
-
+	MoveEvent_t eventType1, eventType2;
 	if (isAdd) {
 		eventType1 = MOVE_EVENT_ADD_ITEM;
 		eventType2 = MOVE_EVENT_ADD_ITEM_ITEMTILE;
@@ -471,24 +441,12 @@ MoveEvent::~MoveEvent()
 std::string MoveEvent::getScriptEventName()
 {
 	switch (m_eventType) {
-		case MOVE_EVENT_STEP_IN:
-			return "onStepIn";
-
-		case MOVE_EVENT_STEP_OUT:
-			return "onStepOut";
-
-		case MOVE_EVENT_EQUIP:
-			return "onEquip";
-
-		case MOVE_EVENT_DEEQUIP:
-			return "onDeEquip";
-
-		case MOVE_EVENT_ADD_ITEM:
-			return "onAddItem";
-
-		case MOVE_EVENT_REMOVE_ITEM:
-			return "onRemoveItem";
-
+		case MOVE_EVENT_STEP_IN: return "onStepIn";
+		case MOVE_EVENT_STEP_OUT: return "onStepOut";
+		case MOVE_EVENT_EQUIP: return "onEquip";
+		case MOVE_EVENT_DEEQUIP: return "onDeEquip";
+		case MOVE_EVENT_ADD_ITEM: return "onAddItem";
+		case MOVE_EVENT_REMOVE_ITEM: return "onRemoveItem";
 		default:
 			std::cout << "[Error - MoveEvent::getScriptEventName] Invalid event type" << std::endl;
 			return std::string();
