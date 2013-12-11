@@ -2993,11 +2993,10 @@ void Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t coun
 		return;
 	}
 
-	int32_t onBuy;
-	int32_t onSell;
+	int32_t onBuy, onSell;
 
 	Npc* merchant = player->getShopOwner(onBuy, onSell);
-	if (merchant == nullptr) {
+	if (!merchant) {
 		return;
 	}
 
@@ -3070,6 +3069,13 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		return;
 	}
 
+	int32_t onBuy, onSell;
+
+	Npc* merchant = player->getShopOwner(onBuy, onSell);
+	if (!merchant) {
+		return;
+	}
+
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
 	if (it.id == 0) {
 		return;
@@ -3080,6 +3086,10 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		subType = clientFluidToServer(count);
 	} else {
 		subType = count;
+	}
+
+	if (!player->hasShopItemForSale(it.id, subType)) {
+		return;
 	}
 
 	std::ostringstream ss;
