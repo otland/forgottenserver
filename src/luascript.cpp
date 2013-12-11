@@ -10834,7 +10834,7 @@ int32_t LuaScriptInterface::luaConditionGetType(lua_State* L)
 
 int32_t LuaScriptInterface::luaConditionGetIcons(lua_State* L)
 {
-	// condition:getType()
+	// condition:getIcons()
 	Condition* condition = getUserdata<Condition>(L, 1);
 	if (condition) {
 		pushNumber(L, condition->getIcons());
