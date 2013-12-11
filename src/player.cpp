@@ -465,7 +465,6 @@ int32_t Player::getArmor() const
 
 void Player::getShieldAndWeapon(const Item*& shield, const Item*& weapon) const
 {
-	Item* item;
 	shield = nullptr;
 	weapon = nullptr;
 
