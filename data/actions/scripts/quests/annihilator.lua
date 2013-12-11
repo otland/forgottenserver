@@ -7,7 +7,7 @@ local playerPosition = {
 
 local newPosition = {
 	{x = 189, y = 650, z = 13},
- 	{x = 189, y = 651, z = 13},
+	{x = 189, y = 651, z = 13},
 	{x = 189, y = 652, z = 13},
 	{x = 189, y = 653, z = 13}
 }
