@@ -42,6 +42,7 @@
 #include "globalevent.h"
 #include "monster.h"
 #include "scheduler.h"
+#include "events.h"
 #ifdef ENABLE_SERVER_DIAGNOSTIC
 #include "outputmessage.h"
 #include "connection.h"
@@ -61,6 +62,7 @@ extern Weapons* g_weapons;
 extern Game g_game;
 extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
+extern Events* g_events;
 
 s_defcommands Commands::defined_commands[] = {
 	//admin commands
@@ -298,6 +300,9 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	} else if (tmpParam == "globalevents" || tmpParam == "globalevent") {
 		g_globalEvents->reload();
 		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
+	} else if (tmpParam == "events") {
+		g_events->load();
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded events.");
 	} else {
 		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}

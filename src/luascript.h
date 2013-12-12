@@ -217,6 +217,7 @@ class LuaScriptInterface
 
 		const std::string& getFileById(int32_t scriptId);
 		int32_t getEvent(const std::string& eventName);
+		int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
 			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 17);
@@ -260,7 +261,6 @@ class LuaScriptInterface
 		//push/pop common structures
 		static void pushThing(lua_State* L, Thing* thing, uint32_t uid);
 		static void pushVariant(lua_State* L, const LuaVariant& var);
-		static void pushPosition(lua_State* L, const Position& position, uint32_t stackpos);
 		static void pushString(lua_State* L, const std::string& value);
 		static void pushCallback(lua_State* L, int32_t callback);
 
@@ -358,7 +358,7 @@ class LuaScriptInterface
 
 		static void pushBoolean(lua_State* L, bool value);
 		static void pushNil(lua_State* L);
-		static void pushMetaPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
+		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
 		//
@@ -880,6 +880,8 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerGetSlotItem(lua_State* L);
 
+		static int32_t luaPlayerGetParty(lua_State* L);
+
 		static int32_t luaPlayerAddOutfit(lua_State* L);
 		static int32_t luaPlayerAddOutfitAddon(lua_State* L);
 		static int32_t luaPlayerRemoveOutfit(lua_State* L);
@@ -1152,6 +1154,29 @@ class LuaScriptInterface
 		static int32_t luaMonsterTypeGetYellSpeedTicks(lua_State* L);
 		static int32_t luaMonsterTypeGetChangeTargetChance(lua_State* L);
 		static int32_t luaMonsterTypeGetChangeTargetSpeed(lua_State* L);
+
+		// Party
+		static int32_t luaPartyDisband(lua_State* L);
+
+		static int32_t luaPartyGetLeader(lua_State* L);
+		static int32_t luaPartySetLeader(lua_State* L);
+	
+		static int32_t luaPartyGetMembers(lua_State* L);
+		static int32_t luaPartyGetMemberCount(lua_State* L);
+
+		static int32_t luaPartyGetInvitees(lua_State* L);
+		static int32_t luaPartyGetInviteeCount(lua_State* L);
+
+		static int32_t luaPartyAddInvite(lua_State* L);
+		static int32_t luaPartyRemoveInvite(lua_State* L);
+
+		static int32_t luaPartyAddMember(lua_State* L);
+		static int32_t luaPartyRemoveMember(lua_State* L);
+
+		static int32_t luaPartyIsSharedExperienceActive(lua_State* L);
+		static int32_t luaPartyIsSharedExperienceEnabled(lua_State* L);
+		static int32_t luaPartyShareExperience(lua_State* L);
+		static int32_t luaPartySetSharedExperience(lua_State* L);
 
 		//
 		lua_State* m_luaState;

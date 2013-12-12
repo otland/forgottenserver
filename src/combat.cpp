@@ -1079,7 +1079,7 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 
 	m_scriptInterface->pushFunction(m_scriptId);
 	lua_pushnumber(L, cid);
-	m_scriptInterface->pushPosition(L, tile->getPosition(), 0);
+	LuaScriptInterface::pushPosition(L, tile->getPosition());
 
 	m_scriptInterface->callFunction(2);
 }

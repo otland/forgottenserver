@@ -62,7 +62,6 @@ Event* CreatureEvents::getEvent(const std::string& nodeName)
 	if (asLowerCaseString(nodeName) == "event") {
 		return new CreatureEvent(&m_scriptInterface);
 	}
-
 	return nullptr;
 }
 

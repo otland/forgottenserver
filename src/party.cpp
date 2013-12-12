@@ -23,9 +23,11 @@
 #include "player.h"
 #include "game.h"
 #include "configmanager.h"
+#include "events.h"
 
 extern Game g_game;
 extern ConfigManager g_config;
+extern Events* g_events;
 
 Party::Party(Player* _leader)
 {
@@ -45,6 +47,10 @@ Party::~Party()
 
 void Party::disband()
 {
+	if (!g_events->eventPartyOnDisband(this)) {
+		return;
+	}
+
 	Player* currentLeader = leader;
 	setLeader(nullptr);
 
@@ -92,8 +98,11 @@ bool Party::leaveParty(Player* player)
 		return false;
 	}
 
-	bool missingLeader = false;
+	if (!g_events->eventPartyOnLeave(this, player)) {
+		return false;
+	}
 
+	bool missingLeader = false;
 	if (leader == player) {
 		if (!memberList.empty()) {
 			if (memberList.size() == 1 && inviteList.empty()) {
@@ -185,6 +194,10 @@ bool Party::passPartyLeadership(Player* player)
 
 bool Party::joinParty(Player& player)
 {
+	if (!g_events->eventPartyOnJoin(this, &player)) {
+		return false;
+	}
+
 	auto it = std::find(inviteList.begin(), inviteList.end(), &player);
 	if (it == inviteList.end()) {
 		return false;

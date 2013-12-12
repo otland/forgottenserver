@@ -49,6 +49,7 @@
 #include "monster.h"
 #include "spawn.h"
 #include "connection.h"
+#include "events.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -57,6 +58,7 @@ extern TalkActions* g_talkActions;
 extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
+extern Events* g_events;
 
 Game::Game() :
 	wildcardTree(false),
@@ -2886,8 +2888,10 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
 
 	std::ostringstream ss;
-
 	if (index == 0) {
+		if (!g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance)) {
+			return;
+		}
 		ss << "You see " << tradeItem->getDescription(lookDistance);
 		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
 		return;
@@ -2921,6 +2925,9 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	}
 
 	if (foundItem) {
+		if (!g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance)) {
+			return;
+		}
 		ss << "You see " << tradeItem->getDescription(lookDistance);
 		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
 	}
@@ -3092,6 +3099,10 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		return;
 	}
 
+	if (!g_events->eventPlayerOnLookInShop(player, &it, subType)) {
+		return;
+	}
+
 	std::ostringstream ss;
 	ss << "You see " << Item::getDescription(it, 1, nullptr, subType);
 	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
@@ -3126,6 +3137,10 @@ void Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 		}
 	} else {
 		lookDistance = -1;
+	}
+
+	if (!g_events->eventPlayerOnLook(player, pos, thing, stackPos, lookDistance)) {
+		return;
 	}
 
 	std::ostringstream ss;

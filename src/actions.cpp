@@ -85,9 +85,8 @@ Event* Actions::getEvent(const std::string& nodeName)
 {
 	if (asLowerCaseString(nodeName) == "action") {
 		return new Action(&m_scriptInterface);
-	} else {
-		return nullptr;
 	}
+	return nullptr;
 }
 
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
@@ -572,7 +571,7 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 	} else {
 		LuaScriptInterface::pushThing(L, nullptr, 0);
 		Position posEx;
-		LuaScriptInterface::pushPosition(L, posEx, 0);
+		LuaScriptInterface::pushPosition(L, posEx);
 	}
 	return m_scriptInterface->callFunction(5);
 }

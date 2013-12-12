@@ -67,7 +67,6 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 	if (asLowerCaseString(nodeName) == "globalevent") {
 		return new GlobalEvent(&m_scriptInterface);
 	}
-
 	return nullptr;
 }
 
