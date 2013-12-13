@@ -280,13 +280,10 @@ class Creature : virtual public Thing
 		void setMaster(Creature* creature) {
 			master = creature;
 		}
-		Creature* getMaster() {
-			return master;
-		}
 		bool isSummon() const {
 			return master != nullptr;
 		}
-		const Creature* getMaster() const {
+		Creature* getMaster() const {
 			return master;
 		}
 
@@ -557,7 +554,6 @@ class Creature : virtual public Thing
 		virtual uint64_t getLostExperience() const {
 			return 0;
 		}
-		bool getKillers(Creature** lastHitCreature, Creature** mostDamageCreature);
 		virtual void dropLoot(Container* corpse, Creature* _lastHitCreature) {}
 		virtual uint16_t getLookCorpse() const {
 			return 0;

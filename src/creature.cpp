@@ -171,11 +171,11 @@ void Creature::onThink(uint32_t interval)
 		updateMapCache();
 	}
 
-	if (followCreature && getMaster() != followCreature && !canSeeCreature(followCreature)) {
+	if (followCreature && master != followCreature && !canSeeCreature(followCreature)) {
 		onCreatureDisappear(followCreature, false);
 	}
 
-	if (attackedCreature && getMaster() != attackedCreature && !canSeeCreature(attackedCreature)) {
+	if (attackedCreature && master != attackedCreature && !canSeeCreature(attackedCreature)) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 
@@ -477,8 +477,8 @@ void Creature::onCreatureDisappear(const Creature* creature, uint32_t stackpos, 
 {
 	onCreatureDisappear(creature, true);
 	if (creature == this) {
-		if (getMaster() && !getMaster()->isRemoved()) {
-			getMaster()->removeSummon(this);
+		if (master && !master->isRemoved()) {
+			master->removeSummon(this);
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
@@ -680,40 +680,45 @@ void Creature::onDeath()
 {
 	bool lastHitUnjustified = false;
 	bool mostDamageUnjustified = false;
-	Creature* _lastHitCreature;
-	Creature* mostDamageCreature;
-	if (getKillers(&_lastHitCreature, &mostDamageCreature)) {
-		Creature* lastHitCreatureMaster;
-		if (_lastHitCreature) {
-			lastHitUnjustified = _lastHitCreature->onKilledCreature(this);
-			lastHitCreatureMaster = _lastHitCreature->getMaster();
-		} else {
-			lastHitCreatureMaster = nullptr;
-		}
+	Creature* _lastHitCreature = g_game.getCreatureByID(lastHitCreature);
+	Creature* lastHitCreatureMaster;
+	if (_lastHitCreature) {
+		lastHitUnjustified = _lastHitCreature->onKilledCreature(this);
+		lastHitCreatureMaster = _lastHitCreature->getMaster();
+	} else {
+		lastHitCreatureMaster = nullptr;
+	}
 
-		if (mostDamageCreature) {
-			Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-			bool isNotLastHitMaster = (mostDamageCreature != lastHitCreatureMaster);
-			bool isNotMostDamageMaster = (_lastHitCreature != mostDamageCreatureMaster);
-			bool isNotSameMaster = lastHitCreatureMaster == nullptr || (mostDamageCreatureMaster != lastHitCreatureMaster);
+	Creature* mostDamageCreature = nullptr;
 
-			if (mostDamageCreature != _lastHitCreature && isNotLastHitMaster && isNotMostDamageMaster && isNotSameMaster) {
-				mostDamageUnjustified = mostDamageCreature->onKilledCreature(this, false);
+	const int64_t timeNow = OTSYS_TIME();
+	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+	int32_t mostDamage = 0;
+	for (const auto& it : damageMap) {
+		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
+			CountBlock_t cb = it.second;
+			if ((cb.total > mostDamage && (timeNow - cb.ticks <= inFightTicks))) {
+				mostDamage = cb.total;
+				mostDamageCreature = attacker;
 			}
+			attacker->onAttackedCreatureKilled(this);
 		}
 	}
 
-	for (const auto& it : damageMap) {
-		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
-			attacker->onAttackedCreatureKilled(this);
+	if (mostDamageCreature) {
+		if (mostDamageCreature != _lastHitCreature && mostDamageCreature != lastHitCreatureMaster) {
+			Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
+			if (_lastHitCreature != mostDamageCreatureMaster && (lastHitCreatureMaster == nullptr || mostDamageCreatureMaster != lastHitCreatureMaster)) {
+				mostDamageUnjustified = mostDamageCreature->onKilledCreature(this, false);
+			}
 		}
 	}
 
 	bool droppedCorpse = dropCorpse(_lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 	death(_lastHitCreature);
 
-	if (getMaster()) {
-		getMaster()->removeSummon(this);
+	if (master) {
+		master->removeSummon(this);
 	}
 
 	if (droppedCorpse) {
@@ -773,28 +778,6 @@ bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatu
 	}
 
 	return true;
-}
-
-bool Creature::getKillers(Creature** _lastHitCreature, Creature** _mostDamageCreature)
-{
-	*_lastHitCreature = g_game.getCreatureByID(lastHitCreature);
-	*_mostDamageCreature = nullptr;
-
-	int32_t mostDamage = 0;
-
-	int64_t timeNow = OTSYS_TIME();
-	uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
-	for (const auto& it : damageMap) {
-		CountBlock_t cb = it.second;
-		if ((cb.total > mostDamage && (timeNow - cb.ticks <= inFightTicks))) {
-			Creature* creature = g_game.getCreatureByID(it.first);
-			if (creature) {
-				mostDamage = cb.total;
-				*_mostDamageCreature = creature;
-			}
-		}
-	}
-	return (*_lastHitCreature || *_mostDamageCreature);
 }
 
 bool Creature::hasBeenAttacked(uint32_t attackerId)
@@ -1143,12 +1126,11 @@ void Creature::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {
 	target->addDamagePoints(this, points);
 
-	Creature* masterCreature = getMaster();
-	if (!masterCreature) {
+	if (!master) {
 		return;
 	}
 
-	Player* masterPlayer = masterCreature->getPlayer();
+	Player* masterPlayer = master->getPlayer();
 	if (masterPlayer) {
 		std::ostringstream ss;
 		ss << "Your " << asLowerCaseString(getName()) << " deals " << points << " to " << target->getNameDescription() << '.';
@@ -1166,8 +1148,8 @@ void Creature::onAttackedCreatureKilled(Creature* target)
 
 bool Creature::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 {
-	if (getMaster()) {
-		getMaster()->onKilledCreature(target);
+	if (master) {
+		master->onKilledCreature(target);
 	}
 
 	//scripting event - onKill
@@ -1180,9 +1162,9 @@ bool Creature::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 
 void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 {
-	if (gainExp != 0 && getMaster()) {
+	if (gainExp != 0 && master) {
 		gainExp = gainExp / 2;
-		getMaster()->onGainExperience(gainExp, target);
+		master->onGainExperience(gainExp, target);
 
 		const Position& targetPos = getPosition();
 
