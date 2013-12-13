@@ -1811,7 +1811,7 @@ bool Monster::canWalkTo(Position pos, Direction dir)
 	return false;
 }
 
-void Monster::death()
+void Monster::death(Creature* _lastHitCreature)
 {
 	setAttackedCreature(nullptr);
 
@@ -1827,27 +1827,18 @@ void Monster::death()
 	onIdleStatus();
 }
 
-Item* Monster::getCorpse()
+Item* Monster::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature)
 {
-	Item* corpse = Creature::getCorpse();
+	Item* corpse = Creature::getCorpse(_lastHitCreature, mostDamageCreature);
 	if (corpse) {
-		Creature* lastHitCreature_ = nullptr;
-		Creature* mostDamageCreature = nullptr;
-
-		if (getKillers(&lastHitCreature_, &mostDamageCreature) && mostDamageCreature) {
-			uint32_t corpseOwner = 0;
-
+		if (mostDamageCreature) {
 			if (mostDamageCreature->getPlayer()) {
-				corpseOwner = mostDamageCreature->getID();
+				corpse->setCorpseOwner(mostDamageCreature->getID());
 			} else {
 				const Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
 				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
-					corpseOwner = mostDamageCreatureMaster->getID();
+					corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
 				}
-			}
-
-			if (corpseOwner != 0) {
-				corpse->setCorpseOwner(corpseOwner);
 			}
 		}
 	}
@@ -1857,24 +1848,24 @@ Item* Monster::getCorpse()
 
 bool Monster::inDespawnRange(const Position& pos)
 {
-	if (spawn) {
-		if (Monster::despawnRadius == 0) {
-			return false;
-		}
-
-		if (!Spawns::getInstance()->isInZone(masterPos, Monster::despawnRadius, pos)) {
-			return true;
-		}
-
-		if (Monster::despawnRange == 0) {
-			return false;
-		}
-
-		if (Position::getDistanceZ(pos, masterPos) > Monster::despawnRange) {
-			return true;
-		}
-
+	if (!spawn) {
 		return false;
+	}
+
+	if (Monster::despawnRadius == 0) {
+		return false;
+	}
+
+	if (!Spawns::getInstance()->isInZone(masterPos, Monster::despawnRadius, pos)) {
+		return true;
+	}
+
+	if (Monster::despawnRange == 0) {
+		return false;
+	}
+
+	if (Position::getDistanceZ(pos, masterPos) > Monster::despawnRange) {
+		return true;
 	}
 
 	return false;
@@ -1954,7 +1945,7 @@ void Monster::updateLookDirection()
 	g_game.internalCreatureTurn(this, newDir);
 }
 
-void Monster::dropLoot(Container* corpse)
+void Monster::dropLoot(Container* corpse, Creature* _lastHitCreature)
 {
 	if (corpse && lootDrop) {
 		mType->createLoot(corpse);

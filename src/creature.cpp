@@ -70,10 +70,6 @@ Creature::Creature() :
 	memset(localMapCache, 0, sizeof(localMapCache));
 
 	attackedCreature = nullptr;
-	_lastHitCreature = nullptr;
-	_mostDamageCreature = nullptr;
-	lastHitUnjustified = false;
-	mostDamageUnjustified = false;
 
 	lastHitCreature = 0;
 	blockCount = 0;
@@ -230,6 +226,7 @@ void Creature::onIdleStatus()
 {
 	if (getHealth() > 0) {
 		damageMap.clear();
+		lastHitCreature = 0;
 	}
 }
 
@@ -681,7 +678,11 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 
 void Creature::onDeath()
 {
-	if (getKillers(&_lastHitCreature, &_mostDamageCreature)) {
+	bool lastHitUnjustified = false;
+	bool mostDamageUnjustified = false;
+	Creature* _lastHitCreature;
+	Creature* mostDamageCreature;
+	if (getKillers(&_lastHitCreature, &mostDamageCreature)) {
 		Creature* lastHitCreatureMaster;
 		if (_lastHitCreature) {
 			lastHitUnjustified = _lastHitCreature->onKilledCreature(this);
@@ -690,14 +691,14 @@ void Creature::onDeath()
 			lastHitCreatureMaster = nullptr;
 		}
 
-		if (_mostDamageCreature) {
-			Creature* mostDamageCreatureMaster = _mostDamageCreature->getMaster();
-			bool isNotLastHitMaster = (_mostDamageCreature != lastHitCreatureMaster);
+		if (mostDamageCreature) {
+			Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
+			bool isNotLastHitMaster = (mostDamageCreature != lastHitCreatureMaster);
 			bool isNotMostDamageMaster = (_lastHitCreature != mostDamageCreatureMaster);
 			bool isNotSameMaster = lastHitCreatureMaster == nullptr || (mostDamageCreatureMaster != lastHitCreatureMaster);
 
-			if (_mostDamageCreature != _lastHitCreature && isNotLastHitMaster && isNotMostDamageMaster && isNotSameMaster) {
-				mostDamageUnjustified = _mostDamageCreature->onKilledCreature(this, false);
+			if (mostDamageCreature != _lastHitCreature && isNotLastHitMaster && isNotMostDamageMaster && isNotSameMaster) {
+				mostDamageUnjustified = mostDamageCreature->onKilledCreature(this, false);
 			}
 		}
 	}
@@ -708,8 +709,8 @@ void Creature::onDeath()
 		}
 	}
 
-	bool droppedCorpse = dropCorpse();
-	death();
+	bool droppedCorpse = dropCorpse(_lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+	death(_lastHitCreature);
 
 	if (getMaster()) {
 		getMaster()->removeSummon(this);
@@ -720,14 +721,14 @@ void Creature::onDeath()
 	}
 }
 
-bool Creature::dropCorpse()
+bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
 	if (!lootDrop && getMonster()) {
 		if (master) {
 			//scripting event - onDeath
 			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
 			for (CreatureEvent* deathEvent : deathEvents) {
-				deathEvent->executeOnDeath(this, nullptr, _lastHitCreature, _mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+				deathEvent->executeOnDeath(this, nullptr, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 			}
 		}
 
@@ -755,7 +756,7 @@ bool Creature::dropCorpse()
 			g_game.startDecay(splash);
 		}
 
-		Item* corpse = getCorpse();
+		Item* corpse = getCorpse(_lastHitCreature, mostDamageCreature);
 		if (corpse) {
 			g_game.internalAddItem(tile, corpse, INDEX_WHEREEVER, FLAG_NOLIMIT);
 			g_game.startDecay(corpse);
@@ -763,11 +764,11 @@ bool Creature::dropCorpse()
 
 		//scripting event - onDeath
 		for (CreatureEvent* deathEvent : getCreatureEvents(CREATURE_EVENT_DEATH)) {
-			deathEvent->executeOnDeath(this, corpse, _lastHitCreature, _mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+			deathEvent->executeOnDeath(this, corpse, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 		}
 
 		if (corpse) {
-			dropLoot(corpse->getContainer());
+			dropLoot(corpse->getContainer(), _lastHitCreature);
 		}
 	}
 
@@ -805,7 +806,7 @@ bool Creature::hasBeenAttacked(uint32_t attackerId)
 	return (OTSYS_TIME() - it->second.ticks) <= g_config.getNumber(ConfigManager::PZ_LOCKED);
 }
 
-Item* Creature::getCorpse()
+Item* Creature::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature)
 {
 	return Item::CreateItem(getLookCorpse());
 }

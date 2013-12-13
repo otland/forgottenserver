@@ -223,8 +223,8 @@ class Monster : public Creature
 		void clearTargetList();
 		void clearFriendList();
 
-		void death();
-		Item* getCorpse();
+		void death(Creature* _lastHitCreature);
+		Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature);
 		bool despawn();
 		bool inDespawnRange(const Position& pos);
 
@@ -265,7 +265,7 @@ class Monster : public Creature
 		virtual uint16_t getLookCorpse() {
 			return mType->lookcorpse;
 		}
-		virtual void dropLoot(Container* corpse);
+		virtual void dropLoot(Container* corpse, Creature* _lastHitCreature);
 		virtual uint32_t getDamageImmunities() const {
 			return mType->damageImmunities;
 		}

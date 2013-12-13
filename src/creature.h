@@ -493,8 +493,6 @@ class Creature : virtual public Thing
 
 		Tile* _tile;
 		Creature* attackedCreature;
-		Creature* _lastHitCreature;
-		Creature* _mostDamageCreature;
 		Creature* master;
 		Creature* followCreature;
 
@@ -540,8 +538,6 @@ class Creature : virtual public Thing
 		bool hasFollowPath;
 		bool forceUpdateFollowPath;
 		bool hiddenHealth;
-		bool lastHitUnjustified;
-		bool mostDamageUnjustified;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {
@@ -562,14 +558,14 @@ class Creature : virtual public Thing
 			return 0;
 		}
 		bool getKillers(Creature** lastHitCreature, Creature** mostDamageCreature);
-		virtual void dropLoot(Container* corpse) {}
+		virtual void dropLoot(Container* corpse, Creature* _lastHitCreature) {}
 		virtual uint16_t getLookCorpse() const {
 			return 0;
 		}
 		virtual void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const;
-		virtual void death() {}
-		virtual bool dropCorpse();
-		virtual Item* getCorpse();
+		virtual void death(Creature* _lastHitCreature) {}
+		virtual bool dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified);
+		virtual Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature);
 
 		friend class Game;
 		friend class Map;

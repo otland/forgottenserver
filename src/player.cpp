@@ -855,7 +855,7 @@ uint16_t Player::getDropPercent() const
 	return dropPercent;
 }
 
-void Player::dropLoot(Container* corpse)
+void Player::dropLoot(Container* corpse, Creature* _lastHitCreature)
 {
 	if (corpse && lootDrop && vocation->getId() != VOCATION_NONE) {
 		Skulls_t playerSkull = getSkull();
@@ -2050,7 +2050,7 @@ uint32_t Player::getIP() const
 	return 0;
 }
 
-void Player::death()
+void Player::death(Creature* _lastHitCreature)
 {
 	loginPosition = town->getTemplePosition();
 
@@ -2249,25 +2249,22 @@ void Player::death()
 	}
 }
 
-bool Player::dropCorpse()
+bool Player::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
 	if (getZone() == ZONE_PVP) {
 		setDropLoot(true);
 		return false;
 	}
-	return Creature::dropCorpse();
+	return Creature::dropCorpse(_lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 }
 
-Item* Player::getCorpse()
+Item* Player::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature)
 {
-	Item* corpse = Creature::getCorpse();
+	Item* corpse = Creature::getCorpse(_lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
-		Creature* lastHitCreature_ = nullptr;
-		Creature* mostDamageCreature = nullptr;
 		std::ostringstream ss;
-
-		if (getKillers(&lastHitCreature_, &mostDamageCreature) && lastHitCreature_) {
-			ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << lastHitCreature_->getNameDescription() << '.';
+		if (_lastHitCreature) {
+			ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << _lastHitCreature->getNameDescription() << '.';
 		} else {
 			ss << "You recognize " << getNameDescription() << '.';
 		}

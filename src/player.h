@@ -1175,9 +1175,9 @@ class Player : public Creature, public Cylinder
 		void setNextWalkTask(SchedulerTask* task);
 		void setNextActionTask(SchedulerTask* task);
 
-		void death();
-		virtual bool dropCorpse();
-		virtual Item* getCorpse();
+		void death(Creature* _lastHitCreature);
+		virtual bool dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified);
+		virtual Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature);
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
@@ -1360,7 +1360,7 @@ class Player : public Creature, public Cylinder
 		virtual uint64_t getLostExperience() const {
 			return skillLoss ? uint64_t(experience * getLostPercent()) : 0;
 		}
-		virtual void dropLoot(Container* corpse);
+		virtual void dropLoot(Container* corpse, Creature* _lastHitCreature);
 		virtual uint32_t getDamageImmunities() const {
 			return damageImmunities;
 		}
