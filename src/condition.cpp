@@ -31,11 +31,14 @@ Condition::Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, b
 	id(_id),
 	subId(_subId),
 	ticks(_ticks),
-	endTime(0),
 	conditionType(_type),
 	isBuff(_buff)
 {
-	//
+	if (_ticks == -1) {
+		endTime = std::numeric_limits<int64_t>::max();
+	} else {
+		endTime = 0;
+	}
 }
 
 bool Condition::setParam(ConditionParam_t param, int32_t value)
@@ -242,13 +245,11 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 Condition* Condition::createCondition(PropStream& propStream)
 {
 	uint8_t attr;
-
 	if (!propStream.GET_UCHAR(attr) || attr != CONDITIONATTR_TYPE) {
 		return nullptr;
 	}
 
 	uint32_t _type = 0;
-
 	if (!propStream.GET_ULONG(_type)) {
 		return nullptr;
 	}
@@ -258,7 +259,6 @@ Condition* Condition::createCondition(PropStream& propStream)
 	}
 
 	uint32_t _id = 0;
-
 	if (!propStream.GET_ULONG(_id)) {
 		return nullptr;
 	}
@@ -268,7 +268,6 @@ Condition* Condition::createCondition(PropStream& propStream)
 	}
 
 	uint32_t _ticks = 0;
-
 	if (!propStream.GET_ULONG(_ticks)) {
 		return nullptr;
 	}
@@ -278,7 +277,6 @@ Condition* Condition::createCondition(PropStream& propStream)
 	}
 
 	uint8_t _buff = 0;
-
 	if (!propStream.GET_UCHAR(_buff)) {
 		return nullptr;
 	}
@@ -288,7 +286,6 @@ Condition* Condition::createCondition(PropStream& propStream)
 	}
 
 	uint32_t _subId = 0;
-
 	if (!propStream.GET_ULONG(_subId)) {
 		return nullptr;
 	}
