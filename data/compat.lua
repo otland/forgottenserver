@@ -644,3 +644,13 @@ function setGlobalStorageValue(key, value)
 	Game.setStorageValue(key, value)
 	return true
 end
+
+
+function getPlayerFlagValue(cid, flag)
+	local player = Player(cid)
+	if player == nil then
+		return false
+	end
+
+	return bit.band(player:getGroup():getFlags(), bit.lshift(1, flag)) ~= 0
+end
