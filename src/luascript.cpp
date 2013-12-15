@@ -1890,6 +1890,13 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getClient", LuaScriptInterface::luaPlayerGetClient);
 
+	registerMethod("Player", "isInCast", LuaScriptInterface::luaPlayerIsInCast);
+	registerMethod("Player", "setInCast", LuaScriptInterface::luaPlayerSetInCast);
+	registerMethod("Player", "getPassword", LuaScriptInterface::luaPlayerGetPassword);
+	registerMethod("Player", "setPassword", LuaScriptInterface::luaPlayerSetPassword);
+	registerMethod("Player", "getViewers", LuaScriptInterface::luaPlayerGetViewews);
+	registerMethod("Player", "getViews", LuaScriptInterface::luaPlayerGetViews);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -9196,6 +9203,93 @@ int32_t LuaScriptInterface::luaPlayerGetClient(lua_State* L)
 	}
 	return 1;
 }
+
+int32_t LuaScriptInterface::luaPlayerIsInCast(lua_State* L)
+{
+	// player:isInCast()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->isInCast());
+	}
+	else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetInCast(lua_State* L)
+{
+	// player:setInCast(value)
+	bool value = getBoolean(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setInCast(value);
+		pushBoolean(L, true);
+	}
+	else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetPassword(lua_State* L)
+{
+	// player:getPassword()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushString(L, player->getPassword());
+	}
+	else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetPassword(lua_State* L)
+{
+	// player:setPassword(value)
+	const std::string& value = getString(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setPassword(value);
+		pushBoolean(L, true);
+	}
+	else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetViewews(lua_State* L)
+{
+	// player:getViewers()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getViewers());
+	}
+	else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetViews(lua_State* L)
+{
+	// player:getViews([increase = false])
+	bool increase = false;
+	if (getStackTop(L) >= 2) {
+		increase = getBoolean(L, 2);
+	}
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getViews(increase));
+	}
+	else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 
 // Monster
 int32_t LuaScriptInterface::luaMonsterCreate(lua_State* L)
