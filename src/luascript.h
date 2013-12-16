@@ -920,7 +920,7 @@ class LuaScriptInterface
 		static int32_t luaPlayerSetInCast(lua_State* L);
 		static int32_t luaPlayerGetPassword(lua_State* L);
 		static int32_t luaPlayerSetPassword(lua_State* L);
-		static int32_t luaPlayerGetViewews(lua_State* L);
+		static int32_t luaPlayerGetViewers(lua_State* L);
 		static int32_t luaPlayerGetViews(lua_State* L);
 
 		// Monster

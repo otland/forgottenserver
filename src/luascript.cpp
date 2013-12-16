@@ -1894,7 +1894,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "setInCast", LuaScriptInterface::luaPlayerSetInCast);
 	registerMethod("Player", "getPassword", LuaScriptInterface::luaPlayerGetPassword);
 	registerMethod("Player", "setPassword", LuaScriptInterface::luaPlayerSetPassword);
-	registerMethod("Player", "getViewers", LuaScriptInterface::luaPlayerGetViewews);
+	registerMethod("Player", "getViewers", LuaScriptInterface::luaPlayerGetViewers);
 	registerMethod("Player", "getViews", LuaScriptInterface::luaPlayerGetViews);
 
 	// Monster
@@ -9260,7 +9260,7 @@ int32_t LuaScriptInterface::luaPlayerSetPassword(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerGetViewews(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerGetViewers(lua_State* L)
 {
 	// player:getViewers()
 	Player* player = getUserdata<Player>(L, 1);
