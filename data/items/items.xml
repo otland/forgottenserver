@@ -11924,7 +11924,7 @@
 		<attribute key="description" value="You can see the movement of fish." />
 	</item>
 	<item id="7237" article="an" name="ice hole">
-		<attribute key="decayTo" value="7183" />
+		<attribute key="decayTo" value="7236" />
 		<attribute key="duration" value="300" />
 	</item>
 	<item fromid="7238" toid="7241" article="a" name="shield" />
