@@ -1225,6 +1225,17 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
+	// scripting event - onMoveItem
+	bool deny = false;
+	const CreatureEventList& moveItemEvents = player->getCreatureEvents(CREATURE_EVENT_MOVEITEM);
+	for (CreatureEvent* moveItemEvent : moveItemEvents) {
+		if (!moveItemEvent->executeOnMoveItem(player, item, fromPos, toPos))
+			deny = true;
+	}
+	
+	if (deny)
+		return;
+
 	ReturnValue ret = internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, nullptr, 0, player);
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
