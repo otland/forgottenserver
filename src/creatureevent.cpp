@@ -249,7 +249,7 @@ std::string CreatureEvent::getScriptEventName()
 			return "onTarget";
 
 		case CREATURE_EVENT_MOVEITEM:
-			return "onMove";
+			return "onMoveItem";
 
 		case CREATURE_EVENT_EXTENDED_OPCODE:
 			return "onExtendedOpcode";
