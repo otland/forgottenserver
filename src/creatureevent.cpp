@@ -574,7 +574,7 @@ bool CreatureEvent::executeOnMoveItem(Player* player, Item* item, const Position
 
 	m_scriptInterface->pushFunction(m_scriptId);
 	lua_pushnumber(L, player->getID());
-	lua_pushnumber(L, item->getID());
+	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 	LuaScriptInterface::pushPosition(L, fromPosition);
 	LuaScriptInterface::pushPosition(L, toPosition);
 
