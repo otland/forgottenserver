@@ -691,6 +691,7 @@ class LuaScriptInterface
 		static int32_t luaItemIsItem(lua_State* L);
 
 		static int32_t luaItemGetId(lua_State* L);
+		static int32_t luaItemGetType(lua_State* L);
 
 		static int32_t luaItemClone(lua_State* L);
 		static int32_t luaItemSplit(lua_State* L);
@@ -920,6 +921,8 @@ class LuaScriptInterface
 		static int32_t luaMonsterCreate(lua_State* L);
 
 		static int32_t luaMonsterIsMonster(lua_State* L);
+
+		static int32_t luaMonsterGetType(lua_State* L);
 
 		static int32_t luaMonsterGetSpawnPosition(lua_State* L);
 		static int32_t luaMonsterDespawn(lua_State* L);
