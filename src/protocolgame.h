@@ -94,6 +94,19 @@ class ProtocolGame : public Protocol
 			return knownCreatureSet;
 		}
 
+		const std::string& getName() const {
+			return name;
+		}
+		void setName(const std::string& value) {
+			name = value;
+		}
+		bool isInCast() const {
+			return inCast;
+		}
+		void setInCast(bool value) {
+			inCast = value;
+		}
+
 	private:
 		std::unordered_set<uint32_t> knownCreatureSet;
 
@@ -380,9 +393,12 @@ class ProtocolGame : public Protocol
 		void addGameTaskInternal(bool droppable, uint32_t delay, const FunctionType&);
 
 		Player* player;
+		std::string name;
 
 		uint32_t eventConnect;
 		uint16_t version;
+
+		bool inCast;
 
 		uint32_t m_challengeTimestamp;
 		uint8_t m_challengeRandom;

@@ -6079,6 +6079,32 @@ void Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 	}
 }
 
+std::vector<Player*> Game::getPlayersInCast() const
+{
+	std::vector<Player*> playersInCast;
+	for (const auto& entry : players) {
+		Player* player = entry.second;
+		if (player->isInCast()) {
+			playersInCast.push_back(player);
+		}
+	}
+
+	return playersInCast;
+}
+
+std::vector<Player*> Game::getPlayersInCast(const std::string& password) const
+{
+	std::vector<Player*> playersInCast;
+	for (const auto& entry : players) {
+		Player* player = entry.second;
+		if (player->isInCast() && player->getPassword() == password) {
+			playersInCast.push_back(player);
+		}
+	}
+
+	return playersInCast;
+}
+
 void Game::addPlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
