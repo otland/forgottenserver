@@ -193,6 +193,8 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_CHANGEHEALTH;
 	} else if (tmpStr == "changemana") {
 		m_type = CREATURE_EVENT_CHANGEMANA;
+	} else if (tmpStr == "target") {
+		m_type = CREATURE_EVENT_TARGET;
 	} else if (tmpStr == "extendedopcode") {
 		m_type = CREATURE_EVENT_EXTENDED_OPCODE;
 	} else {
@@ -240,6 +242,9 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_CHANGEMANA:
 			return "onChangeMana";
+
+		case CREATURE_EVENT_TARGET:
+			return "onTarget";
 
 		case CREATURE_EVENT_EXTENDED_OPCODE:
 			return "onExtendedOpcode";
@@ -527,6 +532,26 @@ bool CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, in
 	LuaScriptInterface::pushNumber(L, manaChange);
 
 	return m_scriptInterface->callFunction(3);
+}
+
+bool CreatureEvent::executeOnTarget(Player* player, Creature* target)
+{
+	//onTarget(cid, target)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnTarget] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, player->getID());
+	lua_pushnumber(L, target->getID());
+
+	return m_scriptInterface->callFunction(2);
 }
 
 bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer)
