@@ -1225,6 +1225,17 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
+	// scripting event - onMoveItem
+	bool deny = false;
+	const CreatureEventList& moveItemEvents = player->getCreatureEvents(CREATURE_EVENT_MOVEITEM);
+	for (CreatureEvent* moveItemEvent : moveItemEvents) {
+		if (!moveItemEvent->executeOnMoveItem(player, item, fromPos, toPos))
+			deny = true;
+	}
+	
+	if (deny)
+		return;
+
 	ReturnValue ret = internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, nullptr, 0, player);
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
@@ -3267,6 +3278,20 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 
 	Creature* attackCreature = getCreatureByID(creatureId);
 	if (!attackCreature) {
+		player->setAttackedCreature(nullptr);
+		player->sendCancelTarget();
+		return;
+	}
+
+	//scripting event - onTarget
+	bool deny = false;
+	const CreatureEventList& targetEvents = player->getCreatureEvents(CREATURE_EVENT_TARGET);
+	for (CreatureEvent* targetEvent : targetEvents) {
+		if (!targetEvent->executeOnTarget(player, attackCreature))
+			deny = true;
+	}
+
+	if (deny) {
 		player->setAttackedCreature(nullptr);
 		player->sendCancelTarget();
 		return;
