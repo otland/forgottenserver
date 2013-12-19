@@ -3281,6 +3281,18 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
+	bool deny = false;
+	for (CreatureEvent* creatureEvent : player->getCreatureEvents(CREATURE_EVENT_TARGET)) {
+		if (!creatureEvent->executeOnTarget(player, attackCreature))
+			deny = true;
+	}
+	
+	if (deny) {
+		player->setAttackedCreature(nullptr);
+		player->sendCancelTarget();
+		return;
+	}
+
 	ReturnValue ret = Combat::canTargetCreature(player, attackCreature);
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
