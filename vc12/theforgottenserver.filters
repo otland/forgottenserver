@@ -18,9 +18,6 @@
     <ClCompile Include="..\src\actions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\allocator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ban.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,7 +63,13 @@
     <ClCompile Include="..\src\databasemanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\exception.cpp">
+    <ClCompile Include="..\src\depotchest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\depotlocker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\events.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\fileloader.cpp">
@@ -78,13 +81,19 @@
     <ClCompile Include="..\src\globalevent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\groups.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\guild.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\house.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\housetile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\inputbox.cpp">
+    <ClCompile Include="..\src\inbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ioguild.cpp">
@@ -135,6 +144,9 @@
     <ClCompile Include="..\src\npc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\otpch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\otserv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -148,9 +160,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\playerbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\position.cpp">
@@ -204,9 +213,6 @@
     <ClCompile Include="..\src\teleport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\textlogger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\thing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -228,16 +234,7 @@
     <ClCompile Include="..\src\weapons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\otpch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\depotchest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\depotlocker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\inbox.cpp">
+    <ClCompile Include="..\src\wildcardtree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -246,9 +243,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\actions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\allocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ban.h">
@@ -302,10 +296,16 @@
     <ClInclude Include="..\src\definitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\depotchest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\depotlocker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\exception.h">
+    <ClInclude Include="..\src\events.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\fileloader.h">
@@ -317,13 +317,19 @@
     <ClInclude Include="..\src\globalevent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\groups.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\guild.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\house.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\housetile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\inputbox.h">
+    <ClInclude Include="..\src\inbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ioguild.h">
@@ -392,9 +398,6 @@
     <ClInclude Include="..\src\player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\playerbox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -413,13 +416,13 @@
     <ClInclude Include="..\src\protocolstatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\pugicast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\quests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\raids.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\rsa.h">
@@ -449,9 +452,6 @@
     <ClInclude Include="..\src\teleport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\textlogger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\thing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -476,13 +476,7 @@
     <ClInclude Include="..\src\weapons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\depotchest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\depotlocker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\inbox.h">
+    <ClInclude Include="..\src\wildcardtree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
