@@ -7,10 +7,14 @@
 
 	<!-- Tools -->
 	<action itemid="2420" script="tools/machete.lua"/>
+	<action itemid="2442" script="tools/machete.lua"/>
 	<action itemid="2550" script="tools/scythe.lua"/>
 	<action itemid="2580" script="tools/fishing.lua" allowfaruse="1"/>
+	<action itemid="10223" script="tools/fishing.lua" allowfaruse="1"/>
 	<action itemid="2554" script="tools/shovel.lua"/>
+	<action itemid="5710" script="tools/shovel.lua"/>
 	<action itemid="2120" script="tools/rope.lua"/>
+	<action itemid="7731" script="tools/rope.lua"/>
 	<action itemid="2553" script="tools/pick.lua"/>
 
 	<!-- Increase/Decrease ItemId -->
