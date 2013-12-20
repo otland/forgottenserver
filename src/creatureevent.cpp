@@ -558,11 +558,11 @@ bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	return m_scriptInterface->callFunction(3);
 }
 
-bool CreatureEvent::executeAttack(Creature* creature, Creature* target)
+bool CreatureEvent::executeAction(Creature* creature, Creature* target)
 {
-	//onAttack(cid, target)
+	//on[Target/Follow/Attack](cid, target)
 	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::onAttack] Call stack overflow" << std::endl;
+		std::cout << "[Error - CreatureEvent::executeAction] Call stack overflow" << std::endl;
 		return false;
 	}
 
