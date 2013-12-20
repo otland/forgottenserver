@@ -3,6 +3,7 @@ local conditionExhaustCombat = createConditionObject(CONDITION_EXHAUST_COMBAT)
 local conditionExhaustHeal = createConditionObject(CONDITION_EXHAUST_HEAL)
 local conditionPacified = createConditionObject(CONDITION_PACIFIED)
 
+setConditionParam(conditionAttrib, CONDITION_PARAM_BUFF_SPELL, 1)
 setConditionParam(conditionAttrib, CONDITION_PARAM_TICKS, 10000)
 setConditionParam(conditionAttrib, CONDITION_PARAM_SKILL_SHIELDPERCENT, 220)
 setConditionParam(conditionExhaustCombat, CONDITION_PARAM_TICKS, 10000)
