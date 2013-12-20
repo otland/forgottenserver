@@ -1077,6 +1077,9 @@ const char* getReturnMessage(ReturnValue value)
 
 		case RET_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
+			
+		case RET_EMPTYTEXT:
+			break;
 
 		default: // RET_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
