@@ -223,7 +223,9 @@ void Creature::onAttacking(uint32_t interval)
         }
 
         if(deny)
+        {
                 setAttackedCreature(nullptr);
+        }
 
 	onAttacked();
 	attackedCreature->onAttacked();
