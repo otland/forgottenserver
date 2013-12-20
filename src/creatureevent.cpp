@@ -196,7 +196,11 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	} else if (tmpStr == "extendedopcode") {
 		m_type = CREATURE_EVENT_EXTENDED_OPCODE;
 	} else if (tmpStr == "attack") {
-			m_type = CREATURE_EVENT_ATTACK;
+		m_type = CREATURE_EVENT_ATTACK;
+	} else if (tmpStr == "follow") {
+		m_type = CREATURE_EVENT_FOLLOW;
+	} else if (tmpStr == "target") {
+		m_type = CREATURE_EVENT_TARGET;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
@@ -248,6 +252,12 @@ std::string CreatureEvent::getScriptEventName()
 			
 		case CREATURE_EVENT_ATTACK:
 			return "onAttack";
+			
+		case CREATURE_EVENT_ATTACK:
+			return "onTarget";
+			
+		case CREATURE_EVENT_ATTACK:
+			return "onFollow";
 
 		case CREATURE_EVENT_NONE:
 		default:
