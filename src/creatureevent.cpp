@@ -195,6 +195,12 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_CHANGEMANA;
 	} else if (tmpStr == "extendedopcode") {
 		m_type = CREATURE_EVENT_EXTENDED_OPCODE;
+	} else if (tmpStr == "attack") {
+		m_type = CREATURE_EVENT_ATTACK;
+	} else if (tmpStr == "follow") {
+		m_type = CREATURE_EVENT_FOLLOW;
+	} else if (tmpStr == "target") {
+		m_type = CREATURE_EVENT_TARGET;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
@@ -243,6 +249,15 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_EXTENDED_OPCODE:
 			return "onExtendedOpcode";
+			
+		case CREATURE_EVENT_ATTACK:
+			return "onAttack";
+			
+		case CREATURE_EVENT_ATTACK:
+			return "onTarget";
+			
+		case CREATURE_EVENT_ATTACK:
+			return "onFollow";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -551,4 +566,24 @@ bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	LuaScriptInterface::pushString(L, buffer);
 
 	return m_scriptInterface->callFunction(3);
+}
+
+bool CreatureEvent::executeAction(Creature* creature, Creature* target)
+{
+	//on[Target/Follow/Attack](cid, target)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeAction] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, creature->getID());
+	lua_pushnumber(L, target->getID());
+
+	return m_scriptInterface->callFunction(2);
 }

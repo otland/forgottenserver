@@ -869,3 +869,7 @@ string.split = function(str, sep)
 	end
 	return res
 end
+
+function isSummon(cid) 
+        return getCreatureMaster(cid) ~= cid 
+end

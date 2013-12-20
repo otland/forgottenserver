@@ -228,6 +228,21 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 	if (player == target) {
 		return RET_YOUMAYNOTATTACKTHISPLAYER;
 	}
+	
+	Player* tmpPlayer = const_cast<Player*>(player);
+	bool deny = false;
+
+	CreatureEventList targetEvents = tmpPlayer->getCreatureEvents(CREATURE_EVENT_TARGET);
+	for (CreatureEventList::iterator it = targetEvents.begin(); it != targetEvents.end(); ++it)
+	{
+		if (!(*it)->executeAction(tmpPlayer, const_cast<Creature*>(target)) && !deny)
+			deny = true;
+	}
+
+	if (deny)
+	{
+		return RET_EMPTYTEXT;
+	}
 
 	if (!player->hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 		//pz-zone
