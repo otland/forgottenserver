@@ -40,7 +40,6 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_EXTENDED_OPCODE, // otclient additional network opcodes
 	CREATURE_EVENT_TARGET,
         CREATURE_EVENT_FOLLOW,
-        CREATURE_EVENT_COMBAT,
         CREATURE_EVENT_ATTACK
 };
 
