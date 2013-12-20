@@ -522,16 +522,10 @@ class Player : public Creature, public Cylinder
 			return skills[skill][SKILL_LEVEL];
 		}
 
-		int32_t getVarSkill(skills_t skill) const {
-			return varSkills[skill];
-		}
 		void setVarSkill(skills_t skill, int32_t modifier) {
 			varSkills[skill] += modifier;
 		}
 
-		int32_t getVarStats(stats_t stat) const {
-			return varStats[stat];
-		}
 		void setVarStats(stats_t stat, int32_t modifier);
 		int32_t getDefaultStats(stats_t stat) const;
 
