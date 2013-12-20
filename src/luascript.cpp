@@ -1800,6 +1800,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "addManaSpent", LuaScriptInterface::luaPlayerAddManaSpent);
 
 	registerMethod("Player", "getSkillLevel", LuaScriptInterface::luaPlayerGetSkillLevel);
+	registerMethod("Player", "getEffectiveSkillLevel", LuaScriptInterface::luaPlayerGetEffectiveSkillLevel);
 	registerMethod("Player", "getSkillPercent", LuaScriptInterface::luaPlayerGetSkillPercent);
 	registerMethod("Player", "getSkillTries", LuaScriptInterface::luaPlayerGetSkillTries);
 	registerMethod("Player", "addSkillTries", LuaScriptInterface::luaPlayerAddSkillTries);
@@ -8035,6 +8036,19 @@ int32_t LuaScriptInterface::luaPlayerGetSkillLevel(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
 		pushNumber(L, player->skills[skillType][SKILL_LEVEL]);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetEffectiveSkillLevel(lua_State* L)
+{
+	// player:getEffectiveSkillLevel(skillType)
+	skills_t skillType = static_cast<skills_t>(getNumber<int64_t>(L, 2));
+	Player* player = getUserdata<Player>(L, 1);
+	if (player && skillType <= SKILL_LAST) {
+		pushNumber(L, player->getSkill(skillType, SKILL_LEVEL));
 	} else {
 		pushNil(L);
 	}
