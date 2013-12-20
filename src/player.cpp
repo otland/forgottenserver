@@ -3293,7 +3293,15 @@ void Player::__internalAddThing(uint32_t index, Thing* thing)
 
 bool Player::setFollowCreature(Creature* creature, bool fullPathSearch /*= false*/)
 {
-	if (!Creature::setFollowCreature(creature, fullPathSearch)) {
+	bool deny = false;
+        CreatureEventList followEvents = getCreatureEvents(CREATURE_EVENT_FOLLOW);
+        for(CreatureEventList::iterator it = followEvents.begin(); it != followEvents.end(); ++it)
+        {
+                if(!(*it)->executeAction(this, creature) && !deny)
+                        deny = true;
+        }
+        
+	if (deny || Creature::setFollowCreature(creature, fullPathSearch)) {
 		setFollowCreature(nullptr);
 		setAttackedCreature(nullptr);
 
