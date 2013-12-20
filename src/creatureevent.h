@@ -37,6 +37,8 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_TEXTEDIT,
 	CREATURE_EVENT_CHANGEHEALTH,
 	CREATURE_EVENT_CHANGEMANA,
+	CREATURE_EVENT_MOVEITEM,
+	CREATURE_EVENT_TARGET,
 	CREATURE_EVENT_EXTENDED_OPCODE // otclient additional network opcodes
 };
 
@@ -102,6 +104,8 @@ class CreatureEvent : public Event
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
 		bool executeChangeHealth(Creature* creature, Creature* attacker, const CombatDamage& damage);
 		bool executeChangeMana(Creature* creature, Creature* attacker, int32_t manaChange);
+		bool executeOnMoveItem(Player* player, Item* item, const Position& fromPosition, const Position& toPosition);
+		bool executeOnTarget(Player* player, Creature* target);
 		bool executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 		//
 

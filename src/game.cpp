@@ -1225,6 +1225,15 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
+	bool deny = false;
+	for (CreatureEvent* creatureEvent : player->getCreatureEvents(CREATURE_EVENT_MOVEITEM)) {
+		if (!creatureEvent->executeOnMoveItem(player, item, fromPos, toPos))
+			deny = true;
+	}
+
+	if (deny)
+		return;
+
 	ReturnValue ret = internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, nullptr, 0, player);
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
@@ -3272,6 +3281,18 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
+	bool deny = false;
+	for (CreatureEvent* creatureEvent : player->getCreatureEvents(CREATURE_EVENT_TARGET)) {
+		if (!creatureEvent->executeOnTarget(player, attackCreature))
+			deny = true;
+	}
+	
+	if (deny) {
+		player->setAttackedCreature(nullptr);
+		player->sendCancelTarget();
+		return;
+	}
+
 	ReturnValue ret = Combat::canTargetCreature(player, attackCreature);
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
@@ -4200,9 +4221,14 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		if (target->hasCondition(CONDITION_MANASHIELD) && combatType != COMBAT_UNDEFINEDDAMAGE) {
 			int32_t manaDamage = std::min<int32_t>(target->getMana(), damage);
 			if (manaDamage != 0) {
+				bool deny = false;
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA)) {
-					creatureEvent->executeChangeMana(target, attacker, manaDamage);
+					if (!creatureEvent->executeChangeMana(target, attacker, manaDamage))
+						deny = true;
 				}
+
+				if (deny)
+					return false;
 
 				target->drainMana(attacker, manaDamage);
 				addMagicEffect(list, targetPos, NM_ME_LOSE_ENERGY);
@@ -4255,6 +4281,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		int32_t targetHealth = target->getHealth();
 		damage = std::min<int32_t>(targetHealth, damage);
 		if (damage > 0) {
+			bool deny = false;
 			const auto& changeHealthEvents = target->getCreatureEvents(CREATURE_EVENT_CHANGEHEALTH);
 			if (!changeHealthEvents.empty()) {
 				CombatDamage tmpDamage;
@@ -4262,15 +4289,20 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				tmpDamage.primary.value = damage;
 
 				for (CreatureEvent* creatureEvent : changeHealthEvents) {
-					creatureEvent->executeChangeHealth(target, attacker, tmpDamage);
+					if (!creatureEvent->executeChangeHealth(target, attacker, tmpDamage))
+						deny = true;
 				}
 			}
 
 			if (damage >= targetHealth) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
-					creatureEvent->executeOnPrepareDeath(target, attacker);
+					if (!creatureEvent->executeOnPrepareDeath(target, attacker))
+						deny = true;
 				}
 			}
+
+			if (deny)
+				return false;
 
 			target->drainHealth(attacker, damage);
 			addCreatureHealth(list, target);
@@ -4438,9 +4470,14 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
 			int32_t manaDamage = std::min<int32_t>(target->getMana(), -healthChange);
 			if (manaDamage != 0) {
+				bool deny = false;
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA)) {
-					creatureEvent->executeChangeMana(target, attacker, manaDamage);
+					if (!creatureEvent->executeChangeMana(target, attacker, manaDamage))
+						deny = true;
 				}
+
+				if (deny)
+					return false;
 
 				target->drainMana(attacker, manaDamage);
 				addMagicEffect(list, targetPos, NM_ME_LOSE_ENERGY);
@@ -4504,15 +4541,21 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 		int32_t realDamage = damage.primary.value + damage.secondary.value;
 		if (realDamage) {
+			bool deny = false;
 			for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_CHANGEHEALTH)) {
-				creatureEvent->executeChangeHealth(target, attacker, damage);
+				if (!creatureEvent->executeChangeHealth(target, attacker, damage))
+					deny = true;
 			}
 
 			if (realDamage >= targetHealth) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
-					creatureEvent->executeOnPrepareDeath(target, attacker);
+					if (!creatureEvent->executeOnPrepareDeath(target, attacker))
+						deny = true;
 				}
 			}
+
+			if (deny)
+				return false;
 
 			target->drainHealth(attacker, realDamage);
 			addCreatureHealth(list, target);
@@ -4586,6 +4629,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaChange)
 {
+	bool deny = false;
 	if (manaChange > 0) {
 		if (attacker) {
 			Player* attackerPlayer = attacker->getPlayer();
@@ -4603,8 +4647,12 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		}
 
 		for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA)) {
-			creatureEvent->executeChangeMana(target, attacker, manaChange);
+			if (!creatureEvent->executeChangeMana(target, attacker, manaChange))
+				deny = true;
 		}
+
+		if (deny)
+			return false;
 
 		target->changeMana(manaChange);
 	} else {
@@ -4644,8 +4692,12 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		}
 
 		for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA)) {
-			creatureEvent->executeChangeMana(target, attacker, manaLoss);
+			if (!creatureEvent->executeChangeMana(target, attacker, manaLoss))
+				deny = true;
 		}
+
+		if (deny)
+			return false;
 
 		target->drainMana(attacker, manaLoss);
 
