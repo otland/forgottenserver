@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Fernfang" nameDescription="Fernfang" race="blood" experience="400" speed="240" manacost="0">
 	<health now="400" max="400"/>
-	<look type="206" corpse="6080"/>
+	<look type="206" corpse="20566"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

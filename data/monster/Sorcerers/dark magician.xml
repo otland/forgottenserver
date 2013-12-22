@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dark Magician" nameDescription="a dark magician" race="blood" experience="185" speed="220" manacost="0">
 	<health now="325" max="325"/>
-	<look type="133" head="116" body="95" legs="50" feet="132" addons="2" corpse="6080"/>
+	<look type="133" head="116" body="95" legs="50" feet="132" addons="2" corpse="20367"/>
 	<targetchange interval="5000" chance="30"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

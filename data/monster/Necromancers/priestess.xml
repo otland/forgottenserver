@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Priestess" nameDescription="a priestess" race="blood" experience="420" speed="220" manacost="0">
 	<health now="390" max="390"/>
-	<look type="58" corpse="6081"/>
+	<look type="58" corpse="20494"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

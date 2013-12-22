@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Warlock" nameDescription="a warlock" race="blood" experience="4000" speed="220" manacost="0">
 	<health now="3500" max="3500"/>
-	<look type="130" head="19" body="71" legs="128" feet="128" addons="1" corpse="6080"/>
+	<look type="130" head="19" body="71" legs="128" feet="128" addons="1" corpse="20530"/>
 	<targetchange interval="5000" chance="30"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

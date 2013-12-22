@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="215" manacost="420">
 	<health now="160" max="160"/>
-	<look type="146" head="114" body="20" legs="22" feet="2" corpse="6080"/>
+	<look type="146" head="114" body="39" legs="40" feet="2" addons="2" corpse="20466"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

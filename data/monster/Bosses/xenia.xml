@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Xenia" nameDescription="xenia" race="blood" experience="255" speed="176" manacost="450">
 	<health now="290" max="290"/>
-	<look type="139" head="113" body="57" legs="95" feet="113" corpse="6081"/>
+	<look type="137" head="95" body="115" legs="115" feet="95" corpse="20542"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

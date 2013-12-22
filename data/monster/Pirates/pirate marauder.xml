@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="230" manacost="490">
 	<health now="210" max="210"/>
-	<look type="93" corpse="6080"/>
+	<look type="93" corpse="20486"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
