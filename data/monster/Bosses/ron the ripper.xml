@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ron the Ripper" nameDescription="Ron the Ripper" race="blood" experience="500" speed="240" manacost="0">
 	<health now="1500" max="1500"/>
-	<look type="151" head="95" body="94" legs="117" feet="97" addons="1" corpse="6080"/>
+	<look type="151" head="95" body="94" legs="117" feet="97" addons="1" corpse="20502"/>
 	<targetchange interval="60000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

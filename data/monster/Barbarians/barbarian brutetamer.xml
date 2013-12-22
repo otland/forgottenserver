@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 	<monster name="Barbarian Brutetamer" nameDescription="a barbarian brutetamer" race="blood" experience="90" speed="270" manacost="0">
 	<health now="145" max="145"/>
-	<look type="264" head="78" body="116" legs="95" feet="121" corpse="6081"/>
+	<look type="264" head="78" body="116" legs="95" feet="121" corpse="20339"/>
 	<targetchange interval="60000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

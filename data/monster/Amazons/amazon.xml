@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Amazon" nameDescription="a amazon" race="blood" experience="60" speed="210" manacost="390">
 	<health now="110" max="110"/>
-	<look type="137" head="113" body="120" legs="114" feet="132" corpse="6081"/>
+	<look type="137" head="113" body="120" legs="114" feet="132" corpse="20323"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

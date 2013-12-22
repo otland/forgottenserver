@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Pirate Cutthroat" nameDescription="a pirate cutthroat" race="blood" experience="175" speed="230" manacost="495">
 	<health now="325" max="325"/>
-	<look type="96" corpse="6080"/>
+	<look type="96" corpse="20482"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

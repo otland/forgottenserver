@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Poacher" nameDescription="a poacher" race="blood" experience="70" speed="205" manacost="530">
 	<health now="90" max="90"/>
-	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="6080"/>
+	<look type="129" head="114" body="118" legs="118" feet="116" addons="1" corpse="20490"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

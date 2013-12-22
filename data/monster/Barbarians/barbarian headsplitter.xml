@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 	<monster name="Barbarian Headsplitter" nameDescription="a barbarian headsplitter" race="blood" experience="85" speed="270" manacost="450">
 	<health now="100" max="100"/>
-	<look type="253" head="115" body="105" legs="119" feet="132" corpse="6080"/>
+	<look type="253" head="115" body="105" legs="119" feet="132" corpse="20343"/>
 	<targetchange interval="60000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

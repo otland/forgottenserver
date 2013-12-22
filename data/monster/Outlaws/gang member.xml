@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Gang Member" nameDescription="a gang member" race="blood" experience="70" speed="220" manacost="420">
 	<health now="295" max="295"/>
-	<look type="151" head="114" body="19" legs="42" feet="20" corpse="3058"/>
+	<look type="151" head="114" body="19" legs="42" feet="20" corpse="20403"/>
 	<targetchange interval="2000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

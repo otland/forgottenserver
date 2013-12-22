@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hunter" nameDescription="a hunter" race="blood" experience="150" speed="215" manacost="0">
 	<health now="150" max="150"/>
-	<look type="129" head="95" body="116" legs="121" feet="115" corpse="6080"/>
+	<look type="129" head="95" body="116" legs="121" feet="115" corpse="20422"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Fury" nameDescription="a fury" race="blood" experience="4000" speed="460" manacost="0">
 	<health now="4100" max="4100"/>
-	<look type="149" head="94" body="77" legs="96" feet="0" addons="3" corpse="6081"/>
+	<look type="149" head="94" body="77" legs="96" feet="0" addons="3" corpse="20399"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

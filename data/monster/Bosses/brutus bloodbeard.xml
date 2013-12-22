@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Brutus Bloodbeard" nameDescription="Brutus Bloodbeard" race="blood" experience="500" speed="240" manacost="0">
 	<health now="1200" max="1200"/>
-	<look type="98" corpse="6080"/>
+	<look type="98" corpse="20478"/>
 	<targetchange interval="60000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

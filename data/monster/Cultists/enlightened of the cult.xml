@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Enlightened of the Cult" nameDescription="a enlightened of the cult" race="blood" experience="500" speed="220" manacost="0">
 	<health now="700" max="700"/>
-	<look type="193" corpse="6080"/>
+	<look type="193" corpse="20391"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

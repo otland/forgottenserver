@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Smuggler" nameDescription="a smuggler" race="blood" experience="48" speed="210" manacost="390">
 	<health now="130" max="130"/>
-	<look type="134" head="95" body="0" legs="113" feet="115" corpse="6080"/>
+	<look type="134" head="95" body="0" legs="113" feet="115" corpse="20510"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

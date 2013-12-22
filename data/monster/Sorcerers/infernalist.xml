@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Infernalist" nameDescription="an infernalist" race="blood" experience="4000" speed="260" manacost="0">
 	<health now="3650" max="3650"/>
-	<look type="130" head="78" body="76" legs="94" feet="115" addons="2" corpse="6080"/>
+	<look type="130" head="78" body="76" legs="94" feet="115" addons="2" corpse="20430"/>
 	<targetchange interval="5000" chance="30"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Pirate Corsair" nameDescription="a pirate corsair" race="blood" experience="350" speed="230" manacost="775">
 	<health now="675" max="675"/>
-	<look type="98" corpse="6080"/>
+	<look type="98" corpse="20478"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
