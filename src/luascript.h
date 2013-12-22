@@ -449,7 +449,6 @@ class LuaScriptInterface
 		static int32_t luaGetInstantSpellInfoByName(lua_State* L);
 		static int32_t luaGetInstantSpellWords(lua_State* L);
 
-		static int32_t luaGetWorldType(lua_State* L);
 		static int32_t luaGetWorldTime(lua_State* L);
 		static int32_t luaGetWorldLight(lua_State* L);
 		static int32_t luaGetWorldUpTime(lua_State* L);
@@ -585,6 +584,9 @@ class LuaScriptInterface
 		static int32_t luaGameSetGameState(lua_State* L);
 
 		static int32_t luaGameGetReturnMessage(lua_State* L);
+
+		static int32_t luaGameGetWorldType(lua_State* L);
+		static int32_t luaGameSetWorldType(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
