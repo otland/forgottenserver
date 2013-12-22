@@ -583,10 +583,10 @@ class LuaScriptInterface
 		static int32_t luaGameGetGameState(lua_State* L);
 		static int32_t luaGameSetGameState(lua_State* L);
 
-		static int32_t luaGameGetReturnMessage(lua_State* L);
-
 		static int32_t luaGameGetWorldType(lua_State* L);
 		static int32_t luaGameSetWorldType(lua_State* L);
+
+		static int32_t luaGameGetReturnMessage(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
@@ -795,6 +795,8 @@ class LuaScriptInterface
 		static int32_t luaCreatureSay(lua_State* L);
 
 		static int32_t luaCreatureGetDamageMap(lua_State* L);
+
+		static int32_t luaCreatureGetSummons(lua_State* L);
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);
@@ -1231,16 +1233,16 @@ class LuaEnvironment : public LuaScriptInterface
 		//
 		LuaScriptInterface* m_testInterface;
 
-		std::map<uint32_t, LuaTimerEventDesc> m_timerEvents;
+		std::unordered_map<uint32_t, LuaTimerEventDesc> m_timerEvents;
 		uint32_t m_lastEventTimerId;
 
 		std::unordered_map<uint32_t, Combat*> m_combatMap;
 		std::unordered_map<uint32_t, Condition*> m_conditionMap;
 		std::unordered_map<uint32_t, AreaCombat*> m_areaMap;
 
-		std::map<LuaScriptInterface*, std::vector<uint32_t>> m_combatIdMap;
-		std::map<LuaScriptInterface*, std::vector<uint32_t>> m_conditionIdMap;
-		std::map<LuaScriptInterface*, std::vector<uint32_t>> m_areaIdMap;
+		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_combatIdMap;
+		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_conditionIdMap;
+		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_areaIdMap;
 
 		uint32_t m_lastCombatId;
 		uint32_t m_lastConditionId;

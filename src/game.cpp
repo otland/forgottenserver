@@ -958,6 +958,10 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		}
 	}
 
+	if (!g_events->eventPlayerOnMoveCreature(player, movingCreature, movingCreaturePos, toPos)) {
+		return;
+	}
+
 	ReturnValue ret = internalMoveCreature(movingCreature, movingCreatureTile, toTile);
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
@@ -1222,6 +1226,10 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 	if (!canThrowObjectTo(mapFromPos, mapToPos)) {
 		player->sendCancelMessage(RET_CANNOTTHROW);
+		return;
+	}
+
+	if (!g_events->eventPlayerOnMoveItem(player, item, count, fromPos, toPos)) {
 		return;
 	}
 
