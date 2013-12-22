@@ -1182,6 +1182,9 @@ class LuaScriptInterface
 		static int32_t luaPartyShareExperience(lua_State* L);
 		static int32_t luaPartySetSharedExperience(lua_State* L);
 
+		//SetWorldType function
+		static int32_t luaSetWorldType(lua_State* L);
+
 		//
 		lua_State* m_luaState;
 		std::string m_lastLuaError;

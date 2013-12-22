@@ -1267,6 +1267,9 @@ void LuaScriptInterface::registerFunctions()
 	//getWorldType()
 	lua_register(m_luaState, "getWorldType", LuaScriptInterface::luaGetWorldType);
 
+	//setWorldType(type)
+	lua_register(m_luaState, "setWorldType", LuaScriptInterface::luaSetWorldType);
+
 	//getWorldTime()
 	lua_register(m_luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
 
@@ -2985,6 +2988,16 @@ int32_t LuaScriptInterface::luaGetWorldType(lua_State* L)
 			pushBoolean(L, false);
 			break;
 	}
+	return 1;
+}
+
+//SetWorldType function
+int32_t LuaScriptInterface::luaSetWorldType(lua_State* L)
+{
+	//setWorldType(type)
+	WorldType_t type = static_cast<WorldType_t>(getNumber<int64_t>(L, 1));
+	g_game.setWorldType(type);
+	pushBoolean(L, true);
 	return 1;
 }
 
