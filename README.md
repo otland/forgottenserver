@@ -1,8 +1,8 @@
-forgottenserver [![Build Status](https://travis-ci.org/otland/forgottenserver.png?branch=master)](https://travis-ci.org/otland/forgottenserver)
+lforgottenserver [![Build Status](https://travis-ci.org/heartcoding/lforgottenserver.png?branch=master)](https://travis-ci.org/heartcoding/lforgottenserver)
 ===============
 
-The Forgotten Server is a free and open-source MMORPG server emulator written in C++. It is a fork of the [OpenTibia Server](https://github.com/opentibia/server) project. To connect to the server, you can use [OTClient](https://github.com/edubart/otclient).
+The Forgotten Server is a free and open-source MMORPG server emulator with live casts written in C++. It is a fork of the [forgottenserver](https://github.com/otland/forgottenserver) project. To connect to the server, you can use [OTClient](https://github.com/edubart/otclient).
 
-### Getting Started
+### Getting dasdasStarted
 
 * [Compiling](https://github.com/otland/forgottenserver/wiki/Compiling)

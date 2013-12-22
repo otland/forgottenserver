@@ -45,7 +45,8 @@ enum RequestedInfo_t {
 	REQUEST_MAP_INFO = 0x10,
 	REQUEST_EXT_PLAYERS_INFO = 0x20,
 	REQUEST_PLAYER_STATUS_INFO = 0x40,
-	REQUEST_SERVER_SOFTWARE_INFO = 0x80
+	REQUEST_SERVER_SOFTWARE_INFO = 0x80,
+	REQUEST_EXT_CAST_PLAYERS_INFO = 0x100
 };
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
@@ -205,7 +206,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 	if (requestedInfo & REQUEST_EXT_PLAYERS_INFO) {
 		output->AddByte(0x21); // players info - online players list
 
-		const auto& players = g_game.getPlayers();
+		auto players = g_game.getPlayers();
 		output->add<uint32_t>(players.size());
 		for (const auto& it : players) {
 			output->AddString(it.second->getName());
@@ -227,6 +228,18 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(STATUS_SERVER_NAME);
 		output->AddString(STATUS_SERVER_VERSION);
 		output->AddString(CLIENT_VERSION_STR);
+	}
+
+	if (requestedInfo & REQUEST_EXT_CAST_PLAYERS_INFO) {
+		output->AddByte(0x24); // players info - live casts list
+
+		auto players = g_game.getPlayersInCast();
+		output->AddByte(static_cast<uint8_t>(players.size()));
+		for (const auto &it : players) {
+			output->AddString(it->getName());
+			output->AddByte(it->getViewers());
+			output->AddByte(it->getPassword().empty() ? 0x00 : 0x01);
+		}
 	}
 	OutputMessagePool::getInstance()->send(output);
 	getConnection()->closeConnection();

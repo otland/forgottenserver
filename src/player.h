@@ -175,8 +175,10 @@ class Player : public Creature, public Cylinder
 		void dismount();
 
 		void sendFYIBox(const std::string& message) {
-			if (client) {
-				client->sendFYIBox(message);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendFYIBox(message);
+				}
 			}
 		}
 
@@ -294,11 +296,11 @@ class Player : public Creature, public Cylinder
 		}
 
 		uint16_t getProtocolVersion() const {
-			if (!client) {
+			if (clients.size() == 0) {
 				return 0;
 			}
 
-			return client->getVersion();
+			return clients.front()->getVersion();
 		}
 
 		secureMode_t getSecureMode() const {
@@ -357,8 +359,10 @@ class Player : public Creature, public Cylinder
 			return (getID() == 0);
 		}
 		void disconnect() {
-			if (client) {
-				client->disconnect();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->disconnect();
+				}
 			}
 		}
 		uint32_t getIP() const;
@@ -695,8 +699,10 @@ class Player : public Creature, public Cylinder
 			skull = newSkull;
 		}
 		void sendCreatureSkull(const Creature* creature) const {
-			if (client) {
-				client->sendCreatureSkull(creature);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureSkull(creature);
+				}
 			}
 		}
 		void checkSkullTicks(int32_t ticks);
@@ -712,145 +718,201 @@ class Player : public Creature, public Cylinder
 		//tile
 		//send methods
 		void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item) {
-			if (client) {
-				client->sendAddTileItem(tile, pos, tile->getClientIndexOfThing(this, item), item);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendAddTileItem(tile, pos, tile->getClientIndexOfThing(this, item), item);
+				}
 			}
 		}
 		void sendUpdateTileItem(const Tile* tile, const Position& pos, const Item* olditem, const Item* newitem) {
-			if (client) {
-				client->sendUpdateTileItem(tile, pos, tile->getClientIndexOfThing(this, newitem), newitem);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendUpdateTileItem(tile, pos, tile->getClientIndexOfThing(this, newitem), newitem);
+				}
 			}
 		}
 		void sendRemoveTileItem(const Tile* tile, const Position& pos, uint32_t stackpos, const Item* item) {
-			if (client) {
-				client->sendRemoveTileItem(tile, pos, stackpos);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendRemoveTileItem(tile, pos, stackpos);
+				}
 			}
 		}
 		void sendUpdateTile(const Tile* tile, const Position& pos) {
-			if (client) {
-				client->sendUpdateTile(tile, pos);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendUpdateTile(tile, pos);
+				}
 			}
 		}
 
 		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel) {
-			if (client) {
-				client->sendChannelMessage(author, text, type, channel);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendChannelMessage(author, text, type, channel);
+				}
 			}
 		}
 		void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent) {
-			if (client) {
-				client->sendChannelEvent(channelId, playerName, channelEvent);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendChannelEvent(channelId, playerName, channelEvent);
+				}
 			}
 		}
 		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
-			if (client) {
-				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfThing(this, creature), isLogin);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfThing(this, creature), isLogin);
+				}
 			}
 		}
 		void sendCreatureDisappear(const Creature* creature, uint32_t stackpos) {
-			if (client) {
-				client->sendRemoveCreature(creature, creature->getPosition(), stackpos);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendRemoveCreature(creature, creature->getPosition(), stackpos);
+				}
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
 		                      const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport) {
-			if (client) {
-				client->sendMoveCreature(creature, newTile, newPos, newTile->getClientIndexOfThing(this, creature), oldTile, oldPos, oldStackPos, teleport);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMoveCreature(creature, newTile, newPos, newTile->getClientIndexOfThing(this, creature), oldTile, oldPos, oldStackPos, teleport);
+				}
 			}
 		}
 		void sendCreatureTurn(const Creature* creature) {
-			if (client) {
-				client->sendCreatureTurn(creature, creature->getTile()->getClientIndexOfThing(this, creature));
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureTurn(creature, creature->getTile()->getClientIndexOfThing(this, creature));
+				}
 			}
 		}
 		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr) {
-			if (client) {
-				client->sendCreatureSay(creature, type, text, pos);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureSay(creature, type, text, pos);
+				}
 			}
 		}
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color) {
-			if (client) {
-				client->sendCreatureSquare(creature, color);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureSquare(creature, color);
+				}
 			}
 		}
 		void sendCreatureChangeOutfit(const Creature* creature, const Outfit_t& outfit) {
-			if (client) {
-				client->sendCreatureOutfit(creature, outfit);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureOutfit(creature, outfit);
+				}
 			}
 		}
 		void sendCreatureChangeVisible(const Creature* creature, bool visible) {
-			if (client) {
+			if (clients.size() > 0) {
 				if (creature->getPlayer()) {
 					if (visible) {
-						client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+						for (auto& client : clients) {
+							client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+						}
 					} else {
 						static Outfit_t outfit;
-						client->sendCreatureOutfit(creature, outfit);
+						for (auto& client : clients) {
+							client->sendCreatureOutfit(creature, outfit);
+						}
 					}
 				} else {
 					if (canSeeInvisibility()) {
-						client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+						for (auto& client : clients) {
+							client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+						}
 					} else {
 						if (visible) {
-							client->sendAddCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature), false);
+							for (auto& client : clients) {
+								client->sendAddCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature), false);
+							}
 						} else {
-							client->sendRemoveCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
+							for (auto& client : clients) {
+								client->sendRemoveCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
+							}
 						}
 					}
 				}
 			}
 		}
 		void sendCreatureLight(const Creature* creature) {
-			if (client) {
-				client->sendCreatureLight(creature);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureLight(creature);
+				}
 			}
 		}
 		void sendCreatureWalkthrough(const Creature* creature, bool walkthrough) {
-			if (client) {
-				client->sendCreatureWalkthrough(creature, walkthrough);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureWalkthrough(creature, walkthrough);
+				}
 			}
 		}
 		void sendCreatureShield(const Creature* creature) {
-			if (client) {
-				client->sendCreatureShield(creature);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureShield(creature);
+				}
 			}
 		}
 		void sendCreatureType(uint32_t creatureId, uint8_t creatureType) {
-			if (client) {
-				client->sendCreatureType(creatureId, creatureType);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureType(creatureId, creatureType);
+				}
 			}
 		}
 		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers) {
-			if (client) {
-				client->sendCreatureHelpers(creatureId, helpers);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureHelpers(creatureId, helpers);
+				}
 			}
 		}
 		void sendSpellCooldown(uint8_t spellId, uint32_t time) {
-			if (client) {
-				client->sendSpellCooldown(spellId, time);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendSpellCooldown(spellId, time);
+				}
 			}
 		}
 		void sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time) {
-			if (client) {
-				client->sendSpellGroupCooldown(groupId, time);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendSpellGroupCooldown(groupId, time);
+				}
 			}
 		}
 
 		void sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
 		                       uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
 		                       uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE) {
-			if (client) {
-				client->sendDamageMessage(mclass, message, pos, primaryDamage, primaryColor, secondaryDamage, secondaryColor);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendDamageMessage(mclass, message, pos, primaryDamage, primaryColor, secondaryDamage, secondaryColor);
+				}
 			}
 		}
 		void sendHealMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t heal, TextColor_t color) {
-			if (client) {
-				client->sendHealMessage(mclass, message, pos, heal, color);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendHealMessage(mclass, message, pos, heal, color);
+				}
 			}
 		}
 		void sendExperienceMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t exp, TextColor_t color) {
-			if (client) {
-				client->sendExperienceMessage(mclass, message, pos, exp, color);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendExperienceMessage(mclass, message, pos, exp, color);
+				}
 			}
 		}
 		void sendModalWindow(const ModalWindow& modalWindow);
@@ -860,15 +922,19 @@ class Player : public Creature, public Cylinder
 		void sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* oldItem, const Item* newItem);
 		void sendRemoveContainerItem(const Container* container, uint16_t slot);
 		void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex) {
-			if (client) {
-				client->sendContainer(cid, container, hasParent, firstIndex);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendContainer(cid, container, hasParent, firstIndex);
+				}
 			}
 		}
 
 		//inventory
 		void sendInventoryItem(slots_t slot, const Item* item) {
-			if (client) {
-				client->sendInventoryItem(slot, item);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendInventoryItem(slot, item);
+				}
 			}
 		}
 
@@ -903,225 +969,311 @@ class Player : public Creature, public Cylinder
 		void onRemoveInventoryItem(slots_t slot, Item* item);
 
 		void sendCancel(const std::string& msg) const {
-			if (client) {
-				client->sendTextMessage(MSG_STATUS_SMALL, msg);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendTextMessage(MSG_STATUS_SMALL, msg);
+				}
 			}
 		}
 		void sendCancelMessage(ReturnValue message) const;
 		void sendCancelTarget() const {
-			if (client) {
-				client->sendCancelTarget();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCancelTarget();
+				}
 			}
 		}
 		void sendCancelWalk() const {
-			if (client) {
-				client->sendCancelWalk();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCancelWalk();
+				}
 			}
 		}
 		void sendChangeSpeed(const Creature* creature, uint32_t newSpeed) const {
-			if (client) {
-				client->sendChangeSpeed(creature, newSpeed);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendChangeSpeed(creature, newSpeed);
+				}
 			}
 		}
 		void sendCreatureHealth(const Creature* creature) const {
-			if (client) {
-				client->sendCreatureHealth(creature);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatureHealth(creature);
+				}
 			}
 		}
 		void sendDistanceShoot(const Position& from, const Position& to, unsigned char type) const {
-			if (client) {
-				client->sendDistanceShoot(from, to, type);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendDistanceShoot(from, to, type);
+				}
 			}
 		}
 		void sendHouseWindow(House* house, uint32_t listId) const;
 		void sendCreatePrivateChannel(uint16_t channelId, const std::string& channelName) {
-			if (client) {
-				client->sendCreatePrivateChannel(channelId, channelName);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCreatePrivateChannel(channelId, channelName);
+				}
 			}
 		}
 		void sendClosePrivate(uint16_t channelId);
 		void sendIcons() const {
-			if (client) {
-				client->sendIcons(getClientIcons());
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendIcons(getClientIcons());
+				}
 			}
 		}
 		void sendMagicEffect(const Position& pos, uint8_t type) const {
-			if (client) {
-				client->sendMagicEffect(pos, type);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMagicEffect(pos, type);
+				}
 			}
 		}
 		void sendPing();
 		void sendPingBack() const {
-			if (client) {
-				client->sendPingBack();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendPingBack();
+				}
 			}
 		}
 		void sendStats();
 		void sendBasicData() const {
-			if (client) {
-				client->sendBasicData();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendBasicData();
+				}
 			}
 		}
 		void sendSkills() const {
-			if (client) {
-				client->sendSkills();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendSkills();
+				}
 			}
 		}
 		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t value = 0, TextColor_t color = TEXTCOLOR_NONE) const {
-			if (client) {
-				client->sendTextMessage(mclass, message, pos, value, color);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendTextMessage(mclass, message, pos, value, color);
+				}
 			}
 		}
 		void sendTextMessage(const TextMessage& message) const {
-			if (client) {
-				client->sendTextMessage(message);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendTextMessage(message);
+				}
 			}
 		}
 		void sendReLoginWindow(uint8_t unfairFightReduction) const {
-			if (client) {
-				client->sendReLoginWindow(unfairFightReduction);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendReLoginWindow(unfairFightReduction);
+				}
 			}
 		}
 		void sendTextWindow(Item* item, uint16_t maxlen, bool canWrite) const {
-			if (client) {
-				client->sendTextWindow(windowTextId, item, maxlen, canWrite);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendTextWindow(windowTextId, item, maxlen, canWrite);
+				}
 			}
 		}
 		void sendTextWindow(uint32_t itemId, const std::string& text) const {
-			if (client) {
-				client->sendTextWindow(windowTextId, itemId, text);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendTextWindow(windowTextId, itemId, text);
+				}
 			}
 		}
 		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId) const {
-			if (client) {
-				client->sendToChannel(creature, type, text, channelId);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendToChannel(creature, type, text, channelId);
+				}
 			}
 		}
 		void sendShop(Npc* npc) const {
-			if (client) {
-				client->sendShop(npc, shopItemList);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendShop(npc, shopItemList);
+				}
 			}
 		}
 		void sendSaleItemList() const {
-			if (client) {
-				client->sendSaleItemList(shopItemList);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendSaleItemList(shopItemList);
+				}
 			}
 		}
 		void sendCloseShop() const {
-			if (client) {
-				client->sendCloseShop();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCloseShop();
+				}
 			}
 		}
 		void sendMarketEnter(uint32_t depotId) const {
-			if (client) {
-				client->sendMarketEnter(depotId);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketEnter(depotId);
+				}
 			}
 		}
 		void sendMarketLeave() {
 			inMarket = false;
-			if (client) {
-				client->sendMarketLeave();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketLeave();
+				}
 			}
 		}
 		void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers) const {
-			if (client) {
-				client->sendMarketBrowseItem(itemId, buyOffers, sellOffers);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketBrowseItem(itemId, buyOffers, sellOffers);
+				}
 			}
 		}
 		void sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers) const {
-			if (client) {
-				client->sendMarketBrowseOwnOffers(buyOffers, sellOffers);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketBrowseOwnOffers(buyOffers, sellOffers);
+				}
 			}
 		}
 		void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers) const {
-			if (client) {
-				client->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
+				}
 			}
 		}
 		void sendMarketDetail(uint16_t itemId) const {
-			if (client) {
-				client->sendMarketDetail(itemId);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketDetail(itemId);
+				}
 			}
 		}
 		void sendMarketAcceptOffer(const MarketOfferEx& offer) const {
-			if (client) {
-				client->sendMarketAcceptOffer(offer);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketAcceptOffer(offer);
+				}
 			}
 		}
 		void sendMarketCancelOffer(const MarketOfferEx& offer) const {
-			if (client) {
-				client->sendMarketCancelOffer(offer);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendMarketCancelOffer(offer);
+				}
 			}
 		}
 		void sendTradeItemRequest(const Player* player, const Item* item, bool ack) const {
-			if (client) {
-				client->sendTradeItemRequest(player, item, ack);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendTradeItemRequest(player, item, ack);
+				}
 			}
 		}
 		void sendTradeClose() const {
-			if (client) {
-				client->sendCloseTrade();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCloseTrade();
+				}
 			}
 		}
 		void sendWorldLight(const LightInfo& lightInfo) {
-			if (client) {
-				client->sendWorldLight(lightInfo);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendWorldLight(lightInfo);
+				}
 			}
 		}
 		void sendChannelsDialog() {
-			if (client) {
-				client->sendChannelsDialog();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendChannelsDialog();
+				}
 			}
 		}
 		void sendOpenPrivateChannel(const std::string& receiver) {
-			if (client) {
-				client->sendOpenPrivateChannel(receiver);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendOpenPrivateChannel(receiver);
+				}
 			}
 		}
 		void sendOutfitWindow() {
-			if (client) {
-				client->sendOutfitWindow();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendOutfitWindow();
+				}
 			}
 		}
 		void sendCloseContainer(uint8_t cid) {
-			if (client) {
-				client->sendCloseContainer(cid);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendCloseContainer(cid);
+				}
 			}
 		}
 
 		void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers) {
-			if (client) {
-				client->sendChannel(channelId, channelName, channelUsers, invitedUsers);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendChannel(channelId, channelName, channelUsers, invitedUsers);
+				}
 			}
 		}
 		void sendTutorial(uint8_t tutorialId) {
-			if (client) {
-				client->sendTutorial(tutorialId);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendTutorial(tutorialId);
+				}
 			}
 		}
 		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc) {
-			if (client) {
-				client->sendAddMarker(pos, markType, desc);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendAddMarker(pos, markType, desc);
+				}
 			}
 		}
 		void sendQuestLog() {
-			if (client) {
-				client->sendQuestLog();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendQuestLog();
+				}
 			}
 		}
 		void sendQuestLine(const Quest* quest) {
-			if (client) {
-				client->sendQuestLine(quest);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendQuestLine(quest);
+				}
 			}
 		}
 		void sendEnterWorld() {
-			if (client) {
-				client->sendEnterWorld();
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->sendEnterWorld();
+				}
 			}
 		}
 		void sendNetworkMessage(const NetworkMessage& message) {
-			if (client) {
-				client->writeToOutputBuffer(message);
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->writeToOutputBuffer(message);
+				}
 			}
 		}
 
@@ -1154,6 +1306,28 @@ class Player : public Creature, public Cylinder
 		void learnInstantSpell(const std::string& name);
 		void forgetInstantSpell(const std::string& name);
 		bool hasLearnedInstantSpell(const std::string& name) const;
+
+		bool isInCast() const {
+			return inCast;
+		}
+		void setInCast(bool value);
+		const std::string& getPassword() const {
+			return password;
+		}
+		void setPassword(const std::string& value) {
+			password = value;
+		}
+
+		uint8_t getViewers() const {
+			return static_cast<uint8_t>(clients.size());
+		}
+		uint32_t getViews(bool increase = false) {
+			if (increase) {
+				views++;
+			}
+
+			return views;
+		}
 
 	protected:
 		void checkTradeState(const Item* item);
@@ -1214,11 +1388,13 @@ class Player : public Creature, public Cylinder
 		std::list<uint32_t> modalWindows;
 		std::list<ShopInfo> shopItemList;
 		std::list<std::string> learnedInstantSpellList;
+		std::list<ProtocolGame*> clients;
 		ConditionList storedConditionList;
 		GuildWarList guildWarList;
 
 		std::string name;
 		std::string guildNick;
+		std::string password;
 
 		LightInfo itemsLight;
 		Position loginPosition;
@@ -1255,7 +1431,6 @@ class Player : public Creature, public Cylinder
 		Npc* shopOwner;
 		Party* party;
 		Player* tradePartner;
-		ProtocolGame* client;
 		SchedulerTask* walkTask;
 		Town* town;
 		Vocation* vocation;
@@ -1279,6 +1454,7 @@ class Player : public Creature, public Cylinder
 		uint32_t maxDepotItems;
 		uint32_t maxVipEntries;
 		uint32_t skills[SKILL_LAST + 1][3];
+		uint32_t views;
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];
 		int32_t purchaseCallback;
@@ -1320,6 +1496,7 @@ class Player : public Creature, public Cylinder
 		bool isConnecting;
 		bool addAttackSkillPoint;
 		bool inventoryAbilities[SLOT_LAST];
+		bool inCast;
 
 		static uint32_t playerAutoID;
 
