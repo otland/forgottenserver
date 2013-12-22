@@ -10,3 +10,11 @@ end
 function Player:onLookInShop(itemType, count)
 	return true
 end
+
+function Player:onMoveItem(item, count, fromPosition, toPosition)
+	return true
+end
+
+function Player:onMoveCreature(creature, fromPosition, toPosition)
+	return true
+end

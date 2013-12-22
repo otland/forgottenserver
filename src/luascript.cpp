@@ -1075,7 +1075,7 @@ void LuaScriptInterface::pushNil(lua_State* L)
 
 void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, int32_t stackpos/* = 0*/)
 {
-	lua_newtable(L);
+	lua_createtable(L, 0, 4);
 
 	pushNumber(L, position.x);
 	lua_setfield(L, -2, "x");
@@ -1094,7 +1094,7 @@ void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, in
 
 void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit_t& outfit)
 {
-	lua_newtable(L);
+	lua_createtable(L, 0, 8);
 
 	pushNumber(L, outfit.lookType);
 	lua_setfield(L, -2, "lookType");
@@ -1546,11 +1546,11 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
-	
-	registerMethod("Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
 
 	registerMethod("Game", "getWorldType", LuaScriptInterface::luaGameGetWorldType);
 	registerMethod("Game", "setWorldType", LuaScriptInterface::luaGameSetWorldType);
+	
+	registerMethod("Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
 
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
@@ -1766,6 +1766,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "say", LuaScriptInterface::luaCreatureSay);
 
 	registerMethod("Creature", "getDamageMap", LuaScriptInterface::luaCreatureGetDamageMap);
+
+	registerMethod("Creature", "getSummons", LuaScriptInterface::luaCreatureGetSummons);
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
@@ -5082,14 +5084,6 @@ int32_t LuaScriptInterface::luaGameSetGameState(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
-{
-	// Game.getReturnMessage(value)
-	ReturnValue value = static_cast<ReturnValue>(getNumber<int64_t>(L, 1));
-	pushString(L, getReturnMessage(value));
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGameGetWorldType(lua_State* L)
 {
 	// Game.getWorldType()
@@ -5103,6 +5097,14 @@ int32_t LuaScriptInterface::luaGameSetWorldType(lua_State* L)
 	WorldType_t type = static_cast<WorldType_t>(getNumber<int64_t>(L, 1));
 	g_game.setWorldType(type);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
+{
+	// Game.getReturnMessage(value)
+	ReturnValue value = static_cast<ReturnValue>(getNumber<int64_t>(L, 1));
+	pushString(L, getReturnMessage(value));
 	return 1;
 }
 
@@ -7720,6 +7722,25 @@ int32_t LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 			pushNumber(L, damageEntry.second.ticks);
 			lua_setfield(L, -2, "ticks");
 
+			lua_rawset(L, -3);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetSummons(lua_State* L)
+{
+	// creature:getSummons()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_Number index = 0;
+		lua_createtable(L, creature->getSummonCount(), 0);
+		for (Creature* summon : creature->getSummons()) {
+			pushNumber(L, ++index);
+			pushUserdata<Creature>(L, summon);
+			setCreatureMetatable(L, -1, summon);
 			lua_rawset(L, -3);
 		}
 	} else {

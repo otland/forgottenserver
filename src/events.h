@@ -43,6 +43,8 @@ class Events
 		bool eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance);
 		bool eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
 		bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count);
+		bool eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition);
+		bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
 
 	private:
 		LuaScriptInterface scriptInterface;
@@ -56,6 +58,8 @@ class Events
 		int32_t playerOnLook;
 		int32_t playerOnLookInTrade;
 		int32_t playerOnLookInShop;
+		int32_t playerOnMoveItem;
+		int32_t playerOnMoveCreature;
 };
 
 #endif
