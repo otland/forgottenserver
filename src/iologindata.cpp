@@ -290,7 +290,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	Condition* condition = Condition::createCondition(propStream);
 	while (condition) {
 		if (condition->unserialize(propStream)) {
-			player->storedConditionList.push_back(condition);
+			player->storedConditionList.push_front(condition);
 		} else {
 			delete condition;
 		}
@@ -441,7 +441,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	if ((result = db->storeQuery(query.str()))) {
 		do {
 			std::string spellName = result->getDataString("name");
-			player->learnedInstantSpellList.push_back(spellName);
+			player->learnedInstantSpellList.push_front(spellName);
 		} while (result->next());
 		db->freeResult(result);
 	}
@@ -570,7 +570,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	std::ostringstream stream;
 
 	typedef std::pair<Container*, int32_t> containerBlock;
-	std::list<containerBlock> stack;
+	std::queue<containerBlock> queue;
 
 	int32_t parentId = 0;
 	int32_t runningId = 100;
@@ -593,22 +593,22 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		}
 
 		if (Container* container = item->getContainer()) {
-			stack.emplace_back(container, runningId);
+			queue.emplace(container, runningId);
 		}
 	}
 
-	while (!stack.empty()) {
-		const containerBlock& cb = stack.front();
+	while (!queue.empty()) {
+		const containerBlock& cb = queue.front();
 		Container* container = cb.first;
 		parentId = cb.second;
-		stack.pop_front();
+		queue.pop();
 
 		for (Item* item : container->getItemList()) {
 			++runningId;
 
 			Container* subContainer = item->getContainer();
 			if (subContainer) {
-				stack.emplace_back(subContainer, runningId);
+				queue.emplace(subContainer, runningId);
 			}
 
 			uint32_t attributesSize = 0;
@@ -1002,9 +1002,9 @@ bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
 	return true;
 }
 
-std::list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
+std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 {
-	std::list<VIPEntry> entries;
+	std::forward_list<VIPEntry> entries;
 
 	std::ostringstream query;
 	query << "SELECT `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify` FROM `account_viplist` WHERE `account_id` = " << accountId;
@@ -1013,7 +1013,7 @@ std::list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 	DBResult* result = db->storeQuery(query.str());
 	if (result) {
 		do {
-			entries.emplace_back(
+			entries.emplace_front(
 				result->getDataInt("player_id"),
 				result->getDataString("name"),
 				result->getDataString("description"),

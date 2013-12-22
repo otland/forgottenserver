@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include "luascript.h"
 #include "chat.h"
 #include "player.h"
@@ -43,8 +45,6 @@
 #include "beds.h"
 #include "monster.h"
 #include "scheduler.h"
-
-#include <boost/range/adaptor/reversed.hpp>
 
 extern Chat g_chat;
 extern Game g_game;

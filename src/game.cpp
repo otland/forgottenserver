@@ -4768,7 +4768,6 @@ void Game::startDecay(Item* item)
 	}
 
 	ItemDecayState_t decayState = item->getDecaying();
-
 	if (decayState == DECAYING_TRUE) {
 		return;
 	}

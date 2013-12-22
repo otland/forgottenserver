@@ -316,7 +316,7 @@ class Player : public Creature, public Cylinder
 		bool isPartner(const Player* player) const;
 		void sendPlayerPartyIcons(Player* player);
 		bool addPartyInvitation(Party* party);
-		bool removePartyInvitation(Party* party);
+		void removePartyInvitation(Party* party);
 		void clearPartyInvitations();
 
 		GuildEmblems_t getGuildEmblem(const Player* player) const;
@@ -1209,13 +1209,14 @@ class Player : public Creature, public Cylinder
 		std::map<uint32_t, int32_t> storageMap;
 
 		std::vector<OutfitEntry> outfits;
-
-		std::list<Party*> invitePartyList;
-		std::list<uint32_t> modalWindows;
-		std::list<ShopInfo> shopItemList;
-		std::list<std::string> learnedInstantSpellList;
-		ConditionList storedConditionList;
 		GuildWarList guildWarList;
+
+		std::list<ShopInfo> shopItemList;
+
+		std::forward_list<Party*> invitePartyList;
+		std::forward_list<uint32_t> modalWindows;
+		std::forward_list<std::string> learnedInstantSpellList;
+		std::forward_list<Condition*> storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
 
 		std::string name;
 		std::string guildNick;

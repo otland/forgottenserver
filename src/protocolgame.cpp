@@ -19,6 +19,9 @@
 
 #include "otpch.h"
 
+#include <random>
+#include <boost/range/adaptor/reversed.hpp>
+
 #include "protocolgame.h"
 
 #include "networkmessage.h"
@@ -43,10 +46,6 @@
 #include "connection.h"
 #include "creatureevent.h"
 #include "scheduler.h"
-
-#include <random>
-
-#include <boost/range/adaptor/reversed.hpp>
 
 extern Game g_game;
 extern ConfigManager g_config;
@@ -2540,7 +2539,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	//player light level
 	sendCreatureLight(creature);
 
-	const std::list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
+	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
 
 	if (player->isAccessPlayer()) {
 		for (const VIPEntry& entry : vipEntries) {
@@ -2804,17 +2803,17 @@ void ProtocolGame::sendOutfitWindow()
 		msg.AddByte(outfit.addons);
 	}
 
-	MountsList mounts;
+	std::vector<const Mount*> mounts;
 	for (const Mount& mount : Mounts::getInstance()->getMounts()) {
 		if (player->hasMount(&mount)) {
-			mounts.push_back(mount);
+			mounts.push_back(&mount);
 		}
 	}
 
 	msg.AddByte(mounts.size());
-	for (const Mount& mount : mounts) {
-		msg.add<uint16_t>(mount.clientId);
-		msg.AddString(mount.name);
+	for (const Mount* mount : mounts) {
+		msg.add<uint16_t>(mount->clientId);
+		msg.AddString(mount->name);
 	}
 
 	player->hasRequestedOutfit(true);

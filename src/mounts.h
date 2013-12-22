@@ -32,8 +32,6 @@ struct Mount
 	bool premium;
 };
 
-typedef std::list<Mount> MountsList;
-
 class Mounts
 {
 	public:
@@ -47,7 +45,7 @@ class Mounts
 		Mount* getMountByID(uint8_t id);
 		Mount* getMountByClientID(uint16_t clientId);
 
-		const MountsList& getMounts() const {
+		const std::list<Mount>& getMounts() const {
 			return mounts;
 		}
 

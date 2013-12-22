@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
+#include <forward_list>
 #include <functional>
 #include <iomanip>
 #include <iostream>

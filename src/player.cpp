@@ -3036,7 +3036,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 		return true;
 	}
 
-	std::list<Item*> itemList;
+	std::forward_list<Item*> itemList;
 
 	uint32_t count = 0;
 	for (int i = SLOT_FIRST; i < SLOT_LAST && count < amount; i++) {
@@ -3047,13 +3047,13 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 
 		if (!ignoreEquipped && item->getID() == itemId) {
 			count += Item::countByType(item, subType);
-			itemList.push_back(item);
+			itemList.push_front(item);
 		} else if (Container* container = item->getContainer()) {
 			for (ContainerIterator it = container->begin(), end = container->end(); it != end; ++it) {
 				Item* containerItem = *it;
 				if (containerItem->getID() == itemId) {
 					count += Item::countByType(containerItem, subType);
-					itemList.push_back(containerItem);
+					itemList.push_front(containerItem);
 					if (count >= amount) {
 						break;
 					}
@@ -4079,23 +4079,13 @@ double Player::getLostPercent() const
 void Player::learnInstantSpell(const std::string& name)
 {
 	if (!hasLearnedInstantSpell(name)) {
-		learnedInstantSpellList.push_back(name);
+		learnedInstantSpellList.push_front(name);
 	}
 }
 
 void Player::forgetInstantSpell(const std::string& name)
 {
-	if (hasLearnedInstantSpell(name)) {
-		auto it = learnedInstantSpellList.begin();
-		while (it != learnedInstantSpellList.end()) {
-			if (strcasecmp((*it).c_str(), name.c_str()) == 0) {
-				learnedInstantSpellList.erase(it);
-				break;
-			} else {
-				++it;
-			}
-		}
-	}
+	learnedInstantSpellList.remove(name);
 }
 
 bool Player::hasLearnedInstantSpell(const std::string& name) const
@@ -4268,23 +4258,13 @@ bool Player::addPartyInvitation(Party* party)
 		return false;
 	}
 
-	invitePartyList.push_back(party);
+	invitePartyList.push_front(party);
 	return true;
 }
 
-bool Player::removePartyInvitation(Party* party)
+void Player::removePartyInvitation(Party* party)
 {
-	if (!party) {
-		return false;
-	}
-
-	auto it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
-	if (it == invitePartyList.end()) {
-		return false;
-	}
-
-	invitePartyList.erase(it);
-	return true;
+	invitePartyList.remove(party);
 }
 
 void Player::clearPartyInvitations()
@@ -4623,7 +4603,7 @@ void Player::sendModalWindow(const ModalWindow& modalWindow)
 		return;
 	}
 
-	modalWindows.push_back(modalWindow.id);
+	modalWindows.push_front(modalWindow.id);
 	client->sendModalWindow(modalWindow);
 }
 
@@ -4726,7 +4706,7 @@ void Player::sendClosePrivate(uint16_t channelId)
 
 uint64_t Player::getMoney() const
 {
-	std::list<Container*> listContainer;
+	std::forward_list<Container*> listContainer;
 	uint64_t moneyCount = 0;
 
 	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
@@ -4737,7 +4717,7 @@ uint64_t Player::getMoney() const
 
 		Container* container = item->getContainer();
 		if (container) {
-			listContainer.push_back(container);
+			listContainer.push_front(container);
 		} else if (item->getWorth() != 0) {
 			moneyCount += item->getWorth();
 		}
@@ -4750,7 +4730,7 @@ uint64_t Player::getMoney() const
 		for (Item* item : container->getItemList()) {
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_back(tmpContainer);
+				listContainer.push_front(tmpContainer);
 			} else if (item->getWorth() != 0) {
 				moneyCount += item->getWorth();
 			}
