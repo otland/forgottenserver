@@ -645,11 +645,4 @@ function setGlobalStorageValue(key, value)
 	return true
 end
 
-function getWorldType()
-	return Game.getWorldType()
-end
-
-function setWorldType(type)
-	Game.setWorldType(type)
-	return true
-end
+getWorldType = Game.getWorldType
