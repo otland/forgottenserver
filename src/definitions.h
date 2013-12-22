@@ -29,7 +29,7 @@
 #define CLIENT_VERSION_STR "10.31"
 
 #ifndef __FUNCTION__
-#define	__FUNCTION__ __func__
+#define __FUNCTION__ __func__
 #endif
 
 #ifndef _USE_MATH_DEFINES

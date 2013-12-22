@@ -334,7 +334,6 @@ void Creature::addEventWalk(bool firstStep)
 	}
 
 	int64_t ticks = getEventStepTicks(firstStep);
-
 	if (ticks <= 0) {
 		return;
 	}
@@ -344,8 +343,7 @@ void Creature::addEventWalk(bool firstStep)
 		g_game.checkCreatureWalk(getID());
 	}
 
-	eventWalk = g_scheduler->addEvent(createSchedulerTask(
-	                                     std::max<int64_t>(SCHEDULER_MINTICKS, ticks), std::bind(&Game::checkCreatureWalk, &g_game, getID())));
+	eventWalk = g_scheduler->addEvent(createSchedulerTask(ticks, std::bind(&Game::checkCreatureWalk, &g_game, getID())));
 }
 
 void Creature::stopEventWalk()

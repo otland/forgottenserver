@@ -1673,11 +1673,7 @@ void Player::setNextActionTask(SchedulerTask* task)
 
 uint32_t Player::getNextActionTime() const
 {
-	int64_t time = nextAction - OTSYS_TIME();
-	if (time < SCHEDULER_MINTICKS) {
-		return SCHEDULER_MINTICKS;
-	}
-	return time;
+	return std::max<int64_t>(SCHEDULER_MINTICKS, nextAction - OTSYS_TIME());
 }
 
 void Player::onThink(uint32_t interval)

@@ -82,8 +82,7 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
 		if (it == timerMap.end()) {
 			timerMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			if (timerEventId == 0) {
-				timerEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
-				                                    std::bind(&GlobalEvents::timer, this)));
+				timerEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
 
 			return true;
@@ -99,8 +98,7 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
 		if (it == thinkMap.end()) {
 			thinkMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			if (thinkEventId == 0) {
-				thinkEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
-				                                    std::bind(&GlobalEvents::think, this)));
+				thinkEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}
 			return true;
 		}
@@ -169,7 +167,6 @@ void GlobalEvents::think()
 			if (nextExecutionTime < nextScheduledTime) {
 				nextScheduledTime = nextExecutionTime;
 			}
-
 			continue;
 		}
 
@@ -186,8 +183,7 @@ void GlobalEvents::think()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		thinkEventId = g_scheduler->addEvent(createSchedulerTask(std::max<int64_t>(SCHEDULER_MINTICKS, nextScheduledTime),
-											std::bind(&GlobalEvents::think, this)));
+		thinkEventId = g_scheduler->addEvent(createSchedulerTask(nextScheduledTime, std::bind(&GlobalEvents::think, this)));
 	}
 }
 
