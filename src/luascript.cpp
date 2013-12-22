@@ -1263,10 +1263,7 @@ void LuaScriptInterface::registerFunctions()
 
 	//getHouseByPlayerGUID(playerGUID)
 	lua_register(m_luaState, "getHouseByPlayerGUID", LuaScriptInterface::luaGetHouseByPlayerGUID);
-
-	//getWorldType()
-	lua_register(m_luaState, "getWorldType", LuaScriptInterface::luaGetWorldType);
-
+	
 	//getWorldTime()
 	lua_register(m_luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
 
@@ -1551,6 +1548,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
 	
 	registerMethod("Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
+
+	registerMethod("Game", "getWorldType", LuaScriptInterface::luaGameGetWorldType);
+	registerMethod("Game", "setWorldType", LuaScriptInterface::luaGameSetWorldType);
 
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
@@ -2964,26 +2964,6 @@ int32_t LuaScriptInterface::luaGetHouseByPlayerGUID(lua_State* L)
 		lua_pushnumber(L, house->getId());
 	} else {
 		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetWorldType(lua_State* L)
-{
-	//getWorldType()
-	switch (g_game.getWorldType()) {
-		case WORLD_TYPE_NO_PVP:
-			lua_pushnumber(L, 1);
-			break;
-		case WORLD_TYPE_PVP:
-			lua_pushnumber(L, 2);
-			break;
-		case WORLD_TYPE_PVP_ENFORCED:
-			lua_pushnumber(L, 3);
-			break;
-		default:
-			pushBoolean(L, false);
-			break;
 	}
 	return 1;
 }
@@ -5107,6 +5087,22 @@ int32_t LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
 	// Game.getReturnMessage(value)
 	ReturnValue value = static_cast<ReturnValue>(getNumber<int64_t>(L, 1));
 	pushString(L, getReturnMessage(value));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetWorldType(lua_State* L)
+{
+	// Game.getWorldType()
+	pushNumber(L, g_game.getWorldType());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameSetWorldType(lua_State* L)
+{
+	// Game.setWorldType(type)
+	WorldType_t type = static_cast<WorldType_t>(getNumber<int64_t>(L, 1));
+	g_game.setWorldType(type);
+	pushBoolean(L, true);
 	return 1;
 }
 
