@@ -436,7 +436,6 @@ class LuaScriptInterface
 		static int32_t luaGetHouseByPlayerGUID(lua_State* L);
 
 		//get creature info functions
-		static int32_t luaGetCreatureSummons(lua_State* L);
 		static int32_t luaGetSpectators(lua_State* L);
 		static int32_t luaGetCreatureSpeed(lua_State* L);
 		static int32_t luaGetCreatureBaseSpeed(lua_State* L);

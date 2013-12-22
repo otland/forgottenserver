@@ -1236,10 +1236,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPartyMembers(leaderId)
 	lua_register(m_luaState, "getPartyMembers", LuaScriptInterface::luaGetPartyMembers);
 
-	//getCreatureSummons(cid)
-	//returns a table with all the summons of the creature
-	lua_register(m_luaState, "getCreatureSummons", LuaScriptInterface::luaGetCreatureSummons);
-
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
 
@@ -4311,29 +4307,6 @@ int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 	}
 
 	pushBoolean(L, hasProp);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetCreatureSummons(lua_State* L)
-{
-	//getCreatureSummons(cid)
-	//returns a table with all the summons of the creature
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_newtable(L);
-	uint32_t index = 0;
-	for (Creature* summon : creature->getSummons()) {
-		lua_pushnumber(L, ++index);
-		lua_pushnumber(L, summon->getID());
-		lua_settable(L, -3);
-	}
 	return 1;
 }
 
