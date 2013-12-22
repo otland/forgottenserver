@@ -5093,20 +5093,7 @@ int32_t LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
 int32_t LuaScriptInterface::luaGameGetWorldType(lua_State* L)
 {
 	// Game.getWorldType()
-	switch (g_game.getWorldType()) {
-	case WORLD_TYPE_NO_PVP:
-		pushNumber(L, 1);
-		break;
-	case WORLD_TYPE_PVP:
-		pushNumber(L, 2);
-		break;
-	case WORLD_TYPE_PVP_ENFORCED:
-		pushNumber(L, 3);
-		break;
-	default:
-		pushBoolean(L, false);
-		break;
-	}
+	pushNumber(L, g_game.getWorldType());
 	return 1;
 }
 
