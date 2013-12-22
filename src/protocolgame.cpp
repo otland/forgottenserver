@@ -3357,16 +3357,14 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 	const ItemType& it = Item::items[item.itemId];
 	msg.add<uint16_t>(it.clientId);
 
-	if (it.stackable || it.isRune()) {
-		msg.AddByte(item.subType);
-	} else if (it.isSplash() || it.isFluidContainer()) {
+	if (it.isSplash() || it.isFluidContainer()) {
 		msg.AddByte(serverFluidToClient(item.subType));
 	} else {
 		msg.AddByte(0x00);
 	}
 
 	msg.AddString(item.realName);
-	msg.add<uint32_t>(uint32_t(it.weight * 100));
+	msg.add<uint32_t>(static_cast<uint32_t>(it.weight * 100));
 	msg.add<uint32_t>(item.buyPrice);
 	msg.add<uint32_t>(item.sellPrice);
 }
