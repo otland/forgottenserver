@@ -181,7 +181,6 @@ bool House::kickPlayer(Player* player, Player* target)
 		g_game.addMagicEffect(oldPosition, NM_ME_POFF);
 		g_game.addMagicEffect(getEntryPosition(), NM_ME_TELEPORT);
 	}
-
 	return true;
 }
 
