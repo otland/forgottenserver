@@ -718,3 +718,40 @@ function setGlobalStorageValue(key, value)
 end
 
 getWorldType = Game.getWorldType
+
+getThingFromPos = getThingfromPos
+getThingPosition = getThingPos
+table.find = function(table, value)
+	for i, v in pairs(table) do
+		if v == value then
+			return i
+		end
+	end
+	return nil
+end
+
+string.trim = function (str)
+ return str:gsub("^%s*(.-)%s*$", "%1")
+end
+
+string.explode = function (str, sep, limit)
+if(type(sep) ~= 'string' or isInArray({tostring(str):len(), sep:len()}, 0)) then
+	return {}
+end
+
+ local i, pos, tmp, t = 0, 1, "", {}
+ for s, e in function() return string.find(str, sep, pos) end do
+  tmp = str:sub(pos, s - 1):trim()
+  table.insert(t, tmp)
+  pos = e + 1
+
+  i = i + 1
+  if(limit ~= nil and i == limit) then
+   break
+  end
+ end
+
+ tmp = str:sub(pos):trim()
+ table.insert(t, tmp)
+ return t
+end
