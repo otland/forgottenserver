@@ -80,8 +80,8 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 
 		for (HouseTile* tile : houseTiles) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
-				for (Creature* creature : *creatures) {
-					kickPlayer(nullptr, creature->getPlayer());
+				for (int32_t i = creatures->size(); --i >= 0;) {
+					kickPlayer(nullptr, creatures->at(i)->getPlayer());
 				}
 			}
 		}
@@ -202,8 +202,8 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 	//kick uninvited players
 	for (HouseTile* tile : houseTiles) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
-			for (Creature* creature : *creatures) {
-				Player* player = creature->getPlayer();
+			for (int32_t i = creatures->size(); --i >= 0;) {
+				Player* player = creatures->at(i)->getPlayer();
 				if (player && !isInvited(player)) {
 					kickPlayer(nullptr, player);
 				}
