@@ -80,12 +80,13 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 
 		for (HouseTile* tile : houseTiles) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
-				for (Creature* creature : *creatures) {
-					kickPlayer(nullptr, creature->getPlayer());
+				for (uint32_t i = 0; i < creatures->size();) {
+					kickPlayer(nullptr, creatures->at(i)->getPlayer());
+					++i;
 				}
 			}
 		}
-
+		
 		// Remove players from beds
 		for (BedItem* bed : bedsList) {
 			if (bed->getSleeper() != 0) {
@@ -180,6 +181,7 @@ bool House::kickPlayer(Player* player, Player* target)
 		g_game.addMagicEffect(oldPosition, NM_ME_POFF);
 		g_game.addMagicEffect(getEntryPosition(), NM_ME_TELEPORT);
 	}
+
 	return true;
 }
 
@@ -202,11 +204,12 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 	//kick uninvited players
 	for (HouseTile* tile : houseTiles) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
-			for (Creature* creature : *creatures) {
-				Player* player = creature->getPlayer();
+			for (uint32_t i = 0; i < creatures->size();) {
+				Player* player = creatures->at(i)->getPlayer();
 				if (player && !isInvited(player)) {
 					kickPlayer(nullptr, player);
 				}
+				++i;
 			}
 		}
 	}
