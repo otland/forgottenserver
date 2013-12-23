@@ -1227,15 +1227,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureDropLoot(cid, doDrop)
 	lua_register(m_luaState, "doSetCreatureDropLoot", LuaScriptInterface::luaDoSetCreatureDropLoot);
 
-	//getPlayerParty(cid)
-	lua_register(m_luaState, "getPlayerParty", LuaScriptInterface::luaGetPlayerParty);
-
-	//doPlayerJoinParty(cid, leaderId)
-	lua_register(m_luaState, "doPlayerJoinParty", LuaScriptInterface::luaDoPlayerJoinParty);
-
-	//getPartyMembers(leaderId)
-	lua_register(m_luaState, "getPartyMembers", LuaScriptInterface::luaGetPartyMembers);
-
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
 
@@ -4479,80 +4470,6 @@ int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
 	g_game.getMap()->clean();
 	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPlayerParty(lua_State* L)
-{
-	//getPlayerParty(cid)
-	uint32_t cid = popNumber(L);
-
-	if (Player* player = g_game.getPlayerByID(cid)) {
-		if (Party* party = player->getParty()) {
-			lua_pushnumber(L, party->getLeader()->getID());
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerJoinParty(lua_State* L)
-{
-	//doPlayerJoinParty(cid, lid)
-	uint32_t leaderId = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* leader = g_game.getPlayerByID(leaderId);
-	if (!leader) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	g_game.playerJoinParty(player->getID(), leader->getID());
-	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetPartyMembers(lua_State* L)
-{
-	//getPartyMembers(leaderId)
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		Party* party = player->getParty();
-		if (party) {
-			PlayerVector list = party->getMembers();
-			list.push_back(party->getLeader());
-
-			lua_newtable(L);
-			uint32_t index = 0;
-
-			for (Player* partyMember : list) {
-				lua_pushnumber(L, ++index);
-				lua_pushnumber(L, partyMember->getID());
-				lua_settable(L, -3);
-			}
-
-			return 1;
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-	}
-
-	pushBoolean(L, false);
 	return 1;
 }
 

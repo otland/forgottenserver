@@ -525,10 +525,6 @@ class LuaScriptInterface
 		static int32_t luaSendChannelMessage(lua_State* L);
 		static int32_t luaSendGuildChannelMessage(lua_State* L);
 
-		static int32_t luaGetPlayerParty(lua_State* L);
-		static int32_t luaDoPlayerJoinParty(lua_State* L);
-		static int32_t luaGetPartyMembers(lua_State* L);
-
 #ifndef LUAJIT_VERSION
 		static int32_t luaBitNot(lua_State* L);
 		static int32_t luaBitAnd(lua_State* L);
