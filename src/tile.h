@@ -321,7 +321,7 @@ class Tile : public Cylinder
 		virtual int32_t __getFirstIndex() const;
 		virtual int32_t __getLastIndex() const;
 		virtual uint32_t __getItemTypeCount(uint16_t itemId, int32_t subType = -1) const;
-		virtual Thing* __getThing(uint32_t index) const;
+		virtual Thing* __getThing(size_t index) const;
 
 		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
 		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);

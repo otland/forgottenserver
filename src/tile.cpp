@@ -1384,7 +1384,7 @@ uint32_t Tile::__getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 	return count;
 }
 
-Thing* Tile::__getThing(uint32_t index) const
+Thing* Tile::__getThing(size_t index) const
 {
 	if (ground) {
 		if (index == 0) {
@@ -1400,16 +1400,14 @@ Thing* Tile::__getThing(uint32_t index) const
 		if (index < topItemSize) {
 			return items->at(items->downItemCount + index);
 		}
-
 		index -= topItemSize;
 	}
 
 	if (const CreatureVector* creatures = getCreatures()) {
-		if (index < (uint32_t)creatures->size()) {
-			return creatures->at(index);
+		if (index < creatures->size()) {
+			return (*creatures)[index];
 		}
-
-		index -= (uint32_t)creatures->size();
+		index -= creatures->size();
 	}
 
 	if (items) {

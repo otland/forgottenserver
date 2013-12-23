@@ -1195,7 +1195,7 @@ class Player : public Creature, public Cylinder
 		virtual int32_t __getLastIndex() const;
 		virtual uint32_t __getItemTypeCount(uint16_t itemId, int32_t subType = -1) const;
 		virtual std::map<uint32_t, uint32_t>& __getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const;
-		virtual Thing* __getThing(uint32_t index) const;
+		virtual Thing* __getThing(size_t index) const;
 
 		virtual void __internalAddThing(Thing* thing);
 		virtual void __internalAddThing(uint32_t index, Thing* thing);

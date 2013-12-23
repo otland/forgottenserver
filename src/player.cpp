@@ -3104,7 +3104,7 @@ std::map<uint32_t, uint32_t>& Player::__getAllItemTypeCount(std::map<uint32_t, u
 	return countMap;
 }
 
-Thing* Player::__getThing(uint32_t index) const
+Thing* Player::__getThing(size_t index) const
 {
 	if (index >= SLOT_FIRST && index < SLOT_LAST) {
 		return inventory[index];

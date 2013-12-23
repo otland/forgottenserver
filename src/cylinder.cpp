@@ -48,7 +48,7 @@ std::map<uint32_t, uint32_t>& Cylinder::__getAllItemTypeCount(std::map<uint32_t,
 	return countMap;
 }
 
-Thing* Cylinder::__getThing(uint32_t index) const
+Thing* Cylinder::__getThing(size_t index) const
 {
 	return nullptr;
 }

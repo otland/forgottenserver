@@ -892,18 +892,6 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		}
 	}
 
-	/*
-	if ((node = monsterNode.child("strategy"))) {
-		if (readXMLInteger(p, "attack", intValue)) {
-			mType->attackStrength = pugi::cast<int32_t>(attr.value());
-		}
-
-		if (readXMLInteger(p, "defense", intValue)) {
-			mType->defenseStrength = pugi::cast<int32_t>(attr.value());
-		}
-	}
-	*/
-
 	if ((node = monsterNode.child("look"))) {
 		if ((attr = node.attribute("type"))) {
 			mType->outfit.lookType = pugi::cast<uint16_t>(attr.value());

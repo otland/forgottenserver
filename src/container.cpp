@@ -699,7 +699,7 @@ std::map<uint32_t, uint32_t>& Container::__getAllItemTypeCount(std::map<uint32_t
 	return countMap;
 }
 
-Thing* Container::__getThing(uint32_t index) const
+Thing* Container::__getThing(size_t index) const
 {
 	return getItemByIndex(index);
 }

@@ -173,7 +173,7 @@ class Cylinder : virtual public Thing
 		  * Gets the object based on index
 		  * \returns the object, returns nullptr if not found
 		  */
-		virtual Thing* __getThing(uint32_t index) const;
+		virtual Thing* __getThing(size_t index) const;
 
 		/**
 		  * Get the amount of items of a certain type
