@@ -69,6 +69,7 @@ bool ConfigManager::load()
 		m_confString[MYSQL_USER] = getGlobalString(L, "mysqlUser", "root");
 		m_confString[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "theforgottenserver");
+		m_confString[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
 
 		m_confInteger[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		m_confInteger[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
