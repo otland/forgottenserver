@@ -6004,6 +6004,7 @@ void Game::forceAddCondition(uint32_t creatureId, Condition* condition)
 {
 	Creature* creature = getCreatureByID(creatureId);
 	if (!creature) {
+		delete condition;
 		return;
 	}
 

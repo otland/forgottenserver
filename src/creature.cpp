@@ -1267,7 +1267,7 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 			continue;
 		}
 
-		if (!force && condition->getType() == CONDITION_PARALYZE) {
+		if (!force && type == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 			if (walkDelay > 0) {
 				g_scheduler->addEvent(createSchedulerTask(walkDelay, std::bind(&Game::forceRemoveCondition, &g_game, getID(), type)));
@@ -1294,7 +1294,7 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool forc
 			continue;
 		}
 
-		if (!force && condition->getType() == CONDITION_PARALYZE) {
+		if (!force && type == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 			if (walkDelay > 0) {
 				g_scheduler->addEvent(createSchedulerTask(walkDelay, std::bind(&Game::forceRemoveCondition, &g_game, getID(), type)));
