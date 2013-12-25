@@ -1294,6 +1294,7 @@ class Player : public Creature, public Cylinder
 		int32_t offlineTrainingTime;
 		int32_t idleTime;
 		int32_t shootRange;
+		int32_t manaMax;
 
 		AccountType_t accountType;
 		PlayerSex_t sex;

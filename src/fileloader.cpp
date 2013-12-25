@@ -56,7 +56,6 @@ bool FileLoader::openFile(const char* filename, const char* accept_identifier, b
 {
 	if (write) {
 		m_file = fopen(filename, "wb");
-
 		if (!m_file) {
 			m_lastError = ERROR_CAN_NOT_CREATE;
 			return false;
@@ -68,14 +67,12 @@ bool FileLoader::openFile(const char* filename, const char* accept_identifier, b
 	}
 
 	m_file = fopen(filename, "rb");
-
 	if (!m_file) {
 		m_lastError = ERROR_CAN_NOT_OPEN;
 		return false;
 	}
 
 	char identifier[4];
-
 	if (fread(identifier, 1, 4, m_file) < 4) {
 		fclose(m_file);
 		m_file = nullptr;
@@ -108,7 +105,6 @@ bool FileLoader::openFile(const char* filename, const char* accept_identifier, b
 	m_root->start = 4;
 
 	int32_t byte;
-
 	if (safeSeek(4) && readByte(byte) && byte == NODE_START) {
 		return parseNode(m_root);
 	}
@@ -262,7 +258,6 @@ const uint8_t* FileLoader::getProps(const NODE node, uint32_t& size)
 bool FileLoader::getProps(const NODE node, PropStream& props)
 {
 	uint32_t size;
-
 	if (const uint8_t* a = getProps(node, size)) {
 		props.init((char*)a, size);
 		return true;
@@ -276,7 +271,6 @@ NODE FileLoader::getChildNode(const NODE parent, uint32_t& type)
 {
 	if (parent) {
 		NODE child = parent->child;
-
 		if (child) {
 			type = child->type;
 		}
@@ -290,17 +284,15 @@ NODE FileLoader::getChildNode(const NODE parent, uint32_t& type)
 
 NODE FileLoader::getNextNode(const NODE prev, uint32_t& type)
 {
-	if (prev) {
-		NODE next = prev->next;
-
-		if (next) {
-			type = next->type;
-		}
-
-		return next;
+	if (!prev) {
+		return NO_NODE;
 	}
 
-	return NO_NODE;
+	NODE next = prev->next;
+	if (next) {
+		type = next->type;
+	}
+	return next;
 }
 
 inline bool FileLoader::readByte(int32_t& value)
@@ -314,14 +306,12 @@ inline bool FileLoader::readByte(int32_t& value)
 		if (m_cache_offset >= m_cached_data[m_cache_index].size) {
 			int32_t pos = m_cache_offset + m_cached_data[m_cache_index].base;
 			int32_t tmp = getCacheBlock(pos);
-
 			if (tmp < 0) {
 				return false;
 			}
 
 			m_cache_index = tmp;
 			m_cache_offset = pos - m_cached_data[m_cache_index].base;
-
 			if (m_cache_offset >= m_cached_data[m_cache_index].size) {
 				return false;
 			}
@@ -333,7 +323,6 @@ inline bool FileLoader::readByte(int32_t& value)
 	}
 
 	value = fgetc(m_file);
-
 	if (value != EOF) {
 		return true;
 	}
@@ -351,7 +340,6 @@ inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 		do {
 			//prepare cache
 			uint32_t i = getCacheBlock(pos);
-
 			if (i == NO_VALID_CACHE) {
 				return false;
 			}
@@ -380,7 +368,7 @@ inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 		return false;
 	}
 
-	if (fread(buffer, 1, size, m_file) == (uint32_t)size) {
+	if (fread(buffer, 1, size, m_file) == size) {
 		return true;
 	}
 
@@ -392,7 +380,6 @@ inline bool FileLoader::safeSeek(uint32_t pos)
 {
 	if (m_use_cache) {
 		uint32_t i = getCacheBlock(pos);
-
 		if (i == NO_VALID_CACHE) {
 			return false;
 		}
@@ -403,7 +390,6 @@ inline bool FileLoader::safeSeek(uint32_t pos)
 		m_lastError = ERROR_SEEK_ERROR;
 		return false;
 	}
-
 	return true;
 }
 
@@ -420,7 +406,6 @@ inline bool FileLoader::safeTell(int32_t& pos)
 	}
 
 	pos = ftell(m_file);
-
 	if (pos == -1) {
 		m_lastError = ERROR_TELL_ERROR;
 		return false;

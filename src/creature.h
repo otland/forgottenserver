@@ -231,7 +231,7 @@ class Creature : virtual public Thing
 			return mana;
 		}
 		virtual int32_t getMaxMana() const {
-			return manaMax;
+			return 0;
 		}
 
 		const Outfit_t getCurrentOutfit() const {
@@ -505,11 +505,9 @@ class Creature : virtual public Thing
 		uint32_t lastStepCost;
 		uint32_t baseSpeed;
 		int32_t varSpeed;
-		int32_t checkCreatureVectorIndex;
 		int32_t health;
 		int32_t healthMax;
 		int32_t mana;
-		int32_t manaMax;
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;

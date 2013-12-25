@@ -1739,7 +1739,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getMana", LuaScriptInterface::luaCreatureGetMana);
 	registerMethod("Creature", "addMana", LuaScriptInterface::luaCreatureAddMana);
 	registerMethod("Creature", "getMaxMana", LuaScriptInterface::luaCreatureGetMaxMana);
-	registerMethod("Creature", "setMaxMana", LuaScriptInterface::luaCreatureSetMaxMana);
 
 	registerMethod("Creature", "getOutfit", LuaScriptInterface::luaCreatureGetOutfit);
 	registerMethod("Creature", "setOutfit", LuaScriptInterface::luaCreatureSetOutfit);
@@ -1785,6 +1784,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getMagicLevel", LuaScriptInterface::luaPlayerGetMagicLevel);
 	registerMethod("Player", "getBaseMagicLevel", LuaScriptInterface::luaPlayerGetBaseMagicLevel);
+	registerMethod("Player", "setMaxMana", LuaScriptInterface::luaPlayerSetMaxMana);
 	registerMethod("Player", "getManaSpent", LuaScriptInterface::luaPlayerGetManaSpent);
 	registerMethod("Player", "addManaSpent", LuaScriptInterface::luaPlayerAddManaSpent);
 
@@ -7339,25 +7339,6 @@ int32_t LuaScriptInterface::luaCreatureGetMaxMana(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaCreatureSetMaxMana(lua_State* L)
-{
-	// creature:setMaxMana(maxMana)
-	uint32_t maxMana = getNumber<uint32_t>(L, 2);
-	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		creature->manaMax = maxMana;
-
-		Player* player = creature->getPlayer();
-		if (player) {
-			player->sendStats();
-		}
-		pushBoolean(L, true);
-	} else {
-		pushNil(L);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 {
 	// creature:getOutfit()
@@ -7902,6 +7883,20 @@ int32_t LuaScriptInterface::luaPlayerGetBaseMagicLevel(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushNumber(L, player->getBaseMagicLevel());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetMaxMana(lua_State* L)
+{
+	// player:setMaxMana(maxMana)
+	Player* player = getPlayer(L, 1);
+	if (player) {
+		player->manaMax = getNumber<int32_t>(L, 2);
+		player->sendStats();
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}

@@ -53,7 +53,6 @@ Creature::Creature() :
 	health = 1000;
 	healthMax = 1000;
 	mana = 0;
-	manaMax = 0;
 
 	lastStep = 0;
 	lastStepCost = 1;
@@ -75,7 +74,6 @@ Creature::Creature() :
 	blockCount = 0;
 	blockTicks = 0;
 	walkUpdateTicks = 0;
-	checkCreatureVectorIndex = -1;
 	creatureCheck = false;
 	scriptEventsBitField = 0;
 

@@ -469,7 +469,7 @@ class Game
 		void checkCreatureWalk(uint32_t creatureId);
 		void updateCreatureWalk(uint32_t creatureId);
 		void checkCreatureAttack(uint32_t creatureId);
-		void checkCreatures();
+		void checkCreatures(size_t index);
 		void checkLight();
 
 		bool combatBlockHit(CombatType_t combatType, Creature* attacker, Creature* target,
@@ -555,13 +555,11 @@ class Game
 		std::list<Item*> toDecayItems;
 
 		std::vector<Creature*> checkCreatureVectors[EVENT_CREATURECOUNT];
-		std::vector<Creature*> toAddCheckCreatureVector;
 		std::vector<Creature*> ToReleaseCreatures;
 		std::vector<Item*> ToReleaseItems;
 		std::vector<char> commandTags;
 
 		size_t lastBucket;
-		size_t checkCreatureLastIndex;
 
 		WildcardTreeNode wildcardTree;
 
