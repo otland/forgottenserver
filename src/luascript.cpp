@@ -6530,19 +6530,17 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 	}
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		if (isNumber(L, 3)) {
-			if (attribute & 0x7F0013) { // All integer attributes
-				item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
-				pushBoolean(L, true);
-			}
-		} else if (isString(L, 3)) {
-			if (attribute & 0x2C) { // All string attributes
-				item->setStrAttr(attribute, getString(L, 3));
-				pushBoolean(L, true);
-			}
+		if (attribute & 0x7F0013) { // All integer attributes
+			item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
+			pushBoolean(L, true);
+		} else if (attribute & 0x2C) { // All string attributes
+			item->setStrAttr(attribute, getString(L, 3));
+			pushBoolean(L, true);
 		} else {
 			pushNil(L);
 		}
+	} else {
+		pushNil(L);
 	}
 	return 1;
 }
