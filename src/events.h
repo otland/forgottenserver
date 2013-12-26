@@ -41,6 +41,7 @@ class Events
 
 		// Player
 		bool eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance);
+		bool eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance);
 		bool eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
 		bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count);
 		bool eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition);
@@ -56,6 +57,7 @@ class Events
 
 		// Player
 		int32_t playerOnLook;
+		int32_t playerOnLookInBattleList;
 		int32_t playerOnLookInTrade;
 		int32_t playerOnLookInShop;
 		int32_t playerOnMoveItem;

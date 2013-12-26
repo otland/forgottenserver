@@ -7,6 +7,7 @@
 	
 	<!-- Player methods -->
 	<event class="Player" method="onLook" enabled="0"/>
+	<event class="Player" method="onLookInBattleList" enabled="0"/>
 	<event class="Player" method="onLookInTrade" enabled="0"/>
 	<event class="Player" method="onLookInShop" enabled="0"/>
 	<event class="Player" method="onMoveItem" enabled="0"/>

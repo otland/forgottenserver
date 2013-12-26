@@ -6498,11 +6498,13 @@ int32_t LuaScriptInterface::luaItemGetTile(lua_State* L)
 int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 {
 	// item:getAttribute(key)
-	itemAttrTypes attribute = ATTR_ITEM_NONE;
+	itemAttrTypes attribute;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<int64_t>(L, 2));
 	} else if (isString(L, 2)) {
 		attribute = stringToItemAttribute(getString(L, 2));
+	} else {
+		attribute = ATTR_ITEM_NONE;
 	}
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
@@ -6522,11 +6524,13 @@ int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 {
 	// item:setAttribute(key, value)
-	itemAttrTypes attribute = ATTR_ITEM_NONE;
+	itemAttrTypes attribute;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<int64_t>(L, 2));
 	} else if (isString(L, 2)) {
 		attribute = stringToItemAttribute(getString(L, 2));
+	} else {
+		attribute = ATTR_ITEM_NONE;
 	}
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
@@ -6548,11 +6552,13 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 int32_t LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 {
 	// item:removeAttribute(key)
-	itemAttrTypes attribute = ATTR_ITEM_NONE;
+	itemAttrTypes attribute;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<int64_t>(L, 2));
 	} else if (isString(L, 2)) {
 		attribute = stringToItemAttribute(getString(L, 2));
+	} else {
+		attribute = ATTR_ITEM_NONE;
 	}
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {

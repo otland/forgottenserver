@@ -3229,6 +3229,10 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		lookDistance = -1;
 	}
 
+	if (!g_events->eventPlayerOnLookInBattleList(player, creature, lookDistance)) {
+		return;
+	}
+
 	std::ostringstream ss;
 	ss << "You see " << creature->getDescription(lookDistance);
 
