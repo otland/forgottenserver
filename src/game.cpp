@@ -3735,11 +3735,12 @@ void Game::checkCreatureAttack(uint32_t creatureId)
 
 void Game::addCreatureCheck(Creature* creature)
 {
-	if (creature->creatureCheck) {
+	if (creature->inCheckCreaturesVector) {
 		// already in a vector
 		return;
 	}
 
+	creature->inCheckCreaturesVector = true;
 	creature->creatureCheck = true;
 
 	size_t minSize = checkCreatureVectors[0].size();
@@ -3758,7 +3759,9 @@ void Game::addCreatureCheck(Creature* creature)
 
 void Game::removeCreatureCheck(Creature* creature)
 {
-	creature->creatureCheck = false;
+	if (creature->inCheckCreaturesVector) {
+		creature->creatureCheck = false;
+	}
 }
 
 void Game::checkCreatures(size_t index)
@@ -3777,6 +3780,7 @@ void Game::checkCreatures(size_t index)
 			}
 			++i;
 		} else {
+			creature->inCheckCreaturesVector = false;
 			std::swap(checkCreatureVector[i], checkCreatureVector[--size]);
 			checkCreatureVector.pop_back();
 			ReleaseCreature(creature);

@@ -526,6 +526,7 @@ class Creature : virtual public Thing
 		bool isMapLoaded;
 		bool isUpdatingPath;
 		bool creatureCheck;
+		bool inCheckCreaturesVector;
 		bool skillLoss;
 		bool lootDrop;
 		bool cancelNextWalk;

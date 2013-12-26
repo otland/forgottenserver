@@ -75,6 +75,7 @@ Creature::Creature() :
 	blockTicks = 0;
 	walkUpdateTicks = 0;
 	creatureCheck = false;
+	inCheckCreaturesVector = false;
 	scriptEventsBitField = 0;
 
 	hiddenHealth = false;
