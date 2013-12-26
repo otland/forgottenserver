@@ -2058,6 +2058,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getDefense", LuaScriptInterface::luaItemTypeGetDefense);
 	registerMethod("ItemType", "getExtraDefense", LuaScriptInterface::luaItemTypeGetExtraDefense);
 	registerMethod("ItemType", "getArmor", LuaScriptInterface::luaItemTypeGetArmor);
+	registerMethod("ItemType", "getWeaponType", LuaScriptInterface::luaItemTypeGetWeaponType);
 
 	registerMethod("ItemType", "getElementType", LuaScriptInterface::luaItemTypeGetElementType);
 	registerMethod("ItemType", "getElementDamage", LuaScriptInterface::luaItemTypeGetElementDamage);
@@ -7258,10 +7259,9 @@ int32_t LuaScriptInterface::luaCreatureGetDirection(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetDirection(lua_State* L)
 {
 	// creature:setDirection(direction)
-	Direction direction = static_cast<Direction>(getNumber<int64_t>(L, 2));
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		pushBoolean(L, g_game.internalCreatureTurn(creature, direction));
+		pushBoolean(L, g_game.internalCreatureTurn(creature, static_cast<Direction>(getNumber<int64_t>(L, 2))));
 	} else {
 		pushNil(L);
 	}
@@ -7283,9 +7283,9 @@ int32_t LuaScriptInterface::luaCreatureGetHealth(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureAddHealth(lua_State* L)
 {
 	// creature:addHealth(healthChange)
-	int32_t healthChange = getNumber<int32_t>(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
+		int32_t healthChange = getNumber<int32_t>(L, 2);
 		if (healthChange >= 0) {
 			g_game.combatChangeHealth(COMBAT_HEALING, nullptr, creature, healthChange);
 		} else {
@@ -7313,10 +7313,10 @@ int32_t LuaScriptInterface::luaCreatureGetMaxHealth(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 {
 	// creature:setMaxHealth(maxHealth)
-	uint32_t maxHealth = getNumber<uint32_t>(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		creature->healthMax = maxHealth;
+		creature->healthMax = getNumber<uint32_t>(L, 2);
+		creature->health = std::min<int32_t>(creature->health, creature->healthMax);
 		g_game.addCreatureHealth(creature);
 
 		Player* player = creature->getPlayer();
@@ -7395,11 +7395,10 @@ int32_t LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetOutfit(lua_State* L)
 {
 	// creature:setOutfit(outfit)
-	const Outfit_t& outfit = getOutfit(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		creature->defaultOutfit = outfit;
-		g_game.internalCreatureChangeOutfit(creature, outfit);
+		creature->defaultOutfit = getOutfit(L, 2);
+		g_game.internalCreatureChangeOutfit(creature, creature->defaultOutfit);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
@@ -7949,6 +7948,7 @@ int32_t LuaScriptInterface::luaPlayerSetMaxMana(lua_State* L)
 	Player* player = getPlayer(L, 1);
 	if (player) {
 		player->manaMax = getNumber<int32_t>(L, 2);
+		player->mana = std::min<int32_t>(player->mana, player->manaMax);
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
@@ -10623,6 +10623,18 @@ int32_t LuaScriptInterface::luaItemTypeGetArmor(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		pushNumber(L, itemType->armor);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetWeaponType(lua_State* L)
+{
+	// itemType:getWeaponType()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->weaponType);
 	} else {
 		pushNil(L);
 	}
