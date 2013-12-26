@@ -810,6 +810,9 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetAccountType(lua_State* L);
 		static int32_t luaPlayerSetAccountType(lua_State* L);
 
+		static int32_t luaPlayerGetCapacity(lua_State* L);
+		static int32_t luaPlayerSetCapacity(lua_State* L);
+
 		static int32_t luaPlayerGetFreeCapacity(lua_State* L);
 		static int32_t luaPlayerGetDepotItems(lua_State* L);
 
