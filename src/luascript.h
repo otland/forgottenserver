@@ -256,7 +256,8 @@ class LuaScriptInterface
 		bool pushFunction(int32_t functionId);
 
 		static int32_t luaErrorHandler(lua_State* L);
-		bool callFunction(uint32_t nParams);
+		bool callFunction(int32_t params);
+		void callVoidFunction(int32_t params);
 
 		//push/pop common structures
 		static void pushThing(lua_State* L, Thing* thing, uint32_t uid);
@@ -719,6 +720,8 @@ class LuaScriptInterface
 		static int32_t luaItemTransform(lua_State* L);
 		static int32_t luaItemDecay(lua_State* L);
 
+		static int32_t luaItemGetDescription(lua_State* L);
+
 		// Container
 		static int32_t luaContainerCreate(lua_State* L);
 
@@ -791,6 +794,8 @@ class LuaScriptInterface
 		static int32_t luaCreatureGetDamageMap(lua_State* L);
 
 		static int32_t luaCreatureGetSummons(lua_State* L);
+
+		static int32_t luaCreatureGetDescription(lua_State* L);
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);
@@ -1071,6 +1076,10 @@ class LuaScriptInterface
 
 		static int32_t luaItemTypeGetElementType(lua_State* L);
 		static int32_t luaItemTypeGetElementDamage(lua_State* L);
+
+		static int32_t luaItemTypeGetTransformEquipId(lua_State* L);
+		static int32_t luaItemTypeGetTransformDeEquipId(lua_State* L);
+		static int32_t luaItemTypeGetDecayId(lua_State* L);
 
 		static int32_t luaItemTypeHasSubType(lua_State* L);
 
