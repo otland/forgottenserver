@@ -44,8 +44,7 @@ enum slots_t {
 	SLOT_FEET = 8,
 	SLOT_RING = 9,
 	SLOT_AMMO = 10,
-	SLOT_DEPOT = 11,
-	SLOT_LAST = SLOT_DEPOT
+	SLOT_LAST = SLOT_AMMO
 };
 
 struct FindPathParams {

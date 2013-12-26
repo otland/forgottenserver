@@ -527,7 +527,7 @@ class Item : virtual public Thing
 		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
 
 		virtual bool isPushable() const {
-			return !isNotMoveable();
+			return isMoveable();
 		}
 		virtual int32_t getThrowRange() const {
 			return (isPickupable() ? 15 : 2);
@@ -616,8 +616,8 @@ class Item : virtual public Thing
 		bool isMagicField() const {
 			return items[id].isMagicField();
 		}
-		bool isNotMoveable() const {
-			return !items[id].moveable;
+		bool isMoveable() const {
+			return items[id].moveable;
 		}
 		bool isPickupable() const {
 			return items[id].pickupable;

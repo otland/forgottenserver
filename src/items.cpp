@@ -166,7 +166,6 @@ int32_t Items::loadFromOtb(const std::string& file)
 		//attributes
 		//0x01 = version data
 		uint32_t flags;
-
 		if (!props.GET_ULONG(flags)) {
 			return ERROR_INVALID_FORMAT;
 		}

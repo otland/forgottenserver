@@ -1250,7 +1250,7 @@ class Player : public Creature, public Cylinder
 		Group* group;
 		Inbox* inbox;
 		Item* tradeItem;
-		Item* inventory[SLOT_LAST];
+		Item* inventory[SLOT_LAST + 1];
 		Item* writeItem;
 		House* editHouse;
 		Npc* shopOwner;
@@ -1321,7 +1321,7 @@ class Player : public Creature, public Cylinder
 		bool pzLocked;
 		bool isConnecting;
 		bool addAttackSkillPoint;
-		bool inventoryAbilities[SLOT_LAST];
+		bool inventoryAbilities[SLOT_LAST + 1];
 
 		static uint32_t playerAutoID;
 

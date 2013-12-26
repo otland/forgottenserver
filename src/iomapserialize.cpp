@@ -25,59 +25,46 @@
 
 extern Game g_game;
 
-bool IOMapSerialize::loadMap(Map* map)
+void IOMapSerialize::loadMap(Map* map)
 {
 	int64_t start = OTSYS_TIME();
 
 	Database* db = Database::getInstance();
-	std::ostringstream query;
 
-	DBResult* result = db->storeQuery("SELECT `id` FROM `houses`");
+	DBResult* result = db->storeQuery("SELECT `data` FROM `tile_store`");
 	if (!result) {
-		return true;
+		return;
 	}
 
 	do {
-		query.str("");
-		query << "SELECT `data` FROM `tile_store` WHERE `house_id` = " << result->getDataInt("id");
-		DBResult* tileResult = db->storeQuery(query.str());
-		if (!tileResult) {
+		unsigned long attrSize;
+		const char* attr = result->getDataStream("data", attrSize);
+
+		PropStream propStream;
+		propStream.init(attr, attrSize);
+
+		uint16_t x, y;
+		uint8_t z;
+		if (!propStream.GET_USHORT(x) || !propStream.GET_USHORT(y) || !propStream.GET_UCHAR(z)) {
 			continue;
 		}
 
-		do {
-			unsigned long attrSize;
-			const char* attr = tileResult->getDataStream("data", attrSize);
+		Tile* tile = map->getTile(x, y, z);
+		if (!tile) {
+			continue;
+		}
 
-			PropStream propStream;
-			propStream.init(attr, attrSize);
+		uint32_t item_count;
+		if (!propStream.GET_ULONG(item_count)) {
+			continue;
+		}
 
-			uint16_t x = 0, y = 0;
-			uint8_t z = 0;
-			propStream.GET_USHORT(x);
-			propStream.GET_USHORT(y);
-			propStream.GET_UCHAR(z);
-			if (x == 0 || y == 0) {
-				continue;
-			}
-
-			Tile* tile = map->getTile(x, y, z);
-			if (!tile) {
-				continue;
-			}
-
-			uint32_t item_count = 0;
-			propStream.GET_ULONG(item_count);
-
-			while (item_count--) {
-				loadItem(propStream, tile);
-			}
-		} while (tileResult->next());
-		db->freeResult(tileResult);
+		while (item_count--) {
+			loadItem(propStream, tile);
+		}
 	} while (result->next());
 	db->freeResult(result);
 	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
-	return true;
 }
 
 bool IOMapSerialize::saveMap(Map* map)
@@ -139,9 +126,8 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 		container->serializationCount--;
 	}
 
-	uint8_t endAttr = 0;
-	propStream.GET_UCHAR(endAttr);
-	if (endAttr != 0x00) {
+	uint8_t endAttr;
+	if (!propStream.GET_UCHAR(endAttr) || endAttr != 0) {
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 		return false;
 	}
@@ -150,25 +136,23 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 
 bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 {
-	Item* item = nullptr;
+	uint16_t id;
+	if (!propStream.GET_USHORT(id)) {
+		return false;
+	}
 
-	uint16_t id = 0;
-	propStream.GET_USHORT(id);
-
-	const ItemType& iType = Item::items[id];
 	Tile* tile = nullptr;
-
 	if (parent->getParent() == nullptr) {
 		tile = parent->getTile();
 	}
 
+	const ItemType& iType = Item::items[id];
 	if (iType.moveable || !tile) {
 		//create a new item
-		item = Item::CreateItem(id);
+		Item* item = Item::CreateItem(id);
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
 				Container* container = item->getContainer();
-
 				if (container && !loadContainer(propStream, container)) {
 					delete item;
 					return false;
@@ -184,6 +168,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 		}
 	} else {
 		// Stationary items like doors/beds/blackboards/bookcases
+		Item* item = nullptr;
 		if (const TileItemVector* items = tile->getItemList()) {
 			for (Item* findItem : *items) {
 				if (findItem->getID() == id) {
@@ -202,7 +187,6 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
 				Container* container = item->getContainer();
-
 				if (container && !loadContainer(propStream, container)) {
 					return false;
 				}
@@ -214,11 +198,9 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 		} else {
 			//The map changed since the last save, just read the attributes
 			Item* dummy = Item::CreateItem(id);
-
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
 				Container* container = dummy->getContainer();
-
 				if (container && !loadContainer(propStream, container)) {
 					delete dummy;
 					return false;
@@ -244,8 +226,8 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 		stream.ADD_UCHAR(ATTR_CONTAINER_ITEMS);
 		stream.ADD_ULONG(container->size());
 
-		for (ItemDeque::const_reverse_iterator i = container->getReversedItems(); i != container->getReversedEnd(); ++i) {
-			saveItem(stream, *i);
+		for (ItemDeque::const_reverse_iterator it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
+			saveItem(stream, *it);
 		}
 	}
 
@@ -254,32 +236,30 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 
 void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 {
-	const Position& tilePosition = tile->getPosition();
-	if (tilePosition.x == 0 || tilePosition.y == 0) {
+	const TileItemVector* tileItems = tile->getItemList();
+	if (!tileItems) {
 		return;
 	}
 
-	std::vector<Item*> items;
-
-	if (const TileItemVector* tileItems = tile->getItemList()) {
-		for (ItemVector::const_reverse_iterator it = tileItems->rbegin(), rend = tileItems->rend(); it != rend; ++it) {
-			Item* item = (*it);
-
-			// Note that these are NEGATED, ie. these are the items that will be saved.
-			if (!(!item->isNotMoveable() || item->getDoor() || (item->getContainer() && !item->getContainer()->empty()) || item->canWriteText() || item->getBed())) {
-				continue;
-			}
-
-			items.push_back(item);
+	std::forward_list<Item*> items;
+	uint16_t count = 0;
+	for (Item* item : *tileItems) {
+		// Note that these are NEGATED, ie. these are the items that will be saved.
+		if (!(item->isMoveable() || item->getDoor() || (item->getContainer() && !item->getContainer()->empty()) || item->canWriteText() || item->getBed())) {
+			continue;
 		}
+
+		items.push_front(item);
+		++count;
 	}
 
 	if (!items.empty()) {
+		const Position& tilePosition = tile->getPosition();
 		stream.ADD_USHORT(tilePosition.x);
 		stream.ADD_USHORT(tilePosition.y);
 		stream.ADD_UCHAR(tilePosition.z);
 
-		stream.ADD_ULONG(items.size());
+		stream.ADD_ULONG(count);
 		for (const Item* item : items) {
 			saveItem(stream, item);
 		}
@@ -356,13 +336,13 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 		House* house = it.second;
 
 		std::string listText;
-
 		if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
 			query << house->getId() << ',' << GUEST_LIST << ',' << db->escapeString(listText);
-
 			if (!stmt.addRow(query)) {
 				return false;
 			}
+
+			listText.clear();
 		}
 
 		if (house->getAccessList(SUBOWNER_LIST, listText) && !listText.empty()) {
@@ -370,6 +350,8 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 			if (!stmt.addRow(query)) {
 				return false;
 			}
+
+			listText.clear();
 		}
 
 		for (Door* door : house->getDoors()) {
@@ -378,6 +360,8 @@ bool IOMapSerialize::saveHouseInfo(Map* map)
 				if (!stmt.addRow(query)) {
 					return false;
 				}
+
+				listText.clear();
 			}
 		}
 	}

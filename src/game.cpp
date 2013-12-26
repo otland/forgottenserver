@@ -262,7 +262,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			/*for move operations*/
 			if (type == STACKPOS_MOVE) {
 				Item* item = tile->getTopDownItem();
-				if (item && !item->isNotMoveable()) {
+				if (item && item->isMoveable()) {
 					thing = item;
 				} else {
 					thing = tile->getTopVisibleCreature(player);

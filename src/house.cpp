@@ -584,7 +584,7 @@ Door::~Door()
 Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (ATTR_HOUSEDOORID == attr) {
-		unsigned char _doorId = 0;
+		uint8_t _doorId;
 		if (!propStream.GET_UCHAR(_doorId)) {
 			return ATTR_READ_ERROR;
 		}

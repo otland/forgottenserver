@@ -833,7 +833,7 @@ ReturnValue Tile::__queryRemove(const Thing* thing, uint32_t count, uint32_t fla
 		return RET_NOTPOSSIBLE;
 	}
 
-	if (item->isNotMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
+	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RET_NOTMOVEABLE;
 	}
 

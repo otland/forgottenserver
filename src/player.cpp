@@ -601,7 +601,7 @@ void Player::updateInventoryWeight()
 	if (!hasFlag(PlayerFlag_HasInfiniteCapacity)) {
 		inventoryWeight = 0.00;
 
-		for (int i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+		for (int i = SLOT_FIRST; i <= SLOT_LAST; ++i) {
 			Item* item = inventory[i];
 			if (item) {
 				inventoryWeight += item->getWeight();
@@ -878,7 +878,7 @@ void Player::dropLoot(Container* corpse, Creature* _lastHitCreature)
 				g_game.internalRemoveItem(inventory[SLOT_NECKLACE], 1);
 			}
 		} else {
-			for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+			for (int32_t i = SLOT_FIRST; i <= SLOT_LAST; ++i) {
 				Item* item = inventory[i];
 				if (item) {
 					if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || uniform_random(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
@@ -1286,7 +1286,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (isLogin && creature == this) {
-		for (int32_t slot = SLOT_FIRST; slot < SLOT_LAST; ++slot) {
+		for (int32_t slot = SLOT_FIRST; slot <= SLOT_LAST; ++slot) {
 			Item* item = inventory[slot];
 			if (item) {
 				item->__startDecaying();
@@ -2005,7 +2005,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	}
 
 	if (damage > 0) {
-		for (int32_t slot = SLOT_FIRST; slot < SLOT_LAST; ++slot) {
+		for (int32_t slot = SLOT_FIRST; slot <= SLOT_LAST; ++slot) {
 			if (!isItemAbilityEnabled((slots_t)slot)) {
 				continue;
 			}
@@ -2638,7 +2638,7 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 
 	if (index == INDEX_WHEREEVER) {
 		uint32_t n = 0;
-		for (int slotIndex = SLOT_FIRST; slotIndex < SLOT_LAST; ++slotIndex) {
+		for (int32_t slotIndex = SLOT_FIRST; slotIndex <= SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
 			if (inventoryItem) {
 				if (Container* subContainer = inventoryItem->getContainer()) {
@@ -2719,7 +2719,7 @@ ReturnValue Player::__queryRemove(const Thing* thing, uint32_t count, uint32_t f
 		return RET_NOTPOSSIBLE;
 	}
 
-	if (item->isNotMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
+	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RET_NOTMOVEABLE;
 	}
 
@@ -2742,7 +2742,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 		std::list<Container*> containerList;
 
-		for (uint32_t slotIndex = SLOT_FIRST; slotIndex < SLOT_LAST; ++slotIndex) {
+		for (uint32_t slotIndex = SLOT_FIRST; slotIndex <= SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
 			if (inventoryItem) {
 				if (inventoryItem == tradeItem) {
@@ -2860,17 +2860,13 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 void Player::__addThing(Thing* thing)
 {
-	__addThing(0, thing);
+	//
 }
 
 void Player::__addThing(int32_t index, Thing* thing)
 {
-	if (index < 0 || index > 11) {
+	if (index < SLOT_FIRST || index > SLOT_LAST) {
 		return /*RET_NOTPOSSIBLE*/;
-	}
-
-	if (index == 0) {
-		return /*RET_NOTENOUGHROOM*/;
 	}
 
 	Item* item = thing->getItem();
@@ -2915,7 +2911,7 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 void Player::__replaceThing(uint32_t index, Thing* thing)
 {
-	if (index >= SLOT_LAST) {
+	if (index > SLOT_LAST) {
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
@@ -2990,7 +2986,7 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 
 int32_t Player::__getIndexOfThing(const Thing* thing) const
 {
-	for (int i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+	for (int i = SLOT_FIRST; i <= SLOT_LAST; ++i) {
 		if (inventory[i] == thing) {
 			return i;
 		}
@@ -3005,13 +3001,13 @@ int32_t Player::__getFirstIndex() const
 
 int32_t Player::__getLastIndex() const
 {
-	return SLOT_LAST;
+	return SLOT_LAST + 1;
 }
 
 uint32_t Player::__getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
-	for (int i = SLOT_FIRST; i < SLOT_LAST; i++) {
+	for (int32_t i = SLOT_FIRST; i <= SLOT_LAST; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
@@ -3039,7 +3035,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 	std::forward_list<Item*> itemList;
 
 	uint32_t count = 0;
-	for (int i = SLOT_FIRST; i < SLOT_LAST && count < amount; i++) {
+	for (int32_t i = SLOT_FIRST; i <= SLOT_LAST && count < amount; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
@@ -3087,7 +3083,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 
 std::map<uint32_t, uint32_t>& Player::__getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
 {
-	for (int i = SLOT_FIRST; i < SLOT_LAST; i++) {
+	for (int32_t i = SLOT_FIRST; i <= SLOT_LAST; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
@@ -3106,7 +3102,7 @@ std::map<uint32_t, uint32_t>& Player::__getAllItemTypeCount(std::map<uint32_t, u
 
 Thing* Player::__getThing(size_t index) const
 {
-	if (index >= SLOT_FIRST && index < SLOT_LAST) {
+	if (index >= SLOT_FIRST && index <= SLOT_LAST) {
 		return inventory[index];
 	}
 	return nullptr;
@@ -3459,7 +3455,7 @@ void Player::updateItemsLight(bool internal /*=false*/)
 	LightInfo maxLight;
 	LightInfo curLight;
 
-	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+	for (int32_t i = SLOT_FIRST; i <= SLOT_LAST; ++i) {
 		Item* item = inventory[i];
 		if (item) {
 			item->getLight(curLight);
@@ -4709,7 +4705,7 @@ uint64_t Player::getMoney() const
 	std::forward_list<Container*> listContainer;
 	uint64_t moneyCount = 0;
 
-	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+	for (int32_t i = SLOT_FIRST; i <= SLOT_LAST; ++i) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;

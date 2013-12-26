@@ -2698,7 +2698,7 @@ int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 		thing = tile->getTopCreature();
 		if (!thing) {
 			Item* item = tile->getTopDownItem();
-			if (item && !item->isNotMoveable()) {
+			if (item && item->isMoveable()) {
 				thing = item;
 			}
 		}

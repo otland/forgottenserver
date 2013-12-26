@@ -91,7 +91,6 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 Item* Item::CreateItem(PropStream& propStream)
 {
 	uint16_t _id;
-
 	if (!propStream.GET_USHORT(_id)) {
 		return nullptr;
 	}
@@ -358,7 +357,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	switch (attr) {
 		case ATTR_COUNT: {
-			uint8_t _count = 0;
+			uint8_t _count;
 			if (!propStream.GET_UCHAR(_count)) {
 				return ATTR_READ_ERROR;
 			}
@@ -368,7 +367,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_ACTION_ID: {
-			uint16_t _actionid = 0;
+			uint16_t _actionid;
 			if (!propStream.GET_USHORT(_actionid)) {
 				return ATTR_READ_ERROR;
 			}
@@ -428,7 +427,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_RUNE_CHARGES: {
-			uint8_t _charges = 1;
+			uint8_t _charges;
 			if (!propStream.GET_UCHAR(_charges)) {
 				return ATTR_READ_ERROR;
 			}
@@ -438,7 +437,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_CHARGES: {
-			uint16_t _charges = 1;
+			uint16_t _charges;
 			if (!propStream.GET_USHORT(_charges)) {
 				return ATTR_READ_ERROR;
 			}
@@ -448,21 +447,17 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_DURATION: {
-			uint32_t duration = 0;
-			if (!propStream.GET_ULONG(duration)) {
+			int32_t duration;
+			if (!propStream.GET_VALUE(duration)) {
 				return ATTR_READ_ERROR;
 			}
 
-			if (((int32_t)duration) < 0) {
-				duration = 0;
-			}
-
-			setDuration(duration);
+			setDuration(std::max<int32_t>(0, duration));
 			break;
 		}
 
 		case ATTR_DECAYING_STATE: {
-			uint8_t state = 0;
+			uint8_t state;
 			if (!propStream.GET_UCHAR(state)) {
 				return ATTR_READ_ERROR;
 			}
@@ -470,7 +465,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			if (state != DECAYING_FALSE) {
 				setDecaying(DECAYING_PENDING);
 			}
-
 			break;
 		}
 
@@ -547,7 +541,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 bool Item::unserializeAttr(PropStream& propStream)
 {
 	uint8_t attr_type;
-
 	while (propStream.GET_UCHAR(attr_type) && attr_type != 0) {
 		Attr_ReadValue ret = readAttr((AttrTypes_t)attr_type, propStream);
 		if (ret == ATTR_READ_ERROR) {
@@ -556,7 +549,6 @@ bool Item::unserializeAttr(PropStream& propStream)
 			return true;
 		}
 	}
-
 	return true;
 }
 
@@ -568,9 +560,8 @@ bool Item::unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream)
 bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	if (isStackable() || isFluidContainer() || isSplash()) {
-		uint8_t _count = getSubType();
 		propWriteStream.ADD_UCHAR(ATTR_COUNT);
-		propWriteStream.ADD_UCHAR(_count);
+		propWriteStream.ADD_UCHAR(getSubType());
 	}
 
 	uint16_t charges = getCharges();
@@ -579,7 +570,7 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.ADD_USHORT(charges);
 	}
 
-	if (!isNotMoveable()) {
+	if (isMoveable()) {
 		uint16_t _actionId = getActionId();
 		if (_actionId != 0) {
 			propWriteStream.ADD_UCHAR(ATTR_ACTION_ID);

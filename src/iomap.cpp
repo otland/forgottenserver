@@ -100,14 +100,12 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	}
 
 	OTBM_root_header* root_header;
-
 	if (!propStream.GET_STRUCT(root_header)) {
 		setLastErrorString("Could not read header.");
 		return false;
 	}
 
 	uint32_t headerVersion = root_header->version;
-
 	if (headerVersion <= 0) {
 		//In otbm version 1 the count variable after splashes/fluidcontainers and stackables
 		//are saved as attributes instead, this solves alot of problems with items
@@ -156,23 +154,20 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		return false;
 	}
 
-	unsigned char attribute;
 	std::string mapDescription;
 	std::string tmp;
 
+	uint8_t attribute;
 	while (propStream.GET_UCHAR(attribute)) {
 		switch (attribute) {
 			case OTBM_ATTR_DESCRIPTION:
-
 				if (!propStream.GET_STRING(mapDescription)) {
 					setLastErrorString("Invalid description tag.");
 					return false;
 				}
-
 				break;
 
 			case OTBM_ATTR_EXT_SPAWN_FILE:
-
 				if (!propStream.GET_STRING(tmp)) {
 					setLastErrorString("Invalid spawn tag.");
 					return false;
@@ -183,7 +178,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				break;
 
 			case OTBM_ATTR_EXT_HOUSE_FILE:
-
 				if (!propStream.GET_STRING(tmp)) {
 					setLastErrorString("Invalid house tag.");
 					return false;
@@ -200,7 +194,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	}
 
 	NODE nodeMapData = f.getChildNode(nodeMap, type);
-
 	while (nodeMapData != NO_NODE) {
 		if (f.getError() != ERROR_NONE) {
 			setLastErrorString("Invalid map node.");
@@ -214,7 +207,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 			}
 
 			OTBM_Destination_coords* area_coord;
-
 			if (!propStream.GET_STRUCT(area_coord)) {
 				setLastErrorString("Invalid map node.");
 				return false;
@@ -226,7 +218,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 			base_z = area_coord->_z;
 
 			NODE nodeTile = f.getChildNode(nodeMapData, type);
-
 			while (nodeTile != NO_NODE) {
 				if (f.getError() != ERROR_NONE) {
 					setLastErrorString("Could not read node data.");
@@ -239,17 +230,15 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 						return false;
 					}
 
-					unsigned short px, py, pz;
 					OTBM_Tile_coords* tile_coord;
-
 					if (!propStream.GET_STRUCT(tile_coord)) {
 						setLastErrorString("Could not read tile position.");
 						return false;
 					}
 
-					px = base_x + tile_coord->_x;
-					py = base_y + tile_coord->_y;
-					pz = base_z;
+					uint16_t px = base_x + tile_coord->_x;
+					uint16_t py = base_y + tile_coord->_y;
+					uint16_t pz = base_z;
 
 					bool isHouseTile = false;
 					House* house = nullptr;
@@ -259,7 +248,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 					if (type == OTBM_HOUSETILE) {
 						uint32_t _houseid;
-
 						if (!propStream.GET_ULONG(_houseid)) {
 							std::ostringstream ss;
 							ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Could not read house id.";
@@ -285,7 +273,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 						switch (attribute) {
 							case OTBM_ATTR_TILE_FLAGS: {
 								uint32_t flags;
-
 								if (!propStream.GET_ULONG(flags)) {
 									std::ostringstream ss;
 									ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Failed to read tile flags.";
@@ -310,7 +297,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 							case OTBM_ATTR_ITEM: {
 								Item* item = Item::CreateItem(propStream);
-
 								if (!item) {
 									std::ostringstream ss;
 									ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Failed to create item.";
@@ -318,7 +304,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 									return false;
 								}
 
-								if (isHouseTile && !item->isNotMoveable()) {
+								if (isHouseTile && item->isMoveable()) {
 									std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
 									delete item;
 									item = nullptr;
@@ -354,14 +340,12 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					}
 
 					NODE nodeItem = f.getChildNode(nodeTile, type);
-
 					while (nodeItem) {
 						if (type == OTBM_ITEM) {
 							PropStream stream;
 							f.getProps(nodeItem, stream);
 
 							Item* item = Item::CreateItem(stream);
-
 							if (!item) {
 								std::ostringstream ss;
 								ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Failed to create item.";
@@ -370,7 +354,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 							}
 
 							if (item->unserializeItemNode(f, nodeItem, stream)) {
-								if (isHouseTile && !item->isNotMoveable()) {
+								if (isHouseTile && item->isMoveable()) {
 									std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
 									delete item;
 								} else {
@@ -424,7 +408,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 			}
 		} else if (type == OTBM_TOWNS) {
 			NODE nodeTown = f.getChildNode(nodeMapData, type);
-
 			while (nodeTown != NO_NODE) {
 				if (type == OTBM_TOWN) {
 					if (!f.getProps(nodeTown, propStream)) {
@@ -432,7 +415,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 						return false;
 					}
 
-					uint32_t townid = 0;
+					uint32_t townid;
 					if (!propStream.GET_ULONG(townid)) {
 						setLastErrorString("Could not read town id.");
 						return false;
@@ -458,11 +441,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 						return false;
 					}
 
-					Position pos;
-					pos.x = town_coords->_x;
-					pos.y = town_coords->_y;
-					pos.z = town_coords->_z;
-					town->setTemplePos(pos);
+					town->setTemplePos(Position(town_coords->_x, town_coords->_y, town_coords->_z));
 				} else {
 					setLastErrorString("Unknown town node.");
 					return false;
