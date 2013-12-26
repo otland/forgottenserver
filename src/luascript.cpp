@@ -638,24 +638,38 @@ int32_t LuaScriptInterface::luaErrorHandler(lua_State* L)
 	return 1;
 }
 
-bool LuaScriptInterface::callFunction(uint32_t nParams)
+bool LuaScriptInterface::callFunction(int32_t params)
 {
 	bool result = false;
-	int32_t size0 = lua_gettop(m_luaState);
-	int32_t ret = protectedCall(m_luaState, nParams, 1);
-	if (ret != 0) {
+	int32_t size = getStackTop(m_luaState);
+	if (protectedCall(m_luaState, params, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(m_luaState, -1));
 	} else {
 		result = LuaScriptInterface::getBoolean(m_luaState, -1);
 	}
 
 	lua_pop(m_luaState, 1);
-	if ((lua_gettop(m_luaState) + (int)nParams + 1) != size0) {
+	if ((getStackTop(m_luaState) + params + 1) != size) {
 		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
 	}
 
 	resetScriptEnv();
 	return result;
+}
+
+void LuaScriptInterface::callVoidFunction(int32_t params)
+{
+	int32_t size = getStackTop(m_luaState);
+	if (protectedCall(m_luaState, params, 0) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(m_luaState, -1));
+		lua_pop(m_luaState, 1);
+	}
+
+	if ((getStackTop(m_luaState) + params + 1) != size) {
+		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
+	}
+
+	resetScriptEnv();
 }
 
 void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
@@ -1680,6 +1694,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "transform", LuaScriptInterface::luaItemTransform);
 	registerMethod("Item", "decay", LuaScriptInterface::luaItemDecay);
 
+	registerMethod("Item", "getDescription", LuaScriptInterface::luaItemGetDescription);
+
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
 	registerMetaMethod("Container", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -1754,6 +1770,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getDamageMap", LuaScriptInterface::luaCreatureGetDamageMap);
 
 	registerMethod("Creature", "getSummons", LuaScriptInterface::luaCreatureGetSummons);
+
+	registerMethod("Creature", "getDescription", LuaScriptInterface::luaCreatureGetDescription);
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
@@ -2043,6 +2061,10 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("ItemType", "getElementType", LuaScriptInterface::luaItemTypeGetElementType);
 	registerMethod("ItemType", "getElementDamage", LuaScriptInterface::luaItemTypeGetElementDamage);
+
+	registerMethod("ItemType", "getTransformEquipId", LuaScriptInterface::luaItemTypeGetTransformEquipId);
+	registerMethod("ItemType", "getTransformDeEquipId", LuaScriptInterface::luaItemTypeGetTransformDeEquipId);
+	registerMethod("ItemType", "getDecayId", LuaScriptInterface::luaItemTypeGetDecayId);
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
@@ -6675,6 +6697,19 @@ int32_t LuaScriptInterface::luaItemDecay(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaItemGetDescription(lua_State* L)
+{
+	// item:getDescription(distance)
+	int32_t distance = getNumber<int32_t>(L, 2);
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushString(L, item->getDescription(distance));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 // Container
 int32_t LuaScriptInterface::luaContainerCreate(lua_State* L)
 {
@@ -7618,6 +7653,19 @@ int32_t LuaScriptInterface::luaCreatureGetSummons(lua_State* L)
 			setCreatureMetatable(L, -1, summon);
 			lua_rawset(L, -3);
 		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetDescription(lua_State* L)
+{
+	// creature:getDescription(distance)
+	int32_t distance = getNumber<int32_t>(L, 2);
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		pushString(L, creature->getDescription(distance));
 	} else {
 		pushNil(L);
 	}
@@ -10609,6 +10657,42 @@ int32_t LuaScriptInterface::luaItemTypeGetElementDamage(lua_State* L)
 		} else {
 			pushNil(L);
 		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetTransformEquipId(lua_State* L)
+{
+	// itemType:getTransformEquipId()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->transformEquipTo);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetTransformDeEquipId(lua_State* L)
+{
+	// itemType:getTransformDeEquipId()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->transformDeEquipTo);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetDecayId(lua_State* L)
+{
+	// itemType:getDecayId()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->decayTo);
 	} else {
 		pushNil(L);
 	}

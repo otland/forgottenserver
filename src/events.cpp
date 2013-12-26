@@ -65,12 +65,12 @@ bool Events::load()
 		if (eventNode.attribute("enabled").as_bool()) {
 			const std::string& className = eventNode.attribute("class").as_string();
 			if (classes.count(className) == 0) {
+				classes.insert(className);
 				const std::string& lowercase = asLowerCaseString(className);
 				if (scriptInterface.loadFile("data/events/scripts/" + lowercase + ".lua") != 0) {
 					std::cout << "[Warning - Events::load] Can not load script: " << lowercase << ".lua" << std::endl;
-					continue;
+					std::cout << scriptInterface.getLastLuaError() << std::endl;
 				}
-				classes.insert(className);
 			}
 
 			const std::string& methodName = eventNode.attribute("method").as_string();
@@ -190,16 +190,16 @@ bool Events::eventPartyOnDisband(Party* party)
 }
 
 // Player
-bool Events::eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance)
+void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance)
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
 	if (playerOnLook == -1) {
-		return true;
+		return;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnLook] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -224,19 +224,19 @@ bool Events::eventPlayerOnLook(Player* player, const Position& position, Thing* 
 	LuaScriptInterface::pushPosition(L, position, stackpos);
 	LuaScriptInterface::pushNumber(L, lookDistance);
 
-	return scriptInterface.callFunction(4);
+	scriptInterface.callVoidFunction(4);
 }
 
-bool Events::eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance)
+void Events::eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance)
 {
 	// Player:onLookInBattleList(creature, position, distance) or Player.onLookInBattleList(self, creature, position, distance)
 	if (playerOnLookInBattleList == -1) {
-		return true;
+		return;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnLookInBattleList] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -253,19 +253,19 @@ bool Events::eventPlayerOnLookInBattleList(Player* player, Creature* creature, i
 
 	LuaScriptInterface::pushNumber(L, lookDistance);
 
-	return scriptInterface.callFunction(3);
+	scriptInterface.callVoidFunction(3);
 }
 
-bool Events::eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance)
+void Events::eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance)
 {
 	// Player:onLookInTrade(partner, item, distance) or Player.onLookInTrade(self, partner, item, distance)
 	if (playerOnLookInTrade == -1) {
-		return true;
+		return;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnLookInTrade] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -285,7 +285,7 @@ bool Events::eventPlayerOnLookInTrade(Player* player, Player* partner, Item* ite
 
 	LuaScriptInterface::pushNumber(L, lookDistance);
 
-	return scriptInterface.callFunction(4);
+	scriptInterface.callVoidFunction(4);
 }
 
 bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count)

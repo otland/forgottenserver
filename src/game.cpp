@@ -2895,11 +2895,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 
 	std::ostringstream ss;
 	if (index == 0) {
-		if (!g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance)) {
-			return;
-		}
-		ss << "You see " << tradeItem->getDescription(lookDistance);
-		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
 		return;
 	}
 
@@ -2931,11 +2927,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	}
 
 	if (foundItem) {
-		if (!g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance)) {
-			return;
-		}
-		ss << "You see " << tradeItem->getDescription(lookDistance);
-		player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
 	}
 }
 
@@ -3145,56 +3137,7 @@ void Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteI
 		lookDistance = -1;
 	}
 
-	if (!g_events->eventPlayerOnLook(player, pos, thing, stackPos, lookDistance)) {
-		return;
-	}
-
-	std::ostringstream ss;
-	ss << "You see " << thing->getDescription(lookDistance);
-
-	if (player->isAccessPlayer()) {
-		Item* item = thing->getItem();
-		if (item) {
-			ss << std::endl << "ItemID: [" << item->getID() << ']';
-
-			uint16_t actionId = item->getActionId();
-			if (actionId != 0) {
-				ss << ", ActionID: [" << actionId << ']';
-			}
-
-			uint16_t uniqueId = item->getUniqueId();
-			if (uniqueId != 0) {
-				ss << ", UniqueID: [" << uniqueId << ']';
-			}
-
-			ss << '.';
-			const ItemType& it = Item::items[item->getID()];
-
-			if (it.transformEquipTo) {
-				ss << std::endl << "TransformTo: [" << it.transformEquipTo << "] (onEquip).";
-			} else if (it.transformDeEquipTo) {
-				ss << std::endl << "TransformTo: [" << it.transformDeEquipTo << "] (onDeEquip).";
-			}
-
-			if (it.decayTo != -1) {
-				ss << std::endl << "DecayTo: [" << it.decayTo << "].";
-			}
-		}
-
-		if (const Creature* creature = thing->getCreature()) {
-			ss << std::endl << "Health: [" << creature->getHealth() << " / " << creature->getMaxHealth() << ']';
-
-			if (creature->getMaxMana() > 0) {
-				ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << ']';
-			}
-
-			ss << '.';
-		}
-
-		ss << std::endl << "Position: [X: " << thingPos.x << "] [Y: " << thingPos.y << "] [Z: " << thingPos.getZ() << "].";
-	}
-
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+	g_events->eventPlayerOnLook(player, pos, thing, stackPos, lookDistance);
 }
 
 void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
@@ -3229,25 +3172,7 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		lookDistance = -1;
 	}
 
-	if (!g_events->eventPlayerOnLookInBattleList(player, creature, lookDistance)) {
-		return;
-	}
-
-	std::ostringstream ss;
-	ss << "You see " << creature->getDescription(lookDistance);
-
-	if (player->isAccessPlayer()) {
-		ss << std::endl << "Health: [" << creature->getHealth() << " / " << creature->getMaxHealth() << ']';
-
-		if (creature->getMaxMana() > 0) {
-			ss << ", Mana: [" << creature->getMana() << " / " << creature->getMaxMana() << ']';
-		}
-
-		ss << '.' << std::endl;
-		ss << "Position: [X: " << creaturePos.x << "] [Y: " << creaturePos.y << "] [Z: " << creaturePos.getZ() << "].";
-	}
-
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+	g_events->eventPlayerOnLookInBattleList(player, creature, lookDistance);
 }
 
 void Game::playerCancelAttackAndFollow(uint32_t playerId)
