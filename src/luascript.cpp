@@ -1787,6 +1787,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getAccountType", LuaScriptInterface::luaPlayerGetAccountType);
 	registerMethod("Player", "setAccountType", LuaScriptInterface::luaPlayerSetAccountType);
 
+	registerMethod("Player", "getCapacity", LuaScriptInterface::luaPlayerGetCapacity);
+	registerMethod("Player", "setCapacity", LuaScriptInterface::luaPlayerSetCapacity);
+
 	registerMethod("Player", "getFreeCapacity", LuaScriptInterface::luaPlayerGetFreeCapacity);
 	registerMethod("Player", "getDepotItems", LuaScriptInterface::luaPlayerGetDepotItems);
 
@@ -7773,6 +7776,32 @@ int32_t LuaScriptInterface::luaPlayerSetAccountType(lua_State* L)
 	if (player) {
 		player->accountType = accountType;
 		IOLoginData::setAccountType(player->getAccount(), accountType);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetCapacity(lua_State* L)
+{
+	// player:getCapacity()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getCapacity());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetCapacity(lua_State* L)
+{
+	// player:setCapacity(capacity)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->capacity = std::max(0.0, std::min<double>(10000.0, getNumber<double>(L, 2)));
+		player->sendStats();
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
