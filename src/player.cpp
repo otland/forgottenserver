@@ -339,7 +339,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 
 Item* Player::getInventoryItem(slots_t slot) const
 {
-	if (slot < SLOT_FIRST || slot >= SLOT_LAST) {
+	if (slot < SLOT_FIRST || slot > SLOT_LAST) {
 		return nullptr;
 	}
 	return inventory[slot];
