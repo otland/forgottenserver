@@ -577,7 +577,7 @@ bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 		}
 	}
 
-	bool result = g_game.combatChangeHealth(caster, target, damage, params);
+	bool result = g_game.combatChangeHealth(caster, target, damage);
 	if (result) {
 		CombatConditionFunc(caster, target, params, nullptr);
 		CombatDispelFunc(caster, target, params, nullptr);
@@ -604,7 +604,7 @@ bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 	return result;
 }
 
-bool Combat::CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
+bool Combat::CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void*)
 {
 	bool result = false;
 	for (const Condition* condition : params.conditionList) {
@@ -621,17 +621,17 @@ bool Combat::CombatConditionFunc(Creature* caster, Creature* target, const Comba
 	return result;
 }
 
-bool Combat::CombatDispelFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
+bool Combat::CombatDispelFunc(Creature*, Creature* target, const CombatParams& params, void*)
 {
 	if (!target->hasCondition(params.dispelType)) {
 		return false;
 	}
 
-	target->removeCondition(caster, params.dispelType);
+	target->removeCombatCondition(params.dispelType);
 	return true;
 }
 
-bool Combat::CombatnullptrFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
+bool Combat::CombatnullptrFunc(Creature* caster, Creature* target, const CombatParams& params, void*)
 {
 	CombatConditionFunc(caster, target, params, nullptr);
 	CombatDispelFunc(caster, target, params, nullptr);

@@ -81,14 +81,13 @@ class NpcEventsHandler
 		NpcEventsHandler(Npc* npc);
 		virtual ~NpcEventsHandler();
 
-		virtual void onCreatureAppear(const Creature* creature) {}
-		virtual void onCreatureDisappear(const Creature* creature) {}
-		virtual void onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos) {}
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text, Position* pos = nullptr) {}
-		virtual void onPlayerTrade(const Player* player, int32_t callback, uint16_t itemid,
-		                           uint8_t count, uint8_t amount, bool ignore = false, bool inBackpacks = false) {}
-		virtual void onPlayerCloseChannel(const Player* player) {}
-		virtual void onPlayerEndTrade(const Player* player) {}
+		virtual void onCreatureAppear(const Creature*) {}
+		virtual void onCreatureDisappear(const Creature*) {}
+		virtual void onCreatureMove(const Creature*, const Position&, const Position&) {}
+		virtual void onCreatureSay(const Creature*, SpeakClasses, const std::string&) {}
+		virtual void onPlayerTrade(const Player*, int32_t, uint16_t, uint8_t, uint8_t, bool = false, bool = false) {}
+		virtual void onPlayerCloseChannel(const Player*) {}
+		virtual void onPlayerEndTrade(const Player*) {}
 		virtual void onThink() {}
 
 		bool isLoaded() const;
@@ -108,7 +107,7 @@ class NpcScript : public NpcEventsHandler
 		virtual void onCreatureAppear(const Creature* creature);
 		virtual void onCreatureDisappear(const Creature* creature);
 		virtual void onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos);
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text, Position* pos = nullptr);
+		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text);
 		virtual void onPlayerTrade(const Player* player, int32_t callback, uint16_t itemid,
 		                           uint8_t count, uint8_t amount, bool ignore, bool inBackpacks);
 		virtual void onPlayerCloseChannel(const Player* player);
@@ -125,12 +124,6 @@ class NpcScript : public NpcEventsHandler
 		int32_t m_onPlayerCloseChannel;
 		int32_t m_onPlayerEndTrade;
 		int32_t m_onThink;
-};
-
-enum ShopEvent_t {
-	SHOPEVENT_SELL,
-	SHOPEVENT_BUY,
-	SHOPEVENT_CLOSE
 };
 
 class Npc : public Creature
@@ -204,8 +197,8 @@ class Npc : public Creature
 		}
 
 		void onPlayerCloseChannel(const Player* player);
-		void onPlayerTrade(Player* player, ShopEvent_t type, int32_t callback, uint16_t itemId,
-		                   uint8_t count, uint8_t amount, bool ignore = false, bool inBackpacks = false);
+		void onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count,
+		                   uint8_t amount, bool ignore = false, bool inBackpacks = false);
 		void onPlayerEndTrade(Player* player, int32_t buyCallback, int32_t sellCallback);
 
 		void turnToCreature(Creature* creature);
@@ -223,14 +216,14 @@ class Npc : public Creature
 		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport);
 
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr);
+		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text);
 		virtual void onThink(uint32_t interval);
 		virtual std::string getDescription(int32_t lookDistance) const;
 
-		bool isImmune(CombatType_t type) const {
+		bool isImmune(CombatType_t) const {
 			return true;
 		}
-		bool isImmune(ConditionType_t type) const {
+		bool isImmune(ConditionType_t) const {
 			return true;
 		}
 		virtual bool isAttackable() const {

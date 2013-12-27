@@ -23,7 +23,7 @@
 
 VirtualCylinder* VirtualCylinder::virtualCylinder = new VirtualCylinder;
 
-int32_t Cylinder::__getIndexOfThing(const Thing* thing) const
+int32_t Cylinder::__getIndexOfThing(const Thing*) const
 {
 	return -1;
 }
@@ -38,7 +38,7 @@ int32_t Cylinder::__getLastIndex() const
 	return -1;
 }
 
-uint32_t Cylinder::__getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
+uint32_t Cylinder::__getItemTypeCount(uint16_t, int32_t) const
 {
 	return 0;
 }
@@ -48,17 +48,17 @@ std::map<uint32_t, uint32_t>& Cylinder::__getAllItemTypeCount(std::map<uint32_t,
 	return countMap;
 }
 
-Thing* Cylinder::__getThing(size_t index) const
+Thing* Cylinder::__getThing(size_t) const
 {
 	return nullptr;
 }
 
-void Cylinder::__internalAddThing(Thing* thing)
+void Cylinder::__internalAddThing(Thing*)
 {
 	//
 }
 
-void Cylinder::__internalAddThing(uint32_t index, Thing* thing)
+void Cylinder::__internalAddThing(uint32_t, Thing*)
 {
 	//
 }

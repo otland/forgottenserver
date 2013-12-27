@@ -162,7 +162,7 @@ void Condition::setTicks(int32_t newTicks)
 	endTime = ticks + OTSYS_TIME();
 }
 
-bool Condition::executeCondition(Creature* creature, int32_t interval)
+bool Condition::executeCondition(Creature*, int32_t interval)
 {
 	if (ticks == -1) {
 		return true;
@@ -285,7 +285,7 @@ Condition* Condition::createCondition(PropStream& propStream)
 	return createCondition((ConditionId_t)_id, (ConditionType_t)_type, _ticks, 0, _buff != 0, _subId);
 }
 
-bool Condition::startCondition(Creature* creature)
+bool Condition::startCondition(Creature*)
 {
 	if (ticks > 0) {
 		endTime = ticks + OTSYS_TIME();
@@ -344,12 +344,12 @@ bool ConditionGeneric::executeCondition(Creature* creature, int32_t interval)
 	return Condition::executeCondition(creature, interval);
 }
 
-void ConditionGeneric::endCondition(Creature* creature, ConditionEnd_t reason)
+void ConditionGeneric::endCondition(Creature*)
 {
 	//
 }
 
-void ConditionGeneric::addCondition(Creature* creature, const Condition* addCondition)
+void ConditionGeneric::addCondition(Creature*, const Condition* addCondition)
 {
 	if (updateCondition(addCondition)) {
 		setTicks(addCondition->getTicks());
@@ -398,7 +398,7 @@ void ConditionAttributes::addCondition(Creature* creature, const Condition* addC
 
 		const ConditionAttributes& conditionAttrs = static_cast<const ConditionAttributes&>(*addCondition);
 		//Remove the old condition
-		endCondition(creature, CONDITIONEND_ABORT);
+		endCondition(creature);
 
 		//Apply the new one
 		memcpy(skills, conditionAttrs.skills, sizeof(skills));
@@ -551,7 +551,7 @@ bool ConditionAttributes::executeCondition(Creature* creature, int32_t interval)
 	return ConditionGeneric::executeCondition(creature, interval);
 }
 
-void ConditionAttributes::endCondition(Creature* creature, ConditionEnd_t reason)
+void ConditionAttributes::endCondition(Creature* creature)
 {
 	Player* player = creature->getPlayer();
 	if (player) {
@@ -731,7 +731,7 @@ ConditionRegeneration::ConditionRegeneration(ConditionId_t _id, ConditionType_t 
 	manaGain = 0;
 }
 
-void ConditionRegeneration::addCondition(Creature* creature, const Condition* addCondition)
+void ConditionRegeneration::addCondition(Creature*, const Condition* addCondition)
 {
 	if (updateCondition(addCondition)) {
 		setTicks(addCondition->getTicks());
@@ -883,7 +883,7 @@ ConditionSoul::ConditionSoul(ConditionId_t _id, ConditionType_t _type, int32_t _
 	soulGain = 0;
 }
 
-void ConditionSoul::addCondition(Creature* creature, const Condition* addCondition)
+void ConditionSoul::addCondition(Creature*, const Condition* addCondition)
 {
 	if (updateCondition(addCondition)) {
 		setTicks(addCondition->getTicks());
@@ -1264,7 +1264,7 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t damage)
 	return g_game.combatChangeHealth(combatType, attacker, creature, damage);
 }
 
-void ConditionDamage::endCondition(Creature* creature, ConditionEnd_t reason)
+void ConditionDamage::endCondition(Creature*)
 {
 	//
 }
@@ -1523,7 +1523,7 @@ bool ConditionSpeed::executeCondition(Creature* creature, int32_t interval)
 	return Condition::executeCondition(creature, interval);
 }
 
-void ConditionSpeed::endCondition(Creature* creature, ConditionEnd_t reason)
+void ConditionSpeed::endCondition(Creature* creature)
 {
 	g_game.changeSpeed(creature, -speedDelta);
 }
@@ -1595,7 +1595,7 @@ bool ConditionInvisible::startCondition(Creature* creature)
 	return true;
 }
 
-void ConditionInvisible::endCondition(Creature* creature, ConditionEnd_t reason)
+void ConditionInvisible::endCondition(Creature* creature)
 {
 	if (!creature->isInvisible()) {
 		g_game.internalCreatureChangeVisible(creature, true);
@@ -1669,7 +1669,7 @@ void ConditionOutfit::changeOutfit(Creature* creature, int32_t index /*= -1*/)
 	}
 }
 
-void ConditionOutfit::endCondition(Creature* creature, ConditionEnd_t reason)
+void ConditionOutfit::endCondition(Creature* creature)
 {
 	g_game.internalCreatureChangeOutfit(creature, creature->getDefaultOutfit());
 }
@@ -1727,7 +1727,7 @@ bool ConditionLight::executeCondition(Creature* creature, int32_t interval)
 	return Condition::executeCondition(creature, interval);
 }
 
-void ConditionLight::endCondition(Creature* creature, ConditionEnd_t reason)
+void ConditionLight::endCondition(Creature* creature)
 {
 	creature->setNormalCreatureLight();
 	g_game.changeLight(creature);

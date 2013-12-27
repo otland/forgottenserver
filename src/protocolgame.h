@@ -118,27 +118,16 @@ class ProtocolGame : public Protocol
 		bool parseFirstPacket(NetworkMessage& msg);
 
 		//Parse methods
-		void parseLogout(NetworkMessage& msg);
-		void parseCancelMove(NetworkMessage& msg);
-
-		void parseReceivePing(NetworkMessage& msg);
-		void parseReceivePingBack(NetworkMessage& msg);
 		void parseAutoWalk(NetworkMessage& msg);
-		void parseMove(NetworkMessage& msg, Direction dir);
-		void parseTurn(NetworkMessage& msg, Direction dir);
-
-		void parseRequestOutfit(NetworkMessage& msg);
 		void parseSetOutfit(NetworkMessage& msg);
 		void parseSay(NetworkMessage& msg);
 		void parseLookAt(NetworkMessage& msg);
 		void parseLookInBattleList(NetworkMessage& msg);
-		void parseJoinAggression(NetworkMessage& msg);
 		void parseFightModes(NetworkMessage& msg);
 		void parseAttack(NetworkMessage& msg);
 		void parseFollow(NetworkMessage& msg);
 
 		void parseBugReport(NetworkMessage& msg);
-		void parseThankYou(NetworkMessage& msg);
 		void parseDebugAssert(NetworkMessage& msg);
 
 		void parseThrow(NetworkMessage& msg);
@@ -147,7 +136,6 @@ class ProtocolGame : public Protocol
 		void parseUseItem(NetworkMessage& msg);
 		void parseCloseContainer(NetworkMessage& msg);
 		void parseUpArrowContainer(NetworkMessage& msg);
-		void parseUpdateTile(NetworkMessage& msg);
 		void parseUpdateContainer(NetworkMessage& msg);
 		void parseTextWindow(NetworkMessage& msg);
 		void parseHouseWindow(NetworkMessage& msg);
@@ -155,21 +143,16 @@ class ProtocolGame : public Protocol
 		void parseLookInShop(NetworkMessage& msg);
 		void parsePlayerPurchase(NetworkMessage& msg);
 		void parsePlayerSale(NetworkMessage& msg);
-		void parseCloseShop(NetworkMessage& msg);
 
-		void parseQuestLog(NetworkMessage& msg);
 		void parseQuestLine(NetworkMessage& msg);
 
 		void parseInviteToParty(NetworkMessage& msg);
 		void parseJoinParty(NetworkMessage& msg);
 		void parseRevokePartyInvite(NetworkMessage& msg);
 		void parsePassPartyLeadership(NetworkMessage& msg);
-		void parseLeaveParty(NetworkMessage& msg);
 		void parseEnableSharedPartyExperience(NetworkMessage& msg);
 
 		void parseToggleMount(NetworkMessage& msg);
-
-		void parseRuleViolationReport(NetworkMessage& msg);
 
 		void parseModalWindowAnswer(NetworkMessage& msg);
 
@@ -179,11 +162,6 @@ class ProtocolGame : public Protocol
 		//trade methods
 		void parseRequestTrade(NetworkMessage& msg);
 		void parseLookInTrade(NetworkMessage& msg);
-		void parseAcceptTrade(NetworkMessage& msg);
-		void parseCloseTrade();
-
-		//
-		void parseGetObjectInfo(NetworkMessage& msg);
 
 		//market methods
 		void parseMarketLeave();
@@ -200,14 +178,11 @@ class ProtocolGame : public Protocol
 		void parseRotateItem(NetworkMessage& msg);
 
 		//Channel tabs
-		void parseCreatePrivateChannel(NetworkMessage& msg);
 		void parseChannelInvite(NetworkMessage& msg);
 		void parseChannelExclude(NetworkMessage& msg);
-		void parseGetChannels(NetworkMessage& msg);
 		void parseOpenChannel(NetworkMessage& msg);
 		void parseOpenPrivateChannel(NetworkMessage& msg);
 		void parseCloseChannel(NetworkMessage& msg);
-		void parseCloseNpc(NetworkMessage& msg);
 
 		//Send functions
 		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel);
@@ -228,7 +203,7 @@ class ProtocolGame : public Protocol
 		void sendPing();
 		void sendPingBack();
 		void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
-		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr);
+		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr);
 
 		void sendQuestLog();
 		void sendQuestLine(const Quest* quest);
@@ -269,7 +244,7 @@ class ProtocolGame : public Protocol
 
 		void sendTextWindow(uint32_t windowTextId, Item* item, uint16_t maxlen, bool canWrite);
 		void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
-		void sendHouseWindow(uint32_t windowTextId, House* house, uint32_t listId, const std::string& text);
+		void sendHouseWindow(uint32_t windowTextId, const std::string& text);
 		void sendOutfitWindow();
 
 		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
@@ -289,15 +264,15 @@ class ProtocolGame : public Protocol
 		//tiles
 		void sendMapDescription(const Position& pos);
 
-		void sendAddTileItem(const Tile* tile, const Position& pos, uint32_t stackpos, const Item* item);
-		void sendUpdateTileItem(const Tile* tile, const Position& pos, uint32_t stackpos, const Item* item);
-		void sendRemoveTileItem(const Tile* tile, const Position& pos, uint32_t stackpos);
+		void sendAddTileItem(const Position& pos, uint32_t stackpos, const Item* item);
+		void sendUpdateTileItem(const Position& pos, uint32_t stackpos, const Item* item);
+		void sendRemoveTileItem(const Position& pos, uint32_t stackpos);
 		void sendUpdateTile(const Tile* tile, const Position& pos);
 
 		void sendAddCreature(const Creature* creature, const Position& pos, uint32_t stackpos, bool isLogin);
-		void sendRemoveCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
-		void sendMoveCreature(const Creature* creature, const Tile* newTile, const Position& newPos, uint32_t newStackPos,
-		                      const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport);
+		void sendRemoveCreature(const Position& pos, uint32_t stackpos);
+		void sendMoveCreature(const Creature* creature, const Position& newPos, uint32_t newStackPos,
+		                      const Position& oldPos, uint32_t oldStackPos, bool teleport);
 
 		//containers
 		void sendAddContainerItem(uint8_t cid, uint16_t slot, const Item* item);
@@ -338,9 +313,9 @@ class ProtocolGame : public Protocol
 		void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
 		void AddPlayerStats(NetworkMessage& msg);
 		void AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-		                      const std::string& text, uint16_t channelId, Position* pos = nullptr);
+		                      const std::string& text, uint16_t channelId, const Position* pos = nullptr);
 		void AddCreatureHealth(NetworkMessage& msg, const Creature* creature);
-		void AddCreatureOutfit(NetworkMessage& msg, const Creature* creature, const Outfit_t& outfit);
+		void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 		void AddPlayerSkills(NetworkMessage& msg);
 		void AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo);
 		void AddCreatureLight(NetworkMessage& msg, const Creature* creature);
@@ -351,10 +326,8 @@ class ProtocolGame : public Protocol
 		void UpdateTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Item* item);
 		void RemoveTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
 
-		void MoveUpCreature(NetworkMessage& msg, const Creature* creature,
-		                    const Position& newPos, const Position& oldPos, uint32_t oldStackPos);
-		void MoveDownCreature(NetworkMessage& msg, const Creature* creature,
-		                      const Position& newPos, const Position& oldPos, uint32_t oldStackPos);
+		void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
+		void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 
 		//container
 		void AddContainerItem(NetworkMessage& msg, uint8_t cid, const Item* item);

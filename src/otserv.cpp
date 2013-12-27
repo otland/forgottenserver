@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* services)
+void mainLoader(int, char*[], ServiceManager* services)
 {
 	//dispatcher thread
 	g_game.setGameState(GAME_STATE_STARTUP);

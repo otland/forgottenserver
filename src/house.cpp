@@ -461,7 +461,7 @@ bool AccessList::parseList(const std::string& _list)
 
 		std::string::size_type at_pos = line.find("@");
 		if (at_pos != std::string::npos) {
-			addGuild(line.substr(at_pos + 1), "");
+			addGuild(line.substr(at_pos + 1));
 		} else if (line.find("!") != std::string::npos || line.find("*") != std::string::npos || line.find("?") != std::string::npos) {
 			addExpression(line);
 		} else {
@@ -486,17 +486,13 @@ bool AccessList::addPlayer(const std::string& name)
 	return false;
 }
 
-bool AccessList::addGuild(const std::string& guildName, const std::string& rank)
+bool AccessList::addGuild(const std::string& guildName)
 {
 	uint32_t guildId;
-
-	if (IOGuild::getGuildIdByName(guildId, guildName)) {
-		if (guildId != 0 && guildList.find(guildId) == guildList.end()) {
-			guildList.insert(guildId);
-			return true;
-		}
+	if (IOGuild::getGuildIdByName(guildId, guildName) && guildList.find(guildId) == guildList.end()) {
+		guildList.insert(guildId);
+		return true;
 	}
-
 	return false;
 }
 
@@ -596,7 +592,7 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 	}
 }
 
-bool Door::serializeAttr(PropWriteStream& propWriteStream) const
+bool Door::serializeAttr(PropWriteStream&) const
 {
 	return true;
 }

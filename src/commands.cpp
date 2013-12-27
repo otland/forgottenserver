@@ -365,7 +365,7 @@ void Commands::sellHouse(Player& player, const std::string& param)
 	}
 }
 
-void Commands::hide(Player& player, const std::string& param)
+void Commands::hide(Player& player, const std::string&)
 {
 	player.setHiddenHealth(!player.isHealthHidden());
 	g_game.addCreatureHealth(&player);
@@ -406,7 +406,7 @@ void Commands::forceRaid(Player& player, const std::string& param)
 	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
 }
 
-void Commands::clean(Player& player, const std::string& param)
+void Commands::clean(Player&, const std::string&)
 {
 	uint32_t count = g_game.getMap()->clean();
 	if (count != 1) {
@@ -418,7 +418,7 @@ void Commands::clean(Player& player, const std::string& param)
 	}
 }
 
-void Commands::serverDiag(Player& player, const std::string& param)
+void Commands::serverDiag(Player& player, const std::string&)
 {
 #ifdef ENABLE_SERVER_DIAGNOSTIC
 	std::ostringstream text;
@@ -453,7 +453,7 @@ void Commands::serverDiag(Player& player, const std::string& param)
 #endif
 }
 
-void Commands::ghost(Player& player, const std::string& param)
+void Commands::ghost(Player& player, const std::string&)
 {
 	player.switchGhostMode();
 
@@ -499,7 +499,7 @@ void Commands::ghost(Player& player, const std::string& param)
 	}
 }
 
-void Commands::multiClientCheck(Player& player, const std::string& param)
+void Commands::multiClientCheck(Player& player, const std::string&)
 {
 	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Multiclient Check List:");
 	std::map<uint32_t, std::vector<Player*>> ipMap;

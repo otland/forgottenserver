@@ -171,7 +171,7 @@ bool Event::loadScript(const std::string& scriptFile)
 	return true;
 }
 
-bool Event::loadFunction(const std::string& functionName)
+bool Event::loadFunction(const std::string&)
 {
 	return false;
 }

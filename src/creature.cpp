@@ -92,7 +92,7 @@ Creature::~Creature()
 	}
 
 	for (Condition* condition : conditions) {
-		condition->endCondition(this, CONDITIONEND_CLEANUP);
+		condition->endCondition(this);
 		delete condition;
 	}
 }
@@ -295,7 +295,7 @@ void Creature::onWalk(Direction& dir)
 	}
 }
 
-bool Creature::getNextStep(Direction& dir, uint32_t& flags)
+bool Creature::getNextStep(Direction& dir, uint32_t&)
 {
 	if (listWalkDir.empty()) {
 		return false;
@@ -417,15 +417,15 @@ int32_t Creature::getWalkCache(const Position& pos) const
 	return 2;
 }
 
-void Creature::onAddTileItem(const Tile* tile, const Position& pos, const Item* item)
+void Creature::onAddTileItem(const Tile* tile, const Position& pos)
 {
 	if (isMapLoaded && pos.z == getPosition().z) {
 		updateTileCache(tile, pos);
 	}
 }
 
-void Creature::onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
-                                const ItemType& oldType, const Item* newItem, const ItemType& newType)
+void Creature::onUpdateTileItem(const Tile* tile, const Position& pos, const Item*,
+                                const ItemType& oldType, const Item*, const ItemType& newType)
 {
 	if (!isMapLoaded) {
 		return;
@@ -438,8 +438,7 @@ void Creature::onUpdateTileItem(const Tile* tile, const Position& pos, const Ite
 	}
 }
 
-void Creature::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
-                                const Item* item)
+void Creature::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item*)
 {
 	if (!isMapLoaded) {
 		return;
@@ -470,7 +469,7 @@ void Creature::onCreatureAppear(const Creature* creature, bool isLogin)
 	}
 }
 
-void Creature::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout)
+void Creature::onCreatureDisappear(const Creature* creature, uint32_t, bool)
 {
 	onCreatureDisappear(creature, true);
 	if (creature == this) {
@@ -786,7 +785,7 @@ bool Creature::hasBeenAttacked(uint32_t attackerId)
 	return (OTSYS_TIME() - it->second.ticks) <= g_config.getNumber(ConfigManager::PZ_LOCKED);
 }
 
-Item* Creature::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature)
+Item* Creature::getCorpse(Creature*, Creature*)
 {
 	return Item::CreateItem(getLookCorpse());
 }
@@ -832,7 +831,7 @@ void Creature::drainHealth(Creature* attacker, int32_t damage)
 	}
 }
 
-void Creature::drainMana(Creature* attacker, int32_t manaLoss)
+void Creature::drainMana(Creature*, int32_t manaLoss)
 {
 	onAttacked();
 	changeMana(-manaLoss);
@@ -884,13 +883,13 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 		}
 
 		if (hasDefense && blockType != BLOCK_NONE) {
-			onBlockHit(blockType);
+			onBlockHit();
 		}
 	}
 
 	if (attacker) {
 		attacker->onAttackedCreature(this);
-		attacker->onAttackedCreatureBlockHit(this, blockType);
+		attacker->onAttackedCreatureBlockHit(blockType);
 	}
 
 	onAttacked();
@@ -919,7 +918,7 @@ bool Creature::setAttackedCreature(Creature* creature)
 	return true;
 }
 
-void Creature::getPathSearchParams(const Creature* creature, FindPathParams& fpp) const
+void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const
 {
 	fpp.fullPathSearch = !hasFollowPath;
 	fpp.clearSight = true;
@@ -974,7 +973,7 @@ void Creature::goToFollowCreature()
 	onFollowCreatureComplete(followCreature);
 }
 
-bool Creature::setFollowCreature(Creature* creature, bool fullPathSearch /*= false*/)
+bool Creature::setFollowCreature(Creature* creature)
 {
 	if (creature) {
 		if (followCreature == creature) {
@@ -1057,12 +1056,12 @@ void Creature::onAddCondition(ConditionType_t type)
 	}
 }
 
-void Creature::onAddCombatCondition(ConditionType_t type)
+void Creature::onAddCombatCondition(ConditionType_t)
 {
 	//
 }
 
-void Creature::onEndCondition(ConditionType_t type)
+void Creature::onEndCondition(ConditionType_t)
 {
 	//
 }
@@ -1104,14 +1103,9 @@ void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 	}
 }
 
-void Creature::onCombatRemoveCondition(const Creature* attacker, Condition* condition)
+void Creature::onCombatRemoveCondition(Condition* condition)
 {
 	removeCondition(condition);
-}
-
-void Creature::onAttackedCreature(Creature* target)
-{
-	//
 }
 
 void Creature::onAttacked()
@@ -1143,7 +1137,7 @@ void Creature::onAttackedCreatureKilled(Creature* target)
 	}
 }
 
-bool Creature::onKilledCreature(Creature* target, bool lastHit/* = true*/)
+bool Creature::onKilledCreature(Creature* target, bool)
 {
 	if (master) {
 		master->onKilledCreature(target);
@@ -1176,21 +1170,6 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 			spectator->getPlayer()->sendExperienceMessage(MSG_EXPERIENCE_OTHERS, strExp, targetPos, gainExp, TEXTCOLOR_WHITE_EXP);
 		}
 	}
-}
-
-void Creature::onGainSharedExperience(uint64_t gainExp)
-{
-	//
-}
-
-void Creature::onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType)
-{
-	//
-}
-
-void Creature::onBlockHit(BlockType_t blockType)
-{
-	//
 }
 
 void Creature::addSummon(Creature* creature)
@@ -1278,7 +1257,7 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 
 		it = conditions.erase(it);
 
-		condition->endCondition(this, CONDITIONEND_ABORT);
+		condition->endCondition(this);
 		delete condition;
 
 		onEndCondition(type);
@@ -1305,14 +1284,14 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool forc
 
 		it = conditions.erase(it);
 
-		condition->endCondition(this, CONDITIONEND_ABORT);
+		condition->endCondition(this);
 		delete condition;
 
 		onEndCondition(type);
 	}
 }
 
-void Creature::removeCondition(const Creature* attacker, ConditionType_t type)
+void Creature::removeCombatCondition(ConditionType_t type)
 {
 	std::vector<Condition*> removeConditions;
 	for (Condition* condition : conditions) {
@@ -1322,7 +1301,7 @@ void Creature::removeCondition(const Creature* attacker, ConditionType_t type)
 	}
 
 	for (Condition* condition : removeConditions) {
-		onCombatRemoveCondition(attacker, condition);
+		onCombatRemoveCondition(condition);
 	}
 }
 
@@ -1343,7 +1322,7 @@ void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 
 	conditions.erase(it);
 
-	condition->endCondition(this, CONDITIONEND_ABORT);
+	condition->endCondition(this);
 	onEndCondition(condition->getType());
 	delete condition;
 }
@@ -1378,7 +1357,7 @@ void Creature::executeConditions(uint32_t interval)
 
 			it = conditions.erase(it);
 
-			condition->endCondition(this, CONDITIONEND_TICKS);
+			condition->endCondition(this);
 			delete condition;
 
 			onEndCondition(type);
@@ -1420,12 +1399,6 @@ bool Creature::isImmune(ConditionType_t type) const
 bool Creature::isSuppress(ConditionType_t type) const
 {
 	return hasBitSet((uint32_t)type, getConditionSuppressions());
-}
-
-std::string Creature::getDescription(int32_t lookDistance) const
-{
-	std::string str = "a creature";
-	return str;
 }
 
 int32_t Creature::getStepDuration(Direction dir) const

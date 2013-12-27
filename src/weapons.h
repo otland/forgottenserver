@@ -100,9 +100,9 @@ class Weapon : public Event
 		bool internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;
 		bool internalUseWeapon(Player* player, Item* item, Tile* tile) const;
 
-		virtual void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;
-		virtual void onUsedAmmo(Player* player, Item* item, Tile* destTile) const;
-		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const {
+		void onUsedWeapon(Player* player, Item* item) const;
+		virtual void onUsedAmmo(Item* item, Tile* destTile) const;
+		virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const {
 			return false;
 		}
 
@@ -142,8 +142,6 @@ class WeaponMelee : public Weapon
 		CombatType_t getElementType() const { return elementType; }
 
 	protected:
-		virtual void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;
-		virtual void onUsedAmmo(Player* player, Item* item, Tile* destTile) const;
 		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const;
 
 		CombatType_t elementType;
@@ -170,8 +168,7 @@ class WeaponDistance : public Weapon
 		CombatType_t getElementType() const { return elementType; }
 
 	protected:
-		virtual void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;
-		virtual void onUsedAmmo(Player* player, Item* item, Tile* destTile) const;
+		virtual void onUsedAmmo(Item* item, Tile* destTile) const;
 		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const;
 
 		int32_t hitChance;
@@ -193,11 +190,11 @@ class WeaponWand : public Weapon
 		virtual bool configureWeapon(const ItemType& it);
 
 		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
-		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const { return 0; }
+		int32_t getElementDamage(const Player*, const Creature*, const Item*) const { return 0; }
 		CombatType_t getElementType() const { return COMBAT_NONE; }
 
 	protected:
-		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const {
+		virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const {
 			return false;
 		}
 

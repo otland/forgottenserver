@@ -237,10 +237,8 @@ bool Container::isHoldingItem(const Item* item) const
 
 void Container::onAddContainerItem(Item* item)
 {
-	const Position& cylinderMapPos = getPosition();
-
 	SpectatorVec list;
-	g_game.getSpectators(list, cylinderMapPos, false, true, 2, 2, 2, 2);
+	g_game.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
 	for (Creature* spectator : list) {
@@ -249,35 +247,30 @@ void Container::onAddContainerItem(Item* item)
 
 	//event methods
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->onAddContainerItem(this, item);
+		spectator->getPlayer()->onAddContainerItem(item);
 	}
 }
 
-void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, const ItemType& oldType,
-                                      Item* newItem, const ItemType& newType)
+void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem)
 {
-	const Position& cylinderMapPos = getPosition();
-
 	SpectatorVec list;
-	g_game.getSpectators(list, cylinderMapPos, false, true, 2, 2, 2, 2);
+	g_game.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->sendUpdateContainerItem(this, index, oldItem, newItem);
+		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
 	}
 
 	//event methods
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->onUpdateContainerItem(this, index, oldItem, oldType, newItem, newType);
+		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
 	}
 }
 
 void Container::onRemoveContainerItem(uint32_t index, Item* item)
 {
-	const Position& cylinderMapPos = getPosition();
-
 	SpectatorVec list;
-	g_game.getSpectators(list, cylinderMapPos, false, true, 2, 2, 2, 2);
+	g_game.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send change to client
 	for (Creature* spectator : list) {
@@ -286,7 +279,7 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 
 	//event methods
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->onRemoveContainerItem(this, index, item);
+		spectator->getPlayer()->onRemoveContainerItem(this, item);
 	}
 }
 
@@ -559,9 +552,6 @@ void Container::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
-	const ItemType& oldType = Item::items[item->getID()];
-	const ItemType& newType = Item::items[itemId];
-
 	const double oldWeight = item->getWeight();
 
 	item->setID(itemId);
@@ -577,7 +567,7 @@ void Container::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 	//send change to client
 	if (getParent()) {
-		onUpdateContainerItem(index, item, oldType, item, newType);
+		onUpdateContainerItem(index, item, item);
 	}
 }
 
@@ -605,9 +595,7 @@ void Container::__replaceThing(uint32_t index, Thing* thing)
 
 	//send change to client
 	if (getParent()) {
-		const ItemType& oldType = Item::items[replacedItem->getID()];
-		const ItemType& newType = Item::items[item->getID()];
-		onUpdateContainerItem(index, replacedItem, oldType, item, newType);
+		onUpdateContainerItem(index, replacedItem, item);
 	}
 
 	replacedItem->setParent(nullptr);
@@ -638,8 +626,7 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 				parentContainer->updateItemWeight(diffWeight);
 			}
 
-			const ItemType& it = Item::items[item->getID()];
-			onUpdateContainerItem(index, item, it, item, it);
+			onUpdateContainerItem(index, item, item);
 		}
 	} else {
 		//send change to client
@@ -704,7 +691,7 @@ Thing* Container::__getThing(size_t index) const
 	return getItemByIndex(index);
 }
 
-void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* topParent = getTopParent();
 	if (topParent->getCreature()) {
@@ -719,7 +706,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 	}
 }
 
-void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
+void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
 {
 	Cylinder* topParent = getTopParent();
 	if (topParent->getCreature()) {
@@ -739,7 +726,7 @@ void Container::__internalAddThing(Thing* thing)
 	__internalAddThing(0, thing);
 }
 
-void Container::__internalAddThing(uint32_t index, Thing* thing)
+void Container::__internalAddThing(uint32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (item == nullptr) {

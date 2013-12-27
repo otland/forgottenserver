@@ -27,9 +27,9 @@ class IOMapSerialize
 {
 	public:
 		static void loadMap(Map* map);
-		static bool saveMap(Map* map);
-		static bool loadHouseInfo(Map* map);
-		static bool saveHouseInfo(Map* map);
+		static bool saveMap();
+		static bool loadHouseInfo();
+		static bool saveHouseInfo();
 
 	protected:
 		static void saveItem(PropWriteStream& stream, const Item* item);

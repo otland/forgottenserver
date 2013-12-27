@@ -67,7 +67,7 @@ void IOMapSerialize::loadMap(Map* map)
 	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
 }
 
-bool IOMapSerialize::saveMap(Map* map)
+bool IOMapSerialize::saveMap()
 {
 	int64_t start = OTSYS_TIME();
 	Database* db = Database::getInstance();
@@ -266,7 +266,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 	}
 }
 
-bool IOMapSerialize::loadHouseInfo(Map* map)
+bool IOMapSerialize::loadHouseInfo()
 {
 	Database* db = Database::getInstance();
 
@@ -298,7 +298,7 @@ bool IOMapSerialize::loadHouseInfo(Map* map)
 	return true;
 }
 
-bool IOMapSerialize::saveHouseInfo(Map* map)
+bool IOMapSerialize::saveHouseInfo()
 {
 	Database* db = Database::getInstance();
 

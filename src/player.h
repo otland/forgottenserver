@@ -586,7 +586,7 @@ class Player : public Creature, public Cylinder
 		bool editVIP(uint32_t _guid, const std::string& description, uint32_t icon, bool notify);
 
 		//follow functions
-		virtual bool setFollowCreature(Creature* creature, bool fullPathSearch = false);
+		virtual bool setFollowCreature(Creature* creature);
 		virtual void goToFollowCreature();
 
 		//follow events
@@ -664,16 +664,16 @@ class Player : public Creature, public Cylinder
 		virtual void onAddCondition(ConditionType_t type);
 		virtual void onAddCombatCondition(ConditionType_t type);
 		virtual void onEndCondition(ConditionType_t type);
-		virtual void onCombatRemoveCondition(const Creature* attacker, Condition* condition);
+		virtual void onCombatRemoveCondition(Condition* condition);
 		virtual void onAttackedCreature(Creature* target);
 		virtual void onAttacked();
 		virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 		virtual void onTargetCreatureGainHealth(Creature* target, int32_t points);
 		virtual bool onKilledCreature(Creature* target, bool lastHit = true);
 		virtual void onGainExperience(uint64_t gainExp, Creature* target);
-		virtual void onGainSharedExperience(uint64_t gainExp);
-		virtual void onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType);
-		virtual void onBlockHit(BlockType_t blockType);
+		void onGainSharedExperience(uint64_t gainExp);
+		virtual void onAttackedCreatureBlockHit(BlockType_t blockType);
+		virtual void onBlockHit();
 		virtual void onChangeZone(ZoneType_t zone);
 		virtual void onAttackedCreatureChangeZone(ZoneType_t zone);
 		virtual void onIdleStatus();
@@ -713,17 +713,17 @@ class Player : public Creature, public Cylinder
 		//send methods
 		void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item) {
 			if (client) {
-				client->sendAddTileItem(tile, pos, tile->getClientIndexOfThing(this, item), item);
+				client->sendAddTileItem(pos, tile->getClientIndexOfThing(this, item), item);
 			}
 		}
-		void sendUpdateTileItem(const Tile* tile, const Position& pos, const Item* olditem, const Item* newitem) {
+		void sendUpdateTileItem(const Tile* tile, const Position& pos, const Item* item) {
 			if (client) {
-				client->sendUpdateTileItem(tile, pos, tile->getClientIndexOfThing(this, newitem), newitem);
+				client->sendUpdateTileItem(pos, tile->getClientIndexOfThing(this, item), item);
 			}
 		}
-		void sendRemoveTileItem(const Tile* tile, const Position& pos, uint32_t stackpos, const Item* item) {
+		void sendRemoveTileItem(const Position& pos, uint32_t stackpos) {
 			if (client) {
-				client->sendRemoveTileItem(tile, pos, stackpos);
+				client->sendRemoveTileItem(pos, stackpos);
 			}
 		}
 		void sendUpdateTile(const Tile* tile, const Position& pos) {
@@ -749,13 +749,12 @@ class Player : public Creature, public Cylinder
 		}
 		void sendCreatureDisappear(const Creature* creature, uint32_t stackpos) {
 			if (client) {
-				client->sendRemoveCreature(creature, creature->getPosition(), stackpos);
+				client->sendRemoveCreature(creature->getPosition(), stackpos);
 			}
 		}
-		void sendCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
-		                      const Tile* oldTile, const Position& oldPos, uint32_t oldStackPos, bool teleport) {
+		void sendCreatureMove(const Creature* creature, const Position& newPos, uint32_t newStackPos, const Position& oldPos, uint32_t oldStackPos, bool teleport) {
 			if (client) {
-				client->sendMoveCreature(creature, newTile, newPos, newTile->getClientIndexOfThing(this, creature), oldTile, oldPos, oldStackPos, teleport);
+				client->sendMoveCreature(creature, newPos, newStackPos, oldPos, oldStackPos, teleport);
 			}
 		}
 		void sendCreatureTurn(const Creature* creature) {
@@ -763,7 +762,7 @@ class Player : public Creature, public Cylinder
 				client->sendCreatureTurn(creature, creature->getTile()->getClientIndexOfThing(this, creature));
 			}
 		}
-		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr) {
+		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr) {
 			if (client) {
 				client->sendCreatureSay(creature, type, text, pos);
 			}
@@ -794,7 +793,7 @@ class Player : public Creature, public Cylinder
 						if (visible) {
 							client->sendAddCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature), false);
 						} else {
-							client->sendRemoveCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
+							client->sendRemoveCreature(creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
 						}
 					}
 				}
@@ -857,7 +856,7 @@ class Player : public Creature, public Cylinder
 
 		//container
 		void sendAddContainerItem(const Container* container, const Item* item);
-		void sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* oldItem, const Item* newItem);
+		void sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* newItem);
 		void sendRemoveContainerItem(const Container* container, uint16_t slot);
 		void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex) {
 			if (client) {
@@ -887,20 +886,17 @@ class Player : public Creature, public Cylinder
 		virtual void onFollowCreatureDisappear(bool isLogout);
 
 		//container
-		void onAddContainerItem(const Container* container, const Item* item);
-		void onUpdateContainerItem(const Container* container, uint16_t slot,
-		                           const Item* oldItem, const ItemType& oldType, const Item* newItem, const ItemType& newType);
-		void onRemoveContainerItem(const Container* container, uint16_t slot, const Item* item);
+		void onAddContainerItem(const Item* item);
+		void onUpdateContainerItem(const Container* container, const Item* oldItem, const Item* newItem);
+		void onRemoveContainerItem(const Container* container, const Item* item);
 
 		void onCloseContainer(const Container* container);
 		void onSendContainer(const Container* container);
 		void autoCloseContainers(const Container* container);
 
 		//inventory
-		void onAddInventoryItem(slots_t slot, Item* item);
-		void onUpdateInventoryItem(slots_t slot, Item* oldItem, const ItemType& oldType,
-		                           Item* newItem, const ItemType& newType);
-		void onRemoveInventoryItem(slots_t slot, Item* item);
+		void onUpdateInventoryItem(Item* oldItem, Item* newItem);
+		void onRemoveInventoryItem(Item* item);
 
 		void sendCancel(const std::string& msg) const {
 			if (client) {
@@ -1182,7 +1178,7 @@ class Player : public Creature, public Cylinder
 		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
 		                                     uint32_t& flags);
 
-		virtual void __addThing(Thing* thing);
+		virtual void __addThing(Thing*) {}
 		virtual void __addThing(int32_t index, Thing* thing);
 
 		virtual void __updateThing(Thing* thing, uint16_t itemId, uint32_t count);

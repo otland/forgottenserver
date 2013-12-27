@@ -49,7 +49,7 @@ class Spells : public BaseEvents
 		uint32_t getInstantSpellCount(const Player* player) const;
 		InstantSpell* getInstantSpellByIndex(const Player* player, uint32_t index);
 
-		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, std::string& words);
+		TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 		static Position getCasterPosition(Creature* creature, Direction dir);
 		virtual std::string getScriptBaseName();
@@ -89,7 +89,7 @@ class CombatSpell : public Event, public BaseSpell
 
 		virtual bool castSpell(Creature* creature);
 		virtual bool castSpell(Creature* creature, Creature* target);
-		virtual bool configureEvent(const pugi::xml_node& node) {
+		virtual bool configureEvent(const pugi::xml_node&) {
 			return true;
 		}
 
@@ -161,7 +161,7 @@ class Spell : public BaseSpell
 		}
 
 	protected:
-		bool playerSpellCheck(Player* player, bool ignoreExhaust = false) const;
+		bool playerSpellCheck(Player* player) const;
 		bool playerInstantSpellCheck(Player* player, const Position& toPos);
 		bool playerRuneSpellCheck(Player* player, const Position& toPos);
 
@@ -259,10 +259,10 @@ class ConjureSpell : public InstantSpell
 
 		virtual bool playerCastInstant(Player* player, std::string& param);
 
-		virtual bool castSpell(Creature* creature) {
+		virtual bool castSpell(Creature*) {
 			return false;
 		}
-		virtual bool castSpell(Creature* creature, Creature* target) {
+		virtual bool castSpell(Creature*, Creature*) {
 			return false;
 		}
 

@@ -51,7 +51,6 @@
 #define HAS_ITERATOR_DEBUGGING 0
 #endif
 
-#pragma warning(disable:4100) // unused parameters
 #pragma warning(disable:4127) // conditional expression is constant
 #pragma warning(disable:4244) // 'argument' : conversion from 'type1' to 'type2', possible loss of data
 #pragma warning(disable:4250) // 'class1' : inherits 'class2::member' via dominance
