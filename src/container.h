@@ -162,8 +162,7 @@ class Container : public Item, public Cylinder
 
 	private:
 		void onAddContainerItem(Item* item);
-		void onUpdateContainerItem(uint32_t index, Item* oldItem, const ItemType& oldType,
-		                           Item* newItem, const ItemType& newType);
+		void onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem);
 		void onRemoveContainerItem(uint32_t index, Item* item);
 
 		Container* getParentContainer();

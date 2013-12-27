@@ -126,7 +126,7 @@ Event* Weapons::getEvent(const std::string& nodeName)
 	return nullptr;
 }
 
-bool Weapons::registerEvent(Event* event, const pugi::xml_node& node)
+bool Weapons::registerEvent(Event* event, const pugi::xml_node&)
 {
 	Weapon* weapon = dynamic_cast<Weapon*>(event);
 	if (weapon) {
@@ -415,8 +415,8 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		Combat::doCombatHealth(player, target, damage, params);
 	}
 
-	onUsedAmmo(player, item, target->getTile());
-	onUsedWeapon(player, item, target->getTile());
+	onUsedAmmo(item, target->getTile());
+	onUsedWeapon(player, item);
 	return true;
 }
 
@@ -432,12 +432,12 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Tile* tile) const
 		g_game.addMagicEffect(tile->getPosition(), NM_ME_POFF);
 	}
 
-	onUsedAmmo(player, item, tile);
-	onUsedWeapon(player, item, tile);
+	onUsedAmmo(item, tile);
+	onUsedWeapon(player, item);
 	return true;
 }
 
-void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
+void Weapon::onUsedWeapon(Player* player, Item* item) const
 {
 	if (!player->hasFlag(PlayerFlag_NotGainSkill)) {
 		skills_t skillType;
@@ -458,7 +458,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	}
 }
 
-void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
+void Weapon::onUsedAmmo(Item* item, Tile* destTile) const
 {
 	if (!g_config.getBoolean(ConfigManager::REMOVE_AMMO)) {
 		return;
@@ -558,16 +558,6 @@ bool WeaponMelee::useWeapon(Player* player, Item* item, Creature* target) const
 	return internalUseWeapon(player, item, target, damageModifier);
 }
 
-void WeaponMelee::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
-{
-	Weapon::onUsedWeapon(player, item, destTile);
-}
-
-void WeaponMelee::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
-{
-	Weapon::onUsedAmmo(player, item, destTile);
-}
-
 bool WeaponMelee::getSkillType(const Player* player, const Item* item,
                                skills_t& skill, uint32_t& skillpoint) const
 {
@@ -600,7 +590,7 @@ bool WeaponMelee::getSkillType(const Player* player, const Item* item,
 	return false;
 }
 
-int32_t WeaponMelee::getElementDamage(const Player* player, const Creature* target, const Item* item) const
+int32_t WeaponMelee::getElementDamage(const Player* player, const Creature*, const Item* item) const
 {
 	if (elementType == COMBAT_NONE) {
 		return 0;
@@ -614,7 +604,7 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Creature* targ
 	return -normal_random(0, static_cast<int32_t>(maxValue * player->getVocation()->meleeDamageMultiplier));
 }
 
-int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
+int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, const Item* item, bool maxDamage /*= false*/) const
 {
 	int32_t attackSkill = player->getWeaponSkill(item);
 	int32_t attackValue = std::max<int32_t>(0, item->getAttack());
@@ -875,12 +865,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 	return true;
 }
 
-void WeaponDistance::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
-{
-	Weapon::onUsedWeapon(player, item, destTile);
-}
-
-void WeaponDistance::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
+void WeaponDistance::onUsedAmmo(Item* item, Tile* destTile) const
 {
 	if (ammoAction == AMMOACTION_MOVEBACK && breakChance > 0 && uniform_random(1, 100) <= breakChance) {
 		uint16_t newCount = item->getItemCount();
@@ -890,7 +875,7 @@ void WeaponDistance::onUsedAmmo(Player* player, Item* item, Tile* destTile) cons
 
 		g_game.transformItem(item, item->getID(), newCount);
 	} else {
-		Weapon::onUsedAmmo(player, item, destTile);
+		Weapon::onUsedAmmo(item, destTile);
 	}
 }
 
@@ -956,8 +941,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	return -normal_random(minValue, maxValue);
 }
 
-bool WeaponDistance::getSkillType(const Player* player, const Item* item,
-                                  skills_t& skill, uint32_t& skillpoint) const
+bool WeaponDistance::getSkillType(const Player* player, const Item*, skills_t& skill, uint32_t& skillpoint) const
 {
 	skill = SKILL_DIST;
 
@@ -1035,7 +1019,7 @@ bool WeaponWand::configureWeapon(const ItemType& it)
 	return Weapon::configureWeapon(it);
 }
 
-int32_t WeaponWand::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
+int32_t WeaponWand::getWeaponDamage(const Player*, const Creature*, const Item*, bool maxDamage /*= false*/) const
 {
 	if (maxDamage) {
 		return -maxChange;

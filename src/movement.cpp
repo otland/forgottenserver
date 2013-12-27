@@ -612,7 +612,7 @@ void MoveEvent::setEventType(MoveEvent_t type)
 	m_eventType = type;
 }
 
-uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position& pos)
+uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 {
 	MagicField* field = item->getMagicField();
 	if (field) {
@@ -623,12 +623,12 @@ uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position& 
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t MoveEvent::StepOutField(Creature* creature, Item* item, const Position& pos)
+uint32_t MoveEvent::StepOutField(Creature*, Item*, const Position&)
 {
 	return 1;
 }
 
-uint32_t MoveEvent::AddItemField(Item* item, Item* tileItem, const Position& pos)
+uint32_t MoveEvent::AddItemField(Item* item, Item*, const Position&)
 {
 	if (MagicField* field = item->getMagicField()) {
 		Tile* tile = item->getTile();
@@ -642,7 +642,7 @@ uint32_t MoveEvent::AddItemField(Item* item, Item* tileItem, const Position& pos
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t MoveEvent::RemoveItemField(Item* item, Item* tileItem, const Position& pos)
+uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&)
 {
 	return 1;
 }
@@ -763,7 +763,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	return 1;
 }
 
-uint32_t MoveEvent::DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isRemoval)
+uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool isRemoval)
 {
 	if (!player->isItemAbilityEnabled(slot)) {
 		return 1;

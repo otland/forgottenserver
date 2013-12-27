@@ -239,7 +239,7 @@ bool Npc::canSee(const Position& pos) const
 	return Creature::canSee(getPosition(), pos, 3, 3);
 }
 
-std::string Npc::getDescription(int32_t lookDistance) const
+std::string Npc::getDescription(int32_t) const
 {
 	std::string descr;
 	descr.reserve(name.length() + 1);
@@ -295,7 +295,7 @@ void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Po
 	}
 }
 
-void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = nullptr*/)
+void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
 {
 	if (creature->getID() == this->getID()) {
 		return;
@@ -353,8 +353,8 @@ void Npc::doTurn(Direction dir)
 	g_game.internalCreatureTurn(this, dir);
 }
 
-void Npc::onPlayerTrade(Player* player, ShopEvent_t type, int32_t callback, uint16_t itemId,
-                        uint8_t count, uint8_t amount, bool ignore/* = false*/, bool inBackpacks/* = false*/)
+void Npc::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count,
+                        uint8_t amount, bool ignore/* = false*/, bool inBackpacks/* = false*/)
 {
 	if (m_npcEventHandler) {
 		m_npcEventHandler->onPlayerTrade(player, callback, itemId, count, amount, ignore, inBackpacks);
@@ -707,8 +707,7 @@ int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
 		return 1;
 	}
 
-	bool result = npc->setFollowCreature(player, true);
-	pushBoolean(L, result);
+	pushBoolean(L, npc->setFollowCreature(player));
 	return 1;
 }
 
@@ -1242,7 +1241,7 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 	m_scriptInterface->callFunction(3);
 }
 
-void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = nullptr*/)
+void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
 {
 	if (m_onCreatureSay == -1) {
 		return;

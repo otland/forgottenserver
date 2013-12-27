@@ -45,7 +45,7 @@ class Thing
 			return nullptr;
 		}
 
-		virtual void setParent(Cylinder* cylinder) {
+		virtual void setParent(Cylinder*) {
 			//
 		}
 

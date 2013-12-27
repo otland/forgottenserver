@@ -42,7 +42,7 @@ class Protocol
 			return 0x00;
 		}
 
-		virtual void parsePacket(NetworkMessage& msg) {}
+		virtual void parsePacket(NetworkMessage&) {}
 
 		virtual void onSendMessage(OutputMessage_ptr msg);
 		void onRecvMessage(NetworkMessage& msg);

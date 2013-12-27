@@ -65,7 +65,7 @@ Event* CreatureEvents::getEvent(const std::string& nodeName)
 	return nullptr;
 }
 
-bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node& node)
+bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node&)
 {
 	CreatureEvent* creatureEvent = dynamic_cast<CreatureEvent*>(event);
 	if (!creatureEvent) {

@@ -49,7 +49,7 @@ Spells::~Spells()
 	clear();
 }
 
-TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std::string& words)
+TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 {
 	std::string str_words = words;
 
@@ -141,7 +141,7 @@ Event* Spells::getEvent(const std::string& nodeName)
 	return nullptr;
 }
 
-bool Spells::registerEvent(Event* event, const pugi::xml_node& node)
+bool Spells::registerEvent(Event* event, const pugi::xml_node&)
 {
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
 	if (instant) {
@@ -588,7 +588,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	return true;
 }
 
-bool Spell::playerSpellCheck(Player* player, bool ignoreExhaust/* = false*/) const
+bool Spell::playerSpellCheck(Player* player) const
 {
 	if (player->hasFlag(PlayerFlag_CannotUseSpells)) {
 		return false;
@@ -1231,33 +1231,27 @@ House* InstantSpell::getHouseFromPos(Creature* creature)
 {
 	if (creature) {
 		Player* player = creature->getPlayer();
-
 		if (player) {
 			HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
-
 			if (houseTile) {
 				House* house = houseTile->getHouse();
-
 				if (house) {
 					return house;
 				}
 			}
 		}
 	}
-
 	return nullptr;
 }
 
-bool InstantSpell::HouseGuestList(const InstantSpell* spell, Creature* creature, const std::string& param)
+bool InstantSpell::HouseGuestList(const InstantSpell*, Creature* creature, const std::string&)
 {
 	House* house = getHouseFromPos(creature);
-
 	if (!house) {
 		return false;
 	}
 
 	Player* player = creature->getPlayer();
-
 	if (house->canEditAccessList(GUEST_LIST, player)) {
 		player->setEditHouse(house, GUEST_LIST);
 		player->sendHouseWindow(house, GUEST_LIST);
@@ -1265,20 +1259,17 @@ bool InstantSpell::HouseGuestList(const InstantSpell* spell, Creature* creature,
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	}
-
 	return true;
 }
 
-bool InstantSpell::HouseSubOwnerList(const InstantSpell* spell, Creature* creature, const std::string& param)
+bool InstantSpell::HouseSubOwnerList(const InstantSpell*, Creature* creature, const std::string&)
 {
 	House* house = getHouseFromPos(creature);
-
 	if (!house) {
 		return false;
 	}
 
 	Player* player = creature->getPlayer();
-
 	if (house->canEditAccessList(SUBOWNER_LIST, player)) {
 		player->setEditHouse(house, SUBOWNER_LIST);
 		player->sendHouseWindow(house, SUBOWNER_LIST);
@@ -1286,14 +1277,12 @@ bool InstantSpell::HouseSubOwnerList(const InstantSpell* spell, Creature* creatu
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	}
-
 	return true;
 }
 
-bool InstantSpell::HouseDoorList(const InstantSpell* spell, Creature* creature, const std::string& param)
+bool InstantSpell::HouseDoorList(const InstantSpell*, Creature* creature, const std::string&)
 {
 	House* house = getHouseFromPos(creature);
-
 	if (!house) {
 		return false;
 	}
@@ -1301,20 +1290,17 @@ bool InstantSpell::HouseDoorList(const InstantSpell* spell, Creature* creature, 
 	Player* player = creature->getPlayer();
 	Position pos = Spells::getCasterPosition(player, player->getDirection());
 	Door* door = house->getDoorByPosition(pos);
-
 	if (door && house->canEditAccessList(door->getDoorId(), player)) {
 		player->setEditHouse(house, door->getDoorId());
 		player->sendHouseWindow(house, door->getDoorId());
-		return true;
 	} else {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	}
-
 	return true;
 }
 
-bool InstantSpell::HouseKick(const InstantSpell* spell, Creature* creature, const std::string& param)
+bool InstantSpell::HouseKick(const InstantSpell*, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
 
@@ -1338,7 +1324,7 @@ bool InstantSpell::HouseKick(const InstantSpell* spell, Creature* creature, cons
 	return true;
 }
 
-bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, const std::string& param)
+bool InstantSpell::SearchPlayer(const InstantSpell*, Creature* creature, const std::string& param)
 {
 	//a. From 1 to 4 sq's [Person] is standing next to you.
 	//b. From 5 to 100 sq's [Person] is to the south, north, east, west.
@@ -1349,7 +1335,6 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 	//g. Higher level to the (direction): this phrase applies if the person you're looking for is from 1-25 squares up/down the actual floor you're in.
 
 	Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
@@ -1410,7 +1395,6 @@ bool InstantSpell::SearchPlayer(const InstantSpell* spell, Creature* creature, c
 		distance = DISTANCE_BESIDE;
 	} else {
 		int32_t distance2 = dx * dx + dy * dy;
-
 		if (distance2 < 10000) {
 			distance = DISTANCE_CLOSE;
 		} else if (distance2 < 75076) {
@@ -1586,7 +1570,7 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 	return (ret == RET_NOERROR);
 }
 
-bool InstantSpell::Levitate(const InstantSpell* spell, Creature* creature, const std::string& param)
+bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
 
@@ -1634,7 +1618,7 @@ bool InstantSpell::Levitate(const InstantSpell* spell, Creature* creature, const
 	return (ret == RET_NOERROR);
 }
 
-bool InstantSpell::Illusion(const InstantSpell* spell, Creature* creature, const std::string& param)
+bool InstantSpell::Illusion(const InstantSpell*, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
 
@@ -1781,7 +1765,7 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 	return RET_YOUNEEDAMAGICITEMTOCASTSPELL;
 }
 
-bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, const std::string& param)
+bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, const std::string&)
 {
 	Player* player = creature->getPlayer();
 	if (!player) {
@@ -1824,7 +1808,7 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 	return false;
 }
 
-bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, const std::string& param)
+bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, const std::string&)
 {
 	Player* player = creature->getPlayer();
 	if (!player) {
@@ -1940,8 +1924,7 @@ bool RuneSpell::loadFunction(const std::string& functionName)
 	return true;
 }
 
-bool RuneSpell::Illusion(const RuneSpell* spell, Creature* creature, Item* item,
-                         const Position& posFrom, const Position& posTo)
+bool RuneSpell::Illusion(const RuneSpell*, Creature* creature, Item*, const Position&, const Position& posTo)
 {
 	Player* player = creature->getPlayer();
 	if (!player) {
@@ -1973,7 +1956,7 @@ bool RuneSpell::Illusion(const RuneSpell* spell, Creature* creature, Item* item,
 	return true;
 }
 
-bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item, const Position& posFrom, const Position& posTo)
+bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item*, const Position&, const Position& posTo)
 {
 	Player* player = creature->getPlayer();
 	if (!player) {
@@ -2047,8 +2030,7 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 	return RET_NOERROR;
 }
 
-bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom,
-                           const PositionEx& posTo, bool extendedUse, uint32_t creatureId)
+bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool, uint32_t creatureId)
 {
 	if (!playerRuneSpellCheck(player, posTo)) {
 		return false;

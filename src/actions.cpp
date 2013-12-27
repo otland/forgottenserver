@@ -286,8 +286,7 @@ Action* Actions::getAction(const Item* item)
 	return nullptr;
 }
 
-ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
-                                     uint8_t index, Item* item, uint32_t creatureId)
+ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item)
 {
 	if (Door* door = item->getDoor()) {
 		if (!door->canUse(player)) {
@@ -301,11 +300,11 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 		PositionEx posEx(pos, stack);
 
 		if (action->isScripted()) {
-			if (action->executeUse(player, item, posEx, posEx, false, creatureId)) {
+			if (action->executeUse(player, item, posEx, posEx, false, 0)) {
 				return RET_NOERROR;
 			}
 		} else if (action->function) {
-			if (action->function(player, item, posEx, posEx, false, creatureId)) {
+			if (action->function(player, item, posEx, posEx, false)) {
 				return RET_NOERROR;
 			}
 		}
@@ -384,7 +383,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 		showUseHotkeyMessage(player, item->getID(), player->__getItemTypeCount(item->getID(), -1));
 	}
 
-	ReturnValue ret = internalUseItem(player, pos, index, item, 0);
+	ReturnValue ret = internalUseItem(player, pos, index, item);
 	if (ret != RET_NOERROR) {
 		player->sendCancelMessage(ret);
 		return false;
@@ -394,7 +393,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 }
 
 bool Actions::useItemEx(Player* player, const Position& fromPos, const Position& toPos,
-                        uint8_t toStackPos, Item* item, bool isHotkey, uint32_t creatureId /* = 0*/)
+                        uint8_t toStackPos, Item* item, bool isHotkey, uint32_t creatureId/* = 0*/)
 {
 	if (!player->canDoAction()) {
 		return false;
@@ -509,21 +508,21 @@ bool Action::loadFunction(const std::string& functionName)
 	return true;
 }
 
-bool Action::increaseItemId(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, uint32_t creatureId)
+bool Action::increaseItemId(Player*, Item* item, const PositionEx&, const PositionEx&, bool)
 {
 	Item* newItem = g_game.transformItem(item, item->getID() + 1);
 	g_game.startDecay(newItem);
 	return true;
 }
 
-bool Action::decreaseItemId(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, uint32_t creatureId)
+bool Action::decreaseItemId(Player*, Item* item, const PositionEx&, const PositionEx&, bool)
 {
 	Item* newItem = g_game.transformItem(item, item->getID() - 1);
 	g_game.startDecay(newItem);
 	return true;
 }
 
-bool Action::enterMarket(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, uint32_t creatureId)
+bool Action::enterMarket(Player* player, Item*, const PositionEx&, const PositionEx&, bool)
 {
 	if (player->getLastDepotId() == -1) {
 		return false;
@@ -547,7 +546,7 @@ ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos
 	}
 }
 
-bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, const PositionEx& toPos, bool extendedUse, uint32_t creatureId)
+bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, const PositionEx& toPos, bool extendedUse, uint32_t)
 {
 	//onUse(cid, item, fromPosition, itemEx, toPosition)
 	if (!m_scriptInterface->reserveScriptEnv()) {

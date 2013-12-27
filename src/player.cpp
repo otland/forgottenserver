@@ -1165,7 +1165,7 @@ void Player::sendHouseWindow(House* house, uint32_t listId) const
 
 	std::string text;
 	if (house->getAccessList(listId, text)) {
-		client->sendHouseWindow(windowTextId, house, listId, text);
+		client->sendHouseWindow(windowTextId, text);
 	}
 }
 
@@ -1201,7 +1201,7 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 	}
 }
 
-void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* oldItem, const Item* newItem)
+void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* newItem)
 {
 	if (!client) {
 		return;
@@ -1525,16 +1525,15 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 }
 
 //container
-void Player::onAddContainerItem(const Container* container, const Item* item)
+void Player::onAddContainerItem(const Item* item)
 {
 	checkTradeState(item);
 }
 
-void Player::onUpdateContainerItem(const Container* container, uint16_t slot,
-                                   const Item* oldItem, const ItemType& oldType, const Item* newItem, const ItemType& newType)
+void Player::onUpdateContainerItem(const Container* container, const Item* oldItem, const Item* newItem)
 {
 	if (oldItem != newItem) {
-		onRemoveContainerItem(container, slot, oldItem);
+		onRemoveContainerItem(container, oldItem);
 	}
 
 	if (tradeState != TRADE_TRANSFER) {
@@ -1542,7 +1541,7 @@ void Player::onUpdateContainerItem(const Container* container, uint16_t slot,
 	}
 }
 
-void Player::onRemoveContainerItem(const Container* container, uint16_t slot, const Item* item)
+void Player::onRemoveContainerItem(const Container* container, const Item* item)
 {
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
@@ -1584,16 +1583,10 @@ void Player::onSendContainer(const Container* container)
 }
 
 //inventory
-void Player::onAddInventoryItem(slots_t slot, Item* item)
-{
-	//
-}
-
-void Player::onUpdateInventoryItem(slots_t slot, Item* oldItem, const ItemType& oldType,
-                                   Item* newItem, const ItemType& newType)
+void Player::onUpdateInventoryItem(Item* oldItem, Item* newItem)
 {
 	if (oldItem != newItem) {
-		onRemoveInventoryItem(slot, oldItem);
+		onRemoveInventoryItem(oldItem);
 	}
 
 	if (tradeState != TRADE_TRANSFER) {
@@ -1601,7 +1594,7 @@ void Player::onUpdateInventoryItem(slots_t slot, Item* oldItem, const ItemType& 
 	}
 }
 
-void Player::onRemoveInventoryItem(slots_t slot, Item* item)
+void Player::onRemoveInventoryItem(Item* item)
 {
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
@@ -1933,7 +1926,7 @@ uint32_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 	return result;
 }
 
-void Player::onBlockHit(BlockType_t blockType)
+void Player::onBlockHit()
 {
 	if (shieldBlockCount > 0) {
 		--shieldBlockCount;
@@ -1944,10 +1937,8 @@ void Player::onBlockHit(BlockType_t blockType)
 	}
 }
 
-void Player::onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType)
+void Player::onAttackedCreatureBlockHit(BlockType_t blockType)
 {
-	Creature::onAttackedCreatureBlockHit(target, blockType);
-
 	lastAttackBlockType = blockType;
 
 	switch (blockType) {
@@ -2213,7 +2204,7 @@ void Player::death(Creature* _lastHitCreature)
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
 
-				condition->endCondition(this, CONDITIONEND_DEATH);
+				condition->endCondition(this);
 				onEndCondition(condition->getType());
 				delete condition;
 			} else {
@@ -2228,7 +2219,7 @@ void Player::death(Creature* _lastHitCreature)
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
 
-				condition->endCondition(this, CONDITIONEND_DEATH);
+				condition->endCondition(this);
 				onEndCondition(condition->getType());
 				delete condition;
 			} else {
@@ -2440,7 +2431,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 	return itemWeight <= getFreeCapacity();
 }
 
-ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags, Creature*) const
 {
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
@@ -2858,11 +2849,6 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 	}
 }
 
-void Player::__addThing(Thing* thing)
-{
-	//
-}
-
 void Player::__addThing(int32_t index, Thing* thing)
 {
 	if (index < SLOT_FIRST || index > SLOT_LAST) {
@@ -2879,9 +2865,6 @@ void Player::__addThing(int32_t index, Thing* thing)
 
 	//send to client
 	sendInventoryItem((slots_t)index, item);
-
-	//event methods
-	onAddInventoryItem((slots_t)index, item);
 }
 
 void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
@@ -2896,9 +2879,6 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RET_NOTPOSSIBLE*/;
 	}
 
-	const ItemType& oldType = Item::items[item->getID()];
-	const ItemType& newType = Item::items[itemId];
-
 	item->setID(itemId);
 	item->setSubType(count);
 
@@ -2906,7 +2886,7 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	sendInventoryItem((slots_t)index, item);
 
 	//event methods
-	onUpdateInventoryItem((slots_t)index, item, oldType, item, newType);
+	onUpdateInventoryItem(item, item);
 }
 
 void Player::__replaceThing(uint32_t index, Thing* thing)
@@ -2929,9 +2909,7 @@ void Player::__replaceThing(uint32_t index, Thing* thing)
 	sendInventoryItem((slots_t)index, item);
 
 	//event methods
-	const ItemType& oldType = Item::items[oldItem->getID()];
-	const ItemType& newType = Item::items[item->getID()];
-	onUpdateInventoryItem((slots_t)index, oldItem, oldType, item, newType);
+	onUpdateInventoryItem(oldItem, item);
 
 	item->setParent(this);
 
@@ -2956,7 +2934,7 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 			sendInventoryItem((slots_t)index, nullptr);
 
 			//event methods
-			onRemoveInventoryItem((slots_t)index, item);
+			onRemoveInventoryItem(item);
 
 			item->setParent(nullptr);
 			inventory[index] = nullptr;
@@ -2964,20 +2942,18 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 			uint8_t newCount = (uint8_t)std::max<int32_t>(0, item->getItemCount() - count);
 			item->setItemCount(newCount);
 
-			const ItemType& it = Item::items[item->getID()];
-
 			//send change to client
 			sendInventoryItem((slots_t)index, item);
 
 			//event methods
-			onUpdateInventoryItem((slots_t)index, item, it, item, it);
+			onUpdateInventoryItem(item, item);
 		}
 	} else {
 		//send change to client
 		sendInventoryItem((slots_t)index, nullptr);
 
 		//event methods
-		onRemoveInventoryItem((slots_t)index, item);
+		onRemoveInventoryItem(item);
 
 		item->setParent(nullptr);
 		inventory[index] = nullptr;
@@ -3283,9 +3259,9 @@ void Player::__internalAddThing(uint32_t index, Thing* thing)
 	}
 }
 
-bool Player::setFollowCreature(Creature* creature, bool fullPathSearch /*= false*/)
+bool Player::setFollowCreature(Creature* creature)
 {
-	if (!Creature::setFollowCreature(creature, fullPathSearch)) {
+	if (!Creature::setFollowCreature(creature)) {
 		setFollowCreature(nullptr);
 		setAttackedCreature(nullptr);
 
@@ -3345,7 +3321,7 @@ void Player::onAttacking(uint32_t interval)
 	Creature::onAttacking(interval);
 }
 
-void Player::doAttacking(uint32_t interval)
+void Player::doAttacking(uint32_t)
 {
 	if (lastAttack == 0) {
 		lastAttack = OTSYS_TIME() - getAttackSpeed() - 1;
@@ -3544,9 +3520,9 @@ void Player::onEndCondition(ConditionType_t type)
 	sendIcons();
 }
 
-void Player::onCombatRemoveCondition(const Creature* attacker, Condition* condition)
+void Player::onCombatRemoveCondition(Condition* condition)
 {
-	//Creature::onCombatRemoveCondition(attacker, condition);
+	//Creature::onCombatRemoveCondition(condition);
 	if (condition->getId() > 0) {
 		//Means the condition is from an item, id == slot
 		if (g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
@@ -3765,7 +3741,6 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 
 void Player::onGainSharedExperience(uint64_t gainExp)
 {
-	Creature::onGainSharedExperience(gainExp);
 	gainExperience(gainExp);
 }
 

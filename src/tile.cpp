@@ -133,10 +133,9 @@ uint32_t Tile::getDownItemCount() const
 	return 0;
 }
 
-std::string Tile::getDescription(int32_t lookDistance) const
+std::string Tile::getDescription(int32_t) const
 {
-	std::string ret = "You dont know why, but you cant see anything!";
-	return ret;
+	return "You dont know why, but you cant see anything!";
 }
 
 Teleport* Tile::getTeleportItem() const
@@ -441,7 +440,7 @@ void Tile::onAddTileItem(Item* item)
 
 	//event methods
 	for (Creature* spectator : list) {
-		spectator->onAddTileItem(this, cylinderMapPos, item);
+		spectator->onAddTileItem(this, cylinderMapPos);
 	}
 }
 
@@ -472,7 +471,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 	//send to client
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendUpdateTileItem(this, cylinderMapPos, oldItem, newItem);
+			tmpPlayer->sendUpdateTileItem(this, cylinderMapPos, newItem);
 		}
 	}
 
@@ -500,7 +499,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& list, const std::vector<uint32_t
 	size_t i = 0;
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendRemoveTileItem(this, cylinderMapPos, oldStackPosVector[i++], item);
+			tmpPlayer->sendRemoveTileItem(cylinderMapPos, oldStackPosVector[i++]);
 		}
 	}
 
@@ -580,7 +579,7 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				tmpPlayer->sendCreatureMove(creature, newTile, newPos, this, oldPos, stackpos, teleport);
+				tmpPlayer->sendCreatureMove(creature, newPos, newTile->getClientIndexOfThing(tmpPlayer, creature), oldPos, stackpos, teleport);
 			}
 		}
 	}
@@ -594,8 +593,7 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 	newTile->postAddNotification(creature, this, newStackPos);
 }
 
-ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                             uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t flags, Creature*) const
 {
 	const CreatureVector* creatures = getCreatures();
 	const TileItemVector* items = getItemList();
@@ -810,8 +808,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 	return RET_NOERROR;
 }
 
-ReturnValue Tile::__queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-                                  uint32_t flags) const
+ReturnValue Tile::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RET_NOERROR;
@@ -840,8 +837,7 @@ ReturnValue Tile::__queryRemove(const Thing* thing, uint32_t count, uint32_t fla
 	return RET_NOERROR;
 }
 
-Cylinder* Tile::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-                                   uint32_t& flags)
+Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint32_t& flags)
 {
 	Tile* destTile = nullptr;
 	*destItem = nullptr;
@@ -944,7 +940,7 @@ void Tile::__addThing(Thing* thing)
 	__addThing(0, thing);
 }
 
-void Tile::__addThing(int32_t index, Thing* thing)
+void Tile::__addThing(int32_t, Thing* thing)
 {
 	Creature* creature = thing->getCreature();
 	if (creature) {
@@ -1420,10 +1416,8 @@ Thing* Tile::__getThing(size_t index) const
 
 void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
-	const Position& cylinderMapPos = getPosition();
-
 	SpectatorVec list;
-	g_game.getSpectators(list, cylinderMapPos, true, true);
+	g_game.getSpectators(list, getPosition(), true, true);
 	for (Creature* spectator : list) {
 		spectator->getPlayer()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
@@ -1476,12 +1470,10 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	}
 }
 
-void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
+void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
 {
-	const Position& cylinderMapPos = getPosition();
-
 	SpectatorVec list;
-	g_game.getSpectators(list, cylinderMapPos, true, true);
+	g_game.getSpectators(list, getPosition(), true, true);
 
 	if (/*isCompleteRemoval &&*/ getThingCount() > 8) {
 		onUpdateTile(list);
@@ -1508,7 +1500,7 @@ void Tile::__internalAddThing(Thing* thing)
 	__internalAddThing(0, thing);
 }
 
-void Tile::__internalAddThing(uint32_t index, Thing* thing)
+void Tile::__internalAddThing(uint32_t, Thing* thing)
 {
 	thing->setParent(this);
 

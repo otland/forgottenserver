@@ -27,13 +27,6 @@ class Creature;
 class Player;
 class PropStream;
 
-enum ConditionEnd_t {
-	CONDITIONEND_CLEANUP,
-	CONDITIONEND_DEATH,
-	CONDITIONEND_TICKS,
-	CONDITIONEND_ABORT
-};
-
 enum ConditionAttr_t {
 	CONDITIONATTR_TYPE = 1,
 	CONDITIONATTR_ID = 2,
@@ -81,7 +74,7 @@ class Condition
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason) = 0;
+		virtual void endCondition(Creature* creature) = 0;
 		virtual void addCondition(Creature* creature, const Condition* condition) = 0;
 		virtual uint32_t getIcons() const;
 		ConditionId_t getId() const {
@@ -135,7 +128,7 @@ class ConditionGeneric: public Condition
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason);
+		virtual void endCondition(Creature* creature);
 		virtual void addCondition(Creature* creature, const Condition* condition);
 		virtual uint32_t getIcons() const;
 
@@ -163,7 +156,7 @@ class ConditionAttributes : public ConditionGeneric
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason);
+		virtual void endCondition(Creature* creature);
 		virtual void addCondition(Creature* creature, const Condition* condition);
 
 		virtual bool setParam(ConditionParam_t param, int32_t value);
@@ -251,7 +244,7 @@ class ConditionInvisible: public ConditionGeneric
 		virtual ~ConditionInvisible() {}
 
 		virtual bool startCondition(Creature* creature);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason);
+		virtual void endCondition(Creature* creature);
 
 		virtual ConditionInvisible* clone() const {
 			return new ConditionInvisible(*this);
@@ -268,7 +261,7 @@ class ConditionDamage: public Condition
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason);
+		virtual void endCondition(Creature* creature);
 		virtual void addCondition(Creature* creature, const Condition* condition);
 		virtual uint32_t getIcons() const;
 
@@ -317,7 +310,7 @@ class ConditionSpeed: public Condition
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason);
+		virtual void endCondition(Creature* creature);
 		virtual void addCondition(Creature* creature, const Condition* condition);
 		virtual uint32_t getIcons() const;
 
@@ -353,7 +346,7 @@ class ConditionOutfit: public Condition
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason);
+		virtual void endCondition(Creature* creature);
 		virtual void addCondition(Creature* creature, const Condition* condition);
 
 		virtual ConditionOutfit* clone() const {
@@ -380,7 +373,7 @@ class ConditionLight: public Condition
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
-		virtual void endCondition(Creature* creature, ConditionEnd_t reason);
+		virtual void endCondition(Creature* creature);
 		virtual void addCondition(Creature* creature, const Condition* addCondition);
 
 		virtual ConditionLight* clone() const {

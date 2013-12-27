@@ -234,7 +234,7 @@ class ScriptEvent : public RaidEvent, public Event
 		~ScriptEvent() {}
 
 		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
-		virtual bool configureEvent(const pugi::xml_node& node) {
+		virtual bool configureEvent(const pugi::xml_node&) {
 			return false;
 		}
 

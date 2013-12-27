@@ -712,7 +712,7 @@ class Item : virtual public Thing
 			return true;
 		}
 		virtual void onRemoved();
-		virtual bool onTradeEvent(TradeEvents_t event, Player* owner) {
+		virtual bool onTradeEvent(TradeEvents_t, Player*) {
 			return true;
 		}
 

@@ -65,16 +65,18 @@ ReturnValue DepotChest::__queryAdd(int32_t index, const Thing* thing, uint32_t c
 	return Container::__queryAdd(index, thing, count, flags, actor);
 }
 
-void DepotChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void DepotChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	if (getParent() != nullptr) {
-		getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	Cylinder* parent = getParent();
+	if (parent != nullptr) {
+		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
-void DepotChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
+void DepotChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
 {
-	if (getParent() != nullptr) {
-		getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
+	Cylinder* parent = getParent();
+	if (parent != nullptr) {
+		parent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 	}
 }

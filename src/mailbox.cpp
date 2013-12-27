@@ -37,32 +37,28 @@ Mailbox::~Mailbox()
 	//
 }
 
-ReturnValue Mailbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue Mailbox::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t, Creature*) const
 {
 	if (const Item* item = thing->getItem()) {
 		if (canSend(item)) {
 			return RET_NOERROR;
 		}
 	}
-
 	return RET_NOTPOSSIBLE;
 }
 
-ReturnValue Mailbox::__queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-                                     uint32_t flags) const
+ReturnValue Mailbox::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RET_NOERROR;
 }
 
-ReturnValue Mailbox::__queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const
+ReturnValue Mailbox::__queryRemove(const Thing*, uint32_t, uint32_t) const
 {
 	return RET_NOTPOSSIBLE;
 }
 
-Cylinder* Mailbox::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-                                      uint32_t& flags)
+Cylinder* Mailbox::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)
 {
 	return this;
 }
@@ -72,7 +68,7 @@ void Mailbox::__addThing(Thing* thing)
 	return __addThing(0, thing);
 }
 
-void Mailbox::__addThing(int32_t index, Thing* thing)
+void Mailbox::__addThing(int32_t, Thing* thing)
 {
 	if (Item* item = thing->getItem()) {
 		if (canSend(item)) {
@@ -81,27 +77,27 @@ void Mailbox::__addThing(int32_t index, Thing* thing)
 	}
 }
 
-void Mailbox::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
+void Mailbox::__updateThing(Thing*, uint16_t, uint32_t)
 {
 	//
 }
 
-void Mailbox::__replaceThing(uint32_t index, Thing* thing)
+void Mailbox::__replaceThing(uint32_t, Thing*)
 {
 	//
 }
 
-void Mailbox::__removeThing(Thing* thing, uint32_t count)
+void Mailbox::__removeThing(Thing*, uint32_t)
 {
 	//
 }
 
-void Mailbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void Mailbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
 	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
 }
 
-void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
+void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
 {
 	getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 }

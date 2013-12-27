@@ -2250,8 +2250,7 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	g_actions->useItem(player, pos, index, item, isHotkey);
 }
 
-void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos,
-                                 uint32_t creatureId, uint16_t spriteId, bool isHotkey)
+void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint32_t creatureId, uint16_t spriteId, bool isHotkey)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -2892,8 +2891,6 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 
 	int32_t lookDistance = std::max<int32_t>(Position::getDistanceX(playerPosition, tradeItemPosition),
 	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
-
-	std::ostringstream ss;
 	if (index == 0) {
 		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
 		return;
@@ -3021,7 +3018,7 @@ void Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t coun
 		return;
 	}
 
-	merchant->onPlayerTrade(player, SHOPEVENT_BUY, onBuy, it.id, subType, amount, ignoreCap, inBackpacks);
+	merchant->onPlayerTrade(player, onBuy, it.id, subType, amount, ignoreCap, inBackpacks);
 }
 
 void Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreEquipped)
@@ -3054,7 +3051,7 @@ void Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, u
 		subType = count;
 	}
 
-	merchant->onPlayerTrade(player, SHOPEVENT_SELL, onSell, it.id, subType, amount, ignoreEquipped);
+	merchant->onPlayerTrade(player, onSell, it.id, subType, amount, ignoreEquipped);
 }
 
 void Game::playerCloseShop(uint32_t playerId)
@@ -3432,7 +3429,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return;
 	}
 
-	if (playerSayCommand(player, type, text)) {
+	if (playerSayCommand(player, text)) {
 		return;
 	}
 
@@ -3485,7 +3482,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	}
 }
 
-bool Game::playerSayCommand(Player* player, SpeakClasses type, const std::string& text)
+bool Game::playerSayCommand(Player* player, const std::string& text)
 {
 	if (text.empty()) {
 		return false;
@@ -3511,7 +3508,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 		return true;
 	}
 
-	result = g_spells->playerSaySpell(player, type, words);
+	result = g_spells->playerSaySpell(player, words);
 	if (result == TALKACTION_BREAK) {
 		return internalCreatureSay(player, SPEAK_SAY, words, false);
 	} else if (result == TALKACTION_FAILED) {
@@ -3638,15 +3635,14 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 }
 
 bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-                               bool ghostMode, SpectatorVec* listPtr/* = nullptr*/, Position* pos/* = nullptr*/)
+                               bool ghostMode, SpectatorVec* listPtr/* = nullptr*/, const Position* pos/* = nullptr*/)
 {
 	if (text.empty()) {
 		return false;
 	}
 
-	Position destPos = creature->getPosition();
-	if (pos) {
-		destPos = (*pos);
+	if (!pos) {
+		pos = &creature->getPosition();
 	}
 
 	SpectatorVec list;
@@ -3657,11 +3653,11 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 		// used (hopefully the compiler will optimize away the construction of
 		// the temporary when it's not used).
 		if (type != SPEAK_YELL && type != SPEAK_MONSTER_YELL) {
-			getSpectators(list, destPos, false, false,
+			getSpectators(list, *pos, false, false,
 			              Map::maxClientViewportX, Map::maxClientViewportX,
 			              Map::maxClientViewportY, Map::maxClientViewportY);
 		} else {
-			getSpectators(list, destPos, true, false, 18, 18, 14, 14);
+			getSpectators(list, *pos, true, false, 18, 18, 14, 14);
 		}
 	} else {
 		list = (*listPtr);
@@ -3671,14 +3667,14 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
-				tmpPlayer->sendCreatureSay(creature, type, text, &destPos);
+				tmpPlayer->sendCreatureSay(creature, type, text, pos);
 			}
 		}
 	}
 
 	//event method
 	for (Creature* spectator : list) {
-		spectator->onCreatureSay(creature, type, text, &destPos);
+		spectator->onCreatureSay(creature, type, text);
 	}
 	return true;
 }
@@ -4247,7 +4243,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 	return true;
 }
 
-bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage& damage, const CombatParams& params)
+bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage& damage)
 {
 	const Position& targetPos = target->getPosition();
 	int32_t healthChange = damage.primary.value + damage.secondary.value;
@@ -5276,7 +5272,7 @@ void Game::playerEnableSharedPartyExperience(uint32_t playerId, bool sharedExpAc
 	party->setSharedExperience(player, sharedExpActive);
 }
 
-void Game::sendGuildMotd(uint32_t playerId, uint32_t guildId)
+void Game::sendGuildMotd(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {

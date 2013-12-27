@@ -70,7 +70,7 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 	return nullptr;
 }
 
-bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node& node)
+bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 {
 	GlobalEvent* globalEvent = dynamic_cast<GlobalEvent*>(event);
 	if (!globalEvent) {

@@ -34,26 +34,23 @@ TrashHolder::~TrashHolder()
 	//
 }
 
-ReturnValue TrashHolder::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                    uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue TrashHolder::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
 {
 	return RET_NOERROR;
 }
 
-ReturnValue TrashHolder::__queryMaxCount(int32_t index, const Thing* thing, uint32_t count,
-        uint32_t& maxQueryCount, uint32_t flags) const
+ReturnValue TrashHolder::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RET_NOERROR;
 }
 
-ReturnValue TrashHolder::__queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const
+ReturnValue TrashHolder::__queryRemove(const Thing*, uint32_t, uint32_t) const
 {
 	return RET_NOTPOSSIBLE;
 }
 
-Cylinder* TrashHolder::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-        uint32_t& flags)
+Cylinder* TrashHolder::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)
 {
 	return this;
 }
@@ -63,7 +60,7 @@ void TrashHolder::__addThing(Thing* thing)
 	return __addThing(0, thing);
 }
 
-void TrashHolder::__addThing(int32_t index, Thing* thing)
+void TrashHolder::__addThing(int32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (!item) {
@@ -88,27 +85,27 @@ void TrashHolder::__addThing(int32_t index, Thing* thing)
 	}
 }
 
-void TrashHolder::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
+void TrashHolder::__updateThing(Thing*, uint16_t, uint32_t)
 {
 	//
 }
 
-void TrashHolder::__replaceThing(uint32_t index, Thing* thing)
+void TrashHolder::__replaceThing(uint32_t, Thing*)
 {
 	//
 }
 
-void TrashHolder::__removeThing(Thing* thing, uint32_t count)
+void TrashHolder::__removeThing(Thing*, uint32_t)
 {
 	//
 }
 
-void TrashHolder::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void TrashHolder::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
 	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
 }
 
-void TrashHolder::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
+void TrashHolder::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
 {
 	getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 }

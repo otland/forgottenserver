@@ -7123,17 +7123,11 @@ int32_t LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 
 int32_t LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 {
-	// creature:setFollowCreature(followedCreature[, fullPathSearch = false])
-	bool fullPathSearch;
-	if (getStackTop(L) >= 3) {
-		fullPathSearch = getBoolean(L, 3);
-	} else {
-		fullPathSearch = false;
-	}
+	// creature:setFollowCreature(followedCreature)
 	Creature* followCreature = getCreature(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		pushBoolean(L, creature->setFollowCreature(followCreature, fullPathSearch));
+		pushBoolean(L, creature->setFollowCreature(followCreature));
 	} else {
 		pushNil(L);
 	}

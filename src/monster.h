@@ -75,7 +75,7 @@ class Monster : public Creature
 		virtual const std::string& getNameDescription() const {
 			return mType->nameDescription;
 		}
-		virtual std::string getDescription(int32_t lookDistance) const {
+		virtual std::string getDescription(int32_t) const {
 			return strDescription + '.';
 		}
 
@@ -133,7 +133,7 @@ class Monster : public Creature
 		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
 		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
 		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos, bool teleport);
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos = nullptr);
+		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text);
 
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);

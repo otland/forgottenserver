@@ -333,12 +333,12 @@ class Game
 		  * \param text The text to say
 		  */
 		bool internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-		                         bool ghostMode, SpectatorVec* listPtr = nullptr, Position* pos = nullptr);
+		                         bool ghostMode, SpectatorVec* listPtr = nullptr, const Position* pos = nullptr);
 
 		void loadPlayersRecord();
 		void checkPlayersRecord();
 
-		void sendGuildMotd(uint32_t playerId, uint32_t guildId);
+		void sendGuildMotd(uint32_t playerId);
 		void kickPlayer(uint32_t playerId, bool displayEffect);
 		void playerReportBug(uint32_t playerId, const std::string& bug);
 		void playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment);
@@ -478,7 +478,7 @@ class Game
 		void combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColor_t& color, uint8_t& effect);
 
 		bool combatChangeHealth(CombatType_t combatType, Creature* attacker, Creature* target, int32_t healthChange);
-		bool combatChangeHealth(Creature* attacker, Creature* target, CombatDamage& damage, const CombatParams& params);
+		bool combatChangeHealth(Creature* attacker, Creature* target, CombatDamage& damage);
 		bool combatChangeMana(Creature* attacker, Creature* target, int32_t manaChange);
 
 		//animation help functions
@@ -534,7 +534,7 @@ class Game
 		Group* getGroup(uint32_t id);
 
 	protected:
-		bool playerSayCommand(Player* player, SpeakClasses type, const std::string& text);
+		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		bool playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);

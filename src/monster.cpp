@@ -129,13 +129,13 @@ bool Monster::canSee(const Position& pos) const
 	return Creature::canSee(getPosition(), pos, 9, 9);
 }
 
-void Monster::onAttackedCreatureDisappear(bool isLogout)
+void Monster::onAttackedCreatureDisappear(bool)
 {
 	attackTicks = 0;
 	extraMeleeAttack = true;
 }
 
-void Monster::onFollowCreatureDisappear(bool isLogout)
+void Monster::onFollowCreatureDisappear(bool)
 {
 	//
 }
@@ -305,9 +305,9 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 	}
 }
 
-void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, Position* pos/* = nullptr*/)
+void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
 {
-	Creature::onCreatureSay(creature, type, text, pos);
+	Creature::onCreatureSay(creature, type, text);
 
 	if (mType->creatureSayEvent != -1) {
 		// onCreatureSay(self, creature, type, message)
@@ -332,9 +332,7 @@ void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const s
 		LuaScriptInterface::pushNumber(L, type);
 		LuaScriptInterface::pushString(L, text);
 
-		if (scriptInterface->callFunction(4)) {
-			return;
-		}
+		scriptInterface->callVoidFunction(4);
 	}
 }
 
@@ -356,7 +354,7 @@ void Monster::removeFriend(Creature* creature)
 	}
 }
 
-void Monster::addTarget(Creature* creature, bool pushFront/*= false*/)
+void Monster::addTarget(Creature* creature, bool pushFront/* = false*/)
 {
 	assert(creature != this);
 	if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
@@ -432,7 +430,7 @@ void Monster::onCreatureFound(Creature* creature, bool pushFront/* = false*/)
 	}
 
 	if (isOpponent(creature)) {
-		addTarget(creature);
+		addTarget(creature, pushFront);
 	}
 
 	updateIdleStatus();
@@ -655,12 +653,10 @@ bool Monster::selectTarget(Creature* creature)
 
 	if (isHostile() || isSummon()) {
 		if (setAttackedCreature(creature) && !isSummon()) {
-			g_dispatcher->addTask(createTask(
-			                         std::bind(&Game::checkCreatureAttack, &g_game, getID())));
+			g_dispatcher->addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
 		}
 	}
-
-	return setFollowCreature(creature, true);
+	return setFollowCreature(creature);
 }
 
 void Monster::setIdle(bool _idle)
@@ -1811,7 +1807,7 @@ bool Monster::canWalkTo(Position pos, Direction dir)
 	return false;
 }
 
-void Monster::death(Creature* _lastHitCreature)
+void Monster::death(Creature*)
 {
 	setAttackedCreature(nullptr);
 
@@ -1945,7 +1941,7 @@ void Monster::updateLookDirection()
 	g_game.internalCreatureTurn(this, newDir);
 }
 
-void Monster::dropLoot(Container* corpse, Creature* _lastHitCreature)
+void Monster::dropLoot(Container* corpse, Creature*)
 {
 	if (corpse && lootDrop) {
 		mType->createLoot(corpse);

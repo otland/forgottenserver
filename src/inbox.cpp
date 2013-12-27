@@ -35,8 +35,8 @@ Inbox::~Inbox()
 	//
 }
 
-ReturnValue Inbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                              uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue Inbox::__queryAdd(int32_t, const Thing* thing, uint32_t,
+                              uint32_t flags, Creature*) const
 {
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		return RET_CONTAINERNOTENOUGHROOM;
@@ -58,16 +58,18 @@ ReturnValue Inbox::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 	return RET_NOERROR;
 }
 
-void Inbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void Inbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	if (getParent() != nullptr) {
-		getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	Cylinder* parent = getParent();
+	if (parent != nullptr) {
+		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
-void Inbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
+void Inbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
 {
-	if (getParent() != nullptr) {
-		getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
+	Cylinder* parent = getParent();
+	if (parent != nullptr) {
+		parent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 	}
 }
