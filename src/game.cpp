@@ -2891,8 +2891,6 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 
 	int32_t lookDistance = std::max<int32_t>(Position::getDistanceX(playerPosition, tradeItemPosition),
 	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
-
-	std::ostringstream ss;
 	if (index == 0) {
 		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
 		return;
