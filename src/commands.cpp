@@ -70,9 +70,7 @@ s_defcommands Commands::defined_commands[] = {
 	{"/reload", &Commands::reloadInfo},
 	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
-	{"/ghost", &Commands::ghost},
 	{"/clean", &Commands::clean},
-	{"/mccheck", &Commands::multiClientCheck},
 	{"/serverdiag", &Commands::serverDiag},
 
 	// player commands - TODO: make them talkactions
@@ -451,83 +449,4 @@ void Commands::serverDiag(Player& player, const std::string&)
 #else
 	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
 #endif
-}
-
-void Commands::ghost(Player& player, const std::string&)
-{
-	player.switchGhostMode();
-
-	Player* playerPtr = &player;
-
-	SpectatorVec list;
-	g_game.getSpectators(list, player.getPosition(), true, true);
-	for (Creature* spectator : list) {
-		Player* tmpPlayer = spectator->getPlayer();
-		if (tmpPlayer != playerPtr && !tmpPlayer->isAccessPlayer()) {
-			if (player.isInGhostMode()) {
-				tmpPlayer->sendCreatureDisappear(playerPtr, player.getTile()->getClientIndexOfThing(tmpPlayer, playerPtr));
-			} else {
-				tmpPlayer->sendCreatureAppear(playerPtr, player.getPosition(), true);
-			}
-		} else {
-			tmpPlayer->sendCreatureChangeVisible(playerPtr, !player.isInGhostMode());
-		}
-	}
-
-	if (player.isInGhostMode()) {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(playerPtr, VIPSTATUS_OFFLINE);
-			}
-		}
-
-		IOLoginData::updateOnlineStatus(player.getGUID(), false);
-		player.sendTextMessage(MSG_INFO_DESCR, "You are now invisible.");
-		g_game.addMagicEffect(list, player.getPosition(), NM_ME_YALAHARIGHOST);
-	} else {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(playerPtr, VIPSTATUS_ONLINE);
-			}
-		}
-
-		IOLoginData::updateOnlineStatus(player.getGUID(), true);
-		player.sendTextMessage(MSG_INFO_DESCR, "You are visible again.");
-		Position pos = player.getPosition();
-		pos.x += 1;
-		g_game.addMagicEffect(list, pos, NM_ME_SMOKE);
-	}
-}
-
-void Commands::multiClientCheck(Player& player, const std::string&)
-{
-	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Multiclient Check List:");
-	std::map<uint32_t, std::vector<Player*>> ipMap;
-
-	for (const auto& it : g_game.getPlayers()) {
-		Player* tmpPlayer = it.second;
-		if (tmpPlayer->getIP() == 0) {
-			continue;
-		}
-
-		ipMap[tmpPlayer->getIP()].push_back(tmpPlayer);
-	}
-
-	for (const auto& it : ipMap) {
-		if (it.second.size() < 2) {
-			continue;
-		}
-
-		Player* tmpPlayer = it.second.front();
-		std::ostringstream ss;
-		ss << convertIPToString(it.first) << ": " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
-
-		for (std::vector<Player*>::size_type i = 1, size = it.second.size(); i < size; ++i) {
-			tmpPlayer = it.second[i];
-			ss << ", " << tmpPlayer->getName() << " [" << tmpPlayer->getLevel() << ']';
-		}
-
-		ss << '.';
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, ss.str());
-	}
 }

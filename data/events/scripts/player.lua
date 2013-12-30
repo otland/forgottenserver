@@ -10,7 +10,7 @@ function Player:onLook(thing, position, distance)
 				description = description .. string.format(", ActionID: [%d]", actionId)
 			end
 			
-			local uniqueId = thing:getUniqueId()
+			local uniqueId = thing:getAttribute(ITEM_ATTRIBUTE_UNIQUEID)
 			if uniqueId > 0 and uniqueId < 65536 then
 				description = description .. string.format(", UniqueId: [%d]", uniqueId)
 			end

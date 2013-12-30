@@ -24,7 +24,7 @@ function onSay(cid, words, param)
 		return false
 	end
 
-	if getHouseByPlayerGUID(player:getGuid()) then
+	if player:getHouse() then
 		player:sendCancelMessage("You are already the owner of a house.")
 		return false
 	end

@@ -1,12 +1,3 @@
-local function convertIPToString(ip)
-	return string.format("%d.%d.%d.%d",
-		bit.band(ip, 0xFF),
-		bit.band(bit.rshift(ip, 8), 0xFF),
-		bit.band(bit.rshift(ip, 16), 0xFF),
-		bit.rshift(ip, 24)
-	)
-end
-
 function onSay(cid, words, param)
 	local player = Player(cid)	
 	if not player:getGroup():getAccess() then
@@ -14,7 +5,7 @@ function onSay(cid, words, param)
 	end
 
 	local target = Player(param)
-	if target == nil then
+	if not target then
 		player:sendCancelMessage("Player not found.")
 		return false
 	end
@@ -31,7 +22,7 @@ function onSay(cid, words, param)
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Magic Level: " .. target:getMagicLevel())
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Speed: " .. getCreatureSpeed(player:getId()))
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Position: " .. string.format("(%0.5d / %0.5d / %0.3d)", target:getPosition().x, target:getPosition().y, target:getPosition().z))
-	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "IP: " .. convertIPToString(targetIp))
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "IP: " .. Game.convertIpToString(targetIp))
 
 	local players = {}
 	for _, tmpPlayer in ipairs(Game.getPlayers()) do

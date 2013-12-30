@@ -767,6 +767,17 @@ function Game.setStorageValue(key, value)
 	globalStorageTable[key] = value
 end
 
+function Game.convertIpToString(ip)
+	local band = bit.band
+	local rshift = bit.rshift
+	return ("%d.%d.%d.%d"):format(
+		band(ip, 0xFF),
+		band(rshift(ip, 8), 0xFF),
+		band(rshift(ip, 16), 0xFF),
+		rshift(ip, 24)
+	)
+end
+
 function Position.getNextPosition(self, direction, steps)
 	steps = steps or 1
 	if direction == WEST then

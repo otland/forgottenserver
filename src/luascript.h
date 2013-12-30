@@ -372,8 +372,8 @@ class LuaScriptInterface
 
 		static std::string popFieldString(lua_State* L, const std::string& key);
 
-		static void setField(lua_State* L, const char* index, double val);
-		static void setField(lua_State* L, const char* index, const std::string& val);
+		static void setField(lua_State* L, const char* index, lua_Number value);
+		static void setField(lua_State* L, const char* index, const std::string& value);
 		static std::string escapeString(const std::string& string);
 
 #ifndef LUAJIT_VERSION
@@ -579,6 +579,12 @@ class LuaScriptInterface
 
 		static int32_t luaGameGetReturnMessage(lua_State* L);
 
+		static int32_t luaGameCreateItem(lua_State* L);
+		static int32_t luaGameCreateMonster(lua_State* L);
+		static int32_t luaGameCreateNpc(lua_State* L);
+
+		static int32_t luaGameStartRaid(lua_State* L);
+
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
 		static int32_t luaPositionAdd(lua_State* L);
@@ -626,6 +632,8 @@ class LuaScriptInterface
 		static int32_t luaTileHasFlag(lua_State* L);
 
 		static int32_t luaTileQueryAdd(lua_State* L);
+
+		static int32_t luaTileGetHouse(lua_State* L);
 
 		// NetworkMessage
 		static int32_t luaNetworkMessageCreate(lua_State* L);
@@ -927,6 +935,10 @@ class LuaScriptInterface
 		static int32_t luaPlayerIsPzLocked(lua_State* L);
 
 		static int32_t luaPlayerGetClient(lua_State* L);
+		static int32_t luaPlayerGetHouse(lua_State* L);
+
+		static int32_t luaPlayerIsInGhostMode(lua_State* L);
+		static int32_t luaPlayerSetGhostMode(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
@@ -1245,8 +1257,6 @@ class LuaEnvironment : public LuaScriptInterface
 		LuaScriptInterface* m_testInterface;
 
 		std::unordered_map<uint32_t, LuaTimerEventDesc> m_timerEvents;
-		uint32_t m_lastEventTimerId;
-
 		std::unordered_map<uint32_t, Combat*> m_combatMap;
 		std::unordered_map<uint32_t, Condition*> m_conditionMap;
 		std::unordered_map<uint32_t, AreaCombat*> m_areaMap;
@@ -1255,6 +1265,7 @@ class LuaEnvironment : public LuaScriptInterface
 		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_conditionIdMap;
 		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_areaIdMap;
 
+		uint32_t m_lastEventTimerId;
 		uint32_t m_lastCombatId;
 		uint32_t m_lastConditionId;
 		uint32_t m_lastAreaId;
