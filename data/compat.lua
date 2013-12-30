@@ -35,6 +35,8 @@ function getCreatureHealth(cid) local c = Creature(cid) return c ~= nil and c:ge
 function getCreatureMaxHealth(cid) local c = Creature(cid) return c ~= nil and c:getMaxHealth() or false end
 function getCreaturePosition(cid) local c = Creature(cid) return c ~= nil and c:getPosition() or false end
 function getCreatureOutfit(cid) local c = Creature(cid) return c ~= nil and c:getOutfit() or false end
+function getCreatureSpeed(cid) local c = Creature(cid) return c ~= nil and c:getSpeed() or false end
+function getCreatureBaseSpeed(cid) local c = Creature(cid) return c ~= nil and c:getBaseSpeed() or false end
 
 function getCreatureTarget(cid)
 	local c = Creature(cid)
@@ -74,6 +76,7 @@ function doRemoveCreature(cid) local c = Creature(cid) return c ~= nil and c:rem
 function doCreatureSetLookDir(cid, direction) local c = Creature(cid) return c ~= nil and c:setDirection(direction) or false end
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c ~= nil and c:say(text, type, ...) or false end
 function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c ~= nil and c:setOutfit(outfit) or false end
+function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c ~= nil and c:setDropLoot(doDrop) or false end
 
 doSetCreatureDirection = doCreatureSetLookDir
 
@@ -264,6 +267,8 @@ function doPlayerSetVocation(cid, vocation) local p = Player(cid) return p ~= ni
 function doPlayerSetTown(cid, town) local p = Player(cid) return p ~= nil and p:setTown(Town(town)) or false end
 function setPlayerGroupId(cid, groupId) local p = Player(cid) return p ~= nil and p:setGroup(Group(groupId)) or false end
 function doPlayerSetSex(cid, sex) local p = Player(cid) return p ~= nil and p:setSex(sex) or false end
+function doPlayerSetGuildLevel(cid, level) local p = Player(cid) return p ~= nil and p:setGuildLevel(level) or false end
+function doPlayerSetGuildNick(cid, nick) local p = Player(cid) return p ~= nil and p:setGuildNick(nick) or false end
 function doShowTextDialog(cid, itemId, text) local p = Player(cid) return p ~= nil and p:showTextDialog(itemId, text) or false end
 function doPlayerAddItemEx(cid, uid, ...) local p = Player(cid) return p ~= nil and p:addItemEx(Item(uid), ...) or false end
 function doPlayerAddPremiumDays(cid, days) local p = Player(cid) return p ~= nil and p:addPremiumDays(days) or false end
