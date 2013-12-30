@@ -3731,13 +3731,14 @@ void Game::checkCreatureAttack(uint32_t creatureId)
 
 void Game::addCreatureCheck(Creature* creature)
 {
+	creature->creatureCheck = true;
+
 	if (creature->inCheckCreaturesVector) {
 		// already in a vector
 		return;
 	}
 
 	creature->inCheckCreaturesVector = true;
-	creature->creatureCheck = true;
 
 	size_t minSize = checkCreatureVectors[0].size();
 	size_t idx = 0;
