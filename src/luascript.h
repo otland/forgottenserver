@@ -420,7 +420,6 @@ class LuaScriptInterface
 		static int32_t luaDoRelocate(lua_State* L);
 		static int32_t luaDoPlayerRemoveItem(lua_State* L);
 		static int32_t luaDoSetCreatureLight(lua_State* L);
-		static int32_t luaDoSetCreatureDropLoot(lua_State* L);
 
 		//get item info
 		static int32_t luaGetThingfromPos(lua_State* L);
@@ -764,6 +763,8 @@ class LuaScriptInterface
 
 		static int32_t luaCreatureGetSpeed(lua_State* L);
 		static int32_t luaCreatureGetBaseSpeed(lua_State* L);
+
+		static int32_t luaCreatureSetDropLoot(lua_State* L);
 
 		static int32_t luaCreatureGetPosition(lua_State* L);
 		static int32_t luaCreatureGetTile(lua_State* L);

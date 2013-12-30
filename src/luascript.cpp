@@ -1232,9 +1232,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
-	//doSetCreatureDropLoot(cid, doDrop)
-	lua_register(m_luaState, "doSetCreatureDropLoot", LuaScriptInterface::luaDoSetCreatureDropLoot);
-
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
 
@@ -1732,6 +1729,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getSpeed", LuaScriptInterface::luaCreatureGetSpeed);
 	registerMethod("Creature", "getBaseSpeed", LuaScriptInterface::luaCreatureGetBaseSpeed);
+
+	registerMethod("Creature", "setDropLoot", LuaScriptInterface::luaCreatureSetDropLoot);
 
 	registerMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
 	registerMethod("Creature", "getTile", LuaScriptInterface::luaCreatureGetTile);
@@ -2674,23 +2673,6 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 	}
 
 	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSetCreatureDropLoot(lua_State* L)
-{
-	//doSetCreatureDropLoot(cid, doDrop)
-	bool doDrop = popBoolean(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		creature->setDropLoot(doDrop);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
@@ -7159,6 +7141,19 @@ int32_t LuaScriptInterface::luaCreatureGetBaseSpeed(lua_State* L)
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
 		pushNumber(L, creature->getBaseSpeed());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureSetDropLoot(lua_State* L)
+{
+	// creature:setDropLoot(doDrop)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->setDropLoot(getBoolean(L, 2));
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}
