@@ -45,8 +45,6 @@ class Commands
 		void forceRaid(Player& player, const std::string& param);
 		void clean(Player& player, const std::string& param);
 		void serverDiag(Player& player, const std::string& param);
-		void ghost(Player& player, const std::string& param);
-		void multiClientCheck(Player& player, const std::string& param);
 		void hide(Player& player, const std::string& param);
 
 		//table of commands
