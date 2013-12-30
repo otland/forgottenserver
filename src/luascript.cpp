@@ -45,6 +45,7 @@
 #include "beds.h"
 #include "monster.h"
 #include "scheduler.h"
+#include "raids.h"
 
 extern Chat g_chat;
 extern Game g_game;
@@ -674,9 +675,8 @@ void LuaScriptInterface::callVoidFunction(int32_t params)
 
 void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
 {
-	lua_newtable(L);
+	lua_createtable(L, 0, 2);
 	setField(L, "type", var.type);
-
 	switch (var.type) {
 		case VARIANT_NUMBER:
 			setField(L, "number", var.number);
@@ -686,19 +686,18 @@ void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
 			break;
 		case VARIANT_TARGETPOSITION:
 		case VARIANT_POSITION: {
-			lua_pushstring(L, "pos");
 			pushPosition(L, var.pos, var.pos.stackpos);
-			lua_settable(L, -3);
+			lua_setfield(L, -2, "pos");
 			break;
 		}
-		case VARIANT_NONE:
+		default:
 			break;
 	}
 }
 
 void LuaScriptInterface::pushThing(lua_State* L, Thing* thing, uint32_t uid)
 {
-	lua_newtable(L);
+	lua_createtable(L, 0, 4);
 
 	if (thing && thing->getItem()) {
 		const Item* item = thing->getItem();
@@ -1136,18 +1135,16 @@ void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit_t& outfit)
 }
 
 //
-void LuaScriptInterface::setField(lua_State* L, const char* index, double val)
+void LuaScriptInterface::setField(lua_State* L, const char* index, lua_Number value)
 {
-	lua_pushstring(L, index);
-	lua_pushnumber(L, val);
-	lua_settable(L, -3);
+	pushNumber(L, value);
+	lua_setfield(L, -2, index);
 }
 
-void LuaScriptInterface::setField(lua_State* L, const char* index, const std::string& val)
+void LuaScriptInterface::setField(lua_State* L, const char* index, const std::string& value)
 {
-	lua_pushstring(L, index);
-	pushString(L, val);
-	lua_settable(L, -3);
+	pushString(L, value);
+	lua_setfield(L, -2, index);
 }
 
 std::string LuaScriptInterface::popFieldString(lua_State* L, const std::string& key)
@@ -1538,6 +1535,12 @@ void LuaScriptInterface::registerFunctions()
 	
 	registerMethod("Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
 
+	registerMethod("Game", "createItem", LuaScriptInterface::luaGameCreateItem);
+	registerMethod("Game", "createMonster", LuaScriptInterface::luaGameCreateMonster);
+	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
+
+	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
+
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
 	registerMetaMethod("Position", "__add", LuaScriptInterface::luaPositionAdd);
@@ -1586,6 +1589,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Tile", "hasFlag", LuaScriptInterface::luaTileHasFlag);
 
 	registerMethod("Tile", "queryAdd", LuaScriptInterface::luaTileQueryAdd);
+
+	registerMethod("Tile", "getHouse", LuaScriptInterface::luaTileGetHouse);
 
 	// NetworkMessage
 	registerClass("NetworkMessage", "", LuaScriptInterface::luaNetworkMessageCreate);
@@ -1894,6 +1899,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "isPzLocked", LuaScriptInterface::luaPlayerIsPzLocked);
 
 	registerMethod("Player", "getClient", LuaScriptInterface::luaPlayerGetClient);
+	registerMethod("Player", "getHouse", LuaScriptInterface::luaPlayerGetHouse);
+
+	registerMethod("Player", "isInGhostMode", LuaScriptInterface::luaPlayerIsInGhostMode);
+	registerMethod("Player", "setGhostMode", LuaScriptInterface::luaPlayerSetGhostMode);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -4936,6 +4945,123 @@ int32_t LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaGameCreateItem(lua_State* L)
+{
+	// Game.createItem(itemId, count[, position])
+	uint16_t count = getNumber<uint16_t>(L, 2);
+	uint16_t id = getNumber<uint16_t>(L, 1);
+
+	const ItemType& it = Item::items[id];
+	if (it.stackable) {
+		count = std::min<uint16_t>(count, 100);
+	}
+
+	Item* item = Item::CreateItem(id, count);
+	if (!item) {
+		pushNil(L);
+		return 1;
+	}
+
+	if (getStackTop(L) >= 3) {
+		const Position& position = getPosition(L, 3);
+		Tile* tile = g_game.getTile(position.x, position.y, position.z);
+		if (!tile) {
+			delete item;
+			pushNil(L);
+			return 1;
+		}
+
+		g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+	} else {
+		ScriptEnvironment* env = getScriptEnv();
+		env->addTempItem(env, item);
+		item->setParent(VirtualCylinder::virtualCylinder);
+	}
+
+	pushUserdata<Item>(L, item);
+	setItemMetatable(L, -1, item);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameCreateMonster(lua_State* L)
+{
+	// Game.createMonster(monsterName, position[, extended = false[, force = false]])
+	int32_t parameters = getStackTop(L);
+
+	bool force;
+	if (parameters >= 4) {
+		force = getBoolean(L, 4);
+	} else {
+		force = false;
+	}
+
+	bool extended;
+	if (parameters >= 3) {
+		extended = getBoolean(L, 3);
+	} else {
+		extended = false;
+	}
+
+	const Position& position = getPosition(L, 2);
+	const std::string& monsterName = getString(L, 1);
+
+	Monster* monster = Monster::createMonster(monsterName);
+	if (monster && g_game.placeCreature(monster, position, extended, force)) {
+		pushUserdata<Monster>(L, monster);
+		setMetatable(L, -1, "Monster");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameCreateNpc(lua_State* L)
+{
+	// Game.createNpc(npcName, position[, extended = false[, force = false]])
+	int32_t parameters = getStackTop(L);
+
+	bool force;
+	if (parameters >= 4) {
+		force = getBoolean(L, 4);
+	} else {
+		force = false;
+	}
+
+	bool extended;
+	if (parameters >= 3) {
+		extended = getBoolean(L, 3);
+	} else {
+		extended = false;
+	}
+
+	const Position& position = getPosition(L, 2);
+	const std::string& npcName = getString(L, 1);
+
+	Npc* npc = Npc::createNpc(npcName);
+	if (npc && g_game.placeCreature(npc, position, extended, force)) {
+		pushUserdata<Npc>(L, npc);
+		setMetatable(L, -1, "Npc");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameStartRaid(lua_State* L)
+{
+	// Game.startRaid(raidName)
+	const std::string& raidName = getString(L, 1);
+
+	Raid* raid = Raids::getInstance()->getRaidByName(raidName);
+	if (raid) {
+		raid->startRaid();
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 // Position
 int32_t LuaScriptInterface::luaPositionCreate(lua_State* L)
 {
@@ -5606,6 +5732,23 @@ int32_t LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaTileGetHouse(lua_State* L)
+{
+	// tile:getHouse()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
+			pushUserdata<House>(L, houseTile->getHouse());
+			setMetatable(L, -1, "House");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 // NetworkMessage
 int32_t LuaScriptInterface::luaNetworkMessageCreate(lua_State* L)
 {
@@ -6098,47 +6241,10 @@ int32_t LuaScriptInterface::luaModalWindowSendToPlayer(lua_State* L)
 int32_t LuaScriptInterface::luaItemCreate(lua_State* L)
 {
 	// Item(uid)
-	// Item(itemId, count[, position])
 	// Item.new(uid)
-	// Item.new(itemId, count[, position])
-	int32_t parameters = getStackTop(L);
-
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
-	Item* item;
-	ScriptEnvironment* env = getScriptEnv();
-	if (parameters >= 3) {
-		uint16_t count = getNumber<uint16_t>(L, 3);
-
-		const ItemType& it = Item::items[id];
-		if (it.stackable) {
-			count = std::min<uint16_t>(count, 100);
-		}
-
-		item = Item::CreateItem(id, count);
-		if (!item) {
-			pushNil(L);
-			return 1;
-		}
-
-		if (parameters >= 4) {
-			const Position& position = getPosition(L, 4);
-			Tile* tile = g_game.getTile(position.x, position.y, position.z);
-			if (!tile) {
-				delete item;
-				pushNil(L);
-				return 1;
-			}
-
-			g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		} else {
-			item->setParent(VirtualCylinder::virtualCylinder);
-			env->addTempItem(env, item);
-		}
-	} else {
-		item = env->getItemByUID(id);
-	}
-
+	Item* item = getScriptEnv()->getItemByUID(id);
 	if (item) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
@@ -6158,7 +6264,7 @@ int32_t LuaScriptInterface::luaItemIsCreature(lua_State* L)
 int32_t LuaScriptInterface::luaItemIsItem(lua_State* L)
 {
 	// item:isItem()
-	pushBoolean(L, true);
+	pushBoolean(L, getUserdata<const Item>(L, 1) != nullptr);
 	return 1;
 }
 
@@ -6889,8 +6995,7 @@ int32_t LuaScriptInterface::luaCreatureIsRemoved(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureIsCreature(lua_State* L)
 {
 	// creature:isCreature()
-	const Creature* creature = getUserdata<const Creature>(L, 1);
-	pushBoolean(L, creature != nullptr);
+	pushBoolean(L, getUserdata<const Creature>(L, 1) != nullptr);
 	return 1;
 }
 
@@ -8177,30 +8282,6 @@ int32_t LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerGetGuildLevel(lua_State* L)
-{
-	// player:getGuildLevel()
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushNumber(L, player->getGuildLevel());
-	} else {
-		pushNil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaPlayerGetGuildNick(lua_State* L)
-{
-	// player:getGuildNick()
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushString(L, player->getGuildNick());
-	} else {
-		pushNil(L);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 {
 	// player:setGuild(guild)
@@ -8220,6 +8301,18 @@ int32_t LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerGetGuildLevel(lua_State* L)
+{
+	// player:getGuildLevel()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushNumber(L, player->getGuildLevel());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 {
 	// player:setGuildLevel(level)
@@ -8228,6 +8321,18 @@ int32_t LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 	if (player) {
 		player->setGuildLevel(level);
 		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetGuildNick(lua_State* L)
+{
+	// player:getGuildNick()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushString(L, player->getGuildNick());
 	} else {
 		pushNil(L);
 	}
@@ -9173,6 +9278,89 @@ int32_t LuaScriptInterface::luaPlayerGetClient(lua_State* L)
 		lua_setfield(L, -2, "version");
 		pushNumber(L, player->getOperatingSystem());
 		lua_setfield(L, -2, "os");
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetHouse(lua_State* L)
+{
+	// player:getHouse()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		House* house = Houses::getInstance().getHouseByPlayerId(player->getGUID());
+		if (house) {
+			pushUserdata<House>(L, house);
+			setMetatable(L, -1, "House");
+		} else {
+			pushNil(L);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerIsInGhostMode(lua_State* L)
+{
+	// player:isInGhostMode()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->isInGhostMode());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
+{
+	// player:setGhostMode(enabled)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		bool enabled = getBoolean(L, 2);
+		if (player->isInGhostMode() == enabled) {
+			pushBoolean(L, true);
+			return 1;
+		}
+
+		player->switchGhostMode();
+
+		Tile* tile = player->getTile();
+		const Position& position = player->getPosition();
+
+		SpectatorVec list;
+		g_game.getSpectators(list, position, true, true);
+		for (Creature* spectator : list) {
+			Player* tmpPlayer = spectator->getPlayer();
+			if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
+				if (enabled) {
+					tmpPlayer->sendCreatureDisappear(player, tile->getClientIndexOfThing(tmpPlayer, player));
+				} else {
+					tmpPlayer->sendCreatureAppear(player, position, true);
+				}
+			} else {
+				tmpPlayer->sendCreatureChangeVisible(player, !enabled);
+			}
+		}
+
+		if (player->isInGhostMode()) {
+			for (const auto& it : g_game.getPlayers()) {
+				if (!it.second->isAccessPlayer()) {
+					it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+				}
+			}
+			IOLoginData::updateOnlineStatus(player->getGUID(), false);
+		} else {
+			for (const auto& it : g_game.getPlayers()) {
+				if (!it.second->isAccessPlayer()) {
+					it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
+				}
+			}
+			IOLoginData::updateOnlineStatus(player->getGUID(), true);
+		}
+		pushBoolean(L, true);
 	} else {
 		pushNil(L);
 	}

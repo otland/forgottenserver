@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands>
 	<command cmd="/reload" group="1" acctype="5" log="yes"/>
-	<command cmd="/ghost" group="2" acctype="5" log="yes"/>
 	<command cmd="/raid" group="2" acctype="4" log="yes"/>
 	<command cmd="/clean" group="2" acctype="5" log="yes"/>
-	<command cmd="/mccheck" group="2" acctype="5" log="yes"/>
 	<command cmd="/serverdiag" group="2" acctype="5" log="yes"/>
 	<command cmd="/hide" group="2" acctype="5" log="yes"/>
 
