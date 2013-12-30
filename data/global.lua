@@ -774,7 +774,7 @@ function Game.convertIpToString(ip)
 		band(ip, 0xFF),
 		band(rshift(ip, 8), 0xFF),
 		band(rshift(ip, 16), 0xFF),
-		band(rshift(ip, 24), 0xFF)
+		rshift(ip, 24)
 	)
 end
 
