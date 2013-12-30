@@ -36,7 +36,7 @@ function getCreatureMaxHealth(cid) local c = Creature(cid) return c ~= nil and c
 function getCreaturePosition(cid) local c = Creature(cid) return c ~= nil and c:getPosition() or false end
 function getCreatureOutfit(cid) local c = Creature(cid) return c ~= nil and c:getOutfit() or false end
 function getCreatureSpeed(cid) local c = Creature(cid) return c ~= nil and c:getSpeed() or false end
-function getCreatureBaseSpeed(cid) local c = Creature(cid) return c ~= nil and c:getSpeed() or false end
+function getCreatureBaseSpeed(cid) local c = Creature(cid) return c ~= nil and c:getBaseSpeed() or false end
 
 function getCreatureTarget(cid)
 	local c = Creature(cid)
