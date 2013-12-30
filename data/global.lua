@@ -771,10 +771,10 @@ function Game.convertIpToString(ip)
 	local band = bit.band
 	local rshift = bit.rshift
 	return ("%d.%d.%d.%d"):format(
-		band(rshift(ip, 24), 0xFF),
-		band(rshift(ip, 16), 0xFF),
+		band(ip, 0xFF),
 		band(rshift(ip, 8), 0xFF),
-		band(ip, 0xFF)
+		band(rshift(ip, 16), 0xFF),
+		band(rshift(ip, 24), 0xFF)
 	)
 end
 
