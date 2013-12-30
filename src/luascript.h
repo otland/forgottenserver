@@ -436,8 +436,6 @@ class LuaScriptInterface
 
 		//get creature info functions
 		static int32_t luaGetSpectators(lua_State* L);
-		static int32_t luaGetCreatureSpeed(lua_State* L);
-		static int32_t luaGetCreatureBaseSpeed(lua_State* L);
 
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
@@ -763,6 +761,9 @@ class LuaScriptInterface
 
 		static int32_t luaCreatureGetLight(lua_State* L);
 		static int32_t luaCreatureSetLight(lua_State* L);
+
+		static int32_t luaCreatureGetSpeed(lua_State* L);
+		static int32_t luaCreatureGetBaseSpeed(lua_State* L);
 
 		static int32_t luaCreatureGetPosition(lua_State* L);
 		static int32_t luaCreatureGetTile(lua_State* L);

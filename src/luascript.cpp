@@ -1370,12 +1370,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureOutfit(cid, outfit, time)
 	lua_register(m_luaState, "doSetCreatureOutfit", LuaScriptInterface::luaSetCreatureOutfit);
 
-	//getCreatureSpeed(cid)
-	lua_register(m_luaState, "getCreatureSpeed", LuaScriptInterface::luaGetCreatureSpeed);
-
-	//getCreatureBaseSpeed(cid)
-	lua_register(m_luaState, "getCreatureBaseSpeed", LuaScriptInterface::luaGetCreatureBaseSpeed);
-
 	//hasProperty(uid, prop)
 	lua_register(m_luaState, "hasProperty", LuaScriptInterface::luaHasProperty);
 
@@ -1735,6 +1729,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getLight", LuaScriptInterface::luaCreatureGetLight);
 	registerMethod("Creature", "setLight", LuaScriptInterface::luaCreatureSetLight);
+
+	registerMethod("Creature", "getSpeed", LuaScriptInterface::luaCreatureGetSpeed);
+	registerMethod("Creature", "getBaseSpeed", LuaScriptInterface::luaCreatureGetBaseSpeed);
 
 	registerMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
 	registerMethod("Creature", "getTile", LuaScriptInterface::luaCreatureGetTile);
@@ -4321,36 +4318,6 @@ int32_t LuaScriptInterface::luaGetSpectators(lua_State* L)
 		lua_pushnumber(L, ++index);
 		lua_pushnumber(L, spectator->getID());
 		lua_settable(L, -3);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetCreatureSpeed(lua_State* L)
-{
-	//getCreatureSpeed(cid)
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		lua_pushnumber(L, creature->getSpeed());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetCreatureBaseSpeed(lua_State* L)
-{
-	//getCreatureBaseSpeed(cid)
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		lua_pushnumber(L, creature->getBaseSpeed());
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
 	}
 	return 1;
 }
@@ -7168,6 +7135,30 @@ int32_t LuaScriptInterface::luaCreatureSetLight(lua_State* L)
 		creature->setCreatureLight(light);
 		g_game.changeLight(creature);
 		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetSpeed(lua_State* L)
+{
+	// creature:getSpeed()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushNumber(L, creature->getSpeed());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetBaseSpeed(lua_State* L)
+{
+	// creature:getBaseSpeed()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushNumber(L, creature->getBaseSpeed());
 	} else {
 		pushNil(L);
 	}
@@ -11083,8 +11074,8 @@ int32_t LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 
 int32_t LuaScriptInterface::luaConditionAddOutfit(lua_State* L)
 {
-	// condition:addOutfit(condition, outfit)
-	// condition:addOutfit(condition, lookTypeEx, lookType, lookHead, lookBody, lookLegs, lookFeet[, lookAddons[, lookMount]])
+	// condition:addOutfit(outfit)
+	// condition:addOutfit(lookTypeEx, lookType, lookHead, lookBody, lookLegs, lookFeet[, lookAddons[, lookMount]])
 	Outfit_t outfit;
 	if (isTable(L, 2)) {
 		outfit = getOutfit(L, 2);
