@@ -62,8 +62,9 @@ class ConfigManager
 			MYSQL_USER = 12,
 			MYSQL_PASS = 13,
 			MYSQL_DB = 14,
-			DEFAULT_PRIORITY = 15,
-			MAP_AUTHOR = 16,
+			MYSQL_SOCK = 15,
+			DEFAULT_PRIORITY = 16,
+			MAP_AUTHOR = 17,
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
 
