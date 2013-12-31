@@ -1231,6 +1231,11 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 	//optional
 	if ((attr = node.attribute("subtype"))) {
 		lootBlock.subType = pugi::cast<int32_t>(attr.value());
+	} else {
+		uint32_t charges = Item::items[lootBlock.id].charges;
+		if (charges != 0) {
+			lootBlock.subType = charges;
+		}
 	}
 
 	if ((attr = node.attribute("actionId"))) {
