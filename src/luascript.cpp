@@ -1714,6 +1714,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "isNpc", LuaScriptInterface::luaCreatureIsNpc);
 	registerMethod("Creature", "isItem", LuaScriptInterface::luaCreatureIsItem);
 	registerMethod("Creature", "isGhost", LuaScriptInterface::luaCreatureIsGhost);
+	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
 	registerMethod("Creature", "canSeeCreature", LuaScriptInterface::luaCreatureCanSeeCreature);
@@ -1747,6 +1748,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "addHealth", LuaScriptInterface::luaCreatureAddHealth);
 	registerMethod("Creature", "getMaxHealth", LuaScriptInterface::luaCreatureGetMaxHealth);
 	registerMethod("Creature", "setMaxHealth", LuaScriptInterface::luaCreatureSetMaxHealth);
+	registerMethod("Creature", "setHiddenHealth", LuaScriptInterface::luaCreatureSetHiddenHealth);
 
 	registerMethod("Creature", "getMana", LuaScriptInterface::luaCreatureGetMana);
 	registerMethod("Creature", "addMana", LuaScriptInterface::luaCreatureAddMana);
@@ -4416,8 +4418,7 @@ int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 
 int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
-	g_game.getMap()->clean();
-	pushBoolean(L, true);
+	pushNumber(L, g_game.getMap()->clean());
 	return 1;
 }
 
@@ -7040,6 +7041,18 @@ int32_t LuaScriptInterface::luaCreatureIsGhost(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
+{
+	// creature:isHealthHidden()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->isHealthHidden());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureCanSee(lua_State* L)
 {
 	// creature:canSee(position)
@@ -7375,6 +7388,20 @@ int32_t LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 		if (player) {
 			player->sendStats();
 		}
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureSetHiddenHealth(lua_State* L)
+{
+	// creature:setHiddenHealth(hide)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->setHiddenHealth(getBoolean(L, 2));
+		g_game.addCreatureHealth(creature);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);

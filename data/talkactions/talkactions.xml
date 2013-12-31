@@ -30,6 +30,8 @@
 	<talkaction words="/addskill" separator=" " script="add_skill.lua" />
 	<talkaction words="/mccheck" script="mccheck.lua" />
 	<talkaction words="/ghost" script="ghost.lua" />
+	<talkaction words="/clean" script="clean.lua" />
+	<talkaction words="/hide" script="hide.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua"/>

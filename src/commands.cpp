@@ -68,9 +68,7 @@ extern LuaEnvironment g_luaEnvironment;
 s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/reload", &Commands::reloadInfo},
-	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
-	{"/clean", &Commands::clean},
 	{"/serverdiag", &Commands::serverDiag},
 
 	// player commands - TODO: make them talkactions
@@ -363,12 +361,6 @@ void Commands::sellHouse(Player& player, const std::string& param)
 	}
 }
 
-void Commands::hide(Player& player, const std::string&)
-{
-	player.setHiddenHealth(!player.isHealthHidden());
-	g_game.addCreatureHealth(&player);
-}
-
 void Commands::forceRaid(Player& player, const std::string& param)
 {
 	Raid* raid = Raids::getInstance()->getRaidByName(param);
@@ -402,18 +394,6 @@ void Commands::forceRaid(Player& player, const std::string& param)
 	}
 
 	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
-}
-
-void Commands::clean(Player&, const std::string&)
-{
-	uint32_t count = g_game.getMap()->clean();
-	if (count != 1) {
-		std::ostringstream ss;
-		ss << "Cleaned " << count << " items from the map.";
-		g_game.broadcastMessage(ss.str(), MSG_STATUS_WARNING);
-	} else {
-		g_game.broadcastMessage("Cleaned 1 item from the map.", MSG_STATUS_WARNING);
-	}
 }
 
 void Commands::serverDiag(Player& player, const std::string&)
