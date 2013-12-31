@@ -513,7 +513,6 @@ class LuaScriptInterface
 		static int32_t luaSaveServer(lua_State* L);
 		static int32_t luaCleanMap(lua_State* L);
 
-		static int32_t luaIsInWar(lua_State* L);
 		static int32_t luaDoPlayerSetOfflineTrainingSkill(lua_State* L);
 
 		static int32_t luaGetWaypointPositionByName(lua_State* L);
@@ -941,6 +940,8 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerIsInGhostMode(lua_State* L);
 		static int32_t luaPlayerSetGhostMode(lua_State* L);
+
+		static int32_t luaPlayerIsInWar(lua_State* L);
 
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);

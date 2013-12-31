@@ -258,6 +258,7 @@ end
 getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
 
+function isInWar(cid, target) local p = Player(cid) return p ~= nil and p:isInWar(Player(target)) or false end
 function setPlayerStorageValue(cid, key, value) local p = Player(cid) return p ~= nil and p:setStorageValue(key, value) or false end
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p ~= nil and p:setBankBalance(balance) or false end
 function doPlayerAddMoney(cid, money) local p = Player(cid) return p ~= nil and p:addMoney(money) or false end
