@@ -4415,8 +4415,7 @@ int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 
 int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
-	g_game.getMap()->clean();
-	pushBoolean(L, true);
+	pushNumber(L, g_game.getMap()->clean());
 	return 1;
 }
 
