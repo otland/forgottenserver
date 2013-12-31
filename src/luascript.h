@@ -750,6 +750,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureIsNpc(lua_State* L);
 		static int32_t luaCreatureIsItem(lua_State* L);
 		static int32_t luaCreatureIsGhost(lua_State* L);
+		static int32_t luaCreatureIsHealthHidden(lua_State* L);
 
 		static int32_t luaCreatureCanSee(lua_State* L);
 		static int32_t luaCreatureCanSeeCreature(lua_State* L);
@@ -783,6 +784,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureAddHealth(lua_State* L);
 		static int32_t luaCreatureGetMaxHealth(lua_State* L);
 		static int32_t luaCreatureSetMaxHealth(lua_State* L);
+		static int32_t luaCreatureSetHiddenHealth(lua_State* L);
 
 		static int32_t luaCreatureGetMana(lua_State* L);
 		static int32_t luaCreatureAddMana(lua_State* L);

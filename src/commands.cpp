@@ -68,7 +68,6 @@ extern LuaEnvironment g_luaEnvironment;
 s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/reload", &Commands::reloadInfo},
-	{"/hide", &Commands::hide},
 	{"/raid", &Commands::forceRaid},
 	{"/serverdiag", &Commands::serverDiag},
 
@@ -360,12 +359,6 @@ void Commands::sellHouse(Player& player, const std::string& param)
 	if (!g_game.internalStartTrade(&player, tradePartner, transferItem)) {
 		house->resetTransferItem();
 	}
-}
-
-void Commands::hide(Player& player, const std::string&)
-{
-	player.setHiddenHealth(!player.isHealthHidden());
-	g_game.addCreatureHealth(&player);
 }
 
 void Commands::forceRaid(Player& player, const std::string& param)
