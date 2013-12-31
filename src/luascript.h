@@ -436,7 +436,6 @@ class LuaScriptInterface
 		//get creature info functions
 		static int32_t luaGetSpectators(lua_State* L);
 
-		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
 
 		static int32_t luaGetPlayerInstantSpellInfo(lua_State* L);
@@ -818,6 +817,8 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerGetAccountType(lua_State* L);
 		static int32_t luaPlayerSetAccountType(lua_State* L);
+
+		static int32_t luaPlayerHasFlag(lua_State* L);
 
 		static int32_t luaPlayerGetCapacity(lua_State* L);
 		static int32_t luaPlayerSetCapacity(lua_State* L);

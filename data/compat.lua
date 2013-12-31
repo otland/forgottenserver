@@ -120,6 +120,7 @@ function getPlayerLossPercent(cid) local p = Player(cid) return p ~= nil and p:g
 function getPlayerMount(cid, mountId) local p = Player(cid) return p ~= nil and p:hasMount(mountId) or false end
 function getPlayerPremiumDays(cid) local p = Player(cid) return p ~= nil and p:getPremiumDays() or false end
 function getPlayerBlessing(cid, blessing) local p = Player(cid) return p ~= nil and p:hasBlessing(blessing) or false end
+function getPlayerFlagValue(cid, flag) local p = Player(cid) return p ~= nil and p:hasFlag(flag) or false end
 function getPlayerParty(cid)
 	local player = Player(cid)
 	if player == nil then
