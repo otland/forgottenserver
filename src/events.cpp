@@ -47,6 +47,7 @@ void Events::clear()
 	playerOnLookInShop = -1;
 	playerOnMoveItem = -1;
 	playerOnMoveCreature = -1;
+	playerOnTurn = -1;
 }
 
 bool Events::load()
@@ -98,6 +99,8 @@ bool Events::load()
 					playerOnMoveItem = event;
 				} else if (methodName == "onMoveCreature") {
 					playerOnMoveCreature = event;
+				} else if (methodName == "onTurn") {
+					playerOnTurn = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 				}
@@ -376,4 +379,30 @@ bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const
 	LuaScriptInterface::pushPosition(L, toPosition);
 
 	return scriptInterface.callFunction(4);
+}
+
+bool Events::eventPlayerOnTurn(Player* player, Direction direction)
+{
+	// Player:onTurn(direction) or Player.onTurn(self, direction)
+	if (playerOnTurn == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnTurn] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(playerOnTurn, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(playerOnTurn);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushNumber(L, direction);
+
+	return scriptInterface.callFunction(2);
 }

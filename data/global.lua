@@ -770,7 +770,7 @@ end
 function Game.convertIpToString(ip)
 	local band = bit.band
 	local rshift = bit.rshift
-	return ("%d.%d.%d.%d"):format(
+	return string.format("%d.%d.%d.%d",
 		band(ip, 0xFF),
 		band(rshift(ip, 8), 0xFF),
 		band(rshift(ip, 16), 0xFF),
@@ -802,10 +802,11 @@ function Creature.getClosestFreePosition(self, position, extended)
 	
 	local tile
 	for y = -length, length do
-		usePosition.y = position.y + y
 		for x = -length, length do
-			usePosition.x = position.x + x
-			if not(x == 0 and y == 0) then
+			if x ~= 0 or y ~= 0 then
+				usePosition.x = position.x + x
+				usePosition.y = position.y + y
+				
 				tile = usePosition:getTile()
 				if tile then
 					tiles[#tiles + 1] = tile
