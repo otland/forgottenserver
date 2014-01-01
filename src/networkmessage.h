@@ -149,7 +149,7 @@ class NetworkMessage
 
 	protected:
 		inline bool canAdd(size_t size) const {
-			return (size + m_ReadPos < max_body_length);
+			return (size + m_ReadPos) < max_body_length;
 		}
 
 		inline bool canRead(int32_t size) {
@@ -160,13 +160,11 @@ class NetworkMessage
 			return true;
 		}
 
-		int32_t m_MsgSize;
-		int32_t m_ReadPos;
-
-		bool m_overrun;
-
 		uint8_t m_RealBuf[NETWORKMESSAGE_MAXSIZE];
 		uint8_t* m_MsgBuf;
+		int32_t m_MsgSize;
+		int32_t m_ReadPos;
+		bool m_overrun;
 };
 
 #endif // #ifndef __NETWORK_MESSAGE_H__

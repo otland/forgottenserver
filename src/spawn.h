@@ -52,16 +52,16 @@ class Spawns
 	private:
 		std::list<Npc*> npcList;
 		std::list<Spawn*> spawnList;
-		bool loaded, started;
 		std::string filename;
+		bool loaded, started;
 };
 
 struct spawnBlock_t {
-	MonsterType* mType;
-	Direction direction;
 	Position pos;
-	uint32_t interval;
+	MonsterType* mType;
 	int64_t lastSpawn;
+	Direction direction;
+	uint32_t interval;
 };
 
 class Spawn

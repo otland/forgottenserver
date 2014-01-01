@@ -118,7 +118,6 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 		offer.timestamp = result->getDataInt("expires_at");
 
 		MarketOfferState_t offerState = (MarketOfferState_t)result->getDataInt("state");
-
 		if (offerState == OFFERSTATE_ACCEPTEDEX) {
 			offerState = OFFERSTATE_ACCEPTED;
 		}

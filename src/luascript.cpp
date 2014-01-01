@@ -2669,7 +2669,7 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 	}
 
 	if (fromTile != toTile) {
-		for (int32_t i = fromTile->getThingCount() - 1; i >= 0; --i) {
+		for (int32_t i = fromTile->getThingCount(); --i >= 0;) {
 			Thing* thing = fromTile->__getThing(i);
 			if (thing) {
 				if (Item* item = thing->getItem()) {
@@ -3196,15 +3196,15 @@ int32_t LuaScriptInterface::luaSetCombatCondition(lua_State* L)
 int32_t LuaScriptInterface::luaSetCombatParam(lua_State* L)
 {
 	//setCombatParam(combat, key, value)
-	uint32_t value = popNumber(L);
-	CombatParam_t key = (CombatParam_t)popNumber(L);
-	uint32_t combatId = popNumber(L);
-
 	if (getScriptEnv()->getScriptId() != EVENT_ID_LOADING) {
 		reportErrorFunc("This function can only be used while loading the script.");
 		pushBoolean(L, false);
 		return 1;
 	}
+
+	uint32_t value = popNumber(L);
+	CombatParam_t key = (CombatParam_t)popNumber(L);
+	uint32_t combatId = popNumber(L);
 
 	Combat* combat = g_luaEnvironment.getCombatObject(combatId);
 	if (combat) {
@@ -3220,6 +3220,12 @@ int32_t LuaScriptInterface::luaSetCombatParam(lua_State* L)
 int32_t LuaScriptInterface::luaSetConditionParam(lua_State* L)
 {
 	//setConditionParam(condition, key, value)
+	if (getScriptEnv()->getScriptId() != EVENT_ID_LOADING) {
+		reportErrorFunc("This function can only be used while loading the script.");
+		pushBoolean(L, false);
+		return 1;
+	}
+
 	int32_t value;
 	if (isBoolean(L, -1)) {
 		value = popBoolean(L) ? 1 : 0;
@@ -3228,12 +3234,6 @@ int32_t LuaScriptInterface::luaSetConditionParam(lua_State* L)
 	}
 	ConditionParam_t key = (ConditionParam_t)popNumber(L);
 	uint32_t conditionId = popNumber(L);
-
-	if (getScriptEnv()->getScriptId() != EVENT_ID_LOADING) {
-		reportErrorFunc("This function can only be used while loading the script.");
-		pushBoolean(L, false);
-		return 1;
-	}
 
 	Condition* condition = g_luaEnvironment.getConditionObject(conditionId);
 	if (condition) {
@@ -3314,16 +3314,16 @@ int32_t LuaScriptInterface::luaAddOutfitCondition(lua_State* L)
 int32_t LuaScriptInterface::luaSetCombatCallBack(lua_State* L)
 {
 	//setCombatCallBack(combat, key, function_name)
-	std::string function = popString(L);
-	CallBackParam_t key = (CallBackParam_t)popNumber(L);
-	uint32_t combatId = popNumber(L);
-
 	ScriptEnvironment* env = getScriptEnv();
 	if (env->getScriptId() != EVENT_ID_LOADING) {
 		reportErrorFunc("This function can only be used while loading the script.");
 		pushBoolean(L, false);
 		return 1;
 	}
+
+	std::string function = popString(L);
+	CallBackParam_t key = (CallBackParam_t)popNumber(L);
+	uint32_t combatId = popNumber(L);
 
 	Combat* combat = g_luaEnvironment.getCombatObject(combatId);
 	if (!combat) {

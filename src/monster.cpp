@@ -1045,13 +1045,12 @@ void Monster::pushItems(Tile* tile)
 		uint32_t removeCount = 0;
 
 		int32_t downItemSize = tile->getDownItemCount();
-		for (int32_t i = downItemSize - 1; i >= 0; --i) {
-			assert(i >= 0 && i < downItemSize);
+		for (int32_t i = downItemSize; --i >= 0;) {
 			Item* item = items->at(i);
 			if (item && item->hasProperty(MOVEABLE) && (item->hasProperty(BLOCKPATH)
 			        || item->hasProperty(BLOCKSOLID))) {
 				if (moveCount < 20 && pushItem(item)) {
-					moveCount++;
+					++moveCount;
 				} else if (g_game.internalRemoveItem(item) == RET_NOERROR) {
 					++removeCount;
 				}
@@ -1093,7 +1092,7 @@ void Monster::pushCreatures(Tile* tile)
 		uint32_t removeCount = 0;
 		Monster* lastPushedMonster = nullptr;
 
-		for (uint32_t i = 0; i < creatures->size();) {
+		for (size_t i = 0; i < creatures->size();) {
 			Monster* monster = creatures->at(i)->getMonster();
 			if (monster && monster->isPushable()) {
 				if (monster != lastPushedMonster && pushCreature(monster)) {

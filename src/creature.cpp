@@ -559,7 +559,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 
 				if (oldPos.y > newPos.y) { //north
 					//shift y south
-					for (int32_t y = mapWalkHeight - 2; y >= 0; --y) {
+					for (int32_t y = mapWalkHeight - 1; --y >= 0;) {
 						memcpy(localMapCache[y + 1], localMapCache[y], sizeof(localMapCache[y]));
 					}
 
@@ -617,7 +617,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 					}
 
 					for (int32_t y = starty; y <= endy; ++y) {
-						for (int32_t x = mapWalkWidth - 2; x >= 0; --x) {
+						for (int32_t x = mapWalkWidth - 1; --x >= 0;) {
 							localMapCache[y][x + 1] = localMapCache[y][x];
 						}
 					}

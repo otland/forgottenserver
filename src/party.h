@@ -87,12 +87,7 @@ class Party
 		void clearPlayerPoints(Player* player);
 
 	protected:
-		bool sharedExpActive;
-		bool sharedExpEnabled;
-
-		Player* leader;
-		PlayerVector memberList;
-		PlayerVector inviteList;
+		bool canEnableSharedExperience();
 
 		struct CountBlock_t {
 			int32_t totalHeal;
@@ -102,7 +97,13 @@ class Party
 		typedef std::map<uint32_t, CountBlock_t> CountMap;
 		CountMap pointMap;
 
-		bool canEnableSharedExperience();
+		PlayerVector memberList;
+		PlayerVector inviteList;
+
+		Player* leader;
+
+		bool sharedExpActive;
+		bool sharedExpEnabled;
 };
 
 #endif

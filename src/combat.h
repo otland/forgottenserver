@@ -169,10 +169,10 @@ class MatrixArea
 			y = centerY;
 		}
 
-		size_t getRows() const {
+		uint32_t getRows() const {
 			return rows;
 		}
-		size_t getCols() const {
+		uint32_t getCols() const {
 			return cols;
 		}
 

@@ -188,7 +188,7 @@ class PropStream
 			end = a + size;
 		}
 
-		uint64_t size() const {
+		size_t size() const {
 			return end - p;
 		}
 
@@ -240,8 +240,8 @@ class PropStream
 			return GET_STRING(ret, str_len);
 		}
 
-		inline bool GET_STRING(std::string& ret, uint16_t str_len) {
-			if (size() < (int32_t)str_len) {
+		inline bool GET_STRING(std::string& ret, size_t str_len) {
+			if (size() < str_len) {
 				return false;
 			}
 
@@ -260,31 +260,7 @@ class PropStream
 				return false;
 			}
 
-			if (size() < str_len) {
-				return false;
-			}
-
-			char* str = new char[str_len + 1];
-			memcpy(str, p, str_len);
-			str[str_len] = 0;
-			ret.assign(str, str_len);
-			delete[] str;
-			p += str_len;
-			return true;
-		}
-
-		inline bool GET_NSTRING(unsigned short str_len, std::string& ret) {
-			if (size() < (int32_t)str_len) {
-				return false;
-			}
-
-			char* str = new char[str_len + 1];
-			memcpy(str, p, str_len);
-			str[str_len] = 0;
-			ret.assign(str, str_len); // String can contain 0s
-			delete[] str;
-			p += str_len;
-			return true;
+			return GET_STRING(ret, str_len);
 		}
 
 		inline bool SKIP_N(uint32_t n) {
@@ -374,7 +350,6 @@ class PropWriteStream
 
 		inline void ADD_LSTRING(const std::string& add) {
 			uint32_t str_len = (uint32_t)add.size();
-
 			ADD_ULONG(str_len);
 
 			if ((buffer_size - size) < str_len) {

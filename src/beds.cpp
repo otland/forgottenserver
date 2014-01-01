@@ -80,7 +80,7 @@ bool BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 
 	if (sleepStart != 0) {
 		propWriteStream.ADD_UCHAR(ATTR_SLEEPSTART);
-		propWriteStream.ADD_ULONG((int32_t)sleepStart);
+		propWriteStream.ADD_ULONG((uint32_t)sleepStart);
 	}
 
 	return true;

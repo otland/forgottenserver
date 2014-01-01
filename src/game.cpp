@@ -5052,7 +5052,7 @@ void Game::saveMotdNum() const
 
 void Game::checkPlayersRecord()
 {
-	const uint32_t playersOnline = getPlayersOnline();
+	const size_t playersOnline = getPlayersOnline();
 	if (playersOnline > playersRecord) {
 		uint32_t previousRecord = playersRecord;
 		playersRecord = playersOnline;

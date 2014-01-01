@@ -146,13 +146,13 @@ bool Condition::serialize(PropWriteStream& propWriteStream)
 	propWriteStream.ADD_VALUE((int32_t)id);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_TICKS);
-	propWriteStream.ADD_VALUE((int32_t)ticks);
+	propWriteStream.ADD_VALUE(ticks);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_ISBUFF);
 	propWriteStream.ADD_VALUE((int8_t)isBuff);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_SUBID);
-	propWriteStream.ADD_VALUE((int32_t)subId);
+	propWriteStream.ADD_VALUE(subId);
 	return true;
 }
 
@@ -175,7 +175,7 @@ bool Condition::executeCondition(Creature*, int32_t interval)
 
 Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, int32_t param/* = 0*/, bool _buff/* = false*/, uint32_t _subId/* = 0*/)
 {
-	switch ((int32_t)_type) {
+	switch (_type) {
 		case CONDITION_POISON:
 		case CONDITION_FIRE:
 		case CONDITION_ENERGY:

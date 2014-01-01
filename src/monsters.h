@@ -91,11 +91,12 @@ class MonsterType
 		std::string name;
 		std::string nameDescription;
 
+		LuaScriptInterface* scriptInterface;
+
 		uint64_t experience;
 
 		Outfit_t outfit;
 
-		LuaScriptInterface* scriptInterface;
 		int32_t creatureAppearEvent;
 		int32_t creatureDisappearEvent;
 		int32_t creatureMoveEvent;
@@ -169,10 +170,9 @@ class Monsters
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
 		std::map<std::string, uint32_t> monsterNames;
-		std::map<uint32_t, MonsterType*> monsters;
-
-		LuaScriptInterface* scriptInterface;
 		std::map<MonsterType*, std::string> monsterScriptList;
+		std::map<uint32_t, MonsterType*> monsters;
+		LuaScriptInterface* scriptInterface;
 
 		bool loaded;
 };

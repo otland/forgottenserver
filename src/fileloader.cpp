@@ -349,21 +349,21 @@ inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 
 			//get maximum read block size and calculate remaining bytes
 			reading = std::min<int32_t>(remain, m_cached_data[i].size - m_cache_offset);
-			remain = remain - reading;
+			remain -= reading;
 
 			//read it
 			memcpy(buffer + bufferPos, m_cached_data[m_cache_index].data + m_cache_offset, reading);
 
 			//update variables
-			m_cache_offset = m_cache_offset + reading;
-			bufferPos = bufferPos + reading;
-			pos = pos + reading;
+			m_cache_offset += reading;
+			bufferPos += reading;
+			pos += reading;
 		} while (remain > 0);
 
 		return true;
 	}
 
-	if (fseek(m_file, pos, SEEK_SET)) {
+	if (fseek(m_file, pos, SEEK_SET) != 0) {
 		m_lastError = ERROR_SEEK_ERROR;
 		return false;
 	}
@@ -386,7 +386,7 @@ inline bool FileLoader::safeSeek(uint32_t pos)
 
 		m_cache_index = i;
 		m_cache_offset = pos - m_cached_data[i].base;
-	} else if (fseek(m_file, pos, SEEK_SET)) {
+	} else if (fseek(m_file, pos, SEEK_SET) != 0) {
 		m_lastError = ERROR_SEEK_ERROR;
 		return false;
 	}
@@ -411,7 +411,7 @@ inline bool FileLoader::safeTell(int32_t& pos)
 		return false;
 	}
 
-	pos = pos - 1;
+	--pos;
 	return true;
 }
 
@@ -449,7 +449,7 @@ int32_t FileLoader::loadCacheBlock(uint32_t pos)
 
 	if (loading_cache == -1) {
 		for (i = 0; i < CACHE_BLOCKS; i++) {
-			if ((long)(abs((long)m_cached_data[i].base - base_pos)) > (long)(2 * m_cache_size)) {
+			if (abs((long)m_cached_data[i].base - base_pos) > (long)(2 * m_cache_size)) {
 				loading_cache = i;
 				break;
 			}
@@ -466,7 +466,7 @@ int32_t FileLoader::loadCacheBlock(uint32_t pos)
 
 	m_cached_data[loading_cache].base = base_pos;
 
-	if (fseek(m_file, m_cached_data[loading_cache].base, SEEK_SET)) {
+	if (fseek(m_file, m_cached_data[loading_cache].base, SEEK_SET) != 0) {
 		m_lastError = ERROR_SEEK_ERROR;
 		return -1;
 	}

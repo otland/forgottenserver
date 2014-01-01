@@ -1256,8 +1256,6 @@ class LuaEnvironment : public LuaScriptInterface
 		void executeTimerEvent(uint32_t eventIndex);
 
 		//
-		LuaScriptInterface* m_testInterface;
-
 		std::unordered_map<uint32_t, LuaTimerEventDesc> m_timerEvents;
 		std::unordered_map<uint32_t, Combat*> m_combatMap;
 		std::unordered_map<uint32_t, Condition*> m_conditionMap;
@@ -1266,6 +1264,8 @@ class LuaEnvironment : public LuaScriptInterface
 		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_combatIdMap;
 		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_conditionIdMap;
 		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_areaIdMap;
+
+		LuaScriptInterface* m_testInterface;
 
 		uint32_t m_lastEventTimerId;
 		uint32_t m_lastCombatId;

@@ -136,11 +136,11 @@ class OutputMessage : public NetworkMessage
 			return m_state;
 		}
 
-		Protocol* m_protocol;
 		Connection_ptr m_connection;
+		Protocol* m_protocol;
 
-		uint32_t m_outputBufferStart;
 		int64_t m_frame;
+		uint32_t m_outputBufferStart;
 
 		OutputMessageState m_state;
 };

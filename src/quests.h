@@ -72,8 +72,8 @@ class Mission
 			return endValue;
 		}
 
-		MissionState* mainState;
 		std::map<int32_t, MissionState> state;
+		MissionState* mainState;
 
 	private:
 		std::string name;

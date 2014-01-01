@@ -80,9 +80,9 @@ class BedItem : public Item
 		void internalSetSleeper(const Player* player);
 		void internalRemoveSleeper();
 
-		uint32_t sleeperGUID;
-		uint64_t sleepStart;
 		House* house;
+		uint64_t sleepStart;
+		uint32_t sleeperGUID;
 };
 
 class Beds

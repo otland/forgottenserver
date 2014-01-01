@@ -1162,9 +1162,9 @@ void AreaCombat::getList(const Position& centerPos, const Position& targetPos, s
 	area->getCenter(centerY, centerX);
 
 	Position tmpPos(targetPos.x - centerX, targetPos.y - centerY, targetPos.z);
-	size_t cols = area->getCols();
-	for (size_t y = 0, rows = area->getRows(); y < rows; ++y) {
-		for (size_t x = 0; x < cols; ++x) {
+	uint32_t cols = area->getCols();
+	for (uint32_t y = 0, rows = area->getRows(); y < rows; ++y) {
+		for (uint32_t x = 0; x < cols; ++x) {
 			if (area->getValue(y, x) != 0) {
 				if (g_game.isSightClear(targetPos, tmpPos, true)) {
 					Tile* tile = g_game.getTile(tmpPos);
@@ -1197,9 +1197,8 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 		output->setCenter(centerY, centerX);
 	} else if (op == MATRIXOPERATION_MIRROR) {
 		for (uint32_t y = 0; y < input->getRows(); ++y) {
-			int32_t rx = 0;
-
-			for (int32_t x = input->getCols() - 1; x >= 0; --x) {
+			uint32_t rx = 0;
+			for (int32_t x = input->getCols(); --x >= 0;) {
 				(*output)[y][rx++] = (*input)[y][x];
 			}
 		}
@@ -1207,9 +1206,8 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 		output->setCenter(centerY, (input->getRows() - 1) - centerX);
 	} else if (op == MATRIXOPERATION_FLIP) {
 		for (uint32_t x = 0; x < input->getCols(); ++x) {
-			int32_t ry = 0;
-
-			for (int32_t y = input->getRows() - 1; y >= 0; --y) {
+			uint32_t ry = 0;
+			for (int32_t y = input->getRows(); --y >= 0;) {
 				(*output)[ry++][x] = (*input)[y][x];
 			}
 		}
@@ -1219,7 +1217,7 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 		// rotation
 		int32_t rotateCenterX = (output->getCols() / 2) - 1;
 		int32_t rotateCenterY = (output->getRows() / 2) - 1;
-		int32_t angle = 0;
+		int32_t angle;
 
 		switch (op) {
 			case MATRIXOPERATION_ROTATE90:
@@ -1246,8 +1244,9 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 		double c = std::sin(angleRad);
 		double d = std::cos(angleRad);
 
-		for (int32_t x = 0, cols = input->getCols(); x < cols; ++x) {
-			for (int32_t y = 0, rows = input->getRows(); y < rows; ++y) {
+		const uint32_t rows = input->getRows();
+		for (uint32_t x = 0, cols = input->getCols(); x < cols; ++x) {
+			for (uint32_t y = 0; y < rows; ++y) {
 				//calculate new coordinates using rotation center
 				int32_t newX = x - centerX;
 				int32_t newY = y - centerY;

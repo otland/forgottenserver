@@ -228,14 +228,14 @@ class Game
 		void addCreatureCheck(Creature* creature);
 		void removeCreatureCheck(Creature* creature);
 
-		uint32_t getPlayersOnline() const {
-			return (uint32_t)players.size();
+		size_t getPlayersOnline() const {
+			return players.size();
 		}
-		uint32_t getMonstersOnline() const {
-			return (uint32_t)monsters.size();
+		size_t getMonstersOnline() const {
+			return monsters.size();
 		}
-		uint32_t getNpcsOnline() const {
-			return (uint32_t)npcs.size();
+		size_t getNpcsOnline() const {
+			return npcs.size();
 		}
 		uint32_t getPlayersRecord() const {
 			return playersRecord;

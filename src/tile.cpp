@@ -860,11 +860,11 @@ Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint
 				Tile* downTile = g_game.getTile(dx, dy, dz);
 				if (downTile) {
 					if (downTile->floorChange(NORTH)) {
-						dy += 1;
+						++dy;
 					}
 
 					if (downTile->floorChange(SOUTH)) {
-						dy -= 1;
+						--dy;
 					}
 
 					if (downTile->floorChange(SOUTH_ALT)) {
@@ -872,7 +872,7 @@ Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint
 					}
 
 					if (downTile->floorChange(EAST)) {
-						dx -= 1;
+						--dx;
 					}
 
 					if (downTile->floorChange(EAST_ALT)) {
@@ -880,7 +880,7 @@ Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint
 					}
 
 					if (downTile->floorChange(WEST)) {
-						dx += 1;
+						++dx;
 					}
 
 					destTile = g_game.getTile(dx, dy, dz);
@@ -893,19 +893,19 @@ Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint
 		int32_t dz = getTilePosition().getZ() - 1;
 
 		if (floorChange(NORTH)) {
-			dy -= 1;
+			--dy;
 		}
 
 		if (floorChange(SOUTH)) {
-			dy += 1;
+			++dy;
 		}
 
 		if (floorChange(EAST)) {
-			dx += 1;
+			++dx;
 		}
 
 		if (floorChange(WEST)) {
-			dx -= 1;
+			--dx;
 		}
 
 		if (floorChange(SOUTH_ALT)) {
@@ -931,7 +931,6 @@ Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint
 			*destItem = destThing->getItem();
 		}
 	}
-
 	return destTile;
 }
 

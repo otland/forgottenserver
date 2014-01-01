@@ -90,13 +90,14 @@ class Raids
 
 	private:
 		Raids();
+
+		LuaScriptInterface m_scriptInterface;
+
 		std::list<Raid*> raidList;
-		bool loaded, started;
 		Raid* running;
 		uint64_t lastRaidEnd;
 		uint32_t checkRaidsEvent;
-
-		LuaScriptInterface m_scriptInterface;
+		bool loaded, started;
 };
 
 class Raid

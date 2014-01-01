@@ -106,9 +106,10 @@ class CombatSpell : public Event, public BaseSpell
 			return "onCastSpell";
 		}
 
+		Combat* combat;
+
 		bool needDirection;
 		bool needTarget;
-		Combat* combat;
 };
 
 class Spell : public BaseSpell
@@ -240,12 +241,13 @@ class InstantSpell : public TalkAction, public Spell
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
 
+		InstantSpellFunction* function;
+
 		bool needDirection;
 		bool hasParam;
 		bool hasPlayerNameParam;
 		bool checkLineOfSight;
 		bool casterTargetOrDirection;
-		InstantSpellFunction* function;
 };
 
 class ConjureSpell : public InstantSpell
@@ -333,10 +335,9 @@ class RuneSpell : public Action, public Spell
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
 
-		bool hasCharges;
-		uint32_t runeId;
-
 		RuneSpellFunction* function;
+		uint32_t runeId;
+		bool hasCharges;
 };
 
 #endif

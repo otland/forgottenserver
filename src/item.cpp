@@ -872,7 +872,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << "speed " << std::showpos << (int32_t)(it.abilities->speed / 2) << std::noshowpos;
+					s << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
 				}
 			}
 
@@ -975,7 +975,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "speed " << std::showpos << (int32_t)(it.abilities->speed / 2) << std::noshowpos;
+				s << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
 			}
 		}
 
@@ -983,7 +983,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << ')';
 		}
 	} else if (it.isContainer()) {
-		s << " (Vol:" << (int32_t)it.maxItems << ')';
+		s << " (Vol:" << it.maxItems << ')';
 	} else {
 		bool found = true;
 
@@ -1127,7 +1127,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 
 		if (it.wieldInfo & WIELDINFO_LEVEL) {
-			s << " of level " << (int32_t)it.minReqLevel << " or higher";
+			s << " of level " << it.minReqLevel << " or higher";
 		}
 
 		if (it.wieldInfo & WIELDINFO_MAGLV) {
@@ -1137,7 +1137,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << " of";
 			}
 
-			s << " magic level " << (int32_t)it.minReqMagicLevel << " or higher";
+			s << " magic level " << it.minReqMagicLevel << " or higher";
 		}
 
 		s << '.';

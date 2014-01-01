@@ -329,8 +329,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	player->currentOutfit = player->defaultOutfit;
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
-		int32_t skullSeconds = result->getDataInt("skulltime") - time(nullptr);
-
+		const int32_t skullSeconds = result->getDataInt("skulltime") - time(nullptr);
 		if (skullSeconds > 0) {
 			//ensure that we round up the number of ticks
 			player->skullTicks = (skullSeconds + 2) * 1000;
@@ -671,7 +670,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "UPDATE `players` SET ";
 	query << "`level` = " << player->level << ',';
 	query << "`group_id` = " << player->group->id << ',';
-	query << "`vocation` = " << (int32_t)player->getVocationId() << ',';
+	query << "`vocation` = " << player->getVocationId() << ',';
 	query << "`health` = " << player->health << ',';
 	query << "`healthmax` = " << player->healthMax << ',';
 	query << "`experience` = " << player->experience << ',';
@@ -679,7 +678,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`lookfeet` = " << (int32_t)player->defaultOutfit.lookFeet << ',';
 	query << "`lookhead` = " << (int32_t)player->defaultOutfit.lookHead << ',';
 	query << "`looklegs` = " << (int32_t)player->defaultOutfit.lookLegs << ',';
-	query << "`looktype` = " << (int32_t)player->defaultOutfit.lookType << ',';
+	query << "`looktype` = " << player->defaultOutfit.lookType << ',';
 	query << "`lookaddons` = " << (int32_t)player->defaultOutfit.lookAddons << ',';
 	query << "`maglevel` = " << player->magLevel << ',';
 	query << "`mana` = " << player->mana << ',';
