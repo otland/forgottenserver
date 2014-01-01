@@ -3306,6 +3306,10 @@ void Game::playerTurn(uint32_t playerId, Direction dir)
 		return;
 	}
 
+	if (!g_events->eventPlayerOnTurn(player, dir)) {
+		return;
+	}
+
 	player->resetIdleTime();
 	internalCreatureTurn(player, dir);
 }

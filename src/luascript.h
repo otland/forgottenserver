@@ -749,7 +749,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureIsMonster(lua_State* L);
 		static int32_t luaCreatureIsNpc(lua_State* L);
 		static int32_t luaCreatureIsItem(lua_State* L);
-		static int32_t luaCreatureIsGhost(lua_State* L);
+		static int32_t luaCreatureIsInGhostMode(lua_State* L);
 		static int32_t luaCreatureIsHealthHidden(lua_State* L);
 
 		static int32_t luaCreatureCanSee(lua_State* L);
@@ -939,7 +939,6 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetClient(lua_State* L);
 		static int32_t luaPlayerGetHouse(lua_State* L);
 
-		static int32_t luaPlayerIsInGhostMode(lua_State* L);
 		static int32_t luaPlayerSetGhostMode(lua_State* L);
 
 		// Monster

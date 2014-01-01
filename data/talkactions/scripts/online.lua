@@ -9,7 +9,7 @@ function onSay(cid, words, param)
 	local i = 0
 	local msg = ""
 	for k, tmpPlayer in ipairs(players) do
-		if hasAccess or not tmpPlayer:isGhost() then
+		if hasAccess or not tmpPlayer:isInGhostMode() then
 			if i > 0 then
 				msg = msg .. ", "
 			end

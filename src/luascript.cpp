@@ -1713,7 +1713,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "isMonster", LuaScriptInterface::luaCreatureIsMonster);
 	registerMethod("Creature", "isNpc", LuaScriptInterface::luaCreatureIsNpc);
 	registerMethod("Creature", "isItem", LuaScriptInterface::luaCreatureIsItem);
-	registerMethod("Creature", "isGhost", LuaScriptInterface::luaCreatureIsGhost);
+	registerMethod("Creature", "isInGhostMode", LuaScriptInterface::luaCreatureIsInGhostMode);
 	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
@@ -1904,7 +1904,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getClient", LuaScriptInterface::luaPlayerGetClient);
 	registerMethod("Player", "getHouse", LuaScriptInterface::luaPlayerGetHouse);
 
-	registerMethod("Player", "isInGhostMode", LuaScriptInterface::luaPlayerIsInGhostMode);
 	registerMethod("Player", "setGhostMode", LuaScriptInterface::luaPlayerSetGhostMode);
 
 	// Monster
@@ -7029,9 +7028,9 @@ int32_t LuaScriptInterface::luaCreatureIsItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaCreatureIsGhost(lua_State* L)
+int32_t LuaScriptInterface::luaCreatureIsInGhostMode(lua_State* L)
 {
-	// creature:isGhost()
+	// creature:isInGhostMode()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
 		pushBoolean(L, creature->isInGhostMode());
@@ -9324,18 +9323,6 @@ int32_t LuaScriptInterface::luaPlayerGetHouse(lua_State* L)
 		} else {
 			pushNil(L);
 		}
-	} else {
-		pushNil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaPlayerIsInGhostMode(lua_State* L)
-{
-	// player:isInGhostMode()
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushBoolean(L, player->isInGhostMode());
 	} else {
 		pushNil(L);
 	}
