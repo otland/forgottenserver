@@ -8802,27 +8802,27 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
-	// player:sendTextMessage(type, text[, position, value = 0, color = TEXTCOLOR_NONE])
+	// player:sendTextMessage(type, text[, position, primaryValue = 0, primaryColor = TEXTCOLOR_NONE[, secondaryValue = 0, secondaryColor = TEXTCOLOR_NONE]])
 	int32_t parameters = getStackTop(L);
 
-	Position position;
-	uint32_t value = 0;
-	TextColor_t color = TEXTCOLOR_NONE;
-	if (parameters >= 6) {
-		color = static_cast<TextColor_t>(getNumber<int64_t>(L, 6));
-		value = getNumber<uint32_t>(L, 5);
-		position = getPosition(L, 4);
+	TextMessage message;
+	if (parameters >= 8) {
+		message.secondary.color = static_cast<TextColor_t>(getNumber<int64_t>(L, 8));
+		message.secondary.value = getNumber<int32_t>(L, 7);
 	}
 
-	const std::string& text = getString(L, 3);
-	MessageClasses type = static_cast<MessageClasses>(getNumber<int64_t>(L, 2));
+	if (parameters >= 6) {
+		message.primary.color = static_cast<TextColor_t>(getNumber<int64_t>(L, 6));
+		message.primary.value = getNumber<int32_t>(L, 5);
+		message.position = getPosition(L, 4);
+	}
+
+	message.text = getString(L, 3);
+	message.type = static_cast<MessageClasses>(getNumber<int64_t>(L, 2));
+
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		if (parameters >= 6) {
-			player->sendTextMessage(type, text, &position, value, color);
-		} else {
-			player->sendTextMessage(type, text);
-		}
+		player->sendTextMessage(message);
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
