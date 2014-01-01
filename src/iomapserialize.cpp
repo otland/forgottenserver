@@ -79,6 +79,7 @@ bool IOMapSerialize::saveMap()
 		return false;
 	}
 
+	//clear old tile data
 	if (!db->executeQuery("DELETE FROM `tile_store`")) {
 		return false;
 	}
@@ -86,15 +87,14 @@ bool IOMapSerialize::saveMap()
 	DBInsert stmt;
 	stmt.setQuery("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
-	//clear old tile data
+	PropWriteStream stream;
 	for (const auto& it : Houses::getInstance().getHouses()) {
 		//save house items
 		House* house = it.second;
 		for (HouseTile* tile : house->getTiles()) {
-			PropWriteStream stream;
 			saveTile(stream, tile);
 
-			uint32_t attributesSize;
+			size_t attributesSize;
 			const char* attributes = stream.getStream(attributesSize);
 			if (attributesSize > 0) {
 				query << house->getId() << ',' << db->escapeBlob(attributes, attributesSize);
@@ -102,6 +102,8 @@ bool IOMapSerialize::saveMap()
 					return false;
 				}
 			}
+
+			stream.clear();
 		}
 	}
 

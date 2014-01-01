@@ -281,8 +281,8 @@ class PropWriteStream
 {
 	public:
 		PropWriteStream() {
-			buffer = (char*)calloc(1, 32 * sizeof(char));
 			buffer_size = 32;
+			buffer = (char*)malloc(buffer_size);
 			size = 0;
 		}
 
@@ -294,20 +294,13 @@ class PropWriteStream
 		PropWriteStream(const PropWriteStream&) = delete;
 		PropWriteStream& operator=(const PropWriteStream&) = delete;
 
-		const char* getStream(uint32_t& _size) const {
+		const char* getStream(size_t& _size) const {
 			_size = size;
 			return buffer;
 		}
 
-		//TODO: might need temp buffer and zero fill the memory chunk allocated by realloc
-		template <typename T>
-		inline void ADD_TYPE(T* add) {
-			if (!reserve(sizeof(T))) {
-				return;
-			}
-
-			memcpy(&buffer[size], (char*)add, sizeof(T));
-			size += sizeof(T);
+		inline void clear() {
+			size = 0;
 		}
 
 		template <typename T>
@@ -359,14 +352,14 @@ class PropWriteStream
 				return true;
 			}
 
-			buffer_size += ((length + 0x1F) & 0xFFFFFFE0);
+			buffer_size <<= 1;
 			buffer = (char*)realloc(buffer, buffer_size);
 			return buffer != nullptr;
 		}
 
 		char* buffer;
-		uint32_t buffer_size;
-		uint32_t size;
+		size_t buffer_size;
+		size_t size;
 };
 
 #endif

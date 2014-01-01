@@ -564,9 +564,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	return true;
 }
 
-bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert)
+bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream)
 {
-	std::ostringstream stream;
+	std::ostringstream ss;
 
 	typedef std::pair<Container*, int32_t> containerBlock;
 	std::queue<containerBlock> queue;
@@ -580,14 +580,14 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		Item* item = it.second;
 		++runningId;
 
-		uint32_t attributesSize = 0;
-
-		PropWriteStream propWriteStream;
+		propWriteStream.clear();
 		item->serializeAttr(propWriteStream);
+
+		size_t attributesSize;
 		const char* attributes = propWriteStream.getStream(attributesSize);
 
-		stream << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
-		if (!query_insert.addRow(stream)) {
+		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
+		if (!query_insert.addRow(ss)) {
 			return false;
 		}
 
@@ -610,13 +610,14 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 				queue.emplace(subContainer, runningId);
 			}
 
-			uint32_t attributesSize = 0;
-			PropWriteStream propWriteStream;
+			propWriteStream.clear();
 			item->serializeAttr(propWriteStream);
+
+			size_t attributesSize;
 			const char* attributes = propWriteStream.getStream(attributesSize);
 
-			stream << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
-			if (!query_insert.addRow(stream)) {
+			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
+			if (!query_insert.addRow(ss)) {
 				return false;
 			}
 		}
@@ -662,7 +663,7 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 	}
 
-	uint32_t conditionsSize = 0;
+	size_t conditionsSize;
 	const char* conditions = propWriteStream.getStream(conditionsSize);
 
 	//First, an UPDATE query to write the player itself
@@ -799,7 +800,7 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 	}
 
-	if (!saveItems(player, itemList, stmt)) {
+	if (!saveItems(player, itemList, stmt, propWriteStream)) {
 		return false;
 	}
 
@@ -822,7 +823,7 @@ bool IOLoginData::savePlayer(Player* player)
 			}
 		}
 
-		if (!saveItems(player, itemList, stmt)) {
+		if (!saveItems(player, itemList, stmt, propWriteStream)) {
 			return false;
 		}
 	}
@@ -841,13 +842,12 @@ bool IOLoginData::savePlayer(Player* player)
 		itemList.emplace_back(0, item);
 	}
 
-	if (!saveItems(player, itemList, stmt)) {
+	if (!saveItems(player, itemList, stmt, propWriteStream)) {
 		return false;
 	}
 
 	query.str("");
 	query << "DELETE FROM `player_storage` WHERE `player_id` = " << player->getGUID();
-
 	if (!db->executeQuery(query.str())) {
 		return false;
 	}

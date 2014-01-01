@@ -64,7 +64,7 @@ class IOLoginData
 		typedef std::map<int32_t , std::pair<Item*, int32_t> > ItemMap;
 
 		static void loadItems(ItemMap& itemMap, DBResult* result);
-		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert);
+		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& stream);
 };
 
 #endif
