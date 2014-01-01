@@ -381,14 +381,10 @@ uint32_t ConditionGeneric::getIcons() const
 }
 
 ConditionAttributes::ConditionAttributes(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId) :
-	ConditionGeneric(_id, _type, _ticks, _buff, _subId)
+ConditionGeneric(_id, _type, _ticks, _buff, _subId), skills(), skillsPercent(), stats(), statsPercent()
 {
 	currentSkill = 0;
 	currentStat = 0;
-	memset(skills, 0, sizeof(skills));
-	memset(skillsPercent, 0, sizeof(skillsPercent));
-	memset(stats, 0, sizeof(stats));
-	memset(statsPercent, 0, sizeof(statsPercent));
 }
 
 void ConditionAttributes::addCondition(Creature* creature, const Condition* addCondition)

@@ -56,13 +56,9 @@ enum ItemTypes_t {
 };
 
 struct Abilities {
-	Abilities() {
+	Abilities() : skills(), absorbPercent(), stats(), statsPercent() {
 		elementType = COMBAT_NONE;
 		elementDamage = 0;
-		memset(skills, 0, sizeof(skills));
-		memset(absorbPercent, 0, sizeof(absorbPercent));
-		memset(stats, 0 , sizeof(stats));
-		memset(statsPercent, 0, sizeof(statsPercent));
 
 		speed = 0;
 		manaShield = false;

@@ -9070,7 +9070,7 @@ int32_t LuaScriptInterface::luaPlayerAddPremiumDays(lua_State* L)
 	uint16_t days = getNumber<uint16_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		if (player->premiumDays != 0xFFFF) {
+		if (player->premiumDays != std::numeric_limits<uint16_t>::max()) {
 			int32_t addDays = std::min<int32_t>(0xFFFE - player->premiumDays, days);
 			if (addDays > 0) {
 				player->setPremiumDays(player->premiumDays + addDays);
@@ -9090,7 +9090,7 @@ int32_t LuaScriptInterface::luaPlayerRemovePremiumDays(lua_State* L)
 	uint16_t days = getNumber<uint16_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		if (player->premiumDays != 0xFFFF) {
+		if (player->premiumDays != std::numeric_limits<uint16_t>::max()) {
 			int32_t removeDays = std::min<int32_t>(player->premiumDays, days);
 			if (removeDays > 0) {
 				player->setPremiumDays(player->premiumDays - removeDays);

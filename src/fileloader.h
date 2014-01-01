@@ -281,10 +281,9 @@ class PropWriteStream
 {
 	public:
 		PropWriteStream() {
-			buffer = (char*)malloc(32 * sizeof(char));
+			buffer = (char*)calloc(1, 32 * sizeof(char));
 			buffer_size = 32;
 			size = 0;
-			memset(buffer, 0, 32 * sizeof(char));
 		}
 
 		~PropWriteStream() {
@@ -303,9 +302,8 @@ class PropWriteStream
 		//TODO: might need temp buffer and zero fill the memory chunk allocated by realloc
 		template <typename T>
 		inline void ADD_TYPE(T* add) {
-			if ((buffer_size - size) < sizeof(T)) {
-				buffer_size += ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
+			if (!reserve(sizeof(T))) {
+				return;
 			}
 
 			memcpy(&buffer[size], (char*)add, sizeof(T));
@@ -314,9 +312,8 @@ class PropWriteStream
 
 		template <typename T>
 		inline void ADD_VALUE(T add) {
-			if ((buffer_size - size) < sizeof(T)) {
-				buffer_size += ((sizeof(T) + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
+			if (!reserve(sizeof(T))) {
+				return;
 			}
 
 			memcpy(&buffer[size], &add, sizeof(T));
@@ -336,25 +333,20 @@ class PropWriteStream
 		}
 
 		inline void ADD_STRING(const std::string& add) {
-			uint16_t str_len = (uint16_t)add.size();
+			size_t str_len = add.size();
 			ADD_USHORT(str_len);
-
-			if ((buffer_size - size) < str_len) {
-				buffer_size += ((str_len + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
-			}
-
-			memcpy(&buffer[size], add.c_str(), str_len);
-			size += str_len;
+			ADD_STRING(add, str_len);
 		}
 
 		inline void ADD_LSTRING(const std::string& add) {
-			uint32_t str_len = (uint32_t)add.size();
+			size_t str_len = add.size();
 			ADD_ULONG(str_len);
+			ADD_STRING(add, str_len);
+		}
 
-			if ((buffer_size - size) < str_len) {
-				buffer_size += ((str_len + 0x1F) & 0xFFFFFFE0);
-				buffer = (char*)realloc(buffer, buffer_size);
+		inline void ADD_STRING(const std::string& add, size_t str_len) {
+			if (!reserve(str_len)) {
+				return;
 			}
 
 			memcpy(&buffer[size], add.c_str(), str_len);
@@ -362,6 +354,16 @@ class PropWriteStream
 		}
 
 	protected:
+		inline bool reserve(size_t length) {
+			if ((buffer_size - size) >= length) {
+				return true;
+			}
+
+			buffer_size += ((length + 0x1F) & 0xFFFFFFE0);
+			buffer = (char*)realloc(buffer, buffer_size);
+			return buffer != nullptr;
+		}
+
 		char* buffer;
 		uint32_t buffer_size;
 		uint32_t size;

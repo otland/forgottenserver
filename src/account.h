@@ -23,10 +23,12 @@
 #include "enums.h"
 
 struct Account {
-	uint32_t id, lastDay, premiumDays;
-	AccountType_t accountType;
-	std::string name;
 	std::list<std::string> charList;
+	std::string name;
+	time_t lastDay;
+	AccountType_t accountType;
+	uint32_t id;
+	uint16_t premiumDays;
 
 	Account() {
 		id = 0;

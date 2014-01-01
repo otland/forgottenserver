@@ -62,7 +62,7 @@ extern Events* g_events;
 
 Game::Game() :
 	wildcardTree(false),
-	offlineTrainingWindow(0xFFFFFFFF, "Choose a Skill", "Please choose a skill:")
+	offlineTrainingWindow(std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:")
 {
 	gameState = GAME_STATE_NORMAL;
 	worldType = WORLD_TYPE_PVP;
@@ -3242,7 +3242,7 @@ void Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMo
 
 void Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
 {
-	if (vip_name.size() > 32) {
+	if (vip_name.length() > 20) {
 		return;
 	}
 
@@ -4988,7 +4988,7 @@ void Game::updatePremium(Account& account)
 	bool save = false;
 	time_t timeNow = time(nullptr);
 
-	if (account.premiumDays != 0 && account.premiumDays != 0xFFFF) {
+	if (account.premiumDays != 0 && account.premiumDays != std::numeric_limits<uint16_t>::max()) {
 		if (account.lastDay == 0) {
 			account.lastDay = timeNow;
 			save = true;
@@ -5980,7 +5980,7 @@ void Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 	player->onModalWindowHandled(modalWindowId);
 
 	// offline training, hardcoded
-	if (modalWindowId == 0xFFFFFFFF) {
+	if (modalWindowId == std::numeric_limits<uint32_t>::max()) {
 		if (button == 1) {
 			if (choice == SKILL_SWORD || choice == SKILL_AXE || choice == SKILL_CLUB || choice == SKILL_DIST || choice == SKILL__MAGLEVEL) {
 				BedItem* bedItem = player->getBedItem();

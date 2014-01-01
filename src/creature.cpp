@@ -39,7 +39,7 @@ extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
 
 Creature::Creature() :
-	isInternalRemoved(false)
+	localMapCache(), isInternalRemoved(false)
 {
 	useCount = 0;
 
@@ -66,7 +66,6 @@ Creature::Creature() :
 	forceUpdateFollowPath = false;
 	isMapLoaded = false;
 	isUpdatingPath = false;
-	memset(localMapCache, 0, sizeof(localMapCache));
 
 	attackedCreature = nullptr;
 

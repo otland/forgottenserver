@@ -205,7 +205,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		player->premiumDays = result->getDataInt("premium_days");
 	} else {
-		player->premiumDays = 0xFFFF;
+		player->premiumDays = std::numeric_limits<uint16_t>::max();
 	}
 	db->freeResult(result);
 	return true;
@@ -244,7 +244,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult* result)
 	player->accountType = acc.accountType;
 
 	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-		player->premiumDays = 0xFFFF;
+		player->premiumDays = std::numeric_limits<uint16_t>::max();
 	} else {
 		player->premiumDays = acc.premiumDays;
 	}

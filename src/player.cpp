@@ -1497,7 +1497,7 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 	if (!modalWindows.empty()) {
 		// TODO: This shouldn't be hardcoded
 		for (uint32_t modalWindowId : modalWindows) {
-			if (modalWindowId == 0xFFFFFFFF) {
+			if (modalWindowId == std::numeric_limits<uint32_t>::max()) {
 				sendTextMessage(MSG_EVENT_ADVANCE, "Offline training aborted.");
 				break;
 			}

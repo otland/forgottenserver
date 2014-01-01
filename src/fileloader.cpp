@@ -21,7 +21,7 @@
 
 #include "fileloader.h"
 
-FileLoader::FileLoader()
+FileLoader::FileLoader() : m_cached_data()
 {
 	m_file = nullptr;
 	m_root = nullptr;
@@ -34,7 +34,6 @@ FileLoader::FileLoader()
 	m_cache_size = 0;
 	m_cache_index = NO_VALID_CACHE;
 	m_cache_offset = NO_VALID_CACHE;
-	memset(m_cached_data, 0, sizeof(m_cached_data));
 }
 
 FileLoader::~FileLoader()
