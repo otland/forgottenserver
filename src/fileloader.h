@@ -283,6 +283,10 @@ class PropWriteStream
 		PropWriteStream() {
 			buffer_size = 32;
 			buffer = (char*)malloc(buffer_size);
+			if (!buffer) {
+				throw std::bad_alloc();
+			}
+
 			size = 0;
 		}
 
@@ -305,10 +309,7 @@ class PropWriteStream
 
 		template <typename T>
 		inline void ADD_VALUE(T add) {
-			if (!reserve(sizeof(T))) {
-				return;
-			}
-
+			reserve(sizeof(T));
 			memcpy(&buffer[size], &add, sizeof(T));
 			size += sizeof(T);
 		}
@@ -338,23 +339,24 @@ class PropWriteStream
 		}
 
 		inline void ADD_STRING(const std::string& add, size_t str_len) {
-			if (!reserve(str_len)) {
-				return;
-			}
-
+			reserve(str_len);
 			memcpy(&buffer[size], add.c_str(), str_len);
 			size += str_len;
 		}
 
 	protected:
-		inline bool reserve(size_t length) {
+		inline void reserve(size_t length) {
 			if ((buffer_size - size) >= length) {
-				return true;
+				return;
 			}
 
 			buffer_size <<= 1;
-			buffer = (char*)realloc(buffer, buffer_size);
-			return buffer != nullptr;
+			void* newBuffer = realloc(buffer, buffer_size);
+			if (!newBuffer) {
+				throw std::bad_alloc();
+			}
+
+			buffer = (char*)newBuffer;
 		}
 
 		char* buffer;
