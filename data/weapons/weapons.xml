@@ -205,6 +205,30 @@
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="18450" level="62" unproperly="1" function="default"/> <!-- crystalline sword -->
+	<melee id="22398" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22399" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22400" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22401" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22402" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22403" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 
 	<!-- Axes -->
 	<melee id="2378" unproperly="1" function="default">
@@ -330,6 +354,30 @@
 	<melee id="15451" level="40" unproperly="1" function="default"/>
 	<melee id="15454" level="50" unproperly="1" function="default"/>
 	<melee id="15492" level="70" unproperly="1" function="default"/>
+	<melee id="22404" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22405" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22406" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22407" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22408" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22409" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 
 	<!--Clubs -->
 	<!-- <melee id="2423" level="20" unproperly="1" function="default"/> -->
@@ -433,6 +481,30 @@
 	<melee id="15400" level="38" unproperly="1" function="default"/>
 	<melee id="15414" level="90" unproperly="1" function="default"/>
 	<melee id="15647" level="48" unproperly="1" function="default"/>
+	<melee id="22410" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22411" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22412" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22413" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22414" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22415" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 
 	<!-- Bows and Crossbows -->
 	<distance id="5803" level="75" unproperly="1" function="default"> <!-- Arbalest -->
@@ -500,6 +572,30 @@
 		<vocation name="Royal Paladin" showInDescription="0"/>
 	</distance>
 	<distance id="18454" level="105" unproperly="1" function="default"> <!-- Mycological Bow -->
+		<vocation name="Paladin"/>
+		<vocation name="Royal Paladin" showInDescription="0"/>
+	</distance>
+	<distance id="22416" level="75" unproperly="1" function="default"> <!-- Crude Umbral Bow -->
+		<vocation name="Paladin"/>
+		<vocation name="Royal Paladin" showInDescription="0"/>
+	</distance>
+	<distance id="22417" level="150" unproperly="1" function="default"> <!-- Umbral Bow -->
+		<vocation name="Paladin"/>
+		<vocation name="Royal Paladin" showInDescription="0"/>
+	</distance>
+	<distance id="22418" level="250" unproperly="1" function="default"> <!-- Umbral Master Bow -->
+		<vocation name="Paladin"/>
+		<vocation name="Royal Paladin" showInDescription="0"/>
+	</distance>
+	<distance id="22419" level="75" unproperly="1" function="default"> <!-- Crude Umbral Crossbow -->
+		<vocation name="Paladin"/>
+		<vocation name="Royal Paladin" showInDescription="0"/>
+	</distance>
+	<distance id="22420" level="150" unproperly="1" function="default"> <!-- Umbral Crossbow -->
+		<vocation name="Paladin"/>
+		<vocation name="Royal Paladin" showInDescription="0"/>
+	</distance>
+	<distance id="22421" level="250" unproperly="1" function="default"> <!-- Umbral Master Crossbow -->
 		<vocation name="Paladin"/>
 		<vocation name="Royal Paladin" showInDescription="0"/>
 	</distance>

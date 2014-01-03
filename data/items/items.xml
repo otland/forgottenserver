@@ -29288,6 +29288,221 @@
 		<attribute key="decayTo" value="481" />
 		<attribute key="duration" value="300" />
 	</item>
+	
+	<item id="22398" article="a" name="crude umbral blade">
+		<attribute key="weight" value="6300" />
+		<attribute key="defense" value="26" />
+		<attribute key="attack" value="48" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="extradef" value="1" />
+	</item>
+	<item id="22399" article="a" name="umbral blade">
+		<attribute key="weight" value="5900" />
+		<attribute key="defense" value="29" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="extradef" value="2" />
+	</item>
+	<item id="22400" article="a" name="umbral masterblade">
+		<attribute key="weight" value="5500" />
+		<attribute key="defense" value="31" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="extradef" value="3" />
+		<attribute key="skillSword" value="1" />
+	</item>
+	<item id="22401" article="a" name="crude umbral slayer">
+		<attribute key="weight" value="10000" />
+		<attribute key="defense" value="29" />
+		<attribute key="attack" value="51" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22402" article="a" name="umbral slayer">
+		<attribute key="weight" value="9500" />
+		<attribute key="defense" value="31" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22403" article="a" name="umbral master slayer">
+		<attribute key="weight" value="9000" />
+		<attribute key="defense" value="35" />
+		<attribute key="attack" value="54" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="skillSword" value="3" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22404" article="a" name="crude umbral axe">
+		<attribute key="weight" value="9000" />
+		<attribute key="defense" value="24" />
+		<attribute key="attack" value="49" />
+		<attribute key="weaponType" value="axe" />
+		<attribute key="extradef" value="1" />
+	</item>
+	<item id="22405" article="a" name="umbral axe">
+		<attribute key="weight" value="8500" />
+		<attribute key="defense" value="27" />
+		<attribute key="attack" value="51" />
+		<attribute key="weaponType" value="axe" />
+		<attribute key="extradef" value="2" />
+	</item>
+	<item id="22406" article="a" name="umbral master axe">
+		<attribute key="weight" value="8000" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="53" />
+		<attribute key="weaponType" value="axe" />
+		<attribute key="extradef" value="3" />
+		<attribute key="skillAxe" value="1" />
+	</item>
+	<item id="22407" article="a" name="crude umbral chopper">
+		<attribute key="weight" value="12000" />
+		<attribute key="defense" value="27" />
+		<attribute key="attack" value="51" />
+		<attribute key="weaponType" value="axe" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22408" article="a" name="umbral chopper">
+		<attribute key="weight" value="11500" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="axe" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22409" article="a" name="umbral master chopper">
+		<attribute key="weight" value="11000" />
+		<attribute key="defense" value="34" />
+		<attribute key="attack" value="54" />
+		<attribute key="weaponType" value="axe" />
+		<attribute key="skillAxe" value="3" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22410" article="a" name="crude umbral mace">
+		<attribute key="weight" value="9000" />
+		<attribute key="defense" value="22" />
+		<attribute key="attack" value="48" />
+		<attribute key="weaponType" value="club" />
+		<attribute key="extradef" value="1" />
+	</item>
+	<item id="22411" article="a" name="umbral mace">
+		<attribute key="weight" value="8500" />
+		<attribute key="defense" value="26" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="club" />
+		<attribute key="extradef" value="2" />
+	</item>
+	<item id="22412" article="a" name="umbral master mace">
+		<attribute key="weight" value="8000" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="club" />
+		<attribute key="extradef" value="3" />
+		<attribute key="skillClub" value="1" />
+	</item>
+	<item id="22413" article="a" name="crude umbral hammer">
+		<attribute key="weight" value="17000" />
+		<attribute key="defense" value="27" />
+		<attribute key="attack" value="51" />
+		<attribute key="weaponType" value="club" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22414" article="a" name="umbral hammer">
+		<attribute key="weight" value="16500" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="53" />
+		<attribute key="weaponType" value="club" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22415" article="a" name="umbral master hammer">
+		<attribute key="weight" value="16000" />
+		<attribute key="defense" value="34" />
+		<attribute key="attack" value="55" />
+		<attribute key="weaponType" value="club" />
+		<attribute key="skillClub" value="3" />
+		<attribute key="slotType" value="two-handed" />
+	</item>
+	<item id="22416" article="a" name="crude umbral bow">
+		<attribute key="weight" value="5000" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="range" value="7" />
+		<attribute key="attack" value="2" />
+		<attribute key="hitChance" value="5" />
+	</item>
+	<item id="22417" article="a" name="umbral bow">
+		<attribute key="weight" value="4500" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="range" value="7" />
+		<attribute key="attack" value="4" />
+		<attribute key="hitChance" value="5" />
+	</item>
+	<item id="22418" article="a" name="umbral master bow">
+		<attribute key="weight" value="4000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="range" value="7" />
+		<attribute key="attack" value="6" />
+		<attribute key="hitChance" value="5" />
+	</item>
+	<item id="22419" article="a" name="crude umbral crossbow">
+		<attribute key="weight" value="13000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="range" value="5" />
+		<attribute key="hitChance" value="3" />
+		<attribute key="attack" value="1" />
+	</item>
+	<item id="22420" article="a" name="umbral crossbow">
+		<attribute key="weight" value="12500" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="range" value="5" />
+		<attribute key="hitChance" value="6" />
+		<attribute key="attack" value="5" />
+	</item>
+	<item id="22421" article="a" name="umbral master crossbow">
+		<attribute key="weight" value="12000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="range" value="5" />
+		<attribute key="hitChance" value="9" />
+		<attribute key="attack" value="4" />
+	</item>
+	<item id="22422" article="a" name="crude umbral spellbook">
+		<attribute key="weight" value="4000" />
+		<attribute key="magiclevelpoints" value="1" />
+		<attribute key="absorbPercentEarth" value="2" />
+		<attribute key="absorbPercentFire" value="2" />
+		<attribute key="absorbPercentIce" value="2" />
+		<attribute key="absorbPercentEnergy" value="2" />
+		<attribute key="defense" value="14" />
+		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="22423" article="a" name="umbral spellbook">
+		<attribute key="weight" value="3500" />
+		<attribute key="magiclevelpoints" value="2" />
+		<attribute key="absorbPercentEarth" value="3" />
+		<attribute key="absorbPercentFire" value="3" />
+		<attribute key="absorbPercentIce" value="3" />
+		<attribute key="absorbPercentEnergy" value="3" />
+		<attribute key="defense" value="16" />
+		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="22424" article="a" name="umbral master spellbook">
+		<attribute key="weight" value="3000" />
+		<attribute key="magiclevelpoints" value="4" />
+		<attribute key="absorbPercentEarth" value="5" />
+		<attribute key="absorbPercentFire" value="5" />
+		<attribute key="absorbPercentIce" value="5" />
+		<attribute key="absorbPercentEnergy" value="5" />
+		<attribute key="defense" value="20" />
+		<attribute key="weaponType" value="shield" />
+	</item>
 
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
