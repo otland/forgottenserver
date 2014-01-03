@@ -30,7 +30,7 @@ struct NodeStruct {
 			next = child = 0;
 		}
 
-		virtual ~NodeStruct() {}
+		~NodeStruct() {}
 
 		uint32_t start;
 		uint32_t propsSize;
@@ -96,7 +96,7 @@ class FileLoader
 {
 	public:
 		FileLoader();
-		virtual ~FileLoader();
+		~FileLoader();
 
 		bool openFile(const char* filename, const char* identifier, bool write, bool caching = false);
 		const uint8_t* getProps(const NODE, uint32_t& size);
@@ -215,10 +215,6 @@ class PropStream
 			return true;
 		}
 
-		inline bool GET_TIME(time_t& ret) {
-			return GET_VALUE(ret);
-		}
-
 		inline bool GET_ULONG(uint32_t& ret) {
 			return GET_VALUE(ret);
 		}
@@ -237,10 +233,6 @@ class PropStream
 				return false;
 			}
 
-			return GET_STRING(ret, str_len);
-		}
-
-		inline bool GET_STRING(std::string& ret, size_t str_len) {
 			if (size() < str_len) {
 				return false;
 			}
@@ -252,15 +244,6 @@ class PropStream
 			delete[] str;
 			p += str_len;
 			return true;
-		}
-
-		inline bool GET_LSTRING(std::string& ret) {
-			uint32_t str_len;
-			if (!GET_ULONG(str_len)) {
-				return false;
-			}
-
-			return GET_STRING(ret, str_len);
 		}
 
 		inline bool SKIP_N(uint32_t n) {
@@ -329,16 +312,6 @@ class PropWriteStream
 		inline void ADD_STRING(const std::string& add) {
 			size_t str_len = add.size();
 			ADD_USHORT(str_len);
-			ADD_STRING(add, str_len);
-		}
-
-		inline void ADD_LSTRING(const std::string& add) {
-			size_t str_len = add.size();
-			ADD_ULONG(str_len);
-			ADD_STRING(add, str_len);
-		}
-
-		inline void ADD_STRING(const std::string& add, size_t str_len) {
 			reserve(str_len);
 			memcpy(&buffer[size], add.c_str(), str_len);
 			size += str_len;

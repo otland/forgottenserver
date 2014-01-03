@@ -32,7 +32,7 @@ class Party
 {
 	public:
 		Party(Player* _leader);
-		virtual ~Party();
+		~Party();
 
 		Player* getLeader() const {
 			return leader;
