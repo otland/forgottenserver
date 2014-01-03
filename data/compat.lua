@@ -26,6 +26,7 @@ end
 function isCreature(cid) return Creature(cid) ~= nil end
 function isPlayer(cid) return Player(cid) ~= nil end
 function isMonster(cid) return Monster(cid) ~= nil end
+function isSummon(cid) return Creature(cid):getMaster() ~= nil end
 function isNpc(cid) return Npc(cid) ~= nil end
 function isItem(uid) return Item(uid) ~= nil end
 function isContainer(uid) return Container(uid) ~= nil end
