@@ -4,6 +4,5 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		doSendMagicEffect(fromPosition, CONST_ME_CRAPS)
 	end
 	doTransformItem(item.uid, value)
-	doCreatureSay(cid, getCreatureName(cid) .. ' rolled a ' .. value - 5791 .. '.', TALKTYPE_ORANGE_1)
-	return TRUE
+	return doCreatureSay(cid, getCreatureName(cid) .. ' rolled a ' .. value - 5791 .. '.', TALKTYPE_ORANGE_1, true,true, getThingPos(item.uid))
 end
