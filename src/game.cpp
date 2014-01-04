@@ -3769,7 +3769,7 @@ void Game::checkCreatures(size_t index)
 {
 	g_scheduler->addEvent(createSchedulerTask(EVENT_CHECK_CREATURE_INTERVAL, std::bind(&Game::checkCreatures, this, (index + 1) % EVENT_CREATURECOUNT)));
 	CreatureVector& checkCreatureVector = checkCreatureVectors[index];
-	for (size_t i = 0, size = checkCreatureVector.size(); i < size;) {
+	for (size_t i = 0; i < checkCreatureVector.size();) {
 		Creature* creature = checkCreatureVector[i];
 		if (creature->creatureCheck) {
 			if (creature->getHealth() > 0) {
@@ -3782,9 +3782,9 @@ void Game::checkCreatures(size_t index)
 			++i;
 		} else {
 			creature->inCheckCreaturesVector = false;
-			std::swap(checkCreatureVector[i], checkCreatureVector[--size]);
-			checkCreatureVector.pop_back();
 			ReleaseCreature(creature);
+			checkCreatureVector[i] = checkCreatureVector.back();
+			checkCreatureVector.pop_back();
 		}
 	}
 
