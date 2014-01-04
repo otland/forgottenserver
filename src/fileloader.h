@@ -318,12 +318,15 @@ class PropWriteStream
 		}
 
 	protected:
-		inline void reserve(size_t length) {
+		void reserve(size_t length) {
 			if ((buffer_size - size) >= length) {
 				return;
 			}
 
-			buffer_size <<= 1;
+			do {
+				buffer_size <<= 1;
+			} while ((buffer_size - size) < length);
+
 			void* newBuffer = realloc(buffer, buffer_size);
 			if (!newBuffer) {
 				throw std::bad_alloc();
