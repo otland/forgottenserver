@@ -20160,6 +20160,7 @@
 	<item id="11700" article="a" name="stone wall" />
 	<item id="11702" article="a" name="stone wall" />
 	<item fromid="11729" toid="11752" name="ground" />
+	<item id="11753" article="a" name="large black crystal" />
 	<item id="11754" article="a" name="ferumbras doll">
 		<attribute key="description" value="It was awarded by Tibiopedia.pl." />
 		<attribute key="weight" value="1700" />
@@ -20239,7 +20240,7 @@
 	<item fromid="12010" toid="12011" article="a" name="torch" />
 	<item id="12012" article="a" name="table" />
 	<item id="12013" article="a" name="pillar" />
-	<item fromid="12014" toid="12017" article="a" name="torch" />
+	<item fromid="12014" toid="12017" article="a" name="mystic floor lamp" />
 	<item id="12024" name="timbers" />
 	<item fromid="12039" toid="12040" article="a" name="well" />
 	<item fromid="12042" toid="12043" article="a" name="dragon fountain" />
