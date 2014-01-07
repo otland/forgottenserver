@@ -1120,13 +1120,13 @@ void QTreeLeafNode::removeCreature(Creature* c)
 {
 	CreatureVector::iterator iter = std::find(creature_list.begin(), creature_list.end(), c);
 	assert(iter != creature_list.end());
-	std::swap(*iter, creature_list.back());
+	*iter = creature_list.back();
 	creature_list.pop_back();
 
 	if (c->getPlayer()) {
 		iter = std::find(player_list.begin(), player_list.end(), c);
 		assert(iter != player_list.end());
-		std::swap(*iter, player_list.back());
+		*iter = player_list.back();
 		player_list.pop_back();
 	}
 }

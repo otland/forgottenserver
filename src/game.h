@@ -554,7 +554,7 @@ class Game
 		std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
 		std::list<Item*> toDecayItems;
 
-		std::vector<Creature*> checkCreatureVectors[EVENT_CREATURECOUNT];
+		std::list<Creature*> checkCreatureLists[EVENT_CREATURECOUNT];
 		std::vector<Creature*> ToReleaseCreatures;
 		std::vector<Item*> ToReleaseItems;
 		std::vector<char> commandTags;
