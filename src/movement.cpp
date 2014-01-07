@@ -138,8 +138,8 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 			it.vocationString = moveEvent->getVocationString();
 		}
 	} else if ((attr = node.attribute("fromid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		int32_t endId = pugi::cast<int32_t>(node.attribute("toid").value());
+		uint32_t id = pugi::cast<uint32_t>(attr.value());
+		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toid").value());
 
 		addEvent(moveEvent, id, m_itemIdMap);
 
@@ -167,8 +167,8 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 	} else if ((attr = node.attribute("uniqueid"))) {
 		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), m_uniqueIdMap);
 	} else if ((attr = node.attribute("fromuid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		int32_t endId = pugi::cast<int32_t>(node.attribute("touid").value());
+		uint32_t id = pugi::cast<uint32_t>(attr.value());
+		uint32_t endId = pugi::cast<uint32_t>(node.attribute("touid").value());
 		addEvent(moveEvent, id, m_uniqueIdMap);
 		while (++id <= endId) {
 			addEvent(moveEvent, id, m_uniqueIdMap);
@@ -176,8 +176,8 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 	} else if ((attr = node.attribute("actionid"))) {
 		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), m_actionIdMap);
 	} else if ((attr = node.attribute("fromaid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		int32_t endId = pugi::cast<int32_t>(node.attribute("toaid").value());
+		uint32_t id = pugi::cast<uint32_t>(attr.value());
+		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toaid").value());
 		addEvent(moveEvent, id, m_actionIdMap);
 		while (++id <= endId) {
 			addEvent(moveEvent, id, m_actionIdMap);
@@ -513,7 +513,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 		pugi::xml_attribute levelAttribute = node.attribute("level");
 		if (levelAttribute) {
-			reqLevel = pugi::cast<int32_t>(levelAttribute.value());
+			reqLevel = pugi::cast<uint32_t>(levelAttribute.value());
 			if (reqLevel > 0) {
 				wieldInfo |= WIELDINFO_LEVEL;
 			}
@@ -521,7 +521,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 		pugi::xml_attribute magLevelAttribute = node.attribute("maglevel");
 		if (magLevelAttribute) {
-			reqMagLevel = pugi::cast<int32_t>(magLevelAttribute.value());
+			reqMagLevel = pugi::cast<uint32_t>(magLevelAttribute.value());
 			if (reqMagLevel > 0) {
 				wieldInfo |= WIELDINFO_MAGLV;
 			}

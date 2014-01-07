@@ -617,7 +617,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if ((int32_t)player->getLevel() < level) {
+	if (player->getLevel() < level) {
 		player->sendCancelMessage(RET_NOTENOUGHLEVEL);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		return false;

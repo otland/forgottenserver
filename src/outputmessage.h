@@ -94,7 +94,7 @@ class OutputMessage : public NetworkMessage
 	protected:
 		template <typename T>
 		inline void add_header(T add) {
-			if ((int32_t)m_outputBufferStart - (int32_t)sizeof(T) < 0) {
+			if (sizeof(T) > m_outputBufferStart) {
 				std::cout << "Error: [OutputMessage::add_header] m_outputBufferStart(" << m_outputBufferStart <<
 				          ") < " << sizeof(T) << std::endl;
 				return;

@@ -1151,7 +1151,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 
 	if ((node = monsterNode.child("summons"))) {
 		if ((attr = node.attribute("maxSummons"))) {
-			mType->maxSummons = std::min<int32_t>(pugi::cast<int32_t>(attr.value()), 100);
+			mType->maxSummons = std::min<uint32_t>(pugi::cast<uint32_t>(attr.value()), 100);
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Missing summons maxSummons. " << file << std::endl;
 		}

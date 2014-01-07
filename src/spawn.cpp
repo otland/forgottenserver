@@ -325,7 +325,7 @@ bool Spawn::addMonster(const std::string& _name, const Position& _pos, Direction
 	sb.interval = _interval;
 	sb.lastSpawn = 0;
 
-	uint32_t spawnId = (int32_t)spawnMap.size() + 1;
+	uint32_t spawnId = spawnMap.size() + 1;
 	spawnMap[spawnId] = sb;
 	return true;
 }

@@ -1993,7 +1993,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 				ss << ", ";
 			}
 
-			ss << "speed " << std::showpos << (int32_t)(it.abilities->speed / 2) << std::noshowpos;
+			ss << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
 		}
 
 		msg.AddString(ss.str());

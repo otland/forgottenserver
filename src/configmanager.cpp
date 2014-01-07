@@ -198,7 +198,7 @@ int32_t ConfigManager::getGlobalNumber(lua_State* _L, const std::string& _identi
 		return _default;
 	}
 
-	int32_t val = (int32_t)lua_tonumber(_L, -1);
+	int32_t val = lua_tonumber(_L, -1);
 	lua_pop(_L, 1);
 	return val;
 }
