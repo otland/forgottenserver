@@ -9351,7 +9351,7 @@ int32_t LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
 				if (enabled) {
-					tmpPlayer->sendCreatureDisappear(player, tile->getClientIndexOfThing(tmpPlayer, player));
+					tmpPlayer->sendRemoveTileThing(position, tile->getClientIndexOfThing(tmpPlayer, player));
 				} else {
 					tmpPlayer->sendCreatureAppear(player, position, true);
 				}

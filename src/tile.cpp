@@ -499,7 +499,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& list, const std::vector<uint32_t
 	size_t i = 0;
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendRemoveTileItem(cylinderMapPos, oldStackPosVector[i++]);
+			tmpPlayer->sendRemoveTileThing(cylinderMapPos, oldStackPosVector[i++]);
 		}
 	}
 
@@ -843,9 +843,9 @@ Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint
 	*destItem = nullptr;
 
 	if (floorChangeDown()) {
-		int32_t dx = getTilePosition().x;
-		int32_t dy = getTilePosition().y;
-		int32_t dz = getTilePosition().z + 1;
+		int32_t dx = tilePos.x;
+		int32_t dy = tilePos.y;
+		int32_t dz = tilePos.z + 1;
 
 		Tile* southDownTile = g_game.getTile(dx, dy - 1, dz);
 		if (southDownTile && southDownTile->floorChange(SOUTH_ALT)) {
@@ -888,9 +888,9 @@ Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint
 			}
 		}
 	} else if (floorChange()) {
-		int32_t dx = getTilePosition().getX();
-		int32_t dy = getTilePosition().getY();
-		int32_t dz = getTilePosition().getZ() - 1;
+		int32_t dx = tilePos.x;
+		int32_t dy = tilePos.y;
+		int32_t dz = tilePos.getZ() - 1;
 
 		if (floorChange(NORTH)) {
 			--dy;

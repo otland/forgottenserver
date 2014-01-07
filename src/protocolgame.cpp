@@ -2286,14 +2286,14 @@ void ProtocolGame::sendUpdateTileItem(const Position& pos, uint32_t stackpos, co
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendRemoveTileItem(const Position& pos, uint32_t stackpos)
+void ProtocolGame::sendRemoveTileThing(const Position& pos, uint32_t stackpos)
 {
 	if (!canSee(pos)) {
 		return;
 	}
 
 	NetworkMessage msg;
-	RemoveTileItem(msg, pos, stackpos);
+	RemoveTileThing(msg, pos, stackpos);
 	writeToOutputBuffer(msg);
 }
 
@@ -2434,30 +2434,19 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	player->sendIcons();
 }
 
-void ProtocolGame::sendRemoveCreature(const Position& pos, uint32_t stackpos)
-{
-	if (!canSee(pos)) {
-		return;
-	}
-
-	NetworkMessage msg;
-	RemoveTileItem(msg, pos, stackpos);
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& newPos, uint32_t newStackPos, const Position& oldPos, uint32_t oldStackPos, bool teleport)
 {
 	if (creature == player) {
 		if (teleport || oldStackPos >= 10) {
 			NetworkMessage msg;
-			RemoveTileItem(msg, oldPos, oldStackPos);
+			RemoveTileThing(msg, oldPos, oldStackPos);
 			writeToOutputBuffer(msg);
 			sendMapDescription(newPos);
 		} else {
 			NetworkMessage msg;
 
 			if (oldPos.z == 7 && newPos.z >= 8) {
-				RemoveTileItem(msg, oldPos, oldStackPos);
+				RemoveTileThing(msg, oldPos, oldStackPos);
 			} else {
 				msg.AddByte(0x6D);
 				msg.AddPosition(oldPos);
@@ -2491,7 +2480,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 		}
 	} else if (canSee(oldPos) && canSee(creature->getPosition())) {
 		if (teleport || (oldPos.z == 7 && newPos.z >= 8) || oldStackPos >= 10) {
-			sendRemoveCreature(oldPos, oldStackPos);
+			sendRemoveTileThing(oldPos, oldStackPos);
 			sendAddCreature(creature, newPos, newStackPos, false);
 		} else {
 			NetworkMessage msg;
@@ -2502,7 +2491,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 			writeToOutputBuffer(msg);
 		}
 	} else if (canSee(oldPos)) {
-		sendRemoveCreature(oldPos, oldStackPos);
+		sendRemoveTileThing(oldPos, oldStackPos);
 	} else if (canSee(creature->getPosition())) {
 		sendAddCreature(creature, newPos, newStackPos, false);
 	}
@@ -3110,7 +3099,7 @@ void ProtocolGame::UpdateTileItem(NetworkMessage& msg, const Position& pos, uint
 	msg.AddItem(item);
 }
 
-void ProtocolGame::RemoveTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos)
+void ProtocolGame::RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos)
 {
 	if (stackpos >= 10) {
 		return;

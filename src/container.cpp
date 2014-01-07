@@ -650,9 +650,8 @@ int32_t Container::__getIndexOfThing(const Thing* thing) const
 	for (Item* item : itemlist) {
 		if (item == thing) {
 			return index;
-		} else {
-			++index;
 		}
+		++index;
 	}
 	return -1;
 }

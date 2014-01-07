@@ -30,7 +30,6 @@ FileLoader::FileLoader() : m_cached_data()
 	m_lastError = ERROR_NONE;
 
 	//cache
-	m_use_cache = false;
 	m_cache_size = 0;
 	m_cache_index = NO_VALID_CACHE;
 	m_cache_offset = NO_VALID_CACHE;
@@ -51,20 +50,8 @@ FileLoader::~FileLoader()
 	}
 }
 
-bool FileLoader::openFile(const char* filename, const char* accept_identifier, bool write, bool caching /*= false*/)
+bool FileLoader::openFile(const char* filename, const char* accept_identifier)
 {
-	if (write) {
-		m_file = fopen(filename, "wb");
-		if (!m_file) {
-			m_lastError = ERROR_CAN_NOT_CREATE;
-			return false;
-		}
-
-		uint32_t version = 0;
-		writeData(&version, sizeof(version), false);
-		return true;
-	}
-
 	m_file = fopen(filename, "rb");
 	if (!m_file) {
 		m_lastError = ERROR_CAN_NOT_OPEN;
@@ -87,12 +74,9 @@ bool FileLoader::openFile(const char* filename, const char* accept_identifier, b
 		return false;
 	}
 
-	if (caching) {
-		m_use_cache = true;
-		fseek(m_file, 0, SEEK_END);
-		int32_t file_size = ftell(m_file);
-		m_cache_size = std::min<uint32_t>(32768, std::max<uint32_t>(file_size / 20, 8192)) & ~0x1FFF;
-	}
+	fseek(m_file, 0, SEEK_END);
+	int32_t file_size = ftell(m_file);
+	m_cache_size = std::min<uint32_t>(32768, std::max<uint32_t>(file_size / 20, 8192)) & ~0x1FFF;
 
 	if (!safeSeek(4)) {
 		m_lastError = ERROR_INVALID_FORMAT;
@@ -214,7 +198,7 @@ bool FileLoader::parseNode(NODE node)
 	return false;
 }
 
-const uint8_t* FileLoader::getProps(const NODE node, uint32_t& size)
+const uint8_t* FileLoader::getProps(const NODE node, size_t& size)
 {
 	if (node) {
 		if (node->propsSize >= m_buffer_size) {
@@ -230,7 +214,7 @@ const uint8_t* FileLoader::getProps(const NODE node, uint32_t& size)
 		//get buffer
 		if (readBytes(m_buffer, node->propsSize, node->start + 2)) {
 			//unscape buffer
-			uint32_t j = 0;
+			size_t j = 0;
 			bool escaped = false;
 
 			for (uint32_t i = 0; i < node->propsSize; ++i, ++j) {
@@ -256,7 +240,7 @@ const uint8_t* FileLoader::getProps(const NODE node, uint32_t& size)
 
 bool FileLoader::getProps(const NODE node, PropStream& props)
 {
-	uint32_t size;
+	size_t size;
 	if (const uint8_t* a = getProps(node, size)) {
 		props.init((char*)a, size);
 		return true;
@@ -296,88 +280,35 @@ NODE FileLoader::getNextNode(const NODE prev, uint32_t& type)
 
 inline bool FileLoader::readByte(int32_t& value)
 {
-	if (m_use_cache) {
-		if (m_cache_index == NO_VALID_CACHE) {
-			m_lastError = ERROR_CACHE_ERROR;
+	if (m_cache_index == NO_VALID_CACHE) {
+		m_lastError = ERROR_CACHE_ERROR;
+		return false;
+	}
+
+	if (m_cache_offset >= m_cached_data[m_cache_index].size) {
+		int32_t pos = m_cache_offset + m_cached_data[m_cache_index].base;
+		int32_t tmp = getCacheBlock(pos);
+		if (tmp < 0) {
 			return false;
 		}
 
+		m_cache_index = tmp;
+		m_cache_offset = pos - m_cached_data[m_cache_index].base;
 		if (m_cache_offset >= m_cached_data[m_cache_index].size) {
-			int32_t pos = m_cache_offset + m_cached_data[m_cache_index].base;
-			int32_t tmp = getCacheBlock(pos);
-			if (tmp < 0) {
-				return false;
-			}
-
-			m_cache_index = tmp;
-			m_cache_offset = pos - m_cached_data[m_cache_index].base;
-			if (m_cache_offset >= m_cached_data[m_cache_index].size) {
-				return false;
-			}
+			return false;
 		}
-
-		value = m_cached_data[m_cache_index].data[m_cache_offset];
-		m_cache_offset++;
-		return true;
 	}
 
-	value = fgetc(m_file);
-	if (value != EOF) {
-		return true;
-	}
-
-	m_lastError = ERROR_EOF;
-	return false;
+	value = m_cached_data[m_cache_index].data[m_cache_offset++];
+	return true;
 }
 
 inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 {
-	if (m_use_cache) {
-		//seek at pos
-		uint32_t reading, remain = size, bufferPos = 0;
-
-		do {
-			//prepare cache
-			uint32_t i = getCacheBlock(pos);
-			if (i == NO_VALID_CACHE) {
-				return false;
-			}
-
-			m_cache_index = i;
-			m_cache_offset = pos - m_cached_data[i].base;
-
-			//get maximum read block size and calculate remaining bytes
-			reading = std::min<int32_t>(remain, m_cached_data[i].size - m_cache_offset);
-			remain -= reading;
-
-			//read it
-			memcpy(buffer + bufferPos, m_cached_data[m_cache_index].data + m_cache_offset, reading);
-
-			//update variables
-			m_cache_offset += reading;
-			bufferPos += reading;
-			pos += reading;
-		} while (remain > 0);
-
-		return true;
-	}
-
-	if (fseek(m_file, pos, SEEK_SET) != 0) {
-		m_lastError = ERROR_SEEK_ERROR;
-		return false;
-	}
-
-	if (fread(buffer, 1, size, m_file) == size) {
-		return true;
-	}
-
-	m_lastError = ERROR_EOF;
-	return false;
-}
-
-inline bool FileLoader::safeSeek(uint32_t pos)
-{
-	if (m_use_cache) {
+	//seek at pos
+	uint32_t reading, remain = size, bufferPos = 0;
+	do {
+		//prepare cache
 		uint32_t i = getCacheBlock(pos);
 		if (i == NO_VALID_CACHE) {
 			return false;
@@ -385,32 +316,42 @@ inline bool FileLoader::safeSeek(uint32_t pos)
 
 		m_cache_index = i;
 		m_cache_offset = pos - m_cached_data[i].base;
-	} else if (fseek(m_file, pos, SEEK_SET) != 0) {
-		m_lastError = ERROR_SEEK_ERROR;
+
+		//get maximum read block size and calculate remaining bytes
+		reading = std::min<int32_t>(remain, m_cached_data[i].size - m_cache_offset);
+		remain -= reading;
+
+		//read it
+		memcpy(buffer + bufferPos, m_cached_data[m_cache_index].data + m_cache_offset, reading);
+
+		//update variables
+		m_cache_offset += reading;
+		bufferPos += reading;
+		pos += reading;
+	} while (remain > 0);
+	return true;
+}
+
+inline bool FileLoader::safeSeek(uint32_t pos)
+{
+	uint32_t i = getCacheBlock(pos);
+	if (i == NO_VALID_CACHE) {
 		return false;
 	}
+
+	m_cache_index = i;
+	m_cache_offset = pos - m_cached_data[i].base;
 	return true;
 }
 
 inline bool FileLoader::safeTell(int32_t& pos)
 {
-	if (m_use_cache) {
-		if (m_cache_index == NO_VALID_CACHE) {
-			m_lastError = ERROR_CACHE_ERROR;
-			return false;
-		}
-
-		pos = m_cached_data[m_cache_index].base + m_cache_offset - 1;
-		return true;
-	}
-
-	pos = ftell(m_file);
-	if (pos == -1) {
-		m_lastError = ERROR_TELL_ERROR;
+	if (m_cache_index == NO_VALID_CACHE) {
+		m_lastError = ERROR_CACHE_ERROR;
 		return false;
 	}
 
-	--pos;
+	pos = m_cached_data[m_cache_index].base + m_cache_offset - 1;
 	return true;
 }
 

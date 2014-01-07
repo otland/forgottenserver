@@ -83,7 +83,7 @@ class Weapon : public Event
 		uint32_t getReqLevel() const {
 			return level;
 		}
-		int32_t getReqMagLv() const {
+		uint32_t getReqMagLv() const {
 			return magLevel;
 		}
 		bool isPremium() const {
@@ -106,17 +106,17 @@ class Weapon : public Event
 			return false;
 		}
 
-		int32_t getManaCost(const Player* player) const;
+		uint32_t getManaCost(const Player* player) const;
 
 		uint16_t id;
 		bool enabled;
 		bool premium;
 		bool wieldUnproperly;
-		int32_t level;
-		int32_t magLevel;
-		int32_t mana;
-		int32_t manaPercent;
-		int32_t soul;
+		uint32_t level;
+		uint32_t magLevel;
+		uint32_t mana;
+		uint32_t manaPercent;
+		uint32_t soul;
 		int32_t range;
 		AmmoAction_t ammoAction;
 		CombatParams params;

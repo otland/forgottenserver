@@ -219,16 +219,16 @@ class Creature : virtual public Thing
 			return baseSpeed;
 		}
 
-		virtual int32_t getHealth() const {
+		int32_t getHealth() const {
 			return health;
 		}
 		virtual int32_t getMaxHealth() const {
 			return healthMax;
 		}
-		virtual int32_t getMana() const {
+		uint32_t getMana() const {
 			return mana;
 		}
-		virtual int32_t getMaxMana() const {
+		virtual uint32_t getMaxMana() const {
 			return 0;
 		}
 
@@ -428,7 +428,7 @@ class Creature : virtual public Thing
 		}
 		virtual void setParent(Cylinder* cylinder) {
 			_tile = dynamic_cast<Tile*>(cylinder);
-			_position = _tile->getTilePosition();
+			_position = _tile->getPosition();
 		}
 
 		inline const Position& getPosition() const {
@@ -500,10 +500,10 @@ class Creature : virtual public Thing
 		uint32_t blockTicks;
 		uint32_t lastStepCost;
 		uint32_t baseSpeed;
+		uint32_t mana;
 		int32_t varSpeed;
 		int32_t health;
 		int32_t healthMax;
-		int32_t mana;
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;

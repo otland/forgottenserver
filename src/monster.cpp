@@ -47,7 +47,6 @@ Monster* Monster::createMonster(MonsterType* mType)
 Monster* Monster::createMonster(const std::string& name)
 {
 	MonsterType* mType = g_monsters.getMonsterType(name);
-
 	if (!mType) {
 		return nullptr;
 	}

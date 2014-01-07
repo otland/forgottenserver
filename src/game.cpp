@@ -783,6 +783,8 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 		return false;
 	}
 
+	const Position& tilePosition = tile->getPosition();
+
 	//send to client
 	size_t i = 0;
 
@@ -790,7 +792,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 		if (Player* player = spectator->getPlayer()) {
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				player->sendCreatureDisappear(creature, stackpos);
+				player->sendRemoveTileThing(tilePosition, stackpos);
 			}
 		}
 	}
@@ -1011,7 +1013,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 			if (currentPos.z != 7 && (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(BLOCKSOLID)))) {
 				tmpTile = getTile(destPos.x, destPos.y, destPos.z + 1);
 				if (tmpTile && tmpTile->hasHeight(3)) {
-					flags = flags | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
+					flags |= FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 					destPos.z++;
 				}
 			}

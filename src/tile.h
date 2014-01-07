@@ -329,10 +329,7 @@ class Tile : public Cylinder
 		virtual void __internalAddThing(Thing* thing);
 		virtual void __internalAddThing(uint32_t index, Thing* thing);
 
-		virtual const Position& getPosition() const {
-			return tilePos;
-		}
-		const Position& getTilePosition() const {
+		const Position& getPosition() const {
 			return tilePos;
 		}
 

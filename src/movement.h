@@ -120,10 +120,10 @@ class MoveEvent : public Event
 		//
 
 		//onEquip information
-		int32_t getReqLevel() const {
+		uint32_t getReqLevel() const {
 			return reqLevel;
 		}
-		int32_t getReqMagLv() const {
+		uint32_t getReqMagLv() const {
 			return reqMagLevel;
 		}
 		bool isPremium() const {
@@ -157,8 +157,8 @@ class MoveEvent : public Event
 		uint32_t slot;
 
 		//onEquip information
-		int32_t reqLevel;
-		int32_t reqMagLevel;
+		uint32_t reqLevel;
+		uint32_t reqMagLevel;
 		bool premium;
 		std::string vocationString;
 		uint32_t wieldInfo;

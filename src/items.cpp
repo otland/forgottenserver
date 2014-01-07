@@ -153,7 +153,7 @@ bool Items::reload()
 int32_t Items::loadFromOtb(const std::string& file)
 {
 	FileLoader f;
-	if (!f.openFile(file.c_str(), "OTBI", false, true)) {
+	if (!f.openFile(file.c_str(), "OTBI")) {
 		return f.getError();
 	}
 

@@ -419,8 +419,7 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 			return false;
 		}
 
-		skills[currentSkill] = value;
-		++currentSkill;
+		skills[currentSkill++] = value;
 		return true;
 	} else if (attr == CONDITIONATTR_STATS) {
 		int32_t value;
@@ -428,8 +427,7 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 			return false;
 		}
 
-		stats[currentStat] = value;
-		++currentStat;
+		stats[currentStat++] = value;
 		return true;
 	}
 

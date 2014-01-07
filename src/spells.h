@@ -130,18 +130,20 @@ class Spell : public BaseSpell
 			return spellId;
 		}
 
-		int32_t getManaCost(const Player* player) const;
-		int32_t getSoulCost() const;
+		uint32_t getManaCost(const Player* player) const;
+		uint32_t getSoulCost() const {
+			return soul;
+		}
 		uint32_t getLevel() const {
 			return level;
 		}
-		int32_t getMagicLevel() const {
+		uint32_t getMagicLevel() const {
 			return magLevel;
 		}
-		int32_t getMana() const {
+		uint32_t getMana() const {
 			return mana;
 		}
-		int32_t getManaPercent() const {
+		uint32_t getManaPercent() const {
 			return manaPercent;
 		}
 		bool isPremium() const {
@@ -172,23 +174,23 @@ class Spell : public BaseSpell
 		SpellGroup_t secondaryGroup;
 		uint32_t secondaryGroupCooldown;
 
-		bool learnable;
-		bool enabled;
-		bool premium;
-		int32_t level;
-		int32_t magLevel;
-
-		int32_t mana;
-		int32_t manaPercent;
-		int32_t soul;
-		int32_t range;
+		uint32_t mana;
+		uint32_t manaPercent;
+		uint32_t soul;
 		uint32_t cooldown;
+		uint32_t level;
+		uint32_t magLevel;
+		int32_t range;
+
 		bool needTarget;
 		bool needWeapon;
 		bool selfTarget;
 		bool blockingSolid;
 		bool blockingCreature;
 		bool isAggressive;
+		bool learnable;
+		bool enabled;
+		bool premium;
 
 		VocSpellMap vocSpellMap;
 

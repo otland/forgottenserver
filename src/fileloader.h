@@ -98,17 +98,18 @@ class FileLoader
 		FileLoader();
 		~FileLoader();
 
-		bool openFile(const char* filename, const char* identifier, bool write, bool caching = false);
-		const uint8_t* getProps(const NODE, uint32_t& size);
+		// non-copyable
+		FileLoader(const FileLoader&) = delete;
+		FileLoader& operator=(const FileLoader&) = delete;
+
+		bool openFile(const char* filename, const char* identifier);
+		const uint8_t* getProps(const NODE, size_t& size);
 		bool getProps(const NODE, PropStream& props);
 		NODE getChildNode(const NODE parent, uint32_t& type);
 		NODE getNextNode(const NODE prev, uint32_t& type);
 
 		int32_t getError() const {
 			return m_lastError;
-		}
-		void clearError() {
-			m_lastError = ERROR_NONE;
 		}
 
 	protected:
@@ -125,51 +126,29 @@ class FileLoader
 		inline bool safeSeek(uint32_t pos);
 		inline bool safeTell(int32_t& pos);
 
-	public:
-		inline bool writeData(const void* data, int32_t size, bool unescape) {
-			for (int32_t i = 0; i < size; ++i) {
-				uint8_t c = *(((uint8_t*)data) + i);
-
-				if (unescape && (c == NODE_START || c == NODE_END || c == ESCAPE_CHAR)) {
-					uint8_t escape = ESCAPE_CHAR;
-					size_t value = fwrite(&escape, 1, 1, m_file);
-					if (value != 1) {
-						m_lastError = ERROR_COULDNOTWRITE;
-						return false;
-					}
-				}
-
-				size_t value = fwrite(&c, 1, 1, m_file);
-				if (value != 1) {
-					m_lastError = ERROR_COULDNOTWRITE;
-					return false;
-				}
-			}
-
-			return true;
-		}
-
 	protected:
-		FILE* m_file;
-		FILELOADER_ERRORS m_lastError;
-		NODE m_root;
-		uint32_t m_buffer_size;
-		uint8_t* m_buffer;
-
-		bool m_use_cache;
 		struct _cache {
+			uint8_t* data;
 			uint32_t loaded;
 			uint32_t base;
 			uint32_t size;
-			uint8_t* data;
 		};
 
 #define CACHE_BLOCKS 3
-		uint32_t m_cache_size;
 		_cache m_cached_data[CACHE_BLOCKS];
+
+		uint8_t* m_buffer;
+		NODE m_root;
+		FILE* m_file;
+
+		FILELOADER_ERRORS m_lastError;
+		uint32_t m_buffer_size;
+
+		uint32_t m_cache_size;
 #define NO_VALID_CACHE 0xFFFFFFFF
 		uint32_t m_cache_index;
 		uint32_t m_cache_offset;
+
 		inline uint32_t getCacheBlock(uint32_t pos);
 		int32_t loadCacheBlock(uint32_t pos);
 };
@@ -183,7 +162,7 @@ class PropStream
 		}
 		~PropStream() {}
 
-		void init(const char* a, uint32_t size) {
+		void init(const char* a, size_t size) {
 			p = a;
 			end = a + size;
 		}
@@ -194,7 +173,7 @@ class PropStream
 
 		template <typename T>
 		inline bool GET_STRUCT(T* &ret) {
-			if (size() < (long)sizeof(T)) {
+			if (size() < sizeof(T)) {
 				ret = nullptr;
 				return false;
 			}
@@ -206,7 +185,7 @@ class PropStream
 
 		template <typename T>
 		inline bool GET_VALUE(T& ret) {
-			if (size() < (long)sizeof(T)) {
+			if (size() < sizeof(T)) {
 				return false;
 			}
 
@@ -246,7 +225,7 @@ class PropStream
 			return true;
 		}
 
-		inline bool SKIP_N(uint32_t n) {
+		inline bool SKIP_N(size_t n) {
 			if (size() < n) {
 				return false;
 			}

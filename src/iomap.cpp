@@ -82,7 +82,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 	FileLoader f;
 
-	if (!f.openFile(identifier.c_str(), "OTBM", false, true)) {
+	if (!f.openFile(identifier.c_str(), "OTBM")) {
 		std::ostringstream ss;
 		ss << "Could not open the file " << identifier << '.';
 		setLastErrorString(ss.str());
@@ -92,8 +92,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	uint32_t type;
 	PropStream propStream;
 
-	NODE root = f.getChildNode((NODE)nullptr, type);
-
+	NODE root = f.getChildNode(nullptr, type);
 	if (!f.getProps(root, propStream)) {
 		setLastErrorString("Could not read root property.");
 		return false;

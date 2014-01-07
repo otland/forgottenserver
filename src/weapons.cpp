@@ -333,7 +333,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 			return 0;
 		}
 
-		if (player->getPlayerInfo(PLAYERINFO_SOUL) < soul) {
+		if (player->getSoul() < soul) {
 			return 0;
 		}
 
@@ -447,14 +447,14 @@ void Weapon::onUsedWeapon(Player* player, Item* item) const
 		}
 	}
 
-	int32_t manaCost = getManaCost(player);
-	if (manaCost > 0) {
+	uint32_t manaCost = getManaCost(player);
+	if (manaCost != 0) {
 		player->addManaSpent(manaCost * g_config.getNumber(ConfigManager::RATE_MAGIC));
-		player->changeMana(-manaCost);
+		player->changeMana(-(int32_t)manaCost);
 	}
 
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {
-		player->changeSoul(-soul);
+		player->changeSoul(-(int32_t)soul);
 	}
 }
 
@@ -484,7 +484,7 @@ void Weapon::onUsedAmmo(Item* item, Tile* destTile) const
 	}
 }
 
-int32_t Weapon::getManaCost(const Player* player) const
+uint32_t Weapon::getManaCost(const Player* player) const
 {
 	if (mana != 0) {
 		return mana;

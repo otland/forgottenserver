@@ -419,11 +419,14 @@ class Player : public Creature, public Cylinder
 		uint32_t getLevel() const {
 			return level;
 		}
-		int32_t getMagicLevel() const {
+		uint32_t getMagicLevel() const {
 			return getPlayerInfo(PLAYERINFO_MAGICLEVEL);
 		}
 		uint32_t getBaseMagicLevel() const {
 			return magLevel;
+		}
+		uint32_t getSoul() const {
+			return std::max<int32_t>(0, soul + varStats[STAT_SOULPOINTS]);
 		}
 		bool isAccessPlayer() const {
 			return group->access;
@@ -505,7 +508,7 @@ class Player : public Creature, public Cylinder
 		virtual int32_t getMaxHealth() const {
 			return getPlayerInfo(PLAYERINFO_MAXHEALTH);
 		}
-		virtual int32_t getMaxMana() const {
+		uint32_t getMaxMana() const {
 			return getPlayerInfo(PLAYERINFO_MAXMANA);
 		}
 
@@ -721,9 +724,9 @@ class Player : public Creature, public Cylinder
 				client->sendUpdateTileItem(pos, tile->getClientIndexOfThing(this, item), item);
 			}
 		}
-		void sendRemoveTileItem(const Position& pos, uint32_t stackpos) {
+		void sendRemoveTileThing(const Position& pos, uint32_t stackpos) {
 			if (client) {
-				client->sendRemoveTileItem(pos, stackpos);
+				client->sendRemoveTileThing(pos, stackpos);
 			}
 		}
 		void sendUpdateTile(const Tile* tile, const Position& pos) {
@@ -745,11 +748,6 @@ class Player : public Creature, public Cylinder
 		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
 			if (client) {
 				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfThing(this, creature), isLogin);
-			}
-		}
-		void sendCreatureDisappear(const Creature* creature, uint32_t stackpos) {
-			if (client) {
-				client->sendRemoveCreature(creature->getPosition(), stackpos);
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Position& newPos, uint32_t newStackPos, const Position& oldPos, uint32_t oldStackPos, bool teleport) {
@@ -793,7 +791,7 @@ class Player : public Creature, public Cylinder
 						if (visible) {
 							client->sendAddCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature), false);
 						} else {
-							client->sendRemoveCreature(creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
+							client->sendRemoveTileThing(creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
 						}
 					}
 				}
@@ -1275,6 +1273,9 @@ class Player : public Creature, public Cylinder
 		uint32_t editListId;
 		uint32_t maxDepotItems;
 		uint32_t maxVipEntries;
+		uint32_t soul;
+		uint32_t soulMax;
+		uint32_t manaMax;
 		uint32_t skills[SKILL_LAST + 1][3];
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];
@@ -1282,15 +1283,12 @@ class Player : public Creature, public Cylinder
 		int32_t saleCallback;
 		int32_t MessageBufferCount;
 		int32_t premiumDays;
-		int32_t soul;
-		int32_t soulMax;
 		int32_t bloodHitCount;
 		int32_t shieldBlockCount;
 		int32_t offlineTrainingSkill;
 		int32_t offlineTrainingTime;
 		int32_t idleTime;
 		int32_t shootRange;
-		int32_t manaMax;
 
 		AccountType_t accountType;
 		PlayerSex_t sex;

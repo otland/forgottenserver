@@ -491,23 +491,23 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("lvl"))) {
-		level = pugi::cast<int32_t>(attr.value());
+		level = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("maglv"))) {
-		magLevel = pugi::cast<int32_t>(attr.value());
+		magLevel = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("mana"))) {
-		mana = pugi::cast<int32_t>(attr.value());
+		mana = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("manapercent"))) {
-		manaPercent = pugi::cast<int32_t>(attr.value());
+		manaPercent = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("soul"))) {
-		soul = pugi::cast<int32_t>(attr.value());
+		soul = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("range"))) {
@@ -623,7 +623,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if ((int32_t)player->getMagicLevel() < magLevel) {
+	if (player->getMagicLevel() < magLevel) {
 		player->sendCancelMessage(RET_NOTENOUGHMAGICLEVEL);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		return false;
@@ -635,7 +635,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (player->getPlayerInfo(PLAYERINFO_SOUL) < soul && !player->hasFlag(PlayerFlag_HasInfiniteSoul)) {
+	if (player->getSoul() < soul && !player->hasFlag(PlayerFlag_HasInfiniteSoul)) {
 		player->sendCancelMessage(RET_NOTENOUGHSOUL);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		return false;
@@ -846,24 +846,19 @@ void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) 
 	}
 }
 
-int32_t Spell::getManaCost(const Player* player) const
+uint32_t Spell::getManaCost(const Player* player) const
 {
 	if (mana != 0) {
 		return mana;
 	}
 
 	if (manaPercent != 0) {
-		int32_t maxMana = player->getMaxMana();
-		int32_t manaCost = (maxMana * manaPercent) / 100;
+		uint32_t maxMana = player->getMaxMana();
+		uint32_t manaCost = (maxMana * manaPercent) / 100;
 		return manaCost;
 	}
 
 	return 0;
-}
-
-int32_t Spell::getSoulCost() const
-{
-	return soul;
 }
 
 ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t& outfit, int32_t time)
@@ -1507,20 +1502,18 @@ bool InstantSpell::SearchPlayer(const InstantSpell*, Creature* creature, const s
 bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
-
 	if (!player) {
 		return false;
 	}
 
 	MonsterType* mType = g_monsters.getMonsterType(param);
-
 	if (!mType) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 		return false;
 	}
 
-	int32_t manaCost = mType->manaCost;
+	uint32_t manaCost = mType->manaCost;
 
 	if (!player->hasFlag(PlayerFlag_CanSummonAll)) {
 		if (!mType->isSummonable) {
@@ -1559,7 +1552,7 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 	}
 
 	if (ret == RET_NOERROR) {
-		spell->postCastSpell(player, (uint32_t)manaCost, (uint32_t)spell->getSoulCost());
+		spell->postCastSpell(player, manaCost, spell->getSoulCost());
 		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_ENERGY);
 		g_game.addMagicEffect(monster->getPosition(), NM_ME_TELEPORT);
 	} else {
@@ -1985,7 +1978,7 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item*, cons
 		return false;
 	}
 
-	int32_t manaCost = 0;
+	uint32_t manaCost = 0;
 	if (convinceCreature->getMonster()) {
 		manaCost = convinceCreature->getMonster()->getManaCost();
 	}
@@ -2002,7 +1995,7 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item*, cons
 		return false;
 	}
 
-	spell->postCastSpell(player, (uint32_t)manaCost, (uint32_t)spell->getSoulCost());
+	spell->postCastSpell(player, manaCost, spell->getSoulCost());
 	g_game.updateCreatureType(convinceCreature);
 	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_BLOOD);
 	return true;
