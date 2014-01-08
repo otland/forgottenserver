@@ -3937,6 +3937,8 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 					effect = NM_ME_ENERGY_DAMAGE;
 					break;
 				default:
+					color = TEXTCOLOR_NONE;
+					effect = NM_ME_NONE;
 					break;
 			}
 
@@ -4178,14 +4180,14 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				}
 			}
 
+			target->drainHealth(attacker, damage);
+			addCreatureHealth(list, target);
+
 			if (damage >= targetHealth) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
 					creatureEvent->executeOnPrepareDeath(target, attacker);
 				}
 			}
-
-			target->drainHealth(attacker, damage);
-			addCreatureHealth(list, target);
 
 			uint8_t hitEffect;
 			combatGetTypeInfo(combatType, target, message.primary.color, hitEffect);
@@ -4420,32 +4422,28 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				creatureEvent->executeChangeHealth(target, attacker, damage);
 			}
 
+			target->drainHealth(attacker, realDamage);
+			addCreatureHealth(list, target);
+
 			if (realDamage >= targetHealth) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
 					creatureEvent->executeOnPrepareDeath(target, attacker);
 				}
 			}
 
-			target->drainHealth(attacker, realDamage);
-			addCreatureHealth(list, target);
-
 			message.primary.value = damage.primary.value;
 			message.secondary.value = damage.secondary.value;
 
 			uint8_t hitEffect;
 			if (message.primary.value) {
-				hitEffect = NM_ME_NONE;
 				combatGetTypeInfo(damage.primary.type, target, message.primary.color, hitEffect);
-
 				if (hitEffect != NM_ME_NONE) {
 					addMagicEffect(list, targetPos, hitEffect);
 				}
 			}
 
 			if (message.secondary.value) {
-				hitEffect = NM_ME_NONE;
 				combatGetTypeInfo(damage.secondary.type, target, message.secondary.color, hitEffect);
-
 				if (hitEffect != NM_ME_NONE) {
 					addMagicEffect(list, targetPos, hitEffect);
 				}
