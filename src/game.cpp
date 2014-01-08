@@ -4180,14 +4180,16 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				}
 			}
 
-			target->drainHealth(attacker, damage);
-			addCreatureHealth(list, target);
-
 			if (damage >= targetHealth) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
-					creatureEvent->executeOnPrepareDeath(target, attacker);
+					if (!creatureEvent->executeOnPrepareDeath(target, attacker)) {
+						return false;
+					}
 				}
 			}
+
+			target->drainHealth(attacker, damage);
+			addCreatureHealth(list, target);
 
 			uint8_t hitEffect;
 			combatGetTypeInfo(combatType, target, message.primary.color, hitEffect);
@@ -4422,14 +4424,16 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				creatureEvent->executeChangeHealth(target, attacker, damage);
 			}
 
-			target->drainHealth(attacker, realDamage);
-			addCreatureHealth(list, target);
-
 			if (realDamage >= targetHealth) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
-					creatureEvent->executeOnPrepareDeath(target, attacker);
+					if (!creatureEvent->executeOnPrepareDeath(target, attacker)) {
+						return false;
+					}
 				}
 			}
+
+			target->drainHealth(attacker, realDamage);
+			addCreatureHealth(list, target);
 
 			message.primary.value = damage.primary.value;
 			message.secondary.value = damage.secondary.value;
