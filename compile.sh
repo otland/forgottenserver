@@ -3,22 +3,21 @@
 ## yum/apt-get install git
 ## git clone https://github.com/otland/forgottenserver
 ## cd forgottenserver
-## bash ncompile.sh
-## It is important to run with 'bash' and not 'sh' or as an executable(./file)
-## because the script is multi-platform so I did not include the shebang
-## and old shell does not support a few things I did here
+## bash compile.sh
+## The shebang may or may not work with the systems that the script can work on 
+## so just use "bash compile.sh" instead of ./comile.sh
 
 ## Script by dominique120
 ## Few edits and fixes by fallen(decltype)
-## Idea from the compile.sh script that was packed with some TFS 0.4 revs.
+## Idea came from the compile.sh script that was packed with some TFS 0.4 revs.
 ## Made for TFS 1.0
 ## If you plan of editing try to keep the structure and conventions
 ## Line endings must be LF only, not CRLF.
 
 ## TODO:
 ## Add other operating systems (MacOSX, Arch Linux)
-## Test the multicore build section 
-## Add other optimizations to the make process (maybe use ccache?)
+## Test the multicore build section on other systems
+## Add other optimizations to the make process faster(maybe use ccache?)
 ## Make it prettier?
 
 ## Get CPU core count
@@ -33,6 +32,7 @@ redText=$(tput setab 0; tput setaf 1)
 blueText=$(tput setab 0; tput setaf 6)
 yellowText=$(tput setab 0; tput setaf 3)
 none=$(tput sgr0)
+
 ###
 ### Functions to simplify stuff :)
 ###
@@ -71,7 +71,7 @@ bsdBuild() {
 	echo "Building on FreeBSD"
 	mkdir build && cd build
 	CXX=g++47 cmake ..
-	echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster) y or n "
+	echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster) y or n: "
 		read ans1_4
 			if [[ $ans1_4 = "y" ]]; then
 				echo -e $greenText"Building on $cpuCores threads with $coreBuild processes."$none
@@ -88,7 +88,7 @@ genBuild() {
 	echo "Building..."
 	mkdir build && cd build
 	cmake ..
-		echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster) y or n "
+		echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster) y or n: "
 		read ans1_4
 			if [[ $ans1_4 = "y" ]]; then
 				echo -e $greenText"Building on $cpuCores threads with $coreBuild processes."$none
@@ -117,6 +117,7 @@ if [[ $EUID -ne 0 ]]; then
 	read end
 	exit 1
 fi
+
 #OS dependencies and other stuff
 echo "Chose your Operating System. {Supported OS: Debian, Ubuntu, Fedora, FreeBSD."$yellowText" Not recommended->"$none " CentOS or Scientific Linux"
 #Note for SL6 and CentOS, look below.
