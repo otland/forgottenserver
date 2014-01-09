@@ -19,7 +19,7 @@ function onSay(cid, words, param)
 
 	local timeNow = os.time()
 	db:query("INSERT INTO `account_bans` (`account_id`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
-			accountId .. ", '', " .. timeNow .. ", " .. timeNow + (banDays * 86400) .. ", " .. getPlayerGUIDByName(getCreatureName(cid)) .. ")")
+			accountId .. ", '', " .. timeNow .. ", " .. timeNow + (banDays * 86400) .. ", " .. player:getGuid() .. ")")
 
 	local target = Player(param)
 	if target ~= nil then
