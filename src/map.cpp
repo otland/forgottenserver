@@ -573,7 +573,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 	AStarNodes nodes;
 	AStarNode* startNode = nodes.createOpenNode();
 
-	nodeTable[(destPos.x * 0xFFFF) + destPos.y] = startNode;
+	nodeTable[(destPos.x << 16) | destPos.y] = startNode;
 
 	startNode->x = destPos.x;
 	startNode->y = destPos.y;
@@ -629,7 +629,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 						const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
 						const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
 						const int_fast32_t newg = n->g + cost + extraCost;
-						const uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+						const uint32_t tableIndex = (pos.x << 16) | pos.y;
 
 						//Check if the node is already in the closed/open list
 						//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
@@ -728,7 +728,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 	AStarNodes nodes;
 	AStarNode* startNode = nodes.createOpenNode();
 
-	nodeTable[(startPos.x * 0xFFFF) + startPos.y] = startNode;
+	nodeTable[(startPos.x << 16) | startPos.y] = startNode;
 
 	startNode->x = startPos.x;
 	startNode->y = startPos.y;
@@ -800,7 +800,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 					const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
 					const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
 					const int_fast32_t newf = n->f + cost + extraCost;
-					const uint32_t tableIndex = (pos.x * 0xFFFF) + pos.y;
+					const uint32_t tableIndex = (pos.x << 16) | pos.y;
 
 					//Check if the node is already in the closed/open list
 					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
