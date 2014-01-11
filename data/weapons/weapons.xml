@@ -575,6 +575,11 @@
 		<vocation name="Paladin"/>
 		<vocation name="Royal Paladin" showInDescription="0"/>
 	</distance>
+	<distance id="21690" level="70" unproperly="1" function="default"> <!-- Triple Bolt Crossbow -->
+		<vocation name="Paladin"/>
+		<vocation name="Royal Paladin" showInDescription="0"/>
+	</distance>
+	<distance id="21696" unproperly="1" function="default"/> <!-- Icicle Bow -->
 	<distance id="22416" level="75" unproperly="1" function="default"> <!-- Crude Umbral Bow -->
 		<vocation name="Paladin"/>
 		<vocation name="Royal Paladin" showInDescription="0"/>
