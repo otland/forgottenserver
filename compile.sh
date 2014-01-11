@@ -26,12 +26,6 @@
 ## Add other optimizations to the make process faster(maybe use ccache?)
 ## Make it prettier?
 
-## Get CPU core count
-## Still testing
-cpuCores=$(nproc)
-## make processes to be spawned.
-coreBuild=$((cpuCores + 1))
-
 ## Colors
 greenText=$(tput setab 0; tput setaf 2)
 redText=$(tput setab 0; tput setaf 1)
@@ -72,10 +66,15 @@ libInstall() {
 }
 
 bsdBuild() {
+## Fetch number of CPUs
+cpuCores=$(sysctl -a | egrep -i 'hw.ncpu')
+## make processes to be spawned.
+coreBuild=$((cpuCores + 1))
+
 	echo "Building on FreeBSD"
 	mkdir build && cd build
 	CXX=g++47 cmake ..
-	echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster) y or n: "
+	echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster)  y or n: "
 		read ans1_4
 			if [[ $ans1_4 = "y" ]]; then
 				echo -e $greenText"Building on $cpuCores threads with $coreBuild processes."$none
@@ -89,6 +88,11 @@ bsdBuild() {
 }	
 
 genBuild() {
+## Fetch number of CPUs
+cpuCores=$(nproc)
+## make processes to be spawned.
+coreBuild=$((cpuCores + 1))
+
 	echo "Building..."
 	mkdir build && cd build
 	cmake ..
@@ -174,10 +178,20 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 		fi
 		
 #Compiling here
-echo -n "Are we on FreeBSD? y or n: If you are make sure to have the latest version of gcc(4.8+) or add C++11 flags(4.7) or the compilation will fail."
+echo -n "Are we on FreeBSD? y or n: "
 read ans1_2
 	if [[ $ans1_2 = "y" ]]; then
-		bsdBuild
+		echo "Make sure to have the latest version of gcc(4.8+) or add C++11 flags(4.7) or the compilation will fail."
+		echo "Have they been installed? y or n: "
+		read ans1_5
+			if [[ $ans1_5 = "y" ]]; then
+				bsdBuild
+			elif [[ $ans1_5 = "n" ]]; then
+				echo "Install those packages and re-run this script."
+				:
+			else
+				echo "Answer yes or no"
+			fi
 	elif [[ $ans1_2 = "n" ]]; then
 		genBuild
 	else
