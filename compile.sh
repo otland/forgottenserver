@@ -1,4 +1,5 @@
 ﻿#!/usr/bin/env bash
+
 ## Usage instructions:
 ## yum/apt-get install git
 ## git clone https://github.com/otland/forgottenserver
@@ -6,6 +7,11 @@
 ## bash compile.sh
 ## The shebang may or may not work with the systems that the script can work on 
 ## so just use "bash compile.sh" instead of ./comile.sh
+
+## In FreeBSD the user must first install bash to be able to execute this script
+## This command can be used:
+## cd /usr/ports/shells/bash && make install clean BATCH=yes
+## The actual dependency install process also takes ages :/
 
 ## Script by dominique120
 ## Few edits and fixes by fallen(decltype)
@@ -53,8 +59,6 @@ centDeps() {
 }
 
 bsdDeps() {
-	cd /usr/ports/shells/bash && make install clean BATCH=yes
-	cd /usr/ports/devel/git && make install clean BATCH=yes
 	cd /usr/ports/devel/cmake && make install clean BATCH=yes
 	cd /usr/ports/lang/gcc47 && make install clean BATCH=yes
 	cd /usr/ports/lang/luajit && make install clean BATCH=yes
@@ -134,7 +138,9 @@ if [[ $ans1 = "Fedora" ]]; then
 		echo "Answer 'y' or 'n' "
 	fi
 elif [[ $ans1 = "CentOS" ]] || [[ $ans1 = "Scientific Linux" ]]; then
-	echo -n "Should the script install dependencies? y or n: " $redText"TFS 1.0 developers discourage the use of these distributions because they have outdated packages."$none $blueText"*NOTE that versions of cmake and boost installed in this process are old, they should be installed manually by adding repositories or compiling them manually."$none
+	echo -n "Should the script install dependencies? y or n: " $redText"TFS 1.0 developers discourage the use of these distributions because they have" \
+		"outdated packages."$none $blueText"*NOTE that versions of cmake and boost installed in this process are old, they should be installed manually by" \ 
+		"adding repositories or compiling them manually."$none
 	read ans1_1
 	if [[ $ans1_1 = "y" ]]; then
 		centDeps
@@ -164,14 +170,14 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 			echo "Answer 'y' or 'n' "
 		fi				
 		else
-			echo "Pick a valid OS"		
+			echo "Pick a valid OS, options are case sensitive."		
 		fi
 		
 #Compiling here
 echo -n "Are we on FreeBSD? y or n: "
 read ans1_2
 	if [[ $ans1_2 = "y" ]]; then
-		bsdbuild
+		bsdBuild
 	elif [[ $ans1_2 = "n" ]]; then
 		genBuild
 	else
