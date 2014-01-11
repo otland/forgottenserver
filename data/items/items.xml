@@ -29289,7 +29289,121 @@
 		<attribute key="decayTo" value="481" />
 		<attribute key="duration" value="300" />
 	</item>
-	
+	<item id="21553" article="a" name="spirit shovel">
+		<attribute key="weight" value="2800" />
+	</item>
+	<item id="21554" article="a" name="tuning fork">
+		<attribute key="weight" value="100" />
+	</item>
+	<item id="21555" article="a" name="ghost detector">
+		<attribute key="weight" value="900" />
+	</item>
+	<item id="21556" article="a" name="thermometer">
+		<attribute key="weight" value="800" />
+	</item>
+	<item id="21557" article="a" name="lodestone">
+		<attribute key="weight" value="300" />
+	</item>
+	<item id="21558" article="a" name="ghost pacifier"/>
+	<item id="21563" article="a" name="charged ghost pacifier">
+		<attribute key="decayTo" value="21558" />
+		<attribute key="duration" value="120" />
+	</item>
+	<item id="21569" name="gnomish supplies">
+		<attribute key="weight" value="800" />
+	</item>
+	<item id="21690" article="a" name="triple bolt crossbow">
+		<attribute key="weight" value="6200" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="range" value="5" />
+		<attribute key="attack" value="3" />
+		<attribute key="hitChance" value="2" />
+	</item>
+	<item id="21691" article="a" name="shrunken head necklace">
+		<attribute key="weight" value="550" />
+		<attribute key="slotType" value="necklace" />
+		<attribute key="speed" value="20" />
+		<attribute key="showattributes" value="1" />
+	</item>
+	<item id="21692" article="an" name="albino plate">
+		<attribute key="weight" value="8400" />
+		<attribute key="armor" value="11" />
+		<attribute key="slotType" value="body" />
+	</item>
+	<item id="21693" article="a" name="horn">
+		<attribute key="weight" value="120" />
+		<attribute key="slotType" value="ring" />
+		<attribute key="armor" value="1" />
+	</item>
+	<item id="21695" article="a" name="sun mirror">
+		<attribute key="slotType" value="ammo" />
+		<attribute key="weight" value="850" />
+	</item>
+	<item id="21696" article="an" name="icicle bow">
+		<attribute key="weight" value="4200" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="range" value="6" />
+		<attribute key="attack" value="1" />
+		<attribute key="hitChance" value="4" />
+	</item>
+	<item id="21697" article="a" name="runic ice shield">
+		<attribute key="weight" value="4900" />
+		<attribute key="defense" value="31" />
+		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="21699" article="a" name="trapped lightning">
+		<attribute key="slotType" value="ammo" />
+		<attribute key="weight" value="900" />
+	</item>
+	<item id="21700" article="a" name="icy culotte">
+		<attribute key="weight" value="1500" />
+		<attribute key="armor" value="8" />
+		<attribute key="slotType" value="legs" />
+		<attribute key="absorbPercentIce" value="8" />
+	</item>
+	<item id="21703" article="an" name="eye of the storm">
+		<attribute key="slotType" value="ammo" />
+		<attribute key="weight" value="1100" />
+	</item>
+	<item id="21705" article="a" name="glass of goo">
+		<attribute key="slotType" value="ammo" />
+		<attribute key="weight" value="1700" />
+	</item>
+	<item id="21706" article="a" name="goo shell">
+		<attribute key="weight" value="4800" />
+		<attribute key="armor" value="12" />
+		<attribute key="slotType" value="body" />
+		<attribute key="absorbPercentEarth" value="2" />
+		<attribute key="absorbPercentFire" value="-2" />
+	</item>
+	<item id="21707" article="a" name="haunted mirror piece">
+		<attribute key="weight" value="2800" />
+		<attribute key="defense" value="34" />
+		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="21708" name="vampire silk slippers">
+		<attribute key="weight" value="1150" />
+	</item>
+	<item id="21725" article="a" name="furious frock">
+		<attribute key="weight" value="3400" />
+		<attribute key="armor" value="12" />
+		<attribute key="slotType" value="body" />
+		<attribute key="absorbPercentFire" value="5" />
+		<attribute key="magiclevelpoints" value="2" />
+	</item>
+	<item fromid="21731" toid="21732" name="memory box">
+		<attribute key="description" value="It was awarded by TibiaEvents. This mysterious box is said to freeze time itself to capture your fondest memories." />
+		<attribute key="weight" value="2000" />
+	</item>
+	<item id="22396" article="a" name="cluster of solace">
+		<attribute key="weight" value="280" />
+	</item>
+	<item id="22397" article="a" name="dream matter">
+		<attribute key="weight" value="390" />
+	</item>
 	<item id="22398" article="a" name="crude umbral blade">
 		<attribute key="weight" value="6300" />
 		<attribute key="defense" value="26" />
@@ -29503,6 +29617,110 @@
 		<attribute key="absorbPercentEnergy" value="5" />
 		<attribute key="defense" value="20" />
 		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="22516" article="a" name="ring of ending">
+		<attribute key="description" value="This constantly rotating ring is perfectly weightless, yet feels infinitely heavy at the same time." />
+		<attribute key="slotType" value="ring" />
+	</item>
+	<item id="22517" article="a" name="sight of surrender's eye">
+		<attribute key="weight" value="550" />
+	</item>
+	<item id="22518" article="a" name="broken visor">
+		<attribute key="armor" value="1" />
+		<attribute key="weight" value="1400" />
+		<attribute key="slotType" value="head" />
+	</item>
+	<item id="22532" article="a" name="frazzle tongue">
+		<attribute key="weight" value="680" />
+	</item>
+	<item id="22533" article="a" name="frazzle skin">
+		<attribute key="weight" value="190" />
+	</item>
+	<item id="22534" article="a" name="silencer claws">
+		<attribute key="weight" value="420" />
+	</item>
+	<item id="22535" article="a" name="silencer resonating chamber">
+		<attribute key="weight" value="350" />
+	</item>
+	<item id="22536" article="a" name="dead weight">
+		<attribute key="weight" value="750" />
+	</item>
+	<item id="22537" article="a" name="trapped bad dream monster">
+		<attribute key="weight" value="1200" />
+	</item>
+	<item id="22538" article="a" name="bowl of terror sweat">
+		<attribute key="weight" value="360" />
+	</item>
+	<item id="22539" article="a" name="goosebump leather">
+		<attribute key="weight" value="280" />
+	</item>
+	<item id="22540" article="a" name="hemp rope">
+		<attribute key="weight" value="190" />
+	</item>
+	<item id="22541" article="a" name="pool of chitinous glue">
+		<attribute key="weight" value="270" />
+	</item>
+	<item id="22598" article="a" name="unrealized dream">
+		<attribute key="weight" value="3300" />
+	</item>
+	<item id="22604" article="a" name="silver prison key">
+		<attribute key="description" value="You dreamt that this key unlocks the prison of a powerful horror that you had to face on your own." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="22605" article="a" name="copper prison key">
+		<attribute key="description" value="You dreamt that this key unlocks the prison of a powerful horror that you had to face on your own." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="22606" article="a" name="bronze prison key">
+		<attribute key="description" value="You dreamt that this key unlocks the prison of a powerful horror that you had to face on your own." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="22607" article="a" name="golden prison key">
+		<attribute key="description" value="You dreamt that this key unlocks the prison of a powerful horror that you had to face on your own." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="22608" article="a" name="nightmare horn">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="22609" article="a" name="dream warden claw">
+		<attribute key="weight" value="3100" />
+	</item>
+	<item id="22610" article="a" name="dream warden mask">
+		<attribute key="weight" value="3400" />
+	</item>
+	<item id="22611" article="a" name="psychedelic tapestry">
+		<attribute key="weight" value="1000" />
+	</item>
+	<item id="22612" article="a" name="demonic tapestry">
+		<attribute key="weight" value="1000" />
+	</item>
+	<item id="22613" article="a" name="eye pod">
+		<attribute key="weight" value="500" />
+	</item>
+	<item fromid="22614" toid="22615" article="a" name="nightmare beacon">
+		<attribute key="weight" value="500" />
+	</item>
+	<item id="22616" article="a" name="nightmare hook">
+		<attribute key="weight" value="500" />
+	</item>
+	<item id="22642" article="a" name="frazzlemaw santa">
+		<attribute key="weight" value="600" />
+	</item>
+	<item id="22643" article="a" name="leaf golem santa">
+		<attribute key="weight" value="650" />
+	</item>
+	<item id="22644" article="a" name="chrismas cookie tray">
+		<attribute key="weight" value="650" />
+	</item>
+	<item fromid="22645" toid="22646" article="a" name="snow globe">
+		<attribute key="weight" value="1000" />
+	</item>
+	<item fromid="22647" toid="22648" article="a" name="santa music box">
+		<attribute key="weight" value="750" />
+	</item>
+	<item id="22649" article="a" name="snowflake tapestry">
+		<attribute key="weight" value="1000" />
 	</item>
 
 	<item id="30001" name="water" />
