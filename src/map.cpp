@@ -1144,7 +1144,7 @@ uint32_t Map::clean()
 		for (uint32_t y = 1; y <= mapHeight; y++) {
 			for (uint32_t x = 1; x <= mapWidth; x++) {
 				Tile* tile = getTile(x, y, z);
-				if (!tile || tile->hasFlag(TILESTATE_PROTECTIONZONE) || !tile->getItemList()) {
+				if (!tile || tile->hasFlag(TILESTATE_HOUSE) || !tile->getItemList()) {
 					continue;
 				}
 
