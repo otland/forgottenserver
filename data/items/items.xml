@@ -29310,6 +29310,7 @@
 		<attribute key="duration" value="120" />
 	</item>
 	<item id="21569" name="gnomish supplies">
+		<attribute key="description" value="It contains the clothes of a dwarf." />
 		<attribute key="weight" value="800" />
 	</item>
 	<item id="21690" article="a" name="triple bolt crossbow">
