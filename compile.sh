@@ -174,7 +174,7 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 		fi
 		
 #Compiling here
-echo -n "Are we on FreeBSD? y or n: "
+echo -n "Are we on FreeBSD? y or n: If you are make sure to have the latest version of gcc(4.8+) or add C++11 flags(4.7) or the compilation will fail."
 read ans1_2
 	if [[ $ans1_2 = "y" ]]; then
 		bsdBuild
