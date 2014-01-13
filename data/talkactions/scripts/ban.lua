@@ -3,7 +3,7 @@ local banDays = 7
 function onSay(cid, words, param)
 	local player = Player(cid)
 	if not player:getGroup():getAccess() then
-		return false
+		return true
 	end
 
 	local accountId = getAccountNumberByPlayerName(param)
