@@ -33,6 +33,6 @@
 		<voice sentence="Blubb"/>
 	</voices>
 	<summons maxSummons="3">
-		<summon name="Slime Summon" interval="1000" chance="10" max="3"/>
+		<summon name="Slime" interval="1000" chance="10" max="3"/>
 	</summons>
 </monster>

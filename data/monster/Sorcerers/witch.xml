@@ -28,32 +28,34 @@
 	</attacks>
 	<defenses armor="8" defense="12"/>
 	<elements>
-		<element energyPercent="100"/>
-		<element earthPercent="30"/>
+		<element earthPercent="20"/>
+		<element physicalPercent="-10"/>
 		<element deathPercent="-5"/>
-		<element physicalPercent="-14"/>
 	</elements>
 	<immunities>
+		<immunity energy="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Horax pokti! Hihihihi!"/>
-		<voice sentence="Herba budinia ex!"/>
+		<voice sentence="Herba buridia ex!"/>
+		<voice sentence="Horax Pokti!"/>
+		<voice sentence="Hihihi!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="10" chance="13000"/><!-- gold coin -->
-		<item id="2687" countmax="8" chance="15750"/><!-- cookie -->
-		<item id="2643" chance="67000"/><!-- leather boots -->
-		<item id="2696" chance="58750"/><!-- cheese -->
-		<item id="2405" chance="52500"/><!-- sickle -->
-		<item id="2654" chance="48500"/><!-- cape -->
-		<item id="2324" chance="29000"/><!-- broom -->
-		<item id="2651" chance="19500"/><!-- coat -->
-		<item id="2129" chance="15500"/><!-- wolf tooth chain -->
-		<item id="2800" chance="10500"/><!-- star herb-->
-		<item id="2199" chance="1000"/><!-- garlic necklace -->
-		<item id="2402" chance="2000"/><!-- silver dagger -->
-		<item id="2185" chance="1000"/><!-- necrotic rod -->
-		<item id="2801" chance="300"/><!-- fern -->
+		<item id="2148" countmax="40" chance="50000"/><!-- gold coin -->
+		<item id="2687" countmax="8" chance="25000"/><!-- cookie -->
+		<item id="10569" chance="10000"/><!-- witch broom -->
+		<item id="2129" chance="10000"/><!-- wolf tooth chain -->
+		<item id="2800" chance="8333"/><!-- star herb-->
+		<item id="2643" chance="4761"/><!-- leather boots -->
+		<item id="2654" chance="4761"/><!-- cape -->
+		<item id="2405" chance="3846"/><!-- sickle -->
+		<item id="2199" chance="2500"/><!-- garlic necklace -->
+		<item id="2651" chance="1886"/><!-- coat -->
+		<item id="2185" chance="1149"/><!-- necrotic rod -->
+		<item id="13537" chance="892"/><!-- bag of apple slices -->
+		<item id="2402" chance="505"/><!-- silver dagger -->
+		<item id="10570" chance="70"/><!-- witch hat -->
+		<item id="11211" chance="7"/><!-- stuffed toad -->
 	</loot>
 </monster>

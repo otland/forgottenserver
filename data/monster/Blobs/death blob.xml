@@ -22,16 +22,20 @@
 	</attacks>
 	<defenses armor="10" defense="10"/>
 	<elements>
-		<element firePercent="-10"/>
 		<element physicalPercent="30"/>
-		<element holyPercent="-25"/>
-		<element icePercent="20"/>
-		<element energyPercent="-5"/>
+		<element icePercent="10"/>
+		<element firePercent="-10"/>
+		<element holyPercent="-10"/>
+		<element energyPercent="-10"/>
 	</elements>
-	<summons maxSummons="2">
+	<immunities>
+		<immunity death="1"/>
+		<immunity earth="1"/>
+	</immunities>
+	<summons maxSummons="3">
 		<summon name="Death Blob" interval="3000" chance="10"/>
 	</summons>
 	<loot>
-		<item id="9968" chance="20000"/><!-- glob of tar -->
+		<item id="9968" chance="14285"/><!-- glob of tar -->
 	</loot>
 </monster>

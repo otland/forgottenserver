@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Enslaved Dwarf" nameDescription="enslaved dwarf" race="venom" experience="2900" speed="270" manacost="0">
+	<health now="4200" max="4200"/>
+	<look type="486" corpse="18374"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="70" attack="90"/>
+		<attack name="poison" interval="1000" chance="12" radius="3" target="0" min="-230" max="-430">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55"/>
+	<elements>
+		<element energyPercent="-20"/>
+		<element icePercent="-20"/>
+		<element physicalPercent="-10"/>
+		<element deathPercent="-10"/>
+		<element holyPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity earth="100"/>
+		<immunity fire="100"/>
+		<immunity paralyze="100"/>
+		<immunity invisible="100"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="99" chance="30000"/> <!-- Gold Coins -->
+		<item id="2152" countmax="7" chance="33333"/> <!-- Gold Coins -->
+		<item id="7588" countmax="2" chance="2667"/> <!-- SHP -->
+		<item id="7620" countmax="2" chance="1600"/> <!-- MP -->
+		<item id="7590" countmax="2" chance="1333"/> <!-- GMP -->
+		<item id="18304" countmax="10" chance="400"/> <!-- Crystalline Arrows -->
+		<item id="7589" countmax="2" chance="367"/> <!-- SMP -->
+		<item id="8473" chance="200"/> <!-- UHP -->
+		<item id="7454" chance="400"/> <!-- Glorious Axe -->
+		<item id="7753" chance="300"/> <!-- War Axe -->
+		<item id="2197" chance="328"/> <!-- Stone Skin Amulet -->
+		<item id="2445" chance="411"/> <!-- Crystal Mace -->
+		<item id="2213" chance="298"/> <!-- Dwarven Ring -->
+		<item id="18431" chance="200"/> <!-- Stone Nose -->
+		<item id="18432" chance="400"/> <!-- Crystalline Spikes -->
+		<item id="13757" chance="300"/> <!-- Coal -->
+		<item id="18419" chance="328"/> <!-- Cyan Crystal Fragment -->
+		<item id="18416" chance="411"/> <!-- Green Crystal Splinter -->
+		<item id="10549" chance="298"/> <!-- Ancient Stone -->
+		<item id="7452" chance="328"/> <!-- Spiked Squelcher -->
+		<item id="7437" chance="411"/> <!-- Sapphire Hammer -->
+		<item id="2393" chance="298"/> <!-- Giant Sword -->
+	</loot>
+</monster>

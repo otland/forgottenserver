@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Swampling" nameDescription="a swampling" race="venom" experience="45" speed="210" manacost="0">
+	<health now="80" max="80"/>
+	<look type="535" corpse="19902"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="40"/>
+		<attack name="lifedrain" interval="2000" chance="17" length="3" spread="2" min="-0" max="-10">
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+		<attack name="physical" interval="3000" chance="2500" min="-0" max="-13">
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55"/>
+	<immunities>
+		<immunity paralyze="100"/>
+		<immunity invisible="100"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Gnark!"/>
+		<voice sentence="Crrrck!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="12" chance="50000"/> <!-- gold coin -->
+		<item id="20102" chance="16666"/> <!-- swampling moss -->
+		<item id="20103" chance="12500"/> <!-- piece of swampling wood -->
+		<item id="2787" chance="9090"/> <!-- white mushroom -->
+		<item id="20104" chance="7142"/> <!-- swampling club -->
+		<item id="2120" chance="3030"/> <!-- rope -->
+	</loot>
+</monster>

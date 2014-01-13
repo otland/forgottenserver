@@ -37,42 +37,41 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
-		<element firePercent="25"/>
+		<element firePercent="20"/>
 		<element energyPercent="20"/>
-		<element earthPercent="10"/>
 		<element icePercent="10"/>
 		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
+		<immunity death="1"/>
+		<immunity earth="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Close your eyes... I want to show you something!"/>
+		<voice sentence="Close your eyes... I want to show you something."/>
 		<voice sentence="I will haunt you forever!"/>
-		<voice sentence="I will make you scream!"/>
 		<voice sentence="Pffffrrrrrrrrrrrr."/>
+		<voice sentence="I will make you scream."/>
 		<voice sentence="Take a ride with me."/>
 		<voice sentence="Weeeheeheeeheee!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="75" chance="50000"/><!-- gold coin -->
-		<item id="2148" countmax="45" chance="50000"/><!-- gold coin -->
-		<item id="2532" chance="800"/><!-- ancient shield -->
-		<item id="2195" chance="300"/><!-- boots of haste -->
-		<item id="6558" countmax="2" chance="13500"/><!-- concentrated demonic blood -->
-		<item id="6300" chance="1429"/><!-- death ring -->
-		<item id="6500" chance="10000"/><!-- demonic essence -->
-		<item id="2387" chance="15000"/><!-- double axe -->
-		<item id="2671" countmax="2" chance="15000"/><!-- ham -->
-		<item id="2477" chance="3333"/><!-- knight legs -->
-		<item id="2666" countmax="4" chance="17500"/><!-- meat -->
-		<item id="5669" chance="100"/><!-- mysterious voodoo skull -->
-		<item id="2152" countmax="4" chance="1000"/><!-- platinum coin -->
-		<item id="2547" countmax="4" chance="7000"/><!-- power bolt -->
-		<item id="6526" chance="500"/><!-- skeleton decoration -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="55" chance="50000"/><!-- gold coin -->
+		<item id="2671" chance="25000"/><!-- ham -->
 		<item id="5944" chance="20000"/><!-- soul orb -->
-		<item id="2457" chance="500"/><!-- steel helmet -->
-		<item id="2454" chance="100"/><!-- war axe -->
+		<item id="6558" chance="16666"/><!-- concentrated demonic blood -->
+		<item id="11223" chance="14285"/><!-- essence of a bad dream -->
+		<item id="6500" chance="10000"/><!-- demonic essence -->
+		<item id="2547" countmax="4" chance="9090"/><!-- power bolt -->
+		<item id="11229" chance="9090"/><!-- scythe leg -->
+		<item id="2152" countmax="3" chance="2564"/><!-- platinum coin -->
+		<item id="6300" chance="1298"/><!-- death ring -->
+		<item id="2532" chance="990"/><!-- ancient shield -->
+		<item id="2477" chance="961"/><!-- knight legs -->
+		<item id="2195" chance="337"/><!-- boots of haste -->
+		<item id="6526" chance="337"/><!-- skeleton decoration -->
+		<item id="5669" chance="123"/><!-- mysterious voodoo skull -->
+		<item id="2454" chance="95"/><!-- war axe -->
 	</loot>
 </monster>

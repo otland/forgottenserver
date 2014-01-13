@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wasp" nameDescription="a wasp" race="venom" experience="25" speed="460" manacost="280">
+<monster name="Wasp" nameDescription="a wasp" race="venom" experience="24" speed="460" manacost="280">
 	<health now="35" max="35"/>
 	<look type="44" corpse="5989"/>
 	<targetchange interval="5000" chance="8"/>
@@ -9,7 +9,7 @@
 		<flag attackable="1"/>
 		<flag hostile="1"/>
 		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag convinceable="0"/>
 		<flag pushable="1"/>
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
@@ -29,6 +29,6 @@
 		<voice sentence="Bssssss"/>
 	</voices>
 	<loot>
-		<item id="5902" chance="3650"/> <!-- honeycomb -->
+		<item id="5902" chance="2854"/> <!-- honeycomb -->
 	</loot>
 </monster>

@@ -8,7 +8,7 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="0"/>
+		<flag illusionable="1"/>
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
@@ -18,34 +18,28 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="95"/>
+		<attack name="melee" interval="2000" skill="30" attack="190"/>
 	</attacks>
-	<defenses armor="20" defense="29">
-		<defense name="healing" interval="1000" chance="15" min="113" max="180">
-			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-	</defenses>
+	<defenses armor="20" defense="29"/>
 	<elements>
-		<element energyPercent="-25"/>
+		<element energyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity ice="1"/>
 		<immunity fire="1"/>
 		<immunity lifedrain="1"/>
-		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Gnarrr!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="37" chance="100000"/><!-- gold coin -->
-		<item id="2226" chance="2000"/><!-- fishbone -->
-		<item id="2473" chance="3333"/><!-- viking helmet -->
-		<item id="2387" chance="2000"/><!-- double axe -->
-		<item id="2483" chance="2000"/><!-- scale armor -->
-		<item id="2177" chance="1429"/><!-- life crystal -->
-		<item id="2145" chance="1429"/><!-- small diamond -->
-		<item id="5895" chance="2000"/><!-- fish fin -->
-	</loot>
+    <item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+	<item id="2148" countmax="11" chance="50000" /><!-- gold coin -->
+	<item id="12447" chance="3846" /><!-- quara bone -->
+    <item id="2387" chance="1075" /><!-- double axe -->
+    <item id="2483" chance="1020" /><!-- scale armor -->
+    <item id="2145" chance="925" /><!-- small diamond -->
+    <item id="5895" chance="719" /><!-- fish fin -->
+</loot>
 </monster>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Deepling Brawler" nameDescription="a deepling brawler" race="blood" experience="260" speed="560" manacost="0">
+	<health now="380" max="380"/>
+	<look type="470" corpse="13839"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="60"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="66" attack="55"/>
+		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-130" max="-210">
+			<attribute key="shootEffect" value="spear"/>
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+	</attacks>
+	<defenses armor="12" defense="20"/>
+	<loot>
+		<item id="2148" countmax="24" chance="31000"/> <!-- gold coin -->
+		<item id="15430" chance="5500"/><!-- deepling scales -->
+	</loot>
+</monster>

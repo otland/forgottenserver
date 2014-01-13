@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spitter" nameDescription="a spitter" race="blood" experience="1100" speed="560" manacost="0">
+	<health now="1500" max="1500"/>
+	<look type="461" corpse="15392"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="70"/>	
+	</attacks>
+	<defenses armor="11" defense="11"/>
+	<voices interval="3000" chance="200">
+		<voice sentence="Spotz!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/> <!-- gold coin -->
+		<item id="2148" countmax="87" chance="100000"/> <!-- gold coin -->
+		<item id="15481" chance="20000"/> <!-- spitter nose -->
+		<item id="15486" chance="16666"/> <!-- compound eye -->
+		<item id="7590" chance="8333"/> <!-- great mana potion -->
+		<item id="2150" countmax="2" chance="3000"/> <!-- small amethyst -->
+		<item id="2789" countmax="3" chance="3000"/> <!-- brown mushroom -->
+		<item id="7591" chance="5000"/><!-- great health potion -->
+		<item id="2169" chance="2941"/><!-- time ring -->
+		<item id="7449" chance="2325"/><!-- crystal sword -->
+		<item id="15489" chance="334"/><!-- calopteryx cape -->
+		<item id="2155" chance="260"/><!-- green gem -->
+		<item id="7440" chance="260"/><!-- mastermind potion -->
+		<item id="2497" chance="185"/><!-- crusader helmet -->
+		<item id="2171" chance="148"/><!-- platinum amulet -->
+		<item id="15490" chance="111"/><!-- grasshopper legs -->
+	</loot>
+</monster>

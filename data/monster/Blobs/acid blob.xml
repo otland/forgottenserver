@@ -31,16 +31,11 @@
 		<immunity death="1"/>
 		<immunity earth="1"/>
 	</immunities>
-	<elements>
-		<element firePercent="-5"/>
-		<element icePercent="8"/>
-		<element energyPercent="-10"/>
-	</elements>
-	<summons maxSummons="2">
+	<summons maxSummons="3">
 		<summon name="Acid Blob" interval="4000" chance="8"/>
 	</summons>
 	<voices interval="5000" chance="10"/>
 	<loot>
-		<item id="9967" chance="20000"/><!-- glob of acid -->
+		<item id="9967" chance="14285"/><!-- glob of acid -->
 	</loot>
 </monster>

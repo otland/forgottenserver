@@ -52,18 +52,18 @@
 		<voice sentence="Chrrr!"/>
 	</voices>
 	<loot>
-		<item id="2165" chance="1450" /> <!-- stealth ring -->
-		<item id="7588" chance="9325" /> <!-- strong health potion -->
-		<item id="11232" chance="15475" /> <!-- sulphurous stone -->
-		<item id="12619" chance="6725" /> <!-- brimstone fangs -->
-		<item id="7589" chance="9250" /> <!-- strong mana potion -->
-		<item id="12659" chance="10450" /> <!-- brimstone shell -->
-		<item id="5904" chance="2200" /> <!-- magic sulphur -->
-		<item id="11222" chance="20375" /> <!-- lump of earth -->
-		<item id="2149" countmax="4" chance="1975" /> <!-- small emerald -->
-		<item id="10557" chance="51300" /> <!-- poisonous slime -->
-		<item id="2148" countmax="100" chance="39300" /> <!-- gold coin -->
-		<item id="2148" countmax="97" chance="39300" /> <!-- gold coin -->
-		<item id="2171" chance="675" /> <!-- platinum amulet -->
+		<item id="2148" countmax="100" chance="100000" /> <!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000" /> <!-- gold coin -->
+		<item id="10557" chance="50000" /> <!-- poisonous slime -->
+		<item id="11222" chance="20000" /> <!-- lump of earth -->
+		<item id="11232" chance="14285" /> <!-- sulphurous stone -->
+		<item id="12659" chance="10000" /> <!-- brimstone shell -->
+		<item id="7589" chance="9090" /> <!-- strong mana potion -->
+		<item id="7588" chance="9090" /> <!-- strong health potion -->
+		<item id="12619" chance="5882" /> <!-- brimstone fangs -->
+		<item id="2149" countmax="4" chance="2702" /> <!-- small emerald -->
+		<item id="5904" chance="1639" /> <!-- magic sulphur -->
+		<item id="2165" chance="892" /> <!-- stealth ring -->
+		<item id="2171" chance="97" /> <!-- platinum amulet -->
 	</loot>
 </monster>

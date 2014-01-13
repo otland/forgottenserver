@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hand of Cursed Fate" nameDescription="a hand of cursed fate" race="blood" experience="5000" speed="250" manacost="0">
-	<health now="10500" max="10500"/>
+	<health now="7500" max="7500"/>
 	<look type="230" corpse="6312"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
@@ -39,35 +39,42 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
-		<element firePercent="100"/>
-		<element energyPercent="100"/>
-		<element earthPercent="100"/>
-		<element icePercent="-40"/>
-		<element holyPercent="-35"/>
+		<element icePercent="-10"/>
+		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
+		<immunity earth="1"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity death="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="90" chance="15000"/><!-- gold coin -->
-		<item id="2148" countmax="60" chance="15000"/><!-- gold coin -->
-		<item id="2152" countmax="5" chance="5000"/><!-- platinum coin -->
-		<item id="2146" countmax="4" chance="3000"/><!-- small sapphires -->
-		<item id="2654" chance="35000"/><!-- cape -->
-		<item id="2178" chance="5000"/><!-- mind stone -->
-		<item id="2127" chance="6000"/><!-- emerald bangle -->
-		<item id="6558" countmax="4" chance="7500"/><!-- concentrated demonic blood -->
-		<item id="6500" chance="2500"/><!-- demonic essence -->
-		<item id="2171" chance="2350"/><!-- platinum amulet-->
-		<item id="2187" chance="2900"/><!-- wand of inferno -->
-		<item id="2476" chance="2200"/><!-- knight armor -->
-		<item id="2436" chance="2000"/><!-- skull staff -->
-		<item id="9971" chance="1000"/><!-- gold ingot -->
-		<item id="2487" chance="750"/><!-- crown armor -->
-		<item id="2153" chance="300"/><!-- violet gem -->
-		<item id="5799" chance="100"/><!-- golden figurine -->
-		<item id="7414" chance="100"/><!-- abyss hammer -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="67" chance="50000"/><!-- gold coin -->
+		<item id="2152" countmax="7" chance="33333"/><!-- platinum coin -->
+		<item id="6558" chance="25000"/><!-- concentrated demonic blood -->
+		<item id="5944" chance="11111"/><!-- soul orb -->
+		<item id="6500" chance="10000"/><!-- demonic essence -->
+		<item id="2146" countmax="4" chance="10000"/><!-- small sapphire -->
+		<item id="8473" chance="10000"/><!-- ultimate health potion -->
+		<item id="7590" countmax="2" chance="9090"/><!-- great mana potion -->
+		<item id="2178" chance="9090"/><!-- mind stone -->
+		<item id="7365" countmax="3" chance="8333"/><!-- onyx arrow -->
+		<item id="7368" countmax="5" chance="7692"/><!-- assassin star -->
+		<item id="2127" chance="4545"/><!-- emerald bangle -->
+		<item id="2200" chance="2941"/><!-- protection amulet -->
+		<item id="2187" chance="2941"/><!-- wand of inferno -->
+		<item id="2476" chance="2702"/><!-- knight armor -->
+		<item id="6300" chance="1724"/><!-- death ring -->
+		<item id="2487" chance="1234"/><!-- crown armor -->
+		<item id="2167" chance="740"/><!-- energy ring -->
+		<item id="2171" chance="740"/><!-- platinum amulet-->
+		<item id="7414" chance="495"/><!-- abyss hammer -->
+		<item id="9971" chance="495"/><!-- gold ingot -->
+		<item id="2436" chance="247"/><!-- skull staff -->
+		<item id="2153" chance="247"/><!-- violet gem -->
 	</loot>
 </monster>

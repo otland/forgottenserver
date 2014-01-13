@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Versperoth" nameDescription="versperoth" race="blood" experience="20000" speed="0" manacost="0">
+  <health now="100000" max="100000"/>
+  <look type="295" corpse="0"/>
+  <targetchange interval="5000" chance="8"/>
+  <strategy attack="90" defense="10"/>
+  <flags>
+    <flag summonable="0"/>
+    <flag attackable="1"/>
+    <flag hostile="1"/>
+    <flag illusionable="0"/>
+    <flag convinceable="0"/>
+    <flag pushable="0"/>
+    <flag canpushitems="1"/>
+    <flag canpushcreatures="1"/>
+    <flag targetdistance="0"/>
+    <flag staticattack="90"/>
+    <flag runonhealth="0"/>
+  </flags>
+<script>
+<event name="Versperoth"/>
+</script>
+	<attacks>
+		<attack name="melee" interval="1200" skill="90" attack="120"/>
+		<attack name="fire" interval="1200" chance="30" range="7" radius="4" target="0">
+			<attribute key="shootEffect" value="fire"/>
+		</attack>
+		<attack name="fire" interval="2500" chance="20" radius="8" range="8" target="1" min="-300" max="-515">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="20" radius="8" range="8" spread="3" target="1" min="-320" max="-550">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="melee" interval="3000" chance="25" range="7" radius="3" target="1" min="-450" max="-850">
+			<attribute key="areaEffect" value="explosionarea"/>
+		</attack>
+	</attacks>
+	<summons maxSummons="7">
+		<summon name="Minion of Vesperoth" interval="2000" chance="16" max="15"/>
+	</summons>
+  <defenses armor="55" defense="55">    
+  </defenses>
+  <immunities>
+    <immunity lifedrain="0"/>
+    <immunity paralyze="100"/>
+    <immunity invisible="100"/>
+  </immunities>   
+	<voices interval="2500" chance="10">
+		<voice sentence="GROWL !"/>
+		<voice sentence="Waaaah!"/>
+	</voices>
+  <loot> 
+</loot>
+</monster>

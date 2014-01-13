@@ -28,11 +28,13 @@
 	</attacks>
 	<defenses armor="30" defense="20"/>
 	<elements>
-		<element energyPercent="20"/>
 		<element firePercent="10"/>
+		<element energyPercent="20"/>
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Blubb"/>

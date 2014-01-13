@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Deepling Tyrant" nameDescription="a deepling tyrant" race="blood" experience="4200" speed="560" manacost="0">
+	<health now="4900" max="4900"/>
+	<look type="442" corpse="13839"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="60"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="34" attack="45"/>
+		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
+			<attribute key="shootEffect" value="spear"/> <!-- TODO: Add spear deepling speed effect? -->
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+	</attacks>
+	<defenses armor="12" defense="20"/>
+	<immunities>
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="3000" chance="200">
+		<voice sentence="Njaaarh!!"/>
+		<voice sentence="Begjone, intrjuder!!"/>
+		<voice sentence="Djon't djare stjare injo the eyes of the djeep!"/>
+		<voice sentence="Ljeave this sjacred pljace while you cjan"/>
+	</voices>
+	<elements>
+		<element earthPercent="-20"/>
+		<element energyPercent="-20"/>
+		<element physicalPercent="-20"/>
+		<element deathPercent="-20"/>
+	</elements>
+	<loot>
+		<item id="2148" countmax="97" chance="100000"/> <!-- gold coin -->
+		<item id="2148" countmax="97" chance="100000"/> <!-- gold coin -->
+		<item id="15455" countmax="3" chance="50000"/> <!-- deepling claw -->
+		<item id="15423" chance="50000"/> <!-- deepling guard belt buckle -->
+		<item id="2152" countmax="2" chance="50000"/> <!-- platinum coin -->
+		<item id="15424" chance="50000"/> <!-- deepling breaktime snack -->
+		<item id="7590" countmax="3" chance="50000"/> <!-- great mana potion -->
+		<item id="13870" chance="20000"/><!-- eye of a deepling -->
+		<item id="7591" chance="11111"/> <!-- great health potion -->
+		<item id="15454" chance="11111"/> <!-- guardian axe -->
+	</loot>
+</monster>

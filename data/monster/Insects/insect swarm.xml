@@ -22,14 +22,9 @@
 	</attacks>
 	<defenses armor="10" defense="10"/>
 	<immunities>
-			<immunity earth="1"/>
+		<immunity earth="1"/>
 	</immunities>
 	<elements>
-		<element physicalPercent="0"/>
-		<element holyPercent="0"/>
-		<element deathPercent="0"/>
-		<element energyPercent="0"/>
-		<element icePercent="0"/>
-		<element firePercent="-1"/>
+		<element firePercent="-10"/>
 	</elements>
 </monster>

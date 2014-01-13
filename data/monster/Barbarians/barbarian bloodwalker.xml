@@ -45,17 +45,17 @@
 		<voice sentence="You can run but you can't hide"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="20000"/><!-- gold coin -->
-		<item id="2671" chance="14250"/><!-- ham -->
-		<item id="2044" chance="12500"/><!-- lamp -->
-		<item id="2381" chance="10750"/><!-- halberd -->
-		<item id="2458" chance="9000"/><!-- chain helmet -->
-		<item id="2378" chance="9000"/><!-- battle axe -->
-		<item id="2464" chance="5400"/><!-- chain armor -->
-		<item id="5911" chance="250"/><!-- red piece of cloth -->
-		<item id="7618" chance="2000"/><!-- health potion -->
-		<item id="3962" chance="500"/><!-- beastslayer axe -->
-		<item id="7457" chance="500"/><!-- fur boots -->
-		<item id="7290" chance="300"/><!-- shard -->
+		<item id="2148" countmax="12" chance="50000"/><!-- gold coin -->
+		<item id="2458" chance="10000"/><!-- chain helmet -->
+		<item id="2464" chance="10000"/><!-- chain armor -->
+		<item id="2044" chance="7692"/><!-- lamp -->
+		<item id="2381" chance="6666"/><!-- halberd -->
+		<item id="2378" chance="5882"/><!-- battle axe -->
+		<item id="2671" chance="4761"/><!-- ham -->
+		<item id="7618" chance="952"/><!-- health potion -->
+		<item id="5911" chance="534"/><!-- red piece of cloth -->
+		<item id="3962" chance="390"/><!-- beastslayer axe -->
+		<item id="7457" chance="289"/><!-- fur boots -->
+		<item id="7290" chance="100"/><!-- shard -->
 	</loot>
 </monster>

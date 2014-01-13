@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lost Berserker" nameDescription="a lost berserker" race="blood" experience="4400" speed="268" manacost="0">
+	<health now="5900" max="5900"/>
+	<look type="496" corpse="17416"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1700" skill="100" attack="75"/>
+		<attack name="physical" interval="2000" chance="20" range="7" min="-100" max="-300">
+			<attribute key="shootEffect" value="Whirlwindaxe"/>
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" length="4" spread="0" min="-100" max="-250"/>
+	</attacks>
+	<defenses armor="30" defense="20">
+		<defense name="healing" interval="1000" chance="10" min="0" max="770">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="invisible" interval="2000" chance="25" duration="100">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="-30"/>
+		<element physicalPercent="-30"/>
+		<element holyPercent="-50"/>
+		<element deathPercent="-25"/>
+		<element earthPercent="-50"/>
+		<element energyPercent="-25"/>
+		<element icePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Kill! Kill! Kill!"/>
+		<voice sentence="Death! Death! Death!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance1="10000" chancemax="0"/>
+	</loot>
+</monster>

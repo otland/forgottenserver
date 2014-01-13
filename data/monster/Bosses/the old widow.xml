@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Old Widow" nameDescription="the Old Widow" race="blood" experience="2800" speed="240" manacost="0">
+<monster name="The Old Widow" nameDescription="the Old Widow" race="blood" experience="4200" speed="240" manacost="0">
 	<health now="3200" max="3200"/>
 	<look type="208" corpse="5977"/>
 	<targetchange interval="5000" chance="8"/>
@@ -51,17 +51,20 @@
 		<summon name="giant spider" interval="1000" chance="13" max="2"/>
 	</summons>
 	<loot>
-		<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
-		<item id="2463" chance="4000"/><!-- plate armor -->
-		<item id="2171" chance="400"/><!-- platinum amulet -->
-		<item id="2459" chance="20000"/><!-- iron helmet -->
-		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
-		<item id="5879" countmax="1" chance="5000"/><!-- giant spider silk -->
-		<item id="2457" countmax="1" chance="10000"/><!-- steel helmet -->
-		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
-		<item id="2476" chance="1000"/><!-- knight armor -->
-		<item id="2477" chance="500"/><!-- knight legs -->
-		<item id="2478" chance="10000"/><!-- brass legs -->
-		<item id="2169" chance="800"/><!-- time ring -->
+		<item id="2148" countmax="99" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="10" chance="100000"/><!-- platinum coin -->
+		<item id="5879" chance="100000"/><!-- spider silk -->
+		<item id="2457" chance="100000"/><!-- steel helmet -->
+		<item id="7591" countmax="4" chance="100000"/><!-- great health potion -->
+		<item id="2476" chance="50000"/><!-- knight armor -->
+		<item id="2165" chance="33333"/><!-- stealth ring -->
+		<item id="2167" chance="33333"/><!-- energy ring -->
+		<item id="2169" chance="33333"/><!-- time ring -->
+		<item id="13307" chance="33333"/><!-- sweet smelling bait -->
+		<item id="2477" chance="25000"/><!-- knight legs -->
+		<item id="2171" chance="25000"/><!-- platinum amulet -->
+		<item id="5886" chance="25000"/><!-- spool of yarn -->
+		<item id="7416" chance="3225"/><!-- bloody edge -->
+		<item id="7419" chance="1639"/><!-- dreaded cleaver -->
 	</loot>
 </monster>

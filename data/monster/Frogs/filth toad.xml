@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Filth Toad" nameDescription="a filth toad" race="blood" experience="90" speed="240" manacost="0">
+	<health now="185" max="185"/>
+	<look type="222" corpse="6077"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="20"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="30"/>
+		<attack name="physical" interval="1000" chance="15" range="7" min="-8" max="-34">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="17" range="7" radius="4" target="1" speedchange="-300" duration="3300">
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+	</attacks>
+	<defenses armor="12" defense="10"/>
+	<loot>
+		<item id="2148" countmax="21" chance="100000"/><!-- gold coin -->
+		<item id="2667" countmax="2" chance="20000"/><!-- fish -->
+		<item id="10557" chance="3571"/><!-- poisonous slime -->
+		<item id="2398" chance="2777"/><!-- mace -->
+	</loot>
+</monster>

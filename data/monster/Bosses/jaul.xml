@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Jaul" nameDescription="a jaul" race="blood" experience="30000" speed="560" manacost="0">
+	<health now="100000" max="100000"/>
+	<look type="444" corpse="15220"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="60"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="34" attack="45"/>
+		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
+			<attribute key="shootEffect" value="spear"/> <!-- TODO: Add spear deepling speed effect? -->
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+	</attacks>
+	<defenses armor="12" defense="20"/>
+	<immunities>
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="3000" chance="200">
+		<voice sentence="QJELL AFAR GOU JEY!!"/>
+		<voice sentence="DIE!! KENH!!"/>
+	</voices>
+	<elements>
+		<element deathPercent="-1"/>
+	</elements>
+	<loot>
+		<item id="15413" chance="50000"/> <!-- ornate shield -->
+		<item id="15408" chance="33333"/> <!-- depth galea -->
+		<item id="15404" chance="25000"/> <!-- deepling axe -->
+		<item id="15406" chance="25000"/> <!-- ornate chestplate -->
+		<item id="15407" chance="20000"/> <!-- depth lorica -->
+		<item id="15410" chance="14285"/><!-- depth calcei -->
+		<item id="15414" chance="14285"/><!-- ornate mace -->
+		<item id="15412" chance="7142"/><!-- ornate legs -->
+	</loot>
+</monster>

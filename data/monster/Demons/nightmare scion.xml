@@ -37,10 +37,9 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element holyPercent="-25"/>
-		<element firePercent="45"/>
+		<element firePercent="20"/>
 		<element energyPercent="20"/>
-		<element icePercent="15"/>
+		<element icePercent="10"/>
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
@@ -49,20 +48,22 @@
 	</immunities>
 	<voices interval="7500" chance="20">
 		<voice sentence="Weeeheeheee!"/>
+		<voice sentence="Pffffrrrrrrrrrrrr."/>
+		<voice sentence="Peak a boo, I killed you!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="74" chance="43000"/><!-- gold coin -->
-		<item id="2148" countmax="73" chance="43000"/><!-- gold coin -->
-		<item id="2491" chance="800"/><!-- crown helmet -->
-		<item id="9941" chance="250"/><!-- crystal of focus -->
-		<item id="6300" chance="250"/><!-- death ring -->
-		<item id="7387" chance="400"/><!-- diamond sceptre -->
-		<item id="2387" chance="1000"/><!-- double axe -->
-		<item id="8871" chance="230"/><!-- focus cape -->
-		<item id="2152" countmax="3" chance="800"/><!-- platinum coin -->
-		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
-		<item id="2666" countmax="4" chance="27500"/><!-- meat -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="54" chance="50000"/><!-- gold coin -->
+		<item id="2666" chance="50000"/><!-- meat -->
+		<item id="11223" chance="7692"/><!-- essence of a bad dream -->
+		<item id="11229" chance="4761"/><!-- scythe leg -->
+		<item id="2152" countmax="3" chance="961"/><!-- platinum coin -->
+		<item id="2491" chance="666"/><!-- crown helmet -->
+		<item id="7387" chance="387"/><!-- diamond sceptre -->
+		<item id="8871" chance="375"/><!-- focus cape -->
 		<item id="6574" chance="150"/><!-- bar of chocolate -->
-		<item id="7451" chance="170"/><!-- shadow sceptre -->
+		<item id="6300" chance="246"/><!-- death ring -->
+		<item id="7451" chance="246"/><!-- shadow sceptre -->
+		<item id="9941" chance="105"/><!-- crystal of focus -->
 	</loot>
 </monster>

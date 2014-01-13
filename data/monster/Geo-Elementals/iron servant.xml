@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Iron Servant" nameDescription="a iron servant" race="energy" experience="210" speed="340" manacost="0">
+	<health now="350" max="350"/>
+	<look type="395" corpse="13486"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="30"/>
+	</flags>
+	<attacks>
+      <attack name="melee" interval="2000" min="-20" max="-45"/>
+		<attack name="physical" interval="1000" chance="14" range="7" min="-0" max="-95">
+			<attribute key="shootEffect" value="spear"/>
+		</attack>
+	</attacks>
+	<elements>
+		<element earthPercent="-1"/>
+		<element holyPercent="1"/>
+		<element firePercent="10"/>
+		<element energyPercent="1"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Error. LOAD 'PROGRAM',8,1"/>
+		<voice sentence="Remain. Obedient."/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="55" chance="50000"/><!-- gold coin -->
+		<item id="9690" chance="4761"/><!-- gear wheel -->
+		<item id="9809" chance="4650"/><!-- rusty armor -->
+		<item id="7618" chance="2000"/><!-- health potion -->
+		<item id="2381" chance="990"/><!-- halberd -->
+		<item id="9808" chance="537"/><!-- rusty armor -->
+		<item id="13758" chance="318"/><!-- slime mould -->
+	</loot>
+</monster>

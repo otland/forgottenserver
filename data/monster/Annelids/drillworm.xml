@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Drillworm" nameDescription="drillworm" race="venom" experience="1100" speed="304" manacost="0">
+	<health now="1500" max="1500"/>
+	<look type="527" corpse="19705"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="110"/>
+		<attack name="lifedrain" interval="2500" chance="100" radius="6" range="7" min="-200" max="-290">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="34" range="7" speedchange="-850" duration="30000">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+		<attack name="poison" interval="1000" chance="12" target="1" min="-10" max="-30">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55"/>
+	<elements>
+		<element energyPercent="10"/>
+		<element icePercent="10"/>
+		<element holyPercent="10"/>
+		<element deathPercent="10"/>
+		<element firePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity earth="100"/>
+		<immunity paralyze="100"/>
+		<immunity invisible="100"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Knarrrk!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="30000"/> <!-- Gold Coin -->
+		<item id="2148" countmax="50" chance="33333"/> <!-- Gold Coin -->
+		<item id="3976" countmax="5" chance="33333"/> <!-- Worms -->
+		<item id="18436" countmax="2" chance="880"/> <!-- Drill Bolts -->
+		<item id="13757" chance="600"/> <!-- Coal -->
+		<item id="11222" chance="500"/> <!-- Lump of Earth -->
+		<item id="2553" chance="500"/> <!-- Pick -->
+		<item id="5880" chance="450"/> <!-- Iron Ore -->
+		<item id="7887" chance="900"/> <!-- Terra Amulet -->
+		<item id="2515" chance="400"/> <!-- Dwarven Ring -->
+		<item id="7452" chance="300"/> <!-- Spiked Squelcher -->
+		<item id="11339" chance="450"/> <!-- Clay Lump -->
+	</loot>
+</monster>

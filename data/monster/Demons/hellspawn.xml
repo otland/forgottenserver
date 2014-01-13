@@ -43,29 +43,30 @@
 		<voice sentence="Your fragile bones are like toothpicks to me." yell="1"/>
 		<voice sentence="You little weasel will not live to see another day." yell="1"/>
 		<voice sentence="I'm just a messenger of what's yet to come." yell="1"/>
+		<voice sentence="HRAAAAAAAAAAAAAAAARRRR" yell="1"/>
+		<voice sentence="I'm taking you down with me!" yell="1"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="44000"/><!-- gold coin -->
-		<item id="2148" countmax="70" chance="44000"/><!-- gold coin -->
-		<item id="2148" countmax="60" chance="44000"/><!-- gold coin -->
-		<item id="7368" countmax="2" chance="7750"/><!-- assassin stars -->
-		<item id="2413" chance="5000"/><!-- battle shield -->
-		<item id="2231" chance="7000"/><!-- big bone -->
-		<item id="2478" chance="12000"/><!-- brass legs -->
-		<item id="10000" chance="10000"/><!-- demonic essence -->
-		<item id="7591" chance="40500"/><!-- great health potion -->
-		<item id="2477" chance="2750"/><!-- knight legs -->
-		<item id="2666" countmax="6" chance="7000"/><!-- meat -->
-		<item id="2394" chance="11000"/><!-- morning star -->
-		<item id="9809" chance="1750"/><!-- rusty armor -->
-		<item id="9809" chance="1750"/><!-- rusty armor -->
-		<item id="9970" countmax="4" chance="3250"/><!-- small topaz -->
-		<item id="7452" chance="1000"/><!-- spiked squelcher -->
-		<item id="8473" chance="10000"/><!-- ultimate health potion -->
-		<item id="2475" chance="1900"/><!-- warrior helmet -->
-		<item id="7439" chance="1100"/><!-- berserk potion -->
-		<item id="9969" chance="200"/><!-- black skull -->
-		<item id="7421" chance="200"/><!-- onyx fail -->
-		<item id="9948" chance="100"/><!-- dracoyle statue -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="36" chance="50000"/><!-- gold coin -->
+		<item id="7591" chance="33333"/><!-- great health potion -->
+		<item id="11221" chance="20000"/><!-- hellspawn tail -->
+		<item id="2413" chance="10000"/><!-- battle shield -->
+		<item id="2394" chance="10000"/><!-- morning star -->
+		<item id="7368" countmax="2" chance="9090"/><!-- assassin stars -->
+		<item id="8473" chance="9090"/><!-- ultimate health potion -->
+		<item id="10000" chance="9090"/><!-- demonic essence -->
+		<item id="2788" countmax="2" chance="7692"/><!-- red mushroom -->
+		<item id="9970" countmax="4" chance="5882"/><!-- small topaz -->
+		<item id="9809" chance="3125"/><!-- rusty armor -->
+		<item id="9809" chance="3125"/><!-- rusty armor -->
+		<item id="2477" chance="3030"/><!-- knight legs -->
+		<item id="2475" chance="1886"/><!-- warrior helmet -->
+		<item id="7452" chance="970"/><!-- spiked squelcher -->
+		<item id="7439" chance="934"/><!-- berserk potion -->
+		<item id="9969" chance="151"/><!-- black skull -->
+		<item id="9948" chance="140"/><!-- dracoyle statue -->
+		<item id="7421" chance="103"/><!-- onyx fail -->
 	</loot>
 </monster>

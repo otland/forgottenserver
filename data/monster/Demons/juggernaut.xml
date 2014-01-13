@@ -29,50 +29,47 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="40"/>
+		<element physicalPercent="50"/>
 		<element firePercent="30"/>
-		<element icePercent="30"/>
-		<element earthPercent="30"/>
-		<element energyPercent="-20"/>
-		<element holyPercent="-15"/>
+		<element icePercent="10"/>
+		<element earthPercent="20"/>
+		<element energyPercent="-10"/>
+		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="WAHHHH!"/>
 		<voice sentence="RAAARRR!"/>
 		<voice sentence="GRRRRRR!"/>
+		<voice sentence="WAHHHH!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="22000"/><!-- gold coin -->
-		<item id="2148" countmax="90" chance="22000"/><!-- gold coin -->
-		<item id="2148" countmax="80" chance="22000"/><!-- gold coin -->
-		<item id="2148" countmax="70" chance="22000"/><!-- gold coin -->
-		<item id="2148" countmax="70" chance="22000"/><!-- gold coin -->
-		<item id="6558" chance="13750"/><!-- concentrated demonic blood -->
-		<item id="6558" chance="13750"/><!-- concentrated demonic blood -->
-		<item id="6558" chance="13750"/><!-- concentrated demonic blood -->
-		<item id="6558" chance="13750"/><!-- concentrated demonic blood -->
-		<item id="6500" chance="45000"/><!-- demonic essence -->
-		<item id="9971" chance="3000"/><!-- gold ingot -->
-		<item id="7590" chance="9000"/><!-- great mana potion -->
-		<item id="7591" chance="7500"/><!-- great health potion -->
-		<item id="2671" countmax="8" chance="10750"/><!-- ham -->
-		<item id="2152" countmax="5" chance="2400"/><!-- platinum coin -->
-		<item id="9808" chance="7500"/><!-- rusty armor -->
-		<item id="5944" chance="30000"/><!-- soul orb -->
-		<item id="7452" chance="1500"/><!-- spiked squelcher -->
-		<item id="7365" chance="7500"/><!-- onyx arrow -->
-		<item id="2220" chance="10000"/><!-- dirty fur -->
-		<item id="2228" chance="12500"/><!-- broken pottery -->
-		<item id="2434" chance="7000"/><!-- dragon hammer -->
-		<item id="2136" chance="750"/><!-- demonbone amulet -->
-		<item id="2470" chance="500"/><!-- golden legs -->
-		<item id="2466" chance="650"/><!-- golden armor -->
-		<item id="2514" chance="450"/><!-- mastermand shield -->
-		<item id="8889" chance="300"/><!-- skullcracker armor -->
-		<item id="2452" chance="250"/><!-- heavy mace -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="7" chance="50000"/><!-- platinum coin -->
+		<item id="2671" chance="50000"/><!-- ham -->
+		<item id="6500" chance="33333"/><!-- demonic essence -->
+		<item id="5944" chance="33333"/><!-- soul orb -->
+		<item id="6558" chance="25000"/><!-- concentrated demonic blood -->
+		<item id="7591" countmax="3" chance="25000"/><!-- great health potion -->
+		<item id="2147" countmax="4" chance="20000"/><!-- small ruby -->
+		<item id="7368" countmax="10" chance="20000"/><!-- assassin star -->
+		<item id="7590" countmax="3" chance="20000"/><!-- great mana potion -->
+		<item id="2149" countmax="4" chance="16666"/><!-- small emerald -->
+		<item id="9808" chance="12500"/><!-- rusty armor -->
+		<item id="7365" countmax="15" chance="11111"/><!-- onyx arrow -->
+		<item id="2156" chance="11111"/><!-- red gem -->
+		<item id="9971" countmax="3" chance="7692"/><!-- gold ingot -->
+		<item id="7632" chance="6666"/><!-- giant shimmering pearl -->
+		<item id="7452" chance="4761"/><!-- spiked squelcher -->
+		<item id="2153" chance="2173"/><!-- violet gem -->
+		<item id="2136" chance="869"/><!-- demonbone amulet -->
+		<item id="2466" chance="869"/><!-- golden armor -->
+		<item id="2155" chance="869"/><!-- green gem -->
+		<item id="2578" chance="434"/><!-- closed trap -->
 	</loot>
 </monster>

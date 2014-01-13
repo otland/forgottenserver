@@ -32,30 +32,27 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="-15"/>
-		<element icePercent="-5"/>
 		<element firePercent="50"/>
-		<element holyPercent="-5"/>
+		<element energyPercent="-10"/>
+		<element icePercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
-		<immunity outfit="1"/>
-		<immunity drunk="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="2000" chance="5">
-		<voice sentence="rattle!"/>
-		<voice sentence="tak tak!"/>
-		<voice sentence="tak tak tak!"/>
+		<voice sentence="Rattle"/>
+		<voice sentence="*tak tak*"/>
+		<voice sentence="*tak tak tak*"/>
 	</voices>
 	<loot>
-		<item id="2478" chance="9000"/><!-- brass legs -->
-		<item id="2152" countmax="2" chance="23000"/><!-- plat coin -->
-		<item id="2148" countmax="93" chance="23000"/><!-- gold coin -->
-		<item id="2439" chance="3600"/><!-- daraminian mace -->
-		<item id="2457" chance="2200"/><!-- steel helmet -->
-		<item id="2149" countmax="2" chance="1600"/><!-- emeralds -->
-		<item id="2529" chance="900"/><!-- black shield -->
-		<item id="13535" chance="100"/><!-- fist on a stick -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="28" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="2" chance="11111"/><!-- platinum coin -->
+		<item id="2149" countmax="2" chance="11111"/><!-- small emerald -->
+		<item id="2439" chance="6250"/><!-- daraminian mace -->
+		<item id="2457" chance="5263"/><!-- steel helmet -->
+		<item id="2529" chance="1724"/><!-- black shield -->
+		<item id="13535" chance="108"/><!-- fist on a stick -->
 	</loot>
 </monster>

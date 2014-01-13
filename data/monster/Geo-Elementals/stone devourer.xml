@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stone Devoruer" nameDescription="a stone devoruer" race="undead" experience="2900" speed="260" manacost="0">
+	<health now="4200" max="4200"/>
+	<look type="486" corpse="18375"/>
+	<targetchange interval="20000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="80"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+      <attack name="melee" interval="2000" min="-250" max="-440"/>
+		<attack name="earth" interval="3000" chance="17" range="7" target="1" radius="2" min="-230" max="-325">
+					<attribute key="shootEffect" value="earth"/>
+			<attribute key="areaEffect" value="stones"/>
+		</attack>
+				<attack name="earth" interval="4000" chance="14" range="7" target="1" radius="2" min="-300" max="-550">
+			<attribute key="areaEffect" value="stones"/>
+					</attack>
+	
+	</attacks>
+	<defenses armor="30" defense="30"/>
+	<elements>
+		<element deathPercent="-1"/>
+		<element icePercent="-1"/>
+		<element physicalPercent="-1"/>
+		<element energyPercent="-1"/>
+		<element holyPercent="-1"/>
+	</elements>
+		<voices interval="2500" chance="10">
+		<voice sentence="Rumble!"/>
+			</voices>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+				<immunity fire="1"/>
+		<immunity earth="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="80" chance="24500"/><!-- gold coin -->
+		<item id="2148" countmax="47" chance="24500"/><!-- gold coin -->
+		<item id="1294" countmax="3" chance="40000"/><!-- small stones -->
+		<item id="2244" chance="22000"/><!-- some leaves -->
+		<item id="8298" chance="3750"/><!-- natural soil -->
+	</loot>
+</monster>

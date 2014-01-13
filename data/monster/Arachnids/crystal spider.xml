@@ -23,9 +23,9 @@
 		<attack name="speed" interval="2000" chance="20" range="7" radius="7" target="0" speedchange="-850" duration="8000">
 		<attribute key="areaEffect" value="poff"/>
 		</attack>
-		<attack name="ice" interval="1000" chance="25" range="7" target="1" min="-50" max="-100">
-			<attribute key="shootEffect" value="smallice"/>
-			<attribute key="areaEffect" value="iceattack"/>
+		<attack name="energy" interval="1000" chance="25" range="7" target="1" min="-60" max="-150">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="energy"/>
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="20">
@@ -49,22 +49,22 @@
 		<voice sentence="Screeech!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="800000"/><!-- gold coin -->
-		<item id="2148" countmax="45" chance="800000"/><!-- gold coin -->
-		<item id="7364" countmax="7" chance="2500"/><!-- sniper arrow -->
-		<item id="2478" chance="8600"/><!-- brass legs -->
-		<item id="2463" chance="6500"/><!-- plate armor -->
-		<item id="2463" chance="4000"/><!-- ice cube -->
-		<item id="2457" chance="4000"/><!-- steel helmet -->
-		<item id="7437" chance="1100"/><!-- sapphire hammer -->
-		<item id="5879" chance="1100"/><!-- spider silk-->
-		<item id="7449" chance="725"/><!-- crystal sword -->
-		<item id="7589" chance="500"/><!-- strong mana potion -->
-		<item id="2477" chance="200"/><!-- knight legs -->
-		<item id="7290" chance="500"/><!-- shard -->
-		<item id="2169" chance="450"/><!-- time ring -->
-		<item id="7902" chance="300"/><!-- glacier mask -->
-		<item id="2476" chance="200"/><!-- knight armor -->
-		<item id="2171" chance="250"/><!-- platinum amulet -->
+		<item id="2148" countmax="82" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="83" chance="100000"/><!-- gold coin -->
+		<item id="7589" chance="14285"/><!-- strong mana potion -->
+		<item id="2463" chance="10000"/><!-- plate armor -->
+		<item id="2478" chance="10000"/><!-- brass legs -->
+		<item id="7364" countmax="6" chance="6250"/><!-- sniper arrow -->
+		<item id="2463" chance="5263"/><!-- ice cube -->
+		<item id="2457" chance="4545"/><!-- steel helmet -->
+		<item id="7449" chance="2564"/><!-- crystal sword -->
+		<item id="5879" chance="2222"/><!-- spider silk-->
+		<item id="2169" chance="1587"/><!-- time ring -->
+		<item id="7290" chance="1010"/><!-- shard -->
+		<item id="2477" chance="952"/><!-- knight legs -->
+		<item id="2476" chance="684"/><!-- knight armor -->
+		<item id="7902" chance="265"/><!-- glacier mask -->
+		<item id="2171" chance="212"/><!-- platinum amulet -->
+		<item id="7437" chance="159"/><!-- sapphire hammer -->
 	</loot>
 </monster>

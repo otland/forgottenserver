@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ironblight" nameDescription="ironblight" race="blood" experience="4400" speed="570" manacost="0">
+	<health now="6600" max="6600"/>
+	<look type="498" corpse="17424"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+	<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="30"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-20" max="-245"/>
+		<attack name="manadrain" interval="2000" chance="13" min="-30" max="-105" range="7"/>
+		<attack name="ice" interval="1000" chance="15" radius="2" target="1" min="-150" max="-390">
+			<attribute key="areaEffect" value="bluebubble"/>
+			<attribute key="shootEffect" value="ice"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="13" range="7" min="-110" max="-250">
+			<attribute key="areaEffect" value="smallplants"/>
+			<attribute key="shootEffect" value="throwingstar"/>
+		</attack>
+		<attack name="poison" interval="2000" chance="15" range="7" radius="1" target="1" min="-15" max="-2">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55">    
+	</defenses>
+	<elements>
+		<element physicalPercent="15"/>
+		<element deathPercent="40"/>		
+		<element icePercent="20"/>	
+		<element energyPercent="25"/>		
+		<element firePercent="60"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>      
+	<voices interval="3000" chance="200">
+		<voice sentence="Clink!"/>
+		<voice sentence="Yowl!"/>
+		<voice sentence="Clank!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="55" chance="50000"/><!-- gold coin -->
+		<item id="9690" chance="4761"/><!-- gear wheel -->
+		<item id="9809" chance="4650"/><!-- rusty armor -->
+		<item id="7618" chance="2000"/><!-- health potion -->
+		<item id="2381" chance="990"/><!-- halberd -->
+		<item id="9808" chance="537"/><!-- rusty armor -->
+		<item id="13758" chance="318"/><!-- slime mould -->
+	</loot>
+</monster>

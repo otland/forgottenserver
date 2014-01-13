@@ -8,35 +8,38 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="0"/>
+		<flag illusionable="1"/>
 		<flag convinceable="1"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag staticattack="90"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="50"/>
-		<attack name="melee" interval="1000" chance="10" range="7" radius="3" target="0" min="-95" max="-155">
+		<attack name="melee" interval="2000" skill="50" attack="150" poison="20"/>
+		<attack name="lifedrain" interval="2000" chance="11" radius="3" target="0" min="-50" max="-90">
 			<attribute key="areaEffect" value="blackspark"/>
 		</attack>
-		<attack name="poisonfield" interval="1000" chance="35" range="7" radius="2" target="0">
-			<attribute key="shootEffect" value="poison"/>
+		<attack name="ice" interval="2000" chance="12" range="7" min="-40" max="-70" target="0" radius="4">
+			<attribute key="areaEffect" value="iceattack"/>
+		</attack> 	
+		<attack name="energycondition" interval="2000" chance="10" min="-75" max="-75" range="1" target="1">
+			<attribute key="shootEffect" value="energy"/>
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15"/>
 	<elements>
-		<element firePercent="100"/>
-		<element icePercent="100"/>
-		<element earthPercent="-12"/>
+		<element earthPercent="-10"/>
 		<element energyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
 		<immunity drown="1"/>
+		<immunity fire="1"/>
+		<immunity ice="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Gaaahhh!"/>
@@ -45,14 +48,12 @@
 		<voice sentence="Boohaa!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="48" chance="34000"/><!-- gold coin -->
-		<item id="2148" countmax="45" chance="34000"/><!-- gold coin -->
-		<item id="2406" chance="7200"/><!-- short sword -->
-		<item id="2465" chance="2500"/><!-- brass armor -->
-		<item id="2460" chance="7500"/><!-- brass helmet -->
-		<item id="2397" chance="4600"/><!-- longsword -->
-		<item id="2670" countmax="5" chance="1000"/><!-- shrimp -->
-		<item id="5895" chance="2000"/><!-- fish fin -->
-		<item id="2150" chance="1000"/><!-- small amethyst -->
-	</loot>
+    <item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+    <item id="12443" chance="9090" /><!-- quara tentacle -->
+    <item id="2397" chance="4761" /><!-- longsword -->
+    <item id="2670" chance="4545" /><!-- shrimp -->
+    <item id="1923" chance="2725" /><!-- brass armor -->
+    <item id="5895" chance="537" /><!-- fish fin -->
+    <item id="2150" chance="393" /><!-- small amethyst -->
+</loot>
 </monster>

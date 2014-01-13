@@ -18,18 +18,27 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" skill="30" attack="20"/>
-		<attack name="lifedrain" interval="1000" chance="12" length="7" spread="0" min="-150" max="-250">
+		<attack name="melee" interval="2000" skill="30" attack="40"/>
+		<attack name="ice" interval="2000" chance="9" length="8" spread="0" min="-125" max="-250">
 			<attribute key="areaEffect" value="bubbles"/>
 		</attack>
-		<attack name="lifedrain" interval="1000" chance="10" length="7" spread="0" min="-170" max="-220">
-			<attribute key="areaEffect" value="greenshimmer"/>
-		</attack>
-		<attack name="ice" interval="1000" chance="12" range="7" radius="3" target="0" min="--130" max="-165">
+		<attack name="ice" interval="2000" chance="12" radius="3" target="0" min="-130" max="-165">
 			<attribute key="areaEffect" value="bubbles"/>
 		</attack>
+		<attack name="lifedrain" interval="2000" chance="8" range="7" target="1" min="-45" max="-170">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>	
+			<attack name="lifedrain" interval="2000" chance="7" length="8" spread="3" max="-210">
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>	
+			<attack name="speed" interval="2000" chance="10" range="7" speedchange="-600" duration="5000">
+		</attack>	
 	</attacks>
-	<defenses armor="15" defense="18"/>
+	<defenses armor="15" defense="18">
+		<defense name="healing" interval="2000" chance="10" min="100" max="120">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>	
+	</defenses>
 	<immunities>
 		<immunity ice="1"/>
 		<immunity fire="1"/>
@@ -38,23 +47,26 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<elements>
-		<element energyPercent="-25"/>
-		<element earthPercent="-10"/>
+		<element energyPercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Qua hah tsh!"/>
+		<voice sentence="Teech tsha tshul!"/>
+		<voice sentence="Quara tsha Fach!"/>
+		<voice sentence="Tssssha Quara!"/>
+		<voice sentence="Blubber."/>
+		<voice sentence="Blup."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
-		<item id="2148" countmax="30" chance="100000"/><!-- gold coin -->
-		<item id="2240" chance="10000"/><!-- fish remains -->
-		<item id="2401" chance="2857"/><!-- staff -->
-		<item id="2149" chance="1000"/><!-- small emerald -->
-		<item id="2144" chance="1429"/><!-- black pearl -->
-		<item id="2143" chance="1333"/><!-- white pearl -->
-		<item id="2189" chance="1333"/><!-- wand of cosmic energy -->
-		<item id="2214" chance="1538"/><!-- ring of healing -->
-		<item id="5895" chance="3333"/><!-- fish fin -->
-		<item id="2476" chance="500"/><!-- knight armor -->
-	</loot>
+    <item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
+    <item id="12444" chance="9090" /><!-- quara eye -->
+    <item id="2667" countmax="2" chance="9090" /><!-- fish -->
+    <item id="2143" chance="2272" /><!-- white pearl -->
+    <item id="2144" chance="1960" /><!-- black pearl -->
+    <item id="2149" countmax="2" chance="917" /><!-- small emerald -->
+	<item id="2189" chance="917" /><!-- wand of cosmic energy -->
+    <item id="5895" chance="884" /><!-- fish fin -->
+	<item id="2214" chance="649" /><!-- ring of healing -->
+	<item id="2476" chance="295" /><!-- knight armor -->
+</loot>
 </monster>

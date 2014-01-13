@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lost Basher" nameDescription="a lost basher" race="blood" experience="1800" speed="320" manacost="0">
+	<health now="2600" max="2600"/>
+	<look type="538" corpse="19962"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="95" attack="110"/>
+		<attack name="melee" interval="2000" chance="17" radius="4" min="-0" max="-250">
+			<attribute key="shootEffect" value="explosion"/>
+		</attack>
+		<attack name="drunk" interval="2000" chance="17" radius="4" min="-0" max="-240">
+			<attribute key="areaEffect" value="yellownote"/>
+		</attack>
+		<attack name="lifedrain" interval="1500" chance="20" min="-0" max="-290">
+			<attribute key="areaEffect" value="yellownote"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35">
+		<defense name="healing" interval="2000" chance="25" min="0" max="120">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="10"/>
+		<element icePercent="10"/>
+		<element energyPercent="10"/>
+		<element firePercent="10"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Yhouuuu!"/>
+		<voice sentence="Whaaarr!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="30000"/> <!-- Gold Coin -->
+		<item id="2152" countmax="2" chance="30000"/> <!-- Platinum Coin -->
+		<item id="2789" countmax="2" chance="3000"/> <!-- Brown Mushroom -->
+		<item id="20135" chance="880"/> <!-- Basalt Fetish -->
+		<item id="8473" chance="450"/> <!-- UHP -->
+		<item id="7590" chance="410"/> <!-- GMP -->
+		<item id="9970" chance="300"/> <!-- Small Topazes -->
+		<item id="20136" chance="450"/> <!-- Basalt Figurine -->
+		<item id="20109" chance="410"/> <!-- Bonecarving Knife -->
+		<item id="20110" chance="300"/> <!-- Bone Fetish -->
+		<item id="13757" chance="410"/> <!-- Coal -->
+		<item id="20106" chance="300"/> <!-- Bloody Dwarven Beard -->
+		<item id="20134" chance="410"/> <!-- Red Hair Dye -->
+		<item id="20126" chance="300"/> <!-- Wimp Tooth Chain -->
+		<item id="2215" chance="410"/> <!-- Dwarven Ring -->
+		<item id="2529" chance="300"/> <!-- Black Shield -->
+		<item id="7750" chance="250"/> <!-- Knight Axe -->
+		<item id="5880" chance="410"/> <!-- Iron Ore -->
+		<item id="2432" chance="300"/> <!-- Fire Axe -->
+		<item id="20108" chance="250"/> <!-- Buckle -->
+		<item id="2114" chance="410"/> <!-- Piggy Bank -->
+		<item id="20105" chance="300"/> <!-- Lost Basher's Spike -->
+		<item id="20107" chance="300"/> <!-- Pair of Iron Fists -->
+	</loot>
+</monster>

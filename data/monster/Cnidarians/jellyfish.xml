@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Jellyfish" nameDescription="a Jellyfish" race="blood" experience="0" speed="560" manacost="0">
+	<health now="55" max="55"/>
+	<look type="452" corpse="15284"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="10"/>
+	</attacks>
+	<defenses armor="12" defense="20"/>
+	<voices interval="3000" chance="200">
+		<voice sentence="Luuurrrp"/>
+	</voices>
+	<loot>
+		<item id="2670" chance="8333"/> <!-- shrimp -->
+	</loot>
+</monster>

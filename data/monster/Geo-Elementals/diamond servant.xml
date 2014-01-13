@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Diamond Servant" nameDescription="a diamond servant" race="energy" experience="700" speed="340" manacost="0">
+	<health now="1000" max="1000"/>
+	<look type="397" corpse="13484"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+      <attack name="melee" interval="2000" min="-50" max="-100"/>
+    <attack name="energy" interval="2000" chance="25" range="7" min="-60" max="-125">
+      <attribute key="shootEffect" value="energy"/>
+		</attack>
+			<attack name="energy" interval="3000" chance="10" range="1" target="1" min="-35" max="-90">
+		<attribute key="areaEffect" value="purpleenergy"/>
+				</attack>
+	</attacks>
+	<elements>
+		<element earthPercent="80"/>
+		<element firePercent="10"/>
+		<element icePercent="-5"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity energy="1"/>
+		<immunity invisible="1"/>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Error. LOAD 'PROGRAM',8,1"/>
+		<voice sentence="Remain. Obedient."/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="79" chance="50000"/><!-- gold coin -->
+		<item id="5944" chance="33333"/><!-- soul orb -->
+		<item id="2177" chance="9090"/><!-- life crystal -->
+		<item id="7589" chance="5882"/><!-- strong mana potion -->
+		<item id="7588" chance="5555"/><!-- strong health potion -->
+		<item id="9976" chance="5000"/><!-- crystal pedestal -->
+		<item id="9690" chance="5000"/><!-- gear wheel -->
+		<item id="10572" chance="5000"/><!-- gear crystal -->
+		<item id="2164" chance="884"/><!-- might ring -->
+		<item id="7889" chance="714"/><!-- lightning pendant -->
+		<item id="2154" chance="568"/><!-- yellow gem -->
+		<item id="2189" chance="529"/><!-- wand of cosmic energy -->
+		<item id="13758" chance="480"/><!-- slime mould -->
+		<item id="7440" chance="386"/><!-- mastermind potion -->
+		<item id="10221" chance="110"/><!-- shockwave amulet -->
+		<item id="8878" chance="23"/><!-- crystalline armor -->
+		<item id="7428" chance="15"/><!-- bonebreaker -->
+	</loot>
+</monster>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Shark" nameDescription="a shark" race="blood" experience="700" speed="560" manacost="0">
+	<health now="1200" max="1200"/>
+	<look type="453" corpse="15287"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="34" attack="45"/>
+	</attacks>
+	<defenses armor="12" defense="20"/>
+	<immunities>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<elements>
+		<element physicalPercent="-1"/>
+		<element firePercent="-1"/>
+		<element icePercent="-1"/>
+		<element energyPercent="5"/>
+	</elements>
+	<voices interval="3000" chance="200">
+		<voice sentence="Rarr chomp chomp!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="50000"/> <!-- gold coin -->
+		<item id="2148" countmax="38" chance="50000"/> <!-- gold coin -->
+		<item id="2667" countmax="4" chance="25000"/> <!-- fish -->
+		<item id="15430" chance="9090"/><!-- deepling scales -->
+		<item id="13870" chance="1470"/><!-- eye of a deepling -->
+		<item id="2146" chance="1351"/><!-- small sapphire -->
+		<item id="7632" chance="452"/><!-- giant shimmering pearl -->
+		<item id="5895" chance="151"/><!-- fish fin -->
+	</loot>
+</monster>
