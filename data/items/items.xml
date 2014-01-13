@@ -29344,6 +29344,7 @@
 	</item>
 	<item id="21696" article="an" name="icicle bow">
 		<attribute key="weight" value="4200" />
+		<attribute key="slotType" value="two-handed" />
 		<attribute key="weaponType" value="distance" />
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="range" value="6" />
