@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Salamander" nameDescription="a salamander" race="blood" experience="25" speed="254" manacost="0">
+	<health now="70" max="70"/>
+	<look type="529" corpse="19707"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="50"/>
+	</attacks>
+	<defenses armor="55" defense="55">
+	</defenses>
+	<elements>
+		<element earthPercent="10"/>
+	</elements>
+	<voices interval="2500" chance="10">
+		<voice sentence="Chrrch!"/>
+		<voice sentence="Chhh!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="9" chance="30000"/> <!-- Gold Coin -->
+		<item id="3976" countmax="5" chance="33333"/> <!-- Worms -->
+		<item id="2544" countmax="5" chance="880"/> <!-- Arrows -->
+		<item id="7618" chance="450"/> <!-- HP -->
+		<item id="2120" chance="600"/> <!-- Rope -->
+		<item id="2456" chance="500"/> <!-- Bow -->
+		<item id="2398" chance="500"/> <!-- Mace -->
+		<item id="2419" chance="450"/> <!-- Scimitar -->
+		<item id="19736" chance="450"/> <!-- Insectoid Eggs -->
+	</loot>
+</monster>

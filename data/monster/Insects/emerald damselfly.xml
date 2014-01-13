@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Emerald Damselfly" nameDescription="emerald damselfly" race="venom" experience="35" speed="310" manacost="0">
+	<health now="90" max="90"/>
+	<look type="528" corpse="19706"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="70"/>
+		<attack name="poison" interval="2000" chance="100" range="7" min="-0" max="-9">
+			<attribute key="shootEffect" value="poisonarrow"/>
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55"/>
+	<voices interval="2500" chance="10">
+		<voice sentence="Bzzzzz!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="15" chance="30000"/>
+		<item id="2544" countmax="5" chance="880"/> <!-- Arrows -->
+		<item id="7618" chance="450"/> <!-- HP -->
+		<item id="7620" chance="450"/> <!-- MP -->
+		<item id="19737" chance="450"/> <!-- Damselfly Wing -->
+		<item id="19742" chance="450"/> <!-- Damselfly Eye -->
+	</loot>
+</monster>

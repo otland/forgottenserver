@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Blood Hand" nameDescription="a blood hand" race="blood" experience="750" speed="210" manacost="390">
+	<health now="700" max="700"/>
+	<look type="552" corpse="21257"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
+		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="11" defense="11"/>
+	<elements>
+		<element physicalPercent="-8"/>
+		<element deathPercent="-7"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Bubble"/>
+		<voice sentence="Bobble"/>
+	</voices>
+	<loot>
+		<item id="2670" countmax="10" chance="23000"/><!-- shrimp -->
+	</loot>
+</monster>

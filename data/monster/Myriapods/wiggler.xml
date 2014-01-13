@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Wiggler" namedescription="a wiggler" race="venom" experience="900" speed="195" manacost="0">
+	<health now="1200" max="1200"/>
+	<look type="510" corpse="18483"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="20" attack="30" poison="22"/>
+	</attacks>
+	<defenses armor="4" defense="3"/>
+	<elements>
+		<element deathPercent="10"/>
+		<element energyPercent="5"/>
+		<element firePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zeppp!"/>
+		<voice sentence="Crick! Crick!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="18304" countmax="5" chance="14285"/><!-- crystalline arrow -->
+		<item id="18436" countmax="5" chance="14285"/><!-- drill bolt -->
+		<item id="2152" chance="12500"/> <!-- platinum coin -->
+		<item id="2787" countmax="5" chance="7142"/><!-- white mushroom -->
+		<item id="7589" chance="5263"/> <!-- strong mana potion -->
+		<item id="7588" chance="4761"/> <!-- strong health potion -->
+		<item id="18416" chance="3333"/> <!-- green crystal splinter -->
+		<item id="5912" chance="2500"/> <!-- blue piece of cloth -->
+		<item id="5914" chance="2439"/> <!-- yellow piece of cloth -->
+		<item id="18421" chance="2040"/> <!-- green crystal fragment -->
+		<item id="2409" chance="1369"/> <!-- serpent sword -->
+		<item id="2529" chance="1234"/> <!-- black shield -->
+		<item id="2181" chance="1020"/> <!-- terra rod -->
+	</loot>
+</monster>

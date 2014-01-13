@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Abyssador" nameDescription="an abyssador" race="blood" experience="35000" speed="500" manacost="0">
+<health now="350000" max="350000"/>
+<look type="495" corpse="17412"/>
+<targetchange interval="5000" chance="8"/>
+<strategy attack="100" defense="0"/>
+<flags>
+<flag summonable="0"/>
+<flag attackable="1"/>
+<flag hostile="1"/>
+<flag illusionable="0"/>
+<flag convinceable="0"/>
+<flag pushable="0"/>
+<flag canpushitems="1"/>
+<flag canpushcreatures="0"/>
+<flag targetdistance="1"/>
+<flag staticattack="90"/>
+<flag runonhealth="0"/>
+</flags>
+<attacks>
+<attack name="melee" interval="3000" skill="300" attack="150"/>
+<attack name="energycondition" interval="1000" chance="10" radius="4" target="0" min="-800" max="-800">
+<attribute key="shootEffect" value="poison"/>
+<attribute key="areaEffect" value="smallplants"/>
+</attack>
+<attack name="energy" interval="2000" chance="20" radius="4" target="0" min="-500" max="-1600">
+<attribute key="shootEffect" value="energy"/>
+<attribute key="areaEffect" value="energy"/>
+</attack>
+<attack name="poison" interval="1000" chance="20" length="5" spread="2" min="-1000" max="-1800">
+<attribute key="areaEffect" value="plantattack"/>
+</attack>
+</attacks>
+<defenses armor="15" defense="20">
+<defense name="healing" interval="1000" chance="1" min="0" max="300000">
+<attribute key="areaEffect" value="blueshimmer"/>
+</defense>
+<defense name="healing" interval="5000" chance="30" min="1000" max="1000">
+<attribute key="areaEffect" value="blueshimmer"/>
+</defense>
+<defense name="invisible" interval="2000" chance="25" duration="3000">
+<attribute key="areaEffect" value="blueshimmer"/>
+</defense>
+</defenses>
+<elements>
+<element firePercent="90"/>
+<element energyPercent="60"/>
+<element deathPercent="30"/>
+<element icePercent="-10"/>
+<element holyPercent="-10"/>
+</elements>
+<immunities>
+<immunity paralyze="1"/>
+<immunity earth="1"/>
+<immunity invisible="1"/>
+</immunities>
+<voices interval="5000" chance="10">
+<voice sentence="*** BRAINS *** SMALL ***"/>
+<voice sentence="*** LIVE *** DRY ***"/>
+<voice sentence="*** IMPORTANT ***"/>
+<voice sentence="** FIRE *** HOME *** VICTORY ***"/>
+<voice sentence="*** EXISTENCE *** FUTILE ***"/>
+<voice sentence="** TIME ***"/>
+
+</voices>
+<loot>
+<item id="18496" chance="50000"/><!-- Abyssador's Lash -->
+<item id="18454" chance="10000"/><!-- mycological bow -->
+<item id="18465" chance="8000"/><!-- shiny sword -->
+<item id="18449" chance="10000"/>
+<item id="18453" chance="4500"/><!-- crystal crossbow -->
+<item id="18451" chance="5500"/><!-- crystalline axe -->
+<item id="18450" chance="5500"/><!-- crystalline sword -->
+<item id="18452" chance="4500"/><!-- mace -->
+<item id="18412" chance="10500"/><!-- glacial rod -->
+<item id="18390" chance="10500"/><!-- wand of defiance -->
+</loot>
+</monster>

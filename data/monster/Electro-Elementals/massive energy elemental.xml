@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Massive Energy Elemental" nameDescription="a massive energy elemental" race="undead" experience="950" speed="300" manacost="0">
+	<health now="1100" max="1100"/>
+	<look type="290" corpse="1495"/>
+	<targetchange interval="20000" chance="15"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="85"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="65" attack="60"/>
+		<attack name="energy" interval="1000" chance="11" range="3" target="1" radius="2" min="-200" max="-400">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="90" max="150">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="70"/>
+		<element holyPercent="25"/>
+		<element deathPercent="1"/>
+		<element earthPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity invisible="1"/>
+		<immunity paralyze="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="88" chance="50000"/><!-- gold coin -->
+		<item id="7589" chance="16666"/><!-- strong mana potion -->
+		<item id="7638" countmax="15" chance="7142"/><!-- flash arrow -->
+		<item id="7590" chance="6250"/><!-- great mana potion -->
+		<item id="9809" chance="6250"/><!-- rusty armor -->
+		<item id="2150" countmax="3" chance="3571"/><!-- small amethysts -->
+		<item id="8920" chance="1020"/><!-- wand of starstorm -->
+		<item id="7889" chance="510"/><!-- lightning pendant -->
+		<item id="8901" chance="510"/><!-- spellbook of warding -->
+	</loot>
+</monster>

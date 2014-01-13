@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Waspoid" nameDescription="a waspoid" race="blood" experience="830" speed="560" manacost="0">
+	<health now="1100" max="1100"/>
+	<look type="462" corpse="15396"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="34" attack="45"/>
+		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
+			<attribute key="shootEffect" value="spear"/> <!-- TODO: Add spear deepling speed effect? -->
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+	</attacks>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1"/>
+	</immunities>
+	<elements>
+		<element deathPercent="1"/>
+		<element energyPercent="1"/>
+		<element physicalPercent="-1"/>
+		<element holyPercent="-1"/>
+		<element firePercent="-10"/>
+	</elements>
+	<defenses armor="12" defense="20"/>
+	<voices interval="3000" chance="200">
+		<voice sentence="Peeex!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="33" chance="100000"/><!-- gold coin -->
+		<item id="2152" chance="33333"/><!-- platinum coin -->
+		<item id="15484" chance="14285"/><!-- waspoid wing -->
+		<item id="15483" chance="9090"/><!-- waspoid claw -->
+		<item id="15486" chance="6250"/><!-- compound eye -->
+		<item id="2144" chance="4166"/><!-- black pearl -->
+		<item id="2127" chance="1587"/><!-- emerald bangle -->
+		<item id="2154" chance="1063"/><!-- yellow gem -->
+		<item id="15490" chance="327"/><!-- grasshopper legs -->
+		<item id="15492" chance="163"/><!-- hive scythe -->
+		<item id="15491" chance="122"/><!-- carapace shield -->
+	</loot>
+</monster>

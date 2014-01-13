@@ -33,19 +33,23 @@
 		<immunity death="1"/>
 	</immunities>
 	<elements>
-		<element firePercent="15"/>
-		<element earthPercent="70"/>
-		<element icePercent="10"/>
-		<element physicalPercent="20"/>
-		<element holyPercent="75"/>
+		<element firePercent="10"/>
+		<element earthPercent="65"/>
+		<element icePercent="15"/>
+		<element physicalPercent="5"/>
+		<element holyPercent="65"/>
+		<element lifedrainPercent="80"/>
 	</elements>
-	<summons maxSummons="2">
+	<immunities>
+		<immunity death="1"/>
+	</immunities>
+	<summons maxSummons="3">
 		<summon name="Mercury Blob" interval="3000" chance="10"/>
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Crackle"/>
 	</voices>
 	<loot>
-		<item id="9966" chance="20000"/><!-- glob of mercury -->
+		<item id="9966" chance="16666"/><!-- glob of mercury -->
 	</loot>
 </monster>

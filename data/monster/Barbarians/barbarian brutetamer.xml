@@ -35,17 +35,17 @@
 	</defenses>
 	<elements>
 		<element icePercent="50"/>
-		<element holyPercent="10"/>
+		<element holyPercent="20"/>
 		<element energyPercent="20"/>
-		<element physicalPercent="-20"/>
-		<element deathPercent="-10"/>
+		<element earthPercent="-13"/>
+		<element physicalPercent="-10"/>
+		<element deathPercent="-7"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
 		<immunity outfit="1"/>
 		<immunity invisible="1"/>
-		<immunity drunk="1"/>
 	</immunities>
 	<summons maxSummons="3">
 		<summon name="War Wolf" interval="2000" chance="40"/>

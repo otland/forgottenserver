@@ -46,17 +46,21 @@
 		<voice sentence="Blubb Blubb"/>
 	</voices>
 	<loot>
-		<item id="6500" chance="33000"/><!-- demonic essence -->
-		<item id="2148" countmax="95" chance="20000"/><!-- gold coin -->
-		<item id="2148" countmax="95" chance="20000"/><!-- gold coin -->
-		<item id="2148" countmax="90" chance="20000"/><!-- gold coin -->
-		<item id="5944" chance="27800"/><!-- soul orb -->
-		<item id="2151" chance="5500"/><!-- talon -->
-		<item id="2152" countmax="4" chance="5000"/><!-- platinum coin -->
-		<item id="2149" countmax="3" chance="2000"/><!-- small emeralds-->
-		<item id="2147" countmax="2" chance="2500"/><!-- small rubies -->
-		<item id="2145" chance="3000"/><!-- small diamond -->
-		<item id="2463" chance="1000"/><!-- plate armor -->
-		<item id="6300" chance="450"/><!-- death ring-->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="72" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="6" chance="50000"/><!-- platinum coin -->
+		<item id="5944" chance="20000"/><!-- soul orb -->
+		<item id="6500" chance="16666"/><!-- demonic essence -->
+		<item id="9967" chance="12500"/><!-- glob of acid slime -->
+		<item id="9968" chance="10000"/><!-- glob of tar -->
+		<item id="2151" chance="7142"/><!-- talon -->
+		<item id="2149" countmax="3" chance="6666"/><!-- small emeralds-->
+		<item id="2147" countmax="2" chance="4000"/><!-- small rubies -->
+		<item id="6300" chance="3030"/><!-- death ring-->
+		<item id="2145" countmax="2" chance="2439"/><!-- small diamond -->
+		<item id="2156" chance="1538"/><!-- red gem -->
+		<item id="2154" chance="1219"/><!-- yellow gem -->
+		<item id="2155" chance="613"/><!-- green gem -->
 	</loot>
 </monster>

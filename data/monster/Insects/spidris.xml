@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spidris" nameDescription="a spidris" race="blood" experience="2600" speed="560" manacost="0">
+	<health now="3700" max="3700"/>
+	<look type="457" corpse="15296"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="60"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
+		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="11" defense="11"/>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="3000" chance="200">
+		<voice sentence="Eeeeeeyyyyh!"/>
+		<voice sentence="Iiiiieeeeeeh!"/>
+	</voices>
+	<elements>
+		<element deathPercent="10"/>
+		<element firePercent="10"/>
+		<element holyPercent="-10"/>
+		<element energyPercent="-10"/>
+		<element icePercent="-10"/>
+	</elements>
+	<loot>
+		<item id="2148" countmax="94" chance="100000"/> <!-- gold coin -->
+		<item id="2148" countmax="94" chance="100000"/> <!-- gold coin -->
+		<item id="2152" countmax="4" chance="50000"/> <!-- platinum coin -->
+		<item id="15485" chance="16666"/> <!-- spidris sandible -->
+		<item id="15486" chance="12500"/> <!-- compound eye -->
+		<item id="2147" countmax="5" chance="11111"/> <!-- small ruby -->
+		<item id="7590" countmax="2" chance="11111"/> <!-- great mana potion -->
+		<item id="8473" countmax="2" chance="6250"/> <!-- ultimate health potion -->
+		<item id="6300" chance="3030"/> <!-- death ring -->
+		<item id="7632" chance="1219"/><!-- giant shimmering pearl -->
+		<item id="7413" chance="909"/><!-- titan axe -->
+		<item id="2153" chance="909"/><!-- violet gem -->
+		<item id="15489" chance="806"/><!-- calopteryx cape -->
+		<item id="15492" chance="709"/><!-- hive scythe -->
+		<item id="15491" chance="606"/><!-- carapace shield -->
+	</loot>
+</monster>

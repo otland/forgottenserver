@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lady Bug" nameDescription="a lady bug" race="blood" experience="70" speed="560" manacost="0">
+	<health now="255" max="255"/>
+	<look type="448" corpse="15272"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="60"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="70"/>	
+	</attacks>
+	<defenses armor="55" defense="55"/>    
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="3000" chance="200">
+		<voice sentence="Nee pah!"/>
+		<voice sentence="Chrk Chrk!"/>
+	</voices>
+	<elements>
+		<element earthPercent="1"/>
+		<element physicalPercent="-1"/>
+		<element firePercent="-1"/>
+		<element icePercent="-1"/>
+	</elements>
+	<loot>
+		<item id="2148" countmax="38" chance="100000"/> <!-- gold coin -->
+	</loot>
+</monster>

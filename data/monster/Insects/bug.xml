@@ -25,7 +25,7 @@
 		<element firePercent="-10"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="6" chance="21000"/><!-- gold coin -->
-		<item id="2679" countmax="3" chance="6600"/><!-- cherry -->
+		<item id="2148" countmax="6" chance="33333"/><!-- gold coin -->
+		<item id="2679" countmax="3" chance="3125"/><!-- cherry -->
 	</loot>
 </monster>

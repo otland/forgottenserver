@@ -22,17 +22,21 @@
 	</attacks>
 	<defenses armor="10" defense="15"/>
 	<elements>
-		<element icePercent="100"/>
-		<element earthPercent="100"/>
-		<element physicalPercent="12"/>
-		<element firePercent="10"/>
-		<element energyPercent="5"/>
+		<element physicalPercent="20"/>
+		<element firePercent="-10"/>
+		<element energyPercent="-5"/>
 	</elements>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity earth="1"/>
+		<immunity drown="1"/>
+	</immunities>
 	<loot>
-		<item id="2148" countmax="36" chance="17500"/><!-- gold coin -->
-		<item id="2667" chance="27000"/><!-- fish -->
-		<item id="2478" chance="7000"/><!-- brass legs -->
-		<item id="2464" chance="10000"/><!-- chain armor -->
-		<item id="2143" chance="1000"/><!-- white pearl -->
+		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
+		<item id="2667" chance="20000"/><!-- fish -->
+		<item id="10550" chance="5882"/><!-- bloody pincers -->
+		<item id="2464" chance="5555"/><!-- chain armor -->
+		<item id="2478" chance="2854"/><!-- brass legs -->
+		<item id="2143" chance="543"/><!-- white pearl -->
 	</loot>
 </monster>

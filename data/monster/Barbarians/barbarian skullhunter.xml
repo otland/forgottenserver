@@ -28,7 +28,7 @@
 		<element energyPercent="20"/>
 		<element physicalPercent="5"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-10"/>
+		<element deathPercent="-7"/>
 	</elements>
 	<immunities>
 		<immunity drunk="1"/>

@@ -31,30 +31,31 @@
 	</attacks>
 	<defenses armor="50" defense="55"/>
 	<elements>
-		<element firePercent="-15"/>
-		<element deathPercent="10"/>
+		<element firePercent="-5"/>
+		<element deathPercent="1"/>
 		<element icePercent="15"/>
 		<element holyPercent="20"/>
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
+		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="5">
 		<voice sentence="Knarrrz"/>
 		<voice sentence="Huuhuuhuuuhuuaarrr"/>
 		<voice sentence="Knorrrrrr"/>
 	</voices>
 	<loot>
-		<item id="2213" chance="1000"/><!-- dwarven ring -->
-		<item id="2148" countmax="96" chance="35000"/><!-- gold coin -->
-		<item id="7618" chance="7200"/><!-- health potion -->
-		<item id="2790" chance="1000"/><!-- orange mushroom -->
-		<item id="2788" chance="8000"/><!-- red mushroom -->
-		<item id="4860" chance="50000"/><!-- wooden trash -->
-		<item id="2146" chance="1500"/><!-- small emerald -->
-		<item id="7588" chance="1000"/><!-- strong health potion -->
-		<item id="3821" chance="500"/><!-- trunk chair kit -->
-		<item id="2787" countmax="2" chance="2200"/><!-- white mushroom -->
-		<item id="7443" chance="300"/><!-- bullseye potion -->
+		<item id="2148" countmax="95" chance="50000"/><!-- gold coin -->
+		<item id="4860" chance="25000"/><!-- wooden trash -->
+		<item id="2788" chance="7142"/><!-- red mushroom -->
+		<item id="2787" countmax="2" chance="5263"/><!-- white mushroom -->
+		<item id="10600" chance="5000"/><!-- haunted piece of wood -->
+		<item id="7618" chance="5000"/><!-- health potion -->
+		<item id="2790" chance="1851"/><!-- orange mushroom -->
+		<item id="7588" chance="900"/><!-- strong health potion -->
+		<item id="2213" chance="621"/><!-- dwarven ring -->
+		<item id="2146" chance="485"/><!-- small emerald -->
+		<item id="7443" chance="67"/><!-- bullseye potion -->
 	</loot>
 </monster>

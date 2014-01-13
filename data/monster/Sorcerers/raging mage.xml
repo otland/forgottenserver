@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Raging Mage" nameDescription="a raging mage" race="blood" experience="3250" speed="265" manacost="0">
+  <health now="3500" max="3500"/>
+  <look type="416" corpse="13834"/>
+  <targetchange interval="5000" chance="30"/>
+  <strategy attack="90" defense="10"/>
+  <flags>
+    <flag summonable="0"/>
+    <flag attackable="1"/>
+    <flag hostile="1"/>
+    <flag illusionable="0"/>
+    <flag convinceable="0"/>
+    <flag pushable="0"/>
+    <flag canpushitems="1"/>
+    <flag canpushcreatures="1"/>
+    <flag targetdistance="4"/>
+    <flag staticattack="90"/>
+    <flag runonhealth="1000"/>
+  </flags>
+  <attacks>
+  	 <attack name="energy" interval="1000" chance="20" range="7" target="1" min="-100" max="-240">
+	  <attribute key="shootEffect" value="energyball"/>
+	  <attribute key="areaEffect" value="energy"/>
+	    </attack>
+		<attack name="manadrain" interval="1400" chance="24" range="6" min="-100" max="-200">
+			<attribute key="shootEffect" value="ice"/>
+		</attack>
+
+  </attacks>
+  <defenses armor="20" defense="20">
+    <defense name="healing" interval="1000" chance="25" min="60" max="200">
+      <attribute key="areaEffect" value="blueshimmer"/>
+    </defense>
+
+  </defenses>
+  <elements>
+	<element physicalPercent="25"/>
+	<element holyPercent="100"/>
+		<element deathPercent="-15"/>
+			<element icePercent="100"/>
+	<element earthPercent="100"/>
+  </elements>
+  <immunities>
+    <immunity energy="1"/>
+    <immunity fire="1"/>
+    <immunity paralyze="1"/>
+    <immunity invisible="1"/>
+  </immunities>
+  <summons maxSummons="1">
+    <summon name="go" interval="1000" chance="10" />
+  </summons>
+  <voices interval="5000" chance="10">
+    <voice sentence="Behold the all permeating powers I draw from this gate!!"/>
+    <voice sentence="ENERGY!!"/>
+  </voices>
+  <loot>
+    <item id="2148" countmax="100" chance1="100000" chancemax="0"/>
+    <item id="2185" chance="993" />
+    <item id="1986" chance="777"/>
+    <item id="2600" chance="10000"/>
+    <item id="2124" chance="1000"/>
+  </loot>
+</monster>

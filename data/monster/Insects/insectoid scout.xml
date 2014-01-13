@@ -18,13 +18,8 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="33"/>
-		<attack name="poison" interval="2000" chance="12" range="3" target="1" min="-5" max="-15">
-			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poison"/>
-		</attack>
+		<attack name="melee" interval="2000" skill="30" attack="28" poison="3"/>	
 	</attacks>
-	<defenses armor="16" defense="19"/>
 	<elements>
 		<element physicalPercent="80"/>
 		<element firePercent="-10"/>
@@ -33,11 +28,11 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Zrp zrp!"/>
+		<voice sentence="Chrrr! Chrr!"/>
+		<voice sentence="Klk! Klk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="69" chance="31800" /> <!-- gold coin -->
-		<item id="7618" chance="4000" /> <!-- health potion -->
-		<item id="3964" chance="1200" /> <!-- ripper lance -->
+		<item id="2148" countmax="70" chance="100000" /> <!-- gold coin -->
+		<item id="3964" chance="1000" /> <!-- ripper lance -->
 	</loot>
 </monster>

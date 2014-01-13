@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hideous Fungus" nameDescription="a hideous fungus" race="venom" experience="2900" speed="240" manacost="0">
+	<health now="4600" max="4600"/>
+	<look type="499" corpse="17428"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="3"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="275"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1500" skill="60" attack="100"/>
+		<attack name="poison" interval="1000" chance="33" range="7" min="-200" max="-400">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="20" range="7" radius="4" target="1" speedchange="-850" duration="120000">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" length="8" spread="0" min="-450" max="-500">
+			<attribute key="areaEffect" value="rednote"/>
+		</attack>
+		<attack name="ice" interval="3000" chance="17" length="8" spread="3" min="-250" max="-300">
+		</attack>
+		<attack name="outfit" interval="2000" chance="15" range="7" item="3976" duration="12000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="18" defense="25">
+		<defense name="healing" interval="1000" chance="17" min="300" max="500">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="speed" interval="1000" chance="9" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
+	</defense>
+        <defense name="invisible" interval="2000" chance="10" duration="4000">
+        <attribute key="areaEffect" value="blueshimmer"/>
+        </defense>
+	</defenses>
+	<elements>
+		<element holyPercent="5"/>
+		<element deathPercent="1"/>
+		<element firePercent="5"/>
+		<element energyPercent="15"/>
+		<element icePercent="15"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="humorless fungus" interval="2000" chance="10" max="2"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Munch munch munch!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="99" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="7" chance="100000"/><!-- platinum coin -->
+		<item id="18434" chance="14285"/><!-- hideous chunk -->
+		<item id="18437" countmax="15" chance="12500"/><!-- envenomed arrow -->
+		<item id="18397" countmax="3" chance="12500"/><!-- mushroom pie -->
+		<item id="7620" chance="9090"/><!-- mana potion -->
+		<item id="7590" chance="7692"/><!-- great mana potion -->
+		<item id="7591" chance="6666"/><!-- great health potion -->
+		<item id="5909" chance="5882"/><!-- white piece of cloth -->
+		<item id="2391" chance="4166"/><!-- war hammer -->
+		<item id="5912" chance="3448"/><!-- blue piece of cloth -->
+		<item id="5910" chance="2941"/><!-- green piece of cloth -->
+		<item id="7886" chance="2127"/><!-- terra boots -->
+		<item id="7887" chance="2000"/><!-- terra amulet -->
+		<item id="5911" chance="1666"/><!-- red piece of cloth -->
+		<item id="7885" chance="990"/><!-- terra legs -->
+		<item id="7884" chance="934"/><!-- terra mantle -->
+		<item id="18411" chance="609"/><!-- muck rod -->
+		<item id="18454" chance="32"/><!-- mycological bow -->
+	</loot>
+</monster>

@@ -33,11 +33,13 @@
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Chrchrchr" yell="1"/>
+		<voice sentence="Klonklonk" yell="1"/>
+		<voice sentence="Chrrrrr" yell="1"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance1="40000" chancemax="954"/><!-- gp -->
-		<item id="2148" countmax="39" chance1="40000" chancemax="954"/><!-- gp -->
-		<item id="13304" chance="5500"/><!-- giant crab pincer -->
-		<item id="7589" chance="7000"/><!-- strong mana potion -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="43" chance="100000"/><!-- gold coin -->
+		<item id="7589" chance="14285"/><!-- strong mana potion -->
+		<item id="13304" chance="5000"/><!-- giant crab pincer -->
 	</loot>
 </monster>

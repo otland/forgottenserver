@@ -27,14 +27,13 @@
 	<defenses armor="30" defense="30"/>
 	<elements>
 		<element icePercent="50"/>
-		<element holyPercent="10"/>
+		<element holyPercent="20"/>
 		<element energyPercent="20"/>
-		<element earthPercent="-10"/>
-		<element deathPercent="-10"/>
+		<element earthPercent="-13"/>
+		<element deathPercent="-7"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
-		<immunity drunk="1"/>
 	</immunities>
 	<voices interval="2000" chance="5">
 		<voice sentence="I will regain my honor with your blood!"/>

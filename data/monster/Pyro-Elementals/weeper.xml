@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Weeper" nameDescription="Weeper" race="blood" experience="4800" speed="570" manacost="0">
+  <health now="6800" max="6800"/>
+  <look type="489" corpse="17252"/>
+  <targetchange interval="5000" chance="8"/>
+  <strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag staticattack="50"/>
+		<flag runonhealth="100"/>
+	</flags>
+	<attacks>
+      <attack name="melee" interval="2000" min="-160" max="-450"/>
+		<attack name="fire" interval="3000" chance="25" length="8" spread="0" min="-240" max="-900">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		                <attack name="fire" interval="2000" chance="10" range="7" radius="4" target="1" min="-50" max="-250">
+                        <attribute key="shootEffect" value="fire"/>
+						    <attribute key="areaEffect" value="firearea"/>
+                </attack>
+	</attacks>
+  <defenses armor="85" defense="85">
+  </defenses>
+	<elements>
+		<element firePercent="100"/>
+		<element physicalPercent="100"/>
+		<element earthPercent="100"/>
+				<element holyPercent="100"/>
+		<element deathPercent="-1"/>
+		<element energyPercent="100"/>
+	</elements>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drown="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Moooaaan!"/>
+	</voices>  
+  <loot>
+ 	 <item id="2148" countmax="172" chance="30000"/>  
+	</loot>
+</monster>

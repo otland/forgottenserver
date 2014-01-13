@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orewalker" nameDescription="orewalker" race="blood" experience="4800" speed="570" manacost="0">
+  <health now="7200" max="7200"/>
+  <look type="490" corpse="17256"/>
+  <targetchange interval="5000" chance="8"/>
+  <strategy attack="90" defense="10"/>
+  <flags>
+    <flag summonable="0"/>
+    <flag attackable="1"/>
+    <flag hostile="1"/>
+    <flag illusionable="0"/>
+    <flag convinceable="0"/>
+    <flag pushable="0"/>
+    <flag canpushitems="1"/>
+    <flag canpushcreatures="1"/>
+    <flag targetdistance="1"/>
+    <flag staticattack="90"/>
+    <flag runonhealth="0"/>
+  </flags>
+  <attacks>
+      <attack name="melee" interval="2000" min="-100" max="-300"/>
+     <attack name="physical" interval="3000" chance="20" range="7" radius="4" target="1" min="-250" max="-1300">
+   			<attribute key="shootEffect" value="death"/>
+			<attribute key="areaEffect" value="groundshaker"/>
+		</attack>	
+    <attack name="drunk" interval="2000" chance="15" radius="4" target="0">
+		<attribute key="areaEffect" value="rednote"/>
+    </attack>
+
+  </attacks>
+  <defenses armor="55" defense="55">    
+  </defenses>
+	<elements>		
+		<element energyPercent="1"/>	
+		<element firePercent="-1"/>	
+				<element holyPercent="100"/>	
+		<element deathPercent="-1"/>	
+		<element physicalPercent="-1"/>
+		<element icePercent="-10"/>		
+	</elements>
+  <immunities>
+    <immunity earth="100"/>
+    <immunity lifedrain="0"/>
+    <immunity paralyze="100"/>
+    <immunity invisible="100"/>
+  </immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Sizzle!"/>
+		<voice sentence="CLONK!"/>
+	</voices>     
+  <loot>
+ 	 <item id="2148" countmax="182" chance="30000"/>  
+</loot>
+</monster>

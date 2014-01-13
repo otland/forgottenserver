@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lost Husher" nameDescription="a lost husher" race="blood" experience="1800" speed="320" manacost="0">
+	<health now="1600" max="1600"/>
+	<look type="537" corpse="19963"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="95" attack="110"/>
+		<attack name="melee" interval="3000" chance="17" radius="4" min="-0" max="-230">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+		<attack name="manadrain" interval="3000" chance="17" min="-0" max="-230">
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="20" min="-0" max="-290">
+			<attribute key="areaEffect" value="explosion"/>
+		</attack>
+		<attack name="death" interval="2000" chance="20" min="-0" max="-190">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35">
+		<defense name="healing" interval="2000" chance="25" min="0" max="160">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Arr far zwar!"/>
+		<voice sentence="Charka! Charka! Chooo!"/>
+		<voice sentence="Fu har fuz hada!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="30000"/> <!-- Gold Coin -->
+		<item id="2152" countmax="2" chance="30000"/> <!-- Platinum Coin -->
+		<item id="2789" countmax="2" chance="3000"/> <!-- Brown Mushroom -->
+		<item id="20135" chance="880"/> <!-- Basalt Fetish -->
+		<item id="7588" chance="450"/> <!-- SHP -->
+		<item id="7590" chance="410"/> <!-- GMP -->
+		<item id="9970" chance="300"/> <!-- Small Topazes -->
+		<item id="20136" chance="450"/> <!-- Basalt Figurine -->
+		<item id="20109" chance="410"/> <!-- Bonecarving Knife -->
+		<item id="20110" chance="300"/> <!-- Bone Fetish -->
+		<item id="20128" chance="450"/> <!-- Skull Shatterer -->
+		<item id="13757" chance="410"/> <!-- Coal -->
+		<item id="20129" chance="300"/> <!-- Holy Ash -->
+		<item id="20127" chance="250"/> <!-- Lost Husher's Staff -->
+		<item id="20134" chance="410"/> <!-- Red Hair Dye -->
+		<item id="20126" chance="300"/> <!-- Wimp Tooth Chain -->
+		<item id="11339" chance="250"/> <!-- Clay Lump -->
+		<item id="2215" chance="410"/> <!-- Dwarven Ring -->
+		<item id="2515" chance="300"/> <!-- Guardian Shield -->
+		<item id="7750" chance="250"/> <!-- Knight Axe -->
+		<item id="7452" chance="410"/> <!-- Spiked Squelcher -->
+		<item id="2528" chance="300"/> <!-- Tower Shield -->
+	</loot>
+</monster>

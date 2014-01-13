@@ -1,74 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Shaburak Demon" nameDescription="a shaburak demon" race="fire" experience="900" speed="280" manacost="0">
-	<health now="1500 " max="1500 "/>
-	<look type="418" corpse="13969"/>
-	<targetchange interval="2000" chance="9"/>
-	<strategy attack="100" defense="0"/>
-	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
-	</flags>
-	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="200"/>
-		<attack name="Paralyze" interval="2000" chance="10" range="7" min="-0" max="-120"/>
-		<attack name="fire" interval="2000" chance="10"  range="7" radius="7" target="1" min="-75" max="-140">
-			<attribute key="shootEffect" value="fire"/>
-			<attribute key="areaEffect" value="firearea"/>
-		</attack>
-		<attack name="Great Fireball" interval="1500" chance="10"  range="1" radius="1" target="1" min="-25" max="-60">
-			<attribute key="shootEffect" value="energy"/>
-			<attribute key="areaEffect" value="energy"/>
-		</attack>
-		<attack name="Fire Wave" interval="2000" chance="10"  range="7" radius="1" target="1">
-			<attribute key="shootEffect" value="fire"/>
-		</attack>
-	</attacks>
-	<defenses armor="30" defense="30">
-		<defense name="healing" interval="2000" chance="10"  min="100" max="150">
-			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-		<defense name="speed" interval="2000" chance="10" speedchange="360" duration="20000">
-			<attribute key="areaEffect" value="redshimmer"/>
-		</defense>
-	</defenses>
-	<elements>
-		<element earthPercent="-30"/>
-		<element energyPercent="50"/>
-		<element icePercent="50"/>
-	</elements>
-	<immunities>
-		<immunity fire="1"/>
-		<immunity invisible="1"/>
-	</immunities>
-	<voices interval="5000" chance="9">
-		<voice sentence="GREEN IS MEAN !!" yell="1"/>
-		<voice sentence="POWER TO THE SHABURAK!!!" yell="1"/>
-		<voice sentence="DEATH TO THE ASKARAK !" yell="1"/>
-		<voice sentence="WE RULE! "/>
-		<voice sentence="OWE RULE!" yell="0"/>
-	</voices>
-	<loot>
-		<item id="2148" countmax="170" chance="100000" /> <!-- gold coin -->
-		<item id="2152" countmax="3" chance="900000" /> <!-- platinum coin -->
-		<item id="2187" chance="8000" /> <!-- Wand of Inferno  -->
-		<item id="13530" chance="3000" /> <!-- Demonic Finge -->
-		<item id="2645" chance="400" /> <!-- Steel Boots  -->
-		<item id="7589" chance="700" /> <!-- Strong Mana Potion  -->
-		<item id="7588" chance="700" /> <!-- Strong Health Potion -->
-		<item id="2147" countmax="5" chance="700" /> <!-- Small Rubies  -->
-		<item id="2165" chance="6000" /> <!-- Stealth Ring  -->
-		<item id="2789" chance="3000" /> <!-- Brown Mushroom -->
-		<item id="7443" chance="5000" /> <!-- Bullseye Potion -->
-		<item id="7899" chance="4000" /> <!-- Magma Coat -->
-		<item id="7412" chance="200" /> <!-- Butcher's Axe  -->
-	</loot>
+        <health now="1500" max="1500"/>
+        <look type="417" corpse="13814"/>
+        <targetchange interval="2000" chance="9"/>
+        <strategy attack="100" defense="0"/>
+        <flags>
+                <flag summonable="0"/>
+                <flag attackable="1"/>
+                <flag hostile="1"/>
+                <flag illusionable="0"/>
+                <flag convinceable="0"/>
+                <flag pushable="0"/>
+                <flag canpushitems="1"/>
+                <flag canpushcreatures="1"/>
+                <flag targetdistance="1"/>
+                <flag staticattack="90"/>
+                <flag runonhealth="0"/>
+        </flags>
+        <attacks>
+                <attack name="melee" interval="2000" skill="40" attack="200"/>
+                <attack name="Paralyze" interval="2000" chance="10" range="7" min="-0" max="-120"/>
+                <attack name="fire" interval="2000" chance="10"  range="7" radius="7" target="1" min="-100" max="-150">
+                        <attribute key="shootEffect" value="fire"/>
+                        <attribute key="areaEffect" value="firearea"/>
+                </attack>
+                <attack name="Great Fireball" interval="1500" chance="10"  range="1" radius="1" target="1" min="-210" max="-350">
+                        <attribute key="shootEffect" value="energy"/>
+                        <attribute key="areaEffect" value="energy"/>
+                </attack>
+                <attack name="Fire Wave" interval="2000" chance="10"  range="7" radius="1" target="1">
+                        <attribute key="shootEffect" value="fire"/>
+                </attack>
+                <attack name="energy" interval="2000"  chance="10"  length="8" spread="0" min="-200" max="-360">
+                        <attribute key="areaEffect" value="purpleenergy"/>
+                </attack>
+                <attack name="speed" interval="2000" chance="10"  range="7" speedchange="-120" duration="5000">
+                        <attribute key="areaEffect" value="redshimmer"/>
+                </attack>
+        </attacks>
+        <defenses armor="30" defense="30">
+                <defense name="healing" interval="2000" chance="10"  min="120" max="280">
+                        <attribute key="areaEffect" value="blueshimmer"/>
+                </defense>
+                <defense name="speed" interval="2000" chance="10" speedchange="360" duration="20000">
+                        <attribute key="areaEffect" value="redshimmer"/>
+                </defense>
+        </defenses>
+        <elements>
+			<element energyPercent="50"/>
+			<element icePercent="50"/>
+			<element earthPercent="-30"/>
+        </elements>
+        <immunities>
+			<immunity fire="1"/>
+			<immunity invisible="1"/>
+        </immunities>
+        <voices interval="5000" chance="9">
+                <voice sentence="GREEN IS MEAN!" yell="1"/>
+                <voice sentence="WE RULE!" yell="1"/>
+                <voice sentence="POWER TO THE SHABURAK!" yell="1"/>
+                <voice sentence="DEATH TO THE ASKARAK!"/>
+        </voices>
+        <loot>
+			<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+			<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+			<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
+			<item id="7378" countmax="6" chance="10000" /><!-- royal spear -->
+			<item id="7589" chance="5000" /><!-- strong mana potion -->
+			<item id="7588" chance="4761" /><!-- strong health potion -->
+			<item id="2147" countmax="5" chance="4761" /><!-- small rubies -->
+			<item id="2789" chance="3846" /><!-- brown mushroom -->
+			<item id="2167" chance="1052" /><!-- energy ring -->
+			<item id="2114" chance="1030" /><!-- piggy bank -->
+			<item id="7443" chance="628" /><!-- bullseye potion -->
+			<item id="2187" chance="564" /><!-- wand of inferno -->
+			<item id="7894" chance="155" /><!-- magma legs -->
+			<item id="5904" chance="81" /><!-- magic sulphur -->
+        </loot>
 </monster>

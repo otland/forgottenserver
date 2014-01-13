@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lancer Beetle" nameDescription="a lancer beetle" race="venom" experience="250" speed="220" manacost="0">
+<monster name="Lancer Beetle" nameDescription="a lancer beetle" race="venom" experience="275" speed="220" manacost="0">
 <health now="400" max="400"/>
 <look type="348" corpse="11375"/>
 <targetchange interval="5000" chance="12"/>
@@ -30,8 +30,6 @@
 	</defenses>
 	<elements>
 		<element deathPercent="50"/>
-		<element icePercent="-5"/>
-		<element firePercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
@@ -43,12 +41,12 @@
 		<voice sentence="Crump!" yell="1"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="61" chance1="2000" chancemax="6400"/><!-- gold coin -->
-		<item id="2148" countmax="60" chance1="2000" chancemax="6400"/><!-- gold coin -->
-		<item id="10609" chance="17500"/><!-- lump of dirt -->
-		<item id="10557" chance="12500"/><!-- poisonous slime -->
-		<item id="11372" chance="7000"/><!-- lancer beetle shell -->
-		<item id="11374" chance="400"/><!-- beetle necklace -->
-		<item id="2150" chance="800"/><!-- small amethyst -->
+		<item id="2148" countmax="61" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="67" chance="100000"/><!-- gold coin -->
+		<item id="11372" chance="16666"/><!-- lancer beetle shell -->
+		<item id="10557" chance="8333"/><!-- poisonous slime -->
+		<item id="10609" chance="4166"/><!-- lump of dirt -->
+		<item id="11374" chance="1123"/><!-- beetle necklace -->
+		<item id="2150" chance="147"/><!-- small amethyst -->
 	</loot>
 </monster>

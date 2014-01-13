@@ -28,22 +28,23 @@
 		<element firePercent="20"/>
 		<element holyPercent="10"/>
 		<element icePercent="-10"/>
-		<element deathPercent="-1"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Ruan Wihmpy!"/>
 		<voice sentence="Kaplar!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="75430"/><!-- gold coin -->
-		<item id="2543" countmax="20" chance="90430"/><!-- bolt -->
-		<item id="7363" countmax="4" chance="12250"/><!-- piercing bolt -->
-		<item id="2455" chance="840"/><!-- crossbow -->
-		<item id="2666" chance="5010"/><!-- meat -->
-		<item id="2465" chance="530"/><!--  brass armor-->
-		<item id="5878" chance="1910"/><!-- minotaur leather -->
-		<item id="2483" chance="510"/><!-- scale armor -->
-		<item id="12428" countmax="2" chance="2000"/><!-- minotaur horn -->
-		<item id="12438" chance="8190"/><!-- piece of archer armor -->
+		<item id="2543" countmax="20" chance="50000"/><!-- bolt -->
+		<item id="2148" countmax="30" chance="50000"/><!-- gold coin -->
+		<item id="12407" chance="14285"/><!-- broken crossbow -->
+		<item id="7363" countmax="4" chance="11111"/><!-- piercing bolt -->
+		<item id="12439" chance="7692"/><!-- piece of archer armor -->
+		<item id="2666" chance="4761"/><!-- meat -->
+		<item id="12428" countmax="2" chance="1960"/><!-- minotaur horn -->
+		<item id="5878" chance="1923"/><!-- minotaur leather -->
+		<item id="2455" chance="826"/><!-- crossbow -->
+		<item id="2465" chance="523"/><!--  brass armor-->
+		<item id="2483" chance="515"/><!-- scale armor -->
 	</loot>
 </monster>

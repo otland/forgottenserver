@@ -18,45 +18,45 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="235"/>
+		<attack name="melee" interval="2000" skill="30" attack="470"/>
 	</attacks>
 	<defenses armor="40" defense="45">
-		<defense name="speed" interval="10000" chance="40" speedchange="210" duration="20000">
+		<defense name="speed" interval="2000" chance="15" speedchange="210">
 			<attribute key="areaEffect" value="greenshimmer"/>
 		</defense>
-		<defense name="healing" interval="1000" chance="25" min="113" max="187">
+		<defense name="healing" interval="2000" chance="12" min="200" max="240">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="100"/>
-		<element icePercent="100"/>
-		<element earthPercent="-12"/>
+		<element earthPercent="-10"/>
 		<element energyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity invisible="1"/>
 		<immunity drown="1"/>
+		<immunity fire="1"/>
+		<immunity ice="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Rrrah!"/>
 		<voice sentence="Rraaar!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="100000"/><!-- gold coin -->
-		<item id="2148" countmax="60" chance="100000"/><!-- gold coin -->
-		<item id="7378" countmax="7" chance="100000"/><!-- royal spear -->
-		<item id="2226" chance="2000"/><!-- fishbone -->
-		<item id="2387" chance="2000"/><!-- double axe -->
-		<item id="2473" chance="3333"/><!-- viking helmet -->
-		<item id="2145" chance="1429"/><!-- small diamond -->
-		<item id="2670" countmax="5" chance="20000"/><!-- shrimp -->
-		<item id="7591" chance="2000"/><!-- great health potion -->
-		<item id="5895" chance="2000"/><!-- fish fin -->
-		<item id="5741" chance="956"/><!-- skull helmet -->
-		<item id="7368" countmax="2" chance="956"/><!-- assassin star -->
-		<item id="7383" chance="2000"/><!-- relic sword -->
-		<item id="7897" chance="800"/><!-- glacier robe -->
-	</loot>
+    <item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+    <item id="2148" countmax="52" chance="50000" /><!-- gold coin -->
+    <item id="12447" chance="9090" /><!-- quara bone -->
+    <item id="7378" countmax="7" chance="8333" /><!-- royal spear -->
+    <item id="2145" countmax="2" chance="4761" /><!-- small diamond -->
+    <item id="2670" chance="4761" /><!-- shrimp -->
+    <item id="2387" chance="2941" /><!-- double axe -->
+    <item id="5895" countmax="2" chance="2127" /><!-- fish fin -->
+    <item id="7591" chance="961" /><!-- great health potion -->
+    <item id="7368" chance="649" /><!-- assassin star -->
+    <item id="7383" chance="558" /><!-- relic sword -->
+    <item id="7897" chance="483" /><!-- glacier robe -->
+    <item id="5741" chance="424" /><!-- skull helmet -->
+    <item id="13305" chance="18" /><!-- giant shrimp -->
+</loot>
 </monster>

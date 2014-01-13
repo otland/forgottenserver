@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Marsh Stalker" nameDescription="a marsh stalker" race="blood" experience="50" speed="180" manacost="0">
+	<health now="100" max="100"/>
+	<look type="530" corpse="19708"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="50"/>
+		<attack name="melee" interval="2800" radius="1" chance="100" min="-0" max="-8">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55"/>
+	<elements>
+		<element icePercent="10"/>
+		<element earthPercent="-10"/>
+	</elements>
+	<voices interval="2500" chance="10">
+		<voice sentence="Rrrawk! Rrrrawk!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="22" chance="30000"/> <!-- Gold Coin -->
+		<item id="3976" countmax="2" chance="33333"/> <!-- Worms -->
+		<item id="2667" countmax="2" chance="880"/> <!-- Fish -->
+		<item id="2666" chance="880"/> <!-- Meat -->
+		<item id="19740" chance="380"/> <!-- Marsh Stalker Beak -->
+		<item id="19741" chance="880"/> <!-- Marsh Stalker Feather -->
+		<item id="2397" chance="320"/> <!-- Longsword -->
+	</loot>
+</monster>

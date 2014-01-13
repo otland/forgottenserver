@@ -33,32 +33,36 @@
 	</attacks>
 	<defenses armor="25" defense="26"/>
 	<elements>
-		<element icePercent="100"/>
-		<element firePercent="100"/>
-		<element deathPercent="100"/>
-		<element holyPercent="100"/>
-		<element physicalPercent="40"/>
+		<element physicalPercent="25"/>
 		<element energyPercent="-20"/>
 	</elements>
 	<immunities>
-		<immunity paralyze="1"/>
+		<immunity holy="1"/>
+		<immunity death="1"/>
+		<immunity fire="1"/>
+		<immunity ice="1"/>
 		<immunity invisible="1"/>
+		<immunity paralyze="1"/>
+		<immunity drunk="1"/>
 	</immunities>
 	<voices interval="2000" chance="5">
-		<voice sentence="Chrr."/>
+		<voice sentence="Chrrr."/>
+		<voice sentence="Crrrrk."/>
+		<voice sentence="Gnarr."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="53" chance="10000"/><!-- gold coin -->
-		<item id="7441" chance="7000"/><!-- ice cube -->
-		<item id="2144" chance="2700"/><!-- black pearl -->
-		<item id="7588" chance="1500"/><!-- strong health potion -->
-		<item id="2145" chance="500"/><!-- small diamond -->
-		<item id="2396" chance="550"/><!-- ice rapier -->
-		<item id="2146" chance="750"/><!-- small sapphire -->
-		<item id="7449" chance="500"/><!-- crystal sword -->
-		<item id="2479" chance="600"/><!-- strange helmet -->
-		<item id="7290" chance="350"/><!-- shard -->
-		<item id="2383" chance="300"/><!-- spike sword -->
-		<item id="7902" chance="250"/><!-- glacier mask -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="3" chance="50000"/><!-- gold coin -->
+		<item id="10578" chance="11111"/><!-- frosty heart -->
+		<item id="7441" chance="5000"/><!-- ice cube -->
+		<item id="2144" chance="1612"/><!-- black pearl -->
+		<item id="2146" chance="578"/><!-- small sapphire -->
+		<item id="2479" chance="444"/><!-- strange helmet -->
+		<item id="7588" chance="444"/><!-- strong health potion -->
+		<item id="2396" chance="400"/><!-- ice rapier -->
+		<item id="7290" chance="266"/><!-- shard -->
+		<item id="7449" chance="177"/><!-- crystal sword -->
+		<item id="7902" chance="111"/><!-- glacier mask -->
+		<item id="2145" chance="66"/><!-- small diamond -->
 	</loot>
 </monster>

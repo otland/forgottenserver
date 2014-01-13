@@ -22,10 +22,10 @@
 	</attacks>
 	<defenses armor="2" defense="2"/>
 	<elements>
-		<element firePercent="-10"/>
+		<element firePercent="-1"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="5" chance="20000"/><!-- gold coin -->
-		<item id="8859" chance="1500"/><!-- spider fangs -->
+		<item id="2148" countmax="5" chance="33333"/><!-- gold coin -->
+		<item id="8859" chance="1098"/><!-- spider fangs -->
 	</loot>
 </monster>

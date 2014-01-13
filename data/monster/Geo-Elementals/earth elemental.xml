@@ -16,7 +16,7 @@
 		<flag lightlevel="0"/>
 		<flag lightcolor="0"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="1"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="45" attack="40"/>
@@ -32,10 +32,10 @@
 	</attacks>
 	<defenses armor="30" defense="30"/>
 	<elements>
-		<element deathPercent="20"/>
-		<element icePercent="20"/>
-		<element physicalPercent="20"/>
-		<element holyPercent="20"/>
+		<element deathPercent="50"/>
+		<element icePercent="85"/>
+		<element physicalPercent="50"/>
+		<element holyPercent="50"/>
 		<element firePercent="-25"/>
 	</elements>
 	<immunities>
@@ -45,17 +45,16 @@
 		<immunity energy="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="80" chance="37000"/><!-- gold coin -->
-		<item id="2148" countmax="49" chance="37000"/><!-- gold coin -->
-		<item id="2260" chance="7850"/><!-- blank rune -->
-		<item id="7850" countmax="30" chance="9200"/><!-- earth arrow -->
-		<item id="2398" chance="8500"/><!-- mace -->
-		<item id="2394" chance="4250"/><!-- morning star -->
-		<item id="9808" chance="5600"/><!-- rusty armor -->
-		<item id="1294" countmax="10" chance="4250"/><!-- small stone -->
-		<item id="9970" chance="1300"/><!-- small topaz -->
-		<item id="2509" chance="8000"/><!-- steel shield -->
-		<item id="7589" chance="2600"/><!-- strong mana potion -->
-		<item id="2150" countmax="2" chance="300"/><!-- small amethyst -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="30" chance="50000"/><!-- gold coin -->
+		<item id="11222" chance="20000"/><!-- lump of earth -->
+		<item id="7850" countmax="30" chance="20000"/><!-- earth arrow -->
+		<item id="1294" countmax="10" chance="9090"/><!-- small stone -->
+		<item id="2260" chance="9090"/><!-- blank rune -->
+		<item id="9808" chance="5263"/><!-- rusty armor -->
+		<item id="7589" chance="1851"/><!-- strong mana potion -->
+		<item id="9970" chance="632"/><!-- small topaz -->
+		<item id="11339" chance="591"/><!-- clay lump -->
+		<item id="13757" chance="460"/><!-- coal -->
 	</loot>
 </monster>

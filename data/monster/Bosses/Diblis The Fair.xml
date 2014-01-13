@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Diblis the fair" nameDescription="a vampire lord" race="undead" experience="1800" speed="280" manacost="0">
+    <health now="1600" max="1600"/>
+    <look type="287" corpse="8937"/>
+    <targetchange interval="5000" chance="10"/>
+    <strategy attack="100" defense="0"/>
+    <flags>
+        <flag summonable="0"/>
+        <flag attackable="1"/>
+        <flag hostile="1"/>
+        <flag illusionable="0"/>
+        <flag convinceable="0"/>
+        <flag pushable="0"/>
+        <flag canpushitems="1"/>
+        <flag canpushcreatures="1"/>
+        <flag targetdistance="1"/>
+        <flag staticattack="90"/>
+        <flag runonhealth="0"/>
+    </flags>
+    <attacks>
+        <attack name="melee" interval="2000" skill="70" attack="95"/>
+        <attack name="death" interval="1000" chance="12" target="1" min="0" max="-155">
+            <attribute key="areaEffect" value="mortarea"/>
+            <attribute key="shootEffect" value="suddendeath"/>
+        </attack>
+    </attacks>
+    <defenses armor="30" defense="30">
+        <defense name="healing" interval="1000" chance="12" min="100" max="235">
+            <attribute key="areaEffect" value="blueshimmer"/>
+        </defense>
+        <defense name="invisible" interval="3000" chance="25" duration="6000">
+            <attribute key="areaEffect" value="blueshimmer"/>
+        </defense>
+    </defenses>
+    <elements>
+        <element energyPercent="-10"/>
+        <element holyPercent="-15"/>
+        <element firePercent="-10"/>
+    </elements>
+    <immunities>
+        <immunity lifedrain="1"/>
+        <immunity death="1"/>
+        <immunity invisible="1"/>
+    </immunities>
+    <voices interval="5000" chance="10">
+        <voice sentence="I envy you to be slain by someone as beautiful as me."/>
+        <voice sentence="I will drain your ugly corpses of the last drop of blood."/>
+    </voices>
+    <summons maxSummons="4">
+        <summon name="Banshee" interval="4500" chance="50"/>
+    </summons>
+    <loot>
+        <item id="2229" chance="15000"/>
+        <item id="7588" chance="1500"/>
+        <item id="2144" chance="8900" countmax="2"/>
+        <item id="2152" chance="50000" countmax="5"/>
+        <item id="2148" chance="100000" countmax="99"/>
+        <item id="2216" chance="14111"/>
+		<item id="13224" chance="500" />
+        <item id="9020" chance1="100000" />
+        <item id="2534" chance="2100"/>
+        <item id="8903" chance="300"/>
+    </loot>
+</monster>

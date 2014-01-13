@@ -23,16 +23,13 @@
 	<defenses armor="5" defense="5"/>
 	<elements>
 		<element earthPercent="100"/>
-		<element icePercent="40"/>
+		<element icePercent="1"/>
 		<element firePercent="-10"/>
-		<element energyPercent="-5"/>
+		<element energyPercent="-10"/>
 	</elements>
-	<voices interval="5000" chance="10">
-		<voice sentence="crab crab!"/>
-	</voices>
 	<loot>
-		<item id="2148" countmax="10" chance="47000"/><!-- gold coin -->
+		<item id="2148" countmax="10" chance="100000"/><!-- gold coin -->
+		<item id="11189" chance="20000"/> <!-- crab pincers -->
 		<item id="2667" chance="20000"/><!-- fish -->
-		<item id="11189" chance="16300"/> <!-- crab pincers -->
 	</loot>
 </monster>

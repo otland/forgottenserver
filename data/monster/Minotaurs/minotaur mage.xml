@@ -47,16 +47,16 @@
 		<voice sentence="Kaplar!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="85810"/><!-- gold coin -->
-		<item id="2684" countmax="8" chance="15030"/><!-- carrot -->
-		<item id="12429" chance="6400"/><!-- purple robe -->
-		<item id="2649" chance="5160"/><!-- leather legs -->
-		<item id="2461" chance="3040"/><!-- leather helmet -->
-		<item id="2050" chance="4970"/><!-- torch -->
-		<item id="5878" chance="2280"/><!-- minotaur leather -->
-		<item id="7425" chance="1060"/><!-- taurus mace -->
-		<item id="2189" chance="600"/><!-- wand of cosmic energy -->
-		<item id="7620" chance="460"/><!-- mana potion -->
-		<item id="12428" countmax="2" chance="3060"/><!-- minotaur horn -->
+		<item id="2148" countmax="35" chance="50000"/><!-- gold coin -->
+		<item id="2684" countmax="8" chance="14285"/><!-- carrot -->
+		<item id="12429" chance="6250"/><!-- purple robe -->
+		<item id="2649" chance="5000"/><!-- leather legs -->
+		<item id="2050" chance="4761"/><!-- torch -->
+		<item id="12428" countmax="2" chance="3030"/><!-- minotaur horn -->
+		<item id="2461" chance="2941"/><!-- leather helmet -->
+		<item id="5878" chance="2272"/><!-- minotaur leather -->
+		<item id="7425" chance="1030"/><!-- taurus mace -->
+		<item id="2189" chance="606"/><!-- wand of cosmic energy -->
+		<item id="7620" chance="490"/><!-- mana potion -->
 	</loot>
 </monster>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spidris Elite" nameDescription="a spidris elite" race="blood" experience="4000" speed="560" manacost="0">
+	<health now="5000" max="5000"/>
+	<look type="457" corpse="15296"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="60"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
+		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="11" defense="11"/>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="3000" chance="200">
+		<voice sentence="Eeeeeeyyyyh!"/>
+		<voice sentence="Iiiiieeeeeeh!"/>
+	</voices>
+	<elements>
+		<element holyPercent="-10"/>
+	</elements>
+	<loot>
+		<item id="2148" countmax="100" chance="50000"/> <!-- gold coin -->
+		<item id="2148" countmax="93" chance="50000"/> <!-- gold coin -->
+		<item id="2152" countmax="6" chance="33333"/> <!-- platinum coin -->
+		<item id="15485" chance="25000"/> <!-- spidris sandible -->
+		<item id="2147" countmax="5" chance="20000"/> <!-- small ruby -->
+		<item id="7590" countmax="2" chance="16666"/> <!-- great mana potion -->
+		<item id="15486" chance="11111"/> <!-- compound eye -->
+		<item id="8473" chance="8333"/> <!-- ultimate health potion -->
+		<item id="6300" chance="4761"/> <!-- death ring -->
+		<item id="7632" chance="3448"/><!-- giant shimmering pearl -->
+		<item id="15492" chance="1250"/><!-- hive scythe -->
+		<item id="15489" chance="1149"/><!-- calopteryx cape -->
+		<item id="15491" chance="917"/><!-- carapace shield -->
+		<item id="7413" chance="917"/><!-- titan axe -->
+		<item id="2153" chance="917"/><!-- violet gem -->
+	</loot>
+</monster>

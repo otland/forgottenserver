@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Destroyer" nameDescription="a destroyer" race="blood" experience="2000" speed="270" manacost="0">
+<monster name="Destroyer" nameDescription="a destroyer" race="blood" experience="2500" speed="270" manacost="0">
 	<health now="3700" max="3700"/>
 	<look type="236" corpse="6320"/>
 	<targetchange interval="5000" chance="8"/>
@@ -8,7 +8,7 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
+		<flag illusionable="0"/>
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
@@ -29,46 +29,47 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="100"/>
-		<element firePercent="45"/>
-		<element physicalPercent="20"/>
-		<element earthPercent="20"/>
+		<element physicalPercent="25"/>
 		<element deathPercent="20"/>
+		<element firePercent="30"/>
+		<element earthPercent="20"/>
+		<element holyPercent="-3"/>
 		<element icePercent="-15"/>
-		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
+		<immunity energy="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
+		<voice sentence="COME HERE AND DIE!"/>
 		<voice sentence="Destructiooooon!"/>
 		<voice sentence="It's a good day to destroy!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="37500"/><!-- gold coin -->
-		<item id="2148" countmax="80" chance="37500"/><!-- gold coin -->
-		<item id="2148" countmax="70" chance="37500"/><!-- gold coin -->
-		<item id="2148" countmax="90" chance="37500"/><!-- gold coin -->
-		<item id="2231" chance="8000"/><!-- big bone -->
-		<item id="2666" countmax="6" chance="8000"/><!-- meat -->
-		<item id="7419" chance="2300"/><!-- dreaded cleaver -->
-		<item id="2463" chance="9200"/><!-- plate armor -->
-		<item id="6500" chance="24000"/><!-- demonic essence -->
-		<item id="2553" chance="7000"/><!-- pick -->
-		<item id="2125" chance="2300"/><!-- crystal necklace -->
-		<item id="2150" countmax="2" chance="7500"/><!-- small amethyst -->
-		<item id="2152" countmax="3" chance="3500"/><!-- platinum coin -->
-		<item id="5944" chance="7000"/><!-- soul orb-->
-		<item id="2393" chance="3500"/><!-- giant sword -->
-		<item id="7591" chance="2300"/><!-- greath health potion -->
-		<item id="2416" chance="11500"/><!-- crowbar -->
-		<item id="2489" chance="7000"/><!-- dark armor -->
-		<item id="2546" countmax="12" chance="5250"/><!-- burst arrow -->
-		<item id="2645" chance="2300"/><!-- steel boots -->
-		<item id="2178" chance="750"/><!-- mind stone -->
-		<item id="7427" chance="700"/><!-- chaos mace -->
-		<item id="5741" chance="300"/><!-- skull helmet -->
-		<item id="6300" chance="400"/><!-- death ring -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="41" chance="100000"/><!-- gold coin -->
+		<item id="2666" chance="50000"/><!-- meat -->
+		<item id="6500" chance="20000"/><!-- demonic essence -->
+		<item id="2416" chance="14285"/><!-- crowbar -->
+		<item id="2546" countmax="12" chance="12500"/><!-- burst arrow -->
+		<item id="2489" chance="10000"/><!-- dark armor -->
+		<item id="2150" countmax="2" chance="7692"/><!-- small amethyst -->
+		<item id="11215" chance="7142"/><!-- metal spike -->
+		<item id="5944" chance="6666"/><!-- soul orb-->
+		<item id="2553" chance="6250"/><!-- pick -->
+		<item id="2463" chance="4347"/><!-- plate armor -->
+		<item id="2152" countmax="3" chance="4166"/><!-- platinum coin -->
+		<item id="2393" chance="1694"/><!-- giant sword -->
+		<item id="7591" chance="1136"/><!-- greath health potion -->
+		<item id="2645" chance="892"/><!-- steel boots -->
+		<item id="7427" chance="869"/><!-- chaos mace -->
+		<item id="7419" chance="833"/><!-- dreaded cleaver -->
+		<item id="2125" chance="578"/><!-- crystal necklace -->
+		<item id="2178" chance="564"/><!-- mind stone -->
+		<item id="6300" chance="144"/><!-- death ring -->
+		<item id="5741" chance="108"/><!-- skull helmet -->
 	</loot>
 </monster>
