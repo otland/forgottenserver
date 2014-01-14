@@ -1,34 +1,38 @@
 function canJoin(cid)
-	return getPlayerVocation(cid) ~= VOCATION_NONE or getPlayerAccountType(cid) >= ACCOUNT_TYPE_SENIORTUTOR
+	local player = Player(cid) return player:getVocation() ~= VOCATION_NONE or player:getAccountType() >= ACCOUNT_TYPE_SENIORTUTOR
 end
 
 local CHANNEL_ADVERTISING = 5
 
-local muted = createConditionObject(CONDITION_CHANNELMUTEDTICKS)
-setConditionParam(muted, CONDITION_PARAM_SUBID, CHANNEL_ADVERTISING)
-setConditionParam(muted, CONDITION_PARAM_TICKS, 120000)
-
 function onSpeak(cid, type, message)
-	if getPlayerAccountType(cid) >= ACCOUNT_TYPE_GAMEMASTER then
+	local player = Player(cid)
+	if player:getAccountType() >= ACCOUNT_TYPE_GAMEMASTER then
 		if type == TALKTYPE_CHANNEL_Y then
 			return TALKTYPE_CHANNEL_O
 		end
 		return true
 	end
 
-	if getPlayerLevel(cid) == 1 then
-		doPlayerSendCancel(cid, "You may not speak into channels as long as you are on level 1.")
+	if player:getLevel() == 1 then
+		player:sendCancelMessage("You may not speak into channels as long as you are on level 1.")
 		return false
 	end
 
-	if getCreatureCondition(cid, CONDITION_CHANNELMUTEDTICKS, CHANNEL_ADVERTISING) then
-		doPlayerSendCancel(cid, "You may only place one offer in two minutes.")
+	local muted = player:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISING)
+	if not muted then
+		if not getPlayerFlagValue(cid, PlayerFlag_CannotBeMuted) then
+			muted = Condition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT)
+			muted:setParameter(CONDITION_PARAM_SUBID, CHANNEL_ADVERTISING)
+			muted:setParameter(CONDITION_PARAM_TICKS, 120000)
+			player:addCondition(muted)
+		end
+	else
+		player:sendCancelMessage("You may only place one offer in two minutes.")
 		return false
 	end
-	doAddCondition(cid, muted)
 
 	if type == TALKTYPE_CHANNEL_O then
-		if getPlayerAccountType(cid) < ACCOUNT_TYPE_GAMEMASTER then
+		if player:getAccountType() < ACCOUNT_TYPE_GAMEMASTER then
 			type = TALKTYPE_CHANNEL_Y
 		end
 	elseif type == TALKTYPE_CHANNEL_R1 then
