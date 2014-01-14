@@ -14,8 +14,8 @@
 		<monster name="Rat" minamount="4" maxamount="10"/><!-- Random amount in specified range -->
 	</areaspawn>
 
-	<!-- Single spawns -->  
+	<!-- Single spawns -->
 	<singlespawn delay="15000" name="Cave Rat" x="93" y="123" z="7"/>
-	<singlespawn delay="30000" name="Cave Rat" x="98" y="125" z="7"/>  
-	<singlespawn delay="30000" name="Cave Rat" x="94" y="128" z="7"/>  
+	<singlespawn delay="30000" name="Cave Rat" x="98" y="125" z="7"/>
+	<singlespawn delay="30000" name="Cave Rat" x="94" y="128" z="7"/>
 </raid>
