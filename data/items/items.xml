@@ -29276,8 +29276,13 @@
 	<item fromid="21477" toid="21478" name="the Brain Heater machine" />
 
 	<item id="21482" name="Omrabas' bone key">
-		<attribute key="weight" value="100" />
 		<attribute key="description" value="It is delicately carved out of the bone of some animal and bears strange inscriptions." />
+		<attribute key="weight" value="100" />
+	</item>
+
+	<item id="21585" article="a" name="smoking coal">
+		<attribute key="description" value="This coal is smoking and emmits quite a stench." />
+		<attribute key="weight" value="1000" />
 	</item>
 
 	<item id="21489" name="Omrabas' copper key">
