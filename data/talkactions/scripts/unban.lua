@@ -1,7 +1,7 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
 	if not player:getGroup():getAccess() then
-		return false
+		return true
 	end
 
 	local resultId = db.storeQuery("SELECT `account_id`, `lastip` FROM `players` WHERE `name` = " .. db.escapeString(param))
