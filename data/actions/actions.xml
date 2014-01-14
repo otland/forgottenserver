@@ -91,22 +91,41 @@
 	<action itemid="19692" function="decreaseItemId"/>
 
 	<!-- Food -->
-	<action fromid="2362" toid="2363" script="other/food.lua"/>
+	<action itemid="2362" script="other/food.lua"/>
 	<action fromid="2666" toid="2691" script="other/food.lua"/>
 	<action fromid="2695" toid="2696" script="other/food.lua"/>
 	<action fromid="2787" toid="2796" script="other/food.lua"/>
 	<action itemid="5097" script="other/food.lua"/>
 	<action itemid="6125" script="other/food.lua"/>
-	<action itemid="6278" script="other/food.lua"/>
-	<action itemid="6279" script="other/food.lua"/>
-	<action itemid="6394" script="other/food.lua"/>
+	<action fromid="6278" toid="6279" script="other/food.lua"/>
+	<action fromid="6393" toid="6394" script="other/food.lua"/>
 	<action itemid="6501" script="other/food.lua"/>
 	<action fromid="6541" toid="6545" script="other/food.lua"/>
 	<action itemid="6569" script="other/food.lua"/>
 	<action itemid="6574" script="other/food.lua"/>
-	<action itemid="7158" script="other/food.lua"/>
-	<action itemid="7159" script="other/food.lua"/>
+	<action fromid="7158" toid="7159" script="other/food.lua"/>
 	<action fromid="7372" toid="7377" script="other/food.lua"/>
+	<action fromid="7909" toid="7910" script="other/food.lua"/>
+	<action itemid="7963" script="other/food.lua"/>
+	<action itemid="8112" script="other/food.lua"/>
+	<action fromid="8838" toid="8845" script="other/food.lua"/>
+	<action itemid="8847" script="other/food.lua"/>
+	<action itemid="9005" script="other/food.lua"/>
+	<action itemid="9114" script="other/food.lua"/>
+	<action itemid="9996" script="other/food.lua"/>
+	<action itemid="10454" script="other/food.lua"/>
+	<action itemid="11246" script="other/food.lua"/>
+	<action itemid="11370" script="other/food.lua"/>
+	<action itemid="11429" script="other/food.lua"/>
+	<action fromid="12415" toid="12418" script="other/food.lua"/>
+	<action fromid="12637" toid="12639" script="other/food.lua"/>
+	<action itemid="13297" script="other/food.lua"/>
+	<action itemid="15405" script="other/food.lua"/>
+	<action fromid="15487" toid="15488" script="other/food.lua"/>
+	<action itemid="16014" script="other/food.lua"/>
+	<action itemid="18397" script="other/food.lua"/>
+	<action itemid="19737" script="other/food.lua"/>
+	<action fromid="20100" toid="20101" script="other/food.lua"/>
 
 	<!-- Spellbooks -->
 	<action itemid="2175" script="other/spellbook.lua"/>
