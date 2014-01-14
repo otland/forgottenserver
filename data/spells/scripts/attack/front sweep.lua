@@ -1,6 +1,7 @@
 local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
 setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_HITAREA)
+setCombatParam(combat, COMBAT_PARAM_USECHARGES, 1)
 setCombatFormula(combat, COMBAT_FORMULA_SKILL, 0.6, 0, 1.4, 0)
 
 local area = createCombatArea(AREA_WAVE6, AREADIAGONAL_WAVE6)
