@@ -60,6 +60,9 @@
 	<wand id="8922" level="42" mana="13" min="55" max="75" type="death" function="default"> <!-- Wand of Voodoo -->
 		<vocation name="Sorcerer"/>
 	</wand>
+	<wand id="13760" level="37" mana="13" min="55" max="75" type="death" function="default"> <!-- Wand of Dimensions -->
+		<vocation name="Sorcerer"/>
+	</wand>
 	<wand id="13880" level="40" mana="13" min="55" max="75" type="energy" function="default"> <!-- Shimmer Wand -->
 		<vocation name="Sorcerer"/>
 	</wand>
@@ -77,7 +80,10 @@
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="7385" level="20" unproperly="1" function="default"/>
-	<melee id="2377" level="20" unproperly="1" function="default"/>
+	<melee id="2377" level="20" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7408" level="25" unproperly="1" function="default"/>
 	<melee id="7449" level="25" unproperly="1" function="default">
 		<vocation name="Knight"/>
@@ -97,14 +103,20 @@
 	</melee>
 	<melee id="2451" level="35" unproperly="1" function="default"/>
 	<melee id="7404" level="40" unproperly="1" function="default"/>
-	<melee id="7386" level="40" unproperly="1" function="default"/>
+	<melee id="7386" level="40" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="2446" level="45" unproperly="1" function="default"/>
 	<melee id="7402" level="45" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="7383" level="50" unproperly="1" function="default"/>
-	<melee id="7391" level="50" unproperly="1" function="default"/>
+	<melee id="7391" level="50" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7416" level="55" unproperly="1" function="default"/>
 	<melee id="2393" level="55" unproperly="1" function="default">
 		<vocation name="Knight"/>
@@ -115,16 +127,16 @@
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
-	<melee id="7417" level="65" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
+	<melee id="7417" level="65" unproperly="1" function="default"/>
 	<melee id="7403" level="65" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="7418" level="70" unproperly="1" function="default"/>
-	<melee id="7405" level="70" unproperly="1" function="default"/>
+	<melee id="7405" level="70" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7390" level="75" unproperly="1" function="default"/>
 	<melee id="6528" level="75" unproperly="1" function="default">
 		<vocation name="Knight"/>
@@ -132,9 +144,12 @@
 	</melee>
 	<melee id="2400" level="80" unproperly="1" function="default"/>
 	<melee id="8930" level="100" unproperly="1" function="default"/>
-	<melee id="8931" level="140" unproperly="1" function="default"/>
-	<melee id="8932" level="100" unproperly="1" function="default"/>
-	<melee id="2408" level="110" unproperly="1" function="default">
+	<melee id="8931" level="120" unproperly="1" function="default"/>
+	<melee id="8932" level="100" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="2408" level="120" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
@@ -147,6 +162,41 @@
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="11307" level="55" unproperly="1" function="default"/>
+	<melee id="12649" level="82" unproperly="1" function="default"/>
+	<melee id="12613" level="58" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="13871" level="40" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="18450" level="62" unproperly="1" function="default"/>
+	<melee id="20092" level="15" unproperly="1" function="default"/>
+	<melee id="22398" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22399" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22400" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22401" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22402" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22403" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 		<!-- Fire -->
 	<melee id="7744" function="default"/>
 	<melee id="7745" level="50" unproperly="1" function="default"/>
@@ -195,40 +245,6 @@
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
-	<melee id="12649" level="82" unproperly="1" function="default"/>
-	<melee id="12613" level="58" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="13871" level="40" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="18450" level="62" unproperly="1" function="default"/> <!-- crystalline sword -->
-	<melee id="22398" level="75" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22399" level="120" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22400" level="250" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22401" level="75" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22402" level="120" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22403" level="250" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
 
 	<!-- Axes -->
 	<melee id="2378" unproperly="1" function="default">
@@ -266,9 +282,16 @@
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="7412" level="45" unproperly="1" function="default"/>
-	<melee id="7436" level="45" unproperly="1" function="default"/>
+	<melee id="7436" level="45" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7411" level="50" unproperly="1" function="default"/>
-	<melee id="2447" level="50" unproperly="1" function="default"/>
+	<melee id="7435" level="85" unproperly="1" function="default"/>
+	<melee id="2447" level="50" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7388" level="55" unproperly="1" function="default"/>
 	<melee id="2427" level="55" unproperly="1" function="default"/>
 	<melee id="7389" level="60" unproperly="1" function="default"/>
@@ -277,10 +300,17 @@
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
-	<melee id="2443" level="70" unproperly="1" function="default"/>
+	<melee id="2443" level="70" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7420" level="70" unproperly="1" function="default"/>
 	<melee id="7434" level="75" unproperly="1" function="default"/>
-	<melee id="6553" level="75" unproperly="1" function="default"/>
+	<melee id="7433" level="65" unproperly="1" function="default"/>
+	<melee id="6553" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7453" level="85" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
@@ -302,6 +332,35 @@
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="11323" level="25" unproperly="1" function="default"/>
+	<melee id="15404" level="80" unproperly="1" function="default"/>
+	<melee id="15451" level="40" unproperly="1" function="default"/>
+	<melee id="15454" level="50" unproperly="1" function="default"/>
+	<melee id="15492" level="70" unproperly="1" function="default"/>
+	<melee id="13838" level="25" unproperly="1" function="default"/>
+	<melee id="22404" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22405" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22406" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22407" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22408" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22409" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 		<!-- Fire -->
 	<melee id="7749" level="20" unproperly="1" function="default"/>
 	<melee id="7750" level="25" unproperly="1" function="default"/>
@@ -350,37 +409,9 @@
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
-	<melee id="15404" level="80" unproperly="1" function="default"/>
-	<melee id="15451" level="40" unproperly="1" function="default"/>
-	<melee id="15454" level="50" unproperly="1" function="default"/>
-	<melee id="15492" level="70" unproperly="1" function="default"/>
-	<melee id="22404" level="75" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22405" level="120" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22406" level="250" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22407" level="75" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22408" level="120" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22409" level="250" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
 
 	<!--Clubs -->
-	<!-- <melee id="2423" level="20" unproperly="1" function="default"/> -->
+	<melee id="2423" level="20" unproperly="1" function="default"/>
 	<melee id="7381" level="20" unproperly="1" function="default"/>
 	<melee id="7425" level="20" unproperly="1" function="default"/>
 	<melee id="7432" level="20" unproperly="1" function="default"/>
@@ -390,8 +421,12 @@
 	<melee id="7430" level="30" unproperly="1" function="default"/>
 	<melee id="2436" level="30" unproperly="1" function="default"/>
 	<melee id="7437" level="30" unproperly="1" function="default"/>
-	<melee id="3961" level="35" unproperly="1" function="default"/>
+	<melee id="3961" level="40" unproperly="1" function="default"/>
 	<melee id="7452" level="30" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="7450" level="120" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
@@ -421,12 +456,15 @@
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
 	<melee id="7421" level="65" unproperly="1" function="default"/>
-	<melee id="2452" level="70" unproperly="1" function="default"/>
+	<melee id="2452" level="70" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
 	<melee id="7422" level="75" unproperly="1" function="default"/>
 	<melee id="7429" level="75" unproperly="1" function="default"/>
 	<melee id="2453" level="75" unproperly="1" function="default"/>
-	<melee id="2437" level="80" unproperly="1" function="default"/>
 	<melee id="7431" level="80" unproperly="1" function="default"/>
+	<melee id="7409" level="50" unproperly="1" function="default"/>
 	<melee id="7423" level="85" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
@@ -439,6 +477,40 @@
 	</melee>
 	<melee id="8927" level="120" unproperly="1" function="default"/>
 	<melee id="11308" level="55" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="12648" level="82" unproperly="1" function="default"/>
+	<melee id="15400" level="38" unproperly="1" function="default"/>
+	<melee id="15414" level="90" unproperly="1" function="default"/>
+	<melee id="15647" level="48" unproperly="1" function="default"/>
+	<melee id="20093" level="15" unproperly="1" function="default"/>
+	<melee id="20108" level="50" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="20139" level="20" unproperly="1" function="default"/>
+	<melee id="22410" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22411" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22412" level="250" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22413" level="75" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22414" level="120" unproperly="1" function="default">
+		<vocation name="Knight"/>
+		<vocation name="Elite Knight" showInDescription="0"/>
+	</melee>
+	<melee id="22415" level="250" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
@@ -475,33 +547,6 @@
 	<melee id="7881" level="60" unproperly="1" function="default"/>
 	<melee id="7882" level="35" unproperly="1" function="default"/>
 	<melee id="7883" level="50" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="15400" level="38" unproperly="1" function="default"/>
-	<melee id="15414" level="90" unproperly="1" function="default"/>
-	<melee id="15647" level="48" unproperly="1" function="default"/>
-	<melee id="22410" level="75" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22411" level="120" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22412" level="250" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22413" level="75" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22414" level="120" unproperly="1" function="default">
-		<vocation name="Knight"/>
-		<vocation name="Elite Knight" showInDescription="0"/>
-	</melee>
-	<melee id="22415" level="250" unproperly="1" function="default">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight" showInDescription="0"/>
 	</melee>
@@ -622,6 +667,8 @@
 	<distance id="7839" unproperly="1" level="20" function="default"/>	<!-- Shiver Arrow -->
 	<distance id="7840" unproperly="1" level="20" function="default"/>	<!-- Flaming Arrow -->
 	<distance id="7850" unproperly="1" level="20" function="default"/>	<!-- Earth Arrow -->
+	<distance id="15648" unproperly="1" level="30" function="default"/>	<!-- Tarsal Arrow -->
+	<distance id="15649" unproperly="1" level="40" function="default"/>	<!-- Vortex Bolt -->
 	<distance id="18304" unproperly="1" level="90" function="default"/>	<!-- Crystalline Arrow -->
 	<distance id="18435" unproperly="1" level="90" function="default"/>	<!-- Prismatic Bolt -->
 	<distance id="18436" unproperly="1" level="70" function="default"/>	<!-- Drill Bolt -->
