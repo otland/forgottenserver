@@ -1707,8 +1707,6 @@ bool ConjureSpell::loadFunction(const std::string& functionName)
 	std::string tmpFunctionName = asLowerCaseString(functionName);
 	if (tmpFunctionName == "conjureitem" || tmpFunctionName == "conjurerune") {
 		function = ConjureItem;
-	} else if (tmpFunctionName == "conjurefood") {
-		function = ConjureFood;
 	} else {
 		std::cout << "[Warning - ConjureSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
@@ -1801,31 +1799,6 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 	return false;
 }
 
-bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, const std::string&)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	uint32_t foodType[8] = {
-		ITEM_MEAT,
-		ITEM_HAM,
-		ITEM_GRAPE,
-		ITEM_APPLE,
-		ITEM_BREAD,
-		ITEM_CHEESE,
-		ITEM_ROLL,
-		ITEM_BREAD
-	};
-
-	bool result = (internalConjureItem(player, foodType[uniform_random(0, 7)], 1) == RET_NOERROR);
-	if (result) {
-		spell->postCastSpell(player);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
-	}
-	return result;
-}
 
 bool ConjureSpell::playerCastInstant(Player* player, std::string& param)
 {
