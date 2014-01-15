@@ -1,7 +1,14 @@
 local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
 setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_ENERGYAREA)
-setCombatFormula(combat, COMBAT_FORMULA_LEVELMAGIC, -1.0, 0, -1.5, 0)
+
+function onGetFormulaValues(cid, level, maglevel)
+min = -((level*0.2) + (maglevel*2.5)+11)
+max = -((level*0.2) + (maglevel*4)+19)
+return min, max
+end
+
+setCombatCallback(combat, CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
 
 local area = createCombatArea(AREA_BEAM5, AREADIAGONAL_BEAM5)
 setCombatArea(combat, area)

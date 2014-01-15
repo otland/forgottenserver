@@ -17,5 +17,9 @@ end
 setCombatCallback(combat, CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
 
 function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+	if getTileInfo(getThingPos(cid)).protection == false then
+		return doCombat(cid, combat, var)
+	else
+		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "You can't cast this spell in protection zone.")
+	end
 end
