@@ -7,5 +7,9 @@ setCombatParam(combat, COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 setCombatFormula(combat, COMBAT_FORMULA_LEVELMAGIC, 1.335, 0, 1.58, 0)
 
 function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+	if getTileInfo(getThingPos(cid)).protection == false then
+		return doCombat(cid, combat, var)
+	else
+		doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_BLUE, "You can't cast this spell in protection zone.")
+	end
 end
