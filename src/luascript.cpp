@@ -1207,9 +1207,6 @@ void LuaScriptInterface::registerFunctions()
 	//doCreateNpc(name, pos)
 	lua_register(m_luaState, "doCreateNpc", LuaScriptInterface::luaDoCreateNpc);
 
-	//doSummonCreature(name, pos)
-	lua_register(m_luaState, "doSummonCreature", LuaScriptInterface::luaDoSummonCreature);
-
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
@@ -2883,29 +2880,6 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 	} else {
 		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSummonCreature(lua_State* L)
-{
-	//doSummonCreature(name, pos)
-	PositionEx pos;
-	popPosition(L, pos);
-	std::string name = popString(L);
-
-	Monster* monster = Monster::createMonster(name);
-	if (!monster) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!g_game.placeCreature(monster, pos)) {
-		delete monster;
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_pushnumber(L, monster->getID());
 	return 1;
 }
 
