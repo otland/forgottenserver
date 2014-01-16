@@ -7752,8 +7752,8 @@ int32_t LuaScriptInterface::luaCreatureGetDescription(lua_State* L)
 // Player
 int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
-	// Player(id or name)
-	// Player.new(id or name)
+	// Player(id or name or userdata)
+	// Player.new(id or name or userdata)
 	Player* player = nullptr;
 	if (isNumber(L, 2)) {
 		player = g_game.getPlayerByID(getNumber<uint32_t>(L, 2));
@@ -7764,6 +7764,8 @@ int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 			pushNumber(L, ret);
 			return 2;
 		}
+	} else if (isUserdata(L, 2)) {
+		player = getUserdata<Player>(L, 2);
 	}
 
 	if (player) {
