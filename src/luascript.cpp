@@ -1216,9 +1216,6 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
 	lua_register(m_luaState, "doPlayerRemoveItem", LuaScriptInterface::luaDoPlayerRemoveItem);
 
-	//doSetCreatureLight(cid, lightLevel, lightColor, time)
-	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
-
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
 
@@ -4052,26 +4049,6 @@ int32_t LuaScriptInterface::luaIsInArray(lua_State* L)
 	}
 
 	pushBoolean(L, false);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
-{
-	//doSetCreatureLight(cid, lightLevel, lightColor, time)
-	uint32_t time = popNumber(L);
-	uint8_t color = popNumber<uint8_t>(L);
-	uint8_t level = popNumber<uint8_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_LIGHT, time, level | (color << 8));
-		creature->addCondition(condition);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 

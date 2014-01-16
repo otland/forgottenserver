@@ -417,7 +417,6 @@ class LuaScriptInterface
 		static int32_t luaDoTileAddItemEx(lua_State* L);
 		static int32_t luaDoRelocate(lua_State* L);
 		static int32_t luaDoPlayerRemoveItem(lua_State* L);
-		static int32_t luaDoSetCreatureLight(lua_State* L);
 
 		//get item info
 		static int32_t luaGetThingfromPos(lua_State* L);

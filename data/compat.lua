@@ -513,6 +513,26 @@ function doSetItemOutfit(cid, item, time)
 	end
 	return true
 end
+function doSetCreatureLight(cid, lightLevel, lightColor, time)
+	local c = Creature(cid)
+	if c == nil then
+		return false
+	end
+	local cd = c:getCondition(CONDITION_LIGHT)
+	if cd == nil then
+		cd = Condition(CONDITION_LIGHT)
+		if cd == nil then
+			return false
+		end
+		cd:setTicks(time)
+		cd:setParameter(CONDITION_PARAM_LIGHT_LEVEL, lightLevel)
+		cd:setParameter(CONDITION_PARAM_LIGHT_COLOR, lightColor)
+		c:addCondition(cd)
+	else
+		cd:setTicks(cd:getTicks() + time)
+	end
+	return true
+end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end
