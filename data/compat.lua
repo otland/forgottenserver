@@ -456,6 +456,34 @@ function doSetCreatureOutfit(cid, outfit, time)
 	end
 	return true
 end
+function doSetMonsterOutfit(cid, name, time)
+	local c = Creature(cid)
+	if c == nil then
+		return false
+	end	
+	local mType = MonsterType(name)
+	if mType == nil then
+		return false
+	end
+	if c:isPlayer() and not getPlayerFlagValue(cid, PlayerFlag_CanIllusionAll) then
+		if not mType:isIllusionable() then
+			return false
+		end
+	end
+	local cd = c:getCondition(CONDITION_OUTFIT)
+	if cd == nil then
+		cd = Condition(CONDITION_OUTFIT)
+		if cd == nil then
+			return false
+		end
+		cd:setTicks(time)
+		cd:addOutfit(mType:getOutfit())
+		c:addCondition(cd)
+	else
+		cd:setTicks(cd:getTicks() + time)
+	end
+	return true
+end
 
 function getTownId(townName) local t = Town(townName) return t ~= nil and t:getId() or false end
 function getTownName(townId) local t = Town(townId) return t ~= nil and t:getName() or false end
