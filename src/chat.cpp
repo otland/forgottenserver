@@ -191,6 +191,7 @@ bool ChatChannel::executeCanJoinEvent(const Player& player)
 
 	m_scriptInterface->pushFunction(canJoinEvent);
 	LuaScriptInterface::pushUserdata(L, &player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	return m_scriptInterface->callFunction(1);
 }
@@ -215,6 +216,7 @@ bool ChatChannel::executeOnJoinEvent(const Player& player)
 
 	m_scriptInterface->pushFunction(onJoinEvent);
 	LuaScriptInterface::pushUserdata(L, &player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	return m_scriptInterface->callFunction(1);
 }
@@ -239,6 +241,7 @@ bool ChatChannel::executeOnLeaveEvent(const Player& player)
 
 	m_scriptInterface->pushFunction(onLeaveEvent);
 	LuaScriptInterface::pushUserdata(L, &player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	return m_scriptInterface->callFunction(1);
 }
@@ -263,6 +266,8 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 
 	m_scriptInterface->pushFunction(onSpeakEvent);
 	LuaScriptInterface::pushUserdata(L, &player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
 	lua_pushnumber(L, type);
 	LuaScriptInterface::pushString(L, message);
 
