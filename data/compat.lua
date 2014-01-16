@@ -572,6 +572,14 @@ function getHouseOwner(houseId) local h = House(houseId) return h ~= nil and h:g
 function getHouseEntry(houseId) local h = House(houseId) return h ~= nil and h:getExitPosition() or false end
 function getHouseTown(houseId) local h = House(houseId) if h == nil then return false end local t = h:getTown() return t ~= nil and t:getId() or false end
 function getHouseTilesSize(houseId) local h = House(houseId) return h ~= nil and h:getTileCount() or false end
+function getTileHouseInfo(pos)
+	local t = Tile(pos)
+	if t == nil then
+		return false
+	end
+	local h = t:getHouse()
+	return h ~= nil and h:getId() or false
+end
 
 function isItemStackable(itemId) return ItemType(itemId):isStackable() end
 function isItemRune(itemId) return ItemType(itemId):isRune() end
