@@ -1361,9 +1361,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSetItemOutfit(cid, item, time)
 	lua_register(m_luaState, "doSetItemOutfit", LuaScriptInterface::luaSetItemOutfit);
 
-	//doSetCreatureOutfit(cid, outfit, time)
-	lua_register(m_luaState, "doSetCreatureOutfit", LuaScriptInterface::luaSetCreatureOutfit);
-
 	//hasProperty(uid, prop)
 	lua_register(m_luaState, "hasProperty", LuaScriptInterface::luaHasProperty);
 
@@ -3972,28 +3969,6 @@ int32_t LuaScriptInterface::luaDoChangeSpeed(lua_State* L)
 		pushBoolean(L, false);
 	}
 
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaSetCreatureOutfit(lua_State* L)
-{
-	//doSetCreatureOutfit(cid, outfit, time)
-	int32_t time = popNumber<int32_t>(L);
-	Outfit_t outfit = popOutfit(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		ReturnValue ret = Spell::CreateIllusion(creature, outfit, time);
-		if (ret == RET_NOERROR) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
