@@ -5,52 +5,57 @@ setConditionParam(muted, CONDITION_PARAM_SUBID, CHANNEL_HELP)
 setConditionParam(muted, CONDITION_PARAM_TICKS, 3600000)
 
 function onSpeak(cid, type, message)
-	local playerAccountType = getPlayerAccountType(cid)
-	if getPlayerLevel(cid) == 1 and playerAccountType == ACCOUNT_TYPE_NORMAL then
-		doPlayerSendCancel(cid, "You may not speak into channels as long as you are on level 1.")
+	local player = Player(cid)
+	local playerAccountType = player:getAccountType()
+	if player:getLevel() == 1 and playerAccountType == ACCOUNT_TYPE_NORMAL then
+		player:sendCancelMessage("You may not speak into channels as long as you are on level 1.")
 		return false
 	end
 
-	if getCreatureCondition(cid, CONDITION_CHANNELMUTEDTICKS, CHANNEL_HELP) then
-		doPlayerSendCancel(cid, "You are muted from the Help channel for using it inappropriately.")
+	local muted = player:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
+	if muted then
+		player:sendCancelMessage("You are muted from the Help channel for using it inappropriately.")
 		return false
 	end
 
 	if playerAccountType >= ACCOUNT_TYPE_TUTOR then
 		if string.sub(message, 1, 6) == "!mute " then
-			local targetName = string.sub(message, 7)
-			local target = getPlayerByName(targetName)
-			if target ~= false then
-				if playerAccountType > getPlayerAccountType(target) then
-					if not getCreatureCondition(target, CONDITION_CHANNELMUTEDTICKS, CHANNEL_HELP) then
-						doAddCondition(target, muted)
-						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, getPlayerName(target) .. " has been muted by " .. getPlayerName(cid) .. " for using Help Channel inappropriately.")
+			local target = Player(string.sub(message, 7))
+			if target ~= nil then
+				if playerAccountType > target:getAccountType() and not getPlayerFlagValue(target:getId(), PlayerFlag_CannotBeMuted) then
+					muted = target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
+					if not muted then
+						muted = Condition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT)
+						muted:setParameter(CONDITION_PARAM_SUBID, CHANNEL_HELP)
+						muted:setParameter(CONDITION_PARAM_TICKS, 3600000)
+						target:addCondition(muted)
+						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been muted by " .. player:getName() .. " for using Help Channel inappropriately.")
 					else
-						doPlayerSendCancel(cid, "That player is already muted.")
+						player:sendCancelMessage("That player is already muted.")
 					end
 				else
-					doPlayerSendCancel(cid, "You are not authorized to mute that player.")
+					player:sendCancelMessage("You are not authorized to mute that player.")
 				end
 			else
-				doPlayerSendDefaultCancel(cid, RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
+				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
 			end
 			return false
 		elseif string.sub(message, 1, 8) == "!unmute " then
-			local targetName = string.sub(message, 9)
-			local target = getPlayerByName(targetName)
-			if target ~= false then
-				if playerAccountType > getPlayerAccountType(target) then
-					if getCreatureCondition(target, CONDITION_CHANNELMUTEDTICKS, CHANNEL_HELP) then
-						doRemoveCondition(target, CONDITION_CHANNELMUTEDTICKS, CHANNEL_HELP)
-						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, getPlayerName(target) .. " has been unmuted by " .. getPlayerName(cid) .. ".")
+			local target = Player(string.sub(message, 9))
+			if target ~= nil then
+				if playerAccountType > target:getAccountType() and not getPlayerFlagValue(target:getId(), PlayerFlag_CannotBeMuted) then
+					muted = target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
+					if muted then
+						target:removeCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
+						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been unmuted by " .. player:getName() .. ".")
 					else
-						doPlayerSendCancel(cid, "That player is not muted.")
+						player:sendCancelMessage("That player is not muted.")
 					end
 				else
-					doPlayerSendCancel(cid, "You are not authorized to unmute that player.")
+					player:sendCancelMessage("You are not authorized to unmute that player.")
 				end
 			else
-				doPlayerSendDefaultCancel(cid, RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
+				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
 			end
 			return false
 		end
