@@ -1,3 +1,5 @@
+local condition = Condition(CONDITION_OUTFIT, CONDITIONID_COMBAT)
+
 function onSay(cid, words, param)
 	local player = Player(cid)
 	if not player:getGroup():getAccess() then
@@ -17,7 +19,6 @@ function onSay(cid, words, param)
 		end
 	end
 
-	local condition = Condition(CONDITION_OUTFIT, CONDITIONID_COMBAT)
 	condition:setTicks(-1)
 	condition:addOutfit(itemType:getId())
 	player:addCondition(condition)
