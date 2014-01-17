@@ -791,11 +791,14 @@ function Position.getNextPosition(self, direction, steps)
 	end
 end
 
-function Creature.getClosestFreePosition(self, position, extended)
-	if self:isPlayer(cid) and self:getAccountType() >= ACCOUNT_TYPE_GOD then
+function Player.getClosestFreePosition(self, position, extended)
+	if self:getAccountType() >= ACCOUNT_TYPE_GOD then
 		return position
 	end
-	
+	return Creature.getClosestFreePosition(self, position, extended)
+end
+
+function Creature.getClosestFreePosition(self, position, extended)
 	local usePosition = Position(position)
 	local tiles = { usePosition:getTile() }
 	local length = extended and 2 or 1
@@ -831,27 +834,25 @@ function Player.sendCancelMessage(self, message)
 	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
 end
 
+local foodCondition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
+
 function Player.feed(self, food)
 	local condition = self:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 	if condition then
 		condition:setTicks(condition:getTicks() + (food * 1000))
 	else
 		local vocation = self:getVocation()
-		if vocation == nil then
+		if not vocation then
 			return nil
 		end
-		
-		condition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
-		if condition == nil then
-			return nil
-		end
-		
-		condition:setTicks(food * 1000)
-		condition:setParameter(CONDITION_PARAM_HEALTHGAIN, vocation:getHealthGainAmount())
-		condition:setParameter(CONDITION_PARAM_HEALTHTICKS, vocation:getHealthGainTicks() * 1000)
-		condition:setParameter(CONDITION_PARAM_MANAGAIN, vocation:getManaGainAmount())
-		condition:setParameter(CONDITION_PARAM_MANATICKS, vocation:getManaGainTicks() * 1000)
-		self:addCondition(condition)
+
+		foodCondition:setTicks(food * 1000)
+		foodCondition:setParameter(CONDITION_PARAM_HEALTHGAIN, vocation:getHealthGainAmount())
+		foodCondition:setParameter(CONDITION_PARAM_HEALTHTICKS, vocation:getHealthGainTicks() * 1000)
+		foodCondition:setParameter(CONDITION_PARAM_MANAGAIN, vocation:getManaGainAmount())
+		foodCondition:setParameter(CONDITION_PARAM_MANATICKS, vocation:getManaGainTicks() * 1000)
+
+		self:addCondition(foodCondition)
 	end
 	return true
 end
