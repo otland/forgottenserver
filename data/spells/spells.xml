@@ -139,6 +139,10 @@
                 <vocation name="Master Sorcerer"/>
                 <vocation name="Elder Druid"/>
         </instant>
+        <instant group="support" spellid="42" name="Food" words="exevo pan" lvl="14" mana="120" soul="1" exhaustion="2000" groupcooldown="2000" aggressive="0" needlearn="0" script="support/food.lua">
+                <vocation name="Druid"/>
+                <vocation name="Elder Druid"/>
+        </instant>
         <instant group="attack" spellid="59" name="Front Sweep" words="exori min" lvl="70" mana="200" prem="1" needweapon="1" direction="1" exhaustion="6000" groupcooldown="2000" needlearn="0" script="attack/front sweep.lua">
                 <vocation name="Knight"/>
                 <vocation name="Elite Knight"/>
@@ -468,10 +472,6 @@
         <conjure group="support" spellid="51" name="Conjure Arrow" words="exevo con" lvl="13" mana="100" soul="1" conjureId="2544" conjureCount="10" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
                 <vocation name="Paladin"/>
                 <vocation name="Royal Paladin"/>
-        </conjure>
-        <conjure group="support" spellid="42" name="Food" words="exevo pan" lvl="14" mana="120" soul="1" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureFood">
-                <vocation name="Druid"/>
-                <vocation name="Elder Druid"/>
         </conjure>
         <conjure group="support" spellid="48" name="Conjure Poisoned Arrow" words="exevo con pox" lvl="16" mana="130" soul="2" conjureId="2545" conjureCount="7" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
                 <vocation name="Paladin"/>
