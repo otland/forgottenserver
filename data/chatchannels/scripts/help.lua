@@ -56,18 +56,17 @@ function onSpeak(player, type, message)
 		end
 	end
 
-	local playerId = player:getId()
 	if type == TALKTYPE_CHANNEL_Y then
-		if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(playerId, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(player, PlayerFlag_TalkOrangeHelpChannel) then
 			type = TALKTYPE_CHANNEL_O
 		end
 	elseif type == TALKTYPE_CHANNEL_O then
-		if playerAccountType < ACCOUNT_TYPE_TUTOR and not getPlayerFlagValue(playerId, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType < ACCOUNT_TYPE_TUTOR and not getPlayerFlagValue(player, PlayerFlag_TalkOrangeHelpChannel) then
 			type = TALKTYPE_CHANNEL_Y
 		end
 	elseif type == TALKTYPE_CHANNEL_R1 then
-		if playerAccountType < ACCOUNT_TYPE_GAMEMASTER and not getPlayerFlagValue(playerId, PlayerFlag_CanTalkRedChannel) then
-			if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(playerId, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType < ACCOUNT_TYPE_GAMEMASTER and not getPlayerFlagValue(player, PlayerFlag_CanTalkRedChannel) then
+			if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(player, PlayerFlag_TalkOrangeHelpChannel) then
 				type = TALKTYPE_CHANNEL_O
 			else
 				type = TALKTYPE_CHANNEL_Y

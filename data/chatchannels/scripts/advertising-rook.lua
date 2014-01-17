@@ -32,7 +32,7 @@ function onSpeak(player, type, message)
 			type = TALKTYPE_CHANNEL_Y
 		end
 	elseif type == TALKTYPE_CHANNEL_R1 then
-		if not getPlayerFlagValue(player:getId(), PlayerFlag_CanTalkRedChannel) then
+		if not getPlayerFlagValue(player, PlayerFlag_CanTalkRedChannel) then
 			type = TALKTYPE_CHANNEL_Y
 		end
 	end
