@@ -4,8 +4,7 @@ local muted = Condition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT)
 muted:setParameter(CONDITION_PARAM_SUBID, CHANNEL_HELP)
 muted:setParameter(CONDITION_PARAM_TICKS, 3600000)
 
-function onSpeak(cid, type, message)
-	local player = Player(cid)
+function onSpeak(player, type, message)
 	local playerAccountType = player:getAccountType()
 	if player:getLevel() == 1 and playerAccountType == ACCOUNT_TYPE_NORMAL then
 		player:sendCancelMessage("You may not speak into channels as long as you are on level 1.")
@@ -57,17 +56,18 @@ function onSpeak(cid, type, message)
 		end
 	end
 
+	local playerId = player:getId()
 	if type == TALKTYPE_CHANNEL_Y then
-		if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(cid, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(playerId, PlayerFlag_TalkOrangeHelpChannel) then
 			type = TALKTYPE_CHANNEL_O
 		end
 	elseif type == TALKTYPE_CHANNEL_O then
-		if playerAccountType < ACCOUNT_TYPE_TUTOR and not getPlayerFlagValue(cid, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType < ACCOUNT_TYPE_TUTOR and not getPlayerFlagValue(playerId, PlayerFlag_TalkOrangeHelpChannel) then
 			type = TALKTYPE_CHANNEL_Y
 		end
 	elseif type == TALKTYPE_CHANNEL_R1 then
-		if playerAccountType < ACCOUNT_TYPE_GAMEMASTER and not getPlayerFlagValue(cid, PlayerFlag_CanTalkRedChannel) then
-			if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(cid, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType < ACCOUNT_TYPE_GAMEMASTER and not getPlayerFlagValue(playerId, PlayerFlag_CanTalkRedChannel) then
+			if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(playerId, PlayerFlag_TalkOrangeHelpChannel) then
 				type = TALKTYPE_CHANNEL_O
 			else
 				type = TALKTYPE_CHANNEL_Y

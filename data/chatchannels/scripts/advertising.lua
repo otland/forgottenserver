@@ -1,5 +1,4 @@
-function canJoin(cid)
-	local player = Player(cid)
+function canJoin(player)
 	return player:getVocation():getId() ~= VOCATION_NONE or player:getAccountType() >= ACCOUNT_TYPE_SENIORTUTOR
 end
 
@@ -9,8 +8,7 @@ local muted = Condition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT)
 muted:setParameter(CONDITION_PARAM_SUBID, CHANNEL_ADVERTISING)
 muted:setParameter(CONDITION_PARAM_TICKS, 120000)
 
-function onSpeak(cid, type, message)
-	local player = Player(cid)
+function onSpeak(player, type, message)
 	if player:getAccountType() >= ACCOUNT_TYPE_GAMEMASTER then
 		if type == TALKTYPE_CHANNEL_Y then
 			return TALKTYPE_CHANNEL_O
@@ -34,7 +32,7 @@ function onSpeak(cid, type, message)
 			type = TALKTYPE_CHANNEL_Y
 		end
 	elseif type == TALKTYPE_CHANNEL_R1 then
-		if not getPlayerFlagValue(cid, PlayerFlag_CanTalkRedChannel) then
+		if not getPlayerFlagValue(player:getId(), PlayerFlag_CanTalkRedChannel) then
 			type = TALKTYPE_CHANNEL_Y
 		end
 	end
