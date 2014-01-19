@@ -2861,8 +2861,7 @@
 		<attribute key="magiclevelpoints" value="1" />
 		<attribute key="slotType" value="head" />
 	</item>
-	<item id="2324" article="a" name="witchesbroom">
-		<attribute key="description" value="Don't use it without flying license. Not suitable for minors." />
+	<item id="2324" article="a" name="broom">
 		<attribute key="weight" value="1100" />
 	</item>
 	<item id="2325" article="a" name="book">
@@ -9418,15 +9417,14 @@
 		<attribute key="duration" value="600" />
 		<attribute key="corpseType" value="blood" />
 	</item>
-	<item id="5937" name="griffinclaw container" article="a">
+	<item id="5937" name="botanist's container" article="a">
 		<attribute key="description" value="It holds a sample of the rare griffinclaw flower." />
-		<attribute key="weight" value="1800" />
+		<attribute key="weight" value="2000" />
 	</item>
 	<item id="5938" name="Ceiron's waterskin">
-		<attribute key="description" value="It is empty." />
 		<attribute key="weight" value="700" />
 	</item>
-	<item id="5939" name="Nilsor's waterskin">
+	<item id="5939" name="Ceiron's waterskin">
 		<attribute key="weight" value="700" />
 	</item>
 	<item id="5940" name="Ceiron's wolf tooth chain">
@@ -10455,8 +10453,7 @@
 		<attribute key="weight" value="830" />
 		<attribute key="description" value="It obviously shows Treasure Island including a big, red cross." />
 	</item>
-	<item id="6119" article="a" name="lottery ticket">
-		<attribute key="description" value="It has not been used yet." />
+	<item id="6119" article="a" name="scroll">
 		<attribute key="weight" value="120" />
 	</item>
 	<item id="6120" name="Dragha's spellbook">
@@ -11109,11 +11106,8 @@
 	<item id="6393" name="valentine's cake" article="a">
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="6394" article="a" name="throwing cake">
-		<attribute key="description" value="You could eat it. But then again, throwing it at others is so much more fun." />
-		<attribute key="weight" value="80" />
-		<attribute key="attack" value="0" />
-		<attribute key="weaponType" value="distance" />
+	<item id="6394" article="a" name="cream cake">
+		<attribute key="weight" value="500" />
 	</item>
 	<item fromid="6395" toid="6412" name="bones" />
 	<item id="6413" article="a" name="bone pillar" />
@@ -11373,19 +11367,22 @@
 	<item id="6546" name="Dracola's eye">
 		<attribute key="weight" value="1500" />
 	</item>
-	<item id="6547" article="a" name="yellow powder">
+	<item id="6547" name="easily inflammable sulphur">
+		<attribute key="weight" value="50" />
+		<attribute key="showcount" value="0" />
+	</item>
+	<item id="6548" article="a" name="violet sulphur">
+		<attribute key="weight" value="750" />
+	</item>
+	<item id="6549" article="a" name="green sulphur">
+		<attribute key="weight" value="750" />
+	</item>
+	<item id="6550" article="a" name="demon dust">
+		<attribute key="description" value="It reeks of hatred and malice." />
 		<attribute key="weight" value="100" />
 	</item>
-	<item id="6548" article="a" name="purple powder">
-		<attribute key="weight" value="100" />
-	</item>
-	<item id="6549" article="a" name="green powder">
-		<attribute key="weight" value="100" />
-	</item>
-	<item id="6550" article="a" name="red powder">
-		<attribute key="weight" value="100" />
-	</item>
-	<item id="6551" article="a" name="blue powder">
+	<item id="6551" article="a" name="vampire dust">
+		<attribute key="description" value="Sun can be a merciless killer, but so can you." />
 		<attribute key="weight" value="100" />
 	</item>
 	<item id="6552" article="a" name="dead defiler">
@@ -11960,10 +11957,10 @@
 		<attribute key="weight" value="100" />
 	</item>
 	<item id="7246" name="Nilsor's waterskin">
-		<attribute key="description" value="It is filled with warm geyser water." />
+		<attribute key="description" value="It is empty." />
 		<attribute key="weight" value="700" />
 	</item>
-	<item id="7247" name="easily inflammable sulphur">
+	<item id="7247" name="fine sulphur">
 		<attribute key="description" value="It has been extracted from an inactive lava hole." />
 		<attribute key="weight" value="50" />
 	</item>
@@ -12054,7 +12051,7 @@
 		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="7286" name="Nilsor's waterskin">
-		<attribute key="description" value="It is empty." />
+		<attribute key="description" value="It is filled with warm geyser water." />
 		<attribute key="weight" value="700" />
 	</item>
 	<item fromid="7287" toid="7288" name="" />
@@ -12954,8 +12951,9 @@
 		<attribute key="description" value="It contains the smell of a freshly slain slime." />
 		<attribute key="weight" value="180" />
 	</item>
-	<item id="7478" article="a" name="vial">
-		<attribute key="weight" value="170" />
+	<item id="7478" article="a" name="special flask">
+		<attribute key="description" value="Bozo gave it to you to collect certain secret ingredients." />
+		<attribute key="weight" value="180" />
 	</item>
 	<item id="7479" name="the dwarven emperor's beard">
 		<attribute key="weight" value="50" />
@@ -14904,11 +14902,11 @@
 	<item fromid="8202" toid="8203" article="a" name="cave entrance">
 		<attribute key="floorchange" value="down" />
 	</item>
-	<item id="8204" name="fine sulphur">
-		<attribute key="description" value="It has been extracted from an inactive lava hole." />
+	<item id="8204" name="easily inflammable sulphur">
 		<attribute key="weight" value="50" />
 	</item>
-	<item id="8205" article="a" name="flask with paint">
+	<item id="8205" article="a" name="special flask">
+		<attribute key="description" value="It contains highly intensified poison against vermin." />
 		<attribute key="weight" value="180" />
 	</item>
 	<item fromid="8206" toid="8207" name="" />
@@ -15039,9 +15037,9 @@
 	<item id="8300" article="a" name="flawless ice crystal">
 		<attribute key="weight" value="250" />
 	</item>
-	<item id="8301" name="holy soil">
-		<attribute key="weight" value="250" />
-		<attribute key="showcount" value="0" />
+	<item id="8301" name="fine sulphur">
+		<attribute key="description" value="It has been extracted from an inactive lava hole." />
+		<attribute key="weight" value="50" />
 	</item>
 	<item id="8302" name="iced soil">
 		<attribute key="weight" value="250" />
@@ -16450,9 +16448,8 @@
 		<attribute key="containerSize" value="8" />
 		<attribute key="slotType" value="backpack" />
 	</item>
-	<item id="9078" article="a" name="special flask">
-		<attribute key="description" value="Bozo gave it to you to collect certain secret ingredients." />
-		<attribute key="weight" value="180" />
+	<item id="9078" article="a" name="vial">
+		<attribute key="weight" value="170" />
 	</item>
 	<item id="9081" article="a" name="parcel">
 		<attribute key="weight" value="1800" />
@@ -17785,6 +17782,9 @@
 	</item>
 	<item id="10066" article="a" name="dark essence">
 		<attribute key="weight" value="260" />
+	</item>
+	<item id="10068" article="a" name="flask with paint">
+		<attribute key="weight" value="180" />
 	</item>
 	<item id="10070" article="a" name="grey bag">
 		<attribute key="weight" value="800" />
