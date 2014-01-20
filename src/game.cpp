@@ -1580,7 +1580,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		return nullptr;
 	}
 
-	std::list<Container*> listContainer;
+	std::forward_list<Container*> listContainer;
 	for (int32_t i = cylinder->__getFirstIndex(), j = cylinder->__getLastIndex(); i < j; ++i) {
 		Thing* thing = cylinder->__getThing(i);
 		if (!thing) {
@@ -1598,7 +1598,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 			if (depthSearch) {
 				Container* container = item->getContainer();
 				if (container) {
-					listContainer.push_back(container);
+					listContainer.push_front(container);
 				}
 			}
 		}
@@ -1615,7 +1615,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_back(tmpContainer);
+				listContainer.push_front(tmpContainer);
 			}
 		}
 	}
@@ -1632,7 +1632,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 		return true;
 	}
 
-	std::list<Container*> listContainer;
+	std::forward_list<Container*> listContainer;
 
 	typedef std::multimap<uint64_t, Item*, std::less<uint64_t>> MoneyMap;
 	typedef MoneyMap::value_type moneymap_pair;
@@ -1652,7 +1652,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 
 		Container* container = item->getContainer();
 		if (container) {
-			listContainer.push_back(container);
+			listContainer.push_front(container);
 		} else if (item->getWorth() != 0) {
 			moneyCount += item->getWorth();
 			moneyMap.insert(moneymap_pair(item->getWorth(), item));
@@ -1666,7 +1666,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 		for (Item* item : container->getItemList()) {
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_back(tmpContainer);
+				listContainer.push_front(tmpContainer);
 			} else if (item->getWorth() != 0) {
 				moneyCount += item->getWorth();
 				moneyMap.insert(moneymap_pair(item->getWorth(), item));
@@ -2904,17 +2904,15 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	}
 
 	bool foundItem = false;
-	std::list<const Container*> listContainer;
-	listContainer.push_back(tradeContainer);
-
-	while (!foundItem && !listContainer.empty()) {
+	std::forward_list<const Container*> listContainer {tradeContainer};
+	do {
 		const Container* container = listContainer.front();
 		listContainer.pop_front();
 
 		for (Item* item : container->getItemList()) {
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_back(tmpContainer);
+				listContainer.push_front(tmpContainer);
 			}
 
 			if (--index == 0) {
@@ -2923,7 +2921,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 				break;
 			}
 		}
-	}
+	} while (!foundItem && !listContainer.empty());
 
 	if (foundItem) {
 		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
@@ -4689,7 +4687,7 @@ void Game::startDecay(Item* item)
 	if (item->getDuration() > 0) {
 		item->useThing2();
 		item->setDecaying(DECAYING_TRUE);
-		toDecayItems.push_back(item);
+		toDecayItems.push_front(item);
 	} else {
 		internalDecayItem(item);
 	}
@@ -5321,6 +5319,7 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 		return;
 	}
 
+	// TODO: move debug assertions to database
 	FILE* file = fopen("client_assertions.txt", "a");
 	if (file) {
 		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(nullptr)).c_str(), player->getName().c_str(), convertIPToString(player->getIP()).c_str());
@@ -5426,20 +5425,16 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	const ItemType& itt = Item::items.getItemIdByClientId(spriteId);
-	if (itt.id == 0) {
-		return;
-	}
-
-	if (itt.wareId == 0) {
+	if (itt.id == 0 || itt.wareId == 0) {
 		return;
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(itt.wareId);
-	if (it.id == 0) {
+	if (it.id == 0 || it.wareId == 0) {
 		return;
 	}
 
-	if (it.wareId == 0) {
+	if (!it.stackable && amount > 2000) {
 		return;
 	}
 
@@ -5470,9 +5465,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 		ItemList itemList;
 		uint32_t count = 0;
-		std::list<Container*> containerList;
-		containerList.push_back(depotChest);
-		containerList.push_back(player->getInbox());
+		std::forward_list<Container*> containerList {depotChest, player->getInbox()};
 		bool enough = false;
 
 		do {
@@ -5482,7 +5475,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			for (Item* item : container->getItemList()) {
 				Container* c = item->getContainer();
 				if (c && !c->empty()) {
-					containerList.push_back(c);
+					containerList.push_front(c);
 					continue;
 				}
 
@@ -5500,8 +5493,8 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 				}
 
 				itemList.push_back(item);
-				count += Item::countByType(item, -1);
 
+				count += Item::countByType(item, -1);
 				if (count >= amount) {
 					enough = true;
 					break;
@@ -5538,7 +5531,6 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	} else {
 		uint64_t totalPrice = (uint64_t)price * amount;
 		totalPrice += fee;
-
 		if (totalPrice > player->bankBalance) {
 			return;
 		}
@@ -5589,7 +5581,6 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			while (tmpAmount > 0) {
 				int32_t stackCount = std::min<int32_t>(100, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-
 				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;
@@ -5607,7 +5598,6 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (uint16_t i = 0; i < offer.amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-
 				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RET_NOERROR) {
 					delete item;
 					break;
@@ -5662,9 +5652,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		ItemList itemList;
 		uint32_t count = 0;
-		std::list<Container*> containerList;
-		containerList.push_back(depotChest);
-		containerList.push_back(player->getInbox());
+		std::forward_list<Container*> containerList {depotChest, player->getInbox()};
 		bool enough = false;
 
 		do {
@@ -5674,7 +5662,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			for (Item* item : container->getItemList()) {
 				Container* c = item->getContainer();
 				if (c && !c->empty()) {
-					containerList.push_back(c);
+					containerList.push_front(c);
 					continue;
 				}
 

@@ -21,7 +21,6 @@
 #define FS_GUILD_H_C00F0A1D732E4BA88FF62ACBE74D76BC
 
 class Player;
-typedef std::list<Player*> PlayerList;
 
 struct GuildRank {
 	uint32_t id;
@@ -50,7 +49,7 @@ class Guild
 		const std::string& getName() const {
 			return name;
 		}
-		const PlayerList& getMembersOnline() const {
+		const std::list<Player*>& getMembersOnline() const {
 			return membersOnline;
 		}
 		uint32_t getMemberCount() const {
@@ -72,7 +71,7 @@ class Guild
 		}
 
 	private:
-		PlayerList membersOnline;
+		std::list<Player*> membersOnline;
 		std::vector<GuildRank> ranks;
 		std::string name;
 		std::string motd;

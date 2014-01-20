@@ -2731,7 +2731,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 		bool autoStack = !((flags & FLAG_IGNOREAUTOSTACK) == FLAG_IGNOREAUTOSTACK);
 		bool isStackable = item->isStackable();
 
-		std::list<Container*> containerList;
+		std::forward_list<Container*> containerList;
 
 		for (uint32_t slotIndex = SLOT_FIRST; slotIndex <= SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
@@ -2755,7 +2755,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 					}
 
 					if (Container* subContainer = inventoryItem->getContainer()) {
-						containerList.push_back(subContainer);
+						containerList.push_front(subContainer);
 					}
 				} else if (Container* subContainer = inventoryItem->getContainer()) {
 					if (subContainer->__queryAdd(INDEX_WHEREEVER, item, item->getItemCount(), flags) == RET_NOERROR) {
@@ -2764,7 +2764,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 						return subContainer;
 					}
 
-					containerList.push_back(subContainer);
+					containerList.push_front(subContainer);
 				}
 			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RET_NOERROR) { //empty slot
 				index = slotIndex;
@@ -2792,7 +2792,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 				for (Item* tmpContainerItem : tmpContainer->getItemList()) {
 					if (Container* subContainer = tmpContainerItem->getContainer()) {
-						containerList.push_back(subContainer);
+						containerList.push_front(subContainer);
 					}
 				}
 
@@ -2818,7 +2818,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				}
 
 				if (Container* subContainer = tmpItem->getContainer()) {
-					containerList.push_back(subContainer);
+					containerList.push_front(subContainer);
 				}
 
 				n++;
@@ -4641,13 +4641,13 @@ uint16_t Player::getHelpers() const
 	if (guild && party) {
 		std::unordered_set<Player*> helperSet;
 
-		const PlayerList& guildMembers = guild->getMembersOnline();
+		const auto& guildMembers = guild->getMembersOnline();
 		helperSet.insert(guildMembers.begin(), guildMembers.end());
 
-		const PlayerVector& partyMembers = party->getMembers();
+		const auto& partyMembers = party->getMembers();
 		helperSet.insert(partyMembers.begin(), partyMembers.end());
 
-		const PlayerVector& partyInvitees = party->getInvitees();
+		const auto& partyInvitees = party->getInvitees();
 		helperSet.insert(partyInvitees.begin(), partyInvitees.end());
 
 		helperSet.insert(party->getLeader());

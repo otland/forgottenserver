@@ -552,9 +552,10 @@ class Game
 		std::map<uint32_t, uint32_t> stages;
 
 		std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
-		std::list<Item*> toDecayItems;
-
 		std::list<Creature*> checkCreatureLists[EVENT_CREATURECOUNT];
+
+		std::forward_list<Item*> toDecayItems;
+
 		std::vector<Creature*> ToReleaseCreatures;
 		std::vector<Item*> ToReleaseItems;
 		std::vector<char> commandTags;

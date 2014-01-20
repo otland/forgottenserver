@@ -66,12 +66,14 @@ extern Events* g_events;
 extern LuaEnvironment g_luaEnvironment;
 
 s_defcommands Commands::defined_commands[] = {
+	// TODO: move all commands to talkactions
+
 	//admin commands
 	{"/reload", &Commands::reloadInfo},
 	{"/raid", &Commands::forceRaid},
 	{"/serverdiag", &Commands::serverDiag},
 
-	// player commands - TODO: make them talkactions
+	// player commands
 	{"!sellhouse", &Commands::sellHouse}
 };
 
@@ -386,11 +388,9 @@ void Commands::forceRaid(Player& player, const std::string& param)
 
 	uint32_t ticks = event->getDelay();
 	if (ticks > 0) {
-		g_scheduler->addEvent(createSchedulerTask(ticks,
-		                     std::bind(&Raid::executeRaidEvent, raid, event)));
+		g_scheduler->addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, raid, event)));
 	} else {
-		g_dispatcher->addTask(createTask(
-		                         std::bind(&Raid::executeRaidEvent, raid, event)));
+		g_dispatcher->addTask(createTask(std::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 
 	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
