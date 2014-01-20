@@ -66,7 +66,6 @@
 		<item id="2674" countmax="3" chance="700"/><!-- apple -->
 		<item id="2695" countmax="2" chance="5000"/><!-- egg -->
 		<item id="2688" countmax="3" chance="5000"/><!-- candy cane -->
-		<item id="6394" chance="5000"/><!-- cream cake -->
 		<item id="2072" chance="5000"/><!-- lute -->
 		<item id="2260" chance="5000"/><!-- blank rune -->
 		<item id="2163" chance="4000"/><!-- magic light wand -->
