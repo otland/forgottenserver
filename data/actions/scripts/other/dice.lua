@@ -1,9 +1,17 @@
 function onUse(cid, item, fromPosition, itemEx, toPosition)
-	local value = math.random(5792, 5797)
-	if fromPosition.x ~= CONTAINER_POSITION then
-		doSendMagicEffect(fromPosition, CONST_ME_CRAPS)
+	local player = Player(cid)
+	local dice = Item(item.uid)
+	local dicePosition = dice:getPosition()
+	local value = math.random(1, 6)
+
+	local isInGhostMode = player:isInGhostMode()
+	if isInGhostMode then
+		dicePosition:sendMagicEffect(CONST_ME_CRAPS, player)
+	else
+		dicePosition:sendMagicEffect(CONST_ME_CRAPS)
 	end
-	doTransformItem(item.uid, value)
-	doCreatureSay(cid, getCreatureName(cid) .. ' rolled a ' .. value - 5791 .. '.', TALKTYPE_ORANGE_1)
-	return TRUE
+
+	player:say(player:getName() .. " rolled a " .. value .. ".", TALKTYPE_ORANGE_1, isInGhostMode, 0, dicePosition)
+	dice:transform(5791 + value)
+	return true
 end
