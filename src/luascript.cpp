@@ -1158,9 +1158,6 @@ std::string LuaScriptInterface::popFieldString(lua_State* L, const std::string& 
 
 void LuaScriptInterface::registerFunctions()
 {
-	//getPlayerFlagValue(cid, flag)
-	lua_register(m_luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
-
 	//getPlayerInstantSpellCount(cid)
 	lua_register(m_luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
 
@@ -1387,9 +1384,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//debugPrint(text)
 	lua_register(m_luaState, "debugPrint", LuaScriptInterface::luaDebugPrint);
-
-	//isInWar(cid, target)
-	lua_register(m_luaState, "isInWar", LuaScriptInterface::luaIsInWar);
 
 	//doPlayerSetOfflineTrainingSkill(cid, skill)
 	lua_register(m_luaState, "doPlayerSetOfflineTrainingSkill", LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill);
@@ -1785,6 +1779,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getAccountType", LuaScriptInterface::luaPlayerGetAccountType);
 	registerMethod("Player", "setAccountType", LuaScriptInterface::luaPlayerSetAccountType);
 
+	registerMethod("Player", "hasFlag", LuaScriptInterface::luaPlayerHasFlag);
+
 	registerMethod("Player", "getCapacity", LuaScriptInterface::luaPlayerGetCapacity);
 	registerMethod("Player", "setCapacity", LuaScriptInterface::luaPlayerSetCapacity);
 
@@ -1905,6 +1901,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getHouse", LuaScriptInterface::luaPlayerGetHouse);
 
 	registerMethod("Player", "setGhostMode", LuaScriptInterface::luaPlayerSetGhostMode);
+
+	registerMethod("Player", "isInWar", LuaScriptInterface::luaPlayerIsInWar);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -2317,27 +2315,6 @@ void LuaScriptInterface::registerGlobalVariable(const std::string& name, lua_Num
 	// _G[name] = value
 	lua_pushnumber(m_luaState, value);
 	lua_setglobal(m_luaState, name.c_str());
-}
-
-int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
-{
-	//getPlayerFlagValue(cid, flag)
-	uint32_t flagindex = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (player) {
-		if (flagindex < PlayerFlag_LastFlag) {
-			pushBoolean(L, player->hasFlag((PlayerFlags)flagindex));
-		} else {
-			reportErrorFunc("No valid flag index.");
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
 }
 
 int32_t LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
@@ -4418,30 +4395,6 @@ int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
 	pushNumber(L, g_game.getMap()->clean());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaIsInWar(lua_State* L)
-{
-	//isInWar(cid, target)
-	uint32_t target = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Player* targetPlayer = g_game.getPlayerByID(target);
-	if (!targetPlayer) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	pushBoolean(L, player->isInWar(targetPlayer));
 	return 1;
 }
 
@@ -7860,6 +7813,18 @@ int32_t LuaScriptInterface::luaPlayerSetAccountType(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaPlayerHasFlag(lua_State* L)
+{
+	// player:hasFlag(flag)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->hasFlag((PlayerFlags)getNumber<uint32_t>(L, 2)));
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaPlayerGetCapacity(lua_State* L)
 {
 	// player:getCapacity()
@@ -9378,6 +9343,24 @@ int32_t LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 			IOLoginData::updateOnlineStatus(player->getGUID(), true);
 		}
 		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerIsInWar(lua_State* L)
+{
+	// player:isInWar(target)
+	Player* target = getUserdata<Player>(L, 2);
+	if (!target) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->isInWar(target));
 	} else {
 		pushNil(L);
 	}
