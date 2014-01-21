@@ -753,6 +753,69 @@ function doForceSummonCreature(name, pos)
 	return creature
 end
 
+local conditionOutfit = Condition(CONDITION_OUTFIT)
+function doSetCreatureOutfit(cid, outfit, time)
+	local c = Creature(cid)
+	if c == nil then
+		return false
+	end
+	conditionOutfit:setTicks(time)
+	conditionOutfit:addOutfit(outfit)
+	c:addCondition(conditionOutfit)
+	return true
+end
+function doSetMonsterOutfit(cid, name, time)
+	local c = Creature(cid)
+	if c == nil then
+		return false
+	end	
+
+	local mType = MonsterType(name)
+	if mType == nil then
+		return false
+	end
+
+	if c:isPlayer() and not getPlayerFlagValue(c:getId(), PlayerFlag_CanIllusionAll) then
+		if not mType:isIllusionable() then
+			return false
+		end
+	end
+
+	conditionOutfit:setTicks(time)
+	conditionOutfit:addOutfit(mType:getOutfit())
+	c:addCondition(conditionOutfit)
+	return true
+end
+function doSetItemOutfit(cid, item, time)
+	local c = Creature(cid)
+	if c == nil then
+		return false
+	end
+
+	local iType = ItemType(item)
+	if iType:getId() == 0 then
+		return false
+	end
+
+	conditionOutfit:setTicks(time)
+	conditionOutfit:addOutfit(iType:getId())
+	c:addCondition(conditionOutfit)
+	return true
+end
+
+local conditionLight = Condition(CONDITION_LIGHT, CONDITIONID_DEFAULT)
+function doSetCreatureLight(cid, lightLevel, lightColor, time)
+	local c = Creature(cid)
+	if c == nil then
+		return false
+	end
+
+	conditionLight:setTicks(time)
+	conditionLight:setParameter(CONDITION_PARAM_LIGHT_LEVEL, lightLevel)
+	conditionLight:setParameter(CONDITION_PARAM_LIGHT_COLOR, lightColor)
+	c:addCondition(conditionLight)
+	return true
+end
 --
 
 if not globalStorageTable then
@@ -882,3 +945,5 @@ string.split = function(str, sep)
 	end
 	return res
 end
+
+

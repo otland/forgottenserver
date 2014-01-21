@@ -409,8 +409,6 @@ class LuaScriptInterface
 		static int32_t luaDoCreateItem(lua_State* L);
 		static int32_t luaDoCreateItemEx(lua_State* L);
 		static int32_t luaDoCreateTeleport(lua_State* L);
-		static int32_t luaDoCreateNpc(lua_State* L);
-		static int32_t luaDoSummonCreature(lua_State* L);
 		static int32_t luaDoAddCondition(lua_State* L);
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
@@ -419,16 +417,12 @@ class LuaScriptInterface
 		static int32_t luaDoTileAddItemEx(lua_State* L);
 		static int32_t luaDoRelocate(lua_State* L);
 		static int32_t luaDoPlayerRemoveItem(lua_State* L);
-		static int32_t luaDoSetCreatureLight(lua_State* L);
 
 		//get item info
 		static int32_t luaGetThingfromPos(lua_State* L);
 		static int32_t luaGetThingPos(lua_State* L);
 		static int32_t luaHasProperty(lua_State* L);
 		static int32_t luaGetDepotId(lua_State* L);
-
-		//get tile info
-		static int32_t luaGetTileHouseInfo(lua_State* L);
 
 		//houses
 		static int32_t luaGetHouseByPlayerGUID(lua_State* L);
@@ -498,10 +492,6 @@ class LuaScriptInterface
 		static int32_t luaVariantToPosition(lua_State* L);
 
 		static int32_t luaDoChangeSpeed(lua_State* L);
-
-		static int32_t luaSetCreatureOutfit(lua_State* L);
-		static int32_t luaSetMonsterOutfit(lua_State* L);
-		static int32_t luaSetItemOutfit(lua_State* L);
 
 		static int32_t luaDebugPrint(lua_State* L);
 		static int32_t luaIsInArray(lua_State* L);
@@ -975,6 +965,8 @@ class LuaScriptInterface
 		static int32_t luaNpcCreate(lua_State* L);
 
 		static int32_t luaNpcIsNpc(lua_State* L);
+
+		static int32_t luaNpcSetMasterPos(lua_State* L);
 
 		// Guild
 		static int32_t luaGuildCreate(lua_State* L);

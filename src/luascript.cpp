@@ -1173,10 +1173,6 @@ void LuaScriptInterface::registerFunctions()
 	//getInstantSpellWords(name)
 	lua_register(m_luaState, "getInstantSpellWords", LuaScriptInterface::luaGetInstantSpellWords);
 
-	//getTileHouseInfo(pos)
-	//0 no house. != 0 house id
-	lua_register(m_luaState, "getTileHouseInfo", LuaScriptInterface::luaGetTileHouseInfo);
-
 	//getThingfromPos(pos)
 	lua_register(m_luaState, "getThingfromPos", LuaScriptInterface::luaGetThingfromPos);
 
@@ -1208,12 +1204,6 @@ void LuaScriptInterface::registerFunctions()
 	//doCreateTeleport(itemid, topos, createpos)
 	lua_register(m_luaState, "doCreateTeleport", LuaScriptInterface::luaDoCreateTeleport);
 
-	//doCreateNpc(name, pos)
-	lua_register(m_luaState, "doCreateNpc", LuaScriptInterface::luaDoCreateNpc);
-
-	//doSummonCreature(name, pos)
-	lua_register(m_luaState, "doSummonCreature", LuaScriptInterface::luaDoSummonCreature);
-
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
@@ -1225,9 +1215,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
 	lua_register(m_luaState, "doPlayerRemoveItem", LuaScriptInterface::luaDoPlayerRemoveItem);
-
-	//doSetCreatureLight(cid, lightLevel, lightColor, time)
-	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
@@ -1354,15 +1341,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doChangeSpeed(cid, delta)
 	lua_register(m_luaState, "doChangeSpeed", LuaScriptInterface::luaDoChangeSpeed);
-
-	//doSetMonsterOutfit(cid, name, time)
-	lua_register(m_luaState, "doSetMonsterOutfit", LuaScriptInterface::luaSetMonsterOutfit);
-
-	//doSetItemOutfit(cid, item, time)
-	lua_register(m_luaState, "doSetItemOutfit", LuaScriptInterface::luaSetItemOutfit);
-
-	//doSetCreatureOutfit(cid, outfit, time)
-	lua_register(m_luaState, "doSetCreatureOutfit", LuaScriptInterface::luaSetCreatureOutfit);
 
 	//hasProperty(uid, prop)
 	lua_register(m_luaState, "hasProperty", LuaScriptInterface::luaHasProperty);
@@ -1942,6 +1920,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Npc", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerMethod("Npc", "isNpc", LuaScriptInterface::luaNpcIsNpc);
+	
+	registerMethod("Npc", "setMasterPos", LuaScriptInterface::luaNpcSetMasterPos);
 
 	// Guild
 	registerClass("Guild", "", LuaScriptInterface::luaGuildCreate);
@@ -2461,30 +2441,6 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
-{
-	//doCreateNpc(name, pos)
-	PositionEx pos;
-	popPosition(L, pos);
-	const std::string& name = popString(L);
-
-	Npc* npc = Npc::createNpc(name);
-	if (!npc) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	// Place the npc
-	if (g_game.placeCreature(npc, pos)) {
-		npc->setMasterPos(npc->getPosition());
-		pushBoolean(L, true);
-	} else {
-		delete npc;
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoChangeTypeItem(lua_State* L)
 {
 	//doChangeTypeItem(uid,new_type)
@@ -2896,56 +2852,6 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 	} else {
 		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
-{
-	//getTileHouseInfo(pos)
-	PositionEx pos;
-	popPosition(L, pos);
-
-	Tile* tile = g_game.getTile(pos);
-	if (tile) {
-		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
-			House* house = houseTile->getHouse();
-			if (house) {
-				lua_pushnumber(L, house->getId());
-			} else {
-				pushBoolean(L, false);
-			}
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		std::ostringstream ss;
-		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSummonCreature(lua_State* L)
-{
-	//doSummonCreature(name, pos)
-	PositionEx pos;
-	popPosition(L, pos);
-	std::string name = popString(L);
-
-	Monster* monster = Monster::createMonster(name);
-	if (!monster) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!g_game.placeCreature(monster, pos)) {
-		delete monster;
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_pushnumber(L, monster->getID());
 	return 1;
 }
 
@@ -3975,73 +3881,6 @@ int32_t LuaScriptInterface::luaDoChangeSpeed(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaSetCreatureOutfit(lua_State* L)
-{
-	//doSetCreatureOutfit(cid, outfit, time)
-	int32_t time = popNumber<int32_t>(L);
-	Outfit_t outfit = popOutfit(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		ReturnValue ret = Spell::CreateIllusion(creature, outfit, time);
-		if (ret == RET_NOERROR) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaSetMonsterOutfit(lua_State* L)
-{
-	//doSetMonsterOutfit(cid, name, time)
-	int32_t time = popNumber<int32_t>(L);
-	std::string name = popString(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		ReturnValue ret = Spell::CreateIllusion(creature, name, time);
-		if (ret == RET_NOERROR) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaSetItemOutfit(lua_State* L)
-{
-	//doSetItemOutfit(cid, item, time)
-	int32_t time = popNumber<int32_t>(L);
-	uint32_t item = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		ReturnValue ret = Spell::CreateIllusion(creature, item, time);
-		if (ret == RET_NOERROR) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 {
 	//doMoveCreature(cid, direction)
@@ -4210,26 +4049,6 @@ int32_t LuaScriptInterface::luaIsInArray(lua_State* L)
 	}
 
 	pushBoolean(L, false);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
-{
-	//doSetCreatureLight(cid, lightLevel, lightColor, time)
-	uint32_t time = popNumber(L);
-	uint8_t color = popNumber<uint8_t>(L);
-	uint8_t level = popNumber<uint8_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_LIGHT, time, level | (color << 8));
-		creature->addCondition(condition);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
@@ -9694,6 +9513,20 @@ int32_t LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 	// npc:isNpc()
 	const Npc* npc = getUserdata<const Npc>(L, 1);
 	pushBoolean(L, npc != nullptr);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaNpcSetMasterPos(lua_State* L)
+{
+	// npc:setMasterPos(pos)
+	const Position& pos = getPosition(L, 2);
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		npc->setMasterPos(pos);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
 	return 1;
 }
 
