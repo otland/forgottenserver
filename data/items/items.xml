@@ -2114,7 +2114,8 @@
 		<attribute key="slotType" value="ring" />
 		<attribute key="charges" value="20" />
 		<attribute key="showcharges" value="1" />
-		<attribute key="absorbPercentAll" value="20" />
+		<attribute key="absorbPercentPhysical" value="20" />
+		<attribute key="absorbPercentMagic" value="20" />
 		<attribute key="showattributes" value="1" />
 	</item>
 	<item id="2165" article="a" name="stealth ring">
@@ -2309,7 +2310,8 @@
 		<attribute key="slotType" value="necklace" />
 		<attribute key="charges" value="50" />
 		<attribute key="showcharges" value="1" />
-		<attribute key="absorbPercentAll" value="5" />
+		<attribute key="absorbPercentPhysical" value="5" />
+		<attribute key="absorbPercentMagic" value="5" />
 		<attribute key="showattributes" value="1" />
 	</item>
 	<item id="2199" article="a" name="garlic necklace">
