@@ -50,9 +50,9 @@ void GlobalEvents::clearMap(GlobalEventMap& map)
 
 void GlobalEvents::clear()
 {
-	g_scheduler->stopEvent(thinkEventId);
+	g_scheduler.stopEvent(thinkEventId);
 	thinkEventId = 0;
-	g_scheduler->stopEvent(timerEventId);
+	g_scheduler.stopEvent(timerEventId);
 	timerEventId = 0;
 
 	clearMap(thinkMap);
@@ -82,7 +82,7 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 		if (it == timerMap.end()) {
 			timerMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			if (timerEventId == 0) {
-				timerEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
+				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
 
 			return true;
@@ -98,7 +98,7 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 		if (it == thinkMap.end()) {
 			thinkMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			if (thinkEventId == 0) {
-				thinkEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
+				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}
 			return true;
 		}
@@ -149,7 +149,7 @@ void GlobalEvents::timer()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		timerEventId = g_scheduler->addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
+		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
 							                std::bind(&GlobalEvents::timer, this)));
 	}
 }
@@ -183,7 +183,7 @@ void GlobalEvents::think()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		thinkEventId = g_scheduler->addEvent(createSchedulerTask(nextScheduledTime, std::bind(&GlobalEvents::think, this)));
+		thinkEventId = g_scheduler.addEvent(createSchedulerTask(nextScheduledTime, std::bind(&GlobalEvents::think, this)));
 	}
 }
 

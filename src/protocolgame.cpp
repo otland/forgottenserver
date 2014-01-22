@@ -62,9 +62,9 @@ template<class FunctionType>
 void ProtocolGame::addGameTaskInternal(bool droppable, uint32_t delay, const FunctionType& func)
 {
 	if (droppable) {
-		g_dispatcher->addTask(createTask(delay, func));
+		g_dispatcher.addTask(createTask(delay, func));
 	} else {
-		g_dispatcher->addTask(createTask(func));
+		g_dispatcher.addTask(createTask(func));
 	}
 }
 
@@ -228,7 +228,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			_player->isConnecting = true;
 
 			addRef();
-			eventConnect = g_scheduler->addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, this, _player->getID(), operatingSystem)));
+			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, this, _player->getID(), operatingSystem)));
 			return;
 		}
 
@@ -386,7 +386,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		return false;
 	}
 
-	g_dispatcher->addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem, gamemasterFlag)));
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem, gamemasterFlag)));
 	return true;
 }
 
@@ -480,7 +480,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	}
 
 	switch (recvbyte) {
-		case 0x14: g_dispatcher->addTask(createTask(std::bind(&ProtocolGame::logout, this, true, false))); break;
+		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, this, true, false))); break;
 		case 0x1D: addGameTask(&Game::playerReceivePingBack, player->getID()); break;
 		case 0x1E: addGameTask(&Game::playerReceivePing, player->getID()); break;
 		case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcode

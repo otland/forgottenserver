@@ -79,7 +79,7 @@ void Connection::closeConnection()
 
 	m_connectionState = CONNECTION_STATE_REQUEST_CLOSE;
 
-	g_dispatcher->addTask(
+	g_dispatcher.addTask(
 	    createTask(std::bind(&Connection::closeConnectionTask, this)));
 }
 
@@ -140,7 +140,7 @@ void Connection::releaseConnection()
 {
 	if (m_refCount > 0) {
 		//Reschedule it and try again.
-		g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Connection::releaseConnection, this)));
+		g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Connection::releaseConnection, this)));
 	} else {
 		deleteConnectionTask();
 	}

@@ -70,7 +70,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		//XML info protocol
 		case 0xFF: {
 			if (msg.GetString(4) == "info") {
-				g_dispatcher->addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, this)));
+				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, this)));
 				return;
 			}
 			break;
@@ -83,7 +83,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.GetString();
 			}
-			g_dispatcher->addTask(createTask(std::bind(&ProtocolStatus::sendInfo, this, requestedInfo, characterName)));
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendInfo, this, requestedInfo, characterName)));
 			return;
 		}
 

@@ -45,8 +45,8 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 
-Dispatcher* g_dispatcher = new Dispatcher;
-Scheduler* g_scheduler = new Scheduler;
+Dispatcher g_dispatcher;
+Scheduler g_scheduler;
 
 Game g_game;
 ConfigManager g_config;
@@ -90,28 +90,28 @@ int main(int argc, char* argv[])
 
 	ServiceManager servicer;
 
-	g_dispatcher->start();
-	g_scheduler->start();
+	g_dispatcher.start();
+	g_scheduler.start();
 
-	g_dispatcher->addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
+	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (servicer.is_running()) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 		servicer.run();
-		g_scheduler->join();
-		g_dispatcher->join();
+		g_scheduler.join();
+		g_dispatcher.join();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_scheduler->stop();
-		g_dispatcher->stop();
-		g_dispatcher->addTask(createTask([](){
-			g_scheduler->shutdown();
-			g_dispatcher->shutdown();
+		g_scheduler.stop();
+		g_dispatcher.stop();
+		g_dispatcher.addTask(createTask([](){
+			g_scheduler.shutdown();
+			g_dispatcher.shutdown();
 		}));
-		g_scheduler->join();
-		g_dispatcher->join();
+		g_scheduler.join();
+		g_dispatcher.join();
 	}
 	return 0;
 }
@@ -177,6 +177,18 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 
 	std::cout << " MySQL " << Database::getClientVersion() << std::endl;
+
+	DBResult* result = db->storeQuery("SHOW variables LIKE 'max_allowed_packet'");
+	if (result) {
+		int32_t max_query = result->getDataInt("Value");
+		db->freeResult(result);
+
+		if (max_query < 16777216) {
+			std::cout << std::endl << "[Warning] max_allowed_packet might be too low for house item storage" << std::endl;
+			std::cout << "Use the following query to raise max_allow_packet: ";
+			std::cout << "SET GLOBAL max_allowed_packet = 16777216" << std::endl;
+		}
+	}
 
 	// run database manager
 	std::cout << ">> Running database manager" << std::endl;

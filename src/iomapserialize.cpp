@@ -101,9 +101,8 @@ bool IOMapSerialize::saveMap()
 				if (!stmt.addRow(query)) {
 					return false;
 				}
+				stream.clear();
 			}
-
-			stream.clear();
 		}
 	}
 

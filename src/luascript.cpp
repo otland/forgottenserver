@@ -4342,7 +4342,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
 	auto& lastTimerEventId = g_luaEnvironment.m_lastEventTimerId;
-	eventDesc.eventId = g_scheduler->addEvent(createSchedulerTask(
+	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(
 		delay, std::bind(&LuaEnvironment::executeTimerEvent, &g_luaEnvironment, lastTimerEventId)
 	));
 
@@ -4369,7 +4369,7 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 	}
 
 	const LuaTimerEventDesc& timerEventDesc = it->second;
-	g_scheduler->stopEvent(timerEventDesc.eventId);
+	g_scheduler.stopEvent(timerEventDesc.eventId);
 
 	for (auto parameter : timerEventDesc.parameters) {
 		luaL_unref(g_luaEnvironment.m_luaState, LUA_REGISTRYINDEX, parameter);
@@ -4616,7 +4616,6 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 	{"escapeString", LuaScriptInterface::luaDatabaseEscapeString},
 	{"escapeBlob", LuaScriptInterface::luaDatabaseEscapeBlob},
 	{"lastInsertId", LuaScriptInterface::luaDatabaseLastInsertId},
-	{"connected", LuaScriptInterface::luaDatabaseConnected},
 	{"tableExists", LuaScriptInterface::luaDatabaseTableExists},
 	{nullptr, nullptr}
 };
@@ -4653,12 +4652,6 @@ int32_t LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 int32_t LuaScriptInterface::luaDatabaseLastInsertId(lua_State* L)
 {
 	lua_pushnumber(L, Database::getInstance()->getLastInsertId());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDatabaseConnected(lua_State* L)
-{
-	pushBoolean(L, Database::getInstance()->isConnected());
 	return 1;
 }
 
@@ -4873,7 +4866,7 @@ int32_t LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
 	const std::string& path = getString(L, 1);
-	g_dispatcher->addTask(createTask(std::bind(&Game::loadMap, &g_game, path)));
+	g_dispatcher.addTask(createTask(std::bind(&Game::loadMap, &g_game, path)));
 	return 1;
 }
 

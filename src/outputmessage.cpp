@@ -115,7 +115,7 @@ void OutputMessagePool::sendAll()
 
 void OutputMessagePool::releaseMessage(OutputMessage* msg)
 {
-	g_dispatcher->addTask(
+	g_dispatcher.addTask(
 	    createTask(std::bind(&OutputMessagePool::internalReleaseMessage, this, msg)));
 }
 

@@ -388,9 +388,9 @@ void Commands::forceRaid(Player& player, const std::string& param)
 
 	uint32_t ticks = event->getDelay();
 	if (ticks > 0) {
-		g_scheduler->addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, raid, event)));
+		g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, raid, event)));
 	} else {
-		g_dispatcher->addTask(createTask(std::bind(&Raid::executeRaidEvent, raid, event)));
+		g_dispatcher.addTask(createTask(std::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 
 	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");

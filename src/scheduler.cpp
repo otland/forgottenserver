@@ -71,7 +71,7 @@ void Scheduler::schedulerThread()
 			if (runTask) {
 				// Expiration has another meaning for dispatcher tasks, reset it
 				task->setDontExpire();
-				g_dispatcher->addTask(task);
+				g_dispatcher.addTask(task);
 			} else {
 				// was stopped, have to be deleted here
 				delete task;

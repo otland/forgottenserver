@@ -24,7 +24,6 @@
 #include <unordered_set>
 #include <queue>
 
-#include <thread>
 #include <condition_variable>
 
 #define SCHEDULER_MINTICKS 50
@@ -105,6 +104,6 @@ class Scheduler
 		SchedulerState m_threadState;
 };
 
-extern Scheduler* g_scheduler;
+extern Scheduler g_scheduler;
 
 #endif

@@ -168,7 +168,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 		if (!m_pendingStart) {
 			close();
 			m_pendingStart = true;
-			g_scheduler->addEvent(createSchedulerTask(15000,
+			g_scheduler.addEvent(createSchedulerTask(15000,
 			                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
 		}
 	}
@@ -228,7 +228,7 @@ void ServicePort::open(uint16_t port)
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		m_pendingStart = true;
-		g_scheduler->addEvent(createSchedulerTask(15000,
+		g_scheduler.addEvent(createSchedulerTask(15000,
 		                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), port)));
 	}
 }

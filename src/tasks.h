@@ -20,7 +20,6 @@
 #ifndef FS_TASKS_H_A66AC384766041E59DCA059DAB6E1976
 #define FS_TASKS_H_A66AC384766041E59DCA059DAB6E1976
 
-#include <thread>
 #include <condition_variable>
 
 const int DISPATCHER_TASK_EXPIRATION = 2000;
@@ -103,6 +102,6 @@ class Dispatcher
 		DispatcherState m_threadState;
 };
 
-extern Dispatcher* g_dispatcher;
+extern Dispatcher g_dispatcher;
 
 #endif
