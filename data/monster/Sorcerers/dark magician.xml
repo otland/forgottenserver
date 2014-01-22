@@ -58,6 +58,7 @@
 		<item id="2260" chance="9250"/><!-- blank rune -->
 		<item id="7589" chance="2750"/><!-- strong mana potion -->
 		<item id="7761" chance="650"/><!-- small enchanted amethyst -->
-		<item id="2188" chance="200"/><!-- necrotic rod -->
+		<item id="2185" chance="200"/><!-- necrotic rod -->
+		<item id="13295" chance="100"/><!-- reins -->
 	</loot>
 </monster>

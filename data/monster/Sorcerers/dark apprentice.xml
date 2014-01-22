@@ -56,6 +56,7 @@
 		<item id="2191" chance="2200"/><!-- wand of dragonbreath -->
 		<item id="7620" chance="1500"/><!-- mana potion -->
 		<item id="7618" chance="3400"/><!-- health potion -->
-		<item id="2188" chance="100"/><!-- wand of decay -->
+		<item id="2188" chance="200"/><!-- wand of decay -->
+		<item id="13295" chance="143"/><!-- reins -->
 	</loot>
 </monster>
