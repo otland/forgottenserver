@@ -43,17 +43,6 @@ class Database
 		}
 
 		/**
-		* Database connected.
-		*
-		* Returns whether or not the database is connected.
-		*
-		* @return whether or not the database is connected.
-		*/
-		bool isConnected() const {
-			return m_connected;
-		}
-
-		/**
 		 * Connects to the database
 		 *
 		 * @return true on successful connection, false on error
@@ -147,8 +136,6 @@ class Database
 		MYSQL* m_handle;
 
 		std::recursive_mutex database_lock;
-
-		bool m_connected;
 
 	friend class DBTransaction;
 };

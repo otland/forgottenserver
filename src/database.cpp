@@ -28,7 +28,6 @@ extern ConfigManager g_config;
 
 Database::Database()
 {
-	m_connected = false;
 	m_handle = nullptr;
 }
 
@@ -57,36 +56,21 @@ bool Database::connect()
 		std::cout << std::endl << "MySQL Error Message: " << mysql_error(m_handle) << std::endl;
 		return false;
 	}
-
-	m_connected = true;
-
-	DBResult* result = storeQuery("SHOW variables LIKE 'max_allowed_packet'");
-	if (result) {
-		int32_t max_query = result->getDataInt("Value");
-		freeResult(result);
-
-		if (max_query < 16777216) {
-			std::cout << std::endl << "[Warning] max_allowed_packet might too low for house item storage" << std::endl;
-			std::cout << "Use the following query to raise max_allow_packet: ";
-			std::cout << "SET GLOBAL max_allowed_packet = 16777216";
-		}
-	}
 	return true;
 }
 
 bool Database::beginTransaction()
 {
+	if (!executeQuery("BEGIN")) {
+		return false;
+	}
+
 	database_lock.lock();
-	return executeQuery("BEGIN");
+	return true;
 }
 
 bool Database::rollback()
 {
-	if (!m_connected) {
-		database_lock.unlock();
-		return false;
-	}
-
 	if (mysql_rollback(m_handle) != 0) {
 		std::cout << "[Error - mysql_rollback] Message: " << mysql_error(m_handle) << std::endl;
 		database_lock.unlock();
@@ -99,11 +83,6 @@ bool Database::rollback()
 
 bool Database::commit()
 {
-	if (!m_connected) {
-		database_lock.unlock();
-		return false;
-	}
-
 	if (mysql_commit(m_handle) != 0) {
 		std::cout << "[Error - mysql_commit] Message: " << mysql_error(m_handle) << std::endl;
 		database_lock.unlock();
@@ -116,23 +95,19 @@ bool Database::commit()
 
 bool Database::executeQuery(const std::string& query)
 {
-	if (!m_connected) {
-		return false;
-	}
-
 	bool success = true;
 
 	// executes the query
 	database_lock.lock();
-	if (mysql_real_query(m_handle, query.c_str(), query.length()) != 0) {
+
+	while (mysql_real_query(m_handle, query.c_str(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query.substr(0, 256) << std::endl << "Message: " << mysql_error(m_handle) << std::endl;
-
-		int error = mysql_errno(m_handle);
-		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
-			m_connected = false;
+		auto error = mysql_errno(m_handle);
+		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR) {
+			success = false;
+			break;
 		}
-
-		success = false;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
 	MYSQL_RES* m_res = mysql_store_result(m_handle);
@@ -147,18 +122,17 @@ bool Database::executeQuery(const std::string& query)
 
 DBResult* Database::storeQuery(const std::string& query)
 {
-	if (!m_connected) {
-		return nullptr;
-	}
-
 	// executes the query
 	database_lock.lock();
-	if (mysql_real_query(m_handle, query.c_str(), query.length()) != 0) {
+
+	retry:
+	while (mysql_real_query(m_handle, query.c_str(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query << std::endl << "Message: " << mysql_error(m_handle) << std::endl;
-		int error = mysql_errno(m_handle);
-		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
-			m_connected = false;
+		auto error = mysql_errno(m_handle);
+		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR) {
+			break;
 		}
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
 	// we should call that every time as someone would call executeQuery('SELECT...')
@@ -169,12 +143,11 @@ DBResult* Database::storeQuery(const std::string& query)
 	if (!m_res) {
 		std::cout << "[Error - mysql_store_result] Query: " << query << std::endl << "Message: " << mysql_error(m_handle) << std::endl;
 		int error = mysql_errno(m_handle);
-		database_lock.unlock();
-
-		if (error == CR_SERVER_LOST || error == CR_SERVER_GONE_ERROR) {
-			m_connected = false;
+		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR) {
+			database_lock.unlock();
+			return nullptr;
 		}
-		return nullptr;
+		goto retry;
 	}
 	database_lock.unlock();
 
