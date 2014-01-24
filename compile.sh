@@ -74,7 +74,7 @@ coreBuild=$((cpuCores + 1))
 	echo "Building on FreeBSD"
 	mkdir build && cd build
 	CXX=g++47 cmake ..
-	echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster)  y or n: "
+	echo "Build on $cpuCores threads with $coreBuild processes? (experimental but builds faster) [y or n]:"
 		read ans1_4
 			if [[ $ans1_4 = "y" ]]; then
 				echo -e $greenText"Building on $cpuCores threads with $coreBuild processes."$none
@@ -96,7 +96,7 @@ coreBuild=$((cpuCores + 1))
 	echo "Building..."
 	mkdir build && cd build
 	cmake ..
-		echo "Build on $cpuCores threads with $coreBuild processes? (experimental but loads faster) y or n: "
+		echo "Build on $cpuCores threads with $coreBuild processes? (experimental but builds faster) [y or n]:"
 		read ans1_4
 			if [[ $ans1_4 = "y" ]]; then
 				echo -e $greenText"Building on $cpuCores threads with $coreBuild processes."$none
@@ -132,7 +132,7 @@ echo "Chose your Operating System. {Supported OS: Debian, Ubuntu, Fedora, FreeBS
 read ans1 
 			
 if [[ $ans1 = "Fedora" ]]; then
-	echo -n "Should the script install dependencies? y or n: "
+	echo -n "Should the script install dependencies? [y or n]:"
 	read ans1_1
 	if [[ $ans1_1 = "y" ]]; then
 		fedoraDeps
@@ -142,9 +142,9 @@ if [[ $ans1 = "Fedora" ]]; then
 		echo "Answer 'y' or 'n' "
 	fi
 elif [[ $ans1 = "CentOS" ]] || [[ $ans1 = "Scientific Linux" ]]; then
-	echo -n "Should the script install dependencies? y or n: " $redText"TFS 1.0 developers discourage the use of these distributions because they have" \
+	echo -n "Should the script install dependencies? [y or n]:"$redText"TFS 1.0 developers discourage the use of these distributions because they have" \
 		"outdated packages."$none $blueText"*NOTE that versions of cmake and boost installed in this process are old, they should be installed manually by" \ 
-		"adding repositories or compiling them manually."$none
+		"adding repositories or compiling them manually." $none
 	read ans1_1
 	if [[ $ans1_1 = "y" ]]; then
 		centDeps
@@ -154,7 +154,7 @@ elif [[ $ans1 = "CentOS" ]] || [[ $ans1 = "Scientific Linux" ]]; then
 		echo "Answer 'y' or 'n' "
 	fi	
 elif [[ $ans1 = "Debian" ]] || [[ $ans1 = "Ubuntu" ]]; then
-	echo -n "Should the script install dependencies? y or n: "
+	echo -n "Should the script install dependencies? [y or n]:"
 	read ans1_1
 	if [[ $ans1_1 = "y" ]]; then
 		debianDeps
@@ -164,7 +164,7 @@ elif [[ $ans1 = "Debian" ]] || [[ $ans1 = "Ubuntu" ]]; then
 		echo "Answer 'y' or 'n' "
 	fi
 elif [[ $ans1 = "FreeBSD" ]]; then
-	echo -n "Should the script install dependencies? y or n: "
+	echo -n "Should the script install dependencies? [y or n]:"
 	read ans1_1
 		if [[ $ans1_1 = "y" ]]; then
 			bsdDeps
@@ -174,7 +174,8 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 			echo "Answer 'y' or 'n' "
 		fi				
 		else
-			echo "Pick a valid OS, options are case sensitive."		
+			echo "Pick a valid OS, options are case sensitive."	
+			:			
 		fi
 		
 #Compiling here
@@ -190,7 +191,7 @@ read ans1_2
 				echo "Install those packages and re-run this script."
 				:
 			else
-				echo "Answer yes or no"
+				echo "Answer 'y' or 'n'"
 			fi
 	elif [[ $ans1_2 = "n" ]]; then
 		genBuild
