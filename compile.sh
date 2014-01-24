@@ -179,15 +179,14 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 		
 #Clean
 echo -n "Should the script clean the directory for any previous builds?"
+read ans1_6
 	if [[ $ans1_6 = "y" ]]; then
-		clen
+		clean		
 	elif [[ $ans1_6 = "n" ]]; then
 		echo "Continuing..."
-		:
-		
+		:		
 	else
-		echo "Answer 'y' or 'n'"
-		
+		echo "Answer 'y' or 'n'"		
 	fi
 
 #Compiling here
