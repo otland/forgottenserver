@@ -108,11 +108,9 @@ coreBuild=$((cpuCores + 1))
 				echo -e $redText"Answer y or n"$none
 			fi				
 }
-# Unused clean, I'm leaving it here in case we might need it in the future.
+# Clean used before compile to remove the build directory in case there has been a previous build
 clean() {
-	mkdir objs/
-	mv *.o objs/
-	echo "There might be a few leftover files."
+	rm -R build
 }
 
 ###
@@ -178,6 +176,20 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 			:			
 		fi
 		
+		
+#Clean
+echo -n "Should the script clean the directory for any previous builds?"
+	if [[ $ans1_6 = "y" ]]; then
+		clen
+	elif [[ $ans1_6 = "n" ]]; then
+		echo "Continuing..."
+		:
+		
+	else
+		echo "Answer 'y' or 'n'"
+		
+	fi
+
 #Compiling here
 echo -n "Are we on FreeBSD? y or n: "
 read ans1_2
