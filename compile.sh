@@ -40,16 +40,19 @@ none=$(tput sgr0)
 debianDeps() {
 	apt-get -y install cmake build-essential liblua5.2-dev \
 		libgmp3-dev libmysqlclient-dev libboost-system-dev
+	libInstall
 }
 
 fedoraDeps() {
 	yum -y install cmake gcc-c++ boost-devel \
 		gmp-devel community-mysql-devel lua-devel
+	libInstall
 }
 
 centDeps() {
 	yum -y install cmake gcc-c++ boost-devel \
 		gmp-devel mysql-devel lua-devel
+	libInstall
 }
 
 bsdDeps() {
@@ -59,10 +62,16 @@ bsdDeps() {
 	cd /usr/ports/devel/boost-libs && make install clean BATCH=yes
 	cd /usr/ports/math/gmp && make install clean BATCH=yes
 	cd /usr/ports/databases/mysql-connector-c && make install clean BATCH=yes
+	libInstall
+}
+
+archDeps() {
+	pacman -Syu
+	pacman -S --noconfirm base-devel git cmake lua gmp boost boost-libs libmariadbclient
 }
 
 libInstall() {
-	echo "Libraries and Build Tools... Installed"
+	echo $greenText"Libraries and Build Tools... Installed"$none
 }
 
 bsdBuild() {
@@ -125,7 +134,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 #OS dependencies and other stuff
-echo "Chose your Operating System. {Supported OS: Debian, Ubuntu, Fedora, FreeBSD."$yellowText" Not recommended->"$none " CentOS or Scientific Linux"
+echo "Chose your Operating System. {Supported: Debian, Ubuntu, Fedora, FreeBSD, ArchLinux."$yellowText"Not recommended->"$none "CentOS or Scientific Linux"
 #Note for SL6 and CentOS, look below.
 read ans1 
 			
@@ -135,18 +144,20 @@ if [[ $ans1 = "Fedora" ]]; then
 	if [[ $ans1_1 = "y" ]]; then
 		fedoraDeps
 	elif [[ $ans1_1 = "n" ]]; then
+		echo "Continuing..."
 		:
 	else
 		echo "Answer 'y' or 'n' "
 	fi
 elif [[ $ans1 = "CentOS" ]] || [[ $ans1 = "Scientific Linux" ]]; then
-	echo -n "Should the script install dependencies? [y or n]:"$redText"TFS 1.0 developers discourage the use of these distributions because they have" \
+	echo -n $redText"TFS 1.0 developers discourage the use of these distributions because they have" \
 		"outdated packages."$none $blueText"*NOTE that versions of cmake and boost installed in this process are old, they should be installed manually by" \ 
-		"adding repositories or compiling them manually." $none
+		"adding repositories or compiling them manually."$none "Should the script install dependencies? [y or n]:"
 	read ans1_1
 	if [[ $ans1_1 = "y" ]]; then
 		centDeps
 	elif [[ $ans1_1 = "n" ]]; then
+		echo "Continuing..."
 		:
 	else
 		echo "Answer 'y' or 'n' "
@@ -157,6 +168,7 @@ elif [[ $ans1 = "Debian" ]] || [[ $ans1 = "Ubuntu" ]]; then
 	if [[ $ans1_1 = "y" ]]; then
 		debianDeps
 	elif [[ $ans1_1 = "n" ]]; then
+		echo "Continuing..."
 		:
 	else
 		echo "Answer 'y' or 'n' "
@@ -170,11 +182,21 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 			:
 		else
 			echo "Answer 'y' or 'n' "
-		fi				
+		fi	
+elif [[ $ans1 = "ArchLinux" ]]; then
+	echo -n "Should the script install dependencies? [y or n]:"
+	read ans1_1
+		if [[ $ans1_1 = "y" ]]; then
+			archDeps
+		elif [[ $ans1_1 = "n" ]]; then
+			:
 		else
-			echo "Pick a valid OS, options are case sensitive."	
-			:			
-		fi
+			echo "Answer 'y' or 'n' "
+		fi		
+else
+	echo "Pick a valid OS, options are case sensitive."	
+	:			
+	fi
 		
 		
 #Clean
