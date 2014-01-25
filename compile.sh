@@ -70,6 +70,23 @@ archDeps() {
 	pacman -S --noconfirm base-devel git cmake lua gmp boost boost-libs libmariadbclient
 }
 
+macDeps() {
+	brew install git cmake gmp mysql-connector-c lua52
+	brew install boost --with-c++11
+}
+
+hombrew() {
+	echo -n "Homebrew is required to install the required packages, should the script install it? If its installed enter 'n' [y or n]:"
+	read ansmac2
+		if [[ $ansmac2 = "y" ]]; then
+			ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+		elif [[ $ansmac2 = "n" ]]; then
+			:
+		else
+			echo "answer 'y' or 'n'"
+		fi
+}
+
 libInstall() {
 	echo $greenText"Libraries and Build Tools... Installed"$none
 }
@@ -134,7 +151,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 #OS dependencies and other stuff
-echo "Chose your Operating System. {Supported: Debian, Ubuntu, Fedora, FreeBSD, ArchLinux."$yellowText"Not recommended->"$none "CentOS or Scientific Linux"
+echo "Chose your Operating System. {Supported: Debian, Ubuntu, Fedora, FreeBSD, ArchLinux, MacOSX."$yellowText"Not recommended->"$none "CentOS or Scientific Linux"
 #Note for SL6 and CentOS, look below.
 read ans1 
 			
@@ -189,6 +206,17 @@ elif [[ $ans1 = "ArchLinux" ]]; then
 		if [[ $ans1_1 = "y" ]]; then
 			archDeps
 		elif [[ $ans1_1 = "n" ]]; then
+			:
+		else
+			echo "Answer 'y' or 'n' "
+		fi	
+elif [[ $ans1 = "MacOSX" ]]; then
+	echo -n "Should the script install dependencies? [y or n]:"
+	read ansmac1
+		if [[ $ansmac1 = "y" ]]; then
+			homebrew
+			macDeps
+		elif [[ $ansmac1 = "n" ]]; then
 			:
 		else
 			echo "Answer 'y' or 'n' "
