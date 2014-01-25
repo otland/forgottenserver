@@ -7,7 +7,7 @@ setCombatParam(combat, COMBAT_PARAM_USECHARGES, 1)
 
 function onGetFormulaValues(cid, skill, attack, factor)
 	local skillTotal, levelTotal = skill * attack, getPlayerLevel(cid) / 5
-	return -(((skillTotal * 0.01) + 1) + (levelTotal)) * 0.3, -(((skillTotal * 0.03) + 6) + (levelTotal))
+	return -(((skillTotal * 0.01) + 1) + (levelTotal)), -(((skillTotal * 0.03) + 6) + (levelTotal))
 end
 
 setCombatCallback(combat, CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValues")
