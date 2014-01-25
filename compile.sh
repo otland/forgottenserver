@@ -178,7 +178,7 @@ elif [[ $ans1 = "FreeBSD" ]]; then
 		
 		
 #Clean
-echo -n "Should the script clean the directory for any previous builds?"
+echo -n "Should the script clean the directory for any previous builds? [y or n]"
 read ans1_6
 	if [[ $ans1_6 = "y" ]]; then
 		clean		
