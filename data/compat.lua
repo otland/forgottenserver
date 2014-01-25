@@ -487,7 +487,7 @@ function getPromotedVocation(vocationId)
 end
 
 function getGuildId(guildName)
-	local resultId = db.query("SELECT `id` FROM `guilds` WHERE `name` = " .. db.escapeString(guildName))
+	local resultId = db.storeQuery("SELECT `id` FROM `guilds` WHERE `name` = " .. db.escapeString(guildName))
 	if resultId == false then
 		return false
 	end
