@@ -441,8 +441,6 @@ class LuaScriptInterface
 
 		static int32_t luaGetPlayerInstantSpellInfo(lua_State* L);
 		static int32_t luaGetPlayerInstantSpellCount(lua_State* L);
-		static int32_t luaGetInstantSpellInfoByName(lua_State* L);
-		static int32_t luaGetInstantSpellWords(lua_State* L);
 
 		static int32_t luaGetWorldTime(lua_State* L);
 		static int32_t luaGetWorldLight(lua_State* L);

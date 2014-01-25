@@ -1167,12 +1167,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerInstantSpellInfo(cid, index)
 	lua_register(m_luaState, "getPlayerInstantSpellInfo", LuaScriptInterface::luaGetPlayerInstantSpellInfo);
 
-	//getInstantSpellInfoByName(cid, name)
-	lua_register(m_luaState, "getInstantSpellInfoByName", LuaScriptInterface::luaGetInstantSpellInfoByName);
-
-	//getInstantSpellWords(name)
-	lua_register(m_luaState, "getInstantSpellWords", LuaScriptInterface::luaGetInstantSpellWords);
-
 	//getTileHouseInfo(pos)
 	//0 no house. != 0 house id
 	lua_register(m_luaState, "getTileHouseInfo", LuaScriptInterface::luaGetTileHouseInfo);
@@ -2322,10 +2316,8 @@ void LuaScriptInterface::registerGlobalVariable(const std::string& name, lua_Num
 int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 {
 	//getPlayerFlagValue(cid, flag)
-	uint32_t flagindex = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, 1);
+	uint32_t flagindex = getNumber<uint32_t>(L, 2);
 	if (player) {
 		if (flagindex < PlayerFlag_LastFlag) {
 			pushBoolean(L, player->hasFlag((PlayerFlags)flagindex));
@@ -2343,9 +2335,7 @@ int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 int32_t LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
 {
 	//getPlayerInstantSpellCount(cid)
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, 1);
 	if (player) {
 		lua_pushnumber(L, g_spells->getInstantSpellCount(player));
 	} else {
@@ -2358,16 +2348,14 @@ int32_t LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
 int32_t LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
 {
 	//getPlayerInstantSpellInfo(cid, index)
-	uint32_t index = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
+	uint32_t index = getNumber<uint32_t>(L, 2);
 	InstantSpell* spell = g_spells->getInstantSpellByIndex(player, index);
 	if (!spell) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_SPELL_NOT_FOUND));
@@ -2382,52 +2370,6 @@ int32_t LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
 	setField(L, "mlevel", spell->getMagicLevel());
 	setField(L, "mana", spell->getManaCost(player));
 	setField(L, "manapercent", spell->getManaPercent());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetInstantSpellInfoByName(lua_State* L)
-{
-	//getInstantSpellInfoByName(cid, name)
-	std::string spellName = popString(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (!player && cid != 0) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
-	if (!spell) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_SPELL_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_newtable(L);
-	setField(L, "name", spell->getName());
-	setField(L, "words", spell->getWords());
-	setField(L, "level", spell->getLevel());
-	setField(L, "mlevel", spell->getMagicLevel());
-	setField(L, "mana", (player != nullptr ? spell->getManaCost(player) : 0));
-	setField(L, "manapercent", spell->getManaPercent());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetInstantSpellWords(lua_State* L)
-{
-	//getInstantSpellWords(name)
-	std::string spellName = popString(L);
-
-	InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
-	if (!spell) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_SPELL_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	pushString(L, spell->getWords());
 	return 1;
 }
 
@@ -2448,9 +2390,7 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 
 	uint32_t count = popNumber(L);
 	uint16_t itemId = popNumber<uint16_t>(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, -1);
 	if (player) {
 		pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
 	} else {
@@ -2536,10 +2476,8 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	}
 
 	uint32_t itemId = popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	ScriptEnvironment* env = getScriptEnv();
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, -1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -2589,7 +2527,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 
 		if (--itemCount == 0) {
 			if (newItem->getParent()) {
-				uint32_t uid = env->addThing(newItem);
+				uint32_t uid = getScriptEnv()->addThing(newItem);
 				lua_pushnumber(L, uid);
 				return 1;
 			} else {
@@ -4237,9 +4175,7 @@ int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 {
 	//mayNotMove(cid, value)
 	bool boolValue = popBoolean(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, -1);
 	if (player) {
 		player->mayNotMove = boolValue;
 		if (player->mayNotMove) {
@@ -4424,17 +4360,14 @@ int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 int32_t LuaScriptInterface::luaIsInWar(lua_State* L)
 {
 	//isInWar(cid, target)
-	uint32_t target = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	Player* targetPlayer = g_game.getPlayerByID(target);
+	Player* targetPlayer = getPlayer(L, 2);
 	if (!targetPlayer) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -4449,9 +4382,7 @@ int32_t LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill(lua_State* L)
 {
 	//doPlayerSetOfflineTrainingSkill(cid, skillid)
 	uint32_t skillid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Player* player = g_game.getPlayerByID(cid);
+	Player* player = getPlayer(L, -1);
 	if (player) {
 		player->setOfflineTrainingSkill(skillid);
 		pushBoolean(L, true);
