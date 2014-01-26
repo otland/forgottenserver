@@ -90,6 +90,7 @@ bool ConfigManager::load()
 	m_confBoolean[REPLACE_KICK_ON_LOGIN] = booleanString(getGlobalString(L, "replaceKickOnLogin", "yes"));
 	m_confBoolean[ALLOW_CLONES] = booleanString(getGlobalString(L, "allowClones", "no"));
 	m_confBoolean[MARKET_PREMIUM] = booleanString(getGlobalString(L, "premiumToCreateMarketOffer", "yes"));
+	m_confBoolean[EMOTE_SPELLS] = booleanString(getGlobalString(L, "emoteSpells", "no"));
 	m_confBoolean[STAMINA_SYSTEM] = booleanString(getGlobalString(L, "staminaSystem", "yes"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");

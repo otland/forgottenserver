@@ -42,7 +42,8 @@ class ConfigManager
 			BIND_ONLY_GLOBAL_ADDRESS = 10,
 			OPTIMIZE_DATABASE = 11,
 			MARKET_PREMIUM = 12,
-			STAMINA_SYSTEM = 13,
+			EMOTE_SPELLS = 13,
+			STAMINA_SYSTEM = 14,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

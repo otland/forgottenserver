@@ -1458,6 +1458,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)
 	registerEnumIn("configKeys", ConfigManager::OPTIMIZE_DATABASE)
 	registerEnumIn("configKeys", ConfigManager::MARKET_PREMIUM)
+	registerEnumIn("configKeys", ConfigManager::EMOTE_SPELLS)
 	registerEnumIn("configKeys", ConfigManager::STAMINA_SYSTEM)
 
 	registerEnumIn("configKeys", ConfigManager::MAP_NAME)
