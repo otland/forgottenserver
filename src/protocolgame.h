@@ -253,6 +253,8 @@ class ProtocolGame : public Protocol
 		void sendPendingStateEntered();
 		void sendEnterWorld();
 
+		void sendFightModes();
+
 		void sendCreatureLight(const Creature* creature);
 		void sendWorldLight(const LightInfo& lightInfo);
 

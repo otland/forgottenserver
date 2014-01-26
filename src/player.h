@@ -72,19 +72,26 @@ enum freeslot_t {
 };
 
 enum chaseMode_t {
-	CHASEMODE_STANDSTILL,
-	CHASEMODE_FOLLOW,
+	CHASEMODE_STANDSTILL = 0,
+	CHASEMODE_FOLLOW = 1,
 };
 
 enum fightMode_t {
-	FIGHTMODE_ATTACK,
-	FIGHTMODE_BALANCED,
-	FIGHTMODE_DEFENSE
+	FIGHTMODE_ATTACK = 1,
+	FIGHTMODE_BALANCED = 2,
+	FIGHTMODE_DEFENSE = 3
 };
 
 enum secureMode_t {
-	SECUREMODE_ON,
-	SECUREMODE_OFF
+	SECUREMODE_OFF = 0,
+	SECUREMODE_ON = 1
+};
+
+enum pvpMode_t {
+	PVP_MODE_DOVE = 0,
+	PVP_MODE_WHITE_HAND = 1,
+	PVP_MODE_YELLOW_HAND = 2,
+	PVP_MODE_RED_FIST = 3
 };
 
 enum tradestate_t {
@@ -1111,6 +1118,11 @@ class Player : public Creature, public Cylinder
 		void sendEnterWorld() {
 			if (client) {
 				client->sendEnterWorld();
+			}
+		}
+		void sendFightModes() {
+			if (client) {
+				client->sendFightModes();
 			}
 		}
 		void sendNetworkMessage(const NetworkMessage& message) {
