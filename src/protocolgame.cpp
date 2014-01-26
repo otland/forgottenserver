@@ -947,7 +947,6 @@ void ProtocolGame::parseFightModes(NetworkMessage& msg)
 	// uint8_t rawPvpMode = msg.GetByte(); // pvp mode introduced in 10.0
 
 	chaseMode_t chaseMode;
-
 	if (rawChaseMode == 1) {
 		chaseMode = CHASEMODE_FOLLOW;
 	} else {
@@ -955,7 +954,6 @@ void ProtocolGame::parseFightModes(NetworkMessage& msg)
 	}
 
 	fightMode_t fightMode;
-
 	if (rawFightMode == 1) {
 		fightMode = FIGHTMODE_ATTACK;
 	} else if (rawFightMode == 2) {
@@ -965,7 +963,6 @@ void ProtocolGame::parseFightModes(NetworkMessage& msg)
 	}
 
 	secureMode_t secureMode;
-
 	if (rawSecureMode == 1) {
 		secureMode = SECUREMODE_ON;
 	} else {
@@ -2330,6 +2327,17 @@ void ProtocolGame::sendEnterWorld()
 {
 	NetworkMessage msg;
 	msg.AddByte(0x0F);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendFightModes()
+{
+	NetworkMessage msg;
+	msg.AddByte(0xA7);
+	msg.AddByte(player->fightMode);
+	msg.AddByte(player->chaseMode);
+	msg.AddByte(player->secureMode);
+	msg.AddByte(PVP_MODE_DOVE);
 	writeToOutputBuffer(msg);
 }
 

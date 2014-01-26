@@ -4128,7 +4128,14 @@ int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 	if (player) {
 		player->mayNotMove = boolValue;
 		if (player->mayNotMove) {
-			player->onWalkAborted();
+			player->setFollowCreature(nullptr);
+			if (!player->getAttackedCreature()) {
+				player->sendCancelTarget();
+			} else {
+				player->setChaseMode(CHASEMODE_STANDSTILL);
+				player->sendFightModes();
+			}
+			player->stopWalk();
 		}
 
 		pushBoolean(L, true);
