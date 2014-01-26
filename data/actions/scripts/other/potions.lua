@@ -42,7 +42,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		doRemoveItem(item.uid, 1)
 		doPlayerAddItem(cid, emptyPot, 1)
 	elseif(item.itemid == smallHealthPot) then
-		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 50, 100, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 60, 85, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -50,7 +50,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		doRemoveItem(item.uid, 1)
 		doPlayerAddItem(cid, emptyPot, 1)
 	elseif(item.itemid == healthPot) then
-		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 100, 200, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 125, 175, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -58,7 +58,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		doRemoveItem(item.uid, 1)
 		doPlayerAddItem(cid, emptyPot, 1)
 	elseif(item.itemid == manaPot) then
-		if(doTargetCombatMana(0, cid, 70, 130, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatMana(0, cid, 75, 125, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -71,7 +71,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			return TRUE
 		end
 
-		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 200, 400, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -84,7 +84,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			return TRUE
 		end
 
-		if(doTargetCombatMana(0, cid, 110, 190, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatMana(0, cid, 115, 185, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -97,7 +97,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			return TRUE
 		end
 
-		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 200, 400, CONST_ME_MAGIC_BLUE) == LUA_ERROR or doTargetCombatMana(0, cid, 110, 190, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) == LUA_ERROR or doTargetCombatMana(0, cid, 100, 200, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -110,7 +110,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			return TRUE
 		end
 
-		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 500, 700, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 425, 575, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -123,7 +123,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			return TRUE
 		end
 
-		if(doTargetCombatMana(0, cid, 200, 300, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatMana(0, cid, 150, 250, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
@@ -136,7 +136,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			return TRUE
 		end
 
-		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 800, 1000, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
+		if(doTargetCombatHealth(0, cid, COMBAT_HEALING, 650, 850, CONST_ME_MAGIC_BLUE) == LUA_ERROR) then
 			return FALSE
 		end
 		doAddCondition(cid, exhaust)
