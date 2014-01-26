@@ -6,8 +6,8 @@ setCombatParam(combat, COMBAT_PARAM_TARGETCASTERORTOPMOST, 1)
 setCombatParam(combat, COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 
 function onGetFormulaValues(cid, level, maglevel)
-	min = ((level / 5) + (maglevel * 7.3) + 42) -- * 7.3) + 42)
-	max = ((level / 5) + (maglevel * 12.4) + 90) -- * 12.4) + 90)
+	min = ((level / 5) + (maglevel * 7.3) + 42)
+	max = ((level / 5) + (maglevel * 12.4) + 90)
 	return min, max
 end
 
