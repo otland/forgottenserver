@@ -3285,7 +3285,7 @@ bool Player::setAttackedCreature(Creature* creature)
 			//chase opponent
 			setFollowCreature(creature);
 		}
-	} else {
+	} else if (followCreature) {
 		setFollowCreature(nullptr);
 	}
 
