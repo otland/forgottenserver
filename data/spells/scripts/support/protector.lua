@@ -11,7 +11,7 @@ setConditionParam(conditionExhaustHeal, CONDITION_PARAM_TICKS, 10000)
 setConditionParam(conditionPacified, CONDITION_PARAM_TICKS, 10000)
 
 local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
+setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_GREEN)
 setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, 0)
 setCombatCondition(combat, conditionAttrib)
 setCombatCondition(combat, conditionExhaustCombat)

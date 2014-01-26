@@ -1,17 +1,16 @@
 local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_HOLYDAMAGE)
 setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_HOLYDAMAGE)
-setCombatFormula(combat, COMBAT_FORMULA_LEVELMAGIC, -0.4, 0, -0.5, 0)
+setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_SMALLHOLY)
 
-local distanceCombat = createCombatObject()
-setCombatParam(distanceCombat, COMBAT_PARAM_TYPE, COMBAT_HOLYDAMAGE)
-setCombatParam(distanceCombat, COMBAT_PARAM_EFFECT, CONST_ME_HOLYDAMAGE)
-setCombatParam(distanceCombat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_SMALLHOLY)
-setCombatFormula(distanceCombat, COMBAT_FORMULA_LEVELMAGIC, -0.4, 0, -0.5, 0)
+function onGetFormulaValues(cid, level, maglevel)
+	min = -((level / 5) + (maglevel * 1.9) + 8)
+	max = -((level / 5) + (maglevel * 3) + 18)
+	return min, max
+end
+
+setCombatCallback(combat, CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
 
 function onCastSpell(cid, var)
-	if(variantToNumber(var) ~= 0) then
-		return doCombat(cid, distanceCombat, var)
-	end
 	return doCombat(cid, combat, var)
 end

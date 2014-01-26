@@ -5,7 +5,7 @@ setConditionParam(conditionAttrib, CONDITION_PARAM_SKILL_SHIELDPERCENT, 0)
 setConditionParam(conditionAttrib, CONDITION_PARAM_BUFF_SPELL, 1)
 
 local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
+setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_GREEN)
 setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, 0)
 setCombatCondition(combat, conditionAttrib)
 
