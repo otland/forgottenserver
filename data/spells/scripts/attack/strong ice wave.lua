@@ -1,8 +1,8 @@
 local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_ICEDAMAGE)
-setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_ICEATTACK)
+setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_ICEAREA)
 
-local area = createCombatArea(AREA_WAVE4, AREADIAGONAL_WAVE4)
+local area = createCombatArea(AREA_SHORTWAVE3)
 setCombatArea(combat, area)
 
 function onGetFormulaValues(cid, level, maglevel)
