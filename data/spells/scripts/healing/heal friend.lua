@@ -5,8 +5,8 @@ setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, 0)
 setCombatParam(combat, COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 
 function onGetFormulaValues(cid, level, maglevel)
-	min = ((level / 5) + (maglevel * 6.3) + 45) -- * 6.3) + 45)
-	max = ((level / 5) + (maglevel * 14.4) + 90) -- * 14.4) + 90)
+	min = ((level / 5) + (maglevel * 6.3) + 45)
+	max = ((level / 5) + (maglevel * 14.4) + 90)
 	return min, max
 end
 
