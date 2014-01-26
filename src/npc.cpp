@@ -748,7 +748,7 @@ int32_t NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 	//doNpcSetCreatureFocus(cid)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->setCreatureFocus(g_game.getCreatureByID(popNumber(L)));
+		npc->setCreatureFocus(getCreature(L, -1));
 	}
 	return 0;
 }

@@ -3350,10 +3350,9 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 	//doCombat(cid, combat, param)
 	LuaVariant var = popVariant(L);
 	uint32_t combatId = popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (cid != 0 && !creature) {
+	Creature* creature = getCreature(L, -1);
+	if (!creature && (!isNumber(L, -1) || getNumber<uint32_t>(L, -1) != 0)) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
@@ -3439,16 +3438,12 @@ int32_t LuaScriptInterface::luaDoAreaCombatHealth(lua_State* L)
 	popPosition(L, pos);
 
 	CombatType_t combatType = (CombatType_t)popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = nullptr;
-	if (cid != 0) {
-		creature = g_game.getCreatureByID(cid);
-		if (!creature) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
+	Creature* creature = getCreature(L, -1);
+	if (!creature && (!isNumber(L, -1) || getNumber<uint32_t>(L, -1) != 0)) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
 	}
 
 	const AreaCombat* area = g_luaEnvironment.getAreaObject(areaId);
@@ -3477,20 +3472,15 @@ int32_t LuaScriptInterface::luaDoTargetCombatHealth(lua_State* L)
 	int32_t maxChange = popNumber<int32_t>(L);
 	int32_t minChange = popNumber<int32_t>(L);
 	CombatType_t combatType = (CombatType_t)popNumber(L);
-	uint32_t targetCid = popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = nullptr;
-	if (cid != 0) {
-		creature = g_game.getCreatureByID(cid);
-		if (!creature) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
+	Creature* creature = getCreature(L, 1);
+	if (!creature && (!isNumber(L, 1) || getNumber<uint32_t>(L, 1) != 0)) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
 	}
 
-	Creature* target = g_game.getCreatureByID(targetCid);
+	Creature* target = getCreature(L, 2);
 	if (target) {
 		CombatParams params;
 		params.combatType = combatType;
@@ -3520,16 +3510,11 @@ int32_t LuaScriptInterface::luaDoAreaCombatMana(lua_State* L)
 	PositionEx pos;
 	popPosition(L, pos);
 
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = nullptr;
-	if (cid != 0) {
-		creature = g_game.getCreatureByID(cid);
-		if (!creature) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
+	Creature* creature = getCreature(L, -1);
+	if (!creature && (!isNumber(L, -1) || getNumber<uint32_t>(L, -1) != 0)) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
 	}
 
 	const AreaCombat* area = g_luaEnvironment.getAreaObject(areaId);
@@ -3553,21 +3538,19 @@ int32_t LuaScriptInterface::luaDoAreaCombatMana(lua_State* L)
 int32_t LuaScriptInterface::luaDoTargetCombatMana(lua_State* L)
 {
 	//doTargetCombatMana(cid, target, min, max, effect)
-	uint8_t effect = popNumber<uint8_t>(L);
-	int32_t maxChange = popNumber<int32_t>(L);
-	int32_t minChange = popNumber<int32_t>(L);
-	uint32_t targetCid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (cid != 0 && !creature) {
+	Creature* creature = getCreature(L, 1);
+	if (!creature && (!isNumber(L, 1) || getNumber<uint32_t>(L, 1) != 0)) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	Creature* target = g_game.getCreatureByID(targetCid);
+	Creature* target = getCreature(L, 2);
 	if (target) {
+		uint8_t effect = popNumber<uint8_t>(L);
+		int32_t maxChange = popNumber<int32_t>(L);
+		int32_t minChange = popNumber<int32_t>(L);
+
 		CombatParams params;
 		params.impactEffect = effect;
 
@@ -3592,16 +3575,12 @@ int32_t LuaScriptInterface::luaDoAreaCombatCondition(lua_State* L)
 	uint32_t areaId = popNumber(L);
 	PositionEx pos;
 	popPosition(L, pos);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = nullptr;
-	if (cid != 0) {
-		creature = g_game.getCreatureByID(cid);
-		if (!creature) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
+	Creature* creature = getCreature(L, -1);
+	if (!creature && (!isNumber(L, -1) || getNumber<uint32_t>(L, -1) != 0)) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
 	}
 
 	const Condition* condition = g_luaEnvironment.getConditionObject(conditionId);
@@ -3628,23 +3607,17 @@ int32_t LuaScriptInterface::luaDoAreaCombatCondition(lua_State* L)
 int32_t LuaScriptInterface::luaDoTargetCombatCondition(lua_State* L)
 {
 	//doTargetCombatCondition(cid, target, condition, effect)
-	uint8_t effect = popNumber<uint8_t>(L);
-	uint32_t conditionId = popNumber(L);
-	uint32_t targetCid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = nullptr;
-	if (cid != 0) {
-		creature = g_game.getCreatureByID(cid);
-		if (!creature) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
+	Creature* creature = getCreature(L, 1);
+	if (!creature && (!isNumber(L, 1) || getNumber<uint32_t>(L, 1) != 0)) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
 	}
 
-	Creature* target = g_game.getCreatureByID(targetCid);
+	Creature* target = getCreature(L, 2);
 	if (target) {
+		uint8_t effect = popNumber<uint8_t>(L);
+		uint32_t conditionId = popNumber(L);
 		const Condition* condition = g_luaEnvironment.getConditionObject(conditionId);
 		if (condition) {
 			CombatParams params;
@@ -3671,10 +3644,9 @@ int32_t LuaScriptInterface::luaDoAreaCombatDispel(lua_State* L)
 	uint32_t areaId = popNumber(L);
 	PositionEx pos;
 	popPosition(L, pos);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (cid != 0 && !creature) {
+	Creature* creature = getCreature(L, -1);
+	if (!creature && (!isNumber(L, -1) || getNumber<uint32_t>(L, -1) != 0)) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
@@ -3698,23 +3670,18 @@ int32_t LuaScriptInterface::luaDoAreaCombatDispel(lua_State* L)
 int32_t LuaScriptInterface::luaDoTargetCombatDispel(lua_State* L)
 {
 	//doTargetCombatDispel(cid, target, type, effect)
-	uint8_t effect = popNumber<uint8_t>(L);
-	ConditionType_t dispelType = (ConditionType_t)popNumber(L);
-	uint32_t targetCid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = nullptr;
-	if (cid != 0) {
-		creature = g_game.getCreatureByID(cid);
-		if (!creature) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
+	Creature* creature = getCreature(L, 1);
+	if (!creature && (!isNumber(L, 1) || getNumber<uint32_t>(L, 1) != 0)) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
 	}
 
-	Creature* target = g_game.getCreatureByID(targetCid);
+	Creature* target = getCreature(L, 2);
 	if (target) {
+		uint8_t effect = popNumber<uint8_t>(L);
+		ConditionType_t dispelType = (ConditionType_t)popNumber(L);
+
 		CombatParams params;
 		params.impactEffect = effect;
 		params.dispelType = dispelType;
@@ -3730,17 +3697,14 @@ int32_t LuaScriptInterface::luaDoTargetCombatDispel(lua_State* L)
 int32_t LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 {
 	//doChallengeCreature(cid, target)
-	uint32_t targetCid = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	Creature* creature = g_game.getCreatureByID(cid);
+	Creature* creature = getCreature(L, 1);
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	Creature* target = g_game.getCreatureByID(targetCid);
+	Creature* target = getCreature(L, 2);
 	if (!target) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
@@ -3756,9 +3720,8 @@ int32_t LuaScriptInterface::luaDoAddCondition(lua_State* L)
 {
 	//doAddCondition(cid, condition)
 	uint32_t conditionId = popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
+	Creature* creature = getCreature(L, -1);
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
@@ -3788,9 +3751,8 @@ int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 	}
 
 	ConditionType_t conditionType = (ConditionType_t)popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
+	Creature* creature = getCreature(L, -1);
 	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
@@ -3899,17 +3861,16 @@ int32_t LuaScriptInterface::luaDoChangeSpeed(lua_State* L)
 {
 	//doChangeSpeed(cid, delta)
 	int32_t delta = popNumber<int32_t>(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		g_game.changeSpeed(creature, delta);
-		pushBoolean(L, true);
-	} else {
+	Creature* creature = getCreature(L, -1);
+	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
+		return 1;
 	}
 
+	g_game.changeSpeed(creature, delta);
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -3918,20 +3879,15 @@ int32_t LuaScriptInterface::luaSetCreatureOutfit(lua_State* L)
 	//doSetCreatureOutfit(cid, outfit, time)
 	int32_t time = popNumber<int32_t>(L);
 	Outfit_t outfit = popOutfit(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		ReturnValue ret = Spell::CreateIllusion(creature, outfit, time);
-		if (ret == RET_NOERROR) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
+	Creature* creature = getCreature(L, -1);
+	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
+		return 1;
 	}
+
+	pushBoolean(L, Spell::CreateIllusion(creature, outfit, time) == RET_NOERROR);
 	return 1;
 }
 
@@ -3940,20 +3896,15 @@ int32_t LuaScriptInterface::luaSetMonsterOutfit(lua_State* L)
 	//doSetMonsterOutfit(cid, name, time)
 	int32_t time = popNumber<int32_t>(L);
 	std::string name = popString(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
-	if (creature) {
-		ReturnValue ret = Spell::CreateIllusion(creature, name, time);
-		if (ret == RET_NOERROR) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
+	Creature* creature = getCreature(L, -1);
+	if (!creature) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
+		return 1;
 	}
+
+	pushBoolean(L, Spell::CreateIllusion(creature, name, time) == RET_NOERROR);
 	return 1;
 }
 
@@ -3962,9 +3913,8 @@ int32_t LuaScriptInterface::luaSetItemOutfit(lua_State* L)
 	//doSetItemOutfit(cid, item, time)
 	int32_t time = popNumber<int32_t>(L);
 	uint32_t item = popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
+	Creature* creature = getCreature(L, -1);
 	if (creature) {
 		ReturnValue ret = Spell::CreateIllusion(creature, item, time);
 		if (ret == RET_NOERROR) {
@@ -4000,8 +3950,7 @@ int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 			return 1;
 	}
 
-	uint32_t cid = popNumber(L);
-	Creature* creature = g_game.getCreatureByID(cid);
+	Creature* creature = getCreature(L, -1);
 	if (creature) {
 		ReturnValue ret = g_game.internalMoveCreature(creature, (Direction)direction, FLAG_NOLIMIT);
 		lua_pushnumber(L, ret);
@@ -4157,9 +4106,8 @@ int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 	uint32_t time = popNumber(L);
 	uint8_t color = popNumber<uint8_t>(L);
 	uint8_t level = popNumber<uint8_t>(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
+	Creature* creature = getCreature(L, -1);
 	if (creature) {
 		Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_LIGHT, time, level | (color << 8));
 		creature->addCondition(condition);
@@ -4328,15 +4276,10 @@ int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 	}
 
 	uint32_t condition = popNumber(L);
-	uint32_t cid = popNumber(L);
 
-	Creature* creature = g_game.getCreatureByID(cid);
+	Creature* creature = getCreature(L, -1);
 	if (creature) {
-		if (creature->hasCondition((ConditionType_t)condition, subId)) {
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
+		pushBoolean(L, creature->hasCondition((ConditionType_t)condition, subId));
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
@@ -6868,6 +6811,8 @@ int32_t LuaScriptInterface::luaCreatureCreate(lua_State* L)
 		creature = g_game.getCreatureByID(getNumber<uint32_t>(L, 2));
 	} else if (isString(L, 2)) {
 		creature = g_game.getCreatureByName(getString(L, 2));
+	} else if (isUserdata(L, 2)) {
+		creature = getUserdata<Creature>(L, 2);
 	}
 
 	if (creature) {
