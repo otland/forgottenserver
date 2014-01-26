@@ -43,6 +43,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "events.h"
+#include "chat.h"
 #ifdef ENABLE_SERVER_DIAGNOSTIC
 #include "outputmessage.h"
 #include "connection.h"
@@ -63,6 +64,7 @@ extern Game g_game;
 extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
+extern Chat g_chat;
 extern LuaEnvironment g_luaEnvironment;
 
 s_defcommands Commands::defined_commands[] = {
@@ -302,6 +304,9 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	} else if (tmpParam == "events") {
 		g_events->load();
 		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded events.");
+	} else if (tmpParam == "chat" || tmpParam == "channel" || tmpParam == "chatchannels") {
+		g_chat.load();
+		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded chatchannels.");
 	} else if (tmpParam == "global") {
 		g_luaEnvironment.loadFile("data/global.lua");
 		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");

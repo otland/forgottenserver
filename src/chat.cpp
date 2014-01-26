@@ -323,6 +323,14 @@ bool Chat::load()
 		return false;
 	}
 
+	for (auto& channelEntry : normalChannels) {
+		ChatChannel& channel = channelEntry.second;
+		channel.onSpeakEvent = -1;
+		channel.canJoinEvent = -1;
+		channel.onJoinEvent = -1;
+		channel.onLeaveEvent = -1;
+	}
+
 	for (pugi::xml_node channelNode = doc.child("channels").first_child(); channelNode; channelNode = channelNode.next_sibling()) {
 		ChatChannel channel(pugi::cast<uint16_t>(channelNode.attribute("id").value()), channelNode.attribute("name").as_string());
 		channel.publicChannel = channelNode.attribute("public").as_bool();
