@@ -4,8 +4,8 @@ setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_HOLYDAMAGE)
 setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_SMALLHOLY)
 
 function onGetFormulaValues(cid, level, maglevel)
-	min = -((level / 5) + (maglevel * 1.9) + 8) -- * 1.9) + 8)
-	max = -((level / 5) + (maglevel * 3) + 18) -- * 3) + 18)
+	min = -((level / 5) + (maglevel * 1.9) + 8)
+	max = -((level / 5) + (maglevel * 3) + 18)
 	return min, max
 end
 
