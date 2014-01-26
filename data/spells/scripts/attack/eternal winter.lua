@@ -6,8 +6,8 @@ local area = createCombatArea(AREA_CROSS5X5)
 setCombatArea(combat, area)
 
 function onGetFormulaValues(cid, level, maglevel)
-	min = -((level / 5) + (maglevel * 5.5) + 25) -- * 5.5) + 25)
-	max = -((level / 5) + (maglevel * 11) + 50) -- * 11) + 50)
+	min = -((level / 5) + (maglevel * 5.5) + 25)
+	max = -((level / 5) + (maglevel * 11) + 50)
 	return min, max
 end
 
