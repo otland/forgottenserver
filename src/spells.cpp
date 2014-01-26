@@ -355,7 +355,7 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 
 bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
-	//onCastSpell(cid, var)
+	//onCastSpell(creature, var)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CombatSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
@@ -367,8 +367,11 @@ bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, creature->getID());
-	m_scriptInterface->pushVariant(L, var);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushVariant(L, var);
 
 	return m_scriptInterface->callFunction(2);
 }
@@ -1204,7 +1207,7 @@ bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 
 bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
-	//onCastSpell(cid, var)
+	//onCastSpell(creature, var)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - InstantSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
@@ -1216,8 +1219,11 @@ bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, creature->getID());
-	m_scriptInterface->pushVariant(L, var);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushVariant(L, var);
 
 	return m_scriptInterface->callFunction(2);
 }
@@ -2100,7 +2106,7 @@ bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 
 bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
-	//onCastSpell(cid, var)
+	//onCastSpell(creature, var)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - RuneSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
@@ -2112,8 +2118,11 @@ bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, creature->getID());
-	m_scriptInterface->pushVariant(L, var);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushVariant(L, var);
 
 	return m_scriptInterface->callFunction(2);
 }
