@@ -741,10 +741,14 @@ bool Houses::payHouses() const
 	}
 
 	time_t currentTime = time(nullptr);
-
 	for (const auto& it : houseMap) {
 		House* house = it.second;
 		if (house->getOwner() != 0) {
+			uint32_t rent = house->getRent();
+			if (rent == 0 || house->getPaidUntil() > currentTime) {
+				continue;
+			}
+
 			uint32_t ownerid = house->getOwner();
 			Town* town = Towns::getInstance().getTown(house->getTownId());
 			if (!town) {
@@ -762,11 +766,10 @@ bool Houses::payHouses() const
 				}
 			}
 
-			if (player->getBankBalance() >= house->getRent()) {
-				player->setBankBalance(player->getBankBalance() - house->getRent());
+			if (player->getBankBalance() >= rent) {
+				player->setBankBalance(player->getBankBalance() - rent);
 
 				time_t paidUntil = currentTime;
-
 				switch (rentPeriod) {
 					case RENTPERIOD_DAILY:
 						paidUntil += 24 * 60 * 60;
