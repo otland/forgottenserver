@@ -323,12 +323,14 @@ bool Chat::load()
 		return false;
 	}
 
+	std::forward_list<uint16_t> removedChannels;
 	for (auto& channelEntry : normalChannels) {
 		ChatChannel& channel = channelEntry.second;
 		channel.onSpeakEvent = -1;
 		channel.canJoinEvent = -1;
 		channel.onJoinEvent = -1;
 		channel.onLeaveEvent = -1;
+		removedChannels.push_front(channelEntry.first);
 	}
 
 	for (pugi::xml_node channelNode = doc.child("channels").first_child(); channelNode; channelNode = channelNode.next_sibling()) {
@@ -347,7 +349,12 @@ bool Chat::load()
 			}
 		}
 
+		removedChannels.remove(channel.id);
 		normalChannels[channel.id] = channel;
+	}
+
+	for (uint16_t channelId : removedChannels) {
+		normalChannels.erase(channelId);
 	}
 	return true;
 }
