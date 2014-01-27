@@ -12193,7 +12193,8 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 		return;
 	}
 
-	const LuaTimerEventDesc& timerEventDesc = it->second;
+	LuaTimerEventDesc timerEventDesc = std::move(it->second);
+	m_timerEvents.erase(it);
 
 	//push function
 	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
@@ -12218,6 +12219,4 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	for (auto parameter : timerEventDesc.parameters) {
 		luaL_unref(m_luaState, LUA_REGISTRYINDEX, parameter);
 	}
-
-	m_timerEvents.erase(it);
 }
