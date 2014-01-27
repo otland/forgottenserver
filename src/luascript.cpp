@@ -12193,7 +12193,7 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 		return;
 	}
 
-	LuaTimerEventDesc timerEventDesc = std::move(it->second);
+	LuaTimerEventDesc&& timerEventDesc = std::move(it->second);
 	m_timerEvents.erase(it);
 
 	//push function
