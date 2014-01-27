@@ -675,11 +675,8 @@ end
 function queryTileAddThing(thing, position, ...) local t = Tile(position) return t ~= nil and t:queryAdd(thing, ...) or false end
 
 function doTeleportThing(uid, dest, pushMovement)
-	if uid >= 0x10000000 then
-		local creature = Creature(uid)
-		if creature ~= nil then
-			return creature:teleportTo(dest, pushMovement or false)
-		end
+	if isCreature(uid) then
+		return Creature(uid):teleportTo(dest, pushMovement or false)
 	else
 		local item = Item(uid)
 		if item ~= nil then
