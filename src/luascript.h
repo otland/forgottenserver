@@ -83,6 +83,13 @@ struct LuaTimerEventDesc {
 	int32_t function;
 	std::list<int32_t> parameters;
 	uint32_t eventId;
+
+	LuaTimerEventDesc() :
+		scriptId(-1), function(-1), eventId(0) {}
+
+	LuaTimerEventDesc(LuaTimerEventDesc&& other) :
+		scriptId(other.scriptId), function(other.function),
+		parameters(std::move(other.parameters)), eventId(other.eventId) {}
 };
 
 class LuaScriptInterface;
