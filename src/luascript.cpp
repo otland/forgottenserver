@@ -4238,7 +4238,8 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 		delay, std::bind(&LuaEnvironment::executeTimerEvent, &g_luaEnvironment, lastTimerEventId)
 	));
 
-	g_luaEnvironment.m_timerEvents[lastTimerEventId] = eventDesc;
+	g_luaEnvironment.m_timerEvents.insert(std::make_pair(lastTimerEventId, std::move(eventDesc)));
+
 	pushNumber(L, lastTimerEventId++);
 	return 1;
 }
@@ -4246,12 +4247,14 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 {
 	//stopEvent(eventid)
-	uint32_t eventId = popNumber(L);
-	if (!g_luaEnvironment.getLuaState()) {
+	lua_State* globalState = g_luaEnvironment.getLuaState();
+	if (!globalState) {
 		reportErrorFunc("No valid script interface!");
 		pushBoolean(L, false);
 		return 1;
 	}
+
+	uint32_t eventId = getNumber<uint32_t>(L, 1);
 
 	auto& timerEvents = g_luaEnvironment.m_timerEvents;
 	auto it = timerEvents.find(eventId);
@@ -4260,15 +4263,15 @@ int32_t LuaScriptInterface::luaStopEvent(lua_State* L)
 		return 1;
 	}
 
-	const LuaTimerEventDesc& timerEventDesc = it->second;
+	LuaTimerEventDesc timerEventDesc = std::move(it->second);
+	timerEvents.erase(it);
+
 	g_scheduler.stopEvent(timerEventDesc.eventId);
+	luaL_unref(globalState, LUA_REGISTRYINDEX, timerEventDesc.function);
 
 	for (auto parameter : timerEventDesc.parameters) {
-		luaL_unref(g_luaEnvironment.m_luaState, LUA_REGISTRYINDEX, parameter);
+		luaL_unref(globalState, LUA_REGISTRYINDEX, parameter);
 	}
-
-	luaL_unref(g_luaEnvironment.m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
-	timerEvents.erase(it);
 
 	pushBoolean(L, true);
 	return 1;
@@ -12045,27 +12048,27 @@ bool LuaEnvironment::closeState()
 	for (const auto& combatEntry : m_combatIdMap) {
 		clearCombatObjects(combatEntry.first);
 	}
-	m_combatIdMap.clear();
 
 	for (const auto& conditionEntry : m_conditionIdMap) {
 		clearConditionObjects(conditionEntry.first);
 	}
-	m_conditionIdMap.clear();
 
 	for (const auto& areaEntry : m_areaIdMap) {
 		clearAreaObjects(areaEntry.first);
 	}
-	m_areaIdMap.clear();
 
-	for (auto timerEntry : m_timerEvents) {
-		const LuaTimerEventDesc& timerEventDesc = timerEntry.second;
+	for (auto& timerEntry : m_timerEvents) {
+		LuaTimerEventDesc timerEventDesc = std::move(timerEntry.second);
 		for (int32_t parameter : timerEventDesc.parameters) {
 			luaL_unref(m_luaState, LUA_REGISTRYINDEX, parameter);
 		}
 		luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
 	}
-	m_timerEvents.clear();
 
+	m_combatIdMap.clear();
+	m_conditionIdMap.clear();
+	m_areaIdMap.clear();
+	m_timerEvents.clear();
 	m_cacheFiles.clear();
 
 	lua_close(m_luaState);
