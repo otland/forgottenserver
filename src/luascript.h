@@ -87,10 +87,6 @@ struct LuaTimerEventDesc {
 	LuaTimerEventDesc() :
 		scriptId(-1), function(-1), eventId(0) {}
 
-	LuaTimerEventDesc(const LuaTimerEventDesc& other) :
-		scriptId(other.scriptId), function(other.function),
-		parameters(other.parameters), eventId(other.eventId) {}
-
 	LuaTimerEventDesc(LuaTimerEventDesc&& other) :
 		scriptId(other.scriptId), function(other.function),
 		parameters(std::move(other.parameters)), eventId(other.eventId) {}
