@@ -183,10 +183,10 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 		std::vector<std::pair<int32_t, int32_t>>& relList = (extendedPos ? extendedRelList : normalRelList);
 
 		if (extendedPos) {
-			std::random_shuffle(relList.begin(), relList.begin() + 4);
-			std::random_shuffle(relList.begin() + 4, relList.end());
+			std::shuffle(relList.begin(), relList.begin() + 4, getRandomGenerator());
+			std::shuffle(relList.begin() + 4, relList.end(), getRandomGenerator());
 		} else {
-			std::random_shuffle(relList.begin(), relList.end());
+			std::shuffle(relList.begin(), relList.end(), getRandomGenerator());
 		}
 
 		for (const auto& it : relList) {

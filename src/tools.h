@@ -20,6 +20,8 @@
 #ifndef FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
 #define FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
 
+#include <random>
+
 #include "position.h"
 #include "const.h"
 #include "enums.h"
@@ -42,6 +44,7 @@ bool hasBitSet(uint32_t flag, uint32_t flags);
 
 bool isNumber(char character);
 
+std::mt19937& getRandomGenerator();
 int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
 int32_t normal_random(int32_t minNumber, int32_t maxNumber);
 bool boolean_random(double probability = 0.5);

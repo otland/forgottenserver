@@ -1020,7 +1020,7 @@ bool Monster::pushItem(Item* item)
 		{-1,  1}, {0,  1}, {1,  1}
 	};
 
-	std::random_shuffle(relList.begin(), relList.end());
+	std::shuffle(relList.begin(), relList.end(), getRandomGenerator());
 
 	for (const auto& it : relList) {
 		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
@@ -1069,7 +1069,7 @@ bool Monster::pushCreature(Creature* creature)
 		WEST,      EAST,
 		     SOUTH
 	};
-	std::random_shuffle(dirList.begin(), dirList.end());
+	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 
 	for (Direction dir : dirList) {
 		const Position& tryPos = Spells::getCasterPosition(creature, dir);
@@ -1170,7 +1170,7 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& dir)
 		WEST,      EAST,
 		     SOUTH
 	};
-	std::random_shuffle(dirList.begin(), dirList.end());
+	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 
 	for (Direction _dir : dirList) {
 		if (canWalkTo(creaturePos, _dir)) {
@@ -1260,7 +1260,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 	}
 
 	if (!dirList.empty()) {
-		std::random_shuffle(dirList.begin(), dirList.end());
+		std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 		dir = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}

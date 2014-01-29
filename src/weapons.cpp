@@ -845,7 +845,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 				{-1,  0}, {0,  0}, {1,  0},
 				{-1,  1}, {0,  1}, {1,  1}
 			};
-			std::random_shuffle(destList.begin(), destList.end());
+			std::shuffle(destList.begin(), destList.end(), getRandomGenerator());
 
 			Position destPos = target->getPosition();
 

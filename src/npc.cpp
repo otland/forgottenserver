@@ -450,7 +450,6 @@ bool Npc::getRandomStep(Direction& dir)
 		return false;
 	}
 
-	std::random_shuffle(dirList.begin(), dirList.end());
 	dir = dirList[uniform_random(0, dirList.size() - 1)];
 	return true;
 }
