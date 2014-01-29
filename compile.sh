@@ -45,7 +45,7 @@ debianDeps() {
 
 fedoraDeps() {
 	yum -y install cmake gcc-c++ boost-devel \
-		gmp-devel community-mysql-devel lua-devel
+		gmp-devel mysql-devel lua-devel
 	libInstall
 }
 
