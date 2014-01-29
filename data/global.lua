@@ -753,15 +753,15 @@ function doForceSummonCreature(name, pos)
 	return creature
 end
 
-local conditionOutfit = Condition(CONDITION_OUTFIT)
+local __outfitCond = Condition(CONDITION_OUTFIT)
 function doSetCreatureOutfit(cid, outfit, time)
 	local c = Creature(cid)
 	if c == nil then
 		return false
 	end
-	conditionOutfit:setTicks(time)
-	conditionOutfit:addOutfit(outfit)
-	c:addCondition(conditionOutfit)
+	__outfitCond:setTicks(time)
+	__outfitCond:addOutfit(outfit)
+	c:addCondition(__outfitCond)
 	return true
 end
 function doSetMonsterOutfit(cid, name, time)
@@ -781,9 +781,9 @@ function doSetMonsterOutfit(cid, name, time)
 		end
 	end
 
-	conditionOutfit:setTicks(time)
-	conditionOutfit:addOutfit(mType:getOutfit())
-	c:addCondition(conditionOutfit)
+	__outfitCond:setTicks(time)
+	__outfitCond:addOutfit(mType:getOutfit())
+	c:addCondition(__outfitCond)
 	return true
 end
 function doSetItemOutfit(cid, item, time)
@@ -797,23 +797,23 @@ function doSetItemOutfit(cid, item, time)
 		return false
 	end
 
-	conditionOutfit:setTicks(time)
-	conditionOutfit:addOutfit(iType:getId())
-	c:addCondition(conditionOutfit)
+	__outfitCond:setTicks(time)
+	__outfitCond:addOutfit(iType:getId())
+	c:addCondition(__outfitCond)
 	return true
 end
 
-local conditionLight = Condition(CONDITION_LIGHT, CONDITIONID_DEFAULT)
+local __lightCond = Condition(CONDITION_LIGHT, CONDITIONID_DEFAULT)
 function doSetCreatureLight(cid, lightLevel, lightColor, time)
 	local c = Creature(cid)
 	if c == nil then
 		return false
 	end
 
-	conditionLight:setTicks(time)
-	conditionLight:setParameter(CONDITION_PARAM_LIGHT_LEVEL, lightLevel)
-	conditionLight:setParameter(CONDITION_PARAM_LIGHT_COLOR, lightColor)
-	c:addCondition(conditionLight)
+	__lightCond:setTicks(time)
+	__lightCond:setParameter(CONDITION_PARAM_LIGHT_LEVEL, lightLevel)
+	__lightCond:setParameter(CONDITION_PARAM_LIGHT_COLOR, lightColor)
+	c:addCondition(__lightCond)
 	return true
 end
 --
@@ -944,5 +944,3 @@ string.split = function(str, sep)
 	end
 	return res
 end
-
-
