@@ -192,22 +192,24 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 					return false;
 				}
 
-				item = g_game.transformItem(item, id);
+				g_game.transformItem(item, id);
 			} else {
 				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
 			}
 		} else {
 			//The map changed since the last save, just read the attributes
-			Item* dummy = Item::CreateItem(id);
-			if (dummy) {
-				dummy->unserializeAttr(propStream);
-				Container* container = dummy->getContainer();
+            
+            // TODO: Store temporary item on stack for automatic memory management here
+			item = Item::CreateItem(id);
+			if (item) {
+				item->unserializeAttr(propStream);
+				Container* container = item->getContainer();
 				if (container && !loadContainer(propStream, container)) {
-					delete dummy;
+					delete item;
 					return false;
 				}
 
-				delete dummy;
+				delete item;
 			}
 		}
 	}

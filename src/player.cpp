@@ -1795,7 +1795,6 @@ void Player::addManaSpent(uint64_t amount)
 		currReqMana = nextReqMana;
 		nextReqMana = vocation->getReqMana(magLevel + 1);
 		if (currReqMana >= nextReqMana) {
-			amount = 0;
 			return;
 		}
 	}

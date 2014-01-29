@@ -1287,17 +1287,13 @@ int32_t Tile::__getIndexOfThing(const Thing* thing) const
 		}
 	}
 
-	if (items) {
-		if (thing->getItem()) {
-			for (ItemVector::const_iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
-				++n;
-				if ((*it) == thing) {
-					return n;
-				}
-			}
-		} else {
-			n += items->getDownItemCount();
-		}
+	if (items && thing->getItem()) {
+        for (ItemVector::const_iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
+            ++n;
+            if ((*it) == thing) {
+                return n;
+            }
+        }
 	}
 
 	return -1;
