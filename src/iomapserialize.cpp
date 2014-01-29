@@ -199,7 +199,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 		} else {
 			//The map changed since the last save, just read the attributes
             
-            // TODO: Store temporary item on stack for automatic memory management here
+			// TODO: Store temporary item on stack for automatic memory management here
 			item = Item::CreateItem(id);
 			if (item) {
 				item->unserializeAttr(propStream);
