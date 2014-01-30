@@ -11,6 +11,7 @@ timeToDecreaseFrags = 24 * 60 * 60 * 1000
 whiteSkullTime = 15 * 60 * 1000
 stairJumpExhaustion = 2000
 experienceByKillingPlayers = "no"
+allowFightBack = "yes"
 
 -- Connection Config
 ip = "127.0.0.1"
