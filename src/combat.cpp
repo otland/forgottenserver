@@ -710,7 +710,6 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 		}
 
 		ReturnValue ret = g_game.internalAddItem(tile, item);
-
 		if (ret == RET_NOERROR) {
 			g_game.startDecay(item);
 		} else {
@@ -1332,7 +1331,7 @@ void AreaCombat::setupArea(int32_t length, int32_t spread)
 	int32_t cols = 1;
 
 	if (spread != 0) {
-		cols = ((length - length % spread) / spread) * 2 + 1;
+		cols = ((length - (length % spread)) / spread) * 2 + 1;
 	}
 
 	int32_t colSpread = cols;
@@ -1342,7 +1341,7 @@ void AreaCombat::setupArea(int32_t length, int32_t spread)
 		int32_t maxcol = cols - (cols - colSpread);
 
 		for (int32_t x = 1; x <= cols; ++x) {
-			if (y == rows && x == ((cols - cols % 2) / 2) + 1) {
+			if (y == rows && x == ((cols - (cols % 2)) / 2) + 1) {
 				list.push_back(3);
 			} else if (x >= mincol && x <= maxcol) {
 				list.push_back(1);

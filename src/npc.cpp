@@ -466,12 +466,12 @@ void Npc::turnToCreature(Creature* creature)
 {
 	const Position& creaturePos = creature->getPosition();
 	const Position& myPos = getPosition();
-	int32_t dx = Position::getOffsetX(myPos, creaturePos);
-	int32_t dy = Position::getOffsetY(myPos, creaturePos);
+	const auto dx = Position::getOffsetX(myPos, creaturePos);
+	const auto dy = Position::getOffsetY(myPos, creaturePos);
 
 	float tan;
 	if (dx != 0) {
-		tan = (float)dy / dx;
+		tan = static_cast<float>(dy) / dx;
 	} else {
 		tan = 10;
 	}
@@ -630,7 +630,7 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 	}
 
 	if (parameters >= 2) {
-		target = popNumber(L);
+		target = popNumber<uint32_t>(L);
 		if (target != 0) {
 			publicize = false;
 		}
@@ -653,7 +653,7 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 int32_t NpcScriptInterface::luaActionMove(lua_State* L)
 {
 	//selfMove(direction)
-	Direction dir = (Direction)popNumber(L);
+	Direction dir = (Direction)popNumber<uint32_t>(L);
 
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
@@ -667,9 +667,9 @@ int32_t NpcScriptInterface::luaActionMoveTo(lua_State* L)
 {
 	//selfMoveTo(x,y,z)
 	Position target;
-	target.z = popNumber(L);
-	target.y = popNumber(L);
-	target.x = popNumber(L);
+	target.z = popNumber<uint8_t>(L);
+	target.y = popNumber<uint16_t>(L);
+	target.x = popNumber<uint16_t>(L);
 
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
@@ -684,7 +684,7 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 	//selfTurn(direction)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->doTurn((Direction)popNumber(L));
+		npc->doTurn((Direction)popNumber<uint32_t>(L));
 	}
 	return 0;
 }
@@ -692,7 +692,7 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
 {
 	//selfFollow(cid)
-	uint32_t cid = popNumber(L);
+	uint32_t cid = popNumber<uint32_t>(L);
 
 	Player* player = g_game.getPlayerByID(cid);
 	if (cid != 0 && !player) {
@@ -713,7 +713,7 @@ int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
 int32_t NpcScriptInterface::luagetDistanceTo(lua_State* L)
 {
 	//getDistanceTo(uid)
-	uint32_t uid = popNumber(L);
+	uint32_t uid = popNumber<uint32_t>(L);
 
 	ScriptEnvironment* env = getScriptEnv();
 
@@ -855,7 +855,7 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	}
 	lua_pop(L, 1);
 
-	Player* player = g_game.getPlayerByID(popNumber(L));
+	Player* player = g_game.getPlayerByID(popNumber<uint32_t>(L));
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -883,7 +883,7 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 int32_t NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 {
 	//closeShopWindow(cid)
-	Player* player = g_game.getPlayerByID(popNumber(L));
+	Player* player = g_game.getPlayerByID(popNumber<uint32_t>(L));
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -936,21 +936,21 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 
 	uint32_t actionId = 0;
 	if (parameters > 4) {
-		actionId = popNumber(L);
+		actionId = popNumber<uint32_t>(L);
 	}
 
 	uint32_t subType = 1;
 	if (parameters > 3) {
-		int32_t n = popNumber(L);
+		int32_t n = popNumber<int32_t>(L);
 		if (n != -1) {
 			subType = n;
 		}
 	}
 
-	uint32_t amount = popNumber(L);
-	uint32_t itemId = popNumber(L);
+	uint32_t amount = popNumber<uint32_t>(L);
+	uint32_t itemId = popNumber<uint32_t>(L);
 
-	Player* player = g_game.getPlayerByID(popNumber(L));
+	Player* player = g_game.getPlayerByID(popNumber<uint32_t>(L));
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);

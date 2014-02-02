@@ -26,12 +26,12 @@
 
 extern ConfigManager g_config;
 
-inline uint32_t circularShift(int bits, uint32_t value)
+static inline uint32_t circularShift(int bits, uint32_t value)
 {
 	return (value << bits) | (value >> (32 - bits));
 }
 
-void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
+static void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 {
 	uint32_t W[80];
 	for (int i = 0; i < 16; ++i) {
@@ -244,11 +244,6 @@ bool boolean_random(double probability/* = 0.5*/)
 {
 	static std::bernoulli_distribution booleanRand;
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
-}
-
-bool isNumber(char character)
-{
-	return (character >= 48 && character <= 57);
 }
 
 void trimString(std::string& str)
@@ -886,12 +881,12 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 std::string getFirstLine(const std::string& str)
 {
 	std::string firstLine;
-	for (size_t i = 0, strLength = str.length(); i < strLength; ++i) {
-		if (str[i] == '\n') {
+	firstLine.reserve(str.length());
+	for (const char c : str) {
+		if (c == '\n') {
 			break;
 		}
-
-		firstLine += str[i];
+		firstLine.push_back(c);
 	}
 	return firstLine;
 }

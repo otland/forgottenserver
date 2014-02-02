@@ -662,7 +662,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		int32_t offlineTrainingSkill = player->getOfflineTrainingSkill();
 		if (offlineTrainingSkill != -1) {
 			player->setOfflineTrainingSkill(-1);
-			int32_t offlineTrainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, player->getOfflineTrainingTime() / 1000)));
+			uint32_t offlineTrainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, player->getOfflineTrainingTime() / 1000)));
 
 			if (offlineTime >= 600) {
 				player->removeOfflineTrainingTime(offlineTrainingTime * 1000);
@@ -4730,7 +4730,6 @@ void Game::checkDecay()
 
 		int32_t decreaseTime = EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS;
 		int32_t duration = item->getDuration();
-
 		if (duration - decreaseTime < 0) {
 			decreaseTime = duration;
 		}
@@ -4869,7 +4868,7 @@ void Game::cleanup()
 	ToReleaseItems.clear();
 
 	for (Item* item : toDecayItems) {
-		int32_t dur = item->getDuration();
+		const uint32_t dur = item->getDuration();
 		if (dur >= EVENT_DECAYINTERVAL * EVENT_DECAY_BUCKETS) {
 			decayItems[lastBucket].push_back(item);
 		} else {

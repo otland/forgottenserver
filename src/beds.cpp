@@ -223,14 +223,14 @@ void BedItem::wakeUp(Player* player)
 
 void BedItem::regeneratePlayer(Player* player) const
 {
-	int32_t sleptTime = int32_t(time(nullptr) - sleepStart);
+	const uint32_t sleptTime = time(nullptr) - sleepStart;
 
 	Condition* condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
 	if (condition) {
-		int32_t regen;
+		uint32_t regen;
 		if (condition->getTicks() != -1) {
 			regen = std::min<int32_t>((condition->getTicks() / 1000), sleptTime) / 30;
-			int32_t newRegenTicks = condition->getTicks() - (regen * 30000);
+			const int32_t newRegenTicks = condition->getTicks() - (regen * 30000);
 			if (newRegenTicks <= 0) {
 				player->removeCondition(condition);
 			} else {
@@ -244,7 +244,7 @@ void BedItem::regeneratePlayer(Player* player) const
 		player->changeMana(regen);
 	}
 
-	int32_t soulRegen = sleptTime / (60 * 15);
+	const int32_t soulRegen = sleptTime / (60 * 15);
 	player->changeSoul(soulRegen);
 }
 

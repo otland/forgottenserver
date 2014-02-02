@@ -240,12 +240,12 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	int_fast16_t max_x = centerPos.x + maxRangeX;
 
 	int32_t minoffset = centerPos.getZ() - maxRangeZ;
-	int32_t x1 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (min_x + minoffset)));
-	int32_t y1 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (min_y + minoffset)));
+	uint16_t x1 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (min_x + minoffset)));
+	uint16_t y1 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (min_y + minoffset)));
 
 	int32_t maxoffset = centerPos.getZ() - minRangeZ;
-	int32_t x2 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (max_x + maxoffset)));
-	int32_t y2 = std::min<int32_t>(0xFFFF, std::max<int32_t>(0, (max_y + maxoffset)));
+	uint16_t x2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_x + maxoffset)));
+	uint16_t y2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_y + maxoffset)));
 
 	int32_t startx1 = x1 - (x1 % FLOOR_SIZE);
 	int32_t starty1 = y1 - (y1 % FLOOR_SIZE);
@@ -256,9 +256,9 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	QTreeLeafNode* leafS = startLeaf;
 	QTreeLeafNode* leafE;
 
-	for (int32_t ny = starty1; ny <= endy2; ny += FLOOR_SIZE) {
+	for (int_fast32_t ny = starty1; ny <= endy2; ny += FLOOR_SIZE) {
 		leafE = leafS;
-		for (int32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
+		for (int_fast32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
 				const CreatureVector& node_list = (onlyPlayers ? leafE->player_list : leafE->creature_list);
 				CreatureVector::const_iterator node_iter = node_list.begin();

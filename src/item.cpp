@@ -1066,7 +1066,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 	if (it.showDuration) {
 		if (item && item->hasAttribute(ATTR_ITEM_DURATION)) {
-			int32_t duration = item->getDuration() / 1000;
+			uint32_t duration = item->getDuration() / 1000;
 			s << " that will expire in ";
 
 			if (duration >= 86400) {

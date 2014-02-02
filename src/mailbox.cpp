@@ -123,20 +123,17 @@ bool Mailbox::sendItem(Item* item)
 			return true;
 		}
 	} else {
-		player = new Player(nullptr);
-		if (!IOLoginData::loadPlayerByName(player, receiver)) {
-			delete player;
+		Player tmpPlayer(nullptr);
+		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
 			return false;
 		}
 
-		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
+		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER,
 		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
-			IOLoginData::savePlayer(player);
-			delete player;
+			IOLoginData::savePlayer(&tmpPlayer);
 			return true;
 		}
-		delete player;
 	}
 	return false;
 }

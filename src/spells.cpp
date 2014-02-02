@@ -1408,7 +1408,7 @@ bool InstantSpell::SearchPlayer(const InstantSpell*, Creature* creature, const s
 	//getting direction
 	float tan;
 	if (dx != 0) {
-		tan = (float)dy / (float)dx;
+		tan = static_cast<float>(dy) / dx;
 	} else {
 		tan = 10.;
 	}

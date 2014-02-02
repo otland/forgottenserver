@@ -695,7 +695,6 @@ class Item : virtual public Thing
 
 		void setDefaultDuration() {
 			uint32_t duration = getDefaultDuration();
-
 			if (duration != 0) {
 				setDuration(duration);
 			}

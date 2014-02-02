@@ -42,8 +42,6 @@ StringVec explodeString(const std::string& inString, const std::string& separato
 IntegerVec vectorAtoi(const StringVec& stringVector);
 bool hasBitSet(uint32_t flag, uint32_t flags);
 
-bool isNumber(char character);
-
 std::mt19937& getRandomGenerator();
 int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
 int32_t normal_random(int32_t minNumber, int32_t maxNumber);

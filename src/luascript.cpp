@@ -786,28 +786,6 @@ void LuaScriptInterface::popPosition(lua_State* L, PositionEx& position)
 	lua_pop(L, 1);
 }
 
-uint32_t LuaScriptInterface::popNumber(lua_State* L)
-{
-	if (lua_gettop(L) == 0) {
-		return 0;
-	}
-
-	uint32_t number = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	return number;
-}
-
-double LuaScriptInterface::popFloatNumber(lua_State* L)
-{
-	if (lua_gettop(L) == 0) {
-		return 0.0;
-	}
-
-	double number = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	return number;
-}
-
 std::string LuaScriptInterface::popString(lua_State* L)
 {
 	if (lua_gettop(L) == 0) {
@@ -2213,7 +2191,7 @@ void LuaScriptInterface::registerClass(const std::string& className, const std::
 	if (!baseClass.empty()) {
 		lua_getglobal(m_luaState, baseClass.c_str());
 		lua_rawgeti(m_luaState, -1, 'p');
-		parents = popNumber(m_luaState) + 1;
+		parents = popNumber<uint32_t>(m_luaState) + 1;
 		lua_setfield(m_luaState, methodsTable, "__index");
 	}
 
@@ -2384,12 +2362,14 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 		ignoreEquipped = popBoolean(L);
 	}
 
-	int32_t subType = -1;
+	int32_t subType;
 	if (parameters > 3) {
-		subType = popNumber(L);
+		subType = popNumber<int32_t>(L);
+	} else {
+		subType = -1;
 	}
 
-	uint32_t count = popNumber(L);
+	uint32_t count = popNumber<uint32_t>(L);
 	uint16_t itemId = popNumber<uint16_t>(L);
 	Player* player = getPlayer(L, -1);
 	if (player) {
@@ -2430,7 +2410,7 @@ int32_t LuaScriptInterface::luaDoChangeTypeItem(lua_State* L)
 {
 	//doChangeTypeItem(uid,new_type)
 	int32_t subtype = popNumber<int32_t>(L);
-	uint32_t uid = popNumber(L);
+	uint32_t uid = popNumber<uint32_t>(L);
 
 	ScriptEnvironment* env = getScriptEnv();
 
@@ -2463,7 +2443,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 
 	int32_t subType = 1;
 	if (parameters > 4) {
-		subType = popNumber(L);
+		subType = popNumber<uint32_t>(L);
 	}
 
 	bool canDropOnMap = true;
@@ -2471,12 +2451,12 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		canDropOnMap = popBoolean(L);
 	}
 
-	uint32_t count = 1;
+	int32_t count = 1;
 	if (parameters > 2) {
-		count = popNumber(L);
+		count = popNumber<int32_t>(L);
 	}
 
-	uint32_t itemId = popNumber(L);
+	uint32_t itemId = popNumber<uint32_t>(L);
 
 	Player* player = getPlayer(L, -1);
 	if (!player) {
@@ -2494,7 +2474,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		itemCount = std::max<int32_t>(1, count);
 	} else if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = (int32_t)std::ceil((float)count / 100);
+			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
 		}
 
 		subType = count;
@@ -2546,7 +2526,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 {
 	//doTileAddItemEx(pos, uid)
-	uint32_t uid = popNumber(L);
+	uint32_t uid = popNumber<uint32_t>(L);
 	PositionEx pos;
 	popPosition(L, pos);
 
@@ -2682,10 +2662,10 @@ int32_t LuaScriptInterface::luaDoCreateItem(lua_State* L)
 
 	uint32_t count = 1;
 	if (parameters > 2) {
-		count = popNumber(L);
+		count = popNumber<uint32_t>(L);
 	}
 
-	uint32_t itemId = popNumber(L);
+	uint32_t itemId = popNumber<uint32_t>(L);
 
 	ScriptEnvironment* env = getScriptEnv();
 
@@ -2704,7 +2684,7 @@ int32_t LuaScriptInterface::luaDoCreateItem(lua_State* L)
 	const ItemType& it = Item::items[itemId];
 	if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = (int32_t)std::ceil((float)count / 100);
+			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
 		}
 
 		subType = count;
@@ -2758,10 +2738,10 @@ int32_t LuaScriptInterface::luaDoCreateItemEx(lua_State* L)
 
 	uint32_t count = 1;
 	if (parameters > 1) {
-		count = popNumber(L);
+		count = popNumber<uint32_t>(L);
 	}
 
-	uint32_t itemId = popNumber(L);
+	uint32_t itemId = popNumber<uint32_t>(L);
 
 	ScriptEnvironment* env = getScriptEnv();
 
@@ -2793,7 +2773,7 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 	popPosition(L, createPos);
 	PositionEx toPos;
 	popPosition(L, toPos);
-	uint32_t itemId = popNumber(L);
+	uint32_t itemId = popNumber<uint32_t>(L);
 
 	Tile* tile = g_game.getTile(createPos);
 	if (!tile) {
@@ -2898,7 +2878,7 @@ int32_t LuaScriptInterface::luaDebugPrint(lua_State* L)
 int32_t LuaScriptInterface::luaGetHouseByPlayerGUID(lua_State* L)
 {
 	//getHouseByPlayerGUID(playerGUID)
-	uint32_t guid = popNumber(L);
+	uint32_t guid = popNumber<uint32_t>(L);
 
 	House* house = Houses::getInstance().getHouseByPlayerId(guid);
 	if (house) {
@@ -2941,7 +2921,7 @@ int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 	uint32_t type = MSG_STATUS_WARNING;
 	int32_t parameters = lua_gettop(L);
 	if (parameters >= 2) {
-		type = popNumber(L);
+		type = popNumber<uint32_t>(L);
 	}
 
 	const std::string& message = popString(L);
@@ -2953,7 +2933,7 @@ int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 int32_t LuaScriptInterface::luaGetThingPos(lua_State* L)
 {
 	//getThingPos(uid)
-	uint32_t uid = popNumber(L);
+	uint32_t uid = popNumber<uint32_t>(L);
 
 	Position pos;
 	uint32_t stackpos = 0;
@@ -2999,7 +2979,7 @@ bool LuaScriptInterface::getArea(lua_State* L, std::list<uint32_t>& list, uint32
 			if (!isNumber(L, -1)) {
 				return false;
 			}
-			list.push_back(popNumber(L));
+			list.push_back(popNumber<uint32_t>(L));
 		}
 
 		lua_pop(L, 1);
@@ -3057,7 +3037,7 @@ int32_t LuaScriptInterface::luaCreateConditionObject(lua_State* L)
 		return 1;
 	}
 
-	ConditionType_t type = static_cast<ConditionType_t>(popNumber(L));
+	ConditionType_t type = static_cast<ConditionType_t>(popNumber<uint32_t>(L));
 
 	uint32_t id;
 	if (g_luaEnvironment.createConditionObject(env->getScriptInterface(), type, CONDITIONID_COMBAT, id)) {
@@ -3072,8 +3052,8 @@ int32_t LuaScriptInterface::luaCreateConditionObject(lua_State* L)
 int32_t LuaScriptInterface::luaSetCombatArea(lua_State* L)
 {
 	//setCombatArea(combat, area)
-	uint32_t areaId = popNumber(L);
-	uint32_t combatId = popNumber(L);
+	uint32_t areaId = popNumber<uint32_t>(L);
+	uint32_t combatId = popNumber<uint32_t>(L);
 
 	if (getScriptEnv()->getScriptId() != EVENT_ID_LOADING) {
 		reportErrorFunc("This function can only be used while loading the script.");
@@ -3103,8 +3083,8 @@ int32_t LuaScriptInterface::luaSetCombatArea(lua_State* L)
 int32_t LuaScriptInterface::luaSetCombatCondition(lua_State* L)
 {
 	//setCombatCondition(combat, condition)
-	uint32_t conditionId = popNumber(L);
-	uint32_t combatId = popNumber(L);
+	uint32_t conditionId = popNumber<uint32_t>(L);
+	uint32_t combatId = popNumber<uint32_t>(L);
 
 	if (getScriptEnv()->getScriptId() != EVENT_ID_LOADING) {
 		reportErrorFunc("This function can only be used while loading the script.");
@@ -3140,9 +3120,9 @@ int32_t LuaScriptInterface::luaSetCombatParam(lua_State* L)
 		return 1;
 	}
 
-	uint32_t value = popNumber(L);
-	CombatParam_t key = (CombatParam_t)popNumber(L);
-	uint32_t combatId = popNumber(L);
+	uint32_t value = popNumber<uint32_t>(L);
+	CombatParam_t key = (CombatParam_t)popNumber<uint32_t>(L);
+	uint32_t combatId = popNumber<uint32_t>(L);
 
 	Combat* combat = g_luaEnvironment.getCombatObject(combatId);
 	if (combat) {
@@ -3170,8 +3150,8 @@ int32_t LuaScriptInterface::luaSetConditionParam(lua_State* L)
 	} else {
 		value = popNumber<int32_t>(L);
 	}
-	ConditionParam_t key = (ConditionParam_t)popNumber(L);
-	uint32_t conditionId = popNumber(L);
+	ConditionParam_t key = (ConditionParam_t)popNumber<uint32_t>(L);
+	uint32_t conditionId = popNumber<uint32_t>(L);
 
 	Condition* condition = g_luaEnvironment.getConditionObject(conditionId);
 	if (condition) {
@@ -3190,7 +3170,7 @@ int32_t LuaScriptInterface::luaAddDamageCondition(lua_State* L)
 	int32_t value = popNumber<int32_t>(L);
 	int32_t time = popNumber<int32_t>(L);
 	int32_t rounds = popNumber<int32_t>(L);
-	uint32_t conditionId = popNumber(L);
+	uint32_t conditionId = popNumber<uint32_t>(L);
 
 	if (getScriptEnv()->getScriptId() != EVENT_ID_LOADING) {
 		reportErrorFunc("This function can only be used while loading the script.");
@@ -3216,21 +3196,21 @@ int32_t LuaScriptInterface::luaAddOutfitCondition(lua_State* L)
 
 	int32_t parameters = lua_gettop(L);
 	if (parameters > 8) {
-		outfit.lookMount = popNumber(L);
+		outfit.lookMount = popNumber<uint32_t>(L);
 	}
 
 	if (parameters > 7) {
-		outfit.lookAddons = popNumber(L);
+		outfit.lookAddons = popNumber<uint32_t>(L);
 	}
 
-	outfit.lookFeet = popNumber(L);
-	outfit.lookLegs = popNumber(L);
-	outfit.lookBody = popNumber(L);
-	outfit.lookHead = popNumber(L);
-	outfit.lookType = popNumber(L);
-	outfit.lookTypeEx = popNumber(L);
+	outfit.lookFeet = popNumber<uint32_t>(L);
+	outfit.lookLegs = popNumber<uint32_t>(L);
+	outfit.lookBody = popNumber<uint32_t>(L);
+	outfit.lookHead = popNumber<uint32_t>(L);
+	outfit.lookType = popNumber<uint32_t>(L);
+	outfit.lookTypeEx = popNumber<uint32_t>(L);
 
-	uint32_t conditionId = popNumber(L);
+	uint32_t conditionId = popNumber<uint32_t>(L);
 
 	if (getScriptEnv()->getScriptId() != EVENT_ID_LOADING) {
 		reportErrorFunc("This function can only be used while loading the script.");
@@ -3260,8 +3240,8 @@ int32_t LuaScriptInterface::luaSetCombatCallBack(lua_State* L)
 	}
 
 	std::string function = popString(L);
-	CallBackParam_t key = (CallBackParam_t)popNumber(L);
-	uint32_t combatId = popNumber(L);
+	CallBackParam_t key = (CallBackParam_t)popNumber<uint32_t>(L);
+	uint32_t combatId = popNumber<uint32_t>(L);
 
 	Combat* combat = g_luaEnvironment.getCombatObject(combatId);
 	if (!combat) {
@@ -3300,13 +3280,13 @@ int32_t LuaScriptInterface::luaSetCombatFormula(lua_State* L)
 		return 1;
 	}
 
-	float maxb = (float)popFloatNumber(L);
-	float maxa = (float)popFloatNumber(L);
-	float minb = (float)popFloatNumber(L);
-	float mina = (float)popFloatNumber(L);
+	float maxb = popNumber<float>(L);
+	float maxa = popNumber<float>(L);
+	float minb = popNumber<float>(L);
+	float mina = popNumber<float>(L);
 
-	formulaType_t type = (formulaType_t)popNumber(L);
-	uint32_t combatId = popNumber(L);
+	formulaType_t type = (formulaType_t)popNumber<uint32_t>(L);
+	uint32_t combatId = popNumber<uint32_t>(L);
 
 	Combat* combat = g_luaEnvironment.getCombatObject(combatId);
 	if (combat) {
@@ -3328,12 +3308,12 @@ int32_t LuaScriptInterface::luaSetConditionFormula(lua_State* L)
 		return 1;
 	}
 
-	double maxb = popFloatNumber(L);
-	double maxa = popFloatNumber(L);
-	double minb = popFloatNumber(L);
-	double mina = popFloatNumber(L);
+	double maxb = popNumber<double>(L);
+	double maxa = popNumber<double>(L);
+	double minb = popNumber<double>(L);
+	double mina = popNumber<double>(L);
 
-	uint32_t conditionId = popNumber(L);
+	uint32_t conditionId = popNumber<uint32_t>(L);
 
 	ConditionSpeed* condition = dynamic_cast<ConditionSpeed*>(g_luaEnvironment.getConditionObject(conditionId));
 	if (condition) {
@@ -3350,7 +3330,7 @@ int32_t LuaScriptInterface::luaDoCombat(lua_State* L)
 {
 	//doCombat(cid, combat, param)
 	LuaVariant var = popVariant(L);
-	uint32_t combatId = popNumber(L);
+	uint32_t combatId = popNumber<uint32_t>(L);
 
 	Creature* creature = getCreature(L, -1);
 	if (!creature && (!isNumber(L, -1) || getNumber<uint32_t>(L, -1) != 0)) {
@@ -3433,12 +3413,12 @@ int32_t LuaScriptInterface::luaDoAreaCombatHealth(lua_State* L)
 	uint8_t effect = popNumber<uint8_t>(L);
 	int32_t maxChange = popNumber<int32_t>(L);
 	int32_t minChange = popNumber<int32_t>(L);
-	uint32_t areaId = popNumber(L);
+	uint32_t areaId = popNumber<uint32_t>(L);
 
 	PositionEx pos;
 	popPosition(L, pos);
 
-	CombatType_t combatType = (CombatType_t)popNumber(L);
+	CombatType_t combatType = (CombatType_t)popNumber<uint32_t>(L);
 
 	Creature* creature = getCreature(L, -1);
 	if (!creature && (!isNumber(L, -1) || getNumber<uint32_t>(L, -1) != 0)) {
@@ -3472,7 +3452,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatHealth(lua_State* L)
 	uint8_t effect = popNumber<uint8_t>(L);
 	int32_t maxChange = popNumber<int32_t>(L);
 	int32_t minChange = popNumber<int32_t>(L);
-	CombatType_t combatType = (CombatType_t)popNumber(L);
+	CombatType_t combatType = (CombatType_t)popNumber<uint32_t>(L);
 
 	Creature* creature = getCreature(L, 1);
 	if (!creature && (!isNumber(L, 1) || getNumber<uint32_t>(L, 1) != 0)) {
@@ -3506,7 +3486,7 @@ int32_t LuaScriptInterface::luaDoAreaCombatMana(lua_State* L)
 	uint8_t effect = popNumber<uint8_t>(L);
 	int32_t maxChange = popNumber<int32_t>(L);
 	int32_t minChange = popNumber<int32_t>(L);
-	uint32_t areaId = popNumber(L);
+	uint32_t areaId = popNumber<uint32_t>(L);
 
 	PositionEx pos;
 	popPosition(L, pos);
@@ -3572,8 +3552,8 @@ int32_t LuaScriptInterface::luaDoAreaCombatCondition(lua_State* L)
 {
 	//doAreaCombatCondition(cid, pos, area, condition, effect)
 	uint8_t effect = popNumber<uint8_t>(L);
-	uint32_t conditionId = popNumber(L);
-	uint32_t areaId = popNumber(L);
+	uint32_t conditionId = popNumber<uint32_t>(L);
+	uint32_t areaId = popNumber<uint32_t>(L);
 	PositionEx pos;
 	popPosition(L, pos);
 
@@ -3618,7 +3598,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatCondition(lua_State* L)
 	Creature* target = getCreature(L, 2);
 	if (target) {
 		uint8_t effect = popNumber<uint8_t>(L);
-		uint32_t conditionId = popNumber(L);
+		uint32_t conditionId = popNumber<uint32_t>(L);
 		const Condition* condition = g_luaEnvironment.getConditionObject(conditionId);
 		if (condition) {
 			CombatParams params;
@@ -3641,8 +3621,8 @@ int32_t LuaScriptInterface::luaDoAreaCombatDispel(lua_State* L)
 {
 	//doAreaCombatDispel(cid, pos, area, type, effect)
 	uint8_t effect = popNumber<uint8_t>(L);
-	ConditionType_t dispelType = (ConditionType_t)popNumber(L);
-	uint32_t areaId = popNumber(L);
+	ConditionType_t dispelType = (ConditionType_t)popNumber<uint32_t>(L);
+	uint32_t areaId = popNumber<uint32_t>(L);
 	PositionEx pos;
 	popPosition(L, pos);
 
@@ -3681,7 +3661,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatDispel(lua_State* L)
 	Creature* target = getCreature(L, 2);
 	if (target) {
 		uint8_t effect = popNumber<uint8_t>(L);
-		ConditionType_t dispelType = (ConditionType_t)popNumber(L);
+		ConditionType_t dispelType = (ConditionType_t)popNumber<uint32_t>(L);
 
 		CombatParams params;
 		params.impactEffect = effect;
@@ -3720,7 +3700,7 @@ int32_t LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 int32_t LuaScriptInterface::luaDoAddCondition(lua_State* L)
 {
 	//doAddCondition(cid, condition)
-	uint32_t conditionId = popNumber(L);
+	uint32_t conditionId = popNumber<uint32_t>(L);
 
 	Creature* creature = getCreature(L, -1);
 	if (!creature) {
@@ -3746,12 +3726,12 @@ int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 	//doRemoveCondition(cid, type[, subId])
 	uint32_t subId;
 	if (lua_gettop(L) > 2) {
-		subId = popNumber(L);
+		subId = popNumber<uint32_t>(L);
 	} else {
 		subId = 0;
 	}
 
-	ConditionType_t conditionType = (ConditionType_t)popNumber(L);
+	ConditionType_t conditionType = (ConditionType_t)popNumber<uint32_t>(L);
 
 	Creature* creature = getCreature(L, -1);
 	if (!creature) {
@@ -3778,7 +3758,7 @@ int32_t LuaScriptInterface::luaNumberToVariant(lua_State* L)
 	//numberToVariant(number)
 	LuaVariant var;
 	var.type = VARIANT_NUMBER;
-	var.number = popNumber(L);
+	var.number = popNumber<uint32_t>(L);
 
 	LuaScriptInterface::pushVariant(L, var);
 	return 1;
@@ -3913,7 +3893,7 @@ int32_t LuaScriptInterface::luaSetItemOutfit(lua_State* L)
 {
 	//doSetItemOutfit(cid, item, time)
 	int32_t time = popNumber<int32_t>(L);
-	uint32_t item = popNumber(L);
+	uint32_t item = popNumber<uint32_t>(L);
 
 	Creature* creature = getCreature(L, -1);
 	if (creature) {
@@ -3934,7 +3914,7 @@ int32_t LuaScriptInterface::luaSetItemOutfit(lua_State* L)
 int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 {
 	//doMoveCreature(cid, direction)
-	uint32_t direction = popNumber(L);
+	uint32_t direction = popNumber<uint32_t>(L);
 	switch (direction) {
 		case NORTH:
 		case SOUTH:
@@ -3965,14 +3945,14 @@ int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 int32_t LuaScriptInterface::luaIsValidUID(lua_State* L)
 {
 	//isValidUID(uid)
-	pushBoolean(L, getScriptEnv()->getThingByUID(popNumber(L)) != nullptr);
+	pushBoolean(L, getScriptEnv()->getThingByUID(popNumber<uint32_t>(L)) != nullptr);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaIsDepot(lua_State* L)
 {
 	//isDepot(uid)
-	Container* container = getScriptEnv()->getContainerByUID(popNumber(L));
+	Container* container = getScriptEnv()->getContainerByUID(popNumber<uint32_t>(L));
 	pushBoolean(L, container && container->getDepotLocker());
 	return 1;
 }
@@ -3981,7 +3961,7 @@ int32_t LuaScriptInterface::luaIsMoveable(lua_State* L)
 {
 	//isMoveable(uid)
 	//isMovable(uid)
-	Thing* thing = getScriptEnv()->getThingByUID(popNumber(L));
+	Thing* thing = getScriptEnv()->getThingByUID(popNumber<uint32_t>(L));
 	pushBoolean(L, thing && thing->isPushable());
 	return 1;
 }
@@ -3993,11 +3973,11 @@ int32_t LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 
 	uint32_t count = 1;
 	if (parameters > 2) {
-		count = popNumber(L);
+		count = popNumber<uint32_t>(L);
 	}
 
 	uint16_t itemId = popNumber<uint16_t>(L);
-	uint32_t uid = popNumber(L);
+	uint32_t uid = popNumber<uint32_t>(L);
 
 	ScriptEnvironment* env = getScriptEnv();
 	Container* container = env->getContainerByUID(uid);
@@ -4015,7 +3995,7 @@ int32_t LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 
 	if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = (int32_t)std::ceil((float)count / 100);
+			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
 		}
 
 		subType = count;
@@ -4062,7 +4042,7 @@ int32_t LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 int32_t LuaScriptInterface::luaGetDepotId(lua_State* L)
 {
 	//getDepotId(uid)
-	uint32_t uid = popNumber(L);
+	uint32_t uid = popNumber<uint32_t>(L);
 
 	Container* container = getScriptEnv()->getContainerByUID(uid);
 	if (container) {
@@ -4104,7 +4084,7 @@ int32_t LuaScriptInterface::luaIsInArray(lua_State* L)
 int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 {
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
-	uint32_t time = popNumber(L);
+	uint32_t time = popNumber<uint32_t>(L);
 	uint8_t color = popNumber<uint8_t>(L);
 	uint8_t level = popNumber<uint8_t>(L);
 
@@ -4149,8 +4129,8 @@ int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
 int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 {
 	//hasProperty(uid, prop)
-	uint32_t prop = popNumber(L);
-	uint32_t uid = popNumber(L);
+	uint32_t prop = popNumber<uint32_t>(L);
+	uint32_t uid = popNumber<uint32_t>(L);
 
 	Item* item = getScriptEnv()->getItemByUID(uid);
 	if (!item) {
@@ -4184,8 +4164,8 @@ int32_t LuaScriptInterface::luaGetSpectators(lua_State* L)
 	}
 
 	bool multifloor = popBoolean(L);
-	uint32_t rangey = popNumber(L);
-	uint32_t rangex = popNumber(L);
+	uint32_t rangey = popNumber<uint32_t>(L);
+	uint32_t rangex = popNumber<uint32_t>(L);
 
 	PositionEx centerPos;
 	popPosition(L, centerPos);
@@ -4229,7 +4209,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 		eventDesc.parameters.push_back(luaL_ref(globalState, LUA_REGISTRYINDEX));
 	}
 
-	uint32_t delay = std::max<uint32_t>(100, popNumber(globalState));
+	uint32_t delay = std::max<uint32_t>(100, popNumber<uint32_t>(globalState));
 	eventDesc.function = luaL_ref(globalState, LUA_REGISTRYINDEX);
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
@@ -4281,12 +4261,12 @@ int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 {
 	uint32_t subId;
 	if (lua_gettop(L) > 2) {
-		subId = popNumber(L);
+		subId = popNumber<uint32_t>(L);
 	} else {
 		subId = 0;
 	}
 
-	uint32_t condition = popNumber(L);
+	uint32_t condition = popNumber<uint32_t>(L);
 
 	Creature* creature = getCreature(L, -1);
 	if (creature) {
@@ -4335,7 +4315,7 @@ int32_t LuaScriptInterface::luaIsInWar(lua_State* L)
 int32_t LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill(lua_State* L)
 {
 	//doPlayerSetOfflineTrainingSkill(cid, skillid)
-	uint32_t skillid = popNumber(L);
+	uint32_t skillid = popNumber<uint32_t>(L);
 	Player* player = getPlayer(L, -1);
 	if (player) {
 		player->setOfflineTrainingSkill(skillid);
@@ -4364,8 +4344,8 @@ int32_t LuaScriptInterface::luaSendChannelMessage(lua_State* L)
 {
 	//sendChannelMessage(channelId, type, message)
 	std::string message = popString(L);
-	SpeakClasses type = (SpeakClasses)popNumber(L);
-	uint32_t channelId = popNumber(L);
+	SpeakClasses type = (SpeakClasses)popNumber<uint32_t>(L);
+	uint32_t channelId = popNumber<uint32_t>(L);
 
 	ChatChannel* channel = g_chat.getChannelById(channelId);
 	if (channel) {
@@ -4382,7 +4362,7 @@ int32_t LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	//sendGuildChannelMessage(guildId, type, message)
 	std::string message = popString(L);
 	SpeakClasses type = (SpeakClasses)popNumber<uint32_t>(L);
-	uint32_t guildId = popNumber(L);
+	uint32_t guildId = popNumber<uint32_t>(L);
 
 	ChatChannel* channel = g_chat.getGuildChannelById(guildId);
 	if (channel) {
@@ -4433,7 +4413,7 @@ int32_t LuaScriptInterface::luaBitNot(lua_State* L)
 
 int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
 {
-	uint32_t number = popNumber(L);
+	uint32_t number = popNumber<uint32_t>(L);
 	lua_pushnumber(L, ~number);
 	return 1;
 }
@@ -4444,7 +4424,7 @@ int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
 		int32_t n = lua_gettop(L); \
 		type w = popNumber<type>(L); \
 		for (int32_t i = 2; i <= n; ++i) \
-			w op popNumber(L); \
+			w op popNumber<uint32_t>(L); \
 		lua_pushnumber(L, w); \
 		return 1; \
 	}
@@ -4479,19 +4459,19 @@ const luaL_Reg LuaScriptInterface::luaConfigManagerTable[] = {
 
 int32_t LuaScriptInterface::luaConfigManagerGetString(lua_State* L)
 {
-	pushString(L, g_config.getString(static_cast<ConfigManager::string_config_t>(popNumber(L))));
+	pushString(L, g_config.getString(static_cast<ConfigManager::string_config_t>(popNumber<uint32_t>(L))));
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaConfigManagerGetNumber(lua_State* L)
 {
-	pushNumber(L, g_config.getNumber(static_cast<ConfigManager::integer_config_t>(popNumber(L))));
+	pushNumber(L, g_config.getNumber(static_cast<ConfigManager::integer_config_t>(popNumber<uint32_t>(L))));
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaConfigManagerGetBoolean(lua_State* L)
 {
-	pushBoolean(L, g_config.getBoolean(static_cast<ConfigManager::boolean_config_t>(popNumber(L))));
+	pushBoolean(L, g_config.getBoolean(static_cast<ConfigManager::boolean_config_t>(popNumber<uint32_t>(L))));
 	return 1;
 }
 
@@ -4529,7 +4509,7 @@ int32_t LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)
 
 int32_t LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 {
-	uint32_t length = popNumber(L);
+	uint32_t length = popNumber<uint32_t>(L);
 	pushString(L, Database::getInstance()->escapeBlob(popString(L).c_str(), length));
 	return 1;
 }
@@ -4560,7 +4540,7 @@ int32_t LuaScriptInterface::luaResultGetDataInt(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4574,7 +4554,7 @@ int32_t LuaScriptInterface::luaResultGetDataLong(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4588,7 +4568,7 @@ int32_t LuaScriptInterface::luaResultGetDataString(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4602,7 +4582,7 @@ int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4616,7 +4596,7 @@ int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
 
 int32_t LuaScriptInterface::luaResultNext(lua_State* L)
 {
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber(L));
+	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4628,7 +4608,7 @@ int32_t LuaScriptInterface::luaResultNext(lua_State* L)
 
 int32_t LuaScriptInterface::luaResultFree(lua_State* L)
 {
-	pushBoolean(L, ScriptEnvironment::removeResult(popNumber(L)));
+	pushBoolean(L, ScriptEnvironment::removeResult(popNumber<uint32_t>(L)));
 	return 1;
 }
 
@@ -8445,9 +8425,9 @@ int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 		canDropOnMap = getBoolean(L, 4);
 	}
 
-	uint32_t count = 1;
+	int32_t count = 1;
 	if (parameters >= 3) {
-		count = getNumber<uint32_t>(L, 3);
+		count = getNumber<int32_t>(L, 3);
 	}
 
 	uint16_t itemId = getNumber<uint16_t>(L, 2);

@@ -1379,8 +1379,8 @@ void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::lis
 			sum += i;
 			list.push_back(i);
 
-			x1 = std::fabs(1.0 - (((float)sum) + i) / med);
-			x2 = std::fabs(1.0 - (((float)sum) / med));
+			x1 = std::fabs(1.0 - ((static_cast<float>(sum)) + i) / med);
+			x2 = std::fabs(1.0 - (static_cast<float>(sum) / med));
 		} while (x1 < x2);
 	}
 }

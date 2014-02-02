@@ -198,18 +198,13 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			}
 		} else {
 			//The map changed since the last save, just read the attributes
-            
-			// TODO: Store temporary item on stack for automatic memory management here
-			item = Item::CreateItem(id);
-			if (item) {
-				item->unserializeAttr(propStream);
-				Container* container = item->getContainer();
+			std::unique_ptr<Item> dummy(Item::CreateItem(id));
+			if (dummy) {
+				dummy->unserializeAttr(propStream);
+				Container* container = dummy->getContainer();
 				if (container && !loadContainer(propStream, container)) {
-					delete item;
 					return false;
 				}
-
-				delete item;
 			}
 		}
 	}

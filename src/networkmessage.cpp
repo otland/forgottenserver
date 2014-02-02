@@ -90,7 +90,7 @@ void NetworkMessage::AddString(const char* value)
 void NetworkMessage::AddDouble(double value, uint8_t precision/* = 2*/)
 {
 	AddByte(precision);
-	add<uint32_t>((value * std::pow((float)10, precision)) + INT_MAX);
+	add<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + INT_MAX);
 }
 
 void NetworkMessage::AddBytes(const char* bytes, size_t size)

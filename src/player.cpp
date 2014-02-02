@@ -1715,14 +1715,13 @@ uint32_t Player::isMuted() const
 			muteTicks = condition->getTicks();
 		}
 	}
-
-	return ((uint32_t)muteTicks / 1000);
+	return static_cast<uint32_t>(muteTicks) / 1000;
 }
 
 void Player::addMessageBuffer()
 {
 	if (MessageBufferCount > 0 && g_config.getNumber(ConfigManager::MAX_MESSAGEBUFFER) != 0 && !hasFlag(PlayerFlag_CannotBeMuted)) {
-		MessageBufferCount--;
+		--MessageBufferCount;
 	}
 }
 
@@ -3535,13 +3534,12 @@ void Player::onCombatRemoveCondition(Condition* condition)
 		}
 	} else {
 		if (!canDoAction()) {
-			int32_t delay = getNextActionTime();
-			delay -= (delay % EVENT_CREATURE_THINK_INTERVAL);
-
-			if (delay < 0) {
+			const uint32_t delay = getNextActionTime();
+			const int32_t ticks = delay - (delay % EVENT_CREATURE_THINK_INTERVAL);
+			if (ticks < 0) {
 				removeCondition(condition);
 			} else {
-				condition->setTicks(delay);
+				condition->setTicks(ticks);
 			}
 		} else {
 			removeCondition(condition);
@@ -4353,8 +4351,8 @@ bool Player::tameMount(uint8_t mountId)
 		return false;
 	}
 
-	mountId--;
-	int key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
+	--mountId;
+	uint32_t key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
 
 	int32_t value;
 	if (getStorageValue(key, value)) {
@@ -4373,8 +4371,8 @@ bool Player::untameMount(uint8_t mountId)
 		return false;
 	}
 
-	mountId--;
-	int key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
+	-- mountId;
+	uint32_t key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
 
 	int32_t value;
 	if (!getStorageValue(key, value)) {
