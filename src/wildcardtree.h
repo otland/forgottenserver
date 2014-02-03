@@ -30,7 +30,7 @@ class WildcardTreeNode
 		WildcardTreeNode(WildcardTreeNode&& other) : children(std::move(other.children)), breakpoint(other.breakpoint) {}
 
 		// non-copyable
-		WildcardTreeNode(WildcardTreeNode&) = delete;
+		WildcardTreeNode(const WildcardTreeNode&) = delete;
 		WildcardTreeNode& operator=(const WildcardTreeNode&) = delete;
 
 		WildcardTreeNode* getChild(char ch);
