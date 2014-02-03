@@ -4351,14 +4351,14 @@ bool Player::tameMount(uint8_t mountId)
 		return false;
 	}
 
-	--mountId;
-	uint32_t key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
+	const uint8_t tmpMountId = mountId - 1;
+	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
 	int32_t value;
 	if (getStorageValue(key, value)) {
-		value |= (1 << (mountId % 31));
+		value |= (1 << (tmpMountId % 31));
 	} else {
-		value = (1 << (mountId % 31));
+		value = (1 << (tmpMountId % 31));
 	}
 
 	addStorageValue(key, value);
@@ -4371,18 +4371,18 @@ bool Player::untameMount(uint8_t mountId)
 		return false;
 	}
 
-	-- mountId;
-	uint32_t key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
+	const uint8_t tmpMountId = mountId - 1;
+	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
 	int32_t value;
 	if (!getStorageValue(key, value)) {
 		return true;
 	}
 
-	value &= ~(1 << (mountId % 31));
+	value &= ~(1 << (tmpMountId % 31));
 	addStorageValue(key, value);
 
-	if (getCurrentMount() == (mountId + 1)) {
+	if (getCurrentMount() == mountId) {
 		if (isMounted()) {
 			dismount();
 			g_game.internalCreatureChangeOutfit(this, defaultOutfit);
@@ -4404,14 +4404,14 @@ bool Player::hasMount(const Mount* mount) const
 		return false;
 	}
 
-	uint8_t tmpId = mount->id - 1;
+	const uint8_t tmpMountId = mount->id - 1;
 
 	int32_t value;
-	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpId / 31), value)) {
+	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31), value)) {
 		return false;
 	}
 
-	return ((1 << (tmpId % 31)) & value) != 0;
+	return ((1 << (tmpMountId % 31)) & value) != 0;
 }
 
 void Player::dismount()
