@@ -49,8 +49,8 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 			child->breakpoint = true;
 		}
 	} else {
-		children[ch] = WildcardTreeNode(breakpoint); // TODO: Use emplace
-		child = &children[ch];
+		auto pair = children.insert(std::make_pair(ch, std::move(WildcardTreeNode(breakpoint)))); // TODO: Use emplace
+		child = &pair.first->second;
 	}
 	return child;
 }
