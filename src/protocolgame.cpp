@@ -1899,13 +1899,12 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	}
 
 	if (!it.description.empty()) {
-		std::string descr = it.description;
-
+		const std::string& descr = it.description;
 		if (descr.back() == '.') {
-			descr.erase(descr.length() - 1); // TODO: Use pop_back
+			msg.AddString(std::string(descr, 0, descr.length() - 1));
+		} else {
+			msg.AddString(descr);
 		}
-
-		msg.AddString(descr);
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
