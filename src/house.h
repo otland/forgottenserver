@@ -33,9 +33,6 @@ class Player;
 class AccessList
 {
 	public:
-		AccessList();
-		~AccessList();
-
 		bool parseList(const std::string& _list);
 		bool addPlayer(const std::string& name);
 		bool addGuild(const std::string& guildName);
@@ -177,10 +174,10 @@ class House
 			return owner;
 		}
 
-		void setPaidUntil(uint32_t paid) {
+		void setPaidUntil(time_t paid) {
 			paidUntil = paid;
 		}
-		uint32_t getPaidUntil() const {
+		time_t getPaidUntil() const {
 			return paidUntil;
 		}
 
@@ -238,24 +235,31 @@ class House
 		bool transferToDepot() const;
 		bool transferToDepot(Player* player) const;
 
-		bool isLoaded;
-		uint32_t id;
-		uint32_t owner;
-		std::string ownerName;
+		AccessList guestList;
+		AccessList subOwnerList;
+
+		Container transfer_container;
+
 		HouseTileList houseTiles;
 		std::list<Door*> doorList;
 		HouseBedItemList bedsList;
-		AccessList guestList;
-		AccessList subOwnerList;
+
 		std::string houseName;
-		Position posEntry;
-		uint32_t paidUntil;
+		std::string ownerName;
+
+		HouseTransferItem* transferItem;
+
+		time_t paidUntil;
+
+		uint32_t id;
+		uint32_t owner;
 		uint32_t rentWarnings;
 		uint32_t rent;
 		uint32_t townid;
 
-		HouseTransferItem* transferItem;
-		Container transfer_container;
+		Position posEntry;
+
+		bool isLoaded;
 };
 
 typedef std::map<uint32_t, House*> HouseMap;

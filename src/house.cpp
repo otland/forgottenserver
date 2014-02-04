@@ -422,16 +422,6 @@ bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
 	return true;
 }
 
-AccessList::AccessList()
-{
-	//
-}
-
-AccessList::~AccessList()
-{
-	//
-}
-
 bool AccessList::parseList(const std::string& _list)
 {
 	playerList.clear();
@@ -743,93 +733,95 @@ bool Houses::payHouses() const
 	time_t currentTime = time(nullptr);
 	for (const auto& it : houseMap) {
 		House* house = it.second;
-		if (house->getOwner() != 0) {
-			uint32_t rent = house->getRent();
-			if (rent == 0 || house->getPaidUntil() > currentTime) {
+		if (house->getOwner() == 0) {
+			continue;
+		}
+
+		const uint32_t rent = house->getRent();
+		if (rent == 0 || house->getPaidUntil() > currentTime) {
+			continue;
+		}
+
+		const uint32_t ownerid = house->getOwner();
+		Town* town = Towns::getInstance().getTown(house->getTownId());
+		if (!town) {
+			continue;
+		}
+
+		Player* player = g_game.getPlayerByGUID(ownerid);
+		if (!player) {
+			player = new Player(nullptr);
+			if (!IOLoginData::loadPlayerById(player, ownerid)) {
+				//player doesnt exist, reset house owner
+				house->setOwner(0);
+				delete player;
 				continue;
 			}
+		}
 
-			uint32_t ownerid = house->getOwner();
-			Town* town = Towns::getInstance().getTown(house->getTownId());
-			if (!town) {
-				continue;
+		if (player->getBankBalance() >= rent) {
+			player->setBankBalance(player->getBankBalance() - rent);
+
+			time_t paidUntil = currentTime;
+			switch (rentPeriod) {
+				case RENTPERIOD_DAILY:
+					paidUntil += 24 * 60 * 60;
+					break;
+				case RENTPERIOD_WEEKLY:
+					paidUntil += 24 * 60 * 60 * 7;
+					break;
+				case RENTPERIOD_MONTHLY:
+					paidUntil += 24 * 60 * 60 * 30;
+					break;
+				case RENTPERIOD_YEARLY:
+					paidUntil += 24 * 60 * 60 * 365;
+					break;
+				default:
+					break;
 			}
 
-			Player* player = g_game.getPlayerByGUID(ownerid);
-			if (!player) {
-				player = new Player(nullptr);
-				if (!IOLoginData::loadPlayerById(player, ownerid)) {
-					//player doesnt exist, reset house owner
-					house->setOwner(0);
-					delete player;
-					continue;
-				}
-			}
+			house->setPaidUntil(paidUntil);
+		} else {
+			if (house->getPayRentWarnings() < 7) {
+				int32_t daysLeft = 7 - house->getPayRentWarnings();
 
-			if (player->getBankBalance() >= rent) {
-				player->setBankBalance(player->getBankBalance() - rent);
+				Item* letter = Item::CreateItem(ITEM_LETTER_STAMPED);
+				std::string period;
 
-				time_t paidUntil = currentTime;
 				switch (rentPeriod) {
 					case RENTPERIOD_DAILY:
-						paidUntil += 24 * 60 * 60;
+						period = "daily";
 						break;
+
 					case RENTPERIOD_WEEKLY:
-						paidUntil += 24 * 60 * 60 * 7;
+						period = "weekly";
 						break;
+
 					case RENTPERIOD_MONTHLY:
-						paidUntil += 24 * 60 * 60 * 30;
+						period = "monthly";
 						break;
+
 					case RENTPERIOD_YEARLY:
-						paidUntil += 24 * 60 * 60 * 365;
+						period = "annual";
 						break;
+
 					default:
 						break;
 				}
 
-				house->setPaidUntil(paidUntil);
+				std::ostringstream ss;
+				ss << "Warning! \nThe " << period << " rent of " << house->getRent() << " gold for your house \"" << house->getName() << "\" is payable. Have it within " << daysLeft << " days or you will lose this house.";
+				letter->setText(ss.str());
+				g_game.internalAddItem(player->getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 			} else {
-				if (house->getPayRentWarnings() < 7) {
-					int32_t daysLeft = 7 - house->getPayRentWarnings();
-
-					Item* letter = Item::CreateItem(ITEM_LETTER_STAMPED);
-					std::string period;
-
-					switch (rentPeriod) {
-						case RENTPERIOD_DAILY:
-							period = "daily";
-							break;
-
-						case RENTPERIOD_WEEKLY:
-							period = "weekly";
-							break;
-
-						case RENTPERIOD_MONTHLY:
-							period = "monthly";
-							break;
-
-						case RENTPERIOD_YEARLY:
-							period = "annual";
-							break;
-
-						default:
-							break;
-					}
-
-					std::ostringstream ss;
-					ss << "Warning! \nThe " << period << " rent of " << house->getRent() << " gold for your house \"" << house->getName() << "\" is payable. Have it within " << daysLeft << " days or you will lose this house.";
-					letter->setText(ss.str());
-					g_game.internalAddItem(player->getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
-					house->setPayRentWarnings(house->getPayRentWarnings() + 1);
-				} else {
-					house->setOwner(0, true, player);
-				}
+				house->setOwner(0, true, player);
 			}
+		}
 
-			if (player->isOffline()) {
-				IOLoginData::savePlayer(player);
-				delete player;
-			}
+		if (player->isOffline()) {
+			IOLoginData::savePlayer(player);
+			delete player;
 		}
 	}
 	return true;
