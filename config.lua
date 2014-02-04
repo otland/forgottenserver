@@ -1,4 +1,5 @@
 -- Combat settings
+-- Confg.lua
 worldType = "pvp"
 hotkeyAimbotEnabled = "yes"
 protectionLevel = 1
