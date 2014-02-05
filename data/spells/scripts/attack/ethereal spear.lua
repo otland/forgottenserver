@@ -4,13 +4,13 @@ setCombatParam(combat, COMBAT_PARAM_BLOCKARMOR, 1)
 setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_HITAREA)
 setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ETHEREALSPEAR)
 
-function onGetPlayerMinMaxValues(cid, level, attackValue)
+function onGetFormulaValues(cid, level, attack, factor)
 	local distanceSkill = Player(cid):getEffectiveSkillLevel(SKILL_DISTANCE)
-	local skillTotal, levelTotal = distanceSkill * attackValue, level / 5
-	return -(((skillTotal * 0.011) + 0) + (levelTotal)), -(((skillTotal * 0.015) + 5) + (levelTotal))
+	local skillDouble, levelTotal = distanceSkill * 2, level / 5
+	return -(((skillDouble + attack / 3500) * 0.35) + (levelTotal) + 0), -(((skillDouble + attack / 3125) * 0.5) + (levelTotal) + 5)
 end
 
-setCombatCallback(combat, CALLBACK_PARAM_SKILLVALUE, "onGetPlayerMinMaxValues")
+setCombatCallback(combat, CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
 
 function onCastSpell(cid, var)
 	return doCombat(cid, combat, var)
