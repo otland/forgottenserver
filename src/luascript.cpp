@@ -1208,9 +1208,6 @@ void LuaScriptInterface::registerFunctions()
 	//isMovable(uid)
 	lua_register(m_luaState, "isMovable", LuaScriptInterface::luaIsMoveable);
 
-	//doAddContainerItem(uid, itemid, <optional> count/subtype)
-	lua_register(m_luaState, "doAddContainerItem", LuaScriptInterface::luaDoAddContainerItem);
-
 	//getDepotId(uid)
 	lua_register(m_luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
 
