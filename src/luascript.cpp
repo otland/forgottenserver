@@ -1158,11 +1158,6 @@ void LuaScriptInterface::registerFunctions()
 	//doChangeTypeItem(uid, newtype)
 	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
 
-	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
-	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
-	//Returns uid of the created item
-	lua_register(m_luaState, "doPlayerAddItem", LuaScriptInterface::luaDoPlayerAddItem);
-
 	//doCreateItem(itemid, type/count, pos)
 	//Returns uid of the created item, only works on tiles.
 	lua_register(m_luaState, "doCreateItem", LuaScriptInterface::luaDoCreateItem);
@@ -1194,9 +1189,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doMoveCreature(cid, direction)
 	lua_register(m_luaState, "doMoveCreature", LuaScriptInterface::luaDoMoveCreature);
-
-	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
-	lua_register(m_luaState, "doPlayerRemoveItem", LuaScriptInterface::luaDoPlayerRemoveItem);
 
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
@@ -2352,36 +2344,6 @@ int32_t LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
-{
-	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
-	int32_t parameters = lua_gettop(L);
-
-	bool ignoreEquipped = false;
-	if (parameters > 4) {
-		ignoreEquipped = popBoolean(L);
-	}
-
-	int32_t subType;
-	if (parameters > 3) {
-		subType = popNumber<int32_t>(L);
-	} else {
-		subType = -1;
-	}
-
-	uint32_t count = popNumber<uint32_t>(L);
-	uint16_t itemId = popNumber<uint16_t>(L);
-	Player* player = getPlayer(L, -1);
-	if (player) {
-		pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
 {
 	//doCreateNpc(name, pos)
@@ -2432,94 +2394,6 @@ int32_t LuaScriptInterface::luaDoChangeTypeItem(lua_State* L)
 	}
 
 	pushBoolean(L, true);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
-{
-	//doPlayerAddItem(cid, itemid, <optional: default: 1> count/subtype, <optional: default: 1> canDropOnMap)
-	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
-	int32_t parameters = lua_gettop(L);
-
-	int32_t subType = 1;
-	if (parameters > 4) {
-		subType = popNumber<uint32_t>(L);
-	}
-
-	bool canDropOnMap = true;
-	if (parameters > 3) {
-		canDropOnMap = popBoolean(L);
-	}
-
-	int32_t count = 1;
-	if (parameters > 2) {
-		count = popNumber<int32_t>(L);
-	}
-
-	uint32_t itemId = popNumber<uint32_t>(L);
-
-	Player* player = getPlayer(L, -1);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	const ItemType& it = Item::items[itemId];
-
-	int32_t itemCount = 1;
-
-	if (parameters > 4) {
-		//subtype already supplied, count then is the amount
-		itemCount = std::max<int32_t>(1, count);
-	} else if (it.hasSubType()) {
-		if (it.stackable) {
-			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
-		}
-
-		subType = count;
-	} else {
-		itemCount = std::max<int32_t>(1, count);
-	}
-
-	while (itemCount > 0) {
-		int32_t stackCount = subType;
-		if (it.stackable && stackCount > 100) {
-			stackCount = 100;
-		}
-
-		Item* newItem = Item::CreateItem(itemId, stackCount);
-		if (!newItem) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (it.stackable) {
-			subType -= stackCount;
-		}
-
-		ReturnValue ret = g_game.internalPlayerAddItem(player, newItem, canDropOnMap);
-		if (ret != RET_NOERROR) {
-			delete newItem;
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (--itemCount == 0) {
-			if (newItem->getParent()) {
-				uint32_t uid = getScriptEnv()->addThing(newItem);
-				lua_pushnumber(L, uid);
-				return 1;
-			} else {
-				//stackable item stacked with existing object, newItem will be released
-				pushBoolean(L, false);
-				return 1;
-			}
-		}
-	}
-
-	pushBoolean(L, false);
 	return 1;
 }
 
@@ -3963,79 +3837,6 @@ int32_t LuaScriptInterface::luaIsMoveable(lua_State* L)
 	//isMovable(uid)
 	Thing* thing = getScriptEnv()->getThingByUID(popNumber<uint32_t>(L));
 	pushBoolean(L, thing && thing->isPushable());
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
-{
-	//doAddContainerItem(uid, itemid, <optional> count/subtype)
-	int32_t parameters = lua_gettop(L);
-
-	uint32_t count = 1;
-	if (parameters > 2) {
-		count = popNumber<uint32_t>(L);
-	}
-
-	uint16_t itemId = popNumber<uint16_t>(L);
-	uint32_t uid = popNumber<uint32_t>(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-	Container* container = env->getContainerByUID(uid);
-	if (!container) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	const ItemType& it = Item::items[itemId];
-
-	int32_t itemCount = 1;
-
-	int32_t subType = 1;
-
-	if (it.hasSubType()) {
-		if (it.stackable) {
-			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
-		}
-
-		subType = count;
-	} else {
-		itemCount = std::max<int32_t>(1, count);
-	}
-
-	while (itemCount > 0) {
-		int32_t stackCount = std::min<int32_t>(100, subType);
-		Item* newItem = Item::CreateItem(itemId, stackCount);
-		if (!newItem) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (it.stackable) {
-			subType -= stackCount;
-		}
-
-		ReturnValue ret = g_game.internalAddItem(container, newItem);
-		if (ret != RET_NOERROR) {
-			delete newItem;
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (--itemCount == 0) {
-			if (newItem->getParent()) {
-				lua_pushnumber(L, env->addThing(newItem));
-				return 1;
-			} else {
-				//stackable item stacked with existing object, newItem will be released
-				pushBoolean(L, false);
-				return 1;
-			}
-		}
-	}
-
-	pushBoolean(L, false);
 	return 1;
 }
 
