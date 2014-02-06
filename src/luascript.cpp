@@ -924,7 +924,7 @@ LuaVariant LuaScriptInterface::getVariant(lua_State* L, int32_t arg)
 		case VARIANT_POSITION:
 		case VARIANT_TARGETPOSITION: {
 			lua_getfield(L, arg, "pos");
-			var.pos = getPosition(L, -1);
+			var.pos = getPosition(L, getStackTop(L));
 			lua_pop(L, 2);
 			break;
 		}
