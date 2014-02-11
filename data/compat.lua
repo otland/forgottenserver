@@ -271,7 +271,9 @@ function doPlayerSetSex(cid, sex) local p = Player(cid) return p ~= nil and p:se
 function doPlayerSetGuildLevel(cid, level) local p = Player(cid) return p ~= nil and p:setGuildLevel(level) or false end
 function doPlayerSetGuildNick(cid, nick) local p = Player(cid) return p ~= nil and p:setGuildNick(nick) or false end
 function doShowTextDialog(cid, itemId, text) local p = Player(cid) return p ~= nil and p:showTextDialog(itemId, text) or false end
+function doPlayerAddItem(cid, itemId, ...) local p = Player(cid) return p ~= nil and p:addItem(itemId, ...) or false end
 function doPlayerAddItemEx(cid, uid, ...) local p = Player(cid) return p ~= nil and p:addItemEx(Item(uid), ...) or false end
+function doPlayerRemoveItem(cid, itemId, ...) local p = Player(cid) return p ~= nil and p:removeItem(itemId, ...) or false end
 function doPlayerAddPremiumDays(cid, days) local p = Player(cid) return p ~= nil and p:addPremiumDays(days) or false end
 function doPlayerRemovePremiumDays(cid, days) local p = Player(cid) return p ~= nil and p:removePremiumDays(days) or false end
 function doPlayerAddBlessing(cid, blessing) local p = Player(cid) return p ~= nil and p:addBlessing(blessing) or false end
@@ -456,6 +458,7 @@ function getContainerItem(uid, slot)
 	return pushThing(container:getItem(slot))
 end
 
+function doAddContainerItem(uid, virtualId, ...) local c = Container(uid) return c ~= nil and c:addItem(virtualId, ...) or false end
 function doAddContainerItemEx(uid, virtualId)
 	local container = Container(uid)
 	if container == nil then
