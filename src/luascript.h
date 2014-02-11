@@ -432,9 +432,6 @@ class LuaScriptInterface
 		static int32_t luaHasProperty(lua_State* L);
 		static int32_t luaGetDepotId(lua_State* L);
 
-		//get tile info
-		static int32_t luaGetTileHouseInfo(lua_State* L);
-
 		//houses
 		static int32_t luaGetHouseByPlayerGUID(lua_State* L);
 

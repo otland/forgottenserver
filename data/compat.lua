@@ -625,6 +625,15 @@ function getTileInfo(position)
 	return ret
 end
 
+function getTileHouseInfo(pos)
+	local t = Tile(pos)
+ 	if t == nil then
+ 		return false
+	end
+	local h = t:getHouse()
+	return h ~= nil and h:getId() or false
+end
+
 function getTileItemByType(position, itemType)
 	local t = Tile(position)
 	if t == nil then

@@ -1145,10 +1145,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerInstantSpellInfo(cid, index)
 	lua_register(m_luaState, "getPlayerInstantSpellInfo", LuaScriptInterface::luaGetPlayerInstantSpellInfo);
 
-	//getTileHouseInfo(pos)
-	//0 no house. != 0 house id
-	lua_register(m_luaState, "getTileHouseInfo", LuaScriptInterface::luaGetTileHouseInfo);
-
 	//getThingfromPos(pos)
 	lua_register(m_luaState, "getThingfromPos", LuaScriptInterface::luaGetThingfromPos);
 
@@ -2814,33 +2810,6 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 		lua_pushnumber(L, uid);
 	} else {
 		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
-{
-	//getTileHouseInfo(pos)
-	PositionEx pos;
-	popPosition(L, pos);
-
-	Tile* tile = g_game.getTile(pos);
-	if (tile) {
-		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
-			House* house = houseTile->getHouse();
-			if (house) {
-				lua_pushnumber(L, house->getId());
-			} else {
-				pushBoolean(L, false);
-			}
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		std::ostringstream ss;
-		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
 	}
 	return 1;
 }
