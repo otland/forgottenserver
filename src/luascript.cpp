@@ -9481,11 +9481,16 @@ int32_t LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 
 int32_t LuaScriptInterface::luaNpcSetMasterPos(lua_State* L)
 {
- 	// npc:setMasterPos(pos)
+ 	// npc:setMasterPos(pos[, radius])
+ 	int32_t radius = 1;
+	if (getStackTop(L) >= 3) {
+		radius = getNumber<int32_t>(L, 3);
+	}
+
  	const Position& pos = getPosition(L, 2);
  	Npc* npc = getUserdata<Npc>(L, 1);
  	if (npc) {
- 		npc->setMasterPos(pos);
+ 		npc->setMasterPos(pos, radius);
  		pushBoolean(L, true);
 	} else {
  		pushNil(L);
