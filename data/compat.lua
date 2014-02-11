@@ -458,7 +458,7 @@ function getContainerItem(uid, slot)
 	return pushThing(container:getItem(slot))
 end
 
-function doAddContainerItem(uid, virtualId, ...) local c = Container(uid) return c ~= nil and c:addItem(virtualId, ...) end
+function doAddContainerItem(uid, virtualId, ...) local c = Container(uid) return c ~= nil and c:addItem(virtualId, ...) or false end
 function doAddContainerItemEx(uid, virtualId)
 	local container = Container(uid)
 	if container == nil then
