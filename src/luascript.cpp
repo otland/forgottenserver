@@ -1176,9 +1176,6 @@ void LuaScriptInterface::registerFunctions()
 	//doCreateTeleport(itemid, topos, createpos)
 	lua_register(m_luaState, "doCreateTeleport", LuaScriptInterface::luaDoCreateTeleport);
 
-	//doCreateNpc(name, pos)
-	lua_register(m_luaState, "doCreateNpc", LuaScriptInterface::luaDoCreateNpc);
-
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
@@ -1909,6 +1906,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Npc", "isNpc", LuaScriptInterface::luaNpcIsNpc);
 
+	registerMethod("Npc", "setMasterPos", LuaScriptInterface::luaNpcSetMasterPos);
+
 	// Guild
 	registerClass("Guild", "", LuaScriptInterface::luaGuildCreate);
 	registerMetaMethod("Guild", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2372,30 +2371,6 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 		pushBoolean(L, false);
 	}
 
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
-{
-	//doCreateNpc(name, pos)
-	PositionEx pos;
-	popPosition(L, pos);
-	const std::string& name = popString(L);
-
-	Npc* npc = Npc::createNpc(name);
-	if (!npc) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	// Place the npc
-	if (g_game.placeCreature(npc, pos)) {
-		npc->setMasterPos(npc->getPosition());
-		pushBoolean(L, true);
-	} else {
-		delete npc;
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
@@ -9501,6 +9476,20 @@ int32_t LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 	// npc:isNpc()
 	const Npc* npc = getUserdata<const Npc>(L, 1);
 	pushBoolean(L, npc != nullptr);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaNpcSetMasterPos(lua_State* L)
+{
+ 	// npc:setMasterPos(pos)
+ 	const Position& pos = getPosition(L, 2);
+ 	Npc* npc = getUserdata<Npc>(L, 1);
+ 	if (npc) {
+ 		npc->setMasterPos(pos);
+ 		pushBoolean(L, true);
+	} else {
+ 		pushNil(L);
+	}
 	return 1;
 }
 
