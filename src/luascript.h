@@ -415,7 +415,6 @@ class LuaScriptInterface
 		static int32_t luaDoCreateItemEx(lua_State* L);
 		static int32_t luaDoCreateTeleport(lua_State* L);
 		static int32_t luaDoCreateNpc(lua_State* L);
-		static int32_t luaDoSummonCreature(lua_State* L);
 		static int32_t luaDoAddCondition(lua_State* L);
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);

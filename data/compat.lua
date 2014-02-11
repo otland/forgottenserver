@@ -423,6 +423,9 @@ function doMonsterChangeTarget(cid)
 	monster:searchTarget(1)
 	return true
 end
+function doSummonCreature(name, pos, ...)
+	local m = Game.createMonster(name, pos, ...) return m ~= nil and m:getId() or false
+end
 function doConvinceCreature(cid, target)
 	local creature = Creature(cid)
 	if creature == nil then
