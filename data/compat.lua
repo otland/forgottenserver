@@ -423,6 +423,12 @@ function doMonsterChangeTarget(cid)
 	monster:searchTarget(1)
 	return true
 end
+function doCreateNpc(name, pos, ...)
+	local npc = Game.createNpc(name, pos, ...) return npc ~= nil and npc:setMasterPos(pos) or false
+end
+function doSummonCreature(name, pos, ...)
+	local m = Game.createMonster(name, pos, ...) return m ~= nil and m:getId() or false
+end
 function doConvinceCreature(cid, target)
 	local creature = Creature(cid)
 	if creature == nil then
@@ -623,6 +629,15 @@ function getTileInfo(position)
 	ret.topItems = t:getTopItemCount()
 	ret.downItems = t:getDownItemCount()
 	return ret
+end
+
+function getTileHouseInfo(pos)
+	local t = Tile(pos)
+ 	if t == nil then
+ 		return false
+	end
+	local h = t:getHouse()
+	return h ~= nil and h:getId() or false
 end
 
 function getTileItemByType(position, itemType)
