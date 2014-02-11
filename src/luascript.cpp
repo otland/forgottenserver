@@ -9531,11 +9531,15 @@ int32_t LuaScriptInterface::luaMonsterSearchTarget(lua_State* L)
 // Npc
 int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
-	// Npc([id])
-	// Npc.new([id])
-	Npc* npc;
+	// Npc([id/name])
+	// Npc.new([id/name])
+	Npc* npc = nullptr;
 	if (getStackTop(L) >= 2) {
-		npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
+		if (isNumber(L, 2)) {
+			npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
+		} else if (isString(L, 2)) {
+			npc = g_game.getNpcByName(getString(L, 2));
+		}
 	} else {
 		npc = getScriptEnv()->getNpc();
 	}
