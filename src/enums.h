@@ -442,6 +442,13 @@ struct MarketOffer {
 };
 
 struct MarketOfferEx {
+	MarketOfferEx() {}
+	MarketOfferEx(MarketOfferEx&& other) :
+		id(other.id), playerId(other.playerId), timestamp(other.timestamp), price(other.price),
+		amount(other.amount), counter(other.counter), itemId(other.itemId), type(other.type),
+		playerName(std::move(other.playerName)) {}
+
+	uint32_t id;
 	uint32_t playerId;
 	uint32_t timestamp;
 	uint32_t price;

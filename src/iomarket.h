@@ -37,8 +37,7 @@ class IOMarket
 		static ExpiredMarketOfferList getExpiredOffers(MarketAction_t action);
 
 		static int32_t getPlayerOfferCount(uint32_t playerId);
-		static uint32_t getOfferIdByCounter(uint32_t timestamp, uint16_t counter);
-		static MarketOfferEx getOfferById(uint32_t id);
+		static MarketOfferEx getOfferByCounter(uint32_t timestamp, uint16_t counter);
 
 		static void createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous);
 		static void acceptOffer(uint32_t offerId, uint16_t amount);

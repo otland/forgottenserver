@@ -5561,13 +5561,8 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
-	uint32_t offerId = IOMarket::getOfferIdByCounter(timestamp, counter);
-	if (offerId == 0) {
-		return;
-	}
-
-	MarketOfferEx offer = IOMarket::getOfferById(offerId);
-	if (offer.playerId != player->getGUID()) {
+	MarketOfferEx offer = IOMarket::getOfferByCounter(timestamp, counter);
+	if (offer.id == 0 || offer.playerId != player->getGUID()) {
 		return;
 	}
 
@@ -5610,7 +5605,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		}
 	}
 
-	IOMarket::moveOfferToHistory(offerId, OFFERSTATE_CANCELLED);
+	IOMarket::moveOfferToHistory(offer.id, OFFERSTATE_CANCELLED);
 	offer.amount = 0;
 	offer.timestamp += g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
 	player->sendMarketCancelOffer(offer);
@@ -5631,12 +5626,11 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
-	uint32_t offerId = IOMarket::getOfferIdByCounter(timestamp, counter);
-	if (offerId == 0) {
+	MarketOfferEx offer = IOMarket::getOfferByCounter(timestamp, counter);
+	if (offer.id == 0) {
 		return;
 	}
 
-	MarketOfferEx offer = IOMarket::getOfferById(offerId);
 	if (amount > offer.amount) {
 		return;
 	}
@@ -5819,9 +5813,9 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	offer.amount -= amount;
 
 	if (offer.amount == 0) {
-		IOMarket::deleteOffer(offerId);
+		IOMarket::deleteOffer(offer.id);
 	} else {
-		IOMarket::acceptOffer(offerId, amount);
+		IOMarket::acceptOffer(offer.id, amount);
 	}
 
 	player->sendMarketEnter(player->getLastDepotId());
