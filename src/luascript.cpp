@@ -12004,10 +12004,6 @@ bool LuaEnvironment::initState()
 	luaL_openlibs(m_luaState);
 	registerFunctions();
 
-	if (loadFile("data/global.lua") == -1) {
-		std::cout << "Warning: [LuaEnvironment::initState] Can not load data/global.lua." << std::endl;
-	}
-
 	m_runningEventId = EVENT_ID_USER;
 	return true;
 }

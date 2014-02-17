@@ -39,6 +39,8 @@ TalkActions* g_talkActions = nullptr;
 MoveEvents* g_moveEvents = nullptr;
 Weapons* g_weapons = nullptr;
 
+extern LuaEnvironment g_luaEnvironment;
+
 ScriptingManager::ScriptingManager()
 {
 	//
@@ -58,6 +60,10 @@ ScriptingManager::~ScriptingManager()
 
 bool ScriptingManager::loadScriptSystems()
 {
+	if (g_luaEnvironment.loadFile("data/global.lua") == -1) {
+		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load data/global.lua" << std::endl;
+	}
+
 	g_weapons = new Weapons();
 	if (!g_weapons->loadFromXml()) {
 		std::cout << "> ERROR: Unable to load weapons!" << std::endl;
