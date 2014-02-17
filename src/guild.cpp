@@ -27,7 +27,7 @@ extern Game g_game;
 
 void Guild::addMember(Player* player)
 {
-	membersOnline.push_front(player);
+	membersOnline.push_back(player);
 	for (Player* member : membersOnline) {
 		g_game.updatePlayerHelpers(*member);
 	}

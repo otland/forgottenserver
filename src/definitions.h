@@ -26,7 +26,7 @@
 
 #define CLIENT_VERSION_MIN 1031
 #define CLIENT_VERSION_MAX 1039
-#define CLIENT_VERSION_STR "10.31"
+#define CLIENT_VERSION_STR "10.34"
 
 #ifndef __FUNCTION__
 #define __FUNCTION__ __func__
