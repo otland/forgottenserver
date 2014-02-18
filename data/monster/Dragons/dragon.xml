@@ -33,12 +33,12 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="100"/>
 		<element earthPercent="80"/>
 		<element energyPercent="20"/>
 		<element icePercent="-10"/>
 	</elements>
 	<immunities>
+		<immunity fire="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
