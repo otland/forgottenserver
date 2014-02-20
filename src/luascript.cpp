@@ -1155,9 +1155,6 @@ void LuaScriptInterface::registerFunctions()
 	//getThingPos(uid)
 	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
 
-	//doChangeTypeItem(uid, newtype)
-	lua_register(m_luaState, "doChangeTypeItem", LuaScriptInterface::luaDoChangeTypeItem);
-
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
 	//Returns uid of the created item
@@ -1667,6 +1664,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Container", "getSize", LuaScriptInterface::luaContainerGetSize);
 	registerMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
 	registerMethod("Container", "getEmptySlots", LuaScriptInterface::luaContainerGetEmptySlots);
+	registerMethod("Container", "getItemHoldingCount", LuaScriptInterface::luaContainerGetItemHoldingCount);
 
 	registerMethod("Container", "getItem", LuaScriptInterface::luaContainerGetItem);
 	registerMethod("Container", "hasItem", LuaScriptInterface::luaContainerHasItem);
@@ -1762,7 +1760,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "setCapacity", LuaScriptInterface::luaPlayerSetCapacity);
 
 	registerMethod("Player", "getFreeCapacity", LuaScriptInterface::luaPlayerGetFreeCapacity);
-	registerMethod("Player", "getDepotItems", LuaScriptInterface::luaPlayerGetDepotItems);
+
+	registerMethod("Player", "getDepotChest", LuaScriptInterface::luaPlayerGetDepotChest);
+	registerMethod("Player", "getInbox", LuaScriptInterface::luaPlayerGetInbox);
 
 	registerMethod("Player", "getSkull", LuaScriptInterface::luaPlayerGetSkull);
 	registerMethod("Player", "setSkull", LuaScriptInterface::luaPlayerSetSkull);
@@ -2403,35 +2403,6 @@ int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
 		delete npc;
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoChangeTypeItem(lua_State* L)
-{
-	//doChangeTypeItem(uid,new_type)
-	int32_t subtype = popNumber<int32_t>(L);
-	uint32_t uid = popNumber<uint32_t>(L);
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	Item* item = env->getItemByUID(uid);
-	if (!item) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Item* newItem = g_game.transformItem(item, item->getID(), subtype);
-
-	if (item->isRemoved()) {
-		env->removeItemByUID(uid);
-	}
-
-	if (newItem && newItem != item) {
-		env->insertThing(uid, newItem);
-	}
-
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -6696,6 +6667,18 @@ int32_t LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaContainerGetItemHoldingCount(lua_State* L)
+{
+	// container:getItemHoldingCount()
+	Container* container = getUserdata<Container>(L, 1);
+	if (container) {
+		pushNumber(L, container->getItemHoldingCount());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaContainerGetItem(lua_State* L)
 {
 	// container:getItem(index)
@@ -7758,15 +7741,40 @@ int32_t LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaPlayerGetDepotItems(lua_State* L)
+int32_t LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 {
-	// player:getDepotItems(depotId)
+	// player:getDepotChest(depotId[, autoCreate = false])
+	bool autoCreate;
+	if (getStackTop(L) >= 3) {
+		autoCreate = getBoolean(L, 3);
+	} else {
+		autoCreate = false;
+	}
 	uint32_t depotId = getNumber<uint32_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		const DepotChest* depotChest = player->getDepotChest(depotId, true);
+		DepotChest* depotChest = player->getDepotChest(depotId, autoCreate);
 		if (depotChest) {
-			pushNumber(L, depotChest->getItemHoldingCount());
+			pushUserdata(L, depotChest);
+			setItemMetatable(L, -1, depotChest);
+		} else {
+			pushBoolean(L, false);
+		}
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetInbox(lua_State* L)
+{
+	// player:getInbox()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		Inbox* inbox = player->getInbox();
+		if (inbox) {
+			pushUserdata(L, inbox);
+			setItemMetatable(L, -1, inbox);
 		} else {
 			pushBoolean(L, false);
 		}

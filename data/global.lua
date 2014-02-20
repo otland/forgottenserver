@@ -857,6 +857,14 @@ function Player.feed(self, food)
 	return true
 end
 
+function Player.getDepotItems(self, depotId)
+	local depotChest = self:getDepotChest(depotId, true)
+	if depotChest then
+		return depotChest:getItemHoldingCount()
+	end
+	return false
+end
+
 function Player.isUsingOtClient(self)
 	return self:getClient().os >= CLIENTOS_OTCLIENT_LINUX
 end

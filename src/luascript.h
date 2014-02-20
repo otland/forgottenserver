@@ -409,7 +409,6 @@ class LuaScriptInterface
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
-		static int32_t luaDoChangeTypeItem(lua_State* L);
 		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
 		static int32_t luaDoCreateItemEx(lua_State* L);
@@ -734,6 +733,7 @@ class LuaScriptInterface
 		static int32_t luaContainerGetSize(lua_State* L);
 		static int32_t luaContainerGetCapacity(lua_State* L);
 		static int32_t luaContainerGetEmptySlots(lua_State* L);
+		static int32_t luaContainerGetItemHoldingCount(lua_State* L);
 
 		static int32_t luaContainerGetItem(lua_State* L);
 		static int32_t luaContainerHasItem(lua_State* L);
@@ -827,7 +827,9 @@ class LuaScriptInterface
 		static int32_t luaPlayerSetCapacity(lua_State* L);
 
 		static int32_t luaPlayerGetFreeCapacity(lua_State* L);
-		static int32_t luaPlayerGetDepotItems(lua_State* L);
+
+		static int32_t luaPlayerGetDepotChest(lua_State* L);
+		static int32_t luaPlayerGetInbox(lua_State* L);
 
 		static int32_t luaPlayerGetSkull(lua_State* L);
 		static int32_t luaPlayerSetSkull(lua_State* L);

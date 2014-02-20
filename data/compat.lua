@@ -444,6 +444,7 @@ function getTownTemplePosition(townId) local t = Town(townId) return t ~= nil an
 
 function doSetItemActionId(uid, actionId) local i = Item(uid) return i ~= nil and i:setActionId(actionId) or false end
 function doTransformItem(uid, newItemId, ...) local i = Item(uid) return i ~= nil and i:transform(newItemId, ...) or false end
+function doChangeTypeItem(uid, newType) local i = Item(uid) return i ~= nil and i:transform(i:getId(), newType) or false end
 function doRemoveItem(uid, ...) local i = Item(uid) return i ~= nil and i:remove(...) or false end
 
 function getContainerSize(uid) local c = Container(uid) return c ~= nil and c:getSize() or false end
