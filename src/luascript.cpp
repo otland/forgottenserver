@@ -6535,12 +6535,7 @@ int32_t LuaScriptInterface::luaItemTransform(lua_State* L)
 
 	Item*& item = *itemPtr;
 	if (item) {
-		if (item->getID() == itemId) {
-			pushBoolean(L, true);
-			return 1;
-		}
-
-		if (subType == -1 || subType == item->getSubType()) {
+		if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
 			pushBoolean(L, true);
 			return 1;
 		}
