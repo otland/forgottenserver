@@ -28,8 +28,7 @@ function destroyItem(cid, itemEx, toPosition)
 					local iEx = Item(itemEx.uid)
 					iEx:transform(itemEx.itemid + 6) 
 					iEx:decay()	
-				end
-			toPosition:sendMagicEffect(CONST_ME_POFF)	 
+				end 
 		else
 				if math.random(1, 7) == 1 then	
 					local iEx = Item(itemEx.uid)	
