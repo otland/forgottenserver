@@ -3,15 +3,15 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 	local dice = Item(item.uid)
 	local dicePosition = dice:getPosition()
 	local value = math.random(1, 6)
+	local playerMode = player:isInGhostMode()
 
-	local isInGhostMode = player:isInGhostMode()
-	if isInGhostMode then
-		dicePosition:sendMagicEffect(CONST_ME_CRAPS, player)
-	else
-		dicePosition:sendMagicEffect(CONST_ME_CRAPS)
+	dicePosition:sendMagicEffect(CONST_ME_CRAPS, playerMode and player)
+
+	local spectators = Game.getSpectators(dicePosition, false, true, 3, 3)
+	for _, pid in ipairs(spectators) do
+		player:say(player:getName() .. " rolled a " .. value .. ".", TALKTYPE_ORANGE_1, playerMode, pid, dicePosition)
 	end
 
-	player:say(player:getName() .. " rolled a " .. value .. ".", TALKTYPE_ORANGE_1, isInGhostMode, 0, dicePosition)
 	dice:transform(5791 + value)
 	return true
 end
