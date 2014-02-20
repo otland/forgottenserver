@@ -1273,7 +1273,13 @@ void AreaCombat::copyArea(const MatrixArea* input, MatrixArea* output, MatrixOpe
 
 MatrixArea* AreaCombat::createArea(const std::list<uint32_t>& list, uint32_t rows)
 {
-	uint32_t cols = list.size() / rows;
+	uint32_t cols;
+	if (rows == 0) {
+		cols = 0;
+	} else {
+		cols = list.size() / rows;
+	}
+
 	MatrixArea* area = new MatrixArea(rows, cols);
 
 	uint32_t x = 0;

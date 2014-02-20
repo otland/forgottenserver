@@ -1005,8 +1005,8 @@ bool Creature::setFollowCreature(Creature* creature)
 
 double Creature::getDamageRatio(Creature* attacker) const
 {
-	int32_t totalDamage = 0;
-	int32_t attackerDamage = 0;
+	uint32_t totalDamage = 0;
+	uint32_t attackerDamage = 0;
 
 	for (const auto& it : damageMap) {
 		const CountBlock_t& cb = it.second;
@@ -1014,6 +1014,10 @@ double Creature::getDamageRatio(Creature* attacker) const
 		if (it.first == attacker->getID()) {
 			attackerDamage += cb.total;
 		}
+	}
+
+	if (totalDamage == 0) {
+		return 0;
 	}
 
 	return ((double)attackerDamage / totalDamage);
@@ -1462,7 +1466,7 @@ int64_t Creature::getEventStepTicks(bool onlyDelay) const
 {
 	int64_t ret = getWalkDelay();
 	if (ret <= 0) {
-		int32_t stepDuration = getStepDuration();
+		int64_t stepDuration = getStepDuration();
 		if (onlyDelay && stepDuration > 0) {
 			ret = 1;
 		} else {
