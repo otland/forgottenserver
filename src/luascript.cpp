@@ -6521,9 +6521,9 @@ int32_t LuaScriptInterface::luaItemMoveTo(lua_State* L)
 int32_t LuaScriptInterface::luaItemTransform(lua_State* L)
 {
 	// item:transform(itemId[, count/subType = -1])
-	int32_t count = -1;
+	int32_t subType = -1;
 	if (getStackTop(L) >= 3) {
-		count = getNumber<int32_t>(L, 3);
+		subType = getNumber<int32_t>(L, 3);
 	}
 
 	uint16_t itemId = getNumber<uint16_t>(L, 2);
@@ -6533,22 +6533,27 @@ int32_t LuaScriptInterface::luaItemTransform(lua_State* L)
 		return 1;
 	}
 
-	if (*itemPtr) {
-		Item* item = *itemPtr;
+	Item*& item = *itemPtr;
+	if (item) {
 		if (item->getID() == itemId) {
+			pushBoolean(L, true);
+			return 1;
+		}
+
+		if (subType == -1 || subType == item->getSubType()) {
 			pushBoolean(L, true);
 			return 1;
 		}
 
 		const ItemType& it = Item::items[itemId];
 		if (it.stackable) {
-			count = std::min<int32_t>(count, 100);
+			subType = std::min<int32_t>(subType, 100);
 		}
 
 		ScriptEnvironment* env = getScriptEnv();
 		uint32_t uid = env->addThing(item);
 
-		Item* newItem = g_game.transformItem(item, itemId, count);
+		Item* newItem = g_game.transformItem(item, itemId, subType);
 		if (item->isRemoved()) {
 			env->removeItemByUID(uid);
 		}
@@ -6557,7 +6562,7 @@ int32_t LuaScriptInterface::luaItemTransform(lua_State* L)
 			env->insertThing(uid, newItem);
 		}
 
-		*itemPtr = newItem;
+		item = newItem;
 		pushBoolean(L, true);
 	} else {
 		pushNil(L);
