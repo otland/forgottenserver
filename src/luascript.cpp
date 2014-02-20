@@ -1413,8 +1413,20 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CLIENTOS_OTCLIENT_LINUX)
 	registerEnum(CLIENTOS_OTCLIENT_WINDOWS)
 	registerEnum(CLIENTOS_OTCLIENT_MAC)
+	
+	// Use with container:addItem, container:addItemEx and possibly other functions.
+	registerEnum(FLAG_NOLIMIT)
+	registerEnum(FLAG_IGNOREBLOCKITEM)
+	registerEnum(FLAG_IGNOREBLOCKITEM)
+	registerEnum(FLAG_IGNOREBLOCKCREATURE)
+	registerEnum(FLAG_CHILDISOWNER)
+	registerEnum(FLAG_PATHFINDING)
+	registerEnum(FLAG_IGNOREFIELDDAMAGE)
+	registerEnum(FLAG_IGNOREAUTOSTACK)
 
 	// _G
+	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
+
 	registerGlobalMethod("isType", LuaScriptInterface::luaIsType);
 
 	// configKeys
@@ -6713,12 +6725,28 @@ int32_t LuaScriptInterface::luaContainerHasItem(lua_State* L)
 
 int32_t LuaScriptInterface::luaContainerAddItem(lua_State* L)
 {
-	// container:addItem(itemId[, count/subType = 1])
+	// container:addItem(itemId[, count/subType = 1[, index = INDEX_WHEREEVER[, flags = 0]]])
 	int32_t parameters = getStackTop(L);
 
-	uint32_t subType = 1;
+	uint32_t flags;
+	if (parameters >= 5) {
+		flags = getNumber<uint32_t>(L, 5);
+	} else {
+		flags = 0;
+	}
+	
+	int32_t index;
+	if (parameters >= 4) {
+		index = getNumber<int32_t>(L, 4);
+	} else {
+		index = INDEX_WHEREEVER;
+	}
+
+	uint32_t subType;
 	if (parameters >= 3) {
 		subType = getNumber<uint32_t>(L, 3);
+	} else {
+		subType = 1;
 	}
 
 	uint16_t itemId = getNumber<uint16_t>(L, 2);
@@ -6734,7 +6762,7 @@ int32_t LuaScriptInterface::luaContainerAddItem(lua_State* L)
 		return 1;
 	}
 
-	ReturnValue ret = g_game.internalAddItem(container, item);
+	ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
 	if (ret != RET_NOERROR || !item->getParent()) {
 		delete item;
 		pushNil(L);
@@ -6748,7 +6776,23 @@ int32_t LuaScriptInterface::luaContainerAddItem(lua_State* L)
 
 int32_t LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 {
-	// container:addItemEx(item)
+	// container:addItemEx(item[, index = INDEX_WHEREEVER[, flags = 0]])
+	int32_t parameters = getStackTop(L);
+
+	uint32_t flags;
+	if (parameters >= 4) {
+		flags = getNumber<uint32_t>(L, 4);
+	} else {
+		flags = 0;
+	}
+	
+	int32_t index;
+	if (parameters >= 3) {
+		index = getNumber<int32_t>(L, 3);
+	} else {
+		index = INDEX_WHEREEVER;
+	}
+
 	Item* item = getUserdata<Item>(L, 2);
 	if (!item) {
 		pushNil(L);
@@ -6763,7 +6807,7 @@ int32_t LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 			return 1;
 		}
 
-		ReturnValue ret = g_game.internalAddItem(container, item);
+		ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
 		if (ret == RET_NOERROR) {
 			getScriptEnv()->removeTempItem(item);
 		}
