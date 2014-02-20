@@ -1,4 +1,3 @@
-			
 local DestroyId =	{
 
 		[1614] = 2253, [1615] = 2253, [1616] = 2253, [1619] = 2255, [1650] = 2253, [1651] = 2253, 
@@ -18,23 +17,25 @@ local DestroyId =	{
 		[3816] = 2253, [3817] = 2253, [3818] = 2253, [3819] = 2253, [3820] = 2253, 
 	}						 
 
-		
-		
+local SPIDER_WEB = {7538, 7539}
 function destroyItem(cid, itemEx, toPosition)
-	if itemEx.uid <= 65535 or itemEx.actionid > 0 then
+	if itemEx.uid <= 65535 or itemEx.actionid > 0 or (DestroyId[itemEx.itemid] == nil and isInArray(SPIDER_WEB, itemEx.itemid) == FALSE) then
 		return false
 	end
-	local iEx 	=  Item(itemEx.uid)
-	local iExId = iEx:getId()
-	
-	if DestroyId[iExId] ~= nil then
-		if math.random(1, 7) == 1 then	iEx:transform(DestroyId[iExId]) end	
-		toPosition:sendMagicEffect(CONST_ME_POFF)
-		return true
-	elseif iExId == 7538 or iExId == 7539 then
-		if math.random(1, 7) <= 2 then 	iEx:transform(iExId + 6) iEx:decay()	end
-		toPosition:sendMagicEffect(CONST_ME_POFF)
-		return true
-	end
- return false	
+
+		if isInArray(SPIDER_WEB, itemEx.itemid) == TRUE then
+				if math.random(1, 7) <= 2 then 
+					local iEx = Item(itemEx.uid)
+					iEx:transform(itemEx.itemid + 6) 
+					iEx:decay()	
+				end
+			toPosition:sendMagicEffect(CONST_ME_POFF)	 
+		else
+				if math.random(1, 7) == 1 then	
+					local iEx = Item(itemEx.uid)	
+					iEx:transform(DestroyId[itemEx.itemid]) 
+				end	
+		end
+	toPosition:sendMagicEffect(CONST_ME_POFF)
+	return true	
 end
