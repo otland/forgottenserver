@@ -3,11 +3,11 @@ local millstones = {1381, 1382, 1383, 1384}
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 
 	if item.itemid == 2692 and isInArray(liquidContainers, itemEx.itemid) and itemEx.type == 1 then
-		Item(item.uid):split()
+		Item(item.uid):transform(item.itemid, item.type - 1)
 		Player(cid):addItem(2693, 1)
-		doChangeTypeItem(itemEx.uid, 0)
+		Item(itemEx.uid):transform(itemEx.itemid, 0)
 	elseif isInArray(millstones, itemEx.itemid) then
-		Item(item.uid):split()
+		Item(item.uid):transform(item.itemid, item.type - 1)
 		Player(cid):addItem(2692, 1)
 	else
 		return false

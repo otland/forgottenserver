@@ -99,17 +99,17 @@ local food =
 	[20101] = {12, "Smack."} -- rat cheese
 }
 function onUse(cid, item, fromPosition, itemEx, toPosition)
-	local p = Player(cid)
+	local player = Player(cid)
 
 	local food = FOODS[item.itemid]
 	if food == nil then return false end
 
-	local condition = p:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
+	local condition = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 	if condition ~= nil and math.floor(condition:getTicks() / 1000 + food[1]) >= 400 then
-		p:sendTextMessage(MESSAGE_STATUS_SMALL, "You are full.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are full.")
 	else
-		p:feed(food[1] * 4)
-		p:say(food[2], TALKTYPE_ORANGE_1)
+		player:feed(food[1] * 4)
+		player:say(food[2], TALKTYPE_ORANGE_1)
 		Item(item.uid):remove(1)
 	end
 
