@@ -1,7 +1,5 @@
 local useWorms = false
 local waterIds = {493, 4608, 4609, 4610, 4611, 4612, 4613, 4614, 4615, 4616, 4617, 4618, 4619, 4620, 4621, 4622, 4623, 4624, 4625}
-local iceholeIds = {7236}
-local waterelementalcorpseIds = {10499}
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 local iEx = Item(itemEx.uid)
 local player = Player(cid)
@@ -16,7 +14,7 @@ local player = Player(cid)
 		end
 		toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 		return true
-	elseif isInArray(iceholeIds, itemEx.itemid) == true then -- fish in ice hole --
+	elseif(itemEx.itemid == 7236) then -- fish in ice hole --
 		if useWorms == false or useWorms == true and player:removeItem(ITEM_WORM, 1) == true then
 			if math.random(1, (100 + (player:getSkillLevel(SKILL_FISHING) / 10))) <= player:getSkillLevel(SKILL_FISHING) then
 				local rand = math.random(1, 100)
@@ -36,7 +34,7 @@ local player = Player(cid)
 			toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 			return true
 		end
-	elseif isInArray(waterelementalcorpseIds, itemEx.itemid) == true then -- fish Water elemental Corpse --
+	elseif(itemEx.itemid == 10499) then -- water elemental corpse --
 		if math.random(1, (100 + (player:getSkillLevel(SKILL_FISHING) / 10))) <= player:getSkillLevel(SKILL_FISHING) then
 			local rand = math.random(1, 1000)
 			if(rand > 995) then
