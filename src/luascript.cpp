@@ -1414,11 +1414,11 @@ void LuaScriptInterface::registerFunctions()
 	// Use with container:addItem, container:addItemEx and possibly other functions.
 	registerEnum(FLAG_NOLIMIT)
 	registerEnum(FLAG_IGNOREBLOCKITEM)
-	registerEnum(FLAG_IGNOREBLOCKITEM)
 	registerEnum(FLAG_IGNOREBLOCKCREATURE)
 	registerEnum(FLAG_CHILDISOWNER)
 	registerEnum(FLAG_PATHFINDING)
 	registerEnum(FLAG_IGNOREFIELDDAMAGE)
+	registerEnum(FLAG_IGNORENOTMOVEABLE)
 	registerEnum(FLAG_IGNOREAUTOSTACK)
 
 	// _G
