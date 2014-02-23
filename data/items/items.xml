@@ -15141,7 +15141,7 @@
 	<item id="8423" name="brown pavement" />
 	<item id="8424" name="earth" />
 	<item fromid="8425" toid="8431" name="brown pavement" />
-	<item id="8432-8434" name="earth" />
+	<item fromid="8432" toid="8434" name="earth" />
 	<item fromid="8435" toid="8446" name="cobbled pavement" />
 	<item fromid="8447" toid="8458" name="earth" />
 	<item id="8459" article="a" name="strange statue" />
