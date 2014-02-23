@@ -526,26 +526,18 @@ int32_t Player::getDefense() const
 float Player::getAttackFactor() const
 {
 	switch (fightMode) {
-		case FIGHTMODE_ATTACK:
-			return 1.0f;
-
-		case FIGHTMODE_BALANCED:
-			return 1.2f;
-
-		case FIGHTMODE_DEFENSE:
-			return 2.0f;
+		case FIGHTMODE_ATTACK: return 1.0f;
+		case FIGHTMODE_BALANCED: return 1.2f;
+		case FIGHTMODE_DEFENSE: return 2.0f;
+		default: return 1.0f;
 	}
 }
 
 float Player::getDefenseFactor() const
 {
 	switch (fightMode) {
-		case FIGHTMODE_ATTACK:
-			return 1.0f;
-
-		case FIGHTMODE_BALANCED:
-			return 1.2f;
-
+		case FIGHTMODE_ATTACK: return 1.0f;
+		case FIGHTMODE_BALANCED: return 1.2f;
 		case FIGHTMODE_DEFENSE: {
 			if ((OTSYS_TIME() - lastAttack) < getAttackSpeed()) {
 				return 1.0f;
@@ -553,6 +545,7 @@ float Player::getDefenseFactor() const
 
 			return 2.0f;
 		}
+		default: return 1.0f;
 	}
 }
 
@@ -616,6 +609,7 @@ int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 		case PLAYERINFO_MANA: return mana;
 		case PLAYERINFO_MAXMANA: return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]);
 		case PLAYERINFO_SOUL: return getSoul();
+		default: return 0;
 	}
 }
 
@@ -716,6 +710,7 @@ int32_t Player::getDefaultStats(stats_t stat) const
 		case STAT_MAXMANAPOINTS: return getMaxMana() - varStats[STAT_MAXMANAPOINTS];
 		case STAT_SOULPOINTS: return getPlayerInfo(PLAYERINFO_SOUL) - varStats[STAT_SOULPOINTS];
 		case STAT_MAGICPOINTS: return getBaseMagicLevel();
+		default: return 0;
 	}
 }
 
