@@ -551,6 +551,11 @@ class Item : virtual public Thing
 		WeaponType_t getWeaponType() const {
 			return items[id].weaponType;
 		}
+//WLASNE
+		int32_t getTransformUseTo() const {
+			return items[id].transformUseTo;
+		}
+//END WLASNE
 		Ammo_t	getAmmoType() const {
 			return items[id].ammoType;
 		}
