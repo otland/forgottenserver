@@ -113,6 +113,7 @@ bool IOBan::isIpBanned(uint32_t clientip, BanInfo& banInfo)
 
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
+		query.str("");
 		query << "DELETE FROM `ip_bans` WHERE `ip` = " << clientip;
 		db->executeQuery(query.str());
 
