@@ -490,6 +490,7 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool Combat::setCallback(CallBackParam_t key)
@@ -519,6 +520,7 @@ bool Combat::setCallback(CallBackParam_t key)
 			return true;
 		}
 	}
+	return false;
 }
 
 CallBack* Combat::getCallback(CallBackParam_t key)
@@ -537,6 +539,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 			return params.targetCallback;
 		}
 	}
+	return nullptr;
 }
 
 bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
