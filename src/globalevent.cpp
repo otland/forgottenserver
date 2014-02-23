@@ -200,12 +200,8 @@ void GlobalEvents::execute(GlobalEvent_t type) const
 GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 {
 	switch (type) {
-		case GLOBALEVENT_NONE:
-			return thinkMap;
-
-		case GLOBALEVENT_TIMER:
-			return timerMap;
-
+		case GLOBALEVENT_NONE: return thinkMap;
+		case GLOBALEVENT_TIMER: return timerMap;
 		case GLOBALEVENT_STARTUP:
 		case GLOBALEVENT_SHUTDOWN:
 		case GLOBALEVENT_RECORD: {
@@ -217,6 +213,7 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			}
 			return retMap;
 		}
+		ddefault: return GlobalEventMap();
 	}
 }
 
