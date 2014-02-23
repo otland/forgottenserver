@@ -100,12 +100,7 @@ bool FileLoader::parseNode(NODE node)
 	int32_t byte, pos;
 	NODE currentNode = node;
 
-	while (true) {
-		//read node type
-		if (!readByte(byte)) {
-			return false;
-		}
-
+	while (readByte(byte)) {
 		currentNode->type = byte;
 		bool setPropsSize = false;
 
@@ -194,7 +189,6 @@ bool FileLoader::parseNode(NODE node)
 			}
 		}
 	}
-
 	return false;
 }
 

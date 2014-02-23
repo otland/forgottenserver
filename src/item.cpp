@@ -693,11 +693,7 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 				return true;
 			}
 			break;
-
-		default:
-			return false;
 	}
-
 	return false;
 }
 

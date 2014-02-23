@@ -489,13 +489,7 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 			params.useCharges = (value != 0);
 			return true;
 		}
-
-		default: {
-			break;
-		}
 	}
-
-	return false;
 }
 
 bool Combat::setCallback(CallBackParam_t key)
@@ -524,11 +518,6 @@ bool Combat::setCallback(CallBackParam_t key)
 			params.targetCallback = new TargetCallback();
 			return true;
 		}
-
-		default: {
-			std::cout << "Combat::setCallback - Unknown callback type: " << (uint32_t)key << std::endl;
-			return false;
-		}
 	}
 }
 
@@ -546,10 +535,6 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 
 		case CALLBACKPARAM_TARGETCREATURECALLBACK: {
 			return params.targetCallback;
-		}
-
-		default: {
-			return nullptr;
 		}
 	}
 }

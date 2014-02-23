@@ -426,7 +426,6 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 
 			delete it->second;
 			guildChannels.erase(it);
-			return true;
 		}
 
 		case CHANNEL_PARTY: {
@@ -442,7 +441,6 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 
 			delete it->second;
 			partyChannels.erase(it);
-			return true;
 		}
 
 		default: {
@@ -455,10 +453,9 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 
 			delete it->second;
 			privateChannels.erase(it);
-			return true;
 		}
 	}
-	return false;
+	return true;
 }
 
 ChatChannel* Chat::addUserToChannel(Player& player, uint16_t channelId)

@@ -1825,8 +1825,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 					ReleaseItem(item);
 					return newItem;
 				} else {
-					item = transformItem(item, newItemId);
-					return item;
+					return transformItem(item, newItemId);
 				}
 			}
 		} else {
@@ -1850,29 +1849,28 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 			cylinder->postAddNotification(item, cylinder, itemIndex);
 			return item;
 		}
-	} else {
-		//Replacing the the old item with the new while maintaining the old position
-		Item* newItem;
-		if (newCount == -1) {
-			newItem = Item::CreateItem(newId);
-		} else {
-			newItem = Item::CreateItem(newId, newCount);
-		}
-
-		if (newItem == nullptr) {
-			return nullptr;
-		}
-
-		cylinder->__replaceThing(itemIndex, newItem);
-		cylinder->postAddNotification(newItem, cylinder, itemIndex);
-
-		item->setParent(nullptr);
-		cylinder->postRemoveNotification(item, cylinder, itemIndex, true);
-		ReleaseItem(item);
-
-		return newItem;
 	}
-	return nullptr;
+
+	//Replacing the the old item with the new while maintaining the old position
+	Item* newItem;
+	if (newCount == -1) {
+		newItem = Item::CreateItem(newId);
+	} else {
+		newItem = Item::CreateItem(newId, newCount);
+	}
+
+	if (newItem == nullptr) {
+		return nullptr;
+	}
+
+	cylinder->__replaceThing(itemIndex, newItem);
+	cylinder->postAddNotification(newItem, cylinder, itemIndex);
+
+	item->setParent(nullptr);
+	cylinder->postRemoveNotification(item, cylinder, itemIndex, true);
+	ReleaseItem(item);
+
+	return newItem;
 }
 
 ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pushMove/* = true*/, uint32_t flags /*= 0*/)

@@ -217,9 +217,6 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			}
 			return retMap;
 		}
-
-		default:
-			return GlobalEventMap();
 	}
 }
 

@@ -400,14 +400,9 @@ bool HouseTransferItem::onTradeEvent(TradeEvents_t event, Player* owner)
 			if (house) {
 				house->resetTransferItem();
 			}
-
 			break;
 		}
-
-		default:
-			break;
 	}
-
 	return true;
 }
 

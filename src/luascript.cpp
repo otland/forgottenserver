@@ -372,9 +372,6 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 
 		case LUA_ERROR_SPELL_NOT_FOUND:
 			return "Spell not found";
-
-		default:
-			return "Bad error code";
 	}
 }
 
