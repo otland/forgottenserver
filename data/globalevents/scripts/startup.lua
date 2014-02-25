@@ -29,6 +29,7 @@ function onStartup()
 					db.query("UPDATE `players` SET `balance` = " .. (balance - lastBid) .. " WHERE `id` = " .. highestBidder)
 					house:setOwnerGuid(highestBidder)
 				end
+				db.query("UPDATE `houses` SET `last_bid` = 0, `bid_end` = 0, `highest_bidder` = 0, `bid` = 0 WHERE `id` = " .. house:getId())
 			end
 		until not result.next(resultId)
 		result.free(resultId)
