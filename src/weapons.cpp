@@ -867,7 +867,9 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 void WeaponDistance::onUsedAmmo(Item* item, Tile* destTile) const
 {
-	if (ammoAction == AMMOACTION_MOVEBACK && breakChance > 0 && uniform_random(1, 100) <= breakChance) {
+//WLASNE MODYFIKACJA
+	if (ammoAction == AMMOACTION_MOVEBACK && breakChance > 0 && uniform_random(1, 1000) <= breakChance) {
+//END WLASNE
 		uint16_t newCount = item->getItemCount();
 		if (newCount > 0) {
 			newCount--;

@@ -88,6 +88,9 @@ ItemType::ItemType()
 	canWriteText = false;
 	writeOnceItemId = 0;
 
+// WLASNE
+	transformUseTo = 0;
+// END wlasne
 	transformEquipTo = 0;
 	transformDeEquipTo = 0;
 	showDuration = false;
@@ -108,7 +111,10 @@ ItemType::ItemType()
 	transformToOnUse[PLAYERSEX_MALE] = 0;
 	transformToOnUse[PLAYERSEX_FEMALE] = 0;
 	transformToFree = 0;
-
+// WLASNE
+	specialDoor = false;
+	closingDoor = false;
+// END wlasne
 	levelDoor = 0;
 
 	wareId = 0;
@@ -677,6 +683,10 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			it.stopTime = valueAttribute.as_bool();
 		} else if (tmpStrValue == "decayto") {
 			it.decayTo = pugi::cast<int32_t>(valueAttribute.value());
+// WLASNE
+		} else if (tmpStrValue == "transformuseto") {
+			it.transformUseTo = pugi::cast<uint16_t>(valueAttribute.value());
+//END WLASNE
 		} else if (tmpStrValue == "transformequipto") {
 			it.transformEquipTo = pugi::cast<uint16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "transformdeequipto") {
@@ -916,6 +926,12 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			it.bedPartnerDir = getDirection(valueAttribute.as_string());
 		} else if (tmpStrValue == "leveldoor") {
 			it.levelDoor = pugi::cast<uint32_t>(valueAttribute.value());
+//WLASNE
+		} else if (tmpStrValue == "specialdoor") {
+			it.specialDoor = valueAttribute.as_bool();
+		} else if (tmpStrValue == "closingdoor") {
+			it.closingDoor = valueAttribute.as_bool();
+//END WLASNE
 		} else if (tmpStrValue == "maletransformto" || tmpStrValue == "malesleeper") {
 			uint16_t value = pugi::cast<uint16_t>(valueAttribute.value());
 			it.transformToOnUse[PLAYERSEX_MALE] = value;

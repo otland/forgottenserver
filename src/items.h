@@ -198,6 +198,10 @@ class ItemType
 		float weight;
 
 		uint32_t levelDoor;
+// WLASNE
+		bool specialDoor;
+		bool closingDoor;
+//END WLASNE
 		uint32_t decayTime;
 		uint32_t wieldInfo;
 		uint32_t minReqLevel;
@@ -230,6 +234,9 @@ class ItemType
 		uint16_t transformToFree;
 		uint16_t maxTextLen;
 		uint16_t writeOnceItemId;
+// WLASNE
+		uint16_t transformUseTo;
+//END WLASNE
 		uint16_t transformEquipTo;
 		uint16_t transformDeEquipTo;
 		uint16_t maxItems;

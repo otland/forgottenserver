@@ -269,27 +269,31 @@ void Creature::onWalk()
 void Creature::onWalk(Direction& dir)
 {
 	if (hasCondition(CONDITION_DRUNK)) {
-		uint32_t r = uniform_random(0, 20);
+		uint32_t r = uniform_random(0, 20); // (1, (35 - drunk))
 		if (r <= 4) {
 			switch (r) {
 				case 0:
 					dir = NORTH;
+					g_game.internalCreatureSay(this, SPEAK_MONSTER_SAY,"Hicks!", false);
 					break;
 				case 1:
 					dir = WEST;
+					g_game.internalCreatureSay(this, SPEAK_MONSTER_SAY,"Ups!", false);
 					break;
 				case 3:
 					dir = SOUTH;
+					g_game.internalCreatureSay(this, SPEAK_MONSTER_SAY,"Ooolala!", false);
 					break;
 				case 4:
 					dir = EAST;
+					g_game.internalCreatureSay(this, SPEAK_MONSTER_SAY,"§=)$(%!", false);
 					break;
 
 				default:
 					break;
 			}
 
-			g_game.internalCreatureSay(this, SPEAK_MONSTER_SAY, "Hicks!", false);
+			//g_game.internalCreatureSay(this, SPEAK_MONSTER_SAY,"Hicks!", false);
 		}
 	}
 }

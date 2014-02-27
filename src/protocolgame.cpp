@@ -2633,6 +2633,25 @@ void ProtocolGame::sendOutfitWindow()
 		);
 	}
 
+// WLASNE
+	if (player->getAccountType() >= ACCOUNT_TYPE_COMMUNITY_MANAGER) {
+		static const std::string cmOutfitName = "CM";
+		protocolOutfits.emplace_back(
+			266,
+			&cmOutfitName,
+			0
+		);
+	}
+	if (player->getAccountType() >= ACCOUNT_TYPE_GOD) {
+		static const std::string godOutfitName = "God";
+		protocolOutfits.emplace_back(
+			302,
+			&godOutfitName,
+			0
+		);
+	}
+//END WLASNE
+
 	const auto& outfits = Outfits::getInstance()->getOutfits(player->getSex());
 	protocolOutfits.reserve(outfits.size());
 	for (const Outfit& outfit : outfits) {

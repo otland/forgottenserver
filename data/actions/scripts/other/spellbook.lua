@@ -8,7 +8,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			if spell.manapercent > 0 then
 				spell.mana = spell.manapercent .. "%"
 			end
-			table.insert(t, spell)
+			t[#t+1] = spell
 		end
 	end
 	table.sort(t, function(a, b) return a.level < b.level end)
@@ -19,11 +19,11 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			if i ~= 1 then
 				line = "\n"
 			end
-			line = line .. "Spells for Level " .. spell.level .. "\n"
+			line = ("%sSpells for Level %s\n"):format(line, spell.level)
 			prevLevel = spell.level
 		end
-		text = text .. line .. "  " .. spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
+		text = ("%s%s  %s - %s : %s\n"):format(text, line, spell.words, spell.name, spell.mana)
 	end
-	doShowTextDialog(cid, item.itemid, text)
-	return TRUE
+	Player(cid):showTextDialog(item.itemid, text)
+	return true
 end

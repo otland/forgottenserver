@@ -708,6 +708,10 @@ class LuaScriptInterface
 		static int32_t luaItemGetCharges(lua_State* L);
 		static int32_t luaItemGetFluidType(lua_State* L);
 
+// WLASNE
+		static int32_t luaItemGetWeaponType(lua_State* L);
+//END WLASNE
+
 		static int32_t luaItemGetSubType(lua_State* L);
 
 		static int32_t luaItemGetName(lua_State* L);
@@ -1082,6 +1086,12 @@ class LuaScriptInterface
 		static int32_t luaItemTypeIsReadable(lua_State* L);
 		static int32_t luaItemTypeIsWritable(lua_State* L);
 
+// WLASNE
+		static int32_t luaItemTypeIsLevelDoor(lua_State* L);
+		static int32_t luaItemTypeIsSpecialDoor(lua_State* L);
+		static int32_t luaItemTypeIsClosingDoor(lua_State* L);
+//END WLASNE
+
 		static int32_t luaItemTypeGetType(lua_State* L);
 		static int32_t luaItemTypeGetId(lua_State* L);
 		static int32_t luaItemTypeGetName(lua_State* L);
@@ -1102,9 +1112,17 @@ class LuaScriptInterface
 		static int32_t luaItemTypeGetElementType(lua_State* L);
 		static int32_t luaItemTypeGetElementDamage(lua_State* L);
 
+//WLASNE
+		static int32_t luaItemTypeGetTransformUseTo(lua_State* L);
+//END WLASNE
+
 		static int32_t luaItemTypeGetTransformEquipId(lua_State* L);
 		static int32_t luaItemTypeGetTransformDeEquipId(lua_State* L);
 		static int32_t luaItemTypeGetDecayId(lua_State* L);
+
+//WLASNE
+		static int32_t luaItemTypeGetDecayTime(lua_State* L);
+//END WLASNE
 
 		static int32_t luaItemTypeHasSubType(lua_State* L);
 

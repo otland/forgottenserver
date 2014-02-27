@@ -366,6 +366,17 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		return RET_NOERROR;
 	}
 
+//WLASNE
+	const ItemType& it = Item::items[item->getID()];
+	if (it.transformUseTo)
+	{
+		g_game.transformItem(item, it.transformUseTo);
+		g_game.startDecay(item);
+
+		return RET_NOERROR;
+	}
+//END WLASNE
+
 	return RET_CANNOTUSETHISOBJECT;
 }
 

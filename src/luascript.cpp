@@ -1336,7 +1336,7 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerSetOfflineTrainingSkill(cid, skill)
 	lua_register(m_luaState, "doPlayerSetOfflineTrainingSkill", LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill);
 
-	//getWaypointPosition(name)
+	//getWaypointPositionByName(name)
 	lua_register(m_luaState, "getWaypointPositionByName", LuaScriptInterface::luaGetWaypointPositionByName);
 
 	//sendChannelMessage(channelId, type, message)
@@ -1622,6 +1622,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getCount", LuaScriptInterface::luaItemGetCount);
 	registerMethod("Item", "getCharges", LuaScriptInterface::luaItemGetCharges);
 	registerMethod("Item", "getFluidType", LuaScriptInterface::luaItemGetFluidType);
+
+// WLASNE
+	registerMethod("Item", "getWeaponType", LuaScriptInterface::luaItemGetWeaponType);
+//END WLASNE
 
 	registerMethod("Item", "getSubType", LuaScriptInterface::luaItemGetSubType);
 
@@ -2008,6 +2012,12 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "isReadable", LuaScriptInterface::luaItemTypeIsReadable);
 	registerMethod("ItemType", "isWritable", LuaScriptInterface::luaItemTypeIsWritable);
 
+// WLASNE
+	registerMethod("ItemType", "isLevelDoor", LuaScriptInterface::luaItemTypeIsLevelDoor);
+	registerMethod("ItemType", "isSpecialDoor", LuaScriptInterface::luaItemTypeIsSpecialDoor);
+	registerMethod("ItemType", "isClosingDoor", LuaScriptInterface::luaItemTypeIsClosingDoor);
+//END WLASNE
+
 	registerMethod("ItemType", "getType", LuaScriptInterface::luaItemTypeGetType);
 	registerMethod("ItemType", "getId", LuaScriptInterface::luaItemTypeGetId);
 	registerMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
@@ -2028,9 +2038,17 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getElementType", LuaScriptInterface::luaItemTypeGetElementType);
 	registerMethod("ItemType", "getElementDamage", LuaScriptInterface::luaItemTypeGetElementDamage);
 
+//WLASNE
+	registerMethod("ItemType", "getTransformUseTo", LuaScriptInterface::luaItemTypeGetTransformUseTo);
+//END WLASNE
+
 	registerMethod("ItemType", "getTransformEquipId", LuaScriptInterface::luaItemTypeGetTransformEquipId);
 	registerMethod("ItemType", "getTransformDeEquipId", LuaScriptInterface::luaItemTypeGetTransformDeEquipId);
 	registerMethod("ItemType", "getDecayId", LuaScriptInterface::luaItemTypeGetDecayId);
+
+//WLASNE
+	registerMethod("ItemType", "getDecayTime", LuaScriptInterface::luaItemTypeGetDecayTime);
+//END WLASNE
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
@@ -2548,7 +2566,8 @@ int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
 			if (thing) {
 				if (Item* item = thing->getItem()) {
 					const ItemType& it = Item::items[item->getID()];
-					if (!it.isGroundTile() && !it.alwaysOnTop && !it.isMagicField() && !it.isDoor()) {
+//WLASNE ZMIENIONE					if (!it.isGroundTile() && !it.alwaysOnTop && !it.isMagicField() && !it.isDoor()) {
+					if (!it.isGroundTile() && !it.alwaysOnTop && !it.isMagicField() && !it.isDoor() && it.moveable) {
 						g_game.internalTeleport(item, toPos, false, FLAG_IGNORENOTMOVEABLE);
 					}
 				} else if (Creature* creature = thing->getCreature()) {
@@ -6275,6 +6294,20 @@ int32_t LuaScriptInterface::luaItemGetFluidType(lua_State* L)
 	}
 	return 1;
 }
+
+// WLASNE
+int32_t LuaScriptInterface::luaItemGetWeaponType(lua_State* L)
+{
+	// item:getWeaponType()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushNumber(L, item->getWeaponType());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+//END WLASNE
 
 int32_t LuaScriptInterface::luaItemGetSubType(lua_State* L)
 {
@@ -10545,6 +10578,44 @@ int32_t LuaScriptInterface::luaItemTypeIsWritable(lua_State* L)
 	return 1;
 }
 
+// WLASNE
+int32_t LuaScriptInterface::luaItemTypeIsLevelDoor(lua_State* L)
+{
+	// itemType:isLevelDoor()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->levelDoor);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsSpecialDoor(lua_State* L)
+{
+	// itemType:isSpecialDoor()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->specialDoor);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeIsClosingDoor(lua_State* L)
+{
+	// itemType:isClosingDoor()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->closingDoor);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+//END WLASNE
+
 int32_t LuaScriptInterface::luaItemTypeGetType(lua_State* L)
 {
 	// itemType:getType()
@@ -10765,6 +10836,20 @@ int32_t LuaScriptInterface::luaItemTypeGetElementDamage(lua_State* L)
 	return 1;
 }
 
+//WLASNE
+int32_t LuaScriptInterface::luaItemTypeGetTransformUseTo(lua_State* L)
+{
+	// itemType:getTransformUseTo()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->transformUseTo);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+//END WLASNE
+
 int32_t LuaScriptInterface::luaItemTypeGetTransformEquipId(lua_State* L)
 {
 	// itemType:getTransformEquipId()
@@ -10800,6 +10885,20 @@ int32_t LuaScriptInterface::luaItemTypeGetDecayId(lua_State* L)
 	}
 	return 1;
 }
+
+// WLASNE
+int32_t LuaScriptInterface::luaItemTypeGetDecayTime(lua_State* L)
+{
+	// itemType:getDecayTime()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushNumber(L, itemType->decayTime);
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+//END WLASNE
 
 int32_t LuaScriptInterface::luaItemTypeHasSubType(lua_State* L)
 {

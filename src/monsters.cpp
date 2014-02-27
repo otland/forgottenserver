@@ -814,18 +814,21 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	pugi::xml_node node;
+// WLASNE ZMIENIONE bo w mobach mam tylko max jak poprawie to mozna przywrocic org
 	if ((node = monsterNode.child("health"))) {
-		if ((attr = node.attribute("now"))) {
-			mType->health = pugi::cast<int32_t>(attr.value());
-		} else {
-			std::cout << "[Error - Monsters::loadMonster] Missing health now. " << file << std::endl;
-		}
-
 		if ((attr = node.attribute("max"))) {
 			mType->healthMax = pugi::cast<int32_t>(attr.value());
 		} else {
 			std::cout << "[Error - Monsters::loadMonster] Missing health max. " << file << std::endl;
 		}
+
+		if ((attr = node.attribute("now"))) {
+			mType->health = pugi::cast<int32_t>(attr.value());
+		} else {
+			mType->health = mType->healthMax;
+			//std::cout << "[Error - Monsters::loadMonster] Missing health now. " << file << std::endl;
+		}
+//END WLASNE
 	}
 
 	if ((node = monsterNode.child("flags"))) {
