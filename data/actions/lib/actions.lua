@@ -1,31 +1,40 @@
+local DestroyId =	{
+
+		[1614] = 2253, [1615] = 2253, [1616] = 2253, [1619] = 2255, [1650] = 2253, [1651] = 2253, 
+		[1652] = 2253, [1653] = 2253, [1666] = 2253, [1667] = 2253, [1668] = 2250, [1669] = 2250, 
+		[1670] = 2250, [1671] = 2250, [1672] = 2250, [1673] = 2250, [1674] = 2250, [1675] = 2250, 
+		[1676] = 2250, [1677] = 2250, [1714] = 2252, [1715] = 2252, [1716] = 2252, [1717] = 2252, 
+		[1724] = 2254, [1725] = 2254, [1726] = 2254, [1727] = 2254, [1728] = 2254, [1729] = 2254,
+		[1730] = 2254, [1731] = 2254, [1732] = 2254, [1733] = 2254, [1734] = 2254, [1735] = 2254, 
+		[1736] = 2254, [1737] = 2254, [1738] = 2250, [1739] = 2250, [1740] = 2251, [1741] = 2255,
+		[1747] = 2251, [1748] = 2251, [1749] = 2251, [1750] = 2255, [1751] = 2255, [1752] = 2255, 
+		[1753] = 2255, [1770] = 2250, [1774] = 2250, [1775] = 2250, [2064] = 2250, [2080] = 2254, 
+		[2081] = 2254, [2082] = 2254, [2083] = 2254, [2084] = 2254, [2085] = 2254, [2094] = 2254, 
+		[2095] = 2254, [2098] = 2250, [2116] = 2254, [2117] = 2254, [2118] = 2254, [2119] = 2254,   
+		[2581] = 2250, [2582] = 2250, [2583] = 2250, [2584] = 2250, [2585] = 2250, [2586] = 2250, 
+		[2587] = 2250, [2588] = 2250, [2602] = 2257, [3805] = 2259, [3806] = 2259, [3807] = 2253, 
+		[3808] = 2253, [3809] = 2253, [3810] = 2253, [3813] = 2253, [3814] = 2253, [3815] = 2253, 
+		[3816] = 2253, [3817] = 2253, [3818] = 2253, [3819] = 2253, [3820] = 2253, 
+	}						 
+
+local SPIDER_WEB = {7538, 7539}
 function destroyItem(cid, itemEx, toPosition)
-	if itemEx.uid <= 65535 or itemEx.actionid > 0 then
-		return FALSE
+	if itemEx.uid <= 65535 or itemEx.actionid > 0 or (DestroyId[itemEx.itemid] == nil and isInArray(SPIDER_WEB, itemEx.itemid) == FALSE) then
+		return false
 	end
 
-	if (itemEx.itemid >= 1724 and itemEx.itemid <= 1741) or (itemEx.itemid >= 2581 and itemEx.itemid <= 2588) or itemEx.itemid == 1770 or itemEx.itemid == 2098 or itemEx.itemid == 1774 or itemEx.itemid == 1775 or itemEx.itemid == 2064 or (itemEx.itemid >= 1747 and itemEx.itemid <= 1753) or (itemEx.itemid >= 1714 and itemEx.itemid <= 1717) or (itemEx.itemid >= 1650 and itemEx.itemid <= 1653) or (itemEx.itemid >= 1666 and itemEx.itemid <= 1677) or (itemEx.itemid >= 1614 and itemEx.itemid <= 1616) or (itemEx.itemid >= 3813 and itemEx.itemid <= 3820) or (itemEx.itemid >= 3807 and itemEx.itemid <= 3810) or (itemEx.itemid >= 2080 and itemEx.itemid <= 2085) or (itemEx.itemid >= 2116 and itemEx.itemid <= 2119) or itemEx.itemid == 2094 or itemEx.itemid == 2095 or itemEx.itemid == 1619 or itemEx.itemid == 2602 or itemEx.itemid == 3805 or itemEx.itemid == 3806 then
-		if math.random(1, 7) == 1 then
-			if itemEx.itemid == 1738 or itemEx.itemid == 1739 or (itemEx.itemid >= 2581 and itemEx.itemid <= 2588) or itemEx.itemid == 1770 or itemEx.itemid == 2098 or itemEx.itemid == 1774 or itemEx.itemid == 1775 or itemEx.itemid == 2064 then
-				doCreateItem(2250, 1, toPosition)
-			elseif (itemEx.itemid >= 1747 and itemEx.itemid <= 1749) or itemEx.itemid == 1740 then
-				doCreateItem(2251, 1, toPosition)
-			elseif (itemEx.itemid >= 1714 and itemEx.itemid <= 1717) then
-				doCreateItem(2252, 1, toPosition)
-			elseif (itemEx.itemid >= 1650 and itemEx.itemid <= 1653) or (itemEx.itemid >= 1666 and itemEx.itemid <= 1677) or (itemEx.itemid >= 1614 and itemEx.itemid <= 1616) or (itemEx.itemid >= 3813 and itemEx.itemid <= 3820) or (itemEx.itemid >= 3807 and itemEx.itemid <= 3810) then
-				doCreateItem(2253, 1, toPosition)
-			elseif (itemEx.itemid >= 1724 and itemEx.itemid <= 1737) or (itemEx.itemid >= 2080 and itemEx.itemid <= 2085) or (itemEx.itemid >= 2116 and itemEx.itemid <= 2119) or itemEx.itemid == 2094 or itemEx.itemid == 2095 then
-				doCreateItem(2254, 1, toPosition)
-			elseif (itemEx.itemid >= 1750 and itemEx.itemid <= 1753) or itemEx.itemid == 1619 or itemEx.itemid == 1741 then
-				doCreateItem(2255, 1, toPosition)
-			elseif itemEx.itemid == 2602 then
-				doCreateItem(2257, 1, toPosition)
-			elseif itemEx.itemid == 3805 or itemEx.itemid == 3806 then
-				doCreateItem(2259, 1, toPosition)
-			end
-			doRemoveItem(itemEx.uid, 1)
+		if isInArray(SPIDER_WEB, itemEx.itemid) == TRUE then
+				if math.random(1, 7) <= 2 then 
+					local iEx = Item(itemEx.uid)
+					iEx:transform(itemEx.itemid + 6) 
+					iEx:decay()	
+				end 
+		else
+				if math.random(1, 7) == 1 then	
+					local iEx = Item(itemEx.uid)	
+					iEx:transform(DestroyId[itemEx.itemid]) 
+				end	
 		end
-		doSendMagicEffect(toPosition, CONST_ME_POFF)
-		return TRUE
-	end
-	return FALSE
+	toPosition:sendMagicEffect(CONST_ME_POFF)
+	return true	
 end
