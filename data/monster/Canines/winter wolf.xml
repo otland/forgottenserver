@@ -28,6 +28,9 @@
 		<element energyPercent="-5"/>
 		<element deathPercent="-5"/>
 	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Yoooohhuuuu!"/>
+	</voices>
 	<loot>
 		<item id="2666" countmax="2" chance="15000"/><!-- meat -->
 		<item id="11212" chance="9425"/> <!-- winter wolf fur -->
