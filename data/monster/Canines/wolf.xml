@@ -27,6 +27,10 @@
 		<element icePercent="-5"/>
 		<elemetn deathPercent="-5"/>
 	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Yoooohhuuuu!"/>
+		<voice sentence="Grrrrrrr"/>
+	</voices>
 	<loot>
 		<item id="2666" countmax="2" chance="25000"/><!-- meat -->
 		<item id="3976" chance="9000"/><!-- worm -->
