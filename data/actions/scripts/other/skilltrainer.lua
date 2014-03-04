@@ -7,16 +7,18 @@ local statues = {
 }
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
-	if not isPremium(cid) then
-		doPlayerSendDefaultCancel(cid, RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
+	local player = Player(cid)
+
+	if player:getPremiumDays() < 1 then
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT))
 		return true
 	end
 
-	if isPlayerPzLocked(cid) then
+	if player:isPzLocked() then
 		return false
 	end
 
 	doPlayerSetOfflineTrainingSkill(cid, statues[item.itemid])
-	doRemoveCreature(cid)
+	player:remove()
 	return true
 end
