@@ -1047,7 +1047,7 @@ QTreeLeafNode* QTreeNode::getLeafStatic(QTreeNode* root, uint32_t x, uint32_t y)
 	QTreeNode* currentNode = root;
 	while (currentNode) {
 		if (!currentNode->isLeaf()) {
-			uint32_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
+			size_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
 			if (currentNode->m_child[index]) {
 				currentNode = currentNode->m_child[index];
 				x *= 2;
@@ -1134,36 +1134,63 @@ void QTreeLeafNode::removeCreature(Creature* c)
 uint32_t Map::clean()
 {
 	uint64_t start = OTSYS_TIME();
-	uint32_t count = 0, tiles = 0;
+	size_t count = 0, tiles = 0;
 
 	if (g_game.getGameState() == GAME_STATE_NORMAL) {
 		g_game.setGameState(GAME_STATE_MAINTAIN);
 	}
 
-	for (int32_t z = 0; z < (int32_t)MAP_MAX_LAYERS; z++) {
-		for (uint32_t y = 1; y <= mapHeight; y++) {
-			for (uint32_t x = 1; x <= mapWidth; x++) {
-				Tile* tile = getTile(x, y, z);
-				if (!tile || tile->hasFlag(TILESTATE_PROTECTIONZONE) || !tile->getItemList()) {
+	std::vector<QTreeNode*> nodes {
+		&root
+	};
+	std::vector<Item*> toRemove;
+	do {
+		QTreeNode* node = nodes.back();
+		nodes.pop_back();
+		if (node->isLeaf()) {
+			QTreeLeafNode* leafNode = static_cast<QTreeLeafNode*>(node);
+			for (uint16_t z = 0; z < MAP_MAX_LAYERS; ++z) {
+				Floor* floor = leafNode->getFloor(z);
+				if (!floor) {
 					continue;
 				}
 
-				++tiles;
-				TileItemVector* itemList = tile->getItemList();
-				ItemVector::iterator it = itemList->begin(), end = itemList->end();
-				while (it != end) {
-					if ((*it)->isCleanable()) {
-						g_game.internalRemoveItem(*it, -1);
-						it = itemList->begin();
-						end = itemList->end();
-						++count;
-					} else {
-						++it;
+				for (size_t x = 0; x < FLOOR_SIZE; ++x) {
+					for (size_t y = 0; y < FLOOR_SIZE; ++y) {
+						Tile* tile = floor->tiles[x][y];
+						if (!tile || tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+							continue;
+						}
+
+						TileItemVector* itemList = tile->getItemList();
+						if (!itemList) {
+							continue;
+						}
+
+						++tiles;
+						for (Item* item : *itemList) {
+							if (item->isCleanable()) {
+								toRemove.push_back(item);
+							}
+						}
+
+						for (Item* item : toRemove) {
+							g_game.internalRemoveItem(item, -1);
+						}
+						count += toRemove.size();
+						toRemove.clear();
 					}
 				}
 			}
+		} else {
+			for (size_t i = 0; i < 4; ++i) {
+				QTreeNode* childNode = node->m_child[i];
+				if (childNode) {
+					nodes.push_back(childNode);
+				}
+			}
 		}
-	}
+	} while (!nodes.empty());
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
 		g_game.setGameState(GAME_STATE_NORMAL);
