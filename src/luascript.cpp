@@ -6116,6 +6116,10 @@ int32_t LuaScriptInterface::luaItemClone(lua_State* L)
 	if (item) {
 		Item* clone = item->clone();
 		if (clone) {
+			ScriptEnvironment* env = getScriptEnv();
+			env->addTempItem(env, clone);
+			clone->setParent(VirtualCylinder::virtualCylinder);
+
 			pushUserdata<Item>(L, clone);
 			setItemMetatable(L, -1, clone);
 		} else {
