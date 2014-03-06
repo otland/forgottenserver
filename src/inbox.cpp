@@ -73,3 +73,19 @@ void Inbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int3
 		parent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 	}
 }
+
+Cylinder* Inbox::getParent()
+{
+	if (parent) {
+		return parent->getParent();
+	}
+	return nullptr;
+}
+
+const Cylinder* Inbox::getParent() const
+{
+	if (parent) {
+		return parent->getParent();
+	}
+	return nullptr;
+}

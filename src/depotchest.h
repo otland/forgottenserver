@@ -52,6 +52,9 @@ class DepotChest : public Container
 			return false;
 		}
 
+		Cylinder* getParent();
+		const Cylinder* getParent() const;
+
 	private:
 		uint32_t maxDepotItems;
 };

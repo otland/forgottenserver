@@ -39,6 +39,9 @@ class Inbox : public Container
 		bool canRemove() const {
 			return false;
 		}
+
+		Cylinder* getParent();
+		const Cylinder* getParent() const;
 };
 
 #endif
