@@ -2700,6 +2700,12 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
+	for (CreatureEvent* creatureEvent : player->getCreatureEvents(CREATURE_EVENT_TRADE_REQUEST)) {
+		if(!creatureEvent->executeTradeRequest(player, tradePartner, tradeItem)){
+			return;
+		}
+	}
+
 	internalStartTrade(player, tradePartner, tradeItem);
 }
 
