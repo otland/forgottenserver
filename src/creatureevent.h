@@ -29,6 +29,7 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_LOGIN,
 	CREATURE_EVENT_LOGOUT,
 	CREATURE_EVENT_THINK,
+	CREATURE_EVENT_TRADE_REQUEST,
 	CREATURE_EVENT_PREPAREDEATH,
 	CREATURE_EVENT_DEATH,
 	CREATURE_EVENT_KILL,
@@ -97,6 +98,7 @@ class CreatureEvent : public Event
 		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
 		bool executeOnKill(Creature* creature, Creature* target);
+		bool executeTradeRequest(Player* player, Player* target, Item* item);
 		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 		bool executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
