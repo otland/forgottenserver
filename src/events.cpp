@@ -432,7 +432,7 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	LuaScriptInterface::pushUserdata<Player>(L, target);
-	LuaScriptInterface::setMetatable(L, -1, "Target");
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	LuaScriptInterface::pushUserdata<Item>(L, item);
 	LuaScriptInterface::setItemMetatable(L, -1, item);
