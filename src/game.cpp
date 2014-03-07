@@ -2699,6 +2699,9 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		player->sendTextMessage(MSG_INFO_DESCR, "You can not trade more than 100 items.");
 		return;
 	}
+	if (!g_events->eventPlayerOnTradeRequest(player,tradePartner,tradeItem)) {
+		return;
+	}
 
 	internalStartTrade(player, tradePartner, tradeItem);
 }
