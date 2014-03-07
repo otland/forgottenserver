@@ -185,6 +185,8 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_KILL;
 	} else if (tmpStr == "advance") {
 		m_type = CREATURE_EVENT_ADVANCE;
+	} else if (tmpStr == "traderequest") {
+		m_type = CREATURE_EVENT_TRADE_REQUEST;
 	} else if (tmpStr == "modalwindow") {
 		m_type = CREATURE_EVENT_MODALWINDOW;
 	} else if (tmpStr == "textedit") {
@@ -234,6 +236,9 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_TEXTEDIT:
 			return "onTextEdit";
+			
+		case CREATURE_EVENT_TRADE_REQUEST:
+			return "onTradeRequest";
 
 		case CREATURE_EVENT_CHANGEHEALTH:
 			return "onChangeHealth";
@@ -472,6 +477,27 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	LuaScriptInterface::pushNumber(L, player->getID());
 	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 	LuaScriptInterface::pushString(L, text);
+
+	return m_scriptInterface->callFunction(3);
+}
+
+bool CreatureEvent::executeTradeRequest(Player* player, Player* target, Item* item)
+{
+	//onTradeRequest(cid,target,item)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeTradeRequest] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	LuaScriptInterface::pushNumber(L, player->getID());
+	LuaScriptInterface::pushNumber(L, target->getID());
+	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 
 	return m_scriptInterface->callFunction(3);
 }
