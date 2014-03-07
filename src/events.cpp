@@ -48,6 +48,7 @@ void Events::clear()
 	playerOnMoveItem = -1;
 	playerOnMoveCreature = -1;
 	playerOnTurn = -1;
+	playerOnTradeRequest = -1;
 }
 
 bool Events::load()
@@ -95,6 +96,8 @@ bool Events::load()
 					playerOnLookInTrade = event;
 				} else if (methodName == "onLookInShop") {
 					playerOnLookInShop = event;
+				} else if (methodName == "onTradeRequest") {
+					playerOnTradeRequest = event;
 				} else if (methodName == "onMoveItem") {
 					playerOnMoveItem = event;
 				} else if (methodName == "onMoveCreature") {
@@ -405,4 +408,34 @@ bool Events::eventPlayerOnTurn(Player* player, Direction direction)
 	LuaScriptInterface::pushNumber(L, direction);
 
 	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* item)
+{
+	// Player:onTradeRequest(target,item)
+	if (playerOnTradeRequest == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnTradeRequest] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(playerOnTradeRequest, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(playerOnTradeRequest);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Player>(L, target);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	return scriptInterface.callFunction(3);
 }

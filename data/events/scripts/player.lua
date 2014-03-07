@@ -1,4 +1,3 @@
-
 function Player:onLook(thing, position, distance)
 	local description = "You see " .. thing:getDescription(distance)
 	if self:getGroup():getAccess() then
@@ -92,5 +91,9 @@ function Player:onMoveCreature(creature, fromPosition, toPosition)
 end
 
 function Player:onTurn(direction)
+	return true
+end
+
+function Player:onTradeRequest(target, item)
 	return true
 end

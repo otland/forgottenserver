@@ -47,6 +47,7 @@ class Events
 		bool eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition);
 		bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
 		bool eventPlayerOnTurn(Player* player, Direction direction);
+		bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
 
 	private:
 		LuaScriptInterface scriptInterface;
@@ -64,6 +65,7 @@ class Events
 		int32_t playerOnMoveItem;
 		int32_t playerOnMoveCreature;
 		int32_t playerOnTurn;
+		int32_t playerOnTradeRequest;
 };
 
 #endif

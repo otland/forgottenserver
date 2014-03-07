@@ -13,4 +13,5 @@
 	<event class="Player" method="onMoveItem" enabled="0"/>
 	<event class="Player" method="onMoveCreature" enabled="0"/>
 	<event class="Player" method="onTurn" enabled="0"/>
+	<event class="Player" method="onTradeRequest" enabled="0"/>
 </events>
