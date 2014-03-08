@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grave Robber" nameDescription="a grave robber" race="venom" experience="0" speed="135" manacost="355">
+	<health now="550" max="550"/>
+	<look type="82" corpse="20411"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="25" attack="20" poison="15"/>
+	</attacks>
+	<defenses armor="5" defense="11"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element energyPercent="20"/>
+		<element firePercent="-10"/>
+		<element icePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="38" chance="55000"/><!-- gold coin -->		
+		<item id="12448" chance="8000"/><!-- rope belt -->  
+		<item id="8838" countmax="3" chance="5700"/><!-- potatoes -->  
+        <item id="2386" chance="2080"/><!-- axe -->               
+        <item id="12412" chance="1700"/><!-- dirty turban -->  
+        <item id="2465" chance="1700"/><!-- brass armor -->  
+        <item id="2398" chance="1500"/><!-- mace -->  
+        <item id="2509" chance="440"/><!-- steel shield -->  
+		<item id="2459" chance="440"/><!-- iron helmet -->  
+</loot>
+</monster>

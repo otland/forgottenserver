@@ -36,41 +36,42 @@
 	</attacks>
 	<defenses armor="25" defense="35"/>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="40"/>
-		<element energyPercent="40"/>
+		<element earthPercent="50"/>
+		<element energyPercent="20"/>
 		<element icePercent="-20"/>
-		<element holyPercent="-10"/>
+		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
+		<immunity fire="1"/>
 		<immunity paralyze="1"/>
 		<immunity outfit="1"/>
 		<immunity drunk="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="GROOOWL!"/>
-		<voice sentence="GRRRRR!"/>
+		<voice sentence="GROOOOWL!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="25000"/><!-- gold coin -->
-		<item id="2148" countmax="100" chance="25000"/><!-- gold coin -->
-		<item id="2148" countmax="100" chance="25000"/><!-- gold coin -->
-		<item id="2148" countmax="75" chance="25000"/><!-- gold coin -->
-		<item id="2152" countmax="5" chance="5000"/><!-- platinum coin -->
-		<item id="2671" countmax="6" chance="22500"/><!-- ham -->
-		<item id="2410" countmax="11" chance="9000"/><!-- throwing knife -->
-		<item id="2144" countmax="4" chance="7000"/><!-- black pearl -->
-		<item id="2231" chance="30000"/><!-- big bone -->
-		<item id="2230" chance="25000"/><!-- bone -->
-		<item id="6558" chance="6500"/><!-- concentrated demonic blood -->
-		<item id="6500" chance="15000"/><!-- demonic essence -->
-		<item id="9971" chance="1000"/><!-- gold ingot -->
-		<item id="9808" chance="1500"/><!-- rusty armor -->
-		<item id="2393" chance="2500"/><!-- giant sword -->
-		<item id="5944" chance="7500"/><!-- soul orb -->
-		<item id="2430" chance="3000"/><!-- knight axe -->
-		<item id="2383" chance="275000"/><!-- spike sword -->
-		<item id="6553" chance="400"/><!-- ruthless axe -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="7" chance="100000"/><!-- platinum coin -->
+		<item id="5944" chance="50000"/><!-- soul orb -->
+		<item id="7368" countmax="10" chance="33333"/><!-- assassin star -->
+		<item id="6558" chance="25000"/><!-- concentrated demonic blood -->
+		<item id="2671" chance="25000"/><!-- ham -->
+		<item id="10554" chance="16666"/><!-- hellhound slobber -->
+		<item id="6500" chance="16666"/><!-- demonic essence -->
+		<item id="2383" chance="14285"/><!-- spike sword -->
+		<item id="7591" countmax="2" chance="14285"/><!-- great health potion -->
+		<item id="7590" countmax="3" chance="14285"/><!-- great mana potion -->
+		<item id="2430" chance="10000"/><!-- knight axe -->
+		<item id="2144" countmax="4" chance="9090"/><!-- black pearl -->
+		<item id="2187" chance="8333"/><!-- wand of inferno -->
+		<item id="2392" chance="6666"/><!-- fire sword -->
+		<item id="9808" chance="4545"/><!-- rusty armor -->
+		<item id="9971" chance="1470"/><!-- gold ingot -->
+		<item id="7894" chance="1265"/><!-- magma legs -->
+		<item id="2231" chance="1162"/><!-- big bone -->
+		<item id="7900" chance="1162"/><!-- magma monocle -->
+		<item id="2393" chance="952"/><!-- giant sword -->
 	</loot>
 </monster>

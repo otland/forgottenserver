@@ -15,29 +15,25 @@
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="15"/>
+		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="50"/>
 	</attacks>
 	<defenses armor="55" defense="55">
 	</defenses>
-	<elements>
-		<element earthPercent="10"/>
-	</elements>
 	<voices interval="2500" chance="10">
 		<voice sentence="Chrrch!"/>
-		<voice sentence="Chhh!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="9" chance="30000"/> <!-- Gold Coin -->
-		<item id="3976" countmax="5" chance="33333"/> <!-- Worms -->
-		<item id="2544" countmax="5" chance="880"/> <!-- Arrows -->
-		<item id="7618" chance="450"/> <!-- HP -->
-		<item id="2120" chance="600"/> <!-- Rope -->
-		<item id="2456" chance="500"/> <!-- Bow -->
-		<item id="2398" chance="500"/> <!-- Mace -->
-		<item id="2419" chance="450"/> <!-- Scimitar -->
-		<item id="19736" chance="450"/> <!-- Insectoid Eggs -->
+		<item id="2148" countmax="16" chance="50000"/> <!-- gold coin -->
+		<item id="19736" chance="25000"/> <!-- insectoid eggs -->
+		<item id="2544" countmax="3" chance="7692"/> <!-- arrows -->
+		<item id="2120" chance="4545"/> <!-- rope -->
+		<item id="2398" chance="3703"/> <!-- mace -->
+		<item id="2460" chance="2173"/> <!-- brass helmet -->
+		<item id="2456" chance="1086"/> <!-- bow -->
+		<item id="7618" chance="833"/> <!-- health potion -->
+		<item id="2419" chance="418"/> <!-- scimitar -->
 	</loot>
 </monster>

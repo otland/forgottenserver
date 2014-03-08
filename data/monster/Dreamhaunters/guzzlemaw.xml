@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Guzzlemaw" nameDescription="Guzzlemaw" race="blood" experience="5500" speed="270" manacost="0">
+  <health now="6400" max="6400"/>
+  <look type="584" corpse="22485"/>
+  <targetchange interval="5000" chance="8"/>
+  <strategy attack="90" defense="10"/>
+  <flags>
+    <flag summonable="0"/>
+    <flag attackable="1"/>
+    <flag hostile="1"/>
+    <flag illusionable="0"/>
+    <flag convinceable="0"/>
+    <flag pushable="0"/>
+    <flag canpushitems="1"/>
+    <flag canpushcreatures="1"/>
+    <flag targetdistance="1"/>
+    <flag staticattack="90"/>
+    <flag runonhealth="0"/>
+  </flags>
+  <attacks>
+    <attack name="melee" interval="2000" skill="90" attack="90"/>
+		<attack name="earth" interval="1800" chance="10" length="7" spread="0" min="-300" max="-685">
+			<attribute key="areaEffect" value="stones"/>
+		</attack>
+		<attack name="earth" interval="2000" chance="9" radius="6" min="-250" max="-590">
+			<attribute key="areaEffect" value="bigplants"/>
+		</attack>	
+  </attacks>
+  <defenses armor="55" defense="55">    
+  </defenses>
+	<elements>			
+		<element icePercent="-10"/>		
+		<element firePercent="-10"/>
+	</elements>
+  <immunities>
+    <immunity earth="100"/>
+    <immunity energy="100"/>
+    <immunity lifedrain="0"/>
+    <immunity paralyze="100"/>
+    <immunity invisible="100"/>
+  </immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Knorrrr!"/>
+	</voices>     
+  <loot>
+ 	 <item id="2148" countmax="100" chance="30000"/>  
+ 	 <item id="2152" countmax="10" chance="33333"/>
+ 	 <item id="7590" countmax="4" chance="3100"/>
+ 	 <item id="5880" countmax="2" chance="2195"/>
+ 	 <item id="8473" countmax="2" chance="2195"/>
+ 	 <item id="18435" countmax="8" chance="366"/>
+ 	 <item id="2144" countmax="1" chance="866"/>
+ 	 <item id="2143" countmax="1" chance="866"/>
+        <item id="18390" chance="1766"/>     
+        <item id="18412" chance="1066"/>          
+        <item id="2477" chance="444"/>
+        <item id="9980" chance="1066"/>
+        <item id="2393" chance="422"/>
+        <item id="11227" chance="1032"/>
+        <item id="5904" chance="632"/>
+        <item id="2487" chance="632"/>
+        <item id="18453" chance="603"/>
+        <item id="18450" chance="603"/>
+</loot>
+</monster>

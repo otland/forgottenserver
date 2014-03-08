@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Desperate White Deer" nameDescription="desperate white deer" race="blood" experience="35" speed="275" manacost="0">
+  <health now="65" max="65"/>
+  <look type="400" corpse="13513"/>
+  <targetchange interval="5000" chance="8"/>
+  <strategy attack="100" defense="0"/>
+  <flags>
+    <flag summonable="0"/>
+    <flag attackable="1"/>
+    <flag hostile="1"/>
+    <flag illusionable="0"/>
+    <flag convinceable="0"/>
+    <flag pushable="0"/>
+    <flag canpushitems="1"/>
+    <flag canpushcreatures="0"/>
+    <flag targetdistance="1"/>
+    <flag staticattack="90"/>
+    <flag runonhealth="65"/>
+  </flags>  
+  <voices interval="5000" chance="10">    
+    <voice sentence="*bell*"/>  
+  </voices>
+  <loot> 	 
+ 	<item id="2671" countmax="3" chance="33333"/> <!-- ham 	-->
+	<item id="13533" chance="33333"/> <!-- white deer antlers 	-->
+	<item id="13534" chance="33333"/> <!-- white deer skin 	-->
+</loot>
+</monster>
