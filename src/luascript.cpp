@@ -1408,7 +1408,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
-	registerGlobalVariable("VIRTUAL_PARENT", true);
+	registerGlobalBoolean("VIRTUAL_PARENT", true);
 
 	registerGlobalMethod("isType", LuaScriptInterface::luaIsType);
 
@@ -2305,7 +2305,7 @@ void LuaScriptInterface::registerGlobalVariable(const std::string& name, lua_Num
 	lua_setglobal(m_luaState, name.c_str());
 }
 
-void LuaScriptInterface::registerGlobalVariable(const std::string& name, bool value)
+void LuaScriptInterface::registerGlobalBoolean(const std::string& name, bool value)
 {
 	// _G[name] = value
 	lua_pushboolean(m_luaState, value ? 1 : 0);
