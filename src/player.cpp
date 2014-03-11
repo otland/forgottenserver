@@ -2758,7 +2758,9 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 			}
 		}
 
-		for (Container* tmpContainer : containers) {
+		size_t i = 0;
+		while (i < containers.size()) {
+			Container* tmpContainer = containers[i++];
 			if (!autoStack || !isStackable) {
 				//we need to find first empty container as fast as we can for non-stackable items
 				uint32_t n = tmpContainer->capacity() - tmpContainer->size();
@@ -4675,7 +4677,9 @@ uint64_t Player::getMoney() const
 		}
 	}
 
-	for (const Container* container : containers) {
+	size_t i = 0;
+	while (i < containers.size()) {
+		const Container* container = containers[i++];
 		for (const Item* item : container->getItemList()) {
 			const Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
