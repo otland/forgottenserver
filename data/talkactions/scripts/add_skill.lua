@@ -46,14 +46,21 @@ function onSay(cid, words, param)
 	-- Trim left
 	split[2] = split[2]:gsub("^%s*(.-)$", "%1")
 
+	local count = 1
+	if split[3] ~= nil then
+		count = tonumber(split[3])
+	end
+
 	local ch = split[2]:sub(1, 1)
-	if ch == "l" or ch == "e" then
-		target:addExperience(getExpForLevel(target:getLevel() + 1) - target:getExperience(), false)
-	elseif ch == "m" then
-		target:addManaSpent(target:getVocation():getRequiredManaSpent(target:getBaseMagicLevel() + 1) - target:getManaSpent())
-	else
-		local skillId = getSkillId(split[2])
-		target:addSkillTries(skillId, target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId) + 1) - target:getSkillTries(skillId))
+	for i = 1, count do
+		if ch == "l" or ch == "e" then
+			target:addExperience(getExpForLevel(target:getLevel() + 1) - target:getExperience(), false)
+		elseif ch == "m" then
+			target:addManaSpent(target:getVocation():getRequiredManaSpent(target:getBaseMagicLevel() + 1) - target:getManaSpent())
+		else
+			local skillId = getSkillId(split[2])
+			target:addSkillTries(skillId, target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId) + 1) - target:getSkillTries(skillId))
+		end
 	end
 	return false
 end
