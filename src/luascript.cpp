@@ -1387,6 +1387,15 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CLIENTOS_OTCLIENT_WINDOWS)
 	registerEnum(CLIENTOS_OTCLIENT_MAC)
 	
+	registerEnum(WEAPON_NONE)
+	registerEnum(WEAPON_SWORD)
+	registerEnum(WEAPON_CLUB)
+	registerEnum(WEAPON_AXE)
+	registerEnum(WEAPON_SHIELD)
+	registerEnum(WEAPON_DISTANCE)
+	registerEnum(WEAPON_WAND)
+	registerEnum(WEAPON_AMMO)
+	
 	// Use with container:addItem, container:addItemEx and possibly other functions.
 	registerEnum(FLAG_NOLIMIT)
 	registerEnum(FLAG_IGNOREBLOCKITEM)

@@ -615,7 +615,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			} else if (tmpStrValue == "shield") {
 				it.weaponType = WEAPON_SHIELD;
 			} else if (tmpStrValue == "distance") {
-				it.weaponType = WEAPON_DIST;
+				it.weaponType = WEAPON_DISTANCE;
 			} else if (tmpStrValue == "wand") {
 				it.weaponType = WEAPON_WAND;
 			} else if (tmpStrValue == "ammunition") {
