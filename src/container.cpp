@@ -103,19 +103,14 @@ void Container::addItem(Item* item)
 
 Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
-	switch (attr) {
-		case ATTR_CONTAINER_ITEMS: {
-			uint32_t count;
-			if (!propStream.GET_ULONG(count)) {
-				return ATTR_READ_ERROR;
-			}
-
-			serializationCount = count;
-			return ATTR_READ_END;
+	if (attr == ATTR_CONTAINER_ITEMS) {
+		uint32_t count;
+		if (!propStream.GET_ULONG(count)) {
+			return ATTR_READ_ERROR;
 		}
 
-		default:
-			break;
+		serializationCount = count;
+		return ATTR_READ_END;
 	}
 	return Item::readAttr(attr, propStream);
 }

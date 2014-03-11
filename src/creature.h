@@ -431,7 +431,7 @@ class Creature : virtual public Thing
 			return _tile;
 		}
 		virtual void setParent(Cylinder* cylinder) {
-			_tile = dynamic_cast<Tile*>(cylinder);
+			_tile = static_cast<Tile*>(cylinder);
 			_position = _tile->getPosition();
 		}
 
