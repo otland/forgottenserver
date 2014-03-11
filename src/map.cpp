@@ -563,7 +563,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 
 	listDir.clear();
 
-	Position endPos = creature->getPosition();
+	const Position& endPos = creature->getPosition();
 	if (destPos.z != endPos.z) {
 		return false;
 	}
@@ -583,8 +583,7 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 	startNode->f = startNode->h;
 	startNode->parent = nullptr;
 
-	Position pos;
-	pos.z = destPos.z;
+	Position pos(0, 0, destPos.z);
 
 	static int32_t neighbourOrderList[8][2] = {
 		{ -1, 0},
@@ -611,70 +610,69 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 		if (n->x == endPos.x && n->y == endPos.y) {
 			found = n;
 			break;
-		} else {
-			for (int i = 0; i < 8; ++i) {
-				pos.x = n->x + neighbourOrderList[i][0];
-				pos.y = n->y + neighbourOrderList[i][1];
+		}
 
-				bool outOfRange = false;
-				if (maxSearchDist != -1 && (Position::getDistanceX(endPos, pos) > maxSearchDist ||
-				                            Position::getDistanceY(endPos, pos) > maxSearchDist)) {
-					outOfRange = true;
-				}
+		for (int i = 0; i < 8; ++i) {
+			pos.x = n->x + neighbourOrderList[i][0];
+			pos.y = n->y + neighbourOrderList[i][1];
 
-				if (!outOfRange) {
-					const Tile* tile = canWalkTo(creature, pos);
-					if (tile) {
-						//The cost (g) for this neighbour
-						const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
-						const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
-						const int_fast32_t newg = n->g + cost + extraCost;
-						const uint32_t tableIndex = (pos.x << 16) | pos.y;
-
-						//Check if the node is already in the closed/open list
-						//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
-
-						AStarNode* neighbourNode;
-						auto it = nodeTable.find(tableIndex);
-						if (it != nodeTable.end()) {
-							neighbourNode = it->second;
-						} else {
-							neighbourNode = nullptr;
-						}
-
-						if (neighbourNode) {
-							if (neighbourNode->g <= newg) {
-								continue;    //The node on the closed/open list is cheaper than this one
-							}
-
-							nodes.openNode(neighbourNode);
-						} else {
-							//Does not exist in the open/closed list, create a new node
-							neighbourNode = nodes.createOpenNode();
-
-							if (!neighbourNode) {
-								//seems we ran out of nodes
-								listDir.clear();
-								return false;
-							}
-
-							nodeTable[tableIndex] = neighbourNode;
-
-							neighbourNode->x = pos.x;
-							neighbourNode->y = pos.y;
-						}
-
-						//This node is the best node so far with this state
-						neighbourNode->parent = n;
-						neighbourNode->g = newg;
-						neighbourNode->h = nodes.getEstimatedDistance(pos.x, pos.y, endPos.x, endPos.y);
-						neighbourNode->f = newg + neighbourNode->h;
-					}
-				}
+			if (maxSearchDist != -1 && (Position::getDistanceX(endPos, pos) > maxSearchDist ||
+										Position::getDistanceY(endPos, pos) > maxSearchDist)) {
+				// Out of range
+				continue;
 			}
 
-			nodes.closeNode(n);
+			const Tile* tile = canWalkTo(creature, pos);
+			if (!tile) {
+				continue;
+			}
+
+			//The cost (g) for this neighbour
+			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
+			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
+			const int_fast32_t newg = n->g + cost + extraCost;
+			const uint32_t tableIndex = (pos.x << 16) | pos.y;
+
+			//Check if the node is already in the closed/open list
+			//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
+
+			AStarNode* neighbourNode;
+			auto it = nodeTable.find(tableIndex);
+			if (it != nodeTable.end()) {
+				neighbourNode = it->second;
+			} else {
+				neighbourNode = nullptr;
+			}
+
+			if (neighbourNode) {
+				if (neighbourNode->g <= newg) {
+					continue;    //The node on the closed/open list is cheaper than this one
+				}
+
+				nodes.openNode(neighbourNode);
+			} else {
+				//Does not exist in the open/closed list, create a new node
+				neighbourNode = nodes.createOpenNode();
+				if (!neighbourNode) {
+					//seems we ran out of nodes
+					listDir.clear();
+					return false;
+				}
+
+				nodeTable[tableIndex] = neighbourNode;
+
+				neighbourNode->x = pos.x;
+				neighbourNode->y = pos.y;
+			}
+
+			//This node is the best node so far with this state
+			neighbourNode->parent = n;
+			neighbourNode->g = newg;
+			neighbourNode->h = nodes.getEstimatedDistance(pos.x, pos.y, endPos.x, endPos.y);
+			neighbourNode->f = newg + neighbourNode->h;
 		}
+
+		nodes.closeNode(n);
 	}
 
 	int_fast32_t prevx = endPos.x;
@@ -776,76 +774,71 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		}
 
 		int32_t dirCount = (fpp.allowDiagonal ? 8 : 4);
-
 		for (int32_t i = 0; i < dirCount; ++i) {
 			pos.x = n->x + neighbourOrderList[i][0];
 			pos.y = n->y + neighbourOrderList[i][1];
 
-			bool inRange = true;
 			if (fpp.maxSearchDist != -1 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
 			                                Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
-				inRange = false;
+				continue;
 			}
 
-			if (fpp.keepDistance) {
-				if (!pathCondition.isInRange(startPos, pos, fpp)) {
-					inRange = false;
+			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {
+				continue;
+			}
+
+			const Tile* tile = canWalkTo(creature, pos);
+			if (!tile) {
+				continue;
+			}
+
+			//The cost (g) for this neighbour
+			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
+			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
+			const int_fast32_t newf = n->f + cost + extraCost;
+			const uint32_t tableIndex = (pos.x << 16) | pos.y;
+
+			//Check if the node is already in the closed/open list
+			//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
+
+			AStarNode* neighbourNode;
+			auto it = nodeTable.find(tableIndex);
+			if (it != nodeTable.end()) {
+				neighbourNode = it->second;
+			} else {
+				neighbourNode = nullptr;
+			}
+
+			if (neighbourNode) {
+				if (neighbourNode->f <= newf) {
+					//The node on the closed/open list is cheaper than this one
+					continue;
 				}
-			}
 
-			if (inRange) {
-				const Tile* tile = canWalkTo(creature, pos);
-				if (tile) {
-					//The cost (g) for this neighbour
-					const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
-					const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
-					const int_fast32_t newf = n->f + cost + extraCost;
-					const uint32_t tableIndex = (pos.x << 16) | pos.y;
-
-					//Check if the node is already in the closed/open list
-					//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
-
-					AStarNode* neighbourNode;
-					auto it = nodeTable.find(tableIndex);
-					if (it != nodeTable.end()) {
-						neighbourNode = it->second;
-					} else {
-						neighbourNode = nullptr;
+				nodes.openNode(neighbourNode);
+			} else {
+				//Does not exist in the open/closed list, create a new node
+				neighbourNode = nodes.createOpenNode();
+				if (!neighbourNode) {
+					if (found) {
+						//not quite what we want, but we found something
+						break;
 					}
 
-					if (neighbourNode) {
-						if (neighbourNode->f <= newf) {
-							//The node on the closed/open list is cheaper than this one
-							continue;
-						}
-
-						nodes.openNode(neighbourNode);
-					} else {
-						//Does not exist in the open/closed list, create a new node
-						neighbourNode = nodes.createOpenNode();
-
-						if (!neighbourNode) {
-							if (found) {
-								//not quite what we want, but we found something
-								break;
-							}
-
-							//seems we ran out of nodes
-							dirList.clear();
-							return false;
-						}
-
-						nodeTable[tableIndex] = neighbourNode;
-
-						neighbourNode->x = pos.x;
-						neighbourNode->y = pos.y;
-					}
-
-					//This node is the best node so far with this state
-					neighbourNode->parent = n;
-					neighbourNode->f = newf;
+					//seems we ran out of nodes
+					dirList.clear();
+					return false;
 				}
+
+				nodeTable[tableIndex] = neighbourNode;
+
+				neighbourNode->x = pos.x;
+				neighbourNode->y = pos.y;
 			}
+
+			//This node is the best node so far with this state
+			neighbourNode->parent = n;
+			neighbourNode->f = newf;
 		}
 
 		nodes.closeNode(n);
