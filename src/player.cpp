@@ -2716,7 +2716,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 		bool autoStack = !((flags & FLAG_IGNOREAUTOSTACK) == FLAG_IGNOREAUTOSTACK);
 		bool isStackable = item->isStackable();
 
-		std::forward_list<Container*> containerList;
+		std::vector<Container*> containers;
 
 		for (uint32_t slotIndex = SLOT_FIRST; slotIndex <= SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
@@ -2740,7 +2740,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 					}
 
 					if (Container* subContainer = inventoryItem->getContainer()) {
-						containerList.push_front(subContainer);
+						containers.push_back(subContainer);
 					}
 				} else if (Container* subContainer = inventoryItem->getContainer()) {
 					if (subContainer->__queryAdd(INDEX_WHEREEVER, item, item->getItemCount(), flags) == RET_NOERROR) {
@@ -2749,7 +2749,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 						return subContainer;
 					}
 
-					containerList.push_front(subContainer);
+					containers.push_back(subContainer);
 				}
 			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RET_NOERROR) { //empty slot
 				index = slotIndex;
@@ -2758,10 +2758,9 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 			}
 		}
 
-		while (!containerList.empty()) {
-			Container* tmpContainer = containerList.front();
-			containerList.pop_front();
-
+		size_t i = 0;
+		while (i < containers.size()) {
+			Container* tmpContainer = containers[i++];
 			if (!autoStack || !isStackable) {
 				//we need to find first empty container as fast as we can for non-stackable items
 				uint32_t n = tmpContainer->capacity() - tmpContainer->size();
@@ -2777,7 +2776,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 				for (Item* tmpContainerItem : tmpContainer->getItemList()) {
 					if (Container* subContainer = tmpContainerItem->getContainer()) {
-						containerList.push_front(subContainer);
+						containers.push_back(subContainer);
 					}
 				}
 
@@ -2803,7 +2802,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				}
 
 				if (Container* subContainer = tmpItem->getContainer()) {
-					containerList.push_front(subContainer);
+					containers.push_back(subContainer);
 				}
 
 				n++;
@@ -2993,7 +2992,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 		return true;
 	}
 
-	std::forward_list<Item*> itemList;
+	std::vector<Item*> itemList;
 
 	uint32_t count = 0;
 	for (int32_t i = SLOT_FIRST; i <= SLOT_LAST && count < amount; i++) {
@@ -3004,13 +3003,13 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 
 		if (!ignoreEquipped && item->getID() == itemId) {
 			count += Item::countByType(item, subType);
-			itemList.push_front(item);
+			itemList.push_back(item);
 		} else if (Container* container = item->getContainer()) {
 			for (ContainerIterator it = container->begin(), end = container->end(); it != end; ++it) {
 				Item* containerItem = *it;
 				if (containerItem->getID() == itemId) {
 					count += Item::countByType(containerItem, subType);
-					itemList.push_front(containerItem);
+					itemList.push_back(containerItem);
 					if (count >= amount) {
 						break;
 					}
@@ -4661,7 +4660,7 @@ void Player::sendClosePrivate(uint16_t channelId)
 
 uint64_t Player::getMoney() const
 {
-	std::forward_list<Container*> listContainer;
+	std::vector<const Container*> containers;
 	uint64_t moneyCount = 0;
 
 	for (int32_t i = SLOT_FIRST; i <= SLOT_LAST; ++i) {
@@ -4670,23 +4669,22 @@ uint64_t Player::getMoney() const
 			continue;
 		}
 
-		Container* container = item->getContainer();
+		const Container* container = item->getContainer();
 		if (container) {
-			listContainer.push_front(container);
-		} else if (item->getWorth() != 0) {
+			containers.push_back(container);
+		} else {
 			moneyCount += item->getWorth();
 		}
 	}
 
-	while (!listContainer.empty()) {
-		Container* container = listContainer.front();
-		listContainer.pop_front();
-
-		for (Item* item : container->getItemList()) {
-			Container* tmpContainer = item->getContainer();
+	size_t i = 0;
+	while (i < containers.size()) {
+		const Container* container = containers[i++];
+		for (const Item* item : container->getItemList()) {
+			const Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_front(tmpContainer);
-			} else if (item->getWorth() != 0) {
+				containers.push_back(tmpContainer);
+			} else {
 				moneyCount += item->getWorth();
 			}
 		}

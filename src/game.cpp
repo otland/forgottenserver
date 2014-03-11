@@ -1580,7 +1580,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		return nullptr;
 	}
 
-	std::forward_list<Container*> listContainer;
+	std::vector<Container*> containers;
 	for (int32_t i = cylinder->__getFirstIndex(), j = cylinder->__getLastIndex(); i < j; ++i) {
 		Thing* thing = cylinder->__getThing(i);
 		if (!thing) {
@@ -1594,20 +1594,19 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 
 		if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
 			return item;
-		} else {
-			if (depthSearch) {
-				Container* container = item->getContainer();
-				if (container) {
-					listContainer.push_front(container);
-				}
+		}
+
+		if (depthSearch) {
+			Container* container = item->getContainer();
+			if (container) {
+				containers.push_back(container);
 			}
 		}
 	}
 
-	while (!listContainer.empty()) {
-		Container* container = listContainer.front();
-		listContainer.pop_front();
-
+	size_t i = 0;
+	while (i < containers.size()) {
+		Container* container = containers[i++];
 		for (Item* item : container->getItemList()) {
 			if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
 				return item;
@@ -1615,7 +1614,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_front(tmpContainer);
+				containers.push_back(tmpContainer);
 			}
 		}
 	}
@@ -1632,7 +1631,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 		return true;
 	}
 
-	std::forward_list<Container*> listContainer;
+	std::vector<Container*> containers;
 
 	typedef std::multimap<uint64_t, Item*, std::less<uint64_t>> MoneyMap;
 	typedef MoneyMap::value_type moneymap_pair;
@@ -1652,21 +1651,20 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 
 		Container* container = item->getContainer();
 		if (container) {
-			listContainer.push_front(container);
+			containers.push_back(container);
 		} else if (item->getWorth() != 0) {
 			moneyCount += item->getWorth();
 			moneyMap.insert(moneymap_pair(item->getWorth(), item));
 		}
 	}
 
-	while (!listContainer.empty()) {
-		Container* container = listContainer.front();
-		listContainer.pop_front();
-
+	size_t i = 0;
+	while (i < containers.size()) {
+		Container* container = containers[i++];
 		for (Item* item : container->getItemList()) {
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_front(tmpContainer);
+				containers.push_back(tmpContainer);
 			} else if (item->getWorth() != 0) {
 				moneyCount += item->getWorth();
 				moneyMap.insert(moneymap_pair(item->getWorth(), item));
@@ -2867,7 +2865,7 @@ std::string Game::getTradeErrorDescription(ReturnValue ret, Item* item)
 	return "Trade could not be completed.";
 }
 
-void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int index)
+void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t index)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -2901,32 +2899,25 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, int ind
 	}
 
 	Container* tradeContainer = tradeItem->getContainer();
-	if (!tradeContainer || index > (int32_t)tradeContainer->getItemHoldingCount()) {
+	if (!tradeContainer) {
 		return;
 	}
 
-	bool foundItem = false;
-	std::forward_list<const Container*> listContainer {tradeContainer};
-	do {
-		const Container* container = listContainer.front();
-		listContainer.pop_front();
-
+	std::vector<const Container*> containers {tradeContainer};
+	size_t i = 0;
+	while (i < containers.size()) {
+		const Container* container = containers[i++];
 		for (Item* item : container->getItemList()) {
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
-				listContainer.push_front(tmpContainer);
+				containers.push_back(tmpContainer);
 			}
 
 			if (--index == 0) {
-				tradeItem = item;
-				foundItem = true;
-				break;
+				g_events->eventPlayerOnLookInTrade(player, tradePartner, item, lookDistance);
+				return;
 			}
 		}
-	} while (!foundItem && !listContainer.empty());
-
-	if (foundItem) {
-		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
 	}
 }
 
@@ -5471,17 +5462,16 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 		ItemList itemList;
 		uint32_t count = 0;
-		std::forward_list<Container*> containerList {depotChest, player->getInbox()};
+		std::vector<Container*> containers {depotChest, player->getInbox()};
 		bool enough = false;
 
+		size_t i = 0;
 		do {
-			Container* container = containerList.front();
-			containerList.pop_front();
-
+			Container* container = containers[i++];
 			for (Item* item : container->getItemList()) {
 				Container* c = item->getContainer();
 				if (c && !c->empty()) {
-					containerList.push_front(c);
+					containers.push_back(c);
 					continue;
 				}
 
@@ -5510,7 +5500,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			if (enough) {
 				break;
 			}
-		} while (!containerList.empty());
+		} while (i < containers.size());
 
 		if (!enough) {
 			return;
@@ -5652,17 +5642,16 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		ItemList itemList;
 		uint32_t count = 0;
-		std::forward_list<Container*> containerList {depotChest, player->getInbox()};
+		std::vector<Container*> containers {depotChest, player->getInbox()};
 		bool enough = false;
 
+		size_t i = 0;
 		do {
-			Container* container = containerList.front();
-			containerList.pop_front();
-
+			Container* container = containers[i++];
 			for (Item* item : container->getItemList()) {
 				Container* c = item->getContainer();
 				if (c && !c->empty()) {
-					containerList.push_front(c);
+					containers.push_back(c);
 					continue;
 				}
 
@@ -5680,8 +5669,8 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				}
 
 				itemList.push_back(item);
-				count += Item::countByType(item, -1);
 
+				count += Item::countByType(item, -1);
 				if (count >= amount) {
 					enough = true;
 					break;
@@ -5691,7 +5680,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			if (enough) {
 				break;
 			}
-		} while (!containerList.empty());
+		} while (i < containers.size());
 
 		if (!enough) {
 			return;
