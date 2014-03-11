@@ -2882,6 +2882,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	}
 
 	msg.AddByte(creatureType); // Type (for summons)
+	msg.AddByte(creature->getSpeechBubble());
 	msg.AddByte(0xFF); // MARK_UNMARKED
 
 	if (otherPlayer) {

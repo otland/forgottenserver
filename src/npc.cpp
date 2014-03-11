@@ -127,6 +127,7 @@ void Npc::reset()
 	floorChange = false;
 	attackable = false;
 	focusCreature = 0;
+	speechBubble = SPEECHBUBBLE_NONE;
 
 	delete m_npcEventHandler;
 	m_npcEventHandler = nullptr;
@@ -182,6 +183,10 @@ bool Npc::loadFromXml(const std::string& filename)
 
 	if ((attr = npcNode.attribute("walkradius"))) {
 		masterRadius = pugi::cast<int32_t>(attr.value());
+	}
+
+	if ((attr = npcNode.attribute("speechbubble"))) {
+		speechBubble = pugi::cast<uint32_t>(attr.value());
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");

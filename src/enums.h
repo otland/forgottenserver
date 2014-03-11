@@ -379,6 +379,15 @@ enum ReturnValue {
 	RET_YOUARENOTTHEOWNER = 63
 };
 
+enum SpeechBubble_t
+{
+	SPEECHBUBBLE_NONE = 0,
+	SPEECHBUBBLE_NORMAL = 1,
+	SPEECHBUBBLE_TRADE = 2,
+	SPEECHBUBBLE_QUEST = 3,
+	SPEECHBUBBLE_QUESTTRADER = 4
+};
+
 struct Outfit_t {
 	Outfit_t() {
 		lookHead   = 0;
