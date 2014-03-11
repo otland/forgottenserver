@@ -28,13 +28,6 @@ class DepotChest : public Container
 		DepotChest(uint16_t _type);
 		~DepotChest();
 
-		DepotChest* getDepotChest() {
-			return this;
-		}
-		const DepotChest* getDepotChest() const {
-			return this;
-		}
-
 		//serialization
 		void setMaxDepotItems(uint32_t maxitems) {
 			maxDepotItems = maxitems;

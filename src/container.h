@@ -69,13 +69,6 @@ class Container : public Item, public Cylinder
 			return this;
 		}
 
-		virtual DepotChest* getDepotChest() {
-			return nullptr;
-		}
-		virtual const DepotChest* getDepotChest() const {
-			return nullptr;
-		}
-
 		virtual DepotLocker* getDepotLocker() {
 			return nullptr;
 		}
