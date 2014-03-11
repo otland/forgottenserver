@@ -1399,6 +1399,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
+	registerGlobalVariable("VIRTUAL_PARENT", true);
 
 	registerGlobalMethod("isType", LuaScriptInterface::luaIsType);
 
@@ -2292,6 +2293,13 @@ void LuaScriptInterface::registerGlobalVariable(const std::string& name, lua_Num
 {
 	// _G[name] = value
 	lua_pushnumber(m_luaState, value);
+	lua_setglobal(m_luaState, name.c_str());
+}
+
+void LuaScriptInterface::registerGlobalVariable(const std::string& name, bool value)
+{
+	// _G[name] = value
+	lua_pushboolean(m_luaState, value ? 1 : 0);
 	lua_setglobal(m_luaState, name.c_str());
 }
 
@@ -6144,6 +6152,8 @@ int32_t LuaScriptInterface::luaItemGetParent(lua_State* L)
 			} else if (Tile* tile = parent->getTile()) {
 				pushUserdata(L, tile);
 				setMetatable(L, -1, "Tile");
+			} else if (parent == VirtualCylinder::virtualCylinder) {
+				pushBoolean(L, true);
 			} else {
 				pushNil(L);
 			}
@@ -6172,6 +6182,8 @@ int32_t LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 			} else if (Tile* tile = topParent->getTile()) {
 				pushUserdata(L, tile);
 				setMetatable(L, -1, "Tile");
+			} else if (topParent == VirtualCylinder::virtualCylinder) {
+				pushBoolean(L, true);
 			} else {
 				pushNil(L);
 			}

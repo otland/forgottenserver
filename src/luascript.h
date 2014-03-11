@@ -402,6 +402,7 @@ class LuaScriptInterface
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
 		void registerVariable(const std::string& tableName, const std::string& name, lua_Number value);
 		void registerGlobalVariable(const std::string& name, lua_Number value);
+		void registerGlobalVariable(const std::string& name, bool value);
 
 		std::string getStackTrace(const std::string& error_desc);
 
