@@ -980,6 +980,8 @@ class LuaScriptInterface
 		static int32_t luaNpcCreate(lua_State* L);
 
 		static int32_t luaNpcIsNpc(lua_State* L);
+		static int32_t luaNpcGetSpeechBubble(lua_State* L);
+		static int32_t luaNpcSetSpeechBubble(lua_State* L);
 
 		// Guild
 		static int32_t luaGuildCreate(lua_State* L);

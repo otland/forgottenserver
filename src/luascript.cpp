@@ -1901,6 +1901,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Npc", "isNpc", LuaScriptInterface::luaNpcIsNpc);
 
+	registerMethod("Npc", "getSpeechBubble", LuaScriptInterface::luaNpcGetSpeechBubble);
+	registerMethod("Npc", "setSpeechBubble", LuaScriptInterface::luaNpcSetSpeechBubble);
+
 	// Guild
 	registerClass("Guild", "", LuaScriptInterface::luaGuildCreate);
 	registerMetaMethod("Guild", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -9584,6 +9587,29 @@ int32_t LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 	const Npc* npc = getUserdata<const Npc>(L, 1);
 	pushBoolean(L, npc != nullptr);
 	return 1;
+}
+
+int32_t LuaScriptInterface::luaNpcGetSpeechBubble(lua_State* L)
+{
+	// npc:getSpeechBubble()
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		pushNumber(L, npc->getSpeechBubble());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaNpcSetSpeechBubble(lua_State* L)
+{
+	// npc:setSpeechBubble(speechBubble)
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		const uint8_t speechBubble = getNumber<uint8_t>(L, 2);
+		npc->setSpeechBubble(speechBubble);
+	}
+	return 0;
 }
 
 // Guild
