@@ -402,6 +402,7 @@ class LuaScriptInterface
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
 		void registerVariable(const std::string& tableName, const std::string& name, lua_Number value);
 		void registerGlobalVariable(const std::string& name, lua_Number value);
+		void registerGlobalBoolean(const std::string& name, bool value);
 
 		std::string getStackTrace(const std::string& error_desc);
 
@@ -616,6 +617,7 @@ class LuaScriptInterface
 		static int32_t luaTileGetItemById(lua_State* L);
 		static int32_t luaTileGetItemByType(lua_State* L);
 		static int32_t luaTileGetItemByTopOrder(lua_State* L);
+		static int32_t luaTileGetItemCountById(lua_State* L);
 
 		static int32_t luaTileGetBottomCreature(lua_State* L);
 		static int32_t luaTileGetTopCreature(lua_State* L);
@@ -692,6 +694,10 @@ class LuaScriptInterface
 
 		static int32_t luaItemIsCreature(lua_State* L);
 		static int32_t luaItemIsItem(lua_State* L);
+		static int32_t luaItemIsContainer(lua_State* L);
+
+		static int32_t luaItemGetParent(lua_State* L);
+		static int32_t luaItemGetTopParent(lua_State* L);
 
 		static int32_t luaItemGetId(lua_State* L);
 		static int32_t luaItemGetType(lua_State* L);
@@ -730,10 +736,14 @@ class LuaScriptInterface
 		// Container
 		static int32_t luaContainerCreate(lua_State* L);
 
+		static int32_t luaContainerIsContainer(lua_State* L);
+
 		static int32_t luaContainerGetSize(lua_State* L);
 		static int32_t luaContainerGetCapacity(lua_State* L);
 		static int32_t luaContainerGetEmptySlots(lua_State* L);
+
 		static int32_t luaContainerGetItemHoldingCount(lua_State* L);
+		static int32_t luaContainerGetItemCountById(lua_State* L);
 
 		static int32_t luaContainerGetItem(lua_State* L);
 		static int32_t luaContainerHasItem(lua_State* L);
@@ -757,6 +767,8 @@ class LuaScriptInterface
 
 		static int32_t luaCreatureCanSee(lua_State* L);
 		static int32_t luaCreatureCanSeeCreature(lua_State* L);
+
+		static int32_t luaCreatureGetParent(lua_State* L);
 
 		static int32_t luaCreatureGetId(lua_State* L);
 		static int32_t luaCreatureGetName(lua_State* L);
@@ -946,6 +958,10 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerSetGhostMode(lua_State* L);
 
+		static int32_t luaPlayerGetContainerId(lua_State* L);
+		static int32_t luaPlayerGetContainerById(lua_State* L);
+		static int32_t luaPlayerGetContainerIndex(lua_State* L);
+
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
 
@@ -980,6 +996,7 @@ class LuaScriptInterface
 		static int32_t luaNpcCreate(lua_State* L);
 
 		static int32_t luaNpcIsNpc(lua_State* L);
+
 		static int32_t luaNpcGetSpeechBubble(lua_State* L);
 		static int32_t luaNpcSetSpeechBubble(lua_State* L);
 

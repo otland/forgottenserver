@@ -374,7 +374,7 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 				break;
 			}
 
-			case WEAPON_DIST: {
+			case WEAPON_DISTANCE: {
 				if (!ignoreAmmo && item->getAmmoType() != AMMO_NONE) {
 					Item* ammoItem = inventory[SLOT_AMMO];
 					if (ammoItem && ammoItem->getAmmoType() == item->getAmmoType()) {
@@ -436,7 +436,7 @@ int32_t Player::getWeaponSkill(const Item* item) const
 			break;
 		}
 
-		case WEAPON_DIST: {
+		case WEAPON_DISTANCE: {
 			attackSkill = getSkill(SKILL_DIST, SKILL_LEVEL);
 			break;
 		}

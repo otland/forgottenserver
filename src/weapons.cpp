@@ -95,8 +95,8 @@ void Weapons::loadDefaults()
 				}
 
 				case WEAPON_AMMO:
-				case WEAPON_DIST: {
-					if (it.weaponType == WEAPON_DIST && it.ammoType != AMMO_NONE) {
+				case WEAPON_DISTANCE: {
+					if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
 						continue;
 					}
 
@@ -711,10 +711,10 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 int32_t WeaponDistance::playerWeaponCheck(Player* player, Creature* target) const
 {
 	Item* bow = player->getWeapon(true);
-	if (bow && bow->getWeaponType() == WEAPON_DIST && bow->getID() != id) {
-		const Weapon* weap = g_weapons->getWeapon(bow);
-		if (weap) {
-			return weap->playerWeaponCheck(player, target);
+	if (bow && bow->getWeaponType() == WEAPON_DISTANCE && bow->getID() != id) {
+		const Weapon* weapon = g_weapons->getWeapon(bow);
+		if (weapon) {
+			return weapon->playerWeaponCheck(player, target);
 		}
 	}
 	return Weapon::playerWeaponCheck(player, target);

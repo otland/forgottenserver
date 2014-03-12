@@ -778,6 +778,42 @@ function Game.convertIpToString(ip)
 	)
 end
 
+function Game.getSkillType(weaponType)
+	if weaponType == WEAPON_CLUB then
+		return SKILL_CLUB
+	elseif weaponType == WEAPON_SWORD then
+		return SKILL_SWORD
+	elseif weaponType == WEAPON_AXE then
+		return SKILL_AXE
+	elseif weaponType == WEAPON_DISTANCE then
+		return SKILL_DISTANCE
+	elseif weaponType == WEAPON_SHIELD then
+		return SKILL_SHIELD
+	end
+	return SKILL_FIST
+end
+
+function Game.getReverseDirection(direction)
+	if direction == WEST then
+		return EAST
+	elseif direction == EAST then
+		return WEST
+	elseif direction == NORTH then
+		return SOUTH
+	elseif direction == SOUTH then
+		return NORTH
+	elseif direction == NORTHWEST then
+		return SOUTHEAST
+	elseif direction == NORTHEAST then
+		return SOUTHWEST
+	elseif direction == SOUTHWEST then
+		return NORTHEAST
+	elseif direction == SOUTHEAST then
+		return NORTHWEST
+	end
+	return NORTH
+end
+
 function Position.getNextPosition(self, direction, steps)
 	steps = steps or 1
 	if direction == WEST then
@@ -787,6 +823,18 @@ function Position.getNextPosition(self, direction, steps)
 	elseif direction == NORTH then
 		self.y = self.y - steps
 	elseif direction == SOUTH then
+		self.y = self.y + steps
+	elseif direction == NORTHWEST then
+		self.x = self.x - steps
+		self.y = self.y - steps
+	elseif direction == NORTHEAST then
+		self.x = self.x + steps
+		self.y = self.y - steps
+	elseif direction == SOUTHWEST then
+		self.x = self.x - steps
+		self.y = self.y + steps
+	elseif direction == SOUTHEAST then
+		self.x = self.x + steps
 		self.y = self.y + steps
 	end
 end
