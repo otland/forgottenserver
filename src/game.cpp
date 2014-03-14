@@ -484,8 +484,9 @@ Npc* Game::getNpcByName(const std::string& s)
 		return nullptr;
 	}
 
+	const char* npcName = s.c_str();
 	for (const auto& it : npcs) {
-		if (strcasecmp(s, it.second->getName()) == 0) {
+		if (strcasecmp(npcName, it.second->getName().c_str()) == 0) {
 			return it.second;
 		}
 	}
