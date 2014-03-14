@@ -9708,7 +9708,7 @@ int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
 	// Npc([id/name])
 	// Npc.new([id/name])
-	Npc* npc;
+	Npc* npc = nullptr;
 	if (getStackTop(L) >= 2) {
 		if (isNumber(L, 2)) {
 			npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
