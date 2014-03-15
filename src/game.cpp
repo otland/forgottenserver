@@ -5025,7 +5025,7 @@ void Game::loadMotdNum()
 
 	DBResult* result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'motd_num'");
 	if (result) {
-		motdNum = atoi(result->getDataString("value").c_str());
+		motdNum = result->getDataInt("value");
 		db->freeResult(result);
 	} else {
 		db->executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('motd_num', '0')");
@@ -5085,7 +5085,7 @@ void Game::loadPlayersRecord()
 
 	DBResult* result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'");
 	if (result) {
-		playersRecord = atoi(result->getDataString("value").c_str());
+		playersRecord = result->getDataInt("value");
 		db->freeResult(result);
 	} else {
 		db->executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')");

@@ -1230,19 +1230,26 @@ bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 
 House* InstantSpell::getHouseFromPos(Creature* creature)
 {
-	if (creature) {
-		Player* player = creature->getPlayer();
-		if (player) {
-			HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
-			if (houseTile) {
-				House* house = houseTile->getHouse();
-				if (house) {
-					return house;
-				}
-			}
-		}
+	if (!creature) {
+		return nullptr;
 	}
-	return nullptr;
+
+	Player* player = creature->getPlayer();
+	if (!player) {
+		return nullptr;
+	}
+
+	HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
+	if (!houseTile) {
+		return nullptr;
+	}
+
+	House* house = houseTile->getHouse();
+	if (!house) {
+		return nullptr;
+	}
+
+	return house;
 }
 
 bool InstantSpell::HouseGuestList(const InstantSpell*, Creature* creature, const std::string&)

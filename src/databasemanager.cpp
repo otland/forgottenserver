@@ -168,7 +168,7 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 		return false;
 	}
 
-	value = atoi(result->getDataString("value").c_str());
+	value = result->getDataInt("value");
 	db->freeResult(result);
 	return true;
 }

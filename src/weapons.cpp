@@ -129,17 +129,17 @@ Event* Weapons::getEvent(const std::string& nodeName)
 bool Weapons::registerEvent(Event* event, const pugi::xml_node&)
 {
 	Weapon* weapon = dynamic_cast<Weapon*>(event);
-	if (weapon) {
-		if (weapons.find(weapon->getID()) != weapons.end()) {
-			std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
-			return false;
-		}
-
-		weapons[weapon->getID()] = weapon;
-		return true;
+	if (!weapon) {
+		return false;
 	}
 
-	return false;
+	if (weapons.find(weapon->getID()) != weapons.end()) {
+		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
+		return false;
+	}
+
+	weapons[weapon->getID()] = weapon;
+	return true;
 }
 
 //monsters
