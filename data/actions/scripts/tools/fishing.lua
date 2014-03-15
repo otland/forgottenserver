@@ -6,35 +6,32 @@ local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
+	local targetId = itemEx.itemid
 	if not isInArray(waterIds, itemEx.itemid) then
 		return false
 	end
 
-	local targetId = itemEx.itemid
-	local targetItem = Item(itemEx.uid)
-	local player = Player(cid)	
 	if targetId == 10499 then
+		local targetItem = Item(itemEx.uid)
 		local owner = targetItem:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
-		if owner == 0 or owner == cid then
-			toPosition:sendMagicEffect(CONST_ME_WATERSPLASH)
-			targetItem:remove()
-
-			local rareChance = math.random(1, 100)
-			if rareChance == 1 then
-				player:addItem(lootVeryRare[math.random(#lootVeryRare)], 1)
-				return true
-			elseif rareChance <= 3 then
-				player:addItem(lootRare[math.random(#lootRare)], 1)
-				return true
-			elseif rareChance <= 10 then
-				player:addItem(lootCommon[math.random(#lootCommon)], 1)
-				return true
-			else
-				player:addItem(lootTrash[math.random(#lootTrash)], 1)
-				return true
-			end
+		if owner ~= 0 and owner ~= cid then
+			Player(cid):sendCancelMessage("You are not the owner.")
+			return true
 		end
-		player:sendCancelMessage("You are not the owner.")
+
+		toPosition:sendMagicEffect(CONST_ME_WATERSPLASH)
+		targetItem:remove()
+
+		local rareChance = math.random(1, 100)
+		if rareChance == 1 then
+			Player(cid):addItem(lootVeryRare[math.random(#lootVeryRare)], 1)
+		elseif rareChance <= 3 then
+			Player(cid):addItem(lootRare[math.random(#lootRare)], 1)
+		elseif rareChance <= 10 then
+			Player(cid):addItem(lootCommon[math.random(#lootCommon)], 1)
+		else
+			Player(cid):addItem(lootTrash[math.random(#lootTrash)], 1)
+		end
 		return true
 	end
 
@@ -46,6 +43,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		return true
 	end
 
+	local player = Player(cid)
 	player:addSkillTries(SKILL_FISHING, 1)
 	if math.random(1, 100) <= math.min(math.max(player:getEffectiveSkillLevel(SKILL_FISHING) * 1.54, 10), 50) then
 		if useWorms and not player:removeItem(ITEM_WORM, 1) then
@@ -53,6 +51,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		end
 
 		if targetId == 15401 then
+			local targetItem = Item(itemEx.uid)
 			targetItem:transform(targetId + 1)
 			targetItem:decay()
 
@@ -61,6 +60,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 				return true
 			end
 		elseif targetId == 7236 then
+			local targetItem = Item(itemEx.uid)
 			targetItem:transform(targetId + 1)
 			targetItem:decay()
 
