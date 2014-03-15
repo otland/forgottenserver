@@ -1115,10 +1115,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerInstantSpellInfo(cid, index)
 	lua_register(m_luaState, "getPlayerInstantSpellInfo", LuaScriptInterface::luaGetPlayerInstantSpellInfo);
 
-	//getTileHouseInfo(pos)
-	//0 no house. != 0 house id
-	lua_register(m_luaState, "getTileHouseInfo", LuaScriptInterface::luaGetTileHouseInfo);
-
 	//getThingfromPos(pos)
 	lua_register(m_luaState, "getThingfromPos", LuaScriptInterface::luaGetThingfromPos);
 
@@ -1146,12 +1142,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doCreateTeleport(itemid, topos, createpos)
 	lua_register(m_luaState, "doCreateTeleport", LuaScriptInterface::luaDoCreateTeleport);
-
-	//doCreateNpc(name, pos)
-	lua_register(m_luaState, "doCreateNpc", LuaScriptInterface::luaDoCreateNpc);
-
-	//doSummonCreature(name, pos)
-	lua_register(m_luaState, "doSummonCreature", LuaScriptInterface::luaDoSummonCreature);
 
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
@@ -1923,6 +1913,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Npc", "isNpc", LuaScriptInterface::luaNpcIsNpc);
 
+	registerMethod("Npc", "setMasterPos", LuaScriptInterface::luaNpcSetMasterPos);
+
 	registerMethod("Npc", "getSpeechBubble", LuaScriptInterface::luaNpcGetSpeechBubble);
 	registerMethod("Npc", "setSpeechBubble", LuaScriptInterface::luaNpcSetSpeechBubble);
 
@@ -2399,30 +2391,6 @@ int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoCreateNpc(lua_State* L)
-{
-	//doCreateNpc(name, pos)
-	PositionEx pos;
-	popPosition(L, pos);
-	const std::string& name = popString(L);
-
-	Npc* npc = Npc::createNpc(name);
-	if (!npc) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	// Place the npc
-	if (g_game.placeCreature(npc, pos)) {
-		npc->setMasterPos(npc->getPosition());
-		pushBoolean(L, true);
-	} else {
-		delete npc;
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 {
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count/subtype, <optional: default: 1> canDropOnMap)
@@ -2803,56 +2771,6 @@ int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
 	} else {
 		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetTileHouseInfo(lua_State* L)
-{
-	//getTileHouseInfo(pos)
-	PositionEx pos;
-	popPosition(L, pos);
-
-	Tile* tile = g_game.getTile(pos);
-	if (tile) {
-		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
-			House* house = houseTile->getHouse();
-			if (house) {
-				lua_pushnumber(L, house->getId());
-			} else {
-				pushBoolean(L, false);
-			}
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
-		std::ostringstream ss;
-		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoSummonCreature(lua_State* L)
-{
-	//doSummonCreature(name, pos)
-	PositionEx pos;
-	popPosition(L, pos);
-	std::string name = popString(L);
-
-	Monster* monster = Monster::createMonster(name);
-	if (!monster) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (!g_game.placeCreature(monster, pos)) {
-		delete monster;
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_pushnumber(L, monster->getID());
 	return 1;
 }
 
@@ -9782,11 +9700,15 @@ int32_t LuaScriptInterface::luaMonsterSearchTarget(lua_State* L)
 // Npc
 int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
-	// Npc([id])
-	// Npc.new([id])
-	Npc* npc;
+	// Npc([id/name])
+	// Npc.new([id/name])
+	Npc* npc = nullptr;
 	if (getStackTop(L) >= 2) {
-		npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
+		if (isNumber(L, 2)) {
+			npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
+		} else if (isString(L, 2)) {
+			npc = g_game.getNpcByName(getString(L, 2));
+		}
 	} else {
 		npc = getScriptEnv()->getNpc();
 	}
@@ -9805,6 +9727,25 @@ int32_t LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 	// npc:isNpc()
 	const Npc* npc = getUserdata<const Npc>(L, 1);
 	pushBoolean(L, npc != nullptr);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaNpcSetMasterPos(lua_State* L)
+{
+	// npc:setMasterPos(pos[, radius])
+	int32_t radius = 1;
+	if (getStackTop(L) >= 3) {
+		radius = getNumber<int32_t>(L, 3);
+	}
+
+	const Position& pos = getPosition(L, 2);
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		npc->setMasterPos(pos, radius);
+		pushBoolean(L, true);
+	} else {
+		pushNil(L);
+	}
 	return 1;
 }
 

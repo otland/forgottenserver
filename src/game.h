@@ -173,6 +173,13 @@ class Game
 		Creature* getCreatureByName(const std::string& s);
 
 		/**
+		  * Returns a npc based on a string name identifier
+		  * \param s is the name identifier
+		  * \returns A Pointer to the npc
+		  */
+		Npc* getNpcByName(const std::string& s);
+
+		/**
 		  * Returns a player based on a string name identifier
 		  * \param s is the name identifier
 		  * \returns A Pointer to the player

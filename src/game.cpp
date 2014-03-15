@@ -478,6 +478,21 @@ Creature* Game::getCreatureByName(const std::string& s)
 	return nullptr;
 }
 
+Npc* Game::getNpcByName(const std::string& s)
+{
+	if (s.empty()) {
+		return nullptr;
+	}
+
+	const char* npcName = s.c_str();
+	for (const auto& it : npcs) {
+		if (strcasecmp(npcName, it.second->getName().c_str()) == 0) {
+			return it.second;
+		}
+	}
+	return nullptr;
+}
+
 Player* Game::getPlayerByName(const std::string& s)
 {
 	if (s.empty()) {
