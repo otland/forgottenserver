@@ -445,9 +445,8 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 	}
 
 	//save in our events table
-	lua_pushnumber(m_luaState, m_runningEventId);
-	lua_pushvalue(m_luaState, -2);
-	lua_rawset(m_luaState, -4);
+	lua_pushvalue(m_luaState, -1);
+	lua_rawseti(m_luaState, -3, m_runningEventId);
 	lua_pop(m_luaState, 2);
 
 	//reset global value of this event
@@ -476,9 +475,8 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 	}
 
 	//save in our events table
-	lua_pushnumber(m_luaState, m_runningEventId);
-	lua_pushvalue(m_luaState, -2);
-	lua_rawset(m_luaState, -5);
+	lua_pushvalue(m_luaState, -1);
+	lua_rawseti(m_luaState, -4, m_runningEventId);
 	lua_pop(m_luaState, 1);
 
 	//reset global value of this event
@@ -570,8 +568,7 @@ bool LuaScriptInterface::pushFunction(int32_t functionId)
 		return false;
 	}
 
-	lua_pushnumber(m_luaState, functionId);
-	lua_rawget(m_luaState, -2);
+	lua_rawgeti(m_luaState, -1, functionId);
 	lua_remove(m_luaState, -2);
 	return isFunction(m_luaState, -1);
 }
@@ -4627,8 +4624,7 @@ int32_t LuaScriptInterface::luaIsType(lua_State* L)
 	lua_rawgeti(L, -3, 'p');
 	uint_fast8_t parentsA = getNumber<uint_fast8_t>(L, 1);
 	for (uint_fast8_t i = parentsA; i < parentsB; ++i) {
-		pushString(L, "__index");
-		lua_rawget(L, -4);
+		lua_getfield(L, -3, "__index");
 		lua_replace(L, -4);
 	}
 
@@ -4692,28 +4688,27 @@ int32_t LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 	SpectatorVec spectators;
 	g_game.getSpectators(spectators, position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 
-	lua_Number index = 0;
 	lua_createtable(L, spectators.size(), 0);
+
+	int32_t index = 0;
 	for (Creature* creature : spectators) {
-		pushNumber(L, ++index);
 		pushUserdata(L, creature);
 		setCreatureMetatable(L, -1, creature);
-		lua_rawset(L, -3);
+		lua_rawseti(L, -2, ++index);
 	}
-
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 {
 	// Game.getPlayers()
-	lua_Number index = 0;
 	lua_createtable(L, g_game.getPlayersOnline(), 0);
+
+	int32_t index = 0;
 	for (const auto& playerEntry : g_game.getPlayers()) {
-		pushNumber(L, ++index);
 		pushUserdata<Player>(L, playerEntry.second);
 		setMetatable(L, -1, "Player");
-		lua_rawset(L, -3);
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
@@ -5459,13 +5454,13 @@ int32_t LuaScriptInterface::luaTileGetItems(lua_State* L)
 	if (tile) {
 		TileItemVector* itemVector = tile->getItemList();
 		if (itemVector) {
-			uint32_t i = 0;
 			lua_createtable(L, itemVector->size(), 0);
+
+			int32_t index = 0;
 			for (Item* item : *itemVector) {
-				pushNumber(L, ++i);
 				pushUserdata<Item>(L, item);
 				setItemMetatable(L, -1, item);
-				lua_rawset(L, -3);
+				lua_rawseti(L, -2, ++index);
 			}
 		} else {
 			pushNil(L);
@@ -5519,13 +5514,13 @@ int32_t LuaScriptInterface::luaTileGetCreatures(lua_State* L)
 	if (tile) {
 		CreatureVector* creatureVector = tile->getCreatures();
 		if (creatureVector) {
-			uint32_t i = 0;
 			lua_createtable(L, creatureVector->size(), 0);
+
+			int32_t index = 0;
 			for (Creature* creature : *creatureVector) {
-				pushNumber(L, ++i);
 				pushUserdata<Creature>(L, creature);
 				setCreatureMetatable(L, -1, creature);
-				lua_rawset(L, -3);
+				lua_rawseti(L, -2, ++index);
 			}
 		} else {
 			pushNil(L);
@@ -7744,7 +7739,6 @@ int32_t LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 	if (creature) {
 		lua_createtable(L, creature->damageMap.size(), 0);
 		for (auto damageEntry : creature->damageMap) {
-			pushNumber(L, damageEntry.first);
 			lua_createtable(L, 0, 2);
 
 			pushNumber(L, damageEntry.second.total);
@@ -7752,7 +7746,7 @@ int32_t LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 			pushNumber(L, damageEntry.second.ticks);
 			lua_setfield(L, -2, "ticks");
 
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, damageEntry.first);
 		}
 	} else {
 		pushNil(L);
@@ -7765,13 +7759,13 @@ int32_t LuaScriptInterface::luaCreatureGetSummons(lua_State* L)
 	// creature:getSummons()
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		lua_Number index = 0;
 		lua_createtable(L, creature->getSummonCount(), 0);
+
+		int32_t index = 0;
 		for (Creature* summon : creature->getSummons()) {
-			pushNumber(L, ++index);
 			pushUserdata<Creature>(L, summon);
 			setCreatureMetatable(L, -1, summon);
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -9662,13 +9656,13 @@ int32_t LuaScriptInterface::luaMonsterGetFriendList(lua_State* L)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
 		const auto& friendList = monster->getFriendList();
-		lua_Number index = 0;
 		lua_createtable(L, friendList.size(), 0);
+
+		int32_t index = 0;
 		for (Creature* creature : friendList) {
-			pushNumber(L, ++index);
 			pushUserdata<Creature>(L, creature);
 			setCreatureMetatable(L, -1, creature);
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -9728,13 +9722,13 @@ int32_t LuaScriptInterface::luaMonsterGetTargetList(lua_State* L)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
 		const auto& targetList = monster->getTargetList();
-		lua_Number index = 0;
 		lua_createtable(L, targetList.size(), 0);
+
+		int32_t index = 0;
 		for (Creature* creature : targetList) {
-			pushNumber(L, ++index);
 			pushUserdata<Creature>(L, creature);
 			setCreatureMetatable(L, -1, creature);
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -9884,13 +9878,13 @@ int32_t LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 	Guild* guild = getUserdata<Guild>(L, 1);
 	if (guild) {
 		const auto& members = guild->getMembersOnline();
-		uint32_t i = 0;
 		lua_createtable(L, members.size(), 0);
+
+		int32_t index = 0;
 		for (Player* player : members) {
-			pushNumber(L, ++i);
 			pushUserdata<Player>(L, player);
 			setMetatable(L, -1, "Player");
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -10551,13 +10545,13 @@ int32_t LuaScriptInterface::luaHouseGetBeds(lua_State* L)
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
 		const auto& beds = house->getBeds();
-		uint32_t i = 0;
 		lua_createtable(L, beds.size(), 0);
+
+		int32_t index = 0;
 		for (BedItem* bedItem : beds) {
-			pushNumber(L, ++i);
 			pushUserdata<Item>(L, bedItem);
 			setItemMetatable(L, -1, bedItem);
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -10583,13 +10577,13 @@ int32_t LuaScriptInterface::luaHouseGetDoors(lua_State* L)
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
 		const auto& doors = house->getDoors();
-		uint32_t i = 0;
 		lua_createtable(L, doors.size(), 0);
+
+		int32_t index = 0;
 		for (Door* door : doors) {
-			pushNumber(L, ++i);
 			pushUserdata<Item>(L, door);
 			setItemMetatable(L, -1, door);
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -10615,13 +10609,13 @@ int32_t LuaScriptInterface::luaHouseGetTiles(lua_State* L)
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
 		const auto& tiles = house->getTiles();
-		uint32_t i = 0;
 		lua_createtable(L, tiles.size(), 0);
+
+		int32_t index = 0;
 		for (Tile* tile : tiles) {
-			pushNumber(L, ++i);
 			pushUserdata<Tile>(L, tile);
 			setMetatable(L, -1, "Tile");
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -11674,10 +11668,10 @@ int32_t LuaScriptInterface::luaMonsterTypeGetAttackList(lua_State* L)
 	// monsterType:getAttackList()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
-		lua_Number index = 0;
 		lua_createtable(L, monsterType->spellAttackList.size(), 0);
+
+		int32_t index = 0;
 		for (const auto& spellBlock : monsterType->spellAttackList) {
-			pushNumber(L, ++index);
 			lua_createtable(L, 0, 8);
 
 			pushNumber(L, spellBlock.chance);
@@ -11697,7 +11691,7 @@ int32_t LuaScriptInterface::luaMonsterTypeGetAttackList(lua_State* L)
 			pushUserdata<CombatSpell>(L, static_cast<CombatSpell*>(spellBlock.spell));
 			lua_setfield(L, -2, "spell");
 
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -11710,10 +11704,10 @@ int32_t LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 	// monsterType:getDefenseList()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
-		lua_Number index = 0;
 		lua_createtable(L, monsterType->spellDefenseList.size(), 0);
+
+		int32_t index = 0;
 		for (const auto& spellBlock : monsterType->spellDefenseList) {
-			pushNumber(L, ++index);
 			lua_createtable(L, 0, 8);
 
 			pushNumber(L, spellBlock.chance);
@@ -11733,7 +11727,7 @@ int32_t LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 			pushUserdata<CombatSpell>(L, static_cast<CombatSpell*>(spellBlock.spell));
 			lua_setfield(L, -2, "spell");
 
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -11748,9 +11742,8 @@ int32_t LuaScriptInterface::luaMonsterTypeGetElementList(lua_State* L)
 	if (monsterType) {
 		lua_newtable(L);
 		for (const auto& elementEntry : monsterType->elementMap) {
-			pushNumber(L, elementEntry.first);
 			pushNumber(L, elementEntry.second);
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, elementEntry.first);
 		}
 	} else {
 		pushNil(L);
@@ -11763,10 +11756,10 @@ int32_t LuaScriptInterface::luaMonsterTypeGetVoices(lua_State* L)
 	// monsterType:getVoices()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
-		lua_Number index = 0;
 		lua_createtable(L, monsterType->voiceVector.size(), 0);
+
+		int32_t index = 0;
 		for (const auto& voiceBlock : monsterType->voiceVector) {
-			pushNumber(L, ++index);
 			lua_createtable(L, 0, 2);
 
 			pushString(L, voiceBlock.text);
@@ -11774,7 +11767,7 @@ int32_t LuaScriptInterface::luaMonsterTypeGetVoices(lua_State* L)
 			pushBoolean(L, voiceBlock.yellText);
 			lua_setfield(L, -2, "yellText");
 
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -11788,10 +11781,10 @@ int32_t LuaScriptInterface::luaMonsterTypeGetLoot(lua_State* L)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		static const std::function<void(const std::list<LootBlock>&)> parseLoot = [&](const std::list<LootBlock>& lootList) {
-			lua_Number index = 0;
 			lua_createtable(L, lootList.size(), 0);
+
+			int32_t index = 0;
 			for (const auto& lootBlock : lootList) {
-				pushNumber(L, ++index);
 				lua_createtable(L, 0, 7);
 
 				pushNumber(L, lootBlock.id);
@@ -11809,7 +11802,7 @@ int32_t LuaScriptInterface::luaMonsterTypeGetLoot(lua_State* L)
 				parseLoot(lootBlock.childLoot);
 				lua_setfield(L, -2, "childLoot");
 
-				lua_rawset(L, -3);
+				lua_rawseti(L, -2, ++index);
 			}
 		};
 		parseLoot(monsterType->lootItems);
@@ -11824,12 +11817,12 @@ int32_t LuaScriptInterface::luaMonsterTypeGetCreatureEvents(lua_State* L)
 	// monsterType:getCreatureEvents()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
-		lua_Number index = 0;
 		lua_createtable(L, monsterType->scriptList.size(), 0);
+
+		int32_t index = 0;
 		for (const std::string& creatureEvent : monsterType->scriptList) {
-			pushNumber(L, ++index);
 			pushString(L, creatureEvent);
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -11842,10 +11835,10 @@ int32_t LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 	// monsterType:getSummonList()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
-		lua_Number index = 0;
 		lua_createtable(L, monsterType->summonList.size(), 0);
+
+		int32_t index = 0;
 		for (const auto& summonBlock : monsterType->summonList) {
-			pushNumber(L, ++index);
 			lua_createtable(L, 0, 3);
 
 			pushString(L, summonBlock.name);
@@ -11855,7 +11848,7 @@ int32_t LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 			pushNumber(L, summonBlock.chance);
 			lua_setfield(L, -2, "chance");
 
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -12096,13 +12089,13 @@ int32_t LuaScriptInterface::luaPartyGetMembers(lua_State* L)
 	// party:getMembers()
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
-		uint32_t i = 0;
 		lua_createtable(L, party->getMemberCount(), 0);
+
+		int32_t index = 0;
 		for (Player* player : party->getMembers()) {
-			pushNumber(L, ++i);
 			pushUserdata<Player>(L, player);
 			setMetatable(L, -1, "Player");
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
@@ -12127,13 +12120,13 @@ int32_t LuaScriptInterface::luaPartyGetInvitees(lua_State* L)
 	// party:getInvitees()
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
-		uint32_t i = 0;
 		lua_createtable(L, party->getInvitationCount(), 0);
+
+		int32_t index = 0;
 		for (Player* player : party->getInvitees()) {
-			pushNumber(L, ++i);
 			pushUserdata<Player>(L, player);
 			setMetatable(L, -1, "Player");
-			lua_rawset(L, -3);
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		pushNil(L);
