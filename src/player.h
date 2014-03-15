@@ -343,14 +343,14 @@ class Player : public Creature, public Cylinder
 			bedItem = b;
 		}
 
-		void addBlessing(int16_t blessing) {
+		void addBlessing(uint8_t blessing) {
 			blessings |= blessing;
 		}
-		void removeBlessing(int16_t blessing) {
+		void removeBlessing(uint8_t blessing) {
 			blessings &= ~blessing;
 		}
-		bool hasBlessing(int16_t value) const {
-			return (0 != (blessings & ((int16_t)1 << value)));
+		bool hasBlessing(uint8_t value) const {
+			return (blessings & ((uint8_t)1 << value)) != 0;
 		}
 
 		bool isFemale() const {
@@ -1316,8 +1316,8 @@ class Player : public Creature, public Cylinder
 		uint16_t staminaMinutes;
 		uint16_t maxWriteLen;
 		int16_t lastDepotId;
-		int16_t blessings;
 
+		uint8_t blessings;
 		uint8_t guildLevel;
 
 		bool mayNotMove;

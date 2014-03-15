@@ -9091,7 +9091,7 @@ int32_t LuaScriptInterface::luaPlayerRemovePremiumDays(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
 {
 	// player:hasBlessing(blessing)
-	int16_t blessing = getNumber<int16_t>(L, 2) - 1;
+	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushBoolean(L, player->hasBlessing(blessing));
@@ -9104,36 +9104,40 @@ int32_t LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
 {
 	// player:addBlessing(blessing)
-	int16_t blessing = getNumber<int16_t>(L, 2) - 1;
+	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
 	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		if (!player->hasBlessing(blessing)) {
-			player->addBlessing(1 << blessing);
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
+	if (!player) {
 		pushNil(L);
+		return 1;
 	}
+
+	if (player->hasBlessing(blessing)) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	player->addBlessing(1 << blessing);
+	pushBoolean(L, true);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 {
 	// player:removeBlessing(blessing)
-	int16_t blessing = getNumber<int16_t>(L, 2) - 1;
+	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
 	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		if (player->hasBlessing(blessing)) {
-			player->removeBlessing(1 << blessing);
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
+	if (!player) {
 		pushNil(L);
+		return 1;
 	}
+
+	if (!player->hasBlessing(blessing)) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	player->removeBlessing(1 << blessing);
+	pushBoolean(L, true);
 	return 1;
 }
 
