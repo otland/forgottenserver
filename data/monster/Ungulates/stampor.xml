@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stampor" nameDescription="a stampor" race="blood" experience="780" speed="240">
+	<health now="1200" max="1200"/>
+	<look type="381" corpse="13312"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="300"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="40"/>
+		<attack name="physical" interval="2000" chance="20" radius="5" target="1" min="-0" max="-300">
+			<attribute key="areaEffect" value="groundshaker"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="15" target="0" radius="1">
+			<attribute key="areaEffect" value="groundshaker"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="18">
+		<defense name="healing" interval="2000" chance="10" min="50" max="100">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="50"/>
+		<element firePercent="20"/>
+		<element energyPercent="20"/>
+		<element icePercent="10"/>
+		<element earthPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="15">
+		<voice sentence="AAAARRRR" yell="1"/>
+		<voice sentence="KRRRRRNG" yell="1"/>
+	</voices>
+	<loot>
+    <item id="2148" countmax="100" chance="32800" /><!-- gold coin -->
+    <item id="2148" countmax="100" chance="32800" /><!-- gold coin -->
+    <item id="2152" chance="15525" /><!-- platinum coin -->
+    <item id="9970" chance="25650" /><!-- small topaz -->
+    <item id="13299" chance="4375" /><!-- stampor horn -->
+    <item id="13300" chance="2425" /><!-- stampor talon -->
+    <item id="7589" chance="925" /><!-- smp -->
+    <item id="7588" chance="1000" /><!-- strong health potion -->
+	<item id="2391" chance="4375" /><!-- war hammer -->
+    <item id="13301" chance="2425" /><!-- hollow stampor hoof -->
+	<item id="2476" chance="4375" /><!-- knight armor -->
+    <item id="7452" chance="2425" /><!-- spiked squelcher -->
+</loot>
+</monster>

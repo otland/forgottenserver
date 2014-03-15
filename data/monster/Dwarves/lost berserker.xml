@@ -50,6 +50,31 @@
 		<voice sentence="Death! Death! Death!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance1="10000" chancemax="0"/>
+		<item id="2148" countmax="200" chance="100000"/> <!-- gold coin -->
+		<item id="2152" countmax="9" chance="100000"/> <!-- platinum coin -->
+		<item id="2789" countmax="2" chance="14285"/> <!-- brown mushroom -->
+		<item id="7590" chance="12500"/> <!-- great mana potion -->
+		<item id="7591" chance="12500"/> <!-- great health potion -->
+		<item id="5880" chance="8333"/> <!-- iron ore -->
+		<item id="18436" countmax="10" chance="7692"/> <!-- drill bolt -->
+		<item id="9970" countmax="2" chance="7692"/> <!-- small topaz -->
+		<item id="18417" countmax="2" chance="7142"/> <!-- brown crystal splinter -->
+		<item id="18421" chance="6666"/> <!-- green crystal fragment -->
+		<item id="18418" chance="4545"/> <!-- blue crystal splinter -->
+		<item id="2114" chance="3846"/> <!-- piggy bank -->
+		<item id="18414" chance="3448"/> <!-- violet crystal shard -->
+		<item id="2213" chance="2272"/> <!-- dwarven ring -->
+		<item id="13757" chance="2040"/> <!-- coal -->
+		<item id="2430" chance="2040"/> <!-- knight axe -->
+		<item id="2515" chance="1408"/> <!-- guardian shield -->
+		<item id="2528" chance="1010"/> <!-- tower shield -->
+		<item id="11339" chance="925"/> <!-- clay lump -->
+		<item id="7452" chance="806"/> <!-- spiked squelcher -->
+		<item id="5904" chance="719"/> <!-- magic sulphur -->
+		<item id="2529" chance="632"/> <!-- black shield -->
+		<item id="7886" chance="632"/> <!-- terra boots -->
+		<item id="7427" chance="549"/> <!-- chaos mace -->
+		<item id="2432" chance="377"/> <!-- fire axe -->
+		<item id="2498" chance="154"/> <!-- royal helmet -->
 	</loot>
 </monster>

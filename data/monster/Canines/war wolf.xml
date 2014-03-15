@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="War Wolf" nameDescription="a war wolf" race="blood" experience="55" speed="200" manacost="0">
+<monster name="War Wolf" nameDescription="a war wolf" race="blood" experience="55" speed="200" manacost="420">
 	<health now="140" max="140"/>
 	<look type="3" corpse="6009"/>
 	<targetchange interval="2000" chance="0"/>
@@ -8,7 +8,7 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
+		<flag illusionable="0"/>
 		<flag convinceable="1"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
@@ -28,13 +28,13 @@
 		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Grrrrrrr"/>
 		<voice sentence="Yoooohhuuuu!" yell="1"/>
+		<voice sentence="Grrrrrrr"/>
 	</voices>
 	<loot>
-		<item id="2666" countmax="4" chance="25000"/><!-- meat -->
-		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
-		<item id="5897" chance="2000"/><!-- wolf paw -->
-		<item id="3976" chance="250"/><!-- wolf trophy -->
+		<item id="2671" countmax="2" chance="33333"/><!-- ham -->
+		<item id="11235" chance="5000"/><!-- warwolf fur -->
+		<item id="5897" chance="735"/><!-- wolf paw -->
+		<item id="3976" chance="35"/><!-- wolf trophy -->
 	</loot>
 </monster>

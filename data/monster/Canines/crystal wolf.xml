@@ -36,13 +36,8 @@
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
-	<elements>
-		<element icePercent="20"/>
-		<element firePercent="-5"/>
-		<element energyPercent="-10"/>
-	</elements>
 	<immunities>
-		<immunity earth="1"/>
+		<immunity ice="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
@@ -50,7 +45,11 @@
 		<voice sentence="Raaarrr!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="46000"/><!-- gold coin -->
-		<item id="2666" countmax="4" chance="25000"/><!-- meat -->
+		<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
+		<item id="2666" chance="50000"/><!-- meat -->
+		<item id="7839" countmax="10" chance="11111"/><!-- shiver arrow -->
+		<item id="2183" chance="7142"/><!-- hailstorm rod -->
+		<item id="8878" chance="3703"/><!-- crystalline armor -->
+		<item id="5897" chance="3703"/><!-- wolf paw -->
 	</loot>
 </monster>

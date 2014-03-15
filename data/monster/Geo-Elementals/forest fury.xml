@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Forest Fury" nameDescription="a forest fury" race="blood" experience="235" speed="170" manacost="0">
-  <health now="480" max="480"/>
-  <look type="569" corpse="21359"/>
-  <targetchange interval="5000" chance="8"/>
+	<health now="480" max="480"/>
+	<look type="569" corpse="21359"/>
+	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -13,38 +13,38 @@
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
+		<flag targetdistance="4"/>
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="90"/>
-		<attack name="physical" interval="1000" chance="20" range="7" min="-150" max="-255">
-			<attribute key="shootEffect" value="whirlwindaxe"/>
-		</attack>
-		<attack name="physical" interval="2000" chance="100" range="7" min="-120" max="-250">
-			<attribute key="shootEffect" value="whirlwindsword"/>		
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
+		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-100">
+			<attribute key="shootEffect" value="spear"/>
 		</attack>
 	</attacks>
-  <defenses armor="85" defense="85">
-  </defenses>
+	<defenses armor="11" defense="11"/>
 	<elements>
-		<element firePercent="100"/>
-		<element physicalPercent="10"/>
-		<element earthPercent="100"/>
-		<element deathPercent="-20"/>
-		<element energyPercent="-20"/>
+		<element deathPercent="1"/>
+		<element holyPercent="1"/>
+		<element firePercent="-1"/>
 	</elements>
-	<immunities>
-		<immunity outfit="1"/>
-		<immunity drown="1"/>
-		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
-	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Qjell afar gou jey!"/>
-		<voice sentence="QJELL NETA NA!!"/>
+		<voice sentence="To arms, sisters!"/>
+		<voice sentence="Feel the wrath of mother forest!"/>
+		<voice sentence="By the power of Greenkull!"/>
+		<voice sentence="Yiiieeehhh!"/>
+		<voice sentence="I'll strike you infidels down!"/>
 	</voices>  
-  <loot>
-</loot>
+	<loot>
+		<item id="2148" countmax="55" chance="50000"/><!-- gold coin -->
+		<item id="2543" countmax="15" chance="33333"/><!-- bolts -->
+		<item id="2666" chance="25000"/><!-- meat -->
+		<item id="7363" countmax="5" chance="14285"/><!-- piercing bolts -->
+		<item id="21312" chance="11111"/><!-- venison -->
+		<item id="21311" chance="6666"/><!-- elven hoof -->
+		<item id="2455" chance="2702"/><!-- crossbow -->
+		<item id="9970" chance="465"/><!-- small topaz -->
+		<item id="7438" chance="93"/><!-- elvish bow -->
+	</loot>
 </monster>

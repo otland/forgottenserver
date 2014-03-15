@@ -33,20 +33,18 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="100"/>
-		<element holyPercent="100"/>
-		<element firePercent="100"/>
-		<element energyPercent="100"/>
-		<element physicalPercent="100"/>
-		<element icePercent="1"/>
-		<element deathPercent="100"/>
+		<element icePercent="-1"/>
 	</elements>
 	<immunities>
+		<immunity fire="1"/>
 		<immunity invisible="1"/>
 		<immunity paralyze="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="70" chance="34000"/><!-- gold coin -->
-		<item id="2148" countmax="61" chance="34000"/><!-- gold coin -->
+		<item id="2148" countmax="53" chance="50000"/><!-- gold coin -->
+		<item id="2666" chance="33333"/><!-- meat -->
+		<item id="7840" countmax="8" chance="14285"/><!-- flaming arrow -->
+		<item id="10553" chance="7692"/><!-- fiery heart -->
+		<item id="5897" chance="7692"/><!-- wolf paw -->
 	</loot>
 </monster>

@@ -17,13 +17,39 @@
 		<flag runonhealth="60"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="34" attack="45"/>
-		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
-			<attribute key="shootEffect" value="spear"/> <!-- TODO: Add spear deepling speed effect? -->
-			<attribute key="areaEffect" value="bluebubble"/>
+		<attack name="melee" interval="2000" min="-0" max="-600"/>
+		<attack name="manadrain" interval="2500" chance="20" range="7" radius="4" target="1" min="-200" max="-600">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="carniphila"/>
 		</attack>
+		<attack name="ice" interval="3500" chance="27" range="7" radius="4" target="1" min="-200" max="-400">
+			<attribute key="shootEffect" value="ice"/>
+			<attribute key="areaEffect" value="icearea"/>
+		</attack>
+		<attack name="ice" interval="3500" chance="15" range="1" radius="1" target="1" min="-100" max="-400"/>
+		<attack name="drown" interval="2300" chance="11" range="7" radius="4" target="1" min="-200" max="-500">
+			<attribute key="shootEffect" value="ice"/>
+			<attribute key="areaEffect" value="watersplash"/>
+		</attack>
+		<attack name="manadrain" interval="2300" chance="14" range="7" radius="7" target="0" min="-200" max="-600">
+			<attribute key="areaEffect" value="bubbles"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="10" range="7" radius="1" target="1" min="-100" max="-400">
+			<attribute key="shootEffect" value="largerock"/>
+		</attack>
+		<attack name="death" interval="1200" chance="7" length="8" spread="0" min="-300" max="-800">
+			<attribute key="areaEffect" value="smallclouds"/>
+		</attack>
+		<attack name="energy" interval="2000" chance="14" length="8" spread="3" min="-200" max="-500">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+		<attack name="speed" interval="2150" chance="16" range="7" radius="1" target="1" speedchange="-600" duration="15000"/>
 	</attacks>
-	<defenses armor="12" defense="20"/>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="3000" chance="40" min="800" max="1100">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity ice="1" />
 		<immunity paralyze="1" />

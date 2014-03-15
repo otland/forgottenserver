@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ghoulish Hyaena" nameDescription="a ghoulish hyaena" race="blood" experience="195" speed="206" manacost="275">
+  <health now="400" max="400"/>
+  <look type="94" head="20" body="30" legs="40" feet="50" corpse="6026"/>
+  <targetchange interval="5000" chance="8"/>
+  <strategy attack="100" defense="0"/>
+  <flags>
+    <flag summonable="1"/>
+    <flag attackable="1"/>
+    <flag hostile="1"/>
+    <flag illusionable="1"/>
+    <flag convinceable="1"/>
+    <flag pushable="1"/>
+    <flag canpushitems="0"/>
+    <flag canpushcreatures="0"/>
+    <flag targetdistance="1"/>
+    <flag staticattack="90"/>
+    <flag runonhealth="30"/>
+  </flags>
+  <attacks>
+    <attack name="melee" interval="2000" skill="18" attack="11" poison="2"/>
+  </attacks>
+  <defenses armor="1" defense="3">
+  <defense name="speed" interval="1000" chance="13" speedchange="300" duration="2000">
+      <attribute key="areaEffect" value="redshimmer"/>
+    </defense>
+ </defenses>
+  <immunities>
+    <immunity physical="0"/>
+    <immunity energy="0"/>
+    <immunity fire="0"/>
+    <immunity poison="0"/>
+    <immunity lifedrain="0"/>
+    <immunity paralyze="0"/>
+    <immunity outfit="0"/>
+    <immunity death="1"/>
+    <immunity invisible="1"/>
+  </immunities>
+   <elements>
+  <element earthPercent="-70"/>
+  </elements>  
+  <voices interval="5000" chance="10">
+    <voice sentence="Grawrrr!!"/>
+    <voice sentence="Hoouu!"/>
+  </voices>
+  <loot>
+    <item id="2147" countmax="2" chance="50000"/><!-- small ruby -->
+    <item id="2148" countmax="40" chance="50000"/><!-- gold coin -->
+    <item id="3976" countmax="4" chance="50000"/><!-- worm -->
+    <item id="2666" countmax="2" chance="90000"/><!-- meat -->
+    <item id="7618" chance="20000"/><!-- hp -->
+  </loot>
+</monster>

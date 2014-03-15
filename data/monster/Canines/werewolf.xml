@@ -25,13 +25,13 @@
 	</attacks>
 	<defenses armor="50" defense="55"/>
 	<elements>
-		<element physicalPercent="5"/>
-		<element energyPercent="15"/>
-		<element earthPercent="20"/>
-		<element firePercent="-10"/>
-		<element deathPercent="20"/>
-		<element icePercent="-10"/>
-		<element holyPercent="-10"/>
+		<element physicalPercent="10"/>
+		<element earthPercent="65"/>
+		<element energyPercent="5"/>
+		<element deathPercent="1"/>
+		<element firePercent="-5"/>
+		<element icePercent="-5"/>
+		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
@@ -45,25 +45,24 @@
 		<voice sentence="HRAAAAAAAAAARRRRRR!" yell="1"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="35000"/><!-- gold coin -->
-		<item id="2148" countmax="90" chance="35000"/><!-- gold coin -->
-		<item id="2148" countmax="45" chance="35000"/><!-- gold coin -->
-		<item id="2381" chance="2700"/><!-- halberd -->
-		<item id="2398" chance="19000"/><!-- mace-->
-		<item id="2647" chance="6500"/><!-- plate legs -->
+		<item id="2148" countmax="224" chance="50000"/><!-- gold coin -->
+		<item id="11234" chance="10000"/><!-- werewolf fur -->
 		<item id="2510" chance="10000"/><!-- plate shield -->
-		<item id="2171" chance="600"/><!-- platinum amulet -->
-		<item id="7439" chance="1000"/><!-- berserk potion -->
-		<item id="7428" chance="300"/><!-- bonebreaker -->
-		<item id="2438" chance="600"/><!-- epee -->
-		<item id="7383" chance="420"/><!-- relic sword -->
-		<item id="9809" chance="7800"/><!-- rusty armor -->
-		<item id="2197" chance="800"/><!-- stone skin amulet -->
-		<item id="7588" chance="5500"/><!-- strong health potion -->
-		<item id="2169" chance="700"/><!-- time ring -->
-		<item id="2805" chance="5000"/><!-- troll green -->
-		<item id="5897" chance="5200"/><!-- wolf paw -->
-		<item id="8473" chance="2400"/><!-- ultimate health potion -->
-		<item id="7419" chance="200"/><!-- dreaded cleaver -->
+		<item id="9809" chance="7142"/><!-- rusty armor -->
+		<item id="2789" chance="6666"/><!-- brown mushroom -->
+		<item id="2805" chance="4761"/><!-- troll green -->
+		<item id="7588" chance="4761"/><!-- strong health potion -->
+		<item id="5897" chance="4545"/><!-- wolf paw -->
+		<item id="2381" chance="3030"/><!-- halberd -->
+		<item id="8473" chance="1851"/><!-- ultimate health potion -->
+		<item id="7439" chance="1176"/><!-- berserk potion -->
+		<item id="2197" chance="1020"/><!-- stone skin amulet -->
+		<item id="2171" chance="862"/><!-- platinum amulet -->
+		<item id="2169" chance="800"/><!-- time ring -->
+		<item id="2438" chance="558"/><!-- epee -->
+		<item id="7383" chance="478"/><!-- relic sword -->
+		<item id="7428" chance="400"/><!-- bonebreaker -->
+		<item id="9808" chance="205"/><!-- rusty armor-->
+		<item id="7419" chance="160"/><!-- dreaded cleaver -->
 	</loot>
 </monster>

@@ -17,13 +17,31 @@
 		<flag runonhealth="60"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="34" attack="45"/>
-		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
-			<attribute key="shootEffect" value="spear"/> <!-- TODO: Add spear deepling speed effect? -->
-			<attribute key="areaEffect" value="bluebubble"/>
+		<attack name="melee" interval="2000" min="-0" max="-1200" poison="360"/>
+		<attack name="death" interval="3000" chance="23" range="7" radius="7" target="1" min="-200" max="-800">
+			<attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="areaEffect" value="mortarea"/>
+		</attack>
+		<attack name="manadrain" interval="3500" chance="20" range="7" radius="6" target="1" min="-200" max="-600">
+			<attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="areaEffect" value="bigclouds"/>
+		</attack>
+		<attack name="earth" interval="2000" chance="25" range="7" radius="1" target="1" min="-200" max="-800">
+			<attribute key="shootEffect" value="poisonarrow"/>
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+		<attack name="ice" interval="1200" chance="7" length="8" spread="0" min="-600" max="-1300">
+			<attribute key="areaEffect" value="giantice"/>
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="14" length="8" spread="3" min="-600" max="-1600">
+			<attribute key="areaEffect" value="icetornado"/>
 		</attack>
 	</attacks>
-	<defenses armor="12" defense="20"/>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="1000" chance="15" min="1000" max="2100">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity ice="1" />
 		<immunity paralyze="1" />

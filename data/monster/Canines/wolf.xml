@@ -22,18 +22,17 @@
 	</attacks>
 	<defenses armor="1" defense="4"/>
 	<elements>
-		<element earthPercent="10"/>
-		<element holyPercent="10"/>
-		<element icePercent="-5"/>
-		<elemetn deathPercent="-5"/>
+		<element earthPercent="1"/>
+		<element holyPercent="1"/>
+		<element icePercent="-1"/>
+		<elemetn deathPercent="-1"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Yoooohhuuuu!"/>
 		<voice sentence="Grrrrrrr"/>
 	</voices>
 	<loot>
-		<item id="2666" countmax="2" chance="25000"/><!-- meat -->
-		<item id="3976" chance="9000"/><!-- worm -->
-		<item id="5897" chance="1500"/><!-- wolf paw -->
+		<item id="2666" countmax="2" chance="50000"/><!-- meat -->
+		<item id="5897" chance="970"/><!-- wolf paw -->
 	</loot>
 </monster>

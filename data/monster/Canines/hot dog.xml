@@ -43,6 +43,6 @@
 		<voice sentence="Show me how good you are without some rolled newspaper!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="73" chance="50000"/><!-- gold coins -->
+		<item id="2148" countmax="75" chance="50000"/><!-- gold coins -->
 	</loot>
 </monster>
