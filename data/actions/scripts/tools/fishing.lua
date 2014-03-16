@@ -45,7 +45,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 
 	local player = Player(cid)
 	player:addSkillTries(SKILL_FISHING, 1)
-	if math.random(1, 100) <= math.min(math.max(player:getEffectiveSkillLevel(SKILL_FISHING) * 1.54, 10), 50) then
+	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
 		if useWorms and not player:removeItem(ITEM_WORM, 1) then
 			return true
 		end
