@@ -706,7 +706,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				} else if (tmpStrValue == "areaeffect") {
 					if ((attr = attributeNode.attribute("value"))) {
 						MagicEffectClasses effect = getMagicEffect(attr.as_string());
-						if (effect != NM_ME_UNK) {
+						if (effect != CONST_ME_UNK) {
 							combat->setParam(COMBATPARAM_EFFECT, effect);
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown areaEffect: " << attr.as_string() << std::endl;

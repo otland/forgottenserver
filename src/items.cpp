@@ -70,7 +70,7 @@ ItemType::ItemType()
 	ammoType = AMMO_NONE;
 	ammoAction = AMMOACTION_NONE;
 	shootType = (ShootType_t)0;
-	magicEffect = NM_ME_NONE;
+	magicEffect = CONST_ME_NONE;
 	attack = 0;
 	defense = 0;
 	extraDefense = 0;
@@ -666,7 +666,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			}
 		} else if (tmpStrValue == "effect") {
 			MagicEffectClasses effect = getMagicEffect(valueAttribute.as_string());
-			if (effect != NM_ME_UNK) {
+			if (effect != CONST_ME_UNK) {
 				it.magicEffect = effect;
 			} else {
 				std::cout << "[Warning - Items::parseItemNode] Unknown effect: " << valueAttribute.as_string() << std::endl;

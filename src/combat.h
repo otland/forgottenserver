@@ -74,7 +74,7 @@ struct CombatParams {
 		targetCasterOrTopMost = false;
 		isAggressive = true;
 		itemId = 0;
-		impactEffect = NM_ME_NONE;
+		impactEffect = CONST_ME_NONE;
 		distanceEffect = NM_SHOOT_NONE;
 		useCharges = false;
 

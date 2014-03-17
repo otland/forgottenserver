@@ -429,7 +429,7 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Tile* tile) const
 		executeUseWeapon(player, var);
 	} else {
 		Combat::postCombatEffects(player, tile->getPosition(), params);
-		g_game.addMagicEffect(tile->getPosition(), NM_ME_POFF);
+		g_game.addMagicEffect(tile->getPosition(), CONST_ME_POFF);
 	}
 
 	onUsedAmmo(item, tile);

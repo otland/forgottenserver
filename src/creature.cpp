@@ -732,7 +732,7 @@ bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatu
 			}
 		}
 
-		g_game.addMagicEffect(getPosition(), NM_ME_POFF);
+		g_game.addMagicEffect(getPosition(), CONST_ME_POFF);
 	} else {
 		Item* splash;
 		switch (getRace()) {

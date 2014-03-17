@@ -292,7 +292,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 		}
 
 		if (displayEffect && player->getHealth() > 0) {
-			g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
+			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		}
 	}
 
@@ -2353,7 +2353,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		writeToOutputBuffer(msg);
 
 		if (isLogin) {
-			sendMagicEffect(pos, NM_ME_TELEPORT);
+			sendMagicEffect(pos, CONST_ME_TELEPORT);
 		}
 
 		return;
@@ -2382,7 +2382,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendMapDescription(pos);
 
 	if (isLogin) {
-		sendMagicEffect(pos, NM_ME_TELEPORT);
+		sendMagicEffect(pos, CONST_ME_TELEPORT);
 	}
 
 	sendInventoryItem(SLOT_HEAD, player->getInventoryItem(SLOT_HEAD));

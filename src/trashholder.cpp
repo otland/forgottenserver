@@ -24,7 +24,7 @@
 
 extern Game g_game;
 
-TrashHolder::TrashHolder(uint16_t _type, MagicEffectClasses _effect /*= NM_ME_NONE*/) : Item(_type)
+TrashHolder::TrashHolder(uint16_t _type, MagicEffectClasses _effect /*= CONST_ME_NONE*/) : Item(_type)
 {
 	effect = _effect;
 }
@@ -80,7 +80,7 @@ void TrashHolder::__addThing(int32_t, Thing* thing)
 
 	g_game.internalRemoveItem(item);
 
-	if (effect != NM_ME_NONE) {
+	if (effect != CONST_ME_NONE) {
 		g_game.addMagicEffect(getPosition(), effect);
 	}
 }

@@ -3865,7 +3865,7 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 
 	if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
 		if (!target->isInGhostMode()) {
-			addMagicEffect(list, targetPos, NM_ME_POFF);
+			addMagicEffect(list, targetPos, CONST_ME_POFF);
 		}
 		return true;
 	}
@@ -3875,10 +3875,10 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 	healthChange = -damage;
 
 	if (blockType == BLOCK_DEFENSE) {
-		addMagicEffect(list, targetPos, NM_ME_POFF);
+		addMagicEffect(list, targetPos, CONST_ME_POFF);
 		return true;
 	} else if (blockType == BLOCK_ARMOR) {
-		addMagicEffect(list, targetPos, NM_ME_BLOCKHIT);
+		addMagicEffect(list, targetPos, CONST_ME_BLOCKHIT);
 		return true;
 	} else if (blockType == BLOCK_IMMUNITY) {
 		uint8_t hitEffect = 0;
@@ -3892,22 +3892,22 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 			case COMBAT_PHYSICALDAMAGE:
 			case COMBAT_ICEDAMAGE:
 			case COMBAT_DEATHDAMAGE: {
-				hitEffect = NM_ME_BLOCKHIT;
+				hitEffect = CONST_ME_BLOCKHIT;
 				break;
 			}
 
 			case COMBAT_EARTHDAMAGE: {
-				hitEffect = NM_ME_POISON_RINGS;
+				hitEffect = CONST_ME_GREEN_RINGS;
 				break;
 			}
 
 			case COMBAT_HOLYDAMAGE: {
-				hitEffect = NM_ME_HOLYDAMAGE;
+				hitEffect = CONST_ME_HOLYDAMAGE;
 				break;
 			}
 
 			default: {
-				hitEffect = NM_ME_POFF;
+				hitEffect = CONST_ME_POFF;
 				break;
 			}
 		}
@@ -3927,29 +3927,29 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 			switch (target->getRace()) {
 				case RACE_VENOM:
 					color = TEXTCOLOR_LIGHTGREEN;
-					effect = NM_ME_POISON;
+					effect = CONST_ME_HITBYPOISON;
 					splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_GREEN);
 					break;
 				case RACE_BLOOD:
 					color = TEXTCOLOR_RED;
-					effect = NM_ME_DRAW_BLOOD;
+					effect = CONST_ME_DRAWBLOOD;
 					splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_BLOOD);
 					break;
 				case RACE_UNDEAD:
 					color = TEXTCOLOR_LIGHTGREY;
-					effect = NM_ME_HIT_AREA;
+					effect = CONST_ME_HITAREA;
 					break;
 				case RACE_FIRE:
 					color = TEXTCOLOR_ORANGE;
-					effect = NM_ME_DRAW_BLOOD;
+					effect = CONST_ME_DRAWBLOOD;
 					break;
 				case RACE_ENERGY:
 					color = TEXTCOLOR_PURPLE;
-					effect = NM_ME_ENERGY_DAMAGE;
+					effect = CONST_ME_ENERGYHIT;
 					break;
 				default:
 					color = TEXTCOLOR_NONE;
-					effect = NM_ME_NONE;
+					effect = CONST_ME_NONE;
 					break;
 			}
 
@@ -3963,49 +3963,49 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 
 		case COMBAT_ENERGYDAMAGE: {
 			color = TEXTCOLOR_PURPLE;
-			effect = NM_ME_ENERGY_DAMAGE;
+			effect = CONST_ME_ENERGYHIT;
 			break;
 		}
 
 		case COMBAT_EARTHDAMAGE: {
 			color = TEXTCOLOR_LIGHTGREEN;
-			effect = NM_ME_POISON_RINGS;
+			effect = CONST_ME_GREEN_RINGS;
 			break;
 		}
 
 		case COMBAT_DROWNDAMAGE: {
 			color = TEXTCOLOR_LIGHTBLUE;
-			effect = NM_ME_LOSE_ENERGY;
+			effect = CONST_ME_LOSEENERGY;
 			break;
 		}
 		case COMBAT_FIREDAMAGE: {
 			color = TEXTCOLOR_ORANGE;
-			effect = NM_ME_HITBY_FIRE;
+			effect = CONST_ME_HITBYFIRE;
 			break;
 		}
 		case COMBAT_ICEDAMAGE: {
 			color = TEXTCOLOR_SKYBLUE;
-			effect = NM_ME_ICEATTACK;
+			effect = CONST_ME_ICEATTACK;
 			break;
 		}
 		case COMBAT_HOLYDAMAGE: {
 			color = TEXTCOLOR_YELLOW;
-			effect = NM_ME_HOLYDAMAGE;
+			effect = CONST_ME_HOLYDAMAGE;
 			break;
 		}
 		case COMBAT_DEATHDAMAGE: {
 			color = TEXTCOLOR_DARKRED;
-			effect = NM_ME_SMALLCLOUDS;
+			effect = CONST_ME_SMALLCLOUDS;
 			break;
 		}
 		case COMBAT_LIFEDRAIN: {
 			color = TEXTCOLOR_RED;
-			effect = NM_ME_MAGIC_BLOOD;
+			effect = CONST_ME_MAGIC_RED;
 			break;
 		}
 		default: {
 			color = TEXTCOLOR_NONE;
-			effect = NM_ME_NONE;
+			effect = CONST_ME_NONE;
 			break;
 		}
 	}
@@ -4092,7 +4092,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 		getSpectators(list, targetPos, true, true);
 
 		if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
-			addMagicEffect(list, targetPos, NM_ME_POFF);
+			addMagicEffect(list, targetPos, CONST_ME_POFF);
 			return true;
 		}
 
@@ -4130,7 +4130,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				}
 
 				target->drainMana(attacker, manaDamage);
-				addMagicEffect(list, targetPos, NM_ME_LOSE_ENERGY);
+				addMagicEffect(list, targetPos, CONST_ME_LOSEENERGY);
 
 				std::ostringstream ss;
 				if (!attacker) {
@@ -4334,7 +4334,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		getSpectators(list, targetPos, true, true);
 
 		if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
-			addMagicEffect(list, targetPos, NM_ME_POFF);
+			addMagicEffect(list, targetPos, CONST_ME_POFF);
 			return true;
 		}
 
@@ -4370,7 +4370,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				}
 
 				target->drainMana(attacker, manaDamage);
-				addMagicEffect(list, targetPos, NM_ME_LOSE_ENERGY);
+				addMagicEffect(list, targetPos, CONST_ME_LOSEENERGY);
 
 				std::ostringstream ss;
 				if (!attacker) {
@@ -4452,14 +4452,14 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			uint8_t hitEffect;
 			if (message.primary.value) {
 				combatGetTypeInfo(damage.primary.type, target, message.primary.color, hitEffect);
-				if (hitEffect != NM_ME_NONE) {
+				if (hitEffect != CONST_ME_NONE) {
 					addMagicEffect(list, targetPos, hitEffect);
 				}
 			}
 
 			if (message.secondary.value) {
 				combatGetTypeInfo(damage.secondary.type, target, message.secondary.color, hitEffect);
-				if (hitEffect != NM_ME_NONE) {
+				if (hitEffect != CONST_ME_NONE) {
 					addMagicEffect(list, targetPos, hitEffect);
 				}
 			}
@@ -4535,7 +4535,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 	} else {
 		const Position& targetPos = target->getPosition();
 		if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
-			addMagicEffect(targetPos, NM_ME_POFF);
+			addMagicEffect(targetPos, CONST_ME_POFF);
 			return false;
 		}
 
@@ -4560,7 +4560,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		int32_t manaLoss = std::min<int32_t>(target->getMana(), -manaChange);
 		BlockType_t blockType = target->blockHit(attacker, COMBAT_MANADRAIN, manaLoss);
 		if (blockType != BLOCK_NONE) {
-			addMagicEffect(targetPos, NM_ME_POFF);
+			addMagicEffect(targetPos, CONST_ME_POFF);
 			return false;
 		}
 
@@ -4639,7 +4639,7 @@ void Game::addCreatureHealth(const SpectatorVec& list, const Creature* target)
 
 void Game::addMagicEffect(const Position& pos, uint8_t effect)
 {
-	if (effect > NM_ME_LAST) {
+	if (effect > CONST_ME_LAST) {
 		return;
 	}
 
@@ -4650,7 +4650,7 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect)
 
 void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect)
 {
-	if (effect > NM_ME_LAST) {
+	if (effect > CONST_ME_LAST) {
 		return;
 	}
 

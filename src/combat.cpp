@@ -709,14 +709,14 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 		params.tileCallback->onTileCombat(caster, tile);
 	}
 
-	if (params.impactEffect != NM_ME_NONE) {
+	if (params.impactEffect != CONST_ME_NONE) {
 		g_game.addMagicEffect(list, tile->getPosition(), params.impactEffect);
 	}
 }
 
 void Combat::postCombatEffects(Creature* caster, const Position& pos, const CombatParams& params)
 {
-	if (caster && params.distanceEffect != NM_ME_NONE) {
+	if (caster && params.distanceEffect != CONST_ME_NONE) {
 		addDistanceEffect(caster, caster->getPosition(), pos, params.distanceEffect);
 	}
 }
@@ -847,7 +847,7 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 void Combat::doCombatHealth(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params)
 {
 	bool canCombat = !params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR);
-	if ((caster == target || canCombat) && params.impactEffect != NM_ME_NONE) {
+	if ((caster == target || canCombat) && params.impactEffect != CONST_ME_NONE) {
 		g_game.addMagicEffect(target->getPosition(), params.impactEffect);
 	}
 
@@ -871,7 +871,7 @@ void Combat::doCombatHealth(Creature* caster, const Position& position, const Ar
 void Combat::doCombatMana(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params)
 {
 	bool canCombat = !params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR);
-	if ((caster == target || canCombat) && params.impactEffect != NM_ME_NONE) {
+	if ((caster == target || canCombat) && params.impactEffect != CONST_ME_NONE) {
 		g_game.addMagicEffect(target->getPosition(), params.impactEffect);
 	}
 
@@ -900,7 +900,7 @@ void Combat::doCombatCondition(Creature* caster, const Position& position, const
 void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatParams& params)
 {
 	bool canCombat = !params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR);
-	if ((caster == target || canCombat) && params.impactEffect != NM_ME_NONE) {
+	if ((caster == target || canCombat) && params.impactEffect != CONST_ME_NONE) {
 		g_game.addMagicEffect(target->getPosition(), params.impactEffect);
 	}
 
@@ -910,7 +910,7 @@ void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatP
 			params.targetCallback->onTargetCombat(caster, target);
 		}
 
-		if (caster && params.distanceEffect != NM_ME_NONE) {
+		if (caster && params.distanceEffect != CONST_ME_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
@@ -924,7 +924,7 @@ void Combat::doCombatDispel(Creature* caster, const Position& position, const Ar
 void Combat::doCombatDispel(Creature* caster, Creature* target, const CombatParams& params)
 {
 	bool canCombat = !params.isAggressive || (caster != target && Combat::canDoCombat(caster, target) == RET_NOERROR);
-	if ((caster == target || canCombat) && params.impactEffect != NM_ME_NONE) {
+	if ((caster == target || canCombat) && params.impactEffect != CONST_ME_NONE) {
 		g_game.addMagicEffect(target->getPosition(), params.impactEffect);
 	}
 
@@ -934,7 +934,7 @@ void Combat::doCombatDispel(Creature* caster, Creature* target, const CombatPara
 			params.targetCallback->onTargetCombat(caster, target);
 		}
 
-		if (caster && params.distanceEffect != NM_ME_NONE) {
+		if (caster && params.distanceEffect != CONST_ME_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
@@ -954,12 +954,12 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 		}
 
 		/*
-		if (params.impactEffect != NM_ME_NONE) {
+		if (params.impactEffect != CONST_ME_NONE) {
 			g_game.addMagicEffect(target->getPosition(), params.impactEffect);
 		}
 		*/
 
-		if (caster && params.distanceEffect != NM_ME_NONE) {
+		if (caster && params.distanceEffect != CONST_ME_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
