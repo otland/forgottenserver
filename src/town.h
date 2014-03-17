@@ -52,6 +52,8 @@ class Town
 		Position templePosition;
 };
 
+typedef std::map<uint32_t, Town*> TownMap;
+
 class Towns
 {
 	public:
@@ -93,8 +95,12 @@ class Towns
 			return it->second;
 		}
 
+		const TownMap& getTowns() const {
+			return townMap;
+		}
+
 	private:
-		std::map<uint32_t, Town*> townMap;
+		TownMap townMap;
 };
 
 #endif

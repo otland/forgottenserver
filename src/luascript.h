@@ -569,6 +569,8 @@ class LuaScriptInterface
 		static int32_t luaGameGetPlayerCount(lua_State* L);
 		static int32_t luaGameGetNpcCount(lua_State* L);
 
+		static int32_t luaGameGetTowns(lua_State* L);
+
 		static int32_t luaGameGetGameState(lua_State* L);
 		static int32_t luaGameSetGameState(lua_State* L);
 

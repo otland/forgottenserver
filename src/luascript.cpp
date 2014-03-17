@@ -1480,6 +1480,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
 
+	registerMethod("Game", "getTowns", LuaScriptInterface::luaGameGetTowns);
+
 	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
 
@@ -4667,6 +4669,20 @@ int32_t LuaScriptInterface::luaGameGetNpcCount(lua_State* L)
 {
 	// Game.getNpcCount()
 	pushNumber(L, g_game.getNpcsOnline());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetTowns(lua_State* L)
+{
+	// Game.getTowns()
+	lua_newtable(L);
+
+	int32_t index = 0;
+	for (const auto& townEntry : Towns::getInstance().getTowns()) {
+		pushUserdata<Town>(L, townEntry.second);
+		setMetatable(L, -1, "Town");
+		lua_rawseti(L, -2, ++index);
+	}
 	return 1;
 }
 
