@@ -1480,6 +1480,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
 
+	registerMethod("Game", "getTowns", LuaScriptInterface::luaGameGetTowns);
+	registerMethod("Game", "getHouses", LuaScriptInterface::luaGameGetHouses);
+
 	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
 
@@ -4665,6 +4668,36 @@ int32_t LuaScriptInterface::luaGameGetNpcCount(lua_State* L)
 {
 	// Game.getNpcCount()
 	pushNumber(L, g_game.getNpcsOnline());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetTowns(lua_State* L)
+{
+	// Game.getTowns()
+	const auto& towns = Towns::getInstance().getTowns();
+	lua_createtable(L, towns.size(), 0);
+
+	int32_t index = 0;
+	for (auto townEntry : towns) {
+		pushUserdata<Town>(L, townEntry.second);
+		setMetatable(L, -1, "Town");
+		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetHouses(lua_State* L)
+{
+	// Game.getHouses()
+	const auto& houses = Houses::getInstance().getHouses();
+	lua_createtable(L, houses.size(), 0);
+
+	int32_t index = 0;
+	for (auto houseEntry : houses) {
+		pushUserdata<House>(L, houseEntry.second);
+		setMetatable(L, -1, "House");
+		lua_rawseti(L, -2, ++index);
+	}
 	return 1;
 }
 
