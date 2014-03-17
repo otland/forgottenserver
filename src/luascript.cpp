@@ -1986,6 +1986,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Town", "getName", LuaScriptInterface::luaTownGetName);
 	registerMethod("Town", "getTemplePosition", LuaScriptInterface::luaTownGetTemplePosition);
 
+	registerMethod("Town", "getHouses", LuaScriptInterface::luaTownGetHouses);
+
 	// House
 	registerClass("House", "", LuaScriptInterface::luaHouseCreate);
 	registerMetaMethod("House", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10371,6 +10373,26 @@ int32_t LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
 	Town* town = getUserdata<Town>(L, 1);
 	if (town) {
 		pushPosition(L, town->getTemplePosition());
+	} else {
+		pushNil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTownGetHouses(lua_State* L)
+{
+	// town:getHouses()
+	Town* town = getUserdata<Town>(L, 1);
+	if (town) {
+		lua_newtable(L);
+		int32_t index = 0;
+		for (const auto& houseEntry : Houses::getInstance().getHouses()) {
+			if (houseEntry.second->getTownId() == town->getID()) {
+				pushUserdata<House>(L, houseEntry.second);
+				setMetatable(L, -1, "House");
+				lua_rawseti(L, -2, ++index);
+			}
+		}
 	} else {
 		pushNil(L);
 	}

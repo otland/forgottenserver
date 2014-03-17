@@ -1061,6 +1061,8 @@ class LuaScriptInterface
 		static int32_t luaTownGetName(lua_State* L);
 		static int32_t luaTownGetTemplePosition(lua_State* L);
 
+		static int32_t luaTownGetHouses(lua_State* L);
+
 		// House
 		static int32_t luaHouseCreate(lua_State* L);
 
