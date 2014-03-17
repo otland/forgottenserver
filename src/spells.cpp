@@ -1713,18 +1713,8 @@ bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool ConjureSpell::loadFunction(const std::string& functionName)
+bool ConjureSpell::loadFunction(const std::string&)
 {
-	std::string tmpFunctionName = asLowerCaseString(functionName);
-	if (tmpFunctionName == "conjureitem" || tmpFunctionName == "conjurerune") {
-		function = ConjureItem;
-	} else if (tmpFunctionName == "conjurefood") {
-		function = ConjureFood;
-	} else {
-		std::cout << "[Warning - ConjureSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-		return false;
-	}
-
 	m_scripted = false;
 	return true;
 }
@@ -1743,33 +1733,7 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 	return result;
 }
 
-ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId,
-        uint32_t conjureCount, uint32_t reagentId, slots_t slot, bool test /*= false*/)
-{
-	if (reagentId != 0) {
-		Item* item = player->getInventoryItem(slot);
-		if (item && item->getID() == reagentId) {
-			if (item->isStackable() && item->getItemCount() != 1) {
-				return RET_YOUNEEDTOSPLITYOURSPEARS;
-			}
-
-			if (test) {
-				return RET_NOERROR;
-			}
-
-			Item* newItem = g_game.transformItem(item, conjureId, conjureCount);
-			if (newItem) {
-				g_game.startDecay(newItem);
-			}
-
-			return RET_NOERROR;
-		}
-	}
-
-	return RET_YOUNEEDAMAGICITEMTOCASTSPELL;
-}
-
-bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, const std::string&)
+bool ConjureSpell::conjureItem(const ConjureSpell* spell, Creature* creature)
 {
 	Player* player = creature->getPlayer();
 	if (!player) {
@@ -1800,6 +1764,8 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_BLOOD);
 		return true;
 	} else {
+
+
 		if (internalConjureItem(player, spell->getConjureId(), spell->getConjureCount()) == RET_NOERROR) {
 			spell->postCastSpell(player);
 			g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_BLOOD);
@@ -1810,32 +1776,6 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 	player->sendCancelMessage(result);
 	g_game.addMagicEffect(player->getPosition(), NM_ME_POFF);
 	return false;
-}
-
-bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, const std::string&)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	uint32_t foodType[8] = {
-		ITEM_MEAT,
-		ITEM_HAM,
-		ITEM_GRAPE,
-		ITEM_APPLE,
-		ITEM_BREAD,
-		ITEM_CHEESE,
-		ITEM_ROLL,
-		ITEM_BREAD
-	};
-
-	bool result = (internalConjureItem(player, foodType[uniform_random(0, 7)], 1) == RET_NOERROR);
-	if (result) {
-		spell->postCastSpell(player);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_POISON);
-	}
-	return result;
 }
 
 bool ConjureSpell::playerCastInstant(Player* player, std::string& param)
@@ -1849,11 +1789,8 @@ bool ConjureSpell::playerCastInstant(Player* player, std::string& param)
 		var.type = VARIANT_STRING;
 		var.text = param;
 		return executeCastSpell(player, var);
-	} else if (function) {
-		return function(this, player, param);
 	}
-
-	return false;
+	return conjureItem(this, player);
 }
 
 RuneSpell::RuneSpell(LuaScriptInterface* _interface) :

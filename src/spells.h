@@ -68,7 +68,6 @@ class Spells : public BaseEvents
 };
 
 typedef bool (InstantSpellFunction)(const InstantSpell* spell, Creature* creature, const std::string& param);
-typedef bool (ConjureSpellFunction)(const ConjureSpell* spell, Creature* creature, const std::string& param);
 typedef bool (RuneSpellFunction)(const RuneSpell* spell, Creature* creature, Item* item, const Position& posFrom, const Position& posTo);
 
 class BaseSpell
@@ -284,15 +283,10 @@ class ConjureSpell : public InstantSpell
 		virtual std::string getScriptEventName();
 
 		static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount);
-		static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount, uint32_t reagentId, slots_t slot, bool test = false);
 
-		static ConjureSpellFunction ConjureItem;
-		static ConjureSpellFunction ConjureFood;
-
+		bool conjureItem(const ConjureSpell* spell, Creature* creature);
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
 		Position getCasterPosition(Creature* creature);
-
-		ConjureSpellFunction* function;
 
 		uint32_t conjureId;
 		uint32_t conjureCount;
