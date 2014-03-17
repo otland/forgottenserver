@@ -2248,6 +2248,10 @@ Item* Player::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature
 
 void Player::addInFightTicks(bool pzlock /*= false*/)
 {
+	if (hasFlag(PlayerFlag_NotGainInFight)) {
+		return;
+	}
+
 	if (pzlock) {
 		pzLocked = true;
 	}
@@ -3537,12 +3541,12 @@ void Player::onAttackedCreature(Creature* target)
 {
 	Creature::onAttackedCreature(target);
 
-	if (hasFlag(PlayerFlag_NotGainInFight)) {
+	if (target == this) {
+		addInFightTicks();
 		return;
 	}
 
-	if (target == this) {
-		addInFightTicks();
+	if (hasFlag(PlayerFlag_NotGainInFight)) {
 		return;
 	}
 
@@ -3584,9 +3588,7 @@ void Player::onAttacked()
 {
 	Creature::onAttacked();
 
-	if (!hasFlag(PlayerFlag_NotGainInFight)) {
-		addInFightTicks();
-	}
+	addInFightTicks();
 }
 
 void Player::onIdleStatus()
