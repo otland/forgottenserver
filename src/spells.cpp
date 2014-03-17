@@ -610,7 +610,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group) || player->hasCondition(CONDITION_SPELLCOOLDOWN, spellId)) {
+	if (player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group) || player->hasCondition(CONDITION_SPELLCOOLDOWN, spellId) || (secondaryGroup != SPELLGROUP_NONE && player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, secondaryGroup))) {
 		player->sendCancelMessage(RET_YOUAREEXHAUSTED);
 
 		if (isInstant()) {
