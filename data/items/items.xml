@@ -29298,14 +29298,14 @@
 	<item fromid="22133" toid="22134" name="instable vortex">
 		<attribute key="description" value="This vortex seems suck you right in.." />
 	</item>
-	<item id="22137" article="a" name="large vortex"/>
-	<item id="22138" article="a" name="strange vortex"/>
-	<item id="22139" article="a" name="tiny vortex"/>
+	<item id="22137" article="a" name="large vortex" />
+	<item id="22138" article="a" name="strange vortex" />
+	<item id="22139" article="a" name="tiny vortex" />
 	<item id="21924" article="a" name="ruined stair">
-		<attribute key="floorchange" value="north"/>
+		<attribute key="floorchange" value="north" />
 	</item>
 	<item id="21925" article="a" name="ruined stair">
-		<attribute key="floorchange" value="west"/>
+		<attribute key="floorchange" value="west" />
 	</item>
 	<item id="22392" article="a" name="dead shock head">
 		<attribute key="containerSize" value="20" />
@@ -29555,9 +29555,9 @@
 		<attribute key="defense" value="20" />
 		<attribute key="weaponType" value="shield" />
 	</item>
-	<item id="22444" article="a" name="bad dream"/>
+	<item id="22444" article="a" name="bad dream" />
 	<item id="22458" article="a" name="ramp">
-		<attribute key="floorchange" value="south"/>
+		<attribute key="floorchange" value="south" />
 	</item>
 	<item id="22478" article="a" name="dead sight of surrender">
 		<attribute key="containerSize" value="20" />
@@ -29800,10 +29800,10 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="22558" article="a" name="ruined stair">
-		<attribute key="floorchange" value="north"/>
+		<attribute key="floorchange" value="north" />
 	</item>
 	<item id="22559" article="a" name="ruined stair">
-		<attribute key="floorchange" value="west"/>
+		<attribute key="floorchange" value="west" />
 	</item>
 	<item id="22562" article="a" name="dead gaz'haragoth">
 		<attribute key="containerSize" value="20" />
@@ -29862,19 +29862,19 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="22587" article="a" name="stair">
-		<attribute key="floorchange" value="west"/>
+		<attribute key="floorchange" value="west" />
 	</item>
 	<item id="22588" article="a" name="stair">
-		<attribute key="floorchange" value="west"/>
+		<attribute key="floorchange" value="west" />
 	</item>
 	<item id="22589" article="a" name="stair">
-		<attribute key="floorchange" value="eastex"/>
+		<attribute key="floorchange" value="eastex" />
 	</item>
 	<item id="22590" article="a" name="stair">
-		<attribute key="floorchange" value="southex"/>
+		<attribute key="floorchange" value="southex" />
 	</item>
 	<item id="22595" article="a" name="stair">
-		<attribute key="floorchange" value="down"/>
+		<attribute key="floorchange" value="down" />
 	</item>
 	<item id="22598" article="a" name="unrealized dream">
 		<attribute key="weight" value="3300" />
@@ -29920,28 +29920,28 @@
 	<item id="22616" article="a" name="nightmare hook">
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="22629" article="a" name="dead mawhank">
+	<item id="22629" article="a" name="dead mawhawk">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22630" />
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="22630" article="a" name="dead mawhank">
+	<item id="22630" article="a" name="dead mawhawk">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22631" />
 		<attribute key="duration" value="60" />
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="22631" article="a" name="dead mawhank">
+	<item id="22631" article="a" name="dead mawhawk">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22632" />
 		<attribute key="duration" value="60" />
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="22632" article="a" name="dead mawhank">
+	<item id="22632" article="a" name="dead mawhawk">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="60" />
@@ -29970,16 +29970,16 @@
 		<attribute key="floorchange" value="down" />
 	</item>
 	<item id="22667" article="a" name="ramp">
-		<attribute key="floorchange" value="south"/>
+		<attribute key="floorchange" value="south" />
 	</item>
 	<item id="22668" article="a" name="ramp">
-		<attribute key="floorchange" value="south"/>
+		<attribute key="floorchange" value="south" />
 	</item>
 	<item id="22669" article="a" name="ramp">
-		<attribute key="floorchange" value="south"/>
+		<attribute key="floorchange" value="south" />
 	</item>
 	<item id="22670" article="a" name="ramp">
-		<attribute key="floorchange" value="south"/>
+		<attribute key="floorchange" value="south" />
 	</item>
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
