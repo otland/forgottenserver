@@ -878,7 +878,7 @@ void Player::dropLoot(Container* corpse, Creature* _lastHitCreature)
 	}
 
 	if (!inventory[SLOT_BACKPACK]) {
-		__internalAddThing(SLOT_BACKPACK, Item::CreateItem(1988));
+		__internalAddThing(SLOT_BACKPACK, Item::CreateItem(ITEM_BAG));
 	}
 }
 
