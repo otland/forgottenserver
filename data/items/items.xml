@@ -29295,6 +29295,46 @@
 		<attribute key="description" value="It is said to freeze time itself to capture your fondest memories. Awarded by TibiaEvents.com" />
 		<attribute key="weight" value="2000" />
 	</item>
+	<item fromid="22133" toid="22134" name="instable vortex">
+		<attribute key="description" value="This vortex seems suck you right in.." />
+	</item>
+	<item id="22137" article="a" name="large vortex"/>
+	<item id="22138" article="a" name="strange vortex"/>
+	<item id="22139" article="a" name="tiny vortex"/>
+	<item id="21924" article="a" name="ruined stair">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="21925" article="a" name="ruined stair">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="22392" article="a" name="dead shock head">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22393" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22393" article="a" name="dead shock head">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22394" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22394" article="a" name="dead shock head">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22395" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22395" article="a" name="dead shock head">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
 	<item id="22396" article="a" name="cluster of solace">
 		<attribute key="weight" value="280" />
 	</item>
@@ -29515,6 +29555,178 @@
 		<attribute key="defense" value="20" />
 		<attribute key="weaponType" value="shield" />
 	</item>
+	<item id="22444" article="a" name="bad dream"/>
+	<item id="22458" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
+	<item id="22478" article="a" name="dead sight of surrender">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22479" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22479" article="a" name="dead sight of surrender">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22480" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22480" article="a" name="dead sight of surrender">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22481" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22481" article="a" name="dead sight of surrender">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22482" article="a" name="dead guzzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22483" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22483" article="a" name="dead guzzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22484" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22484" article="a" name="dead guzzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22485" article="a" name="dead guzzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22482" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22486" article="a" name="dead silencer">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22487" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22487" article="a" name="dead silencer">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22488" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22488" article="a" name="dead silencer">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22489" article="a" name="dead silencer">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22486" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22490" article="a" name="dead choking fear">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22491" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22491" article="a" name="dead choking fear">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22492" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22492" article="a" name="dead choking fear">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22493" article="a" name="dead choking fear">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22490" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22494" article="a" name="dead terrorsleep">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22495" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22495" article="a" name="dead terrorsleep">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22496" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22496" article="a" name="dead terrorsleep">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22497" article="a" name="dead terrorsleep">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22494" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22508" article="a" name="dead retching horror">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22505" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22505" article="a" name="dead retching horror">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22506" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22506" article="a" name="dead retching horror">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22507" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22507" article="a" name="dead retching horror">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
 	<item id="22516" article="a" name="ring of ending">
 		<attribute key="description" value="This constantly rotating ring is perfectly weightless, yet feels infinitely heavy at the same time." />
 		<attribute key="slotType" value="ring" />
@@ -29558,6 +29770,111 @@
 	</item>
 	<item id="22541" article="a" name="pool of chitinous glue">
 		<attribute key="weight" value="270" />
+	</item>
+	<item id="22546" article="a" name="dead demon outcast">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22547" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22547" article="a" name="dead demon outcast">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22548" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22548" article="a" name="dead demon outcast">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22549" article="a" name="dead demon outcast">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22546" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22558" article="a" name="ruined stair">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="22559" article="a" name="ruined stair">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="22562" article="a" name="dead gaz'haragoth">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22563" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22563" article="a" name="dead gaz'haragoth">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22564" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22564" article="a" name="dead gaz'haragoth">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22565" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22565" article="a" name="dead gaz'haragoth">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22567" article="a" name="dead frazzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22568" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22568" article="a" name="dead frazzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22569" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22569" article="a" name="dead frazzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22570" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22570" article="a" name="dead frazzlemaw">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22587" article="a" name="stair">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="22588" article="a" name="stair">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="22589" article="a" name="stair">
+		<attribute key="floorchange" value="eastex"/>
+	</item>
+	<item id="22590" article="a" name="stair">
+		<attribute key="floorchange" value="southex"/>
+	</item>
+	<item id="22595" article="a" name="stair">
+		<attribute key="floorchange" value="down"/>
 	</item>
 	<item id="22598" article="a" name="unrealized dream">
 		<attribute key="weight" value="3300" />
@@ -29603,6 +29920,34 @@
 	<item id="22616" article="a" name="nightmare hook">
 		<attribute key="weight" value="500" />
 	</item>
+	<item id="22629" article="a" name="dead mawhank">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22630" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22630" article="a" name="dead mawhank">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22631" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22631" article="a" name="dead mawhank">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22632" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22632" article="a" name="dead mawhank">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="60" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
 	<item id="22642" article="a" name="frazzlemaw santa">
 		<attribute key="weight" value="600" />
 	</item>
@@ -29620,6 +29965,21 @@
 	</item>
 	<item id="22649" article="a" name="snowflake tapestry">
 		<attribute key="weight" value="1000" />
+	</item>
+	<item fromid="22662" toid="22666" article="a" name="hole">
+		<attribute key="floorchange" value="down" />
+	</item>
+	<item id="22667" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
+	<item id="22668" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
+	<item id="22669" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
+	<item id="22670" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
 	</item>
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
