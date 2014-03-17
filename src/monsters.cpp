@@ -697,7 +697,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				if (tmpStrValue == "shooteffect") {
 					if ((attr = attributeNode.attribute("value"))) {
 						ShootType_t shoot = getShootType(attr.as_string());
-						if (shoot != NM_SHOOT_UNK) {
+						if (shoot != CONST_ANI_UNK) {
 							combat->setParam(COMBATPARAM_DISTANCEEFFECT, shoot);
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;

@@ -723,24 +723,24 @@ void Combat::postCombatEffects(Creature* caster, const Position& pos, const Comb
 
 void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	if (caster && effect == NM_SHOOT_WEAPONTYPE) {
+	if (caster && effect == CONST_ANI_WEAPONTYPE) {
 		switch (caster->getWeaponType()) {
 			case WEAPON_AXE:
-				effect = NM_SHOOT_WHIRLWINDAXE;
+				effect = CONST_ANI_WHIRLWINDAXE;
 				break;
 			case WEAPON_SWORD:
-				effect = NM_SHOOT_WHIRLWINDSWORD;
+				effect = CONST_ANI_WHIRLWINDSWORD;
 				break;
 			case WEAPON_CLUB:
-				effect = NM_SHOOT_WHIRLWINDCLUB;
+				effect = CONST_ANI_WHIRLWINDCLUB;
 				break;
 			default:
-				effect = NM_SHOOT_NONE;
+				effect = CONST_ANI_NONE;
 				break;
 		}
 	}
 
-	if (effect != NM_SHOOT_NONE) {
+	if (effect != CONST_ANI_NONE) {
 		g_game.addDistanceEffect(fromPos, toPos, effect);
 	}
 }
@@ -857,7 +857,7 @@ void Combat::doCombatHealth(Creature* caster, Creature* target, CombatDamage& da
 			params.targetCallback->onTargetCombat(caster, target);
 		}
 
-		if (caster && params.distanceEffect != NM_SHOOT_NONE) {
+		if (caster && params.distanceEffect != CONST_ANI_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
@@ -881,7 +881,7 @@ void Combat::doCombatMana(Creature* caster, Creature* target, CombatDamage& dama
 			params.targetCallback->onTargetCombat(caster, target);
 		}
 
-		if (caster && params.distanceEffect != NM_SHOOT_NONE) {
+		if (caster && params.distanceEffect != CONST_ANI_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}

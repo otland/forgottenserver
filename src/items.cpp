@@ -659,7 +659,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			}
 		} else if (tmpStrValue == "shoottype") {
 			ShootType_t shoot = getShootType(valueAttribute.as_string());
-			if (shoot != NM_SHOOT_UNK) {
+			if (shoot != CONST_ANI_UNK) {
 				it.shootType = shoot;
 			} else {
 				std::cout << "[Warning - Items::parseItemNode] Unknown shootType: " << valueAttribute.as_string() << std::endl;

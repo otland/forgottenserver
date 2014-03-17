@@ -75,7 +75,7 @@ struct CombatParams {
 		isAggressive = true;
 		itemId = 0;
 		impactEffect = CONST_ME_NONE;
-		distanceEffect = NM_SHOOT_NONE;
+		distanceEffect = CONST_ANI_NONE;
 		useCharges = false;
 
 		valueCallback = nullptr;
