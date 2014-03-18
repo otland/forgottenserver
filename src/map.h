@@ -39,9 +39,9 @@ class Map;
 
 struct FindPathParams;
 struct AStarNode {
-	int32_t x, y;
 	AStarNode* parent;
-	int32_t f, g, h;
+	int_fast32_t f;
+	uint16_t x, y;
 };
 
 #define MAX_NODES 512
@@ -56,30 +56,19 @@ class AStarNodes
 		AStarNodes();
 		~AStarNodes() {}
 
-		AStarNode* createOpenNode();
+		AStarNode* createOpenNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f);
 		AStarNode* getBestNode();
 		void closeNode(AStarNode* node);
 		void openNode(AStarNode* node);
 		uint32_t countClosedNodes() const;
-		bool isInList(int32_t x, int32_t y);
-		AStarNode* getNodeInList(int32_t x, int32_t y);
 
 		static int32_t getMapWalkCost(AStarNode* node, const Position& neighbourPos);
 		static int32_t getTileWalkCost(const Creature* creature, const Tile* tile);
-		int32_t getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, int32_t yGoal);
 
 	private:
 		AStarNode nodes[MAX_NODES];
 		std::bitset<MAX_NODES> openNodes;
 		uint32_t curNode;
-};
-
-template<class T> class lessPointer : public std::binary_function<T*, T*, bool>
-{
-	public:
-		bool operator()(T*& t1, T*& t2) {
-			return *t1 < *t2;
-		}
 };
 
 typedef std::unordered_set<Creature*> SpectatorVec;
@@ -242,17 +231,6 @@ class Map
 		bool checkSightLine(const Position& fromPos, const Position& toPos) const;
 
 		const Tile* canWalkTo(const Creature* creature, const Position& pos);
-
-		/**
-		  * Get the path to a specific position on the map.
-		  * \param creature The creature that wants a path
-		  * \param destPos The position we want a path calculated to
-		  * \param listDir contains a list of directions to the destination
-		  * \param maxDist Maximum distance from our current position to search, default: -1 (no limit)
-		  * \returns returns true if a path was found
-		  */
-		bool getPathTo(const Creature* creature, const Position& destPos,
-		               std::list<Direction>& listDir, int32_t maxDist = -1);
 
 		bool getPathMatching(const Creature* creature, std::list<Direction>& dirList,
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp);

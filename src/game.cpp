@@ -1164,11 +1164,10 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerMoveItem, this,
 			                      playerId, fromPos, spriteId, fromStackPos, toPos, count));
 			player->setNextWalkActionTask(task);
-			return;
 		} else {
 			player->sendCancelMessage(RET_THEREISNOWAY);
-			return;
 		}
+		return;
 	}
 
 	const Tile* toCylinderTile = toCylinder->getTile();
@@ -1217,8 +1216,7 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			}
 
 			std::list<Direction> listDir;
-
-			if (map.getPathTo(player, walkPos, listDir)) {
+			if (getPathToEx(player, walkPos, listDir, 0, 0, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
 
@@ -1922,9 +1920,7 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 	player->resetIdleTime();
 	player->setNextWalkActionTask(nullptr);
 
-	std::list<Direction> dirs;
-	dirs.push_back(direction);
-	player->startAutoWalk(dirs);
+	player->startAutoWalk(std::list<Direction> { direction });
 }
 
 bool Game::playerBroadcastMessage(Player* player, const std::string& text)
@@ -3696,12 +3692,6 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	return true;
 }
 
-bool Game::getPathTo(const Creature* creature, const Position& destPos,
-                     std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/)
-{
-	return map.getPathTo(creature, destPos, listDir, maxSearchDist);
-}
-
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos,
                        std::list<Direction>& dirList, const FindPathParams& fpp)
 {
@@ -3709,8 +3699,8 @@ bool Game::getPathToEx(const Creature* creature, const Position& targetPos,
 }
 
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,
-                       uint32_t minTargetDist, uint32_t maxTargetDist, bool fullPathSearch /*= true*/,
-                       bool clearSight /*= true*/, int32_t maxSearchDist /*= -1*/)
+                       int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch /*= true*/,
+                       bool clearSight /*= true*/, uint32_t maxSearchDist /*= 0*/)
 {
 	FindPathParams fpp;
 	fpp.fullPathSearch = fullPathSearch;

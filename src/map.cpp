@@ -298,9 +298,7 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	}
 }
 
-void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/,
-                        int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/,
-                        int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
+void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
 		return;
@@ -544,7 +542,7 @@ const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 		return getTile(pos.x, pos.y, pos.z);
 	}
 
-	//used for none-cached tiles
+	//used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature->getTile() != tile) {
 		if (!tile || tile->__queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RET_NOERROR) {
@@ -554,190 +552,20 @@ const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 	return tile;
 }
 
-bool Map::getPathTo(const Creature* creature, const Position& destPos,
-                    std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/)
-{
-	if (canWalkTo(creature, destPos) == nullptr) {
-		return false;
-	}
-
-	listDir.clear();
-
-	const Position& endPos = creature->getPosition();
-	if (destPos.z != endPos.z) {
-		return false;
-	}
-
-	std::unordered_map<uint32_t, AStarNode*> nodeTable;
-
-	AStarNodes nodes;
-	AStarNode* startNode = nodes.createOpenNode();
-
-	nodeTable[(destPos.x << 16) | destPos.y] = startNode;
-
-	startNode->x = destPos.x;
-	startNode->y = destPos.y;
-
-	startNode->g = 0;
-	startNode->h = nodes.getEstimatedDistance(destPos.x, destPos.y, endPos.x, endPos.y);
-	startNode->f = startNode->h;
-	startNode->parent = nullptr;
-
-	Position pos(0, 0, destPos.z);
-
-	static int32_t neighbourOrderList[8][2] = {
-		{ -1, 0},
-		{0, 1},
-		{1, 0},
-		{0, -1},
-
-		//diagonal
-		{ -1, -1},
-		{1, -1},
-		{1, 1},
-		{ -1, 1},
-	};
-
-	AStarNode* found = nullptr;
-
-	while (maxSearchDist != -1 || nodes.countClosedNodes() < 100) {
-		AStarNode* n = nodes.getBestNode();
-		if (!n) {
-			listDir.clear();
-			return false; //no path found
-		}
-
-		if (n->x == endPos.x && n->y == endPos.y) {
-			found = n;
-			break;
-		}
-
-		for (int i = 0; i < 8; ++i) {
-			pos.x = n->x + neighbourOrderList[i][0];
-			pos.y = n->y + neighbourOrderList[i][1];
-
-			if (maxSearchDist != -1 && (Position::getDistanceX(endPos, pos) > maxSearchDist ||
-										Position::getDistanceY(endPos, pos) > maxSearchDist)) {
-				// Out of range
-				continue;
-			}
-
-			const Tile* tile = canWalkTo(creature, pos);
-			if (!tile) {
-				continue;
-			}
-
-			//The cost (g) for this neighbour
-			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
-			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
-			const int_fast32_t newg = n->g + cost + extraCost;
-			const uint32_t tableIndex = (pos.x << 16) | pos.y;
-
-			//Check if the node is already in the closed/open list
-			//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
-
-			AStarNode* neighbourNode;
-			auto it = nodeTable.find(tableIndex);
-			if (it != nodeTable.end()) {
-				neighbourNode = it->second;
-			} else {
-				neighbourNode = nullptr;
-			}
-
-			if (neighbourNode) {
-				if (neighbourNode->g <= newg) {
-					continue;    //The node on the closed/open list is cheaper than this one
-				}
-
-				nodes.openNode(neighbourNode);
-			} else {
-				//Does not exist in the open/closed list, create a new node
-				neighbourNode = nodes.createOpenNode();
-				if (!neighbourNode) {
-					//seems we ran out of nodes
-					listDir.clear();
-					return false;
-				}
-
-				nodeTable[tableIndex] = neighbourNode;
-
-				neighbourNode->x = pos.x;
-				neighbourNode->y = pos.y;
-			}
-
-			//This node is the best node so far with this state
-			neighbourNode->parent = n;
-			neighbourNode->g = newg;
-			neighbourNode->h = nodes.getEstimatedDistance(pos.x, pos.y, endPos.x, endPos.y);
-			neighbourNode->f = newg + neighbourNode->h;
-		}
-
-		nodes.closeNode(n);
-	}
-
-	int_fast32_t prevx = endPos.x;
-	int_fast32_t prevy = endPos.y;
-	int_fast32_t dx, dy;
-
-	while (found) {
-		pos.x = found->x;
-		pos.y = found->y;
-
-		found = found->parent;
-
-		dx = pos.getX() - prevx;
-		dy = pos.getY() - prevy;
-
-		prevx = pos.x;
-		prevy = pos.y;
-
-		if (dx == -1 && dy == -1) {
-			listDir.push_back(NORTHWEST);
-		} else if (dx == 1 && dy == -1) {
-			listDir.push_back(NORTHEAST);
-		} else if (dx == -1 && dy == 1) {
-			listDir.push_back(SOUTHWEST);
-		} else if (dx == 1 && dy == 1) {
-			listDir.push_back(SOUTHEAST);
-		} else if (dx == -1) {
-			listDir.push_back(WEST);
-		} else if (dx == 1) {
-			listDir.push_back(EAST);
-		} else if (dy == -1) {
-			listDir.push_back(NORTH);
-		} else if (dy == 1) {
-			listDir.push_back(SOUTH);
-		}
-	}
-
-	return !listDir.empty();
-}
-
 bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirList,
-                          const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
+						  const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
 {
-	dirList.clear();
-
-	Position startPos = creature->getPosition();
+	Position pos = creature->getPosition();
 	Position endPos;
 
 	std::unordered_map<uint32_t, AStarNode*> nodeTable;
 
 	AStarNodes nodes;
-	AStarNode* startNode = nodes.createOpenNode();
+	nodeTable[(static_cast<uint32_t>(pos.x) << 16) | static_cast<uint32_t>(pos.y)] = nodes.createOpenNode(nullptr, pos.x, pos.y, 0);
 
-	nodeTable[(startPos.x << 16) | startPos.y] = startNode;
-
-	startNode->x = startPos.x;
-	startNode->y = startPos.y;
-
-	startNode->f = 0;
-	startNode->parent = nullptr;
-
-	Position pos(0, 0, startPos.z);
 	int32_t bestMatch = 0;
 
-	static int32_t neighbourOrderList[8][2] = {
+	static int_fast32_t neighbourOrderList[8][2] = {
 		{ -1, 0},
 		{0, 1},
 		{1, 0},
@@ -749,37 +577,51 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		{1, 1},
 		{ -1, 1},
 	};
+	const size_t dirCount = (fpp.allowDiagonal ? 8 : 4);
+	const Position startPos = creature->getPosition();
 
 	AStarNode* found = nullptr;
-
-	while (fpp.maxSearchDist != -1 || nodes.countClosedNodes() < 100) {
+	while (fpp.maxSearchDist != 0 || nodes.countClosedNodes() < 100) {
 		AStarNode* n = nodes.getBestNode();
 		if (!n) {
 			if (found) {
-				//not quite what we want, but we found something
 				break;
 			}
-
-			dirList.clear();
-			return false; //no path found
+			return false;
 		}
 
-		if (pathCondition(startPos, Position(n->x, n->y, startPos.z), fpp, bestMatch)) {
+		const int_fast32_t x = n->x;
+		const int_fast32_t y = n->y;
+		pos.x = x;
+		pos.y = y;
+		if (pathCondition(startPos, pos, fpp, bestMatch)) {
 			found = n;
-			endPos = Position(n->x, n->y, startPos.z);
-
+			endPos = pos;
 			if (bestMatch == 0) {
 				break;
 			}
 		}
 
-		int32_t dirCount = (fpp.allowDiagonal ? 8 : 4);
-		for (int32_t i = 0; i < dirCount; ++i) {
-			pos.x = n->x + neighbourOrderList[i][0];
-			pos.y = n->y + neighbourOrderList[i][1];
+		uint16_t parent_x;
+		uint16_t parent_y;
+		if (n->parent) {
+			parent_x = n->parent->x;
+			parent_y = n->parent->y;
+		} else {
+			parent_x = 0;
+			parent_y = 0;
+		}
 
-			if (fpp.maxSearchDist != -1 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
-			                                Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+		const int_fast32_t f = n->f;
+		for (size_t i = 0; i < dirCount; ++i) {
+			pos.x = x + neighbourOrderList[i][0];
+			pos.y = y + neighbourOrderList[i][1];
+			if (pos.x == parent_x && pos.y == parent_y) {
+				continue;
+			}
+
+			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
+											Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				continue;
 			}
 
@@ -787,58 +629,47 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 				continue;
 			}
 
-			const Tile* tile = canWalkTo(creature, pos);
-			if (!tile) {
-				continue;
-			}
-
 			//The cost (g) for this neighbour
-			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
-			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
-			const int_fast32_t newf = n->f + cost + extraCost;
-			const uint32_t tableIndex = (pos.x << 16) | pos.y;
+			const uint32_t tableIndex = (static_cast<uint32_t>(pos.x) << 16) | static_cast<uint32_t>(pos.y);
 
-			//Check if the node is already in the closed/open list
-			//If it exists and the nodes already on them has a lower cost (g) then we can ignore this neighbour node
-
+			const Tile* tile;
 			AStarNode* neighbourNode;
 			auto it = nodeTable.find(tableIndex);
 			if (it != nodeTable.end()) {
 				neighbourNode = it->second;
+				tile = getTile(pos.x, pos.y, pos.z);
 			} else {
 				neighbourNode = nullptr;
+				tile = canWalkTo(creature, pos);
+				if (!tile) {
+					continue;
+				}
 			}
 
+			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
+			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
+			const int_fast32_t newf = f + cost + extraCost;
 			if (neighbourNode) {
 				if (neighbourNode->f <= newf) {
 					//The node on the closed/open list is cheaper than this one
 					continue;
 				}
 
+				neighbourNode->f = newf;
+				neighbourNode->parent = n;
 				nodes.openNode(neighbourNode);
 			} else {
 				//Does not exist in the open/closed list, create a new node
-				neighbourNode = nodes.createOpenNode();
+				neighbourNode = nodes.createOpenNode(n, pos.x, pos.y, newf);
 				if (!neighbourNode) {
 					if (found) {
-						//not quite what we want, but we found something
 						break;
 					}
-
-					//seems we ran out of nodes
-					dirList.clear();
 					return false;
 				}
 
 				nodeTable[tableIndex] = neighbourNode;
-
-				neighbourNode->x = pos.x;
-				neighbourNode->y = pos.y;
 			}
-
-			//This node is the best node so far with this state
-			neighbourNode->parent = n;
-			neighbourNode->f = newf;
 		}
 
 		nodes.closeNode(n);
@@ -894,7 +725,7 @@ AStarNodes::AStarNodes()
 	openNodes.reset();
 }
 
-AStarNode* AStarNodes::createOpenNode()
+AStarNode* AStarNodes::createOpenNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f)
 {
 	if (curNode >= MAX_NODES) {
 		return nullptr;
@@ -902,7 +733,13 @@ AStarNode* AStarNodes::createOpenNode()
 
 	uint32_t ret_node = curNode++;
 	openNodes[ret_node] = 1;
-	return &nodes[ret_node];
+
+	AStarNode* node = &nodes[ret_node];
+	node->parent = parent;
+	node->x = x;
+	node->y = y;
+	node->f = f;
+	return node;
 }
 
 AStarNode* AStarNodes::getBestNode()
@@ -983,13 +820,6 @@ int32_t AStarNodes::getTileWalkCost(const Creature* creature, const Tile* tile)
 		}
 	}
 	return cost;
-}
-
-int32_t AStarNodes::getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, int32_t yGoal)
-{
-	int32_t h_diagonal = std::min<int32_t>(std::abs(x - xGoal), std::abs(y - yGoal));
-	int32_t h_straight = (std::abs(x - xGoal) + std::abs(y - yGoal));
-	return MAP_DIAGONALWALKCOST * h_diagonal + MAP_NORMALWALKCOST * (h_straight - 2 * h_diagonal);
 }
 
 //*********** Floor **************

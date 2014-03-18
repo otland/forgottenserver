@@ -941,6 +941,7 @@ void Creature::goToFollowCreature()
 			} else { //maxTargetDist > 1
 				if (!monster->getDistanceStep(followCreature->getPosition(), dir)) {
 					// if we can't get anything then let the A* calculate
+					listWalkDir.clear();
 					if (g_game.getPathToEx(this, followCreature->getPosition(), listWalkDir, fpp)) {
 						hasFollowPath = true;
 						startAutoWalk(listWalkDir);
@@ -960,6 +961,7 @@ void Creature::goToFollowCreature()
 				startAutoWalk(listWalkDir);
 			}
 		} else {
+			listWalkDir.clear();
 			if (g_game.getPathToEx(this, followCreature->getPosition(), listWalkDir, fpp)) {
 				hasFollowPath = true;
 				startAutoWalk(listWalkDir);

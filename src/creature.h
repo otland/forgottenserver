@@ -52,7 +52,7 @@ struct FindPathParams {
 	bool clearSight;
 	bool allowDiagonal;
 	bool keepDistance;
-	int32_t maxSearchDist;
+	uint32_t maxSearchDist;
 	int32_t minTargetDist;
 	int32_t maxTargetDist;
 
@@ -61,7 +61,7 @@ struct FindPathParams {
 		clearSight = true;
 		allowDiagonal = true;
 		keepDistance = false;
-		maxSearchDist = -1;
+		maxSearchDist = 0;
 		minTargetDist = -1;
 		maxTargetDist = -1;
 	}

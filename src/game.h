@@ -446,15 +446,12 @@ class Game
 		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY) const;
 		bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor) const;
 
-		bool getPathTo(const Creature* creature, const Position& destPos,
-		               std::list<Direction>& listDir, int32_t maxSearchDist /*= -1*/);
-
 		bool getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,
 		                 const FindPathParams& fpp);
 
 		bool getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,
-		                 uint32_t minTargetDist, uint32_t maxTargetDist, bool fullPathSearch = true,
-		                 bool clearSight = true, int32_t maxSearchDist = -1);
+		                 int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true,
+		                 bool clearSight = true, uint32_t maxSearchDist = 0);
 
 		void changeSpeed(Creature* creature, int32_t varSpeedDelta);
 		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& oufit);
