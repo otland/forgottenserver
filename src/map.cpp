@@ -552,8 +552,7 @@ const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirList,
-						  const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
+bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
 {
 	Position pos = creature->getPosition();
 	Position endPos;
@@ -620,8 +619,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 				continue;
 			}
 
-			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
-											Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist || Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				continue;
 			}
 

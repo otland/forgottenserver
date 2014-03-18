@@ -451,7 +451,7 @@ class Game
 
 		bool getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,
 		                 int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true,
-		                 bool clearSight = true, uint32_t maxSearchDist = 0);
+		                 bool clearSight = true, int32_t maxSearchDist = 0);
 
 		void changeSpeed(Creature* creature, int32_t varSpeedDelta);
 		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& oufit);

@@ -3700,7 +3700,7 @@ bool Game::getPathToEx(const Creature* creature, const Position& targetPos,
 
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,
                        int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch /*= true*/,
-                       bool clearSight /*= true*/, uint32_t maxSearchDist /*= 0*/)
+                       bool clearSight /*= true*/, int32_t maxSearchDist /*= 0*/)
 {
 	FindPathParams fpp;
 	fpp.fullPathSearch = fullPathSearch;
