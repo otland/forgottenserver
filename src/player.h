@@ -65,12 +65,6 @@ enum playerinfo_t {
 	PLAYERINFO_SOUL,
 };
 
-enum freeslot_t {
-	SLOT_TYPE_NONE,
-	SLOT_TYPE_INVENTORY,
-	SLOT_TYPE_CONTAINER
-};
-
 enum chaseMode_t {
 	CHASEMODE_STANDSTILL = 0,
 	CHASEMODE_FOLLOW = 1,
@@ -905,7 +899,7 @@ class Player : public Creature, public Cylinder
 
 		void sendCancel(const std::string& msg) const {
 			if (client) {
-				client->sendTextMessage(MSG_STATUS_SMALL, msg);
+				client->sendTextMessage(MESSAGE_STATUS_SMALL, msg);
 			}
 		}
 		void sendCancelMessage(ReturnValue message) const;
@@ -1256,7 +1250,7 @@ class Player : public Creature, public Cylinder
 		Group* group;
 		Inbox* inbox;
 		Item* tradeItem;
-		Item* inventory[SLOT_LAST + 1];
+		Item* inventory[CONST_SLOT_LAST + 1];
 		Item* writeItem;
 		House* editHouse;
 		Npc* shopOwner;
@@ -1327,7 +1321,7 @@ class Player : public Creature, public Cylinder
 		bool pzLocked;
 		bool isConnecting;
 		bool addAttackSkillPoint;
-		bool inventoryAbilities[SLOT_LAST + 1];
+		bool inventoryAbilities[CONST_SLOT_LAST + 1];
 
 		static uint32_t playerAutoID;
 

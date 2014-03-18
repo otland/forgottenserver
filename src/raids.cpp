@@ -332,24 +332,24 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	if (typeAttribute) {
 		std::string tmpStrValue = asLowerCaseString(typeAttribute.as_string());
 		if (tmpStrValue == "warning") {
-			m_messageType = MSG_STATUS_WARNING;
+			m_messageType = MESSAGE_STATUS_WARNING;
 		} else if (tmpStrValue == "event") {
-			m_messageType = MSG_EVENT_ADVANCE;
+			m_messageType = MESSAGE_EVENT_ADVANCE;
 		} else if (tmpStrValue == "default") {
-			m_messageType = MSG_EVENT_DEFAULT;
+			m_messageType = MESSAGE_EVENT_DEFAULT;
 		} else if (tmpStrValue == "description") {
-			m_messageType = MSG_INFO_DESCR;
+			m_messageType = MESSAGE_INFO_DESCR;
 		} else if (tmpStrValue == "smallstatus") {
-			m_messageType = MSG_STATUS_SMALL;
+			m_messageType = MESSAGE_STATUS_SMALL;
 		} else if (tmpStrValue == "blueconsole") {
-			m_messageType = MSG_STATUS_CONSOLE_BLUE;
+			m_messageType = MESSAGE_STATUS_CONSOLE_BLUE;
 		} else if (tmpStrValue == "redconsole") {
-			m_messageType = MSG_STATUS_CONSOLE_RED;
+			m_messageType = MESSAGE_STATUS_CONSOLE_RED;
 		} else {
 			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
 		}
 	} else {
-		m_messageType = MSG_EVENT_ADVANCE;
+		m_messageType = MESSAGE_EVENT_ADVANCE;
 		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
 	}
 	return true;

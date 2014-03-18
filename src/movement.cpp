@@ -218,16 +218,16 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 {
 	uint32_t slotp;
 	switch (slot) {
-		case SLOT_HEAD: slotp = SLOTP_HEAD; break;
-		case SLOT_NECKLACE: slotp = SLOTP_NECKLACE; break;
-		case SLOT_BACKPACK: slotp = SLOTP_BACKPACK; break;
-		case SLOT_ARMOR: slotp = SLOTP_ARMOR; break;
-		case SLOT_RIGHT: slotp = SLOTP_RIGHT; break;
-		case SLOT_LEFT: slotp = SLOTP_LEFT; break;
-		case SLOT_LEGS: slotp = SLOTP_LEGS; break;
-		case SLOT_FEET: slotp = SLOTP_FEET; break;
-		case SLOT_AMMO: slotp = SLOTP_AMMO; break;
-		case SLOT_RING: slotp = SLOTP_RING; break;
+		case CONST_SLOT_HEAD: slotp = SLOTP_HEAD; break;
+		case CONST_SLOT_NECKLACE: slotp = SLOTP_NECKLACE; break;
+		case CONST_SLOT_BACKPACK: slotp = SLOTP_BACKPACK; break;
+		case CONST_SLOT_ARMOR: slotp = SLOTP_ARMOR; break;
+		case CONST_SLOT_RIGHT: slotp = SLOTP_RIGHT; break;
+		case CONST_SLOT_LEFT: slotp = SLOTP_LEFT; break;
+		case CONST_SLOT_LEGS: slotp = SLOTP_LEGS; break;
+		case CONST_SLOT_FEET: slotp = SLOTP_FEET; break;
+		case CONST_SLOT_AMMO: slotp = SLOTP_AMMO; break;
+		case CONST_SLOT_RING: slotp = SLOTP_RING; break;
 		default: slotp = 0; break;
 	}
 
@@ -709,19 +709,19 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 		Condition* condition = Condition::createCondition((ConditionId_t)slot, CONDITION_REGENERATION, -1, 0);
 
 		if (it.abilities->healthGain != 0) {
-			condition->setParam(CONDITIONPARAM_HEALTHGAIN, it.abilities->healthGain);
+			condition->setParam(CONDITION_PARAM_HEALTHGAIN, it.abilities->healthGain);
 		}
 
 		if (it.abilities->healthTicks != 0) {
-			condition->setParam(CONDITIONPARAM_HEALTHTICKS, it.abilities->healthTicks);
+			condition->setParam(CONDITION_PARAM_HEALTHTICKS, it.abilities->healthTicks);
 		}
 
 		if (it.abilities->manaGain != 0) {
-			condition->setParam(CONDITIONPARAM_MANAGAIN, it.abilities->manaGain);
+			condition->setParam(CONDITION_PARAM_MANAGAIN, it.abilities->manaGain);
 		}
 
 		if (it.abilities->manaTicks != 0) {
-			condition->setParam(CONDITIONPARAM_MANATICKS, it.abilities->manaTicks);
+			condition->setParam(CONDITION_PARAM_MANATICKS, it.abilities->manaTicks);
 		}
 
 		player->addCondition(condition);

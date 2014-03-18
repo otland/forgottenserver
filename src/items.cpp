@@ -907,7 +907,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 				}
 
 				if (conditionDamage->getTotalDamage() > 0) {
-					conditionDamage->setParam(CONDITIONPARAM_FORCEUPDATE, 1);
+					conditionDamage->setParam(CONDITION_PARAM_FORCEUPDATE, 1);
 				}
 			}
 		} else if (tmpStrValue == "replaceable") {

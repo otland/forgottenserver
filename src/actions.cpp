@@ -447,7 +447,7 @@ void Actions::showUseHotkeyMessage(Player* player, int32_t id, uint32_t count)
 		ss << "Using one of " << count << ' ' << it.getPluralName() << "...";
 	}
 
-	player->sendTextMessage(MSG_INFO_DESCR, ss.str());
+	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 }
 
 bool Actions::hasAction(const Item* item)

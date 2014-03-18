@@ -289,7 +289,7 @@ void Creature::onWalk(Direction& dir)
 					break;
 			}
 
-			g_game.internalCreatureSay(this, SPEAK_MONSTER_SAY, "Hicks!", false);
+			g_game.internalCreatureSay(this, TALKTYPE_MONSTER_SAY, "Hicks!", false);
 		}
 	}
 }
@@ -1130,7 +1130,7 @@ void Creature::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 	if (masterPlayer) {
 		std::ostringstream ss;
 		ss << "Your " << asLowerCaseString(getName()) << " deals " << points << " to " << target->getNameDescription() << '.';
-		masterPlayer->sendTextMessage(MSG_EVENT_DEFAULT, ss.str());
+		masterPlayer->sendTextMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 	}
 }
 
@@ -1172,7 +1172,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 		g_game.getSpectators(list, targetPos, false, true);
 
 		for (Creature* spectator : list) {
-			spectator->getPlayer()->sendExperienceMessage(MSG_EXPERIENCE_OTHERS, strExp, targetPos, gainExp, TEXTCOLOR_WHITE_EXP);
+			spectator->getPlayer()->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, gainExp, TEXTCOLOR_WHITE_EXP);
 		}
 	}
 }

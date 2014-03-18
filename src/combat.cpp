@@ -34,7 +34,7 @@ extern Weapons* g_weapons;
 extern ConfigManager g_config;
 
 Combat::Combat() :
-	formulaType(FORMULA_UNDEFINED),
+	formulaType(COMBAT_FORMULA_UNDEFINED),
 	mina(0.0), minb(0.0), maxa(0.0), maxb(0.0),
 	area(nullptr)
 {
@@ -70,7 +70,7 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 			params.valueCallback->getMinMaxValues(player, damage, params.useCharges);
 		} else {
 			switch (formulaType) {
-				case FORMULA_LEVELMAGIC: {
+				case COMBAT_FORMULA_LEVELMAGIC: {
 					int32_t levelFormula = player->getLevel() * 2 + player->getMagicLevel() * 3;
 					damage.primary.value = normal_random(
 						static_cast<int32_t>(levelFormula * mina + minb),
@@ -79,7 +79,7 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 					break;
 				}
 
-				case FORMULA_SKILL: {
+				case COMBAT_FORMULA_SKILL: {
 					Item* tool = player->getWeapon();
 					const Weapon* weapon = g_weapons->getWeapon(tool);
 					if (weapon) {
@@ -105,7 +105,7 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 					break;
 				}
 
-				case FORMULA_VALUE: {
+				case COMBAT_FORMULA_DAMAGE: {
 					damage.primary.value = normal_random(
 						static_cast<int32_t>(mina),
 						static_cast<int32_t>(maxa)
@@ -116,7 +116,7 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 					break;
 			}
 		}
-	} else if (formulaType == FORMULA_VALUE) {
+	} else if (formulaType == COMBAT_FORMULA_DAMAGE) {
 		damage.primary.value = normal_random(
 			static_cast<int32_t>(mina),
 			static_cast<int32_t>(maxa)
@@ -440,52 +440,52 @@ void Combat::setPlayerCombatValues(formulaType_t _type, double _mina, double _mi
 bool Combat::setParam(CombatParam_t param, uint32_t value)
 {
 	switch (param) {
-		case COMBATPARAM_COMBATTYPE: {
+		case COMBAT_PARAM_TYPE: {
 			params.combatType = (CombatType_t)value;
 			return true;
 		}
 
-		case COMBATPARAM_EFFECT: {
+		case COMBAT_PARAM_EFFECT: {
 			params.impactEffect = (uint8_t)value;
 			return true;
 		}
 
-		case COMBATPARAM_DISTANCEEFFECT: {
+		case COMBAT_PARAM_DISTANCEEFFECT: {
 			params.distanceEffect = (uint8_t)value;
 			return true;
 		}
 
-		case COMBATPARAM_BLOCKEDBYARMOR: {
+		case COMBAT_PARAM_BLOCKARMOR: {
 			params.blockedByArmor = (value != 0);
 			return true;
 		}
 
-		case COMBATPARAM_BLOCKEDBYSHIELD: {
+		case COMBAT_PARAM_BLOCKSHIELD: {
 			params.blockedByShield = (value != 0);
 			return true;
 		}
 
-		case COMBATPARAM_TARGETCASTERORTOPMOST: {
+		case COMBAT_PARAM_TARGETCASTERORTOPMOST: {
 			params.targetCasterOrTopMost = (value != 0);
 			return true;
 		}
 
-		case COMBATPARAM_CREATEITEM: {
+		case COMBAT_PARAM_CREATEITEM: {
 			params.itemId = value;
 			return true;
 		}
 
-		case COMBATPARAM_AGGRESSIVE: {
+		case COMBAT_PARAM_AGGRESSIVE: {
 			params.isAggressive = (value != 0);
 			return true;
 		}
 
-		case COMBATPARAM_DISPEL: {
+		case COMBAT_PARAM_DISPEL: {
 			params.dispelType = (ConditionType_t)value;
 			return true;
 		}
 
-		case COMBATPARAM_USECHARGES: {
+		case COMBAT_PARAM_USECHARGES: {
 			params.useCharges = (value != 0);
 			return true;
 		}
@@ -496,25 +496,25 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 bool Combat::setCallback(CallBackParam_t key)
 {
 	switch (key) {
-		case CALLBACKPARAM_LEVELMAGICVALUE: {
+		case CALLBACK_PARAM_LEVELMAGICVALUE: {
 			delete params.valueCallback;
-			params.valueCallback = new ValueCallback(FORMULA_LEVELMAGIC);
+			params.valueCallback = new ValueCallback(COMBAT_FORMULA_LEVELMAGIC);
 			return true;
 		}
 
-		case CALLBACKPARAM_SKILLVALUE: {
+		case CALLBACK_PARAM_SKILLVALUE: {
 			delete params.valueCallback;
-			params.valueCallback = new ValueCallback(FORMULA_SKILL);
+			params.valueCallback = new ValueCallback(COMBAT_FORMULA_SKILL);
 			return true;
 		}
 
-		case CALLBACKPARAM_TARGETTILECALLBACK: {
+		case CALLBACK_PARAM_TARGETTILE: {
 			delete params.tileCallback;
 			params.tileCallback = new TileCallback();
 			return true;
 		}
 
-		case CALLBACKPARAM_TARGETCREATURECALLBACK: {
+		case CALLBACK_PARAM_TARGETCREATURE: {
 			delete params.targetCallback;
 			params.targetCallback = new TargetCallback();
 			return true;
@@ -526,16 +526,16 @@ bool Combat::setCallback(CallBackParam_t key)
 CallBack* Combat::getCallback(CallBackParam_t key)
 {
 	switch (key) {
-		case CALLBACKPARAM_LEVELMAGICVALUE:
-		case CALLBACKPARAM_SKILLVALUE: {
+		case CALLBACK_PARAM_LEVELMAGICVALUE:
+		case CALLBACK_PARAM_SKILLVALUE: {
 			return params.valueCallback;
 		}
 
-		case CALLBACKPARAM_TARGETTILECALLBACK: {
+		case CALLBACK_PARAM_TARGETTILE: {
 			return params.tileCallback;
 		}
 
-		case CALLBACKPARAM_TARGETCREATURECALLBACK: {
+		case CALLBACK_PARAM_TARGETCREATURE: {
 			return params.targetCallback;
 		}
 	}
@@ -599,7 +599,7 @@ bool Combat::CombatConditionFunc(Creature* caster, Creature* target, const Comba
 		if (caster == target || !target->isImmune(condition->getType())) {
 			Condition* conditionCopy = condition->clone();
 			if (caster) {
-				conditionCopy->setParam(CONDITIONPARAM_OWNER, caster->getID());
+				conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
 			}
 
 			//TODO: infight condition until all aggressive conditions has ended
@@ -988,7 +988,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 
 	int32_t parameters = 1;
 	switch (type) {
-		case FORMULA_LEVELMAGIC: {
+		case COMBAT_FORMULA_LEVELMAGIC: {
 			//"onGetPlayerMinMaxValues"(cid, level, maglevel)
 			LuaScriptInterface::pushNumber(L, player->getLevel());
 			LuaScriptInterface::pushNumber(L, player->getMagicLevel());
@@ -996,7 +996,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 			break;
 		}
 
-		case FORMULA_SKILL: {
+		case COMBAT_FORMULA_SKILL: {
 			//"onGetPlayerMinMaxValues"(cid, attackSkill, attackValue, attackFactor)
 			Item* tool = player->getWeapon();
 			const Weapon* weapon = g_weapons->getWeapon(tool);
@@ -1457,7 +1457,7 @@ void MagicField::onStepInField(Creature* creature)
 			}
 
 			if (!harmfulField || (OTSYS_TIME() - createTime <= 5000) || creature->hasBeenAttacked(ownerId)) {
-				conditionCopy->setParam(CONDITIONPARAM_OWNER, ownerId);
+				conditionCopy->setParam(CONDITION_PARAM_OWNER, ownerId);
 			}
 		}
 

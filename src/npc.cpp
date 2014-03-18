@@ -337,14 +337,14 @@ void Npc::onThink(uint32_t interval)
 
 void Npc::doSay(const std::string& text)
 {
-	g_game.internalCreatureSay(this, SPEAK_SAY, text, false);
+	g_game.internalCreatureSay(this, TALKTYPE_SAY, text, false);
 }
 
 void Npc::doSayToPlayer(Player* player, const std::string& text)
 {
 	if (player) {
-		player->sendCreatureSay(this, SPEAK_PRIVATE_NP, text);
-		player->onCreatureSay(this, SPEAK_PRIVATE_NP, text);
+		player->sendCreatureSay(this, TALKTYPE_PRIVATE_NP, text);
+		player->onCreatureSay(this, TALKTYPE_PRIVATE_NP, text);
 	}
 }
 

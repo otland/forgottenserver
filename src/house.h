@@ -72,10 +72,10 @@ class Door : public Item
 		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
 
 		void setDoorId(uint32_t _doorId) {
-			setIntAttr(ATTR_ITEM_DOORID, _doorId);
+			setIntAttr(ITEM_ATTRIBUTE_DOORID, _doorId);
 		}
 		uint32_t getDoorId() const {
-			return getIntAttr(ATTR_ITEM_DOORID);
+			return getIntAttr(ITEM_ATTRIBUTE_DOORID);
 		}
 
 		bool canUse(const Player* player);

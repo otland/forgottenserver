@@ -181,7 +181,7 @@ class AnnounceEvent : public RaidEvent
 {
 	public:
 		AnnounceEvent() {
-			m_messageType = MSG_EVENT_ADVANCE;
+			m_messageType = MESSAGE_EVENT_ADVANCE;
 		}
 		virtual ~AnnounceEvent() {}
 

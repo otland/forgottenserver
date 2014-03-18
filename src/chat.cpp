@@ -69,11 +69,11 @@ void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer
 	if (addInvited(invitePlayer)) {
 		std::ostringstream ss;
 		ss << player.getName() << " invites you to " << (player.getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " private chat channel.";
-		invitePlayer.sendTextMessage(MSG_INFO_DESCR, ss.str());
+		invitePlayer.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 
 		ss.str("");
 		ss << invitePlayer.getName() << " has been invited.";
-		player.sendTextMessage(MSG_INFO_DESCR, ss.str());
+		player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 
 		for (const auto& it : users) {
 			it.second->sendChannelEvent(id, invitePlayer.getName(), CHANNELEVENT_INVITE);
@@ -88,7 +88,7 @@ void PrivateChatChannel::excludePlayer(const Player& player, Player& excludePlay
 
 		std::ostringstream ss;
 		ss << excludePlayer.getName() << " has been excluded.";
-		player.sendTextMessage(MSG_INFO_DESCR, ss.str());
+		player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 
 		excludePlayer.sendClosePrivate(getId());
 
@@ -513,12 +513,12 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 
 	if (channelId == CHANNEL_GUILD) {
 		if (player.getGuildLevel() > 1) {
-			type = SPEAK_CHANNEL_O;
-		} else if (type != SPEAK_CHANNEL_Y) {
-			type = SPEAK_CHANNEL_Y;
+			type = TALKTYPE_CHANNEL_O;
+		} else if (type != TALKTYPE_CHANNEL_Y) {
+			type = TALKTYPE_CHANNEL_Y;
 		}
-	} else if (type != SPEAK_CHANNEL_Y && (channelId == CHANNEL_PRIVATE || channelId == CHANNEL_PARTY)) {
-		type = SPEAK_CHANNEL_Y;
+	} else if (type != TALKTYPE_CHANNEL_Y && (channelId == CHANNEL_PRIVATE || channelId == CHANNEL_PARTY)) {
+		type = TALKTYPE_CHANNEL_Y;
 	}
 
 	if (!channel->executeOnSpeakEvent(player, type, text)) {

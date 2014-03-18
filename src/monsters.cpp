@@ -161,7 +161,7 @@ void MonsterType::createLoot(Container* corpse)
 			if (owner->getParty()) {
 				owner->getParty()->broadcastPartyLoot(ss.str());
 			} else {
-				owner->sendTextMessage(MSG_INFO_DESCR, ss.str());
+				owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 			}
 		}
 	} else {
@@ -171,7 +171,7 @@ void MonsterType::createLoot(Container* corpse)
 		if (owner->getParty()) {
 			owner->getParty()->broadcastPartyLoot(ss.str());
 		} else {
-			owner->sendTextMessage(MSG_INFO_DESCR, ss.str());
+			owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 		}
 	}
 
@@ -309,11 +309,11 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType,
         int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval)
 {
 	ConditionDamage* condition = static_cast<ConditionDamage*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, 0, 0));
-	condition->setParam(CONDITIONPARAM_TICKINTERVAL, tickInterval);
-	condition->setParam(CONDITIONPARAM_MINVALUE, minDamage);
-	condition->setParam(CONDITIONPARAM_MAXVALUE, maxDamage);
-	condition->setParam(CONDITIONPARAM_STARTVALUE, startDamage);
-	condition->setParam(CONDITIONPARAM_DELAYED, 1);
+	condition->setParam(CONDITION_PARAM_TICKINTERVAL, tickInterval);
+	condition->setParam(CONDITION_PARAM_MINVALUE, minDamage);
+	condition->setParam(CONDITION_PARAM_MAXVALUE, maxDamage);
+	condition->setParam(CONDITION_PARAM_STARTVALUE, startDamage);
+	condition->setParam(CONDITION_PARAM_DELAYED, 1);
 	return condition;
 }
 
@@ -405,7 +405,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			return false;
 		}
 
-		combatSpell->getCombat()->setPlayerCombatValues(FORMULA_VALUE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
 		Combat* combat = new Combat;
 		sb.combatSpell = true;
@@ -517,35 +517,35 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			sb.range = 1;
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_PHYSICALDAMAGE);
-			combat->setParam(COMBATPARAM_BLOCKEDBYARMOR, 1);
-			combat->setParam(COMBATPARAM_BLOCKEDBYSHIELD, 1);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
+			combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
+			combat->setParam(COMBAT_PARAM_BLOCKSHIELD, 1);
 		} else if (tmpName == "physical") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_PHYSICALDAMAGE);
-			combat->setParam(COMBATPARAM_BLOCKEDBYARMOR, 1);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
+			combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
 		} else if (tmpName == "bleed") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_PHYSICALDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
 		} else if (tmpName == "poison" || tmpName == "earth") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_EARTHDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_EARTHDAMAGE);
 		} else if (tmpName == "fire") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_FIREDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_FIREDAMAGE);
 		} else if (tmpName == "energy") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_ENERGYDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE);
 		} else if (tmpName == "drown") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_DROWNDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_DROWNDAMAGE);
 		} else if (tmpName == "ice") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_ICEDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_ICEDAMAGE);
 		} else if (tmpName == "holy") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_HOLYDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_HOLYDAMAGE);
 		} else if (tmpName == "death") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_DEATHDAMAGE);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_DEATHDAMAGE);
 		} else if (tmpName == "lifedrain") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_LIFEDRAIN);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_LIFEDRAIN);
 		} else if (tmpName == "manadrain") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_MANADRAIN);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_MANADRAIN);
 		} else if (tmpName == "healing") {
-			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_HEALING);
-			combat->setParam(COMBATPARAM_AGGRESSIVE, 0);
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_HEALING);
+			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 		} else if (tmpName == "speed") {
 			int32_t speedChange = 0;
 			int32_t duration = 10000;
@@ -565,7 +565,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			ConditionType_t conditionType;
 			if (speedChange > 0) {
 				conditionType = CONDITION_HASTE;
-				combat->setParam(COMBATPARAM_AGGRESSIVE, 0);
+				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 			} else {
 				conditionType = CONDITION_PARALYZE;
 			}
@@ -585,7 +585,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				if (mType) {
 					ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
 					condition->addOutfit(mType->outfit);
-					combat->setParam(COMBATPARAM_AGGRESSIVE, 0);
+					combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 					combat->setCondition(condition);
 				}
 			} else if ((attr = node.attribute("item"))) {
@@ -594,7 +594,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
 				condition->addOutfit(outfit);
-				combat->setParam(COMBATPARAM_AGGRESSIVE, 0);
+				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 				combat->setCondition(condition);
 			}
 		} else if (tmpName == "invisible") {
@@ -605,7 +605,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_INVISIBLE, duration, 0);
-			combat->setParam(COMBATPARAM_AGGRESSIVE, 0);
+			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 			combat->setCondition(condition);
 		} else if (tmpName == "drunk") {
 			int32_t duration = 10000;
@@ -617,11 +617,11 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, 0);
 			combat->setCondition(condition);
 		} else if (tmpName == "firefield") {
-			combat->setParam(COMBATPARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);
 		} else if (tmpName == "poisonfield") {
-			combat->setParam(COMBATPARAM_CREATEITEM, ITEM_POISONFIELD_PVP);
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_POISONFIELD_PVP);
 		} else if (tmpName == "energyfield") {
-			combat->setParam(COMBATPARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
 		} else if (tmpName == "firecondition" || tmpName == "energycondition" ||
 		           tmpName == "earthcondition" || tmpName == "poisoncondition" ||
 		           tmpName == "icecondition" || tmpName == "freezecondition" ||
@@ -688,7 +688,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			return false;
 		}
 
-		combat->setPlayerCombatValues(FORMULA_VALUE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 		combatSpell = new CombatSpell(combat, needTarget, needDirection);
 
 		for (pugi::xml_node attributeNode = node.first_child(); attributeNode; attributeNode = attributeNode.next_sibling()) {
@@ -698,7 +698,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					if ((attr = attributeNode.attribute("value"))) {
 						ShootType_t shoot = getShootType(attr.as_string());
 						if (shoot != CONST_ANI_UNK) {
-							combat->setParam(COMBATPARAM_DISTANCEEFFECT, shoot);
+							combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, shoot);
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
@@ -707,7 +707,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					if ((attr = attributeNode.attribute("value"))) {
 						MagicEffectClasses effect = getMagicEffect(attr.as_string());
 						if (effect != CONST_ME_UNK) {
-							combat->setParam(COMBATPARAM_EFFECT, effect);
+							combat->setParam(COMBAT_PARAM_EFFECT, effect);
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown areaEffect: " << attr.as_string() << std::endl;
 						}

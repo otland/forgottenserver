@@ -849,33 +849,33 @@ uint8_t clientFluidToServer(uint8_t clientFluid)
 itemAttrTypes stringToItemAttribute(const std::string& str)
 {
 	if (str == "aid") {
-		return ATTR_ITEM_ACTIONID;
+		return ITEM_ATTRIBUTE_ACTIONID;
 	} else if (str == "uid") {
-		return ATTR_ITEM_UNIQUEID;
+		return ITEM_ATTRIBUTE_UNIQUEID;
 	} else if (str == "description") {
-		return ATTR_ITEM_DESC;
+		return ITEM_ATTRIBUTE_DESCRIPTION;
 	} else if (str == "text") {
-		return ATTR_ITEM_TEXT;
+		return ITEM_ATTRIBUTE_TEXT;
 	} else if (str == "date") {
-		return ATTR_ITEM_WRITTENDATE;
+		return ITEM_ATTRIBUTE_DATE;
 	} else if (str == "writer") {
-		return ATTR_ITEM_WRITTENBY;
+		return ITEM_ATTRIBUTE_WRITER;
 	} else if (str == "owner") {
-		return ATTR_ITEM_OWNER;
+		return ITEM_ATTRIBUTE_OWNER;
 	} else if (str == "duration") {
-		return ATTR_ITEM_DURATION;
+		return ITEM_ATTRIBUTE_DURATION;
 	} else if (str == "decaystate") {
-		return ATTR_ITEM_DECAYING;
+		return ITEM_ATTRIBUTE_DECAYSTATE;
 	} else if (str == "corpseowner") {
-		return ATTR_ITEM_CORPSEOWNER;
+		return ITEM_ATTRIBUTE_CORPSEOWNER;
 	} else if (str == "charges") {
-		return ATTR_ITEM_CHARGES;
+		return ITEM_ATTRIBUTE_CHARGES;
 	} else if (str == "fluidtype") {
-		return ATTR_ITEM_FLUIDTYPE;
+		return ITEM_ATTRIBUTE_FLUIDTYPE;
 	} else if (str == "doorid") {
-		return ATTR_ITEM_DOORID;
+		return ITEM_ATTRIBUTE_DOORID;
 	}
-	return ATTR_ITEM_NONE;
+	return ITEM_ATTRIBUTE_NONE;
 }
 
 std::string getFirstLine(const std::string& str)

@@ -1359,6 +1359,143 @@ void LuaScriptInterface::registerFunctions()
 	//registerEnumIn(tableName, value)
 
 	// Enums
+	registerEnum(ACCOUNT_TYPE_NORMAL)
+	registerEnum(ACCOUNT_TYPE_TUTOR)
+	registerEnum(ACCOUNT_TYPE_SENIORTUTOR)
+	registerEnum(ACCOUNT_TYPE_GAMEMASTER)
+	registerEnum(ACCOUNT_TYPE_GOD)
+
+	registerEnum(CALLBACK_PARAM_LEVELMAGICVALUE)
+	registerEnum(CALLBACK_PARAM_SKILLVALUE)
+	registerEnum(CALLBACK_PARAM_TARGETTILE)
+	registerEnum(CALLBACK_PARAM_TARGETCREATURE)
+
+	registerEnum(COMBAT_FORMULA_UNDEFINED)
+	registerEnum(COMBAT_FORMULA_LEVELMAGIC)
+	registerEnum(COMBAT_FORMULA_SKILL)
+	registerEnum(COMBAT_FORMULA_DAMAGE)
+
+	registerEnum(NORTH)
+	registerEnum(EAST)
+	registerEnum(SOUTH)
+	registerEnum(WEST)
+	registerEnum(SOUTHWEST)
+	registerEnum(SOUTHEAST)
+	registerEnum(NORTHWEST)
+	registerEnum(NORTHEAST)
+
+	registerEnum(COMBAT_NONE)
+	registerEnum(COMBAT_PHYSICALDAMAGE)
+	registerEnum(COMBAT_ENERGYDAMAGE)
+	registerEnum(COMBAT_EARTHDAMAGE)
+	registerEnum(COMBAT_FIREDAMAGE)
+	registerEnum(COMBAT_UNDEFINEDDAMAGE)
+	registerEnum(COMBAT_LIFEDRAIN)
+	registerEnum(COMBAT_MANADRAIN)
+	registerEnum(COMBAT_HEALING)
+	registerEnum(COMBAT_DROWNDAMAGE)
+	registerEnum(COMBAT_ICEDAMAGE)
+	registerEnum(COMBAT_HOLYDAMAGE)
+	registerEnum(COMBAT_DEATHDAMAGE)
+
+	registerEnum(COMBAT_PARAM_TYPE)
+	registerEnum(COMBAT_PARAM_EFFECT)
+	registerEnum(COMBAT_PARAM_DISTANCEEFFECT)
+	registerEnum(COMBAT_PARAM_BLOCKSHIELD)
+	registerEnum(COMBAT_PARAM_BLOCKARMOR)
+	registerEnum(COMBAT_PARAM_TARGETCASTERORTOPMOST)
+	registerEnum(COMBAT_PARAM_CREATEITEM)
+	registerEnum(COMBAT_PARAM_AGGRESSIVE)
+	registerEnum(COMBAT_PARAM_DISPEL)
+
+	registerEnum(CONDITION_NONE)
+	registerEnum(CONDITION_POISON)
+	registerEnum(CONDITION_FIRE)
+	registerEnum(CONDITION_ENERGY)
+	registerEnum(CONDITION_BLEEDING)
+	registerEnum(CONDITION_HASTE)
+	registerEnum(CONDITION_PARALYZE)
+	registerEnum(CONDITION_OUTFIT)
+	registerEnum(CONDITION_INVISIBLE)
+	registerEnum(CONDITION_LIGHT)
+	registerEnum(CONDITION_MANASHIELD)
+	registerEnum(CONDITION_INFIGHT)
+	registerEnum(CONDITION_DRUNK)
+	registerEnum(CONDITION_EXHAUST_WEAPON)
+	registerEnum(CONDITION_REGENERATION)
+	registerEnum(CONDITION_SOUL)
+	registerEnum(CONDITION_DROWN)
+	registerEnum(CONDITION_MUTED)
+	registerEnum(CONDITION_CHANNELMUTEDTICKS)
+	registerEnum(CONDITION_YELLTICKS)
+	registerEnum(CONDITION_ATTRIBUTES)
+	registerEnum(CONDITION_FREEZING)
+	registerEnum(CONDITION_DAZZLED)
+	registerEnum(CONDITION_CURSED)
+	registerEnum(CONDITION_EXHAUST_COMBAT)
+	registerEnum(CONDITION_EXHAUST_HEAL)
+	registerEnum(CONDITION_PACIFIED)
+	registerEnum(CONDITION_SPELLCOOLDOWN)
+	registerEnum(CONDITION_SPELLGROUPCOOLDOWN)
+
+	registerEnum(CONDITIONID_DEFAULT)
+	registerEnum(CONDITIONID_COMBAT)
+	registerEnum(CONDITIONID_HEAD)
+	registerEnum(CONDITIONID_NECKLACE)
+	registerEnum(CONDITIONID_BACKPACK)
+	registerEnum(CONDITIONID_ARMOR)
+	registerEnum(CONDITIONID_RIGHT)
+	registerEnum(CONDITIONID_LEFT)
+	registerEnum(CONDITIONID_LEGS)
+	registerEnum(CONDITIONID_FEET)
+	registerEnum(CONDITIONID_RING)
+	registerEnum(CONDITIONID_AMMO)
+
+	registerEnum(CONDITION_PARAM_OWNER)
+	registerEnum(CONDITION_PARAM_TICKS)
+	registerEnum(CONDITION_PARAM_HEALTHGAIN)
+	registerEnum(CONDITION_PARAM_HEALTHTICKS)
+	registerEnum(CONDITION_PARAM_MANAGAIN)
+	registerEnum(CONDITION_PARAM_MANATICKS)
+	registerEnum(CONDITION_PARAM_DELAYED)
+	registerEnum(CONDITION_PARAM_SPEED)
+	registerEnum(CONDITION_PARAM_LIGHT_LEVEL)
+	registerEnum(CONDITION_PARAM_LIGHT_COLOR)
+	registerEnum(CONDITION_PARAM_SOULGAIN)
+	registerEnum(CONDITION_PARAM_SOULTICKS)
+	registerEnum(CONDITION_PARAM_MINVALUE)
+	registerEnum(CONDITION_PARAM_MAXVALUE)
+	registerEnum(CONDITION_PARAM_STARTVALUE)
+	registerEnum(CONDITION_PARAM_TICKINTERVAL)
+	registerEnum(CONDITION_PARAM_FORCEUPDATE)
+	registerEnum(CONDITION_PARAM_SKILL_MELEE)
+	registerEnum(CONDITION_PARAM_SKILL_FIST)
+	registerEnum(CONDITION_PARAM_SKILL_CLUB)
+	registerEnum(CONDITION_PARAM_SKILL_SWORD)
+	registerEnum(CONDITION_PARAM_SKILL_AXE)
+	registerEnum(CONDITION_PARAM_SKILL_DISTANCE)
+	registerEnum(CONDITION_PARAM_SKILL_SHIELD)
+	registerEnum(CONDITION_PARAM_SKILL_FISHING)
+	registerEnum(CONDITION_PARAM_STAT_MAXHITPOINTS)
+	registerEnum(CONDITION_PARAM_STAT_MAXMANAPOINTS)
+	registerEnum(CONDITION_PARAM_STAT_SOULPOINTS)
+	registerEnum(CONDITION_PARAM_STAT_MAGICPOINTS)
+	registerEnum(CONDITION_PARAM_STAT_MAXHITPOINTSPERCENT)
+	registerEnum(CONDITION_PARAM_STAT_MAXMANAPOINTSPERCENT)
+	registerEnum(CONDITION_PARAM_STAT_SOULPOINTSPERCENT)
+	registerEnum(CONDITION_PARAM_STAT_MAGICPOINTSPERCENT)
+	registerEnum(CONDITION_PARAM_PERIODICDAMAGE)
+	registerEnum(CONDITION_PARAM_SKILL_MELEEPERCENT)
+	registerEnum(CONDITION_PARAM_SKILL_FISTPERCENT)
+	registerEnum(CONDITION_PARAM_SKILL_CLUBPERCENT)
+	registerEnum(CONDITION_PARAM_SKILL_SWORDPERCENT)
+	registerEnum(CONDITION_PARAM_SKILL_AXEPERCENT)
+	registerEnum(CONDITION_PARAM_SKILL_DISTANCEPERCENT)
+	registerEnum(CONDITION_PARAM_SKILL_SHIELDPERCENT)
+	registerEnum(CONDITION_PARAM_SKILL_FISHINGPERCENT)
+	registerEnum(CONDITION_PARAM_BUFF_SPELL)
+	registerEnum(CONDITION_PARAM_SUBID)
+
 	registerEnum(CONST_ME_DRAWBLOOD)
 	registerEnum(CONST_ME_LOSEENERGY)
 	registerEnum(CONST_ME_POFF)
@@ -1490,6 +1627,17 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ANI_NONE)
 	registerEnum(CONST_ANI_LAST)
 
+	registerEnum(CONST_SLOT_HEAD)
+	registerEnum(CONST_SLOT_NECKLACE)
+	registerEnum(CONST_SLOT_BACKPACK)
+	registerEnum(CONST_SLOT_ARMOR)
+	registerEnum(CONST_SLOT_RIGHT)
+	registerEnum(CONST_SLOT_LEFT)
+	registerEnum(CONST_SLOT_LEGS)
+	registerEnum(CONST_SLOT_FEET)
+	registerEnum(CONST_SLOT_RING)
+	registerEnum(CONST_SLOT_AMMO)
+	
 	registerEnum(GAME_STATE_STARTUP)
 	registerEnum(GAME_STATE_INIT)
 	registerEnum(GAME_STATE_NORMAL)
@@ -1498,13 +1646,95 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(GAME_STATE_CLOSING)
 	registerEnum(GAME_STATE_MAINTAIN)
 
+	registerEnum(MESSAGE_STATUS_CONSOLE_BLUE)
+	registerEnum(MESSAGE_STATUS_CONSOLE_RED)
+	registerEnum(MESSAGE_STATUS_DEFAULT)
+	registerEnum(MESSAGE_STATUS_WARNING)
+	registerEnum(MESSAGE_EVENT_ADVANCE)
+	registerEnum(MESSAGE_STATUS_SMALL)
+	registerEnum(MESSAGE_INFO_DESCR)
+	registerEnum(MESSAGE_DAMAGE_DEALT)
+	registerEnum(MESSAGE_DAMAGE_RECEIVED)
+	registerEnum(MESSAGE_HEALED)
+	registerEnum(MESSAGE_EXPERIENCE)
+	registerEnum(MESSAGE_DAMAGE_OTHERS)
+	registerEnum(MESSAGE_HEALED_OTHERS)
+	registerEnum(MESSAGE_EXPERIENCE_OTHERS)
+	registerEnum(MESSAGE_EVENT_DEFAULT)
+	registerEnum(MESSAGE_EVENT_ORANGE)
+	registerEnum(MESSAGE_STATUS_CONSOLE_ORANGE)
+
 	registerEnum(CLIENTOS_LINUX)
 	registerEnum(CLIENTOS_WINDOWS)
 	registerEnum(CLIENTOS_FLASH)
 	registerEnum(CLIENTOS_OTCLIENT_LINUX)
 	registerEnum(CLIENTOS_OTCLIENT_WINDOWS)
 	registerEnum(CLIENTOS_OTCLIENT_MAC)
-	
+
+	registerEnum(ITEM_ATTRIBUTE_NONE)
+	registerEnum(ITEM_ATTRIBUTE_ACTIONID)
+	registerEnum(ITEM_ATTRIBUTE_UNIQUEID)
+	registerEnum(ITEM_ATTRIBUTE_DESCRIPTION)
+	registerEnum(ITEM_ATTRIBUTE_TEXT)
+	registerEnum(ITEM_ATTRIBUTE_DATE)
+	registerEnum(ITEM_ATTRIBUTE_WRITER)
+	registerEnum(ITEM_ATTRIBUTE_OWNER)
+	registerEnum(ITEM_ATTRIBUTE_DURATION)
+	registerEnum(ITEM_ATTRIBUTE_DECAYSTATE)
+	registerEnum(ITEM_ATTRIBUTE_CORPSEOWNER)
+	registerEnum(ITEM_ATTRIBUTE_CHARGES)
+	registerEnum(ITEM_ATTRIBUTE_FLUIDTYPE)
+	registerEnum(ITEM_ATTRIBUTE_DOORID)
+
+	registerEnum(TALKTYPE_SAY)
+	registerEnum(TALKTYPE_WHISPER)
+	registerEnum(TALKTYPE_YELL)
+	registerEnum(TALKTYPE_PRIVATE_FROM)
+	registerEnum(TALKTYPE_PRIVATE_TO)
+	registerEnum(TALKTYPE_CHANNEL_Y)
+	registerEnum(TALKTYPE_CHANNEL_O)
+	registerEnum(TALKTYPE_PRIVATE_NP)
+	registerEnum(TALKTYPE_PRIVATE_PN)
+	registerEnum(TALKTYPE_BROADCAST)
+	registerEnum(TALKTYPE_CHANNEL_R1)
+	registerEnum(TALKTYPE_PRIVATE_RED_FROM)
+	registerEnum(TALKTYPE_PRIVATE_RED_TO)
+	registerEnum(TALKTYPE_MONSTER_SAY)
+	registerEnum(TALKTYPE_MONSTER_YELL)
+	registerEnum(TALKTYPE_CHANNEL_R2)
+	registerEnum(TALKTYPE_CHANNEL_W)
+
+	registerEnum(TILESTATE_NONE)
+	registerEnum(TILESTATE_PROTECTIONZONE)
+	registerEnum(TILESTATE_DEPRECATED_HOUSE)
+	registerEnum(TILESTATE_NOPVPZONE)
+	registerEnum(TILESTATE_NOLOGOUT)
+	registerEnum(TILESTATE_PVPZONE)
+	registerEnum(TILESTATE_REFRESH)
+	registerEnum(TILESTATE_HOUSE)
+	registerEnum(TILESTATE_FLOORCHANGE)
+	registerEnum(TILESTATE_FLOORCHANGE_DOWN)
+	registerEnum(TILESTATE_FLOORCHANGE_NORTH)
+	registerEnum(TILESTATE_FLOORCHANGE_SOUTH)
+	registerEnum(TILESTATE_FLOORCHANGE_EAST)
+	registerEnum(TILESTATE_FLOORCHANGE_WEST)
+	registerEnum(TILESTATE_TELEPORT)
+	registerEnum(TILESTATE_MAGICFIELD)
+	registerEnum(TILESTATE_MAILBOX)
+	registerEnum(TILESTATE_TRASHHOLDER)
+	registerEnum(TILESTATE_BED)
+	registerEnum(TILESTATE_DEPOT)
+	registerEnum(TILESTATE_BLOCKSOLID)
+	registerEnum(TILESTATE_BLOCKPATH)
+	registerEnum(TILESTATE_IMMOVABLEBLOCKSOLID)
+	registerEnum(TILESTATE_IMMOVABLEBLOCKPATH)
+	registerEnum(TILESTATE_IMMOVABLENOFIELDBLOCKPATH)
+	registerEnum(TILESTATE_NOFIELDBLOCKPATH)
+	registerEnum(TILESTATE_DYNAMIC_TILE)
+	registerEnum(TILESTATE_FLOORCHANGE_SOUTH_ALT)
+	registerEnum(TILESTATE_FLOORCHANGE_EAST_ALT)
+	registerEnum(TILESTATE_SUPPORTS_HANGABLE)
+
 	registerEnum(WEAPON_NONE)
 	registerEnum(WEAPON_SWORD)
 	registerEnum(WEAPON_CLUB)
@@ -2958,7 +3188,7 @@ int32_t LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
 int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 {
 	//broadcastMessage(message, type)
-	uint32_t type = MSG_STATUS_WARNING;
+	uint32_t type = MESSAGE_STATUS_WARNING;
 	int32_t parameters = lua_gettop(L);
 	if (parameters >= 2) {
 		type = popNumber<uint32_t>(L);
@@ -6566,7 +6796,7 @@ int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 	} else if (isString(L, 2)) {
 		attribute = stringToItemAttribute(getString(L, 2));
 	} else {
-		attribute = ATTR_ITEM_NONE;
+		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
@@ -6592,7 +6822,7 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 	} else if (isString(L, 2)) {
 		attribute = stringToItemAttribute(getString(L, 2));
 	} else {
-		attribute = ATTR_ITEM_NONE;
+		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
@@ -6620,11 +6850,11 @@ int32_t LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 	} else if (isString(L, 2)) {
 		attribute = stringToItemAttribute(getString(L, 2));
 	} else {
-		attribute = ATTR_ITEM_NONE;
+		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		bool ret = attribute != ATTR_ITEM_UNIQUEID;
+		bool ret = attribute != ITEM_ATTRIBUTE_UNIQUEID;
 		if (ret) {
 			item->removeAttribute(attribute);
 		} else {
@@ -8693,11 +8923,11 @@ int32_t LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 {
-	// player:addItem(itemId[, count/subType = 1[, canDropOnMap = true[, slot = SLOT_WHEREEVER]]])
-	// player:addItem(itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = SLOT_WHEREEVER]]]])
+	// player:addItem(itemId[, count/subType = 1[, canDropOnMap = true[, slot = CONST_SLOT_WHEREEVER]]])
+	// player:addItem(itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = CONST_SLOT_WHEREEVER]]]])
 	int32_t parameters = getStackTop(L);
 
-	slots_t slot = SLOT_WHEREEVER;
+	slots_t slot = CONST_SLOT_WHEREEVER;
 	int32_t subType = 1;
 	if (parameters >= 6) {
 		slot = static_cast<slots_t>(getNumber<int64_t>(L, 6));
@@ -8786,10 +9016,10 @@ int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 {
-	// player:addItemEx(item[, canDropOnMap = false[, slot = SLOT_WHEREEVER]])
+	// player:addItemEx(item[, canDropOnMap = false[, slot = CONST_SLOT_WHEREEVER]])
 	int32_t parameters = getStackTop(L);
 
-	slots_t slot = SLOT_WHEREEVER;
+	slots_t slot = CONST_SLOT_WHEREEVER;
 	if (parameters >= 4) {
 		slot = static_cast<slots_t>(getNumber<int64_t>(L, 4));
 	}

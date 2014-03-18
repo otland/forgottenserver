@@ -916,13 +916,13 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 	uint16_t channelId = 0;
 
 	switch (type) {
-		case SPEAK_PRIVATE_TO:
-		case SPEAK_PRIVATE_RED_TO:
+		case TALKTYPE_PRIVATE_TO:
+		case TALKTYPE_PRIVATE_RED_TO:
 			receiver = msg.GetString();
 			break;
 
-		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_R1:
+		case TALKTYPE_CHANNEL_Y:
+		case TALKTYPE_CHANNEL_R1:
 			channelId = msg.get<uint16_t>();
 			break;
 
@@ -1363,7 +1363,7 @@ void ProtocolGame::sendBasicData()
 void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos/* = nullptr*/, uint32_t value/* = 0*/, TextColor_t color/* = TEXTCOLOR_NONE*/)
 {
 	NetworkMessage msg;
-	if (pos != nullptr && (mclass == MSG_DAMAGE_DEALT || mclass == MSG_DAMAGE_RECEIVED || mclass == MSG_HEALED || mclass == MSG_EXPERIENCE || mclass == MSG_DAMAGE_OTHERS || mclass == MSG_HEALED_OTHERS || mclass == MSG_EXPERIENCE_OTHERS)) {
+	if (pos != nullptr && (mclass == MESSAGE_DAMAGE_DEALT || mclass == MESSAGE_DAMAGE_RECEIVED || mclass == MESSAGE_HEALED || mclass == MESSAGE_EXPERIENCE || mclass == MESSAGE_DAMAGE_OTHERS || mclass == MESSAGE_HEALED_OTHERS || mclass == MESSAGE_EXPERIENCE_OTHERS)) {
 		AddTextMessageEx(msg, mclass, message, *pos, value, color);
 	} else {
 		AddTextMessage(msg, mclass, message);
@@ -1378,9 +1378,9 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 	msg.AddByte(0xB4);
 	msg.AddByte(message.type);
 	switch (message.type) {
-		case MSG_DAMAGE_DEALT:
-		case MSG_DAMAGE_RECEIVED:
-		case MSG_DAMAGE_OTHERS: {
+		case MESSAGE_DAMAGE_DEALT:
+		case MESSAGE_DAMAGE_RECEIVED:
+		case MESSAGE_DAMAGE_OTHERS: {
 			msg.AddPosition(message.position);
 			msg.add<uint32_t>(message.primary.value);
 			msg.AddByte(message.primary.color);
@@ -1388,10 +1388,10 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			msg.AddByte(message.secondary.color);
 			break;
 		}
-		case MSG_HEALED:
-		case MSG_HEALED_OTHERS:
-		case MSG_EXPERIENCE:
-		case MSG_EXPERIENCE_OTHERS: {
+		case MESSAGE_HEALED:
+		case MESSAGE_HEALED_OTHERS:
+		case MESSAGE_EXPERIENCE:
+		case MESSAGE_EXPERIENCE_OTHERS: {
 			msg.AddPosition(message.position);
 			msg.add<uint32_t>(message.primary.value);
 			msg.AddByte(message.primary.color);
@@ -2385,16 +2385,16 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		sendMagicEffect(pos, CONST_ME_TELEPORT);
 	}
 
-	sendInventoryItem(SLOT_HEAD, player->getInventoryItem(SLOT_HEAD));
-	sendInventoryItem(SLOT_NECKLACE, player->getInventoryItem(SLOT_NECKLACE));
-	sendInventoryItem(SLOT_BACKPACK, player->getInventoryItem(SLOT_BACKPACK));
-	sendInventoryItem(SLOT_ARMOR, player->getInventoryItem(SLOT_ARMOR));
-	sendInventoryItem(SLOT_RIGHT, player->getInventoryItem(SLOT_RIGHT));
-	sendInventoryItem(SLOT_LEFT, player->getInventoryItem(SLOT_LEFT));
-	sendInventoryItem(SLOT_LEGS, player->getInventoryItem(SLOT_LEGS));
-	sendInventoryItem(SLOT_FEET, player->getInventoryItem(SLOT_FEET));
-	sendInventoryItem(SLOT_RING, player->getInventoryItem(SLOT_RING));
-	sendInventoryItem(SLOT_AMMO, player->getInventoryItem(SLOT_AMMO));
+	sendInventoryItem(CONST_SLOT_HEAD, player->getInventoryItem(CONST_SLOT_HEAD));
+	sendInventoryItem(CONST_SLOT_NECKLACE, player->getInventoryItem(CONST_SLOT_NECKLACE));
+	sendInventoryItem(CONST_SLOT_BACKPACK, player->getInventoryItem(CONST_SLOT_BACKPACK));
+	sendInventoryItem(CONST_SLOT_ARMOR, player->getInventoryItem(CONST_SLOT_ARMOR));
+	sendInventoryItem(CONST_SLOT_RIGHT, player->getInventoryItem(CONST_SLOT_RIGHT));
+	sendInventoryItem(CONST_SLOT_LEFT, player->getInventoryItem(CONST_SLOT_LEFT));
+	sendInventoryItem(CONST_SLOT_LEGS, player->getInventoryItem(CONST_SLOT_LEGS));
+	sendInventoryItem(CONST_SLOT_FEET, player->getInventoryItem(CONST_SLOT_FEET));
+	sendInventoryItem(CONST_SLOT_RING, player->getInventoryItem(CONST_SLOT_RING));
+	sendInventoryItem(CONST_SLOT_AMMO, player->getInventoryItem(CONST_SLOT_AMMO));
 
 	sendStats();
 	sendSkills();
@@ -2973,9 +2973,9 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creatur
 	static uint32_t statementId = 0;
 	msg.add<uint32_t>(++statementId); // statement id
 
-	if (type == SPEAK_CHANNEL_R2) {
+	if (type == TALKTYPE_CHANNEL_R2) {
 		msg.add<uint16_t>(0x00);
-		type = SPEAK_CHANNEL_R1;
+		type = TALKTYPE_CHANNEL_R1;
 	} else {
 		msg.AddString(creature->getName());
 	}
@@ -2990,12 +2990,12 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creatur
 	msg.AddByte(type);
 
 	switch (type) {
-		case SPEAK_SAY:
-		case SPEAK_WHISPER:
-		case SPEAK_YELL:
-		case SPEAK_MONSTER_SAY:
-		case SPEAK_MONSTER_YELL:
-		case SPEAK_PRIVATE_NP: {
+		case TALKTYPE_SAY:
+		case TALKTYPE_WHISPER:
+		case TALKTYPE_YELL:
+		case TALKTYPE_MONSTER_SAY:
+		case TALKTYPE_MONSTER_YELL:
+		case TALKTYPE_PRIVATE_NP: {
 			if (pos) {
 				msg.AddPosition(*pos);
 			} else {
@@ -3005,9 +3005,9 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creatur
 			break;
 		}
 
-		case SPEAK_CHANNEL_Y:
-		case SPEAK_CHANNEL_R1:
-		case SPEAK_CHANNEL_O:
+		case TALKTYPE_CHANNEL_Y:
+		case TALKTYPE_CHANNEL_R1:
+		case TALKTYPE_CHANNEL_O:
 			msg.add<uint16_t>(channelId);
 			break;
 

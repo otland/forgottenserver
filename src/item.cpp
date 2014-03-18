@@ -195,8 +195,8 @@ void Item::copyAttributes(Item* item)
 		attributes = new ItemAttributes(*item->attributes);
 	}
 
-	removeAttribute(ATTR_ITEM_DECAYING);
-	removeAttribute(ATTR_ITEM_DURATION);
+	removeAttribute(ITEM_ATTRIBUTE_DECAYSTATE);
+	removeAttribute(ITEM_ATTRIBUTE_DURATION);
 }
 
 Item::~Item()
@@ -238,13 +238,13 @@ void Item::setID(uint16_t newid)
 	uint32_t newDuration = it.decayTime * 1000;
 
 	if (newDuration == 0 && !it.stopTime && it.decayTo == -1) {
-		removeAttribute(ATTR_ITEM_DECAYING);
-		removeAttribute(ATTR_ITEM_DURATION);
+		removeAttribute(ITEM_ATTRIBUTE_DECAYSTATE);
+		removeAttribute(ITEM_ATTRIBUTE_DURATION);
 	}
 
-	removeAttribute(ATTR_ITEM_CORPSEOWNER);
+	removeAttribute(ITEM_ATTRIBUTE_CORPSEOWNER);
 
-	if (newDuration > 0 && (!prevIt.stopTime || !hasAttribute(ATTR_ITEM_DURATION))) {
+	if (newDuration > 0 && (!prevIt.stopTime || !hasAttribute(ITEM_ATTRIBUTE_DURATION))) {
 		setDecaying(DECAYING_FALSE);
 		setDuration(newDuration);
 	}
@@ -602,7 +602,7 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.ADD_STRING(_specialDesc);
 	}
 
-	if (hasAttribute(ATTR_ITEM_DURATION)) {
+	if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
 		uint32_t duration = getDuration();
 		propWriteStream.ADD_UCHAR(ATTR_DURATION);
 		propWriteStream.ADD_ULONG(duration);
@@ -1061,7 +1061,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 
 	if (it.showDuration) {
-		if (item && item->hasAttribute(ATTR_ITEM_DURATION)) {
+		if (item && item->hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
 			uint32_t duration = item->getDuration() / 1000;
 			s << " that will expire in ";
 
@@ -1406,16 +1406,16 @@ void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
 bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
 {
 	switch (type) {
-		case ATTR_ITEM_ACTIONID:
-		case ATTR_ITEM_UNIQUEID:
-		case ATTR_ITEM_OWNER:
-		case ATTR_ITEM_DURATION:
-		case ATTR_ITEM_DECAYING:
-		case ATTR_ITEM_WRITTENDATE:
-		case ATTR_ITEM_CORPSEOWNER:
-		case ATTR_ITEM_CHARGES:
-		case ATTR_ITEM_FLUIDTYPE:
-		case ATTR_ITEM_DOORID:
+		case ITEM_ATTRIBUTE_ACTIONID:
+		case ITEM_ATTRIBUTE_UNIQUEID:
+		case ITEM_ATTRIBUTE_OWNER:
+		case ITEM_ATTRIBUTE_DURATION:
+		case ITEM_ATTRIBUTE_DECAYSTATE:
+		case ITEM_ATTRIBUTE_DATE:
+		case ITEM_ATTRIBUTE_CORPSEOWNER:
+		case ITEM_ATTRIBUTE_CHARGES:
+		case ITEM_ATTRIBUTE_FLUIDTYPE:
+		case ITEM_ATTRIBUTE_DOORID:
 			return true;
 
 		default:
@@ -1427,9 +1427,9 @@ bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
 bool ItemAttributes::validateStrAttrType(itemAttrTypes type)
 {
 	switch (type) {
-		case ATTR_ITEM_DESC:
-		case ATTR_ITEM_TEXT:
-		case ATTR_ITEM_WRITTENBY:
+		case ITEM_ATTRIBUTE_DESCRIPTION:
+		case ITEM_ATTRIBUTE_TEXT:
+		case ITEM_ATTRIBUTE_WRITER:
 			return true;
 
 		default:
