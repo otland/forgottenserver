@@ -8093,7 +8093,7 @@ int32_t LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 	}
 
 	std::list<Direction> dirList;
-	if (g_game.getPathToEx(creature, position, dirList, fpp)) {
+	if (creature->getPathTo(position, dirList, fpp)) {
 		lua_createtable(L, dirList.size(), 0);
 
 		int32_t index = 0;

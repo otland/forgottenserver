@@ -459,6 +459,9 @@ class Creature : virtual public Thing
 
 		virtual double getDamageRatio(Creature* attacker) const;
 
+		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, const FindPathParams& fpp) const;
+		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
+
 		void useThing2() {
 			++useCount;
 		}

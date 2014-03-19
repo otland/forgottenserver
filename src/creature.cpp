@@ -942,7 +942,7 @@ void Creature::goToFollowCreature()
 				if (!monster->getDistanceStep(followCreature->getPosition(), dir)) {
 					// if we can't get anything then let the A* calculate
 					listWalkDir.clear();
-					if (g_game.getPathToEx(this, followCreature->getPosition(), listWalkDir, fpp)) {
+					if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
 						hasFollowPath = true;
 						startAutoWalk(listWalkDir);
 					} else {
@@ -962,7 +962,7 @@ void Creature::goToFollowCreature()
 			}
 		} else {
 			listWalkDir.clear();
-			if (g_game.getPathToEx(this, followCreature->getPosition(), listWalkDir, fpp)) {
+			if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
 				hasFollowPath = true;
 				startAutoWalk(listWalkDir);
 			} else {
@@ -1643,4 +1643,20 @@ bool Creature::isInvisible() const
 	return std::find_if(conditions.begin(), conditions.end(), [] (const Condition* condition) {
 		return condition->getType() == CONDITION_INVISIBLE;
 	}) != conditions.end();
+}
+
+bool Creature::getPathTo(const Position& targetPos, std::list<Direction>& dirList, const FindPathParams& fpp) const
+{
+	return g_game.getMap()->getPathMatching(*this, dirList, FrozenPathingConditionCall(targetPos), fpp);
+}
+
+bool Creature::getPathTo(const Position& targetPos, std::list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch /*= true*/, bool clearSight /*= true*/, int32_t maxSearchDist /*= 0*/) const
+{
+	FindPathParams fpp;
+	fpp.fullPathSearch = fullPathSearch;
+	fpp.maxSearchDist = maxSearchDist;
+	fpp.clearSight = clearSight;
+	fpp.minTargetDist = minTargetDist;
+	fpp.maxTargetDist = maxTargetDist;
+	return getPathTo(targetPos, dirList, fpp);
 }

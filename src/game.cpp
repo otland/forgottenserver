@@ -911,7 +911,7 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	if (!Position::areInRange<1, 1, 0>(movingCreatureOrigPos, player->getPosition())) {
 		//need to walk to the creature first before moving it
 		std::list<Direction> listDir;
-		if (getPathToEx(player, movingCreatureOrigPos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(movingCreatureOrigPos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
 			SchedulerTask* task = createSchedulerTask(1500, std::bind(&Game::playerMoveCreature, this,
@@ -1156,8 +1156,7 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	if (!Position::areInRange<1, 1, 0>(playerPos, mapFromPos)) {
 		//need to walk to the item first before using it
 		std::list<Direction> listDir;
-
-		if (getPathToEx(player, item->getPosition(), listDir, 0, 1, true, true)) {
+		if (player->getPathTo(item->getPosition(), listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
 
@@ -1216,7 +1215,7 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			}
 
 			std::list<Direction> listDir;
-			if (getPathToEx(player, walkPos, listDir, 0, 0, true, true)) {
+			if (player->getPathTo(walkPos, listDir, 0, 0, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
 
@@ -2170,7 +2169,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 			}
 
 			std::list<Direction> listDir;
-			if (getPathToEx(player, walkToPos, listDir, 0, 1, true, true)) {
+			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk, this, player->getID(), listDir)));
 
 				SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerUseItemEx, this,
@@ -2228,7 +2227,7 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	if (ret != RET_NOERROR) {
 		if (ret == RET_TOOFARAWAY) {
 			std::list<Direction> listDir;
-			if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
+			if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
 
@@ -2322,8 +2321,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 			}
 
 			std::list<Direction> listDir;
-
-			if (getPathToEx(player, walkToPos, listDir, 0, 1, true, true)) {
+			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
 
@@ -2434,7 +2432,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 
 	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
 		std::list<Direction> listDir;
-		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
 
@@ -2533,7 +2531,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 
 	if (!Position::areInRange<1, 1, 0>(playerPos, pos)) {
 		std::list<Direction> listDir;
-		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
 			SchedulerTask* task = createSchedulerTask(400, std::bind(
@@ -2654,7 +2652,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	} else if (!Position::areInRange<1, 1, 0>(tradeItemPosition, playerPosition)) {
 		std::list<Direction> listDir;
-		if (getPathToEx(player, pos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
 
@@ -3690,25 +3688,6 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 		spectator->onCreatureSay(creature, type, text);
 	}
 	return true;
-}
-
-bool Game::getPathToEx(const Creature* creature, const Position& targetPos,
-                       std::list<Direction>& dirList, const FindPathParams& fpp)
-{
-	return map.getPathMatching(*creature, dirList, FrozenPathingConditionCall(targetPos), fpp);
-}
-
-bool Game::getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,
-                       int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch /*= true*/,
-                       bool clearSight /*= true*/, int32_t maxSearchDist /*= 0*/)
-{
-	FindPathParams fpp;
-	fpp.fullPathSearch = fullPathSearch;
-	fpp.maxSearchDist = maxSearchDist;
-	fpp.clearSight = clearSight;
-	fpp.minTargetDist = minTargetDist;
-	fpp.maxTargetDist = maxTargetDist;
-	return getPathToEx(creature, targetPos, dirList, fpp);
 }
 
 void Game::checkCreatureWalk(uint32_t creatureId)
