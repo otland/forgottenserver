@@ -5459,12 +5459,12 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 					continue;
 				}
 
-				if (item->getWareID() != it.wareId) {
+				const ItemType& itemType = Item::items[item->getID()];
+				if (itemType.wareId != it.wareId) {
 					continue;
 				}
 
 				// TODO: Disallow other items with other attributes than charges and duration
-				const ItemType& itemType = Item::items[item->getID()];
 				if (!itemType.isRune() && item->getCharges() != itemType.charges) {
 					continue;
 				}
