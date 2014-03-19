@@ -984,14 +984,14 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushNumber(L, player->getID());
+	lua_pushnumber(L, player->getID());
 
 	int32_t parameters = 1;
 	switch (type) {
 		case COMBAT_FORMULA_LEVELMAGIC: {
 			//"onGetPlayerMinMaxValues"(cid, level, maglevel)
-			LuaScriptInterface::pushNumber(L, player->getLevel());
-			LuaScriptInterface::pushNumber(L, player->getMagicLevel());
+			lua_pushnumber(L, player->getLevel());
+			lua_pushnumber(L, player->getMagicLevel());
 			parameters += 2;
 			break;
 		}
@@ -1015,9 +1015,9 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 				}
 			}
 
-			LuaScriptInterface::pushNumber(L, player->getWeaponSkill(tool));
-			LuaScriptInterface::pushNumber(L, attackValue);
-			LuaScriptInterface::pushNumber(L, player->getAttackFactor());
+			lua_pushnumber(L, player->getWeaponSkill(tool));
+			lua_pushnumber(L, attackValue);
+			lua_pushnumber(L, player->getAttackFactor());
 			parameters += 3;
 			break;
 		}

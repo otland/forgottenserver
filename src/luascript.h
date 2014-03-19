@@ -20,8 +20,6 @@
 #ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 #define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 
-#include <unordered_map>
-
 #include <lua.hpp>
 
 #if LUA_VERSION_NUM >= 502
@@ -358,12 +356,7 @@ class LuaScriptInterface
 		static Outfit_t popOutfit(lua_State* L);
 
 		// Push
-		inline static void pushNumber(lua_State* L, lua_Number number) {
-			lua_pushnumber(L, number);
-		}
-
 		static void pushBoolean(lua_State* L, bool value);
-		static void pushNil(lua_State* L);
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
@@ -377,8 +370,18 @@ class LuaScriptInterface
 
 		static std::string popFieldString(lua_State* L, const std::string& key);
 
-		static void setField(lua_State* L, const char* index, lua_Number value);
-		static void setField(lua_State* L, const char* index, const std::string& value);
+		inline static void setField(lua_State* L, const char* index, lua_Number value)
+		{
+			lua_pushnumber(L, value);
+			lua_setfield(L, -2, index);
+		}
+
+		inline static void setField(lua_State* L, const char* index, const std::string& value)
+		{
+			pushString(L, value);
+			lua_setfield(L, -2, index);
+		}
+	
 		static std::string escapeString(const std::string& string);
 
 #ifndef LUAJIT_VERSION
@@ -819,6 +822,8 @@ class LuaScriptInterface
 		static int32_t luaCreatureGetSummons(lua_State* L);
 
 		static int32_t luaCreatureGetDescription(lua_State* L);
+
+		static int32_t luaCreatureGetPathTo(lua_State* L);
 
 		// Player
 		static int32_t luaPlayerCreate(lua_State* L);

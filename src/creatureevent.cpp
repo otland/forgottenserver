@@ -447,10 +447,10 @@ bool CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushNumber(L, player->getID());
-	LuaScriptInterface::pushNumber(L, modalWindowId);
-	LuaScriptInterface::pushNumber(L, buttonId);
-	LuaScriptInterface::pushNumber(L, choiceId);
+	lua_pushnumber(L, player->getID());
+	lua_pushnumber(L, modalWindowId);
+	lua_pushnumber(L, buttonId);
+	lua_pushnumber(L, choiceId);
 
 	return m_scriptInterface->callFunction(4);
 }
@@ -469,7 +469,7 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushNumber(L, player->getID());
+	lua_pushnumber(L, player->getID());
 	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 	LuaScriptInterface::pushString(L, text);
 
@@ -490,16 +490,16 @@ bool CreatureEvent::executeChangeHealth(Creature* creature, Creature* attacker, 
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushNumber(L, creature->getID());
+	lua_pushnumber(L, creature->getID());
 	if (attacker) {
-		LuaScriptInterface::pushNumber(L, attacker->getID());
+		lua_pushnumber(L, attacker->getID());
 	} else {
-		LuaScriptInterface::pushNumber(L, 0);
+		lua_pushnumber(L, 0);
 	}
-	LuaScriptInterface::pushNumber(L, damage.primary.value);
-	LuaScriptInterface::pushNumber(L, damage.primary.type);
-	LuaScriptInterface::pushNumber(L, damage.secondary.value);
-	LuaScriptInterface::pushNumber(L, damage.secondary.type);
+	lua_pushnumber(L, damage.primary.value);
+	lua_pushnumber(L, damage.primary.type);
+	lua_pushnumber(L, damage.secondary.value);
+	lua_pushnumber(L, damage.secondary.type);
 
 	return m_scriptInterface->callFunction(6);
 }
@@ -518,13 +518,13 @@ bool CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, in
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushNumber(L, creature->getID());
+	lua_pushnumber(L, creature->getID());
 	if (attacker) {
-		LuaScriptInterface::pushNumber(L, attacker->getID());
+		lua_pushnumber(L, attacker->getID());
 	} else {
-		LuaScriptInterface::pushNumber(L, 0);
+		lua_pushnumber(L, 0);
 	}
-	LuaScriptInterface::pushNumber(L, manaChange);
+	lua_pushnumber(L, manaChange);
 
 	return m_scriptInterface->callFunction(3);
 }
@@ -547,7 +547,7 @@ bool CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	LuaScriptInterface::pushNumber(L, opcode);
+	lua_pushnumber(L, opcode);
 	LuaScriptInterface::pushString(L, buffer);
 
 	return m_scriptInterface->callFunction(3);

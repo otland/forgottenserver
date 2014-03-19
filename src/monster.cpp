@@ -328,7 +328,7 @@ void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const s
 		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 
-		LuaScriptInterface::pushNumber(L, type);
+		lua_pushnumber(L, type);
 		LuaScriptInterface::pushString(L, text);
 
 		scriptInterface->callVoidFunction(4);
@@ -732,7 +732,7 @@ void Monster::onThink(uint32_t interval)
 		LuaScriptInterface::pushUserdata<Monster>(L, this);
 		LuaScriptInterface::setMetatable(L, -1, "Monster");
 
-		LuaScriptInterface::pushNumber(L, interval);
+		lua_pushnumber(L, interval);
 
 		if (scriptInterface->callFunction(2)) {
 			return;

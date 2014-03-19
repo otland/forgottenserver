@@ -224,11 +224,11 @@ void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* 
 		LuaScriptInterface::pushUserdata<Item>(L, item);
 		LuaScriptInterface::setItemMetatable(L, -1, item);
 	} else {
-		LuaScriptInterface::pushNil(L);
+		lua_pushnil(L);
 	}
 
 	LuaScriptInterface::pushPosition(L, position, stackpos);
-	LuaScriptInterface::pushNumber(L, lookDistance);
+	lua_pushnumber(L, lookDistance);
 
 	scriptInterface.callVoidFunction(4);
 }
@@ -257,7 +257,7 @@ void Events::eventPlayerOnLookInBattleList(Player* player, Creature* creature, i
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 
-	LuaScriptInterface::pushNumber(L, lookDistance);
+	lua_pushnumber(L, lookDistance);
 
 	scriptInterface.callVoidFunction(3);
 }
@@ -289,7 +289,7 @@ void Events::eventPlayerOnLookInTrade(Player* player, Player* partner, Item* ite
 	LuaScriptInterface::pushUserdata<Item>(L, item);
 	LuaScriptInterface::setItemMetatable(L, -1, item);
 
-	LuaScriptInterface::pushNumber(L, lookDistance);
+	lua_pushnumber(L, lookDistance);
 
 	scriptInterface.callVoidFunction(4);
 }
@@ -318,7 +318,7 @@ bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, u
 	LuaScriptInterface::pushUserdata<const ItemType>(L, itemType);
 	LuaScriptInterface::setMetatable(L, -1, "ItemType");
 
-	LuaScriptInterface::pushNumber(L, count);
+	lua_pushnumber(L, count);
 
 	return scriptInterface.callFunction(3);
 }
@@ -347,7 +347,7 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 	LuaScriptInterface::pushUserdata<Item>(L, item);
 	LuaScriptInterface::setItemMetatable(L, -1, item);
 
-	LuaScriptInterface::pushNumber(L, count);
+	lua_pushnumber(L, count);
 	LuaScriptInterface::pushPosition(L, fromPosition);
 	LuaScriptInterface::pushPosition(L, toPosition);
 
@@ -405,7 +405,7 @@ bool Events::eventPlayerOnTurn(Player* player, Direction direction)
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	LuaScriptInterface::pushNumber(L, direction);
+	lua_pushnumber(L, direction);
 
 	return scriptInterface.callFunction(2);
 }

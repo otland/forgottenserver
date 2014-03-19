@@ -1013,10 +1013,10 @@ int32_t NpcScriptInterface::luaNpcGetParameter(lua_State* L)
 		if (it != npc->m_parameters.end()) {
 			pushString(L, it->second);
 		} else {
-			pushNil(L);
+			lua_pushnil(L);
 		}
 	} else {
-		pushNil(L);
+		lua_pushnil(L);
 	}
 	return 1;
 }
@@ -1030,7 +1030,7 @@ int32_t NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 		npc->setCreatureFocus(creature);
 		pushBoolean(L, true);
 	} else {
-		pushNil(L);
+		lua_pushnil(L);
 	}
 	return 1;
 }
@@ -1070,7 +1070,7 @@ int32_t NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 
 	std::list<ShopInfo> items;
 
-	pushNil(L);
+	lua_pushnil(L);
 	while (lua_next(L, 3) != 0) {
 		ShopInfo item;
 		item.itemId = popField<uint32_t>(L, "id");
