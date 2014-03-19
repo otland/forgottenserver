@@ -1675,6 +1675,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 				continue;
 			}
 
+			// TODO: Disallow other items with other attributes than charges and duration
 			if (!itemType.isRune() && item->getCharges() != itemType.charges) {
 				continue;
 			}
@@ -2571,7 +2572,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	}
 
 	const std::string& writer = item->getWriter();
-	if (writer.size()) {
+	if (!writer.empty()) {
 		msg.AddString(writer);
 	} else {
 		msg.add<uint16_t>(0x00);

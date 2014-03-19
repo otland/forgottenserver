@@ -224,7 +224,7 @@ void Item::onRemoved()
 {
 	ScriptEnvironment::removeTempItem(this);
 
-	if (getUniqueId() != 0) {
+	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		ScriptEnvironment::removeUniqueThing(this);
 	}
 }
@@ -622,15 +622,15 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 	const ItemType& it = items[id];
 	switch (prop) {
 		case CONST_PROP_BLOCKSOLID: return it.blockSolid;
-		case CONST_PROP_MOVEABLE: return it.moveable && getUniqueId() == 0;
+		case CONST_PROP_MOVEABLE: return it.moveable && !hasAttribute(ITEM_ATTRIBUTE_UNIQUEID);
 		case CONST_PROP_HASHEIGHT: return it.hasHeight;
 		case CONST_PROP_BLOCKPROJECTILE: return it.blockProjectile;
 		case CONST_PROP_BLOCKPATH: return it.blockPathFind;
 		case CONST_PROP_ISVERTICAL: return it.isVertical;
 		case CONST_PROP_ISHORIZONTAL: return it.isHorizontal;
-		case CONST_PROP_IMMOVABLEBLOCKSOLID: return it.blockSolid && (!it.moveable || getUniqueId() != 0);
-		case CONST_PROP_IMMOVABLEBLOCKPATH: return it.blockPathFind && (!it.moveable || getUniqueId() != 0);
-		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind && (!it.moveable || getUniqueId() != 0);
+		case CONST_PROP_IMMOVABLEBLOCKSOLID: return it.blockSolid && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		case CONST_PROP_IMMOVABLEBLOCKPATH: return it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
 		case CONST_PROP_NOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind;
 		case CONST_PROP_SUPPORTHANGABLE: return it.isHorizontal || it.isVertical;
 		default: return false;
@@ -1180,7 +1180,7 @@ std::string Item::getWeightDescription() const
 
 void Item::setUniqueId(uint16_t n)
 {
-	if (getUniqueId() != 0) {
+	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		return;
 	}
 
@@ -1199,7 +1199,7 @@ bool Item::canDecay() const
 		return false;
 	}
 
-	if (getUniqueId() != 0) {
+	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		return false;
 	}
 

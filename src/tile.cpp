@@ -696,14 +696,14 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 				//FLAG_IGNOREBLOCKITEM is set
 				if (ground) {
 					const ItemType& iiType = Item::items[ground->getID()];
-					if (iiType.blockSolid && (!iiType.moveable || ground->getUniqueId() != 0)) {
+					if (iiType.blockSolid && (!iiType.moveable || ground->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
 						return RET_NOTPOSSIBLE;
 					}
 				}
 
 				for (const Item* item : *items) {
 					const ItemType& iiType = Item::items[item->getID()];
-					if (iiType.blockSolid && (!iiType.moveable || item->getUniqueId() != 0)) {
+					if (iiType.blockSolid && (!iiType.moveable || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
 						return RET_NOTPOSSIBLE;
 					}
 				}

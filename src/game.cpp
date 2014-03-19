@@ -1136,7 +1136,7 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
-	if (!item->isPushable() || item->getUniqueId() != 0) {
+	if (!item->isPushable() || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RET_NOTMOVEABLE);
 		return;
 	}
@@ -1806,7 +1806,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 
 	if (curType.type == newType.type) {
 		//Both items has the same type so we can safely change id/subtype
-		if (newCount == 0 && (item->isStackable() || item->getCharges() != 0)) {
+		if (newCount == 0 && (item->isStackable() || item->hasAttribute(ITEM_ATTRIBUTE_CHARGES))) {
 			if (item->isStackable()) {
 				internalRemoveItem(item);
 				return nullptr;
@@ -2425,7 +2425,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	}
 
 	Item* item = thing->getItem();
-	if (!item || item->getClientID() != spriteId || !item->isRoteable() || item->getUniqueId() != 0) {
+	if (!item || item->getClientID() != spriteId || !item->isRoteable() || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return;
 	}
@@ -2636,7 +2636,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	}
 
 	Item* tradeItem = dynamic_cast<Item*>(internalGetThing(player, pos, stackPos, spriteId, STACKPOS_USE));
-	if (!tradeItem || tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->getUniqueId() != 0) {
+	if (!tradeItem || tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return;
 	}
@@ -5463,6 +5463,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 					continue;
 				}
 
+				// TODO: Disallow other items with other attributes than charges and duration
 				const ItemType& itemType = Item::items[item->getID()];
 				if (!itemType.isRune() && item->getCharges() != itemType.charges) {
 					continue;
@@ -5643,6 +5644,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 					continue;
 				}
 
+				// TODO: Disallow other items with other attributes than charges and duration
 				const ItemType& itemType = Item::items[item->getID()];
 				if (!itemType.isRune() && item->getCharges() != itemType.charges) {
 					continue;
