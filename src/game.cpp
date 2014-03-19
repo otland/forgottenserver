@@ -3695,7 +3695,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos,
                        std::list<Direction>& dirList, const FindPathParams& fpp)
 {
-	return map.getPathMatching(creature, dirList, FrozenPathingConditionCall(targetPos), fpp);
+	return map.getPathMatching(*creature, dirList, FrozenPathingConditionCall(targetPos), fpp);
 }
 
 bool Game::getPathToEx(const Creature* creature, const Position& targetPos, std::list<Direction>& dirList,

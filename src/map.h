@@ -53,22 +53,25 @@ struct AStarNode {
 class AStarNodes
 {
 	public:
-		AStarNodes();
+		AStarNodes(uint32_t x, uint32_t y);
 		~AStarNodes() {}
 
-		AStarNode* createOpenNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f);
+		AStarNode* createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f);
 		AStarNode* getBestNode();
 		void closeNode(AStarNode* node);
 		void openNode(AStarNode* node);
-		uint32_t countClosedNodes() const;
+		int_fast32_t getClosedNodes() const;
+		AStarNode* getNodeByPosition(uint32_t x, uint32_t y);
 
-		static int32_t getMapWalkCost(AStarNode* node, const Position& neighbourPos);
-		static int32_t getTileWalkCost(const Creature* creature, const Tile* tile);
+		static int_fast32_t getMapWalkCost(AStarNode* node, const Position& neighbourPos);
+		static int_fast32_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 	private:
 		AStarNode nodes[MAX_NODES];
-		std::bitset<MAX_NODES> openNodes;
-		uint32_t curNode;
+		bool openNodes[MAX_NODES];
+		std::unordered_map<uint32_t, AStarNode*> nodeTable;
+		size_t curNode;
+		int_fast32_t closedNodes;
 };
 
 typedef std::unordered_set<Creature*> SpectatorVec;
@@ -230,9 +233,9 @@ class Map
 		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
 		bool checkSightLine(const Position& fromPos, const Position& toPos) const;
 
-		const Tile* canWalkTo(const Creature* creature, const Position& pos);
+		const Tile* canWalkTo(const Creature& creature, const Position& pos);
 
-		bool getPathMatching(const Creature* creature, std::list<Direction>& dirList,
+		bool getPathMatching(const Creature& creature, std::list<Direction>& dirList,
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp);
 
 		std::map<std::string, Position> waypoints;

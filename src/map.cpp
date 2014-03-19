@@ -533,9 +533,9 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	return checkSightLine(fromPos, toPos) || checkSightLine(toPos, fromPos);
 }
 
-const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
+const Tile* Map::canWalkTo(const Creature& creature, const Position& pos)
 {
-	int32_t walkCache = creature->getWalkCache(pos);
+	int32_t walkCache = creature.getWalkCache(pos);
 	if (walkCache == 0) {
 		return nullptr;
 	} else if (walkCache == 1) {
@@ -544,23 +544,20 @@ const Tile* Map::canWalkTo(const Creature* creature, const Position& pos)
 
 	//used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
-	if (creature->getTile() != tile) {
-		if (!tile || tile->__queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RET_NOERROR) {
+	if (creature.getTile() != tile) {
+		if (!tile || tile->__queryAdd(0, &creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RET_NOERROR) {
 			return nullptr;
 		}
 	}
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
+bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
 {
-	Position pos = creature->getPosition();
+	Position pos = creature.getPosition();
 	Position endPos;
 
-	std::unordered_map<uint32_t, AStarNode*> nodeTable;
-
-	AStarNodes nodes;
-	nodeTable[(static_cast<uint32_t>(pos.x) << 16) | static_cast<uint32_t>(pos.y)] = nodes.createOpenNode(nullptr, pos.x, pos.y, 0);
+	AStarNodes nodes(pos.x, pos.y);
 
 	int32_t bestMatch = 0;
 
@@ -577,10 +574,10 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		{ -1, 1},
 	};
 	const size_t dirCount = (fpp.allowDiagonal ? 8 : 4);
-	const Position startPos = creature->getPosition();
+	const Position startPos = pos;
 
 	AStarNode* found = nullptr;
-	while (fpp.maxSearchDist != 0 || nodes.countClosedNodes() < 100) {
+	while (fpp.maxSearchDist != 0 || nodes.getClosedNodes() < 100) {
 		AStarNode* n = nodes.getBestNode();
 		if (!n) {
 			if (found) {
@@ -627,23 +624,19 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 				continue;
 			}
 
-			//The cost (g) for this neighbour
-			const uint32_t tableIndex = (static_cast<uint32_t>(pos.x) << 16) | static_cast<uint32_t>(pos.y);
-
 			const Tile* tile;
-			AStarNode* neighbourNode;
-			auto it = nodeTable.find(tableIndex);
-			if (it != nodeTable.end()) {
-				neighbourNode = it->second;
+
+			AStarNode* neighbourNode = nodes.getNodeByPosition(pos.x, pos.y);
+			if (neighbourNode) {
 				tile = getTile(pos.x, pos.y, pos.z);
 			} else {
-				neighbourNode = nullptr;
 				tile = canWalkTo(creature, pos);
 				if (!tile) {
 					continue;
 				}
 			}
 
+			//The cost (g) for this neighbour
 			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
 			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
 			const int_fast32_t newf = f + cost + extraCost;
@@ -665,8 +658,6 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 					}
 					return false;
 				}
-
-				nodeTable[tableIndex] = neighbourNode;
 			}
 		}
 
@@ -717,22 +708,32 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 
 //*********** AStarNodes *************
 
-AStarNodes::AStarNodes()
+AStarNodes::AStarNodes(uint32_t x, uint32_t y)
+	: openNodes()
 {
-	curNode = 0;
-	openNodes.reset();
+	curNode = 1;
+	closedNodes = 0;
+	openNodes[0] = true;
+
+	AStarNode& startNode = nodes[0];
+	startNode.parent = nullptr;
+	startNode.x = x;
+	startNode.y = y;
+	startNode.f = 0;
+	nodeTable[(x << 16) | y] = &startNode;
 }
 
-AStarNode* AStarNodes::createOpenNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f)
+AStarNode* AStarNodes::createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f)
 {
 	if (curNode >= MAX_NODES) {
 		return nullptr;
 	}
 
-	uint32_t ret_node = curNode++;
-	openNodes[ret_node] = 1;
+	size_t retNode = curNode++;
+	openNodes[retNode] = true;
 
-	AStarNode* node = &nodes[ret_node];
+	AStarNode* node = &nodes[retNode];
+	nodeTable[(x << 16) | y] = node;
 	node->parent = parent;
 	node->x = x;
 	node->y = y;
@@ -749,7 +750,7 @@ AStarNode* AStarNodes::getBestNode()
 	int32_t best_node_f = std::numeric_limits<int32_t>::max();
 	int32_t best_node = -1;
 	for (uint32_t i = 0; i < curNode; i++) {
-		if (nodes[i].f < best_node_f && openNodes[i] == 1) {
+		if (openNodes[i] && nodes[i].f < best_node_f) {
 			best_node_f = nodes[i].f;
 			best_node = i;
 		}
@@ -769,7 +770,8 @@ void AStarNodes::closeNode(AStarNode* node)
 		return;
 	}
 
-	openNodes[pos] = 0;
+	openNodes[pos] = false;
+	++closedNodes;
 }
 
 void AStarNodes::openNode(AStarNode* node)
@@ -780,21 +782,27 @@ void AStarNodes::openNode(AStarNode* node)
 		return;
 	}
 
-	openNodes[pos] = 1;
-}
-
-uint32_t AStarNodes::countClosedNodes() const
-{
-	uint32_t counter = 0;
-	for (uint32_t i = 0; i < curNode; i++) {
-		if (openNodes[i] == 0) {
-			counter++;
-		}
+	if (!openNodes[pos]) {
+		openNodes[pos] = true;
+		--closedNodes;
 	}
-	return counter;
 }
 
-int32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbourPos)
+int_fast32_t AStarNodes::getClosedNodes() const
+{
+	return closedNodes;
+}
+
+AStarNode* AStarNodes::getNodeByPosition(uint32_t x, uint32_t y)
+{
+	auto it = nodeTable.find((x << 16) | y);
+	if (it == nodeTable.end()) {
+		return nullptr;
+	}
+	return it->second;
+}
+
+int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbourPos)
 {
 	if (std::abs(node->x - neighbourPos.x) == std::abs(node->y - neighbourPos.y)) {
 		//diagonal movement extra cost
@@ -803,17 +811,17 @@ int32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbourPos
 	return MAP_NORMALWALKCOST;
 }
 
-int32_t AStarNodes::getTileWalkCost(const Creature* creature, const Tile* tile)
+int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
-	int cost = 0;
-	if (tile->getTopVisibleCreature(creature) != nullptr) {
+	int_fast32_t cost = 0;
+	if (tile->getTopVisibleCreature(&creature) != nullptr) {
 		//destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
 	}
 
 	if (const MagicField* field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
-		if (!creature->isImmune(combatType) && !creature->hasCondition(Combat::DamageToConditionType(combatType))) {
+		if (!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;
 		}
 	}
