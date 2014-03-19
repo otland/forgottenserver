@@ -853,7 +853,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 				Tile* tmpTile = g_game.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
 
 				// Blocking tiles or tiles without ground ain't valid targets for spears
-				if (tmpTile && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && tmpTile->ground != nullptr) {
+				if (tmpTile && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && tmpTile->ground != nullptr) {
 					destTile = tmpTile;
 					break;
 				}

@@ -291,7 +291,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 				//do extra checks here if the thing is accessable
 				if (thing && thing->getItem()) {
-					if (tile->hasProperty(ISVERTICAL)) {
+					if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
 						if (player->getPosition().x + 1 == tile->getPosition().x) {
 							thing = nullptr;
 						}
@@ -318,7 +318,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			if (parentContainer->getID() == ITEM_BROWSEFIELD) {
 				Tile* tile = parentContainer->getTile();
 				if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
-					if (tile->hasProperty(ISVERTICAL)) {
+					if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
 						if (player->getPosition().x + 1 == tile->getPosition().x) {
 							return nullptr;
 						}
@@ -949,7 +949,7 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	}
 
 	if (player != movingCreature) {
-		if (toTile->hasProperty(BLOCKPATH)) {
+		if (toTile->hasProperty(CONST_PROP_BLOCKPATH)) {
 			player->sendCancelMessage(RET_NOTENOUGHROOM);
 			return;
 		} else if ((movingCreature->getZone() == ZONE_PROTECTION && !toTile->hasFlag(TILESTATE_PROTECTIONZONE)) || (movingCreature->getZone() == ZONE_NOPVP && !toTile->hasFlag(TILESTATE_NOPVPZONE))) {
@@ -1012,9 +1012,9 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		//try go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
 			Tile* tmpTile = getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
-			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(BLOCKSOLID))) {
+			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID))) {
 				tmpTile = getTile(destPos.x, destPos.y, destPos.getZ() - 1);
-				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(BLOCKSOLID)) {
+				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID)) {
 					flags = flags | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 
 					if (!tmpTile->floorChange()) {
@@ -1025,7 +1025,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		} else {
 			//try go down
 			Tile* tmpTile = getTile(destPos);
-			if (currentPos.z != 7 && (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(BLOCKSOLID)))) {
+			if (currentPos.z != 7 && (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID)))) {
 				tmpTile = getTile(destPos.x, destPos.y, destPos.z + 1);
 				if (tmpTile && tmpTile->hasHeight(3)) {
 					flags |= FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
@@ -1175,7 +1175,7 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 	//hangable item specific code
 	if (item->isHangable() && toCylinderTile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 		//destination supports hangable objects so need to move there first
-		bool vertical = toCylinderTile->hasProperty(ISVERTICAL);
+		bool vertical = toCylinderTile->hasProperty(CONST_PROP_ISVERTICAL);
 		if (vertical) {
 			if (playerPos.x + 1 == mapToPos.x) {
 				player->sendCancelMessage(RET_NOTPOSSIBLE);

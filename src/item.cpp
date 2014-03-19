@@ -620,81 +620,21 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 bool Item::hasProperty(ITEMPROPERTY prop) const
 {
 	const ItemType& it = items[id];
-
 	switch (prop) {
-		case BLOCKSOLID:
-			if (it.blockSolid) {
-				return true;
-			}
-			break;
-
-		case MOVEABLE:
-			if (it.moveable && getUniqueId() == 0) {
-				return true;
-			}
-			break;
-
-		case HASHEIGHT:
-			if (it.hasHeight) {
-				return true;
-			}
-			break;
-
-		case BLOCKPROJECTILE:
-			if (it.blockProjectile) {
-				return true;
-			}
-			break;
-
-		case BLOCKPATH:
-			if (it.blockPathFind) {
-				return true;
-			}
-			break;
-
-		case ISVERTICAL:
-			if (it.isVertical) {
-				return true;
-			}
-			break;
-
-		case ISHORIZONTAL:
-			if (it.isHorizontal) {
-				return true;
-			}
-			break;
-
-		case IMMOVABLEBLOCKSOLID:
-			if (it.blockSolid && (!it.moveable || getUniqueId() != 0)) {
-				return true;
-			}
-			break;
-
-		case IMMOVABLEBLOCKPATH:
-			if (it.blockPathFind && (!it.moveable || getUniqueId() != 0)) {
-				return true;
-			}
-			break;
-
-		case SUPPORTHANGABLE:
-			if (it.isHorizontal || it.isVertical) {
-				return true;
-			}
-			break;
-
-		case IMMOVABLENOFIELDBLOCKPATH:
-			if (!it.isMagicField() && it.blockPathFind && (!it.moveable || getUniqueId() != 0)) {
-				return true;
-			}
-			break;
-
-		case NOFIELDBLOCKPATH:
-			if (!it.isMagicField() && it.blockPathFind) {
-				return true;
-			}
-			break;
+		case CONST_PROP_BLOCKSOLID: return it.blockSolid;
+		case CONST_PROP_MOVEABLE: return it.moveable && getUniqueId() == 0;
+		case CONST_PROP_HASHEIGHT: return it.hasHeight;
+		case CONST_PROP_BLOCKPROJECTILE: return it.blockProjectile;
+		case CONST_PROP_BLOCKPATH: return it.blockPathFind;
+		case CONST_PROP_ISVERTICAL: return it.isVertical;
+		case CONST_PROP_ISHORIZONTAL: return it.isHorizontal;
+		case CONST_PROP_IMMOVABLEBLOCKSOLID: return it.blockSolid && (!it.moveable || getUniqueId() != 0);
+		case CONST_PROP_IMMOVABLEBLOCKPATH: return it.blockPathFind && (!it.moveable || getUniqueId() != 0);
+		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind && (!it.moveable || getUniqueId() != 0);
+		case CONST_PROP_NOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind;
+		case CONST_PROP_SUPPORTHANGABLE: return it.isHorizontal || it.isVertical;
+		default: return false;
 	}
-	return false;
 }
 
 double Item::getWeight() const
@@ -702,7 +642,6 @@ double Item::getWeight() const
 	if (isStackable()) {
 		return items[id].weight * std::max<int32_t>(1, getItemCount());
 	}
-
 	return items[id].weight;
 }
 

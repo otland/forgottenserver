@@ -78,7 +78,7 @@ bool Tile::hasHeight(uint32_t n) const
 	uint32_t height = 0;
 
 	if (ground) {
-		if (ground->hasProperty(HASHEIGHT)) {
+		if (ground->hasProperty(CONST_PROP_HASHEIGHT)) {
 			++height;
 		}
 
@@ -89,7 +89,7 @@ bool Tile::hasHeight(uint32_t n) const
 
 	if (const TileItemVector* items = getItemList()) {
 		for (const Item* item : *items) {
-			if (item->hasProperty(HASHEIGHT)) {
+			if (item->hasProperty(CONST_PROP_HASHEIGHT)) {
 				++height;
 			}
 
@@ -389,7 +389,7 @@ Thing* Tile::getTopVisibleThing(const Creature* creature)
 
 void Tile::onAddTileItem(Item* item)
 {
-	if (item->hasProperty(MOVEABLE) || item->getContainer()) {
+	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
 		auto it = g_game.browseFields.find(this);
 		if (it != g_game.browseFields.end()) {
 			it->second->__addThingBack(item);
@@ -418,7 +418,7 @@ void Tile::onAddTileItem(Item* item)
 
 void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType)
 {
-	if (newItem->hasProperty(MOVEABLE) || newItem->getContainer()) {
+	if (newItem->hasProperty(CONST_PROP_MOVEABLE) || newItem->getContainer()) {
 		auto it = g_game.browseFields.find(this);
 		if (it != g_game.browseFields.end()) {
 			int32_t index = it->second->__getIndexOfThing(oldItem);
@@ -427,7 +427,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 				newItem->setParent(this);
 			}
 		}
-	} else if (oldItem->hasProperty(MOVEABLE) || oldItem->getContainer()) {
+	} else if (oldItem->hasProperty(CONST_PROP_MOVEABLE) || oldItem->getContainer()) {
 		auto it = g_game.browseFields.find(this);
 		if (it != g_game.browseFields.end()) {
 			Cylinder* oldParent = oldItem->getParent();
@@ -455,7 +455,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 
 void Tile::onRemoveTileItem(const SpectatorVec& list, const std::vector<uint32_t>& oldStackPosVector, Item* item)
 {
-	if (item->hasProperty(MOVEABLE) || item->getContainer()) {
+	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
 		auto it = g_game.browseFields.find(this);
 		if (it != g_game.browseFields.end()) {
 			it->second->__removeThing(item, item->getItemCount());
@@ -1554,19 +1554,19 @@ void Tile::updateTileFlags(Item* item, bool removing)
 			}
 		}
 
-		if (item->hasProperty(IMMOVABLEBLOCKSOLID)) {
+		if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID)) {
 			setFlag(TILESTATE_IMMOVABLEBLOCKSOLID);
 		}
 
-		if (item->hasProperty(BLOCKPATH)) {
+		if (item->hasProperty(CONST_PROP_BLOCKPATH)) {
 			setFlag(TILESTATE_BLOCKPATH);
 		}
 
-		if (item->hasProperty(NOFIELDBLOCKPATH)) {
+		if (item->hasProperty(CONST_PROP_NOFIELDBLOCKPATH)) {
 			setFlag(TILESTATE_NOFIELDBLOCKPATH);
 		}
 
-		if (item->hasProperty(IMMOVABLENOFIELDBLOCKPATH)) {
+		if (item->hasProperty(CONST_PROP_IMMOVABLENOFIELDBLOCKPATH)) {
 			setFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
 		}
 
@@ -1586,7 +1586,7 @@ void Tile::updateTileFlags(Item* item, bool removing)
 			setFlag(TILESTATE_TRASHHOLDER);
 		}
 
-		if (item->hasProperty(BLOCKSOLID)) {
+		if (item->hasProperty(CONST_PROP_BLOCKSOLID)) {
 			setFlag(TILESTATE_BLOCKSOLID);
 		}
 
@@ -1599,7 +1599,7 @@ void Tile::updateTileFlags(Item* item, bool removing)
 			setFlag(TILESTATE_DEPOT);
 		}
 
-		if (item->hasProperty(SUPPORTHANGABLE)) {
+		if (item->hasProperty(CONST_PROP_SUPPORTHANGABLE)) {
 			setFlag(TILESTATE_SUPPORTS_HANGABLE);
 		}
 	} else {
@@ -1638,27 +1638,27 @@ void Tile::updateTileFlags(Item* item, bool removing)
 			resetFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
 		}
 
-		if (item->hasProperty(BLOCKSOLID) && !hasProperty(item, BLOCKSOLID)) {
+		if (item->hasProperty(CONST_PROP_BLOCKSOLID) && !hasProperty(item, CONST_PROP_BLOCKSOLID)) {
 			resetFlag(TILESTATE_BLOCKSOLID);
 		}
 
-		if (item->hasProperty(IMMOVABLEBLOCKSOLID) && !hasProperty(item, IMMOVABLEBLOCKSOLID)) {
+		if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !hasProperty(item, CONST_PROP_IMMOVABLEBLOCKSOLID)) {
 			resetFlag(TILESTATE_IMMOVABLEBLOCKSOLID);
 		}
 
-		if (item->hasProperty(BLOCKPATH) && !hasProperty(item, BLOCKPATH)) {
+		if (item->hasProperty(CONST_PROP_BLOCKPATH) && !hasProperty(item, CONST_PROP_BLOCKPATH)) {
 			resetFlag(TILESTATE_BLOCKPATH);
 		}
 
-		if (item->hasProperty(NOFIELDBLOCKPATH) && !hasProperty(item, NOFIELDBLOCKPATH)) {
+		if (item->hasProperty(CONST_PROP_NOFIELDBLOCKPATH) && !hasProperty(item, CONST_PROP_NOFIELDBLOCKPATH)) {
 			resetFlag(TILESTATE_NOFIELDBLOCKPATH);
 		}
 
-		if (item->hasProperty(IMMOVABLEBLOCKPATH) && !hasProperty(item, IMMOVABLEBLOCKPATH)) {
+		if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH) && !hasProperty(item, CONST_PROP_IMMOVABLEBLOCKPATH)) {
 			resetFlag(TILESTATE_IMMOVABLEBLOCKPATH);
 		}
 
-		if (item->hasProperty(IMMOVABLENOFIELDBLOCKPATH) && !hasProperty(item, IMMOVABLENOFIELDBLOCKPATH)) {
+		if (item->hasProperty(CONST_PROP_IMMOVABLENOFIELDBLOCKPATH) && !hasProperty(item, CONST_PROP_IMMOVABLENOFIELDBLOCKPATH)) {
 			resetFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
 		}
 
@@ -1687,7 +1687,7 @@ void Tile::updateTileFlags(Item* item, bool removing)
 			resetFlag(TILESTATE_DEPOT);
 		}
 
-		if (item->hasProperty(SUPPORTHANGABLE)) {
+		if (item->hasProperty(CONST_PROP_SUPPORTHANGABLE)) {
 			resetFlag(TILESTATE_SUPPORTS_HANGABLE);
 		}
 	}

@@ -275,7 +275,7 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 
 ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool isAggressive)
 {
-	if (tile->hasProperty(BLOCKPROJECTILE)) {
+	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
 		return RET_NOTENOUGHROOM;
 	}
 

@@ -40,7 +40,7 @@ Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 	TileItemVector* itemVector = tile->getItemList();
 	if (itemVector) {
 		for (Item* item : *itemVector) {
-			if (item->getContainer() || item->hasProperty(MOVEABLE)) {
+			if (item->getContainer() || item->hasProperty(CONST_PROP_MOVEABLE)) {
 				itemlist.push_front(item);
 				item->setParent(this);
 			}

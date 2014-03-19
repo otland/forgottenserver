@@ -67,7 +67,7 @@ void TrashHolder::__addThing(int32_t, Thing* thing)
 		return;
 	}
 
-	if (item == this || !item->hasProperty(MOVEABLE)) {
+	if (item == this || !item->hasProperty(CONST_PROP_MOVEABLE)) {
 		return;
 	}
 

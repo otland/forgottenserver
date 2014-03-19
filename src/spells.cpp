@@ -715,7 +715,7 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 				return false;
 			}
 
-			if (blockingSolid && tile->hasProperty(BLOCKSOLID)) {
+			if (blockingSolid && tile->hasProperty(CONST_PROP_BLOCKSOLID)) {
 				player->sendCancelMessage(RET_NOTENOUGHROOM);
 				g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 				return false;
@@ -774,7 +774,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 				player->sendCancelMessage(RET_NOTENOUGHROOM);
 				g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 				return false;
-			} else if (blockingSolid && tile->hasProperty(BLOCKSOLID)) {
+			} else if (blockingSolid && tile->hasProperty(CONST_PROP_BLOCKSOLID)) {
 				player->sendCancelMessage(RET_NOTENOUGHROOM);
 				g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 				return false;
@@ -1593,9 +1593,9 @@ bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::
 	if (tmpParam == "up") {
 		if (currentPos.z != 8) {
 			Tile* tmpTile = g_game.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
-			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID))) {
+			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID))) {
 				tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.getZ() - 1);
-				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
+				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
 					ret = g_game.internalMoveCreature(player, player->getTile(), tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
 				}
 			}
@@ -1603,9 +1603,9 @@ bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::
 	} else if (tmpParam == "down") {
 		if (currentPos.z != 7) {
 			Tile* tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z);
-			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(BLOCKSOLID))) {
+			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID))) {
 				tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z + 1);
-				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
+				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
 					ret = g_game.internalMoveCreature(player, player->getTile(), tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
 				}
 			}
