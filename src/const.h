@@ -423,99 +423,96 @@ enum GuildEmblems_t {
 enum item_t {
 	ITEM_BROWSEFIELD = 460, // for internal use
 
-	ITEM_FIREFIELD_PVP_FULL	= 1487,
-	ITEM_FIREFIELD_PVP_MEDIUM	= 1488,
-	ITEM_FIREFIELD_PVP_SMALL	= 1489,
+	ITEM_FIREFIELD_PVP_FULL = 1487,
+	ITEM_FIREFIELD_PVP_MEDIUM = 1488,
+	ITEM_FIREFIELD_PVP_SMALL = 1489,
 	ITEM_FIREFIELD_PERSISTENT_FULL = 1492,
 	ITEM_FIREFIELD_PERSISTENT_MEDIUM = 1493,
 	ITEM_FIREFIELD_PERSISTENT_SMALL = 1494,
-	ITEM_FIREFIELD_NOPVP	= 1500,
+	ITEM_FIREFIELD_NOPVP = 1500,
 
-	ITEM_POISONFIELD_PVP	= 1490,
+	ITEM_POISONFIELD_PVP = 1490,
 	ITEM_POISONFIELD_PERSISTENT = 1496,
-	ITEM_POISONFIELD_NOPVP	= 1503,
+	ITEM_POISONFIELD_NOPVP = 1503,
 
-	ITEM_ENERGYFIELD_PVP	= 1491,
+	ITEM_ENERGYFIELD_PVP = 1491,
 	ITEM_ENERGYFIELD_PERSISTENT = 1495,
-	ITEM_ENERGYFIELD_NOPVP	= 1504,
+	ITEM_ENERGYFIELD_NOPVP = 1504,
 
-	ITEM_MAGICWALL		= 1497,
+	ITEM_MAGICWALL = 1497,
 	ITEM_MAGICWALL_PERSISTENT = 1498,
-	ITEM_MAGICWALL_SAFE	= 11098,
+	ITEM_MAGICWALL_SAFE = 11098,
 
-	ITEM_WILDGROWTH		= 1499,
+	ITEM_WILDGROWTH = 1499,
 	ITEM_WILDGROWTH_PERSISTENT = 2721,
-	ITEM_WILDGROWTH_SAFE	= 11099,
+	ITEM_WILDGROWTH_SAFE = 11099,
 
-	ITEM_BAG		= 1987,
+	ITEM_BAG = 1987,
 
-	ITEM_COINS_GOLD		= 2148,
-	ITEM_COINS_PLATINUM	= 2152,
-	ITEM_COINS_CRYSTAL	= 2160,
+	ITEM_GOLD_COIN = 2148,
+	ITEM_PLATINUM_COIN = 2152,
+	ITEM_CRYSTAL_COIN = 2160,
 
-	ITEM_DEPOT		= 2594,
-	ITEM_LOCKER1		= 2589,
-	ITEM_INBOX		= 14404,
-	ITEM_MARKET		= 14405,
+	ITEM_DEPOT = 2594,
+	ITEM_LOCKER1 = 2589,
+	ITEM_INBOX = 14404,
+	ITEM_MARKET = 14405,
 
-	ITEM_MALE_CORPSE	= 3058,
-	ITEM_FEMALE_CORPSE	= 3065,
+	ITEM_MALE_CORPSE = 3058,
+	ITEM_FEMALE_CORPSE = 3065,
 
-	ITEM_FULLSPLASH		= 2016,
-	ITEM_SMALLSPLASH	= 2019,
+	ITEM_FULLSPLASH = 2016,
+	ITEM_SMALLSPLASH = 2019,
 
-	ITEM_PARCEL		= 2595,
-	ITEM_LETTER		= 2597,
-	ITEM_LETTER_STAMPED	= 2598,
-	ITEM_LABEL		= 2599,
+	ITEM_PARCEL = 2595,
+	ITEM_LETTER = 2597,
+	ITEM_LETTER_STAMPED = 2598,
+	ITEM_LABEL = 2599,
 
-	ITEM_AMULETOFLOSS	= 2173,
+	ITEM_AMULETOFLOSS = 2173,
 
-	ITEM_DOCUMENT_RO	= 1968 //read-only
+	ITEM_DOCUMENT_RO = 1968 //read-only
 };
 
 enum PlayerFlags {
-	PlayerFlag_CannotUseCombat = 0,         //2^0 = 1
-	PlayerFlag_CannotAttackPlayer,          //2^1 = 2
-	PlayerFlag_CannotAttackMonster,         //2^2 = 4
-	PlayerFlag_CannotBeAttacked,            //2^3 = 8
-	PlayerFlag_CanConvinceAll,              //2^4 = 16
-	PlayerFlag_CanSummonAll,                //2^5 = 32
-	PlayerFlag_CanIllusionAll,              //2^6 = 64
-	PlayerFlag_CanSenseInvisibility,        //2^7 = 128
-	PlayerFlag_IgnoredByMonsters,           //2^8 = 256
-	PlayerFlag_NotGainInFight,              //2^9 = 512
-	PlayerFlag_HasInfiniteMana,             //2^10 = 1024
-	PlayerFlag_HasInfiniteSoul,             //2^11 = 2048
-	PlayerFlag_HasNoExhaustion,             //2^12 = 4096
-	PlayerFlag_CannotUseSpells,             //2^13 = 8192
-	PlayerFlag_CannotPickupItem,            //2^14 = 16384
-	PlayerFlag_CanAlwaysLogin,              //2^15 = 32768
-	PlayerFlag_CanBroadcast,                //2^16 = 65536
-	PlayerFlag_CanEditHouses,               //2^17 = 131072
-	PlayerFlag_CannotBeBanned,              //2^18 = 262144
-	PlayerFlag_CannotBePushed,              //2^19 = 524288
-	PlayerFlag_HasInfiniteCapacity,         //2^20 = 1048576
-	PlayerFlag_CanPushAllCreatures,         //2^21 = 2097152
-	PlayerFlag_CanTalkRedPrivate,           //2^22 = 4194304
-	PlayerFlag_CanTalkRedChannel,           //2^23 = 8388608
-	PlayerFlag_TalkOrangeHelpChannel,       //2^24 = 16777216
-	PlayerFlag_NotGainExperience,           //2^25 = 33554432
-	PlayerFlag_NotGainMana,                 //2^26 = 67108864
-	PlayerFlag_NotGainHealth,               //2^27 = 134217728
-	PlayerFlag_NotGainSkill,                //2^28 = 268435456
-	PlayerFlag_SetMaxSpeed,                 //2^29 = 536870912
-	PlayerFlag_SpecialVIP,                  //2^30 = 1073741824
-	PlayerFlag_NotGenerateLoot,             //2^31 = 2147483648
-	PlayerFlag_CanTalkRedChannelAnonymous,  //2^32 = 4294967296
-	PlayerFlag_IgnoreProtectionZone,        //2^33 = 8589934592
-	PlayerFlag_IgnoreSpellCheck,            //2^34 = 17179869184
-	PlayerFlag_IgnoreWeaponCheck,           //2^35 = 34359738368
-	PlayerFlag_CannotBeMuted,               //2^36 = 68719476736
-	PlayerFlag_IsAlwaysPremium,             //2^37 = 137438953472
-
-	//add new flags here
-	PlayerFlag_LastFlag
+	PlayerFlag_CannotUseCombat = 1,
+	PlayerFlag_CannotAttackPlayer = 2,
+	PlayerFlag_CannotAttackMonster = 4,
+	PlayerFlag_CannotBeAttacked = 8,
+	PlayerFlag_CanConvinceAll = 16,
+	PlayerFlag_CanSummonAll = 32,
+	PlayerFlag_CanIllusionAll = 64,
+	PlayerFlag_CanSenseInvisibility = 128,
+	PlayerFlag_IgnoredByMonsters = 256,
+	PlayerFlag_NotGainInFight = 512,
+	PlayerFlag_HasInfiniteMana = 1024,
+	PlayerFlag_HasInfiniteSoul = 2048,
+	PlayerFlag_HasNoExhaustion = 4096,
+	PlayerFlag_CannotUseSpells = 8192,
+	PlayerFlag_CannotPickupItem = 16384,
+	PlayerFlag_CanAlwaysLogin = 32768,
+	PlayerFlag_CanBroadcast = 65536,
+	PlayerFlag_CanEditHouses = 131072,
+	PlayerFlag_CannotBeBanned = 262144,
+	PlayerFlag_CannotBePushed = 524288,
+	PlayerFlag_HasInfiniteCapacity = 1048576,
+	PlayerFlag_CanPushAllCreatures = 2097152,
+	PlayerFlag_CanTalkRedPrivate = 4194304,
+	PlayerFlag_CanTalkRedChannel = 8388608,
+	PlayerFlag_TalkOrangeHelpChannel = 16777216,
+	PlayerFlag_NotGainExperience = 33554432,
+	PlayerFlag_NotGainMana = 67108864,
+	PlayerFlag_NotGainHealth = 134217728,
+	PlayerFlag_NotGainSkill = 268435456,
+	PlayerFlag_SetMaxSpeed = 536870912,
+	PlayerFlag_SpecialVIP = 1073741824,
+	PlayerFlag_NotGenerateLoot = 2147483648,
+	PlayerFlag_CanTalkRedChannelAnonymous = 4294967296,
+	PlayerFlag_IgnoreProtectionZone = 8589934592,
+	PlayerFlag_IgnoreSpellCheck = 17179869184,
+	PlayerFlag_IgnoreWeaponCheck = 34359738368,
+	PlayerFlag_CannotBeMuted = 68719476736,
+	PlayerFlag_IsAlwaysPremium = 137438953472
 };
 
 #define CHANNEL_GUILD 0x00

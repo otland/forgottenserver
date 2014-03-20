@@ -327,7 +327,7 @@ class Player : public Creature, public Cylinder
 		}
 
 		bool hasFlag(PlayerFlags value) const {
-			return (0 != (group->flags & ((uint64_t)1 << value)));
+			return (group->flags & value) != 0;
 		}
 
 		BedItem* getBedItem() {

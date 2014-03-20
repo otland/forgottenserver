@@ -1209,13 +1209,13 @@ bool Item::canDecay() const
 int32_t Item::getWorth() const
 {
 	switch (id) {
-		case ITEM_COINS_GOLD:
+		case ITEM_GOLD_COIN:
 			return count;
 
-		case ITEM_COINS_PLATINUM:
+		case ITEM_PLATINUM_COIN:
 			return count * 100;
 
-		case ITEM_COINS_CRYSTAL:
+		case ITEM_CRYSTAL_COIN:
 			return count * 10000;
 
 		default:

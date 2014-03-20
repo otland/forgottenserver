@@ -1669,6 +1669,73 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_TYPE_KEY)
 	registerEnum(ITEM_TYPE_RUNE)
 
+	registerEnum(ITEM_GOLD_COIN)
+	registerEnum(ITEM_PLATINUM_COIN)
+	registerEnum(ITEM_CRYSTAL_COIN)
+	registerEnum(ITEM_PARCEL)
+	registerEnum(ITEM_LABEL)
+	registerEnum(ITEM_FIREFIELD_PVP_FULL)
+	registerEnum(ITEM_FIREFIELD_PVP_MEDIUM)
+	registerEnum(ITEM_FIREFIELD_PVP_SMALL)
+	registerEnum(ITEM_FIREFIELD_PERSISTENT_FULL)
+	registerEnum(ITEM_FIREFIELD_PERSISTENT_MEDIUM)
+	registerEnum(ITEM_FIREFIELD_PERSISTENT_SMALL)
+	registerEnum(ITEM_FIREFIELD_NOPVP)
+	registerEnum(ITEM_POISONFIELD_PVP)
+	registerEnum(ITEM_POISONFIELD_PERSISTENT)
+	registerEnum(ITEM_POISONFIELD_NOPVP)
+	registerEnum(ITEM_ENERGYFIELD_PVP)
+	registerEnum(ITEM_ENERGYFIELD_PERSISTENT)
+	registerEnum(ITEM_ENERGYFIELD_NOPVP)
+	registerEnum(ITEM_MAGICWALL)
+	registerEnum(ITEM_MAGICWALL_PERSISTENT)
+	registerEnum(ITEM_MAGICWALL_SAFE)
+	registerEnum(ITEM_WILDGROWTH)
+	registerEnum(ITEM_WILDGROWTH_PERSISTENT)
+	registerEnum(ITEM_WILDGROWTH_SAFE)
+
+	registerEnum(PlayerFlag_CannotUseCombat)
+	registerEnum(PlayerFlag_CannotAttackPlayer)
+	registerEnum(PlayerFlag_CannotAttackMonster)
+	registerEnum(PlayerFlag_CannotBeAttacked)
+	registerEnum(PlayerFlag_CanConvinceAll)
+	registerEnum(PlayerFlag_CanSummonAll)
+	registerEnum(PlayerFlag_CanIllusionAll)
+	registerEnum(PlayerFlag_CanSenseInvisibility)
+	registerEnum(PlayerFlag_IgnoredByMonsters)
+	registerEnum(PlayerFlag_NotGainInFight)
+	registerEnum(PlayerFlag_HasInfiniteMana)
+	registerEnum(PlayerFlag_HasInfiniteSoul)
+	registerEnum(PlayerFlag_HasNoExhaustion)
+	registerEnum(PlayerFlag_CannotUseSpells)
+	registerEnum(PlayerFlag_CannotPickupItem)
+	registerEnum(PlayerFlag_CanAlwaysLogin)
+	registerEnum(PlayerFlag_CanBroadcast)
+	registerEnum(PlayerFlag_CanEditHouses)
+	registerEnum(PlayerFlag_CannotBeBanned)
+	registerEnum(PlayerFlag_CannotBePushed)
+	registerEnum(PlayerFlag_HasInfiniteCapacity)
+	registerEnum(PlayerFlag_CanPushAllCreatures)
+	registerEnum(PlayerFlag_CanTalkRedPrivate)
+	registerEnum(PlayerFlag_CanTalkRedChannel)
+	registerEnum(PlayerFlag_TalkOrangeHelpChannel)
+	registerEnum(PlayerFlag_NotGainExperience)
+	registerEnum(PlayerFlag_NotGainMana)
+	registerEnum(PlayerFlag_NotGainHealth)
+	registerEnum(PlayerFlag_NotGainSkill)
+	registerEnum(PlayerFlag_SetMaxSpeed)
+	registerEnum(PlayerFlag_SpecialVIP)
+	registerEnum(PlayerFlag_NotGenerateLoot)
+	registerEnum(PlayerFlag_CanTalkRedChannelAnonymous)
+	registerEnum(PlayerFlag_IgnoreProtectionZone)
+	registerEnum(PlayerFlag_IgnoreSpellCheck)
+	registerEnum(PlayerFlag_IgnoreWeaponCheck)
+	registerEnum(PlayerFlag_CannotBeMuted)
+	registerEnum(PlayerFlag_IsAlwaysPremium)
+
+	registerEnum(PLAYERSEX_FEMALE)
+	registerEnum(PLAYERSEX_MALE)
+
 	registerEnum(SKILL_FIST)
 	registerEnum(SKILL_CLUB)
 	registerEnum(SKILL_SWORD)
@@ -1758,7 +1825,11 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(WEAPON_DISTANCE)
 	registerEnum(WEAPON_WAND)
 	registerEnum(WEAPON_AMMO)
-	
+
+	registerEnum(WORLD_TYPE_NO_PVP)
+	registerEnum(WORLD_TYPE_PVP)
+	registerEnum(WORLD_TYPE_PVP_ENFORCED)
+
 	// Use with container:addItem, container:addItemEx and possibly other functions.
 	registerEnum(FLAG_NOLIMIT)
 	registerEnum(FLAG_IGNOREBLOCKITEM)
@@ -2685,14 +2756,9 @@ int32_t LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 {
 	//getPlayerFlagValue(cid, flag)
 	Player* player = getPlayer(L, 1);
-	uint32_t flagindex = getNumber<uint32_t>(L, 2);
 	if (player) {
-		if (flagindex < PlayerFlag_LastFlag) {
-			pushBoolean(L, player->hasFlag((PlayerFlags)flagindex));
-		} else {
-			reportErrorFunc("No valid flag index.");
-			pushBoolean(L, false);
-		}
+		uint64_t flag = getNumber<uint64_t>(L, 2);
+		pushBoolean(L, player->hasFlag(static_cast<PlayerFlags>(flag)));
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);

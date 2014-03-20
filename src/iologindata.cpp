@@ -931,7 +931,7 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 		flags = 0;
 	}
 
-	specialVip = (0 != (flags & ((uint64_t)1 << PlayerFlag_SpecialVIP)));
+	specialVip = (flags & PlayerFlag_SpecialVIP) != 0;
 	return true;
 }
 

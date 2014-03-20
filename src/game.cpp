@@ -1711,7 +1711,7 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 	uint32_t crys = money / 10000;
 	money -= crys * 10000;
 	while (crys > 0) {
-		Item* remaindItem = Item::CreateItem(ITEM_COINS_CRYSTAL, std::min<int32_t>(100, crys));
+		Item* remaindItem = Item::CreateItem(ITEM_CRYSTAL_COIN, std::min<int32_t>(100, crys));
 
 		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
 		if (ret != RET_NOERROR) {
@@ -1723,7 +1723,7 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 
 	uint16_t plat = money / 100;
 	if (plat != 0) {
-		Item* remaindItem = Item::CreateItem(ITEM_COINS_PLATINUM, plat);
+		Item* remaindItem = Item::CreateItem(ITEM_PLATINUM_COIN, plat);
 
 		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
 		if (ret != RET_NOERROR) {
@@ -1734,7 +1734,7 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 	}
 
 	if (money != 0) {
-		Item* remaindItem = Item::CreateItem(ITEM_COINS_GOLD, money);
+		Item* remaindItem = Item::CreateItem(ITEM_GOLD_COIN, money);
 
 		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
 		if (ret != RET_NOERROR) {
