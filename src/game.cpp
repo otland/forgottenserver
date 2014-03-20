@@ -3242,9 +3242,9 @@ void Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMo
 	player->setSecureMode(secureMode);
 }
 
-void Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
+void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 {
-	if (vip_name.length() > 20) {
+	if (name.length() > 20) {
 		return;
 	}
 
@@ -3253,32 +3253,34 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& vip_name)
 		return;
 	}
 
-	std::string real_name;
-	real_name = vip_name;
-	uint32_t guid;
-	bool specialVip;
-
-	if (!IOLoginData::getGuidByNameEx(guid, specialVip, real_name)) {
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with that name does not exist.");
-		return;
-	}
-
-	if (specialVip && !player->hasFlag(PlayerFlag_SpecialVIP)) {
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.");
-		return;
-	}
-
-	VipStatus_t status;
-	Player* vipPlayer = getPlayerByName(real_name);
+	Player* vipPlayer = getPlayerByName(name);
 	if (!vipPlayer) {
-		status = VIPSTATUS_OFFLINE;
-	} else if (player->isAccessPlayer() || !vipPlayer->isInGhostMode()) {
-		status = VIPSTATUS_ONLINE;
-	} else {
-		status = VIPSTATUS_OFFLINE;
-	}
+		uint32_t guid;
+		bool specialVip;
+		std::string formattedName = name;
+		if (!IOLoginData::getGuidByNameEx(guid, specialVip, formattedName)) {
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with that name does not exist.");
+			return;
+		}
 
-	player->addVIP(guid, real_name, status);
+		if (specialVip && !player->hasFlag(PlayerFlag_SpecialVIP)) {
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.");
+			return;
+		}
+
+		player->addVIP(guid, formattedName, VIPSTATUS_OFFLINE);
+	} else {
+		if (vipPlayer->hasFlag(PlayerFlag_SpecialVIP) && !player->hasFlag(PlayerFlag_SpecialVIP)) {
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.");
+			return;
+		}
+
+		if (!vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
+			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_ONLINE);
+		} else {
+			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_OFFLINE);
+		}
+	}
 }
 
 void Game::playerRequestRemoveVip(uint32_t playerId, uint32_t guid)
