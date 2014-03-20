@@ -1668,7 +1668,17 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_TYPE_BED)
 	registerEnum(ITEM_TYPE_KEY)
 	registerEnum(ITEM_TYPE_RUNE)
-	
+
+	registerEnum(SKILL_FIST)
+	registerEnum(SKILL_CLUB)
+	registerEnum(SKILL_SWORD)
+	registerEnum(SKILL_AXE)
+	registerEnum(SKILL_DISTANCE)
+	registerEnum(SKILL_SHIELD)
+	registerEnum(SKILL_FISHING)
+	registerEnum(SKILL_MAGLEVEL)
+	registerEnum(SKILLVALUE_LEVEL)
+
 	registerEnum(TALKTYPE_SAY)
 	registerEnum(TALKTYPE_WHISPER)
 	registerEnum(TALKTYPE_YELL)
@@ -8518,7 +8528,7 @@ int32_t LuaScriptInterface::luaPlayerGetSkillLevel(lua_State* L)
 	skills_t skillType = static_cast<skills_t>(getNumber<int64_t>(L, 2));
 	Player* player = getUserdata<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
-		lua_pushnumber(L, player->skills[skillType][SKILL_LEVEL]);
+		lua_pushnumber(L, player->skills[skillType][SKILLVALUE_LEVEL]);
 	} else {
 		lua_pushnil(L);
 	}
@@ -8531,7 +8541,7 @@ int32_t LuaScriptInterface::luaPlayerGetEffectiveSkillLevel(lua_State* L)
 	skills_t skillType = static_cast<skills_t>(getNumber<int64_t>(L, 2));
 	Player* player = getUserdata<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
-		lua_pushnumber(L, player->getSkill(skillType, SKILL_LEVEL));
+		lua_pushnumber(L, player->getSkill(skillType, SKILLVALUE_LEVEL));
 	} else {
 		lua_pushnil(L);
 	}
@@ -8544,7 +8554,7 @@ int32_t LuaScriptInterface::luaPlayerGetSkillPercent(lua_State* L)
 	skills_t skillType = static_cast<skills_t>(getNumber<int64_t>(L, 2));
 	Player* player = getUserdata<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
-		lua_pushnumber(L, player->skills[skillType][SKILL_PERCENT]);
+		lua_pushnumber(L, player->skills[skillType][SKILLVALUE_PERCENT]);
 	} else {
 		lua_pushnil(L);
 	}
@@ -8557,7 +8567,7 @@ int32_t LuaScriptInterface::luaPlayerGetSkillTries(lua_State* L)
 	skills_t skillType = static_cast<skills_t>(getNumber<int64_t>(L, 2));
 	Player* player = getUserdata<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
-		lua_pushnumber(L, player->skills[skillType][SKILL_TRIES]);
+		lua_pushnumber(L, player->skills[skillType][SKILLVALUE_TRIES]);
 	} else {
 		lua_pushnil(L);
 	}

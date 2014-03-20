@@ -519,7 +519,7 @@ void ConditionAttributes::updatePercentSkills(Player* player)
 			continue;
 		}
 
-		int32_t currSkill = player->getSkill((skills_t)i, SKILL_LEVEL);
+		int32_t currSkill = player->getSkill((skills_t)i, SKILLVALUE_LEVEL);
 		skills[i] = (int32_t)(currSkill * ((skillsPercent[i] - 100) / 100.f));
 	}
 }
@@ -638,12 +638,12 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 		}
 
 		case CONDITION_PARAM_SKILL_DISTANCE: {
-			skills[SKILL_DIST] = value;
+			skills[SKILL_DISTANCE] = value;
 			return true;
 		}
 
 		case CONDITION_PARAM_SKILL_DISTANCEPERCENT: {
-			skillsPercent[SKILL_DIST] = value;
+			skillsPercent[SKILL_DISTANCE] = value;
 			return true;
 		}
 
@@ -658,12 +658,12 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 		}
 
 		case CONDITION_PARAM_SKILL_FISHING: {
-			skills[SKILL_FISH] = value;
+			skills[SKILL_FISHING] = value;
 			return true;
 		}
 
 		case CONDITION_PARAM_SKILL_FISHINGPERCENT: {
-			skillsPercent[SKILL_FISH] = value;
+			skillsPercent[SKILL_FISHING] = value;
 			return true;
 		}
 

@@ -731,9 +731,9 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 		} else if (tmpStrValue == "skillclub") {
 			it.getAbilities()->skills[SKILL_CLUB] = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "skilldist") {
-			it.getAbilities()->skills[SKILL_DIST] = pugi::cast<int32_t>(valueAttribute.value());
+			it.getAbilities()->skills[SKILL_DISTANCE] = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "skillfish") {
-			it.getAbilities()->skills[SKILL_FISH] = pugi::cast<int32_t>(valueAttribute.value());
+			it.getAbilities()->skills[SKILL_FISHING] = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "skillshield") {
 			it.getAbilities()->skills[SKILL_SHIELD] = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "skillfist") {

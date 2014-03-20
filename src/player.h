@@ -48,9 +48,9 @@ class Bed;
 class Guild;
 
 enum skillsid_t {
-	SKILL_LEVEL = 0,
-	SKILL_TRIES = 1,
-	SKILL_PERCENT = 2
+	SKILLVALUE_LEVEL = 0,
+	SKILLVALUE_TRIES = 1,
+	SKILLVALUE_PERCENT = 2
 };
 
 enum playerinfo_t {
@@ -523,7 +523,7 @@ class Player : public Creature, public Cylinder
 		}
 
 		int32_t getBaseSkill(skills_t skill) const {
-			return skills[skill][SKILL_LEVEL];
+			return skills[skill][SKILLVALUE_LEVEL];
 		}
 
 		void setVarSkill(skills_t skill, int32_t modifier) {

@@ -2952,33 +2952,33 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 {
 	msg.AddByte(0xA1);
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_FIST, SKILL_LEVEL)));
+	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_FIST, SKILLVALUE_LEVEL)));
 	msg.add<uint16_t>(player->getBaseSkill(SKILL_FIST));
-	msg.AddByte(player->getSkill(SKILL_FIST, SKILL_PERCENT));
+	msg.AddByte(player->getSkill(SKILL_FIST, SKILLVALUE_PERCENT));
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_CLUB, SKILL_LEVEL)));
+	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_CLUB, SKILLVALUE_LEVEL)));
 	msg.add<uint16_t>(player->getBaseSkill(SKILL_CLUB));
-	msg.AddByte(player->getSkill(SKILL_CLUB, SKILL_PERCENT));
+	msg.AddByte(player->getSkill(SKILL_CLUB, SKILLVALUE_PERCENT));
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_SWORD, SKILL_LEVEL)));
+	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_SWORD, SKILLVALUE_LEVEL)));
 	msg.add<uint16_t>(player->getBaseSkill(SKILL_SWORD));
-	msg.AddByte(player->getSkill(SKILL_SWORD, SKILL_PERCENT));
+	msg.AddByte(player->getSkill(SKILL_SWORD, SKILLVALUE_PERCENT));
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_AXE, SKILL_LEVEL)));
+	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_AXE, SKILLVALUE_LEVEL)));
 	msg.add<uint16_t>(player->getBaseSkill(SKILL_AXE));
-	msg.AddByte(player->getSkill(SKILL_AXE, SKILL_PERCENT));
+	msg.AddByte(player->getSkill(SKILL_AXE, SKILLVALUE_PERCENT));
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_DIST, SKILL_LEVEL)));
-	msg.add<uint16_t>(player->getBaseSkill(SKILL_DIST));
-	msg.AddByte(player->getSkill(SKILL_DIST, SKILL_PERCENT));
+	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_DISTANCE, SKILLVALUE_LEVEL)));
+	msg.add<uint16_t>(player->getBaseSkill(SKILL_DISTANCE));
+	msg.AddByte(player->getSkill(SKILL_DISTANCE, SKILLVALUE_PERCENT));
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_SHIELD, SKILL_LEVEL)));
+	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_SHIELD, SKILLVALUE_LEVEL)));
 	msg.add<uint16_t>(player->getBaseSkill(SKILL_SHIELD));
-	msg.AddByte(player->getSkill(SKILL_SHIELD, SKILL_PERCENT));
+	msg.AddByte(player->getSkill(SKILL_SHIELD, SKILLVALUE_PERCENT));
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_FISH, SKILL_LEVEL)));
-	msg.add<uint16_t>(player->getBaseSkill(SKILL_FISH));
-	msg.AddByte(player->getSkill(SKILL_FISH, SKILL_PERCENT));
+	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getSkill(SKILL_FISHING, SKILLVALUE_LEVEL)));
+	msg.add<uint16_t>(player->getBaseSkill(SKILL_FISHING));
+	msg.AddByte(player->getSkill(SKILL_FISHING, SKILLVALUE_PERCENT));
 }
 
 void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,

@@ -377,7 +377,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 	}
 
 	float attackFactor = player->getAttackFactor();
-	int32_t attackSkill = player->getSkill(SKILL_FIST, SKILL_LEVEL);
+	int32_t attackSkill = player->getSkill(SKILL_FIST, SKILLVALUE_LEVEL);
 	int32_t attackValue = 7;
 
 	int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
@@ -731,7 +731,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 	if (hitChance == 0) {
 		//hit chance is based on distance to target and distance skill
-		uint32_t skill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
+		uint32_t skill = player->getSkill(SKILL_DISTANCE, SKILLVALUE_LEVEL);
 		const Position& playerPos = player->getPosition();
 		const Position& targetPos = target->getPosition();
 		uint32_t distance = std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos));
@@ -893,7 +893,7 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 		}
 	}
 
-	int32_t attackSkill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
+	int32_t attackSkill = player->getSkill(SKILL_DISTANCE, SKILLVALUE_LEVEL);
 	float attackFactor = player->getAttackFactor();
 
 	int32_t minValue = 0;
@@ -920,7 +920,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 		}
 	}
 
-	int32_t attackSkill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
+	int32_t attackSkill = player->getSkill(SKILL_DISTANCE, SKILLVALUE_LEVEL);
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = int32_t(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->distDamageMultiplier);
@@ -943,7 +943,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 
 bool WeaponDistance::getSkillType(const Player* player, const Item*, skills_t& skill, uint32_t& skillpoint) const
 {
-	skill = SKILL_DIST;
+	skill = SKILL_DISTANCE;
 
 	if (player->getAddAttackSkill()) {
 		switch (player->getLastAttackBlockType()) {

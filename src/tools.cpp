@@ -682,19 +682,19 @@ std::string getSkillName(uint16_t skillid)
 		case SKILL_AXE:
 			return "axe fighting";
 
-		case SKILL_DIST:
+		case SKILL_DISTANCE:
 			return "distance fighting";
 
 		case SKILL_SHIELD:
 			return "shielding";
 
-		case SKILL_FISH:
+		case SKILL_FISHING:
 			return "fishing";
 
-		case SKILL__MAGLEVEL:
+		case SKILL_MAGLEVEL:
 			return "magic level";
 
-		case SKILL__LEVEL:
+		case SKILL_LEVEL:
 			return "level";
 
 		default:

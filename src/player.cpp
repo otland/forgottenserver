@@ -142,9 +142,9 @@ Player::Player(ProtocolGame* p) :
 	}
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
-		skills[i][SKILL_LEVEL] = 10;
-		skills[i][SKILL_TRIES] = 0;
-		skills[i][SKILL_PERCENT] = 0;
+		skills[i][SKILLVALUE_LEVEL] = 10;
+		skills[i][SKILLVALUE_TRIES] = 0;
+		skills[i][SKILLVALUE_PERCENT] = 0;
 	}
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
@@ -414,7 +414,7 @@ WeaponType_t Player::getWeaponType()
 int32_t Player::getWeaponSkill(const Item* item) const
 {
 	if (!item) {
-		return getSkill(SKILL_FIST, SKILL_LEVEL);
+		return getSkill(SKILL_FIST, SKILLVALUE_LEVEL);
 	}
 
 	int32_t attackSkill;
@@ -422,22 +422,22 @@ int32_t Player::getWeaponSkill(const Item* item) const
 	WeaponType_t weaponType = item->getWeaponType();
 	switch (weaponType) {
 		case WEAPON_SWORD: {
-			attackSkill = getSkill(SKILL_SWORD, SKILL_LEVEL);
+			attackSkill = getSkill(SKILL_SWORD, SKILLVALUE_LEVEL);
 			break;
 		}
 
 		case WEAPON_CLUB: {
-			attackSkill = getSkill(SKILL_CLUB, SKILL_LEVEL);
+			attackSkill = getSkill(SKILL_CLUB, SKILLVALUE_LEVEL);
 			break;
 		}
 
 		case WEAPON_AXE: {
-			attackSkill = getSkill(SKILL_AXE, SKILL_LEVEL);
+			attackSkill = getSkill(SKILL_AXE, SKILLVALUE_LEVEL);
 			break;
 		}
 
 		case WEAPON_DISTANCE: {
-			attackSkill = getSkill(SKILL_DIST, SKILL_LEVEL);
+			attackSkill = getSkill(SKILL_DISTANCE, SKILLVALUE_LEVEL);
 			break;
 		}
 
@@ -512,7 +512,7 @@ int32_t Player::getDefense() const
 
 	if (shield && shield->getDefense() >= defenseValue) {
 		defenseValue = baseDefense + shield->getDefense() + extraDefense;
-		defenseSkill = getSkill(SKILL_SHIELD, SKILL_LEVEL);
+		defenseSkill = getSkill(SKILL_SHIELD, SKILLVALUE_LEVEL);
 	}
 
 	if (defenseSkill == 0) {
@@ -616,7 +616,7 @@ int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 int32_t Player::getSkill(skills_t skilltype, skillsid_t skillinfo) const
 {
 	int32_t n = skills[skilltype][skillinfo];
-	if (skillinfo == SKILL_LEVEL) {
+	if (skillinfo == SKILLVALUE_LEVEL) {
 		n += varSkills[skilltype];
 	}
 	return std::max<int32_t>(0, n);
@@ -628,46 +628,46 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 		return;
 	}
 
-	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL]);
-	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1);
+	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]);
+	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL] + 1);
 	if (currReqTries >= nextReqTries) {
 		//player has reached max skill
 		return;
 	}
 
 	bool sendUpdateSkills = false;
-	while ((skills[skill][SKILL_TRIES] + count) >= nextReqTries) {
-		count -= nextReqTries - skills[skill][SKILL_TRIES];
-		skills[skill][SKILL_LEVEL]++;
-		skills[skill][SKILL_TRIES] = 0;
-		skills[skill][SKILL_PERCENT] = 0;
+	while ((skills[skill][SKILLVALUE_TRIES] + count) >= nextReqTries) {
+		count -= nextReqTries - skills[skill][SKILLVALUE_TRIES];
+		skills[skill][SKILLVALUE_LEVEL]++;
+		skills[skill][SKILLVALUE_TRIES] = 0;
+		skills[skill][SKILLVALUE_PERCENT] = 0;
 
 		std::ostringstream ss;
-		ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILL_LEVEL] << '.';
+		ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILLVALUE_LEVEL] << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 
-		g_creatureEvents->playerAdvance(this, skill, (skills[skill][SKILL_LEVEL] - 1), skills[skill][SKILL_LEVEL]);
+		g_creatureEvents->playerAdvance(this, skill, (skills[skill][SKILLVALUE_LEVEL] - 1), skills[skill][SKILLVALUE_LEVEL]);
 
 		sendUpdateSkills = true;
 		currReqTries = nextReqTries;
-		nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1);
+		nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL] + 1);
 		if (currReqTries >= nextReqTries) {
 			count = 0;
 			break;
 		}
 	}
 
-	skills[skill][SKILL_TRIES] += count;
+	skills[skill][SKILLVALUE_TRIES] += count;
 
 	uint32_t newPercent;
 	if (nextReqTries > currReqTries) {
-		newPercent = Player::getPercentLevel(skills[skill][SKILL_TRIES], nextReqTries);
+		newPercent = Player::getPercentLevel(skills[skill][SKILLVALUE_TRIES], nextReqTries);
 	} else {
 		newPercent = 0;
 	}
 
-	if (skills[skill][SKILL_PERCENT] != newPercent) {
-		skills[skill][SKILL_PERCENT] = newPercent;
+	if (skills[skill][SKILLVALUE_PERCENT] != newPercent) {
+		skills[skill][SKILLVALUE_PERCENT] = newPercent;
 		sendUpdateSkills = true;
 	}
 
@@ -1775,7 +1775,7 @@ void Player::addManaSpent(uint64_t amount)
 		ss << "You advanced to magic level " << magLevel << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 
-		g_creatureEvents->playerAdvance(this, SKILL__MAGLEVEL, magLevel - 1, magLevel);
+		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, magLevel - 1, magLevel);
 
 		sendUpdateStats = true;
 		currReqMana = nextReqMana;
@@ -1882,7 +1882,7 @@ void Player::addExperience(uint64_t exp, bool sendText/* = false*/, bool applySt
 			party->updateSharedExperience();
 		}
 
-		g_creatureEvents->playerAdvance(this, SKILL__LEVEL, prevLevel, level);
+		g_creatureEvents->playerAdvance(this, SKILL_LEVEL, prevLevel, level);
 
 		std::ostringstream ss;
 		ss << "You advanced from Level " << prevLevel << " to Level " << level << '.';
@@ -2091,29 +2091,29 @@ void Player::death(Creature* _lastHitCreature)
 		//Skill loss
 		for (int16_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) { //for each skill
 			uint32_t sumSkillTries = 0;
-			for (uint32_t c = 11; c <= skills[i][SKILL_LEVEL]; ++c) { //sum up all required tries for all skill levels
+			for (uint32_t c = 11; c <= skills[i][SKILLVALUE_LEVEL]; ++c) { //sum up all required tries for all skill levels
 				sumSkillTries += vocation->getReqSkillTries(i, c);
 			}
 
-			sumSkillTries += skills[i][SKILL_TRIES];
+			sumSkillTries += skills[i][SKILLVALUE_TRIES];
 
 			uint32_t lostSkillTries = (uint32_t)(sumSkillTries * deathLossPercent);
-			while (lostSkillTries > skills[i][SKILL_TRIES]) {
-				lostSkillTries -= skills[i][SKILL_TRIES];
+			while (lostSkillTries > skills[i][SKILLVALUE_TRIES]) {
+				lostSkillTries -= skills[i][SKILLVALUE_TRIES];
 
-				if (skills[i][SKILL_LEVEL] <= 10) {
-					skills[i][SKILL_LEVEL] = 10;
-					skills[i][SKILL_TRIES] = 0;
+				if (skills[i][SKILLVALUE_LEVEL] <= 10) {
+					skills[i][SKILLVALUE_LEVEL] = 10;
+					skills[i][SKILLVALUE_TRIES] = 0;
 					lostSkillTries = 0;
 					break;
 				}
 
-				skills[i][SKILL_TRIES] = vocation->getReqSkillTries(i, skills[i][SKILL_LEVEL]);
-				skills[i][SKILL_LEVEL]--;
+				skills[i][SKILLVALUE_TRIES] = vocation->getReqSkillTries(i, skills[i][SKILLVALUE_LEVEL]);
+				skills[i][SKILLVALUE_LEVEL]--;
 			}
 
-			skills[i][SKILL_TRIES] = std::max<int32_t>(0, skills[i][SKILL_TRIES] - lostSkillTries);
-			skills[i][SKILL_PERCENT] = Player::getPercentLevel(skills[i][SKILL_TRIES], vocation->getReqSkillTries(i, skills[i][SKILL_LEVEL]));
+			skills[i][SKILLVALUE_TRIES] = std::max<int32_t>(0, skills[i][SKILLVALUE_TRIES] - lostSkillTries);
+			skills[i][SKILLVALUE_PERCENT] = Player::getPercentLevel(skills[i][SKILLVALUE_TRIES], vocation->getReqSkillTries(i, skills[i][SKILLVALUE_LEVEL]));
 		}
 
 		//
@@ -4414,7 +4414,7 @@ void Player::dismount()
 
 bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 {
-	if (tries <= 0 || skill == SKILL__LEVEL) {
+	if (tries <= 0 || skill == SKILL_LEVEL) {
 		return false;
 	}
 
@@ -4422,7 +4422,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 	uint32_t oldSkillValue, newSkillValue;
 	long double oldPercentToNextLevel, newPercentToNextLevel;
 
-	if (skill == SKILL__MAGLEVEL) {
+	if (skill == SKILL_MAGLEVEL) {
 		uint64_t currReqMana = vocation->getReqMana(magLevel);
 		uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
 
@@ -4442,7 +4442,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 			magLevel++;
 			manaSpent = 0;
 
-			g_creatureEvents->playerAdvance(this, SKILL__MAGLEVEL, magLevel - 1, magLevel);
+			g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, magLevel - 1, magLevel);
 
 			sendUpdate = true;
 			currReqMana = nextReqMana;
@@ -4479,31 +4479,31 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 
 		newSkillValue = magLevel;
 	} else {
-		uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL]);
-		uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1);
+		uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]);
+		uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL] + 1);
 
 		if (currReqTries >= nextReqTries) {
 			return false;
 		}
 
-		oldSkillValue = skills[skill][SKILL_LEVEL];
-		oldPercentToNextLevel = (long double)(skills[skill][SKILL_TRIES] * 100) / nextReqTries;
+		oldSkillValue = skills[skill][SKILLVALUE_LEVEL];
+		oldPercentToNextLevel = (long double)(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
 
 		tries *= g_config.getNumber(ConfigManager::RATE_SKILL);
-		uint32_t currSkillLevel = skills[skill][SKILL_LEVEL];
+		uint32_t currSkillLevel = skills[skill][SKILLVALUE_LEVEL];
 
-		while ((skills[skill][SKILL_TRIES] + tries) >= nextReqTries) {
-			tries -= nextReqTries - skills[skill][SKILL_TRIES];
+		while ((skills[skill][SKILLVALUE_TRIES] + tries) >= nextReqTries) {
+			tries -= nextReqTries - skills[skill][SKILLVALUE_TRIES];
 
-			skills[skill][SKILL_LEVEL]++;
-			skills[skill][SKILL_TRIES] = 0;
-			skills[skill][SKILL_PERCENT] = 0;
+			skills[skill][SKILLVALUE_LEVEL]++;
+			skills[skill][SKILLVALUE_TRIES] = 0;
+			skills[skill][SKILLVALUE_PERCENT] = 0;
 
-			g_creatureEvents->playerAdvance(this, skill, (skills[skill][SKILL_LEVEL] - 1), skills[skill][SKILL_LEVEL]);
+			g_creatureEvents->playerAdvance(this, skill, (skills[skill][SKILLVALUE_LEVEL] - 1), skills[skill][SKILLVALUE_LEVEL]);
 
 			sendUpdate = true;
 			currReqTries = nextReqTries;
-			nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1);
+			nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL] + 1);
 
 			if (currReqTries >= nextReqTries) {
 				tries = 0;
@@ -4511,30 +4511,30 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 			}
 		}
 
-		skills[skill][SKILL_TRIES] += tries;
+		skills[skill][SKILLVALUE_TRIES] += tries;
 
-		if (currSkillLevel != skills[skill][SKILL_LEVEL]) {
+		if (currSkillLevel != skills[skill][SKILLVALUE_LEVEL]) {
 			std::ostringstream ss;
-			ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILL_LEVEL] << '.';
+			ss << "You advanced to " << getSkillName(skill) << " level " << skills[skill][SKILLVALUE_LEVEL] << '.';
 			sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 		}
 
 		uint32_t newPercent;
 
 		if (nextReqTries > currReqTries) {
-			newPercent = Player::getPercentLevel(skills[skill][SKILL_TRIES], nextReqTries);
-			newPercentToNextLevel = (long double)(skills[skill][SKILL_TRIES] * 100) / nextReqTries;
+			newPercent = Player::getPercentLevel(skills[skill][SKILLVALUE_TRIES], nextReqTries);
+			newPercentToNextLevel = (long double)(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
 		} else {
 			newPercent = 0;
 			newPercentToNextLevel = 0;
 		}
 
-		if (skills[skill][SKILL_PERCENT] != newPercent) {
-			skills[skill][SKILL_PERCENT] = newPercent;
+		if (skills[skill][SKILLVALUE_PERCENT] != newPercent) {
+			skills[skill][SKILLVALUE_PERCENT] = newPercent;
 			sendUpdate = true;
 		}
 
-		newSkillValue = skills[skill][SKILL_LEVEL];
+		newSkillValue = skills[skill][SKILLVALUE_LEVEL];
 	}
 
 	std::ostringstream ss;
