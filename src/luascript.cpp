@@ -5652,7 +5652,13 @@ int32_t LuaScriptInterface::luaTileGetItemById(lua_State* L)
 		subType = getNumber<int32_t>(L, 3);
 	}
 
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
+
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile) {
 		Item* item = g_game.findItemOfType(tile, itemId, false, subType);
@@ -5759,7 +5765,13 @@ int32_t LuaScriptInterface::luaTileGetItemCountById(lua_State* L)
 			subType = -1;
 		}
 		
-		const uint16_t itemId = getNumber<uint16_t>(L, 2);
+		uint16_t itemId;
+		if (isNumber(L, 2)) {
+			itemId = getNumber<uint16_t>(L, 2);
+		} else {
+			itemId = Item::items.getItemIdByName(getString(L, 2));
+		}
+
 		lua_pushnumber(L, tile->__getItemTypeCount(itemId, subType));
 	} else {
 		lua_pushnil(L);
@@ -6229,7 +6241,13 @@ int32_t LuaScriptInterface::luaNetworkMessageAddItemId(lua_State* L)
 	if (getStackTop(L) >= 3) {
 		protocolVersion = getNumber<uint16_t>(L, 3);
 	}*/
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
+
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
 		message->AddItemId(itemId);
@@ -6997,7 +7015,13 @@ int32_t LuaScriptInterface::luaItemTransform(lua_State* L)
 		subType = getNumber<int32_t>(L, 3);
 	}
 
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
+
 	Item** itemPtr = getRawUserdata<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
@@ -7244,7 +7268,13 @@ int32_t LuaScriptInterface::luaContainerAddItem(lua_State* L)
 		subType = 1;
 	}
 
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
+
 	Container* container = getUserdata<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
@@ -7326,7 +7356,13 @@ int32_t LuaScriptInterface::luaContainerGetItemCountById(lua_State* L)
 			subType = -1;
 		}
 		
-		const uint16_t itemId = getNumber<uint16_t>(L, 2);
+		uint16_t itemId;
+		if (isNumber(L, 2)) {
+			itemId = getNumber<uint16_t>(L, 2);
+		} else {
+			itemId = Item::items.getItemIdByName(getString(L, 2));
+		}
+
 		lua_pushnumber(L, container->__getItemTypeCount(itemId, subType));
 	} else {
 		lua_pushnil(L);
@@ -8670,7 +8706,14 @@ int32_t LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 	if (getStackTop(L) >= 3) {
 		subType = getNumber<int32_t>(L, 3);
 	}
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
+
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->__getItemTypeCount(itemId, subType));
@@ -8688,7 +8731,14 @@ int32_t LuaScriptInterface::luaPlayerGetItemById(lua_State* L)
 		subType = getNumber<int32_t>(L, 4);
 	}
 	bool deepSearch = getBoolean(L, 3);
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
+
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		Item* item = g_game.findItemOfType(player, itemId, deepSearch, subType);
@@ -9077,7 +9127,13 @@ int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 		count = getNumber<int32_t>(L, 3);
 	}
 
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
+
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -9203,7 +9259,12 @@ int32_t LuaScriptInterface::luaPlayerRemoveItem(lua_State* L)
 	}
 
 	uint32_t count = getNumber<uint32_t>(L, 3);
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
@@ -9281,7 +9342,12 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 		}
 	}
 
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	} else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+	}
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		Item* item = Item::CreateItem(itemId);
