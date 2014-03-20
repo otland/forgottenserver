@@ -107,23 +107,10 @@ enum Attr_ReadValue {
 class ItemAttributes
 {
 	public:
-		ItemAttributes() {
-			m_attributes = 0;
-			m_firstAttr = nullptr;
-		}
-
-		~ItemAttributes() {
-			if (m_firstAttr) {
-				deleteAttrs(m_firstAttr);
-			}
-		}
-
+		ItemAttributes() : attributeBits(0) {}
 		ItemAttributes(const ItemAttributes& i) {
-			m_attributes = i.m_attributes;
-
-			if (i.m_firstAttr) {
-				m_firstAttr = new Attribute(*i.m_firstAttr);
-			}
+			attributeBits = i.attributeBits;
+			attributes = i.attributes;
 		}
 
 		void setSpecialDescription(const std::string& desc) {
@@ -232,7 +219,7 @@ class ItemAttributes
 
 	protected:
 		inline bool hasAttribute(itemAttrTypes type) const {
-			return (type & m_attributes) != 0;
+			return (type & attributeBits) != 0;
 		}
 		void removeAttribute(itemAttrTypes type);
 
@@ -240,18 +227,11 @@ class ItemAttributes
 
 		struct Attribute
 		{
-			itemAttrTypes type;
 			void* value;
-			Attribute* next;
-			Attribute(itemAttrTypes _type) {
-				type = _type;
-				value = nullptr;
-				next = nullptr;
-			}
+			itemAttrTypes type;
 
+			Attribute(itemAttrTypes type) : value(nullptr), type(type) {}
 			Attribute(const Attribute& i) {
-				type = i.type;
-
 				if (ItemAttributes::validateIntAttrType(type)) {
 					value = i.value;
 				} else if (ItemAttributes::validateStrAttrType(type)) {
@@ -259,17 +239,17 @@ class ItemAttributes
 				} else {
 					value = nullptr;
 				}
-
-				next = nullptr;
-
-				if (i.next) {
-					next = new Attribute(*i.next);
+				type = i.type;
+			}
+			~Attribute() {
+				if (ItemAttributes::validateStrAttrType(type)) {
+					delete (std::string*)value;
 				}
 			}
 		};
 
-		uint32_t m_attributes;
-		Attribute* m_firstAttr;
+		uint32_t attributeBits;
+		std::forward_list<Attribute> attributes;
 
 		const std::string& getStrAttr(itemAttrTypes type) const;
 		void setStrAttr(itemAttrTypes type, const std::string& value);
@@ -283,9 +263,12 @@ class ItemAttributes
 
 		void addAttr(Attribute* attr);
 		Attribute* getAttrConst(itemAttrTypes type) const;
-		Attribute* getAttr(itemAttrTypes type);
+		Attribute& getAttr(itemAttrTypes type);
 
-		void deleteAttrs(Attribute* attr);
+	public:
+		const std::forward_list<Attribute>& getList() const {
+			return attributes;
+		}
 
 	friend class Item;
 };
@@ -725,6 +708,10 @@ class Item : virtual public Thing
 		}
 		bool isCleanable() const {
 			return !loadedFromMap && canRemove() && isPickupable() && !hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) && !hasAttribute(ITEM_ATTRIBUTE_ACTIONID);
+		}
+
+		bool hasAttributes() const {
+			return attributes != nullptr;
 		}
 
 		ItemAttributes* getAttributes() {

@@ -1256,52 +1256,33 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 		return;
 	}
 
-	Attribute* attr = getAttr(type);
-	if (attr) {
-		if (attr->value) {
-			delete (std::string*)attr->value;
-		}
-
-		attr->value = (void*)new std::string(value);
+	Attribute& attr = getAttr(type);
+	if (attr.value) {
+		delete (std::string*)attr.value;
 	}
+	attr.value = (void*)new std::string(value);
 }
 
 void ItemAttributes::removeAttribute(itemAttrTypes type)
 {
-	//check if we have it
 	if (!hasAttribute(type)) {
 		return;
 	}
 
-	//go trough the linked list until find it
-	Attribute* prevAttr = nullptr;
-	Attribute* curAttr = m_firstAttr;
-	while (curAttr != nullptr) {
-		if (curAttr->type == type) {
-			//found so remove it from the linked list
-			if (prevAttr) {
-				prevAttr->next = curAttr->next;
-			} else {
-				m_firstAttr = curAttr->next;
+	auto prev_it = attributes.cbegin();
+	if ((*prev_it).type == type) {
+		attributes.pop_front();
+	} else {
+		auto it = prev_it, end = attributes.cend();
+		while (++it != end) {
+			if ((*it).type == type) {
+				attributes.erase_after(prev_it);
+				break;
 			}
-
-			//remove it from flags
-			m_attributes = m_attributes & ~type;
-
-			//delete string if it is string type
-			if (validateStrAttrType(type)) {
-				delete (std::string*)curAttr->value;
-			}
-
-			//finally delete the attribute and return
-			delete curAttr;
-			return;
+			prev_it = it;
 		}
-
-		//advance in the linked list
-		prevAttr = curAttr;
-		curAttr = curAttr->next;
 	}
+	attributeBits &= ~type;
 }
 
 uint32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
@@ -1324,10 +1305,7 @@ void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
 		return;
 	}
 
-	Attribute* attr = getAttr(type);
-	if (attr) {
-		attr->value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(value));
-	}
+	getAttr(type).value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(value));
 }
 
 void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
@@ -1336,10 +1314,8 @@ void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
 		return;
 	}
 
-	Attribute* attr = getAttr(type);
-	if (attr) {
-		attr->value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr->value)) + value));
-	}
+	Attribute& attr = getAttr(type);
+	attr.value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value)) + value));
 }
 
 bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
@@ -1377,62 +1353,28 @@ bool ItemAttributes::validateStrAttrType(itemAttrTypes type)
 	return false;
 }
 
-void ItemAttributes::addAttr(Attribute* attr)
-{
-	if (m_firstAttr) {
-		Attribute* curAttr = m_firstAttr;
-		while (curAttr->next) {
-			curAttr = curAttr->next;
-		}
-		curAttr->next = attr;
-	} else {
-		m_firstAttr = attr;
-	}
-	m_attributes |= attr->type;
-}
-
 ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) const
 {
-	if (!hasAttribute(type)) {
-		return nullptr;
-	}
-
-	Attribute* curAttr = m_firstAttr;
-	while (curAttr) {
-		if (curAttr->type == type) {
-			break;
+	if (hasAttribute(type)) {
+		for (const Attribute& attribute : attributes) {
+			if (attribute.type == type) {
+				return const_cast<ItemAttributes::Attribute*>(&attribute);
+			}
 		}
-		curAttr = curAttr->next;
 	}
-	return curAttr;
+	return nullptr;
 }
 
-ItemAttributes::Attribute* ItemAttributes::getAttr(itemAttrTypes type)
+ItemAttributes::Attribute& ItemAttributes::getAttr(itemAttrTypes type)
 {
 	Attribute* curAttr = getAttrConst(type);
-	if (!curAttr) {
-		curAttr = new Attribute(type);
-		addAttr(curAttr);
+	if (curAttr) {
+		return *curAttr;
 	}
-	return curAttr;
-}
 
-void ItemAttributes::deleteAttrs(Attribute* attr)
-{
-	if (attr) {
-		if (validateStrAttrType(attr->type)) {
-			delete (std::string*)attr->value;
-		}
-
-		Attribute* next_attr = attr->next;
-		attr->next = nullptr;
-
-		if (next_attr) {
-			deleteAttrs(next_attr);
-		}
-
-		delete attr;
-	}
+	attributeBits |= type;
+	attributes.emplace_front(type);
+	return attributes.front();
 }
 
 void Item::__startDecaying()
