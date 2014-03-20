@@ -1,7 +1,8 @@
 function onUse(cid, item, fromPosition, itemEx, toPosition)
-	doTransformItem(item.uid, 6573)
-	doCreatureSay(cid, "TOOOOOOT!", TALKTYPE_ORANGE_1)
-	doSendMagicEffect(fromPosition, CONST_ME_SOUND_BLUE)
-	doDecayItem(item.uid)
-	return TRUE
+	local ITem = Item(item.uid)
+	ITem:transform(13578)
+	ITem:decay()
+	Player(cid):say("TOOOOOOT!", TALKTYPE_ORANGE_1)
+	fromPosition:sendMagicEffect(CONST_ME_SOUND_BLUE)
+	return true
 end
