@@ -3259,7 +3259,7 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 		bool specialVip;
 		std::string formattedName = name;
 		if (!IOLoginData::getGuidByNameEx(guid, specialVip, formattedName)) {
-			player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with that name does not exist.");
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name does not exist.");
 			return;
 		}
 
