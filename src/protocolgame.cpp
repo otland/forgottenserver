@@ -1675,13 +1675,32 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 				continue;
 			}
 
-			// TODO: Disallow other items with other attributes than charges and duration
-			if (!itemType.isRune() && item->getCharges() != itemType.charges) {
-				continue;
-			}
+			if (item->hasAttributes()) {
+				bool badAttribute = false;
 
-			if (item->getDuration() != itemType.decayTime) {
-				continue;
+				ItemAttributes* attributes = item->getAttributes();
+				for (const auto& attr : attributes->getList()) {
+					if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
+						uint16_t charges = static_cast<uint16_t>(0xFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+						if (charges != itemType.charges) {
+							badAttribute = true;
+							continue;
+						}
+					} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
+						uint32_t duration = static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+						if (duration != itemType.decayTime) {
+							badAttribute = true;
+							continue;
+						}
+					} else {
+						badAttribute = true;
+						break;
+					}
+				}
+
+				if (badAttribute) {
+					continue;
+				}
 			}
 
 			depotItems[itemType.wareId] += Item::countByType(item, -1);
