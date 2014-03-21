@@ -1,5 +1,4 @@
-local food =
-{
+local food = {
 	[2362] = {5, "Crunch."}, -- carrot
 	[2666] = {15, "Munch."}, -- meat
 	[2667] = {12, "Munch."}, -- fish
@@ -98,16 +97,23 @@ local food =
 	[20100] = {15, "Smack."}, -- soft cheese
 	[20101] = {12, "Smack."} -- rat cheese
 }
-function onUse(cid, item, frompos, item2, topos)
-	if food[item.itemid] ~= nil then
-		if (getPlayerFood(cid) + food[item.itemid][1]) >= 400 then
-			doPlayerSendCancel(cid, "You are full.")
-		else
-			doPlayerFeed(cid, food[item.itemid][1] * 4)
-			doCreatureSay(cid, food[item.itemid][2], TALKTYPE_ORANGE_1)
-			doRemoveItem(item.uid, 1)
-		end
-		return true
+
+function onUse(cid, item, fromPosition, itemEx, toPosition)
+	local player = Player(cid)
+
+	local food = FOODS[item.itemid]
+	if food == nil then
+		return false
 	end
-	return false
+
+	local condition = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
+	if condition ~= nil and math.floor(condition:getTicks() / 1000 + food[1]) >= 400 then
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are full.")
+	else
+		player:feed(food[1] * 4)
+		player:say(food[2], TALKTYPE_MONSTER_SAY)
+		Item(item.uid):remove(1)
+	end
+
+	return true
 end
