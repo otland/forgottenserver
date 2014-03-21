@@ -1366,6 +1366,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(COMBAT_PARAM_CREATEITEM)
 	registerEnum(COMBAT_PARAM_AGGRESSIVE)
 	registerEnum(COMBAT_PARAM_DISPEL)
+	registerEnum(COMBAT_PARAM_USECHARGES)
 
 	registerEnum(CONDITION_NONE)
 	registerEnum(CONDITION_POISON)
