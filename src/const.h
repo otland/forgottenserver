@@ -474,7 +474,7 @@ enum item_t {
 	ITEM_DOCUMENT_RO = 1968 //read-only
 };
 
-enum PlayerFlags {
+enum PlayerFlags : uint64_t {
 	PlayerFlag_CannotUseCombat = 1,
 	PlayerFlag_CannotAttackPlayer = 2,
 	PlayerFlag_CannotAttackMonster = 4,
