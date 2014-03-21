@@ -1165,7 +1165,7 @@ bool ConditionDamage::init()
 			}
 		}
 	}
-	return (!damageList.empty());
+	return !damageList.empty();
 }
 
 bool ConditionDamage::startCondition(Creature* creature)
@@ -1311,13 +1311,14 @@ void ConditionDamage::addCondition(Creature* creature, const Condition* addCondi
 
 int32_t ConditionDamage::getTotalDamage() const
 {
-	int32_t result = 0;
+	int32_t result;
 	if (!damageList.empty()) {
+		result = 0;
 		for (const IntervalInfo& intervalInfo : damageList) {
 			result += intervalInfo.value;
 		}
 	} else {
-		result = maxDamage + (maxDamage - minDamage) / 2;
+		result = minDamage + (maxDamage - minDamage) / 2;
 	}
 	return std::abs(result);
 }
