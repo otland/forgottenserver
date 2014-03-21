@@ -19,10 +19,10 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			if i ~= 1 then
 				line = "\n"
 			end
-			line = line .."Spells for Level ".. spell.level .."\n"
+			line = line .. "Spells for Level " .. spell.level .. "\n"
 			prevLevel = spell.level
 		end
-		text = text .."".. line .."  ".. spell.words .." - ".. spell.name .." : ".. spell.mana .."\n"
+		text = text .. line .. "  " .. spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
 	end
 	Player(cid):showTextDialog(item.itemid, text)
 	return true

@@ -34,12 +34,12 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		if bed[1][1] == itemEx.itemid or isInArray({1758, 5502, 18027}, itemEx.itemid) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.y = toPosition.y + 1
-			internalBedTransform(item, itemEx, fromPosition, toPosition, newBed[1])
+			internalBedTransform(item, itemEx, toPosition, newBed[1])
 			break
 		elseif bed[2][1] == itemEx.itemid or isInArray({1756, 5500, 18029}, itemEx.itemid) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.x = toPosition.x + 1
-			internalBedTransform(item, itemEx, fromPosition, toPosition, newBed[2])
+			internalBedTransform(item, itemEx, toPosition, newBed[2])
 			break
 		end
 	end
