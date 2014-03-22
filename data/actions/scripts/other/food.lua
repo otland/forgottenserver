@@ -107,10 +107,10 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 	end
 
 	local condition = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
-	if condition ~= nil and math.floor(condition:getTicks() / 1000 + food[1]) >= 400 then
+	if condition ~= nil and math.floor(condition:getTicks() / 1000 + food[1]) >= 1200 then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are full.")
 	else
-		player:feed(food[1] * 4)
+		player:feed(food[1] * 12)
 		player:say(food[2], TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 	end
