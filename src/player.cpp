@@ -963,8 +963,15 @@ bool Player::canWalkthrough(const Creature* creature) const
 	if (!player) {
 		return false;
 	}
+	
+	if ((player->isAttackable() &&
+    (player->getLevel() < (uint32_t)g_config.getNumber(ConfigManager::PROTECTION_LEVEL))))
+    return true;
 
 	const Tile* playerTile = player->getTile();
+	if ((!player->isAttackable() &&
+        (player->getLevel() > (uint32_t)g_config.getNumber(ConfigManager::PROTECTION_LEVEL))))
+        return true;
 	if (playerTile && playerTile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		Item* playerTileGround = playerTile->ground;
 		if (playerTileGround && playerTileGround->hasWalkStack()) {
@@ -999,7 +1006,7 @@ bool Player::canWalkthroughEx(const Creature* creature) const
 	}
 
 	const Tile* playerTile = player->getTile();
-	return playerTile && playerTile->hasFlag(TILESTATE_PROTECTIONZONE);
+	return playerTile && playerTile->hasFlag(TILESTATE_NONE);
 }
 
 void Player::onReceiveMail()
