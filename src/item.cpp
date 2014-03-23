@@ -189,10 +189,11 @@ Item* Item::clone() const
 	return _item;
 }
 
-void Item::copyAttributes(Item* item)
+void Item::stealAttributes(Item* item)
 {
 	if (item->attributes) {
-		attributes = new ItemAttributes(*item->attributes);
+		attributes = item->attributes;
+		item->attributes = nullptr;
 	}
 
 	removeAttribute(ITEM_ATTRIBUTE_DECAYSTATE);
@@ -1260,7 +1261,7 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 	if (attr.value) {
 		delete (std::string*)attr.value;
 	}
-	attr.value = (void*)new std::string(value);
+	attr.value = (uint8_t*)new std::string(value);
 }
 
 void ItemAttributes::removeAttribute(itemAttrTypes type)
@@ -1285,7 +1286,7 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 	attributeBits &= ~type;
 }
 
-uint32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
+int32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 {
 	if (!validateIntAttrType(type)) {
 		return 0;
@@ -1293,7 +1294,7 @@ uint32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 
 	Attribute* attr = getAttrConst(type);
 	if (attr) {
-		return static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr->value));
+		return reinterpret_cast<ptrdiff_t>(attr->value);
 	} else {
 		return 0;
 	}
@@ -1305,7 +1306,7 @@ void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
 		return;
 	}
 
-	getAttr(type).value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(value));
+	getAttr(type).value = reinterpret_cast<uint8_t*>(value);
 }
 
 void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
@@ -1314,8 +1315,7 @@ void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
 		return;
 	}
 
-	Attribute& attr = getAttr(type);
-	attr.value = reinterpret_cast<void*>(static_cast<ptrdiff_t>(static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value)) + value));
+	getAttr(type).value += value;
 }
 
 bool ItemAttributes::validateIntAttrType(itemAttrTypes type)

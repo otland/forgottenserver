@@ -627,9 +627,9 @@ bool Door::getAccessList(std::string& list) const
 	return true;
 }
 
-void Door::copyAttributes(Item* item)
+void Door::stealAttributes(Item* item)
 {
-	Item::copyAttributes(item);
+	Item::stealAttributes(item);
 
 	if (Door* door = item->getDoor()) {
 		std::string list;

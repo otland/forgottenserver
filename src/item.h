@@ -108,10 +108,6 @@ class ItemAttributes
 {
 	public:
 		ItemAttributes() : attributeBits(0) {}
-		ItemAttributes(const ItemAttributes& i) {
-			attributeBits = i.attributeBits;
-			attributes = i.attributes;
-		}
 
 		void setSpecialDescription(const std::string& desc) {
 			setStrAttr(ITEM_ATTRIBUTE_DESCRIPTION, desc);
@@ -227,34 +223,60 @@ class ItemAttributes
 
 		struct Attribute
 		{
-			void* value;
+			uint8_t* value;
 			itemAttrTypes type;
 
 			Attribute(itemAttrTypes type) : value(nullptr), type(type) {}
 			Attribute(const Attribute& i) {
+				type = i.type;
 				if (ItemAttributes::validateIntAttrType(type)) {
 					value = i.value;
 				} else if (ItemAttributes::validateStrAttrType(type)) {
-					value = (void*)new std::string( *((std::string*)i.value) );
+					value = (uint8_t*)new std::string( *((std::string*)i.value) );
 				} else {
 					value = nullptr;
 				}
-				type = i.type;
+			}
+			Attribute(Attribute&& attribute) : value(attribute.value), type(attribute.type) {
+				attribute.value = nullptr;
+				attribute.type = ITEM_ATTRIBUTE_NONE;
 			}
 			~Attribute() {
 				if (ItemAttributes::validateStrAttrType(type)) {
 					delete (std::string*)value;
 				}
 			}
+			Attribute& operator=(Attribute other) {
+				swap(*this, other);
+				return *this;
+			}
+			Attribute& operator=(Attribute&& other) {
+				if (this != &other) {
+					if (ItemAttributes::validateStrAttrType(type)) {
+						delete (std::string*)value;
+					}
+
+					value = other.value;
+					type = other.type;
+					other.value = nullptr;
+					other.type = ITEM_ATTRIBUTE_NONE;
+				}
+				return *this;
+			}
+
+			void swap(Attribute& first, Attribute &second) {
+				std::swap(first.value, second.value);
+				std::swap(first.type, second.type);
+			}
 		};
 
-		uint32_t attributeBits;
 		std::forward_list<Attribute> attributes;
+		uint32_t attributeBits;
 
 		const std::string& getStrAttr(itemAttrTypes type) const;
 		void setStrAttr(itemAttrTypes type, const std::string& value);
 
-		uint32_t getIntAttr(itemAttrTypes type) const;
+		int32_t getIntAttr(itemAttrTypes type) const;
 		void setIntAttr(itemAttrTypes type, int32_t value);
 		void increaseIntAttr(itemAttrTypes type, int32_t value);
 
@@ -285,7 +307,7 @@ class Item : virtual public Thing
 		Item(const uint16_t _type, uint16_t _count = 0);
 		Item(const Item& i);
 		virtual Item* clone() const;
-		virtual void copyAttributes(Item* item);
+		virtual void stealAttributes(Item* item);
 
 		virtual ~Item();
 
@@ -348,7 +370,7 @@ class Item : virtual public Thing
 			getAttributes()->setStrAttr(type, value);
 		}
 
-		uint32_t getIntAttr(itemAttrTypes type) const {
+		int32_t getIntAttr(itemAttrTypes type) const {
 			if (!attributes) {
 				return 0;
 			}
