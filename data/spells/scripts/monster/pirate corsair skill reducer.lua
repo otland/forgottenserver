@@ -10,5 +10,5 @@ setCombatArea(combat, area)
 setCombatCondition(combat, condition)
 
 function onCastSpell(cid, var)
-       return doCombat(cid, combat, var)
+	return doCombat(cid, combat, var)
 end
