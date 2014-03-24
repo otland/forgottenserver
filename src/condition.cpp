@@ -1091,23 +1091,11 @@ bool ConditionDamage::updateCondition(const Condition* addCondition)
 		return true;
 	}
 
-	if (ticks == -1 && conditionDamage.getTicks() > 0) {
+	if (ticks == -1 && conditionDamage.ticks > 0) {
 		return false;
 	}
 
-	if (conditionDamage.getTicks() <= ticks) {
-		return false;
-	}
-
-	if (conditionDamage.getTotalDamage() < getTotalDamage()) {
-		return false;
-	}
-
-	if (conditionDamage.periodDamage < periodDamage) {
-		return false;
-	}
-
-	return true;
+	return conditionDamage.getTotalDamage() > getTotalDamage();
 }
 
 bool ConditionDamage::addDamage(int32_t rounds, int32_t time, int32_t value)
