@@ -81,7 +81,7 @@ class ProtocolGame : public Protocol
 			return 0x0A;
 		}
 
-		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem, bool gamemasterLogin);
+		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
 
 		void setPlayer(Player* p);
@@ -99,7 +99,7 @@ class ProtocolGame : public Protocol
 
 		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
 		void disconnect();
-		void disconnectClient(uint8_t error, const char* message);
+		void disconnectClient(const std::string& message);
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
 		virtual void releaseProtocol();
@@ -115,7 +115,6 @@ class ProtocolGame : public Protocol
 		virtual void parsePacket(NetworkMessage& msg);
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 		virtual void onConnect();
-		bool parseFirstPacket(NetworkMessage& msg);
 
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);

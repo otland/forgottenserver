@@ -116,7 +116,7 @@ void ProtocolGame::deleteProtocolTask()
 	Protocol::deleteProtocolTask();
 }
 
-void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem, bool gamemasterLogin)
+void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	//dispatcher thread
 	Player* _player = g_game.getPlayerByName(name);
@@ -128,32 +128,27 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		player->setID();
 
 		if (!IOLoginData::preloadPlayer(player, name)) {
-			disconnectClient(0x14, "Your character could not be loaded.");
+			disconnectClient("Your character could not be loaded.");
 			return;
 		}
 
 		if (IOBan::isPlayerNamelocked(player->getGUID())) {
-			disconnectClient(0x14, "Your character has been namelocked.");
-			return;
-		}
-
-		if (gamemasterLogin && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER) {
-			disconnectClient(0x14, "You are not a gamemaster!");
+			disconnectClient("Your character has been namelocked.");
 			return;
 		}
 
 		if (g_game.getGameState() == GAME_STATE_CLOSING && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
-			disconnectClient(0x14, "The game is just going down.\nPlease try again later.");
+			disconnectClient("The game is just going down.\nPlease try again later.");
 			return;
 		}
 
 		if (g_game.getGameState() == GAME_STATE_CLOSED && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
-			disconnectClient(0x14, "Server is currently closed. Please try again later.");
+			disconnectClient("Server is currently closed. Please try again later.");
 			return;
 		}
 
 		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
-			disconnectClient(0x14, "You may only login with one character\nof your account at the same time.");
+			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return;
 		}
 
@@ -170,7 +165,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 				} else {
 					ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
 				}
-				disconnectClient(0x14, ss.str().c_str());
+				disconnectClient(ss.str());
 				return;
 			}
 		}
@@ -196,7 +191,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		}
 
 		if (!IOLoginData::loadPlayerByName(player, name)) {
-			disconnectClient(0x14, "Your character could not be loaded.");
+			disconnectClient("Your character could not be loaded.");
 			return;
 		}
 
@@ -204,7 +199,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 
 		if (!g_game.placeCreature(player, player->getLoginPosition())) {
 			if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
-				disconnectClient(0x14, "Temple position is wrong. Contact the administrator.");
+				disconnectClient("Temple position is wrong. Contact the administrator.");
 				return;
 			}
 		}
@@ -219,7 +214,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 	} else {
 		if (eventConnect != 0 || !g_config.getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
 			//Already trying to connect
-			disconnectClient(0x14, "You are already logged in.");
+			disconnectClient("You are already logged in.");
 			return;
 		}
 
@@ -244,7 +239,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 
 	Player* _player = g_game.getPlayerByID(playerId);
 	if (!_player || _player->client) {
-		disconnectClient(0x14, "You are already logged in.");
+		disconnectClient("You are already logged in.");
 		return;
 	}
 
@@ -303,11 +298,11 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 	g_game.removeCreature(player);
 }
 
-bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
+void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	OperatingSystem_t operatingSystem = (OperatingSystem_t)msg.get<uint16_t>();
@@ -317,7 +312,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 	if (!RSA_decrypt(msg)) {
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	uint32_t key[4];
@@ -336,7 +331,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 		writeToOutputBuffer(opcodeMessage);
 	}
 
-	bool gamemasterFlag = msg.GetByte() != 0;
+	msg.SkipBytes(1); // gamemaster flag
 	std::string accountName = msg.GetString();
 	std::string characterName = msg.GetString();
 	std::string password = msg.GetString();
@@ -345,27 +340,29 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	uint8_t randNumber = msg.GetByte();
 	if (m_challengeTimestamp != timeStamp || m_challengeRandom != randNumber) {
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
+#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::disconnectClient, this, err)))
+
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(0x14, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
-		return false;
+		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		return;
 	}
 
 	if (accountName.empty()) {
-		disconnectClient(0x14, "You must enter your account name.");
-		return false;
+		dispatchDisconnectClient("You must enter your account name.");
+		return;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
-		disconnectClient(0x14, "Gameworld is starting up. Please wait.");
-		return false;
+		dispatchDisconnectClient("Gameworld is starting up. Please wait.");
+		return;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
-		disconnectClient(0x14, "Gameworld is under maintenance. Please re-connect in a while.");
-		return false;
+		dispatchDisconnectClient("Gameworld is under maintenance. Please re-connect in a while.");
+		return;
 	}
 
 	BanInfo banInfo;
@@ -376,23 +373,19 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 
 		std::ostringstream ss;
 		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-		disconnectClient(0x14, ss.str().c_str());
-		return false;
+		dispatchDisconnectClient(ss.str());
+		return;
 	}
 
 	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
 	if (accountId == 0) {
-		disconnectClient(0x14, "Account name or password is not correct.");
-		return false;
+		dispatchDisconnectClient("Account name or password is not correct.");
+		return;
 	}
 
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem, gamemasterFlag)));
-	return true;
-}
+#undef dispatchDisconnectClient
 
-void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
-{
-	parseFirstPacket(msg);
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem)));
 }
 
 void ProtocolGame::onConnect()
@@ -425,11 +418,11 @@ void ProtocolGame::onConnect()
 	}
 }
 
-void ProtocolGame::disconnectClient(uint8_t error, const char* message)
+void ProtocolGame::disconnectClient(const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		output->AddByte(error);
+		output->AddByte(0x14);
 		output->AddString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}

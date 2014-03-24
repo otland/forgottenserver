@@ -57,9 +57,9 @@ class ProtocolLogin : public Protocol
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 
 	protected:
-		void disconnectClient(uint8_t error, const char* message);
+		void disconnectClient(const std::string& message);
 
-		bool parseFirstPacket(NetworkMessage& msg);
+		void getCharacterList(const std::string& accountName, const std::string& password);
 };
 
 #endif

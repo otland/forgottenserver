@@ -24,6 +24,7 @@
 #include "outputmessage.h"
 #include "connection.h"
 #include "rsa.h"
+#include "tasks.h"
 
 #include "configmanager.h"
 #include "tools.h"
@@ -38,11 +39,11 @@ extern Game g_game;
 uint32_t ProtocolLogin::protocolLoginCount = 0;
 #endif
 
-void ProtocolLogin::disconnectClient(uint8_t error, const char* message)
+void ProtocolLogin::disconnectClient(const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		output->AddByte(error);
+		output->AddByte(0x0A);
 		output->AddString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
@@ -50,89 +51,12 @@ void ProtocolLogin::disconnectClient(uint8_t error, const char* message)
 	getConnection()->closeConnection();
 }
 
-bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
+void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password)
 {
-	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		getConnection()->closeConnection();
-		return false;
-	}
-
-	uint32_t clientip = getConnection()->getIP();
-
-	/*uint16_t clientos = */
-	msg.get<uint16_t>();
-	uint16_t version = msg.get<uint16_t>();
-
-	if (version >= 971) {
-		msg.SkipBytes(17);
-	} else {
-		msg.SkipBytes(12);
-	}
-
-	/*
-	 * Skipped bytes:
-	 * 4 bytes: protocolVersion (only 971+)
-	 * 12 bytes: dat, spr, pic signatures (4 bytes each)
-	 * 1 byte: 0 (only 971+)
-	*/
-
-	if (version <= 760) {
-		disconnectClient(0x0A, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
-		return false;
-	}
-
-	if (!RSA_decrypt(msg)) {
-		getConnection()->closeConnection();
-		return false;
-	}
-
-	uint32_t key[4];
-	key[0] = msg.get<uint32_t>();
-	key[1] = msg.get<uint32_t>();
-	key[2] = msg.get<uint32_t>();
-	key[3] = msg.get<uint32_t>();
-	enableXTEAEncryption();
-	setXTEAKey(key);
-
-	std::string accountName = msg.GetString();
-	std::string password = msg.GetString();
-
-	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(0x0A, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
-		return false;
-	}
-
-	if (g_game.getGameState() == GAME_STATE_STARTUP) {
-		disconnectClient(0x0A, "Gameworld is starting up. Please wait.");
-		return false;
-	}
-
-	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
-		disconnectClient(0x0A, "Gameworld is under maintenance. Please re-connect in a while.");
-		return false;
-	}
-
-	BanInfo banInfo;
-	if (IOBan::isIpBanned(clientip, banInfo)) {
-		if (banInfo.reason.empty()) {
-			banInfo.reason = "(none)";
-		}
-
-		std::ostringstream ss;
-		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-		disconnectClient(0x0A, ss.str().c_str());
-		return false;
-	}
-
-	if (accountName.empty()) {
-		disconnectClient(0x0A, "Invalid account name.");
-		return false;
-	}
-
 	Account account;
 	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
-		disconnectClient(0x0A, "Account name or password is not correct.");
-		return false;
+		disconnectClient("Account name or password is not correct.");
+		return;
 	}
 
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
@@ -175,10 +99,90 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	getConnection()->closeConnection();
-	return true;
 }
 
 void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
-	parseFirstPacket(msg);
+	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
+		getConnection()->closeConnection();
+		return;
+	}
+
+	uint32_t clientip = getConnection()->getIP();
+
+	/*uint16_t clientos = */
+	msg.get<uint16_t>();
+	uint16_t version = msg.get<uint16_t>();
+
+	if (version >= 971) {
+		msg.SkipBytes(17);
+	} else {
+		msg.SkipBytes(12);
+	}
+
+	/*
+	 * Skipped bytes:
+	 * 4 bytes: protocolVersion (only 971+)
+	 * 12 bytes: dat, spr, pic signatures (4 bytes each)
+	 * 1 byte: 0 (only 971+)
+	 */
+
+#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, this, err)))
+
+	if (version <= 760) {
+		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		return;
+	}
+
+	if (!RSA_decrypt(msg)) {
+		getConnection()->closeConnection();
+		return;
+	}
+
+	uint32_t key[4];
+	key[0] = msg.get<uint32_t>();
+	key[1] = msg.get<uint32_t>();
+	key[2] = msg.get<uint32_t>();
+	key[3] = msg.get<uint32_t>();
+	enableXTEAEncryption();
+	setXTEAKey(key);
+
+	std::string accountName = msg.GetString();
+	std::string password = msg.GetString();
+
+	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
+		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		return;
+	}
+
+	if (g_game.getGameState() == GAME_STATE_STARTUP) {
+		dispatchDisconnectClient("Gameworld is starting up. Please wait.");
+		return;
+	}
+
+	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
+		dispatchDisconnectClient("Gameworld is under maintenance. Please re-connect in a while.");
+		return;
+	}
+
+	BanInfo banInfo;
+	if (IOBan::isIpBanned(clientip, banInfo)) {
+		if (banInfo.reason.empty()) {
+			banInfo.reason = "(none)";
+		}
+
+		std::ostringstream ss;
+		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
+		dispatchDisconnectClient(ss.str());
+		return;
+	}
+
+	if (accountName.empty()) {
+		dispatchDisconnectClient("Invalid account name.");
+		return;
+	}
+
+#undef dispatchDisconnectClient
+
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, this, accountName, password)));
 }

@@ -22,6 +22,7 @@
 #include "protocolold.h"
 #include "outputmessage.h"
 #include "connection.h"
+#include "tasks.h"
 
 #include "rsa.h"
 #include "game.h"
@@ -32,11 +33,11 @@ extern Game g_game;
 uint32_t ProtocolOld::protocolOldCount = 0;
 #endif
 
-void ProtocolOld::disconnectClient(uint8_t error, const char* message)
+void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		output->AddByte(error);
+		output->AddByte(0x0A);
 		output->AddString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
@@ -44,11 +45,16 @@ void ProtocolOld::disconnectClient(uint8_t error, const char* message)
 	getConnection()->closeConnection();
 }
 
-bool ProtocolOld::parseFirstPacket(NetworkMessage& msg)
+void ProtocolOld::disconnectClient(const std::string& message)
+{
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolOld::disconnectClient, this, message)));
+}
+
+void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	/*uint16_t clientOS =*/ msg.get<uint16_t>();
@@ -56,12 +62,13 @@ bool ProtocolOld::parseFirstPacket(NetworkMessage& msg)
 	msg.SkipBytes(12);
 
 	if (version <= 760) {
-		disconnectClient(0x0A, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		return;
 	}
 
 	if (!RSA_decrypt(msg)) {
 		getConnection()->closeConnection();
-		return false;
+		return;
 	}
 
 	uint32_t key[4];
@@ -76,11 +83,5 @@ bool ProtocolOld::parseFirstPacket(NetworkMessage& msg)
 		disableChecksum();
 	}
 
-	disconnectClient(0x0A, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
-	return false;
-}
-
-void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
-{
-	parseFirstPacket(msg);
+	disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
 }

@@ -51,9 +51,8 @@ class ProtocolOld : public Protocol
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 
 	protected:
-		void disconnectClient(uint8_t error, const char* message);
-
-		bool parseFirstPacket(NetworkMessage& msg);
+		void dispatchedDisconnectClient(const std::string& message);
+		void disconnectClient(const std::string& message);
 };
 
 class ProtocolOldLogin : public ProtocolOld

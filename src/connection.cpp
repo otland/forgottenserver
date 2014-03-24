@@ -189,7 +189,7 @@ void Connection::deleteConnectionTask()
 void Connection::acceptConnection(Protocol* protocol)
 {
 	m_protocol = protocol;
-	m_protocol->onConnect();
+	g_dispatcher.addTask(createTask(std::bind(&Protocol::onConnect, m_protocol)));
 
 	acceptConnection();
 }
