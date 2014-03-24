@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sandstone Scorpion" nameDescription="a sandstone scorpion" race="undead" experience="230" speed="180" manacost="0">
+<monster name="Sandstone Scorpion" nameDescription="a sandstone scorpion" race="undead" experience="680" speed="230" manacost="0">
 	<health now="900" max="900"/>
 	<look type="398" corpse="13501"/>
 	<targetchange interval="4000" chance="10"/>
