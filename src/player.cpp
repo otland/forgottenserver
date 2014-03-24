@@ -1467,16 +1467,12 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 
 	if (tradeState != TRADE_TRANSFER) {
 		//check if we should close trade
-		if (tradeItem) {
-			if (!Position::areInRange<1, 1, 0>(tradeItem->getPosition(), getPosition())) {
-				g_game.internalCloseTrade(this);
-			}
+		if (tradeItem && !Position::areInRange<1, 1, 0>(tradeItem->getPosition(), getPosition())) {
+			g_game.internalCloseTrade(this);
 		}
 
-		if (tradePartner) {
-			if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), getPosition())) {
-				g_game.internalCloseTrade(this);
-			}
+		if (tradePartner && !Position::areInRange<2, 2, 0>(tradePartner->getPosition(), getPosition())) {
+			g_game.internalCloseTrade(this);
 		}
 	}
 

@@ -491,7 +491,7 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 	int32_t B = Position::getOffsetX(start, destination);
 	int32_t C = -(A * destination.x + B * destination.y);
 
-	while (!Position::areInRange<0, 0, 15>(start, destination)) {
+	while (start.x != destination.x || start.y != destination.y) {
 		int32_t move_hor = std::abs(A * (start.x + mx) + B * (start.y) + C);
 		int32_t move_ver = std::abs(A * (start.x) + B * (start.y + my) + C);
 		int32_t move_cross = std::abs(A * (start.x + mx) + B * (start.y + my) + C);

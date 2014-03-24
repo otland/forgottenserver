@@ -902,10 +902,8 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
-	if (movingCreature->getPlayer()) {
-		if (movingCreature->getPlayer()->getNoMove()) {
-			return;
-		}
+	if (movingCreature->getPlayer() && movingCreature->getPlayer()->getNoMove()) {
+		return;
 	}
 
 	if (!Position::areInRange<1, 1, 0>(movingCreatureOrigPos, player->getPosition())) {
@@ -1143,17 +1141,12 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 
 	const Position& playerPos = player->getPosition();
 	const Position& mapFromPos = fromCylinder->getTile()->getPosition();
-	if (playerPos.z > mapFromPos.z) {
-		player->sendCancelMessage(RET_FIRSTGOUPSTAIRS);
+	if (playerPos.z != mapFromPos.z) {
+		player->sendCancelMessage(playerPos.z > mapFromPos.z ? RET_FIRSTGOUPSTAIRS : RET_FIRSTGODOWNSTAIRS);
 		return;
 	}
 
-	if (playerPos.z < mapFromPos.z) {
-		player->sendCancelMessage(RET_FIRSTGODOWNSTAIRS);
-		return;
-	}
-
-	if (!Position::areInRange<1, 1, 0>(playerPos, mapFromPos)) {
+	if (!Position::areInRange<1, 1>(playerPos, mapFromPos)) {
 		//need to walk to the item first before using it
 		std::list<Direction> listDir;
 		if (player->getPathTo(item->getPosition(), listDir, 0, 1, true, true)) {
@@ -1199,7 +1192,7 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			Position itemPos = fromPos;
 			uint8_t itemStackPos = fromStackPos;
 
-			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1, 0>(mapFromPos, player->getPosition())
+			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1>(mapFromPos, playerPos)
 			        && !Position::areInRange<1, 1, 0>(mapFromPos, walkPos)) {
 				//need to pickup the item first
 				Item* moveItem = nullptr;
@@ -2518,17 +2511,12 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	}
 
 	const Position& playerPos = player->getPosition();
-	if (playerPos.z > pos.z) {
-		player->sendCancelMessage(RET_FIRSTGOUPSTAIRS);
+	if (playerPos.z != pos.z) {
+		player->sendCancelMessage(playerPos.z > pos.z ? RET_FIRSTGOUPSTAIRS : RET_FIRSTGODOWNSTAIRS);
 		return;
 	}
 
-	if (playerPos.z < pos.z) {
-		player->sendCancelMessage(RET_FIRSTGODOWNSTAIRS);
-		return;
-	}
-
-	if (!Position::areInRange<1, 1, 0>(playerPos, pos)) {
+	if (!Position::areInRange<1, 1>(playerPos, pos)) {
 		std::list<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
@@ -2642,14 +2630,12 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	const Position& playerPosition = player->getPosition();
 	const Position& tradeItemPosition = tradeItem->getPosition();
+	if (playerPosition.z != tradeItemPosition.z) {
+		player->sendCancelMessage(playerPosition.z > tradeItemPosition.z ? RET_FIRSTGOUPSTAIRS : RET_FIRSTGODOWNSTAIRS);
+		return;
+	}
 
-	if (playerPosition.z > tradeItemPosition.z) {
-		player->sendCancelMessage(RET_FIRSTGOUPSTAIRS);
-		return;
-	} else if (playerPosition.z < tradeItemPosition.z) {
-		player->sendCancelMessage(RET_FIRSTGODOWNSTAIRS);
-		return;
-	} else if (!Position::areInRange<1, 1, 0>(tradeItemPosition, playerPosition)) {
+	if (!Position::areInRange<1, 1>(tradeItemPosition, playerPosition)) {
 		std::list<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
@@ -3540,7 +3526,7 @@ bool Game::playerWhisper(Player* player, const std::string& text)
 	//send to client
 	for (Creature* spectator : list) {
 		if (Player* spectatorPlayer = spectator->getPlayer()) {
-			if (!Position::areInRange<1, 1, 0>(player->getPosition(), spectatorPlayer->getPosition())) {
+			if (!Position::areInRange<1, 1>(player->getPosition(), spectatorPlayer->getPosition())) {
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, "pspsps");
 			} else {
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, text);

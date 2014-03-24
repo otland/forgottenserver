@@ -212,12 +212,11 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos)
 {
 	if (pos.x != 0xFFFF) {
 		const Position& playerPos = player->getPosition();
+		if (playerPos.z != pos.z) {
+			return playerPos.z > pos.z ? RET_FIRSTGOUPSTAIRS : RET_FIRSTGODOWNSTAIRS;
+		}
 
-		if (playerPos.z > pos.z) {
-			return RET_FIRSTGOUPSTAIRS;
-		} else if (playerPos.z < pos.z) {
-			return RET_FIRSTGODOWNSTAIRS;
-		} else if (!Position::areInRange<1, 1, 0>(playerPos, pos)) {
+		if (!Position::areInRange<1, 1>(playerPos, pos)) {
 			return RET_TOOFARAWAY;
 		}
 	}
@@ -240,11 +239,11 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 	}
 
 	const Position& creaturePos = creature->getPosition();
-	if (creaturePos.z > toPos.z) {
-		return RET_FIRSTGOUPSTAIRS;
-	} else if (creaturePos.z < toPos.z) {
-		return RET_FIRSTGODOWNSTAIRS;
-	} else if (!Position::areInRange<7, 5, 0>(toPos, creaturePos)) {
+	if (creaturePos.z != toPos.z) {
+		return creaturePos.z > toPos.z ? RET_FIRSTGOUPSTAIRS : RET_FIRSTGODOWNSTAIRS;
+	}
+
+	if (!Position::areInRange<7, 5>(toPos, creaturePos)) {
 		return RET_TOOFARAWAY;
 	}
 
