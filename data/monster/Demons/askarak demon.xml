@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Askarak Demon" nameDescription="a askarak demon" race="venom" experience="900" speed="280" manacost="0">
+<monster name="Askarak Demon" nameDescription="an askarak demon" race="venom" experience="900" speed="220" manacost="0">
 	<health now="1500" max="1500"/>
 	<look type="420" corpse="13815"/>
-	<targetchange interval="2000" chance="9"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,31 +14,26 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="80"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-20" max="-140"/>
-		<attack name="Paralyze" interval="2000" chance="10" range="7" min="-0" max="-120"/>
-		<attack name="poison" interval="2000" chance="10" length="8" spread="3" min="-130" max="-170">
-			<attribute key="areaEffect" value="poison"/>
-</attack>
-		<attack name="poison" interval="2000" chance="15" range="7" min="-25" max="-60">
+		<attack name="melee" interval="2000" skill="40" attack="57"/>
+		<attack name="earth" interval="2000" chance="20"  range="7" radius="6" target="0" min="-20" max="-60">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poison"/>
-</attack>
-    <attack name="poisoncondition" interval="3000" chance="18" length="8" spread="3" min="-75" max="-140">
-      <attribute key="areaEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
-	</attacks>
-	<defenses armor="30" defense="30">
-		<defense name="healing" interval="2000" chance="10"  min="120" max="280">
-			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-		<defense name="speed" interval="2000" chance="10" speedchange="360" duration="20000">
+        <attack name="earth" interval="2000" chance="15" target="0" length="4" spread="3" min="-75" max="-140">
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+		<attack name="earth" interval="2000" chance="10" target="0" length="4" spread="0" min="-130" max="-170">
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="10"  radius="1" target="1" speedchange="-600" duration="15000">
 			<attribute key="areaEffect" value="redshimmer"/>
-		</defense>
-	</defenses>
+        </attack>
+	</attacks>
+	<defenses armor="15" defense="15"/>
 	<elements>
 		<element energyPercent="50"/>
 		<element icePercent="50"/>
@@ -49,7 +44,7 @@
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="5000" chance="9">
+	<voices interval="5000" chance="10">
 		<voice sentence="POWER TO THE ASKARAK!"/>
 		<voice sentence="GREEN WILL RULE!"/>
 		<voice sentence="GREEN IS MEAN!"/>
@@ -57,9 +52,9 @@
 		<voice sentence="RED IS MAD"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="35" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="35" chance="40000" /><!-- gold coin -->
 		<item id="2149" countmax="4" chance="6250" /><!-- small emerald -->
 		<item id="7589" chance="5263" /><!-- strong mana potion -->
 		<item id="7588" chance="5263" /><!-- strong health potion -->

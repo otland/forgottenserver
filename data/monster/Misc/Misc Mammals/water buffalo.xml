@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Water Buffalo" nameDescription="water buffalo" race="blood" experience="20" speed="270" manacost="0">
+<monster name="Water Buffalo" nameDescription="water buffalo" race="blood" experience="20" speed="210" manacost="0">
 	<health now="390" max="390"/>
 	<look type="523" corpse="19701"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="90" defense="10"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,33 +14,29 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="80"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="90"/>
-		<attack name="melee" interval="2800" chance="100" min="-30" max="-30"/>
+		<attack name="melee" interval="2000" skill="10" attack="30"/>
 	</attacks>
-	<defenses armor="65" defense="65"/>
 	<elements>
-		<element physicalPercent="10"/>
+		<element physicalPercent="5"/>
 	</elements>
 	<immunities>
-		<immunity earth="100"/>
-		<immunity paralyze="100"/>
-		<immunity invisible="100"/>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="2000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Gnorrr!"/>
 		<voice sentence="Gnarrr!"/>
-		<voice sentence="snort"/>
-		<voice sentence="Noorrr!"/>
-		<voice sentence="Bellow!"/>
-		<voice sentence="Baaah"/>
+		<voice sentence="<snort>"/>
+		<voice sentence="Mrrr!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="17" chance="30000"/>
-		<item id="2666" countmax="4" chance="880"/> <!-- Meat -->
-		<item id="2671" countmax="3" chance="880"/> <!-- Ham -->
+		<item id="2148" countmax="20" chance="100000"/> <!-- gold coin -->
+		<item id="2666" countmax="4" chance="33600"/> <!-- Meat -->
+		<item id="2671" countmax="3" chance="39200"/> <!-- Ham -->
 	</loot>
 </monster>

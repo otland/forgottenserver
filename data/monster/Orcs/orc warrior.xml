@@ -2,7 +2,7 @@
 <monster name="Orc Warrior" nameDescription="a orc warrior" race="blood" experience="50" speed="190" manacost="360">
 	<health now="125" max="125"/>
 	<look type="7" corpse="5979"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -15,17 +15,17 @@
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="10"/>
+		<flag runonhealth="11"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="30"/>
 	</attacks>
-	<defenses armor="8" defense="14"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
 		<element energyPercent="30"/>
-		<element holyPercent="20"/>
+		<element holyPercent="10"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-5"/>
+		<element deathPercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grow truk grrrr."/>
@@ -33,14 +33,14 @@
 		<voice sentence="Alk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="30000"/><!-- gold coin -->
-		<item id="2385" chance="51850"/><!-- sabre -->
-		<item id="2512" chance="23333"/><!-- wooden shield -->
-		<item id="2666" chance="16000"/><!-- meat -->
-		<item id="2464" chance="10750"/><!-- chain armor -->
-		<item id="2007" chance="9750"/><!-- blue bottle -->
-		<item id="2530" chance="400"/><!-- copper shield -->
-		<item id="2448" chance="400"/><!-- studded club -->
-		<item id="2411" chance="400"/><!-- poison dagger -->
+		<item id="2148" countmax="15" chance="65000"/><!-- gold coin -->
+		<item id="2666" chance="15000"/><!-- meat -->
+		<item id="2464" chance="7360"/><!-- chain armor -->
+		<item id="2530" chance="560"/><!-- copper shield -->
+		<item id="12435" chance="4000"/><!-- orc leather -->
+		<item id="11113" chance="700"/><!-- orc tooth -->
+		<item id="12436" chance="980"/><!-- skull belt -->
+		<item id="12409" chance="10800"/><!-- broken helmet -->
+		<item id="2411" chance="120"/><!-- poison dagger -->
 	</loot>
 </monster>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Angry Adventurer" nameDescription="a angry adventurer" race="blood" experience="50" speed="195" manacost="0">
 	<health now="65" max="65"/>
-	<look type="129" head="92" body="15" legs="92" feet="82" corpse="20318"/>
-	<targetchange interval="5000" chance="8"/>
+	<look type="129" head="92" body="15" legs="92" feet="82" corpse="20315"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -13,11 +13,12 @@
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
-		<flag targetdistance="4"/>
+		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="15" attack="16"/>
 	</attacks>
+	<defenses armor="15" defense="15"/>
 </monster>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="280" manacost="485">
+<monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="210" manacost="485">
 	<health now="550" max="550"/>
 	<look type="219" corpse="6060"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="01"/>
+		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
 		<flag illusionable="1"/>
@@ -18,24 +18,21 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="47" attack="38" poison="4"/>
-		<attack name="poisoncondition" interval="1000" chance="20" range="1" min="-54" max="-79">
+		<attack name="melee" interval="2000" skill="47" attack="38" poison="80"/>
+		<attack name="earth" interval="2000" chance="20" range="7" min="-60" max="-100">
 			<attribute key="shootEffect" value="poison"/>
 		</attack>	
 	</attacks>
-	<defenses armor="15" defense="17">
-		<defense name="speed" interval="1000" chance="13" speedchange="314" duration="5000">
-			<attribute key="areaEffect" value="redshimmer"/>
-		</defense>
-	</defenses>
+	<defenses armor="25" defense="25"/>
 	<elements>
-		<element energyPercent="10"/>
-		<element firePercent="-15"/>
-		<element icePercent="-10"/>
+		<element firePercent="-5"/>
 	</elements>
+		<immunities>
+		<immunity invisible="1"/>
+	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
-		<item id="2148" countmax="19" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="19" chance="50000"/><!-- gold coin -->
 		<item id="8859" chance="25000"/><!-- spider fangs -->
 		<item id="2159" countmax="4" chance="7142"/><!-- scarab coin -->
 		<item id="2463" chance="4761"/><!-- plate armor -->

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="195" manacost="0">
+<monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="185" manacost="0">
 	<health now="125" max="125"/>
 	<look type="425" corpse="20395"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -19,10 +19,18 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="25" attack="10"/>
+		<attack name="drunk" interval="2000" chance="15" target="0" length="3" spread="2" duration="3000">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
 	</attacks>
-	<defenses armor="9" defense="18"/>
+	<defenses armor="15" defense="15">
+		<defense name="outfit" interval="2000" chance="1" target="0" radius="3" monster="bog raider" duration="5000">
+			<attribute key="areaeffect" value="greenbubble"/>
+		</defense>
+	</defenses>
 	<elements>
 		<element holyPercent="80"/>
+		<element firePercent="20"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Aaaaargh!"/>
@@ -31,22 +39,22 @@
 		<voice sentence="Tigerblood is running through my veins!"/>
 		<voice sentence="You! It's you again!"/>
 		<voice sentence="Stand still you tasty morsel!"/>
-		<voice sentence="*giggle*"/>
+		<voice sentence="<giggle>"/>
 		<voice sentence="Burn heretic! Burn!"/>
 		<voice sentence="Harrr!"/>
 		<voice sentence="This is Venore!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="16750"/> <!-- gold coin -->
-		<item id="3976" countmax="3" chance="20000"/> <!-- worms -->
-		<item id="2230" chance="27500"/> <!-- bone -->
-		<item id="13545" chance="9250"/><!-- luminous piece of cloth -->
-		<item id="13543" chance="9600"/><!-- obvious piece of cloth -->
-		<item id="13541" chance="8650"/><!-- dubious piece of cloth -->
-		<item id="13542" chance="6550"/><!-- voluminous piece of cloth -->
-		<item id="13540" chance="7650"/><!-- ominous piece of cloth -->
-		<item id="13544" chance="8400"/><!-- ludicrous piece of cloth -->
-		<item id="13926" chance="1450"/><!-- plague bell -->
-		<item id="13925" chance="1250"/><!-- plague mask -->
+		<item id="2148" countmax="35" chance="30300"/> <!-- gold coin -->
+		<item id="3976" countmax="3" chance="25730"/> <!-- worms -->
+		<item id="2230" chance="4920"/> <!-- bone -->
+		<item id="13545" chance="2290"/><!-- luminous piece of cloth -->
+		<item id="13543" chance="2006"/><!-- obvious piece of cloth -->
+		<item id="13541" chance="1720"/><!-- dubious piece of cloth -->
+		<item id="13542" chance="2290"/><!-- voluminous piece of cloth -->
+		<item id="13540" chance="1660"/><!-- ominous piece of cloth -->
+		<item id="13544" chance="2060"/><!-- ludicrous piece of cloth -->
+		<item id="13926" chance="100"/><!-- plague bell -->
+		<item id="13925" chance="100"/><!-- plague mask -->
 	</loot>
 </monster>

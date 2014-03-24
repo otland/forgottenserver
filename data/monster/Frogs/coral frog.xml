@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Coral Frog" namedescription="a coral frog" race="blood" experience="20" speed="230" manacost="305">
+<monster name="Coral Frog" namedescription="a coral frog" race="blood" experience="20" speed="200" manacost="305">
 	<health now="60" max="60"/>
 	<look type="226" head="114" body="98" legs="97" feet="114" corpse="6079"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -15,12 +15,12 @@
 		<flag canpushcreatures="0"/>
 		<flag staticattack="90"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="10"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="24"/>
 	</attacks>
-	<defenses armor="1" defense="5"/>
+	<defenses armor="5" defense="5"/>
 	<voices interval="5000" chance="10">
 		<voice sentence="Ribbit!"/>
 		<voice sentence="Ribbit! Ribbit!"/>
@@ -30,7 +30,7 @@
 		<element firePercent="-10"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="11" chance="100000"/><!-- gold coin -->
-		<item id="3976" chance="11111"/><!-- worm -->
+		<item id="2148" countmax="10" chance="76780"/><!-- gold coin -->
+		<item id="3976" chance="13510"/><!-- worm -->
 	</loot>
 </monster>

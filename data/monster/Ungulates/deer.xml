@@ -2,7 +2,7 @@
 <monster name="Deer" nameDescription="a deer" race="blood" experience="0" speed="150" manacost="260">
 	<health now="25" max="25"/>
 	<look type="31" corpse="5970"/>
-	<targetchange interval="2000" chance="20"/>
+	<targetchange interval="4000" chance="20"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -20,10 +20,10 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="2"/>
 	</attacks>
-	<defenses armor="2" defense="2"/>
+	<defenses armor="5" defense="5"/>
 	<loot>
-		<item id="2666" countmax="4" chance="20000"/><!-- meat -->
-		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
-		<item id="11214" chance="1900"/> <!-- antlers -->
+		<item id="2666" countmax="4" chance="80000"/><!-- meat -->
+		<item id="2671" countmax="2" chance="50000"/><!-- ham -->
+		<item id="11214" chance="850"/> <!-- antlers -->
 	</loot>
 </monster>

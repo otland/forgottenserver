@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cockroach" nameDescription="a cockroach" race="venom" experience="0" speed="100" manacost="0">
+<monster name="Cockroach" nameDescription="a cockroach" race="venom" experience="0" speed="180" manacost="0">
 	<health now="1" max="1"/>
 	<look type="284" corpse="8593"/>
 	<targetchange interval="60000" chance="0"/>
@@ -18,10 +18,6 @@
 		<flag targetdistance="5"/>
 		<flag runonhealth="1"/>
 	</flags>
-	<defenses armor="0" defense="0"/>
-	<immunities>
-		<immunity poison="1"/>
-	</immunities>
 	<loot>
 		<item id="8710" chance="100000"/><!-- cockroach leg -->
 	</loot>

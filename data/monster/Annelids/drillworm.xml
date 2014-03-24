@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Drillworm" nameDescription="drillworm" race="venom" experience="1100" speed="304" manacost="0">
+<monster name="Drillworm" nameDescription="drillworm" race="venom" experience="1100" speed="240" manacost="0">
 	<health now="1500" max="1500"/>
 	<look type="527" corpse="19705"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="90" defense="10"/>
+	<targetchange interval="4000" chance="20"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -18,45 +18,50 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="110"/>
-		<attack name="lifedrain" interval="2500" chance="100" radius="6" range="7" min="-200" max="-290">
-			<attribute key="areaEffect" value="blackspark"/>
+		<attack name="melee" interval="2000" skill="90" attack="60" poison="100"/>
+		<attack name="speed" interval="2000" chance="15" length="8" spread="0" target="0" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="speed" interval="1000" chance="34" range="7" speedchange="-850" duration="30000">
-			<attribute key="shootEffect" value="poison"/>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="0" min="-180" max="-300">
+			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
-		<attack name="poison" interval="1000" chance="12" target="1" min="-10" max="-30">
+		<attack name="earth" interval="2000" chance="15" radius="3" target="1" min="-100" max="-150">
 			<attribute key="areaEffect" value="poison"/>
-		</attack>
+		</attack>	
 	</attacks>
-	<defenses armor="55" defense="55"/>
+	<defenses armor="35" defense="35"/>
 	<elements>
-		<element energyPercent="10"/>
-		<element icePercent="10"/>
-		<element holyPercent="10"/>
-		<element deathPercent="10"/>
-		<element firePercent="-10"/>
+		<element energyPercent="15"/>
+		<element icePercent="1t"/>
+		<element holyPercent="25"/>
+		<element deathPercent="15"/>
+		<element firePercent="-5"/>
 	</elements>
 	<immunities>
-		<immunity earth="100"/>
-		<immunity paralyze="100"/>
-		<immunity invisible="100"/>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="2500" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Knarrrk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="30000"/> <!-- Gold Coin -->
-		<item id="2148" countmax="50" chance="33333"/> <!-- Gold Coin -->
-		<item id="3976" countmax="5" chance="33333"/> <!-- Worms -->
-		<item id="18436" countmax="2" chance="880"/> <!-- Drill Bolts -->
-		<item id="13757" chance="600"/> <!-- Coal -->
-		<item id="11222" chance="500"/> <!-- Lump of Earth -->
-		<item id="2553" chance="500"/> <!-- Pick -->
-		<item id="5880" chance="450"/> <!-- Iron Ore -->
-		<item id="7887" chance="900"/> <!-- Terra Amulet -->
-		<item id="2515" chance="400"/> <!-- Dwarven Ring -->
-		<item id="7452" chance="300"/> <!-- Spiked Squelcher -->
-		<item id="11339" chance="450"/> <!-- Clay Lump -->
+		<item id="2148" countmax="100" chance="50000"/> <!-- Gold Coin -->
+		<item id="2148" countmax="50" chance="50000"/> <!-- Gold Coin -->
+		<item id="3976" countmax="5" chance="4580"/> <!-- Worms -->
+		<item id="18436" countmax="2" chance="4870"/> <!-- Drill Bolts -->
+		<item id="13757" chance="12130"/> <!-- Coal -->
+		<item id="11222" chance="15000"/> <!-- Lump of Earth -->
+		<item id="2553" chance="5280"/> <!-- Pick -->
+		<item id="5880" chance="1750"/> <!-- Iron Ore -->
+		<item id="7887" chance="2360"/> <!-- Terra Amulet -->
+		<item id="2515" chance="2240"/> <!-- Dwarven Ring -->
+		<item id="7452" chance="540"/> <!-- Spiked Squelcher -->
+		<item id="11339" chance="700"/> <!-- Clay Lump -->
+		<item id="18429" chance="7280"/> <!-- vein of ore -->
+		<item id="18427" chance="5400"/> <!-- pulverized ore -->
+		<item id="18416" chance="9780"/> <!-- green crystal splinter -->
+		<item id="18417" chance="9260"/> <!-- brown crystal splinter -->
+		<item id="18418" chance="9610"/> <!-- blue crystal splinter -->
 	</loot>
 </monster>

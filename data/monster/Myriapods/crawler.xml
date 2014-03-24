@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crawler" nameDescription="a crawler" race="blood" experience="1000" speed="560" manacost="0">
+<monster name="Crawler" nameDescription="a crawler" race="venom" experience="1000" speed="200" manacost="0">
 	<health now="1450" max="1450"/>
 	<look type="456" corpse="15292"/>
-	<targetchange interval="2000" chance="50"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,41 +14,44 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="0"/>
-		<flag runonhealth="60"/>
+		<flag runonhealth="40"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="34" attack="45"/>
-		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
-			<attribute key="shootEffect" value="spear"/> <!-- TODO: Add spear deepling speed effect? -->
-			<attribute key="areaEffect" value="bluebubble"/>
+		<attack name="melee" interval="2000" skill="60" attack="65" poison="80"/>
+		<attack name="earth" interval="2000" chance="20" range="7" min="-100" max="-180">
+			<attribute key="shootEffect" value="smallearth"/>
 		</attack>
 	</attacks>
-	<defenses armor="12" defense="20"/>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity earth="1" />
 		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="Sssschrchrsss!"/>
 	</voices>
 	<elements>
-		<element deathPercent="1"/>
-		<element holyPercent="-1"/>
+		<element deathPercent="5"/>
+		<element holyPercent="-5"/>
 		<element firePercent="-10"/>
-		<element icePercent="-10"/>
+		<element icePercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="95" chance="100000"/> <!-- gold coin -->
-		<item id="2148" countmax="95" chance="100000"/> <!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000"/> <!-- gold coin -->
+		<item id="2148" countmax="90" chance="50000"/> <!-- gold coin -->
 		<item id="2168" chance="50000"/> <!-- platinum coin -->
-		<item id="15482" chance="20000"/> <!-- crawler head plating -->
-		<item id="15486" chance="16666"/> <!-- compound eye -->
-		<item id="9970" countmax="2" chance="11111"/> <!-- small topaz -->
-		<item id="7590" chance="9090"/> <!-- great mana potion -->
-		<item id="7591" chance="5000"/> <!-- great health potion -->
-		<item id="2391" chance="2380"/><!-- war hammer -->
-		<item id="8912" chance="714"/><!-- springsprout rod -->
-		<item id="2154" chance="645"/><!-- yellow gem -->
-		<item id="15490" chance="194"/><!-- grasshopper legs -->
+		<item id="15482" chance="18430"/> <!-- crawler head plating -->
+		<item id="15486" chance="14640"/> <!-- compound eye -->
+		<item id="9970" countmax="2" chance="10040"/> <!-- small topaz -->
+		<item id="7590" chance="9300"/> <!-- great mana potion -->
+		<item id="7591" chance="6200"/> <!-- great health potion -->
+		<item id="2391" chance="2070"/><!-- war hammer -->
+		<item id="8912" chance="710"/><!-- springsprout rod -->
+		<item id="2154" chance="530"/><!-- yellow gem -->
+		<item id="15490" chance="100"/><!-- grasshopper legs -->
 	</loot>
 </monster>

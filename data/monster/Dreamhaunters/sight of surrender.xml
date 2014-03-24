@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sight of Surrender" nameDescription="Sight of Surrender" race="blood" experience="17000" speed="270" manacost="0">
+<monster name="Sight of Surrender" nameDescription="Sight of Surrender" race="undead" experience="17000" speed="300" manacost="0">
   <health now="28000" max="28000"/>
   <look type="583" corpse="22478"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+  <targetchange interval="4000" chance="20"/>
+  <strategy attack="100" defense="0"/>
   <flags>
     <flag summonable="0"/>
     <flag attackable="1"/>
@@ -14,52 +14,70 @@
     <flag canpushitems="1"/>
     <flag canpushcreatures="1"/>
     <flag targetdistance="1"/>
-    <flag staticattack="90"/>
+    <flag staticattack="80"/>
     <flag runonhealth="0"/>
   </flags>
-  <attacks>
-    <attack name="melee" interval="2000" skill="90" attack="90"/>
-		<attack name="earth" interval="1800" chance="10" length="7" spread="0" min="-300" max="-685">
-			<attribute key="areaEffect" value="stones"/>
+   <attacks>
+		<attack name="melee" interval="2000" skill="100" attack="200"/>
+		<attack name="energy" interval="2000" chance="15" length="8" spread="0" target="1" min="-500" max="-800">
+			<attribute key="areaEffect" value="yellowenergy"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="9" radius="6" min="-250" max="-590">
-			<attribute key="areaEffect" value="bigplants"/>
-		</attack>	
-  </attacks>
-  <defenses armor="55" defense="55">    
-  </defenses>
+		<attack name="physical" interval="2000" chance="20" radius="1" target="1" min="-0" max="-500">
+			<attribute key="shootEffect" value="largerock"/>
+		</attack>
+	</attacks>
+	<defenses armor="70" defense="70">
+		<defense name="healing" interval="2000" chance="30" min="550" max="1100">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>  
+		<defense name="speed" interval="2000" chance="15" speedchange="520" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
 	<elements>			
-		<element icePercent="-10"/>		
-		<element firePercent="-10"/>
+		<element physicalPercent="40"/>	
+		<element deathPercent="10"/>	
+		<element firePercent="35"/>	
+		<element energyPercent="10"/>	
+		<element icePercent="30"/>	
+		<element earthPercent="10"/>	
+		<element holyPercent="-5"/>			
 	</elements>
-  <immunities>
-    <immunity earth="100"/>
-    <immunity energy="100"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="100"/>
-    <immunity invisible="100"/>
-  </immunities>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Knorrrr!"/>
+		<voice sentence="BOW LOW!"/>
+		<voice sentence="FEEL THE TRUE MEANING OF VANQUISH!"/>
+		<voice sentence="HAHAHAHA DO YOU WANT TO AMUSE YOUR MASTER?"/>
+		<voice sentence="NOW YOU WILL SURRENDER!"/>
 	</voices>     
-  <loot>
- 	 <item id="2148" countmax="100" chance="30000"/>  
- 	 <item id="2152" countmax="10" chance="33333"/>
- 	 <item id="7590" countmax="4" chance="3100"/>
- 	 <item id="5880" countmax="2" chance="2195"/>
- 	 <item id="8473" countmax="2" chance="2195"/>
- 	 <item id="18435" countmax="8" chance="366"/>
- 	 <item id="2144" countmax="1" chance="866"/>
- 	 <item id="2143" countmax="1" chance="866"/>
-        <item id="18390" chance="1766"/>     
-        <item id="18412" chance="1066"/>          
-        <item id="2477" chance="444"/>
-        <item id="9980" chance="1066"/>
-        <item id="2393" chance="422"/>
-        <item id="11227" chance="1032"/>
-        <item id="5904" chance="632"/>
-        <item id="2487" chance="632"/>
-        <item id="18453" chance="603"/>
-        <item id="18450" chance="603"/>
-</loot>
+	<loot>
+		<item id="2152"  countmax="20"  chance="100000"/> <!-- platinum coin -->
+		<item id="2164"  chance="8000"/> <!-- might ring -->
+		<item id="2197"  chance="18000"/> <!-- stone skin amulet -->
+		<item id="2444"  chance="1380"/> <!-- hammer of wrath -->
+		<item id="2445"  chance="5500"/> <!-- crystal mace -->
+		<item id="2472"  chance="1380"/> <!-- magic plate armor -->
+		<item id="2497"  chance="920"/> <!-- crusader helmet -->
+		<item id="2488"  chance="920"/> <!-- crown legs -->
+		<item id="2528"  chance="1380"/> <!-- tower shield -->
+		<item id="2645"  chance="920"/> <!-- steel boots -->
+		<item id="7421"  chance="920"/> <!-- onyx flail -->
+		<item id="7422"  chance="920"/> <!-- jade hammer -->
+		<item id="7590"  countmax="5"  chance="78000"/> <!-- great mana potion -->
+		<item id="8472"  countmax="5"  chance="72000"/> <!-- great spirit potion -->
+		<item id="8473"  countmax="5"  chance="30000"/> <!-- ultimate health potion -->
+		<item id="18413"  countmax="3" chance="23000"/> <!-- blue crystal shard -->
+		<item id="18414"  countmax="3" chance="32000"/> <!-- violet crystal shard -->
+		<item id="18415"  countmax="3" chance="21600"/> <!-- green crystal shard -->
+		<item id="18416"  countmax="5"  chance="30000"/> <!-- green crystal splinter -->
+		<item id="18417"  countmax="5" chance="30410"/> <!-- brown crystal splinter -->
+		<item id="18418"  countmax="5" chance="40000"/> <!-- blue crystal splinter -->
+		<item id="22396"  chance="1800"/> <!-- cluster of solace -->
+		<item id="22517"  chance="100000"/> <!-- sight of surrender's eye -->
+		<item id="22518"  chance="100000"/> <!-- broken visor -->
+		<item id="22542"  chance="460"/> <!-- string of mending -->
+	</loot>
 </monster>

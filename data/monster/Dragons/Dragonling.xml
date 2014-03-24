@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dragonling" nameDescription="a dragonling" race="blood" experience="2200" speed="670" manacost="0">
+<monster name="Dragonling" nameDescription="a dragonling" race="blood" experience="2200" speed="330" manacost="0">
   <health now="2600" max="2600"/>
   <look type="505" corpse="18438"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+  <targetchange interval="4000" chance="10"/>
+  <strategy attack="100" defense="0"/>
   <flags>
     <flag summonable="0"/>
     <flag attackable="1"/>
@@ -14,38 +14,50 @@
     <flag canpushitems="1"/>
     <flag canpushcreatures="1"/>
     <flag targetdistance="1"/>
-    <flag staticattack="90"/>
-    <flag runonhealth="0"/>
+    <flag staticattack="70"/>
+    <flag runonhealth="900"/>
   </flags>
 	<attacks>
-         <attack name="melee" interval="2000" min="-20" max="-240"/>
-         <attack name="fire" interval="2000" chance="17" range="7" radius="4" target="1" min="-60" max="-230">
+         <attack name="melee" interval="2000" skill="60" attack="60"/>
+         <attack name="fire" interval="2000" chance="10" length="5" spread="2" target="0" min="-120" max="-250">
 			<attribute key="shootEffect" value="fire"/>
-			<attribute key="areaEffect" value="firearea"/>
+			<attribute key="areaEffect" value="fire"/>
 		</attack>
-    <attack name="energy" interval="2000" chance="25" range="7" min="-75" max="-180">
-      <attribute key="shootEffect" value="energy"/>
-    </attack>
+		<attack name="energy" interval="2000" chance="20" radius="3" target="0" min="-115" max="-180">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="20" radius="3" target="0" min="-95" max="-150">
+			<attribute key="areaEffect" value="explosion"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="1" radius="1" speedchange="-700" duration="16000">
+			<attribute key="shootEffect" value="explosion"/>
+			<attribute key="areaEffect" value="stun"/>
+		</attack>
 	</attacks>
-  <defenses armor="55" defense="55">    
-  </defenses>
+	<defenses armor="25" defense="25">    
+		<defense name="healing" interval="2000" chance="15" min="100" max="200">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<elements>		
-		<element energyPercent="-50"/>		
-		<element icePercent="-50"/>		
+		<element energyPercent="-5"/>		
+		<element icePercent="-5"/>		
 	</elements>
-  <immunities>
-    <immunity fire="100"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="100"/>
-    <immunity invisible="100"/>
+	<immunities>
+		<immunity fire="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="FCHHHHHHHHHHHHHHHH"/>
 		<voice sentence="FI?"/>
 	</voices>     
-  <loot>
- 	 <item id="2148" countmax="135" chance="30000"/>  
-        <item id="7589" chance="2000"/>             
-        <item id="7588" chance="2000"/>     		
-</loot>
+	<loot>
+		<item id="2148" countmax="100" chance="37500"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="37500"/><!-- gold coin -->
+		<item id="2148" countmax="27" chance="37500"/><!-- gold coin -->
+        <item id="7589" countmax="2" chance="16900"/><!-- smp-->      
+        <item id="7588" countmax="2" chance="24480"/><!-- shp -->
+		<item id="18425" chance="12410"/><!-- Blazing Bones --> 	
+	</loot>
 </monster>

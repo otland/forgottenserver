@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Corym Charlatan" nameDescription="a corym charlatan" race="blood" experience="150" speed="190" manacost="0">
+<monster name="Corym Charlatan" nameDescription="a corym charlatan" race="blood" experience="150" speed="180" manacost="0">
 	<health now="250" max="250"/>
-	<look type="532" corpse="19725"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="90" defense="10"/>
+	<look type="532"  body="97" legs="116" corpse="19725"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -12,44 +12,38 @@
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
+		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="55" attack="65"/>
+		<attack name="melee" interval="2000" skill="50" attack="35"/>
 	</attacks>
-	<defenses armor="25" defense="35">
-		<defense name="healing" interval="3000" chance="25" min="0" max="20">
-			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-	</defenses>
+	<defenses armor="10" defense="10"/>
 	<elements>
-		<element earthPercent="10"/>
-		<element deathPercent="10"/>
-		<element energyPercent="10"/>
-		<element holyPercent="-10"/>
+		<element earthPercent="20"/>
+		<element deathPercent="20"/>
+		<element energyPercent="25"/>
+		<element holyPercent="-20"/>
 	</elements>
-	<immunities>
-		<immunity earth="1"/>
-		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
-	</immunities>
-	<voices interval="2500" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Mehehe!"/>
 		<voice sentence="Beware! Me hexing you!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="30000"/> <!-- Gold Coin -->
-		<item id="20092" chance="880"/> <!-- Life Preserver -->
-		<item id="2696" chance="450"/> <!-- Cheese -->
-		<item id="20100" chance="410"/> <!-- Rat Cheese -->
-		<item id="20099" chance="300"/> <!-- Soft Cheese -->
-		<item id="20088" chance="450"/> <!-- Bola -->
-		<item id="20096" chance="410"/> <!-- Cheese Cutter -->
-		<item id="20098" chance="300"/> <!-- earflap -->
-		<item id="20091" chance="410"/> <!-- Ratana -->
-		<item id="20125" chance="380"/> <!-- Leather Harness -->
+		<item id="2148" countmax="35" chance="89980"/> <!-- Gold Coin -->
+		<item id="20092" chance="860"/> <!-- Life Preserver -->
+		<item id="2696" chance="10020"/> <!-- Cheese -->
+		<item id="20100" chance="14780"/> <!-- Rat Cheese -->
+		<item id="20099" chance="12530"/> <!-- Soft Cheese -->
+		<item id="20089" chance="8070"/> <!-- Bola -->
+		<item id="20096" chance="6100"/> <!-- Cheese Cutter -->
+		<item id="20098" chance="7150"/> <!-- earflap -->
+		<item id="20091" chance="910"/> <!-- Ratana -->
+		<item id="20125" chance="550"/> <!-- Leather Harness -->
+		<item id="20097" chance="500"/> <!-- Cheesy Figurine -->
+		<item id="20089" chance="490"/> <!-- Spike Shield -->
+	    <item id="20104" chance="10"/>  <!-- Rat God Doll -->
 	</loot>
 </monster>

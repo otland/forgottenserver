@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Terrorsleep" nameDescription="Terrorsleep" race="blood" experience="6900" speed="270" manacost="0">
+<monster name="Terrorsleep" nameDescription="Terrorsleep" race="blood" experience="5900" speed="270" manacost="0">
   <health now="7200" max="7200"/>
   <look type="593" corpse="22497"/>
-  <targetchange interval="5000" chance="8"/>
+  <targetchange interval="4000" chance="10"/>
   <strategy attack="90" defense="10"/>
   <flags>
     <flag summonable="0"/>
@@ -17,49 +17,72 @@
     <flag staticattack="90"/>
     <flag runonhealth="0"/>
   </flags>
-  <attacks>
+   <attacks>
     <attack name="melee" interval="2000" skill="90" attack="90"/>
-		<attack name="earth" interval="1800" chance="10" length="7" spread="0" min="-300" max="-685">
-			<attribute key="areaEffect" value="stones"/>
+		<attack name="poisoncondition" interval="2000" chance="20" radius="7" target="0" min="-1000" max="-1500" >
+			<attribute key="areaEffect" value="yellowbubble"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="9" radius="6" min="-250" max="-590">
-			<attribute key="areaEffect" value="bigplants"/>
+		<attack name="manadrain" interval="2000" chance="10" radius="5" target="0" min="-100" max="-300">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="feversleep skill reducer" interval="2000" chance="10"/>
+	   <attack name="lifedrain" interval="2000" chance="10" length="6" spread="0" target="1" min="-350" max="-500">
+			<attribute key="areaEffect" value="yellowenergy"/>
 		</attack>	
-  </attacks>
-  <defenses armor="55" defense="55">    
-  </defenses>
+		<attack name="death" interval="2000" chance="20" radius="1" target="1" min="-200" max="-450">
+			<attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="areaEffect" value="smallclouds"/>
+			<attribute key="areaEffect" value="mortarea"/>
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="50">
+		<defense name="healing" interval="2000" chance="15" min="350" max="600">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>  
+		<defense name="invisible" interval="2000" chance="15" duration="5000" >
+			<attribute key="areaEffect" value="blackspark"/>
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
 	<elements>			
-		<element icePercent="-10"/>		
-		<element firePercent="-10"/>
+		<element physicalPercent="10"/>	
+		<element deathPercent="5"/>	
+		<element firePercent="5"/>	
+		<element energyPercent="5"/>	
+		<element icePercent="5"/>		
+		<element holyPercent="-10"/>			
 	</elements>
-  <immunities>
-    <immunity earth="100"/>
-    <immunity energy="100"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="100"/>
-    <immunity invisible="100"/>
-  </immunities>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities> 
 	<voices interval="5000" chance="10">
-		<voice sentence="Knorrrr!"/>
+		<voice sentence="Aktat Roshok! Marruk!"/>
+		<voice sentence="I will eat you in your sleep."/>
+		<voice sentence="I am the darkness around you..."/>
 	</voices>     
-  <loot>
- 	 <item id="2148" countmax="100" chance="30000"/>  
- 	 <item id="2152" countmax="10" chance="33333"/>
- 	 <item id="7590" countmax="4" chance="3100"/>
- 	 <item id="5880" countmax="2" chance="2195"/>
- 	 <item id="8473" countmax="2" chance="2195"/>
- 	 <item id="18435" countmax="8" chance="366"/>
- 	 <item id="2144" countmax="1" chance="866"/>
- 	 <item id="2143" countmax="1" chance="866"/>
-        <item id="18390" chance="1766"/>     
-        <item id="18412" chance="1066"/>          
-        <item id="2477" chance="444"/>
-        <item id="9980" chance="1066"/>
-        <item id="2393" chance="422"/>
-        <item id="11227" chance="1032"/>
-        <item id="5904" chance="632"/>
-        <item id="2487" chance="632"/>
-        <item id="18453" chance="603"/>
-        <item id="18450" chance="603"/>
-</loot>
+	<loot>
+		<item id="2148"  countmax="100"  chance="100000"/> <!-- gold coin -->
+		<item id="2152"  countmax="8"  chance="100000"/> <!-- platinum coin -->
+		<item id="2149"  chance="14000"/> <!-- small emerald -->
+		<item id="2147" countmax="3" chance="9600"/> <!-- small ruby -->
+		<item id="2150" countmax="3"  chance="17000"/> <!-- small amethyst -->
+		<item id="2393"  chance="560"/> <!-- giant sword -->
+		<item id="2475"  chance="2820"/> <!-- warrior helmet -->
+		<item id="2476"  chance="4000"/> <!-- knight armor -->
+		<item id="5909"  chance="4520"/> <!-- white piece of cloth -->
+		<item id="5911"  chance="1130"/> <!-- red piece of cloth -->
+		<item id="7590"  countmax="2" chance="36000"/> <!-- great mana potion -->
+		<item id="8473"  chance="26000"/> <!-- ultimate health potion -->
+		<item id="9970"  countmax="2" chance="17000"/> <!-- small topaz -->
+		<item id="18413"  chance="6000"/> <!-- blue crystal shard -->
+		<item id="18418"  chance="13000"/> <!-- blue crystal splinter -->
+		<item id="18419"  chance="17000"/> <!-- cyan crystal fragment -->
+		<item id="22537"  chance="13000"/> <!-- trapped bad dream monster -->
+		<item id="22538"  chance="18000"/> <!-- bowl of terror sweat -->
+		<item id="22363"  chance="1130"/> <!-- broken dream -->
+	</loot>
 </monster>

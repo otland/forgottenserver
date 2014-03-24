@@ -2,7 +2,7 @@
 <monster name="Shredderthrower" nameDescription="a shredderthrower" race="undead" experience="0" speed="0" manacost="0">
 	<health now="9950" max="9950"/>
 	<look type="0" corpse="1740"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,14 +14,12 @@
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="100"/>
+		<flag runonhealth="0"/>
 		<flag hidehealth="1"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="1" attack="1"/>
-		<attack name="physical" interval="1000" chance="100" range="7" min="-80" max="-140">
+		<attack name="physical" interval="2000" chance="100" range="7" min="-0" max="-110">
 			<attribute key="shootEffect" value="throwingstar"/>
-			<attribute key="areaEffect" value="yellowspark"/>
 		</attack>
 	</attacks>
 	<defenses armor="1" defense="1"/>

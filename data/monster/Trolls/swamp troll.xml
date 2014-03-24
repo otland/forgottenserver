@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Swamp Troll" nameDescription="a swamp troll" race="venom" experience="65" speed="128" manacost="320">
+<monster name="Swamp Troll" nameDescription="a swamp troll" race="venom" experience="25" speed="170" manacost="320">
 	<health now="55" max="55"/>
 	<look type="76" corpse="6018"/>
 	<targetchange interval="5000" chance="0"/>
@@ -18,12 +18,12 @@
 		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="13" poison="30"/>
+		<attack name="melee" interval="2000" skill="10" attack="13" poison="20"/>
 	</attacks>
-	<defenses armor="6" defense="10"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element earthPercent="20"/>
-		<element firePercent="-10"/>
+		<element earthPercent="5"/>
+		<element firePercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grrrr"/>
@@ -31,12 +31,17 @@
 		<voice sentence="Me strong! Me ate spinach!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="5" chance="31500"/><!-- gold coin -->
-		<item id="2667" chance="63500"/><!-- fish -->
+		<item id="2148" countmax="5" chance="50300"/><!-- gold coin -->
+		<item id="2667" chance="60000"/><!-- fish -->
 		<item id="2379" chance="27500"/><!-- dagger -->
-		<item id="2050" chance="15750"/><!-- torch -->
-		<item id="2389" chance="14700"/><!-- spear -->
+		<item id="2050" chance="15000"/><!-- torch -->
+		<item id="2389" chance="13000"/><!-- spear -->
 		<item id="2643" chance="9500"/><!-- leather boots -->
-		<item id="2580" chance="150"/><!-- fishing rod -->
+		<item id="2580" chance="60"/><!-- fishing rod -->
+		<item id="2805" chance="1200"/><!-- Troll Green -->
+		<item id="5901" chance="2160"/><!-- wood -->
+		<item id="13506" chance="2120"/><!-- Medicine Pouch -->
+		<item id="10603" chance="3120"/><!-- Swamp Grass -->
+		<item id="2235" chance="10000"/><!-- Mouldy Cheese -->
 	</loot>
 </monster>

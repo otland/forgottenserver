@@ -2,7 +2,7 @@
 <monster name="Fire Elemental" nameDescription="a fire elemental" race="fire" experience="220" speed="200" manacost="690">
 	<health now="280" max="280"/>
 	<look type="49" corpse="8964"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -19,21 +19,22 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50"/>
-		<attack name="fire" interval="1000" chance="25" range="7" radius="2" target="1" min="-55" max="-155">
+		<attack name="fire" interval="2000" chance="20" range="7" radius="2" target="1" min="-45" max="-160">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="firefield" interval="1000" chance="34" range="7" radius="1" target="1">
+		<attack name="firefield" interval="2000" chance="25" range="7" radius="1" target="1">
 			<attribute key="shootEffect" value="fire"/>
 		</attack>
 	</attacks>
-	<defenses armor="18" defense="20"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element firePercent="100"/>
-		<element deathPercent="100"/>
 		<element icePercent="-25"/>
 	</elements>
 	<immunities>
+		<immunity death="1"/>
+		<immunity fire="1"/>
+		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>

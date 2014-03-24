@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Slug" nameDescription="a slug" race="venom" experience="70" speed="90" manacost="0">
+<monster name="Slug" nameDescription="a slug" race="venom" experience="70" speed="150" manacost="0">
 	<health now="255" max="255"/>
 	<look type="407" corpse="13515"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="5000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -18,20 +18,18 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40"/>
-		<attack name="poison" interval="1000" chance="15" range="4" target="1" min="-5" max="-40">
+		<attack name="melee" interval="2000" skill="45" attack="16"/>
+		<attack name="poison" interval="1000" chance="15" range="7" target="1" min="-5" max="-40">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
 	</attacks>
-	<defenses armor="9" defense="15"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
 		<element energyPercent="20"/>
 		<element deathPercent="7"/>
-		<element firePercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="45" chance="20750"/> <!-- gold coin -->
-		<item id="3976" countmax="5" chance="50000"/> <!-- worm -->
+		<item id="2148" countmax="40" chance="62000"/> <!-- gold coin -->
+		<item id="3976" countmax="3" chance="5000"/> <!-- worm -->
 	</loot>
 </monster>

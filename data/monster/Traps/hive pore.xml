@@ -2,27 +2,30 @@
 <monster name="Hive Pore" nameDescription="a hive pore" race="venom" experience="0" speed="0" manacost="355">
 	<health now="550" max="550"/>
 	<look typeex="15467"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
-		<flag attackable="1"/>
+		<flag attackable="0"/>
 		<flag hostile="1"/>
 		<flag illusionable="1"/>
 		<flag convinceable="1"/>
-		<flag pushable="1"/>
+		<flag pushable="0"/>
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
 	</flags>
-	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0"/>
-	</attacks>
-	<defenses armor="5" defense="11"/>
-	<summons maxSummons="4">
-		<summon name="Lesser Swarmer" interval="2000" chance="16" max="4"/>
+	<defenses>
+		<defense name="physical" interval="30000" chance="100" target="0" radius="3">
+			<attribute key="areaEffect" value="greenspark"/>
+		</defense>
+	</defenses>
+	<summons maxSummons="3">
+		<summon name="Lesser Swarmer" interval="30000" chance="100"/>
+		<summon name="Lesser Swarmer" interval="30000" chance="100"/>
+		<summon name="Lesser Swarmer" interval="30000" chance="100"/>
 	</summons>
 	<immunities>
 		<immunity physical="1"/>
@@ -38,6 +41,4 @@
 		<immunity outfit="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-	<loot>
-	</loot>
 </monster>

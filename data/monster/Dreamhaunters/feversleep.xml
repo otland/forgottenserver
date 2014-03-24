@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Feversleep" nameDescription="Feversleep" race="blood" experience="4400" speed="270" manacost="0">
   <health now="5900" max="5900"/>
-  <look type="592" corpse="22497"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+  <look type="593" corpse="22497"/>
+  <targetchange interval="4000" chance="10"/>
+  <strategy attack="100" defense="0"/>
   <flags>
     <flag summonable="0"/>
     <flag attackable="1"/>
@@ -17,49 +17,58 @@
     <flag staticattack="90"/>
     <flag runonhealth="0"/>
   </flags>
-  <attacks>
-    <attack name="melee" interval="2000" skill="90" attack="90"/>
-		<attack name="earth" interval="1800" chance="10" length="7" spread="0" min="-300" max="-685">
-			<attribute key="areaEffect" value="stones"/>
+    <attacks>
+		<attack name="melee" interval="2000" skill="90" attack="90"/>
+		<attack name="poisoncondition" interval="2000" chance="20" radius="7" target="0" min="-800" max="-1000" >
+			<attribute key="areaEffect" value="yellowbubble"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="9" radius="6" min="-250" max="-590">
-			<attribute key="areaEffect" value="bigplants"/>
+		<attack name="manadrain" interval="2000" chance="10" radius="5" target="0" min="-70" max="-100">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="feversleep skill reducer" interval="2000" chance="10"/>
+	    <attack name="lifedrain" interval="2000" chance="10" length="6" spread="0" target="1" min="-250" max="-300">
+			<attribute key="areaEffect" value="yellowenergy"/>
 		</attack>	
-  </attacks>
-  <defenses armor="55" defense="55">    
-  </defenses>
+		<attack name="death" interval="2000" chance="15" radius="1" target="1" min="-150" max="-300">
+	        <attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="areaEffect" value="smallclouds"/>
+			<attribute key="areaEffect" value="mortarea"/>
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="healing" interval="2000" chance="20" min="250" max="425">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>  
+		<defense name="invisible" interval="2000" chance="10" duration="5000">
+			<attribute key="areaEffect" value="blackspark"/>
+		</defense>
+	</defenses>
 	<elements>			
-		<element icePercent="-10"/>		
-		<element firePercent="-10"/>
+		<element physicalPercent="10"/>	
+		<element deathPercent="5"/>	
+		<element firePercent="5"/>	
+		<element energyPercent="5"/>	
+		<element icePercent="5"/>		
+		<element holyPercent="-10"/>			
 	</elements>
-  <immunities>
-    <immunity earth="100"/>
-    <immunity energy="100"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="100"/>
-    <immunity invisible="100"/>
-  </immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Knorrrr!"/>
-	</voices>     
+	<immunities>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities> 
   <loot>
- 	 <item id="2148" countmax="100" chance="30000"/>  
- 	 <item id="2152" countmax="10" chance="33333"/>
- 	 <item id="7590" countmax="4" chance="3100"/>
- 	 <item id="5880" countmax="2" chance="2195"/>
- 	 <item id="8473" countmax="2" chance="2195"/>
- 	 <item id="18435" countmax="8" chance="366"/>
- 	 <item id="2144" countmax="1" chance="866"/>
- 	 <item id="2143" countmax="1" chance="866"/>
-        <item id="18390" chance="1766"/>     
-        <item id="18412" chance="1066"/>          
-        <item id="2477" chance="444"/>
-        <item id="9980" chance="1066"/>
-        <item id="2393" chance="422"/>
-        <item id="11227" chance="1032"/>
-        <item id="5904" chance="632"/>
-        <item id="2487" chance="632"/>
-        <item id="18453" chance="603"/>
-        <item id="18450" chance="603"/>
+    <item id="2148"  countmax="100"  chance="100000"/> <!-- gold coin -->
+    <item id="2152"  countmax="9" chance="100000"/> <!-- platinum coin -->
+	<item id="2149"  countmax="2" chance="11000"/> <!-- small emerald -->
+	<item id="2150"  countmax="3" chance="12000"/> <!-- small amethyst -->
+	<item id="2656"  chance="1500"/> <!-- blue robe -->
+	<item id="7590"  countmax="2" chance="40000"/> <!-- great mana potion -->
+	<item id="8473"  chance="18000"/> <!-- ultimate health potion -->
+	<item id="9970"  countmax="2" chance="16000"/> <!-- small topaz -->
+	<item id="18418"  chance="13000"/> <!-- blue crystal splinter -->
+	<item id="18413"  chance="11000"/> <!-- blue crystal shard -->
+	<item id="18419"  chance="18000"/> <!-- cyan crystal fragment -->
+	<item id="22537"  chance="17000"/> <!-- trapped bad dream monster -->
+	<item id="22538"  chance="14000"/> <!-- bowl of terror sweat -->
 </loot>
 </monster>

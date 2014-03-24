@@ -1,63 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Raging Mage" nameDescription="a raging mage" race="blood" experience="3250" speed="265" manacost="0">
-  <health now="3500" max="3500"/>
-  <look type="416" corpse="13834"/>
-  <targetchange interval="5000" chance="30"/>
-  <strategy attack="90" defense="10"/>
-  <flags>
-    <flag summonable="0"/>
-    <flag attackable="1"/>
-    <flag hostile="1"/>
-    <flag illusionable="0"/>
-    <flag convinceable="0"/>
-    <flag pushable="0"/>
-    <flag canpushitems="1"/>
-    <flag canpushcreatures="1"/>
-    <flag targetdistance="4"/>
-    <flag staticattack="90"/>
-    <flag runonhealth="1000"/>
-  </flags>
-  <attacks>
-  	 <attack name="energy" interval="1000" chance="20" range="7" target="1" min="-100" max="-240">
-	  <attribute key="shootEffect" value="energyball"/>
-	  <attribute key="areaEffect" value="energy"/>
-	    </attack>
-		<attack name="manadrain" interval="1400" chance="24" range="6" min="-100" max="-200">
-			<attribute key="shootEffect" value="ice"/>
+<monster name="raging mage" nameDescription="a raging mage" race="blood" experience="3250" speed="200" manacost="0">
+	<health now="3500" max="3500"/>
+	<look type="416" corpse="13834"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="80"/>
+		<flag runonhealth="300"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="32" attack="37"/>
+		<attack name="thunderstorm" interval="2000" chance="35" range="7" target="1" min="-100" max="-200"/>
+		<attack name="manadrain" interval="2000" chance="15" range="7" min="-100" max="-200"/>
+		<attack name="energyfield" interval="2000" chance="15" range="7" radius="2" target="1">
+			<attribute key="shootEffect" value="energy"/>
 		</attack>
-
-  </attacks>
-  <defenses armor="20" defense="20">
-    <defense name="healing" interval="1000" chance="25" min="60" max="200">
-      <attribute key="areaEffect" value="blueshimmer"/>
-    </defense>
-
-  </defenses>
-  <elements>
-	<element physicalPercent="25"/>
-	<element holyPercent="100"/>
-		<element deathPercent="-15"/>
-			<element icePercent="100"/>
-	<element earthPercent="100"/>
-  </elements>
-  <immunities>
-    <immunity energy="1"/>
-    <immunity fire="1"/>
-    <immunity paralyze="1"/>
-    <immunity invisible="1"/>
-  </immunities>
-  <summons maxSummons="1">
-    <summon name="go" interval="1000" chance="10" />
-  </summons>
-  <voices interval="5000" chance="10">
-    <voice sentence="Behold the all permeating powers I draw from this gate!!"/>
-    <voice sentence="ENERGY!!"/>
-  </voices>
-  <loot>
-    <item id="2148" countmax="100" chance1="100000" chancemax="0"/>
-    <item id="2185" chance="993" />
-    <item id="1986" chance="777"/>
-    <item id="2600" chance="10000"/>
-    <item id="2124" chance="1000"/>
-  </loot>
+		<attack name="energy" interval="2000" chance="20" length="8" spread="0" min="-101" max="-300">
+			<attribute key="areaEffect" value="bigclouds"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25"/>
+	<elements>
+		<element physicalPercent="-25"/>
+		<element deathPercent="15"/>
+	</elements>
+	<immunities>
+		<immunity energy="1"/>
+		<immunity outfit="1"/>
+        <immunity fire="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Behold the all permeating powers I draw from this gate!!"/>
+		<voice sentence="ENERGY!!"/>
+	</voices>
+	<summons maxSummons="1">
+		<summon name="golden servant" interval="2000" chance="50"/>
+	</summons>
+	<loot>
+		<item id="2148" countmax="100" chance="50000" /> <!-- gold coin -->
+		<item id="2148" countmax="69" chance="47000" /> <!-- gold coin -->
+		<item id="2152" countmax="8" chance="77400"/> <!-- platinum coins -->
+		<item id="7368" countmax="7" chance="1830" /> <!-- assassin star -->
+		<item id="5911" chance="31100"/> <!-- red piece of cloth -->
+		<item id="7590" countmax="5" chance="23170"/> <!-- great mana potion -->
+		<item id="7591" countmax="5" chance="26830"/> <!-- great health potion -->
+		<item id="2792" countmax="3" chance="3600"/> <!-- dark mushroom -->	
+		<item id="2178" chance="9760"/> <!-- mind stone -->
+		<item id="7443" chance="6710"/> <!-- bullseye potion -->
+		<item id="8871" chance="4880"/> <!-- focus cape -->
+		<item id="2165" chance="4880"/> <!-- stealth ring -->
+		<item id="12410" chance="4270"/> <!-- luminous orb- -->
+		<item id="2123" chance="1830"/> <!-- ring of the sky -->
+		<item id="2146" countmax="5" chance="1830"/> <!-- small sapphires -->
+		<item id="9958" chance="1220"/> <!-- royal tapestry -->
+		<item id="133940" chance="1220"/> <!-- elemental spikes -->
+		<item id="8902" chance="610"/> <!-- spellbook of mind control -->
+		<item id="5741" chance="610"/> <!-- skull helmet -->
+		<item id="2195" chance="610"/> <!-- boots of haste -->
+	</loot>
 </monster>

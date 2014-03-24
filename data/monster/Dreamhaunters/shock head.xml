@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Shock Head" nameDescription="Shock Head" race="blood" experience="4700" speed="270" manacost="0">
+<monster name="Shock Head" nameDescription="Shock Head" race="blood" experience="4700" speed="250" manacost="0">
   <health now="5800" max="5800"/>
   <look type="579" corpse="22392"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+  <targetchange interval="4000" chance="10"/>
+  <strategy attack="100" defense="0"/>
   <flags>
     <flag summonable="0"/>
     <flag attackable="1"/>
@@ -14,52 +14,50 @@
     <flag canpushitems="1"/>
     <flag canpushcreatures="1"/>
     <flag targetdistance="1"/>
-    <flag staticattack="90"/>
+    <flag staticattack="80"/>
     <flag runonhealth="0"/>
   </flags>
-  <attacks>
-    <attack name="melee" interval="2000" skill="90" attack="90"/>
-		<attack name="earth" interval="1800" chance="10" length="7" spread="0" min="-300" max="-685">
+   <attacks>
+		<attack name="melee" interval="2000" skill="100" attack="145"/>
+  		<attack name="death" interval="2000" chance="15" length="5" spread="2" target="1" min="-200" max="-300">
+			<attribute key="areaEffect" value="blacksmoke"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="15" length="8" spread="3" target="1" speedchange="-800" duration="7500">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="-0" max="-350">
+		 <attribute key="shootEffect" value="earth"/>
 			<attribute key="areaEffect" value="stones"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="9" radius="6" min="-250" max="-590">
-			<attribute key="areaEffect" value="bigplants"/>
-		</attack>	
-  </attacks>
-  <defenses armor="55" defense="55">    
-  </defenses>
+		<attack name="shock head skill reducer 1" range="5" interval="2000" chance="5"/>
+		<attack name="shock head skill reducer 2" interval="2000" chance="5"/>
+	</attacks>
+    <defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="250" max="350">
+			<attribute key="areaEffect" value="insects"/>
+		</defense>  
+	</defenses>
 	<elements>			
-		<element icePercent="-10"/>		
-		<element firePercent="-10"/>
+		<element physicalPercent="-5"/>	
+		<element deathPercent="30"/>	
+		<element energyPercent="30"/>	
+		<element icePercent="5"/>	
 	</elements>
-  <immunities>
-    <immunity earth="100"/>
-    <immunity energy="100"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="100"/>
-    <immunity invisible="100"/>
-  </immunities>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity fire="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Knorrrr!"/>
+		<voice sentence="<brrzz>"/>
+		<voice sentence="Thun... Thun... THUNDER!"/>
 	</voices>     
-  <loot>
- 	 <item id="2148" countmax="100" chance="30000"/>  
- 	 <item id="2152" countmax="10" chance="33333"/>
- 	 <item id="7590" countmax="4" chance="3100"/>
- 	 <item id="5880" countmax="2" chance="2195"/>
- 	 <item id="8473" countmax="2" chance="2195"/>
- 	 <item id="18435" countmax="8" chance="366"/>
- 	 <item id="2144" countmax="1" chance="866"/>
- 	 <item id="2143" countmax="1" chance="866"/>
-        <item id="18390" chance="1766"/>     
-        <item id="18412" chance="1066"/>          
-        <item id="2477" chance="444"/>
-        <item id="9980" chance="1066"/>
-        <item id="2393" chance="422"/>
-        <item id="11227" chance="1032"/>
-        <item id="5904" chance="632"/>
-        <item id="2487" chance="632"/>
-        <item id="18453" chance="603"/>
-        <item id="18450" chance="603"/>
-</loot>
+	<loot>
+		<item id="2148"  countmax="100"  chance="43000"/> <!-- gold coin -->
+		<item id="2148"  countmax="87"  chance="50000"/> <!-- gold coin -->
+		<item id="2146"  chance="5000"/> <!-- small sapphire -->
+		<item id="2498"  chance="270"/> <!-- royal helmet -->
+		<item id="22539"  chance="10000"/> <!-- goosebump leather -->
+	</loot>
 </monster>

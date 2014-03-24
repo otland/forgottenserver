@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="250" manacost="0">
+<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200" manacost="0">
 	<health now="1100" max="1100"/>
 	<look type="355" corpse="12631"/>
-	<targetchange interval="2000" chance="5"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,27 +14,25 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="80"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="90" />
-		<attack name="death" interval="2000" chance="10" range="7" target="1" max="-170">
-			<attribute key="shootEffect" value="death"/>
-			<attribute key="areaEffect" value="mortarea"/>
-		</attack>
-		<attack name="death" interval="2000" chance="9" length="8" spread="0" min="-125" max="-255">
-			<attribute key="areaEffect" value="mortarea"/>
-		</attack>
-		<attack name="physical" interval="2000" chance="12" length="8" spread="3" max="-0">
+		<attack name="melee" interval="2000" skill="60" attack="60"/>
+		<attack name="icicle" interval="2000" chance="20" range="7" target="1" min="-50" max="-100"/>
+		<attack name="souleater drown" interval="2000" chance="10"/>
+		<attack name="death" interval="2000" chance="10" length="4" spread="3" target="0"  min="-100" max="-200">
 			<attribute key="areaEffect" value="rednote"/>
 		</attack>
-		<attack name="manadrain" interval="2000" chance="13" range="7" target="1" max="-100">
+		<attack name="lifedrain" interval="2000" chance="25" radius="4" target="0" min="-30" max="-60">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="20">
-		<defense name="invisible" interval="2000" chance="8">
+	<defenses armor="30" defense="30">
+		<defense name="invisible" interval="2000" chance="5" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="healing" interval="2000" chance="15" min="120" max="125">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
@@ -49,7 +47,6 @@
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 		<immunity death="1"/>
-		<immunity earth="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Life is such a fickle thing!"/>
@@ -58,17 +55,17 @@
 		<voice sentence="I will feed on you."/>
 	</voices>
 	<loot>
-		<item id="2189" chance="1500" /><!-- wand of cosmic energy -->
-		<item id="12637" chance="2350" /><!-- ectoplasmic sushi -->
-		<item id="7590" chance="8750" /><!-- great mana potion -->
-		<item id="2152" countmax="6" chance="29425" /><!-- platinum coin -->
-		<item id="8473" chance="9700" /><!-- ultimate health potion -->
+		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
+		<item id="2152" countmax="6" chance="49610" /><!-- platinum coin -->
+		<item id="2189" chance="910" /><!-- wand of cosmic energy -->
+		<item id="12637" chance="2000" /><!-- ectoplasmic sushi -->
+		<item id="7590" chance="8000" /><!-- great mana potion -->
+		<item id="8473" chance="9400" /><!-- ultimate health potion -->
 		<item id="12636" chance="15250" /><!-- lizard essence -->
-		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
-		<item id="2185" chance="1550" /><!-- necrotic rod -->
-		<item id="12635" chance="525" /><!-- souleater trophy -->
-		<item id="6300" chance="800" /><!-- death ring -->
-		<item id="5884" chance="600" /><!-- spirit container -->
+		<item id="2185" chance="980" /><!-- necrotic rod -->
+		<item id="12635" chance="20" /><!-- souleater trophy -->
+		<item id="6300" chance="300" /><!-- death ring -->
+		<item id="5884" chance="140" /><!-- spirit container -->
 	</loot>
 </monster>

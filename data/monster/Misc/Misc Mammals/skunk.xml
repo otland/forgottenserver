@@ -2,7 +2,7 @@
 <monster name="Skunk" nameDescription="a skunk" race="blood" experience="3" speed="120" manacost="200">
 	<health now="20" max="20"/>
 	<look type="106" corpse="6035"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -19,14 +19,11 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="5"/>
-		<attack name="poison" interval="1000" chance="2" range="1" radius="1" target="1" min="-1" max="-3">
-			<attribute key="areaEffect" value="poison"/>
-		</attack>
+		<attack name="poison" interval="2000" chance="10" range="1" target="1" min="-1" max="-3"/>
 	</attacks>
-	<defenses armor="1" defense="5"/>
+	<defenses armor="5" defense="5"/>
 	<loot>
-		<item id="3976" chance="3000"/><!-- worm -->
-		<item id="2666" chance="1000"/><!-- meat -->
-		<item id="11191" chance="700"/> <!-- skunk tail -->
+		<item id="9114" chance="4910"/><!-- bulb of garlic -->
+		<item id="11191" chance="920"/> <!-- skunk tail -->
 	</loot>
 </monster>

@@ -2,7 +2,7 @@
 <monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190" manacost="0">
 <health now="230" max="230"/>
 <look type="403" corpse="13514"/>
-<targetchange interval="5000" chance="12"/>
+<targetchange interval="5000" chance="0"/>
 <strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -18,11 +18,15 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="28" poison="3"/>	
+		<attack name="melee" interval="2000" skill="30" attack="37" poison="60"/>	
 	</attacks>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element physicalPercent="80"/>
-		<element firePercent="-10"/>
+		<element physicalPercent="5"/>
+		<element firePercent="-5"/>
+		<element earthPercent="50"/>
+		<element icePercent="-5"/>
+		<element energyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -32,7 +36,9 @@
 		<voice sentence="Klk! Klk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="100000" /> <!-- gold coin -->
-		<item id="3964" chance="1000" /> <!-- ripper lance -->
+		<item id="2148" countmax="80" chance="80000" /> <!-- gold coin -->
+		<item id="3964" chance="850" /> <!-- ripper lance -->
+		<item id="7618" chance="280" /> <!-- hp -->
+		<item id="2209" chance="100" /> <!-- club ring -->
 	</loot>
 </monster>

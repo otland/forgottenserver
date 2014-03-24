@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<monster name="Dire Penguin" nameDescription="dire penguin" race="blood" experience="120" speed="156" manacost="0">
+<monster name="Dire Penguin" nameDescription="dire penguin" race="blood" experience="119" speed="200" manacost="0">
 	<health now="173" max="173"/>
 	<look type="250" corpse="7334"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -18,11 +18,19 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="40"/>
-		<attack name="physical" interval="2000" chance="20" range="7" min="-0" max="-60">
-			<attribute key="shootEffect" value="suddendeath"/>
-			<attribute key="areaEffect" value="mortarea"/>
+		<attack name="physical" interval="2000" chance="15" target="1" radius="1" range="7" min="-0" max="-35">
+			<attribute key="shootEffect" value="smallstone"/>
+			<attribute key="areaEffect" value="explosionarea"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="10" range="7" radius="4" target="0" speedchange="-600" duration="9000">
+			<attribute key="areaEffect" value="poff"/>
 		</attack>
 	</attacks>
+	<defenses armor="10" defense="10">
+		<defense name="speed" interval="2000" chance="15" range="7" speedchange="310" duration="3000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
@@ -34,6 +42,6 @@
 		<item id="2667" countmax="4" chance="8000"/><!-- fish -->
 		<item id="7159" chance="7000"/><!-- green perch -->
 		<item id="7158" chance="8000"/><!-- rainbow trout -->
-		<item id="2434"  chance="500"/><!-- dragon hammer -->
+		<item id="2434"  chance="200"/><!-- dragon hammer -->
 	</loot>
 </monster>

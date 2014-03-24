@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Destroyer" nameDescription="a destroyer" race="blood" experience="2500" speed="270" manacost="0">
+<monster name="Destroyer" nameDescription="a destroyer" race="undead" experience="2500" speed="270" manacost="0">
 	<health now="3700" max="3700"/>
 	<look type="236" corpse="6320"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,17 +14,17 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="70"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="90" attack="100"/>
-		<attack name="physical" interval="1000" chance="15" range="7" min="-90" max="-165">
-			<attribute key="shootEffect" value="smallstone"/>
+		<attack name="physical" interval="2000" chance="15" range="7" min="-0" max="-200">
+			<attribute key="shootEffect" value="largerock"/>
 		</attack>
 	</attacks>
-	<defenses armor="30" defense="35">
-		<defense name="speed" interval="1000" chance="7" speedchange="380" duration="8000">
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="420" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
@@ -47,11 +47,11 @@
 		<voice sentence="It's a good day to destroy!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
-		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
-		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
-		<item id="2148" countmax="41" chance="100000"/><!-- gold coin -->
-		<item id="2666" chance="50000"/><!-- meat -->
+		<item id="2148" countmax="100" chance="60000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="41" chance="60000"/><!-- gold coin -->
+		<item id="2666" countmax="6" chance="50000"/><!-- meat -->
 		<item id="6500" chance="20000"/><!-- demonic essence -->
 		<item id="2416" chance="14285"/><!-- crowbar -->
 		<item id="2546" countmax="12" chance="12500"/><!-- burst arrow -->
@@ -64,7 +64,7 @@
 		<item id="2152" countmax="3" chance="4166"/><!-- platinum coin -->
 		<item id="2393" chance="1694"/><!-- giant sword -->
 		<item id="7591" chance="1136"/><!-- greath health potion -->
-		<item id="2645" chance="892"/><!-- steel boots -->
+		<item id="2645" chance="992"/><!-- steel boots -->
 		<item id="7427" chance="869"/><!-- chaos mace -->
 		<item id="7419" chance="833"/><!-- dreaded cleaver -->
 		<item id="2125" chance="578"/><!-- crystal necklace -->

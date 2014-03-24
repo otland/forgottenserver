@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Prospector" nameDescription="a undead prospector" race="blood" experience="85" speed="144" manacost="0">
+<monster name="Undead Prospector" nameDescription="a undead prospector" race="blood" experience="85" speed="170" manacost="0">
 	<health now="100" max="100"/>
 	<look type="18" corpse="5976"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -20,11 +20,12 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="28"/>
 	</attacks>
-	<defenses armor="8" defense="17">
+	<defenses>
 		<defense name="healing" interval="2000" chance="15" min="5" max="15">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
+	<defenses armor="15" defense="15"/>
 	<elements>
 		<element energyPercent="30"/>
 		<element earthPercent="20"/>
@@ -37,11 +38,21 @@
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Our mine... leave us alone."/>
+		<voice sentence="Turn back..."/>
+		<voice sentence="These mine is ours... you shall not pass."/>
+	</voices>
 	<loot>
-		<item id="3976" countmax="6" chance="46325" /><!-- worm -->
-		<item id="2148" countmax="29" chance="38150" /><!-- gold coin -->
-		<item id="2403" chance="33825" /><!-- knife -->
-		<item id="2050" chance="58825" /><!-- torch -->
-		<item id="2460" chance="17175" /><!-- brass helmet -->
+     	<item id="2148" countmax="29" chance="53850" /><!-- gold coin -->
+		<item id="3976" countmax="6" chance="92310" /><!-- worm -->
+		<item id="2403" chance="15380" /><!-- knife -->
+		<item id="2050" chance="46150" /><!-- torch -->
+		<item id="2460" chance="23000" /><!-- brass helmet -->
+		<item id="2168" chance="200"/><!-- life ring -->
+		<item id="2483" chance="1000"/><!-- scale armor -->
+		<item id="2229" chance="240"/><!-- skull -->
+		<item id="2473" chance="1000"/><!-- viking helmet -->
+		<item id="5913" chance="1000"/><!-- brown piece of cloth -->
 	</loot>
 </monster>

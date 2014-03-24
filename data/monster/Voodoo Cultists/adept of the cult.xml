@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Adept of the Cult" nameDescription="an adept of the cult" race="blood" experience="400" speed="210" manacost="0">
+<monster name="Adept of the Cult" nameDescription="an adept of the cult" race="blood" experience="400" speed="215" manacost="0">
 	<health now="430" max="430"/>
-	<look type="194" head="114" body="94" legs="94" feet="57" corpse="20314"/>
-	<targetchange interval="5000" chance="8"/>
+	<look type="194" head="114" body="94" legs="94" feet="57" corpse="20311"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -18,52 +18,59 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="30"/>
-		<attack name="lifedrain" interval="2000" chance="34" radius="1" target="0" min="-50" max="-250">
+		<attack name="melee" interval="2000" skill="50" attack="30" poison="50" poison="40" />
+		<attack name="lifedrain" interval="2000" chance="20" range="7" target="0" min="-70" max="-150">
+			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="poison"/>
-		</attack>
-		<attack name="drunk" interval="1000" chance="15" range="7" radius="1" target="1">
 			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" range="7" radius="1" target="1" duration="4000">
+			<attribute key="shootEffect" value="holy"/>
+			<attribute key="areaEffect" value="holydamage"/>
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
-		<defense name="healing" interval="1000" chance="25" min="50" max="70">
+		<defense name="healing" interval="2000" chance="20" min="50" max="70">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="invisible" interval="3000" chance="15" duration="4000">
-			<attribute key="areaEffect" value="blueshimmer"/>
+		<defense name="invisible" interval="2000" chance="15" duration="3000">
+			<attribute key="areaEffect" value="yellowbubble"/>
 		</defense>
 	</defenses>
 	<elements>
 		<element holyPercent="30"/>
-		<element earthPercent="15"/>
-		<element icePercent="15"/>
-		<element energyPercent="-6"/>
+		<element earthPercent="40"/>
+		<element icePercent="20"/>
+		<element energyPercent="-5"/>
 		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="Ghoul" interval="2000" chance="10000"/>
+		<summon name="Ghoul" interval="2000" chance="10"/>
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Praise the voodoo!"/>
+		<voice sentence="Power to the cult!"/>
+		<voice sentence="Feel the power of the cult!"/>
+	</voices>
 	<loot>
-		<item id="2148" countmax="57" chance="20000"/><!-- gold coin -->
-			<item id="5810" chance="850"/><!-- pirate voodoo doll -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2423" chance="3000"/><!-- clerical mace -->
-				<item id="1962" chance="2750"/><!-- orange book -->
-				<item id="2169" chance="1000"/><!-- time ring -->
-				<item id="2170" chance="1250"/><!-- silver amulet -->
-				<item id="2147" chance="900"/><!-- small ruby -->
-				<item id="6089" chance="700"/><!-- music sheet third verse -->
-				<item id="2183" chance="750"/><!-- hailstorm rod -->
-				<item id="7426" chance="800"/><!-- amber staff -->
-				<item id="2655" chance="500"/><!-- red robe -->
-				<item id="5801" chance="100"/><!-- key ring -->
-				<item id="7424" chance="50"/><!-- lunar staff -->
-			</inside>
-		</item>
+		<item id="2148" countmax="60" chance="65000"/><!-- gold coin -->
+		<item id="5810" chance="1650"/><!-- pirate voodoo doll -->
+		<item id="2423" chance="1000"/><!-- clerical mace -->
+		<item id="1962" chance="980"/><!-- orange book -->
+		<item id="2169" chance="420"/><!-- time ring -->
+		<item id="2170" chance="1000"/><!-- silver amulet -->
+		<item id="2147" chance="330"/><!-- small ruby -->
+		<item id="6089" chance="700"/><!-- music sheet third verse -->
+		<item id="2183" chance="220"/><!-- hailstorm rod -->
+		<item id="7426" chance="690"/><!-- amber staff -->
+		<item id="2655" chance="80"/><!-- red robe -->
+		<item id="7424" chance="120"/><!-- lunar staff -->
+		<item id="12448" chance="9640"/><!-- rope belt -->
+		<item id="10556" chance="10000"/><!-- cultish robe -->
+		<item id="12608" chance="130"/><!-- broken key ring -->
+		<item id="12411" chance="90"/><!-- cultish symbol -->
 	</loot>
 </monster>

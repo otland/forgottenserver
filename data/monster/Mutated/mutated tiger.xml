@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mutated Tiger" nameDescription="a mutated tiger" race="blood" experience="750" speed="245" manacost="0">
+<monster name="Mutated Tiger" nameDescription="a mutated tiger" race="blood" experience="750" speed="240" manacost="0">
 	<health now="1100" max="1100"/>
 	<look type="318" corpse="9913"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -19,15 +19,15 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="60"/>
-		<attack name="physical" interval="3000" chance="20" length="8" spread="3" min="-30" max="-130">
-			<attribute key="areaEffect" value="redspark"/>
+		<attack name="physical" interval="2000" chance="20" length="5" spread="3" min="-0" max="-200">
+			<attribute key="areaEffect" value="yellowspark"/>
 		</attack>
 	</attacks>
-	<defenses armor="30" defense="30">
-		<defense name="invisible" interval="1000" chance="25" duration="9000">
+	<defenses armor="25" defense="25">
+		<defense name="invisible" interval="2000" chance="10" duration="2000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="healing" interval="1000" chance="25" min="150" max="300">
+		<defense name="healing" interval="2000" chance="10" min="150" max="300">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
@@ -35,27 +35,28 @@
 		<element firePercent="20"/>
 		<element energyPercent="20"/>
 		<element icePercent="20"/>
-		<element deathPercent="-15"/>
+		<element deathPercent="-5"/>
 		<element earthPercent="80"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
-		<immunity drunk="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="2500" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="GRAAARRRRRR"/>
 		<voice sentence="CHHHHHHHHHHH"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="96" chance="20000"/><!-- gold coin -->
-		<item id="2671" countmax="2" chance="22500"/><!-- ham -->
-		<item id="2666" countmax="4" chance="15000"/><!-- meat -->
-		<item id="2509" chance="7000"/><!-- steel shield -->
-		<item id="2168" chance="2000"/><!-- life ring -->
-		<item id="7588" chance="900"/><!-- strong health potion -->
-		<item id="2515" chance="500"/><!-- guardian shield -->
-		<item id="7454" chance="300"/><!-- glorius axe -->
-		<item id="7436" chance="200"/><!-- angelic axe -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="5" chance="50000"/><!-- gold coin -->
+		<item id="11210" chance="20130"/><!-- striped fur -->
+		<item id="2666" countmax="2" chance="29500"/><!-- meat -->
+		<item id="11228" chance="10600"/><!-- sabretooth -->
+		<item id="2168" chance="5580"/><!-- life ring -->
+		<item id="7588" chance="6000"/><!-- strong health potion -->
+		<item id="2515" chance="380"/><!-- guardian shield -->
+		<item id="7454" chance="870"/><!-- glorius axe -->
+		<item id="7436" chance="440"/><!-- angelic axe -->
+		<item id="9959" chance="730"/><!-- Silky Tapestry -->
 	</loot>
 </monster>

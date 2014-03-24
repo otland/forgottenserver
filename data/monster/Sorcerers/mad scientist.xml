@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mad Scientist" nameDescription="a mad scientist" race="blood" experience="205" speed="220" manacost="0">
+<monster name="Mad Scientist" nameDescription="a mad scientist" race="blood" experience="205" speed="190" manacost="0">
 	<health now="325" max="325"/>
-	<look type="133" head="97" body="0" legs="38" feet="97" addons="1" corpse="6080"/>
-	<targetchange interval="5000" chance="30"/>
+	<look type="133" head="97" body="0" legs="38" feet="97" addons="1" corpse="20439"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -19,17 +19,21 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="25" attack="20"/>
-		<attack name="lifedrain" interval="1000" chance="35" range="7" min="-20" max="-60">
-			<attribute key="shootEffect" value="energy"/>
+		<attack name="drown" interval="2000" chance="15" range="7" radius="3" target="1" min="-20" max="-56">
+			<attribute key="shootEffect" value="smallearth"/>
 			<attribute key="areaEffect" value="poff"/>
 		</attack>
-		<attack name="energy strike" interval="2000" chance="25" min="0" max="-30"/>
-		<attack name="speed" interval="3000" chance="10" range="7" target="1" duration="2000" speedchange="-300">
-			<attribute key="areaEffect" value="redshimmer"/>
+		<attack name="earth" interval="2000" chance="15" min="-20" max="-36">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="10" range="7" target="1" duration="2000" speedchange="-300">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="smallplants"/>
 		</attack> 
 	</attacks>
-	<defenses armor="15" defense="20">
-		<defense name="healing" interval="1000" chance="25" min="10" max="30">
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="15" min="10" max="30">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
@@ -39,30 +43,30 @@
 		<element energyPercent="20"/>
 		<element icePercent="10"/>
 		<element holyPercent="20"/>
-		<element deathPercent="-15"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
+		<immunity drown="1"/>
 	</immunities>
-	<voices interval="3000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Die in the name of Science!"/>
 		<voice sentence="You will regret interrupting my studies!"/>
 		<voice sentence="Let me test this!"/>
 		<voice sentence="I will study your corpse!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="17500"/><!-- gold coin -->
-		<item id="2148" countmax="50" chance="17500"/><!-- gold coin -->
-		<item id="7620" chance="18000"/><!-- mana potion -->
-		<item id="7618" chance="23500"/><!-- health potion -->
-		<item id="2787" countmax="3" chance="5000"/><!-- white mushroom -->
-		<item id="2308" chance="7750"/><!-- powder herb -->
-		<item id="2177" chance="2700"/><!-- life crystal -->
-		<item id="2162" chance="3000"/><!-- magic lightwand -->
-		<item id="7762" chance="700"/><!-- small enchanted amethyst -->
-		<item id="6324" chance="350"/><!-- cream cake -->
-		<item id="2687" countmax="5" chance="500"/><!-- cookie -->
-		<item id="2190" chance="200"/><!-- wand of vortex -->
-		<item id="7440" chance="1500"/><!-- mastermind potion -->
+		<item id="2148" countmax="65" chance="30000"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="30000"/><!-- gold coin -->
+		<item id="7620" chance="19000"/><!-- mana potion -->
+		<item id="7618" chance="19000"/><!-- health potion -->
+		<item id="2787" countmax="3" chance="8000"/><!-- white mushroom -->
+		<item id="2308" chance="6000"/><!-- powder herb -->
+		<item id="2177" chance="2000"/><!-- life crystal -->
+		<item id="2162" chance="2000"/><!-- magic lightwand -->
+		<item id="7762" chance="470"/><!-- small enchanted amethyst -->
+		<item id="6324" chance="820"/><!-- cream cake -->
+		<item id="2687" countmax="5" chance="1200"/><!-- cookie -->
+		<item id="7440" chance="130"/><!-- mastermind potion -->
 	</loot>
 </monster>

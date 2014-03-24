@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lizard Chosen" nameDescription="a lizard chosen" race="blood" experience="2200" speed="240" manacost="0">
+<monster name="Lizard Chosen" nameDescription="a lizard chosen" race="blood" experience="2200" speed="260" manacost="0">
 	<health now="3050" max="3050"/>
 	<look type="344" corpse="11288"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,24 +14,24 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="80"/>
 		<flag runonhealth="50"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="80" attack="80"/>
-		<attack name="poisoncondition" interval="2000" chance="10" length="8" spread="3" min="-20" max="-20">
+		<attack name="poisoncondition" interval="2000" chance="15" length="3" spread="2" min="-240" max="-320">
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
-		<attack name="poison" interval="2000" chance="7" target="0" radius="3" min="-190" max="-340">
-			<attribute key="areaEffect" value="poison"/>
+		<attack name="earth" interval="2000" chance="15" target="0" radius="3" min="-190" max="-340">
+			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
-		<attack name="poison" interval="2000" chance="8" length="8" spread="0" min="-90" max="-180">
-			<attribute key="areaEffect" value="poison"/>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="0" min="-90" max="-180">
+			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">
+	<defenses armor="45" defense="45">
 		<defense name="healing" interval="2000" chance="10" min="75" max="125">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="greenshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
@@ -45,21 +45,27 @@
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grzzzzzzz!"/>
+		<voice sentence="Garrrblarrrrzzzz!"/>
+		<voice sentence="Kzzzzzz!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="36450" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="36450" /><!-- gold coin -->
-		<item id="2148" countmax="32" chance="36450" /><!-- gold coin -->
-		<item id="5876" chance="2525" /><!-- lizard leather -->
-		<item id="11325" chance="9825" /><!-- spiked iron ball -->
-		<item id="12629" chance="3675" /><!-- scale of corruption -->
-		<item id="2152" countmax="5" chance="2450" /><!-- platinum coin -->
+		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="32000" /><!-- gold coin -->
+		<item id="2148" countmax="36" chance="32000" /><!-- gold coin -->
+		<item id="5876" chance="2000" /><!-- lizard leather -->
+		<item id="11325" chance="9890" /><!-- spiked iron ball -->
+		<item id="12629" chance="2870" /><!-- scale of corruption -->
+		<item id="2152" countmax="5" chance="2920" /><!-- platinum coin -->
 		<item id="11327" chance="5800" /><!-- cursed shoulder spikes -->
 		<item id="7591" countmax="3" chance="5350" /><!-- great health potion -->
-		<item id="11303" chance="1225" /><!-- zaoan shoes -->
-		<item id="2145" countmax="5" chance="2150" /><!-- small diamond -->
+		<item id="11303" chance="810" /><!-- zaoan shoes -->
+		<item id="2145" countmax="5" chance="2550" /><!-- small diamond -->
 		<item id="11326" chance="3350" /><!-- corrupted flag -->
-		<item id="5881" countmax="3" chance="1475" /><!-- lizard scale -->
-		<item id="2528" chance="1450" /><!-- tower shield -->
+		<item id="5881" countmax="3" chance="980" /><!-- lizard scale -->
+		<item id="2528" chance="1100" /><!-- tower shield -->
+		<item id="11304" chance="940"/> <!-- zaoan legs -->
+		<item id="11302" chance="140"/> <!-- zaoan helmet -->
+		<item id="11301" chance="980"/> <!-- zaoan armor -->
+		
 	</loot>
 </monster>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Valkyrie" nameDescription="a valkyrie" race="blood" experience="85" speed="176" manacost="450">
+<monster name="Valkyrie" nameDescription="a valkyrie" race="blood" experience="85" speed="190" manacost="450">
 	<health now="190" max="190"/>
-	<look type="139" head="113" body="57" legs="95" feet="113" corpse="20526"/>
-	<targetchange interval="5000" chance="8"/>
+	<look type="139" head="113" body="57" legs="95" feet="113" corpse="20523"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -15,21 +15,21 @@
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="10"/>
+		<flag runonhealth="20"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="25" attack="40"/>
-		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-50">
+		<attack name="physical" interval="2000" chance="15" range="7" min="-0" max="-50">
 			<attribute key="shootEffect" value="spear"/>
 		</attack>
 	</attacks>
-	<defenses armor="12" defense="14"/>
+	<defenses armor="20" defense="20"/>
 	<elements>
 		<element icePercent="10"/>
 		<element firePercent="10"/>
-		<element holyPercent="1"/>
-		<element deathPercent="-1"/>
-		<element physicalPercent="-1"/>
+		<element holyPercent="5"/>
+		<element deathPercent="-5"/>
+		<element physicalPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Another head for me!"/>
@@ -39,19 +39,19 @@
 		<voice sentence="One more head for me!"/>
 	</voices>
 	<loot>
-		<item id="2389" countmax="3" chance="50000"/><!-- spear -->
-		<item id="2148" countmax="12" chance="25000"/><!-- gold coin -->
-		<item id="2666" countmax="3" chance="25000"/><!-- meat -->
+		<item id="2148" countmax="12" chance="30000"/><!-- gold coin -->
+		<item id="2666" chance="30100"/><!-- meat -->
+		<item id="2674" countmax="2" chance="6800"/><!-- apple -->
+		<item id="2229" chance="760"/><!-- skull -->
 		<item id="2464" chance="10000"/><!-- chain armor -->
-		<item id="2674" countmax="2" chance="6666"/><!-- apple -->
-		<item id="12399" chance="5555"/><!-- girlish hair decoration -->
-		<item id="3965" chance="5000"/><!-- hunting spear -->
-		<item id="12400" chance="3333"/><!-- protective charm -->
-		<item id="2200" subtype="250" chance="1162"/><!-- protection amulet -->
-		<item id="2463" chance="813"/><!-- plate armor -->
-		<item id="2229" chance="735"/><!-- skull -->
-		<item id="7618" chance="526"/><!-- health potion -->
-		<item id="2387" chance="460"/><!-- double axe -->
-		<item id="2145" chance="184"/><!-- small diamond -->
+		<item id="2389" countmax="3" chance="55000"/><!-- spear -->
+		<item id="3965" chance="5155"/><!-- hunting spear -->
+		<item id="2463" chance="719"/><!-- plate armor -->
+		<item id="2387" chance="492"/><!-- double axe -->
+		<item id="2200" chance="1086"/><!-- protection amulet -->
+		<item id="7618" chance="591"/><!-- health potion -->
+		<item id="2145" chance="200"/><!-- small diamond -->
+		<item id="12399" chance="5800"/><!-- Girlish Hair Decoration -->
+		<item id="12400" chance="3400"/><!-- Protective Charm -->
 	</loot>
 </monster>

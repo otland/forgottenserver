@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spidris" nameDescription="a spidris" race="blood" experience="2600" speed="560" manacost="0">
+<monster name="Spidris" nameDescription="a spidris" race="venom" experience="2600" speed="260" manacost="0">
 	<health now="3700" max="3700"/>
 	<look type="457" corpse="15296"/>
-	<targetchange interval="2000" chance="50"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,45 +14,50 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="0"/>
-		<flag runonhealth="60"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="30"/>
-		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
-			<attribute key="shootEffect" value="throwingknife"/>
-		</attack>
+		<attack name="melee" interval="2000" skill="75" attack="70"/>
+		<attack name="earth" interval="2000" chance="20" target="1" range="7" radius="3" min="-150" max="-310">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>		
 	</attacks>
-	<defenses armor="11" defense="11"/>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="450" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity earth="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="Eeeeeeyyyyh!"/>
-		<voice sentence="Iiiiieeeeeeh!"/>
+		<voice sentence="Iiiiieeeeeh!"/>
 	</voices>
 	<elements>
-		<element deathPercent="10"/>
-		<element firePercent="10"/>
+		<element deathPercent="5"/>
+		<element firePercent="5"/>
 		<element holyPercent="-10"/>
-		<element energyPercent="-10"/>
-		<element icePercent="-10"/>
+		<element energyPercent="-5"/>
+		<element icePercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="94" chance="100000"/> <!-- gold coin -->
-		<item id="2148" countmax="94" chance="100000"/> <!-- gold coin -->
-		<item id="2152" countmax="4" chance="50000"/> <!-- platinum coin -->
-		<item id="15485" chance="16666"/> <!-- spidris sandible -->
+		<item id="2148" countmax="100" chance="50000"/> <!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000"/> <!-- gold coin -->
+		<item id="2152" countmax="4" chance="45000"/> <!-- platinum coin -->
+		<item id="15485" chance="14960"/> <!-- spidris sandible -->
 		<item id="15486" chance="12500"/> <!-- compound eye -->
-		<item id="2147" countmax="5" chance="11111"/> <!-- small ruby -->
-		<item id="7590" countmax="2" chance="11111"/> <!-- great mana potion -->
+		<item id="2147" countmax="5" chance="11900"/> <!-- small ruby -->
+		<item id="7590" countmax="2" chance="11500"/> <!-- great mana potion -->
 		<item id="8473" countmax="2" chance="6250"/> <!-- ultimate health potion -->
-		<item id="6300" chance="3030"/> <!-- death ring -->
-		<item id="7632" chance="1219"/><!-- giant shimmering pearl -->
-		<item id="7413" chance="909"/><!-- titan axe -->
-		<item id="2153" chance="909"/><!-- violet gem -->
-		<item id="15489" chance="806"/><!-- calopteryx cape -->
-		<item id="15492" chance="709"/><!-- hive scythe -->
-		<item id="15491" chance="606"/><!-- carapace shield -->
+		<item id="6300" chance="2700"/> <!-- death ring -->
+		<item id="7632" chance="1700"/><!-- giant shimmering pearl -->
+		<item id="7413" chance="920"/><!-- titan axe -->
+		<item id="2153" chance="770"/><!-- violet gem -->
+		<item id="15489" chance="370"/><!-- calopteryx cape -->
+		<item id="15492" chance="690"/><!-- hive scythe -->
+		<item id="15491" chance="720"/><!-- carapace shield -->
 	</loot>
 </monster>

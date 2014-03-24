@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Thornfire Wolf" nameDescription="a thornfire wolf" race="energy" experience="200" speed="360" manacost="0">
+<monster name="Thornfire Wolf" nameDescription="a thornfire wolf" race="energy" experience="200" speed="250" manacost="0">
 	<health now="600" max="600"/>
 	<look type="414" corpse="13859"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -18,33 +18,34 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-      <attack name="melee" interval="2000" min="-15" max="-80"/>
-			<attack name="physical" interval="2000" chance="10" range="1" target="1" min="-35" max="-70">
-		<attribute key="areaEffect" value="explosionarea"/>
+		<attack name="melee" interval="2000" skill="35" attack="30"/>
+		<attack name="physical" interval="2000" chance="15" range="1" target="1" min="-35" max="-70">
+			<attribute key="shootEffect" value="whirlwindsword"/>
 		</attack>
-		    <attack name="fire" interval="2000" chance="22" range="7" radius="4" target="1" min="-0" max="-0">
-      <attribute key="shootEffect" value="fire"/>
-      <attribute key="areaEffect" value="firearea"/>
-				</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" radius="2" target="1" min="-30" max="-70">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="explosion"/>
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="2" target="1"/>
 	</attacks>
-	<defenses armor="40" defense="45">
+	<defenses armor="15" defense="15">
 		<defense name="healing" interval="1000" chance="20" min="100" max="220">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="-1"/>
+		<element icePercent="1"/>
 	</elements>
 	<immunities>
-		<immunity fire="1"/>
+	    <immunity fire="1"/>
 		<immunity invisible="1"/>
 		<immunity paralyze="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="53" chance="50000"/><!-- gold coin -->
-		<item id="2666" chance="33333"/><!-- meat -->
-		<item id="7840" countmax="8" chance="14285"/><!-- flaming arrow -->
-		<item id="10553" chance="7692"/><!-- fiery heart -->
-		<item id="5897" chance="7692"/><!-- wolf paw -->
+		<item id="2148" countmax="53" chance="64000"/><!-- gold coin -->
+		<item id="2666" chance="34000"/><!-- meat -->
+		<item id="7840" countmax="8" chance="15000"/><!-- flaming arrow -->
+		<item id="5897" chance="7900"/><!-- wolf paw -->
+		<item id="10553" chance="7900"/><!-- fiery heart -->
 	</loot>
 </monster>

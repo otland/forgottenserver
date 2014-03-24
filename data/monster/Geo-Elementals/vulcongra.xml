@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vulcongra" nameDescription="vulcongra" race="blood" experience="1100" speed="390" manacost="0">
+<monster name="Vulcongra" nameDescription="vulcongra" race="fire" experience="1100" speed="230" manacost="0">
   <health now="1600" max="1600"/>
   <look type="509" corpse="18476"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+  <targetchange interval="4000" chance="10"/>
+  <strategy attack="100" defense="0"/>
   <flags>
     <flag summonable="0"/>
     <flag attackable="1"/>
@@ -15,55 +15,51 @@
     <flag canpushcreatures="1"/>
     <flag targetdistance="1"/>
     <flag staticattack="90"/>
-    <flag runonhealth="0"/>
+    <flag runonhealth="220"/>
   </flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="110"/>
-		<attack name="fire" interval="2000" chance="17" range="7" radius="4" target="1" min="-60" max="-250">
+		<attack name="melee" interval="2000" skill="60" attack="67"/>
+		<attack name="fire" interval="2000" chance="10" length="8" spread="0" min="-195" max="-340">
+			<attribute key="areaEffect" value="explosion"/>
+		</attack>	
+		<attack name="fire" interval="2000" chance="15" range="7" target="1" min="-100" max="-200">
 			<attribute key="shootEffect" value="fire"/>
-			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="firefield" interval="2000" chance="15" range="7" radius="4" target="1">
-			<attribute key="shootEffect" value="fire"/>
-		</attack>
-		<attack name="fire" interval="2000" chance="17" length="8" spread="3" min="-70" max="-350">
-			<attribute key="areaEffect" value="firearea"/>
-		</attack>
+		<attack name="vulcongra soulfire" interval="3000" chance="100"/>
 	</attacks>
-  <defenses armor="55" defense="55">    
-  </defenses>
+	<defenses armor="35" defense="35"/>
 	<elements>		
-		<element deathPercent="-10"/>				
-		<element icePercent="+10"/>
+		<element deathPercent="5"/>				
+		<element icePercent="-5"/>
 	</elements>
-  <immunities>
-    <immunity fire="100"/>
-    <immunity earth="100"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="100"/>
-    <immunity invisible="100"/>
-  </immunities> 
+	<immunities>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities> 
 	<voices interval="5000" chance="10">
 		<voice sentence="Fuchah! Fuchah!"/>
 		<voice sentence="Fuchah!"/>
 		<voice sentence="Yag! Yag! Yag!"/>
 	</voices>   
   <loot>
-		<item id="2148" countmax="100" chance="30000"/><!-- gold coin -->		
-		<item id="2152" countmax="2" chance="33333"/><!-- platinum coin -->  
-		<item id="2676" countmax="2" chance="33333"/><!-- banana -->  
-        <item id="2187" chance="1080"/><!-- woi -->               
-        <item id="2207" chance="1600"/><!-- sword ring -->  
-        <item id="2392" chance="500"/><!-- fire sword -->  
-        <item id="7899" chance="500"/><!-- magma coat -->  
-        <item id="7890" chance="450"/><!-- magma amulet -->  
-		<item id="10553" chance="1508"/><!-- fiery heart -->  
-		<item id="18424" chance="877"/><!-- Magma Clumps --> 
-		<item id="18425" chance="976"/><!-- Blazing Bone -->
-		<item id="7588" chance="1942"/><!-- shp --> 
-		<item id="7589" chance="1942"/><!-- smp --> 
-		<item id="18420" chance="778"/><!-- Red Crystal Fragment -->  
-		<item id="13757" chance="1942"/><!-- coal --> 
-		<item id="18417" chance="1942"/><!-- Brown Crystal Splinter --> 
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->		
+		<item id="2148" countmax="7" chance="50000"/><!-- gold coin -->		
+		<item id="2152"  chance="14780"/><!-- platinum coin -->  
+		<item id="2676" countmax="10" chance="10420"/><!-- banana -->  
+        <item id="2187" chance="1000"/><!-- woi -->               
+        <item id="2207" chance="2920"/><!-- sword ring -->  
+        <item id="2392" chance="260"/><!-- fire sword -->  
+        <item id="7899" chance="140"/><!-- magma coat -->  
+        <item id="7890" chance="970"/><!-- magma amulet -->  
+		<item id="10553" chance="9380"/><!-- fiery heart -->  
+		<item id="18424" chance="12440"/><!-- Magma Clump --> 
+		<item id="18425" chance="8030"/><!-- Blazing Bone -->
+		<item id="7588" chance="7100"/><!-- shp --> 
+		<item id="7589" chance="7100"/><!-- smp --> 
+		<item id="18420" chance="2280"/><!-- Red Crystal Fragment -->  
+		<item id="13757" chance="940"/><!-- coal --> 
+		<item id="18417" chance="4850"/><!-- Brown Crystal Splinter --> 
 </loot>
 </monster>

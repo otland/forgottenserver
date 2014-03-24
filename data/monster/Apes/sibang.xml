@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="220" manacost="0">
+<monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="200" manacost="0">
 	<health now="225" max="225"/>
 	<look type="118" corpse="6045"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,17 +14,17 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="4"/>
-		<flag staticattack="90"/>
+		<flag staticattack="70"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="40"/>
-		<attack name="physical" interval="1000" chance="25" range="7" min="0" max="-55">
+		<attack name="physical" interval="2000" chance="35" range="7" min="-0" max="-55">
 			<attribute key="shootEffect" value="smallstone"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="12">
-		<defense name="speed" interval="1000" chance="12" speedchange="240" duration="3000">
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="380" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
@@ -45,13 +45,13 @@
 		<voice sentence="Ahhuuaaa!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="50000"/><!-- gold coin -->
-		<item id="2676" countmax="12" chance="25000"/><!-- banana -->
-		<item id="1294" countmax="3" chance="25000"/><!-- small stone -->
-		<item id="2675" countmax="5" chance="16666"/><!-- orange -->
-		<item id="12467" chance="4761"/><!-- banana sash -->
-		<item id="2678" countmax="5" chance="1923"/><!-- coconut -->
-		<item id="5883" chance="1000"/><!-- ape fur -->
+		<item id="2148" countmax="35" chance="56000"/><!-- gold coin -->
+		<item id="2676" countmax="12" chance="30000"/><!-- banana -->
+		<item id="2678" countmax="3" chance="1960"/><!-- coconut -->
+		<item id="2675" countmax="5" chance="19840"/><!-- orange -->
+		<item id="1294" countmax="3" chance="30060"/><!-- small stone -->
 		<item id="2682" chance="1000"/><!-- melon -->
+		<item id="12467" chance="5000"/><!-- banana sash -->
+		<item id="5883" chance="1000"/><!-- ape fur -->
 	</loot>
 </monster>
