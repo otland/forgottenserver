@@ -219,19 +219,16 @@ bool House::transferToDepot() const
 	}
 
 	Player* player = g_game.getPlayerByGUID(owner);
-	if (!player) {
-		player = new Player(nullptr);
-		if (!IOLoginData::loadPlayerById(player, owner)) {
-			delete player;
+	if (player) {
+		transferToDepot(player);
+	} else {
+		Player tmpPlayer(nullptr);
+		if (!IOLoginData::loadPlayerById(&tmpPlayer, owner)) {
 			return false;
 		}
-	}
 
-	transferToDepot(player);
-
-	if (player->isOffline()) {
-		IOLoginData::savePlayer(player);
-		delete player;
+		transferToDepot(&tmpPlayer);
+		IOLoginData::savePlayer(&tmpPlayer);
 	}
 	return true;
 }
@@ -743,19 +740,15 @@ bool Houses::payHouses() const
 			continue;
 		}
 
-		Player* player = g_game.getPlayerByGUID(ownerid);
-		if (!player) {
-			player = new Player(nullptr);
-			if (!IOLoginData::loadPlayerById(player, ownerid)) {
-				//player doesnt exist, reset house owner
-				house->setOwner(0);
-				delete player;
-				continue;
-			}
+		Player player(nullptr);
+		if (!IOLoginData::loadPlayerById(&player, ownerid)) {
+			//player doesnt exist, reset house owner
+			house->setOwner(0);
+			continue;
 		}
 
-		if (player->getBankBalance() >= rent) {
-			player->setBankBalance(player->getBankBalance() - rent);
+		if (player.getBankBalance() >= rent) {
+			player.setBankBalance(player.getBankBalance() - rent);
 
 			time_t paidUntil = currentTime;
 			switch (rentPeriod) {
@@ -807,17 +800,14 @@ bool Houses::payHouses() const
 				std::ostringstream ss;
 				ss << "Warning! \nThe " << period << " rent of " << house->getRent() << " gold for your house \"" << house->getName() << "\" is payable. Have it within " << daysLeft << " days or you will lose this house.";
 				letter->setText(ss.str());
-				g_game.internalAddItem(player->getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 			} else {
-				house->setOwner(0, true, player);
+				house->setOwner(0, true, &player);
 			}
 		}
 
-		if (player->isOffline()) {
-			IOLoginData::savePlayer(player);
-			delete player;
-		}
+		IOLoginData::savePlayer(&player);
 	}
 	return true;
 }
