@@ -488,7 +488,7 @@
 	<monster name="Goblin Leader" file="Goblins/goblin leader.xml"/>
 	<monster name="Goblin Scavenger" file="Goblins/goblin scavenger.xml"/>
 	<monster name="Grynch Clan Goblin" file="Goblins/grynch clan goblin.xml"/>
-	<monster name="Demon (Goblin)" file="Goblins\demon (goblin).xml"/>
+	<monster name="Demon (Goblin)" file="Goblins/demon (goblin).xml"/>
 
 	<!-- Hydro-Elementals -->
 	<monster name="Massive Water Elemental" file="Hydro-Elementals/massive water elemental.xml"/>
@@ -636,7 +636,7 @@
 	<monster name="Stalker" file="Outlaws/stalker.xml"/>
 	<monster name="Wild Warrior" file="Outlaws/wild warrior.xml"/>
 	<monster name="Feverish Citizen" file="Outlaws/feverish citizen.xml"/>
-	<monster name="Crypt Defiler" file="Outlaws\crypt defiler.xml"/>
+	<monster name="Crypt Defiler" file="Outlaws/crypt defiler.xml"/>
 
 	<!-- Pharaohs -->
 	<monster name="Ashmunrah" file="Pharaohs/ashmunrah.xml"/>
