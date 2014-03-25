@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Kongra" nameDescription="a kongra" race="blood" experience="115" speed="200" manacost="0">
+<monster name="Kongra" nameDescription="a kongra" race="blood" experience="115" speed="210" manacost="0">
 	<health now="340" max="340"/>
 	<look type="116" corpse="6043"/>
-	<targetchange interval="5000" chance="20"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -20,8 +20,8 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="20" attack="40"/>
 	</attacks>
-	<defenses armor="18" defense="14">
-		<defense name="speed" interval="1000" chance="7" speedchange="260" duration="3000">
+	<defenses armor="20" defense="20">
+		<defense name="speed" interval="2000" chance="15" speedchange="260" duration="3000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
@@ -38,14 +38,14 @@
 		<voice sentence="Huaauaauaauaa!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="50000"/><!-- gold coin -->
-		<item id="2676" countmax="12" chance="25000"/><!-- banana -->
-		<item id="12427" chance="4761"/><!-- kongra's shoulderpad -->
-		<item id="2200" subtype="250" chance="980"/><!-- protection amulet -->
+		<item id="2148" countmax="40" chance="69000"/><!-- gold coin -->
+		<item id="2676" countmax="12" chance="30000"/><!-- banana -->
+		<item id="2463" chance="950"/><!-- plate armor -->
+		<item id="2200" chance="990"/><!-- protection amulet -->
 		<item id="5883" chance="980"/><!-- ape fur -->
-		<item id="2463" chance="943"/><!-- plate armor -->
-		<item id="7618" chance="564"/><!-- health potion -->
-		<item id="2166" chance="301"/><!-- power ring -->
-		<item id="2209" chance="234"/><!-- club ring -->
+		<item id="2166" chance="300"/><!-- power ring -->
+		<item id="2209" chance="230"/><!-- club ring -->
+		<item id="7618" chance="570"/><!-- health potion -->
+		<item id="12427" chance="4900"/><!-- kongra shoulderpad -->
 	</loot>
 </monster>

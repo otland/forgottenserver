@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crystalcrusher" nameDescription="a crystalcrusher" race="blood" experience="500" speed="340" manacost="0">
+<monster name="Crystalcrusher" nameDescription="a crystalcrusher" race="undead" experience="500" speed="230" manacost="0">
 	<health now="570" max="570"/>
 	<look type="511" corpse="18487"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,26 +14,29 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="80"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-      <attack name="melee" interval="2000" min="-60" max="-140"/>
-		<attack name="fire" interval="3000" chance="17" length="8" spread="3" min="-150" max="-310">
-			<attribute key="areaEffect" value="firearea"/>
+		<attack name="melee" interval="2000" skill="54" attack="52"/>
+		<attack name="earth" interval="2000" chance="10" target="1" radius="3" min="-110" max="-260">
+			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
 	</attacks>
-	<defenses armor="22" defense="35">
-		<defense name="invisible" interval="5000" chance="50" duration="5000">
-			<attribute key="areaEffect" value="redshimmer"/>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="30" min="5" max="15">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="healing" interval="2000" chance="10" min="129" max="175">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="20"/>
-		<element firePercent="10"/>
+		<element deathPercent="10"/>
+		<element firePercent="15"/>
 		<element holyPercent="-1"/>
-		<element energyPercent="-10"/>
-		<element icePercent="-1"/>
+		<element energyPercent="-5"/>
+		<element icePercent="-3"/>
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
@@ -44,11 +47,11 @@
 		<voice sentence="Crunch!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="50000"/><!-- gold coin -->
-		<item id="18417" chance="5263"/><!-- brown crystal splinter -->
+		<item id="2148" countmax="90" chance="85000"/><!-- gold coin -->
+		<item id="18417" chance="5250"/><!-- brown crystal splinter -->
 		<item id="18418" chance="5000"/><!-- blue crystal splinter -->
-		<item id="18416" chance="4761"/><!-- green crystal splinter -->
-		<item id="18304" countmax="3" chance="4761"/><!-- crystalline arrow -->
-		<item id="18432" chance="3571"/><!-- crystalline spikes -->
+		<item id="18416" chance="4920"/><!-- green crystal splinter -->
+		<item id="18304" countmax="3" chance="5000"/><!-- crystalline arrow -->
+		<item id="18432" chance="3690"/><!-- crystalline spikes --> 
 	</loot>
 </monster>

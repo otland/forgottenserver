@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Infected Weeper" nameDescription="infected weeper" race="blood" experience="4800" speed="670" manacost="0">
+<monster name="Infected Weeper" nameDescription="infected weeper" race="fire" experience="4800" speed="250" manacost="0">
   <health now="6800" max="6800"/>
   <look type="489" corpse="17251"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+  <targetchange interval="4000" chance="10"/>
+  <strategy attack="100" defense="0"/>
   <flags>
     <flag summonable="0"/>
     <flag attackable="1"/>
@@ -14,38 +14,46 @@
     <flag canpushitems="1"/>
     <flag canpushcreatures="1"/>
     <flag targetdistance="1"/>
-    <flag staticattack="90"/>
+    <flag staticattack="80"/>
     <flag runonhealth="0"/>
   </flags>
   <attacks>
-		<attack name="melee" interval="1000" skill="90" attack="100" poison="5"/>	
-		<attack name="poison" interval="1000" chance="12" radius="3" target="0" min="-100" max="-460">
-			<attribute key="areaEffect" value="firearea"/>
+		<attack name="melee" interval="2000" skill="70" attack="70"/>
+		<attack name="lifedrain" interval="2000" chance="15" length="5" spread="3" min="-250" max="-700">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>	
+		<attack name="fire" interval="2000" chance="30" target="0" radius="3" min="-80" max="-250">
+			<attribute key="areaEffect" value="fire"/>
 		</attack>
-		<attack name="fire" interval="2300" chance="100" range="7" target="1" radius="2" min="-280" max="-490">
-			<attribute key="shootEffect" value="flammingarrow"/>
-			<attribute key="areaEffect" value="firearea"/>			
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-800" duration="30000">
+			<attribute key="areaEffect" value="yellowspark"/>
 		</attack>
   </attacks>
-  <defenses armor="75" defense="75">    
+  <defenses armor="45" defense="45">
+		<defense name="invisible" interval="2000" chance="10" duration="4000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>  
   </defenses>
-	<elements>				
-		<element physicalPercent="-10"/>
-		<element deathPercent="10"/>
-		<element energyPercent="10"/>
-	</elements>
+  <elements>				
+		<element physicalPercent="-5"/>
+		<element deathPercent="5"/>
+		<element icePercent="-5"/>
+  </elements>
   <immunities>
-    <immunity fire="100"/>
-    <immunity earth="100"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="100"/>
-    <immunity invisible="100"/>
+    <immunity fire="1"/>
+    <immunity earth="1"/>
+    <immunity paralyze="1"/>
+    <immunity invisible="1"/>
   </immunities> 
 	<voices interval="5000" chance="10">
 		<voice sentence="Moooaaan!"/>
 	</voices>     
+	<summons maxSummons="6">
+		<summon name="Parasite" interval="2000" chance="10"/>
+	</summons>
   <loot>
- 	 <item id="2148" countmax="189" chance="30000"/><!-- gold coin -->  
- 	 <item id="2152" countmax="6" chance="33333"/><!-- platinum coin -->
+ 	 <item id="2148" countmax="198" chance="100000"/><!-- gold coin -->  
+ 	 <item id="2152" countmax="7" chance="100000"/><!-- platinum coin -->
+	 <item id="8748" chance="1460"/><!-- coal -->
 </loot>
 </monster>

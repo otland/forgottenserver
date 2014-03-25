@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rotworm" nameDescription="a rotworm" race="blood" experience="40" speed="176" manacost="305">
+<monster name="Rotworm" nameDescription="a rotworm" race="blood" experience="40" speed="150" manacost="305">
 	<health now="65" max="65"/>
 	<look type="26" corpse="5967"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,20 +14,20 @@
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="70"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="20"/>
 	</attacks>
-	<defenses armor="8" defense="11"/>
+	<defenses armor="10" defense="10"/>
 	<loot>
-		<item id="2148" countmax="17" chance="50000"/><!-- gold coin -->
-		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
-		<item id="2666" countmax="2" chance="16666"/><!-- meat -->
-		<item id="10609" chance="9090"/><!-- lump of dirt -->
-		<item id="2398" chance="4347"/><!-- mace -->
-		<item id="2376" chance="3030"/><!-- sword -->
-		<item id="3976" countmax="3" chance="2941"/><!-- worm -->
+		<item id="2148" countmax="17" chance="71760"/><!-- gold coin -->
+		<item id="3976" countmax="3" chance="3000"/><!-- worm -->
+		<item id="2666" chance="20000"/><!-- meat -->
+		<item id="2671" chance="20120"/><!-- ham -->
+		<item id="2376" chance="3000"/><!-- sword -->
+		<item id="2398" chance="4500"/><!-- mace -->
+		<item id="10609" chance="10000"/><!-- lump of dirt -->
 	</loot>
 </monster>

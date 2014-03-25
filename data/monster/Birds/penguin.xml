@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<monster name="Penguin" nameDescription="penguin" race="blood" experience="1" speed="156" manacost="300">
+<monster name="Penguin" nameDescription="penguin" race="blood" experience="1" speed="180" manacost="300">
 	<health now="33" max="33"/>
 	<look type="250" corpse="7334"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -14,19 +14,20 @@
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="15"/>
+		<flag runonhealth="32"/>
+		<flag staticattack="90"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="3"/>
 	</attacks>
+	<defenses armor="5" defense="5"/>
 	<elements>
-		<element icePercent="10"/>
+		<element icePercent="5"/>
 		<element energyPercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2667" countmax="2" chance="5000"/><!-- fish -->
-		<item id="7159" chance="5000"/><!-- green perch -->
-		<item id="7158" chance="2000"/><!-- rainbow trout -->
-		<item id="2669" chance="3000"/><!-- northern pike -->
+		<item id="2667" countmax="2" chance="7500"/><!-- fish -->
+		<item id="7159" chance="140"/><!-- green perch -->
+		<item id="7158" chance="60"/><!-- rainbow trout -->
 	</loot>
 </monster>

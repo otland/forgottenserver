@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crocodile" nameDescription="a crocodile" race="blood" experience="40" speed="240" manacost="350">
+<monster name="Crocodile" nameDescription="a crocodile" race="blood" experience="40" speed="190" manacost="350">
 	<health now="105" max="105"/>
 	<look type="119" corpse="6046"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="5000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -20,20 +20,18 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="20"/>
 	</attacks>
-	<defenses armor="13" defense="5"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element earthPercent="25"/>
-		<element icePercent="18"/>
-		<element energyPercent="-6"/>
+		<element earthPercent="20"/>
+		<element icePercent="10"/>
+		<element energyPercent="-5"/>
 		<element firePercent="-10"/>
-		<element physicalPercent="-14"/>
+		<element physicalPercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="15" chance="17500"/><!-- gold coin -->
-		<item id="2467" chance="7450"/><!-- leather helmet -->
-		<item id="2671" countmax="2" chance="15000"/><!-- ham -->
-		<item id="2666" countmax="4" chance="20000"/><!-- meat -->
-		<item id="2649" chance="8250"/><!-- leather legs-->
-		<item id="3982" chance="400"/><!-- crocodile boots -->
+		<item id="2148" countmax="10" chance="50000"/><!-- gold coin -->
+		<item id="2671" chance="40000"/><!-- ham -->
+		<item id="3982" chance="100"/><!-- crocodile boots -->
+		<item id="11196" chance="20180"/><!-- Piece of Crocodile Leather -->
 	</loot>
 </monster>

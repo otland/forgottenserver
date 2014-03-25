@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="280" manacost="485">
+<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="210" manacost="485">
 	<health now="225" max="225"/>
 	<look type="219" corpse="6060"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -18,14 +18,14 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="45" poison="2"/>
-		<attack name="poisonfield" interval="1000" chance="20" range="1">
-			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poff"/>
+		<attack name="melee" interval="2000" skill="30" attack="45" poison="40"/>
+		<attack name="poison" interval="2000" chance="10" target="1" radius="1" range="1">
+		    <attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="carniphila"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="17">
-		<defense name="speed" interval="1000" chance="13" speedchange="334" duration="5000">
+	<defenses armor="10" defense="10">
+		<defense name="speed" interval="2000" chance="15" speedchange="220" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
@@ -35,16 +35,17 @@
 		<element icePercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity earth="1"/>
+        <immunity earth="1"/>     	
 		<immunity outfit="1"/>
 		<immunity drunk="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="40" chance="79000"/><!-- gold coin -->
 		<item id="11198" chance="10000"/><!-- tarantula egg -->
-		<item id="2478" chance="2564"/><!-- brass legs -->
+		<item id="2478" chance="3050"/><!-- brass legs -->
 		<item id="2510" chance="2000"/><!-- plate shield -->
-		<item id="2457" chance="943"/><!-- steel helmet -->
-		<item id="2169" chance="121"/><!-- time ring -->
+		<item id="2457" chance="990"/><!-- steel helmet -->
+		<item id="2169" chance="120"/><!-- time ring -->
+		<item id="8859" chance="4820"/><!-- spider fangs -->
 	</loot>
 </monster>

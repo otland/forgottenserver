@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Minotaur Guard" nameDescription="a minotaur guard" race="blood" experience="160" speed="190" manacost="550">
+<monster name="Minotaur Guard" nameDescription="a minotaur guard" race="blood" experience="160" speed="250" manacost="550">
 	<health now="185" max="185"/>
 	<look type="29" corpse="5983"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -20,7 +20,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50"/>
 	</attacks>
-	<defenses armor="15" defense="25"/>
+	<defenses armor="20" defense="20"/>
 	<elements>
 		<element firePercent="20"/>
 		<element holyPercent="10"/>
@@ -32,16 +32,16 @@
 		<voice sentence="Kaplar!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="20" chance="50000"/><!-- gold coin -->
-		<item id="12428" countmax="2" chance="8333"/><!-- minotaur horn -->
-		<item id="12438" chance="5000"/><!-- piece of warrior armor -->
-		<item id="2465" chance="4347"/><!-- brass armor -->
-		<item id="2464" chance="2941"/><!-- chain armor -->
-		<item id="2513" chance="2063"/><!-- battle shield -->
-		<item id="5878" chance="925"/><!-- minotaur leather -->
-		<item id="2580" chance="473"/><!-- fishing rod -->
+		<item id="2148" countmax="20" chance="59640"/><!-- gold coin -->
+		<item id="2580" chance="480"/><!-- fishing rod -->
+		<item id="2465" chance="4390"/><!-- brass armor -->
+		<item id="2464" chance="2980"/><!-- chain armor -->
+		<item id="2513" chance="2150"/><!-- battle shield -->
+		<item id="5878" chance="1000"/><!-- minotaur leather -->
 		<item id="2387" chance="400"/><!-- double axe -->
-		<item id="7618" chance="369"/><!-- health potion -->
-		<item id="7401" chance="97"/><!-- minotaur trophy -->
+		<item id="7618" chance="400"/><!-- health potion -->
+		<item id="7401" chance="80"/><!-- minotaur trophy -->
+		<item id="12428" countmax="2" chance="8330"/><!-- Minotaur Horn -->
+		<item id="12438" chance="5040"/><!-- Piece of Warrior armor -->
 	</loot>
 </monster>

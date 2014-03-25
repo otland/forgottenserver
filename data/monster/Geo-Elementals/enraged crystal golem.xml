@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Enraged Crystal Golem" nameDescription="a enraged crystal golem" race="energy" experience="550" speed="270" manacost="0">
-	<health now="700" max="700"/>
-	<look type="508" corpse="18466"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
+<monster name="Enraged Crystal Golem" nameDescription="enraged crystal golem" race="energy" experience="550" speed="200" manacost="0">
+  <health now="700" max="700"/>
+  <look type="508" corpse="18466"/>
+  <targetchange interval="4000" chance="10"/>
+  <strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -13,39 +13,35 @@
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag targetdistance="0"/>
+		<flag staticattack="70"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="15"/>
+		<attack name="melee" interval="2000" skill="50" attack="50"/>
 	</attacks>
-	<defenses armor="40" defense="45">
-		<defense name="healing" interval="1000" chance="7" min="20" max="100">
-			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-	</defenses>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element physicalPercent="20"/>
+		<element physicalPercent="15"/>
 	</elements>
 	<immunities>
 		<immunity fire="1"/>
 		<immunity ice="1"/>
-		<immunity invisible="1"/>
 		<immunity paralyze="1"/>
-	</immunities>
-	<voices interval="2500" chance="10">
+		<immunity invisible="1"/>
+	</immunities>  
+	<voices interval="5000" chance="10">
 		<voice sentence="Crrrrk! Chhhhr!"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
-		<item id="7589" chance="7692"/><!-- strong mana potion -->
-		<item id="18432" chance="7692"/><!-- crystalline spikes -->
-		<item id="7588" chance="6666"/><!-- strong health potion -->
-		<item id="7449" chance="4761"/><!-- crystal sword -->
-		<item id="18304" countmax="5" chance="4761"/><!-- crystalline arrow -->
-		<item id="18418" chance="4166"/><!-- blue crystal splinter -->
-		<item id="18419" chance="909"/><!-- cyan crystal fragment -->
-		<item id="7454" chance="389"/><!-- glorious axe -->
+		<item id="18451" countmax="5" chance="5008"/><!-- crystalline arrows -->
+		<item id="18432" chance="7980"/><!-- crystaline spikes -->
+		<item id="7588" chance="7140"/><!-- SHP -->
+		<item id="7589" chance="8270"/><!-- SMP -->
+		<item id="18418" chance="4120"/><!-- blue crystal splinter -->
+		<item id="7449" chance="4710"/><!-- crystal sword  -->
+		<item id="18419" chance="1050"/><!-- cyan crystal fragment -->
+		<item id="7454" chance="360"/><!-- glorious axe -->
 	</loot>
 </monster>

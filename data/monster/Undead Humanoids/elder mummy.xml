@@ -1,62 +1,56 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Elder Mummy" nameDescription="a elder mummy" race="undead" experience="560" speed="220" manacost="0">
-  <health now="850" max="850"/>
-  <look type="65" head="20" body="30" legs="40" feet="50" corpse="6004"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="100" defense="0"/>
-  <flags>
-    <flag summonable="0"/>
-    <flag attackable="1"/>
-    <flag hostile="1"/>
-    <flag illusionable="1"/>
-    <flag convinceable="0"/>
-    <flag pushable="0"/>
-    <flag canpushitems="1"/>
-    <flag canpushcreatures="0"/>
-    <flag targetdistance="1"/>
-    <flag staticattack="90"/>
-    <flag runonhealth="0"/>
-  </flags>
-  <attacks>
-    <attack name="melee" interval="2000" skill="50" attack="32" poison="3"/>
-    <attack name="death" interval="1000" chance="15" range="1" min="-10" max="-130">
-    <attribute key="areaEffect" value="poff"/>
-    </attack>
-    <attack name="speed" interval="1000" chance="8" range="7" speedchange="-600" duration="7000">
-      <attribute key="areaEffect" value="redshimmer"/>
-    </attack>
-  </attacks>  
-  <elements>
-  <element earthPercent="-30"/>
-  <element icePercent="-90"/>
-  <element firePercent="-90"/>
-  </elements>
-  <immunities>
-    <immunity earth="0"/>
-    <immunity death="0"/>
-    <immunity lifedrain="0"/>
-    <immunity paralyze="0"/>
-    <immunity invisible="0"/>
-  </immunities>
-<voices interval="5000" chance="10">
-    <voice sentence="I will ssswallow your sssoul!"/>
-    <voice sentence="Mort ulhegh dakh visss"/>
-    <voice sentence="Flesssh to dussst!"/>
-    <voice sentence="I will tassste life again!"/>
-    <voice sentence="hkahra exura belil mort!"/>
-    <voice sentence="Yohag Sssetham!"/>
-  </voices>
-  <loot>
-    <item id="2148" countmax="100" chance="30000"/><!-- gold coin -->
-    <item id="2148" countmax="100" chance="30000"/><!-- gold coin -->
-    <item id="3976" countmax="3" chance="30000"/><!-- worm -->
-    <item id="2159" countmax="2" chance="30000"/><!-- scarab coin -->
-    <item id="2161" chance="2000"/><!-- strange talisman -->
-    <item id="2162" chance="2000"/><!-- magic lightwand -->
-    <item id="2188" chance="3000"/><!-- wand of decay -->
-    <item id="2411" chance="909"/><!-- poison dagger -->
-    <item id="10566" chance="5000"/><!-- gauze bandages -->
-    <item id="12422" chance="10000"/><!-- flasks of embalming fluid -->
-    <item id="13472" chance="3500"/><!-- Pharaoh Banner -->
-  </loot>
+<monster name="Elder Mummy" nameDescription="a elder mummy" race="undead" experience="560" speed="180" manacost="0">
+	  <health now="850" max="850"/>
+	  <look type="65" head="20" body="30" legs="40" feet="50" corpse="6004"/>
+	  <targetchange interval="4000" chance="10"/>
+	  <strategy attack="100" defense="0"/>
+	  <flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	  </flags>
+	  <attacks>
+		<attack name="melee" interval="2000" skill="70" attack="40" poison="60"/>
+		<attack name="death" interval="2000" chance="20" range="1" min="-150" max="-250">
+			<attribute key="areaEffect" value="smallclouds"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-700" duration="15000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	  </attacks> 
+	  <defenses armor="30" defense="30"/>
+	  <elements>
+	  <element icePercent="20"/>
+	  </elements>
+	  <immunities>
+		<immunity earth="1"/>
+		<immunity death="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	  </immunities>
+	  <loot>
+		<item id="2148" countmax="100" chance="37000"/><!-- gold coin -->
+		<item id="2148" countmax="60" chance="50000"/><!-- gold coin -->
+		<item id="3976" countmax="3" chance="20000"/><!-- worm -->
+		<item id="2159" countmax="3" chance="10000"/><!-- scarab coin -->
+		<item id="2161" chance="4500"/><!-- strange talisman -->
+		<item id="2162" chance="6000"/><!-- magic lightwand -->
+		<item id="2188" chance="3000"/><!-- wand of decay -->
+		<item id="2411" chance="410"/><!-- poison dagger -->
+		<item id="10566" chance="10000"/><!-- gauze bandages -->
+		<item id="12422" chance="12600"/><!-- flasks of embalming fluid -->
+		<item id="13472" chance="2400"/><!-- Pharaoh Banner -->
+		<item id="2134" chance="4000"/><!-- silver brooch -->
+			<item id="2124" chance="1650"/><!-- crystal ring -->
+				<item id="2144" chance="1430"/><!-- black pearl -->
+	  </loot>
 </monster>

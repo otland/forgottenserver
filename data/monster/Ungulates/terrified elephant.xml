@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Terrified Elephant" nameDescription="a terrified elephant" race="blood" experience="160" speed="240" manacost="500">
+<monster name="Terrified Elephant" nameDescription="a terrified elephant" race="blood" experience="160" speed="220" manacost="500">
 	<health now="320" max="320"/>
 	<look type="211" corpse="6052"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -20,11 +20,13 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50"/>
 	</attacks>
-	<defenses armor="20" defense="16"/>
+	<defenses>
+		<defense name="speed" interval="2000" chance="15" speedchange="1000" duration="5000">
+    </defense>
+	</defenses>
 	<elements>
-		<element physicalPercent="15"/>
+		<element physicalPercent="25"/>
 		<element icePercent="20"/>
-		<element firePercent="20"/>
 		<element energyPercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
@@ -33,9 +35,9 @@
 		<voice sentence="Troooooot!"/>
 	</voices>
 	<loot>
-		<item id="2671" countmax="4" chance="15000"/><!-- ham -->
-		<item id="2666" countmax="3" chance="30000"/><!-- meat -->
-		<item id="3956" countmax="2" chance="3500"/><!-- elephant tusk -->
-		<item id="3973" chance="200"/><!-- tusk shield -->
+		<item id="2671" countmax="9" chance="27000"/><!-- ham -->
+		<item id="2666" countmax="4" chance="40000"/><!-- meat -->
+		<item id="3956" countmax="2" chance="8400"/><!-- elephant tusk -->
+		<item id="3973" chance="80"/><!-- tusk shield -->
 	</loot>
 </monster>

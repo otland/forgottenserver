@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Corym Skirmisher" nameDescription="a corym skirmisher" race="blood" experience="260" speed="190" manacost="0">
+<monster name="Corym Skirmisher" nameDescription="a corym skirmisher" race="blood" experience="260" speed="200" manacost="0">
 	<health now="450" max="450"/>
-	<look type="533" corpse="19726"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="90" defense="10"/>
+	<look type="533"  legs="101" corpse="19726"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -18,43 +18,39 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="95"/>
-		<attack name="physical" interval="2000" chance="100" range="7" min="-0" max="-60">
-			<attribute key="shootEffect" value="whirlwindsword"/>
+		<attack name="melee" interval="2000" skill="45" attack="40"/>
+		<attack name="physical" interval="2000" chance="20" range="7" min="-0" max="-90">
+			<attribute key="shootEffect" value="whirlwindclub"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="35">
-		<defense name="healing" interval="3000" chance="25" min="0" max="20">
-			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-	</defenses>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element earthPercent="10"/>
-		<element deathPercent="10"/>
-		<element energyPercent="10"/>
-		<element holyPercent="-10"/>
+		<element earthPercent="20"/>
+		<element deathPercent="20"/>
+		<element energyPercent="20"/>
+		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
-		<immunity paralyze="100"/>
-		<immunity invisible="100"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="2500" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Squeak! Squeak!"/>
-		<voice sentence="sniff sniff sniff"/>
+		<voice sentence="<sniff> <sniff> <sniff>"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="30000"/> <!-- Gold Coin -->
-		<item id="20092" chance="880"/> <!-- Life Preserver -->
-		<item id="2696" chance="450"/> <!-- Cheese -->
-		<item id="20100" chance="410"/> <!-- Rat Cheese -->
-		<item id="20099" chance="300"/> <!-- Soft Cheese -->
-		<item id="20088" chance="450"/> <!-- Bola -->
-		<item id="20096" chance="410"/> <!-- Cheese Cutter -->
-		<item id="20098" chance="300"/> <!-- earflap -->
-		<item id="20091" chance="410"/> <!-- Ratana -->
-		<item id="20125" chance="380"/> <!-- Leather Harness -->
-		<item id="20097" chance="300"/> <!-- Cheesy Figurine -->
-		<item id="20104" chance="410"/> <!-- Rat God Doll -->
-		<item id="20089" chance="380"/> <!-- Spike Shield -->
+		<item id="2148" countmax="45" chance="79000"/> <!-- Gold Coin -->
+		<item id="20092" chance="3000"/> <!-- Life Preserver -->
+		<item id="2696" chance="20190"/> <!-- Cheese -->
+		<item id="20100" chance="18000"/> <!-- Rat Cheese -->
+		<item id="20099" chance="14910"/> <!-- Soft Cheese -->
+		<item id="20089" chance="8100"/> <!-- Bola -->
+		<item id="20096" chance="9130"/> <!-- Cheese Cutter -->
+		<item id="20098" chance="9220"/> <!-- earflap -->
+		<item id="20091" chance="2700"/> <!-- Ratana -->
+		<item id="20125" chance="550"/> <!-- Leather Harness -->
+		<item id="20097" chance="860"/> <!-- Cheesy Figurine -->
+	    <item id="20104" chance="10"/>  <!-- Rat God Doll -->
+		<item id="20089" chance="660"/> <!-- Spike Shield -->
 	</loot>
 </monster>

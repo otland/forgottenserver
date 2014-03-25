@@ -1,52 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vampire Viscount" nameDescription="a vampire viscount" race="blood" experience="800" speed="910" manacost="390">
+<monster name="Vampire Viscount" nameDescription="a vampire viscount" race="undead" experience="800" speed="250" manacost="0">
 	<health now="1200" max="1200"/>
 	<look type="555" corpse="21275"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
 		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="0"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="10"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1500" skill="90" attack="175"/>
-		<attack name="earth" interval="1000" chance="10" length="7" spread="0" min="-300" max="-585">
-			<attribute key="areaEffect" value="stones"/>
+		<attack name="melee" interval="2000" skill="60" attack="60"/>
+		<attack name="death" interval="2000" chance="15" radius="3" range="6" target="1" min="-90" max="-150">
+			<attribute key="shootEffect" value="death"/>
+			<attribute key="areaEffect" value="mortarea"/>
 		</attack>
-		<attack name="earth" interval="1000" chance="9" radius="6" min="0" max="-490">
-			<attribute key="areaEffect" value="bigplants"/>
+		<attack name="lifedrain" interval="2000" chance="20" radius="4" target="0" min="-50" max="-60">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="10" range="7" speedchange="-850" duration="30000">
-			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="greenspark"/>
-		</attack>
-		<attack name="manadrain" interval="1000" chance="17" range="7" min="-475" max="-660"/>
-		<attack name="energy" interval="2000" chance="25" length="8" spread="0" min="-465" max="-690">
-			<attribute key="areaEffect" value="energy"/>
+		<attack name="bleedcondition" interval="2000" chance="10"  radius="6" target="1" min="-320" max="-560">
+			<attribute key="areaEffect" value="bats"/>
 		</attack>
 	</attacks>
-	<defenses armor="11" defense="11"/>
+	<defenses armor="35" defense="35">
+		<defense name="outfit" interval="2000" chance="10" monster="Vicious Manbat" duration="4000"/>
+		<defense name="speed" interval="2000" chance="15" speedchange="200" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
 	<elements>
-		<element physicalPercent="-8"/>
-		<element deathPercent="-7"/>
+		<element holyPercent="-5"/>
+		<element firePercent="-5"/>
+		<element physicalPercent="5"/>
+		<element icePercent="5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
+		<immunity paralyze="1"/>
+		<immunity death="1"/>
+		<immunity earth="1"/>
 	</immunities>
-	<voices interval="2000" chance="10">
-		<voice sentence="DIE!! KENH!!"/>
-		<voice sentence="QJELL AFAR GOU JEY!!"/>
+	<voices interval="5000" chance="10">
+		<voice sentence="Prepare to BLEED!"/>
+		<voice sentence="Don't struggle."/>
+		<voice sentence="We don't want to waste a drop of blood now, do we?"/>
+		<voice sentence="Ah, refreshments have arrived!"/>
 	</voices>
 	<loot>
-
+		<item id="2148" countmax="50" chance="83000" /><!-- gold coin -->
+		<item id="10602" chance="7200" /><!-- vampire teeth -->
+		<item id="21241" chance="6170" /><!-- tooth file -->
+		<item id="7588" chance="6850"/><!-- strong health potion -->
+		<item id="7589" chance="8180"/><!-- strong mana potion -->
+		<item id="2147" countmax="2" chance="2890" /><!-- small rubies -->
+		<item id="21244" chance="4170" /><!-- vampire's cape chain -->
+		<item id="15565" chance="640" /><!-- red gem -->
+		<item id="5911" chance="80" /><!-- red piece of cloth -->
+		<item id="2396" chance="870" /><!-- ice rapier -->
+		<item id="2144" chance="2490" /><!-- black pearl -->
+		<item id="12405" chance="3130" /><!-- blood preservation -->
+		<item id="2534" chance="240" /><!-- vampire shield -->
 	</loot>
 </monster>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Crypt Defiler" nameDescription="a crypt defiler" race="blood" experience="70" speed="205" manacost="0">
+	<health now="180" max="180"/>
+	<look type="146" head="115" body="115" legs="61" feet="96" addons="3" corpse="20359"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="35" attack="40"/>
+			<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1"  min="-0" max="-40">
+		<atribute key="shooteffect" value="throwingstar"/>
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element energyPercent="20"/>
+		<element firePercent="-10"/>
+		<element icePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="I smell gold!"/>
+		<voice sentence="You'll make a fine fake-mummy to be sold!"/>
+		<voice sentence="Untold riches are awaiting me!"/>
+		<voice sentence="I don't like competition"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="39" chance="50900"/><!-- gold coin -->
+		<item id="2386" chance="2730"/><!-- axe -->
+		<item id="2398" chance="1800"/><!-- mace -->
+		<item id="2465" chance="2240"/><!-- brass armor -->
+		<item id="2509" chance="450"/><!-- steel shield -->
+		<item id="2459" chance="450"/><!-- iron helmet -->
+		<item id="12448" chance="4040"/><!-- rope belt -->
+		<item id="8838" countmax="3" chance="4840"/><!-- potatoes -->
+		<item id="8267" chance="220"/><!-- nomad parchment -->
+		<item id="12412" chance="1570"/><!-- dirty turban -->
+</loot>
+</monster>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Marsh Stalker" nameDescription="a marsh stalker" race="blood" experience="50" speed="180" manacost="0">
+<monster name="Marsh Stalker" nameDescription="a marsh stalker" race="blood" experience="50" speed="210" manacost="0">
 	<health now="100" max="100"/>
 	<look type="530" corpse="19708"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="90" defense="10"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -18,26 +18,29 @@
 		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="50"/>
-		<attack name="melee" interval="2800" radius="1" chance="100" min="-0" max="-8">
-			<attribute key="areaEffect" value="blackspark"/>
+		<attack name="melee" interval="2000" skill="10" attack="10"/>
+		<attack name="physical" interval="2000" radius="1" target="1" range="7" chance="20" min="-0" max="-8">
+		    <attribute key="shootEffect" value="explosion"/>
+			<attribute key="areaEffect" value="explosionarea"/>
 		</attack>
 	</attacks>
-	<defenses armor="55" defense="55"/>
+	<defenses armor="5" defense="5"/>
 	<elements>
-		<element icePercent="10"/>
-		<element earthPercent="-10"/>
+		<element icePercent="5"/>
+		<element earthPercent="-5"/>
 	</elements>
-	<voices interval="2500" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Rrrawk! Rrrrawk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="22" chance="30000"/> <!-- Gold Coin -->
-		<item id="3976" countmax="2" chance="33333"/> <!-- Worms -->
-		<item id="2667" countmax="2" chance="880"/> <!-- Fish -->
-		<item id="2666" chance="880"/> <!-- Meat -->
-		<item id="19740" chance="380"/> <!-- Marsh Stalker Beak -->
-		<item id="19741" chance="880"/> <!-- Marsh Stalker Feather -->
-		<item id="2397" chance="320"/> <!-- Longsword -->
+		<item id="2148" countmax="23" chance="65000"/> <!-- Gold Coin -->
+		<item id="3976" countmax="2" chance="15000"/> <!-- Worms -->
+		<item id="2667" countmax="2" chance="20290"/> <!-- Fish -->
+		<item id="2666" countmax="2" chance="20360"/> <!-- Meat -->
+		<item id="19740" chance="7180"/> <!-- Marsh Stalker Beak -->
+		<item id="19741" chance="9300"/> <!-- Marsh Stalker Feather -->
+		<item id="2397" chance="7180"/> <!-- Longsword -->
+		<item id="7732" chance="120"/> <!-- seeds -->
+		<item id="2120" chance="4530"/> <!-- rope -->
 	</loot>
 </monster>

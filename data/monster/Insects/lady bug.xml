@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lady Bug" nameDescription="a lady bug" race="blood" experience="70" speed="560" manacost="0">
+<monster name="Lady Bug" nameDescription="a lady bug" race="venom" experience="70" speed="200" manacost="0">
 	<health now="255" max="255"/>
 	<look type="448" corpse="15272"/>
-	<targetchange interval="2000" chance="50"/>
+	<targetchange interval="5000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -17,23 +17,28 @@
 		<flag runonhealth="60"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="70"/>	
+		<attack name="melee" interval="2000" skill="5" attack="5"/>	
+		<attack name="earth" interval="2000" chance="15" range="1" min="-0" max="-20">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+        <attack name="earth" interval="2000" chance="15" range="7" min="-0" max="-20">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>	
 	</attacks>
-	<defenses armor="55" defense="55"/>    
+	<defenses armor="10" defense="10"/>
 	<immunities>
 		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="Nee pah!"/>
-		<voice sentence="Chrk Chrk!"/>
 	</voices>
 	<elements>
-		<element earthPercent="1"/>
-		<element physicalPercent="-1"/>
-		<element firePercent="-1"/>
-		<element icePercent="-1"/>
+		<element earthPercent="5"/>
+		<element physicalPercent="-5"/>
+		<element firePercent="-5"/>
+		<element icePercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="38" chance="100000"/> <!-- gold coin -->
+		<item id="2148" countmax="40" chance="65000"/> <!-- gold coin -->
 	</loot>
 </monster>

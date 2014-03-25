@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Nightmare Scion" nameDescription="a nightmare scion" race="blood" experience="1350" speed="340" manacost="0">
+<monster name="Nightmare Scion" nameDescription="a nightmare scion" race="blood" experience="1350" speed="230" manacost="0">
 	<health now="1400" max="1400"/>
 	<look type="321" corpse="9919"/>
-	<targetchange interval="5000" chance="10"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -19,20 +19,18 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="70"/>
-		<attack name="earth" interval="1000" chance="12" range="7" target="1" radius="4" min="-0" max="-180">
+		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="4" min="-115" max="-180">
 			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
-		<attack name="death" interval="2000" chance="20" range="2" target="1" min="-0" max="-125">
-			<attribute key="areaEffect" value="mortarea"/>
+		<attack name="death" interval="2000" chance="10" range="7" radius="1" target="1" min="-70" max="-130">
 			<attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
-		<defense name="speed" interval="1000" chance="19" speedchange="460" duration="8000">
-			<attribute key="areaEffect" value="redshimmer"/>
-		</defense>
-		<defense name="healing" interval="1000" chance="14" min="150" max="230">
+		<defense name="healing" interval="2000" chance="5" min="60" max="95">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
@@ -40,30 +38,31 @@
 		<element firePercent="20"/>
 		<element energyPercent="20"/>
 		<element icePercent="10"/>
+		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity earth="1"/>
 		<immunity death="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="7500" chance="20">
+	<voices interval="5000" chance="10">
 		<voice sentence="Weeeheeheee!"/>
 		<voice sentence="Pffffrrrrrrrrrrrr."/>
 		<voice sentence="Peak a boo, I killed you!"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
-		<item id="2148" countmax="54" chance="50000"/><!-- gold coin -->
-		<item id="2666" chance="50000"/><!-- meat -->
+		<item id="2148" countmax="53" chance="50000"/><!-- gold coin -->
+		<item id="2666" countmax="4" chance="50000"/><!-- meat -->
 		<item id="11223" chance="7692"/><!-- essence of a bad dream -->
 		<item id="11229" chance="4761"/><!-- scythe leg -->
 		<item id="2152" countmax="3" chance="961"/><!-- platinum coin -->
 		<item id="2491" chance="666"/><!-- crown helmet -->
-		<item id="7387" chance="387"/><!-- diamond sceptre -->
-		<item id="8871" chance="375"/><!-- focus cape -->
-		<item id="6574" chance="150"/><!-- bar of chocolate -->
-		<item id="6300" chance="246"/><!-- death ring -->
-		<item id="7451" chance="246"/><!-- shadow sceptre -->
-		<item id="9941" chance="105"/><!-- crystal of focus -->
+		<item id="7387" chance="340"/><!-- diamond sceptre -->
+		<item id="8871" chance="340"/><!-- focus cape -->
+		<item id="6574" chance="280"/><!-- bar of chocolate -->
+		<item id="6300" chance="250"/><!-- death ring -->
+		<item id="7451" chance="270"/><!-- shadow sceptre -->
+		<item id="9941" chance="100"/><!-- crystal of focus -->
 	</loot>
 </monster>

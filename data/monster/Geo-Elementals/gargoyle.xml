@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gargoyle" nameDescription="a gargoyle" race="blood" experience="150" speed="250" manacost="0">
+<monster name="Gargoyle" nameDescription="a gargoyle" race="undead" experience="150" speed="200" manacost="0">
 	<health now="250" max="250"/>
 	<look type="95" corpse="6027"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,17 +14,14 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="70"/>
 		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="55" attack="20"/>
-		<attack name="physical" interval="1000" chance="24" range="7" min="-50" max="-110">
-			<attribute key="shootEffect" value="largerock"/>
-		</attack>
 	</attacks>
-	<defenses armor="26" defense="20">
-		<defense name="healing" interval="1000" chance="10" min="5" max="15">
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="20" min="5" max="15">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
@@ -34,28 +31,29 @@
 		<element firePercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity earth="1"/>
 		<immunity lifedrain="1"/>
+		<immunity earth="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Feel my claws, softskin!"/>
-		<voice sentence="There is a stone in your shoe"/>
-		<voice sentence="Stone sweet stone"/>
-		<voice sentence="Harrr harrr!"/>
+		<voice sentence="Harrrr Harrrr!"/>
+		<voice sentence="Stone sweet stone."/>
+		<voice sentence="Feel my claws, softskin."/>
+		<voice sentence="Chhhhhrrrrk!"/>
+		<voice sentence="There is a stone in your shoe!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="50000"/><!-- gold coin -->
-		<item id="2194" countmax="10" chance="10000"/><!-- small stone -->
-		<item id="11195" chance="9090"/><!-- stone wing -->
-		<item id="8838" countmax="2" chance="4545"/><!-- potato -->
-		<item id="2513" chance="1408"/><!-- battle shield -->
-		<item id="2394" chance="1149"/><!-- morning star -->
-		<item id="2680" countmax="5" chance="892"/><!-- strawberry -->
-		<item id="11343" chance="492"/><!-- piece of marble rock -->
-		<item id="2489" chance="198"/><!-- dark armor -->
-		<item id="2457" chance="166"/><!-- steel helmet -->
-		<item id="11227" chance="158"/><!-- shiny stone -->
-		<item id="2129" chance="151"/><!-- wolf tooth chain -->
-		<item id="2209" chance="127"/><!-- club ring -->
+		<item id="2148" countmax="30" chance="88000"/><!-- gold coin -->
+		<item id="2513" chance="1000"/><!-- battle shield -->
+		<item id="8838" countmax="2" chance="9220"/><!-- potatoes -->
+		<item id="2680" countmax="5" chance="1810"/><!-- strawberries -->
+		<item id="2394" chance="2150"/><!-- morning star -->
+		<item id="11343" chance="630"/><!-- piece of marble rock -->
+		<item id="2194" countmax="10" chance="15800"/><!-- small stone -->
+		<item id="2457" chance="850"/><!-- steel helmet -->
+		<item id="2489" chance="300"/><!-- dark armor -->
+		<item id="2129" chance="1480"/><!-- wolf tooth chain -->
+		<item id="2209" chance="260"/><!-- club ring -->
+		<item id="11227" chance="190"/><!-- shiny stone -->
+		<item id="11195" chance="11730"/><!-- stone wing -->
 	</loot>
 </monster>

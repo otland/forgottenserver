@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dromedary" nameDescription="a dromedary" race="blood" experience="0" speed="150">
+<monster name="Dromedary" nameDescription="a dromedary" race="blood" experience="0" speed="170">
 	<health now="45" max="45"/>
 	<look type="404" corpse="13528"/>
-	<targetchange interval="2000" chance="20"/>
+	<targetchange interval="4000" chance="20"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -15,18 +15,22 @@
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="4"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="25"/>
+		<flag runonhealth="45"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="5"/>
+		<attack name="drunk" interval="2000" chance="1" range="7" duration="6000">
+			<attribute key="shootEffect" value="explosion"/>
+			<attribute key="areaEffect" value="stun"/>
+		</attack>
 	</attacks>
-	<defenses armor="2" defense="2"/>
-		<voices interval="5000" chance="10">
+	<defenses armor="5" defense="5"/>
+	<voices interval="5000" chance="10">
 		<voice sentence="Snort"/>
 		<voice sentence="Grunt!"/>
 	</voices>
 	<loot>
-		<item id="13939" countmax="2" chance="8000"/> 
-		<item id="2666" countmax="2" chance="20000"/>
+		<item id="13939" chance="1000"/><!-- sugar oat -->
+		<item id="2666" countmax="2" chance="36000"/><!-- meat -->
 	</loot>
 </monster>

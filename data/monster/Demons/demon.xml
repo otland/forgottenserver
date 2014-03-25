@@ -2,7 +2,7 @@
 <monster name="Demon" nameDescription="a demon" race="fire" experience="6000" speed="280" manacost="0">
 	<health now="8200" max="8200"/>
 	<look type="35" corpse="5995"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="20"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,28 +14,33 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="40"/>
+		<flag staticattack="70"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="70" attack="130"/>
-		<attack name="manadrain" interval="3000" chance="13" range="7" min="-80" max="-300"/>
-		<attack name="fire" interval="2000" chance="14" range="7" radius="7" target="1" min="-160" max="-350">
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-0" max="-120"/>
+		<attack name="fire" interval="2000" chance="20" range="7" radius="7" target="1" min="-150" max="-250">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="firefield" interval="1000" chance="15" range="7" radius="1" target="1">
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="1" target="1">
 			<attribute key="shootEffect" value="fire"/>
 		</attack>
-		<attack name="energy" interval="3000" chance="30" length="8" spread="0" min="-220" max="-460">
-			<attribute key="areaEffect" value="energy"/>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-490">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+			<attack name="energy strike" interval="2000" chance="10" range="1" min="-210" max="-300">
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-700" duration="30000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-	<defenses armor="50" defense="55">
-		<defense name="healing" interval="1000" chance="15" min="90" max="200">
+	<defenses armor="55" defense="55">
+		<defense name="healing" interval="2000" chance="15" min="180" max="250">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="speed" interval="1000" chance="15" speedchange="200" duration="20000">
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
@@ -44,8 +49,8 @@
 		<element deathPercent="30"/>
 		<element energyPercent="50"/>
 		<element earthPercent="40"/>
-		<element icePercent="-12"/>
-		<element holyPercent="-12"/>
+		<element icePercent="-10"/>
+		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity fire="1"/>
@@ -54,8 +59,8 @@
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-	<summons maxSummons="2">
-		<summon name="fire elemental" interval="2000" chance="10" max="2"/>
+	<summons maxSummons="1">
+		<summon name="fire elemental" interval="2000" chance="10"/>
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Your soul will be mine!"/>
@@ -65,10 +70,10 @@
 		<voice sentence="Your resistance is futile!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
-		<item id="2148" countmax="99" chance="100000"/><!-- gold coin -->
-		<item id="2152" chance="50000"/><!-- platinum coin -->
-		<item id="2795" countmax="5" chance="20000"/><!-- fire mushroom -->
+		<item id="2148" countmax="100" chance="60000"/><!-- gold coin -->
+		<item id="2148" countmax="99" chance="60000"/><!-- gold coin -->
+		<item id="2152" countmax="6" chance="100000"/><!-- platinum coin -->
+		<item id="2795" countmax="6" chance="20740"/><!-- fire mushroom -->
 		<item id="8473" countmax="3" chance="20000"/><!-- ultimate health potion -->
 		<item id="7590" countmax="3" chance="14285"/><!-- great mana potion -->
 		<item id="2387" chance="14285"/><!-- double axe -->
@@ -91,8 +96,8 @@
 		<item id="2470" chance="413"/><!-- golden legs -->
 		<item id="2514" chance="389"/><!-- mastermind shield -->
 		<item id="2164" chance="170"/><!-- might ring -->
-		<item id="2472" chance="91"/><!-- magic plate armor -->
-		<item id="7393" chance="78"/><!-- demon trophy -->
-		<item id="7382" chance="60"/><!-- demonrage sword -->
+		<item id="2472" chance="70"/><!-- magic plate armor -->
+		<item id="7393" chance="100"/><!-- demon trophy -->
+		<item id="7382" chance="80"/><!-- demonrage sword -->
 	</loot>
 </monster>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Badger" namedescription="a badger" race="blood" experience="5" speed="180" manacost="200">
-	<health now="20" max="20"/>
+	<health now="23" max="23"/>
 	<look type="105" corpse="6034"/>
-	<targetchange interval="2000" chance="20"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -20,10 +20,10 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="12"/>
 	</attacks>
-	<defenses armor="1" defense="3"/>
+	<defenses armor="5" defense="5"/>
 	<loot>
-		<item id="3976" chance="20000"/><!-- worm -->
-		<item id="2671" chance="20000"/><!-- ham -->
-		<item id="11213" chance="7325"/> <!-- acorn -->
+		<item id="8845" chance="40710"/><!-- beetroot -->
+		<item id="7965" chance="10230"/><!-- badger fur -->
+		<item id="11213" chance="5130"/> <!-- acorn -->
 	</loot>
 </monster>

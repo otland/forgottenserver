@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Troll Champion" nameDescription="a troll champion" race="blood" experience="30" speed="120" manacost="340">
+<monster name="Troll Champion" nameDescription="a troll champion" race="blood" experience="40" speed="190" manacost="340">
 	<health now="75" max="75"/>
 	<look type="281" corpse="7926"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -14,17 +14,17 @@
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="20"/>
+		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="25" attack="20"/>
 	</attacks>
-	<defenses armor="6" defense="8"/>
+	<defenses armor="20" defense="20"/>
 	<elements>
-		<element energyPercent="22"/>
-		<element holyPercent="11"/>
-		<element earthPercent="-3"/>
-		<element deathPercent="-4"/>
+		<element energyPercent="15"/>
+		<element holyPercent="10"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Meee maity!"/>
@@ -33,16 +33,15 @@
 		<voice sentence="Gruntz!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="24250"/><!-- gold coin -->
-		<item id="2544" countmax="5" chance="2000"/><!-- arrow -->
-		<item id="2643" chance="15250"/><!-- leather boots -->
-		<item id="2666" chance="11500"/><!-- meat -->
-		<item id="2389" chance="27000"/><!-- spear -->
-		<item id="2448" chance="5000"/><!-- studded club -->
-		<item id="2512" chance="20000"/><!-- wooden shield -->
-		<item id="2380" chance="20000"/><!-- hand axe -->
-		<item id="2461" chance="10000"/><!-- leather helmet -->
-		<item id="2120" chance="9000"/><!-- rope -->
-		<item id="2170" chance="100"/><!-- silver amulet -->
+		<item id="2148" countmax="12" chance="64000"/><!-- gold coin -->
+		<item id="2544" countmax="5" chance="5440"/><!-- arrow -->
+		<item id="2643" chance="8620"/><!-- leather boots -->
+		<item id="2666" chance="10000"/><!-- meat -->
+		<item id="2389" chance="26000"/><!-- spear -->
+		<item id="2448" chance="5500"/><!-- studded club -->
+		<item id="2512" chance="6000"/><!-- wooden shield -->
+		<item id="2170" chance="230"/><!-- silver amulet -->
+		<item id="12471" chance="750"/><!-- Trollroot -->
+		<item id="10606" chance="3280"/><!-- Bunch of Troll Hair -->
 	</loot>
 </monster>

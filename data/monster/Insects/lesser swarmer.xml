@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lesser Swarmer" nameDescription="a lesser swarmer" race="blood" experience="0" speed="560" manacost="0">
+<monster name="Lesser Swarmer" nameDescription="a lesser swarmer" race="venom" experience="0" speed="180" manacost="0">
 	<health now="230" max="230"/>
 	<look type="460" corpse="15388"/>
-	<targetchange interval="2000" chance="50"/>
+	<targetchange interval="5000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -17,14 +17,13 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="34" attack="45"/>
-		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
-			<attribute key="shootEffect" value="spear"/> <!-- TODO: Add spear deepling speed effect? -->
-			<attribute key="areaEffect" value="bluebubble"/>
+		<attack name="melee" interval="2000" skill="34" attack="35" poison="60" />
+		<attack name="lifedrain" interval="2000" chance="15" range="5" target="1" min="-15" max="-70">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-	<defenses armor="12" defense="20"/>
+	<defenses armor="5" defense="5"/>
 	<immunities>
-		<immunity earth="1" />
+		<immunity earth="1"/>
 	</immunities>
 </monster>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Black Sheep" namedescription="a black sheep" race="blood" experience="0" speed="200" manacost="250">
+<monster name="Black Sheep" namedescription="a black sheep" race="blood" experience="0" speed="130" manacost="250">
 	<health now="20" max="20"/>
 	<look type="13" corpse="5994"/>
-	<targetchange interval="2000" chance="20"/>
+	<targetchange interval="4000" chance="20"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
@@ -17,14 +17,12 @@
 		<flag staticattack="90"/>
 		<flag runonhealth="20"/>
 	</flags>
-	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0"/>
-	</attacks>
-	<defenses armor="1" defense="2"/>
+	<defenses armor="5" defense="5"/>
 	<voices interval="5000" chance="10">
 		<voice sentence="Maeh"/>
 	</voices>
 	<loot>
-		<item id="2666" countmax="4" chance="22500"/><!-- meat -->
+		<item id="2666" countmax="5" chance="70860"/><!-- meat -->
+		<item id="12404" countmax="1" chance="1000"/><!-- black wool -->
 	</loot>
 </monster>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Clay Guardian" nameDescription="a clay guardian" race="blood" experience="400" speed="340" manacost="0">
+<monster name="Clay Guardian" nameDescription="a clay guardian" race="undead" experience="400" speed="210" manacost="0">
 	<health now="625" max="625"/>
 	<look type="333" corpse="13972"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -14,13 +14,24 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="60"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-      <attack name="melee" interval="2000" min="-60" max="-140"/>
+      <attack name="melee" interval="2000" skill="40" attack="50"/> 
+	  <attack name="earth" interval="2000" chance="20" range="7" min="-30" max="-150">
+			<attribute key="shootEffect" value="smallearth"/>
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+	  <attack name="earth" interval="2000" chance="50" target="0" radius="3" min="-20" max="-30">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
 	</attacks>
-	<defenses armor="22" defense="35"/>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="10" min="40" max="130">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<elements>
 		<element physicalPercent="40"/>
 		<element deathPercent="50"/>
@@ -38,7 +49,7 @@
 		<item id="2260" chance="25000"/><!-- blank rune -->
 		<item id="1294" countmax="10" chance="10000"/><!-- small stone -->
 		<item id="7850" countmax="8" chance="5555"/><!-- earth arrow -->
-		<item id="11339" chance="1204"/><!-- clay lump -->
-		<item id="9970" chance="286"/><!-- small topaz -->
+		<item id="11339" chance="1100"/><!-- clay lump -->
+		<item id="9970" chance="320"/><!-- small topaz -->
 	</loot>
 </monster>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Weeper" nameDescription="Weeper" race="blood" experience="4800" speed="570" manacost="0">
+<monster name="Weeper" nameDescription="Weeper" race="fire" experience="4800" speed="260" manacost="0">
   <health now="6800" max="6800"/>
   <look type="489" corpse="17252"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+  <targetchange interval="4000" chance="10"/>
+  <strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -14,30 +14,34 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="0"/>
-		<flag staticattack="50"/>
-		<flag runonhealth="100"/>
+		<flag staticattack="70"/>
+		<flag runonhealth="570"/>
 	</flags>
 	<attacks>
-      <attack name="melee" interval="2000" min="-160" max="-450"/>
-		<attack name="fire" interval="3000" chance="25" length="8" spread="0" min="-240" max="-900">
-			<attribute key="areaEffect" value="firearea"/>
+		<attack name="melee" interval="2000" skill="90" attack="90"/>
+		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-400" max="-1000">
+			<attribute key="areaEffect" value="fireattack"/>
+		</attack>	
+		<attack name="fire" interval="3000" chance="100" target="0" radius="3" min="-80" max="-250">
+			<attribute key="areaEffect" value="fire"/>
 		</attack>
-		                <attack name="fire" interval="2000" chance="10" range="7" radius="4" target="1" min="-50" max="-250">
-                        <attribute key="shootEffect" value="fire"/>
-						    <attribute key="areaEffect" value="firearea"/>
-                </attack>
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-800" duration="30000">
+			<attribute key="areaEffect" value="yellowspark"/>
+		</attack>
 	</attacks>
-  <defenses armor="85" defense="85">
-  </defenses>
+	<defenses armor="50" defense="50">
+		<defense name="invisible" interval="2000" chance="5" duration="3000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
 	<elements>
-		<element firePercent="100"/>
-		<element physicalPercent="100"/>
-		<element earthPercent="100"/>
-				<element holyPercent="100"/>
-		<element deathPercent="-1"/>
-		<element energyPercent="100"/>
+		<element physicalPercent="-5"/>
+		<element icePercent="-5"/>
+		<element deathPercent="5"/>
 	</elements>
 	<immunities>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
 		<immunity outfit="1"/>
 		<immunity drown="1"/>
 		<immunity paralyze="1"/>
@@ -47,6 +51,25 @@
 		<voice sentence="Moooaaan!"/>
 	</voices>  
   <loot>
- 	 <item id="2148" countmax="172" chance="30000"/>  
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="99" chance="50000"/><!-- gold coin -->
+		<item id="2172" countmax="7" chance="100000"/>  <!-- platinum coin -->
+		<item id="18425" chance="14890"/><!-- blazing bones -->
+		<item id="18426" chance="15870"/><!-- eye of a weeper -->
+		<item id="10553" chance="13570"/><!-- fiery hearts -->
+		<item id="18424" chance="13240"/><!-- magma clumps -->
+		<item id="18435" countmax="5" chance="10900"/><!-- prismatic bolt -->
+		<item id="7590" countmax="2" chance="14800"/><!-- GMP -->
+		<item id="8473" countmax="2" chance="15440"/><!-- UHP -->
+		<item id="18417" countmax="2" chance="12100"/><!-- brown crystal plinter -->
+		<item id="2147" countmax="3" chance="15690"/><!-- small ruby -->
+		<item id="18409" chance="1480"/><!-- wand of everblazing -->
+		<item id="18420" chance="8880"/><!-- red crystal fragment -->
+		<item id="18414" chance="5430"/><!-- violet crystal shard -->
+		<item id="2392" chance="3280"/><!-- fire sword -->
+		<item id="2432" chance="2150"/><!-- fire axe -->
+		<item id="7894" chance="790"/><!-- magma legs -->
+		<item id="7899" chance="790"/><!-- magma coat -->
+		<item id="13757" chance="1320"/><!-- coal -->	
 	</loot>
 </monster>

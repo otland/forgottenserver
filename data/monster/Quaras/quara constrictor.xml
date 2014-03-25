@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Constrictor" nameDescription="a quara constrictor" race="blood" experience="250" speed="520" manacost="670">
+<monster name="Quara Constrictor" nameDescription="a quara constrictor" race="blood" experience="250" speed="230" manacost="670">
 	<health now="450" max="450"/>
 	<look type="46" corpse="6065"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -18,18 +18,17 @@
 		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="150" poison="20"/>
-		<attack name="lifedrain" interval="2000" chance="11" radius="3" target="0" min="-50" max="-90">
+		<attack name="melee" interval="2000" skill="50" attack="50" poison="20"/>
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-50" max="-90">
 			<attribute key="areaEffect" value="blackspark"/>
 		</attack>
-		<attack name="ice" interval="2000" chance="12" range="7" min="-40" max="-70" target="0" radius="4">
+		<attack name="quara constrictor freeze" interval="2000" chance="10"/>
+		<attack name="ice" interval="2000" chance="10" range="7" radius="4" min="-40" max="-70" target="0" >
 			<attribute key="areaEffect" value="iceattack"/>
 		</attack> 	
-		<attack name="energycondition" interval="2000" chance="10" min="-75" max="-75" range="1" target="1">
-			<attribute key="shootEffect" value="energy"/>
-		</attack>
+		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10"/>
 	</attacks>
-	<defenses armor="15" defense="15"/>
+	<defenses armor="20" defense="20"/>
 	<elements>
 		<element earthPercent="-10"/>
 		<element energyPercent="-25"/>
@@ -48,12 +47,12 @@
 		<voice sentence="Boohaa!"/>
 	</voices>
 	<loot>
-    <item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-    <item id="12443" chance="9090" /><!-- quara tentacle -->
-    <item id="2397" chance="4761" /><!-- longsword -->
-    <item id="2670" chance="4545" /><!-- shrimp -->
-    <item id="1923" chance="2725" /><!-- brass armor -->
-    <item id="5895" chance="537" /><!-- fish fin -->
-    <item id="2150" chance="393" /><!-- small amethyst -->
+    <item id="2148" countmax="100" chance="87500" /><!-- gold coin -->
+    <item id="12443" chance="14520" /><!-- quara tentacle -->
+    <item id="2397" chance="7761" /><!-- longsword -->
+    <item id="2670" countmax="5" chance="5000" /><!-- shrimp -->
+    <item id="2465" chance="5000" /><!-- brass armor -->
+    <item id="5895" chance="430" /><!-- fish fin -->
+    <item id="2150" chance="2860" /><!-- small amethyst -->
 </loot>
 </monster>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mutated Bat" nameDescription="a mutated bat" race="blood" experience="615" speed="245" manacost="0">
+<monster name="Mutated Bat" nameDescription="a mutated bat" race="blood" experience="615" speed="210" manacost="0">
 	<health now="900" max="900"/>
 	<look type="307" corpse="9829"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -15,46 +15,53 @@
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag runonhealth="300"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="50" poison="300"/>
-		<attack name="earth" interval="2000" chance="18" range="7" min="90" max="-180">
+		<attack name="melee" interval="2000" skill="50" attack="56" poison="120"/>
+		<attack name="earth" interval="2000" chance="15" range="7" min="-70" max="-180">
 			<attribute key="shootEffect" value="poison"/>
 		</attack>
-		<attack name="drown" interval="1000" chance="8" target="0" radius="6" min="-40" max="-100">
+		<attack name="drown" interval="2000" chance="15" target="0" radius="6" min="-30" max="-90">
 			<attribute key="areaEffect" value="whitenote"/>
 		</attack>
-		<attack name="drunk" interval="1000" chance="8" target="0" radius="6" duration="15000">
-			<attribute key="areaeffect" value="yellownote"/>
+		<attack name="mutated bat curse" interval="2000" chance="10"/>
+		<attack name="poisoncondition" interval="2000" chance="15" target="0" length="4" spread="3" min="-190" max="-240">
+			<attribute key="areaeffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="30" defense="30"/>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="10" min="80" max="95">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity death="1"/>
 		<immunity earth="1"/>
 		<immunity drown="1"/>
 		<immunity invisible="1"/>
-		<immunity drunk="1"/>
 	</immunities>
-	<voices interval="2500" chance="10">
+	<elements>
+		<element firePercent="-10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Shriiiiiek"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="60" chance="43500"/><!-- gold coin -->
-		<item id="2148" countmax="51" chance="43500"/><!-- gold coin -->
-		<item id="5894" countmax="2" chance="4000"/><!-- bat wing -->
-		<item id="2513" chance="7300"/><!-- battle shield -->
-		<item id="2144" countmax="3" chance="1000"/><!-- black pearl -->
-		<item id="2529" chance="7300"/><!-- black shield -->
-		<item id="2167" chance="900"/><!-- energy ring -->
-		<item id="2800" chance="10000"/><!-- longsword -->
-		<item id="2800" chance="7400"/><!-- obsidian lance -->
-		<item id="2800" chance="7950"/><!-- rusty armor -->
-		<item id="2800" chance="9900"/><!-- short sword -->
-		<item id="2800" chance="5000"/><!-- rusty armor -->
+		<item id="2148" countmax="50" chance="53000"/><!-- gold coin -->
+		<item id="2148" countmax="70" chance="40000"/><!-- gold coin -->
+		<item id="5894" countmax="2" chance="4900"/><!-- bat wing -->
+		<item id="2513" chance="7760"/><!-- battle shield -->
+		<item id="2144" countmax="3" chance="720"/><!-- black pearl -->
+		<item id="2529" chance="70"/><!-- black shield -->
+		<item id="2167" chance="990"/><!-- energy ring -->
+		<item id="2800" chance="7260"/><!-- obsidian lance -->
+		<item id="9809" countmax="2" chance="12530"/><!-- rusty armor -->
+		<item id="9808" chance="12530"/><!-- rusty armor -->
 		<item id="2150" countmax="2" chance="500"/><!-- small amethyst -->
-		<item id="2800" chance="5200"/><!-- star herb -->
-		<item id="7386" chance="100"/><!-- mercenary sword -->
-		<item id="10016" chance="100"/><!-- batwing hat -->
+		<item id="2800" chance="5060"/><!-- star herb -->
+		<item id="7386" chance="110"/><!-- mercenary sword -->
+		<item id="10016" chance="80"/><!-- batwing hat -->
+		<item id="10579" chance="4900"/><!-- Mutated Bat Ear -->
 	</loot>
 </monster>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Pirate Skeleton" nameDescription="a pirate skeleton" race="undead" experience="85" speed="230" manacost="0">
+<monster name="Pirate Skeleton" nameDescription="a pirate skeleton" race="undead" experience="85" speed="180" manacost="0">
 	<health now="190" max="190"/>
 	<look type="195" corpse="6070"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="5000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -20,18 +20,22 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="20"/>
 	</attacks>
-	<defenses armor="18" defense="19"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element deathPercent="100"/>
-		<element holyPercent="-20"/>
-	</elements>
+		<element holyPercent="-25"/>
+	</elements>	
+	<immunities>
+		<immunity death="1"/>
+	</immunities>
+
 	<loot>
-		<item id="2148" countmax="35" chance="23000"/><!-- gold coin -->
-		<item id="2231" chance="11500"/><!-- big bone -->
-		<item id="2230" chance="6000"/><!-- bone -->
-		<item id="2406" chance="7000"/><!-- short sword -->
-		<item id="2376" chance="7000"/><!-- sword -->
-		<item id="2449" chance="7000"/><!-- bone club -->
-		<item id="2229" countmax="2" chance="2000"/><!-- skull -->
+		<item id="2148" countmax="25" chance="48000"/><!-- gold coin -->
+		<item id="2231" chance="5140"/><!-- big bone -->
+		<item id="2230" chance="4250"/><!-- bone -->
+		<item id="2406" chance="1003"/><!-- short sword -->
+		<item id="2376" chance="550"/><!-- sword -->
+		<item id="2449" chance="960"/><!-- bone club -->
+		<item id="2229" chance="4460"/><!-- skull -->
+		<item id="10559" chance="4730"/><!-- Spooky Blue Eye -->
 	</loot>
 </monster>

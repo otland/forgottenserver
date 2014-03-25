@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="240" manacost="0">
+<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="170" manacost="0">
 	<health now="255" max="255"/>
 	<look type="120" corpse="6047"/>
-	<targetchange interval="5000" chance="8"/>
+	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -16,22 +16,22 @@
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
-	</flags>
+	</flags>	
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="5"/>
-		<attack name="poison" interval="1000" chance="25" range="7" min="-60" max="-90">
+		<attack name="melee" interval="2000" skill="30" attack="50" poison="100"/>
+		<attack name="earth" interval="2000" chance="15" range="7" min="-60" max="-95">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="greenspark"/>
+			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
-		<attack name="speed" interval="1000" chance="34" range="7" speedchange="-850" duration="30000">
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-800" duration="30000">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="greenspark"/>
+			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
-		<attack name="poison" interval="1000" chance="12" radius="3" target="0" min="-40" max="-130">
+		<attack name="earth" interval="2000" chance="10" radius="3" target="0" min="-40" max="-130">
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="26" defense="10"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
 		<element energyPercent="10"/>
 		<element icePercent="35"/>
@@ -42,13 +42,13 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="40" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="40" chance="60000"/><!-- gold coin -->
 		<item id="2792" chance="7692"/><!-- dark mushroom -->
 		<item id="11217" chance="4166"/><!-- carniphila seeds -->
-		<item id="2804" chance="847"/><!-- shadow herb -->
-		<item id="2686" chance="775"/><!-- corncob -->
+		<item id="2804" chance="880"/><!-- shadow herb -->
+		<item id="2686" chance="890"/><!-- corncob -->
 		<item id="7732" chance="490"/><!-- seeds -->
-		<item id="2802" chance="446"/><!-- sling herb -->
-		<item id="13298" chance="143"/><!-- carrot on a stick -->
+		<item id="2802" countmax="2" chance="446"/><!-- sling herb -->
+		<item id="13298" chance="170"/><!-- carrot on a stick -->
 	</loot>
 </monster>
