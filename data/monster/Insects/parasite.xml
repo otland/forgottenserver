@@ -22,12 +22,12 @@
 	</attacks>
 	<defenses armor="15" defense="15"/>
 	<elements>
-		<element earthPercent="100"/>
 		<element energyPercent="20"/>
 		<element firePercent="-10"/>
 		<element icePercent="-5"/>
 	</elements>
 	<immunities>
+		<immunity earth="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 		<immunity fire="1"/>

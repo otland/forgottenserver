@@ -32,12 +32,12 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
 		<element icePercent="20"/>
 		<element firePercent="20"/>
 		<element energyPercent="20"/>
 	</elements>
 	<immunities>
+		<immunity death="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="2">

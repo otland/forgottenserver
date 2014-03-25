@@ -18,11 +18,11 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<defenses armor="0" defense="0"/>
-	<elements>
-		<element earthPercent="100"/>
-		<element physicalPercent="100"/>
-		<element deathPercent="100"/>
-	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity physical="1"/>
+		<immunity death="1"/>
+	</immunities>
 	<voices interval="5000" chance="11">
 		<voice sentence="Welcome to Yalahar, outsider."/>
 		<voice sentence="Hail Yalahar."/>

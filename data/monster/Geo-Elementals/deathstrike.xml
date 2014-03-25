@@ -41,8 +41,8 @@
 	</elements>
 	<immunities>
 		<immunity outfit="1"/>
-		<immunity fire="100"/>
-		<immunity earth="100"/>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
 		<immunity drown="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
