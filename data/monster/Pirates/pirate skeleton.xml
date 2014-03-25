@@ -27,7 +27,6 @@
 	<immunities>
 		<immunity death="1"/>
 	</immunities>
-
 	<loot>
 		<item id="2148" countmax="25" chance="48000"/><!-- gold coin -->
 		<item id="2231" chance="5140"/><!-- big bone -->

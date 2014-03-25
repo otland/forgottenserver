@@ -32,7 +32,7 @@
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-<defenses>
+	<defenses>
 		<defense name="healing" interval="2000" chance="30" min="228" max="449">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>

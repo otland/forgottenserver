@@ -1,4 +1,4 @@
-t o<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Orc Rider" nameDescription="a orc rider" race="blood" experience="110" speed="210" manacost="0">
 	<health now="180" max="180"/>
 	<look type="4" corpse="6010"/>

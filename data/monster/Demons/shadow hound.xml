@@ -40,7 +40,7 @@
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-<voices speed="5000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Grrrr!" yell="1"/>
 	</voices>
 	<loot>

@@ -58,7 +58,7 @@
 		<summon name="war wolf" interval="2000" chance="40"/>
 		<summon name="war wolf" interval="2000" chance="40"/>
 	</summons>
-<voices speed="5000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="BLOOD!" yell="1"/>
 		<voice sentence="HRAAAAAAAAAARRRRRR!" yell="1"/>
 	</voices>

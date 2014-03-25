@@ -22,8 +22,10 @@
 		<attack name="lifedrain" interval="1000" chance="13" radius="1" target="1" min="-400" max="-600"/>
 		<attack name="death" interval="3000" chance="34" range="1" radius="1" target="1" min="-180" max="-500">
 			<attribute key="shootEffect" value="death"/>
-		</attack><!--		<attack name="blood ball" interval="3000" chance="34" range="7" radius="3" target="1" min="-120" max="-230">
-		</attack>-->
+		</attack>
+		<!--
+		<attack name="blood ball" interval="3000" chance="34" range="7" radius="3" target="1" min="-120" max="-230"/>
+		-->
 	</attacks>
 	<defenses armor="50" defense="55">
 		<defense name="healing" interval="5000" chance="25" min="60" max="100">

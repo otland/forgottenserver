@@ -27,7 +27,7 @@
 		</attack>
 		<attack name="stampor skill reducer" range="5" interval="2000" chance="10"/>
 	</attacks>
-<defenses>
+	<defenses>
 		<defense name="healing" interval="2000" chance="15" min="90" max="120">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>

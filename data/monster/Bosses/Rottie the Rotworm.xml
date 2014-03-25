@@ -21,7 +21,6 @@
 		<attack name="melee" interval="2000" skill="30" attack="30"/>
 	</attacks>
 	<defenses armor="8" defense="11"/>
-<immunities/>
 	<loot>
 		<item id="2148" countmax="30" chance1="6230" chancemax="0"/>
 		<item id="2530" chance="2850"/>

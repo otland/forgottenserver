@@ -31,7 +31,7 @@
 			<attribute key="shootEffect" value="energy"/>
 		</attack>
 		<attack name="physical" interval="10500" chance="100" radius="3" target="0" min="0" max="0">
-<atttibute key="areaEffect" value="redshimmer"/>
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
 	<defenses armor="12" defense="13"/>

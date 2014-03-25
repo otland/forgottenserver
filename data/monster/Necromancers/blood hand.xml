@@ -46,7 +46,7 @@
 		<immunity earth="1"/>
 		<immunity drown="1"/>
 	</immunities>
-<defenses>
+	<defenses>
 		<defense name="healing" interval="2000" chance="20" min="70" max="90">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>

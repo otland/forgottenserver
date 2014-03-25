@@ -43,7 +43,7 @@
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-<voices speed="5000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Your fragile bones are like toothpicks to me."/>
 		<voice sentence="You little weasel will not live to see another day." />
 		<voice sentence="I'm just a messenger of what's yet to come." />

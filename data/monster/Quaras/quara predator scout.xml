@@ -47,6 +47,5 @@
 		<item id="2377" chance="2320" /><!-- two handed sword -->
 		<item id="8911" chance="800" /><!-- northwind rod -->
 		<item id="2670" countmax="5" chance="4700" /><!-- shrimp -->
-
 	</loot>
 </monster>
