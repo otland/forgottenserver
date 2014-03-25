@@ -26,7 +26,7 @@
 		<attack name="death" interval="1500" chance="30" range="7" radius="4" target="1" min="-12" max="-20">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="redspark"/>
-	 	</attack>
+		</attack>
 		<attack name="physical" interval="1500" chance="40" lenght="8" spread="3" min="-20" max="-30">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>

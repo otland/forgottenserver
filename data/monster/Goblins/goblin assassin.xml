@@ -20,7 +20,6 @@
 		<attack name="melee" interval="2000" skill="10" attack="15"/>
 		<attack name="drunk" interval="2000" chance="10" duration="10000">
 			<attribute key="shootEffect" value="poison"/>
-			<attriubte key="shootEffect" value="poison"/>
 		</attack>
 		<attack name="physical" interval="2000" chance="10" range="6" min="-0" max="-35">
 			<attribute key="shootEffect" value="throwingknife"/>
@@ -49,7 +48,7 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="9" chance="50000"/><!-- gold coin -->
-		<item id="2667"  chance="12400"/><!-- fish -->
+		<item id="2667" chance="12400"/><!-- fish -->
 		<item id="2449" chance="4770"/><!-- bone club -->
 		<item id="2406" chance="8820"/><!-- short sword -->
 		<item id="2230" chance="13000"/><!-- bone -->

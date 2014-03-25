@@ -1,4 +1,4 @@
-r<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Infernalist" nameDescription="an infernalist" race="blood" experience="4000" speed="220" manacost="0">
 	<health now="3650" max="3650"/>
 	<look type="130" head="78" body="76" legs="94" feet="115" addons="2" corpse="20427"/>

@@ -24,7 +24,7 @@
 		</attack>
 		<attack name="drunk" interval="2000" chance="10" range="7" radius="1" target="1" duration="5000">
 			<attribute key="shootEffect" value="holy"/>
-		<attribute key="areaEffect" value="holydamage"/>
+			<attribute key="areaEffect" value="holydamage"/>
 		</attack>
 		<attack name="speed" interval="2000" chance="10" range="7" radius="1" target="1" speedchange="-360" duration="6000">
 			<attribute key="areaEffect" value="redshimmer"/>
@@ -54,10 +54,10 @@
 		<summon name="Ghost" interval="2000" chance="10"/>
 	</summons>
 	<voices interval="5000" chance="10">
-	<voice sentence="Praise to my master Urgith!"/>
-	<voice sentence="You will rise as my servant!"/>
-	<voice sentence="Praise to my masters! Long live the triangle!"/>
-	<voice sentence="You will die in the name of the triangle!"/>
+		<voice sentence="Praise to my master Urgith!"/>
+		<voice sentence="You will rise as my servant!"/>
+		<voice sentence="Praise to my masters! Long live the triangle!"/>
+		<voice sentence="You will die in the name of the triangle!"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="70" chance="65000"/><!-- gold coin -->

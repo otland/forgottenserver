@@ -26,7 +26,7 @@
 		<attack name="earth" interval="2000" chance="5" radius="6" target="0" min="-140" max="-310">
 			<attribute key="areaEffect" value="smallplants"/>
 		</attack>
-		<attack name="manadrain" interval="2000" chance="10" length="6" spread="0"  min="-130" max="-200">
+		<attack name="manadrain" interval="2000" chance="10" length="6" spread="0" min="-130" max="-200">
 			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
 		<attack name="poison" interval="2000" chance="15" length="8" spread="3" min="-80" max="-120">
@@ -51,18 +51,18 @@
 		<voice sentence="Chrrr!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /> <!-- gold coin -->
-		<item id="2148" countmax="100" chance="50000" /> <!-- gold coin -->
-		<item id="10557" chance="50000"/> <!-- poisonous slime -->
-		<item id="11222" chance="20000"/> <!-- lump of earth -->
-		<item id="11232" chance="14970"/> <!-- sulphurous stone -->
-		<item id="12659" chance="10000"/> <!-- brimstone shell -->
-		<item id="7589" chance="9025"/> <!-- strong mana potion -->
-		<item id="7588" chance="9003"/> <!-- strong health potion -->
-		<item id="12619" chance="5710"/> <!-- brimstone fangs -->
-		<item id="2149" countmax="4" chance="2702"/> <!-- small emerald -->
-		<item id="5904" chance="1639"/> <!-- magic sulphur -->
-		<item id="2165" chance="892"/> <!-- stealth ring -->
-		<item id="2171" chance="110"/> <!-- platinum amulet -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="10557" chance="50000"/><!-- poisonous slime -->
+		<item id="11222" chance="20000"/><!-- lump of earth -->
+		<item id="11232" chance="14970"/><!-- sulphurous stone -->
+		<item id="12659" chance="10000"/><!-- brimstone shell -->
+		<item id="7589" chance="9025"/><!-- strong mana potion -->
+		<item id="7588" chance="9003"/><!-- strong health potion -->
+		<item id="12619" chance="5710"/><!-- brimstone fangs -->
+		<item id="2149" countmax="4" chance="2702"/><!-- small emerald -->
+		<item id="5904" chance="1639"/><!-- magic sulphur -->
+		<item id="2165" chance="892"/><!-- stealth ring -->
+		<item id="2171" chance="110"/><!-- platinum amulet -->
 	</loot>
 </monster>

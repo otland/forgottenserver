@@ -37,7 +37,7 @@
 			<attribute key="areaEffect" value="mortarea"/>
 			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
-        <attack name="speed" interval="2000" chance="15" range="7" speedchange="-800" duration="30000">
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-800" duration="30000">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>
 			<attribute key="areaEffect" value="smallclouds"/>
@@ -89,6 +89,6 @@
 		<item id="5944" chance="50"/><!-- assassin star -->
 		<item id="2124" chance="410"/><!-- crystal ring-->
 		<item id="8844" countmax="4" chance="29280"/><!-- jalapeno peppers-->
-	    <item id="6301" chance="60"/><!-- death ring-->
+		<item id="6301" chance="60"/><!-- death ring-->
 	</loot>
 </monster>

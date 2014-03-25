@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Rottie the Rotworm" nameDescription="a rottie the rotworm" race="blood" experience="40" speed="180" manacost="0">
-<health now="65" max="65"/>
-<look type="26" head="20" body="30" legs="40" feet="50" corpse="5967"/>
-<targetchange interval="2000" chance="0"/>
-<strategy attack="100" defense="0"/>
-<flags>
-<flag summonable="0"/>
-<flag attackable="1"/>
-<flag hostile="1"/>
-<flag illusionable="0"/>
-<flag convinceable="0"/>
-<flag pushable="0"/>
-<flag canpushitems="0"/>
-<flag canpushcreatures="0"/>
-<flag targetdistance="1"/>
-<flag staticattack="90"/>
-<flag runonhealth="0"/>
-</flags>
-<attacks>
-<attack name="melee" interval="2000" skill="30" attack="30"/>
-</attacks>
-<defenses armor="8" defense="11"/>
-<immunities/>
-<loot>
-<item id="2148" countmax="30" chance1="6230" chancemax="0"/>
-<item id="2530" chance="2850"/>
-<item id="2666" countmax="2" chance="3260"/>
-<item id="3976" countmax="5" chance1="32500" chancemax="0"/>
-<item id="2398" chance="3335"/>
-<item id="2671" countmax="2" chance1="3160" chancemax="0"/>
-<item id="2376" chance="3335"/>
-<item id="2412" chance="900"/>
-<item id="2480" chance="1250"/>
-</loot>
+	<health now="65" max="65"/>
+	<look type="26" head="20" body="30" legs="40" feet="50" corpse="5967"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="30"/>
+	</attacks>
+	<defenses armor="8" defense="11"/>
+	<loot>
+		<item id="2148" countmax="30" chance1="6230" chancemax="0"/>
+		<item id="2530" chance="2850"/>
+		<item id="2666" countmax="2" chance="3260"/>
+		<item id="3976" countmax="5" chance1="32500" chancemax="0"/>
+		<item id="2398" chance="3335"/>
+		<item id="2671" countmax="2" chance1="3160" chancemax="0"/>
+		<item id="2376" chance="3335"/>
+		<item id="2412" chance="900"/>
+		<item id="2480" chance="1250"/>
+	</loot>
 </monster>

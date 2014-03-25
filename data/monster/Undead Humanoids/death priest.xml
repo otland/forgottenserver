@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Death Priest" nameDescription="death priest" race="undead" experience="750" speed="220" manacost="0">
-	  <health now="800" max="800"/>
-	  <look type="99" head="95" body="116" legs="119" feet="115" corpse="13975"/>
-	  <targetchange interval="4000" chance="10"/>
-	  <strategy attack="100" defense="0"/>
-	  <flags>
+	<health now="800" max="800"/>
+	<look type="99" head="95" body="116" legs="119" feet="115" corpse="13975"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
@@ -16,8 +16,8 @@
 		<flag targetdistance="1"/>
 		<flag staticattack="70"/>
 		<flag runonhealth="0"/>
-	  </flags>
-	  <attacks>
+	</flags>
+	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="32"/>
 		<attack name="death" interval="2000" chance="20" range="7" min="-150" max="-250">
 			<attribute key="shootEffect" value="death"/>
@@ -27,30 +27,30 @@
 		<attack name="death" interval="2000" chance="10" target="0" length="5" spread="0" min="-200" max="-245">
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>
-	  </attacks>
-	  <defenses armor="20" defense="20">
+	</attacks>
+	<defenses armor="20" defense="20">
 		<defense name="healing" interval="2000" chance="20" min="80" max="200">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-	  </defenses>  
-		<elements>
-			<element energyPercent="75"/>
-		</elements>
-	  <immunities>
+	</defenses>
+	<elements>
+		<element energyPercent="75"/>
+	</elements>
+	<immunities>
 		<immunity death="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
-	  </immunities>  
-	  <loot>
-			<item id="2148" countmax="100" chance="30000" /><!-- gold coin --> 	
-			<item id="2148" countmax="44" chance="40000" /><!-- gold coin --> 
-			<item id="2143"  chance="3000" /><!-- white pearl --> 
-			<item id="2159" countmax="3" chance="10000" /><!-- scarab coin --> 
-			<item id="7618" chance="15680" /><!-- hp --> 
-			<item id="7620" chance="14860" /><!-- mp --> 
-			<item id="5022" countmax="4"  chance="6000" /><!-- orichalcum pearl --> 
-			<item id="2175" chance="6380" /><!-- spellbook --> 
-			<item id="2214" chance="100" /><!-- ring of healing --> 
-			<item id="13739" chance="27000" /><!-- hieroglyph banner --> 
-	  </loot>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
+		<item id="2148" countmax="44" chance="40000" /><!-- gold coin -->
+		<item id="2143" chance="3000" /><!-- white pearl -->
+		<item id="2159" countmax="3" chance="10000" /><!-- scarab coin -->
+		<item id="7618" chance="15680" /><!-- hp -->
+		<item id="7620" chance="14860" /><!-- mp -->
+		<item id="5022" countmax="4" chance="6000" /><!-- orichalcum pearl -->
+		<item id="2175" chance="6380" /><!-- spellbook -->
+		<item id="2214" chance="100" /><!-- ring of healing -->
+		<item id="13739" chance="27000" /><!-- hieroglyph banner -->
+	</loot>
 </monster>

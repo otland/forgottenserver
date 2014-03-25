@@ -1,4 +1,4 @@
- of<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Necromancer" nameDescription="a necromancer" race="blood" experience="580" speed="200" manacost="0">
 	<health now="580" max="580"/>
 	<look type="9" corpse="20455"/>
@@ -22,11 +22,11 @@
 		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-60" max="-120">
 			<attribute key="shootEffect" value="death"/>
 			<attribute key="areaEffect" value="smallclouds"/>
-		</attack>	
+		</attack>
 		<attack name="poison" interval="2000" chance="20" range="7" min="-65" max="-120">
 			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="poison"/>
-		</attack>		
+		</attack>
 	</attacks>
 	<defenses armor="25" defense="25">
 		<defense name="healing" interval="2000" chance="25" min="50" max="80">

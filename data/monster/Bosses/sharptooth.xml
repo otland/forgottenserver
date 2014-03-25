@@ -45,6 +45,6 @@
 		<voice sentence="Rraaar!"/>
 	</voices>
 	<loot>
-    <item id="2226" chance="50000" /><!-- fishbone -->
-</loot>
+		<item id="2226" chance="50000" /><!-- fishbone -->
+	</loot>
 </monster>

@@ -35,7 +35,7 @@
 		</attack>
 		<attack name="death" interval="2000" chance="5" range="7" min="-5" max="-50">
 			<attribute key="shootEffect" value="death"/>
-		</attack>	
+		</attack>
 		<attack name="lifedrain" interval="2000" chance="5" range="7" min="0" max="-45">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>

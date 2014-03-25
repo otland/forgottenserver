@@ -27,11 +27,11 @@
 		<element energyPercent="-5"/>
 	</elements>
 	<immunities>
-	    <immunity ice="1"/>
+		<immunity ice="1"/>
 		<immunity earth="1"/>
 		<immunity drown="1"/>
 	</immunities>
-		<loot>
+	<loot>
 		<item id="2148" countmax="20" chance="90000"/><!-- gold coin -->
 		<item id="2667" chance="13000"/><!-- fish -->
 		<item id="10550" chance="6260"/><!-- bloody pincers -->

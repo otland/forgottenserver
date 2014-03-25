@@ -23,11 +23,10 @@
 	<defenses armor="15" defense="15"/>
 	<elements>
 		<element holyPercent="-25"/>
-	</elements>	
+	</elements>
 	<immunities>
 		<immunity death="1"/>
 	</immunities>
-
 	<loot>
 		<item id="2148" countmax="25" chance="48000"/><!-- gold coin -->
 		<item id="2231" chance="5140"/><!-- big bone -->

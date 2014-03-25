@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Weeper" nameDescription="Weeper" race="fire" experience="4800" speed="260" manacost="0">
-  <health now="6800" max="6800"/>
-  <look type="489" corpse="17252"/>
-  <targetchange interval="4000" chance="10"/>
-  <strategy attack="100" defense="0"/>
+	<health now="6800" max="6800"/>
+	<look type="489" corpse="17252"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -21,7 +21,7 @@
 		<attack name="melee" interval="2000" skill="90" attack="90"/>
 		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-400" max="-1000">
 			<attribute key="areaEffect" value="fireattack"/>
-		</attack>	
+		</attack>
 		<attack name="fire" interval="3000" chance="100" target="0" radius="3" min="-80" max="-250">
 			<attribute key="areaEffect" value="fire"/>
 		</attack>
@@ -49,11 +49,11 @@
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Moooaaan!"/>
-	</voices>  
-  <loot>
+	</voices>
+	<loot>
 		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
 		<item id="2148" countmax="99" chance="50000"/><!-- gold coin -->
-		<item id="2172" countmax="7" chance="100000"/>  <!-- platinum coin -->
+		<item id="2172" countmax="7" chance="100000"/><!-- platinum coin -->
 		<item id="18425" chance="14890"/><!-- blazing bones -->
 		<item id="18426" chance="15870"/><!-- eye of a weeper -->
 		<item id="10553" chance="13570"/><!-- fiery hearts -->
@@ -70,6 +70,6 @@
 		<item id="2432" chance="2150"/><!-- fire axe -->
 		<item id="7894" chance="790"/><!-- magma legs -->
 		<item id="7899" chance="790"/><!-- magma coat -->
-		<item id="13757" chance="1320"/><!-- coal -->	
+		<item id="13757" chance="1320"/><!-- coal -->
 	</loot>
 </monster>

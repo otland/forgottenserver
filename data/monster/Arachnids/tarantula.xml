@@ -20,7 +20,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="45" poison="40"/>
 		<attack name="poison" interval="2000" chance="10" target="1" radius="1" range="1">
-		    <attribute key="shootEffect" value="poison"/>
+			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="carniphila"/>
 		</attack>
 	</attacks>
@@ -35,7 +35,7 @@
 		<element icePercent="-10"/>
 	</elements>
 	<immunities>
-        <immunity earth="1"/>     	
+		<immunity earth="1"/>
 		<immunity outfit="1"/>
 		<immunity drunk="1"/>
 	</immunities>

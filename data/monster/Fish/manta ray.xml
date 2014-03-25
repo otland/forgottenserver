@@ -24,7 +24,7 @@
 		</attack>
 		<attack name="energy" interval="2000" chance="10" length="4" spread="0" target="0">
 			<attribute key="areaEffect" value="energy"/>
-		</attack>	
+		</attack>
 	</attacks>
 	<defenses armor="15" defense="15"/>
 	<immunities>
@@ -42,6 +42,6 @@
 		<element energyPercent="1"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="38" chance="50000"/> <!-- gold coin -->
+		<item id="2148" countmax="38" chance="50000"/><!-- gold coin -->
 	</loot>
 </monster>

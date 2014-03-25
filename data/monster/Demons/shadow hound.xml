@@ -20,7 +20,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" skill="60" attack="100"/>
 		<attack name="fireball" interval="2000" chance="24" min="-60" max="-160"/>
-		<attack name="soulfire" interval="2000" chance="14"/> 
+		<attack name="soulfire" interval="2000" chance="14"/>
 	</attacks>
 	<defenses armor="50" defense="55">
 		<defense name="healing" interval="1000" chance="15" min="60" max="230">
@@ -38,9 +38,9 @@
 		<immunity death="1"/>
 		<immunity earth="1"/>
 		<immunity paralyze="1"/>
-		<immunity invisible="1"/> 
-	</immunities> 
-	<voices speed="5000" chance="10">
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
 		<voice sentence="Grrrr!" yell="1"/>
 	</voices>
 	<loot>

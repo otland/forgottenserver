@@ -35,9 +35,9 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<loot>
-	    <item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
-		<item id="11196" chance="25430" /><!-- piece of crocodile leather -->	
+		<item id="11196" chance="25430" /><!-- piece of crocodile leather -->
 		<item id="2671" chance="40100" /><!-- ham -->
 		<item id="7632" chance="1130" /><!-- giant shimmering pearl -->
 		<item id="11245" countmax="2" chance="4800" /><!-- bunch of ripe rice -->

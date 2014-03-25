@@ -24,10 +24,10 @@
 		</attack>
 		<attack name="poisonfield" interval="2000" chance="19" range="7" radius="3" target="0">
 			<attribute key="shootEffect" value="poison"/>
-		</attack>		
+		</attack>
 		<attack name="physical" interval="2000" chance="7" range="7" target="1" min="-56" max="-87">
 			<attribute key="shootEffect" value="snowball"/>
-		</attack>		
+		</attack>
 		<attack name="energycondition" interval="2000" chance="10" min="-75" max="-75" range="1" target="1">
 			<attribute key="shootEffect" value="energy"/>
 		</attack>

@@ -63,6 +63,6 @@
 		<item id="2647" chance="2040" /><!-- plate legs -->
 		<item id="8473" chance="740" /><!-- ultimate health potion -->
 		<item id="8872" chance="590" /><!-- belted cape -->
-		<item id="8891" chance="110"/> <!--paladin armor-->
-		</loot>
+		<item id="8891" chance="110"/><!--paladin armor-->
+	</loot>
 </monster>

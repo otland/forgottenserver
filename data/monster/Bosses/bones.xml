@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<monster name="Bones" nameDescription="bones" race="undead" experience="3750" speed="300" manacost="0">
+<monster name="Bones" nameDescription="bones" race="undead" experience="3750" speed="300" manacost="0">
 	<health now="9500" max="9500"/>
 	<look type="231" corpse="6306"/>
 	<targetchange interval="5000" chance="8"/>
@@ -23,8 +23,9 @@
 		<attack name="death" interval="3000" chance="34" range="1" radius="1" target="1" min="-180" max="-500">
 			<attribute key="shootEffect" value="death"/>
 		</attack>
-		<!-- <attack name="blood ball" interval="3000" chance="34" range="7" radius="3" target="1" min="-120" max="-230">
-		</attack> -->
+		<!--
+		<attack name="blood ball" interval="3000" chance="34" range="7" radius="3" target="1" min="-120" max="-230"/>
+		-->
 	</attacks>
 	<defenses armor="50" defense="55">
 		<defense name="healing" interval="5000" chance="25" min="60" max="100">

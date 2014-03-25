@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Horse" nameDescription="a horse" race="undead" experience="0" speed="190" manacost="0">
-  <health now="75" max="75"/>
-  <look type="435" corpse="0"/>
-  <targetchange interval="4000" chance="10"/>
-  <strategy attack="100" defense="0"/>
-  <flags>
-    <flag summonable="1"/>
-    <flag attackable="1"/>
-    <flag hostile="1"/>
-    <flag illusionable="1"/>
-    <flag convinceable="1"/>
-    <flag pushable="1"/>
-    <flag canpushitems="0"/>
-    <flag canpushcreatures="0"/>
-    <flag targetdistance="1"/>
-    <flag staticattack="90"/>
-    <flag runonhealth="75"/>
-  </flags>
-  <voices interval="5000" chance="10">
-		<voice sentence="Weeeeheeeeeee"/>	
-		<voice sentence="*snort*" />	
-		<voice sentence="Weeeeheeeeaaa"/>					
-   </voices>   
+	<health now="75" max="75"/>
+	<look type="435" corpse="0"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="75"/>
+	</flags>
+	<voices interval="5000" chance="10">
+		<voice sentence="Weeeeheeeeeee"/>
+		<voice sentence="*snort*" />
+		<voice sentence="Weeeeheeeeaaa"/>
+	</voices>
 </monster>

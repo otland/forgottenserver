@@ -42,7 +42,7 @@
 	<immunities>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
-	</immunities>   
+	</immunities>
 	<voices interval="2500" chance="10">
 		<voice sentence="GrrroaR!"/>
 		<voice sentence="GROWL!"/>

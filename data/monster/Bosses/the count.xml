@@ -40,7 +40,7 @@
 		<immunity death="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-		<summons maxSummons="1">
+	<summons maxSummons="1">
 		<summon name="Banshee" interval="4000" chance="50"/>
 	</summons>
 	<loot>

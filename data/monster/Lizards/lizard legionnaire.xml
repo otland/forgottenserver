@@ -36,7 +36,7 @@
 		<voice sentence="Tssss!"/>
 	</voices>
 	<loot>
-	    <item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
 		<item id="2148" countmax="65" chance="54000" /><!-- gold coin -->
 		<item id="11334" chance="1940" /><!-- legionnaire flags -->
 		<item id="5881" countmax="3" chance="980" /><!-- lizard scale -->
@@ -50,6 +50,6 @@
 		<item id="2145" countmax="2" chance="1001" /><!-- small diamond -->
 		<item id="11303" chance="460" /><!-- zaoan shoes -->
 		<item id="11336" chance="20" /><!-- lizard trophy -->
-		<item id="11301" chance="70"/> <!-- zaoan armor -->
+		<item id="11301" chance="70"/><!-- zaoan armor -->
 	</loot>
 </monster>

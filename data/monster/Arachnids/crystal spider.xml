@@ -41,7 +41,7 @@
 		<element energyPercent="-20"/>
 	</elements>
 	<immunities>
-	    <immunity fire="1"/>
+		<immunity fire="1"/>
 		<immunity ice="1"/>
 		<immunity paralyze="1"/>
 		<immunity outfit="1"/>

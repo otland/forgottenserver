@@ -37,7 +37,7 @@
 		<element icePercent="1"/>
 	</elements>
 	<immunities>
-	    <immunity fire="1"/>
+		<immunity fire="1"/>
 		<immunity invisible="1"/>
 		<immunity paralyze="1"/>
 	</immunities>

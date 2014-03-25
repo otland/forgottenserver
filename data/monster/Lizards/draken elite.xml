@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Draken Elite" nameDescription="a draken elite" race="blood" experience="4200" speed="250" manacost="0">
-<health now="5550" max="5550"/>
-<look type="362" corpse="12609"/>
-<targetchange interval="5000" chance="10"/>
-<strategy attack="100" defense="0"/>
+	<health now="5550" max="5550"/>
+	<look type="362" corpse="12609"/>
+	<targetchange interval="5000" chance="10"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -72,9 +72,9 @@
 		<item id="12646" chance="600" /><!-- draken boots -->
 		<item id="12649" chance="20" /><!-- blade of corruption -->
 		<item id="12630" chance="10" /><!-- cobra crown -->
-		<item id="11302" chance="150"/> <!-- zaoan helmet -->
-		<item id="11304" chance="770"/> <!-- zaoan legs -->
-		<item id="11301" chance="490"/> <!-- zaoan armor -->
+		<item id="11302" chance="150"/><!-- zaoan helmet -->
+		<item id="11304" chance="770"/><!-- zaoan legs -->
+		<item id="11301" chance="490"/><!-- zaoan armor -->
 		<item id="12647" chance="80" /><!-- snake god's wristguard -->
 		<item id="12607" chance="110" /><!-- elite draken mail -->
 	</loot>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ghastly Dragon" nameDescription="a ghastly dragon" race="undead" experience="4600" speed="320" manacost="0">
-<health now="7800" max="7800"/>
-<look type="351" corpse="11362"/>
-<targetchange interval="4000" chance="5"/>
-<strategy attack="100" defense="0"/>
+	<health now="7800" max="7800"/>
+	<look type="351" corpse="11362"/>
+	<targetchange interval="4000" chance="5"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -23,10 +23,10 @@
 		<attack name="poisoncondition" interval="2000" chance="10" target="1" range="5" min="-920" max="-1280">
 			<attribute key="areaEffect" value="bats"/>
 			<attribute key="areaEffect" value="smallclouds"/>
-		</attack>	
+		</attack>
 		<attack name="lifedrain" interval="2000" chance="15" range="7" target="1" min="-80" max="-230">
 			<attribute key="areaEffect" value="redshimmer"/>
-		</attack>	
+		</attack>
 		<attack name="death" interval="2000" chance="10" length="8" spread="3" min="-120" max="-250">
 			<attribute key="areaEffect" value="bluebubble"/>
 		</attack>
@@ -65,8 +65,8 @@
 		<item id="11368" chance="810" /><!-- jade hat -->
 		<item id="5944" chance="12170" /><!-- soul orb -->
 		<item id="11323" chance="15020" /><!-- zaoan halberd -->
-		<item id="8472" countmax="2"  chance="29460" /><!-- great spirit potion -->
-		<item id="7590" countmax="2"  chance="30560" /><!-- great mana potion -->
+		<item id="8472" countmax="2" chance="29460" /><!-- great spirit potion -->
+		<item id="7590" countmax="2" chance="30560" /><!-- great mana potion -->
 		<item id="11301" chance="870" /><!-- zaoan armor -->
 		<item id="11367" chance="19830" /><!-- undead heart -->
 		<item id="6500" chance="8920" /><!-- demonic essence -->

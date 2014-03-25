@@ -20,16 +20,16 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="80" attack="100" poison="840"/>
 		<attack name="lifedrain" interval="2000" chance="20" count="5" range="7" target="1" min="-21" max="-350">
-		    <attribute key="shootEffect" value="earth"/>
+			<attribute key="shootEffect" value="earth"/>
 			<attribute key="areaEffect" value="carniphila"/>
-		</attack>	
+		</attack>
 		<attack name="earth" interval="2000" chance="15" length="8" spread="3" min="-250" max="-500">
 			<attribute key="areaEffect" value="carniphila"/>
-		</attack>	
+		</attack>
 		<attack name="speed" interval="2000" chance="25" radius="7" target="1" speedchange="-900">
 			<attribute key="areaEffect" value="poff"/>
-		</attack>	
-		<attack name="outfit" interval="2000" chance="1" target="1" range="7" monster="clay guardian" duration="3000"/>	
+		</attack>
+		<attack name="outfit" interval="2000" chance="1" target="1" range="7" monster="clay guardian" duration="3000"/>
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="25" min="150" max="300">
@@ -52,7 +52,7 @@
 		<voice sentence="You will make ssuch a fine ssstatue!"/>
 		<voice sentence="There isss no chhhanccce of esscape"/>
 		<voice sentence="Jusssst look at me!"/>
-		<voice sentence="Are you tired or why are you moving thhat sslow <chuckle>"/>
+		<voice sentence="Are you tired or why are you moving thhat sslow<chuckle>"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->

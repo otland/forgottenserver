@@ -26,7 +26,7 @@
 		<attack name="lifedrain" interval="2000" chance="20" radius="4" target="0" min="-50" max="-60">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="bleedcondition" interval="2000" chance="10"  radius="6" target="1" min="-320" max="-560">
+		<attack name="bleedcondition" interval="2000" chance="10" radius="6" target="1" min="-320" max="-560">
 			<attribute key="areaEffect" value="bats"/>
 		</attack>
 	</attacks>

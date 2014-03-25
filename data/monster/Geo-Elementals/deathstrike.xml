@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deathstrike" nameDescription="Deathstrike" race="blood" experience="45000" speed="470" manacost="0">
-  <health now="80000" max="80000"/>
-  <look type="500" corpse="18384"/>
-  <targetchange interval="5000" chance="8"/>
-  <strategy attack="90" defense="10"/>
+	<health now="80000" max="80000"/>
+	<look type="500" corpse="18384"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="90" defense="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -26,7 +26,7 @@
 			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 		<attack name="energy" interval="1000" chance="12" range="3" target="1" min="-350" max="-800">
-			<attribute key="areaEffect" value="purpleenergy"/>			
+			<attribute key="areaEffect" value="purpleenergy"/>
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="35">
@@ -52,15 +52,14 @@
 		<voice sentence="Maaahhhrrr!"/>
 		<voice sentence="You are nothing!"/>
 		<voice sentence="Taaake ... this!"/>
-	</voices>     
+	</voices>
 	<loot>
-		<item id="18465" chance="11430"/><!-- shiny blade -->  
-		<item id="18452" chance="8570"/><!-- mycological mace -->  
-		<item id="18450" chance="10480"/><!-- crystalline sword -->            
-		<item id="18430" chance="100000"/><!-- Deathstrike's snippets -->  
-		<item id="18453" chance="12380"/><!-- crystalline crossbow -->  
-		<item id="18451" chance="11430"/><!-- crystalline axe -->  
-		<item id="18454" chance="11430"/><!-- mycological bow -->  
+		<item id="18465" chance="11430"/><!-- shiny blade -->
+		<item id="18452" chance="8570"/><!-- mycological mace -->
+		<item id="18450" chance="10480"/><!-- crystalline sword -->
+		<item id="18430" chance="100000"/><!-- Deathstrike's snippets -->
+		<item id="18453" chance="12380"/><!-- crystalline crossbow -->
+		<item id="18451" chance="11430"/><!-- crystalline axe -->
+		<item id="18454" chance="11430"/><!-- mycological bow -->
 	</loot>
 </monster>
-

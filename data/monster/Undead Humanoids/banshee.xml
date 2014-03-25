@@ -26,7 +26,7 @@
 			<attribute key="areaEffect" value="rednote"/>
 		</attack>
 		<attack name="death" interval="2000" chance="5" range="1" target="1" radius="1" min="-55" max="-350">
-			<attribute key="areaEffect" value="smallclouds"/>	
+			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="25">

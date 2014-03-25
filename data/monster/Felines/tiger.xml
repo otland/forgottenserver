@@ -31,6 +31,6 @@
 	</elements>
 	<loot>
 		<item id="2666" countmax="4" chance="35190"/><!-- meat -->
-		<item id="11210" chance="10830"/> <!-- striped fur -->
+		<item id="11210" chance="10830"/><!-- striped fur -->
 	</loot>
 </monster>

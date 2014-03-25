@@ -35,7 +35,7 @@
 		<element energyPercent="-10"/>
 		<element deathPercent="-3"/>
 	</elements>
-		<immunities>
+	<immunities>
 		<immunity ice="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">

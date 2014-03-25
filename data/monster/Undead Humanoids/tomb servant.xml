@@ -32,7 +32,7 @@
 		<voice sentence="Ngl..Nglll...Gll"/>
 	</voices>
 	<loot>
-	    <item id="2148" countmax="50" chance="40000" /><!-- gold coin -->
+		<item id="2148" countmax="50" chance="40000" /><!-- gold coin -->
 		<item id="2148" countmax="58" chance="40000" /><!-- gold coin -->
 		<item id="2230" chance="49000" /><!-- bone -->
 		<item id="11200" chance="1000" /><!-- half-digested piece of meat -->

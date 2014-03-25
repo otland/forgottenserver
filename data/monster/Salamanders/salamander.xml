@@ -30,14 +30,14 @@
 		<voice sentence="Chhh!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="60000"/> <!-- Gold Coin -->
-		<item id="2544" countmax="3" chance="7890"/> <!-- Arrows -->
-		<item id="7618" chance="840"/> <!-- HP -->
-		<item id="2120" chance="4700"/> <!-- Rope -->
-		<item id="2456" chance="1090"/> <!-- Bow -->
-		<item id="2398" chance="3780"/> <!-- Mace -->
-		<item id="2460" chance="2180"/> <!-- Brass Helmet -->
-		<item id="2419" chance="420"/> <!-- Scimitar -->
-		<item id="19736" countmax="5" chance="32830"/> <!-- Insectoid Eggs -->
+		<item id="2148" countmax="15" chance="60000"/><!-- Gold Coin -->
+		<item id="2544" countmax="3" chance="7890"/><!-- Arrows -->
+		<item id="7618" chance="840"/><!-- HP -->
+		<item id="2120" chance="4700"/><!-- Rope -->
+		<item id="2456" chance="1090"/><!-- Bow -->
+		<item id="2398" chance="3780"/><!-- Mace -->
+		<item id="2460" chance="2180"/><!-- Brass Helmet -->
+		<item id="2419" chance="420"/><!-- Scimitar -->
+		<item id="19736" countmax="5" chance="32830"/><!-- Insectoid Eggs -->
 	</loot>
 </monster>
