@@ -27,7 +27,7 @@
 		</attack>
 		<attack name="stampor skill reducer" range="5" interval="2000" chance="10"/>
 	</attacks>
-	<defenses>
+<defenses>
 		<defense name="healing" interval="2000" chance="15" min="90" max="120">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
@@ -50,18 +50,18 @@
 		<voice sentence="KRRRRRNG" yell="1"/>
 	</voices>
 	<loot>
-    <item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-    <item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-	<item id="2148" countmax="42" chance="35000" /><!-- gold coin -->
-    <item id="2152" countmax="2" chance="10000" /><!-- platinum coin -->
-    <item id="9970" countmax="2" chance="7930" /><!-- small topaz -->
-    <item id="13299" chance="4910" /><!-- stampor horn -->
-    <item id="13300" countmax="2" chance="4940" /><!-- stampor talon -->
-    <item id="7589" countmax="2" chance="5000" /><!-- smp -->
-    <item id="7588" countmax="2" chance="5000" /><!-- strong health potion -->
-	<item id="2391" chance="1000" /><!-- war hammer -->
-    <item id="13301" chance="3000" /><!-- hollow stampor hoof -->
-	<item id="2476" chance="850" /><!-- knight armor -->
-    <item id="7452" chance="160" /><!-- spiked squelcher -->
-</loot>
+		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
+		<item id="2148" countmax="42" chance="35000" /><!-- gold coin -->
+		<item id="2152" countmax="2" chance="10000" /><!-- platinum coin -->
+		<item id="9970" countmax="2" chance="7930" /><!-- small topaz -->
+		<item id="13299" chance="4910" /><!-- stampor horn -->
+		<item id="13300" countmax="2" chance="4940" /><!-- stampor talon -->
+		<item id="7589" countmax="2" chance="5000" /><!-- smp -->
+		<item id="7588" countmax="2" chance="5000" /><!-- strong health potion -->
+		<item id="2391" chance="1000" /><!-- war hammer -->
+		<item id="13301" chance="3000" /><!-- hollow stampor hoof -->
+		<item id="2476" chance="850" /><!-- knight armor -->
+		<item id="7452" chance="160" /><!-- spiked squelcher -->
+	</loot>
 </monster>

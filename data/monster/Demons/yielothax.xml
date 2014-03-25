@@ -21,7 +21,7 @@
 		<attack name="melee" interval="1000" skill="65" attack="54"/>
 		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="0" min="-100" max="-130">
 			<attribute key="areaEffect" value="energyarea"/>
-		</attack>	
+		</attack>
 		<attack name="earth" interval="2000" chance="15" radius="3" target="0" min="-150" max="-250">
 			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
@@ -30,7 +30,7 @@
 		</attack>
 		<attack name="manadrain" interval="2000" chance="10" length="4" spread="3" min="-50" max="-150">
 			<attribute key="areaEffect" value="redshimmer"/>
-		</attack>		
+		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="15" min="100" max="150">

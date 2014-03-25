@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Enraged Crystal Golem" nameDescription="enraged crystal golem" race="energy" experience="550" speed="200" manacost="0">
-  <health now="700" max="700"/>
-  <look type="508" corpse="18466"/>
-  <targetchange interval="4000" chance="10"/>
-  <strategy attack="100" defense="0"/>
+	<health now="700" max="700"/>
+	<look type="508" corpse="18466"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -29,7 +29,7 @@
 		<immunity ice="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
-	</immunities>  
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Crrrrk! Chhhhr!"/>
 	</voices>
@@ -40,7 +40,7 @@
 		<item id="7588" chance="7140"/><!-- SHP -->
 		<item id="7589" chance="8270"/><!-- SMP -->
 		<item id="18418" chance="4120"/><!-- blue crystal splinter -->
-		<item id="7449" chance="4710"/><!-- crystal sword  -->
+		<item id="7449" chance="4710"/><!-- crystal sword -->
 		<item id="18419" chance="1050"/><!-- cyan crystal fragment -->
 		<item id="7454" chance="360"/><!-- glorious axe -->
 	</loot>

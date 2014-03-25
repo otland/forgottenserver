@@ -21,7 +21,7 @@
 		<attack name="earth" interval="2000" chance="20" target="1" range="7" radius="3" min="-150" max="-310">
 			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="greenbubble"/>
-		</attack>		
+		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="speed" interval="2000" chance="15" speedchange="450" duration="5000">
@@ -44,15 +44,15 @@
 		<element icePercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="100" chance="50000"/> <!-- gold coin -->
-		<item id="2148" countmax="100" chance="50000"/> <!-- gold coin -->
-		<item id="2152" countmax="4" chance="45000"/> <!-- platinum coin -->
-		<item id="15485" chance="14960"/> <!-- spidris sandible -->
-		<item id="15486" chance="12500"/> <!-- compound eye -->
-		<item id="2147" countmax="5" chance="11900"/> <!-- small ruby -->
-		<item id="7590" countmax="2" chance="11500"/> <!-- great mana potion -->
-		<item id="8473" countmax="2" chance="6250"/> <!-- ultimate health potion -->
-		<item id="6300" chance="2700"/> <!-- death ring -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2152" countmax="4" chance="45000"/><!-- platinum coin -->
+		<item id="15485" chance="14960"/><!-- spidris sandible -->
+		<item id="15486" chance="12500"/><!-- compound eye -->
+		<item id="2147" countmax="5" chance="11900"/><!-- small ruby -->
+		<item id="7590" countmax="2" chance="11500"/><!-- great mana potion -->
+		<item id="8473" countmax="2" chance="6250"/><!-- ultimate health potion -->
+		<item id="6300" chance="2700"/><!-- death ring -->
 		<item id="7632" chance="1700"/><!-- giant shimmering pearl -->
 		<item id="7413" chance="920"/><!-- titan axe -->
 		<item id="2153" chance="770"/><!-- violet gem -->

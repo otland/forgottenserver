@@ -40,7 +40,7 @@
 		<immunity earth="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-		<voices interval="5000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Attack aggrezzively! Dezztroy zze intruderzz!"/>
 		<voice sentence="Hizzzzz!"/>
 	</voices>
@@ -57,9 +57,9 @@
 		<item id="2123" chance="180" /><!-- ring of the sky -->
 		<item id="2147" countmax="5" chance="1525" /><!-- small ruby -->
 		<item id="11305" chance="860" /><!-- drakinata -->
-		<item id="11304" chance="960"/> <!-- zaoan legs -->
-		<item id="11301" chance="790"/> <!-- zaoan armor -->
-		<item id="11321" chance="12010"/> <!-- bone shoulderplate -->
-		<item id="11322" chance="7000"/> <!-- warmaster's wristguards -->
+		<item id="11304" chance="960"/><!-- zaoan legs -->
+		<item id="11301" chance="790"/><!-- zaoan armor -->
+		<item id="11321" chance="12010"/><!-- bone shoulderplate -->
+		<item id="11322" chance="7000"/><!-- warmaster's wristguards -->
 	</loot>
 </monster>

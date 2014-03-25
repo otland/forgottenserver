@@ -63,9 +63,9 @@
 		<item id="11326" chance="3350" /><!-- corrupted flag -->
 		<item id="5881" countmax="3" chance="980" /><!-- lizard scale -->
 		<item id="2528" chance="1100" /><!-- tower shield -->
-		<item id="11304" chance="940"/> <!-- zaoan legs -->
-		<item id="11302" chance="140"/> <!-- zaoan helmet -->
-		<item id="11301" chance="980"/> <!-- zaoan armor -->
-		
+		<item id="11304" chance="940"/><!-- zaoan legs -->
+		<item id="11302" chance="140"/><!-- zaoan helmet -->
+		<item id="11301" chance="980"/><!-- zaoan armor -->
+
 	</loot>
 </monster>

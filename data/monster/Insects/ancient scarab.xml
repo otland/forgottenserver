@@ -64,6 +64,6 @@
 		<item id="7903" chance="490"/><!-- terra hood -->
 		<item id="7588" chance="660"/><!-- strong health potion -->
 		<item id="2440" chance="420"/><!-- daramanian waraxe -->
-		<item id="2540"  chance="480"/><!-- scarab shield -->
+		<item id="2540" chance="480"/><!-- scarab shield -->
 	</loot>
 </monster>

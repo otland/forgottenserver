@@ -46,8 +46,8 @@ e<?xml version="1.0" encoding="UTF-8"?>
 		<element physicalPercent="5"/>
 	</elements>
 	<immunities>
-	    <immunity fire="1"/>
-	    <immunity earth="1"/>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
@@ -55,9 +55,9 @@ e<?xml version="1.0" encoding="UTF-8"?>
 		<voice sentence="Crrroak!"/>
 	</voices>
 	<loot>
-      	<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
 		<item id="2148" countmax="99" chance="50000"/><!-- gold coin -->
-		<item id="2152" countmax="5" chance="100000"/>  <!-- platinum coin -->
+		<item id="2152" countmax="5" chance="100000"/><!-- platinum coin -->
 		<item id="18425" countmax="1" chance="11500"/><!-- violet -->
 		<item id="5909" chance="2310"/><!-- white piece of cloth -->
 		<item id="5914" chance="2980"/><!-- yellow piece of cloth -->
@@ -72,16 +72,16 @@ e<?xml version="1.0" encoding="UTF-8"?>
 		<item id="2529" chance="1550"/><!-- black shield -->
 		<item id="18425" chance="12220"/><!-- blazing bones -->
 		<item id="8921" chance="4280"/><!-- wand of draconia -->
-		<item id="7590" chance="6500"/>  <!-- gmp -->
+		<item id="7590" chance="6500"/><!-- gmp -->
 		<item id="5880" chance="4280"/><!-- iron ore -->
 		<item id="2154" chance="1030"/><!-- yellow gem -->
 		<item id="10553" chance="7810"/><!-- fiery hearts -->
 		<item id="18424" chance="11600"/><!-- magma clumps -->
-		<item id="13757" chance="1675"/> <!-- coal -->
-		<item id="18418" countmax="2" chance="8500"/>  <!-- blue crystal splinter -->
-		<item id="18417" countmax="2" chance="8500"/>  <!-- brown crystal splinter -->
+		<item id="13757" chance="1675"/><!-- coal -->
+		<item id="18418" countmax="2" chance="8500"/><!-- blue crystal splinter -->
+		<item id="18417" countmax="2" chance="8500"/><!-- brown crystal splinter -->
 		<item id="18421" chance="7000"/><!-- green crystal fragment -->
-			<item id="18413" countmax="2" chance="3930"/>  <!-- blue crystal shard -->
-				<item id="2392" chance="1680"/><!-- fire sword -->
+		<item id="18413" countmax="2" chance="3930"/><!-- blue crystal shard -->
+		<item id="2392" chance="1680"/><!-- fire sword -->
 	</loot>
 </monster>

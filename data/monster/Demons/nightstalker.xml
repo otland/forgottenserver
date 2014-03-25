@@ -15,7 +15,7 @@
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="0"/> 
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="50" attack="30" poison="80"/>
@@ -35,8 +35,8 @@
 		</defense>
 		<defense name="outfit" interval="5000" chance="10" monster="nightstalker" duration="4000"/>
 		<defense name="outfit" interval="5000" chance="10" monster="werewolf" duration="4000"/>
-		<defense name="outfit" interval="5000" chance="10" monster="the count" duration="4000"/>		
-		<defense name="outfit" interval="5000" chance="10" monster="grim reaper" duration="4000"/>	
+		<defense name="outfit" interval="5000" chance="10" monster="the count" duration="4000"/>
+		<defense name="outfit" interval="5000" chance="10" monster="grim reaper" duration="4000"/>
 		<defense name="outfit" interval="5000" chance="10" monster="tarantula" duration="4000"/>
 		<defense name="outfit" interval="5000" chance="1" monster="ferumbras" duration="4000"/>
 	</defenses>
@@ -49,8 +49,8 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
-		<immunity invisible="1"/> 
-	</immunities> 
+		<immunity invisible="1"/>
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="The sunlight is so depressing."/>
 		<voice sentence="Come with me, my child."/>
@@ -60,7 +60,7 @@
 		<voice sentence="Only the sweetest and cruelest dreams for you, my love."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000"/><!-- gold coin --> 
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
 		<item id="2148" countmax="10" chance="50000"/><!-- gold coin -->
 		<item id="2804" chance="4761"/><!-- shadow herb -->
 		<item id="7589" chance="1612"/><!-- strong mana potion -->

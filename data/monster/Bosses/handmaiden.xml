@@ -21,9 +21,9 @@
 		<attack name="melee" interval="2000" min="-0" max="-800"/>
 		<attack name="manadrain" interval="2000" chance="25" range="7" min="-150" max="-800">
 			<attribute key="areaEffect" value="blueshimmer"/>
-	</attack>
+		</attack>
 		<attack name="drunk" interval="1000" chance="12" range="1" target="1">
-	</attack>
+		</attack>
 	</attacks>
 	<defenses armor="25" defense="35">
 		<defense name="speed" interval="3000" chance="12" speedchange="380" duration="8000">

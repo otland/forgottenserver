@@ -30,7 +30,7 @@
 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-490">
 			<attribute key="areaEffect" value="purpleenergy"/>
 		</attack>
-			<attack name="energy strike" interval="2000" chance="10" range="1" min="-210" max="-300">
+		<attack name="energy strike" interval="2000" chance="10" range="1" min="-210" max="-300">
 		</attack>
 		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-700" duration="30000">
 			<attribute key="areaEffect" value="redshimmer"/>

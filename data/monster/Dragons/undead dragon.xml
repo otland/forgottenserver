@@ -57,9 +57,9 @@
 		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
-	    <immunity fire="1"/>
-	    <immunity earth="1"/>
-	    <immunity death="1"/>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
+		<immunity death="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 		<immunity drown="1"/>
@@ -76,7 +76,7 @@
 		<item id="6300" chance="1150"/><!-- death ring -->
 		<item id="7591" chance="21200"/><!-- great health potion -->
 		<item id="2033" chance="6002"/><!-- golden mug -->
-        <item id="2547" countmax="15" chance="15190"/><!-- power bolt -->
+		<item id="2547" countmax="15" chance="15190"/><!-- power bolt -->
 		<item id="7430" chance="4000"/><!-- dragonbone staff -->
 		<item id="2476" chance="5500"/><!-- knight armor -->
 		<item id="2177" chance="2500"/><!-- life crystal -->

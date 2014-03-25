@@ -31,7 +31,7 @@
 		<attack name="outfit" interval="2000" chance="1" target="1" range="3" monster="cyclops" duration="2000">
 			<attribute key="shootEffect" value="explosion"/>
 		</attack>
-        <attack name="outfit" interval="2000" chance="1" target="0" radius="4" item="2324" duration="2000">
+		<attack name="outfit" interval="2000" chance="1" target="0" radius="4" item="2324" duration="2000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</attack>
 	</attacks>

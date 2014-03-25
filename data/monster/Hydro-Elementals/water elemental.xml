@@ -18,14 +18,14 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="80" poison="60" />	
-		<attack name="drown" interval="2000" chance="10" target="1" range="7" radius="2"  min="-125" max="-235">
+		<attack name="melee" interval="2000" skill="30" attack="80" poison="60" />
+		<attack name="drown" interval="2000" chance="10" target="1" range="7" radius="2" min="-125" max="-235">
 			<attribute key="areaEffect" value="bluebubble"/>
 		</attack>
 		<attack name="icicle" interval="2000" chance="20" range="7" min="-88" max="-150"/>
-		<attack name="poisoncondition" interval="2000" chance="15" target="0" radius="5"  min="-225" max="-260">
+		<attack name="poisoncondition" interval="2000" chance="15" target="0" radius="5" min="-225" max="-260">
 			<attribute key="areaEffect" value="poison"/>
-		</attack>	
+		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
 		<defense name="healing" interval="2000" chance="5" min="50" max="80">
@@ -33,7 +33,7 @@
 		</defense>
 		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
-		</defense>	
+		</defense>
 	</defenses>
 	<elements>
 		<element physicalPercent="35"/>
@@ -55,7 +55,7 @@
 		<item id="2152" chance="10000"/><!-- platinum coin -->
 		<item id="2667" chance="20000"/><!-- fish -->
 		<item id="2149" countmax="2" chance="1000"/><!-- small emerald -->
-		<item id="2145"  chance="1000"/><!-- small diamond -->
+		<item id="2145" chance="1000"/><!-- small diamond -->
 		<item id="2146" chance="1000"/><!-- small sapphire -->
 		<item id="7632" chance="800"/><!-- giant shimmering pearl -->
 		<item id="7633" chance="800"/><!-- giant shimmering pearl -->
@@ -65,6 +65,6 @@
 		<item id="2168" chance="930"/><!-- life ring -->
 		<item id="7158" chance="940"/><!-- rainbow trout -->
 		<item id="7159" chance="1050"/><!-- green perch -->
-        <item id="10220" chance="260"/><!-- leviathan's amulet -->
+		<item id="10220" chance="260"/><!-- leviathan's amulet -->
 	</loot>
 </monster>

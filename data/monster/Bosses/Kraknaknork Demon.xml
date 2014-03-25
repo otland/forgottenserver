@@ -40,20 +40,8 @@
 		<voice sentence="ROOKIE FOR BREAKFAST" yell="1"/>
 	</voices>
 	<loot>
-    <item id="2148" countmax="100" chance="48025" /><!-- gold coin -->
-    <item id="2148" countmax="86" chance="48025" /><!-- gold coin -->
-    <item id="1987" chance="100000"><!-- bag -->
-        <inside>
-            <item id="2148" chance="24400" /><!-- gold ingot -->
-        </inside>
-    </item>
-</loot>
-
-
-
-
-
-
-
-
+		<item id="2148" countmax="100" chance="48025" /><!-- gold coin -->
+		<item id="2148" countmax="86" chance="48025" /><!-- gold coin -->
+		<item id="2148" chance="24400" /><!-- gold ingot -->
+	</loot>
 </monster>

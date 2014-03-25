@@ -22,7 +22,7 @@
 		<attack name="melee" interval="2000" skill="45" attack="40"/>
 		<attack name="earth" interval="2000" chance="10" range="7" target="1" min="-99" max="-145">
 			<attribute key="shootEffect" value="smallearth"/>
-			<attribute key="areaEffect" value="greenbubble"/>	
+			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
 		<attack name="physical" interval="2000" chance="10" range="7" radius="2" target="1" min="-95" max="-169">
 			<attribute key="shootEffect" value="largerock"/>
@@ -42,7 +42,7 @@
 	<defenses armor="35" defense="35">
 		<defense name="healing" interval="2000" chance="5" min="150" max="180">
 			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>	
+		</defense>
 	</defenses>
 	<elements>
 		<element deathPercent="45"/>
@@ -61,7 +61,7 @@
 		<item id="2148" countmax="100" chance="32000"/><!-- gold coin -->
 		<item id="2148" countmax="100" chance="32000"/><!-- gold coin -->
 		<item id="2148" countmax="41" chance="32000"/><!-- gold coin -->
-		<item id="1294" countmax="10" chance="25280"/><!-- small stone -->	
+		<item id="1294" countmax="10" chance="25280"/><!-- small stone -->
 		<item id="2200" chance="1580"/><!-- protection amulet -->
 		<item id="9809" chance="3300"/><!-- rusty armor -->
 		<item id="2213" chance="2790"/><!-- dwarven ring -->

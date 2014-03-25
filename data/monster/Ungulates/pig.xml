@@ -17,7 +17,7 @@
 		<flag staticattack="90"/>
 		<flag runonhealth="25"/>
 	</flags>
-		<voices interval="5000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Oink oink"/>
 		<voice sentence="Oink"/>
 	</voices>

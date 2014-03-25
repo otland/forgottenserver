@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Corym Charlatan" nameDescription="a corym charlatan" race="blood" experience="150" speed="180" manacost="0">
 	<health now="250" max="250"/>
-	<look type="532"  body="97" legs="116" corpse="19725"/>
+	<look type="532" body="97" legs="116" corpse="19725"/>
 	<targetchange interval="5000" chance="0"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
@@ -32,18 +32,18 @@
 		<voice sentence="Beware! Me hexing you!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="89980"/> <!-- Gold Coin -->
-		<item id="20092" chance="860"/> <!-- Life Preserver -->
-		<item id="2696" chance="10020"/> <!-- Cheese -->
-		<item id="20100" chance="14780"/> <!-- Rat Cheese -->
-		<item id="20099" chance="12530"/> <!-- Soft Cheese -->
-		<item id="20089" chance="8070"/> <!-- Bola -->
-		<item id="20096" chance="6100"/> <!-- Cheese Cutter -->
-		<item id="20098" chance="7150"/> <!-- earflap -->
-		<item id="20091" chance="910"/> <!-- Ratana -->
-		<item id="20125" chance="550"/> <!-- Leather Harness -->
-		<item id="20097" chance="500"/> <!-- Cheesy Figurine -->
-		<item id="20089" chance="490"/> <!-- Spike Shield -->
-	    <item id="20104" chance="10"/>  <!-- Rat God Doll -->
+		<item id="2148" countmax="35" chance="89980"/><!-- Gold Coin -->
+		<item id="20092" chance="860"/><!-- Life Preserver -->
+		<item id="2696" chance="10020"/><!-- Cheese -->
+		<item id="20100" chance="14780"/><!-- Rat Cheese -->
+		<item id="20099" chance="12530"/><!-- Soft Cheese -->
+		<item id="20089" chance="8070"/><!-- Bola -->
+		<item id="20096" chance="6100"/><!-- Cheese Cutter -->
+		<item id="20098" chance="7150"/><!-- earflap -->
+		<item id="20091" chance="910"/><!-- Ratana -->
+		<item id="20125" chance="550"/><!-- Leather Harness -->
+		<item id="20097" chance="500"/><!-- Cheesy Figurine -->
+		<item id="20089" chance="490"/><!-- Spike Shield -->
+		<item id="20104" chance="10"/><!-- Rat God Doll -->
 	</loot>
 </monster>

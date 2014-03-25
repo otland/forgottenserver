@@ -20,9 +20,9 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50"/>
 	</attacks>
-	<defenses>
+<defenses>
 		<defense name="speed" interval="2000" chance="15" speedchange="1000" duration="5000">
-    </defense>
+		</defense>
 	</defenses>
 	<elements>
 		<element physicalPercent="25"/>

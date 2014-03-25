@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lizard Abomination" nameDescription="lizard abomination" race="blood" experience="1350" speed="220" manacost="0">
-<health now="20000" max="20000"/>
-<look type="364" corpse="12385"/>
-<targetchange interval="2000" chance="10"/>
-<strategy attack="100" defense="0"/>
+	<health now="20000" max="20000"/>
+	<look type="364" corpse="12385"/>
+	<targetchange interval="2000" chance="10"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

@@ -20,7 +20,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="28"/>
 	</attacks>
-	<defenses>
+<defenses>
 		<defense name="healing" interval="2000" chance="15" min="5" max="15">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
@@ -44,7 +44,7 @@
 		<voice sentence="These mine is ours... you shall not pass."/>
 	</voices>
 	<loot>
-     	<item id="2148" countmax="29" chance="53850" /><!-- gold coin -->
+		<item id="2148" countmax="29" chance="53850" /><!-- gold coin -->
 		<item id="3976" countmax="6" chance="92310" /><!-- worm -->
 		<item id="2403" chance="15380" /><!-- knife -->
 		<item id="2050" chance="46150" /><!-- torch -->

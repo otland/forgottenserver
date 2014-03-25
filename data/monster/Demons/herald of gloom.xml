@@ -15,7 +15,7 @@
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="0"/> 
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" skill="50" attack="30"/>
@@ -59,14 +59,14 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
-		<immunity invisible="1"/> 
-	</immunities> 
-	<voices speed="5000" chance="10">
+		<immunity invisible="1"/>
+	</immunities>
+<voices speed="5000" chance="10">
 		<voice sentence="The powers of light are waning." yell="1"/>
 		<voice sentence="You will join us in eternal night!" yell="1"/>
 		<voice sentence="The shadows will engulf the world." yell="1"/>
 	</voices>
 	<loot>
-		<item id="10531" chance="1886"/><!-- midnight shard --> 
+		<item id="10531" chance="1886"/><!-- midnight shard -->
 	</loot>
 </monster>

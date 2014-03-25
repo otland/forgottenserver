@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dragonling" nameDescription="a dragonling" race="blood" experience="2200" speed="330" manacost="0">
-  <health now="2600" max="2600"/>
-  <look type="505" corpse="18438"/>
-  <targetchange interval="4000" chance="10"/>
-  <strategy attack="100" defense="0"/>
-  <flags>
-    <flag summonable="0"/>
-    <flag attackable="1"/>
-    <flag hostile="1"/>
-    <flag illusionable="0"/>
-    <flag convinceable="0"/>
-    <flag pushable="0"/>
-    <flag canpushitems="1"/>
-    <flag canpushcreatures="1"/>
-    <flag targetdistance="1"/>
-    <flag staticattack="70"/>
-    <flag runonhealth="900"/>
-  </flags>
+	<health now="2600" max="2600"/>
+	<look type="505" corpse="18438"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="70"/>
+		<flag runonhealth="900"/>
+	</flags>
 	<attacks>
-         <attack name="melee" interval="2000" skill="60" attack="60"/>
-         <attack name="fire" interval="2000" chance="10" length="5" spread="2" target="0" min="-120" max="-250">
+		<attack name="melee" interval="2000" skill="60" attack="60"/>
+		<attack name="fire" interval="2000" chance="10" length="5" spread="2" target="0" min="-120" max="-250">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="fire"/>
 		</attack>
@@ -34,14 +34,14 @@
 			<attribute key="areaEffect" value="stun"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">    
+	<defenses armor="25" defense="25">
 		<defense name="healing" interval="2000" chance="15" min="100" max="200">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
-	<elements>		
-		<element energyPercent="-5"/>		
-		<element icePercent="-5"/>		
+	<elements>
+		<element energyPercent="-5"/>
+		<element icePercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity fire="1"/>
@@ -51,13 +51,13 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="FCHHHHHHHHHHHHHHHH"/>
 		<voice sentence="FI?"/>
-	</voices>     
+	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="37500"/><!-- gold coin -->
 		<item id="2148" countmax="100" chance="37500"/><!-- gold coin -->
 		<item id="2148" countmax="27" chance="37500"/><!-- gold coin -->
-        <item id="7589" countmax="2" chance="16900"/><!-- smp-->      
-        <item id="7588" countmax="2" chance="24480"/><!-- shp -->
-		<item id="18425" chance="12410"/><!-- Blazing Bones --> 	
+		<item id="7589" countmax="2" chance="16900"/><!-- smp-->
+		<item id="7588" countmax="2" chance="24480"/><!-- shp -->
+		<item id="18425" chance="12410"/><!-- Blazing Bones -->
 	</loot>
 </monster>

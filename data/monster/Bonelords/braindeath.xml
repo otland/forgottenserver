@@ -43,12 +43,12 @@
 		<defense name="healing" interval="2000" chance="15" min="150" max="200">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-			<defense name="speed" interval="2000" chance="15" speedchange="260" duration="5000">
+		<defense name="speed" interval="2000" chance="15" speedchange="260" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
-		<elements>
-	    <element icePercent="20"/>
+	<elements>
+		<element icePercent="20"/>
 		<element physicalPercent="10"/>
 		<element energyPercent="10"/>
 		<element holyPercent="-20"/>

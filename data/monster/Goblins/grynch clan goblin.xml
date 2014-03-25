@@ -93,7 +93,7 @@
 		<item id="2102" chance="500"/><!-- flower bowl -->
 		<item id="4839" chance="500"/><!-- bottle -->
 		<item id="2159" countmax="2" chance="500"/><!-- scarab coin -->
-		<item id="5022" countmax="2" chance="500"/><!-- orichalcum pearl  -->
+		<item id="5022" countmax="2" chance="500"/><!-- orichalcum pearl -->
 		<item id="2160" chance="250"/><!-- crystal coin -->
 		<item id="7731" chance="250"/><!-- elvenhair rope -->
 		<item id="2534" chance="250"/><!-- vampire shield -->

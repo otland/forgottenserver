@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Demon Outcast" nameDescription="Demon Outcast" race="blood" experience="6200" speed="280" manacost="0">
-  <health now="6900" max="6900"/>
-  <look type="590" corpse="22549"/>
-  <targetchange interval="4000" chance="10"/>
-  <strategy attack="100" defense="0"/>
-  <flags>
-    <flag summonable="0"/>
-    <flag attackable="1"/>
-    <flag hostile="1"/>
-    <flag illusionable="0"/>
-    <flag convinceable="0"/>
-    <flag pushable="0"/>
-    <flag canpushitems="1"/>
-    <flag canpushcreatures="1"/>
-    <flag targetdistance="1"/>
-    <flag staticattack="90"/>
-    <flag runonhealth="0"/>
-  </flags>
-    <attacks>
+	<health now="6900" max="6900"/>
+	<look type="590" corpse="22549"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
 		<attack name="melee" interval="2000" skill="90" attack="80"/>
 		<attack name="energy" interval="2000" chance="10" length="6" spread="0" target="1" min="-250" max="-450">
 			<attribute key="areaEffect" value="purpleenergy"/>
@@ -31,20 +31,20 @@
 		<attack name="demon outcast skill reducer" range="5" interval="2000" chance="10"/>
 		<attack name="manadrain" interval="2000" chance="10" radius="4" target="0" min="-80" max="-150">
 			<attribute key="areaEffect" value="greenshimmer"/>
-		</attack>	
+		</attack>
 	</attacks>
 	<defenses armor="40" defense="40">
 		<defense name="healing" interval="2000" chance="15" min="250" max="425">
 			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>  
+		</defense>
 	</defenses>
-	<elements>			
-		<element physicalPercent="20"/>	
-		<element deathPercent="5"/>	
-		<element energyPercent="-5"/>	
-		<element icePercent="5"/>	
-		<element earthPercent="40"/>	
-		<element holyPercent="-5"/>			
+	<elements>
+		<element physicalPercent="20"/>
+		<element deathPercent="5"/>
+		<element energyPercent="-5"/>
+		<element icePercent="5"/>
+		<element earthPercent="40"/>
+		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity fire="1"/>
@@ -59,31 +59,31 @@
 		<voice sentence="This prison break will have casualties!"/>
 		<voice sentence="At last someone to hurt"/>
 		<voice sentence="No one will imprison me again!"/>
-	</voices>     
-  <loot>
-    <item id="2148"  countmax="100"  chance="100000"/> <!-- gold coin -->
-	<item id="2152"  countmax="6"  chance="100000"/> <!-- platinum coin -->
-	<item id="2145"  countmax="5"  chance="10000"/> <!-- small diamond -->
-	<item id="2146"  countmax="5"  chance="10000"/> <!-- small sapphire -->
-	<item id="2147"  countmax="5"  chance="12000"/> <!-- small ruby -->
-	<item id="2149"  countmax="5"  chance="10000"/> <!-- small emerald -->
-	<item id="2164"  chance="910"/> <!-- might ring -->
-	<item id="2165"  chance="1300"/> <!-- stealth ring -->
-	<item id="2171"  chance="1000"/> <!-- platinum amulet -->
-	<item id="2214"  chance="3000"/> <!-- ring of healing -->
-	<item id="2393"  chance="2000"/> <!-- giant sword -->
-	<item id="2396"  chance="660"/> <!-- ice rapier -->
-	<item id="2462"  chance="910"/> <!-- devil helmet -->
-	<item id="2497"  chance="740"/> <!-- crusader helmet -->
-	<item id="2519"  chance="740"/> <!-- crown shield -->
-	<item id="2520"  chance="170"/> <!-- demon shield -->
-	<item id="7382"  chance="350"/> <!-- demonrage sword -->
-	<item id="6550"  chance="1000"/> <!-- demon dust -->
-	<item id="2795"  countmax="6"  chance="20600"/> <!-- fire mushroom -->
-	<item id="7368"  countmax="10"  chance="8340"/> <!-- assassin star -->
-	<item id="7590"  countmax="2" chance="18000"/> <!-- great mana potion -->
-	<item id="8473"  countmax="3"  chance="20500"/> <!-- ultimate health potion -->
-	<item id="9970"  countmax="5"  chance="9300"/> <!-- small topaz -->
-	<item id="22396"  chance="410"/> <!-- cluster of solace -->
-</loot>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="6" chance="100000"/><!-- platinum coin -->
+		<item id="2145" countmax="5" chance="10000"/><!-- small diamond -->
+		<item id="2146" countmax="5" chance="10000"/><!-- small sapphire -->
+		<item id="2147" countmax="5" chance="12000"/><!-- small ruby -->
+		<item id="2149" countmax="5" chance="10000"/><!-- small emerald -->
+		<item id="2164" chance="910"/><!-- might ring -->
+		<item id="2165" chance="1300"/><!-- stealth ring -->
+		<item id="2171" chance="1000"/><!-- platinum amulet -->
+		<item id="2214" chance="3000"/><!-- ring of healing -->
+		<item id="2393" chance="2000"/><!-- giant sword -->
+		<item id="2396" chance="660"/><!-- ice rapier -->
+		<item id="2462" chance="910"/><!-- devil helmet -->
+		<item id="2497" chance="740"/><!-- crusader helmet -->
+		<item id="2519" chance="740"/><!-- crown shield -->
+		<item id="2520" chance="170"/><!-- demon shield -->
+		<item id="7382" chance="350"/><!-- demonrage sword -->
+		<item id="6550" chance="1000"/><!-- demon dust -->
+		<item id="2795" countmax="6" chance="20600"/><!-- fire mushroom -->
+		<item id="7368" countmax="10" chance="8340"/><!-- assassin star -->
+		<item id="7590" countmax="2" chance="18000"/><!-- great mana potion -->
+		<item id="8473" countmax="3" chance="20500"/><!-- ultimate health potion -->
+		<item id="9970" countmax="5" chance="9300"/><!-- small topaz -->
+		<item id="22396" chance="410"/><!-- cluster of solace -->
+	</loot>
 </monster>

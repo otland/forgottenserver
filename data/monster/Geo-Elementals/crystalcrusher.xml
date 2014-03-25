@@ -52,6 +52,6 @@
 		<item id="18418" chance="5000"/><!-- blue crystal splinter -->
 		<item id="18416" chance="4920"/><!-- green crystal splinter -->
 		<item id="18304" countmax="3" chance="5000"/><!-- crystalline arrow -->
-		<item id="18432" chance="3690"/><!-- crystalline spikes --> 
+		<item id="18432" chance="3690"/><!-- crystalline spikes -->
 	</loot>
 </monster>

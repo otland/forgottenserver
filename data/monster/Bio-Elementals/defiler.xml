@@ -26,14 +26,14 @@
 			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
 		<attack name="poison" interval="2000" chance="20" radius="3" target="0" min="-120" max="-170">
-			<attribute key="areaEffect" value="poison"/>	
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 		<attack name="poisoncondition" interval="2000" chance="10" length="8" spread="3" min="-500" max="-1000">
 			<attribute key="areaEffect" value="smallplants"/>
 		</attack>
 		<attack name="speed" interval="2000" chance="15" length="8" spread="3" speedchange="-700" duration="15000" >
 			<attribute key="areaEffect" value="smallclouds"/>
-		</attack>	
+		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
 		<defense name="healing" interval="2000" chance="10" min="280" max="350">

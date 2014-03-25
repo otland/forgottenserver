@@ -46,7 +46,7 @@
 		<immunity earth="1"/>
 		<immunity drown="1"/>
 	</immunities>
-	<defenses>
+<defenses>
 		<defense name="healing" interval="2000" chance="20" min="70" max="90">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
@@ -60,11 +60,11 @@
 		<item id="21245" chance="15460"/><!-- Blood Tincture in a Vial -->
 		<item id="21242" chance="10680"/><!-- Lancet -->
 		<item id="21246" chance="8820"/><!-- Incantation Notes -->
-		<item id="11237" chance="9340"/><!--  Book of Necromantic Rituals -->
+		<item id="11237" chance="9340"/><!-- Book of Necromantic Rituals -->
 		<item id="21243" chance="7950"/><!-- Horoscope -->
 		<item id="21247" chance="6120"/><!-- Pieces of Magic Chalk -->
 		<item id="7589" chance="5590"/><!-- Strong Mana Potion -->
-		<item id="2185" chance="3000"/><!--  Necrotic Rod -->
+		<item id="2185" chance="3000"/><!-- Necrotic Rod -->
 		<item id="8900" chance="790"/><!-- Spellbook of Enlightenment -->
 		<item id="15565" chance="710"/><!-- Red Gem -->
 		<item id="5909" chance="840"/><!-- White Piece of Cloth -->

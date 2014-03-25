@@ -41,6 +41,6 @@
 		<item id="2148" countmax="40" chance="10000"/><!-- gold coin -->
 		<item id="7840" countmax="4" chance="5000"/><!-- flaming arrow -->
 		<item id="8299" chance="2500"/><!-- glimmering soil -->
-		<item id="10553" chance="5475"/> <!-- fiery heart -->
+		<item id="10553" chance="5475"/><!-- fiery heart -->
 	</loot>
 </monster>

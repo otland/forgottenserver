@@ -20,20 +20,20 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="65" attack="70"/>
 		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-100" max="-250">
-			<attribute key="areaEffect" value="redspark"/>	
+			<attribute key="areaEffect" value="redspark"/>
 		</attack>
 		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-600">
 			<attribute key="areaEffect" value="bats"/>
-		</attack>	
-		<attack name="bleedcondition" interval="2000" chance="20" radius="2" target="0" min="-400" max="-600">	
-		<attribute key="areaEffect" value="redspark"/>
-		</attack>		
+		</attack>
+		<attack name="bleedcondition" interval="2000" chance="20" radius="2" target="0" min="-400" max="-600">
+			<attribute key="areaEffect" value="redspark"/>
+		</attack>
 	</attacks>
 	<defenses armor="35" defense="35"/>
-	<elements>		
-	    <element physicalPercent="5"/>	
-		<element energyPercent="5"/>		
-		<element icePercent="5"/>		
+	<elements>
+		<element physicalPercent="5"/>
+		<element energyPercent="5"/>
+		<element icePercent="5"/>
 		<element firePercent="5"/>
 		<element holyPercent="10"/>
 	</elements>
@@ -50,10 +50,10 @@
 		<item id="21241" chance="3700" /><!-- tooth file -->
 		<item id="7588" chance="9260"/><!-- strong health potion -->
 		<item id="7589" chance="11110"/><!-- strong mana potion -->
-	    <item id="2147" countmax="2" chance="5560" /><!-- small rubies -->
+		<item id="2147" countmax="2" chance="5560" /><!-- small rubies -->
 		<item id="15565" chance="1850" /><!-- red gem -->
-		<item id="2127" chance="3700" /> <!--emerald bangle-->
-		<item id="2147" countmax="2" chance="6060" /> <!--small rubies-->
-		<item id="5894" chance="5560" /> <!--bat wing-->
+		<item id="2127" chance="3700" /><!--emerald bangle-->
+		<item id="2147" countmax="2" chance="6060" /><!--small rubies-->
+		<item id="5894" chance="5560" /><!--bat wing-->
 	</loot>
 </monster>

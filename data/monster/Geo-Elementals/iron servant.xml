@@ -21,7 +21,7 @@
 		<attack name="melee" interval="2000" skill="20" attack="30" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="-0" max="-60">
 			<attribute key="shootEffect" value="smallstone"/>
-		    <attribute key="areaEffect" value="explosionarea"/>
+			<attribute key="areaEffect" value="explosionarea"/>
 		</attack>
 		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="2000">
 			<attribute key="shootEffect" value="explosion"/>

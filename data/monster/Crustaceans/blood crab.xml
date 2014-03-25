@@ -27,7 +27,7 @@
 		<element energyPercent="-5"/>
 	</elements>
 	<immunities>
-	    <immunity ice="1"/>
+		<immunity ice="1"/>
 		<immunity earth="1"/>
 		<immunity drown="1"/>
 	</immunities>

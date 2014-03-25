@@ -17,7 +17,7 @@
 		<flag staticattack="85"/>
 		<flag runonhealth="0"/>
 	</flags>
-	<attacks/>
+<attacks/>
 	<defenses armor="48" defense="46"/>
 	<elements>
 		<element icePercent="15"/>

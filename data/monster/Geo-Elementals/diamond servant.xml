@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50"/>
-		<attack name="energy" interval="2000" chance="20" radius="3" target="0"  min="-80" max="-120">
+		<attack name="energy" interval="2000" chance="20" radius="3" target="0" min="-80" max="-120">
 			<attribute key="areaEffect" value="yellowenergy"/>
 		</attack>
 		<attack name="energy" interval="2000" chance="15" target="0" length="5" spread="2" min="-125" max="-170">

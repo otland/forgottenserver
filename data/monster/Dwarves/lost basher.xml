@@ -18,18 +18,18 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="78"/>	
+		<attack name="melee" interval="2000" skill="80" attack="78"/>
 		<attack name="physical" interval="2000" chance="15" range="7" target="1" radius="3" min="-0" max="-220">
-            <attribute key="shootEffect" value="whirlwindaxe"/>
+			<attribute key="shootEffect" value="whirlwindaxe"/>
 			<attribute key="areaEffect" value="explosionarea"/>
-		</attack>	
+		</attack>
 		<attack name="drunk" interval="2000" chance="15" target="1" radius="4" duration="6000">
 			<attribute key="shootEffect" value="whirlwindclub"/>
 			<attribute key="areaEffect" value="rednote"/>
-		</attack>		
+		</attack>
 		<attack name="speed" interval="2000" chance="15" target="0" radius="2" speedchange="-650" duration="15000">
 			<attribute key="areaEffect" value="energy"/>
-		</attack>	
+		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="10" min="250" max="500">
@@ -51,34 +51,34 @@
 		<voice sentence="Yhouuuu!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="60000"/> <!-- Gold Coin -->
-		<item id="2152" countmax="2" chance="70000"/> <!-- Platinum Coin -->
-		<item id="2789" countmax="2" chance="15170"/> <!-- Brown Mushroom -->
-		<item id="20136" chance="8800"/> <!-- Basalt Fetish -->
-		<item id="8473" chance="10250"/> <!-- UHP -->
-		<item id="7590" chance="11240"/> <!-- GMP -->
-		<item id="9970" chance="10200"/> <!-- Small Topazes -->
-		<item id="20137" chance="9470"/> <!-- Basalt Figurine -->
-		<item id="20109" chance="10930"/> <!-- Bonecarving Knife -->
-		<item id="20110" chance="7320"/> <!-- Bone Fetish -->
-		<item id="13757" chance="21130"/> <!-- Coal -->
-		<item id="20106" chance="17260"/> <!-- Bloody Dwarven Beard -->
-		<item id="20134" chance="11870"/> <!-- Red Hair Dye -->
-		<item id="20126" chance="12500"/> <!-- Wimp Tooth Chain -->
-		<item id="2215" chance="2560"/> <!-- Dwarven Ring -->
-		<item id="2529" chance="3710"/> <!-- Black Shield -->
-		<item id="7750" chance="1200"/> <!-- Knight Axe -->
-		<item id="5880" chance="5280"/> <!-- Iron Ore -->
-		<item id="2432" chance="310"/> <!-- Fire Axe -->
-		<item id="20108" chance="1410"/> <!-- Buckle -->
-		<item id="2114" chance="4450"/> <!-- Piggy Bank -->
-		<item id="20106" chance="14380"/> <!-- Lost Basher's Spike -->
-		<item id="20107" chance="1730"/> <!-- Pair of Iron Fists -->
-		<item id="7452" chance="420"/> <!-- spicked squelcher -->
-		<item id="7886" chance="780"/> <!-- terra boots -->
-		<item id="7427" chance="160"/> <!-- chaos mace -->
-		<item id="2477" chance="310"/> <!-- knight legs -->
-		<item id="2454" chance="120"/> <!-- war axe -->
-		<item id="18413" chance="840"/> <!-- blue crystal shard -->
+		<item id="2148" countmax="100" chance="60000"/><!-- Gold Coin -->
+		<item id="2152" countmax="2" chance="70000"/><!-- Platinum Coin -->
+		<item id="2789" countmax="2" chance="15170"/><!-- Brown Mushroom -->
+		<item id="20136" chance="8800"/><!-- Basalt Fetish -->
+		<item id="8473" chance="10250"/><!-- UHP -->
+		<item id="7590" chance="11240"/><!-- GMP -->
+		<item id="9970" chance="10200"/><!-- Small Topazes -->
+		<item id="20137" chance="9470"/><!-- Basalt Figurine -->
+		<item id="20109" chance="10930"/><!-- Bonecarving Knife -->
+		<item id="20110" chance="7320"/><!-- Bone Fetish -->
+		<item id="13757" chance="21130"/><!-- Coal -->
+		<item id="20106" chance="17260"/><!-- Bloody Dwarven Beard -->
+		<item id="20134" chance="11870"/><!-- Red Hair Dye -->
+		<item id="20126" chance="12500"/><!-- Wimp Tooth Chain -->
+		<item id="2215" chance="2560"/><!-- Dwarven Ring -->
+		<item id="2529" chance="3710"/><!-- Black Shield -->
+		<item id="7750" chance="1200"/><!-- Knight Axe -->
+		<item id="5880" chance="5280"/><!-- Iron Ore -->
+		<item id="2432" chance="310"/><!-- Fire Axe -->
+		<item id="20108" chance="1410"/><!-- Buckle -->
+		<item id="2114" chance="4450"/><!-- Piggy Bank -->
+		<item id="20106" chance="14380"/><!-- Lost Basher's Spike -->
+		<item id="20107" chance="1730"/><!-- Pair of Iron Fists -->
+		<item id="7452" chance="420"/><!-- spicked squelcher -->
+		<item id="7886" chance="780"/><!-- terra boots -->
+		<item id="7427" chance="160"/><!-- chaos mace -->
+		<item id="2477" chance="310"/><!-- knight legs -->
+		<item id="2454" chance="120"/><!-- war axe -->
+		<item id="18413" chance="840"/><!-- blue crystal shard -->
 	</loot>
 </monster>

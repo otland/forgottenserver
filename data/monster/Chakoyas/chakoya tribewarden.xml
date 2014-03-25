@@ -28,8 +28,8 @@
 		<element energyPercent="-15"/>
 		<element deathPercent="-5"/>
 	</elements>
-		<immunities>
-	    <immunity ice="1"/>
+	<immunities>
+		<immunity ice="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Quisavu tukavi!"/>

@@ -41,12 +41,12 @@
 		<voice sentence="Boohaa!"/>
 	</voices>
 	<loot>
-    <item id="2148" countmax="49" chance="98800" /><!-- gold coin -->
-	<item id="12443" chance="15600" /><!-- quara tentacle -->
-    <item id="2397" chance="8310" /><!-- longsword -->
-    <item id="2465" chance="4660" /><!-- brass armor -->
-    <item id="2150" chance="4350" /><!-- small amethyst -->
-    <item id="5895" chance="290" /><!-- fish fin -->
-	<item id="2670" countmax="3" chance="9680" /><!-- shrimp -->
-</loot>
+		<item id="2148" countmax="49" chance="98800" /><!-- gold coin -->
+		<item id="12443" chance="15600" /><!-- quara tentacle -->
+		<item id="2397" chance="8310" /><!-- longsword -->
+		<item id="2465" chance="4660" /><!-- brass armor -->
+		<item id="2150" chance="4350" /><!-- small amethyst -->
+		<item id="5895" chance="290" /><!-- fish fin -->
+		<item id="2670" countmax="3" chance="9680" /><!-- shrimp -->
+	</loot>
 </monster>

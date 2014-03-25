@@ -58,6 +58,6 @@
 		<item id="2114" chance="150"/><!-- piggy bank -->
 		<item id="11219" chance="11050"/><!-- compass -->
 		<item id="5553" chance="130"/><!-- rum flask -->
-	    <item id="11219" chance="11020"/><!-- compass -->
+		<item id="11219" chance="11020"/><!-- compass -->
 	</loot>
 </monster>

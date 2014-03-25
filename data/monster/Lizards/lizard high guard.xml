@@ -56,7 +56,7 @@
 		<item id="11245" chance="4950" /><!-- bunch of ripe rice -->
 		<item id="7591" chance="7070" /><!-- great health potion -->
 		<item id="11206" chance="1220" /><!-- red lantern -->
-		<item id="11304" chance="720"/> <!-- zaoan legs -->
-		<item id="11301" chance="80"/> <!-- zaoan armor -->
+		<item id="11304" chance="720"/><!-- zaoan legs -->
+		<item id="11301" chance="80"/><!-- zaoan armor -->
 	</loot>
 </monster>

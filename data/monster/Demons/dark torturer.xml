@@ -22,7 +22,7 @@
 		<attack name="physical" interval="2000" chance="10" range="7" min="-0" max="-781">
 			<attribute key="shootEffect" value="throwingknife"/>
 		</attack>
-		<attack name="dark torturer skill reducer" interval="2000" chance="5"/>	
+		<attack name="dark torturer skill reducer" interval="2000" chance="5"/>
 	</attacks>
 	<defenses armor="40" defense="40">
 		<defense name="healing" interval="2000" chance="10" min="200" max="250">

@@ -21,10 +21,10 @@
 		<attack name="melee" interval="2000" skill="10" attack="5"/>
 	</attacks>
 	<defenses armor="2" defense="2"/>
-		<voices interval="5000" chance="10">
-	<voice sentence="Grunt!"/>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grunt!"/>
 	</voices>
 	<loot>
-	<item id="2666" countmax="2" chance="20000"/>
+		<item id="2666" countmax="2" chance="20000"/>
 	</loot>
 </monster>

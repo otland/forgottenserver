@@ -26,7 +26,7 @@
 			<attribute key="shootEffect" value="smallice"/>
 			<attribute key="areaEffect" value="giantice"/>
 		</attack>
-		<attack name="manadrain" interval="2000" chance="10" range="7" min="-25" max="-80"/> 
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-25" max="-80"/>
 	</attacks>
 	<defenses armor="20" defense="20">
 		<defense name="healing" interval="2000" chance="5" min="15" max="55">

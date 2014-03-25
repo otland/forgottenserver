@@ -23,7 +23,7 @@
 	<defenses armor="15" defense="15"/>
 	<elements>
 		<element holyPercent="-25"/>
-	</elements>	
+	</elements>
 	<immunities>
 		<immunity death="1"/>
 	</immunities>

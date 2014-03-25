@@ -20,7 +20,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="70" attack="88"/>
 		<attack name="fireball" interval="2000" chance="20" min="-150" max="-175"/>
-		<attack name="hellspawn soulfire" interval="2000" range="5" chance="10"/> 
+		<attack name="hellspawn soulfire" interval="2000" range="5" chance="10"/>
 	</attacks>
 	<defenses armor="40" defense="40">
 		<defense name="healing" interval="2000" chance="10" min="120" max="230">
@@ -41,9 +41,9 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
-		<immunity invisible="1"/> 
-	</immunities> 
-	<voices speed="5000" chance="10">
+		<immunity invisible="1"/>
+	</immunities>
+<voices speed="5000" chance="10">
 		<voice sentence="Your fragile bones are like toothpicks to me."/>
 		<voice sentence="You little weasel will not live to see another day." />
 		<voice sentence="I'm just a messenger of what's yet to come." />

@@ -16,10 +16,10 @@
 		<flag targetdistance="1"/>
 		<flag staticattack="80"/>
 		<flag runonhealth="0"/>
-     </flags>
-     <attacks>
+	</flags>
+	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="45"/>
-		<attack name="fire" interval="2000" chance="20"  range="7" radius="6" target="0" min="-20" max="-60">
+		<attack name="fire" interval="2000" chance="20" range="7" radius="6" target="0" min="-20" max="-60">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="fireattack"/>
 		</attack>
@@ -29,31 +29,31 @@
 		<attack name="fire" interval="2000" chance="10" target="0" length="4" spread="0" min="-130" max="-170">
 			<attribute key="areaEffect" value="fireattack"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="10"  radius="1" target="1" speedchange="-600" duration="15000">
+		<attack name="speed" interval="2000" chance="10" radius="1" target="1" speedchange="-600" duration="15000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-    <defenses armor="15" defense="15">
-		<defense name="healing" interval="2000" chance="5"  min="100" max="150">
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="5" min="100" max="150">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-    </defenses>
-    <elements>
+	</defenses>
+	<elements>
 		<element energyPercent="50"/>
 		<element icePercent="50"/>
 		<element earthPercent="-30"/>
-    </elements>
-    <immunities>
+	</elements>
+	<immunities>
 		<immunity fire="1"/>
 		<immunity invisible="1"/>
-    </immunities>
-    <voices interval="5000" chance="10">
-        <voice sentence="GREEN IS MEAN!" yell="1"/>
-        <voice sentence="WE RULE!" yell="1"/>
-        <voice sentence="POWER TO THE SHABURAK!" yell="1"/>
-        <voice sentence="DEATH TO THE ASKARAK!"/>
-    </voices>
-    <loot>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="GREEN IS MEAN!" yell="1"/>
+		<voice sentence="WE RULE!" yell="1"/>
+		<voice sentence="POWER TO THE SHABURAK!" yell="1"/>
+		<voice sentence="DEATH TO THE ASKARAK!"/>
+	</voices>
+	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->

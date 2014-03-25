@@ -22,7 +22,7 @@
 		<attack name="death" interval="2000" chance="10" length="3" spread="0" target="0" min="-40" max="-210">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-	    <attack name="speed" interval="2000" chance="20" radius="6" target="0" speedchange="-800" duration="4000">
+		<attack name="speed" interval="2000" chance="20" radius="6" target="0" speedchange="-800" duration="4000">
 			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
 	</attacks>
@@ -52,7 +52,7 @@
 		<item id="2260" countmax="3" chance="35250"/><!-- blank rune -->
 		<item id="6500" chance="7500"/><!-- demonic essence -->
 		<item id="7590" countmax="2" chance="14200"/><!-- great mana potion -->
-	    <item id="2144" countmax="3" chance="12000"/><!-- black pearl -->
+		<item id="2144" countmax="3" chance="12000"/><!-- black pearl -->
 		<item id="2143" countmax="3" chance="10000"/><!-- white pearl -->
 		<item id="7591" countmax="2" chance="8800"/><!-- great health potion -->
 		<item id="9809" chance="3500"/><!-- rusty armor -->
