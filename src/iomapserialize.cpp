@@ -29,9 +29,7 @@ void IOMapSerialize::loadMap(Map* map)
 {
 	int64_t start = OTSYS_TIME();
 
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery("SELECT `data` FROM `tile_store`");
+	DBResult_ptr result = Database::getInstance()->storeQuery("SELECT `data` FROM `tile_store`");
 	if (!result) {
 		return;
 	}
@@ -63,7 +61,6 @@ void IOMapSerialize::loadMap(Map* map)
 			loadItem(propStream, tile);
 		}
 	} while (result->next());
-	db->freeResult(result);
 	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
 }
 
@@ -268,7 +265,7 @@ bool IOMapSerialize::loadHouseInfo()
 {
 	Database* db = Database::getInstance();
 
-	DBResult* result = db->storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
+	DBResult_ptr result = db->storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
 	if (!result) {
 		return false;
 	}
@@ -281,7 +278,6 @@ bool IOMapSerialize::loadHouseInfo()
 			house->setPayRentWarnings(result->getDataInt("warnings"));
 		}
 	} while (result->next());
-	db->freeResult(result);
 
 	result = db->storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`");
 	if (result) {
@@ -291,7 +287,6 @@ bool IOMapSerialize::loadHouseInfo()
 				house->setAccessList(result->getDataInt("listid"), result->getDataString("list"));
 			}
 		} while (result->next());
-		db->freeResult(result);
 	}
 	return true;
 }
@@ -313,9 +308,8 @@ bool IOMapSerialize::saveHouseInfo()
 	for (const auto& it : Houses::getInstance().getHouses()) {
 		House* house = it.second;
 		query << "SELECT `id` FROM `houses` WHERE `id` = " << house->getId();
-		DBResult* result = db->storeQuery(query.str());
+		DBResult_ptr result = db->storeQuery(query.str());
 		if (result) {
-			db->freeResult(result);
 			query.str("");
 			query << "UPDATE `houses` SET `owner` = " << house->getOwner() << ", `paid` = " << house->getPaidUntil() << ", `warnings` = " << house->getPayRentWarnings() << ", `name` = " << db->escapeString(house->getName()) << ", `town_id` = " << house->getTownId() << ", `rent` = " << house->getRent() << ", `size` = " << house->getTiles().size() << ", `beds` = " << house->getBedCount() << " WHERE `id` = " << house->getId();
 		} else {

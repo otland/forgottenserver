@@ -120,7 +120,7 @@ bool Database::executeQuery(const std::string& query)
 	return success;
 }
 
-DBResult* Database::storeQuery(const std::string& query)
+DBResult_ptr Database::storeQuery(const std::string& query)
 {
 	// executes the query
 	database_lock.lock();
@@ -152,7 +152,7 @@ DBResult* Database::storeQuery(const std::string& query)
 	database_lock.unlock();
 
 	// retriving results of query
-	return verifyResult(new DBResult(m_res));
+	return verifyResult(DBResult_ptr(new DBResult(m_res)));
 }
 
 std::string Database::escapeString(const std::string& s) const
@@ -180,15 +180,9 @@ std::string Database::escapeBlob(const char* s, uint32_t length) const
 	return escaped;
 }
 
-void Database::freeResult(DBResult* res)
-{
-	delete res;
-}
-
-DBResult* Database::verifyResult(DBResult* result)
+DBResult_ptr Database::verifyResult(DBResult_ptr result)
 {
 	if (!result->next()) {
-		freeResult(result);
 		return nullptr;
 	}
 	return result;

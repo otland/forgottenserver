@@ -178,18 +178,6 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	std::cout << " MySQL " << Database::getClientVersion() << std::endl;
 
-	DBResult* result = db->storeQuery("SHOW variables LIKE 'max_allowed_packet'");
-	if (result) {
-		int32_t max_query = result->getDataInt("Value");
-		db->freeResult(result);
-
-		if (max_query < 16777216) {
-			std::cout << std::endl << "[Warning] max_allowed_packet might be too low for house item storage" << std::endl;
-			std::cout << "Use the following query to raise max_allow_packet: ";
-			std::cout << "SET GLOBAL max_allowed_packet = 16777216" << std::endl;
-		}
-	}
-
 	// run database manager
 	std::cout << ">> Running database manager" << std::endl;
 

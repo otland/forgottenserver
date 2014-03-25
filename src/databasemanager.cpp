@@ -33,7 +33,7 @@ bool DatabaseManager::optimizeTables()
 	std::ostringstream query;
 
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `DATA_FREE` > 0";
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
 	}
@@ -51,7 +51,6 @@ bool DatabaseManager::optimizeTables()
 			std::cout << " [failed]" << std::endl;
 		}
 	} while (result->next());
-	db->freeResult(result);
 	return true;
 }
 
@@ -61,14 +60,7 @@ bool DatabaseManager::tableExists(const std::string& tableName)
 
 	std::ostringstream query;
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TABLE_NAME` = " << db->escapeString(tableName);
-
-	DBResult* result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
-
-	db->freeResult(result);
-	return true;
+	return db->storeQuery(query.str()).get() != nullptr;
 }
 
 bool DatabaseManager::isDatabaseSetup()
@@ -76,14 +68,7 @@ bool DatabaseManager::isDatabaseSetup()
 	Database* db = Database::getInstance();
 	std::ostringstream query;
 	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::MYSQL_DB));
-
-	DBResult* result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
-
-	db->freeResult(result);
-	return true;
+	return db->storeQuery(query.str()).get() != nullptr;
 }
 
 int32_t DatabaseManager::getDatabaseVersion()
@@ -163,13 +148,12 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 	std::ostringstream query;
 	query << "SELECT `value` FROM `server_config` WHERE `config` = " << db->escapeString(config);
 
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
 	}
 
 	value = result->getDataInt("value");
-	db->freeResult(result);
 	return true;
 }
 

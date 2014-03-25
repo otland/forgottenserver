@@ -68,7 +68,7 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 	std::ostringstream query;
 	query << "SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = " << accountId;
 
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
 	}
@@ -83,15 +83,12 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 		query.str("");
 		query << "DELETE FROM `account_bans` WHERE `account_id` = " << accountId;
 		db->executeQuery(query.str());
-
-		db->freeResult(result);
 		return false;
 	}
 
 	banInfo.expiresAt = expiresAt;
 	banInfo.reason = result->getDataString("reason");
 	banInfo.bannedBy = result->getDataString("name");
-	db->freeResult(result);
 	return true;
 }
 
@@ -106,7 +103,7 @@ bool IOBan::isIpBanned(uint32_t clientip, BanInfo& banInfo)
 	std::ostringstream query;
 	query << "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = " << clientip;
 
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
 	}
@@ -116,30 +113,18 @@ bool IOBan::isIpBanned(uint32_t clientip, BanInfo& banInfo)
 		query.str("");
 		query << "DELETE FROM `ip_bans` WHERE `ip` = " << clientip;
 		db->executeQuery(query.str());
-
-		db->freeResult(result);
 		return false;
 	}
 
 	banInfo.expiresAt = expiresAt;
 	banInfo.reason = result->getDataString("reason");
 	banInfo.bannedBy = result->getDataString("name");
-	db->freeResult(result);
 	return true;
 }
 
 bool IOBan::isPlayerNamelocked(uint32_t playerId)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT 1 FROM `player_namelocks` WHERE `player_id` = " << playerId;
-
-	DBResult* result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
-
-	db->freeResult(result);
-	return true;
+	return Database::getInstance()->storeQuery(query.str()).get() != nullptr;
 }

@@ -32,9 +32,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 	std::ostringstream query;
 	query << "SELECT `id`, `amount`, `price`, `created`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `sale` = " << action << " AND `itemtype` = " << itemId;
 
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return offerList;
 	}
@@ -54,8 +52,6 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 		}
 		offerList.push_back(offer);
 	} while (result->next());
-
-	db->freeResult(result);
 	return offerList;
 }
 
@@ -68,9 +64,7 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 	std::ostringstream query;
 	query << "SELECT `id`, `amount`, `price`, `created`, `itemtype` FROM `market_offers` WHERE `player_id` = " << playerId << " AND `sale` = " << action;
 
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return offerList;
 	}
@@ -84,8 +78,6 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 		offer.itemId = result->getDataInt("itemtype");
 		offerList.push_back(offer);
 	} while (result->next());
-
-	db->freeResult(result);
 	return offerList;
 }
 
@@ -96,9 +88,7 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 	std::ostringstream query;
 	query << "SELECT `itemtype`, `amount`, `price`, `expires_at`, `state` FROM `market_history` WHERE `player_id` = " << playerId << " AND `sale` = " << action;
 
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return offerList;
 	}
@@ -119,8 +109,6 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 
 		offerList.push_back(offer);
 	} while (result->next());
-
-	db->freeResult(result);
 	return offerList;
 }
 
@@ -133,9 +121,7 @@ ExpiredMarketOfferList IOMarket::getExpiredOffers(MarketAction_t action)
 	std::ostringstream query;
 	query << "SELECT `id`, `amount`, `price`, `itemtype`, `player_id` FROM `market_offers` WHERE `sale` = " << action << " AND `created` <= " << lastExpireDate;
 
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return offerList;
 	}
@@ -150,27 +136,19 @@ ExpiredMarketOfferList IOMarket::getExpiredOffers(MarketAction_t action)
 
 		offerList.push_back(offer);
 	} while (result->next());
-
-	db->freeResult(result);
 	return offerList;
 }
 
 int32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 {
-	int32_t count = -1;
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = " << playerId;
 
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
-		return count;
+		return -1;
 	}
-
-	count = result->getDataInt("count");
-	db->freeResult(result);
-	return count;
+	return result->getDataInt("count");
 }
 
 MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
@@ -182,9 +160,7 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 	std::ostringstream query;
 	query << "SELECT `id`, `sale`, `itemtype`, `amount`, `created`, `price`, `player_id`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `created` = " << created << " AND (`id` & 65535) = " << counter << " LIMIT 1";
 
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		offer.id = 0;
 		return offer;
@@ -203,8 +179,6 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 	} else {
 		offer.playerName = "Anonymous";
 	}
-	
-	db->freeResult(result);
 	return offer;
 }
 
@@ -247,7 +221,7 @@ void IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 	std::ostringstream query;
 	query << "SELECT `player_id`, `sale`, `itemtype`, `amount`, `price`, `created` FROM `market_offers` WHERE `id` = " << offerId;
 
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return;
 	}
@@ -255,21 +229,17 @@ void IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 	query.str("");
 	query << "DELETE FROM `market_offers` WHERE `id` = " << offerId;
 	if (!db->executeQuery(query.str())) {
-		db->freeResult(result);
 		return;
 	}
 
 	appendHistory(result->getDataInt("player_id"), (MarketAction_t)result->getDataInt("sale"), result->getDataInt("itemtype"), result->getDataInt("amount"), result->getDataInt("price"), result->getDataInt("created") + marketOfferDuration, state);
-	db->freeResult(result);
 }
 
 void IOMarket::updateStatistics()
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT `sale` AS `sale`, `itemtype` AS `itemtype`, COUNT(`price`) AS `num`, MIN(`price`) AS `min`, MAX(`price`) AS `max`, SUM(`price`) AS `sum` FROM `market_history` WHERE `state` = " << OFFERSTATE_ACCEPTED << " GROUP BY `itemtype`, `sale`";
-	DBResult* result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return;
 	}
@@ -287,7 +257,6 @@ void IOMarket::updateStatistics()
 		statistics->totalPrice = result->getNumber<uint64_t>("sum");
 		statistics->highestPrice = result->getDataInt("max");
 	} while (result->next());
-	db->freeResult(result);
 }
 
 MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)

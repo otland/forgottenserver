@@ -25,6 +25,7 @@
 #include <mysql.h>
 
 class DBResult;
+typedef std::shared_ptr<DBResult> DBResult_ptr;
 
 class Database
 {
@@ -67,7 +68,7 @@ class Database
 		* @param std::string query
 		* @return results object (nullptr on error)
 		*/
-		DBResult* storeQuery(const std::string& query);
+		DBResult_ptr storeQuery(const std::string& query);
 
 		/**
 		* Escapes string for query.
@@ -89,13 +90,6 @@ class Database
 		* @return quoted string
 		*/
 		std::string escapeBlob(const char* s, uint32_t length) const;
-
-		/**
-		* Resource freeing.
-		*
-		* @param DBResult* resource to be freed
-		*/
-		static void freeResult(DBResult* res);
 
 		/**
 		 * Retrieve id of last inserted row
@@ -131,7 +125,7 @@ class Database
 		Database();
 		~Database();
 
-		DBResult* verifyResult(DBResult* result);
+		DBResult_ptr verifyResult(DBResult_ptr result);
 
 		MYSQL* m_handle;
 
@@ -143,6 +137,8 @@ class Database
 class DBResult
 {
 	public:
+		~DBResult();
+
 		template<typename T>
 		T getNumber(const std::string& s) const
 		{
@@ -173,7 +169,6 @@ class DBResult
 
 	protected:
 		DBResult(MYSQL_RES* res);
-		~DBResult();
 
 	private:
 		MYSQL_RES* m_handle;

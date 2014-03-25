@@ -32,6 +32,7 @@
 #endif
 #endif
 
+#include "database.h"
 #include "enums.h"
 #include "position.h"
 
@@ -45,7 +46,6 @@ class Combat;
 class Condition;
 class Npc;
 class Monster;
-class DBResult;
 
 enum LuaVariantType_t {
 	VARIANT_NONE = 0,
@@ -141,8 +141,8 @@ class ScriptEnvironment
 		uint32_t addThing(Thing* thing);
 		void insertThing(uint32_t uid, Thing* thing);
 
-		static DBResult* getResultByID(uint32_t id);
-		static uint32_t addResult(DBResult* res);
+		static DBResult_ptr getResultByID(uint32_t id);
+		static uint32_t addResult(DBResult_ptr res);
 		static bool removeResult(uint32_t id);
 
 		void setNpc(Npc* npc) {
@@ -161,7 +161,7 @@ class ScriptEnvironment
 		typedef std::unordered_map<uint32_t, Thing*> ThingMap;
 		typedef std::vector<const LuaVariant*> VariantVector;
 		typedef std::map<uint32_t, int32_t> StorageMap;
-		typedef std::map<uint32_t, DBResult*> DBResultMap;
+		typedef std::map<uint32_t, DBResult_ptr> DBResultMap;
 		typedef std::list<Item*> ItemList;
 
 		//script file id

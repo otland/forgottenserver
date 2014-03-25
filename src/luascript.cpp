@@ -96,10 +96,6 @@ void ScriptEnvironment::resetEnv()
 		}
 	}
 	m_tempItems.clear();
-
-	for (const auto& it : m_tempResults) {
-		Database::freeResult(it.second);
-	}
 	m_tempResults.clear();
 }
 
@@ -304,7 +300,7 @@ void ScriptEnvironment::removeTempItem(Item* item)
 	}
 }
 
-uint32_t ScriptEnvironment::addResult(DBResult* res)
+uint32_t ScriptEnvironment::addResult(DBResult_ptr res)
 {
 	m_tempResults[++m_lastResultId] = res;
 	return m_lastResultId;
@@ -317,12 +313,11 @@ bool ScriptEnvironment::removeResult(uint32_t id)
 		return false;
 	}
 
-	Database::freeResult(it->second);
 	m_tempResults.erase(it);
 	return true;
 }
 
-DBResult* ScriptEnvironment::getResultByID(uint32_t id)
+DBResult_ptr ScriptEnvironment::getResultByID(uint32_t id)
 {
 	auto it = m_tempResults.find(id);
 	if (it == m_tempResults.end()) {
@@ -4846,7 +4841,7 @@ int32_t LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 
 int32_t LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
-	if (DBResult* res = Database::getInstance()->storeQuery(popString(L))) {
+	if (DBResult_ptr res = Database::getInstance()->storeQuery(popString(L))) {
 		lua_pushnumber(L, ScriptEnvironment::addResult(res));
 	} else {
 		pushBoolean(L, false);
@@ -4893,7 +4888,7 @@ int32_t LuaScriptInterface::luaResultGetDataInt(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
+	DBResult_ptr res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4907,7 +4902,7 @@ int32_t LuaScriptInterface::luaResultGetDataLong(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
+	DBResult_ptr res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4921,7 +4916,7 @@ int32_t LuaScriptInterface::luaResultGetDataString(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
+	DBResult_ptr res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4935,7 +4930,7 @@ int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
 {
 	const std::string& s = popString(L);
 
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
+	DBResult_ptr res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
@@ -4949,7 +4944,7 @@ int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
 
 int32_t LuaScriptInterface::luaResultNext(lua_State* L)
 {
-	DBResult* res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
+	DBResult_ptr res = ScriptEnvironment::getResultByID(popNumber<uint32_t>(L));
 	if (!res) {
 		pushBoolean(L, false);
 		return 1;
