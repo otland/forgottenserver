@@ -96,7 +96,7 @@
 		<voice sentence="Slay your friends and I will spare you!" yell="1"/>
 		<voice sentence="DON'T BE AFRAID! I AM COMING IN PEACE!" yell="1"/>
 	</voices>
-<loot capacity="5000">
+	<loot capacity="5000">
 		<item id="2142" countmax="1" chance="3500"/>
 		<item id="2231" countmax="1" chance="9000"/>
 		<item id="2144" countmax="15" chance="15000"/>
