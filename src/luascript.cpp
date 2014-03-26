@@ -1450,6 +1450,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SKILL_FISHINGPERCENT)
 	registerEnum(CONDITION_PARAM_BUFF_SPELL)
 	registerEnum(CONDITION_PARAM_SUBID)
+	registerEnum(CONDITION_PARAM_FIELD)
 
 	registerEnum(CONST_ME_DRAWBLOOD)
 	registerEnum(CONST_ME_LOSEENERGY)
