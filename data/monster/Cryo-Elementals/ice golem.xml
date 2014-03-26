@@ -27,9 +27,7 @@
 			<attribute key="shootEffect" value="smallice"/>
 			<attribute key="areaEffect" value="iceattack"/>
 		</attack>
-		<attack name="melee" interval="2000" chance="15" range="7" radius="3" target="0" min="-10" max="-80">
-			<attribute key="areaEffect" value="blackspark"/>
-		</attack>
+		<attack name="ice golem skill reducer" interval="2000" chance="10"/>
 	</attacks>
 	<defenses armor="25" defense="26"/>
 	<elements>
