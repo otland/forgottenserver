@@ -15,7 +15,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		local targetItem = Item(itemEx.uid)
 		local owner = targetItem:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
 		if owner ~= 0 and owner ~= cid then
-			Player(cid):sendCancelMessage("You are not the owner.")
+			Player(cid):sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
 			return true
 		end
 
