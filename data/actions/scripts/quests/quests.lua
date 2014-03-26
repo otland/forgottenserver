@@ -1,7 +1,8 @@
 local annihilatorReward = {1990, 2400, 2431, 2494}
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	if item.uid > 1000 and item.uid <= 22670 then
-		local itemWeight = ItemType(item.itemid):getWeight(false)
+		local itemType = ItemType(item.itemid)
+		local itemWeight = itemType:getWeight(false)
 		local player = Player(cid)
 		local playerCap = player:getFreeCapacity()
 		if isInArray(annihilatorReward, item.uid) then
@@ -12,21 +13,21 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 					else
 						player:addItem(item.uid, 1)
 					end
-					player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. ItemType(item.itemid):getName() .. '.')
+					player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. '.')
 					player:setStorageValue(30015, 1)
 				else
-					player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. ItemType(item.itemid):getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
+					player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 				end
 			else
 				player:sendTextMessage(MESSAGE_INFO_DESCR, "It is empty.")
 			end
 		elseif player:getStorageValue(item.uid) == -1 then
 			if playerCap >= itemWeight then
-				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. ItemType(item.itemid):getName() .. '.')
+				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. '.')
 				player:addItem(item.uid, 1)
 				player:setStorageValue(item.uid, 1)
 			else
-				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. ItemType(item.itemid):getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
+				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 			end
 		else
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "It is empty.")

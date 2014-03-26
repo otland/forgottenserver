@@ -1,16 +1,16 @@
 function onUse(cid, item, fromPosition, itemEx, toPosition)
-	if item.itemid == 2148 and item.type == 100 then -- gold coin
+	if item.itemid == ITEM_GOLD_COIN and item.type == ITEMCOUNT_MAX then
 		Item(item.uid):remove()
-		Player(cid):addItem(2152, 1) -- platinum coin
-	elseif item.itemid == 2152 and item.type == 100 then -- platinum coin
+		Player(cid):addItem(ITEM_PLATINUM_COIN, 1)
+	elseif item.itemid == ITEM_PLATINUM_COIN and item.type == ITEMCOUNT_MAX then
 		Item(item.uid):remove()
-		Player(cid):addItem(2160, 1) -- crystal coin
-	elseif item.itemid == 2152 and item.type < 100 then -- platinum coin
+		Player(cid):addItem(ITEM_CRYSTAL_COIN, 1)
+	elseif item.itemid == ITEM_PLATINUM_COIN and item.type < ITEMCOUNT_MAX then
 		Item(item.uid):transform(item.itemid, item.type - 1)
-		Player(cid):addItem(2148, 100) -- gold coin
-	elseif item.itemid == 2160 then  -- crystal coin
+		Player(cid):addItem(ITEM_GOLD_COIN, ITEMCOUNT_MAX)
+	elseif item.itemid == ITEM_CRYSTAL_COIN then
 		Item(item.uid):transform(item.itemid, item.type - 1)
-		Player(cid):addItem(2152, 100) -- platinum coin
+		Player(cid):addItem(ITEM_PLATINUM_COIN, ITEMCOUNT_MAX)
 	else
 		return false
 	end

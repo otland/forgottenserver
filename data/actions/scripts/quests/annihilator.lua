@@ -14,18 +14,18 @@ local newPosition = {
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	if item.itemid == 1945 then
 		local players = {}
-		for _, posi in ipairs(playerPosition) do
-			local pl = Tile(posi):getTopCreature()
-			if pl == nil or not pl:isPlayer() or pl:getLevel() < 100 or pl:getStorageValue(30015) ~= -1 then
+		for _, pos in ipairs(playerPosition) do
+			local player = Tile(pos):getTopCreature()
+			if player == nil or not player:isPlayer() or player:getLevel() < 100 or player:getStorageValue(30015) ~= -1 then
 				Player(cid):sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_NOTPOSSIBLE))
 				return false
 			end
-			players[#players+1] = pl
+			players[#players+1] = player
 		end
-		for i, pl in ipairs(players) do
+		for i, player in ipairs(players) do
 			Position(playerPosition[i]):sendMagicEffect(CONST_ME_POFF)
-			pl:teleportTo(newPosition[i], false)
-			pl:getPosition():sendMagicEffect(CONST_ME_ENERGYAREA)
+			player:teleportTo(newPosition[i], false)
+			player:getPosition():sendMagicEffect(CONST_ME_ENERGYAREA)
 		end
 		Item(item.uid):transform(1946)
 	elseif item.itemid == 1946 then
