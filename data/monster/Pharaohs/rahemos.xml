@@ -48,14 +48,14 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="100"/>
-		<element earthPercent="100"/>
-		<element deathPercent="100"/>
 		<element firePercent="94"/>
 		<element energyPercent="92"/>
 		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
+		<immunity ice="1"/>
+		<immunity earth="1"/>
+		<immunity death="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>

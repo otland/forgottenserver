@@ -23,9 +23,11 @@
 	</attacks>
 	<defenses armor="2" defense="9"/>
 	<elements>
-		<element deathPercent="100"/>
 		<element holyPercent="-25"/>
 	</elements>
+	<immunities>
+		<immunity death="1"/>
+	</immunities>
 	<loot>
 		<item id="2148" countmax="10" chance="24500"/><!-- gold coin -->
 		<item id="2050" chance="25000"/><!-- torch -->

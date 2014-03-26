@@ -48,10 +48,8 @@
 		</attack>
 	</attacks>
 	<defenses armor="40" defense="39"/>
-	<elements>
-		<element earthPercent="100"/>
-	</elements>
 	<immunities>
+		<immunity earth="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
