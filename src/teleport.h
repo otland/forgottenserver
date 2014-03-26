@@ -25,7 +25,7 @@
 class Teleport : public Item, public Cylinder
 {
 	public:
-		Teleport(uint16_t _type);
+		Teleport(uint16_t _type, MagicEffectClasses _effect = CONST_ME_TELEPORT);
 		~Teleport();
 
 		virtual Teleport* getTeleport() {
@@ -68,6 +68,7 @@ class Teleport : public Item, public Cylinder
 
 	private:
 		Position destPos;
+		MagicEffectClasses effect;
 };
 
 #endif

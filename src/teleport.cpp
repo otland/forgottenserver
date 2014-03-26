@@ -24,11 +24,12 @@
 
 extern Game g_game;
 
-Teleport::Teleport(uint16_t _type) : Item(_type)
+Teleport::Teleport(uint16_t _type, MagicEffectClasses _effect /* = CONST_ME_TELEPORT */) : Item(_type)
 {
 	destPos.x = 0;
 	destPos.y = 0;
 	destPos.z = 0;
+	effect = _effect;
 }
 
 Teleport::~Teleport()
@@ -102,12 +103,18 @@ void Teleport::__addThing(int32_t, Thing* thing)
 		Position origPos = creature->getPosition();
 		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? WEST : EAST);
 		getTile()->moveCreature(creature, destTile);
-		g_game.addMagicEffect(origPos, CONST_ME_TELEPORT);
-		g_game.addMagicEffect(destTile->getPosition(), CONST_ME_TELEPORT);
+		if (effect != CONST_ME_NONE) {
+			g_game.addMagicEffect(origPos, effect);
+			g_game.addMagicEffect(destTile->getPosition(), effect);
+		}
 	} else if (Item* item = thing->getItem()) {
-		g_game.addMagicEffect(item->getPosition(), CONST_ME_TELEPORT);
+		if (effect != CONST_ME_NONE) {
+			g_game.addMagicEffect(item->getPosition(), effect);
+		}
 		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr);
-		g_game.addMagicEffect(destTile->getPosition(), CONST_ME_TELEPORT);
+		if (effect != CONST_ME_NONE) {
+			g_game.addMagicEffect(destTile->getPosition(), effect);
+		}
 	}
 }
 
