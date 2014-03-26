@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hellfire Fighter" nameDescription="a hellfire fighter" race="fire" experience="3900" speed="220" manacost="0">
 	<health now="3800" max="3800"/>
 	<look type="243" corpse="6324"/>
@@ -38,7 +38,7 @@
 		<element icePercent="-25"/>
 	</elements>
 	<immunities>
-	    <immunity fire="1"/>
+		<immunity fire="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
@@ -47,7 +47,7 @@
 		<item id="2148" countmax="100" chance="40000"/><!-- gold coin -->
 		<item id="2148" countmax="46" chance="10000"/><!-- gold coin -->
 		<item id="2260" countmax="2" chance="30000"/><!-- blank rune -->
-		<item id="2172" chance="1000"/>  <!-- platinum coin -->
+		<item id="2172" chance="1000"/><!-- platinum coin -->
 		<item id="2239" chance="50000"/><!-- burnt scroll -->
 		<item id="6500" chance="14500"/><!-- demonic essence -->
 		<item id="2127" chance="2200"/><!-- emerald bangle -->
@@ -59,8 +59,8 @@
 		<item id="2187" chance="9450"/><!-- wand of inferno -->
 		<item id="2432" chance="440"/><!-- fire axe -->
 		<item id="2136" chance="190"/><!-- demonbone amulet -->
-		<item id="13757" chance="670"/> <!-- coal -->
+		<item id="13757" chance="670"/><!-- coal -->
 		<item id="10553" chance="9570"/><!-- fiery hearts -->
-		<item id="10581" chance="5060"/><!-- piece of hellfire armor -->	
+		<item id="10581" chance="5060"/><!-- piece of hellfire armor -->
 	</loot>
 </monster>

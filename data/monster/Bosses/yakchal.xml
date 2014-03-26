@@ -51,7 +51,7 @@
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-		<summons maxSummons="4">
+	<summons maxSummons="4">
 		<summon name="Ice Golem" interval="1000" chance="13" max="4"/>
 	</summons>
 	<voices interval="2000" chance="5">

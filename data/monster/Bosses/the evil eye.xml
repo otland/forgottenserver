@@ -54,10 +54,10 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="100"/>
 		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
+		<immunity earth="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="5">

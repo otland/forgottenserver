@@ -31,6 +31,6 @@
 		<element physicalPercent="-5"/>
 	</elements>
 	<loot>
-		<item id="2670" countmax="2" chance="12270"/> <!-- shrimp -->
+		<item id="2670" countmax="2" chance="12270"/><!-- shrimp -->
 	</loot>
 </monster>

@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="1500" skill="100" attack="98" poison="200" />
-		<attack name="poison" interval="2000" chance="15"  radius="4" target="0" min="-60" max="-114">
+		<attack name="poison" interval="2000" chance="15" radius="4" target="0" min="-60" max="-114">
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
 		<attack name="poison" interval="2000" chance="10" length="5" spread="3" min="-100" max="-350">

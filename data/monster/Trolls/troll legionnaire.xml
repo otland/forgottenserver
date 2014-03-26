@@ -24,7 +24,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="7" defense="9">
-			<defense name="invisible" interval="2000" chance="18" duration="20000">
+		<defense name="invisible" interval="2000" chance="18" duration="20000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 		<defense name="healing" interval="2000" chance="18" min="17" max="25">
@@ -39,27 +39,10 @@
 		<voice sentence="Graaaaar!"/>
 	</voices>
 	<loot>
-    <item id="2148" countmax="100" chance="36250" /><!-- gold coin -->
-    <item id="2148" countmax="56" chance="36250" /><!-- gold coin -->
-    <item id="2399" countmax="10" chance="15750" /><!-- throwing star -->
-    <item id="10565" chance="3400" /><!-- frosty ear of a troll -->
-	<item id="2165" chance="320" /><!-- Stealth Ring -->
-</loot>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		<item id="2148" countmax="100" chance="36250" /><!-- gold coin -->
+		<item id="2148" countmax="56" chance="36250" /><!-- gold coin -->
+		<item id="2399" countmax="10" chance="15750" /><!-- throwing star -->
+		<item id="10565" chance="3400" /><!-- frosty ear of a troll -->
+		<item id="2165" chance="320" /><!-- Stealth Ring -->
+	</loot>
 </monster>

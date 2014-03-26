@@ -32,7 +32,7 @@
 		<defense name="healing" interval="2000" chance="15" min="500" max="700">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		</defenses>
+	</defenses>
 	<immunities>
 		<immunity earth="1"/>
 		<immunity invisible="1"/>
@@ -47,16 +47,16 @@
 		<element physicalPercent="60"/>
 		<element holyPercent="10"/>
 	</elements>
-		<summons maxSummons="2">
+	<summons maxSummons="2">
 		<summon name="Spidris Elite" interval="2000" chance="40" max="2"/>
 	</summons>
 	<loot>
-		<item id="2148" countmax="100" chance="40000"/> <!-- gold coin -->
-		<item id="2148" countmax="98" chance="58000"/> <!-- gold coin -->
-		<item id="2152" countmax="6" chance="84000"/> <!-- platinum coin -->
-		<item id="15480" chance="28000"/> <!-- kollos shell -->
-		<item id="7590" chance="18000"/> <!-- gmp -->
-		<item id="15486" chance="16000"/> <!-- compound eye -->
+		<item id="2148" countmax="100" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="98" chance="58000"/><!-- gold coin -->
+		<item id="2152" countmax="6" chance="84000"/><!-- platinum coin -->
+		<item id="15480" chance="28000"/><!-- kollos shell -->
+		<item id="7590" chance="18000"/><!-- gmp -->
+		<item id="15486" chance="16000"/><!-- compound eye -->
 		<item id="8473" chance="12000"/><!-- uhp -->
 		<item id="2147" countmax="2" chance="16000"/><!-- small ruby -->
 		<item id="7632" chance="6000"/><!-- giant shimmering pearl -->

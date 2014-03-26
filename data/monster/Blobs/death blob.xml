@@ -17,7 +17,6 @@
 		<flag staticattack="85"/>
 		<flag runonhealth="0"/>
 	</flags>
-	
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50"/>
 		<attack name="physical" interval="2000" chance="25" range="3" radius="4" target="0" min="-35" max="-60">

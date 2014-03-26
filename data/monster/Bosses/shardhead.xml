@@ -46,11 +46,11 @@
 		<voice sentence="Chrr."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="87" chance="99700" /> <!-- gold coin -->
-		<item id="7290" chance="40000" /> <!-- shard -->
-		<item id="7588" chance="100000" /> <!-- strong health potion -->
-		<item id="10578" chance="40000" /> <!-- frosty heart -->
-		<item id="7441" chance="80000" /> <!-- ice cube -->   
-		<item id="7449" chance="30000" /> <!-- crystal sword -->
+		<item id="2148" countmax="87" chance="99700" /><!-- gold coin -->
+		<item id="7290" chance="40000" /><!-- shard -->
+		<item id="7588" chance="100000" /><!-- strong health potion -->
+		<item id="10578" chance="40000" /><!-- frosty heart -->
+		<item id="7441" chance="80000" /><!-- ice cube -->
+		<item id="7449" chance="30000" /><!-- crystal sword -->
 	</loot>
 </monster>

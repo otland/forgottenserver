@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Golgordan" nameDescription="golgordan" race="fire" experience="10000" speed="350" manacost="0">
 	<health now="40000" max="40000"/>
-	<look type="12" head="108" body="100" legs="105" feet="114" corpse="6068"/> 
+	<look type="12" head="108" body="100" legs="105" feet="114" corpse="6068"/>
 	<targetchange interval="7000" chance="10"/>
 	<strategy attack="90" defense="10"/>
 	<flags>

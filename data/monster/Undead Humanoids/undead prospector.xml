@@ -44,7 +44,7 @@
 		<voice sentence="These mine is ours... you shall not pass."/>
 	</voices>
 	<loot>
-     	<item id="2148" countmax="29" chance="53850" /><!-- gold coin -->
+		<item id="2148" countmax="29" chance="53850" /><!-- gold coin -->
 		<item id="3976" countmax="6" chance="92310" /><!-- worm -->
 		<item id="2403" chance="15380" /><!-- knife -->
 		<item id="2050" chance="46150" /><!-- torch -->

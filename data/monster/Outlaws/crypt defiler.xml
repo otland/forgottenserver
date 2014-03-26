@@ -19,8 +19,8 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="35" attack="40"/>
-			<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1"  min="-0" max="-40">
-		<atribute key="shooteffect" value="throwingstar"/>
+		<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1" min="-0" max="-40">
+			<attribute key="shooteffect" value="throwingstar"/>
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15"/>
@@ -50,5 +50,5 @@
 		<item id="8838" countmax="3" chance="4840"/><!-- potatoes -->
 		<item id="8267" chance="220"/><!-- nomad parchment -->
 		<item id="12412" chance="1570"/><!-- dirty turban -->
-</loot>
+	</loot>
 </monster>

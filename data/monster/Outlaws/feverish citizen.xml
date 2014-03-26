@@ -45,9 +45,9 @@
 		<voice sentence="This is Venore!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="30300"/> <!-- gold coin -->
-		<item id="3976" countmax="3" chance="25730"/> <!-- worms -->
-		<item id="2230" chance="4920"/> <!-- bone -->
+		<item id="2148" countmax="35" chance="30300"/><!-- gold coin -->
+		<item id="3976" countmax="3" chance="25730"/><!-- worms -->
+		<item id="2230" chance="4920"/><!-- bone -->
 		<item id="13545" chance="2290"/><!-- luminous piece of cloth -->
 		<item id="13543" chance="2006"/><!-- obvious piece of cloth -->
 		<item id="13541" chance="1720"/><!-- dubious piece of cloth -->

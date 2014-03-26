@@ -32,10 +32,10 @@
 	<immunities>
 		<immunity earth="1"/>
 	</immunities>
-		<voices interval="5000" chance="10">
-			<voice sentence="Grak brrretz!"/>
-			<voice sentence="Grow truk grrrrr."/>
-			<voice sentence="Prek tars, dekklep zurk."/>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grak brrretz!"/>
+		<voice sentence="Grow truk grrrrr."/>
+		<voice sentence="Prek tars, dekklep zurk."/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="13" chance="69000"/><!-- gold coin -->

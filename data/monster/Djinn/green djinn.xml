@@ -48,7 +48,7 @@
 	<immunities>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
-	</immunities>>
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="I grant you a deathwish!"/>
 		<voice sentence="Muhahahaha!"/>

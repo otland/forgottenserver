@@ -38,11 +38,11 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="100"/>
 		<element physicalPercent="-10"/>
 		<element earthPercent="-10"/>
 	</elements>
 	<immunities>
+		<immunity energy="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>

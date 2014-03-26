@@ -58,5 +58,5 @@
 		<item id="9808" chance="790"/><!-- rusty armor -->
 		<item id="10572" chance="200"/><!-- gear crystal -->
 		<item id="2207" chance="570"/><!-- sword ring -->
-    </loot>
+	</loot>
 </monster>

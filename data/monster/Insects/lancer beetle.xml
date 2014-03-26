@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lancer Beetle" nameDescription="a lancer beetle" race="venom" experience="275" speed="200" manacost="0">
-<health now="400" max="400"/>
-<look type="348" corpse="11375"/>
-<targetchange interval="4000" chance="10"/>
-<strategy attack="100" defense="0"/>
+	<health now="400" max="400"/>
+	<look type="348" corpse="11375"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

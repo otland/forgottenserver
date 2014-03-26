@@ -54,8 +54,8 @@
 		<item id="5876" chance="14360" /><!-- lizard leather -->
 		<item id="7588" chance="1900" /><!-- strong health potion -->
 		<item id="2528" chance="1000" /><!-- tower shield -->
-		<item id="11304" chance="1001"/> <!-- zaoan legs -->
-		<item id="11301" chance="530"/> <!-- zaoan armor -->
-		<item id="11331" chance="14980"/> <!-- zaogun shoulderplates -->
+		<item id="11304" chance="1001"/><!-- zaoan legs -->
+		<item id="11301" chance="530"/><!-- zaoan armor -->
+		<item id="11331" chance="14980"/><!-- zaogun shoulderplates -->
 	</loot>
 </monster>

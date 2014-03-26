@@ -23,7 +23,7 @@
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="smallclouds"/>
 			<attribute key="areaEffect" value="mortarea"/>
-		</attack>			
+		</attack>
 		<attack name="death" interval="2000" chance="15" target="0" radius="3" min="-30" max="-60">
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>
@@ -53,7 +53,7 @@
 		<item id="2148" countmax="64" chance="100000"/><!-- gold coin -->
 		<item id="21246" chance="9130"/><!-- Incantation Notes -->
 		<item id="21243" chance="15000"/><!-- horoscope -->
-		<item id="11237" chance="6920"/><!--  Book of Necromantic Rituals -->
+		<item id="11237" chance="6920"/><!-- Book of Necromantic Rituals -->
 		<item id="2789" chance="5170"/><!-- brown mushroom -->
 		<item id="21247" chance="4300"/><!-- Pieces of Magic Chalk -->
 		<item id="7589" chance="470"/><!-- Strong Mana Potion -->

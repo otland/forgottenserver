@@ -16,7 +16,7 @@
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
-	</flags>	
+	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50" poison="100"/>
 		<attack name="earth" interval="2000" chance="15" range="7" min="-60" max="-95">

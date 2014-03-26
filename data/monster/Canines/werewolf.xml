@@ -24,10 +24,10 @@
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="2" target="0" min="-80" max="-200">
 			<attribute key="areaEffect" value="rednote"/>
-		</attack>	
+		</attack>
 		<attack name="physical" interval="2000" chance="40" radius="3" target="0">
 			<attribute key="areaEffect" value="whitenote"/>
-		</attack>	
+		</attack>
 		<attack name="physical" interval="2000" chance="10" radius="1" target="0">
 			<attribute key="areaEffect" value="greennote"/>
 		</attack>
@@ -52,13 +52,13 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
-		<immunity invisible="1"/> 
+		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="2">
 		<summon name="war wolf" interval="2000" chance="40"/>
 		<summon name="war wolf" interval="2000" chance="40"/>
 	</summons>
-	<voices speed="5000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="BLOOD!" yell="1"/>
 		<voice sentence="HRAAAAAAAAAARRRRRR!" yell="1"/>
 	</voices>

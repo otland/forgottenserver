@@ -64,11 +64,11 @@
 		<element deathPercent="-1"/>
 	</elements>
 	<loot>
-		<item id="15413" chance="50000"/> <!-- ornate shield -->
-		<item id="15408" chance="33333"/> <!-- depth galea -->
-		<item id="15404" chance="25000"/> <!-- deepling axe -->
-		<item id="15406" chance="25000"/> <!-- ornate chestplate -->
-		<item id="15407" chance="20000"/> <!-- depth lorica -->
+		<item id="15413" chance="50000"/><!-- ornate shield -->
+		<item id="15408" chance="33333"/><!-- depth galea -->
+		<item id="15404" chance="25000"/><!-- deepling axe -->
+		<item id="15406" chance="25000"/><!-- ornate chestplate -->
+		<item id="15407" chance="20000"/><!-- depth lorica -->
 		<item id="15410" chance="14285"/><!-- depth calcei -->
 		<item id="15414" chance="14285"/><!-- ornate mace -->
 		<item id="15412" chance="7142"/><!-- ornate legs -->

@@ -39,7 +39,7 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="55" chance="57000"/><!-- gold coin -->
-		<item id="2230" chance="5000"/><!-- bone  -->
+		<item id="2230" chance="5000"/><!-- bone -->
 		<item id="2541" chance="1000"/><!-- bone shield -->
 		<item id="2450" chance="1000"/><!-- bone sword -->
 		<item id="2459" chance="2150"/><!-- iron helmet -->

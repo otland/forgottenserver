@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Draken Abomination" nameDescription="a draken abomination" race="venom" experience="3800" speed="230" manacost="0">
-<health now="6250" max="6250"/>
-<look type="357" corpse="12623"/>
-<targetchange interval="4000" chance="10"/>
-<strategy attack="100" defense="0"/>
+	<health now="6250" max="6250"/>
+	<look type="357" corpse="12623"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -75,8 +75,8 @@
 		<item id="12644" chance="10" /><!-- shield of corruption -->
 		<item id="12647" chance="10" /><!-- snake god's wristguard -->
 		<item id="13538" chance="360" /><!-- bamboo leaves -->
-		<item id="11304" chance="780"/> <!-- zaoan legs -->
-		<item id="11301" chance="470"/> <!-- zaoan armor -->
-		<item id="11302" chance="560"/> <!-- zaoan helmet -->
+		<item id="11304" chance="780"/><!-- zaoan legs -->
+		<item id="11301" chance="470"/><!-- zaoan armor -->
+		<item id="11302" chance="560"/><!-- zaoan helmet -->
 	</loot>
 </monster>

@@ -28,7 +28,7 @@
 		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-650" duration="1500">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-	    <attack name="drunk" interval="2000" chance="10" range="7" duration="6000">
+		<attack name="drunk" interval="2000" chance="10" range="7" duration="6000">
 			<attribute key="shootEffect" value="energy"/>
 		</attack>
 		<attack name="outfit" interval="2000" chance="1" range="7" monster="rabbit" duration="4000">
@@ -82,7 +82,7 @@
 		<item id="2663" chance="290"/><!-- mystic turban -->
 		<item id="12442" chance="530"/><!-- Noble turban -->
 		<item id="12426" chance="7880"/><!-- Jewelled Belt -->
-	 	<item id="7900" chance="320"/><!-- magma monocle -->
+		<item id="7900" chance="320"/><!-- magma monocle -->
 		<item id="2158" chance="110"/><!-- blue gem -->
 	</loot>
 </monster>

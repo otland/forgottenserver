@@ -42,6 +42,6 @@
 		<item id="2667" countmax="4" chance="8000"/><!-- fish -->
 		<item id="7159" chance="7000"/><!-- green perch -->
 		<item id="7158" chance="8000"/><!-- rainbow trout -->
-		<item id="2434"  chance="200"/><!-- dragon hammer -->
+		<item id="2434" chance="200"/><!-- dragon hammer -->
 	</loot>
 </monster>

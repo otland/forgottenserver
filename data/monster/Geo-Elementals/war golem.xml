@@ -1,4 +1,4 @@
-er<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="War Golem" nameDescription="a war golem" race="energy" experience="2550" speed="240" manacost="0">
 	<health now="4300" max="4300"/>
 	<look type="326" corpse="10005"/>

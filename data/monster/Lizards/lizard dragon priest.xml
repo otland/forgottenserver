@@ -43,7 +43,7 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="I ssssmell warm blood!"/>
 	</voices>
-		<summons maxSummons="2">
+	<summons maxSummons="2">
 		<summon name="Dragon Hatchling" interval="2000" chance="20" max="2"/>
 	</summons>
 	<loot>

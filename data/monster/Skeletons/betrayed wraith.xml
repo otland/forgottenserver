@@ -21,7 +21,7 @@
 		<attack name="melee" interval="2000" skill="80" attack="100"/>
 		<attack name="betrayed wraith skill reducer" chance="10"/>
 		<attack name="speed" interval="2000" chance="20" range="7" target="1" speedchange="-600" duration="3000">
-		    <attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>
 			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
@@ -62,7 +62,7 @@
 		<item id="2152" countmax="8" chance="100000"/><!-- platinum coin -->
 		<item id="6558" chance="65250"/><!-- concentrated demonic blood -->
 		<item id="2547" countmax="5" chance="50000"/><!-- power bolt-->
-	    <item id="7368" countmax="5" chance="10780"/><!-- assassin star-->
+		<item id="7368" countmax="5" chance="10780"/><!-- assassin star-->
 		<item id="5944" chance="10000"/><!-- soul orb-->
 		<item id="7386" chance="1890"/><!-- mercenary sword -->
 		<item id="7590" countmax="3" chance="15000"/><!-- great mana potion-->

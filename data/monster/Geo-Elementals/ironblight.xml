@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ironblight" nameDescription="ironblight" race="undead" experience="4400" speed="220" manacost="0">
-  <health now="6600" max="6600"/>
-  <look type="498" corpse="17424"/>
-  <targetchange interval="4000" chance="10"/>
-  <strategy attack="90" defense="10"/>
-  <flags>
-    <flag summonable="0"/>
-    <flag attackable="1"/>
-    <flag hostile="1"/>
-    <flag illusionable="0"/>
-    <flag convinceable="0"/>
-    <flag pushable="0"/>
-    <flag canpushitems="1"/>
-    <flag canpushcreatures="1"/>
-    <flag targetdistance="0"/>
-    <flag staticattack="70"/>
-    <flag runonhealth="260"/>
-  </flags>
+	<health now="6600" max="6600"/>
+	<look type="498" corpse="17424"/>
+	<targetchange interval="4000" chance="10"/>
+	<strategy attack="90" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag staticattack="70"/>
+		<flag runonhealth="260"/>
+	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="100"/>			
+		<attack name="melee" interval="2000" skill="50" attack="100"/>
 		<attack name="poisoncondition" interval="2000" chance="10" target="0" radius="6" min="-460" max="-480">
 			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="poison"/>
@@ -27,7 +27,7 @@
 			<attribute key="shootEffect" value="ice"/>
 			<attribute key="areaEffect" value="iceattack"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="20" target="1" radius="2"  min="-180" max="-250">
+		<attack name="earth" interval="2000" chance="20" target="1" radius="2" min="-180" max="-250">
 			<attribute key="shootEffect" value="greenstar"/>
 			<attribute key="areaEffect" value="bigplants"/>
 		</attack>
@@ -35,18 +35,18 @@
 			<attribute key="areaEffect" value="yellowspark"/>
 		</attack>
 	</attacks>
-	<defenses armor="35" defense="35">   
+	<defenses armor="35" defense="35">
 		<defense name="invisible" interval="2000" chance="20" duration="7000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
-  	<voices interval="5000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="Clonk!"/>
 		<voice sentence="Yowl!"/>
 	</voices>
-	<elements>		
-		<element deathPercent="50"/>		
-		<element icePercent="20"/>		
+	<elements>
+		<element deathPercent="50"/>
+		<element icePercent="20"/>
 		<element firePercent="60"/>
 		<element energyPercent="25"/>
 	</elements>
@@ -54,33 +54,33 @@
 		<immunity earth="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
-	</immunities>      
+	</immunities>
 	<loot>
-		 <item id="2148" countmax="199" chance="100000"/><!-- gold coin -->
-		 <item id="2152" countmax="8" chance="100000"/><!-- platinum coin -->
-		 <item id="2150" countmax="3" chance="15020"/><!-- small amethist -->
-		 <item id="2149" countmax="3" chance="10890"/><!-- small emerald -->
-		 <item id="7590" chance="17640"/><!-- GMP -->         
-		 <item id="10571" chance="21230"/><!-- war crystal -->
-		 <item id="8473" chance="18330"/><!-- UHP -->
-		 <item id="11227" chance="15230"/><!-- shiny stone -->
-		 <item id="2156" chance="3510"/><!-- red gem -->
-		 <item id="2158" chance="480"/><!-- blue gem -->
-		 <item id="18420" chance="10540"/><!-- red crystal fragment -->
-		 <item id="18421" chance="10540"/><!-- green crystal fragment -->
-		 <item id="18415" chance="5720"/><!-- green crystal shard -->
-		 <item id="18417" countmax="2" chance="12610"/><!-- brown crystal splinter -->
-		 <item id="18432" chance="18400"/><!-- crystalline spikes -->
-		 <item id="9942" chance="4480"/><!-- crystal of balance -->
-		 <item id="9980" chance="2480"/><!-- crystal of power -->
-		 <item id="5904" chance="830"/><!-- magic sulphur -->
-		 <item id="2245" chance="620"/><!-- crystal mace -->
-		 <item id="2438" chance="480"/><!-- epee -->
-		 <item id="7437" chance="480"/><!-- sapphire hammer -->
-		 <item id="8855" chance="210"/><!-- composite hornbow -->
-		 <item id="18412" chance="960"/><!-- glacial rod -->
-		 <item id="8912" chance="1720"/><!-- springsprout rod -->
-		 <item id="11368" chance="210"/><!-- jade hat -->
-		 <item id="7885" chance="1110"/><!-- terra legs -->
-</loot>
+		<item id="2148" countmax="199" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="8" chance="100000"/><!-- platinum coin -->
+		<item id="2150" countmax="3" chance="15020"/><!-- small amethist -->
+		<item id="2149" countmax="3" chance="10890"/><!-- small emerald -->
+		<item id="7590" chance="17640"/><!-- GMP -->
+		<item id="10571" chance="21230"/><!-- war crystal -->
+		<item id="8473" chance="18330"/><!-- UHP -->
+		<item id="11227" chance="15230"/><!-- shiny stone -->
+		<item id="2156" chance="3510"/><!-- red gem -->
+		<item id="2158" chance="480"/><!-- blue gem -->
+		<item id="18420" chance="10540"/><!-- red crystal fragment -->
+		<item id="18421" chance="10540"/><!-- green crystal fragment -->
+		<item id="18415" chance="5720"/><!-- green crystal shard -->
+		<item id="18417" countmax="2" chance="12610"/><!-- brown crystal splinter -->
+		<item id="18432" chance="18400"/><!-- crystalline spikes -->
+		<item id="9942" chance="4480"/><!-- crystal of balance -->
+		<item id="9980" chance="2480"/><!-- crystal of power -->
+		<item id="5904" chance="830"/><!-- magic sulphur -->
+		<item id="2245" chance="620"/><!-- crystal mace -->
+		<item id="2438" chance="480"/><!-- epee -->
+		<item id="7437" chance="480"/><!-- sapphire hammer -->
+		<item id="8855" chance="210"/><!-- composite hornbow -->
+		<item id="18412" chance="960"/><!-- glacial rod -->
+		<item id="8912" chance="1720"/><!-- springsprout rod -->
+		<item id="11368" chance="210"/><!-- jade hat -->
+		<item id="7885" chance="1110"/><!-- terra legs -->
+	</loot>
 </monster>

@@ -19,19 +19,19 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="85" attack="285"/>
-		<attack name="physical" interval="2000" chance="25" radius="3"  min="-0" max="-170">
+		<attack name="physical" interval="2000" chance="25" radius="3" min="-0" max="-170">
 			<attribute key="areaEffect" value="blackspark"/>
-		</attack>	
+		</attack>
 		<attack name="poisonfield" interval="2000" chance="19" range="7" radius="3" target="0">
 			<attribute key="shootEffect" value="poison"/>
-		</attack>		
+		</attack>
 		<attack name="speed" interval="2000" chance="18" range="7" speedchange="-360" duration="5000">
-		<attribute key="shootEffect" value="snowball"/>
-		</attack>	
+			<attribute key="shootEffect" value="snowball"/>
+		</attack>
 		<attack name="ice" interval="2000" chance="20" range="7" target="1" min="-108" max="-137">
 			<attribute key="shootEffect" value="ice"/>
 			<attribute key="areaEffect" value="icearea"/>
-		</attack>	
+		</attack>
 	</attacks>
 	<defenses armor="15" defense="15"/>
 	<elements>
@@ -49,9 +49,9 @@
 		<summon name="Massive Water Elementals" interval="2000" chance="10" max="2"/>
 	</summons>
 	<loot>
-	<item id="5895" chance="100000" /><!-- fish fin -->
-    <item id="2148" countmax="77" chance="50000" /><!-- gold coin -->
-    <item id="7383" chance="50000" /><!-- relic sword -->
-	<item id="2670" chance="25000" /><!-- shrimp -->
-</loot>
+		<item id="5895" chance="100000" /><!-- fish fin -->
+		<item id="2148" countmax="77" chance="50000" /><!-- gold coin -->
+		<item id="7383" chance="50000" /><!-- relic sword -->
+		<item id="2670" chance="25000" /><!-- shrimp -->
+	</loot>
 </monster>

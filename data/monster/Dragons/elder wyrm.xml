@@ -29,9 +29,9 @@
 		<attack name="physical" interval="2000" chance="10" length="8" spread="0" min="-0" max="-180">
 			<attribute key="areaEffect" value="yellowspark"/>
 		</attack>
-		<attack name="death" interval="2000" chance="10"  length="5" spread="2" target="1" min="-200" max="-300">
+		<attack name="death" interval="2000" chance="10" length="5" spread="2" target="1" min="-200" max="-300">
 			<attribute key="areaEffect" value="blacksmoke"/>
-		</attack>	
+		</attack>
 	</attacks>
 	<defenses armor="45" defense="45">
 		<defense name="healing" interval="2000" chance="15" min="100" max="150">

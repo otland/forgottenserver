@@ -20,7 +20,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="10"/>
 		<attack name="physical" interval="2000" radius="1" target="1" range="7" chance="20" min="-0" max="-8">
-		    <attribute key="shootEffect" value="explosion"/>
+			<attribute key="shootEffect" value="explosion"/>
 			<attribute key="areaEffect" value="explosionarea"/>
 		</attack>
 	</attacks>
@@ -33,14 +33,14 @@
 		<voice sentence="Rrrawk! Rrrrawk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="23" chance="65000"/> <!-- Gold Coin -->
-		<item id="3976" countmax="2" chance="15000"/> <!-- Worms -->
-		<item id="2667" countmax="2" chance="20290"/> <!-- Fish -->
-		<item id="2666" countmax="2" chance="20360"/> <!-- Meat -->
-		<item id="19740" chance="7180"/> <!-- Marsh Stalker Beak -->
-		<item id="19741" chance="9300"/> <!-- Marsh Stalker Feather -->
-		<item id="2397" chance="7180"/> <!-- Longsword -->
-		<item id="7732" chance="120"/> <!-- seeds -->
-		<item id="2120" chance="4530"/> <!-- rope -->
+		<item id="2148" countmax="23" chance="65000"/><!-- Gold Coin -->
+		<item id="3976" countmax="2" chance="15000"/><!-- Worms -->
+		<item id="2667" countmax="2" chance="20290"/><!-- Fish -->
+		<item id="2666" countmax="2" chance="20360"/><!-- Meat -->
+		<item id="19740" chance="7180"/><!-- Marsh Stalker Beak -->
+		<item id="19741" chance="9300"/><!-- Marsh Stalker Feather -->
+		<item id="2397" chance="7180"/><!-- Longsword -->
+		<item id="7732" chance="120"/><!-- seeds -->
+		<item id="2120" chance="4530"/><!-- rope -->
 	</loot>
 </monster>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Terramite" nameDescription="a terramite" race="venom" experience="160" speed="200" manacost="505">
-<health now="365" max="365"/>
-<look type="346" corpse="11347"/>
-<targetchange interval="5000" chance="0"/>
-<strategy attack="100" defense="0"/>
+	<health now="365" max="365"/>
+	<look type="346" corpse="11347"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -37,9 +37,9 @@
 		<voice sentence="Zrp zrp!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="45" chance="97520" /> <!-- gold coin -->
-		<item id="11371" chance="14880" /> <!-- terramite legs -->
-		<item id="11370" countmax="3" chance="4680" /> <!-- terramite eggs -->
-		<item id="11369" chance="7730" /> <!-- terramite shell -->
+		<item id="2148" countmax="45" chance="97520" /><!-- gold coin -->
+		<item id="11371" chance="14880" /><!-- terramite legs -->
+		<item id="11370" countmax="3" chance="4680" /><!-- terramite eggs -->
+		<item id="11369" chance="7730" /><!-- terramite shell -->
 	</loot>
 </monster>

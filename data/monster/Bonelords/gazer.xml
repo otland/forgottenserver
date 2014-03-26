@@ -25,8 +25,8 @@
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="-10" max="-35"/>
 	</attacks>
 	<defenses armor="5" defense="5"/>
-    <elements>
-        <element icePercent="20"/>
+	<elements>
+		<element icePercent="20"/>
 		<element energyPercent="10"/>
 		<element firePercent="-10"/>
 	</elements>

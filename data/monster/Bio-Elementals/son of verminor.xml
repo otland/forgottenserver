@@ -30,10 +30,10 @@
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
-	    <defense name="healing" interval="2000" chance="20" min="250" max="350">
+		<defense name="healing" interval="2000" chance="20" min="250" max="350">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-	    <defense name="outfit" interval="5000" chance="10" monster="rat" duration="6000">
+		<defense name="outfit" interval="5000" chance="10" monster="rat" duration="6000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 		<defense name="outfit" interval="5000" chance="10" monster="larva" duration="6000">
@@ -44,7 +44,7 @@
 		</defense>
 		<defense name="outfit" interval="5000" chance="10" monster="slime" duration="6000">
 			<attribute key="areaEffect" value="blueshimmer"/>
-	     </defense>
+		</defense>
 	</defenses>
 	<elements>
 		<element firePercent="10"/>

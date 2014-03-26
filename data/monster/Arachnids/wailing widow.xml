@@ -27,7 +27,7 @@
 		</attack>
 		<attack name="earth" interval="2000" chance="15" range="7" min="-60" max="-110">
 			<attribute key="shootEffect" value="poison"/>
-	    </attack>
+		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
 		<defense name="healing" interval="2000" chance="5" min="70" max="100">
