@@ -1,27 +1,25 @@
-function onStepIn(cid, item, pos)
+function onStepIn(cid, item, position, fromPosition)
 	if item.itemid == 2579 then
-		if isPlayer(cid) ~= TRUE then
-			doTargetCombatHealth(0, cid, COMBAT_PHYSICALDAMAGE, -15, -30, CONST_ME_NONE)
-			doTransformItem(item.uid, item.itemid - 1)
-		end
-	else
-		if isPlayer(cid) == TRUE then
-			doTargetCombatHealth(0, cid, COMBAT_PHYSICALDAMAGE, -50, -100, CONST_ME_NONE)
-			doTransformItem(item.uid, item.itemid + 1)
-		end
+		doTargetCombatHealth(0, cid, COMBAT_PHYSICALDAMAGE, -15, -30, CONST_ME_NONE)
+		Item(item.uid):transform(item.itemid - 1)
+	elseif Player(cid) then
+		doTargetCombatHealth(0, cid, COMBAT_PHYSICALDAMAGE, -50, -100, CONST_ME_NONE)
+		Item(item.uid):transform(item.itemid + 1)
 	end
-	return TRUE
+	return true
 end
 
-function onStepOut(cid, item, pos)
-	doTransformItem(item.uid, item.itemid - 1)
-	return TRUE
+function onStepOut(cid, item, position, fromPosition)
+	Item(item.uid):transform(item.itemid - 1)
+	return true
 end
 
-function onRemoveItem(item, tile, pos)
-	if getDistanceBetween(getThingPos(item.uid), pos) > 0 then
-		doTransformItem(item.uid, item.itemid - 1)
-		doSendMagicEffect(getThingPos(item.uid), CONST_ME_POFF)
+function onRemoveItem(item, tile, position)
+	local trap = Item(item.uid)
+	local thingPos = trap:getPosition()
+	if getDistanceBetween(thingPos, position) > 0 then
+		trap:transform(item.itemid - 1)
+		thingPos:sendMagicEffect(CONST_ME_POFF)
 	end
-	return TRUE
+	return true
 end
