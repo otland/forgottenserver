@@ -30,7 +30,8 @@
 		</attack>		
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="-60" max="-140">
 			<attribute key="areaEffect" value="smallplants"/>
-		</attack>	
+		</attack>
+		<attack name="deepling spellsinger skill reducer" range="5" interval="2000" chance="10"/>	
 	</attacks>
 	<defenses armor="20" defense="20">
 		<defense name="healing" interval="2000" chance="15" min="40" max="80">
