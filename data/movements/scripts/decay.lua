@@ -1,8 +1,7 @@
 function onStepIn(cid, item, position, fromPosition)
-
-	local it = Item(item.uid)
-	it:transform(item.itemid + 1)
-	it:decay()
+	local decayItem = Item(item.uid)
+	decayItem:transform(item.itemid + 1)
+	decayItem:decay()
 
 	return true
 end
