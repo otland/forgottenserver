@@ -3,11 +3,11 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 
 	if math.random(6) == 1 then
 		fromPosition:sendMagicEffect(CONST_ME_POFF)
-		player:addItem(ITEM_GOLD_COIN, 1)
+		player:addItem(2148, 1) -- gold coin
 		Item(item.uid):transform(2115)
 	else
 		fromPosition:sendMagicEffect(CONST_ME_SOUND_YELLOW)
-		player:addItem(ITEM_PLATINUM_COIN, 1)
+		player:addItem(2152, 1) -- platinum coin
 	end
 
 	return true
