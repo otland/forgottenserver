@@ -4,14 +4,12 @@ function onStepIn(cid, item, position, fromPosition)
 		return true
 	end
 	local snow = Item(item.uid)
-	if snow then
-		if item.itemid == 670 then
-			snow:transform(6594)
-		else
-			snow:transform(item.itemid + 15)
-		end
-		snow:decay()
+	if item.itemid == 670 then
+		snow:transform(6594)
+	else
+		snow:transform(item.itemid + 15)
 	end
+	snow:decay()
 
 	return true
 end
