@@ -470,7 +470,7 @@ class Game
 		void checkLight();
 
 		bool combatBlockHit(CombatType_t combatType, Creature* attacker, Creature* target,
-		                    int32_t& healthChange, bool checkDefense, bool checkArmor);
+		                    int32_t& healthChange, bool checkDefense, bool checkArmor, bool field);
 
 		void combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColor_t& color, uint8_t& effect);
 

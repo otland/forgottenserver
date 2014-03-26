@@ -800,6 +800,53 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << "protection all " << std::showpos << show << std::noshowpos << '%';
 				}
 
+				show = it.abilities->fieldAbsorbPercent[COMBAT_FIRST];
+
+				for (uint32_t i = (COMBAT_FIRST + 1); i <= COMBAT_COUNT; ++i) {
+					if (it.abilities->absorbPercent[i] == show) {
+						continue;
+					}
+
+					show = 0;
+					break;
+				}
+
+				if (!show) {
+					bool tmp = true;
+
+					for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
+						if (!it.abilities->fieldAbsorbPercent[i]) {
+							continue;
+						}
+
+						if (tmp) {
+							tmp = false;
+
+							if (begin) {
+								begin = false;
+								s << " (";
+							} else {
+								s << ", ";
+							}
+
+							s << "protection ";
+						} else {
+							s << ", ";
+						}
+
+						s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << it.abilities->fieldAbsorbPercent[i] << std::noshowpos << '%';
+					}
+				} else {
+					if (begin) {
+						begin = false;
+						s << " (";
+					} else {
+						s << ", ";
+					}
+
+					s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
+				}
+
 				if (it.abilities->speed) {
 					if (begin) {
 						begin = false;
@@ -901,6 +948,57 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				}
 
 				s << "protection all " << std::showpos << show << std::noshowpos << '%';
+			}
+
+			show = it.abilities->fieldAbsorbPercent[COMBAT_FIRST];
+
+			for (uint32_t i = (COMBAT_FIRST + 1); i <= COMBAT_COUNT; ++i) {
+				if (it.abilities->absorbPercent[i] == show) {
+					continue;
+				}
+
+				show = 0;
+				break;
+			}
+
+			if (!show) {
+				bool tmp = true;
+
+				for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
+					if (!it.abilities->fieldAbsorbPercent[i]) {
+						continue;
+					}
+
+					if (tmp) {
+						tmp = false;
+
+						if (begin) {
+							begin = false;
+							s << " (";
+						}
+						else {
+							s << ", ";
+						}
+
+						s << "protection ";
+					}
+					else {
+						s << ", ";
+					}
+
+					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << it.abilities->fieldAbsorbPercent[i] << std::noshowpos << '%';
+				}
+			}
+			else {
+				if (begin) {
+					begin = false;
+					s << " (";
+				}
+				else {
+					s << ", ";
+				}
+
+				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
 			}
 
 			if (it.abilities->speed) {

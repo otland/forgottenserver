@@ -291,6 +291,7 @@ class ConditionDamage: public Condition
 
 		bool forceUpdate;
 		bool delayed;
+		bool field;
 		uint32_t owner;
 
 		bool init();

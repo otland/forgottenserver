@@ -628,7 +628,7 @@ class Player : public Creature, public Cylinder
 			return pzLocked;
 		}
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false);
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false);
 		virtual void doAttacking(uint32_t interval);
 		virtual bool hasExtraSwing() {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());

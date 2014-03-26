@@ -17326,6 +17326,7 @@
 		<attribute key="slotType" value="feet" />
 		<attribute key="decayTo" value="10022" />
 		<attribute key="transformDeEquipTo" value="9933" />
+		<attribute key="fieldabsorbpercentfire" value="90" />
 		<attribute key="duration" value="3600" />
 		<attribute key="showduration" value="1" />
 		<attribute key="showattributes" value="1" />

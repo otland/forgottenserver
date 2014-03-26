@@ -753,7 +753,13 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 		} else if (tmpStrValue == "magicpoints" || tmpStrValue == "magiclevelpoints") {
 			it.getAbilities()->stats[STAT_MAGICPOINTS] = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "magicpointspercent") {
-			it.getAbilities()->statsPercent[STAT_MAGICPOINTS] = pugi::cast<int32_t>(valueAttribute.value());
+			it.getAbilities()->statsPercent[STAT_MAGICPOINTS] = pugi::cast<int32_t>(valueAttribute.value());		
+		} else if (tmpStrValue == "fieldabsorbpercentenergy") {
+			it.getAbilities()->fieldAbsorbPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+		} else if (tmpStrValue == "fieldabsorbpercentfire") {
+			it.getAbilities()->fieldAbsorbPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+		} else if (tmpStrValue == "fieldabsorbpercentpoison" || tmpStrValue == "fieldabsorpercentearth") {
+			it.getAbilities()->fieldAbsorbPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "absorbpercentall" || tmpStrValue == "absorbpercentallelements") {
 			int16_t value = pugi::cast<int16_t>(valueAttribute.value());
 			Abilities* abilities = it.getAbilities();
@@ -905,6 +911,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 						}
 					}
 				}
+
+				conditionDamage->setParam(CONDITION_PARAM_FIELD, 1);
 
 				if (conditionDamage->getTotalDamage() > 0) {
 					conditionDamage->setParam(CONDITION_PARAM_FORCEUPDATE, 1);

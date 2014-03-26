@@ -837,7 +837,8 @@ void Creature::drainMana(Creature*, int32_t manaLoss)
 }
 
 BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                               bool checkDefense /* = false */, bool checkArmor /* = false */)
+                               bool checkDefense /* = false */, bool checkArmor /* = false */,
+							   bool /* field  = false */)
 {
 	BlockType_t blockType = BLOCK_NONE;
 
