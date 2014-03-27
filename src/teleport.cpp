@@ -24,12 +24,11 @@
 
 extern Game g_game;
 
-Teleport::Teleport(uint16_t _type, MagicEffectClasses _effect /* = CONST_ME_TELEPORT */) : Item(_type)
+Teleport::Teleport(uint16_t _type) : Item(_type)
 {
 	destPos.x = 0;
 	destPos.y = 0;
 	destPos.z = 0;
-	effect = _effect;
 }
 
 Teleport::~Teleport()
@@ -99,21 +98,23 @@ void Teleport::__addThing(int32_t, Thing* thing)
 		return;
 	}
 
+	const ItemType& it = Item::items[getID()];
+
 	if (Creature* creature = thing->getCreature()) {
 		Position origPos = creature->getPosition();
 		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? WEST : EAST);
 		getTile()->moveCreature(creature, destTile);
-		if (effect != CONST_ME_NONE) {
-			g_game.addMagicEffect(origPos, effect);
-			g_game.addMagicEffect(destTile->getPosition(), effect);
+		if (it.magicEffect != CONST_ME_NONE) {
+			g_game.addMagicEffect(origPos, it.magicEffect);
+			g_game.addMagicEffect(destTile->getPosition(), it.magicEffect);
 		}
 	} else if (Item* item = thing->getItem()) {
-		if (effect != CONST_ME_NONE) {
-			g_game.addMagicEffect(item->getPosition(), effect);
+		if (it.magicEffect != CONST_ME_NONE) {
+			g_game.addMagicEffect(item->getPosition(), it.magicEffect);
 		}
 		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr);
-		if (effect != CONST_ME_NONE) {
-			g_game.addMagicEffect(destTile->getPosition(), effect);
+		if (it.magicEffect != CONST_ME_NONE) {
+			g_game.addMagicEffect(destTile->getPosition(), it.magicEffect);
 		}
 	}
 }

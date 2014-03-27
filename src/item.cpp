@@ -55,7 +55,7 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 		} else if (it.isContainer()) {
 			newItem = new Container(_type);
 		} else if (it.isTeleport()) {
-			newItem = new Teleport(_type, it.magicEffect);
+			newItem = new Teleport(_type);
 		} else if (it.isMagicField()) {
 			newItem = new MagicField(_type);
 		} else if (it.isDoor()) {
