@@ -13,7 +13,7 @@ function onSay(cid, words, param)
 	if npcId ~= false then
 		orig:sendMagicEffect(CONST_ME_MAGIC_RED)
 	else
-		player:sendCancelMessage("There is not enough room.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "There is not enough room.")
 		orig:sendMagicEffect(CONST_ME_POFF)
 	end
 	return false

@@ -6,12 +6,12 @@ function onSay(cid, words, param)
 
 	local target = Player(param)
 	if target == nil then
-		player:sendCancelMessage("A player with that name is not online.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "A player with that name is not online.")
 		return false
 	end
 
 	if target:getAccountType() ~= ACCOUNT_TYPE_NORMAL then
-		player:sendCancelMessage("You can only promote a normal player to a tutor.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only promote a normal player to a tutor.")
 		return false
 	end
 

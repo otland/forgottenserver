@@ -6,7 +6,7 @@ function onSay(cid, words, param)
 
 	local target = Creature(param)
 	if target == nil then
-		player:sendCancelMessage("Creature not found.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Creature not found.")
 		return false
 	end
 

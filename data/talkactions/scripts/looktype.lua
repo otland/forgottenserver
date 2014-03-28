@@ -10,7 +10,7 @@ function onSay(cid, words, param)
 		playerOutfit.lookType = lookType
 		player:setOutfit(playerOutfit)
 	else
-		player:sendCancelMessage("A look type with that id does not exist.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "A look type with that id does not exist.")
 	end
 	return false
 end

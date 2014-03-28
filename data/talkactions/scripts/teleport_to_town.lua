@@ -6,7 +6,7 @@ function onSay(cid, words, param)
 
 	local town = Town(param)
 	if town == nil then
-		player:sendCancelMessage("Town not found.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Town not found.")
 		return false
 	end
 

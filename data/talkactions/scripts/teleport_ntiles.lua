@@ -14,7 +14,7 @@ function onSay(cid, words, param)
 	
 	position = player:getClosestFreePosition(position, false)
 	if position.x == 0 then
-		player:sendCancelMessage("You cannot teleport there.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot teleport there.")
 		return false
 	end
 	

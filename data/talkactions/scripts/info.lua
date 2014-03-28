@@ -6,12 +6,12 @@ function onSay(cid, words, param)
 
 	local target = Player(param)
 	if not target then
-		player:sendCancelMessage("Player not found.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Player not found.")
 		return false
 	end
 
 	if target:getAccountType() > player:getAccountType() then
-		player:sendCancelMessage("You can not get info about this player.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You can not get info about this player.")
 		return false
 	end
 

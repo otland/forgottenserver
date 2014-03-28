@@ -6,12 +6,12 @@ function onSay(cid, words, param)
 
 	local resultId = db.storeQuery("SELECT `name`, `account_id`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type` FROM `players` WHERE `name` = " .. db.escapeString(param))
 	if resultId == false then
-		player:sendCancelMessage("A player with that name does not exist.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "A player with that name does not exist.")
 		return false
 	end
 
 	if result.getDataInt(resultId, "account_type") ~= ACCOUNT_TYPE_TUTOR then
-		player:sendCancelMessage("You can only demote a tutor to a normal player.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only demote a tutor to a normal player.")
 		return false
 	end
 
