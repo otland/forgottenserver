@@ -678,7 +678,7 @@
 	
 	<!-- Monster Spells -->
 	<instant name="ghastly dragon curse" words="###1"  aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/ghastly dragon curse.lua"/>
-    <instant name="djinn electrify"  words="###2"  aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/djinn electrify.lua"/> 
+	<instant name="djinn electrify"  words="###2"  aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/djinn electrify.lua"/> 
 	<instant name="energy elemental electrify" words="###3"  aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/energy elemental electrify.lua"/>
 	<instant name="massive energy elemental electrify" words="###4"  aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/massive energy elemental electrify.lua"/>
 	<instant name="massive fire elemental soulfire" words="###5"  aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/massive fire elemental soulfire.lua"/>
