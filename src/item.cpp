@@ -61,7 +61,7 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 		} else if (it.isDoor()) {
 			newItem = new Door(_type);
 		} else if (it.isTrashHolder()) {
-			newItem = new TrashHolder(_type, it.magicEffect);
+			newItem = new TrashHolder(_type);
 		} else if (it.isMailbox()) {
 			newItem = new Mailbox(_type);
 		} else if (it.isBed()) {
