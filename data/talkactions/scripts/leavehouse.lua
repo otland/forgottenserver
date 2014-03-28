@@ -3,13 +3,13 @@ function onSay(cid, words, param)
 	local house = House(getTileHouseInfo(player:getPosition()))
 	
 	if not house then
-		player:sendCancelMessage("You are not inside a house.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not inside a house.")
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
 	
 	if house:getOwnerGuid() ~= player:getGuid() then
-		player:sendCancelMessage("You are not the owner of this house.")
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner of this house.")
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end

@@ -14,7 +14,7 @@ function onSay(cid, words, param)
 	if itemType:getId() == 0 then
 		itemType = ItemType(tonumber(split[1]))
 		if itemType:getId() == 0 then
-			player:sendCancelMessage("There is no item with that id or name.")
+			player:sendTextMessage(MESSAGE_STATUS_SMALL, "There is no item with that id or name.")
 			return false
 		end
 	end
