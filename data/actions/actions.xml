@@ -256,4 +256,5 @@
 	<action fromid="13020" toid="13023" script="other/doors.lua" />
 	<action itemid="14405" function="market"/>
 	<action fromid="18488" toid="18492" script="other/skilltrainer.lua" />
+	<action itemid="9930" script="other/rustremover.lua"/>
 </actions>
