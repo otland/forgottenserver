@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ushuriel" nameDescription="ushuriel" race="fire" experience="10500" speed="350" manacost="0">
+<monster name="Ushuriel" nameDescription="Ushuriel" race="fire" experience="10500" speed="350" manacost="0">
 	<health now="31500" max="31500"/>
 	<look type="12" head="0" body="95" legs="19" feet="112" corpse="6068"/>
 	<targetchange interval="5000" chance="8"/>

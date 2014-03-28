@@ -19721,7 +19721,7 @@
 		<attribute key="weaponType" value="axe" />
 		<attribute key="slotType" value="two-handed" />
 	</item>
-	<item id="11306" article="a" name="sais">
+	<item id="11306" article="a" name="sai">
 		<attribute key="weight" value="5000" />
 		<attribute key="defense" value="27" />
 		<attribute key="attack" value="45" />
