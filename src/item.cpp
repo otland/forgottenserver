@@ -975,26 +975,22 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						if (begin) {
 							begin = false;
 							s << " (";
-						}
-						else {
+						} else {
 							s << ", ";
 						}
 
 						s << "protection ";
-					}
-					else {
+					} else {
 						s << ", ";
 					}
 
 					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << it.abilities->fieldAbsorbPercent[i] << std::noshowpos << '%';
 				}
-			}
-			else {
+			} else {
 				if (begin) {
 					begin = false;
 					s << " (";
-				}
-				else {
+				} else {
 					s << ", ";
 				}
 
