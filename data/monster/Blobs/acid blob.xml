@@ -35,7 +35,7 @@
 		<immunity earth="1"/>
 	</immunities>
 	<summons maxSummons="3">
-		<summon name="Acid Blob" interval="2000" chance="10"/>
+		<summon name="Acid Blob" interval="2000" chance="15"/>
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Kzzchhh!"/>

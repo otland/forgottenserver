@@ -41,7 +41,7 @@
 		<immunity earth="1"/>
 	</immunities>
 	<summons maxSummons="3">
-		<summon name="Death Blob" interval="2000" chance="10"/>
+		<summon name="Death Blob" interval="2000" chance="15"/>
 	</summons>
 	<loot>
 		<item id="9968" chance="14285"/><!-- glob of tar -->
