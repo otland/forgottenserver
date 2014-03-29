@@ -426,6 +426,10 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir)
 	if (!floorChange && (tile->floorChange() || tile->getTeleportItem())) {
 		return false;
 	}
+	
+	if (tile->getHeight() > 0) {
+		return false;
+	}
 
 	return true;
 }
