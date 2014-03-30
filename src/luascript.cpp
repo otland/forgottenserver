@@ -9110,7 +9110,7 @@ int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 		slot = static_cast<slots_t>(getNumber<int64_t>(L, 6));
 		subType = getNumber<int32_t>(L, 5);
 	} else if (parameters >= 5) {
-		slot = static_cast<slots_t>(getNumber<int64_t>(L, 5));
+		subType = getNumber<int32_t>(L, 5);
 	}
 
 	bool canDropOnMap = true;
