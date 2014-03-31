@@ -9100,17 +9100,17 @@ int32_t LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 
 int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 {
-	// player:addItem(itemId[, count/subType = 1[, canDropOnMap = true[, slot = CONST_SLOT_WHEREEVER]]])
 	// player:addItem(itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = CONST_SLOT_WHEREEVER]]]])
 	int32_t parameters = getStackTop(L);
 
 	slots_t slot = CONST_SLOT_WHEREEVER;
-	int32_t subType = 1;
 	if (parameters >= 6) {
 		slot = static_cast<slots_t>(getNumber<int64_t>(L, 6));
+	}
+
+	int32_t subType = 1;
+	if (parameters >= 5) {
 		subType = getNumber<int32_t>(L, 5);
-	} else if (parameters >= 5) {
-		slot = static_cast<slots_t>(getNumber<int64_t>(L, 5));
 	}
 
 	bool canDropOnMap = true;
