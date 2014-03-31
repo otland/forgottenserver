@@ -98,16 +98,24 @@ void Teleport::__addThing(int32_t, Thing* thing)
 		return;
 	}
 
+	const ItemType& it = Item::items[getID()];
+
 	if (Creature* creature = thing->getCreature()) {
 		Position origPos = creature->getPosition();
 		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? WEST : EAST);
 		getTile()->moveCreature(creature, destTile);
-		g_game.addMagicEffect(origPos, CONST_ME_TELEPORT);
-		g_game.addMagicEffect(destTile->getPosition(), CONST_ME_TELEPORT);
+		if (it.magicEffect != CONST_ME_NONE) {
+			g_game.addMagicEffect(origPos, it.magicEffect);
+			g_game.addMagicEffect(destTile->getPosition(), it.magicEffect);
+		}
 	} else if (Item* item = thing->getItem()) {
-		g_game.addMagicEffect(item->getPosition(), CONST_ME_TELEPORT);
+		if (it.magicEffect != CONST_ME_NONE) {
+			g_game.addMagicEffect(item->getPosition(), it.magicEffect);
+		}
 		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr);
-		g_game.addMagicEffect(destTile->getPosition(), CONST_ME_TELEPORT);
+		if (it.magicEffect != CONST_ME_NONE) {
+			g_game.addMagicEffect(destTile->getPosition(), it.magicEffect);
+		}
 	}
 }
 

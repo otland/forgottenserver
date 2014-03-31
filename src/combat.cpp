@@ -546,8 +546,8 @@ bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 {
 	CombatDamage damage = *reinterpret_cast<CombatDamage*>(data);
 
-	bool blockPrimary = g_game.combatBlockHit(damage.primary.type, caster, target, damage.primary.value, params.blockedByShield, params.blockedByArmor);
-	bool blockSecondary = g_game.combatBlockHit(damage.secondary.type, caster, target, damage.secondary.value, false, false);
+	bool blockPrimary = g_game.combatBlockHit(damage.primary.type, caster, target, damage.primary.value, params.blockedByShield, params.blockedByArmor, params.itemId != 0);
+	bool blockSecondary = g_game.combatBlockHit(damage.secondary.type, caster, target, damage.secondary.value, false, false, params.itemId != 0);
 	if (blockPrimary) {
 		if (blockSecondary) {
 			return false;

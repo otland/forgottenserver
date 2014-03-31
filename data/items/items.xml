@@ -461,6 +461,7 @@
 	<item id="1387" article="a" name="magic forcefield">
 		<attribute key="description" value="You can see the other side through it." />
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport" />
 	</item>
 	<item id="1388" article="a" name="ramp">
 		<attribute key="floorchange" value="east" />
@@ -484,6 +485,7 @@
 	<item id="1397" article="a" name="mystic flame">
 		<attribute key="description" value="You feel drawn to the mesmerizing light." />
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport" />
 	</item>
 	<item id="1398" article="a" name="ramp">
 		<attribute key="floorchange" value="east" />
@@ -8154,6 +8156,7 @@
 	<item fromid="5023" toid="5024" article="a" name="magic forcefield">
 		<attribute key="type" value="teleport" />
 		<attribute key="description" value="You can see the other side trough it." />
+		<attribute key="effect" value="teleport" />
 	</item>
 	<item fromid="5025" toid="5044" article="a" name="bamboo lamp" />
 	<item id="5045" article="a" name="flat roof" />
@@ -14792,6 +14795,7 @@
 	<item id="8058" article="a" name="mystic flame">
 		<attribute key="description" value="You feel drawn to the mesmerizing light." />
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport" />
 	</item>
 	<item id="8059" article="a" name="sanctified grave" />
 	<item fromid="8060" toid="8061" name="" />
@@ -16491,6 +16495,7 @@
 	</item>
 	<item id="9110" article="a" name="strange whirl">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport" />
 	</item>
 	<item id="9111" article="a" name="garlic bread">
 		<attribute key="weight" value="500" />
@@ -17321,6 +17326,7 @@
 		<attribute key="slotType" value="feet" />
 		<attribute key="decayTo" value="10022" />
 		<attribute key="transformDeEquipTo" value="9933" />
+		<attribute key="fieldabsorbpercentfire" value="90" />
 		<attribute key="duration" value="3600" />
 		<attribute key="showduration" value="1" />
 		<attribute key="showattributes" value="1" />
@@ -20724,13 +20730,10 @@
 		<attribute key="description" value="It is able to store memories and thoughts." />
 		<attribute key="weight" value="140" />
 	</item>
-	<item id="12509" article="a" name="magic portal">
+	<item fromid="12509" toid="12510" article="a" name="magic portal">
 		<attribute key="description" value="You can see the other side through it." />
 		<attribute key="type" value="teleport" />
-	</item>
-	<item id="12510" article="a" name="magic portal">
-		<attribute key="description" value="You can see the other side through it." />
-		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport" />
 	</item>
 	<item fromid="12511" toid="12526" article="a" name="palisade" />
 	<item id="12527" article="a" name="dead brimstone bug">
@@ -24563,6 +24566,7 @@
 	<item id="17867" article="a" name="large blue crystal" />
 	<item id="17868" article="a" name="large crystal teleporter">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport" />
 	</item>
 	<item fromid="17869" toid="17880" name="basalt" />
 	<item fromid="17881" toid="17892" name="crystals" />
