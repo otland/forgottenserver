@@ -826,6 +826,42 @@ void Monster::doAttacking(uint32_t interval)
 	if (updateLook) {
 		updateLookDirection();
 	}
+	
+	if (!isSummon() && summons.size() < mType->maxSummons) {
+		for (const summonBlock_t& summonBlock : mType->summonList) {
+			if (summonBlock.speed > attackTicks) {
+				resetTicks = false;
+				continue;
+			}
+
+			if (summons.size() >= mType->maxSummons) {
+				continue;
+			}
+
+			if (attackTicks % summonBlock.speed >= interval) {
+				//already used this spell for this round
+				continue;
+			}
+
+			if (summonBlock.chance < (uint32_t)uniform_random(1, 100)) {
+				continue;
+			}
+
+			Monster* summon = Monster::createMonster(summonBlock.name);
+			if (summon) {
+				const Position& summonPos = getPosition();
+
+				addSummon(summon);
+
+				if (!g_game.placeCreature(summon, summonPos)) {
+					removeSummon(summon);
+				} else {
+					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
+					g_game.addMagicEffect(summon->getPosition(), CONST_ME_TELEPORT);
+				}
+			}
+		}
+	}
 
 	if (resetTicks) {
 		attackTicks = 0;
@@ -938,42 +974,6 @@ void Monster::onThinkDefense(uint32_t interval)
 			minCombatValue = spellBlock.minCombatValue;
 			maxCombatValue = spellBlock.maxCombatValue;
 			spellBlock.spell->castSpell(this, this);
-		}
-	}
-
-	if (!isSummon() && summons.size() < mType->maxSummons) {
-		for (const summonBlock_t& summonBlock : mType->summonList) {
-			if (summonBlock.speed > defenseTicks) {
-				resetTicks = false;
-				continue;
-			}
-
-			if (summons.size() >= mType->maxSummons) {
-				continue;
-			}
-
-			if (defenseTicks % summonBlock.speed >= interval) {
-				//already used this spell for this round
-				continue;
-			}
-
-			if (summonBlock.chance < (uint32_t)uniform_random(1, 100)) {
-				continue;
-			}
-
-			Monster* summon = Monster::createMonster(summonBlock.name);
-			if (summon) {
-				const Position& summonPos = getPosition();
-
-				addSummon(summon);
-
-				if (!g_game.placeCreature(summon, summonPos)) {
-					removeSummon(summon);
-				} else {
-					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
-					g_game.addMagicEffect(summon->getPosition(), CONST_ME_TELEPORT);
-				}
-			}
 		}
 	}
 
