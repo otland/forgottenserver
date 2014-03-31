@@ -298,6 +298,7 @@ class Tile : public Cylinder
 		virtual std::string getDescription(int32_t lookDistance) const;
 
 		void moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport = false);
+		uint32_t getHeight() const;
 		int32_t getClientIndexOfThing(const Player* player, const Thing* thing) const;
 
 		//cylinder implementations
