@@ -291,7 +291,7 @@ if NpcHandler == nil then
 	function NpcHandler:getMessage(id)
 		local ret = nil
 		if self.messages ~= nil then
-			ret = choose(self.messages[id])
+			ret = self.messages[id]
 		end
 		return ret
 	end
@@ -593,6 +593,11 @@ if NpcHandler == nil then
 	--	This implements the currently set type of talkdelay.
 	--	shallDelay is a boolean value. If it is false, the message is not delayed. Default value is true.
 	function NpcHandler:say(message, focus, publicize, shallDelay, delay)
+		if not focus then
+			selfSay(message)
+			return
+		end
+
 		if type(message) == "table" then
 			return self:doNPCTalkALot(message, delay or 6000, focus)
 		end
@@ -608,6 +613,13 @@ if NpcHandler == nil then
 		end
 
 		stopEvent(self.eventSay[focus])
-		self.eventSay[focus] = addEvent(function(x) if isPlayer(x[3]) then doCreatureSay(x[1], x[2], TALKTYPE_PRIVATE_NP, false, x[3], getCreaturePosition(x[1])) end end, self.talkDelayTime * 1000, {getNpcCid(), message, focus})
+		self.eventSay[focus] = addEvent(function(x)
+			if Player(x[3]) ~= nil then
+				local creature = Creature(x[1])
+				if creature then
+					creature:say(x[2], TALKTYPE_PRIVATE_NP, false, x[3], creature:getPosition())
+				end
+			end
+		end, self.talkDelayTime * 1000, {getNpcCid(), message, focus})
 	end
 end
