@@ -2,14 +2,14 @@ local increasing = {[416] = 417, [426] = 425, [446] = 447, [3216] = 3217, [3202]
 local decreasing = {[417] = 416, [425] = 426, [447] = 446, [3217] = 3216, [3215] = 3202, [11063] = 11062}
 
 function onStepIn(cid, item, position, fromPosition)
-	if not config.increasing[item.itemid] then
+	if not increasing[item.itemid] then
 		return false
 	end
 	local player = Player(cid)
 	if not player or player:isInGhostMode() then
 		return false
 	end
-	Item(item.uid):transform(config.increasing[item.itemid])
+	Item(item.uid):transform(increasing[item.itemid])
 
 	if item.actionid >= 1000 then
 		if player:getLevel() < item.actionid - 1000 then
@@ -42,14 +42,14 @@ function onStepIn(cid, item, position, fromPosition)
 end
 
 function onStepOut(cid, item, position, fromPosition)
-	if not config.decreasing[item.itemid] then
+	if not decreasing[item.itemid] then
 		return false
 	end
 	local player = Player(cid)
 	if not player or player:isInGhostMode() then
 		return false
 	end
-	Item(item.uid):transform(config.decreasing[item.itemid])
+	Item(item.uid):transform(decreasing[item.itemid])
 
 	return true
 end
