@@ -1,4 +1,4 @@
-local food = {
+local FOODS = {
 	[2362] = {5, "Crunch."}, -- carrot
 	[2666] = {15, "Munch."}, -- meat
 	[2667] = {12, "Munch."}, -- fish
@@ -99,15 +99,14 @@ local food = {
 }
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
-	local player = Player(cid)
-
 	local food = FOODS[item.itemid]
 	if food == nil then
 		return false
 	end
 
+	local player = Player(cid)
 	local condition = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
-	if condition ~= nil and math.floor(condition:getTicks() / 1000 + food[1]) >= 1200 then
+	if condition and math.floor(condition:getTicks() / 1000 + food[1]) >= 1200 then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are full.")
 	else
 		player:feed(food[1] * 12)

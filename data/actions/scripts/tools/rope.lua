@@ -12,7 +12,6 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		Player(cid):teleportTo({x = toPosition.x, y = toPosition.y + 1, z = toPosition.z - 1}, false)
 		return true
 	elseif isInArray(holeId, itemEx.itemid) then
-		local player = Player(cid)
 		toPosition.z = toPosition.z + 1
 		tile = toPosition:getTile()
 		if tile then
@@ -23,7 +22,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 				return thing:moveTo(toPosition)
 			end
 		end
-		return player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_NOTPOSSIBLE))
+		return Player(cid):sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end
 
 	return false
