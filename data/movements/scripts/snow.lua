@@ -1,4 +1,4 @@
-function onStepIn(cid, item, position, fromPosition)
+function onStepOut(cid, item, position, fromPosition)
 	local player = Player(cid)
 	if player and player:isInGhostMode() then
 		return true
