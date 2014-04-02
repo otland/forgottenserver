@@ -1,73 +1,55 @@
-local increasingItemID = {416, 446, 3216, 11062}
-local decreasingItemID = {417, 447, 3217, 11063}
+local increasing = {[416] = 417, [426] = 425, [446] = 447, [3216] = 3217, [3202] = 3215, [11062] = 11063}
+local decreasing = {[417] = 416, [425] = 426, [447] = 446, [3217] = 3216, [3215] = 3202, [11063] = 11062}
 
 function onStepIn(cid, item, position, fromPosition)
-	if isInArray(increasingItemID, item.itemid) then
-		doTransformItem(item.uid, item.itemid + 1)
-		if item.actionid > 1000 then
-			getLevelTile(cid, item, position)
-		elseif getTilePzInfo(position) then
-			getDepotItems(cid, position)
+	if not increasing[item.itemid] then
+		return false
+	end
+	local player = Player(cid)
+	if not player or player:isInGhostMode() then
+		return false
+	end
+	Item(item.uid):transform(increasing[item.itemid])
+
+	if item.actionid >= 1000 then
+		if player:getLevel() < item.actionid - 1000 then
+			player:teleportTo(fromPosition, false)
+			position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
+			player:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
 		end
-	elseif item.itemid == 426 then
-		doTransformItem(item.uid, 425)
-		if item.actionid > 1000 then
-			getLevelTile(cid, item, position)
-		elseif getTilePzInfo(position) then
-			getDepotItems(cid, position)
+		return true
+	end
+
+	if item.actionid ~= 0 and player:getStorageValue(item.actionid) <= 0 then
+		player:teleportTo(fromPosition, false)
+		position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
+		return true
+	end
+
+	if position:getTile():hasFlag(TILESTATE_PROTECTIONZONE) then
+		local lookPos = player:getPosition()
+		lookPos:getNextPosition(player:getDirection())
+		local depotItem = lookPos:getTile():getItemByType(ITEM_TYPE_DEPOT)
+		if depotItem ~= nil then
+			local depotItems = player:getDepotChest(getDepotId(depotItem:getUniqueId()), true):getItemHoldingCount()
+			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, "Your depot contains " .. depotItems .. " item" .. (depotItems > 1 and "s." or "."))
+			return true
 		end
 	end
+
 	return true
 end
 
 function onStepOut(cid, item, position, fromPosition)
-	if isInArray(decreasingItemID, item.itemid) then
-		doTransformItem(item.uid, item.itemid - 1)
-	elseif item.itemid == 425 then
-		doTransformItem(item.uid, item.itemid + 1)
+	if not decreasing[item.itemid] then
+		return false
 	end
+	local player = Player(cid)
+	if not player or player:isInGhostMode() then
+		return false
+	end
+	Item(item.uid):transform(decreasing[item.itemid])
+
 	return true
-end
-
-function getLevelTile(cid, item, position)
-	local player = Player(cid)
-	if player == nil then
-		return
-	end
-
-	if player:getLevel() < item.actionid - 1000 then
-		local playerPosition = player:getPosition()
-		doTeleportThing(cid, {x = playerPosition.x, y = playerPosition.y, z = playerPosition.z + 1})
-		playerPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
-	end
-end
-
-function getDepotItems(cid, position)
-	local player = Player(cid)
-	if player == nil then
-		return
-	end
-
-	local possiblePositions = {
-		{x = position.x - 1, y = position.y, z = position.z},
-		{x = position.x + 1, y = position.y, z = position.z},
-		{x = position.x, y = position.y - 1, z = position.z},
-		{x = position.x, y = position.y + 1, z = position.z},
-	}
-
-	for i = 1, #possiblePositions do
-		local tile = Tile(possiblePositions[i])
-		if tile ~= nil then
-			local item = tile:getItemByType(ITEM_TYPE_DEPOT)
-			if item ~= nil then
-				local depotItems = player:getDepotItems(getDepotId(item:getUniqueId()))
-				if depotItems == 1 then
-					player:sendTextMessage(MESSAGE_EVENT_DEFAULT, 'Your depot contains 1 item.')
-				else
-					player:sendTextMessage(MESSAGE_EVENT_DEFAULT, 'Your depot contains '  .. depotItems .. ' items.')
-				end
-				break
-			end
-		end
-	end
 end
