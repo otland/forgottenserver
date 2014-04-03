@@ -125,10 +125,6 @@ class Spell : public BaseSpell
 		void postCastSpell(Player* player, bool finishedSpell = true, bool payCost = true) const;
 		void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
 
-		uint8_t getSpellId() const {
-			return spellId;
-		}
-
 		uint32_t getManaCost(const Player* player) const;
 		uint32_t getSoulCost() const {
 			return soul;
@@ -138,9 +134,6 @@ class Spell : public BaseSpell
 		}
 		uint32_t getMagicLevel() const {
 			return magLevel;
-		}
-		uint32_t getMana() const {
-			return mana;
 		}
 		uint32_t getManaPercent() const {
 			return manaPercent;

@@ -63,15 +63,6 @@ enum ItemDecayState_t {
 	DECAYING_PENDING
 };
 
-/*from iomap.h*/
-#pragma pack(1)
-struct TeleportDest {
-	uint16_t _x;
-	uint16_t _y;
-	uint8_t _z;
-};
-#pragma pack()
-
 enum AttrTypes_t {
 	//ATTR_DESCRIPTION = 1,
 	//ATTR_EXT_FILE = 2,

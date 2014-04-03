@@ -514,7 +514,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		//Teleport class
 		case ATTR_TELE_DEST: {
-			TeleportDest* tele_dest;
+			Position* tele_dest;
 			if (!propStream.GET_STRUCT(tele_dest)) {
 				return ATTR_READ_ERROR;
 			}

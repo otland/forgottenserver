@@ -26,9 +26,6 @@ extern Game g_game;
 
 Teleport::Teleport(uint16_t _type) : Item(_type)
 {
-	destPos.x = 0;
-	destPos.y = 0;
-	destPos.z = 0;
 }
 
 Teleport::~Teleport()
@@ -39,12 +36,12 @@ Teleport::~Teleport()
 Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (ATTR_TELE_DEST == attr) {
-		TeleportDest* tele_dest;
+		Position* tele_dest;
 		if (!propStream.GET_STRUCT(tele_dest)) {
 			return ATTR_READ_ERROR;
 		}
 
-		setDestPos(Position(tele_dest->_x, tele_dest->_y, tele_dest->_z));
+		setDestPos(*tele_dest);
 		return ATTR_READ_CONTINUE;
 	} else {
 		return Item::readAttr(attr, propStream);
@@ -54,15 +51,8 @@ Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 bool Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	bool ret = Item::serializeAttr(propWriteStream);
-
 	propWriteStream.ADD_UCHAR(ATTR_TELE_DEST);
-
-	TeleportDest tele_dest;
-	tele_dest._x = destPos.x;
-	tele_dest._y = destPos.y;
-	tele_dest._z = (uint8_t)destPos.z;
-	propWriteStream.ADD_VALUE(tele_dest);
-
+	propWriteStream.ADD_VALUE(destPos);
 	return ret;
 }
 

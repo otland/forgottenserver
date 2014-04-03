@@ -347,13 +347,6 @@ class Player : public Creature, public Cylinder
 			return (blessings & ((uint8_t)1 << value)) != 0;
 		}
 
-		bool isFemale() const {
-			return sex == PLAYERSEX_FEMALE;
-		}
-		bool isMale() const {
-			return sex == PLAYERSEX_MALE;
-		}
-
 		bool isOffline() const {
 			return (getID() == 0);
 		}
