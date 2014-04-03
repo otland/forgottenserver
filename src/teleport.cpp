@@ -36,12 +36,9 @@ Teleport::~Teleport()
 Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (ATTR_TELE_DEST == attr) {
-		Position* tele_dest;
-		if (!propStream.GET_STRUCT(tele_dest)) {
+		if (!propStream.GET_USHORT(destPos.x) || !propStream.GET_USHORT(destPos.y) || !propStream.GET_UCHAR(destPos.z)) {
 			return ATTR_READ_ERROR;
 		}
-
-		setDestPos(*tele_dest);
 		return ATTR_READ_CONTINUE;
 	} else {
 		return Item::readAttr(attr, propStream);

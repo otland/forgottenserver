@@ -42,9 +42,6 @@ class Teleport : public Item, public Cylinder
 		void setDestPos(const Position& pos) {
 			destPos = pos;
 		}
-		const Position& getDestPos() const {
-			return destPos;
-		}
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
