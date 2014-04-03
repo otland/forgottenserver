@@ -49,7 +49,9 @@ bool Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	bool ret = Item::serializeAttr(propWriteStream);
 	propWriteStream.ADD_UCHAR(ATTR_TELE_DEST);
-	propWriteStream.ADD_VALUE(destPos);
+	propWriteStream.ADD_USHORT(destPos.x);
+	propWriteStream.ADD_USHORT(destPos.y);
+	propWriteStream.ADD_UCHAR(destPos.z);
 	return ret;
 }
 
