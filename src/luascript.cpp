@@ -2029,6 +2029,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ModalWindow", "getTitle", LuaScriptInterface::luaModalWindowGetTitle);
 	registerMethod("ModalWindow", "getMessage", LuaScriptInterface::luaModalWindowGetMessage);
 
+	registerMethod("ModalWindow", "setTitle", LuaScriptInterface::luaModalWindowSetTitle);
+	registerMethod("ModalWindow", "setMessage", LuaScriptInterface::luaModalWindowSetMessage);
+
 	registerMethod("ModalWindow", "getButtonCount", LuaScriptInterface::luaModalWindowGetButtonCount);
 	registerMethod("ModalWindow", "getChoiceCount", LuaScriptInterface::luaModalWindowGetChoiceCount);
 
@@ -6352,6 +6355,34 @@ int32_t LuaScriptInterface::luaModalWindowGetMessage(lua_State* L)
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
 		pushString(L, window->message);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaModalWindowSetTitle(lua_State* L)
+{
+	// modalWindow:setTitle(text)
+	const std::string& text = getString(L, 2);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
+	if (window) {
+		window->title = text;
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaModalWindowSetMessage(lua_State* L)
+{
+	// modalWindow:setMessage(text)
+	const std::string& text = getString(L, 2);
+	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
+	if (window) {
+		window->message = text;
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
