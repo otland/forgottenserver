@@ -19,7 +19,7 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="100" poison="160"/>
+		<attack name="melee" interval="2000" min="-0" max="-250" poison="160"/>
 		<attack name="speed" interval="2000" chance="15" range="7" radius="6" target="0" speedchange="-800" duration="15000">
 			<attribute key="areaEffect" value="poff"/>
 		</attack>
