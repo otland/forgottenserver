@@ -342,7 +342,10 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					while (nodeItem) {
 						if (type == OTBM_ITEM) {
 							PropStream stream;
-							f.getProps(nodeItem, stream);
+							if (!f.getProps(nodeItem, stream)) {
+								setLastErrorString("Invalid item node.");
+								return false;
+							}
 
 							Item* item = Item::CreateItem(stream);
 							if (!item) {

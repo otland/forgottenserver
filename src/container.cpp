@@ -132,7 +132,9 @@ bool Container::unserializeItemNode(FileLoader& f, NODE node, PropStream& propSt
 		}
 
 		PropStream itemPropStream;
-		f.getProps(nodeItem, itemPropStream);
+		if (!f.getProps(nodeItem, itemPropStream)) {
+			return false;
+		}
 
 		Item* item = Item::CreateItem(itemPropStream);
 		if (!item) {
