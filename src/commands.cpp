@@ -430,7 +430,7 @@ void Commands::serverDiag(Player& player, const std::string&)
 	text << "lua: " << LUA_VERSION << "\n";
 	text << "pugixml: " << PUGIXML_VERSION << "\n";
 
-	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, text.str().c_str());
+	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, text.str());
 #else
 	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
 #endif
