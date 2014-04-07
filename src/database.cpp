@@ -182,7 +182,7 @@ std::string Database::escapeBlob(const char* s, uint32_t length) const
 
 DBResult_ptr Database::verifyResult(DBResult_ptr result)
 {
-	if (!result->next()) {
+	if (!result->hasNext()) {
 		return nullptr;
 	}
 	return result;
@@ -199,6 +199,8 @@ DBResult::DBResult(MYSQL_RES* res)
 		m_listNames[field->name] = i++;
 		field = mysql_fetch_field(m_handle);
 	}
+
+	m_row = mysql_fetch_row(m_handle);
 }
 
 DBResult::~DBResult()
@@ -252,6 +254,11 @@ const char* DBResult::getDataStream(const std::string& s, unsigned long& size) c
 
 	size = mysql_fetch_lengths(m_handle)[it->second];
 	return m_row[it->second];
+}
+
+bool DBResult::hasNext() const
+{
+	return m_row != nullptr;
 }
 
 bool DBResult::next()

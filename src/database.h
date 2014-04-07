@@ -165,6 +165,7 @@ class DBResult
 		std::string getDataString(const std::string& s) const;
 		const char* getDataStream(const std::string& s, unsigned long& size) const;
 
+		bool hasNext() const;
 		bool next();
 
 	protected:
