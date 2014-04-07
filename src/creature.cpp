@@ -1406,18 +1406,16 @@ bool Creature::isSuppress(ConditionType_t type) const
 	return hasBitSet((uint32_t)type, getConditionSuppressions());
 }
 
-int32_t Creature::getStepDuration(Direction dir) const
+int64_t Creature::getStepDuration(Direction dir) const
 {
-	int32_t stepDuration = getStepDuration();
-
+	int64_t stepDuration = getStepDuration();
 	if (dir == NORTHWEST || dir == NORTHEAST || dir == SOUTHWEST || dir == SOUTHEAST) {
 		stepDuration *= 3;
 	}
-
 	return stepDuration;
 }
 
-int32_t Creature::getStepDuration() const
+int64_t Creature::getStepDuration() const
 {
 	if (isRemoved()) {
 		return 0;
@@ -1427,10 +1425,8 @@ int32_t Creature::getStepDuration() const
 	uint32_t groundSpeed;
 
 	int32_t stepSpeed = getStepSpeed();
-
 	if (stepSpeed > -Creature::speedB) {
 		calculatedStepSpeed = floor((Creature::speedA * log((stepSpeed / 2) + Creature::speedB) + Creature::speedC) + 0.5);
-
 		if (calculatedStepSpeed <= 0) {
 			calculatedStepSpeed = 1;
 		}
@@ -1439,11 +1435,9 @@ int32_t Creature::getStepDuration() const
 	}
 
 	const Tile* tile = getTile();
-
 	if (tile && tile->ground) {
 		uint32_t groundId = tile->ground->getID();
 		groundSpeed = Item::items[groundId].speed;
-
 		if (groundSpeed == 0) {
 			groundSpeed = 150;
 		}
@@ -1452,8 +1446,7 @@ int32_t Creature::getStepDuration() const
 	}
 
 	double duration = std::floor(1000 * groundSpeed / calculatedStepSpeed);
-
-	int32_t stepDuration = std::ceil(duration / 50) * 50;
+	int64_t stepDuration = std::ceil(duration / 50) * 50;
 
 	const Monster* monster = getMonster();
 	if (monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
