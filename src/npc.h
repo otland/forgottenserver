@@ -267,6 +267,7 @@ class Npc : public Creature
 
 		bool floorChange;
 		bool attackable;
+		bool ignoreHeight;
 		bool loaded;
 
 		static NpcScriptInterface* m_scriptInterface;

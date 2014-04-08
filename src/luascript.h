@@ -692,6 +692,9 @@ class LuaScriptInterface
 		static int32_t luaModalWindowGetTitle(lua_State* L);
 		static int32_t luaModalWindowGetMessage(lua_State* L);
 
+		static int32_t luaModalWindowSetTitle(lua_State* L);
+		static int32_t luaModalWindowSetMessage(lua_State* L);
+
 		static int32_t luaModalWindowGetButtonCount(lua_State* L);
 		static int32_t luaModalWindowGetChoiceCount(lua_State* L);
 
