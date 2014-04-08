@@ -6894,39 +6894,39 @@ int32_t LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 int32_t LuaScriptInterface::luaItemMoveTo(lua_State* L)
 {
 	// item:moveTo(position)
-	const Position& position = getPosition(L, 2);
 	Item** itemPtr = getRawUserdata<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (*itemPtr) {
-		Item* item = *itemPtr;
-		if (position == item->getPosition()) {
-			pushBoolean(L, true);
-		} else if (item->isRemoved()) {
-			lua_pushnil(L);
-		} else {
-			Tile* tile = g_game.getTile(position.x, position.y, position.z);
-			if (!tile) {
-				lua_pushnil(L);
-				return 1;
-			}
-
-			if (item->getParent() == VirtualCylinder::virtualCylinder) {
-				pushBoolean(L, g_game.internalAddItem(tile, item) == RET_NOERROR);
-			} else {
-				Item* moveItem = nullptr;
-				ReturnValue ret = g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
-				if (moveItem) {
-					*itemPtr = moveItem;
-				}
-				pushBoolean(L, ret == RET_NOERROR);
-			}
-		}
-	} else {
+	Item* item = *itemPtr;
+	if (!item || item->isRemoved()) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	const Position& position = getPosition(L, 2);
+	Tile* tile = g_game.getTile(position);
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (item->getParent() == tile) {
+		pushBoolean(L, true);
+		return 1;
+	}
+
+	if (item->getParent() == VirtualCylinder::virtualCylinder) {
+		pushBoolean(L, g_game.internalAddItem(tile, item) == RET_NOERROR);
+	} else {
+		Item* moveItem = nullptr;
+		ReturnValue ret = g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
+		if (moveItem) {
+			*itemPtr = moveItem;
+		}
+		pushBoolean(L, ret == RET_NOERROR);
 	}
 	return 1;
 }
