@@ -61,12 +61,13 @@ if NpcHandler == nil then
 	TAG_ITEMNAME = "|ITEMNAME|"
 
 	NpcHandler = {
+		shopMode = SHOPMODULE_MODE_TRADE,
 		keywordHandler = nil,
 		focuses = nil,
 		talkStart = nil,
 		idleTime = 120,
 		talkRadius = 3,
-		talkDelayTime = 1, -- Seconds to delay outgoing messages.
+		talkDelayTime = 0.7, -- Seconds to delay outgoing messages.
 		talkDelay = nil,
 		callbackFunctions = nil,
 		modules = nil,
@@ -213,8 +214,8 @@ if NpcHandler == nil then
 			self:processModuleCallback(CALLBACK_ONRELEASEFOCUS, focus)
 		end
 
-		if Player(focus) ~= nil then
-			closeShopWindow(focus) --Even if it can not exist, we need to prevent it.
+		if Player(focus) then
+			closeShopWindow(focus) -- Even if it can not exist, we need to prevent it.
 			self:updateFocus()
 		end
 	end
@@ -318,22 +319,17 @@ if NpcHandler == nil then
 			return
 		end
 
-		local callback = self:getCallback(CALLBACK_FAREWELL)
-		if callback == nil or callback() then
-			if self:processModuleCallback(CALLBACK_FAREWELL) then
-				local msg = self:getMessage(MESSAGE_FAREWELL)
-				local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
-				self:resetNpc(cid)
-				msg = self:parseMessage(msg, parseInfo)
-				self:say(msg, cid, true)
-				self:releaseFocus(cid)
-			end
-		end
+		local msg = self:getMessage(MESSAGE_FAREWELL)
+		local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+		self:resetNpc(cid)
+		msg = self:parseMessage(msg, parseInfo)
+		self:say(msg, cid, true)
+		self:releaseFocus(cid)
 	end
 
 	-- Greets a new player.
 	function NpcHandler:greet(cid)
-		if cid ~= 0  then
+		if cid ~= 0 then
 			local callback = self:getCallback(CALLBACK_GREET)
 			if callback == nil or callback(cid) then
 				if self:processModuleCallback(CALLBACK_GREET, cid) then
@@ -347,8 +343,8 @@ if NpcHandler == nil then
 			else
 				return
 			end
+			self:addFocus(cid)
 		end
-		self:addFocus(cid)
 	end
 
 	-- Handles onCreatureAppear events. If you with to handle this yourself, please use the CALLBACK_CREATURE_APPEAR callback.
@@ -397,9 +393,9 @@ if NpcHandler == nil then
 				end
 
 				if self.keywordHandler ~= nil then
-					if self:isFocused(cid) and msgtype == TALKTYPE_PRIVATE_PN or not self:isFocused(cid) then
+					if msgtype == TALKTYPE_PRIVATE_PN or not self:isFocused(cid) then
 						local ret = self.keywordHandler:processMessage(cid, msg)
-						if(not ret) then
+						if not ret then
 							local callback = self:getCallback(CALLBACK_MESSAGE_DEFAULT)
 							if callback ~= nil and callback(cid, msgtype, msg) then
 								self.talkStart[cid] = os.time()
@@ -484,7 +480,7 @@ if NpcHandler == nil then
 			end
 
 			if self:processModuleCallback(CALLBACK_ONTHINK) then
-				for pos, focus in pairs(self.focuses) do
+				for _, focus in pairs(self.focuses) do
 					if focus ~= nil then
 						if not self:isInRange(focus) then
 							self:onWalkAway(focus)
@@ -505,13 +501,26 @@ if NpcHandler == nil then
 			if not self:isFocused(cid) then
 				self:greet(cid)
 				return
+			else
+				local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+				local msg = self:parseMessage(self:getMessage(MESSAGE_ALREADYFOCUSED), parseInfo)
+				self:say(msg, cid)
+				return
 			end
 		end
 	end
 
 	-- Simply calls the underlying unGreet function.
 	function NpcHandler:onFarewell(cid)
-		self:unGreet(cid)
+		if not self:isFocused(cid) then
+			return
+		end
+		local callback = self:getCallback(CALLBACK_FAREWELL)
+		if callback == nil or callback(cid) then
+			if self:processModuleCallback(CALLBACK_FAREWELL, cid) then
+				self:unGreet(cid)
+			end
+		end
 	end
 
 	-- Should be called on this npc's focus if the distance to focus is greater then talkRadius.
@@ -520,27 +529,23 @@ if NpcHandler == nil then
 			local callback = self:getCallback(CALLBACK_CREATURE_DISAPPEAR)
 			if callback == nil or callback() then
 				if self:processModuleCallback(CALLBACK_CREATURE_DISAPPEAR, cid) then
-					local msg = self:getMessage(MESSAGE_WALKAWAY)
-					local playerName = Player(cid):getName()
-					if not playerName then
-						playerName = -1
-					end
-
-					local parseInfo = { [TAG_PLAYERNAME] = playerName }
-					local message = self:parseMessage(msg, parseInfo)
+					local player = Player(cid)
+					local parseInfo = { [TAG_PLAYERNAME] = player:getName() }
 
 					local msg_male = self:getMessage(MESSAGE_WALKAWAY_MALE)
-					local message_male = self:parseMessage(msg_male, parseInfo)
 					local msg_female = self:getMessage(MESSAGE_WALKAWAY_FEMALE)
-					local message_female = self:parseMessage(msg_female, parseInfo)
-					if message_female ~= message_male then
-						if Player(cid):getSex() == 0 then
-							selfSay(message_female)
+					if msg_male ~= msg_female then
+						if player:getSex() == 0 then
+							msg_female = self:parseMessage(msg_female, parseInfo)
+							selfSay(msg_female)
 						else
-							selfSay(message_male)
+							msg_male = self:parseMessage(msg_male, parseInfo)
+							selfSay(msg_male)
 						end
-					elseif message ~= "" then
-						selfSay(message)
+					else
+						local msg = self:getMessage(MESSAGE_WALKAWAY)
+						msg = self:parseMessage(msg, parseInfo)
+						selfSay(msg)
 					end
 					self:resetNpc(cid)
 					self:releaseFocus(cid)
@@ -551,7 +556,7 @@ if NpcHandler == nil then
 
 	-- Returns true if cid is within the talkRadius of this npc.
 	function NpcHandler:isInRange(cid)
-		local distance = Player(cid) ~= nil and getDistanceTo(cid) or -1
+		local distance = Player(cid) and getDistanceTo(cid) or -1
 		if distance == -1 then
 			return false
 		end
@@ -599,7 +604,7 @@ if NpcHandler == nil then
 		end
 
 		if type(message) == "table" then
-			return self:doNPCTalkALot(message, delay or 6000, focus)
+			return self:doNPCTalkALot(message, delay or 4000, focus)
 		end
 
 		if self.eventDelayedSay[focus] then
@@ -615,11 +620,13 @@ if NpcHandler == nil then
 		stopEvent(self.eventSay[focus])
 		self.eventSay[focus] = addEvent(function(x)
 			if Player(x[3]) ~= nil then
-				local creature = Creature(x[1])
-				if creature then
-					creature:say(x[2], TALKTYPE_PRIVATE_NP, false, x[3], creature:getPosition())
+				if x[1] then
+					if x[4] then
+						x[1]:say(x[2], TALKTYPE_SAY)
+					end
+					x[1]:say(x[2], TALKTYPE_PRIVATE_NP, false, x[3])
 				end
 			end
-		end, self.talkDelayTime * 1000, {getNpcCid(), message, focus})
+		end, self.talkDelayTime * 1000, {Npc(), message, focus, publicize})
 	end
 end

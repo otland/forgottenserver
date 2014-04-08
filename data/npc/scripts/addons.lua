@@ -6,10 +6,10 @@ function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
 function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
 function onCreatureSay(cid, type, msg)	npcHandler:onCreatureSay(cid, type, msg)	end
 function onThink()						npcHandler:onThink()						end
+function onPlayerCloseChannel(cid)		npcHandler:onPlayerCloseChannel(cid)		end
 
 function buyAddons(cid, message, keywords, parameters, node)
-	--TODO: buyAddons function in modules.lua
-	if(not npcHandler:isFocused(cid)) then
+	if not npcHandler:isFocused(cid) then
 		return false
 	end
 
@@ -18,7 +18,7 @@ function buyAddons(cid, message, keywords, parameters, node)
 	local premium = (parameters.premium ~= nil and parameters.premium)
 
 	if isPlayerPremiumCallback == nil or (isPlayerPremiumCallback(cid) and premium) then
-		if doPlayerRemoveMoney(cid, cost) == TRUE then
+		if doPlayerRemoveMoney(cid, cost) then
 			doPlayerAddAddons(cid, addon)
 			npcHandler:say('There, you are now able to use all addons!', cid)
 		else

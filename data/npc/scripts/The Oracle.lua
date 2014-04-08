@@ -6,20 +6,22 @@ local vocation = {}
 local town = {}
 local destination = {}
 
-function onCreatureAppear(cid) npcHandler:onCreatureAppear(cid) end
-function onCreatureDisappear(cid) npcHandler:onCreatureDisappear(cid) end
-function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
-function onThink() npcHandler:onThink() end
+function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
+function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
+function onCreatureSay(cid, type, msg)	npcHandler:onCreatureSay(cid, type, msg)	end
+function onThink()						npcHandler:onThink()						end
+function onPlayerCloseChannel(cid)		npcHandler:onPlayerCloseChannel(cid)		end
 
 local function greetCallback(cid)
-	local level = getPlayerLevel(cid)
+	local player = Player(cid)
+	local level = player:getLevel()
 	if level < 8 then
 		npcHandler:say("CHILD! COME BACK WHEN YOU HAVE GROWN UP!", cid)
 		return false
 	elseif level > 9 then
-		npcHandler:say(getCreatureName(cid) .. ", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
+		npcHandler:say(player:getName() .. ", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
 		return false
-	elseif getPlayerVocation(cid) > 0 then
+	elseif player:getVocation():getId() > 0 then
 		npcHandler:say("YOU ALREADY HAVE A VOCATION!", cid)
 		return false
 	end
@@ -62,15 +64,16 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("{KNIGHT}, {PALADIN}, {SORCERER}, OR {DRUID}?", cid)
 		end
 	elseif npcHandler.topic[cid] == 3 then
+		local player = Player(cid)
 		if msgcontains(msg, "yes") then
 			npcHandler:say("SO BE IT!", cid)
-			doPlayerSetVocation(cid, vocation[cid])
-			doPlayerSetTown(cid, town[cid])
-			local destination = destination[cid]
+			player:setVocation(Vocation(vocation[cid]))
+			player:setTown(Town(town[cid]))
+			local destination = Position(destination[cid])
 			npcHandler:releaseFocus(cid)
-			doSendMagicEffect(getCreaturePosition(cid), CONST_ME_TELEPORT)
-			doTeleportThing(cid, destination)
-			doSendMagicEffect(destination, CONST_ME_TELEPORT)
+			player:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
+			player:teleportTo(destination)
+			destination:sendMagicEffect(CONST_ME_TELEPORT)
 		else
 			npcHandler:say("THEN WHAT? {KNIGHT}, {PALADIN}, {SORCERER}, OR {DRUID}?", cid)
 			npcHandler.topic[cid] = 2
@@ -93,6 +96,10 @@ end
 
 npcHandler:setCallback(CALLBACK_ONADDFOCUS, onAddFocus)
 npcHandler:setCallback(CALLBACK_ONRELEASEFOCUS, onReleaseFocus)
+
+npcHandler:setMessage(MESSAGE_GREET, "|PLAYERNAME|, ARE YOU PREPARED TO FACE YOUR DESTINY?")
+npcHandler:setMessage(MESSAGE_FAREWELL, "COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!")
+npcHandler:setMessage(MESSAGE_WALKAWAY, "COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!")
 
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
