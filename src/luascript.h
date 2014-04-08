@@ -291,7 +291,7 @@ class LuaScriptInterface
 
 		// Get
 		template<typename T>
-		static T getNumber(lua_State* L, int32_t arg)
+		inline static T getNumber(lua_State* L, int32_t arg)
 		{
 			return static_cast<T>(lua_tonumber(L, arg));
 		}
@@ -313,7 +313,7 @@ class LuaScriptInterface
 			return *userdata;
 		}
 		template<class T>
-		static T** getRawUserdata(lua_State* L, int32_t arg)
+		inline static T** getRawUserdata(lua_State* L, int32_t arg)
 		{
 			return static_cast<T**>(lua_touserdata(L, arg));
 		}
@@ -349,17 +349,31 @@ class LuaScriptInterface
 
 		static std::string getFieldString(lua_State* L, int32_t arg, const std::string& key);
 
-		// Other
-		static int32_t getStackTop(lua_State* L);
-
 		// Is
-		static bool isNil(lua_State* L, int32_t arg);
-		static bool isNumber(lua_State* L, int32_t arg);
-		static bool isString(lua_State* L, int32_t arg);
-		static bool isBoolean(lua_State* L, int32_t arg);
-		static bool isTable(lua_State* L, int32_t arg);
-		static bool isFunction(lua_State* L, int32_t arg);
-		static bool isUserdata(lua_State* L, int32_t arg);
+		inline static bool isNumber(lua_State* L, int32_t arg)
+		{
+			return lua_isnumber(L, arg) != 0;
+		}
+		inline static bool isString(lua_State* L, int32_t arg)
+		{
+			return lua_isstring(L, arg) != 0;
+		}
+		inline static bool isBoolean(lua_State* L, int32_t arg)
+		{
+			return lua_isboolean(L, arg);
+		}
+		inline static bool isTable(lua_State* L, int32_t arg)
+		{
+			return lua_istable(L, arg);
+		}
+		inline static bool isFunction(lua_State* L, int32_t arg)
+		{
+			return lua_isfunction(L, arg);
+		}
+		inline static bool isUserdata(lua_State* L, int32_t arg)
+		{
+			return lua_isuserdata(L, arg) != 0;
+		}
 
 		// Pop
 		template<typename T>

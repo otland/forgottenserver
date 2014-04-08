@@ -1068,12 +1068,12 @@ int32_t NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 	}
 
 	int32_t sellCallback = -1;
-	if (isFunction(L, 5)) {
+	if (LuaScriptInterface::isFunction(L, 5)) {
 		sellCallback = luaL_ref(L, LUA_REGISTRYINDEX);
 	}
 
 	int32_t buyCallback = -1;
-	if (isFunction(L, 4)) {
+	if (LuaScriptInterface::isFunction(L, 4)) {
 		buyCallback = luaL_ref(L, LUA_REGISTRYINDEX);
 	}
 
