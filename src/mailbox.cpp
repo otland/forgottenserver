@@ -39,10 +39,9 @@ Mailbox::~Mailbox()
 
 ReturnValue Mailbox::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t, Creature*) const
 {
-	if (const Item* item = thing->getItem()) {
-		if (canSend(item)) {
-			return RET_NOERROR;
-		}
+	const Item* item = thing->getItem();
+	if (item && canSend(item)) {
+		return RET_NOERROR;
 	}
 	return RET_NOTPOSSIBLE;
 }
@@ -70,10 +69,9 @@ void Mailbox::__addThing(Thing* thing)
 
 void Mailbox::__addThing(int32_t, Thing* thing)
 {
-	if (Item* item = thing->getItem()) {
-		if (canSend(item)) {
-			sendItem(item);
-		}
+	Item* item = thing->getItem();
+	if (item && canSend(item)) {
+		sendItem(item);
 	}
 }
 
@@ -140,43 +138,22 @@ bool Mailbox::sendItem(Item* item)
 
 bool Mailbox::getReceiver(Item* item, std::string& name)
 {
-	if (!item) {
-		return false;
-	}
-
-	const std::string* text = nullptr;
-
-	if (item->getID() == ITEM_PARCEL) { /**We need to get the text from the label incase its a parcel**/
-		Container* parcel = item->getContainer();
-		if (parcel) {
-			for (Item* parcelItem : parcel->getItemList()) {
-				if (parcelItem->getID() == ITEM_LABEL) {
-					item = parcelItem;
-					text = &item->getText();
-					if (!text->empty()) {
-						break;
-					}
-				}
+	const Container* container = item->getContainer();
+	if (container) {
+		for (Item* containerItem : container->getItemList()) {
+			if (containerItem->getID() == ITEM_LABEL && getReceiver(containerItem, name)) {
+				return true;
 			}
 		}
-	} else if (item->getID() != ITEM_LETTER) { /**The item is somehow not a parcel or letter**/
-		std::cout << "Mailbox::getReciver error, trying to get reciecer from unkown item! ID: " << item->getID() << '.' << std::endl;
 		return false;
 	}
 
-	if (!item) {
+	const std::string& text = item->getText();
+	if (text.empty()) {
 		return false;
 	}
 
-	if (!text) {
-		text = &item->getText();
-	}
-
-	if (text->empty()) {
-		return false;
-	}
-
-	name = getFirstLine(*text);
+	name = getFirstLine(text);
 	trimString(name);
 	return true;
 }

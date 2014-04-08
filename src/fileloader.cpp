@@ -194,42 +194,42 @@ bool FileLoader::parseNode(NODE node)
 
 const uint8_t* FileLoader::getProps(const NODE node, size_t& size)
 {
-	if (node) {
-		if (node->propsSize >= m_buffer_size) {
-			delete[] m_buffer;
+	if (!node) {
+		return nullptr;
+	}
 
-			while (node->propsSize >= m_buffer_size) {
-				m_buffer_size *= 2;
-			}
+	if (node->propsSize >= m_buffer_size) {
+		delete[] m_buffer;
 
-			m_buffer = new uint8_t[m_buffer_size];
+		while (node->propsSize >= m_buffer_size) {
+			m_buffer_size *= 2;
 		}
 
-		//get buffer
-		if (readBytes(m_buffer, node->propsSize, node->start + 2)) {
-			//unscape buffer
-			size_t j = 0;
-			bool escaped = false;
+		m_buffer = new uint8_t[m_buffer_size];
+	}
 
-			for (uint32_t i = 0; i < node->propsSize; ++i, ++j) {
-				if (m_buffer[i] == ESCAPE_CHAR) {
-					//escape char found, skip it and write next
-					++i;
-					m_buffer[j] = m_buffer[i];
-					//is neede a displacement for next bytes
-					escaped = true;
-				} else if (escaped) {
-					//perform that displacement
-					m_buffer[j] = m_buffer[i];
-				}
-			}
+	//get buffer
+	if (!readBytes(m_buffer, node->propsSize, node->start + 2)) {
+		return nullptr;
+	}
 
-			size = j;
-			return m_buffer;
+	//unscape buffer
+	size_t j = 0;
+	bool escaped = false;
+	for (uint32_t i = 0; i < node->propsSize; ++i, ++j) {
+		if (m_buffer[i] == ESCAPE_CHAR) {
+			//escape char found, skip it and write next
+			m_buffer[j] = m_buffer[++i];
+			//is neede a displacement for next bytes
+			escaped = true;
+		} else if (escaped) {
+			//perform that displacement
+			m_buffer[j] = m_buffer[i];
 		}
 	}
 
-	return nullptr;
+	size = j;
+	return m_buffer;
 }
 
 bool FileLoader::getProps(const NODE node, PropStream& props)

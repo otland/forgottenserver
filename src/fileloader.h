@@ -25,24 +25,20 @@ struct NodeStruct;
 typedef NodeStruct* NODE;
 
 struct NodeStruct {
-		NodeStruct() {
-			start = propsSize = type = 0;
-			next = child = 0;
+	NodeStruct() : start(0), propsSize(0), type(0), next(nullptr), child(nullptr) {}
+	~NodeStruct() {}
+
+	uint32_t start;
+	uint32_t propsSize;
+	uint32_t type;
+	NodeStruct* next;
+	NodeStruct* child;
+
+	static void clearNet(NodeStruct* root) {
+		if (root) {
+			clearChild(root);
 		}
-
-		~NodeStruct() {}
-
-		uint32_t start;
-		uint32_t propsSize;
-		uint32_t type;
-		NodeStruct* next;
-		NodeStruct* child;
-
-		static void clearNet(NodeStruct* root) {
-			if (root) {
-				clearChild(root);
-			}
-		}
+	}
 
 	private:
 		static void clearNext(NodeStruct* node) {
