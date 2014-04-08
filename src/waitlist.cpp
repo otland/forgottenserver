@@ -108,7 +108,6 @@ bool WaitingList::clientLogin(const Player* player)
 
 		if (slot > waitList.size()) {
 			waitList.push_back(wait);
-			--slot;
 		}
 	} else {
 		waitList.push_back(wait);
