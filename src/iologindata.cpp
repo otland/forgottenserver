@@ -184,7 +184,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 		return false;
 	}
 	player->setGroup(group);
-	player->accountNumber = (uint32_t)result->getDataInt("account_id");
+	player->accountNumber = result->getNumber<uint32_t>("account_id");
 	player->accountType = (AccountType_t)result->getDataInt("account_type");
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		player->premiumDays = result->getDataInt("premium_days");

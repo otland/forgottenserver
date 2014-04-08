@@ -296,7 +296,7 @@ class Items
 		ItemType& getItemType(size_t id);
 		const ItemType& getItemIdByClientId(uint16_t spriteId) const;
 
-		int32_t getItemIdByName(const std::string& name);
+		uint16_t getItemIdByName(const std::string& name);
 
 		static uint32_t dwMajorVersion;
 		static uint32_t dwMinorVersion;

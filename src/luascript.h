@@ -295,6 +295,14 @@ class LuaScriptInterface
 		{
 			return static_cast<T>(lua_tonumber(L, arg));
 		}
+		template<typename T>
+		static T getNumber(lua_State *L, int32_t arg, T defaultValue)
+		{
+			if (arg > lua_gettop(L)) {
+				return defaultValue;
+			}
+			return static_cast<T>(lua_tonumber(L, arg));
+		}
 		template<class T>
 		static T* getUserdata(lua_State* L, int32_t arg)
 		{
@@ -310,8 +318,19 @@ class LuaScriptInterface
 			return static_cast<T**>(lua_touserdata(L, arg));
 		}
 
+		inline static bool getBoolean(lua_State* L, int32_t arg)
+		{
+			return lua_toboolean(L, arg) != 0;
+		}
+		inline static bool getBoolean(lua_State* L, int32_t arg, bool defaultValue)
+		{
+			if (arg > lua_gettop(L)) {
+				return defaultValue;
+			}
+			return lua_toboolean(L, arg) != 0;
+		}
+
 		static std::string getString(lua_State* L, int32_t arg);
-		static bool getBoolean(lua_State* L, int32_t arg);
 		static Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos);
 		static Position getPosition(lua_State* L, int32_t arg);
 		static Outfit_t getOutfit(lua_State* L, int32_t arg);

@@ -1011,10 +1011,10 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 	return items.front();
 }
 
-int32_t Items::getItemIdByName(const std::string& name)
+uint16_t Items::getItemIdByName(const std::string& name)
 {
 	if (name.empty()) {
-		return -1;
+		return 0;
 	}
 
 	const char* itemName = name.c_str();
@@ -1023,5 +1023,5 @@ int32_t Items::getItemIdByName(const std::string& name)
 			return i;
 		}
 	}
-	return -1;
+	return 0;
 }

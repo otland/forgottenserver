@@ -60,7 +60,7 @@ class Guild
 		}
 
 		GuildRank* getRankById(uint32_t id);
-		GuildRank* getRankByLevel(uint8_t level);
+		const GuildRank* getRankByLevel(uint8_t level) const;
 		void addRank(uint32_t id, const std::string& name, uint8_t level);
 
 		const std::string& getMotd() const {

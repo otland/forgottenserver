@@ -52,7 +52,7 @@ GuildRank* Guild::getRankById(uint32_t id)
 	return nullptr;
 }
 
-GuildRank* Guild::getRankByLevel(uint8_t level)
+const GuildRank* Guild::getRankByLevel(uint8_t level) const
 {
 	for (size_t i = 0; i < ranks.size(); ++i) {
 		if (ranks[i].level == level) {

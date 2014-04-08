@@ -311,7 +311,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 	}
 
 	if (guild) {
-		GuildRank* rank = guild->getRankByLevel(guildLevel);
+		const GuildRank* rank = guild->getRankByLevel(guildLevel);
 		if (rank) {
 			if (lookDistance == -1) {
 				s << " You are ";
