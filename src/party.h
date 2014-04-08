@@ -31,14 +31,11 @@ typedef std::vector<Player*> PlayerVector;
 class Party
 {
 	public:
-		Party(Player* _leader);
+		Party(Player* leader);
 		~Party();
 
 		Player* getLeader() const {
 			return leader;
-		}
-		void setLeader(Player* _leader) {
-			leader = _leader;
 		}
 		PlayerVector& getMembers() {
 			return memberList;

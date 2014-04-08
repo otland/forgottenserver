@@ -375,19 +375,20 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 			}
 
 			case WEAPON_DISTANCE: {
-				if (!ignoreAmmo && item->getAmmoType() != AMMO_NONE) {
+				const ItemType& it = Item::items[item->getID()];
+				if (!ignoreAmmo && it.ammoType != AMMO_NONE) {
 					Item* ammoItem = inventory[CONST_SLOT_AMMO];
-					if (ammoItem && ammoItem->getAmmoType() == item->getAmmoType()) {
+					if (ammoItem && ammoItem->getAmmoType() == it.ammoType) {
 						const Weapon* weapon = g_weapons->getWeapon(ammoItem);
 						if (weapon) {
-							shootRange = item->getShootRange();
+							shootRange = it.shootRange;
 							return ammoItem;
 						}
 					}
 				} else {
 					const Weapon* weapon = g_weapons->getWeapon(item);
 					if (weapon) {
-						shootRange = item->getShootRange();
+						shootRange = it.shootRange;
 						return item;
 					}
 				}
@@ -398,7 +399,6 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 				break;
 		}
 	}
-
 	return nullptr;
 }
 

@@ -29,15 +29,13 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern Events* g_events;
 
-Party::Party(Player* _leader)
+Party::Party(Player* leader)
 {
 	sharedExpActive = false;
 	sharedExpEnabled = false;
 
-	if (_leader) {
-		setLeader(_leader);
-		_leader->setParty(this);
-	}
+	this->leader = leader;
+	leader->setParty(this);
 }
 
 Party::~Party()
@@ -52,7 +50,7 @@ void Party::disband()
 	}
 
 	Player* currentLeader = leader;
-	setLeader(nullptr);
+	leader = nullptr;
 
 	currentLeader->setParty(nullptr);
 	currentLeader->sendClosePrivate(CHANNEL_PARTY);
@@ -169,7 +167,7 @@ bool Party::passPartyLeadership(Player* player)
 	broadcastPartyMessage(MESSAGE_INFO_DESCR, ss.str(), true);
 
 	Player* oldLeader = leader;
-	setLeader(player);
+	leader = player;
 
 	memberList.insert(memberList.begin(), oldLeader);
 
