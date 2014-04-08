@@ -132,6 +132,11 @@ uint32_t Monsters::getLootRandom()
 
 void MonsterType::createLoot(Container* corpse)
 {
+	if (g_config.getNumber(ConfigManager::RATE_LOOT) == 0) {
+		corpse->__startDecaying();
+		return;
+	}
+
 	Player* owner = g_game.getPlayerByID(corpse->getCorpseOwner());
 	if (!owner || owner->getStaminaMinutes() > 840) {
 		for (auto it = lootItems.rbegin(), end = lootItems.rend(); it != end; ++it) {
