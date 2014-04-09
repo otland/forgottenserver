@@ -34,19 +34,16 @@ Account IOLoginData::loadAccount(uint32_t accno)
 {
 	Account account;
 
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << accno;
-
-	DBResult_ptr result = db->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return account;
 	}
 
 	account.id = result->getDataInt("id");
 	account.name = result->getDataString("name");
-	account.accountType = (AccountType_t)result->getDataInt("type");
+	account.accountType = static_cast<AccountType_t>(result->getDataInt("type"));
 	account.premiumDays = result->getDataInt("premdays");
 	account.lastDay = result->getDataInt("lastday");
 	return account;
@@ -65,7 +62,6 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `name` = " << db->escapeString(name);
-
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -77,7 +73,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 
 	account.id = result->getDataInt("id");
 	account.name = result->getDataString("name");
-	account.accountType = (AccountType_t)result->getDataInt("type");
+	account.accountType = static_cast<AccountType_t>(result->getDataInt("type"));
 	account.premiumDays = result->getDataInt("premdays");
 	account.lastDay = result->getDataInt("lastday");
 
@@ -101,7 +97,6 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 
 	std::ostringstream query;
 	query << "SELECT `id`, `password` FROM `accounts` WHERE `name` = " << db->escapeString(accountName);
-
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return 0;
@@ -131,7 +126,6 @@ AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 {
 	std::ostringstream query;
 	query << "SELECT `type` FROM `accounts` WHERE `id` = " << accountId;
-
 	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return ACCOUNT_TYPE_NORMAL;
@@ -167,7 +161,6 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 		query << ", (SELECT `premdays` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premium_days`";
 	}
 	query << " FROM `players` WHERE `name` = " << db->escapeString(name);
-
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -185,7 +178,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	}
 	player->setGroup(group);
 	player->accountNumber = result->getNumber<uint32_t>("account_id");
-	player->accountType = (AccountType_t)result->getDataInt("account_type");
+	player->accountType = static_cast<AccountType_t>(result->getDataInt("account_type"));
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		player->premiumDays = result->getDataInt("premium_days");
 	} else {
@@ -601,7 +594,6 @@ bool IOLoginData::savePlayer(Player* player)
 
 	std::ostringstream query;
 	query << "SELECT `save` FROM `players` WHERE `id` = " << player->getGUID();
-
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -615,7 +607,6 @@ bool IOLoginData::savePlayer(Player* player)
 
 	//serialize conditions
 	PropWriteStream propWriteStream;
-
 	for (Condition* condition : player->conditions) {
 		if (condition->isPersistent()) {
 			if (!condition->serialize(propWriteStream)) {
@@ -839,7 +830,6 @@ bool IOLoginData::getNameByGuid(uint32_t guid, std::string& name)
 {
 	std::ostringstream query;
 	query << "SELECT `name` FROM `players` WHERE `id` = " << guid;
-
 	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -855,7 +845,6 @@ bool IOLoginData::getGuidByName(uint32_t& guid, std::string& name)
 
 	std::ostringstream query;
 	query << "SELECT `id`, `name` FROM `players` WHERE `name` = " << db->escapeString(name);
-
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -872,7 +861,6 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 
 	std::ostringstream query;
 	query << "SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = " << db->escapeString(name);
-
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;

@@ -103,7 +103,7 @@ void Protocol::XTEA_encrypt(OutputMessage& msg) const
 		for (int32_t i = 32; --i >= 0;) {
 			v0 += ((v1 << 4 ^ v1 >> 5) + v1) ^ (sum + k[sum & 3]);
 			sum -= delta;
-			v1 += ((v0 << 4 ^ v0 >> 5) + v0) ^ (sum + k[sum >> 11 & 3]);
+			v1 += ((v0 << 4 ^ v0 >> 5) + v0) ^ (sum + k[(sum >> 11) & 3]);
 		}
 
 		buffer[readPos++] = v0;
@@ -128,7 +128,7 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 		uint32_t sum = 0xC6EF3720;
 
 		for (int32_t i = 32; --i >= 0;) {
-			v1 -= ((v0 << 4 ^ v0 >> 5) + v0) ^ (sum + k[sum >> 11 & 3]);
+			v1 -= ((v0 << 4 ^ v0 >> 5) + v0) ^ (sum + k[(sum >> 11) & 3]);
 			sum += delta;
 			v0 -= ((v1 << 4 ^ v1 >> 5) + v1) ^ (sum + k[sum & 3]);
 		}
