@@ -40,19 +40,6 @@ ServiceManager::~ServiceManager()
 	stop();
 }
 
-std::list<uint16_t> ServiceManager::get_ports() const
-{
-	std::list<uint16_t> ports;
-
-	for (std::map<uint16_t, ServicePort_ptr>::const_iterator it = m_acceptors.begin();
-	        it != m_acceptors.end(); ++it) {
-		ports.push_back(it->first);
-	}
-
-	ports.unique();
-	return ports;
-}
-
 void ServiceManager::die()
 {
 	m_io_service.stop();

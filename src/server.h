@@ -120,7 +120,6 @@ class ServiceManager
 		bool is_running() const {
 			return m_acceptors.empty() == false;
 		}
-		std::list<uint16_t> get_ports() const;
 
 	protected:
 		void die();
