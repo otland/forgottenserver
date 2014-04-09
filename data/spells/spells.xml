@@ -4,6 +4,12 @@
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight"/>
 	</instant>
+	<instant group="attack" spellid="89" name="Apprentice's Strike" words="exori min flam" lvl="8" mana="6" prem="1" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/apprentice's strike.lua">
+		<vocation name="Sorcerer"/>
+		<vocation name="Druid"/>
+		<vocation name="Master Sorcerer"/>
+		<vocation name="Elder Druid"/>
+	</instant>
 	<instant group="attack" spellid="80" name="Berserk" words="exori" lvl="35" mana="115" prem="1" needweapon="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/berserk.lua">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight"/>
