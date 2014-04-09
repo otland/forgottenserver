@@ -531,15 +531,6 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 	return channel->talk(player, type, text);
 }
 
-std::string Chat::getChannelName(const Player& player, uint16_t channelId)
-{
-	ChatChannel* channel = getChannel(player, channelId);
-	if (!channel) {
-		return std::string();
-	}
-	return channel->getName();
-}
-
 ChannelList Chat::getChannelList(const Player& player)
 {
 	ChannelList list;
