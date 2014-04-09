@@ -166,6 +166,7 @@ Item::Item(const uint16_t _type, uint16_t _count /*= 0*/)
 Item::Item(const Item& i) :
 	Thing()
 {
+	parent = nullptr;
 	useCount = 0;
 
 	//std::cout << "Item copy constructor " << this << std::endl;
