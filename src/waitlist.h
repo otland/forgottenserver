@@ -51,7 +51,7 @@ class WaitingList
 
 		static uint32_t getTimeout(uint32_t slot);
 		WaitListIterator findClient(const Player* player, uint32_t& slot);
-		void cleanupList(WaitList& list);
+		static void cleanupList(WaitList& list);
 };
 
 #endif
