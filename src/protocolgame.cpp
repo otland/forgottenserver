@@ -1357,9 +1357,16 @@ void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& mes
 {
 	NetworkMessage msg;
 	if (pos != nullptr && (mclass == MESSAGE_DAMAGE_DEALT || mclass == MESSAGE_DAMAGE_RECEIVED || mclass == MESSAGE_HEALED || mclass == MESSAGE_EXPERIENCE || mclass == MESSAGE_DAMAGE_OTHERS || mclass == MESSAGE_HEALED_OTHERS || mclass == MESSAGE_EXPERIENCE_OTHERS)) {
-		AddTextMessageEx(msg, mclass, message, *pos, value, color);
+		msg.AddByte(0xB4);
+		msg.AddByte(mclass);
+		msg.AddPosition(*pos);
+		msg.add<uint32_t>(value);
+		msg.AddByte(color);
+		msg.AddString(message);
 	} else {
-		AddTextMessage(msg, mclass, message);
+		msg.AddByte(0xB4);
+		msg.AddByte(mclass);
+		msg.AddString(message);
 	}
 
 	writeToOutputBuffer(msg);
@@ -2173,14 +2180,54 @@ void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackPos)
 void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos/* = nullptr*/)
 {
 	NetworkMessage msg;
-	AddCreatureSpeak(msg, creature, type, text, 0, pos);
+	msg.AddByte(0xAA);
+
+	static uint32_t statementId = 0;
+	msg.add<uint32_t>(++statementId); // statement id
+
+	msg.AddString(creature->getName());
+
+	//Add level only for players
+	if (const Player* speaker = creature->getPlayer()) {
+		msg.add<uint16_t>(speaker->getPlayerInfo(PLAYERINFO_LEVEL));
+	} else {
+		msg.add<uint16_t>(0x00);
+	}
+
+	msg.AddByte(type);
+	if (pos) {
+		msg.AddPosition(*pos);
+	} else {
+		msg.AddPosition(creature->getPosition());
+	}
+
+	msg.AddString(text);
 	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId)
 {
 	NetworkMessage msg;
-	AddCreatureSpeak(msg, creature, type, text, channelId);
+	msg.AddByte(0xAA);
+
+	static uint32_t statementId = 0;
+	msg.add<uint32_t>(++statementId); // statement id
+	if (!creature || type == TALKTYPE_CHANNEL_R2) {
+		msg.add<uint32_t>(0x00);
+		type = TALKTYPE_CHANNEL_R1;
+	} else {
+		msg.AddString(creature->getName());
+		//Add level only for players
+		if (const Player* speaker = creature->getPlayer()) {
+			msg.add<uint16_t>(speaker->getPlayerInfo(PLAYERINFO_LEVEL));
+		} else {
+			msg.add<uint16_t>(0x00);
+		}
+	}
+
+	msg.AddByte(type);
+	msg.add<uint16_t>(channelId);
+	msg.AddString(text);
 	writeToOutputBuffer(msg);
 }
 
@@ -2233,7 +2280,10 @@ void ProtocolGame::sendPingBack()
 void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, uint8_t type)
 {
 	NetworkMessage msg;
-	AddDistanceShoot(msg, from, to, type);
+	msg.AddByte(0x85);
+	msg.AddPosition(from);
+	msg.AddPosition(to);
+	msg.AddByte(type);
 	writeToOutputBuffer(msg);
 }
 
@@ -2244,14 +2294,23 @@ void ProtocolGame::sendMagicEffect(const Position& pos, uint8_t type)
 	}
 
 	NetworkMessage msg;
-	AddMagicEffect(msg, pos, type);
+	msg.AddByte(0x83);
+	msg.AddPosition(pos);
+	msg.AddByte(type);
 	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendCreatureHealth(const Creature* creature)
 {
 	NetworkMessage msg;
-	AddCreatureHealth(msg, creature);
+	msg.AddByte(0x8C);
+	msg.add<uint32_t>(creature->getID());
+
+	if (creature->isHealthHidden()) {
+		msg.AddByte(0x00);
+	} else {
+		msg.AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1)));
+	}
 	writeToOutputBuffer(msg);
 }
 
@@ -2275,23 +2334,29 @@ void ProtocolGame::sendMapDescription(const Position& pos)
 
 void ProtocolGame::sendAddTileItem(const Position& pos, uint32_t stackpos, const Item* item)
 {
-	if (!canSee(pos)) {
+	if (stackpos >= 10 || !canSee(pos)) {
 		return;
 	}
 
 	NetworkMessage msg;
-	AddTileItem(msg, pos, stackpos, item);
+	msg.AddByte(0x6A);
+	msg.AddPosition(pos);
+	msg.AddByte(stackpos);
+	msg.AddItem(item);
 	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendUpdateTileItem(const Position& pos, uint32_t stackpos, const Item* item)
 {
-	if (!canSee(pos)) {
+	if (stackpos >= 10 || !canSee(pos)) {
 		return;
 	}
 
 	NetworkMessage msg;
-	UpdateTileItem(msg, pos, stackpos, item);
+	msg.AddByte(0x6B);
+	msg.AddPosition(pos);
+	msg.AddByte(stackpos);
+	msg.AddItem(item);
 	writeToOutputBuffer(msg);
 }
 
@@ -2801,39 +2866,6 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 }
 
 ////////////// Add common messages
-void ProtocolGame::AddTextMessage(NetworkMessage& msg, MessageClasses mclass, const std::string& message)
-{
-	msg.AddByte(0xB4);
-	msg.AddByte(mclass);
-	msg.AddString(message);
-}
-
-void ProtocolGame::AddTextMessageEx(NetworkMessage& msg, MessageClasses mclass, const std::string& message, const Position& pos, uint32_t value, TextColor_t color)
-{
-	msg.AddByte(0xB4);
-	msg.AddByte(mclass);
-	msg.AddPosition(pos);
-	msg.add<uint32_t>(value);
-	msg.AddByte(color);
-	msg.AddString(message);
-}
-
-void ProtocolGame::AddMagicEffect(NetworkMessage& msg, const Position& pos, uint8_t type)
-{
-	msg.AddByte(0x83);
-	msg.AddPosition(pos);
-	msg.AddByte(type + 1);
-}
-
-void ProtocolGame::AddDistanceShoot(NetworkMessage& msg, const Position& from, const Position& to,
-                                    uint8_t type)
-{
-	msg.AddByte(0x85);
-	msg.AddPosition(from);
-	msg.AddPosition(to);
-	msg.AddByte(type + 1);
-}
-
 void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove)
 {
 	CreatureType_t creatureType = creature->getType();
@@ -2974,75 +3006,6 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	msg.AddByte(player->getSkill(SKILL_FISHING, SKILLVALUE_PERCENT));
 }
 
-void ProtocolGame::AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-                                    const std::string& text, uint16_t channelId, const Position* pos/* = nullptr*/)
-{
-	if (!creature) {
-		return;
-	}
-
-	msg.AddByte(0xAA);
-
-	static uint32_t statementId = 0;
-	msg.add<uint32_t>(++statementId); // statement id
-
-	if (type == TALKTYPE_CHANNEL_R2) {
-		msg.add<uint16_t>(0x00);
-		type = TALKTYPE_CHANNEL_R1;
-	} else {
-		msg.AddString(creature->getName());
-	}
-
-	//Add level only for players
-	if (const Player* speaker = creature->getPlayer()) {
-		msg.add<uint16_t>(speaker->getPlayerInfo(PLAYERINFO_LEVEL));
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	msg.AddByte(type);
-
-	switch (type) {
-		case TALKTYPE_SAY:
-		case TALKTYPE_WHISPER:
-		case TALKTYPE_YELL:
-		case TALKTYPE_MONSTER_SAY:
-		case TALKTYPE_MONSTER_YELL:
-		case TALKTYPE_PRIVATE_NP: {
-			if (pos) {
-				msg.AddPosition(*pos);
-			} else {
-				msg.AddPosition(creature->getPosition());
-			}
-
-			break;
-		}
-
-		case TALKTYPE_CHANNEL_Y:
-		case TALKTYPE_CHANNEL_R1:
-		case TALKTYPE_CHANNEL_O:
-			msg.add<uint16_t>(channelId);
-			break;
-
-		default:
-			break;
-	}
-
-	msg.AddString(text);
-}
-
-void ProtocolGame::AddCreatureHealth(NetworkMessage& msg, const Creature* creature)
-{
-	msg.AddByte(0x8C);
-	msg.add<uint32_t>(creature->getID());
-
-	if (creature->isHealthHidden()) {
-		msg.AddByte(0x00);
-	} else {
-		msg.AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1)));
-	}
-}
-
 void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 {
 	msg.add<uint16_t>(outfit.lookType);
@@ -3079,18 +3042,6 @@ void ProtocolGame::AddCreatureLight(NetworkMessage& msg, const Creature* creatur
 }
 
 //tile
-void ProtocolGame::AddTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Item* item)
-{
-	if (stackpos >= 10) {
-		return;
-	}
-
-	msg.AddByte(0x6A);
-	msg.AddPosition(pos);
-	msg.AddByte(stackpos);
-	msg.AddItem(item);
-}
-
 void ProtocolGame::AddTileCreature(NetworkMessage& msg, const Position& pos, uint32_t stackpos,
                                    const Creature* creature)
 {
@@ -3106,18 +3057,6 @@ void ProtocolGame::AddTileCreature(NetworkMessage& msg, const Position& pos, uin
 	uint32_t removedKnown;
 	checkCreatureAsKnown(creature->getID(), known, removedKnown);
 	AddCreature(msg, creature, known, removedKnown);
-}
-
-void ProtocolGame::UpdateTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Item* item)
-{
-	if (stackpos >= 10) {
-		return;
-	}
-
-	msg.AddByte(0x6B);
-	msg.AddPosition(pos);
-	msg.AddByte(stackpos);
-	msg.AddItem(item);
 }
 
 void ProtocolGame::RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos)

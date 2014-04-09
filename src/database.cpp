@@ -152,7 +152,11 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	database_lock.unlock();
 
 	// retriving results of query
-	return verifyResult(DBResult_ptr(new DBResult(m_res)));
+	DBResult_ptr result = DBResult_ptr(new DBResult(m_res));
+	if (!result->hasNext()) {
+		return nullptr;
+	}
+	return result;
 }
 
 std::string Database::escapeString(const std::string& s) const
@@ -178,14 +182,6 @@ std::string Database::escapeBlob(const char* s, uint32_t length) const
 
 	escaped.push_back('\'');
 	return escaped;
-}
-
-DBResult_ptr Database::verifyResult(DBResult_ptr result)
-{
-	if (!result->hasNext()) {
-		return nullptr;
-	}
-	return result;
 }
 
 DBResult::DBResult(MYSQL_RES* res)

@@ -4595,10 +4595,6 @@ void Game::addCreatureHealth(const SpectatorVec& list, const Creature* target)
 
 void Game::addMagicEffect(const Position& pos, uint8_t effect)
 {
-	if (effect > CONST_ME_LAST) {
-		return;
-	}
-
 	SpectatorVec list;
 	getSpectators(list, pos, true, true);
 	addMagicEffect(list, pos, effect);
@@ -4606,10 +4602,6 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect)
 
 void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect)
 {
-	if (effect > CONST_ME_LAST) {
-		return;
-	}
-
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			tmpPlayer->sendMagicEffect(pos, effect);
@@ -4619,10 +4611,6 @@ void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t
 
 void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	if (effect > CONST_ANI_LAST || effect == CONST_ANI_UNK1 || effect == CONST_ANI_UNK2 || effect == CONST_ANI_UNK3) {
-		return;
-	}
-
 	SpectatorVec list;
 	getSpectators(list, fromPos, false, true);
 	getSpectators(list, toPos, false, true);
@@ -4631,10 +4619,6 @@ void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uin
 
 void Game::addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	if (effect > CONST_ANI_LAST || effect == CONST_ANI_UNK1 || effect == CONST_ANI_UNK2 || effect == CONST_ANI_UNK3) {
-		return;
-	}
-
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			tmpPlayer->sendDistanceShoot(fromPos, toPos, effect);

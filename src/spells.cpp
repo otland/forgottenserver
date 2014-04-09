@@ -1545,32 +1545,27 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 		}
 	}
 
-	ReturnValue ret;
 	Monster* monster = Monster::createMonster(param);
-	if (monster) {
-		// Place the monster
-		creature->addSummon(monster);
-
-		if (!g_game.placeCreature(monster, creature->getPosition(), true)) {
-			creature->removeSummon(monster);
-			ret = RET_NOTENOUGHROOM;
-		} else {
-			ret = RET_NOERROR;
-		}
-	} else {
-		ret = RET_NOTPOSSIBLE;
-	}
-
-	if (ret == RET_NOERROR) {
-		spell->postCastSpell(player, manaCost, spell->getSoulCost());
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_BLUE);
-		g_game.addMagicEffect(monster->getPosition(), CONST_ME_TELEPORT);
-	} else {
-		player->sendCancelMessage(ret);
+	if (!monster) {
+		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+		return false;
 	}
 
-	return (ret == RET_NOERROR);
+	// Place the monster
+	creature->addSummon(monster);
+
+	if (!g_game.placeCreature(monster, creature->getPosition(), true)) {
+		creature->removeSummon(monster);
+		player->sendCancelMessage(RET_NOTENOUGHROOM);
+		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+		return false;
+	}
+
+	spell->postCastSpell(player, manaCost, spell->getSoulCost());
+	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_BLUE);
+	g_game.addMagicEffect(monster->getPosition(), CONST_ME_TELEPORT);
+	return true;
 }
 
 bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::string& param)

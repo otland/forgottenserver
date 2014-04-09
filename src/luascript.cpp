@@ -1534,7 +1534,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ANI_ENVENOMEDARROW)
 	registerEnum(CONST_ANI_WEAPONTYPE)
 	registerEnum(CONST_ANI_NONE)
-	registerEnum(CONST_ANI_LAST)
 
 	registerEnum(CONST_PROP_BLOCKSOLID)
 	registerEnum(CONST_PROP_HASHEIGHT)
@@ -9182,12 +9181,12 @@ int32_t LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerChannelSay(lua_State* L)
 {
 	// player:channelSay(speaker, type, text, channelId)
-	uint16_t channelId = getNumber<uint16_t>(L, 5);
-	const std::string& text = getString(L, 4);
-	SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 3));
-	Creature* speaker = getCreature(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
+		Creature* speaker = getCreature(L, 2);
+		SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 3));
+		const std::string& text = getString(L, 4);
+		uint16_t channelId = getNumber<uint16_t>(L, 5);
 		player->sendToChannel(speaker, type, text, channelId);
 		pushBoolean(L, true);
 	} else {

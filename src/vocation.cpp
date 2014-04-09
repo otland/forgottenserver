@@ -183,9 +183,8 @@ uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
 uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 Vocation::Vocation(uint16_t id)
-	: id(id)
+	: name("none"), id(id)
 {
-	name = "none";
 	gainHealthTicks = 6;
 	gainHealthAmount = 1;
 	gainManaTicks = 6;

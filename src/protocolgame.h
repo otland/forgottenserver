@@ -306,25 +306,16 @@ class ProtocolGame : public Protocol
 		void GetMapDescription(int32_t x, int32_t y, int32_t z,
 		                       int32_t width, int32_t height, NetworkMessage& msg);
 
-		void AddTextMessage(NetworkMessage& msg, MessageClasses mclass, const std::string& message);
-		void AddTextMessageEx(NetworkMessage& msg, MessageClasses mclass, const std::string& message, const Position& pos, uint32_t value, TextColor_t color);
-		void AddMagicEffect(NetworkMessage& msg, const Position& pos, uint8_t type);
-		void AddDistanceShoot(NetworkMessage& msg, const Position& from, const Position& to, uint8_t type);
 		void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
 		void AddPlayerStats(NetworkMessage& msg);
-		void AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-		                      const std::string& text, uint16_t channelId, const Position* pos = nullptr);
-		void AddCreatureHealth(NetworkMessage& msg, const Creature* creature);
 		void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 		void AddPlayerSkills(NetworkMessage& msg);
 		void AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo);
 		void AddCreatureLight(NetworkMessage& msg, const Creature* creature);
 
 		//tiles
-		void AddTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Item* item);
 		void AddTileCreature(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Creature* creature);
-		void UpdateTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Item* item);
-		void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
+		static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
 
 		void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 		void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);

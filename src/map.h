@@ -119,7 +119,7 @@ class QTreeLeafNode : public QTreeNode
 		virtual ~QTreeLeafNode();
 
 		Floor* createFloor(uint32_t z);
-		Floor* getFloor(uint16_t z) {
+		Floor* getFloor(uint16_t z) const {
 			return m_array[z];
 		}
 
@@ -180,7 +180,7 @@ class Map
 		  */
 		Tile* getTile(int32_t x, int32_t y, int32_t z);
 
-		uint32_t clean();
+		uint32_t clean() const;
 
 		QTreeLeafNode* getLeaf(uint16_t x, uint16_t y) {
 			return root.getLeaf(x, y);
