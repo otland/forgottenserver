@@ -23,14 +23,14 @@
 #include "player.h"
 
 struct Wait {
-	uint32_t acc;
-	uint32_t ip;
-	std::string name;
-	bool premium;
+	Wait(int64_t timeout, uint32_t playerGUID) :
+		timeout(timeout), playerGUID(playerGUID) {}
+
 	int64_t timeout;
+	uint32_t playerGUID;
 };
 
-typedef std::list<Wait*> WaitList;
+typedef std::list<Wait> WaitList;
 typedef WaitList::iterator WaitListIterator;
 
 class WaitingList
@@ -42,16 +42,16 @@ class WaitingList
 		}
 
 		bool clientLogin(const Player* player);
-		int32_t getClientSlot(const Player* player);
-		static int32_t getTime(int32_t slot);
+		uint32_t getClientSlot(const Player* player);
+		static uint32_t getTime(uint32_t slot);
 
 	protected:
 		WaitList priorityWaitList;
 		WaitList waitList;
 
-		static int32_t getTimeOut(int32_t slot);
+		static uint32_t getTimeout(uint32_t slot);
 		WaitListIterator findClient(const Player* player, uint32_t& slot);
-		void cleanUpList();
+		void cleanupList(WaitList& list);
 };
 
 #endif

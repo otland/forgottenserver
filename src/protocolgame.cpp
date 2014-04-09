@@ -171,8 +171,8 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		}
 
 		if (!WaitingList::getInstance()->clientLogin(player)) {
-			int32_t currentSlot = WaitingList::getInstance()->getClientSlot(player);
-			int32_t retryTime = WaitingList::getTime(currentSlot);
+			uint32_t currentSlot = WaitingList::getInstance()->getClientSlot(player);
+			uint32_t retryTime = WaitingList::getTime(currentSlot);
 			std::ostringstream ss;
 
 			ss << "Too many players online.\nYou are at place "
