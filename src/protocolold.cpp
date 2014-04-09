@@ -47,7 +47,7 @@ void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
 
 void ProtocolOld::disconnectClient(const std::string& message)
 {
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolOld::disconnectClient, this, message)));
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolOld::dispatchedDisconnectClient, this, message)));
 }
 
 void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
