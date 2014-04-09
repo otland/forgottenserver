@@ -203,19 +203,3 @@ int32_t ConfigManager::getGlobalNumber(lua_State* _L, const std::string& _identi
 	lua_pop(_L, 1);
 	return val;
 }
-
-std::string ConfigManager::getGlobalStringField(lua_State* _L, const std::string& _identifier, const int32_t _key, const std::string& _default)
-{
-	lua_getglobal(_L, _identifier.c_str());
-
-	lua_pushnumber(_L, _key);
-	lua_gettable(_L, -2);  /* get table[key] */
-
-	if (!lua_isstring(_L, -1)) {
-		return _default;
-	}
-
-	std::string result = lua_tostring(_L, -1);
-	lua_pop(_L, 2);  /* remove number and key*/
-	return result;
-}
