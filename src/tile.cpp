@@ -453,7 +453,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 	}
 }
 
-void Tile::onRemoveTileItem(const SpectatorVec& list, const std::vector<uint32_t>& oldStackPosVector, Item* item)
+void Tile::onRemoveTileItem(const SpectatorVec& list, const std::vector<int32_t>& oldStackPosVector, Item* item)
 {
 	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
 		auto it = g_game.browseFields.find(this);
@@ -509,7 +509,7 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			if (tmpPlayer->canSeeCreature(creature)) {
-				oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, creature));
+				oldStackPosVector.push_back(getClientIndexOfCreature(tmpPlayer, creature));
 			} else {
 				oldStackPosVector.push_back(-1);
 			}
@@ -545,13 +545,12 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 
 	//send to client
 	size_t i = 0;
-
 	for (Creature* spectator : list) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				tmpPlayer->sendCreatureMove(creature, newPos, newTile->getClientIndexOfThing(tmpPlayer, creature), oldPos, stackpos, teleport);
+				tmpPlayer->sendCreatureMove(creature, newPos, newTile->getClientIndexOfCreature(tmpPlayer, creature), oldPos, stackpos, teleport);
 			}
 		}
 	}
@@ -1035,17 +1034,11 @@ void Tile::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	const ItemType& oldType = Item::items[item->getID()];
-
 	const ItemType& newType = Item::items[itemId];
-
 	updateTileFlags(item, true);
-
 	item->setID(itemId);
-
 	item->setSubType(count);
-
 	updateTileFlags(item, false);
-
 	onUpdateTileItem(item, oldType, item, newType);
 }
 
@@ -1148,18 +1141,10 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 	}
 
 	if (item == ground) {
-		std::vector<uint32_t> oldStackPosVector;
-
-		const SpectatorVec& list = g_game.getSpectators(getPosition());
-		for (Creature* spectator : list) {
-			if (Player* tmpPlayer = spectator->getPlayer()) {
-				oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, ground));
-			}
-		}
-
 		ground->setParent(nullptr);
 		ground = nullptr;
-		onRemoveTileItem(list, oldStackPosVector, item);
+		const SpectatorVec& list = g_game.getSpectators(getPosition());
+		onRemoveTileItem(list, std::vector<int32_t>(list.size(), 0), item);
 		return;
 	}
 
@@ -1174,12 +1159,12 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			return;
 		}
 
-		std::vector<uint32_t> oldStackPosVector;
+		std::vector<int32_t> oldStackPosVector;
 
 		const SpectatorVec& list = g_game.getSpectators(getPosition());
 		for (Creature* spectator : list) {
 			if (Player* tmpPlayer = spectator->getPlayer()) {
-				oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, item));
+				oldStackPosVector.push_back(getStackposOfThing(tmpPlayer, item));
 			}
 		}
 
@@ -1202,12 +1187,12 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			const ItemType& itemType = Item::items[item->getID()];
 			onUpdateTileItem(item, itemType, item, itemType);
 		} else {
-			std::vector<uint32_t> oldStackPosVector;
+			std::vector<int32_t> oldStackPosVector;
 
 			const SpectatorVec& list = g_game.getSpectators(getPosition());
 			for (Creature* spectator : list) {
 				if (Player* tmpPlayer = spectator->getPlayer()) {
-					oldStackPosVector.push_back(getClientIndexOfThing(tmpPlayer, item));
+					oldStackPosVector.push_back(getStackposOfThing(tmpPlayer, item));
 				}
 			}
 
@@ -1222,22 +1207,20 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 int32_t Tile::__getIndexOfThing(const Thing* thing) const
 {
 	int32_t n = -1;
-
 	if (ground) {
 		if (ground == thing) {
 			return 0;
 		}
-
 		++n;
 	}
 
 	const TileItemVector* items = getItemList();
 	if (items) {
-		if (thing->getItem()) {
+		const Item* item = thing->getItem();
+		if (item && item->isAlwaysOnTop()) {
 			for (ItemVector::const_iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
 				++n;
-
-				if ((*it) == thing) {
+				if (*it == item) {
 					return n;
 				}
 			}
@@ -1259,19 +1242,78 @@ int32_t Tile::__getIndexOfThing(const Thing* thing) const
 		}
 	}
 
-	if (items && thing->getItem()) {
-        for (ItemVector::const_iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
-            ++n;
-            if ((*it) == thing) {
-                return n;
-            }
-        }
+	if (items) {
+		const Item* item = thing->getItem();
+		if (item && !item->isAlwaysOnTop()) {
+			for (ItemVector::const_iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
+				++n;
+				if (*it == item) {
+					return n;
+				}
+			}
+		}
 	}
-
 	return -1;
 }
 
-int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) const
+int32_t Tile::getClientIndexOfCreature(const Player* player, const Creature* creature) const
+{
+	int32_t n;
+	if (ground) {
+		n = 1;
+	} else {
+		n = 0;
+	}
+
+	const TileItemVector* items = getItemList();
+	if (items) {
+		n += items->getTopItemCount();
+	}
+
+	if (const CreatureVector* creatures = getCreatures()) {
+		for (const Creature* c : boost::adaptors::reverse(*creatures)) {
+			if (c == creature) {
+				return n;
+			} else if (player->canSeeCreature(c)) {
+				++n;
+			}
+		}
+	}
+	return -1;
+}
+
+int32_t Tile::getStackposOfCreature(const Player* player, const Creature* creature) const
+{
+	int32_t n;
+	if (ground) {
+		n = 1;
+	} else {
+		n = 0;
+	}
+
+	const TileItemVector* items = getItemList();
+	if (items) {
+		n += items->getTopItemCount();
+		if (n >= 10) {
+			return -1;
+		}
+	}
+
+	if (const CreatureVector* creatures = getCreatures()) {
+		for (const Creature* c : boost::adaptors::reverse(*creatures)) {
+			if (c == creature) {
+				return n;
+			} else if (player->canSeeCreature(c)) {
+				if (++n >= 10) {
+					return -1;
+				}
+			}
+		}
+	}
+	return -1;
+}
+
+int32_t Tile::getStackposOfThing(const Player* player, const Thing* thing) const
 {
 	int32_t n = 0;
 	if (ground) {
@@ -1283,16 +1325,20 @@ int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) co
 
 	const TileItemVector* items = getItemList();
 	if (items) {
-		if (thing->getItem()) {
+		const Item* item = thing->getItem();
+		if (item && item->isAlwaysOnTop()) {
 			for (ItemVector::const_iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
-				if (*it == thing) {
+				if (*it == item) {
 					return n;
-				} else {
-					++n;
+				} else if (++n == 10) {
+					return -1;
 				}
 			}
 		} else {
 			n += items->getTopItemCount();
+			if (n >= 10) {
+				return -1;
+			}
 		}
 	}
 
@@ -1301,18 +1347,22 @@ int32_t Tile::getClientIndexOfThing(const Player* player, const Thing* thing) co
 			if (creature == thing) {
 				return n;
 			} else if (player->canSeeCreature(creature)) {
-				++n;
+				if (++n >= 10) {
+					return -1;
+				}
 			}
 		}
 	}
 
 	if (items) {
-		if (thing->getItem()) {
+		const Item* item = thing->getItem();
+		if (item && !item->isAlwaysOnTop()) {
 			for (ItemVector::const_iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
-				if (*it == thing) {
+				if (*it == item) {
 					return n;
+				} else if (++n >= 10) {
+					return -1;
 				}
-				++n;
 			}
 		}
 	}

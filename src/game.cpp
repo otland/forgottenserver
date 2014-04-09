@@ -784,11 +784,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 	getSpectators(list, tile->getPosition(), true);
 	for (Creature* spectator : list) {
 		if (Player* player = spectator->getPlayer()) {
-			if (player->canSeeCreature(creature)) {
-				oldStackPosVector.push_back(tile->getClientIndexOfThing(player, creature));
-			} else {
-				oldStackPosVector.push_back(-1);
-			}
+			oldStackPosVector.push_back(player->canSeeCreature(creature) ? tile->getStackposOfCreature(player, creature) : -1);
 		}
 	}
 
@@ -802,13 +798,9 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 
 	//send to client
 	size_t i = 0;
-
 	for (Creature* spectator : list) {
 		if (Player* player = spectator->getPlayer()) {
-			int32_t stackpos = oldStackPosVector[i++];
-			if (stackpos != -1) {
-				player->sendRemoveTileThing(tilePosition, stackpos);
-			}
+			player->sendRemoveTileThing(tilePosition, oldStackPosVector[i++]);
 		}
 	}
 

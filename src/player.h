@@ -710,16 +710,22 @@ class Player : public Creature, public Cylinder
 		//send methods
 		void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item) {
 			if (client) {
-				client->sendAddTileItem(pos, tile->getClientIndexOfThing(this, item), item);
+				int32_t stackpos = tile->getStackposOfThing(this, item);
+				if (stackpos != -1) {
+					client->sendAddTileItem(pos, stackpos, item);
+				}
 			}
 		}
 		void sendUpdateTileItem(const Tile* tile, const Position& pos, const Item* item) {
 			if (client) {
-				client->sendUpdateTileItem(pos, tile->getClientIndexOfThing(this, item), item);
+				int32_t stackpos = tile->getStackposOfThing(this, item);
+				if (stackpos != -1) {
+					client->sendUpdateTileItem(pos, stackpos, item);
+				}
 			}
 		}
-		void sendRemoveTileThing(const Position& pos, uint32_t stackpos) {
-			if (client) {
+		void sendRemoveTileThing(const Position& pos, int32_t stackpos) {
+			if (stackpos != -1 && client) {
 				client->sendRemoveTileThing(pos, stackpos);
 			}
 		}
@@ -741,17 +747,20 @@ class Player : public Creature, public Cylinder
 		}
 		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
 			if (client) {
-				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfThing(this, creature), isLogin);
+				client->sendAddCreature(creature, pos, creature->getTile()->getStackposOfCreature(this, creature), isLogin);
 			}
 		}
-		void sendCreatureMove(const Creature* creature, const Position& newPos, uint32_t newStackPos, const Position& oldPos, uint32_t oldStackPos, bool teleport) {
+		void sendCreatureMove(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport) {
 			if (client) {
 				client->sendMoveCreature(creature, newPos, newStackPos, oldPos, oldStackPos, teleport);
 			}
 		}
 		void sendCreatureTurn(const Creature* creature) {
-			if (client) {
-				client->sendCreatureTurn(creature, creature->getTile()->getClientIndexOfThing(this, creature));
+			if (client && canSeeCreature(creature)) {
+				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
+				if (stackpos != -1) {
+					client->sendCreatureTurn(creature, stackpos);
+				}
 			}
 		}
 		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr) {
@@ -770,24 +779,29 @@ class Player : public Creature, public Cylinder
 			}
 		}
 		void sendCreatureChangeVisible(const Creature* creature, bool visible) {
-			if (client) {
-				if (creature->getPlayer()) {
-					if (visible) {
-						client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
-					} else {
-						static Outfit_t outfit;
-						client->sendCreatureOutfit(creature, outfit);
-					}
+			if (!client) {
+				return;
+			}
+
+			if (creature->getPlayer()) {
+				if (visible) {
+					client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
 				} else {
-					if (canSeeInvisibility()) {
-						client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
-					} else {
-						if (visible) {
-							client->sendAddCreature(creature, creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature), false);
-						} else {
-							client->sendRemoveTileThing(creature->getPosition(), creature->getTile()->getClientIndexOfThing(this, creature));
-						}
-					}
+					static Outfit_t outfit;
+					client->sendCreatureOutfit(creature, outfit);
+				}
+			} else if (canSeeInvisibility()) {
+				client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+			} else {
+				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
+				if (stackpos == -1) {
+					return;
+				}
+
+				if (visible) {
+					client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
+				} else {
+					client->sendRemoveTileThing(creature->getPosition(), stackpos);
 				}
 			}
 		}

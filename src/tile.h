@@ -298,7 +298,9 @@ class Tile : public Cylinder
 		virtual std::string getDescription(int32_t lookDistance) const;
 
 		void moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport = false);
-		int32_t getClientIndexOfThing(const Player* player, const Thing* thing) const;
+		int32_t getClientIndexOfCreature(const Player* player, const Creature* creature) const;
+		int32_t getStackposOfCreature(const Player* player, const Creature* creature) const;
+		int32_t getStackposOfThing(const Player* player, const Thing* thing) const;
 
 		//cylinder implementations
 		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
@@ -340,7 +342,7 @@ class Tile : public Cylinder
 	private:
 		void onAddTileItem(Item* item);
 		void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
-		void onRemoveTileItem(const SpectatorVec& list, const std::vector<uint32_t>& oldStackPosVector, Item* item);
+		void onRemoveTileItem(const SpectatorVec& list, const std::vector<int32_t>& oldStackPosVector, Item* item);
 		void onUpdateTile(const SpectatorVec& list);
 
 		void updateTileFlags(Item* item, bool removing);
