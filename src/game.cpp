@@ -2528,6 +2528,10 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		return;
 	}
 
+	if (!g_events->eventPlayerOnBrowseField(player, pos)) {
+		return;
+	}
+
 	Container* container;
 
 	auto it = browseFields.find(tile);
