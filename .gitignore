@@ -169,3 +169,4 @@ pip-log.txt
 .*.swp
 .*.swo
 
+src/weapons.cpp
