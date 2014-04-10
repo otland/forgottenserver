@@ -62,7 +62,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
 		//Update premium days
-		g_game.updatePremium(account);
+		Game::updatePremium(account);
 
 		//Add MOTD
 		output->AddByte(0x14);

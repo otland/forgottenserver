@@ -47,7 +47,7 @@ class GlobalEvents : public BaseEvents
 		void execute(GlobalEvent_t type) const;
 
 		GlobalEventMap getEventMap(GlobalEvent_t type);
-		void clearMap(GlobalEventMap& map);
+		static void clearMap(GlobalEventMap& map);
 
 	protected:
 		virtual std::string getScriptBaseName() {

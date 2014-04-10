@@ -710,7 +710,7 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 	}
 
 	if (params.impactEffect != CONST_ME_NONE) {
-		g_game.addMagicEffect(list, tile->getPosition(), params.impactEffect);
+		Game::addMagicEffect(list, tile->getPosition(), params.impactEffect);
 	}
 }
 

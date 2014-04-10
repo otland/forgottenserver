@@ -247,17 +247,17 @@ class Monster : public Creature
 		bool isInSpawnRange(const Position& toPos);
 		bool canWalkTo(Position pos, Direction dir);
 
-		bool pushItem(Item* item);
+		static bool pushItem(Item* item);
 		void pushItems(Tile* tile);
-		bool pushCreature(Creature* creature);
+		static bool pushCreature(Creature* creature);
 		void pushCreatures(Tile* tile);
 
 		void onThinkTarget(uint32_t interval);
 		void onThinkYell(uint32_t interval);
 		void onThinkDefense(uint32_t interval);
 
-		bool isFriend(const Creature* creature);
-		bool isOpponent(const Creature* creature);
+		bool isFriend(const Creature* creature) const;
+		bool isOpponent(const Creature* creature) const;
 
 		virtual uint64_t getLostExperience() const {
 			return ((skillLoss ? mType->experience : 0));

@@ -115,7 +115,7 @@ class Game
 		Cylinder* internalGetCylinder(Player* player, const Position& pos);
 		Thing* internalGetThing(Player* player, const Position& pos, int32_t index,
 		                        uint32_t spriteId = 0, stackPosType_t type = STACKPOS_NORMAL);
-		void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
+		static void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
 
 		static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
 
@@ -233,7 +233,7 @@ class Game
 		bool removeCreature(Creature* creature, bool isLogout = true);
 
 		void addCreatureCheck(Creature* creature);
-		void removeCreatureCheck(Creature* creature);
+		static void removeCreatureCheck(Creature* creature);
 
 		size_t getPlayersOnline() const {
 			return players.size();
@@ -353,8 +353,8 @@ class Game
 
 		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
 		bool internalCloseTrade(Player* player);
-		bool playerBroadcastMessage(Player* player, const std::string& text);
-		void broadcastMessage(const std::string& text, MessageClasses type);
+		bool playerBroadcastMessage(Player* player, const std::string& text) const;
+		void broadcastMessage(const std::string& text, MessageClasses type) const;
 
 		//Implementation of player invoked events
 		void playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos,
@@ -435,7 +435,7 @@ class Game
 
 		void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
 
-		void updatePremium(Account& account);
+		static void updatePremium(Account& account);
 
 		void cleanup();
 		void shutdown();
@@ -480,11 +480,11 @@ class Game
 
 		//animation help functions
 		void addCreatureHealth(const Creature* target);
-		void addCreatureHealth(const SpectatorVec& list, const Creature* target);
+		static void addCreatureHealth(const SpectatorVec& list, const Creature* target);
 		void addMagicEffect(const Position& pos, uint8_t effect);
-		void addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect);
+		static void addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect);
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
-		void addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect);
+		static void addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect);
 
 		Map* getMap() {
 			return &map;

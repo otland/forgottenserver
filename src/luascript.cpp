@@ -5319,7 +5319,7 @@ int32_t LuaScriptInterface::luaPositionSendMagicEffect(lua_State* L)
 	MagicEffectClasses magicEffect = static_cast<MagicEffectClasses>(getNumber<int64_t>(L, 2));
 	const Position& position = getPosition(L, 1);
 	if (!list.empty()) {
-		g_game.addMagicEffect(list, position, magicEffect);
+		Game::addMagicEffect(list, position, magicEffect);
 	} else {
 		g_game.addMagicEffect(position, magicEffect);
 	}
@@ -5343,7 +5343,7 @@ int32_t LuaScriptInterface::luaPositionSendDistanceEffect(lua_State* L)
 	const Position& positionEx = getPosition(L, 2);
 	const Position& position = getPosition(L, 1);
 	if (!list.empty()) {
-		g_game.addDistanceEffect(list, position, positionEx, distanceEffect);
+		Game::addDistanceEffect(list, position, positionEx, distanceEffect);
 	} else {
 		g_game.addDistanceEffect(position, positionEx, distanceEffect);
 	}

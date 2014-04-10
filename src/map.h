@@ -208,7 +208,7 @@ class Map
 		  * Remove a creature from the map.
 		  * \param c Creature pointer to the creature to remove
 		  */
-		bool removeCreature(Creature* c);
+		static bool removeCreature(Creature* c);
 
 		/**
 		  * Checks if you can throw an object to that position

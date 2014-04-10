@@ -790,7 +790,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 
 	int32_t index = tile->__getIndexOfThing(creature);
 
-	if (!map.removeCreature(creature)) {
+	if (!Map::removeCreature(creature)) {
 		return false;
 	}
 
@@ -1906,7 +1906,7 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 	player->startAutoWalk(std::list<Direction> { direction });
 }
 
-bool Game::playerBroadcastMessage(Player* player, const std::string& text)
+bool Game::playerBroadcastMessage(Player* player, const std::string& text) const
 {
 	if (!player->hasFlag(PlayerFlag_CanBroadcast)) {
 		return false;
@@ -4828,7 +4828,7 @@ void Game::ReleaseItem(Item* item)
 	ToReleaseItems.push_back(item);
 }
 
-void Game::broadcastMessage(const std::string& text, MessageClasses type)
+void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 {
 	std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
 	for (const auto& it : players) {

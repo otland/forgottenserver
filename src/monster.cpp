@@ -448,7 +448,7 @@ void Monster::onCreatureEnter(Creature* creature)
 	onCreatureFound(creature, true);
 }
 
-bool Monster::isFriend(const Creature* creature)
+bool Monster::isFriend(const Creature* creature) const
 {
 	if (isSummon() && getMaster()->getPlayer()) {
 		const Player* masterPlayer = getMaster()->getPlayer();
@@ -474,7 +474,7 @@ bool Monster::isFriend(const Creature* creature)
 	return false;
 }
 
-bool Monster::isOpponent(const Creature* creature)
+bool Monster::isOpponent(const Creature* creature) const
 {
 	if (isSummon() && getMaster()->getPlayer()) {
 		if (creature != getMaster()) {
@@ -672,7 +672,7 @@ void Monster::setIdle(bool _idle)
 		onIdleStatus();
 		clearTargetList();
 		clearFriendList();
-		g_game.removeCreatureCheck(this);
+		Game::removeCreatureCheck(this);
 	}
 }
 

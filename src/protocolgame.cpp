@@ -431,8 +431,9 @@ void ProtocolGame::disconnectClient(const std::string& message)
 
 void ProtocolGame::disconnect()
 {
-	if (getConnection()) {
-		getConnection()->closeConnection();
+	Connection_ptr connection = getConnection();
+	if (connection) {
+		connection->closeConnection();
 	}
 }
 
