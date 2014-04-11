@@ -688,22 +688,14 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 
 int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
 {
-	//selfFollow(cid)
-	uint32_t cid = popNumber<uint32_t>(L);
-
-	Player* player = g_game.getPlayerByID(cid);
-	if (cid != 0 && !player) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
+	//selfFollow(player)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (!npc) {
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	pushBoolean(L, npc->setFollowCreature(player));
+	pushBoolean(L, npc->setFollowCreature(getPlayer(L, 1)));
 	return 1;
 }
 
@@ -852,7 +844,7 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	}
 	lua_pop(L, 1);
 
-	Player* player = g_game.getPlayerByID(popNumber<uint32_t>(L));
+	Player* player = getPlayer(L, -1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -880,16 +872,16 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 int32_t NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 {
 	//closeShopWindow(cid)
-	Player* player = g_game.getPlayerByID(popNumber<uint32_t>(L));
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+	Npc* npc = getScriptEnv()->getNpc();
+	if (!npc) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	Npc* npc = getScriptEnv()->getNpc();
-	if (!npc) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+	Player* player = getPlayer(L, 1);
+	if (!player) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
