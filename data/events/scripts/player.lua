@@ -1,3 +1,7 @@
+function Player:onBrowseField(position)
+	return true
+end
+
 function Player:onLook(thing, position, distance)
 	local description = "You see " .. thing:getDescription(distance)
 	if self:getGroup():getAccess() then
