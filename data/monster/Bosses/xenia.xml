@@ -18,7 +18,7 @@
 		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="28"/>
+		<attack name="melee" interval="2000" min="-0" max="-50"/>
 		<attack name="physical" interval="1000" chance="15" range="7" min="-28" max="-42">
 			<attribute key="shootEffect" value="spear"/>
 		</attack>
@@ -38,7 +38,7 @@
 	</voices>
 	<loot>
 		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
-		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="45" chance="100000"/><!-- gold coin -->
 		<item id="2464" chance="6666"/><!-- chain armor -->
 		<item id="2125" chance="2500"/><!-- crystal necklace -->
 		<item id="2387" chance="3333"/><!-- double axe -->

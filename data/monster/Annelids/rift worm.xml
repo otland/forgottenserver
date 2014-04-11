@@ -17,9 +17,20 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="35"/>
+		<attack name="melee" interval="2000" min="-0" max="-160"/>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-500" max="-1000"/>
 	</attacks>
-	<defenses armor="10" defense="15"/>
+	<defenses armor="25" defense="25">
+		<defense name="invisible" interval="2000" chance="10" duration="5000">
+			<attribute key="areaEffect" value="groundshaker"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-5"/>
+		<element firePercent="-5"/>
+		<element icePercent="-5"/>
+		<element earthPercent="-25"/>
+	</elements>
 	<immunities>
 		<immunity invisible="1"/>
 	</immunities>
