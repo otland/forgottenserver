@@ -128,7 +128,7 @@ void DatabaseManager::updateDatabase()
 			break;
 		}
 
-		if (!LuaScriptInterface::popBoolean(L)) {
+		if (!LuaScriptInterface::getBoolean(L, -1, false)) {
 			LuaScriptInterface::resetScriptEnv();
 			break;
 		}

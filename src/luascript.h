@@ -274,7 +274,6 @@ class LuaScriptInterface
 		static void popPosition(lua_State* L, PositionEx& position);
 		static std::string popString(lua_State* L);
 		static int32_t popCallback(lua_State* L);
-		static bool popBoolean(lua_State* L);
 
 		// Userdata
 		template<class T>
@@ -298,7 +297,8 @@ class LuaScriptInterface
 		template<typename T>
 		static T getNumber(lua_State *L, int32_t arg, T defaultValue)
 		{
-			if (arg > lua_gettop(L)) {
+			const auto parameters = lua_gettop(L);
+			if (parameters == 0 || arg > parameters) {
 				return defaultValue;
 			}
 			return static_cast<T>(lua_tonumber(L, arg));
@@ -324,7 +324,8 @@ class LuaScriptInterface
 		}
 		inline static bool getBoolean(lua_State* L, int32_t arg, bool defaultValue)
 		{
-			if (arg > lua_gettop(L)) {
+			const auto parameters = lua_gettop(L);
+			if (parameters == 0 || arg > parameters) {
 				return defaultValue;
 			}
 			return lua_toboolean(L, arg) != 0;
@@ -541,8 +542,6 @@ class LuaScriptInterface
 		static int32_t luaIsInArray(lua_State* L);
 		static int32_t luaAddEvent(lua_State* L);
 		static int32_t luaStopEvent(lua_State* L);
-
-		static int32_t luaMayNotMove(lua_State* L);
 
 		static int32_t luaSaveServer(lua_State* L);
 		static int32_t luaCleanMap(lua_State* L);

@@ -767,17 +767,6 @@ int32_t LuaScriptInterface::popCallback(lua_State* L)
 	return luaL_ref(L, LUA_REGISTRYINDEX);
 }
 
-bool LuaScriptInterface::popBoolean(lua_State* L)
-{
-	if (lua_gettop(L) == 0) {
-		return false;
-	}
-
-	bool value = lua_toboolean(L, -1) != 0;
-	lua_pop(L, 1);
-	return value;
-}
-
 // Metatables
 void LuaScriptInterface::setMetatable(lua_State* L, int32_t index, const std::string& string)
 {
@@ -1211,9 +1200,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//stopEvent(eventid)
 	lua_register(m_luaState, "stopEvent", LuaScriptInterface::luaStopEvent);
-
-	//mayNotMove(cid, value)
-	lua_register(m_luaState, "mayNotMove", LuaScriptInterface::luaMayNotMove);
 
 	//saveServer()
 	lua_register(m_luaState, "saveServer", LuaScriptInterface::luaSaveServer);
@@ -2762,30 +2748,18 @@ int32_t LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
 int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
 {
 	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
-	int32_t parameters = lua_gettop(L);
-
-	bool ignoreEquipped = false;
-	if (parameters > 4) {
-		ignoreEquipped = popBoolean(L);
-	}
-
-	int32_t subType;
-	if (parameters > 3) {
-		subType = popNumber<int32_t>(L);
-	} else {
-		subType = -1;
-	}
-
-	uint32_t count = popNumber<uint32_t>(L);
-	uint16_t itemId = popNumber<uint16_t>(L);
-	Player* player = getPlayer(L, -1);
-	if (player) {
-		pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
-	} else {
+	Player* player = getPlayer(L, 1);
+	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
+		return 1;
 	}
 
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
+	uint32_t count = getNumber<uint32_t>(L, 3);
+	int32_t subType = getNumber<int32_t>(L, 4, -1);
+	bool ignoreEquipped = getBoolean(L, 5, false);
+	pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
 	return 1;
 }
 
@@ -2793,44 +2767,31 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 {
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count/subtype, <optional: default: 1> canDropOnMap)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
-	int32_t parameters = lua_gettop(L);
-
-	int32_t subType = 1;
-	if (parameters > 4) {
-		subType = popNumber<uint32_t>(L);
-	}
-
-	bool canDropOnMap = true;
-	if (parameters > 3) {
-		canDropOnMap = popBoolean(L);
-	}
-
-	int32_t count = 1;
-	if (parameters > 2) {
-		count = popNumber<int32_t>(L);
-	}
-
-	uint32_t itemId = popNumber<uint32_t>(L);
-
-	Player* player = getPlayer(L, -1);
+	Player* player = getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
+	uint32_t itemId = getNumber<uint32_t>(L, 2);
+	int32_t count = getNumber<int32_t>(L, 3, 1);
+	bool canDropOnMap = getBoolean(L, 4, true);
+	int32_t subType = getNumber<uint32_t>(L, 5, 1);
+
 	const ItemType& it = Item::items[itemId];
+	int32_t itemCount;
 
-	int32_t itemCount = 1;
-
+	auto parameters = lua_gettop(L);
 	if (parameters > 4) {
 		//subtype already supplied, count then is the amount
 		itemCount = std::max<int32_t>(1, count);
 	} else if (it.hasSubType()) {
 		if (it.stackable) {
 			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
+		} else {
+			itemCount = 1;
 		}
-
 		subType = count;
 	} else {
 		itemCount = std::max<int32_t>(1, count);
@@ -3448,23 +3409,25 @@ int32_t LuaScriptInterface::luaSetConditionParam(lua_State* L)
 		return 1;
 	}
 
-	int32_t value;
-	if (isBoolean(L, -1)) {
-		value = popBoolean(L) ? 1 : 0;
-	} else {
-		value = popNumber<int32_t>(L);
-	}
-	ConditionParam_t key = (ConditionParam_t)popNumber<uint32_t>(L);
-	uint32_t conditionId = popNumber<uint32_t>(L);
-
+	uint32_t conditionId = getNumber<uint32_t>(L, 1);
 	Condition* condition = g_luaEnvironment.getConditionObject(conditionId);
-	if (condition) {
-		condition->setParam(key, value);
-		pushBoolean(L, true);
-	} else {
+	if (!condition) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CONDITION_NOT_FOUND));
 		pushBoolean(L, false);
+		return 1;
 	}
+
+	ConditionParam_t key = static_cast<ConditionParam_t>(getNumber<uint32_t>(L, 2));
+
+	int32_t value;
+	if (isBoolean(L, 3)) {
+		value = getBoolean(L, 3) ? 1 : 0;
+	} else {
+		value = getNumber<int32_t>(L, 3);
+	}
+
+	condition->setParam(key, value);
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -4404,32 +4367,6 @@ int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaMayNotMove(lua_State* L)
-{
-	//mayNotMove(cid, value)
-	bool boolValue = popBoolean(L);
-	Player* player = getPlayer(L, -1);
-	if (player) {
-		player->mayNotMove = boolValue;
-		if (player->mayNotMove) {
-			player->setFollowCreature(nullptr);
-			if (!player->getAttackedCreature()) {
-				player->sendCancelTarget();
-			} else {
-				player->setChaseMode(CHASEMODE_STANDSTILL);
-				player->sendFightModes();
-			}
-			player->stopWalk();
-		}
-
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 {
 	//hasProperty(uid, prop)
@@ -4459,20 +4396,11 @@ int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 int32_t LuaScriptInterface::luaGetSpectators(lua_State* L)
 {
 	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers = false)
-	int32_t parameters = lua_gettop(L);
-
-	bool onlyPlayers = false;
-
-	if (parameters > 4) {
-		onlyPlayers = popBoolean(L);
-	}
-
-	bool multifloor = popBoolean(L);
-	uint32_t rangey = popNumber<uint32_t>(L);
-	uint32_t rangex = popNumber<uint32_t>(L);
-
-	PositionEx centerPos;
-	popPosition(L, centerPos);
+	bool onlyPlayers = getBoolean(L, 5, false);
+	bool multifloor = getBoolean(L, 4);
+	uint32_t rangey = getNumber<uint32_t>(L, 3);
+	uint32_t rangex = getNumber<uint32_t>(L, 2);
+	const Position& centerPos = getPosition(L, 1);
 
 	SpectatorVec list;
 	g_game.getSpectators(list, centerPos, multifloor, onlyPlayers, rangex, rangex, rangey, rangey);
@@ -11618,20 +11546,21 @@ int32_t LuaScriptInterface::luaConditionSetTicks(lua_State* L)
 int32_t LuaScriptInterface::luaConditionSetParameter(lua_State* L)
 {
 	// condition:setParameter(key, value)
+	Condition* condition = getUserdata<Condition>(L, 1);
+	if (!condition) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	ConditionParam_t key = static_cast<ConditionParam_t>(getNumber<int64_t>(L, 2));
 	int32_t value;
 	if (isBoolean(L, 3)) {
-		value = popBoolean(L) ? 1 : 0;
+		value = getBoolean(L, 3) ? 1 : 0;
 	} else {
-		value = popNumber<int32_t>(L);
+		value = getNumber<int32_t>(L, 3);
 	}
-	ConditionParam_t key = static_cast<ConditionParam_t>(getNumber<int64_t>(L, 2));
-	Condition* condition = getUserdata<Condition>(L, 1);
-	if (condition) {
-		condition->setParam(key, value);
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
+	condition->setParam(key, value);
+	pushBoolean(L, true);
 	return 1;
 }
 

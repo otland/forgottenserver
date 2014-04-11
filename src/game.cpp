@@ -879,6 +879,17 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
+	Tile* toTile = getTile(toPos);
+	if (!toTile) {
+		player->sendCancelMessage(RET_NOTPOSSIBLE);
+		return;
+	}
+
+	Creature* movingCreature = getCreatureByID(movingCreatureId);
+	if (!movingCreature) {
+		return;
+	}
+
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::playerMoveCreature,
@@ -888,15 +899,6 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	}
 
 	player->setNextActionTask(nullptr);
-
-	Creature* movingCreature = getCreatureByID(movingCreatureId);
-	if (!movingCreature) {
-		return;
-	}
-
-	if (movingCreature->getPlayer() && movingCreature->getPlayer()->getNoMove()) {
-		return;
-	}
 
 	if (!Position::areInRange<1, 1, 0>(movingCreatureOrigPos, player->getPosition())) {
 		//need to walk to the creature first before moving it
@@ -910,12 +912,6 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		} else {
 			player->sendCancelMessage(RET_THEREISNOWAY);
 		}
-		return;
-	}
-
-	Tile* toTile = getTile(toPos);
-	if (!toTile) {
-		player->sendCancelMessage(RET_NOTPOSSIBLE);
 		return;
 	}
 

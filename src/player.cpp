@@ -113,8 +113,6 @@ Player::Player(ProtocolGame* p) :
 
 	blessings = 0;
 
-	mayNotMove = false;
-
 	inMarket = false;
 	lastDepotId = -1;
 
@@ -1664,7 +1662,7 @@ void Player::onThink(uint32_t interval)
 		addMessageBuffer();
 	}
 
-	if (!getTile()->hasFlag(TILESTATE_NOLOGOUT) && !mayNotMove && !isAccessPlayer()) {
+	if (!getTile()->hasFlag(TILESTATE_NOLOGOUT) && !isAccessPlayer()) {
 		idleTime += interval;
 		const int32_t kickAfterMinutes = g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES);
 		if (idleTime > (kickAfterMinutes * 60000) + 60000) {

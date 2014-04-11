@@ -622,12 +622,10 @@ bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirLis
 				} else {
 					neighbors = *dirNeighbors[NORTHEAST];
 				}
+			} else if (offset_x == -1) {
+				neighbors = *dirNeighbors[SOUTHWEST];
 			} else {
-				if (offset_x == -1) {
-					neighbors = *dirNeighbors[SOUTHWEST];
-				} else {
-					neighbors = *dirNeighbors[SOUTHEAST];
-				}
+				neighbors = *dirNeighbors[SOUTHEAST];
 			}
 			dirCount = fpp.allowDiagonal ? 5 : 3;
 		} else {

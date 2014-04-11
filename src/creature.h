@@ -247,7 +247,7 @@ class Creature : virtual public Thing
 		}
 
 		//walk functions
-		bool startAutoWalk(const std::list<Direction>& listDir);
+		void startAutoWalk(const std::list<Direction>& listDir);
 		void addEventWalk(bool firstStep = false);
 		void stopEventWalk();
 		virtual void goToFollowCreature();

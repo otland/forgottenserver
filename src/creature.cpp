@@ -306,17 +306,10 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 	return true;
 }
 
-bool Creature::startAutoWalk(const std::list<Direction>& listDir)
+void Creature::startAutoWalk(const std::list<Direction>& listDir)
 {
-	const Player* thisPlayer = getPlayer();
-	if (thisPlayer && thisPlayer->getNoMove()) {
-		thisPlayer->sendCancelWalk();
-		return false;
-	}
-
 	listWalkDir = listDir;
 	addEventWalk(listDir.size() == 1);
-	return true;
 }
 
 void Creature::addEventWalk(bool firstStep)

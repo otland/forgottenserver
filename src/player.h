@@ -393,9 +393,6 @@ class Player : public Creature, public Cylinder
 		void resetIdleTime() {
 			idleTime = 0;
 		}
-		bool getNoMove() const {
-			return mayNotMove;
-		}
 
 		bool isInGhostMode() const {
 			return ghostMode;
@@ -1321,7 +1318,6 @@ class Player : public Creature, public Cylinder
 		uint8_t blessings;
 		uint8_t guildLevel;
 
-		bool mayNotMove;
 		bool requestedOutfit;
 		bool inMarket;
 		bool ghostMode;

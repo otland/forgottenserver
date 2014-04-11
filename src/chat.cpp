@@ -277,7 +277,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	if (ret != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else if (lua_isboolean(L, -1)) {
-		result = LuaScriptInterface::popBoolean(L);
+		result = LuaScriptInterface::getBoolean(L, -1);
 	} else if (lua_gettop(L) > 0 && lua_isnumber(L, -1)) {
 		result = true;
 		type = static_cast<SpeakClasses>(LuaScriptInterface::popNumber<uint32_t>(L));

@@ -631,64 +631,48 @@ int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
 
 int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 {
-	//selfSay(words [[, target], publicize])
-	// publicize defaults to true if there is no target, false otherwise
-	uint32_t parameters = lua_gettop(L);
-	uint32_t target = 0;
-	bool publicize;
-	if (parameters >= 3) {
-		publicize = popBoolean(L);
-	} else {
-		publicize = true;
-	}
-
-	if (parameters >= 2) {
-		target = popNumber<uint32_t>(L);
-		if (target != 0) {
-			publicize = false;
-		}
-	}
-
-	std::string text = popString(L);
-
+	//selfSay(words[, target])
 	Npc* npc = getScriptEnv()->getNpc();
-	if (npc) {
-		if (publicize) {
-			npc->doSay(text);
-		} else {
-			npc->doSayToPlayer(g_game.getPlayerByID(target), text);
+	if (!npc) {
+		return 0;
+	}
+
+	const std::string& text = getString(L, 1);
+	if (lua_gettop(L) >= 2) {
+		Player* target = getPlayer(L, 2);
+		if (target) {
+			npc->doSayToPlayer(target, text);
+			return 0;
 		}
 	}
 
+	npc->doSay(text);
 	return 0;
 }
 
 int32_t NpcScriptInterface::luaActionMove(lua_State* L)
 {
 	//selfMove(direction)
-	Direction dir = (Direction)popNumber<uint32_t>(L);
-
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->doMove(dir);
+		npc->doMove(static_cast<Direction>(getNumber<uint32_t>(L, 1)));
 	}
-
 	return 0;
 }
 
 int32_t NpcScriptInterface::luaActionMoveTo(lua_State* L)
 {
 	//selfMoveTo(x,y,z)
-	Position target;
-	target.z = popNumber<uint8_t>(L);
-	target.y = popNumber<uint16_t>(L);
-	target.x = popNumber<uint16_t>(L);
-
 	Npc* npc = getScriptEnv()->getNpc();
-	if (npc) {
-		npc->doMoveTo(target);
+	if (!npc) {
+		return 0;
 	}
 
+	npc->doMoveTo(Position(
+		getNumber<uint16_t>(L, 1),
+		getNumber<uint16_t>(L, 2),
+		getNumber<uint8_t>(L, 3)
+	));
 	return 0;
 }
 
@@ -697,7 +681,7 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 	//selfTurn(direction)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->doTurn((Direction)popNumber<uint32_t>(L));
+		npc->doTurn(static_cast<Direction>(getNumber<uint32_t>(L, 1)));
 	}
 	return 0;
 }
@@ -938,32 +922,7 @@ int32_t NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 {
 	//doSellItem(cid, itemid, amount, <optional> subtype, <optional> actionid, <optional: default: 1> canDropOnMap)
-	int32_t parameters = lua_gettop(L);
-
-	bool canDropOnMap;
-	if (parameters > 5) {
-		canDropOnMap = popBoolean(L);
-	} else {
-		canDropOnMap = true;
-	}
-
-	uint32_t actionId = 0;
-	if (parameters > 4) {
-		actionId = popNumber<uint32_t>(L);
-	}
-
-	uint32_t subType = 1;
-	if (parameters > 3) {
-		int32_t n = popNumber<int32_t>(L);
-		if (n != -1) {
-			subType = n;
-		}
-	}
-
-	uint32_t amount = popNumber<uint32_t>(L);
-	uint32_t itemId = popNumber<uint32_t>(L);
-
-	Player* player = g_game.getPlayerByID(popNumber<uint32_t>(L));
+	Player* player = getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -971,6 +930,20 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 	}
 
 	uint32_t sellCount = 0;
+
+	uint32_t itemId = getNumber<uint32_t>(L, 2);
+	uint32_t amount = getNumber<uint32_t>(L, 3);
+	uint32_t subType;
+
+	int32_t n = getNumber<int32_t>(L, 4, -1);
+	if (n != -1) {
+		subType = n;
+	} else {
+		subType = 1;
+	}
+
+	uint32_t actionId = getNumber<uint32_t>(L, 5, 0);
+	bool canDropOnMap = getBoolean(L, 6, true);
 
 	const ItemType& it = Item::items[itemId];
 	if (it.stackable) {
@@ -987,7 +960,7 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 				return 1;
 			}
 
-			amount = amount - stackCount;
+			amount -= stackCount;
 			sellCount += stackCount;
 		}
 	} else {
