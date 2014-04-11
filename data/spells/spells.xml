@@ -4,6 +4,12 @@
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight"/>
 	</instant>
+	<instant group="attack" spellid="89" name="Apprentice's Strike" words="exori min flam" lvl="8" mana="6" prem="0" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/apprentices strike.lua">
+		<vocation name="Sorcerer"/>
+		<vocation name="Druid"/>
+		<vocation name="Master Sorcerer"/>
+		<vocation name="Elder Druid"/>
+	</instant>
 	<instant group="attack" spellid="80" name="Berserk" words="exori" lvl="35" mana="115" prem="1" needweapon="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/berserk.lua">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight"/>
@@ -289,6 +295,12 @@
 		<vocation name="Druid"/>
 		<vocation name="Elder Druid"/>
 	</instant>
+	<instant group="attack" spellid="19" name="Practise Fire Wave" words="exevo dis flam hur" lvl="1" mana="5" direction="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/practise fire wave.lua">
+		<vocation name="None"/>
+	</instant>
+	<instant group="healing" spellid="1" name="Practise Healing" words="exura dis" lvl="1" mana="5" aggressive="0" selftarget="1" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/practise healing.lua">
+		<vocation name="None"/>
+	</instant>
 	<instant group="support" spellid="127" name="Protect Party" words="utamo mas sio" lvl="32" mana="90" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="party/protect.lua">
 		<vocation name="Paladin"/>
 		<vocation name="Royal Paladin"/>
@@ -424,6 +436,7 @@
 	<rune group="attack" spellid="55" name="Energybomb" id="2262" allowfaruse="1" charges="2" lvl="37" maglv="10" exhaustion="2000" groupcooldown="2000" blocktype="solid" script="attack/energy bomb.lua"/>
 	<rune group="attack" spellid="33" name="Energy Wall" id="2279" allowfaruse="1" charges="4" lvl="41" maglv="9" exhaustion="2000" groupcooldown="2000" blocktype="solid" script="attack/energy wall.lua"/>
 	<rune group="attack" spellid="7" name="Light Magic Missile" id="2287" allowfaruse="1" charges="10" lvl="15" exhaustion="2000" groupcooldown="2000" maglv="0" needtarget="1" blocktype="solid" script="attack/light magic missile.lua"/>
+	<!--<rune group="attack" spellid="7" name="Lightest Magic Missile" id="2287" allowfaruse="1" charges="10" lvl="1" exhaustion="2000" groupcooldown="2000" maglv="0" needtarget="1" blocktype="solid" script="attack/lightest magic missile.lua"/>-->
 	<rune group="attack" spellid="8" name="Heavy Magic Missile" id="2311" allowfaruse="1" charges="10" lvl="25" exhaustion="2000" groupcooldown="2000" maglv="3" needtarget="1" blocktype="solid" script="attack/heavy magic missile.lua"/>
 	<rune group="attack" spellid="18" name="Explosion" id="2313" allowfaruse="1" charges="6" lvl="31" maglv="6" exhaustion="2000" groupcooldown="2000" blocktype="solid" script="attack/explosion.lua"/>
 	<rune group="attack" spellid="21" name="Sudden Death" id="2268" allowfaruse="1" charges="3" lvl="45" maglv="15" exhaustion="2000" groupcooldown="2000" needtarget="1" blocktype="solid" script="attack/sudden death.lua"/>
@@ -515,6 +528,9 @@
 		<vocation name="Master Sorcerer"/>
 		<vocation name="Elder Druid"/>
 	</conjure>
+	<!--<conjure name="Lightest Magic Missile" words="adori dis min vis" lvl="1" mana="5" soul="0" reagentId="2260" conjureId="2287" conjureCount="10" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+		<vocation name="None"/>
+	</conjure>-->
 	<conjure name="Fire Field" words="adevo grav flam" lvl="15" mana="240" soul="1" reagentId="2260" conjureId="2301" conjureCount="3" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Sorcerer"/>
 		<vocation name="Druid"/>
