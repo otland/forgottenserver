@@ -602,8 +602,6 @@ bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirLis
 		uint_fast32_t dirCount;
 		int_fast32_t* neighbors;
 		if (n->parent) {
-			dirCount = fpp.allowDiagonal ? 5 : 3;
-
 			const int_fast32_t offset_x = n->parent->x - x;
 			const int_fast32_t offset_y = n->parent->y - y;
 			if (offset_y == 0) {
@@ -624,16 +622,14 @@ bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirLis
 				} else {
 					neighbors = *dirNeighbors[NORTHEAST];
 				}
-			} else if (offset_y == 1) {
+			} else {
 				if (offset_x == -1) {
 					neighbors = *dirNeighbors[SOUTHWEST];
 				} else {
 					neighbors = *dirNeighbors[SOUTHEAST];
 				}
-			} else {
-				neighbors = nullptr;
-				dirCount = 0;
 			}
+			dirCount = fpp.allowDiagonal ? 5 : 3;
 		} else {
 			dirCount = 8;
 			neighbors = *allNeighbors;
