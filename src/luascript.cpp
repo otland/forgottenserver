@@ -2777,7 +2777,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	uint32_t itemId = getNumber<uint32_t>(L, 2);
 	int32_t count = getNumber<int32_t>(L, 3, 1);
 	bool canDropOnMap = getBoolean(L, 4, true);
-	int32_t subType = getNumber<uint32_t>(L, 5, 1);
+	uint16_t subType = getNumber<uint16_t>(L, 5, 1);
 
 	const ItemType& it = Item::items[itemId];
 	int32_t itemCount;
@@ -2798,7 +2798,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	}
 
 	while (itemCount > 0) {
-		int32_t stackCount = subType;
+		uint16_t stackCount = subType;
 		if (it.stackable && stackCount > 100) {
 			stackCount = 100;
 		}
@@ -8997,33 +8997,19 @@ int32_t LuaScriptInterface::luaPlayerRemoveMoney(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 {
 	// player:showTextDialog(itemId[, text[, canWrite[, length]]])
-	// player:showTextDialog(itemId[, canWrite[, length]])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	int32_t parameters = lua_gettop(L);
-
-	int32_t length = getNumber<uint32_t>(L, 5, -1);
-
-	bool canWrite = false;
-	if (parameters >= 4) {
-		if (isBoolean(L, 4)) {
-			canWrite = getBoolean(L, 4);
-		} else {
-			length = getNumber<uint32_t>(L, 4);
-		}
-	}
-
+	int32_t length = getNumber<int32_t>(L, 5, -1);
+	bool canWrite = getBoolean(L, 4, false);
 	std::string text;
+
+	int32_t parameters = lua_gettop(L);
 	if (parameters >= 3) {
-		if (isBoolean(L, 3)) {
-			canWrite = getBoolean(L, 3);
-		} else {
-			text = getString(L, 3);
-		}
+		text = getString(L, 3);
 	}
 
 	uint16_t itemId;
