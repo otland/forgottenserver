@@ -11,6 +11,11 @@ setConditionParam(condition, CONDITION_PARAM_TICKS, 10000)
 setConditionFormula(condition, 0.8, -72, 0.8, -72)
 setCombatCondition(combat, condition)
 
+local exhaustAttackGroup = createConditionObject(CONDITION_SPELLGROUPCOOLDOWN)
+setConditionParam(exhaustAttackGroup, CONDITION_PARAM_SUBID, 1)
+setConditionParam(exhaustAttackGroup, CONDITION_PARAM_TICKS, 10000)
+setCombatCondition(combat, exhaustAttackGroup)
+
 local disable = createConditionObject(CONDITION_PACIFIED)
 setConditionParam(disable, CONDITION_PARAM_TICKS, 10000)
 setCombatCondition(combat, disable)
