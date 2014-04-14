@@ -9006,7 +9006,7 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 
 	int32_t parameters = lua_gettop(L);
 
-	int32_t length = getNumber<uint32_t>(L, 5, -1);
+	uint32_t length = getNumber<uint32_t>(L, 5, -1);
 
 	bool canWrite = false;
 	if (parameters >= 4) {
