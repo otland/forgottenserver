@@ -86,7 +86,13 @@ std::string transformToSHA1(const std::string& input)
 	size_t index = 0;
 
 	uint32_t length_low = input.length() << 3;
-	uint32_t length_high = input.length() >> 32;
+	uint32_t length_high;
+	if (sizeof(size_t) > 4) {
+		length_high = input.length() >> 32;
+	} else {
+		length_high = 0;
+	}
+
 	for (char ch : input) {
 		messageBlock[index++] = ch;
 		if (index == 64) {
