@@ -7088,7 +7088,7 @@ int32_t LuaScriptInterface::luaContainerAddItem(lua_State* L)
 	uint32_t flags = getNumber<uint32_t>(L, 5, 0);
 
 	ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
-	if (ret == RET_NOERROR && item->getParent()) {
+	if (ret == RET_NOERROR) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
 	} else {
