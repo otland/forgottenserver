@@ -20,6 +20,7 @@
 #include "otpch.h"
 
 #include <cctype>
+#include <climits>
 
 #include "tools.h"
 #include "configmanager.h"
@@ -86,12 +87,11 @@ std::string transformToSHA1(const std::string& input)
 	size_t index = 0;
 
 	uint32_t length_low = input.length() << 3;
-	uint32_t length_high;
-	if (sizeof(size_t) > 4) {
-		length_high = input.length() >> 32;
-	} else {
-		length_high = 0;
-	}
+#if ULONG_MAX > 0xFFFFFFFFUL
+	uint32_t length_high = input.length() >> 32;
+#else
+	uint32_t length_high = 0;
+#endif
 
 	for (char ch : input) {
 		messageBlock[index++] = ch;
