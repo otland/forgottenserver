@@ -334,7 +334,7 @@ class Creature : virtual public Thing
 			return true;
 		}
 		
-		virtual bool isAccountManager() const { return false; }
+		virtual bool isAccountManager() const {return false;}
 
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
 		virtual void changeMana(int32_t manaChange);
