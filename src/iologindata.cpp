@@ -999,3 +999,161 @@ void IOLoginData::removePremiumDays(uint32_t accountId, int32_t removeDays)
 	query << "UPDATE `accounts` SET `premdays` = `premdays` - " << removeDays << " WHERE `id` = " << accountId;
 	Database::getInstance()->executeQuery(query.str());
 }
+
+bool IOLoginData::playerExists(uint32_t guid)
+{
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+
+	query << "SELECT `name` FROM `players` WHERE `id` = " << guid << " AND `deletion` = 0";
+
+	query << " LIMIT 1";
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
+	if (!result)
+		return false;
+
+	return true;
+}
+
+bool IOLoginData::playerExists(std::string& name)
+{
+
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+
+	query << "SELECT `id`, `name` FROM `players` WHERE `name` = " << db->escapeString(name) << " AND `deletion` = 0";
+
+	query << " LIMIT 1";
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
+	if (!result)
+		return false;
+
+	return true;
+}
+
+bool IOLoginData::changeName(uint32_t guid, std::string newName, std::string oldName) //not in use yet
+{
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+
+	query << "DELETE FROM `player_namelocks` WHERE `player_id` = " << guid << ";";
+	db->storeQuery(query.str());
+
+	query.str("");
+	query << "UPDATE `players` SET `name` = " << db->escapeString(newName) << " WHERE `id` = " << guid << ";";
+	if (!db->storeQuery(query.str()))
+		return false;
+
+	return true;
+}
+
+bool IOLoginData::createCharacter(uint32_t accountId, std::string characterName, int32_t vocationId, uint16_t sex)
+{
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+	query << "SELECT `id` FROM `players` WHERE `name` = " << db->escapeString(characterName) << ";";
+	DBResult_ptr result = db->storeQuery(query.str());
+	if (result)
+	{
+		return false;
+	}
+	Vocation* vocation = g_vocations.getVocation(vocationId);
+	Vocation* rookVoc = g_vocations.getVocation(0);
+	uint16_t healthMax = 150, manaMax = 0, capMax = 400, lookType = 136;
+	if (sex % 2)
+		lookType = 128;
+
+	uint32_t level = g_config.getNumber(ConfigManager::START_LEVEL), tmpLevel = std::min((uint32_t) 7, (level - 1));
+	uint32_t magLevel = g_config.getNumber(ConfigManager::START_MAGLEVEL);
+	uint32_t manaSpent = vocation->getReqMana(magLevel);
+	if (magLevel < 1)
+	{
+		magLevel = 0;
+		manaSpent = 0;
+	}
+	uint32_t posx = g_config.getNumber(ConfigManager::SPAWN_X);
+	uint32_t posy = g_config.getNumber(ConfigManager::SPAWN_Y);
+	uint32_t posz = g_config.getNumber(ConfigManager::SPAWN_Z);
+	uint32_t town = g_config.getNumber(ConfigManager::START_TOWNID);
+	uint64_t exp = 0;
+	if (level > 1)
+		exp = Player::getExpForLevel(level);
+
+	if (tmpLevel > 0)
+	{
+		healthMax += rookVoc->getHPGain() * tmpLevel;
+		manaMax += rookVoc->getManaGain() * tmpLevel;
+		capMax += rookVoc->getCapGain() * tmpLevel;
+		if (level > 8)
+		{
+			tmpLevel = level - 8;
+			healthMax += vocation->getHPGain() * tmpLevel;
+			manaMax += vocation->getManaGain() * tmpLevel;
+			capMax += vocation->getCapGain() * tmpLevel;
+		}
+	}
+
+	query.str("");
+	//query << "INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `skull`, `skulltime`, `lastlogout`, `blessings`, `onlinetime`) VALUES (NULL, " << db->escapeString(characterName) << ", 1, " << accountId << ", " << level << ", " << vocationId << ", " << healthMax << ", " << healthMax << ", " << exp << ", 68, 76, 78, 39, " << lookType << ", 0, 0, " << manaMax << ", " << manaMax << ", 0, 100, 1, 100, 100, 7, 0, " << capMax << ", " << sex << ", 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)";
+	
+	
+	query << "INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `skull`, `skulltime`, `lastlogout`, `blessings`, `onlinetime`, `deletion`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`) VALUES (NULL, " << db->escapeString(characterName) << ", 1, " << accountId << ", " << level << ", 0, " << healthMax << ", " << healthMax << ", 0, 68, 76, 68, 79, " << lookType << ", 0, " << magLevel << ", 0, 0, " << manaSpent << ", 100, " << town << ", " << posx << ", " << posy << ", " << posz << ", '', " << capMax << ", " << sex << ", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 129600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
+	
+	return db->executeQuery(query.str());
+}
+
+bool IOLoginData::setPassword(uint32_t accountId, std::string newPassword)
+{
+
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+
+	transformToSHA1(newPassword);
+	query << "UPDATE `accounts` SET `password` = " << db->escapeString(newPassword) << " WHERE `id` = " << accountId << ";";
+	return db->executeQuery(query.str());
+}
+
+uint64_t IOLoginData::createAccount(std::string name, std::string password)
+{
+
+	password = transformToSHA1(password);
+
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+
+	query << "INSERT INTO `accounts` (`id`, `name`, `password`) VALUES (NULL, " << db->escapeString(name) << ", " << db->escapeString(password) << ")";
+	if (!db->executeQuery(query.str()))
+		return 0;
+
+	return db->getLastInsertId();
+}
+
+bool IOLoginData::getAccountId(const std::string& name, uint32_t& number)
+{
+	if (!name.length())
+		return false;
+
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+	query << "SELECT `id` FROM `accounts` WHERE `name` = " << db->escapeString(name) << " LIMIT 1";
+
+	DBResult_ptr result = db->storeQuery(query.str());
+	if (!result)
+		return false;
+
+	number = result->getDataInt("id");
+	return true;
+}
+
+bool IOLoginData::accountNameExists(const std::string& name)
+{
+	Database* db = Database::getInstance();
+	std::ostringstream query;
+	query << "SELECT 1 FROM `accounts` WHERE `name` = " << db->escapeString(name) << " LIMIT 1";
+
+	DBResult_ptr result = db->storeQuery(query.str());
+	if (!result)
+		return false;
+
+	return true;
+}
