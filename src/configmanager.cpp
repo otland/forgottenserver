@@ -92,6 +92,7 @@ bool ConfigManager::load()
 	m_confBoolean[MARKET_PREMIUM] = booleanString(getGlobalString(L, "premiumToCreateMarketOffer", "yes"));
 	m_confBoolean[EMOTE_SPELLS] = booleanString(getGlobalString(L, "emoteSpells", "no"));
 	m_confBoolean[STAMINA_SYSTEM] = booleanString(getGlobalString(L, "staminaSystem", "yes"));
+	m_confBoolean[ACCOUNT_MANAGER] = booleanString(getGlobalString(L, "useAccountManager", "yes"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	m_confString[SERVER_NAME] = getGlobalString(L, "serverName");
@@ -128,6 +129,12 @@ bool ConfigManager::load()
 	m_confInteger[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
 	m_confInteger[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
 	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 40);
+	m_confInteger[START_LEVEL] = getGlobalNumber(L, "newPlayerLevel", 1);
+	m_confInteger[SPAWN_X] = getGlobalNumber(L, "newPlayerSpawnPosX", 100);
+	m_confInteger[SPAWN_Y] = getGlobalNumber(L, "newPlayerSpawnPosY", 100);
+	m_confInteger[SPAWN_Z] = getGlobalNumber(L, "newPlayerSpawnPosZ", 7);
+	m_confInteger[START_TOWNID] = getGlobalNumber(L, "newPlayerTownId", 1);
+	m_confInteger[START_MAGLEVEL] = getGlobalNumber(L, "newPlayerMagicLevel", 0);
 
 	m_isLoaded = true;
 	lua_close(L);
