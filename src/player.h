@@ -81,6 +81,14 @@ enum secureMode_t {
 	SECUREMODE_ON = 1
 };
 
+enum AccountManager_t
+{
+	MANAGER_NONE,
+	MANAGER_NEW,
+	MANAGER_ACCOUNT,
+	MANAGER_NAMELOCK
+};
+
 enum pvpMode_t {
 	PVP_MODE_DOVE = 0,
 	PVP_MODE_WHITE_HAND = 1,
@@ -159,6 +167,9 @@ class Player : public Creature, public Cylinder
 			return name;
 		}
 		virtual std::string getDescription(int32_t lookDistance) const;
+		
+		bool isAccountManager() const { return (accountManager != MANAGER_NONE); }
+		void manageAccount(const std::string& text);
 
 		virtual CreatureType_t getType() const {
 			return CREATURETYPE_PLAYER;
@@ -1304,6 +1315,7 @@ class Player : public Creature, public Cylinder
 		PlayerSex_t sex;
 		Skulls_t skull;
 		OperatingSystem_t operatingSystem;
+		AccountManager_t accountManager;
 		chaseMode_t chaseMode;
 		fightMode_t fightMode;
 		secureMode_t secureMode;
