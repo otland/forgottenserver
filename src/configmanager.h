@@ -44,6 +44,7 @@ class ConfigManager
 			MARKET_PREMIUM = 12,
 			EMOTE_SPELLS = 13,
 			STAMINA_SYSTEM = 14,
+			ACCOUNT_MANAGER = 15,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
@@ -101,6 +102,12 @@ class ConfigManager
 			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER = 28,
 			EXP_FROM_PLAYERS_LEVEL_RANGE = 29,
 			MAX_PACKETS_PER_SECOND = 30,
+			START_LEVEL = 31,
+			START_MAGLEVEL = 32,
+			SPAWN_X = 33,
+			SPAWN_Y = 34,
+			SPAWN_Z = 35,
+			START_TOWNID = 36,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 
