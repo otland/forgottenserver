@@ -59,6 +59,14 @@ class IOLoginData
 
 		static void addPremiumDays(uint32_t accountId, int32_t addDays);
 		static void removePremiumDays(uint32_t accountId, int32_t removeDays);
+		
+		static bool changeName(uint32_t guid, std::string newName, std::string oldName);
+		static bool createCharacter(uint32_t accountId, std::string characterName, int32_t vocationId, uint16_t sex);
+		static bool setPassword(uint32_t accountId, std::string newPassword);
+		static bool accountIdExists(uint32_t accountId);
+		static bool accountNameExists(const std::string& name);
+		static uint64_t createAccount(std::string name, std::string password);
+		static bool getAccountId(const std::string& name, uint32_t& number);
 
 	protected:
 		typedef std::map<int32_t , std::pair<Item*, int32_t> > ItemMap;
