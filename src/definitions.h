@@ -25,8 +25,8 @@
 #define STATUS_SERVER_DEVELOPERS "Mark Samman"
 
 #define CLIENT_VERSION_MIN 1036
-#define CLIENT_VERSION_MAX 1039
-#define CLIENT_VERSION_STR "10.36"
+#define CLIENT_VERSION_MAX 1037
+#define CLIENT_VERSION_STR "10.37"
 
 #ifndef __FUNCTION__
 #define __FUNCTION__ __func__
