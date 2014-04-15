@@ -6023,10 +6023,9 @@ Group* Game::getGroup(uint32_t id)
 	return groups.getGroup(id);
 }
 
-void Game::internalRemoveItems(std::vector<Item*> itemList, uint16_t itemId, uint32_t amount)
+void Game::internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, bool stackable)
 {
-	const ItemType& it = Item::items[itemId];
-	if (it.stackable) {
+	if (stackable) {
 		for (Item* item : itemList) {
 			if (item->getItemCount() > amount) {
 				internalRemoveItem(item, amount);

@@ -530,7 +530,7 @@ class Game
 
 		Group* getGroup(uint32_t id);
 
-		void internalRemoveItems(std::vector<Item*> itemList, uint16_t itemId, uint32_t amount);
+		void internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, bool stackable);
 
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
