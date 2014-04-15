@@ -177,9 +177,16 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (accountName.empty()) {
-		dispatchDisconnectClient("Invalid account name.");
-		return;
+	if (accountName.empty())
+	{
+		if (!g_config.getBoolean(ConfigManager::ACCOUNT_MANAGER))
+		{
+			dispatchDisconnectClient("Invalid account name.");
+			return;
+		}
+
+		accountName = "1";
+		password = "1";
 	}
 
 #undef dispatchDisconnectClient
