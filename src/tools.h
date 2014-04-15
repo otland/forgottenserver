@@ -84,6 +84,15 @@ uint8_t clientFluidToServer(uint8_t clientFluid);
 
 itemAttrTypes stringToItemAttribute(const std::string& str);
 
+bool isValidAccountName(std::string text);
+bool isValidPassword(std::string text);
+bool isValidName(std::string text, bool forceUppercaseOnFirstLetter = true);
+
+bool isNumber(char character);
+bool isNumbers(std::string text);
+
+bool isPasswordCharacter(char character);
+
 const char* getReturnMessage(ReturnValue value);
 
 #if !defined(_MSC_VER) || _MSC_VER < 1800

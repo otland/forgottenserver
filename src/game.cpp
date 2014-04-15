@@ -764,6 +764,15 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 			player->sendStats();
 		}
 	}
+	
+	if (player->isAccountManager())
+	{
+		if (player->accountManager == MANAGER_NEW)
+		{
+			player->sendCreatureSay(player, TALKTYPE_PRIVATE_NP, "Type {account} to create a new account.");
+			player->talkState[1] = false;
+		}
+	}
 
 	addCreatureCheck(creature);
 	creature->onPlacedCreature();
@@ -3413,6 +3422,15 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, ss.str());
 		return;
 	}
+	
+	if (player->isAccountManager())
+	{
+		if (muteTime > 0)
+			player->removeMessageBuffer();
+
+		internalCreatureSay(player, TALKTYPE_SAY, text, false);
+		return;
+	}
 
 	if (playerSayCommand(player, text)) {
 		return;
@@ -3629,6 +3647,13 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 {
 	if (text.empty()) {
 		return false;
+	}
+	
+	Player* player = creature->getPlayer();
+	if (player && player->isAccountManager() && !ghostMode)
+	{
+		player->manageAccount(text);
+		return true;
 	}
 
 	if (!pos) {

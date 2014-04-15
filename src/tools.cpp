@@ -1075,6 +1075,120 @@ const char* getReturnMessage(ReturnValue value)
 	}
 }
 
+bool isValidName(std::string text, bool forceUppercaseOnFirstLetter/* = true*/)
+{
+	uint32_t textLength = text.length(), lenBeforeSpace = 1, lenBeforeQuote = 1, lenBeforeDash = 1, repeatedCharacter = 0;
+	char lastChar = 32;
+	if(forceUppercaseOnFirstLetter)
+	{
+		if(!isupper(text[0]))
+			return false;
+	}
+	else if(!islower(text[0]) && !isupper(text[0]))
+		return false;
+
+	for (uint32_t size = 1; size < textLength; size++)
+	{
+		if (text[size] != 32)
+		{
+			lenBeforeSpace++;
+			if (text[size] != 39)
+				lenBeforeQuote++;
+			else
+			{
+				if (lenBeforeQuote <= 1 || size == textLength - 1 || text[size + 1] == 32)
+					return false;
+
+				lenBeforeQuote = 0;
+			}
+
+			if (text[size] != 45)
+				lenBeforeDash++;
+			else
+			{
+				if (lenBeforeDash <= 1 || size == textLength - 1 || text[size + 1] == 32)
+					return false;
+
+				lenBeforeDash = 0;
+			}
+
+			if (text[size] == lastChar)
+			{
+				repeatedCharacter++;
+				if (repeatedCharacter > 2)
+					return false;
+			}
+			else
+				repeatedCharacter = 0;
+
+			lastChar = text[size];
+		}
+		else
+		{
+			if (lenBeforeSpace <= 1 || size == textLength - 1 || text[size + 1] == 32)
+				return false;
+
+			lenBeforeSpace = lenBeforeQuote = lenBeforeDash = 0;
+		}
+
+		if (!(islower(text[size]) || text[size] == 32 || text[size] == 39 || text[size] == 45
+			|| (isupper(text[size]) && text[size - 1] == 32)))
+			return false;
+	}
+
+	return true;
+}
+
+bool isValidAccountName(std::string text)
+{
+	toLowerCaseString(text);
+
+	uint32_t textLength = text.length();
+	for(uint32_t size = 0; size < textLength; size++)
+	{
+		if(!islower(text[size]) && !isNumber(text[size]))
+			return false;
+	}
+
+	return true;
+}
+
+bool isValidPassword(std::string text)
+{
+	toLowerCaseString(text);
+
+	uint32_t textLength = text.length();
+	for (uint32_t size = 0; size < textLength; size++)
+	{
+		if (!islower(text[size]) && !isNumber(text[size]) && !isPasswordCharacter(text[size]))
+			return false;
+	}
+
+	return true;
+}
+
+bool isNumber(char character)
+{
+	return (character >= 48 && character <= 57);
+}
+
+bool isNumbers(std::string text)
+{
+	uint32_t textLength = text.length();
+	for(uint32_t size = 0; size < textLength; size++)
+	{
+		if(!isNumber(text[size]))
+			return false;
+	}
+
+	return true;
+}
+
+bool isPasswordCharacter(char character)
+{
+	return ((character >= 33 && character <= 47) || (character >= 58 && character <= 64) || (character >= 91 && character <= 96) || (character >= 123 && character <= 126));
+}
+
 #if !defined(_MSC_VER) || _MSC_VER < 1800
 double round(double v)
 {

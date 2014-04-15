@@ -119,19 +119,21 @@ void ProtocolGame::deleteProtocolTask()
 void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	//dispatcher thread
+	bool accountManager = g_config.getBoolean(ConfigManager::ACCOUNT_MANAGER);
 	Player* _player = g_game.getPlayerByName(name);
-	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES) || (accountManager && name == "Account Manager")) {
 		player = new Player(this);
 		player->setName(name);
 
 		player->useThing2();
 		player->setID();
-
 		if (!IOLoginData::preloadPlayer(player, name)) {
 			disconnectClient("Your character could not be loaded.");
 			return;
 		}
 
+
+		//add here the namelock manager
 		if (IOBan::isPlayerNamelocked(player->getGUID())) {
 			disconnectClient("Your character has been namelocked.");
 			return;
@@ -147,9 +149,26 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			return;
 		}
 
-		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
+		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && !player->isAccountManager() && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
 			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return;
+		}
+
+		if (player->getName() == "Account Manager")
+		{
+			if (!g_config.getBoolean(ConfigManager::ACCOUNT_MANAGER))
+			{
+				disconnectClient("Account Manager is disabled.");
+				return;
+			}
+
+			if (accountId != 1)
+			{
+				player->accountManager = MANAGER_ACCOUNT;
+				player->managerNumber = accountId;
+			}
+			else
+				player->accountManager = MANAGER_NEW;
 		}
 
 		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
@@ -351,8 +370,16 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (accountName.empty()) {
-		dispatchDisconnectClient("You must enter your account name.");
-		return;
+		if (!g_config.getBoolean(ConfigManager::ACCOUNT_MANAGER))
+		{
+			dispatchDisconnectClient("You must enter your account name.");
+			return;
+		}
+		else
+		{
+			accountName = "1";
+			password = "1";
+		}
 	}
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
@@ -473,7 +500,30 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		}
 	}
 
-	switch (recvbyte) {
+	if (player->isAccountManager())
+	{
+		switch (recvbyte)
+		{
+			case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, this, true, false))); break;
+			case 0x1D: addGameTask(&Game::playerReceivePingBack, player->getID()); break;
+			case 0x1E: addGameTask(&Game::playerReceivePing, player->getID()); break;
+			case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcod
+			case 0x89: parseTextWindow(msg); break;
+			case 0x8A: parseHouseWindow(msg); break;
+			case 0x8C: parseLookAt(msg); break;
+			case 0x8E: /* join aggression */ break;
+			case 0x96: parseSay(msg); break;
+			case 0xC9: /* update tile */ break;
+			case 0xF9: parseModalWindowAnswer(msg); break;
+
+			default:
+				// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << (int16_t)recvbyte << std::dec << "!" << std::endl;
+				break;
+		}
+	}
+	else
+	{
+		switch (recvbyte) {
 		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, this, true, false))); break;
 		case 0x1D: addGameTask(&Game::playerReceivePingBack, player->getID()); break;
 		case 0x1E: addGameTask(&Game::playerReceivePing, player->getID()); break;
@@ -558,6 +608,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		default:
 			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << (int16_t)recvbyte << std::dec << "!" << std::endl;
 			break;
+		}
 	}
 
 	if (msg.isOverrun()) {
