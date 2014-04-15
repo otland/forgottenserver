@@ -3012,43 +3012,39 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 		}
 
 		if (!ignoreEquipped && item->getID() == itemId) {
-			count += Item::countByType(item, subType);
+			uint32_t itemCount = Item::countByType(item, subType);
+			if (itemCount == 0) {
+				continue;
+			}
+
 			itemList.push_back(item);
+
+			count += itemCount;
+			if (count >= amount) {
+				g_game.internalRemoveItems(std::move(itemList), itemId, amount);
+				return true;
+			}
 		} else if (Container* container = item->getContainer()) {
 			for (ContainerIterator it = container->begin(), end = container->end(); it != end; ++it) {
 				Item* containerItem = *it;
 				if (containerItem->getID() == itemId) {
-					count += Item::countByType(containerItem, subType);
+					uint32_t itemCount = Item::countByType(containerItem, subType);
+					if (itemCount == 0) {
+						continue;
+					}
+
 					itemList.push_back(containerItem);
+
+					count += itemCount;
 					if (count >= amount) {
-						break;
+						g_game.internalRemoveItems(std::move(itemList), itemId, amount);
+						return true;
 					}
 				}
 			}
 		}
 	}
-
-	if (count < amount) {
-		return false;
-	}
-
-	const ItemType& it = Item::items[itemId];
-	if (it.stackable) {
-		for (Item* item : itemList) {
-			if (item->getItemCount() > amount) {
-				g_game.internalRemoveItem(item, amount);
-				break;
-			} else {
-				amount -= item->getItemCount();
-				g_game.internalRemoveItem(item);
-			}
-		}
-	} else {
-		for (Item* item : itemList) {
-			g_game.internalRemoveItem(item);
-		}
-	}
-	return true;
+	return false;
 }
 
 std::map<uint32_t, uint32_t>& Player::__getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const

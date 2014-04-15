@@ -6022,3 +6022,23 @@ Group* Game::getGroup(uint32_t id)
 {
 	return groups.getGroup(id);
 }
+
+void Game::internalRemoveItems(std::vector<Item*> itemList, uint16_t itemId, uint32_t amount)
+{
+	const ItemType& it = Item::items[itemId];
+	if (it.stackable) {
+		for (Item* item : itemList) {
+			if (item->getItemCount() > amount) {
+				internalRemoveItem(item, amount);
+				break;
+			} else {
+				amount -= item->getItemCount();
+				internalRemoveItem(item);
+			}
+		}
+	} else {
+		for (Item* item : itemList) {
+			internalRemoveItem(item);
+		}
+	}
+}
