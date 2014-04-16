@@ -1911,7 +1911,7 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text) const
 	std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 
 	for (const auto& it : players) {
-		it.second->sendCreatureSay(player, TALKTYPE_BROADCAST, text);
+		it.second->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
 	}
 
 	return true;
