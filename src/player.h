@@ -54,7 +54,6 @@ enum skillsid_t {
 };
 
 enum playerinfo_t {
-	PLAYERINFO_LEVEL,
 	PLAYERINFO_LEVELPERCENT,
 	PLAYERINFO_HEALTH,
 	PLAYERINFO_MAXHEALTH,
@@ -763,6 +762,11 @@ class Player : public Creature, public Cylinder
 		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr) {
 			if (client) {
 				client->sendCreatureSay(creature, type, text, pos);
+			}
+		}
+		void sendPrivateMessage(const Player* speaker, SpeakClasses type, const std::string& text) {
+			if (client) {
+				client->sendPrivateMessage(speaker, type, text);
 			}
 		}
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color) {

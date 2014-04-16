@@ -192,6 +192,7 @@ class ProtocolGame : public Protocol
 		void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers);
 		void sendOpenPrivateChannel(const std::string& receiver);
 		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId);
+		void sendPrivateMessage(const Player* speaker, SpeakClasses type, const std::string& text);
 		void sendIcons(uint16_t icons);
 		void sendFYIBox(const std::string& message);
 

@@ -598,7 +598,6 @@ void Player::updateInventoryWeight()
 int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 {
 	switch (playerinfo) {
-		case PLAYERINFO_LEVEL: return level;
 		case PLAYERINFO_LEVELPERCENT: return levelPercent;
 		case PLAYERINFO_MAGICLEVEL: return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]);
 		case PLAYERINFO_MAGICLEVELPERCENT: return magLevelPercent;
