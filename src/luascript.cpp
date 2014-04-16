@@ -2218,6 +2218,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "sendTextMessage", LuaScriptInterface::luaPlayerSendTextMessage);
 	registerMethod("Player", "sendChannelMessage", LuaScriptInterface::luaPlayerSendChannelMessage);
+	registerMethod("Player", "sendPrivateMessage", LuaScriptInterface::luaPlayerSendPrivateMessage);
 	registerMethod("Player", "channelSay", LuaScriptInterface::luaPlayerChannelSay);
 	registerMethod("Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
 
@@ -9085,6 +9086,22 @@ int32_t LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->sendChannelMessage(author, text, type, channelId);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSendPrivateMessage(lua_State* L)
+{
+	// player:sendPrivateMessage(speaker, text[, type])
+	SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 4, TALKTYPE_PRIVATE_FROM));
+	const std::string& text = getString(L, 3);
+	const Player* speaker = getUserdata<const Player>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendPrivateMessage(speaker, type, text);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

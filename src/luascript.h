@@ -952,6 +952,8 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerSendTextMessage(lua_State* L);
 		static int32_t luaPlayerSendChannelMessage(lua_State* L);
+		static int32_t luaPlayerSendPrivateMessage(lua_State* L);
+
 		static int32_t luaPlayerChannelSay(lua_State* L);
 		static int32_t luaPlayerOpenChannel(lua_State* L);
 
