@@ -9100,7 +9100,7 @@ int32_t LuaScriptInterface::luaPlayerSendPrivateMessage(lua_State* L)
 	const std::string& text = getString(L, 3);
 	const Player* speaker = getUserdata<const Player>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
+	if (player && speaker) {
 		player->sendPrivateMessage(speaker, type, text);
 		pushBoolean(L, true);
 	} else {
