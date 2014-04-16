@@ -1077,7 +1077,7 @@ void LuaScriptInterface::registerFunctions()
 
 	//getHouseByPlayerGUID(playerGUID)
 	lua_register(m_luaState, "getHouseByPlayerGUID", LuaScriptInterface::luaGetHouseByPlayerGUID);
-	
+
 	//getWorldTime()
 	lua_register(m_luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
 
@@ -1544,7 +1544,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_SLOT_FEET)
 	registerEnum(CONST_SLOT_RING)
 	registerEnum(CONST_SLOT_AMMO)
-	
+
 	registerEnum(GAME_STATE_STARTUP)
 	registerEnum(GAME_STATE_INIT)
 	registerEnum(GAME_STATE_NORMAL)
@@ -1870,7 +1870,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getWorldType", LuaScriptInterface::luaGameGetWorldType);
 	registerMethod("Game", "setWorldType", LuaScriptInterface::luaGameSetWorldType);
-	
+
 	registerMethod("Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
 
 	registerMethod("Game", "createItem", LuaScriptInterface::luaGameCreateItem);
@@ -2124,7 +2124,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getDescription", LuaScriptInterface::luaCreatureGetDescription);
 
 	registerMethod("Creature", "getPathTo", LuaScriptInterface::luaCreatureGetPathTo);
-	
+
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2537,7 +2537,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Party", "getLeader", LuaScriptInterface::luaPartyGetLeader);
 	registerMethod("Party", "setLeader", LuaScriptInterface::luaPartySetLeader);
-	
+
 	registerMethod("Party", "getMembers", LuaScriptInterface::luaPartyGetMembers);
 	registerMethod("Party", "getMemberCount", LuaScriptInterface::luaPartyGetMemberCount);
 
@@ -4652,15 +4652,15 @@ int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
 }
 
 #define MULTIOP(type, name, op) \
-	int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
-	{ \
-		int32_t n = lua_gettop(L); \
-		type w = popNumber<type>(L); \
-		for (int32_t i = 2; i <= n; ++i) \
-			w op popNumber<uint32_t>(L); \
-		lua_pushnumber(L, w); \
-		return 1; \
-	}
+int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
+{ \
+	int32_t n = lua_gettop(L); \
+	type w = popNumber<type>(L); \
+	for (int32_t i = 2; i <= n; ++i) \
+		w op popNumber<uint32_t>(L); \
+	lua_pushnumber(L, w); \
+	return 1; \
+}
 
 MULTIOP(int32_t, And, &= )
 MULTIOP(int32_t, Or, |= )
@@ -4670,12 +4670,12 @@ MULTIOP(uint32_t, UOr, |= )
 MULTIOP(uint32_t, UXor, ^= )
 
 #define SHIFTOP(type, name, op) \
-	int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
-	{ \
-		type n2 = popNumber<type>(L), n1 = popNumber<type>(L); \
-		lua_pushnumber(L, (n1 op n2)); \
-		return 1; \
-	}
+int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
+{ \
+	type n2 = popNumber<type>(L), n1 = popNumber<type>(L); \
+	lua_pushnumber(L, (n1 op n2)); \
+	return 1; \
+}
 
 SHIFTOP(int32_t, LeftShift, << )
 SHIFTOP(int32_t, RightShift, >> )
@@ -4931,7 +4931,7 @@ int32_t LuaScriptInterface::luaGameLoadMap(lua_State* L)
 int32_t LuaScriptInterface::luaGameGetExperienceStage(lua_State* L)
 {
 	// Game.getExperienceStage(level)
-	uint32_t level = getNumber<uint32_t>(L, 1);	
+	uint32_t level = getNumber<uint32_t>(L, 1);
 	lua_pushnumber(L, g_game.getExperienceStage(level));
 	return 1;
 }
@@ -6385,26 +6385,28 @@ int32_t LuaScriptInterface::luaItemGetParent(lua_State* L)
 {
 	// item:getParent()
 	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		Cylinder* parent = item->getParent();
-		if (parent) {
-			if (Creature* creature = parent->getCreature()) {
-				pushUserdata<Creature>(L, creature);
-				setCreatureMetatable(L, -1, creature);
-			} else if (Item* item = parent->getItem()) {
-				pushUserdata<Item>(L, item);
-				setItemMetatable(L, -1, item);
-			} else if (Tile* tile = parent->getTile()) {
-				pushUserdata<Tile>(L, tile);
-				setMetatable(L, -1, "Tile");
-			} else if (parent == VirtualCylinder::virtualCylinder) {
-				pushBoolean(L, true);
-			} else {
-				lua_pushnil(L);
-			}
-		} else {
-			lua_pushnil(L);
-		}
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Cylinder* parent = item->getParent();
+	if (!parent) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Creature* creature = parent->getCreature()) {
+		pushUserdata<Creature>(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (Item* item = parent->getItem()) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
+	} else if (Tile* tile = parent->getTile()) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
+	} else if (parent == VirtualCylinder::virtualCylinder) {
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -8563,17 +8565,19 @@ int32_t LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 {
 	// player:getGuild()
 	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		Guild* guild = player->getGuild();
-		if (guild) {
-			pushUserdata<Guild>(L, guild);
-			setMetatable(L, -1, "Guild");
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!player) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	Guild* guild = player->getGuild();
+	if (!guild) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushUserdata<Guild>(L, guild);
+	setMetatable(L, -1, "Guild");
 	return 1;
 }
 
@@ -9096,18 +9100,13 @@ int32_t LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSendPrivateMessage(lua_State* L)
 {
 	// player:sendPrivateMessage(speaker, text[, type])
-	const Player* speaker = getUserdata<const Player>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (!speaker) {
-		lua_pushnil(L);
-		return 1;
-	}
-
+	const Player* speaker = getUserdata<const Player>(L, 2);
 	const std::string& text = getString(L, 3);
 	SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 4, TALKTYPE_PRIVATE_FROM));
 	player->sendPrivateMessage(speaker, type, text);
@@ -10121,7 +10120,7 @@ int32_t LuaScriptInterface::luaGuildAddMember(lua_State* L)
 		lua_pushnil(L);
 		return 1;
 	}
-	
+
 	Player* player = getPlayer(L, 2);
 	if (player) {
 		guild->addMember(player);
@@ -12417,12 +12416,8 @@ int32_t LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 
 //
 LuaEnvironment::LuaEnvironment() :
-	LuaScriptInterface("Main Interface"),
-	m_testInterface(nullptr),
-	m_lastEventTimerId(0),
-	m_lastCombatId(0),
-	m_lastConditionId(0),
-	m_lastAreaId(0)
+	LuaScriptInterface("Main Interface"), m_testInterface(nullptr),
+	m_lastEventTimerId(0), m_lastCombatId(0), m_lastConditionId(0), m_lastAreaId(0)
 {
 	//
 }
@@ -12610,18 +12605,18 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	if (it == m_timerEvents.end()) {
 		return;
 	}
-
+	
 	LuaTimerEventDesc timerEventDesc = std::move(it->second);
 	m_timerEvents.erase(it);
-
+	
 	//push function
 	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
-
+	
 	//push parameters
 	for (auto parameter : boost::adaptors::reverse(timerEventDesc.parameters)) {
 		lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, parameter);
 	}
-
+	
 	//call the function
 	if (reserveScriptEnv()) {
 		ScriptEnvironment* env = getScriptEnv();
@@ -12631,7 +12626,7 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	} else {
 		std::cout << "[Error - LuaScriptInterface::executeTimerEvent] Call stack overflow" << std::endl;
 	}
-
+	
 	//free resources
 	luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
 	for (auto parameter : timerEventDesc.parameters) {
