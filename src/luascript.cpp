@@ -9096,16 +9096,22 @@ int32_t LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSendPrivateMessage(lua_State* L)
 {
 	// player:sendPrivateMessage(speaker, text[, type])
-	SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 4, TALKTYPE_PRIVATE_FROM));
-	const std::string& text = getString(L, 3);
 	const Player* speaker = getUserdata<const Player>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
-	if (player && speaker) {
-		player->sendPrivateMessage(speaker, type, text);
-		pushBoolean(L, true);
-	} else {
+	if (!player) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	if (!speaker) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const std::string& text = getString(L, 3);
+	SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 4, TALKTYPE_PRIVATE_FROM));
+	player->sendPrivateMessage(speaker, type, text);
+	pushBoolean(L, true);
 	return 1;
 }
 

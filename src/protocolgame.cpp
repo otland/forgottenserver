@@ -2240,8 +2240,12 @@ void ProtocolGame::sendPrivateMessage(const Player* speaker, SpeakClasses type, 
 	msg.AddByte(0xAA);
 	static uint32_t statementId = 0;
 	msg.add<uint32_t>(++statementId);
-	msg.AddString(speaker->getName());
-	msg.add<uint16_t>(speaker->getLevel());
+	if (speaker) {
+		msg.AddString(speaker->getName());
+		msg.add<uint16_t>(speaker->getLevel());
+	} else {
+		msg.add<uint32_t>(0x00);
+	}
 	msg.AddByte(type);
 	msg.AddString(text);
 	writeToOutputBuffer(msg);
