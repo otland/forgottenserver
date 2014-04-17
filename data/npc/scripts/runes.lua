@@ -3,10 +3,12 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 local talkState = {}
 
-function onCreatureAppear(cid)				npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid) 			npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)			npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()					npcHandler:onThink()					end
+function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
+function onCreatureDisappear(cid) 		npcHandler:onCreatureDisappear(cid)			end
+function onCreatureSay(cid, type, msg)	npcHandler:onCreatureSay(cid, type, msg)	end
+function onThink()						npcHandler:onThink()						end
+function onPlayerEndTrade(cid)			npcHandler:onPlayerEndTrade(cid)			end
+function onPlayerCloseChannel(cid)		npcHandler:onPlayerCloseChannel(cid)		end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -92,40 +94,43 @@ shopModule:addSellableItem({'hailstorm rod', 'hailstorm'}, 2183, 7500, 'hailstor
 shopModule:addSellableItem({'springsprout rod', 'springsprout'}, 8912, 9000, 'springsprout rod')
 shopModule:addSellableItem({'underworld rod', 'underworld'}, 8910, 11000, 'underworld rod')
 
-
 function creatureSayCallback(cid, type, msg)
-	if(not npcHandler:isFocused(cid)) then
+	if not npcHandler:isFocused(cid) then
 		return false
 	end
 
-	local talkUser = NPCHANDLER_CONVBEHAVIOR == CONVERSATION_DEFAULT and 0 or cid
-
-	local items = {[1] = 2190, [2] = 2182, [5] = 2190, [6] = 2182}
-	if(msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand')) then
-		if(isSorcerer(cid) or isDruid(cid)) then
-			if(getPlayerStorageValue(cid, 30002) == -1) then
-				selfSay('So you ask me for a {' .. getItemNameById(items[getPlayerVocation(cid)]) .. '} to begin your advanture?', cid)
-				talkState[talkUser] = 1
+	if msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand') then
+		local player = Player(cid)
+		local playerVoc = player:getVocation():getId()
+		if isInArray({1,2,5,6}, playerVoc) then
+			local item = ({[1] = 2190, [2] = 2182, [5] = 2190, [6] = 2182})[playerVoc]
+			if player:getStorageValue(30002) <= 0 then
+				npcHandler:say("So you ask me for a {" .. ItemType(item):getName() .. "} to begin your advanture?", cid)
+				talkState[cid] = item
 			else
-				selfSay('What? I have already gave you one {' .. getItemNameById(items[getPlayerVocation(cid)]) .. '}!', cid)
+				npcHandler:say("What? I have already gave you one {" .. ItemType(item):getName() .. "}!", cid)
 			end
 		else
-			selfSay('Sorry, you aren\'t a druid either a sorcerer.', cid)
+			npcHandler:say("Sorry, you aren't a druid either a sorcerer.", cid)
 		end
-	elseif(msgcontains(msg, 'yes')) then
-		if(talkState[talkUser] == 1) then
-			doPlayerAddItem(cid, items[getPlayerVocation(cid)], 1)
-			selfSay('Here you are young adept, take care yourself.', cid)
-			setPlayerStorageValue(cid, 30002, 1)
+	elseif talkState[cid] == 2190 or talkState[cid] == 2182 then
+		if msgcontains(msg, 'yes') then
+			local player = Player(cid)
+			if player:addItem(talkState[cid], 1) then
+				player:setStorageValue(30002, 1)
+				npcHandler:say("Here you are young adept, take care yourself.", cid)
+			end
+		elseif msgcontains(msg, 'no') then
+			npcHandler:say('Ok then.', cid)
 		end
-		talkState[talkUser] = 0
-	elseif(msgcontains(msg, 'no') and isInArray({1}, talkState[talkUser]) == TRUE) then
-		selfSay('Ok then.', cid)
-		talkState[talkUser] = 0
+		talkState[cid] = 0
 	end
 
 	return true
 end
+
+npcHandler:setMessage(MESSAGE_GREET, "Hello |PLAYERNAME|. I sell runes, potions, wands and rods.")
+npcHandler:setMessage(MESSAGE_DECLINE, "Is |TOTALCOST| gold coins too much for you? Get out of here!")
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

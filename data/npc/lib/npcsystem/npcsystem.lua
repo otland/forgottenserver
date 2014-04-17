@@ -14,7 +14,7 @@ shop_premium = {}
 npcs_loaded_shop = {}
 npcs_loaded_travel = {}
 
-if(NpcSystem == nil) then
+if NpcSystem == nil then
 	-- Loads the underlying classes of the npcsystem.
 	dofile('data/npc/lib/npcsystem/keywordhandler.lua')
 	dofile('data/npc/lib/npcsystem/npchandler.lua')
@@ -51,7 +51,7 @@ if(NpcSystem == nil) then
 	-- Gets an npcparameter with the specified key. Returns nil if no such parameter is found.
 	function NpcSystem.getParameter(key)
 		local ret = getNpcParameter(tostring(key))
-		if((type(ret) == 'number' and ret == 0) or ret == nil) then
+		if (type(ret) == 'number' and ret == 0) or ret == nil then
 			return nil
 		else
 			return ret
@@ -61,112 +61,112 @@ if(NpcSystem == nil) then
 	-- Parses all known parameters for the npc. Also parses parseable modules.
 	function NpcSystem.parseParameters(npcHandler)
 		local ret = NpcSystem.getParameter('idletime')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler.idleTime = tonumber(ret)
 		end
 		local ret = NpcSystem.getParameter('talkradius')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler.talkRadius = tonumber(ret)
 		end
 		local ret = NpcSystem.getParameter('message_greet')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_GREET, ret)
 		end
 		local ret = NpcSystem.getParameter('message_farewell')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_FAREWELL, ret)
 		end
 		local ret = NpcSystem.getParameter('message_decline')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_DECLINE, ret)
 		end
 		local ret = NpcSystem.getParameter('message_needmorespace')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_NEEDMORESPACE, ret)
 		end
 		local ret = NpcSystem.getParameter('message_needspace')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_NEEDSPACE, ret)
 		end
 		local ret = NpcSystem.getParameter('message_sendtrade')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_SENDTRADE, ret)
 		end
 		local ret = NpcSystem.getParameter('message_noshop')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_NOSHOP, ret)
 		end
 		local ret = NpcSystem.getParameter('message_oncloseshop')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_ONCLOSESHOP, ret)
 		end
 		local ret = NpcSystem.getParameter('message_onbuy')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_ONBUY, ret)
 		end
 		local ret = NpcSystem.getParameter('message_onsell')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_ONSELL, ret)
 		end
 		local ret = NpcSystem.getParameter('message_missingmoney')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_MISSINGMONEY, ret)
 		end
 		local ret = NpcSystem.getParameter('message_needmoney')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_NEEDMONEY, ret)
 		end
 		local ret = NpcSystem.getParameter('message_missingitem')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_MISSINGITEM, ret)
 		end
 		local ret = NpcSystem.getParameter('message_needitem')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_NEEDITEM, ret)
 		end
 		local ret = NpcSystem.getParameter('message_idletimeout')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_IDLETIMEOUT, ret)
 		end
 		local ret = NpcSystem.getParameter('message_walkaway')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_WALKAWAY, ret)
 		end
 		local ret = NpcSystem.getParameter('message_alreadyfocused')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_ALREADYFOCUSED, ret)
 		end
 		local ret = NpcSystem.getParameter('message_buy')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_BUY, ret)
 		end
 		local ret = NpcSystem.getParameter('message_sell')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_SELL, ret)
 		end
 		local ret = NpcSystem.getParameter('message_bought')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_BOUGHT, ret)
 		end
 		local ret = NpcSystem.getParameter('message_sold')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_SOLD, ret)
 		end
 		local ret = NpcSystem.getParameter('message_walkaway_male')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_WALKAWAY_MALE, ret)
 		end
 		local ret = NpcSystem.getParameter('message_walkaway_female')
-		if(ret ~= nil) then
+		if ret ~= nil then
 			npcHandler:setMessage(MESSAGE_WALKAWAY_FEMALE, ret)
 		end
 
 		-- Parse modules.
 		for parameter, module in pairs(Modules.parseableModules) do
 			local ret = NpcSystem.getParameter(parameter)
-			if(ret ~= nil) then
+			if ret ~= nil then
 				local number = tonumber(ret)
-				if(number ~= 0 and module.parseParameters ~= nil) then
+				if number ~= 0 and module.parseParameters ~= nil then
 					local instance = module:new()
 					npcHandler:addModule(instance)
 					instance:parseParameters()

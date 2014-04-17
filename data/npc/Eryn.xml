@@ -2,8 +2,4 @@
 <npc name="Eryn" script="runes.lua" walkinterval="2000" floorchange="0">
 	<health now="100" max="100"/>
 	<look type="130" head="39" body="122" legs="125" feet="57" addons="0"/>
-	<parameters>
-		<parameter key="message_greet" value="Hello |PLAYERNAME|. I sell runes, potions, wands and rods."/>
-		<parameter key="message_decline" value="Is |TOTALCOST| gold coins too much for you? Get out of here!"/>
-	</parameters>
 </npc>

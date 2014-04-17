@@ -1,8 +1,3 @@
 <npc name="The Oracle" script="The Oracle.lua" walkinterval="0" speechbubble="3">
 	<look typeex="1448"/>
-	<parameters>
-		<parameter key="message_greet" value="|PLAYERNAME|, ARE YOU PREPARED TO FACE YOUR DESTINY?" />
-		<parameter key="message_walkaway" value="COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!" />
-		<parameter key="message_farewell" value="COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!" />
-	</parameters>
 </npc>
