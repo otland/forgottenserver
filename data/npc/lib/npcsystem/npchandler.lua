@@ -291,7 +291,7 @@ if NpcHandler == nil then
 	function NpcHandler:getMessage(id)
 		local ret = nil
 		if self.messages ~= nil then
-			ret = choose(self.messages[id])
+			ret = self.messages[id]
 		end
 		return ret
 	end
