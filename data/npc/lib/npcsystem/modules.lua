@@ -442,7 +442,7 @@ if Modules == nil then
 				npcHandler:say("It was a pleasure doing business with you.", cid)
 				npcHandler:releaseFocus(cid)
 				doTeleportThing(cid, destination, 0)
-				doSendMagicEffect(destination, 10)
+				doSendMagicEffect(destination, CONST_ME_TELEPORT)
 			end
 		else
 			npcHandler:say("I can only allow premium players to travel there.", cid)
@@ -479,7 +479,7 @@ if Modules == nil then
 		if(not isPlayerPremiumCallback or isPlayerPremiumCallback(cid) or parameters.premium ~= true) then
 			if(doPlayerRemoveMoney(cid, cost) == TRUE) then
 				doTeleportThing(cid, destination, 0)
-				doSendMagicEffect(destination, 10)
+				doSendMagicEffect(destination, CONST_ME_TELEPORT)
 			end
 		end
 		return true
