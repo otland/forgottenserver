@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gaz'haragoth" nameDescription="a gaz'haragoth" race="undead" experience="1000000" speed="400" manacost="0" script="gaz'haragoth.lua">
+<monster name="Gaz'haragoth" nameDescription="a gaz'haragoth" race="undead" experience="1000000" speed="400" manacost="0">
 	<health now="350000" max="350000"/>
 	<look type="591" head="0" body="94" legs="79" feet="79" corpse="22562"/>
 	<targetchange interval="10000" chance="20"/>
