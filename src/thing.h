@@ -38,11 +38,11 @@ class Thing
 
 		virtual std::string getDescription(int32_t lookDistance) const = 0;
 
-		virtual Cylinder* getParent() {
+		virtual Cylinder* getParent() const {
 			return nullptr;
 		}
-		virtual const Cylinder* getParent() const {
-			return nullptr;
+		virtual Cylinder* getRealParent() const {
+			return getParent();
 		}
 
 		virtual void setParent(Cylinder*) {

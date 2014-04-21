@@ -424,10 +424,7 @@ class Creature : virtual public Thing
 		bool registerCreatureEvent(const std::string& name);
 		bool unregisterCreatureEvent(const std::string& name);
 
-		Cylinder* getParent() {
-			return _tile;
-		}
-		const Cylinder* getParent() const {
+		Cylinder* getParent() const {
 			return _tile;
 		}
 		virtual void setParent(Cylinder* cylinder) {

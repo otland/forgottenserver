@@ -2355,7 +2355,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 		return;
 	}
 
-	Container* parentContainer = dynamic_cast<Container*>(container->getParent());
+	Container* parentContainer = dynamic_cast<Container*>(container->getRealParent());
 	if (!parentContainer) {
 		Tile* tile = container->getTile();
 		if (!tile) {
