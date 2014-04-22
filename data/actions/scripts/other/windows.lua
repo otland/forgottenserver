@@ -41,7 +41,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 	end
 	if house then
 		local player = Player(cid)
-		if player:getPosition():getTile():getHouse() ~= house and player:getAccountType() < ACCOUNT_TYPE_COMMUNITY_MANAGER then
+		if player:getPosition():getTile():getHouse() ~= house and player:getAccountType() < ACCOUNT_TYPE_GAMEMASTER then
 			return false
 		end
 	end
