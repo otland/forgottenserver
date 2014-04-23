@@ -17306,6 +17306,7 @@
 		<attribute key="weight" value="500" />
 	</item>
 	<item id="9928" article="a" name="leaf legs">
+		<attribute key="slotType" value="legs" />
 		<attribute key="weight" value="1200" />
 	</item>
 	<item id="9929" article="a" name="flower dress">
