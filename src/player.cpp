@@ -1891,6 +1891,77 @@ void Player::addExperience(uint64_t exp, bool sendText/* = false*/, bool applySt
 	sendStats();
 }
 
+void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
+{
+	if (experience == 0) {
+		return;
+	}
+
+	experience = std::max<int32_t>(0, experience - exp);
+
+	if (sendText) {
+		const Position& targetPos = getPosition();
+
+		std::ostringstream ss;
+		ss << "You lost " << exp << " experience points.";
+		sendExperienceMessage(MESSAGE_EXPERIENCE, ss.str(), targetPos, exp, TEXTCOLOR_RED);
+
+		std::ostringstream ssExp;
+		ssExp << getNameDescription() << " lost " << exp << " experience points.";
+		std::string strExp = ssExp.str();
+
+		SpectatorVec list;
+		g_game.getSpectators(list, targetPos, false, true);
+		for (Creature* spectator : list) {
+			Player* tmpPlayer = spectator->getPlayer();
+			if (tmpPlayer != this) {
+				tmpPlayer->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, exp, TEXTCOLOR_RED);
+			}
+		}
+	}
+
+	while (level > 1 && experience < Player::getExpForLevel(level)) {
+		--level;
+		healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
+		manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
+		capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
+	}
+
+	uint32_t oldLevel = level;
+
+	if (oldLevel != level) {
+		health = healthMax;
+		mana = manaMax;
+
+		updateBaseSpeed();
+
+		int32_t newSpeed = getBaseSpeed();
+		setBaseSpeed(newSpeed);
+
+		g_game.changeSpeed(this, 0);
+		g_game.addCreatureHealth(this);
+
+		if (party) {
+			party->updateSharedExperience();
+		}
+
+		g_creatureEvents->playerAdvance(this, SKILL_LEVEL, oldLevel, level);
+
+		std::ostringstream ss;
+		ss << "You were downgraded from Level " << oldLevel << " to Level " << level << '.';
+		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+	}
+
+	uint64_t currLevelExp = Player::getExpForLevel(level);
+	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
+	if (nextLevelExp > currLevelExp) {
+		levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+	} else {
+		levelPercent = 0;
+	}
+	sendStats();
+}
+
 uint32_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 {
 	if (nextLevelCount == 0) {
@@ -2120,8 +2191,6 @@ void Player::death(Creature* _lastHitCreature)
 			skills[i][SKILLVALUE_TRIES] = std::max<int32_t>(0, skills[i][SKILLVALUE_TRIES] - lostSkillTries);
 			skills[i][SKILLVALUE_PERCENT] = Player::getPercentLevel(skills[i][SKILLVALUE_TRIES], vocation->getReqSkillTries(i, skills[i][SKILLVALUE_LEVEL]));
 		}
-
-		//
 
 		//Level loss
 		uint32_t oldLevel = level;

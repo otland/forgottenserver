@@ -2155,6 +2155,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getExperience", LuaScriptInterface::luaPlayerGetExperience);
 	registerMethod("Player", "addExperience", LuaScriptInterface::luaPlayerAddExperience);
+	registerMethod("Player", "removeExperience", LuaScriptInterface::luaPlayerRemoveExperience);
 	registerMethod("Player", "getLevel", LuaScriptInterface::luaPlayerGetLevel);
 
 	registerMethod("Player", "getMagicLevel", LuaScriptInterface::luaPlayerGetMagicLevel);
@@ -8257,6 +8258,21 @@ int32_t LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 		int64_t experience = getNumber<int64_t>(L, 2);
 		bool sendText = getBoolean(L, 3, false);
 		player->addExperience(experience, sendText);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerRemoveExperience(lua_State* L)
+{
+	// player:removeExperience(experience[, sendText = false])
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		int64_t experience = getNumber<int64_t>(L, 2);
+		bool sendText = getBoolean(L, 3, false);
+		player->removeExperience(experience, sendText);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
