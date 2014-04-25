@@ -10739,11 +10739,12 @@ int32_t LuaScriptInterface::luaHouseGetOwnerGuid(lua_State* L)
 
 int32_t LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
 {
-	// house:setOwnerGuid(guid)
+	// house:setOwnerGuid(guid[, updateDatabase = true])
+	bool updateDatabase = getBoolean(L, 3, true);
 	uint32_t guid = getNumber<uint32_t>(L, 2);
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		house->setOwner(guid);
+		house->setOwner(guid, updateDatabase);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
