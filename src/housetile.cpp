@@ -67,14 +67,12 @@ void HouseTile::updateHouse(Item* item)
 {
 	if (item->getTile() == this) {
 		Door* door = item->getDoor();
-
 		if (door && door->getDoorId() != 0) {
 			house->addDoor(door);
 		}
 
 		if (!door) {
 			BedItem* bed = item->getBed();
-
 			if (bed) {
 				house->addBed(bed);
 			}
@@ -98,7 +96,6 @@ ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 			return RET_CANNOTTHROW;
 		}
 	}
-
 	return Tile::__queryAdd(index, thing, count, flags, actor);
 }
 
@@ -109,7 +106,6 @@ Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();
 				Tile* destTile = g_game.getTile(entryPos.x, entryPos.y, entryPos.z);
-
 				if (!destTile) {
 					std::cout << "Error: [HouseTile::__queryDestination] House entry not correct"
 					          << " - Name: " << house->getName()
@@ -118,7 +114,6 @@ Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item
 
 					const Position& templePos = player->getTemplePosition();
 					destTile = g_game.getTile(templePos.x, templePos.y, templePos.z);
-
 					if (!destTile) {
 						destTile = &(Tile::nullptr_tile);
 					}
@@ -130,6 +125,5 @@ Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item
 			}
 		}
 	}
-
 	return Tile::__queryDestination(index, thing, destItem, flags);
 }

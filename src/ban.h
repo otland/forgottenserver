@@ -27,6 +27,9 @@ struct BanInfo {
 };
 
 struct ConnectBlock {
+	ConnectBlock(uint64_t lastAttempt, uint64_t blockTime, uint32_t count)
+		: lastAttempt(lastAttempt), blockTime(blockTime), count(count) {}
+
 	uint64_t lastAttempt;
 	uint64_t blockTime;
 	uint32_t count;

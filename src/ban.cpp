@@ -31,11 +31,8 @@ bool Ban::acceptConnection(uint32_t clientip)
 
 	auto it = ipConnectMap.find(clientip);
 	if (it == ipConnectMap.end()) {
-		ConnectBlock cb;
-		cb.lastAttempt = currentTime;
-		cb.blockTime = 0;
-		cb.count = 1;
-		ipConnectMap[clientip] = cb;
+		// TODO: emplace
+		ipConnectMap.insert(std::make_pair(clientip, ConnectBlock(currentTime, 0, 1)));
 		return true;
 	}
 
