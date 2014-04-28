@@ -2803,10 +2803,6 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::st
 
 void ProtocolGame::sendSpellCooldown(uint8_t spellId, uint32_t time)
 {
-	if (spellId == 0 || spellId > 160) { // TODO: define max spells somewhere
-		return;
-	}
-
 	NetworkMessage msg;
 	msg.AddByte(0xA4);
 	msg.AddByte(spellId);
