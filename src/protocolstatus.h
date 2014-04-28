@@ -34,19 +34,8 @@ class ProtocolStatus : public Protocol
 			return "status protocol";
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t protocolStatusCount;
-#endif
-		ProtocolStatus(Connection_ptr connection) : Protocol(connection) {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolStatusCount++;
-#endif
-		}
-		virtual ~ProtocolStatus() {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolStatusCount--;
-#endif
-		}
+		ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
+		virtual ~ProtocolStatus() {}
 
 		virtual int32_t getProtocolId() {
 			return 0xFF;

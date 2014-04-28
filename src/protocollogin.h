@@ -36,19 +36,8 @@ class ProtocolLogin : public Protocol
 			return "login protocol";
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t protocolLoginCount;
-#endif
-		ProtocolLogin(Connection_ptr connection) : Protocol(connection) {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolLoginCount++;
-#endif
-		}
-		virtual ~ProtocolLogin() {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolLoginCount--;
-#endif
-		}
+		ProtocolLogin(Connection_ptr connection) : Protocol(connection) {}
+		virtual ~ProtocolLogin() {}
 
 		virtual int32_t getProtocolId() {
 			return 0x01;

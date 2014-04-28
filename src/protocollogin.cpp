@@ -35,10 +35,6 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t ProtocolLogin::protocolLoginCount = 0;
-#endif
-
 void ProtocolLogin::disconnectClient(const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);

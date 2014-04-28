@@ -2,6 +2,5 @@
 <commands>
 	<command cmd="/reload" group="2" acctype="5" log="yes"/>
 	<command cmd="/raid" group="2" acctype="4" log="yes"/>
-	<command cmd="/serverdiag" group="2" acctype="5" log="yes"/>
 	<command cmd="!sellhouse" group="1" acctype="1" log="no"/>
 </commands>

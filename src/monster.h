@@ -43,9 +43,6 @@ class Monster : public Creature
 		Monster(MonsterType* mtype);
 
 	public:
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t monsterCount;
-#endif
 		static Monster* createMonster(MonsterType* mType);
 		static Monster* createMonster(const std::string& name);
 		static int32_t despawnRange;

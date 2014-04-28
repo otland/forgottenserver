@@ -32,21 +32,9 @@ class ProtocolOld : public Protocol
 		enum {server_sends_first = false};
 		enum {use_checksum = false};
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t protocolOldCount;
-#endif
+		ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
 
-		ProtocolOld(Connection_ptr connection) : Protocol(connection) {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolOldCount++;
-#endif
-		}
-
-		virtual ~ProtocolOld() {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolOldCount--;
-#endif
-		}
+		virtual ~ProtocolOld() {}
 
 		virtual void onRecvFirstMessage(NetworkMessage& msg);
 

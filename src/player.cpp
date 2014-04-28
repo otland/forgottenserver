@@ -48,10 +48,6 @@ MuteCountMap Player::muteCountMap;
 
 uint32_t Player::playerAutoID = 0x10000000;
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t Player::playerCount = 0;
-#endif
-
 Player::Player(ProtocolGame* p) :
 	Creature()
 {
@@ -185,10 +181,6 @@ Player::Player(ProtocolGame* p) :
 	nextUseStaminaTime = 0;
 
 	lastQuestlogUpdate = 0;
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	playerCount++;
-#endif
 }
 
 Player::~Player()
@@ -213,10 +205,6 @@ Player::~Player()
 
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	playerCount--;
-#endif
 }
 
 bool Player::setVocation(uint32_t vocId)

@@ -33,9 +33,6 @@ extern Game g_game;
 
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t ProtocolStatus::protocolStatusCount = 0;
-#endif
 
 enum RequestedInfo_t {
 	REQUEST_BASIC_SERVER_INFO = 0x01,

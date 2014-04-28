@@ -44,12 +44,6 @@
 #include "scheduler.h"
 #include "events.h"
 #include "chat.h"
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-#include "outputmessage.h"
-#include "connection.h"
-#include "protocolstatus.h"
-#include "protocollogin.h"
-#endif
 
 #include "pugicast.h"
 
@@ -73,7 +67,6 @@ s_defcommands Commands::defined_commands[] = {
 	//admin commands
 	{"/reload", &Commands::reloadInfo},
 	{"/raid", &Commands::forceRaid},
-	{"/serverdiag", &Commands::serverDiag},
 
 	// player commands
 	{"!sellhouse", &Commands::sellHouse}
@@ -399,39 +392,4 @@ void Commands::forceRaid(Player& player, const std::string& param)
 	}
 
 	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Raid started.");
-}
-
-void Commands::serverDiag(Player& player, const std::string&)
-{
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	std::ostringstream text;
-	text << "Server diagonostic:\n";
-	text << "World:\n";
-	text << "Player: " << g_game.getPlayersOnline() << " (" << Player::playerCount << ")\n";
-	text << "Npc: " << g_game.getNpcsOnline() << " (" << Npc::npcCount << ")\n";
-	text << "Monster: " << g_game.getMonstersOnline() << " (" << Monster::monsterCount << ")\n";
-
-	text << "\nProtocols:\n";
-	text << "--------------------\n";
-	text << "ProtocolGame: " << ProtocolGame::protocolGameCount << "\n";
-	text << "ProtocolLogin: " << ProtocolLogin::protocolLoginCount << "\n";
-	text << "ProtocolStatus: " << ProtocolStatus::protocolStatusCount << "\n\n";
-
-	text << "\nConnections:\n";
-	text << "--------------------\n";
-	text << "Active connections: " << Connection::connectionCount << "\n";
-	text << "Total message pool: " << OutputMessagePool::getInstance()->getTotalMessageCount() << "\n";
-	text << "Auto message pool: " << OutputMessagePool::getInstance()->getAutoMessageCount() << "\n";
-	text << "Free message pool: " << OutputMessagePool::getInstance()->getAvailableMessageCount() << "\n";
-
-	text << "\nLibraries:\n";
-	text << "--------------------\n";
-	text << "asio: " << BOOST_ASIO_VERSION << "\n";
-	text << "lua: " << LUA_VERSION << "\n";
-	text << "pugixml: " << PUGIXML_VERSION << "\n";
-
-	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, text.str());
-#else
-	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
-#endif
 }

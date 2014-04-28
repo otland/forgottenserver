@@ -57,10 +57,6 @@ class ConnectionManager
 class Connection : public std::enable_shared_from_this<Connection>
 {
 	public:
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t connectionCount;
-#endif
-
 		// non-copyable
 		Connection(const Connection&) = delete;
 		Connection& operator=(const Connection&) = delete;
@@ -94,20 +90,10 @@ class Connection : public std::enable_shared_from_this<Connection>
 			m_readError = false;
 			m_packetsSent = 0;
 			m_timeConnected = time(nullptr);
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			connectionCount++;
-#endif
 		}
 		friend class ConnectionManager;
 
 	public:
-		~Connection() {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			connectionCount--;
-#endif
-		}
-
 		boost::asio::ip::tcp::socket& getHandle() {
 			return *m_socket;
 		}

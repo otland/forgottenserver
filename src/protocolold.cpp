@@ -29,10 +29,6 @@
 
 extern Game g_game;
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t ProtocolOld::protocolOldCount = 0;
-#endif
-
 void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);

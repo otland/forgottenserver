@@ -127,9 +127,6 @@ typedef std::vector<uint32_t> GuildWarList;
 class Player : public Creature, public Cylinder
 {
 	public:
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t playerCount;
-#endif
 		Player(ProtocolGame* p);
 		virtual ~Player();
 

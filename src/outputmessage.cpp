@@ -23,10 +23,6 @@
 #include "protocol.h"
 #include "scheduler.h"
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t OutputMessagePool::OutputMessagePoolCount = OUTPUT_POOL_SIZE;
-#endif
-
 OutputMessage::OutputMessage()
 {
 	freeMessage();
@@ -155,10 +151,6 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 	if (m_outputMessages.empty()) {
 		OutputMessage* msg = new OutputMessage();
 		m_outputMessages.push_back(msg);
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		OutputMessagePoolCount++;
-#endif
 	}
 
 	OutputMessage_ptr outputmessage;

@@ -35,10 +35,6 @@ int32_t Monster::despawnRadius;
 
 uint32_t Monster::monsterAutoID = 0x40000000;
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t Monster::monsterCount = 0;
-#endif
-
 Monster* Monster::createMonster(MonsterType* mType)
 {
 	return new Monster(mType);
@@ -98,19 +94,12 @@ Monster::Monster(MonsterType* _mtype) :
 			std::cout << "[Warning - Monster::Monster] Unknown event name: " << scriptName << std::endl;
 		}
 	}
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	monsterCount++;
-#endif
 }
 
 Monster::~Monster()
 {
 	clearTargetList();
 	clearFriendList();
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	monsterCount--;
-#endif
 }
 
 void Monster::addList()

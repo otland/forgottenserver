@@ -43,7 +43,6 @@ class Commands
 		void reloadInfo(Player& player, const std::string& param);
 		void sellHouse(Player& player, const std::string& param);
 		void forceRaid(Player& player, const std::string& param);
-		void serverDiag(Player& player, const std::string& param);
 
 		//table of commands
 		static s_defcommands defined_commands[];

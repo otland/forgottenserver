@@ -160,10 +160,6 @@ class OutputMessagePool
 			return &instance;
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t OutputMessagePoolCount;
-#endif
-
 		void send(OutputMessage_ptr msg);
 		void sendAll();
 		void stop() {
@@ -176,15 +172,9 @@ class OutputMessagePool
 			return m_frameTime;
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		size_t getTotalMessageCount() const {
-			return OutputMessagePoolCount;
-		}
-#else
 		size_t getTotalMessageCount() const {
 			return m_allOutputMessages.size();
 		}
-#endif
 		size_t getAvailableMessageCount() const {
 			return m_outputMessages.size();
 		}

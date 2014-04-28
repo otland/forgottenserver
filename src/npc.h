@@ -129,10 +129,6 @@ class NpcScript : public NpcEventsHandler
 class Npc : public Creature
 {
 	public:
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t npcCount;
-#endif
-
 		virtual ~Npc();
 
 		virtual Npc* getNpc() {

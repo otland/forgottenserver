@@ -71,9 +71,6 @@ class ProtocolGame : public Protocol
 			return "gameworld protocol";
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t protocolGameCount;
-#endif
 		ProtocolGame(Connection_ptr connection);
 		virtual ~ProtocolGame();
 

@@ -39,10 +39,6 @@ enum {
 uint32_t Npc::npcAutoID = 0x80000000;
 NpcScriptInterface* Npc::m_scriptInterface = nullptr;
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t Npc::npcCount = 0;
-#endif
-
 void Npcs::reload()
 {
 	const std::map<uint32_t, Npc*>& npcs = g_game.getNpcs();
@@ -77,19 +73,11 @@ Npc::Npc(const std::string& _name) :
 
 	m_npcEventHandler = nullptr;
 	reset();
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	npcCount++;
-#endif
 }
 
 Npc::~Npc()
 {
 	reset();
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	npcCount--;
-#endif
 }
 
 void Npc::addList()
