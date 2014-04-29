@@ -146,7 +146,7 @@
 	<monster name="Bazir" file="Bosses/Bazir.xml"/>
 	<monster name="Apocalypse" file="Bosses/Apocalypse.xml"/>
 	<monster name="Zoralurk" file="Bosses/Zoralurk.xml"/>
-	<monster name="Doomhowl" file="Bosses/doomhowl.xml"/>
+	<monster name="Doomhowl" file="Bosses/Doomhowl.xml"/>
 	<monster name="Coldheart" file="Bosses/Coldheart.xml"/>
 	<monster name="Kraknaknork Demon" file="Bosses/Kraknaknork Demon.xml"/>
 	<monster name="The Dreadorian" file="Bosses/the dreadorian.xml"/>
