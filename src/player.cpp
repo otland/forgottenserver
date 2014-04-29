@@ -1897,17 +1897,19 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		return;
 	}
 
-	experience = std::max<int32_t>(0, experience - exp);
+	uint64_t lostExp = experience;
+	experience = std::max<int64_t>(0, experience - exp);
 
 	if (sendText) {
 		const Position& targetPos = getPosition();
 
+		lostExp -= experience;
 		std::ostringstream ss;
-		ss << "You lost " << exp << " experience points.";
-		sendExperienceMessage(MESSAGE_EXPERIENCE, ss.str(), targetPos, exp, TEXTCOLOR_RED);
+		ss << "You lost " << lostExp << " experience points.";
+		sendExperienceMessage(MESSAGE_EXPERIENCE, ss.str(), targetPos, lostExp, TEXTCOLOR_RED);
 
 		std::ostringstream ssExp;
-		ssExp << getNameDescription() << " lost " << exp << " experience points.";
+		ssExp << getNameDescription() << " lost " << lostExp << " experience points.";
 		std::string strExp = ssExp.str();
 
 		SpectatorVec list;
@@ -1915,7 +1917,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		for (Creature* spectator : list) {
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer != this) {
-				tmpPlayer->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, exp, TEXTCOLOR_RED);
+				tmpPlayer->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, lostExp, TEXTCOLOR_RED);
 			}
 		}
 	}
