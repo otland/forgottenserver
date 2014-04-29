@@ -1893,7 +1893,7 @@ void Player::addExperience(uint64_t exp, bool sendText/* = false*/, bool applySt
 
 void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 {
-	if (experience == 0) {
+	if (experience == 0 || exp == 0) {
 		return;
 	}
 
@@ -1920,14 +1920,16 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		}
 	}
 
-	while (level > 1 && experience < Player::getExpForLevel(level)) {
+	uint32_t oldLevel = level;
+	uint64_t currLevelExp = Player::getExpForLevel(level);
+
+	while (level > 1 && experience < currLevelExp) {
 		--level;
 		healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
 		manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
 		capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
+		currLevelExp = Player::getExpForLevel(level);
 	}
-
-	uint32_t oldLevel = level;
 
 	if (oldLevel != level) {
 		health = healthMax;
@@ -1945,14 +1947,11 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 			party->updateSharedExperience();
 		}
 
-		g_creatureEvents->playerAdvance(this, SKILL_LEVEL, oldLevel, level);
-
 		std::ostringstream ss;
 		ss << "You were downgraded from Level " << oldLevel << " to Level " << level << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 	}
 
-	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
 	if (nextLevelExp > currLevelExp) {
 		levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
