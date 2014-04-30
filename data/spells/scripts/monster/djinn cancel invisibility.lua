@@ -1,9 +1,9 @@
-local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_DISPEL, CONDITION_INVISIBLE)
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_INVISIBLE)
 
 local area = createCombatArea(AREA_CIRCLE3X3)
-setCombatArea(combat, area)
+combat:setArea(area)
 
-function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+function onCastSpell(creature, var)
+	return combat:execute(creature, var)
 end
