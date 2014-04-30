@@ -889,6 +889,7 @@ class LuaScriptInterface
 
 		static int32_t luaPlayerGetExperience(lua_State* L);
 		static int32_t luaPlayerAddExperience(lua_State* L);
+		static int32_t luaPlayerRemoveExperience(lua_State* L);
 		static int32_t luaPlayerGetLevel(lua_State* L);
 
 		static int32_t luaPlayerGetMagicLevel(lua_State* L);

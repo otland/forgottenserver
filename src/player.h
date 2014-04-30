@@ -1166,6 +1166,7 @@ class Player : public Creature, public Cylinder
 
 		void gainExperience(uint64_t exp);
 		void addExperience(uint64_t exp, bool sendText = false, bool applyStaminaChange = false);
+		void removeExperience(uint64_t exp, bool sendText = false);
 
 		void updateInventoryWeight();
 		void postUpdateGoods(uint32_t itemId);
