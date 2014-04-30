@@ -1,15 +1,15 @@
-local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_DROWNDAMAGE)
-setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_GREEN)
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_DROWNDAMAGE)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_GREEN)
 
-local condition = createConditionObject(CONDITION_DROWN)
-setConditionParam(condition, CONDITION_PARAM_DELAYED, 1)
-addDamageCondition(condition, 20, 5000, -20)
+local condition = Condition(CONDITION_DROWN)
+condition:setParameter(CONDITION_PARAM_DELAYED, 1)
+condition:addDamage(20, 5000, -20)
 
 local area = createCombatArea(AREA_CIRCLE3X3)
-setCombatArea(combat, area)
-setCombatCondition(combat, condition)
+combat:setArea(area)
+combat:setCondition(condition)
 
-function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+function onCastSpell(creature, var)
+	return combat:execute(creature, var)
 end
