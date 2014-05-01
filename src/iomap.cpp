@@ -57,22 +57,20 @@
 
 Tile* IOMap::createTile(Item*& ground, Item* item, int px, int py, int pz)
 {
-	Tile* tile;
-
-	if (ground) {
-		if ((item && item->isBlocking()) || ground->isBlocking()) {
-			tile = new StaticTile(px, py, pz);
-		} else {
-			tile = new DynamicTile(px, py, pz);
-		}
-
-		tile->__internalAddThing(ground);
-		ground->__startDecaying();
-		ground = nullptr;
-	} else {
-		tile = new StaticTile(px, py, pz);
+	if (!ground) {
+		return new StaticTile(px, py, pz);
 	}
 
+	Tile* tile;
+	if ((item && item->isBlocking()) || ground->isBlocking()) {
+		tile = new StaticTile(px, py, pz);
+	} else {
+		tile = new DynamicTile(px, py, pz);
+	}
+
+	tile->__internalAddThing(ground);
+	ground->__startDecaying();
+	ground = nullptr;
 	return tile;
 }
 
