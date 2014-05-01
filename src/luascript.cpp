@@ -5485,36 +5485,51 @@ int32_t LuaScriptInterface::luaTileGetItemById(lua_State* L)
 int32_t LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 {
 	// tile:getItemByType(itemType)
-	ItemTypes_t itemType = static_cast<ItemTypes_t>(getNumber<int64_t>(L, 2));
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		bool found;
-		switch (itemType) {
-			case ITEM_TYPE_TELEPORT:
-				found = tile->hasFlag(TILESTATE_TELEPORT);
-				break;
-			case ITEM_TYPE_MAGICFIELD:
-				found = tile->hasFlag(TILESTATE_MAGICFIELD);
-				break;
-			case ITEM_TYPE_MAILBOX:
-				found = tile->hasFlag(TILESTATE_MAILBOX);
-				break;
-			case ITEM_TYPE_TRASHHOLDER:
-				found = tile->hasFlag(TILESTATE_TRASHHOLDER);
-				break;
-			case ITEM_TYPE_BED:
-				found = tile->hasFlag(TILESTATE_BED);
-				break;
-			case ITEM_TYPE_DEPOT:
-				found = tile->hasFlag(TILESTATE_DEPOT);
-				break;
-			default:
-				found = true;
-				break;
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	bool found;
+
+	ItemTypes_t itemType = static_cast<ItemTypes_t>(getNumber<int64_t>(L, 2));
+	switch (itemType) {
+		case ITEM_TYPE_TELEPORT:
+			found = tile->hasFlag(TILESTATE_TELEPORT);
+			break;
+		case ITEM_TYPE_MAGICFIELD:
+			found = tile->hasFlag(TILESTATE_MAGICFIELD);
+			break;
+		case ITEM_TYPE_MAILBOX:
+			found = tile->hasFlag(TILESTATE_MAILBOX);
+			break;
+		case ITEM_TYPE_TRASHHOLDER:
+			found = tile->hasFlag(TILESTATE_TRASHHOLDER);
+			break;
+		case ITEM_TYPE_BED:
+			found = tile->hasFlag(TILESTATE_BED);
+			break;
+		case ITEM_TYPE_DEPOT:
+			found = tile->hasFlag(TILESTATE_DEPOT);
+			break;
+		default:
+			found = true;
+			break;
+	}
+
+	if (found) {
+		if (Item* item = tile->ground) {
+			const ItemType& it = Item::items[item->getID()];
+			if (it.type == itemType) {
+				pushUserdata<Item>(L, item);
+				setItemMetatable(L, -1, item);
+				return 1;
+			}
 		}
 
-		if (found) {
-			if (Item* item = tile->ground) {
+		if (const TileItemVector* items = tile->getItemList()) {
+			for (Item* item : *items) {
 				const ItemType& it = Item::items[item->getID()];
 				if (it.type == itemType) {
 					pushUserdata<Item>(L, item);
@@ -5522,42 +5537,32 @@ int32_t LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 					return 1;
 				}
 			}
-
-			if (const TileItemVector* items = tile->getItemList()) {
-				for (Item* item : *items) {
-					const ItemType& it = Item::items[item->getID()];
-					if (it.type == itemType) {
-						pushUserdata<Item>(L, item);
-						setItemMetatable(L, -1, item);
-						return 1;
-					}
-				}
-			}
 		}
-
-		lua_pushnil(L);
-	} else {
-		lua_pushnil(L);
 	}
+
+	lua_pushnil(L);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaTileGetItemByTopOrder(lua_State* L)
 {
 	// tile:getItemByTopOrder(topOrder)
-	int32_t topOrder = getNumber<int32_t>(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Item* item = tile->getItemByTopOrder(topOrder);
-		if (item) {
-			pushUserdata<Item>(L, item);
-			setItemMetatable(L, -1, item);
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	int32_t topOrder = getNumber<int32_t>(L, 2);
+
+	Item* item = tile->getItemByTopOrder(topOrder);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushUserdata<Item>(L, item);
+	setItemMetatable(L, -1, item);
 	return 1;
 }
 
@@ -5591,17 +5596,19 @@ int32_t LuaScriptInterface::luaTileGetBottomCreature(lua_State* L)
 {
 	// tile:getBottomCreature()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		const Creature* creature = tile->getBottomCreature();
-		if (creature) {
-			pushUserdata<const Creature>(L, creature);
-			setCreatureMetatable(L, -1, creature);
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	const Creature* creature = tile->getBottomCreature();
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushUserdata<const Creature>(L, creature);
+	setCreatureMetatable(L, -1, creature);
 	return 1;
 }
 
@@ -5609,33 +5616,41 @@ int32_t LuaScriptInterface::luaTileGetTopCreature(lua_State* L)
 {
 	// tile:getTopCreature()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Creature* creature = tile->getTopCreature();
-		if (creature) {
-			pushUserdata<Creature>(L, creature);
-			setCreatureMetatable(L, -1, creature);
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	Creature* creature = tile->getTopCreature();
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushUserdata<Creature>(L, creature);
+	setCreatureMetatable(L, -1, creature);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaTileGetBottomVisibleCreature(lua_State* L)
 {
 	// tile:getBottomVisibleCreature(creature)
-	Creature* creature = getCreature(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile && creature) {
-		const Creature* visibleCreature = tile->getBottomVisibleCreature(creature);
-		if (visibleCreature) {
-			pushUserdata<const Creature>(L, visibleCreature);
-			setCreatureMetatable(L, -1, visibleCreature);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Creature* creature = getCreature(L, 2);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const Creature* visibleCreature = tile->getBottomVisibleCreature(creature);
+	if (visibleCreature) {
+		pushUserdata<const Creature>(L, visibleCreature);
+		setCreatureMetatable(L, -1, visibleCreature);
 	} else {
 		lua_pushnil(L);
 	}
@@ -5645,16 +5660,22 @@ int32_t LuaScriptInterface::luaTileGetBottomVisibleCreature(lua_State* L)
 int32_t LuaScriptInterface::luaTileGetTopVisibleCreature(lua_State* L)
 {
 	// tile:getTopVisibleCreature(creature)
-	Creature* creature = getCreature(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile && creature) {
-		Creature* visibleCreature = tile->getTopVisibleCreature(creature);
-		if (visibleCreature) {
-			pushUserdata<Creature>(L, visibleCreature);
-			setCreatureMetatable(L, -1, visibleCreature);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Creature* creature = getCreature(L, 2);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Creature* visibleCreature = tile->getTopVisibleCreature(creature);
+	if (visibleCreature) {
+		pushUserdata<Creature>(L, visibleCreature);
+		setCreatureMetatable(L, -1, visibleCreature);
 	} else {
 		lua_pushnil(L);
 	}
@@ -5665,22 +5686,24 @@ int32_t LuaScriptInterface::luaTileGetItems(lua_State* L)
 {
 	// tile:getItems()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		TileItemVector* itemVector = tile->getItemList();
-		if (itemVector) {
-			lua_createtable(L, itemVector->size(), 0);
-
-			int32_t index = 0;
-			for (Item* item : *itemVector) {
-				pushUserdata<Item>(L, item);
-				setItemMetatable(L, -1, item);
-				lua_rawseti(L, -2, ++index);
-			}
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	TileItemVector* itemVector = tile->getItemList();
+	if (!itemVector) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_createtable(L, itemVector->size(), 0);
+
+	int32_t index = 0;
+	for (Item* item : *itemVector) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
@@ -5689,11 +5712,12 @@ int32_t LuaScriptInterface::luaTileGetItemCount(lua_State* L)
 {
 	// tile:getItemCount()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		lua_pushnumber(L, tile->getItemCount());
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	lua_pushnumber(L, tile->getItemCount());
 	return 1;
 }
 
@@ -5713,11 +5737,12 @@ int32_t LuaScriptInterface::luaTileGetTopItemCount(lua_State* L)
 {
 	// tile:getTopItemCount()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		lua_pushnumber(L, tile->getTopItemCount());
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	lua_pushnumber(L, tile->getTopItemCount());
 	return 1;
 }
 
@@ -5725,22 +5750,24 @@ int32_t LuaScriptInterface::luaTileGetCreatures(lua_State* L)
 {
 	// tile:getCreatures()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		CreatureVector* creatureVector = tile->getCreatures();
-		if (creatureVector) {
-			lua_createtable(L, creatureVector->size(), 0);
-
-			int32_t index = 0;
-			for (Creature* creature : *creatureVector) {
-				pushUserdata<Creature>(L, creature);
-				setCreatureMetatable(L, -1, creature);
-				lua_rawseti(L, -2, ++index);
-			}
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	CreatureVector* creatureVector = tile->getCreatures();
+	if (!creatureVector) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_createtable(L, creatureVector->size(), 0);
+
+	int32_t index = 0;
+	for (Creature* creature : *creatureVector) {
+		pushUserdata<Creature>(L, creature);
+		setCreatureMetatable(L, -1, creature);
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
@@ -5749,17 +5776,24 @@ int32_t LuaScriptInterface::luaTileGetCreatureCount(lua_State* L)
 {
 	// tile:getCreatureCount()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		lua_pushnumber(L, tile->getCreatureCount());
-	} else {
+	if (!tile) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	lua_pushnumber(L, tile->getCreatureCount());
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaTileHasProperty(lua_State* L)
 {
 	// tile:hasProperty(property[, item])
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	Item* item;
 	if (lua_gettop(L) >= 3) {
 		item = getUserdata<Item>(L, 3);
@@ -5768,15 +5802,10 @@ int32_t LuaScriptInterface::luaTileHasProperty(lua_State* L)
 	}
 
 	ITEMPROPERTY property = static_cast<ITEMPROPERTY>(getNumber<int64_t>(L, 2));
-	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		if (item) {
-			pushBoolean(L, tile->hasProperty(item, property));
-		} else {
-			pushBoolean(L, tile->hasProperty(property));
-		}
+	if (item) {
+		pushBoolean(L, tile->hasProperty(item, property));
 	} else {
-		lua_pushnil(L);
+		pushBoolean(L, tile->hasProperty(property));
 	}
 	return 1;
 }
@@ -5784,9 +5813,9 @@ int32_t LuaScriptInterface::luaTileHasProperty(lua_State* L)
 int32_t LuaScriptInterface::luaTileHasFlag(lua_State* L)
 {
 	// tile:hasFlag(flag)
-	tileflags_t flag = static_cast<tileflags_t>(getNumber<int64_t>(L, 2));
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile) {
+		tileflags_t flag = static_cast<tileflags_t>(getNumber<int64_t>(L, 2));
 		pushBoolean(L, tile->hasFlag(flag));
 	} else {
 		lua_pushnil(L);
@@ -5797,9 +5826,14 @@ int32_t LuaScriptInterface::luaTileHasFlag(lua_State* L)
 int32_t LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 {
 	// tile:queryAdd(thing[, flags])
-	Thing* thing = getThing(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile && thing) {
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Thing* thing = getThing(L, 2);
+	if (thing) {
 		uint32_t flags = getNumber<uint32_t>(L, 3, 0);
 		lua_pushnumber(L, tile->__queryAdd(0, thing, 1, flags));
 	} else {
@@ -6260,10 +6294,9 @@ int32_t LuaScriptInterface::luaModalWindowGetDefaultEnterButton(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowSetDefaultEnterButton(lua_State* L)
 {
 	// modalWindow:setDefaultEnterButton(buttonId)
-	uint8_t buttonId = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->defaultEnterButton = buttonId;
+		window->defaultEnterButton = getNumber<uint8_t>(L, 2);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6286,10 +6319,9 @@ int32_t LuaScriptInterface::luaModalWindowGetDefaultEscapeButton(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowSetDefaultEscapeButton(lua_State* L)
 {
 	// modalWindow:setDefaultEscapeButton(buttonId)
-	uint8_t buttonId = getNumber<uint8_t>(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->defaultEscapeButton = buttonId;
+		window->defaultEscapeButton = getNumber<uint8_t>(L, 2);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6312,10 +6344,9 @@ int32_t LuaScriptInterface::luaModalWindowHasPriority(lua_State* L)
 int32_t LuaScriptInterface::luaModalWindowSetPriority(lua_State* L)
 {
 	// modalWindow:setPriority(priority)
-	bool priority = getBoolean(L, 2);
 	ModalWindow* window = getUserdata<ModalWindow>(L, 1);
 	if (window) {
-		window->priority = priority;
+		window->priority = getBoolean(L, 2);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6418,26 +6449,28 @@ int32_t LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 {
 	// item:getTopParent()
 	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		Cylinder* topParent = item->getTopParent();
-		if (topParent) {
-			if (Creature* creature = topParent->getCreature()) {
-				pushUserdata<Creature>(L, creature);
-				setCreatureMetatable(L, -1, creature);
-			} else if (Item* item = topParent->getItem()) {
-				pushUserdata<Item>(L, item);
-				setItemMetatable(L, -1, item);
-			} else if (Tile* tile = topParent->getTile()) {
-				pushUserdata<Tile>(L, tile);
-				setMetatable(L, -1, "Tile");
-			} else if (topParent == VirtualCylinder::virtualCylinder) {
-				pushBoolean(L, true);
-			} else {
-				lua_pushnil(L);
-			}
-		} else {
-			lua_pushnil(L);
-		}
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Cylinder* topParent = item->getTopParent();
+	if (!topParent) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Creature* creature = topParent->getCreature()) {
+		pushUserdata<Creature>(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (Item* item = topParent->getItem()) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
+	} else if (Tile* tile = topParent->getTile()) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
+	} else if (topParent == VirtualCylinder::virtualCylinder) {
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -6474,21 +6507,23 @@ int32_t LuaScriptInterface::luaItemClone(lua_State* L)
 {
 	// item:clone()
 	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		Item* clone = item->clone();
-		if (clone) {
-			ScriptEnvironment* env = getScriptEnv();
-			env->addTempItem(env, clone);
-			clone->setParent(VirtualCylinder::virtualCylinder);
-
-			pushUserdata<Item>(L, clone);
-			setItemMetatable(L, -1, clone);
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!item) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	Item* clone = item->clone();
+	if (!clone) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	ScriptEnvironment* env = getScriptEnv();
+	env->addTempItem(env, clone);
+	clone->setParent(VirtualCylinder::virtualCylinder);
+
+	pushUserdata<Item>(L, clone);
+	setItemMetatable(L, -1, clone);
 	return 1;
 }
 
@@ -6693,14 +6728,15 @@ int32_t LuaScriptInterface::luaItemGetTile(lua_State* L)
 {
 	// item:getTile()
 	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		Tile* tile = item->getTile();
-		if (tile) {
-			pushUserdata<Tile>(L, tile);
-			setMetatable(L, -1, "Tile");
-		} else {
-			lua_pushnil(L);
-		}
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Tile* tile = item->getTile();
+	if (tile) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
 	} else {
 		lua_pushnil(L);
 	}
@@ -6710,6 +6746,12 @@ int32_t LuaScriptInterface::luaItemGetTile(lua_State* L)
 int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 {
 	// item:getAttribute(key)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	itemAttrTypes attribute;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<int64_t>(L, 2));
@@ -6718,15 +6760,11 @@ int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 	} else {
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		if (attribute & 0x7F0013) { // All integer attributes
-			lua_pushnumber(L, item->getIntAttr(attribute));
-		} else if (attribute & 0x2C) { // All string attributes
-			pushString(L, item->getStrAttr(attribute));
-		} else {
-			lua_pushnil(L);
-		}
+
+	if (attribute & 0x7F0013) { // All integer attributes
+		lua_pushnumber(L, item->getIntAttr(attribute));
+	} else if (attribute & 0x2C) { // All string attributes
+		pushString(L, item->getStrAttr(attribute));
 	} else {
 		lua_pushnil(L);
 	}
@@ -6736,6 +6774,12 @@ int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 {
 	// item:setAttribute(key, value)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	itemAttrTypes attribute;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<int64_t>(L, 2));
@@ -6744,17 +6788,13 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 	} else {
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		if (attribute & 0x7F0013) { // All integer attributes
-			item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
-			pushBoolean(L, true);
-		} else if (attribute & 0x2C) { // All string attributes
-			item->setStrAttr(attribute, getString(L, 3));
-			pushBoolean(L, true);
-		} else {
-			lua_pushnil(L);
-		}
+
+	if (attribute & 0x7F0013) { // All integer attributes
+		item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
+		pushBoolean(L, true);
+	} else if (attribute & 0x2C) { // All string attributes
+		item->setStrAttr(attribute, getString(L, 3));
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -6764,6 +6804,12 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 int32_t LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 {
 	// item:removeAttribute(key)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	itemAttrTypes attribute;
 	if (isNumber(L, 2)) {
 		attribute = static_cast<itemAttrTypes>(getNumber<int64_t>(L, 2));
@@ -6772,18 +6818,14 @@ int32_t LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 	} else {
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		bool ret = attribute != ITEM_ATTRIBUTE_UNIQUEID;
-		if (ret) {
-			item->removeAttribute(attribute);
-		} else {
-			reportErrorFunc("Attempt to erase protected key \"uid\"");
-		}
-		pushBoolean(L, ret);
+
+	bool ret = attribute != ITEM_ATTRIBUTE_UNIQUEID;
+	if (ret) {
+		item->removeAttribute(attribute);
 	} else {
-		lua_pushnil(L);
+		reportErrorFunc("Attempt to erase protected key \"uid\"");
 	}
+	pushBoolean(L, ret);
 	return 1;
 }
 
@@ -6999,20 +7041,21 @@ int32_t LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 {
 	// container:getEmptySlots([recursive = false])
 	Container* container = getUserdata<Container>(L, 1);
-	if (container) {
-		uint32_t slots = container->capacity() - container->size();
-		bool recursive = getBoolean(L, 2, false);
-		if (recursive) {
-			for (ContainerIterator cit = container->begin(); cit != container->end(); ++cit) {
-				if (Container* tmpContainer = (*cit)->getContainer()) {
-					slots += tmpContainer->capacity() - tmpContainer->size();
-				}
+	if (!container) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t slots = container->capacity() - container->size();
+	bool recursive = getBoolean(L, 2, false);
+	if (recursive) {
+		for (ContainerIterator cit = container->begin(); cit != container->end(); ++cit) {
+			if (Container* tmpContainer = (*cit)->getContainer()) {
+				slots += tmpContainer->capacity() - tmpContainer->size();
 			}
 		}
-		lua_pushnumber(L, slots);
-	} else {
-		lua_pushnil(L);
 	}
+	lua_pushnumber(L, slots);
 	return 1;
 }
 
@@ -7031,16 +7074,17 @@ int32_t LuaScriptInterface::luaContainerGetItemHoldingCount(lua_State* L)
 int32_t LuaScriptInterface::luaContainerGetItem(lua_State* L)
 {
 	// container:getItem(index)
-	uint32_t index = getNumber<uint32_t>(L, 2);
 	Container* container = getUserdata<Container>(L, 1);
-	if (container) {
-		Item* item = container->getItemByIndex(index);
-		if (item) {
-			pushUserdata<Item>(L, item);
-			setItemMetatable(L, -1, item);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!container) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t index = getNumber<uint32_t>(L, 2);
+	Item* item = container->getItemByIndex(index);
+	if (item) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
 	}
@@ -7283,9 +7327,9 @@ int32_t LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureCanSee(lua_State* L)
 {
 	// creature:canSee(position)
-	const Position& position = getPosition(L, 2);
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
+		const Position& position = getPosition(L, 2);
 		pushBoolean(L, creature->canSee(position));
 	} else {
 		lua_pushnil(L);
@@ -7296,9 +7340,9 @@ int32_t LuaScriptInterface::luaCreatureCanSee(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureCanSeeCreature(lua_State* L)
 {
 	// creature:canSeeCreature(creature)
-	const Creature* otherCreature = getCreature(L, 2);
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
+		const Creature* otherCreature = getCreature(L, 2);
 		pushBoolean(L, creature->canSeeCreature(otherCreature));
 	} else {
 		lua_pushnil(L);
@@ -7310,24 +7354,26 @@ int32_t LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 {
 	// creature:getParent()
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		Cylinder* parent = creature->getParent();
-		if (parent) {
-			if (Creature* creature = parent->getCreature()) {
-				pushUserdata<Creature>(L, creature);
-				setCreatureMetatable(L, -1, creature);
-			} else if (Item* item = parent->getItem()) {
-				pushUserdata<Item>(L, item);
-				setItemMetatable(L, -1, item);
-			} else if (Tile* tile = parent->getTile()) {
-				pushUserdata<Tile>(L, tile);
-				setMetatable(L, -1, "Tile");
-			} else {
-				lua_pushnil(L);
-			}
-		} else {
-			lua_pushnil(L);
-		}
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Cylinder* parent = creature->getParent();
+	if (!parent) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Creature* creature = parent->getCreature()) {
+		pushUserdata<Creature>(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (Item* item = parent->getItem()) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
+	} else if (Tile* tile = parent->getTile()) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
 	} else {
 		lua_pushnil(L);
 	}
@@ -7362,14 +7408,15 @@ int32_t LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
 {
 	// creature:getTarget()
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		Creature* target = creature->getAttackedCreature();
-		if (target) {
-			pushUserdata<Creature>(L, target);
-			setCreatureMetatable(L, -1, target);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Creature* target = creature->getAttackedCreature();
+	if (target) {
+		pushUserdata<Creature>(L, target);
+		setCreatureMetatable(L, -1, target);
 	} else {
 		lua_pushnil(L);
 	}
@@ -7379,9 +7426,9 @@ int32_t LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
 {
 	// creature:setTarget(target)
-	Creature* target = getCreature(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
+		Creature* target = getCreature(L, 2);
 		pushBoolean(L, creature->setAttackedCreature(target));
 	} else {
 		lua_pushnil(L);
@@ -7393,14 +7440,15 @@ int32_t LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 {
 	// creature:getFollowCreature()
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		Creature* followCreature = creature->getFollowCreature();
-		if (followCreature) {
-			pushUserdata<Creature>(L, followCreature);
-			setCreatureMetatable(L, -1, followCreature);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Creature* followCreature = creature->getFollowCreature();
+	if (followCreature) {
+		pushUserdata<Creature>(L, followCreature);
+		setCreatureMetatable(L, -1, followCreature);
 	} else {
 		lua_pushnil(L);
 	}
@@ -7410,9 +7458,9 @@ int32_t LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 {
 	// creature:setFollowCreature(followedCreature)
-	Creature* followCreature = getCreature(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
+		Creature* followCreature = getCreature(L, 2);
 		pushBoolean(L, creature->setFollowCreature(followCreature));
 	} else {
 		lua_pushnil(L);
@@ -7424,41 +7472,44 @@ int32_t LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 {
 	// creature:getMaster()
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		Creature* master = creature->getMaster();
-		if (master) {
-			pushUserdata<Creature>(L, master);
-			setCreatureMetatable(L, -1, master);
-		} else {
-			lua_pushnil(L);
-		}
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	Creature* master = creature->getMaster();
+	if (!master) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushUserdata<Creature>(L, master);
+	setCreatureMetatable(L, -1, master);
 	return 1;
 }
 
 int32_t LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 {
 	// creature:setMaster(master)
-	Creature* master = getCreature(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		if (master) {
-			pushBoolean(L, creature->convinceCreature(master));
-		} else {
-			master = creature->getMaster();
-			if (master) {
-				master->removeSummon(creature);
-				creature->useThing2();
-				creature->setDropLoot(true);
-			}
-			pushBoolean(L, true);
-		}
-		g_game.updateCreatureType(creature);
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	Creature* master = getCreature(L, 2);
+	if (master) {
+		pushBoolean(L, creature->convinceCreature(master));
+	} else {
+		master = creature->getMaster();
+		if (master) {
+			master->removeSummon(creature);
+			creature->useThing2();
+			creature->setDropLoot(true);
+		}
+		pushBoolean(L, true);
+	}
+	g_game.updateCreatureType(creature);
 	return 1;
 }
 
@@ -7466,34 +7517,33 @@ int32_t LuaScriptInterface::luaCreatureGetLight(lua_State* L)
 {
 	// creature:getLight()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
-	if (creature) {
-		LightInfo light;
-		creature->getCreatureLight(light);
-		lua_pushnumber(L, light.level);
-		lua_pushnumber(L, light.color);
-		return 2;
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
 	}
 
-	lua_pushnil(L);
-	return 1;
+	LightInfo light;
+	creature->getCreatureLight(light);
+	lua_pushnumber(L, light.level);
+	lua_pushnumber(L, light.color);
+	return 2;
 }
 
 int32_t LuaScriptInterface::luaCreatureSetLight(lua_State* L)
 {
 	// creature:setLight(color, level)
-	uint32_t level = getNumber<uint32_t>(L, 3);
-	uint32_t color = getNumber<uint32_t>(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		LightInfo light;
-		light.color = color;
-		light.level = level;
-		creature->setCreatureLight(light);
-		g_game.changeLight(creature);
-		pushBoolean(L, true);
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	LightInfo light;
+	light.color = getNumber<uint32_t>(L, 2);;
+	light.level = getNumber<uint32_t>(L, 3);
+	creature->setCreatureLight(light);
+	g_game.changeLight(creature);
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -7550,14 +7600,15 @@ int32_t LuaScriptInterface::luaCreatureGetTile(lua_State* L)
 {
 	// creature:getTile()
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		Tile* tile = creature->getTile();
-		if (tile) {
-			pushUserdata<Tile>(L, tile);
-			setMetatable(L, -1, "Tile");
-		} else {
-			lua_pushnil(L);
-		}
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Tile* tile = creature->getTile();
+	if (tile) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
 	} else {
 		lua_pushnil(L);
 	}
@@ -7738,18 +7789,19 @@ int32_t LuaScriptInterface::luaCreatureGetCondition(lua_State* L)
 {
 	// creature:getCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0]])
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		ConditionType_t conditionType = static_cast<ConditionType_t>(getNumber<int64_t>(L, 2));
-		ConditionId_t conditionId = static_cast<ConditionId_t>(getNumber<int64_t>(L, 3, CONDITIONID_COMBAT));
-		uint32_t subId = getNumber<uint32_t>(L, 4, 0);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
 
-		Condition* condition = creature->getCondition(conditionType, conditionId, subId);
-		if (condition) {
-			pushUserdata<Condition>(L, condition);
-			setMetatable(L, -1, "Condition");
-		} else {
-			lua_pushnil(L);
-		}
+	ConditionType_t conditionType = static_cast<ConditionType_t>(getNumber<int64_t>(L, 2));
+	ConditionId_t conditionId = static_cast<ConditionId_t>(getNumber<int64_t>(L, 3, CONDITIONID_COMBAT));
+	uint32_t subId = getNumber<uint32_t>(L, 4, 0);
+
+	Condition* condition = creature->getCondition(conditionType, conditionId, subId);
+	if (condition) {
+		pushUserdata<Condition>(L, condition);
+		setMetatable(L, -1, "Condition");
 	} else {
 		lua_pushnil(L);
 	}
@@ -7831,30 +7883,31 @@ int32_t LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 
 	const Position& position = getPosition(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		const Position oldPosition = creature->getPosition();
-		if (g_game.internalTeleport(creature, position, pushMovement) == RET_NOERROR) {
-			if (!pushMovement) {
-				if (oldPosition.x == position.x) {
-					if (oldPosition.y < position.y) {
-						g_game.internalCreatureTurn(creature, SOUTH);
-					} else {
-						g_game.internalCreatureTurn(creature, NORTH);
-					}
-				} else if (oldPosition.x > position.x) {
-					g_game.internalCreatureTurn(creature, WEST);
-				} else if (oldPosition.x < position.x) {
-					g_game.internalCreatureTurn(creature, EAST);
-				}
-			}
-
-			pushBoolean(L, true);
-		} else {
-			pushBoolean(L, false);
-		}
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	const Position oldPosition = creature->getPosition();
+	if (g_game.internalTeleport(creature, position, pushMovement) != RET_NOERROR) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	if (!pushMovement) {
+		if (oldPosition.x == position.x) {
+			if (oldPosition.y < position.y) {
+				g_game.internalCreatureTurn(creature, SOUTH);
+			} else {
+				g_game.internalCreatureTurn(creature, NORTH);
+			}
+		} else if (oldPosition.x > position.x) {
+			g_game.internalCreatureTurn(creature, WEST);
+		} else if (oldPosition.x < position.x) {
+			g_game.internalCreatureTurn(creature, EAST);
+		}
+	}
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -7883,19 +7936,20 @@ int32_t LuaScriptInterface::luaCreatureSay(lua_State* L)
 	SpeakClasses type = static_cast<SpeakClasses>(getNumber<int64_t>(L, 3));
 	const std::string& text = getString(L, 2);
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		SpectatorVec list;
-		if (target) {
-			list.insert(target);
-		}
-
-		if (position.x != 0) {
-			pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list, &position));
-		} else {
-			pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list));
-		}
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	SpectatorVec list;
+	if (target) {
+		list.insert(target);
+	}
+
+	if (position.x != 0) {
+		pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list, &position));
+	} else {
+		pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &list));
 	}
 	return 1;
 }
@@ -7904,16 +7958,17 @@ int32_t LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 {
 	// creature:getDamageMap()
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		lua_createtable(L, creature->damageMap.size(), 0);
-		for (auto damageEntry : creature->damageMap) {
-			lua_createtable(L, 0, 2);
-			setField(L, "total", damageEntry.second.total);
-			setField(L, "ticks", damageEntry.second.ticks);
-			lua_rawseti(L, -2, damageEntry.first);
-		}
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_createtable(L, creature->damageMap.size(), 0);
+	for (auto damageEntry : creature->damageMap) {
+		lua_createtable(L, 0, 2);
+		setField(L, "total", damageEntry.second.total);
+		setField(L, "ticks", damageEntry.second.ticks);
+		lua_rawseti(L, -2, damageEntry.first);
 	}
 	return 1;
 }
@@ -7922,17 +7977,18 @@ int32_t LuaScriptInterface::luaCreatureGetSummons(lua_State* L)
 {
 	// creature:getSummons()
 	Creature* creature = getUserdata<Creature>(L, 1);
-	if (creature) {
-		lua_createtable(L, creature->getSummonCount(), 0);
-
-		int32_t index = 0;
-		for (Creature* summon : creature->getSummons()) {
-			pushUserdata<Creature>(L, summon);
-			setCreatureMetatable(L, -1, summon);
-			lua_rawseti(L, -2, ++index);
-		}
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_createtable(L, creature->getSummonCount(), 0);
+
+	int32_t index = 0;
+	for (Creature* summon : creature->getSummons()) {
+		pushUserdata<Creature>(L, summon);
+		setCreatureMetatable(L, -1, summon);
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
