@@ -270,8 +270,6 @@ class LuaScriptInterface
 		static void pushString(lua_State* L, const std::string& value);
 		static void pushCallback(lua_State* L, int32_t callback);
 
-		static LuaVariant popVariant(lua_State* L);
-		static void popPosition(lua_State* L, PositionEx& position);
 		static std::string popString(lua_State* L);
 		static int32_t popCallback(lua_State* L);
 
@@ -387,7 +385,6 @@ class LuaScriptInterface
 			lua_pop(L, 1);
 			return ret;
 		}
-		static Outfit_t popOutfit(lua_State* L);
 
 		// Push
 		static void pushBoolean(lua_State* L, bool value);

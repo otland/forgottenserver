@@ -690,8 +690,6 @@ int32_t NpcScriptInterface::luaActionFollow(lua_State* L)
 int32_t NpcScriptInterface::luagetDistanceTo(lua_State* L)
 {
 	//getDistanceTo(uid)
-	uint32_t uid = popNumber<uint32_t>(L);
-
 	ScriptEnvironment* env = getScriptEnv();
 
 	Npc* npc = env->getNpc();
@@ -700,6 +698,8 @@ int32_t NpcScriptInterface::luagetDistanceTo(lua_State* L)
 		lua_pushnil(L);
 		return 1;
 	}
+
+	uint32_t uid = getNumber<uint32_t>(L, -1);
 
 	Thing* thing = env->getThingByUID(uid);
 	if (!thing) {
@@ -772,16 +772,17 @@ int32_t NpcScriptInterface::luaGetNpcName(lua_State* L)
 int32_t NpcScriptInterface::luaGetNpcParameter(lua_State* L)
 {
 	//getNpcParameter(paramKey)
-	std::string paramKey = popString(L);
-
 	Npc* npc = getScriptEnv()->getNpc();
-	if (npc) {
-		auto it = npc->m_parameters.find(paramKey);
-		if (it != npc->m_parameters.end()) {
-			LuaScriptInterface::pushString(L, it->second);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!npc) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	std::string paramKey = getString(L, -1);
+
+	auto it = npc->m_parameters.find(paramKey);
+	if (it != npc->m_parameters.end()) {
+		LuaScriptInterface::pushString(L, it->second);
 	} else {
 		lua_pushnil(L);
 	}
