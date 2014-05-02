@@ -2523,7 +2523,8 @@ void LuaScriptInterface::registerClass(const std::string& className, const std::
 	if (!baseClass.empty()) {
 		lua_getglobal(m_luaState, baseClass.c_str());
 		lua_rawgeti(m_luaState, -1, 'p');
-		parents = popNumber<uint32_t>(m_luaState) + 1;
+		parents = getNumber<uint32_t>(m_luaState, -1) + 1;
+		lua_pop(m_luaState, 1);
 		lua_setfield(m_luaState, methodsTable, "__index");
 	}
 
@@ -3165,7 +3166,8 @@ bool LuaScriptInterface::getArea(lua_State* L, std::list<uint32_t>& list, uint32
 			if (!isNumber(L, -1)) {
 				return false;
 			}
-			list.push_back(popNumber<uint32_t>(L));
+			list.push_back(getNumber<uint32_t>(L, -1));
+			lua_pop(L, 1);
 		}
 
 		lua_pop(L, 1);
@@ -4291,7 +4293,8 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 		eventDesc.parameters.push_back(luaL_ref(globalState, LUA_REGISTRYINDEX));
 	}
 
-	uint32_t delay = std::max<uint32_t>(100, popNumber<uint32_t>(globalState));
+	uint32_t delay = std::max<uint32_t>(100, getNumber<uint32_t>(globalState, 2));
+	lua_pop(globalState, 1);
 	eventDesc.function = luaL_ref(globalState, LUA_REGISTRYINDEX);
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
