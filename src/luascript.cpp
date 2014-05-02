@@ -4496,9 +4496,9 @@ int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
 int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
 { \
 	int32_t n = lua_gettop(L); \
-	type w = popNumber<type>(L); \
-	for (int32_t i = 2; i <= n; ++i) \
-		w op popNumber<uint32_t>(L); \
+	type w = getNumber<type>(L, -1); \
+	for (int32_t i = 1; i < n; ++i) \
+		w op getNumber<type>(L, i); \
 	lua_pushnumber(L, w); \
 	return 1; \
 }
@@ -4513,7 +4513,7 @@ MULTIOP(uint32_t, UXor, ^= )
 #define SHIFTOP(type, name, op) \
 int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
 { \
-	type n2 = popNumber<type>(L), n1 = popNumber<type>(L); \
+	type n2 = getNumber<type>(L, 1), n1 = getNumber<type>(L, 2); \
 	lua_pushnumber(L, (n1 op n2)); \
 	return 1; \
 }
