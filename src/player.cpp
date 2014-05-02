@@ -3620,7 +3620,7 @@ void Player::onAttackedCreature(Creature* target)
 			addAttacked(targetPlayer);
 			targetPlayer->sendCreatureSkull(this);
 		} else if (!targetPlayer->hasAttacked(this)) {
-			if (!pzLocked && g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
+			if (!pzLocked) {
 				pzLocked = true;
 				sendIcons();
 			}
