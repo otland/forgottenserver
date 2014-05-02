@@ -270,8 +270,6 @@ class LuaScriptInterface
 		static void pushString(lua_State* L, const std::string& value);
 		static void pushCallback(lua_State* L, int32_t callback);
 
-		static LuaVariant popVariant(lua_State* L);
-		static void popPosition(lua_State* L, PositionEx& position);
 		static std::string popString(lua_State* L);
 		static int32_t popCallback(lua_State* L);
 
@@ -376,19 +374,6 @@ class LuaScriptInterface
 			return lua_isuserdata(L, arg) != 0;
 		}
 
-		// Pop
-		template<typename T>
-		static T popNumber(lua_State* L) {
-			if (lua_gettop(L) == 0) {
-				return static_cast<T>(0);
-			}
-
-			T ret = static_cast<T>(lua_tonumber(L, -1));
-			lua_pop(L, 1);
-			return ret;
-		}
-		static Outfit_t popOutfit(lua_State* L);
-
 		// Push
 		static void pushBoolean(lua_State* L, bool value);
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
@@ -399,7 +384,10 @@ class LuaScriptInterface
 		static T popField(lua_State* L, const std::string& key)
 		{
 			lua_getfield(L, -1, key.c_str());
-			return popNumber<T>(L);
+
+			T ret = static_cast<T>(lua_tonumber(L, -1));
+			lua_pop(L, 1);
+			return ret;
 		}
 
 		static std::string popFieldString(lua_State* L, const std::string& key);

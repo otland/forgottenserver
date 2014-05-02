@@ -276,11 +276,14 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	int32_t ret = m_scriptInterface->protectedCall(L, 3, 1);
 	if (ret != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
-	} else if (lua_isboolean(L, -1)) {
-		result = LuaScriptInterface::getBoolean(L, -1);
-	} else if (lua_gettop(L) > 0 && lua_isnumber(L, -1)) {
-		result = true;
-		type = static_cast<SpeakClasses>(LuaScriptInterface::popNumber<uint32_t>(L));
+	} else if (lua_gettop(L) > 0) {
+		if (lua_isboolean(L, -1)) {
+			result = LuaScriptInterface::getBoolean(L, -1);
+		} else if (lua_isnumber(L, -1)) {
+			result = true;
+			type = static_cast<SpeakClasses>(LuaScriptInterface::getNumber<uint32_t>(L, -1));
+		}
+		lua_pop(L, 1);
 	}
 
 	if ((lua_gettop(L) + 4) != size0) {
