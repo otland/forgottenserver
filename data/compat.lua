@@ -112,6 +112,7 @@ function getPlayerMaxMana(cid) local p = Player(cid) return p ~= nil and p:getMa
 function getPlayerLevel(cid) local p = Player(cid) return p ~= nil and p:getLevel() or false end
 function getPlayerTown(cid) local p = Player(cid) return p ~= nil and p:getTown():getId() or false end
 function getPlayerVocation(cid) local p = Player(cid) return p ~= nil and p:getVocation():getId() or false end
+function getPlayerVocationName(cid) local p = Player(cid) return p ~= nil and p:getVocation():getName() end
 function getPlayerSoul(cid) local p = Player(cid) return p ~= nil and p:getSoul() or false end
 function getPlayerSex(cid) local p = Player(cid) return p ~= nil and p:getSex() or false end
 function getPlayerStorageValue(cid, key) local p = Player(cid) return p ~= nil and p:getStorageValue(key) or false end
