@@ -4,7 +4,7 @@ function onCastSpell(creature, var)
 	local tile = pos:getTile()
 	if tile then
 		local thing = tile:getGround()
-		if thing and thing:isItem() and not isInArray(ropeSpots, thing:getType():getId()) then
+		if thing and not isInArray(ropeSpots, thing:getId()) then
 			creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 			pos:sendMagicEffect(CONST_ME_POFF)
 			return false
