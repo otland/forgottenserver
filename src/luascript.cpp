@@ -2866,7 +2866,7 @@ int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 	//	stackpos = 253. Get the top creature (moveable creature)
 
 	int32_t stackpos;
-	const Position& pos = getPosition(L, -1, stackpos);
+	const Position& pos = getPosition(L, 1, stackpos);
 
 	Tile* tile = g_game.getTile(pos);
 	if (!tile) {
@@ -3919,7 +3919,7 @@ int32_t LuaScriptInterface::luaPositionToVariant(lua_State* L)
 	//positionToVariant(pos)
 	LuaVariant var;
 	var.type = VARIANT_POSITION;
-	var.pos = getPosition(L, -1);
+	var.pos = getPosition(L, 1);
 	LuaScriptInterface::pushVariant(L, var);
 	return 1;
 }
