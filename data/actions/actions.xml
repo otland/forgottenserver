@@ -217,6 +217,7 @@
 	<action fromid="19443" toid="19450" script="other/windows.lua" />
 	<action fromid="19974" toid="19975" script="other/windows.lua" />
 	<action fromid="20180" toid="20185" script="other/windows.lua" />
+	<action itemid="19510" script="other/woodenladder.lua"/>
 	<action fromid="1209" toid="1214" script="other/doors.lua"/>
 	<action fromid="1219" toid="1262" script="other/doors.lua"/>
 	<action fromid="1539" toid="1542" script="other/doors.lua"/>
