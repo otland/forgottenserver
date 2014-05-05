@@ -6,13 +6,15 @@ local BEDS = {
 	[20252] = {{20197, 20198}, {20199, 20200}} -- canopy kit
 }
 
-local function internalBedTransform(item, itemEx, fromPosition, toPosition, ids)
+local function internalBedTransform(item, itemEx, toPosition, ids)
+	local targetItem = Item(itemEx.uid)
+	targetItem:transform(ids[1])
+	targetItem:getPosition():sendMagicEffect(CONST_ME_POFF)
+
 	toPosition:getTile():getItemByType(ITEM_TYPE_BED):transform(ids[2])
-	Item(itemEx.uid):transform(ids[1])
 	toPosition:sendMagicEffect(CONST_ME_POFF)
-	local kit = Item(item.uid)
-	kit:getPosition():sendMagicEffect(CONST_ME_POFF)
-	kit:remove()
+
+	Item(item.uid):remove()
 end
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
