@@ -7,12 +7,12 @@ function onCastSpell(creature, var)
 		position.z = position.z - 1
 		position.y = position.y + 1
 		tile = position:getTile()
-		if not tile then
+		if tile then
+			creature:teleportTo(position, false)
+			position:sendMagicEffect(CONST_ME_TELEPORT)
+		else
 			creature:sendCancelMessage(RETURNVALUE_NOTENOUGHROOM)
 		end
-
-		creature:teleportTo(position, false)
-		position:sendMagicEffect(CONST_ME_TELEPORT)
 	else
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end
