@@ -32,7 +32,7 @@
 	<defenses armor="35" defense="35"/>
 	<elements>
 		<element energyPercent="15"/>
-		<element icePercent="1t"/>
+		<element icePercent="16"/>
 		<element holyPercent="25"/>
 		<element deathPercent="15"/>
 		<element firePercent="-5"/>

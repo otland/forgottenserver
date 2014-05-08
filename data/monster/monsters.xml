@@ -6,6 +6,7 @@
 
 	<!-- Annelids -->
 	<monster name="Carrion Worm" file="Annelids/carrion worm.xml"/>
+	<monster name="Drillworm" file="Annelids/drillworm.xml"/>
 	<monster name="Rotworm" file="Annelids/rotworm.xml"/>
 	<monster name="Rift Worm" file="Annelids/rift worm.xml"/>
 
