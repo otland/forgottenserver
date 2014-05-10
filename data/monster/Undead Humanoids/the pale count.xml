@@ -33,8 +33,8 @@
 	<defenses armor="75" defense="75">
 	</defenses>
 	<elements>
-		<element energyPercent="+20"/>
-		<element earthPercent="+20"/>
+		<element energyPercent="20"/>
+		<element earthPercent="20"/>
 		<element deathPercent="-40"/>
 	</elements>
 	<immunities>
