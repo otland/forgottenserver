@@ -33,15 +33,15 @@
 	<defenses armor="75" defense="75">
 	</defenses>
 	<elements>
-		<element energyPercent="+20"/>
-		<element earthPercent="+20"/>
+		<element energyPercent="20"/>
+		<element earthPercent="20"/>
 		<element deathPercent="-40"/>
 	</elements>
 	<immunities>
 		<immunity holy="1"/>
 		<immunity lifedrain="0"/>
-		<immunity paralyze="100"/>
-		<immunity invisible="100"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Mmmmmoooaaaaaahaaa!!"/>
