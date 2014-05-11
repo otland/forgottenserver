@@ -4074,7 +4074,9 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 			int32_t manaDamage = std::min<int32_t>(target->getMana(), damage);
 			if (manaDamage != 0) {
 				for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA)) {
-					creatureEvent->executeChangeMana(target, attacker, manaDamage);
+					if (!creatureEvent->executeChangeMana(target, attacker, manaDamage)) {
+						return false;
+					}
 				}
 
 				target->drainMana(attacker, manaDamage);
@@ -4135,7 +4137,9 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 				tmpDamage.primary.value = damage;
 
 				for (CreatureEvent* creatureEvent : changeHealthEvents) {
-					creatureEvent->executeChangeHealth(target, attacker, tmpDamage);
+					if (!creatureEvent->executeChangeHealth(target, attacker, tmpDamage)) {
+						return false;
+					}
 				}
 			}
 
