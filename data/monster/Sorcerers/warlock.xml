@@ -23,7 +23,7 @@
 			<attribute key="shootEffect" value="energy"/>
 		</attack>
 		<attack name="warlock skill reducer" range="5" interval="2000" chance="5"/>
-		<attack name="manadrain" interval="2000" chance="10" range="7" min="-0" max="-120"/>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-120"/>
 		<attack name="fire" interval="2000" chance="20" range="7" radius="3" target="1" min="-50" max="-180">
 			<attribute key="shootEffect" value="burstarrow"/>
 			<attribute key="areaEffect" value="firearea"/>

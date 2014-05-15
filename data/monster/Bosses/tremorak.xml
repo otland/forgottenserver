@@ -20,7 +20,7 @@
         </flags>
         <attacks>
                 <attack name="melee" interval="2000" skill="36" attack="50"/>
-                <attack name="earth" interval="2000" chance="16" radius="7" target="0" min="-0" max="-255">
+                <attack name="earth" interval="2000" chance="16" radius="7" target="0" min="0" max="-255">
                         <attribute key="areaEffect" value="groundshaker"/>
                 </attack>
                 <attack name="earth" interval="2000" chance="16" length="8" spread="0" min="0" max="-405">

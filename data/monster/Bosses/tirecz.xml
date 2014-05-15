@@ -30,7 +30,7 @@
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="10" radius="3" target="0" min="-0" max="-290">
+		<attack name="physical" interval="2000" chance="10" radius="3" target="0" min="0" max="-290">
 			<attribute key="areaEffect" value="yellowspark"/>
 		</attack>
 		<attack name="energy" interval="3000" chance="30" length="8" spread="0" min="-80" max="-345">

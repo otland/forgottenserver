@@ -24,7 +24,7 @@
 			<attribute key="shootEffect" value="smallearth"/>
 			<attribute key="areaEffect" value="stones"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="15" range="7" target="1" min="-0" max="-650">
+		<attack name="physical" interval="2000" chance="15" range="7" target="1" min="0" max="-650">
 			<attribute key="shootEffect" value="largerock"/>
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="15" target="0" length="5" spread="0" min="-150" max="-260">

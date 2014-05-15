@@ -18,7 +18,7 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="-0" max="-100"/>
+		<attack name="melee" interval="1200" min="0" max="-100"/>
 		<attack name="Blood Rage" interval="2000" chance="30" target="1"/>
 	</attacks>
 	<defenses armor="30" defense="35">

@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="70" attack="130"/>
-		<attack name="manadrain" interval="2000" chance="10" range="7" min="-0" max="-120"/>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-120"/>
 		<attack name="fire" interval="2000" chance="20" range="7" radius="7" target="1" min="-150" max="-250">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="firearea"/>

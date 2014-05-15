@@ -22,7 +22,7 @@
 		<attack name="poisonfield" interval="2000" chance="10" target="0" radius="4">
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
-		<attack name="lifedrain" interval="2000" chance="15" length="7" spread="0" min="-0" max="-90">
+		<attack name="lifedrain" interval="2000" chance="15" length="7" spread="0" min="0" max="-90">
 			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
 		<attack name="poisoncondition" interval="2000" chance="10" range="7" target="0" min="-40" max="-80">

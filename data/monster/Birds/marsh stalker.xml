@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="10"/>
-		<attack name="physical" interval="2000" radius="1" target="1" range="7" chance="20" min="-0" max="-8">
+		<attack name="physical" interval="2000" radius="1" target="1" range="7" chance="20" min="0" max="-8">
 			<attribute key="shootEffect" value="explosion"/>
 			<attribute key="areaEffect" value="explosionarea"/>
 		</attack>

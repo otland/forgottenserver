@@ -18,7 +18,7 @@
 		<flag runonhealth="20"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="-0" max="-118"/>
+		<attack name="melee" interval="1200" min="0" max="-118"/>
 		<attack name="outfit" interval="1000" chance="20" range="7" monster="Sheep" duration="4000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</attack>

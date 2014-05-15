@@ -51,14 +51,14 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
-		<element energyPercent="100"/>
 		<element deathPercent="60"/>
 		<element physicalPercent="40"/>
 		<element icePercent="-25"/>
 	</elements>
 	<immunities>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
+		<immunity energy="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>

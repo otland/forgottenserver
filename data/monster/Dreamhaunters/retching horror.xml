@@ -26,10 +26,10 @@
 			<attribute key="shootEffect" value="whirlwindclub"/>
 			<attribute key="areaEffect" value="stun"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="15" radius="4" target="0" min="-0" max="-110">
+		<attack name="physical" interval="2000" chance="15" radius="4" target="0" min="0" max="-110">
 			<attribute key="areaEffect" value="blackspark"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="15" radius="1" target="1" min="-0" max="-200">
+		<attack name="physical" interval="2000" chance="15" radius="1" target="1" min="0" max="-200">
 			<attribute key="shootEffect" value="sniperarrow"/>
 		</attack>
 		<attack name="fire" interval="2000" chance="10" radius="1" target="1" min="-200" max="-350">

@@ -25,7 +25,7 @@
 		<attack name="speed" interval="2000" chance="15" length="8" spread="3" target="1" speedchange="-800" duration="7500">
 			<attribute key="areaEffect" value="purpleenergy"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="-0" max="-350">
+		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="0" max="-350">
 			<attribute key="shootEffect" value="earth"/>
 			<attribute key="areaEffect" value="stones"/>
 		</attack>

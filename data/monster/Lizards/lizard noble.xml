@@ -23,7 +23,7 @@
 			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
-		<attack name="manadrain" interval="2000" chance="10" range="7" min="-0" max="-100">
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-100">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</attack>
 	</attacks>

@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" skill="70" attack="100"/>
-		<attack name="physical" interval="2000" chance="50" radius="3" target="0" min="-0" max="-645">
+		<attack name="physical" interval="2000" chance="50" radius="3" target="0" min="0" max="-645">
 			<attribute key="areaEffect" value="redspark"/>
 		</attack>
 		<attack name="physical" interval="4000" chance="20" radius="0">

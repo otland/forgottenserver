@@ -19,11 +19,11 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="1950" skill="60" attack="60"/>
-		<attack name="melee" interval="2000" chance="16" range="7" radius="4" target="1" min="-0" max="-795">
+		<attack name="melee" interval="2000" chance="16" range="7" radius="4" target="1" min="0" max="-795">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="redspark"/>
 		</attack>
-		<attack name="physical" interval="2800" chance="15" range="7" min="-0" max="-400">
+		<attack name="physical" interval="2800" chance="15" range="7" min="0" max="-400">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>

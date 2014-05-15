@@ -17,7 +17,7 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-160"/>
+		<attack name="melee" interval="2000" min="0" max="-160"/>
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="-500" max="-1000"/>
 	</attacks>
 	<defenses armor="25" defense="25">

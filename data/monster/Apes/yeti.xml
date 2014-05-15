@@ -18,12 +18,12 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-200"/>
-		<attack name="physical" interval="1000" chance="15" range="7" min="-0" max="-180">
+		<attack name="melee" interval="2000" min="0" max="-200"/>
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
 			<attribute key="shootEffect" value="snowball"/>
 			<attribute key="areaEffect" value="poff"/>
 		</attack>
-		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="-0" max="-175">
+		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="0" max="-175">
 			<attribute key="areaEffect" value="poff"/>
 		</attack>
 	</attacks>

@@ -19,10 +19,10 @@
         </flags>
         <attacks>
                 <attack name="melee" interval="2000" skill="28" attack="100"/>
-                <attack name="poison" interval="2000" chance="20" length="8" spread="0" min="-0" max="-125">
+                <attack name="poison" interval="2000" chance="20" length="8" spread="0" min="0" max="-125">
                         <attribute key="areaEffect" value="poison"/>
                 </attack>
-                <attack name="physical" interval="2000" chance="20" length="8" spread="0" min="-0" max="-411">
+                <attack name="physical" interval="2000" chance="20" length="8" spread="0" min="0" max="-411">
                         <attribute key="areaEffect" value="groundshaker"/>
                 </attack>       
         </attacks>

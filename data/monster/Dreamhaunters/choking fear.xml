@@ -22,7 +22,7 @@
 		<attack name="poisoncondition" interval="2000" chance="10" length="5" spread="3" target="0" min="-700" max="-900">
 			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="10" radius="1" target="1" min="-0" max="-300">
+		<attack name="physical" interval="2000" chance="10" radius="1" target="1" min="0" max="-300">
 			<attribute key="shootEffect" value="explosion"/>
 			<attribute key="areaEffect" value="sleep"/>
 		</attack>

@@ -23,7 +23,7 @@
 			<attribute key="shootEffect" value="smallearth"/>
 			<attribute key="areaEffect" value="smallplants"/>
 		</attack>
-		<attack name="ice" interval="2000" chance="10" range="7" target="1" min="-0" max="-525">
+		<attack name="ice" interval="2000" chance="10" range="7" target="1" min="0" max="-525">
 			<attribute key="shootEffect" value="snowball"/>
 			<attribute key="areaEffect" value="icearea"/>
 		</attack>
