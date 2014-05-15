@@ -19,10 +19,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="50" attack="40"/>
-		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-0" max="-300">
+		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="0" max="-300">
 			<attribute key="areaEffect" value="groundshaker"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="15" target="1" min="-0" max="-100">
+		<attack name="physical" interval="2000" chance="15" target="1" min="0" max="-100">
 			<attribute key="shootEffect" value="smallstone"/>
 		</attack>
 		<attack name="stampor skill reducer" range="5" interval="2000" chance="10"/>

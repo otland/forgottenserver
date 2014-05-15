@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="70" attack="130" poison="380" />
-		<attack name="manadrain" interval="2000" chance="15" range="1" min="-0" max="-920"/>
+		<attack name="manadrain" interval="2000" chance="15" range="1" min="0" max="-920"/>
 		<attack name="drunk" interval="2000" chance="10" target="0" radius="4" duration="3000">
 			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>

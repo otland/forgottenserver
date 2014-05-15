@@ -34,7 +34,7 @@
 		<attack name="ice" interval="2000" chance="10" target="1" radius="4" min="-100" max="-240">
 			<attribute key="areaEffect" value="icearea"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="5" target="0" length="1" spread="0" min="-0" max="-220">
+		<attack name="physical" interval="2000" chance="5" target="0" length="1" spread="0" min="0" max="-220">
 			<attribute key="areaEffect" value="poff"/>
 		</attack>
 		<attack name="speed" interval="2000" chance="20" target="1" radius="4" speedchange="-600" duration="12000">

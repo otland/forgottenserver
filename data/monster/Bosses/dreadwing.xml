@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="100" />
-		<attack name="physical" interval="3000" chance="50" target="1" radius="7" min="-0" max="-100">
+		<attack name="physical" interval="3000" chance="50" target="1" radius="7" min="0" max="-100">
 			<attribute key="areaEffect" value="whitenote"/>
 		</attack>
 	</attacks>

@@ -19,13 +19,13 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="95" attack="95"/>
-		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="-0" max="-800">
+		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="0" max="-800">
 			<attribute key="shootEffect" value="largerock"/>
 			<attribute key="areaEffect" value="stones"/>
 		</attack>
 		<attack name="cliff strider skill reducer" interval="2000" chance="10"/>
 		<attack name="cliff strider electrify" range="1" interval="2000" chance="15"/>
-		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="-0" max="-1000">
+		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="0" max="-1000">
 			<attribute key="areaEffect" value="groundshaker"/>
 		</attack>
 		<attack name="manadrain" interval="2000" chance="15" radius="4" target="0" min="-100" max="-300">

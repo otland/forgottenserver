@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="60"/>
-		<attack name="physical" interval="2000" chance="20" length="5" spread="3" min="-0" max="-200">
+		<attack name="physical" interval="2000" chance="20" length="5" spread="3" min="0" max="-200">
 			<attribute key="areaEffect" value="yellowspark"/>
 		</attack>
 	</attacks>

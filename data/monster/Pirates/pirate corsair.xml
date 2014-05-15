@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="75" attack="40"/>
-		<attack name="physical" interval="2000" chance="20" range="7" min="-0" max="-150">
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-150">
 			<attribute key="shootEffect" value="throwingstar"/>
 		</attack>
 		<attack name="pirate corsair skill reducer" interval="2000" chance="5"/>

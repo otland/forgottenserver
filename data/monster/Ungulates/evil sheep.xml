@@ -18,8 +18,8 @@
 		<flag runonhealth="20"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="-0" max="-90"/>
-		<attack name="physical" interval="1200" chance="30" range="7" min="-0" max="-50">
+		<attack name="melee" interval="1200" min="0" max="-90"/>
+		<attack name="physical" interval="1200" chance="30" range="7" min="0" max="-50">
 			<attribute key="shootEffect" value="snowball"/>
 		</attack>
 	</attacks>

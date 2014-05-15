@@ -21,7 +21,7 @@
 		<attack name="drunk" interval="2000" chance="10" duration="10000">
 			<attribute key="shootEffect" value="poison"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="10" range="6" min="-0" max="-35">
+		<attack name="physical" interval="2000" chance="10" range="6" min="0" max="-35">
 			<attribute key="shootEffect" value="throwingknife"/>
 		</attack>
 	</attacks>

@@ -24,7 +24,7 @@
 			<attribute key="shootEffect" value="smallearth"/>
 			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="10" range="7" radius="2" target="1" min="-0" max="-100">
+		<attack name="physical" interval="2000" chance="10" range="7" radius="2" target="1" min="0" max="-100">
 			<attribute key="shootEffect" value="largerock"/>
 			<attribute key="areaEffect" value="poff"/>
 		</attack>

@@ -18,7 +18,7 @@
 		<flag runonhealth="3100"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-800"/>
+		<attack name="melee" interval="2000" min="0" max="-800"/>
 		<attack name="manadrain" interval="2000" chance="25" range="7" min="-150" max="-800">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</attack>

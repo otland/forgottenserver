@@ -19,18 +19,18 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="35" attack="40"/>
-		<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1" min="-0" max="-40">
+		<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1" min="0" max="-40">
 			<attribute key="shooteffect" value="throwingstar"/>
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15"/>
 	<elements>
-		<element earthPercent="100"/>
 		<element energyPercent="20"/>
 		<element firePercent="-10"/>
 		<element icePercent="-5"/>
 	</elements>
 	<immunities>
+		<immunity earth="1"/>
 		<immunity paralyze="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">

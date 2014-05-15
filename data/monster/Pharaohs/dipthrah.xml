@@ -39,11 +39,11 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="100"/>
-		<element deathPercent="100"/>
 		<element icePercent="30"/>
 	</elements>
 	<immunities>
+		<immunity physical="1"/>
+		<immunity death="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="4">

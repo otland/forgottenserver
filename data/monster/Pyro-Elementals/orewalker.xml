@@ -22,7 +22,7 @@
 		<attack name="manadrain" interval="2000" chance="15" length="4" spread="3" min="-296" max="-700">
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="-0" max="-1500">
+		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="0" max="-1500">
 			<attribute key="areaEffect" value="groundshaker"/>
 		</attack>
 		<attack name="poisoncondition" interval="2000" chance="10" target="1" radius="3" min="-800" max="-1080" >

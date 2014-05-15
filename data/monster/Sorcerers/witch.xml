@@ -18,7 +18,7 @@
 		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-20"/>
+		<attack name="melee" interval="2000" min="0" max="-20"/>
 		<attack name="fire" interval="2000" chance="20" range="7" min="-30" max="-75">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="fire"/>

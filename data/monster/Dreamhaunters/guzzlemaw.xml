@@ -22,10 +22,10 @@
 		<attack name="bleedcondition" interval="2000" chance="10" radius="3" target="0" min="-500" max="-1000">
 			<attribute key="areaEffect" value="redspark"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="10" length="8" spread="3" target="1" min="-0" max="-900">
+		<attack name="physical" interval="2000" chance="10" length="8" spread="3" target="1" min="0" max="-900">
 			<attribute key="areaEffect" value="explosionarea"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="20" radius="2" target="1" min="-0" max="-500">
+		<attack name="physical" interval="2000" chance="20" radius="2" target="1" min="0" max="-500">
 			<attribute key="shootEffect" value="largerock"/>
 			<attribute key="areaEffect" value="stones"/>
 		</attack>

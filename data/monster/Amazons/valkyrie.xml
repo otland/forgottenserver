@@ -18,8 +18,8 @@
 		<flag runonhealth="20"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-70"/>
-		<attack name="physical" interval="2000" chance="15" range="7" min="-0" max="-50">
+		<attack name="melee" interval="2000" min="0" max="-70"/>
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-50">
 			<attribute key="shootEffect" value="spear"/>
 		</attack>
 	</attacks>

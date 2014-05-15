@@ -18,7 +18,7 @@
 		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-60"/>
+		<attack name="melee" interval="2000" min="0" max="-60"/>
 	</attacks>
 	<defenses armor="20" defense="20">
 		<defense name="speed" interval="2000" chance="15" speedchange="260" duration="3000">

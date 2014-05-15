@@ -18,8 +18,8 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="-0" max="-120"/>
-		<attack name="physical" interval="1500" chance="30" range="7" min="-0" max="-30">
+		<attack name="melee" interval="1200" min="0" max="-120"/>
+		<attack name="physical" interval="1500" chance="30" range="7" min="0" max="-30">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>

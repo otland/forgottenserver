@@ -22,7 +22,7 @@
 		<attack name="physical" interval="3000" chance="17" length="8" spread="3" min="-150" max="-250">
 			<attribute key="areaEffect" value="bluebubble"/>
 		</attack>
-		<attack name="physical" interval="3000" chance="10" range="7" min="-0" max="-500">
+		<attack name="physical" interval="3000" chance="10" range="7" min="0" max="-500">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>

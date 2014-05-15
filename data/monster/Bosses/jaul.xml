@@ -17,15 +17,15 @@
 		<flag runonhealth="60"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-2000" poison="870"/>
-		<attack name="fire" interval="2200" chance="19" range="7" radius="7" target="1" min="-0" max="-1000">
+		<attack name="melee" interval="2000" min="0" max="-2000" poison="870"/>
+		<attack name="fire" interval="2200" chance="19" range="7" radius="7" target="1" min="0" max="-1000">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 		<attack name="manadrain" interval="3000" chance="32" range="7" radius="7" target="1" min="-200" max="-800">
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>
-		<attack name="earth" interval="1300" chance="27" radius="3" target="0" min="-0" max="-600">
+		<attack name="earth" interval="1300" chance="27" radius="3" target="0" min="0" max="-600">
 			<attribute key="areaEffect" value="explosionarea"/>
 		</attack>
 		<attack name="death" interval="1200" chance="6" length="8" spread="0" min="-300" max="-900">

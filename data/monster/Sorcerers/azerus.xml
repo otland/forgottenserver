@@ -18,16 +18,16 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-900"/>
-		<attack name="manadrain" interval="2000" chance="10" range="7" min="-0" max="-2000">
+		<attack name="melee" interval="2000" min="0" max="-900"/>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-2000">
 			<attribute key="shootEffect" value="energy"/>
 			<attribute key="areaEffect" value="poff"/>
 		</attack>
-		<attack name="manadrain" interval="2000" chance="15" range="7" radius="7" target="1" min="-0" max="-800">
+		<attack name="manadrain" interval="2000" chance="15" range="7" radius="7" target="1" min="0" max="-800">
 			<attribute key="shootEffect" value="fire"/>
 			<attribute key="areaEffect" value="bigclouds"/>
 		</attack>
-		<attack name="death" interval="2000" chance="20" range="7" min="-0" max="-524">
+		<attack name="death" interval="2000" chance="20" range="7" min="0" max="-524">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>
 		</attack>

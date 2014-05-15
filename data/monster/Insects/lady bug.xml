@@ -18,10 +18,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="5" attack="5"/>
-		<attack name="earth" interval="2000" chance="15" range="1" min="-0" max="-20">
+		<attack name="earth" interval="2000" chance="15" range="1" min="0" max="-20">
 			<attribute key="shootEffect" value="poison"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="15" range="7" min="-0" max="-20">
+		<attack name="earth" interval="2000" chance="15" range="7" min="0" max="-20">
 			<attribute key="shootEffect" value="poison"/>
 		</attack>
 	</attacks>

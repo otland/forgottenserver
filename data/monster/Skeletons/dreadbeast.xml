@@ -19,7 +19,7 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-100"/>
+		<attack name="melee" interval="2000" min="0" max="-100"/>
 		<attack name="lifedrain" interval="2000" chance="20" radius="1" target ="1" min="-150" max="-250">
 			<attribute key="areaEffect" value="yellowenergy"/>
 			<attribute key="shootEffect" value="suddendeath"/>
