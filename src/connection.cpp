@@ -227,6 +227,19 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		return;
 	}
 
+	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - m_timeConnected) + 1);
+	if ((++m_packetsSent / timePassed) > (uint32_t)g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND)) {
+		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
+		closeConnection();
+		m_connectionLock.unlock();
+		return;
+	}
+
+	if (timePassed > 2) {
+		m_timeConnected = time(nullptr);
+		m_packetsSent = 0;
+	}
+
 	try {
 		m_readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		m_readTimer.async_wait( std::bind(&Connection::handleReadTimeout, std::weak_ptr<Connection>(shared_from_this()),
@@ -261,19 +274,6 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		closeConnection();
 		m_connectionLock.unlock();
 		return;
-	}
-
-	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - m_timeConnected) + 1);
-	if ((++m_packetsSent / timePassed) > (uint32_t)g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND)) {
-		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
-		closeConnection();
-		m_connectionLock.unlock();
-		return;
-	}
-
-	if (timePassed > 2) {
-		m_timeConnected = time(nullptr);
-		m_packetsSent = 0;
 	}
 
 	//Check packet checksum
