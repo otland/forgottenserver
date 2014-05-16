@@ -1823,7 +1823,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Position", "__sub", LuaScriptInterface::luaPositionSub);
 	registerMetaMethod("Position", "__eq", LuaScriptInterface::luaPositionCompare);
 
-	registerMethod("Position", "getTile", LuaScriptInterface::luaPositionGetTile);
 	registerMethod("Position", "getDistance", LuaScriptInterface::luaPositionGetDistance);
 	registerMethod("Position", "isSightClear", LuaScriptInterface::luaPositionIsSightClear);
 
@@ -5032,21 +5031,6 @@ int32_t LuaScriptInterface::luaPositionCompare(lua_State* L)
 	const Position& positionEx = getPosition(L, 2);
 	const Position& position = getPosition(L, 1);
 	pushBoolean(L, position == positionEx);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaPositionGetTile(lua_State* L)
-{
-	// position:getTile()
-	const Position& position = getPosition(L, 1);
-
-	Tile* tile = g_game.getTile(position);
-	if (tile) {
-		pushUserdata<Tile>(L, tile);
-		setMetatable(L, -1, "Tile");
-	} else {
-		lua_pushnil(L);
-	}
 	return 1;
 }
 

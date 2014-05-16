@@ -615,7 +615,6 @@ class LuaScriptInterface
 		static int32_t luaPositionSub(lua_State* L);
 		static int32_t luaPositionCompare(lua_State* L);
 
-		static int32_t luaPositionGetTile(lua_State* L);
 		static int32_t luaPositionGetDistance(lua_State* L);
 		static int32_t luaPositionIsSightClear(lua_State* L);
 

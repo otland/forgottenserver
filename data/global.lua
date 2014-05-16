@@ -422,3 +422,7 @@ string.split = function(str, sep)
 	end
 	return res
 end
+
+function Position.getTile(self)
+	return Tile(self)
+end
