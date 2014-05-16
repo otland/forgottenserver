@@ -5437,13 +5437,13 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 							uint16_t charges = static_cast<uint16_t>(0xFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
 							if (charges != itemType.charges) {
 								badAttribute = true;
-								continue;
+								break;
 							}
 						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
 							uint32_t duration = static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
 							if (duration != itemType.decayTime) {
 								badAttribute = true;
-								continue;
+								break;
 							}
 						} else {
 							badAttribute = true;
@@ -5628,7 +5628,6 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 					continue;
 				}
 
-				// TODO: Disallow other items with other attributes than charges and duration
 				if (item->hasAttributes()) {
 					bool badAttribute = false;
 
@@ -5638,13 +5637,13 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 							uint16_t charges = static_cast<uint16_t>(0xFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
 							if (charges != itemType.charges) {
 								badAttribute = true;
-								continue;
+								break;
 							}
 						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
 							uint32_t duration = static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
 							if (duration != itemType.decayTime) {
 								badAttribute = true;
-								continue;
+								break;
 							}
 						} else {
 							badAttribute = true;
