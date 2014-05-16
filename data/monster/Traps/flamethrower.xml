@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Flamethrower" nameDescription="a flamethrower" race="undead" experience="0" speed="0" manacost="0">
 	<health now="9950" max="9950"/>
-	<look typeex="1560"/>
+	<look typeex="1551"/>
 	<targetchange interval="5000" chance="5"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
@@ -19,7 +19,7 @@
 		<flag hidehealth="1"/>
 	</flags>
 	<attacks>
-		<attack name="fire" interval="2000" chance="100" range="7" min="-50" max="-100">
+		<attack name="fire" interval="2000" chance="100" range="7" min="0" max="-100">
 			<attribute key="shootEffect" value="fire"/>
 		</attack>
 	</attacks>
