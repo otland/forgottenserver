@@ -5624,7 +5624,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				}
 
 				const ItemType& itemType = Item::items[item->getID()];
-				if (itemType.wareId != it.id) {
+				if (itemType.wareId != it.wareId) {
 					continue;
 				}
 
