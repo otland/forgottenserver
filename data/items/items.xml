@@ -17333,9 +17333,9 @@
 		<attribute key="weight" value="90" />
 	</item>
 	<item id="9931" article="a" name="coconut shoes">
-        <attribute key="slotType" value="feet" />
-        <attribute key="weight" value="600" />
-    </item>
+		<attribute key="slotType" value="feet" />
+		<attribute key="weight" value="600" />
+	</item>
 	<item id="9932" article="a" name="firewalker boots">
 		<attribute key="description" value="Wearing these boots reduces the damage gotten from fiery ground." />
 		<attribute key="weight" value="950" />
