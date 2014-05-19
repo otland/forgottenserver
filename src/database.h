@@ -25,7 +25,11 @@
 #include <mysql.h>
 
 class DBResult;
+class DBInsert;
+class DBTransaction;
 typedef std::shared_ptr<DBResult> DBResult_ptr;
+typedef std::shared_ptr<DBInsert> DBInsert_ptr;
+typedef std::shared_ptr<DBTransaction> DBTransaction_ptr;
 
 class Database
 {

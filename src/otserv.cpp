@@ -45,6 +45,8 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 
+#include "databasedispatcher.h"
+
 Dispatcher g_dispatcher;
 Scheduler g_scheduler;
 
@@ -91,7 +93,9 @@ int main(int argc, char* argv[])
 	ServiceManager servicer;
 
 	g_dispatcher.start();
-	g_scheduler.start();
+    g_scheduler.start();
+
+    DatabaseDispatcher::getInstance(); // Eager loading neccessary.
 
 	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
 
