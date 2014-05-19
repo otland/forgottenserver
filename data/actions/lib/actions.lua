@@ -28,11 +28,11 @@ function destroyItem(cid, itemEx, toPosition)
 		return true
 	end
 	--spiderweb
-	if itemEx.itemid >= 7538 and itemEx.itemid <= 7539 then 
+	if itemEx.itemid == 7538 or itemEx.itemid == 7539 then 
 		if math.random(1, 7) == 1 then
-			if(itemEx.itemid == 7538) then
+			if itemEx.itemid == 7538 then
 				Item(itemEx.uid):transform(7544)
-			elseif(itemEx.itemid == 7539) then
+			elseif itemEx.itemid == 7539 then
 				Item(itemEx.uid):transform(7545)
 			end
 			Item(itemEx.uid):decay()
@@ -41,11 +41,11 @@ function destroyItem(cid, itemEx, toPosition)
 		return true
 	end
 	--wooden bar
-	if itemEx.itemid >= 3798 and itemEx.itemid <= 3799 then 
+	if itemEx.itemid == 3798 or itemEx.itemid == 3799 then 
 		if math.random(1, 3) == 1 then
-			if(itemEx.itemid == 3798) then
+			if itemEx.itemid == 3798 then
 				Item(itemEx.uid):transform(3959)
-			elseif(itemEx.itemid == 3799) then
+			elseif itemEx.itemid == 3799 then
 				Item(itemEx.uid):transform(3958)
 			end
 			Item(itemEx.uid):decay()

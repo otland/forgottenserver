@@ -6788,7 +6788,7 @@
 		<attribute key="type" value="door" />
 	</item>
 	<item fromid="3569" toid="3574" article="a" name="waterfall" />
-	<item id="3587" article="a" name="small boat"/>
+	<item id="3587" article="a" name="small boat" />
 	<item fromid="3588" toid="3590" article="a" name="small boat">
 		<attribute key="type" value="teleport" />
 	</item>
@@ -11914,9 +11914,7 @@
 	<item id="7185" article="a" name="small crack in the ice">
 		<attribute key="description" value="This would be a good place to destroy the ice." />
 	</item>
-	<item id="7186" article="a" name="big crack in the ice">
-		<attribute key="description" value="Now the ice passage are destroyed." />
-	</item>
+	<item id="7186" article="a" name="big crack in the ice"/>
 	<item fromid="7187" toid="7188" article="a" name="raft" />
 	<item id="7189" article="a" name="stone shelf">
 		<attribute key="containerSize" value="6" />
@@ -13086,11 +13084,11 @@
 	<item id="7536" name="the remains of a spider egg" />
 	<item id="7537" article="a" name="spider egg" />
 	<item fromid="7538" toid="7543" article="a" name="spider web" />
-	<item id="7544" name="the remains of a spider web" >
+	<item id="7544" name="the remains of a spider web">
 		<attribute key="decayTo" value="7538" />
 		<attribute key="duration" value="60" />
 	</item>
-	<item id="7545" name="the remains of a spider web" >
+	<item id="7545" name="the remains of a spider web">
 		<attribute key="decayTo" value="7539" />
 		<attribute key="duration" value="60" />
 	</item>
