@@ -778,10 +778,7 @@
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="fire" />
 	</item>
-	<item id="1510" name="slits">
-		<attribute key="decayTo" value="1511" />
-		<attribute key="duration" value="10" />
-	</item>
+	<item id="1510" name="slits" />
 	<item id="1511" name="blades">
 		<attribute key="decayTo" value="1510" />
 		<attribute key="duration" value="10" />
@@ -7378,7 +7375,11 @@
 	<item id="4185" article="a" name="large pearl flower" />
 	<item fromid="4186" toid="4201" article="a" name="fallen tree" />
 	<item fromid="4202" toid="4207" name="vines" />
-	<item fromid="4208" toid="4209" article="a" name="jungle maw" />
+	<item id="4208" article="a" name="jungle maw" />
+	<item id="4209" article="a" name="jungle maw">
+		<attribute key="decayTo" value="4208" />
+		<attribute key="duration" value="5" />
+	</item>
 	<item fromid="4210" toid="4215" article="a" name="fallen tree" />
 	<item fromid="4216" toid="4222" article="a" name="giant tree" />
 	<item fromid="4223" toid="4238" article="a" name="giant tree root" />
