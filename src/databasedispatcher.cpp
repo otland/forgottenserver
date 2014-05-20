@@ -19,6 +19,7 @@
 
 #include "otpch.h"
 
+#include "tasks.h"
 #include "databasedispatcher.h"
 
 DatabaseDispatcher::DatabaseDispatcher()
@@ -32,7 +33,7 @@ DatabaseDispatcher::~DatabaseDispatcher()
 
 void DatabaseDispatcher::queueSqlCommand(DBCommand_t type,
 										 std::string query,
-										 Callback_ptr callback,
+										 DBCallback callback,
 										 DBInsert_ptr insertStmt,
 										 DBTransaction_ptr transaction,
 										 TransactionFunc_ptr transactionFunc)
@@ -46,8 +47,8 @@ void DatabaseDispatcher::queueSqlCommand(DBCommand_t type,
 
 void DatabaseDispatcher::processQueue()
 {
-	bool succeess = false;
-	int tries = 0;
+	bool success = false;
+	DBResult_ptr result;
 
 	while (true)
 	{
@@ -61,43 +62,31 @@ void DatabaseDispatcher::processQueue()
 		DBCommand sqlCommand = m_sqlCommandQueue.front();
 		m_queueMutex.unlock();
 
-		tries++;
-
 		switch(sqlCommand.type)
 		{
 		case(DBCommand_t::INSERT):
 			break;
 		case(DBCommand_t::SELECT):
-			sqlCommand.result = Database::getInstance()->storeQuery(sqlCommand.query);
-			if (sqlCommand.result != nullptr)
-			{
+			result = Database::getInstance()->storeQuery(sqlCommand.query);
+			if (result != nullptr)
 				success = true;
-				m_sqlCommandQueue.pop();
-			}
 			break;
 		case(DBCommand_t::UPDATE):
 		case(DBCommand_t::DELETE):
 			if (Database::getInstance()->executeQuery(sqlCommand.query))
-				sqlCommand.succeeded = true;
+				success = true;
 			break;
 		case(DBCommand_t::TRANSACTION):
 			break;
 		}
 
-		if (!sqlCommand.succeeded)
-		{
-			if (sqlCommand.tries >= 3 && !sqlCommand.mustExecute)
-			{
-				// TODO: log failure.
-				// Give up trying.
-			} else {
-				m_queueMutex.lock();
-				m_sqlCommandQueue.push(sqlCommand); // let's put it in the end of the line.
-				m_queueMutex.unlock();
-			}
-		} else if (sqlCommand.callback != nullptr)
-		{
-			(*sqlCommand.callback)(sqlCommand.result);
+		if (!success)
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		else {
+			m_sqlCommandQueue.pop();
+
+			if (sqlCommand.type == DBCommand_t::SELECT && sqlCommand.callback != nullptr)
+				g_dispatcher.addTask(createTask(std::bind(sqlCommand.callback,result)));
 		}
 	}
 }

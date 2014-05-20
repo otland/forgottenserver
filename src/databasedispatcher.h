@@ -14,17 +14,18 @@ enum DBCommand_t {
 	TRANSACTION
 };
 
+typedef std::function<void(DBResult_ptr)> DBCallback;
+
 class DatabaseDispatcher
 {
 private:
-	typedef std::shared_ptr<std::function<void(DBResult_ptr)>> Callback_ptr;
 	typedef std::shared_ptr<std::function<void()>> TransactionFunc_ptr;
 
 	struct DBCommand
 	{
 		DBCommand_t type;
 		std::string query;
-		Callback_ptr callback;
+		DBCallback callback;
 		DBInsert_ptr insertStmt;
 		DBTransaction_ptr transaction;
 		TransactionFunc_ptr transactionFunc;
@@ -32,7 +33,7 @@ private:
 		DBCommand() {}
 		DBCommand(DBCommand_t _type,
 				  std::string _query,
-				  Callback_ptr _callback,
+				  DBCallback _callback,
 				  DBInsert_ptr _insertStmt,
 				  DBTransaction_ptr _transaction,
 				  TransactionFunc_ptr _transactionFunc):
@@ -63,7 +64,7 @@ public:
 
 	void queueSqlCommand(DBCommand_t type,
 						 std::string query,
-						 Callback_ptr callback = nullptr,
+						 DBCallback callback = nullptr,
 						 DBInsert_ptr insertStmt = nullptr,
 						 DBTransaction_ptr transaction = nullptr,
 						 TransactionFunc_ptr transactionFunc = nullptr);
