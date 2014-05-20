@@ -27,45 +27,26 @@
 #include "vocation.h"
 #include "house.h"
 
-#include "databasedispatcher.h"
-
 extern ConfigManager g_config;
 extern Game g_game;
 
 Account IOLoginData::loadAccount(uint32_t accno)
 {
+	Account account;
 
-//	std::shared_ptr<Account> account_ptr;
-////	->queryToStore(query, [=](const DBResult_ptr& res) {
-////	   query2 = .. + res.getLala() + ..
-////	   g_queryDispatcher->queryToStore(query2, [=](const DBResult_ptr& res) {
-////		  query3 = .. + res.getLala() + ..
-////		 g_queryDispatcher->queryToStore(query3, [=](const DBResult_ptr& res) {
-////	  ...
-////		 }
-////	   }
-////	);
+	std::ostringstream query;
+	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << accno;
+	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
+	if (!result) {
+		return account;
+	}
 
-//	std::ostringstream query;
-//	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << accno;
-
-//	DatabaseDispatcher::getInstance()->queueSqlCommand(INSERT, query, [=](const DBResult_ptr& result) {
-//		if (!result) {
-//			//return account;
-//		}
-
-//		account_ptr->id = result->getDataInt("id");
-//		account_ptr->name = result->getDataString("name");
-//		account_ptr->accountType = static_cast<AccountType_t>(result->getDataInt("type"));
-//		account_ptr->premiumDays = result->getDataInt("premdays");
-//		account_ptr->lastDay = result->getDataInt("lastday");
-//		//return account;
-//	});
-
-	//DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
-	accno = 0;
-	Account acc;
-	return acc;
+	account.id = result->getDataInt("id");
+	account.name = result->getDataString("name");
+	account.accountType = static_cast<AccountType_t>(result->getDataInt("type"));
+	account.premiumDays = result->getDataInt("premdays");
+	account.lastDay = result->getDataInt("lastday");
+	return account;
 }
 
 bool IOLoginData::saveAccount(const Account& acc)
@@ -227,39 +208,10 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		return false;
 	}
 
-	//Database* db = Database::getInstance();
+	Database* db = Database::getInstance();
 
 	uint32_t accno = result->getDataInt("account_id");
-	//Account acc = loadAccount(accno);
-	std::shared_ptr<Account> account_ptr = std::shared_ptr<Account>(new Account());
-
-	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << accno;
-
-	auto lambda = [=](DBResult_ptr result) {
-		if (!result) {
-			//return account;
-		}
-
-		account_ptr->id = result->getDataInt("id");
-		account_ptr->name = result->getDataString("name");
-		account_ptr->accountType = static_cast<AccountType_t>(result->getDataInt("type"));
-		account_ptr->premiumDays = result->getDataInt("premdays");
-		account_ptr->lastDay = result->getDataInt("lastday");
-		//return account;
-
-		loadPlayer2(player, result, *account_ptr);
-	};
-
-	DatabaseDispatcher::getInstance()->queueSqlCommand(INSERT, query.str(), static_cast<DBCallback>(lambda));
-
-	return true;
-}
-
-bool IOLoginData::loadPlayer2(Player* player, DBResult_ptr result, Account acc)
-{
-	Database* db = Database::getInstance();
-	uint32_t accno = acc.id;
+	Account acc = loadAccount(accno);
 
 	player->setGUID(result->getDataInt("id"));
 	player->name = result->getDataString("name");
