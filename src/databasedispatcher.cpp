@@ -43,6 +43,8 @@ void DatabaseDispatcher::queueSqlCommand(DBCommand_t type,
 	m_queueMutex.lock();
 	m_sqlCommandQueue.push(sqlCommand);
 	m_queueMutex.unlock();
+
+	m_QueueAddCondition.notify_all();
 }
 
 void DatabaseDispatcher::processQueue()
