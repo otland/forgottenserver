@@ -458,7 +458,7 @@
 
 	<!-- Summon Runes -->
 	<rune group="support" spellid="12" name="Convince Creature" id="2290" allowfaruse="1" charges="1" lvl="16" maglv="5" exhaustion="2000" groupcooldown="2000" needtarget="1" blocktype="solid" function="convince"/>
-	<rune group="support" spellid="83" name="Animate Dead" id="2316" allowfaruse="1" charges="1" lvl="27" maglv="4" exhaustion="2000" groupcooldown="2000" blocktype="solid" script="summon/animate dead rune.lua"/>
+	<rune group="support" spellid="83" name="Animate Dead" id="2316" allowfaruse="1" charges="1" lvl="27" maglv="4" exhaustion="2000" groupcooldown="2000" blocktype="solid" script="support/animate dead rune.lua"/>
 
 	<!-- Support Runes -->
 	<rune group="support" spellid="78" name="Desintegrate" id="2310" allowfaruse="0" charges="3" lvl="21" maglv="4" exhaustion="2000" groupcooldown="2000" range="1" script="support/desintegrate rune.lua"/>

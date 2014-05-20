@@ -1,7 +1,7 @@
-local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_EARTH)
-setCombatParam(combat, COMBAT_PARAM_CREATEITEM, ITEM_WILDGROWTH)
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_EARTH)
+combat:setParameter(COMBAT_PARAM_CREATEITEM, ITEM_WILDGROWTH)
 
-function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+function onCastSpell(creature, var)
+	return combat:execute(creature, var)
 end

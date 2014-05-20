@@ -1,19 +1,21 @@
-function onCastSpell(cid, var)
-	local pos = getPlayerPosition(cid)
-	pos.stackpos = STACKPOS_GROUND
-	local thing = getThingfromPos(pos)
-	if not isInArray(ropeSpots, thing.itemid) then
-		pos.stackpos = STACKPOS_FIRST_ITEM_ABOVE_GROUNDTILE
-		thing = getThingfromPos(pos)
-		if not isInArray(ropeSpots, thing.itemid) then
-			doPlayerSendDefaultCancel(cid, RETURNVALUE_NOTPOSSIBLE)
-			doSendMagicEffect(pos, CONST_ME_POFF)
-			return false
+function onCastSpell(creature, var)
+	local position = creature:getPosition()
+	position:sendMagicEffect(CONST_ME_POFF)
+	local tile = position:getTile()
+
+	if isInArray(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
+		position.z = position.z - 1
+		position.y = position.y + 1
+		tile = position:getTile()
+		if tile then
+			creature:teleportTo(position, false)
+			position:sendMagicEffect(CONST_ME_TELEPORT)
+		else
+			creature:sendCancelMessage(RETURNVALUE_NOTENOUGHROOM)
 		end
+	else
+		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end
 
-	local destination = {x = pos.x, y = pos.y + 1, z = pos.z - 1}
-	doTeleportThing(cid, destination, false)
-	doSendMagicEffect(destination, CONST_ME_TELEPORT)
 	return true
 end
