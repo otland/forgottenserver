@@ -23,6 +23,8 @@
 #include "database.h"
 #include "tools.h"
 
+#include "tasks.h"
+
 bool Ban::acceptConnection(uint32_t clientip)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(lock);
@@ -56,6 +58,53 @@ bool Ban::acceptConnection(uint32_t clientip)
 		connectBlock.count = 1;
 	}
 	return true;
+}
+
+void IOBan::getAccountBanishments(uint32_t accountId, std::function<void(BanInfo, bool)> callback)
+{
+	Database* db = Database::getInstance();
+
+	std::ostringstream query;
+	query << "SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, ";
+	query << "(SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS ";
+	query << "`name` FROM `account_bans` WHERE `account_id` = " << accountId;
+
+	auto lambdaAccountBanishments = [=](const DBResult_ptr& result) {
+		BanInfo banInfo;
+
+		if (!result) {
+			g_dispatcher.addTask(createTask(std::bind(callback, banInfo, false)));
+		}
+
+		int64_t expiresAt = result->getNumber<int64_t>("expires_at");
+		if (expiresAt != 0 && time(nullptr) > expiresAt) {
+			// Move the ban to history if it has expired
+
+			std::ostringstream query; // redeclaration of query inside lambda
+
+			query << "INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, ";
+			query << "`expired_at`, `banned_by`) VALUES (" << accountId;
+			query << ',' << db->escapeString(result->getDataString("reason")) << ',';
+			query << result->getDataInt("banned_at") << ',' << expiresAt << ',';
+			query << result->getDataInt("banned_by") << ')';
+
+			DatabaseDispatcher::getInstance()->queueSqlCommand(INSERT, query.str());
+
+			query.str("");
+			query << "DELETE FROM `account_bans` WHERE `account_id` = " << accountId;
+			DatabaseDispatcher::getInstance()->queueSqlCommand(DELETE, query.str());
+
+			g_dispatcher.addTask(createTask(std::bind(callback, banInfo, false)));
+		}
+
+		banInfo.expiresAt = expiresAt;
+		banInfo.reason = result->getDataString("reason");
+		banInfo.bannedBy = result->getDataString("name");
+
+		g_dispatcher.addTask(createTask(std::bind(callback, banInfo, true)));
+	};
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), lambdaAccountBanishments);
 }
 
 bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)

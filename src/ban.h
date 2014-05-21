@@ -20,6 +20,8 @@
 #ifndef FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
 #define FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
 
+#include "databasedispatcher.h"
+
 struct BanInfo {
 	std::string bannedBy;
 	std::string reason;
@@ -50,6 +52,7 @@ class Ban
 class IOBan
 {
 	public:
+		static void getAccountBanishments(uint32_t accountId, std::function<void (BanInfo, bool)> callback);
 		static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
 		static bool isIpBanned(uint32_t ip, BanInfo& banInfo);
 		static bool isPlayerNamelocked(uint32_t playerId);

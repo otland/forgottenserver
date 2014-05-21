@@ -151,40 +151,22 @@ bool IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	return Database::getInstance()->executeQuery(query.str());
 }
 
-bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
+void IOLoginData::preloadPlayer(const std::string& name, DBCallback callback)
 {
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id`, `account_id`, `group_id`, `deletion`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`";
+	query << "SELECT `players`.`id`, `players`.`account_id`, `players`.`group_id`";
+	query << ", `players`.`deletion`, `player_namelocks`.`player_id` AS `namelock`";
+	query << ", (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`";
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		query << ", (SELECT `premdays` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premium_days`";
 	}
-	query << " FROM `players` WHERE `name` = " << db->escapeString(name);
-	DBResult_ptr result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
+	query << " FROM `players`";
+	query << " LEFT JOIN `player_namelocks` ON `players`.`id` = `player_namelocks`.`player_id`";
+	query << " WHERE `name` = " << db->escapeString(name);
 
-	if (result->getDataInt("deletion") != 0) {
-		return false;
-	}
-
-	player->setGUID(result->getDataInt("id"));
-	Group* group = g_game.getGroup(result->getDataInt("group_id"));
-	if (!group) {
-		std::cout << "[Error - IOLoginData::preloadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
-		return false;
-	}
-	player->setGroup(group);
-	player->accountNumber = result->getNumber<uint32_t>("account_id");
-	player->accountType = static_cast<AccountType_t>(result->getDataInt("account_type"));
-	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-		player->premiumDays = result->getDataInt("premium_days");
-	} else {
-		player->premiumDays = std::numeric_limits<uint16_t>::max();
-	}
-	return true;
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
 }
 
 bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
