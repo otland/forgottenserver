@@ -261,12 +261,9 @@ void ProtocolGame::login()
 			}
 
 			if (player->getLoadedData() != LOADED_ALL) {
-				std::cout << "LOADED_DATA = " << player->getLoadedData() << std::endl;
 				// Wait for everything loaded.
 				return;
 			}
-
-			std::cout << "PASSED LOGIN" << std::endl;
 
 			if (!g_game.placeCreature(player, player->getLoginPosition())) {
 				if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
