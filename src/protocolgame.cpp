@@ -123,14 +123,14 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 		player->useThing2();
 		IOLoginData::preloadPlayer(name, [=](const DBResult_ptr& result) {
 			if (!result) {
-				disconnectClient("Your character could not be loaded.");
 				player->releaseThing2();
+				disconnectClient("Your character could not be loaded.");
 				return;
 			}
 
 			if (result->getDataInt("deletion") != 0) {
-				disconnectClient("Your character could not be loaded.");
 				player->releaseThing2();
+				disconnectClient("Your character could not be loaded.");
 				return;
 			}
 
@@ -139,14 +139,14 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 			Group* group = g_game.getGroup(result->getDataInt("group_id"));
 			if (!group) {
 				std::cout << "[Error - IOLoginData::preloadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
-				disconnectClient("Your character could not be loaded.");
 				player->releaseThing2();
+				disconnectClient("Your character could not be loaded.");
 				return;
 			}
 
 			if ((uint32_t)result->getDataInt("namelock") == player->getGUID()) {
-				disconnectClient("Your character has been namelocked.");
 				player->releaseThing2();
+				disconnectClient("Your character has been namelocked.");
 				return;
 			}
 
@@ -161,20 +161,20 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 			}
 
 			if (g_game.getGameState() == GAME_STATE_CLOSING && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
-				disconnectClient("The game is just going down.\nPlease try again later.");
 				player->releaseThing2();
+				disconnectClient("The game is just going down.\nPlease try again later.");
 				return;
 			}
 
 			if (g_game.getGameState() == GAME_STATE_CLOSED && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
-				disconnectClient("Server is currently closed. Please try again later.");
 				player->releaseThing2();
+				disconnectClient("Server is currently closed. Please try again later.");
 				return;
 			}
 
 			if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
-				disconnectClient("You may only login with one character\nof your account at the same time.");
 				player->releaseThing2();
+				disconnectClient("You may only login with one character\nof your account at the same time.");
 				return;
 			}
 
@@ -190,6 +190,7 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 					} else {
 						ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
 					}
+					player->releaseThing2();
 					disconnectClient(ss.str());
 					return;
 				}
@@ -254,18 +255,22 @@ void ProtocolGame::login()
 
 		g_dispatcher.addTask(createTask(std::bind(IOLoginData::loadPlayer, player, result, [=] (bool success) {
 			if (!success) {
-				disconnectClient("Your character could not be loaded.");
 				player->releaseThing2();
+				disconnectClient("Your character could not be loaded.");
 				return;
 			}
 
 			if (player->getLoadedData() != LOADED_ALL) {
+				std::cout << "LOADED_DATA = " << player->getLoadedData() << std::endl;
 				// Wait for everything loaded.
 				return;
 			}
 
+			std::cout << "PASSED LOGIN" << std::endl;
+
 			if (!g_game.placeCreature(player, player->getLoginPosition())) {
 				if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
+					player->releaseThing2();
 					disconnectClient("Temple position is wrong. Contact the administrator.");
 					return;
 				}
@@ -430,15 +435,18 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
-	if (accountId == 0) {
-		dispatchDisconnectClient("Account name or password is not correct.");
-		return;
-	}
-
+	IOLoginData::gameworldAuthentication(accountName, password, characterName,
+										 [=] (uint32_t accountId, std::string newCharacterName) {
+		if (accountId == 0) {
+			dispatchDisconnectClient("Account name or password is not correct.");
+			return;
+		} else {
 #undef dispatchDisconnectClient
 
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::initLogin, this, characterName, accountId, operatingSystem)));
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::initLogin, this, newCharacterName,
+													  accountId, operatingSystem)));
+		}
+	});
 }
 
 void ProtocolGame::onConnect()

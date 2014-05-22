@@ -96,6 +96,7 @@ enum tradestate_t {
 };
 
 enum playerLoaded_t {
+	LOADED_NOTHING = 0,
 	LOADED_ACCOUNT = 1,
 	LOADED_ITEMS = 2,
 	LOADED_DEPOT = 4,

@@ -80,7 +80,7 @@ void DatabaseDispatcher::processQueue()
 			if (!error) // Result can be null and that shouldn't mean the query failed. So we check for an error.
 				success = true;
 			else
-				std::cout << "";
+				std::cout << ""; // TODO: write error.
 			break;
 		case(DBCommand_t::UPDATE):
 		case(DBCommand_t::DELETE):
@@ -90,6 +90,8 @@ void DatabaseDispatcher::processQueue()
 		case(DBCommand_t::TRANSACTION):
 			break;
 		}
+
+		std::cout << sqlCommand.query << std::endl;
 
 		if (!success)
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));

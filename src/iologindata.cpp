@@ -312,70 +312,92 @@ bool IOLoginData::saveAccount(const Account& acc)
 	return Database::getInstance()->executeQuery(query.str());
 }
 
-bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
+void IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password,
+											std::function<void(Account, bool)> callback)
 {
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `name` = " << db->escapeString(name);
-	DBResult_ptr result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
 
-	if (transformToSHA1(password) != result->getDataString("password")) {
-		return false;
-	}
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		Account account;
 
-	account.id = result->getDataInt("id");
-	account.name = result->getDataString("name");
-	account.accountType = static_cast<AccountType_t>(result->getDataInt("type"));
-	account.premiumDays = result->getDataInt("premdays");
-	account.lastDay = result->getDataInt("lastday");
+		if (!result) {
+			callback(account, false);
+			return;
+		}
 
-	query.str("");
-	query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
-	result = db->storeQuery(query.str());
-	if (result) {
-		do {
-			if (result->getDataInt("deletion") == 0) {
-				account.charList.push_back(result->getDataString("name"));
-			}
-		} while (result->next());
-		account.charList.sort();
-	}
-	return true;
+		if (transformToSHA1(password) != result->getDataString("password")) {
+			callback(account, false);
+			return;
+		}
+
+		account.id = result->getDataInt("id");
+		account.name = result->getDataString("name");
+		account.accountType = static_cast<AccountType_t>(result->getDataInt("type"));
+		account.premiumDays = result->getDataInt("premdays");
+		account.lastDay = result->getDataInt("lastday");
+
+		std::ostringstream query("");
+		query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
+		result = db->storeQuery(query.str());
+		if (result) {
+			do {
+				if (result->getDataInt("deletion") == 0) {
+					account.charList.push_back(result->getDataString("name"));
+				}
+			} while (result->next());
+			account.charList.sort();
+		}
+		callback(account, true);
+		return;
+	});
 }
 
-uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password, std::string& characterName)
+void IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
+										  std::function<void(uint32_t, std::string)> callback)
 {
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
 	query << "SELECT `id`, `password` FROM `accounts` WHERE `name` = " << db->escapeString(accountName);
-	DBResult_ptr result = db->storeQuery(query.str());
-	if (!result) {
-		return 0;
-	}
 
-	if (transformToSHA1(password) != result->getDataString("password")) {
-		return 0;
-	}
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
 
-	int32_t accountId = result->getDataInt("id");
+		if (!result) {
+			callback(0, "");
+			return;
+		}
 
-	query.str("");
-	query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = " << db->escapeString(characterName);
-	result = db->storeQuery(query.str());
-	if (!result) {
-		return 0;
-	}
+		if (transformToSHA1(password) != result->getDataString("password")) {
+			callback(0, "");
+			return;
+		}
 
-	if (result->getDataInt("account_id") != accountId || result->getDataInt("deletion") != 0) {
-		return 0;
-	}
-	characterName = result->getDataString("name");
-	return accountId;
+		int32_t accountId = result->getDataInt("id");
+
+		std::ostringstream query("");
+		query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = " << db->escapeString(characterName);
+		result = db->storeQuery(query.str());
+
+		DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+			std::string newCharacterName;
+
+			if (!result) {
+				callback(0, newCharacterName);
+				return;
+			}
+
+			if (result->getDataInt("account_id") != accountId || result->getDataInt("deletion") != 0) {
+				callback(0, newCharacterName);
+				return;
+			}
+			newCharacterName = result->getDataString("name");
+			callback(accountId, newCharacterName);
+			return;
+		});
+	});
 }
 
 AccountType_t IOLoginData::getAccountType(uint32_t accountId)

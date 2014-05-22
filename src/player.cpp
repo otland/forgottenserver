@@ -181,6 +181,8 @@ Player::Player(ProtocolGame* p) :
 	nextUseStaminaTime = 0;
 
 	lastQuestlogUpdate = 0;
+
+	loadedData = LOADED_NOTHING;
 }
 
 Player::~Player()
