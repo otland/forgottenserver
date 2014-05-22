@@ -305,13 +305,6 @@ void IOLoginData::loadVip(Player *player, std::function<void ()> callback)
 	});
 }
 
-bool IOLoginData::saveAccount(const Account& acc)
-{
-	std::ostringstream query;
-	query << "UPDATE `accounts` SET `premdays` = " << acc.premiumDays << ", `lastday` = " << acc.lastDay << " WHERE `id` = " << acc.id;
-	return Database::getInstance()->executeQuery(query.str());
-}
-
 void IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password,
 											std::function<void(Account, bool)> callback)
 {
@@ -1105,4 +1098,12 @@ void IOLoginData::removePremiumDays(uint32_t accountId, int32_t removeDays)
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `premdays` = `premdays` - " << removeDays << " WHERE `id` = " << accountId;
 	Database::getInstance()->executeQuery(query.str());
+}
+
+void IOLoginData::saveAccount(const Account acc)
+{
+	std::ostringstream query;
+	query << "UPDATE `accounts` SET `premdays` = " << acc.premiumDays << ", `lastday` = " << acc.lastDay << " WHERE `id` = " << acc.id;
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(UPDATE, query.str());
 }

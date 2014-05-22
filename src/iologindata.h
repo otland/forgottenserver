@@ -30,7 +30,7 @@ typedef std::list<std::pair<int32_t, Item*>> ItemBlockList;
 class IOLoginData
 {
 	public:
-		static bool saveAccount(const Account& acc);
+		static void saveAccount(const Account acc);
 
 		static void loginserverAuthentication(const std::string& name, const std::string& password, std::function<void(Account, bool)> callback);
 

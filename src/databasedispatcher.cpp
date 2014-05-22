@@ -86,6 +86,10 @@ void DatabaseDispatcher::processQueue()
 		case(DBCommand_t::DELETE):
 			if (Database::getInstance()->executeQuery(sqlCommand.query))
 				success = true;
+			else {
+				std::cout << "> ERROR: Failed to execute the following query:" << std::endl;
+				std::cout <<  sqlCommand.query  << std::endl;
+			}
 			break;
 		case(DBCommand_t::TRANSACTION):
 			break;
@@ -96,8 +100,14 @@ void DatabaseDispatcher::processQueue()
 		else {
 			m_sqlCommandQueue.pop();
 
-			if (sqlCommand.type == DBCommand_t::SELECT && sqlCommand.callback != nullptr)
-				g_dispatcher.addTask(createTask(std::bind(std::move(sqlCommand.callback),result)));
+			if (sqlCommand.callback != nullptr)
+			{
+				if (sqlCommand.type == DBCommand_t::SELECT)
+					g_dispatcher.addTask(createTask(std::bind(std::move(sqlCommand.callback), result)));
+				else
+					g_dispatcher.addTask(createTask(std::bind(std::move(sqlCommand.callback), nullptr)));
+			}
+
 		}
 	}
 }
