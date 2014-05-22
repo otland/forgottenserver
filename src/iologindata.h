@@ -47,10 +47,12 @@ class IOLoginData
 
 		static void loadAccount(Player *player, uint32_t accno, std::function<void(bool)> callback);
 		static void loadGuild(Player* player, std::function<void()> callback);
-		static void loadSkills(Player* player, std::function<void()> callback);
 		static void loadSpells(Player* player, std::function<void()> callback);
 		static void loadItems(Player* player, std::function<void()> callback);
 		static void loadDepot(Player* player, std::function<void()> callback);
+		static void loadInbox(Player* player, std::function<void()> callback);
+		static void loadStorage(Player* player, std::function<void()> callback);
+		static void loadVip(Player* player, std::function<void()> callback);
 
 		static bool savePlayer(Player* player);
 		static bool getGuidByName(uint32_t& guid, std::string& name);

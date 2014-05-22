@@ -41,8 +41,6 @@ void IOLoginData::loadAccount(Player* player, uint32_t accno, std::function<void
 			return;
 		}
 
-		player->setGUID(result->getDataInt("id"));
-		player->name = result->getDataString("name");
 		player->accountNumber = accno;
 
 		player->accountType = static_cast<AccountType_t>(result->getDataInt("type"));
@@ -140,6 +138,170 @@ void IOLoginData::loadGuild(Player* player, std::function<void()> callback)
 		player->addLoadedData(LOADED_GUILD);
 		callback();
 		return;
+	});
+}
+
+void IOLoginData::loadSpells(Player* player, std::function<void()> callback)
+{
+	std::ostringstream query("");
+	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (result) {
+			do {
+				player->learnedInstantSpellList.emplace_front(result->getDataString("name"));
+			} while (result->next());
+		}
+
+		player->addLoadedData(LOADED_SPELLS);
+		callback();
+	});
+}
+
+void IOLoginData::loadItems(Player *player, std::function<void ()> callback)
+{
+	std::ostringstream query("");
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		ItemMap itemMap;
+
+		if (result) {
+			loadItems(itemMap, result);
+
+			for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
+				const std::pair<Item*, int32_t>& pair = it->second;
+				Item* item = pair.first;
+				int32_t pid = pair.second;
+				if (pid >= 1 && pid <= 10) {
+					player->__internalAddThing(pid, item);
+				} else {
+					ItemMap::const_iterator it2 = itemMap.find(pid);
+					if (it2 == itemMap.end()) {
+						continue;
+					}
+
+					Container* container = it2->second.first->getContainer();
+					if (container) {
+						container->__internalAddThing(item);
+					}
+				}
+			}
+		}
+
+		player->addLoadedData(LOADED_ITEMS);
+		callback();
+	});
+}
+
+void IOLoginData::loadDepot(Player *player, std::function<void ()> callback)
+{
+	std::ostringstream query("");
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		ItemMap itemMap;
+
+		if (result) {
+			loadItems(itemMap, result);
+
+			for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
+				const std::pair<Item*, int32_t>& pair = it->second;
+				Item* item = pair.first;
+
+				int32_t pid = pair.second;
+				if (pid >= 0 && pid < 100) {
+					DepotChest* depotChest = player->getDepotChest(pid, true);
+					if (depotChest) {
+						depotChest->__internalAddThing(item);
+					}
+				} else {
+					ItemMap::const_iterator it2 = itemMap.find(pid);
+					if (it2 == itemMap.end()) {
+						continue;
+					}
+
+					Container* container = it2->second.first->getContainer();
+					if (container) {
+						container->__internalAddThing(item);
+					}
+				}
+			}
+		}
+
+		player->addLoadedData(LOADED_DEPOT);
+		callback();
+	});
+}
+
+void IOLoginData::loadInbox(Player *player, std::function<void ()> callback)
+{
+	std::ostringstream query("");
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		ItemMap itemMap;
+
+		if (result) {
+			loadItems(itemMap, result);
+
+			for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
+				const std::pair<Item*, int32_t>& pair = it->second;
+				Item* item = pair.first;
+				int32_t pid = pair.second;
+
+				if (pid >= 0 && pid < 100) {
+					player->getInbox()->__internalAddThing(item);
+				} else {
+					ItemMap::const_iterator it2 = itemMap.find(pid);
+
+					if (it2 == itemMap.end()) {
+						continue;
+					}
+
+					Container* container = it2->second.first->getContainer();
+					if (container) {
+						container->__internalAddThing(item);
+					}
+				}
+			}
+		}
+
+		player->addLoadedData(LOADED_INBOX);
+		callback();
+	});
+}
+
+void IOLoginData::loadStorage(Player *player, std::function<void ()> callback)
+{
+	std::ostringstream query("");
+	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (result) {
+			do {
+				player->addStorageValue(result->getDataInt("key"), result->getDataInt("value"), true);
+			} while (result->next());
+		}
+
+		player->addLoadedData(LOADED_STORAGE);
+		callback();
+	});
+}
+
+void IOLoginData::loadVip(Player *player, std::function<void ()> callback)
+{
+	std::ostringstream query("");
+	query << "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = " << player->getAccount();
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (result) {
+			do {
+				player->addVIPInternal(result->getDataInt("player_id"));
+			} while (result->next());
+		}
+
+		player->addLoadedData(LOADED_VIP);
+		callback();
 	});
 }
 
@@ -295,33 +457,18 @@ void IOLoginData::loadPlayer(Player* player, DBResult_ptr result, std::function<
 		callback(false);
 	}
 
-	Database* db = Database::getInstance();
-
 	uint32_t accno = result->getDataInt("account_id");
+	player->setGUID(result->getDataInt("id"));
+	player->name = result->getDataString("name");
 
-	loadAccount(player, accno, [=] (bool success) {
-		callback(success);
-	});
-
-	loadGuild(player, [=] {
-		callback(true);
-	});
-
-//	loadSkills(player, [=] {
-//		callback(true);
-//	});
-
-//	loadSpells(player, [=] {
-//		callback(true);
-//	});
-
-//	loadItems(player, [=] {
-//		callback(true);
-//	});
-
-//	loadDepot(player, [=] {
-//		callback(true);
-//	});
+	loadAccount(player, accno, [=] (bool success) { callback(success); });
+	loadGuild(player, [=] () { callback(true); });
+	loadSpells(player, [=] () { callback(true); });
+	loadItems(player, [=] () { callback(true); });
+	loadDepot(player, [=] () { callback(true); });
+	loadInbox(player, [=] () { callback(true); });
+	loadStorage(player, [=] () { callback(true); });
+	loadVip(player, [=] () { callback(true); });
 
 	Group* group = g_game.getGroup(result->getDataInt("group_id"));
 	if (!group) {
@@ -452,124 +599,6 @@ void IOLoginData::loadPlayer(Player* player, DBResult_ptr result, std::function<
 		player->skills[i][SKILLVALUE_LEVEL] = skillLevel;
 		player->skills[i][SKILLVALUE_TRIES] = skillTries;
 		player->skills[i][SKILLVALUE_PERCENT] = Player::getPercentLevel(skillTries, nextSkillTries);
-	}
-
-	// guilds
-
-	std::ostringstream query("");
-	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
-	if ((result = db->storeQuery(query.str()))) {
-		do {
-			player->learnedInstantSpellList.emplace_front(result->getDataString("name"));
-		} while (result->next());
-	}
-
-	//load inventory items
-	ItemMap itemMap;
-
-	query.str("");
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
-	if ((result = db->storeQuery(query.str()))) {
-		loadItems(itemMap, result);
-
-		for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
-			if (pid >= 1 && pid <= 10) {
-				player->__internalAddThing(pid, item);
-			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-				if (it2 == itemMap.end()) {
-					continue;
-				}
-
-				Container* container = it2->second.first->getContainer();
-				if (container) {
-					container->__internalAddThing(item);
-				}
-			}
-		}
-	}
-
-	//load depot items
-	itemMap.clear();
-
-	query.str("");
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
-	if ((result = db->storeQuery(query.str()))) {
-		loadItems(itemMap, result);
-
-		for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-
-			int32_t pid = pair.second;
-			if (pid >= 0 && pid < 100) {
-				DepotChest* depotChest = player->getDepotChest(pid, true);
-				if (depotChest) {
-					depotChest->__internalAddThing(item);
-				}
-			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-				if (it2 == itemMap.end()) {
-					continue;
-				}
-
-				Container* container = it2->second.first->getContainer();
-				if (container) {
-					container->__internalAddThing(item);
-				}
-			}
-		}
-	}
-
-	//load inbox items
-	itemMap.clear();
-
-	query.str("");
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
-	if ((result = db->storeQuery(query.str()))) {
-		loadItems(itemMap, result);
-
-		for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
-
-			if (pid >= 0 && pid < 100) {
-				player->getInbox()->__internalAddThing(item);
-			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-
-				if (it2 == itemMap.end()) {
-					continue;
-				}
-
-				Container* container = it2->second.first->getContainer();
-				if (container) {
-					container->__internalAddThing(item);
-				}
-			}
-		}
-	}
-
-	//load storage map
-	query.str("");
-	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
-	if ((result = db->storeQuery(query.str()))) {
-		do {
-			player->addStorageValue(result->getDataInt("key"), result->getDataInt("value"), true);
-		} while (result->next());
-	}
-
-	//load vip
-	query.str("");
-	query << "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = " << player->getAccount();
-	if ((result = db->storeQuery(query.str()))) {
-		do {
-			player->addVIPInternal(result->getDataInt("player_id"));
-		} while (result->next());
 	}
 
 	player->updateBaseSpeed();
