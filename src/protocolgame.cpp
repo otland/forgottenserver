@@ -252,27 +252,45 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 
 void ProtocolGame::login()
 {
-	if (!IOLoginData::loadPlayerByName(player, player->getName())) {
-		disconnectClient("Your character could not be loaded.");
-		return;
-	}
+	auto lambdaLoadPlayerByName = [=] (DBResult_ptr result) {
 
-	if (!g_game.placeCreature(player, player->getLoginPosition())) {
-		if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
-			disconnectClient("Temple position is wrong. Contact the administrator.");
-			return;
-		}
-	}
+		auto lambdaLoadPlayer = [=] (bool success) {
+			if (!success) {
+				disconnectClient("Your character could not be loaded.");
+				player->releaseThing2();
+				return;
+			}
 
-	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
-		player->registerCreatureEvent("ExtendedOpcode");
-	}
+			if (player->getLoadedData() != LOADED_ALL) {
+				// Wait for everything loaded.
+				return;
+			}
 
-	player->lastIP = player->getIP();
-	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
-	m_acceptPackets = true;
+			if (!g_game.placeCreature(player, player->getLoginPosition())) {
+				if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
+					disconnectClient("Temple position is wrong. Contact the administrator.");
+					return;
+				}
+			}
 
-	player->releaseThing2();
+			if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+				player->registerCreatureEvent("ExtendedOpcode");
+			}
+
+			player->lastIP = player->getIP();
+			player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
+			m_acceptPackets = true;
+
+			// we release here. Callback hell finished.
+			player->releaseThing2();
+		};
+
+		g_dispatcher.addTask(createTask(std::bind(IOLoginData::loadPlayer, player, result, lambdaLoadPlayer)));
+	};
+
+	IOLoginData::loadPlayerByName(player->getName(), lambdaLoadPlayerByName);
+
+
 }
 
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)

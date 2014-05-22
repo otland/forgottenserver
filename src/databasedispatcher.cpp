@@ -67,11 +67,16 @@ void DatabaseDispatcher::processQueue()
 		switch(sqlCommand.type)
 		{
 		case(DBCommand_t::INSERT):
+			if (!sqlCommand.insertStmt)
+			{
+				if (Database::getInstance()->executeQuery(sqlCommand.query))
+					success = true;
+			}
 			break;
 		case(DBCommand_t::SELECT):
 			result = Database::getInstance()->storeQuery(sqlCommand.query);
 			if (result != nullptr)
-				success = true;
+				success = true; // TODO: better error treatment.
 			break;
 		case(DBCommand_t::UPDATE):
 		case(DBCommand_t::DELETE):

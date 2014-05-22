@@ -23,6 +23,8 @@
 #include "database.h"
 #include "tools.h"
 
+#include "databasedispatcher.h"
+
 #include "tasks.h"
 
 bool Ban::acceptConnection(uint32_t clientip)
@@ -73,7 +75,8 @@ void IOBan::getAccountBanishments(uint32_t accountId, std::function<void(BanInfo
 		BanInfo banInfo;
 
 		if (!result) {
-			g_dispatcher.addTask(createTask(std::bind(callback, banInfo, false)));
+			callback(banInfo, false);
+			return;
 		}
 
 		int64_t expiresAt = result->getNumber<int64_t>("expires_at");
@@ -94,14 +97,15 @@ void IOBan::getAccountBanishments(uint32_t accountId, std::function<void(BanInfo
 			query << "DELETE FROM `account_bans` WHERE `account_id` = " << accountId;
 			DatabaseDispatcher::getInstance()->queueSqlCommand(DELETE, query.str());
 
-			g_dispatcher.addTask(createTask(std::bind(callback, banInfo, false)));
+			callback(banInfo, false);
+			return;
 		}
 
 		banInfo.expiresAt = expiresAt;
 		banInfo.reason = result->getDataString("reason");
 		banInfo.bannedBy = result->getDataString("name");
 
-		g_dispatcher.addTask(createTask(std::bind(callback, banInfo, true)));
+		callback(banInfo, true);
 	};
 
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), lambdaAccountBanishments);

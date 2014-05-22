@@ -122,9 +122,9 @@ bool Mailbox::sendItem(Item* item) const
 		}
 	} else {
 		Player tmpPlayer(nullptr);
-		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
+		//if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
 			return false;
-		}
+		//}
 
 		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER,
 		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {

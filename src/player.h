@@ -95,6 +95,17 @@ enum tradestate_t {
 	TRADE_TRANSFER
 };
 
+enum playerLoaded_t {
+	LOADED_ACCOUNT = 1,
+	LOADED_SKILLS = 2,
+	LOADED_ITEMS = 4,
+	LOADED_DEPOT = 8,
+	LOADED_SPELLS = 16,
+	LOADED_GUILD = 32,
+	LOADED_ALL = LOADED_ACCOUNT | LOADED_SKILLS | LOADED_ITEMS |
+				 LOADED_DEPOT | LOADED_SPELLS | LOADED_GUILD
+};
+
 struct VIPEntry {
 	VIPEntry(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify)
 		: guid(guid), name(name), description(description), icon(icon), notify(notify) {}
@@ -456,6 +467,16 @@ class Player : public Creature, public Cylinder
 		}
 		void setTown(Town* _town) {
 			town = _town;
+		}
+
+		void addLoadedData(playerLoaded_t loaded)
+		{
+			loadedData = playerLoaded_t(loadedData | loaded);
+		}
+
+		playerLoaded_t getLoadedData()
+		{
+			return loadedData;
 		}
 
 		void clearModalWindows();
@@ -1329,6 +1350,8 @@ class Player : public Creature, public Cylinder
 		bool inventoryAbilities[CONST_SLOT_LAST + 1];
 
 		static uint32_t playerAutoID;
+
+		playerLoaded_t loadedData;
 
 		void updateItemsLight(bool internal = false);
 		virtual int32_t getStepSpeed() const {

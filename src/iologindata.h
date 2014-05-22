@@ -30,7 +30,6 @@ typedef std::list<std::pair<int32_t, Item*>> ItemBlockList;
 class IOLoginData
 {
 	public:
-		static Account loadAccount(uint32_t accno);
 		static bool saveAccount(const Account& acc);
 
 		static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
@@ -42,8 +41,17 @@ class IOLoginData
 		static void preloadPlayer(const std::string& name, DBCallback callback);
 
 		static bool loadPlayerById(Player* player, uint32_t id);
-		static bool loadPlayerByName(Player* player, const std::string& name);
-		static bool loadPlayer(Player* player, DBResult_ptr result);
+		static void loadPlayerByName(const std::string& name, DBCallback callback);
+
+		static void loadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> callback);
+
+		static void loadAccount(Player *player, uint32_t accno, std::function<void(bool)> callback);
+		static void loadGuild(Player* player, std::function<void()> callback);
+		static void loadSkills(Player* player, std::function<void()> callback);
+		static void loadSpells(Player* player, std::function<void()> callback);
+		static void loadItems(Player* player, std::function<void()> callback);
+		static void loadDepot(Player* player, std::function<void()> callback);
+
 		static bool savePlayer(Player* player);
 		static bool getGuidByName(uint32_t& guid, std::string& name);
 		static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
