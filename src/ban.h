@@ -51,9 +51,7 @@ class IOBan
 {
 	public:
 		static void getAccountBanishments(uint32_t accountId, std::function<void (BanInfo, bool)> callback);
-		static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
 		static bool isIpBanned(uint32_t ip, BanInfo& banInfo);
-		static bool isPlayerNamelocked(uint32_t playerId);
 };
 
 #endif

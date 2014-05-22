@@ -72,6 +72,7 @@ class Database
 		* @param std::string query
 		* @return results object (nullptr on error)
 		*/
+		DBResult_ptr storeQuery(const std::string& query, int& error);
 		DBResult_ptr storeQuery(const std::string& query);
 
 		/**

@@ -119,7 +119,9 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 		player->useThing2();
 		player->setID();
 
-		auto lambdaPreloadPlayer = [=](const DBResult_ptr& result) {
+		// We add useThing2 again in order to make sure it will be valid when the lambda function gets called.
+		player->useThing2();
+		IOLoginData::preloadPlayer(name, [=](const DBResult_ptr& result) {
 			if (!result) {
 				disconnectClient("Your character could not be loaded.");
 				player->releaseThing2();
@@ -218,16 +220,12 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 			};
 
 			if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
-				IOBan::getAccountBanishments(accountId, lambdaIsAccountBanished);
+				IOBan::getAccountBanishments(accountId, std::move(lambdaIsAccountBanished));
 			} else {
 				BanInfo banInfo; // empty just to fulfill lambda request.
-				g_dispatcher.addTask(createTask(std::bind(lambdaIsAccountBanished, banInfo, false)));
+				g_dispatcher.addTask(createTask(std::bind(std::move(lambdaIsAccountBanished), banInfo, false)));
 			}
-		};
-
-		// We add useThing2 again in order to make sure it will be valid when the lambda function gets called.
-		player->useThing2();
-		IOLoginData::preloadPlayer(name, lambdaPreloadPlayer);
+		});
 
 	} else {
 		if (eventConnect != 0 || !g_config.getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
@@ -252,9 +250,9 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 
 void ProtocolGame::login()
 {
-	auto lambdaLoadPlayerByName = [=] (DBResult_ptr result) {
+	IOLoginData::loadPlayerByName(player->getName(), [=] (DBResult_ptr result) {
 
-		auto lambdaLoadPlayer = [=] (bool success) {
+		g_dispatcher.addTask(createTask(std::bind(IOLoginData::loadPlayer, player, result, [=] (bool success) {
 			if (!success) {
 				disconnectClient("Your character could not be loaded.");
 				player->releaseThing2();
@@ -283,14 +281,8 @@ void ProtocolGame::login()
 
 			// we release here. Callback hell finished.
 			player->releaseThing2();
-		};
-
-		g_dispatcher.addTask(createTask(std::bind(IOLoginData::loadPlayer, player, result, lambdaLoadPlayer)));
-	};
-
-	IOLoginData::loadPlayerByName(player->getName(), lambdaLoadPlayerByName);
-
-
+		})));
+	});
 }
 
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)

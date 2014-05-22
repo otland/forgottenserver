@@ -64,6 +64,8 @@ void DatabaseDispatcher::processQueue()
 		DBCommand sqlCommand = m_sqlCommandQueue.front();
 		m_queueMutex.unlock();
 
+		int error = 0;
+
 		switch(sqlCommand.type)
 		{
 		case(DBCommand_t::INSERT):
@@ -74,9 +76,11 @@ void DatabaseDispatcher::processQueue()
 			}
 			break;
 		case(DBCommand_t::SELECT):
-			result = Database::getInstance()->storeQuery(sqlCommand.query);
-			if (result != nullptr)
-				success = true; // TODO: better error treatment.
+			result = Database::getInstance()->storeQuery(sqlCommand.query, error);
+			if (!error) // Result can be null and that shouldn't mean the query failed. So we check for an error.
+				success = true;
+			else
+				std::cout << "";
 			break;
 		case(DBCommand_t::UPDATE):
 		case(DBCommand_t::DELETE):
@@ -93,7 +97,7 @@ void DatabaseDispatcher::processQueue()
 			m_sqlCommandQueue.pop();
 
 			if (sqlCommand.type == DBCommand_t::SELECT && sqlCommand.callback != nullptr)
-				g_dispatcher.addTask(createTask(std::bind(sqlCommand.callback,result)));
+				g_dispatcher.addTask(createTask(std::bind(std::move(sqlCommand.callback),result)));
 		}
 	}
 }
