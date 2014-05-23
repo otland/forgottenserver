@@ -40,23 +40,23 @@ class IOLoginData
 		static AccountType_t getAccountType(uint32_t accountId);
 		static void setAccountType(uint32_t accountId, AccountType_t accountType);
 		static bool updateOnlineStatus(uint32_t guid, bool login);
-		static void asyncPreloadPlayer(const std::string& name, DBCallback callback);
+		static void asyncPreloadPlayer(const std::string& name, DBResultCallback callback);
 
 		static bool loadPlayerById(Player* player, uint32_t id);
 
-		static void asyncLoadPlayerById(uint32_t id, DBCallback callback);
-		static void asyncLoadPlayerByName(Player *player, const std::string& name, std::function<void(bool)> boolCallback);
+		static void asyncLoadPlayerById(uint32_t id, DBResultCallback callback);
+		static void asyncLoadPlayerByName(Player *player, const std::string& name, DBBoolCallback boolCallback);
 
-		static void asyncLoadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> boolCallback);
+		static void asyncLoadPlayer(Player* player, DBResult_ptr result, DBBoolCallback boolCallback);
 
-		static void asyncLoadAccount(Player *player, uint32_t accno, std::function<void(bool)> callback);
-		static void asyncLoadGuild(Player* player, std::function<void()> callback);
-		static void asyncLoadSpells(Player* player, std::function<void()> callback);
-		static void asyncLoadItems(Player* player, std::function<void()> callback);
-		static void asyncLoadDepot(Player* player, std::function<void()> callback);
-		static void asyncLoadInbox(Player* player, std::function<void()> callback);
-		static void asyncLoadStorage(Player* player, std::function<void()> callback);
-		static void asyncLoadVip(Player* player, std::function<void()> callback);
+		static void asyncLoadAccount(Player *player, uint32_t accno, DBBoolCallback callback);
+		static void asyncLoadGuild(Player* player, DBVoidCallback callback);
+		static void asyncLoadSpells(Player* player, DBVoidCallback callback);
+		static void asyncLoadItems(Player* player, DBVoidCallback callback);
+		static void asyncLoadDepot(Player* player, DBVoidCallback callback);
+		static void asyncLoadInbox(Player* player, DBVoidCallback callback);
+		static void asyncLoadStorage(Player* player, DBVoidCallback callback);
+		static void asyncLoadVip(Player* player, DBVoidCallback callback);
 
 		static bool savePlayer(Player* player);
 		static bool getGuidByName(uint32_t& guid, std::string& name);

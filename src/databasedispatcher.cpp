@@ -33,7 +33,7 @@ DatabaseDispatcher::~DatabaseDispatcher()
 
 void DatabaseDispatcher::queueSqlCommand(DBCommand_t type,
 										 std::string query,
-										 DBCallback callback,
+										 DBResultCallback callback,
 										 DBInsert_ptr insertStmt,
 										 DBTransaction_ptr transaction,
 										 TransactionFunc_ptr transactionFunc)
