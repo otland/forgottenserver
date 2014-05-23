@@ -113,6 +113,8 @@ bool BedItem::canUse(Player* player)
 	}
 
 	Player sleeper(nullptr);
+
+	// Better to make sync call to DB in this case?
 	if (!IOLoginData::loadPlayerById(&sleeper, sleeperGUID)) {
 		return false;
 	}

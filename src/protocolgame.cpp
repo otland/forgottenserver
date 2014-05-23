@@ -121,7 +121,7 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 
 		// We add useThing2 again in order to make sure it will be valid when the lambda function gets called.
 		player->useThing2();
-		IOLoginData::preloadPlayer(name, [=](const DBResult_ptr& result) {
+		IOLoginData::asyncPreloadPlayer(name, [=](const DBResult_ptr& result) {
 			if (!result) {
 				player->releaseThing2();
 				disconnectClient("Your character could not be loaded.");
@@ -251,9 +251,15 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 
 void ProtocolGame::login()
 {
-	IOLoginData::loadPlayerByName(player->getName(), [=] (DBResult_ptr result) {
+	IOLoginData::asyncLoadPlayerByName(player->getName(), [=] (DBResult_ptr result) {
+		if (!result)
+		{
+			player->releaseThing2();
+			disconnectClient("Your character could not be loaded.");
+			return;
+		}
 
-		g_dispatcher.addTask(createTask(std::bind(IOLoginData::loadPlayer, player, result, [=] (bool success) {
+		g_dispatcher.addTask(createTask(std::bind(IOLoginData::asyncLoadPlayer, player, result, [=] (bool success) {
 			if (!success) {
 				player->releaseThing2();
 				disconnectClient("Your character could not be loaded.");
@@ -432,7 +438,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	IOLoginData::gameworldAuthentication(accountName, password, characterName,
+	IOLoginData::asyncGameworldAuthentication(accountName, password, characterName,
 										 [=] (uint32_t accountId, std::string newCharacterName) {
 		if (accountId == 0) {
 			dispatchDisconnectClient("Account name or password is not correct.");

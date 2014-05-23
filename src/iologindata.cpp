@@ -30,7 +30,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-void IOLoginData::loadAccount(Player* player, uint32_t accno, std::function<void(bool)> callback)
+void IOLoginData::asyncLoadAccount(Player* player, uint32_t accno, std::function<void(bool)> callback)
 {
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << accno;
@@ -56,7 +56,7 @@ void IOLoginData::loadAccount(Player* player, uint32_t accno, std::function<void
 	});
 }
 
-void IOLoginData::loadGuild(Player* player, std::function<void()> callback)
+void IOLoginData::asyncLoadGuild(Player* player, std::function<void()> callback)
 {
 	std::ostringstream query;
 	query << "SELECT `guild_id`, `rank_id`, `nick` FROM `guild_membership` WHERE `player_id` = " << player->getGUID();
@@ -141,7 +141,7 @@ void IOLoginData::loadGuild(Player* player, std::function<void()> callback)
 	});
 }
 
-void IOLoginData::loadSpells(Player* player, std::function<void()> callback)
+void IOLoginData::asyncLoadSpells(Player* player, std::function<void()> callback)
 {
 	std::ostringstream query("");
 	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
@@ -158,7 +158,7 @@ void IOLoginData::loadSpells(Player* player, std::function<void()> callback)
 	});
 }
 
-void IOLoginData::loadItems(Player *player, std::function<void ()> callback)
+void IOLoginData::asyncLoadItems(Player *player, std::function<void ()> callback)
 {
 	std::ostringstream query("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
@@ -167,7 +167,7 @@ void IOLoginData::loadItems(Player *player, std::function<void ()> callback)
 		ItemMap itemMap;
 
 		if (result) {
-			loadItems(itemMap, result);
+			asyncLoadItems(itemMap, result);
 
 			for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
 				const std::pair<Item*, int32_t>& pair = it->second;
@@ -194,7 +194,7 @@ void IOLoginData::loadItems(Player *player, std::function<void ()> callback)
 	});
 }
 
-void IOLoginData::loadDepot(Player *player, std::function<void ()> callback)
+void IOLoginData::asyncLoadDepot(Player *player, std::function<void ()> callback)
 {
 	std::ostringstream query("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
@@ -203,7 +203,7 @@ void IOLoginData::loadDepot(Player *player, std::function<void ()> callback)
 		ItemMap itemMap;
 
 		if (result) {
-			loadItems(itemMap, result);
+			asyncLoadItems(itemMap, result);
 
 			for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
 				const std::pair<Item*, int32_t>& pair = it->second;
@@ -234,7 +234,7 @@ void IOLoginData::loadDepot(Player *player, std::function<void ()> callback)
 	});
 }
 
-void IOLoginData::loadInbox(Player *player, std::function<void ()> callback)
+void IOLoginData::asyncLoadInbox(Player *player, std::function<void ()> callback)
 {
 	std::ostringstream query("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
@@ -242,7 +242,7 @@ void IOLoginData::loadInbox(Player *player, std::function<void ()> callback)
 		ItemMap itemMap;
 
 		if (result) {
-			loadItems(itemMap, result);
+			asyncLoadItems(itemMap, result);
 
 			for (ItemMap::reverse_iterator it = itemMap.rbegin(); it != itemMap.rend(); ++it) {
 				const std::pair<Item*, int32_t>& pair = it->second;
@@ -271,7 +271,7 @@ void IOLoginData::loadInbox(Player *player, std::function<void ()> callback)
 	});
 }
 
-void IOLoginData::loadStorage(Player *player, std::function<void ()> callback)
+void IOLoginData::asyncLoadStorage(Player *player, std::function<void ()> callback)
 {
 	std::ostringstream query("");
 	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
@@ -288,7 +288,7 @@ void IOLoginData::loadStorage(Player *player, std::function<void ()> callback)
 	});
 }
 
-void IOLoginData::loadVip(Player *player, std::function<void ()> callback)
+void IOLoginData::asyncLoadVip(Player *player, std::function<void ()> callback)
 {
 	std::ostringstream query("");
 	query << "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = " << player->getAccount();
@@ -305,7 +305,7 @@ void IOLoginData::loadVip(Player *player, std::function<void ()> callback)
 	});
 }
 
-void IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password,
+void IOLoginData::asyncLoginserverAuthentication(const std::string& name, const std::string& password,
 											std::function<void(Account, bool)> callback)
 {
 	Database* db = Database::getInstance();
@@ -348,7 +348,7 @@ void IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	});
 }
 
-void IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
+void IOLoginData::asyncGameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
 										  std::function<void(uint32_t, std::string)> callback)
 {
 	Database* db = Database::getInstance();
@@ -422,7 +422,7 @@ bool IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	return Database::getInstance()->executeQuery(query.str());
 }
 
-void IOLoginData::preloadPlayer(const std::string& name, DBCallback callback)
+void IOLoginData::asyncPreloadPlayer(const std::string& name, DBCallback callback)
 {
 	Database* db = Database::getInstance();
 
@@ -440,15 +440,6 @@ void IOLoginData::preloadPlayer(const std::string& name, DBCallback callback)
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
 }
 
-bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
-{
-	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `id` = " << id;
-
-	return false;
-	//return loadPlayer(player, Database::getInstance()->storeQuery(query.str()));
-}
-
 //bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
 //{
 //	Database* db = Database::getInstance();
@@ -457,7 +448,24 @@ bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 //	return loadPlayer(player, db->storeQuery(query.str()));
 //}
 
-void IOLoginData::loadPlayerByName(const std::string& name, DBCallback callback)
+bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
+{
+	//Database* db = Database::getInstance();
+	std::ostringstream query;
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `id` = " << id;
+	//return asyncLoadPlayer(player, Database::getInstance()->storeQuery(query.str()));
+	return false;
+}
+
+void IOLoginData::asyncLoadPlayerById(const std::string& id, DBCallback callback)
+{
+	std::ostringstream query;
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `id` = " << id;
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
+}
+
+void IOLoginData::asyncLoadPlayerByName(const std::string& name, DBCallback callback)
 {
 	Database* db = Database::getInstance();
 	std::ostringstream query;
@@ -466,7 +474,7 @@ void IOLoginData::loadPlayerByName(const std::string& name, DBCallback callback)
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
 }
 
-void IOLoginData::loadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> callback)
+void IOLoginData::asyncLoadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> callback)
 {
 	if (!result) {
 		callback(false);
@@ -476,14 +484,14 @@ void IOLoginData::loadPlayer(Player* player, DBResult_ptr result, std::function<
 	player->setGUID(result->getDataInt("id"));
 	player->name = result->getDataString("name");
 
-	loadAccount(player, accno, [=] (bool success) { callback(success); });
-	loadGuild(player, [=] () { callback(true); });
-	loadSpells(player, [=] () { callback(true); });
-	loadItems(player, [=] () { callback(true); });
-	loadDepot(player, [=] () { callback(true); });
-	loadInbox(player, [=] () { callback(true); });
-	loadStorage(player, [=] () { callback(true); });
-	loadVip(player, [=] () { callback(true); });
+	asyncLoadAccount(player, accno, [=] (bool success) { callback(success); });
+	asyncLoadGuild(player, [=] () { callback(true); });
+	asyncLoadSpells(player, [=] () { callback(true); });
+	asyncLoadItems(player, [=] () { callback(true); });
+	asyncLoadDepot(player, [=] () { callback(true); });
+	asyncLoadInbox(player, [=] () { callback(true); });
+	asyncLoadStorage(player, [=] () { callback(true); });
+	asyncLoadVip(player, [=] () { callback(true); });
 
 	Group* group = g_game.getGroup(result->getDataInt("group_id"));
 	if (!group) {
@@ -997,7 +1005,7 @@ bool IOLoginData::formatPlayerName(std::string& name)
 	return true;
 }
 
-void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
+void IOLoginData::asyncLoadItems(ItemMap& itemMap, DBResult_ptr result)
 {
 	do {
 		int32_t sid = result->getDataInt("sid");
@@ -1100,7 +1108,7 @@ void IOLoginData::removePremiumDays(uint32_t accountId, int32_t removeDays)
 	Database::getInstance()->executeQuery(query.str());
 }
 
-void IOLoginData::saveAccount(const Account acc)
+void IOLoginData::asyncSaveAccount(const Account acc)
 {
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `premdays` = " << acc.premiumDays << ", `lastday` = " << acc.lastDay << " WHERE `id` = " << acc.id;

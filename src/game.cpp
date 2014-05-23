@@ -4951,7 +4951,7 @@ void Game::updatePremium(Account& account)
 	}
 
 	if (save) {
-		IOLoginData::saveAccount(account);
+		IOLoginData::asyncSaveAccount(account);
 	}
 }
 

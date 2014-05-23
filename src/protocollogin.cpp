@@ -50,7 +50,7 @@ void ProtocolLogin::disconnectClient(const std::string& message)
 void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password)
 {
 
-	IOLoginData::loginserverAuthentication(accountName, password, [=] (Account account, bool success) {
+	IOLoginData::asyncLoginserverAuthentication(accountName, password, [=] (Account account, bool success) {
 		if (!success)
 		{
 			disconnectClient("Account name or password is not correct.");

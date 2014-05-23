@@ -30,31 +30,33 @@ typedef std::list<std::pair<int32_t, Item*>> ItemBlockList;
 class IOLoginData
 {
 	public:
-		static void saveAccount(const Account acc);
+		static void asyncSaveAccount(const Account acc);
 
-		static void loginserverAuthentication(const std::string& name, const std::string& password, std::function<void(Account, bool)> callback);
+		static void asyncLoginserverAuthentication(const std::string& name, const std::string& password, std::function<void(Account, bool)> callback);
 
-		static void gameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
+		static void asyncGameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
 											std::function<void(uint32_t, std::string)> callback);
 
 		static AccountType_t getAccountType(uint32_t accountId);
 		static void setAccountType(uint32_t accountId, AccountType_t accountType);
 		static bool updateOnlineStatus(uint32_t guid, bool login);
-		static void preloadPlayer(const std::string& name, DBCallback callback);
+		static void asyncPreloadPlayer(const std::string& name, DBCallback callback);
 
 		static bool loadPlayerById(Player* player, uint32_t id);
-		static void loadPlayerByName(const std::string& name, DBCallback callback);
 
-		static void loadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> callback);
+		static void asyncLoadPlayerById(const std::string& id, DBCallback callback);
+		static void asyncLoadPlayerByName(const std::string& name, DBCallback callback);
 
-		static void loadAccount(Player *player, uint32_t accno, std::function<void(bool)> callback);
-		static void loadGuild(Player* player, std::function<void()> callback);
-		static void loadSpells(Player* player, std::function<void()> callback);
-		static void loadItems(Player* player, std::function<void()> callback);
-		static void loadDepot(Player* player, std::function<void()> callback);
-		static void loadInbox(Player* player, std::function<void()> callback);
-		static void loadStorage(Player* player, std::function<void()> callback);
-		static void loadVip(Player* player, std::function<void()> callback);
+		static void asyncLoadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> callback);
+
+		static void asyncLoadAccount(Player *player, uint32_t accno, std::function<void(bool)> callback);
+		static void asyncLoadGuild(Player* player, std::function<void()> callback);
+		static void asyncLoadSpells(Player* player, std::function<void()> callback);
+		static void asyncLoadItems(Player* player, std::function<void()> callback);
+		static void asyncLoadDepot(Player* player, std::function<void()> callback);
+		static void asyncLoadInbox(Player* player, std::function<void()> callback);
+		static void asyncLoadStorage(Player* player, std::function<void()> callback);
+		static void asyncLoadVip(Player* player, std::function<void()> callback);
 
 		static bool savePlayer(Player* player);
 		static bool getGuidByName(uint32_t& guid, std::string& name);
@@ -76,7 +78,7 @@ class IOLoginData
 	protected:
 		typedef std::map<int32_t , std::pair<Item*, int32_t> > ItemMap;
 
-		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
+		static void asyncLoadItems(ItemMap& itemMap, DBResult_ptr result);
 		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& stream);
 };
 
