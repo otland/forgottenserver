@@ -44,10 +44,10 @@ class IOLoginData
 
 		static bool loadPlayerById(Player* player, uint32_t id);
 
-		static void asyncLoadPlayerById(const std::string& id, DBCallback callback);
-		static void asyncLoadPlayerByName(const std::string& name, DBCallback callback);
+		static void asyncLoadPlayerById(uint32_t id, DBCallback callback);
+		static void asyncLoadPlayerByName(Player *player, const std::string& name, std::function<void(bool)> boolCallback);
 
-		static void asyncLoadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> callback);
+		static void asyncLoadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> boolCallback);
 
 		static void asyncLoadAccount(Player *player, uint32_t accno, std::function<void(bool)> callback);
 		static void asyncLoadGuild(Player* player, std::function<void()> callback);

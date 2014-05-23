@@ -78,8 +78,8 @@ class ProtocolGame : public Protocol
 			return 0x0A;
 		}
 
-		void initLogin(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
-		void login();
+		void initLogin(std::string name, uint32_t accnumber, OperatingSystem_t operatingSystem);
+		void login(std::string name);
 
 		void logout(bool displayEffect, bool forced);
 

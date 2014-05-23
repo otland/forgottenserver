@@ -457,7 +457,7 @@ bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 	return false;
 }
 
-void IOLoginData::asyncLoadPlayerById(const std::string& id, DBCallback callback)
+void IOLoginData::asyncLoadPlayerById(uint32_t id, DBCallback callback)
 {
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `id` = " << id;
@@ -465,38 +465,64 @@ void IOLoginData::asyncLoadPlayerById(const std::string& id, DBCallback callback
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
 }
 
-void IOLoginData::asyncLoadPlayerByName(const std::string& name, DBCallback callback)
+void IOLoginData::asyncLoadPlayerByName(Player *player, const std::string& name, std::function<void(bool)> boolCallback)
 {
 	Database* db = Database::getInstance();
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`";
+	query << ", `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`";
+	query << ", `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`";
+	query << ", `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`";
+	query << ", `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`";
+	query << ", `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`";
+	query << ", `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`";
+	query << ", `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`";
+	query << ", `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`";
+	query << ", `skill_shielding`, `skill_shielding_tries`, `skill_fishing`";
+	query << ", `skill_fishing_tries` FROM `players` WHERE `name` = " << db->escapeString(name);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
+	player->useThing2();
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result)
+		{
+			player->releaseThing2();
+			boolCallback(false);
+			return;
+		}
+
+		asyncLoadPlayer(player, result, [=] (bool success) {
+			if (!success)
+				player->releaseThing2();
+
+			boolCallback(success);
+		});
+	});
 }
 
-void IOLoginData::asyncLoadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> callback)
+void IOLoginData::asyncLoadPlayer(Player* player, DBResult_ptr result, std::function<void(bool)> boolCallback)
 {
 	if (!result) {
-		callback(false);
+		boolCallback(false);
 	}
 
 	uint32_t accno = result->getDataInt("account_id");
 	player->setGUID(result->getDataInt("id"));
 	player->name = result->getDataString("name");
 
-	asyncLoadAccount(player, accno, [=] (bool success) { callback(success); });
-	asyncLoadGuild(player, [=] () { callback(true); });
-	asyncLoadSpells(player, [=] () { callback(true); });
-	asyncLoadItems(player, [=] () { callback(true); });
-	asyncLoadDepot(player, [=] () { callback(true); });
-	asyncLoadInbox(player, [=] () { callback(true); });
-	asyncLoadStorage(player, [=] () { callback(true); });
-	asyncLoadVip(player, [=] () { callback(true); });
+	asyncLoadAccount(player, accno, [=] (bool success) { boolCallback(success); });
+	asyncLoadGuild(player, [=] () { boolCallback(true); });
+	asyncLoadSpells(player, [=] () { boolCallback(true); });
+	asyncLoadItems(player, [=] () { boolCallback(true); });
+	asyncLoadDepot(player, [=] () { boolCallback(true); });
+	asyncLoadInbox(player, [=] () { boolCallback(true); });
+	asyncLoadStorage(player, [=] () { boolCallback(true); });
+	asyncLoadVip(player, [=] () { boolCallback(true); });
 
 	Group* group = g_game.getGroup(result->getDataInt("group_id"));
 	if (!group) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
-		callback(false);
+		boolCallback(false);
 	}
 	player->setGroup(group);
 
@@ -542,7 +568,7 @@ void IOLoginData::asyncLoadPlayer(Player* player, DBResult_ptr result, std::func
 
 	if (!player->setVocation(result->getDataInt("vocation"))) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Vocation ID " << result->getDataInt("vocation") << " which doesn't exist." << std::endl;
-		callback(false);
+		boolCallback(false);
 	}
 
 	player->mana = result->getDataInt("mana");
@@ -597,7 +623,7 @@ void IOLoginData::asyncLoadPlayer(Player* player, DBResult_ptr result, std::func
 	Town* town = Towns::getInstance().getTown(result->getDataInt("town_id"));
 	if (!town) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Town ID " << result->getDataInt("town_id") << " which doesn't exist." << std::endl;
-		callback(false);
+		boolCallback(false);
 	}
 
 	player->town = town;
@@ -628,7 +654,7 @@ void IOLoginData::asyncLoadPlayer(Player* player, DBResult_ptr result, std::func
 	player->updateInventoryWeight();
 	player->updateItemsLight(true);
 
-	callback(true);
+	boolCallback(true);
 }
 
 bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream)

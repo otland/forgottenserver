@@ -107,7 +107,7 @@ void ProtocolGame::deleteProtocolTask()
 	Protocol::deleteProtocolTask();
 }
 
-void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
+void ProtocolGame::initLogin(std::string name, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	//dispatcher thread
 	Player* _player = g_game.getPlayerByName(name);
@@ -217,7 +217,10 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 
 				player->setOperatingSystem((OperatingSystem_t)operatingSystem);
 
-				login();
+				login(name);
+				player->releaseThing2();	// NOTE: we released for using here, but, at this point,
+											// the asyncLoadPlayerByName method in the login called above
+											// has already called "useThing2" and "owns" the player ptr now.
 			};
 
 			if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
@@ -249,47 +252,38 @@ void ProtocolGame::initLogin(const std::string& name, uint32_t accountId, Operat
 	}
 }
 
-void ProtocolGame::login()
+void ProtocolGame::login(std::string name)
 {
-	IOLoginData::asyncLoadPlayerByName(player->getName(), [=] (DBResult_ptr result) {
-		if (!result)
+	IOLoginData::asyncLoadPlayerByName(player, name, [=] (bool success) {
+		if (!success)
 		{
-			player->releaseThing2();
 			disconnectClient("Your character could not be loaded.");
 			return;
 		}
 
-		g_dispatcher.addTask(createTask(std::bind(IOLoginData::asyncLoadPlayer, player, result, [=] (bool success) {
-			if (!success) {
+		if (player->getLoadedData() != LOADED_ALL) {
+			// Wait for everything loaded.
+			return;
+		}
+
+		if (!g_game.placeCreature(player, player->getLoginPosition())) {
+			if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
 				player->releaseThing2();
-				disconnectClient("Your character could not be loaded.");
+				disconnectClient("Temple position is wrong. Contact the administrator.");
 				return;
 			}
+		}
 
-			if (player->getLoadedData() != LOADED_ALL) {
-				// Wait for everything loaded.
-				return;
-			}
+		if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+			player->registerCreatureEvent("ExtendedOpcode");
+		}
 
-			if (!g_game.placeCreature(player, player->getLoginPosition())) {
-				if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
-					player->releaseThing2();
-					disconnectClient("Temple position is wrong. Contact the administrator.");
-					return;
-				}
-			}
+		player->lastIP = player->getIP();
+		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
+		m_acceptPackets = true;
 
-			if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
-				player->registerCreatureEvent("ExtendedOpcode");
-			}
-
-			player->lastIP = player->getIP();
-			player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
-			m_acceptPackets = true;
-
-			// we release here. Callback hell finished.
-			player->releaseThing2();
-		})));
+		// we release here. Callback hell finished.
+		player->releaseThing2();
 	});
 }
 

@@ -114,10 +114,10 @@ bool BedItem::canUse(Player* player)
 
 	Player sleeper(nullptr);
 
-	// Better to make sync call to DB in this case?
-	if (!IOLoginData::loadPlayerById(&sleeper, sleeperGUID)) {
-		return false;
-	}
+	// TODO: fix this. What is this code actually supposed to do?
+//	if (!IOLoginData::loadPlayerById(&sleeper, sleeperGUID)) {
+//		return false;
+//	}
 
 	if (house->getHouseAccessLevel(&sleeper) > house->getHouseAccessLevel(player)) {
 		return false;
@@ -192,11 +192,11 @@ void BedItem::wakeUp(Player* player)
 
 	if (sleeperGUID != 0) {
 		if (!player) {
-			Player _player(nullptr);
-			if (IOLoginData::loadPlayerById(&_player, sleeperGUID)) {
+			IOLoginData::asyncLoadPlayerById(sleeperGUID, [=] (DBResult_ptr result) {
+				Player _player(nullptr);
 				regeneratePlayer(&_player);
 				IOLoginData::savePlayer(&_player);
-			}
+			});
 		} else {
 			regeneratePlayer(player);
 			g_game.addCreatureHealth(player);
