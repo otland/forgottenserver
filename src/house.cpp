@@ -108,12 +108,16 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 	}
 
 	std::string name;
-	if (guid != 0 && IOLoginData::getNameByGuid(guid, name)) {
-		owner = guid;
-		ownerName = name;
-	}
+	if (guid != 0) {
+		IOLoginData::asyncGetNameByGuid(guid, [=] (bool success, std::string name) {
+			if (success) {
+				owner = guid;
+				ownerName = name;
+			}
 
-	updateDoorDescription();
+			updateDoorDescription();
+		});
+	}
 }
 
 void House::updateDoorDescription() const

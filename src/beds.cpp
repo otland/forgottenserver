@@ -44,11 +44,13 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 			}
 
 			if (_guid != 0) {
-				std::string name;
-				if (IOLoginData::getNameByGuid(_guid, name)) {
-					setSpecialDescription(name + " is sleeping there.");
-					Beds::getInstance().setBedSleeper(this, _guid);
-				}
+				IOLoginData::asyncGetNameByGuid(_guid, [=] (bool success, std::string name){
+					if (success)
+					{
+						setSpecialDescription(name + " is sleeping there.");
+						Beds::getInstance().setBedSleeper(this, _guid);
+					}
+				});
 			}
 
 			sleeperGUID = _guid;

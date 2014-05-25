@@ -317,37 +317,42 @@ void IOLoginData::asyncLoginserverAuthentication(const std::string& name, const 
 	query << DatabaseDispatcher::getInstance()->escapeString(name);
 
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
-		Account account;
+		Account *account = new Account();
 
 		if (!result) {
-			callback(account, false);
+			callback(*account, false);
+			delete account;
 			return;
 		}
 
 		if (transformToSHA1(password) != result->getDataString("password")) {
-			callback(account, false);
+			callback(*account, false);
+			delete account;
 			return;
 		}
 
-		account.id = result->getDataInt("id");
-		account.name = result->getDataString("name");
-		account.accountType = static_cast<AccountType_t>(result->getDataInt("type"));
-		account.premiumDays = result->getDataInt("premdays");
-		account.lastDay = result->getDataInt("lastday");
+		account->id = result->getDataInt("id");
+		account->name = result->getDataString("name");
+		account->accountType = static_cast<AccountType_t>(result->getDataInt("type"));
+		account->premiumDays = result->getDataInt("premdays");
+		account->lastDay = result->getDataInt("lastday");
 
 		std::ostringstream query("");
-		query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
+		query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account->id;
 
-		if (result) {
-			do {
-				if (result->getDataInt("deletion") == 0) {
-					account.charList.push_back(result->getDataString("name"));
-				}
-			} while (result->next());
-			account.charList.sort();
-		}
-		callback(account, true);
-		return;
+		DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+			if (result) {
+				do {
+					if (result->getDataInt("deletion") == 0) {
+						account->charList.push_back(result->getDataString("name"));
+					}
+				} while (result->next());
+				account->charList.sort();
+			}
+			callback(*account, true);
+			delete account;
+			return;
+		});
 	});
 }
 
@@ -974,17 +979,19 @@ bool IOLoginData::savePlayer(Player* player)
 	return transaction.commit();
 }
 
-bool IOLoginData::getNameByGuid(uint32_t guid, std::string& name)
+void IOLoginData::asyncGetNameByGuid(uint32_t guid, std::function<void(bool, std::string)> callback)
 {
 	std::ostringstream query;
 	query << "SELECT `name` FROM `players` WHERE `id` = " << guid;
-	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
 
-	name = result->getDataString("name");
-	return true;
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result) {
+			callback(false, "");
+			return;
+		}
+
+		callback(true, result->getDataString("name"));
+	});
 }
 
 bool IOLoginData::getGuidByName(uint32_t& guid, std::string& name)
