@@ -57,7 +57,7 @@ class IOLoginData
 		static void asyncLoadVip(Player* player, DBVoidCallback callback);
 
 		static bool savePlayer(Player* player);
-		static bool getGuidByName(uint32_t& guid, std::string& name);
+		static void asyncGetGuidByName(const std::string &name, std::function<void(bool, uint32_t, std::string)> callback);
 		static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
 		static void asyncGetNameByGuid(uint32_t guid, std::function<void(bool, std::string)> callback);
 		static bool formatPlayerName(std::string& name);

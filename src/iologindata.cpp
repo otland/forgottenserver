@@ -994,20 +994,20 @@ void IOLoginData::asyncGetNameByGuid(uint32_t guid, std::function<void(bool, std
 	});
 }
 
-bool IOLoginData::getGuidByName(uint32_t& guid, std::string& name)
+void IOLoginData::asyncGetGuidByName(const std::string& name, std::function<void(bool, uint32_t, std::string)> callback)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
-	query << "SELECT `id`, `name` FROM `players` WHERE `name` = " << DatabaseDispatcher::getInstance()->escapeString(name);
-	DBResult_ptr result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
+	query << "SELECT `id`, `name` FROM `players` WHERE `name` = "
+		  << DatabaseDispatcher::getInstance()->escapeString(name);
 
-	name = result->getDataString("name");
-	guid = result->getDataInt("id");
-	return true;
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result) {
+			callback(false, 0, "");
+			return;
+		}
+
+		callback(true, result->getDataInt("id"), result->getDataString("name"));
+	});
 }
 
 bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name)

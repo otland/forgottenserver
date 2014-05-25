@@ -465,19 +465,17 @@ bool AccessList::parseList(const std::string& _list)
 	return true;
 }
 
-bool AccessList::addPlayer(const std::string& name)
+// Maybe just calling it disregarding a callback is enough?
+// Information won't be used right after, anyway. Delay on list
+// update might be noticeable in-game, though.
+void AccessList::addPlayer(const std::string& name)
 {
-	uint32_t guid;
-	std::string dbName = name;
-
-	if (IOLoginData::getGuidByName(guid, dbName)) {
-		if (playerList.find(guid) == playerList.end()) {
+	IOLoginData::asyncGetGuidByName(name, [=] (bool success, uint32_t guid, std::string newName) {
+		if (success && playerList.find(guid) == playerList.end())
+		{
 			playerList.insert(guid);
-			return true;
 		}
-	}
-
-	return false;
+	});
 }
 
 // Maybe just calling it disregarding a callback is enough?

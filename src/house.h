@@ -34,7 +34,7 @@ class AccessList
 {
 	public:
 		bool parseList(const std::string& _list);
-		bool addPlayer(const std::string& name);
+		void addPlayer(const std::string& name);
 		void addGuild(const std::string& guildName);
 		bool addExpression(const std::string& expression);
 
