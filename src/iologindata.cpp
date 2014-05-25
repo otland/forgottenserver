@@ -37,6 +37,7 @@ void IOLoginData::asyncLoadAccount(Player* player, uint32_t accno, DBBoolCallbac
 
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
+			player->addLoadedData(LOADED_ACCOUNT);
 			callback(false);
 			return;
 		}
@@ -78,18 +79,20 @@ void IOLoginData::asyncLoadGuild(Player* player, DBVoidCallback callback)
 						player->guildLevel = 1;
 					}
 
-					IOGuild::getWarList(guildId, player->guildWarList);
+					IOGuild::asyncGetWarList(guildId, [=] (GuildWarList guildWarList) {
+						player->guildWarList = guildWarList;
 
-					std::ostringstream query("");
-					query << "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = " << guildId;
-					DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
-						if (result) {
-							guild->setMemberCount(result->getDataInt("members"));
-						}
+						std::ostringstream query("");
+						query << "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = " << guildId;
+						DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+							if (result) {
+								guild->setMemberCount(result->getDataInt("members"));
+							}
 
-						player->addLoadedData(LOADED_GUILD);
-						callback();
-						return;
+							player->addLoadedData(LOADED_GUILD);
+							callback();
+							return;
+						});
 					});
 				}
 

@@ -254,15 +254,21 @@ void ProtocolGame::initLogin(std::string name, uint32_t accountId, OperatingSyst
 void ProtocolGame::login(std::string name)
 {
 	IOLoginData::asyncLoadPlayerByName(player, name, [=] (bool success) {
-		if (!success)
-		{
-			player->releaseThing2();
-			disconnectClient("Your character could not be loaded.");
+		if (player->getLoadedData() != LOADED_ALL) {
+			// Wait for everything loaded.
 			return;
 		}
 
-		if (player->getLoadedData() != LOADED_ALL) {
-			// Wait for everything loaded.
+		// Wait for LOADED_ALL before checking if everything succeeded.
+		// Although only asyncLoadAccount is expected to fail sometimes, we better
+		// already try loading everything to avoid long waitings of the player,
+		// even because account loading failures should be rare.
+		// I guess it is a matter of opinion, but I believe this is the best option.
+		if (!success)
+		{
+			// We can only releaseThing2 when all the asyncLoads related to player's "loadedData" are complete.
+			player->releaseThing2();
+			disconnectClient("Your character could not be loaded.");
 			return;
 		}
 

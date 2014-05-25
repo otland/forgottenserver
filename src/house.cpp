@@ -476,14 +476,17 @@ bool AccessList::addPlayer(const std::string& name)
 	return false;
 }
 
-bool AccessList::addGuild(const std::string& guildName)
+// Maybe just calling it disregarding a callback is enough?
+// Information won't be used right after, anyway. Delay on list
+// update might be noticeable in-game, though.
+void AccessList::addGuild(const std::string& guildName)
 {
-	uint32_t guildId;
-	if (IOGuild::getGuildIdByName(guildId, guildName) && guildList.find(guildId) == guildList.end()) {
-		guildList.insert(guildId);
-		return true;
-	}
-	return false;
+	IOGuild::asyncGetGuildIdByName(guildName, [=] (bool success, uint32_t guildId) {
+		if (success && guildList.find(guildId) == guildList.end())
+		{
+			guildList.insert(guildId);
+		}
+	});
 }
 
 bool AccessList::addExpression(const std::string& expression)

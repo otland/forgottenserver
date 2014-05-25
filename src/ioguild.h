@@ -20,13 +20,15 @@
 #ifndef FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
 #define FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
 
+#include "databasedispatcher.h"
+
 typedef std::vector<uint32_t> GuildWarList;
 
 class IOGuild
 {
 	public:
-		static bool getGuildIdByName(uint32_t& guildId, const std::string& guildName);
-		static void getWarList(uint32_t guildId, GuildWarList& guildWarList);
+		static void asyncGetGuildIdByName(const std::string& guildName, std::function<void (bool, uint32_t)> callback);
+		static void asyncGetWarList(uint32_t guildId, std::function<void(GuildWarList)> callback);
 };
 
 #endif
