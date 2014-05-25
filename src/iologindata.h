@@ -58,9 +58,9 @@ class IOLoginData
 
 		static bool savePlayer(Player* player);
 		static void asyncGetGuidByName(const std::string &name, std::function<void(bool, uint32_t, std::string)> callback);
-		static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
+		static void asyncGetGuidByNameEx(std::string name, std::function<void(bool success, bool sVip, uint32_t guid)> callback);
 		static void asyncGetNameByGuid(uint32_t guid, std::function<void(bool, std::string)> callback);
-		static bool formatPlayerName(std::string& name);
+		static void asyncFormatPlayerName(std::string name, std::function<void(bool, std::string)> callback);
 		static bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 		static bool hasBiddedOnHouse(uint32_t guid);

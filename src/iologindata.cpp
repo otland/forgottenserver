@@ -1010,49 +1010,49 @@ void IOLoginData::asyncGetGuidByName(const std::string& name, std::function<void
 	});
 }
 
-bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name)
+void IOLoginData::asyncGetGuidByNameEx(std::string name, std::function<void(bool, bool, uint32_t)> callback)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = "
 		  << DatabaseDispatcher::getInstance()->escapeString(name);
 
-	DBResult_ptr result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result) {
+			callback(false, false, 0);
+			return;
+		}
 
-	name = result->getDataString("name");
-	guid = result->getDataInt("id");
-	Group* group = g_game.getGroup(result->getDataInt("group_id"));
+		uint32_t guid = result->getDataInt("id");
+		Group* group = g_game.getGroup(result->getDataInt("group_id"));
 
-	uint64_t flags;
-	if (group) {
-		flags = group->flags;
-	} else {
-		flags = 0;
-	}
+		uint64_t flags;
+		if (group) {
+			flags = group->flags;
+		} else {
+			flags = 0;
+		}
 
-	specialVip = (flags & PlayerFlag_SpecialVIP) != 0;
-	return true;
+		bool specialVip = (flags & PlayerFlag_SpecialVIP) != 0;
+		callback(true, specialVip, guid);
+	});
 }
 
-bool IOLoginData::formatPlayerName(std::string& name)
+void IOLoginData::asyncFormatPlayerName(std::string name, std::function<void(bool, std::string)> callback)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT `name` FROM `players` WHERE `name` = "
 		  << DatabaseDispatcher::getInstance()->escapeString(name);
 
-	DBResult_ptr result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result) {
+			callback(false, "");
+			return;
+		}
 
-	name = result->getDataString("name");
-	return true;
+		std::string name = result->getDataString("name");
+		callback(true, name);
+		return;
+	});
 }
 
 void IOLoginData::asyncLoadItems(ItemMap& itemMap, DBResult_ptr result)

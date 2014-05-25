@@ -2030,12 +2030,20 @@ void Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 		return;
 	}
 
-	if (!IOLoginData::formatPlayerName(receiver)) {
-		player->sendCancel("A player with this name does not exist.");
-		return;
-	}
+	IOLoginData::asyncFormatPlayerName(receiver, [=] (bool success, std::string formatedName) {
+		if (!player)
+		{
+			return;
+		}
 
-	player->sendOpenPrivateChannel(receiver);
+		if (!success)
+		{
+			player->sendCancel("A player with this name does not exist.");
+			return;
+		}
+
+		player->sendOpenPrivateChannel(formatedName);
+	});
 }
 
 void Game::playerCloseNpcChannel(uint32_t playerId)
@@ -3232,20 +3240,24 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 
 	Player* vipPlayer = getPlayerByName(name);
 	if (!vipPlayer) {
-		uint32_t guid;
-		bool specialVip;
 		std::string formattedName = name;
-		if (!IOLoginData::getGuidByNameEx(guid, specialVip, formattedName)) {
-			player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name does not exist.");
-			return;
-		}
+		IOLoginData::asyncGetGuidByNameEx(formattedName, [=] (bool success, bool specialVip, uint32_t guid) {
+			if (!player)
+				return;
 
-		if (specialVip && !player->hasFlag(PlayerFlag_SpecialVIP)) {
-			player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.");
-			return;
-		}
+			if (!success) {
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name does not exist.");
+				return;
+			}
 
-		player->addVIP(guid, formattedName, VIPSTATUS_OFFLINE);
+			if (specialVip && !player->hasFlag(PlayerFlag_SpecialVIP)) {
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.");
+				return;
+			}
+
+			player->addVIP(guid, formattedName, VIPSTATUS_OFFLINE);
+		});
+
 	} else {
 		if (vipPlayer->hasFlag(PlayerFlag_SpecialVIP) && !player->hasFlag(PlayerFlag_SpecialVIP)) {
 			player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.");
