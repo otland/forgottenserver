@@ -42,9 +42,7 @@ class IOLoginData
 		static bool updateOnlineStatus(uint32_t guid, bool login);
 		static void asyncPreloadPlayer(const std::string& name, DBResultCallback callback);
 
-		static bool loadPlayerById(Player* player, uint32_t id);
-
-		static void asyncLoadPlayerById(uint32_t id, DBResultCallback callback);
+		static void asyncLoadPlayerById(Player *player, uint32_t id, DBBoolCallback boolCallback);
 		static void asyncLoadPlayerByName(Player *player, const std::string& name, DBBoolCallback boolCallback);
 
 		static void asyncLoadPlayer(Player* player, DBResult_ptr result, DBBoolCallback boolCallback);

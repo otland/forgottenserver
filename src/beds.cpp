@@ -192,10 +192,14 @@ void BedItem::wakeUp(Player* player)
 
 	if (sleeperGUID != 0) {
 		if (!player) {
-			IOLoginData::asyncLoadPlayerById(sleeperGUID, [=] (DBResult_ptr result) {
-				Player _player(nullptr);
-				regeneratePlayer(&_player);
-				IOLoginData::savePlayer(&_player);
+			Player * _player = new Player(nullptr);
+			_player->useThing2();
+			IOLoginData::asyncLoadPlayerById(_player, sleeperGUID, [=] (bool success) {
+				if (success) {
+					regeneratePlayer(_player);
+					IOLoginData::savePlayer(_player);
+					_player->releaseThing2();
+				}
 			});
 		} else {
 			regeneratePlayer(player);

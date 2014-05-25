@@ -232,7 +232,7 @@ class House
 		}
 
 	private:
-		bool transferToDepot() const;
+		void transferToDepot(std::function<void(bool)> callback = nullptr) const;
 		bool transferToDepot(Player* player) const;
 
 		AccessList guestList;

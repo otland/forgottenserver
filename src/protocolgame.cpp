@@ -120,6 +120,7 @@ void ProtocolGame::initLogin(std::string name, uint32_t accountId, OperatingSyst
 		player->setID();
 
 		// We add useThing2 again in order to make sure it will be valid when the lambda function gets called.
+		// Then we release right after we finish the login "Callback hell".
 		player->useThing2();
 		IOLoginData::asyncPreloadPlayer(name, [=](const DBResult_ptr& result) {
 			if (!result) {
@@ -212,22 +213,20 @@ void ProtocolGame::initLogin(std::string name, uint32_t accountId, OperatingSyst
 					}
 
 					getConnection()->closeConnection();
+					player->releaseThing2();
 					return;
 				}
 
 				player->setOperatingSystem((OperatingSystem_t)operatingSystem);
 
 				login(name);
-				player->releaseThing2();	// NOTE: we released for using here, but, at this point,
-											// the asyncLoadPlayerByName method in the login called above
-											// has already called "useThing2" and "owns" the player ptr now.
 			};
 
 			if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
 				IOBan::getAccountBanishments(accountId, std::move(lambdaIsAccountBanished));
 			} else {
-				BanInfo banInfo; // empty just to fulfill lambda request.
-				g_dispatcher.addTask(createTask(std::bind(std::move(lambdaIsAccountBanished), banInfo, false)));
+				BanInfo banInfo; // empty just to fulfill lambda requirement.
+				lambdaIsAccountBanished(banInfo, false);
 			}
 		});
 
@@ -257,6 +256,7 @@ void ProtocolGame::login(std::string name)
 	IOLoginData::asyncLoadPlayerByName(player, name, [=] (bool success) {
 		if (!success)
 		{
+			player->releaseThing2();
 			disconnectClient("Your character could not be loaded.");
 			return;
 		}
@@ -1221,7 +1221,7 @@ void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
 	uint32_t timestamp = msg.get<uint32_t>();
 	uint16_t counter = msg.get<uint16_t>();
 	uint16_t amount = msg.get<uint16_t>();
-	addGameTask(&Game::playerAcceptMarketOffer, player->getID(), timestamp, counter, amount);
+	addGameTask(&Game::playerBeginAcceptMarketOffer, player->getID(), timestamp, counter, amount);
 }
 
 void ProtocolGame::parseModalWindowAnswer(NetworkMessage& msg)

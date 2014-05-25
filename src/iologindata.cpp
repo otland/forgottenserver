@@ -440,29 +440,35 @@ void IOLoginData::asyncPreloadPlayer(const std::string& name, DBResultCallback c
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
 }
 
-//bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
-//{
-//	Database* db = Database::getInstance();
-//	std::ostringstream query;
-//	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `name` = " << db->escapeString(name);
-//	return loadPlayer(player, db->storeQuery(query.str()));
-//}
-
-bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
-{
-	//Database* db = Database::getInstance();
-	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `id` = " << id;
-	//return asyncLoadPlayer(player, Database::getInstance()->storeQuery(query.str()));
-	return false;
-}
-
-void IOLoginData::asyncLoadPlayerById(uint32_t id, DBResultCallback callback)
+void IOLoginData::asyncLoadPlayerById(Player *player, uint32_t id, DBBoolCallback boolCallback)
 {
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries` FROM `players` WHERE `id` = " << id;
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`";
+	query << ", `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`";
+	query << ", `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`";
+	query << ", `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`";
+	query << ", `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`";
+	query << ", `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`";
+	query << ", `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`";
+	query << ", `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`";
+	query << ", `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`";
+	query << ", `skill_shielding`, `skill_shielding_tries`, `skill_fishing`";
+	query << ", `skill_fishing_tries` FROM `players` WHERE `id` = " << id;
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
+	player->useThing2();
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result)
+		{
+			boolCallback(false);
+			player->releaseThing2();
+			return;
+		}
+
+		asyncLoadPlayer(player, result, [=] (bool success) {
+			boolCallback(success);
+		});
+	});
 }
 
 void IOLoginData::asyncLoadPlayerByName(Player *player, const std::string& name, DBBoolCallback boolCallback)
@@ -486,15 +492,12 @@ void IOLoginData::asyncLoadPlayerByName(Player *player, const std::string& name,
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result)
 		{
-			player->releaseThing2();
 			boolCallback(false);
+			player->releaseThing2();
 			return;
 		}
 
 		asyncLoadPlayer(player, result, [=] (bool success) {
-			if (!success)
-				player->releaseThing2();
-
 			boolCallback(success);
 		});
 	});
