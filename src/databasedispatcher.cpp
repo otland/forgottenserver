@@ -111,3 +111,13 @@ void DatabaseDispatcher::processQueue()
 		}
 	}
 }
+
+std::string DatabaseDispatcher::escapeString(const std::string& s) const
+{
+	return Database::getInstance()->escapeBlob(s.c_str(), s.length());
+}
+
+std::string DatabaseDispatcher::escapeBlob(const char* s, uint32_t length) const
+{
+	return Database::getInstance()->escapeBlob(s, length);
+}

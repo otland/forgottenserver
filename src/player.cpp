@@ -1285,7 +1285,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 		}
 
 		g_game.checkPlayersRecord();
-		IOLoginData::updateOnlineStatus(guid, true);
+		IOLoginData::asyncUpdateOnlineStatus(guid, true);
 	}
 }
 
@@ -1385,7 +1385,7 @@ void Player::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bo
 			guild->removeMember(this);
 		}
 
-		IOLoginData::updateOnlineStatus(guid, false);
+		IOLoginData::asyncUpdateOnlineStatus(guid, false);
 
 		bool saved = false;
 		for (uint32_t tries = 0; tries < 3; ++tries) {

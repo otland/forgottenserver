@@ -71,7 +71,9 @@ public:
 						 DBTransaction_ptr transaction = nullptr,
 						 TransactionFunc_ptr transactionFunc = nullptr);
 
-	void transactionToExecute(std::unique_ptr<DBTransaction> transaction); // nao pode ser um ponteiro
+	void transactionToExecute(std::unique_ptr<DBTransaction> transaction);
+	std::string escapeString(const std::string& s) const;
+	std::string escapeBlob(const char* s, uint32_t length) const;
 };
 
 extern DatabaseDispatcher g_databaseDispatcher;

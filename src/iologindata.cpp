@@ -311,10 +311,10 @@ void IOLoginData::asyncLoadVip(Player *player, DBVoidCallback callback)
 void IOLoginData::asyncLoginserverAuthentication(const std::string& name, const std::string& password,
 											std::function<void(Account, bool)> callback)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `id`, `name`, `password`, `type`, `premdays`";
+	query << ", `lastday` FROM `accounts` WHERE `name` = ";
+	query << DatabaseDispatcher::getInstance()->escapeString(name);
 
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
 		Account account;
@@ -337,7 +337,7 @@ void IOLoginData::asyncLoginserverAuthentication(const std::string& name, const 
 
 		std::ostringstream query("");
 		query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
-		result = db->storeQuery(query.str());
+
 		if (result) {
 			do {
 				if (result->getDataInt("deletion") == 0) {
@@ -354,10 +354,9 @@ void IOLoginData::asyncLoginserverAuthentication(const std::string& name, const 
 void IOLoginData::asyncGameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
 										  std::function<void(uint32_t, std::string)> callback)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
-	query << "SELECT `id`, `password` FROM `accounts` WHERE `name` = " << db->escapeString(accountName);
+	query << "SELECT `id`, `password` FROM `accounts`";
+	query << " WHERE `name` = " << DatabaseDispatcher::getInstance()->escapeString(accountName);
 
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
 
@@ -374,8 +373,8 @@ void IOLoginData::asyncGameworldAuthentication(const std::string& accountName, c
 		int32_t accountId = result->getDataInt("id");
 
 		std::ostringstream query("");
-		query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = " << db->escapeString(characterName);
-		result = db->storeQuery(query.str());
+		query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = ";
+		query << DatabaseDispatcher::getInstance()->escapeString(characterName);
 
 		DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
 			std::string newCharacterName;
@@ -396,39 +395,42 @@ void IOLoginData::asyncGameworldAuthentication(const std::string& accountName, c
 	});
 }
 
-AccountType_t IOLoginData::getAccountType(uint32_t accountId)
+void IOLoginData::asyncGetAccountType(uint32_t accountId, std::function<void(AccountType_t)> callback)
 {
 	std::ostringstream query;
 	query << "SELECT `type` FROM `accounts` WHERE `id` = " << accountId;
-	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
-	if (!result) {
-		return ACCOUNT_TYPE_NORMAL;
-	}
-	return static_cast<AccountType_t>(result->getDataInt("type"));
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result) {
+			callback(ACCOUNT_TYPE_NORMAL);
+		}
+
+		callback(static_cast<AccountType_t>(result->getDataInt("type")));
+	});
 }
 
-void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
+void IOLoginData::asyncSetAccountType(uint32_t accountId, AccountType_t accountType)
 {
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `type` = " << accountType << " WHERE `id` = " << accountId;
-	Database::getInstance()->executeQuery(query.str());
+
+	DatabaseDispatcher::getInstance()->queueSqlCommand(UPDATE, query.str());
 }
 
-bool IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
+void IOLoginData::asyncUpdateOnlineStatus(uint32_t guid, bool login)
 {
 	std::ostringstream query;
 	if (login) {
 		query << "INSERT INTO `players_online` VALUES (" << guid << ')';
+		DatabaseDispatcher::getInstance()->queueSqlCommand(UPDATE, query.str());
 	} else {
 		query << "DELETE FROM `players_online` WHERE `player_id` = " << guid;
+		DatabaseDispatcher::getInstance()->queueSqlCommand(DELETE, query.str());
 	}
-	return Database::getInstance()->executeQuery(query.str());
 }
 
 void IOLoginData::asyncPreloadPlayer(const std::string& name, DBResultCallback callback)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT `players`.`id`, `players`.`account_id`, `players`.`group_id`";
 	query << ", `players`.`deletion`, `player_namelocks`.`player_id` AS `namelock`";
@@ -438,7 +440,7 @@ void IOLoginData::asyncPreloadPlayer(const std::string& name, DBResultCallback c
 	}
 	query << " FROM `players`";
 	query << " LEFT JOIN `player_namelocks` ON `players`.`id` = `player_namelocks`.`player_id`";
-	query << " WHERE `name` = " << db->escapeString(name);
+	query << " WHERE `name` = " << DatabaseDispatcher::getInstance()->escapeString(name);
 
 	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
 }
@@ -476,7 +478,6 @@ void IOLoginData::asyncLoadPlayerById(Player *player, uint32_t id, DBBoolCallbac
 
 void IOLoginData::asyncLoadPlayerByName(Player *player, const std::string& name, DBBoolCallback boolCallback)
 {
-	Database* db = Database::getInstance();
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`";
 	query << ", `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`";
@@ -488,7 +489,8 @@ void IOLoginData::asyncLoadPlayerByName(Player *player, const std::string& name,
 	query << ", `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`";
 	query << ", `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`";
 	query << ", `skill_shielding`, `skill_shielding_tries`, `skill_fishing`";
-	query << ", `skill_fishing_tries` FROM `players` WHERE `name` = " << db->escapeString(name);
+	query << ", `skill_fishing_tries` FROM `players` WHERE `name` = ";
+	query << DatabaseDispatcher::getInstance()->escapeString(name);
 
 	player->useThing2();
 
@@ -673,7 +675,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	int32_t parentId = 0;
 	int32_t runningId = 100;
 
-	Database* db = Database::getInstance();
+	//Database* db = Database::getInstance();
 	for (const auto& it : itemList) {
 		int32_t pid = it.first;
 		Item* item = it.second;
@@ -685,7 +687,10 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		size_t attributesSize;
 		const char* attributes = propWriteStream.getStream(attributesSize);
 
-		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
+		ss << player->getGUID() << ',' << pid << ',' << runningId << ','
+		   << item->getID() << ',' << (int32_t)item->getSubType() << ','
+		   << DatabaseDispatcher::getInstance()->escapeBlob(attributes, attributesSize);
+
 		if (!query_insert.addRow(ss)) {
 			return false;
 		}
@@ -715,7 +720,10 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			size_t attributesSize;
 			const char* attributes = propWriteStream.getStream(attributesSize);
 
-			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
+			ss << player->getGUID() << ',' << parentId << ',' << runningId << ','
+			   << item->getID() << ',' << (int32_t)item->getSubType() << ','
+			   << DatabaseDispatcher::getInstance()->escapeBlob(attributes, attributesSize);
+
 			if (!query_insert.addRow(ss)) {
 				return false;
 			}
@@ -798,7 +806,7 @@ bool IOLoginData::savePlayer(Player* player)
 		query << "`lastip` = " << player->lastIP << ',';
 	}
 
-	query << "`conditions` = " << db->escapeBlob(conditions, conditionsSize) << ',';
+	query << "`conditions` = " << DatabaseDispatcher::getInstance()->escapeBlob(conditions, conditionsSize) << ',';
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		int32_t skullTime = 0;
@@ -868,7 +876,7 @@ bool IOLoginData::savePlayer(Player* player)
 	stmt.setQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
 
 	for (const std::string& spellName : player->learnedInstantSpellList) {
-		query << player->getGUID() << ',' << db->escapeString(spellName);
+		query << player->getGUID() << ',' << DatabaseDispatcher::getInstance()->escapeString(spellName);
 		if (!stmt.addRow(query)) {
 			return false;
 		}
@@ -984,7 +992,7 @@ bool IOLoginData::getGuidByName(uint32_t& guid, std::string& name)
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id`, `name` FROM `players` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `id`, `name` FROM `players` WHERE `name` = " << DatabaseDispatcher::getInstance()->escapeString(name);
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -1000,7 +1008,9 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = "
+		  << DatabaseDispatcher::getInstance()->escapeString(name);
+
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -1026,7 +1036,8 @@ bool IOLoginData::formatPlayerName(std::string& name)
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `name` FROM `players` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `name` FROM `players` WHERE `name` = "
+		  << DatabaseDispatcher::getInstance()->escapeString(name);
 
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
@@ -1106,7 +1117,8 @@ void IOLoginData::addVIPEntry(uint32_t accountId, uint32_t guid, const std::stri
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES (" << accountId << ',' << guid << ',' << db->escapeString(description) << ',' << icon << ',' << notify << ')';
+	query << "INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES (" << accountId
+		  << ',' << guid << ',' << DatabaseDispatcher::getInstance()->escapeString(description) << ',' << icon << ',' << notify << ')';
 	db->executeQuery(query.str());
 }
 
@@ -1115,7 +1127,9 @@ void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::str
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "UPDATE `account_viplist` SET `description` = " << db->escapeString(description) << ", `icon` = " << icon << ", `notify` = " << notify << " WHERE `account_id` = " << accountId << " AND `player_id` = " << guid;
+	query << "UPDATE `account_viplist` SET `description` = "<< DatabaseDispatcher::getInstance()->escapeString(description)
+		  << ", `icon` = " << icon << ", `notify` = " << notify << " WHERE `account_id` = "
+		  << accountId << " AND `player_id` = " << guid;
 	db->executeQuery(query.str());
 }
 

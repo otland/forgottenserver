@@ -37,9 +37,9 @@ class IOLoginData
 		static void asyncGameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
 											std::function<void(uint32_t, std::string)> callback);
 
-		static AccountType_t getAccountType(uint32_t accountId);
-		static void setAccountType(uint32_t accountId, AccountType_t accountType);
-		static bool updateOnlineStatus(uint32_t guid, bool login);
+		static void asyncGetAccountType(uint32_t accountId, std::function<void(AccountType_t)> callback);
+		static void asyncSetAccountType(uint32_t accountId, AccountType_t accountType);
+		static void asyncUpdateOnlineStatus(uint32_t guid, bool login);
 		static void asyncPreloadPlayer(const std::string& name, DBResultCallback callback);
 
 		static void asyncLoadPlayerById(Player *player, uint32_t id, DBBoolCallback boolCallback);
