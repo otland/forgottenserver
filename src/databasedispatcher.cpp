@@ -24,14 +24,20 @@
 
 DatabaseDispatcher::DatabaseDispatcher()
 {
-	m_executionThread = std::unique_ptr<std::thread>(new std::thread(&DatabaseDispatcher::processQueue, this));
+	//
 }
 
 DatabaseDispatcher::~DatabaseDispatcher()
 {
+	//
 }
 
-void DatabaseDispatcher::queueSqlCommand(DBCommand_t type,
+void DatabaseDispatcher::start()
+{
+	m_executionThread = std::unique_ptr<std::thread>(new std::thread(&DatabaseDispatcher::processQueue, this));
+}
+
+void DatabaseDispatcher::asyncQuery(DBCommand_t type,
 										 std::string query,
 										 DBResultCallback callback,
 										 DBInsert_ptr insertStmt,

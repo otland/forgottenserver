@@ -27,6 +27,8 @@
 
 #include "tasks.h"
 
+extern DatabaseDispatcher g_database;
+
 bool Ban::acceptConnection(uint32_t clientip)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(lock);
@@ -71,7 +73,7 @@ void IOBan::getAccountBanishments(uint32_t accountId, std::function<void(BanInfo
 	query << "(SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS ";
 	query << "`name` FROM `account_bans` WHERE `account_id` = " << accountId;
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=](const DBResult_ptr& result) {
+	g_database.asyncQuery(SELECT, query.str(), [=](const DBResult_ptr& result) {
 		BanInfo banInfo;
 
 		if (!result) {
@@ -91,11 +93,11 @@ void IOBan::getAccountBanishments(uint32_t accountId, std::function<void(BanInfo
 			query << result->getDataInt("banned_at") << ',' << expiresAt << ',';
 			query << result->getDataInt("banned_by") << ')';
 
-			DatabaseDispatcher::getInstance()->queueSqlCommand(INSERT, query.str());
+			g_database.asyncQuery(INSERT, query.str());
 
 			query.str("");
 			query << "DELETE FROM `account_bans` WHERE `account_id` = " << accountId;
-			DatabaseDispatcher::getInstance()->queueSqlCommand(DELETE, query.str());
+			g_database.asyncQuery(DELETE, query.str());
 
 			callback(banInfo, false);
 			return;

@@ -63,7 +63,7 @@ class IOLoginData
 		static void asyncFormatPlayerName(std::string name, std::function<void(bool, std::string)> callback);
 		static bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
-		static bool hasBiddedOnHouse(uint32_t guid);
+		static void asyncHasBiddedOnHouse(uint32_t guid, DBBoolCallback callback);
 
 		static std::forward_list<VIPEntry> getVIPEntries(uint32_t accountId);
 		static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);

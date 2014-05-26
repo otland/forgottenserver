@@ -22,6 +22,8 @@
 #include "ioguild.h"
 #include "database.h"
 
+extern DatabaseDispatcher g_database;
+
 void IOGuild::asyncGetGuildIdByName(const std::string& guildName, std::function<void(bool, uint32_t)> callback)
 {
 	Database* db = Database::getInstance();
@@ -29,7 +31,7 @@ void IOGuild::asyncGetGuildIdByName(const std::string& guildName, std::function<
 	std::ostringstream query;
 	query << "SELECT `id` FROM `guilds` WHERE `name` = " << db->escapeString(guildName);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
 			callback(false, 0);
 		}
@@ -45,7 +47,7 @@ void IOGuild::asyncGetWarList(uint32_t guildId, std::function<void(GuildWarList)
 	std::ostringstream query;
 	query << "SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = " << guildId << " OR `guild2` = " << guildId << ") AND `ended` = 0 AND `status` = 1";
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 
 		GuildWarList guildWarList;
 

@@ -2030,19 +2030,17 @@ void Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 		return;
 	}
 
+	player->useThing2();
 	IOLoginData::asyncFormatPlayerName(receiver, [=] (bool success, std::string formatedName) {
-		if (!player)
-		{
-			return;
-		}
-
 		if (!success)
 		{
 			player->sendCancel("A player with this name does not exist.");
+			player->useThing2();
 			return;
 		}
 
 		player->sendOpenPrivateChannel(formatedName);
+		player->useThing2();
 	});
 }
 

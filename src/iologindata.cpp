@@ -29,13 +29,14 @@
 
 extern ConfigManager g_config;
 extern Game g_game;
+extern DatabaseDispatcher g_database;
 
 void IOLoginData::asyncLoadAccount(Player* player, uint32_t accno, DBBoolCallback callback)
 {
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << accno;
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
 			player->addLoadedData(LOADED_ACCOUNT);
 			callback(false);
@@ -62,7 +63,7 @@ void IOLoginData::asyncLoadGuild(Player* player, DBVoidCallback callback)
 	std::ostringstream query;
 	query << "SELECT `guild_id`, `rank_id`, `nick` FROM `guild_membership` WHERE `player_id` = " << player->getGUID();
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 
 		if (result) {
 			uint32_t guildId = result->getDataInt("guild_id");
@@ -84,7 +85,7 @@ void IOLoginData::asyncLoadGuild(Player* player, DBVoidCallback callback)
 
 						std::ostringstream query("");
 						query << "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = " << guildId;
-						DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+						g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 							if (result) {
 								guild->setMemberCount(result->getDataInt("members"));
 							}
@@ -107,7 +108,7 @@ void IOLoginData::asyncLoadGuild(Player* player, DBVoidCallback callback)
 				std::ostringstream query("");
 				query << "SELECT `name` FROM `guilds` WHERE `id` = " << guildId;
 
-				DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+				g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 					Guild* guild = nullptr;
 
 					if (result) {
@@ -117,7 +118,7 @@ void IOLoginData::asyncLoadGuild(Player* player, DBVoidCallback callback)
 						std::ostringstream query("");
 						query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = " << guildId << " LIMIT 3";
 
-						DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result){
+						g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result){
 							if (result) {
 								do {
 									guild->addRank(result->getDataInt("id"), result->getDataString("name"), result->getDataInt("level"));
@@ -149,7 +150,7 @@ void IOLoginData::asyncLoadSpells(Player* player, DBVoidCallback callback)
 	std::ostringstream query("");
 	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (result) {
 			do {
 				player->learnedInstantSpellList.emplace_front(result->getDataString("name"));
@@ -166,7 +167,7 @@ void IOLoginData::asyncLoadItems(Player *player, DBVoidCallback callback)
 	std::ostringstream query("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		ItemMap itemMap;
 
 		if (result) {
@@ -202,7 +203,7 @@ void IOLoginData::asyncLoadDepot(Player *player, DBVoidCallback callback)
 	std::ostringstream query("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		ItemMap itemMap;
 
 		if (result) {
@@ -241,7 +242,7 @@ void IOLoginData::asyncLoadInbox(Player *player, DBVoidCallback callback)
 {
 	std::ostringstream query("");
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		ItemMap itemMap;
 
 		if (result) {
@@ -279,7 +280,7 @@ void IOLoginData::asyncLoadStorage(Player *player, DBVoidCallback callback)
 	std::ostringstream query("");
 	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (result) {
 			do {
 				player->addStorageValue(result->getDataInt("key"), result->getDataInt("value"), true);
@@ -296,7 +297,7 @@ void IOLoginData::asyncLoadVip(Player *player, DBVoidCallback callback)
 	std::ostringstream query("");
 	query << "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = " << player->getAccount();
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (result) {
 			do {
 				player->addVIPInternal(result->getDataInt("player_id"));
@@ -314,9 +315,9 @@ void IOLoginData::asyncLoginserverAuthentication(const std::string& name, const 
 	std::ostringstream query;
 	query << "SELECT `id`, `name`, `password`, `type`, `premdays`";
 	query << ", `lastday` FROM `accounts` WHERE `name` = ";
-	query << DatabaseDispatcher::getInstance()->escapeString(name);
+	query << g_database.escapeString(name);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		Account *account = new Account();
 
 		if (!result) {
@@ -340,7 +341,7 @@ void IOLoginData::asyncLoginserverAuthentication(const std::string& name, const 
 		std::ostringstream query("");
 		query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account->id;
 
-		DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 			if (result) {
 				do {
 					if (result->getDataInt("deletion") == 0) {
@@ -361,9 +362,9 @@ void IOLoginData::asyncGameworldAuthentication(const std::string& accountName, c
 {
 	std::ostringstream query;
 	query << "SELECT `id`, `password` FROM `accounts`";
-	query << " WHERE `name` = " << DatabaseDispatcher::getInstance()->escapeString(accountName);
+	query << " WHERE `name` = " << g_database.escapeString(accountName);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 
 		if (!result) {
 			callback(0, "");
@@ -379,9 +380,9 @@ void IOLoginData::asyncGameworldAuthentication(const std::string& accountName, c
 
 		std::ostringstream query("");
 		query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = ";
-		query << DatabaseDispatcher::getInstance()->escapeString(characterName);
+		query << g_database.escapeString(characterName);
 
-		DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+		g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 			std::string newCharacterName;
 
 			if (!result) {
@@ -405,7 +406,7 @@ void IOLoginData::asyncGetAccountType(uint32_t accountId, std::function<void(Acc
 	std::ostringstream query;
 	query << "SELECT `type` FROM `accounts` WHERE `id` = " << accountId;
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
 			callback(ACCOUNT_TYPE_NORMAL);
 		}
@@ -419,7 +420,7 @@ void IOLoginData::asyncSetAccountType(uint32_t accountId, AccountType_t accountT
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `type` = " << accountType << " WHERE `id` = " << accountId;
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(UPDATE, query.str());
+	g_database.asyncQuery(UPDATE, query.str());
 }
 
 void IOLoginData::asyncUpdateOnlineStatus(uint32_t guid, bool login)
@@ -427,10 +428,10 @@ void IOLoginData::asyncUpdateOnlineStatus(uint32_t guid, bool login)
 	std::ostringstream query;
 	if (login) {
 		query << "INSERT INTO `players_online` VALUES (" << guid << ')';
-		DatabaseDispatcher::getInstance()->queueSqlCommand(UPDATE, query.str());
+		g_database.asyncQuery(UPDATE, query.str());
 	} else {
 		query << "DELETE FROM `players_online` WHERE `player_id` = " << guid;
-		DatabaseDispatcher::getInstance()->queueSqlCommand(DELETE, query.str());
+		g_database.asyncQuery(DELETE, query.str());
 	}
 }
 
@@ -445,9 +446,9 @@ void IOLoginData::asyncPreloadPlayer(const std::string& name, DBResultCallback c
 	}
 	query << " FROM `players`";
 	query << " LEFT JOIN `player_namelocks` ON `players`.`id` = `player_namelocks`.`player_id`";
-	query << " WHERE `name` = " << DatabaseDispatcher::getInstance()->escapeString(name);
+	query << " WHERE `name` = " << g_database.escapeString(name);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), callback);
+	g_database.asyncQuery(SELECT, query.str(), callback);
 }
 
 void IOLoginData::asyncLoadPlayerById(Player *player, uint32_t id, DBBoolCallback boolCallback)
@@ -467,7 +468,7 @@ void IOLoginData::asyncLoadPlayerById(Player *player, uint32_t id, DBBoolCallbac
 
 	player->useThing2();
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result)
 		{
 			boolCallback(false);
@@ -495,11 +496,11 @@ void IOLoginData::asyncLoadPlayerByName(Player *player, const std::string& name,
 	query << ", `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`";
 	query << ", `skill_shielding`, `skill_shielding_tries`, `skill_fishing`";
 	query << ", `skill_fishing_tries` FROM `players` WHERE `name` = ";
-	query << DatabaseDispatcher::getInstance()->escapeString(name);
+	query << g_database.escapeString(name);
 
 	player->useThing2();
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result)
 		{
 			boolCallback(false);
@@ -694,7 +695,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 		ss << player->getGUID() << ',' << pid << ',' << runningId << ','
 		   << item->getID() << ',' << (int32_t)item->getSubType() << ','
-		   << DatabaseDispatcher::getInstance()->escapeBlob(attributes, attributesSize);
+		   << g_database.escapeBlob(attributes, attributesSize);
 
 		if (!query_insert.addRow(ss)) {
 			return false;
@@ -727,7 +728,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 			ss << player->getGUID() << ',' << parentId << ',' << runningId << ','
 			   << item->getID() << ',' << (int32_t)item->getSubType() << ','
-			   << DatabaseDispatcher::getInstance()->escapeBlob(attributes, attributesSize);
+			   << g_database.escapeBlob(attributes, attributesSize);
 
 			if (!query_insert.addRow(ss)) {
 				return false;
@@ -811,7 +812,7 @@ bool IOLoginData::savePlayer(Player* player)
 		query << "`lastip` = " << player->lastIP << ',';
 	}
 
-	query << "`conditions` = " << DatabaseDispatcher::getInstance()->escapeBlob(conditions, conditionsSize) << ',';
+	query << "`conditions` = " << g_database.escapeBlob(conditions, conditionsSize) << ',';
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		int32_t skullTime = 0;
@@ -881,7 +882,7 @@ bool IOLoginData::savePlayer(Player* player)
 	stmt.setQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
 
 	for (const std::string& spellName : player->learnedInstantSpellList) {
-		query << player->getGUID() << ',' << DatabaseDispatcher::getInstance()->escapeString(spellName);
+		query << player->getGUID() << ',' << g_database.escapeString(spellName);
 		if (!stmt.addRow(query)) {
 			return false;
 		}
@@ -984,7 +985,7 @@ void IOLoginData::asyncGetNameByGuid(uint32_t guid, std::function<void(bool, std
 	std::ostringstream query;
 	query << "SELECT `name` FROM `players` WHERE `id` = " << guid;
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
 			callback(false, "");
 			return;
@@ -998,9 +999,9 @@ void IOLoginData::asyncGetGuidByName(const std::string& name, std::function<void
 {
 	std::ostringstream query;
 	query << "SELECT `id`, `name` FROM `players` WHERE `name` = "
-		  << DatabaseDispatcher::getInstance()->escapeString(name);
+		  << g_database.escapeString(name);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
 			callback(false, 0, "");
 			return;
@@ -1014,9 +1015,9 @@ void IOLoginData::asyncGetGuidByNameEx(std::string name, std::function<void(bool
 {
 	std::ostringstream query;
 	query << "SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = "
-		  << DatabaseDispatcher::getInstance()->escapeString(name);
+		  << g_database.escapeString(name);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
 			callback(false, false, 0);
 			return;
@@ -1041,9 +1042,9 @@ void IOLoginData::asyncFormatPlayerName(std::string name, std::function<void(boo
 {
 	std::ostringstream query;
 	query << "SELECT `name` FROM `players` WHERE `name` = "
-		  << DatabaseDispatcher::getInstance()->escapeString(name);
+		  << g_database.escapeString(name);
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(SELECT, query.str(), [=] (DBResult_ptr result) {
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 		if (!result) {
 			callback(false, "");
 			return;
@@ -1088,13 +1089,14 @@ void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 	Database::getInstance()->executeQuery(query.str());
 }
 
-bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
+void IOLoginData::asyncHasBiddedOnHouse(uint32_t guid, DBBoolCallback callback)
 {
-	Database* db = Database::getInstance();
-
 	std::ostringstream query;
 	query << "SELECT `id` FROM `houses` WHERE `highest_bidder` = " << guid << " LIMIT 1";
-	return db->storeQuery(query.str()).get() != nullptr;
+
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
+		callback(result ? true : false);
+	});
 }
 
 std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
@@ -1125,7 +1127,7 @@ void IOLoginData::addVIPEntry(uint32_t accountId, uint32_t guid, const std::stri
 
 	std::ostringstream query;
 	query << "INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES (" << accountId
-		  << ',' << guid << ',' << DatabaseDispatcher::getInstance()->escapeString(description) << ',' << icon << ',' << notify << ')';
+		  << ',' << guid << ',' << g_database.escapeString(description) << ',' << icon << ',' << notify << ')';
 	db->executeQuery(query.str());
 }
 
@@ -1134,7 +1136,7 @@ void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::str
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "UPDATE `account_viplist` SET `description` = "<< DatabaseDispatcher::getInstance()->escapeString(description)
+	query << "UPDATE `account_viplist` SET `description` = "<< g_database.escapeString(description)
 		  << ", `icon` = " << icon << ", `notify` = " << notify << " WHERE `account_id` = "
 		  << accountId << " AND `player_id` = " << guid;
 	db->executeQuery(query.str());
@@ -1166,5 +1168,5 @@ void IOLoginData::asyncSaveAccount(const Account acc)
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `premdays` = " << acc.premiumDays << ", `lastday` = " << acc.lastDay << " WHERE `id` = " << acc.id;
 
-	DatabaseDispatcher::getInstance()->queueSqlCommand(UPDATE, query.str());
+	g_database.asyncQuery(UPDATE, query.str());
 }

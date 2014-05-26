@@ -44,9 +44,6 @@ private:
 			transactionFunc(_transactionFunc) {}
 	};
 
-	DatabaseDispatcher();
-	~DatabaseDispatcher();
-
 	void processQueue();
 
 	std::queue<DBCommand> m_sqlCommandQueue;
@@ -58,13 +55,11 @@ private:
 	std::unique_ptr<std::thread> m_executionThread;
 
 public:
-	static DatabaseDispatcher* getInstance()
-	{
-		static DatabaseDispatcher instance;
-		return &instance;
-	}
+	DatabaseDispatcher();
+	~DatabaseDispatcher();
+	void start();
 
-	void queueSqlCommand(DBCommand_t type,
+	void asyncQuery(DBCommand_t type,
 						 std::string query,
 						 DBResultCallback callback = nullptr,
 						 DBInsert_ptr insertStmt = nullptr,
