@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spidris Elite" nameDescription="a spidris elite" race="venom" experience="0" speed="260" manacost="0">
+<monster name="Spidris Elite" nameDescription="a spidris elite" race="venom" experience="4000" speed="260" manacost="0">
 	<health now="3700" max="3700"/>
 	<look type="457" corpse="15296"/>
 	<targetchange interval="4000" chance="0"/>
