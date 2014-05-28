@@ -407,7 +407,7 @@ class LuaScriptInterface
 		static std::string escapeString(const std::string& string);
 
 #ifndef LUAJIT_VERSION
-		static const luaL_Reg luaBitReg[13];
+		static const luaL_Reg luaBitReg[7];
 #endif
 		static const luaL_Reg luaConfigManagerTable[4];
 		static const luaL_Reg luaDatabaseTable[7];
@@ -549,12 +549,6 @@ class LuaScriptInterface
 		static int32_t luaBitXor(lua_State* L);
 		static int32_t luaBitLeftShift(lua_State* L);
 		static int32_t luaBitRightShift(lua_State* L);
-		static int32_t luaBitUNot(lua_State* L);
-		static int32_t luaBitUAnd(lua_State* L);
-		static int32_t luaBitUOr(lua_State* L);
-		static int32_t luaBitUXor(lua_State* L);
-		static int32_t luaBitULeftShift(lua_State* L);
-		static int32_t luaBitURightShift(lua_State* L);
 #endif
 
 		static int32_t luaConfigManagerGetString(lua_State* L);

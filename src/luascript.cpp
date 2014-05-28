@@ -4465,66 +4465,52 @@ std::string LuaScriptInterface::escapeString(const std::string& string)
 
 #ifndef LUAJIT_VERSION
 const luaL_Reg LuaScriptInterface::luaBitReg[] = {
-	//{"cast", LuaScriptInterface::luaBitCast},
+	//{"tobit", LuaScriptInterface::luaBitToBit},
 	{"bnot", LuaScriptInterface::luaBitNot},
 	{"band", LuaScriptInterface::luaBitAnd},
 	{"bor", LuaScriptInterface::luaBitOr},
 	{"bxor", LuaScriptInterface::luaBitXor},
 	{"lshift", LuaScriptInterface::luaBitLeftShift},
 	{"rshift", LuaScriptInterface::luaBitRightShift},
-	// Unsigned
-	{"ubnot", LuaScriptInterface::luaBitUNot},
-	{"uband", LuaScriptInterface::luaBitUAnd},
-	{"ubor", LuaScriptInterface::luaBitUOr},
-	{"ubxor", LuaScriptInterface::luaBitUXor},
-	{"ulshift", LuaScriptInterface::luaBitULeftShift},
-	{"urshift", LuaScriptInterface::luaBitURightShift},
 	//{"arshift", LuaScriptInterface::luaBitArithmeticalRightShift},
+	//{"rol", LuaScriptInterface::luaBitRotateLeft},
+	//{"ror", LuaScriptInterface::luaBitRotateRight},
+	//{"bswap", LuaScriptInterface::luaBitSwapEndian},
+	//{"tohex", LuaScriptInterface::luaBitToHex},
 	{nullptr, nullptr}
 };
 
 int32_t LuaScriptInterface::luaBitNot(lua_State* L)
 {
-	lua_pushnumber(L, ~getNumber<int32_t>(L, -1));
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaBitUNot(lua_State* L)
-{
 	lua_pushnumber(L, ~getNumber<uint32_t>(L, -1));
 	return 1;
 }
 
-#define MULTIOP(type, name, op) \
+#define MULTIOP(name, op) \
 int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
 { \
-	int32_t n = lua_gettop(L); \
-	type w = getNumber<type>(L, -1); \
-	for (int32_t i = 1; i < n; ++i) \
-		w op getNumber<type>(L, i); \
+	int n = lua_gettop(L); \
+	uint32_t w = getNumber<uint32_t>(L, -1); \
+	for (int i = 1; i < n; ++i) \
+		w op getNumber<uint32_t>(L, i); \
 	lua_pushnumber(L, w); \
 	return 1; \
 }
 
-MULTIOP(int32_t, And, &= )
-MULTIOP(int32_t, Or, |= )
-MULTIOP(int32_t, Xor, ^= )
-MULTIOP(uint32_t, UAnd, &= )
-MULTIOP(uint32_t, UOr, |= )
-MULTIOP(uint32_t, UXor, ^= )
+MULTIOP(And, &= )
+MULTIOP(Or, |= )
+MULTIOP(Xor, ^= )
 
-#define SHIFTOP(type, name, op) \
+#define SHIFTOP(name, op) \
 int32_t LuaScriptInterface::luaBit##name(lua_State* L) \
 { \
-	type n2 = getNumber<type>(L, 1), n1 = getNumber<type>(L, 2); \
+	uint32_t n1 = getNumber<uint32_t>(L, 1), n2 = getNumber<uint32_t>(L, 2); \
 	lua_pushnumber(L, (n1 op n2)); \
 	return 1; \
 }
 
-SHIFTOP(int32_t, LeftShift, << )
-SHIFTOP(int32_t, RightShift, >> )
-SHIFTOP(uint32_t, ULeftShift, << )
-SHIFTOP(uint32_t, URightShift, >> )
+SHIFTOP(LeftShift, << )
+SHIFTOP(RightShift, >> )
 #endif
 
 const luaL_Reg LuaScriptInterface::luaConfigManagerTable[] = {
