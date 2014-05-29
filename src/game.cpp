@@ -567,7 +567,7 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 		return false;
 	}
 
-	creature->useThing2();
+	creature->ref();
 	creature->setID();
 	creature->addList();
 	return true;
@@ -2365,7 +2365,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 		auto it = browseFields.find(tile);
 		if (it == browseFields.end()) {
 			parentContainer = new Container(tile);
-			parentContainer->useThing2();
+			parentContainer->ref();
 			browseFields[tile] = parentContainer;
 			g_scheduler.addEvent(createSchedulerTask(30000, std::bind(&Game::decreaseBrowseFieldRef, this, tile->getPosition())));
 		} else {
@@ -2533,7 +2533,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	auto it = browseFields.find(tile);
 	if (it == browseFields.end()) {
 		container = new Container(tile);
-		container->useThing2();
+		container->ref();
 		browseFields[tile] = container;
 		g_scheduler.addEvent(createSchedulerTask(30000, std::bind(&Game::decreaseBrowseFieldRef, this, tile->getPosition())));
 	} else {
@@ -2704,7 +2704,7 @@ bool Game::internalStartTrade(Player* player, Player* tradePartner, Item* tradeI
 	player->tradePartner = tradePartner;
 	player->tradeItem = tradeItem;
 	player->tradeState = TRADE_INITIATED;
-	tradeItem->useThing2();
+	tradeItem->ref();
 	tradeItems[tradeItem] = player->getID();
 
 	player->sendTradeItemRequest(player, tradeItem, true);
@@ -3705,7 +3705,7 @@ void Game::addCreatureCheck(Creature* creature)
 
 	creature->inCheckCreaturesVector = true;
 	checkCreatureLists[uniform_random(0, EVENT_CREATURECOUNT - 1)].push_back(creature);
-	creature->useThing2();
+	creature->ref();
 }
 
 void Game::removeCreatureCheck(Creature* creature)
@@ -4634,7 +4634,7 @@ void Game::startDecay(Item* item)
 	}
 
 	if (item->getDuration() > 0) {
-		item->useThing2();
+		item->ref();
 		item->setDecaying(DECAYING_TRUE);
 		toDecayItems.push_front(item);
 	} else {
@@ -4802,12 +4802,12 @@ void Game::cleanup()
 {
 	//free memory
 	for (auto creature : ToReleaseCreatures) {
-		creature->releaseThing2();
+		creature->unref();
 	}
 	ToReleaseCreatures.clear();
 
 	for (auto item : ToReleaseItems) {
-		item->releaseThing2();
+		item->unref();
 	}
 	ToReleaseItems.clear();
 
@@ -6017,7 +6017,7 @@ void Game::decreaseBrowseFieldRef(const Position& pos)
 
 	auto it = browseFields.find(tile);
 	if (it != browseFields.end()) {
-		it->second->releaseThing2();
+		it->second->unref();
 	}
 }
 

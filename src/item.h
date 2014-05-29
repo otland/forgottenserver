@@ -734,11 +734,11 @@ class Item : virtual public Thing
 			return attributes;
 		}
 
-		void useThing2() {
-			++useCount;
+		void ref() {
+			++refCount;
 		}
-		void releaseThing2() {
-			if (--useCount == 0) {
+		void unref() {
+			if (--refCount == 0) {
 				delete this;
 			}
 		}
@@ -763,7 +763,7 @@ class Item : virtual public Thing
 		Cylinder* parent;
 		ItemAttributes* attributes;
 
-		uint32_t useCount;
+		uint32_t refCount;
 
 		uint16_t id;  // the same id as in ItemType
 		uint8_t count; // number of stacked items

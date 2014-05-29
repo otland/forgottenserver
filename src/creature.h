@@ -459,11 +459,11 @@ class Creature : virtual public Thing
 		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, const FindPathParams& fpp) const;
 		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
 
-		void useThing2() {
-			++useCount;
+		void ref() {
+			++refCount;
 		}
-		void releaseThing2() {
-			if (--useCount == 0) {
+		void unref() {
+			if (--refCount == 0) {
 				delete this;
 			}
 		}
@@ -494,7 +494,7 @@ class Creature : virtual public Thing
 		Creature* followCreature;
 
 		uint64_t lastStep;
-		uint32_t useCount;
+		uint32_t refCount;
 		uint32_t id;
 		uint32_t scriptEventsBitField;
 		uint32_t eventWalk;

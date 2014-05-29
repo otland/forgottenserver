@@ -329,7 +329,7 @@ void Monster::addFriend(Creature* creature)
 	assert(creature != this);
 	auto result = friendList.insert(creature);
 	if (result.second) {
-		creature->useThing2();
+		creature->ref();
 	}
 }
 
@@ -337,7 +337,7 @@ void Monster::removeFriend(Creature* creature)
 {
 	auto it = friendList.find(creature);
 	if (it != friendList.end()) {
-		creature->releaseThing2();
+		creature->unref();
 		friendList.erase(it);
 	}
 }
@@ -346,7 +346,7 @@ void Monster::addTarget(Creature* creature, bool pushFront/* = false*/)
 {
 	assert(creature != this);
 	if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
-		creature->useThing2();
+		creature->ref();
 		if (pushFront) {
 			targetList.push_front(creature);
 		} else {
@@ -359,7 +359,7 @@ void Monster::removeTarget(Creature* creature)
 {
 	auto it = std::find(targetList.begin(), targetList.end(), creature);
 	if (it != targetList.end()) {
-		creature->releaseThing2();
+		creature->unref();
 		targetList.erase(it);
 	}
 }
@@ -370,7 +370,7 @@ void Monster::updateTargetList()
 	while (friendIterator != friendList.end()) {
 		Creature* creature = *friendIterator;
 		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
-			creature->releaseThing2();
+			creature->unref();
 			friendIterator = friendList.erase(friendIterator);
 		} else {
 			++friendIterator;
@@ -381,7 +381,7 @@ void Monster::updateTargetList()
 	while (targetIterator != targetList.end()) {
 		Creature* creature = *targetIterator;
 		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
-			creature->releaseThing2();
+			creature->unref();
 			targetIterator = targetList.erase(targetIterator);
 		} else {
 			++targetIterator;
@@ -398,7 +398,7 @@ void Monster::updateTargetList()
 void Monster::clearTargetList()
 {
 	for (Creature* creature : targetList) {
-		creature->releaseThing2();
+		creature->unref();
 	}
 	targetList.clear();
 }
@@ -406,7 +406,7 @@ void Monster::clearTargetList()
 void Monster::clearFriendList()
 {
 	for (Creature* creature : friendList) {
-		creature->releaseThing2();
+		creature->unref();
 	}
 	friendList.clear();
 }
@@ -583,7 +583,7 @@ void Monster::onFollowCreatureComplete(const Creature* creature)
 			} else if (!isSummon()) {
 				targetList.push_back(target);
 			} else {
-				target->releaseThing2();
+				target->unref();
 			}
 		}
 	}
@@ -1801,7 +1801,7 @@ void Monster::death(Creature*)
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
 		summon->setMaster(nullptr);
-		summon->releaseThing2();
+		summon->unref();
 	}
 	summons.clear();
 
@@ -1994,7 +1994,7 @@ bool Monster::convinceCreature(Creature* creature)
 			for (Creature* summon : summons) {
 				summon->changeHealth(-summon->getHealth());
 				summon->setMaster(nullptr);
-				summon->releaseThing2();
+				summon->unref();
 			}
 			summons.clear();
 
@@ -2026,7 +2026,7 @@ bool Monster::convinceCreature(Creature* creature)
 		for (Creature* summon : summons) {
 			summon->changeHealth(-summon->getHealth());
 			summon->setMaster(nullptr);
-			summon->releaseThing2();
+			summon->unref();
 		}
 		summons.clear();
 

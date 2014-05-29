@@ -508,7 +508,7 @@ inline StaticTile::~StaticTile()
 {
 	if (items) {
 		for (Item* item : *items) {
-			item->releaseThing2();
+			item->unref();
 		}
 		delete items;
 	}
@@ -525,7 +525,7 @@ inline DynamicTile::DynamicTile(uint16_t x, uint16_t y, uint16_t z) :
 inline DynamicTile::~DynamicTile()
 {
 	for (Item* item : items) {
-		item->releaseThing2();
+		item->unref();
 	}
 }
 
