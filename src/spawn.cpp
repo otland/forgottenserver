@@ -191,7 +191,7 @@ Spawn::~Spawn()
 	for (const auto& it : spawnedMap) {
 		Monster* monster = it.second;
 		monster->setSpawn(nullptr);
-		monster->releaseThing2();
+		monster->unref();
 	}
 }
 
@@ -235,7 +235,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 	monster->setDirection(dir);
 	monster->setSpawn(this);
 	monster->setMasterPos(pos, radius);
-	monster->useThing2();
+	monster->ref();
 
 	spawnedMap.insert(spawned_pair(spawnId, monster));
 	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
@@ -294,7 +294,7 @@ void Spawn::cleanup()
 				spawnMap[spawnId].lastSpawn = OTSYS_TIME();
 			}
 
-			monster->releaseThing2();
+			monster->unref();
 			spawnedMap.erase(it++);
 		} else if (!isInSpawnZone(monster->getPosition()) && spawnId != 0) {
 			spawnedMap.insert(spawned_pair(0, monster));
@@ -334,7 +334,7 @@ void Spawn::removeMonster(Monster* monster)
 {
 	for (auto it = spawnedMap.begin(); it != spawnedMap.end(); ++it) {
 		if (it->second == monster) {
-			monster->releaseThing2();
+			monster->unref();
 			spawnedMap.erase(it);
 			break;
 		}

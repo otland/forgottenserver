@@ -168,7 +168,7 @@ Player::Player(ProtocolGame* p) :
 	bankBalance = 0;
 
 	inbox = new Inbox(ITEM_INBOX);
-	inbox->useThing2();
+	inbox->ref();
 
 	offlineTrainingSkill = -1;
 	offlineTrainingTime = 0;
@@ -188,7 +188,7 @@ Player::~Player()
 	for (int i = 0; i < 11; ++i) {
 		if (inventory[i]) {
 			inventory[i]->setParent(nullptr);
-			inventory[i]->releaseThing2();
+			inventory[i]->unref();
 			inventory[i] = nullptr;
 			inventoryAbilities[i] = false;
 		}
@@ -196,10 +196,10 @@ Player::~Player()
 
 	for (const auto& it : depotLockerMap) {
 		it.second->removeInbox(inbox);
-		it.second->releaseThing2();
+		it.second->unref();
 	}
 
-	inbox->releaseThing2();
+	inbox->unref();
 
 	//std::cout << "Player destructor " << this << std::endl;
 
@@ -706,7 +706,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 	}
 
 	if (container->getID() == ITEM_BROWSEFIELD) {
-		container->useThing2();
+		container->ref();
 	}
 
 	auto it = openContainers.find(cid);
@@ -714,7 +714,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 		OpenContainer& openContainer = it->second;
 		Container* oldContainer = openContainer.container;
 		if (oldContainer->getID() == ITEM_BROWSEFIELD) {
-			oldContainer->releaseThing2();
+			oldContainer->unref();
 		}
 
 		openContainer.container = container;
@@ -739,7 +739,7 @@ void Player::closeContainer(uint8_t cid)
 	openContainers.erase(it);
 
 	if (container && container->getID() == ITEM_BROWSEFIELD) {
-		container->releaseThing2();
+		container->unref();
 	}
 }
 
@@ -1024,7 +1024,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 	}
 
 	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
-	depotChest->useThing2();
+	depotChest->ref();
 	depotChest->setMaxDepotItems(maxDepotItems);
 	depotChests[depotId] = depotChest;
 	return depotChest;
@@ -1102,13 +1102,13 @@ void Player::setWriteItem(Item* item, uint16_t _maxWriteLen /*= 0*/)
 	windowTextId++;
 
 	if (writeItem) {
-		writeItem->releaseThing2();
+		writeItem->unref();
 	}
 
 	if (item) {
 		writeItem = item;
 		maxWriteLen = _maxWriteLen;
-		writeItem->useThing2();
+		writeItem->ref();
 	} else {
 		writeItem = nullptr;
 		maxWriteLen = 0;

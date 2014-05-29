@@ -7314,7 +7314,7 @@ int32_t LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 		master = creature->getMaster();
 		if (master) {
 			master->removeSummon(creature);
-			creature->useThing2();
+			creature->ref();
 			creature->setDropLoot(true);
 		}
 		pushBoolean(L, true);

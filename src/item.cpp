@@ -82,7 +82,7 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 			newItem = new Item(_type, _count);
 		}
 
-		newItem->useThing2();
+		newItem->ref();
 	}
 
 	return newItem;
@@ -134,7 +134,7 @@ Item* Item::CreateItem(PropStream& propStream)
 Item::Item(const uint16_t _type, uint16_t _count /*= 0*/)
 {
 	parent = nullptr;
-	useCount = 0;
+	refCount = 0;
 
 	id = _type;
 	attributes = nullptr;
@@ -167,7 +167,7 @@ Item::Item(const Item& i) :
 	Thing()
 {
 	parent = nullptr;
-	useCount = 0;
+	refCount = 0;
 
 	//std::cout << "Item copy constructor " << this << std::endl;
 	id = i.id;

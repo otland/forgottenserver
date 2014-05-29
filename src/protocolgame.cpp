@@ -115,7 +115,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		player = new Player(this);
 		player->setName(name);
 
-		player->useThing2();
+		player->ref();
 		player->setID();
 
 		if (!IOLoginData::preloadPlayer(player, name)) {
@@ -235,7 +235,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	}
 
 	player = _player;
-	player->useThing2();
+	player->ref();
 
 	g_chat.removeUserFromAllChannels(*player);
 	player->clearModalWindows();
