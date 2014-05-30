@@ -23,7 +23,7 @@ motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = "yes"
 allowClones = "no"
 serverName = "Forgotten"
-statusTimeout = 60000
+statusTimeout = 5000
 replaceKickOnLogin = "yes"
 maxPacketsPerSecond = 25
 
