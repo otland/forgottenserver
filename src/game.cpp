@@ -1897,6 +1897,10 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 	}
 
 	player->resetIdleTime();
+	if (!g_events->eventPlayerOnMove(player, direction)) {
+		player->sendCancelWalk();
+		return;
+	}
 	player->setNextWalkActionTask(nullptr);
 
 	player->startAutoWalk(std::list<Direction> { direction });

@@ -101,3 +101,7 @@ end
 function Player:onTradeRequest(target, item)
 	return true
 end
+
+function Player:onMove(direction)
+	return true
+end
