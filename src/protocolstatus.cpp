@@ -132,6 +132,16 @@ void ProtocolStatus::sendStatusString()
 	pugi::xml_node monsters = tsqp.append_child("monsters");
 	monsters.append_attribute("total") = std::to_string(g_game.getMonstersOnline()).c_str();
 
+	pugi::xml_node npcs = tsqp.append_child("npcs");
+	npcs.append_attribute("total") = std::to_string(g_game.getNpcsOnline()).c_str();
+
+	pugi::xml_node rates = tsqp.append_child("rates");
+	rates.append_attribute("experience") = std::to_string(g_config.getNumber(ConfigManager::RATE_EXPERIENCE)).c_str();
+	rates.append_attribute("skill") = std::to_string(g_config.getNumber(ConfigManager::RATE_SKILL)).c_str();
+	rates.append_attribute("loot") = std::to_string(g_config.getNumber(ConfigManager::RATE_LOOT)).c_str();
+	rates.append_attribute("magic") = std::to_string(g_config.getNumber(ConfigManager::RATE_MAGIC)).c_str();
+	rates.append_attribute("spawn") = std::to_string(g_config.getNumber(ConfigManager::RATE_SPAWN)).c_str();
+
 	pugi::xml_node map = tsqp.append_child("map");
 	map.append_attribute("name") = g_config.getString(ConfigManager::MAP_NAME).c_str();
 	map.append_attribute("author") = g_config.getString(ConfigManager::MAP_AUTHOR).c_str();
