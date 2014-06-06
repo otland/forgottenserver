@@ -64,11 +64,11 @@ bool ConfigManager::load()
 		m_confString[IP] = getGlobalString(L, "ip", "127.0.0.1");
 		m_confString[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		m_confString[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
-		m_confString[HOUSE_RENT_PERIOD] = getGlobalString(L, "houseRentPeriod", "monthly");
-		m_confString[MYSQL_HOST] = getGlobalString(L, "mysqlHost", "localhost");
-		m_confString[MYSQL_USER] = getGlobalString(L, "mysqlUser", "root");
+		m_confString[HOUSE_RENT_PERIOD] = getGlobalString(L, "houseRentPeriod", "never");
+		m_confString[MYSQL_HOST] = getGlobalString(L, "mysqlHost", "127.0.0.1");
+		m_confString[MYSQL_USER] = getGlobalString(L, "mysqlUser", "forgottenserver");
 		m_confString[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
-		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "theforgottenserver");
+		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
 		m_confString[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
 
 		m_confInteger[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
@@ -103,13 +103,13 @@ bool ConfigManager::load()
 	m_confString[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
 
 	m_confInteger[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
-	m_confInteger[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 0);
+	m_confInteger[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
 	m_confInteger[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);
 	m_confInteger[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
-	m_confInteger[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 1);
-	m_confInteger[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 1);
-	m_confInteger[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 1);
-	m_confInteger[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 1);
+	m_confInteger[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
+	m_confInteger[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
+	m_confInteger[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
+	m_confInteger[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
 	m_confInteger[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
 	m_confInteger[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
 	m_confInteger[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
@@ -120,14 +120,14 @@ bool ConfigManager::load()
 	m_confInteger[KICK_AFTER_MINUTES] = getGlobalNumber(L, "kickIdlePlayerAfterMinutes", 15);
 	m_confInteger[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
 	m_confInteger[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);
-	m_confInteger[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 60000);
+	m_confInteger[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
 	m_confInteger[FRAG_TIME] = getGlobalNumber(L, "timeToDecreaseFrags", 24 * 60 * 60 * 1000);
 	m_confInteger[WHITE_SKULL_TIME] = getGlobalNumber(L, "whiteSkullTime", 15 * 60 * 1000);
 	m_confInteger[STAIRHOP_DELAY] = getGlobalNumber(L, "stairJumpExhaustion", 2000);
 	m_confInteger[EXP_FROM_PLAYERS_LEVEL_RANGE] = getGlobalNumber(L, "expFromPlayersLevelRange", 75);
 	m_confInteger[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
 	m_confInteger[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
-	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 40);
+	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
 
 	m_isLoaded = true;
 	lua_close(L);

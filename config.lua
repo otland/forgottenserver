@@ -1,4 +1,5 @@
 -- Combat settings
+-- NOTE: valid values for worldType are: "pvp", "no-pvp" and "pvp-enforced"
 worldType = "pvp"
 hotkeyAimbotEnabled = "yes"
 protectionLevel = 1
@@ -11,14 +12,17 @@ timeToDecreaseFrags = 24 * 60 * 60 * 1000
 whiteSkullTime = 15 * 60 * 1000
 stairJumpExhaustion = 2000
 experienceByKillingPlayers = "no"
+expFromPlayersLevelRange = 75
+noDamageToSameLookfeet = "no"
 
 -- Connection Config
+-- NOTE: maxPlayers set to 0 means no limit
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = "no"
 loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
-maxPlayers = "1000"
+maxPlayers = 0
 motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = "yes"
 allowClones = "no"
@@ -43,6 +47,7 @@ timeBetweenActions = 200
 timeBetweenExActions = 1000
 
 -- Map
+-- NOTE: set mapName WITHOUT .otbm at the end
 mapName = "forgotten"
 mapAuthor = "Komic"
 
@@ -65,7 +70,6 @@ allowChangeOutfit = "yes"
 freePremium = "no"
 kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
-noDamageToSameLookfeet = "no"
 emoteSpells = "no"
 
 -- Rates
