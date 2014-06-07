@@ -23,34 +23,47 @@
 #include "account.h"
 #include "player.h"
 #include "database.h"
+#include "databasedispatcher.h"
 
 typedef std::list<std::pair<int32_t, Item*>> ItemBlockList;
 
 class IOLoginData
 {
 	public:
-		static Account loadAccount(uint32_t accno);
-		static bool saveAccount(const Account& acc);
+		static void asyncSaveAccount(const Account acc);
 
-		static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
-		static uint32_t gameworldAuthentication(const std::string& accountName, const std::string& password, std::string& characterName);
+		static void asyncLoginserverAuthentication(const std::string& name, const std::string& password, std::function<void(Account, bool)> callback);
 
-		static AccountType_t getAccountType(uint32_t accountId);
-		static void setAccountType(uint32_t accountId, AccountType_t accountType);
-		static bool updateOnlineStatus(uint32_t guid, bool login);
-		static bool preloadPlayer(Player* player, const std::string& name);
+		static void asyncGameworldAuthentication(const std::string& accountName, const std::string& password, std::string characterName,
+											std::function<void(uint32_t, std::string)> callback);
 
-		static bool loadPlayerById(Player* player, uint32_t id);
-		static bool loadPlayerByName(Player* player, const std::string& name);
-		static bool loadPlayer(Player* player, DBResult_ptr result);
+		static void asyncGetAccountType(uint32_t accountId, std::function<void(AccountType_t)> callback);
+		static void asyncSetAccountType(uint32_t accountId, AccountType_t accountType);
+		static void asyncUpdateOnlineStatus(uint32_t guid, bool login);
+		static void asyncPreloadPlayer(const std::string& name, DBResultCallback callback);
+
+		static void asyncLoadPlayerById(Player *player, uint32_t id, DBBoolCallback boolCallback);
+		static void asyncLoadPlayerByName(Player *player, const std::string& name, DBBoolCallback boolCallback);
+
+		static void asyncLoadPlayer(Player* player, DBResult_ptr result, DBBoolCallback boolCallback);
+
+		static void asyncLoadAccount(Player *player, uint32_t accno, DBBoolCallback callback);
+		static void asyncLoadGuild(Player* player, DBVoidCallback callback);
+		static void asyncLoadSpells(Player* player, DBVoidCallback callback);
+		static void asyncLoadItems(Player* player, DBVoidCallback callback);
+		static void asyncLoadDepot(Player* player, DBVoidCallback callback);
+		static void asyncLoadInbox(Player* player, DBVoidCallback callback);
+		static void asyncLoadStorage(Player* player, DBVoidCallback callback);
+		static void asyncLoadVip(Player* player, DBVoidCallback callback);
+
 		static bool savePlayer(Player* player);
-		static bool getGuidByName(uint32_t& guid, std::string& name);
-		static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
-		static bool getNameByGuid(uint32_t guid, std::string& name);
-		static bool formatPlayerName(std::string& name);
+		static void asyncGetGuidByName(const std::string &name, std::function<void(bool, uint32_t, std::string)> callback);
+		static void asyncGetGuidByNameEx(std::string name, std::function<void(bool success, bool sVip, uint32_t guid)> callback);
+		static void asyncGetNameByGuid(uint32_t guid, std::function<void(bool, std::string)> callback);
+		static void asyncFormatPlayerName(std::string name, std::function<void(bool, std::string)> callback);
 		static bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
-		static bool hasBiddedOnHouse(uint32_t guid);
+		static void asyncHasBiddedOnHouse(uint32_t guid, DBBoolCallback callback);
 
 		static std::forward_list<VIPEntry> getVIPEntries(uint32_t accountId);
 		static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
@@ -63,7 +76,7 @@ class IOLoginData
 	protected:
 		typedef std::map<int32_t , std::pair<Item*, int32_t> > ItemMap;
 
-		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
+		static void asyncLoadItems(ItemMap& itemMap, DBResult_ptr result);
 		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& stream);
 };
 

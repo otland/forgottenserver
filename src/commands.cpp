@@ -308,57 +308,66 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	}
 }
 
-void Commands::sellHouse(Player& player, const std::string& param)
+void Commands::sellHouse(Player& p, const std::string& param)
 {
 	Player* tradePartner = g_game.getPlayerByName(param);
-	if (!tradePartner || tradePartner == &player) {
-		player.sendCancel("Trade player not found.");
+	if (!tradePartner || tradePartner == &p) {
+		p.sendCancel("Trade player not found.");
 		return;
 	}
 
-	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player.getPosition())) {
-		player.sendCancel("Trade player is too far away.");
+	Player* player = &p;
+
+	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
+		player->sendCancel("Trade player is too far away.");
 		return;
 	}
 
 	if (!tradePartner->isPremium()) {
-		player.sendCancel("Trade player does not have a premium account.");
+		player->sendCancel("Trade player does not have a premium account.");
 		return;
 	}
 
-	HouseTile* houseTile = dynamic_cast<HouseTile*>(player.getTile());
+	HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
 	if (!houseTile) {
-		player.sendCancel("You must stand in your house to initiate the trade.");
+		player->sendCancel("You must stand in your house to initiate the trade.");
 		return;
 	}
 
 	House* house = houseTile->getHouse();
-	if (!house || house->getOwner() != player.getGUID()) {
-		player.sendCancel("You don't own this house.");
+	if (!house || house->getOwner() != player->getGUID()) {
+		player->sendCancel("You don't own this house.");
 		return;
 	}
 
 	if (Houses::getInstance().getHouseByPlayerId(tradePartner->getGUID())) {
-		player.sendCancel("Trade player already owns a house.");
+		player->sendCancel("Trade player already owns a house.");
 		return;
 	}
 
-	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
-		player.sendCancel("Trade player is currently the highest bidder of an auctioned house.");
-		return;
-	}
+	player->useThing2();
+	IOLoginData::asyncHasBiddedOnHouse(tradePartner->getGUID(), [=] (bool hasResult) {
+		if (hasResult)
+		{
+			player->sendCancel("Trade player is currently the highest bidder of an auctioned house.");
+			player->releaseThing2();
+			return;
+		}
 
-	Item* transferItem = house->getTransferItem();
-	if (!transferItem) {
-		player.sendCancel("You can not trade this house.");
-		return;
-	}
+		Item* transferItem = house->getTransferItem();
+		if (!transferItem) {
+			player->sendCancel("You can not trade this house.");
+			player->releaseThing2();
+			return;
+		}
 
-	transferItem->getParent()->setParent(&player);
+		transferItem->getParent()->setParent(player);
 
-	if (!g_game.internalStartTrade(&player, tradePartner, transferItem)) {
-		house->resetTransferItem();
-	}
+		if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+			house->resetTransferItem();
+		}
+		player->releaseThing2();
+	});
 }
 
 void Commands::forceRaid(Player& player, const std::string& param)

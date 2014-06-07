@@ -34,8 +34,8 @@ class AccessList
 {
 	public:
 		bool parseList(const std::string& _list);
-		bool addPlayer(const std::string& name);
-		bool addGuild(const std::string& guildName);
+		void addPlayer(const std::string& name);
+		void addGuild(const std::string& guildName);
 		bool addExpression(const std::string& expression);
 
 		bool isInList(const Player* player);
@@ -232,7 +232,7 @@ class House
 		}
 
 	private:
-		bool transferToDepot() const;
+		void transferToDepot(std::function<void(bool)> callback = nullptr) const;
 		bool transferToDepot(Player* player) const;
 
 		AccessList guestList;

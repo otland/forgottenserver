@@ -44,11 +44,13 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 			}
 
 			if (_guid != 0) {
-				std::string name;
-				if (IOLoginData::getNameByGuid(_guid, name)) {
-					setSpecialDescription(name + " is sleeping there.");
-					Beds::getInstance().setBedSleeper(this, _guid);
-				}
+				IOLoginData::asyncGetNameByGuid(_guid, [=] (bool success, std::string name){
+					if (success)
+					{
+						setSpecialDescription(name + " is sleeping there.");
+						Beds::getInstance().setBedSleeper(this, _guid);
+					}
+				});
 			}
 
 			sleeperGUID = _guid;
@@ -113,9 +115,11 @@ bool BedItem::canUse(Player* player)
 	}
 
 	Player sleeper(nullptr);
-	if (!IOLoginData::loadPlayerById(&sleeper, sleeperGUID)) {
-		return false;
-	}
+
+	// TODO: fix this. What is this code actually supposed to do?
+//	if (!IOLoginData::loadPlayerById(&sleeper, sleeperGUID)) {
+//		return false;
+//	}
 
 	if (house->getHouseAccessLevel(&sleeper) > house->getHouseAccessLevel(player)) {
 		return false;
@@ -190,11 +194,15 @@ void BedItem::wakeUp(Player* player)
 
 	if (sleeperGUID != 0) {
 		if (!player) {
-			Player _player(nullptr);
-			if (IOLoginData::loadPlayerById(&_player, sleeperGUID)) {
-				regeneratePlayer(&_player);
-				IOLoginData::savePlayer(&_player);
-			}
+			Player * _player = new Player(nullptr);
+			_player->useThing2();
+			IOLoginData::asyncLoadPlayerById(_player, sleeperGUID, [=] (bool success) {
+				if (success) {
+					regeneratePlayer(_player);
+					IOLoginData::savePlayer(_player);
+					_player->releaseThing2();
+				}
+			});
 		} else {
 			regeneratePlayer(player);
 			g_game.addCreatureHealth(player);

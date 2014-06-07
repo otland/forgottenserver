@@ -22,38 +22,50 @@
 #include "ioguild.h"
 #include "database.h"
 
-bool IOGuild::getGuildIdByName(uint32_t& guildId, const std::string& guildName)
+extern DatabaseDispatcher g_database;
+
+void IOGuild::asyncGetGuildIdByName(const std::string& guildName, std::function<void(bool, uint32_t)> callback)
 {
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
 	query << "SELECT `id` FROM `guilds` WHERE `name` = " << db->escapeString(guildName);
 
-	DBResult_ptr result = db->storeQuery(query.str());
-	if (!result) {
-		return false;
-	}
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
+		if (!result) {
+			callback(false, 0);
+		}
 
-	guildId = result->getDataInt("id");
-	return true;
+		uint32_t guildId = result->getDataInt("id");
+		callback(true, guildId);
+	});
 }
 
-void IOGuild::getWarList(uint32_t guildId, GuildWarList& guildWarList)
+// No problem in passing a vector of uint32_t by copy, I guess. Will review performance later, anyway.
+void IOGuild::asyncGetWarList(uint32_t guildId, std::function<void(GuildWarList)> callback)
 {
 	std::ostringstream query;
 	query << "SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = " << guildId << " OR `guild2` = " << guildId << ") AND `ended` = 0 AND `status` = 1";
 
-	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
-	if (!result) {
-		return;
-	}
+	g_database.asyncQuery(SELECT, query.str(), [=] (DBResult_ptr result) {
 
-	do {
-		uint32_t guild1 = result->getDataInt("guild1");
-		if (guildId != guild1) {
-			guildWarList.push_back(guild1);
-		} else {
-			guildWarList.push_back(result->getDataInt("guild2"));
+		GuildWarList guildWarList;
+
+		if (!result)
+		{
+			callback(guildWarList);
+			return;
 		}
-	} while (result->next());
+
+		do {
+			uint32_t guild1 = result->getDataInt("guild1");
+			if (guildId != guild1) {
+				guildWarList.push_back(guild1);
+			} else {
+				guildWarList.push_back(result->getDataInt("guild2"));
+			}
+		} while (result->next());
+
+		callback(guildWarList);
+	});
 }

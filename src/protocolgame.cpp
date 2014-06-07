@@ -107,101 +107,129 @@ void ProtocolGame::deleteProtocolTask()
 	Protocol::deleteProtocolTask();
 }
 
-void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
+void ProtocolGame::initLogin(std::string name, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	//dispatcher thread
 	Player* _player = g_game.getPlayerByName(name);
 	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(this);
 		player->setName(name);
+		accountId = 0; //
 
 		player->useThing2();
 		player->setID();
 
-		if (!IOLoginData::preloadPlayer(player, name)) {
-			disconnectClient("Your character could not be loaded.");
-			return;
-		}
-
-		if (IOBan::isPlayerNamelocked(player->getGUID())) {
-			disconnectClient("Your character has been namelocked.");
-			return;
-		}
-
-		if (g_game.getGameState() == GAME_STATE_CLOSING && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
-			disconnectClient("The game is just going down.\nPlease try again later.");
-			return;
-		}
-
-		if (g_game.getGameState() == GAME_STATE_CLOSED && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
-			disconnectClient("Server is currently closed. Please try again later.");
-			return;
-		}
-
-		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
-			disconnectClient("You may only login with one character\nof your account at the same time.");
-			return;
-		}
-
-		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
-			BanInfo banInfo;
-			if (IOBan::isAccountBanned(accountId, banInfo)) {
-				if (banInfo.reason.empty()) {
-					banInfo.reason = "(none)";
-				}
-
-				std::ostringstream ss;
-				if (banInfo.expiresAt > 0) {
-					ss << "Your account has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-				} else {
-					ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-				}
-				disconnectClient(ss.str());
+		// We add useThing2 again in order to make sure it will be valid when the lambda function gets called.
+		// Then we release right after we finish the login "Callback hell".
+		player->useThing2();
+		IOLoginData::asyncPreloadPlayer(name, [=](const DBResult_ptr& result) {
+			if (!result) {
+				player->releaseThing2();
+				disconnectClient("Your character could not be loaded.");
 				return;
 			}
-		}
 
-		if (!WaitingList::getInstance()->clientLogin(player)) {
-			uint32_t currentSlot = WaitingList::getInstance()->getClientSlot(player);
-			uint32_t retryTime = WaitingList::getTime(currentSlot);
-			std::ostringstream ss;
-
-			ss << "Too many players online.\nYou are at place "
-			   << currentSlot << " on the waiting list.";
-
-			OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
-			if (output) {
-				output->AddByte(0x16);
-				output->AddString(ss.str());
-				output->AddByte(retryTime);
-				OutputMessagePool::getInstance()->send(output);
-			}
-
-			getConnection()->closeConnection();
-			return;
-		}
-
-		if (!IOLoginData::loadPlayerByName(player, name)) {
-			disconnectClient("Your character could not be loaded.");
-			return;
-		}
-
-		player->setOperatingSystem((OperatingSystem_t)operatingSystem);
-
-		if (!g_game.placeCreature(player, player->getLoginPosition())) {
-			if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
-				disconnectClient("Temple position is wrong. Contact the administrator.");
+			if (result->getDataInt("deletion") != 0) {
+				player->releaseThing2();
+				disconnectClient("Your character could not be loaded.");
 				return;
 			}
-		}
 
-		if (operatingSystem >= CLIENTOS_OTCLIENT_LINUX) {
-			player->registerCreatureEvent("ExtendedOpcode");
-		}
+			player->setGUID(result->getDataInt("id"));
 
-		player->lastIP = player->getIP();
-		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
-		m_acceptPackets = true;
+			Group* group = g_game.getGroup(result->getDataInt("group_id"));
+			if (!group) {
+				std::cout << "[Error - IOLoginData::preloadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
+				player->releaseThing2();
+				disconnectClient("Your character could not be loaded.");
+				return;
+			}
+
+			if ((uint32_t)result->getDataInt("namelock") == player->getGUID()) {
+				player->releaseThing2();
+				disconnectClient("Your character has been namelocked.");
+				return;
+			}
+
+			// Someone correct me if I'm wrong, but I THINK that the player ptr will still exist here with no exceptions.
+			player->setGroup(group);
+			player->accountNumber = result->getNumber<uint32_t>("account_id");
+			player->accountType = static_cast<AccountType_t>(result->getDataInt("account_type"));
+			if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
+				player->premiumDays = result->getDataInt("premium_days");
+			} else {
+				player->premiumDays = std::numeric_limits<uint16_t>::max();
+			}
+
+			if (g_game.getGameState() == GAME_STATE_CLOSING && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
+				player->releaseThing2();
+				disconnectClient("The game is just going down.\nPlease try again later.");
+				return;
+			}
+
+			if (g_game.getGameState() == GAME_STATE_CLOSED && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
+				player->releaseThing2();
+				disconnectClient("Server is currently closed. Please try again later.");
+				return;
+			}
+
+			if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
+				player->releaseThing2();
+				disconnectClient("You may only login with one character\nof your account at the same time.");
+				return;
+			}
+
+			auto lambdaIsAccountBanished = [=](BanInfo banInfo, bool banished) {
+				if (banished) {
+					if (banInfo.reason.empty()) {
+						banInfo.reason = "(none)";
+					}
+
+					std::ostringstream ss;
+					if (banInfo.expiresAt > 0) {
+						ss << "Your account has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
+					} else {
+						ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
+					}
+					player->releaseThing2();
+					disconnectClient(ss.str());
+					return;
+				}
+
+				if (!WaitingList::getInstance()->clientLogin(player)) {
+					uint32_t currentSlot = WaitingList::getInstance()->getClientSlot(player);
+					uint32_t retryTime = WaitingList::getTime(currentSlot);
+					std::ostringstream ss;
+
+					ss << "Too many players online.\nYou are at place "
+					   << currentSlot << " on the waiting list.";
+
+					OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+					if (output) {
+						output->AddByte(0x16);
+						output->AddString(ss.str());
+						output->AddByte(retryTime);
+						OutputMessagePool::getInstance()->send(output);
+					}
+
+					getConnection()->closeConnection();
+					player->releaseThing2();
+					return;
+				}
+
+				player->setOperatingSystem((OperatingSystem_t)operatingSystem);
+
+				login(name);
+			};
+
+			if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
+				IOBan::getAccountBanishments(accountId, std::move(lambdaIsAccountBanished));
+			} else {
+				BanInfo banInfo; // empty just to fulfill lambda requirement.
+				lambdaIsAccountBanished(banInfo, false);
+			}
+		});
+
 	} else {
 		if (eventConnect != 0 || !g_config.getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
 			//Already trying to connect
@@ -221,6 +249,48 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		addRef();
 		connect(_player->getID(), operatingSystem);
 	}
+}
+
+void ProtocolGame::login(std::string name)
+{
+	IOLoginData::asyncLoadPlayerByName(player, name, [=] (bool success) {
+		if (player->getLoadedData() != LOADED_ALL) {
+			// Wait for everything loaded.
+			return;
+		}
+
+		// Wait for LOADED_ALL before checking if everything succeeded.
+		// Although only asyncLoadAccount is expected to fail sometimes, we better
+		// already try loading everything to avoid long waitings of the player,
+		// even because account loading failures should be rare.
+		// I guess it is a matter of opinion, but I believe this is the best option.
+		if (!success)
+		{
+			// We can only releaseThing2 when all the asyncLoads related to player's "loadedData" are complete.
+			player->releaseThing2();
+			disconnectClient("Your character could not be loaded.");
+			return;
+		}
+
+		if (!g_game.placeCreature(player, player->getLoginPosition())) {
+			if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
+				player->releaseThing2();
+				disconnectClient("Temple position is wrong. Contact the administrator.");
+				return;
+			}
+		}
+
+		if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+			player->registerCreatureEvent("ExtendedOpcode");
+		}
+
+		player->lastIP = player->getIP();
+		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
+		m_acceptPackets = true;
+
+		// we release here. Callback hell finished.
+		player->releaseThing2();
+	});
 }
 
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
@@ -368,15 +438,18 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
-	if (accountId == 0) {
-		dispatchDisconnectClient("Account name or password is not correct.");
-		return;
-	}
-
+	IOLoginData::asyncGameworldAuthentication(accountName, password, characterName,
+										 [=] (uint32_t accountId, std::string newCharacterName) {
+		if (accountId == 0) {
+			dispatchDisconnectClient("Account name or password is not correct.");
+			return;
+		} else {
 #undef dispatchDisconnectClient
 
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem)));
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::initLogin, this, newCharacterName,
+													  accountId, operatingSystem)));
+		}
+	});
 }
 
 void ProtocolGame::onConnect()
@@ -1154,7 +1227,7 @@ void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
 	uint32_t timestamp = msg.get<uint32_t>();
 	uint16_t counter = msg.get<uint16_t>();
 	uint16_t amount = msg.get<uint16_t>();
-	addGameTask(&Game::playerAcceptMarketOffer, player->getID(), timestamp, counter, amount);
+	addGameTask(&Game::playerBeginAcceptMarketOffer, player->getID(), timestamp, counter, amount);
 }
 
 void ProtocolGame::parseModalWindowAnswer(NetworkMessage& msg)

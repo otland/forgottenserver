@@ -45,6 +45,8 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 
+#include "databasedispatcher.h"
+
 Dispatcher g_dispatcher;
 Scheduler g_scheduler;
 
@@ -52,6 +54,7 @@ Game g_game;
 ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
+DatabaseDispatcher g_database;
 RSA g_RSA;
 
 std::mutex g_loaderLock;
@@ -91,7 +94,8 @@ int main(int argc, char* argv[])
 	ServiceManager servicer;
 
 	g_dispatcher.start();
-	g_scheduler.start();
+    g_scheduler.start();
+	g_database.start();
 
 	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
 

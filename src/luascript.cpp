@@ -7957,7 +7957,7 @@ int32_t LuaScriptInterface::luaPlayerSetAccountType(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->accountType = static_cast<AccountType_t>(getNumber<uint32_t>(L, 2));;
-		IOLoginData::setAccountType(player->getAccount(), player->accountType);
+		IOLoginData::asyncSetAccountType(player->getAccount(), player->accountType);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -9528,14 +9528,14 @@ int32_t LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), false);
+		IOLoginData::asyncUpdateOnlineStatus(player->getGUID(), false);
 	} else {
 		for (const auto& it : g_game.getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
 				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
 		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), true);
+		IOLoginData::asyncUpdateOnlineStatus(player->getGUID(), true);
 	}
 	pushBoolean(L, true);
 	return 1;
