@@ -817,19 +817,22 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	std::list<ShopInfo> items;
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
+		const int32_t tableIndex = lua_gettop(L);
 		ShopInfo item;
-		item.itemId = popField<uint32_t>(L, "id");
-		item.subType = popField<int32_t>(L, "subType");
+
+		item.itemId = getField<uint32_t>(L, tableIndex, "id");
+		item.subType = getField<int32_t>(L, tableIndex, "subType");
 		if (item.subType == 0) {
-			item.subType = popField<int32_t>(L, "subtype");
+			item.subType = getField<int32_t>(L, tableIndex, "subtype");
+			lua_pop(L, 1);
 		}
 
-		item.buyPrice = popField<uint32_t>(L, "buy");
-		item.sellPrice = popField<uint32_t>(L, "sell");
-		item.realName = popFieldString(L, "name");
+		item.buyPrice = getField<uint32_t>(L, tableIndex, "buy");
+		item.sellPrice = getField<uint32_t>(L, tableIndex, "sell");
+		item.realName = getFieldString(L, tableIndex, "name");
 
 		items.push_back(item);
-		lua_pop(L, 1);
+		lua_pop(L, 6);
 	}
 	lua_pop(L, 1);
 
@@ -1034,19 +1037,22 @@ int32_t NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 
 	lua_pushnil(L);
 	while (lua_next(L, 3) != 0) {
+		const int32_t tableIndex = lua_gettop(L);
 		ShopInfo item;
-		item.itemId = popField<uint32_t>(L, "id");
-		item.subType = popField<int32_t>(L, "subType");
+
+		item.itemId = getField<uint32_t>(L, tableIndex, "id");
+		item.subType = getField<int32_t>(L, tableIndex, "subType");
 		if (item.subType == 0) {
-			item.subType = popField<int32_t>(L, "subtype");
+			item.subType = getField<int32_t>(L, tableIndex, "subtype");
+			lua_pop(L, 1);
 		}
 
-		item.buyPrice = popField<uint32_t>(L, "buy");
-		item.sellPrice = popField<uint32_t>(L, "sell");
-		item.realName = popFieldString(L, "name");
+		item.buyPrice = getField<uint32_t>(L, tableIndex, "buy");
+		item.sellPrice = getField<uint32_t>(L, tableIndex, "sell");
+		item.realName = getFieldString(L, tableIndex, "name");
 
 		items.push_back(item);
-		lua_pop(L, 1);
+		lua_pop(L, 6);
 	}
 	lua_pop(L, 1);
 

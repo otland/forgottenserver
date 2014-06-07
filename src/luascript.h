@@ -288,7 +288,14 @@ class LuaScriptInterface
 
 		// Get
 		template<typename T>
-		inline static T getNumber(lua_State* L, int32_t arg)
+		inline static typename std::enable_if<std::is_enum<T>::value, T>::type
+			getNumber(lua_State* L, int32_t arg)
+		{
+			return static_cast<T>(static_cast<int64_t>(lua_tonumber(L, arg)));
+		}
+		template<typename T>
+		inline static typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value, T>::type
+			getNumber(lua_State* L, int32_t arg)
 		{
 			return static_cast<T>(lua_tonumber(L, arg));
 		}
@@ -299,7 +306,7 @@ class LuaScriptInterface
 			if (parameters == 0 || arg > parameters) {
 				return defaultValue;
 			}
-			return static_cast<T>(lua_tonumber(L, arg));
+			return getNumber<T>(L, arg);
 		}
 		template<class T>
 		static T* getUserdata(lua_State* L, int32_t arg)
@@ -380,18 +387,6 @@ class LuaScriptInterface
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
 		//
-		template<typename T>
-		static T popField(lua_State* L, const std::string& key)
-		{
-			lua_getfield(L, -1, key.c_str());
-
-			T ret = static_cast<T>(lua_tonumber(L, -1));
-			lua_pop(L, 1);
-			return ret;
-		}
-
-		static std::string popFieldString(lua_State* L, const std::string& key);
-
 		inline static void setField(lua_State* L, const char* index, lua_Number value)
 		{
 			lua_pushnumber(L, value);
@@ -511,17 +506,6 @@ class LuaScriptInterface
 
 		static int32_t luaDoChallengeCreature(lua_State* L);
 
-		static int32_t luaNumberToVariant(lua_State* L);
-		static int32_t luaStringToVariant(lua_State* L);
-		static int32_t luaPositionToVariant(lua_State* L);
-		static int32_t luaTargetPositionToVariant(lua_State* L);
-
-		static int32_t luaVariantToNumber(lua_State* L);
-		static int32_t luaVariantToString(lua_State* L);
-		static int32_t luaVariantToPosition(lua_State* L);
-
-		static int32_t luaDoChangeSpeed(lua_State* L);
-
 		static int32_t luaSetCreatureOutfit(lua_State* L);
 		static int32_t luaSetMonsterOutfit(lua_State* L);
 		static int32_t luaSetItemOutfit(lua_State* L);
@@ -602,6 +586,13 @@ class LuaScriptInterface
 		static int32_t luaGameCreateNpc(lua_State* L);
 
 		static int32_t luaGameStartRaid(lua_State* L);
+
+		// Variant
+		static int32_t luaVariantCreate(lua_State* L);
+
+		static int32_t luaVariantGetNumber(lua_State* L);
+		static int32_t luaVariantGetString(lua_State* L);
+		static int32_t luaVariantGetPosition(lua_State* L);
 
 		// Position
 		static int32_t luaPositionCreate(lua_State* L);
@@ -804,6 +795,7 @@ class LuaScriptInterface
 
 		static int32_t luaCreatureGetSpeed(lua_State* L);
 		static int32_t luaCreatureGetBaseSpeed(lua_State* L);
+		static int32_t luaCreatureChangeSpeed(lua_State* L);
 
 		static int32_t luaCreatureSetDropLoot(lua_State* L);
 
