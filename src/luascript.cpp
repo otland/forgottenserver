@@ -10938,7 +10938,7 @@ int32_t LuaScriptInterface::luaItemTypeGetDescription(lua_State* L)
 
 int32_t LuaScriptInterface::luaItemTypeGetSlotPosition(lua_State *L)
 {
-	// itemType:getSlotPosition()pushVariant
+	// itemType:getSlotPosition()
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->slotPosition);

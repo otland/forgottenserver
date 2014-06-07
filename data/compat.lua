@@ -765,14 +765,6 @@ function targetPositionToVariant(position)
 	return variant
 end
 
-function variantToNumber(variant)
-	return variant:getNumber()
-end
-
-function variantToString(variant)
-	return variant:getString()
-end
-
-function variantToPosition(variant)
-	return variant:getPosition()
-end
+variantToNumber = Variant.getNumber
+variantToString = Variant.getString
+variantToPosition = Variant.getPosition
