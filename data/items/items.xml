@@ -11363,21 +11363,21 @@
 	<item id="6546" name="Dracola's eye">
 		<attribute key="weight" value="1500" />
 	</item>
-	<item id="6547" name="easily inflammable sulphur">
+	<item id="6547" name="yellow powder">
 		<attribute key="weight" value="50" />
 		<attribute key="showcount" value="0" />
 	</item>
-	<item id="6548" article="a" name="violet sulphur">
+	<item id="6548" article="a" name="purple powder">
 		<attribute key="weight" value="750" />
 	</item>
-	<item id="6549" article="a" name="green sulphur">
+	<item id="6549" article="a" name="green powder">
 		<attribute key="weight" value="750" />
 	</item>
-	<item id="6550" article="a" name="demon dust">
+	<item id="6550" article="a" name="red powder">
 		<attribute key="description" value="It reeks of hatred and malice." />
 		<attribute key="weight" value="100" />
 	</item>
-	<item id="6551" article="a" name="vampire dust">
+	<item id="6551" article="a" name="blue powder">
 		<attribute key="description" value="Sun can be a merciless killer, but so can you." />
 		<attribute key="weight" value="100" />
 	</item>
@@ -15045,7 +15045,7 @@
 	<item id="8300" article="a" name="flawless ice crystal">
 		<attribute key="weight" value="250" />
 	</item>
-	<item id="8301" name="fine sulphur">
+	<item id="8301" name="holy soil">
 		<attribute key="description" value="It has been extracted from an inactive lava hole." />
 		<attribute key="weight" value="50" />
 	</item>
@@ -16458,7 +16458,7 @@
 		<attribute key="containerSize" value="8" />
 		<attribute key="slotType" value="backpack" />
 	</item>
-	<item id="9078" article="a" name="vial">
+	<item id="9078" article="a" name="special flask">
 		<attribute key="weight" value="170" />
 	</item>
 	<item id="9081" article="a" name="parcel">
