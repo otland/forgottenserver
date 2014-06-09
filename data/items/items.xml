@@ -23771,6 +23771,10 @@
 	<item id="15455" article="a" name="deepling claw">
 		<attribute key="weight" value="180" />
 	</item>
+	<item id="15462" article="a" name="gooey substance">
+		<attribute key="weight" value="120" />
+		<attribute key="description" value="The substance will dissolve after a while." />
+	</item>
 	<item id="15463" article="a" name="flask of chitin dissolver">
 		<attribute key="weight" value="155" />
 	</item>
@@ -24005,6 +24009,9 @@
 		<attribute key="shootType" value="vortexbolt" />
 		<attribute key="maxHitChance" value="90" />
 		<attribute key="ammoAction" value="removecount" />
+	</item>
+	<item id="15650" article="a" name="swarmer drum">
+		<attribute key="weight" value="3200" />
 	</item>
 	<item id="15651" article="a" name="depth galea">
 		<attribute key="description" value="Enables underwater exploration." />
@@ -29931,7 +29938,7 @@
 	<item id="22612" article="a" name="demonic tapestry">
 		<attribute key="weight" value="1000" />
 	</item>
-	<item id="22613" article="a" name="eye pod">
+	<item id="22613" article="an" name="eye pod">
 		<attribute key="weight" value="500" />
 	</item>
 	<item fromid="22614" toid="22615" article="a" name="nightmare beacon">
