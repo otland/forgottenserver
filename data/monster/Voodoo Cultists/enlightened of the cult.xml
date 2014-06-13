@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Enlightened of the Cult" nameDescription="a enlightened of the cult" race="blood" experience="500" speed="210" manacost="0">
+<monster name="Enlightened of the Cult" nameDescription="an enlightened of the cult" race="blood" experience="500" speed="210" manacost="0">
 	<health now="700" max="700"/>
 	<look type="193" corpse="20391"/>
 	<targetchange interval="4000" chance="10"/>
@@ -18,15 +18,16 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="80"/>
+		<attack name="melee" interval="2000" min="0" max="-100" poison="4"/>
 		<attack name="lifedrain" interval="2000" chance="25" range="1" radius="1" target="1" min="-70" max="-185">
+			<attribute key="shootEffect" value="holy"/>
 			<attribute key="areaEffect" value="holyarea"/>
 		</attack>
-		<attack name="drunk" interval="2000" chance="10" range="7" radius="1" target="1" duration="5000">
+		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="5000">
 			<attribute key="shootEffect" value="holy"/>
 			<attribute key="areaEffect" value="holydamage"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="10" range="7" radius="1" target="1" speedchange="-360" duration="6000">
+		<attack name="speed" interval="2000" chance="10" range="7" target="1" speedchange="-360" duration="6000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
@@ -60,24 +61,24 @@
 		<voice sentence="You will die in the name of the triangle!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="65000"/><!-- gold coin -->
-		<item id="2200" chance="770"/><!-- protection amulet -->
-		<item id="2146" chance="540"/><!-- small sapphire -->
-		<item id="5810" chance="400"/><!-- pirate voodoo doll -->
-		<item id="6090" chance="700"/><!-- music sheet 4th verse -->
-		<item id="2167" chance="460"/><!-- energy ring -->
-		<item id="7589" chance="760"/><!-- strong mana potion -->
-		<item id="2187" chance="170"/><!-- wand of inferno -->
-		<item id="2436" chance="360"/><!-- skull staff -->
-		<item id="2171" chance="210"/><!-- platinum amulet -->
-		<item id="2114" chance="140"/><!-- piggy bank -->
-		<item id="2656" chance="30"/><!-- blue robe -->
-		<item id="5801" chance="100"/><!-- jewelled bp -->
-		<item id="5669" chance="140"/><!-- mysterious voodoo skull -->
-		<item id="7426" chance="100"/><!-- amber staff -->
-		<item id="1962" chance="940"/><!-- orange book -->
-		<item id="12608" chance="90"/><!-- broken key ring -->
-		<item id="12411" chance="890"/><!-- cultish symbol -->
-		<item id="10555" chance="10000"/><!-- cultish mask -->
+		<item id="2148" countmax="70" chance="64550"/>	<!-- gold coin -->
+		<item id="10555" chance="10250"/>				<!-- cultish mask -->
+		<item id="1962" chance="910"/>					<!-- orange book -->
+		<item id="12411" chance="890"/>					<!-- cultish symbol -->
+		<item id="2200" chance="790"/>					<!-- protection amulet -->
+		<item id="7589" chance="740"/>					<!-- strong mana potion -->
+		<item id="2146" chance="550"/>					<!-- small sapphire -->
+		<item id="6090" chance="490"/>					<!-- music sheet 4th verse -->
+		<item id="2167" chance="450"/>					<!-- energy ring -->
+		<item id="5810" chance="430"/>					<!-- pirate voodoo doll -->
+		<item id="2436" chance="350"/>					<!-- skull staff -->
+		<item id="2171" chance="200"/>					<!-- platinum amulet -->
+		<item id="2187" chance="180"/>					<!-- wand of inferno -->
+		<item id="5670" chance="130"/>					<!-- mysterious voodoo skull -->
+		<item id="2114" chance="130"/>					<!-- piggy bank -->
+		<item id="7426" chance="100"/>					<!-- amber staff -->
+		<item id="12608" chance="100"/>					<!-- broken key ring -->
+		<item id="5801" chance="100"/>					<!-- jewelled backpack -->
+		<item id="2656" chance="40"/>					<!-- blue robe -->
 	</loot>
 </monster>

@@ -18,12 +18,12 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="42" attack="50"/>
-		<attack name="manadrain" interval="2000" chance="10" range="1" min="-14" max="-23"/>
-		<attack name="lifedrain" interval="2000" chance="15" range="7" min="-15" max="-24">
+		<attack name="melee" interval="2000" min="0" max="-130"/>
+		<attack name="manadrain" interval="2000" chance="10" target="1" range="1" min="-14" max="-23"/>
+		<attack name="lifedrain" interval="2000" chance="15" target="1" range="7" min="-15" max="-24">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="death" interval="2000" chance="15" range="1" min="-30" max="-49">
+		<attack name="death" interval="2000" chance="15" target="1" range="1" min="-30" max="-49">
 			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
 	</attacks>
@@ -48,16 +48,16 @@
 		<voice sentence="Httt.... hmnnsss..."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="65" chance="82000"/><!-- gold coin -->
-		<item id="10576" chance="10000"/><!-- half-eaten brain -->
-		<item id="2460" chance="9400"/><!-- brass helmet -->
-		<item id="2457" chance="4600"/><!-- steel helmet -->
-		<item id="2398" chance="7250"/><!-- mace -->
-		<item id="9808" chance="240"/><!-- rusty armor -->
-		<item id="2381" chance="7000"/><!-- battle hammer -->
-		<item id="2381" chance="3750"/><!-- halberd -->
-		<item id="2205" chance="1000"/><!-- life ring -->
-		<item id="7620" chance="690"/><!-- mana potion -->
-		<item id="2657" chance="530"/><!-- simple dress -->
+		<item id="2148" countmax="65" chance="82000"/>	<!-- gold coin -->
+		<item id="10576" chance="10000"/>				<!-- half-eaten brain -->
+		<item id="2460" chance="9400"/>					<!-- brass helmet -->
+		<item id="2398" chance="7250"/>					<!-- mace -->
+		<item id="2417" chance="7000"/>					<!-- battle hammer -->
+		<item id="9808" chance="5680"/>					<!-- rusty armor (common) -->
+		<item id="2457" chance="4600"/>					<!-- steel helmet -->
+		<item id="2381" chance="3750"/>					<!-- halberd -->
+		<item id="2205" chance="1000"/>					<!-- life ring -->
+		<item id="7620" chance="740"/>					<!-- mana potion -->
+		<item id="2657" chance="560"/>					<!-- simple dress -->
 	</loot>
 </monster>

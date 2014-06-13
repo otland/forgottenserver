@@ -8,9 +8,9 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="0"/>
+		<flag illusionable="1"/>
 		<flag convinceable="0"/>
-		<flag pushable="1"/>
+		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag staticattack="90"/>
@@ -18,10 +18,9 @@
 		<flag runonhealth="40"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="55" attack="20" poison="20"/>
+		<attack name="melee" interval="2000" min="0" max="-65" poison="1"/>
 		<attack name="lifedrain" interval="2000" chance="15" range="7" radius="1" target="1" min="-20" max="-80">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poison"/>
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
@@ -34,7 +33,7 @@
 		<element earthPercent="10"/>
 		<element icePercent="10"/>
 		<element holyPercent="10"/>
-		<element physicalPercent="-20"/>
+		<element physicalPercent="-10"/>
 		<element energyPercent="-8"/>
 		<element firePercent="-5"/>
 		<element deathPercent="-8"/>
@@ -44,20 +43,20 @@
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Fear us!"/>
-		<voice sentence="You will not tell anyone what you have seen."/>
+		<voice sentence="You will not tell anyone what you have seen!"/>
 		<voice sentence="Your curiosity will be punished!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="43300"/><!-- gold coin -->
-		<item id="2661" chance="3000"/><!-- scarf -->
-		<item id="2190" chance="460"/><!-- wand of vortex -->
-		<item id="1962" chance="680"/><!-- orange book -->
-		<item id="5810" chance="510"/><!-- pirate voodoo doll -->
-		<item id="2213" chance="510"/><!-- dwarven ring -->
-		<item id="6087" chance="500"/><!-- music sheet 1st verse -->
-		<item id="2145" chance="220"/><!-- small diamond -->
-		<item id="2199" chance="420"/><!-- garlic necklace -->
-		<item id="12448" chance="5950"/><!-- rope belt -->
-		<item id="10556" chance="1000"/><!-- cultish robe -->
+		<item id="2148" countmax="40" chance="43380"/>	<!-- gold coin -->
+		<item id="12448" chance="5910"/>				<!-- rope belt -->
+		<item id="2661" chance="2900"/>					<!-- scarf -->
+		<item id="10556" chance="1030"/>				<!-- cultish robe -->
+		<item id="6087" chance="970"/>					<!-- music sheet 1st verse -->
+		<item id="1962" chance="700"/>					<!-- orange book -->
+		<item id="5810" chance="520"/>					<!-- pirate voodoo doll -->
+		<item id="2213" chance="500"/>					<!-- dwarven ring -->
+		<item id="2190" chance="450"/>					<!-- wand of vortex -->
+		<item id="2199" chance="420"/>					<!-- garlic necklace -->
+		<item id="2145" chance="210"/>					<!-- small diamond -->
 	</loot>
 </monster>

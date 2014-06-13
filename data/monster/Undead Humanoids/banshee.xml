@@ -15,18 +15,18 @@
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag runonhealth="500"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="60"/>
-		<attack name="speed" interval="2000" chance="10" range="7" speedchange="-600" duration="15000">
-			<attribute key="areaEffect" value="redshimmer"/>
-		</attack>
+		<attack name="melee" interval="2000" min="0" max="-100" poison="3"/>
 		<attack name="lifedrain" interval="2000" chance="15" radius="4" target="0" min="-100" max="-200">
 			<attribute key="areaEffect" value="rednote"/>
 		</attack>
 		<attack name="death" interval="2000" chance="5" range="1" target="1" radius="1" min="-55" max="-350">
 			<attribute key="areaEffect" value="smallclouds"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="10" range="7" speedchange="-300" duration="15000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="25">
@@ -47,36 +47,36 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Are you ready to rock?"/>
-		<voice sentence="That's what I call easy listening!"/>
+		<voice sentence="Dance for me your dance of death!"/>
 		<voice sentence="Let the music play!"/>
 		<voice sentence="I will mourn your death!"/>
-		<voice sentence="IIIIEEEeeeeeehhhHHHHH!" yell="1"/>
-		<voice sentence="Dance for me your dance of death!"/>
+		<voice sentence="Are you ready to rock?"/>
 		<voice sentence="Feel my gentle kiss of death."/>
+		<voice sentence="That's what I call easy listening!"/>
+		<voice sentence="IIIIEEEeeeeeehhhHHHH!" yell="1"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="30000"/><!-- gold coin -->
-		<item id="2144" chance="2000"/><!-- black pearl -->
-		<item id="2656" chance="710"/><!-- blue robe -->
-		<item id="2047" chance="70000"/><!-- candlestick -->
-		<item id="2177" chance="70"/><!-- life crystal -->
-		<item id="2655" chance="130"/><!-- red robe -->
-		<item id="2214" chance="710"/><!-- ring of healing -->
-		<item id="2170" chance="8700"/><!-- silver amulet -->
-		<item id="2134" chance="1250"/><!-- silver brooch -->
-		<item id="2657" chance="6000"/><!-- simple dress -->
-		<item id="2197" chance="820"/><!-- stone skin amulet -->
-		<item id="7589" chance="640"/><!-- strong mana potion -->
-		<item id="2175" chance="520"/><!-- spellbook -->
-		<item id="2143" chance="1000"/><!-- white pearl -->
-		<item id="7884" chance="340"/><!-- terra mantle -->
-		<item id="2121" chance="460"/><!-- wedding ring -->
-		<item id="2124" chance="60"/><!-- crystal ring -->
-		<item id="11337" chance="4150"/><!-- petrified scream -->
-		<item id="12402" chance="4810"/><!-- hair of a banshee -->
-		<item id="13307" chance="40"/><!-- sweet smelling bait -->
-		<item id="2411" chance="1350"/><!-- poison dagger -->
-		<item id="2372" chance="920"/><!-- lyre -->
+		<item id="2047" chance="70000"/>				<!-- candlestick -->
+		<item id="2148" countmax="80" chance="30000"/>	<!-- gold coin -->
+		<item id="2170" chance="8700"/>					<!-- silver amulet -->
+		<item id="2657" chance="6050"/>					<!-- simple dress -->
+		<item id="12402" chance="4810"/>				<!-- hair of a banshee -->
+		<item id="11337" chance="4150"/>				<!-- petrified scream -->
+		<item id="2144" chance="2030"/>					<!-- black pearl -->
+		<item id="2411" chance="1350"/>					<!-- poison dagger -->
+		<item id="2134" chance="1250"/>					<!-- silver brooch -->
+		<item id="2143" chance="1010"/>					<!-- white pearl -->
+		<item id="2372" chance="910"/>					<!-- lyre -->
+		<item id="2197" chance="820"/>					<!-- stone skin amulet -->
+		<item id="2214" chance="730"/>					<!-- ring of healing -->
+		<item id="2656" chance="700"/>					<!-- blue robe -->
+		<item id="7589" chance="680"/>					<!-- strong mana potion -->
+		<item id="2175" chance="520"/>					<!-- spellbook -->
+		<item id="2121" chance="460"/>					<!-- wedding ring -->
+		<item id="7884" chance="340"/>					<!-- terra mantle -->
+		<item id="2655" chance="150"/>					<!-- red robe -->
+		<item id="2177" chance="70"/>					<!-- life crystal -->
+		<item id="2124" chance="60"/>					<!-- crystal ring -->
+		<item id="13307" chance="40"/>					<!-- sweet smelling bait -->
 	</loot>
 </monster>

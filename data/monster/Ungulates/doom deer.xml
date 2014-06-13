@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Doom Deer" nameDescription="a doom deer" race="blood" experience="200" speed="300" manacost="260">
-	<health now="450" max="450"/>
+<monster name="Doom Deer" nameDescription="a doom deer" race="blood" experience="200" speed="300" manacost="0">
+	<health now="405" max="405"/>
 	<look type="31" corpse="5970"/>
 	<targetchange interval="2000" chance="20"/>
 	<strategy attack="100" defense="0"/>
@@ -15,16 +15,16 @@
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag runonhealth="25"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="0" max="-100"/>
-		<attack name="energy" interval="1000" chance="30" length="5" spread="0">
+		<attack name="melee" interval="2000" min="0" max="-100"/>
+		<attack name="energy" interval="4000" chance="30" length="5" min="-35" max="-55">
 			<attribute key="areaEffect" value="bigclouds"/>
 		</attack>
 	</attacks>
 	<defenses armor="30" defense="35">
-		<defense name="speed" interval="1000" chance="30" speedchange="400" duration="8000">
+		<defense name="speed" interval="3000" chance="30" speedchange="400" duration="8000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
@@ -38,6 +38,6 @@
 		<voice sentence="I bet it was you who killed my mom!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000"/><!-- gold coins -->
+		<item id="2148" countmax="100" chance="50000"/>	<!-- gold coins -->
 	</loot>
 </monster>

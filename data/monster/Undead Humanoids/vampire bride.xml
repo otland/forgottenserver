@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vampire Bride" nameDescription="a vampire bride" race="undead" experience="1050" speed="230" manacost="0">
+<monster name="Vampire Bride" nameDescription="a vampire bride" race="blood" experience="1050" speed="230" manacost="0">
 	<health now="1200" max="1200"/>
 	<look type="312" corpse="9658"/>
 	<targetchange interval="4000" chance="10"/>
@@ -18,20 +18,19 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="50"/>
-		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-60" max="-130">
+		<attack name="melee" interval="2000" min="0" max="-190"/>
+		<attack name="lifedrain" interval="3000" chance="15" target="1" range="1" min="-60" max="-130">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="death" interval="2000" chance="10" range="7" min="-60" max="-150">
+		<attack name="death" interval="2000" chance="10" target="1" range="7" min="-60" max="-150">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="mortarea"/>
-			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
-		<attack name="death" interval="2000" chance="5" range="7" min="-60" max="-150">
+		<attack name="death" interval="4000" chance="5" target="1" range="7" min="-60" max="-150">
 			<attribute key="shootEffect" value="suddendeath"/>
 			<attribute key="areaEffect" value="hearts"/>
 		</attack>
-		<attack name="energy" interval="2000" chance="15" range="7" min="-60" max="-150">
+		<attack name="energy" interval="2000" chance="15" target="1" range="7" min="-60" max="-150">
 			<attribute key="shootEffect" value="energy"/>
 		</attack>
 	</attacks>
@@ -57,25 +56,26 @@
 		<voice sentence="Dead is the new alive."/>
 		<voice sentence="Come, let me kiss you, darling. Oh wait, I meant kill."/>
 		<voice sentence="Enjoy the pain - I know you love it."/>
+		<voice sentence="Are you suffering nicely enough?"/>
+		<voice sentence="You won't regret you came to me, sweetheart."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
-		<item id="2148" countmax="49" chance="43000"/><!-- gold coin -->
-		<item id="2152" chance="9910"/><!-- platinum coin -->
-		<item id="2195" chance="230"/><!-- boots of haste -->
-		<item id="2127" chance="1100"/><!-- emerald bangle -->
-		<item id="8873" chance="1000"/><!-- hibiscus dress -->
-		<item id="2186" chance="5500"/><!-- moonlight rod -->
-		<item id="5670" chance="170"/><!-- mysterious voodo skull -->
-		<item id="9809" chance="10"/><!-- rusty armor -->
-		<item id="2145" countmax="2" chance="1000"/><!-- small diamond -->
-		<item id="7589" chance="10210"/><!-- strong mana potion -->
-		<item id="7588" chance="4800"/><!-- strong health potion -->
-		<item id="9837" chance="925"/><!-- velvet tapestry -->
-		<item id="13293" chance="20"/><!-- leather whip -->
-		<item id="12405" chance="4850"/><!-- blood preservation -->
-		<item id="10602" chance="10000"/><!-- vampire teeth -->
-		<item id="9447" chance="60"/><!-- blood goblet -->
-		<item id="7733" chance="200"/><!-- flower bouquet -->
+		<item id="2148" countmax="149" chance="90000"/>	<!-- gold coin -->
+		<item id="7589" chance="10210"/>				<!-- strong mana potion -->
+		<item id="10602" chance="10000"/>				<!-- vampire teeth -->
+		<item id="2152" chance="9910"/>					<!-- platinum coin -->
+		<item id="2186" chance="5500"/>					<!-- moonlight rod -->
+		<item id="7588" chance="5000"/>					<!-- strong health potion -->
+		<item id="12405" chance="4950"/>				<!-- blood preservation -->
+		<item id="2127" chance="1100"/>					<!-- emerald bangle -->
+		<item id="8873" chance="1030"/>					<!-- hibiscus dress -->
+		<item id="2145" countmax="2" chance="1020"/>	<!-- small diamond -->
+		<item id="9809" chance="1010"/>					<!-- rusty armor (semi-rare) -->
+		<item id="9837" chance="970"/>					<!-- velvet tapestry -->
+		<item id="2195" chance="220"/>					<!-- boots of haste -->
+		<item id="7733" chance="200"/>					<!-- flower bouquet -->
+		<item id="5670" chance="170"/>					<!-- mysterious voodo skull -->
+		<item id="9447" chance="60"/>					<!-- blood goblet -->
+		<item id="13293" chance="20"/>					<!-- leather whip -->
 	</loot>
 </monster>

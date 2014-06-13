@@ -18,11 +18,10 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="30" poison="50" poison="40" />
-		<attack name="lifedrain" interval="2000" chance="20" range="7" target="0" min="-70" max="-150">
+		<attack name="melee" interval="2000" min="0" max="-90" poison="2"/>
+		<attack name="lifedrain" interval="2000" chance="20" range="7" target="1" min="-70" max="-150">
 			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="poison"/>
-			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 		<attack name="drunk" interval="2000" chance="10" range="7" radius="1" target="1" duration="4000">
 			<attribute key="shootEffect" value="holy"/>
@@ -30,7 +29,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
-		<defense name="healing" interval="2000" chance="20" min="50" max="70">
+		<defense name="healing" interval="3000" chance="20" min="45" max="60">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 		<defense name="invisible" interval="2000" chance="10" duration="3000">
@@ -51,26 +50,26 @@
 		<summon name="Ghoul" interval="2000" chance="10"/>
 	</summons>
 	<voices interval="5000" chance="10">
+		<voice sentence="Feel the power of the cult!"/>
 		<voice sentence="Praise the voodoo!"/>
 		<voice sentence="Power to the cult!"/>
-		<voice sentence="Feel the power of the cult!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="60" chance="65000"/><!-- gold coin -->
-		<item id="5810" chance="1650"/><!-- pirate voodoo doll -->
-		<item id="2423" chance="1000"/><!-- clerical mace -->
-		<item id="1962" chance="980"/><!-- orange book -->
-		<item id="2169" chance="420"/><!-- time ring -->
-		<item id="2170" chance="1000"/><!-- silver amulet -->
-		<item id="2147" chance="330"/><!-- small ruby -->
-		<item id="6089" chance="700"/><!-- music sheet third verse -->
-		<item id="2183" chance="220"/><!-- hailstorm rod -->
-		<item id="7426" chance="690"/><!-- amber staff -->
-		<item id="2655" chance="80"/><!-- red robe -->
-		<item id="7424" chance="120"/><!-- lunar staff -->
-		<item id="12448" chance="9640"/><!-- rope belt -->
-		<item id="10556" chance="10000"/><!-- cultish robe -->
-		<item id="12608" chance="130"/><!-- broken key ring -->
-		<item id="12411" chance="90"/><!-- cultish symbol -->
+		<item id="2148" countmax="60" chance="65520"/>	<!-- gold coin -->
+		<item id="10556" chance="10080"/>				<!-- cultish robe -->
+		<item id="12448" chance="10000"/>				<!-- rope belt -->
+		<item id="5810" chance="1730"/>					<!-- pirate voodoo doll -->
+		<item id="2170" chance="1020"/>					<!-- silver amulet -->
+		<item id="2423" chance="1260"/>					<!-- clerical mace -->
+		<item id="1962" chance="940"/>					<!-- orange book -->
+		<item id="6089" chance="700"/>					<!-- music sheet 3rd verse -->
+		<item id="7426" chance="680"/>					<!-- amber staff -->
+		<item id="2169" chance="420"/>					<!-- time ring -->
+		<item id="2147" chance="320"/>					<!-- small ruby -->
+		<item id="2183" chance="220"/>					<!-- hailstorm rod -->
+		<item id="12608" chance="120"/>					<!-- broken key ring -->
+		<item id="7424" chance="120"/>					<!-- lunar staff -->
+		<item id="2655" chance="80"/>					<!-- red robe -->
+		<item id="12411" chance="90"/>					<!-- cultish symbol -->
 	</loot>
 </monster>

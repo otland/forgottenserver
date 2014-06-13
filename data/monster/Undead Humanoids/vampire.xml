@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vampire" nameDescription="a vampire" race="undead" experience="305" speed="220" manacost="0">
-	<health now="450" max="450"/>
+<monster name="Vampire" nameDescription="a vampire" race="blood" experience="305" speed="220" manacost="0">
+	<health now="475" max="475"/>
 	<look type="68" corpse="6006"/>
 	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
@@ -15,19 +15,19 @@
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="10"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="50"/>
-		<attack name="lifedrain" interval="2000" chance="20" radius="1" target="1" range="1" min="-50" max="-200">
+		<attack name="melee" interval="2000" min="0" max="-150"/>
+		<attack name="lifedrain" interval="2000" chance="20" target="1" range="1" min="-50" max="-200">
 			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" radius="1" target="0" speedchange="-600" duration="60000">
+		<attack name="speed" interval="2000" chance="15" range="1" target="1" speedchange="-400" duration="60000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">
-		<defense name="outfit" interval="2000" chance="10" monster="bat" duration="5000">
+		<defense name="outfit" interval="4000" chance="10" monster="bat" duration="5000">
 			<attribute key="areaEffect" value="groundshaker"/>
 		</defense>
 		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="3000">
@@ -51,24 +51,24 @@
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="BLOOD!" yell="1"/>
-		<voice sentence="Let me kiss your neck."/>
-		<voice sentence="I smell warm blood."/>
+		<voice sentence="Let me kiss your neck"/>
+		<voice sentence="I smell warm blood!"/>
 		<voice sentence="I call you, my bats! Come!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="60" chance="90230"/><!-- gold coin -->
-		<item id="2144" chance="1800"/><!-- black pearl -->
-		<item id="2172" chance="210"/><!-- bronze amulet -->
-		<item id="2127" chance="250"/><!-- emerald bangle -->
-		<item id="2747" chance="1910"/><!-- grave flower -->
-		<item id="2396" chance="420"/><!-- ice rapier -->
-		<item id="2412" chance="1400"/><!-- katana -->
-		<item id="12405" chance="5000"/><!-- blood preservation -->
-		<item id="10602" chance="7600"/><!-- vampire teeth -->
-		<item id="2229" chance="1000"/><!-- skull -->
-		<item id="2383" chance="1000"/><!-- spike sword -->
-		<item id="2479" chance="410"/><!-- strange helmet -->
-		<item id="7588" chance="1500"/><!-- strong health potion -->
-		<item id="2534" chance="250"/><!-- vampire shield -->
+		<item id="2148" countmax="60" chance="90230"/>	<!-- gold coin -->
+		<item id="10602" chance="7600"/>				<!-- vampire teeth -->
+		<item id="12405" chance="5100"/>				<!-- blood preservation -->
+		<item id="2747" chance="1910"/>					<!-- grave flower -->
+		<item id="2144" chance="1800"/>					<!-- black pearl -->
+		<item id="2412" chance="1560"/>					<!-- katana -->
+		<item id="7588" chance="1500"/>					<!-- strong health potion -->
+		<item id="2383" chance="1000"/>					<!-- spike sword -->
+		<item id="2229" chance="1000"/>					<!-- skull -->
+		<item id="2396" chance="420"/>					<!-- ice rapier -->
+		<item id="2479" chance="420"/>					<!-- strange helmet -->
+		<item id="2127" chance="230"/>					<!-- emerald bangle -->
+		<item id="2534" chance="230"/>					<!-- vampire shield -->
+		<item id="2172" chance="220"/>					<!-- bronze amulet -->
 	</loot>
 </monster>

@@ -15,10 +15,10 @@
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="30"/>
+		<attack name="melee" interval="2000" min="0" max="-50"/>
 	</attacks>
 	<defenses armor="35" defense="35"/>
 	<voices interval="5000" chance="10">
@@ -26,7 +26,7 @@
 		<voice sentence="Grunt"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="20" chance="25000"/><!-- gold -->
-		<item id="13297" countmax="2" chance="20000"/><!-- Haunch of Boar -->
+		<item id="2148" countmax="20" chance="25000"/>	<!-- gold -->
+		<item id="13297" countmax="2" chance="20000"/>	<!-- Haunch of Boar -->
 	</loot>
 </monster>

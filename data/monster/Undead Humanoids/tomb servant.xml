@@ -8,8 +8,8 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
@@ -18,8 +18,10 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="50"/>
-		<attack name="lifedrain" interval="2000" chance="20" range="7" min="-40" max="-55"/>
+		<attack name="melee" interval="2000" min="0" max="-130"/>
+		<attack name="lifedrain" interval="2000" chance="20" target="1" range="7" min="-40" max="-55">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
 	</attacks>
 	<defenses armor="30" defense="30"/>
 	<immunities>
@@ -32,15 +34,14 @@
 		<voice sentence="Ngl..Nglll...Gll"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="40000" /><!-- gold coin -->
-		<item id="2148" countmax="58" chance="40000" /><!-- gold coin -->
-		<item id="2230" chance="49000" /><!-- bone -->
-		<item id="11200" chance="1000" /><!-- half-digested piece of meat -->
-		<item id="3976" countmax="12" chance="25325" /><!-- worm -->
-		<item id="2541" chance="5300" /><!-- bone shield -->
-		<item id="2227" chance="2000" /><!-- rotten meat -->
-		<item id="13535" chance="220"/><!-- fist on a stick -->
-		<item id="2159" chance="8210" /><!-- scarab coin -->
-		<item id="2397" chance="6530" /><!-- longsword -->
+		<item id="2148" countmax="108" chance="82350"/>	<!-- gold coin -->
+		<item id="2230" chance="49000"/>				<!-- bone -->
+		<item id="3976" countmax="12" chance="25325"/>	<!-- worm -->
+		<item id="2159" chance="8210"/>					<!-- scarab coin -->
+		<item id="2397" chance="6560"/>					<!-- longsword -->
+		<item id="2541" chance="5300"/>					<!-- bone shield -->
+		<item id="2227" chance="2000"/>					<!-- rotten meat -->
+		<item id="11200" chance="1000"/>				<!-- half-digested piece of meat -->
+		<item id="13535" chance="230"/>					<!-- fist on a stick -->
 	</loot>
 </monster>

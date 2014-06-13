@@ -5,10 +5,10 @@
 	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1"/>
+		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
+		<flag illusionable="0"/>
 		<flag convinceable="1"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
@@ -18,10 +18,10 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50"/>
+		<attack name="melee" interval="2000" min="0" max="-100"/>
 	</attacks>
 	<defenses>
-		<defense name="speed" interval="2000" chance="15" speedchange="1000" duration="5000"/>
+		<defense name="speed" interval="2000" chance="15" speedchange="800" duration="5000"/>
 	</defenses>
 	<elements>
 		<element physicalPercent="25"/>
@@ -30,13 +30,13 @@
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Hooooot-Toooooot!"/>
-		<voice sentence="Tooooot."/>
-		<voice sentence="Troooooot!"/>
+		<voice sentence="Tooooot!"/>
+		<voice sentence="Trooooot!"/>
 	</voices>
 	<loot>
-		<item id="2671" countmax="9" chance="27000"/><!-- ham -->
-		<item id="2666" countmax="4" chance="40000"/><!-- meat -->
-		<item id="3956" countmax="2" chance="8400"/><!-- elephant tusk -->
-		<item id="3973" chance="80"/><!-- tusk shield -->
+		<item id="2666" countmax="4" chance="40000"/>	<!-- meat -->
+		<item id="2671" countmax="9" chance="27000"/>	<!-- ham -->
+		<item id="3956" countmax="2" chance="8510"/>	<!-- tusk -->
+		<item id="3973" chance="80"/>					<!-- tusk shield -->
 	</loot>
 </monster>

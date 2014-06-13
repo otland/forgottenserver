@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vampire Pig" nameDescription="a vampire pig" race="blood" experience="165" speed="300" manacost="255">
+<monster name="Vampire Pig" nameDescription="a vampire pig" race="blood" experience="165" speed="300" manacost="0">
 	<health now="305" max="305"/>
 	<look type="60" corpse="6000"/>
 	<targetchange interval="2000" chance="0"/>
@@ -10,22 +10,22 @@
 		<flag hostile="1"/>
 		<flag illusionable="0"/>
 		<flag convinceable="0"/>
-		<flag pushable="0"/>
+		<flag pushable="1"/>
 		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
+		<flag canpushcreatures="0"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="0" max="-100"/>
-		<attack name="lifedrain" interval="2000" chance="30" radius="4" min="-15" max="-25">
+		<attack name="melee" interval="2000" min="0" max="-100"/>
+		<attack name="lifedrain" interval="2000" chance="30" target="1" radius="4" min="-15" max="-25">
 			<attribute key="areaEffect" value="bats"/>
 		</attack>
-		<attack name="lifedrain" interval="1500" chance="30" range="3" min="-35" max="-55"/>
+		<attack name="lifedrain" interval="2000" chance="10" target ="1" range="3" min="-35" max="-55"/>
 	</attacks>
 	<defenses armor="30" defense="35">
-		<defense name="outfit" interval="1500" chance="50" monster="mutated bat" duration="1500">
+		<defense name="outfit" interval="2000" chance="20" monster="mutated bat" duration="1500">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
@@ -42,6 +42,6 @@
 		<voice sentence="Oink oink"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="50000"/><!-- gold coins -->
+		<item id="2148" countmax="40" chance="90000"/>	<!-- gold coins -->
 	</loot>
 </monster>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Pale Count" nameDescription="a The Pale Count" race="blood" experience="950" speed="570" manacost="0">
-	<health now="1500" max="1500"/>
+<monster name="The Pale Count" nameDescription="The Pale Count" race="blood" experience="18000" speed="300" manacost="0">
+	<health now="20000" max="20000"/>
 	<look type="558" corpse="21279"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="90" defense="10"/>
@@ -38,13 +38,20 @@
 		<element deathPercent="-40"/>
 	</elements>
 	<immunities>
-		<immunity holy="1"/>
-		<immunity lifedrain="0"/>
+		<immunity death="1"/>
+		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
+	<summons maxSummons="4">
+		<summon name="Nightfiend" interval="2000" chance="10"/>
+	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Mmmmmoooaaaaaahaaa!!"/>
-		<voice sentence="Jey obu giotja!!"/>
+		<voice sentence="Feel the hungry kiss of death!"/>
+		<voice sentence="The monsters in the mirror will come eat your dreams."/>
+		<voice sentence="Your pitiful life has come to an end!"/>
+		<voice sentence="I will squish you like a maggot and suck you dry!"/>
+		<voice sentence="Yield to the inevitable!"/>
+		<voice sentence="Some day I shall see my beautiful face in a mirror again."/>
 	</voices>
 </monster>

@@ -8,7 +8,7 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
+		<flag illusionable="0"/>
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
@@ -18,20 +18,19 @@
 		<flag runonhealth="800"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="88" attack="100"/>
-		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="1" min="-225" max="-405">
+		<attack name="melee" interval="2000" min="0" max="-490"/>
+		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="1" min="-220" max="-405">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="greenbubble"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-800" duration="30000">
-			<attribute key="shootEffect" value="poison"/>
+		<attack name="lifedrain" interval="2000" chance="15" target="0" radius="4" min="-65" max="-135">
+			<attribute key="areaEffect" value="greenshimmer"/>
 		</attack>
 		<attack name="drunk" interval="2000" chance="10" target="0" radius="3" duration="5000">
 			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
 		<attack name="blightwalker curse" interval="2000" chance="15"/>
-		<attack name="lifedrain" interval="2000" chance="15" target="0" radius="4" min="-125" max="-185">
-			<attribute key="areaEffect" value="greenshimmer"/>
+		<attack name="speed" interval="2000" chance="15" target="1" range="7" speedchange="-300" duration="30000">
+			<attribute key="shootEffect" value="poison"/>
 		</attack>
 	</attacks>
 	<defenses armor="50" defense="50"/>
@@ -54,29 +53,29 @@
 		<voice sentence="Your lifeforce is waning!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
-		<item id="2148" countmax="99" chance="50000"/><!-- gold coin -->
-		<item id="2152" countmax="5" chance="100000"/><!-- platinum coin -->
-		<item id="7590" countmax="3" chance="31360"/><!-- great mana potions -->
-		<item id="8473" countmax="2" chance="14720"/><!-- ultimate health potions -->
-		<item id="2260" countmax="2" chance="25250"/><!-- blank rune -->
-		<item id="2694" chance="50000"/><!-- bunch of wheat -->
-		<item id="10605" chance="15000"/><!-- bundle of cursed straw -->
-		<item id="6500" chance="28000"/><!-- demonic essence -->
-		<item id="2179" chance="1810"/><!-- gold ring -->
-		<item id="7732" chance="4300"/><!-- seeds -->
-		<item id="5944" chance="23720"/><!-- soul orb -->
-		<item id="2550" chance="3000"/><!-- scythe -->
-		<item id="2183" chance="10000"/><!-- hailstorm rod -->
-		<item id="7885" chance="2800"/><!-- terra legs -->
-		<item id="7884" chance="1000"/><!-- terra mantle -->
-		<item id="2199" chance="2110"/><!-- garlic necklace -->
-		<item id="6300" chance="1360"/><!-- death ring -->
-		<item id="9971" chance="5000"/><!-- gold ingot -->
-		<item id="2418" chance="270"/><!-- golden sickle -->
-		<item id="2436" chance="1500"/><!-- skull staff -->
-		<item id="7632" chance="4700"/><!-- Giant Shimmering Pearl -->
-		<item id="2173" chance="130"/><!-- amulet of loss -->
-		<item id="7368" countmax="10" chance="5900"/><!-- assassin star -->
+		<item id="2148" countmax="197" chance="100000"/>	<!-- gold coin -->
+		<item id="2152" countmax="5" chance="100000"/>		<!-- platinum coin -->
+		<item id="2694" chance="50000"/>					<!-- bunch of wheat -->
+		<item id="7590" countmax="3" chance="31360"/>		<!-- great mana potion -->
+		<item id="6500" chance="28000"/>					<!-- demonic essence -->
+		<item id="2260" countmax="2" chance="26250"/>		<!-- blank rune -->
+		<item id="5944" chance="23720"/>					<!-- soul orb -->
+		<item id="10605" chance="15000"/>					<!-- bundle of cursed straw -->
+		<item id="8473" countmax="2" chance="14720"/>		<!-- ultimate health potion -->
+		<item id="2183" chance="10000"/>					<!-- hailstorm rod -->
+		<item id="7368" countmax="10" chance="5900"/>		<!-- assassin star -->
+		<item id="9971" chance="5270"/>						<!-- gold ingot -->
+		<item id="7632" chance="4450"/>						<!-- giant shimmering pearl -->
+		<item id="7633" chance="4450"/>						<!-- giant shimmering pearl -->
+		<item id="7732" chance="4300"/>						<!-- seeds -->
+		<item id="2550" chance="3000"/>						<!-- scythe -->
+		<item id="7885" chance="2500"/>						<!-- terra legs -->
+		<item id="2199" chance="2050"/>						<!-- garlic necklace -->
+		<item id="2179" chance="1870"/>						<!-- gold ring -->
+		<item id="2436" chance="1520"/>						<!-- skull staff -->
+		<item id="6300" chance="1410"/>						<!-- death ring -->
+		<item id="7884" chance="1050"/>						<!-- terra mantle -->
+		<item id="2418" chance="350"/>						<!-- golden sickle -->
+		<item id="2173" chance="120"/>						<!-- amulet of loss -->
 	</loot>
 </monster>

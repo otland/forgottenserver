@@ -17,6 +17,9 @@
 		<flag staticattack="90"/>
 		<flag runonhealth="20"/>
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1"/>
+	</attacks>
 	<elements>
 		<element firePercent="-5"/>
 	</elements>
@@ -24,7 +27,7 @@
 		<voice sentence="Maeh"/>
 	</voices>
 	<loot>
-		<item id="2666" countmax="4" chance="70000"/><!-- meat -->
-		<item id="11236" chance="1000"/><!-- wool -->
+		<item id="2666" countmax="4" chance="70000"/>	<!-- meat -->
+		<item id="11236" chance="1000"/>				<!-- wool -->
 	</loot>
 </monster>

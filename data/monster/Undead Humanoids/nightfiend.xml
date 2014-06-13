@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Nightfiend" nameDescription="a nightfiend" race="blood" experience="0" speed="210" manacost="390">
-	<health now="95" max="95"/>
+<monster name="Nightfiend" nameDescription="a nightfiend" race="blood" experience="2100" speed="210" manacost="0">
+	<health now="2700" max="2700"/>
 	<look type="568" corpse="2669"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1"/>
+		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
+		<flag canpushcreatures="1"/>
 		<flag targetdistance="4"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="10"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="20" attack="30"/>
@@ -25,7 +25,16 @@
 	</attacks>
 	<defenses armor="11" defense="11"/>
 	<elements>
-		<element physicalPercent="-8"/>
-		<element deathPercent="-7"/>
+		<element physicalPercent="5"/>
+		<element energyPercent="5"/>
+		<element icePercent="5"/>
+		<element firePercent="-5"/>
+		<element holyPercent="-5"/>
 	</elements>
+	<immunities>
+		<immunity death="1"/>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
 </monster>
