@@ -33,7 +33,4 @@
 		<item id="13533" chance="20000"/>				<!-- white deer antlers -->
 		<item id="13534" chance="20000"/>				<!-- white deer skin -->
 	</loot>
-	<script>
-		<event name="whiteDeerScouts"/>
-	</script>
 </monster>
