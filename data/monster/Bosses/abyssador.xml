@@ -8,7 +8,7 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
+		<flag illusionable="0"/>
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
@@ -35,8 +35,14 @@
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="35">
-		<defense name="healing" interval="2500" chance="25" min="8000" max="35000">
+	<defenses armor="15" defense="20">
+		<defense name="healing" interval="1000" chance="1" min="0" max="300000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="healing" interval="5000" chance="30" min="1000" max="1000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="invisible" interval="2000" chance="25" duration="3000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
