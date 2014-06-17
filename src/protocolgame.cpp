@@ -1339,6 +1339,7 @@ void ProtocolGame::sendBasicData()
 {
 	NetworkMessage msg;
 	msg.AddByte(0x9F);
+	msg.AddByte(0x9F);
 	msg.AddByte(player->isPremium() ? 0x01 : 0x00);
 	msg.AddByte(player->getVocation()->getClientId());
 	msg.add<uint16_t>(0x00);
