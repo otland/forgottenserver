@@ -1340,6 +1340,7 @@ void ProtocolGame::sendBasicData()
 	NetworkMessage msg;
 	msg.AddByte(0x9F);
 	msg.AddByte(player->isPremium() ? 0x01 : 0x00);
+	msg.add<uint32_t>(std::numeric_limits<uint32_t>::max());
 	msg.AddByte(player->getVocation()->getClientId());
 	msg.add<uint16_t>(0x00);
 	writeToOutputBuffer(msg);
