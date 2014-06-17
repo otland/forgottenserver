@@ -18,11 +18,11 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="28" poison="80"/>
-		<attack name="death" interval="2000" chance="20" range="1" min="-30" max="-40">
+		<attack name="melee" interval="2000" min="0" max="-85" poison="4"/>
+		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-30" max="-40">
 			<attribute key="areaEffect" value="smallclouds"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="10000">
+		<attack name="speed" interval="2000" chance="15" range="7" target="1" speedchange="-226" duration="10000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
@@ -48,20 +48,19 @@
 		<voice sentence="Yohag Sssetham!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="18000"/><!-- gold coin -->
-		<item id="2148" countmax="40" chance="20000"/><!-- gold coin -->
-		<item id="3976" countmax="3" chance="19000"/><!-- worm -->
-		<item id="2162" chance="5760"/><!-- magic lightwand -->
-		<item id="2134" chance="4000"/><!-- silver brooch -->
-		<item id="2161" chance="5000"/><!-- strange talisman -->
-		<item id="2124" chance="1500"/><!-- crystal ring -->
-		<item id="2411" chance="450"/><!-- poison dagger -->
-		<item id="2144" chance="1000"/><!-- black pearl -->
-		<item id="2170" chance="100"/><!-- silver amulet -->
-		<item id="5914" chance="900"/><!-- yellow piece of cloth -->
-		<item id="2529" chance="170"/><!-- black shield -->
-		<item id="12422" chance="11690"/><!-- flask of embalming fluid -->
-		<item id="10566" chance="9880"/><!-- gauze bandage -->
-		<item id="11207" chance="10"/><!-- mini mummy -->
+		<item id="2148" countmax="80" chance="38000"/>	<!-- gold coin -->
+		<item id="3976" countmax="3" chance="19000"/>	<!-- worm -->
+		<item id="12422" chance="11690"/>				<!-- flask of embalming fluid -->
+		<item id="10566" chance="10000"/>				<!-- gauze bandage -->
+		<item id="2162" chance="5800"/>					<!-- magic lightwand -->
+		<item id="2161" chance="5000"/>					<!-- strange talisman -->
+		<item id="2134" chance="4000"/>					<!-- silver brooch -->
+		<item id="2124" chance="1500"/>					<!-- crystal ring -->
+		<item id="2144" chance="1000"/>					<!-- black pearl -->
+		<item id="5914" chance="900"/>					<!-- yellow piece of cloth -->
+		<item id="2411" chance="450"/>					<!-- poison dagger -->
+		<item id="2529" chance="170"/>					<!-- black shield -->
+		<item id="2170" chance="100"/>					<!-- silver amulet -->
+		<item id="11207" chance="10"/>					<!-- mini mummy -->
 	</loot>
 </monster>

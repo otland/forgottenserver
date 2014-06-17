@@ -18,21 +18,21 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="30"/>
-		<attack name="lifedrain" interval="2000" chance="10" range="1" min="-200" max="-245">
+		<attack name="melee" interval="2000" min="0" max="-75"/>
+		<attack name="lifedrain" interval="2000" chance="10" length="7" spread="0" min="-140" max="-190">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="30000">
+		<attack name="poisoncondition" interval="2000" chance="10" length="7" spread="0" min="-300" max="-400">
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="1" min="-200" max="-245">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-300" duration="30000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-130" max="-195">
 			<attribute key="areaEffect" value="redshimmer"/>
-		</attack>
-		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-130" max="-195">
-			<attribute key="areaEffect" value="redshimmer"/>
-		</attack>
-		<attack name="poisoncondition" interval="2000" chance="10" length="8" spread="0" min="-300" max="-400">
-			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="25">
@@ -56,32 +56,32 @@
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Doomed be the living!"/>
-		<voice sentence="You will endure agony beyond thy death!"/>
 		<voice sentence="Death awaits all!"/>
 		<voice sentence="Thy living flesh offends me!"/>
 		<voice sentence="Death and Decay!"/>
+		<voice sentence="You will endure agony beyond thy death!"/>
+		<voice sentence="Pain sweet pain!"/>
+		<voice sentence="Come to me my children!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="57" chance="50000"/><!-- gold coin -->
-		<item id="2148" countmax="80" chance="50000"/><!-- gold coin -->
-		<item id="2152" chance="19720"/><!-- platinum coin -->
-		<item id="2401" chance="60"/><!-- staff -->
-		<item id="2175" chance="10000"/><!-- spell book -->
-		<item id="2144" countmax="3" chance="6500"/><!-- black pearl -->
-		<item id="2149" countmax="3" chance="2500"/><!-- small emeralds -->
-		<item id="9970" countmax="3" chance="2700"/><!-- small topazes -->
-		<item id="2143" chance="5000"/><!-- white pearl -->
-		<item id="2479" chance="810"/><!-- strange helmet -->
-		<item id="2178" chance="440"/><!-- mind stone -->
-		<item id="7589" chance="7500"/><!-- strong mana potion -->
-		<item id="2171" chance="250"/><!-- platinium amulet -->
-		<item id="2214" chance="1440"/><!-- ring of healing -->
-		<item id="7893" chance="180"/><!-- lightning boots -->
-		<item id="2656" chance="120"/><!-- blue robe -->
-		<item id="2535" chance="370"/><!-- castle shield -->
-		<item id="13291" chance="120"/><!-- maximila maximus -->
-		<item id="2532" chance="2422"/><!-- ancient shield -->
-		<item id="2436" chance="690"/><!-- skull staff -->
-		<item id="2154" chance="630"/><!--yellow gem-->
+		<item id="2148" countmax="139" chance="100000"/>	<!-- gold coin -->
+		<item id="2152" chance="19720"/>					<!-- platinum coin -->
+		<item id="2175" chance="10000"/>					<!-- spellbook -->
+		<item id="7589" chance="7500"/>						<!-- strong mana potion -->
+		<item id="2144" countmax="3" chance="5960"/>		<!-- black pearl -->
+		<item id="2143" chance="5000"/>						<!-- white pearl -->
+		<item id="2532" chance="2422"/>						<!-- ancient shield -->
+		<item id="9970" countmax="3" chance="2430"/>		<!-- small topaz -->
+		<item id="2149" countmax="3" chance="2230"/>		<!-- small emerald -->
+		<item id="2214" chance="1540"/>						<!-- ring of healing -->
+		<item id="2479" chance="740"/>						<!-- strange helmet -->
+		<item id="2154" chance="690"/>						<!-- yellow gem -->
+		<item id="2436" chance="550"/>						<!-- skull staff -->
+		<item id="2171" chance="450"/>						<!-- platinum amulet -->
+		<item id="2535" chance="350"/>						<!-- castle shield -->
+		<item id="2178" chance="350"/>						<!-- mind stone -->
+		<item id="7893" chance="200"/>						<!-- lightning boots -->
+		<item id="2656" chance="150"/>						<!-- blue robe -->
+		<item id="13291" chance="100"/>						<!-- maximila maximus -->
 	</loot>
 </monster>

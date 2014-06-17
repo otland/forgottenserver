@@ -18,12 +18,12 @@
 		<flag runonhealth="25"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="2"/>
+		<attack name="melee" interval="2000" min="0" max="-1"/>
 	</attacks>
 	<defenses armor="5" defense="5"/>
 	<loot>
-		<item id="2666" countmax="4" chance="80000"/><!-- meat -->
-		<item id="2671" countmax="2" chance="50000"/><!-- ham -->
-		<item id="11214" chance="850"/><!-- antlers -->
+		<item id="2666" countmax="4" chance="80000"/>	<!-- meat -->
+		<item id="2671" countmax="2" chance="50000"/>	<!-- ham -->
+		<item id="11214" chance="870"/>					<!-- antlers -->
 	</loot>
 </monster>

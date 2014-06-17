@@ -17,7 +17,7 @@
 		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="25" attack="20"/>
+		<attack name="melee" interval="2000" min="0" max="-35"/>
 	</attacks>
 	<defenses armor="20" defense="20"/>
 	<elements>
@@ -31,17 +31,18 @@
 		<voice sentence="Grrrr"/>
 		<voice sentence="Whaaaz up!?"/>
 		<voice sentence="Gruntz!"/>
+		<voice sentence="Groar"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="64000"/><!-- gold coin -->
-		<item id="2544" countmax="5" chance="5440"/><!-- arrow -->
-		<item id="2643" chance="8620"/><!-- leather boots -->
-		<item id="2666" chance="10000"/><!-- meat -->
-		<item id="2389" chance="26000"/><!-- spear -->
-		<item id="2448" chance="5500"/><!-- studded club -->
-		<item id="2512" chance="6000"/><!-- wooden shield -->
-		<item id="2170" chance="230"/><!-- silver amulet -->
-		<item id="12471" chance="750"/><!-- Trollroot -->
-		<item id="10606" chance="3280"/><!-- Bunch of Troll Hair -->
+		<item id="2148" countmax="12" chance="64000"/>	<!-- gold coin -->
+		<item id="2389" chance="25000"/>				<!-- spear -->
+		<item id="2666" chance="9650"/>					<!-- meat -->
+		<item id="2643" chance="9000"/>					<!-- leather boots -->
+		<item id="2512" chance="6000"/>					<!-- wooden shield -->
+		<item id="2544" countmax="5" chance="5450"/>	<!-- arrow -->
+		<item id="2448" chance="5450"/>					<!-- studded club -->
+		<item id="10606" chance="3000"/>				<!-- bunch of troll hair -->
+		<item id="12471" chance="750"/>					<!-- trollroot -->
+		<item id="2170" chance="230"/>					<!-- silver amulet -->
 	</loot>
 </monster>

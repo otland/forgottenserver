@@ -8,21 +8,21 @@
 		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
+		<flag illusionable="0"/>
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="300"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="40"/>
-		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="0" max="-300">
+		<attack name="melee" interval="2000" min="0" max="-130"/>
+		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-150" max="-280">
 			<attribute key="areaEffect" value="groundshaker"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="15" target="1" min="0" max="-100">
+		<attack name="lifedrain" interval="2000" chance="15" target="1" min="-75" max="-100">
 			<attribute key="shootEffect" value="smallstone"/>
 		</attack>
 		<attack name="stampor skill reducer" range="5" interval="2000" chance="10"/>
@@ -30,9 +30,6 @@
 	<defenses>
 		<defense name="healing" interval="2000" chance="15" min="90" max="120">
 			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-		<defense name="physical" interval="2000" chance="10">
-			<attribute key="areaEffect" value="groundshaker"/>
 		</defense>
 	</defenses>
 	<elements>
@@ -50,18 +47,16 @@
 		<voice sentence="KRRRRRNG" yell="1"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-		<item id="2148" countmax="42" chance="35000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="10000" /><!-- platinum coin -->
-		<item id="9970" countmax="2" chance="7930" /><!-- small topaz -->
-		<item id="13299" chance="4910" /><!-- stampor horn -->
-		<item id="13300" countmax="2" chance="4940" /><!-- stampor talon -->
-		<item id="7589" countmax="2" chance="5000" /><!-- smp -->
-		<item id="7588" countmax="2" chance="5000" /><!-- strong health potion -->
-		<item id="2391" chance="1000" /><!-- war hammer -->
-		<item id="13301" chance="3000" /><!-- hollow stampor hoof -->
-		<item id="2476" chance="850" /><!-- knight armor -->
-		<item id="7452" chance="160" /><!-- spiked squelcher -->
+		<item id="2148" countmax="242" chance="30000"/>		<!-- gold coin -->
+		<item id="13300" countmax="2" chance="9950"/>		<!-- stampor talon -->
+		<item id="2152" countmax="2" chance="9920"/>		<!-- platinum coin -->
+		<item id="9970" countmax="2" chance="7940"/>		<!-- small topaz -->
+		<item id="7589" countmax="2" chance="5000"/>		<!-- strong mana potion -->
+		<item id="7588" countmax="2" chance="5000"/>		<!-- strong health potion -->
+		<item id="13299" chance="4920"/>					<!-- stampor horn -->
+		<item id="13301" chance="3020"/>					<!-- hollow stampor hoof -->
+		<item id="2391" chance="1010"/>						<!-- war hammer -->
+		<item id="2476" chance="870"/>						<!-- knight armor -->
+		<item id="7452" chance="160"/>						<!-- spiked squelcher -->
 	</loot>
 </monster>

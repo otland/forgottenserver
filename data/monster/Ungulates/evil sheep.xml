@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Evil Sheep" nameDescription="an evil sheep" race="blood" experience="240" speed="300" manacost="250">
+<monster name="Evil Sheep" nameDescription="an evil sheep" race="blood" experience="240" speed="250" manacost="0">
 	<health now="350" max="350"/>
 	<look type="14" corpse="5991"/>
 	<targetchange interval="2000" chance="20"/>
@@ -18,8 +18,8 @@
 		<flag runonhealth="20"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="0" max="-90"/>
-		<attack name="physical" interval="1200" chance="30" range="7" min="0" max="-50">
+		<attack name="melee" interval="2000" min="0" max="-90"/>
+		<attack name="physical" interval="4000" chance="30" target="1" range="7" min="0" max="-50">
 			<attribute key="shootEffect" value="snowball"/>
 		</attack>
 	</attacks>
@@ -37,6 +37,6 @@
 		<voice sentence="Grrrr"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="50000"/><!-- gold coins -->
+		<item id="2148" countmax="50" chance="50000"/>	<!-- gold coins -->
 	</loot>
 </monster>

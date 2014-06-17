@@ -9,7 +9,7 @@
 		<flag attackable="1"/>
 		<flag hostile="1"/>
 		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag convinceable="0"/>
 		<flag pushable="1"/>
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
@@ -18,7 +18,7 @@
 		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="13" poison="20"/>
+		<attack name="melee" interval="2000" min="0" max="-13" poison="1"/>
 	</attacks>
 	<defenses armor="15" defense="15"/>
 	<elements>
@@ -31,17 +31,16 @@
 		<voice sentence="Me strong! Me ate spinach!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="5" chance="50300"/><!-- gold coin -->
-		<item id="2667" chance="60000"/><!-- fish -->
-		<item id="2379" chance="27500"/><!-- dagger -->
-		<item id="2050" chance="15000"/><!-- torch -->
-		<item id="2389" chance="13000"/><!-- spear -->
-		<item id="2643" chance="9500"/><!-- leather boots -->
-		<item id="2580" chance="60"/><!-- fishing rod -->
-		<item id="2805" chance="1200"/><!-- Troll Green -->
-		<item id="5901" chance="2160"/><!-- wood -->
-		<item id="13506" chance="2120"/><!-- Medicine Pouch -->
-		<item id="10603" chance="3120"/><!-- Swamp Grass -->
-		<item id="2235" chance="10000"/><!-- Mouldy Cheese -->
+		<item id="2667" chance="60000"/>				<!-- fish -->
+		<item id="2148" countmax="5" chance="50300"/>	<!-- gold coin -->
+		<item id="2050" chance="15000"/>				<!-- torch -->
+		<item id="2389" chance="13000"/>				<!-- spear -->
+		<item id="2235" chance="10000"/>				<!-- mouldy cheese -->
+		<item id="2643" chance="9500"/>					<!-- leather boots -->
+		<item id="10603" chance="3100"/>				<!-- swamp grass -->
+		<item id="13506" chance="2160"/>				<!-- medicine pouch -->
+		<item id="5901" chance="2140"/>					<!-- wood -->
+		<item id="2805" chance="1200"/>					<!-- troll green -->
+		<item id="2580" chance="60"/>					<!-- fishing rod -->
 	</loot>
 </monster>

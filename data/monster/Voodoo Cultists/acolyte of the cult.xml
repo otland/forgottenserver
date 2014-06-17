@@ -18,10 +18,9 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="40"/>
+		<attack name="melee" interval="2000" min="0" max="-100" poison="2"/>
 		<attack name="lifedrain" interval="2000" chance="20" range="7" radius="1" target="1" min="-60" max="-120">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poison"/>
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 		<attack name="drunk" interval="2000" chance="5" range="7" radius="1" target="1" duration="3000">
@@ -45,7 +44,7 @@
 	<immunities>
 		<immunity invisible="1"/>
 	</immunities>
-	<summons maxSummons="2">
+	<summons maxSummons="1">
 		<summon name="Skeleton" interval="2000" chance="10"/>
 	</summons>
 	<voices interval="5000" chance="10">
@@ -54,18 +53,18 @@
 		<voice sentence="Feel the power of the cult!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="67000"/><!-- gold coin -->
-		<item id="2394" chance="5000"/><!-- morning star -->
-		<item id="5810" chance="1000"/><!-- pirate voodoo doll -->
-		<item id="2201" chance="1000"/><!-- dragon necklace -->
-		<item id="1962" chance="720"/><!-- orange book -->
-		<item id="6087" chance="600"/><!-- music sheet 2nd verse -->
-		<item id="2168" chance="560"/><!-- life ring -->
-		<item id="2149" chance="550"/><!-- small emerald -->
-		<item id="2181" chance="230"/><!-- terra rod -->
-		<item id="12448" chance="10450"/><!-- rope belt -->
-		<item id="10556" chance="8000"/><!-- cultish robe -->
-		<item id="12608" chance="60"/><!-- broken key ring -->
-		<item id="12411" chance="50"/><!-- cultish symbol -->
+		<item id="2148" countmax="40" chance="66940"/>	<!-- gold coin -->
+		<item id="12448" chance="10420"/>				<!-- rope belt -->
+		<item id="10556" chance="8070"/>				<!-- cultish robe -->
+		<item id="2394" chance="4990"/>					<!-- morning star -->
+		<item id="5810" chance="1060"/>					<!-- pirate voodoo doll -->
+		<item id="2201" chance="1050"/>					<!-- dragon necklace -->
+		<item id="1962" chance="730"/>					<!-- orange book -->
+		<item id="2168" chance="560"/>					<!-- life ring -->
+		<item id="2149" chance="550"/>					<!-- small emerald -->
+		<item id="6088" chance="480"/>					<!-- music sheet 2nd verse -->
+		<item id="2181" chance="250"/>					<!-- terra rod -->
+		<item id="12608" chance="60"/>					<!-- broken key ring -->
+		<item id="12411" chance="40"/>					<!-- cultish symbol -->
 	</loot>
 </monster>

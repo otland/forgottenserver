@@ -2,7 +2,7 @@
 <monster name="Troll Legionnaire" nameDescription="a troll legionnaire" race="blood" experience="140" speed="190" manacost="0">
 	<health now="210" max="210"/>
 	<look type="53" corpse="5998"/>
-	<targetchange interval="2000" chance="0"/>
+	<targetchange interval="2000" chance="5"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
@@ -10,16 +10,16 @@
 		<flag hostile="1"/>
 		<flag illusionable="1"/>
 		<flag convinceable="0"/>
-		<flag pushable="1"/>
-		<flag canpushitems="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag targetdistance="4"/>
 		<flag staticattack="90"/>
-		<flag runonhealth="10"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="20"/>
-		<attack name="physical" interval="2000" chance="18" range="7" max="-130">
+		<attack name="melee" interval="2000" min="0" max="-35"/>
+		<attack name="physical" interval="2000" chance="18" target="1" range="6" min="0" max="-130">
 			<attribute key="shootEffect" value="throwingstar"/>
 		</attack>
 	</attacks>
@@ -27,7 +27,7 @@
 		<defense name="invisible" interval="2000" chance="18" duration="20000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="healing" interval="2000" chance="18" min="17" max="25">
+		<defense name="healing" interval="2000" chance="28" min="17" max="25">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
@@ -35,14 +35,13 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="9">
-		<voice sentence="Attack"/>
+		<voice sentence="Attack!"/>
 		<voice sentence="Graaaaar!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="36250" /><!-- gold coin -->
-		<item id="2148" countmax="56" chance="36250" /><!-- gold coin -->
-		<item id="2399" countmax="10" chance="15750" /><!-- throwing star -->
-		<item id="10565" chance="3400" /><!-- frosty ear of a troll -->
-		<item id="2165" chance="320" /><!-- Stealth Ring -->
+		<item id="2148" countmax="155" chance="92000"/>	<!-- gold coin -->
+		<item id="2399" countmax="10" chance="28000"/>	<!-- throwing star -->
+		<item id="10565" chance="5120"/>				<!-- frosty ear of a troll -->
+		<item id="2165" chance="560"/>					<!-- stealth ring -->
 	</loot>
 </monster>

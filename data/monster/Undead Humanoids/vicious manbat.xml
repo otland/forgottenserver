@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vicious Manbat" nameDescription="a vicious manbat" race="blood" experience="1200" speed="220" manacost="390">
+<monster name="Vicious Manbat" nameDescription="a vicious manbat" race="blood" experience="1200" speed="220" manacost="0">
 	<health now="1700" max="1700"/>
 	<look type="554" corpse="21266"/>
 	<targetchange interval="4000" chance="10"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1"/>
+		<flag summonable="0"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="0"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
 		<flag staticattack="70"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="65" attack="70"/>
+		<attack name="melee" interval="2000" min="0" max="-215"/>
 		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-100" max="-250">
 			<attribute key="areaEffect" value="redspark"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-600">
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-400">
 			<attribute key="areaEffect" value="bats"/>
 		</attack>
 		<attack name="bleedcondition" interval="2000" chance="20" radius="2" target="0" min="-400" max="-600">
@@ -34,8 +34,8 @@
 		<element physicalPercent="5"/>
 		<element energyPercent="5"/>
 		<element icePercent="5"/>
-		<element firePercent="5"/>
-		<element holyPercent="10"/>
+		<element firePercent="-5"/>
+		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -44,16 +44,6 @@
 		<immunity earth="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
-		<item id="2148" countmax="52" chance="50000"/><!-- gold coin -->
-		<item id="10602" chance="9260" /><!-- vampire teeth -->
-		<item id="21241" chance="3700" /><!-- tooth file -->
-		<item id="7588" chance="9260"/><!-- strong health potion -->
-		<item id="7589" chance="11110"/><!-- strong mana potion -->
-		<item id="2147" countmax="2" chance="5560" /><!-- small rubies -->
-		<item id="15565" chance="1850" /><!-- red gem -->
-		<item id="2127" chance="3700" /><!--emerald bangle-->
-		<item id="2147" countmax="2" chance="6060" /><!--small rubies-->
-		<item id="5894" chance="5560" /><!--bat wing-->
+		<item id="2148" countmax="100" chance="50000"/>	<!-- gold coin -->
 	</loot>
 </monster>

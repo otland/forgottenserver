@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mammoth" nameDescription="a mammoth" race="blood" experience="160" speed="210" manacost="0">
+<monster name="Mammoth" nameDescription="a mammoth" race="blood" experience="160" speed="210" manacost="500">
 	<health now="320" max="320"/>
 	<look type="199" corpse="6074"/>
 	<targetchange interval="4000" chance="10"/>
@@ -9,8 +9,8 @@
 		<flag attackable="1"/>
 		<flag hostile="1"/>
 		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag staticattack="90"/>
@@ -18,7 +18,7 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40"/>
+		<attack name="melee" interval="2000" min="0" max="-110"/>
 	</attacks>
 	<defenses armor="25" defense="25"/>
 	<elements>
@@ -33,13 +33,13 @@
 		<voice sentence="Tooooot."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="90000"/><!-- gold -->
-		<item id="2671" countmax="3" chance="30000"/><!-- ham -->
-		<item id="2666" chance="39000"/><!-- meat -->
-		<item id="11238" countmax="2" chance="7500"/><!-- mammoth tusks -->
-		<item id="7432" chance="450"/><!-- furry club -->
-		<item id="3973" chance="410"/><!-- tusk shield -->
-		<item id="7381" chance="2800"/><!-- Mammoth Whopper -->
-		<item id="11224" chance="7280"/><!-- thick fur -->
+		<item id="2148" countmax="40" chance="90000"/>	<!-- gold -->
+		<item id="2666" chance="39000"/>				<!-- meat -->
+		<item id="2671" countmax="3" chance="30000"/>	<!-- ham -->
+		<item id="11238" countmax="2" chance="7500"/>	<!-- mammoth tusk -->
+		<item id="11224" chance="7280"/>				<!-- thick fur -->
+		<item id="7381" chance="2800"/>					<!-- mammoth whopper -->
+		<item id="7432" chance="500"/>					<!-- furry club -->
+		<item id="3973" chance="500"/>					<!-- tusk shield -->
 	</loot>
 </monster>

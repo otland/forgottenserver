@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="White Deer" nameDescription="a white deer" race="blood" experience="0" speed="190" manacost="260">
+<monster name="White Deer" nameDescription="a white deer" race="blood" experience="0" speed="190" manacost="0">
 	<health now="195" max="195"/>
 	<look type="400" corpse="13513"/>
 	<targetchange interval="4000" chance="0"/>
@@ -9,7 +9,7 @@
 		<flag attackable="1"/>
 		<flag hostile="0"/>
 		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag convinceable="0"/>
 		<flag pushable="1"/>
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>

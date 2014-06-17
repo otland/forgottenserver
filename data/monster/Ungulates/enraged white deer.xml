@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="White Deer" nameDescription="a white deer" race="blood" experience="165" speed="210" manacost="260">
+<monster name="Enraged White Deer" nameDescription="an enraged white deer" race="blood" experience="165" speed="210" manacost="0">
 	<health now="255" max="255"/>
 	<look type="400" corpse="13513"/>
 	<targetchange interval="5000" chance="0"/>
@@ -7,9 +7,9 @@
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
-		<flag hostile="0"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
 		<flag pushable="1"/>
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
@@ -18,9 +18,13 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="26" attack="25"/>
+		<attack name="melee" interval="2000" min="0" max="-45"/>
 	</attacks>
-	<defenses armor="25" defense="25"/>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="4000" chance="15" min="10" max="40">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<voices interval="5000" chance="10">
 		<voice sentence="*wheeze*"/>
 		<voice sentence="ROOOAAARR!!"/>
@@ -28,8 +32,8 @@
 		<voice sentence="*bell*"/>
 	</voices>
 	<loot>
-		<item id="2671" countmax="3" chance="19850"/><!-- ham -->
-		<item id="13534" chance="20280"/><!-- white deer skin -->
-		<item id="13533" chance="19520"/><!-- white deer antlers -->
+		<item id="2671" countmax="3" chance="19850"/>	<!-- ham -->
+		<item id="13534" chance="20280"/>				<!-- white deer skin -->
+		<item id="13533" chance="19520"/>				<!-- white deer antlers -->
 	</loot>
 </monster>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Young Troll" nameDescription="a young troll" race="blood" experience="0" speed="380" manacost="220">
-	<health now="15" max="15"/>
-	<look type="74" corpse="6017"/>
+<monster name="Young Troll" nameDescription="a young troll" race="blood" experience="12" speed="380" manacost="0">
+	<health now="30" max="30"/>
+	<look type="15" corpse="5960"/>
 	<targetchange interval="5000" chance="20"/>
 	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1"/>
+		<flag summonable="0"/>
 		<flag attackable="1"/>
-		<flag hostile="0"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
 		<flag pushable="1"/>
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
@@ -18,11 +18,13 @@
 		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0"/>
+		<attack name="melee" interval="2000" min="0" max="-10"/>
 	</attacks>
 	<defenses armor="1" defense="2"/>
 	<loot>
-		<item id="2684" countmax="2" chance="9000"/><!-- carrot -->
-		<item id="2666" countmax="2" chance="20000"/><!-- meat -->
+		<item id="2148" countmax="12" chance="58000"/>	<!-- gold coin -->
+		<item id="2666" chance="14000"/>				<!-- meat -->
+		<item id="2120" chance="10000"/>				<!-- rope -->
+		<item id="2448" chance="3000"/>					<!-- studded club -->
 	</loot>
 </monster>
