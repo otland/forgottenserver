@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Abyssador" nameDescription="an abyssador" race="blood" experience="35000" speed="500" manacost="0">
-	<health now="350000" max="350000"/>
-	<look type="495" corpse="17412"/>
+<monster name="Abyssador" nameDescription="Abyssador" race="blood" experience="50000" speed="470" manacost="0">
+	<health now="300000" max="300000"/>
+	<look type="495" corpse="17413"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
+	<strategy attack="90" defense="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -12,23 +12,27 @@
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag staticattack="50"/>
+		<flag runonhealth="100"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="3000" skill="300" attack="150"/>
-		<attack name="energycondition" interval="1000" chance="10" radius="4" target="0" min="-800" max="-800">
-			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="smallplants"/>
+		<attack name="melee" interval="2500" skill="110" attack="160"/>
+		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-400" duration="2500">
+			<attribute key="shootEffect" value="earth"/>
 		</attack>
-		<attack name="energy" interval="2000" chance="20" radius="4" target="0" min="-500" max="-1600">
-			<attribute key="shootEffect" value="energy"/>
-			<attribute key="areaEffect" value="energy"/>
+		<attack name="fire" interval="800" chance="10" radius="10" range="7" min="-820" max="-1250">
+			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
-		<attack name="poison" interval="1000" chance="20" length="5" spread="2" min="-1000" max="-1800">
-			<attribute key="areaEffect" value="plantattack"/>
+		<attack name="energy" interval="750" chance="10" radius="12" range="3" target="1" min="-650" max="-1300">
+			<attribute key="areaEffect" value="greenspark"/>			
+		</attack>
+      		<attack name="lifedrain" interval="700" chance="10" range="3" radius="4" target="1" min="-600" max="-1230">
+      		<attribute key="shootEffect" value="poison"/>
+      		</attack>
+		<attack name="poison" interval="700" chance="12" radius="3" target="0" min="-40" max="-130">
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="20">
@@ -43,33 +47,36 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="15"/>
-		<element firePercent="15"/>
-		<element energyPercent="15"/>
-		<element icePercent="15"/>
 		<element physicalPercent="10"/>
+		<element deathPercent="-20"/>
+		<element energyPercent="-20"/>
 	</elements>
 	<immunities>
+		<immunity drown="1"/>
 		<immunity paralyze="1"/>
-		<immunity earth="1"/>
 		<immunity invisible="1"/>
+		<immunity earth="1"/>
+		<immunity drunk="1"/>
+		<immunity outfit="1"/>
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="3000" chance="10">
 		<voice sentence="*** BRAINS *** SMALL ***"/>
 		<voice sentence="*** LIVE *** DRY ***"/>
 		<voice sentence="*** IMPORTANT ***"/>
 		<voice sentence="*** FIRE *** HOME *** VICTORY ***"/>
 		<voice sentence="*** EXISTENCE *** FUTILE ***"/>
 		<voice sentence="*** TIME ***"/>
+		<voice sentence="*** STEALTH ***"/>
+		<voice sentence="*** DEATH ***"/>
 	</voices>
 	<loot>
-		<item id="18496" chance="100000"/><!-- abyssador's lash -->
-		<item id="18453" chance="8333"/><!-- crystal crossbow -->
-		<item id="18451" chance="8333"/><!-- crystalline axe -->
-		<item id="18465" chance="8333"/><!-- shiny blade -->
-		<item id="18450" chance="6666"/><!-- crystalline sword -->
-		<item id="18454" chance="5263"/><!-- mycological bow -->
-		<item id="18449" chance="1754"/><!-- decorative ribbon -->
-		<item id="18452" chance="1754"/><!-- mycological mace -->
+		<item id="18496" chance="100000"/> <!-- Abyssador's Lash -->
+		<item id="18454" chance="10000"/> <!-- Mycological Bow -->
+		<item id="18465" chance="8000"/> <!-- Shiny Sword -->
+		<item id="18449" chance="10000"/> <!-- Decorative Ribbon -->
+		<item id="18453" chance="4500"/> <!-- Crystal Crossbow -->
+		<item id="18451" chance="5500"/> <!-- Crystalline Axe -->
+		<item id="18450" chance="5500"/> <!-- Crystalline Sword -->
+		<item id="18452" chance="4500"/> <!-- Mace -->
 	</loot>
 </monster>
