@@ -35,6 +35,7 @@
 #include "scheduler.h"
 #include "town.h"
 #include "weapons.h"
+#include "events.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -43,6 +44,7 @@ extern Vocations g_vocations;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 MuteCountMap Player::muteCountMap;
 
@@ -3402,6 +3404,15 @@ void Player::doAttacking(uint32_t)
 			lastAttack = OTSYS_TIME();
 		}
 	}
+}
+
+void Player::startAutoWalk(const std::list<Direction>& listDir)
+{
+	if (!g_events->eventPlayerOnMove(this, direction)){
+		sendCancelWalk();
+		return;
+	}
+	Creature::startAutoWalk(listDir);
 }
 
 uint64_t Player::getGainedExperience(Creature* attacker) const

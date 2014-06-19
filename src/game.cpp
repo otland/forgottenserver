@@ -959,6 +959,11 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		}
 	}
 
+	Direction dir = getDirectionTo(movingCreatureOrigPos, toPos);
+	if (!g_events->eventPlayerOnMove(player, dir)) {
+		return;
+	}
+
 	if (!g_events->eventPlayerOnMoveCreature(player, movingCreature, movingCreaturePos, toPos)) {
 		return;
 	}
@@ -1897,6 +1902,10 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 	}
 
 	player->resetIdleTime();
+	if (!g_events->eventPlayerOnMove(player, direction)) {
+		player->sendCancelWalk();
+		return;
+	}
 	player->setNextWalkActionTask(nullptr);
 
 	player->startAutoWalk(std::list<Direction> { direction });
