@@ -1,15 +1,18 @@
 function onStepIn(cid, item, position, fromPosition)
-	if item.itemid == 2579 then -- trap item
-		doTargetCombatHealth(0, cid, COMBAT_PHYSICALDAMAGE, -15, -30, CONST_ME_NONE)
-		Item(item.uid):transform(item.itemid - 1)
-	elseif item.itemid == 1510 then -- blades from slit
-		doTargetCombatHealth(0, cid, COMBAT_PHYSICALDAMAGE, -50, -100, CONST_ME_NONE)
-		Item(item.uid):transform(item.itemid + 1)
-	elseif item.itemid == 1513 then -- spikes from strange holes
-		doTargetCombatHealth(0, cid, COMBAT_PHYSICALDAMAGE, -50, -100, CONST_ME_NONE)
-	elseif item.itemid == 4208 then -- jungle maw
-		doTargetCombatHealth(0, cid, COMBAT_EARTHDAMAGE, -15, -30, CONST_ME_NONE)
-		Item(item.uid):transform(item.itemid + 1)
+	local traps = {
+		[1510] = {toItem = 1511, combat = {-50, -100}},
+		[1513] = {combat = {-50, -100}},
+		[2579] = {toItem = 2578, combat = {-15, -30}},
+		[4208] = {toItem = 4209, combat = {-15, -30}, type = COMBAT_EARTHDAMAGE}
+	}
+	
+	local trap = traps[item.itemid]
+	if(trap and Player(cid) ~= nil) then
+		doTargetCombatHealth(0, cid, trap.type == nil and COMBAT_PHYSICALDAMAGE or trap.type, trap.combat[1], trap.combat[2], CONST_ME_NONE)
+		
+		if(trap.toItem ~= nil) then
+			Item(item.uid):transform(trap.toItem)
+		end
 	end
 	return true
 end
