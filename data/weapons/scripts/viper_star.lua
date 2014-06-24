@@ -19,7 +19,7 @@ function onUseWeapon(cid, var)
 		return LUA_ERROR
 	end
 
-	local target = variantToNumber(var)
+	local target = var.getNumber()
 	if(target ~= 0) then
 		if(math.random(0, 100) > 90) then
 			ret = xCombat:execute(cid, var)
