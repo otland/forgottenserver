@@ -15,13 +15,13 @@ xCombat:setCondition(condition)
 
 function onUseWeapon(cid, var)
 	local ret = combat:execute(cid, var)
-	if(ret == LUA_ERROR) then
+	if ret == LUA_ERROR then
 		return LUA_ERROR
 	end
 
 	local target = var.getNumber()
-	if(target ~= 0) then
-		if(math.random(0, 100) > 90) then
+	if target ~= 0 then
+		if math.random(0, 100) > 90 then
 			ret = xCombat:execute(cid, var)
 		end
 	end
