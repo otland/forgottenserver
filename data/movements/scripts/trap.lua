@@ -1,17 +1,17 @@
 local traps = {
-	[1510] = {toItem = 1511, combat = {-50, -100}},
-	[1513] = {combat = {-50, -100}},
-	[2579] = {toItem = 2578, combat = {-15, -30}},
-	[4208] = {toItem = 4209, combat = {-15, -30}, type = COMBAT_EARTHDAMAGE}
+	[1510] = {transformTo = 1511, damage = {-50, -100}},
+	[1513] = {damage = {-50, -100}},
+	[2579] = {transformTo = 2578, damage = {-15, -30}},
+	[4208] = {transformTo = 4209, damage = {-15, -30}, type = COMBAT_EARTHDAMAGE}
 }
 	
 function onStepIn(cid, item, position, fromPosition)
 	local trap = traps[item.itemid]
-	if(trap and Player(cid) ~= nil) then
-		doTargetCombatHealth(0, cid, trap.type == nil and COMBAT_PHYSICALDAMAGE or trap.type, trap.combat[1], trap.combat[2], CONST_ME_NONE)
+	if trap and Player(cid) ~= nil then
+		doTargetCombatHealth(0, cid, trap.type == nil and COMBAT_PHYSICALDAMAGE or trap.type, trap.damage[1], trap.damage[2], CONST_ME_NONE)
 		
-		if(trap.toItem ~= nil) then
-			Item(item.uid):transform(trap.toItem)
+		if trap.transformTo ~= nil then
+			Item(item.uid):transform(trap.transformTo)
 		end
 	end
 	return true
