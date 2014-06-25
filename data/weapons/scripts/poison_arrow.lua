@@ -10,10 +10,5 @@ condition:addDamage(10, 2000, -1)
 combat:setCondition(condition)
 
 function onUseWeapon(cid, var)
-	local ret = combat:execute(cid, var)
-	if(ret == LUA_ERROR) then
-		return LUA_ERROR
-	end
-	
-	return ret
+	return combat:execute(cid, var)
 end
