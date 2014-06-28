@@ -22492,6 +22492,7 @@
 		<attribute key="duration" value="600" />
 		<attribute key="corpseType" value="blood" />
 	</item>
+	<item id="13863" name="bog water" />
 	<item id="13864" name="bucket of bog water">
 		<attribute key="description" value="It seems the water wants back to the bog it came from. Soon it will all be trickled away." />
 		<attribute key="weight" value="3000" />
@@ -29889,7 +29890,7 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="22587" article="a" name="stair">
-		<attribute key="floorchange" value="west" />
+		<attribute key="floorchange" value="north" />
 	</item>
 	<item id="22588" article="a" name="stair">
 		<attribute key="floorchange" value="west" />

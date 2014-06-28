@@ -7,7 +7,7 @@ local traps = {
 	
 function onStepIn(cid, item, position, fromPosition)
 	local trap = traps[item.itemid]
-	if trap and Player(cid) ~= nil then
+	if trap ~= nil then
 		doTargetCombatHealth(0, cid, trap.type == nil and COMBAT_PHYSICALDAMAGE or trap.type, trap.damage[1], trap.damage[2], CONST_ME_NONE)
 		
 		if trap.transformTo ~= nil then
