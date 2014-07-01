@@ -241,8 +241,6 @@ function doForceSummonCreature(name, pos)
 	return creature
 end
 
---
-
 if not globalStorageTable then
 	globalStorageTable = {}
 end
