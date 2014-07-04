@@ -444,7 +444,7 @@ bool Events::eventPlayerOnTurn(Player* player, Direction direction)
 
 bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* item)
 {
-	// Player:onTradeRequest(target,item)
+	// Player:onTradeRequest(target, item)
 	if (playerOnTradeRequest == -1) {
 		return true;
 	}
@@ -474,7 +474,7 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 
 bool Events::eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem)
 {
-	// Player:onTradeAccept(target,item, targetItem)
+	// Player:onTradeAccept(target, item, targetItem)
 	if (playerOnTradeAccept == -1) {
 		return true;
 	}
