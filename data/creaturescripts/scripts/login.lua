@@ -14,7 +14,7 @@ function onLogin(cid)
 		player:addItem(player:getSex() == 0 and 2651 or 2650, 1)
 		
 		local bag = player:addItem(1987, 1)
-		Container(bag:getUniqueId()):addItem(2674, 1)
+		bag:addItem(2674, 1)
 	else
 		if loginStr ~= "" then
 			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
