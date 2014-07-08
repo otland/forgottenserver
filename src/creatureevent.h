@@ -98,11 +98,11 @@ class CreatureEvent : public Event
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
 		bool executeOnKill(Creature* creature, Creature* target);
 		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
-		bool executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
+		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
-		bool executeChangeHealth(Creature* creature, Creature* attacker, const CombatDamage& damage);
-		bool executeChangeMana(Creature* creature, Creature* attacker, int32_t manaChange);
-		bool executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
+		void executeChangeHealth(Creature* creature, Creature* attacker, CombatDamage& damage);
+		void executeChangeMana(Creature* creature, Creature* attacker, int32_t& manaChange);
+		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 		//
 
 	protected:

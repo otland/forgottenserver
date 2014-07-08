@@ -81,6 +81,8 @@ struct CombatParams {
 		valueCallback = nullptr;
 		tileCallback = nullptr;
 		targetCallback = nullptr;
+
+		origin = ORIGIN_SPELL;
 	}
 
 	std::forward_list<const Condition*> conditionList;
@@ -93,6 +95,7 @@ struct CombatParams {
 
 	ConditionType_t dispelType;
 	CombatType_t combatType;
+	CombatOrigin origin;
 
 	uint8_t impactEffect;
 	uint8_t distanceEffect;
@@ -315,6 +318,10 @@ class Combat
 		void setPlayerCombatValues(formulaType_t _type, double _mina, double _minb, double _maxa, double _maxb);
 		void postCombatEffects(Creature* caster, const Position& pos) const {
 			postCombatEffects(caster, pos, params);
+		}
+
+		void setOrigin(CombatOrigin origin) {
+			params.origin = origin;
 		}
 
 	protected:
