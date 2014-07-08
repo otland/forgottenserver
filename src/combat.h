@@ -82,7 +82,7 @@ struct CombatParams {
 		tileCallback = nullptr;
 		targetCallback = nullptr;
 
-		origin = ORIGIN_NONE;
+		origin = ORIGIN_SPELL;
 	}
 
 	std::forward_list<const Condition*> conditionList;

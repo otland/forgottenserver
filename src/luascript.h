@@ -1158,6 +1158,7 @@ class LuaScriptInterface
 		static int32_t luaCombatSetArea(lua_State* L);
 		static int32_t luaCombatSetCondition(lua_State* L);
 		static int32_t luaCombatSetCallback(lua_State* L);
+		static int32_t luaCombatSetOrigin(lua_State* L);
 
 		static int32_t luaCombatExecute(lua_State* L);
 

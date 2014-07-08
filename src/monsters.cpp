@@ -412,12 +412,10 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		
 		Combat* combat = combatSpell->getCombat();
 		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
-		combat->setOrigin(ORIGIN_SPELL);
 	} else {
 		Combat* combat = new Combat;
-		combat->setOrigin(ORIGIN_SPELL);
-
 		sb.combatSpell = true;
+
 		if ((attr = node.attribute("length"))) {
 			int32_t length = pugi::cast<int32_t>(attr.value());
 			if (length > 0) {

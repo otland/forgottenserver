@@ -2396,6 +2396,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Combat", "setArea", LuaScriptInterface::luaCombatSetArea);
 	registerMethod("Combat", "setCondition", LuaScriptInterface::luaCombatSetCondition);
 	registerMethod("Combat", "setCallback", LuaScriptInterface::luaCombatSetCallback);
+	registerMethod("Combat", "setOrigin", LuaScriptInterface::luaCombatSetOrigin);
 
 	registerMethod("Combat", "execute", LuaScriptInterface::luaCombatExecute);
 
@@ -11279,6 +11280,19 @@ int32_t LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 
 	const std::string& function = getString(L, 3);
 	pushBoolean(L, callback->loadCallBack(getScriptEnv()->getScriptInterface(), function));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCombatSetOrigin(lua_State* L)
+{
+	// combat:setOrigin(origin)
+	Combat* combat = getUserdata<Combat>(L, 1);
+	if (combat) {
+		combat->setOrigin(getNumber<CombatOrigin>(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
