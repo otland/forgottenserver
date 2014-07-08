@@ -56,6 +56,7 @@ Combat::~Combat()
 CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 {
 	CombatDamage damage;
+	damage.origin = params.origin;
 	if (!creature) {
 		return damage;
 	}

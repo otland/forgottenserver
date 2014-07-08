@@ -560,6 +560,9 @@ class LuaScriptInterface
 		// _G
 		static int32_t luaIsType(lua_State* L);
 
+		// table
+		static int32_t luaTableCreate(lua_State* L);
+
 		// Game
 		static int32_t luaGameGetSpectators(lua_State* L);
 		static int32_t luaGameGetPlayers(lua_State* L);
@@ -740,6 +743,8 @@ class LuaScriptInterface
 		static int32_t luaItemDecay(lua_State* L);
 
 		static int32_t luaItemGetDescription(lua_State* L);
+
+		static int32_t luaItemHasProperty(lua_State* L);
 
 		// Container
 		static int32_t luaContainerCreate(lua_State* L);

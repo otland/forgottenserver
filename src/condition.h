@@ -299,7 +299,7 @@ class ConditionDamage: public Condition
 		std::list<IntervalInfo> damageList;
 
 		bool getNextDamage(int32_t& damage);
-		bool doDamage(Creature* creature, int32_t damage);
+		bool doDamage(Creature* creature, int32_t healthChange);
 		bool updateCondition(const Condition* addCondition);
 };
 

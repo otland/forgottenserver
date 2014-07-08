@@ -409,12 +409,15 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			delete combatSpell;
 			return false;
 		}
-
-		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		
+		Combat* combat = combatSpell->getCombat();
+		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		combat->setOrigin(ORIGIN_SPELL);
 	} else {
 		Combat* combat = new Combat;
-		sb.combatSpell = true;
+		combat->setOrigin(ORIGIN_SPELL);
 
+		sb.combatSpell = true;
 		if ((attr = node.attribute("length"))) {
 			int32_t length = pugi::cast<int32_t>(attr.value());
 			if (length > 0) {
@@ -525,9 +528,11 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
 			combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
 			combat->setParam(COMBAT_PARAM_BLOCKSHIELD, 1);
+			combat->setOrigin(ORIGIN_MELEE);
 		} else if (tmpName == "physical") {
 			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
 			combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
+			combat->setOrigin(ORIGIN_RANGED);
 		} else if (tmpName == "bleed") {
 			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
 		} else if (tmpName == "poison" || tmpName == "earth") {
