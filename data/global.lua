@@ -1,3 +1,4 @@
+--test
 dofile('data/compat.lua')
 
 TRUE = true
