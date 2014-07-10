@@ -510,14 +510,26 @@ struct ModalWindow
 		: title(title), message(message), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
 };
 
-struct CombatDamage {
+enum CombatOrigin
+{
+	ORIGIN_NONE = 0,
+	ORIGIN_CONDITION = 1,
+	ORIGIN_SPELL = 2,
+	ORIGIN_MELEE = 3,
+	ORIGIN_RANGED = 4
+};
+
+struct CombatDamage
+{
 	struct {
 		CombatType_t type;
 		int32_t value;
 	} primary, secondary;
 
+	CombatOrigin origin;
 	CombatDamage()
 	{
+		origin = ORIGIN_NONE;
 		primary.type = secondary.type = COMBAT_NONE;
 		primary.value = secondary.value = 0;
 	}

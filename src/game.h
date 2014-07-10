@@ -474,7 +474,6 @@ class Game
 
 		void combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColor_t& color, uint8_t& effect);
 
-		bool combatChangeHealth(CombatType_t combatType, Creature* attacker, Creature* target, int32_t healthChange);
 		bool combatChangeHealth(Creature* attacker, Creature* target, CombatDamage& damage);
 		bool combatChangeMana(Creature* attacker, Creature* target, int32_t manaChange);
 

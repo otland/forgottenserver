@@ -388,6 +388,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 	params.blockedByShield = true;
 
 	CombatDamage damage;
+	damage.origin = ORIGIN_MELEE;
 	damage.primary.type = params.combatType;
 	damage.primary.value = -normal_random(0, maxDamage);
 
@@ -408,6 +409,7 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		executeUseWeapon(player, var);
 	} else {
 		CombatDamage damage;
+		damage.origin = range != 1 ? ORIGIN_RANGED : ORIGIN_MELEE;
 		damage.primary.type = params.combatType;
 		damage.primary.value = (getWeaponDamage(player, target, item) * damageModifier) / 100;
 		damage.secondary.type = getElementType();

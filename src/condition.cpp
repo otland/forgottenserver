@@ -1236,7 +1236,7 @@ bool ConditionDamage::getNextDamage(int32_t& damage)
 	return false;
 }
 
-bool ConditionDamage::doDamage(Creature* creature, int32_t damage)
+bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 {
 	if (creature->isSuppress(getType())) {
 		return true;
@@ -1244,11 +1244,15 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t damage)
 
 	CombatType_t combatType = Combat::ConditionToDamageType(conditionType);
 	Creature* attacker = g_game.getCreatureByID(owner);
-	if (g_game.combatBlockHit(combatType, attacker, creature, damage, false, false, field)) {
+	if (g_game.combatBlockHit(combatType, attacker, creature, healthChange, false, false, field)) {
 		return false;
 	}
 
-	return g_game.combatChangeHealth(combatType, attacker, creature, damage);
+	CombatDamage damage;
+	damage.origin = ORIGIN_CONDITION;
+	damage.primary.value = healthChange;
+	damage.primary.type = combatType;
+	return g_game.combatChangeHealth(attacker, creature, damage);
 }
 
 void ConditionDamage::endCondition(Creature*)
