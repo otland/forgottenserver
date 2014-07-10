@@ -50,6 +50,7 @@ void Events::clear()
 	playerOnMoveCreature = -1;
 	playerOnTurn = -1;
 	playerOnTradeRequest = -1;
+	playerOnTradeAccept = -1;
 }
 
 bool Events::load()
@@ -101,6 +102,8 @@ bool Events::load()
 					playerOnLookInShop = event;
 				} else if (methodName == "onTradeRequest") {
 					playerOnTradeRequest = event;
+				} else if (methodName == "onTradeAccept") {
+					playerOnTradeAccept = event;
 				} else if (methodName == "onMoveItem") {
 					playerOnMoveItem = event;
 				} else if (methodName == "onMoveCreature") {
@@ -441,7 +444,7 @@ bool Events::eventPlayerOnTurn(Player* player, Direction direction)
 
 bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* item)
 {
-	// Player:onTradeRequest(target,item)
+	// Player:onTradeRequest(target, item)
 	if (playerOnTradeRequest == -1) {
 		return true;
 	}
@@ -467,4 +470,37 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 	LuaScriptInterface::setItemMetatable(L, -1, item);
 
 	return scriptInterface.callFunction(3);
+}
+
+bool Events::eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem)
+{
+	// Player:onTradeAccept(target, item, targetItem)
+	if (playerOnTradeAccept == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnTradeRequest] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(playerOnTradeAccept, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(playerOnTradeAccept);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Player>(L, target);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+	
+	LuaScriptInterface::pushUserdata<Item>(L, targetItem);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	return scriptInterface.callFunction(4);
 }
