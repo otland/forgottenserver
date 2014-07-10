@@ -2751,6 +2751,10 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		Item* tradeItem1 = player->tradeItem;
 		Item* tradeItem2 = tradePartner->tradeItem;
 
+		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, tradeItem1, tradeItem2)) {
+			return;
+		}
+
 		player->setTradeState(TRADE_TRANSFER);
 		tradePartner->setTradeState(TRADE_TRANSFER);
 
