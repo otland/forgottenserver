@@ -1809,6 +1809,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createItem", LuaScriptInterface::luaGameCreateItem);
 	registerMethod("Game", "createMonster", LuaScriptInterface::luaGameCreateMonster);
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
+	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
 
@@ -4853,6 +4854,37 @@ int32_t LuaScriptInterface::luaGameCreateNpc(lua_State* L)
 		delete npc;
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameCreateTile(lua_State* L)
+{
+	// Game.createTile(x, y, z[, isDynamic = false])
+	// Game.createTile(position[, isDynamic = false])
+	Position position;
+	bool isDynamic;
+	if (isTable(L, 1)) {
+		position = getPosition(L, 1);
+		isDynamic = getBoolean(L, 2, false);
+	} else {
+		position.x = getNumber<uint16_t>(L, 1);
+		position.y = getNumber<uint16_t>(L, 2);
+		position.z = getNumber<uint16_t>(L, 3);
+		isDynamic = getBoolean(L, 4, false);
+	}
+
+	Tile* tile = g_game.getTile(position);
+	if (!tile) {
+		if (isDynamic) {
+			tile = new DynamicTile(position.x, position.y, position.z);
+		} else {
+			tile = new StaticTile(position.x, position.y, position.z);
+		}
+		g_game.setTile(tile);
+	}
+
+	pushUserdata(L, tile);
+	setMetatable(L, -1, "Tile");
 	return 1;
 }
 
