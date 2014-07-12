@@ -587,6 +587,7 @@ class LuaScriptInterface
 		static int32_t luaGameCreateItem(lua_State* L);
 		static int32_t luaGameCreateMonster(lua_State* L);
 		static int32_t luaGameCreateNpc(lua_State* L);
+		static int32_t luaGameCreateTile(lua_State* L);
 
 		static int32_t luaGameStartRaid(lua_State* L);
 
