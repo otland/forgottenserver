@@ -25,7 +25,7 @@
 #include "itemloader.h"
 #include "position.h"
 
-enum SlotPositionBits {
+enum SlotPositionBits : uint32_t {
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
 	SLOTP_HEAD = 1,
 	SLOTP_NECKLACE = 2,
