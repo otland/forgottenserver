@@ -62,13 +62,13 @@ local function greetCallback(cid)
 		npcHandler:say("CHILD! COME BACK WHEN YOU HAVE GROWN UP!", cid)
 		return false
 	elseif level > 9 then
-		npcHandler:say(player:getName() ..", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
+		npcHandler:say(string.upper(player:getName()) ..", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
 		return false
 	elseif player:getVocation():getId() > 0 then
 		npcHandler:say("YOU ALREADY HAVE A VOCATION!", cid)
 		return false
 	else
-		npcHandler:setMessage(MESSAGE_GREET, player:getName() ..", ARE YOU PREPARED TO FACE YOUR DESTINY?")
+		npcHandler:setMessage(MESSAGE_GREET, string.upper(player:getName()) ..", ARE YOU PREPARED TO FACE YOUR DESTINY?")
 	end
 	return true
 end
