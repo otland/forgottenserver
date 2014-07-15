@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Werewolf" nameDescription="a werewolf" experience="1900" speed="200" race="blood" manacost="0">
 	<health now="1955" max="1955"/>
-	<strategy attack="100" defense="0"/>
 	<targetchange interval="4000" chance="10"/>
 	<look type="308" corpse="20380"/>
 	<flags>

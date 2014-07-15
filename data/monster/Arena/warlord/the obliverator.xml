@@ -2,7 +2,6 @@
 <monster name="The Obliverator" nameDescription="the obliverator" race="fire" experience="6000" speed="280" manacost="0">
 	<health now="9500" max="9500"/>
 	<look type="35" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

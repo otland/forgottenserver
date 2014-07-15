@@ -2,7 +2,6 @@
 <monster name="The Hag" nameDescription="the hag" race="blood" experience="510" speed="205" manacost="0">
 	<health now="935" max="935"/>
 	<look type="264" head="78" body="97" legs="95" feet="95" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

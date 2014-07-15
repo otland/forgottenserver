@@ -3,7 +3,6 @@
 	<health now="60" max="60"/>
 	<look type="94" corpse="6026"/>
 	<targetchange interval="5000" chance="0"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>

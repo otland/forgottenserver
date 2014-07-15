@@ -2,7 +2,6 @@
 <monster name="Dwarf Miner" nameDescription="a dwarf miner" race="blood" experience="60" speed="210" manacost="420">
 	<health now="120" max="120"/>
 	<look type="160" head="77" body="101" legs="97" feet="115" corpse="6007"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>

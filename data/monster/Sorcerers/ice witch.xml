@@ -3,7 +3,6 @@
 	<health now="650" max="650"/>
 	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20423"/>
 	<targetchange interval="4000" chance="10"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

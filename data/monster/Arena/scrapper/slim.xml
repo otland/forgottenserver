@@ -2,7 +2,6 @@
 <monster name="Slim" nameDescription="slim" race="undead" experience="580" speed="200" manacost="0">
 	<health now="1025" max="1025"/>
 	<look type="101" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

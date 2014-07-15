@@ -2,7 +2,6 @@
 <monster name="Norgle Glacierbeard" nameDescription="norgle glacierbeard" race="blood" experience="2100" speed="195" manacost="0">
 	<health now="4300" max="4300"/>
 	<look type="257" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

@@ -2,7 +2,6 @@
 <monster name="Deathbringer" nameDescription="deathbringer" race="undead" experience="5100" speed="300" manacost="0">
 	<health now="10000" max="10000"/>
 	<look type="231" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

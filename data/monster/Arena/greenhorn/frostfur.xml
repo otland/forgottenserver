@@ -2,7 +2,6 @@
 <monster name="Frostfur" nameDescription="frostfur" race="blood" experience="35" speed="170" manacost="0">
 	<health now="65" max="65"/>
 	<look type="52" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

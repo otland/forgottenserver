@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Shadow Hound" nameDescription="a shadow hound" experience="600" speed="360" race="blood" manacost="0">
 	<health now="555" max="555"/>
-	<strategy attack="100" defense="0"/>
 	<targetchange speed="0" chance="8"/>
 	<look type="322" corpse="9923"/>
 	<flags>

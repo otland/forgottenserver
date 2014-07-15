@@ -2,7 +2,6 @@
 <monster name="Spirit of Fire" nameDescription="the spirit of fire" race="blood" experience="950" speed="220" manacost="0">
 	<health now="2210" max="2210"/>
 	<look type="242" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

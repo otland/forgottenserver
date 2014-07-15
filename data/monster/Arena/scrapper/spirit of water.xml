@@ -2,7 +2,6 @@
 <monster name="Spirit of Water" nameDescription="the spirit of water" race="undead" experience="850" speed="200" manacost="0">
 	<health now="1517" max="1517"/>
 	<look type="11" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

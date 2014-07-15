@@ -2,7 +2,6 @@
 <monster name="The Pit Lord" nameDescription="the pit lord" race="blood" experience="2500" speed="270" manacost="0">
 	<health now="4500" max="4500"/>
 	<look type="55" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

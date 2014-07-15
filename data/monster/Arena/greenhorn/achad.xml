@@ -2,7 +2,6 @@
 <monster name="Achad" nameDescription="achad" race="blood" experience="70" speed="185" manacost="0">
 	<health now="185" max="185"/>
 	<look type="146" head="93" body="93" legs="57" feet="97" addons="3" corpse="7349"/>
-	<strategy attack="100" defense="1"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

@@ -2,7 +2,6 @@
 <monster name="Drasilla" nameDescription="drasilla" race="blood" experience="700" speed="170" manacost="0">
 	<health now="1320" max="1320"/>
 	<look type="34" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

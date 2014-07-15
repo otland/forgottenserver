@@ -2,7 +2,6 @@
 <monster name="Spirit of Earth" nameDescription="the spirit of earth" race="undead" experience="800" speed="180" manacost="0">
 	<health now="1294" max="1294"/>
 	<look type="67" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
