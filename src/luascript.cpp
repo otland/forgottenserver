@@ -42,7 +42,7 @@
 #include "ban.h"
 #include "mounts.h"
 #include "databasemanager.h"
-#include "beds.h"
+#include "bed.h"
 #include "monster.h"
 #include "scheduler.h"
 #include "raids.h"

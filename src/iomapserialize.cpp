@@ -22,6 +22,7 @@
 #include "iomapserialize.h"
 #include "house.h"
 #include "game.h"
+#include "bed.h"
 
 extern Game g_game;
 
@@ -199,8 +200,15 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
 				Container* container = dummy->getContainer();
-				if (container && !loadContainer(propStream, container)) {
-					return false;
+				if (container) {
+					if (!loadContainer(propStream, container)) {
+						return false;
+					}
+				} else if (BedItem* bedItem = dynamic_cast<BedItem*>(dummy.get())) {
+					uint32_t sleeperGUID = bedItem->getSleeper();
+					if (sleeperGUID != 0) {
+						g_game.removeBedSleeper(sleeperGUID);
+					}
 				}
 			}
 		}

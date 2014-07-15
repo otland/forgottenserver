@@ -20,7 +20,7 @@
 #include "otpch.h"
 
 #include "actions.h"
-#include "beds.h"
+#include "bed.h"
 #include "configmanager.h"
 #include "const.h"
 #include "container.h"

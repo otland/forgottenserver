@@ -27,7 +27,7 @@
 #include "town.h"
 #include "configmanager.h"
 #include "tools.h"
-#include "beds.h"
+#include "bed.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

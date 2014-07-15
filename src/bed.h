@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_BEDS_H_84DE19758D424C6C9789189231946BFF
-#define FS_BEDS_H_84DE19758D424C6C9789189231946BFF
+#ifndef FS_BED_H_84DE19758D424C6C9789189231946BFF
+#define FS_BED_H_84DE19758D424C6C9789189231946BFF
 
 #include "item.h"
 
@@ -83,23 +83,6 @@ class BedItem : public Item
 		House* house;
 		uint64_t sleepStart;
 		uint32_t sleeperGUID;
-};
-
-class Beds
-{
-	public:
-		static Beds& getInstance() {
-			static Beds instance;
-			return instance;
-		}
-
-		BedItem* getBedBySleeper(uint32_t guid);
-		void setBedSleeper(BedItem* bed, uint32_t guid);
-
-	protected:
-		Beds() {}
-
-		std::map<uint32_t, BedItem*> BedSleepersMap;
 };
 
 #endif

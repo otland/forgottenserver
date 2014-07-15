@@ -27,7 +27,7 @@
 #include "house.h"
 #include "game.h"
 #include "luascript.h"
-#include "beds.h"
+#include "bed.h"
 
 #include "actions.h"
 #include "combat.h"

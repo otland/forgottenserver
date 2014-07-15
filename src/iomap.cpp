@@ -29,7 +29,7 @@
 #include "fileloader.h"
 #include "town.h"
 
-#include "beds.h"
+#include "bed.h"
 
 /*
 	OTBM_ROOTV1

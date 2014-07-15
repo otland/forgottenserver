@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "beds.h"
+#include "bed.h"
 #include "game.h"
 #include "house.h"
 #include "iologindata.h"
@@ -47,7 +47,7 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 				std::string name;
 				if (IOLoginData::getNameByGuid(_guid, name)) {
 					setSpecialDescription(name + " is sleeping there.");
-					Beds::getInstance().setBedSleeper(this, _guid);
+					g_game.setBedSleeper(this, _guid);
 				}
 			}
 
@@ -88,7 +88,7 @@ bool BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 
 BedItem* BedItem::getNextBedItem()
 {
-	Direction dir = Item::items[getID()].bedPartnerDir;
+	Direction dir = Item::items[id].bedPartnerDir;
 	Position targetPos = getNextPosition(dir, getPosition());
 
 	Tile* tile = g_game.getTile(targetPos);
@@ -130,7 +130,7 @@ bool BedItem::trySleep(Player* player)
 	}
 
 	if (sleeperGUID != 0) {
-		if (Item::items[getID()].transformToFree != 0 && house->getOwner() == player->getGUID()) {
+		if (Item::items[id].transformToFree != 0 && house->getOwner() == player->getGUID()) {
 			wakeUp(nullptr);
 		}
 
@@ -158,8 +158,8 @@ bool BedItem::sleep(Player* player)
 		nextBedItem->internalSetSleeper(player);
 	}
 
-	// update the BedSleepersMap
-	Beds::getInstance().setBedSleeper(this, player->getGUID());
+	// update the bedSleepersMap
+	g_game.setBedSleeper(this, player->getGUID());
 
 	// make the player walk onto the bed
 	player->getTile()->moveCreature(player, getTile());
@@ -201,8 +201,8 @@ void BedItem::wakeUp(Player* player)
 		}
 	}
 
-	// update the BedSleepersMap
-	Beds::getInstance().setBedSleeper(nullptr, sleeperGUID);
+	// update the bedSleepersMap
+	g_game.removeBedSleeper(sleeperGUID);
 
 	BedItem* nextBedItem = getNextBedItem();
 
@@ -250,7 +250,7 @@ void BedItem::regeneratePlayer(Player* player) const
 
 void BedItem::updateAppearance(const Player* player)
 {
-	const ItemType& it = Item::items[getID()];
+	const ItemType& it = Item::items[id];
 	if (it.type == ITEM_TYPE_BED) {
 		if (player && it.transformToOnUse[player->getSex()] != 0) {
 			const ItemType& newType = Item::items[it.transformToOnUse[player->getSex()]];
@@ -280,18 +280,4 @@ void BedItem::internalRemoveSleeper()
 	setSleeper(0);
 	setSleepStart(0);
 	setSpecialDescription("Nobody is sleeping there.");
-}
-
-BedItem* Beds::getBedBySleeper(uint32_t guid)
-{
-	auto it = BedSleepersMap.find(guid);
-	if (it == BedSleepersMap.end()) {
-		return nullptr;
-	}
-	return it->second;
-}
-
-void Beds::setBedSleeper(BedItem* bed, uint32_t guid)
-{
-	BedSleepersMap[guid] = bed;
 }

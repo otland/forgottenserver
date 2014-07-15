@@ -44,7 +44,7 @@
 #include "quests.h"
 #include "globalevent.h"
 #include "mounts.h"
-#include "beds.h"
+#include "bed.h"
 #include "scheduler.h"
 #include "monster.h"
 #include "spawn.h"
@@ -5827,5 +5827,27 @@ void Game::internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, boo
 		for (Item* item : itemList) {
 			internalRemoveItem(item);
 		}
+	}
+}
+
+BedItem* Game::getBedBySleeper(uint32_t guid) const
+{
+	auto it = bedSleepersMap.find(guid);
+	if (it == bedSleepersMap.end()) {
+		return nullptr;
+	}
+	return it->second;
+}
+
+void Game::setBedSleeper(BedItem* bed, uint32_t guid)
+{
+	bedSleepersMap[guid] = bed;
+}
+
+void Game::removeBedSleeper(uint32_t guid)
+{
+	auto it = bedSleepersMap.find(guid);
+	if (it != bedSleepersMap.end()) {
+		bedSleepersMap.erase(it);
 	}
 }

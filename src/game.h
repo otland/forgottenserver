@@ -531,6 +531,10 @@ class Game
 
 		void internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, bool stackable);
 
+		BedItem* getBedBySleeper(uint32_t guid) const;
+		void setBedSleeper(BedItem* bed, uint32_t guid);
+		void removeBedSleeper(uint32_t guid);
+
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
@@ -567,6 +571,8 @@ class Game
 
 		//list of items that are in trading state, mapped to the player
 		std::map<Item*, uint32_t> tradeItems;
+
+		std::map<uint32_t, BedItem*> bedSleepersMap;
 
 		ModalWindow offlineTrainingWindow;
 		Commands commands;

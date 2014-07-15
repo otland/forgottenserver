@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "beds.h"
+#include "bed.h"
 #include "chat.h"
 #include "combat.h"
 #include "configmanager.h"
@@ -1271,7 +1271,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 		}
 		storedConditionList.clear();
 
-		BedItem* bed = Beds::getInstance().getBedBySleeper(getGUID());
+		BedItem* bed = g_game.getBedBySleeper(guid);
 		if (bed) {
 			bed->wakeUp(this);
 		}
@@ -2357,12 +2357,12 @@ void Player::notifyStatusChange(Player* loginPlayer, VipStatus_t status)
 		return;
 	}
 
-	auto it = VIPList.find(loginPlayer->getGUID());
+	auto it = VIPList.find(loginPlayer->guid);
 	if (it == VIPList.end()) {
 		return;
 	}
 
-	client->sendUpdatedVIPStatus(loginPlayer->getGUID(), status);
+	client->sendUpdatedVIPStatus(loginPlayer->guid, status);
 
 	if (status == VIPSTATUS_ONLINE) {
 		client->sendTextMessage(MESSAGE_STATUS_SMALL, (loginPlayer->getName() + " has logged in."));
@@ -3996,7 +3996,7 @@ bool Player::hasAttacked(const Player* attacked) const
 		return false;
 	}
 
-	return attackedSet.find(attacked->getGUID()) != attackedSet.end();
+	return attackedSet.find(attacked->guid) != attackedSet.end();
 }
 
 void Player::addAttacked(const Player* attacked)
@@ -4005,7 +4005,7 @@ void Player::addAttacked(const Player* attacked)
 		return;
 	}
 
-	attackedSet.insert(attacked->getGUID());
+	attackedSet.insert(attacked->guid);
 }
 
 void Player::clearAttacked()
