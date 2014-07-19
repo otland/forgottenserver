@@ -768,3 +768,13 @@ end
 variantToNumber = Variant.getNumber
 variantToString = Variant.getString
 variantToPosition = Variant.getPosition
+
+function doCreateTeleport(itemId, destination, position)
+	local item = Game.createItem(itemId, 1, position)
+	if not item:isTeleport() then
+		item:remove()
+		return false
+	end
+	item:setDestination(destination)
+	return item:getUniqueId()
+end
