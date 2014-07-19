@@ -433,7 +433,6 @@ class LuaScriptInterface
 		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
 		static int32_t luaDoCreateItemEx(lua_State* L);
-		static int32_t luaDoCreateTeleport(lua_State* L);
 		static int32_t luaDoAddCondition(lua_State* L);
 		static int32_t luaDoRemoveCondition(lua_State* L);
 		static int32_t luaDoMoveCreature(lua_State* L);
@@ -707,6 +706,7 @@ class LuaScriptInterface
 		static int32_t luaItemIsCreature(lua_State* L);
 		static int32_t luaItemIsItem(lua_State* L);
 		static int32_t luaItemIsContainer(lua_State* L);
+		static int32_t luaItemIsTeleport(lua_State* L);
 
 		static int32_t luaItemGetParent(lua_State* L);
 		static int32_t luaItemGetTopParent(lua_State* L);
@@ -763,6 +763,14 @@ class LuaScriptInterface
 		static int32_t luaContainerHasItem(lua_State* L);
 		static int32_t luaContainerAddItem(lua_State* L);
 		static int32_t luaContainerAddItemEx(lua_State* L);
+
+		// Teleport
+		static int32_t luaTeleportCreate(lua_State* L);
+
+		static int32_t luaTeleportIsTeleport(lua_State* L);
+		
+		static int32_t luaTeleportGetDestination(lua_State* L);
+		static int32_t luaTeleportSetDestination(lua_State* L);
 
 		// Creature
 		static int32_t luaCreatureCreate(lua_State* L);

@@ -735,6 +735,8 @@ void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, const Ite
 {
 	if (item->getContainer()) {
 		luaL_getmetatable(L, "Container");
+	} else if (item->getTeleport()) {
+		luaL_getmetatable(L, "Teleport");
 	} else {
 		luaL_getmetatable(L, "Item");
 	}
@@ -967,9 +969,6 @@ void LuaScriptInterface::registerFunctions()
 	//doRelocate(pos, posTo)
 	//Moves all moveable objects from pos to posTo
 	lua_register(m_luaState, "doRelocate", LuaScriptInterface::luaDoRelocate);
-
-	//doCreateTeleport(itemid, topos, createpos)
-	lua_register(m_luaState, "doCreateTeleport", LuaScriptInterface::luaDoCreateTeleport);
 
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
@@ -1934,6 +1933,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "isCreature", LuaScriptInterface::luaItemIsCreature);
 	registerMethod("Item", "isItem", LuaScriptInterface::luaItemIsItem);
 	registerMethod("Item", "isContainer", LuaScriptInterface::luaItemIsContainer);
+	registerMethod("Item", "isTeleport", LuaScriptInterface::luaItemIsTeleport);
 
 	registerMethod("Item", "getParent", LuaScriptInterface::luaItemGetParent);
 	registerMethod("Item", "getTopParent", LuaScriptInterface::luaItemGetTopParent);
@@ -1991,6 +1991,15 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Container", "hasItem", LuaScriptInterface::luaContainerHasItem);
 	registerMethod("Container", "addItem", LuaScriptInterface::luaContainerAddItem);
 	registerMethod("Container", "addItemEx", LuaScriptInterface::luaContainerAddItemEx);
+
+	// Teleport
+	registerClass("Teleport", "Item", LuaScriptInterface::luaTeleportCreate);
+	registerMetaMethod("Teleport", "__eq", LuaScriptInterface::luaUserdataCompare);
+	
+	registerMethod("Teleport", "isTeleport", LuaScriptInterface::luaTeleportIsTeleport);
+
+	registerMethod("Teleport", "getDestination", LuaScriptInterface::luaTeleportGetDestination);
+	registerMethod("Teleport", "setDestination", LuaScriptInterface::luaTeleportSetDestination);
 
 	// Creature
 	registerClass("Creature", "", LuaScriptInterface::luaCreatureCreate);
@@ -3013,55 +3022,6 @@ int32_t LuaScriptInterface::luaDoCreateItemEx(lua_State* L)
 
 	uint32_t uid = env->addThing(newItem);
 	lua_pushnumber(L, uid);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoCreateTeleport(lua_State* L)
-{
-	//doCreateTeleport(itemid, topos, createpos)
-	const Position& createPos = getPosition(L, 3);
-	Tile* tile = g_game.getTile(createPos);
-	if (!tile) {
-		std::ostringstream ss;
-		ss << createPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	uint32_t itemId = getNumber<uint32_t>(L, 1);
-	Item* newItem = Item::CreateItem(itemId);
-	if (!newItem) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Teleport* newTeleport = newItem->getTeleport();
-	if (!newTeleport) {
-		delete newItem;
-		reportErrorFunc("Invalid teleport ItemID.");
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	const Position& toPos = getPosition(L, 2);
-	newTeleport->setDestPos(toPos);
-
-	ReturnValue ret = g_game.internalAddItem(tile, newTeleport, INDEX_WHEREEVER, FLAG_NOLIMIT);
-	if (ret != RET_NOERROR) {
-		delete newItem;
-		reportErrorFunc("Can not add Item");
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (newItem->getParent()) {
-		uint32_t uid = getScriptEnv()->addThing(newItem);
-		lua_pushnumber(L, uid);
-	} else {
-		pushBoolean(L, false);    //stackable item stacked with existing object, newItem will be released
-	}
 	return 1;
 }
 
@@ -6229,6 +6189,13 @@ int32_t LuaScriptInterface::luaItemIsContainer(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaItemIsTeleport(lua_State* L)
+{
+	// item:isTeleport()
+	pushBoolean(L, false);
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaItemGetParent(lua_State* L)
 {
 	// item:getParent()
@@ -6782,50 +6749,11 @@ int32_t LuaScriptInterface::luaItemHasProperty(lua_State* L)
 int32_t LuaScriptInterface::luaContainerCreate(lua_State* L)
 {
 	// Container(uid)
-	// Container(itemId[, position])
-	int32_t parameters = lua_gettop(L);
-
-	Position position;
-	if (parameters >= 3) {
-		position = getPosition(L, 3);
-	}
-
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
-	Item* item;
-	ScriptEnvironment* env = getScriptEnv();
-	if (parameters >= 3) {
-		item = Item::CreateItem(id, 1);
-		if (!item) {
-			lua_pushnil(L);
-			return 1;
-		}
-
-		if (!item->getContainer()) {
-			delete item;
-			lua_pushnil(L);
-			return 1;
-		}
-
-		if (parameters >= 4) {
-			Tile* tile = g_game.getTile(position.x, position.y, position.z);
-			if (!tile) {
-				delete item;
-				lua_pushnil(L);
-				return 1;
-			}
-
-			g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		} else {
-			item->setParent(VirtualCylinder::virtualCylinder);
-			env->addTempItem(env, item);
-		}
-	} else {
-		item = env->getContainerByUID(id);
-	}
-
-	if (item) {
-		pushUserdata<Container>(L, item->getContainer());
+	Container* container = getScriptEnv()->getContainerByUID(id);
+	if (container) {
+		pushUserdata(L, container);
 		setMetatable(L, -1, "Container");
 	} else {
 		lua_pushnil(L);
@@ -7026,6 +6954,54 @@ int32_t LuaScriptInterface::luaContainerGetItemCountById(lua_State* L)
 
 	int32_t subType = getNumber<int32_t>(L, 3, -1);
 	lua_pushnumber(L, container->__getItemTypeCount(itemId, subType));
+	return 1;
+}
+
+// Teleport
+int32_t LuaScriptInterface::luaTeleportCreate(lua_State* L)
+{
+	// Teleport(uid)
+	uint32_t id = getNumber<uint32_t>(L, 2);
+
+	Item* item = getScriptEnv()->getItemByUID(id);
+	if (item && item->getTeleport()) {
+		pushUserdata(L, item);
+		setMetatable(L, -1, "Teleport");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTeleportIsTeleport(lua_State* L)
+{
+	// teleport:isTeleport()
+	pushBoolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTeleportGetDestination(lua_State* L)
+{
+	// teleport:getDestination()
+	Teleport* teleport = getUserdata<Teleport>(L, 1);
+	if (teleport) {
+		pushPosition(L, teleport->getDestPos(), 0);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTeleportSetDestination(lua_State* L)
+{
+	// teleport:setDestination(position)
+	Teleport* teleport = getUserdata<Teleport>(L, 1);
+	if (teleport) {
+		teleport->setDestPos(getPosition(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
