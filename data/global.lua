@@ -421,6 +421,10 @@ string.split = function(str, sep)
 	return res
 end
 
+string.trim = function(str)
+	return str:match'^()%s*$' and '' or str:match'^%s*(.*%S)'
+end
+
 function Position.getTile(self)
 	return Tile(self)
 end
