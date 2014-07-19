@@ -6,7 +6,16 @@ function onSay(cid, words, param)
 		return true
 	end
 
-	local accountId = getAccountNumberByPlayerName(param)
+	local name = param
+	local reason = ''
+
+	local separatorPos = param:find(',')
+	if separatorPos ~= nil then
+		name = param:sub(0, separatorPos - 1)
+		reason = string.trim(param:sub(separatorPos + 1))
+	end
+
+	local accountId = getAccountNumberByPlayerName(name)
 	if accountId == 0 then
 		return false
 	end
@@ -19,7 +28,7 @@ function onSay(cid, words, param)
 
 	local timeNow = os.time()
 	db:query("INSERT INTO `account_bans` (`account_id`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
-			accountId .. ", '', " .. timeNow .. ", " .. timeNow + (banDays * 86400) .. ", " .. player:getGuid() .. ")")
+			accountId .. ", " .. db.escapeString(reason) .. ", " .. timeNow .. ", " .. timeNow + (banDays * 86400) .. ", " .. player:getGuid() .. ")")
 
 	local target = Player(param)
 	if target ~= nil then
