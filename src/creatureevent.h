@@ -101,7 +101,7 @@ class CreatureEvent : public Event
 		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
 		void executeChangeHealth(Creature* creature, Creature* attacker, CombatDamage& damage);
-		void executeChangeMana(Creature* creature, Creature* attacker, int32_t& manaChange);
+		void executeChangeMana(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin);
 		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 		//
 

@@ -584,7 +584,7 @@ bool Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 		}
 	}
 
-	bool result = g_game.combatChangeMana(caster, target, damage.primary.value);
+	bool result = g_game.combatChangeMana(caster, target, damage.primary.value, damage.origin);
 	if (result) {
 		CombatConditionFunc(caster, target, params, nullptr);
 		CombatDispelFunc(caster, target, params, nullptr);
