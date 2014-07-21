@@ -966,10 +966,6 @@ void LuaScriptInterface::registerFunctions()
 	//doTileAddItemEx(pos, uid)
 	lua_register(m_luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
 
-	//doRelocate(pos, posTo)
-	//Moves all moveable objects from pos to posTo
-	lua_register(m_luaState, "doRelocate", LuaScriptInterface::luaDoRelocate);
-
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
@@ -2821,50 +2817,6 @@ int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	}
 
 	lua_pushnumber(L, g_game.internalAddItem(tile, item));
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
-{
-	//doRelocate(pos, posTo)
-	//Moves all moveable objects from pos to posTo
-	const Position& fromPos = getPosition(L, 1);
-	Tile* fromTile = g_game.getTile(fromPos.x, fromPos.y, fromPos.z);
-	if (!fromTile) {
-		std::ostringstream ss;
-		ss << fromPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	const Position& toPos = getPosition(L, 2);
-	Tile* toTile = g_game.getTile(toPos.x, toPos.y, toPos.z);
-	if (!toTile) {
-		std::ostringstream ss;
-		ss << toPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (fromTile != toTile) {
-		for (int32_t i = fromTile->getThingCount(); --i >= 0;) {
-			Thing* thing = fromTile->__getThing(i);
-			if (thing) {
-				if (Item* item = thing->getItem()) {
-					const ItemType& it = Item::items[item->getID()];
-					if (!it.isGroundTile() && !it.alwaysOnTop && !it.isMagicField() && !it.isDoor()) {
-						g_game.internalTeleport(item, toPos, false, FLAG_IGNORENOTMOVEABLE);
-					}
-				} else if (Creature* creature = thing->getCreature()) {
-					g_game.internalTeleport(creature, toPos);
-				}
-			}
-		}
-	}
-
-	pushBoolean(L, true);
 	return 1;
 }
 

@@ -719,6 +719,36 @@ function doTeleportThing(uid, dest, pushMovement)
 	return false
 end
 
+function doRelocate(fromPos, toPos)
+	if fromPos == toPos then
+		return false
+	end	
+
+	local fromTile = Tile(fromPos)
+	if fromTile == nil then
+		return false
+	end
+
+	if Tile(toPos) == nil then
+		return false
+	end
+
+	for i = fromTile:getThingCount(), 0, -1 do
+		local thing = fromTile:getThing(i)
+		if thing ~= nil then
+			if thing:isItem() then
+				local iType = ItemType(thing:getId())
+				if iType and iType:isMovable() then
+					thing:moveTo(toPos)
+				end
+			elseif thing:isCreature() then
+				thing:teleportTo(toPos)
+			end
+		end
+	end		
+	return true
+end
+
 function getThing(uid)
 	return uid >= 0x10000000 and pushThing(Creature(uid)) or pushThing(Item(uid))
 end
