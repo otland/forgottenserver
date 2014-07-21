@@ -808,3 +808,11 @@ function doCreateTeleport(itemId, destination, position)
 	item:setDestination(destination)
 	return item:getUniqueId()
 end
+
+function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
+	local result = {}
+	for _, spectator in ipairs(Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)) do
+		result[#result + 1] = spectator:getId()
+	end
+	return result ~= nil and result or false
+end

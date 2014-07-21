@@ -981,9 +981,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
-	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
-	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
-
 	//getCreatureCondition(cid, condition[, subId])
 	lua_register(m_luaState, "getCreatureCondition", LuaScriptInterface::luaGetCreatureCondition);
 
@@ -4068,32 +4065,6 @@ int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 	}
 
 	pushBoolean(L, hasProp);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetSpectators(lua_State* L)
-{
-	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers = false)
-	bool onlyPlayers = getBoolean(L, 5, false);
-	bool multifloor = getBoolean(L, 4);
-	uint32_t rangey = getNumber<uint32_t>(L, 3);
-	uint32_t rangex = getNumber<uint32_t>(L, 2);
-	const Position& centerPos = getPosition(L, 1);
-
-	SpectatorVec list;
-	g_game.getSpectators(list, centerPos, multifloor, onlyPlayers, rangex, rangex, rangey, rangey);
-	if (list.empty()) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	lua_createtable(L, list.size(), 0);
-
-	int32_t index = 0;
-	for (Creature* spectator : list) {
-		lua_pushnumber(L, spectator->getID());
-		lua_rawseti(L, -2, ++index);
-	}
 	return 1;
 }
 
