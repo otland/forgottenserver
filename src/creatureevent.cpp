@@ -525,9 +525,9 @@ void CreatureEvent::executeChangeHealth(Creature* creature, Creature* attacker, 
 	m_scriptInterface->resetScriptEnv();
 }
 
-void CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, int32_t& manaChange)
+void CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin)
 {
-	//onChangeMana(creature, attacker, manaChange)
+	//onChangeMana(creature, attacker, manaChange, origin)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeChangeMana] Call stack overflow" << std::endl;
 		return;
@@ -548,8 +548,9 @@ void CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, in
 		lua_pushnil(L);
 	}
 	lua_pushnumber(L, manaChange);
+	lua_pushnumber(L, origin);
 
-	if (m_scriptInterface->protectedCall(L, 3, 1) != 0) {
+	if (m_scriptInterface->protectedCall(L, 4, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, -1));
 	} else {
 		manaChange = LuaScriptInterface::getNumber<int32_t>(L, -1);
