@@ -35,6 +35,7 @@
 #include "scheduler.h"
 #include "town.h"
 #include "weapons.h"
+#include "events.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -43,6 +44,7 @@ extern Vocations g_vocations;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 MuteCountMap Player::muteCountMap;
 
@@ -1885,6 +1887,11 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		return;
 	}
 
+	if (!g_events->eventPlayerOnRemoveExperience(this, exp)) {
+		//we handle the exp loss through lua then, with Player:onRemoveExperience(exp)
+		return;
+	}
+
 	uint64_t lostExp = experience;
 	experience = std::max<int64_t>(0, experience - exp);
 
@@ -2182,31 +2189,35 @@ void Player::death(Creature* _lastHitCreature)
 		}
 
 		//Level loss
-		uint32_t oldLevel = level;
+		uint64_t expLoss = (uint64_t)(experience * deathLossPercent);
+		if (g_events->eventPlayerOnRemoveExperience(this, expLoss)) {
+			uint32_t oldLevel = level;
 
-		if (vocation->getId() == VOCATION_NONE || level > 7) {
-			experience -= (uint64_t)(experience * deathLossPercent);
-		}
+			if (vocation->getId() == VOCATION_NONE || level > 7) {
+				experience -= (uint64_t)(experience * deathLossPercent);
+			}
 
-		while (level > 1 && experience < Player::getExpForLevel(level)) {
-			--level;
-			healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
-			manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
-			capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
-		}
+			while (level > 1 && experience < Player::getExpForLevel(level)) {
+				--level;
+				healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
+				manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
+				capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
+			}
 
-		if (oldLevel != level) {
-			std::ostringstream ss;
-			ss << "You were downgraded from Level " << oldLevel << " to Level " << level << '.';
-			sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
-		}
+			if (oldLevel != level) {
+				std::ostringstream ss;
+				ss << "You were downgraded from Level " << oldLevel << " to Level " << level << '.';
+				sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+			}
 
-		uint64_t currLevelExp = Player::getExpForLevel(level);
-		uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
-		if (nextLevelExp > currLevelExp) {
-			levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
-		} else {
-			levelPercent = 0;
+			uint64_t currLevelExp = Player::getExpForLevel(level);
+			uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
+			if (nextLevelExp > currLevelExp) {
+				levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+			}
+			else {
+				levelPercent = 0;
+			}
 		}
 
 		std::bitset<6> bitset(blessings);
@@ -3764,6 +3775,11 @@ void Player::gainExperience(uint64_t gainExp)
 void Player::onGainExperience(uint64_t gainExp, Creature* target)
 {
 	if (hasFlag(PlayerFlag_NotGainExperience)) {
+		return;
+	}
+
+	if (!g_events->eventPlayerOnGainExperience(this, target, gainExp)) {
+		//we handle the experience gain through lua, with Player:onGainExperience(target, exp)
 		return;
 	}
 

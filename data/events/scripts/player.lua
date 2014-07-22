@@ -101,3 +101,11 @@ end
 function Player:onTradeRequest(target, item)
 	return true
 end
+
+function Player:onGainExperience(target, exp)
+	return true
+end
+
+function Player: onRemoveExperience(exp)
+	return true
+end
