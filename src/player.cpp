@@ -1887,8 +1887,8 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnRemoveExperience(this, exp)) {
-		//we handle the exp loss through lua then, with Player:onRemoveExperience(exp)
+	if (!g_events->eventPlayerOnLoseExperience(this, exp)) {
+		//we handle the exp loss through lua then, with Player:onLoseExperience(exp)
 		return;
 	}
 
@@ -2190,7 +2190,7 @@ void Player::death(Creature* _lastHitCreature)
 
 		//Level loss
 		uint64_t expLoss = (uint64_t)(experience * deathLossPercent);
-		if (g_events->eventPlayerOnRemoveExperience(this, expLoss)) {
+		if (g_events->eventPlayerOnLoseExperience(this, expLoss)) {
 			uint32_t oldLevel = level;
 
 			if (vocation->getId() == VOCATION_NONE || level > 7) {
@@ -3778,8 +3778,8 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnAddExperience(this, target, gainExp)) {
-		//we handle the experience gain through lua, with Player:onAddExperience(target, exp)
+	if (!g_events->eventPlayerOnGainExperience(this, target, gainExp)) {
+		//we handle the experience gain through lua, with Player:onGainExperience(target, exp)
 		return;
 	}
 
