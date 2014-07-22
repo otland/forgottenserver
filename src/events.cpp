@@ -50,8 +50,8 @@ void Events::clear()
 	playerOnMoveCreature = -1;
 	playerOnTurn = -1;
 	playerOnTradeRequest = -1;
-	playerOnAddExperience = -1;
-	playerOnRemoveExperience = -1;
+	playerOnGainExperience = -1;
+	playerOnLoseExperience = -1;
 }
 
 bool Events::load()
@@ -109,10 +109,10 @@ bool Events::load()
 					playerOnMoveCreature = event;
 				} else if (methodName == "onTurn") {
 					playerOnTurn = event;
-				} else if (methodName == "onAddExperience") {
-					playerOnAddExperience = event;
-				} else if (methodName == "onRemoveExperience") {
-					playerOnRemoveExperience = event;
+				} else if (methodName == "onGainExperience") {
+					playerOnGainExperience = event;
+				} else if (methodName == "onLoseExperience") {
+					playerOnLoseExperience = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 				}
@@ -475,10 +475,10 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventPlayerOnAddExperience(Player* player, Creature* target, uint64_t exp)
+bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t exp)
 {
-	// Player:onAddExperience(target(= nil, if there is no target), exp) or Player.onAddExperience(self, target, exp)
-	if (playerOnAddExperience == -1) {
+	// Player:onGainExperience(target(= nil, if there is no target), exp) or Player.onGainExperience(self, target, exp)
+	if (playerOnGainExperience == -1) {
 		return true;
 	}
 
@@ -488,10 +488,10 @@ bool Events::eventPlayerOnAddExperience(Player* player, Creature* target, uint64
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(playerOnAddExperience, &scriptInterface);
+	env->setScriptId(playerOnGainExperience, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerOnAddExperience);
+	scriptInterface.pushFunction(playerOnGainExperience);
 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
@@ -509,23 +509,23 @@ bool Events::eventPlayerOnAddExperience(Player* player, Creature* target, uint64
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventPlayerOnRemoveExperience(Player* player, uint64_t exp)
+bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t exp)
 {
-	// Player:onRemoveExperience(exp) or Player.onRemoveExperience(self, exp)
-	if (playerOnRemoveExperience == -1) {
+	// Player:onLoseExperience(exp) or Player.onLoseExperience(self, exp)
+	if (playerOnLoseExperience == -1) {
 		return true;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventPlayerOnRemoveExperience] Call stack overflow" << std::endl;
+		std::cout << "[Error - Events::eventPlayerOnLoseExperience] Call stack overflow" << std::endl;
 		return false;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(playerOnRemoveExperience, &scriptInterface);
+	env->setScriptId(playerOnLoseExperience, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerOnRemoveExperience);
+	scriptInterface.pushFunction(playerOnLoseExperience);
 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");

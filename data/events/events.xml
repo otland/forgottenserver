@@ -15,6 +15,6 @@
 	<event class="Player" method="onMoveCreature" enabled="0"/>
 	<event class="Player" method="onTurn" enabled="0"/>
 	<event class="Player" method="onTradeRequest" enabled="0"/>
-	<event class="Player" method="onAddExperience" enabled="0"/>
-	<event class="Player" method="onRemoveExperience" enabled="0"/>
+	<event class="Player" method="onGainExperience" enabled="0"/>
+	<event class="Player" method="onLoseExperience" enabled="0"/>
 </events>
