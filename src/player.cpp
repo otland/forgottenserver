@@ -3778,8 +3778,8 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnGainExperience(this, target, gainExp)) {
-		//we handle the experience gain through lua, with Player:onGainExperience(target, exp)
+	if (!g_events->eventPlayerOnAddExperience(this, target, gainExp)) {
+		//we handle the experience gain through lua, with Player:onAddExperience(target, exp)
 		return;
 	}
 
