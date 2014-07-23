@@ -814,5 +814,5 @@ function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	for _, spectator in ipairs(Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)) do
 		result[#result + 1] = spectator:getId()
 	end
-	return result ~= nil and result or false
+	return result
 end
