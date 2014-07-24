@@ -12361,7 +12361,7 @@ int32_t LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 //
 LuaEnvironment::LuaEnvironment() :
 	LuaScriptInterface("Main Interface"), m_testInterface(nullptr),
-	m_lastEventTimerId(0), m_lastCombatId(0), m_lastConditionId(0), m_lastAreaId(0)
+	m_lastEventTimerId(1), m_lastCombatId(0), m_lastConditionId(0), m_lastAreaId(0)
 {
 	//
 }
