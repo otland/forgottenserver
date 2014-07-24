@@ -1788,7 +1788,7 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
-void Player::addExperience(uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/)
+void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -1808,6 +1808,11 @@ void Player::addExperience(uint64_t exp, bool sendText/* = false*/, bool applySt
 			exp *= 0.5;
 		}
 	}
+
+	if (g_events->eventPlayerOnGainExperience(this, target, exp) == 0) {
+		return;
+	}
+	exp = g_events->eventPlayerOnGainExperience(this, target, exp);
 
 	experience += exp;
 
@@ -1887,10 +1892,10 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnLoseExperience(this, exp)) {
-		//we handle the exp loss through lua then, with Player:onLoseExperience(exp)
+	if (g_events->eventPlayerOnLoseExperience(this, exp) == 0) {
 		return;
 	}
+	exp = g_events->eventPlayerOnLoseExperience(this, exp);
 
 	uint64_t lostExp = experience;
 	experience = std::max<int64_t>(0, experience - exp);
@@ -2190,7 +2195,7 @@ void Player::death(Creature* _lastHitCreature)
 
 		//Level loss
 		uint64_t expLoss = (uint64_t)(experience * deathLossPercent);
-		if (g_events->eventPlayerOnLoseExperience(this, expLoss)) {
+		if (g_events->eventPlayerOnLoseExperience(this, expLoss) != 0) {
 			uint32_t oldLevel = level;
 
 			if (vocation->getId() == VOCATION_NONE || level > 7) {
@@ -3750,7 +3755,7 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 	return unjustified;
 }
 
-void Player::gainExperience(uint64_t gainExp)
+void Player::gainExperience(Creature* target, uint64_t gainExp)
 {
 	if (!hasFlag(PlayerFlag_NotGainExperience) && gainExp > 0) {
 		if (staminaMinutes == 0) {
@@ -3759,7 +3764,7 @@ void Player::gainExperience(uint64_t gainExp)
 
 		uint64_t oldExperience = experience;
 
-		addExperience(gainExp * g_game.getExperienceStage(level), true, true);
+		addExperience(target, gainExp * g_game.getExperienceStage(level), true, true);
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;
@@ -3778,30 +3783,25 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnGainExperience(this, target, gainExp)) {
-		//we handle the experience gain through lua, with Player:onGainExperience(target, exp)
-		return;
-	}
-
 	if (target) {
 		if (gainExp > 0 && target->getMonster()) {
 			useStamina();
 		}
 
 		if (!target->getPlayer() && party && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
-			party->shareExperience(gainExp);
+			party->shareExperience(target, gainExp);
 			//We will get a share of the experience through the sharing mechanism
 			return;
 		}
 	}
 
 	Creature::onGainExperience(gainExp, target);
-	gainExperience(gainExp);
+	gainExperience(target, gainExp);
 }
 
-void Player::onGainSharedExperience(uint64_t gainExp)
+void Player::onGainSharedExperience(Creature* target, uint64_t gainExp)
 {
-	gainExperience(gainExp);
+	gainExperience(target, gainExp);
 }
 
 bool Player::isImmune(CombatType_t type) const

@@ -475,16 +475,16 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t exp)
+uint64_t Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t exp)
 {
 	// Player:onGainExperience(target(= nil, if there is no target), exp) or Player.onGainExperience(self, target, exp)
 	if (playerOnGainExperience == -1) {
-		return true;
+		return exp;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnGainExperience] Call stack overflow" << std::endl;
-		return false;
+		return 0;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -506,19 +506,26 @@ bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint6
 
 	lua_pushnumber(L, exp);
 
-	return scriptInterface.callFunction(3);
+	if (scriptInterface.protectedCall(L, 3, 1) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, 0));
+	}
+	else {
+		exp = LuaScriptInterface::getNumber<uint64_t>(L, 0);
+	}
+	lua_pop(L, 1);
+	return exp;
 }
 
-bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t exp)
+uint64_t Events::eventPlayerOnLoseExperience(Player* player, uint64_t exp)
 {
 	// Player:onLoseExperience(exp) or Player.onLoseExperience(self, exp)
 	if (playerOnLoseExperience == -1) {
-		return true;
+		return exp;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnLoseExperience] Call stack overflow" << std::endl;
-		return false;
+		return 0;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -532,5 +539,12 @@ bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t exp)
 
 	lua_pushnumber(L, exp);
 
-	return scriptInterface.callFunction(2);
+	if (scriptInterface.protectedCall(L, 2, 1) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, 0));
+	}
+	else {
+		exp = LuaScriptInterface::getNumber<int32_t>(L, 0);
+	}
+	lua_pop(L, 1);
+	return exp;
 }
