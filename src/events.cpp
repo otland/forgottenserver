@@ -475,16 +475,16 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 	return scriptInterface.callFunction(3);
 }
 
-uint64_t Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t exp)
+bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp)
 {
 	// Player:onGainExperience(target(= nil, if there is no target), exp) or Player.onGainExperience(self, target, exp)
 	if (playerOnGainExperience == -1) {
-		return exp;
+		return true;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnGainExperience] Call stack overflow" << std::endl;
-		return 0;
+		return false;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -513,19 +513,19 @@ uint64_t Events::eventPlayerOnGainExperience(Player* player, Creature* target, u
 		exp = LuaScriptInterface::getNumber<uint64_t>(L, 0);
 	}
 	lua_pop(L, 1);
-	return exp;
+	return (exp == 0 ? false : true);
 }
 
-uint64_t Events::eventPlayerOnLoseExperience(Player* player, uint64_t exp)
+bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t &exp)
 {
 	// Player:onLoseExperience(exp) or Player.onLoseExperience(self, exp)
 	if (playerOnLoseExperience == -1) {
-		return exp;
+		return true;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnLoseExperience] Call stack overflow" << std::endl;
-		return 0;
+		return false;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -546,5 +546,5 @@ uint64_t Events::eventPlayerOnLoseExperience(Player* player, uint64_t exp)
 		exp = LuaScriptInterface::getNumber<int32_t>(L, 0);
 	}
 	lua_pop(L, 1);
-	return exp;
+	return (exp == 0 ? false : true);
 }
