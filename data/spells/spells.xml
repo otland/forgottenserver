@@ -1,10 +1,11 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <spells>
 	<instant group="attack" spellid="62" name="Annihilation" words="exori gran ico" lvl="110" mana="300" prem="1" range="1" needtarget="1" blockwalls="1" needweapon="1" exhaustion="30000" groupcooldown="4000" needlearn="0" script="attack/annihilation.lua">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight"/>
 	</instant>
-	<instant group="attack" spellid="89" name="Apprentice's Strike" words="exori min flam" lvl="8" mana="6" prem="0" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/apprentices strike.lua">
+	<instant group="attack" spellid="169" name="Apprentice's Strike" words="exori min flam" lvl="8" mana="6" prem="0" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/apprentices strike.lua">
 		<vocation name="Sorcerer"/>
 		<vocation name="Druid"/>
 		<vocation name="Master Sorcerer"/>
@@ -295,10 +296,10 @@
 		<vocation name="Druid"/>
 		<vocation name="Elder Druid"/>
 	</instant>
-	<instant group="attack" spellid="19" name="Practise Fire Wave" words="exevo dis flam hur" lvl="1" mana="5" direction="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/practise fire wave.lua">
+	<instant group="attack" spellid="167" name="Practise Fire Wave" words="exevo dis flam hur" lvl="1" mana="5" direction="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/practise fire wave.lua">
 		<vocation name="None"/>
 	</instant>
-	<instant group="healing" spellid="1" name="Practise Healing" words="exura dis" lvl="1" mana="5" aggressive="0" selftarget="1" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/practise healing.lua">
+	<instant group="healing" spellid="166" name="Practise Healing" words="exura dis" lvl="1" mana="5" aggressive="0" selftarget="1" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/practise healing.lua">
 		<vocation name="None"/>
 	</instant>
 	<instant group="support" spellid="127" name="Protect Party" words="utamo mas sio" lvl="32" mana="90" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="party/protect.lua">
