@@ -73,7 +73,7 @@ bool WaitingList::clientLogin(const Player* player)
 	}
 
 	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-	if (priorityWaitList.empty() && waitList.empty() && g_game.getPlayersOnline() < maxPlayers) {
+	if (maxPlayers == 0 || (priorityWaitList.empty() && waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
 		return true;
 	}
 
