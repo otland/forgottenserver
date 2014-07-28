@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <spells>
 	<instant group="attack" spellid="62" name="Annihilation" words="exori gran ico" lvl="110" mana="300" prem="1" range="1" needtarget="1" blockwalls="1" needweapon="1" exhaustion="30000" groupcooldown="4000" needlearn="0" script="attack/annihilation.lua">
