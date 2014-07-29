@@ -230,18 +230,12 @@ class LuaScriptInterface
 		}
 
 		static bool reserveScriptEnv() {
-			if (++m_scriptEnvIndex < 16) {
-				return true;
-			} else {
-				--m_scriptEnvIndex;
-				return false;
-			}
+			return ++m_scriptEnvIndex < 16;
 		}
 
 		static void resetScriptEnv() {
 			if (m_scriptEnvIndex >= 0) {
-				m_scriptEnv[m_scriptEnvIndex].resetEnv();
-				--m_scriptEnvIndex;
+				m_scriptEnv[m_scriptEnvIndex--].resetEnv();
 			}
 		}
 
