@@ -234,9 +234,8 @@ class LuaScriptInterface
 		}
 
 		static void resetScriptEnv() {
-			if (m_scriptEnvIndex >= 0) {
-				m_scriptEnv[m_scriptEnvIndex--].resetEnv();
-			}
+			assert(m_scriptEnvIndex >= 0);
+			m_scriptEnv[m_scriptEnvIndex--].resetEnv();
 		}
 
 		static void reportError(const char* function, const std::string& error_desc, bool stack_trace = false);
