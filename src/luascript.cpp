@@ -12337,7 +12337,7 @@ int32_t LuaScriptInterface::luaPartyShareExperience(lua_State* L)
 	uint64_t experience = getNumber<uint64_t>(L, 2);
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
-		party->shareExperience(nullptr,experience);
+		party->shareExperience(nullptr, experience);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

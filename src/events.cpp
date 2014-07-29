@@ -477,7 +477,8 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 
 bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp, uint64_t rawExp)
 {
-	// Player:onGainExperience(target(= nil, if there is no target), exp) or Player.onGainExperience(self, target, exp)
+	// Player:onGainExperience(target(= nil, if there is no target), exp, rawExp) or Player.onGainExperience(self, target, exp, rawExp)
+	//rawExp = gives an output of the original exp which is not multiplied
 	if (playerOnGainExperience == -1) {
 		return true;
 	}
@@ -509,8 +510,7 @@ bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint6
 
 	if (scriptInterface.protectedCall(L, 4, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, 0));
-	}
-	else {
+	} else {
 		exp = LuaScriptInterface::getNumber<uint64_t>(L, 0);
 	}
 	lua_pop(L, 1);
@@ -543,8 +543,7 @@ bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t &exp)
 
 	if (scriptInterface.protectedCall(L, 2, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, 0));
-	}
-	else {
+	} else {
 		exp = LuaScriptInterface::getNumber<int32_t>(L, 0);
 	}
 	lua_pop(L, 1);
