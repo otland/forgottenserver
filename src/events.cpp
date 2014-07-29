@@ -514,6 +514,7 @@ bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint6
 		exp = LuaScriptInterface::getNumber<uint64_t>(L, 0);
 	}
 	lua_pop(L, 1);
+	scriptInterface.resetScriptEnv();
 	return exp != 0;
 }
 
@@ -547,5 +548,6 @@ bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t &exp)
 		exp = LuaScriptInterface::getNumber<int32_t>(L, 0);
 	}
 	lua_pop(L, 1);
+	scriptInterface.resetScriptEnv();
 	return exp != 0;
 }
