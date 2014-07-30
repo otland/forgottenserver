@@ -87,6 +87,10 @@ deSpawnRadius = 50
 -- Stamina
 staminaSystem = "yes"
 
+-- Scripts
+warnUnsafeScripts = "no"
+convertUnsafeScripts = "no"
+
 -- Startup
 -- NOTE: defaultPriority only works on Windows and sets process priority.
 defaultPriority = "high"

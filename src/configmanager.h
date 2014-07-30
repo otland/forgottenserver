@@ -44,6 +44,8 @@ class ConfigManager
 			MARKET_PREMIUM = 12,
 			EMOTE_SPELLS = 13,
 			STAMINA_SYSTEM = 14,
+			WARN_UNSAFE_SCRIPTS = 15,
+			CONVERT_UNSAFE_SCRIPTS = 16,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

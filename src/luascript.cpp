@@ -504,10 +504,11 @@ std::string LuaScriptInterface::getStackTrace(const std::string& error_desc)
 
 	lua_getfield(m_luaState, -1, "traceback");
 	if (!isFunction(m_luaState, -1)) {
-		lua_pop(m_luaState, 1);
+		lua_pop(m_luaState, 2);
 		return error_desc;
 	}
 
+	lua_replace(m_luaState, -2);
 	pushString(m_luaState, error_desc);
 	lua_call(m_luaState, 1, 1);
 	return popString(m_luaState);
@@ -857,6 +858,9 @@ Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
 				break;
 			case LuaData_Container:
 				thing = getUserdata<Container>(L, arg);
+				break;
+			case LuaData_Teleport:
+				thing = getUserdata<Teleport>(L, arg);
 				break;
 			case LuaData_Player:
 				thing = getUserdata<Player>(L, arg);
@@ -1728,6 +1732,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::MARKET_PREMIUM)
 	registerEnumIn("configKeys", ConfigManager::EMOTE_SPELLS)
 	registerEnumIn("configKeys", ConfigManager::STAMINA_SYSTEM)
+	registerEnumIn("configKeys", ConfigManager::WARN_UNSAFE_SCRIPTS)
+	registerEnumIn("configKeys", ConfigManager::CONVERT_UNSAFE_SCRIPTS)
 
 	registerEnumIn("configKeys", ConfigManager::MAP_NAME)
 	registerEnumIn("configKeys", ConfigManager::HOUSE_RENT_PERIOD)
@@ -2569,6 +2575,8 @@ void LuaScriptInterface::registerClass(const std::string& className, const std::
 		lua_pushnumber(m_luaState, LuaData_Item);
 	} else if (className == "Container") {
 		lua_pushnumber(m_luaState, LuaData_Container);
+	} else if (className == "Teleport") {
+		lua_pushnumber(m_luaState, LuaData_Teleport);
 	} else if (className == "Player") {
 		lua_pushnumber(m_luaState, LuaData_Player);
 	} else if (className == "Monster") {
@@ -4162,6 +4170,80 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 		reportErrorFunc("callback parameter should be a function.");
 		pushBoolean(L, false);
 		return 1;
+	}
+
+	if (g_config.getBoolean(ConfigManager::WARN_UNSAFE_SCRIPTS) || g_config.getBoolean(ConfigManager::CONVERT_UNSAFE_SCRIPTS)) {
+		std::vector<std::pair<int32_t, LuaDataType>> indexes;
+		for (int32_t i = 3; i <= parameters; ++i) {
+			if (lua_getmetatable(globalState, i) == 0) {
+				continue;
+			}
+			lua_rawgeti(L, -1, 't');
+
+			LuaDataType type = getNumber<LuaDataType>(L, -1);
+			if (type != LuaData_Unknown) {
+				indexes.push_back({i, type});
+			}
+			lua_pop(globalState, 2);
+		}
+
+		if (!indexes.empty()) {
+			if (g_config.getBoolean(ConfigManager::WARN_UNSAFE_SCRIPTS)) {
+				bool plural = indexes.size() > 1;
+				
+				std::string warningString = "Argument";
+				if (plural) {
+					warningString += 's';
+				}
+
+				for (const auto& entry : indexes) {
+					if (entry == indexes.front()) {
+						warningString += ' ';
+					} else if (entry == indexes.back()) {
+						warningString += " and ";
+					} else {
+						warningString += ", ";
+					}
+					warningString += '#';
+					warningString += std::to_string(entry.first);
+				}
+
+				if (plural) {
+					warningString += " are unsafe";
+				} else {
+					warningString += " is unsafe";
+				}
+
+				reportErrorFunc(warningString);
+			}
+
+			if (g_config.getBoolean(ConfigManager::CONVERT_UNSAFE_SCRIPTS)) {
+				for (const auto& entry : indexes) {
+					switch (entry.second) {
+						case LuaData_Item:
+						case LuaData_Container:
+						case LuaData_Teleport: {
+							lua_getglobal(globalState, "Item");
+							lua_getfield(globalState, -1, "getUniqueId");
+							break;
+						}
+						case LuaData_Player:
+						case LuaData_Monster:
+						case LuaData_Npc: {
+							lua_getglobal(globalState, "Creature");
+							lua_getfield(globalState, -1, "getId");
+							break;
+						}
+						default:
+							break;
+					}
+					lua_replace(globalState, -2);
+					lua_pushvalue(globalState, entry.first);
+					lua_call(globalState, 1, 1);
+					lua_replace(globalState, entry.first);
+				}
+			}
+		}
 	}
 
 	LuaTimerEventDesc eventDesc;

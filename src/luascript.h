@@ -59,6 +59,7 @@ enum LuaDataType {
 	LuaData_Unknown = 0,
 	LuaData_Item,
 	LuaData_Container,
+	LuaData_Teleport,
 	LuaData_Player,
 	LuaData_Monster,
 	LuaData_Npc
