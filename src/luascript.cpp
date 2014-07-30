@@ -4234,6 +4234,8 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 							lua_getfield(globalState, -1, "getId");
 							break;
 						}
+						default:
+							break;
 					}
 					lua_replace(globalState, -2);
 					lua_pushvalue(globalState, entry.first);
