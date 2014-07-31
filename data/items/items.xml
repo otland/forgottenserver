@@ -7949,10 +7949,9 @@
 	<item id="4840" article="a" name="witches' cap spot">
 		<attribute key="weight" value="100" />
 	</item>
-	<item id="4842" article="a" name="parchment">
+	<item id="4842" article="an" name="old parchment">
+		<attribute key="description" value="It is covered with foreign symbols." />
 		<attribute key="weight" value="200" />
-		<attribute key="writeable" value="1" />
-		<attribute key="maxTextLen" value="1023" />
 	</item>
 	<item id="4843" article="a" name="giant ape's hair">
 		<attribute key="weight" value="2000" />
@@ -8911,7 +8910,7 @@
 	<item id="5670" article="an" name="enigmatic voodoo skull">
 		<attribute key="weight" value="1400" />
 		<attribute key="decayTo" value="5669" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 		<attribute key="description" value="It is not time yet." />
 	</item>
 	<item fromid="5671" toid="5674" article="a" name="pirate statue" />
@@ -11956,7 +11955,7 @@
 		<attribute key="weight" value="100" />
 	</item>
 	<item id="7246" name="Nilsor's waterskin">
-		<attribute key="description" value="It is empty." />
+		<attribute key="description" value="It is filled with warm geyser water." />
 		<attribute key="weight" value="700" />
 	</item>
 	<item id="7247" name="fine sulphur">
@@ -12050,7 +12049,7 @@
 		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="7286" name="Nilsor's waterskin">
-		<attribute key="description" value="It is filled with warm geyser water." />
+		<attribute key="description" value="It is empty." />
 		<attribute key="weight" value="700" />
 	</item>
 	<item fromid="7287" toid="7288" name="" />
@@ -17544,7 +17543,7 @@
 		<attribute key="description" value="The plant in it seems to be a finger snapper plant." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9982" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item fromid="9984" toid="9985" article="a" name="flower pot">
 		<attribute key="description" value="This plant urgently needs some water, else it will wither away and disappear completely." />
@@ -17562,7 +17561,7 @@
 		<attribute key="description" value="The plant in it seems to be a fairy dancer flower." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9986" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="9988" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown fairy dancer flower in it." />
@@ -17574,7 +17573,7 @@
 		<attribute key="description" value="There is a fully grown fairy dancer flower in it." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9988" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="9990" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown finger snapper plant in it." />
@@ -17586,7 +17585,7 @@
 		<attribute key="description" value="There is a fully grown finger snapper plant in it." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9990" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="9992" article="a" name="rotworm stew">
 		<attribute key="description" value="It's hot, beefy and delicious. The perfect food for knights." />
@@ -20453,7 +20452,10 @@
 		<attribute key="weight" value="1000" />
 	</item>
 	<item fromid="12305" toid="12315" article="a" name="corrupted plantation" />
-	<!-- Missing 13216 -->
+	<item id="12316" name="the dead keeper">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="900" />
+	</item>
 	<item id="12317" name="the presence of the emperor">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="60" />
@@ -22975,6 +22977,12 @@
 	<item fromid="14853" toid="14854" name="small insectoid hairs" />
 	<item fromid="14858" toid="14871" article="an" name="insectoid meatball" />
 	<item fromid="14887" toid="14898" article="a" name="rockboy" />
+	<item id="14903" article="a" name="bag with stolen gold">
+		<attribute key="weight" value="5000" />
+		<attribute key="description" value="It contains so much cash that you wouldn't have any idea how to use it. Return it to a nearby bank." />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="43200" />
+	</item>
 	<item fromid="14904" toid="14912" name="wet temple floor" />
 	<item fromid="14913" toid="14914" article="a" name="finely crafted ornament" />
 	<item fromid="14915" toid="14930" name="wet temple floor" />
@@ -28956,7 +28964,13 @@
 	</item>
 	<item id="21367" article="a" name="dead white shade">
 		<attribute key="containerSize" value="10" />
-		<attribute key="decayTo" value="21369" />
+		<attribute key="decayTo" value="21375" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="undead" />
+	</item>
+	<item id="21367" article="a" name="dead enraged soul">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="21372" />
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="undead" />
 	</item>
@@ -28977,15 +28991,32 @@
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="undead" />
 	</item>
+	<item id="21372" article="a" name="dead enraged soul">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="21373" />
+		<attribute key="duration" value="300" />
+		<attribute key="corpseType" value="undead" />
+	</item>
+	<item id="21373" article="a" name="dead enraged soul">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="21374" />
+		<attribute key="duration" value="300" />
+		<attribute key="corpseType" value="undead" />
+	</item>
+	<item id="21374" article="a" name="dead enraged soul">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="300" />
+		<attribute key="corpseType" value="undead" />
+	</item>
 	<item id="21375" article="a" name="dead white shade">
 		<attribute key="containerSize" value="10" />
-		<attribute key="decayTo" value="21370" />
+		<attribute key="decayTo" value="21376" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="21376" article="a" name="dead white shade">
 		<attribute key="containerSize" value="10" />
-		<attribute key="decayTo" value="21371" />
+		<attribute key="decayTo" value="21377" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="undead" />
 	</item>
@@ -29335,6 +29366,38 @@
 	<item id="21925" article="a" name="ruined stair">
 		<attribute key="floorchange" value="west" />
 	</item>
+	<item id="22381" name="ancient dream">
+		<attribute key="description" value="The dream glows as if alive." />
+		<attribute key="weight" value="15" />
+	</item>
+	<item id="22383" article="a" name="dream nebuliser">
+		<attribute key="description" value="Used to spray fine dream sand on things." />
+		<attribute key="weight" value="100" />
+	</item>
+	<item id="22384" name="strange good night songs">
+		<attribute key="description" value="It contains some hypnotic melodies that are hard to remember." />
+		<attribute key="weight" value="1300" />
+	</item>
+	<item id="22387" article="a" name="bucket filled with gravel">
+		<attribute key="description" value="This gravel is quite finely granulated." />
+		<attribute key="weight" value="2400" />
+	</item>
+	<item id="22388" article="a" name="bucket filled with chalk">
+		<attribute key="description" value="By adding it to gravel, this chalk could be used as a binder of some sort to create mortar." />
+		<attribute key="weight" value="2400" />
+	</item>
+	<item id="22389" article="a" name="crude horn of bone">
+		<attribute key="description" value="This horn makes a strange noise when blowing it." />
+		<attribute key="weight" value="400" />
+	</item>
+	<item id="22390" article="a" name="crude horn with mouthpiece">
+		<attribute key="description" value="This horn actually sounds like a horn when blowing it - a very loud and distorted horn." />
+		<attribute key="weight" value="500" />
+	</item>
+	<item id="22391" article="a" name="mouthpiece for a horn">
+		<attribute key="description" value="This mouthpiece can be used with a musical horn. It won't stay pristine very long in the open air." />
+		<attribute key="weight" value="100" />
+	</item>
 	<item id="22392" article="a" name="dead shock head">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22393" />
@@ -29587,6 +29650,19 @@
 	<item id="22458" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
 	</item>
+	<item id="22472" name="essence of dread">
+		<attribute key="description" value="You don't like holding it. Really don't. As if something bad was just waiting to happen." />
+		<attribute key="weight" value="30" />
+	</item>
+	<item id="22473" name="essence of wishful thinking">
+		<attribute key="description" value="Just looking at it makes you feel better. What could possibly go wrong." />
+		<attribute key="weight" value="30" />
+	</item>
+	<item id="22475" article="a" name="pendulum">
+		<attribute key="description" value="Sometimes it swings out of its own accord." />
+		<attribute key="weight" value="3500" />
+	</item>
+	<item fromid="22476" toid="22477" article="a" name="ruined stair" />
 	<item id="22478" article="a" name="dead sight of surrender">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22479" />
@@ -29727,6 +29803,12 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
+	<item id="22503" name="gravel and chalk in a bucket">
+		<attribute key="description" value="This contains a mixture of gravel and chalk." />
+	</item>
+	<item id="22504" article="a" name="bucket full of mortar">
+		<attribute key="description" value="This mortar seems to be perfect for construction or repair works." />
+	</item>
 	<item id="22508" article="a" name="dead retching horror">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22505" />
@@ -29767,6 +29849,10 @@
 		<attribute key="armor" value="1" />
 		<attribute key="weight" value="1400" />
 		<attribute key="slotType" value="head" />
+	</item>
+	<item id="22523" article="a" name="tea spoon">
+		<attribute key="description" value="Engraved in the back is &quot;From Mommy, with love&quot;." />
+		<attribute key="weight" value="100" />
 	</item>
 	<item id="22532" article="a" name="frazzle tongue">
 		<attribute key="weight" value="680" />
@@ -29982,7 +30068,7 @@
 	<item id="22643" article="a" name="leaf golem santa">
 		<attribute key="weight" value="650" />
 	</item>
-	<item id="22644" article="a" name="chrismas cookie tray">
+	<item id="22644" article="a" name="christmas cookie tray">
 		<attribute key="weight" value="650" />
 	</item>
 	<item fromid="22645" toid="22646" article="a" name="snow globe">
@@ -30008,6 +30094,14 @@
 	</item>
 	<item id="22670" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
+	</item>
+	<item id="22696" article="a" name="cake backpack">
+		<attribute key="weight" value="1800" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
+	</item>
+	<item id="22699" article="a" name="cake tapestry">
+		<attribute key="weight" value="1000" />
 	</item>
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
