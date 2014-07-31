@@ -7949,10 +7949,9 @@
 	<item id="4840" article="a" name="witches' cap spot">
 		<attribute key="weight" value="100" />
 	</item>
-	<item id="4842" article="a" name="parchment">
+	<item id="4842" article="an" name="old parchment">
+		<attribute key="description" value="It is covered with foreign symbols." />
 		<attribute key="weight" value="200" />
-		<attribute key="writeable" value="1" />
-		<attribute key="maxTextLen" value="1023" />
 	</item>
 	<item id="4843" article="a" name="giant ape's hair">
 		<attribute key="weight" value="2000" />
@@ -8911,7 +8910,7 @@
 	<item id="5670" article="an" name="enigmatic voodoo skull">
 		<attribute key="weight" value="1400" />
 		<attribute key="decayTo" value="5669" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 		<attribute key="description" value="It is not time yet." />
 	</item>
 	<item fromid="5671" toid="5674" article="a" name="pirate statue" />
@@ -11956,7 +11955,7 @@
 		<attribute key="weight" value="100" />
 	</item>
 	<item id="7246" name="Nilsor's waterskin">
-		<attribute key="description" value="It is empty." />
+		<attribute key="description" value="It is filled with warm geyser water." />
 		<attribute key="weight" value="700" />
 	</item>
 	<item id="7247" name="fine sulphur">
@@ -12050,7 +12049,7 @@
 		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="7286" name="Nilsor's waterskin">
-		<attribute key="description" value="It is filled with warm geyser water." />
+		<attribute key="description" value="It is empty." />
 		<attribute key="weight" value="700" />
 	</item>
 	<item fromid="7287" toid="7288" name="" />
@@ -17544,7 +17543,7 @@
 		<attribute key="description" value="The plant in it seems to be a finger snapper plant." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9982" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item fromid="9984" toid="9985" article="a" name="flower pot">
 		<attribute key="description" value="This plant urgently needs some water, else it will wither away and disappear completely." />
@@ -17562,7 +17561,7 @@
 		<attribute key="description" value="The plant in it seems to be a fairy dancer flower." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9986" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="9988" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown fairy dancer flower in it." />
@@ -17574,7 +17573,7 @@
 		<attribute key="description" value="There is a fully grown fairy dancer flower in it." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9988" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="9990" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown finger snapper plant in it." />
@@ -17586,7 +17585,7 @@
 		<attribute key="description" value="There is a fully grown finger snapper plant in it." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="9990" />
-		<attribute key="duration" value="86400" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="9992" article="a" name="rotworm stew">
 		<attribute key="description" value="It's hot, beefy and delicious. The perfect food for knights." />
@@ -20453,7 +20452,10 @@
 		<attribute key="weight" value="1000" />
 	</item>
 	<item fromid="12305" toid="12315" article="a" name="corrupted plantation" />
-	<!-- Missing 13216 -->
+	<item id="12316" name="the dead keeper">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="900" />
+	</item>
 	<item id="12317" name="the presence of the emperor">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="60" />
@@ -28956,7 +28958,13 @@
 	</item>
 	<item id="21367" article="a" name="dead white shade">
 		<attribute key="containerSize" value="10" />
-		<attribute key="decayTo" value="21369" />
+		<attribute key="decayTo" value="21375" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="undead" />
+	</item>
+	<item id="21367" article="a" name="dead enraged soul">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="21372" />
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="undead" />
 	</item>
@@ -28977,15 +28985,32 @@
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="undead" />
 	</item>
+	<item id="21372" article="a" name="dead enraged soul">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="21373" />
+		<attribute key="duration" value="300" />
+		<attribute key="corpseType" value="undead" />
+	</item>
+	<item id="21373" article="a" name="dead enraged soul">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="21374" />
+		<attribute key="duration" value="300" />
+		<attribute key="corpseType" value="undead" />
+	</item>
+	<item id="21374" article="a" name="dead enraged soul">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="300" />
+		<attribute key="corpseType" value="undead" />
+	</item>
 	<item id="21375" article="a" name="dead white shade">
 		<attribute key="containerSize" value="10" />
-		<attribute key="decayTo" value="21370" />
+		<attribute key="decayTo" value="21376" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="21376" article="a" name="dead white shade">
 		<attribute key="containerSize" value="10" />
-		<attribute key="decayTo" value="21371" />
+		<attribute key="decayTo" value="21377" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="undead" />
 	</item>
@@ -30008,6 +30033,14 @@
 	</item>
 	<item id="22670" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
+	</item>
+	<item id="22696" article="a" name="cake backpack">
+		<attribute key="weight" value="1800" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
+	</item>
+	<item id="22699" article="a" name="cake tapestry">
+		<attribute key="weight" value="1000" />
 	</item>
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
