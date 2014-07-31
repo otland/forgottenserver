@@ -206,6 +206,7 @@ function canPlayerLearnInstantSpell(cid, name) local p = Player(cid) return p ~=
 function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p ~= nil and p:hasLearnedSpell(name) or false end
 function isPlayerGhost(cid) local p = Player(cid) return p ~= nil and p:isInGhostMode() or false end
 function isPlayerPzLocked(cid) local p = Player(cid) return p ~= nil and p:isPzLocked() or false end
+function isPremium(cid) local p = Player(cid) return p ~= nil and p:isPremium() or false end
 function getPlayersByIPAddress(ip, mask)
 	if mask == nil then mask = 0xFFFFFFFF end
 	local masked = bit.band(ip, mask)
