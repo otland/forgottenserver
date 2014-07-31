@@ -160,7 +160,7 @@ function isInRange(pos, fromPos, toPos)
 end
 
 function Player:isPremium()
-	return (self:getPremiumDays() > 0) or (configManager.getBoolean(configKeys.FREE_PREMIUM))
+	return self:getPremiumDays() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
 
 function isNumber(str)
