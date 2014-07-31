@@ -159,8 +159,8 @@ function isInRange(pos, fromPos, toPos)
 	return pos.x >= fromPos.x and pos.y >= fromPos.y and pos.z >= fromPos.z and pos.x <= toPos.x and pos.y <= toPos.y and pos.z <= toPos.z
 end
 
-function isPremium(cid)
-	return getPlayerPremiumDays(cid) > 0
+function Player:isPremium()
+	return self:getPremiumDays() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
 
 function isNumber(str)
