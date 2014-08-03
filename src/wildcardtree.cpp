@@ -76,6 +76,9 @@ void WildcardTreeNode::remove(const std::string& str)
 	size_t len = str.length();
 	for (size_t pos = 0; pos < len; ++pos) {
 		cur = cur->getChild(str[pos]);
+		if (!cur) {
+			return;
+		}
 		path.push(cur);
 	}
 
