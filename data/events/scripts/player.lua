@@ -101,3 +101,11 @@ end
 function Player:onTradeRequest(target, item)
 	return true
 end
+
+function Player:onGainExperience(target, exp, rawExp)
+	return exp
+end
+
+function Player:onLoseExperience(exp)
+	return exp
+end

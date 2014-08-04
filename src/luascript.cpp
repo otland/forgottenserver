@@ -8217,7 +8217,7 @@ int32_t LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 	if (player) {
 		int64_t experience = getNumber<int64_t>(L, 2);
 		bool sendText = getBoolean(L, 3, false);
-		player->addExperience(experience, sendText);
+		player->addExperience(nullptr, experience, sendText);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -12419,7 +12419,7 @@ int32_t LuaScriptInterface::luaPartyShareExperience(lua_State* L)
 	uint64_t experience = getNumber<uint64_t>(L, 2);
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
-		party->shareExperience(experience);
+		party->shareExperience(nullptr, experience);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
