@@ -4003,10 +4003,13 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			std::string damageString = std::to_string(realHealthChange);
 			std::string pluralString = (realHealthChange != 1 ? "s." : ".");
-			std::string spectatorMessage = ucfirst(target->getNameDescription());
+			
+			std::string spectatorMessage;
 			if (!attacker) {
+				spectatorMessage += ucfirst(target->getNameDescription());
 				spectatorMessage += " was healed for " + damageString + " hitpoint" + pluralString;
 			} else {
+				spectatorMessage += ucfirst(attacker->getNameDescription());
 				spectatorMessage += " healed ";
 				if (attacker == target) {
 					spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "herself" : "himself") : "itself");
@@ -4213,7 +4216,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
 					spectatorMessage += " own attack";
 				} else {
-					spectatorMessage += "an attack by " + target->getNameDescription();
+					spectatorMessage += "an attack by " + attacker->getNameDescription();
 				}
 			}
 			spectatorMessage += '.';
