@@ -303,6 +303,28 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	} else if (tmpParam == "global") {
 		g_luaEnvironment.loadFile("data/global.lua");
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
+	} else if (tmpParam == "all") {
+		g_luaEnvironment.loadFile("data/global.lua");
+		g_chat.load();
+		g_events->load();
+		g_globalEvents->reload();
+		Mounts::getInstance()->reload();
+		Quests::getInstance()->reload();
+		g_weapons->reload();
+		g_weapons->loadDefaults();
+		Item::items.reload();
+		g_talkActions->reload();
+		g_spells->reload();
+		g_monsters.reload();
+		Raids::getInstance()->reload();
+		Raids::getInstance()->startup();
+		Npcs::reload();
+		g_moveEvents->reload();
+		g_creatureEvents->reload();
+		reload();
+		g_actions->reload();
+		g_config.reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded all.");
 	} else {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}
