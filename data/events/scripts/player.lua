@@ -101,3 +101,7 @@ end
 function Player:onTradeRequest(target, item)
 	return true
 end
+
+function Player:onTradeAccept(target, item, targetItem)
+	return true
+end
