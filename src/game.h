@@ -352,7 +352,7 @@ class Game
 		void playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
 
 		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
-		bool internalCloseTrade(Player* player);
+		void internalCloseTrade(Player* player);
 		bool playerBroadcastMessage(Player* player, const std::string& text) const;
 		void broadcastMessage(const std::string& text, MessageClasses type) const;
 

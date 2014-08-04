@@ -2922,11 +2922,11 @@ void Game::playerCloseTrade(uint32_t playerId)
 	internalCloseTrade(player);
 }
 
-bool Game::internalCloseTrade(Player* player)
+void Game::internalCloseTrade(Player* player)
 {
 	Player* tradePartner = player->tradePartner;
 	if ((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) || player->getTradeState() == TRADE_TRANSFER) {
-		return true;
+		return;
 	}
 
 	if (player->getTradeItem()) {
@@ -2964,7 +2964,6 @@ bool Game::internalCloseTrade(Player* player)
 		tradePartner->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
 		tradePartner->sendTradeClose();
 	}
-	return true;
 }
 
 void Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
