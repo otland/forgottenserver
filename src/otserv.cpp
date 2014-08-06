@@ -99,16 +99,31 @@ int main(int argc, char* argv[])
 
 	if (servicer.is_running()) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
+#ifdef _WIN32
+		SetConsoleCtrlHandler([](DWORD) -> BOOL {
+			g_dispatcher.addTask(createTask([]() {
+				g_dispatcher.addTask(createTask(
+					std::bind(&Game::shutdown, &g_game)
+				));
+				g_scheduler.stop();
+				g_dispatcher.stop();
+			}));
+			ExitThread(0);
+			return 0;
+		}, 1);
+#endif
 		servicer.run();
 		g_scheduler.join();
 		g_dispatcher.join();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_scheduler.stop();
-		g_dispatcher.stop();
-		g_dispatcher.addTask(createTask([](){
-			g_scheduler.shutdown();
-			g_dispatcher.shutdown();
+		g_dispatcher.addTask(createTask([]() {
+			g_dispatcher.addTask(createTask([]() {
+				g_scheduler.shutdown();
+				g_dispatcher.shutdown();
+			}));
+			g_scheduler.stop();
+			g_dispatcher.stop();
 		}));
 		g_scheduler.join();
 		g_dispatcher.join();
