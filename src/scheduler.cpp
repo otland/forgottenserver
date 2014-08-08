@@ -141,13 +141,14 @@ bool Scheduler::stopEvent(uint32_t eventid)
 
 void Scheduler::stop()
 {
-	std::lock_guard<std::mutex> lockGuard(m_eventLock);
+	m_eventLock.lock();
 	m_threadState = Scheduler::STATE_CLOSING;
+	m_eventLock.unlock();
 }
 
 void Scheduler::shutdown()
 {
-	std::lock_guard<std::mutex> lockGuard(m_eventLock);
+	m_eventLock.lock();
 	m_threadState = Scheduler::STATE_TERMINATED;
 
 	//this list should already be empty
@@ -157,6 +158,8 @@ void Scheduler::shutdown()
 	}
 
 	m_eventIds.clear();
+	m_eventLock.unlock();
+	m_eventSignal.notify_one();
 }
 
 void Scheduler::join()

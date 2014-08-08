@@ -133,6 +133,7 @@ void Dispatcher::shutdown()
 	m_threadState = STATE_TERMINATED;
 	flush();
 	m_taskLock.unlock();
+	m_taskSignal.notify_one();
 }
 
 void Dispatcher::join()
