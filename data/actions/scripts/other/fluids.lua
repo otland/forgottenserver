@@ -33,9 +33,9 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			local player = Player(cid)
 			Item(item.uid):transform(item.itemid, 0)
 			if item.type == 3 or item.type == 15 then
-				doTargetCombatCondition(0, cid, drunk, CONST_ME_NONE)
+				player:addCondition(drunk)
 			elseif item.type == 4 then
-				doTargetCombatCondition(0, cid, poison, CONST_ME_NONE)
+				player:addCondition(poison)
 			elseif item.type == 7 then
 				player:addMana(math.random(50, 150))
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
