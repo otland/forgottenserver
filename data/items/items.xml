@@ -17395,29 +17395,32 @@
 	<item fromid="9943" toid="9947" article="a" name="gate" />
 	<item id="9948" article="a" name="dracoyle statue">
 		<attribute key="slotType" value="ammo" />
-		<attribute key="description" value="This rare treasure can be charged with an enchanted emerald." />
+		<attribute key="description" value="This rare treasure is said to protect its owner from misery and curses." />
 		<attribute key="weight" value="1500" />
 		<attribute key="rotateTo" value="9953" />
 		<attribute key="duration" value="604800" />
 		<attribute key="decayTo" value="9949" />
 	</item>
 	<item id="9949" article="a" name="dracoyle statue">
+		<attribute key="slotType" value="ammo" />
 		<attribute key="description" value="This rare treasure can be charged with an enchanted emerald." />
 		<attribute key="weight" value="1500" />
 		<attribute key="rotateTo" value="9954" />
 	</item>
 	<item fromid="9950" toid="9952" article="a" name="gate" />
 	<item id="9953" article="a" name="dracoyle statue">
-		<attribute key="description" value="This rare treasure can be charged with an enchanted emerald." />
+		<attribute key="slotType" value="ammo" />
+		<attribute key="description" value="This rare treasure is said to protect its owner from misery and curses." />
 		<attribute key="weight" value="1500" />
-		<attribute key="rotateTo" value="9949" />
+		<attribute key="rotateTo" value="9948" />
 		<attribute key="duration" value="604800" />
 		<attribute key="decayTo" value="9954" />
 	</item>
 	<item id="9954" article="a" name="dracoyle statue">
+		<attribute key="slotType" value="ammo" />
 		<attribute key="description" value="This rare treasure can be charged with an enchanted emerald." />
 		<attribute key="weight" value="1500" />
-		<attribute key="rotateTo" value="9948" />
+		<attribute key="rotateTo" value="9949" />
 	</item>
 	<item id="9955" article="a" name="vampiric crest">
 		<attribute key="description" value="This crest seems important. You shouldn't lose it." />
@@ -18367,7 +18370,7 @@
 		<attribute key="weight" value="500" />
 		<attribute key="decayTo" value="10309" />
 		<attribute key="duration" value="10" />
-		<attribute key="transformDeEquipTo" value="10310" />
+		<attribute key="transformDeEquipTo" value="10315" />
 	</item>
 	<item id="10312" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="Its power is depleted at the moment." />
@@ -18391,8 +18394,8 @@
 	<item id="10315" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="Its power is depleted at the moment." />
 		<attribute key="weight" value="500" />
-		<attribute key="decayTo" value="10309" />
-		<attribute key="duration" value="86400" />
+		<attribute key="decayTo" value="10310" />
+		<attribute key="duration" value="10" />
 	</item>
 	<item id="10316" article="a" name="mighty helm of green sparks">
 		<attribute key="description" value="This helmet spawns green stars. Awesome." />
