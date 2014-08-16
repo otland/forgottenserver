@@ -51,7 +51,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			end
 
 			if query ~= RETURNVALUE_NOERROR then
-				player:sendTextMessage(MESSAGE_STATUS_SMALL, query)
+				Player(cid):sendTextMessage(MESSAGE_STATUS_SMALL, query)
 				return true
 			end
 
