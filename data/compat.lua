@@ -733,7 +733,7 @@ function doRelocate(fromPos, toPos)
 		return false
 	end
 
-	for i = fromTile:getThingCount(), 0, -1 do
+	for i = fromTile:getThingCount() - 1, 0, -1 do
 		local thing = fromTile:getThing(i)
 		if thing ~= nil then
 			if thing:isItem() then
@@ -811,8 +811,8 @@ end
 
 function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	local result = {}
-	for _, spectator in ipairs(Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)) do
-		result[#result + 1] = spectator:getId()
+	for index, spectator in ipairs(Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)) do
+		result[index] = spectator:getId()
 	end
 	return result
 end
