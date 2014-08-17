@@ -4633,7 +4633,7 @@ void Game::ReleaseItem(Item* item)
 	ToReleaseItems.push_back(item);
 }
 
-void Game::broadcastMessage(const std::string& text, MessageClasses type, bool show = true) const
+void Game::broadcastMessage(const std::string& text, MessageClasses type, bool show) const
 {
 	if (show)
 		std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
