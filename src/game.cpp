@@ -4633,9 +4633,11 @@ void Game::ReleaseItem(Item* item)
 	ToReleaseItems.push_back(item);
 }
 
-void Game::broadcastMessage(const std::string& text, MessageClasses type) const
+void Game::broadcastMessage(const std::string& text, MessageClasses type, bool show = true) const
 {
-	std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
+	if (show)
+		std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
+
 	for (const auto& it : players) {
 		it.second->sendTextMessage(type, text);
 	}

@@ -3082,10 +3082,11 @@ int32_t LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
 
 int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
 {
-	//broadcastMessage(message, type)
+	//broadcastMessage(message, type, show)
+	bool show = getBoolean(L, 3, true);
 	const std::string& message = getString(L, 1);
 	MessageClasses type = getNumber<MessageClasses>(L, 2, MESSAGE_STATUS_WARNING);
-	g_game.broadcastMessage(message, type);
+	g_game.broadcastMessage(message, type, show);
 	pushBoolean(L, true);
 	return 1;
 }

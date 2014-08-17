@@ -354,7 +354,7 @@ class Game
 		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
 		void internalCloseTrade(Player* player);
 		bool playerBroadcastMessage(Player* player, const std::string& text) const;
-		void broadcastMessage(const std::string& text, MessageClasses type) const;
+		void broadcastMessage(const std::string& text, MessageClasses type, bool show) const;
 
 		//Implementation of player invoked events
 		void playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos,
