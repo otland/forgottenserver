@@ -15390,9 +15390,9 @@
 		<attribute key="description" value="It can't be closed." />
 		<attribute key="type" value="door" />
 	</item>
-	<item id="8698" article="a" name="golden goblet">
+	<item id="8698" article="a" name="stolen golden goblet">
 		<attribute key="description" value="It looks incredibly valuable." />
-		<attribute key="weight" value="1800" />
+		<attribute key="weight" value="1500" />
 	</item>
 	<item id="8699" name="the famous Mina Losa painting">
 		<attribute key="weight" value="1000" />
