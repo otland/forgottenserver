@@ -14,7 +14,7 @@ speed:setParameter(CONDITION_PARAM_TICKS, 10000)
 speed:setFormula(-0.7, 56, -0.7, 56)
 combat:setCondition(speed)
 
-local exhaustHealGroup = Condition(CONDITION_EXHAUST_HEAL)
+local exhaustHealGroup = Condition(CONDITION_SPELLGROUPCOOLDOWN)
 exhaustHealGroup:setParameter(CONDITION_PARAM_SUBID, 2)
 exhaustHealGroup:setParameter(CONDITION_PARAM_TICKS, 10000)
 combat:setCondition(exhaustHealGroup)
