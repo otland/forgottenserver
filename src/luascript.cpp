@@ -4922,7 +4922,7 @@ int32_t LuaScriptInterface::luaGameGetWorldTime(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaGameGetWorldUpTime(lua_State* L)
+int32_t LuaScriptInterface::luaGameGetWorldUptime(lua_State* L)
 {
 	// Game.getWorldUptime()
 	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
