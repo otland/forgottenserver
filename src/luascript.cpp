@@ -1013,18 +1013,6 @@ void LuaScriptInterface::registerFunctions()
 	//getHouseByPlayerGUID(playerGUID)
 	lua_register(m_luaState, "getHouseByPlayerGUID", LuaScriptInterface::luaGetHouseByPlayerGUID);
 
-	//getWorldTime()
-	lua_register(m_luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
-
-	//getWorldLight()
-	lua_register(m_luaState, "getWorldLight", LuaScriptInterface::luaGetWorldLight);
-
-	//getWorldUpTime()
-	lua_register(m_luaState, "getWorldUpTime", LuaScriptInterface::luaGetWorldUpTime);
-
-	//broadcastMessage(message, type)
-	lua_register(m_luaState, "broadcastMessage", LuaScriptInterface::luaBroadcastMessage);
-
 	//createCombatArea( {area}, <optional> {extArea} )
 	lua_register(m_luaState, "createCombatArea", LuaScriptInterface::luaCreateCombatArea);
 
@@ -1817,6 +1805,12 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
+
+	registerMethod("Game", "getWorldLight", LuaScriptInterface::luaGameGetWorldLight);
+	registerMethod("Game", "getWorldTime", LuaScriptInterface::luaGameGetWorldTime);
+	registerMethod("Game", "getWorldUptime", LuaScriptInterface::luaGameGetWorldUptime);
+
+	registerMethod("Game", "broadcastMessage", LuaScriptInterface::luaGameBroadcastMessage);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -3051,42 +3045,6 @@ int32_t LuaScriptInterface::luaGetHouseByPlayerGUID(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetWorldTime(lua_State* L)
-{
-	//getWorldTime()
-	uint32_t time = g_game.getLightHour();
-	lua_pushnumber(L, time);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetWorldLight(lua_State* L)
-{
-	//getWorldLight()
-	LightInfo lightInfo;
-	g_game.getWorldLightInfo(lightInfo);
-	lua_pushnumber(L, lightInfo.level);
-	lua_pushnumber(L, lightInfo.color);
-	return 2;
-}
-
-int32_t LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
-{
-	//getWorldUpTime()
-	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
-	lua_pushnumber(L, uptime);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
-{
-	//broadcastMessage(message, type)
-	const std::string& message = getString(L, 1);
-	MessageClasses type = getNumber<MessageClasses>(L, 2, MESSAGE_STATUS_WARNING);
-	g_game.broadcastMessage(message, type);
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -4944,6 +4902,42 @@ int32_t LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetWorldLight(lua_State* L)
+{
+	// Game.getWorldLight()
+	LightInfo lightInfo;
+	g_game.getWorldLightInfo(lightInfo);
+	lua_pushnumber(L, lightInfo.level);
+	lua_pushnumber(L, lightInfo.color);
+	return 2;
+}
+
+int32_t LuaScriptInterface::luaGameGetWorldTime(lua_State* L)
+{
+	// Game.getWorldTime()
+	lua_pushnumber(L, g_game.getLightHour());
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameGetWorldUptime(lua_State* L)
+{
+	// Game.getWorldUptime()
+	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
+	lua_pushnumber(L, uptime);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameBroadcastMessage(lua_State* L)
+{
+	// Game.broadcastMessage(message, type[, hideMessage = false])
+	const std::string& message = getString(L, 1);
+	MessageClasses type = getNumber<MessageClasses>(L, 2, MESSAGE_STATUS_WARNING);
+	bool hideMessage = getBoolean(L, 3, false);
+	g_game.broadcastMessage(message, type, hideMessage);
+	pushBoolean(L, true);
 	return 1;
 }
 

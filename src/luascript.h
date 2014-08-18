@@ -455,11 +455,6 @@ class LuaScriptInterface
 		static int32_t luaGetPlayerInstantSpellInfo(lua_State* L);
 		static int32_t luaGetPlayerInstantSpellCount(lua_State* L);
 
-		static int32_t luaGetWorldTime(lua_State* L);
-		static int32_t luaGetWorldLight(lua_State* L);
-		static int32_t luaGetWorldUpTime(lua_State* L);
-		static int32_t luaBroadcastMessage(lua_State* L);
-
 		//type validation
 		static int32_t luaIsDepot(lua_State* L);
 		static int32_t luaIsMoveable(lua_State* L);
@@ -583,6 +578,11 @@ class LuaScriptInterface
 		static int32_t luaGameCreateTile(lua_State* L);
 
 		static int32_t luaGameStartRaid(lua_State* L);
+
+		static int32_t luaGameGetWorldLight(lua_State* L);
+		static int32_t luaGameGetWorldTime(lua_State* L);
+		static int32_t luaGameGetWorldUptime(lua_State* L);
+		static int32_t luaGameBroadcastMessage(lua_State* L);
 
 		// Variant
 		static int32_t luaVariantCreate(lua_State* L);

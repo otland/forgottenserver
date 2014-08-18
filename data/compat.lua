@@ -779,3 +779,19 @@ function doCreateTeleport(itemId, destination, position)
 	item:setDestination(destination)
 	return item:getUniqueId()
 end
+
+function getWorldLight()
+	return Game.getWorldLight() or -1
+end
+
+function getWorldTime()
+	return Game.getWorldTime() or -1
+end
+
+function getWorldUpTime()
+	return Game.getWorldUptime() or -1
+end
+
+function broadcastMessage(message, type, ...)
+	return Game.broadcastMessage(message, type, ...) or false
+end
