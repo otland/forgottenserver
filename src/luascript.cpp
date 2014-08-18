@@ -4908,7 +4908,8 @@ int32_t LuaScriptInterface::luaGameStartRaid(lua_State* L)
 int32_t LuaScriptInterface::luaGameGetWorldLight(lua_State* L)
 {
 	// Game.getWorldLight()
-	LightInfo lightInfo = g_game.getWorldLightInfo(lightInfo);
+	LightInfo lightInfo;
+	g_game.getWorldLightInfo(lightInfo);
 	lua_pushnumber(L, lightInfo.level);
 	lua_pushnumber(L, lightInfo.color);
 	return 2;
@@ -4934,7 +4935,7 @@ int32_t LuaScriptInterface::luaGameBroadcastMessage(lua_State* L)
 	// Game.broadcastMessage(message, type[, hideMessage = false])
 	const std::string& message = getString(L, 1);
 	MessageClasses type = getNumber<MessageClasses>(L, 2, MESSAGE_STATUS_WARNING);
-	bool hideMessage = getBoolean(L, 3, false)
+	bool hideMessage = getBoolean(L, 3, false);
 	g_game.broadcastMessage(message, type, hideMessage);
 	pushBoolean(L, true);
 	return 1;
