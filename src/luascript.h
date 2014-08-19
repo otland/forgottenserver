@@ -424,7 +424,6 @@ class LuaScriptInterface
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
-		static int32_t luaDoShowTextWindow(lua_State* L);
 		static int32_t luaDoCreateItem(lua_State* L);
 		static int32_t luaDoCreateItemEx(lua_State* L);
 		static int32_t luaDoAddCondition(lua_State* L);
@@ -433,7 +432,6 @@ class LuaScriptInterface
 
 		static int32_t luaDoPlayerAddItem(lua_State* L);
 		static int32_t luaDoTileAddItemEx(lua_State* L);
-		static int32_t luaDoRelocate(lua_State* L);
 		static int32_t luaDoPlayerRemoveItem(lua_State* L);
 		static int32_t luaDoSetCreatureLight(lua_State* L);
 
@@ -447,8 +445,6 @@ class LuaScriptInterface
 		static int32_t luaGetHouseByPlayerGUID(lua_State* L);
 
 		//get creature info functions
-		static int32_t luaGetSpectators(lua_State* L);
-
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
 		static int32_t luaGetCreatureCondition(lua_State* L);
 

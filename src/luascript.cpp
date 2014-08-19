@@ -970,10 +970,6 @@ void LuaScriptInterface::registerFunctions()
 	//doTileAddItemEx(pos, uid)
 	lua_register(m_luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
 
-	//doRelocate(pos, posTo)
-	//Moves all moveable objects from pos to posTo
-	lua_register(m_luaState, "doRelocate", LuaScriptInterface::luaDoRelocate);
-
 	//doAddCondition(cid, condition)
 	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
 
@@ -988,9 +984,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
-
-	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
-	lua_register(m_luaState, "getSpectators", LuaScriptInterface::luaGetSpectators);
 
 	//getCreatureCondition(cid, condition[, subId])
 	lua_register(m_luaState, "getCreatureCondition", LuaScriptInterface::luaGetCreatureCondition);
@@ -2832,50 +2825,6 @@ int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoRelocate(lua_State* L)
-{
-	//doRelocate(pos, posTo)
-	//Moves all moveable objects from pos to posTo
-	const Position& fromPos = getPosition(L, 1);
-	Tile* fromTile = g_game.getTile(fromPos.x, fromPos.y, fromPos.z);
-	if (!fromTile) {
-		std::ostringstream ss;
-		ss << fromPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	const Position& toPos = getPosition(L, 2);
-	Tile* toTile = g_game.getTile(toPos.x, toPos.y, toPos.z);
-	if (!toTile) {
-		std::ostringstream ss;
-		ss << toPos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (fromTile != toTile) {
-		for (int32_t i = fromTile->getThingCount(); --i >= 0;) {
-			Thing* thing = fromTile->__getThing(i);
-			if (thing) {
-				if (Item* item = thing->getItem()) {
-					const ItemType& it = Item::items[item->getID()];
-					if (!it.isGroundTile() && !it.alwaysOnTop && !it.isMagicField() && !it.isDoor()) {
-						g_game.internalTeleport(item, toPos, false, FLAG_IGNORENOTMOVEABLE);
-					}
-				} else if (Creature* creature = thing->getCreature()) {
-					g_game.internalTeleport(creature, toPos);
-				}
-			}
-		}
-	}
-
-	pushBoolean(L, true);
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 {
 	//Consider using getTileItemById/getTileItemByType/getTileThingByPos/getTopCreature instead.
@@ -4124,32 +4073,6 @@ int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 	}
 
 	pushBoolean(L, hasProp);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetSpectators(lua_State* L)
-{
-	//getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers = false)
-	bool onlyPlayers = getBoolean(L, 5, false);
-	bool multifloor = getBoolean(L, 4);
-	uint32_t rangey = getNumber<uint32_t>(L, 3);
-	uint32_t rangex = getNumber<uint32_t>(L, 2);
-	const Position& centerPos = getPosition(L, 1);
-
-	SpectatorVec list;
-	g_game.getSpectators(list, centerPos, multifloor, onlyPlayers, rangex, rangex, rangey, rangey);
-	if (list.empty()) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	lua_createtable(L, list.size(), 0);
-
-	int32_t index = 0;
-	for (Creature* spectator : list) {
-		lua_pushnumber(L, spectator->getID());
-		lua_rawseti(L, -2, ++index);
-	}
 	return 1;
 }
 

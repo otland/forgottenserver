@@ -720,6 +720,35 @@ function doTeleportThing(uid, dest, pushMovement)
 	return false
 end
 
+function doRelocate(fromPos, toPos)
+	if fromPos == toPos then
+		return false
+	end	
+
+	local fromTile = Tile(fromPos)
+	if fromTile == nil then
+		return false
+	end
+
+	if Tile(toPos) == nil then
+		return false
+	end
+
+	for i = fromTile:getThingCount() - 1, 0, -1 do
+		local thing = fromTile:getThing(i)
+		if thing ~= nil then
+			if thing:isItem() then
+				if ItemType(thing:getId()):isMovable() then
+					thing:moveTo(toPos)
+				end
+			elseif thing:isCreature() then
+				thing:teleportTo(toPos)
+			end
+		end
+	end		
+	return true
+end
+
 function getThing(uid)
 	return uid >= 0x10000000 and pushThing(Creature(uid)) or pushThing(Item(uid))
 end
@@ -778,4 +807,16 @@ function doCreateTeleport(itemId, destination, position)
 	end
 	item:setDestination(destination)
 	return item:getUniqueId()
+end
+
+function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
+	local result = Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)
+	if #result == 0 then
+		return nil
+	end
+
+	for index, spectator in ipairs(result) do
+		result[index] = spectator:getId()
+	end
+	return result
 end
