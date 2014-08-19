@@ -8140,7 +8140,7 @@ int32_t LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 	if (player) {
 		int64_t experience = getNumber<int64_t>(L, 2);
 		bool sendText = getBoolean(L, 3, false);
-		player->addExperience(experience, sendText);
+		player->addExperience(nullptr, experience, sendText);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

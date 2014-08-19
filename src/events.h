@@ -50,6 +50,8 @@ class Events
 		bool eventPlayerOnTurn(Player* player, Direction direction);
 		bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
 		bool eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem);
+		bool eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
+		bool eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 
 	private:
 		LuaScriptInterface scriptInterface;
@@ -70,6 +72,8 @@ class Events
 		int32_t playerOnTurn;
 		int32_t playerOnTradeRequest;
 		int32_t playerOnTradeAccept;
+		int32_t playerOnGainExperience;
+		int32_t playerOnLoseExperience;
 };
 
 #endif
