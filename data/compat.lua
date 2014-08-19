@@ -737,8 +737,7 @@ function doRelocate(fromPos, toPos)
 		local thing = fromTile:getThing(i)
 		if thing ~= nil then
 			if thing:isItem() then
-				local iType = ItemType(thing:getId())
-				if iType and iType:isMovable() then
+				if ItemType(thing:getId()):isMovable() then
 					thing:moveTo(toPos)
 				end
 			elseif thing:isCreature() then
@@ -810,8 +809,12 @@ function doCreateTeleport(itemId, destination, position)
 end
 
 function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
-	local result = {}
-	for index, spectator in ipairs(Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)) do
+	local result = Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)
+	if #result == 0 then
+		return nil
+	end
+
+	for index, spectator in ipairs(result) do
 		result[index] = spectator:getId()
 	end
 	return result
