@@ -511,17 +511,17 @@ bool Events::eventPlayerOnTradeAccept(Player* player, Player* target, Item* item
 	return scriptInterface.callFunction(4);
 }
 
-bool Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp)
+void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp)
 {
 	// Player:onGainExperience(source, exp, rawExp)
 	// rawExp gives the original exp which is not multiplied
 	if (playerOnGainExperience == -1) {
-		return true;
+		return;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnGainExperience] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -544,26 +544,25 @@ bool Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint6
 	lua_pushnumber(L, rawExp);
 
 	if (scriptInterface.protectedCall(L, 4, 1) != 0) {
-		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, 0));
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		exp = LuaScriptInterface::getNumber<uint64_t>(L, 0);
+		exp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
+		lua_pop(L, 1);
 	}
-	lua_pop(L, 1);
 
 	scriptInterface.resetScriptEnv();
-	return exp != 0;
 }
 
-bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t& exp)
+void Events::eventPlayerOnLoseExperience(Player* player, uint64_t& exp)
 {
 	// Player:onLoseExperience(exp)
 	if (playerOnLoseExperience == -1) {
-		return true;
+		return;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnLoseExperience] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -578,12 +577,11 @@ bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t& exp)
 	lua_pushnumber(L, exp);
 
 	if (scriptInterface.protectedCall(L, 2, 1) != 0) {
-		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, 0));
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		exp = LuaScriptInterface::getNumber<int32_t>(L, 0);
+		exp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
+		lua_pop(L, 1);
 	}
-	lua_pop(L, 1);
 
 	scriptInterface.resetScriptEnv();
-	return exp != 0;
 }
