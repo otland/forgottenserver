@@ -109,7 +109,6 @@ int main(int argc, char* argv[])
 				g_dispatcher.stop();
 			}));
 			ExitThread(0);
-			return 0;
 		}, 1);
 #endif
 		servicer.run();
