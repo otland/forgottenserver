@@ -432,17 +432,12 @@ class LuaScriptInterface
 
 		static int32_t luaDoPlayerAddItem(lua_State* L);
 		static int32_t luaDoTileAddItemEx(lua_State* L);
-		static int32_t luaDoPlayerRemoveItem(lua_State* L);
 		static int32_t luaDoSetCreatureLight(lua_State* L);
 
 		//get item info
 		static int32_t luaGetThingfromPos(lua_State* L);
-		static int32_t luaGetThingPos(lua_State* L);
 		static int32_t luaHasProperty(lua_State* L);
 		static int32_t luaGetDepotId(lua_State* L);
-
-		//houses
-		static int32_t luaGetHouseByPlayerGUID(lua_State* L);
 
 		//get creature info functions
 		static int32_t luaGetPlayerFlagValue(lua_State* L);
@@ -631,6 +626,8 @@ class LuaScriptInterface
 
 		static int32_t luaTileHasProperty(lua_State* L);
 		static int32_t luaTileHasFlag(lua_State* L);
+
+		static int32_t luaTileGetThingIndex(lua_State* L);
 
 		static int32_t luaTileQueryAdd(lua_State* L);
 
