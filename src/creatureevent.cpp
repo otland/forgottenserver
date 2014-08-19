@@ -189,10 +189,10 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_MODALWINDOW;
 	} else if (tmpStr == "textedit") {
 		m_type = CREATURE_EVENT_TEXTEDIT;
-	} else if (tmpStr == "changehealth") {
-		m_type = CREATURE_EVENT_CHANGEHEALTH;
-	} else if (tmpStr == "changemana") {
-		m_type = CREATURE_EVENT_CHANGEMANA;
+	} else if (tmpStr == "healthchange") {
+		m_type = CREATURE_EVENT_HEALTHCHANGE;
+	} else if (tmpStr == "manachange") {
+		m_type = CREATURE_EVENT_MANACHANGE;
 	} else if (tmpStr == "extendedopcode") {
 		m_type = CREATURE_EVENT_EXTENDED_OPCODE;
 	} else {
@@ -235,11 +235,11 @@ std::string CreatureEvent::getScriptEventName()
 		case CREATURE_EVENT_TEXTEDIT:
 			return "onTextEdit";
 
-		case CREATURE_EVENT_CHANGEHEALTH:
-			return "onChangeHealth";
+		case CREATURE_EVENT_HEALTHCHANGE:
+			return "onHealthChange";
 
-		case CREATURE_EVENT_CHANGEMANA:
-			return "onChangeMana";
+		case CREATURE_EVENT_MANACHANGE:
+			return "onManaChange";
 
 		case CREATURE_EVENT_EXTENDED_OPCODE:
 			return "onExtendedOpcode";
@@ -480,11 +480,11 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	return m_scriptInterface->callFunction(3);
 }
 
-void CreatureEvent::executeChangeHealth(Creature* creature, Creature* attacker, CombatDamage& damage)
+void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage)
 {
-	//onChangeHealth(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
+	//onHealthChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
 	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::executeChangeHealth] Call stack overflow" << std::endl;
+		std::cout << "[Error - CreatureEvent::executeHealthChange] Call stack overflow" << std::endl;
 		return;
 	}
 
@@ -502,6 +502,7 @@ void CreatureEvent::executeChangeHealth(Creature* creature, Creature* attacker, 
 	} else {
 		lua_pushnil(L);
 	}
+
 	lua_pushnumber(L, damage.primary.value);
 	lua_pushnumber(L, damage.primary.type);
 	lua_pushnumber(L, damage.secondary.value);
@@ -522,14 +523,15 @@ void CreatureEvent::executeChangeHealth(Creature* creature, Creature* attacker, 
 			damage.secondary.value = -damage.secondary.value;
 		}
 	}
+
 	m_scriptInterface->resetScriptEnv();
 }
 
-void CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin)
+void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin)
 {
-	//onChangeMana(creature, attacker, manaChange, origin)
+	//onManaChange(creature, attacker, manaChange, origin)
 	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::executeChangeMana] Call stack overflow" << std::endl;
+		std::cout << "[Error - CreatureEvent::executeManaChange] Call stack overflow" << std::endl;
 		return;
 	}
 
@@ -547,6 +549,7 @@ void CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, in
 	} else {
 		lua_pushnil(L);
 	}
+
 	lua_pushnumber(L, manaChange);
 	lua_pushnumber(L, origin);
 
@@ -556,6 +559,7 @@ void CreatureEvent::executeChangeMana(Creature* creature, Creature* attacker, in
 		manaChange = LuaScriptInterface::getNumber<int32_t>(L, -1);
 	}
 	lua_pop(L, 1);
+
 	m_scriptInterface->resetScriptEnv();
 }
 

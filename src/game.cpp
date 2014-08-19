@@ -3990,10 +3990,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (damage.origin != ORIGIN_NONE) {
-			const auto& events = target->getCreatureEvents(CREATURE_EVENT_CHANGEHEALTH);
+			const auto& events = target->getCreatureEvents(CREATURE_EVENT_HEALTHCHANGE);
 			if (!events.empty()) {
 				for (CreatureEvent* creatureEvent : events) {
-					creatureEvent->executeChangeHealth(target, attacker, damage);
+					creatureEvent->executeHealthChange(target, attacker, damage);
 				}
 				damage.origin = ORIGIN_NONE;
 				return combatChangeHealth(attacker, target, damage);
@@ -4093,10 +4093,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			int32_t manaDamage = std::min<int32_t>(target->getMana(), healthChange);
 			if (manaDamage != 0) {
 				if (damage.origin != ORIGIN_NONE) {
-					const auto& events = target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA);
+					const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 					if (!events.empty()) {
 						for (CreatureEvent* creatureEvent : events) {
-							creatureEvent->executeChangeMana(target, attacker, healthChange, damage.origin);
+							creatureEvent->executeManaChange(target, attacker, healthChange, damage.origin);
 						}
 						if (healthChange == 0) {
 							return true;
@@ -4160,10 +4160,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (damage.origin != ORIGIN_NONE) {
-			const auto& events = target->getCreatureEvents(CREATURE_EVENT_CHANGEHEALTH);
+			const auto& events = target->getCreatureEvents(CREATURE_EVENT_HEALTHCHANGE);
 			if (!events.empty()) {
 				for (CreatureEvent* creatureEvent : events) {
-					creatureEvent->executeChangeHealth(target, attacker, damage);
+					creatureEvent->executeHealthChange(target, attacker, damage);
 				}
 				damage.origin = ORIGIN_NONE;
 				return combatChangeHealth(attacker, target, damage);
@@ -4272,10 +4272,10 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		}
 
 		if (origin != ORIGIN_NONE) {
-			const auto& events = target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA);
+			const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 			if (!events.empty()) {
 				for (CreatureEvent* creatureEvent : events) {
-					creatureEvent->executeChangeMana(target, attacker, manaChange, origin);
+					creatureEvent->executeManaChange(target, attacker, manaChange, origin);
 				}
 				return combatChangeMana(attacker, target, manaChange, ORIGIN_NONE);
 			}
@@ -4319,10 +4319,10 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		}
 
 		if (origin != ORIGIN_NONE) {
-			const auto& events = target->getCreatureEvents(CREATURE_EVENT_CHANGEMANA);
+			const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 			if (!events.empty()) {
 				for (CreatureEvent* creatureEvent : events) {
-					creatureEvent->executeChangeMana(target, attacker, manaChange, origin);
+					creatureEvent->executeManaChange(target, attacker, manaChange, origin);
 				}
 				return combatChangeMana(attacker, target, manaChange, ORIGIN_NONE);
 			}
