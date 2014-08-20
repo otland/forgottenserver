@@ -80,6 +80,7 @@
       <PreprocessorDefinitions>_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <ObjectFileName>$(IntDir)\obj_d\</ObjectFileName>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -91,6 +92,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ObjectFileName>$(IntDir)\obj_d\</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -102,6 +104,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ObjectFileName>$(IntDir)\obj_r\</ObjectFileName>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -117,6 +120,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WarningLevel>Level4</WarningLevel>
+      <ObjectFileName>$(IntDir)\obj_r\</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
