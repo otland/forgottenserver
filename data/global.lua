@@ -445,3 +445,13 @@ local slotBits = {
 function ItemType.usesSlot(self, slot)
 	return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
 end
+
+function Game.broadcastMessage(message, messageType)
+	if messageType == nil then
+		messageType = MESSAGE_STATUS_WARNING
+	end
+
+	for _, player in ipairs(Game.getPlayers()) do
+		player:sendTextMessage(messageType, message)
+	end
+end
