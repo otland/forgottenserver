@@ -1015,9 +1015,6 @@ void LuaScriptInterface::registerFunctions()
 	//getWorldUpTime()
 	lua_register(m_luaState, "getWorldUpTime", LuaScriptInterface::luaGetWorldUpTime);
 
-	//broadcastMessage(message, type)
-	lua_register(m_luaState, "broadcastMessage", LuaScriptInterface::luaBroadcastMessage);
-
 	//createCombatArea( {area}, <optional> {extArea} )
 	lua_register(m_luaState, "createCombatArea", LuaScriptInterface::luaCreateCombatArea);
 
@@ -3026,16 +3023,6 @@ int32_t LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
 	//getWorldUpTime()
 	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
 	lua_pushnumber(L, uptime);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaBroadcastMessage(lua_State* L)
-{
-	//broadcastMessage(message, type)
-	const std::string& message = getString(L, 1);
-	MessageClasses type = getNumber<MessageClasses>(L, 2, MESSAGE_STATUS_WARNING);
-	g_game.broadcastMessage(message, type);
-	pushBoolean(L, true);
 	return 1;
 }
 

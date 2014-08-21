@@ -820,3 +820,8 @@ function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	end
 	return result
 end
+
+function broadcastMessage(message, messageType)
+	Game.broadcastMessage(message, messageType)
+	print("> Broadcasted message: \"" .. message .. "\".")
+end
