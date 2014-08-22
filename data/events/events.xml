@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
+	<!-- Creature methods -->
+	<event class="Creature" method="onOutfit" enabled="0" />
+
 	<!-- Party methods -->
 	<event class="Party" method="onJoin" enabled="0" />
 	<event class="Party" method="onLeave" enabled="0" />

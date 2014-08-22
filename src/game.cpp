@@ -3761,6 +3761,10 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 
 void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
+	if (!g_events->eventCreatureOnOutfit(creature, outfit)) {
+		return;
+	}
+
 	creature->setCurrentOutfit(outfit);
 
 	if (creature->isInvisible()) {

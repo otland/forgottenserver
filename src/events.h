@@ -34,6 +34,9 @@ class Events
 		void clear();
 		bool load();
 
+		// Creature
+		bool eventCreatureOnOutfit(Creature* creature, const Outfit_t& outfit);
+
 		// Party
 		bool eventPartyOnJoin(Party* party, Player* player);
 		bool eventPartyOnLeave(Party* party, Player* player);
@@ -55,6 +58,9 @@ class Events
 
 	private:
 		LuaScriptInterface scriptInterface;
+
+		// Creature
+		int32_t creatureOnOutfit;
 
 		// Party
 		int32_t partyOnJoin;
