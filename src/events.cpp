@@ -146,7 +146,7 @@ bool Events::eventCreatureOnOutfit(Creature* creature, const Outfit_t& outfit)
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventPartyOnJoin] Call stack overflow" << std::endl;
+		std::cout << "[Error - Events::eventCreatureOnOutfit] Call stack overflow" << std::endl;
 		return false;
 	}
 
