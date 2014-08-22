@@ -952,9 +952,6 @@ void LuaScriptInterface::registerFunctions()
 	//getThingfromPos(pos)
 	lua_register(m_luaState, "getThingfromPos", LuaScriptInterface::luaGetThingfromPos);
 
-	//getThingPos(uid)
-	lua_register(m_luaState, "getThingPos", LuaScriptInterface::luaGetThingPos);
-
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
 	//Returns uid of the created item
@@ -979,9 +976,6 @@ void LuaScriptInterface::registerFunctions()
 	//doMoveCreature(cid, direction)
 	lua_register(m_luaState, "doMoveCreature", LuaScriptInterface::luaDoMoveCreature);
 
-	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
-	lua_register(m_luaState, "doPlayerRemoveItem", LuaScriptInterface::luaDoPlayerRemoveItem);
-
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(m_luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
@@ -1002,9 +996,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//getDepotId(uid)
 	lua_register(m_luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
-
-	//getHouseByPlayerGUID(playerGUID)
-	lua_register(m_luaState, "getHouseByPlayerGUID", LuaScriptInterface::luaGetHouseByPlayerGUID);
 
 	//getWorldTime()
 	lua_register(m_luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
@@ -1859,6 +1850,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Tile", "getCreatures", LuaScriptInterface::luaTileGetCreatures);
 	registerMethod("Tile", "getCreatureCount", LuaScriptInterface::luaTileGetCreatureCount);
 
+	registerMethod("Tile", "getThingIndex", LuaScriptInterface::luaTileGetThingIndex);
+
 	registerMethod("Tile", "hasProperty", LuaScriptInterface::luaTileHasProperty);
 	registerMethod("Tile", "hasFlag", LuaScriptInterface::luaTileHasFlag);
 
@@ -2697,24 +2690,6 @@ int32_t LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaDoPlayerRemoveItem(lua_State* L)
-{
-	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
-	Player* player = getPlayer(L, 1);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	uint16_t itemId = getNumber<uint16_t>(L, 2);
-	uint32_t count = getNumber<uint32_t>(L, 3);
-	int32_t subType = getNumber<int32_t>(L, 4, -1);
-	bool ignoreEquipped = getBoolean(L, 5, false);
-	pushBoolean(L, player->removeItemOfType(itemId, count, subType, ignoreEquipped));
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 {
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count/subtype, <optional: default: 1> canDropOnMap)
@@ -2986,20 +2961,6 @@ int32_t LuaScriptInterface::luaDebugPrint(lua_State* L)
 	return 0;
 }
 
-int32_t LuaScriptInterface::luaGetHouseByPlayerGUID(lua_State* L)
-{
-	//getHouseByPlayerGUID(playerGUID)
-	uint32_t guid = getNumber<uint32_t>(L, -1);
-
-	House* house = Houses::getInstance().getHouseByPlayerId(guid);
-	if (house) {
-		lua_pushnumber(L, house->getId());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int32_t LuaScriptInterface::luaGetWorldTime(lua_State* L)
 {
 	//getWorldTime()
@@ -3023,27 +2984,6 @@ int32_t LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
 	//getWorldUpTime()
 	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
 	lua_pushnumber(L, uptime);
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaGetThingPos(lua_State* L)
-{
-	//getThingPos(uid)
-	uint32_t uid = getNumber<uint32_t>(L, -1);
-	Thing* thing = getScriptEnv()->getThingByUID(uid);
-	if (!thing) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	uint32_t stackpos = 0;
-
-	const Position& pos = thing->getPosition();
-	if (Tile* tile = thing->getTile()) {
-		stackpos = tile->__getIndexOfThing(thing);
-	}
-	pushPosition(L, pos, stackpos);
 	return 1;
 }
 
@@ -5579,6 +5519,23 @@ int32_t LuaScriptInterface::luaTileHasProperty(lua_State* L)
 		pushBoolean(L, tile->hasProperty(item, property));
 	} else {
 		pushBoolean(L, tile->hasProperty(property));
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaTileGetThingIndex(lua_State* L)
+{
+	// tile:getThingIndex(thing)
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (tile) {
+		Thing* thing = getThing(L, 2);
+		if (thing) {
+			lua_pushnumber(L, tile->__getIndexOfThing(thing));
+		} else {
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
 	}
 	return 1;
 }

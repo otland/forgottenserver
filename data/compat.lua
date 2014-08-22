@@ -279,6 +279,7 @@ function doPlayerSetGuildLevel(cid, level) local p = Player(cid) return p ~= nil
 function doPlayerSetGuildNick(cid, nick) local p = Player(cid) return p ~= nil and p:setGuildNick(nick) or false end
 function doShowTextDialog(cid, itemId, text) local p = Player(cid) return p ~= nil and p:showTextDialog(itemId, text) or false end
 function doPlayerAddItemEx(cid, uid, ...) local p = Player(cid) return p ~= nil and p:addItemEx(Item(uid), ...) or false end
+function doPlayerRemoveItem(cid, itemid, count, ...) local p = Player(cid) return p ~= nil and p:removeItem(itemid, count, ...) or false end
 function doPlayerAddPremiumDays(cid, days) local p = Player(cid) return p ~= nil and p:addPremiumDays(days) or false end
 function doPlayerRemovePremiumDays(cid, days) local p = Player(cid) return p ~= nil and p:removePremiumDays(days) or false end
 function doPlayerAddBlessing(cid, blessing) local p = Player(cid) return p ~= nil and p:addBlessing(blessing) or false end
@@ -608,6 +609,15 @@ function getHouseRent(id) local h = House(id) return h ~= nil and h:getRent() or
 function getHouseAccessList(id, listId) local h = House(id) return h ~= nil and h:getAccessList(listId) or nil end
 function setHouseAccessList(id, listId, listText) local h = House(id) return h ~= nil and h:setAccessList(listId, listText) or false end
 
+function getHouseByPlayerGUID(playerGUID)
+	for _, house in ipairs(Game.getHouses()) do
+		if house:getOwnerGuid() == playerGUID then
+			return house:getId()
+		end
+	end
+	return nil
+end
+
 function getTileHouseInfo(pos)
 	local t = Tile(pos)
 	if t == nil then
@@ -718,6 +728,29 @@ function doTeleportThing(uid, dest, pushMovement)
 		end
 	end
 	return false
+end
+
+function getThingPos(uid)
+	local thing
+	if uid >= 0x10000000 then
+		thing = Creature(uid)
+	else
+		thing = Item(uid)
+	end
+
+	if thing == nil then
+		return false
+	end
+
+	local stackpos = 0
+	local tile = thing:getTile()
+	if tile ~= nil then
+		stackpos = tile:getThingIndex(thing)
+	end
+
+	local position = thing:getPosition()
+	position.stackpos = stackpos
+	return position
 end
 
 function doRelocate(fromPos, toPos)
