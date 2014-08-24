@@ -1,3 +1,3 @@
-function Creature:onOutfit(outfit)
+function Creature:onChangeOutfit(outfit)
 	return true
 end

@@ -35,7 +35,7 @@ class Events
 		bool load();
 
 		// Creature
-		bool eventCreatureOnOutfit(Creature* creature, const Outfit_t& outfit);
+		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
 
 		// Party
 		bool eventPartyOnJoin(Party* party, Player* player);
@@ -60,7 +60,7 @@ class Events
 		LuaScriptInterface scriptInterface;
 
 		// Creature
-		int32_t creatureOnOutfit;
+        int32_t creatureOnChangeOutfit;
 
 		// Party
 		int32_t partyOnJoin;

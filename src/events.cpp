@@ -36,7 +36,7 @@ Events::Events() :
 void Events::clear()
 {
 	// Creature
-	creatureOnOutfit = -1;
+	creatureOnChangeOutfit = -1;
 
 	// Party
 	partyOnJoin = -1;
@@ -85,8 +85,8 @@ bool Events::load()
 			const std::string& methodName = eventNode.attribute("method").as_string();
 			const int32_t event = scriptInterface.getMetaEvent(className, methodName);
 			if (className == "Creature") {
-				if (methodName == "onOutfit") {
-					creatureOnOutfit = event;
+				if (methodName == "onChangeOutfit") {
+					creatureOnChangeOutfit = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 				}
@@ -138,23 +138,23 @@ bool Events::load()
 }
 
 // Creature
-bool Events::eventCreatureOnOutfit(Creature* creature, const Outfit_t& outfit)
+bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
-	// Creature:onOutfit(outfit) or Creature.onOutfit(self, outfit)
-	if (creatureOnOutfit == -1) {
+	// Creature:onChangeOutfit(outfit) or Creature.onChangeOutfit(self, outfit)
+    if (creatureOnChangeOutfit == -1) {
 		return true;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventCreatureOnOutfit] Call stack overflow" << std::endl;
+		std::cout << "[Error - Events::eventCreatureOnChangeOutfit] Call stack overflow" << std::endl;
 		return false;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(creatureOnOutfit, &scriptInterface);
+    env->setScriptId(creatureOnChangeOutfit, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(creatureOnOutfit);
+    scriptInterface.pushFunction(creatureOnChangeOutfit);
 
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
