@@ -21,7 +21,7 @@
 		<attack name="drunk" interval="2000" chance="10" length="4" spread="3" target="1" duration="5000">
 			<attribute key="areaEffect" value="greenshimmer"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" radius="4" target="1" speechange="-700" duration="15000">
+		<attack name="speed" interval="2000" chance="15" radius="4" target="1" speedchange="-700" duration="15000">
 			<attribute key="shootEffect" value="whirlwindclub"/>
 			<attribute key="areaEffect" value="stun"/>
 		</attack>
