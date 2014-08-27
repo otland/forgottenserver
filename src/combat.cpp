@@ -717,7 +717,7 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 
 void Combat::postCombatEffects(Creature* caster, const Position& pos, const CombatParams& params)
 {
-	if (caster && params.distanceEffect != CONST_ME_NONE) {
+	if (caster && params.distanceEffect != CONST_ANI_NONE) {
 		addDistanceEffect(caster, caster->getPosition(), pos, params.distanceEffect);
 	}
 }
@@ -911,7 +911,7 @@ void Combat::doCombatCondition(Creature* caster, Creature* target, const CombatP
 			params.targetCallback->onTargetCombat(caster, target);
 		}
 
-		if (caster && params.distanceEffect != CONST_ME_NONE) {
+		if (caster && params.distanceEffect != CONST_ANI_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
@@ -935,7 +935,7 @@ void Combat::doCombatDispel(Creature* caster, Creature* target, const CombatPara
 			params.targetCallback->onTargetCombat(caster, target);
 		}
 
-		if (caster && params.distanceEffect != CONST_ME_NONE) {
+		if (caster && params.distanceEffect != CONST_ANI_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
@@ -960,7 +960,7 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 		}
 		*/
 
-		if (caster && params.distanceEffect != CONST_ME_NONE) {
+		if (caster && params.distanceEffect != CONST_ANI_NONE) {
 			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
