@@ -219,7 +219,7 @@ void Game::saveGameState()
 	}
 }
 
-int32_t Game::loadMainMap(const std::string& filename)
+bool Game::loadMainMap(const std::string& filename)
 {
 	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
 	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
