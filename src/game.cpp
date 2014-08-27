@@ -223,12 +223,12 @@ int32_t Game::loadMainMap(const std::string& filename)
 {
 	Monster::despawnRange = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRANGE);
 	Monster::despawnRadius = g_config.getNumber(ConfigManager::DEFAULT_DESPAWNRADIUS);
-	return map.loadMap("data/world/" + filename + ".otbm");
+	return map.loadMap("data/world/" + filename + ".otbm", true);
 }
 
 void Game::loadMap(const std::string& path)
 {
-	map.loadMap(path);
+	map.loadMap(path, false);
 }
 
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos)

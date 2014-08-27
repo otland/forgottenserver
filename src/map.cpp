@@ -41,7 +41,7 @@ Map::~Map()
 	//
 }
 
-bool Map::loadMap(const std::string& identifier)
+bool Map::loadMap(const std::string& identifier, bool loadHouses)
 {
 	IOMap loader;
 	if (!loader.loadMap(this, identifier)) {
@@ -53,12 +53,14 @@ bool Map::loadMap(const std::string& identifier)
 		std::cout << "[Warning - Map::loadMap] Failed to load spawn data." << std::endl;
 	}
 
-	if (!IOMap::loadHouses(this)) {
-		std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
-	}
+	if (loadHouses) {
+		if (!IOMap::loadHouses(this)) {
+			std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
+		}
 
-	IOMapSerialize::loadHouseInfo();
-	IOMapSerialize::loadMap(this);
+		IOMapSerialize::loadHouseInfo();
+		IOMapSerialize::loadHouseItems(this);
+	}
 	return true;
 }
 
@@ -77,14 +79,12 @@ bool Map::saveMap()
 	}
 
 	saved = false;
-
 	for (uint32_t tries = 0; tries < 3; tries++) {
-		if (IOMapSerialize::saveMap()) {
+		if (IOMapSerialize::saveHouseItems()) {
 			saved = true;
 			break;
 		}
 	}
-
 	return saved;
 }
 

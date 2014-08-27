@@ -165,7 +165,7 @@ class Map
 		  * Load a map.
 		  * \returns true if the map was loaded successfully
 		  */
-		bool loadMap(const std::string& identifier);
+		bool loadMap(const std::string& identifier, bool loadHouses);
 
 		/**
 		  * Save a map.

@@ -26,7 +26,7 @@
 
 extern Game g_game;
 
-void IOMapSerialize::loadMap(Map* map)
+void IOMapSerialize::loadHouseItems(Map* map)
 {
 	int64_t start = OTSYS_TIME();
 
@@ -65,7 +65,7 @@ void IOMapSerialize::loadMap(Map* map)
 	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
 }
 
-bool IOMapSerialize::saveMap()
+bool IOMapSerialize::saveHouseItems()
 {
 	int64_t start = OTSYS_TIME();
 	Database* db = Database::getInstance();
