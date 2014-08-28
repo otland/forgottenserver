@@ -89,11 +89,6 @@ class Game
 		void forceAddCondition(uint32_t creatureId, Condition* condition);
 		void forceRemoveCondition(uint32_t creatureId, ConditionType_t type);
 
-		/**
-		  * Load a map.
-		  * \param filename Mapfile to load
-		  * \returns int32_t 0 built-in spawns, 1 needs xml spawns, 2 needs sql spawns, -1 if got error
-		  */
 		bool loadMainMap(const std::string& filename);
 		void loadMap(const std::string& path);
 
