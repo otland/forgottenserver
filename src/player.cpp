@@ -54,7 +54,7 @@ Player::Player(ProtocolGame* p) :
 	Creature()
 {
 #ifdef CAST_SYSTEM
-	clients = p;
+	clients.push_back(p);
 	isConnecting = false;
 #else
 	client = p;
