@@ -1125,12 +1125,6 @@ void Player::sendPing()
 				for (auto& client : clients) {
 					client->logout(true, true);
 				}
-<<<<<<< HEAD
-			}
-			if (client) {
-				client->logout(true, true);
-=======
->>>>>>> parent of 8b4f6f1... Update player.cpp
 #else
 			if (client) {
 				client->logout(true, true);
