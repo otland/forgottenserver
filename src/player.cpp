@@ -1124,8 +1124,11 @@ void Player::sendPing()
 #ifdef CAST_SYSTEM
 			if (clients.size() > 0) {
 				for (auto& client : clients) {
-					client->logout(true, true);
+					clients->logout(true, true);
 				}
+			if (clients.size() > 0) {
+				client->logout(true, true);
+			}
 #else
 			if (client) {
 				client->logout(true, true);
