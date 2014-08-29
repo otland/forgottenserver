@@ -1123,11 +1123,14 @@ void Player::sendPing()
 #ifdef CAST_SYSTEM
 			if (clients.size() > 0) {
 				for (auto& client : clients) {
-					clients->logout(true, true);
+					client->logout(true, true);
 				}
+<<<<<<< HEAD
 			}
 			if (client) {
 				client->logout(true, true);
+=======
+>>>>>>> parent of 8b4f6f1... Update player.cpp
 #else
 			if (client) {
 				client->logout(true, true);
