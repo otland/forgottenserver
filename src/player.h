@@ -172,8 +172,16 @@ class Player : public Creature, public Cylinder
 		void dismount();
 
 		void sendFYIBox(const std::string& message) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+		for (auto& client : clients) { 
+#else
 			if (client) {
+#endif
 				client->sendFYIBox(message);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 
@@ -291,11 +299,19 @@ class Player : public Creature, public Cylinder
 		}
 
 		uint16_t getProtocolVersion() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() == 0) {
+#else
 			if (!client) {
+#endif
 				return 0;
 			}
 
+#ifdef CAST_SYSTEM
+			return clients.front()->getVersion();
+#else
 			return client->getVersion();
+#endif
 		}
 
 		secureMode_t getSecureMode() const {
@@ -347,8 +363,19 @@ class Player : public Creature, public Cylinder
 			return (getID() == 0);
 		}
 		void disconnect() {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+
+				for (auto& client : clients) {
+
+#else
 			if (client) {
+#endif
 				client->disconnect();
+#ifdef CAST_SYSTEM
+				}
+#endif
+
 			}
 		}
 		uint32_t getIP() const;
@@ -661,7 +688,7 @@ class Player : public Creature, public Cylinder
 		virtual void onTargetCreatureGainHealth(Creature* target, int32_t points);
 		virtual bool onKilledCreature(Creature* target, bool lastHit = true);
 		virtual void onGainExperience(uint64_t gainExp, Creature* target);
-		void onGainSharedExperience(uint64_t gainExp, Creature* source);
+		void onGainSharedExperience(uint64_t gainExp);
 		virtual void onAttackedCreatureBlockHit(BlockType_t blockType);
 		virtual void onBlockHit();
 		virtual void onChangeZone(ZoneType_t zone);
@@ -685,9 +712,20 @@ class Player : public Creature, public Cylinder
 			skull = newSkull;
 		}
 		void sendCreatureSkull(const Creature* creature) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+
+				for (auto& client : clients) {
+
+					client->sendCreatureSkull(creature);
+
+					
+				}			}
+#else
 			if (client) {
 				client->sendCreatureSkull(creature);
 			}
+#endif
 		}
 		void checkSkullTicks(int32_t ticks);
 
@@ -702,158 +740,391 @@ class Player : public Creature, public Cylinder
 		//tile
 		//send methods
 		void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+#else
 			if (client) {
-				int32_t stackpos = tile->getStackposOfThing(this, item);
-				if (stackpos != -1) {
-					client->sendAddTileItem(pos, stackpos, item);
-				}
+#endif
+#ifdef CAST_SYSTEM
+					for (auto& client : clients) {
+#endif
+					int32_t stackpos = tile->getStackposOfThing(this, item);
+					if (stackpos != -1) {
+							client->sendAddTileItem(pos, stackpos, item);
+#ifdef CAST_SYSTEM
+					}
+#endif
+					}
 			}
 		}
 		void sendUpdateTileItem(const Tile* tile, const Position& pos, const Item* item) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				int32_t stackpos = tile->getStackposOfThing(this, item);
 				if (stackpos != -1) {
 					client->sendUpdateTileItem(pos, stackpos, item);
+
 				}
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
+
 		}
+		
+
 		void sendRemoveTileThing(const Position& pos, int32_t stackpos) {
+#ifdef CAST_SYSTEM
+			if (stackpos != -1 && clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (stackpos != -1 && client) {
+#endif
 				client->sendRemoveTileThing(pos, stackpos);
+
+#ifdef CAST_SYSTEM
+				}
+#endif			
 			}
+
 		}
+
 		void sendUpdateTile(const Tile* tile, const Position& pos) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendUpdateTile(tile, pos);
+#ifdef CAST_SYSTEM
+			}
+#endif
+			}
+
+		}
+
+
+		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
+			if (client) {
+#endif
+				client->sendChannelMessage(author, text, type, channel);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 
-		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel) {
-			if (client) {
-				client->sendChannelMessage(author, text, type, channel);
-			}
-		}
 		void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendChannelEvent(channelId, playerName, channelEvent);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendAddCreature(creature, pos, creature->getTile()->getStackposOfCreature(this, creature), isLogin);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMoveCreature(creature, newPos, newStackPos, oldPos, oldStackPos, teleport);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureTurn(const Creature* creature) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0 && canSeeCreature(creature)) {
+				for (auto& client : clients) {
+#else
 			if (client && canSeeCreature(creature)) {
+#endif
 				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
 				if (stackpos != -1) {
 					client->sendCreatureTurn(creature, stackpos);
+#ifdef CAST_SYSTEM
+				}
+#endif
 				}
 			}
 		}
 		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureSay(creature, type, text, pos);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendPrivateMessage(const Player* speaker, SpeakClasses type, const std::string& text) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendPrivateMessage(speaker, type, text);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureSquare(creature, color);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureChangeOutfit(const Creature* creature, const Outfit_t& outfit) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
+	
 				client->sendCreatureOutfit(creature, outfit);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureChangeVisible(const Creature* creature, bool visible) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+#else
 			if (!client) {
+#endif
 				return;
 			}
 
 			if (creature->getPlayer()) {
 				if (visible) {
+#ifdef CAST_SYSTEM
+					for (auto& client : clients) {
+#endif
 					client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+#ifdef CAST_SYSTEM
+					}
+#endif
 				} else {
 					static Outfit_t outfit;
+#ifdef CAST_SYSTEM
+					for (auto& client : clients) {
+#endif
 					client->sendCreatureOutfit(creature, outfit);
+#ifdef CAST_SYSTEM
+					}
+#endif
 				}
+
 			} else if (canSeeInvisibility()) {
+#ifdef CAST_SYSTEM
+					for (auto& client : clients) {
+#endif
 				client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
+#ifdef CAST_SYSTEM
+					}
+#endif
 			} else {
 				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
 				if (stackpos == -1) {
 					return;
-				}
+                                 }
 
 				if (visible) {
+#ifdef CAST_SYSTEM
+					for (auto& client : clients) {
+#endif
 					client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
+#ifdef CAST_SYSTEM
+					}
+#endif
 				} else {
+#ifdef CAST_SYSTEM
+					for (auto& client : clients) {
+#endif
 					client->sendRemoveTileThing(creature->getPosition(), stackpos);
+#ifdef CAST_SYSTEM
+					}
+#endif
 				}
 			}
 		}
 		void sendCreatureLight(const Creature* creature) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureLight(creature);
+#ifdef CAST_SYSTEM
+					}
+#endif
+
 			}
 		}
 		void sendCreatureWalkthrough(const Creature* creature, bool walkthrough) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureWalkthrough(creature, walkthrough);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureShield(const Creature* creature) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureShield(creature);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureType(uint32_t creatureId, uint8_t creatureType) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureType(creatureId, creatureType);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureHelpers(creatureId, helpers);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendSpellCooldown(uint8_t spellId, uint32_t time) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendSpellCooldown(spellId, time);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendSpellGroupCooldown(groupId, time);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 
 		void sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
 		                       uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
 		                       uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendDamageMessage(mclass, message, pos, primaryDamage, primaryColor, secondaryDamage, secondaryColor);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendHealMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t heal, TextColor_t color) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendHealMessage(mclass, message, pos, heal, color);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendExperienceMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t exp, TextColor_t color) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendExperienceMessage(mclass, message, pos, exp, color);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendModalWindow(const ModalWindow& modalWindow);
@@ -863,15 +1134,31 @@ class Player : public Creature, public Cylinder
 		void sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* newItem);
 		void sendRemoveContainerItem(const Container* container, uint16_t slot);
 		void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendContainer(cid, container, hasParent, firstIndex);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 
 		//inventory
 		void sendInventoryItem(slots_t slot, const Item* item) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendInventoryItem(slot, item);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 
@@ -903,230 +1190,583 @@ class Player : public Creature, public Cylinder
 		void onRemoveInventoryItem(Item* item);
 
 		void sendCancel(const std::string& msg) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendTextMessage(MESSAGE_STATUS_SMALL, msg);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCancelMessage(ReturnValue message) const;
 		void sendCancelTarget() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCancelTarget();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCancelWalk() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCancelWalk();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendChangeSpeed(const Creature* creature, uint32_t newSpeed) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendChangeSpeed(creature, newSpeed);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCreatureHealth(const Creature* creature) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatureHealth(creature);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendDistanceShoot(const Position& from, const Position& to, unsigned char type) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendDistanceShoot(from, to, type);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendHouseWindow(House* house, uint32_t listId) const;
 		void sendCreatePrivateChannel(uint16_t channelId, const std::string& channelName) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCreatePrivateChannel(channelId, channelName);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendClosePrivate(uint16_t channelId);
 		void sendIcons() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendIcons(getClientIcons());
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMagicEffect(const Position& pos, uint8_t type) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMagicEffect(pos, type);
+#ifdef CAST_SYSTEM
+				}
+#endif
+
 			}
 		}
 		void sendPing();
 		void sendPingBack() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendPingBack();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendStats();
 		void sendBasicData() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendBasicData();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendSkills() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendSkills();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t value = 0, TextColor_t color = TEXTCOLOR_NONE) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendTextMessage(mclass, message, pos, value, color);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendTextMessage(const TextMessage& message) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendTextMessage(message);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendReLoginWindow(uint8_t unfairFightReduction) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendReLoginWindow(unfairFightReduction);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendTextWindow(Item* item, uint16_t maxlen, bool canWrite) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendTextWindow(windowTextId, item, maxlen, canWrite);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendTextWindow(uint32_t itemId, const std::string& text) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendTextWindow(windowTextId, itemId, text);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendToChannel(creature, type, text, channelId);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendShop(Npc* npc) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendShop(npc, shopItemList);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendSaleItemList() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendSaleItemList(shopItemList);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCloseShop() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCloseShop();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketEnter(uint32_t depotId) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketEnter(depotId);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketLeave() {
 			inMarket = false;
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketLeave();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketBrowseItem(itemId, buyOffers, sellOffers);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketBrowseOwnOffers(buyOffers, sellOffers);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketDetail(uint16_t itemId) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketDetail(itemId);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketAcceptOffer(const MarketOfferEx& offer) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketAcceptOffer(offer);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendMarketCancelOffer(const MarketOfferEx& offer) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendMarketCancelOffer(offer);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendTradeItemRequest(const Player* player, const Item* item, bool ack) const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendTradeItemRequest(player, item, ack);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendTradeClose() const {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCloseTrade();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendWorldLight(const LightInfo& lightInfo) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendWorldLight(lightInfo);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendChannelsDialog() {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendChannelsDialog();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendOpenPrivateChannel(const std::string& receiver) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendOpenPrivateChannel(receiver);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendOutfitWindow() {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendOutfitWindow();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendCloseContainer(uint8_t cid) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendCloseContainer(cid);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 
 		void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendChannel(channelId, channelName, channelUsers, invitedUsers);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendTutorial(uint8_t tutorialId) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendTutorial(tutorialId);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendAddMarker(pos, markType, desc);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendQuestLog() {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendQuestLog();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendQuestLine(const Quest* quest) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendQuestLine(quest);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendEnterWorld() {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendEnterWorld();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendFightModes() {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->sendFightModes();
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 		void sendNetworkMessage(const NetworkMessage& message) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+#else
 			if (client) {
+#endif
 				client->writeToOutputBuffer(message);
+#ifdef CAST_SYSTEM
+				}
+#endif
 			}
 		}
 
@@ -1159,13 +1799,36 @@ class Player : public Creature, public Cylinder
 		void learnInstantSpell(const std::string& name);
 		void forgetInstantSpell(const std::string& name);
 		bool hasLearnedInstantSpell(const std::string& name) const;
+#ifdef CAST_SYSTEM
+		bool isInCast() const {
+			return inCast;
+		}
+		void setInCast(bool value);
+		const std::string& getPassword() const {
+			return password;
+		}
+		void setPassword(const std::string& value) {
+			password = value;
+		}
+
+		uint8_t getViewers() const {
+			return static_cast<uint8_t>(clients.size());
+		}
+		uint32_t getViews(bool increase = false) {
+			if (increase) {
+				views++;
+			}
+
+			return views;
+		}
+#endif
 
 	protected:
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
-		void gainExperience(uint64_t exp, Creature* source);
-		void addExperience(Creature* source, uint64_t exp, bool sendText = false, bool applyStaminaChange = false, bool applyMultiplier = false);
+		void gainExperience(uint64_t exp);
+		void addExperience(uint64_t exp, bool sendText = false, bool applyStaminaChange = false);
 		void removeExperience(uint64_t exp, bool sendText = false);
 
 		void updateInventoryWeight();
@@ -1222,10 +1885,16 @@ class Player : public Creature, public Cylinder
 		std::forward_list<Party*> invitePartyList;
 		std::forward_list<uint32_t> modalWindows;
 		std::forward_list<std::string> learnedInstantSpellList;
+#ifdef CAST_SYSTEM
+		std::list<ProtocolGame*> clients;
+#endif
 		std::forward_list<Condition*> storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
 
 		std::string name;
 		std::string guildNick;
+#ifdef CAST_SYSTEM
+		std::string password;
+#endif
 
 		LightInfo itemsLight;
 		Position loginPosition;
@@ -1262,7 +1931,9 @@ class Player : public Creature, public Cylinder
 		Npc* shopOwner;
 		Party* party;
 		Player* tradePartner;
+#ifndef CAST_SYSTEM
 		ProtocolGame* client;
+#endif
 		SchedulerTask* walkTask;
 		Town* town;
 		Vocation* vocation;
@@ -1300,6 +1971,9 @@ class Player : public Creature, public Cylinder
 		int32_t offlineTrainingSkill;
 		int32_t offlineTrainingTime;
 		int32_t idleTime;
+#ifdef CAST_SYSTEM
+		uint32_t views;
+#endif
 		int32_t shootRange;
 
 		AccountType_t accountType;
@@ -1327,7 +2001,9 @@ class Player : public Creature, public Cylinder
 		bool isConnecting;
 		bool addAttackSkillPoint;
 		bool inventoryAbilities[CONST_SLOT_LAST + 1];
-
+#ifdef CAST_SYSTEM
+		bool inCast;
+#endif
 		static uint32_t playerAutoID;
 
 		void updateItemsLight(bool internal = false);

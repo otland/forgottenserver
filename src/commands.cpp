@@ -303,6 +303,46 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	} else if (tmpParam == "global") {
 		g_luaEnvironment.loadFile("data/global.lua");
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
+	} else if (tmpParam == "all") {
+		g_actions->reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded actions.");
+		g_config.reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded config.");
+		reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded commands.");
+		g_creatureEvents->reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded creature scripts.");
+		g_monsters.reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
+		g_moveEvents->reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded movements.");
+		Npcs::reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
+		Raids::getInstance()->reload();
+		Raids::getInstance()->startup();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded raids.");
+		g_spells->reload();
+		g_monsters.reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded spells.");
+		g_talkActions->reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded talk actions.");
+		Item::items.reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded items.");		
+		g_weapons->reload();
+		g_weapons->loadDefaults();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded weapons.");		
+		Quests::getInstance()->reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded quests.");		
+		Mounts::getInstance()->reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded mounts.");		
+		g_globalEvents->reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");		
+		g_events->load();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded events.");
+		g_chat.load();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded chatchannels.");
+		g_luaEnvironment.loadFile("data/global.lua");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
 	} else {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}

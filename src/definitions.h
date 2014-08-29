@@ -28,6 +28,8 @@
 #define CLIENT_VERSION_MAX 1041
 #define CLIENT_VERSION_STR "10.41"
 
+#define CAST_SYSTEM
+
 #ifndef __FUNCTION__
 #define __FUNCTION__ __func__
 #endif

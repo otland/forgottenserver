@@ -58,7 +58,15 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
 		//Update premium days
+#ifdef CAST_SYSTEM
+		if (!accountName.empty()) {
+#endif
+
 		Game::updatePremium(account);
+
+#ifdef CAST_SYSTEM
+		}
+#endif
 
 		//Add MOTD
 		output->AddByte(0x14);
@@ -70,6 +78,9 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		//Add char list
 		output->AddByte(0x64);
 
+#ifdef CAST_SYSTEM
+		if (!accountName.empty()) {
+#endif
 		output->AddByte(1); // number of worlds
 
 		output->AddByte(0); // world id
@@ -83,6 +94,28 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 			output->AddByte(0);
 			output->AddString(characterName);
 		}
+#ifdef CAST_SYSTEM
+		}
+		else {
+			auto players = g_game.getPlayersInCast(password);
+			uint8_t size = static_cast<uint8_t>(players.size());
+
+			output->AddByte(size);
+			for (const auto& player : players) {
+				output->AddByte(player->getViewers());
+				output->AddString(std::to_string(player->getViewers()-1) + (player->getViewers()-1 == 1 ? " viewer" : " viewers"));
+				output->AddString(g_config.getString(ConfigManager::IP));
+				output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+				output->AddByte(0);
+			}
+
+			output->AddByte(size);
+			for (const auto& player : players) {
+				output->AddByte(player->getViewers());
+				output->AddString(player->getName());
+			}
+		}
+#endif
 
 		//Add premium days
 		if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
@@ -172,12 +205,13 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		dispatchDisconnectClient(ss.str());
 		return;
 	}
-
+#ifndef CAST_SYSTEM
 	if (accountName.empty()) {
 		dispatchDisconnectClient("Invalid account name.");
 		return;
 	}
-
+#endif
+	
 #undef dispatchDisconnectClient
 
 	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, this, accountName, password)));
