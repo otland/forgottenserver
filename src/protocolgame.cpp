@@ -420,11 +420,15 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		dispatchDisconnectClient("Account name or password is not correct.");
 		return;
 	}
+
+#undef dispatchDisconnectClient
+
 #ifdef CAST_SYSTEM
 
 	if (!accountName.empty()) {
-		dispatchDisconnectClient("Account name or password is not correct.");
-		return;
+#endif
+		g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem)));
+#ifdef CAST_SYSTEM
 	} else {
 		player = g_game.getPlayerByName(characterName);
 		player->clients.push_back(this);
@@ -444,12 +448,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 			}
 		}
 	}
-	return;
 #endif
-
-#undef dispatchDisconnectClient
-
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem)));
 }
 
 void ProtocolGame::onConnect()
