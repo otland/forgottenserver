@@ -40,6 +40,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 extern Chat g_chat;
+extern Vocations g_vocations;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
