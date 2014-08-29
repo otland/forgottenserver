@@ -1125,7 +1125,9 @@ void Player::sendPing()
 				for (auto& client : clients) {
 					clients->logout(true, true);
 				}
-			client->logout(true, true);
+			}
+			if (client) {
+				client->logout(true, true);
 #else
 			if (client) {
 				client->logout(true, true);
