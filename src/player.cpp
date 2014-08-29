@@ -1123,9 +1123,10 @@ void Player::sendPing()
 		if (g_creatureEvents->playerLogout(this)) {
 #ifdef CAST_SYSTEM
 			if (clients.size() > 0) {
-				for (auto& client : clients) {
-					client->logout(true, true);
+				for (auto clients) {
+					clients->logout(true, true);
 				}
+			client->logout(true, true);
 #else
 			if (client) {
 				client->logout(true, true);
