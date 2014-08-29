@@ -688,7 +688,7 @@ class Player : public Creature, public Cylinder
 		virtual void onTargetCreatureGainHealth(Creature* target, int32_t points);
 		virtual bool onKilledCreature(Creature* target, bool lastHit = true);
 		virtual void onGainExperience(uint64_t gainExp, Creature* target);
-		void onGainSharedExperience(uint64_t gainExp);
+		void onGainSharedExperience(uint64_t gainExp, Creature* source);
 		virtual void onAttackedCreatureBlockHit(BlockType_t blockType);
 		virtual void onBlockHit();
 		virtual void onChangeZone(ZoneType_t zone);
@@ -1827,8 +1827,8 @@ class Player : public Creature, public Cylinder
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
-		void gainExperience(uint64_t exp);
-		void addExperience(uint64_t exp, bool sendText = false, bool applyStaminaChange = false);
+		void gainExperience(uint64_t exp, Creature* source);
+		void addExperience(Creature* source, uint64_t exp, bool sendText = false, bool applyStaminaChange = false, bool applyMultiplier = false);
 		void removeExperience(uint64_t exp, bool sendText = false);
 
 		void updateInventoryWeight();
