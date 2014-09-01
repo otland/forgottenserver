@@ -891,7 +891,11 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 	}
 
 	if (!movingCreature->isAbleToWalk()) {
-		player->sendCancelMessage(RET_YOUCANNOTMOVETHISCREATURE);
+		if (movingCreature == player) {
+			player->sendCancelMessage(RET_YOUCANNOTMOVE);
+		} else {
+			player->sendCancelMessage(RET_YOUCANNOTMOVETHISCREATURE);
+		}
 		return;
 	}
 

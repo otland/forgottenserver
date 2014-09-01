@@ -502,15 +502,16 @@ bool Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 	Position newPos = newTile->getPosition();
 
 	if (!g_events->eventCreatureOnMove(creature, oldPos, newPos, isTeleport)) {
-		if (creature->getPlayer()) {
-			if (creature->getPlayer()->getFollowCreature()) {
-				creature->getPlayer()->setFollowCreature(nullptr);
-				creature->getPlayer()->onFollowCreatureDisappear(false);
+		Player* player = creature->getPlayer();
+		if (player) {
+			if (player->getFollowCreature()) {
+				player->setFollowCreature(nullptr);
+				player->onFollowCreatureDisappear(false);
 			}
-			creature->getPlayer()->sendCancelWalk();
-			creature->getPlayer()->sendCancelMessage(RET_YOUCANNOTMOVE);
-			creature->getPlayer()->stopEventWalk();
-			creature->getPlayer()->stopWalk();
+			player->sendCancelWalk();
+			player->sendCancelMessage(RET_YOUCANNOTMOVE);
+			player->stopEventWalk();
+			player->stopWalk();
 		}
 		return false;
 	}
