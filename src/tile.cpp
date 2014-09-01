@@ -31,9 +31,11 @@
 #include "combat.h"
 #include "movement.h"
 #include "monster.h"
+#include "events.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
+extern Events* g_events;
 
 StaticTile real_nullptr_tile(0xFFFF, 0xFFFF, 0xFFFF);
 Tile& Tile::nullptr_tile = real_nullptr_tile;
@@ -491,13 +493,27 @@ void Tile::onUpdateTile(const SpectatorVec& list)
 	}
 }
 
-void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport/* = false*/)
+bool Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport/* = false*/, bool isTeleport/* = false*/)
 {
 	Tile* newTile = toCylinder->getTile();
 	int32_t oldStackPos = __getIndexOfThing(creature);
 
 	Position oldPos = getPosition();
 	Position newPos = newTile->getPosition();
+
+	if (!g_events->eventCreatureOnMove(creature, oldPos, newPos, isTeleport)) {
+		if (creature->getPlayer()) {
+			if (creature->getPlayer()->getFollowCreature()) {
+				creature->getPlayer()->setFollowCreature(nullptr);
+				creature->getPlayer()->onFollowCreatureDisappear(false);
+			}
+			creature->getPlayer()->sendCancelWalk();
+			creature->getPlayer()->sendCancelMessage(RET_YOUCANNOTMOVE);
+			creature->getPlayer()->stopEventWalk();
+			creature->getPlayer()->stopWalk();
+		}
+		return false;
+	}
 
 	bool teleport = forceTeleport || !newTile->ground || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
@@ -562,6 +578,8 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 
 	postRemoveNotification(creature, toCylinder, oldStackPos, true);
 	newTile->postAddNotification(creature, this, newStackPos);
+
+	return true;
 }
 
 ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t flags, Creature*) const

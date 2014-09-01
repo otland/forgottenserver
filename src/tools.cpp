@@ -1070,6 +1070,12 @@ const char* getReturnMessage(ReturnValue value)
 		case RET_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
+		case RET_YOUCANNOTMOVE:
+			return "You can not move.";
+
+		case RET_YOUCANNOTMOVETHISCREATURE:
+			return "You can not move this creature.";
+
 		default: // RET_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}

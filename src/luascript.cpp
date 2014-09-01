@@ -2066,6 +2066,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getPathTo", LuaScriptInterface::luaCreatureGetPathTo);
 
+	registerMethod("Creature", "isAbleToMove", LuaScriptInterface::luaCreatureIsAbleToMove);
+	registerMethod("Creature", "canMove", LuaScriptInterface::luaCreatureCanMove);
+
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -7809,6 +7812,31 @@ int32_t LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 		}
 	} else {
 		pushBoolean(L, false);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureIsAbleToMove(lua_State* L)
+{
+	// creature:isAbleToMove()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		lua_pushboolean(L, creature->isAbleToWalk());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureCanMove(lua_State* L)
+{
+	// creature:canMove(bool)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->canWalk(getBoolean(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
 	}
 	return 1;
 }

@@ -53,6 +53,9 @@ class Events
 		void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
 		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 
+		// Creature
+		bool eventCreatureOnMove(Creature* creature, Position oldPos, Position newPos, bool isTeleport);
+
 	private:
 		LuaScriptInterface scriptInterface;
 
@@ -74,6 +77,9 @@ class Events
 		int32_t playerOnTradeAccept;
 		int32_t playerOnGainExperience;
 		int32_t playerOnLoseExperience;
+
+		// Creature
+		int32_t creatureOnMove;
 };
 
 #endif
