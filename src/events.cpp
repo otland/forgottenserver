@@ -125,6 +125,8 @@ bool Events::load()
 			} else if (className == "Creature") {
 				if (methodName == "onMove") {
 					creatureOnMove = event;
+				} else {
+					std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 				}
 			} else {
 				std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
