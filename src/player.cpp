@@ -1987,7 +1987,7 @@ void Player::onBlockHit()
 		--shieldBlockCount;
 
 		if (hasShield()) {
-			addSkillAdvance(SKILL_SHIELD, g_config.getNumber(ConfigManager::RATE_SKILL));
+			addSkillAdvance(SKILL_SHIELD, g_config.getFloat(ConfigManager::RATE_SKILL));
 		}
 	}
 }
@@ -4512,7 +4512,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 		oldSkillValue = magLevel;
 		oldPercentToNextLevel = (long double)(manaSpent * 100) / nextReqMana;
 
-		tries *= g_config.getNumber(ConfigManager::RATE_MAGIC);
+		tries *= g_config.getFloat(ConfigManager::RATE_MAGIC);
 		uint32_t currMagLevel = magLevel;
 
 		while ((manaSpent + tries) >= nextReqMana) {
@@ -4568,7 +4568,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 		oldSkillValue = skills[skill][SKILLVALUE_LEVEL];
 		oldPercentToNextLevel = (long double)(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
 
-		tries *= g_config.getNumber(ConfigManager::RATE_SKILL);
+		tries *= std::round(g_config.getFloat(ConfigManager::RATE_SKILL));
 		uint32_t currSkillLevel = skills[skill][SKILLVALUE_LEVEL];
 
 		while ((skills[skill][SKILLVALUE_TRIES] + tries) >= nextReqTries) {
