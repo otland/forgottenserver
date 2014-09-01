@@ -43,6 +43,10 @@ enum RequestedInfo_t {
 	REQUEST_EXT_PLAYERS_INFO = 0x20,
 	REQUEST_PLAYER_STATUS_INFO = 0x40,
 	REQUEST_SERVER_SOFTWARE_INFO = 0x80
+#ifdef CAST_SYSTEM
+	,
+	REQUEST_EXT_CAST_PLAYERS_INFO = 0x100
+#endif
 };
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
@@ -235,6 +239,19 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(STATUS_SERVER_VERSION);
 		output->AddString(CLIENT_VERSION_STR);
 	}
+#ifdef CAST_SYSTEM
+	if (requestedInfo & REQUEST_EXT_CAST_PLAYERS_INFO) {
+		output->AddByte(0x24); // players info - live casts list
+
+		auto players = g_game.getPlayersInCast();
+		output->AddByte(static_cast<uint8_t>(players.size()));
+		for (const auto &it : players) {
+			output->AddString(it->getName());
+			output->AddByte(it->getViewers());
+			output->AddByte(it->getPassword().empty() ? 0x00 : 0x01);
+		}
+	}
+#endif
 	OutputMessagePool::getInstance()->send(output);
 	getConnection()->closeConnection();
 }

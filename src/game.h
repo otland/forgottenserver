@@ -101,6 +101,11 @@ class Game
 			width = map.mapWidth;
 			height = map.mapHeight;
 		}
+		
+#ifdef CAST_SYSTEM
+		std::vector<Player*> getPlayersInCast() const;
+		std::vector<Player*> getPlayersInCast(const std::string& password) const;
+#endif
 
 		void setWorldType(WorldType_t type);
 		WorldType_t getWorldType() const {

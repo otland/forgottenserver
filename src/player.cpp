@@ -53,13 +53,25 @@ uint32_t Player::playerAutoID = 0x10000000;
 Player::Player(ProtocolGame* p) :
 	Creature()
 {
+#ifdef CAST_SYSTEM
+	clients.push_back(p);
+	isConnecting = false;
+#else
 	client = p;
 	isConnecting = false;
+#endif
 
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+		for (auto& client : clients) {
+			client->setPlayer(this);
+		}
+	}
+#else
 	if (client) {
 		client->setPlayer(this);
 	}
-
+#endif
 	accountNumber = 0;
 	setVocation(0);
 	capacity = 400.00;
@@ -183,6 +195,10 @@ Player::Player(ProtocolGame* p) :
 	nextUseStaminaTime = 0;
 
 	lastQuestlogUpdate = 0;
+#ifdef CAST_SYSTEM
+	inCast = false;
+	views = 0;
+#endif
 }
 
 Player::~Player()
@@ -918,11 +934,19 @@ bool Player::getStorageValue(const uint32_t key, int32_t& value) const
 
 bool Player::canSee(const Position& pos) const
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+		return false;
+	}
+	return clients.front()->canSee(pos);
+}
+#else
 	if (!client) {
 		return false;
 	}
 	return client->canSee(pos);
 }
+#endif
 
 bool Player::canSeeCreature(const Creature* creature) const
 {
@@ -1056,8 +1080,15 @@ void Player::sendCancelMessage(ReturnValue message) const
 
 void Player::sendStats()
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+		for (auto& client : clients) {
+			client->sendStats();
+		}
+#else
 	if (client) {
 		client->sendStats();
+#endif
 		lastStatsTrainingTime = getOfflineTrainingTime() / 60 / 1000;
 	}
 }
@@ -1069,9 +1100,16 @@ void Player::sendPing()
 	bool hasLostConnection = false;
 	if ((timeNow - lastPing) >= 5000) {
 		lastPing = timeNow;
+#ifdef CAST_SYSTEM
+		if (clients.size() > 0) {
+			for (auto& client : clients) {
+				client->sendPing();
+			}
+#else
 		if (client) {
 			client->sendPing();
-		} else {
+#endif
+			} else {
 			hasLostConnection = true;
 		}
 	}
@@ -1083,8 +1121,15 @@ void Player::sendPing()
 
 	if (noPongTime >= 60000 && canLogout()) {
 		if (g_creatureEvents->playerLogout(this)) {
+#ifdef CAST_SYSTEM
+			if (clients.size() > 0) {
+				for (auto& client : clients) {
+					client->logout(true, true);
+				}
+#else
 			if (client) {
 				client->logout(true, true);
+#endif
 			} else {
 				g_game.removeCreature(this, true);
 			}
@@ -1133,20 +1178,34 @@ void Player::setEditHouse(House* house, uint32_t listId /*= 0*/)
 
 void Player::sendHouseWindow(House* house, uint32_t listId) const
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
 	std::string text;
 	if (house->getAccessList(listId, text)) {
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendHouseWindow(windowTextId, text);
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 }
 
 //container
 void Player::sendAddContainerItem(const Container* container, const Item* item)
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
@@ -1170,14 +1229,23 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 		} else if (openContainer.index >= container->capacity()) {
 			item = container->getItemByIndex(openContainer.index - 1);
 		}
-
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendAddContainerItem(it.first, slot, item);
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 }
 
 void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* newItem)
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
@@ -1195,14 +1263,23 @@ void Player::sendUpdateContainerItem(const Container* container, uint16_t slot, 
 		if (slot >= pageEnd) {
 			continue;
 		}
-
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendUpdateContainerItem(it.first, slot, newItem);
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 }
 
 void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
@@ -1217,8 +1294,13 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 			firstIndex -= container->capacity();
 			sendContainer(it.first, container, false, firstIndex);
 		}
-
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendRemoveContainerItem(it.first, std::max<uint16_t>(slot, firstIndex), container->getItemByIndex(container->capacity() + firstIndex));
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 }
 
@@ -1526,20 +1608,34 @@ void Player::onRemoveContainerItem(const Container* container, const Item* item)
 
 void Player::onCloseContainer(const Container* container)
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
 	for (const auto& it : openContainers) {
 		if (it.second.container == container) {
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 			client->sendCloseContainer(it.first);
+#ifdef CAST_SYSTEM
+		}
+#endif
 		}
 	}
 }
 
 void Player::onSendContainer(const Container* container)
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
@@ -1547,7 +1643,13 @@ void Player::onSendContainer(const Container* container)
 	for (const auto& it : openContainers) {
 		const OpenContainer& openContainer = it.second;
 		if (openContainer.container == container) {
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 			client->sendContainer(it.first, container, hasParent, openContainer.index);
+#ifdef CAST_SYSTEM
+		}
+#endif
 		}
 	}
 }
@@ -1656,10 +1758,20 @@ void Player::onThink(uint32_t interval)
 		const int32_t kickAfterMinutes = g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES);
 		if (idleTime > (kickAfterMinutes * 60000) + 60000) {
 			kickPlayer(true);
+#ifdef CAST_SYSTEM
+		} else if (clients.size() > 0 && idleTime == 60000 * kickAfterMinutes) {
+#else
 		} else if (client && idleTime == 60000 * kickAfterMinutes) {
+#endif
 			std::ostringstream ss;
 			ss << "You have been idle for " << kickAfterMinutes << " minutes. You will be disconnected in one minute if you are still idle then.";
+#ifdef CAST_SYSTEM
+			for (auto& client : clients) {
+#endif
 			client->sendTextMessage(MESSAGE_STATUS_WARNING, ss.str());
+#ifdef CAST_SYSTEM
+			}
+#endif
 		}
 	}
 
@@ -2097,8 +2209,13 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 
 uint32_t Player::getIP() const
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+		return clients.front()->getIP();
+#else
 	if (client) {
 		return client->getIP();
+#endif
 	}
 
 	return 0;
@@ -2366,8 +2483,18 @@ void Player::addList()
 void Player::kickPlayer(bool displayEffect)
 {
 	g_creatureEvents->playerLogout(this);
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+#else
 	if (client) {
+#endif
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->logout(displayEffect, true);
+#ifdef CAST_SYSTEM
+		}
+#endif
 	} else {
 		g_game.removeCreature(this);
 	}
@@ -2375,7 +2502,11 @@ void Player::kickPlayer(bool displayEffect)
 
 void Player::notifyStatusChange(Player* loginPlayer, VipStatus_t status)
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
@@ -2383,13 +2514,29 @@ void Player::notifyStatusChange(Player* loginPlayer, VipStatus_t status)
 	if (it == VIPList.end()) {
 		return;
 	}
-
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 	client->sendUpdatedVIPStatus(loginPlayer->guid, status);
-
+#ifdef CAST_SYSTEM
+		}
+#endif
 	if (status == VIPSTATUS_ONLINE) {
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendTextMessage(MESSAGE_STATUS_SMALL, (loginPlayer->getName() + " has logged in."));
+#ifdef CAST_SYSTEM
+	}
+#endif
 	} else if (status == VIPSTATUS_OFFLINE) {
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendTextMessage(MESSAGE_STATUS_SMALL, (loginPlayer->getName() + " has logged out."));
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 }
 
@@ -2425,8 +2572,18 @@ bool Player::addVIP(uint32_t _guid, const std::string& name, VipStatus_t status)
 
 	IOLoginData::addVIPEntry(accountNumber, _guid, "", 0, false);
 
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+#else
 	if (client) {
+#endif
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendVIP(_guid, name, "", 0, false, status);
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 
 	return true;
@@ -2480,8 +2637,18 @@ void Player::autoCloseContainers(const Container* container)
 
 	for (uint32_t containerId : closeList) {
 		closeContainer(containerId);
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+#else
 		if (client) {
+#endif
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 			client->sendCloseContainer(containerId);
+#ifdef CAST_SYSTEM
+		}
+#endif
 		}
 	}
 }
@@ -3274,9 +3441,18 @@ void Player::updateSaleShopList(uint32_t itemId)
 	if (it == shopItemList.end()) {
 		return;
 	}
-
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+#else
 	if (client) {
+#endif
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendSaleItemList(shopItemList);
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 }
 
@@ -4038,11 +4214,20 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	if (hasFlag(PlayerFlag_NotGainInFight) || attacked == this || g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
 		return;
 	}
-
-	if (client) {
-		std::ostringstream ss;
-		ss << "Warning! The murder of " << attacked->getName() << " was not justified.";
-		client->sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+#ifdef CAST_SYSTEM
+	if (clients.size() > 0) {
+#else
+ 	if (client) {
+#endif
+ 		std::ostringstream ss;
+ 		ss << "Warning! The murder of " << attacked->getName() << " was not justified.";
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
+ 		client->sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 
 	skullTicks += g_config.getNumber(ConfigManager::FRAG_TIME);
@@ -4117,6 +4302,24 @@ void Player::learnInstantSpell(const std::string& name)
 		learnedInstantSpellList.push_front(name);
 	}
 }
+#ifdef CAST_SYSTEM
+void Player::setInCast(bool value)
+{
+	if (inCast == value)
+		return;
+
+	inCast = value;
+	if (!inCast) {
+		while (clients.size() > 1) {
+			clients.back()->disconnect();
+			clients.pop_back();
+		}
+	}
+	else {
+		sendChannel(CHANNEL_CAST, "Live cast", nullptr, nullptr);
+	}
+}
+#endif
 
 void Player::forgetInstantSpell(const std::string& name)
 {
@@ -4634,12 +4837,22 @@ void Player::onModalWindowHandled(uint32_t modalWindowId)
 
 void Player::sendModalWindow(const ModalWindow& modalWindow)
 {
+#ifdef CAST_SYSTEM
+	if (clients.size() == 0) {
+#else
 	if (!client) {
+#endif
 		return;
 	}
 
 	modalWindows.push_front(modalWindow.id);
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 	client->sendModalWindow(modalWindow);
+#ifdef CAST_SYSTEM
+	}
+#endif
 }
 
 void Player::clearModalWindows()
@@ -4733,9 +4946,18 @@ void Player::sendClosePrivate(uint16_t channelId)
 	if (channelId == CHANNEL_GUILD || channelId == CHANNEL_PARTY) {
 		g_chat.removeUserFromChannel(*this, channelId);
 	}
-
-	if (client) {
+#ifdef CAST_SYSTEM
+		if (clients.size() > 0) {
+#else
+		if (client) {
+#endif
+#ifdef CAST_SYSTEM
+		for (auto& client : clients) {
+#endif
 		client->sendClosePrivate(channelId);
+#ifdef CAST_SYSTEM
+		}
+#endif
 	}
 }
 
