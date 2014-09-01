@@ -136,10 +136,11 @@ void ProtocolStatus::sendStatusString()
 	npcs.append_attribute("total") = std::to_string(g_game.getNpcsOnline()).c_str();
 
 	pugi::xml_node rates = tsqp.append_child("rates");
-	rates.append_attribute("experience") = std::to_string(g_config.getNumber(ConfigManager::RATE_EXPERIENCE)).c_str();
-	rates.append_attribute("skill") = std::to_string(g_config.getNumber(ConfigManager::RATE_SKILL)).c_str();
+	//Casting the float values to int32_t to avoid conversion problems
+	rates.append_attribute("experience") = std::to_string((int32_t)g_config.getFloat(ConfigManager::RATE_EXPERIENCE)).c_str();
+	rates.append_attribute("skill") = std::to_string((int32_t)g_config.getFloat(ConfigManager::RATE_SKILL)).c_str();
 	rates.append_attribute("loot") = std::to_string(g_config.getNumber(ConfigManager::RATE_LOOT)).c_str();
-	rates.append_attribute("magic") = std::to_string(g_config.getNumber(ConfigManager::RATE_MAGIC)).c_str();
+	rates.append_attribute("magic") = std::to_string((int32_t)g_config.getFloat(ConfigManager::RATE_MAGIC)).c_str();
 	rates.append_attribute("spawn") = std::to_string(g_config.getNumber(ConfigManager::RATE_SPAWN)).c_str();
 
 	pugi::xml_node map = tsqp.append_child("map");

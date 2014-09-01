@@ -108,10 +108,7 @@ bool ConfigManager::load()
 	m_confInteger[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
 	m_confInteger[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);
 	m_confInteger[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
-	m_confInteger[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
-	m_confInteger[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
 	m_confInteger[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
-	m_confInteger[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
 	m_confInteger[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
 	m_confInteger[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
 	m_confInteger[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
@@ -131,6 +128,9 @@ bool ConfigManager::load()
 	m_confInteger[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
 	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
 
+	m_confFloat[RATE_EXPERIENCE] = getGlobalFloat(L, "rateExp", 5.0);
+	m_confFloat[RATE_SKILL] = getGlobalFloat(L, "rateSkill", 3.0);
+	m_confFloat[RATE_MAGIC] = getGlobalFloat(L, "rateMagic", 3.0);
 	m_isLoaded = true;
 	lua_close(L);
 	return true;
@@ -169,6 +169,16 @@ int32_t ConfigManager::getNumber(integer_config_t _what) const
 	}
 }
 
+float ConfigManager::getFloat(float_config_t _what) const
+{
+	if (m_isLoaded && _what < LAST_FLOAT_CONFIG) {
+		return m_confFloat[_what];
+	} else {
+		std::cout << "[Warning - ConfigManager::getFloat] " << _what << std::endl;
+		return 0;
+	}
+}
+
 bool ConfigManager::getBoolean(boolean_config_t _what) const
 {
 	if (m_isLoaded && _what < LAST_BOOLEAN_CONFIG) {
@@ -194,6 +204,19 @@ std::string ConfigManager::getGlobalString(lua_State* _L, const std::string& _id
 }
 
 int32_t ConfigManager::getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default)
+{
+	lua_getglobal(_L, _identifier.c_str());
+
+	if (!lua_isnumber(_L, -1)) {
+		return _default;
+	}
+
+	int32_t val = lua_tointeger(_L, -1);
+	lua_pop(_L, 1);
+	return val;
+}
+
+float ConfigManager::getGlobalFloat(lua_State* _L, const std::string& _identifier, const float _default)
 {
 	lua_getglobal(_L, _identifier.c_str());
 

@@ -2683,7 +2683,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		player->sendTextMessage(MESSAGE_INFO_DESCR, "You can not trade more than 100 items.");
 		return;
 	}
-	
+
 	if (!g_events->eventPlayerOnTradeRequest(player, tradePartner, tradeItem)) {
 		return;
 	}
@@ -4007,7 +4007,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			std::string damageString = std::to_string(realHealthChange);
 			std::string pluralString = (realHealthChange != 1 ? "s." : ".");
-			
+
 			std::string spectatorMessage;
 			if (!attacker) {
 				spectatorMessage += ucfirst(target->getNameDescription());
@@ -4826,10 +4826,10 @@ void Game::loadPlayersRecord()
 	}
 }
 
-uint64_t Game::getExperienceStage(uint32_t level)
+float Game::getExperienceStage(uint32_t level)
 {
 	if (!stagesEnabled) {
-		return g_config.getNumber(ConfigManager::RATE_EXPERIENCE);
+		return g_config.getFloat(ConfigManager::RATE_EXPERIENCE);
 	}
 
 	if (useLastStageLevel && level >= lastStageLevel) {
@@ -4852,8 +4852,8 @@ bool Game::loadExperienceStages()
 		if (strcasecmp(stageNode.name(), "config") == 0) {
 			stagesEnabled = stageNode.attribute("enabled").as_bool();
 		} else {
-			uint32_t minLevel, maxLevel, multiplier;
-
+			uint32_t minLevel, maxLevel;
+			float multiplier;
 			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
 			if (minLevelAttribute) {
 				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
@@ -4872,9 +4872,10 @@ bool Game::loadExperienceStages()
 
 			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
 			if (multiplierAttribute) {
-				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
+				multiplier = pugi::cast<float>(multiplierAttribute.value());
+
 			} else {
-				multiplier = 1;
+				multiplier = 1.0;
 			}
 
 			if (useLastStageLevel) {

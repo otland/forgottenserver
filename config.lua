@@ -74,10 +74,10 @@ emoteSpells = "no"
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
-rateExp = 5
-rateSkill = 3
+rateExp = 5.0
+rateSkill = 3.0
 rateLoot = 2
-rateMagic = 3
+rateMagic = 3.0
 rateSpawn = 1
 
 -- Monsters
