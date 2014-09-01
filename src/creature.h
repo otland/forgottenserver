@@ -259,7 +259,6 @@ class Creature : virtual public Thing
 		void stopEventWalk();
 		virtual void goToFollowCreature();
 
-
 		//walk events
 		virtual void onWalk(Direction& dir);
 		virtual void onWalkAborted() {}
