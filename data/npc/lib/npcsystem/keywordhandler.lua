@@ -72,13 +72,14 @@ if KeywordHandler == nil then
 
 	KeywordHandler = {
 		root = nil,
-		lastNode = {}
+		lastNode = nil
 	}
 
 	-- Creates a new keywordhandler with an empty rootnode.
 	function KeywordHandler:new()
 		local obj = {}
 		obj.root = KeywordNode:new(nil, nil, nil)
+		obj.lastNode = {}
 		setmetatable(obj, self)
 		self.__index = self
 		return obj

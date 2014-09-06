@@ -50,7 +50,7 @@ if Modules == nil then
 
 		local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
 		npcHandler:say(npcHandler:parseMessage(parameters.text or parameters.message, parseInfo), cid, parameters.publicize and true)
-		if not parameters.reset == false then
+		if not(parameters.reset == false) then
 			npcHandler:resetNpc(cid)
 		elseif parameters.moveup ~= nil then
 			npcHandler.keywordHandler:moveUp(parameters.moveup)
