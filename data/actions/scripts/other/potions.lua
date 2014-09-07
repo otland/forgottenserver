@@ -43,7 +43,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == smallHealthPot then
-		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 60, 85, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 60, 90, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
