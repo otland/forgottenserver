@@ -108,8 +108,8 @@ class MonsterType
 		uint32_t yellSpeedTicks;
 		uint32_t staticAttackChance;
 		uint32_t maxSummons;
+		uint32_t runAwayHealth;
 		int32_t targetDistance;
-		int32_t runAwayHealth;
 		int32_t baseSpeed;
 		int32_t health;
 		int32_t healthMax;

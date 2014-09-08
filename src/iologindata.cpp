@@ -586,10 +586,6 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 bool IOLoginData::savePlayer(Player* player)
 {
-	if (player->getHealth() <= 0) {
-		player->changeHealth(1);
-	}
-
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;

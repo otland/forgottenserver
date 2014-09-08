@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS `players` (
   `account_id` int(11) NOT NULL DEFAULT '0',
   `level` int(11) NOT NULL DEFAULT '1',
   `vocation` int(11) NOT NULL DEFAULT '0',
-  `health` int(11) NOT NULL DEFAULT '150',
-  `healthmax` int(11) NOT NULL DEFAULT '150',
+  `health` int(11) unsigned NOT NULL DEFAULT '150',
+  `healthmax` int(11) unsigned NOT NULL DEFAULT '150',
   `experience` bigint(20) NOT NULL DEFAULT '0',
   `lookbody` int(11) NOT NULL DEFAULT '0',
   `lookfeet` int(11) NOT NULL DEFAULT '0',
@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '18'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '19'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,

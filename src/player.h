@@ -492,7 +492,7 @@ class Player : public Creature, public Cylinder
 			}
 		}
 
-		virtual int32_t getMaxHealth() const {
+		virtual uint32_t getMaxHealth() const {
 			return getPlayerInfo(PLAYERINFO_MAXHEALTH);
 		}
 		uint32_t getMaxMana() const {
