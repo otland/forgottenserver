@@ -1040,6 +1040,9 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 	}
 
 	fromCylinder->getTile()->moveCreature(creature, toCylinder);
+	if (creature->getParent() != toCylinder) {
+		return RET_NOERROR;
+	}
 
 	int32_t index = 0;
 	Item* toItem = nullptr;

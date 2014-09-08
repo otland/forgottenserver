@@ -1453,14 +1453,6 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	}
 
 	if (link == LINK_OWNER) {
-		//calling movement scripts
-		Creature* creature = thing->getCreature();
-		if (creature) {
-			g_moveEvents->onCreatureMove(creature, this, true);
-		} else if (item) {
-			g_moveEvents->onItemMove(item, this, true);
-		}
-
 		if (hasFlag(TILESTATE_TELEPORT)) {
 			Teleport* teleport = getTeleportItem();
 			if (teleport) {
@@ -1476,6 +1468,14 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 			if (mailbox) {
 				mailbox->__addThing(thing);
 			}
+		}
+
+		//calling movement scripts
+		Creature* creature = thing->getCreature();
+		if (creature) {
+			g_moveEvents->onCreatureMove(creature, this, true);
+		} else if (item) {
+			g_moveEvents->onItemMove(item, this, true);
 		}
 	}
 
