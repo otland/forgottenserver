@@ -14768,6 +14768,7 @@
 	<item fromid="7967" toid="7968" article="a" name="shapeshifter ring">
 		<attribute key="description" value="It will only work for a few days after the challenge of Kurik has been won." />
 		<attribute key="weight" value="80" />
+		<attribute key="slotType" value="ring" />
 	</item>
 	<item id="7969" article="a" name="dead frost dragon hatchling">
 		<attribute key="containerSize" value="15" />
@@ -22627,6 +22628,7 @@
 	<item fromid="13946" toid="13947" name="The Epic Wisdom">
 		<attribute key="description" value="This hat was handcrafted by Uman the Wise and cursed by Zathroth the Destroyer." />
 		<attribute key="weight" value="805" />
+		<attribute key="slotType" value="head" />
 	</item>
 	<item fromid="13948" toid="13949" name="Imortus">
 		<attribute key="description" value="It knows all secrets of all numbers. It was awarded by fansite Exhiti.com." />
@@ -29193,6 +29195,7 @@
 	</item>
 	<item id="21469" article="a" name="friendship amulet">
 		<attribute key="description" value="Souvenir from Thais Museum." />
+		<attribute key="slotType" value="necklace" />
 		<attribute key="weight" value="520" />
 	</item>
 	<item id="21470" name="the Mexcalibur">
@@ -29214,6 +29217,7 @@
 	</item>
 	<item id="21475" article="a" name="pannier backpack">
 		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
 		<attribute key="weight" value="1800" />
 	</item>
 	<item id="21476" name="Omrabas' talking skull">
