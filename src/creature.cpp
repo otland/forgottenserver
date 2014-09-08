@@ -784,7 +784,7 @@ Item* Creature::getCorpse(Creature*, Creature*)
 
 void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true*/)
 {
-	int32_t oldHealth = health;
+	uint32_t oldHealth = health;
 
 	if (healthChange > 0) {
 		health += std::min<int32_t>(healthChange, getMaxHealth() - health);

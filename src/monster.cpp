@@ -1088,7 +1088,7 @@ void Monster::pushCreatures(Tile* tile)
 					continue;
 				}
 
-				monster->changeHealth(-monster->getHealth());
+				monster->changeHealth(-((int32_t)monster->getHealth()));
 				monster->setDropLoot(false);
 				removeCount++;
 			}
@@ -1799,7 +1799,7 @@ void Monster::death(Creature*)
 	setAttackedCreature(nullptr);
 
 	for (Creature* summon : summons) {
-		summon->changeHealth(-summon->getHealth());
+		summon->changeHealth(-((int32_t)summon->getHealth()));
 		summon->setMaster(nullptr);
 		summon->releaseThing2();
 	}
@@ -1992,7 +1992,7 @@ bool Monster::convinceCreature(Creature* creature)
 
 			//destroy summons
 			for (Creature* summon : summons) {
-				summon->changeHealth(-summon->getHealth());
+				summon->changeHealth(-((int32_t)summon->getHealth()));
 				summon->setMaster(nullptr);
 				summon->releaseThing2();
 			}
@@ -2024,7 +2024,7 @@ bool Monster::convinceCreature(Creature* creature)
 		setAttackedCreature(nullptr);
 
 		for (Creature* summon : summons) {
-			summon->changeHealth(-summon->getHealth());
+			summon->changeHealth(-((int32_t)summon->getHealth()));
 			summon->setMaster(nullptr);
 			summon->releaseThing2();
 		}

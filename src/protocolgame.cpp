@@ -2957,8 +2957,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 {
 	msg.AddByte(0xA0);
 
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getHealth()));
-	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getPlayerInfo(PLAYERINFO_MAXHEALTH)));
+	msg.add<uint16_t>(std::min<uint32_t>(0xFFFF, player->getHealth()));
+	msg.add<uint16_t>(std::min<uint32_t>(0xFFFF, player->getPlayerInfo(PLAYERINFO_MAXHEALTH)));
 
 	msg.add<uint32_t>(uint32_t(player->getFreeCapacity() * 100));
 	msg.add<uint32_t>(uint32_t(player->getCapacity() * 100));

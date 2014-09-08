@@ -871,7 +871,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			} else if (strcasecmp(attrName, "targetdistance") == 0) {
 				mType->targetDistance = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
 			} else if (strcasecmp(attrName, "runonhealth") == 0) {
-				mType->runAwayHealth = pugi::cast<int32_t>(attr.value());
+				mType->runAwayHealth = pugi::cast<uint32_t>(attr.value());
 			} else if (strcasecmp(attrName, "hidehealth") == 0) {
 				mType->hiddenHealth = attr.as_bool();
 			} else {

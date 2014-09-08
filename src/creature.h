@@ -219,10 +219,10 @@ class Creature : virtual public Thing
 			return baseSpeed;
 		}
 
-		int32_t getHealth() const {
+		uint32_t getHealth() const {
 			return health;
 		}
-		virtual int32_t getMaxHealth() const {
+		virtual uint32_t getMaxHealth() const {
 			return healthMax;
 		}
 		uint32_t getMana() const {
@@ -504,10 +504,10 @@ class Creature : virtual public Thing
 		uint32_t blockTicks;
 		uint32_t lastStepCost;
 		uint32_t baseSpeed;
+		uint32_t health;
+		uint32_t healthMax;
 		uint32_t mana;
 		int32_t varSpeed;
-		int32_t health;
-		int32_t healthMax;
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
