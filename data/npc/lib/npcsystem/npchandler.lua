@@ -608,6 +608,15 @@ if NpcHandler == nil then
 		end
 
 		stopEvent(self.eventSay[focus])
-		self.eventSay[focus] = addEvent(function(x) if isPlayer(x[3]) then doCreatureSay(x[1], x[2], TALKTYPE_PRIVATE_NP, false, x[3], getCreaturePosition(x[1])) end end, self.talkDelayTime * 1000, {getNpcCid(), message, focus})
+		self.eventSay[focus] = addEvent(function(npcId, message, focusId)
+			local npc = Npc(npcId)
+			if npc == nil then
+				return
+			end
+			local player = Player(focusId)
+			if player then
+				npc:say(message, TALKTYPE_PRIVATE_NP, false, player, npc:getPosition())
+			end
+		end, self.talkDelayTime * 1000, Npc():getId(), message, focus)
 	end
 end
