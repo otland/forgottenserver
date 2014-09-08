@@ -297,7 +297,7 @@ class Tile : public Cylinder
 
 		virtual std::string getDescription(int32_t lookDistance) const;
 
-		void moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport = false);
+		bool moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport = false, bool isTeleport = false);
 		int32_t getClientIndexOfCreature(const Player* player, const Creature* creature) const;
 		int32_t getStackposOfCreature(const Player* player, const Creature* creature) const;
 		int32_t getStackposOfThing(const Player* player, const Thing* thing) const;

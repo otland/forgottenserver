@@ -246,6 +246,13 @@ class Creature : virtual public Thing
 			return getTile()->getZone();
 		}
 
+		bool isAbleToWalk() const {
+			return walk;
+		}
+		void canWalk(bool n) {
+			walk = n;
+		}
+
 		//walk functions
 		void startAutoWalk(const std::list<Direction>& listDir);
 		void addEventWalk(bool firstStep = false);
@@ -534,6 +541,7 @@ class Creature : virtual public Thing
 		bool hasFollowPath;
 		bool forceUpdateFollowPath;
 		bool hiddenHealth;
+		bool walk;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {

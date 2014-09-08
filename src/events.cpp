@@ -53,6 +53,9 @@ void Events::clear()
 	playerOnTradeAccept = -1;
 	playerOnGainExperience = -1;
 	playerOnLoseExperience = -1;
+
+	// Creature
+	creatureOnMove = -1;
 }
 
 bool Events::load()
@@ -118,6 +121,12 @@ bool Events::load()
 					playerOnLoseExperience = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
+				}
+			} else if (className == "Creature") {
+				if (methodName == "onMove") {
+					creatureOnMove = event;
+				} else {
+					std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 				}
 			} else {
 				std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
@@ -584,4 +593,33 @@ void Events::eventPlayerOnLoseExperience(Player* player, uint64_t& exp)
 	}
 
 	scriptInterface.resetScriptEnv();
+}
+
+// Creature
+bool Events::eventCreatureOnMove(Creature* creature, Position oldPos, Position newPos, bool isTeleport)
+{
+	// Creature:onMove(oldPos, newPos, isTeleport) or Creature.onMove(self, oldPos, newPos, isTeleport)
+	if (creatureOnMove == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnMove] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(creatureOnMove, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(creatureOnMove);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushPosition(L, oldPos);
+	LuaScriptInterface::pushPosition(L, newPos);
+	LuaScriptInterface::pushBoolean(L, isTeleport);
+
+	return scriptInterface.callFunction(4);
 }

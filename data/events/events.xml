@@ -18,4 +18,7 @@
 	<event class="Player" method="onTradeAccept" enabled="0" />
 	<event class="Player" method="onGainExperience" enabled="0" />
 	<event class="Player" method="onLoseExperience" enabled="0" />
+	
+	<!-- Creature methods -->
+	<event class="Creature" method="onMove" enabled="1" />
 </events>

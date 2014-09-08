@@ -890,6 +890,15 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
+	if (!movingCreature->isAbleToWalk()) {
+		if (movingCreature == player) {
+			player->sendCancelMessage(RET_YOUCANNOTMOVE);
+		} else {
+			player->sendCancelMessage(RET_YOUCANNOTMOVETHISCREATURE);
+		}
+		return;
+	}
+
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::playerMoveCreature,
@@ -1882,7 +1891,10 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 				return ret;
 			}
 
-			creature->getTile()->moveCreature(creature, toTile, !pushMove);
+			if (!creature->getTile()->moveCreature(creature, toTile, !pushMove, true)) {
+				return RET_YOUCANNOTMOVE;
+			}
+
 			return RET_NOERROR;
 		} else if (Item* item = thing->getItem()) {
 			return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
