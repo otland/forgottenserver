@@ -43,6 +43,8 @@
 	<talkaction words="!kills" script="kills.lua" />
 	<talkaction words="!online" script="online.lua" />
 	<talkaction words="!serverinfo" script="serverinfo.lua" />
+	<talkaction words="!cast" separator=" " script="start_cast.lua" />
+	<talkaction words="!stopcast" script="stop_cast.lua" />
 
 	<!-- test talkactions -->
 	<talkaction words="!z" separator=" " script="magiceffect.lua" />
