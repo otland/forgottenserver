@@ -4850,6 +4850,12 @@ bool Game::loadExperienceStages()
 		std::cout << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
 		return false;
 	}
+	
+	float stagesMultiplier = 1.0f;
+	pugi::xml_attribute stagesMultiplierAttribute = doc.child("stages").attribute("multiplier");
+	if (stagesMultiplierAttribute) {
+		stagesMultiplier = pugi::cast<float>(stagesMultiplierAttribute.value());
+	}
 
 	for (pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
 		if (strcasecmp(stageNode.name(), "config") == 0) {
@@ -4879,6 +4885,8 @@ bool Game::loadExperienceStages()
 			} else {
 				multiplier = 1;
 			}
+			
+			multiplier *= stagesMultiplier;
 
 			if (useLastStageLevel) {
 				stages[lastStageLevel] = multiplier;
