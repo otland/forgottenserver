@@ -1365,7 +1365,8 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 		int32_t newCount = m - n;
 		if (newCount > 0) {
-			moveItem = Item::CreateItem(item->getID(), newCount);
+			moveItem = item->clone();
+			moveItem->setItemCount(newCount);
 		} else {
 			moveItem = nullptr;
 		}
@@ -1464,7 +1465,8 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		int32_t count = m - n;
 		if (count > 0) {
 			if (item->getItemCount() != count) {
-				Item* remainderItem = Item::CreateItem(item->getID(), count);
+				Item* remainderItem = item->clone();
+				remainderItem->setItemCount(count);
 				if (internalAddItem(destCylinder, remainderItem, INDEX_WHEREEVER, flags, false) != RETURNVALUE_NOERROR) {
 					ReleaseItem(remainderItem);
 					remainderCount = count;
