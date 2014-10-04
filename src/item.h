@@ -302,6 +302,8 @@ class Item : virtual public Thing
 
 		virtual ~Item();
 
+		bool equals(const Item* otherItem) const;
+
 		virtual Item* getItem() {
 			return this;
 		}

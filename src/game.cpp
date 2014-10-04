@@ -1355,7 +1355,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	if (item->isStackable()) {
 		uint32_t n;
 
-		if (toItem && toItem->getID() == item->getID()) {
+		if (toItem && toItem->equals(item)) {
 			n = std::min<uint32_t>(100 - toItem->getItemCount(), m);
 			toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 			updateItem = toItem;
@@ -1455,14 +1455,11 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (item->isStackable() && toItem && toItem->getID() == item->getID()) {
+	if (item->isStackable() && toItem && toItem->equals(item)) {
 		uint32_t m = std::min<uint32_t>(item->getItemCount(), maxQueryCount);
-		uint32_t n = 0;
+		uint32_t n = std::min<uint32_t>(100 - toItem->getItemCount(), m);
 
-		if (toItem->getID() == item->getID()) {
-			n = std::min<uint32_t>(100 - toItem->getItemCount(), m);
-			toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
-		}
+		toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 
 		int32_t count = m - n;
 		if (count > 0) {

@@ -366,7 +366,7 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 			//Iterate through every item and check how much free stackable slots there is.
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
-				if (containerItem != item && containerItem->getID() == item->getID() && containerItem->getItemCount() < 100) {
+				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
 					uint32_t remainder = (100 - containerItem->getItemCount());
 					if (__queryAdd(slotIndex++, item, remainder, flags) == RETURNVALUE_NOERROR) {
 						n += remainder;
@@ -375,7 +375,7 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 			}
 		} else {
 			const Item* destItem = getItemByIndex(index);
-			if (destItem && destItem->getID() == item->getID() && destItem->getItemCount() < 100) {
+			if (destItem && destItem->equals(item) && destItem->getItemCount() < 100) {
 				uint32_t remainder = 100 - destItem->getItemCount();
 				if (__queryAdd(index, item, remainder, flags) == RETURNVALUE_NOERROR) {
 					n = remainder;
@@ -462,7 +462,7 @@ Cylinder* Container::__queryDestination(int32_t& index, const Thing* thing, Item
 		//try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
-			if (listItem != item && listItem->getID() == item->getID() && listItem->getItemCount() < 100) {
+			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < 100) {
 				*destItem = listItem;
 				index = n;
 				return this;
