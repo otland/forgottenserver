@@ -150,10 +150,10 @@ void MonsterType::createLoot(Container* corpse)
 				if (Container* container = item->getContainer()) {
 					if (!createLootContainer(container, *it)) {
 						delete container;
-					} else if (g_game.internalAddItem(corpse, item) != RET_NOERROR) {
+					} else if (g_game.internalAddItem(corpse, item) != RETURNVALUE_NOERROR) {
 						corpse->__internalAddThing(item);
 					}
-				} else if (g_game.internalAddItem(corpse, item) != RET_NOERROR) {
+				} else if (g_game.internalAddItem(corpse, item) != RETURNVALUE_NOERROR) {
 					corpse->__internalAddThing(item);
 				}
 			}

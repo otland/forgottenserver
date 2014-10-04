@@ -409,7 +409,12 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		executeUseWeapon(player, var);
 	} else {
 		CombatDamage damage;
-		damage.origin = range != 1 ? ORIGIN_RANGED : ORIGIN_MELEE;
+		WeaponType_t weaponType = item->getWeaponType();
+		if (weaponType == WEAPON_AMMO || weaponType == WEAPON_DISTANCE) {
+			damage.origin = ORIGIN_RANGED;
+		} else {
+			damage.origin = ORIGIN_MELEE;
+		}
 		damage.primary.type = params.combatType;
 		damage.primary.value = (getWeaponDamage(player, target, item) * damageModifier) / 100;
 		damage.secondary.type = getElementType();

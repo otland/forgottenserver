@@ -571,26 +571,26 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 
 	if (const Creature* creature = thing->getCreature()) {
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
-			return RET_NOERROR;
+			return RETURNVALUE_NOERROR;
 		}
 
 		if (hasBitSet(FLAG_PATHFINDING, flags)) {
 			if (floorChange() || positionChange()) {
-				return RET_NOTPOSSIBLE;
+				return RETURNVALUE_NOTPOSSIBLE;
 			}
 		}
 
 		if (ground == nullptr) {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
 		if (const Monster* monster = creature->getMonster()) {
 			if (hasFlag(TILESTATE_PROTECTIONZONE)) {
-				return RET_NOTPOSSIBLE;
+				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
 			if (floorChange() || positionChange()) {
-				return RET_NOTPOSSIBLE;
+				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
 			if (monster->canPushCreatures() && !monster->isSummon()) {
@@ -603,29 +603,29 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 						const Monster* creatureMonster = tileCreature->getMonster();
 						if (!creatureMonster || !tileCreature->isPushable() ||
 						        (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
-							return RET_NOTPOSSIBLE;
+							return RETURNVALUE_NOTPOSSIBLE;
 						}
 					}
 				}
 			} else if (creatures && !creatures->empty()) {
 				for (const Creature* tileCreature : *creatures) {
 					if (!tileCreature->isInGhostMode()) {
-						return RET_NOTENOUGHROOM;
+						return RETURNVALUE_NOTENOUGHROOM;
 					}
 				}
 			}
 
 			if (hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID)) {
-				return RET_NOTPOSSIBLE;
+				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
 			if (hasBitSet(FLAG_PATHFINDING, flags) && hasFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH)) {
-				return RET_NOTPOSSIBLE;
+				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
 			if (hasFlag(TILESTATE_BLOCKSOLID) || (hasBitSet(FLAG_PATHFINDING, flags) && hasFlag(TILESTATE_NOFIELDBLOCKPATH))) {
 				if (!(monster->canPushItems() || hasBitSet(FLAG_IGNOREBLOCKITEM, flags))) {
-					return RET_NOTPOSSIBLE;
+					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
 
@@ -640,47 +640,47 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 					//2) Monster is already afflicated by this type of condition
 					if (hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
 						if (!(monster->canPushItems() || monster->hasCondition(Combat::DamageToConditionType(combatType)))) {
-							return RET_NOTPOSSIBLE;
+							return RETURNVALUE_NOTPOSSIBLE;
 						}
 					} else {
-						return RET_NOTPOSSIBLE;
+						return RETURNVALUE_NOTPOSSIBLE;
 					}
 				}
 			}
 
-			return RET_NOERROR;
+			return RETURNVALUE_NOERROR;
 		} else if (const Player* player = creature->getPlayer()) {
 			if (creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags) && !player->isAccessPlayer()) {
 				for (const Creature* tileCreature : *creatures) {
 					if (!player->canWalkthrough(tileCreature)) {
-						return RET_NOTPOSSIBLE;
+						return RETURNVALUE_NOTPOSSIBLE;
 					}
 				}
 			}
 
 			if (player->getParent() == nullptr && hasFlag(TILESTATE_NOLOGOUT)) {
 				//player is trying to login to a "no logout" tile
-				return RET_NOTPOSSIBLE;
+				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
 			if (player->getTile() && player->isPzLocked()) {
 				if (!player->getTile()->hasFlag(TILESTATE_PVPZONE)) {
 					//player is trying to enter a pvp zone while being pz-locked
 					if (hasFlag(TILESTATE_PVPZONE)) {
-						return RET_PLAYERISPZLOCKEDENTERPVPZONE;
+						return RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE;
 					}
 				} else if (!hasFlag(TILESTATE_PVPZONE)) { //player is trying to leave a pvp zone while being pz-locked
-					return RET_PLAYERISPZLOCKEDLEAVEPVPZONE;
+					return RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE;
 				}
 			}
 
 			if ((hasFlag(TILESTATE_NOPVPZONE) || hasFlag(TILESTATE_PROTECTIONZONE)) && player->isPzLocked()) {
-				return RET_PLAYERISPZLOCKED;
+				return RETURNVALUE_PLAYERISPZLOCKED;
 			}
 		} else if (creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags)) {
 			for (const Creature* tileCreature : *creatures) {
 				if (!tileCreature->isInGhostMode()) {
-					return RET_NOTENOUGHROOM;
+					return RETURNVALUE_NOTENOUGHROOM;
 				}
 			}
 		}
@@ -689,43 +689,43 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 			if (!hasBitSet(FLAG_IGNOREBLOCKITEM, flags)) {
 				//If the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
 				if (hasFlag(TILESTATE_BLOCKSOLID)) {
-					return RET_NOTENOUGHROOM;
+					return RETURNVALUE_NOTENOUGHROOM;
 				}
 			} else {
 				//FLAG_IGNOREBLOCKITEM is set
 				if (ground) {
 					const ItemType& iiType = Item::items[ground->getID()];
 					if (iiType.blockSolid && (!iiType.moveable || ground->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
-						return RET_NOTPOSSIBLE;
+						return RETURNVALUE_NOTPOSSIBLE;
 					}
 				}
 
 				for (const Item* item : *items) {
 					const ItemType& iiType = Item::items[item->getID()];
 					if (iiType.blockSolid && (!iiType.moveable || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
-						return RET_NOTPOSSIBLE;
+						return RETURNVALUE_NOTPOSSIBLE;
 					}
 				}
 			}
 		}
 	} else if (const Item* item = thing->getItem()) {
 		if (items && items->size() >= 0xFFFF) {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
-			return RET_NOERROR;
+			return RETURNVALUE_NOERROR;
 		}
 
 		bool itemIsHangable = item->isHangable();
 		if (ground == nullptr && !itemIsHangable) {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
 		if (creatures && !creatures->empty() && item->isBlocking() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags)) {
 			for (const Creature* tileCreature : *creatures) {
 				if (!tileCreature->isInGhostMode()) {
-					return RET_NOTENOUGHROOM;
+					return RETURNVALUE_NOTENOUGHROOM;
 				}
 			}
 		}
@@ -734,7 +734,7 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 			if (items) {
 				for (const Item* tileItem : *items) {
 					if (tileItem->isHangable()) {
-						return RET_NEEDEXCHANGE;
+						return RETURNVALUE_NEEDEXCHANGE;
 					}
 				}
 			}
@@ -744,11 +744,11 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 				if (iiType.blockSolid) {
 					if (!iiType.allowPickupable || item->isMagicField() || item->isBlocking()) {
 						if (!item->isPickupable()) {
-							return RET_NOTENOUGHROOM;
+							return RETURNVALUE_NOTENOUGHROOM;
 						}
 
 						if (!iiType.hasHeight || iiType.pickupable || iiType.isBed()) {
-							return RET_NOTENOUGHROOM;
+							return RETURNVALUE_NOTENOUGHROOM;
 						}
 					}
 				}
@@ -766,46 +766,46 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 					}
 
 					if (!item->isPickupable()) {
-						return RET_NOTENOUGHROOM;
+						return RETURNVALUE_NOTENOUGHROOM;
 					}
 
 					if (!iiType.hasHeight || iiType.pickupable || iiType.isBed()) {
-						return RET_NOTENOUGHROOM;
+						return RETURNVALUE_NOTENOUGHROOM;
 					}
 				}
 			}
 		}
 	}
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Tile::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Tile::__queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const
 {
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (count == 0 || (item->isStackable() && count > item->getItemCount())) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
-		return RET_NOTMOVEABLE;
+		return RETURNVALUE_NOTMOVEABLE;
 	}
 
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 Cylinder* Tile::__queryDestination(int32_t&, const Thing*, Item** destItem, uint32_t& flags)
@@ -921,12 +921,12 @@ void Tile::__addThing(int32_t, Thing* thing)
 	} else {
 		Item* item = thing->getItem();
 		if (item == nullptr) {
-			return /*RET_NOTPOSSIBLE*/;
+			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
 		TileItemVector* items = getItemList();
 		if (items && items->size() > 0xFFFF) {
-			return /*RET_NOTPOSSIBLE*/;
+			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
 		item->setParent(this);
@@ -1025,12 +1025,12 @@ void Tile::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* item = thing->getItem();
 	if (item == nullptr) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	const ItemType& oldType = Item::items[item->getID()];
@@ -1048,7 +1048,7 @@ void Tile::__replaceThing(uint32_t index, Thing* thing)
 
 	Item* item = thing->getItem();
 	if (item == nullptr) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* oldItem = nullptr;
@@ -1083,7 +1083,7 @@ void Tile::__replaceThing(uint32_t index, Thing* thing)
 	CreatureVector* creatures = getCreatures();
 	if (creatures) {
 		if (!isInserted && pos < (int32_t)creatures->size()) {
-			return /*RET_NOTPOSSIBLE*/;
+			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
 		pos -= (uint32_t)creatures->size();
@@ -1110,7 +1110,7 @@ void Tile::__replaceThing(uint32_t index, Thing* thing)
 		onUpdateTileItem(oldItem, oldType, item, newType);
 
 		oldItem->setParent(nullptr);
-		return /*RET_NOERROR*/;
+		return /*RETURNVALUE_NOERROR*/;
 	}
 }
 
@@ -1534,7 +1534,7 @@ void Tile::__internalAddThing(uint32_t, Thing* thing)
 
 		TileItemVector* items = makeItemList();
 		if (items->size() >= 0xFFFF) {
-			return /*RET_NOTPOSSIBLE*/;
+			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
 		if (item->isGroundTile()) {

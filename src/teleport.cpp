@@ -57,17 +57,17 @@ bool Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 
 ReturnValue Teleport::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
 {
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
 ReturnValue Teleport::__queryMaxCount(int32_t, const Thing*, uint32_t, uint32_t&, uint32_t) const
 {
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
 ReturnValue Teleport::__queryRemove(const Thing*, uint32_t, uint32_t) const
 {
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 Cylinder* Teleport::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)

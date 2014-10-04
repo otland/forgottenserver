@@ -213,14 +213,14 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos)
 	if (pos.x != 0xFFFF) {
 		const Position& playerPos = player->getPosition();
 		if (playerPos.z != pos.z) {
-			return playerPos.z > pos.z ? RET_FIRSTGOUPSTAIRS : RET_FIRSTGODOWNSTAIRS;
+			return playerPos.z > pos.z ? RETURNVALUE_FIRSTGOUPSTAIRS : RETURNVALUE_FIRSTGODOWNSTAIRS;
 		}
 
 		if (!Position::areInRange<1, 1>(playerPos, pos)) {
-			return RET_TOOFARAWAY;
+			return RETURNVALUE_TOOFARAWAY;
 		}
 	}
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Actions::canUse(const Player* player, const Position& pos, const Item* item)
@@ -229,29 +229,29 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos, const Ite
 	if (action) {
 		return action->canExecuteAction(player, pos);
 	}
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor)
 {
 	if (toPos.x == 0xFFFF) {
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 
 	const Position& creaturePos = creature->getPosition();
 	if (checkFloor && creaturePos.z != toPos.z) {
-		return creaturePos.z > toPos.z ? RET_FIRSTGOUPSTAIRS : RET_FIRSTGODOWNSTAIRS;
+		return creaturePos.z > toPos.z ? RETURNVALUE_FIRSTGOUPSTAIRS : RETURNVALUE_FIRSTGODOWNSTAIRS;
 	}
 
 	if (!Position::areInRange<7, 5>(toPos, creaturePos)) {
-		return RET_TOOFARAWAY;
+		return RETURNVALUE_TOOFARAWAY;
 	}
 
 	if (checkLineOfSight && !g_game.canThrowObjectTo(creaturePos, toPos)) {
-		return RET_CANNOTTHROW;
+		return RETURNVALUE_CANNOTTHROW;
 	}
 
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 Action* Actions::getAction(const Item* item)
@@ -289,7 +289,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 {
 	if (Door* door = item->getDoor()) {
 		if (!door->canUse(player)) {
-			return RET_CANNOTUSETHISOBJECT;
+			return RETURNVALUE_CANNOTUSETHISOBJECT;
 		}
 	}
 
@@ -300,18 +300,18 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 		if (action->isScripted()) {
 			if (action->executeUse(player, item, posEx, posEx, false, 0)) {
-				return RET_NOERROR;
+				return RETURNVALUE_NOERROR;
 			}
 		} else if (action->function) {
 			if (action->function(player, item, posEx, posEx, false)) {
-				return RET_NOERROR;
+				return RETURNVALUE_NOERROR;
 			}
 		}
 	}
 
 	if (BedItem* bed = item->getBed()) {
 		if (!bed->canUse(player)) {
-			return RET_CANNOTUSETHISOBJECT;
+			return RETURNVALUE_CANNOTUSETHISOBJECT;
 		}
 
 		if (bed->trySleep(player)) {
@@ -319,7 +319,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			g_game.sendOfflineTrainingDialog(player);
 		}
 
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (Container* container = item->getContainer()) {
@@ -337,7 +337,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 		uint32_t corpseOwner = container->getCorpseOwner();
 		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
-			return RET_YOUARENOTTHEOWNER;
+			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}
 
 		//open/close container
@@ -350,7 +350,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->onSendContainer(openContainer);
 		}
 
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (item->isReadable()) {
@@ -362,10 +362,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->sendTextWindow(item, 0, false);
 		}
 
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 
-	return RET_CANNOTUSETHISOBJECT;
+	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
 
 bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey)
@@ -383,7 +383,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	ReturnValue ret = internalUseItem(player, pos, index, item);
-	if (ret != RET_NOERROR) {
+	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 		return false;
 	}
@@ -404,12 +404,12 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 
 	Action* action = getAction(item);
 	if (!action) {
-		player->sendCancelMessage(RET_CANNOTUSETHISOBJECT);
+		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return false;
 	}
 
 	ReturnValue ret = action->canExecuteAction(player, toPos);
-	if (ret != RET_NOERROR) {
+	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 		return false;
 	}
@@ -424,7 +424,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 
 	if (!action->executeUse(player, item, fromPosEx, toPosEx, true, creatureId)) {
 		if (!action->hasOwnErrorHandler()) {
-			player->sendCancelMessage(RET_CANNOTUSETHISOBJECT);
+			player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		}
 
 		return false;

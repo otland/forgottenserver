@@ -41,20 +41,20 @@ ReturnValue Mailbox::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t,
 {
 	const Item* item = thing->getItem();
 	if (item && Mailbox::canSend(item)) {
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
 ReturnValue Mailbox::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Mailbox::__queryRemove(const Thing*, uint32_t, uint32_t) const
 {
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
 Cylinder* Mailbox::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)
@@ -115,7 +115,7 @@ bool Mailbox::sendItem(Item* item) const
 	Player* player = g_game.getPlayerByName(receiver);
 	if (player) {
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
+		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			player->onReceiveMail();
 			return true;
@@ -127,7 +127,7 @@ bool Mailbox::sendItem(Item* item) const
 		}
 
 		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
+		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			IOLoginData::savePlayer(&tmpPlayer);
 			return true;

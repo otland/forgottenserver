@@ -38,7 +38,7 @@ ReturnValue DepotChest::__queryAdd(int32_t index, const Thing* thing, uint32_t c
 {
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
@@ -58,7 +58,7 @@ ReturnValue DepotChest::__queryAdd(int32_t index, const Thing* thing, uint32_t c
 		}
 
 		if (getItemHoldingCount() + addCount > maxDepotItems) {
-			return RET_DEPOTISFULL;
+			return RETURNVALUE_DEPOTISFULL;
 		}
 	}
 

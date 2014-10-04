@@ -36,18 +36,18 @@ TrashHolder::~TrashHolder()
 
 ReturnValue TrashHolder::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
 {
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue TrashHolder::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue TrashHolder::__queryRemove(const Thing*, uint32_t, uint32_t) const
 {
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
 Cylinder* TrashHolder::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)

@@ -212,13 +212,13 @@ class VirtualCylinder : public Cylinder
 		static VirtualCylinder* virtualCylinder;
 
 		virtual ReturnValue __queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature* = nullptr) const {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 		virtual ReturnValue __queryMaxCount(int32_t, const Thing*, uint32_t, uint32_t&, uint32_t) const {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 		virtual ReturnValue __queryRemove(const Thing*, uint32_t, uint32_t) const {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 		virtual Cylinder* __queryDestination(int32_t&, const Thing*, Item**, uint32_t&) {
 			return nullptr;

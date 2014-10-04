@@ -159,7 +159,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	if (tile) {
 		placeInPZ = tile->hasFlag(TILESTATE_PROTECTIONZONE);
 		ReturnValue ret = tile->__queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM);
-		foundTile = forceLogin || ret == RET_NOERROR || ret == RET_PLAYERISNOTINVITED;
+		foundTile = forceLogin || ret == RETURNVALUE_NOERROR || ret == RETURNVALUE_PLAYERISNOTINVITED;
 	} else {
 		placeInPZ = false;
 		foundTile = false;
@@ -197,7 +197,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 				continue;
 			}
 
-			if (tile->__queryAdd(0, creature, 1, 0) == RET_NOERROR) {
+			if (tile->__queryAdd(0, creature, 1, 0) == RETURNVALUE_NOERROR) {
 				if (!extendedPos || isSightClear(centerPos, tryPos, false)) {
 					foundTile = true;
 					break;
@@ -545,7 +545,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos)
 	//used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
-		if (!tile || tile->__queryAdd(0, &creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RET_NOERROR) {
+		if (!tile || tile->__queryAdd(0, &creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
 			return nullptr;
 		}
 	}

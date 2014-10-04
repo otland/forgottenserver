@@ -1015,7 +1015,7 @@ bool Monster::pushItem(Item* item)
 		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
 		Tile* tile = g_game.getTile(tryPos);
 		if (tile && g_game.canThrowObjectTo(centerPos, tryPos)) {
-			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr) == RET_NOERROR) {
+			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr) == RETURNVALUE_NOERROR) {
 				return true;
 			}
 		}
@@ -1039,7 +1039,7 @@ void Monster::pushItems(Tile* tile)
 			        || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
 				if (moveCount < 20 && pushItem(item)) {
 					++moveCount;
-				} else if (g_game.internalRemoveItem(item) == RET_NOERROR) {
+				} else if (g_game.internalRemoveItem(item) == RETURNVALUE_NOERROR) {
 					++removeCount;
 				}
 			}
@@ -1064,7 +1064,7 @@ bool Monster::pushCreature(Creature* creature)
 		const Position& tryPos = Spells::getCasterPosition(creature, dir);
 		Tile* toTile = g_game.getTile(tryPos.x, tryPos.y, tryPos.z);
 		if (toTile && !toTile->hasProperty(CONST_PROP_BLOCKPATH)) {
-			if (g_game.internalMoveCreature(creature, dir) == RET_NOERROR) {
+			if (g_game.internalMoveCreature(creature, dir) == RETURNVALUE_NOERROR) {
 				return true;
 			}
 		}
@@ -1787,7 +1787,7 @@ bool Monster::canWalkTo(Position pos, Direction dir)
 		}
 
 		Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING) == RET_NOERROR) {
+		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
 			return true;
 		}
 	}

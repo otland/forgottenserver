@@ -288,47 +288,47 @@ ReturnValue Container::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 	if (childIsOwner) {
 		//a child container is querying, since we are the top container (not carried by a player)
 		//just return with no error.
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (!unlocked) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (!item->isPickupable()) {
-		return RET_CANNOTPICKUP;
+		return RETURNVALUE_CANNOTPICKUP;
 	}
 
 	if (item == this) {
-		return RET_THISISIMPOSSIBLE;
+		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
 	const Cylinder* cylinder = getParent();
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		while (cylinder) {
 			if (cylinder == thing) {
-				return RET_THISISIMPOSSIBLE;
+				return RETURNVALUE_THISISIMPOSSIBLE;
 			}
 
 			if (dynamic_cast<const Inbox*>(cylinder)) {
-				return RET_CONTAINERNOTENOUGHROOM;
+				return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 			}
 
 			cylinder = cylinder->getParent();
 		}
 
 		if (index == INDEX_WHEREEVER && size() >= capacity()) {
-			return RET_CONTAINERNOTENOUGHROOM;
+			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
 	} else {
 		while (cylinder) {
 			if (cylinder == thing) {
-				return RET_THISISIMPOSSIBLE;
+				return RETURNVALUE_THISISIMPOSSIBLE;
 			}
 
 			cylinder = cylinder->getParent();
@@ -339,7 +339,7 @@ ReturnValue Container::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 	if (topParent != this) {
 		return topParent->__queryAdd(INDEX_WHEREEVER, item, count, flags | FLAG_CHILDISOWNER, actor);
 	} else {
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 }
 
@@ -349,12 +349,12 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
 		maxQueryCount = 0;
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (hasBitSet(FLAG_NOLIMIT, flags)) {
 		maxQueryCount = std::max<uint32_t>(1, count);
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 
 	int32_t freeSlots = std::max<int32_t>(capacity() - size(), 0);
@@ -368,7 +368,7 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 			for (Item* containerItem : itemlist) {
 				if (containerItem != item && containerItem->getID() == item->getID() && containerItem->getItemCount() < 100) {
 					uint32_t remainder = (100 - containerItem->getItemCount());
-					if (__queryAdd(slotIndex++, item, remainder, flags) == RET_NOERROR) {
+					if (__queryAdd(slotIndex++, item, remainder, flags) == RETURNVALUE_NOERROR) {
 						n += remainder;
 					}
 				}
@@ -377,7 +377,7 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 			const Item* destItem = getItemByIndex(index);
 			if (destItem && destItem->getID() == item->getID() && destItem->getItemCount() < 100) {
 				uint32_t remainder = 100 - destItem->getItemCount();
-				if (__queryAdd(index, item, remainder, flags) == RET_NOERROR) {
+				if (__queryAdd(index, item, remainder, flags) == RETURNVALUE_NOERROR) {
 					n = remainder;
 				}
 			}
@@ -385,37 +385,37 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 
 		maxQueryCount = freeSlots * 100 + n;
 		if (maxQueryCount < count) {
-			return RET_CONTAINERNOTENOUGHROOM;
+			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
 	} else {
 		maxQueryCount = freeSlots;
 		if (maxQueryCount == 0) {
-			return RET_CONTAINERNOTENOUGHROOM;
+			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
 	}
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Container::__queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const
 {
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (count == 0 || (item->isStackable() && count > item->getItemCount())) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
-		return RET_NOTMOVEABLE;
+		return RETURNVALUE_NOTMOVEABLE;
 	}
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 Cylinder* Container::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
@@ -495,12 +495,12 @@ void Container::__addThing(Thing* thing)
 void Container::__addThing(int32_t index, Thing* thing)
 {
 	if (index >= (int32_t)capacity()) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* item = thing->getItem();
 	if (item == nullptr) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	item->setParent(this);
@@ -521,7 +521,7 @@ void Container::__addThingBack(Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (item == nullptr) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	item->setParent(this);
@@ -542,12 +542,12 @@ void Container::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* item = thing->getItem();
 	if (item == nullptr) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	const double oldWeight = item->getWeight();
@@ -573,12 +573,12 @@ void Container::__replaceThing(uint32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (!item) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* replacedItem = getItemByIndex(index);
 	if (!replacedItem) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	totalWeight -= replacedItem->getWeight();
@@ -603,12 +603,12 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
 	if (item == nullptr) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	if (item->isStackable() && count != item->getItemCount()) {

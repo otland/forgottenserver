@@ -85,15 +85,15 @@ ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t co
 	if (const Creature* creature = thing->getCreature()) {
 		if (const Player* player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
-				return RET_PLAYERISNOTINVITED;
+				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		} else {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 	} else if (thing->getItem() && actor) {
 		Player* actorPlayer = actor->getPlayer();
 		if (!house->isInvited(actorPlayer)) {
-			return RET_CANNOTTHROW;
+			return RETURNVALUE_CANNOTTHROW;
 		}
 	}
 	return Tile::__queryAdd(index, thing, count, flags, actor);

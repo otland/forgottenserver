@@ -107,7 +107,7 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 	for (size_t pos = 0; pos < query.length(); ++pos) {
 		cur = cur->getChild(query[pos]);
 		if (!cur) {
-			return RET_PLAYERWITHTHISNAMEISNOTONLINE;
+			return RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE;
 		}
 	}
 
@@ -116,9 +116,9 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 	do {
 		size_t size = cur->children.size();
 		if (size == 0) {
-			return RET_NOERROR;
+			return RETURNVALUE_NOERROR;
 		} else if (size > 1 || cur->breakpoint) {
-			return RET_NAMEISTOOAMBIGIOUS;
+			return RETURNVALUE_NAMEISTOOAMBIGIOUS;
 		}
 
 		auto it = cur->children.begin();

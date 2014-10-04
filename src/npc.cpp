@@ -411,7 +411,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir)
 	}
 
 	Tile* tile = g_game.getTile(toPos.x, toPos.y, toPos.z);
-	if (!tile || tile->__queryAdd(0, this, 1, 0) != RET_NOERROR) {
+	if (!tile || tile->__queryAdd(0, this, 1, 0) != RETURNVALUE_NOERROR) {
 		return false;
 	}
 
@@ -938,7 +938,7 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 				item->setActionId(actionId);
 			}
 
-			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RET_NOERROR) {
+			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
 				delete item;
 				lua_pushnumber(L, sellCount);
 				return 1;
@@ -954,7 +954,7 @@ int32_t NpcScriptInterface::luaDoSellItem(lua_State* L)
 				item->setActionId(actionId);
 			}
 
-			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RET_NOERROR) {
+			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
 				delete item;
 				lua_pushnumber(L, sellCount);
 				return 1;

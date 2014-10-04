@@ -2509,7 +2509,7 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 {
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	bool childIsOwner = hasBitSet(FLAG_CHILDISOWNER, flags);
@@ -2517,54 +2517,54 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 		//a child container is querying the player, just check if enough capacity
 		bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
 		if (skipLimit || hasCapacity(item, count)) {
-			return RET_NOERROR;
+			return RETURNVALUE_NOERROR;
 		}
-		return RET_NOTENOUGHCAPACITY;
+		return RETURNVALUE_NOTENOUGHCAPACITY;
 	}
 
 	if (!item->isPickupable()) {
-		return RET_CANNOTPICKUP;
+		return RETURNVALUE_CANNOTPICKUP;
 	}
 
-	ReturnValue ret = RET_NOERROR;
+	ReturnValue ret = RETURNVALUE_NOERROR;
 
 	const int32_t& slotPosition = item->getSlotPosition();
 	if ((slotPosition & SLOTP_HEAD) || (slotPosition & SLOTP_NECKLACE) ||
 	        (slotPosition & SLOTP_BACKPACK) || (slotPosition & SLOTP_ARMOR) ||
 	        (slotPosition & SLOTP_LEGS) || (slotPosition & SLOTP_FEET) ||
 	        (slotPosition & SLOTP_RING)) {
-		ret = RET_CANNOTBEDRESSED;
+		ret = RETURNVALUE_CANNOTBEDRESSED;
 	} else if (slotPosition & SLOTP_TWO_HAND) {
-		ret = RET_PUTTHISOBJECTINBOTHHANDS;
+		ret = RETURNVALUE_PUTTHISOBJECTINBOTHHANDS;
 	} else if ((slotPosition & SLOTP_RIGHT) || (slotPosition & SLOTP_LEFT)) {
-		ret = RET_PUTTHISOBJECTINYOURHAND;
+		ret = RETURNVALUE_PUTTHISOBJECTINYOURHAND;
 	}
 
 	switch (index) {
 		case CONST_SLOT_HEAD: {
 			if (slotPosition & SLOTP_HEAD) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
 
 		case CONST_SLOT_NECKLACE: {
 			if (slotPosition & SLOTP_NECKLACE) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
 
 		case CONST_SLOT_BACKPACK: {
 			if (slotPosition & SLOTP_BACKPACK) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
 
 		case CONST_SLOT_ARMOR: {
 			if (slotPosition & SLOTP_ARMOR) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
@@ -2574,29 +2574,29 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 				//check if we already carry an item in the other hand
 				if (slotPosition & SLOTP_TWO_HAND) {
 					if (inventory[CONST_SLOT_LEFT] && inventory[CONST_SLOT_LEFT] != item) {
-						ret = RET_BOTHHANDSNEEDTOBEFREE;
+						ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
 					} else {
-						ret = RET_NOERROR;
+						ret = RETURNVALUE_NOERROR;
 					}
 				} else if (inventory[CONST_SLOT_LEFT]) {
 					const Item* leftItem = inventory[CONST_SLOT_LEFT];
 					WeaponType_t type = item->getWeaponType(), leftType = leftItem->getWeaponType();
 
 					if (leftItem->getSlotPosition() & SLOTP_TWO_HAND) {
-						ret = RET_DROPTWOHANDEDITEM;
+						ret = RETURNVALUE_DROPTWOHANDEDITEM;
 					} else if (item == leftItem && count == item->getItemCount()) {
-						ret = RET_NOERROR;
+						ret = RETURNVALUE_NOERROR;
 					} else if (leftType == WEAPON_SHIELD && type == WEAPON_SHIELD) {
-						ret = RET_CANONLYUSEONESHIELD;
+						ret = RETURNVALUE_CANONLYUSEONESHIELD;
 					} else if (!leftItem->isWeapon() || !item->isWeapon() ||
 					           leftType == WEAPON_SHIELD || leftType == WEAPON_AMMO
 					           || type == WEAPON_SHIELD || type == WEAPON_AMMO) {
-						ret = RET_NOERROR;
+						ret = RETURNVALUE_NOERROR;
 					} else {
-						ret = RET_CANONLYUSEONEWEAPON;
+						ret = RETURNVALUE_CANONLYUSEONEWEAPON;
 					}
 				} else {
-					ret = RET_NOERROR;
+					ret = RETURNVALUE_NOERROR;
 				}
 			}
 			break;
@@ -2607,29 +2607,29 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 				//check if we already carry an item in the other hand
 				if (slotPosition & SLOTP_TWO_HAND) {
 					if (inventory[CONST_SLOT_RIGHT] && inventory[CONST_SLOT_RIGHT] != item) {
-						ret = RET_BOTHHANDSNEEDTOBEFREE;
+						ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
 					} else {
-						ret = RET_NOERROR;
+						ret = RETURNVALUE_NOERROR;
 					}
 				} else if (inventory[CONST_SLOT_RIGHT]) {
 					const Item* rightItem = inventory[CONST_SLOT_RIGHT];
 					WeaponType_t type = item->getWeaponType(), rightType = rightItem->getWeaponType();
 
 					if (rightItem->getSlotPosition() & SLOTP_TWO_HAND) {
-						ret = RET_DROPTWOHANDEDITEM;
+						ret = RETURNVALUE_DROPTWOHANDEDITEM;
 					} else if (item == rightItem && count == item->getItemCount()) {
-						ret = RET_NOERROR;
+						ret = RETURNVALUE_NOERROR;
 					} else if (rightType == WEAPON_SHIELD && type == WEAPON_SHIELD) {
-						ret = RET_CANONLYUSEONESHIELD;
+						ret = RETURNVALUE_CANONLYUSEONESHIELD;
 					} else if (!rightItem->isWeapon() || !item->isWeapon() ||
 					           rightType == WEAPON_SHIELD || rightType == WEAPON_AMMO
 					           || type == WEAPON_SHIELD || type == WEAPON_AMMO) {
-						ret = RET_NOERROR;
+						ret = RETURNVALUE_NOERROR;
 					} else {
-						ret = RET_CANONLYUSEONEWEAPON;
+						ret = RETURNVALUE_CANONLYUSEONEWEAPON;
 					}
 				} else {
-					ret = RET_NOERROR;
+					ret = RETURNVALUE_NOERROR;
 				}
 			}
 			break;
@@ -2637,56 +2637,56 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 
 		case CONST_SLOT_LEGS: {
 			if (slotPosition & SLOTP_LEGS) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
 
 		case CONST_SLOT_FEET: {
 			if (slotPosition & SLOTP_FEET) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
 
 		case CONST_SLOT_RING: {
 			if (slotPosition & SLOTP_RING) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
 
 		case CONST_SLOT_AMMO: {
 			if (slotPosition & SLOTP_AMMO) {
-				ret = RET_NOERROR;
+				ret = RETURNVALUE_NOERROR;
 			}
 			break;
 		}
 
 		case CONST_SLOT_WHEREEVER:
 		case -1:
-			ret = RET_NOTENOUGHROOM;
+			ret = RETURNVALUE_NOTENOUGHROOM;
 			break;
 
 		default:
-			ret = RET_NOTPOSSIBLE;
+			ret = RETURNVALUE_NOTPOSSIBLE;
 			break;
 	}
 
-	if (ret == RET_NOERROR || ret == RET_NOTENOUGHROOM) {
+	if (ret == RETURNVALUE_NOERROR || ret == RETURNVALUE_NOTENOUGHROOM) {
 		//need an exchange with source?
 		const Item* inventoryItem = getInventoryItem((slots_t)index);
 		if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
-			return RET_NEEDEXCHANGE;
+			return RETURNVALUE_NEEDEXCHANGE;
 		}
 
 		//check if enough capacity
 		if (!hasCapacity(item, count)) {
-			return RET_NOTENOUGHCAPACITY;
+			return RETURNVALUE_NOTENOUGHCAPACITY;
 		}
 
 		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), (slots_t)index, true)) {
-			return RET_CANNOTBEDRESSED;
+			return RETURNVALUE_CANNOTBEDRESSED;
 		}
 	}
 	return ret;
@@ -2698,7 +2698,7 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
 		maxQueryCount = 0;
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (index == INDEX_WHEREEVER) {
@@ -2722,11 +2722,11 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 				} else if (inventoryItem->isStackable() && item->getID() == inventoryItem->getID() && inventoryItem->getItemCount() < 100) {
 					uint32_t remainder = (100 - inventoryItem->getItemCount());
 
-					if (__queryAdd(slotIndex, item, remainder, flags) == RET_NOERROR) {
+					if (__queryAdd(slotIndex, item, remainder, flags) == RETURNVALUE_NOERROR) {
 						n += remainder;
 					}
 				}
-			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RET_NOERROR) { //empty slot
+			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { //empty slot
 				if (item->isStackable()) {
 					n += 100;
 				} else {
@@ -2750,21 +2750,21 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 			} else {
 				maxQueryCount = 0;
 			}
-		} else if (__queryAdd(index, item, count, flags) == RET_NOERROR) { //empty slot
+		} else if (__queryAdd(index, item, count, flags) == RETURNVALUE_NOERROR) { //empty slot
 			if (item->isStackable()) {
 				maxQueryCount = 100;
 			} else {
 				maxQueryCount = 1;
 			}
 
-			return RET_NOERROR;
+			return RETURNVALUE_NOERROR;
 		}
 	}
 
 	if (maxQueryCount < count) {
-		return RET_NOTENOUGHROOM;
+		return RETURNVALUE_NOTENOUGHROOM;
 	} else {
-		return RET_NOERROR;
+		return RETURNVALUE_NOERROR;
 	}
 }
 
@@ -2772,23 +2772,23 @@ ReturnValue Player::__queryRemove(const Thing* thing, uint32_t count, uint32_t f
 {
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	const Item* item = thing->getItem();
 	if (item == nullptr) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (count == 0 || (item->isStackable() && count > item->getItemCount())) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
-		return RET_NOTMOVEABLE;
+		return RETURNVALUE_NOTMOVEABLE;
 	}
 
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** destItem,
@@ -2820,7 +2820,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 				if (autoStack && isStackable) {
 					//try find an already existing item to stack with
-					if (__queryAdd(slotIndex, item, item->getItemCount(), 0) == RET_NOERROR) {
+					if (__queryAdd(slotIndex, item, item->getItemCount(), 0) == RETURNVALUE_NOERROR) {
 						if (inventoryItem->getID() == item->getID() && inventoryItem->getItemCount() < 100) {
 							index = slotIndex;
 							*destItem = inventoryItem;
@@ -2832,7 +2832,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 						containers.push_back(subContainer);
 					}
 				} else if (Container* subContainer = inventoryItem->getContainer()) {
-					if (subContainer->__queryAdd(INDEX_WHEREEVER, item, item->getItemCount(), flags) == RET_NOERROR) {
+					if (subContainer->__queryAdd(INDEX_WHEREEVER, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) {
 						index = INDEX_WHEREEVER;
 						*destItem = nullptr;
 						return subContainer;
@@ -2840,7 +2840,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 
 					containers.push_back(subContainer);
 				}
-			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RET_NOERROR) { //empty slot
+			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { //empty slot
 				index = slotIndex;
 				*destItem = nullptr;
 				return this;
@@ -2854,7 +2854,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				//we need to find first empty container as fast as we can for non-stackable items
 				uint32_t n = tmpContainer->capacity() - tmpContainer->size();
 				while (n) {
-					if (tmpContainer->__queryAdd(tmpContainer->capacity() - n, item, item->getItemCount(), flags) == RET_NOERROR) {
+					if (tmpContainer->__queryAdd(tmpContainer->capacity() - n, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) {
 						index = tmpContainer->capacity() - n;
 						*destItem = nullptr;
 						return tmpContainer;
@@ -2897,7 +2897,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 				n++;
 			}
 
-			if (n < tmpContainer->capacity() && tmpContainer->__queryAdd(n, item, item->getItemCount(), flags) == RET_NOERROR) {
+			if (n < tmpContainer->capacity() && tmpContainer->__queryAdd(n, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) {
 				index = n;
 				*destItem = nullptr;
 				return tmpContainer;
@@ -2925,12 +2925,12 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 void Player::__addThing(int32_t index, Thing* thing)
 {
 	if (index < CONST_SLOT_FIRST || index > CONST_SLOT_LAST) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* item = thing->getItem();
 	if (!item) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	item->setParent(this);
@@ -2944,12 +2944,12 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* item = thing->getItem();
 	if (!item) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	item->setID(itemId);
@@ -2965,17 +2965,17 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 void Player::__replaceThing(uint32_t index, Thing* thing)
 {
 	if (index > CONST_SLOT_LAST) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* oldItem = getInventoryItem((slots_t)index);
 	if (!oldItem) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	Item* item = thing->getItem();
 	if (!item) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	//send to client
@@ -2993,12 +2993,12 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
 	if (!item) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	int32_t index = __getIndexOfThing(thing);
 	if (index == -1) {
-		return /*RET_NOTPOSSIBLE*/;
+		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
 	if (item->isStackable()) {
@@ -3334,7 +3334,7 @@ bool Player::setFollowCreature(Creature* creature)
 		setFollowCreature(nullptr);
 		setAttackedCreature(nullptr);
 
-		sendCancelMessage(RET_THEREISNOWAY);
+		sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 		sendCancelTarget();
 		stopWalk();
 		return false;
@@ -4353,7 +4353,7 @@ void Player::setCurrentMount(uint8_t mount)
 bool Player::toggleMount(bool mount)
 {
 	if ((OTSYS_TIME() - lastToggleMount) < 3000) {
-		sendCancelMessage(RET_YOUAREEXHAUSTED);
+		sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return false;
 	}
 
@@ -4363,7 +4363,7 @@ bool Player::toggleMount(bool mount)
 		}
 
 		if (!group->access && _tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
-			sendCancelMessage(RET_ACTIONNOTPERMITTEDINPROTECTIONZONE);
+			sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 			return false;
 		}
 
@@ -4385,12 +4385,12 @@ bool Player::toggleMount(bool mount)
 		}
 
 		if (currentMount->premium && !isPremium()) {
-			sendCancelMessage(RET_YOUNEEDPREMIUMACCOUNT);
+			sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT);
 			return false;
 		}
 
 		if (hasCondition(CONDITION_OUTFIT)) {
-			sendCancelMessage(RET_NOTPOSSIBLE);
+			sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return false;
 		}
 

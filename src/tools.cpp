@@ -892,185 +892,185 @@ std::string getFirstLine(const std::string& str)
 const char* getReturnMessage(ReturnValue value)
 {
 	switch (value) {
-		case RET_DESTINATIONOUTOFREACH:
+		case RETURNVALUE_DESTINATIONOUTOFREACH:
 			return "Destination is out of reach.";
 
-		case RET_NOTMOVEABLE:
+		case RETURNVALUE_NOTMOVEABLE:
 			return "You cannot move this object.";
 
-		case RET_DROPTWOHANDEDITEM:
+		case RETURNVALUE_DROPTWOHANDEDITEM:
 			return "Drop the double-handed object first.";
 
-		case RET_BOTHHANDSNEEDTOBEFREE:
+		case RETURNVALUE_BOTHHANDSNEEDTOBEFREE:
 			return "Both hands need to be free.";
 
-		case RET_CANNOTBEDRESSED:
+		case RETURNVALUE_CANNOTBEDRESSED:
 			return "You cannot dress this object there.";
 
-		case RET_PUTTHISOBJECTINYOURHAND:
+		case RETURNVALUE_PUTTHISOBJECTINYOURHAND:
 			return "Put this object in your hand.";
 
-		case RET_PUTTHISOBJECTINBOTHHANDS:
+		case RETURNVALUE_PUTTHISOBJECTINBOTHHANDS:
 			return "Put this object in both hands.";
 
-		case RET_CANONLYUSEONEWEAPON:
+		case RETURNVALUE_CANONLYUSEONEWEAPON:
 			return "You may only use one weapon.";
 
-		case RET_TOOFARAWAY:
+		case RETURNVALUE_TOOFARAWAY:
 			return "Too far away.";
 
-		case RET_FIRSTGODOWNSTAIRS:
+		case RETURNVALUE_FIRSTGODOWNSTAIRS:
 			return "First go downstairs.";
 
-		case RET_FIRSTGOUPSTAIRS:
+		case RETURNVALUE_FIRSTGOUPSTAIRS:
 			return "First go upstairs.";
 
-		case RET_NOTENOUGHCAPACITY:
+		case RETURNVALUE_NOTENOUGHCAPACITY:
 			return "This object is too heavy for you to carry.";
 
-		case RET_CONTAINERNOTENOUGHROOM:
+		case RETURNVALUE_CONTAINERNOTENOUGHROOM:
 			return "You cannot put more objects in this container.";
 
-		case RET_NEEDEXCHANGE:
-		case RET_NOTENOUGHROOM:
+		case RETURNVALUE_NEEDEXCHANGE:
+		case RETURNVALUE_NOTENOUGHROOM:
 			return "There is not enough room.";
 
-		case RET_CANNOTPICKUP:
+		case RETURNVALUE_CANNOTPICKUP:
 			return "You cannot take this object.";
 
-		case RET_CANNOTTHROW:
+		case RETURNVALUE_CANNOTTHROW:
 			return "You cannot throw there.";
 
-		case RET_THEREISNOWAY:
+		case RETURNVALUE_THEREISNOWAY:
 			return "There is no way.";
 
-		case RET_THISISIMPOSSIBLE:
+		case RETURNVALUE_THISISIMPOSSIBLE:
 			return "This is impossible.";
 
-		case RET_PLAYERISPZLOCKED:
+		case RETURNVALUE_PLAYERISPZLOCKED:
 			return "You can not enter a protection zone after attacking another player.";
 
-		case RET_PLAYERISNOTINVITED:
+		case RETURNVALUE_PLAYERISNOTINVITED:
 			return "You are not invited.";
 
-		case RET_CREATUREDOESNOTEXIST:
+		case RETURNVALUE_CREATUREDOESNOTEXIST:
 			return "Creature does not exist.";
 
-		case RET_DEPOTISFULL:
+		case RETURNVALUE_DEPOTISFULL:
 			return "You cannot put more items in this depot.";
 
-		case RET_CANNOTUSETHISOBJECT:
+		case RETURNVALUE_CANNOTUSETHISOBJECT:
 			return "You cannot use this object.";
 
-		case RET_PLAYERWITHTHISNAMEISNOTONLINE:
+		case RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE:
 			return "A player with this name is not online.";
 
-		case RET_NOTREQUIREDLEVELTOUSERUNE:
+		case RETURNVALUE_NOTREQUIREDLEVELTOUSERUNE:
 			return "You do not have the required magic level to use this rune.";
 
-		case RET_YOUAREALREADYTRADING:
+		case RETURNVALUE_YOUAREALREADYTRADING:
 			return "You are already trading.";
 
-		case RET_THISPLAYERISALREADYTRADING:
+		case RETURNVALUE_THISPLAYERISALREADYTRADING:
 			return "This player is already trading.";
 
-		case RET_YOUMAYNOTLOGOUTDURINGAFIGHT:
+		case RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT:
 			return "You may not logout during or immediately after a fight!";
 
-		case RET_DIRECTPLAYERSHOOT:
+		case RETURNVALUE_DIRECTPLAYERSHOOT:
 			return "You are not allowed to shoot directly on players.";
 
-		case RET_NOTENOUGHLEVEL:
+		case RETURNVALUE_NOTENOUGHLEVEL:
 			return "You do not have enough level.";
 
-		case RET_NOTENOUGHMAGICLEVEL:
+		case RETURNVALUE_NOTENOUGHMAGICLEVEL:
 			return "You do not have enough magic level.";
 
-		case RET_NOTENOUGHMANA:
+		case RETURNVALUE_NOTENOUGHMANA:
 			return "You do not have enough mana.";
 
-		case RET_NOTENOUGHSOUL:
+		case RETURNVALUE_NOTENOUGHSOUL:
 			return "You do not have enough soul.";
 
-		case RET_YOUAREEXHAUSTED:
+		case RETURNVALUE_YOUAREEXHAUSTED:
 			return "You are exhausted.";
 
-		case RET_CANONLYUSETHISRUNEONCREATURES:
+		case RETURNVALUE_CANONLYUSETHISRUNEONCREATURES:
 			return "You can only use this rune on creatures.";
 
-		case RET_PLAYERISNOTREACHABLE:
+		case RETURNVALUE_PLAYERISNOTREACHABLE:
 			return "Player is not reachable.";
 
-		case RET_CREATUREISNOTREACHABLE:
+		case RETURNVALUE_CREATUREISNOTREACHABLE:
 			return "Creature is not reachable.";
 
-		case RET_ACTIONNOTPERMITTEDINPROTECTIONZONE:
+		case RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE:
 			return "This action is not permitted in a protection zone.";
 
-		case RET_YOUMAYNOTATTACKTHISPLAYER:
+		case RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER:
 			return "You may not attack this player.";
 
-		case RET_YOUMAYNOTATTACKTHISCREATURE:
+		case RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE:
 			return "You may not attack this creature.";
 
-		case RET_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE:
+		case RETURNVALUE_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE:
 			return "You may not attack a person in a protection zone.";
 
-		case RET_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE:
+		case RETURNVALUE_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE:
 			return "You may not attack a person while you are in a protection zone.";
 
-		case RET_YOUCANONLYUSEITONCREATURES:
+		case RETURNVALUE_YOUCANONLYUSEITONCREATURES:
 			return "You can only use it on creatures.";
 
-		case RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS:
+		case RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS:
 			return "Turn secure mode off if you really want to attack unmarked players.";
 
-		case RET_YOUNEEDPREMIUMACCOUNT:
+		case RETURNVALUE_YOUNEEDPREMIUMACCOUNT:
 			return "You need a premium account.";
 
-		case RET_YOUNEEDTOLEARNTHISSPELL:
+		case RETURNVALUE_YOUNEEDTOLEARNTHISSPELL:
 			return "You need to learn this spell first.";
 
-		case RET_YOURVOCATIONCANNOTUSETHISSPELL:
+		case RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL:
 			return "Your vocation cannot use this spell.";
 
-		case RET_YOUNEEDAWEAPONTOUSETHISSPELL:
+		case RETURNVALUE_YOUNEEDAWEAPONTOUSETHISSPELL:
 			return "You need to equip a weapon to use this spell.";
 
-		case RET_PLAYERISPZLOCKEDLEAVEPVPZONE:
+		case RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE:
 			return "You can not leave a pvp zone after attacking another player.";
 
-		case RET_PLAYERISPZLOCKEDENTERPVPZONE:
+		case RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE:
 			return "You can not enter a pvp zone after attacking another player.";
 
-		case RET_ACTIONNOTPERMITTEDINANOPVPZONE:
+		case RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE:
 			return "This action is not permitted in a non pvp zone.";
 
-		case RET_YOUCANNOTLOGOUTHERE:
+		case RETURNVALUE_YOUCANNOTLOGOUTHERE:
 			return "You can not logout here.";
 
-		case RET_YOUNEEDAMAGICITEMTOCASTSPELL:
+		case RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL:
 			return "You need a magic item to cast this spell.";
 
-		case RET_CANNOTCONJUREITEMHERE:
+		case RETURNVALUE_CANNOTCONJUREITEMHERE:
 			return "You cannot conjure items here.";
 
-		case RET_YOUNEEDTOSPLITYOURSPEARS:
+		case RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS:
 			return "You need to split your spears first.";
 
-		case RET_NAMEISTOOAMBIGIOUS:
+		case RETURNVALUE_NAMEISTOOAMBIGIOUS:
 			return "Name is too ambigious.";
 
-		case RET_CANONLYUSEONESHIELD:
+		case RETURNVALUE_CANONLYUSEONESHIELD:
 			return "You may use only one shield.";
 
-		case RET_NOPARTYMEMBERSINRANGE:
+		case RETURNVALUE_NOPARTYMEMBERSINRANGE:
 			return "No party members in range.";
 
-		case RET_YOUARENOTTHEOWNER:
+		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
-		default: // RET_NOTPOSSIBLE, etc
+		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}
 }

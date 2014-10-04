@@ -237,7 +237,7 @@ void Creature::onWalk()
 		if (getNextStep(dir, flags)) {
 			ReturnValue ret = g_game.internalMoveCreature(this, dir, flags);
 
-			if (ret != RET_NOERROR) {
+			if (ret != RETURNVALUE_NOERROR) {
 				if (Player* player = getPlayer()) {
 					player->sendCancelMessage(ret);
 					player->sendCancelWalk();
@@ -364,7 +364,7 @@ void Creature::updateMapCache()
 void Creature::updateTileCache(const Tile* tile, int32_t dx, int32_t dy)
 {
 	if (std::abs(dx) <= maxWalkCacheWidth && std::abs(dy) <= maxWalkCacheHeight) {
-		localMapCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx] = tile && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RET_NOERROR;
+		localMapCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx] = tile && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RETURNVALUE_NOERROR;
 	}
 }
 
