@@ -354,16 +354,16 @@ class ConditionOutfit: public Condition
 			return new ConditionOutfit(*this);
 		}
 
-		void addOutfit(const Outfit_t& outfit);
+		void setOutfit(const Outfit_t& outfit);
 
 		//serialization
 		virtual bool serialize(PropWriteStream& propWriteStream);
 		virtual bool unserializeProp(ConditionAttr_t attr, PropStream& propStream);
 
 	protected:
-		std::vector<Outfit_t> outfits;
+		Outfit_t outfit;
 
-		void changeOutfit(Creature* creature, int32_t index = -1);
+		void changeOutfit(Creature* creature);
 };
 
 class ConditionLight: public Condition

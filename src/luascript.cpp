@@ -2514,9 +2514,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Condition", "setParameter", LuaScriptInterface::luaConditionSetParameter);
 	registerMethod("Condition", "setFormula", LuaScriptInterface::luaConditionSetFormula);
+	registerMethod("Condition", "setOutfit", LuaScriptInterface::luaConditionSetOutfit);
 
 	registerMethod("Condition", "addDamage", LuaScriptInterface::luaConditionAddDamage);
-	registerMethod("Condition", "addOutfit", LuaScriptInterface::luaConditionAddOutfit);
 
 	// MonsterType
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
@@ -3344,7 +3344,7 @@ int32_t LuaScriptInterface::luaAddOutfitCondition(lua_State* L)
 		outfit.lookFeet = getNumber<uint32_t>(L, 7);
 		outfit.lookAddons = getNumber<uint32_t>(L, 8, outfit.lookAddons);
 		outfit.lookMount = getNumber<uint32_t>(L, 9, outfit.lookMount);
-		condition->addOutfit(outfit);
+		condition->setOutfit(outfit);
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CONDITION_NOT_FOUND));
@@ -11578,25 +11578,10 @@ int32_t LuaScriptInterface::luaConditionSetFormula(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaConditionAddDamage(lua_State* L)
+int32_t LuaScriptInterface::luaConditionSetOutfit(lua_State* L)
 {
-	// condition:addDamage(rounds, time, value)
-	int32_t value = getNumber<int32_t>(L, 4);
-	int32_t time = getNumber<int32_t>(L, 3);
-	int32_t rounds = getNumber<int32_t>(L, 2);
-	ConditionDamage* condition = dynamic_cast<ConditionDamage*>(getUserdata<Condition>(L, 1));
-	if (condition) {
-		pushBoolean(L, condition->addDamage(rounds, time, value));
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaConditionAddOutfit(lua_State* L)
-{
-	// condition:addOutfit(outfit)
-	// condition:addOutfit(lookTypeEx, lookType, lookHead, lookBody, lookLegs, lookFeet[, lookAddons[, lookMount]])
+	// condition:setOutfit(outfit)
+	// condition:setOutfit(lookTypeEx, lookType, lookHead, lookBody, lookLegs, lookFeet[, lookAddons[, lookMount]])
 	Outfit_t outfit;
 	if (isTable(L, 2)) {
 		outfit = getOutfit(L, 2);
@@ -11610,10 +11595,26 @@ int32_t LuaScriptInterface::luaConditionAddOutfit(lua_State* L)
 		outfit.lookType = getNumber<uint16_t>(L, 3);
 		outfit.lookTypeEx = getNumber<uint16_t>(L, 2);
 	}
+
 	ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(getUserdata<Condition>(L, 1));
 	if (condition) {
-		condition->addOutfit(outfit);
+		condition->setOutfit(outfit);
 		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaConditionAddDamage(lua_State* L)
+{
+	// condition:addDamage(rounds, time, value)
+	int32_t value = getNumber<int32_t>(L, 4);
+	int32_t time = getNumber<int32_t>(L, 3);
+	int32_t rounds = getNumber<int32_t>(L, 2);
+	ConditionDamage* condition = dynamic_cast<ConditionDamage*>(getUserdata<Condition>(L, 1));
+	if (condition) {
+		pushBoolean(L, condition->addDamage(rounds, time, value));
 	} else {
 		lua_pushnil(L);
 	}

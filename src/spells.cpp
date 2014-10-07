@@ -864,7 +864,7 @@ uint32_t Spell::getManaCost(const Player* player) const
 ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t& outfit, int32_t time)
 {
 	ConditionOutfit* outfitCondition = new ConditionOutfit(CONDITIONID_COMBAT, CONDITION_OUTFIT, time);
-	outfitCondition->addOutfit(outfit);
+	outfitCondition->setOutfit(outfit);
 	creature->addCondition(outfitCondition);
 	return RETURNVALUE_NOERROR;
 }
@@ -872,19 +872,16 @@ ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t& outfit, in
 ReturnValue Spell::CreateIllusion(Creature* creature, const std::string& name, int32_t time)
 {
 	uint32_t mId = g_monsters.getIdByName(name);
-
 	if (mId == 0) {
 		return RETURNVALUE_CREATUREDOESNOTEXIST;
 	}
 
 	const MonsterType* mType = g_monsters.getMonsterType(mId);
-
 	if (mType == nullptr) {
 		return RETURNVALUE_CREATUREDOESNOTEXIST;
 	}
 
 	Player* player = creature->getPlayer();
-
 	if (player && !player->hasFlag(PlayerFlag_CanIllusionAll)) {
 		if (!mType->isIllusionable) {
 			return RETURNVALUE_NOTPOSSIBLE;
@@ -897,7 +894,6 @@ ReturnValue Spell::CreateIllusion(Creature* creature, const std::string& name, i
 ReturnValue Spell::CreateIllusion(Creature* creature, uint32_t itemId, int32_t time)
 {
 	const ItemType& it = Item::items[itemId];
-
 	if (it.id == 0) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -1019,7 +1015,6 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			}
 
 			target = playerTarget;
-
 			if (!target || target->getHealth() <= 0) {
 				if (!casterTargetOrDirection) {
 					if (cooldown > 0) {
@@ -1050,7 +1045,6 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			}
 		} else {
 			target = player->getAttackedCreature();
-
 			if (!target || target->getHealth() <= 0) {
 				if (!casterTargetOrDirection) {
 					player->sendCancelMessage(RETURNVALUE_YOUCANONLYUSEITONCREATURES);
@@ -1128,7 +1122,6 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 	}
 
 	bool result = internalCastSpell(player, var);
-
 	if (result) {
 		Spell::postCastSpell(player);
 	}
@@ -1140,13 +1133,11 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 {
 	const Position& fromPos = creature->getPosition();
 	const Position& toPos = target->getPosition();
-
 	if (fromPos.z != toPos.z ||
 	        (range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight)) ||
 	        (range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -1156,7 +1147,6 @@ bool InstantSpell::castSpell(Creature* creature)
 
 	if (casterTargetOrDirection) {
 		Creature* target = creature->getAttackedCreature();
-
 		if (target && target->getHealth() > 0) {
 			if (!canThrowSpell(creature, target)) {
 				return false;

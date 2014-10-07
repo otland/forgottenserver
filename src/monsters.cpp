@@ -592,7 +592,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				MonsterType* mType = g_monsters.getMonsterType(attr.as_string());
 				if (mType) {
 					ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
-					condition->addOutfit(mType->outfit);
+					condition->setOutfit(mType->outfit);
 					combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 					combat->setCondition(condition);
 				}
@@ -601,7 +601,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				outfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 
 				ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
-				condition->addOutfit(outfit);
+				condition->setOutfit(outfit);
 				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 				combat->setCondition(condition);
 			}

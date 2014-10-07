@@ -1600,24 +1600,16 @@ ConditionOutfit::ConditionOutfit(ConditionId_t _id, ConditionType_t _type, int32
 	//
 }
 
-void ConditionOutfit::addOutfit(const Outfit_t& outfit)
+void ConditionOutfit::setOutfit(const Outfit_t& outfit)
 {
-	outfits.push_back(outfit);
+	this->outfit = outfit;
 }
 
 bool ConditionOutfit::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 {
 	if (attr == CONDITIONATTR_OUTFIT) {
-		Outfit_t outfit;
-
-		if (!propStream.GET_VALUE(outfit)) {
-			return false;
-		}
-
-		outfits.push_back(outfit);
-		return true;
+		return propStream.GET_VALUE(this->outfit);
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1627,10 +1619,8 @@ bool ConditionOutfit::serialize(PropWriteStream& propWriteStream)
 		return false;
 	}
 
-	for (const Outfit_t& outfit : outfits) {
-		propWriteStream.ADD_UCHAR(CONDITIONATTR_OUTFIT);
-		propWriteStream.ADD_VALUE(outfit);
-	}
+	propWriteStream.ADD_UCHAR(CONDITIONATTR_OUTFIT);
+	propWriteStream.ADD_VALUE(outfit);
 	return true;
 }
 
@@ -1640,25 +1630,13 @@ bool ConditionOutfit::startCondition(Creature* creature)
 		return false;
 	}
 
-	changeOutfit(creature);
+	g_game.internalCreatureChangeOutfit(creature, outfit);
 	return true;
 }
 
 bool ConditionOutfit::executeCondition(Creature* creature, int32_t interval)
 {
 	return Condition::executeCondition(creature, interval);
-}
-
-void ConditionOutfit::changeOutfit(Creature* creature, int32_t index /*= -1*/)
-{
-	if (!outfits.empty()) {
-		if (index == -1) {
-			index = uniform_random(0, outfits.size() - 1);
-		}
-
-		Outfit_t outfit = outfits[index];
-		g_game.internalCreatureChangeOutfit(creature, outfit);
-	}
 }
 
 void ConditionOutfit::endCondition(Creature* creature)
@@ -1672,9 +1650,9 @@ void ConditionOutfit::addCondition(Creature* creature, const Condition* addCondi
 		setTicks(addCondition->getTicks());
 
 		const ConditionOutfit& conditionOutfit = static_cast<const ConditionOutfit&>(*addCondition);
-		outfits = conditionOutfit.outfits;
+		outfit = conditionOutfit.outfit;
 
-		changeOutfit(creature);
+		g_game.internalCreatureChangeOutfit(creature, outfit);
 	}
 }
 

@@ -1173,9 +1173,9 @@ class LuaScriptInterface
 
 		static int32_t luaConditionSetParameter(lua_State* L);
 		static int32_t luaConditionSetFormula(lua_State* L);
+		static int32_t luaConditionSetOutfit(lua_State* L);
 
 		static int32_t luaConditionAddDamage(lua_State* L);
-		static int32_t luaConditionAddOutfit(lua_State* L);
 
 		// MonsterType
 		static int32_t luaMonsterTypeCreate(lua_State* L);
