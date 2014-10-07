@@ -872,7 +872,18 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool boolean)
 {
 	if (m_scripted) {
-		return executeEquip(player, item, slot);
+		//If the item's parent is the VirtualCylinder then we need to temporarily change it to nullptr
+		//to prevent it from being cleaned up prematurely
+		if(item && item->getParent() == VirtualCylinder::virtualCylinder){
+			item->setParent(nullptr);
+			auto ret = executeEquip(player, item, slot);
+			//We switch the parent back to virtualCylinder to ensure it gets cleaned up
+			//if it doesn't become a child of a real cylinder
+			item->setParent(VirtualCylinder::virtualCylinder);
+			return ret;
+		}
+		else
+			return executeEquip(player, item, slot);
 	} else {
 		return equipFunction(this, player, item, slot, boolean);
 	}
