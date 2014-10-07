@@ -306,6 +306,7 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	} else {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}
+	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 }
 
 void Commands::sellHouse(Player& player, const std::string& param)
