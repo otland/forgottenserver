@@ -869,31 +869,6 @@ ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t& outfit, in
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Spell::CreateIllusion(Creature* creature, const std::string& name, int32_t time)
-{
-	uint32_t mId = g_monsters.getIdByName(name);
-
-	if (mId == 0) {
-		return RETURNVALUE_CREATUREDOESNOTEXIST;
-	}
-
-	const MonsterType* mType = g_monsters.getMonsterType(mId);
-
-	if (mType == nullptr) {
-		return RETURNVALUE_CREATUREDOESNOTEXIST;
-	}
-
-	Player* player = creature->getPlayer();
-
-	if (player && !player->hasFlag(PlayerFlag_CanIllusionAll)) {
-		if (!mType->isIllusionable) {
-			return RETURNVALUE_NOTPOSSIBLE;
-		}
-	}
-
-	return CreateIllusion(creature, mType->outfit, time);
-}
-
 ReturnValue Spell::CreateIllusion(Creature* creature, uint32_t itemId, int32_t time)
 {
 	const ItemType& it = Item::items[itemId];
@@ -984,8 +959,6 @@ bool InstantSpell::loadFunction(const std::string& functionName)
 	} else if (tmpFunctionName == "illusion") {
 		isAggressive = false;
 		function = Illusion;
-	} else if (tmpFunctionName == "summonmonster") {
-		function = SummonMonster;
 	} else {
 		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
@@ -1509,65 +1482,6 @@ bool InstantSpell::SearchPlayer(const InstantSpell*, Creature* creature, const s
 	return true;
 }
 
-bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	MonsterType* mType = g_monsters.getMonsterType(param);
-	if (!mType) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	uint32_t manaCost = mType->manaCost;
-
-	if (!player->hasFlag(PlayerFlag_CanSummonAll)) {
-		if (!mType->isSummonable) {
-			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getMana() < manaCost) {
-			player->sendCancelMessage(RETURNVALUE_NOTENOUGHMANA);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getSummonCount() >= 2) {
-			player->sendCancel("You cannot summon more creatures.");
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-	}
-
-	Monster* monster = Monster::createMonster(param);
-	if (!monster) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	// Place the monster
-	creature->addSummon(monster);
-
-	if (!g_game.placeCreature(monster, creature->getPosition(), true)) {
-		creature->removeSummon(monster);
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	spell->postCastSpell(player, manaCost, spell->getSoulCost());
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_BLUE);
-	g_game.addMagicEffect(monster->getPosition(), CONST_ME_TELEPORT);
-	return true;
-}
-
 bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -1608,26 +1522,6 @@ bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::
 
 	if (ret == RETURNVALUE_NOERROR) {
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_TELEPORT);
-	} else {
-		player->sendCancelMessage(ret);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-	}
-
-	return (ret == RETURNVALUE_NOERROR);
-}
-
-bool InstantSpell::Illusion(const InstantSpell*, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-
-	if (!player) {
-		return false;
-	}
-
-	ReturnValue ret = CreateIllusion(creature, param, 180000);
-
-	if (ret == RETURNVALUE_NOERROR) {
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_RED);
 	} else {
 		player->sendCancelMessage(ret);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
