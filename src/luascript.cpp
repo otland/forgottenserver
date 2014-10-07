@@ -3170,7 +3170,7 @@ int32_t LuaScriptInterface::luaCreateConditionObject(lua_State* L)
 	ConditionType_t type = getNumber<ConditionType_t>(L, -1);
 
 	uint32_t id;
-	if (g_luaEnvironment.createConditionObject(env->getScriptInterface(), type, CONDITIONID_COMBAT, id)) {
+	if (g_luaEnvironment.createConditionObject(type, CONDITIONID_COMBAT, id)) {
 		lua_pushnumber(L, id);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CONDITION_NOT_FOUND));
@@ -11434,7 +11434,7 @@ int32_t LuaScriptInterface::luaConditionCreate(lua_State* L)
 	ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
 	ConditionId_t conditionId = getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
 	uint32_t id;
-	if (g_luaEnvironment.createConditionObject(getScriptEnv()->getScriptInterface(), conditionType, conditionId, id)) {
+	if (g_luaEnvironment.createConditionObject(conditionType, conditionId, id)) {
 		pushUserdata<Condition>(L, g_luaEnvironment.getConditionObject(id));
 		setMetatable(L, -1, "Condition");
 	} else {
@@ -12540,12 +12540,13 @@ Condition* LuaEnvironment::getConditionObject(uint32_t id) const
 	return it->second;
 }
 
-bool LuaEnvironment::createConditionObject(LuaScriptInterface* interface, ConditionType_t conditionType, ConditionId_t conditionId, uint32_t& id)
+bool LuaEnvironment::createConditionObject(ConditionType_t conditionType, ConditionId_t conditionId, uint32_t& id)
 {
 	Condition* condition = Condition::createCondition(conditionId, conditionType, 0, 0);
 	if (!condition) {
 		return false;
 	}
+
 	id = ++m_lastConditionId;
 	m_conditionMap[m_lastConditionId] = condition;
 	return true;

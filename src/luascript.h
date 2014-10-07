@@ -1286,7 +1286,7 @@ class LuaEnvironment : public LuaScriptInterface
 		void clearCombatObjects(LuaScriptInterface* interface);
 
 		Condition* getConditionObject(uint32_t id) const;
-		bool createConditionObject(LuaScriptInterface* interface, ConditionType_t conditionType, ConditionId_t conditionId, uint32_t& id);
+		bool createConditionObject(ConditionType_t conditionType, ConditionId_t conditionId, uint32_t& id);
 
 		AreaCombat* getAreaObject(uint32_t id) const;
 		uint32_t createAreaObject(LuaScriptInterface* interface);
