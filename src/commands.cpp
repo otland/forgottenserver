@@ -303,6 +303,9 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	} else if (tmpParam == "global") {
 		g_luaEnvironment.loadFile("data/global.lua");
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
+	} else if (tmpParam == "stages") {
+		g_game.loadExperienceStages(true);
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded experience stages.");
 	} else {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}

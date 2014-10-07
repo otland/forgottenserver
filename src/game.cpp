@@ -4841,13 +4841,25 @@ uint64_t Game::getExperienceStage(uint32_t level)
 	return stages[level];
 }
 
-bool Game::loadExperienceStages()
+bool Game::loadExperienceStages(bool reloading /*= false*/)
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
 	if (!result) {
 		std::cout << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
 		return false;
+	}
+
+	if (reloading) {
+		stages.clear();
+		lastStageLevel = 0;
+		useLastStageLevel = false;
+	}
+
+	float stagesMultiplier = 1.0f;
+	pugi::xml_attribute stagesMultiplierAttribute = doc.child("stages").attribute("multiplier");
+	if (stagesMultiplierAttribute) {
+		stagesMultiplier = pugi::cast<float>(stagesMultiplierAttribute.value());
 	}
 
 	for (pugi::xml_node stageNode = doc.child("stages").first_child(); stageNode; stageNode = stageNode.next_sibling()) {
@@ -4878,6 +4890,8 @@ bool Game::loadExperienceStages()
 			} else {
 				multiplier = 1;
 			}
+			
+			multiplier *= stagesMultiplier;
 
 			if (useLastStageLevel) {
 				stages[lastStageLevel] = multiplier;

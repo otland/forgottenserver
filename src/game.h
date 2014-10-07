@@ -492,7 +492,7 @@ class Game
 			return lightHour;
 		}
 
-		bool loadExperienceStages();
+		bool loadExperienceStages(bool reloading = false);
 		uint64_t getExperienceStage(uint32_t level);
 
 		void loadMotdNum();
