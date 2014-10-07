@@ -87,16 +87,20 @@ void ScriptEnvironment::resetEnv()
 	m_timerEvent = false;
 	m_interface = nullptr;
 	m_localMap.clear();
+	m_tempResults.clear();
 
-	for (const auto& it : m_tempItems) {
-		for (Item* item : it.second) {
-			if (item->getParent() == VirtualCylinder::virtualCylinder) {
-				g_game.ReleaseItem(item);
-			}
+	auto it = m_tempItems.find(this);
+	if (it == m_tempItems.end()) {
+		return;
+	}
+
+	ItemList& itemList = it->second;
+	for (Item* item : itemList) {
+		if (item->getParent() == VirtualCylinder::virtualCylinder) {
+			g_game.ReleaseItem(item);
 		}
 	}
-	m_tempItems.clear();
-	m_tempResults.clear();
+	itemList.clear();
 }
 
 bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
@@ -275,16 +279,6 @@ void ScriptEnvironment::addTempItem(ScriptEnvironment* env, Item* item)
 	m_tempItems[env].push_back(item);
 }
 
-void ScriptEnvironment::removeTempItem(ScriptEnvironment* env, Item* item)
-{
-	ItemList& itemList = m_tempItems[env];
-
-	auto it = std::find(itemList.begin(), itemList.end(), item);
-	if (it != itemList.end()) {
-		itemList.erase(it);
-	}
-}
-
 void ScriptEnvironment::removeTempItem(Item* item)
 {
 	for (auto& it : m_tempItems) {
@@ -365,7 +359,6 @@ LuaScriptInterface::~LuaScriptInterface()
 bool LuaScriptInterface::reInitState()
 {
 	g_luaEnvironment.clearCombatObjects(this);
-	g_luaEnvironment.clearConditionObjects(this);
 	g_luaEnvironment.clearAreaObjects(this);
 
 	closeState();
@@ -1988,6 +1981,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("ModalWindow", "", LuaScriptInterface::luaModalWindowCreate);
 	registerMetaMethod("ModalWindow", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("ModalWindow", "__gc", LuaScriptInterface::luaModalWindowDelete);
+	registerMethod("ModalWindow", "delete", LuaScriptInterface::luaModalWindowDelete);
 
 	registerMethod("ModalWindow", "getId", LuaScriptInterface::luaModalWindowGetId);
 	registerMethod("ModalWindow", "getTitle", LuaScriptInterface::luaModalWindowGetTitle);
@@ -2500,6 +2494,8 @@ void LuaScriptInterface::registerFunctions()
 	// Condition
 	registerClass("Condition", "", LuaScriptInterface::luaConditionCreate);
 	registerMetaMethod("Condition", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("Condition", "__gc", LuaScriptInterface::luaConditionDelete);
+	registerMethod("Condition", "delete", LuaScriptInterface::luaConditionDelete);
 
 	registerMethod("Condition", "getId", LuaScriptInterface::luaConditionGetId);
 	registerMethod("Condition", "getSubId", LuaScriptInterface::luaConditionGetSubId);
@@ -8866,14 +8862,20 @@ int32_t LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 	}
 
 	bool canDropOnMap = getBoolean(L, 3, false);
+	ReturnValue returnValue;
 	if (canDropOnMap) {
 		slots_t slot = getNumber<slots_t>(L, 4, CONST_SLOT_WHEREEVER);
-		lua_pushnumber(L, g_game.internalPlayerAddItem(player, item, true, slot));
+		returnValue = g_game.internalPlayerAddItem(player, item, true, slot);
 	} else {
 		int32_t index = getNumber<int32_t>(L, 4, INDEX_WHEREEVER);
 		uint32_t flags = getNumber<uint32_t>(L, 5, 0);
-		lua_pushnumber(L, g_game.internalAddItem(player, item, index, flags));
+		returnValue = g_game.internalAddItem(player, item, index, flags);
 	}
+
+	if (returnValue == RETURNVALUE_NOERROR) {
+		getScriptEnv()->removeTempItem(item);
+	}
+	lua_pushnumber(L, returnValue);
 	return 1;
 }
 
@@ -11441,6 +11443,17 @@ int32_t LuaScriptInterface::luaConditionCreate(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaConditionDelete(lua_State* L)
+{
+	// condition:delete()
+	Condition** conditionPtr = getRawUserdata<Condition>(L, 1);
+	if (conditionPtr && *conditionPtr) {
+		delete *conditionPtr;
+		*conditionPtr = nullptr;
+	}
+	return 0;
+}
+
 int32_t LuaScriptInterface::luaConditionGetId(lua_State* L)
 {
 	// condition:getId()
@@ -12454,10 +12467,6 @@ bool LuaEnvironment::closeState()
 		clearCombatObjects(combatEntry.first);
 	}
 
-	for (const auto& conditionEntry : m_conditionIdMap) {
-		clearConditionObjects(conditionEntry.first);
-	}
-
 	for (const auto& areaEntry : m_areaIdMap) {
 		clearAreaObjects(areaEntry.first);
 	}
@@ -12471,7 +12480,6 @@ bool LuaEnvironment::closeState()
 	}
 
 	m_combatIdMap.clear();
-	m_conditionIdMap.clear();
 	m_areaIdMap.clear();
 	m_timerEvents.clear();
 	m_cacheFiles.clear();
@@ -12540,25 +12548,7 @@ bool LuaEnvironment::createConditionObject(LuaScriptInterface* interface, Condit
 	}
 	id = ++m_lastConditionId;
 	m_conditionMap[m_lastConditionId] = condition;
-	m_conditionIdMap[interface].push_back(m_lastConditionId);
 	return true;
-}
-
-void LuaEnvironment::clearConditionObjects(LuaScriptInterface* interface)
-{
-	auto it = m_conditionIdMap.find(interface);
-	if (it == m_conditionIdMap.end()) {
-		return;
-	}
-
-	for (uint32_t id : it->second) {
-		auto itt = m_conditionMap.find(id);
-		if (itt != m_conditionMap.end()) {
-			delete itt->second;
-			m_conditionMap.erase(itt);
-		}
-	}
-	it->second.clear();
 }
 
 AreaCombat* LuaEnvironment::getAreaObject(uint32_t id) const
