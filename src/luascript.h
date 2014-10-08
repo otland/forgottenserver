@@ -275,7 +275,9 @@ class LuaScriptInterface
 		}
 
 		// Metatables
-		static void setMetatable(lua_State* L, int32_t index, const std::string& string);
+		static void setMetatable(lua_State* L, int32_t index, const std::string& name);
+		static void setWeakMetatable(lua_State* L, int32_t index, const std::string& name);
+
 		static void setItemMetatable(lua_State* L, int32_t index, const Item* item);
 		static void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature);
 

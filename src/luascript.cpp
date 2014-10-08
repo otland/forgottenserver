@@ -719,9 +719,43 @@ int32_t LuaScriptInterface::popCallback(lua_State* L)
 }
 
 // Metatables
-void LuaScriptInterface::setMetatable(lua_State* L, int32_t index, const std::string& string)
+void LuaScriptInterface::setMetatable(lua_State* L, int32_t index, const std::string& name)
 {
-	luaL_getmetatable(L, string.c_str());
+	luaL_getmetatable(L, name.c_str());
+	lua_setmetatable(L, index - 1);
+}
+
+void LuaScriptInterface::setWeakMetatable(lua_State* L, int32_t index, const std::string& name)
+{
+	static std::set<std::string> weakObjectTypes;
+	const std::string& weakName = name + "_weak";
+	if (weakObjectTypes.find(name) == weakObjectTypes.end()) {
+		luaL_getmetatable(L, name.c_str());
+		int32_t childMetatable = lua_gettop(L);
+
+		luaL_newmetatable(L, weakName.c_str());
+		int32_t metatable = lua_gettop(L);
+
+		static const std::vector<std::string> methodKeys = {"__index", "__metatable", "__eq"};
+		for (const std::string& metaKey : methodKeys) {
+			lua_getfield(L, childMetatable, metaKey.c_str());
+			lua_setfield(L, metatable, metaKey.c_str());
+		}
+
+		static const std::vector<int32_t> methodIndexes = {'h', 'p', 't'};
+		for (int32_t metaIndex : methodIndexes) {
+			lua_rawgeti(L, childMetatable, metaIndex);
+			lua_rawseti(L, metatable, metaIndex);
+		}
+
+		lua_pushnil(L);
+		lua_setfield(L, metatable, "__gc");
+
+		lua_remove(L, childMetatable);
+		weakObjectTypes.insert(name);
+	} else {
+		luaL_getmetatable(L, weakName.c_str());
+	}
 	lua_setmetatable(L, index - 1);
 }
 
@@ -7667,7 +7701,7 @@ int32_t LuaScriptInterface::luaCreatureGetCondition(lua_State* L)
 	Condition* condition = creature->getCondition(conditionType, conditionId, subId);
 	if (condition) {
 		pushUserdata<Condition>(L, condition);
-		setMetatable(L, -1, "Condition");
+		setWeakMetatable(L, -1, "Condition");
 	} else {
 		lua_pushnil(L);
 	}
