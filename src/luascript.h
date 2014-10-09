@@ -742,6 +742,7 @@ class LuaScriptInterface
 		static int32_t luaContainerGetSize(lua_State* L);
 		static int32_t luaContainerGetCapacity(lua_State* L);
 		static int32_t luaContainerGetEmptySlots(lua_State* L);
+		static int32_t luaContainerGetWeight(lua_State* L);
 
 		static int32_t luaContainerGetItemHoldingCount(lua_State* L);
 		static int32_t luaContainerGetItemCountById(lua_State* L);
