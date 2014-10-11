@@ -11,7 +11,7 @@ function onSay(cid, words, param)
 		return false
 	end
 
-	local ip = result.getDataInt(resultId, "lastip")
+	local ip = result.getDataLong(resultId, "lastip")
 	result.free(resultId)
 
 	local targetCid = getPlayerByName(param)
