@@ -2832,12 +2832,6 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 						containers.push_back(subContainer);
 					}
 				} else if (Container* subContainer = inventoryItem->getContainer()) {
-					if (subContainer->__queryAdd(INDEX_WHEREEVER, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) {
-						index = INDEX_WHEREEVER;
-						*destItem = nullptr;
-						return subContainer;
-					}
-
 					containers.push_back(subContainer);
 				}
 			} else if (__queryAdd(slotIndex, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { //empty slot
