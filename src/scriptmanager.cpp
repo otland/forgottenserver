@@ -22,6 +22,7 @@
 #include "scriptmanager.h"
 
 #include "actions.h"
+#include "chat.h"
 #include "talkaction.h"
 #include "spells.h"
 #include "movement.h"
@@ -32,6 +33,7 @@
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
+Chat* g_chat = nullptr;
 Events* g_events = nullptr;
 GlobalEvents* g_globalEvents = nullptr;
 Spells* g_spells = nullptr;
@@ -54,6 +56,7 @@ ScriptingManager::~ScriptingManager()
 	delete g_actions;
 	delete g_talkActions;
 	delete g_moveEvents;
+	delete g_chat;
 	delete g_creatureEvents;
 	delete g_globalEvents;
 }
@@ -63,6 +66,8 @@ bool ScriptingManager::loadScriptSystems()
 	if (g_luaEnvironment.loadFile("data/global.lua") == -1) {
 		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load data/global.lua" << std::endl;
 	}
+
+	g_chat = new Chat();
 
 	g_weapons = new Weapons();
 	if (!g_weapons->loadFromXml()) {

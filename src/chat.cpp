@@ -25,7 +25,7 @@
 #include "player.h"
 #include "scheduler.h"
 
-extern Chat g_chat;
+extern Chat* g_chat;
 extern Game g_game;
 
 PrivateChatChannel::PrivateChatChannel(uint16_t channelId, const std::string& channelName) :
@@ -178,7 +178,7 @@ bool ChatChannel::executeCanJoinEvent(const Player& player)
 	}
 
 	//canJoin(player)
-	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	LuaScriptInterface* m_scriptInterface = g_chat->getScriptInterface();
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CanJoinChannelEvent::execute] Call stack overflow" << std::endl;
 		return false;
@@ -203,7 +203,7 @@ bool ChatChannel::executeOnJoinEvent(const Player& player)
 	}
 
 	//onJoin(player)
-	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	LuaScriptInterface* m_scriptInterface = g_chat->getScriptInterface();
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - OnJoinChannelEvent::execute] Call stack overflow" << std::endl;
 		return false;
@@ -228,7 +228,7 @@ bool ChatChannel::executeOnLeaveEvent(const Player& player)
 	}
 
 	//onLeave(player)
-	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	LuaScriptInterface* m_scriptInterface = g_chat->getScriptInterface();
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - OnLeaveChannelEvent::execute] Call stack overflow" << std::endl;
 		return false;
@@ -253,7 +253,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	}
 
 	//onSpeak(player, type, message)
-	LuaScriptInterface* m_scriptInterface = g_chat.getScriptInterface();
+	LuaScriptInterface* m_scriptInterface = g_chat->getScriptInterface();
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - OnSpeakChannelEvent::execute] Call stack overflow" << std::endl;
 		return false;

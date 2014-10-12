@@ -47,7 +47,7 @@
 #include "scheduler.h"
 #include "raids.h"
 
-extern Chat g_chat;
+extern Chat* g_chat;
 extern Game g_game;
 extern Monsters g_monsters;
 extern ConfigManager g_config;
@@ -342,13 +342,13 @@ int32_t LuaScriptInterface::m_scriptEnvIndex = -1;
 
 LuaScriptInterface::LuaScriptInterface(const std::string& interfaceName)
 {
-	if (interfaceName != "Main Interface" && !g_luaEnvironment.getLuaState()) {
-		g_luaEnvironment.initState();
-	}
-
 	m_eventTableRef = -1;
 	m_luaState = nullptr;
 	m_interfaceName = interfaceName;
+
+	if (!g_luaEnvironment.getLuaState()) {
+		g_luaEnvironment.initState();
+	}
 }
 
 LuaScriptInterface::~LuaScriptInterface()
@@ -4359,7 +4359,7 @@ int32_t LuaScriptInterface::luaSendChannelMessage(lua_State* L)
 {
 	//sendChannelMessage(channelId, type, message)
 	uint32_t channelId = getNumber<uint32_t>(L, 1);
-	ChatChannel* channel = g_chat.getChannelById(channelId);
+	ChatChannel* channel = g_chat->getChannelById(channelId);
 	if (!channel) {
 		pushBoolean(L, false);
 		return 1;
@@ -4376,7 +4376,7 @@ int32_t LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 {
 	//sendGuildChannelMessage(guildId, type, message)
 	uint32_t guildId = getNumber<uint32_t>(L, 1);
-	ChatChannel* channel = g_chat.getGuildChannelById(guildId);
+	ChatChannel* channel = g_chat->getGuildChannelById(guildId);
 	if (!channel) {
 		pushBoolean(L, false);
 		return 1;

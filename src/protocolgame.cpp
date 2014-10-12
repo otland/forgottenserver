@@ -51,7 +51,7 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
-Chat g_chat;
+extern Chat* g_chat;
 
 // Helping templates to add dispatcher tasks
 template<class FunctionType>
@@ -237,7 +237,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player = _player;
 	player->useThing2();
 
-	g_chat.removeUserFromAllChannels(*player);
+	g_chat->removeUserFromAllChannels(*player);
 	player->clearModalWindows();
 	player->setOperatingSystem((OperatingSystem_t)operatingSystem);
 	player->isConnecting = false;
@@ -1423,7 +1423,7 @@ void ProtocolGame::sendChannelsDialog()
 	NetworkMessage msg;
 	msg.AddByte(0xAB);
 
-	const ChannelList& list = g_chat.getChannelList(*player);
+	const ChannelList& list = g_chat->getChannelList(*player);
 	msg.AddByte(list.size());
 	for (ChatChannel* channel : list) {
 		msg.add<uint16_t>(channel->getId());
