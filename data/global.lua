@@ -269,7 +269,7 @@ function Creature.getClosestFreePosition(self, position, extended)
 	
 	for i = 1, #tiles do
 		tile = tiles[i]
-		if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_BLOCKINGANDNOTMOVEABLE) then
+		if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) then
 			return tile:getPosition()
 		end
 	end
