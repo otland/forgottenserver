@@ -659,14 +659,14 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			}
 		} else if (tmpStrValue == "shoottype") {
 			ShootType_t shoot = getShootType(valueAttribute.as_string());
-			if (shoot != CONST_ANI_UNK) {
+			if (shoot != CONST_ANI_NONE) {
 				it.shootType = shoot;
 			} else {
 				std::cout << "[Warning - Items::parseItemNode] Unknown shootType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if (tmpStrValue == "effect") {
 			MagicEffectClasses effect = getMagicEffect(valueAttribute.as_string());
-			if (effect != CONST_ME_UNK) {
+			if (effect != CONST_ME_NONE) {
 				it.magicEffect = effect;
 			} else {
 				std::cout << "[Warning - Items::parseItemNode] Unknown effect: " << valueAttribute.as_string() << std::endl;

@@ -221,14 +221,6 @@ class ItemType
 		int32_t runeMagLevel;
 		int32_t runeLevel;
 
-		WeaponType_t weaponType;
-		Ammo_t ammoType;
-		ShootType_t shootType;
-		MagicEffectClasses magicEffect;
-		RaceType_t corpseType;
-		Direction bedPartnerDir;
-		AmmoAction_t ammoAction;
-		FluidTypes_t fluidSource;
 		CombatType_t combatType;
 
 		uint16_t transformToOnUse[2];
@@ -243,6 +235,15 @@ class ItemType
 		uint16_t wareId;
 		uint16_t lightLevel;
 		uint16_t lightColor;
+
+		MagicEffectClasses magicEffect;
+		Direction bedPartnerDir;
+		WeaponType_t weaponType;
+		Ammo_t ammoType;
+		ShootType_t shootType;
+		RaceType_t corpseType;
+		AmmoAction_t ammoAction;
+		FluidTypes_t fluidSource;
 
 		uint8_t alwaysOnTopOrder;
 

@@ -28,10 +28,10 @@
 extern Game g_game;
 
 Condition::Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId) :
-	id(_id),
 	subId(_subId),
 	ticks(_ticks),
 	conditionType(_type),
+	id(_id),
 	isBuff(_buff)
 {
 	if (_ticks == -1) {

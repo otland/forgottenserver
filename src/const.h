@@ -22,7 +22,7 @@
 
 #define NETWORKMESSAGE_MAXSIZE 24590
 
-enum MagicEffectClasses {
+enum MagicEffectClasses : uint8_t {
 	CONST_ME_FIRST = 1,
 	CONST_ME_DRAWBLOOD = CONST_ME_FIRST,
 	CONST_ME_LOSEENERGY = 2,
@@ -105,11 +105,10 @@ enum MagicEffectClasses {
 	CONST_ME_LAST = CONST_ME_BLACKSMOKE,
 
 	//for internal use, dont send to client
-	CONST_ME_NONE             = 0xFF,
-	CONST_ME_UNK              = 0xFFFF
+	CONST_ME_NONE             = 0xFF
 };
 
-enum ShootType_t {
+enum ShootType_t : uint8_t {
 	CONST_ANI_NONE = 0,
 	CONST_ANI_FIRST = 1,
 	CONST_ANI_SPEAR = CONST_ANI_FIRST,
@@ -164,8 +163,7 @@ enum ShootType_t {
 	CONST_ANI_ENVENOMEDARROW = 51,
 
 	//for internal use, dont send to client
-	CONST_ANI_WEAPONTYPE = 0xFE, //254
-	CONST_ANI_UNK = 0xFFFF
+	CONST_ANI_WEAPONTYPE = 0xFE //254
 };
 
 enum SpeakClasses {
@@ -189,7 +187,7 @@ enum SpeakClasses {
 	TALKTYPE_CHANNEL_W = 0xFF + 2
 };
 
-enum MessageClasses {
+enum MessageClasses : uint8_t {
 	MESSAGE_STATUS_CONSOLE_BLUE		= 0x04, /*FIXME Blue message in the console*/
 	MESSAGE_STATUS_CONSOLE_RED		= 0x0D, /*Red message in the console*/
 	MESSAGE_STATUS_DEFAULT		= 0x11, /*White message at the bottom of the game window and in the console*/
@@ -210,42 +208,42 @@ enum MessageClasses {
 	MESSAGE_STATUS_CONSOLE_ORANGE	= 0x24  /*Orange message in the console*/
 };
 
-enum FluidColors_t {
-	FLUID_EMPTY	= 0x00,
-	FLUID_BLUE	= 0x01,
-	FLUID_RED	= 0x02,
-	FLUID_BROWN	= 0x03,
-	FLUID_GREEN	= 0x04,
-	FLUID_YELLOW	= 0x05,
-	FLUID_WHITE	= 0x06,
-	FLUID_PURPLE	= 0x07
+enum FluidColors_t : uint8_t {
+	FLUID_EMPTY = 0x00,
+	FLUID_BLUE = 0x01,
+	FLUID_RED = 0x02,
+	FLUID_BROWN = 0x03,
+	FLUID_GREEN = 0x04,
+	FLUID_YELLOW = 0x05,
+	FLUID_WHITE = 0x06,
+	FLUID_PURPLE = 0x07
 };
 
-enum FluidTypes_t {
-	FLUID_NONE		= FLUID_EMPTY,
-	FLUID_WATER		= FLUID_BLUE,
-	FLUID_BLOOD		= FLUID_RED,
-	FLUID_BEER		= FLUID_BROWN,
-	FLUID_SLIME		= FLUID_GREEN,
-	FLUID_LEMONADE		= FLUID_YELLOW,
-	FLUID_MILK		= FLUID_WHITE,
-	FLUID_MANA		= FLUID_PURPLE,
+enum FluidTypes_t : uint8_t {
+	FLUID_NONE = FLUID_EMPTY,
+	FLUID_WATER = FLUID_BLUE,
+	FLUID_BLOOD = FLUID_RED,
+	FLUID_BEER = FLUID_BROWN,
+	FLUID_SLIME = FLUID_GREEN,
+	FLUID_LEMONADE = FLUID_YELLOW,
+	FLUID_MILK = FLUID_WHITE,
+	FLUID_MANA = FLUID_PURPLE,
 
-	FLUID_LIFE		= FLUID_RED + 8,
-	FLUID_OIL		= FLUID_BROWN + 8,
-	FLUID_URINE		= FLUID_YELLOW + 8,
-	FLUID_COCONUTMILK	= FLUID_WHITE + 8,
-	FLUID_WINE		= FLUID_PURPLE + 8,
+	FLUID_LIFE = FLUID_RED + 8,
+	FLUID_OIL = FLUID_BROWN + 8,
+	FLUID_URINE = FLUID_YELLOW + 8,
+	FLUID_COCONUTMILK = FLUID_WHITE + 8,
+	FLUID_WINE = FLUID_PURPLE + 8,
 
-	FLUID_MUD		= FLUID_BROWN + 16,
-	FLUID_FRUITJUICE	= FLUID_YELLOW + 16,
+	FLUID_MUD = FLUID_BROWN + 16,
+	FLUID_FRUITJUICE = FLUID_YELLOW + 16,
 
-	FLUID_LAVA		= FLUID_RED + 24,
-	FLUID_RUM		= FLUID_BROWN + 24,
-	FLUID_SWAMP		= FLUID_GREEN + 24,
+	FLUID_LAVA = FLUID_RED + 24,
+	FLUID_RUM = FLUID_BROWN + 24,
+	FLUID_SWAMP = FLUID_GREEN + 24,
 
-	FLUID_TEA		= FLUID_BROWN + 32,
-	FLUID_MEAD		= FLUID_BROWN + 40
+	FLUID_TEA = FLUID_BROWN + 32,
+	FLUID_MEAD = FLUID_BROWN + 40
 };
 
 const uint8_t reverseFluidMap[] = {
@@ -282,7 +280,7 @@ const uint8_t clientToServerFluidMap[] = {
 	FLUID_MEAD
 };
 
-enum ClientFluidTypes_t {
+enum ClientFluidTypes_t : uint8_t {
 	CLIENTFLUID_EMPTY	= 0x00,
 	CLIENTFLUID_BLUE	= 0x01,
 	CLIENTFLUID_PURPLE	= 0x02,
@@ -311,7 +309,7 @@ enum SquareColor_t {
 	SQ_COLOR_BLACK = 0
 };
 
-enum TextColor_t {
+enum TextColor_t : uint8_t {
 	TEXTCOLOR_BLUE = 5,
 	TEXTCOLOR_LIGHTGREEN = 30,
 	TEXTCOLOR_LIGHTBLUE = 35,
@@ -346,7 +344,7 @@ enum Icons_t {
 	ICON_BLEEDING = 32768
 };
 
-enum WeaponType_t {
+enum WeaponType_t : uint8_t {
 	WEAPON_NONE = 0,
 	WEAPON_SWORD = 1,
 	WEAPON_CLUB = 2,
@@ -357,7 +355,7 @@ enum WeaponType_t {
 	WEAPON_AMMO = 7
 };
 
-enum Ammo_t {
+enum Ammo_t : uint8_t {
 	AMMO_NONE = 0,
 	AMMO_BOLT = 1,
 	AMMO_ARROW = 2,
@@ -383,7 +381,7 @@ enum WieldInfo_t {
 	WIELDINFO_PREMIUM = 8
 };
 
-enum Skulls_t {
+enum Skulls_t : uint8_t {
 	SKULL_NONE = 0,
 	SKULL_YELLOW = 1,
 	SKULL_GREEN = 2,
@@ -394,7 +392,7 @@ enum Skulls_t {
 	SKULL_LAST = SKULL_ORANGE
 };
 
-enum PartyShields_t {
+enum PartyShields_t : uint8_t {
 	SHIELD_NONE = 0,
 	SHIELD_WHITEYELLOW = 1,
 	SHIELD_WHITEBLUE = 2,
@@ -409,7 +407,7 @@ enum PartyShields_t {
 	SHIELD_GRAY = 11
 };
 
-enum GuildEmblems_t {
+enum GuildEmblems_t : uint8_t {
 	GUILDEMBLEM_NONE = 0,
 	GUILDEMBLEM_ALLY = 1,
 	GUILDEMBLEM_ENEMY = 2,

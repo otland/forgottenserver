@@ -612,7 +612,7 @@ MagicEffectClasses getMagicEffect(const std::string& strValue)
 			return magicEffectNames[i].effect;
 		}
 	}
-	return CONST_ME_UNK;
+	return CONST_ME_NONE;
 }
 
 ShootType_t getShootType(const std::string& strValue)
@@ -622,7 +622,7 @@ ShootType_t getShootType(const std::string& strValue)
 			return shootTypeNames[i].shoot;
 		}
 	}
-	return CONST_ANI_UNK;
+	return CONST_ANI_NONE;
 }
 
 CombatType_t getCombatType(const std::string& strValue)
@@ -665,7 +665,7 @@ AmmoAction_t getAmmoAction(const std::string& strValue)
 	return AMMOACTION_NONE;
 }
 
-std::string getSkillName(uint16_t skillid)
+std::string getSkillName(uint8_t skillid)
 {
 	switch (skillid) {
 		case SKILL_FIST:

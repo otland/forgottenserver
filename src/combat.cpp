@@ -724,7 +724,11 @@ void Combat::postCombatEffects(Creature* caster, const Position& pos, const Comb
 
 void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	if (caster && effect == CONST_ANI_WEAPONTYPE) {
+	if (effect == CONST_ANI_WEAPONTYPE) {
+		if (!caster) {
+			return;
+		}
+
 		switch (caster->getWeaponType()) {
 			case WEAPON_AXE:
 				effect = CONST_ANI_WHIRLWINDAXE;

@@ -60,8 +60,8 @@ struct spawnBlock_t {
 	Position pos;
 	MonsterType* mType;
 	int64_t lastSpawn;
-	Direction direction;
 	uint32_t interval;
+	Direction direction;
 };
 
 class Spawn

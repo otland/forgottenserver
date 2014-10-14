@@ -66,7 +66,7 @@ AmmoAction_t getAmmoAction(const std::string& strValue);
 CombatType_t getCombatType(const std::string& strValue);
 std::string getCombatName(CombatType_t combatType);
 
-std::string getSkillName(uint16_t skillid);
+std::string getSkillName(uint8_t skillid);
 
 uint32_t adlerChecksum(uint8_t* data, size_t len);
 

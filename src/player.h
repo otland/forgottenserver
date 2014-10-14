@@ -64,30 +64,30 @@ enum playerinfo_t {
 	PLAYERINFO_SOUL,
 };
 
-enum chaseMode_t {
+enum chaseMode_t : uint8_t {
 	CHASEMODE_STANDSTILL = 0,
 	CHASEMODE_FOLLOW = 1,
 };
 
-enum fightMode_t {
+enum fightMode_t : uint8_t {
 	FIGHTMODE_ATTACK = 1,
 	FIGHTMODE_BALANCED = 2,
 	FIGHTMODE_DEFENSE = 3
 };
 
-enum secureMode_t {
+enum secureMode_t : uint8_t {
 	SECUREMODE_OFF = 0,
 	SECUREMODE_ON = 1
 };
 
-enum pvpMode_t {
+enum pvpMode_t : uint8_t {
 	PVP_MODE_DOVE = 0,
 	PVP_MODE_WHITE_HAND = 1,
 	PVP_MODE_YELLOW_HAND = 2,
 	PVP_MODE_RED_FIST = 3
 };
 
-enum tradestate_t {
+enum tradestate_t : uint8_t {
 	TRADE_NONE,
 	TRADE_INITIATED,
 	TRADE_ACCEPT,
@@ -1302,16 +1302,6 @@ class Player : public Creature, public Cylinder
 		int32_t idleTime;
 		int32_t shootRange;
 
-		AccountType_t accountType;
-		PlayerSex_t sex;
-		Skulls_t skull;
-		OperatingSystem_t operatingSystem;
-		chaseMode_t chaseMode;
-		fightMode_t fightMode;
-		secureMode_t secureMode;
-		BlockType_t lastAttackBlockType;
-		tradestate_t tradeState;
-
 		uint16_t lastStatsTrainingTime;
 		uint16_t staminaMinutes;
 		uint16_t maxWriteLen;
@@ -1319,6 +1309,16 @@ class Player : public Creature, public Cylinder
 
 		uint8_t blessings;
 		uint8_t guildLevel;
+
+		PlayerSex_t sex;
+		OperatingSystem_t operatingSystem;
+		BlockType_t lastAttackBlockType;
+		tradestate_t tradeState;
+		Skulls_t skull;
+		chaseMode_t chaseMode;
+		fightMode_t fightMode;
+		secureMode_t secureMode;
+		AccountType_t accountType;
 
 		bool requestedOutfit;
 		bool inMarket;

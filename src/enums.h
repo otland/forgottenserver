@@ -37,7 +37,7 @@ enum itemAttrTypes {
 	ITEM_ATTRIBUTE_DOORID = 4194304
 };
 
-enum VipStatus_t {
+enum VipStatus_t : uint8_t {
 	VIPSTATUS_OFFLINE = 0,
 	VIPSTATUS_ONLINE = 1,
 	VIPSTATUS_PENDING = 2
@@ -62,7 +62,7 @@ enum MarketOfferState_t {
 	OFFERSTATE_ACCEPTEDEX = 255
 };
 
-enum ChannelEvent_t {
+enum ChannelEvent_t : uint8_t {
 	CHANNELEVENT_JOIN = 0,
 	CHANNELEVENT_LEAVE = 1,
 	CHANNELEVENT_INVITE = 2,
@@ -75,7 +75,7 @@ enum ReportType_t {
 	REPORTTYPE_BOT = 2
 };
 
-enum CreatureType_t {
+enum CreatureType_t : uint8_t {
 	CREATURETYPE_PLAYER = 0,
 	CREATURETYPE_MONSTER = 1,
 	CREATURETYPE_NPC = 2,
@@ -88,7 +88,7 @@ enum StorageValues_t {
 	STORAGEVALUE_PROMOTION = 30018
 };
 
-enum OperatingSystem_t {
+enum OperatingSystem_t : uint8_t {
 	CLIENTOS_LINUX = 0x01,
 	CLIENTOS_WINDOWS = 0x02,
 	CLIENTOS_FLASH = 0x03,
@@ -98,7 +98,7 @@ enum OperatingSystem_t {
 	CLIENTOS_OTCLIENT_MAC = 0x0C
 };
 
-enum SpellGroup_t {
+enum SpellGroup_t : uint8_t {
 	SPELLGROUP_NONE = 0,
 	SPELLGROUP_ATTACK = 1,
 	SPELLGROUP_HEALING = 2,
@@ -106,7 +106,7 @@ enum SpellGroup_t {
 	SPELLGROUP_SPECIAL = 4
 };
 
-enum AccountType_t {
+enum AccountType_t : uint8_t {
 	ACCOUNT_TYPE_NORMAL = 1,
 	ACCOUNT_TYPE_TUTOR = 2,
 	ACCOUNT_TYPE_SENIORTUTOR = 3,
@@ -114,7 +114,7 @@ enum AccountType_t {
 	ACCOUNT_TYPE_GOD = 5
 };
 
-enum RaceType_t {
+enum RaceType_t : uint8_t {
 	RACE_NONE	= 0,
 	RACE_VENOM 	= 1,
 	RACE_BLOOD	= 2,
@@ -211,7 +211,7 @@ enum ConditionParam_t {
 	CONDITION_PARAM_FIELD = 46
 };
 
-enum BlockType_t {
+enum BlockType_t : uint8_t {
 	BLOCK_NONE = 0,
 	BLOCK_DEFENSE,
 	BLOCK_ARMOR,
@@ -280,7 +280,7 @@ enum ConditionType_t {
 	CONDITION_SPELLGROUPCOOLDOWN	= 134217728
 };
 
-enum ConditionId_t {
+enum ConditionId_t : int8_t {
 	CONDITIONID_DEFAULT = -1,
 	CONDITIONID_COMBAT = 0,
 	CONDITIONID_HEAD = 1,
@@ -295,13 +295,13 @@ enum ConditionId_t {
 	CONDITIONID_AMMO = 10
 };
 
-enum PlayerSex_t {
+enum PlayerSex_t : uint8_t {
 	PLAYERSEX_FEMALE = 0,
 	PLAYERSEX_MALE = 1,
 	PLAYERSEX_LAST = PLAYERSEX_MALE
 };
 
-enum Vocation_t {
+enum Vocation_t : uint8_t {
 	VOCATION_NONE = 0,
 	VOCATION_SORCERER = 1,
 	VOCATION_DRUID = 2,

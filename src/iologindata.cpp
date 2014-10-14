@@ -136,7 +136,7 @@ AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 {
 	std::ostringstream query;
-	query << "UPDATE `accounts` SET `type` = " << accountType << " WHERE `id` = " << accountId;
+	query << "UPDATE `accounts` SET `type` = " << static_cast<uint32_t>(accountType) << " WHERE `id` = " << accountId;
 	Database::getInstance()->executeQuery(query.str());
 }
 
@@ -545,7 +545,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		size_t attributesSize;
 		const char* attributes = propWriteStream.getStream(attributesSize);
 
-		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
+		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
 		if (!query_insert.addRow(ss)) {
 			return false;
 		}
@@ -575,7 +575,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			size_t attributesSize;
 			const char* attributes = propWriteStream.getStream(attributesSize);
 
-			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << (int32_t)item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
+			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db->escapeBlob(attributes, attributesSize);
 			if (!query_insert.addRow(ss)) {
 				return false;
 			}
@@ -629,12 +629,12 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`health` = " << player->health << ',';
 	query << "`healthmax` = " << player->healthMax << ',';
 	query << "`experience` = " << player->experience << ',';
-	query << "`lookbody` = " << (int32_t)player->defaultOutfit.lookBody << ',';
-	query << "`lookfeet` = " << (int32_t)player->defaultOutfit.lookFeet << ',';
-	query << "`lookhead` = " << (int32_t)player->defaultOutfit.lookHead << ',';
-	query << "`looklegs` = " << (int32_t)player->defaultOutfit.lookLegs << ',';
+	query << "`lookbody` = " << static_cast<uint32_t>(player->defaultOutfit.lookBody) << ',';
+	query << "`lookfeet` = " << static_cast<uint32_t>(player->defaultOutfit.lookFeet) << ',';
+	query << "`lookhead` = " << static_cast<uint32_t>(player->defaultOutfit.lookHead) << ',';
+	query << "`looklegs` = " << static_cast<uint32_t>(player->defaultOutfit.lookLegs) << ',';
 	query << "`looktype` = " << player->defaultOutfit.lookType << ',';
-	query << "`lookaddons` = " << (int32_t)player->defaultOutfit.lookAddons << ',';
+	query << "`lookaddons` = " << static_cast<uint32_t>(player->defaultOutfit.lookAddons) << ',';
 	query << "`maglevel` = " << player->magLevel << ',';
 	query << "`mana` = " << player->mana << ',';
 	query << "`manamax` = " << player->manaMax << ',';
@@ -668,15 +668,14 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 
 		query << "`skulltime` = " << skullTime << ',';
-		int32_t skull = 0;
 
+		Skulls_t skull = SKULL_NONE;
 		if (player->skull == SKULL_RED) {
 			skull = SKULL_RED;
 		} else if (player->skull == SKULL_BLACK) {
 			skull = SKULL_BLACK;
 		}
-
-		query << "`skull` = " << skull << ',';
+		query << "`skull` = " << static_cast<uint32_t>(skull) << ',';
 	}
 
 	query << "`lastlogout` = " << player->getLastLogout() << ',';
@@ -703,7 +702,7 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!player->isOffline()) {
 		query << "`onlinetime` = `onlinetime` + " << (time(nullptr) - player->lastLoginSaved) << ',';
 	}
-	query << "`blessings` = " << static_cast<uint16_t>(player->blessings);
+	query << "`blessings` = " << static_cast<uint32_t>(player->blessings);
 	query << " WHERE `id` = " << player->getGUID();
 
 	DBTransaction transaction;

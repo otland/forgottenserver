@@ -31,7 +31,7 @@
 typedef std::list<Condition*> ConditionList;
 typedef std::list<CreatureEvent*> CreatureEventList;
 
-enum slots_t {
+enum slots_t : uint8_t {
 	CONST_SLOT_WHEREEVER = 0,
 	CONST_SLOT_FIRST = 1,
 	CONST_SLOT_HEAD = CONST_SLOT_FIRST,
@@ -478,6 +478,11 @@ class Creature : virtual public Thing
 			int64_t ticks;
 		};
 
+		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
+		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
+		static const int32_t maxWalkCacheWidth = (mapWalkWidth - 1) / 2;
+		static const int32_t maxWalkCacheHeight = (mapWalkHeight - 1) / 2;
+
 		Position _position;
 
 		typedef std::map<uint32_t, CountBlock_t> CountMap;
@@ -513,16 +518,11 @@ class Creature : virtual public Thing
 		Outfit_t defaultOutfit;
 
 		Position lastPosition;
-		Direction direction;
 		LightInfo internalLight;
 
-		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
-		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
+		Direction direction;
+
 		bool localMapCache[mapWalkHeight][mapWalkWidth];
-
-		static const int32_t maxWalkCacheWidth = (mapWalkWidth - 1) / 2;
-		static const int32_t maxWalkCacheHeight = (mapWalkHeight - 1) / 2;
-
 		bool isInternalRemoved;
 		bool isMapLoaded;
 		bool isUpdatingPath;

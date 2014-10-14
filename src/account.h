@@ -26,9 +26,9 @@ struct Account {
 	std::list<std::string> charList;
 	std::string name;
 	time_t lastDay;
-	AccountType_t accountType;
 	uint32_t id;
 	uint16_t premiumDays;
+	AccountType_t accountType;
 
 	Account() {
 		id = 0;

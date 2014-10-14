@@ -93,7 +93,7 @@ ServicePort::~ServicePort()
 
 bool ServicePort::is_single_socket() const
 {
-	return m_services.size() && m_services.front()->is_single_socket();
+	return !m_services.empty() && m_services.front()->is_single_socket();
 }
 
 std::string ServicePort::get_protocol_names() const
@@ -103,7 +103,7 @@ std::string ServicePort::get_protocol_names() const
 	}
 
 	std::string str = m_services.front()->get_protocol_name();
-	for (uint32_t i = 1; i < m_services.size(); ++i) {
+	for (size_t i = 1; i < m_services.size(); ++i) {
 		str.push_back(',');
 		str.push_back(' ');
 		str.append(m_services[i]->get_protocol_name());

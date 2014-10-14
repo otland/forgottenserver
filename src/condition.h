@@ -110,11 +110,11 @@ class Condition
 		bool isPersistent() const;
 
 	protected:
-		ConditionId_t id;
+		int64_t endTime;
 		uint32_t subId;
 		int32_t ticks;
-		int64_t endTime;
 		ConditionType_t conditionType;
+		ConditionId_t id;
 		bool isBuff;
 
 		virtual bool updateCondition(const Condition* addCondition);
