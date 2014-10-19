@@ -140,7 +140,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 	SetConsoleTitle(STATUS_SERVER_NAME);
 #endif
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
-	std::cout << "Compilied on " << __DATE__ << ' ' << __TIME__ << " for arch ";
+	std::cout << "Compiled with: " << BOOST_COMPILER << std::endl;
+	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for arch ";
 
 #if defined(__amd64__) || defined(_M_X64)
 	std::cout << "x64" << std::endl;
