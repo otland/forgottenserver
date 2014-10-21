@@ -8069,7 +8069,7 @@ int32_t LuaScriptInterface::luaPlayerSetCapacity(lua_State* L)
 	// player:setCapacity(capacity)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->capacity = std::max(0.0, std::min<double>(10000.0, getNumber<double>(L, 2)));
+		player->capacity = std::max(0.0, std::min<double>(10000.0, getNumber<double>(L, 2) / 100));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
