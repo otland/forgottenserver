@@ -1891,6 +1891,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)
 	registerEnumIn("configKeys", ConfigManager::MAX_PACKETS_PER_SECOND)
 
+	// os
+	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);
+
 	// table
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
 
@@ -4639,6 +4642,14 @@ int32_t LuaScriptInterface::luaIsType(lua_State* L)
 	size_t hashA = getNumber<size_t>(L, 1);
 
 	pushBoolean(L, hashA == hashB);
+	return 1;
+}
+
+// os
+int32_t LuaScriptInterface::luaSystemTime(lua_State* L)
+{
+	// os.mtime()
+	lua_pushnumber(L, OTSYS_TIME());
 	return 1;
 }
 

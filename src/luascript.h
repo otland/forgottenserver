@@ -544,6 +544,9 @@ class LuaScriptInterface
 		// _G
 		static int32_t luaIsType(lua_State* L);
 
+		// os
+		static int32_t luaSystemTime(lua_State* L);
+
 		// table
 		static int32_t luaTableCreate(lua_State* L);
 
