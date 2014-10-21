@@ -1549,6 +1549,66 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 	return RETURNVALUE_NOERROR;
 }
 
+ReturnValue Game::internalDestroyItem(Item* item)
+{
+	Cylinder* cylinder = item->getParent();
+	if (cylinder == nullptr) {
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
+
+	Tile* fromTile = cylinder->getTile();
+	if (fromTile) {
+		auto it = browseFields.find(fromTile);
+		if (it != browseFields.end() && it->second == cylinder) {
+			cylinder = fromTile;
+		}
+	}
+
+	uint16_t count = item->getItemCount();
+	ReturnValue ret = cylinder->__queryRemove(item, count, FLAG_NOLIMIT);
+	if (ret != RETURNVALUE_NOERROR) {
+		return ret;
+	}
+
+	if (!item->canRemove()) {
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
+
+	uint16_t destroyId = item->getDestroyId();
+	if (destroyId > 0) {
+		if (!fromTile) {
+			fromTile = item->getTile();
+		}
+		internalAddItem(fromTile, Item::CreateItem(destroyId, 1), INDEX_WHEREEVER, FLAG_NOLIMIT);
+
+		Container* container = item->getContainer();
+		if (container) {
+			for (const auto& it : container->getItemList()) {
+				if (it->getContainer() && it->getDestroyId()) {
+					internalDestroyItem(it);
+				} else {
+					internalMoveItem(container, fromTile, INDEX_WHEREEVER, it, it->getItemCount(), nullptr, FLAG_NOLIMIT);
+				}
+			}
+		}
+	}
+
+	int32_t index = cylinder->__getIndexOfThing(item);
+
+	cylinder->__removeThing(item, count);
+	bool isCompleteRemoval = false;
+
+	if (item->isRemoved()) {
+		isCompleteRemoval = true;
+		ReleaseItem(item);
+	}
+
+	cylinder->postRemoveNotification(item, nullptr, index, isCompleteRemoval);
+
+	item->onRemoved();
+	return RETURNVALUE_NOERROR;
+}
+
 ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnMap /*= true*/, slots_t slot /*= CONST_SLOT_WHEREEVER*/)
 {
 	uint32_t remainderCount = 0;

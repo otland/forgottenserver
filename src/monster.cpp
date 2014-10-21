@@ -1039,7 +1039,7 @@ void Monster::pushItems(Tile* tile)
 			        || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
 				if (moveCount < 20 && pushItem(item)) {
 					++moveCount;
-				} else if (g_game.internalRemoveItem(item) == RETURNVALUE_NOERROR) {
+				} else if (g_game.internalDestroyItem(item) == RETURNVALUE_NOERROR) {
 					++removeCount;
 				}
 			}
