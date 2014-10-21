@@ -94,6 +94,7 @@ bool ConfigManager::load()
 	m_confBoolean[STAMINA_SYSTEM] = booleanString(getGlobalString(L, "staminaSystem", "yes"));
 	m_confBoolean[WARN_UNSAFE_SCRIPTS] = booleanString(getGlobalString(L, "warnUnsafeScripts", "no"));
 	m_confBoolean[CONVERT_UNSAFE_SCRIPTS] = booleanString(getGlobalString(L, "convertUnsafeScripts", "no"));
+	m_confBoolean[CLASSIC_SLOTS] = booleanString(getGlobalString(L, "classicSlots", "no"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	m_confString[SERVER_NAME] = getGlobalString(L, "serverName");
