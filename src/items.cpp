@@ -109,6 +109,8 @@ ItemType::ItemType()
 	transformToOnUse[PLAYERSEX_FEMALE] = 0;
 	transformToFree = 0;
 
+	destroyTo = 0;
+
 	levelDoor = 0;
 
 	wareId = 0;
@@ -949,6 +951,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			}
 		} else if (tmpStrValue == "transformto") {
 			it.transformToFree = pugi::cast<uint16_t>(valueAttribute.value());
+		} else if (tmpStrValue == "destroyto") {
+			it.destroyTo = pugi::cast<uint16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "elementice") {
 			Abilities* abilities = it.getAbilities();
 			abilities->elementDamage = pugi::cast<int16_t>(valueAttribute.value());
