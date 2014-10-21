@@ -97,7 +97,7 @@ function getPlayerIp(cid) local p = Player(cid) return p ~= nil and p:getIp() or
 function getPlayerAccountType(cid) local p = Player(cid) return p ~= nil and p:getAccountType() or false end
 function getPlayerLastLoginSaved(cid) local p = Player(cid) return p ~= nil and p:getLastLoginSaved() or false end
 function getPlayerName(cid) local p = Player(cid) return p ~= nil and p:getName() or false end
-function getPlayerFreeCap(cid) local p = Player(cid) return p ~= nil and p:getFreeCapacity() or false end
+function getPlayerFreeCap(cid) local p = Player(cid) return p ~= nil and (p:getFreeCapacity() / 100) or false end
 function getPlayerPosition(cid) local p = Player(cid) return p ~= nil and p:getPosition() or false end
 function getPlayerMagLevel(cid) local p = Player(cid) return p ~= nil and p:getMagicLevel() or false end
 function getPlayerAccess(cid)
@@ -530,7 +530,7 @@ isItemMoveable = isItemMovable
 isMoveable = isMovable
 
 function getItemName(itemId) return ItemType(itemId):getName() end
-function getItemWeight(itemId, ...) return ItemType(itemId):getWeight(...) end
+function getItemWeight(itemId, ...) return ItemType(itemId):getWeight(...) / 100 end
 function getItemDescriptions(itemId)
 	local itemType = ItemType(itemId)
 	return {
@@ -554,7 +554,7 @@ function getItemWeightByUID(uid, ...)
 	end
 
 	local itemType = ItemType(item:getId())
-	return itemType:isStackable() and itemType:getWeight(item:getCount(), ...) or itemType:getWeight(1, ...)
+	return itemType:isStackable() and (itemType:getWeight(item:getCount(), ...) / 100) or (itemType:getWeight(1, ...) / 100)
 end
 function getItemRWInfo(uid)
 	local item = Item(uid)
