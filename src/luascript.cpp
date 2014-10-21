@@ -2098,6 +2098,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Container", "getSize", LuaScriptInterface::luaContainerGetSize);
 	registerMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
 	registerMethod("Container", "getEmptySlots", LuaScriptInterface::luaContainerGetEmptySlots);
+	registerMethod("Container", "getWeight", LuaScriptInterface::luaContainerGetWeight);
 
 	registerMethod("Container", "getItemHoldingCount", LuaScriptInterface::luaContainerGetItemHoldingCount);
 	registerMethod("Container", "getItemCountById", LuaScriptInterface::luaContainerGetItemCountById);
@@ -6890,6 +6891,26 @@ int32_t LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 		}
 	}
 	lua_pushnumber(L, slots);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaContainerGetWeight(lua_State* L)
+{
+	// container:getWeight()
+	Container* container = getUserdata<Container>(L, 1);
+	if (!container) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	double weight = container->getWeight();
+
+	std::ostringstream ws;
+	ws << std::fixed << std::setprecision(2) << weight;
+	weight = std::stof(ws.str());
+
+	lua_pushnumber(L, weight);
+
 	return 1;
 }
 
