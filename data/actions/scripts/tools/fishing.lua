@@ -5,7 +5,7 @@ local lootRare = {2143, 2146, 2149, 7158, 7159}
 local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local targetId = itemEx.itemid
 	if not isInArray(waterIds, itemEx.itemid) then
 		return false

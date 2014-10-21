@@ -5,7 +5,7 @@ local holeId = {
 	8252, 8253, 8254, 8255, 8256, 8972, 9606, 9625, 13190, 14461, 19519, 21536
 }
 
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local tile = toPosition:getTile()
 
 	if isInArray(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then

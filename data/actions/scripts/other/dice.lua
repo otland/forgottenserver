@@ -1,4 +1,4 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local player = Player(cid)
 	local dice = Item(item.uid)
 	local dicePosition = dice:getPosition()

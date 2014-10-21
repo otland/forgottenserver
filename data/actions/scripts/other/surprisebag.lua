@@ -10,7 +10,7 @@ local config = {
 	}
 }
 
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local present = config[item.itemid]
 	if not present then
 		return false

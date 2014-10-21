@@ -1,4 +1,4 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local blueberryBush = Item(item.uid)
 	blueberryBush:transform(2786)
 	blueberryBush:decay()

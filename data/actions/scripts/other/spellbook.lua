@@ -1,4 +1,4 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local count = getPlayerInstantSpellCount(cid)
 	local text = ""
 	local t = {}

@@ -7,6 +7,6 @@ setCombatParam(combat, COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP)
 local area = createCombatArea(AREA_WALLFIELD, AREADIAGONAL_WALLFIELD)
 setCombatArea(combat, area)
 
-function onCastSpell(cid, var)
+function onCastSpell(cid, var, isHotkey)
 	return doCombat(cid, combat, var)
 end

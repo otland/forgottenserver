@@ -68,7 +68,7 @@ class Spells : public BaseEvents
 };
 
 typedef bool (InstantSpellFunction)(const InstantSpell* spell, Creature* creature, const std::string& param);
-typedef bool (RuneSpellFunction)(const RuneSpell* spell, Creature* creature, Item* item, const Position& posFrom, const Position& posTo);
+typedef bool (RuneSpellFunction)(const RuneSpell* spell, Creature* creature, Item* item, const Position& posFrom, const Position& posTo, bool isHotkey);
 
 class BaseSpell
 {
@@ -301,13 +301,13 @@ class RuneSpell : public Action, public Spell
 		}
 
 		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-		                        const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
+		                        const PositionEx& posTo, bool extendedUse, uint32_t creatureId, bool isHotkey);
 
 		virtual bool castSpell(Creature* creature);
 		virtual bool castSpell(Creature* creature, Creature* target);
 
 		//scripting
-		bool executeCastSpell(Creature* creature, const LuaVariant& var);
+		bool executeCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
 		virtual bool isInstant() const {
 			return false;
@@ -322,7 +322,7 @@ class RuneSpell : public Action, public Spell
 		static RuneSpellFunction Illusion;
 		static RuneSpellFunction Convince;
 
-		bool internalCastSpell(Creature* creature, const LuaVariant& var);
+		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
 		RuneSpellFunction* function;
 		uint32_t runeId;
