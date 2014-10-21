@@ -1,7 +1,7 @@
 local dead_human = {
 	3058, 3059, 3060, 3061, 3064, 3065, 3066
 }
-function onCastSpell(creature, var)
+function onCastSpell(creature, var, isHotkey)
 	local position = variantToPosition(var)
 	local tile = position:getTile()
 	local object = tile and tile:getTopVisibleThing()

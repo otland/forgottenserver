@@ -24,7 +24,7 @@
 #include "enums.h"
 #include "luascript.h"
 
-typedef bool (ActionFunction)(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse);
+typedef bool (ActionFunction)(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, bool isHotkey);
 
 class Action : public Event
 {
@@ -38,7 +38,7 @@ class Action : public Event
 
 		//scripting
 		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-			const PositionEx& posTo, bool extendedUse, uint32_t creatureId);
+			const PositionEx& posTo, bool extendedUse, uint32_t creatureId, bool isHotkey);
 		//
 
 		bool getAllowFarUse() const {
@@ -97,7 +97,7 @@ class Actions : public BaseEvents
 		bool hasAction(const Item* item);
 
 	protected:
-		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item);
+		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 		static void showUseHotkeyMessage(Player* player, int32_t id, uint32_t count);
 
 		virtual void clear();

@@ -1,4 +1,4 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local partyTrumpet = Item(item.uid)
 	partyTrumpet:transform(13578)
 	partyTrumpet:decay()

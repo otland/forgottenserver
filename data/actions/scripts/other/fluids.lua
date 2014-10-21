@@ -12,7 +12,7 @@ poison:setParameter(CONDITION_PARAM_FORCEUPDATE, true)
 local fluidType = {3, 4, 5, 7, 10, 11, 13, 15, 19}
 local fluidMessage = {"Aah...", "Urgh!", "Mmmh.", "Aaaah...", "Aaaah...", "Urgh!", "Urgh!", "Aah...", "Urgh!"}
 
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local itemExType = ItemType(itemEx.itemid)
 	if itemExType and itemExType:isFluidContainer() then
 		if itemEx.type == 0 and item.type ~= 0 then

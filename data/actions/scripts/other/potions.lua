@@ -23,7 +23,7 @@ local exhaust = Condition(CONDITION_EXHAUST_HEAL)
 exhaust:setParameter(CONDITION_PARAM_TICKS, (configManager.getNumber(configKeys.EX_ACTIONS_DELAY_INTERVAL) - 100))
 -- 1000 - 100 due to exact condition timing. -100 doesn't hurt us, and players don't have reminding ~50ms exhaustion.
 
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	if itemEx.itemid ~= 1 or itemEx.type ~= THING_TYPE_PLAYER then
 		return true
 	end

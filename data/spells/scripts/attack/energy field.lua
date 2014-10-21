@@ -4,6 +4,6 @@ setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_ENERGYHIT)
 setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ENERGYBALL)
 setCombatParam(combat, COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP)
 
-function onCastSpell(cid, var)
+function onCastSpell(cid, var, isHotkey)
 	return doCombat(cid, combat, var)
 end

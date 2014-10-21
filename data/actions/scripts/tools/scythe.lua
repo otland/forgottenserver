@@ -1,4 +1,4 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	if itemEx.itemid == 2739 then
 		local iEx = Item(itemEx.uid)
 		iEx:transform(2737)

@@ -17,7 +17,7 @@ local function internalBedTransform(item, itemEx, toPosition, ids)
 	Item(item.uid):remove()
 end
 
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	local newBed = BEDS[item.itemid]
 	if not newBed then
 		return false

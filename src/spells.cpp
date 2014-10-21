@@ -1847,7 +1847,7 @@ bool RuneSpell::loadFunction(const std::string& functionName)
 	return true;
 }
 
-bool RuneSpell::Illusion(const RuneSpell*, Creature* creature, Item*, const Position&, const Position& posTo)
+bool RuneSpell::Illusion(const RuneSpell*, Creature* creature, Item*, const Position&, const Position& posTo, bool)
 {
 	Player* player = creature->getPlayer();
 	if (!player) {
@@ -1879,7 +1879,7 @@ bool RuneSpell::Illusion(const RuneSpell*, Creature* creature, Item*, const Posi
 	return true;
 }
 
-bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item*, const Position&, const Position& posTo)
+bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item*, const Position&, const Position& posTo, bool)
 {
 	Player* player = creature->getPlayer();
 	if (!player) {
@@ -1953,7 +1953,7 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 	return RETURNVALUE_NOERROR;
 }
 
-bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool, uint32_t creatureId)
+bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool, uint32_t creatureId, bool isHotkey)
 {
 	if (!playerRuneSpellCheck(player, posTo)) {
 		return false;
@@ -1982,9 +1982,9 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 			var.pos = posTo;
 		}
 
-		result = internalCastSpell(player, var);
+		result = internalCastSpell(player, var, isHotkey);
 	} else if (function) {
-		result = function(this, player, item, posFrom, posTo);
+		result = function(this, player, item, posFrom, posTo, isHotkey);
 	}
 
 	if (result) {
@@ -2005,7 +2005,7 @@ bool RuneSpell::castSpell(Creature* creature)
 	var.type = VARIANT_NUMBER;
 	var.number = creature->getID();
 
-	return internalCastSpell(creature, var);
+	return internalCastSpell(creature, var, false);
 }
 
 bool RuneSpell::castSpell(Creature* creature, Creature* target)
@@ -2014,23 +2014,23 @@ bool RuneSpell::castSpell(Creature* creature, Creature* target)
 	var.type = VARIANT_NUMBER;
 	var.number = target->getID();
 
-	return internalCastSpell(creature, var);
+	return internalCastSpell(creature, var, false);
 }
 
-bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
+bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey)
 {
 	bool result;
 	if (m_scripted) {
-		result = executeCastSpell(creature, var);
+		result = executeCastSpell(creature, var, isHotkey);
 	} else {
 		result = false;
 	}
 	return result;
 }
 
-bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
+bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey)
 {
-	//onCastSpell(creature, var)
+	//onCastSpell(creature, var, isHotkey)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - RuneSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
@@ -2048,5 +2048,7 @@ bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 
 	LuaScriptInterface::pushVariant(L, var);
 
-	return m_scriptInterface->callFunction(2);
+	LuaScriptInterface::pushBoolean(L, isHotkey);
+
+	return m_scriptInterface->callFunction(3);
 }
