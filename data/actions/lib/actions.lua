@@ -30,7 +30,7 @@ function destroyItem(cid, itemEx, toPosition)
 	end
 
 	if toPosition.x == CONTAINER_POSITION then
-		Game.getReturnMessage(RETURNVALUE_NOTPOSSIBLE)
+		Player(cid):sendCancelMessage(Game.getReturnMessage(RETURNVALUE_NOTPOSSIBLE))
 		return true
 	end
 	--chest,crate,barrel...
