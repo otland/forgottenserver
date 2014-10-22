@@ -1267,7 +1267,7 @@ void ProtocolGame::sendCreatureSkull(const Creature* creature)
 	NetworkMessage msg;
 	msg.AddByte(0x90);
 	msg.add<uint32_t>(creature->getID());
-	msg.AddByte(player->getSkullClient(creature->getPlayer()));
+	msg.AddByte(player->getSkullClient(creature));
 	writeToOutputBuffer(msg);
 }
 
@@ -2919,7 +2919,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.add<uint16_t>(creature->getStepSpeed() / 2);
 
-	msg.AddByte(player->getSkullClient(otherPlayer));
+	msg.AddByte(player->getSkullClient(creature));
 	msg.AddByte(player->getPartyShield(otherPlayer));
 
 	if (!known) {

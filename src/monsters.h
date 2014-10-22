@@ -125,6 +125,7 @@ class MonsterType
 		RaceType_t race;
 
 		uint16_t lookcorpse;
+		Skulls_t skull;
 
 		bool canPushItems;
 		bool canPushCreatures;

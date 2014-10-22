@@ -60,6 +60,8 @@ Monster::Monster(MonsterType* _mtype) :
 	defaultOutfit = mType->outfit;
 	currentOutfit = mType->outfit;
 
+	skull = mType->skull;
+
 	health = mType->health;
 	healthMax = mType->healthMax;
 	baseSpeed = mType->baseSpeed;

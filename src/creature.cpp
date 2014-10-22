@@ -79,6 +79,8 @@ Creature::Creature() :
 
 	hiddenHealth = false;
 
+	skull = SKULL_NONE;
+
 	onIdleStatus();
 }
 

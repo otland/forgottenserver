@@ -164,7 +164,6 @@ Player::Player(ProtocolGame* p) :
 	idleTime = 0;
 
 	skullTicks = 0;
-	skull = SKULL_NONE;
 	setParty(nullptr);
 
 	bankBalance = 0;
@@ -3996,13 +3995,14 @@ Skulls_t Player::getSkull() const
 	return skull;
 }
 
-Skulls_t Player::getSkullClient(const Player* player) const
+Skulls_t Player::getSkullClient(const Creature* creature) const
 {
-	if (!player || g_game.getWorldType() != WORLD_TYPE_PVP) {
+	if (!creature || g_game.getWorldType() != WORLD_TYPE_PVP) {
 		return SKULL_NONE;
 	}
 
-	if (player->getSkull() == SKULL_NONE) {
+	const Player* player = creature->getPlayer();
+	if (player && player->getSkull() == SKULL_NONE) {
 		if (isInWar(player)) {
 			return SKULL_GREEN;
 		}
@@ -4019,7 +4019,7 @@ Skulls_t Player::getSkullClient(const Player* player) const
 			return SKULL_GREEN;
 		}
 	}
-	return player->getSkull();
+	return Creature::getSkullClient(creature);
 }
 
 bool Player::hasAttacked(const Player* attacked) const
