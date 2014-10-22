@@ -1583,11 +1583,11 @@ ReturnValue Game::internalDestroyItem(Item* item)
 
 		Container* container = item->getContainer();
 		if (container) {
-			for (const auto& it : container->getItemList()) {
-				if (it->getContainer() && it->getDestroyId()) {
-					internalDestroyItem(it);
+			for (Item* containerItem : container->getItemList()) {
+				if (containerItem->getContainer() && containerItem->getDestroyId()) {
+					internalDestroyItem(containerItem);
 				} else {
-					internalMoveItem(container, fromTile, INDEX_WHEREEVER, it, it->getItemCount(), nullptr, FLAG_NOLIMIT);
+					internalMoveItem(container, fromTile, INDEX_WHEREEVER, containerItem, containerItem->getItemCount(), nullptr, FLAG_NOLIMIT);
 				}
 			}
 		}
