@@ -46,7 +46,7 @@ class ConfigManager
 			STAMINA_SYSTEM = 14,
 			WARN_UNSAFE_SCRIPTS = 15,
 			CONVERT_UNSAFE_SCRIPTS = 16,
-			CLASSIC_SLOTS = 17,
+			CLASSIC_EQUIPMENT_SLOTS = 17,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

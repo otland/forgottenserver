@@ -71,7 +71,7 @@ freePremium = "no"
 kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
 emoteSpells = "no"
-classicSlots = "no"
+classicEquipmentSlots = "no"
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
