@@ -380,8 +380,8 @@ void Party::updateVocationsList()
 		vocationIds.insert(vocationId);
 	}
 
-	for (const auto& it : memberList) {
-		vocationId = it->getVocation()->getFromVocation();
+	for (const Player* member : memberList) {
+		vocationId = member->getVocation()->getFromVocation();
 		if (vocationId != VOCATION_NONE) {
 			vocationIds.insert(vocationId);
 		}
