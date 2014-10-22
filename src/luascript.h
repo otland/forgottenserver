@@ -874,12 +874,14 @@ class LuaScriptInterface
 		static int32_t luaPlayerSetMaxMana(lua_State* L);
 		static int32_t luaPlayerGetManaSpent(lua_State* L);
 		static int32_t luaPlayerAddManaSpent(lua_State* L);
+		static int32_t luaPlayerRemoveManaSpent(lua_State* L);
 
 		static int32_t luaPlayerGetSkillLevel(lua_State* L);
 		static int32_t luaPlayerGetEffectiveSkillLevel(lua_State* L);
 		static int32_t luaPlayerGetSkillPercent(lua_State* L);
 		static int32_t luaPlayerGetSkillTries(lua_State* L);
 		static int32_t luaPlayerAddSkillTries(lua_State* L);
+		static int32_t luaPlayerRemoveSkillTries(lua_State* L);
 
 		static int32_t luaPlayerGetItemCount(lua_State* L);
 		static int32_t luaPlayerGetItemById(lua_State* L);
