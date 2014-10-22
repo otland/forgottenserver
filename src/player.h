@@ -672,8 +672,8 @@ class Player : public Creature, public Cylinder
 
 		virtual void getCreatureLight(LightInfo& light) const;
 
-		virtual Skulls_t getSkull() const;
-		virtual Skulls_t getSkullClient(const Creature* creature) const;
+		Skulls_t getSkull() const;
+		Skulls_t getSkullClient(const Creature* creature) const;
 		int64_t getSkullTicks() const { return skullTicks; }
 		void setSkullTicks(int64_t ticks) { skullTicks = ticks; }
 
