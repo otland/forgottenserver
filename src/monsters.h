@@ -96,6 +96,7 @@ class MonsterType
 		uint64_t experience;
 
 		Outfit_t outfit;
+		Skulls_t skull;
 
 		int32_t creatureAppearEvent;
 		int32_t creatureDisappearEvent;

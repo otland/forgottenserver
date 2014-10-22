@@ -157,6 +157,15 @@ class Creature : virtual public Thing
 		virtual RaceType_t getRace() const {
 			return RACE_NONE;
 		}
+		virtual Skulls_t getSkull() const {
+			return skull;
+		}
+		virtual Skulls_t getSkullClient(const Creature* creature) const {
+			return creature->getSkull();
+		}
+		virtual void setSkull(Skulls_t newSkull) {
+			skull = newSkull;
+		}
 		Direction getDirection() const {
 			return direction;
 		}
@@ -516,6 +525,7 @@ class Creature : virtual public Thing
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
+		Skulls_t skull;
 
 		Position lastPosition;
 		LightInfo internalLight;

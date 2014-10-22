@@ -72,6 +72,8 @@ void MonsterType::reset()
 	outfit.lookMount = 0;
 	lookcorpse = 0;
 
+	skull = SKULL_NONE;
+
 	conditionImmunities = 0;
 	damageImmunities = 0;
 	race = RACE_BLOOD;
@@ -815,6 +817,10 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 
 	if ((attr = monsterNode.attribute("manacost"))) {
 		mType->manaCost = pugi::cast<uint32_t>(attr.value());
+	}
+
+	if((attr = monsterNode.attribute("skull"))) {
+		mType->skull = getSkullType(attr.as_string());
 	}
 
 	if ((attr = monsterNode.attribute("script"))) {

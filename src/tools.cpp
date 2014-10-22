@@ -426,6 +426,11 @@ struct AmmoActionNames {
 	AmmoAction_t ammoAction;
 };
 
+struct SkullNames {
+	const char* name;
+	Skulls_t skull;
+};
+
 MagicEffectNames magicEffectNames[] = {
 	{"redspark",		CONST_ME_DRAWBLOOD},
 	{"bluebubble",		CONST_ME_LOSEENERGY},
@@ -605,6 +610,16 @@ AmmoActionNames ammoActionNames[] = {
 	{"removecount",		AMMOACTION_REMOVECOUNT}
 };
 
+SkullNames skullNames[] = {
+	{"none",	SKULL_NONE},
+	{"yellow",	SKULL_YELLOW},
+	{"green",	SKULL_GREEN},
+	{"white",	SKULL_WHITE},
+	{"red",		SKULL_RED},
+	{"black",	SKULL_BLACK},
+	{"orange",	SKULL_ORANGE},
+};
+
 MagicEffectClasses getMagicEffect(const std::string& strValue)
 {
 	for (size_t i = 0; i < sizeof(magicEffectNames) / sizeof(MagicEffectNames); ++i) {
@@ -663,6 +678,16 @@ AmmoAction_t getAmmoAction(const std::string& strValue)
 		}
 	}
 	return AMMOACTION_NONE;
+}
+
+Skulls_t getSkullType(const std::string& strValue)
+{
+	for (size_t i = 0, size = sizeof(skullNames) / sizeof(SkullNames); i < size; ++i) {
+		if (strcasecmp(strValue.c_str(), skullNames[i].name) == 0) {
+			return skullNames[i].skull;
+		}
+	}
+	return SKULL_NONE;
 }
 
 std::string getSkillName(uint8_t skillid)
