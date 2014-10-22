@@ -819,7 +819,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		mType->manaCost = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if((attr = monsterNode.attribute("skull"))) {
+	if ((attr = monsterNode.attribute("skull"))) {
 		mType->skull = getSkullType(attr.as_string());
 	}
 

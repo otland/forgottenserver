@@ -525,12 +525,12 @@ class Creature : virtual public Thing
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
-		Skulls_t skull;
 
 		Position lastPosition;
 		LightInfo internalLight;
 
 		Direction direction;
+		Skulls_t skull;
 
 		bool localMapCache[mapWalkHeight][mapWalkWidth];
 		bool isInternalRemoved;

@@ -181,7 +181,7 @@ bool Npc::loadFromXml(const std::string& filename)
 		speechBubble = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if((attr = npcNode.attribute("skull"))) {
+	if ((attr = npcNode.attribute("skull"))) {
 		setSkull(getSkullType(attr.as_string()));
 	}
 
