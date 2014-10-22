@@ -776,6 +776,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureIsItem(lua_State* L);
 		static int32_t luaCreatureIsInGhostMode(lua_State* L);
 		static int32_t luaCreatureIsHealthHidden(lua_State* L);
+		static int32_t luaCreatureIsDangerous(lua_State* L);
 
 		static int32_t luaCreatureCanSee(lua_State* L);
 		static int32_t luaCreatureCanSeeCreature(lua_State* L);
@@ -813,6 +814,20 @@ class LuaScriptInterface
 		static int32_t luaCreatureGetMaxHealth(lua_State* L);
 		static int32_t luaCreatureSetMaxHealth(lua_State* L);
 		static int32_t luaCreatureSetHiddenHealth(lua_State* L);
+
+		static int32_t luaCreatureSetDangerous(lua_State* L);
+
+		static int32_t luaCreatureGetSkull(lua_State* L);
+		static int32_t luaCreatureSetSkull(lua_State* L);
+
+		static int32_t luaCreatureGetPartyShield(lua_State* L);
+		static int32_t luaCreatureSetPartyShield(lua_State* L);
+
+		static int32_t luaCreatureGetGuildEmblem(lua_State* L);
+		static int32_t luaCreatureSetGuildEmblem(lua_State* L);
+
+		static int32_t luaCreatureGetSummonIcon(lua_State* L);
+		static int32_t luaCreatureSetSummonIcon(lua_State* L);
 
 		static int32_t luaCreatureGetMana(lua_State* L);
 		static int32_t luaCreatureAddMana(lua_State* L);
@@ -858,8 +873,6 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetDepotChest(lua_State* L);
 		static int32_t luaPlayerGetInbox(lua_State* L);
 
-		static int32_t luaPlayerGetSkull(lua_State* L);
-		static int32_t luaPlayerSetSkull(lua_State* L);
 		static int32_t luaPlayerGetSkullTime(lua_State* L);
 		static int32_t luaPlayerSetSkullTime(lua_State* L);
 		static int32_t luaPlayerGetDeathPenalty(lua_State* L);
@@ -1192,6 +1205,7 @@ class LuaScriptInterface
 		static int32_t luaMonsterTypeIsHostile(lua_State* L);
 		static int32_t luaMonsterTypeIsPushable(lua_State* L);
 		static int32_t luaMonsterTypeIsHealthShown(lua_State* L);
+		static int32_t luaMonsterTypeIsDangerous(lua_State* L);
 
 		static int32_t luaMonsterTypeCanPushItems(lua_State* L);
 		static int32_t luaMonsterTypeCanPushCreatures(lua_State* L);
@@ -1203,6 +1217,10 @@ class LuaScriptInterface
 		static int32_t luaMonsterTypeGetMaxHealth(lua_State* L);
 		static int32_t luaMonsterTypeGetRunHealth(lua_State* L);
 		static int32_t luaMonsterTypeGetExperience(lua_State* L);
+
+		static int32_t luaMonsterTypeGetSkull(lua_State* L);
+		static int32_t luaMonsterTypeGetPartyShield(lua_State* L);
+		static int32_t luaMonsterTypeGetGuildEmblem(lua_State* L);
 
 		static int32_t luaMonsterTypeGetCombatImmunities(lua_State* L);
 		static int32_t luaMonsterTypeGetConditionImmunities(lua_State* L);

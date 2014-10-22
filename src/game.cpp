@@ -4654,35 +4654,35 @@ void Game::updateCreatureWalkthrough(const Creature* creature)
 	}
 }
 
-void Game::updatePlayerSkull(Player* player)
+void Game::updateCreatureSkull(Creature* creature)
 {
 	if (getWorldType() != WORLD_TYPE_PVP) {
 		return;
 	}
 
 	SpectatorVec list;
-	getSpectators(list, player->getPosition(), true, true);
+	getSpectators(list, creature->getPosition(), true, true);
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->sendCreatureSkull(player);
+		spectator->getPlayer()->sendCreatureSkull(creature);
 	}
 }
 
-void Game::updatePlayerShield(Player* player)
+void Game::updateCreatureShield(Creature* creature)
 {
 	SpectatorVec list;
-	getSpectators(list, player->getPosition(), true, true);
+	getSpectators(list, creature->getPosition(), true, true);
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->sendCreatureShield(player);
+		spectator->getPlayer()->sendCreatureShield(creature);
 	}
 }
 
-void Game::updatePlayerHelpers(const Player& player)
+void Game::updateCreatureHelpers(const Creature& creature)
 {
-	uint32_t creatureId = player.getID();
-	uint16_t helpers = player.getHelpers();
+	uint32_t creatureId = creature.getID();
+	uint16_t helpers = creature.getHelpers();
 
 	SpectatorVec list;
-	getSpectators(list, player.getPosition(), true, true);
+	getSpectators(list, creature.getPosition(), true, true);
 	for (Creature* spectator : list) {
 		spectator->getPlayer()->sendCreatureHelpers(creatureId, helpers);
 	}
@@ -4708,7 +4708,12 @@ void Game::updateCreatureType(Creature* creature)
 	SpectatorVec list;
 	getSpectators(list, creature->getPosition(), true, true);
 
-	if (creatureType == CREATURETYPE_SUMMON_OTHERS) {
+	CreatureType_t summonIcon = creature->getSummonIcon();
+	if (summonIcon != CREATURETYPE_NONE) {
+		for (Creature* spectator : list) {
+			spectator->getPlayer()->sendCreatureType(creatureId, summonIcon);
+		}
+	} else if (creatureType == CREATURETYPE_SUMMON_OTHERS) {
 		for (Creature* spectator : list) {
 			Player* player = spectator->getPlayer();
 			if (masterPlayer == player) {

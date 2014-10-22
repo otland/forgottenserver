@@ -3593,7 +3593,7 @@ void Player::onEndCondition(ConditionType_t type)
 
 		if (getSkull() != SKULL_RED && getSkull() != SKULL_BLACK) {
 			setSkull(SKULL_NONE);
-			g_game.updatePlayerSkull(this);
+			g_game.updateCreatureSkull(this);
 		}
 	}
 
@@ -3663,7 +3663,7 @@ void Player::onAttackedCreature(Creature* target)
 
 				if (targetPlayer->getSkull() == SKULL_NONE && getSkull() == SKULL_NONE) {
 					setSkull(SKULL_WHITE);
-					g_game.updatePlayerSkull(this);
+					g_game.updateCreatureSkull(this);
 				}
 
 				if (getSkull() == SKULL_NONE) {
@@ -4062,10 +4062,10 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	if (getSkull() != SKULL_BLACK) {
 		if (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) != 0 && skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) - 1) * g_config.getNumber(ConfigManager::FRAG_TIME)) {
 			setSkull(SKULL_BLACK);
-			g_game.updatePlayerSkull(this);
+			g_game.updateCreatureSkull(this);
 		} else if (getSkull() != SKULL_RED && g_config.getNumber(ConfigManager::KILLS_TO_RED) != 0 && skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_RED) - 1) * g_config.getNumber(ConfigManager::FRAG_TIME)) {
 			setSkull(SKULL_RED);
-			g_game.updatePlayerSkull(this);
+			g_game.updateCreatureSkull(this);
 		}
 	}
 }
@@ -4081,7 +4081,7 @@ void Player::checkSkullTicks(int32_t ticks)
 
 	if ((skull == SKULL_RED || skull == SKULL_BLACK) && skullTicks < 1000 && !hasCondition(CONDITION_INFIGHT)) {
 		setSkull(SKULL_NONE);
-		g_game.updatePlayerSkull(this);
+		g_game.updateCreatureSkull(this);
 	}
 }
 
@@ -4209,10 +4209,15 @@ void Player::setGroup(Group* newGroup)
 	}
 }
 
-PartyShields_t Player::getPartyShield(const Player* player) const
+PartyShields_t Player::getPartyShield(const Creature* creature) const
 {
-	if (!player) {
+	if (!creature) {
 		return SHIELD_NONE;
+	}
+
+	const Player* player = creature->getPlayer();
+	if (!player) {
+		return Creature::getPartyShield(creature);
 	}
 
 	if (party) {
@@ -4260,9 +4265,9 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 	if (player->party) {
 		return SHIELD_GRAY;
 	}
-
 	return SHIELD_NONE;
 }
+
 
 bool Player::isInviting(const Player* player) const
 {
@@ -4322,10 +4327,15 @@ void Player::clearPartyInvitations()
 	invitePartyList.clear();
 }
 
-GuildEmblems_t Player::getGuildEmblem(const Player* player) const
+GuildEmblems_t Player::getGuildEmblem(const Creature* creature) const
 {
-	if (!player) {
+	if (!creature) {
 		return GUILDEMBLEM_NONE;
+	}
+
+	const Player* player = creature->getPlayer();
+	if (!player) {
+		return Creature::getGuildEmblem(creature);
 	}
 
 	const Guild* playerGuild = player->getGuild();
@@ -4344,7 +4354,6 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 	} else if (isInWar(player)) {
 		return GUILDEMBLEM_ENEMY;
 	}
-
 	return GUILDEMBLEM_NEUTRAL;
 }
 
@@ -4712,6 +4721,10 @@ void Player::useStamina()
 
 uint16_t Player::getHelpers() const
 {
+	if (dangerous) {
+		return Creature::getHelpers();
+	}
+
 	uint16_t helpers;
 
 	if (guild && party) {

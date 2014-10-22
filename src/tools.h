@@ -65,6 +65,9 @@ Ammo_t getAmmoType(const std::string& strValue);
 AmmoAction_t getAmmoAction(const std::string& strValue);
 CombatType_t getCombatType(const std::string& strValue);
 Skulls_t getSkullType(const std::string& strValue);
+PartyShields_t getPartyShieldType(const std::string& strValue);
+GuildEmblems_t getGuildEmblemType(const std::string& strValue);
+CreatureType_t getSummonIconType(const std::string& strValue);
 std::string getCombatName(CombatType_t combatType);
 
 std::string getSkillName(uint8_t skillid);

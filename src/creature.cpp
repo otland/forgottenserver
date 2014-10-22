@@ -79,7 +79,12 @@ Creature::Creature() :
 
 	hiddenHealth = false;
 
+	dangerous = false;
+
 	skull = SKULL_NONE;
+	partyShield = SHIELD_NONE;
+	guildEmblem = GUILDEMBLEM_NONE;
+	summonIcon = CREATURETYPE_NONE;
 
 	onIdleStatus();
 }

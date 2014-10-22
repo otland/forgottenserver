@@ -182,7 +182,22 @@ bool Npc::loadFromXml(const std::string& filename)
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
-		setSkull(getSkullType(attr.as_string()));
+		skull = getSkullType(attr.as_string());
+	}
+
+	if ((attr = npcNode.attribute("shield"))) {
+		partyShield = getPartyShieldType(attr.as_string());
+	}
+
+	if ((attr = npcNode.attribute("emblem"))) {
+		guildEmblem = getGuildEmblemType(attr.as_string());
+	}
+
+	if ((attr = npcNode.attribute("summonicon"))) {
+		setSummonIcon(getSummonIconType(attr.as_string()));
+	}
+	if ((attr = npcNode.attribute("dangerous"))) {
+		dangerous = attr.as_bool();
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");

@@ -61,6 +61,9 @@ Monster::Monster(MonsterType* _mtype) :
 	currentOutfit = mType->outfit;
 
 	skull = mType->skull;
+	partyShield = mType->partyShield;
+	guildEmblem = mType->guildEmblem;
+	summonIcon = mType->summonIcon;
 
 	health = mType->health;
 	healthMax = mType->healthMax;
@@ -69,6 +72,8 @@ Monster::Monster(MonsterType* _mtype) :
 	internalLight.color = mType->lightColor;
 
 	hiddenHealth = mType->hiddenHealth;
+
+	dangerous = mType->dangerous;
 
 	minCombatValue = 0;
 	maxCombatValue = 0;
