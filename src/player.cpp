@@ -688,7 +688,7 @@ void Player::removeSkillAdvance(skills_t skill, uint32_t count)
 		ss << "You were downgraded to " << getSkillName(skill) << " level " << skills[skill][SKILLVALUE_LEVEL] << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 
-		g_creatureEvents->playerAdvance(this, skill, (skills[skill][SKILLVALUE_LEVEL] + 1), skills[skill][SKILLVALUE_LEVEL]);
+		g_creatureEvents->playerDowngrade(this, skill, (skills[skill][SKILLVALUE_LEVEL] + 1), skills[skill][SKILLVALUE_LEVEL]);
 
 		sendUpdateSkills = true;
 	}
@@ -1853,7 +1853,7 @@ void Player::removeManaSpent(uint64_t amount)
 		ss << "You were downgraded to magic level " << magLevel << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 
-		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, magLevel + 1, magLevel);
+		g_creatureEvents->playerDowngrade(this, SKILL_MAGLEVEL, magLevel + 1, magLevel);
 
 		sendUpdateStats = true;
 	}
@@ -2048,6 +2048,8 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		std::ostringstream ss;
 		ss << "You were downgraded from Level " << oldLevel << " to Level " << level << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+
+		g_creatureEvents->playerDowngrade(this, SKILL_LEVEL, oldLevel, level);
 	}
 
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);

@@ -37,9 +37,9 @@ function onSay(cid, words, param)
 		return false
 	end
 
-	local target = Player(split[1])
+	local target, err = Player(split[1])
 	if target == nil then
-		player:sendCancelMessage("A player with that name is not online.")
+		player:sendCancelMessage(err)
 		return false
 	end
 
