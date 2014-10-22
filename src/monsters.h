@@ -96,7 +96,6 @@ class MonsterType
 		uint64_t experience;
 
 		Outfit_t outfit;
-		Skulls_t skull;
 
 		int32_t creatureAppearEvent;
 		int32_t creatureDisappearEvent;
@@ -126,6 +125,7 @@ class MonsterType
 		RaceType_t race;
 
 		uint16_t lookcorpse;
+		Skulls_t skull;
 
 		bool canPushItems;
 		bool canPushCreatures;
