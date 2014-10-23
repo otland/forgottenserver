@@ -163,7 +163,7 @@ class OutputMessagePool
 		void send(OutputMessage_ptr msg);
 		void sendAll();
 		void stop() {
-			m_isOpen = false;
+			m_open = false;
 		}
 		OutputMessage_ptr getOutputMessage(Protocol* protocol, bool autosend = true);
 		void startExecutionFrame();
@@ -197,6 +197,6 @@ class OutputMessagePool
 		OutputMessageMessageList m_toAddQueue;
 		std::recursive_mutex m_outputPoolLock;
 		int64_t m_frameTime;
-		bool m_isOpen;
+		bool m_open;
 };
 #endif

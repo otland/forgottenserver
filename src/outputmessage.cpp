@@ -38,13 +38,13 @@ OutputMessagePool::OutputMessagePool()
 	}
 
 	m_frameTime = OTSYS_TIME();
+	m_open = true;
 }
 
 void OutputMessagePool::startExecutionFrame()
 {
 	//std::lock_guard<std::recursive_mutex> lockClass(m_outputPoolLock);
 	m_frameTime = OTSYS_TIME();
-	m_isOpen = true;
 }
 
 OutputMessagePool::~OutputMessagePool()
@@ -138,7 +138,7 @@ void OutputMessagePool::internalReleaseMessage(OutputMessage* msg)
 
 OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool autosend /*= true*/)
 {
-	if (!m_isOpen) {
+	if (!m_open) {
 		return OutputMessage_ptr();
 	}
 
