@@ -182,6 +182,8 @@ Player::Player(ProtocolGame* p) :
 	nextUseStaminaTime = 0;
 
 	lastQuestlogUpdate = 0;
+
+	inventoryWeight = 0.00;
 }
 
 Player::~Player()
@@ -572,14 +574,15 @@ uint16_t Player::getClientIcons() const
 
 void Player::updateInventoryWeight()
 {
-	if (!hasFlag(PlayerFlag_HasInfiniteCapacity)) {
-		inventoryWeight = 0.00;
+	if (hasFlag(PlayerFlag_HasInfiniteCapacity)) {
+		return;
+	}
 
-		for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
-			Item* item = inventory[i];
-			if (item) {
-				inventoryWeight += item->getWeight();
-			}
+	inventoryWeight = 0.00;
+	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+		const Item* item = inventory[i];
+		if (item) {
+			inventoryWeight += item->getWeight();
 		}
 	}
 }
