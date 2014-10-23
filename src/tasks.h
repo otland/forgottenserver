@@ -35,8 +35,6 @@ class Task
 		Task(const std::function<void (void)>& f)
 			: m_expiration(SYSTEM_TIME_ZERO), m_f(f) {}
 
-		~Task() {}
-
 		void operator()() {
 			m_f();
 		}

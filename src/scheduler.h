@@ -31,8 +31,6 @@
 class SchedulerTask : public Task
 {
 	public:
-		~SchedulerTask() {}
-
 		void setEventId(uint32_t eventid) {
 			m_eventid = eventid;
 		}
