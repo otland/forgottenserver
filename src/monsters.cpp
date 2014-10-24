@@ -73,6 +73,10 @@ void MonsterType::reset()
 	lookcorpse = 0;
 
 	skull = SKULL_NONE;
+	partyShield = SHIELD_NONE;
+	guildEmblem = GUILDEMBLEM_NONE;
+
+	dangerous = false;
 
 	conditionImmunities = 0;
 	damageImmunities = 0;
@@ -823,6 +827,18 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		mType->skull = getSkullType(attr.as_string());
 	}
 
+	if ((attr = monsterNode.attribute("shield"))) {
+		mType->partyShield = getPartyShieldType(attr.as_string());
+	}
+
+	if ((attr = monsterNode.attribute("emblem"))) {
+		mType->guildEmblem = getGuildEmblemType(attr.as_string());
+	}
+
+	if ((attr = monsterNode.attribute("summonicon"))) {
+		mType->summonIcon = getSummonIconType(attr.as_string());
+	}
+
 	if ((attr = monsterNode.attribute("script"))) {
 		monsterScriptList[mType] = attr.as_string();
 	}
@@ -880,6 +896,8 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 				mType->runAwayHealth = pugi::cast<int32_t>(attr.value());
 			} else if (strcasecmp(attrName, "hidehealth") == 0) {
 				mType->hiddenHealth = attr.as_bool();
+			} else if (strcasecmp(attrName, "dangerous") == 0) {
+				mType->dangerous = attr.as_bool();
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Unknown flag attribute: " << attrName << ". " << file << std::endl;
 			}

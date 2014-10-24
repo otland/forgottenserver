@@ -431,6 +431,21 @@ struct SkullNames {
 	Skulls_t skull;
 };
 
+struct PartyShieldNames {
+	const char* name;
+	PartyShields_t partyShield;
+};
+
+struct GuildEmblemNames {
+	const char* name;
+	GuildEmblems_t guildEmblem;
+};
+
+struct CreatureTypeNames {
+	const char* name;
+	CreatureType_t creatureType;
+};
+
 MagicEffectNames magicEffectNames[] = {
 	{"redspark",		CONST_ME_DRAWBLOOD},
 	{"bluebubble",		CONST_ME_LOSEENERGY},
@@ -617,7 +632,37 @@ SkullNames skullNames[] = {
 	{"white",	SKULL_WHITE},
 	{"red",		SKULL_RED},
 	{"black",	SKULL_BLACK},
-	{"orange",	SKULL_ORANGE},
+	{"orange",	SKULL_ORANGE}
+};
+
+PartyShieldNames partyShieldNames[] = {
+	{"none",		SHIELD_NONE},
+	{"whiteyellow",	SHIELD_WHITEYELLOW},
+	{"whiteblue",	SHIELD_WHITEBLUE},
+	{"blue",		SHIELD_BLUE},
+	{"yellow",		SHIELD_YELLOW},
+	{"blueshared",	SHIELD_BLUE_SHAREDEXP},
+	{"yellowshared",		SHIELD_YELLOW_SHAREDEXP},
+	{"bluenosharedblink",	SHIELD_BLUE_NOSHAREDEXP_BLINK},
+	{"yellownosharedblink",	SHIELD_YELLOW_NOSHAREDEXP_BLINK},
+	{"bluenoshared",		SHIELD_BLUE_NOSHAREDEXP},
+	{"yellownoshared",		SHIELD_YELLOW_NOSHAREDEXP},
+	{"gray",		SHIELD_GRAY}
+};
+
+GuildEmblemNames guildEmblemNames[] = {
+	{"none",	GUILDEMBLEM_NONE},
+	{"ally",	GUILDEMBLEM_ALLY},
+	{"enemy",	GUILDEMBLEM_ENEMY},
+	{"neutral",	GUILDEMBLEM_NEUTRAL},
+	{"member",	GUILDEMBLEM_MEMBER},
+	{"other",	GUILDEMBLEM_OTHER}
+};
+
+CreatureTypeNames summonIconNames[] = {
+	{"none",	CREATURETYPE_NONE},
+	{"own",		CREATURETYPE_SUMMON_OWN},
+	{"other",	CREATURETYPE_SUMMON_OTHERS}
 };
 
 MagicEffectClasses getMagicEffect(const std::string& strValue)
@@ -688,6 +733,36 @@ Skulls_t getSkullType(const std::string& strValue)
 		}
 	}
 	return SKULL_NONE;
+}
+
+PartyShields_t getPartyShieldType(const std::string& strValue)
+{
+	for (size_t i = 0, size = sizeof(partyShieldNames) / sizeof(PartyShieldNames); i < size; ++i) {
+		if (strcasecmp(strValue.c_str(), partyShieldNames[i].name) == 0) {
+			return partyShieldNames[i].partyShield;
+		}
+	}
+	return SHIELD_NONE;
+}
+
+GuildEmblems_t getGuildEmblemType(const std::string& strValue)
+{
+	for (size_t i = 0, size = sizeof(guildEmblemNames) / sizeof(GuildEmblemNames); i < size; ++i) {
+		if (strcasecmp(strValue.c_str(), guildEmblemNames[i].name) == 0) {
+			return guildEmblemNames[i].guildEmblem;
+		}
+	}
+	return GUILDEMBLEM_NONE;
+}
+
+CreatureType_t getSummonIconType(const std::string& strValue)
+{
+	for (size_t i = 0, size = sizeof(summonIconNames) / sizeof(CreatureTypeNames); i < size; ++i) {
+		if (strcasecmp(strValue.c_str(), summonIconNames[i].name) == 0) {
+			return summonIconNames[i].creatureType;
+		}
+	}
+	return CREATURETYPE_NONE;
 }
 
 std::string getSkillName(uint8_t skillid)

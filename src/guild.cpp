@@ -29,7 +29,7 @@ void Guild::addMember(Player* player)
 {
 	membersOnline.push_back(player);
 	for (Player* member : membersOnline) {
-		g_game.updatePlayerHelpers(*member);
+		g_game.updateCreatureHelpers(*member);
 	}
 }
 
@@ -37,9 +37,9 @@ void Guild::removeMember(Player* player)
 {
 	membersOnline.remove(player);
 	for (Player* member : membersOnline) {
-		g_game.updatePlayerHelpers(*member);
+		g_game.updateCreatureHelpers(*member);
 	}
-	g_game.updatePlayerHelpers(*player);
+	g_game.updateCreatureHelpers(*player);
 }
 
 GuildRank* Guild::getRankById(uint32_t id)

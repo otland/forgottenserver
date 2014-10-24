@@ -1250,7 +1250,7 @@ void ProtocolGame::sendCreatureShield(const Creature* creature)
 	NetworkMessage msg;
 	msg.AddByte(0x91);
 	msg.add<uint32_t>(creature->getID());
-	msg.AddByte(player->getPartyShield(creature->getPlayer()));
+	msg.AddByte(player->getPartyShield(creature));
 	writeToOutputBuffer(msg);
 }
 
@@ -2884,8 +2884,6 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 {
 	CreatureType_t creatureType = creature->getType();
 
-	const Player* otherPlayer = creature->getPlayer();
-
 	if (known) {
 		msg.add<uint16_t>(0x62);
 		msg.add<uint32_t>(creature->getID());
@@ -2920,13 +2918,16 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	msg.add<uint16_t>(creature->getStepSpeed() / 2);
 
 	msg.AddByte(player->getSkullClient(creature));
-	msg.AddByte(player->getPartyShield(otherPlayer));
+	msg.AddByte(player->getPartyShield(creature));
 
 	if (!known) {
-		msg.AddByte(player->getGuildEmblem(otherPlayer));
+		msg.AddByte(player->getGuildEmblem(creature));
 	}
 
-	if (creatureType == CREATURETYPE_MONSTER) {
+	CreatureType_t summonIcon = creature->getSummonIcon();
+	if (summonIcon != CREATURETYPE_NONE) {
+		creatureType = summonIcon;
+	} else if (creatureType == CREATURETYPE_MONSTER) {
 		const Creature* master = creature->getMaster();
 		if (master) {
 			const Player* masterPlayer = master->getPlayer();
@@ -2944,11 +2945,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	msg.AddByte(creature->getSpeechBubble());
 	msg.AddByte(0xFF); // MARK_UNMARKED
 
-	if (otherPlayer) {
-		msg.add<uint16_t>(otherPlayer->getHelpers());
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
+	msg.add<uint16_t>(creature->getHelpers());
 
 	msg.AddByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
 }

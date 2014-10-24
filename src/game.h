@@ -445,9 +445,9 @@ class Game
 		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& oufit);
 		void internalCreatureChangeVisible(Creature* creature, bool visible);
 		void changeLight(const Creature* creature);
-		void updatePlayerSkull(Player* player);
-		void updatePlayerShield(Player* player);
-		void updatePlayerHelpers(const Player& player);
+		void updateCreatureSkull(Creature* creature);
+		void updateCreatureShield(Creature* creature);
+		void updateCreatureHelpers(const Creature& creature);
 		void updateCreatureType(Creature* creature);
 		void updateCreatureWalkthrough(const Creature* creature);
 

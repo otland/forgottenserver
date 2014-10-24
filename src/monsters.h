@@ -126,6 +126,9 @@ class MonsterType
 
 		uint16_t lookcorpse;
 		Skulls_t skull;
+		PartyShields_t partyShield;
+		GuildEmblems_t guildEmblem;
+		CreatureType_t summonIcon;
 
 		bool canPushItems;
 		bool canPushCreatures;
@@ -136,6 +139,7 @@ class MonsterType
 		bool isAttackable;
 		bool isHostile;
 		bool hiddenHealth;
+		bool dangerous;
 
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);

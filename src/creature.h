@@ -139,7 +139,17 @@ class Creature : virtual public Thing
 		virtual const std::string& getNameDescription() const = 0;
 
 		virtual CreatureType_t getType() const = 0;
-
+		virtual CreatureType_t getSummonIcon() const {
+			return summonIcon;
+		}
+		virtual bool setSummonIcon(CreatureType_t newCreatureType) {
+			if (newCreatureType < CREATURETYPE_SUMMON_OWN) {
+				return false;
+			} else {
+				summonIcon = newCreatureType;
+				return true;
+			}
+		}
 		virtual void setID() = 0;
 		void setRemoved() {
 			isInternalRemoved = true;
@@ -166,6 +176,18 @@ class Creature : virtual public Thing
 		virtual void setSkull(Skulls_t newSkull) {
 			skull = newSkull;
 		}
+		virtual PartyShields_t getPartyShield(const Creature* creature) const {
+			return creature->partyShield;
+		}
+		virtual void setPartyShield(PartyShields_t newShield) {
+			partyShield = newShield;
+		}
+		virtual GuildEmblems_t getGuildEmblem(const Creature* creature) const {
+			return creature->guildEmblem;
+		}
+		virtual void setGuildEmblem(GuildEmblems_t newEmblem) {
+			guildEmblem = newEmblem;
+		}
 		Direction getDirection() const {
 			return direction;
 		}
@@ -179,7 +201,13 @@ class Creature : virtual public Thing
 		void setHiddenHealth(bool b) {
 			hiddenHealth = b;
 		}
+		virtual void setDangerous(bool b) {
+			dangerous = b;
+		}
 
+		virtual uint16_t getHelpers() const {
+			return dangerous ? 5 : 0;
+		}
 		virtual int32_t getThrowRange() const {
 			return 1;
 		}
@@ -531,6 +559,9 @@ class Creature : virtual public Thing
 
 		Direction direction;
 		Skulls_t skull;
+		PartyShields_t partyShield;
+		GuildEmblems_t guildEmblem;
+		CreatureType_t summonIcon;
 
 		bool localMapCache[mapWalkHeight][mapWalkWidth];
 		bool isInternalRemoved;
@@ -544,6 +575,7 @@ class Creature : virtual public Thing
 		bool hasFollowPath;
 		bool forceUpdateFollowPath;
 		bool hiddenHealth;
+		bool dangerous;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {
