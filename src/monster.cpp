@@ -778,6 +778,7 @@ void Monster::doAttacking(uint32_t interval)
 	}
 
 	bool updateLook = true;
+	bool resetTicks = interval != 0;
 	attackTicks += interval;
 
 	const Position& myPos = getPosition();
@@ -786,7 +787,7 @@ void Monster::doAttacking(uint32_t interval)
 	for (const spellBlock_t& spellBlock : mType->spellAttackList) {
 		bool inRange = false;
 
-		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange)) {
+		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= (uint32_t)uniform_random(1, 100)) {
 				if (updateLook) {
 					updateLookDirection();
@@ -816,7 +817,7 @@ void Monster::doAttacking(uint32_t interval)
 		updateLookDirection();
 	}
 
-	if (interval != 0) {
+	if (resetTicks) {
 		attackTicks = 0;
 	}
 }
@@ -837,7 +838,7 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 }
 
 bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
-                          const spellBlock_t& sb, uint32_t interval, bool& inRange)
+                          const spellBlock_t& sb, uint32_t interval, bool& inRange, bool& resetTicks)
 {
 	inRange = true;
 
@@ -853,6 +854,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 
 	if (!sb.isMelee || !extraMeleeAttack) {
 		if (sb.speed > attackTicks) {
+			resetTicks = false;
 			return false;
 		}
 
