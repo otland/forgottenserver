@@ -67,7 +67,8 @@ function onDeath(cid, corpse, killer, mostDamage, unjustified, mostDamage_unjust
 		local guild = player:getGuild()
 		local targetGuild = guild and guild:getId()
 		if targetGuild ~= 0 then
-			local killerGuild = killerCreature:getGuild():getId()
+			local killerGuild = killerCreature:getGuild()
+			killerGuild = killerGuild and killerGuild:getId() or 0
 			if killerGuild ~= 0 and targetGuild ~= killerGuild and isInWar(cid, killerCreature) then
 				local warId = false
 				resultId = db.storeQuery("SELECT `id` FROM `guild_wars` WHERE `status` = 1 AND ((`guild1` = " .. killerGuild .. " AND `guild2` = " .. targetGuild .. ") OR (`guild1` = " .. targetGuild .. " AND `guild2` = " .. killerGuild .. "))")
