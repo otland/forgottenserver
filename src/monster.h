@@ -200,7 +200,6 @@ class Monster : public Creature
 
 		Position masterPos;
 
-		bool resetTicks;
 		bool isIdle;
 		bool extraMeleeAttack;
 		bool isMasterInRange;

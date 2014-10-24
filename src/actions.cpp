@@ -467,6 +467,7 @@ Action::Action(const Action* copy) :
 	Event(copy)
 {
 	allowFarUse = copy->allowFarUse;
+	checkFloor = copy->checkFloor;
 	checkLineOfSight = copy->checkLineOfSight;
 	function = copy->function;
 }

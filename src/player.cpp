@@ -182,6 +182,8 @@ Player::Player(ProtocolGame* p) :
 	nextUseStaminaTime = 0;
 
 	lastQuestlogUpdate = 0;
+
+	inventoryWeight = 0.00;
 }
 
 Player::~Player()
@@ -572,14 +574,15 @@ uint16_t Player::getClientIcons() const
 
 void Player::updateInventoryWeight()
 {
-	if (!hasFlag(PlayerFlag_HasInfiniteCapacity)) {
-		inventoryWeight = 0.00;
+	if (hasFlag(PlayerFlag_HasInfiniteCapacity)) {
+		return;
+	}
 
-		for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
-			Item* item = inventory[i];
-			if (item) {
-				inventoryWeight += item->getWeight();
-			}
+	inventoryWeight = 0.00;
+	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+		const Item* item = inventory[i];
+		if (item) {
+			inventoryWeight += item->getWeight();
 		}
 	}
 }
@@ -4060,7 +4063,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	skullTicks += g_config.getNumber(ConfigManager::FRAG_TIME);
 
 	if (getSkull() != SKULL_BLACK) {
-		if (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) != 0 && skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) - 1) * g_config.getNumber(ConfigManager::FRAG_TIME)) {
+		if (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) != 0 && skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) - 1) * static_cast<int64_t>(g_config.getNumber(ConfigManager::FRAG_TIME))) {
 			setSkull(SKULL_BLACK);
 			g_game.updateCreatureSkull(this);
 		} else if (getSkull() != SKULL_RED && g_config.getNumber(ConfigManager::KILLS_TO_RED) != 0 && skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_RED) - 1) * g_config.getNumber(ConfigManager::FRAG_TIME)) {

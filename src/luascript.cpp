@@ -9156,6 +9156,7 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 	if (!item) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		pushBoolean(L, false);
+		return 1;
 	}
 
 	if (length < 0) {
