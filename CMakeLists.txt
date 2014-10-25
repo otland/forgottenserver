@@ -20,6 +20,7 @@ include(FindCXX11)
 find_package(GMP REQUIRED)
 find_package(MySQL)
 find_package(LuaJIT)
+find_package(Threads)
 
 if (LUAJIT_FOUND)
     add_definitions(-D__LUAJIT__)
@@ -33,4 +34,4 @@ include(src/CMakeLists.txt)
 add_executable(tfs ${tfs_SRC})
 
 include_directories(${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${GMP_INCLUDE_DIR})
-target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${GMP_LIBRARIES})
+target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${GMP_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
