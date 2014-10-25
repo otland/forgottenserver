@@ -301,16 +301,8 @@ enum PlayerSex_t : uint8_t {
 	PLAYERSEX_LAST = PLAYERSEX_MALE
 };
 
-enum Vocation_t : uint8_t {
-	VOCATION_NONE = 0,
-	VOCATION_SORCERER = 1,
-	VOCATION_DRUID = 2,
-	VOCATION_PALADIN = 3,
-	VOCATION_KNIGHT = 4,
-	VOCATION_MASTERSORCERER = 5,
-	VOCATION_ELDERDRUID = 6,
-	VOCATION_ROYALPALADIN = 7,
-	VOCATION_ELITEKNIGHT = 8
+enum Vocation_t : uint16_t {
+	VOCATION_NONE = 0
 };
 
 enum ReturnValue {
@@ -440,7 +432,7 @@ struct LightInfo {
 	LightInfo() {
 		level = 0;
 		color = 0;
-	};
+	}
 	LightInfo(uint32_t _level, uint32_t _color) {
 		level = _level;
 		color = _color;

@@ -440,7 +440,7 @@ Cylinder* Container::__queryDestination(int32_t& index, const Thing* thing, Item
 	if (index == 255 /*add wherever*/) {
 		index = INDEX_WHEREEVER;
 		*destItem = nullptr;
-	} else if (index >= (int32_t)capacity()) {
+	} else if (index >= static_cast<int32_t>(capacity())) {
 		/*
 		if you have a container, maximize it to show all 20 slots
 		then you open a bag that is inside the container you will have a bag with 8 slots
@@ -494,7 +494,7 @@ void Container::__addThing(Thing* thing)
 
 void Container::__addThing(int32_t index, Thing* thing)
 {
-	if (index >= (int32_t)capacity()) {
+	if (index >= static_cast<int32_t>(capacity())) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -612,7 +612,7 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 	}
 
 	if (item->isStackable() && count != item->getItemCount()) {
-		uint8_t newCount = (uint8_t)std::max<int32_t>(0, item->getItemCount() - count);
+		uint8_t newCount = static_cast<uint8_t>(std::max<int32_t>(0, item->getItemCount() - count));
 		const double oldWeight = -item->getWeight();
 		item->setItemCount(newCount);
 		const double diffWeight = oldWeight + item->getWeight();

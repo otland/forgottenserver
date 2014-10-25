@@ -228,7 +228,7 @@ class House
 			return bedsList;
 		}
 		uint32_t getBedCount() {
-			return (uint32_t)std::ceil((double)bedsList.size() / 2);   //each bed takes 2 sqms of space, ceil is just for bad maps
+			return static_cast<uint32_t>(std::ceil((double)bedsList.size() / 2));   //each bed takes 2 sqms of space, ceil is just for bad maps
 		}
 
 	private:

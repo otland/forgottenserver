@@ -86,15 +86,16 @@ std::string transformToSHA1(const std::string& input)
 	uint8_t messageBlock[64];
 	size_t index = 0;
 
-	uint32_t length_low = input.length() << 3;
-#if ULONG_MAX > 0xFFFFFFFFUL
-	uint32_t length_high = input.length() >> 32;
-#else
+	uint32_t length_low = 0;
 	uint32_t length_high = 0;
-#endif
-
 	for (char ch : input) {
 		messageBlock[index++] = ch;
+
+		length_low += 8;
+		if (length_low == 0) {
+			length_high++;
+		}
+
 		if (index == 64) {
 			processSHA1MessageBlock(messageBlock, H);
 			index = 0;
@@ -860,7 +861,7 @@ uint8_t serverFluidToClient(uint8_t serverFluid)
 
 uint8_t clientFluidToServer(uint8_t clientFluid)
 {
-	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(int8_t);
+	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(uint8_t);
 
 	if (clientFluid >= size) {
 		return 0;

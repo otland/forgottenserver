@@ -78,7 +78,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
 		output->AddByte(0);
 
-		output->AddByte((uint8_t)account.charList.size());
+		output->AddByte(static_cast<uint8_t>(account.charList.size()));
 		for (const std::string& characterName : account.charList) {
 			output->AddByte(0);
 			output->AddString(characterName);

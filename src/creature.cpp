@@ -1388,17 +1388,17 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 
 bool Creature::isImmune(CombatType_t type) const
 {
-	return hasBitSet((uint32_t)type, getDamageImmunities());
+	return hasBitSet(static_cast<uint32_t>(type), getDamageImmunities());
 }
 
 bool Creature::isImmune(ConditionType_t type) const
 {
-	return hasBitSet((uint32_t)type, getConditionImmunities());
+	return hasBitSet(static_cast<uint32_t>(type), getConditionImmunities());
 }
 
 bool Creature::isSuppress(ConditionType_t type) const
 {
-	return hasBitSet((uint32_t)type, getConditionSuppressions());
+	return hasBitSet(static_cast<uint32_t>(type), getConditionSuppressions());
 }
 
 int64_t Creature::getStepDuration(Direction dir) const

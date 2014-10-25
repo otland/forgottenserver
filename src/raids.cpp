@@ -142,7 +142,7 @@ void Raids::checkRaids()
 		for (auto it = raidList.begin(); it != raidList.end(); ++it) {
 			Raid* raid = *it;
 			if (now >= (getLastRaidEnd() + raid->getMargin())) {
-				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / raid->getInterval() >= (uint32_t)uniform_random(0, MAX_RAND_RANGE)) {
+				if (MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL / raid->getInterval() >= static_cast<uint32_t>(uniform_random(0, MAX_RAND_RANGE))) {
 					setRunning(raid);
 					raid->startRaid();
 
@@ -259,7 +259,7 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 		RaidEvent* newRaidEvent = getNextRaidEvent();
 
 		if (newRaidEvent) {
-			uint32_t ticks = (uint32_t)std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay());
+			uint32_t ticks = static_cast<uint32_t>(std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay()));
 			nextEventEvent = g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, this, newRaidEvent)));
 		} else {
 			resetRaid();
@@ -346,11 +346,11 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		} else if (tmpStrValue == "redconsole") {
 			m_messageType = MESSAGE_STATUS_CONSOLE_RED;
 		} else {
-			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
+			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << static_cast<uint32_t>(m_messageType) << std::endl;
 		}
 	} else {
 		m_messageType = MESSAGE_EVENT_ADVANCE;
-		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << (int32_t)m_messageType << std::endl;
+		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << static_cast<uint32_t>(m_messageType) << std::endl;
 	}
 	return true;
 }

@@ -1082,11 +1082,11 @@ void Tile::__replaceThing(uint32_t index, Thing* thing)
 
 	CreatureVector* creatures = getCreatures();
 	if (creatures) {
-		if (!isInserted && pos < (int32_t)creatures->size()) {
+		if (!isInserted && pos < static_cast<int32_t>(creatures->size())) {
 			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
-		pos -= (uint32_t)creatures->size();
+		pos -= static_cast<uint32_t>(creatures->size());
 	}
 
 	if (items && !isInserted) {
@@ -1178,7 +1178,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 		}
 
 		if (item->isStackable() && count != item->getItemCount()) {
-			uint8_t newCount = (uint8_t)std::max<int32_t>(0, (int32_t)(item->getItemCount() - count));
+			uint8_t newCount = static_cast<uint8_t>(std::max<int32_t>(0, static_cast<int32_t>(item->getItemCount() - count)));
 
 			updateTileFlags(item, true);
 			item->setItemCount(newCount);

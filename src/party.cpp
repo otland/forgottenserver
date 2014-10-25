@@ -389,7 +389,7 @@ void Party::updateVocationsList()
 
 	size_t size = vocationIds.size();
 	if (size > 1) {
-		extraExpRate = size * (10 + (size - 1) * 5) / 100.f;
+		extraExpRate = static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f;
 	} else {
 		extraExpRate = 0.20f;
 	}
@@ -425,7 +425,7 @@ bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 
 void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
 {
-	uint32_t shareExperience = (uint64_t)std::ceil((((double)experience / (memberList.size() + 1)) + ((double)experience * extraExpRate)));
+	uint32_t shareExperience = static_cast<uint64_t>(std::ceil((((double)experience / (memberList.size() + 1)) + ((double)experience * extraExpRate))));
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
@@ -445,7 +445,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 		}
 	}
 
-	uint32_t minLevel = (int32_t)std::ceil(((float)(highestLevel) * 2) / 3);
+	uint32_t minLevel = static_cast<int32_t>(std::ceil(((float)(highestLevel) * 2) / 3));
 	if (player->getLevel() < minLevel) {
 		return false;
 	}
@@ -462,7 +462,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 		}
 
 		uint64_t timeDiff = OTSYS_TIME() - it->second.ticks;
-		if (timeDiff > (uint64_t)g_config.getNumber(ConfigManager::PZ_LOCKED)) {
+		if (timeDiff > static_cast<uint64_t>(g_config.getNumber(ConfigManager::PZ_LOCKED))) {
 			return false;
 		}
 	}

@@ -169,7 +169,6 @@ class Map
 
 		/**
 		  * Save a map.
-		  * \param identifier file/database to save to
 		  * \returns true if the map was saved successfully
 		  */
 		bool saveMap();
@@ -188,7 +187,6 @@ class Map
 
 		/**
 		  * Set a single tile.
-		  * \param a tile to set for the position
 		  */
 		void setTile(int32_t _x, int32_t _y, int32_t _z, Tile* newTile);
 		void setTile(const Position& pos, Tile* newTile) {
@@ -197,7 +195,7 @@ class Map
 
 		/**
 		  * Place a creature on the map
-		  * \param pos The position to place the creature
+		  * \param centerPos The position to place the creature
 		  * \param creature Creature to place on the map
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param forceLogin If true, placing the creature will not fail becase of obstacles (creatures/chests)

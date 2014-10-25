@@ -547,7 +547,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xF9: parseModalWindowAnswer(msg); break;
 
 		default:
-			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << (int16_t)recvbyte << std::dec << "!" << std::endl;
+			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << static_cast<uint16_t>(recvbyte) << std::dec << "!" << std::endl;
 			break;
 	}
 
@@ -1298,7 +1298,7 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	NetworkMessage msg;
 	msg.AddByte(0x86);
 	msg.add<uint32_t>(creature->getID());
-	msg.AddByte((uint8_t)color);
+	msg.AddByte(color);
 	writeToOutputBuffer(msg);
 }
 
@@ -2321,7 +2321,7 @@ void ProtocolGame::sendCreatureHealth(const Creature* creature)
 	if (creature->isHealthHidden()) {
 		msg.AddByte(0x00);
 	} else {
-		msg.AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1)));
+		msg.AddByte(static_cast<int32_t>(std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1))));
 	}
 	writeToOutputBuffer(msg);
 }
@@ -2900,10 +2900,10 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	if (creature->isHealthHidden()) {
 		msg.AddByte(0x00);
 	} else {
-		msg.AddByte((int32_t)std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1)));
+		msg.AddByte(static_cast<int32_t>(std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1))));
 	}
 
-	msg.AddByte((uint8_t)creature->getDirection());
+	msg.AddByte(creature->getDirection());
 
 	if (!creature->isInGhostMode() && !creature->isInvisible()) {
 		AddOutfit(msg, creature->getCurrentOutfit());
@@ -2960,8 +2960,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getHealth()));
 	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getPlayerInfo(PLAYERINFO_MAXHEALTH)));
 
-	msg.add<uint32_t>(uint32_t(player->getFreeCapacity() * 100));
-	msg.add<uint32_t>(uint32_t(player->getCapacity() * 100));
+	msg.add<uint32_t>(static_cast<uint32_t>(player->getFreeCapacity() * 100));
+	msg.add<uint32_t>(static_cast<uint32_t>(player->getCapacity() * 100));
 
 	msg.add<uint64_t>(player->getExperience());
 

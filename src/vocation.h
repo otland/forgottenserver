@@ -38,7 +38,7 @@ class Vocation
 		uint32_t getReqSkillTries(int32_t skill, int32_t level);
 		uint64_t getReqMana(uint32_t magLevel);
 
-		int32_t getId() const {
+		uint16_t getId() const {
 			return id;
 		}
 

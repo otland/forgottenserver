@@ -43,7 +43,7 @@ struct MoveEventList {
 	std::list<MoveEvent*> moveEvent[MOVE_EVENT_LAST];
 };
 
-typedef std::map<int32_t, bool> VocEquipMap;
+typedef std::map<uint16_t, bool> VocEquipMap;
 
 class MoveEvents : public BaseEvents
 {

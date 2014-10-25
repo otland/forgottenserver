@@ -228,7 +228,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	}
 
 	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - m_timeConnected) + 1);
-	if ((++m_packetsSent / timePassed) > (uint32_t)g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND)) {
+	if ((++m_packetsSent / timePassed) > static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND))) {
 		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
 		closeConnection();
 		m_connectionLock.unlock();

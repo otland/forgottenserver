@@ -340,7 +340,7 @@ class Player : public Creature, public Cylinder
 			blessings &= ~blessing;
 		}
 		bool hasBlessing(uint8_t value) const {
-			return (blessings & ((uint8_t)1 << value)) != 0;
+			return (blessings & (static_cast<uint8_t>(1) << value)) != 0;
 		}
 
 		bool isOffline() const {
@@ -423,8 +423,8 @@ class Player : public Creature, public Cylinder
 
 		uint16_t getHelpers() const;
 
-		bool setVocation(uint32_t vocId);
-		uint32_t getVocationId() const {
+		bool setVocation(uint16_t vocId);
+		uint16_t getVocationId() const {
 			return vocation->getId();
 		}
 
@@ -1355,7 +1355,7 @@ class Player : public Creature, public Cylinder
 		static uint32_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
 		double getLostPercent() const;
 		virtual uint64_t getLostExperience() const {
-			return skillLoss ? uint64_t(experience * getLostPercent()) : 0;
+			return skillLoss ? static_cast<uint64_t>(experience * getLostPercent()) : 0;
 		}
 		virtual void dropLoot(Container* corpse, Creature* _lastHitCreature);
 		virtual uint32_t getDamageImmunities() const {

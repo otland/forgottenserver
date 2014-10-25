@@ -67,7 +67,7 @@ class Cylinder : virtual public Thing
 		  * Query the cylinder how much it can accept
 		  * \param index points to the destination index (inventory slot/container position)
 			* -1 is a internal value and means add to a empty position, with no destItem
-		  * \param item the object to move/add
+		  * \param thing the object to move/add
 		  * \param count is the amount that we want to move/add
 		  * \param maxQueryCount is the max amount that the cylinder can accept
 		  * \param flags optional flags to modifiy the default behaviour
@@ -78,7 +78,7 @@ class Cylinder : virtual public Thing
 
 		/**
 		  * Query if the cylinder can remove an object
-		  * \param item the object to move/remove
+		  * \param thing the object to move/remove
 		  * \param count is the amount that we want to remove
 		  * \param flags optional flags to modifiy the default behaviour
 		  * \returns ReturnValue holds the return value
@@ -100,14 +100,14 @@ class Cylinder : virtual public Thing
 
 		/**
 		  * Add the object to the cylinder
-		  * \param item is the object to add
+		  * \param thing is the object to add
 		  */
 		virtual void __addThing(Thing* thing) = 0;
 
 		/**
 		  * Add the object to the cylinder
 		  * \param index points to the destination index (inventory slot/container position)
-		  * \param item is the object to add
+		  * \param thing is the object to add
 		  */
 		virtual void __addThing(int32_t index, Thing* thing) = 0;
 
@@ -186,7 +186,7 @@ class Cylinder : virtual public Thing
 		/**
 		  * Get the amount of items of a all types
 		  * \param countMap a map to put the itemID:count mapping in
-		  * \param returns a map mapping item id to count (same as first argument)
+		  * \returns a map mapping item id to count (same as first argument)
 		  */
 		virtual std::map<uint32_t, uint32_t>& __getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const;
 

@@ -241,10 +241,10 @@ class Tile : public Cylinder
 			return hasBitSet(flag, m_flags);
 		}
 		void setFlag(tileflags_t flag) {
-			m_flags |= (uint32_t)flag;
+			m_flags |= static_cast<uint32_t>(flag);
 		}
 		void resetFlag(tileflags_t flag) {
-			m_flags &= ~(uint32_t)flag;
+			m_flags &= ~static_cast<uint32_t>(flag);
 		}
 
 		bool positionChange() const {

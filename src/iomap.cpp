@@ -399,7 +399,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					tile = createTile(ground_item, nullptr, px, py, pz);
 				}
 
-				tile->setFlag((tileflags_t)tileflags);
+				tile->setFlag(static_cast<tileflags_t>(tileflags));
 
 				map->setTile(px, py, pz, tile);
 

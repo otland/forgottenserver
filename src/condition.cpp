@@ -140,16 +140,16 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 bool Condition::serialize(PropWriteStream& propWriteStream)
 {
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_TYPE);
-	propWriteStream.ADD_VALUE((int32_t)conditionType);
+	propWriteStream.ADD_VALUE(static_cast<uint32_t>(conditionType));
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_ID);
-	propWriteStream.ADD_VALUE((int32_t)id);
+	propWriteStream.ADD_VALUE(static_cast<uint32_t>(id));
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_TICKS);
 	propWriteStream.ADD_VALUE(ticks);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_ISBUFF);
-	propWriteStream.ADD_VALUE((int8_t)isBuff);
+	propWriteStream.ADD_VALUE(static_cast<uint8_t>(isBuff));
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_SUBID);
 	propWriteStream.ADD_VALUE(subId);
@@ -478,19 +478,19 @@ void ConditionAttributes::updatePercentStats(Player* player)
 
 		switch (i) {
 			case STAT_MAXHITPOINTS:
-				stats[i] = (int32_t)(player->getMaxHealth() * ((statsPercent[i] - 100) / 100.f));
+				stats[i] = static_cast<int32_t>(player->getMaxHealth() * ((statsPercent[i] - 100) / 100.f));
 				break;
 
 			case STAT_MAXMANAPOINTS:
-				stats[i] = (int32_t)(player->getMaxMana() * ((statsPercent[i] - 100) / 100.f));
+				stats[i] = static_cast<int32_t>(player->getMaxMana() * ((statsPercent[i] - 100) / 100.f));
 				break;
 
 			case STAT_SOULPOINTS:
-				stats[i] = (int32_t)(player->getPlayerInfo(PLAYERINFO_SOUL) * ((statsPercent[i] - 100) / 100.f));
+				stats[i] = static_cast<int32_t>(player->getPlayerInfo(PLAYERINFO_SOUL) * ((statsPercent[i] - 100) / 100.f));
 				break;
 
 			case STAT_MAGICPOINTS:
-				stats[i] = (int32_t)(player->getMagicLevel() * ((statsPercent[i] - 100) / 100.f));
+				stats[i] = static_cast<int32_t>(player->getMagicLevel() * ((statsPercent[i] - 100) / 100.f));
 				break;
 		}
 	}
@@ -520,7 +520,7 @@ void ConditionAttributes::updatePercentSkills(Player* player)
 		}
 
 		int32_t currSkill = player->getSkill((skills_t)i, SKILLVALUE_LEVEL);
-		skills[i] = (int32_t)(currSkill * ((skillsPercent[i] - 100) / 100.f));
+		skills[i] = static_cast<int32_t>(currSkill * ((skillsPercent[i] - 100) / 100.f));
 	}
 }
 
@@ -1403,8 +1403,8 @@ void ConditionSpeed::setFormulaVars(float _mina, float _minb, float _maxa, float
 
 void ConditionSpeed::getFormulaValues(int32_t var, int32_t& min, int32_t& max) const
 {
-	min = (int32_t)std::ceil(var * 1.f * mina + minb);
-	max = (int32_t)std::ceil(var * 1.f * maxa + maxb);
+	min = (var * mina) + minb;
+	max = (var * maxa) + maxb;
 }
 
 bool ConditionSpeed::setParam(ConditionParam_t param, int32_t value)

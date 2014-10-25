@@ -74,7 +74,7 @@ struct Abilities {
 
 		conditionImmunities = 0;
 		conditionSuppressions = 0;
-	};
+	}
 
 	//elemental damage
 	CombatType_t elementType;

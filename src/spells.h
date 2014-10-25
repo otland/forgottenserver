@@ -31,7 +31,7 @@ class ConjureSpell;
 class RuneSpell;
 class Spell;
 
-typedef std::map<int32_t, bool> VocSpellMap;
+typedef std::map<uint16_t, bool> VocSpellMap;
 
 class Spells : public BaseEvents
 {

@@ -145,7 +145,7 @@ class ItemAttributes
 			setIntAttr(ITEM_ATTRIBUTE_ACTIONID, n);
 		}
 		uint16_t getActionId() const {
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_ACTIONID);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_ACTIONID));
 		}
 
 		void setUniqueId(uint16_t n) {
@@ -156,21 +156,21 @@ class ItemAttributes
 			setIntAttr(ITEM_ATTRIBUTE_UNIQUEID, n);
 		}
 		uint16_t getUniqueId() const {
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_UNIQUEID);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_UNIQUEID));
 		}
 
 		void setCharges(uint16_t n) {
 			setIntAttr(ITEM_ATTRIBUTE_CHARGES, n);
 		}
 		uint16_t getCharges() const {
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_CHARGES);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_CHARGES));
 		}
 
 		void setFluidType(uint16_t n) {
 			setIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE, n);
 		}
 		uint16_t getFluidType() const {
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE));
 		}
 
 		void setOwner(uint32_t _owner) {
@@ -436,14 +436,14 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_ACTIONID);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_ACTIONID));
 		}
 
 		uint16_t getUniqueId() const {
 			if (!attributes) {
 				return 0;
 			}
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_UNIQUEID);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_UNIQUEID));
 		}
 
 		void setCharges(uint16_t n) {
@@ -453,7 +453,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_CHARGES);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_CHARGES));
 		}
 
 		void setFluidType(uint16_t n) {
@@ -463,7 +463,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
-			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE);
+			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE));
 		}
 
 		void setOwner(uint32_t _owner) {

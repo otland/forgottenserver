@@ -55,7 +55,7 @@ class Database
 		*
 		* Executes query which doesn't generates results (eg. INSERT, UPDATE, DELETE...).
 		*
-		* @param std::string query command
+		* @param query command
 		* @return true on success, false on error
 		*/
 		bool executeQuery(const std::string& query);
@@ -65,7 +65,6 @@ class Database
 		*
 		* Executes query which generates results (mostly SELECT).
 		*
-		* @param std::string query
 		* @return results object (nullptr on error)
 		*/
 		DBResult_ptr storeQuery(const std::string& query);
@@ -75,7 +74,7 @@ class Database
 		*
 		* Prepares string to fit SQL queries including quoting it.
 		*
-		* @param std::string string to be escaped
+		* @param s string to be escaped
 		* @return quoted string
 		*/
 		std::string escapeString(const std::string& s) const;
@@ -85,8 +84,8 @@ class Database
 		*
 		* Prepares binary stream to fit SQL queries.
 		*
-		* @param char* binary stream
-		* @param long stream length
+		* @param s binary stream
+		* @param length stream length
 		* @return quoted string
 		*/
 		std::string escapeBlob(const char* s, uint32_t length) const;
@@ -187,13 +186,13 @@ class DBInsert
 		/**
 		* Sets query prototype.
 		*
-		* @param std::string& INSERT query
+		* @param query INSERT query
 		*/
 		void setQuery(const std::string& query);
 
 		/**
 		* Adds new row to INSERT statement
-		* @param std::string& row data
+		* @param row data
 		*/
 		bool addRow(const std::string& row);
 

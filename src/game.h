@@ -183,7 +183,6 @@ class Game
 
 		/**
 		  * Returns a player based on guid
-		  * \param guid
 		  * \returns A Pointer to the player
 		  */
 		Player* getPlayerByGUID(const uint32_t& guid);
@@ -216,7 +215,7 @@ class Game
 		  * \param creature Creature to place on the map
 		  * \param pos The position to place the creature
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
-		  * \param forced If true, placing the creature will not fail because of obstacles (creatures/items)
+		  * \param force If true, placing the creature will not fail because of obstacles (creatures/items)
 		  */
 		bool placeCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool force = false);
 
@@ -450,8 +449,6 @@ class Game
 		void updatePlayerHelpers(const Player& player);
 		void updateCreatureType(Creature* creature);
 		void updateCreatureWalkthrough(const Creature* creature);
-
-		void sendPublicSquare(Player* sender, SquareColor_t color);
 
 		GameState_t getGameState() const;
 		void setGameState(GameState_t newState);

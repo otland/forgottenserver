@@ -30,7 +30,7 @@
 
 int32_t NetworkMessage::decodeHeader()
 {
-	int32_t size = (int32_t)(m_RealBuf[0] | m_RealBuf[1] << 8);
+	int32_t size = static_cast<int32_t>(m_RealBuf[0] | m_RealBuf[1] << 8);
 	m_MsgSize = size;
 	return size;
 }

@@ -166,7 +166,7 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_WEAPONTYPE = 0xFE //254
 };
 
-enum SpeakClasses {
+enum SpeakClasses : uint8_t {
 	TALKTYPE_SAY = 1,
 	TALKTYPE_WHISPER = 2,
 	TALKTYPE_YELL = 3,
@@ -183,8 +183,7 @@ enum SpeakClasses {
 	TALKTYPE_MONSTER_SAY = 35,
 	TALKTYPE_MONSTER_YELL = 36,
 
-	TALKTYPE_CHANNEL_R2 = 0xFF + 1, //#d
-	TALKTYPE_CHANNEL_W = 0xFF + 2
+	TALKTYPE_CHANNEL_R2 = 0xFF //#d
 };
 
 enum MessageClasses : uint8_t {
@@ -304,8 +303,7 @@ const uint8_t fluidMap[] = {
 	CLIENTFLUID_PURPLE
 };
 
-enum SquareColor_t {
-	SQ_COLOR_NONE = 256,
+enum SquareColor_t : uint8_t {
 	SQ_COLOR_BLACK = 0
 };
 

@@ -145,13 +145,13 @@ bool Weapons::registerEvent(Event* event, const pugi::xml_node&)
 //monsters
 int32_t Weapons::getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue)
 {
-	return ((int32_t)ceil((attackSkill * (attackValue * 0.05)) + (attackValue * 0.5)));
+	return static_cast<int32_t>(std::ceil((attackSkill * (attackValue * 0.05)) + (attackValue * 0.5)));
 }
 
 //players
 int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor)
 {
-	return (int32_t)ceil((2 * (attackValue * (attackSkill + 5.8) / 25 + (level - 1) / 10.)) / attackFactor);
+	return static_cast<int32_t>(std::ceil((2 * (attackValue * (attackSkill + 5.8) / 25 + (level - 1) / 10.)) / attackFactor));
 }
 
 Weapon::Weapon(LuaScriptInterface* _interface) :
@@ -457,11 +457,11 @@ void Weapon::onUsedWeapon(Player* player, Item* item) const
 	uint32_t manaCost = getManaCost(player);
 	if (manaCost != 0) {
 		player->addManaSpent(manaCost * g_config.getNumber(ConfigManager::RATE_MAGIC));
-		player->changeMana(-(int32_t)manaCost);
+		player->changeMana(-static_cast<int32_t>(manaCost));
 	}
 
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {
-		player->changeSoul(-(int32_t)soul);
+		player->changeSoul(-static_cast<int32_t>(soul));
 	}
 }
 
@@ -617,7 +617,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 	int32_t attackValue = std::max<int32_t>(0, item->getAttack());
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue = int32_t(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->meleeDamageMultiplier);
+	int32_t maxValue = static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->meleeDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
 	}
@@ -747,25 +747,23 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			//chance for one-handed weapons
 			switch (distance) {
 				case 1:
+				case 5:
 					chance = std::min<uint32_t>(skill, 74) + 1;
 					break;
 				case 2:
-					chance = (uint32_t)((float)2.4 * std::min<uint32_t>(skill, 28)) + 8;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 28) * 2.40f) + 8;
 					break;
 				case 3:
-					chance = (uint32_t)((float)1.55 * std::min<uint32_t>(skill, 45)) + 6;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 45) * 1.55f) + 6;
 					break;
 				case 4:
-					chance = (uint32_t)((float)1.25 * std::min<uint32_t>(skill, 58)) + 3;
-					break;
-				case 5:
-					chance = (uint32_t)((float)std::min<uint32_t>(skill, 74)) + 1;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 58) * 1.25f) + 3;
 					break;
 				case 6:
-					chance = (uint32_t)((float)0.8 * std::min<uint32_t>(skill, 90)) + 3;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 90) * 0.80f) + 3;
 					break;
 				case 7:
-					chance = (uint32_t)((float)0.7 * std::min<uint32_t>(skill, 104)) + 2;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 104) * 0.70f) + 2;
 					break;
 				default:
 					chance = hitChance;
@@ -775,25 +773,21 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			//formula for two-handed weapons
 			switch (distance) {
 				case 1:
-					chance = (uint32_t)((float)1.2 * std::min<uint32_t>(skill, 74)) + 1;
+				case 5:
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 74) * 1.20f) + 1;
 					break;
 				case 2:
-					chance = (uint32_t)((float)3.2 * std::min<uint32_t>(skill, 28));
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 28) * 3.20f);
 					break;
 				case 3:
-					chance = (uint32_t)((float)2.0 * std::min<uint32_t>(skill, 45));
+					chance = std::min<uint32_t>(skill, 45) * 2;
 					break;
 				case 4:
-					chance = (uint32_t)((float)1.55 * std::min<uint32_t>(skill, 58));
-					break;
-				case 5:
-					chance = (uint32_t)((float)1.2 * std::min<uint32_t>(skill, 74)) + 1;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 58) * 1.55f);
 					break;
 				case 6:
-					chance = (uint32_t)((float)1.0 * std::min<uint32_t>(skill, 90));
-					break;
 				case 7:
-					chance = (uint32_t)((float)1.0 * std::min<uint32_t>(skill, 90));
+					chance = std::min<uint32_t>(skill, 90);
 					break;
 				default:
 					chance = hitChance;
@@ -802,25 +796,23 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		} else if (maxHitChance == 100) {
 			switch (distance) {
 				case 1:
-					chance = (uint32_t)((float)1.35 * std::min<uint32_t>(skill, 73)) + 1;
+				case 5:
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 73) * 1.35f) + 1;
 					break;
 				case 2:
-					chance = (uint32_t)((float)3.2 * std::min<uint32_t>(skill, 30)) + 4;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 30) * 3.20f) + 4;
 					break;
 				case 3:
-					chance = (uint32_t)((float)2.05 * std::min<uint32_t>(skill, 48)) + 2;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 48) * 2.05f) + 2;
 					break;
 				case 4:
-					chance = (uint32_t)((float)1.5 * std::min<uint32_t>(skill, 65)) + 2;
-					break;
-				case 5:
-					chance = (uint32_t)((float)1.35 * std::min<uint32_t>(skill, 73)) + 1;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 65) * 1.50f) + 2;
 					break;
 				case 6:
-					chance = (uint32_t)((float)1.2 * std::min<uint32_t>(skill, 87)) - 4;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 87) * 1.20f) - 4;
 					break;
 				case 7:
-					chance = (uint32_t)((float)1.1 * std::min<uint32_t>(skill, 90)) + 1;
+					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 90) * 1.10f) + 1;
 					break;
 				default:
 					chance = hitChance;
@@ -930,7 +922,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	int32_t attackSkill = player->getSkill(SKILL_DISTANCE, SKILLVALUE_LEVEL);
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue = int32_t(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->distDamageMultiplier);
+	int32_t maxValue = static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->distDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
 	}

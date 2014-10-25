@@ -200,7 +200,7 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 
 	std::list<Item*> itemList;
 	while (itemCount > 0) {
-		uint16_t n = (uint16_t)std::min<int32_t>(itemCount, 100);
+		uint16_t n = static_cast<uint16_t>(std::min<int32_t>(itemCount, 100));
 		Item* tmpItem = Item::CreateItem(lootBlock.id, n);
 		if (!tmpItem) {
 			break;
@@ -894,7 +894,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 
 	if ((node = monsterNode.child("targetchange"))) {
 		if ((attr = node.attribute("speed")) || (attr = node.attribute("interval"))) {
-			mType->changeTargetSpeed = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
+			mType->changeTargetSpeed = pugi::cast<uint32_t>(attr.value());
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Missing targetchange speed. " << file << std::endl;
 		}

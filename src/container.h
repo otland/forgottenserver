@@ -81,7 +81,7 @@ class Container : public Item, public Cylinder
 		std::string getContentDescription() const;
 
 		uint32_t size() const {
-			return (uint32_t)itemlist.size();
+			return static_cast<uint32_t>(itemlist.size());
 		}
 		bool empty() const {
 			return itemlist.empty();

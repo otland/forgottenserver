@@ -826,9 +826,7 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 	}
 
 	if (payCost) {
-		int32_t manaCost = getManaCost(player);
-		int32_t soulCost = getSoulCost();
-		postCastSpell(player, (uint32_t)manaCost, (uint32_t)soulCost);
+		postCastSpell(player, getManaCost(player), getSoulCost());
 	}
 }
 
@@ -836,12 +834,12 @@ void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) 
 {
 	if (manaCost > 0) {
 		player->addManaSpent(manaCost * g_config.getNumber(ConfigManager::RATE_MAGIC));
-		player->changeMana(-(int32_t)manaCost);
+		player->changeMana(-static_cast<int32_t>(manaCost));
 	}
 
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul)) {
 		if (soulCost > 0) {
-			player->changeSoul(-(int32_t)soulCost);
+			player->changeSoul(-static_cast<int32_t>(soulCost));
 		}
 	}
 }

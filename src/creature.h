@@ -547,7 +547,7 @@ class Creature : virtual public Thing
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {
-			return (0 != (scriptEventsBitField & ((uint32_t)1 << event)));
+			return (0 != (scriptEventsBitField & (static_cast<uint32_t>(1) << event)));
 		}
 		CreatureEventList getCreatureEvents(CreatureEventType_t type);
 

@@ -61,7 +61,7 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			sleepStart = (uint64_t)sleep_start;
+			sleepStart = static_cast<uint64_t>(sleep_start);
 			return ATTR_READ_CONTINUE;
 		}
 
@@ -80,7 +80,8 @@ bool BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 
 	if (sleepStart != 0) {
 		propWriteStream.ADD_UCHAR(ATTR_SLEEPSTART);
-		propWriteStream.ADD_ULONG((uint32_t)sleepStart);
+		// FIXME: should be stored as 64-bit, but we need to retain backwards compatibility
+		propWriteStream.ADD_ULONG(static_cast<uint32_t>(sleepStart));
 	}
 
 	return true;

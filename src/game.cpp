@@ -337,7 +337,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			}
 
 			int32_t subType;
-			if (it.isFluidContainer() && index < int32_t(sizeof(reverseFluidMap) / sizeof(int8_t))) {
+			if (it.isFluidContainer() && index < static_cast<int32_t>(sizeof(reverseFluidMap) / sizeof(uint8_t))) {
 				subType = reverseFluidMap[index];
 			} else {
 				subType = -1;
@@ -366,7 +366,7 @@ void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
 
 			Container* container = dynamic_cast<Container*>(item->getParent());
 			if (container) {
-				pos.y = (uint16_t)0x40 | (uint16_t)player->getContainerID(container);
+				pos.y = static_cast<uint16_t>(0x40) | static_cast<uint16_t>(player->getContainerID(container));
 				pos.z = container->__getIndexOfThing(item);
 				stackpos = pos.z;
 			} else {
@@ -1552,7 +1552,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnMap /*= true*/, slots_t slot /*= CONST_SLOT_WHEREEVER*/)
 {
 	uint32_t remainderCount = 0;
-	ReturnValue ret = internalAddItem(player, item, (int32_t)slot, 0, false, remainderCount);
+	ReturnValue ret = internalAddItem(player, item, static_cast<int32_t>(slot), 0, false, remainderCount);
 	if (remainderCount > 0) {
 		Item* remainderItem = Item::CreateItem(item->getID(), remainderCount);
 		ReturnValue remaindRet = internalAddItem(player->getTile(), remainderItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
@@ -4448,14 +4448,13 @@ void Game::startDecay(Item* item)
 void Game::internalDecayItem(Item* item)
 {
 	const ItemType& it = Item::items[item->getID()];
-
 	if (it.decayTo != 0) {
 		Item* newItem = transformItem(item, it.decayTo);
 		startDecay(newItem);
 	} else {
 		ReturnValue ret = internalRemoveItem(item);
 		if (ret != RETURNVALUE_NOERROR) {
-			std::cout << "DEBUG, internalDecayItem failed, error code: " << (int32_t) ret << "item id: " << item->getID() << std::endl;
+			std::cout << "[Debug - Game::internalDecayItem] internalDecayItem failed, error code: " << static_cast<uint32_t>(ret) << ", item id: " << item->getID() << std::endl;
 		}
 	}
 }
@@ -5296,7 +5295,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 		player->bankBalance -= fee;
 	} else {
-		uint64_t totalPrice = (uint64_t)price * amount;
+		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
 		if (totalPrice > player->bankBalance) {
 			return;
@@ -5330,7 +5329,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	}
 
 	if (offer.type == MARKETACTION_BUY) {
-		player->bankBalance += (uint64_t)offer.price * offer.amount;
+		player->bankBalance += static_cast<uint64_t>(offer.price) * offer.amount;
 		player->sendMarketEnter(player->getLastDepotId());
 	} else {
 		const ItemType& it = Item::items[offer.itemId];
@@ -5403,7 +5402,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
-	uint64_t totalPrice = (uint64_t)offer.price * amount;
+	uint64_t totalPrice = static_cast<uint64_t>(offer.price) * amount;
 
 	if (offer.type == MARKETACTION_BUY) {
 		DepotChest* depotChest = player->getDepotChest(player->getLastDepotId(), false);
@@ -5609,7 +5608,7 @@ void Game::checkExpiredMarketOffers()
 {
 	const ExpiredMarketOfferList& expiredBuyOffers = IOMarket::getExpiredOffers(MARKETACTION_BUY);
 	for (const ExpiredMarketOffer& offer : expiredBuyOffers) {
-		uint64_t totalPrice = (uint64_t)offer.price * offer.amount;
+		uint64_t totalPrice = static_cast<uint64_t>(offer.price) * offer.amount;
 
 		Player* player = getPlayerByGUID(offer.playerId);
 		if (player) {

@@ -192,7 +192,7 @@ class Npc : public Creature
 		const Position& getMasterPos() const {
 			return masterPos;
 		}
-		void setMasterPos(const Position& pos, uint32_t radius = 1) {
+		void setMasterPos(const Position& pos, int32_t radius = 1) {
 			masterPos = pos;
 			if (masterRadius == -1) {
 				masterRadius = radius;

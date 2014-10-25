@@ -1624,7 +1624,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(TALKTYPE_MONSTER_SAY)
 	registerEnum(TALKTYPE_MONSTER_YELL)
 	registerEnum(TALKTYPE_CHANNEL_R2)
-	registerEnum(TALKTYPE_CHANNEL_W)
 
 	registerEnum(TEXTCOLOR_BLUE)
 	registerEnum(TEXTCOLOR_LIGHTGREEN)
@@ -2847,7 +2846,7 @@ int32_t LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		itemCount = std::max<int32_t>(1, count);
 	} else if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
+			itemCount = static_cast<int32_t>(std::ceil(static_cast<float>(count) / 100));
 		} else {
 			itemCount = 1;
 		}
@@ -3011,7 +3010,7 @@ int32_t LuaScriptInterface::luaDoCreateItem(lua_State* L)
 	const ItemType& it = Item::items[itemId];
 	if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
+			itemCount = static_cast<int32_t>(std::ceil(static_cast<float>(count) / 100));
 		}
 
 		subType = count;
@@ -4004,7 +4003,7 @@ int32_t LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 
 	if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = (int32_t)std::ceil(static_cast<float>(count) / 100);
+			itemCount = static_cast<int32_t>(std::ceil(static_cast<float>(count) / 100));
 		}
 
 		subType = count;

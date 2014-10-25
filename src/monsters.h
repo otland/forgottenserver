@@ -97,23 +97,23 @@ class MonsterType
 
 		Outfit_t outfit;
 
-		int32_t creatureAppearEvent;
-		int32_t creatureDisappearEvent;
-		int32_t creatureMoveEvent;
-		int32_t creatureSayEvent;
-		int32_t thinkEvent;
-
 		uint32_t manaCost;
 		uint32_t yellChance;
 		uint32_t yellSpeedTicks;
 		uint32_t staticAttackChance;
 		uint32_t maxSummons;
+		uint32_t changeTargetSpeed;
+
+		int32_t creatureAppearEvent;
+		int32_t creatureDisappearEvent;
+		int32_t creatureMoveEvent;
+		int32_t creatureSayEvent;
+		int32_t thinkEvent;
 		int32_t targetDistance;
 		int32_t runAwayHealth;
 		int32_t baseSpeed;
 		int32_t health;
 		int32_t healthMax;
-		int32_t changeTargetSpeed;
 		int32_t changeTargetChance;
 		int32_t lightLevel;
 		int32_t lightColor;
