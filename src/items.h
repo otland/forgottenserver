@@ -233,8 +233,6 @@ class ItemType
 		uint16_t slotPosition;
 		uint16_t speed;
 		uint16_t wareId;
-		uint16_t lightLevel;
-		uint16_t lightColor;
 
 		MagicEffectClasses magicEffect;
 		Direction bedPartnerDir;
@@ -246,6 +244,8 @@ class ItemType
 		FluidTypes_t fluidSource;
 
 		uint8_t alwaysOnTopOrder;
+		uint8_t lightLevel;
+		uint8_t lightColor;
 
 		bool floorChangeDown;
 		bool floorChangeNorth;

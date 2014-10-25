@@ -1656,7 +1656,7 @@ void ConditionOutfit::addCondition(Creature* creature, const Condition* addCondi
 	}
 }
 
-ConditionLight::ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, int32_t _lightlevel, int32_t _lightcolor) :
+ConditionLight::ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, uint8_t _lightlevel, uint8_t _lightcolor) :
 	Condition(_id, _type, _ticks, _buff, _subId)
 {
 	lightInfo.level = _lightlevel;
@@ -1758,21 +1758,9 @@ bool ConditionLight::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 		lightInfo.level = value;
 		return true;
 	} else if (attr == CONDITIONATTR_LIGHTTICKS) {
-		uint32_t value;
-		if (!propStream.GET_VALUE(value)) {
-			return false;
-		}
-
-		internalLightTicks = value;
-		return true;
+		return propStream.GET_VALUE(internalLightTicks);
 	} else if (attr == CONDITIONATTR_LIGHTINTERVAL) {
-		uint32_t value;
-		if (!propStream.GET_VALUE(value)) {
-			return false;
-		}
-
-		lightChangeInterval = value;
-		return true;
+		return propStream.GET_VALUE(lightChangeInterval);
 	}
 
 	return Condition::unserializeProp(attr, propStream);
@@ -1784,11 +1772,14 @@ bool ConditionLight::serialize(PropWriteStream& propWriteStream)
 		return false;
 	}
 
+	// TODO: color and level could be serialized as 8-bit if we can retain backwards
+	// compatibility, but perhaps we should keep it like this in case they increase
+	// in the future...
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_LIGHTCOLOR);
-	propWriteStream.ADD_VALUE(lightInfo.color);
+	propWriteStream.ADD_ULONG(lightInfo.color);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_LIGHTLEVEL);
-	propWriteStream.ADD_VALUE(lightInfo.level);
+	propWriteStream.ADD_ULONG(lightInfo.level);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_LIGHTTICKS);
 	propWriteStream.ADD_VALUE(internalLightTicks);

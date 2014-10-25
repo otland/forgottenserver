@@ -369,7 +369,7 @@ class ConditionOutfit: public Condition
 class ConditionLight: public Condition
 {
 	public:
-		ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, int32_t _lightlevel, int32_t _lightcolor);
+		ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, uint8_t _lightlevel, uint8_t _lightcolor);
 		virtual ~ConditionLight() {}
 
 		virtual bool startCondition(Creature* creature);

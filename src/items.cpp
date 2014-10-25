@@ -221,9 +221,9 @@ int32_t Items::loadFromOtb(const std::string& file)
 		uint16_t serverId = 0;
 		uint16_t clientId = 0;
 		uint16_t speed = 0;
-		uint16_t lightLevel = 0;
-		uint16_t lightColor = 0;
 		uint16_t wareId = 0;
+		uint8_t lightLevel = 0;
+		uint8_t lightColor = 0;
 		uint8_t alwaysOnTopOrder = 0;
 
 		uint8_t attrib;
@@ -281,8 +281,8 @@ int32_t Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					lightLevel = lb2->lightLevel;
-					lightColor = lb2->lightColor;
+					lightLevel = static_cast<uint8_t>(lb2->lightLevel);
+					lightColor = static_cast<uint8_t>(lb2->lightColor);
 					break;
 				}
 

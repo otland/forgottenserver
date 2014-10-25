@@ -115,8 +115,6 @@ class MonsterType
 		int32_t health;
 		int32_t healthMax;
 		int32_t changeTargetChance;
-		int32_t lightLevel;
-		int32_t lightColor;
 		int32_t conditionImmunities;
 		int32_t damageImmunities;
 		int32_t defense;
@@ -125,7 +123,10 @@ class MonsterType
 		RaceType_t race;
 
 		uint16_t lookcorpse;
+
 		Skulls_t skull;
+		uint8_t lightLevel;
+		uint8_t lightColor;
 
 		bool canPushItems;
 		bool canPushCreatures;

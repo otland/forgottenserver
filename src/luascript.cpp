@@ -4098,8 +4098,8 @@ int32_t LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 		return 1;
 	}
 
-	uint8_t level = getNumber<uint8_t>(L, 2);
-	uint8_t color = getNumber<uint8_t>(L, 3);
+	uint16_t level = getNumber<uint16_t>(L, 2);
+	uint16_t color = getNumber<uint16_t>(L, 3);
 	uint32_t time = getNumber<uint32_t>(L, 4);
 	Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_LIGHT, time, level | (color << 8));
 	creature->addCondition(condition);
@@ -7431,8 +7431,8 @@ int32_t LuaScriptInterface::luaCreatureSetLight(lua_State* L)
 	}
 
 	LightInfo light;
-	light.color = getNumber<uint32_t>(L, 2);;
-	light.level = getNumber<uint32_t>(L, 3);
+	light.color = getNumber<uint8_t>(L, 2);
+	light.level = getNumber<uint8_t>(L, 3);
 	creature->setCreatureLight(light);
 	g_game.changeLight(creature);
 	pushBoolean(L, true);

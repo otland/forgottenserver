@@ -427,13 +427,13 @@ struct Outfit_t {
 };
 
 struct LightInfo {
-	uint32_t level;
-	uint32_t color;
+	uint8_t level;
+	uint8_t color;
 	LightInfo() {
 		level = 0;
 		color = 0;
 	}
-	LightInfo(uint32_t _level, uint32_t _color) {
+	LightInfo(uint8_t _level, uint8_t _color) {
 		level = _level;
 		color = _color;
 	}

@@ -585,7 +585,7 @@ class Game
 		WorldType_t worldType;
 
 		LightState_t lightState;
-		int32_t lightLevel;
+		uint8_t lightLevel;
 		int32_t lightHour;
 		int32_t lightHourDelta;
 
