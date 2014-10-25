@@ -235,7 +235,7 @@ class Player : public Creature, public Cylinder
 			this->guild = guild;
 		}
 
-		int8_t getGuildLevel() const {
+		uint8_t getGuildLevel() const {
 			return guildLevel;
 		}
 		void setGuildLevel(uint8_t newGuildLevel);
@@ -619,7 +619,7 @@ class Player : public Creature, public Cylinder
 		virtual bool hasExtraSwing() {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());
 		}
-		int32_t getShootRange() const {
+		uint8_t getShootRange() const {
 			return shootRange;
 		}
 
@@ -1297,7 +1297,6 @@ class Player : public Creature, public Cylinder
 		int32_t offlineTrainingSkill;
 		int32_t offlineTrainingTime;
 		int32_t idleTime;
-		int32_t shootRange;
 
 		uint16_t lastStatsTrainingTime;
 		uint16_t staminaMinutes;
@@ -1306,6 +1305,7 @@ class Player : public Creature, public Cylinder
 
 		uint8_t blessings;
 		uint8_t guildLevel;
+		uint8_t shootRange;
 
 		PlayerSex_t sex;
 		OperatingSystem_t operatingSystem;

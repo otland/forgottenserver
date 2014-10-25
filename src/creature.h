@@ -224,7 +224,7 @@ class Creature : virtual public Thing
 		void setBaseSpeed(uint32_t newBaseSpeed) {
 			baseSpeed = newBaseSpeed;
 		}
-		int32_t getBaseSpeed() const {
+		uint32_t getBaseSpeed() const {
 			return baseSpeed;
 		}
 

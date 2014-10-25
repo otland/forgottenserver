@@ -103,6 +103,9 @@ class MonsterType
 		uint32_t staticAttackChance;
 		uint32_t maxSummons;
 		uint32_t changeTargetSpeed;
+		uint32_t conditionImmunities;
+		uint32_t damageImmunities;
+		uint32_t baseSpeed;
 
 		int32_t creatureAppearEvent;
 		int32_t creatureDisappearEvent;
@@ -111,12 +114,9 @@ class MonsterType
 		int32_t thinkEvent;
 		int32_t targetDistance;
 		int32_t runAwayHealth;
-		int32_t baseSpeed;
 		int32_t health;
 		int32_t healthMax;
 		int32_t changeTargetChance;
-		int32_t conditionImmunities;
-		int32_t damageImmunities;
 		int32_t defense;
 		int32_t armor;
 

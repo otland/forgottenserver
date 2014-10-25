@@ -552,7 +552,7 @@ class Item : virtual public Thing
 		Ammo_t	getAmmoType() const {
 			return items[id].ammoType;
 		}
-		int32_t getShootRange() const {
+		uint8_t getShootRange() const {
 			return items[id].shootRange;
 		}
 

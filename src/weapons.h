@@ -108,21 +108,22 @@ class Weapon : public Event
 
 		uint32_t getManaCost(const Player* player) const;
 
-		uint16_t id;
-		bool enabled;
-		bool premium;
-		bool wieldUnproperly;
+		CombatParams params;
+
 		uint32_t level;
 		uint32_t magLevel;
 		uint32_t mana;
 		uint32_t manaPercent;
 		uint32_t soul;
-		int32_t range;
+		uint16_t id;
 		AmmoAction_t ammoAction;
-		CombatParams params;
+		uint8_t range;
+		bool enabled;
+		bool premium;
+		bool wieldUnproperly;
 
 	private:
-		std::map<int32_t, bool> vocWeaponMap;
+		std::map<uint16_t, bool> vocWeaponMap;
 		friend class Combat;
 };
 

@@ -312,7 +312,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 		return 0;
 	}
 
-	int32_t trueRange;
+	uint8_t trueRange;
 	const ItemType& it = Item::items[getID()];
 	if (it.weaponType == WEAPON_AMMO) {
 		trueRange = player->getShootRange();
@@ -320,7 +320,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 		trueRange = range;
 	}
 
-	if (std::max<int32_t>(Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos)) > trueRange) {
+	if (std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos)) > trueRange) {
 		return 0;
 	}
 

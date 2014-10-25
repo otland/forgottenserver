@@ -871,9 +871,9 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 
 				mType->staticAttackChance = staticAttack;
 			} else if (strcasecmp(attrName, "lightlevel") == 0) {
-				mType->lightLevel = pugi::cast<uint8_t>(attr.value());
+				mType->lightLevel = pugi::cast<uint16_t>(attr.value());
 			} else if (strcasecmp(attrName, "lightcolor") == 0) {
-				mType->lightColor = pugi::cast<uint8_t>(attr.value());
+				mType->lightColor = pugi::cast<uint16_t>(attr.value());
 			} else if (strcasecmp(attrName, "targetdistance") == 0) {
 				mType->targetDistance = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
 			} else if (strcasecmp(attrName, "runonhealth") == 0) {

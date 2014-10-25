@@ -672,7 +672,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 				std::cout << "[Warning - Items::parseItemNode] Unknown effect: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if (tmpStrValue == "range") {
-			it.shootRange = pugi::cast<int32_t>(valueAttribute.value());
+			it.shootRange = pugi::cast<uint16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "stopduration") {
 			it.stopTime = valueAttribute.as_bool();
 		} else if (tmpStrValue == "decayto") {

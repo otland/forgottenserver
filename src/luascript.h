@@ -176,7 +176,7 @@ class ScriptEnvironment
 		static ThingMap m_globalMap;
 
 		//item/creature map
-		int32_t m_lastUID;
+		uint32_t m_lastUID;
 		ThingMap m_localMap;
 
 		//temporary item list

@@ -98,7 +98,7 @@ class Monster : public Creature
 			return mType->defense;
 		}
 		virtual bool isPushable() const {
-			return mType->pushable && (baseSpeed > 0);
+			return mType->pushable && baseSpeed != 0;
 		}
 		virtual bool isAttackable() const {
 			return mType->isAttackable;

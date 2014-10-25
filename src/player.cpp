@@ -1866,9 +1866,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		mana = manaMax;
 
 		updateBaseSpeed();
-
-		int32_t newSpeed = getBaseSpeed();
-		setBaseSpeed(newSpeed);
+		setBaseSpeed(getBaseSpeed());
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
@@ -1945,9 +1943,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		mana = manaMax;
 
 		updateBaseSpeed();
-
-		int32_t newSpeed = getBaseSpeed();
-		setBaseSpeed(newSpeed);
+		setBaseSpeed(getBaseSpeed());
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);

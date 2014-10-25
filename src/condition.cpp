@@ -140,10 +140,10 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 bool Condition::serialize(PropWriteStream& propWriteStream)
 {
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_TYPE);
-	propWriteStream.ADD_VALUE(static_cast<uint32_t>(conditionType));
+	propWriteStream.ADD_ULONG(conditionType);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_ID);
-	propWriteStream.ADD_VALUE(static_cast<uint32_t>(id));
+	propWriteStream.ADD_ULONG(id);
 
 	propWriteStream.ADD_UCHAR(CONDITIONATTR_TICKS);
 	propWriteStream.ADD_VALUE(ticks);

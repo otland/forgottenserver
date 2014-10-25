@@ -58,11 +58,11 @@ class Protocol
 
 		uint32_t getIP() const;
 
-		int32_t addRef() {
-			return ++m_refCount;
+		void addRef() {
+			++m_refCount;
 		}
-		int32_t unRef() {
-			return --m_refCount;
+		void unRef() {
+			--m_refCount;
 		}
 
 		//Use this function for autosend messages only

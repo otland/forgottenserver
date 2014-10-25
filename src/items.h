@@ -208,7 +208,6 @@ class ItemType
 		uint32_t minReqLevel;
 		uint32_t minReqMagicLevel;
 		uint32_t charges;
-		uint32_t shootRange;
 		int32_t breakChance;
 		int32_t hitChance;
 		int32_t maxHitChance;
@@ -246,6 +245,7 @@ class ItemType
 		uint8_t alwaysOnTopOrder;
 		uint8_t lightLevel;
 		uint8_t lightColor;
+		uint8_t shootRange;
 
 		bool floorChangeDown;
 		bool floorChangeNorth;
