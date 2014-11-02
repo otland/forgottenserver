@@ -2576,10 +2576,17 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 				if (!g_config.getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
 					if (item->getWeaponType() != WEAPON_SHIELD) {
 						ret = RETURNVALUE_CANNOTBEDRESSED;
-					} else if (inventory[CONST_SLOT_LEFT] && (slotPosition & SLOTP_TWO_HAND)) {
-						ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
 					} else {
-						ret = RETURNVALUE_NOERROR;
+						const Item* leftItem = inventory[CONST_SLOT_LEFT];
+						if (leftItem) {
+							if (leftItem->getSlotPosition() & SLOTP_TWO_HAND) {
+								ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
+							} else if (slotPosition & SLOTP_TWO_HAND) {
+								ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
+							}
+						} else {
+							ret = RETURNVALUE_NOERROR;
+						}
 					}
 				} else if (slotPosition & SLOTP_TWO_HAND) {
 					if (inventory[CONST_SLOT_LEFT] && inventory[CONST_SLOT_LEFT] != item) {
