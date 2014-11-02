@@ -737,7 +737,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 							gainTicks = 1;
 						}
 
-						player->addOfflineTrainingTries(SKILL_MAGLEVEL, offlineTrainingTime * (vocation->getManaGainAmount() / gainTicks));
+						player->addOfflineTrainingTries(SKILL_MAGLEVEL, offlineTrainingTime * ((double)vocation->getManaGainAmount() / gainTicks));
 					}
 
 					if (player->addOfflineTrainingTries(SKILL_SHIELD, offlineTrainingTime / 4) || sendUpdateSkills) {
