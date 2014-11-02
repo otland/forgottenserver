@@ -87,10 +87,6 @@ class ProtocolGame : public Protocol
 			return version;
 		}
 
-		const std::unordered_set<uint32_t>& getKnownCreatures() const {
-			return knownCreatureSet;
-		}
-
 	private:
 		std::unordered_set<uint32_t> knownCreatureSet;
 
