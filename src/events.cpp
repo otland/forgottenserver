@@ -141,7 +141,7 @@ bool Events::load()
 bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
 	// Creature:onChangeOutfit(outfit) or Creature.onChangeOutfit(self, outfit)
-    if (creatureOnChangeOutfit == -1) {
+	if (creatureOnChangeOutfit == -1) {
 		return true;
 	}
 
@@ -151,10 +151,10 @@ bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& out
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-    env->setScriptId(creatureOnChangeOutfit, &scriptInterface);
+	env->setScriptId(creatureOnChangeOutfit, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-    scriptInterface.pushFunction(creatureOnChangeOutfit);
+	scriptInterface.pushFunction(creatureOnChangeOutfit);
 
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);

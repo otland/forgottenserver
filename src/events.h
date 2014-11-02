@@ -60,7 +60,7 @@ class Events
 		LuaScriptInterface scriptInterface;
 
 		// Creature
-        int32_t creatureOnChangeOutfit;
+		int32_t creatureOnChangeOutfit;
 
 		// Party
 		int32_t partyOnJoin;
