@@ -2579,10 +2579,10 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 					} else {
 						const Item* leftItem = inventory[CONST_SLOT_LEFT];
 						if (leftItem) {
-							if (leftItem->getSlotPosition() & SLOTP_TWO_HAND) {
+							if ((leftItem->getSlotPosition() | slotPosition) & SLOTP_TWO_HAND) {
 								ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
-							} else if (slotPosition & SLOTP_TWO_HAND) {
-								ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
+							} else {
+								ret = RETURNVALUE_NOERROR;
 							}
 						} else {
 							ret = RETURNVALUE_NOERROR;
