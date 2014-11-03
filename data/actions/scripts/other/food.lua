@@ -98,13 +98,12 @@ local FOODS = {
 	[20101] = {12, "Smack."} -- rat cheese
 }
 
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 	local food = FOODS[item.itemid]
 	if food == nil then
 		return false
 	end
 
-	local player = Player(cid)
 	local condition = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 	if condition and math.floor(condition:getTicks() / 1000 + food[1]) >= 1200 then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are full.")
@@ -113,6 +112,5 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		player:say(food[2], TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 	end
-
 	return true
 end

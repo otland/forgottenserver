@@ -1,9 +1,9 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
-	local count = getPlayerInstantSpellCount(cid)
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+	local count = getPlayerInstantSpellCount(player)
 	local text = ""
 	local t = {}
 	for i = 0, count - 1 do
-		local spell = getPlayerInstantSpellInfo(cid, i)
+		local spell = getPlayerInstantSpellInfo(player, i)
 		if spell.level ~= 0 then
 			if spell.manapercent > 0 then
 				spell.mana = spell.manapercent .. "%"
@@ -24,6 +24,6 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		end
 		text = text .. line .. "  " .. spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
 	end
-	Player(cid):showTextDialog(item.itemid, text)
+	player:showTextDialog(item.itemid, text)
 	return true
 end

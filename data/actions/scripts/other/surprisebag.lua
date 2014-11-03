@@ -10,7 +10,7 @@ local config = {
 	}
 }
 
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 	local present = config[item.itemid]
 	if not present then
 		return false
@@ -23,7 +23,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		gift = gift[1]
 	end
 
-	Player(cid):addItem(gift, count)
+	player:addItem(gift, count)
 	Item(item.uid):remove(1)
 	fromPosition:sendMagicEffect(CONST_ME_GIFT_WRAPS)
 	return true

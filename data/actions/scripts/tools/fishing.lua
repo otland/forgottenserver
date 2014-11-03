@@ -5,7 +5,7 @@ local lootRare = {2143, 2146, 2149, 7158, 7159}
 local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 	local targetId = itemEx.itemid
 	if not isInArray(waterIds, itemEx.itemid) then
 		return false
@@ -14,8 +14,8 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	if targetId == 10499 then
 		local targetItem = Item(itemEx.uid)
 		local owner = targetItem:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
-		if owner ~= 0 and owner ~= cid then
-			Player(cid):sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
+		if owner ~= 0 and owner ~= player:getId() then
+			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
 			return true
 		end
 
@@ -24,13 +24,13 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 
 		local rareChance = math.random(1, 100)
 		if rareChance == 1 then
-			Player(cid):addItem(lootVeryRare[math.random(#lootVeryRare)], 1)
+			player:addItem(lootVeryRare[math.random(#lootVeryRare)], 1)
 		elseif rareChance <= 3 then
-			Player(cid):addItem(lootRare[math.random(#lootRare)], 1)
+			player:addItem(lootRare[math.random(#lootRare)], 1)
 		elseif rareChance <= 10 then
-			Player(cid):addItem(lootCommon[math.random(#lootCommon)], 1)
+			player:addItem(lootCommon[math.random(#lootCommon)], 1)
 		else
-			Player(cid):addItem(lootTrash[math.random(#lootTrash)], 1)
+			player:addItem(lootTrash[math.random(#lootTrash)], 1)
 		end
 		return true
 	end
@@ -43,7 +43,6 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		return true
 	end
 
-	local player = Player(cid)
 	player:addSkillTries(SKILL_FISHING, 1)
 	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
 		if useWorms and not player:removeItem("worm", 1) then

@@ -23,19 +23,18 @@ local exhaust = Condition(CONDITION_EXHAUST_HEAL)
 exhaust:setParameter(CONDITION_PARAM_TICKS, (configManager.getNumber(configKeys.EX_ACTIONS_DELAY_INTERVAL) - 100))
 -- 1000 - 100 due to exact condition timing. -100 doesn't hurt us, and players don't have reminding ~50ms exhaustion.
 
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 	if itemEx.itemid ~= 1 or itemEx.type ~= THING_TYPE_PLAYER then
 		return true
 	end
 
-	local player = Player(cid)
 	if player:getCondition(CONDITION_EXHAUST_HEAL) then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUAREEXHAUSTED))
 		return true
 	end
 
 	if item.itemid == antidotePot then
-		if not doCombat(cid, antidote, numberToVariant(cid)) then
+		if not doCombat(player, antidote, numberToVariant(player:getId())) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -43,7 +42,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == smallHealthPot then
-		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 60, 90, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 60, 90, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -51,7 +50,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == healthPot then
-		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 125, 175, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 125, 175, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -59,7 +58,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == manaPot then
-		if not doTargetCombatMana(0, cid, 75, 125, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatMana(0, player, 75, 125, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -72,7 +71,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -85,7 +84,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 			return true
 		end
 
-		if not doTargetCombatMana(0, cid, 115, 185, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatMana(0, player, 115, 185, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -98,7 +97,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) or not doTargetCombatMana(0, cid, 100, 200, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) or not doTargetCombatMana(0, player, 100, 200, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -111,7 +110,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 425, 575, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 425, 575, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -124,7 +123,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 			return true
 		end
 
-		if not doTargetCombatMana(0, cid, 150, 250, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatMana(0, player, 150, 250, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -137,7 +136,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, cid, COMBAT_HEALING, 650, 850, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 650, 850, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
@@ -145,6 +144,5 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 		Item(item.uid):remove(1)
 		player:addItem(greatEmptyPot, 1)
 	end
-
 	return true
 end

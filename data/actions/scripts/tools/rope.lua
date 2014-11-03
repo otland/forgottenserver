@@ -5,11 +5,10 @@ local holeId = {
 	8252, 8253, 8254, 8255, 8256, 8972, 9606, 9625, 13190, 14461, 19519, 21536
 }
 
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 	local tile = toPosition:getTile()
-
 	if isInArray(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
-		Player(cid):teleportTo({x = toPosition.x, y = toPosition.y + 1, z = toPosition.z - 1}, false)
+		player:teleportTo({x = toPosition.x, y = toPosition.y + 1, z = toPosition.z - 1}, false)
 		return true
 	elseif isInArray(holeId, itemEx.itemid) then
 		toPosition.z = toPosition.z + 1
@@ -20,8 +19,8 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 				return thing:moveTo({x = toPosition.x, y = toPosition.y + 1, z = toPosition.z - 1})
 			end
 		end
-		return Player(cid):sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return true
 	end
-
 	return false
 end
