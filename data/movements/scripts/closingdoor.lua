@@ -1,16 +1,17 @@
-function onStepOut(cid, item, position, fromPosition)
+function onStepOut(creature, item, position, fromPosition)
 	local tile = position:getTile()
 	if tile:getCreatureCount() > 0 then
 		return true
 	end
 
 	local newPosition = {x = position.x + 1, y = position.y, z = position.z}
-	local query = Tile(newPosition):queryAdd(cid)
+	local query = Tile(newPosition):queryAdd(creature)
 	if query ~= RETURNVALUE_NOERROR or query == RETURNVALUE_NOTENOUGHROOM then
 		newPosition.x = newPosition.x - 1
 		newPosition.y = newPosition.y + 1
-		query = Tile(newPosition):queryAdd(cid)
+		query = Tile(newPosition):queryAdd(creature)
 	end
+
 	if query == RETURNVALUE_NOERROR and query ~= RETURNVALUE_NOTENOUGHROOM then
 		doRelocate(position, newPosition)
 	end

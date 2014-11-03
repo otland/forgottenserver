@@ -1,14 +1,16 @@
 local increasing = {[416] = 417, [426] = 425, [446] = 447, [3216] = 3217, [3202] = 3215, [11062] = 11063}
 local decreasing = {[417] = 416, [425] = 426, [447] = 446, [3217] = 3216, [3215] = 3202, [11063] = 11062}
 
-function onStepIn(cid, item, position, fromPosition)
+function onStepIn(creature, item, position, fromPosition)
 	if not increasing[item.itemid] then
-		return false
+		return true
 	end
-	local player = Player(cid)
-	if not player or player:isInGhostMode() then
-		return false
+
+	local player = creature:getPlayer()
+	if player == nil or player:isInGhostMode() then
+		return true
 	end
+
 	Item(item.uid):transform(increasing[item.itemid])
 
 	if item.actionid >= 1000 then
@@ -37,19 +39,18 @@ function onStepIn(cid, item, position, fromPosition)
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
 		return true
 	end
-
 	return true
 end
 
-function onStepOut(cid, item, position, fromPosition)
+function onStepOut(creature, item, position, fromPosition)
 	if not decreasing[item.itemid] then
-		return false
+		return true
 	end
-	local player = Player(cid)
-	if not player or player:isInGhostMode() then
-		return false
-	end
-	Item(item.uid):transform(decreasing[item.itemid])
 
+	if creature:isPlayer and creature:isInGhostMode() then
+		return true
+	end
+
+	Item(item.uid):transform(decreasing[item.itemid])
 	return true
 end

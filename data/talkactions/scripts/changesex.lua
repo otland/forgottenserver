@@ -1,7 +1,6 @@
 local premiumDaysCost = 3
 
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if player:getGroup():getAccess() then
 		player:setSex(player:getSex() == PLAYERSEX_FEMALE and PLAYERSEX_MALE or PLAYERSEX_FEMALE)
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "You have changed your sex.")

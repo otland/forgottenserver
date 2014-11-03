@@ -1,7 +1,6 @@
 local banDays = 7
 
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
 		return true
 	end

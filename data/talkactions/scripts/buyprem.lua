@@ -4,11 +4,11 @@ local config = {
 	price = 10000
 }
 
-function onSay(cid, words, param)
+function onSay(player, words, param)
 	if configManager.getBoolean(configKeys.FREE_PREMIUM) then
 		return true
 	end
-	local player = Player(cid)
+
 	if player:getPremiumDays() <= config.maxDays then
 		if player:removeMoney(config.price) then
 			player:addPremiumDays(config.days)

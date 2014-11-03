@@ -506,7 +506,7 @@ uint32_t Weapon::getManaCost(const Player* player) const
 
 bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 {
-	//onUseWeapon(cid, var)
+	//onUseWeapon(player, var)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - Weapon::executeUseWeapon] Call stack overflow" << std::endl;
 		return false;
@@ -518,7 +518,8 @@ bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player->getID());
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 	m_scriptInterface->pushVariant(L, var);
 
 	return m_scriptInterface->callFunction(2);

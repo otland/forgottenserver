@@ -5,12 +5,13 @@ local traps = {
 	[4208] = {transformTo = 4209, damage = {-15, -30}, type = COMBAT_EARTHDAMAGE}
 }
 	
-function onStepIn(cid, item, position, fromPosition)
+function onStepIn(creature, item, position, fromPosition)
 	local trap = traps[item.itemid]
 	if trap ~= nil then
-		if Monster(cid) then
-			doTargetCombatHealth(0, cid, trap.type or COMBAT_PHYSICALDAMAGE, trap.damage[1], trap.damage[2], CONST_ME_NONE)
+		if creature:isMonster() then
+			doTargetCombatHealth(0, creature, trap.type or COMBAT_PHYSICALDAMAGE, trap.damage[1], trap.damage[2], CONST_ME_NONE)
 		end
+
 		if trap.transformTo ~= nil then
 			Item(item.uid):transform(trap.transformTo)
 		end
@@ -18,7 +19,7 @@ function onStepIn(cid, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(cid, item, position, fromPosition)
+function onStepOut(creature, item, position, fromPosition)
 	Item(item.uid):transform(item.itemid - 1)
 	return true
 end

@@ -1174,7 +1174,8 @@ void NpcScript::onCreatureAppear(const Creature* creature)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureAppear);
-	lua_pushnumber(L, creature->getID());
+	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	m_scriptInterface->callFunction(1);
 }
 
@@ -1184,7 +1185,7 @@ void NpcScript::onCreatureDisappear(const Creature* creature)
 		return;
 	}
 
-	//onCreatureDisappear(id)
+	//onCreatureDisappear(creature)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureDisappear] Call stack overflow" << std::endl;
 		return;
@@ -1196,7 +1197,8 @@ void NpcScript::onCreatureDisappear(const Creature* creature)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureDisappear);
-	lua_pushnumber(L, creature->getID());
+	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	m_scriptInterface->callFunction(1);
 }
 
@@ -1218,7 +1220,8 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureMove);
-	lua_pushnumber(L, creature->getID());
+	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushPosition(L, oldPos);
 	LuaScriptInterface::pushPosition(L, newPos);
 	m_scriptInterface->callFunction(3);
@@ -1230,7 +1233,7 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 		return;
 	}
 
-	//onCreatureSay(cid, type, msg)
+	//onCreatureSay(creature, type, msg)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureSay] Call stack overflow" << std::endl;
 		return;
@@ -1242,7 +1245,8 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureSay);
-	lua_pushnumber(L, creature->getID());
+	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	lua_pushnumber(L, type);
 	LuaScriptInterface::pushString(L, text);
 	m_scriptInterface->callFunction(3);
@@ -1255,7 +1259,7 @@ void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t i
 		return;
 	}
 
-	//"onBuy"(cid, itemid, count, amount, ignore, inbackpacks)
+	//onBuy(player, itemid, count, amount, ignore, inbackpacks)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onPlayerTrade] Call stack overflow" << std::endl;
 		return;
@@ -1267,7 +1271,8 @@ void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t i
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	LuaScriptInterface::pushCallback(L, callback);
-	lua_pushnumber(L, player->getID());
+	LuaScriptInterface::pushUserdata<Player>(L, const_cast<Player*>(player));
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 	lua_pushnumber(L, itemid);
 	lua_pushnumber(L, count);
 	lua_pushnumber(L, amount);
@@ -1282,7 +1287,7 @@ void NpcScript::onPlayerCloseChannel(const Player* player)
 		return;
 	}
 
-	//onPlayerCloseChannel(cid)
+	//onPlayerCloseChannel(player)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onPlayerCloseChannel] Call stack overflow" << std::endl;
 		return;
@@ -1294,7 +1299,8 @@ void NpcScript::onPlayerCloseChannel(const Player* player)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onPlayerCloseChannel);
-	lua_pushnumber(L, player->getID());
+	LuaScriptInterface::pushUserdata<Player>(L, const_cast<Player*>(player));
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 	m_scriptInterface->callFunction(1);
 }
 
@@ -1304,7 +1310,7 @@ void NpcScript::onPlayerEndTrade(const Player* player)
 		return;
 	}
 
-	//onPlayerEndTrade(cid)
+	//onPlayerEndTrade(player)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onPlayerEndTrade] Call stack overflow" << std::endl;
 		return;
@@ -1316,7 +1322,8 @@ void NpcScript::onPlayerEndTrade(const Player* player)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onPlayerEndTrade);
-	lua_pushnumber(L, player->getID());
+	LuaScriptInterface::pushUserdata<Player>(L, const_cast<Player*>(player));
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 	m_scriptInterface->callFunction(1);
 }
 

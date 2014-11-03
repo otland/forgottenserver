@@ -974,7 +974,7 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 
 void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool useCharges) const
 {
-	//"onGetPlayerMinMaxValues"(...)
+	//onGetPlayerMinMaxValues(...)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - ValueCallback::getMinMaxValues] Call stack overflow" << std::endl;
 		return;
@@ -989,12 +989,14 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player->getID());
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	int32_t parameters = 1;
 	switch (type) {
 		case COMBAT_FORMULA_LEVELMAGIC: {
-			//"onGetPlayerMinMaxValues"(cid, level, maglevel)
+			//onGetPlayerMinMaxValues(player, level, maglevel)
 			lua_pushnumber(L, player->getLevel());
 			lua_pushnumber(L, player->getMagicLevel());
 			parameters += 2;
@@ -1002,7 +1004,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 		}
 
 		case COMBAT_FORMULA_SKILL: {
-			//"onGetPlayerMinMaxValues"(cid, attackSkill, attackValue, attackFactor)
+			//onGetPlayerMinMaxValues(player, attackSkill, attackValue, attackFactor)
 			Item* tool = player->getWeapon();
 			const Weapon* weapon = g_weapons->getWeapon(tool);
 
@@ -1056,7 +1058,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 
 void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 {
-	//"onTileCombat"(cid, pos)
+	//onTileCombat(cid, pos)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TileCallback::onTileCombat] Call stack overflow" << std::endl;
 		return;
@@ -1088,7 +1090,7 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 
 void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 {
-	//"onTargetCombat"(cid, target)
+	//onTargetCombat(creature, target)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TargetCallback::onTargetCombat] Call stack overflow" << std::endl;
 		return;
@@ -1102,23 +1104,21 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
-	uint32_t cid;
-	if (creature) {
-		cid = creature->getID();
-	} else {
-		cid = 0;
-	}
-
-	uint32_t targetCid;
-	if (target) {
-		targetCid = target->getID();
-	} else {
-		targetCid = 0;
-	}
-
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, cid);
-	lua_pushnumber(L, targetCid);
+
+	if (creature) {
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+	} else {
+		lua_pushnil(L);
+	}
+
+	if (target) {
+		LuaScriptInterface::pushUserdata<Creature>(L, target);
+		LuaScriptInterface::setCreatureMetatable(L, -1, target);
+	} else {
+		lua_pushnil(L);
+	}
 
 	int32_t size0 = lua_gettop(L);
 

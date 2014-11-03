@@ -21,8 +21,7 @@ local function getExpForLevel(level)
 	return ((50 * level * level * level) - (150 * level * level) + (400 * level)) / 3
 end
 
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
 		return true
 	end

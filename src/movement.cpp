@@ -848,8 +848,8 @@ uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position
 
 bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 {
-	//onStepIn(cid, item, pos, fromPosition)
-	//onStepOut(cid, item, pos, fromPosition)
+	//onStepIn(creature, item, pos, fromPosition)
+	//onStepOut(creature, item, pos, fromPosition)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeStep] Call stack overflow" << std::endl;
 		return false;
@@ -861,7 +861,8 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, creature->getID());
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 	LuaScriptInterface::pushPosition(L, pos);
 	LuaScriptInterface::pushPosition(L, creature->getLastPosition());
@@ -880,8 +881,8 @@ uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool boo
 
 bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 {
-	//onEquip(cid, item, slot)
-	//onDeEquip(cid, item, slot)
+	//onEquip(player, item, slot)
+	//onDeEquip(player, item, slot)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeEquip] Call stack overflow" << std::endl;
 		return false;
@@ -893,7 +894,8 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 	lua_State* L = m_scriptInterface->getLuaState();
 
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, player->getID());
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
 	LuaScriptInterface::pushThing(L, item, env->addThing(item));
 	lua_pushnumber(L, slot);
 
