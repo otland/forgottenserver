@@ -1131,7 +1131,6 @@ class Player : public Creature, public Cylinder
 		}
 
 		virtual void onThink(uint32_t interval);
-		virtual void onAttacking(uint32_t interval);
 
 		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
 		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);

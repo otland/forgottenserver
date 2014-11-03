@@ -388,7 +388,7 @@ class Creature : virtual public Thing
 		}
 
 		virtual void onThink(uint32_t interval);
-		virtual void onAttacking(uint32_t interval);
+		void onAttacking(uint32_t interval);
 		virtual void onWalk();
 		virtual bool getNextStep(Direction& dir, uint32_t& flags);
 

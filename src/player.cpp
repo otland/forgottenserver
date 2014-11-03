@@ -3402,11 +3402,6 @@ void Player::getPathSearchParams(const Creature* creature, FindPathParams& fpp) 
 	fpp.fullPathSearch = true;
 }
 
-void Player::onAttacking(uint32_t interval)
-{
-	Creature::onAttacking(interval);
-}
-
 void Player::doAttacking(uint32_t)
 {
 	if (lastAttack == 0) {
