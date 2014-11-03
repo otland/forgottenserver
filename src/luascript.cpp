@@ -8068,7 +8068,7 @@ int32_t LuaScriptInterface::luaPlayerGetCapacity(lua_State* L)
 	// player:getCapacity()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, static_cast<uint64_t>(player->getCapacity() * 100));
+		lua_pushnumber(L, player->getCapacity());
 	} else {
 		lua_pushnil(L);
 	}
@@ -8080,7 +8080,7 @@ int32_t LuaScriptInterface::luaPlayerSetCapacity(lua_State* L)
 	// player:setCapacity(capacity)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->capacity = std::max(0.0, std::min<double>(10000.0, getNumber<double>(L, 2) / 100));
+		player->capacity = getNumber<uint32_t>(L, 2);
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
@@ -8094,7 +8094,7 @@ int32_t LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 	// player:getFreeCapacity()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, static_cast<uint64_t>(player->getFreeCapacity() * 100));
+		lua_pushnumber(L, player->getFreeCapacity());
 	} else {
 		lua_pushnil(L);
 	}
@@ -11127,7 +11127,7 @@ int32_t LuaScriptInterface::luaItemTypeGetWeight(lua_State* L)
 		return 1;
 	}
 
-	uint64_t weight = (itemType->weight * std::max<int32_t>(1, count)) * 100;
+	uint64_t weight = (itemType->weight * std::max<int32_t>(1, count));
 	lua_pushnumber(L, weight);
 	return 1;
 }

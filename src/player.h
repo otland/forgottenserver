@@ -472,23 +472,22 @@ class Player : public Creature, public Cylinder
 
 		bool removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped = false) const;
 
-		double getCapacity() const {
+		uint32_t getCapacity() const {
 			if (hasFlag(PlayerFlag_CannotPickupItem)) {
-				return 0.00;
+				return 0;
 			} else if (hasFlag(PlayerFlag_HasInfiniteCapacity)) {
-				return 10000.00;
-			} else {
-				return capacity;
+				return std::numeric_limits<uint32_t>::max();
 			}
+			return capacity;
 		}
 
-		double getFreeCapacity() const {
+		uint32_t getFreeCapacity() const {
 			if (hasFlag(PlayerFlag_CannotPickupItem)) {
-				return 0.00;
+				return 0;
 			} else if (hasFlag(PlayerFlag_HasInfiniteCapacity)) {
-				return 10000.00;
+				return std::numeric_limits<uint32_t>::max();
 			} else {
-				return std::max<double>(0.00, capacity - inventoryWeight);
+				return std::max<int32_t>(0, capacity - inventoryWeight);
 			}
 		}
 
@@ -1232,9 +1231,6 @@ class Player : public Creature, public Cylinder
 		time_t lastLogout;
 		time_t nextUseStaminaTime;
 
-		double inventoryWeight;
-		double capacity;
-
 		uint64_t experience;
 		uint64_t manaSpent;
 		uint64_t lastAttack;
@@ -1264,6 +1260,8 @@ class Player : public Creature, public Cylinder
 		Town* town;
 		Vocation* vocation;
 
+		uint32_t inventoryWeight;
+		uint32_t capacity;
 		uint32_t damageImmunities;
 		uint32_t conditionImmunities;
 		uint32_t conditionSuppressions;

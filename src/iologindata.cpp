@@ -254,7 +254,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	player->soul = result->getDataInt("soul");
-	player->capacity = result->getDataInt("cap");
+	player->capacity = result->getDataInt("cap") * 100;
 	player->blessings = result->getDataInt("blessings");
 
 	unsigned long conditionsSize;
@@ -647,7 +647,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`posy` = " << loginPosition.getY() << ',';
 	query << "`posz` = " << loginPosition.getZ() << ',';
 
-	query << "`cap` = " << player->getCapacity() << ',';
+	query << "`cap` = " << (player->capacity / 100) << ',';
 	query << "`sex` = " << player->sex << ',';
 
 	if (player->lastLoginSaved != 0) {

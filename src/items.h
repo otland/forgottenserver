@@ -200,8 +200,7 @@ class ItemType
 		Abilities* abilities;
 		Condition* condition;
 
-		float weight;
-
+		uint32_t weight;
 		uint32_t levelDoor;
 		uint32_t decayTime;
 		uint32_t wieldInfo;

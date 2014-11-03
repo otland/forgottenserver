@@ -666,10 +666,10 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 	}
 }
 
-double Item::getWeight() const
+uint32_t Item::getWeight() const
 {
 	if (isStackable()) {
-		return items[id].weight * std::max<int32_t>(1, getItemCount());
+		return items[id].weight * std::max<uint32_t>(1, getItemCount());
 	}
 	return items[id].weight;
 }
@@ -1202,8 +1202,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 
 	if (lookDistance <= 1) {
-		double weight = (item == nullptr ? it.weight : item->getWeight());
-		if (weight > 0 && it.pickupable) {
+		uint32_t weight = (item == nullptr ? it.weight : item->getWeight());
+		if (weight != 0 && it.pickupable) {
 			int32_t amount = weight / it.weight;
 			s << std::endl << getWeightDescription(it, weight, amount);
 		}
@@ -1273,20 +1273,30 @@ std::string Item::getNameDescription() const
 	return getNameDescription(it, this);
 }
 
-std::string Item::getWeightDescription(const ItemType& it, double weight, uint32_t _count /*= 1*/)
+std::string Item::getWeightDescription(const ItemType& it, uint32_t weight, uint32_t _count /*= 1*/)
 {
 	std::ostringstream ss;
-
 	if (it.stackable && _count > 1 && it.showCount != 0) {
-		ss << "They weigh " << std::fixed << std::setprecision(2) << weight << " oz.";
+		ss << "They weigh ";
 	} else {
-		ss << "It weighs " << std::fixed << std::setprecision(2) << weight << " oz.";
+		ss << "It weighs ";
 	}
 
+	if (weight < 10) {
+		ss << "0.0" << weight;
+	} else if (weight < 100) {
+		ss << "0." << weight;
+	} else {
+		std::string weightString = std::to_string(weight);
+		weightString.insert(weightString.end() - 2, '.');
+		ss << weightString;
+	}
+
+	ss << " oz.";
 	return ss.str();
 }
 
-std::string Item::getWeightDescription(double weight) const
+std::string Item::getWeightDescription(uint32_t weight) const
 {
 	const ItemType& it = Item::items[id];
 	return getWeightDescription(it, weight, getItemCount());
@@ -1294,8 +1304,8 @@ std::string Item::getWeightDescription(double weight) const
 
 std::string Item::getWeightDescription() const
 {
-	double weight = getWeight();
-	if (weight <= 0) {
+	uint32_t weight = getWeight();
+	if (weight == 0) {
 		return std::string();
 	}
 	return getWeightDescription(weight);

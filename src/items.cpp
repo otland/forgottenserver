@@ -497,7 +497,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 		} else if (tmpStrValue == "runespellname") {
 			it.runeSpellName = valueAttribute.as_string();
 		} else if (tmpStrValue == "weight") {
-			it.weight = pugi::cast<uint32_t>(valueAttribute.value()) / 100.f;
+			it.weight = pugi::cast<uint32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "showcount") {
 			it.showCount = valueAttribute.as_bool();
 		} else if (tmpStrValue == "armor") {

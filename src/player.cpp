@@ -62,7 +62,7 @@ Player::Player(ProtocolGame* p) :
 
 	accountNumber = 0;
 	setVocation(0);
-	capacity = 400.00;
+	capacity = 40000;
 	mana = 0;
 	manaMax = 0;
 	manaSpent = 0;
@@ -183,7 +183,7 @@ Player::Player(ProtocolGame* p) :
 
 	lastQuestlogUpdate = 0;
 
-	inventoryWeight = 0.00;
+	inventoryWeight = 0;
 }
 
 Player::~Player()
@@ -578,7 +578,7 @@ void Player::updateInventoryWeight()
 		return;
 	}
 
-	inventoryWeight = 0.00;
+	inventoryWeight = 0;
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 		const Item* item = inventory[i];
 		if (item) {
@@ -1934,7 +1934,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		--level;
 		healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
 		manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
-		capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
+		capacity = std::max<int32_t>(0, capacity - (vocation->getCapGain() * 100));
 		currLevelExp = Player::getExpForLevel(level);
 	}
 
@@ -2211,7 +2211,7 @@ void Player::death(Creature* _lastHitCreature)
 				--level;
 				healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
 				manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
-				capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
+				capacity = std::max<int32_t>(0, capacity - (vocation->getCapGain() * 100));
 			}
 
 			if (oldLevel != level) {

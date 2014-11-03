@@ -2028,9 +2028,18 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 
 	msg.AddString(weaponName);
 
-	if (it.weight > 0) {
+	if (it.weight != 0) {
 		std::ostringstream ss;
-		ss << std::fixed << std::setprecision(2) << it.weight << " oz";
+		if (it.weight < 10) {
+			ss << "0.0" << it.weight;
+		} else if (it.weight < 100) {
+			ss << "0." << it.weight;
+		} else {
+			std::string weightString = std::to_string(it.weight);
+			weightString.insert(weightString.end() - 2, '.');
+			ss << weightString;
+		}
+		ss << " oz";
 		msg.AddString(ss.str());
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -2960,8 +2969,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getHealth()));
 	msg.add<uint16_t>(std::min<int32_t>(0xFFFF, player->getPlayerInfo(PLAYERINFO_MAXHEALTH)));
 
-	msg.add<uint32_t>(static_cast<uint32_t>(player->getFreeCapacity() * 100));
-	msg.add<uint32_t>(static_cast<uint32_t>(player->getCapacity() * 100));
+	msg.add<uint32_t>(player->getFreeCapacity());
+	msg.add<uint32_t>(player->getCapacity());
 
 	msg.add<uint64_t>(player->getExperience());
 
@@ -3167,7 +3176,7 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 	}
 
 	msg.AddString(item.realName);
-	msg.add<uint32_t>(static_cast<uint32_t>(it.weight * 100));
+	msg.add<uint32_t>(it.weight * 100);
 	msg.add<uint32_t>(item.buyPrice);
 	msg.add<uint32_t>(item.sellPrice);
 }
