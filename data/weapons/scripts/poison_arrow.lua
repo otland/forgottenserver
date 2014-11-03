@@ -9,6 +9,6 @@ condition:setParameter(CONDITION_PARAM_DELAYED, 1)
 condition:addDamage(10, 2000, -1)
 combat:setCondition(condition)
 
-function onUseWeapon(creature, var)
-	return combat:execute(creature, var)
+function onUseWeapon(player, var)
+	return combat:execute(player, var)
 end

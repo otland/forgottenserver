@@ -13,8 +13,8 @@ condition:addDamage(4, 2000, -2)
 condition:addDamage(6, 2000, -1)
 xCombat:setCondition(condition)
 
-function onUseWeapon(creature, var)
-	local ret = combat:execute(creature, var)
+function onUseWeapon(player, var)
+	local ret = combat:execute(player, var)
 	if ret == LUA_ERROR then
 		return LUA_ERROR
 	end
@@ -22,7 +22,7 @@ function onUseWeapon(creature, var)
 	local target = var:getNumber()
 	if target ~= 0 then
 		if math.random(0, 100) > 90 then
-			ret = xCombat:execute(creature, var)
+			ret = xCombat:execute(player, var)
 		end
 	end
 	return ret
