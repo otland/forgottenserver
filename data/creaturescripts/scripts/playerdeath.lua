@@ -62,8 +62,8 @@ function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDama
 	end
 
 	if byPlayer == 1 then
-		local guild = player:getGuild()
-		local targetGuild = guild and guild:getId()
+		local targetGuild = player:getGuild()
+		targetGuild = targetGuild and targetGuild:getId() or 0
 		if targetGuild ~= 0 then
 			local killerGuild = killer:getGuild()
 			killerGuild = killerGuild and killerGuild:getId() or 0
