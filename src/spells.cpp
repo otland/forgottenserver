@@ -156,12 +156,13 @@ bool Spells::registerEvent(Event* event, const pugi::xml_node&)
 
 	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
 	if (rune) {
-		if (runes.find(rune->getRuneItemId()) != runes.end()) {
-			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
+		uint32_t runeId = rune->getRuneItemId();
+		if (runes.find(runeId) != runes.end()) {
+			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << runeId << std::endl;
 			return false;
 		}
 
-		runes[rune->getRuneItemId()] = rune;
+		runes[runeId] = rune;
 		return true;
 	}
 	return false;
