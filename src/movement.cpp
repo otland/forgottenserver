@@ -102,14 +102,9 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 
 bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 {
-	MoveEvent* moveEvent = dynamic_cast<MoveEvent*>(event);
-	if (!moveEvent) {
-		return false;
-	}
+	MoveEvent* moveEvent = static_cast<MoveEvent*>(event);
 
-	bool success = true;
-
-	MoveEvent_t eventType = moveEvent->getEventType();
+	const MoveEvent_t eventType = moveEvent->getEventType();
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
 		pugi::xml_attribute tileItemAttribute = node.attribute("tileitem");
 		if (tileItemAttribute && pugi::cast<uint16_t>(tileItemAttribute.value()) == 1) {
@@ -184,16 +179,16 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 		}
 	} else if ((attr = node.attribute("pos"))) {
 		std::vector<int32_t> posList = vectorAtoi(explodeString(attr.as_string(), ";"));
-		if (posList.size() >= 3) {
-			Position pos(posList[0], posList[1], posList[2]);
-			addEvent(moveEvent, pos, m_positionMap);
-		} else {
-			success = false;
+		if (posList.size() < 3) {
+			return false;
 		}
+
+		Position pos(posList[0], posList[1], posList[2]);
+		addEvent(moveEvent, pos, m_positionMap);
 	} else {
-		success = false;
+		return false;
 	}
-	return success;
+	return true;
 }
 
 void MoveEvents::addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map)

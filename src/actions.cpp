@@ -91,10 +91,7 @@ Event* Actions::getEvent(const std::string& nodeName)
 
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 {
-	Action* action = dynamic_cast<Action*>(event);
-	if (!action) {
-		return false;
-	}
+	Action* action = static_cast<Action*>(event);
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {

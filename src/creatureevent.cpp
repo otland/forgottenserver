@@ -67,11 +67,7 @@ Event* CreatureEvents::getEvent(const std::string& nodeName)
 
 bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node&)
 {
-	CreatureEvent* creatureEvent = dynamic_cast<CreatureEvent*>(event);
-	if (!creatureEvent) {
-		return false;
-	}
-
+	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(event);
 	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
 		std::cout << "Error: [CreatureEvents::registerEvent] Trying to register event without type!" << std::endl;
 		return false;

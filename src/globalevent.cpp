@@ -72,11 +72,7 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 
 bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 {
-	GlobalEvent* globalEvent = dynamic_cast<GlobalEvent*>(event);
-	if (!globalEvent) {
-		return false;
-	}
-
+	GlobalEvent* globalEvent = static_cast<GlobalEvent*>(event);
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
 		GlobalEventMap::iterator it = timerMap.find(globalEvent->getName());
 		if (it == timerMap.end()) {

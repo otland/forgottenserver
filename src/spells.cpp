@@ -152,17 +152,17 @@ bool Spells::registerEvent(Event* event, const pugi::xml_node&)
 
 		instants[instant->getWords()] = instant;
 		return true;
-	} else {
-		RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
-		if (rune) {
-			if (runes.find(rune->getRuneItemId()) != runes.end()) {
-				std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
-				return false;
-			}
+	}
 
-			runes[rune->getRuneItemId()] = rune;
-			return true;
+	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
+	if (rune) {
+		if (runes.find(rune->getRuneItemId()) != runes.end()) {
+			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
+			return false;
 		}
+
+		runes[rune->getRuneItemId()] = rune;
+		return true;
 	}
 	return false;
 }

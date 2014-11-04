@@ -65,12 +65,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)
 {
-	TalkAction* talkAction = dynamic_cast<TalkAction*>(event);
-	if (!talkAction) {
-		return false;
-	}
-
-	talkActions.push_back(talkAction);
+	talkActions.push_back(static_cast<TalkAction*>(event));
 	return true;
 }
 
