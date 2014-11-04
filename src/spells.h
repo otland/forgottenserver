@@ -60,7 +60,7 @@ class Spells : public BaseEvents
 		virtual Event* getEvent(const std::string& nodeName);
 		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
 
-		std::map<uint32_t, RuneSpell*> runes;
+		std::map<uint16_t, RuneSpell*> runes;
 		std::map<std::string, InstantSpell*> instants;
 
 		friend class CombatSpell;
@@ -312,7 +312,7 @@ class RuneSpell : public Action, public Spell
 		virtual bool isInstant() const {
 			return false;
 		}
-		uint32_t getRuneItemId() const {
+		uint16_t getRuneItemId() const {
 			return runeId;
 		}
 
@@ -325,7 +325,7 @@ class RuneSpell : public Action, public Spell
 		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
 		RuneSpellFunction* function;
-		uint32_t runeId;
+		uint16_t runeId;
 		bool hasCharges;
 };
 
