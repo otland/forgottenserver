@@ -44,8 +44,6 @@ void Dispatcher::dispatcherThread()
 	std::unique_lock<std::mutex> taskLockUnique(m_taskLock, std::defer_lock);
 
 	while (m_threadState != STATE_TERMINATED) {
-		Task* task = nullptr;
-
 		// check if there are tasks waiting
 		taskLockUnique.lock();
 
@@ -54,25 +52,23 @@ void Dispatcher::dispatcherThread()
 			m_taskSignal.wait(taskLockUnique);
 		}
 
-		if (!m_taskList.empty() && (m_threadState != STATE_TERMINATED)) {
+		if (!m_taskList.empty() && m_threadState != STATE_TERMINATED) {
 			// take the first task
-			task = m_taskList.front();
+			Task* task = m_taskList.front();
 			m_taskList.pop_front();
-		}
+			taskLockUnique.unlock();
 
-		taskLockUnique.unlock();
-
-		// finally execute the task...
-		if (task) {
 			if (!task->hasExpired()) {
+				// execute it
 				outputPool->startExecutionFrame();
 				(*task)();
 				outputPool->sendAll();
 
 				g_game.clearSpectatorCache();
 			}
-
 			delete task;
+		} else {
+			taskLockUnique.unlock();
 		}
 	}
 }
