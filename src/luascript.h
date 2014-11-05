@@ -350,6 +350,8 @@ class LuaScriptInterface
 
 		static std::string getFieldString(lua_State* L, int32_t arg, const std::string& key);
 
+		static LuaDataType getUserdataType(lua_State* L, int32_t arg);
+
 		// Is
 		inline static bool isNumber(lua_State* L, int32_t arg)
 		{

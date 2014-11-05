@@ -21,4 +21,5 @@
 	<event class="Player" method="onTradeAccept" enabled="0" />
 	<event class="Player" method="onGainExperience" enabled="0" />
 	<event class="Player" method="onLoseExperience" enabled="0" />
+	<event class="Player" method="onGainSkillTries" enabled="1" />
 </events>
