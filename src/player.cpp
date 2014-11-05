@@ -1083,7 +1083,7 @@ void Player::sendPing()
 		setAttackedCreature(nullptr);
 	}
 
-	if (noPongTime >= 60000 && canLogout()) {
+	if (noPongTime >= 60000) {
 		if (g_creatureEvents->playerLogout(this)) {
 			if (client) {
 				client->logout(true, true);
