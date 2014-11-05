@@ -390,7 +390,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 
 	Combat::doCombatHealth(player, target, damage, params);
 	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
-		player->addSkillAdvance(SKILL_FIST, g_config.getNumber(ConfigManager::RATE_SKILL));
+		player->addSkillAdvance(SKILL_FIST, 1);
 	}
 
 	return true;
@@ -446,7 +446,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item) const
 		skills_t skillType;
 		uint32_t skillPoint;
 		if (getSkillType(player, item, skillType, skillPoint)) {
-			player->addSkillAdvance(skillType, skillPoint * g_config.getNumber(ConfigManager::RATE_SKILL));
+			player->addSkillAdvance(skillType, skillPoint);
 		}
 	}
 

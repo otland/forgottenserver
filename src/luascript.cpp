@@ -931,6 +931,19 @@ std::string LuaScriptInterface::getFieldString(lua_State* L, int32_t arg, const 
 	return getString(L, -1);
 }
 
+LuaDataType LuaScriptInterface::getUserdataType(lua_State* L, int32_t arg)
+{
+	if (lua_getmetatable(L, arg) == 0) {
+		return LuaData_Unknown;
+	}
+	lua_rawgeti(L, -1, 't');
+
+	LuaDataType type = getNumber<LuaDataType>(L, -1);
+	lua_pop(L, 2);
+
+	return type;
+}
+
 // Push
 void LuaScriptInterface::pushBoolean(lua_State* L, bool value)
 {
@@ -7106,6 +7119,12 @@ int32_t LuaScriptInterface::luaCreatureCreate(lua_State* L)
 		creature = g_game.getCreatureByName(getString(L, 2));
 	} else if (isUserdata(L, 2)) {
 		creature = getUserdata<Creature>(L, 2);
+
+		LuaDataType type = getUserdataType(L, -1);
+		if (type != LuaData_Player && type != LuaData_Monster && type != LuaData_Npc) {
+			lua_pushnil(L);
+			return 1;
+		}
 	} else {
 		creature = nullptr;
 	}
@@ -7968,6 +7987,10 @@ int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 		}
 	} else if (isUserdata(L, 2)) {
 		player = getUserdata<Player>(L, 2);
+		if (getUserdataType(L, -1) != LuaData_Player) {
+			lua_pushnil(L);
+			return 1;
+		}
 	} else {
 		player = nullptr;
 	}
@@ -9701,10 +9724,20 @@ int32_t LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 // Monster
 int32_t LuaScriptInterface::luaMonsterCreate(lua_State* L)
 {
-	// Monster(id)
-	uint32_t id = getNumber<uint32_t>(L, 2);
+	// Monster(id or userdata)
+	Monster* monster;
+	if (isNumber(L, 2)) {
+		monster = g_game.getMonsterByID(getNumber<uint32_t>(L, 2));
+	} else if (isUserdata(L, 2)) {
+		monster = getUserdata<Monster>(L, 2);
+		if (getUserdataType(L, -1) != LuaData_Monster) {
+			lua_pushnil(L);
+			return 1;
+		}
+	} else {
+		monster = nullptr;
+	}
 
-	Monster* monster = g_game.getMonsterByID(id);
 	if (monster) {
 		pushUserdata<Monster>(L, monster);
 		setMetatable(L, -1, "Monster");
@@ -9977,13 +10010,21 @@ int32_t LuaScriptInterface::luaMonsterSearchTarget(lua_State* L)
 // Npc
 int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
-	// Npc([id or name])
-	Npc* npc = nullptr;
+	// Npc([id or name or userdata])
+	Npc* npc;
 	if (lua_gettop(L) >= 2) {
 		if (isNumber(L, 2)) {
 			npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
 		} else if (isString(L, 2)) {
 			npc = g_game.getNpcByName(getString(L, 2));
+		} else if (isUserdata(L, 2)) {
+			npc = getUserdata<Npc>(L, 2);
+			if (getUserdataType(L, -1) != LuaData_Npc) {
+				lua_pushnil(L);
+				return 1;
+			}
+		} else {
+			npc = nullptr;
 		}
 	} else {
 		npc = getScriptEnv()->getNpc();

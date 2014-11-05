@@ -56,6 +56,7 @@ void Events::clear()
 	playerOnTradeAccept = -1;
 	playerOnGainExperience = -1;
 	playerOnLoseExperience = -1;
+	playerOnGainSkillTries = -1;
 }
 
 bool Events::load()
@@ -125,6 +126,8 @@ bool Events::load()
 					playerOnGainExperience = event;
 				} else if (methodName == "onLoseExperience") {
 					playerOnLoseExperience = event;
+				} else if (methodName == "onGainSkillTries") {
+					playerOnGainSkillTries = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 				}
@@ -616,6 +619,40 @@ void Events::eventPlayerOnLoseExperience(Player* player, uint64_t& exp)
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
 		exp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
+		lua_pop(L, 1);
+	}
+
+	scriptInterface.resetScriptEnv();
+}
+
+void Events::eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint32_t& tries)
+{
+	// Player:onGainSkillTries(skill, tries)
+	if (playerOnGainSkillTries == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnGainSkillTries] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(playerOnGainSkillTries, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(playerOnGainSkillTries);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, skill);
+	lua_pushnumber(L, tries);
+
+	if (scriptInterface.protectedCall(L, 3, 1) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	} else {
+		tries = LuaScriptInterface::getNumber<uint32_t>(L, -1);
 		lua_pop(L, 1);
 	}
 
