@@ -30,6 +30,7 @@ serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = "yes"
 maxPacketsPerSecond = 25
+loginProtectionTime = 10
 
 -- Deaths
 -- NOTE: Leave deathLosePercent as -1 if you want to use the default

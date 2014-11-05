@@ -104,6 +104,7 @@ class ConfigManager
 			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER = 28,
 			EXP_FROM_PLAYERS_LEVEL_RANGE = 29,
 			MAX_PACKETS_PER_SECOND = 30,
+			LOGIN_PROTECTION_TIME = 31,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 

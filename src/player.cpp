@@ -1084,7 +1084,7 @@ void Player::sendPing()
 		setAttackedCreature(nullptr);
 	}
 
-	if (noPongTime >= 60000 && canLogout()) {
+	if (noPongTime >= 60000) {
 		if (g_creatureEvents->playerLogout(this)) {
 			if (client) {
 				client->logout(true, true);
@@ -1494,6 +1494,11 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 				addCondition(condition);
 			}
 		}
+	}
+
+	Condition* condition = getCondition(CONDITION_LOGINPROTECTION, CONDITIONID_DEFAULT);
+	if (condition) {
+		removeCondition(condition);
 	}
 }
 
@@ -3378,6 +3383,11 @@ bool Player::setAttackedCreature(Creature* creature)
 
 	if (creature) {
 		g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
+	}
+
+	Condition* condition = getCondition(CONDITION_LOGINPROTECTION, CONDITIONID_DEFAULT);
+	if (condition) {
+		removeCondition(condition);
 	}
 	return true;
 }

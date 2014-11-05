@@ -226,6 +226,7 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 		case CONDITION_CHANNELMUTEDTICKS:
 		case CONDITION_YELLTICKS:
 		case CONDITION_PACIFIED:
+		case CONDITION_LOGINPROTECTION:
 			return new ConditionGeneric(_id, _type, _ticks, _buff, _subId);
 
 		default:
