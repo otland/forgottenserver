@@ -7118,13 +7118,12 @@ int32_t LuaScriptInterface::luaCreatureCreate(lua_State* L)
 	} else if (isString(L, 2)) {
 		creature = g_game.getCreatureByName(getString(L, 2));
 	} else if (isUserdata(L, 2)) {
-		creature = getUserdata<Creature>(L, 2);
-
-		LuaDataType type = getUserdataType(L, -1);
+		LuaDataType type = getUserdataType(L, 2);
 		if (type != LuaData_Player && type != LuaData_Monster && type != LuaData_Npc) {
 			lua_pushnil(L);
 			return 1;
 		}
+		creature = getUserdata<Creature>(L, 2);
 	} else {
 		creature = nullptr;
 	}
@@ -7986,11 +7985,11 @@ int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 			return 2;
 		}
 	} else if (isUserdata(L, 2)) {
-		player = getUserdata<Player>(L, 2);
-		if (getUserdataType(L, -1) != LuaData_Player) {
+		if (getUserdataType(L, 2) != LuaData_Player) {
 			lua_pushnil(L);
 			return 1;
 		}
+		player = getUserdata<Player>(L, 2);
 	} else {
 		player = nullptr;
 	}
@@ -9729,11 +9728,11 @@ int32_t LuaScriptInterface::luaMonsterCreate(lua_State* L)
 	if (isNumber(L, 2)) {
 		monster = g_game.getMonsterByID(getNumber<uint32_t>(L, 2));
 	} else if (isUserdata(L, 2)) {
-		monster = getUserdata<Monster>(L, 2);
-		if (getUserdataType(L, -1) != LuaData_Monster) {
+		if (getUserdataType(L, 2) != LuaData_Monster) {
 			lua_pushnil(L);
 			return 1;
 		}
+		monster = getUserdata<Monster>(L, 2);
 	} else {
 		monster = nullptr;
 	}
@@ -10018,11 +10017,11 @@ int32_t LuaScriptInterface::luaNpcCreate(lua_State* L)
 		} else if (isString(L, 2)) {
 			npc = g_game.getNpcByName(getString(L, 2));
 		} else if (isUserdata(L, 2)) {
-			npc = getUserdata<Npc>(L, 2);
-			if (getUserdataType(L, -1) != LuaData_Npc) {
+			if (getUserdataType(L, 2) != LuaData_Npc) {
 				lua_pushnil(L);
 				return 1;
 			}
+			npc = getUserdata<Npc>(L, 2);
 		} else {
 			npc = nullptr;
 		}
