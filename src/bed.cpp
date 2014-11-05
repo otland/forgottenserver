@@ -87,7 +87,7 @@ bool BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 	return true;
 }
 
-BedItem* BedItem::getNextBedItem()
+BedItem* BedItem::getNextBedItem() const
 {
 	Direction dir = Item::items[id].bedPartnerDir;
 	Position targetPos = getNextPosition(dir, getPosition());

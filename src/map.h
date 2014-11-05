@@ -100,8 +100,9 @@ class QTreeNode
 		bool isLeaf() const {
 			return m_isLeaf;
 		}
+
 		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
-		static QTreeLeafNode* getLeafStatic(QTreeNode* root, uint32_t x, uint32_t y);
+		static inline const QTreeLeafNode* getLeafStatic(const QTreeNode* root, uint32_t x, uint32_t y);
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:
@@ -121,13 +122,6 @@ class QTreeLeafNode : public QTreeNode
 		Floor* createFloor(uint32_t z);
 		Floor* getFloor(uint16_t z) const {
 			return m_array[z];
-		}
-
-		QTreeLeafNode* stepSouth() {
-			return m_leafS;
-		}
-		QTreeLeafNode* stepEast() {
-			return m_leafE;
 		}
 
 		void addCreature(Creature* c);
@@ -177,13 +171,9 @@ class Map
 		  * Get a single tile.
 		  * \returns A pointer to that tile.
 		  */
-		Tile* getTile(int32_t x, int32_t y, int32_t z);
+		Tile* getTile(int32_t x, int32_t y, int32_t z) const;
 
 		uint32_t clean() const;
-
-		QTreeLeafNode* getLeaf(uint16_t x, uint16_t y) {
-			return root.getLeaf(x, y);
-		}
 
 		/**
 		  * Set a single tile.
@@ -231,10 +221,10 @@ class Map
 		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
 		bool checkSightLine(const Position& fromPos, const Position& toPos) const;
 
-		const Tile* canWalkTo(const Creature& creature, const Position& pos);
+		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
 		bool getPathMatching(const Creature& creature, std::list<Direction>& dirList,
-		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp);
+		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 		std::map<std::string, Position> waypoints;
 
@@ -253,7 +243,7 @@ class Map
 		void getSpectatorsInternal(SpectatorVec& list, const Position& centerPos,
 		                           int32_t minRangeX, int32_t maxRangeX,
 		                           int32_t minRangeY, int32_t maxRangeY,
-		                           int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers);
+		                           int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const;
 
 		// Use this when a custom spectator vector is needed, this support many
 		// more parameters than the heavily cached version below.

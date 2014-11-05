@@ -291,7 +291,6 @@ ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool i
 	if (caster) {
 		const Position& casterPosition = caster->getPosition();
 		const Position& tilePosition = tile->getPosition();
-
 		if (casterPosition.z < tilePosition.z) {
 			return RETURNVALUE_FIRSTGODOWNSTAIRS;
 		} else if (casterPosition.z > tilePosition.z) {
@@ -329,7 +328,6 @@ bool Combat::isInPvpZone(const Creature* attacker, const Creature* target)
 bool Combat::isProtected(const Player* attacker, const Player* target)
 {
 	uint32_t protectionLevel = g_config.getNumber(ConfigManager::PROTECTION_LEVEL);
-
 	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
 		return true;
 	}
@@ -364,7 +362,6 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 
 				//nopvp-zone
 				const Tile* targetPlayerTile = targetPlayer->getTile();
-
 				if (targetPlayerTile->hasFlag(TILESTATE_NOPVPZONE)) {
 					return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 				} else if (attackerPlayer->getTile()->hasFlag(TILESTATE_NOPVPZONE) && !targetPlayerTile->hasFlag(TILESTATE_NOPVPZONE) && !targetPlayerTile->hasFlag(TILESTATE_PROTECTIONZONE)) {
@@ -425,7 +422,6 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 			}
 		}
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 

@@ -107,9 +107,9 @@ class Game
 			return worldType;
 		}
 
-		Cylinder* internalGetCylinder(Player* player, const Position& pos);
+		Cylinder* internalGetCylinder(Player* player, const Position& pos) const;
 		Thing* internalGetThing(Player* player, const Position& pos, int32_t index,
-		                        uint32_t spriteId = 0, stackPosType_t type = STACKPOS_NORMAL);
+		                        uint32_t spriteId = 0, stackPosType_t type = STACKPOS_NORMAL) const;
 		static void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
 
 		static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
@@ -118,19 +118,13 @@ class Game
 		  * Get a single tile of the map.
 		  * \returns A pointer to the tile
 		*/
-		Tile* getTile(int32_t x, int32_t y, int32_t z);
-		Tile* getTile(const Position& pos);
+		Tile* getTile(int32_t x, int32_t y, int32_t z) const;
+		Tile* getTile(const Position& pos) const;
 
 		/**
 		  * Set a single tile of the map, position is read from this tile
 		*/
 		void setTile(Tile* newTile);
-
-		/**
-		  * Get a leaf of the map.
-		  * \returns A pointer to a leaf
-		*/
-		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
 
 		/**
 		  * Returns a creature based on the unique creature identifier
@@ -282,7 +276,7 @@ class Game
 		  * \returns A pointer to the item to an item and nullptr if not found
 		  */
 		Item* findItemOfType(Cylinder* cylinder, uint16_t itemId,
-		                     bool depthSearch = true, int32_t subType = -1);
+		                     bool depthSearch = true, int32_t subType = -1) const;
 
 		/**
 		  * Remove/Add item(s) with a monetary value

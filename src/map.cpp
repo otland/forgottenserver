@@ -88,20 +88,22 @@ bool Map::saveMap()
 	return saved;
 }
 
-Tile* Map::getTile(int32_t x, int32_t y, int32_t z)
+Tile* Map::getTile(int32_t x, int32_t y, int32_t z) const
 {
 	if (x < 0 || x >= 0xFFFF || y < 0 || y >= 0xFFFF || z < 0 || z >= MAP_MAX_LAYERS) {
 		return nullptr;
 	}
 
-	QTreeLeafNode* leaf = QTreeNode::getLeafStatic(&root, x, y);
-	if (leaf) {
-		Floor* floor = leaf->getFloor(z);
-		if (floor) {
-			return floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
-		}
+	const QTreeLeafNode* leaf = QTreeNode::getLeafStatic(&root, x, y);
+	if (!leaf) {
+		return nullptr;
 	}
-	return nullptr;
+
+	const Floor* floor = leaf->getFloor(z);
+	if (!floor) {
+		return nullptr;
+	}
+	return floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
 }
 
 void Map::setTile(int32_t x, int32_t y, int32_t z, Tile* newTile)
@@ -232,7 +234,7 @@ bool Map::removeCreature(Creature* creature)
 	return true;
 }
 
-void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers)
+void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
 {
 	int_fast16_t min_y = centerPos.y + minRangeY;
 	int_fast16_t min_x = centerPos.x + minRangeX;
@@ -252,9 +254,9 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	int32_t endx2 = x2 - (x2 % FLOOR_SIZE);
 	int32_t endy2 = y2 - (y2 % FLOOR_SIZE);
 
-	QTreeLeafNode* startLeaf = getLeaf(startx1, starty1);
-	QTreeLeafNode* leafS = startLeaf;
-	QTreeLeafNode* leafE;
+	const QTreeLeafNode* startLeaf = QTreeNode::getLeafStatic(&root, startx1, starty1);
+	const QTreeLeafNode* leafS = startLeaf;
+	const QTreeLeafNode* leafE;
 
 	for (int_fast32_t ny = starty1; ny <= endy2; ny += FLOOR_SIZE) {
 		leafE = leafS;
@@ -284,16 +286,16 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 						list.insert(creature);
 					} while (++node_iter != node_end);
 				}
-				leafE = leafE->stepEast();
+				leafE = leafE->m_leafE;
 			} else {
-				leafE = getLeaf(nx + FLOOR_SIZE, ny);
+				leafE = QTreeNode::getLeafStatic(&root, nx + FLOOR_SIZE, ny);
 			}
 		}
 
 		if (leafS) {
-			leafS = leafS->stepSouth();
+			leafS = leafS->m_leafS;
 		} else {
-			leafS = getLeaf(startx1, ny + FLOOR_SIZE);
+			leafS = QTreeNode::getLeafStatic(&root, startx1, ny + FLOOR_SIZE);
 		}
 	}
 }
@@ -504,7 +506,7 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 			start.x += mx;
 		}
 
-		const Tile* tile = const_cast<Map*>(this)->getTile(start.x, start.y, start.z);
+		const Tile* tile = getTile(start.x, start.y, start.z);
 		if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
 			return false;
 		}
@@ -512,7 +514,7 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 
 	// now we need to perform a jump between floors to see if everything is clear (literally)
 	while (start.z != destination.z) {
-		const Tile* tile = const_cast<Map*>(this)->getTile(start.x, start.y, start.z);
+		const Tile* tile = getTile(start.x, start.y, start.z);
 		if (tile && tile->getThingCount() > 0) {
 			return false;
 		}
@@ -533,7 +535,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	return checkSightLine(fromPos, toPos) || checkSightLine(toPos, fromPos);
 }
 
-const Tile* Map::canWalkTo(const Creature& creature, const Position& pos)
+const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 {
 	int32_t walkCache = creature.getWalkCache(pos);
 	if (walkCache == 0) {
@@ -552,7 +554,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos)
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp)
+bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -881,36 +883,29 @@ QTreeNode::~QTreeNode()
 
 QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 {
-	if (!isLeaf()) {
-		uint32_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
-		if (m_child[index]) {
-			return m_child[index]->getLeaf(x * 2, y * 2);
-		} else {
-			return nullptr;
-		}
-	} else {
+	if (isLeaf()) {
 		return static_cast<QTreeLeafNode*>(this);
 	}
+
+	QTreeNode* node = m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
+	if (!node) {
+		return nullptr;
+	}
+	return node->getLeaf(x << 1, y << 1);
 }
 
-QTreeLeafNode* QTreeNode::getLeafStatic(QTreeNode* root, uint32_t x, uint32_t y)
+const QTreeLeafNode* QTreeNode::getLeafStatic(const QTreeNode* node, uint32_t x, uint32_t y)
 {
-	QTreeNode* currentNode = root;
-	while (currentNode) {
-		if (!currentNode->isLeaf()) {
-			size_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
-			if (currentNode->m_child[index]) {
-				currentNode = currentNode->m_child[index];
-				x *= 2;
-				y *= 2;
-			} else {
-				return nullptr;
-			}
-		} else {
-			return static_cast<QTreeLeafNode*>(currentNode);
+	do {
+		node = node->m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
+		if (!node) {
+			return nullptr;
 		}
-	}
-	return nullptr;
+
+		x <<= 1;
+		y <<= 1;
+	} while (node->isLeaf());
+	return static_cast<const QTreeLeafNode*>(node);
 }
 
 QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)

@@ -72,7 +72,7 @@ class BedItem : public Item
 		bool sleep(Player* player);
 		void wakeUp(Player* player);
 
-		BedItem* getNextBedItem();
+		BedItem* getNextBedItem() const;
 
 	protected:
 		void updateAppearance(const Player* player);

@@ -231,7 +231,7 @@ void Game::loadMap(const std::string& path)
 	map.loadMap(path, false);
 }
 
-Cylinder* Game::internalGetCylinder(Player* player, const Position& pos)
+Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 {
 	if (pos.x != 0xFFFF) {
 		return getTile(pos.x, pos.y, pos.z);
@@ -247,7 +247,7 @@ Cylinder* Game::internalGetCylinder(Player* player, const Position& pos)
 	return player;
 }
 
-Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index, uint32_t spriteId /*= 0*/, stackPosType_t type /*= STACKPOS_NORMAL*/)
+Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index, uint32_t spriteId /*= 0*/, stackPosType_t type /*= STACKPOS_NORMAL*/) const
 {
 	if (pos.x != 0xFFFF) {
 		Tile* tile = getTile(pos.x, pos.y, pos.z);
@@ -385,19 +385,14 @@ void Game::setTile(Tile* newTile)
 	return map.setTile(newTile->getPosition(), newTile);
 }
 
-Tile* Game::getTile(int32_t x, int32_t y, int32_t z)
+Tile* Game::getTile(int32_t x, int32_t y, int32_t z) const
 {
 	return map.getTile(x, y, z);
 }
 
-Tile* Game::getTile(const Position& pos)
+Tile* Game::getTile(const Position& pos) const
 {
 	return map.getTile(pos.x, pos.y, pos.z);
-}
-
-QTreeLeafNode* Game::getLeaf(uint32_t x, uint32_t y)
-{
-	return map.getLeaf(x, y);
 }
 
 Creature* Game::getCreatureByID(uint32_t id)
@@ -1569,7 +1564,7 @@ ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnM
 }
 
 Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
-                           bool depthSearch /*= true*/, int32_t subType /*= -1*/)
+                           bool depthSearch /*= true*/, int32_t subType /*= -1*/) const
 {
 	if (cylinder == nullptr) {
 		return nullptr;
