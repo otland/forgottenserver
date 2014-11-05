@@ -233,7 +233,6 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 	}
 }
 
-
 Condition* Condition::createCondition(PropStream& propStream)
 {
 	uint8_t attr;

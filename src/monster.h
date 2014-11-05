@@ -127,10 +127,10 @@ class Monster : public Creature
 		virtual void onAttackedCreatureDisappear(bool isLogout);
 		virtual void onFollowCreatureDisappear(bool isLogout);
 
-		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
-		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
-		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos, bool teleport);
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text);
+		virtual void onCreatureAppear(Creature* creature, bool isLogin);
+		virtual void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout);
+		virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos, bool teleport);
+		virtual void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text);
 
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
@@ -222,7 +222,7 @@ class Monster : public Creature
 		void death(Creature* _lastHitCreature);
 		Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature);
 		bool despawn();
-		bool inDespawnRange(const Position& pos);
+		bool inDespawnRange(const Position& pos) const;
 
 		void setIdle(bool _idle);
 		void updateIdleStatus();
@@ -237,11 +237,11 @@ class Monster : public Creature
 		bool canUseAttack(const Position& pos, const Creature* target) const;
 		bool canUseSpell(const Position& pos, const Position& targetPos,
 		                 const spellBlock_t& sb, uint32_t interval, bool& inRange, bool& resetTicks);
-		bool getRandomStep(const Position& creaturePos, Direction& dir);
+		bool getRandomStep(const Position& creaturePos, Direction& dir) const;
 		bool getDanceStep(const Position& creaturePos, Direction& dir,
 		                  bool keepAttack = true, bool keepDistance = true);
-		bool isInSpawnRange(const Position& toPos);
-		bool canWalkTo(Position pos, Direction dir);
+		bool isInSpawnRange(const Position& toPos) const;
+		bool canWalkTo(Position pos, Direction dir) const;
 
 		static bool pushItem(Item* item);
 		void pushItems(Tile* tile);

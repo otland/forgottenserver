@@ -398,15 +398,15 @@ class Creature : virtual public Thing
 		virtual void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
 		                              const Item* item);
 
-		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
-		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
-		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
+		virtual void onCreatureAppear(Creature* creature, bool isLogin);
+		virtual void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout);
+		virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport);
 
 		virtual void onAttackedCreatureDisappear(bool) {}
 		virtual void onFollowCreatureDisappear(bool) {}
 
-		virtual void onCreatureSay(const Creature*, SpeakClasses, const std::string&) {}
+		virtual void onCreatureSay(Creature*, SpeakClasses, const std::string&) {}
 
 		virtual void onCreatureConvinced(const Creature*, const Creature*) {}
 		virtual void onPlacedCreature() {}

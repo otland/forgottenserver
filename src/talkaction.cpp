@@ -141,7 +141,7 @@ std::string TalkAction::getScriptEventName()
 	return "onSay";
 }
 
-bool TalkAction::executeSay(const Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
+bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
 	//onSay(player, words, param, type)
 	if (!m_scriptInterface->reserveScriptEnv()) {
@@ -156,7 +156,7 @@ bool TalkAction::executeSay(const Player* player, const std::string& words, cons
 
 	m_scriptInterface->pushFunction(m_scriptId);
 
-	LuaScriptInterface::pushUserdata<Player>(L, const_cast<Player*>(player));
+	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	LuaScriptInterface::pushString(L, words);

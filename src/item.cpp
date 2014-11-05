@@ -350,7 +350,7 @@ uint16_t Item::getSubType() const
 	return count;
 }
 
-Player* Item::getHoldingPlayer()
+Player* Item::getHoldingPlayer() const
 {
 	Cylinder* p = getParent();
 	while (p) {
@@ -361,11 +361,6 @@ Player* Item::getHoldingPlayer()
 		p = p->getParent();
 	}
 	return nullptr;
-}
-
-const Player* Item::getHoldingPlayer() const
-{
-	return const_cast<Item*>(this)->getHoldingPlayer();
 }
 
 void Item::setSubType(uint16_t n)
@@ -1371,7 +1366,7 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 		return emptyString;
 	}
 
-	Attribute* attr = getAttrConst(type);
+	const Attribute* attr = getExistingAttr(type);
 	if (attr) {
 		return *(std::string*)attr->value;
 	} else {
@@ -1424,7 +1419,7 @@ int32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 		return 0;
 	}
 
-	Attribute* attr = getAttrConst(type);
+	const Attribute* attr = getExistingAttr(type);
 	if (attr) {
 		return reinterpret_cast<ptrdiff_t>(attr->value);
 	} else {
@@ -1485,12 +1480,12 @@ bool ItemAttributes::validateStrAttrType(itemAttrTypes type)
 	return false;
 }
 
-ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) const
+const ItemAttributes::Attribute* ItemAttributes::getExistingAttr(itemAttrTypes type) const
 {
 	if (hasAttribute(type)) {
 		for (const Attribute& attribute : attributes) {
 			if (attribute.type == type) {
-				return const_cast<ItemAttributes::Attribute*>(&attribute);
+				return &attribute;
 			}
 		}
 	}
@@ -1499,9 +1494,12 @@ ItemAttributes::Attribute* ItemAttributes::getAttrConst(itemAttrTypes type) cons
 
 ItemAttributes::Attribute& ItemAttributes::getAttr(itemAttrTypes type)
 {
-	Attribute* curAttr = getAttrConst(type);
-	if (curAttr) {
-		return *curAttr;
+	if (hasAttribute(type)) {
+		for (Attribute& attribute : attributes) {
+			if (attribute.type == type) {
+				return attribute;
+			}
+		}
 	}
 
 	attributeBits |= type;

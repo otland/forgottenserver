@@ -209,11 +209,9 @@ class Tile : public Cylinder
 		Mailbox* getMailbox() const;
 		BedItem* getBedItem() const;
 
-		Creature* getTopCreature();
-		const Creature* getTopCreature() const;
+		Creature* getTopCreature() const;
 		const Creature* getBottomCreature() const;
-		Creature* getTopVisibleCreature(const Creature* creature);
-		const Creature* getTopVisibleCreature(const Creature* creature) const;
+		Creature* getTopVisibleCreature(const Creature* creature) const;
 		const Creature* getBottomVisibleCreature(const Creature* creature) const;
 		Item* getTopTopItem();
 		Item* getTopDownItem();

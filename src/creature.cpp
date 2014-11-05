@@ -445,7 +445,7 @@ void Creature::onRemoveTileItem(const Tile* tile, const Position& pos, const Ite
 	}
 }
 
-void Creature::onCreatureAppear(const Creature* creature, bool isLogin)
+void Creature::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	if (creature == this) {
 		if (useCacheMap()) {
@@ -463,7 +463,7 @@ void Creature::onCreatureAppear(const Creature* creature, bool isLogin)
 	}
 }
 
-void Creature::onCreatureDisappear(const Creature* creature, uint32_t, bool)
+void Creature::onCreatureDisappear(Creature* creature, uint32_t, bool)
 {
 	onCreatureDisappear(creature, true);
 	if (creature == this) {
@@ -504,7 +504,7 @@ void Creature::onAttackedCreatureChangeZone(ZoneType_t zone)
 	}
 }
 
-void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
+void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
                               const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	if (creature == this) {

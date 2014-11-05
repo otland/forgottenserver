@@ -130,7 +130,7 @@ void Monster::onFollowCreatureDisappear(bool)
 	//
 }
 
-void Monster::onCreatureAppear(const Creature* creature, bool isLogin)
+void Monster::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
@@ -151,7 +151,7 @@ void Monster::onCreatureAppear(const Creature* creature, bool isLogin)
 		LuaScriptInterface::pushUserdata<Monster>(L, this);
 		LuaScriptInterface::setMetatable(L, -1, "Monster");
 
-		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 
 		if (scriptInterface->callFunction(2)) {
@@ -168,11 +168,11 @@ void Monster::onCreatureAppear(const Creature* creature, bool isLogin)
 		updateTargetList();
 		updateIdleStatus();
 	} else {
-		onCreatureEnter(const_cast<Creature*>(creature));
+		onCreatureEnter(creature);
 	}
 }
 
-void Monster::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout)
+void Monster::onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout)
 {
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
 
@@ -193,7 +193,7 @@ void Monster::onCreatureDisappear(const Creature* creature, uint32_t stackpos, b
 		LuaScriptInterface::pushUserdata<Monster>(L, this);
 		LuaScriptInterface::setMetatable(L, -1, "Monster");
 
-		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 
 		if (scriptInterface->callFunction(2)) {
@@ -208,11 +208,11 @@ void Monster::onCreatureDisappear(const Creature* creature, uint32_t stackpos, b
 
 		setIdle(true);
 	} else {
-		onCreatureLeave(const_cast<Creature*>(creature));
+		onCreatureLeave(creature);
 	}
 }
 
-void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
+void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
                              const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -234,7 +234,7 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 		LuaScriptInterface::pushUserdata<Monster>(L, this);
 		LuaScriptInterface::setMetatable(L, -1, "Monster");
 
-		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 
 		LuaScriptInterface::pushPosition(L, oldPos);
@@ -257,9 +257,9 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 		bool canSeeOldPos = canSee(oldPos);
 
 		if (canSeeNewPos && !canSeeOldPos) {
-			onCreatureEnter(const_cast<Creature*>(creature));
+			onCreatureEnter(creature);
 		} else if (!canSeeNewPos && canSeeOldPos) {
-			onCreatureLeave(const_cast<Creature*>(creature));
+			onCreatureLeave(creature);
 		}
 
 		if (canSeeNewPos && isSummon() && getMaster() == creature) {
@@ -289,13 +289,13 @@ void Monster::onCreatureMove(const Creature* creature, const Tile* newTile, cons
 				}
 			} else if (isOpponent(creature)) {
 				//we have no target lets try pick this one
-				selectTarget(const_cast<Creature*>(creature));
+				selectTarget(creature);
 			}
 		}
 	}
 }
 
-void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
+void Monster::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
 	Creature::onCreatureSay(creature, type, text);
 
@@ -316,7 +316,7 @@ void Monster::onCreatureSay(const Creature* creature, SpeakClasses type, const s
 		LuaScriptInterface::pushUserdata<Monster>(L, this);
 		LuaScriptInterface::setMetatable(L, -1, "Monster");
 
-		LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 
 		lua_pushnumber(L, type);
@@ -1153,7 +1153,7 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 	return result;
 }
 
-bool Monster::getRandomStep(const Position& creaturePos, Direction& dir)
+bool Monster::getRandomStep(const Position& creaturePos, Direction& dir) const
 {
 	static std::vector<Direction> dirList {
 		     NORTH,
@@ -1770,7 +1770,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	return true;
 }
 
-bool Monster::isInSpawnRange(const Position& toPos)
+bool Monster::isInSpawnRange(const Position& toPos) const
 {
 	if (masterRadius == -1) {
 		return true;
@@ -1779,7 +1779,7 @@ bool Monster::isInSpawnRange(const Position& toPos)
 	return !inDespawnRange(toPos);
 }
 
-bool Monster::canWalkTo(Position pos, Direction dir)
+bool Monster::canWalkTo(Position pos, Direction dir) const
 {
 	pos = getNextPosition(dir, pos);
 	if (isInSpawnRange(pos)) {
@@ -1830,7 +1830,7 @@ Item* Monster::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatur
 	return corpse;
 }
 
-bool Monster::inDespawnRange(const Position& pos)
+bool Monster::inDespawnRange(const Position& pos) const
 {
 	if (!spawn) {
 		return false;

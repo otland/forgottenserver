@@ -275,7 +275,7 @@ class ItemAttributes
 		static bool validateStrAttrType(itemAttrTypes type);
 
 		void addAttr(Attribute* attr);
-		Attribute* getAttrConst(itemAttrTypes type) const;
+		const Attribute* getExistingAttr(itemAttrTypes type) const;
 		Attribute& getAttr(itemAttrTypes type);
 
 	public:
@@ -543,8 +543,7 @@ class Item : virtual public Thing
 		void setID(uint16_t newid);
 
 		// Returns the player that is holding this item in his inventory
-		Player* getHoldingPlayer();
-		const Player* getHoldingPlayer() const;
+		Player* getHoldingPlayer() const;
 
 		WeaponType_t getWeaponType() const {
 			return items[id].weaponType;

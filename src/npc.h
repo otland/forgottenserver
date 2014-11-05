@@ -81,13 +81,13 @@ class NpcEventsHandler
 		NpcEventsHandler(Npc* npc);
 		virtual ~NpcEventsHandler();
 
-		virtual void onCreatureAppear(const Creature*) {}
-		virtual void onCreatureDisappear(const Creature*) {}
-		virtual void onCreatureMove(const Creature*, const Position&, const Position&) {}
-		virtual void onCreatureSay(const Creature*, SpeakClasses, const std::string&) {}
-		virtual void onPlayerTrade(const Player*, int32_t, uint16_t, uint8_t, uint8_t, bool = false, bool = false) {}
-		virtual void onPlayerCloseChannel(const Player*) {}
-		virtual void onPlayerEndTrade(const Player*) {}
+		virtual void onCreatureAppear(Creature*) {}
+		virtual void onCreatureDisappear(Creature*) {}
+		virtual void onCreatureMove(Creature*, const Position&, const Position&) {}
+		virtual void onCreatureSay(Creature*, SpeakClasses, const std::string&) {}
+		virtual void onPlayerTrade(Player*, int32_t, uint16_t, uint8_t, uint8_t, bool = false, bool = false) {}
+		virtual void onPlayerCloseChannel(Player*) {}
+		virtual void onPlayerEndTrade(Player*) {}
 		virtual void onThink() {}
 
 		bool isLoaded() const;
@@ -104,14 +104,14 @@ class NpcScript : public NpcEventsHandler
 		NpcScript(Npc* npc);
 		virtual ~NpcScript();
 
-		virtual void onCreatureAppear(const Creature* creature);
-		virtual void onCreatureDisappear(const Creature* creature);
-		virtual void onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos);
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text);
-		virtual void onPlayerTrade(const Player* player, int32_t callback, uint16_t itemid,
+		virtual void onCreatureAppear(Creature* creature);
+		virtual void onCreatureDisappear(Creature* creature);
+		virtual void onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos);
+		virtual void onCreatureSay(Creature* creature, SpeakClasses, const std::string& text);
+		virtual void onPlayerTrade(Player* player, int32_t callback, uint16_t itemid,
 		                           uint8_t count, uint8_t amount, bool ignore, bool inBackpacks);
-		virtual void onPlayerCloseChannel(const Player* player);
-		virtual void onPlayerEndTrade(const Player* player);
+		virtual void onPlayerCloseChannel(Player* player);
+		virtual void onPlayerEndTrade(Player* player);
 		virtual void onThink();
 
 	private:
@@ -199,7 +199,7 @@ class Npc : public Creature
 			}
 		}
 
-		void onPlayerCloseChannel(const Player* player);
+		void onPlayerCloseChannel(Player* player);
 		void onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count,
 		                   uint8_t amount, bool ignore = false, bool inBackpacks = false);
 		void onPlayerEndTrade(Player* player, int32_t buyCallback, int32_t sellCallback);
@@ -214,12 +214,12 @@ class Npc : public Creature
 	protected:
 		Npc(const std::string& _name);
 
-		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
-		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
-		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
+		virtual void onCreatureAppear(Creature* creature, bool isLogin);
+		virtual void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout);
+		virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport);
 
-		virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text);
+		virtual void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text);
 		virtual void onThink(uint32_t interval);
 		virtual std::string getDescription(int32_t lookDistance) const;
 
@@ -234,8 +234,8 @@ class Npc : public Creature
 		}
 		virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-		bool canWalkTo(const Position& fromPos, Direction dir);
-		bool getRandomStep(Direction& dir);
+		bool canWalkTo(const Position& fromPos, Direction dir) const;
+		bool getRandomStep(Direction& dir) const;
 
 		void reset();
 		bool loadFromXml(const std::string& name);

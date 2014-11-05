@@ -249,7 +249,7 @@ std::string Npc::getDescription(int32_t) const
 	return descr;
 }
 
-void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
+void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
@@ -268,7 +268,7 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 	}
 }
 
-void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout)
+void Npc::onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout)
 {
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
 
@@ -284,7 +284,7 @@ void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool 
 	}
 }
 
-void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
+void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
                          const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -296,14 +296,14 @@ void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Po
 	}
 }
 
-void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
+void Npc::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
 	if (creature->getID() == this->getID()) {
 		return;
 	}
 
 	//only players for script events
-	const Player* player = creature->getPlayer();
+	Player* player = creature->getPlayer();
 	if (player) {
 		if (m_npcEventHandler) {
 			m_npcEventHandler->onCreatureSay(player, type, text);
@@ -311,7 +311,7 @@ void Npc::onCreatureSay(const Creature* creature, SpeakClasses type, const std::
 	}
 }
 
-void Npc::onPlayerCloseChannel(const Player* player)
+void Npc::onPlayerCloseChannel(Player* player)
 {
 	if (m_npcEventHandler) {
 		m_npcEventHandler->onPlayerCloseChannel(player);
@@ -403,7 +403,7 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	return getRandomStep(dir);
 }
 
-bool Npc::canWalkTo(const Position& fromPos, Direction dir)
+bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 {
 	if (masterRadius == 0) {
 		return false;
@@ -430,7 +430,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir)
 	return true;
 }
 
-bool Npc::getRandomStep(Direction& dir)
+bool Npc::getRandomStep(Direction& dir) const
 {
 	std::vector<Direction> dirList;
 	const Position& creaturePos = getPosition();
@@ -1156,7 +1156,7 @@ NpcScript::~NpcScript()
 	//
 }
 
-void NpcScript::onCreatureAppear(const Creature* creature)
+void NpcScript::onCreatureAppear(Creature* creature)
 {
 	if (m_onCreatureAppear == -1) {
 		return;
@@ -1174,12 +1174,12 @@ void NpcScript::onCreatureAppear(const Creature* creature)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureAppear);
-	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	m_scriptInterface->callFunction(1);
 }
 
-void NpcScript::onCreatureDisappear(const Creature* creature)
+void NpcScript::onCreatureDisappear(Creature* creature)
 {
 	if (m_onCreatureDisappear == -1) {
 		return;
@@ -1197,12 +1197,12 @@ void NpcScript::onCreatureDisappear(const Creature* creature)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureDisappear);
-	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	m_scriptInterface->callFunction(1);
 }
 
-void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos)
+void NpcScript::onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos)
 {
 	if (m_onCreatureMove == -1) {
 		return;
@@ -1220,14 +1220,14 @@ void NpcScript::onCreatureMove(const Creature* creature, const Position& oldPos,
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureMove);
-	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushPosition(L, oldPos);
 	LuaScriptInterface::pushPosition(L, newPos);
 	m_scriptInterface->callFunction(3);
 }
 
-void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
+void NpcScript::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
 	if (m_onCreatureSay == -1) {
 		return;
@@ -1245,14 +1245,14 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onCreatureSay);
-	LuaScriptInterface::pushUserdata<Creature>(L, const_cast<Creature*>(creature));
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	lua_pushnumber(L, type);
 	LuaScriptInterface::pushString(L, text);
 	m_scriptInterface->callFunction(3);
 }
 
-void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t itemid,
+void NpcScript::onPlayerTrade(Player* player, int32_t callback, uint16_t itemid,
                               uint8_t count, uint8_t amount, bool ignore, bool inBackpacks)
 {
 	if (callback == -1) {
@@ -1271,7 +1271,7 @@ void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t i
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	LuaScriptInterface::pushCallback(L, callback);
-	LuaScriptInterface::pushUserdata<Player>(L, const_cast<Player*>(player));
+	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 	lua_pushnumber(L, itemid);
 	lua_pushnumber(L, count);
@@ -1281,7 +1281,7 @@ void NpcScript::onPlayerTrade(const Player* player, int32_t callback, uint16_t i
 	m_scriptInterface->callFunction(6);
 }
 
-void NpcScript::onPlayerCloseChannel(const Player* player)
+void NpcScript::onPlayerCloseChannel(Player* player)
 {
 	if (m_onPlayerCloseChannel == -1) {
 		return;
@@ -1299,12 +1299,12 @@ void NpcScript::onPlayerCloseChannel(const Player* player)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onPlayerCloseChannel);
-	LuaScriptInterface::pushUserdata<Player>(L, const_cast<Player*>(player));
+	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 	m_scriptInterface->callFunction(1);
 }
 
-void NpcScript::onPlayerEndTrade(const Player* player)
+void NpcScript::onPlayerEndTrade(Player* player)
 {
 	if (m_onPlayerEndTrade == -1) {
 		return;
@@ -1322,7 +1322,7 @@ void NpcScript::onPlayerEndTrade(const Player* player)
 
 	lua_State* L = m_scriptInterface->getLuaState();
 	m_scriptInterface->pushFunction(m_onPlayerEndTrade);
-	LuaScriptInterface::pushUserdata<Player>(L, const_cast<Player*>(player));
+	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 	m_scriptInterface->callFunction(1);
 }

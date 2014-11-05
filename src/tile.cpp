@@ -235,12 +235,7 @@ BedItem* Tile::getBedItem() const
 	return nullptr;
 }
 
-Creature* Tile::getTopCreature()
-{
-	return const_cast<Creature*>(static_cast<const Tile*>(this)->getTopCreature());
-}
-
-const Creature* Tile::getTopCreature() const
+Creature* Tile::getTopCreature() const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
 		if (!creatures->empty()) {
@@ -260,12 +255,7 @@ const Creature* Tile::getBottomCreature() const
 	return nullptr;
 }
 
-Creature* Tile::getTopVisibleCreature(const Creature* creature)
-{
-	return const_cast<Creature*>(static_cast<const Tile*>(this)->getTopVisibleCreature(creature));
-}
-
-const Creature* Tile::getTopVisibleCreature(const Creature* creature) const
+Creature* Tile::getTopVisibleCreature(const Creature* creature) const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
 		if (creature) {

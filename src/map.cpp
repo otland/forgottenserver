@@ -883,7 +883,7 @@ QTreeNode::~QTreeNode()
 
 QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 {
-	if (isLeaf()) {
+	if (m_isLeaf) {
 		return static_cast<QTreeLeafNode*>(this);
 	}
 
@@ -904,7 +904,7 @@ const QTreeLeafNode* QTreeNode::getLeafStatic(const QTreeNode* node, uint32_t x,
 
 		x <<= 1;
 		y <<= 1;
-	} while (!node->isLeaf());
+	} while (!node->m_isLeaf);
 	return static_cast<const QTreeLeafNode*>(node);
 }
 
