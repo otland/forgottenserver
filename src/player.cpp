@@ -1494,6 +1494,11 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 			}
 		}
 	}
+
+	Condition* condition = getCondition(CONDITION_LOGINPROTECTION, CONDITIONID_DEFAULT);
+	if (condition) {
+		removeCondition(condition);
+	}
 }
 
 //container
@@ -3377,6 +3382,11 @@ bool Player::setAttackedCreature(Creature* creature)
 
 	if (creature) {
 		g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
+	}
+
+	Condition* condition = getCondition(CONDITION_LOGINPROTECTION, CONDITIONID_DEFAULT);
+	if (condition) {
+		removeCondition(condition);
 	}
 	return true;
 }

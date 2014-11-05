@@ -677,6 +677,11 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
+	Condition* condition = player->getCondition(CONDITION_LOGINPROTECTION, CONDITIONID_DEFAULT);
+	if (condition) {
+		player->removeCondition(condition);
+	}
+
 	return true;
 }
 

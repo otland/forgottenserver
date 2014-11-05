@@ -618,7 +618,7 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 
 bool Monster::isTarget(const Creature* creature) const
 {
-	if (creature->isRemoved() || !creature->isAttackable() ||
+	if (creature->isRemoved() || !creature->isAttackable() || creature->getCondition(CONDITION_LOGINPROTECTION) ||
 	        creature->getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {
 		return false;
 	}
