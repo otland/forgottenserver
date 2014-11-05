@@ -374,3 +374,7 @@ function Game.broadcastMessage(message, messageType)
 		player:sendTextMessage(messageType, message)
 	end
 end
+
+function Tile.isWalkable(self)
+	return not self:hasFlag(TILESTATE_BLOCKSOLID)
+end
