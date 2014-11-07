@@ -1935,7 +1935,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		--level;
 		healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
 		manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
-		capacity = std::max<int32_t>(0, capacity - (vocation->getCapGain() * 100));
+		capacity = std::max<int32_t>(0, capacity - vocation->getCapGain());
 		currLevelExp = Player::getExpForLevel(level);
 	}
 
@@ -2212,7 +2212,7 @@ void Player::death(Creature* _lastHitCreature)
 				--level;
 				healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
 				manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
-				capacity = std::max<int32_t>(0, capacity - (vocation->getCapGain() * 100));
+				capacity = std::max<int32_t>(0, capacity - vocation->getCapGain());
 			}
 
 			if (oldLevel != level) {

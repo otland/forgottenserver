@@ -59,7 +59,7 @@ bool Vocations::loadFromXml()
 		}
 
 		if ((attr = vocationNode.attribute("gaincap"))) {
-			voc.gainCap = pugi::cast<uint32_t>(attr.value());
+			voc.gainCap = pugi::cast<uint32_t>(attr.value()) * 100;
 		}
 
 		if ((attr = vocationNode.attribute("gainhp"))) {
@@ -194,7 +194,7 @@ Vocation::Vocation(uint16_t id)
 	clientId = 0;
 	fromVocation = 0;
 
-	gainCap = 5;
+	gainCap = 500;
 	gainMana = 5;
 	gainHP = 5;
 	attackSpeed = 1500;
