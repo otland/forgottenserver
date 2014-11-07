@@ -188,7 +188,7 @@ bool Quests::loadFromXml()
 			if (missionState.empty()) {
 				for (pugi::xml_node missionStateNode = missionNode.first_child(); missionStateNode; missionStateNode = missionStateNode.next_sibling()) {
 					int32_t missionId = pugi::cast<int32_t>(missionStateNode.attribute("id").value());
-					mission.state[missionId] = MissionState(missionStateNode.attribute("description").as_string(), missionId); // TODO: Use emplace
+					mission.state.emplace(missionId, MissionState(missionStateNode.attribute("description").as_string(), missionId));
 				}
 			} else {
 				mission.mainState = new MissionState(missionState, 0);
