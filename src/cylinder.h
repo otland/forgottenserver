@@ -233,17 +233,16 @@ class VirtualCylinder : public Cylinder
 		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) {}
 		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, bool, cylinderlink_t = LINK_OWNER) {}
 
-		virtual bool isPushable() const {
+		virtual bool isPushable() const override {
 			return false;
 		}
-		virtual int getThrowRange() const {
+		virtual int32_t getThrowRange() const override {
 			return 1;
 		}
-		virtual std::string getDescription(int32_t) const {
+		virtual std::string getDescription(int32_t) const override {
 			return std::string();
 		}
-
-		virtual bool isRemoved() const {
+		virtual bool isRemoved() const override {
 			return false;
 		}
 };

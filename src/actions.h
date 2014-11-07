@@ -33,8 +33,8 @@ class Action : public Event
 		Action(LuaScriptInterface* _interface);
 		virtual ~Action();
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool loadFunction(const std::string& functionName);
+		virtual bool configureEvent(const pugi::xml_node& node) override;
+		virtual bool loadFunction(const std::string& functionName) override;
 
 		//scripting
 		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
@@ -70,7 +70,7 @@ class Action : public Event
 		ActionFunction* function;
 
 	protected:
-		virtual std::string getScriptEventName();
+		virtual std::string getScriptEventName() const override;
 
 		static ActionFunction increaseItemId;
 		static ActionFunction decreaseItemId;
@@ -81,11 +81,11 @@ class Action : public Event
 		bool checkLineOfSight;
 };
 
-class Actions : public BaseEvents
+class Actions final : public BaseEvents
 {
 	public:
 		Actions();
-		virtual ~Actions();
+		~Actions();
 
 		bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 		bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey, uint32_t creatureId = 0);
@@ -100,11 +100,11 @@ class Actions : public BaseEvents
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 		static void showUseHotkeyMessage(Player* player, int32_t id, uint32_t count);
 
-		virtual void clear();
-		virtual LuaScriptInterface& getScriptInterface();
-		virtual std::string getScriptBaseName();
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
+		void clear() final;
+		LuaScriptInterface& getScriptInterface() final;
+		std::string getScriptBaseName() const final;
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
 		void registerItemID(int32_t itemId, Event* event);
 		void registerActionID(int32_t actionId, Event* event);

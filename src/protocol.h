@@ -38,10 +38,6 @@ class Protocol
 
 		virtual ~Protocol() {}
 
-		virtual int32_t getProtocolId() {
-			return 0x00;
-		}
-
 		virtual void parsePacket(NetworkMessage&) {}
 
 		virtual void onSendMessage(OutputMessage_ptr msg);

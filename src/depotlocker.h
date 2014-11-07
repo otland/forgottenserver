@@ -23,23 +23,23 @@
 #include "container.h"
 #include "inbox.h"
 
-class DepotLocker : public Container
+class DepotLocker final : public Container
 {
 	public:
 		DepotLocker(uint16_t _type);
 		~DepotLocker();
 
-		DepotLocker* getDepotLocker() {
+		DepotLocker* getDepotLocker() final {
 			return this;
 		}
-		const DepotLocker* getDepotLocker() const {
+		const DepotLocker* getDepotLocker() const final {
 			return this;
 		}
 
 		void removeInbox(Inbox* inbox);
 
 		//serialization
-		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
 
 		uint32_t getDepotId() const {
 			return depotId;
@@ -50,13 +50,12 @@ class DepotLocker : public Container
 
 		//cylinder implementations
 		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                       uint32_t flags, Creature* actor = nullptr) const;
+		                       uint32_t flags, Creature* actor = nullptr) const final;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) final;
 
-		//overrides
-		bool canRemove() const {
+		bool canRemove() const final {
 			return false;
 		}
 

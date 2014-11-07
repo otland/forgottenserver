@@ -28,16 +28,16 @@ class Teleport : public Item, public Cylinder
 		Teleport(uint16_t _type);
 		~Teleport();
 
-		virtual Teleport* getTeleport() {
+		Teleport* getTeleport() final {
 			return this;
 		}
-		virtual const Teleport* getTeleport() const {
+		const Teleport* getTeleport() const final {
 			return this;
 		}
 
 		//serialization
-		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
+		bool serializeAttr(PropWriteStream& propWriteStream) const final;
 
 		const Position& getDestPos() const {
 			return destPos;
@@ -47,24 +47,24 @@ class Teleport : public Item, public Cylinder
 		}
 
 		//cylinder implementations
-		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = nullptr) const;
-		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count,
-		                                    uint32_t& maxQueryCount, uint32_t flags) const;
-		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const;
-		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-		                                     uint32_t& flags);
+		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
+			uint32_t flags, Creature* actor = nullptr) const final;
+		ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count,
+			uint32_t& maxQueryCount, uint32_t flags) const final;
+		ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const final;
+		Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
+			uint32_t& flags) final;
 
-		virtual void __addThing(Thing* thing);
-		virtual void __addThing(int32_t index, Thing* thing);
+		void __addThing(Thing* thing) final;
+		void __addThing(int32_t index, Thing* thing) final;
 
-		virtual void __updateThing(Thing* thing, uint16_t itemId, uint32_t count);
-		virtual void __replaceThing(uint32_t index, Thing* thing);
+		void __updateThing(Thing* thing, uint16_t itemId, uint32_t count) final;
+		void __replaceThing(uint32_t index, Thing* thing) final;
 
-		virtual void __removeThing(Thing* thing, uint32_t count);
+		void __removeThing(Thing* thing, uint32_t count) final;
 
-		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
-		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) final;
 
 	private:
 		Position destPos;

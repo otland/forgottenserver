@@ -33,11 +33,11 @@ class Spell;
 
 typedef std::map<uint16_t, bool> VocSpellMap;
 
-class Spells : public BaseEvents
+class Spells final : public BaseEvents
 {
 	public:
 		Spells();
-		virtual ~Spells();
+		~Spells();
 
 		Spell* getSpellByName(const std::string& name);
 		RuneSpell* getRuneSpell(uint32_t id);
@@ -52,13 +52,13 @@ class Spells : public BaseEvents
 		TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 		static Position getCasterPosition(Creature* creature, Direction dir);
-		virtual std::string getScriptBaseName();
+		std::string getScriptBaseName() const final;
 
 	protected:
-		virtual void clear();
-		virtual LuaScriptInterface& getScriptInterface();
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
+		void clear() final;
+		LuaScriptInterface& getScriptInterface() final;
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
 		std::map<uint16_t, RuneSpell*> runes;
 		std::map<std::string, InstantSpell*> instants;
@@ -80,15 +80,15 @@ class BaseSpell
 		virtual bool castSpell(Creature* creature, Creature* target) = 0;
 };
 
-class CombatSpell : public Event, public BaseSpell
+class CombatSpell final : public Event, public BaseSpell
 {
 	public:
 		CombatSpell(Combat* _combat, bool _needTarget, bool _needDirection);
-		virtual ~CombatSpell();
+		~CombatSpell();
 
-		virtual bool castSpell(Creature* creature);
-		virtual bool castSpell(Creature* creature, Creature* target);
-		virtual bool configureEvent(const pugi::xml_node&) {
+		bool castSpell(Creature* creature) final;
+		bool castSpell(Creature* creature, Creature* target) final;
+		bool configureEvent(const pugi::xml_node&) final {
 			return true;
 		}
 
@@ -101,7 +101,7 @@ class CombatSpell : public Event, public BaseSpell
 		}
 
 	protected:
-		virtual std::string getScriptEventName() {
+		std::string getScriptEventName() const final {
 			return "onCastSpell";
 		}
 
@@ -194,20 +194,20 @@ class InstantSpell : public TalkAction, public Spell
 {
 	public:
 		InstantSpell(LuaScriptInterface* _interface);
-		virtual ~InstantSpell();
+		~InstantSpell();
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool loadFunction(const std::string& functionName);
+		virtual bool configureEvent(const pugi::xml_node& node) override;
+		virtual bool loadFunction(const std::string& functionName) override;
 
 		virtual bool playerCastInstant(Player* player, std::string& param);
 
-		virtual bool castSpell(Creature* creature);
-		virtual bool castSpell(Creature* creature, Creature* target);
+		virtual bool castSpell(Creature* creature) override;
+		virtual bool castSpell(Creature* creature, Creature* target) override;
 
 		//scripting
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
 
-		virtual bool isInstant() const {
+		bool isInstant() const {
 			return true;
 		}
 		bool getHasParam() const {
@@ -220,7 +220,7 @@ class InstantSpell : public TalkAction, public Spell
 		bool canThrowSpell(const Creature* creature, const Creature* target) const;
 
 	protected:
-		virtual std::string getScriptEventName();
+		virtual std::string getScriptEventName() const override;
 
 		static InstantSpellFunction HouseGuestList;
 		static InstantSpellFunction HouseSubOwnerList;
@@ -244,21 +244,21 @@ class InstantSpell : public TalkAction, public Spell
 		bool casterTargetOrDirection;
 };
 
-class ConjureSpell : public InstantSpell
+class ConjureSpell final : public InstantSpell
 {
 	public:
 		ConjureSpell(LuaScriptInterface* _interface);
-		virtual ~ConjureSpell();
+		~ConjureSpell();
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool loadFunction(const std::string& functionName);
+		bool configureEvent(const pugi::xml_node& node) final;
+		bool loadFunction(const std::string& functionName) final;
 
-		virtual bool playerCastInstant(Player* player, std::string& param);
+		bool playerCastInstant(Player* player, std::string& param) final;
 
-		virtual bool castSpell(Creature*) {
+		bool castSpell(Creature*) final {
 			return false;
 		}
-		virtual bool castSpell(Creature*, Creature*) {
+		bool castSpell(Creature*, Creature*) final {
 			return false;
 		}
 
@@ -273,7 +273,7 @@ class ConjureSpell : public InstantSpell
 		}
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 
 		static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount);
 
@@ -286,30 +286,30 @@ class ConjureSpell : public InstantSpell
 		uint32_t conjureReagentId;
 };
 
-class RuneSpell : public Action, public Spell
+class RuneSpell final : public Action, public Spell
 {
 	public:
 		RuneSpell(LuaScriptInterface* _interface);
-		virtual ~RuneSpell();
+		~RuneSpell();
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool loadFunction(const std::string& functionName);
+		bool configureEvent(const pugi::xml_node& node) final;
+		bool loadFunction(const std::string& functionName) final;
 
-		virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
-		virtual bool hasOwnErrorHandler() {
+		ReturnValue canExecuteAction(const Player* player, const Position& toPos) final;
+		bool hasOwnErrorHandler() final {
 			return true;
 		}
 
-		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-		                        const PositionEx& posTo, bool extendedUse, uint32_t creatureId, bool isHotkey);
+		bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
+		                        const PositionEx& posTo, bool extendedUse, uint32_t creatureId, bool isHotkey) final;
 
-		virtual bool castSpell(Creature* creature);
-		virtual bool castSpell(Creature* creature, Creature* target);
+		bool castSpell(Creature* creature) final;
+		bool castSpell(Creature* creature, Creature* target) final;
 
 		//scripting
 		bool executeCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
-		virtual bool isInstant() const {
+		bool isInstant() const final {
 			return false;
 		}
 		uint16_t getRuneItemId() const {
@@ -317,7 +317,7 @@ class RuneSpell : public Action, public Spell
 		}
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 
 		static RuneSpellFunction Illusion;
 		static RuneSpellFunction Convince;

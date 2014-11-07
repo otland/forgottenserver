@@ -60,7 +60,7 @@ struct TextMessage
 	}
 };
 
-class ProtocolGame : public Protocol
+class ProtocolGame final : public Protocol
 {
 	public:
 		// static protocol information
@@ -72,11 +72,7 @@ class ProtocolGame : public Protocol
 		}
 
 		ProtocolGame(Connection_ptr connection);
-		virtual ~ProtocolGame();
-
-		virtual int32_t getProtocolId() {
-			return 0x0A;
-		}
+		~ProtocolGame();
 
 		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
@@ -95,8 +91,8 @@ class ProtocolGame : public Protocol
 		void disconnectClient(const std::string& message);
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
-		virtual void releaseProtocol();
-		virtual void deleteProtocolTask();
+		void releaseProtocol() final;
+		void deleteProtocolTask() final;
 
 		void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);
 
@@ -105,9 +101,9 @@ class ProtocolGame : public Protocol
 		bool canSee(const Position& pos) const;
 
 		// we have all the parse methods
-		virtual void parsePacket(NetworkMessage& msg);
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
-		virtual void onConnect();
+		void parsePacket(NetworkMessage& msg) final;
+		void onRecvFirstMessage(NetworkMessage& msg) final;
+		void onConnect() final;
 
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);

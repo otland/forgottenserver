@@ -87,7 +87,7 @@ LuaScriptInterface& MoveEvents::getScriptInterface()
 	return m_scriptInterface;
 }
 
-std::string MoveEvents::getScriptBaseName()
+std::string MoveEvents::getScriptBaseName() const
 {
 	return "movements";
 }
@@ -432,7 +432,7 @@ MoveEvent::~MoveEvent()
 	//
 }
 
-std::string MoveEvent::getScriptEventName()
+std::string MoveEvent::getScriptEventName() const
 {
 	switch (m_eventType) {
 		case MOVE_EVENT_STEP_IN: return "onStepIn";

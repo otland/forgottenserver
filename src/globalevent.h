@@ -35,11 +35,12 @@ enum GlobalEvent_t {
 class GlobalEvent;
 typedef std::map<std::string, GlobalEvent*> GlobalEventMap;
 
-class GlobalEvents : public BaseEvents
+class GlobalEvents final : public BaseEvents
 {
 	public:
 		GlobalEvents();
-		virtual ~GlobalEvents();
+		~GlobalEvents();
+
 		void startup() const;
 
 		void timer();
@@ -50,15 +51,15 @@ class GlobalEvents : public BaseEvents
 		static void clearMap(GlobalEventMap& map);
 
 	protected:
-		virtual std::string getScriptBaseName() {
+		std::string getScriptBaseName() const final {
 			return "globalevents";
 		}
-		virtual void clear();
+		void clear() final;
 
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
-		virtual LuaScriptInterface& getScriptInterface() {
+		LuaScriptInterface& getScriptInterface() final {
 			return m_scriptInterface;
 		}
 		LuaScriptInterface m_scriptInterface;
@@ -67,13 +68,13 @@ class GlobalEvents : public BaseEvents
 		int32_t thinkEventId, timerEventId;
 };
 
-class GlobalEvent : public Event
+class GlobalEvent final : public Event
 {
 	public:
 		GlobalEvent(LuaScriptInterface* _interface);
-		virtual ~GlobalEvent() {}
+		~GlobalEvent() {}
 
-		virtual bool configureEvent(const pugi::xml_node& node);
+		bool configureEvent(const pugi::xml_node& node) final;
 
 		bool executeRecord(uint32_t current, uint32_t old);
 		bool executeEvent();
@@ -99,7 +100,7 @@ class GlobalEvent : public Event
 	protected:
 		GlobalEvent_t m_eventType;
 
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 
 		std::string m_name;
 		int64_t m_nextExecution;

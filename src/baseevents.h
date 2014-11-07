@@ -40,7 +40,7 @@ class Event
 		}
 
 	protected:
-		virtual std::string getScriptEventName() = 0;
+		virtual std::string getScriptEventName() const = 0;
 
 		bool m_scripted;
 		int32_t m_scriptId;
@@ -61,7 +61,7 @@ class BaseEvents
 
 	protected:
 		virtual LuaScriptInterface& getScriptInterface() = 0;
-		virtual std::string getScriptBaseName() = 0;
+		virtual std::string getScriptBaseName() const = 0;
 		virtual Event* getEvent(const std::string& nodeName) = 0;
 		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
 		virtual void clear() = 0;

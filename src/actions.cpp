@@ -76,7 +76,7 @@ LuaScriptInterface& Actions::getScriptInterface()
 	return m_scriptInterface;
 }
 
-std::string Actions::getScriptBaseName()
+std::string Actions::getScriptBaseName() const
 {
 	return "actions";
 }
@@ -536,7 +536,7 @@ bool Action::enterMarket(Player* player, Item*, const PositionEx&, const Positio
 	return true;
 }
 
-std::string Action::getScriptEventName()
+std::string Action::getScriptEventName() const
 {
 	return "onUse";
 }

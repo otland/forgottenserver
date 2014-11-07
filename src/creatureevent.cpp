@@ -52,7 +52,7 @@ LuaScriptInterface& CreatureEvents::getScriptInterface()
 	return m_scriptInterface;
 }
 
-std::string CreatureEvents::getScriptBaseName()
+std::string CreatureEvents::getScriptBaseName() const
 {
 	return "creaturescripts";
 }
@@ -200,7 +200,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string CreatureEvent::getScriptEventName()
+std::string CreatureEvent::getScriptEventName() const
 {
 	//Depending on the type script event name is different
 	switch (m_type) {

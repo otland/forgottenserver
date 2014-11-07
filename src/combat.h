@@ -32,7 +32,7 @@ class Item;
 struct Position;
 
 //for luascript callback
-class ValueCallback : public CallBack
+class ValueCallback final : public CallBack
 {
 	public:
 		ValueCallback(formulaType_t _type) {
@@ -44,7 +44,7 @@ class ValueCallback : public CallBack
 		formulaType_t type;
 };
 
-class TileCallback : public CallBack
+class TileCallback final : public CallBack
 {
 	public:
 		TileCallback() {}
@@ -54,7 +54,7 @@ class TileCallback : public CallBack
 		formulaType_t type;
 };
 
-class TargetCallback : public CallBack
+class TargetCallback final : public CallBack
 {
 	public:
 		TargetCallback() {}
@@ -352,7 +352,7 @@ class Combat
 		AreaCombat* area;
 };
 
-class MagicField : public Item
+class MagicField final : public Item
 {
 	public:
 		MagicField(uint16_t _type) : Item(_type) {
@@ -360,10 +360,10 @@ class MagicField : public Item
 		}
 		~MagicField() {}
 
-		virtual MagicField* getMagicField() {
+		MagicField* getMagicField() final {
 			return this;
 		}
-		virtual const MagicField* getMagicField() const {
+		const MagicField* getMagicField() const final {
 			return this;
 		}
 

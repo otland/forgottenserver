@@ -24,38 +24,35 @@
 #include "cylinder.h"
 #include "const.h"
 
-class TrashHolder : public Item, public Cylinder
+class TrashHolder final : public Item, public Cylinder
 {
 	public:
 		TrashHolder(uint16_t _type);
 		~TrashHolder();
 
-		virtual TrashHolder* getTrashHolder() {
+		TrashHolder* getTrashHolder() final {
 			return this;
 		}
-		virtual const TrashHolder* getTrashHolder() const {
+		const TrashHolder* getTrashHolder() const final {
 			return this;
 		}
 
 		//cylinder implementations
-		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = nullptr) const;
-		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count,
-		                                    uint32_t& maxQueryCount, uint32_t flags) const;
-		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const;
-		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-		                                     uint32_t& flags);
+		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const final;
+		ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags) const final;
+		ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const final;
+		Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem, uint32_t& flags) final;
 
-		virtual void __addThing(Thing* thing);
-		virtual void __addThing(int32_t index, Thing* thing);
+		void __addThing(Thing* thing) final;
+		void __addThing(int32_t index, Thing* thing) final;
 
-		virtual void __updateThing(Thing* thing, uint16_t itemId, uint32_t count);
-		virtual void __replaceThing(uint32_t index, Thing* thing);
+		void __updateThing(Thing* thing, uint16_t itemId, uint32_t count) final;
+		void __replaceThing(uint32_t index, Thing* thing) final;
 
-		virtual void __removeThing(Thing* thing, uint32_t count);
+		void __removeThing(Thing* thing, uint32_t count) final;
 
-		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
-		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) final;
 };
 
 #endif

@@ -298,23 +298,17 @@ class Item : virtual public Thing
 		Item(const uint16_t _type, uint16_t _count = 0);
 		Item(const Item& i);
 		virtual Item* clone() const;
-		virtual void stealAttributes(Item* item);
+		virtual void moveAttributes(Item* item);
 
 		virtual ~Item();
 
 		bool equals(const Item* otherItem) const;
 
-		virtual Item* getItem() {
+		Item* getItem() final {
 			return this;
 		}
-		virtual const Item* getItem() const {
+		const Item* getItem() const final {
 			return this;
-		}
-		virtual Container* getContainer() {
-			return nullptr;
-		}
-		virtual const Container* getContainer() const {
-			return nullptr;
 		}
 		virtual Teleport* getTeleport() {
 			return nullptr;
@@ -513,21 +507,21 @@ class Item : virtual public Thing
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-		virtual std::string getDescription(int32_t lookDistance) const;
+		std::string getDescription(int32_t lookDistance) const final;
 		std::string getNameDescription() const;
 		std::string getWeightDescription() const;
 
 		//serialization
 		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-		virtual bool unserializeAttr(PropStream& propStream);
+		bool unserializeAttr(PropStream& propStream);
 		virtual bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);
 
 		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
 
-		virtual bool isPushable() const {
+		bool isPushable() const final {
 			return isMoveable();
 		}
-		virtual int32_t getThrowRange() const {
+		int32_t getThrowRange() const final {
 			return (isPickupable() ? 15 : 2);
 		}
 
@@ -708,9 +702,7 @@ class Item : virtual public Thing
 			return true;
 		}
 		virtual void onRemoved();
-		virtual bool onTradeEvent(TradeEvents_t, Player*) {
-			return true;
-		}
+		virtual void onTradeEvent(TradeEvents_t, Player*) {}
 
 		virtual void __startDecaying();
 

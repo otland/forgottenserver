@@ -32,7 +32,7 @@ typedef std::shared_ptr<ServiceBase> Service_ptr;
 class ServiceBase
 {
 	public:
-		virtual ~ServiceBase() {} // Redundant, but stifles compiler warnings
+		virtual ~ServiceBase() {}
 
 		virtual bool is_single_socket() const = 0;
 		virtual bool is_checksummed() const = 0;

@@ -92,7 +92,7 @@ void Npc::removeList()
 
 bool Npc::load()
 {
-	if (isLoaded()) {
+	if (loaded) {
 		return true;
 	}
 
@@ -104,7 +104,7 @@ bool Npc::load()
 	}
 
 	loaded = loadFromXml(m_filename);
-	return isLoaded();
+	return loaded;
 }
 
 void Npc::reset()
@@ -224,8 +224,10 @@ bool Npc::loadFromXml(const std::string& filename)
 
 	pugi::xml_attribute scriptFile = npcNode.attribute("script");
 	if (scriptFile) {
-		m_npcEventHandler = new NpcScript(scriptFile.as_string(), this);
+		m_npcEventHandler = new NpcEventsHandler(scriptFile.as_string(), this);
 		if (!m_npcEventHandler->isLoaded()) {
+			delete m_npcEventHandler;
+			m_npcEventHandler = nullptr;
 			return false;
 		}
 	}
@@ -1109,25 +1111,9 @@ int32_t NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 	return 1;
 }
 
-NpcEventsHandler::NpcEventsHandler(Npc* npc)
+NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc)
 {
 	m_npc = npc;
-	m_loaded = false;
-}
-
-NpcEventsHandler::~NpcEventsHandler()
-{
-	//
-}
-
-bool NpcEventsHandler::isLoaded() const
-{
-	return m_loaded;
-}
-
-NpcScript::NpcScript(const std::string& file, Npc* npc) :
-	NpcEventsHandler(npc)
-{
 	m_scriptInterface = npc->getScriptInterface();
 	m_loaded = m_scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
 	if (!m_loaded) {
@@ -1151,12 +1137,17 @@ NpcScript::NpcScript(const std::string& file, Npc* npc) :
 	}
 }
 
-NpcScript::~NpcScript()
+NpcEventsHandler::~NpcEventsHandler()
 {
 	//
 }
 
-void NpcScript::onCreatureAppear(Creature* creature)
+bool NpcEventsHandler::isLoaded() const
+{
+	return m_loaded;
+}
+
+void NpcEventsHandler::onCreatureAppear(Creature* creature)
 {
 	if (m_onCreatureAppear == -1) {
 		return;
@@ -1179,7 +1170,7 @@ void NpcScript::onCreatureAppear(Creature* creature)
 	m_scriptInterface->callFunction(1);
 }
 
-void NpcScript::onCreatureDisappear(Creature* creature)
+void NpcEventsHandler::onCreatureDisappear(Creature* creature)
 {
 	if (m_onCreatureDisappear == -1) {
 		return;
@@ -1202,7 +1193,7 @@ void NpcScript::onCreatureDisappear(Creature* creature)
 	m_scriptInterface->callFunction(1);
 }
 
-void NpcScript::onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos)
+void NpcEventsHandler::onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos)
 {
 	if (m_onCreatureMove == -1) {
 		return;
@@ -1227,7 +1218,7 @@ void NpcScript::onCreatureMove(Creature* creature, const Position& oldPos, const
 	m_scriptInterface->callFunction(3);
 }
 
-void NpcScript::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
+void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
 	if (m_onCreatureSay == -1) {
 		return;
@@ -1252,7 +1243,7 @@ void NpcScript::onCreatureSay(Creature* creature, SpeakClasses type, const std::
 	m_scriptInterface->callFunction(3);
 }
 
-void NpcScript::onPlayerTrade(Player* player, int32_t callback, uint16_t itemid,
+void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t itemid,
                               uint8_t count, uint8_t amount, bool ignore, bool inBackpacks)
 {
 	if (callback == -1) {
@@ -1281,7 +1272,7 @@ void NpcScript::onPlayerTrade(Player* player, int32_t callback, uint16_t itemid,
 	m_scriptInterface->callFunction(6);
 }
 
-void NpcScript::onPlayerCloseChannel(Player* player)
+void NpcEventsHandler::onPlayerCloseChannel(Player* player)
 {
 	if (m_onPlayerCloseChannel == -1) {
 		return;
@@ -1304,7 +1295,7 @@ void NpcScript::onPlayerCloseChannel(Player* player)
 	m_scriptInterface->callFunction(1);
 }
 
-void NpcScript::onPlayerEndTrade(Player* player)
+void NpcEventsHandler::onPlayerEndTrade(Player* player)
 {
 	if (m_onPlayerEndTrade == -1) {
 		return;
@@ -1327,7 +1318,7 @@ void NpcScript::onPlayerEndTrade(Player* player)
 	m_scriptInterface->callFunction(1);
 }
 
-void NpcScript::onThink()
+void NpcEventsHandler::onThink()
 {
 	if (m_onThink == -1) {
 		return;

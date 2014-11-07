@@ -50,7 +50,7 @@ LuaScriptInterface& TalkActions::getScriptInterface()
 	return m_scriptInterface;
 }
 
-std::string TalkActions::getScriptBaseName()
+std::string TalkActions::getScriptBaseName() const
 {
 	return "talkactions";
 }
@@ -136,7 +136,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string TalkAction::getScriptEventName()
+std::string TalkAction::getScriptEventName() const
 {
 	return "onSay";
 }

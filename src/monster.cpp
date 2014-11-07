@@ -125,11 +125,6 @@ void Monster::onAttackedCreatureDisappear(bool)
 	extraMeleeAttack = true;
 }
 
-void Monster::onFollowCreatureDisappear(bool)
-{
-	//
-}
-
 void Monster::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
@@ -1826,7 +1821,6 @@ Item* Monster::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatur
 			}
 		}
 	}
-
 	return corpse;
 }
 

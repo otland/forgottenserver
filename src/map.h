@@ -113,11 +113,11 @@ class QTreeNode
 		friend class Map;
 };
 
-class QTreeLeafNode : public QTreeNode
+class QTreeLeafNode final : public QTreeNode
 {
 	public:
 		QTreeLeafNode();
-		virtual ~QTreeLeafNode();
+		~QTreeLeafNode();
 
 		Floor* createFloor(uint32_t z);
 		Floor* getFloor(uint16_t z) const {

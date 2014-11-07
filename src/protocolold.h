@@ -25,44 +25,25 @@
 class NetworkMessage;
 class OutputMessage;
 
-class ProtocolOld : public Protocol
+class ProtocolOld final : public Protocol
 {
 	public:
 		// static protocol information
 		enum {server_sends_first = false};
-		enum {use_checksum = false};
-
-		ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
-
-		virtual ~ProtocolOld() {}
-
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
-
-	protected:
-		void dispatchedDisconnectClient(const std::string& message);
-		void disconnectClient(const std::string& message);
-};
-
-class ProtocolOldLogin : public ProtocolOld
-{
-	public:
 		enum {protocol_identifier = 0x01};
+		enum {use_checksum = false};
 		static const char* protocol_name() {
 			return "old login protocol";
 		}
 
-		ProtocolOldLogin(Connection_ptr connection) : ProtocolOld(connection) {}
-};
+		ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
+		~ProtocolOld() {}
 
-class ProtocolOldGame : public ProtocolOld
-{
-	public:
-		enum {protocol_identifier = 0x0A};
-		static const char* protocol_name() {
-			return "old gameworld protocol";
-		}
+		void onRecvFirstMessage(NetworkMessage& msg) final;
 
-		ProtocolOldGame(Connection_ptr connection) : ProtocolOld(connection) {}
+	protected:
+		void dispatchedDisconnectClient(const std::string& message);
+		void disconnectClient(const std::string& message);
 };
 
 #endif

@@ -279,9 +279,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 	// OT protocols
 	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
 
-	// Legacy protocols
-	services->add<ProtocolOldLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
-	services->add<ProtocolOldGame>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	// Legacy login protocol
+	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
 	Houses::getInstance().payHouses();
 	g_game.checkExpiredMarketOffers();

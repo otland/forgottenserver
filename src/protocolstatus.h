@@ -23,7 +23,7 @@
 #include "networkmessage.h"
 #include "protocol.h"
 
-class ProtocolStatus : public Protocol
+class ProtocolStatus final : public Protocol
 {
 	public:
 		// static protocol information
@@ -35,13 +35,9 @@ class ProtocolStatus : public Protocol
 		}
 
 		ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
-		virtual ~ProtocolStatus() {}
+		~ProtocolStatus() {}
 
-		virtual int32_t getProtocolId() {
-			return 0xFF;
-		}
-
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
+		void onRecvFirstMessage(NetworkMessage& msg) final;
 
 		void sendStatusString();
 		void sendInfo(uint16_t requestedInfo, const std::string& characterName);

@@ -138,10 +138,9 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 		return false;
 	}
 
-	const std::string& eventName = getScriptEventName();
-	int32_t id = testInterface->getEvent(eventName);
+	int32_t id = testInterface->getEvent(getScriptEventName());
 	if (id == -1) {
-		std::cout << "[Warning - Event::checkScript] Event " << eventName << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
 	}
 	return true;
@@ -197,7 +196,7 @@ bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& n
 
 	m_scriptInterface = _interface;
 
-	int32_t id = m_scriptInterface->getEvent(name);
+	int32_t id = m_scriptInterface->getEvent(name.c_str());
 	if (id == -1) {
 		std::cout << "[Warning - CallBack::loadCallBack] Event " << name << " not found." << std::endl;
 		return false;

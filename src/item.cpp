@@ -190,7 +190,7 @@ Item* Item::clone() const
 	return _item;
 }
 
-void Item::stealAttributes(Item* item)
+void Item::moveAttributes(Item* item)
 {
 	if (item->attributes) {
 		attributes = item->attributes;

@@ -379,28 +379,19 @@ HouseTransferItem* HouseTransferItem::createHouseTransferItem(House* house)
 	return transferItem;
 }
 
-bool HouseTransferItem::onTradeEvent(TradeEvents_t event, Player* owner)
+void HouseTransferItem::onTradeEvent(TradeEvents_t event, Player* owner)
 {
-	switch (event) {
-		case ON_TRADE_TRANSFER: {
-			House* house = getHouse();
-			if (house) {
-				house->executeTransfer(this, owner);
-			}
-
-			g_game.internalRemoveItem(this, 1);
-			break;
+	if (event == ON_TRADE_TRANSFER) {
+		if (house) {
+			house->executeTransfer(this, owner);
 		}
 
-		case ON_TRADE_CANCEL: {
-			House* house = getHouse();
-			if (house) {
-				house->resetTransferItem();
-			}
-			break;
+		g_game.internalRemoveItem(this, 1);
+	} else if (event == ON_TRADE_CANCEL) {
+		if (house) {
+			house->resetTransferItem();
 		}
 	}
-	return true;
 }
 
 bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
@@ -624,9 +615,9 @@ bool Door::getAccessList(std::string& list) const
 	return true;
 }
 
-void Door::stealAttributes(Item* item)
+void Door::moveAttributes(Item* item)
 {
-	Item::stealAttributes(item);
+	Item::moveAttributes(item);
 
 	if (Door* door = item->getDoor()) {
 		std::string list;

@@ -25,24 +25,24 @@
 class House;
 class Player;
 
-class BedItem : public Item
+class BedItem final : public Item
 {
 	public:
 		BedItem(uint16_t id);
-		virtual ~BedItem() {}
+		~BedItem() {}
 
-		virtual BedItem* getBed() {
+		BedItem* getBed() final {
 			return this;
 		}
-		virtual const BedItem* getBed() const {
+		const BedItem* getBed() const final {
 			return this;
 		}
 
-		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
+		bool serializeAttr(PropWriteStream& propWriteStream) const final;
 
-		virtual bool canRemove() const {
-			return (house == nullptr);
+		bool canRemove() const final {
+			return house == nullptr;
 		}
 
 		uint32_t getSleeper() const {

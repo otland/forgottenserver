@@ -37,13 +37,9 @@ class ProtocolLogin : public Protocol
 		}
 
 		ProtocolLogin(Connection_ptr connection) : Protocol(connection) {}
-		virtual ~ProtocolLogin() {}
+		~ProtocolLogin() {}
 
-		virtual int32_t getProtocolId() {
-			return 0x01;
-		}
-
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
+		void onRecvFirstMessage(NetworkMessage& msg);
 
 	protected:
 		void disconnectClient(const std::string& message);

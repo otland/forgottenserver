@@ -42,11 +42,11 @@ enum CreatureEventType_t {
 
 class CreatureEvent;
 
-class CreatureEvents : public BaseEvents
+class CreatureEvents final : public BaseEvents
 {
 	public:
 		CreatureEvents();
-		virtual ~CreatureEvents();
+		~CreatureEvents();
 
 		// global events
 		bool playerLogin(Player* player) const;
@@ -56,11 +56,11 @@ class CreatureEvents : public BaseEvents
 		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
 	protected:
-		virtual LuaScriptInterface& getScriptInterface();
-		virtual std::string getScriptBaseName();
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
-		virtual void clear();
+		LuaScriptInterface& getScriptInterface() final;
+		std::string getScriptBaseName() const final;
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+		void clear() final;
 
 		//creature events
 		typedef std::map<std::string, CreatureEvent*> CreatureEventList;
@@ -69,13 +69,13 @@ class CreatureEvents : public BaseEvents
 		LuaScriptInterface m_scriptInterface;
 };
 
-class CreatureEvent : public Event
+class CreatureEvent final : public Event
 {
 	public:
 		CreatureEvent(LuaScriptInterface* _interface);
-		virtual ~CreatureEvent() {}
+		~CreatureEvent() {}
 
-		virtual bool configureEvent(const pugi::xml_node& node);
+		bool configureEvent(const pugi::xml_node& node) final;
 
 		CreatureEventType_t getEventType() const {
 			return m_type;
@@ -106,7 +106,7 @@ class CreatureEvent : public Event
 		//
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 
 		std::string m_eventName;
 		CreatureEventType_t m_type;

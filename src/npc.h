@@ -34,16 +34,16 @@ class Npcs
 		static void reload();
 };
 
-class NpcScriptInterface : public LuaScriptInterface
+class NpcScriptInterface final : public LuaScriptInterface
 {
 	public:
 		NpcScriptInterface();
-		virtual ~NpcScriptInterface();
+		~NpcScriptInterface();
 
 		bool loadNpcLib(const std::string& file);
 
 	protected:
-		virtual void registerFunctions();
+		void registerFunctions();
 
 		static int32_t luaActionSay(lua_State* L);
 		static int32_t luaActionMove(lua_State* L);
@@ -69,8 +69,8 @@ class NpcScriptInterface : public LuaScriptInterface
 		static int32_t luaNpcCloseShopWindow(lua_State* L);
 
 	private:
-		virtual bool initState();
-		virtual bool closeState();
+		bool initState() final;
+		bool closeState() final;
 
 		bool m_libLoaded;
 };
@@ -78,43 +78,22 @@ class NpcScriptInterface : public LuaScriptInterface
 class NpcEventsHandler
 {
 	public:
-		NpcEventsHandler(Npc* npc);
-		virtual ~NpcEventsHandler();
+		NpcEventsHandler(const std::string& file, Npc* npc);
+		~NpcEventsHandler();
 
-		virtual void onCreatureAppear(Creature*) {}
-		virtual void onCreatureDisappear(Creature*) {}
-		virtual void onCreatureMove(Creature*, const Position&, const Position&) {}
-		virtual void onCreatureSay(Creature*, SpeakClasses, const std::string&) {}
-		virtual void onPlayerTrade(Player*, int32_t, uint16_t, uint8_t, uint8_t, bool = false, bool = false) {}
-		virtual void onPlayerCloseChannel(Player*) {}
-		virtual void onPlayerEndTrade(Player*) {}
-		virtual void onThink() {}
+		void onCreatureAppear(Creature* creature);
+		void onCreatureDisappear(Creature* creature);
+		void onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos);
+		void onCreatureSay(Creature* creature, SpeakClasses, const std::string& text);
+		void onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint8_t amount, bool ignore = false, bool inBackpacks = false);
+		void onPlayerCloseChannel(Player* player);
+		void onPlayerEndTrade(Player* player);
+		void onThink();
 
 		bool isLoaded() const;
 
 	protected:
 		Npc* m_npc;
-		bool m_loaded;
-};
-
-class NpcScript : public NpcEventsHandler
-{
-	public:
-		NpcScript(const std::string& file, Npc* npc);
-		NpcScript(Npc* npc);
-		virtual ~NpcScript();
-
-		virtual void onCreatureAppear(Creature* creature);
-		virtual void onCreatureDisappear(Creature* creature);
-		virtual void onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos);
-		virtual void onCreatureSay(Creature* creature, SpeakClasses, const std::string& text);
-		virtual void onPlayerTrade(Player* player, int32_t callback, uint16_t itemid,
-		                           uint8_t count, uint8_t amount, bool ignore, bool inBackpacks);
-		virtual void onPlayerCloseChannel(Player* player);
-		virtual void onPlayerEndTrade(Player* player);
-		virtual void onThink();
-
-	private:
 		NpcScriptInterface* m_scriptInterface;
 
 		int32_t m_onCreatureAppear;
@@ -124,52 +103,53 @@ class NpcScript : public NpcEventsHandler
 		int32_t m_onPlayerCloseChannel;
 		int32_t m_onPlayerEndTrade;
 		int32_t m_onThink;
+		bool m_loaded;
 };
 
-class Npc : public Creature
+class Npc final : public Creature
 {
 	public:
-		virtual ~Npc();
+		~Npc();
 
-		virtual Npc* getNpc() {
+		Npc* getNpc() final {
 			return this;
 		}
-		virtual const Npc* getNpc() const {
+		const Npc* getNpc() const final {
 			return this;
 		}
 
-		virtual bool isPushable() const {
+		bool isPushable() const final {
 			return walkTicks > 0;
 		}
 
-		void setID() {
+		void setID() final {
 			if (this->id == 0) {
 				this->id = npcAutoID++;
 			}
 		}
 
-		void removeList();
-		void addList();
+		void removeList() final;
+		void addList() final;
 
 		static Npc* createNpc(const std::string& name);
 
-		virtual bool canSee(const Position& pos) const;
+		bool canSee(const Position& pos) const final;
 
 		bool load();
 		void reload();
 
-		virtual const std::string& getName() const {
+		const std::string& getName() const final {
 			return name;
 		}
-		virtual const std::string& getNameDescription() const {
+		const std::string& getNameDescription() const final {
 			return name;
 		}
 
-		virtual CreatureType_t getType() const {
+		CreatureType_t getType() const final {
 			return CREATURETYPE_NPC;
 		}
 
-		uint8_t getSpeechBubble() const {
+		uint8_t getSpeechBubble() const final {
 			return speechBubble;
 		}
 		void setSpeechBubble(const uint8_t bubble) {
@@ -182,9 +162,6 @@ class Npc : public Creature
 		void doMove(Direction dir);
 		void doTurn(Direction dir);
 		void doMoveTo(const Position& pos);
-		bool isLoaded() const {
-			return loaded;
-		}
 
 		int32_t getMasterRadius() const {
 			return masterRadius;
@@ -214,25 +191,25 @@ class Npc : public Creature
 	protected:
 		Npc(const std::string& _name);
 
-		virtual void onCreatureAppear(Creature* creature, bool isLogin);
-		virtual void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout);
-		virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
-		                            const Tile* oldTile, const Position& oldPos, bool teleport);
+		void onCreatureAppear(Creature* creature, bool isLogin) final;
+		void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout) final;
+		void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
+		                            const Tile* oldTile, const Position& oldPos, bool teleport) final;
 
-		virtual void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text);
-		virtual void onThink(uint32_t interval);
-		virtual std::string getDescription(int32_t lookDistance) const;
+		void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text) final;
+		void onThink(uint32_t interval) final;
+		std::string getDescription(int32_t lookDistance) const final;
 
-		bool isImmune(CombatType_t) const {
-			return true;
+		bool isImmune(CombatType_t) const final {
+			return !attackable;
 		}
-		bool isImmune(ConditionType_t) const {
-			return true;
+		bool isImmune(ConditionType_t) const final {
+			return !attackable;
 		}
-		virtual bool isAttackable() const {
+		bool isAttackable() const final {
 			return attackable;
 		}
-		virtual bool getNextStep(Direction& dir, uint32_t& flags);
+		bool getNextStep(Direction& dir, uint32_t& flags) final;
 
 		bool canWalkTo(const Position& fromPos, Direction dir) const;
 		bool getRandomStep(Direction& dir) const;

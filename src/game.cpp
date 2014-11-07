@@ -1770,7 +1770,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 			return nullptr;
 		}
 
-		newItem->stealAttributes(item);
+		newItem->moveAttributes(item);
 
 		ret = internalAddItem(cylinder, newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 		if (ret != RETURNVALUE_NOERROR) {

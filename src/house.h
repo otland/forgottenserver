@@ -50,16 +50,16 @@ class AccessList
 		std::list<std::pair<std::regex, bool>> regExList;
 };
 
-class Door : public Item
+class Door final : public Item
 {
 	public:
 		Door(uint16_t _type);
-		virtual ~Door();
+		~Door();
 
-		virtual Door* getDoor() {
+		Door* getDoor() final {
 			return this;
 		}
-		virtual const Door* getDoor() const {
+		const Door* getDoor() const final {
 			return this;
 		}
 
@@ -68,8 +68,8 @@ class Door : public Item
 		}
 
 		//serialization
-		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
+		bool serializeAttr(PropWriteStream& propWriteStream) const final;
 
 		void setDoorId(uint32_t _doorId) {
 			setIntAttr(ITEM_ATTRIBUTE_DOORID, _doorId);
@@ -83,9 +83,8 @@ class Door : public Item
 		void setAccessList(const std::string& textlist);
 		bool getAccessList(std::string& list) const;
 
-		//overrides
-		virtual void onRemoved();
-		void stealAttributes(Item* item);
+		void onRemoved() final;
+		void moveAttributes(Item* item) final;
 
 	protected:
 		void setHouse(House* _house);
@@ -111,7 +110,7 @@ enum AccessHouseLevel_t {
 typedef std::list<HouseTile*> HouseTileList;
 typedef std::list<BedItem*> HouseBedItemList;
 
-class HouseTransferItem : public Item
+class HouseTransferItem final : public Item
 {
 	public:
 		static HouseTransferItem* createHouseTransferItem(House* house);
@@ -119,14 +118,10 @@ class HouseTransferItem : public Item
 		HouseTransferItem(House* _house) : Item(0) {
 			house = _house;
 		}
-		virtual ~HouseTransferItem() {}
+		~HouseTransferItem() {}
 
-		virtual bool onTradeEvent(TradeEvents_t event, Player* owner);
-
-		House* getHouse() {
-			return house;
-		}
-		virtual bool canTransform() const {
+		void onTradeEvent(TradeEvents_t event, Player* owner) final;
+		bool canTransform() const final {
 			return false;
 		}
 

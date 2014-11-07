@@ -177,72 +177,72 @@ class RaidEvent
 		uint32_t m_delay;
 };
 
-class AnnounceEvent : public RaidEvent
+class AnnounceEvent final : public RaidEvent
 {
 	public:
 		AnnounceEvent() {
 			m_messageType = MESSAGE_EVENT_ADVANCE;
 		}
-		virtual ~AnnounceEvent() {}
+		~AnnounceEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
-		virtual bool executeEvent();
+		bool executeEvent() final;
 
 	private:
 		std::string m_message;
 		MessageClasses m_messageType;
 };
 
-class SingleSpawnEvent : public RaidEvent
+class SingleSpawnEvent final : public RaidEvent
 {
 	public:
 		SingleSpawnEvent() {}
-		virtual ~SingleSpawnEvent() {}
+		~SingleSpawnEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
-		virtual bool executeEvent();
+		bool executeEvent() final;
 
 	private:
 		std::string m_monsterName;
 		Position m_position;
 };
 
-class AreaSpawnEvent : public RaidEvent
+class AreaSpawnEvent final : public RaidEvent
 {
 	public:
 		AreaSpawnEvent() {}
-		virtual ~AreaSpawnEvent();
+		~AreaSpawnEvent();
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
 		void addMonster(MonsterSpawn* monsterSpawn);
 		void addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount);
 
-		virtual bool executeEvent();
+		bool executeEvent() final;
 
 	private:
 		std::list<MonsterSpawn*> m_spawnList;
 		Position m_fromPos, m_toPos;
 };
 
-class ScriptEvent : public RaidEvent, public Event
+class ScriptEvent final : public RaidEvent, public Event
 {
 	public:
 		ScriptEvent(LuaScriptInterface* _interface);
 		ScriptEvent(const ScriptEvent* copy);
 		~ScriptEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
-		virtual bool configureEvent(const pugi::xml_node&) {
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
+		bool configureEvent(const pugi::xml_node&) final {
 			return false;
 		}
 
-		bool executeEvent();
+		bool executeEvent() final;
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 };
 
 #endif

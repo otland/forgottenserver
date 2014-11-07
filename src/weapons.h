@@ -31,11 +31,11 @@ class WeaponMelee;
 class WeaponDistance;
 class WeaponWand;
 
-class Weapons : public BaseEvents
+class Weapons final : public BaseEvents
 {
 	public:
 		Weapons();
-		virtual ~Weapons();
+		~Weapons();
 
 		void loadDefaults();
 		const Weapon* getWeapon(const Item* item) const;
@@ -44,11 +44,11 @@ class Weapons : public BaseEvents
 		static int32_t getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor);
 
 	protected:
-		virtual void clear();
-		virtual LuaScriptInterface& getScriptInterface();
-		virtual std::string getScriptBaseName();
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
+		void clear() final;
+		LuaScriptInterface& getScriptInterface() final;
+		std::string getScriptBaseName() const final;
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
 		std::map<uint32_t, Weapon*> weapons;
 
@@ -61,8 +61,8 @@ class Weapon : public Event
 		Weapon(LuaScriptInterface* _interface);
 		virtual ~Weapon();
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool loadFunction(const std::string& functionName);
+		virtual bool configureEvent(const pugi::xml_node& node) override;
+		bool loadFunction(const std::string& functionName) final;
 		virtual bool configureWeapon(const ItemType& it);
 		virtual bool interruptSwing() const {
 			return false;
@@ -94,7 +94,7 @@ class Weapon : public Event
 		}
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 
 		bool executeUseWeapon(Player* player, const LuaVariant& var) const;
 		bool internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;
@@ -127,50 +127,50 @@ class Weapon : public Event
 		friend class Combat;
 };
 
-class WeaponMelee : public Weapon
+class WeaponMelee final : public Weapon
 {
 	public:
 		WeaponMelee(LuaScriptInterface* _interface);
-		virtual ~WeaponMelee() {}
+		~WeaponMelee() {}
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool configureWeapon(const ItemType& it);
+		bool configureEvent(const pugi::xml_node& node) final;
+		bool configureWeapon(const ItemType& it) final;
 
-		virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
+		bool useWeapon(Player* player, Item* item, Creature* target) const final;
 
-		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
-		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const;
-		CombatType_t getElementType() const { return elementType; }
+		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const final;
+		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const final;
+		CombatType_t getElementType() const final { return elementType; }
 
 	protected:
-		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const;
+		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
 		CombatType_t elementType;
 		int16_t elementDamage;
 };
 
-class WeaponDistance : public Weapon
+class WeaponDistance final : public Weapon
 {
 	public:
 		WeaponDistance(LuaScriptInterface* _interface);
-		virtual ~WeaponDistance() {}
+		~WeaponDistance() {}
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool configureWeapon(const ItemType& it);
-		virtual bool interruptSwing() const {
+		bool configureEvent(const pugi::xml_node& node) final;
+		bool configureWeapon(const ItemType& it) final;
+		bool interruptSwing() const final {
 			return true;
 		}
 
-		virtual int32_t playerWeaponCheck(Player* player, Creature* target) const;
-		virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
+		int32_t playerWeaponCheck(Player* player, Creature* target) const final;
+		bool useWeapon(Player* player, Item* item, Creature* target) const final;
 
-		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
-		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const;
-		CombatType_t getElementType() const { return elementType; }
+		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const final;
+		int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const final;
+		CombatType_t getElementType() const final { return elementType; }
 
 	protected:
-		virtual void onUsedAmmo(Item* item, Tile* destTile) const;
-		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const;
+		void onUsedAmmo(Item* item, Tile* destTile) const final;
+		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
 		int32_t hitChance;
 		int32_t maxHitChance;
@@ -181,21 +181,21 @@ class WeaponDistance : public Weapon
 		int16_t elementDamage;
 };
 
-class WeaponWand : public Weapon
+class WeaponWand final : public Weapon
 {
 	public:
 		WeaponWand(LuaScriptInterface* _interface);
-		virtual ~WeaponWand() {}
+		~WeaponWand() {}
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool configureWeapon(const ItemType& it);
+		bool configureEvent(const pugi::xml_node& node) final;
+		bool configureWeapon(const ItemType& it) final;
 
-		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const;
-		int32_t getElementDamage(const Player*, const Creature*, const Item*) const { return 0; }
-		CombatType_t getElementType() const { return COMBAT_NONE; }
+		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const final;
+		int32_t getElementDamage(const Player*, const Creature*, const Item*) const final { return 0; }
+		CombatType_t getElementType() const final { return COMBAT_NONE; }
 
 	protected:
-		virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const {
+		bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const final {
 			return false;
 		}
 

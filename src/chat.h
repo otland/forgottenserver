@@ -82,13 +82,13 @@ class ChatChannel
 	friend class Chat;
 };
 
-class PrivateChatChannel : public ChatChannel
+class PrivateChatChannel final : public ChatChannel
 {
 	public:
 		PrivateChatChannel(uint16_t channelId, const std::string& channelName);
-		virtual ~PrivateChatChannel() {}
+		 ~PrivateChatChannel() {}
 
-		virtual uint32_t getOwner() const {
+		uint32_t getOwner() const final {
 			return m_owner;
 		}
 		void setOwner(uint32_t id) {
@@ -109,7 +109,7 @@ class PrivateChatChannel : public ChatChannel
 			return m_invites;
 		}
 
-		const InvitedMap* getInvitedUsersPtr() const {
+		const InvitedMap* getInvitedUsersPtr() const final {
 			return &m_invites;
 		}
 

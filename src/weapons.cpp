@@ -70,7 +70,7 @@ LuaScriptInterface& Weapons::getScriptInterface()
 	return m_scriptInterface;
 }
 
-std::string Weapons::getScriptBaseName()
+std::string Weapons::getScriptBaseName() const
 {
 	return "weapons";
 }
@@ -295,7 +295,7 @@ bool Weapon::configureWeapon(const ItemType& it)
 	return true;
 }
 
-std::string Weapon::getScriptEventName()
+std::string Weapon::getScriptEventName() const
 {
 	return "onUseWeapon";
 }
