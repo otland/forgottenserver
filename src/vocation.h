@@ -26,7 +26,6 @@
 class Vocation
 {
 	public:
-		Vocation() {} // TODO: Remove this constructor when we can use emplace
 		Vocation(uint16_t id);
 
 		const std::string& getVocName() const {

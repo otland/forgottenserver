@@ -43,9 +43,8 @@ bool Vocations::loadFromXml()
 
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
 
-		// TODO: Use emplace ( auto res = vocationsMap.emplace(id, id); Vocation& voc = res.first->second; )
-		vocationsMap[id] = Vocation(id);
-		Vocation& voc = vocationsMap[id];
+		auto res = vocationsMap.emplace(id, id);
+		Vocation& voc = res.first->second;
 
 		if ((attr = vocationNode.attribute("name"))) {
 			voc.name = attr.as_string();

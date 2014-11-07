@@ -49,7 +49,7 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 			child->breakpoint = true;
 		}
 	} else {
-		auto pair = children.insert(std::make_pair(ch, std::move(WildcardTreeNode(breakpoint)))); // TODO: Use emplace
+		auto pair = children.emplace(ch, breakpoint);
 		child = &pair.first->second;
 	}
 	return child;
