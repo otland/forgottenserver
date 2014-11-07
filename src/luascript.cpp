@@ -4256,7 +4256,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 		delay, std::bind(&LuaEnvironment::executeTimerEvent, &g_luaEnvironment, lastTimerEventId)
 	));
 
-	g_luaEnvironment.m_timerEvents.emplace(lastTimerEventId, eventDesc);
+	g_luaEnvironment.m_timerEvents.emplace(lastTimerEventId, std::move(eventDesc));
 	lua_pushnumber(L, lastTimerEventId++);
 	return 1;
 }
