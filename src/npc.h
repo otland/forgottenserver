@@ -123,8 +123,8 @@ class Npc final : public Creature
 		}
 
 		void setID() final {
-			if (this->id == 0) {
-				this->id = npcAutoID++;
+			if (id == 0) {
+				id = npcAutoID++;
 			}
 		}
 

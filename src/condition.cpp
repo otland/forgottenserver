@@ -1605,7 +1605,7 @@ void ConditionOutfit::setOutfit(const Outfit_t& outfit)
 bool ConditionOutfit::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 {
 	if (attr == CONDITIONATTR_OUTFIT) {
-		return propStream.GET_VALUE(this->outfit);
+		return propStream.GET_VALUE(outfit);
 	}
 	return Condition::unserializeProp(attr, propStream);
 }

@@ -300,7 +300,7 @@ class Item : virtual public Thing
 		virtual Item* clone() const;
 		virtual void moveAttributes(Item* item);
 
-		virtual ~Item();
+		~Item();
 
 		bool equals(const Item* otherItem) const;
 

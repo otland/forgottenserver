@@ -59,7 +59,7 @@ class Container : public Item, public Cylinder
 	public:
 		Container(uint16_t _type);
 		Container(Tile* tile);
-		virtual ~Container();
+		~Container();
 		Item* clone() const final;
 
 		Container* getContainer() final {
@@ -146,8 +146,8 @@ class Container : public Item, public Cylinder
 		std::map<uint32_t, uint32_t>& __getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const final;
 		Thing* __getThing(size_t index) const final;
 
-		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
-		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) override;
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) override;
 
 		void __internalAddThing(Thing* thing) final;
 		void __internalAddThing(uint32_t index, Thing* thing) final;

@@ -58,8 +58,8 @@ class Monster final : public Creature
 		}
 
 		void setID() final {
-			if (this->id == 0) {
-				this->id = monsterAutoID++;
+			if (id == 0) {
+				id = monsterAutoID++;
 			}
 		}
 

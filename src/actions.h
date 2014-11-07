@@ -31,10 +31,10 @@ class Action : public Event
 	public:
 		Action(const Action* copy);
 		Action(LuaScriptInterface* _interface);
-		virtual ~Action();
+		~Action();
 
-		virtual bool configureEvent(const pugi::xml_node& node) override;
-		virtual bool loadFunction(const std::string& functionName) override;
+		bool configureEvent(const pugi::xml_node& node) override;
+		bool loadFunction(const std::string& functionName) override;
 
 		//scripting
 		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
@@ -70,7 +70,7 @@ class Action : public Event
 		ActionFunction* function;
 
 	protected:
-		virtual std::string getScriptEventName() const override;
+		std::string getScriptEventName() const override;
 
 		static ActionFunction increaseItemId;
 		static ActionFunction decreaseItemId;

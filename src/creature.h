@@ -108,7 +108,7 @@ class Creature : virtual public Thing
 	public:
 		static double speedA, speedB, speedC;
 
-		virtual ~Creature();
+		~Creature();
 
 		Creature* getCreature() final {
 			return this;
@@ -183,7 +183,7 @@ class Creature : virtual public Thing
 		int32_t getThrowRange() const final {
 			return 1;
 		}
-		virtual bool isPushable() const override {
+		bool isPushable() const override {
 			return getWalkDelay() <= 0;
 		}
 		bool isRemoved() const final {

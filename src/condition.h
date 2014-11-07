@@ -124,15 +124,15 @@ class ConditionGeneric : public Condition
 {
 	public:
 		ConditionGeneric(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
-		virtual ~ConditionGeneric() {}
+		~ConditionGeneric() {}
 
-		virtual bool startCondition(Creature* creature) override;
-		virtual bool executeCondition(Creature* creature, int32_t interval) override;
-		virtual void endCondition(Creature* creature) override;
-		virtual void addCondition(Creature* creature, const Condition* condition) override;
-		virtual uint32_t getIcons() const override;
+		bool startCondition(Creature* creature) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
+		void endCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
+		uint32_t getIcons() const override;
 
-		virtual ConditionGeneric* clone() const override {
+		ConditionGeneric* clone() const override {
 			return new ConditionGeneric(*this);
 		}
 };

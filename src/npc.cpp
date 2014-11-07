@@ -300,7 +300,7 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 
 void Npc::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
-	if (creature->getID() == this->getID()) {
+	if (creature->getID() == id) {
 		return;
 	}
 

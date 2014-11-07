@@ -59,7 +59,7 @@ class TalkAction : public Event
 		TalkAction(LuaScriptInterface* _interface);
 		~TalkAction();
 
-		virtual bool configureEvent(const pugi::xml_node& node) override;
+		bool configureEvent(const pugi::xml_node& node) override;
 
 		std::string getWords() const {
 			return words;
@@ -73,7 +73,7 @@ class TalkAction : public Event
 		//
 
 	protected:
-		virtual std::string getScriptEventName() const override;
+		std::string getScriptEventName() const override;
 
 		std::string words;
 		char separator;

@@ -115,7 +115,7 @@ class Spell : public BaseSpell
 {
 	public:
 		Spell();
-		virtual ~Spell() {}
+		~Spell() {}
 
 		bool configureSpell(const pugi::xml_node& node);
 		const std::string& getName() const {
@@ -196,13 +196,13 @@ class InstantSpell : public TalkAction, public Spell
 		InstantSpell(LuaScriptInterface* _interface);
 		~InstantSpell();
 
-		virtual bool configureEvent(const pugi::xml_node& node) override;
-		virtual bool loadFunction(const std::string& functionName) override;
+		bool configureEvent(const pugi::xml_node& node) override;
+		bool loadFunction(const std::string& functionName) override;
 
 		virtual bool playerCastInstant(Player* player, std::string& param);
 
-		virtual bool castSpell(Creature* creature) override;
-		virtual bool castSpell(Creature* creature, Creature* target) override;
+		bool castSpell(Creature* creature) override;
+		bool castSpell(Creature* creature, Creature* target) override;
 
 		//scripting
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
@@ -220,7 +220,7 @@ class InstantSpell : public TalkAction, public Spell
 		bool canThrowSpell(const Creature* creature, const Creature* target) const;
 
 	protected:
-		virtual std::string getScriptEventName() const override;
+		std::string getScriptEventName() const override;
 
 		static InstantSpellFunction HouseGuestList;
 		static InstantSpellFunction HouseSubOwnerList;
