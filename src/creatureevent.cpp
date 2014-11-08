@@ -139,6 +139,19 @@ bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldL
 	return true;
 }
 
+bool CreatureEvents::playerDowngrade(Player* player, skills_t skill, uint32_t oldLevel,
+								   uint32_t newLevel)
+{
+	for (const auto& it : m_creatureEvents) {
+		if (it.second->getEventType() == CREATURE_EVENT_DOWNGRADE) {
+			if (!it.second->executeDowngrade(player, skill, oldLevel, newLevel)) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 /////////////////////////////////////
 
 CreatureEvent::CreatureEvent(LuaScriptInterface* _interface) :
@@ -181,6 +194,8 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_KILL;
 	} else if (tmpStr == "advance") {
 		m_type = CREATURE_EVENT_ADVANCE;
+	} else if (tmpStr == "downgrade") {
+		m_type = CREATURE_EVENT_DOWNGRADE;
 	} else if (tmpStr == "modalwindow") {
 		m_type = CREATURE_EVENT_MODALWINDOW;
 	} else if (tmpStr == "textedit") {
@@ -224,6 +239,9 @@ std::string CreatureEvent::getScriptEventName() const
 
 		case CREATURE_EVENT_ADVANCE:
 			return "onAdvance";
+
+		case CREATURE_EVENT_DOWNGRADE:
+			return "onDowngrade";
 
 		case CREATURE_EVENT_MODALWINDOW:
 			return "onModalWindow";
@@ -404,6 +422,28 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 	m_scriptInterface->pushFunction(m_scriptId);
 	LuaScriptInterface::pushUserdata(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
+	lua_pushnumber(L, static_cast<uint32_t>(skill));
+	lua_pushnumber(L, oldLevel);
+	lua_pushnumber(L, newLevel);
+
+	return m_scriptInterface->callFunction(4);
+}
+
+bool CreatureEvent::executeDowngrade(Player* player, skills_t skill, uint32_t oldLevel,
+								   uint32_t newLevel)
+{
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeDowngrade] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, player->getID());
 	lua_pushnumber(L, static_cast<uint32_t>(skill));
 	lua_pushnumber(L, oldLevel);
 	lua_pushnumber(L, newLevel);

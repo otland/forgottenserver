@@ -666,6 +666,56 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 	}
 }
 
+void Player::removeSkillAdvance(skills_t skill, uint32_t count)
+{
+	if (count == 0) {
+		return;
+	}
+
+	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]);
+
+	bool sendUpdateSkills = false;
+	while (count > skills[skill][SKILLVALUE_TRIES]) {
+		count -= skills[skill][SKILLVALUE_TRIES];
+
+		if (skills[skill][SKILLVALUE_LEVEL] <= 10) {
+			skills[skill][SKILLVALUE_LEVEL] = 10;
+			skills[skill][SKILLVALUE_TRIES] = 0;
+			count = 0;
+			break;
+		}
+
+		skills[skill][SKILLVALUE_TRIES] = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]);
+		skills[skill][SKILLVALUE_LEVEL]--;
+
+		std::ostringstream ss;
+		ss << "You were downgraded to " << getSkillName(skill) << " level " << skills[skill][SKILLVALUE_LEVEL] << '.';
+		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+
+		g_creatureEvents->playerDowngrade(this, skill, (skills[skill][SKILLVALUE_LEVEL] + 1), skills[skill][SKILLVALUE_LEVEL]);
+
+		sendUpdateSkills = true;
+	}
+
+	skills[skill][SKILLVALUE_TRIES] = std::max<int32_t>(0, skills[skill][SKILLVALUE_TRIES] - count);
+
+	uint32_t newPercent;
+	if (vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]) < currReqTries) {
+		newPercent = Player::getPercentLevel(skills[skill][SKILLVALUE_TRIES], currReqTries);
+	} else {
+		newPercent = 0;
+	}
+
+	if (skills[skill][SKILLVALUE_PERCENT] != newPercent) {
+		skills[skill][SKILLVALUE_PERCENT] = newPercent;
+		sendUpdateSkills = true;
+	}
+
+	if (sendUpdateSkills) {
+		sendSkills();
+	}
+}
+
 void Player::setVarStats(stats_t stat, int32_t modifier)
 {
 	varStats[stat] += modifier;
@@ -1791,6 +1841,48 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
+void Player::removeManaSpent(uint64_t amount)
+{
+	if (amount == 0 || hasFlag(PlayerFlag_NotGainMana)) {
+		return;
+	}
+
+	bool sendUpdateStats = false;
+	while (amount > manaSpent && magLevel > 0) {
+		amount -= manaSpent;
+		manaSpent = vocation->getReqMana(magLevel);
+		magLevel--;
+
+		std::ostringstream ss;
+		ss << "You were downgraded to magic level " << magLevel << '.';
+		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+
+		g_creatureEvents->playerDowngrade(this, SKILL_MAGLEVEL, magLevel + 1, magLevel);
+
+		sendUpdateStats = true;
+	}
+
+	manaSpent -= amount;
+	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
+
+	uint32_t newPercent;
+
+	if (nextReqMana > vocation->getReqMana(magLevel)) {
+		newPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+	} else {
+		newPercent = 0;
+	}
+
+	if (newPercent != magLevelPercent) {
+		magLevelPercent = newPercent;
+		sendUpdateStats = true;
+	}
+
+	if (sendUpdateStats) {
+		sendStats();
+	}
+}
+
 void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/, bool applyMultiplier/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
@@ -1956,6 +2048,8 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		std::ostringstream ss;
 		ss << "You were downgraded from Level " << oldLevel << " to Level " << level << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+
+		g_creatureEvents->playerDowngrade(this, SKILL_LEVEL, oldLevel, level);
 	}
 
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);

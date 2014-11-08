@@ -21,7 +21,8 @@ local function getExpForLevel(level)
 	return ((50 * level * level * level) - (150 * level * level) + (400 * level)) / 3
 end
 
-function onSay(player, words, param)
+function onSay(cid, words, param)
+	local player = Player(cid)
 	if not player:getGroup():getAccess() then
 		return true
 	end
@@ -53,12 +54,12 @@ function onSay(player, words, param)
 	local ch = split[2]:sub(1, 1)
 	for i = 1, count do
 		if ch == "l" or ch == "e" then
-			target:addExperience(getExpForLevel(target:getLevel() + 1) - target:getExperience(), false)
+			target:removeExperience(math.abs(-target:getExperience() + getExpForLevel(target:getLevel() - 1)), false)
 		elseif ch == "m" then
-			target:addManaSpent(target:getVocation():getRequiredManaSpent(target:getBaseMagicLevel() + 1) - target:getManaSpent())
+			target:removeManaSpent(target:getManaSpent() + target:getVocation():getRequiredManaSpent(target:getBaseMagicLevel()))
 		else
 			local skillId = getSkillId(split[2])
-			target:addSkillTries(skillId, target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId) + 1) - target:getSkillTries(skillId))
+			target:removeSkillTries(skillId, target:getSkillTries(skillId) + target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId)))
 		end
 	end
 	return false

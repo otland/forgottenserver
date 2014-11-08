@@ -33,6 +33,7 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_DEATH,
 	CREATURE_EVENT_KILL,
 	CREATURE_EVENT_ADVANCE,
+	CREATURE_EVENT_DOWNGRADE,
 	CREATURE_EVENT_MODALWINDOW,
 	CREATURE_EVENT_TEXTEDIT,
 	CREATURE_EVENT_HEALTHCHANGE,
@@ -52,6 +53,7 @@ class CreatureEvents final : public BaseEvents
 		bool playerLogin(Player* player) const;
 		bool playerLogout(Player* player) const;
 		bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
+		bool playerDowngrade(Player *player, skills_t, uint32_t, uint32_t);
 
 		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
@@ -98,6 +100,7 @@ class CreatureEvent final : public Event
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
 		bool executeOnKill(Creature* creature, Creature* target);
 		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
+		bool executeDowngrade(Player* player, skills_t, uint32_t, uint32_t);
 		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
 		void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
