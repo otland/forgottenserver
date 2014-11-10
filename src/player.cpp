@@ -611,7 +611,7 @@ int32_t Player::getSkill(skills_t skilltype, skillsid_t skillinfo) const
 	return std::max<int32_t>(0, n);
 }
 
-void Player::addSkillAdvance(skills_t skill, uint32_t count)
+void Player::addSkillAdvance(skills_t skill, uint64_t count)
 {
 	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]);
 	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL] + 1);
@@ -1739,7 +1739,7 @@ void Player::drainMana(Creature* attacker, int32_t manaLoss)
 
 void Player::addManaSpent(uint64_t amount)
 {
-	if (amount == 0 || hasFlag(PlayerFlag_NotGainMana)) {
+	if (hasFlag(PlayerFlag_NotGainMana)) {
 		return;
 	}
 
@@ -1747,6 +1747,11 @@ void Player::addManaSpent(uint64_t amount)
 	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
 	if (currReqMana >= nextReqMana) {
 		//player has reached max magic level
+		return;
+	}
+
+	g_events->eventPlayerOnGainSkillTries(this, SKILL_MAGLEVEL, amount);
+	if (amount == 0) {
 		return;
 	}
 
@@ -4505,9 +4510,9 @@ void Player::dismount()
 	defaultOutfit.lookMount = 0;
 }
 
-bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
+bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 {
-	if (tries <= 0 || skill == SKILL_LEVEL) {
+	if (tries == 0 || skill == SKILL_LEVEL) {
 		return false;
 	}
 
@@ -4526,7 +4531,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 		oldSkillValue = magLevel;
 		oldPercentToNextLevel = (long double)(manaSpent * 100) / nextReqMana;
 
-		tries *= g_config.getNumber(ConfigManager::RATE_MAGIC);
+		g_events->eventPlayerOnGainSkillTries(this, SKILL_MAGLEVEL, tries);
 		uint32_t currMagLevel = magLevel;
 
 		while ((manaSpent + tries) >= nextReqMana) {
@@ -4582,7 +4587,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, int32_t tries)
 		oldSkillValue = skills[skill][SKILLVALUE_LEVEL];
 		oldPercentToNextLevel = (long double)(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
 
-		tries *= g_config.getNumber(ConfigManager::RATE_SKILL);
+		g_events->eventPlayerOnGainSkillTries(this, skill, tries);
 		uint32_t currSkillLevel = skills[skill][SKILLVALUE_LEVEL];
 
 		while ((skills[skill][SKILLVALUE_TRIES] + tries) >= nextReqTries) {

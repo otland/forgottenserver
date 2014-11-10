@@ -3796,80 +3796,77 @@ void Game::changeLight(const Creature* creature)
 	}
 }
 
-bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature* target,
-                          int32_t& healthChange, bool checkDefense, bool checkArmor, bool field)
+bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field)
 {
-	if (combatType == COMBAT_NONE) {
+	if (damage.primary.type == COMBAT_NONE && damage.secondary.type == COMBAT_NONE) {
 		return true;
 	}
 
-	if (target->getPlayer() && target->getPlayer()->isInGhostMode()) {
+	if (target->getPlayer() && target->isInGhostMode()) {
 		return true;
 	}
 
-	if (healthChange > 0) {
+	if (damage.primary.value > 0) {
 		return false;
 	}
 
-	const Position& targetPos = target->getPosition();
-
-	SpectatorVec list;
-	getSpectators(list, targetPos, false, true);
-
-	if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RETURNVALUE_NOERROR) {
-		if (!target->isInGhostMode()) {
-			addMagicEffect(list, targetPos, CONST_ME_POFF);
+	static const auto sendBlockEffect = [this](BlockType_t blockType, CombatType_t combatType, const Position& targetPos) {
+		if (blockType == BLOCK_DEFENSE) {
+			addMagicEffect(targetPos, CONST_ME_POFF);
+		} else if (blockType == BLOCK_ARMOR) {
+			addMagicEffect(targetPos, CONST_ME_BLOCKHIT);
+		} else if (blockType == BLOCK_IMMUNITY) {
+			uint8_t hitEffect = 0;
+			switch (combatType) {
+				case COMBAT_UNDEFINEDDAMAGE: {
+					return;
+				}
+				case COMBAT_ENERGYDAMAGE:
+				case COMBAT_FIREDAMAGE:
+				case COMBAT_PHYSICALDAMAGE:
+				case COMBAT_ICEDAMAGE:
+				case COMBAT_DEATHDAMAGE: {
+					hitEffect = CONST_ME_BLOCKHIT;
+					break;
+				}
+				case COMBAT_EARTHDAMAGE: {
+					hitEffect = CONST_ME_GREEN_RINGS;
+					break;
+				}
+				case COMBAT_HOLYDAMAGE: {
+					hitEffect = CONST_ME_HOLYDAMAGE;
+					break;
+				}
+				default: {
+					hitEffect = CONST_ME_POFF;
+					break;
+				}
+			}
+			addMagicEffect(targetPos, hitEffect);
 		}
-		return true;
+	};
+
+	BlockType_t primaryBlockType, secondaryBlockType;
+	if (damage.primary.type != COMBAT_NONE) {
+		damage.primary.value = -damage.primary.value;
+		primaryBlockType = target->blockHit(attacker, damage.primary.type, damage.primary.value, checkDefense, checkArmor, field);
+
+		damage.primary.value = -damage.primary.value;
+		sendBlockEffect(primaryBlockType, damage.primary.type, target->getPosition());
+	} else {
+		primaryBlockType = BLOCK_NONE;
 	}
 
-	int32_t damage = -healthChange;
-	BlockType_t blockType = target->blockHit(attacker, combatType, damage, checkDefense, checkArmor, field);
-	healthChange = -damage;
+	if (damage.secondary.type != COMBAT_NONE) {
+		damage.secondary.value = -damage.secondary.value;
+		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false, field);
 
-	if (blockType == BLOCK_DEFENSE) {
-		addMagicEffect(list, targetPos, CONST_ME_POFF);
-		return true;
-	} else if (blockType == BLOCK_ARMOR) {
-		addMagicEffect(list, targetPos, CONST_ME_BLOCKHIT);
-		return true;
-	} else if (blockType == BLOCK_IMMUNITY) {
-		uint8_t hitEffect = 0;
-
-		switch (combatType) {
-			case COMBAT_UNDEFINEDDAMAGE:
-				break;
-
-			case COMBAT_ENERGYDAMAGE:
-			case COMBAT_FIREDAMAGE:
-			case COMBAT_PHYSICALDAMAGE:
-			case COMBAT_ICEDAMAGE:
-			case COMBAT_DEATHDAMAGE: {
-				hitEffect = CONST_ME_BLOCKHIT;
-				break;
-			}
-
-			case COMBAT_EARTHDAMAGE: {
-				hitEffect = CONST_ME_GREEN_RINGS;
-				break;
-			}
-
-			case COMBAT_HOLYDAMAGE: {
-				hitEffect = CONST_ME_HOLYDAMAGE;
-				break;
-			}
-
-			default: {
-				hitEffect = CONST_ME_POFF;
-				break;
-			}
-		}
-
-		addMagicEffect(list, targetPos, hitEffect);
-		return true;
+		damage.secondary.value = -damage.secondary.value;
+		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition());
+	} else {
+		secondaryBlockType = BLOCK_NONE;
 	}
-
-	return false;
+	return (primaryBlockType != BLOCK_NONE) && (secondaryBlockType != BLOCK_NONE);
 }
 
 void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColor_t& color, uint8_t& effect)
@@ -4053,11 +4050,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			}
 		}
 	} else {
-		SpectatorVec list;
-		getSpectators(list, targetPos, true, true);
-
-		if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RETURNVALUE_NOERROR) {
-			addMagicEffect(list, targetPos, CONST_ME_POFF);
+		if (!target->isAttackable()) {
+			if (!target->isInGhostMode()) {
+				addMagicEffect(targetPos, CONST_ME_POFF);
+			}
 			return true;
 		}
 
@@ -4090,6 +4086,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		TextMessage message;
 		message.position = targetPos;
 
+		SpectatorVec list;
 		if (target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
 			int32_t manaDamage = std::min<int32_t>(target->getMana(), healthChange);
 			if (manaDamage != 0) {
@@ -4107,6 +4104,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				}
 
 				target->drainMana(attacker, manaDamage);
+				getSpectators(list, targetPos, true, true);
 				addMagicEffect(list, targetPos, CONST_ME_LOSEENERGY);
 
 				std::string damageString = std::to_string(manaDamage);
@@ -4191,6 +4189,9 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		target->drainHealth(attacker, realDamage);
+		if (list.empty()) {
+			getSpectators(list, targetPos, true, true);
+		}
 		addCreatureHealth(list, target);
 
 		message.primary.value = damage.primary.value;
@@ -4285,8 +4286,10 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		target->changeMana(manaChange);
 	} else {
 		const Position& targetPos = target->getPosition();
-		if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RETURNVALUE_NOERROR) {
-			addMagicEffect(targetPos, CONST_ME_POFF);
+		if (!target->isAttackable()) {
+			if (!target->isInGhostMode()) {
+				addMagicEffect(targetPos, CONST_ME_POFF);
+			}
 			return false;
 		}
 

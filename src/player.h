@@ -202,7 +202,7 @@ class Player final : public Creature, public Cylinder
 		void regenerateStamina(int32_t offlineTime);
 		void useStamina();
 
-		bool addOfflineTrainingTries(skills_t skill, int32_t tries);
+		bool addOfflineTrainingTries(skills_t skill, uint64_t tries);
 
 		void addOfflineTrainingTime(int32_t addTime) {
 			offlineTrainingTime = std::min<int32_t>(12 * 3600 * 1000, offlineTrainingTime + addTime);
@@ -635,7 +635,7 @@ class Player final : public Creature, public Cylinder
 		void drainHealth(Creature* attacker, int32_t damage) final;
 		void drainMana(Creature* attacker, int32_t manaLoss) final;
 		void addManaSpent(uint64_t amount);
-		void addSkillAdvance(skills_t skill, uint32_t count);
+		void addSkillAdvance(skills_t skill, uint64_t count);
 
 		int32_t getArmor() const final;
 		int32_t getDefense() const final;
