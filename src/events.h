@@ -24,6 +24,7 @@
 
 class Party;
 class ItemType;
+class Tile;
 
 class Events
 {
@@ -36,6 +37,8 @@ class Events
 
 		// Creature
 		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
+		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool isAggressive);
+		ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 
 		// Party
 		bool eventPartyOnJoin(Party* party, Player* player);
@@ -55,13 +58,15 @@ class Events
 		bool eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem);
 		void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
 		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
-		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint32_t& tries);
+		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 
 	private:
 		LuaScriptInterface scriptInterface;
 
 		// Creature
 		int32_t creatureOnChangeOutfit;
+		int32_t creatureOnAreaCombat;
+		int32_t creatureOnTargetCombat;
 
 		// Party
 		int32_t partyOnJoin;

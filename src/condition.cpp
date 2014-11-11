@@ -1239,16 +1239,22 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 		return true;
 	}
 
-	CombatType_t combatType = Combat::ConditionToDamageType(conditionType);
-	Creature* attacker = g_game.getCreatureByID(owner);
-	if (g_game.combatBlockHit(combatType, attacker, creature, healthChange, false, false, field)) {
-		return false;
-	}
-
 	CombatDamage damage;
 	damage.origin = ORIGIN_CONDITION;
 	damage.primary.value = healthChange;
-	damage.primary.type = combatType;
+	damage.primary.type = Combat::ConditionToDamageType(conditionType);
+
+	Creature* attacker = g_game.getCreatureByID(owner);
+	if (!creature->isAttackable() || Combat::canDoCombat(attacker, creature) != RETURNVALUE_NOERROR) {
+		if (!creature->isInGhostMode()) {
+			g_game.addMagicEffect(creature->getPosition(), CONST_ME_POFF);
+		}
+		return false;
+	}
+
+	if (g_game.combatBlockHit(damage, attacker, creature, false, false, field)) {
+		return false;
+	}
 	return g_game.combatChangeHealth(attacker, creature, damage);
 }
 

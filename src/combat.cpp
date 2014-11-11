@@ -28,10 +28,12 @@
 #include "tools.h"
 #include "weapons.h"
 #include "configmanager.h"
+#include "events.h"
 
 extern Game g_game;
 extern Weapons* g_weapons;
 extern ConfigManager g_config;
+extern Events* g_events;
 
 Combat::Combat() :
 	formulaType(COMBAT_FORMULA_UNDEFINED),
@@ -224,7 +226,7 @@ bool Combat::isPlayerCombat(const Creature* target)
 	return false;
 }
 
-ReturnValue Combat::canTargetCreature(const Player* player, const Creature* target)
+ReturnValue Combat::canTargetCreature(Player* player, Creature* target)
 {
 	if (player == target) {
 		return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
@@ -274,7 +276,7 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 	return Combat::canDoCombat(player, target);
 }
 
-ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool isAggressive)
+ReturnValue Combat::canDoCombat(Creature* caster, Tile* tile, bool isAggressive)
 {
 	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
 		return RETURNVALUE_NOTENOUGHROOM;
@@ -309,7 +311,7 @@ ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool i
 		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE;
 	}
 
-	return RETURNVALUE_NOERROR;
+	return g_events->eventCreatureOnAreaCombat(caster, tile, isAggressive);
 }
 
 bool Combat::isInPvpZone(const Creature* attacker, const Creature* target)
@@ -343,7 +345,7 @@ bool Combat::isProtected(const Player* attacker, const Player* target)
 	return false;
 }
 
-ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target)
+ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 {
 	if (attacker) {
 		if (const Player* targetPlayer = target->getPlayer()) {
@@ -422,7 +424,7 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 			}
 		}
 	}
-	return RETURNVALUE_NOERROR;
+	return g_events->eventCreatureOnTargetCombat(attacker, target);
 }
 
 void Combat::setPlayerCombatValues(formulaType_t _type, double _mina, double _minb, double _maxa, double _maxb)
@@ -542,16 +544,8 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 bool Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data)
 {
 	CombatDamage damage = *reinterpret_cast<CombatDamage*>(data);
-
-	bool blockPrimary = g_game.combatBlockHit(damage.primary.type, caster, target, damage.primary.value, params.blockedByShield, params.blockedByArmor, params.itemId != 0);
-	bool blockSecondary = g_game.combatBlockHit(damage.secondary.type, caster, target, damage.secondary.value, false, false, params.itemId != 0);
-	if (blockPrimary) {
-		if (blockSecondary) {
-			return false;
-		}
-		damage.primary.value = 0;
-	} else if (blockSecondary) {
-		damage.secondary.value = 0;
+	if (g_game.combatBlockHit(damage, caster, target, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
+		return false;
 	}
 
 	if ((damage.primary.value < 0 || damage.secondary.value < 0) && caster) {

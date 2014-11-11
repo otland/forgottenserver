@@ -115,5 +115,8 @@ function Player:onLoseExperience(exp)
 end
 
 function Player:onGainSkillTries(skill, tries)
+	if skill == SKILL_MAGLEVEL then
+		return tries * configManager.getNumber(configKeys.RATE_MAGIC)
+	end
 	return tries * configManager.getNumber(configKeys.RATE_SKILL)
 end
