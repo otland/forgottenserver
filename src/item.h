@@ -498,9 +498,9 @@ class Item : virtual public Thing
 		}
 		ItemDecayState_t getDecaying() const {
 			if (!attributes) {
-				return (ItemDecayState_t)0;
+				return DECAYING_FALSE;
 			}
-			return (ItemDecayState_t)getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE);
+			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
 		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
@@ -546,26 +546,50 @@ class Item : virtual public Thing
 			return items[id].ammoType;
 		}
 		uint8_t getShootRange() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_SHOOTRANGE)) {
+				return getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE);
+			}
 			return items[id].shootRange;
 		}
 
 		virtual uint32_t getWeight() const;
+		uint32_t getBaseWeight() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_WEIGHT)) {
+				return getIntAttr(ITEM_ATTRIBUTE_WEIGHT);
+			}
+			return items[id].weight;
+		}
 		int32_t getAttack() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_ATTACK)) {
+				return getIntAttr(ITEM_ATTRIBUTE_ATTACK);
+			}
 			return items[id].attack;
 		}
 		int32_t getArmor() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
+				return getIntAttr(ITEM_ATTRIBUTE_ARMOR);
+			}
 			return items[id].armor;
 		}
 		int32_t getDefense() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DEFENSE)) {
+				return getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
+			}
 			return items[id].defense;
 		}
 		int32_t getExtraDefense() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)) {
+				return getIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE);
+			}
 			return items[id].extraDefense;
 		}
 		int32_t getSlotPosition() const {
 			return items[id].slotPosition;
 		}
 		int32_t getHitChance() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_HITCHANCE)) {
+				return getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
+			}
 			return items[id].hitChance;
 		}
 
@@ -659,12 +683,21 @@ class Item : virtual public Thing
 		}
 
 		const std::string& getName() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_NAME)) {
+				return getStrAttr(ITEM_ATTRIBUTE_NAME);
+			}
 			return items[id].name;
 		}
 		const std::string getPluralName() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_PLURALNAME)) {
+				return getStrAttr(ITEM_ATTRIBUTE_PLURALNAME);
+			}
 			return items[id].getPluralName();
 		}
 		const std::string& getArticle() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_ARTICLE)) {
+				return getStrAttr(ITEM_ATTRIBUTE_ARTICLE);
+			}
 			return items[id].article;
 		}
 

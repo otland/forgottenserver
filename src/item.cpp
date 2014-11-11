@@ -663,10 +663,11 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 
 uint32_t Item::getWeight() const
 {
+	uint32_t weight = getBaseWeight();
 	if (isStackable()) {
-		return items[id].weight * std::max<uint32_t>(1, getItemCount());
+		return weight * std::max<uint32_t>(1, getItemCount());
 	}
-	return items[id].weight;
+	return weight;
 }
 
 std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
@@ -711,30 +712,50 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	} else if (it.weaponType != WEAPON_NONE) {
 		if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
-			s << " (Range:" << static_cast<uint16_t>(it.shootRange);
+			s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
 
-			if (it.attack != 0) {
-				s << ", Atk" << std::showpos << it.attack << std::noshowpos;
+			int32_t attack, hitChance;
+			if (item) {
+				attack = item->getAttack();
+				hitChance = item->getHitChance();
+			} else {
+				attack = it.attack;
+				hitChance = it.hitChance;
 			}
 
-			if (it.hitChance != 0) {
-				s << ", Hit%" << std::showpos << it.hitChance << std::noshowpos;
+			if (attack != 0) {
+				s << ", Atk" << std::showpos << attack << std::noshowpos;
+			}
+
+			if (hitChance != 0) {
+				s << ", Hit%" << std::showpos << hitChance << std::noshowpos;
 			}
 
 			s << ')';
 		} else if (it.weaponType != WEAPON_AMMO) {
 			bool begin = true;
 
-			if (it.attack != 0) {
+			int32_t attack, defense, extraDefense;
+			if (item) {
+				attack = item->getAttack();
+				defense = item->getDefense();
+				extraDefense = item->getExtraDefense();
+			} else {
+				attack = it.attack;
+				defense = it.defense;
+				extraDefense = it.extraDefense;
+			}
+
+			if (attack != 0) {
 				begin = false;
-				s << " (Atk:" << it.attack;
+				s << " (Atk:" << attack;
 
 				if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
 					s << " physical + " << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
 				}
 			}
 
-			if (it.defense != 0 || it.extraDefense != 0) {
+			if (defense != 0 || extraDefense != 0) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -742,10 +763,9 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "Def:" << it.defense;
-
-				if (it.extraDefense != 0 || (item && item->getExtraDefense() != 0)) {
-					s << ' ' << std::showpos << it.extraDefense << std::noshowpos;
+				s << "Def:" << defense;
+				if (extraDefense != 0) {
+					s << ' ' << std::showpos << extraDefense << std::noshowpos;
 				}
 			}
 
@@ -886,17 +906,12 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << ')';
 			}
 		}
-	} else if (it.armor || (item && item->getArmor()) || it.showAttributes) {
-		int32_t tmp = it.armor;
-
-		if (item) {
-			tmp = item->getArmor();
-		}
-
+	} else if (it.armor != 0 || (item && item->getArmor() != 0) || it.showAttributes) {
 		bool begin = true;
 
-		if (tmp != 0) {
-			s << " (Arm:" << tmp;
+		int32_t armor = (item ? item->getArmor() : it.armor);
+		if (armor != 0) {
+			s << " (Arm:" << armor;
 			begin = false;
 		}
 
@@ -1197,10 +1212,14 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 
 	if (lookDistance <= 1) {
-		uint32_t weight = (item == nullptr ? it.weight : item->getWeight());
-		if (weight != 0 && it.pickupable) {
-			int32_t amount = weight / it.weight;
-			s << std::endl << getWeightDescription(it, weight, amount);
+		if (item) {
+			uint32_t weight = item->getWeight();
+			if (weight != 0 && it.pickupable) {
+				uint32_t amount = weight / item->getBaseWeight();
+				s << std::endl << getWeightDescription(it, weight, amount);
+			}
+		} else if (it.weight != 0 && it.pickupable) {
+			s << std::endl << getWeightDescription(it, it.weight, 1);
 		}
 	}
 
@@ -1241,24 +1260,27 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 
 	std::ostringstream s;
 
-	if (!it.name.empty()) {
+	const std::string& name = (item ? item->getName() : it.name);
+	if (!name.empty()) {
 		if (it.stackable && subType > 1) {
 			if (it.showCount) {
 				s << subType << ' ';
 			}
 
-			s << it.getPluralName();
+			s << (item ? item->getPluralName() : it.getPluralName());
 		} else {
-			if (addArticle && !it.article.empty()) {
-				s << it.article << ' ';
+			if (addArticle) {
+				const std::string& article = (item ? item->getArticle() : it.article);
+				if (!article.empty()) {
+					s << article << ' ';
+				}
 			}
 
-			s << it.name;
+			s << name;
 		}
 	} else {
 		s << "an item of type " << it.id;
 	}
-
 	return s.str();
 }
 
@@ -1458,6 +1480,13 @@ bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
 		case ITEM_ATTRIBUTE_CHARGES:
 		case ITEM_ATTRIBUTE_FLUIDTYPE:
 		case ITEM_ATTRIBUTE_DOORID:
+		case ITEM_ATTRIBUTE_WEIGHT:
+		case ITEM_ATTRIBUTE_ATTACK:
+		case ITEM_ATTRIBUTE_DEFENSE:
+		case ITEM_ATTRIBUTE_EXTRADEFENSE:
+		case ITEM_ATTRIBUTE_ARMOR:
+		case ITEM_ATTRIBUTE_HITCHANCE:
+		case ITEM_ATTRIBUTE_SHOOTRANGE:
 			return true;
 
 		default:
@@ -1472,6 +1501,9 @@ bool ItemAttributes::validateStrAttrType(itemAttrTypes type)
 		case ITEM_ATTRIBUTE_DESCRIPTION:
 		case ITEM_ATTRIBUTE_TEXT:
 		case ITEM_ATTRIBUTE_WRITER:
+		case ITEM_ATTRIBUTE_NAME:
+		case ITEM_ATTRIBUTE_ARTICLE:
+		case ITEM_ATTRIBUTE_PLURALNAME:
 			return true;
 
 		default:

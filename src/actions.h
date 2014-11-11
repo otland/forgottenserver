@@ -98,7 +98,7 @@ class Actions final : public BaseEvents
 
 	protected:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		static void showUseHotkeyMessage(Player* player, int32_t id, uint32_t count);
+		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
 		void clear() final;
 		LuaScriptInterface& getScriptInterface() final;

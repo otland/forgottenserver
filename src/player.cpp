@@ -370,14 +370,14 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 					if (ammoItem && ammoItem->getAmmoType() == it.ammoType) {
 						const Weapon* weapon = g_weapons->getWeapon(ammoItem);
 						if (weapon) {
-							shootRange = it.shootRange;
+							shootRange = item->getShootRange();
 							return ammoItem;
 						}
 					}
 				} else {
 					const Weapon* weapon = g_weapons->getWeapon(item);
 					if (weapon) {
-						shootRange = it.shootRange;
+						shootRange = item->getShootRange();
 						return item;
 					}
 				}
@@ -2500,11 +2500,9 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 		return true;
 	}
 
-	double itemWeight;
+	uint32_t itemWeight = item->getBaseWeight();
 	if (item->isStackable()) {
-		itemWeight = Item::items[item->getID()].weight * count;
-	} else {
-		itemWeight = item->getWeight();
+		itemWeight *= count;
 	}
 	return itemWeight <= getFreeCapacity();
 }

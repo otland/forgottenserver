@@ -376,7 +376,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	player->stopWalk();
 
 	if (isHotkey) {
-		showUseHotkeyMessage(player, item->getID(), player->__getItemTypeCount(item->getID(), -1));
+		showUseHotkeyMessage(player, item, player->__getItemTypeCount(item->getID(), -1));
 	}
 
 	ReturnValue ret = internalUseItem(player, pos, index, item, isHotkey);
@@ -412,7 +412,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	}
 
 	if (isHotkey) {
-		showUseHotkeyMessage(player, item->getID(), player->__getItemTypeCount(item->getID(), -1));
+		showUseHotkeyMessage(player, item, player->__getItemTypeCount(item->getID(), -1));
 	}
 
 	int32_t fromStackPos = item->getParent()->__getIndexOfThing(item);
@@ -430,19 +430,18 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	return true;
 }
 
-void Actions::showUseHotkeyMessage(Player* player, int32_t id, uint32_t count)
+void Actions::showUseHotkeyMessage(Player* player, const Item* item, uint32_t count)
 {
-	const ItemType& it = Item::items[id];
 	std::ostringstream ss;
 
+	const ItemType& it = Item::items[item->getID()];
 	if (!it.showCount) {
-		ss << "Using one of " << it.name << "...";
+		ss << "Using one of " << item->getName() << "...";
 	} else if (count == 1) {
-		ss << "Using the last " << it.name << "...";
+		ss << "Using the last " << item->getName() << "...";
 	} else {
-		ss << "Using one of " << count << ' ' << it.getPluralName() << "...";
+		ss << "Using one of " << count << ' ' << item->getPluralName() << "...";
 	}
-
 	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 }
 

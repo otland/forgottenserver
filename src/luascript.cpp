@@ -1517,6 +1517,16 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_TEXT)
 	registerEnum(ITEM_ATTRIBUTE_DATE)
 	registerEnum(ITEM_ATTRIBUTE_WRITER)
+	registerEnum(ITEM_ATTRIBUTE_NAME)
+	registerEnum(ITEM_ATTRIBUTE_ARTICLE)
+	registerEnum(ITEM_ATTRIBUTE_PLURALNAME)
+	registerEnum(ITEM_ATTRIBUTE_WEIGHT)
+	registerEnum(ITEM_ATTRIBUTE_ATTACK)
+	registerEnum(ITEM_ATTRIBUTE_DEFENSE)
+	registerEnum(ITEM_ATTRIBUTE_EXTRADEFENSE)
+	registerEnum(ITEM_ATTRIBUTE_ARMOR)
+	registerEnum(ITEM_ATTRIBUTE_HITCHANCE)
+	registerEnum(ITEM_ATTRIBUTE_SHOOTRANGE)
 	registerEnum(ITEM_ATTRIBUTE_OWNER)
 	registerEnum(ITEM_ATTRIBUTE_DURATION)
 	registerEnum(ITEM_ATTRIBUTE_DECAYSTATE)
@@ -6675,10 +6685,10 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
-	if (attribute & 0x7F0013) { // All integer attributes
+	if (attribute & 0x7FFE13) { // All integer attributes
 		item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
 		pushBoolean(L, true);
-	} else if (attribute & 0x2C) { // All string attributes
+	} else if (attribute & 0x1EC) { // All string attributes
 		item->setStrAttr(attribute, getString(L, 3));
 		pushBoolean(L, true);
 	} else {

@@ -884,6 +884,26 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_DATE;
 	} else if (str == "writer") {
 		return ITEM_ATTRIBUTE_WRITER;
+	} else if (str == "name") {
+		return ITEM_ATTRIBUTE_NAME;
+	} else if (str == "article") {
+		return ITEM_ATTRIBUTE_ARTICLE;
+	} else if (str == "pluralname") {
+		return ITEM_ATTRIBUTE_PLURALNAME;
+	} else if (str == "weight") {
+		return ITEM_ATTRIBUTE_WEIGHT;
+	} else if (str == "attack") {
+		return ITEM_ATTRIBUTE_ATTACK;
+	} else if (str == "defense") {
+		return ITEM_ATTRIBUTE_DEFENSE;
+	} else if (str == "extradefense") {
+		return ITEM_ATTRIBUTE_EXTRADEFENSE;
+	} else if (str == "armor") {
+		return ITEM_ATTRIBUTE_ARMOR;
+	} else if (str == "hitchance") {
+		return ITEM_ATTRIBUTE_HITCHANCE;
+	} else if (str == "shootrange") {
+		return ITEM_ATTRIBUTE_SHOOTRANGE;
 	} else if (str == "owner") {
 		return ITEM_ATTRIBUTE_OWNER;
 	} else if (str == "duration") {
