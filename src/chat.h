@@ -91,8 +91,8 @@ class PrivateChatChannel final : public ChatChannel
 		uint32_t getOwner() const final {
 			return m_owner;
 		}
-		void setOwner(uint32_t id) {
-			m_owner = id;
+		void setOwner(uint32_t owner) {
+			m_owner = owner;
 		}
 
 		bool isInvited(const Player& player) const;

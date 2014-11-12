@@ -6657,9 +6657,9 @@ int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
-	if (attribute & 0x7F0013) { // All integer attributes
+	if (attribute & 0x7FFE13) { // All integer attributes
 		lua_pushnumber(L, item->getIntAttr(attribute));
-	} else if (attribute & 0x2C) { // All string attributes
+	} else if (attribute & 0x1EC) { // All string attributes
 		pushString(L, item->getStrAttr(attribute));
 	} else {
 		lua_pushnil(L);
