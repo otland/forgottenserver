@@ -120,3 +120,34 @@ function Player:onGainSkillTries(skill, tries)
 	end
 	return tries * configManager.getNumber(configKeys.RATE_SKILL)
 end
+
+local firstItems = {2050, 2382}
+
+function Player:onLogin()
+	local loginStr = "Welcome to " .. configManager.getString(configKeys.SERVER_NAME) .. "!"
+	if self:getLastLoginSaved() <= 0 then
+		loginStr = loginStr .. " Please choose your outfit."
+		self:sendOutfitWindow()
+		for i = 1, #firstItems do
+			self:addItem(firstItems[i], 1)
+		end
+		self:addItem(player:getSex() == 0 and 2651 or 2650, 1)
+		self:addItem(1987, 1):addItem(2674, 1)
+	else
+		if loginStr ~= "" then
+			self:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
+		end
+
+		loginStr = string.format("Your last visit was on %s.", os.date("%a %b %d %X %Y", self:getLastLoginSaved()))
+	end
+	self:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
+
+	self:registerEvent('PlayerDeath')
+	print(self:getName()..' has logged in.')
+	return true
+end
+
+function Player:onLogout()
+	print(self:getName()..' has logged out.')
+	return true
+end

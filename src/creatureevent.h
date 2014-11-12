@@ -26,8 +26,6 @@
 
 enum CreatureEventType_t {
 	CREATURE_EVENT_NONE,
-	CREATURE_EVENT_LOGIN,
-	CREATURE_EVENT_LOGOUT,
 	CREATURE_EVENT_THINK,
 	CREATURE_EVENT_PREPAREDEATH,
 	CREATURE_EVENT_DEATH,
@@ -91,8 +89,6 @@ class CreatureEvent final : public Event
 		void copyEvent(CreatureEvent* creatureEvent);
 
 		//scripting
-		bool executeOnLogin(Player* player);
-		bool executeOnLogout(Player* player);
 		bool executeOnThink(Creature* creature, uint32_t interval);
 		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);

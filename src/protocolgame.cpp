@@ -45,12 +45,14 @@
 #include "ban.h"
 #include "connection.h"
 #include "creatureevent.h"
+#include "events.h"
 #include "scheduler.h"
 
 extern Game g_game;
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 extern Chat* g_chat;
 
 // Helping templates to add dispatcher tasks
@@ -271,7 +273,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 			}
 
 			//scripting event - onLogout
-			if (!g_creatureEvents->playerLogout(player)) {
+			if (!g_events->eventPlayerOnLogout(player)) {
 				//Let the script handle the error message
 				return;
 			}

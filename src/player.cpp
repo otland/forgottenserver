@@ -1085,7 +1085,7 @@ void Player::sendPing()
 	}
 
 	if (noPongTime >= 60000 && canLogout()) {
-		if (g_creatureEvents->playerLogout(this)) {
+		if (g_events->eventPlayerOnLogout(this)) {
 			if (client) {
 				client->logout(true, true);
 			} else {
@@ -1281,8 +1281,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			bed->wakeUp(this);
 		}
 
-		std::cout << name << " has logged in." << std::endl;
-
 		if (guild) {
 			guild->addMember(this);
 		}
@@ -1381,8 +1379,6 @@ void Player::onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isL
 		}
 
 		g_chat->removeUserFromAllChannels(*this);
-
-		std::cout << getName() << " has logged out." << std::endl;
 
 		if (guild) {
 			guild->removeMember(this);
@@ -2369,7 +2365,7 @@ void Player::addList()
 
 void Player::kickPlayer(bool displayEffect)
 {
-	g_creatureEvents->playerLogout(this);
+	g_events->eventPlayerOnLogout(this);
 	if (client) {
 		client->logout(displayEffect, true);
 	} else {
@@ -3699,8 +3695,7 @@ void Player::onIdleStatus()
 
 void Player::onPlacedCreature()
 {
-	//scripting event - onLogin
-	if (!g_creatureEvents->playerLogin(this)) {
+	if (!g_events->eventPlayerOnLogin(this)) {
 		kickPlayer(true);
 	}
 }

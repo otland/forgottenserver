@@ -100,32 +100,6 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 	return nullptr;
 }
 
-bool CreatureEvents::playerLogin(Player* player) const
-{
-	//fire global event if is registered
-	for (const auto& it : m_creatureEvents) {
-		if (it.second->getEventType() == CREATURE_EVENT_LOGIN) {
-			if (!it.second->executeOnLogin(player)) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-bool CreatureEvents::playerLogout(Player* player) const
-{
-	//fire global event if is registered
-	for (const auto& it : m_creatureEvents) {
-		if (it.second->getEventType() == CREATURE_EVENT_LOGOUT) {
-			if (!it.second->executeOnLogout(player)) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
 bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldLevel,
                                        uint32_t newLevel)
 {
@@ -167,11 +141,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	}
 
 	std::string tmpStr = asLowerCaseString(typeAttribute.as_string());
-	if (tmpStr == "login") {
-		m_type = CREATURE_EVENT_LOGIN;
-	} else if (tmpStr == "logout") {
-		m_type = CREATURE_EVENT_LOGOUT;
-	} else if (tmpStr == "think") {
+	if (tmpStr == "think") {
 		m_type = CREATURE_EVENT_THINK;
 	} else if (tmpStr == "preparedeath") {
 		m_type = CREATURE_EVENT_PREPAREDEATH;
@@ -204,12 +174,6 @@ std::string CreatureEvent::getScriptEventName() const
 {
 	//Depending on the type script event name is different
 	switch (m_type) {
-		case CREATURE_EVENT_LOGIN:
-			return "onLogin";
-
-		case CREATURE_EVENT_LOGOUT:
-			return "onLogout";
-
 		case CREATURE_EVENT_THINK:
 			return "onThink";
 
@@ -260,44 +224,6 @@ void CreatureEvent::clearEvent()
 	m_scriptInterface = nullptr;
 	m_scripted = false;
 	m_isLoaded = false;
-}
-
-bool CreatureEvent::executeOnLogin(Player* player)
-{
-	//onLogin(player)
-	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::executeOnLogin] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	lua_State* L = m_scriptInterface->getLuaState();
-
-	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushUserdata(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-	return m_scriptInterface->callFunction(1);
-}
-
-bool CreatureEvent::executeOnLogout(Player* player)
-{
-	//onLogout(player)
-	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::executeOnLogout] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	lua_State* L = m_scriptInterface->getLuaState();
-
-	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushUserdata(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-	return m_scriptInterface->callFunction(1);
 }
 
 bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
