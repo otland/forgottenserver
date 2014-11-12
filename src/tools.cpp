@@ -842,31 +842,26 @@ CombatType_t indexToCombatType(uint32_t v)
 	if (v == 0) {
 		return COMBAT_FIRST;
 	}
-
-	return (CombatType_t)(1 << (v - 1));
+	return static_cast<CombatType_t>(1 << (v - 1));
 }
 
 uint8_t serverFluidToClient(uint8_t serverFluid)
 {
 	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(uint8_t);
-
 	for (uint8_t i = 0; i < size; ++i) {
 		if (clientToServerFluidMap[i] == serverFluid) {
 			return i;
 		}
 	}
-
 	return 0;
 }
 
 uint8_t clientFluidToServer(uint8_t clientFluid)
 {
 	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(uint8_t);
-
 	if (clientFluid >= size) {
 		return 0;
 	}
-
 	return clientToServerFluidMap[clientFluid];
 }
 

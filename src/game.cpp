@@ -722,17 +722,17 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 					bool sendUpdateSkills = false;
 					if (offlineTrainingSkill == SKILL_CLUB || offlineTrainingSkill == SKILL_SWORD || offlineTrainingSkill == SKILL_AXE) {
 						float modifier = vocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = player->addOfflineTrainingTries((skills_t)offlineTrainingSkill, (offlineTrainingTime / modifier) / 2);
+						sendUpdateSkills = player->addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 2);
 					} else if (offlineTrainingSkill == SKILL_DISTANCE) {
 						float modifier = vocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = player->addOfflineTrainingTries((skills_t)offlineTrainingSkill, (offlineTrainingTime / modifier) / 4);
+						sendUpdateSkills = player->addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 4);
 					} else if (offlineTrainingSkill == SKILL_MAGLEVEL) {
 						int32_t gainTicks = vocation->getManaGainTicks() * 2;
 						if (gainTicks == 0) {
 							gainTicks = 1;
 						}
 
-						player->addOfflineTrainingTries(SKILL_MAGLEVEL, offlineTrainingTime * ((double)vocation->getManaGainAmount() / gainTicks));
+						player->addOfflineTrainingTries(SKILL_MAGLEVEL, offlineTrainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
 					}
 
 					if (player->addOfflineTrainingTries(SKILL_SHIELD, offlineTrainingTime / 4) || sendUpdateSkills) {
@@ -5238,13 +5238,13 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 					ItemAttributes* attributes = item->getAttributes();
 					for (const auto& attr : attributes->getList()) {
 						if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-							uint16_t charges = static_cast<uint16_t>(0xFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+							uint16_t charges = static_cast<uint16_t>(reinterpret_cast<ptrdiff_t>(attr.value));
 							if (charges != itemType.charges) {
 								badAttribute = true;
 								break;
 							}
 						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-							uint32_t duration = static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+							uint32_t duration = static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(attr.value));
 							if (duration != itemType.decayTime) {
 								badAttribute = true;
 								break;
@@ -5306,7 +5306,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		player->bankBalance -= totalPrice;
 	}
 
-	IOMarket::createOffer(player->getGUID(), (MarketAction_t)type, it.id, amount, price, anonymous);
+	IOMarket::createOffer(player->getGUID(), static_cast<MarketAction_t>(type), it.id, amount, price, anonymous);
 
 	player->sendMarketEnter(player->getLastDepotId());
 	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
@@ -5438,13 +5438,13 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 					ItemAttributes* attributes = item->getAttributes();
 					for (const auto& attr : attributes->getList()) {
 						if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-							uint16_t charges = static_cast<uint16_t>(0xFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+							uint16_t charges = static_cast<uint16_t>(reinterpret_cast<ptrdiff_t>(attr.value));
 							if (charges != itemType.charges) {
 								badAttribute = true;
 								break;
 							}
 						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-							uint32_t duration = static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+							uint32_t duration = static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(attr.value));
 							if (duration != itemType.decayTime) {
 								badAttribute = true;
 								break;

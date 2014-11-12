@@ -440,7 +440,7 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 {
 	switch (param) {
 		case COMBAT_PARAM_TYPE: {
-			params.combatType = (CombatType_t)value;
+			params.combatType = static_cast<CombatType_t>(value);
 			return true;
 		}
 
@@ -480,7 +480,7 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 		}
 
 		case COMBAT_PARAM_DISPEL: {
-			params.dispelType = (ConditionType_t)value;
+			params.dispelType = static_cast<ConditionType_t>(value);
 			return true;
 		}
 

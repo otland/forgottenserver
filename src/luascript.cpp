@@ -3313,7 +3313,7 @@ int32_t LuaScriptInterface::luaSetCombatParam(lua_State* L)
 	uint32_t combatId = getNumber<uint32_t>(L, 1);
 	Combat* combat = g_luaEnvironment.getCombatObject(combatId);
 	if (combat) {
-		CombatParam_t key = (CombatParam_t)getNumber<uint32_t>(L, 2);
+		CombatParam_t key = getNumber<CombatParam_t>(L, 2);
 		uint32_t value = getNumber<uint32_t>(L, 3);
 		combat->setParam(key, value);
 		pushBoolean(L, true);
@@ -3428,7 +3428,7 @@ int32_t LuaScriptInterface::luaSetCombatCallBack(lua_State* L)
 		return 1;
 	}
 
-	CallBackParam_t key = (CallBackParam_t)getNumber<uint32_t>(L, 2);
+	CallBackParam_t key = getNumber<CallBackParam_t>(L, 2);
 	combat->setCallback(key);
 
 	CallBack* callback = combat->getCallback(key);
@@ -3822,7 +3822,7 @@ int32_t LuaScriptInterface::luaDoTargetCombatDispel(lua_State* L)
 	}
 
 	CombatParams params;
-	params.dispelType = (ConditionType_t)getNumber<uint32_t>(L, 3);
+	params.dispelType = getNumber<ConditionType_t>(L, 3);
 	params.impactEffect = getNumber<uint8_t>(L, 4);
 	Combat::doCombatDispel(creature, target, params);
 	pushBoolean(L, true);
@@ -3884,7 +3884,7 @@ int32_t LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
 		return 1;
 	}
 
-	ConditionType_t conditionType = (ConditionType_t)getNumber<uint32_t>(L, 2);
+	ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
 	uint32_t subId = getNumber<uint32_t>(L, 3, 0);
 
 	Condition* condition = creature->getCondition(conditionType, CONDITIONID_COMBAT, subId);
@@ -3958,7 +3958,7 @@ int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 		return 1;
 	}
 
-	uint32_t direction = getNumber<uint32_t>(L, 2);
+	Direction direction = getNumber<Direction>(L, 2);
 	switch (direction) {
 		case NORTH:
 		case SOUTH:
@@ -3975,7 +3975,7 @@ int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 			return 1;
 	}
 
-	ReturnValue ret = g_game.internalMoveCreature(creature, (Direction)direction, FLAG_NOLIMIT);
+	ReturnValue ret = g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT);
 	lua_pushnumber(L, ret);
 	return 1;
 }
@@ -4142,18 +4142,15 @@ int32_t LuaScriptInterface::luaHasProperty(lua_State* L)
 		return 1;
 	}
 
-	uint32_t prop = getNumber<uint32_t>(L, 2);
+	ITEMPROPERTY prop = getNumber<ITEMPROPERTY>(L, 2);
 
 	//Check if the item is a tile, so we can get more accurate properties
-	bool hasProp;
 	const Tile* itemTile = item->getTile();
 	if (itemTile && itemTile->ground == item) {
-		hasProp = itemTile->hasProperty((ITEMPROPERTY)prop);
+		pushBoolean(L, itemTile->hasProperty(prop));
 	} else {
-		hasProp = item->hasProperty((ITEMPROPERTY)prop);
+		pushBoolean(L, item->hasProperty(prop));
 	}
-
-	pushBoolean(L, hasProp);
 	return 1;
 }
 
@@ -4313,9 +4310,9 @@ int32_t LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
 		return 1;
 	}
 
-	uint32_t condition = getNumber<uint32_t>(L, 2);
+	ConditionType_t condition = getNumber<ConditionType_t>(L, 2);
 	uint32_t subId = getNumber<uint32_t>(L, 3, 0);
-	pushBoolean(L, creature->hasCondition((ConditionType_t)condition, subId));
+	pushBoolean(L, creature->hasCondition(condition, subId));
 	return 1;
 }
 
@@ -10441,7 +10438,7 @@ int32_t LuaScriptInterface::luaVocationGetRequiredSkillTries(lua_State* L)
 	// vocation:getRequiredSkillTries(skillType, skillLevel)
 	Vocation* vocation = getUserdata<Vocation>(L, 1);
 	if (vocation) {
-		skills_t skillType = getNumber<skills_t>(L, 2);
+		int32_t skillType = getNumber<int32_t>(L, 2);
 		int32_t skillLevel = getNumber<int32_t>(L, 3);
 		lua_pushnumber(L, vocation->getReqSkillTries(skillType, skillLevel));
 	} else {
@@ -11970,7 +11967,7 @@ int32_t LuaScriptInterface::luaMonsterTypeGetAttackList(lua_State* L)
 		setField(L, "maxCombatValue", spellBlock.maxCombatValue);
 		setField(L, "range", spellBlock.range);
 		setField(L, "speed", spellBlock.speed);
-		pushUserdata<CombatSpell>(L, static_cast<CombatSpell*>(spellBlock.spell));
+		pushUserdata<CombatSpell>(L, reinterpret_cast<CombatSpell*>(spellBlock.spell));
 		lua_setfield(L, -2, "spell");
 
 		lua_rawseti(L, -2, ++index);
@@ -12000,7 +11997,7 @@ int32_t LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 		setField(L, "maxCombatValue", spellBlock.maxCombatValue);
 		setField(L, "range", spellBlock.range);
 		setField(L, "speed", spellBlock.speed);
-		pushUserdata<CombatSpell>(L, static_cast<CombatSpell*>(spellBlock.spell));
+		pushUserdata<CombatSpell>(L, reinterpret_cast<CombatSpell*>(spellBlock.spell));
 		lua_setfield(L, -2, "spell");
 
 		lua_rawseti(L, -2, ++index);

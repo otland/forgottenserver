@@ -444,55 +444,49 @@ inline Tile::~Tile()
 inline CreatureVector* Tile::getCreatures()
 {
 	if (is_dynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::getCreatures();
+		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::getCreatures();
 	}
-
-	return static_cast<StaticTile*>(this)->StaticTile::getCreatures();
+	return reinterpret_cast<StaticTile*>(this)->StaticTile::getCreatures();
 }
 
 inline const CreatureVector* Tile::getCreatures() const
 {
 	if (is_dynamic()) {
-		return static_cast<const DynamicTile*>(this)->DynamicTile::getCreatures();
+		return reinterpret_cast<const DynamicTile*>(this)->DynamicTile::getCreatures();
 	}
-
-	return static_cast<const StaticTile*>(this)->StaticTile::getCreatures();
+	return reinterpret_cast<const StaticTile*>(this)->StaticTile::getCreatures();
 }
 
 inline TileItemVector* Tile::getItemList()
 {
 	if (is_dynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::getItemList();
+		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::getItemList();
 	}
-
-	return static_cast<StaticTile*>(this)->StaticTile::getItemList();
+	return reinterpret_cast<StaticTile*>(this)->StaticTile::getItemList();
 }
 
 inline const TileItemVector* Tile::getItemList() const
 {
 	if (is_dynamic()) {
-		return static_cast<const DynamicTile*>(this)->DynamicTile::getItemList();
+		return reinterpret_cast<const DynamicTile*>(this)->DynamicTile::getItemList();
 	}
-
-	return static_cast<const StaticTile*>(this)->StaticTile::getItemList();
+	return reinterpret_cast<const StaticTile*>(this)->StaticTile::getItemList();
 }
 
 inline CreatureVector* Tile::makeCreatures()
 {
 	if (is_dynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::makeCreatures();
+		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::makeCreatures();
 	}
-
-	return static_cast<StaticTile*>(this)->StaticTile::makeCreatures();
+	return reinterpret_cast<StaticTile*>(this)->StaticTile::makeCreatures();
 }
 
 inline TileItemVector* Tile::makeItemList()
 {
 	if (is_dynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::makeItemList();
+		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::makeItemList();
 	}
-
-	return static_cast<StaticTile*>(this)->StaticTile::makeItemList();
+	return reinterpret_cast<StaticTile*>(this)->StaticTile::makeItemList();
 }
 
 inline StaticTile::StaticTile(uint16_t x, uint16_t y, uint16_t z) :

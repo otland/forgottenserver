@@ -69,7 +69,7 @@ bool Condition::unserialize(PropStream& propStream)
 {
 	uint8_t attr_type;
 	while (propStream.read<uint8_t>(attr_type) && attr_type != CONDITIONATTR_END) {
-		if (!unserializeProp((ConditionAttr_t)attr_type, propStream)) {
+		if (!unserializeProp(static_cast<ConditionAttr_t>(attr_type), propStream)) {
 			return false;
 		}
 	}
@@ -475,7 +475,7 @@ void ConditionAttributes::updateStats(Player* player)
 	for (int32_t i = STAT_FIRST; i <= STAT_LAST; ++i) {
 		if (stats[i]) {
 			needUpdateStats = true;
-			player->setVarStats((stats_t)i, stats[i]);
+			player->setVarStats(static_cast<stats_t>(i), stats[i]);
 		}
 	}
 
@@ -491,7 +491,7 @@ void ConditionAttributes::updatePercentSkills(Player* player)
 			continue;
 		}
 
-		int32_t currSkill = player->getSkill((skills_t)i, SKILLVALUE_LEVEL);
+		int32_t currSkill = player->getSkill(static_cast<skills_t>(i), SKILLVALUE_LEVEL);
 		skills[i] = static_cast<int32_t>(currSkill * ((skillsPercent[i] - 100) / 100.f));
 	}
 }
@@ -503,7 +503,7 @@ void ConditionAttributes::updateSkills(Player* player)
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		if (skills[i]) {
 			needUpdateSkills = true;
-			player->setVarSkill((skills_t)i, skills[i]);
+			player->setVarSkill(static_cast<skills_t>(i), skills[i]);
 		}
 	}
 
@@ -527,7 +527,7 @@ void ConditionAttributes::endCondition(Creature* creature)
 			if (skills[i] || skillsPercent[i]) {
 				needUpdateSkills = true;
 				const int new_skill = skills[i];
-				player->setVarSkill((skills_t)i, -new_skill);
+				player->setVarSkill(static_cast<skills_t>(i), -new_skill);
 			}
 		}
 
@@ -540,7 +540,7 @@ void ConditionAttributes::endCondition(Creature* creature)
 		for (int32_t i = STAT_FIRST; i <= STAT_LAST; ++i) {
 			if (stats[i]) {
 				needUpdateStats = true;
-				player->setVarStats((stats_t)i, -stats[i]);
+				player->setVarStats(static_cast<stats_t>(i), -stats[i]);
 			}
 		}
 
@@ -1727,7 +1727,7 @@ void ConditionSpellGroupCooldown::addCondition(Creature* creature, const Conditi
 		if (subId != 0 && ticks > 0) {
 			Player* player = creature->getPlayer();
 			if (player) {
-				player->sendSpellGroupCooldown((SpellGroup_t)subId, ticks);
+				player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 			}
 		}
 	}
@@ -1742,7 +1742,7 @@ bool ConditionSpellGroupCooldown::startCondition(Creature* creature)
 	if (subId != 0 && ticks > 0) {
 		Player* player = creature->getPlayer();
 		if (player) {
-			player->sendSpellGroupCooldown((SpellGroup_t)subId, ticks);
+			player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 		}
 	}
 	return true;

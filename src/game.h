@@ -563,12 +563,6 @@ class Game
 		Commands commands;
 		Groups groups;
 
-		struct GameEvent {
-			int64_t tick;
-			int type;
-			void* data;
-		};
-
 		static const int32_t LIGHT_LEVEL_DAY = 250;
 		static const int32_t LIGHT_LEVEL_NIGHT = 40;
 		static const int32_t SUNSET = 1305;

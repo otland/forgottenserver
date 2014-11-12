@@ -96,7 +96,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		return false;
 	}
 
-	OTBM_root_header* root_header;
+	const OTBM_root_header* root_header;
 	if (!propStream.readStruct(root_header)) {
 		setLastErrorString("Could not read header.");
 		return false;
@@ -203,7 +203,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				return false;
 			}
 
-			OTBM_Destination_coords* area_coord;
+			const OTBM_Destination_coords* area_coord;
 			if (!propStream.readStruct(area_coord)) {
 				setLastErrorString("Invalid map node.");
 				return false;
@@ -230,7 +230,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				OTBM_Tile_coords* tile_coord;
+				const OTBM_Tile_coords* tile_coord;
 				if (!propStream.readStruct(tile_coord)) {
 					setLastErrorString("Could not read tile position.");
 					return false;
@@ -264,7 +264,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					}
 
 					tile = new HouseTile(px, py, pz, house);
-					house->addTile(static_cast<HouseTile*>(tile));
+					house->addTile(reinterpret_cast<HouseTile*>(tile));
 					isHouseTile = true;
 				}
 
@@ -438,7 +438,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 				town->setName(townName);
 
-				OTBM_Destination_coords* town_coords;
+				const OTBM_Destination_coords* town_coords;
 				if (!propStream.readStruct(town_coords)) {
 					setLastErrorString("Could not read town coordinates.");
 					return false;
@@ -467,7 +467,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				OTBM_Destination_coords* waypoint_coords;
+				const OTBM_Destination_coords* waypoint_coords;
 				if (!propStream.readStruct(waypoint_coords)) {
 					setLastErrorString("Could not read waypoint coordinates.");
 					return false;

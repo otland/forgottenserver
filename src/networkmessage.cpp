@@ -46,7 +46,7 @@ std::string NetworkMessage::GetString(uint16_t stringlen/* = 0*/)
 		return std::string();
 	}
 
-	char* v = (char*)m_RealBuf + m_ReadPos;
+	char* v = reinterpret_cast<char*>(m_RealBuf) + m_ReadPos;
 	m_ReadPos += stringlen;
 	return std::string(v, stringlen);
 }

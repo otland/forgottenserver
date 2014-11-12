@@ -102,7 +102,7 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 
 bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 {
-	MoveEvent* moveEvent = static_cast<MoveEvent*>(event);
+	MoveEvent* moveEvent = reinterpret_cast<MoveEvent*>(event);
 
 	const MoveEvent_t eventType = moveEvent->getEventType();
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
@@ -594,11 +594,6 @@ bool MoveEvent::loadFunction(const std::string& functionName)
 
 MoveEvent_t MoveEvent::getEventType() const
 {
-	if (m_eventType == MOVE_EVENT_NONE) {
-		std::cout << "Error: [MoveEvent::getEventType()] MOVE_EVENT_NONE" << std::endl;
-		return (MoveEvent_t)0;
-	}
-
 	return m_eventType;
 }
 
@@ -680,12 +675,12 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	}
 
 	if (it.abilities->invisible) {
-		Condition* condition = Condition::createCondition((ConditionId_t)slot, CONDITION_INVISIBLE, -1, 0);
+		Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_INVISIBLE, -1, 0);
 		player->addCondition(condition);
 	}
 
 	if (it.abilities->manaShield) {
-		Condition* condition = Condition::createCondition((ConditionId_t)slot, CONDITION_MANASHIELD, -1, 0);
+		Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_MANASHIELD, -1, 0);
 		player->addCondition(condition);
 	}
 
@@ -699,7 +694,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	}
 
 	if (it.abilities->regeneration) {
-		Condition* condition = Condition::createCondition((ConditionId_t)slot, CONDITION_REGENERATION, -1, 0);
+		Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_REGENERATION, -1, 0);
 
 		if (it.abilities->healthGain != 0) {
 			condition->setParam(CONDITION_PARAM_HEALTHGAIN, it.abilities->healthGain);
@@ -726,7 +721,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		if (it.abilities->skills[i]) {
 			needUpdateSkills = true;
-			player->setVarSkill((skills_t)i, it.abilities->skills[i]);
+			player->setVarSkill(static_cast<skills_t>(i), it.abilities->skills[i]);
 		}
 	}
 
@@ -776,11 +771,11 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	}
 
 	if (it.abilities->invisible) {
-		player->removeCondition(CONDITION_INVISIBLE, (ConditionId_t)slot);
+		player->removeCondition(CONDITION_INVISIBLE, static_cast<ConditionId_t>(slot));
 	}
 
 	if (it.abilities->manaShield) {
-		player->removeCondition(CONDITION_MANASHIELD, (ConditionId_t)slot);
+		player->removeCondition(CONDITION_MANASHIELD, static_cast<ConditionId_t>(slot));
 	}
 
 	if (it.abilities->speed != 0) {
@@ -793,7 +788,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	}
 
 	if (it.abilities->regeneration) {
-		player->removeCondition(CONDITION_REGENERATION, (ConditionId_t)slot);
+		player->removeCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
 	}
 
 	//skill modifiers
@@ -802,7 +797,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		if (it.abilities->skills[i] != 0) {
 			needUpdateSkills = true;
-			player->setVarSkill((skills_t)i, -it.abilities->skills[i]);
+			player->setVarSkill(static_cast<skills_t>(i), -it.abilities->skills[i]);
 		}
 	}
 

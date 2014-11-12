@@ -128,7 +128,7 @@ Event* Weapons::getEvent(const std::string& nodeName)
 
 bool Weapons::registerEvent(Event* event, const pugi::xml_node&)
 {
-	Weapon* weapon = static_cast<Weapon*>(event);
+	Weapon* weapon = reinterpret_cast<Weapon*>(event);
 	if (weapons.find(weapon->getID()) != weapons.end()) {
 		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
 		return false;

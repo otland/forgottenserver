@@ -642,7 +642,7 @@ bool Item::unserializeAttr(PropStream& propStream)
 {
 	uint8_t attr_type;
 	while (propStream.read<uint8_t>(attr_type) && attr_type != 0) {
-		Attr_ReadValue ret = readAttr((AttrTypes_t)attr_type, propStream);
+		Attr_ReadValue ret = readAttr(static_cast<AttrTypes_t>(attr_type), propStream);
 		if (ret == ATTR_READ_ERROR) {
 			return false;
 		} else if (ret == ATTR_READ_END) {
@@ -1515,7 +1515,7 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 
 	const Attribute* attr = getExistingAttr(type);
 	if (attr) {
-		return *(std::string*)attr->value;
+		return *attr->value;
 	} else {
 		return emptyString;
 	}
@@ -1533,9 +1533,9 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 
 	Attribute& attr = getAttr(type);
 	if (attr.value) {
-		delete (std::string*)attr.value;
+		delete attr.value;
 	}
-	attr.value = (uint8_t*)new std::string(value);
+	attr.value = new std::string(value);
 }
 
 void ItemAttributes::removeAttribute(itemAttrTypes type)
@@ -1580,7 +1580,7 @@ void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
 		return;
 	}
 
-	getAttr(type).value = reinterpret_cast<uint8_t*>(value);
+	getAttr(type).value = reinterpret_cast<std::string*>(value);
 }
 
 void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)

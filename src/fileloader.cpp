@@ -236,7 +236,7 @@ bool FileLoader::getProps(const NODE node, PropStream& props)
 {
 	size_t size;
 	if (const uint8_t* a = getProps(node, size)) {
-		props.init((char*)a, size);
+		props.init(reinterpret_cast<const char*>(a), size);
 		return true;
 	}
 
@@ -383,7 +383,7 @@ int32_t FileLoader::loadCacheBlock(uint32_t pos)
 
 	if (loading_cache == -1) {
 		for (i = 0; i < CACHE_BLOCKS; i++) {
-			if (abs((long)m_cached_data[i].base - base_pos) > (long)(2 * m_cache_size)) {
+			if (abs(static_cast<long>(m_cached_data[i].base) - base_pos) > static_cast<long>(2 * m_cache_size)) {
 				loading_cache = i;
 				break;
 			}

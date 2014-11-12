@@ -234,7 +234,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	player->bankBalance = result->getNumber<uint64_t>("balance");
 
-	player->setSex((PlayerSex_t)result->getDataInt("sex"));
+	player->setSex(static_cast<PlayerSex_t>(result->getDataInt("sex")));
 	player->level = std::max<uint32_t>(1, result->getDataInt("level"));
 
 	uint64_t experience = result->getNumber<uint64_t>("experience");

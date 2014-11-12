@@ -101,7 +101,7 @@ class OutputMessage : public NetworkMessage
 			}
 
 			m_outputBufferStart -= sizeof(T);
-			*(T*)(m_MsgBuf + m_outputBufferStart) = add;
+			*reinterpret_cast<T*>(m_MsgBuf + m_outputBufferStart) = add;
 			//added header size to the message size
 			m_MsgSize += sizeof(T);
 		}

@@ -136,7 +136,7 @@ bool Commands::loadFromXml()
 		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
 		if (acctypeAttribute) {
 			if (!command->loadedAccountType) {
-				command->accountType = (AccountType_t)pugi::cast<uint32_t>(acctypeAttribute.value());
+				command->accountType = static_cast<AccountType_t>(pugi::cast<uint32_t>(acctypeAttribute.value()));
 				command->loadedAccountType = true;
 			} else {
 				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;

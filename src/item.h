@@ -134,7 +134,7 @@ class ItemAttributes
 			removeAttribute(ITEM_ATTRIBUTE_DATE);
 		}
 		time_t getDate() const {
-			return (time_t)getIntAttr(ITEM_ATTRIBUTE_DATE);
+			return static_cast<time_t>(getIntAttr(ITEM_ATTRIBUTE_DATE));
 		}
 
 		void setWriter(const std::string& _writer) {
@@ -211,7 +211,7 @@ class ItemAttributes
 			setIntAttr(ITEM_ATTRIBUTE_DECAYSTATE, decayState);
 		}
 		ItemDecayState_t getDecaying() const {
-			return (ItemDecayState_t)getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE);
+			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
 	protected:
@@ -224,7 +224,7 @@ class ItemAttributes
 
 		struct Attribute
 		{
-			uint8_t* value;
+			std::string* value;
 			itemAttrTypes type;
 
 			Attribute(itemAttrTypes type) : value(nullptr), type(type) {}
@@ -233,7 +233,7 @@ class ItemAttributes
 				if (ItemAttributes::validateIntAttrType(type)) {
 					value = i.value;
 				} else if (ItemAttributes::validateStrAttrType(type)) {
-					value = (uint8_t*)new std::string( *((std::string*)i.value) );
+					value = new std::string(*i.value);
 				} else {
 					value = nullptr;
 				}
@@ -244,7 +244,7 @@ class ItemAttributes
 			}
 			~Attribute() {
 				if (ItemAttributes::validateStrAttrType(type)) {
-					delete (std::string*)value;
+					delete value;
 				}
 			}
 			Attribute& operator=(Attribute other) {
@@ -254,7 +254,7 @@ class ItemAttributes
 			Attribute& operator=(Attribute&& other) {
 				if (this != &other) {
 					if (ItemAttributes::validateStrAttrType(type)) {
-						delete (std::string*)value;
+						delete value;
 					}
 
 					value = other.value;
@@ -416,7 +416,7 @@ class Item : virtual public Thing
 			removeAttribute(ITEM_ATTRIBUTE_DATE);
 		}
 		time_t getDate() const {
-			return (time_t)getIntAttr(ITEM_ATTRIBUTE_DATE);
+			return static_cast<time_t>(getIntAttr(ITEM_ATTRIBUTE_DATE));
 		}
 
 		void setWriter(const std::string& _writer) {

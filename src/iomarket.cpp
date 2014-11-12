@@ -100,7 +100,7 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 		offer.price = result->getDataInt("price");
 		offer.timestamp = result->getDataInt("expires_at");
 
-		MarketOfferState_t offerState = (MarketOfferState_t)result->getDataInt("state");
+		MarketOfferState_t offerState = static_cast<MarketOfferState_t>(result->getDataInt("state"));
 		if (offerState == OFFERSTATE_ACCEPTEDEX) {
 			offerState = OFFERSTATE_ACCEPTED;
 		}
@@ -167,7 +167,7 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 	}
 
 	offer.id = result->getDataInt("id");
-	offer.type = (MarketAction_t)result->getDataInt("sale");
+	offer.type = static_cast<MarketAction_t>(result->getDataInt("sale"));
 	offer.amount = result->getDataInt("amount");
 	offer.counter = result->getDataInt("id") & 0xFFFF;
 	offer.timestamp = result->getDataInt("created");
@@ -232,7 +232,7 @@ void IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 		return;
 	}
 
-	appendHistory(result->getDataInt("player_id"), (MarketAction_t)result->getDataInt("sale"), result->getDataInt("itemtype"), result->getDataInt("amount"), result->getDataInt("price"), result->getDataInt("created") + marketOfferDuration, state);
+	appendHistory(result->getDataInt("player_id"), static_cast<MarketAction_t>(result->getDataInt("sale")), result->getDataInt("itemtype"), result->getDataInt("amount"), result->getDataInt("price"), result->getDataInt("created") + marketOfferDuration, state);
 }
 
 void IOMarket::updateStatistics()

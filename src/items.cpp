@@ -69,7 +69,7 @@ ItemType::ItemType()
 	slotPosition = SLOTP_HAND;
 	ammoType = AMMO_NONE;
 	ammoAction = AMMOACTION_NONE;
-	shootType = (ShootType_t)0;
+	shootType = CONST_ANI_NONE;
 	magicEffect = CONST_ME_NONE;
 	attack = 0;
 	defense = 0;
@@ -185,7 +185,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 				return ERROR_INVALID_FORMAT;
 			}
 
-			VERSIONINFO* vi;
+			const VERSIONINFO* vi;
 			if (!props.readStruct(vi)) {
 				return ERROR_INVALID_FORMAT;
 			}
@@ -276,7 +276,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					lightBlock2* lb2;
+					const lightBlock2* lb2;
 					if (!stream.readStruct(lb2)) {
 						return ERROR_INVALID_FORMAT;
 					}
@@ -328,7 +328,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 		}
 		ItemType& iType = items[serverId];
 
-		iType.group = (itemgroup_t)type;
+		iType.group = static_cast<itemgroup_t>(type);
 		switch (type) {
 			case ITEM_GROUP_CONTAINER:
 				iType.type = ITEM_TYPE_CONTAINER;

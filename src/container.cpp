@@ -74,7 +74,7 @@ Container::~Container()
 
 Item* Container::clone() const
 {
-	Container* clone = static_cast<Container*>(Item::clone());
+	Container* clone = reinterpret_cast<Container*>(Item::clone());
 	for (Item* item : itemlist) {
 		clone->addItem(item->clone());
 	}

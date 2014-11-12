@@ -509,7 +509,7 @@ int32_t Player::getDefense() const
 	}
 
 	defenseValue = static_cast<int32_t>(defenseValue * vocation->defenseMultiplier);
-	return static_cast<int32_t>(std::ceil(((float)(defenseSkill * (defenseValue * 0.015)) + (defenseValue * 0.1)) * defenseFactor));
+	return static_cast<int32_t>(std::ceil((static_cast<float>(defenseSkill * (defenseValue * 0.015)) + (defenseValue * 0.1)) * defenseFactor));
 }
 
 float Player::getAttackFactor() const
@@ -857,11 +857,13 @@ void Player::dropLoot(Container* corpse, Creature* _lastHitCreature)
 		} else {
 			for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 				Item* item = inventory[i];
-				if (item) {
-					if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || uniform_random(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
-						g_game.internalMoveItem(this, corpse, INDEX_WHEREEVER, item, item->getItemCount(), 0);
-						sendInventoryItem((slots_t)i, nullptr);
-					}
+				if (!item) {
+					continue;
+				}
+
+				if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || uniform_random(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
+					g_game.internalMoveItem(this, corpse, INDEX_WHEREEVER, item, item->getItemCount(), 0);
+					sendInventoryItem(static_cast<slots_t>(i), nullptr);
 				}
 			}
 		}
@@ -1267,7 +1269,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			Item* item = inventory[slot];
 			if (item) {
 				item->__startDecaying();
-				g_moveEvents->onPlayerEquip(this, item, (slots_t)slot, false);
+				g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
 			}
 		}
 
@@ -2056,7 +2058,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 
 	if (damage > 0) {
 		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-			if (!isItemAbilityEnabled((slots_t)slot)) {
+			if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
 				continue;
 			}
 
@@ -2138,7 +2140,7 @@ void Player::death(Creature* _lastHitCreature)
 				}
 
 				if (sumLevels > level) {
-					double reduce = level / (double)sumLevels;
+					double reduce = level / static_cast<double>(sumLevels);
 					unfairFightReduction = std::max<uint8_t>(20, std::floor((reduce * 100) + 0.5));
 				}
 			}
@@ -2702,7 +2704,7 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 
 	if (ret == RETURNVALUE_NOERROR || ret == RETURNVALUE_NOTENOUGHROOM) {
 		//need an exchange with source?
-		const Item* inventoryItem = getInventoryItem((slots_t)index);
+		const Item* inventoryItem = getInventoryItem(static_cast<slots_t>(index));
 		if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
 			return RETURNVALUE_NEEDEXCHANGE;
 		}
@@ -2712,7 +2714,7 @@ ReturnValue Player::__queryAdd(int32_t index, const Thing* thing, uint32_t count
 			return RETURNVALUE_NOTENOUGHCAPACITY;
 		}
 
-		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), (slots_t)index, true)) {
+		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true)) {
 			return RETURNVALUE_CANNOTBEDRESSED;
 		}
 	}
@@ -2958,7 +2960,7 @@ void Player::__addThing(int32_t index, Thing* thing)
 	inventory[index] = item;
 
 	//send to client
-	sendInventoryItem((slots_t)index, item);
+	sendInventoryItem(static_cast<slots_t>(index), item);
 }
 
 void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
@@ -2977,7 +2979,7 @@ void Player::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	item->setSubType(count);
 
 	//send to client
-	sendInventoryItem((slots_t)index, item);
+	sendInventoryItem(static_cast<slots_t>(index), item);
 
 	//event methods
 	onUpdateInventoryItem(item, item);
@@ -2989,7 +2991,7 @@ void Player::__replaceThing(uint32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* oldItem = getInventoryItem((slots_t)index);
+	Item* oldItem = getInventoryItem(static_cast<slots_t>(index));
 	if (!oldItem) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -3000,7 +3002,7 @@ void Player::__replaceThing(uint32_t index, Thing* thing)
 	}
 
 	//send to client
-	sendInventoryItem((slots_t)index, item);
+	sendInventoryItem(static_cast<slots_t>(index), item);
 
 	//event methods
 	onUpdateInventoryItem(oldItem, item);
@@ -3025,7 +3027,7 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 	if (item->isStackable()) {
 		if (count == item->getItemCount()) {
 			//send change to client
-			sendInventoryItem((slots_t)index, nullptr);
+			sendInventoryItem(static_cast<slots_t>(index), nullptr);
 
 			//event methods
 			onRemoveInventoryItem(item);
@@ -3037,14 +3039,14 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 			item->setItemCount(newCount);
 
 			//send change to client
-			sendInventoryItem((slots_t)index, item);
+			sendInventoryItem(static_cast<slots_t>(index), item);
 
 			//event methods
 			onUpdateInventoryItem(item, item);
 		}
 	} else {
 		//send change to client
-		sendInventoryItem((slots_t)index, nullptr);
+		sendInventoryItem(static_cast<slots_t>(index), nullptr);
 
 		//event methods
 		onRemoveInventoryItem(item);
@@ -3178,7 +3180,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerEquip(this, thing->getItem(), (slots_t)index, false);
+		g_moveEvents->onPlayerEquip(this, thing->getItem(), static_cast<slots_t>(index), false);
 	}
 
 	bool requireListUpdate = true;
@@ -3232,7 +3234,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), (slots_t)index, isCompleteRemoval);
+		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<slots_t>(index), isCompleteRemoval);
 	}
 
 	bool requireListUpdate = true;
@@ -3611,7 +3613,7 @@ void Player::onCombatRemoveCondition(Condition* condition)
 	if (condition->getId() > 0) {
 		//Means the condition is from an item, id == slot
 		if (g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
-			Item* item = getInventoryItem((slots_t)condition->getId());
+			Item* item = getInventoryItem(static_cast<slots_t>(condition->getId()));
 			if (item) {
 				//25% chance to destroy the item
 				if (25 >= uniform_random(1, 100)) {
@@ -4109,13 +4111,13 @@ double Player::getLostPercent() const
 		}
 
 		lossPercent -= static_cast<int32_t>(bitset.count());
-		return std::max<int32_t>(0, lossPercent) / (double)100;
+		return std::max<int32_t>(0, lossPercent) / 100.;
 	} else {
 		double lossPercent;
 
 		if (level >= 25) {
 			double tmpLevel = level + (levelPercent / 100.);
-			lossPercent = (double)((tmpLevel + 50) * 50 * ((tmpLevel * tmpLevel) - (5 * tmpLevel) + 8)) / experience;
+			lossPercent = static_cast<double>((tmpLevel + 50) * 50 * ((tmpLevel * tmpLevel) - (5 * tmpLevel) + 8)) / experience;
 		} else {
 			lossPercent = 10;
 		}
@@ -4527,7 +4529,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 		}
 
 		oldSkillValue = magLevel;
-		oldPercentToNextLevel = (long double)(manaSpent * 100) / nextReqMana;
+		oldPercentToNextLevel = static_cast<long double>(manaSpent * 100) / nextReqMana;
 
 		g_events->eventPlayerOnGainSkillTries(this, SKILL_MAGLEVEL, tries);
 		uint32_t currMagLevel = magLevel;
@@ -4562,7 +4564,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		if (nextReqMana > currReqMana) {
 			newPercent = Player::getPercentLevel(manaSpent, nextReqMana);
-			newPercentToNextLevel = (long double)(manaSpent * 100) / nextReqMana;
+			newPercentToNextLevel = static_cast<long double>(manaSpent * 100) / nextReqMana;
 		} else {
 			newPercent = 0;
 			newPercentToNextLevel = 0;
@@ -4583,7 +4585,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 		}
 
 		oldSkillValue = skills[skill][SKILLVALUE_LEVEL];
-		oldPercentToNextLevel = (long double)(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
+		oldPercentToNextLevel = static_cast<long double>(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
 
 		g_events->eventPlayerOnGainSkillTries(this, skill, tries);
 		uint32_t currSkillLevel = skills[skill][SKILLVALUE_LEVEL];
@@ -4619,7 +4621,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		if (nextReqTries > currReqTries) {
 			newPercent = Player::getPercentLevel(skills[skill][SKILLVALUE_TRIES], nextReqTries);
-			newPercentToNextLevel = (long double)(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
+			newPercentToNextLevel = static_cast<long double>(skills[skill][SKILLVALUE_TRIES] * 100) / nextReqTries;
 		} else {
 			newPercent = 0;
 			newPercentToNextLevel = 0;

@@ -186,7 +186,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			return;
 		}
 
-		player->setOperatingSystem((OperatingSystem_t)operatingSystem);
+		player->setOperatingSystem(operatingSystem);
 
 		if (!g_game.placeCreature(player, player->getLoginPosition())) {
 			if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
@@ -239,7 +239,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 
 	g_chat->removeUserFromAllChannels(*player);
 	player->clearModalWindows();
-	player->setOperatingSystem((OperatingSystem_t)operatingSystem);
+	player->setOperatingSystem(operatingSystem);
 	player->isConnecting = false;
 
 	player->client = this;
@@ -296,7 +296,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	OperatingSystem_t operatingSystem = (OperatingSystem_t)msg.get<uint16_t>();
+	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 	version = msg.get<uint16_t>();
 
 	msg.SkipBytes(5); // U32 clientVersion, U8 clientType
@@ -895,15 +895,15 @@ void ProtocolGame::parseLookInBattleList(NetworkMessage& msg)
 
 void ProtocolGame::parseSay(NetworkMessage& msg)
 {
-	SpeakClasses type = (SpeakClasses)msg.GetByte();
-
 	std::string receiver;
-	uint16_t channelId = 0;
+	uint16_t channelId;
 
+	SpeakClasses type = static_cast<SpeakClasses>(msg.GetByte());
 	switch (type) {
 		case TALKTYPE_PRIVATE_TO:
 		case TALKTYPE_PRIVATE_RED_TO:
 			receiver = msg.GetString();
+			channelId = 0;
 			break;
 
 		case TALKTYPE_CHANNEL_Y:
@@ -912,11 +912,11 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 			break;
 
 		default:
+			channelId = 0;
 			break;
 	}
 
 	const std::string text = msg.GetString();
-
 	if (text.length() > 255) {
 		return;
 	}
@@ -1674,13 +1674,13 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 				ItemAttributes* attributes = item->getAttributes();
 				for (const auto& attr : attributes->getList()) {
 					if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-						uint16_t charges = static_cast<uint16_t>(0xFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+						uint16_t charges = static_cast<uint16_t>(reinterpret_cast<ptrdiff_t>(attr.value));
 						if (charges != itemType.charges) {
 							badAttribute = true;
 							break;
 						}
 					} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-						uint32_t duration = static_cast<uint32_t>(0xFFFFFFFF & reinterpret_cast<ptrdiff_t>(attr.value));
+						uint32_t duration = static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(attr.value));
 						if (duration != itemType.decayTime) {
 							badAttribute = true;
 							break;
@@ -2330,7 +2330,7 @@ void ProtocolGame::sendCreatureHealth(const Creature* creature)
 	if (creature->isHealthHidden()) {
 		msg.AddByte(0x00);
 	} else {
-		msg.AddByte(static_cast<int32_t>(std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1))));
+		msg.AddByte(static_cast<int32_t>(std::ceil(static_cast<float>(creature->getHealth() * 100) / std::max<int32_t>(creature->getMaxHealth(), 1))));
 	}
 	writeToOutputBuffer(msg);
 }
@@ -2909,7 +2909,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	if (creature->isHealthHidden()) {
 		msg.AddByte(0x00);
 	} else {
-		msg.AddByte(static_cast<int32_t>(std::ceil(((float)creature->getHealth()) * 100 / std::max<int32_t>(creature->getMaxHealth(), 1))));
+		msg.AddByte(static_cast<int32_t>(std::ceil(static_cast<float>(creature->getHealth() * 100) / std::max<int32_t>(creature->getMaxHealth(), 1))));
 	}
 
 	msg.AddByte(creature->getDirection());

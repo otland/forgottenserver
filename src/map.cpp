@@ -884,7 +884,7 @@ QTreeNode::~QTreeNode()
 QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 {
 	if (m_isLeaf) {
-		return static_cast<QTreeLeafNode*>(this);
+		return reinterpret_cast<QTreeLeafNode*>(this);
 	}
 
 	QTreeNode* node = m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
@@ -905,7 +905,7 @@ const QTreeLeafNode* QTreeNode::getLeafStatic(const QTreeNode* node, uint32_t x,
 		x <<= 1;
 		y <<= 1;
 	} while (!node->m_isLeaf);
-	return static_cast<const QTreeLeafNode*>(node);
+	return reinterpret_cast<const QTreeLeafNode*>(node);
 }
 
 QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
@@ -922,7 +922,7 @@ QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
 		}
 		return m_child[index]->createLeaf(x * 2, y * 2, level - 1);
 	}
-	return static_cast<QTreeLeafNode*>(this);
+	return reinterpret_cast<QTreeLeafNode*>(this);
 }
 
 //************ LeafNode ************************
@@ -994,7 +994,7 @@ uint32_t Map::clean() const
 		const QTreeNode* node = nodes.back();
 		nodes.pop_back();
 		if (node->isLeaf()) {
-			const QTreeLeafNode* leafNode = static_cast<const QTreeLeafNode*>(node);
+			const QTreeLeafNode* leafNode = reinterpret_cast<const QTreeLeafNode*>(node);
 			for (uint16_t z = 0; z < MAP_MAX_LAYERS; ++z) {
 				Floor* floor = leafNode->getFloor(z);
 				if (!floor) {

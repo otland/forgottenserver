@@ -649,7 +649,7 @@ int32_t NpcScriptInterface::luaActionMove(lua_State* L)
 	//selfMove(direction)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->doMove(static_cast<Direction>(getNumber<uint32_t>(L, 1)));
+		npc->doMove(getNumber<Direction>(L, 1));
 	}
 	return 0;
 }
@@ -675,7 +675,7 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 	//selfTurn(direction)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->doTurn(static_cast<Direction>(getNumber<uint32_t>(L, 1)));
+		npc->doTurn(getNumber<Direction>(L, 1));
 	}
 	return 0;
 }

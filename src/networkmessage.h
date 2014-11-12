@@ -69,7 +69,7 @@ class NetworkMessage
 				return 0;
 			}
 
-			T v = *(T*)(m_MsgBuf + m_ReadPos);
+			T v = *reinterpret_cast<T*>(m_MsgBuf + m_ReadPos);
 			m_ReadPos += sizeof(T);
 			return v;
 		}
@@ -101,7 +101,7 @@ class NetworkMessage
 				return;
 			}
 
-			*(T*)(m_MsgBuf + m_ReadPos) = value;
+			*reinterpret_cast<T*>(m_MsgBuf + m_ReadPos) = value;
 			m_ReadPos += sizeof(T);
 			m_MsgSize += sizeof(T);
 		}
@@ -144,7 +144,7 @@ class NetworkMessage
 		}
 		char* getBodyBuffer() {
 			m_ReadPos = 2;
-			return (char*)&m_RealBuf[header_length];
+			return reinterpret_cast<char*>(&m_RealBuf[header_length]);
 		}
 
 	protected:
