@@ -131,7 +131,7 @@ function Player:onLogin()
 		for i = 1, #firstItems do
 			self:addItem(firstItems[i], 1)
 		end
-		self:addItem(player:getSex() == 0 and 2651 or 2650, 1)
+		self:addItem(self:getSex() == 0 and 2651 or 2650, 1)
 		self:addItem(1987, 1):addItem(2674, 1)
 	else
 		if loginStr ~= "" then
