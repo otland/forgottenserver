@@ -168,7 +168,7 @@ class PropStream
 		}
 
 		template <typename T>
-		inline bool GET_STRUCT(T* &ret) {
+		inline bool readStruct(T* &ret) {
 			if (size() < sizeof(T)) {
 				ret = nullptr;
 				return false;
@@ -180,7 +180,7 @@ class PropStream
 		}
 
 		template <typename T>
-		inline bool GET_VALUE(T& ret) {
+		inline bool read(T& ret) {
 			if (size() < sizeof(T)) {
 				return false;
 			}
@@ -190,38 +190,26 @@ class PropStream
 			return true;
 		}
 
-		inline bool GET_ULONG(uint32_t& ret) {
-			return GET_VALUE(ret);
-		}
-
-		inline bool GET_USHORT(uint16_t& ret) {
-			return GET_VALUE(ret);
-		}
-
-		inline bool GET_UCHAR(uint8_t& ret) {
-			return GET_VALUE(ret);
-		}
-
-		inline bool GET_STRING(std::string& ret) {
-			uint16_t str_len;
-			if (!GET_USHORT(str_len)) {
+		inline bool readString(std::string& ret) {
+			uint16_t strLen;
+			if (!read<uint16_t>(strLen)) {
 				return false;
 			}
 
-			if (size() < str_len) {
+			if (size() < strLen) {
 				return false;
 			}
 
-			char* str = new char[str_len + 1];
-			memcpy(str, p, str_len);
-			str[str_len] = 0;
-			ret.assign(str, str_len);
+			char* str = new char[strLen + 1];
+			memcpy(str, p, strLen);
+			str[strLen] = 0;
+			ret.assign(str, strLen);
 			delete[] str;
-			p += str_len;
+			p += strLen;
 			return true;
 		}
 
-		inline bool SKIP_N(size_t n) {
+		inline bool skip(size_t n) {
 			if (size() < n) {
 				return false;
 			}
@@ -266,29 +254,17 @@ class PropWriteStream
 		}
 
 		template <typename T>
-		inline void ADD_VALUE(T add) {
+		inline void write(T add) {
 			reserve(sizeof(T));
 			memcpy(&buffer[size], &add, sizeof(T));
 			size += sizeof(T);
 		}
 
-		inline void ADD_ULONG(uint32_t ret) {
-			ADD_VALUE(ret);
-		}
-
-		inline void ADD_USHORT(uint16_t ret) {
-			ADD_VALUE(ret);
-		}
-
-		inline void ADD_UCHAR(uint8_t ret) {
-			ADD_VALUE(ret);
-		}
-
-		inline void ADD_STRING(const std::string& add) {
-			size_t str_len = add.size();
-			ADD_USHORT(str_len);
+		inline void writeString(const std::string& str) {
+			size_t str_len = str.size();
+			write<uint16_t>(str_len);
 			reserve(str_len);
-			memcpy(&buffer[size], add.c_str(), str_len);
+			memcpy(&buffer[size], str.c_str(), str_len);
 			size += str_len;
 		}
 

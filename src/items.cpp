@@ -166,18 +166,18 @@ int32_t Items::loadFromOtb(const std::string& file)
 		//attributes
 		//0x01 = version data
 		uint32_t flags;
-		if (!props.GET_ULONG(flags)) {
+		if (!props.read<uint32_t>(flags)) {
 			return ERROR_INVALID_FORMAT;
 		}
 
 		uint8_t attr;
-		if (!props.GET_VALUE(attr)) {
+		if (!props.read<uint8_t>(attr)) {
 			return ERROR_INVALID_FORMAT;
 		}
 
 		if (attr == ROOT_ATTR_VERSION) {
 			uint16_t datalen;
-			if (!props.GET_VALUE(datalen)) {
+			if (!props.read<uint16_t>(datalen)) {
 				return ERROR_INVALID_FORMAT;
 			}
 
@@ -186,7 +186,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 			}
 
 			VERSIONINFO* vi;
-			if (!props.GET_STRUCT(vi)) {
+			if (!props.readStruct(vi)) {
 				return ERROR_INVALID_FORMAT;
 			}
 
@@ -214,7 +214,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 		}
 
 		uint32_t flags;
-		if (!stream.GET_VALUE(flags)) {
+		if (!stream.read<uint32_t>(flags)) {
 			return ERROR_INVALID_FORMAT;
 		}
 
@@ -227,9 +227,9 @@ int32_t Items::loadFromOtb(const std::string& file)
 		uint8_t alwaysOnTopOrder = 0;
 
 		uint8_t attrib;
-		while (stream.GET_VALUE(attrib)) {
+		while (stream.read<uint8_t>(attrib)) {
 			uint16_t datalen;
-			if (!stream.GET_VALUE(datalen)) {
+			if (!stream.read<uint16_t>(datalen)) {
 				return ERROR_INVALID_FORMAT;
 			}
 
@@ -239,7 +239,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					if (!stream.GET_USHORT(serverId)) {
+					if (!stream.read<uint16_t>(serverId)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -254,7 +254,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					if (!stream.GET_USHORT(clientId)) {
+					if (!stream.read<uint16_t>(clientId)) {
 						return ERROR_INVALID_FORMAT;
 					}
 					break;
@@ -265,7 +265,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					if (!stream.GET_USHORT(speed)) {
+					if (!stream.read<uint16_t>(speed)) {
 						return ERROR_INVALID_FORMAT;
 					}
 					break;
@@ -277,7 +277,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 					}
 
 					lightBlock2* lb2;
-					if (!stream.GET_STRUCT(lb2)) {
+					if (!stream.readStruct(lb2)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
@@ -291,7 +291,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					if (!stream.GET_UCHAR(alwaysOnTopOrder)) {
+					if (!stream.read<uint8_t>(alwaysOnTopOrder)) {
 						return ERROR_INVALID_FORMAT;
 					}
 					break;
@@ -302,7 +302,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					if (!stream.GET_USHORT(wareId)) {
+					if (!stream.read<uint16_t>(wareId)) {
 						return ERROR_INVALID_FORMAT;
 					}
 					break;
@@ -310,7 +310,7 @@ int32_t Items::loadFromOtb(const std::string& file)
 
 				default: {
 					//skip unknown attributes
-					if (!stream.SKIP_N(datalen)) {
+					if (!stream.skip(datalen)) {
 						return ERROR_INVALID_FORMAT;
 					}
 					break;
@@ -699,7 +699,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 				std::cout << "[Warning - Items::parseItemNode] Unknown ammoAction " << valueAttribute.as_string() << std::endl;
 			}
 		} else if (tmpStrValue == "hitchance") {
-			it.hitChance = std::min<int32_t>(100, std::max<int32_t>(-100, pugi::cast<int32_t>(valueAttribute.value())));
+			it.hitChance = std::min<int8_t>(100, std::max<int8_t>(-100, pugi::cast<int16_t>(valueAttribute.value())));
 		} else if (tmpStrValue == "maxhitchance") {
 			it.maxHitChance = std::min<uint32_t>(100, pugi::cast<uint32_t>(valueAttribute.value()));
 		} else if (tmpStrValue == "invisible") {

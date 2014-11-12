@@ -86,7 +86,17 @@ enum AttrTypes_t {
 	ATTR_SLEEPERGUID = 20,
 	ATTR_SLEEPSTART = 21,
 	ATTR_CHARGES = 22,
-	ATTR_CONTAINER_ITEMS = 23
+	ATTR_CONTAINER_ITEMS = 23,
+	ATTR_NAME = 24,
+	ATTR_ARTICLE = 25,
+	ATTR_PLURALNAME = 26,
+	ATTR_WEIGHT = 27,
+	ATTR_ATTACK = 28,
+	ATTR_DEFENSE = 29,
+	ATTR_EXTRADEFENSE = 30,
+	ATTR_ARMOR = 31,
+	ATTR_HITCHANCE = 32,
+	ATTR_SHOOTRANGE = 33
 };
 
 enum Attr_ReadValue {
@@ -586,7 +596,7 @@ class Item : virtual public Thing
 		int32_t getSlotPosition() const {
 			return items[id].slotPosition;
 		}
-		int32_t getHitChance() const {
+		int8_t getHitChance() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_HITCHANCE)) {
 				return getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
 			}

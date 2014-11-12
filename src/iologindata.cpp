@@ -613,7 +613,7 @@ bool IOLoginData::savePlayer(Player* player)
 				return false;
 			}
 
-			propWriteStream.ADD_UCHAR(CONDITIONATTR_END);
+			propWriteStream.write<uint8_t>(CONDITIONATTR_END);
 		}
 	}
 

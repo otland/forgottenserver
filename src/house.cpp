@@ -552,17 +552,16 @@ Door::~Door()
 
 Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
-	if (ATTR_HOUSEDOORID == attr) {
+	if (attr == ATTR_HOUSEDOORID) {
 		uint8_t _doorId;
-		if (!propStream.GET_UCHAR(_doorId)) {
+		if (!propStream.read<uint8_t>(_doorId)) {
 			return ATTR_READ_ERROR;
 		}
 
 		setDoorId(_doorId);
 		return ATTR_READ_CONTINUE;
-	} else {
-		return Item::readAttr(attr, propStream);
 	}
+	return Item::readAttr(attr, propStream);
 }
 
 bool Door::serializeAttr(PropWriteStream&) const

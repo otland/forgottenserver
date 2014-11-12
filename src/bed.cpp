@@ -39,7 +39,7 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 	switch (attr) {
 		case ATTR_SLEEPERGUID: {
 			uint32_t _guid;
-			if (!propStream.GET_ULONG(_guid)) {
+			if (!propStream.read<uint32_t>(_guid)) {
 				return ATTR_READ_ERROR;
 			}
 
@@ -57,7 +57,7 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_SLEEPSTART: {
 			uint32_t sleep_start;
-			if (!propStream.GET_ULONG(sleep_start)) {
+			if (!propStream.read<uint32_t>(sleep_start)) {
 				return ATTR_READ_ERROR;
 			}
 
@@ -74,16 +74,15 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 bool BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	if (sleeperGUID != 0) {
-		propWriteStream.ADD_UCHAR(ATTR_SLEEPERGUID);
-		propWriteStream.ADD_ULONG(sleeperGUID);
+		propWriteStream.write<uint8_t>(ATTR_SLEEPERGUID);
+		propWriteStream.write<uint32_t>(sleeperGUID);
 	}
 
 	if (sleepStart != 0) {
-		propWriteStream.ADD_UCHAR(ATTR_SLEEPSTART);
+		propWriteStream.write<uint8_t>(ATTR_SLEEPSTART);
 		// FIXME: should be stored as 64-bit, but we need to retain backwards compatibility
-		propWriteStream.ADD_ULONG(static_cast<uint32_t>(sleepStart));
+		propWriteStream.write<uint32_t>(static_cast<uint32_t>(sleepStart));
 	}
-
 	return true;
 }
 

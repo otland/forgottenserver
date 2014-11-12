@@ -37,16 +37,12 @@ DepotLocker::~DepotLocker()
 Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_DEPOT_ID) {
-		uint16_t _depotId;
-		if (!propStream.GET_USHORT(_depotId)) {
+		if (!propStream.read<uint16_t>(depotId)) {
 			return ATTR_READ_ERROR;
 		}
-
-		setDepotId(_depotId);
 		return ATTR_READ_CONTINUE;
-	} else {
-		return Item::readAttr(attr, propStream);
 	}
+	return Item::readAttr(attr, propStream);
 }
 
 ReturnValue DepotLocker::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const

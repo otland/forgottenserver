@@ -97,7 +97,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	}
 
 	OTBM_root_header* root_header;
-	if (!propStream.GET_STRUCT(root_header)) {
+	if (!propStream.readStruct(root_header)) {
 		setLastErrorString("Could not read header.");
 		return false;
 	}
@@ -155,17 +155,17 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	std::string tmp;
 
 	uint8_t attribute;
-	while (propStream.GET_UCHAR(attribute)) {
+	while (propStream.read<uint8_t>(attribute)) {
 		switch (attribute) {
 			case OTBM_ATTR_DESCRIPTION:
-				if (!propStream.GET_STRING(mapDescription)) {
+				if (!propStream.readString(mapDescription)) {
 					setLastErrorString("Invalid description tag.");
 					return false;
 				}
 				break;
 
 			case OTBM_ATTR_EXT_SPAWN_FILE:
-				if (!propStream.GET_STRING(tmp)) {
+				if (!propStream.readString(tmp)) {
 					setLastErrorString("Invalid spawn tag.");
 					return false;
 				}
@@ -175,7 +175,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				break;
 
 			case OTBM_ATTR_EXT_HOUSE_FILE:
-				if (!propStream.GET_STRING(tmp)) {
+				if (!propStream.readString(tmp)) {
 					setLastErrorString("Invalid house tag.");
 					return false;
 				}
@@ -204,7 +204,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 			}
 
 			OTBM_Destination_coords* area_coord;
-			if (!propStream.GET_STRUCT(area_coord)) {
+			if (!propStream.readStruct(area_coord)) {
 				setLastErrorString("Invalid map node.");
 				return false;
 			}
@@ -231,7 +231,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				}
 
 				OTBM_Tile_coords* tile_coord;
-				if (!propStream.GET_STRUCT(tile_coord)) {
+				if (!propStream.readStruct(tile_coord)) {
 					setLastErrorString("Could not read tile position.");
 					return false;
 				}
@@ -248,7 +248,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 				if (type == OTBM_HOUSETILE) {
 					uint32_t _houseid;
-					if (!propStream.GET_ULONG(_houseid)) {
+					if (!propStream.read<uint32_t>(_houseid)) {
 						std::ostringstream ss;
 						ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Could not read house id.";
 						setLastErrorString(ss.str());
@@ -269,11 +269,11 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				}
 
 				//read tile attributes
-				while (propStream.GET_UCHAR(attribute)) {
+				while (propStream.read<uint8_t>(attribute)) {
 					switch (attribute) {
 						case OTBM_ATTR_TILE_FLAGS: {
 							uint32_t flags;
-							if (!propStream.GET_ULONG(flags)) {
+							if (!propStream.read<uint32_t>(flags)) {
 								std::ostringstream ss;
 								ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Failed to read tile flags.";
 								setLastErrorString(ss.str());
@@ -419,7 +419,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				}
 
 				uint32_t townid;
-				if (!propStream.GET_ULONG(townid)) {
+				if (!propStream.read<uint32_t>(townid)) {
 					setLastErrorString("Could not read town id.");
 					return false;
 				}
@@ -431,7 +431,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				}
 
 				std::string townName;
-				if (!propStream.GET_STRING(townName)) {
+				if (!propStream.readString(townName)) {
 					setLastErrorString("Could not read town name.");
 					return false;
 				}
@@ -439,7 +439,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				town->setName(townName);
 
 				OTBM_Destination_coords* town_coords;
-				if (!propStream.GET_STRUCT(town_coords)) {
+				if (!propStream.readStruct(town_coords)) {
 					setLastErrorString("Could not read town coordinates.");
 					return false;
 				}
@@ -462,13 +462,13 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				}
 
 				std::string name;
-				if (!propStream.GET_STRING(name)) {
+				if (!propStream.readString(name)) {
 					setLastErrorString("Could not read waypoint name.");
 					return false;
 				}
 
 				OTBM_Destination_coords* waypoint_coords;
-				if (!propStream.GET_STRUCT(waypoint_coords)) {
+				if (!propStream.readStruct(waypoint_coords)) {
 					setLastErrorString("Could not read waypoint coordinates.");
 					return false;
 				}

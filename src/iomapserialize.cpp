@@ -44,7 +44,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 
 		uint16_t x, y;
 		uint8_t z;
-		if (!propStream.GET_USHORT(x) || !propStream.GET_USHORT(y) || !propStream.GET_UCHAR(z)) {
+		if (!propStream.read<uint16_t>(x) || !propStream.read<uint16_t>(y) || !propStream.read<uint8_t>(z)) {
 			continue;
 		}
 
@@ -54,7 +54,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 		}
 
 		uint32_t item_count;
-		if (!propStream.GET_ULONG(item_count)) {
+		if (!propStream.read<uint32_t>(item_count)) {
 			continue;
 		}
 
@@ -126,7 +126,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	}
 
 	uint8_t endAttr;
-	if (!propStream.GET_UCHAR(endAttr) || endAttr != 0) {
+	if (!propStream.read<uint8_t>(endAttr) || endAttr != 0) {
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 		return false;
 	}
@@ -136,7 +136,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 {
 	uint16_t id;
-	if (!propStream.GET_USHORT(id)) {
+	if (!propStream.read<uint16_t>(id)) {
 		return false;
 	}
 
@@ -221,20 +221,19 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 	const Container* container = item->getContainer();
 
 	// Write ID & props
-	stream.ADD_USHORT(item->getID());
+	stream.write<uint16_t>(item->getID());
 	item->serializeAttr(stream);
 
 	if (container) {
 		// Hack our way into the attributes
-		stream.ADD_UCHAR(ATTR_CONTAINER_ITEMS);
-		stream.ADD_ULONG(container->size());
-
+		stream.write<uint8_t>(ATTR_CONTAINER_ITEMS);
+		stream.write<uint32_t>(container->size());
 		for (ItemDeque::const_reverse_iterator it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
 			saveItem(stream, *it);
 		}
 	}
 
-	stream.ADD_UCHAR(0x00); // attr end
+	stream.write<uint8_t>(0x00); // attr end
 }
 
 void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
@@ -258,11 +257,11 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 
 	if (!items.empty()) {
 		const Position& tilePosition = tile->getPosition();
-		stream.ADD_USHORT(tilePosition.x);
-		stream.ADD_USHORT(tilePosition.y);
-		stream.ADD_UCHAR(tilePosition.z);
+		stream.write<uint16_t>(tilePosition.x);
+		stream.write<uint16_t>(tilePosition.y);
+		stream.write<uint8_t>(tilePosition.z);
 
-		stream.ADD_ULONG(count);
+		stream.write<uint32_t>(count);
 		for (const Item* item : items) {
 			saveItem(stream, item);
 		}
