@@ -1532,9 +1532,7 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 	}
 
 	Attribute& attr = getAttr(type);
-	if (attr.value) {
-		delete attr.value;
-	}
+	delete attr.value;
 	attr.value = new std::string(value);
 }
 
