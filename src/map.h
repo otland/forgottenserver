@@ -102,7 +102,7 @@ class QTreeNode
 		}
 
 		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
-		static inline const QTreeLeafNode* getLeafStatic(const QTreeNode* root, uint32_t x, uint32_t y);
+		inline static const QTreeLeafNode* getLeafStatic(const QTreeNode* root, uint32_t x, uint32_t y);
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:

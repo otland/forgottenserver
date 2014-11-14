@@ -2103,6 +2103,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getPosition", LuaScriptInterface::luaItemGetPosition);
 	registerMethod("Item", "getTile", LuaScriptInterface::luaItemGetTile);
 
+	registerMethod("Item", "hasAttribute", LuaScriptInterface::luaItemHasAttribute);
 	registerMethod("Item", "getAttribute", LuaScriptInterface::luaItemGetAttribute);
 	registerMethod("Item", "setAttribute", LuaScriptInterface::luaItemSetAttribute);
 	registerMethod("Item", "removeAttribute", LuaScriptInterface::luaItemRemoveAttribute);
@@ -6636,6 +6637,28 @@ int32_t LuaScriptInterface::luaItemGetTile(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaItemHasAttribute(lua_State* L)
+{
+	// item:hasAttribute(key)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	itemAttrTypes attribute;
+	if (isNumber(L, 2)) {
+		attribute = getNumber<itemAttrTypes>(L, 2);
+	} else if (isString(L, 2)) {
+		attribute = stringToItemAttribute(getString(L, 2));
+	} else {
+		attribute = ITEM_ATTRIBUTE_NONE;
+	}
+
+	lua_pushboolean(L, item->hasAttribute(attribute));
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 {
 	// item:getAttribute(key)
@@ -6654,9 +6677,9 @@ int32_t LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
-	if (attribute & 0x7FFE13) { // All integer attributes
+	if (ItemAttributes::isIntAttrType(attribute)) {
 		lua_pushnumber(L, item->getIntAttr(attribute));
-	} else if (attribute & 0x1EC) { // All string attributes
+	} else if (ItemAttributes::isStrAttrType(attribute)) {
 		pushString(L, item->getStrAttr(attribute));
 	} else {
 		lua_pushnil(L);
@@ -6682,10 +6705,10 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
-	if (attribute & 0x7FFE13) { // All integer attributes
+	if (ItemAttributes::isIntAttrType(attribute)) {
 		item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
 		pushBoolean(L, true);
-	} else if (attribute & 0x1EC) { // All string attributes
+	} else if (ItemAttributes::isStrAttrType(attribute)) {
 		item->setStrAttr(attribute, getString(L, 3));
 		pushBoolean(L, true);
 	} else {

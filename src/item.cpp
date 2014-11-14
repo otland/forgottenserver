@@ -1509,7 +1509,7 @@ std::string ItemAttributes::emptyString;
 
 const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 {
-	if (!validateStrAttrType(type)) {
+	if (!isStrAttrType(type)) {
 		return emptyString;
 	}
 
@@ -1523,7 +1523,7 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 
 void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 {
-	if (!validateStrAttrType(type)) {
+	if (!isStrAttrType(type)) {
 		return;
 	}
 
@@ -1560,7 +1560,7 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 
 int32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 {
-	if (!validateIntAttrType(type)) {
+	if (!isIntAttrType(type)) {
 		return 0;
 	}
 
@@ -1574,7 +1574,7 @@ int32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 
 void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
 {
-	if (!validateIntAttrType(type)) {
+	if (!isIntAttrType(type)) {
 		return;
 	}
 
@@ -1583,56 +1583,11 @@ void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
 
 void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
 {
-	if (!validateIntAttrType(type)) {
+	if (!isIntAttrType(type)) {
 		return;
 	}
 
 	getAttr(type).value += value;
-}
-
-bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
-{
-	switch (type) {
-		case ITEM_ATTRIBUTE_ACTIONID:
-		case ITEM_ATTRIBUTE_UNIQUEID:
-		case ITEM_ATTRIBUTE_OWNER:
-		case ITEM_ATTRIBUTE_DURATION:
-		case ITEM_ATTRIBUTE_DECAYSTATE:
-		case ITEM_ATTRIBUTE_DATE:
-		case ITEM_ATTRIBUTE_CORPSEOWNER:
-		case ITEM_ATTRIBUTE_CHARGES:
-		case ITEM_ATTRIBUTE_FLUIDTYPE:
-		case ITEM_ATTRIBUTE_DOORID:
-		case ITEM_ATTRIBUTE_WEIGHT:
-		case ITEM_ATTRIBUTE_ATTACK:
-		case ITEM_ATTRIBUTE_DEFENSE:
-		case ITEM_ATTRIBUTE_EXTRADEFENSE:
-		case ITEM_ATTRIBUTE_ARMOR:
-		case ITEM_ATTRIBUTE_HITCHANCE:
-		case ITEM_ATTRIBUTE_SHOOTRANGE:
-			return true;
-
-		default:
-			break;
-	}
-	return false;
-}
-
-bool ItemAttributes::validateStrAttrType(itemAttrTypes type)
-{
-	switch (type) {
-		case ITEM_ATTRIBUTE_DESCRIPTION:
-		case ITEM_ATTRIBUTE_TEXT:
-		case ITEM_ATTRIBUTE_WRITER:
-		case ITEM_ATTRIBUTE_NAME:
-		case ITEM_ATTRIBUTE_ARTICLE:
-		case ITEM_ATTRIBUTE_PLURALNAME:
-			return true;
-
-		default:
-			break;
-	}
-	return false;
 }
 
 const ItemAttributes::Attribute* ItemAttributes::getExistingAttr(itemAttrTypes type) const

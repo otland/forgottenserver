@@ -27,7 +27,7 @@
 
 extern ConfigManager g_config;
 
-static inline uint32_t circularShift(int bits, uint32_t value)
+inline static uint32_t circularShift(int bits, uint32_t value)
 {
 	return (value << bits) | (value >> (32 - bits));
 }

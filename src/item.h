@@ -230,9 +230,9 @@ class ItemAttributes
 			Attribute(itemAttrTypes type) : value(nullptr), type(type) {}
 			Attribute(const Attribute& i) {
 				type = i.type;
-				if (ItemAttributes::validateIntAttrType(type)) {
+				if (ItemAttributes::isIntAttrType(type)) {
 					value = i.value;
-				} else if (ItemAttributes::validateStrAttrType(type)) {
+				} else if (ItemAttributes::isStrAttrType(type)) {
 					value = new std::string(*i.value);
 				} else {
 					value = nullptr;
@@ -243,7 +243,7 @@ class ItemAttributes
 				attribute.type = ITEM_ATTRIBUTE_NONE;
 			}
 			~Attribute() {
-				if (ItemAttributes::validateStrAttrType(type)) {
+				if (ItemAttributes::isStrAttrType(type)) {
 					delete value;
 				}
 			}
@@ -253,7 +253,7 @@ class ItemAttributes
 			}
 			Attribute& operator=(Attribute&& other) {
 				if (this != &other) {
-					if (ItemAttributes::validateStrAttrType(type)) {
+					if (ItemAttributes::isStrAttrType(type)) {
 						delete value;
 					}
 
@@ -281,14 +281,18 @@ class ItemAttributes
 		void setIntAttr(itemAttrTypes type, int32_t value);
 		void increaseIntAttr(itemAttrTypes type, int32_t value);
 
-		static bool validateIntAttrType(itemAttrTypes type);
-		static bool validateStrAttrType(itemAttrTypes type);
-
 		void addAttr(Attribute* attr);
 		const Attribute* getExistingAttr(itemAttrTypes type) const;
 		Attribute& getAttr(itemAttrTypes type);
 
 	public:
+		inline static bool isIntAttrType(itemAttrTypes type) {
+			return (type & 0x7FFE13) != 0;
+		}
+		inline static bool isStrAttrType(itemAttrTypes type) {
+			return (type & 0x1EC) != 0;
+		}
+
 		const std::forward_list<Attribute>& getList() const {
 			return attributes;
 		}
