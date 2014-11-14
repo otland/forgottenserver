@@ -59,6 +59,11 @@ void Events::clear()
 	playerOnGainExperience = -1;
 	playerOnLoseExperience = -1;
 	playerOnGainSkillTries = -1;
+	playerOnLogin = -1;
+	playerOnLogout = -1;
+
+	// Monster
+	monsterOnSpawn = -1;
 }
 
 bool Events::load()
@@ -134,8 +139,16 @@ bool Events::load()
 					playerOnLoseExperience = event;
 				} else if (methodName == "onGainSkillTries") {
 					playerOnGainSkillTries = event;
+				} else if (methodName == "onLogin") {
+					playerOnLogin = event;
+				} else if (methodName == "onLogout") {
+					playerOnLogout = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
+				}
+			} else if (className == "Monster") {
+				if (methodName == "onSpawn") {
+					monsterOnSpawn = event;
 				}
 			} else {
 				std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
@@ -747,4 +760,77 @@ void Events::eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_
 	}
 
 	scriptInterface.resetScriptEnv();
+}
+
+bool Events::eventPlayerOnLogin(Player* player)
+{
+	// Player:onLogin() or Player.onLogin(self)
+	if (playerOnLogin == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnLogin] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(playerOnLogin, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(playerOnLogin);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(1);
+}
+
+bool Events::eventPlayerOnLogout(Player* player)
+{
+	// Player:onLogout() or Player.onLogout(self)
+	if (playerOnLogout == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnLogout] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(playerOnLogout, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(playerOnLogout);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(1);
+}
+
+// Monster
+bool Events::eventMonsterOnSpawn(Monster* monster)
+{
+	// Monster:onSpawn() or Monster.onSpawn(self)
+	if (monsterOnSpawn == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventMonsterOnSpawn] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(monsterOnSpawn, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(monsterOnSpawn);
+
+	LuaScriptInterface::pushUserdata<Monster>(L, monster);
+	LuaScriptInterface::setMetatable(L, -1, "Monster");
+
+	return scriptInterface.callFunction(1);
 }

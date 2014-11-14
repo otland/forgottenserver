@@ -858,3 +858,74 @@ function broadcastMessage(message, messageType)
 	Game.broadcastMessage(message, messageType)
 	print("> Broadcasted message: \"" .. message .. "\".")
 end
+
+local outfitCondition = Condition(CONDITION_OUTFIT, CONDITIONID_COMBAT)
+
+function doSetItemOutfit(cid, itemId, time, force)
+	local creature = Creature(cid)
+	if not creature then
+		return false
+	end
+
+	local itemType = ItemType(itemId)
+	if itemType:getId() == 0 then
+		itemType = ItemType(tonumber(itemId))
+		if itemType:getId() == 0 then
+			return false
+		end
+	end
+	
+	if force then
+		creature:removeCondition(CONDITION_OUTFIT, CONDITIONID_COMBAT)
+	end
+	
+	outfitCondition:setTicks(time * 1000)
+	outfitCondition:setOutfit(itemType:getId())
+	creature:addCondition(outfitCondition)
+	return true
+end
+
+function doSetMonsterOutfit(cid, name, time, force)
+	local creature = Creature(cid)
+	if not creature then
+		return false
+	end
+	
+	local mType = MonsterType(name)
+	if not mType then
+		return false
+	end
+	
+	if force then
+		creature:removeCondition(CONDITION_OUTFIT, CONDITIONID_COMBAT)
+	end
+	
+	outfitCondition:setTicks(time * 1000)
+	outfitCondition:setOutfit(mType:getOutfit())
+	creature:addCondition(outfitCondition)
+	return true
+end
+
+function doSetCreatureOutfit(cid, outfit, time, force)
+	local creature = Creature(cid)
+	if not creature then
+		return false
+	end
+	
+	local lookType = tonumber(outfit)
+	if not lookTypeExsist(lookType) then
+		return false
+	end
+	
+	if force then
+		creature:removeCondition(CONDITION_OUTFIT, CONDITIONID_COMBAT)
+	end
+	
+	local creatureOutfit = creature:getOutfit()
+	creatureOutfit.lookType = lookType
+	outfitCondition:setOutfit(creatureOutfit)
+	
+	outfitCondition:setTicks(time * 1000)
+	creature:addCondition(outfitCondition)
+	return true
+end

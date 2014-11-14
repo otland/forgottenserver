@@ -25,10 +25,12 @@
 #include "npc.h"
 #include "tools.h"
 #include "configmanager.h"
+#include "events.h"
 #include "scheduler.h"
 
 #include "pugicast.h"
 
+extern Events* g_events;
 extern ConfigManager g_config;
 extern Monsters g_monsters;
 extern Game g_game;
@@ -230,6 +232,10 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 			delete monster;
 			return false;
 		}
+	}
+
+	if (!g_events->eventMonsterOnSpawn(monster)) {
+		return false;
 	}
 
 	monster->setDirection(dir);
