@@ -2786,7 +2786,7 @@ void LuaScriptInterface::registerGlobalVariable(const std::string& name, lua_Num
 void LuaScriptInterface::registerGlobalBoolean(const std::string& name, bool value)
 {
 	// _G[name] = value
-	lua_pushboolean(m_luaState, value ? 1 : 0);
+	pushBoolean(m_luaState, value);
 	lua_setglobal(m_luaState, name.c_str());
 }
 
@@ -6655,7 +6655,7 @@ int32_t LuaScriptInterface::luaItemHasAttribute(lua_State* L)
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
-	lua_pushboolean(L, item->hasAttribute(attribute));
+	pushBoolean(L, item->hasAttribute(attribute));
 	return 1;
 }
 

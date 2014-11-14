@@ -381,8 +381,8 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 		lua_pushnil(L);
 	}
 
-	lua_pushboolean(L, lastHitUnjustified);
-	lua_pushboolean(L, mostDamageUnjustified);
+	LuaScriptInterface::pushBoolean(L, lastHitUnjustified);
+	LuaScriptInterface::pushBoolean(L, mostDamageUnjustified);
 
 	return m_scriptInterface->callFunction(6);
 }
