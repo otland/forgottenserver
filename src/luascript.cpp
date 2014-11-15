@@ -2513,15 +2513,20 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("ItemType", "getType", LuaScriptInterface::luaItemTypeGetType);
 	registerMethod("ItemType", "getId", LuaScriptInterface::luaItemTypeGetId);
+	registerMethod("ItemType", "getClientId", LuaScriptInterface::luaItemTypeGetClientId);
 	registerMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
 	registerMethod("ItemType", "getPluralName", LuaScriptInterface::luaItemTypeGetPluralName);
 	registerMethod("ItemType", "getArticle", LuaScriptInterface::luaItemTypeGetArticle);
 	registerMethod("ItemType", "getDescription", LuaScriptInterface::luaItemTypeGetDescription);
 	registerMethod("ItemType", "getSlotPosition", LuaScriptInterface::luaItemTypeGetSlotPosition);
 
+	registerMethod("ItemType", "getCharges", LuaScriptInterface::luaItemTypeGetCharges);
 	registerMethod("ItemType", "getFluidSource", LuaScriptInterface::luaItemTypeGetFluidSource);
 	registerMethod("ItemType", "getCapacity", LuaScriptInterface::luaItemTypeGetCapacity);
 	registerMethod("ItemType", "getWeight", LuaScriptInterface::luaItemTypeGetWeight);
+
+	registerMethod("ItemType", "getHitChance", LuaScriptInterface::luaItemTypeGetHitChance);
+	registerMethod("ItemType", "getShootRange", LuaScriptInterface::luaItemTypeGetShootRange);
 
 	registerMethod("ItemType", "getAttack", LuaScriptInterface::luaItemTypeGetAttack);
 	registerMethod("ItemType", "getDefense", LuaScriptInterface::luaItemTypeGetDefense);
@@ -11102,6 +11107,18 @@ int32_t LuaScriptInterface::luaItemTypeGetId(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaItemTypeGetClientId(lua_State* L)
+{
+	// itemType:getClientId()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->clientId);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaItemTypeGetName(lua_State* L)
 {
 	// itemType:getName()
@@ -11162,6 +11179,18 @@ int32_t LuaScriptInterface::luaItemTypeGetSlotPosition(lua_State *L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaItemTypeGetCharges(lua_State* L)
+{
+	// itemType:getCharges()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->charges);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaItemTypeGetFluidSource(lua_State* L)
 {
 	// itemType:getFluidSource()
@@ -11199,6 +11228,30 @@ int32_t LuaScriptInterface::luaItemTypeGetWeight(lua_State* L)
 
 	uint64_t weight = (itemType->weight * std::max<int32_t>(1, count));
 	lua_pushnumber(L, weight);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetHitChance(lua_State* L)
+{
+	// itemType:getHitChance()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->hitChance);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetShootRange(lua_State* L)
+{
+	// itemType:getShootRange()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->shootRange);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
