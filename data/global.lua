@@ -374,3 +374,39 @@ function Game.broadcastMessage(message, messageType)
 		player:sendTextMessage(messageType, message)
 	end
 end
+
+function Container.getContentDescription(sep)
+    local description = ""
+    local containers = {}
+
+    for slot = 0, self:getSize() -1 do
+        local itemsDesc = ""
+        local item = self:getItem(slot)
+        if item then
+            local itemType = item:getType()
+            local itemName = item:getName()
+
+            if itemName ~= "" then
+                local count = item:getCount()
+                if itemType:isStackable() and count > 1 then
+                    itemsDesc = count .. " " .. item:getPluralName()
+                else
+                    local article = item:getArticle()
+                    itemsDesc = article == "" and article or article .. " " .. itemName
+                end
+                description = description .. (slot == 0 and not sep and "" or ", ") .. itemsDesc
+
+                if item:isContainer() and self:getSize() > 0 then
+                    table.insert(containers, item)
+                end
+            else
+                description = description .. (slot == 0 and not sep and "" or ", ") .. "an item of type " .. item:getId() .. ", please report it to gamemaster."
+            end
+        end
+    end
+
+    for i = 1, #containers do
+        description = description .. containers[i]:getContentDescription(true)
+    end
+    return description
+end

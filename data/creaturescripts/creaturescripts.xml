@@ -2,6 +2,5 @@
 <creaturescripts>
 	<event type="login" name="PlayerLogin" script="login.lua"/>
 	<event type="login" name="FirstItems" script="firstitems.lua"/>
-	<event type="death" name="PlayerDeath" script="playerdeath.lua"/>
 	<event type="extendedopcode" name="ExtendedOpcode" script="extendedopcode.lua"/>
 </creaturescripts>

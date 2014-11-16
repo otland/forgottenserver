@@ -164,40 +164,6 @@ uint32_t Container::getWeight() const
 	return Item::getWeight() + totalWeight;
 }
 
-std::string Container::getContentDescription() const
-{
-	std::ostringstream os;
-	return getContentDescription(os).str();
-}
-
-std::ostringstream& Container::getContentDescription(std::ostringstream& os) const
-{
-	bool firstitem = true;
-	Container* evil = const_cast<Container*>(this);
-
-	for (ContainerIterator cit = evil->begin(); cit != evil->end(); ++cit) {
-		Item* item = (*cit);
-
-		Container* container = item->getContainer();
-		if (container && !container->empty()) {
-			continue;
-		}
-
-		if (firstitem) {
-			firstitem = false;
-		} else {
-			os << ", ";
-		}
-
-		os << item->getNameDescription();
-	}
-
-	if (firstitem) {
-		os << "nothing";
-	}
-	return os;
-}
-
 Item* Container::getItemByIndex(uint32_t index) const
 {
 	if (index >= size()) {

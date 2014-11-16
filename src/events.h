@@ -39,6 +39,7 @@ class Events
 		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
 		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool isAggressive);
 		ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
+		bool eventCreatureOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
 
 		// Party
 		bool eventPartyOnJoin(Party* party, Player* player);
@@ -67,6 +68,7 @@ class Events
 		int32_t creatureOnChangeOutfit;
 		int32_t creatureOnAreaCombat;
 		int32_t creatureOnTargetCombat;
+		int32_t creatureOnDeath;
 
 		// Party
 		int32_t partyOnJoin;

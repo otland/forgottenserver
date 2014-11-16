@@ -350,15 +350,6 @@ void Party::broadcastPartyMessage(MessageClasses msgClass, const std::string& ms
 	}
 }
 
-void Party::broadcastPartyLoot(const std::string& loot)
-{
-	leader->sendTextMessage(MESSAGE_INFO_DESCR, loot);
-
-	for (Player* member : memberList) {
-		member->sendTextMessage(MESSAGE_INFO_DESCR, loot);
-	}
-}
-
 void Party::updateSharedExperience()
 {
 	if (sharedExpActive) {

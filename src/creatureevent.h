@@ -30,7 +30,6 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_LOGOUT,
 	CREATURE_EVENT_THINK,
 	CREATURE_EVENT_PREPAREDEATH,
-	CREATURE_EVENT_DEATH,
 	CREATURE_EVENT_KILL,
 	CREATURE_EVENT_ADVANCE,
 	CREATURE_EVENT_MODALWINDOW,
@@ -95,7 +94,6 @@ class CreatureEvent final : public Event
 		bool executeOnLogout(Player* player);
 		bool executeOnThink(Creature* creature, uint32_t interval);
 		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
-		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
 		bool executeOnKill(Creature* creature, Creature* target);
 		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);

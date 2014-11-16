@@ -78,7 +78,6 @@ class Container : public Item, public Cylinder
 
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 		bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream) override;
-		std::string getContentDescription() const;
 
 		uint32_t size() const {
 			return static_cast<uint32_t>(itemlist.size());
@@ -162,8 +161,6 @@ class Container : public Item, public Cylinder
 		void updateItemWeight(int32_t diff);
 
 	protected:
-		std::ostringstream& getContentDescription(std::ostringstream& os) const;
-
 		uint32_t maxSize;
 		uint32_t totalWeight;
 		ItemDeque itemlist;
