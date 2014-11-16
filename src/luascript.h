@@ -1126,16 +1126,20 @@ class LuaScriptInterface
 
 		static int32_t luaItemTypeGetType(lua_State* L);
 		static int32_t luaItemTypeGetId(lua_State* L);
+		static int32_t luaItemTypeGetClientId(lua_State* L);
 		static int32_t luaItemTypeGetName(lua_State* L);
 		static int32_t luaItemTypeGetPluralName(lua_State* L);
 		static int32_t luaItemTypeGetArticle(lua_State* L);
 		static int32_t luaItemTypeGetDescription(lua_State* L);
 		static int32_t luaItemTypeGetSlotPosition(lua_State *L);
 
+		static int32_t luaItemTypeGetCharges(lua_State* L);
 		static int32_t luaItemTypeGetFluidSource(lua_State* L);
 		static int32_t luaItemTypeGetCapacity(lua_State* L);
 		static int32_t luaItemTypeGetWeight(lua_State* L);
 
+		static int32_t luaItemTypeGetHitChance(lua_State* L);
+		static int32_t luaItemTypeGetShootRange(lua_State* L);
 		static int32_t luaItemTypeGetAttack(lua_State* L);
 		static int32_t luaItemTypeGetDefense(lua_State* L);
 		static int32_t luaItemTypeGetExtraDefense(lua_State* L);
