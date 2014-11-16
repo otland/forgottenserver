@@ -375,13 +375,17 @@ function Game.broadcastMessage(message, messageType)
 	end
 end
 
-function Container.getContentDescription(sep)
+function getContentDescription(container, sep)
+	if not container:isContainer() then
+		return ""
+	end
+
     local description = ""
     local containers = {}
 
-    for slot = 0, self:getSize() -1 do
+    for slot = 0, container:getSize() -1 do
         local itemsDesc = ""
-        local item = self:getItem(slot)
+        local item = container:getItem(slot)
         if item then
             local itemType = item:getType()
             local itemName = item:getName()
@@ -396,7 +400,7 @@ function Container.getContentDescription(sep)
                 end
                 description = description .. (slot == 0 and not sep and "" or ", ") .. itemsDesc
 
-                if item:isContainer() and self:getSize() > 0 then
+                if item:isContainer() and container:getSize() > 0 then
                     table.insert(containers, item)
                 end
             else
@@ -406,7 +410,7 @@ function Container.getContentDescription(sep)
     end
 
     for i = 1, #containers do
-        description = description .. containers[i]:getContentDescription(true)
+        description = description .. getContentDescription(containers[i], true)
     end
     return description
 end

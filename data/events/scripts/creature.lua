@@ -33,8 +33,8 @@ function Creature:onDeath(corpse, killer, mostDamageKiller, unjustified, mostDam
 
 			local description = "Loot of " .. nameDesc .. ": "
 			if player:getStamina() > 840 then
-				if corpse and corpse:isContainer() then
-					local content = corpse:getContentDescription()
+				if corpse then
+					local content = getContentDescription(corpse)
 					description = description .. (content ~= "" and content .. "." or "nothing.")
 				end
 			else
