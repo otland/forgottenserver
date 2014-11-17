@@ -1,4 +1,4 @@
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
 	local headSlotItem = player:getSlotItem(CONST_SLOT_HEAD)
 	if headSlotItem == nil or item.uid ~= headSlotItem:getUniqueId() then
 		return false

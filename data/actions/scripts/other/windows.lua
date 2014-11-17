@@ -21,8 +21,8 @@ local windows = {
 	[20182] = 19974, [20183] = 19445, [20184] = 19446, [20185] = 19975
 }
 
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
-	local window = windows[item.itemid]
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
+	local window = windows[item:getId()]
 	if window == nil then
 		return false
 	end
@@ -45,6 +45,6 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		return false
 	end
 
-	Item(item.uid):transform(window) 
+	item:transform(window) 
 	return true
 end

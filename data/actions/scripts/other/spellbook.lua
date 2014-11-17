@@ -1,4 +1,4 @@
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
 	local count = getPlayerInstantSpellCount(player)
 	local text = ""
 	local t = {}
@@ -24,6 +24,6 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		end
 		text = text .. line .. "  " .. spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
 	end
-	player:showTextDialog(item.itemid, text)
+	player:showTextDialog(item:getId(), text)
 	return true
 end

@@ -13,8 +13,8 @@ local constructionKits = {
 	[20254] = 20295, [20255] = 20297, [20257] = 20299
 }
 
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
-	local kit = constructionKits[item.itemid]
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
+	local kit = constructionKits[item:getId()]
 	if not kit then
 		return false
 	end
@@ -24,7 +24,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	elseif not fromPosition:getTile():getHouse() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may construct this only inside a house.")
 	else
-		Item(item.uid):transform(kit)
+		item:transform(kit)
 		fromPosition:sendMagicEffect(CONST_ME_POFF)
 	end
 	return true

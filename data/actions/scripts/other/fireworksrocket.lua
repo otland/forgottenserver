@@ -1,4 +1,4 @@
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
 	if fromPosition.x ~= CONTAINER_POSITION then
 		fromPosition:sendMagicEffect(math.random(CONST_ME_FIREWORK_YELLOW, CONST_ME_FIREWORK_BLUE))
 	else
@@ -9,6 +9,6 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		player:addHealth(-10)
 	end
 
-	Item(item.uid):remove()
+	item:remove()
 	return true
 end
