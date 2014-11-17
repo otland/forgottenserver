@@ -825,10 +825,14 @@ void Creature::drainHealth(Creature* attacker, int32_t damage)
 	}
 }
 
-void Creature::drainMana(Creature*, int32_t manaLoss)
+void Creature::drainMana(Creature* attacker, int32_t manaLoss)
 {
 	onAttacked();
 	changeMana(-manaLoss);
+
+	if (attacker) {
+		addDamagePoints(attacker, manaLoss);
+	}
 }
 
 BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
@@ -1031,7 +1035,7 @@ void Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 		return;
 	}
 
-	uint32_t attackerId = (attacker ? attacker->getID() : 0);
+	uint32_t attackerId = attacker->id;
 
 	auto it = damageMap.find(attackerId);
 	if (it == damageMap.end()) {
