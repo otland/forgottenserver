@@ -309,7 +309,7 @@ std::string GlobalEvent::getScriptEventName() const
 
 bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 {
-	//onRecord(current, old, cid)
+	//onRecord(current, old)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow" << std::endl;
 		return false;

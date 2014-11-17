@@ -316,15 +316,7 @@ ReturnValue Combat::canDoCombat(Creature* caster, Tile* tile, bool isAggressive)
 
 bool Combat::isInPvpZone(const Creature* attacker, const Creature* target)
 {
-	if (attacker->getZone() != ZONE_PVP) {
-		return false;
-	}
-
-	if (target->getZone() != ZONE_PVP) {
-		return false;
-	}
-
-	return true;
+	return attacker->getZone() == ZONE_PVP && target->getZone() == ZONE_PVP;
 }
 
 bool Combat::isProtected(const Player* attacker, const Player* target)
@@ -621,20 +613,6 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 {
 	if (params.itemId != 0) {
 		uint32_t itemId = params.itemId;
-
-		Player* _caster;
-		if (caster) {
-			if (caster->getPlayer()) {
-				_caster = caster->getPlayer();
-			} else if (caster->isSummon()) {
-				_caster = caster->getMaster()->getPlayer();
-			} else {
-				_caster = nullptr;
-			}
-		} else {
-			_caster = nullptr;
-		}
-
 		switch (itemId) {
 			case ITEM_FIREFIELD_PERSISTENT_FULL:
 				itemId = ITEM_FIREFIELD_PVP_FULL;
@@ -668,22 +646,30 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 				break;
 		}
 
-		if (_caster) {
-			if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || tile->hasFlag(TILESTATE_NOPVPZONE)) {
-				if (itemId == ITEM_FIREFIELD_PVP_FULL) {
-					itemId = ITEM_FIREFIELD_NOPVP;
-				} else if (itemId == ITEM_POISONFIELD_PVP) {
-					itemId = ITEM_POISONFIELD_NOPVP;
-				} else if (itemId == ITEM_ENERGYFIELD_PVP) {
-					itemId = ITEM_ENERGYFIELD_NOPVP;
+		if (caster) {
+			Player* casterPlayer;
+			if (caster->isSummon()) {
+				casterPlayer = caster->getMaster()->getPlayer();
+			} else {
+				casterPlayer = caster->getPlayer();
+			}
+
+			if (casterPlayer) {
+				if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || tile->hasFlag(TILESTATE_NOPVPZONE)) {
+					if (itemId == ITEM_FIREFIELD_PVP_FULL) {
+						itemId = ITEM_FIREFIELD_NOPVP;
+					} else if (itemId == ITEM_POISONFIELD_PVP) {
+						itemId = ITEM_POISONFIELD_NOPVP;
+					} else if (itemId == ITEM_ENERGYFIELD_PVP) {
+						itemId = ITEM_ENERGYFIELD_NOPVP;
+					}
+				} else if (itemId == ITEM_FIREFIELD_PVP_FULL || itemId == ITEM_POISONFIELD_PVP || itemId == ITEM_ENERGYFIELD_PVP) {
+					casterPlayer->addInFightTicks(true);
 				}
-			} else if (itemId == ITEM_FIREFIELD_PVP_FULL || itemId == ITEM_POISONFIELD_PVP || itemId == ITEM_ENERGYFIELD_PVP) {
-				_caster->addInFightTicks(true);
 			}
 		}
 
 		Item* item = Item::CreateItem(itemId);
-
 		if (caster) {
 			item->setOwner(caster->getID());
 		}
@@ -1048,7 +1034,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 
 void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 {
-	//onTileCombat(cid, pos)
+	//onTileCombat(creature, pos)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TileCallback::onTileCombat] Call stack overflow" << std::endl;
 		return;
@@ -1062,15 +1048,13 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 
 	lua_State* L = m_scriptInterface->getLuaState();
 
-	uint32_t cid;
-	if (creature) {
-		cid = creature->getID();
-	} else {
-		cid = 0;
-	}
-
 	m_scriptInterface->pushFunction(m_scriptId);
-	lua_pushnumber(L, cid);
+	if (creature) {
+		LuaScriptInterface::pushUserdata<Creature>(L, creature);
+		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+	} else {
+		lua_pushnil(L);
+	}
 	LuaScriptInterface::pushPosition(L, tile->getPosition());
 
 	m_scriptInterface->callFunction(2);
