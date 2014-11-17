@@ -24,7 +24,7 @@ exhaust:setParameter(CONDITION_PARAM_TICKS, (configManager.getNumber(configKeys.
 -- 1000 - 100 due to exact condition timing. -100 doesn't hurt us, and players don't have reminding ~50ms exhaustion.
 
 function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
-	if targetEx:getId() ~= 1 or targetEx:getSubType() ~= THING_TYPE_PLAYER then
+	if not targetEx:isPlayer() then
 		return true
 	end
 
@@ -34,7 +34,7 @@ function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
 	end
 
 	if item:getId() == antidotePot then
-		if not doCombat(player, antidote, numberToVariant(player:getId())) then
+		if not antidote:execute(player, Variant(player:getId())) then
 			return false
 		end
 		player:addCondition(exhaust)

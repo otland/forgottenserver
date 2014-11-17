@@ -13,23 +13,25 @@ local fluidType = {3, 4, 5, 7, 10, 11, 13, 15, 19}
 local fluidMessage = {"Aah...", "Urgh!", "Mmmh.", "Aaaah...", "Aaaah...", "Urgh!", "Urgh!", "Aah...", "Urgh!"}
 
 function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
-	local targetExType = targetEx:getType()
-	if targetExType and targetExType:isFluidContainer() then
-		if targetEx:getSubType() == 0 and item:getSubType() ~= 0 then
-			targetEx:transform(targetEx:getId(), item:getSubType())
-			item:transform(item:getId(), 0)
-			return true
-		elseif targetEx:getSubType() ~= 0 and item:getSubType() == 0 then
-			targetEx:transform(targetEx:getId(), 0)
-			item:transform(item:getId(), targetEx:getSubType())
-			return true
+	if targetEx:isItem() then
+		local targetExType = targetEx:getType()
+		if targetExType and targetExType:isFluidContainer() then
+			if targetEx:getSubType() == 0 and item:getSubType() ~= 0 then
+				targetEx:transform(targetEx:getId(), item:getSubType())
+				item:transform(item:getId(), 0)
+				return true
+			elseif targetEx:getSubType() ~= 0 and item:getSubType() == 0 then
+				targetEx:transform(targetEx:getId(), 0)
+				item:transform(item:getId(), targetEx:getSubType())
+				return true
+			end
 		end
 	end
 
-	if targetEx:getId() == 1 then
+	if targetEx:isCreature() then
 		if item:getSubType() == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
-		elseif targetEx:getUniqueId() == player:getId() then
+		elseif targetEx == player then
 			item:transform(item:getId(), 0)
 			if item:getSubType() == 3 or item:getSubType() == 15 then
 				player:addCondition(drunk)
