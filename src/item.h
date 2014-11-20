@@ -224,7 +224,7 @@ class ItemAttributes
 
 		struct Attribute
 		{
-			std::string* value;
+			uint8_t* value;
 			itemAttrTypes type;
 
 			Attribute(itemAttrTypes type) : value(nullptr), type(type) {}
@@ -233,7 +233,7 @@ class ItemAttributes
 				if (ItemAttributes::isIntAttrType(type)) {
 					value = i.value;
 				} else if (ItemAttributes::isStrAttrType(type)) {
-					value = new std::string(*i.value);
+					value = reinterpret_cast<uint8_t*>(new std::string(*reinterpret_cast<std::string*>(i.value)));
 				} else {
 					value = nullptr;
 				}

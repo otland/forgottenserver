@@ -1514,11 +1514,10 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 	}
 
 	const Attribute* attr = getExistingAttr(type);
-	if (attr) {
-		return *attr->value;
-	} else {
+	if (!attr) {
 		return emptyString;
 	}
+	return *reinterpret_cast<std::string*>(attr->value);
 }
 
 void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
@@ -1532,8 +1531,8 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 	}
 
 	Attribute& attr = getAttr(type);
-	delete attr.value;
-	attr.value = new std::string(value);
+	delete reinterpret_cast<std::string*>(attr.value);
+	attr.value = reinterpret_cast<uint8_t*>(new std::string(value));
 }
 
 void ItemAttributes::removeAttribute(itemAttrTypes type)
@@ -1565,11 +1564,10 @@ int32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 	}
 
 	const Attribute* attr = getExistingAttr(type);
-	if (attr) {
-		return reinterpret_cast<ptrdiff_t>(attr->value);
-	} else {
+	if (!attr) {
 		return 0;
 	}
+	return reinterpret_cast<ptrdiff_t>(attr->value);
 }
 
 void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
@@ -1578,7 +1576,7 @@ void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
 		return;
 	}
 
-	getAttr(type).value = reinterpret_cast<std::string*>(value);
+	getAttr(type).value = reinterpret_cast<uint8_t*>(value);
 }
 
 void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
