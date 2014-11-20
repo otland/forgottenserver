@@ -59,7 +59,7 @@ void Party::disband()
 	g_game.updatePlayerShield(currentLeader);
 	g_game.updatePlayerHelpers(*currentLeader);
 	currentLeader->sendCreatureSkull(currentLeader);
-	currentLeader->sendTextMessage(MESSAGE_INFO_DESCR, "Your party has been disbanded.");
+	currentLeader->sendTextMessage(MESSAGE_EVENT_DEFAULT, "Your party has been disbanded.");
 
 	for (Player* invitee : inviteList) {
 		invitee->removePartyInvitation(this);
@@ -70,7 +70,7 @@ void Party::disband()
 	for (Player* member : memberList) {
 		member->setParty(nullptr);
 		member->sendClosePrivate(CHANNEL_PARTY);
-		member->sendTextMessage(MESSAGE_INFO_DESCR, "Your party has been disbanded.");
+		member->sendTextMessage(MESSAGE_EVENT_DEFAULT, "Your party has been disbanded.");
 	}
 
 	for (Player* member : memberList) {
@@ -136,7 +136,7 @@ bool Party::leaveParty(Player* player)
 	player->sendCreatureSkull(player);
 	player->sendPlayerPartyIcons(leader);
 
-	player->sendTextMessage(MESSAGE_INFO_DESCR, "You have left the party.");
+	player->sendTextMessage(MESSAGE_EVENT_DEFAULT, "You have left the party.");
 
 	updateSharedExperience();
 	updateVocationsList();
@@ -145,7 +145,7 @@ bool Party::leaveParty(Player* player)
 
 	std::ostringstream ss;
 	ss << player->getName() << " has left the party.";
-	broadcastPartyMessage(MESSAGE_INFO_DESCR, ss.str());
+	broadcastPartyMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 
 	if (missingLeader || empty()) {
 		disband();
@@ -168,7 +168,7 @@ bool Party::passPartyLeadership(Player* player)
 
 	std::ostringstream ss;
 	ss << player->getName() << " is now the leader of the party.";
-	broadcastPartyMessage(MESSAGE_INFO_DESCR, ss.str(), true);
+	broadcastPartyMessage(MESSAGE_EVENT_DEFAULT, ss.str(), true);
 
 	Player* oldLeader = leader;
 	leader = player;
@@ -190,7 +190,11 @@ bool Party::passPartyLeadership(Player* player)
 	leader->sendCreatureShield(oldLeader);
 	leader->sendCreatureShield(leader);
 
-	player->sendTextMessage(MESSAGE_INFO_DESCR, "You are now the leader of the party.");
+	ss.str("");
+	ss << "As party leader, you can turn on shared experience for your party by right-clicking on yourself "
+		<< "and selecting the option. There is an experience bonus for every unique vocation in your party. "
+		<< "In this party, shared experience is currently " << (sharedExpActive ? "" : "in") << "active.";
+	leader->sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 	return true;
 }
 
@@ -209,7 +213,7 @@ bool Party::joinParty(Player& player)
 
 	std::ostringstream ss;
 	ss << player.getName() << " has joined the party.";
-	broadcastPartyMessage(MESSAGE_INFO_DESCR, ss.str());
+	broadcastPartyMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 
 	player.setParty(this);
 
@@ -232,11 +236,19 @@ bool Party::joinParty(Player& player)
 	updateSharedExperience();
 	updateVocationsList();
 
+	if (memberList.size() == 1) {
+		ss.str("");
+		ss << "As party leader, you can turn on shared experience for your party by right-clicking on yourself "
+			<< "and selecting the option. There is an experience bonus for every unique vocation in your party. "
+			<< "In this party, shared experience is currently " << (sharedExpActive ? "" : "in") << "active.";
+		leader->sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+	}
+
 	const std::string& leaderName = leader->getName();
 	ss.str("");
 	ss << "You have joined " << leaderName << "'" << (leaderName.back() == 's' ? "" : "s") <<
 	   " party. Open the party channel to communicate with your companions.";
-	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	player.sendTextMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 	return true;
 }
 
@@ -273,11 +285,11 @@ void Party::revokeInvitation(Player& player)
 {
 	std::ostringstream ss;
 	ss << leader->getName() << " has revoked " << (leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " invitation.";
-	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	player.sendTextMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 
 	ss.str("");
 	ss << "Invitation for " << player.getName() << " has been revoked.";
-	leader->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	leader->sendTextMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 
 	removeInvite(player);
 }
@@ -297,7 +309,7 @@ bool Party::invitePlayer(Player& player)
 		leader->sendCreatureSkull(leader);
 	}
 
-	leader->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	leader->sendTextMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 
 	inviteList.push_back(&player);
 
@@ -313,7 +325,7 @@ bool Party::invitePlayer(Player& player)
 
 	ss.str("");
 	ss << leader->getName() << " has invited you to " << (leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " party.";
-	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	player.sendTextMessage(MESSAGE_EVENT_DEFAULT, ss.str());
 	return true;
 }
 
@@ -411,12 +423,12 @@ bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 		sharedExpEnabled = canEnableSharedExperience();
 
 		if (sharedExpEnabled) {
-			leader->sendTextMessage(MESSAGE_INFO_DESCR, "Shared Experience is now active.");
+			leader->sendTextMessage(MESSAGE_EVENT_DEFAULT, "Shared Experience is now active.");
 		} else {
-			leader->sendTextMessage(MESSAGE_INFO_DESCR, "Shared Experience has been activated, but some members of your party are inactive.");
+			leader->sendTextMessage(MESSAGE_EVENT_DEFAULT, "Shared Experience has been activated, but some members of your party are inactive.");
 		}
 	} else {
-		leader->sendTextMessage(MESSAGE_INFO_DESCR, "Shared Experience has been deactivated.");
+		leader->sendTextMessage(MESSAGE_EVENT_DEFAULT, "Shared Experience has been deactivated.");
 	}
 
 	updateAllPartyIcons();
