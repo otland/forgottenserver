@@ -36,7 +36,7 @@ function destroyItem(cid, itemEx, toPosition)
 	--chest,crate,barrel...
 	if ItemType(itemEx.itemid):getDestroyId() > -1 then
 		if math.random(1, 7) == 1 then
-			Item(itemEx.uid):destroy(true)
+			Item(itemEx.uid):destroy()
 		end
 		toPosition:sendMagicEffect(CONST_ME_POFF)
 		return true
