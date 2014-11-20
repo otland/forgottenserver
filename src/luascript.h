@@ -707,6 +707,7 @@ class LuaScriptInterface
 		static int32_t luaItemClone(lua_State* L);
 		static int32_t luaItemSplit(lua_State* L);
 		static int32_t luaItemRemove(lua_State* L);
+		static int32_t luaItemDestroy(lua_State* L);
 
 		static int32_t luaItemGetUniqueId(lua_State* L);
 		static int32_t luaItemGetActionId(lua_State* L);
@@ -1144,6 +1145,7 @@ class LuaScriptInterface
 
 		static int32_t luaItemTypeGetTransformEquipId(lua_State* L);
 		static int32_t luaItemTypeGetTransformDeEquipId(lua_State* L);
+		static int32_t luaItemTypeGetDestroyId(lua_State* L);
 		static int32_t luaItemTypeGetDecayId(lua_State* L);
 
 		static int32_t luaItemTypeHasSubType(lua_State* L);
