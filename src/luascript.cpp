@@ -6464,10 +6464,10 @@ int32_t LuaScriptInterface::luaItemRemove(lua_State* L)
 
 int32_t LuaScriptInterface::luaItemDestroy(lua_State* L)
 {
-	// item:destroy()
+	// item:destroy([destroySubContainers = false])
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		pushBoolean(L, g_game.internalDestroyItem(item) == RETURNVALUE_NOERROR);
+		pushBoolean(L, g_game.internalDestroyItem(item, getBoolean(L, 2, false)) == RETURNVALUE_NOERROR);
 	} else {
 		lua_pushnil(L);
 	}

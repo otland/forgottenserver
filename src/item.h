@@ -540,9 +540,6 @@ class Item : virtual public Thing
 		uint16_t getWareID() const {
 			return items[id].wareId;
 		}
-		uint16_t getDestroyId() const {
-			return items[id].destroyTo;
-		}
 		void setID(uint16_t newid);
 
 		// Returns the player that is holding this item in his inventory
@@ -577,6 +574,10 @@ class Item : virtual public Thing
 		}
 		int32_t getHitChance() const {
 			return items[id].hitChance;
+		}
+		int32_t getDestroyId() const
+		{
+			return items[id].destroyTo;
 		}
 
 		bool isReadable() const {

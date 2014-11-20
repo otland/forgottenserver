@@ -1549,7 +1549,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Game::internalDestroyItem(Item* item)
+ReturnValue Game::internalDestroyItem(Item* item, bool subContainers/* = false*/)
 {
 	Cylinder* cylinder = item->getParent();
 	if (cylinder == nullptr) {
@@ -1574,17 +1574,20 @@ ReturnValue Game::internalDestroyItem(Item* item)
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	uint16_t destroyId = item->getDestroyId();
-	if (destroyId > 0) {
+	int32_t destroyId = item->getDestroyId();
+	if (destroyId > -1) {
 		if (!fromTile) {
 			fromTile = item->getTile();
 		}
-		internalAddItem(fromTile, Item::CreateItem(destroyId, 1), INDEX_WHEREEVER, FLAG_NOLIMIT);
+
+		if (destroyId > 0) {
+			internalAddItem(fromTile, Item::CreateItem(destroyId, 1), INDEX_WHEREEVER, FLAG_NOLIMIT);
+		}
 
 		Container* container = item->getContainer();
 		if (container) {
 			for (Item* containerItem : container->getItemList()) {
-				if (containerItem->getContainer() && containerItem->getDestroyId()) {
+				if (subContainers && containerItem->getContainer() && containerItem->getDestroyId() > -1) {
 					internalDestroyItem(containerItem);
 				} else {
 					internalMoveItem(container, fromTile, INDEX_WHEREEVER, containerItem, containerItem->getItemCount(), nullptr, FLAG_NOLIMIT);

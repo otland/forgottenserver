@@ -1015,6 +1015,10 @@ bool Monster::pushItem(Item* item)
 
 	for (const auto& it : relList) {
 		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
+		if (tryPos == monsterPos) {
+			continue;
+		}
+
 		Tile* tile = g_game.getTile(tryPos);
 		if (tile && g_game.canThrowObjectTo(centerPos, tryPos)) {
 			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr) == RETURNVALUE_NOERROR) {
@@ -1041,7 +1045,7 @@ void Monster::pushItems(Tile* tile)
 			        || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
 				if (moveCount < 20 && pushItem(item)) {
 					++moveCount;
-				} else if (g_game.internalDestroyItem(item) == RETURNVALUE_NOERROR) {
+				} else if (g_game.internalDestroyItem(item, true) == RETURNVALUE_NOERROR) {
 					++removeCount;
 				}
 			}

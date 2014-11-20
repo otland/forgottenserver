@@ -213,6 +213,7 @@ class ItemType
 		int32_t hitChance;
 		int32_t maxHitChance;
 		int32_t decayTo;
+		int32_t destroyTo;
 		int32_t attack;
 		int32_t defense;
 		int32_t extraDefense;
@@ -225,7 +226,6 @@ class ItemType
 
 		uint16_t transformToOnUse[2];
 		uint16_t transformToFree;
-		uint16_t destroyTo;
 		uint16_t maxTextLen;
 		uint16_t writeOnceItemId;
 		uint16_t transformEquipTo;
