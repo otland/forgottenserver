@@ -210,6 +210,7 @@ class ItemType
 		int32_t breakChance;
 		int32_t maxHitChance;
 		int32_t decayTo;
+		int32_t destroyTo;
 		int32_t attack;
 		int32_t defense;
 		int32_t extraDefense;

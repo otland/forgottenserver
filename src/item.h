@@ -606,6 +606,10 @@ class Item : virtual public Thing
 			}
 			return items[id].hitChance;
 		}
+		int32_t getDestroyId() const
+		{
+			return items[id].destroyTo;
+		}
 
 		bool isReadable() const {
 			return items[id].canReadText;

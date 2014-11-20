@@ -2085,6 +2085,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "clone", LuaScriptInterface::luaItemClone);
 	registerMethod("Item", "split", LuaScriptInterface::luaItemSplit);
 	registerMethod("Item", "remove", LuaScriptInterface::luaItemRemove);
+	registerMethod("Item", "destroy", LuaScriptInterface::luaItemDestroy);
 
 	registerMethod("Item", "getUniqueId", LuaScriptInterface::luaItemGetUniqueId);
 	registerMethod("Item", "getActionId", LuaScriptInterface::luaItemGetActionId);
@@ -2539,6 +2540,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("ItemType", "getTransformEquipId", LuaScriptInterface::luaItemTypeGetTransformEquipId);
 	registerMethod("ItemType", "getTransformDeEquipId", LuaScriptInterface::luaItemTypeGetTransformDeEquipId);
+	registerMethod("ItemType", "getDestroyId", LuaScriptInterface::luaItemTypeGetDestroyId);
 	registerMethod("ItemType", "getDecayId", LuaScriptInterface::luaItemTypeGetDecayId);
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
@@ -6479,6 +6481,18 @@ int32_t LuaScriptInterface::luaItemRemove(lua_State* L)
 	if (item) {
 		int32_t count = getNumber<int32_t>(L, 2, -1);
 		pushBoolean(L, g_game.internalRemoveItem(item, count) == RETURNVALUE_NOERROR);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemDestroy(lua_State* L)
+{
+	// item:destroy([destroySubContainers = false])
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushBoolean(L, g_game.internalDestroyItem(item, getBoolean(L, 2, false)) == RETURNVALUE_NOERROR);
 	} else {
 		lua_pushnil(L);
 	}
@@ -11369,6 +11383,18 @@ int32_t LuaScriptInterface::luaItemTypeGetTransformDeEquipId(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->transformDeEquipTo);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetDestroyId(lua_State* L)
+{
+	// itemType:getDestroyId()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->destroyTo);
 	} else {
 		lua_pushnil(L);
 	}
