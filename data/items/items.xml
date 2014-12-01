@@ -4665,7 +4665,9 @@
 	<item id="2782" name="jungle grass" />
 	<item id="2783" article="an" name="agave" />
 	<item id="2784" article="a" name="dry bush" />
-	<item id="2785" article="a" name="blueberry bush" />
+    <item id="2785" article="a" name="blueberry bush">
+        <attribute key="topOrder" value="3" />
+    </item>
 	<item id="2786" article="a" name="blueberry bush">
 		<attribute key="decayTo" value="2785" />
 		<attribute key="duration" value="300" />
