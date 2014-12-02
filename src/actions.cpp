@@ -567,16 +567,23 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	LuaScriptInterface::pushThing(L, item, env->addThing(item));
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setMetatable(L, -1, "Item");
 
 	LuaScriptInterface::pushPosition(L, fromPos, fromPos.stackpos);
 
 	Thing* thing = g_game.internalGetThing(player, toPos, toPos.stackpos);
 	if (thing && (!extendedUse || thing != item)) {
-		LuaScriptInterface::pushThing(L, thing, env->addThing(thing));
+		if (Item* itemEx = thing->getItem()) {
+			LuaScriptInterface::pushUserdata<Item>(L, itemEx);
+			LuaScriptInterface::setMetatable(L, -1, "Item");
+		} else if (Creature* creature = thing->getCreature()) {
+			LuaScriptInterface::pushUserdata<Creature>(L, creature);
+			LuaScriptInterface::setMetatable(L, -1, "Creature");
+		}
 		LuaScriptInterface::pushPosition(L, toPos, toPos.stackpos);
 	} else {
-		LuaScriptInterface::pushThing(L, nullptr, 0);
+		lua_pushnil(L);
 		Position posEx;
 		LuaScriptInterface::pushPosition(L, posEx);
 	}

@@ -1,7 +1,6 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
-	local blueberryBush = Item(item.uid)
-	blueberryBush:transform(2786)
-	blueberryBush:decay()
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
+	item:transform(2786)
+	item:decay()
 	Game.createItem(2677, 3, fromPosition)
 	return true
 end

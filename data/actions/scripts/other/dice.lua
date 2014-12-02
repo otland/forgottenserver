@@ -1,6 +1,5 @@
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
-	local dice = Item(item.uid)
-	local dicePosition = dice:getPosition()
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
+	local dicePosition = item:getPosition()
 	local value = math.random(1, 6)
 	local isInGhostMode = player:isInGhostMode()
 
@@ -11,6 +10,6 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		player:say(player:getName() .. " rolled a " .. value .. ".", TALKTYPE_MONSTER_SAY, isInGhostMode, pid, dicePosition)
 	end
 
-	dice:transform(5791 + value)
+	item:transform(5791 + value)
 	return true
 end

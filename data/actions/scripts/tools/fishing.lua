@@ -5,22 +5,21 @@ local lootRare = {2143, 2146, 2149, 7158, 7159}
 local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
-	local targetId = itemEx.itemid
-	if not isInArray(waterIds, itemEx.itemid) then
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
+	local targetId = targetEx:getId()
+	if not isInArray(waterIds, targetEx:getId()) then
 		return false
 	end
 
 	if targetId == 10499 then
-		local targetItem = Item(itemEx.uid)
-		local owner = targetItem:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
+		local owner = targetEx:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
 		if owner ~= 0 and owner ~= player:getId() then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
 			return true
 		end
 
 		toPosition:sendMagicEffect(CONST_ME_WATERSPLASH)
-		targetItem:remove()
+		targetEx:remove()
 
 		local rareChance = math.random(1, 100)
 		if rareChance == 1 then
@@ -50,18 +49,16 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		end
 
 		if targetId == 15401 then
-			local targetItem = Item(itemEx.uid)
-			targetItem:transform(targetId + 1)
-			targetItem:decay()
+			targetEx:transform(targetId + 1)
+			targetEx:decay()
 
 			if math.random(1, 100) >= 97 then
 				player:addItem(15405, 1)
 				return true
 			end
 		elseif targetId == 7236 then
-			local targetItem = Item(itemEx.uid)
-			targetItem:transform(targetId + 1)
-			targetItem:decay()
+			targetEx:transform(targetId + 1)
+			targetEx:decay()
 
 			local rareChance = math.random(1, 100)
 			if rareChance == 1 then

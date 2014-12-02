@@ -1,25 +1,25 @@
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
-	if isInArray(questDoors, item.itemid) then
-		if player:getStorageValue(item.actionid) ~= -1 then
-			Item(item.uid):transform(item.itemid + 1)
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
+	if isInArray(questDoors, item:getId()) then
+		if player:getStorageValue(item:getActionId()) ~= -1 then
+			item:transform(item:getId() + 1)
 			player:teleportTo(toPosition, true)
 		else
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "The door seems to be sealed against unwanted intruders.")
 		end
 		return true
-	elseif isInArray(levelDoors, item.itemid) then
-		if item.actionid > 0 and player:getLevel() >= item.actionid - 1000 then
-			Item(item.uid):transform(item.itemid + 1)
+	elseif isInArray(levelDoors, item:getId()) then
+		if item:getActionId() > 0 and player:getLevel() >= item:getActionId() - 1000 then
+			item:transform(item:getId() + 1)
 			player:teleportTo(toPosition, true)
 		else
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "Only the worthy may pass.")
 		end
 		return true
-	elseif isInArray(keys, item.itemid) then
-		if itemEx.actionid > 0 then
-			if item.actionid == itemEx.actionid then
-				if doors[itemEx.itemid] then
-					Item(itemEx.uid):transform(doors[itemEx.itemid])
+	elseif isInArray(keys, item:getId()) then
+		if targetEx:getActionId() > 0 then
+			if item:getActionId() == targetEx:getActionId() then
+				if doors[targetEx:getId()] then
+					targetEx:transform(doors[targetEx:getId()])
 					return true
 				end
 			end
@@ -35,7 +35,7 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		return false
 	end
 
-	if isInArray(horizontalOpenDoors, item.itemid) or isInArray(verticalOpenDoors, item.itemid) then
+	if isInArray(horizontalOpenDoors, item:getId()) or isInArray(verticalOpenDoors, item:getId()) then
 		local doorCreature = tileToPos:getTopCreature()
 		if doorCreature ~= nil then
 			toPosition.x = toPosition.x + 1
@@ -53,15 +53,15 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 
 			doorCreature:teleportTo(toPosition, true)
 		end
-		if not isInArray(openSpecialDoors, item.itemid) then
-			Item(item.uid):transform(item.itemid - 1)
+		if not isInArray(openSpecialDoors, item:getId()) then
+			item:transform(item:getId() - 1)
 		end
 		return true
 	end
 
-	if doors[item.itemid] then
-		if item.actionid == 0 then
-			Item(item.uid):transform(doors[item.itemid])
+	if doors[item:getId()] then
+		if item:getActionId() == 0 then
+			item:transform(doors[item:getId()])
 		else
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
 		end

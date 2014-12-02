@@ -1,6 +1,6 @@
 local upFloorIds = {1386, 3678, 5543}
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
-	if isInArray(upFloorIds, item.itemid) then
+function onUse(player, item, fromPosition, targetEx, toPosition, isHotkey)
+	if isInArray(upFloorIds, item:getId()) then
 		fromPosition.y = fromPosition.y + 1
 		fromPosition.z = fromPosition.z - 1
 	else
