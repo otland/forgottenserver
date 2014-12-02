@@ -29,6 +29,7 @@ extern ConfigManager g_config;
 Database::Database()
 {
 	m_handle = nullptr;
+	maxPacketSize = 16777216;
 }
 
 Database::~Database()
@@ -55,6 +56,11 @@ bool Database::connect()
 	if (!mysql_real_connect(m_handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), g_config.getString(ConfigManager::MYSQL_SOCK).c_str(), 0)) {
 		std::cout << std::endl << "MySQL Error Message: " << mysql_error(m_handle) << std::endl;
 		return false;
+	}
+
+	DBResult_ptr result = storeQuery("SHOW VARIABLES LIKE 'max_allowed_packet'");
+	if (result) {
+		maxPacketSize = result->getNumber<uint64_t>("Value");
 	}
 	return true;
 }
@@ -263,36 +269,32 @@ bool DBResult::next()
 	return m_row != nullptr;
 }
 
-void DBInsert::setQuery(const std::string& query)
+DBInsert::DBInsert(const std::string& query)
 {
-	m_query = query;
-	m_buf.clear();
+	this->query = query;
+	this->length = query.length();
 }
 
 bool DBInsert::addRow(const std::string& row)
 {
 	// adds new row to buffer
-	size_t size = m_buf.length();
-	if (size == 0) {
-		m_buf.reserve(row.length() + 2);
-		m_buf.push_back('(');
-		m_buf.append(row);
-		m_buf.push_back(')');
-	} else if (size > 32768) {
-		if (!execute()) {
-			return false;
-		}
+	const size_t rowLength = row.length();
+	length += rowLength;
+	if (length > Database::getInstance()->getMaxPacketSize() && !execute()) {
+		return false;
+	}
 
-		m_buf.reserve(row.length() + 2);
-		m_buf.push_back('(');
-		m_buf.append(row);
-		m_buf.push_back(')');
+	if (values.empty()) {
+		values.reserve(rowLength + 2);
+		values.push_back('(');
+		values.append(row);
+		values.push_back(')');
 	} else {
-		m_buf.reserve(m_buf.length() + row.length() + 3);
-		m_buf.push_back(',');
-		m_buf.push_back('(');
-		m_buf.append(row);
-		m_buf.push_back(')');
+		values.reserve(values.length() + rowLength + 3);
+		values.push_back(',');
+		values.push_back('(');
+		values.append(row);
+		values.push_back(')');
 	}
 	return true;
 }
@@ -306,12 +308,13 @@ bool DBInsert::addRow(std::ostringstream& row)
 
 bool DBInsert::execute()
 {
-	if (m_buf.empty()) {
+	if (values.empty()) {
 		return true;
 	}
 
 	// executes buffer
-	bool res = Database::getInstance()->executeQuery(m_query + m_buf);
-	m_buf.clear();
+	bool res = Database::getInstance()->executeQuery(query + values);
+	values.clear();
+	length = query.length();
 	return res;
 }

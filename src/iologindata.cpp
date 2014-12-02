@@ -723,17 +723,15 @@ bool IOLoginData::savePlayer(Player* player)
 
 	query.str("");
 
-	DBInsert stmt;
-	stmt.setQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
-
+	DBInsert spellsQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
 	for (const std::string& spellName : player->learnedInstantSpellList) {
 		query << player->getGUID() << ',' << db->escapeString(spellName);
-		if (!stmt.addRow(query)) {
+		if (!spellsQuery.addRow(query)) {
 			return false;
 		}
 	}
 
-	if (!stmt.execute()) {
+	if (!spellsQuery.execute()) {
 		return false;
 	}
 
@@ -743,7 +741,7 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	stmt.setQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 
 	ItemBlockList itemList;
 	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
@@ -753,7 +751,7 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 	}
 
-	if (!saveItems(player, itemList, stmt, propWriteStream)) {
+	if (!saveItems(player, itemList, itemsQuery, propWriteStream)) {
 		return false;
 	}
 
@@ -766,7 +764,7 @@ bool IOLoginData::savePlayer(Player* player)
 			return false;
 		}
 
-		stmt.setQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+		DBInsert depotQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 		itemList.clear();
 
 		for (const auto& it : player->depotChests) {
@@ -776,7 +774,7 @@ bool IOLoginData::savePlayer(Player* player)
 			}
 		}
 
-		if (!saveItems(player, itemList, stmt, propWriteStream)) {
+		if (!saveItems(player, itemList, depotQuery, propWriteStream)) {
 			return false;
 		}
 	}
@@ -788,14 +786,14 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	stmt.setQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	DBInsert inboxQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
 	for (Item* item : player->getInbox()->getItemList()) {
 		itemList.emplace_back(0, item);
 	}
 
-	if (!saveItems(player, itemList, stmt, propWriteStream)) {
+	if (!saveItems(player, itemList, inboxQuery, propWriteStream)) {
 		return false;
 	}
 
@@ -807,17 +805,17 @@ bool IOLoginData::savePlayer(Player* player)
 
 	query.str("");
 
-	stmt.setQuery("INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES ");
+	DBInsert storageQuery("INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES ");
 	player->genReservedStorageRange();
 
 	for (const auto& it : player->storageMap) {
 		query << player->getGUID() << ',' << it.first << ',' << it.second;
-		if (!stmt.addRow(query)) {
+		if (!storageQuery.addRow(query)) {
 			return false;
 		}
 	}
 
-	if (!stmt.execute()) {
+	if (!storageQuery.execute()) {
 		return false;
 	}
 

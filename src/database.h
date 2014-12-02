@@ -31,12 +31,12 @@ class Database
 {
 	public:
 		/**
-		* Singleton implementation.
-		*
-		* Retruns instance of database handler. Don't create database (or drivers) instances in your code - instead of it use Database::instance(). This method stores static instance of connection class internaly to make sure exacly one instance of connection is created for entire system.
-		*
-		* @return database connection handler singletor
-		*/
+		 * Singleton implementation.
+		 *
+		 * Retruns instance of database handler. Don't create database (or drivers) instances in your code - instead of it use Database::instance(). This method stores static instance of connection class internaly to make sure exacly one instance of connection is created for entire system.
+		 *
+		 * @return database connection handler singletor
+		 */
 		static Database* getInstance()
 		{
 			static Database instance;
@@ -51,43 +51,43 @@ class Database
 		bool connect();
 
 		/**
-		* Executes command.
-		*
-		* Executes query which doesn't generates results (eg. INSERT, UPDATE, DELETE...).
-		*
-		* @param query command
-		* @return true on success, false on error
-		*/
+		 * Executes command.
+		 *
+		 * Executes query which doesn't generates results (eg. INSERT, UPDATE, DELETE...).
+		 *
+		 * @param query command
+		 * @return true on success, false on error
+		 */
 		bool executeQuery(const std::string& query);
 
 		/**
-		* Queries database.
-		*
-		* Executes query which generates results (mostly SELECT).
-		*
-		* @return results object (nullptr on error)
-		*/
+		 * Queries database.
+		 *
+		 * Executes query which generates results (mostly SELECT).
+		 *
+		 * @return results object (nullptr on error)
+		 */
 		DBResult_ptr storeQuery(const std::string& query);
 
 		/**
-		* Escapes string for query.
-		*
-		* Prepares string to fit SQL queries including quoting it.
-		*
-		* @param s string to be escaped
-		* @return quoted string
-		*/
+		 * Escapes string for query.
+		 *
+		 * Prepares string to fit SQL queries including quoting it.
+		 *
+		 * @param s string to be escaped
+		 * @return quoted string
+		 */
 		std::string escapeString(const std::string& s) const;
 
 		/**
-		* Escapes binary stream for query.
-		*
-		* Prepares binary stream to fit SQL queries.
-		*
-		* @param s binary stream
-		* @param length stream length
-		* @return quoted string
-		*/
+		 * Escapes binary stream for query.
+		 *
+		 * Prepares binary stream to fit SQL queries.
+		 *
+		 * @param s binary stream
+		 * @param length stream length
+		 * @return quoted string
+		 */
 		std::string escapeBlob(const char* s, uint32_t length) const;
 
 		/**
@@ -95,27 +95,31 @@ class Database
 		 *
 		 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
 		 */
-		uint64_t getLastInsertId() {
+		uint64_t getLastInsertId() const {
 			return static_cast<uint64_t>(mysql_insert_id(m_handle));
 		}
 
 		/**
-		* Get database engine version
-		*
-		* @return the database engine version
-		*/
+		 * Get database engine version
+		 *
+		 * @return the database engine version
+		 */
 		static const char* getClientVersion() {
 			return mysql_get_client_info();
 		}
 
+		uint64_t getMaxPacketSize() const {
+			return maxPacketSize;
+		}
+
 	protected:
 		/**
-		* Transaction related methods.
-		*
-		* Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
-		*
-		* @return true on success, false on error
-		*/
+		 * Transaction related methods.
+		 *
+		 * Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
+		 *
+		 * @return true on success, false on error
+		 */
 		bool beginTransaction();
 		bool rollback();
 		bool commit();
@@ -125,8 +129,8 @@ class Database
 		~Database();
 
 		MYSQL* m_handle;
-
 		std::recursive_mutex database_lock;
+		uint64_t maxPacketSize;
 
 	friend class DBTransaction;
 };
@@ -183,32 +187,15 @@ class DBResult
 class DBInsert
 {
 	public:
-		/**
-		* Sets query prototype.
-		*
-		* @param query INSERT query
-		*/
-		void setQuery(const std::string& query);
-
-		/**
-		* Adds new row to INSERT statement
-		* @param row data
-		*/
+		DBInsert(const std::string& query);
 		bool addRow(const std::string& row);
-
-		/**
-		* Allows to use addRow() with stringstream as parameter.
-		*/
 		bool addRow(std::ostringstream& row);
-
-		/**
-		* Executes current buffer.
-		*/
 		bool execute();
 
 	protected:
-		std::string m_query;
-		std::string m_buf;
+		std::string query;
+		std::string values;
+		size_t length;
 };
 
 class DBTransaction

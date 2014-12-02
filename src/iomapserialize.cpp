@@ -82,8 +82,7 @@ bool IOMapSerialize::saveHouseItems()
 		return false;
 	}
 
-	DBInsert stmt;
-	stmt.setQuery("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
+	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
 	for (const auto& it : Houses::getInstance().getHouses()) {
@@ -328,8 +327,7 @@ bool IOMapSerialize::saveHouseInfo()
 		query.str("");
 	}
 
-	DBInsert stmt;
-	stmt.setQuery("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
+	DBInsert stmt("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
 
 	for (const auto& it : Houses::getInstance().getHouses()) {
 		House* house = it.second;
