@@ -556,9 +556,6 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTele
 
 ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t flags, Creature*) const
 {
-	const CreatureVector* creatures = getCreatures();
-	const TileItemVector* items = getItemList();
-
 	if (const Creature* creature = thing->getCreature()) {
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
 			return RETURNVALUE_NOERROR;
@@ -583,6 +580,7 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
+			const CreatureVector* creatures = getCreatures();
 			if (monster->canPushCreatures() && !monster->isSummon()) {
 				if (creatures) {
 					for (Creature* tileCreature : *creatures) {
@@ -639,7 +637,10 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 			}
 
 			return RETURNVALUE_NOERROR;
-		} else if (const Player* player = creature->getPlayer()) {
+		}
+
+		const CreatureVector* creatures = getCreatures();
+		if (const Player* player = creature->getPlayer()) {
 			if (creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags) && !player->isAccessPlayer()) {
 				for (const Creature* tileCreature : *creatures) {
 					if (!player->canWalkthrough(tileCreature)) {
@@ -675,6 +676,7 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 			}
 		}
 
+		const TileItemVector* items = getItemList();
 		if (items) {
 			if (!hasBitSet(FLAG_IGNOREBLOCKITEM, flags)) {
 				//If the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
@@ -699,6 +701,7 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 			}
 		}
 	} else if (const Item* item = thing->getItem()) {
+		const TileItemVector* items = getItemList();
 		if (items && items->size() >= 0xFFFF) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
@@ -712,6 +715,7 @@ ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t fla
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
+		const CreatureVector* creatures = getCreatures();
 		if (creatures && !creatures->empty() && item->isBlocking() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags)) {
 			for (const Creature* tileCreature : *creatures) {
 				if (!tileCreature->isInGhostMode()) {

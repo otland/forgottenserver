@@ -98,7 +98,6 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	} else {
 		m_eventLock.unlock();
 		delete task;
-		task = nullptr;
 		return 0;
 	}
 
