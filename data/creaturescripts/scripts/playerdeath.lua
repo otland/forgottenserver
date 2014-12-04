@@ -56,9 +56,9 @@ function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDama
 		result.free(resultId)
 	end
 
-	while deathRecords > maxDeathRecords do
-		db.asyncQuery("DELETE FROM `player_deaths` WHERE `player_id` = " .. playerGuid .. " ORDER BY `time` LIMIT 1")
-		deathRecords = deathRecords - 1
+	local limit = deathRecords - maxDeathRecords
+	if limit > 0 then
+		db.asyncQuery("DELETE FROM `player_deaths` WHERE `player_id` = " .. playerGuid .. " ORDER BY `time` LIMIT " .. limit)
 	end
 
 	if byPlayer == 1 then
