@@ -93,7 +93,6 @@ int main(int argc, char* argv[])
 	ServiceManager servicer;
 
 	g_dispatcher.start();
-	g_databaseTasks.start();
 	g_scheduler.start();
 
 	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
@@ -117,6 +116,7 @@ int main(int argc, char* argv[])
 #endif
 		servicer.run();
 		g_scheduler.join();
+		g_databaseTasks.join();
 		g_dispatcher.join();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
@@ -207,6 +207,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
+	g_databaseTasks.start();
 
 	DatabaseManager::updateDatabase();
 

@@ -4492,6 +4492,7 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 	{"query", LuaScriptInterface::luaDatabaseExecute},
 	{"asyncQuery", LuaScriptInterface::luaDatabaseAsyncExecute},
 	{"storeQuery", LuaScriptInterface::luaDatabaseStoreQuery},
+	{"asyncStoreQuery", LuaScriptInterface::luaDatabaseAsyncStoreQuery},
 	{"escapeString", LuaScriptInterface::luaDatabaseEscapeString},
 	{"escapeBlob", LuaScriptInterface::luaDatabaseEscapeBlob},
 	{"lastInsertId", LuaScriptInterface::luaDatabaseLastInsertId},
@@ -4519,6 +4520,28 @@ int32_t LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 		pushBoolean(L, false);
 	}
 	return 1;
+}
+
+int32_t LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
+{
+	std::function<void(DBResult_ptr)> callback;
+	if (lua_gettop(L) > 1) {
+		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
+		callback = [ref](DBResult_ptr result) {
+			lua_State* luaState = g_luaEnvironment.getLuaState();
+			if (!luaState || !LuaScriptInterface::reserveScriptEnv()) {
+				return;
+			}
+
+			lua_rawgeti(luaState, LUA_REGISTRYINDEX, ref);
+			lua_pushnumber(luaState, ScriptEnvironment::addResult(result));
+			g_luaEnvironment.callFunction(1);
+
+			luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
+		};
+	}
+	g_databaseTasks.addTask(getString(L, -1), callback);
+	return 0;
 }
 
 int32_t LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)

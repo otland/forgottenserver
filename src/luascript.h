@@ -402,7 +402,7 @@ class LuaScriptInterface
 		static const luaL_Reg luaBitReg[7];
 #endif
 		static const luaL_Reg luaConfigManagerTable[4];
-		static const luaL_Reg luaDatabaseTable[8];
+		static const luaL_Reg luaDatabaseTable[9];
 		static const luaL_Reg luaResultTable[7];
 
 		static int32_t protectedCall(lua_State* L, int32_t nargs, int32_t nresults);
@@ -528,6 +528,7 @@ class LuaScriptInterface
 		static int32_t luaDatabaseExecute(lua_State* L);
 		static int32_t luaDatabaseAsyncExecute(lua_State* L);
 		static int32_t luaDatabaseStoreQuery(lua_State* L);
+		static int32_t luaDatabaseAsyncStoreQuery(lua_State* L);
 		static int32_t luaDatabaseEscapeString(lua_State* L);
 		static int32_t luaDatabaseEscapeBlob(lua_State* L);
 		static int32_t luaDatabaseLastInsertId(lua_State* L);

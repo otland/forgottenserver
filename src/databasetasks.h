@@ -27,9 +27,6 @@
 #include "database.h"
 #include "enums.h"
 
-// TODO: Pass DatabaseTask objects to addTask with support for callbacks with query results,
-// the callbacks should be added as tasks to Dispatcher
-/*
 struct DatabaseTask {
 	DatabaseTask(const std::string& query) : query(query), store(false) {}
 	DatabaseTask(const std::string& query, const std::function<void(DBResult_ptr)>& callback) : query(query), callback(callback), store(true) {}
@@ -38,7 +35,6 @@ struct DatabaseTask {
 	std::function<void(DBResult_ptr)> callback;
 	bool store;
 };
-*/
 
 class DatabaseTasks {
 	public:
@@ -51,12 +47,12 @@ class DatabaseTasks {
 		void shutdown();
 		void join();
 
-		void addTask(const std::string& query);
+		void addTask(const std::string& query, const std::function<void(DBResult_ptr)>& callback = nullptr);
 
 	private:
 		Database db;
 		std::thread thread;
-		std::list<std::string> tasks;
+		std::list<DatabaseTask> tasks;
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
 		ThreadState threadState;
