@@ -49,11 +49,7 @@ void DatabaseTasks::run()
 		if (!tasks.empty() && threadState != THREAD_STATE_TERMINATED) {
 			const DatabaseTask& task = tasks.front();
 			taskLockUnique.unlock();
-			if (task.callback) {
-				g_dispatcher.addTask(createTask(std::bind(task.callback, db.storeQuery(task.query))));
-			} else {
-				db.executeQuery(task.query);
-			}
+			runTask(task);
 			taskLockUnique.lock();
 			tasks.pop_front();
 		}
@@ -61,13 +57,13 @@ void DatabaseTasks::run()
 	}
 }
 
-void DatabaseTasks::addTask(const std::string& query, const std::function<void(DBResult_ptr)>& callback/* = nullptr*/)
+void DatabaseTasks::addTask(const std::string& query, const std::function<void(DBResult_ptr, bool)>& callback/* = nullptr*/, bool store/* = false*/)
 {
 	bool signal = false;
 	taskLock.lock();
 	if (threadState == THREAD_STATE_RUNNING) {
 		signal = tasks.empty();
-		tasks.emplace_back(DatabaseTask(query, callback));
+		tasks.emplace_back(query, callback, store);
 	}
 	taskLock.unlock();
 
@@ -76,15 +72,27 @@ void DatabaseTasks::addTask(const std::string& query, const std::function<void(D
 	}
 }
 
+void DatabaseTasks::runTask(const DatabaseTask& task)
+{
+	bool success;
+	DBResult_ptr result;
+	if (task.store) {
+		result = db.storeQuery(task.query);
+		success = true;
+	} else {
+		result = nullptr;
+		success = db.executeQuery(task.query);
+	}
+
+	if (task.callback) {
+		g_dispatcher.addTask(createTask(std::bind(task.callback, result, success)));
+	}
+}
+
 void DatabaseTasks::flush()
 {
 	while (!tasks.empty()) {
-		const DatabaseTask& task = tasks.front();
-		if (task.callback) {
-			g_dispatcher.addTask(createTask(std::bind(task.callback, db.storeQuery(task.query))));
-		} else {
-			db.executeQuery(task.query);
-		}
+		runTask(tasks.front());
 		tasks.pop_front();
 	}
 }

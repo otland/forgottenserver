@@ -4508,7 +4508,28 @@ int32_t LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 
 int32_t LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 {
-	g_databaseTasks.addTask(getString(L, -1));
+	std::function<void(DBResult_ptr, bool)> callback;
+	if (lua_gettop(L) > 1) {
+		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
+		callback = [ref](DBResult_ptr, bool success) {
+			lua_State* luaState = g_luaEnvironment.getLuaState();
+			if (!luaState) {
+				return;
+			}
+			
+			if (!LuaScriptInterface::reserveScriptEnv()) {
+				luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
+				return;
+			}
+
+			lua_rawgeti(luaState, LUA_REGISTRYINDEX, ref);
+			pushBoolean(luaState, success);
+			g_luaEnvironment.callFunction(1);
+
+			luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
+		};
+	}
+	g_databaseTasks.addTask(getString(L, -1), callback);
 	return 0;
 }
 
@@ -4524,10 +4545,10 @@ int32_t LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 
 int32_t LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 {
-	std::function<void(DBResult_ptr)> callback;
+	std::function<void(DBResult_ptr, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
-		callback = [ref](DBResult_ptr result) {
+		callback = [ref](DBResult_ptr result, bool) {
 			lua_State* luaState = g_luaEnvironment.getLuaState();
 			if (!luaState) {
 				return;
@@ -4539,13 +4560,17 @@ int32_t LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 			}
 
 			lua_rawgeti(luaState, LUA_REGISTRYINDEX, ref);
-			lua_pushnumber(luaState, ScriptEnvironment::addResult(result));
+			if (result) {
+				lua_pushnumber(luaState, ScriptEnvironment::addResult(result));
+			} else {
+				pushBoolean(luaState, false);
+			}
 			g_luaEnvironment.callFunction(1);
 
 			luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
 		};
 	}
-	g_databaseTasks.addTask(getString(L, -1), callback);
+	g_databaseTasks.addTask(getString(L, -1), callback, true);
 	return 0;
 }
 
