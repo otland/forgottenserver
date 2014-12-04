@@ -50,7 +50,7 @@ void DatabaseTasks::run()
 			const DatabaseTask& task = tasks.front();
 			taskLockUnique.unlock();
 			if (task.callback) {
-				task.callback(db.storeQuery(task.query));
+				g_dispatcher.addTask(createTask(std::bind(task.callback, db.storeQuery(task.query))));
 			} else {
 				db.executeQuery(task.query);
 			}
@@ -81,7 +81,7 @@ void DatabaseTasks::flush()
 	while (!tasks.empty()) {
 		const DatabaseTask& task = tasks.front();
 		if (task.callback) {
-			task.callback(db.storeQuery(task.query));
+			g_dispatcher.addTask(createTask(std::bind(task.callback, db.storeQuery(task.query))));
 		} else {
 			db.executeQuery(task.query);
 		}

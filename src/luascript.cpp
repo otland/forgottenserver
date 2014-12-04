@@ -4529,7 +4529,12 @@ int32_t LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
 		callback = [ref](DBResult_ptr result) {
 			lua_State* luaState = g_luaEnvironment.getLuaState();
-			if (!luaState || !LuaScriptInterface::reserveScriptEnv()) {
+			if (!luaState) {
+				return;
+			}
+			
+			if (!LuaScriptInterface::reserveScriptEnv()) {
+				luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
 				return;
 			}
 
