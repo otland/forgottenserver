@@ -718,6 +718,7 @@ class LuaScriptInterface
 		static int32_t luaItemGetCount(lua_State* L);
 		static int32_t luaItemGetCharges(lua_State* L);
 		static int32_t luaItemGetFluidType(lua_State* L);
+		static int32_t luaItemGetWeight(lua_State* L);
 
 		static int32_t luaItemGetSubType(lua_State* L);
 
