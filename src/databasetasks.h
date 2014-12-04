@@ -28,12 +28,11 @@
 #include "enums.h"
 
 struct DatabaseTask {
-	DatabaseTask(const std::string& query) : query(query), store(false) {}
-	DatabaseTask(const std::string& query, const std::function<void(DBResult_ptr)>& callback) : query(query), callback(callback), store(true) {}
+	DatabaseTask(const std::string& query) : query(query) {}
+	DatabaseTask(const std::string& query, const std::function<void(DBResult_ptr)>& callback) : query(query), callback(callback) {}
 
 	std::string query;
 	std::function<void(DBResult_ptr)> callback;
-	bool store;
 };
 
 class DatabaseTasks {
