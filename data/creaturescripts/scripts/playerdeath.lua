@@ -57,7 +57,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDama
 	end
 
 	while deathRecords > maxDeathRecords do
-		db.query("DELETE FROM `player_deaths` WHERE `player_id` = " .. playerGuid .. " ORDER BY `time` LIMIT 1")
+		db.asyncQuery("DELETE FROM `player_deaths` WHERE `player_id` = " .. playerGuid .. " ORDER BY `time` LIMIT 1")
 		deathRecords = deathRecords - 1
 	end
 
@@ -76,7 +76,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDama
 				end
 
 				if warId ~= false then
-					db.query("INSERT INTO `guildwar_kills` (`killer`, `target`, `killerguild`, `targetguild`, `time`, `warid`) VALUES (" .. db.escapeString(killerName) .. ", " .. db.escapeString(player:getName()) .. ", " .. killerGuild .. ", " .. targetGuild .. ", " .. os.time() .. ", " .. warId .. ")")
+					db.asyncQuery("INSERT INTO `guildwar_kills` (`killer`, `target`, `killerguild`, `targetguild`, `time`, `warid`) VALUES (" .. db.escapeString(killerName) .. ", " .. db.escapeString(player:getName()) .. ", " .. killerGuild .. ", " .. targetGuild .. ", " .. os.time() .. ", " .. warId .. ")")
 				end
 			end
 		end

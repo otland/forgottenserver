@@ -20,8 +20,10 @@
 #include "otpch.h"
 
 #include "iomarket.h"
-#include "iologindata.h"
+
 #include "configmanager.h"
+#include "databasetasks.h"
+#include "iologindata.h"
 
 extern ConfigManager g_config;
 
@@ -209,7 +211,7 @@ void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t it
 	query << "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES ("
 		<< playerId << ',' << type << ',' << itemId << ',' << amount << ',' << price << ','
 		<< timestamp << ',' << time(nullptr) << ',' << state << ')';
-	Database::getInstance()->executeQuery(query.str());
+	g_databaseTasks.addTask(query.str());
 }
 
 void IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)

@@ -44,7 +44,9 @@
 #include "house.h"
 #include "databasemanager.h"
 #include "scheduler.h"
+#include "databasetasks.h"
 
+DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
 Scheduler g_scheduler;
 
@@ -91,6 +93,7 @@ int main(int argc, char* argv[])
 	ServiceManager servicer;
 
 	g_dispatcher.start();
+	g_databaseTasks.start();
 	g_scheduler.start();
 
 	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
@@ -106,6 +109,7 @@ int main(int argc, char* argv[])
 					std::bind(&Game::shutdown, &g_game)
 				));
 				g_scheduler.stop();
+				g_databaseTasks.stop();
 				g_dispatcher.stop();
 			}));
 			ExitThread(0);
@@ -119,12 +123,15 @@ int main(int argc, char* argv[])
 		g_dispatcher.addTask(createTask([]() {
 			g_dispatcher.addTask(createTask([]() {
 				g_scheduler.shutdown();
+				g_databaseTasks.shutdown();
 				g_dispatcher.shutdown();
 			}));
 			g_scheduler.stop();
+			g_databaseTasks.stop();
 			g_dispatcher.stop();
 		}));
 		g_scheduler.join();
+		g_databaseTasks.join();
 		g_dispatcher.join();
 	}
 	return 0;

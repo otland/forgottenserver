@@ -142,6 +142,7 @@
     <ClCompile Include="..\src\cylinder.cpp" />
     <ClCompile Include="..\src\database.cpp" />
     <ClCompile Include="..\src\databasemanager.cpp" />
+    <ClCompile Include="..\src\databasetasks.cpp" />
     <ClCompile Include="..\src\depotchest.cpp" />
     <ClCompile Include="..\src\depotlocker.cpp" />
     <ClCompile Include="..\src\events.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="..\src\cylinder.h" />
     <ClInclude Include="..\src\database.h" />
     <ClInclude Include="..\src\databasemanager.h" />
+    <ClInclude Include="..\src\databasetasks.h" />
     <ClInclude Include="..\src\definitions.h" />
     <ClInclude Include="..\src\depotchest.h" />
     <ClInclude Include="..\src\depotlocker.h" />

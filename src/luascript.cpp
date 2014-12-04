@@ -46,6 +46,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "raids.h"
+#include "databasetasks.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -4489,6 +4490,7 @@ int32_t LuaScriptInterface::luaConfigManagerGetBoolean(lua_State* L)
 
 const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 	{"query", LuaScriptInterface::luaDatabaseExecute},
+	{"asyncQuery", LuaScriptInterface::luaDatabaseAsyncExecute},
 	{"storeQuery", LuaScriptInterface::luaDatabaseStoreQuery},
 	{"escapeString", LuaScriptInterface::luaDatabaseEscapeString},
 	{"escapeBlob", LuaScriptInterface::luaDatabaseEscapeBlob},
@@ -4501,6 +4503,12 @@ int32_t LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 {
 	pushBoolean(L, Database::getInstance()->executeQuery(getString(L, -1)));
 	return 1;
+}
+
+int32_t LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
+{
+	g_databaseTasks.addTask(getString(L, -1));
+	return 0;
 }
 
 int32_t LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)

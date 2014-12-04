@@ -27,12 +27,12 @@ extern Game g_game;
 
 Dispatcher::Dispatcher()
 {
-	m_threadState = STATE_TERMINATED;
+	m_threadState = THREAD_STATE_TERMINATED;
 }
 
 void Dispatcher::start()
 {
-	m_threadState = STATE_RUNNING;
+	m_threadState = THREAD_STATE_RUNNING;
 	m_thread = std::thread(&Dispatcher::dispatcherThread, this);
 }
 
@@ -43,7 +43,7 @@ void Dispatcher::dispatcherThread()
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	std::unique_lock<std::mutex> taskLockUnique(m_taskLock, std::defer_lock);
 
-	while (m_threadState != STATE_TERMINATED) {
+	while (m_threadState != THREAD_STATE_TERMINATED) {
 		// check if there are tasks waiting
 		taskLockUnique.lock();
 
@@ -52,7 +52,7 @@ void Dispatcher::dispatcherThread()
 			m_taskSignal.wait(taskLockUnique);
 		}
 
-		if (!m_taskList.empty() && m_threadState != STATE_TERMINATED) {
+		if (!m_taskList.empty() && m_threadState != THREAD_STATE_TERMINATED) {
 			// take the first task
 			Task* task = m_taskList.front();
 			m_taskList.pop_front();
@@ -79,7 +79,7 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 
 	m_taskLock.lock();
 
-	if (m_threadState == STATE_RUNNING) {
+	if (m_threadState == THREAD_STATE_RUNNING) {
 		do_signal = m_taskList.empty();
 
 		if (push_front) {
@@ -119,14 +119,14 @@ void Dispatcher::flush()
 void Dispatcher::stop()
 {
 	m_taskLock.lock();
-	m_threadState = STATE_CLOSING;
+	m_threadState = THREAD_STATE_CLOSING;
 	m_taskLock.unlock();
 }
 
 void Dispatcher::shutdown()
 {
 	m_taskLock.lock();
-	m_threadState = STATE_TERMINATED;
+	m_threadState = THREAD_STATE_TERMINATED;
 	flush();
 	m_taskLock.unlock();
 	m_taskSignal.notify_one();

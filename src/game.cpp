@@ -50,6 +50,7 @@
 #include "spawn.h"
 #include "connection.h"
 #include "events.h"
+#include "databasetasks.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -174,6 +175,7 @@ void Game::setGameState(GameState_t newState)
 				createTask(std::bind(&Game::shutdown, this)));
 
 			g_scheduler.stop();
+			g_databaseTasks.stop();
 			g_dispatcher.stop();
 			break;
 		}
@@ -4591,6 +4593,7 @@ void Game::shutdown()
 	std::cout << "Shutting down server..." << std::flush;
 
 	g_scheduler.shutdown();
+	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
 	Spawns::getInstance()->clear();
 	Raids::getInstance()->clear();

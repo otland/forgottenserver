@@ -22,6 +22,8 @@
 
 #include <condition_variable>
 
+#include "enums.h"
+
 const int DISPATCHER_TASK_EXPIRATION = 2000;
 const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono::milliseconds(0));
 
@@ -68,12 +70,6 @@ inline Task* createTask(uint32_t expiration, const std::function<void (void)>& f
 	return new Task(expiration, f);
 }
 
-enum DispatcherState {
-	STATE_RUNNING,
-	STATE_CLOSING,
-	STATE_TERMINATED
-};
-
 class Dispatcher
 {
 	public:
@@ -97,7 +93,7 @@ class Dispatcher
 		std::condition_variable m_taskSignal;
 
 		std::list<Task*> m_taskList;
-		DispatcherState m_threadState;
+		ThreadState m_threadState;
 };
 
 extern Dispatcher g_dispatcher;

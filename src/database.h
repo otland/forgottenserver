@@ -30,6 +30,9 @@ typedef std::shared_ptr<DBResult> DBResult_ptr;
 class Database
 {
 	public:
+		Database();
+		~Database();
+
 		/**
 		 * Singleton implementation.
 		 *
@@ -123,9 +126,6 @@ class Database
 		bool commit();
 
 	private:
-		Database();
-		~Database();
-
 		MYSQL* m_handle;
 		std::recursive_mutex database_lock;
 		uint64_t maxPacketSize;
