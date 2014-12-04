@@ -473,7 +473,7 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	LuaScriptInterface::pushUserdata(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	LuaScriptInterface::pushThing(L, item, env->addThing(item));
+	LuaScriptInterface::pushThing(L, item);
 	LuaScriptInterface::pushString(L, text);
 
 	return m_scriptInterface->callFunction(3);

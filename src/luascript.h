@@ -258,7 +258,7 @@ class LuaScriptInterface
 		void callVoidFunction(int32_t params);
 
 		//push/pop common structures
-		static void pushThing(lua_State* L, Thing* thing, uint32_t uid);
+		static void pushThing(lua_State* L, Thing* thing);
 		static void pushVariant(lua_State* L, const LuaVariant& var);
 		static void pushString(lua_State* L, const std::string& value);
 		static void pushCallback(lua_State* L, int32_t callback);
@@ -694,6 +694,7 @@ class LuaScriptInterface
 
 		// Item
 		static int32_t luaItemCreate(lua_State* L);
+		static int32_t luaItemIndex(lua_State* L);
 
 		static int32_t luaItemIsCreature(lua_State* L);
 		static int32_t luaItemIsItem(lua_State* L);
@@ -767,6 +768,7 @@ class LuaScriptInterface
 
 		// Creature
 		static int32_t luaCreatureCreate(lua_State* L);
+		static int32_t luaCreatureIndex(lua_State* L);
 
 		static int32_t luaCreatureRegisterEvent(lua_State* L);
 		static int32_t luaCreatureUnregisterEvent(lua_State* L);

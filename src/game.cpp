@@ -1749,8 +1749,12 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		return item;
 	}
 
-	const ItemType& curType = Item::items[item->getID()];
 	const ItemType& newType = Item::items[newId];
+	if (newType.id == 0) {
+		return item;
+	}
+
+	const ItemType& curType = Item::items[item->getID()];
 	if (curType.alwaysOnTop != newType.alwaysOnTop) {
 		//This only occurs when you transform items on tiles from a downItem to a topItem (or vice versa)
 		//Remove the old, and add the new
