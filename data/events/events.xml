@@ -4,6 +4,7 @@
 	<event class="Creature" method="onChangeOutfit" enabled="0" />
 	<event class="Creature" method="onAreaCombat" enabled="0" />
 	<event class="Creature" method="onTargetCombat" enabled="0" />
+	<event class="Creature" method="onDeath" enabled="1" />
 
 	<!-- Party methods -->
 	<event class="Party" method="onJoin" enabled="0" />

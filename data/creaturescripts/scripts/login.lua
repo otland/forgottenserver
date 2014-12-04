@@ -12,6 +12,5 @@ function onLogin(player)
 	end
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 
-	player:registerEvent("PlayerDeath")
 	return true
 end

@@ -175,8 +175,6 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_THINK;
 	} else if (tmpStr == "preparedeath") {
 		m_type = CREATURE_EVENT_PREPAREDEATH;
-	} else if (tmpStr == "death") {
-		m_type = CREATURE_EVENT_DEATH;
 	} else if (tmpStr == "kill") {
 		m_type = CREATURE_EVENT_KILL;
 	} else if (tmpStr == "advance") {
@@ -215,9 +213,6 @@ std::string CreatureEvent::getScriptEventName() const
 
 		case CREATURE_EVENT_PREPAREDEATH:
 			return "onPrepareDeath";
-
-		case CREATURE_EVENT_DEATH:
-			return "onDeath";
 
 		case CREATURE_EVENT_KILL:
 			return "onKill";
@@ -347,44 +342,6 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 	}
 
 	return m_scriptInterface->callFunction(2);
-}
-
-bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified)
-{
-	//onDeath(creature, corpse, lasthitkiller, mostdamagekiller, lasthitunjustified, mostdamageunjustified)
-	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::executeOnDeath] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
-
-	lua_State* L = m_scriptInterface->getLuaState();
-
-	m_scriptInterface->pushFunction(m_scriptId);
-	LuaScriptInterface::pushUserdata<Creature>(L, creature);
-	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	lua_pushnumber(L, env->addThing(corpse));
-
-	if (killer) {
-		LuaScriptInterface::pushUserdata<Creature>(L, killer);
-		LuaScriptInterface::setCreatureMetatable(L, -1, killer);
-	} else {
-		lua_pushnil(L);
-	}
-
-	if (mostDamageKiller) {
-		LuaScriptInterface::pushUserdata<Creature>(L, mostDamageKiller);
-		LuaScriptInterface::setCreatureMetatable(L, -1, mostDamageKiller);
-	} else {
-		lua_pushnil(L);
-	}
-
-	LuaScriptInterface::pushBoolean(L, lastHitUnjustified);
-	LuaScriptInterface::pushBoolean(L, mostDamageUnjustified);
-
-	return m_scriptInterface->callFunction(6);
 }
 
 bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldLevel,

@@ -29,6 +29,7 @@
 #include "combat.h"
 #include "configmanager.h"
 #include "scheduler.h"
+#include "events.h"
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
@@ -37,6 +38,7 @@ double Creature::speedC = -4795.01;
 extern Game g_game;
 extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 Creature::Creature() :
 	localMapCache(), isInternalRemoved(false)
@@ -721,9 +723,8 @@ bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatu
 	if (!lootDrop && getMonster()) {
 		if (master) {
 			//scripting event - onDeath
-			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
-			for (CreatureEvent* deathEvent : deathEvents) {
-				deathEvent->executeOnDeath(this, nullptr, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+			if (!g_events->eventCreatureOnDeath(this, nullptr, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified)) {
+				return false;
 			}
 		}
 
@@ -757,13 +758,12 @@ bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatu
 			g_game.startDecay(corpse);
 		}
 
-		//scripting event - onDeath
-		for (CreatureEvent* deathEvent : getCreatureEvents(CREATURE_EVENT_DEATH)) {
-			deathEvent->executeOnDeath(this, corpse, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
-		}
-
 		if (corpse) {
 			dropLoot(corpse->getContainer(), _lastHitCreature);
+		}
+
+		if (!g_events->eventCreatureOnDeath(this, corpse, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified)) {
+			return false;
 		}
 	}
 

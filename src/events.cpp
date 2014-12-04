@@ -39,6 +39,7 @@ void Events::clear()
 	creatureOnChangeOutfit = -1;
 	creatureOnAreaCombat = -1;
 	creatureOnTargetCombat = -1;
+	creatureOnDeath = -1;
 
 	// Party
 	partyOnJoin = -1;
@@ -94,6 +95,8 @@ bool Events::load()
 					creatureOnAreaCombat = event;
 				} else if (methodName == "onTargetCombat") {
 					creatureOnTargetCombat = event;
+				} else if (methodName == "onDeath") {
+					creatureOnDeath = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 				}
@@ -255,6 +258,55 @@ ReturnValue Events::eventCreatureOnTargetCombat(Creature* creature, Creature* ta
 
 	scriptInterface.resetScriptEnv();
 	return returnValue;
+}
+
+bool Events::eventCreatureOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified)
+{
+	// Creature:onDeath(corpse, lasthitkiller, mostdamagekiller, lasthitunjustified, mostdamageunjustified) or
+	// Creature.onDeath(self, corpse, lasthitkiller, mostdamagekiller, lasthitunjustified, mostdamageunjustified)
+	if (creatureOnDeath == -1) {
+		return RETURNVALUE_NOERROR;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnDeath] Call stack overflow" << std::endl;
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(creatureOnDeath, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(creatureOnDeath);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	if (corpse) {
+		LuaScriptInterface::pushUserdata<Item>(L, corpse);
+		LuaScriptInterface::setItemMetatable(L, -1, corpse);
+	} else {
+		lua_pushnil(L);
+	}
+
+	if (killer) {
+		LuaScriptInterface::pushUserdata<Creature>(L, killer);
+		LuaScriptInterface::setCreatureMetatable(L, -1, killer);
+	} else {
+		lua_pushnil(L);
+	}
+
+	if (mostDamageKiller) {
+		LuaScriptInterface::pushUserdata<Creature>(L, mostDamageKiller);
+		LuaScriptInterface::setCreatureMetatable(L, -1, mostDamageKiller);
+	} else {
+		lua_pushnil(L);
+	}
+
+	LuaScriptInterface::pushBoolean(L, lastHitUnjustified);
+	LuaScriptInterface::pushBoolean(L, mostDamageUnjustified);
+
+	return scriptInterface.callFunction(6);
 }
 
 // Party

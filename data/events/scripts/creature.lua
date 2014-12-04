@@ -9,3 +9,130 @@ end
 function Creature:onTargetCombat(target)
 	return true
 end
+
+function Creature:onDeath(corpse, killer, mostDamageKiller, unjustified, mostDamageUnjustified)
+	local broadcastLootMessage = true
+	local deathListEnabled = true
+	local maxDeathRecords = 5
+
+    if broadcastLootMessage and killer then
+	    local player
+	    if killer:isPlayer() then
+	        player = killer
+	    elseif killer:isMonster() and killer:getMaster() then
+	        player = killer:getMaster()
+	    end
+
+	    if player then
+	    	local nameDesc = "unknown"
+	    	if self:isMonster() then
+	    		nameDesc = self:getType():getNameDescription()
+	    	elseif self:isPlayer() then
+	    		nameDesc = self:getName()
+	    	end
+
+			local description = "Loot of " .. nameDesc .. ": "
+			if player:getStamina() > 840 then
+				if corpse then
+					local content = getContentDescription(corpse)
+					description = description .. (content ~= "" and content .. "." or "nothing.")
+				end
+			else
+				description = description .. "nothing (due to low stamina)"
+			end
+
+			player:sendTextMessage(MESSAGE_INFO_DESCR, description)
+			local party = player:getParty()
+			if party then
+				for _, member in pairs(party:getMembers()) do
+					member:sendTextMessage(MESSAGE_INFO_DESCR, description)    
+				end
+			end
+		end
+	end
+
+	if self:isPlayer() then
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are dead.")
+		if not deathListEnabled then
+			return true
+		end
+
+		local byPlayer = 0
+		local killerName
+		if killer ~= nil then
+			if killer:isPlayer() then
+				byPlayer = 1
+			else
+				local master = killer:getMaster()
+				if master and master ~= killer and master:isPlayer() then
+					killer = master
+					byPlayer = 1
+				end
+			end
+			killerName = killer:getName()
+		else
+			killerName = "field item"
+		end
+
+		local byPlayerMostDamage = 0
+		local mostDamageKillerName
+		if mostDamageKiller ~= nil then
+			if mostDamageKiller:isPlayer() then
+				byPlayerMostDamage = 1
+			else
+				local master = mostDamageKiller:getMaster()
+				if master and master ~= mostDamageKiller and master:isPlayer() then
+					mostDamageKiller = master
+					byPlayerMostDamage = 1
+				end
+			end
+			mostDamageName = mostDamageKiller:getName()
+		else
+			mostDamageName = "field item"
+		end
+
+		local playerGuid = self:getGuid()
+		db.query("INSERT INTO `player_deaths` (`player_id`, `time`, `level`, `killed_by`, `is_player`, `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`) VALUES (" .. playerGuid .. ", " .. os.time() .. ", " .. self:getLevel() .. ", " .. db.escapeString(killerName) .. ", " .. byPlayer .. ", " .. db.escapeString(mostDamageName) .. ", " .. byPlayerMostDamage .. ", " .. (unjustified and 1 or 0) .. ", " .. (mostDamageUnjustified and 1 or 0) .. ")")
+		local resultId = db.storeQuery("SELECT `player_id` FROM `player_deaths` WHERE `player_id` = " .. playerGuid)
+
+		local deathRecords = 0
+		local tmpResultId = resultId
+		while tmpResultId ~= false do
+			tmpResultId = result.next(resultId)
+			deathRecords = deathRecords + 1
+		end
+
+		if resultId ~= false then
+			result.free(resultId)
+		end
+
+		while deathRecords > maxDeathRecords do
+			db.query("DELETE FROM `player_deaths` WHERE `player_id` = " .. playerGuid .. " ORDER BY `time` LIMIT 1")
+			deathRecords = deathRecords - 1
+		end
+
+		if byPlayer == 1 then
+			local targetGuild = self:getGuild()
+			targetGuild = targetGuild and targetGuild:getId() or 0
+			if targetGuild ~= 0 then
+				local killerGuild = killer:getGuild()
+				killerGuild = killerGuild and killerGuild:getId() or 0
+				if killerGuild ~= 0 and targetGuild ~= killerGuild and isInWar(self:getId(), killer:getId()) then
+					local warId = false
+					resultId = db.storeQuery("SELECT `id` FROM `guild_wars` WHERE `status` = 1 AND ((`guild1` = " .. killerGuild .. " AND `guild2` = " .. targetGuild .. ") OR (`guild1` = " .. targetGuild .. " AND `guild2` = " .. killerGuild .. "))")
+					if resultId ~= false then
+						warId = result.getDataInt(resultId, "id")
+						result.free(resultId)
+					end
+
+					if warId ~= false then
+						db.query("INSERT INTO `guildwar_kills` (`killer`, `target`, `killerguild`, `targetguild`, `time`, `warid`) VALUES (" .. db.escapeString(killerName) .. ", " .. db.escapeString(self:getName()) .. ", " .. killerGuild .. ", " .. targetGuild .. ", " .. os.time() .. ", " .. warId .. ")")
+					end
+				end
+			end
+		end
+	end
+	return true
+end
+
+

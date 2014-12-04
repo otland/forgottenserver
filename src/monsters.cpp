@@ -160,26 +160,6 @@ void MonsterType::createLoot(Container* corpse)
 				}
 			}
 		}
-
-		if (owner) {
-			std::ostringstream ss;
-			ss << "Loot of " << nameDescription << ": " << corpse->getContentDescription();
-
-			if (owner->getParty()) {
-				owner->getParty()->broadcastPartyLoot(ss.str());
-			} else {
-				owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
-			}
-		}
-	} else {
-		std::ostringstream ss;
-		ss << "Loot of " << nameDescription << ": nothing (due to low stamina)";
-
-		if (owner->getParty()) {
-			owner->getParty()->broadcastPartyLoot(ss.str());
-		} else {
-			owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
-		}
 	}
 
 	corpse->__startDecaying();
