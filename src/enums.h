@@ -500,14 +500,6 @@ struct MarketOfferEx {
 	std::string playerName;
 };
 
-struct ExpiredMarketOffer {
-	uint32_t id;
-	uint32_t price;
-	uint16_t amount;
-	uint16_t itemId;
-	uint32_t playerId;
-};
-
 struct HistoryMarketOffer {
 	uint32_t timestamp;
 	uint32_t price;
@@ -568,7 +560,6 @@ struct CombatDamage
 };
 
 typedef std::list<MarketOffer> MarketOfferList;
-typedef std::list<ExpiredMarketOffer> ExpiredMarketOfferList;
 typedef std::list<HistoryMarketOffer> HistoryMarketOfferList;
 typedef std::list<ShopInfo> ShopInfoList;
 

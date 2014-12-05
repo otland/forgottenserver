@@ -291,7 +291,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
 	Houses::getInstance().payHouses();
-	g_game.checkExpiredMarketOffers();
+	IOMarket::checkExpiredOffers();
 	IOMarket::getInstance()->updateStatistics();
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;

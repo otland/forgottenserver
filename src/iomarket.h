@@ -21,6 +21,7 @@
 #define FS_IOMARKET_H_B981E52C218C42D3B9EF726EBF0E92C9
 
 #include "enums.h"
+#include "database.h"
 
 class IOMarket
 {
@@ -34,7 +35,8 @@ class IOMarket
 		static MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId);
 		static HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId);
 
-		static ExpiredMarketOfferList getExpiredOffers(MarketAction_t action);
+		static void processExpiredOffers(DBResult_ptr result, bool);
+		static void checkExpiredOffers();
 
 		static int32_t getPlayerOfferCount(uint32_t playerId);
 		static MarketOfferEx getOfferByCounter(uint32_t timestamp, uint16_t counter);
@@ -44,7 +46,7 @@ class IOMarket
 		static void deleteOffer(uint32_t offerId);
 
 		static void appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint32_t price, time_t timestamp, MarketOfferState_t state);
-		static void moveOfferToHistory(uint32_t offerId, MarketOfferState_t state);
+		static bool moveOfferToHistory(uint32_t offerId, MarketOfferState_t state);
 
 		void updateStatistics();
 
