@@ -7,5 +7,10 @@ function Creature:onAreaCombat(tile, isAggressive)
 end
 
 function Creature:onTargetCombat(target)
+	if target:isPlayer() then
+		if target:getStorageValue(1000) >= os.time() then -- Login Protection Time
+			return false
+		end
+	end
 	return true
 end
