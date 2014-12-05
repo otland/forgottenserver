@@ -2103,6 +2103,7 @@ void LuaScriptInterface::registerFunctions()
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
 	registerMetaMethod("Container", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("Container", "__index", LuaScriptInterface::luaItemIndex);
 
 	registerMethod("Container", "isContainer", LuaScriptInterface::luaContainerIsContainer);
 
@@ -2121,6 +2122,7 @@ void LuaScriptInterface::registerFunctions()
 	// Teleport
 	registerClass("Teleport", "Item", LuaScriptInterface::luaTeleportCreate);
 	registerMetaMethod("Teleport", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("Teleport", "__index", LuaScriptInterface::luaItemIndex);
 	
 	registerMethod("Teleport", "isTeleport", LuaScriptInterface::luaTeleportIsTeleport);
 
@@ -2207,6 +2209,7 @@ void LuaScriptInterface::registerFunctions()
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("Player", "__index", LuaScriptInterface::luaCreatureIndex);
 
 	registerMethod("Player", "isPlayer", LuaScriptInterface::luaPlayerIsPlayer);
 
@@ -2350,6 +2353,7 @@ void LuaScriptInterface::registerFunctions()
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("Monster", "__index", LuaScriptInterface::luaCreatureIndex);
 
 	registerMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
 
@@ -2381,6 +2385,7 @@ void LuaScriptInterface::registerFunctions()
 	// Npc
 	registerClass("Npc", "Creature", LuaScriptInterface::luaNpcCreate);
 	registerMetaMethod("Npc", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("Npc", "__index", LuaScriptInterface::luaCreatureIndex);
 
 	registerMethod("Npc", "isNpc", LuaScriptInterface::luaNpcIsNpc);
 
