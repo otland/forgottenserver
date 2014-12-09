@@ -1,6 +1,6 @@
 local config = {
 	loginProtection = true,
-	loginProtectionTime = 10 -- Login Protection Time / seconds
+	loginProtectionTime = 10000 -- Login Protection Time / miliseconds
 }
 
 function onLogin(player)
@@ -18,7 +18,7 @@ function onLogin(player)
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 
 	if config.loginProtection then
-		player:setStorageValue(1000, os.time() + config.loginProtectionTime)
+		loginProtectionTable[player:getId()] = os.mtime() + config.loginProtectionTime
 	end
 
 	player:registerEvent("PlayerDeath")

@@ -374,3 +374,5 @@ function Game.broadcastMessage(message, messageType)
 		player:sendTextMessage(messageType, message)
 	end
 end
+
+loginProtectionTable = {}

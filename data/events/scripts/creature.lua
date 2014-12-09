@@ -8,9 +8,16 @@ end
 
 function Creature:onTargetCombat(target)
 	if target:isPlayer() then
-		if target:getStorageValue(1000) >= os.time() then -- Login Protection Time
+        local protection = loginProtectionTable[target:getId()]
+        if not protection then
+			return true
+		end
+
+		if protection >= os.mtime() then
 			return false
 		end
-	end
-	return true
+
+		loginProtectionTable[target:getId()] = nil
+    end
+    return true
 end
