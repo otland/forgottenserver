@@ -1,8 +1,7 @@
 function onLogout(player)
-	
-	local protection = loginProtectionTable[player:getId()]
+	local protection = loginProtectionTable[player:getGuid()]
 	if protection then
-		protection = nil
+		loginProtectionTable[player:getGuid()] = nil
 	end
 	return true
 end

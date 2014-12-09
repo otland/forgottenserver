@@ -8,8 +8,8 @@ end
 
 function Creature:onTargetCombat(target)
 	if target:isPlayer() then
-        local protection = loginProtectionTable[target:getId()]
-        if not protection then
+		local protection = loginProtectionTable[target:getGuid()]
+		if not protection then
 			return true
 		end
 
@@ -17,7 +17,7 @@ function Creature:onTargetCombat(target)
 			return false
 		end
 
-		loginProtectionTable[target:getId()] = nil
-    end
-    return true
+		loginProtectionTable[target:getGuid()] = nil
+    	end
+    	return true
 end

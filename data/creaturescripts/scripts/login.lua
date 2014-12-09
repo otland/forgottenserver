@@ -18,7 +18,7 @@ function onLogin(player)
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 
 	if config.loginProtection then
-		loginProtectionTable[player:getId()] = os.mtime() + config.loginProtectionTime
+		loginProtectionTable[player:getGuid()] = os.mtime() + config.loginProtectionTime
 	end
 
 	player:registerEvent("PlayerDeath")
