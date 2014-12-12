@@ -145,7 +145,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	// as it is described in MySQL manual: "it doesn't hurt" :P
 	MYSQL_RES* m_res = mysql_store_result(m_handle);
 
-	// error occured
+	// error occurred
 	if (!m_res) {
 		std::cout << "[Error - mysql_store_result] Query: " << query << std::endl << "Message: " << mysql_error(m_handle) << std::endl;
 		int error = mysql_errno(m_handle);
@@ -157,7 +157,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	}
 	database_lock.unlock();
 
-	// retriving results of query
+	// retrieving results of query
 	DBResult_ptr result = DBResult_ptr(new DBResult(m_res));
 	if (!result->hasNext()) {
 		return nullptr;
