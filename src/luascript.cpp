@@ -2490,8 +2490,7 @@ void LuaScriptInterface::registerFunctions()
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
 	registerMetaMethod("ItemType", "__eq", LuaScriptInterface::luaUserdataCompare);
-	
-	registerMethod("ItemType", "isGroundTile", LuaScriptInterface::luaItemTypeIsGroundTile);
+
 	registerMethod("ItemType", "isCorpse", LuaScriptInterface::luaItemTypeIsCorpse);
 	registerMethod("ItemType", "isDoor", LuaScriptInterface::luaItemTypeIsDoor);
 	registerMethod("ItemType", "isContainer", LuaScriptInterface::luaItemTypeIsContainer);
@@ -11108,19 +11107,6 @@ int32_t LuaScriptInterface::luaItemTypeCreate(lua_State* L)
 	const ItemType& itemType = Item::items[id];
 	pushUserdata<const ItemType>(L, &itemType);
 	setMetatable(L, -1, "ItemType");
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaItemTypeIsGroundTile(lua_State* L)
-{
-	// itemType:isGroundTile()
-	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
-	if (itemType) {
-		pushBoolean(L, itemType->isGroundTile());
-	}
-	else {
-		lua_pushnil(L);
-	}
 	return 1;
 }
 
