@@ -1119,6 +1119,7 @@ class LuaScriptInterface
 		// ItemType
 		static int32_t luaItemTypeCreate(lua_State* L);
 
+		static int32_t luaItemTypeIsGroundTile(lua_State* L);
 		static int32_t luaItemTypeIsCorpse(lua_State* L);
 		static int32_t luaItemTypeIsDoor(lua_State* L);
 		static int32_t luaItemTypeIsContainer(lua_State* L);
