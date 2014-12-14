@@ -133,7 +133,6 @@ class WeaponMelee final : public Weapon
 		WeaponMelee(LuaScriptInterface* _interface);
 		~WeaponMelee() {}
 
-		bool configureEvent(const pugi::xml_node& node) final;
 		bool configureWeapon(const ItemType& it) final;
 
 		bool useWeapon(Player* player, Item* item, Creature* target) const final;

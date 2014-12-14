@@ -529,15 +529,6 @@ WeaponMelee::WeaponMelee(LuaScriptInterface* _interface) :
 	params.combatType = COMBAT_PHYSICALDAMAGE;
 }
 
-bool WeaponMelee::configureEvent(const pugi::xml_node& node)
-{
-	if (!Weapon::configureEvent(node)) {
-		return false;
-	}
-
-	return true;
-}
-
 bool WeaponMelee::configureWeapon(const ItemType& it)
 {
 	if (it.abilities) {
