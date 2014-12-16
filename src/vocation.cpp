@@ -213,7 +213,7 @@ Vocation::Vocation(uint16_t id)
 	skillMultipliers[6] = 1.1f;
 }
 
-uint32_t Vocation::getReqSkillTries(int32_t skill, int32_t level)
+uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 {
 	if (skill < SKILL_FIRST || skill > SKILL_LAST) {
 		return 0;
@@ -224,7 +224,7 @@ uint32_t Vocation::getReqSkillTries(int32_t skill, int32_t level)
 		return it->second;
 	}
 
-	uint32_t tries = static_cast<uint32_t>(skillBase[skill] * std::pow(static_cast<float>(skillMultipliers[skill]), level - 11));
+	uint64_t tries = static_cast<uint64_t>(skillBase[skill] * std::pow(static_cast<double>(skillMultipliers[skill]), level - 11));
 	cacheSkill[skill][level] = tries;
 	return tries;
 }
@@ -236,7 +236,7 @@ uint64_t Vocation::getReqMana(uint32_t magLevel)
 		return it->second;
 	}
 
-	uint64_t reqMana = static_cast<uint64_t>(400 * std::pow(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
+	uint64_t reqMana = static_cast<uint64_t>(400 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
 	uint32_t modResult = reqMana % 20;
 	if (modResult < 10) {
 		reqMana -= modResult;

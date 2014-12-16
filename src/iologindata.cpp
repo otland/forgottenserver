@@ -344,16 +344,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	static const std::string skillNames[] = {"skill_fist", "skill_club", "skill_sword", "skill_axe", "skill_dist", "skill_shielding", "skill_fishing"};
 	static const std::string skillNameTries[] = {"skill_fist_tries", "skill_club_tries", "skill_sword_tries", "skill_axe_tries", "skill_dist_tries", "skill_shielding_tries", "skill_fishing_tries"};
 	static const size_t size = sizeof(skillNames) / sizeof(std::string);
-	for (size_t i = 0; i < size; ++i) {
-		uint32_t skillLevel = result->getDataInt(skillNames[i]);
+	for (uint8_t i = 0; i < size; ++i) {
+		uint16_t skillLevel = result->getNumber<uint16_t>(skillNames[i]);
 		uint64_t skillTries = result->getNumber<uint64_t>(skillNameTries[i]);
 		uint64_t nextSkillTries = player->vocation->getReqSkillTries(i, skillLevel + 1);
+
+		player->skills[i].tries = skillTries;
+		player->skills[i].level = skillLevel;
 		if (skillTries > nextSkillTries) {
-			skillTries = 0;
+			player->skills[i].percent = Player::getPercentLevel(skillTries, nextSkillTries);
 		}
-		player->skills[i][SKILLVALUE_LEVEL] = skillLevel;
-		player->skills[i][SKILLVALUE_TRIES] = skillTries;
-		player->skills[i][SKILLVALUE_PERCENT] = Player::getPercentLevel(skillTries, nextSkillTries);
 	}
 
 	std::ostringstream query;
@@ -684,20 +684,20 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`offlinetraining_skill` = " << player->getOfflineTrainingSkill() << ',';
 	query << "`stamina` = " << player->getStaminaMinutes() << ',';
 
-	query << "`skill_fist` = " << player->skills[SKILL_FIST][SKILLVALUE_LEVEL] << ',';
-	query << "`skill_fist_tries` = " << player->skills[SKILL_FIST][SKILLVALUE_TRIES] << ',';
-	query << "`skill_club` = " << player->skills[SKILL_CLUB][SKILLVALUE_LEVEL] << ',';
-	query << "`skill_club_tries` = " << player->skills[SKILL_CLUB][SKILLVALUE_TRIES] << ',';
-	query << "`skill_sword` = " << player->skills[SKILL_SWORD][SKILLVALUE_LEVEL] << ',';
-	query << "`skill_sword_tries` = " << player->skills[SKILL_SWORD][SKILLVALUE_TRIES] << ',';
-	query << "`skill_axe` = " << player->skills[SKILL_AXE][SKILLVALUE_LEVEL] << ',';
-	query << "`skill_axe_tries` = " << player->skills[SKILL_AXE][SKILLVALUE_TRIES] << ',';
-	query << "`skill_dist` = " << player->skills[SKILL_DISTANCE][SKILLVALUE_LEVEL] << ',';
-	query << "`skill_dist_tries` = " << player->skills[SKILL_DISTANCE][SKILLVALUE_TRIES] << ',';
-	query << "`skill_shielding` = " << player->skills[SKILL_SHIELD][SKILLVALUE_LEVEL] << ',';
-	query << "`skill_shielding_tries` = " << player->skills[SKILL_SHIELD][SKILLVALUE_TRIES] << ',';
-	query << "`skill_fishing` = " << player->skills[SKILL_FISHING][SKILLVALUE_LEVEL] << ',';
-	query << "`skill_fishing_tries` = " << player->skills[SKILL_FISHING][SKILLVALUE_TRIES] << ',';
+	query << "`skill_fist` = " << player->skills[SKILL_FIST].level << ',';
+	query << "`skill_fist_tries` = " << player->skills[SKILL_FIST].tries << ',';
+	query << "`skill_club` = " << player->skills[SKILL_CLUB].level << ',';
+	query << "`skill_club_tries` = " << player->skills[SKILL_CLUB].tries << ',';
+	query << "`skill_sword` = " << player->skills[SKILL_SWORD].level << ',';
+	query << "`skill_sword_tries` = " << player->skills[SKILL_SWORD].tries << ',';
+	query << "`skill_axe` = " << player->skills[SKILL_AXE].level << ',';
+	query << "`skill_axe_tries` = " << player->skills[SKILL_AXE].tries << ',';
+	query << "`skill_dist` = " << player->skills[SKILL_DISTANCE].level << ',';
+	query << "`skill_dist_tries` = " << player->skills[SKILL_DISTANCE].tries << ',';
+	query << "`skill_shielding` = " << player->skills[SKILL_SHIELD].level << ',';
+	query << "`skill_shielding_tries` = " << player->skills[SKILL_SHIELD].tries << ',';
+	query << "`skill_fishing` = " << player->skills[SKILL_FISHING].level << ',';
+	query << "`skill_fishing_tries` = " << player->skills[SKILL_FISHING].tries << ',';
 
 	if (!player->isOffline()) {
 		query << "`onlinetime` = `onlinetime` + " << (time(nullptr) - player->lastLoginSaved) << ',';

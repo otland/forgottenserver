@@ -234,7 +234,7 @@ enum BlockType_t : uint8_t {
 	BLOCK_IMMUNITY
 };
 
-enum skills_t {
+enum skills_t : uint8_t {
 	SKILL_FIRST = 0,
 	SKILL_FIST = SKILL_FIRST,
 	SKILL_CLUB = 1,

@@ -689,7 +689,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	}
 
 	if (it.abilities->conditionSuppressions != 0) {
-		player->setConditionSuppressions(it.abilities->conditionSuppressions, false);
+		player->addConditionSuppressions(it.abilities->conditionSuppressions);
 		player->sendIcons();
 	}
 
@@ -783,7 +783,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	}
 
 	if (it.abilities->conditionSuppressions != 0) {
-		player->setConditionSuppressions(it.abilities->conditionSuppressions, true);
+		player->removeConditionSuppressions(it.abilities->conditionSuppressions);
 		player->sendIcons();
 	}
 

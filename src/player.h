@@ -118,6 +118,13 @@ struct OutfitEntry {
 	uint8_t addons;
 };
 
+struct Skill {
+	Skill() : tries(0), level(10), percent(0) {}
+	uint64_t tries;
+	uint16_t level;
+	uint8_t percent;
+};
+
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
 typedef std::vector<uint32_t> GuildWarList;
 
@@ -504,10 +511,6 @@ class Player final : public Creature, public Cylinder
 			inventoryAbilities[slot] = enabled;
 		}
 
-		int32_t getBaseSkill(skills_t skill) const {
-			return skills[skill][SKILLVALUE_LEVEL];
-		}
-
 		void setVarSkill(skills_t skill, int32_t modifier) {
 			varSkills[skill] += modifier;
 		}
@@ -515,7 +518,8 @@ class Player final : public Creature, public Cylinder
 		void setVarStats(stats_t stat, int32_t modifier);
 		int32_t getDefaultStats(stats_t stat) const;
 
-		void setConditionSuppressions(uint32_t conditions, bool remove);
+		void addConditionSuppressions(uint32_t conditions);
+		void removeConditionSuppressions(uint32_t conditions);
 
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
 		DepotLocker* getDepotLocker(uint32_t depotId);
@@ -619,7 +623,16 @@ class Player final : public Creature, public Cylinder
 			return shootRange;
 		}
 
-		int32_t getSkill(skills_t skilltype, skillsid_t skillinfo) const;
+		uint16_t getSkillLevel(uint8_t skill) const {
+			return std::max<int32_t>(0, skills[skill].level + varSkills[skill]);
+		}
+		uint16_t getBaseSkill(uint8_t skill) const {
+			return skills[skill].level;
+		}
+		uint8_t getSkillPercent(uint8_t skill) const {
+			return skills[skill].percent;
+		}
+
 		bool getAddAttackSkill() const {
 			return addAttackSkillPoint;
 		}
@@ -1219,6 +1232,7 @@ class Player final : public Creature, public Cylinder
 		std::string name;
 		std::string guildNick;
 
+		Skill skills[SKILL_LAST + 1];
 		LightInfo itemsLight;
 		Position loginPosition;
 		Position lastWalkthroughPosition;
@@ -1262,9 +1276,7 @@ class Player final : public Creature, public Cylinder
 		uint32_t conditionImmunities;
 		uint32_t conditionSuppressions;
 		uint32_t level;
-		uint32_t levelPercent;
 		uint32_t magLevel;
-		uint32_t magLevelPercent;
 		uint32_t actionTaskEvent;
 		uint32_t nextStepEvent;
 		uint32_t walkTaskEvent;
@@ -1279,7 +1291,6 @@ class Player final : public Creature, public Cylinder
 		uint32_t soul;
 		uint32_t soulMax;
 		uint32_t manaMax;
-		uint32_t skills[SKILL_LAST + 1][3];
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];
 		int32_t purchaseCallback;
@@ -1300,6 +1311,8 @@ class Player final : public Creature, public Cylinder
 		uint8_t blessings;
 		uint8_t guildLevel;
 		uint8_t shootRange;
+		uint8_t levelPercent;
+		uint8_t magLevelPercent;
 
 		PlayerSex_t sex;
 		OperatingSystem_t operatingSystem;
@@ -1322,13 +1335,7 @@ class Player final : public Creature, public Cylinder
 
 		void updateItemsLight(bool internal = false);
 		int32_t getStepSpeed() const final {
-			if (getSpeed() > PLAYER_MAX_SPEED) {
-				return PLAYER_MAX_SPEED;
-			} else if (getSpeed() < PLAYER_MIN_SPEED) {
-				return PLAYER_MIN_SPEED;
-			}
-
-			return getSpeed();
+			return std::max<int32_t>(PLAYER_MIN_SPEED, std::min<int32_t>(PLAYER_MAX_SPEED, getSpeed()));
 		}
 		void updateBaseSpeed() {
 			if (!hasFlag(PlayerFlag_SetMaxSpeed)) {
@@ -1346,7 +1353,7 @@ class Player final : public Creature, public Cylinder
 
 		uint16_t getDropPercent() const;
 
-		static uint32_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
+		static uint8_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
 		double getLostPercent() const;
 		uint64_t getLostExperience() const final {
 			return skillLoss ? static_cast<uint64_t>(experience * getLostPercent()) : 0;
