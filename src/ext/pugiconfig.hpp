@@ -1,5 +1,5 @@
 /**
- * pugixml parser - version 1.4
+ * pugixml parser - version 1.5
  * --------------------------------------------------------
  * Copyright (C) 2006-2014, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
  * Report bugs and download new versions at http://pugixml.org/
@@ -24,7 +24,7 @@
 // #define PUGIXML_NO_STL
 
 // Uncomment this to disable exceptions
-// #define PUGIXML_NO_EXCEPTIONS
+#define PUGIXML_NO_EXCEPTIONS
 
 // Set this to control attributes for public classes/functions, i.e.:
 // #define PUGIXML_API __declspec(dllexport) // to export all public symbols from DLL

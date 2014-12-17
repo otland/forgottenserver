@@ -486,12 +486,12 @@ void ConditionAttributes::updateStats(Player* player)
 
 void ConditionAttributes::updatePercentSkills(Player* player)
 {
-	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
+	for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		if (skillsPercent[i] == 0) {
 			continue;
 		}
 
-		int32_t currSkill = player->getSkillLevel(static_cast<skills_t>(i));
+		int32_t currSkill = player->getSkillLevel(i);
 		skills[i] = static_cast<int32_t>(currSkill * ((skillsPercent[i] - 100) / 100.f));
 	}
 }
@@ -526,8 +526,7 @@ void ConditionAttributes::endCondition(Creature* creature)
 		for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 			if (skills[i] || skillsPercent[i]) {
 				needUpdateSkills = true;
-				const int new_skill = skills[i];
-				player->setVarSkill(static_cast<skills_t>(i), -new_skill);
+				player->setVarSkill(static_cast<skills_t>(i), -skills[i]);
 			}
 		}
 
