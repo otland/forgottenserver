@@ -215,7 +215,7 @@ Vocation::Vocation(uint16_t id)
 
 uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 {
-	if (skill < SKILL_FIRST || skill > SKILL_LAST) {
+	if (skill > SKILL_LAST) {
 		return 0;
 	}
 
