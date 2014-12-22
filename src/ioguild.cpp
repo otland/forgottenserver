@@ -22,20 +22,18 @@
 #include "ioguild.h"
 #include "database.h"
 
-bool IOGuild::getGuildIdByName(uint32_t& guildId, const std::string& guildName)
+uint32_t IOGuild::getGuildIdByName(const std::string& name)
 {
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id` FROM `guilds` WHERE `name` = " << db->escapeString(guildName);
+	query << "SELECT `id` FROM `guilds` WHERE `name` = " << db->escapeString(name);
 
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
-		return false;
+		return 0;
 	}
-
-	guildId = result->getDataInt("id");
-	return true;
+	return result->getNumber<uint32_t>("id");
 }
 
 void IOGuild::getWarList(uint32_t guildId, GuildWarList& guildWarList)

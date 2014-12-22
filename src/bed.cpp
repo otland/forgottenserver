@@ -38,20 +38,19 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	switch (attr) {
 		case ATTR_SLEEPERGUID: {
-			uint32_t _guid;
-			if (!propStream.read<uint32_t>(_guid)) {
+			uint32_t guid;
+			if (!propStream.read<uint32_t>(guid)) {
 				return ATTR_READ_ERROR;
 			}
 
-			if (_guid != 0) {
-				std::string name;
-				if (IOLoginData::getNameByGuid(_guid, name)) {
+			if (guid != 0) {
+				std::string name = IOLoginData::getNameByGuid(guid);
+				if (!name.empty()) {
 					setSpecialDescription(name + " is sleeping there.");
-					g_game.setBedSleeper(this, _guid);
+					g_game.setBedSleeper(this, guid);
+					sleeperGUID = guid;
 				}
 			}
-
-			sleeperGUID = _guid;
 			return ATTR_READ_CONTINUE;
 		}
 
@@ -270,14 +269,14 @@ void BedItem::internalSetSleeper(const Player* player)
 {
 	std::string desc_str = player->getName() + " is sleeping there.";
 
-	setSleeper(player->getGUID());
-	setSleepStart(time(nullptr));
+	sleeperGUID = player->getGUID();
+	sleepStart = time(nullptr);
 	setSpecialDescription(desc_str);
 }
 
 void BedItem::internalRemoveSleeper()
 {
-	setSleeper(0);
-	setSleepStart(0);
+	sleeperGUID = 0;
+	sleepStart = 0;
 	setSpecialDescription("Nobody is sleeping there.");
 }

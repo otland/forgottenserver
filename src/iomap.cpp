@@ -209,9 +209,9 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				return false;
 			}
 
-			int32_t base_x = area_coord->_x;
-			int32_t base_y = area_coord->_y;
-			int32_t base_z = area_coord->_z;
+			int32_t base_x = area_coord->x;
+			int32_t base_y = area_coord->y;
+			int32_t base_z = area_coord->z;
 
 			NODE nodeTile = f.getChildNode(nodeMapData, type);
 			while (nodeTile != NO_NODE) {
@@ -236,8 +236,8 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				uint16_t px = base_x + tile_coord->_x;
-				uint16_t py = base_y + tile_coord->_y;
+				uint16_t px = base_x + tile_coord->x;
+				uint16_t py = base_y + tile_coord->y;
 				uint16_t pz = base_z;
 
 				bool isHouseTile = false;
@@ -444,7 +444,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				town->setTemplePos(Position(town_coords->_x, town_coords->_y, town_coords->_z));
+				town->setTemplePos(Position(town_coords->x, town_coords->y, town_coords->z));
 
 				nodeTown = f.getNextNode(nodeTown, type);
 			}
@@ -473,7 +473,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				map->waypoints[name] = Position(waypoint_coords->_x, waypoint_coords->_y, waypoint_coords->_z);
+				map->waypoints[name] = Position(waypoint_coords->x, waypoint_coords->y, waypoint_coords->z);
 
 				nodeWaypoint = f.getNextNode(nodeWaypoint, type);
 			}

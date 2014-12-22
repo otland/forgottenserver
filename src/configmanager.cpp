@@ -97,12 +97,12 @@ bool ConfigManager::load()
 	m_confBoolean[CLASSIC_EQUIPMENT_SLOTS] = booleanString(getGlobalString(L, "classicEquipmentSlots", "no"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
-	m_confString[SERVER_NAME] = getGlobalString(L, "serverName");
-	m_confString[OWNER_NAME] = getGlobalString(L, "ownerName");
-	m_confString[OWNER_EMAIL] = getGlobalString(L, "ownerEmail");
-	m_confString[URL] = getGlobalString(L, "url");
-	m_confString[LOCATION] = getGlobalString(L, "location");
-	m_confString[MOTD] = getGlobalString(L, "motd");
+	m_confString[SERVER_NAME] = getGlobalString(L, "serverName", "");
+	m_confString[OWNER_NAME] = getGlobalString(L, "ownerName", "");
+	m_confString[OWNER_EMAIL] = getGlobalString(L, "ownerEmail", "");
+	m_confString[URL] = getGlobalString(L, "url", "");
+	m_confString[LOCATION] = getGlobalString(L, "location", "");
+	m_confString[MOTD] = getGlobalString(L, "motd", "");
 	m_confString[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
 
 	m_confInteger[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
@@ -180,7 +180,7 @@ bool ConfigManager::getBoolean(boolean_config_t _what) const
 	}
 }
 
-std::string ConfigManager::getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default)
+std::string ConfigManager::getGlobalString(lua_State* _L, const std::string& _identifier, const char* _default)
 {
 	lua_getglobal(_L, _identifier.c_str());
 

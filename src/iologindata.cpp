@@ -823,33 +823,28 @@ bool IOLoginData::savePlayer(Player* player)
 	return transaction.commit();
 }
 
-bool IOLoginData::getNameByGuid(uint32_t guid, std::string& name)
+std::string IOLoginData::getNameByGuid(uint32_t guid)
 {
 	std::ostringstream query;
 	query << "SELECT `name` FROM `players` WHERE `id` = " << guid;
 	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
-		return false;
+		return std::string();
 	}
-
-	name = result->getDataString("name");
-	return true;
+	return result->getDataString("name");
 }
 
-bool IOLoginData::getGuidByName(uint32_t& guid, std::string& name)
+uint32_t IOLoginData::getGuidByName(const std::string& name)
 {
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id`, `name` FROM `players` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `id` FROM `players` WHERE `name` = " << db->escapeString(name);
 	DBResult_ptr result = db->storeQuery(query.str());
 	if (!result) {
-		return false;
+		return 0;
 	}
-
-	name = result->getDataString("name");
-	guid = result->getDataInt("id");
-	return true;
+	return result->getNumber<uint32_t>("id");
 }
 
 bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name)

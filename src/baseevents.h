@@ -35,7 +35,7 @@ class Event
 		bool loadScript(const std::string& scriptFile);
 		virtual bool loadFunction(const std::string& functionName);
 
-		virtual bool isScripted() {
+		bool isScripted() {
 			return m_scripted;
 		}
 

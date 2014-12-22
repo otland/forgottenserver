@@ -61,14 +61,10 @@
 #define strcasecmp _stricmp
 #define strncasecmp _strnicmp
 
-//Windows 2000	0x0500
-//Windows XP	0x0501
-//Windows 2003	0x0502
-//Windows Vista	0x0600
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
+#ifndef _WIN32_WINNT
+// 0x0602: Windows 7
+#define _WIN32_WINNT 0x0602
 #endif
-#define _WIN32_WINNT 0x0501
 #endif
 
 #ifndef M_PI

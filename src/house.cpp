@@ -107,10 +107,12 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 		rentWarnings = 0;
 	}
 
-	std::string name;
-	if (guid != 0 && IOLoginData::getNameByGuid(guid, name)) {
-		owner = guid;
-		ownerName = name;
+	if (guid != 0) {
+		std::string name = IOLoginData::getNameByGuid(guid);
+		if (!name.empty()) {
+			owner = guid;
+			ownerName = name;
+		}
 	}
 
 	updateDoorDescription();
@@ -405,16 +407,15 @@ bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
 	return true;
 }
 
-bool AccessList::parseList(const std::string& _list)
+void AccessList::parseList(const std::string& _list)
 {
 	playerList.clear();
 	guildList.clear();
 	expressionList.clear();
 	regExList.clear();
 	list = _list;
-
 	if (_list.empty()) {
-		return true;
+		return;
 	}
 
 	std::istringstream listStream(_list);
@@ -441,40 +442,33 @@ bool AccessList::parseList(const std::string& _list)
 			addPlayer(line);
 		}
 	}
-	return true;
 }
 
-bool AccessList::addPlayer(const std::string& name)
+void AccessList::addPlayer(const std::string& name)
 {
-	uint32_t guid;
-	std::string dbName = name;
-
-	if (IOLoginData::getGuidByName(guid, dbName)) {
-		if (playerList.find(guid) == playerList.end()) {
+	Player* player = g_game.getPlayerByName(name);
+	if (player) {
+		playerList.insert(player->getGUID());
+	} else {
+		uint32_t guid = IOLoginData::getGuidByName(name);
+		if (guid != 0) {
 			playerList.insert(guid);
-			return true;
 		}
 	}
-
-	return false;
 }
 
-bool AccessList::addGuild(const std::string& guildName)
+void AccessList::addGuild(const std::string& name)
 {
-	uint32_t guildId;
-	if (IOGuild::getGuildIdByName(guildId, guildName) && guildList.find(guildId) == guildList.end()) {
+	uint32_t guildId = IOGuild::getGuildIdByName(name);
+	if (guildId != 0) {
 		guildList.insert(guildId);
-		return true;
 	}
-	return false;
 }
 
-bool AccessList::addExpression(const std::string& expression)
+void AccessList::addExpression(const std::string& expression)
 {
-	for (const std::string& expr : expressionList) {
-		if (expr == expression) {
-			return false;
-		}
+	if (std::find(expressionList.begin(), expressionList.end(), expression) != expressionList.end()) {
+		return;
 	}
 
 	std::string outExp;
@@ -504,7 +498,6 @@ bool AccessList::addExpression(const std::string& expression)
 			}
 		}
 	} catch (...) {}
-	return true;
 }
 
 bool AccessList::isInList(const Player* player)
@@ -523,14 +516,8 @@ bool AccessList::isInList(const Player* player)
 		return true;
 	}
 
-	Guild* guild = player->getGuild();
-	if (guild) {
-		auto guildIt = guildList.find(guild->getId());
-		if (guildIt != guildList.end()) {
-			return true;
-		}
-	}
-	return false;
+	const Guild* guild = player->getGuild();
+	return guild && guildList.find(guild->getId()) != guildList.end();
 }
 
 void AccessList::getList(std::string& _list) const
