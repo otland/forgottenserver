@@ -483,7 +483,7 @@ struct MarketOffer {
 };
 
 struct MarketOfferEx {
-	MarketOfferEx() {}
+	MarketOfferEx() = default;
 	MarketOfferEx(MarketOfferEx&& other) :
 		id(other.id), playerId(other.playerId), timestamp(other.timestamp), price(other.price),
 		amount(other.amount), counter(other.counter), itemId(other.itemId), type(other.type),

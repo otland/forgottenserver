@@ -27,7 +27,7 @@ class Event
 	public:
 		Event(LuaScriptInterface* _interface);
 		Event(const Event* copy);
-		virtual ~Event() {}
+		virtual ~Event() = default;
 
 		virtual bool configureEvent(const pugi::xml_node& node) = 0;
 
@@ -51,7 +51,7 @@ class BaseEvents
 {
 	public:
 		BaseEvents();
-		virtual ~BaseEvents() {}
+		virtual ~BaseEvents() = default;
 
 		bool loadFromXml();
 		bool reload();

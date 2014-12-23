@@ -69,9 +69,9 @@ struct IntervalInfo {
 class Condition
 {
 	public:
-		Condition() {}
+		Condition() = default;
 		Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
-		virtual ~Condition() {}
+		virtual ~Condition() = default;
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);
@@ -239,7 +239,7 @@ class ConditionInvisible final : public ConditionGeneric
 class ConditionDamage final : public Condition
 {
 	public:
-		ConditionDamage() {}
+		ConditionDamage() = default;
 		ConditionDamage(ConditionId_t _id, ConditionType_t _type, bool _buff = false, uint32_t _subId = 0);
 
 		static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list);

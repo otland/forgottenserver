@@ -56,7 +56,7 @@ typedef std::map<uint32_t, Town*> TownMap;
 class Towns
 {
 	public:
-		Towns() {}
+		Towns() = default;
 		~Towns() {
 			for (const auto& it : townMap) {
 				delete it.second;

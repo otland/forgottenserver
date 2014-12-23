@@ -48,7 +48,7 @@ class ConnectionManager
 		void closeAll();
 
 	protected:
-		ConnectionManager() {}
+		ConnectionManager() = default;
 
 		std::unordered_set<Connection_ptr> m_connections;
 		std::recursive_mutex m_connectionManagerLock;

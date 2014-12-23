@@ -31,10 +31,10 @@ class Container;
 class Thing
 {
 	protected:
-		Thing() {}
+		Thing() = default;
 
 	public:
-		virtual ~Thing() {}
+		virtual ~Thing() = default;
 
 		// non-copyable
 		Thing(const Thing&) = delete;

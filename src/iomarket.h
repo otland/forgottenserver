@@ -54,7 +54,7 @@ class IOMarket
 		MarketStatistics* getSaleStatistics(uint16_t itemId);
 
 	private:
-		IOMarket() {}
+		IOMarket() = default;
 
 		std::map<uint16_t, MarketStatistics> purchaseStatistics;
 		std::map<uint16_t, MarketStatistics> saleStatistics;

@@ -47,7 +47,6 @@ class ValueCallback final : public CallBack
 class TileCallback final : public CallBack
 {
 	public:
-		TileCallback() {}
 		void onTileCombat(Creature* creature, Tile* tile) const;
 
 	protected:
@@ -57,7 +56,6 @@ class TileCallback final : public CallBack
 class TargetCallback final : public CallBack
 {
 	public:
-		TargetCallback() {}
 		void onTargetCombat(Creature* creature, Creature* target) const;
 
 	protected:

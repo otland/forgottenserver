@@ -33,7 +33,7 @@ typedef std::list<Quest> QuestsList;
 class MissionState
 {
 	public:
-		MissionState() {}
+		MissionState() = default;
 		MissionState(const std::string& description, int32_t missionID)
 			: description(description), missionID(missionID) {}
 

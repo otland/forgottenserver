@@ -77,8 +77,8 @@ typedef bool (RuneSpellFunction)(const RuneSpell* spell, Creature* creature, Ite
 class BaseSpell
 {
 	public:
-		BaseSpell() {}
-		virtual ~BaseSpell() {}
+		BaseSpell() = default;
+		virtual ~BaseSpell() = default;
 
 		virtual bool castSpell(Creature* creature) = 0;
 		virtual bool castSpell(Creature* creature, Creature* target) = 0;
