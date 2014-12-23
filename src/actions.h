@@ -31,7 +31,6 @@ class Action : public Event
 	public:
 		Action(const Action* copy);
 		Action(LuaScriptInterface* _interface);
-		~Action();
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const std::string& functionName) override;
@@ -86,6 +85,10 @@ class Actions final : public BaseEvents
 	public:
 		Actions();
 		~Actions();
+
+		// non-copyable
+		Actions(const Actions&) = delete;
+		Actions& operator=(const Actions&) = delete;
 
 		bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 		bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey, uint32_t creatureId = 0);

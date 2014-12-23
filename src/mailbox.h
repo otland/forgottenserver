@@ -24,12 +24,10 @@
 #include "cylinder.h"
 #include "const.h"
 
-
 class Mailbox final : public Item, public Cylinder
 {
 	public:
-		Mailbox(uint16_t _type);
-		~Mailbox();
+		Mailbox::Mailbox(uint16_t itemId) : Item(itemId) {}
 
 		Mailbox* getMailbox() final {
 			return this;

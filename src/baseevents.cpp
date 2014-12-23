@@ -29,11 +29,6 @@ BaseEvents::BaseEvents()
 	m_loaded = false;
 }
 
-BaseEvents::~BaseEvents()
-{
-	//
-}
-
 bool BaseEvents::loadFromXml()
 {
 	if (m_loaded) {
@@ -113,11 +108,6 @@ Event::Event(const Event* copy)
 	m_scripted = copy->m_scripted;
 }
 
-Event::~Event()
-{
-	//
-}
-
 bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile)
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
@@ -180,11 +170,6 @@ CallBack::CallBack()
 	m_scriptId = 0;
 	m_scriptInterface = nullptr;
 	m_loaded = false;
-}
-
-CallBack::~CallBack()
-{
-	//
 }
 
 bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& name)

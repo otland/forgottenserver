@@ -28,6 +28,10 @@ class RSA
 		RSA();
 		~RSA();
 
+		// non-copyable
+		RSA(const RSA&) = delete;
+		RSA& operator=(const RSA&) = delete;
+
 		void setKey(const char* p, const char* q);
 		void decrypt(char* msg);
 

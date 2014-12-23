@@ -26,6 +26,10 @@ class ScriptingManager
 		ScriptingManager();
 		~ScriptingManager();
 
+		// non-copyable
+		ScriptingManager(const ScriptingManager&) = delete;
+		ScriptingManager& operator=(const ScriptingManager&) = delete;
+
 		static ScriptingManager* getInstance() {
 			static ScriptingManager instance;
 			return &instance;

@@ -101,6 +101,10 @@ class ScriptEnvironment
 		ScriptEnvironment();
 		~ScriptEnvironment();
 
+		// non-copyable
+		ScriptEnvironment(const ScriptEnvironment&) = delete;
+		ScriptEnvironment& operator=(const ScriptEnvironment&) = delete;
+
 		void resetEnv();
 
 		void setScriptId(int32_t scriptId, LuaScriptInterface* scriptInterface) {
@@ -214,6 +218,10 @@ class LuaScriptInterface
 	public:
 		LuaScriptInterface(const std::string& interfaceName);
 		virtual ~LuaScriptInterface();
+
+		// non-copyable
+		LuaScriptInterface(const LuaScriptInterface&) = delete;
+		LuaScriptInterface& operator=(const LuaScriptInterface&) = delete;
 
 		virtual bool initState();
 		bool reInitState();
@@ -1291,6 +1299,10 @@ class LuaEnvironment : public LuaScriptInterface
 	public:
 		LuaEnvironment();
 		~LuaEnvironment();
+
+		// non-copyable
+		LuaEnvironment(const LuaEnvironment&) = delete;
+		LuaEnvironment& operator=(const LuaEnvironment&) = delete;
 
 		bool initState();
 		bool reInitState();

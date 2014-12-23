@@ -35,7 +35,6 @@ class ProtocolStatus final : public Protocol
 		}
 
 		ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
-		~ProtocolStatus() {}
 
 		void onRecvFirstMessage(NetworkMessage& msg) final;
 

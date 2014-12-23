@@ -77,11 +77,6 @@ ProtocolGame::ProtocolGame(Connection_ptr connection) :
 	//
 }
 
-ProtocolGame::~ProtocolGame()
-{
-	player = nullptr;
-}
-
 void ProtocolGame::setPlayer(Player* p)
 {
 	player = p;

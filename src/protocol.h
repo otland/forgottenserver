@@ -36,8 +36,6 @@ class Protocol
 		Protocol(const Protocol&) = delete;
 		Protocol& operator=(const Protocol&) = delete;
 
-		virtual ~Protocol() {}
-
 		virtual void parsePacket(NetworkMessage&) {}
 
 		virtual void onSendMessage(OutputMessage_ptr msg);

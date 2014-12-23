@@ -26,7 +26,6 @@ typedef NodeStruct* NODE;
 
 struct NodeStruct {
 	NodeStruct() : start(0), propsSize(0), type(0), next(nullptr), child(nullptr) {}
-	~NodeStruct() {}
 
 	uint32_t start;
 	uint32_t propsSize;
@@ -156,7 +155,6 @@ class PropStream
 			end = nullptr;
 			p = nullptr;
 		}
-		~PropStream() {}
 
 		void init(const char* a, size_t size) {
 			p = a;

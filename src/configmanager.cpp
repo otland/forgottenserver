@@ -36,11 +36,6 @@ ConfigManager::ConfigManager()
 	m_isLoaded = false;
 }
 
-ConfigManager::~ConfigManager()
-{
-	//
-}
-
 bool ConfigManager::load()
 {
 	lua_State* L = luaL_newstate();

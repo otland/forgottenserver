@@ -38,7 +38,6 @@ class NpcScriptInterface final : public LuaScriptInterface
 {
 	public:
 		NpcScriptInterface();
-		~NpcScriptInterface();
 
 		bool loadNpcLib(const std::string& file);
 
@@ -79,7 +78,6 @@ class NpcEventsHandler
 {
 	public:
 		NpcEventsHandler(const std::string& file, Npc* npc);
-		~NpcEventsHandler();
 
 		void onCreatureAppear(Creature* creature);
 		void onCreatureDisappear(Creature* creature);
@@ -110,6 +108,10 @@ class Npc final : public Creature
 {
 	public:
 		~Npc();
+
+		// non-copyable
+		Npc(const Npc&) = delete;
+		Npc& operator=(const Npc&) = delete;
 
 		Npc* getNpc() final {
 			return this;

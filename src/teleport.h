@@ -22,11 +22,10 @@
 
 #include "tile.h"
 
-class Teleport : public Item, public Cylinder
+class Teleport final : public Item, public Cylinder
 {
 	public:
 		Teleport(uint16_t _type);
-		~Teleport();
 
 		Teleport* getTeleport() final {
 			return this;

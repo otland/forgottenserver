@@ -427,11 +427,6 @@ MoveEvent::MoveEvent(const MoveEvent* copy) :
 	}
 }
 
-MoveEvent::~MoveEvent()
-{
-	//
-}
-
 std::string MoveEvent::getScriptEventName() const
 {
 	switch (m_eventType) {

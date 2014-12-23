@@ -56,6 +56,10 @@ class Door final : public Item
 		Door(uint16_t _type);
 		~Door();
 
+		// non-copyable
+		Door(const Door&) = delete;
+		Door& operator=(const Door&) = delete;
+
 		Door* getDoor() final {
 			return this;
 		}
@@ -118,7 +122,6 @@ class HouseTransferItem final : public Item
 		HouseTransferItem(House* _house) : Item(0) {
 			house = _house;
 		}
-		~HouseTransferItem() {}
 
 		void onTradeEvent(TradeEvents_t event, Player* owner) final;
 		bool canTransform() const final {
@@ -133,7 +136,6 @@ class House
 {
 	public:
 		House(uint32_t _houseid);
-		~House() {}
 
 		void addTile(HouseTile* tile);
 		void updateDoorDescription() const;
@@ -275,6 +277,10 @@ class Houses
 				delete it.second;
 			}
 		}
+
+		// non-copyable
+		Houses(const Houses&) = delete;
+		Houses& operator=(const Houses&) = delete;
 
 	public:
 		static Houses& getInstance() {

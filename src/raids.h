@@ -30,6 +30,8 @@ enum RaidState_t {
 };
 
 struct MonsterSpawn {
+	MonsterSpawn(const char* name, uint32_t minAmount, uint32_t maxAmount) : name(name), minAmount(minAmount), maxAmount(maxAmount) {}
+
 	std::string name;
 	uint32_t minAmount;
 	uint32_t maxAmount;
@@ -52,6 +54,10 @@ class Raids
 		}
 
 		~Raids();
+
+		// non-copyable
+		Raids(const Raids&) = delete;
+		Raids& operator=(const Raids&) = delete;
 
 		bool loadFromXml();
 		bool startup();
@@ -107,6 +113,10 @@ class Raid
 			: name(name), interval(interval), nextEvent(0), margin(marginTime), state(RAIDSTATE_IDLE), nextEventEvent(0), loaded(false), repeat(repeat) {}
 		~Raid();
 
+		// non-copyable
+		Raid(const Raid&) = delete;
+		Raid& operator=(const Raid&) = delete;
+
 		bool loadFromXml(const std::string& _filename);
 
 		void startRaid();
@@ -154,9 +164,6 @@ class Raid
 class RaidEvent
 {
 	public:
-		RaidEvent() {}
-		virtual ~RaidEvent() {}
-
 		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent() {
@@ -183,7 +190,6 @@ class AnnounceEvent final : public RaidEvent
 		AnnounceEvent() {
 			m_messageType = MESSAGE_EVENT_ADVANCE;
 		}
-		~AnnounceEvent() {}
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
@@ -197,9 +203,6 @@ class AnnounceEvent final : public RaidEvent
 class SingleSpawnEvent final : public RaidEvent
 {
 	public:
-		SingleSpawnEvent() {}
-		~SingleSpawnEvent() {}
-
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
 		bool executeEvent() final;
@@ -212,18 +215,14 @@ class SingleSpawnEvent final : public RaidEvent
 class AreaSpawnEvent final : public RaidEvent
 {
 	public:
-		AreaSpawnEvent() {}
-		~AreaSpawnEvent();
-
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
-		void addMonster(MonsterSpawn* monsterSpawn);
 		void addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount);
 
 		bool executeEvent() final;
 
 	private:
-		std::list<MonsterSpawn*> m_spawnList;
+		std::list<MonsterSpawn> m_spawnList;
 		Position m_fromPos, m_toPos;
 };
 
@@ -232,7 +231,6 @@ class ScriptEvent final : public RaidEvent, public Event
 	public:
 		ScriptEvent(LuaScriptInterface* _interface);
 		ScriptEvent(const ScriptEvent* copy);
-		~ScriptEvent() {}
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 		bool configureEvent(const pugi::xml_node&) final {

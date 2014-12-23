@@ -50,6 +50,10 @@ class Monster final : public Creature
 
 		~Monster();
 
+		// non-copyable
+		Monster(const Monster&) = delete;
+		Monster& operator=(const Monster&) = delete;
+
 		Monster* getMonster() final {
 			return this;
 		}

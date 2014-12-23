@@ -498,23 +498,23 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	}
 
 	for (pugi::xml_node monsterNode = eventNode.first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
-		std::string name;
+		const char* name;
 
 		if ((attr = monsterNode.attribute("name"))) {
-			name = attr.as_string();
+			name = attr.value();
 		} else {
 			std::cout << "[Error] Raid: name tag missing for monster node." << std::endl;
 			return false;
 		}
 
-		int32_t minAmount;
+		uint32_t minAmount;
 		if ((attr = monsterNode.attribute("minamount"))) {
 			minAmount = pugi::cast<uint32_t>(attr.value());
 		} else {
 			minAmount = 0;
 		}
 
-		int32_t maxAmount;
+		uint32_t maxAmount;
 		if ((attr = monsterNode.attribute("maxamount"))) {
 			maxAmount = pugi::cast<uint32_t>(attr.value());
 		} else {
@@ -531,40 +531,19 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 			}
 		}
 
-		addMonster(name, minAmount, maxAmount);
+		m_spawnList.emplace_back(name, minAmount, maxAmount);
 	}
 	return true;
 }
 
-AreaSpawnEvent::~AreaSpawnEvent()
-{
-	for (MonsterSpawn* spawn : m_spawnList) {
-		delete spawn;
-	}
-}
-
-void AreaSpawnEvent::addMonster(MonsterSpawn* monsterSpawn)
-{
-	m_spawnList.push_back(monsterSpawn);
-}
-
-void AreaSpawnEvent::addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount)
-{
-	MonsterSpawn* monsterSpawn = new MonsterSpawn();
-	monsterSpawn->name = monsterName;
-	monsterSpawn->minAmount = minAmount;
-	monsterSpawn->maxAmount = maxAmount;
-	addMonster(monsterSpawn);
-}
-
 bool AreaSpawnEvent::executeEvent()
 {
-	for (MonsterSpawn* spawn : m_spawnList) {
-		uint32_t amount = uniform_random(spawn->minAmount, spawn->maxAmount);
+	for (const MonsterSpawn& spawn : m_spawnList) {
+		uint32_t amount = uniform_random(spawn.minAmount, spawn.maxAmount);
 		for (uint32_t i = 0; i < amount; ++i) {
-			Monster* monster = Monster::createMonster(spawn->name);
+			Monster* monster = Monster::createMonster(spawn.name);
 			if (!monster) {
-				std::cout << "[Error - AreaSpawnEvent::executeEvent] Can't create monster " << spawn->name << std::endl;
+				std::cout << "[Error - AreaSpawnEvent::executeEvent] Can't create monster " << spawn.name << std::endl;
 				return false;
 			}
 

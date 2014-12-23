@@ -41,6 +41,10 @@ class Spawns
 
 		~Spawns();
 
+		// non-copyable
+		Spawns(const Spawns&) = delete;
+		Spawns& operator=(const Spawns&) = delete;
+
 		bool loadFromXml(const std::string& _filename);
 		void startup();
 		void clear();
@@ -69,6 +73,10 @@ class Spawn
 	public:
 		Spawn(const Position& pos, int32_t radius) : centerPos(pos), radius(radius), interval(60000), checkSpawnEvent() {}
 		~Spawn();
+
+		// non-copyable
+		Spawn(const Spawn&) = delete;
+		Spawn& operator=(const Spawn&) = delete;
 
 		bool addMonster(const std::string& _name, const Position& _pos, Direction _dir, uint32_t _interval);
 		void removeMonster(Monster* monster);

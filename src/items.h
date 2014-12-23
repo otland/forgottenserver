@@ -23,6 +23,7 @@
 #include "const.h"
 #include "enums.h"
 #include "itemloader.h"
+#include "optional.h"
 #include "position.h"
 
 enum SlotPositionBits : uint32_t {
@@ -107,13 +108,12 @@ struct Abilities {
 	uint32_t conditionSuppressions;
 };
 
-class Condition;
+class ConditionDamage;
 
 class ItemType
 {
 	public:
 		ItemType();
-		~ItemType();
 
 		bool isGroundTile() const {
 			return (group == ITEM_GROUP_GROUND);
@@ -159,12 +159,11 @@ class ItemType
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
 		}
 
-		Abilities* getAbilities() {
-			if (abilities == nullptr) {
-				abilities = new Abilities();
+		Abilities& getAbilities() {
+			if (!abilities) {
+				abilities.set(new Abilities());
 			}
-
-			return abilities;
+			return *abilities;
 		}
 
 		std::string getPluralName() const {
@@ -197,8 +196,8 @@ class ItemType
 		std::string runeSpellName;
 		std::string vocationString;
 
-		Abilities* abilities;
-		Condition* condition;
+		Optional<Abilities> abilities;
+		Optional<ConditionDamage> conditionDamage;
 
 		uint32_t weight;
 		uint32_t levelDoor;
@@ -285,6 +284,10 @@ class Items
 	public:
 		Items();
 		~Items();
+
+		// non-copyable
+		Items(const Items&) = delete;
+		Items& operator=(const Items&) = delete;
 
 		bool reload();
 		void clear();

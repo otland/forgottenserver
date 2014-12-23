@@ -308,7 +308,6 @@ void Spawn::cleanup()
 bool Spawn::addMonster(const std::string& _name, const Position& _pos, Direction _dir, uint32_t _interval)
 {
 	MonsterType* mType = g_monsters.getMonsterType(_name);
-
 	if (!mType) {
 		std::cout << "[Spawn::addMonster] Can not find " << _name << std::endl;
 		return false;

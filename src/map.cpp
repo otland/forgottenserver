@@ -36,11 +36,6 @@ Map::Map()
 	mapHeight = 0;
 }
 
-Map::~Map()
-{
-	//
-}
-
 bool Map::loadMap(const std::string& identifier, bool loadHouses)
 {
 	IOMap loader;

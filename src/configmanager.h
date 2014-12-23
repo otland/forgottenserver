@@ -26,7 +26,6 @@ class ConfigManager
 {
 	public:
 		ConfigManager();
-		~ConfigManager();
 
 		enum boolean_config_t {
 			ALLOW_CHANGEOUTFIT = 0,

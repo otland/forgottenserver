@@ -34,7 +34,6 @@ class ChatChannel
 	public:
 		ChatChannel() {}
 		ChatChannel(uint16_t channelId, const std::string& channelName) : name(channelName), canJoinEvent(-1), onJoinEvent(-1), onLeaveEvent(-1), onSpeakEvent(-1), id(channelId), publicChannel(false) {}
-		virtual ~ChatChannel() {}
 
 		bool addUser(Player& player);
 		bool removeUser(const Player& player);
@@ -86,7 +85,6 @@ class PrivateChatChannel final : public ChatChannel
 {
 	public:
 		PrivateChatChannel(uint16_t channelId, const std::string& channelName);
-		 ~PrivateChatChannel() {}
 
 		uint32_t getOwner() const final {
 			return m_owner;

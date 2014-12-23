@@ -29,7 +29,6 @@ class BedItem final : public Item
 {
 	public:
 		BedItem(uint16_t id);
-		~BedItem() {}
 
 		BedItem* getBed() final {
 			return this;

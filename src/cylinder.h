@@ -206,7 +206,7 @@ class Cylinder : virtual public Thing
 		virtual void __startDecaying();
 };
 
-class VirtualCylinder : public Cylinder
+class VirtualCylinder final : public Cylinder
 {
 	public:
 		static VirtualCylinder* virtualCylinder;

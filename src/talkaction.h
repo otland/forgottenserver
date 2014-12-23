@@ -38,6 +38,10 @@ class TalkActions : public BaseEvents
 		TalkActions();
 		~TalkActions();
 
+		// non-copyable
+		TalkActions(const TalkActions&) = delete;
+		TalkActions& operator=(const TalkActions&) = delete;
+
 		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
 
 	protected:
@@ -57,7 +61,6 @@ class TalkAction : public Event
 {
 	public:
 		TalkAction(LuaScriptInterface* _interface);
-		~TalkAction();
 
 		bool configureEvent(const pugi::xml_node& node) override;
 

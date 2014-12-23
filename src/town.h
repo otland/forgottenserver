@@ -27,7 +27,6 @@ class Town
 	public:
 		Town(uint32_t _id)
 			: id(_id) {}
-		~Town() {}
 
 		const Position& getTemplePosition() const {
 			return templePosition;
@@ -57,11 +56,16 @@ typedef std::map<uint32_t, Town*> TownMap;
 class Towns
 {
 	public:
+		Towns() {}
 		~Towns() {
 			for (const auto& it : townMap) {
 				delete it.second;
 			}
 		}
+
+		// non-copyable
+		Towns(const Towns&) = delete;
+		Towns& operator=(const Towns&) = delete;
 
 		static Towns& getInstance() {
 			static Towns singleton;

@@ -28,7 +28,6 @@ class HouseTile final : public DynamicTile
 {
 	public:
 		HouseTile(int32_t x, int32_t y, int32_t z, House* _house);
-		~HouseTile();
 
 		//cylinder implementations
 		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,

@@ -28,11 +28,6 @@ DepotChest::DepotChest(uint16_t _type) :
 	maxDepotItems = 1500;
 }
 
-DepotChest::~DepotChest()
-{
-	//
-}
-
 ReturnValue DepotChest::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
                                    uint32_t flags, Creature* actor/* = nullptr*/) const
 {

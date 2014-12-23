@@ -30,7 +30,6 @@ class Events
 {
 	public:
 		Events();
-		~Events() {}
 
 		void clear();
 		bool load();

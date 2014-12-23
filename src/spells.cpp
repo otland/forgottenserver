@@ -914,11 +914,6 @@ InstantSpell::InstantSpell(LuaScriptInterface* _interface) :
 	function = nullptr;
 }
 
-InstantSpell::~InstantSpell()
-{
-	//
-}
-
 std::string InstantSpell::getScriptEventName() const
 {
 	return "onCastSpell";
@@ -1658,11 +1653,6 @@ ConjureSpell::ConjureSpell(LuaScriptInterface* _interface) :
 	conjureReagentId = 0;
 }
 
-ConjureSpell::~ConjureSpell()
-{
-	//
-}
-
 std::string ConjureSpell::getScriptEventName() const
 {
 	return "onCastSpell";
@@ -1782,11 +1772,6 @@ RuneSpell::RuneSpell(LuaScriptInterface* _interface) :
 	function = nullptr;
 
 	allowFarUse = true;
-}
-
-RuneSpell::~RuneSpell()
-{
-	//
 }
 
 std::string RuneSpell::getScriptEventName() const

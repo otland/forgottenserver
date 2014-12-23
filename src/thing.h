@@ -31,10 +31,14 @@ class Container;
 class Thing
 {
 	protected:
-		Thing();
+		Thing() {}
 
 	public:
-		virtual ~Thing();
+		virtual ~Thing() {}
+
+		// non-copyable
+		Thing(const Thing&) = delete;
+		Thing& operator=(const Thing&) = delete;
 
 		virtual std::string getDescription(int32_t lookDistance) const = 0;
 

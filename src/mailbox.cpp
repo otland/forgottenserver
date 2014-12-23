@@ -27,16 +27,6 @@
 
 extern Game g_game;
 
-Mailbox::Mailbox(uint16_t _type) : Item(_type)
-{
-	//
-}
-
-Mailbox::~Mailbox()
-{
-	//
-}
-
 ReturnValue Mailbox::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t, Creature*) const
 {
 	const Item* item = thing->getItem();

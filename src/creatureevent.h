@@ -48,6 +48,10 @@ class CreatureEvents final : public BaseEvents
 		CreatureEvents();
 		~CreatureEvents();
 
+		// non-copyable
+		CreatureEvents(const CreatureEvents&) = delete;
+		CreatureEvents& operator=(const CreatureEvents&) = delete;
+
 		// global events
 		bool playerLogin(Player* player) const;
 		bool playerLogout(Player* player) const;
@@ -73,7 +77,6 @@ class CreatureEvent final : public Event
 {
 	public:
 		CreatureEvent(LuaScriptInterface* _interface);
-		~CreatureEvent() {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 

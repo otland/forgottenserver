@@ -40,11 +40,6 @@ Party::Party(Player* leader)
 	leader->setParty(this);
 }
 
-Party::~Party()
-{
-	//
-}
-
 void Party::disband()
 {
 	if (!g_events->eventPartyOnDisband(this)) {

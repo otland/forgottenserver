@@ -37,7 +37,6 @@ class ProtocolOld final : public Protocol
 		}
 
 		ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
-		~ProtocolOld() {}
 
 		void onRecvFirstMessage(NetworkMessage& msg) final;
 

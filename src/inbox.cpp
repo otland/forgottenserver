@@ -30,11 +30,6 @@ Inbox::Inbox(uint16_t _type) :
 	pagination = true;
 }
 
-Inbox::~Inbox()
-{
-	//
-}
-
 ReturnValue Inbox::__queryAdd(int32_t, const Thing* thing, uint32_t,
                               uint32_t flags, Creature*) const
 {

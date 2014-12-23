@@ -60,6 +60,11 @@ class Container : public Item, public Cylinder
 		Container(uint16_t _type);
 		Container(Tile* tile);
 		~Container();
+
+		// non-copyable
+		Container(const Container&) = delete;
+		Container& operator=(const Container&) = delete;
+
 		Item* clone() const final;
 
 		Container* getContainer() final {

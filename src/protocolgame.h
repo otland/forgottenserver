@@ -72,7 +72,6 @@ class ProtocolGame final : public Protocol
 		}
 
 		ProtocolGame(Connection_ptr connection);
-		~ProtocolGame();
 
 		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);

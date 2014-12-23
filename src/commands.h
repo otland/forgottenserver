@@ -33,6 +33,10 @@ class Commands
 		Commands();
 		~Commands();
 
+		// non-copyable
+		Commands(const Commands&) = delete;
+		Commands& operator=(const Commands&) = delete;
+
 		bool loadFromXml();
 		bool reload();
 

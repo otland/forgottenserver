@@ -114,11 +114,6 @@ TalkAction::TalkAction(LuaScriptInterface* _interface) :
 	separator = '"';
 }
 
-TalkAction::~TalkAction()
-{
-	//
-}
-
 bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute wordsAttribute = node.attribute("words");

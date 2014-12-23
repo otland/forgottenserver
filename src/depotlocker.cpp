@@ -29,11 +29,6 @@ DepotLocker::DepotLocker(uint16_t _type) :
 	maxSize = 3;
 }
 
-DepotLocker::~DepotLocker()
-{
-	//
-}
-
 Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_DEPOT_ID) {

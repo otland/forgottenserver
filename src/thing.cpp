@@ -26,17 +26,6 @@
 #include "item.h"
 #include "player.h"
 
-Thing::Thing()
-{
-	//
-}
-
-Thing::~Thing()
-{
-	//
-	//std::cout << "thing destructor " << this << std::endl;
-}
-
 const Position& Thing::getPosition() const
 {
 	const Tile* tile = getTile();

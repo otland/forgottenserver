@@ -32,6 +32,10 @@ class Database
 	public:
 		Database();
 		~Database();
+		
+		// non-copyable
+		Database(const Database&) = delete;
+		Database& operator=(const Database&) = delete;
 
 		/**
 		 * Singleton implementation.
@@ -138,6 +142,10 @@ class DBResult
 	public:
 		~DBResult();
 
+		// non-copyable
+		DBResult(const DBResult&) = delete;
+		DBResult& operator=(const DBResult&) = delete;
+
 		template<typename T>
 		T getNumber(const std::string& s) const
 		{
@@ -208,6 +216,10 @@ class DBTransaction
 				Database::getInstance()->rollback();
 			}
 		}
+
+		// non-copyable
+		DBTransaction(const DBTransaction&) = delete;
+		DBTransaction& operator=(const DBTransaction&) = delete;
 
 		bool begin() {
 			m_state = STATE_START;

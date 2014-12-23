@@ -1410,8 +1410,8 @@ void MagicField::onStepInField(Creature* creature)
 	}
 
 	const ItemType& it = items[getID()];
-	if (it.condition) {
-		Condition* conditionCopy = it.condition->clone();
+	if (it.conditionDamage) {
+		Condition* conditionCopy = it.conditionDamage->clone();
 		uint32_t ownerId = getOwner();
 		if (ownerId) {
 			bool harmfulField = true;

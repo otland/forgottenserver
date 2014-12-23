@@ -38,7 +38,6 @@ class Guild
 {
 	public:
 		Guild(uint32_t id, const std::string& name) : name(name), id(id), memberCount(0) {}
-		~Guild() {}
 
 		void addMember(Player* player);
 		void removeMember(Player* player);

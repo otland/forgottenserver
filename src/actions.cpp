@@ -468,11 +468,6 @@ Action::Action(const Action* copy) :
 	function = copy->function;
 }
 
-Action::~Action()
-{
-	//
-}
-
 bool Action::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute allowFarUseAttr = node.attribute("allowfaruse");

@@ -26,7 +26,6 @@ class Inbox final : public Container
 {
 	public:
 		Inbox(uint16_t _type);
-		~Inbox();
 
 		//cylinder implementations
 		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,

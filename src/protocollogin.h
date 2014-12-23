@@ -37,7 +37,6 @@ class ProtocolLogin : public Protocol
 		}
 
 		ProtocolLogin(Connection_ptr connection) : Protocol(connection) {}
-		~ProtocolLogin() {}
 
 		void onRecvFirstMessage(NetworkMessage& msg);
 

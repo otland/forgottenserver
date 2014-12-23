@@ -32,11 +32,6 @@ HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* _house) :
 	setFlag(TILESTATE_HOUSE);
 }
 
-HouseTile::~HouseTile()
-{
-	//
-}
-
 void HouseTile::__addThing(int32_t index, Thing* thing)
 {
 	Tile::__addThing(index, thing);

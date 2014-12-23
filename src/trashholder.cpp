@@ -24,16 +24,6 @@
 
 extern Game g_game;
 
-TrashHolder::TrashHolder(uint16_t _type) : Item(_type)
-{
-	//
-}
-
-TrashHolder::~TrashHolder()
-{
-	//
-}
-
 ReturnValue TrashHolder::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
 {
 	return RETURNVALUE_NOERROR;

@@ -137,6 +137,10 @@ class Player final : public Creature, public Cylinder
 		Player(ProtocolGame* p);
 		~Player();
 
+		// non-copyable
+		Player(const Player&) = delete;
+		Player& operator=(const Player&) = delete;
+
 		Player* getPlayer() final {
 			return this;
 		}

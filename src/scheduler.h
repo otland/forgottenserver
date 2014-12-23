@@ -73,7 +73,6 @@ class Scheduler
 {
 	public:
 		Scheduler();
-		~Scheduler() {}
 
 		uint32_t addEvent(SchedulerTask* task);
 		bool stopEvent(uint32_t eventId);

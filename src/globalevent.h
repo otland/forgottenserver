@@ -41,6 +41,10 @@ class GlobalEvents final : public BaseEvents
 		GlobalEvents();
 		~GlobalEvents();
 
+		// non-copyable
+		GlobalEvents(const GlobalEvents&) = delete;
+		GlobalEvents& operator=(const GlobalEvents&) = delete;
+
 		void startup() const;
 
 		void timer();
@@ -72,7 +76,6 @@ class GlobalEvent final : public Event
 {
 	public:
 		GlobalEvent(LuaScriptInterface* _interface);
-		~GlobalEvent() {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 

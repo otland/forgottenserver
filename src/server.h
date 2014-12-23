@@ -32,8 +32,6 @@ typedef std::shared_ptr<ServiceBase> Service_ptr;
 class ServiceBase
 {
 	public:
-		virtual ~ServiceBase() {}
-
 		virtual bool is_single_socket() const = 0;
 		virtual bool is_checksummed() const = 0;
 		virtual uint8_t get_protocol_identifier() const = 0;

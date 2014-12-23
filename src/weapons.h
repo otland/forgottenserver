@@ -37,6 +37,10 @@ class Weapons final : public BaseEvents
 		Weapons();
 		~Weapons();
 
+		// non-copyable
+		Weapons(const Weapons&) = delete;
+		Weapons& operator=(const Weapons&) = delete;
+
 		void loadDefaults();
 		const Weapon* getWeapon(const Item* item) const;
 
@@ -59,7 +63,6 @@ class Weapon : public Event
 {
 	public:
 		Weapon(LuaScriptInterface* _interface);
-		~Weapon();
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const std::string& functionName) final;
@@ -131,7 +134,6 @@ class WeaponMelee final : public Weapon
 {
 	public:
 		WeaponMelee(LuaScriptInterface* _interface);
-		~WeaponMelee() {}
 
 		bool configureWeapon(const ItemType& it) final;
 
@@ -152,7 +154,6 @@ class WeaponDistance final : public Weapon
 {
 	public:
 		WeaponDistance(LuaScriptInterface* _interface);
-		~WeaponDistance() {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		bool configureWeapon(const ItemType& it) final;
@@ -184,7 +185,6 @@ class WeaponWand final : public Weapon
 {
 	public:
 		WeaponWand(LuaScriptInterface* _interface);
-		~WeaponWand() {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		bool configureWeapon(const ItemType& it) final;

@@ -22,11 +22,10 @@
 
 #include "container.h"
 
-class DepotChest : public Container
+class DepotChest final : public Container
 {
 	public:
 		DepotChest(uint16_t _type);
-		~DepotChest();
 
 		//serialization
 		void setMaxDepotItems(uint32_t maxitems) {

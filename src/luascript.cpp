@@ -11459,7 +11459,7 @@ int32_t LuaScriptInterface::luaItemTypeGetElementType(lua_State* L)
 		return 1;
 	}
 
-	Abilities* abilities = itemType->abilities;
+	auto& abilities = itemType->abilities;
 	if (abilities) {
 		lua_pushnumber(L, abilities->elementType);
 	} else {
@@ -11477,7 +11477,7 @@ int32_t LuaScriptInterface::luaItemTypeGetElementDamage(lua_State* L)
 		return 1;
 	}
 
-	Abilities* abilities = itemType->abilities;
+	auto& abilities = itemType->abilities;
 	if (abilities) {
 		lua_pushnumber(L, abilities->elementDamage);
 	} else {

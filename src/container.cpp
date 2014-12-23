@@ -57,7 +57,6 @@ Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 
 Container::~Container()
 {
-	//std::cout << "Container destructor " << this << std::endl;
 	if (getID() == ITEM_BROWSEFIELD) {
 		g_game.browseFields.erase(getTile());
 

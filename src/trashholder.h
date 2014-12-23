@@ -27,8 +27,7 @@
 class TrashHolder final : public Item, public Cylinder
 {
 	public:
-		TrashHolder(uint16_t _type);
-		~TrashHolder();
+		TrashHolder(uint16_t itemId) : Item(itemId) {}
 
 		TrashHolder* getTrashHolder() final {
 			return this;

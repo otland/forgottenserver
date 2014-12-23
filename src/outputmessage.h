@@ -34,8 +34,6 @@ class OutputMessage : public NetworkMessage
 		OutputMessage();
 
 	public:
-		~OutputMessage() {}
-
 		// non-copyable
 		OutputMessage(const OutputMessage&) = delete;
 		OutputMessage& operator=(const OutputMessage&) = delete;
@@ -154,6 +152,10 @@ class OutputMessagePool
 
 	public:
 		~OutputMessagePool();
+
+		// non-copyable
+		OutputMessagePool(const OutputMessagePool&) = delete;
+		OutputMessagePool& operator=(const OutputMessagePool&) = delete;
 
 		static OutputMessagePool* getInstance() {
 			static OutputMessagePool instance;

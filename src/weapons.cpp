@@ -167,11 +167,6 @@ Weapon::Weapon(LuaScriptInterface* _interface) :
 	ammoAction = AMMOACTION_NONE;
 }
 
-Weapon::~Weapon()
-{
-	//
-}
-
 bool Weapon::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute attr;

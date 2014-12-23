@@ -32,7 +32,6 @@ class Party
 {
 	public:
 		Party(Player* leader);
-		~Party();
 
 		Player* getLeader() const {
 			return leader;

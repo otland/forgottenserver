@@ -37,14 +37,11 @@ class NetworkMessage
 		enum { max_body_length = NETWORKMESSAGE_MAXSIZE - header_length - crypto_length - xtea_multiple };
 		enum { max_protocol_body_length = max_body_length - 10 };
 
-		// constructor/destructor
+		// constructor
 		NetworkMessage() {
 			m_MsgBuf = m_RealBuf;
 			Reset();
 		}
-		virtual ~NetworkMessage() {}
-
-		// resets the internal buffer to an empty message
 
 	protected:
 		void Reset() {

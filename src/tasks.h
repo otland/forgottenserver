@@ -74,7 +74,6 @@ class Dispatcher
 {
 	public:
 		Dispatcher();
-		~Dispatcher() {}
 
 		void addTask(Task* task, bool push_front = false);
 

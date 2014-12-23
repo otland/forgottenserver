@@ -51,6 +51,10 @@ class MoveEvents final : public BaseEvents
 		MoveEvents();
 		~MoveEvents();
 
+		// non-copyable
+		MoveEvents(const MoveEvents&) = delete;
+		MoveEvents& operator=(const MoveEvents&) = delete;
+
 		uint32_t onCreatureMove(Creature* creature, const Tile* tile, bool isIn);
 		uint32_t onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 		uint32_t onPlayerDeEquip(Player* player, Item* item, slots_t slot, bool isRemoval);
@@ -97,7 +101,6 @@ class MoveEvent final : public Event
 	public:
 		MoveEvent(LuaScriptInterface* _interface);
 		MoveEvent(const MoveEvent* copy);
-		~MoveEvent();
 
 		MoveEvent_t getEventType() const;
 		void setEventType(MoveEvent_t type);

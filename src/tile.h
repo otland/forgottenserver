@@ -85,7 +85,6 @@ class TileItemVector
 {
 	public:
 		TileItemVector() : downItemCount(0) {}
-		~TileItemVector() {}
 
 		ItemVector::iterator begin() {
 			return items.begin();
@@ -187,6 +186,10 @@ class Tile : public Cylinder
 		static Tile& nullptr_tile;
 		Tile(uint16_t x, uint16_t y, uint16_t z);
 		~Tile();
+
+		// non-copyable
+		Tile(const Tile&) = delete;
+		Tile& operator=(const Tile&) = delete;
 
 		TileItemVector* getItemList();
 		const TileItemVector* getItemList() const;
@@ -372,6 +375,10 @@ class DynamicTile : public Tile
 		DynamicTile(uint16_t x, uint16_t y, uint16_t z);
 		~DynamicTile();
 
+		// non-copyable
+		DynamicTile(const DynamicTile&) = delete;
+		DynamicTile& operator=(const DynamicTile&) = delete;
+
 		TileItemVector* getItemList() {
 			return &items;
 		}
@@ -403,6 +410,10 @@ class StaticTile final : public Tile
 	public:
 		StaticTile(uint16_t x, uint16_t y, uint16_t z);
 		~StaticTile();
+
+		// non-copyable
+		StaticTile(const StaticTile&) = delete;
+		StaticTile& operator=(const StaticTile&) = delete;
 
 		TileItemVector* getItemList() {
 			return items;

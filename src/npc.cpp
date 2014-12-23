@@ -542,11 +542,6 @@ NpcScriptInterface::NpcScriptInterface() :
 	initState();
 }
 
-NpcScriptInterface::~NpcScriptInterface()
-{
-	//
-}
-
 bool NpcScriptInterface::initState()
 {
 	m_luaState = g_luaEnvironment.getLuaState();
@@ -1135,11 +1130,6 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc)
 		m_onPlayerEndTrade = m_scriptInterface->getEvent("onPlayerEndTrade");
 		m_onThink = m_scriptInterface->getEvent("onThink");
 	}
-}
-
-NpcEventsHandler::~NpcEventsHandler()
-{
-	//
 }
 
 bool NpcEventsHandler::isLoaded() const

@@ -84,6 +84,10 @@ class Game
 		Game();
 		~Game();
 
+		// non-copyable
+		Game(const Game&) = delete;
+		Game& operator=(const Game&) = delete;
+
 		void start(ServiceManager* servicer);
 
 		void forceAddCondition(uint32_t creatureId, Condition* condition);

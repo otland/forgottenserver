@@ -316,6 +316,9 @@ class Item : virtual public Thing
 
 		~Item();
 
+		// non-assignable
+		Item& operator=(const Item&) = delete;
+
 		bool equals(const Item* otherItem) const;
 
 		Item* getItem() final {
