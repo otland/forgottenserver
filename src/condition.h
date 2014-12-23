@@ -71,6 +71,7 @@ class Condition
 	public:
 		Condition() {}
 		Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		virtual ~Condition() {}
 
 		virtual bool startCondition(Creature* creature);
 		virtual bool executeCondition(Creature* creature, int32_t interval);

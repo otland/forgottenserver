@@ -164,6 +164,8 @@ class Raid
 class RaidEvent
 {
 	public:
+		virtual ~RaidEvent() {}
+
 		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
 		virtual bool executeEvent() {

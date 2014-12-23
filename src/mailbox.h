@@ -27,7 +27,7 @@
 class Mailbox final : public Item, public Cylinder
 {
 	public:
-		Mailbox::Mailbox(uint16_t itemId) : Item(itemId) {}
+		Mailbox(uint16_t itemId) : Item(itemId) {}
 
 		Mailbox* getMailbox() final {
 			return this;

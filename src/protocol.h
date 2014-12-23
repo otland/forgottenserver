@@ -31,6 +31,7 @@ class Protocol
 {
 	public:
 		Protocol(Connection_ptr connection) : m_connection(connection), m_key(), m_refCount(), m_encryptionEnabled(false), m_checksumEnabled(true), m_rawMessages(false) {}
+		virtual ~Protocol() {}
 
 		// non-copyable
 		Protocol(const Protocol&) = delete;

@@ -56,7 +56,7 @@ class Optional {
 		T* operator->() const {
 			return ptr;
 		}
-		operator bool() const {
+		explicit operator bool() const {
 			return ptr != nullptr;
 		}
 		T& operator*() {
