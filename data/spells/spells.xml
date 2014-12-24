@@ -33,7 +33,7 @@
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight"/>
 	</instant>
-	<instant group="support" spellid="38" name="Creature Illusion" words="utevo res ina" lvl="23" mana="100" aggressive="0" params="1" exhaustion="2000" groupcooldown="2000" needlearn="0" function="Illusion">
+	<instant group="support" spellid="38" name="Creature Illusion" words="utevo res ina" lvl="23" mana="100" aggressive="0" params="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/illusion.lua">
 		<vocation name="Sorcerer"/>
 		<vocation name="Druid"/>
 		<vocation name="Master Sorcerer"/>
@@ -357,7 +357,7 @@
 		<vocation name="Druid"/>
 		<vocation name="Elder Druid"/>
 	</instant>
-	<instant group="support" spellid="9" name="Summon Creature" words="utevo res" lvl="25" params="1" exhaustion="2000" groupcooldown="2000" needlearn="0" function="summonMonster">
+	<instant group="support" spellid="9" name="Summon Creature" words="utevo res" lvl="25" params="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/summon monster.lua">
 		<vocation name="Sorcerer"/>
 		<vocation name="Druid"/>
 		<vocation name="Master Sorcerer"/>
@@ -463,7 +463,7 @@
 	<!-- Support Runes -->
 	<rune group="support" spellid="78" name="Desintegrate" id="2310" allowfaruse="0" charges="3" lvl="21" maglv="4" exhaustion="2000" groupcooldown="2000" range="1" script="support/desintegrate rune.lua"/>
 	<rune group="support" spellid="30" name="Destroy Field" id="2261" allowfaruse="1" charges="3" lvl="17" maglv="3" exhaustion="2000" groupcooldown="2000" aggressive="0" range="5" script="support/destroy field rune.lua"/>
-	<rune group="support" spellid="14" name="Chameleon" id="2291" allowfaruse="1" charges="1" lvl="27" maglv="4" exhaustion="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" function="chameleon"/>
+	<rune group="support" spellid="14" name="Chameleon" id="2291" allowfaruse="1" charges="1" lvl="27" maglv="4" exhaustion="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" script="support/chameleon rune.lua">
 	<rune group="support" spellid="94" name="Wild Growth" id="2269" allowfaruse="1" charges="2" lvl="27" maglv="8" exhaustion="2000" groupcooldown="2000" blocktype="all" script="support/wild growth rune.lua">
 		<vocation name="Druid"/>
 		<vocation name="Elder Druid" showInDescription="0"/>
