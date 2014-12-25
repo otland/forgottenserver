@@ -348,12 +348,13 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		uint16_t skillLevel = result->getNumber<uint16_t>(skillNames[i]);
 		uint64_t skillTries = result->getNumber<uint64_t>(skillNameTries[i]);
 		uint64_t nextSkillTries = player->vocation->getReqSkillTries(i, skillLevel + 1);
-
-		player->skills[i].tries = skillTries;
-		player->skills[i].level = skillLevel;
 		if (skillTries > nextSkillTries) {
-			player->skills[i].percent = Player::getPercentLevel(skillTries, nextSkillTries);
+			skillTries = 0;
 		}
+
+		player->skills[i].level = skillLevel;
+		player->skills[i].tries = skillTries;
+		player->skills[i].percent = Player::getPercentLevel(skillTries, nextSkillTries);
 	}
 
 	std::ostringstream query;
