@@ -1052,7 +1052,7 @@ bool Monster::pushCreature(Creature* creature)
 
 	for (Direction dir : dirList) {
 		const Position& tryPos = Spells::getCasterPosition(creature, dir);
-		Tile* toTile = g_game.getTile(tryPos.x, tryPos.y, tryPos.z);
+		Tile* toTile = g_game.getTile(tryPos);
 		if (toTile && !toTile->hasProperty(CONST_PROP_BLOCKPATH)) {
 			if (g_game.internalMoveCreature(creature, dir) == RETURNVALUE_NOERROR) {
 				return true;
@@ -1101,7 +1101,6 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 	}
 
 	bool result = false;
-
 	if ((!followCreature || !hasFollowPath) && !isSummon()) {
 		if (followCreature || getTimeSinceLastMove() > 1000) {
 			//choose a random direction
@@ -1109,7 +1108,6 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 		}
 	} else if (isSummon() || followCreature) {
 		result = Creature::getNextStep(dir, flags);
-
 		if (result) {
 			flags |= FLAG_PATHFINDING;
 		} else {
@@ -1126,8 +1124,7 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 
 	if (result && (canPushItems() || canPushCreatures())) {
 		const Position& pos = Spells::getCasterPosition(this, dir);
-		Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
-
+		Tile* tile = g_game.getTile(pos);
 		if (tile) {
 			if (canPushItems()) {
 				pushItems(tile);
@@ -1776,7 +1773,7 @@ bool Monster::canWalkTo(Position pos, Direction dir) const
 			return false;
 		}
 
-		Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
+		Tile* tile = g_game.getTile(pos);
 		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
 			return true;
 		}

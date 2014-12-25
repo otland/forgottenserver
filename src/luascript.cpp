@@ -2920,7 +2920,7 @@ int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	//doTileAddItemEx(pos, uid)
 	const Position& pos = getPosition(L, 1);
 
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
+	Tile* tile = g_game.getTile(pos);
 	if (!tile) {
 		std::ostringstream ss;
 		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
@@ -3009,7 +3009,7 @@ int32_t LuaScriptInterface::luaDoCreateItem(lua_State* L)
 	//doCreateItem(itemid, <optional> type/count, pos)
 	//Returns uid of the created item, only works on tiles.
 	const Position& pos = getPosition(L, 3);
-	Tile* tile = g_game.getTile(pos.x, pos.y, pos.z);
+	Tile* tile = g_game.getTile(pos);
 	if (!tile) {
 		std::ostringstream ss;
 		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
@@ -4903,7 +4903,7 @@ int32_t LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 	if (lua_gettop(L) >= 3) {
 		const Position& position = getPosition(L, 3);
-		Tile* tile = g_game.getTile(position.x, position.y, position.z);
+		Tile* tile = g_game.getTile(position);
 		if (!tile) {
 			delete item;
 			lua_pushnil(L);

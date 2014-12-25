@@ -122,8 +122,12 @@ class Game
 		  * Get a single tile of the map.
 		  * \returns A pointer to the tile
 		*/
-		Tile* getTile(int32_t x, int32_t y, int32_t z) const;
-		Tile* getTile(const Position& pos) const;
+		inline Tile* getTile(uint16_t x, uint16_t y, uint8_t z) const {
+			return map.getTile(x, y, z);
+		}
+		inline Tile* getTile(const Position& pos) const {
+			return map.getTile(pos.x, pos.y, pos.z);
+		}
 
 		/**
 		  * Set a single tile of the map, position is read from this tile

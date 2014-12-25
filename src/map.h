@@ -181,14 +181,14 @@ class Map
 		  * Get a single tile.
 		  * \returns A pointer to that tile.
 		  */
-		Tile* getTile(int32_t x, int32_t y, int32_t z) const;
+		Tile* getTile(uint16_t x, uint16_t y, uint8_t z) const;
 
 		uint32_t clean() const;
 
 		/**
 		  * Set a single tile.
 		  */
-		void setTile(int32_t _x, int32_t _y, int32_t _z, Tile* newTile);
+		void setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile);
 		void setTile(const Position& pos, Tile* newTile) {
 			setTile(pos.x, pos.y, pos.z, newTile);
 		}

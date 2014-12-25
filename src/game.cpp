@@ -387,16 +387,6 @@ void Game::setTile(Tile* newTile)
 	return map.setTile(newTile->getPosition(), newTile);
 }
 
-Tile* Game::getTile(int32_t x, int32_t y, int32_t z) const
-{
-	return map.getTile(x, y, z);
-}
-
-Tile* Game::getTile(const Position& pos) const
-{
-	return map.getTile(pos.x, pos.y, pos.z);
-}
-
 Creature* Game::getCreatureByID(uint32_t id)
 {
 	if (id <= Player::playerAutoID) {

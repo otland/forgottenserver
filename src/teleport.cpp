@@ -76,7 +76,7 @@ void Teleport::__addThing(Thing* thing)
 
 void Teleport::__addThing(int32_t, Thing* thing)
 {
-	Tile* destTile = g_game.getTile(destPos.x, destPos.y, destPos.z);
+	Tile* destTile = g_game.getTile(destPos);
 	if (!destTile) {
 		return;
 	}
