@@ -401,19 +401,17 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			needTarget = attr.as_bool();
 		}
 
-		combatSpell = new CombatSpell(nullptr, needTarget, needDirection);
-		if (!combatSpell->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
-			delete combatSpell;
+		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, needTarget, needDirection));
+		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
 			return false;
 		}
 
-		if (!combatSpell->loadScriptCombat()) {
-			delete combatSpell;
+		if (!combatSpellPtr->loadScriptCombat()) {
 			return false;
 		}
 		
-		Combat* combat = combatSpell->getCombat();
-		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		combatSpell = combatSpellPtr.release();
+		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
 		Combat* combat = new Combat;
 		sb.combatSpell = true;
@@ -749,36 +747,27 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		}
 	}
 
-	if (new_mType) {
-		mType = new MonsterType();
-	}
-
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(file.c_str());
 	if (!result) {
-		if (new_mType) {
-			delete mType;
-		}
 		std::cout << "[Error - Monsters::loadMonster] Failed to load " << file << ": " << result.description() << std::endl;
 		return false;
 	}
 
 	pugi::xml_node monsterNode = doc.child("monster");
 	if (!monsterNode) {
-		if (new_mType) {
-			delete mType;
-		}
 		std::cout << "[Error - Monsters::loadMonster] Missing monster node in: " << file << std::endl;
 		return false;
 	}
 
 	pugi::xml_attribute attr;
 	if (!(attr = monsterNode.attribute("name"))) {
-		if (new_mType) {
-			delete mType;
-		}
 		std::cout << "[Error - Monsters::loadMonster] Missing name in: " << file << std::endl;
 		return false;
+	}
+
+	if (mType == nullptr) {
+		mType = new MonsterType();
 	}
 	mType->name = attr.as_string();
 

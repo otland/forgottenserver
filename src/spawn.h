@@ -39,12 +39,6 @@ class Spawns
 
 		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
-		~Spawns();
-
-		// non-copyable
-		Spawns(const Spawns&) = delete;
-		Spawns& operator=(const Spawns&) = delete;
-
 		bool loadFromXml(const std::string& _filename);
 		void startup();
 		void clear();
@@ -55,7 +49,7 @@ class Spawns
 
 	private:
 		std::list<Npc*> npcList;
-		std::list<Spawn*> spawnList;
+		std::forward_list<Spawn> spawnList;
 		std::string filename;
 		bool loaded, started;
 };

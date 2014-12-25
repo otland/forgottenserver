@@ -32,10 +32,9 @@ class Thing
 {
 	protected:
 		Thing() = default;
+		~Thing() = default;
 
 	public:
-		virtual ~Thing() = default;
-
 		// non-copyable
 		Thing(const Thing&) = delete;
 		Thing& operator=(const Thing&) = delete;

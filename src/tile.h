@@ -122,16 +122,10 @@ class TileItemVector
 		ItemVector::iterator erase(ItemVector::iterator _pos) {
 			return items.erase(_pos);
 		}
-		Item* at(size_t _pos) {
-			return items.at(_pos);
-		}
 		Item* at(size_t _pos) const {
 			return items.at(_pos);
 		}
-		Item* back() {
-			return items.back();
-		}
-		const Item* back() const {
+		Item* back() const {
 			return items.back();
 		}
 		void push_back(Item* item) {
@@ -185,7 +179,7 @@ class Tile : public Cylinder
 	public:
 		static Tile& nullptr_tile;
 		Tile(uint16_t x, uint16_t y, uint16_t z);
-		~Tile();
+		virtual ~Tile();
 
 		// non-copyable
 		Tile(const Tile&) = delete;

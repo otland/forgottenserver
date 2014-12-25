@@ -35,19 +35,13 @@ int32_t Monster::despawnRadius;
 
 uint32_t Monster::monsterAutoID = 0x40000000;
 
-Monster* Monster::createMonster(MonsterType* mType)
-{
-	return new Monster(mType);
-}
-
 Monster* Monster::createMonster(const std::string& name)
 {
 	MonsterType* mType = g_monsters.getMonsterType(name);
 	if (!mType) {
 		return nullptr;
 	}
-
-	return createMonster(mType);
+	return new Monster(mType);
 }
 
 Monster::Monster(MonsterType* _mtype) :

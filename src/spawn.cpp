@@ -41,13 +41,6 @@ Spawns::Spawns()
 	started = false;
 }
 
-Spawns::~Spawns()
-{
-	for (Spawn* spawn : spawnList) {
-		delete spawn;
-	}
-}
-
 bool Spawns::loadFromXml(const std::string& _filename)
 {
 	if (loaded) {
@@ -79,8 +72,8 @@ bool Spawns::loadFromXml(const std::string& _filename)
 			radius = -1;
 		}
 
-		Spawn* spawn = new Spawn(centerPos, radius);
-		spawnList.push_back(spawn);
+		spawnList.emplace_front(centerPos, radius);
+		Spawn& spawn = spawnList.front();
 
 		for (pugi::xml_node childNode = spawnNode.first_child(); childNode; childNode = childNode.next_sibling()) {
 			if (strcasecmp(childNode.name(), "monster") == 0) {
@@ -105,7 +98,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 				);
 				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
 				if (interval > MINSPAWN_INTERVAL) {
-					spawn->addMonster(nameAttribute.as_string(), pos, dir, interval);
+					spawn.addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {
 					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
 				}
@@ -148,8 +141,8 @@ void Spawns::startup()
 	}
 	npcList.clear();
 
-	for (Spawn* spawn : spawnList) {
-		spawn->startup();
+	for (Spawn& spawn : spawnList) {
+		spawn.startup();
 	}
 
 	started = true;
@@ -157,11 +150,9 @@ void Spawns::startup()
 
 void Spawns::clear()
 {
-	for (Spawn* spawn : spawnList) {
-		spawn->stopEvent();
-		delete spawn;
+	for (Spawn& spawn : spawnList) {
+		spawn.stopEvent();
 	}
-
 	spawnList.clear();
 
 	loaded = false;
@@ -214,24 +205,19 @@ bool Spawn::isInSpawnZone(const Position& pos)
 
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
 {
-	Monster* monster = Monster::createMonster(mType);
-	if (!monster) {
-		return false;
-	}
-
+	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
 	if (startup) {
 		//No need to send out events to the surrounding since there is no one out there to listen!
-		if (!g_game.internalPlaceCreature(monster, pos, true)) {
-			delete monster;
+		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
 			return false;
 		}
 	} else {
-		if (!g_game.placeCreature(monster, pos, false, true)) {
-			delete monster;
+		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
 			return false;
 		}
 	}
 
+	Monster* monster = monster_ptr.release();
 	monster->setDirection(dir);
 	monster->setSpawn(this);
 	monster->setMasterPos(pos, radius);

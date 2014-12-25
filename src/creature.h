@@ -107,7 +107,7 @@ class Creature : virtual public Thing
 	public:
 		static double speedA, speedB, speedC;
 
-		~Creature();
+		virtual ~Creature();
 
 		// non-copyable
 		Creature(const Creature&) = delete;

@@ -56,12 +56,11 @@ void Npcs::reload()
 
 Npc* Npc::createNpc(const std::string& name)
 {
-	Npc* npc = new Npc(name);
+	std::unique_ptr<Npc> npc(new Npc(name));
 	if (!npc->load()) {
-		delete npc;
 		return nullptr;
 	}
-	return npc;
+	return npc.release();
 }
 
 Npc::Npc(const std::string& _name) :
