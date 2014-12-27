@@ -834,6 +834,9 @@ class LuaScriptInterface
 		static int32_t luaCreatureAddMana(lua_State* L);
 		static int32_t luaCreatureGetMaxMana(lua_State* L);
 
+		static int32_t luaCreatureGetSkull(lua_State* L);
+		static int32_t luaCreatureSetSkull(lua_State* L);
+
 		static int32_t luaCreatureGetOutfit(lua_State* L);
 		static int32_t luaCreatureSetOutfit(lua_State* L);
 
@@ -874,8 +877,6 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetDepotChest(lua_State* L);
 		static int32_t luaPlayerGetInbox(lua_State* L);
 
-		static int32_t luaPlayerGetSkull(lua_State* L);
-		static int32_t luaPlayerSetSkull(lua_State* L);
 		static int32_t luaPlayerGetSkullTime(lua_State* L);
 		static int32_t luaPlayerSetSkullTime(lua_State* L);
 		static int32_t luaPlayerGetDeathPenalty(lua_State* L);

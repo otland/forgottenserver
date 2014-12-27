@@ -4652,16 +4652,16 @@ void Game::updateCreatureWalkthrough(const Creature* creature)
 	}
 }
 
-void Game::updatePlayerSkull(Player* player)
+void Game::updateCreatureSkull(const Creature* creature)
 {
 	if (getWorldType() != WORLD_TYPE_PVP) {
 		return;
 	}
 
 	SpectatorVec list;
-	getSpectators(list, player->getPosition(), true, true);
+	getSpectators(list, creature->getPosition(), true, true);
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->sendCreatureSkull(player);
+		spectator->getPlayer()->sendCreatureSkull(creature);
 	}
 }
 

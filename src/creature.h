@@ -166,9 +166,7 @@ class Creature : virtual public Thing
 		virtual Skulls_t getSkullClient(const Creature* creature) const {
 			return creature->getSkull();
 		}
-		void setSkull(Skulls_t newSkull) {
-			skull = newSkull;
-		}
+		void setSkull(Skulls_t newSkull);
 		Direction getDirection() const {
 			return direction;
 		}

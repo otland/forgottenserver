@@ -2187,6 +2187,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "addMana", LuaScriptInterface::luaCreatureAddMana);
 	registerMethod("Creature", "getMaxMana", LuaScriptInterface::luaCreatureGetMaxMana);
 
+	registerMethod("Creature", "getSkull", LuaScriptInterface::luaCreatureGetSkull);
+	registerMethod("Creature", "setSkull", LuaScriptInterface::luaCreatureSetSkull);
+
 	registerMethod("Creature", "getOutfit", LuaScriptInterface::luaCreatureGetOutfit);
 	registerMethod("Creature", "setOutfit", LuaScriptInterface::luaCreatureSetOutfit);
 
@@ -2229,8 +2232,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getDepotChest", LuaScriptInterface::luaPlayerGetDepotChest);
 	registerMethod("Player", "getInbox", LuaScriptInterface::luaPlayerGetInbox);
 
-	registerMethod("Player", "getSkull", LuaScriptInterface::luaPlayerGetSkull);
-	registerMethod("Player", "setSkull", LuaScriptInterface::luaPlayerSetSkull);
 	registerMethod("Player", "getSkullTime", LuaScriptInterface::luaPlayerGetSkullTime);
 	registerMethod("Player", "setSkullTime", LuaScriptInterface::luaPlayerSetSkullTime);
 	registerMethod("Player", "getDeathPenalty", LuaScriptInterface::luaPlayerGetDeathPenalty);
@@ -7858,6 +7859,31 @@ int32_t LuaScriptInterface::luaCreatureGetMaxMana(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureGetSkull(lua_State* L)
+{
+	// creature:getSkull()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_pushnumber(L, creature->getSkull());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureSetSkull(lua_State* L)
+{
+	// creature:setSkull(skull)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->setSkull(getNumber<Skulls_t>(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 {
 	// creature:getOutfit()
@@ -8329,32 +8355,6 @@ int32_t LuaScriptInterface::luaPlayerGetInbox(lua_State* L)
 		setItemMetatable(L, -1, inbox);
 	} else {
 		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaPlayerGetSkull(lua_State* L)
-{
-	// player:getSkull()
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, player->getSkull());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaPlayerSetSkull(lua_State* L)
-{
-	// player:setSkull(skull)
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		player->setSkull(getNumber<Skulls_t>(L, 2));
-		g_game.updatePlayerSkull(player);
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
 	}
 	return 1;
 }

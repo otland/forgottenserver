@@ -133,6 +133,12 @@ bool Creature::canSeeCreature(const Creature* creature) const
 	return true;
 }
 
+void Creature::setSkull(Skulls_t newSkull)
+{
+	skull = newSkull;
+	g_game.updateCreatureSkull(this);
+}
+
 int64_t Creature::getTimeSinceLastMove() const
 {
 	if (lastStep) {
