@@ -666,7 +666,7 @@
 	<distance id="7363" action="removecount" unproperly="1" level="30" />	<!-- Piercing Bolt -->
 	<distance id="7364" action="removecount" unproperly="1" level="20" />	<!-- Sniper Arrow -->
 	<distance id="7365" action="removecount" unproperly="1" level="40" />	<!-- Onyx Arrow -->
-	<distance id="7366" action="moveback" breakchance="9" script="viper_star.lua" />
+	<distance id="7366" breakchance="9" script="viper_star.lua" />
 	<distance id="7367" breakchance="1" unproperly="1" level="42" />	<!-- Enchanted Spear -->
 	<distance id="7368" breakchance="33" unproperly="1" level="80" />	<!-- Assassin Star -->
 	<distance id="7378" breakchance="3" unproperly="1" level="25" />	<!-- Royal Spear -->

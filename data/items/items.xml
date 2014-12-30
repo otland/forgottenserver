@@ -4112,7 +4112,6 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="powerbolt" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="2548" article="a" name="pitchfork">
 		<attribute key="weight" value="2500" />
@@ -11297,7 +11296,6 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="infernalbolt" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="6530" article="a" name="worn soft boots">
 		<attribute key="description" value="Someone specialised in shoes might be able to repair them for you." />
@@ -12294,7 +12292,6 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="piercingbolt" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="7364" article="a" name="sniper arrow">
 		<attribute key="weight" value="70" />
@@ -12304,7 +12301,6 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="sniperarrow" />
 		<attribute key="maxHitChance" value="100" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="7365" article="an" name="onyx arrow">
 		<attribute key="weight" value="70" />
@@ -12377,8 +12373,6 @@
 		<attribute key="weaponType" value="distance" />
 		<attribute key="shootType" value="royalspear" />
 		<attribute key="range" value="3" />
-		<attribute key="breakChance" value="3" />
-		<attribute key="ammoAction" value="moveback" />
 	</item>
 	<item id="7379" name="brutetamer's staff">
 		<attribute key="weight" value="3800" />
@@ -14041,7 +14035,6 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="flasharrow" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="7839" article="a" name="shiver arrow">
 		<attribute key="weight" value="70" />
@@ -14052,7 +14045,6 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="shiverarrow" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="7840" article="a" name="flaming arrow">
 		<attribute key="weight" value="70" />
@@ -14063,7 +14055,6 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="flammingarrow" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="7841" article="a" name="straw mat">
 		<attribute key="type" value="bed" />
@@ -14113,7 +14104,6 @@
 		<attribute key="shootType" value="eartharrow" />
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item fromid="7851" toid="7853" article="an" name="archway" />
 	<item id="7854" article="an" name="earth spike sword">
@@ -23990,7 +23980,6 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="tarsalarrow" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="15649" article="a" name="vortex bolt">
 		<attribute key="weight" value="80" />
@@ -24000,7 +23989,6 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="vortexbolt" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="15650" article="a" name="swarmer drum">
 		<attribute key="weight" value="3200" />
@@ -24750,7 +24738,6 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="vortexbolt" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="18304" article="a" name="crystalline arrow">
 		<attribute key="weight" value="75" />
@@ -24760,7 +24747,6 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="crystallinearrow" />
 		<attribute key="maxHitChance" value="95" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="18305" article="a" name="fresh mushroom beer">
 		<attribute key="weight" value="200" />
@@ -25183,7 +25169,6 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="prismaticbolt" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="18436" article="a" name="drill bolt">
 		<attribute key="weight" value="80" />
@@ -25193,7 +25178,6 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="drillbolt" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="18437" article="a" name="envenomed arrow">
 		<attribute key="weight" value="70" />
@@ -25204,7 +25188,6 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="envenomedarrow" />
 		<attribute key="maxHitChance" value="90" />
-		<attribute key="ammoAction" value="removecount" />
 	</item>
 	<item id="18438" article="a" name="dead dragonling">
 		<attribute key="containerSize" value="25" />
