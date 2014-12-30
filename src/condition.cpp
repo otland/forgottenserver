@@ -125,7 +125,7 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 	}
 }
 
-bool Condition::serialize(PropWriteStream& propWriteStream)
+void Condition::serialize(PropWriteStream& propWriteStream)
 {
 	propWriteStream.write<uint8_t>(CONDITIONATTR_TYPE);
 	propWriteStream.write<uint32_t>(conditionType);
@@ -141,7 +141,6 @@ bool Condition::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_SUBID);
 	propWriteStream.write<uint32_t>(subId);
-	return true;
 }
 
 void Condition::setTicks(int32_t newTicks)
@@ -406,11 +405,9 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 	return Condition::unserializeProp(attr, propStream);
 }
 
-bool ConditionAttributes::serialize(PropWriteStream& propWriteStream)
+void ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 {
-	if (!Condition::serialize(propWriteStream)) {
-		return false;
-	}
+	Condition::serialize(propWriteStream);
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		propWriteStream.write<uint8_t>(CONDITIONATTR_SKILLS);
@@ -421,8 +418,6 @@ bool ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.write<uint8_t>(CONDITIONATTR_STATS);
 		propWriteStream.write<int32_t>(stats[i]);
 	}
-
-	return true;
 }
 
 bool ConditionAttributes::startCondition(Creature* creature)
@@ -725,11 +720,9 @@ bool ConditionRegeneration::unserializeProp(ConditionAttr_t attr, PropStream& pr
 	return Condition::unserializeProp(attr, propStream);
 }
 
-bool ConditionRegeneration::serialize(PropWriteStream& propWriteStream)
+void ConditionRegeneration::serialize(PropWriteStream& propWriteStream)
 {
-	if (!Condition::serialize(propWriteStream)) {
-		return false;
-	}
+	Condition::serialize(propWriteStream);
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_HEALTHTICKS);
 	propWriteStream.write<uint32_t>(healthTicks);
@@ -742,7 +735,6 @@ bool ConditionRegeneration::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_MANAGAIN);
 	propWriteStream.write<uint32_t>(manaGain);
-	return true;
 }
 
 bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interval)
@@ -845,18 +837,15 @@ bool ConditionSoul::unserializeProp(ConditionAttr_t attr, PropStream& propStream
 	return Condition::unserializeProp(attr, propStream);
 }
 
-bool ConditionSoul::serialize(PropWriteStream& propWriteStream)
+void ConditionSoul::serialize(PropWriteStream& propWriteStream)
 {
-	if (!Condition::serialize(propWriteStream)) {
-		return false;
-	}
+	Condition::serialize(propWriteStream);
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_SOULGAIN);
 	propWriteStream.write<uint32_t>(soulGain);
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_SOULTICKS);
 	propWriteStream.write<uint32_t>(soulTicks);
-	return true;
 }
 
 bool ConditionSoul::executeCondition(Creature* creature, int32_t interval)
@@ -984,11 +973,9 @@ bool ConditionDamage::unserializeProp(ConditionAttr_t attr, PropStream& propStre
 	return Condition::unserializeProp(attr, propStream);
 }
 
-bool ConditionDamage::serialize(PropWriteStream& propWriteStream)
+void ConditionDamage::serialize(PropWriteStream& propWriteStream)
 {
-	if (!Condition::serialize(propWriteStream)) {
-		return false;
-	}
+	Condition::serialize(propWriteStream);
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_DELAYED);
 	propWriteStream.write<uint8_t>(delayed);
@@ -1000,7 +987,6 @@ bool ConditionDamage::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.write<uint8_t>(CONDITIONATTR_INTERVALDATA);
 		propWriteStream.write<IntervalInfo>(intervalInfo);
 	}
-	return true;
 }
 
 bool ConditionDamage::updateCondition(const Condition* addCondition)
@@ -1360,11 +1346,9 @@ bool ConditionSpeed::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 	return Condition::unserializeProp(attr, propStream);
 }
 
-bool ConditionSpeed::serialize(PropWriteStream& propWriteStream)
+void ConditionSpeed::serialize(PropWriteStream& propWriteStream)
 {
-	if (!Condition::serialize(propWriteStream)) {
-		return false;
-	}
+	Condition::serialize(propWriteStream);
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_SPEEDDELTA);
 	propWriteStream.write<int32_t>(speedDelta);
@@ -1380,7 +1364,6 @@ bool ConditionSpeed::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_FORMULA_MAXB);
 	propWriteStream.write<float>(maxb);
-	return true;
 }
 
 bool ConditionSpeed::startCondition(Creature* creature)
@@ -1502,15 +1485,12 @@ bool ConditionOutfit::unserializeProp(ConditionAttr_t attr, PropStream& propStre
 	return Condition::unserializeProp(attr, propStream);
 }
 
-bool ConditionOutfit::serialize(PropWriteStream& propWriteStream)
+void ConditionOutfit::serialize(PropWriteStream& propWriteStream)
 {
-	if (!Condition::serialize(propWriteStream)) {
-		return false;
-	}
+	Condition::serialize(propWriteStream);
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_OUTFIT);
 	propWriteStream.write<Outfit_t>(outfit);
-	return true;
 }
 
 bool ConditionOutfit::startCondition(Creature* creature)
@@ -1654,11 +1634,9 @@ bool ConditionLight::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 	return Condition::unserializeProp(attr, propStream);
 }
 
-bool ConditionLight::serialize(PropWriteStream& propWriteStream)
+void ConditionLight::serialize(PropWriteStream& propWriteStream)
 {
-	if (!Condition::serialize(propWriteStream)) {
-		return false;
-	}
+	Condition::serialize(propWriteStream);
 
 	// TODO: color and level could be serialized as 8-bit if we can retain backwards
 	// compatibility, but perhaps we should keep it like this in case they increase
@@ -1674,7 +1652,6 @@ bool ConditionLight::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_LIGHTINTERVAL);
 	propWriteStream.write<uint32_t>(lightChangeInterval);
-	return true;
 }
 
 ConditionSpellCooldown::ConditionSpellCooldown(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId) :

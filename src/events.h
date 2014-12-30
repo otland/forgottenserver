@@ -36,7 +36,7 @@ class Events
 
 		// Creature
 		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
-		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool isAggressive);
+		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 		ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 
 		// Party

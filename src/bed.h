@@ -38,7 +38,7 @@ class BedItem final : public Item
 		}
 
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		bool serializeAttr(PropWriteStream& propWriteStream) const final;
+		void serializeAttr(PropWriteStream& propWriteStream) const final;
 
 		bool canRemove() const final {
 			return house == nullptr;

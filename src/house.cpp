@@ -551,11 +551,6 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-bool Door::serializeAttr(PropWriteStream&) const
-{
-	return true;
-}
-
 void Door::setHouse(House* _house)
 {
 	if (house != nullptr) {
@@ -693,10 +688,10 @@ bool Houses::loadHousesXML(const std::string& filename)
 	return true;
 }
 
-bool Houses::payHouses() const
+void Houses::payHouses() const
 {
 	if (rentPeriod == RENTPERIOD_NEVER) {
-		return true;
+		return;
 	}
 
 	time_t currentTime = time(nullptr);
@@ -786,5 +781,4 @@ bool Houses::payHouses() const
 
 		IOLoginData::savePlayer(&player);
 	}
-	return true;
 }

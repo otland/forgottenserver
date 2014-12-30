@@ -701,8 +701,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 		for (pugi::xml_node attributeNode = node.first_child(); attributeNode; attributeNode = attributeNode.next_sibling()) {
 			if ((attr = attributeNode.attribute("key"))) {
-				std::string tmpStrValue = asLowerCaseString(attr.as_string());
-				if (tmpStrValue == "shooteffect") {
+				const char* value = attr.value();
+				if (strcasecmp(value, "shooteffect") == 0) {
 					if ((attr = attributeNode.attribute("value"))) {
 						ShootType_t shoot = getShootType(attr.as_string());
 						if (shoot != CONST_ANI_NONE) {
@@ -711,7 +711,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
 					}
-				} else if (tmpStrValue == "areaeffect") {
+				} else if (strcasecmp(value, "areaeffect") == 0) {
 					if ((attr = attributeNode.attribute("value"))) {
 						MagicEffectClasses effect = getMagicEffect(attr.as_string());
 						if (effect != CONST_ME_NONE) {

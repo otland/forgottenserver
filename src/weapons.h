@@ -65,8 +65,10 @@ class Weapon : public Event
 		Weapon(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
-		bool loadFunction(const std::string& functionName) final;
-		virtual bool configureWeapon(const ItemType& it);
+		bool loadFunction(const pugi::xml_attribute&) final {
+			return true;
+		}
+		virtual void configureWeapon(const ItemType& it);
 		virtual bool interruptSwing() const {
 			return false;
 		}
@@ -100,11 +102,10 @@ class Weapon : public Event
 		std::string getScriptEventName() const final;
 
 		bool executeUseWeapon(Player* player, const LuaVariant& var) const;
-		bool internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;
-		bool internalUseWeapon(Player* player, Item* item, Tile* tile) const;
+		void internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;
+		void internalUseWeapon(Player* player, Item* item, Tile* tile) const;
 
-		void onUsedWeapon(Player* player, Item* item) const;
-		virtual void onUsedAmmo(Item* item, Tile* destTile) const;
+		void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;
 		virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const {
 			return false;
 		}
@@ -119,13 +120,16 @@ class Weapon : public Event
 		uint32_t manaPercent;
 		uint32_t soul;
 		uint16_t id;
-		AmmoAction_t ammoAction;
+		WeaponAction_t action;
 		uint8_t range;
+		uint8_t breakChance;
 		bool enabled;
 		bool premium;
 		bool wieldUnproperly;
 
 	private:
+		void decrementItemCount(Item* item) const;
+
 		std::map<uint16_t, bool> vocWeaponMap;
 		friend class Combat;
 };
@@ -135,7 +139,7 @@ class WeaponMelee final : public Weapon
 	public:
 		WeaponMelee(LuaScriptInterface* _interface);
 
-		bool configureWeapon(const ItemType& it) final;
+		void configureWeapon(const ItemType& it) final;
 
 		bool useWeapon(Player* player, Item* item, Creature* target) const final;
 
@@ -156,7 +160,7 @@ class WeaponDistance final : public Weapon
 		WeaponDistance(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
-		bool configureWeapon(const ItemType& it) final;
+		void configureWeapon(const ItemType& it) final;
 		bool interruptSwing() const final {
 			return true;
 		}
@@ -169,12 +173,10 @@ class WeaponDistance final : public Weapon
 		CombatType_t getElementType() const final { return elementType; }
 
 	protected:
-		void onUsedAmmo(Item* item, Tile* destTile) const final;
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
 		int32_t hitChance;
 		int32_t maxHitChance;
-		int32_t breakChance;
 		int32_t ammuAttackValue;
 
 		CombatType_t elementType;
@@ -187,7 +189,7 @@ class WeaponWand final : public Weapon
 		WeaponWand(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
-		bool configureWeapon(const ItemType& it) final;
+		void configureWeapon(const ItemType& it) final;
 
 		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const final;
 		int32_t getElementDamage(const Player*, const Creature*, const Item*) const final { return 0; }

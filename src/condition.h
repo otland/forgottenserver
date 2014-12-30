@@ -105,7 +105,7 @@ class Condition
 
 		//serialization
 		bool unserialize(PropStream& propStream);
-		virtual bool serialize(PropWriteStream& propWriteStream);
+		virtual void serialize(PropWriteStream& propWriteStream);
 		virtual bool unserializeProp(ConditionAttr_t attr, PropStream& propStream);
 
 		bool isPersistent() const;
@@ -154,7 +154,7 @@ class ConditionAttributes final : public ConditionGeneric
 		}
 
 		//serialization
-		bool serialize(PropWriteStream& propWriteStream) final;
+		void serialize(PropWriteStream& propWriteStream) final;
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
 
 	protected:
@@ -186,7 +186,7 @@ class ConditionRegeneration final : public ConditionGeneric
 		}
 
 		//serialization
-		bool serialize(PropWriteStream& propWriteStream) final;
+		void serialize(PropWriteStream& propWriteStream) final;
  		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
 
 	protected:
@@ -214,7 +214,7 @@ class ConditionSoul final : public ConditionGeneric
 		}
 
 		//serialization
-		bool serialize(PropWriteStream& propWriteStream) final;
+		void serialize(PropWriteStream& propWriteStream) final;
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
 
 	protected:
@@ -263,7 +263,7 @@ class ConditionDamage final : public Condition
 		int32_t getTotalDamage() const;
 
 		//serialization
-		bool serialize(PropWriteStream& propWriteStream) final;
+		void serialize(PropWriteStream& propWriteStream) final;
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
 
 	protected:
@@ -309,7 +309,7 @@ class ConditionSpeed final : public Condition
 		void setFormulaVars(float _mina, float _minb, float _maxa, float _maxb);
 
 		//serialization
-		bool serialize(PropWriteStream& propWriteStream) final;
+		void serialize(PropWriteStream& propWriteStream) final;
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
 
 	protected:
@@ -341,7 +341,7 @@ class ConditionOutfit final : public Condition
 		void setOutfit(const Outfit_t& outfit);
 
 		//serialization
-		bool serialize(PropWriteStream& propWriteStream) final;
+		void serialize(PropWriteStream& propWriteStream) final;
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
 
 	protected:
@@ -367,7 +367,7 @@ class ConditionLight final : public Condition
 		bool setParam(ConditionParam_t param, int32_t value) final;
 
 		//serialization
-		bool serialize(PropWriteStream& propWriteStream) final;
+		void serialize(PropWriteStream& propWriteStream) final;
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
 
 	protected:

@@ -610,10 +610,7 @@ bool IOLoginData::savePlayer(Player* player)
 	PropWriteStream propWriteStream;
 	for (Condition* condition : player->conditions) {
 		if (condition->isPersistent()) {
-			if (!condition->serialize(propWriteStream)) {
-				return false;
-			}
-
+			condition->serialize(propWriteStream);
 			propWriteStream.write<uint8_t>(CONDITIONATTR_END);
 		}
 	}

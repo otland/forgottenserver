@@ -106,7 +106,7 @@ class MoveEvent final : public Event
 		void setEventType(MoveEvent_t type);
 
 		bool configureEvent(const pugi::xml_node& node) final;
-		bool loadFunction(const std::string& functionName) final;
+		bool loadFunction(const pugi::xml_attribute& attr) final;
 
 		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);

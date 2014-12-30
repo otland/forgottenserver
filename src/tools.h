@@ -62,7 +62,7 @@ void trimString(std::string& str);
 MagicEffectClasses getMagicEffect(const std::string& strValue);
 ShootType_t getShootType(const std::string& strValue);
 Ammo_t getAmmoType(const std::string& strValue);
-AmmoAction_t getAmmoAction(const std::string& strValue);
+WeaponAction_t getWeaponAction(const std::string& strValue);
 CombatType_t getCombatType(const std::string& strValue);
 Skulls_t getSkullType(const std::string& strValue);
 std::string getCombatName(CombatType_t combatType);

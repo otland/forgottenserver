@@ -59,10 +59,10 @@ std::string CreatureEvents::getScriptBaseName() const
 
 Event* CreatureEvents::getEvent(const std::string& nodeName)
 {
-	if (asLowerCaseString(nodeName) == "event") {
-		return new CreatureEvent(&m_scriptInterface);
+	if (strcasecmp(nodeName.c_str(), "event") != 0) {
+		return nullptr;
 	}
-	return nullptr;
+	return new CreatureEvent(&m_scriptInterface);
 }
 
 bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node&)

@@ -64,10 +64,10 @@ void GlobalEvents::clear()
 
 Event* GlobalEvents::getEvent(const std::string& nodeName)
 {
-	if (asLowerCaseString(nodeName) == "globalevent") {
-		return new GlobalEvent(&m_scriptInterface);
+	if (strcasecmp(nodeName.c_str(), "globalevent") != 0) {
+		return nullptr;
 	}
-	return nullptr;
+	return new GlobalEvent(&m_scriptInterface);
 }
 
 bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
@@ -275,12 +275,12 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		m_nextExecution = current_time + difference;
 		m_eventType = GLOBALEVENT_TIMER;
 	} else if ((attr = node.attribute("type"))) {
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "startup" || tmpStrValue == "start" || tmpStrValue == "load") {
+		const char* value = attr.value();
+		if (strcasecmp(value, "startup") == 0) {
 			m_eventType = GLOBALEVENT_STARTUP;
-		} else if (tmpStrValue == "shutdown" || tmpStrValue == "quit" || tmpStrValue == "exit") {
+		} else if (strcasecmp(value, "shutdown") == 0) {
 			m_eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (tmpStrValue == "record" || tmpStrValue == "playersrecord") {
+		} else if (strcasecmp(value, "record") == 0) {
 			m_eventType = GLOBALEVENT_RECORD;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string() << "\" for globalevent with name " << m_name << std::endl;

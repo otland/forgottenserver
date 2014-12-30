@@ -70,7 +70,7 @@ struct CombatParams {
 		blockedByArmor = false;
 		blockedByShield = false;
 		targetCasterOrTopMost = false;
-		isAggressive = true;
+		aggressive = true;
 		itemId = 0;
 		impactEffect = CONST_ME_NONE;
 		distanceEffect = CONST_ANI_NONE;
@@ -101,11 +101,11 @@ struct CombatParams {
 	bool blockedByArmor;
 	bool blockedByShield;
 	bool targetCasterOrTopMost;
-	bool isAggressive;
+	bool aggressive;
 	bool useCharges;
 };
 
-typedef bool (*COMBATFUNC)(Creature*, Creature*, const CombatParams&, void*);
+typedef void (*COMBATFUNC)(Creature*, Creature*, const CombatParams&, void*);
 
 class MatrixArea
 {
@@ -299,7 +299,7 @@ class Combat
 		static CombatType_t ConditionToDamageType(ConditionType_t type);
 		static ConditionType_t DamageToConditionType(CombatType_t type);
 		static ReturnValue canTargetCreature(Player* attacker, Creature* target);
-		static ReturnValue canDoCombat(Creature* caster, Tile* tile, bool isAggressive);
+		static ReturnValue canDoCombat(Creature* caster, Tile* tile, bool aggressive);
 		static ReturnValue canDoCombat(Creature* attacker, Creature* target);
 		static void postCombatEffects(Creature* caster, const Position& pos, const CombatParams& params);
 
@@ -337,11 +337,11 @@ class Combat
 		static void CombatFunc(Creature* caster, const Position& pos,
 		                       const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data);
 
-		static bool CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static bool CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static bool CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static bool CombatDispelFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static bool CombatnullptrFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
+		static void CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
+		static void CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
+		static void CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
+		static void CombatDispelFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
+		static void CombatNullFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
 
 		static void combatTileEffects(const SpectatorVec& list, Creature* caster, Tile* tile, const CombatParams& params);
 		CombatDamage getCombatDamage(Creature* creature, Creature* target) const;

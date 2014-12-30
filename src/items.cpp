@@ -67,7 +67,6 @@ ItemType::ItemType()
 	weaponType = WEAPON_NONE;
 	slotPosition = SLOTP_HAND;
 	ammoType = AMMO_NONE;
-	ammoAction = AMMOACTION_NONE;
 	shootType = CONST_ANI_NONE;
 	magicEffect = CONST_ME_NONE;
 	attack = 0;
@@ -95,7 +94,6 @@ ItemType::ItemType()
 	charges	= 0;
 	hitChance = 0;
 	maxHitChance = -1;
-	breakChance = -1;
 	shootRange = 1;
 
 	combatType = COMBAT_NONE;
@@ -683,13 +681,6 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
 			it.showCharges = valueAttribute.as_bool();
 		} else if (tmpStrValue == "showattributes") {
 			it.showAttributes = valueAttribute.as_bool();
-		} else if (tmpStrValue == "breakchance") {
-			it.breakChance = std::min<uint32_t>(100, pugi::cast<uint32_t>(valueAttribute.value()));
-		} else if (tmpStrValue == "ammoaction") {
-			it.ammoAction = getAmmoAction(valueAttribute.as_string());
-			if (it.ammoAction == AMMOACTION_NONE) {
-				std::cout << "[Warning - Items::parseItemNode] Unknown ammoAction " << valueAttribute.as_string() << std::endl;
-			}
 		} else if (tmpStrValue == "hitchance") {
 			it.hitChance = std::min<int8_t>(100, std::max<int8_t>(-100, pugi::cast<int16_t>(valueAttribute.value())));
 		} else if (tmpStrValue == "maxhitchance") {

@@ -83,10 +83,10 @@ std::string Actions::getScriptBaseName() const
 
 Event* Actions::getEvent(const std::string& nodeName)
 {
-	if (asLowerCaseString(nodeName) == "action") {
-		return new Action(&m_scriptInterface);
+	if (strcasecmp(nodeName.c_str(), "action") != 0) {
+		return nullptr;
 	}
-	return nullptr;
+	return new Action(&m_scriptInterface);
 }
 
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
@@ -488,14 +488,14 @@ bool Action::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool Action::loadFunction(const std::string& functionName)
+bool Action::loadFunction(const pugi::xml_attribute& attr)
 {
-	const std::string& tmpFunctionName = asLowerCaseString(functionName);
-	if (tmpFunctionName == "increaseitemid") {
+	const char* functionName = attr.as_string();
+	if (strcasecmp(functionName, "increaseitemid") == 0) {
 		function = increaseItemId;
-	} else if (tmpFunctionName == "decreaseitemid") {
+	} else if (strcasecmp(functionName, "decreaseitemid") == 0) {
 		function = decreaseItemId;
-	} else if (tmpFunctionName == "market") {
+	} else if (strcasecmp(functionName, "market") == 0) {
 		function = enterMarket;
 	} else {
 		std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
@@ -508,15 +508,13 @@ bool Action::loadFunction(const std::string& functionName)
 
 bool Action::increaseItemId(Player*, Item* item, const PositionEx&, const PositionEx&, bool, bool)
 {
-	Item* newItem = g_game.transformItem(item, item->getID() + 1);
-	g_game.startDecay(newItem);
+	g_game.startDecay(g_game.transformItem(item, item->getID() + 1));
 	return true;
 }
 
 bool Action::decreaseItemId(Player*, Item* item, const PositionEx&, const PositionEx&, bool, bool)
 {
-	Item* newItem = g_game.transformItem(item, item->getID() - 1);
-	g_game.startDecay(newItem);
+	g_game.startDecay(g_game.transformItem(item, item->getID() - 1));
 	return true;
 }
 

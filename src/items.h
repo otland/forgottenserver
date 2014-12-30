@@ -206,7 +206,6 @@ class ItemType
 		uint32_t minReqLevel;
 		uint32_t minReqMagicLevel;
 		uint32_t charges;
-		int32_t breakChance;
 		int32_t maxHitChance;
 		int32_t decayTo;
 		int32_t attack;
@@ -236,7 +235,6 @@ class ItemType
 		Ammo_t ammoType;
 		ShootType_t shootType;
 		RaceType_t corpseType;
-		AmmoAction_t ammoAction;
 		FluidTypes_t fluidSource;
 
 		uint8_t alwaysOnTopOrder;

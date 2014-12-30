@@ -73,7 +73,7 @@ class Door final : public Item
 
 		//serialization
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		bool serializeAttr(PropWriteStream& propWriteStream) const final;
+		void serializeAttr(PropWriteStream&) const final {}
 
 		void setDoorId(uint32_t _doorId) {
 			setIntAttr(ITEM_ATTRIBUTE_DOORID, _doorId);
@@ -311,7 +311,7 @@ class Houses
 
 		bool loadHousesXML(const std::string& filename);
 
-		bool payHouses() const;
+		void payHouses() const;
 
 		const HouseMap& getHouses() const {
 			return houseMap;

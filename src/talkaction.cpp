@@ -57,10 +57,10 @@ std::string TalkActions::getScriptBaseName() const
 
 Event* TalkActions::getEvent(const std::string& nodeName)
 {
-	if (asLowerCaseString(nodeName) == "talkaction") {
-		return new TalkAction(&m_scriptInterface);
+	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
+		return nullptr;
 	}
-	return nullptr;
+	return new TalkAction(&m_scriptInterface);
 }
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)

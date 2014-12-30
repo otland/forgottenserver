@@ -70,7 +70,7 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-bool BedItem::serializeAttr(PropWriteStream& propWriteStream) const
+void BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	if (sleeperGUID != 0) {
 		propWriteStream.write<uint8_t>(ATTR_SLEEPERGUID);
@@ -82,7 +82,6 @@ bool BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 		// FIXME: should be stored as 64-bit, but we need to retain backwards compatibility
 		propWriteStream.write<uint32_t>(static_cast<uint32_t>(sleepStart));
 	}
-	return true;
 }
 
 BedItem* BedItem::getNextBedItem() const
@@ -182,7 +181,6 @@ bool BedItem::sleep(Player* player)
 
 void BedItem::wakeUp(Player* player)
 {
-	// avoid crashes
 	if (!house) {
 		return;
 	}

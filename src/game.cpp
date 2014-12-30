@@ -3505,7 +3505,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	return false;
 }
 
-bool Game::playerWhisper(Player* player, const std::string& text)
+void Game::playerWhisper(Player* player, const std::string& text)
 {
 	SpectatorVec list;
 	getSpectators(list, player->getPosition(), false, false,
@@ -3527,8 +3527,6 @@ bool Game::playerWhisper(Player* player, const std::string& text)
 	for (Creature* spectator : list) {
 		spectator->onCreatureSay(player, TALKTYPE_WHISPER, text);
 	}
-
-	return true;
 }
 
 bool Game::playerYell(Player* player, const std::string& text)
@@ -3580,7 +3578,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 	return true;
 }
 
-bool Game::playerSpeakToNpc(Player* player, const std::string& text)
+void Game::playerSpeakToNpc(Player* player, const std::string& text)
 {
 	SpectatorVec list;
 	getSpectators(list, player->getPosition());
@@ -3589,7 +3587,6 @@ bool Game::playerSpeakToNpc(Player* player, const std::string& text)
 			spectator->onCreatureSay(player, TALKTYPE_PRIVATE_PN, text);
 		}
 	}
-	return true;
 }
 
 //--

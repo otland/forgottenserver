@@ -106,18 +106,17 @@ void ScriptEnvironment::resetEnv()
 
 bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
 {
-	if (m_callbackId == 0) {
-		m_callbackId = callbackId;
-		m_interface = scriptInterface;
-		return true;
-	} else {
+	if (m_callbackId != 0) {
 		//nested callbacks are not allowed
 		if (m_interface) {
 			m_interface->reportErrorFunc("Nested callbacks!");
 		}
-
 		return false;
 	}
+
+	m_callbackId = callbackId;
+	m_interface = scriptInterface;
+	return true;
 }
 
 void ScriptEnvironment::getEventInfo(int32_t& scriptId, std::string& desc, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent) const
@@ -1831,7 +1830,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::CANNOT_ATTACK_SAME_LOOKFEET)
 	registerEnumIn("configKeys", ConfigManager::ONE_PLAYER_ON_ACCOUNT)
 	registerEnumIn("configKeys", ConfigManager::AIMBOT_HOTKEY_ENABLED)
-	registerEnumIn("configKeys", ConfigManager::REMOVE_AMMO)
 	registerEnumIn("configKeys", ConfigManager::REMOVE_RUNE_CHARGES)
 	registerEnumIn("configKeys", ConfigManager::EXPERIENCE_FROM_PLAYERS)
 	registerEnumIn("configKeys", ConfigManager::FREE_PREMIUM)

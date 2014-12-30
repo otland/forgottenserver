@@ -422,9 +422,9 @@ struct AmmoTypeNames {
 	Ammo_t ammoType;
 };
 
-struct AmmoActionNames {
+struct WeaponActionNames {
 	const char* name;
-	AmmoAction_t ammoAction;
+	WeaponAction_t weaponAction;
 };
 
 struct SkullNames {
@@ -604,11 +604,10 @@ AmmoTypeNames ammoTypeNames[] = {
 	{"eartharrow",		AMMO_ARROW}
 };
 
-AmmoActionNames ammoActionNames[] = {
-	{"move",		AMMOACTION_MOVE},
-	{"moveback",		AMMOACTION_MOVEBACK},
-	{"removecharge",	AMMOACTION_REMOVECHARGE},
-	{"removecount",		AMMOACTION_REMOVECOUNT}
+WeaponActionNames weaponActionNames[] = {
+	{"move",		WEAPONACTION_MOVE},
+	{"removecharge",	WEAPONACTION_REMOVECHARGE},
+	{"removecount",		WEAPONACTION_REMOVECOUNT}
 };
 
 SkullNames skullNames[] = {
@@ -671,14 +670,14 @@ Ammo_t getAmmoType(const std::string& strValue)
 	return AMMO_NONE;
 }
 
-AmmoAction_t getAmmoAction(const std::string& strValue)
+WeaponAction_t getWeaponAction(const std::string& strValue)
 {
-	for (size_t i = 0, size = sizeof(ammoActionNames) / sizeof(AmmoActionNames); i < size; ++i) {
-		if (strcasecmp(strValue.c_str(), ammoActionNames[i].name) == 0) {
-			return ammoActionNames[i].ammoAction;
+	for (size_t i = 0, size = sizeof(weaponActionNames) / sizeof(WeaponActionNames); i < size; ++i) {
+		if (strcasecmp(strValue.c_str(), weaponActionNames[i].name) == 0) {
+			return weaponActionNames[i].weaponAction;
 		}
 	}
-	return AMMOACTION_NONE;
+	return WEAPONACTION_NONE;
 }
 
 Skulls_t getSkullType(const std::string& strValue)

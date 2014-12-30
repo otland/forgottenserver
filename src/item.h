@@ -533,7 +533,7 @@ class Item : virtual public Thing
 		bool unserializeAttr(PropStream& propStream);
 		virtual bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);
 
-		virtual bool serializeAttr(PropWriteStream& propWriteStream) const;
+		virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
 		bool isPushable() const final {
 			return isMoveable();

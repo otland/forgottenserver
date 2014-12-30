@@ -36,7 +36,7 @@ class Teleport final : public Item, public Cylinder
 
 		//serialization
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		bool serializeAttr(PropWriteStream& propWriteStream) const final;
+		void serializeAttr(PropWriteStream& propWriteStream) const final;
 
 		const Position& getDestPos() const {
 			return destPos;

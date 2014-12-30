@@ -94,10 +94,10 @@ std::string MoveEvents::getScriptBaseName() const
 
 Event* MoveEvents::getEvent(const std::string& nodeName)
 {
-	if (asLowerCaseString(nodeName) == "movevent") {
-		return new MoveEvent(&m_scriptInterface);
+	if (strcasecmp(nodeName.c_str(), "movevent") != 0) {
+		return nullptr;
 	}
-	return nullptr;
+	return new MoveEvent(&m_scriptInterface);
 }
 
 bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
@@ -563,20 +563,20 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool MoveEvent::loadFunction(const std::string& functionName)
+bool MoveEvent::loadFunction(const pugi::xml_attribute& attr)
 {
-	std::string tmpFunctionName = asLowerCaseString(functionName);
-	if (tmpFunctionName == "onstepinfield") {
+	const char* functionName = attr.as_string();
+	if (strcasecmp(functionName, "onstepinfield") == 0) {
 		stepFunction = StepInField;
-	} else if (tmpFunctionName == "onstepoutfield") {
+	} else if (strcasecmp(functionName, "onstepoutfield") == 0) {
 		stepFunction = StepOutField;
-	} else if (tmpFunctionName == "onaddfield") {
+	} else if (strcasecmp(functionName, "onaddfield") == 0) {
 		moveFunction = AddItemField;
-	} else if (tmpFunctionName == "onremovefield") {
+	} else if (strcasecmp(functionName, "onremovefield") == 0) {
 		moveFunction = RemoveItemField;
-	} else if (tmpFunctionName == "onequipitem") {
+	} else if (strcasecmp(functionName, "onequipitem") == 0) {
 		equipFunction = EquipItem;
-	} else if (tmpFunctionName == "ondeequipitem") {
+	} else if (strcasecmp(functionName, "ondeequipitem") == 0) {
 		equipFunction = DeEquipItem;
 	} else {
 		std::cout << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;

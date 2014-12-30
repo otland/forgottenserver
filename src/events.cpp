@@ -173,9 +173,9 @@ bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& out
 	return scriptInterface.callFunction(2);
 }
 
-ReturnValue Events::eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool isAggressive)
+ReturnValue Events::eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive)
 {
-	// Creature:onAreaCombat(tile, isAggressive) or Creature.onAreaCombat(self, tile, isAggressive)
+	// Creature:onAreaCombat(tile, aggressive) or Creature.onAreaCombat(self, tile, aggressive)
 	if (creatureOnAreaCombat == -1) {
 		return RETURNVALUE_NOERROR;
 	}
@@ -201,7 +201,7 @@ ReturnValue Events::eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bo
 	LuaScriptInterface::pushUserdata<Tile>(L, tile);
 	LuaScriptInterface::setMetatable(L, -1, "Tile");
 
-	LuaScriptInterface::pushBoolean(L, isAggressive);
+	LuaScriptInterface::pushBoolean(L, aggressive);
 
 	ReturnValue returnValue;
 	if (scriptInterface.protectedCall(L, 3, 1) != 0) {

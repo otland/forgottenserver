@@ -130,12 +130,11 @@ std::string Spells::getScriptBaseName() const
 
 Event* Spells::getEvent(const std::string& nodeName)
 {
-	std::string tmpNodeName = asLowerCaseString(nodeName);
-	if (tmpNodeName == "rune") {
+	if (strcasecmp(nodeName.c_str(), "rune") == 0) {
 		return new RuneSpell(&m_scriptInterface);
-	} else if (tmpNodeName == "instant") {
+	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
 		return new InstantSpell(&m_scriptInterface);
-	} else if (tmpNodeName == "conjure") {
+	} else if (strcasecmp(nodeName.c_str(), "conjure") == 0) {
 		return new ConjureSpell(&m_scriptInterface);
 	}
 	return nullptr;
@@ -393,7 +392,7 @@ Spell::Spell()
 	blockingCreature = false;
 	premium = false;
 	enabled = true;
-	isAggressive = true;
+	aggressive = true;
 	learnable = false;
 	group = SPELLGROUP_NONE;
 	groupCooldown = 1000;
@@ -565,11 +564,11 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("aggressive"))) {
-		isAggressive = booleanString(attr.as_string());
+		aggressive = booleanString(attr.as_string());
 	}
 
 	if (group == SPELLGROUP_NONE) {
-		group = (isAggressive ? SPELLGROUP_ATTACK : SPELLGROUP_HEALING);
+		group = (aggressive ? SPELLGROUP_ATTACK : SPELLGROUP_HEALING);
 	}
 
 	for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
@@ -605,7 +604,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (isAggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
+	if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;
 	}
@@ -703,7 +702,7 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 		g_game.setTile(tile);
 	}
 
-	ReturnValue ret = Combat::canDoCombat(player, tile, isAggressive);
+	ReturnValue ret = Combat::canDoCombat(player, tile, aggressive);
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -759,7 +758,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	ReturnValue ret = Combat::canDoCombat(player, tile, isAggressive);
+	ReturnValue ret = Combat::canDoCombat(player, tile, aggressive);
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -783,7 +782,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	if (isAggressive && needTarget && topVisibleCreature && player->getSecureMode() == SECUREMODE_ON) {
+	if (aggressive && needTarget && topVisibleCreature && player->getSecureMode() == SECUREMODE_ON) {
 		const Player* targetPlayer = topVisibleCreature->getPlayer();
 		if (targetPlayer && targetPlayer != player && player->getSkullClient(targetPlayer) == SKULL_NONE && !Combat::isInPvpZone(player, targetPlayer)) {
 			player->sendCancelMessage(RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
@@ -814,7 +813,7 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 			}
 		}
 
-		if (isAggressive) {
+		if (aggressive) {
 			player->addInFightTicks();
 		}
 	}
@@ -943,31 +942,24 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool InstantSpell::loadFunction(const std::string& functionName)
+bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 {
-	std::string tmpFunctionName = asLowerCaseString(functionName);
-	if (tmpFunctionName == "edithouseguest") {
-		isAggressive = false;
+	const char* functionName = attr.as_string();
+	if (strcasecmp(functionName, "edithouseguest") == 0) {
 		function = HouseGuestList;
-	} else if (tmpFunctionName == "edithousesubowner") {
-		isAggressive = false;
+	} else if (strcasecmp(functionName, "edithousesubowner") == 0) {
 		function = HouseSubOwnerList;
-	} else if (tmpFunctionName == "edithousedoor") {
-		isAggressive = false;
+	} else if (strcasecmp(functionName, "edithousedoor") == 0) {
 		function = HouseDoorList;
-	} else if (tmpFunctionName == "housekick") {
-		isAggressive = false;
+	} else if (strcasecmp(functionName, "housekick") == 0) {
 		function = HouseKick;
-	} else if (tmpFunctionName == "searchplayer") {
-		isAggressive = false;
+	} else if (strcasecmp(functionName, "searchplayer") == 0) {
 		function = SearchPlayer;
-	} else if (tmpFunctionName == "levitate") {
-		isAggressive = false;
+	} else if (strcasecmp(functionName, "levitate") == 0) {
 		function = Levitate;
-	} else if (tmpFunctionName == "illusion") {
-		isAggressive = false;
+	} else if (strcasecmp(functionName, "illusion") == 0) {
 		function = Illusion;
-	} else if (tmpFunctionName == "summonmonster") {
+	} else if (strcasecmp(functionName, "summonmonster") == 0) {
 		function = SummonMonster;
 	} else {
 		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
@@ -1555,8 +1547,7 @@ bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::
 
 	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
 
-	std::string tmpParam = asLowerCaseString(param);
-	if (tmpParam == "up") {
+	if (strcasecmp(param.c_str(), "up") == 0) {
 		if (currentPos.z != 8) {
 			Tile* tmpTile = g_game.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
 			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID))) {
@@ -1566,7 +1557,7 @@ bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::
 				}
 			}
 		}
-	} else if (tmpParam == "down") {
+	} else if (strcasecmp(param.c_str(), "down") == 0) {
 		if (currentPos.z != 7) {
 			Tile* tmpTile = g_game.getTile(destPos);
 			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID))) {
@@ -1633,7 +1624,7 @@ bool InstantSpell::canCast(const Player* player) const
 ConjureSpell::ConjureSpell(LuaScriptInterface* _interface) :
 	InstantSpell(_interface)
 {
-	isAggressive = false;
+	aggressive = false;
 	conjureId = 0;
 	conjureCount = 1;
 	conjureReagentId = 0;
@@ -1672,7 +1663,7 @@ bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool ConjureSpell::loadFunction(const std::string&)
+bool ConjureSpell::loadFunction(const pugi::xml_attribute&)
 {
 	m_scripted = false;
 	return true;
@@ -1792,12 +1783,12 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool RuneSpell::loadFunction(const std::string& functionName)
+bool RuneSpell::loadFunction(const pugi::xml_attribute& attr)
 {
-	std::string tmpFunctionName = asLowerCaseString(functionName);
-	if (tmpFunctionName == "chameleon") {
+	const char* functionName = attr.as_string();
+	if (strcasecmp(functionName, "chameleon") == 0) {
 		function = Illusion;
-	} else if (tmpFunctionName == "convince") {
+	} else if (strcasecmp(functionName, "convince") == 0) {
 		function = Convince;
 	} else {
 		std::cout << "[Warning - RuneSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;

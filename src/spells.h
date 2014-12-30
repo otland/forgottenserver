@@ -186,7 +186,7 @@ class Spell : public BaseSpell
 		bool selfTarget;
 		bool blockingSolid;
 		bool blockingCreature;
-		bool isAggressive;
+		bool aggressive;
 		bool learnable;
 		bool enabled;
 		bool premium;
@@ -203,7 +203,7 @@ class InstantSpell : public TalkAction, public Spell
 		InstantSpell(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
-		bool loadFunction(const std::string& functionName) override;
+		bool loadFunction(const pugi::xml_attribute& attr) override;
 
 		virtual bool playerCastInstant(Player* player, std::string& param);
 
@@ -256,7 +256,7 @@ class ConjureSpell final : public InstantSpell
 		ConjureSpell(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
-		bool loadFunction(const std::string& functionName) final;
+		bool loadFunction(const pugi::xml_attribute& attr) final;
 
 		bool playerCastInstant(Player* player, std::string& param) final;
 
@@ -297,7 +297,7 @@ class RuneSpell final : public Action, public Spell
 		RuneSpell(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
-		bool loadFunction(const std::string& functionName) final;
+		bool loadFunction(const pugi::xml_attribute& attr) final;
 
 		ReturnValue canExecuteAction(const Player* player, const Position& toPos) final;
 		bool hasOwnErrorHandler() final {

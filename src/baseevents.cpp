@@ -72,12 +72,7 @@ bool BaseEvents::loadFromXml()
 			std::string scriptFile = "scripts/" + std::string(scriptAttribute.as_string());
 			success = event->checkScript(basePath, scriptsName, scriptFile) && event->loadScript(basePath + scriptFile);
 		} else {
-			pugi::xml_attribute functionAttribute = node.attribute("function");
-			if (functionAttribute) {
-				success = event->loadFunction(functionAttribute.as_string());
-			} else {
-				success = false;
-			}
+			success = event->loadFunction(node.attribute("function"));
 		}
 
 		if (!success || !registerEvent(event, node)) {
@@ -158,11 +153,6 @@ bool Event::loadScript(const std::string& scriptFile)
 	m_scripted = true;
 	m_scriptId = id;
 	return true;
-}
-
-bool Event::loadFunction(const std::string&)
-{
-	return false;
 }
 
 CallBack::CallBack()

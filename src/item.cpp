@@ -655,7 +655,7 @@ bool Item::unserializeItemNode(FileLoader&, NODE, PropStream& propStream)
 	return unserializeAttr(propStream);
 }
 
-bool Item::serializeAttr(PropWriteStream& propWriteStream) const
+void Item::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	if (isStackable() || isFluidContainer() || isSplash()) {
 		propWriteStream.write<uint8_t>(ATTR_COUNT);
@@ -760,7 +760,6 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.write<uint8_t>(ATTR_SHOOTRANGE);
 		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE));
 	}
-	return true;
 }
 
 bool Item::hasProperty(ITEMPROPERTY prop) const
