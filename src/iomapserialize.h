@@ -37,8 +37,6 @@ class IOMapSerialize
 
 		static bool loadContainer(PropStream& propStream, Container* container);
 		static bool loadItem(PropStream& propStream, Cylinder* parent);
-		static bool saveTile(Database* db, uint32_t tileId, const Tile* tile);
-		static bool loadTile(Database& db, Tile* tile);
 };
 
 #endif
