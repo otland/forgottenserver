@@ -156,8 +156,8 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 					return false;
 				}
 
-				parent->__internalAddThing(item);
-				item->__startDecaying();
+				parent->internalAddThing(item);
+				item->startDecaying();
 			} else {
 				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
 				delete item;

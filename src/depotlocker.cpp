@@ -40,7 +40,7 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-ReturnValue DepotLocker::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
+ReturnValue DepotLocker::queryAdd(int32_t, const Thing *, uint32_t, uint32_t, Creature *) const
 {
 	return RETURNVALUE_NOTENOUGHROOM;
 }

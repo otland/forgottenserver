@@ -24,33 +24,33 @@
 
 extern Game g_game;
 
-ReturnValue TrashHolder::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
+ReturnValue TrashHolder::queryAdd(int32_t, const Thing *, uint32_t, uint32_t, Creature *) const
 {
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue TrashHolder::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
+ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing *, uint32_t count, uint32_t &maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue TrashHolder::__queryRemove(const Thing*, uint32_t, uint32_t) const
+ReturnValue TrashHolder::queryRemove(const Thing *, uint32_t, uint32_t) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Cylinder* TrashHolder::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)
+Cylinder* TrashHolder::queryDestination(int32_t &, const Thing *, Item **, uint32_t &)
 {
 	return this;
 }
 
-void TrashHolder::__addThing(Thing* thing)
+void TrashHolder::addThing(Thing *thing)
 {
-	return __addThing(0, thing);
+	return addThing(0, thing);
 }
 
-void TrashHolder::__addThing(int32_t, Thing* thing)
+void TrashHolder::addThing(int32_t, Thing *thing)
 {
 	Item* item = thing->getItem();
 	if (!item) {
@@ -76,17 +76,17 @@ void TrashHolder::__addThing(int32_t, Thing* thing)
 	}
 }
 
-void TrashHolder::__updateThing(Thing*, uint16_t, uint32_t)
+void TrashHolder::updateThing(Thing *, uint16_t, uint32_t)
 {
 	//
 }
 
-void TrashHolder::__replaceThing(uint32_t, Thing*)
+void TrashHolder::replaceThing(uint32_t, Thing *)
 {
 	//
 }
 
-void TrashHolder::__removeThing(Thing*, uint32_t)
+void TrashHolder::removeThing(Thing *, uint32_t)
 {
 	//
 }

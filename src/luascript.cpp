@@ -2989,7 +2989,7 @@ int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 		}
 
 		default: {
-			thing = tile->__getThing(stackpos);
+			thing = tile->getThing(stackpos);
 			break;
 		}
 	}
@@ -5266,7 +5266,7 @@ int32_t LuaScriptInterface::luaTileGetThing(lua_State* L)
 	int32_t index = getNumber<int32_t>(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (tile) {
-		Thing* thing = tile->__getThing(index);
+		Thing* thing = tile->getThing(index);
 		if (thing) {
 			if (Creature* creature = thing->getCreature()) {
 				pushUserdata<Creature>(L, creature);
@@ -5515,7 +5515,7 @@ int32_t LuaScriptInterface::luaTileGetItemCountById(lua_State* L)
 		}
 	}
 
-	lua_pushnumber(L, tile->__getItemTypeCount(itemId, subType));
+	lua_pushnumber(L, tile->getItemTypeCount(itemId, subType));
 	return 1;
 }
 
@@ -5744,7 +5744,7 @@ int32_t LuaScriptInterface::luaTileGetThingIndex(lua_State* L)
 	if (tile) {
 		Thing* thing = getThing(L, 2);
 		if (thing) {
-			lua_pushnumber(L, tile->__getIndexOfThing(thing));
+			lua_pushnumber(L, tile->getThingIndex(thing));
 		} else {
 			lua_pushnil(L);
 		}
@@ -5779,7 +5779,7 @@ int32_t LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 	Thing* thing = getThing(L, 2);
 	if (thing) {
 		uint32_t flags = getNumber<uint32_t>(L, 3, 0);
-		lua_pushnumber(L, tile->__queryAdd(0, thing, 1, flags));
+		lua_pushnumber(L, tile->queryAdd(0, thing, 1, flags));
 	} else {
 		lua_pushnil(L);
 	}
@@ -7191,7 +7191,7 @@ int32_t LuaScriptInterface::luaContainerGetItemCountById(lua_State* L)
 	}
 
 	int32_t subType = getNumber<int32_t>(L, 3, -1);
-	lua_pushnumber(L, container->__getItemTypeCount(itemId, subType));
+	lua_pushnumber(L, container->getItemTypeCount(itemId, subType));
 	return 1;
 }
 
@@ -8600,7 +8600,7 @@ int32_t LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 	}
 
 	int32_t subType = getNumber<int32_t>(L, 3, -1);
-	lua_pushnumber(L, player->__getItemTypeCount(itemId, subType));
+	lua_pushnumber(L, player->getItemTypeCount(itemId, subType));
 	return 1;
 }
 
@@ -9338,7 +9338,7 @@ int32_t LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 	}
 
 	uint32_t slot = getNumber<uint32_t>(L, 2);
-	Thing* thing = player->__getThing(slot);
+	Thing* thing = player->getThing(slot);
 	if (!thing) {
 		lua_pushnil(L);
 		return 1;

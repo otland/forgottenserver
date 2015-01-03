@@ -353,7 +353,7 @@ HouseTransferItem* House::getTransferItem()
 
 	transfer_container.setParent(nullptr);
 	transferItem = HouseTransferItem::createHouseTransferItem(this);
-	transfer_container.__addThing(transferItem);
+	transfer_container.addThing(transferItem);
 	return transferItem;
 }
 
@@ -364,7 +364,7 @@ void House::resetTransferItem()
 		transferItem = nullptr;
 		transfer_container.setParent(nullptr);
 
-		transfer_container.__removeThing(tmpItem, tmpItem->getItemCount());
+		transfer_container.removeThing(tmpItem, tmpItem->getItemCount());
 		g_game.ReleaseItem(tmpItem);
 	}
 }

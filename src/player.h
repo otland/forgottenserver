@@ -1189,31 +1189,31 @@ class Player final : public Creature, public Cylinder
 		Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature) final;
 
 		//cylinder implementations
-		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-			uint32_t flags, Creature* actor = nullptr) const final;
-		ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-			uint32_t flags) const final;
-		ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const final;
-		Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-			uint32_t& flags) final;
+		ReturnValue queryAdd(int32_t index, const Thing *thing, uint32_t count,
+				uint32_t flags, Creature *actor = nullptr) const final;
+		ReturnValue queryMaxCount(int32_t index, const Thing *thing, uint32_t count, uint32_t &maxQueryCount,
+				uint32_t flags) const final;
+		ReturnValue queryRemove(const Thing *thing, uint32_t count, uint32_t flags) const final;
+		Cylinder*queryDestination(int32_t &index, const Thing *thing, Item **destItem,
+				uint32_t &flags) final;
 
-		void __addThing(Thing*) final {}
-		void __addThing(int32_t index, Thing* thing) final;
+		void addThing(Thing *) final {}
+		void addThing(int32_t index, Thing *thing) final;
 
-		void __updateThing(Thing* thing, uint16_t itemId, uint32_t count) final;
-		void __replaceThing(uint32_t index, Thing* thing) final;
+		void updateThing(Thing *thing, uint16_t itemId, uint32_t count) final;
+		void replaceThing(uint32_t index, Thing *thing) final;
 
-		void __removeThing(Thing* thing, uint32_t count) final;
+		void removeThing(Thing *thing, uint32_t count) final;
 
-		int32_t __getIndexOfThing(const Thing* thing) const final;
-		int32_t __getFirstIndex() const final;
-		int32_t __getLastIndex() const final;
-		uint32_t __getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
-		std::map<uint32_t, uint32_t>& __getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const final;
-		Thing* __getThing(size_t index) const final;
+		int32_t getThingIndex(const Thing *thing) const final;
+		int32_t getFirstIndex() const final;
+		int32_t getLastIndex() const final;
+		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
+		std::map<uint32_t, uint32_t>&getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const final;
+		Thing*getThing(size_t index) const final;
 
-		void __internalAddThing(Thing* thing) final;
-		void __internalAddThing(uint32_t index, Thing* thing) final;
+		void internalAddThing(Thing *thing) final;
+		void internalAddThing(uint32_t index, Thing *thing) final;
 
 		std::unordered_set<uint32_t> attackedSet;
 		std::unordered_set<uint32_t> VIPList;

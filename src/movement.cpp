@@ -321,8 +321,8 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, bool i
 		ret &= moveEvent->fireStepEvent(creature, nullptr, pos);
 	}
 
-	for (int32_t i = tile->__getFirstIndex(), j = tile->__getLastIndex(); i < j; ++i) {
-		Thing* thing = tile->__getThing(i);
+	for (int32_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
+		Thing* thing = tile->getThing(i);
 		if (thing) {
 			Item* tileItem = thing->getItem();
 			if (tileItem) {
@@ -379,8 +379,8 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 		ret &= moveEvent->fireAddRemItem(item, nullptr, tile->getPosition());
 	}
 
-	for (int32_t i = tile->__getFirstIndex(), j = tile->__getLastIndex(); i < j; ++i) {
-		Thing* thing = tile->__getThing(i);
+	for (int32_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
+		Thing* thing = tile->getThing(i);
 		if (thing) {
 			Item* tileItem = thing->getItem();
 			if (tileItem && tileItem != item) {

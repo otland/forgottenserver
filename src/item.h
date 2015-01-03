@@ -754,7 +754,7 @@ class Item : virtual public Thing
 		virtual void onRemoved();
 		virtual void onTradeEvent(TradeEvents_t, Player*) {}
 
-		virtual void __startDecaying();
+		virtual void startDecaying();
 
 		bool isLoadedFromMap() const {
 			return loadedFromMap;

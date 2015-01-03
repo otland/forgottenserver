@@ -49,32 +49,32 @@ void Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 	propWriteStream.write<uint8_t>(destPos.z);
 }
 
-ReturnValue Teleport::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
+ReturnValue Teleport::queryAdd(int32_t, const Thing *, uint32_t, uint32_t, Creature *) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-ReturnValue Teleport::__queryMaxCount(int32_t, const Thing*, uint32_t, uint32_t&, uint32_t) const
+ReturnValue Teleport::queryMaxCount(int32_t, const Thing *, uint32_t, uint32_t &, uint32_t) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-ReturnValue Teleport::__queryRemove(const Thing*, uint32_t, uint32_t) const
+ReturnValue Teleport::queryRemove(const Thing *, uint32_t, uint32_t) const
 {
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Teleport::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)
+Cylinder* Teleport::queryDestination(int32_t &, const Thing *, Item **, uint32_t &)
 {
 	return this;
 }
 
-void Teleport::__addThing(Thing* thing)
+void Teleport::addThing(Thing *thing)
 {
-	return __addThing(0, thing);
+	return addThing(0, thing);
 }
 
-void Teleport::__addThing(int32_t, Thing* thing)
+void Teleport::addThing(int32_t, Thing *thing)
 {
 	Tile* destTile = g_game.getTile(destPos);
 	if (!destTile) {
@@ -102,17 +102,17 @@ void Teleport::__addThing(int32_t, Thing* thing)
 	}
 }
 
-void Teleport::__updateThing(Thing*, uint16_t, uint32_t)
+void Teleport::updateThing(Thing *, uint16_t, uint32_t)
 {
 	//
 }
 
-void Teleport::__replaceThing(uint32_t, Thing*)
+void Teleport::replaceThing(uint32_t, Thing *)
 {
 	//
 }
 
-void Teleport::__removeThing(Thing*, uint32_t)
+void Teleport::removeThing(Thing *, uint32_t)
 {
 	//
 }

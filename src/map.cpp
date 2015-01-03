@@ -155,7 +155,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	Tile* tile = getTile(centerPos.x, centerPos.y, centerPos.z);
 	if (tile) {
 		placeInPZ = tile->hasFlag(TILESTATE_PROTECTIONZONE);
-		ReturnValue ret = tile->__queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM);
+		ReturnValue ret = tile->queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM);
 		foundTile = forceLogin || ret == RETURNVALUE_NOERROR || ret == RETURNVALUE_PLAYERISNOTINVITED;
 	} else {
 		placeInPZ = false;
@@ -194,7 +194,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 				continue;
 			}
 
-			if (tile->__queryAdd(0, creature, 1, 0) == RETURNVALUE_NOERROR) {
+			if (tile->queryAdd(0, creature, 1, 0) == RETURNVALUE_NOERROR) {
 				if (!extendedPos || isSightClear(centerPos, tryPos, false)) {
 					foundTile = true;
 					break;
@@ -210,8 +210,8 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	int32_t index = 0;
 	Item* toItem = nullptr;
 	uint32_t flags = 0;
-	Cylinder* toCylinder = tile->__queryDestination(index, creature, &toItem, flags);
-	toCylinder->__internalAddThing(creature);
+	Cylinder* toCylinder = tile->queryDestination(index, creature, &toItem, flags);
+	toCylinder->internalAddThing(creature);
 	Tile* toTile = toCylinder->getTile();
 	toTile->qt_node->addCreature(creature);
 	return true;
@@ -225,7 +225,7 @@ bool Map::removeCreature(Creature* creature)
 	}
 
 	tile->qt_node->removeCreature(creature);
-	tile->__removeThing(creature, 0);
+	tile->removeThing(creature, 0);
 	return true;
 }
 
@@ -542,7 +542,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	//used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
-		if (!tile || tile->__queryAdd(0, &creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
+		if (!tile || tile->queryAdd(0, &creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
 			return nullptr;
 		}
 	}

@@ -1566,7 +1566,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 					subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
 				}
 
-				uint32_t count = player->__getItemTypeCount(shopInfo.itemId, subtype);
+				uint32_t count = player->getItemTypeCount(shopInfo.itemId, subtype);
 				if (count > 0) {
 					saleMap[shopInfo.itemId] = count;
 				}
@@ -1577,7 +1577,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 		// We need a temporary map since the finished map should only contain items
 		// available in the shop
 		std::map<uint32_t, uint32_t> tempSaleMap;
-		player->__getAllItemTypeCount(tempSaleMap);
+		player->getAllItemTypeCount(tempSaleMap);
 
 		// We must still check manually for the special items that require subtype matches
 		// (That is, fluids such as potions etc., actually these items are very few since
@@ -1595,7 +1595,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 					uint32_t count;
 
 					if (!itemType.isFluidContainer() && !itemType.isSplash()) {
-						count = player->__getItemTypeCount(shopInfo.itemId, subtype);    // This shop item requires extra checks
+						count = player->getItemTypeCount(shopInfo.itemId, subtype);    // This shop item requires extra checks
 					} else {
 						count = subtype;
 					}

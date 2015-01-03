@@ -30,14 +30,14 @@ class HouseTile final : public DynamicTile
 		HouseTile(int32_t x, int32_t y, int32_t z, House* _house);
 
 		//cylinder implementations
-		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = nullptr) const final;
+		ReturnValue queryAdd(int32_t index, const Thing *thing, uint32_t count,
+				uint32_t flags, Creature *actor = nullptr) const final;
 
-		Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-		                                     uint32_t& flags) final;
+		Cylinder*queryDestination(int32_t &index, const Thing *thing, Item **destItem,
+				uint32_t &flags) final;
 
-		void __addThing(int32_t index, Thing* thing) final;
-		void __internalAddThing(uint32_t index, Thing* thing) final;
+		void addThing(int32_t index, Thing *thing) final;
+		void internalAddThing(uint32_t index, Thing *thing) final;
 
 		House* getHouse() {
 			return house;

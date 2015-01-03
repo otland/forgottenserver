@@ -68,8 +68,8 @@ Tile* IOMap::createTile(Item*& ground, Item* item, int px, int py, int pz)
 		tile = new DynamicTile(px, py, pz);
 	}
 
-	tile->__internalAddThing(ground);
-	ground->__startDecaying();
+	tile->internalAddThing(ground);
+	ground->startDecaying();
 	ground = nullptr;
 	return tile;
 }
@@ -313,16 +313,16 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 								}
 
 								if (tile) {
-									tile->__internalAddThing(item);
-									item->__startDecaying();
+									tile->internalAddThing(item);
+									item->startDecaying();
 									item->setLoadedFromMap(true);
 								} else if (item->isGroundTile()) {
 									delete ground_item;
 									ground_item = item;
 								} else {
 									tile = createTile(ground_item, item, px, py, pz);
-									tile->__internalAddThing(item);
-									item->__startDecaying();
+									tile->internalAddThing(item);
+									item->startDecaying();
 									item->setLoadedFromMap(true);
 								}
 							}
@@ -378,16 +378,16 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 						}
 
 						if (tile) {
-							tile->__internalAddThing(item);
-							item->__startDecaying();
+							tile->internalAddThing(item);
+							item->startDecaying();
 							item->setLoadedFromMap(true);
 						} else if (item->isGroundTile()) {
 							delete ground_item;
 							ground_item = item;
 						} else {
 							tile = createTile(ground_item, item, px, py, pz);
-							tile->__internalAddThing(item);
-							item->__startDecaying();
+							tile->internalAddThing(item);
+							item->startDecaying();
 							item->setLoadedFromMap(true);
 						}
 					}

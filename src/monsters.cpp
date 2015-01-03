@@ -135,7 +135,7 @@ uint32_t Monsters::getLootRandom()
 void MonsterType::createLoot(Container* corpse)
 {
 	if (g_config.getNumber(ConfigManager::RATE_LOOT) == 0) {
-		corpse->__startDecaying();
+		corpse->startDecaying();
 		return;
 	}
 
@@ -153,10 +153,10 @@ void MonsterType::createLoot(Container* corpse)
 					if (!createLootContainer(container, *it)) {
 						delete container;
 					} else if (g_game.internalAddItem(corpse, item) != RETURNVALUE_NOERROR) {
-						corpse->__internalAddThing(item);
+						corpse->internalAddThing(item);
 					}
 				} else if (g_game.internalAddItem(corpse, item) != RETURNVALUE_NOERROR) {
-					corpse->__internalAddThing(item);
+					corpse->internalAddThing(item);
 				}
 			}
 		}
@@ -182,7 +182,7 @@ void MonsterType::createLoot(Container* corpse)
 		}
 	}
 
-	corpse->__startDecaying();
+	corpse->startDecaying();
 }
 
 std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
@@ -239,10 +239,10 @@ bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootbl
 				if (!createLootContainer(container, *it)) {
 					delete container;
 				} else {
-					parent->__internalAddThing(container);
+					parent->internalAddThing(container);
 				}
 			} else {
-				parent->__internalAddThing(tmpItem);
+				parent->internalAddThing(tmpItem);
 			}
 		}
 	}

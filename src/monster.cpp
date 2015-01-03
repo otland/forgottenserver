@@ -1774,7 +1774,7 @@ bool Monster::canWalkTo(Position pos, Direction dir) const
 		}
 
 		Tile* tile = g_game.getTile(pos);
-		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->__queryAdd(0, this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
+		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->queryAdd(0, this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
 			return true;
 		}
 	}

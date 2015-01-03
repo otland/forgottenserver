@@ -292,7 +292,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 	Action* action = getAction(item);
 	if (action) {
-		int32_t stack = item->getParent()->__getIndexOfThing(item);
+		int32_t stack = item->getParent()->getThingIndex(item);
 		PositionEx posEx(pos, stack);
 
 		if (action->isScripted()) {
@@ -376,7 +376,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	player->stopWalk();
 
 	if (isHotkey) {
-		showUseHotkeyMessage(player, item, player->__getItemTypeCount(item->getID(), -1));
+		showUseHotkeyMessage(player, item, player->getItemTypeCount(item->getID(), -1));
 	}
 
 	ReturnValue ret = internalUseItem(player, pos, index, item, isHotkey);
@@ -412,10 +412,10 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	}
 
 	if (isHotkey) {
-		showUseHotkeyMessage(player, item, player->__getItemTypeCount(item->getID(), -1));
+		showUseHotkeyMessage(player, item, player->getItemTypeCount(item->getID(), -1));
 	}
 
-	int32_t fromStackPos = item->getParent()->__getIndexOfThing(item);
+	int32_t fromStackPos = item->getParent()->getThingIndex(item);
 	PositionEx fromPosEx(fromPos, fromStackPos);
 	PositionEx toPosEx(toPos, toStackPos);
 

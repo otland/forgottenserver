@@ -416,7 +416,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 	}
 
 	Tile* tile = g_game.getTile(toPos);
-	if (!tile || tile->__queryAdd(0, this, 1, 0) != RETURNVALUE_NOERROR) {
+	if (!tile || tile->queryAdd(0, this, 1, 0) != RETURNVALUE_NOERROR) {
 		return false;
 	}
 
@@ -738,7 +738,7 @@ int32_t NpcScriptInterface::luaGetNpcPos(lua_State* L)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
 		pos = npc->getPosition();
-		stackpos = npc->getParent()->__getIndexOfThing(npc);
+		stackpos = npc->getParent()->getThingIndex(npc);
 	}
 
 	pushPosition(L, pos, stackpos);
