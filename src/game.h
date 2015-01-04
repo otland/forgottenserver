@@ -477,10 +477,6 @@ class Game
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 		static void addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect);
 
-		Map* getMap() {
-			return &map;
-		}
-
 		void addCommandTag(char tag);
 		void resetCommandTag();
 
@@ -527,6 +523,7 @@ class Game
 		void setBedSleeper(BedItem* bed, uint32_t guid);
 		void removeBedSleeper(uint32_t guid);
 
+		Map map;
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
@@ -537,8 +534,6 @@ class Game
 
 		void checkDecay();
 		void internalDecayItem(Item* item);
-
-		Map map;
 
 		std::unordered_map<uint32_t, Player*> players;
 		std::unordered_map<std::string, Player*> mappedPlayerNames;

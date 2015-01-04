@@ -160,7 +160,7 @@ bool BedItem::sleep(Player* player)
 	g_game.setBedSleeper(this, player->getGUID());
 
 	// make the player walk onto the bed
-	g_game.getMap()->moveCreature(*player, *getTile());
+	g_game.map.moveCreature(*player, *getTile());
 
 	// display 'Zzzz'/sleep effect
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_SLEEP);

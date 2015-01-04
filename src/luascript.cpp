@@ -4320,7 +4320,7 @@ int32_t LuaScriptInterface::luaSaveServer(lua_State* L)
 
 int32_t LuaScriptInterface::luaCleanMap(lua_State* L)
 {
-	lua_pushnumber(L, g_game.getMap()->clean());
+	lua_pushnumber(L, g_game.map.clean());
 	return 1;
 }
 
@@ -4363,7 +4363,8 @@ int32_t LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill(lua_State* L)
 int32_t LuaScriptInterface::luaGetWaypointPositionByName(lua_State* L)
 {
 	//getWaypointPositionByName(name)
-	auto& waypoints = g_game.getMap()->waypoints;
+	auto& waypoints = g_game.map.waypoints;
+
 	auto it = waypoints.find(getString(L, -1));
 	if (it != waypoints.end()) {
 		pushPosition(L, it->second);
