@@ -217,6 +217,84 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	return true;
 }
 
+void Map::moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport/* = false*/)
+{
+	Tile* oldTile = creature->getTile();
+	Tile* newTile = toCylinder->getTile();
+
+	int32_t oldStackPos = oldTile->getThingIndex(creature);
+
+	Position oldPos = oldTile->getPosition();
+	Position newPos = newTile->getPosition();
+
+	bool teleport = forceTeleport || !newTile->ground || !Position::areInRange<1, 1, 0>(oldPos, newPos);
+
+	SpectatorVec list;
+	g_game.getSpectators(list, oldPos, true);
+	g_game.getSpectators(list, newPos, true);
+
+	std::vector<int32_t> oldStackPosVector;
+	for (Creature* spectator : list) {
+		if (Player* tmpPlayer = spectator->getPlayer()) {
+			if (tmpPlayer->canSeeCreature(creature)) {
+				oldStackPosVector.push_back(oldTile->getClientIndexOfCreature(tmpPlayer, creature));
+			} else {
+				oldStackPosVector.push_back(-1);
+			}
+		}
+	}
+
+	//remove the creature
+	oldTile->removeThing(creature, 0);
+
+	auto leaf = const_cast<QTreeLeafNode*>(QTreeNode::getLeafStatic(&root, oldPos.x, oldPos.y));
+	auto new_leaf = const_cast<QTreeLeafNode*>(QTreeLeafNode::getLeafStatic(&root, newPos.x, newPos.y));
+
+	// Switch the node ownership
+	if (leaf != new_leaf) {
+		leaf->removeCreature(creature);
+		new_leaf->addCreature(creature);
+	}
+
+	//add the creature
+	newTile->addThing(creature);
+	int32_t newStackPos = newTile->getThingIndex(creature);
+
+	if (!teleport) {
+		if (oldPos.y > newPos.y) {
+			creature->setDirection(NORTH);
+		} else if (oldPos.y < newPos.y) {
+			creature->setDirection(SOUTH);
+		}
+
+		if (oldPos.x < newPos.x) {
+			creature->setDirection(EAST);
+		} else if (oldPos.x > newPos.x) {
+			creature->setDirection(WEST);
+		}
+	}
+
+	//send to client
+	size_t i = 0;
+	for (Creature* spectator : list) {
+		if (Player* tmpPlayer = spectator->getPlayer()) {
+			//Use the correct stackpos
+			int32_t stackpos = oldStackPosVector[i++];
+			if (stackpos != -1) {
+				tmpPlayer->sendCreatureMove(creature, newPos, newTile->getStackposOfCreature(tmpPlayer, creature), oldPos, stackpos, teleport);
+			}
+		}
+	}
+
+	//event method
+	for (Creature* spectator : list) {
+		spectator->onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
+	}
+
+	oldTile->postRemoveNotification(creature, toCylinder, oldStackPos, true);
+	newTile->postAddNotification(creature, oldTile, newStackPos);
+}
+
 bool Map::removeCreature(Creature* creature)
 {
 	Tile* tile = creature->getTile();

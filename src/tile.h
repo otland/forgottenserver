@@ -292,7 +292,6 @@ class Tile : public Cylinder
 
 		std::string getDescription(int32_t lookDistance) const final;
 
-		void moveCreature(Creature* creature, Cylinder* toCylinder, bool forceTeleport = false);
 		int32_t getClientIndexOfCreature(const Player* player, const Creature* creature) const;
 		int32_t getStackposOfCreature(const Player* player, const Creature* creature) const;
 		int32_t getStackposOfThing(const Player* player, const Thing* thing) const;
@@ -318,7 +317,7 @@ class Tile : public Cylinder
 		int32_t getFirstIndex() const final;
 		int32_t getLastIndex() const final;
 		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
-		Thing*getThing(size_t index) const final;
+		Thing* getThing(size_t index) const final;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) final;

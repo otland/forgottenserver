@@ -202,11 +202,13 @@ class Map
 		  */
 		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
 
+		void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
+
 		/**
 		  * Remove a creature from the map.
 		  * \param c Creature pointer to the creature to remove
 		  */
-		static bool removeCreature(Creature* c);
+		bool removeCreature(Creature* c);
 
 		/**
 		  * Checks if you can throw an object to that position

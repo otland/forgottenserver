@@ -777,7 +777,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 
 	int32_t index = tile->getThingIndex(creature);
 
-	if (!Map::removeCreature(creature)) {
+	if (!map.removeCreature(creature)) {
 		return false;
 	}
 
@@ -1026,7 +1026,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 		return ret;
 	}
 
-	fromCylinder->getTile()->moveCreature(creature, toCylinder);
+	map.moveCreature(creature, toCylinder);
 	if (creature->getParent() != toCylinder) {
 		return RETURNVALUE_NOERROR;
 	}
@@ -1038,7 +1038,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 	uint32_t n = 0;
 
 	while ((subCylinder = toCylinder->queryDestination(index, creature, &toItem, flags)) != toCylinder) {
-		toCylinder->getTile()->moveCreature(creature, subCylinder);
+		map.moveCreature(creature, subCylinder);
 
 		if (creature->getParent() != subCylinder) {
 			//could happen if a script move the creature
@@ -1872,7 +1872,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 				return ret;
 			}
 
-			creature->getTile()->moveCreature(creature, toTile, !pushMove);
+			map.moveCreature(creature, toTile, !pushMove);
 			return RETURNVALUE_NOERROR;
 		} else if (Item* item = thing->getItem()) {
 			return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
