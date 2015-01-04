@@ -49,22 +49,22 @@ void Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 	propWriteStream.write<uint8_t>(destPos.z);
 }
 
-ReturnValue Teleport::queryAdd(int32_t, const Thing *, uint32_t, uint32_t, Creature *) const
+ReturnValue Teleport::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature *) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-ReturnValue Teleport::queryMaxCount(int32_t, const Thing *, uint32_t, uint32_t &, uint32_t) const
+ReturnValue Teleport::queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t &, uint32_t) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-ReturnValue Teleport::queryRemove(const Thing *, uint32_t, uint32_t) const
+ReturnValue Teleport::queryRemove(const Thing&, uint32_t, uint32_t) const
 {
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Teleport::queryDestination(int32_t &, const Thing *, Item **, uint32_t &)
+Cylinder* Teleport::queryDestination(int32_t&, const Thing&, Item **, uint32_t&)
 {
 	return this;
 }
@@ -86,7 +86,7 @@ void Teleport::addThing(int32_t, Thing *thing)
 	if (Creature* creature = thing->getCreature()) {
 		Position origPos = creature->getPosition();
 		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? WEST : EAST);
-		g_game.getMap()->moveCreature(creature, destTile);
+		g_game.getMap()->moveCreature(*creature, *destTile);
 		if (it.magicEffect != CONST_ME_NONE) {
 			g_game.addMagicEffect(origPos, it.magicEffect);
 			g_game.addMagicEffect(destTile->getPosition(), it.magicEffect);

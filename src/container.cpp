@@ -272,7 +272,7 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 	}
 }
 
-ReturnValue Container::queryAdd(int32_t index, const Thing *thing, uint32_t count,
+ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t flags, Creature *actor/* = nullptr*/) const
 {
 	bool childIsOwner = hasBitSet(FLAG_CHILDISOWNER, flags);
@@ -286,7 +286,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing *thing, uint32_t coun
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing->getItem();
+	const Item* item = thing.getItem();
 	if (item == nullptr) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -302,7 +302,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing *thing, uint32_t coun
 	const Cylinder* cylinder = getParent();
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		while (cylinder) {
-			if (cylinder == thing) {
+			if (cylinder == &thing) {
 				return RETURNVALUE_THISISIMPOSSIBLE;
 			}
 
@@ -318,7 +318,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing *thing, uint32_t coun
 		}
 	} else {
 		while (cylinder) {
-			if (cylinder == thing) {
+			if (cylinder == &thing) {
 				return RETURNVALUE_THISISIMPOSSIBLE;
 			}
 
@@ -328,16 +328,16 @@ ReturnValue Container::queryAdd(int32_t index, const Thing *thing, uint32_t coun
 
 	const Cylinder* topParent = getTopParent();
 	if (topParent != this) {
-		return topParent->queryAdd(INDEX_WHEREEVER, item, count, flags | FLAG_CHILDISOWNER, actor);
+		return topParent->queryAdd(INDEX_WHEREEVER, *item, count, flags | FLAG_CHILDISOWNER, actor);
 	} else {
 		return RETURNVALUE_NOERROR;
 	}
 }
 
-ReturnValue Container::queryMaxCount(int32_t index, const Thing *thing, uint32_t count,
-		uint32_t &maxQueryCount, uint32_t flags) const
+ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
+		uint32_t& maxQueryCount, uint32_t flags) const
 {
-	const Item* item = thing->getItem();
+	const Item* item = thing.getItem();
 	if (item == nullptr) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -359,7 +359,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing *thing, uint32_t
 			for (Item* containerItem : itemlist) {
 				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
 					uint32_t remainder = (100 - containerItem->getItemCount());
-					if (queryAdd(slotIndex++, item, remainder, flags) == RETURNVALUE_NOERROR) {
+					if (queryAdd(slotIndex++, *item, remainder, flags) == RETURNVALUE_NOERROR) {
 						n += remainder;
 					}
 				}
@@ -368,7 +368,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing *thing, uint32_t
 			const Item* destItem = getItemByIndex(index);
 			if (item->equals(destItem) && destItem->getItemCount() < 100) {
 				uint32_t remainder = 100 - destItem->getItemCount();
-				if (queryAdd(index, item, remainder, flags) == RETURNVALUE_NOERROR) {
+				if (queryAdd(index, *item, remainder, flags) == RETURNVALUE_NOERROR) {
 					n = remainder;
 				}
 			}
@@ -387,14 +387,14 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing *thing, uint32_t
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Container::queryRemove(const Thing *thing, uint32_t count, uint32_t flags) const
+ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
 {
-	int32_t index = getThingIndex(thing);
+	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing->getItem();
+	const Item* item = thing.getItem();
 	if (item == nullptr) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -409,7 +409,7 @@ ReturnValue Container::queryRemove(const Thing *thing, uint32_t count, uint32_t 
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Container::queryDestination(int32_t &index, const Thing *thing, Item **destItem,
+Cylinder* Container::queryDestination(int32_t &index, const Thing &thing, Item **destItem,
 		uint32_t &flags)
 {
 	if (!unlocked) {
@@ -443,7 +443,7 @@ Cylinder* Container::queryDestination(int32_t &index, const Thing *thing, Item *
 		*destItem = nullptr;
 	}
 
-	const Item* item = thing->getItem();
+	const Item* item = thing.getItem();
 	if (!item) {
 		return this;
 	}

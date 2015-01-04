@@ -481,9 +481,9 @@ void Tile::onUpdateTile(const SpectatorVec& list)
 	}
 }
 
-ReturnValue Tile::queryAdd(int32_t, const Thing *thing, uint32_t, uint32_t flags, Creature *) const
+ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature *) const
 {
-	if (const Creature* creature = thing->getCreature()) {
+	if (const Creature* creature = thing.getCreature()) {
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
 			return RETURNVALUE_NOERROR;
 		}
@@ -627,7 +627,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing *thing, uint32_t, uint32_t flags
 				}
 			}
 		}
-	} else if (const Item* item = thing->getItem()) {
+	} else if (const Item* item = thing.getItem()) {
 		const TileItemVector* items = getItemList();
 		if (items && items->size() >= 0xFFFF) {
 			return RETURNVALUE_NOTPOSSIBLE;
@@ -700,20 +700,20 @@ ReturnValue Tile::queryAdd(int32_t, const Thing *thing, uint32_t, uint32_t flags
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Tile::queryMaxCount(int32_t, const Thing *, uint32_t count, uint32_t &maxQueryCount, uint32_t) const
+ReturnValue Tile::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t &maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Tile::queryRemove(const Thing *thing, uint32_t count, uint32_t flags) const
+ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
 {
-	int32_t index = getThingIndex(thing);
+	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing->getItem();
+	const Item* item = thing.getItem();
 	if (item == nullptr) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -729,7 +729,7 @@ ReturnValue Tile::queryRemove(const Thing *thing, uint32_t count, uint32_t flags
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Tile::queryDestination(int32_t &, const Thing *, Item **destItem, uint32_t &flags)
+Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& flags)
 {
 	Tile* destTile = nullptr;
 	*destItem = nullptr;
@@ -823,6 +823,7 @@ Cylinder* Tile::queryDestination(int32_t &, const Thing *, Item **destItem, uint
 			*destItem = destThing->getItem();
 		}
 	}
+
 	return destTile;
 }
 

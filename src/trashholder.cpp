@@ -24,23 +24,23 @@
 
 extern Game g_game;
 
-ReturnValue TrashHolder::queryAdd(int32_t, const Thing *, uint32_t, uint32_t, Creature *) const
+ReturnValue TrashHolder::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature *) const
 {
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing *, uint32_t count, uint32_t &maxQueryCount, uint32_t) const
+ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t &maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue TrashHolder::queryRemove(const Thing *, uint32_t, uint32_t) const
+ReturnValue TrashHolder::queryRemove(const Thing&, uint32_t, uint32_t) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Cylinder* TrashHolder::queryDestination(int32_t &, const Thing *, Item **, uint32_t &)
+Cylinder* TrashHolder::queryDestination(int32_t&, const Thing&, Item **, uint32_t&)
 {
 	return this;
 }

@@ -28,7 +28,7 @@ class Inbox final : public Container
 		Inbox(uint16_t _type);
 
 		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing *thing, uint32_t count,
+		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature *actor = nullptr) const final;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;

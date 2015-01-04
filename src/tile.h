@@ -297,13 +297,12 @@ class Tile : public Cylinder
 		int32_t getStackposOfThing(const Player* player, const Thing* thing) const;
 
 		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing *thing, uint32_t count,
+		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature *actor = nullptr) const override;
-		ReturnValue queryMaxCount(int32_t index, const Thing *thing, uint32_t count,
-				uint32_t &maxQueryCount, uint32_t flags) const final;
-		ReturnValue queryRemove(const Thing *thing, uint32_t count, uint32_t flags) const final;
-		Cylinder*queryDestination(int32_t &index, const Thing *thing, Item **destItem,
-				uint32_t &flags) override;
+		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
+				uint32_t& maxQueryCount, uint32_t flags) const final;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const final;
+		Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
 
 		void addThing(Thing *thing) final;
 		void addThing(int32_t index, Thing *thing) override;

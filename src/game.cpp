@@ -950,7 +950,7 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
-	ReturnValue ret = internalMoveCreature(movingCreature, movingCreatureTile, toTile);
+	ReturnValue ret = internalMoveCreature(*movingCreature, *movingCreatureTile, *toTile);
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 	}
@@ -958,8 +958,8 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
-	Cylinder* fromTile = creature->getTile();
-	Cylinder* toTile = nullptr;
+	Tile* fromTile = creature->getTile();
+	Tile* toTile = nullptr;
 
 	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
@@ -1012,35 +1012,35 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
 
 	if (toTile != nullptr) {
-		ret = internalMoveCreature(creature, fromTile, toTile, flags);
+		ret = internalMoveCreature(*creature, *fromTile, *toTile, flags);
 	}
 
 	return ret;
 }
 
-ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinder, Cylinder* toCylinder, uint32_t flags /*= 0*/)
+ReturnValue Game::internalMoveCreature(Creature& creature, Tile& fromTile, Tile& toTile, uint32_t flags /*= 0*/)
 {
 	//check if we can move the creature to the destination
-	ReturnValue ret = toCylinder->queryAdd(0, creature, 1, flags);
+	ReturnValue ret = toTile.queryAdd(0, creature, 1, flags);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
 
-	map.moveCreature(creature, toCylinder);
-	if (creature->getParent() != toCylinder) {
+	map.moveCreature(creature, toTile);
+	if (creature.getParent() != &toTile) {
 		return RETURNVALUE_NOERROR;
 	}
 
 	int32_t index = 0;
 	Item* toItem = nullptr;
-	Cylinder* subCylinder = nullptr;
-
+	Tile* subCylinder = nullptr;
+	Tile* toCylinder = &toTile;
 	uint32_t n = 0;
 
-	while ((subCylinder = toCylinder->queryDestination(index, creature, &toItem, flags)) != toCylinder) {
-		map.moveCreature(creature, subCylinder);
+	while ((subCylinder = toTile.queryDestination(index, creature, &toItem, flags)) != toCylinder) {
+		map.moveCreature(creature, *subCylinder);
 
-		if (creature->getParent() != subCylinder) {
+		if (creature.getParent() != subCylinder) {
 			//could happen if a script move the creature
 			break;
 		}
@@ -1242,7 +1242,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	Cylinder* subCylinder;
 	int floorN = 0;
 
-	while ((subCylinder = toCylinder->queryDestination(index, item, &toItem, flags)) != toCylinder) {
+	while ((subCylinder = toCylinder->queryDestination(index, *item, &toItem, flags)) != toCylinder) {
 		toCylinder = subCylinder;
 		flags = 0;
 
@@ -1258,20 +1258,20 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	//check if we can add this item
-	ReturnValue ret = toCylinder->queryAdd(index, item, count, flags, actor);
+	ReturnValue ret = toCylinder->queryAdd(index, *item, count, flags, actor);
 	if (ret == RETURNVALUE_NEEDEXCHANGE) {
 		//check if we can add it to source cylinder
-		ret = fromCylinder->queryAdd(fromCylinder->getThingIndex(item), toItem, toItem->getItemCount(), 0);
+		ret = fromCylinder->queryAdd(fromCylinder->getThingIndex(item), *toItem, toItem->getItemCount(), 0);
 		if (ret == RETURNVALUE_NOERROR) {
 			//check how much we can move
 			uint32_t maxExchangeQueryCount = 0;
-			ReturnValue retExchangeMaxCount = fromCylinder->queryMaxCount(INDEX_WHEREEVER, toItem, toItem->getItemCount(), maxExchangeQueryCount, 0);
+			ReturnValue retExchangeMaxCount = fromCylinder->queryMaxCount(INDEX_WHEREEVER, *toItem, toItem->getItemCount(), maxExchangeQueryCount, 0);
 
 			if (retExchangeMaxCount != RETURNVALUE_NOERROR && maxExchangeQueryCount == 0) {
 				return retExchangeMaxCount;
 			}
 
-			if (toCylinder->queryRemove(toItem, toItem->getItemCount(), flags) == RETURNVALUE_NOERROR) {
+			if (toCylinder->queryRemove(*toItem, toItem->getItemCount(), flags) == RETURNVALUE_NOERROR) {
 				int32_t oldToItemIndex = toCylinder->getThingIndex(toItem);
 				toCylinder->removeThing(toItem, toItem->getItemCount());
 				fromCylinder->addThing(toItem);
@@ -1285,7 +1285,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 					fromCylinder->postAddNotification(toItem, toCylinder, newToItemIndex);
 				}
 
-				ret = toCylinder->queryAdd(index, item, count, flags);
+				ret = toCylinder->queryAdd(index, *item, count, flags);
 				toItem = nullptr;
 			}
 		}
@@ -1297,7 +1297,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	//check how much we can move
 	uint32_t maxQueryCount = 0;
-	ReturnValue retMaxCount = toCylinder->queryMaxCount(index, item, count, maxQueryCount, flags);
+	ReturnValue retMaxCount = toCylinder->queryMaxCount(index, *item, count, maxQueryCount, flags);
 	if (retMaxCount != RETURNVALUE_NOERROR && maxQueryCount == 0) {
 		return retMaxCount;
 	}
@@ -1312,7 +1312,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	Item* moveItem = item;
 
 	//check if we can remove this item
-	ret = fromCylinder->queryRemove(item, m, flags);
+	ret = fromCylinder->queryRemove(*item, m, flags);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1420,10 +1420,10 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 
 	Cylinder* destCylinder = toCylinder;
 	Item* toItem = nullptr;
-	toCylinder = toCylinder->queryDestination(index, item, &toItem, flags);
+	toCylinder = toCylinder->queryDestination(index, *item, &toItem, flags);
 
 	//check if we can add this item
-	ReturnValue ret = toCylinder->queryAdd(index, item, item->getItemCount(), flags);
+	ReturnValue ret = toCylinder->queryAdd(index, *item, item->getItemCount(), flags);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1433,7 +1433,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 	since the queryDestination can return a cylinder that might only hold a part of the full amount.
 	*/
 	uint32_t maxQueryCount = 0;
-	ret = destCylinder->queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), maxQueryCount, flags);
+	ret = destCylinder->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), maxQueryCount, flags);
 
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
@@ -1508,7 +1508,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 	}
 
 	//check if we can remove this item
-	ReturnValue ret = cylinder->queryRemove(item, count, flags | FLAG_IGNORENOTMOVEABLE);
+	ReturnValue ret = cylinder->queryRemove(*item, count, flags | FLAG_IGNORENOTMOVEABLE);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1867,12 +1867,12 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	Tile* toTile = getTile(newPos.x, newPos.y, newPos.z);
 	if (toTile) {
 		if (Creature* creature = thing->getCreature()) {
-			ReturnValue ret = toTile->queryAdd(0, creature, 1, FLAG_NOLIMIT);
+			ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
 			if (ret != RETURNVALUE_NOERROR) {
 				return ret;
 			}
 
-			map.moveCreature(creature, toTile, !pushMove);
+			map.moveCreature(*creature, *toTile, !pushMove);
 			return RETURNVALUE_NOERROR;
 		} else if (Item* item = thing->getItem()) {
 			return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);

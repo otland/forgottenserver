@@ -1189,13 +1189,13 @@ class Player final : public Creature, public Cylinder
 		Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature) final;
 
 		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing *thing, uint32_t count,
+		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature *actor = nullptr) const final;
-		ReturnValue queryMaxCount(int32_t index, const Thing *thing, uint32_t count, uint32_t &maxQueryCount,
+		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 				uint32_t flags) const final;
-		ReturnValue queryRemove(const Thing *thing, uint32_t count, uint32_t flags) const final;
-		Cylinder*queryDestination(int32_t &index, const Thing *thing, Item **destItem,
-				uint32_t &flags) final;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const final;
+		Cylinder* queryDestination(int32_t& index, const Thing &thing, Item **destItem,
+				uint32_t& flags) final;
 
 		void addThing(Thing *) final {}
 		void addThing(int32_t index, Thing *thing) final;

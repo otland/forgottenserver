@@ -5779,7 +5779,7 @@ int32_t LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 	Thing* thing = getThing(L, 2);
 	if (thing) {
 		uint32_t flags = getNumber<uint32_t>(L, 3, 0);
-		lua_pushnumber(L, tile->queryAdd(0, thing, 1, flags));
+		lua_pushnumber(L, tile->queryAdd(0, *thing, 1, flags));
 	} else {
 		lua_pushnil(L);
 	}
