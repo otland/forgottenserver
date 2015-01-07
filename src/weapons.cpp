@@ -163,6 +163,8 @@ Weapon::Weapon(LuaScriptInterface* _interface) :
 	enabled = true;
 	wieldUnproperly = false;
 	range = 1;
+	breakChance = 0;
+	action = WEAPONACTION_NONE;
 }
 
 bool Weapon::configureEvent(const pugi::xml_node& node)
