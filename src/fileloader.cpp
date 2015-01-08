@@ -383,7 +383,7 @@ int32_t FileLoader::loadCacheBlock(uint32_t pos)
 
 	if (loading_cache == -1) {
 		for (i = 0; i < CACHE_BLOCKS; i++) {
-			if (abs(static_cast<long>(m_cached_data[i].base) - base_pos) > static_cast<long>(2 * m_cache_size)) {
+			if (std::abs(static_cast<long>(m_cached_data[i].base) - base_pos) > static_cast<long>(2 * m_cache_size)) {
 				loading_cache = i;
 				break;
 			}
