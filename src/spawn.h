@@ -24,36 +24,6 @@
 #include "position.h"
 #include "monster.h"
 
-class Spawn;
-
-class Spawns
-{
-	private:
-		Spawns();
-
-	public:
-		static Spawns* getInstance() {
-			static Spawns instance;
-			return &instance;
-		}
-
-		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
-
-		bool loadFromXml(const std::string& _filename);
-		void startup();
-		void clear();
-
-		bool isStarted() const {
-			return started;
-		}
-
-	private:
-		std::list<Npc*> npcList;
-		std::forward_list<Spawn> spawnList;
-		std::string filename;
-		bool loaded, started;
-};
-
 struct spawnBlock_t {
 	Position pos;
 	MonsterType* mType;
@@ -104,6 +74,34 @@ class Spawn
 		static bool findPlayer(const Position& pos);
 		bool spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup = false);
 		void checkSpawn();
+};
+
+class Spawns
+{
+	private:
+		Spawns();
+
+	public:
+		static Spawns* getInstance() {
+			static Spawns instance;
+			return &instance;
+		}
+
+		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
+
+		bool loadFromXml(const std::string& _filename);
+		void startup();
+		void clear();
+
+		bool isStarted() const {
+			return started;
+		}
+
+	private:
+		std::list<Npc*> npcList;
+		std::forward_list<Spawn> spawnList;
+		std::string filename;
+		bool loaded, started;
 };
 
 #endif
