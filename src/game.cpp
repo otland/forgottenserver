@@ -915,12 +915,6 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
-	Tile* movingCreatureTile = movingCreature->getTile();
-	if (!movingCreatureTile) {
-		player->sendCancelMessage(RETURNVALUE_NOTMOVEABLE);
-		return;
-	}
-
 	if (player != movingCreature) {
 		if (toTile->hasProperty(CONST_PROP_BLOCKPATH)) {
 			player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
@@ -950,7 +944,7 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
-	ReturnValue ret = internalMoveCreature(*movingCreature, *movingCreatureTile, *toTile);
+	ReturnValue ret = internalMoveCreature(*movingCreature, *toTile);
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 	}
@@ -958,7 +952,6 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
-	Tile* fromTile = creature->getTile();
 	Tile* toTile = nullptr;
 
 	creature->setLastPosition(creature->getPosition());
@@ -1012,13 +1005,13 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
 
 	if (toTile != nullptr) {
-		ret = internalMoveCreature(*creature, *fromTile, *toTile, flags);
+		ret = internalMoveCreature(*creature, *toTile, flags);
 	}
 
 	return ret;
 }
 
-ReturnValue Game::internalMoveCreature(Creature& creature, Tile& fromTile, Tile& toTile, uint32_t flags /*= 0*/)
+ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags /*= 0*/)
 {
 	//check if we can move the creature to the destination
 	ReturnValue ret = toTile.queryAdd(0, creature, 1, flags);

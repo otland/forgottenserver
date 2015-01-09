@@ -803,7 +803,7 @@ bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirLis
 	return true;
 }
 
-//*********** AStarNodes *************
+// AStarNodes
 
 AStarNodes::AStarNodes(uint32_t x, uint32_t y)
 	: openNodes()
@@ -925,8 +925,7 @@ int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* t
 	return cost;
 }
 
-//*********** Floor **************
-
+// Floor
 Floor::~Floor()
 {
 	for (uint32_t i = 0; i < FLOOR_SIZE; ++i) {
@@ -936,7 +935,7 @@ Floor::~Floor()
 	}
 }
 
-//**************** QTreeNode **********************
+// QTreeNode
 QTreeNode::QTreeNode()
 {
 	m_isLeaf = false;
@@ -998,7 +997,7 @@ QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
 	return reinterpret_cast<QTreeLeafNode*>(this);
 }
 
-//************ LeafNode ************************
+// QTreeLeafNode
 bool QTreeLeafNode::newLeaf = false;
 QTreeLeafNode::QTreeLeafNode()
 {

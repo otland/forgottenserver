@@ -481,7 +481,7 @@ void Tile::onUpdateTile(const SpectatorVec& list)
 	}
 }
 
-ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature *) const
+ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
 	if (const Creature* creature = thing.getCreature()) {
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
@@ -700,7 +700,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Tile::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t &maxQueryCount, uint32_t) const
+ReturnValue Tile::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
 	return RETURNVALUE_NOERROR;
@@ -827,12 +827,12 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 	return destTile;
 }
 
-void Tile::addThing(Thing *thing)
+void Tile::addThing(Thing* thing)
 {
 	addThing(0, thing);
 }
 
-void Tile::addThing(int32_t, Thing *thing)
+void Tile::addThing(int32_t, Thing* thing)
 {
 	Creature* creature = thing->getCreature();
 	if (creature) {
@@ -943,7 +943,7 @@ void Tile::addThing(int32_t, Thing *thing)
 	}
 }
 
-void Tile::updateThing(Thing *thing, uint16_t itemId, uint32_t count)
+void Tile::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
 	int32_t index = getThingIndex(thing);
 	if (index == -1) {
@@ -964,7 +964,7 @@ void Tile::updateThing(Thing *thing, uint16_t itemId, uint32_t count)
 	onUpdateTileItem(item, oldType, item, newType);
 }
 
-void Tile::replaceThing(uint32_t index, Thing *thing)
+void Tile::replaceThing(uint32_t index, Thing* thing)
 {
 	int32_t pos = index;
 
@@ -1036,7 +1036,7 @@ void Tile::replaceThing(uint32_t index, Thing *thing)
 	}
 }
 
-void Tile::removeThing(Thing *thing, uint32_t count)
+void Tile::removeThing(Thing* thing, uint32_t count)
 {
 	Creature* creature = thing->getCreature();
 	if (creature) {
@@ -1126,7 +1126,7 @@ void Tile::removeThing(Thing *thing, uint32_t count)
 	}
 }
 
-int32_t Tile::getThingIndex(const Thing *thing) const
+int32_t Tile::getThingIndex(const Thing* thing) const
 {
 	int32_t n = -1;
 	if (ground) {
@@ -1434,12 +1434,12 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	}
 }
 
-void Tile::internalAddThing(Thing *thing)
+void Tile::internalAddThing(Thing* thing)
 {
 	internalAddThing(0, thing);
 }
 
-void Tile::internalAddThing(uint32_t, Thing *thing)
+void Tile::internalAddThing(uint32_t, Thing* thing)
 {
 	thing->setParent(this);
 

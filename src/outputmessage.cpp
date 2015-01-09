@@ -28,7 +28,7 @@ OutputMessage::OutputMessage()
 	freeMessage();
 }
 
-//*********** OutputMessagePool ****************//
+// OutputMessagePool
 
 OutputMessagePool::OutputMessagePool()
 {

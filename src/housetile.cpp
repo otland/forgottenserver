@@ -32,7 +32,7 @@ HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* _house) :
 	setFlag(TILESTATE_HOUSE);
 }
 
-void HouseTile::addThing(int32_t index, Thing *thing)
+void HouseTile::addThing(int32_t index, Thing* thing)
 {
 	Tile::addThing(index, thing);
 
@@ -45,7 +45,7 @@ void HouseTile::addThing(int32_t index, Thing *thing)
 	}
 }
 
-void HouseTile::internalAddThing(uint32_t index, Thing *thing)
+void HouseTile::internalAddThing(uint32_t index, Thing* thing)
 {
 	Tile::internalAddThing(index, thing);
 
@@ -75,7 +75,7 @@ void HouseTile::updateHouse(Item* item)
 	}
 }
 
-ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature *actor/* = nullptr*/) const
+ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	if (const Creature* creature = thing.getCreature()) {
 		if (const Player* player = creature->getPlayer()) {

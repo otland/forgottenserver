@@ -23,7 +23,7 @@
 
 VirtualCylinder* VirtualCylinder::virtualCylinder = new VirtualCylinder;
 
-int32_t Cylinder::getThingIndex(const Thing *) const
+int32_t Cylinder::getThingIndex(const Thing*) const
 {
 	return -1;
 }
@@ -53,12 +53,12 @@ Thing* Cylinder::getThing(size_t) const
 	return nullptr;
 }
 
-void Cylinder::internalAddThing(Thing *)
+void Cylinder::internalAddThing(Thing*)
 {
 	//
 }
 
-void Cylinder::internalAddThing(uint32_t, Thing *)
+void Cylinder::internalAddThing(uint32_t, Thing*)
 {
 	//
 }

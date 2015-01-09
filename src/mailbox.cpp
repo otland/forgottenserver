@@ -27,7 +27,7 @@
 
 extern Game g_game;
 
-ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature *) const
+ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature*) const
 {
 	const Item* item = thing.getItem();
 	if (item && Mailbox::canSend(item)) {
@@ -47,17 +47,17 @@ ReturnValue Mailbox::queryRemove(const Thing&, uint32_t, uint32_t) const
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Cylinder* Mailbox::queryDestination(int32_t&, const Thing&, Item **, uint32_t&)
+Cylinder* Mailbox::queryDestination(int32_t&, const Thing&, Item**, uint32_t&)
 {
 	return this;
 }
 
-void Mailbox::addThing(Thing *thing)
+void Mailbox::addThing(Thing* thing)
 {
 	return addThing(0, thing);
 }
 
-void Mailbox::addThing(int32_t, Thing *thing)
+void Mailbox::addThing(int32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (item && Mailbox::canSend(item)) {
@@ -65,17 +65,17 @@ void Mailbox::addThing(int32_t, Thing *thing)
 	}
 }
 
-void Mailbox::updateThing(Thing *, uint16_t, uint32_t)
+void Mailbox::updateThing(Thing*, uint16_t, uint32_t)
 {
 	//
 }
 
-void Mailbox::replaceThing(uint32_t, Thing *)
+void Mailbox::replaceThing(uint32_t, Thing*)
 {
 	//
 }
 
-void Mailbox::removeThing(Thing *, uint32_t)
+void Mailbox::removeThing(Thing*, uint32_t)
 {
 	//
 }

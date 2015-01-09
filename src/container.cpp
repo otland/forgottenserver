@@ -273,7 +273,7 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 }
 
 ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t count,
-		uint32_t flags, Creature *actor/* = nullptr*/) const
+		uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	bool childIsOwner = hasBitSet(FLAG_CHILDISOWNER, flags);
 	if (childIsOwner) {
@@ -409,8 +409,8 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Container::queryDestination(int32_t &index, const Thing &thing, Item **destItem,
-		uint32_t &flags)
+Cylinder* Container::queryDestination(int32_t& index, const Thing &thing, Item** destItem,
+		uint32_t& flags)
 {
 	if (!unlocked) {
 		*destItem = nullptr;
@@ -478,12 +478,12 @@ Cylinder* Container::queryDestination(int32_t &index, const Thing &thing, Item *
 	return this;
 }
 
-void Container::addThing(Thing *thing)
+void Container::addThing(Thing* thing)
 {
 	return addThing(0, thing);
 }
 
-void Container::addThing(int32_t index, Thing *thing)
+void Container::addThing(int32_t index, Thing* thing)
 {
 	if (index >= static_cast<int32_t>(capacity())) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -504,7 +504,7 @@ void Container::addThing(int32_t index, Thing *thing)
 	}
 }
 
-void Container::addThingBack(Thing *thing)
+void Container::addThingBack(Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (item == nullptr) {
@@ -520,7 +520,7 @@ void Container::addThingBack(Thing *thing)
 	}
 }
 
-void Container::updateThing(Thing *thing, uint16_t itemId, uint32_t count)
+void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
 	int32_t index = getThingIndex(thing);
 	if (index == -1) {
@@ -543,7 +543,7 @@ void Container::updateThing(Thing *thing, uint16_t itemId, uint32_t count)
 	}
 }
 
-void Container::replaceThing(uint32_t index, Thing *thing)
+void Container::replaceThing(uint32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (!item) {
@@ -567,7 +567,7 @@ void Container::replaceThing(uint32_t index, Thing *thing)
 	replacedItem->setParent(nullptr);
 }
 
-void Container::removeThing(Thing *thing, uint32_t count)
+void Container::removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
 	if (item == nullptr) {
@@ -602,7 +602,7 @@ void Container::removeThing(Thing *thing, uint32_t count)
 	}
 }
 
-int32_t Container::getThingIndex(const Thing *thing) const
+int32_t Container::getThingIndex(const Thing* thing) const
 {
 	uint32_t index = 0;
 	for (Item* item : itemlist) {
@@ -678,12 +678,12 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 	}
 }
 
-void Container::internalAddThing(Thing *thing)
+void Container::internalAddThing(Thing* thing)
 {
 	internalAddThing(0, thing);
 }
 
-void Container::internalAddThing(uint32_t, Thing *thing)
+void Container::internalAddThing(uint32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (item == nullptr) {

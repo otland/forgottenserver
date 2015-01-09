@@ -734,7 +734,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 	return false;
 }
 
-//********************** Parse methods *******************************//
+// Parse methods
 void ProtocolGame::parseChannelInvite(NetworkMessage& msg)
 {
 	const std::string name = msg.GetString();
@@ -1173,7 +1173,7 @@ void ProtocolGame::parseSeekInContainer(NetworkMessage& msg)
 	addGameTask(&Game::playerSeekInContainer, player->getID(), containerId, index);
 }
 
-//********************** Send methods *******************************//
+// Send methods
 void ProtocolGame::sendOpenPrivateChannel(const std::string& receiver)
 {
 	NetworkMessage msg;

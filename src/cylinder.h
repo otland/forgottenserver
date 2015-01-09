@@ -61,7 +61,7 @@ class Cylinder : virtual public Thing
 		  * \returns ReturnValue holds the return value
 		  */
 		virtual ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature *actor = nullptr) const = 0;
+				uint32_t flags, Creature* actor = nullptr) const = 0;
 
 		/**
 		  * Query the cylinder how much it can accept
@@ -95,21 +95,21 @@ class Cylinder : virtual public Thing
 			* this method can modify the flags
 		  * \returns Cylinder returns the destination cylinder
 		  */
-		virtual Cylinder* queryDestination(int32_t& index, const Thing& thing, Item **destItem,
+		virtual Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
 				uint32_t& flags) = 0;
 
 		/**
 		  * Add the object to the cylinder
 		  * \param thing is the object to add
 		  */
-		virtual void addThing(Thing *thing) = 0;
+		virtual void addThing(Thing* thing) = 0;
 
 		/**
 		  * Add the object to the cylinder
 		  * \param index points to the destination index (inventory slot/container position)
 		  * \param thing is the object to add
 		  */
-		virtual void addThing(int32_t index, Thing *thing) = 0;
+		virtual void addThing(int32_t index, Thing* thing) = 0;
 
 		/**
 		  * Update the item count or type for an object
@@ -117,21 +117,21 @@ class Cylinder : virtual public Thing
 		  * \param itemId is the new item id
 		  * \param count is the new count value
 		  */
-		virtual void updateThing(Thing *thing, uint16_t itemId, uint32_t count) = 0;
+		virtual void updateThing(Thing* thing, uint16_t itemId, uint32_t count) = 0;
 
 		/**
 		  * Replace an object with a new
 		  * \param index is the position to change (inventory slot/container position)
 		  * \param thing is the object to update
 		  */
-		virtual void replaceThing(uint32_t index, Thing *thing) = 0;
+		virtual void replaceThing(uint32_t index, Thing* thing) = 0;
 
 		/**
 		  * Remove an object
 		  * \param thing is the object to delete
 		  * \param count is the new count value
 		  */
-		virtual void removeThing(Thing *thing, uint32_t count) = 0;
+		virtual void removeThing(Thing* thing, uint32_t count) = 0;
 
 		/**
 		  * Is sent after an operation (move/add) to update internal values
@@ -155,7 +155,7 @@ class Cylinder : virtual public Thing
 		  * \param thing the object to get the index value from
 		  * \returns the index of the object, returns -1 if not found
 		  */
-		virtual int32_t getThingIndex(const Thing *thing) const;
+		virtual int32_t getThingIndex(const Thing* thing) const;
 
 		/**
 		  * Returns the first index
@@ -194,14 +194,14 @@ class Cylinder : virtual public Thing
 		  * Adds an object to the cylinder without sending to the client(s)
 		  * \param thing is the object to add
 		  */
-		virtual void internalAddThing(Thing *thing);
+		virtual void internalAddThing(Thing* thing);
 
 		/**
 		  * Adds an object to the cylinder without sending to the client(s)
 		  * \param thing is the object to add
 		  * \param index points to the destination index (inventory slot/container position)
 		  */
-		virtual void internalAddThing(uint32_t index, Thing *thing);
+		virtual void internalAddThing(uint32_t index, Thing* thing);
 
 		virtual void startDecaying();
 };
@@ -211,7 +211,7 @@ class VirtualCylinder final : public Cylinder
 	public:
 		static VirtualCylinder* virtualCylinder;
 
-		virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature * = nullptr) const {
+		virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 		virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const {
@@ -220,15 +220,15 @@ class VirtualCylinder final : public Cylinder
 		virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t) const {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-		virtual Cylinder* queryDestination(int32_t &, const Thing&, Item **, uint32_t &) {
+		virtual Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) {
 			return nullptr;
 		}
 
-		virtual void addThing(Thing *) {}
-		virtual void addThing(int32_t, Thing *) {}
-		virtual void updateThing(Thing *, uint16_t, uint32_t) {}
-		virtual void replaceThing(uint32_t, Thing *) {}
-		virtual void removeThing(Thing *, uint32_t) {}
+		virtual void addThing(Thing*) {}
+		virtual void addThing(int32_t, Thing*) {}
+		virtual void updateThing(Thing*, uint16_t, uint32_t) {}
+		virtual void replaceThing(uint32_t, Thing*) {}
+		virtual void removeThing(Thing*, uint32_t) {}
 
 		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) {}
 		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, bool, cylinderlink_t = LINK_OWNER) {}

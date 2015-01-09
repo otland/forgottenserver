@@ -2476,7 +2476,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 	return itemWeight <= getFreeCapacity();
 }
 
-ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature *) const
+ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature*) const
 {
 	const Item* item = thing.getItem();
 	if (item == nullptr) {
@@ -2688,7 +2688,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 	return ret;
 }
 
-ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t &maxQueryCount,
+ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 		uint32_t flags) const
 {
 	const Item* item = thing.getItem();
@@ -2787,7 +2787,7 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item **destItem,
+Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** destItem,
 		uint32_t& flags)
 {
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
@@ -2912,7 +2912,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item **de
 	}
 }
 
-void Player::addThing(int32_t index, Thing *thing)
+void Player::addThing(int32_t index, Thing* thing)
 {
 	if (index < CONST_SLOT_FIRST || index > CONST_SLOT_LAST) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -2930,7 +2930,7 @@ void Player::addThing(int32_t index, Thing *thing)
 	sendInventoryItem(static_cast<slots_t>(index), item);
 }
 
-void Player::updateThing(Thing *thing, uint16_t itemId, uint32_t count)
+void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
 	int32_t index = getThingIndex(thing);
 	if (index == -1) {
@@ -2952,7 +2952,7 @@ void Player::updateThing(Thing *thing, uint16_t itemId, uint32_t count)
 	onUpdateInventoryItem(item, item);
 }
 
-void Player::replaceThing(uint32_t index, Thing *thing)
+void Player::replaceThing(uint32_t index, Thing* thing)
 {
 	if (index > CONST_SLOT_LAST) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -2979,7 +2979,7 @@ void Player::replaceThing(uint32_t index, Thing *thing)
 	inventory[index] = item;
 }
 
-void Player::removeThing(Thing *thing, uint32_t count)
+void Player::removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
 	if (!item) {
@@ -3023,7 +3023,7 @@ void Player::removeThing(Thing *thing, uint32_t count)
 	}
 }
 
-int32_t Player::getThingIndex(const Thing *thing) const
+int32_t Player::getThingIndex(const Thing* thing) const
 {
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 		if (inventory[i] == thing) {
@@ -3291,12 +3291,12 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 	return false;
 }
 
-void Player::internalAddThing(Thing *thing)
+void Player::internalAddThing(Thing* thing)
 {
 	internalAddThing(0, thing);
 }
 
-void Player::internalAddThing(uint32_t index, Thing *thing)
+void Player::internalAddThing(uint32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (!item) {
