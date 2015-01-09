@@ -230,7 +230,7 @@ class Tile : public Cylinder
 		uint32_t getDownItemCount() const;
 
 		bool hasProperty(enum ITEMPROPERTY prop) const;
-		bool hasProperty(Item* exclude, enum ITEMPROPERTY prop) const;
+		bool hasProperty(const Item* exclude, enum ITEMPROPERTY prop) const;
 
 		bool hasFlag(tileflags_t flag) const {
 			return hasBitSet(flag, m_flags);
@@ -338,7 +338,8 @@ class Tile : public Cylinder
 		void onRemoveTileItem(const SpectatorVec& list, const std::vector<int32_t>& oldStackPosVector, Item* item);
 		void onUpdateTile(const SpectatorVec& list);
 
-		void updateTileFlags(Item* item, bool removing);
+		void setTileFlags(const Item* item);
+		void resetTileFlags(const Item* item);
 
 	protected:
 		// Put this first for cache-coherency

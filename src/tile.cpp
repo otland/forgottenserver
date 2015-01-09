@@ -54,7 +54,7 @@ bool Tile::hasProperty(enum ITEMPROPERTY prop) const
 	return false;
 }
 
-bool Tile::hasProperty(Item* exclude, enum ITEMPROPERTY prop) const
+bool Tile::hasProperty(const Item* exclude, enum ITEMPROPERTY prop) const
 {
 	assert(exclude);
 
@@ -387,7 +387,7 @@ void Tile::onAddTileItem(Item* item)
 		}
 	}
 
-	updateTileFlags(item, false);
+	setTileFlags(item);
 
 	const Position& cylinderMapPos = getPosition();
 
@@ -452,7 +452,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& list, const std::vector<int32_t>
 		}
 	}
 
-	updateTileFlags(item, true);
+	resetTileFlags(item);
 
 	const Position& cylinderMapPos = getPosition();
 	const ItemType& iType = Item::items[item->getID()];
@@ -866,8 +866,8 @@ void Tile::addThing(int32_t, Thing* thing)
 				ground->setParent(nullptr);
 				g_game.ReleaseItem(ground);
 				ground = item;
-				updateTileFlags(oldGround, true);
-				updateTileFlags(item, false);
+				resetTileFlags(oldGround);
+				setTileFlags(item);
 				onUpdateTileItem(oldGround, oldType, item, newType);
 				postRemoveNotification(oldGround, nullptr, oldGroundIndex, true);
 			}
@@ -957,10 +957,10 @@ void Tile::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 	const ItemType& oldType = Item::items[item->getID()];
 	const ItemType& newType = Item::items[itemId];
-	updateTileFlags(item, true);
+	resetTileFlags(item);
 	item->setID(itemId);
 	item->setSubType(count);
-	updateTileFlags(item, false);
+	setTileFlags(item);
 	onUpdateTileItem(item, oldType, item, newType);
 }
 
@@ -1025,8 +1025,8 @@ void Tile::replaceThing(uint32_t index, Thing* thing)
 	if (isInserted) {
 		item->setParent(this);
 
-		updateTileFlags(oldItem, true);
-		updateTileFlags(item, false);
+		resetTileFlags(oldItem);
+		setTileFlags(item);
 		const ItemType& oldType = Item::items[oldItem->getID()];
 		const ItemType& newType = Item::items[item->getID()];
 		onUpdateTileItem(oldItem, oldType, item, newType);
@@ -1102,9 +1102,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		if (item->isStackable() && count != item->getItemCount()) {
 			uint8_t newCount = static_cast<uint8_t>(std::max<int32_t>(0, static_cast<int32_t>(item->getItemCount() - count)));
 
-			updateTileFlags(item, true);
 			item->setItemCount(newCount);
-			updateTileFlags(item, false);
 
 			const ItemType& itemType = Item::items[item->getID()];
 			onUpdateTileItem(item, itemType, item, itemType);
@@ -1481,187 +1479,187 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 			++items->downItemCount;
 		}
 
-		updateTileFlags(item, false);
+		setTileFlags(item);
 	}
 }
 
-void Tile::updateTileFlags(Item* item, bool removing)
+void Tile::setTileFlags(const Item* item)
 {
-	if (!removing) {
-		//!removing is adding an item to the tile
-		if (!hasFlag(TILESTATE_FLOORCHANGE)) {
-			if (item->floorChangeDown()) {
-				setFlag(TILESTATE_FLOORCHANGE);
-				setFlag(TILESTATE_FLOORCHANGE_DOWN);
-			}
-
-			if (item->floorChangeNorth()) {
-				setFlag(TILESTATE_FLOORCHANGE);
-				setFlag(TILESTATE_FLOORCHANGE_NORTH);
-			}
-
-			if (item->floorChangeSouth()) {
-				setFlag(TILESTATE_FLOORCHANGE);
-				setFlag(TILESTATE_FLOORCHANGE_SOUTH);
-			}
-
-			if (item->floorChangeEast()) {
-				setFlag(TILESTATE_FLOORCHANGE);
-				setFlag(TILESTATE_FLOORCHANGE_EAST);
-			}
-
-			if (item->floorChangeWest()) {
-				setFlag(TILESTATE_FLOORCHANGE);
-				setFlag(TILESTATE_FLOORCHANGE_WEST);
-			}
-
-			if (item->floorChangeSouthAlt()) {
-				setFlag(TILESTATE_FLOORCHANGE);
-				setFlag(TILESTATE_FLOORCHANGE_SOUTH_ALT);
-			}
-
-			if (item->floorChangeEastAlt()) {
-				setFlag(TILESTATE_FLOORCHANGE);
-				setFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
-			}
-		}
-
-		if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID)) {
-			setFlag(TILESTATE_IMMOVABLEBLOCKSOLID);
-		}
-
-		if (item->hasProperty(CONST_PROP_BLOCKPATH)) {
-			setFlag(TILESTATE_BLOCKPATH);
-		}
-
-		if (item->hasProperty(CONST_PROP_NOFIELDBLOCKPATH)) {
-			setFlag(TILESTATE_NOFIELDBLOCKPATH);
-		}
-
-		if (item->hasProperty(CONST_PROP_IMMOVABLENOFIELDBLOCKPATH)) {
-			setFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
-		}
-
-		if (item->getTeleport()) {
-			setFlag(TILESTATE_TELEPORT);
-		}
-
-		if (item->getMagicField()) {
-			setFlag(TILESTATE_MAGICFIELD);
-		}
-
-		if (item->getMailbox()) {
-			setFlag(TILESTATE_MAILBOX);
-		}
-
-		if (item->getTrashHolder()) {
-			setFlag(TILESTATE_TRASHHOLDER);
-		}
-
-		if (item->hasProperty(CONST_PROP_BLOCKSOLID)) {
-			setFlag(TILESTATE_BLOCKSOLID);
-		}
-
-		if (item->getBed()) {
-			setFlag(TILESTATE_BED);
-		}
-
-		Container* container = item->getContainer();
-		if (container && container->getDepotLocker()) {
-			setFlag(TILESTATE_DEPOT);
-		}
-
-		if (item->hasProperty(CONST_PROP_SUPPORTHANGABLE)) {
-			setFlag(TILESTATE_SUPPORTS_HANGABLE);
-		}
-	} else {
+	if (!hasFlag(TILESTATE_FLOORCHANGE)) {
 		if (item->floorChangeDown()) {
-			resetFlag(TILESTATE_FLOORCHANGE);
-			resetFlag(TILESTATE_FLOORCHANGE_DOWN);
+			setFlag(TILESTATE_FLOORCHANGE);
+			setFlag(TILESTATE_FLOORCHANGE_DOWN);
 		}
 
 		if (item->floorChangeNorth()) {
-			resetFlag(TILESTATE_FLOORCHANGE);
-			resetFlag(TILESTATE_FLOORCHANGE_NORTH);
+			setFlag(TILESTATE_FLOORCHANGE);
+			setFlag(TILESTATE_FLOORCHANGE_NORTH);
 		}
 
 		if (item->floorChangeSouth()) {
-			resetFlag(TILESTATE_FLOORCHANGE);
-			resetFlag(TILESTATE_FLOORCHANGE_SOUTH);
+			setFlag(TILESTATE_FLOORCHANGE);
+			setFlag(TILESTATE_FLOORCHANGE_SOUTH);
 		}
 
 		if (item->floorChangeEast()) {
-			resetFlag(TILESTATE_FLOORCHANGE);
-			resetFlag(TILESTATE_FLOORCHANGE_EAST);
+			setFlag(TILESTATE_FLOORCHANGE);
+			setFlag(TILESTATE_FLOORCHANGE_EAST);
 		}
 
 		if (item->floorChangeWest()) {
-			resetFlag(TILESTATE_FLOORCHANGE);
-			resetFlag(TILESTATE_FLOORCHANGE_WEST);
+			setFlag(TILESTATE_FLOORCHANGE);
+			setFlag(TILESTATE_FLOORCHANGE_WEST);
 		}
 
 		if (item->floorChangeSouthAlt()) {
-			resetFlag(TILESTATE_FLOORCHANGE);
-			resetFlag(TILESTATE_FLOORCHANGE_SOUTH_ALT);
+			setFlag(TILESTATE_FLOORCHANGE);
+			setFlag(TILESTATE_FLOORCHANGE_SOUTH_ALT);
 		}
 
 		if (item->floorChangeEastAlt()) {
-			resetFlag(TILESTATE_FLOORCHANGE);
-			resetFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
+			setFlag(TILESTATE_FLOORCHANGE);
+			setFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
 		}
+	}
 
-		if (item->hasProperty(CONST_PROP_BLOCKSOLID) && !hasProperty(item, CONST_PROP_BLOCKSOLID)) {
-			resetFlag(TILESTATE_BLOCKSOLID);
-		}
+	if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID)) {
+		setFlag(TILESTATE_IMMOVABLEBLOCKSOLID);
+	}
 
-		if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !hasProperty(item, CONST_PROP_IMMOVABLEBLOCKSOLID)) {
-			resetFlag(TILESTATE_IMMOVABLEBLOCKSOLID);
-		}
+	if (item->hasProperty(CONST_PROP_BLOCKPATH)) {
+		setFlag(TILESTATE_BLOCKPATH);
+	}
 
-		if (item->hasProperty(CONST_PROP_BLOCKPATH) && !hasProperty(item, CONST_PROP_BLOCKPATH)) {
-			resetFlag(TILESTATE_BLOCKPATH);
-		}
+	if (item->hasProperty(CONST_PROP_NOFIELDBLOCKPATH)) {
+		setFlag(TILESTATE_NOFIELDBLOCKPATH);
+	}
 
-		if (item->hasProperty(CONST_PROP_NOFIELDBLOCKPATH) && !hasProperty(item, CONST_PROP_NOFIELDBLOCKPATH)) {
-			resetFlag(TILESTATE_NOFIELDBLOCKPATH);
-		}
+	if (item->hasProperty(CONST_PROP_IMMOVABLENOFIELDBLOCKPATH)) {
+		setFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
+	}
 
-		if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH) && !hasProperty(item, CONST_PROP_IMMOVABLEBLOCKPATH)) {
-			resetFlag(TILESTATE_IMMOVABLEBLOCKPATH);
-		}
+	if (item->getTeleport()) {
+		setFlag(TILESTATE_TELEPORT);
+	}
 
-		if (item->hasProperty(CONST_PROP_IMMOVABLENOFIELDBLOCKPATH) && !hasProperty(item, CONST_PROP_IMMOVABLENOFIELDBLOCKPATH)) {
-			resetFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
-		}
+	if (item->getMagicField()) {
+		setFlag(TILESTATE_MAGICFIELD);
+	}
 
-		if (item->getTeleport()) {
-			resetFlag(TILESTATE_TELEPORT);
-		}
+	if (item->getMailbox()) {
+		setFlag(TILESTATE_MAILBOX);
+	}
 
-		if (item->getMagicField()) {
-			resetFlag(TILESTATE_MAGICFIELD);
-		}
+	if (item->getTrashHolder()) {
+		setFlag(TILESTATE_TRASHHOLDER);
+	}
 
-		if (item->getMailbox()) {
-			resetFlag(TILESTATE_MAILBOX);
-		}
+	if (item->hasProperty(CONST_PROP_BLOCKSOLID)) {
+		setFlag(TILESTATE_BLOCKSOLID);
+	}
 
-		if (item->getTrashHolder()) {
-			resetFlag(TILESTATE_TRASHHOLDER);
-		}
+	if (item->getBed()) {
+		setFlag(TILESTATE_BED);
+	}
 
-		if (item->getBed()) {
-			resetFlag(TILESTATE_BED);
-		}
+	const Container* container = item->getContainer();
+	if (container && container->getDepotLocker()) {
+		setFlag(TILESTATE_DEPOT);
+	}
 
-		Container* container = item->getContainer();
-		if (container && container->getDepotLocker()) {
-			resetFlag(TILESTATE_DEPOT);
-		}
+	if (item->hasProperty(CONST_PROP_SUPPORTHANGABLE)) {
+		setFlag(TILESTATE_SUPPORTS_HANGABLE);
+	}
+}
 
-		if (item->hasProperty(CONST_PROP_SUPPORTHANGABLE)) {
-			resetFlag(TILESTATE_SUPPORTS_HANGABLE);
-		}
+void Tile::resetTileFlags(const Item* item)
+{
+	if (item->floorChangeDown()) {
+		resetFlag(TILESTATE_FLOORCHANGE);
+		resetFlag(TILESTATE_FLOORCHANGE_DOWN);
+	}
+
+	if (item->floorChangeNorth()) {
+		resetFlag(TILESTATE_FLOORCHANGE);
+		resetFlag(TILESTATE_FLOORCHANGE_NORTH);
+	}
+
+	if (item->floorChangeSouth()) {
+		resetFlag(TILESTATE_FLOORCHANGE);
+		resetFlag(TILESTATE_FLOORCHANGE_SOUTH);
+	}
+
+	if (item->floorChangeEast()) {
+		resetFlag(TILESTATE_FLOORCHANGE);
+		resetFlag(TILESTATE_FLOORCHANGE_EAST);
+	}
+
+	if (item->floorChangeWest()) {
+		resetFlag(TILESTATE_FLOORCHANGE);
+		resetFlag(TILESTATE_FLOORCHANGE_WEST);
+	}
+
+	if (item->floorChangeSouthAlt()) {
+		resetFlag(TILESTATE_FLOORCHANGE);
+		resetFlag(TILESTATE_FLOORCHANGE_SOUTH_ALT);
+	}
+
+	if (item->floorChangeEastAlt()) {
+		resetFlag(TILESTATE_FLOORCHANGE);
+		resetFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
+	}
+
+	if (item->hasProperty(CONST_PROP_BLOCKSOLID) && !hasProperty(item, CONST_PROP_BLOCKSOLID)) {
+		resetFlag(TILESTATE_BLOCKSOLID);
+	}
+
+	if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !hasProperty(item, CONST_PROP_IMMOVABLEBLOCKSOLID)) {
+		resetFlag(TILESTATE_IMMOVABLEBLOCKSOLID);
+	}
+
+	if (item->hasProperty(CONST_PROP_BLOCKPATH) && !hasProperty(item, CONST_PROP_BLOCKPATH)) {
+		resetFlag(TILESTATE_BLOCKPATH);
+	}
+
+	if (item->hasProperty(CONST_PROP_NOFIELDBLOCKPATH) && !hasProperty(item, CONST_PROP_NOFIELDBLOCKPATH)) {
+		resetFlag(TILESTATE_NOFIELDBLOCKPATH);
+	}
+
+	if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH) && !hasProperty(item, CONST_PROP_IMMOVABLEBLOCKPATH)) {
+		resetFlag(TILESTATE_IMMOVABLEBLOCKPATH);
+	}
+
+	if (item->hasProperty(CONST_PROP_IMMOVABLENOFIELDBLOCKPATH) && !hasProperty(item, CONST_PROP_IMMOVABLENOFIELDBLOCKPATH)) {
+		resetFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
+	}
+
+	if (item->getTeleport()) {
+		resetFlag(TILESTATE_TELEPORT);
+	}
+
+	if (item->getMagicField()) {
+		resetFlag(TILESTATE_MAGICFIELD);
+	}
+
+	if (item->getMailbox()) {
+		resetFlag(TILESTATE_MAILBOX);
+	}
+
+	if (item->getTrashHolder()) {
+		resetFlag(TILESTATE_TRASHHOLDER);
+	}
+
+	if (item->getBed()) {
+		resetFlag(TILESTATE_BED);
+	}
+
+	const Container* container = item->getContainer();
+	if (container && container->getDepotLocker()) {
+		resetFlag(TILESTATE_DEPOT);
+	}
+
+	if (item->hasProperty(CONST_PROP_SUPPORTHANGABLE)) {
+		resetFlag(TILESTATE_SUPPORTS_HANGABLE);
 	}
 }
 
