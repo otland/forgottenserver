@@ -28946,7 +28946,7 @@
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="undead" />
 	</item>
-	<item id="21367" article="a" name="dead enraged soul">
+	<item id="21368" article="a" name="dead enraged soul">
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="21372" />
 		<attribute key="duration" value="10" />
