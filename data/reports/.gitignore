@@ -1,0 +1,6 @@
+# We dont want people to upload reports so we will ignore them.
+*
+
+# We still want to keep note.txt and the .gitignore file though.
+!.gitignore
+!note.txt
