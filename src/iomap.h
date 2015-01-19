@@ -119,7 +119,7 @@ class IOMap
 				map->spawnfile += "-spawn.xml";
 			}
 
-			return Spawns::getInstance()->loadFromXml(map->spawnfile);
+			return map->spawns.loadFromXml(map->spawnfile);
 		}
 
 		/* Load the houses (not house tile-data)

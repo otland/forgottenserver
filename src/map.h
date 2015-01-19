@@ -30,6 +30,7 @@
 #include "tile.h"
 #include "town.h"
 #include "house.h"
+#include "spawn.h"
 
 class Creature;
 class Player;
@@ -242,6 +243,7 @@ class Map
 
 		std::map<std::string, Position> waypoints;
 
+		Spawns spawns;
 		Towns towns;
 		Houses houses;
 	protected:

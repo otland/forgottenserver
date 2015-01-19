@@ -1825,7 +1825,7 @@ bool Monster::inDespawnRange(const Position& pos) const
 		return false;
 	}
 
-	if (!Spawns::getInstance()->isInZone(masterPos, Monster::despawnRadius, pos)) {
+	if (!Spawns::isInZone(masterPos, Monster::despawnRadius, pos)) {
 		return true;
 	}
 

@@ -411,7 +411,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 	}
 
 	Position toPos = getNextPosition(dir, fromPos);
-	if (!Spawns::getInstance()->isInZone(masterPos, masterRadius, toPos)) {
+	if (!Spawns::isInZone(masterPos, masterRadius, toPos)) {
 		return false;
 	}
 

@@ -142,7 +142,7 @@ void Game::setGameState(GameState_t newState)
 			groups.load();
 			g_chat->load();
 
-			Spawns::getInstance()->startup();
+			map.spawns.startup();
 
 			raids.loadFromXml();
 			raids.startup();
@@ -933,7 +933,7 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 			}
 
 			Npc* movingNpc = movingCreature->getNpc();
-			if (movingNpc && !Spawns::getInstance()->isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
+			if (movingNpc && !Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
 				player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
 				return;
 			}
@@ -4575,7 +4575,7 @@ void Game::shutdown()
 	g_scheduler.shutdown();
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
-	Spawns::getInstance()->clear();
+	map.spawns.clear();
 	raids.clear();
 
 	cleanup();

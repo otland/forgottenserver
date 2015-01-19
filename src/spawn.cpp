@@ -21,9 +21,7 @@
 
 #include "spawn.h"
 #include "game.h"
-#include "player.h"
-#include "npc.h"
-#include "tools.h"
+#include "monster.h"
 #include "configmanager.h"
 #include "scheduler.h"
 
@@ -200,7 +198,7 @@ bool Spawn::findPlayer(const Position& pos)
 
 bool Spawn::isInSpawnZone(const Position& pos)
 {
-	return Spawns::getInstance()->isInZone(centerPos, radius, pos);
+	return Spawns::isInZone(centerPos, radius, pos);
 }
 
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)

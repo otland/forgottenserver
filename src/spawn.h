@@ -22,7 +22,10 @@
 
 #include "tile.h"
 #include "position.h"
-#include "monster.h"
+
+class Monster;
+class MonsterType;
+class Npc;
 
 struct spawnBlock_t {
 	Position pos;
@@ -78,14 +81,8 @@ class Spawn
 
 class Spawns
 {
-	private:
-		Spawns();
-
 	public:
-		static Spawns* getInstance() {
-			static Spawns instance;
-			return &instance;
-		}
+		Spawns();
 
 		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
