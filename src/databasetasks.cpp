@@ -115,5 +115,7 @@ void DatabaseTasks::shutdown()
 
 void DatabaseTasks::join()
 {
-	thread.join();
+	if (thread.joinable()) {
+		thread.join();
+	}
 }

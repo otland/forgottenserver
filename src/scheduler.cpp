@@ -153,5 +153,7 @@ void Scheduler::shutdown()
 
 void Scheduler::join()
 {
-	m_thread.join();
+	if (m_thread.joinable()) {
+		m_thread.join();
+	}
 }
