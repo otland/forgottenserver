@@ -101,7 +101,7 @@ void NetworkMessage::AddBytes(const char* bytes, size_t size)
 
 	memcpy(buffer + position, bytes, size);
 	position += size;
-	size += size;
+	length += size;
 }
 
 void NetworkMessage::AddPaddingBytes(size_t n)

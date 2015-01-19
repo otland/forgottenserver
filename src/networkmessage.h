@@ -154,7 +154,7 @@ class NetworkMessage
 		}
 
 		inline bool canRead(int32_t size) {
-			if ((position + size) > (size + 8) || size >= (NETWORKMESSAGE_MAXSIZE - position)) {
+			if ((position + size) > (length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - position)) {
 				overrun = true;
 				return false;
 			}

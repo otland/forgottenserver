@@ -96,7 +96,7 @@ void OutputMessagePool::sendAll()
 
 	for (auto it = autoSendOutputMessages.begin(), end = autoSendOutputMessages.end(); it != end; it = autoSendOutputMessages.erase(it)) {
 		OutputMessage_ptr msg = *it;
-		if (frameTime <= msg->getFrame()) {
+		if (staleTime <= msg->getFrame()) {
 			break;
 		}
 
