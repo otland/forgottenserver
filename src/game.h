@@ -32,6 +32,7 @@
 #include "raids.h"
 #include "npc.h"
 #include "wildcardtree.h"
+#include "quests.h"
 
 class ServiceManager;
 class Creature;
@@ -526,6 +527,7 @@ class Game
 
 		Map map;
 		Raids raids;
+		Quests quests;
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);

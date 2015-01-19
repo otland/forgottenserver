@@ -147,8 +147,7 @@ void Game::setGameState(GameState_t newState)
 			raids.loadFromXml();
 			raids.startup();
 
-			Quests::getInstance()->loadFromXml();
-
+			quests.loadFromXml();
 			Mounts::getInstance()->loadFromXml();
 
 			loadMotdNum();
@@ -3378,7 +3377,7 @@ void Game::playerShowQuestLine(uint32_t playerId, uint16_t questId)
 		return;
 	}
 
-	Quest* quest = Quests::getInstance()->getQuestByID(questId);
+	Quest* quest = quests.getQuestByID(questId);
 	if (!quest) {
 		return;
 	}

@@ -124,11 +124,6 @@ class Quest
 class Quests
 {
 	public:
-		static Quests* getInstance() {
-			static Quests instance;
-			return &instance;
-		}
-
 		const QuestsList& getQuests() const {
 			return quests;
 		}

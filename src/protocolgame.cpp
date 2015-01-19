@@ -2069,9 +2069,9 @@ void ProtocolGame::sendQuestLog()
 {
 	NetworkMessage msg;
 	msg.AddByte(0xF0);
-	msg.Add<uint16_t>(Quests::getInstance()->getQuestsCount(player));
+	msg.Add<uint16_t>(g_game.quests.getQuestsCount(player));
 
-	for (const Quest& quest : Quests::getInstance()->getQuests()) {
+	for (const Quest& quest : g_game.quests.getQuests()) {
 		if (quest.isStarted(player)) {
 			msg.Add<uint16_t>(quest.getID());
 			msg.AddString(quest.getName());
