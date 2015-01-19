@@ -138,10 +138,10 @@ void Combat::getCombatArea(const Position& centerPos, const Position& targetPos,
 	if (area) {
 		area->getList(centerPos, targetPos, list);
 	} else {
-		Tile* tile = g_game.getTile(targetPos);
+		Tile* tile = g_game.map.getTile(targetPos);
 		if (!tile) {
 			tile = new StaticTile(targetPos.x, targetPos.y, targetPos.z);
-			g_game.setTile(tile);
+			g_game.map.setTile(targetPos, tile);
 		}
 		list.push_back(tile);
 	}
@@ -1127,10 +1127,10 @@ void AreaCombat::getList(const Position& centerPos, const Position& targetPos, s
 		for (uint32_t x = 0; x < cols; ++x) {
 			if (area->getValue(y, x) != 0) {
 				if (g_game.isSightClear(targetPos, tmpPos, true)) {
-					Tile* tile = g_game.getTile(tmpPos);
+					Tile* tile = g_game.map.getTile(tmpPos);
 					if (!tile) {
 						tile = new StaticTile(tmpPos.x, tmpPos.y, tmpPos.z);
-						g_game.setTile(tile);
+						g_game.map.setTile(tmpPos, tile);
 					}
 					list.push_back(tile);
 				}

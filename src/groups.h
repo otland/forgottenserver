@@ -31,13 +31,7 @@ struct Group {
 
 class Groups {
 	public:
-		static Groups* getInstance() {
-			static Groups instance;
-			return &instance;
-		}
-
 		bool load();
-
 		Group* getGroup(uint32_t id);
 
 	private:

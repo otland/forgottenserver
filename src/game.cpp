@@ -235,7 +235,7 @@ void Game::loadMap(const std::string& path)
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 {
 	if (pos.x != 0xFFFF) {
-		return getTile(pos.x, pos.y, pos.z);
+		return map.getTile(pos);
 	}
 
 	//container
@@ -251,7 +251,7 @@ Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index, uint32_t spriteId /*= 0*/, stackPosType_t type /*= STACKPOS_NORMAL*/) const
 {
 	if (pos.x != 0xFFFF) {
-		Tile* tile = getTile(pos.x, pos.y, pos.z);
+		Tile* tile = map.getTile(pos);
 		if (tile) {
 			/*look at*/
 			if (type == STACKPOS_LOOK) {
@@ -379,11 +379,6 @@ void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
 			stackpos = tile->getThingIndex(item);
 		}
 	}
-}
-
-void Game::setTile(Tile* newTile)
-{
-	return map.setTile(newTile->getPosition(), newTile);
 }
 
 Creature* Game::getCreatureByID(uint32_t id)
@@ -865,7 +860,7 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
-	Tile* toTile = getTile(toPos);
+	Tile* toTile = map.getTile(toPos);
 	if (!toTile) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -976,9 +971,9 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	if (creature->getPlayer() && !diagonalMovement) {
 		//try go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
-			Tile* tmpTile = getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
+			Tile* tmpTile = map.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
 			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID))) {
-				tmpTile = getTile(destPos.x, destPos.y, destPos.getZ() - 1);
+				tmpTile = map.getTile(destPos.x, destPos.y, destPos.getZ() - 1);
 				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID)) {
 					flags = flags | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 
@@ -989,9 +984,9 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 			}
 		} else {
 			//try go down
-			Tile* tmpTile = getTile(destPos);
+			Tile* tmpTile = map.getTile(destPos.x, destPos.y, destPos.z);
 			if (currentPos.z != 7 && (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID)))) {
-				tmpTile = getTile(destPos.x, destPos.y, destPos.z + 1);
+				tmpTile = map.getTile(destPos.x, destPos.y, destPos.z + 1);
 				if (tmpTile && tmpTile->hasHeight(3)) {
 					flags |= FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 					destPos.z++;
@@ -1000,7 +995,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		}
 	}
 
-	toTile = getTile(destPos);
+	toTile = map.getTile(destPos.x, destPos.y, destPos.z);
 	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
 
 	if (toTile != nullptr) {
@@ -1856,7 +1851,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	Tile* toTile = getTile(newPos.x, newPos.y, newPos.z);
+	Tile* toTile = map.getTile(newPos);
 	if (toTile) {
 		if (Creature* creature = thing->getCreature()) {
 			ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
@@ -2504,7 +2499,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		return;
 	}
 
-	Tile* tile = getTile(pos);
+	Tile* tile = map.getTile(pos);
 	if (!tile) {
 		return;
 	}
@@ -5723,7 +5718,7 @@ void Game::addGuild(Guild* guild)
 
 void Game::decreaseBrowseFieldRef(const Position& pos)
 {
-	Tile* tile = getTile(pos);
+	Tile* tile = map.getTile(pos.x, pos.y, pos.z);
 	if (!tile) {
 		return;
 	}
@@ -5732,11 +5727,6 @@ void Game::decreaseBrowseFieldRef(const Position& pos)
 	if (it != browseFields.end()) {
 		it->second->releaseThing2();
 	}
-}
-
-Group* Game::getGroup(uint32_t id)
-{
-	return groups.getGroup(id);
 }
 
 void Game::internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, bool stackable)

@@ -268,7 +268,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 					Direction dir = getDirectionTo(position, followPosition);
 					const Position& checkPosition = getNextPosition(dir, position);
 
-					Tile* tile = g_game.getTile(checkPosition);
+					Tile* tile = g_game.map.getTile(checkPosition);
 					if (tile) {
 						Creature* topCreature = tile->getTopCreature();
 						if (topCreature && followCreature != topCreature && isOpponent(topCreature)) {
@@ -1003,7 +1003,7 @@ bool Monster::pushItem(Item* item)
 
 	for (const auto& it : relList) {
 		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
-		Tile* tile = g_game.getTile(tryPos);
+		Tile* tile = g_game.map.getTile(tryPos);
 		if (tile && g_game.canThrowObjectTo(centerPos, tryPos)) {
 			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr) == RETURNVALUE_NOERROR) {
 				return true;
@@ -1052,7 +1052,7 @@ bool Monster::pushCreature(Creature* creature)
 
 	for (Direction dir : dirList) {
 		const Position& tryPos = Spells::getCasterPosition(creature, dir);
-		Tile* toTile = g_game.getTile(tryPos);
+		Tile* toTile = g_game.map.getTile(tryPos);
 		if (toTile && !toTile->hasProperty(CONST_PROP_BLOCKPATH)) {
 			if (g_game.internalMoveCreature(creature, dir) == RETURNVALUE_NOERROR) {
 				return true;
@@ -1124,7 +1124,7 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 
 	if (result && (canPushItems() || canPushCreatures())) {
 		const Position& pos = Spells::getCasterPosition(this, dir);
-		Tile* tile = g_game.getTile(pos);
+		Tile* tile = g_game.map.getTile(pos);
 		if (tile) {
 			if (canPushItems()) {
 				pushItems(tile);
@@ -1773,7 +1773,7 @@ bool Monster::canWalkTo(Position pos, Direction dir) const
 			return false;
 		}
 
-		Tile* tile = g_game.getTile(pos);
+		Tile* tile = g_game.map.getTile(pos);
 		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->queryAdd(0, *this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
 			return true;
 		}

@@ -696,10 +696,10 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	Tile* tile = g_game.getTile(toPos);
+	Tile* tile = g_game.map.getTile(toPos);
 	if (!tile) {
 		tile = new StaticTile(toPos.x, toPos.y, toPos.z);
-		g_game.setTile(tile);
+		g_game.map.setTile(toPos, tile);
 	}
 
 	ReturnValue ret = Combat::canDoCombat(player, tile, aggressive);
@@ -745,7 +745,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	Tile* tile = g_game.getTile(toPos);
+	Tile* tile = g_game.map.getTile(toPos);
 	if (!tile) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -1549,9 +1549,9 @@ bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::
 
 	if (strcasecmp(param.c_str(), "up") == 0) {
 		if (currentPos.z != 8) {
-			Tile* tmpTile = g_game.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
+			Tile* tmpTile = g_game.map.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
 			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID))) {
-				tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.getZ() - 1);
+				tmpTile = g_game.map.getTile(destPos.x, destPos.y, destPos.getZ() - 1);
 				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
 					ret = g_game.internalMoveCreature(*player, *tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
 				}
@@ -1559,9 +1559,9 @@ bool InstantSpell::Levitate(const InstantSpell*, Creature* creature, const std::
 		}
 	} else if (strcasecmp(param.c_str(), "down") == 0) {
 		if (currentPos.z != 7) {
-			Tile* tmpTile = g_game.getTile(destPos);
+			Tile* tmpTile = g_game.map.getTile(destPos);
 			if (tmpTile == nullptr || (tmpTile->ground == nullptr && !tmpTile->hasProperty(CONST_PROP_BLOCKSOLID))) {
-				tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z + 1);
+				tmpTile = g_game.map.getTile(destPos.x, destPos.y, destPos.z + 1);
 				if (tmpTile && tmpTile->ground && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()) {
 					ret = g_game.internalMoveCreature(*player, *tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
 				}
@@ -1918,9 +1918,9 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 
 		if (needTarget) {
 			if (creatureId == 0) {
-				Tile* tileTo = g_game.getTile(posTo);
-				if (tileTo) {
-					const Creature* creature = tileTo->getBottomVisibleCreature(player);
+				Tile* toTile = g_game.map.getTile(posTo);
+				if (toTile) {
+					const Creature* creature = toTile->getBottomVisibleCreature(player);
 					if (creature) {
 						creatureId = creature->getID();
 					}

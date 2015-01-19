@@ -171,7 +171,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	}
 
 	player->setGUID(result->getDataInt("id"));
-	Group* group = g_game.getGroup(result->getDataInt("group_id"));
+	Group* group = g_game.groups.getGroup(result->getDataInt("group_id"));
 	if (!group) {
 		std::cout << "[Error - IOLoginData::preloadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
 		return false;
@@ -225,7 +225,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		player->premiumDays = acc.premiumDays;
 	}
 
-	Group* group = g_game.getGroup(result->getDataInt("group_id"));
+	Group* group = g_game.groups.getGroup(result->getDataInt("group_id"));
 	if (!group) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Group ID " << result->getDataInt("group_id") << " which doesn't exist." << std::endl;
 		return false;
@@ -858,7 +858,7 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 
 	name = result->getDataString("name");
 	guid = result->getDataInt("id");
-	Group* group = g_game.getGroup(result->getDataInt("group_id"));
+	Group* group = g_game.groups.getGroup(result->getDataInt("group_id"));
 
 	uint64_t flags;
 	if (group) {

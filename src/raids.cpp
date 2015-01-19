@@ -550,7 +550,7 @@ bool AreaSpawnEvent::executeEvent()
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
 				Position pos(uniform_random(m_fromPos.x, m_toPos.x), uniform_random(m_fromPos.y, m_toPos.y), uniform_random(m_fromPos.z, m_toPos.z));
-				Tile* tile = g_game.getTile(pos);
+				Tile* tile = g_game.map.getTile(pos);
 				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, pos, false, true)) {
 					success = true;
 					break;

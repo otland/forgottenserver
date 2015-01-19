@@ -739,17 +739,17 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 		uint16_t dy = tilePos.y;
 		uint8_t dz = tilePos.z + 1;
 
-		Tile* southDownTile = g_game.getTile(dx, dy - 1, dz);
+		Tile* southDownTile = g_game.map.getTile(dx, dy - 1, dz);
 		if (southDownTile && southDownTile->floorChange(SOUTH_ALT)) {
 			dy -= 2;
-			destTile = g_game.getTile(dx, dy, dz);
+			destTile = g_game.map.getTile(dx, dy, dz);
 		} else {
-			Tile* eastDownTile = g_game.getTile(dx - 1, dy, dz);
+			Tile* eastDownTile = g_game.map.getTile(dx - 1, dy, dz);
 			if (eastDownTile && eastDownTile->floorChange(EAST_ALT)) {
 				dx -= 2;
-				destTile = g_game.getTile(dx, dy, dz);
+				destTile = g_game.map.getTile(dx, dy, dz);
 			} else {
-				Tile* downTile = g_game.getTile(dx, dy, dz);
+				Tile* downTile = g_game.map.getTile(dx, dy, dz);
 				if (downTile) {
 					if (downTile->floorChange(NORTH)) {
 						++dy;
@@ -775,7 +775,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 						++dx;
 					}
 
-					destTile = g_game.getTile(dx, dy, dz);
+					destTile = g_game.map.getTile(dx, dy, dz);
 				}
 			}
 		}
@@ -808,7 +808,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 			dx += 2;
 		}
 
-		destTile = g_game.getTile(dx, dy, dz);
+		destTile = g_game.map.getTile(dx, dy, dz);
 	}
 
 	if (destTile == nullptr) {

@@ -358,7 +358,7 @@ void Creature::updateMapCache()
 		for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
 			pos.x = myPos.getX() + x;
 			pos.y = myPos.getY() + y;
-			tile = g_game.getTile(pos.x, pos.y, myPos.z);
+			tile = g_game.map.getTile(pos);
 			updateTileCache(tile, pos);
 		}
 	}
@@ -560,7 +560,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update 0
 					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
-						tile = g_game.getTile(myPos.getX() + x, myPos.getY() - maxWalkCacheHeight, myPos.z);
+						tile = g_game.map.getTile(myPos.getX() + x, myPos.getY() - maxWalkCacheHeight, myPos.z);
 						updateTileCache(tile, x, -maxWalkCacheHeight);
 					}
 				} else if (oldPos.y < newPos.y) { // south
@@ -571,7 +571,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update mapWalkHeight - 1
 					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
-						tile = g_game.getTile(myPos.getX() + x, myPos.getY() + maxWalkCacheHeight, myPos.z);
+						tile = g_game.map.getTile(myPos.getX() + x, myPos.getY() + maxWalkCacheHeight, myPos.z);
 						updateTileCache(tile, x, maxWalkCacheHeight);
 					}
 				}
@@ -596,7 +596,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update mapWalkWidth - 1
 					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
-						tile = g_game.getTile(myPos.x + maxWalkCacheWidth, myPos.y + y, myPos.z);
+						tile = g_game.map.getTile(myPos.x + maxWalkCacheWidth, myPos.y + y, myPos.z);
 						updateTileCache(tile, maxWalkCacheWidth, y);
 					}
 				} else if (oldPos.x > newPos.x) { // west
@@ -619,7 +619,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update 0
 					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
-						tile = g_game.getTile(myPos.x - maxWalkCacheWidth, myPos.y + y, myPos.z);
+						tile = g_game.map.getTile(myPos.x - maxWalkCacheWidth, myPos.y + y, myPos.z);
 						updateTileCache(tile, -maxWalkCacheWidth, y);
 					}
 				}

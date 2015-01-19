@@ -2919,7 +2919,7 @@ int32_t LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	//doTileAddItemEx(pos, uid)
 	const Position& pos = getPosition(L, 1);
 
-	Tile* tile = g_game.getTile(pos);
+	Tile* tile = g_game.map.getTile(pos);
 	if (!tile) {
 		std::ostringstream ss;
 		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
@@ -2959,7 +2959,7 @@ int32_t LuaScriptInterface::luaGetThingfromPos(lua_State* L)
 	int32_t stackpos;
 	const Position& pos = getPosition(L, 1, stackpos);
 
-	Tile* tile = g_game.getTile(pos);
+	Tile* tile = g_game.map.getTile(pos);
 	if (!tile) {
 		pushThing(L, nullptr);
 		return 1;
@@ -3008,7 +3008,7 @@ int32_t LuaScriptInterface::luaDoCreateItem(lua_State* L)
 	//doCreateItem(itemid, <optional> type/count, pos)
 	//Returns uid of the created item, only works on tiles.
 	const Position& pos = getPosition(L, 3);
-	Tile* tile = g_game.getTile(pos);
+	Tile* tile = g_game.map.getTile(pos);
 	if (!tile) {
 		std::ostringstream ss;
 		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
@@ -4903,7 +4903,7 @@ int32_t LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 	if (lua_gettop(L) >= 3) {
 		const Position& position = getPosition(L, 3);
-		Tile* tile = g_game.getTile(position);
+		Tile* tile = g_game.map.getTile(position);
 		if (!tile) {
 			delete item;
 			lua_pushnil(L);
@@ -4982,14 +4982,15 @@ int32_t LuaScriptInterface::luaGameCreateTile(lua_State* L)
 		isDynamic = getBoolean(L, 4, false);
 	}
 
-	Tile* tile = g_game.getTile(position);
+	Tile* tile = g_game.map.getTile(position);
 	if (!tile) {
 		if (isDynamic) {
 			tile = new DynamicTile(position.x, position.y, position.z);
 		} else {
 			tile = new StaticTile(position.x, position.y, position.z);
 		}
-		g_game.setTile(tile);
+
+		g_game.map.setTile(position, tile);
 	}
 
 	pushUserdata(L, tile);
@@ -5219,12 +5220,12 @@ int32_t LuaScriptInterface::luaTileCreate(lua_State* L)
 	// Tile(position)
 	Tile* tile;
 	if (isTable(L, 2)) {
-		tile = g_game.getTile(getPosition(L, 2));
+		tile = g_game.map.getTile(getPosition(L, 2));
 	} else {
 		uint8_t z = getNumber<uint8_t>(L, 4);
 		uint16_t y = getNumber<uint16_t>(L, 3);
 		uint16_t x = getNumber<uint16_t>(L, 2);
-		tile = g_game.getTile(x, y, z);
+		tile = g_game.map.getTile(x, y, z);
 	}
 
 	if (tile) {
@@ -6867,7 +6868,7 @@ int32_t LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	}
 
 	const Position& position = getPosition(L, 2);
-	Tile* tile = g_game.getTile(position);
+	Tile* tile = g_game.map.getTile(position);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -10444,7 +10445,7 @@ int32_t LuaScriptInterface::luaGroupCreate(lua_State* L)
 	// Group(id)
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
-	Group* group = g_game.getGroup(id);
+	Group* group = g_game.groups.getGroup(id);
 	if (group) {
 		pushUserdata<Group>(L, group);
 		setMetatable(L, -1, "Group");

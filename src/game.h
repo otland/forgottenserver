@@ -121,22 +121,6 @@ class Game
 		static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
 
 		/**
-		  * Get a single tile of the map.
-		  * \returns A pointer to the tile
-		*/
-		inline Tile* getTile(uint16_t x, uint16_t y, uint8_t z) const {
-			return map.getTile(x, y, z);
-		}
-		inline Tile* getTile(const Position& pos) const {
-			return map.getTile(pos.x, pos.y, pos.z);
-		}
-
-		/**
-		  * Set a single tile of the map, position is read from this tile
-		*/
-		void setTile(Tile* newTile);
-
-		/**
 		  * Returns a creature based on the unique creature identifier
 		  * \param id is the unique creature id to get a creature pointer to
 		  * \returns A Creature pointer to the creature
@@ -517,14 +501,13 @@ class Game
 
 		std::unordered_map<Tile*, Container*> browseFields;
 
-		Group* getGroup(uint32_t id);
-
 		void internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, bool stackable);
 
 		BedItem* getBedBySleeper(uint32_t guid) const;
 		void setBedSleeper(BedItem* bed, uint32_t guid);
 		void removeBedSleeper(uint32_t guid);
 
+		Groups groups;
 		Map map;
 		Mounts mounts;
 		Raids raids;
@@ -568,7 +551,6 @@ class Game
 
 		ModalWindow offlineTrainingWindow;
 		Commands commands;
-		Groups groups;
 
 		static const int32_t LIGHT_LEVEL_DAY = 250;
 		static const int32_t LIGHT_LEVEL_NIGHT = 40;

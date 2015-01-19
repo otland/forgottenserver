@@ -632,7 +632,7 @@ void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y
 {
 	for (int32_t nx = 0; nx < width; nx++) {
 		for (int32_t ny = 0; ny < height; ny++) {
-			Tile* tile = g_game.getTile(x + nx + offset, y + ny + offset, z);
+			Tile* tile = g_game.map.getTile(x + nx + offset, y + ny + offset, z);
 			if (tile) {
 				if (skip >= 0) {
 					msg.AddByte(skip);
