@@ -31,15 +31,15 @@
 class SchedulerTask : public Task
 {
 	public:
-		void setEventId(uint32_t eventid) {
-			m_eventid = eventid;
+		void setEventId(uint32_t id) {
+			eventId = id;
 		}
 		uint32_t getEventId() const {
-			return m_eventid;
+			return eventId;
 		}
 
 		std::chrono::system_clock::time_point getCycle() const {
-			return m_expiration;
+			return expiration;
 		}
 
 		bool operator<(const SchedulerTask& other) const {
@@ -48,10 +48,10 @@ class SchedulerTask : public Task
 
 	protected:
 		SchedulerTask(uint32_t delay, const std::function<void (void)>& f) : Task(delay, f) {
-			m_eventid = 0;
+			eventId = 0;
 		}
 
-		uint32_t m_eventid;
+		uint32_t eventId;
 
 		friend SchedulerTask* createSchedulerTask(uint32_t, const std::function<void (void)>&);
 };
@@ -85,14 +85,14 @@ class Scheduler
 	protected:
 		void schedulerThread();
 
-		std::thread m_thread;
-		std::mutex m_eventLock;
-		std::condition_variable m_eventSignal;
+		std::thread thread;
+		std::mutex eventLock;
+		std::condition_variable eventSignal;
 
-		uint32_t m_lastEventId;
-		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > m_eventList;
-		std::unordered_set<uint32_t> m_eventIds;
-		ThreadState m_threadState;
+		uint32_t lastEventId;
+		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > eventList;
+		std::unordered_set<uint32_t> eventIds;
+		ThreadState threadState;
 };
 
 extern Scheduler g_scheduler;

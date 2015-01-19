@@ -75,7 +75,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->AddByte(0); // world id
 		output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
 		output->AddString(g_config.getString(ConfigManager::IP));
-		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+		output->Add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
 		output->AddByte(0);
 
 		output->AddByte(static_cast<uint8_t>(account.charList.size()));
@@ -86,9 +86,9 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 		//Add premium days
 		if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-			output->add<uint16_t>(0xFFFF);    //client displays free premium
+			output->Add<uint16_t>(0xFFFF);    //client displays free premium
 		} else {
-			output->add<uint16_t>(account.premiumDays);
+			output->Add<uint16_t>(account.premiumDays);
 		}
 
 		OutputMessagePool::getInstance()->send(output);

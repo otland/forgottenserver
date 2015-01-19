@@ -39,15 +39,14 @@ class NetworkMessage
 
 		// constructor
 		NetworkMessage() {
-			m_MsgBuf = m_RealBuf;
 			Reset();
 		}
 
 	protected:
 		void Reset() {
-			m_overrun = false;
-			m_MsgSize = 0;
-			m_ReadPos = 8;
+			overrun = false;
+			length = 0;
+			position = 8;
 		}
 
 	public:
@@ -57,7 +56,7 @@ class NetworkMessage
 				return 0;
 			}
 
-			return m_RealBuf[m_ReadPos++];
+			return buffer[position++];
 		}
 
 		template<typename T>
@@ -66,20 +65,17 @@ class NetworkMessage
 				return 0;
 			}
 
-			T v = *reinterpret_cast<T*>(m_MsgBuf + m_ReadPos);
-			m_ReadPos += sizeof(T);
+			T v = *reinterpret_cast<T*>(buffer + position);
+			position += sizeof(T);
 			return v;
 		}
 
-		std::string GetString(uint16_t stringlen = 0);
-		std::string GetRaw() {
-			return GetString(m_MsgSize - m_ReadPos);
-		}
+		std::string GetString(uint16_t stringLen = 0);
 		Position GetPosition();
 
 		// skips count unknown/unused bytes in an incoming message
 		void SkipBytes(int count) {
-			m_ReadPos += count;
+			position += count;
 		}
 
 		// simply write functions for outgoing message
@@ -88,19 +84,19 @@ class NetworkMessage
 				return;
 			}
 
-			m_RealBuf[m_ReadPos++] = value;
-			m_MsgSize++;
+			buffer[position++] = value;
+			length++;
 		}
 
 		template<typename T>
-		void add(T value) {
+		void Add(T value) {
 			if (!canAdd(sizeof(T))) {
 				return;
 			}
 
-			*reinterpret_cast<T*>(m_MsgBuf + m_ReadPos) = value;
-			m_ReadPos += sizeof(T);
-			m_MsgSize += sizeof(T);
+			*reinterpret_cast<T*>(buffer + position) = value;
+			position += sizeof(T);
+			length += sizeof(T);
 		}
 
 		void AddBytes(const char* bytes, size_t size);
@@ -117,51 +113,58 @@ class NetworkMessage
 		void AddItem(const Item* item);
 		void AddItemId(uint16_t itemId);
 
-		int32_t getMessageLength() const {
-			return m_MsgSize;
+		int32_t getLength() const {
+			return length;
 		}
-		void setMessageLength(int32_t newSize) {
-			m_MsgSize = newSize;
+
+		void setLength(int32_t newLength) {
+			length = newLength;
 		}
-		int32_t getReadPos() const {
-			return m_ReadPos;
+
+		int32_t getPosition() const {
+			return position;
 		}
+
 		void setReadPos(int32_t pos) {
-			m_ReadPos = pos;
+			position = pos;
 		}
 
 		int32_t decodeHeader();
 
 		bool isOverrun() const {
-			return m_overrun;
+			return overrun;
 		}
 
-		uint8_t* getBuffer() const {
-			return m_MsgBuf;
+		uint8_t* getBuffer() {
+			return buffer;
 		}
-		char* getBodyBuffer() {
-			m_ReadPos = 2;
-			return reinterpret_cast<char*>(&m_RealBuf[header_length]);
+
+		const uint8_t* getBuffer() const {
+			return buffer;
+		}
+
+		uint8_t* getBodyBuffer() {
+			position = 2;
+			return &buffer[header_length];
 		}
 
 	protected:
 		inline bool canAdd(size_t size) const {
-			return (size + m_ReadPos) < max_body_length;
+			return (size + position) < max_body_length;
 		}
 
 		inline bool canRead(int32_t size) {
-			if ((m_ReadPos + size) > (m_MsgSize + 8) || size >= (NETWORKMESSAGE_MAXSIZE - m_ReadPos)) {
-				m_overrun = true;
+			if ((position + size) > (size + 8) || size >= (NETWORKMESSAGE_MAXSIZE - position)) {
+				overrun = true;
 				return false;
 			}
 			return true;
 		}
 
-		uint8_t m_RealBuf[NETWORKMESSAGE_MAXSIZE];
-		uint8_t* m_MsgBuf;
-		int32_t m_MsgSize;
-		int32_t m_ReadPos;
-		bool m_overrun;
+		uint8_t buffer[NETWORKMESSAGE_MAXSIZE];
+		int32_t length;
+		int32_t position;
+		bool overrun;
 };
 
 #endif // #ifndef __NETWORK_MESSAGE_H__

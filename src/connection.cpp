@@ -246,7 +246,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		                                    std::placeholders::_1));
 
 		// Read packet content
-		m_msg.setMessageLength(size + NetworkMessage::header_length);
+		m_msg.setLength(size + NetworkMessage::header_length);
 		boost::asio::async_read(getHandle(), boost::asio::buffer(m_msg.getBodyBuffer(), size),
 		                        std::bind(&Connection::parsePacket, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
@@ -278,9 +278,9 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 	//Check packet checksum
 	uint32_t checksum;
-	int32_t len = m_msg.getMessageLength() - m_msg.getReadPos() - 4;
+	int32_t len = m_msg.getLength() - m_msg.getPosition() - 4;
 	if (len > 0) {
-		checksum = adlerChecksum(m_msg.getBuffer() + m_msg.getReadPos() + 4, len);
+		checksum = adlerChecksum(m_msg.getBuffer() + m_msg.getPosition() + 4, len);
 	} else {
 		checksum = 0;
 	}
@@ -364,7 +364,7 @@ void Connection::internalSend(OutputMessage_ptr msg)
 		                                     std::placeholders::_1));
 
 		boost::asio::async_write(getHandle(),
-		                         boost::asio::buffer(msg->getOutputBuffer(), msg->getMessageLength()),
+		                         boost::asio::buffer(msg->getOutputBuffer(), msg->getLength()),
 		                         std::bind(&Connection::onWriteOperation, shared_from_this(), msg, std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {

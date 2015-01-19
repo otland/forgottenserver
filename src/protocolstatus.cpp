@@ -189,14 +189,14 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(g_config.getString(ConfigManager::MOTD));
 		output->AddString(g_config.getString(ConfigManager::LOCATION));
 		output->AddString(g_config.getString(ConfigManager::URL));
-		output->add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
+		output->Add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
 	}
 
 	if (requestedInfo & REQUEST_PLAYERS_INFO) {
 		output->AddByte(0x20);
-		output->add<uint32_t>(g_game.getPlayersOnline());
-		output->add<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-		output->add<uint32_t>(g_game.getPlayersRecord());
+		output->Add<uint32_t>(g_game.getPlayersOnline());
+		output->Add<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+		output->Add<uint32_t>(g_game.getPlayersRecord());
 	}
 
 	if (requestedInfo & REQUEST_MAP_INFO) {
@@ -205,18 +205,18 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(g_config.getString(ConfigManager::MAP_AUTHOR));
 		uint32_t mapWidth, mapHeight;
 		g_game.getMapDimensions(mapWidth, mapHeight);
-		output->add<uint16_t>(mapWidth);
-		output->add<uint16_t>(mapHeight);
+		output->Add<uint16_t>(mapWidth);
+		output->Add<uint16_t>(mapHeight);
 	}
 
 	if (requestedInfo & REQUEST_EXT_PLAYERS_INFO) {
 		output->AddByte(0x21); // players info - online players list
 
 		const auto& players = g_game.getPlayers();
-		output->add<uint32_t>(players.size());
+		output->Add<uint32_t>(players.size());
 		for (const auto& it : players) {
 			output->AddString(it.second->getName());
-			output->add<uint32_t>(it.second->getLevel());
+			output->Add<uint32_t>(it.second->getLevel());
 		}
 	}
 

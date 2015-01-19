@@ -5915,7 +5915,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU16(lua_State* L)
 	uint16_t number = getNumber<uint16_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->add<uint16_t>(number);
+		message->Add<uint16_t>(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -5929,7 +5929,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU32(lua_State* L)
 	uint32_t number = getNumber<uint32_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->add<uint32_t>(number);
+		message->Add<uint32_t>(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -5943,7 +5943,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU64(lua_State* L)
 	uint64_t number = getNumber<uint64_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->add<uint64_t>(number);
+		message->Add<uint64_t>(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

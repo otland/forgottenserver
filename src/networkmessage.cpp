@@ -30,9 +30,9 @@
 
 int32_t NetworkMessage::decodeHeader()
 {
-	int32_t size = static_cast<int32_t>(m_RealBuf[0] | m_RealBuf[1] << 8);
-	m_MsgSize = size;
-	return size;
+	int32_t newSize = static_cast<int32_t>(buffer[0] | buffer[1] << 8);
+	length = newSize;
+	return length;
 }
 
 /******************************************************************************/
@@ -46,8 +46,8 @@ std::string NetworkMessage::GetString(uint16_t stringlen/* = 0*/)
 		return std::string();
 	}
 
-	char* v = reinterpret_cast<char*>(m_RealBuf) + m_ReadPos;
-	m_ReadPos += stringlen;
+	char* v = reinterpret_cast<char*>(buffer) + position;
+	position += stringlen;
 	return std::string(v, stringlen);
 }
 
@@ -63,34 +63,34 @@ Position NetworkMessage::GetPosition()
 
 void NetworkMessage::AddString(const std::string& value)
 {
-	size_t stringlen = value.length();
-	if (!canAdd(stringlen + 2) || stringlen > 8192) {
+	size_t stringLen = value.length();
+	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
-	add<uint16_t>(stringlen);
-	memcpy(m_MsgBuf + m_ReadPos, value.c_str(), stringlen);
-	m_ReadPos += stringlen;
-	m_MsgSize += stringlen;
+	Add<uint16_t>(stringLen);
+	memcpy(buffer + position, value.c_str(), stringLen);
+	position += stringLen;
+	length += stringLen;
 }
 
 void NetworkMessage::AddString(const char* value)
 {
-	size_t stringlen = strlen(value);
-	if (!canAdd(stringlen + 2) || stringlen > 8192) {
+	size_t stringLen = strlen(value);
+	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
-	add<uint16_t>(stringlen);
-	memcpy(m_MsgBuf + m_ReadPos, value, stringlen);
-	m_ReadPos += stringlen;
-	m_MsgSize += stringlen;
+	Add<uint16_t>(stringLen);
+	memcpy(buffer + position, value, stringLen);
+	position += stringLen;
+	length += stringLen;
 }
 
 void NetworkMessage::AddDouble(double value, uint8_t precision/* = 2*/)
 {
 	AddByte(precision);
-	add<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + INT_MAX);
+	Add<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + INT_MAX);
 }
 
 void NetworkMessage::AddBytes(const char* bytes, size_t size)
@@ -99,9 +99,9 @@ void NetworkMessage::AddBytes(const char* bytes, size_t size)
 		return;
 	}
 
-	memcpy(m_MsgBuf + m_ReadPos, bytes, size);
-	m_ReadPos += size;
-	m_MsgSize += size;
+	memcpy(buffer + position, bytes, size);
+	position += size;
+	size += size;
 }
 
 void NetworkMessage::AddPaddingBytes(size_t n)
@@ -110,14 +110,14 @@ void NetworkMessage::AddPaddingBytes(size_t n)
 		return;
 	}
 
-	memset(&m_MsgBuf[m_ReadPos], 0x33, n);
-	m_MsgSize += n;
+	memset(&buffer[position], 0x33, n);
+	length += n;
 }
 
 void NetworkMessage::AddPosition(const Position& pos)
 {
-	add<uint16_t>(pos.x);
-	add<uint16_t>(pos.y);
+	Add<uint16_t>(pos.x);
+	Add<uint16_t>(pos.y);
 	AddByte(pos.z);
 }
 
@@ -125,7 +125,7 @@ void NetworkMessage::AddItem(uint16_t id, uint8_t count)
 {
 	const ItemType& it = Item::items[id];
 
-	add<uint16_t>(it.clientId);
+	Add<uint16_t>(it.clientId);
 
 	AddByte(0xFF);    // MARK_UNMARKED
 
@@ -144,7 +144,7 @@ void NetworkMessage::AddItem(const Item* item)
 {
 	const ItemType& it = Item::items[item->getID()];
 
-	add<uint16_t>(it.clientId);
+	Add<uint16_t>(it.clientId);
 	AddByte(0xFF);    // MARK_UNMARKED
 
 	if (it.stackable) {
@@ -160,5 +160,5 @@ void NetworkMessage::AddItem(const Item* item)
 
 void NetworkMessage::AddItemId(uint16_t itemId)
 {
-	add<uint16_t>(Item::items[itemId].clientId);
+	Add<uint16_t>(Item::items[itemId].clientId);
 }

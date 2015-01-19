@@ -31,33 +31,33 @@ class Task
 {
 	public:
 		// DO NOT allocate this class on the stack
-		Task(uint32_t ms, const std::function<void (void)>& f) : m_f(f) {
-			m_expiration = std::chrono::system_clock::now() + std::chrono::milliseconds(ms);
+		Task(uint32_t ms, const std::function<void (void)>& f) : func(f) {
+			expiration = std::chrono::system_clock::now() + std::chrono::milliseconds(ms);
 		}
 		Task(const std::function<void (void)>& f)
-			: m_expiration(SYSTEM_TIME_ZERO), m_f(f) {}
+			: expiration(SYSTEM_TIME_ZERO), func(f) {}
 
 		void operator()() {
-			m_f();
+			func();
 		}
 
 		void setDontExpire() {
-			m_expiration = SYSTEM_TIME_ZERO;
+			expiration = SYSTEM_TIME_ZERO;
 		}
 
 		bool hasExpired() const {
-			if (m_expiration == SYSTEM_TIME_ZERO) {
+			if (expiration == SYSTEM_TIME_ZERO) {
 				return false;
 			}
-			return m_expiration < std::chrono::system_clock::now();
+			return expiration < std::chrono::system_clock::now();
 		}
 
 	protected:
 		// Expiration has another meaning for scheduler tasks,
 		// then it is the time the task should be added to the
 		// dispatcher
-		std::chrono::system_clock::time_point m_expiration;
-		std::function<void (void)> m_f;
+		std::chrono::system_clock::time_point expiration;
+		std::function<void (void)> func;
 };
 
 inline Task* createTask(const std::function<void (void)>& f)
@@ -87,12 +87,12 @@ class Dispatcher
 
 		void flush();
 
-		std::thread m_thread;
-		std::mutex m_taskLock;
-		std::condition_variable m_taskSignal;
+		std::thread thread;
+		std::mutex taskLock;
+		std::condition_variable taskSignal;
 
-		std::list<Task*> m_taskList;
-		ThreadState m_threadState;
+		std::list<Task*> taskList;
+		ThreadState threadState;
 };
 
 extern Dispatcher g_dispatcher;

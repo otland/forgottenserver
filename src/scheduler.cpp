@@ -23,43 +23,43 @@
 
 Scheduler::Scheduler()
 {
-	m_lastEventId = 0;
-	m_threadState = THREAD_STATE_TERMINATED;
+	lastEventId = 0;
+	threadState = THREAD_STATE_TERMINATED;
 }
 
 void Scheduler::start()
 {
-	m_threadState = THREAD_STATE_RUNNING;
-	m_thread = std::thread(&Scheduler::schedulerThread, this);
+	threadState = THREAD_STATE_RUNNING;
+	thread = std::thread(&Scheduler::schedulerThread, this);
 }
 
 void Scheduler::schedulerThread()
 {
-	std::unique_lock<std::mutex> eventLockUnique(m_eventLock, std::defer_lock);
-	while (m_threadState != THREAD_STATE_TERMINATED) {
+	std::unique_lock<std::mutex> eventLockUnique(eventLock, std::defer_lock);
+	while (threadState != THREAD_STATE_TERMINATED) {
 		std::cv_status ret = std::cv_status::no_timeout;
 
 		eventLockUnique.lock();
-		if (m_eventList.empty()) {
-			m_eventSignal.wait(eventLockUnique);
+		if (eventList.empty()) {
+			eventSignal.wait(eventLockUnique);
 		} else {
-			ret = m_eventSignal.wait_until(eventLockUnique, m_eventList.top()->getCycle());
+			ret = eventSignal.wait_until(eventLockUnique, eventList.top()->getCycle());
 		}
 
 		// the mutex is locked again now...
-		if (ret == std::cv_status::timeout && m_threadState != THREAD_STATE_TERMINATED) {
+		if (ret == std::cv_status::timeout && threadState != THREAD_STATE_TERMINATED) {
 			// ok we had a timeout, so there has to be an event we have to execute...
-			SchedulerTask* task = m_eventList.top();
-			m_eventList.pop();
+			SchedulerTask* task = eventList.top();
+			eventList.pop();
 
 			// check if the event was stopped
-			auto it = m_eventIds.find(task->getEventId());
-			if (it == m_eventIds.end()) {
+			auto it = eventIds.find(task->getEventId());
+			if (it == eventIds.end()) {
 				eventLockUnique.unlock();
 				delete task;
 				continue;
 			}
-			m_eventIds.erase(it);
+			eventIds.erase(it);
 			eventLockUnique.unlock();
 
 			task->setDontExpire();
@@ -73,38 +73,38 @@ void Scheduler::schedulerThread()
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
 	bool do_signal = false;
-	m_eventLock.lock();
+	eventLock.lock();
 
-	if (Scheduler::m_threadState == THREAD_STATE_RUNNING) {
+	if (threadState == THREAD_STATE_RUNNING) {
 		// check if the event has a valid id
 		if (task->getEventId() == 0) {
 			// if not generate one
-			if (++m_lastEventId == 0) {
-				m_lastEventId = 1;
+			if (++lastEventId == 0) {
+				lastEventId = 1;
 			}
 
-			task->setEventId(m_lastEventId);
+			task->setEventId(lastEventId);
 		}
 
-		// insert the eventid in the list of active events
-		m_eventIds.insert(task->getEventId());
+		// insert the event id in the list of active events
+		eventIds.insert(task->getEventId());
 
 		// add the event to the queue
-		m_eventList.push(task);
+		eventList.push(task);
 
 		// if the list was empty or this event is the top in the list
 		// we have to signal it
-		do_signal = (task == m_eventList.top());
+		do_signal = (task == eventList.top());
 	} else {
-		m_eventLock.unlock();
+		eventLock.unlock();
 		delete task;
 		return 0;
 	}
 
-	m_eventLock.unlock();
+	eventLock.unlock();
 
 	if (do_signal) {
-		m_eventSignal.notify_one();
+		eventSignal.notify_one();
 	}
 
 	return task->getEventId();
@@ -116,44 +116,44 @@ bool Scheduler::stopEvent(uint32_t eventid)
 		return false;
 	}
 
-	std::lock_guard<std::mutex> lockGuard(m_eventLock);
+	std::lock_guard<std::mutex> lockGuard(eventLock);
 
 	// search the event id..
-	auto it = m_eventIds.find(eventid);
-	if (it == m_eventIds.end()) {
+	auto it = eventIds.find(eventid);
+	if (it == eventIds.end()) {
 		return false;
 	}
 
-	m_eventIds.erase(it);
+	eventIds.erase(it);
 	return true;
 }
 
 void Scheduler::stop()
 {
-	m_eventLock.lock();
-	m_threadState = THREAD_STATE_CLOSING;
-	m_eventLock.unlock();
+	eventLock.lock();
+	threadState = THREAD_STATE_CLOSING;
+	eventLock.unlock();
 }
 
 void Scheduler::shutdown()
 {
-	m_eventLock.lock();
-	m_threadState = THREAD_STATE_TERMINATED;
+	eventLock.lock();
+	threadState = THREAD_STATE_TERMINATED;
 
 	//this list should already be empty
-	while (!m_eventList.empty()) {
-		delete m_eventList.top();
-		m_eventList.pop();
+	while (!eventList.empty()) {
+		delete eventList.top();
+		eventList.pop();
 	}
 
-	m_eventIds.clear();
-	m_eventLock.unlock();
-	m_eventSignal.notify_one();
+	eventIds.clear();
+	eventLock.unlock();
+	eventSignal.notify_one();
 }
 
 void Scheduler::join()
 {
-	if (m_thread.joinable()) {
-		m_thread.join();
+	if (thread.joinable()) {
+		thread.join();
 	}
 }
