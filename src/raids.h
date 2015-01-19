@@ -48,11 +48,7 @@ class RaidEvent;
 class Raids
 {
 	public:
-		static Raids* getInstance() {
-			static Raids instance;
-			return &instance;
-		}
-
+		Raids();
 		~Raids();
 
 		// non-copyable
@@ -91,13 +87,11 @@ class Raids
 		void checkRaids();
 
 		LuaScriptInterface& getScriptInterface() {
-			return m_scriptInterface;
+			return scriptInterface;
 		}
 
 	private:
-		Raids();
-
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 
 		std::list<Raid*> raidList;
 		Raid* running;

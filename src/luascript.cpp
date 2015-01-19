@@ -5002,7 +5002,7 @@ int32_t LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	// Game.startRaid(raidName)
 	const std::string& raidName = getString(L, 1);
 
-	Raid* raid = Raids::getInstance()->getRaidByName(raidName);
+	Raid* raid = g_game.raids.getRaidByName(raidName);
 	if (raid) {
 		raid->startRaid();
 		pushBoolean(L, true);

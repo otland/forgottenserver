@@ -144,8 +144,8 @@ void Game::setGameState(GameState_t newState)
 
 			Spawns::getInstance()->startup();
 
-			Raids::getInstance()->loadFromXml();
-			Raids::getInstance()->startup();
+			raids.loadFromXml();
+			raids.startup();
 
 			Quests::getInstance()->loadFromXml();
 
@@ -4576,7 +4576,7 @@ void Game::shutdown()
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
 	Spawns::getInstance()->clear();
-	Raids::getInstance()->clear();
+	raids.clear();
 
 	cleanup();
 

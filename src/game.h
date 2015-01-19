@@ -29,6 +29,7 @@
 #include "item.h"
 #include "container.h"
 #include "player.h"
+#include "raids.h"
 #include "npc.h"
 #include "wildcardtree.h"
 
@@ -524,6 +525,7 @@ class Game
 		void removeBedSleeper(uint32_t guid);
 
 		Map map;
+		Raids raids;
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);

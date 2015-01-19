@@ -268,8 +268,8 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 		Npcs::reload();
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
 	} else if (tmpParam == "raid" || tmpParam == "raids") {
-		Raids::getInstance()->reload();
-		Raids::getInstance()->startup();
+		g_game.raids.reload();
+		g_game.raids.startup();
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded raids.");
 	} else if (tmpParam == "spell" || tmpParam == "spells") {
 		g_spells->reload();
@@ -364,18 +364,18 @@ void Commands::sellHouse(Player& player, const std::string& param)
 
 void Commands::forceRaid(Player& player, const std::string& param)
 {
-	Raid* raid = Raids::getInstance()->getRaidByName(param);
+	Raid* raid = g_game.raids.getRaidByName(param);
 	if (!raid || !raid->isLoaded()) {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "No such raid exists.");
 		return;
 	}
 
-	if (Raids::getInstance()->getRunning()) {
+	if (g_game.raids.getRunning()) {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
 		return;
 	}
 
-	Raids::getInstance()->setRunning(raid);
+	g_game.raids.setRunning(raid);
 
 	RaidEvent* event = raid->getNextRaidEvent();
 	if (!event) {

@@ -33,7 +33,7 @@ extern Game g_game;
 extern ConfigManager g_config;
 
 Raids::Raids()
-	: m_scriptInterface("Raid Interface")
+	: scriptInterface("Raid Interface")
 {
 	loaded = false;
 	started = false;
@@ -41,7 +41,7 @@ Raids::Raids()
 	lastRaidEnd = 0;
 	checkRaidsEvent = 0;
 
-	m_scriptInterface.initState();
+	scriptInterface.initState();
 }
 
 Raids::~Raids()
@@ -174,7 +174,7 @@ void Raids::clear()
 	running = nullptr;
 	lastRaidEnd = 0;
 
-	m_scriptInterface.reInitState();
+	scriptInterface.reInitState();
 }
 
 bool Raids::reload()
@@ -222,7 +222,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		} else if (strcasecmp(eventNode.name(), "areaspawn") == 0) {
 			event = new AreaSpawnEvent();
 		} else if (strcasecmp(eventNode.name(), "script") == 0) {
-			event = new ScriptEvent(&Raids::getInstance()->getScriptInterface());
+			event = new ScriptEvent(&g_game.raids.getScriptInterface());
 		} else {
 			continue;
 		}
@@ -273,8 +273,8 @@ void Raid::resetRaid()
 {
 	nextEvent = 0;
 	state = RAIDSTATE_IDLE;
-	Raids::getInstance()->setRunning(nullptr);
-	Raids::getInstance()->setLastRaidEnd(OTSYS_TIME());
+	g_game.raids.setRunning(nullptr);
+	g_game.raids.setLastRaidEnd(OTSYS_TIME());
 }
 
 void Raid::stopEvents()
