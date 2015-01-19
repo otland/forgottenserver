@@ -247,18 +247,18 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				uint32_t tileflags = TILESTATE_NONE;
 
 				if (type == OTBM_HOUSETILE) {
-					uint32_t _houseid;
-					if (!propStream.read<uint32_t>(_houseid)) {
+					uint32_t houseId;
+					if (!propStream.read<uint32_t>(houseId)) {
 						std::ostringstream ss;
 						ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Could not read house id.";
 						setLastErrorString(ss.str());
 						return false;
 					}
 
-					house = Houses::getInstance().addHouse(_houseid);
+					house = map->houses.addHouse(houseId);
 					if (!house) {
 						std::ostringstream ss;
-						ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Could not create house id: " << _houseid;
+						ss << "[x:" << px << ", y:" << py << ", z:" << pz << "] Could not create house id: " << houseId;
 						setLastErrorString(ss.str());
 						return false;
 					}

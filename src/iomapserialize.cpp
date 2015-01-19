@@ -85,7 +85,7 @@ bool IOMapSerialize::saveHouseItems()
 	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
-	for (const auto& it : Houses::getInstance().getHouses()) {
+	for (const auto& it : g_game.map.houses.getHouses()) {
 		//save house items
 		House* house = it.second;
 		for (HouseTile* tile : house->getTiles()) {
@@ -277,7 +277,7 @@ bool IOMapSerialize::loadHouseInfo()
 	}
 
 	do {
-		House* house = Houses::getInstance().getHouse(result->getDataInt("id"));
+		House* house = g_game.map.houses.getHouse(result->getDataInt("id"));
 		if (house) {
 			house->setOwner(result->getDataInt("owner"), false);
 			house->setPaidUntil(result->getDataInt("paid"));
@@ -288,7 +288,7 @@ bool IOMapSerialize::loadHouseInfo()
 	result = db->storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`");
 	if (result) {
 		do {
-			House* house = Houses::getInstance().getHouse(result->getDataInt("house_id"));
+			House* house = g_game.map.houses.getHouse(result->getDataInt("house_id"));
 			if (house) {
 				house->setAccessList(result->getDataInt("listid"), result->getDataString("list"));
 			}
@@ -311,7 +311,7 @@ bool IOMapSerialize::saveHouseInfo()
 	}
 
 	std::ostringstream query;
-	for (const auto& it : Houses::getInstance().getHouses()) {
+	for (const auto& it : g_game.map.houses.getHouses()) {
 		House* house = it.second;
 		query << "SELECT `id` FROM `houses` WHERE `id` = " << house->getId();
 		DBResult_ptr result = db->storeQuery(query.str());
@@ -329,7 +329,7 @@ bool IOMapSerialize::saveHouseInfo()
 
 	DBInsert stmt("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
 
-	for (const auto& it : Houses::getInstance().getHouses()) {
+	for (const auto& it : g_game.map.houses.getHouses()) {
 		House* house = it.second;
 
 		std::string listText;

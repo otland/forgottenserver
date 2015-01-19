@@ -29,6 +29,7 @@
 #include "tools.h"
 #include "tile.h"
 #include "town.h"
+#include "house.h"
 
 class Creature;
 class Player;
@@ -242,6 +243,7 @@ class Map
 		std::map<std::string, Position> waypoints;
 
 		Towns towns;
+		Houses houses;
 	protected:
 		SpectatorCache spectatorCache;
 		SpectatorCache playersSpectatorCache;

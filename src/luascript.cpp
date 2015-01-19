@@ -4832,7 +4832,7 @@ int32_t LuaScriptInterface::luaGameGetTowns(lua_State* L)
 int32_t LuaScriptInterface::luaGameGetHouses(lua_State* L)
 {
 	// Game.getHouses()
-	const auto& houses = Houses::getInstance().getHouses();
+	const auto& houses = g_game.map.houses.getHouses();
 	lua_createtable(L, houses.size(), 0);
 
 	int32_t index = 0;
@@ -9776,7 +9776,7 @@ int32_t LuaScriptInterface::luaPlayerGetHouse(lua_State* L)
 		return 1;
 	}
 
-	House* house = Houses::getInstance().getHouseByPlayerId(player->getGUID());
+	House* house = g_game.map.houses.getHouseByPlayerId(player->getGUID());
 	if (house) {
 		pushUserdata<House>(L, house);
 		setMetatable(L, -1, "House");
@@ -10854,7 +10854,7 @@ int32_t LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
 int32_t LuaScriptInterface::luaHouseCreate(lua_State* L)
 {
 	// House(id)
-	House* house = Houses::getInstance().getHouse(getNumber<uint32_t>(L, 2));
+	House* house = g_game.map.houses.getHouse(getNumber<uint32_t>(L, 2));
 	if (house) {
 		pushUserdata<House>(L, house);
 		setMetatable(L, -1, "House");

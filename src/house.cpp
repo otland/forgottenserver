@@ -617,22 +617,6 @@ void Door::onRemoved()
 	}
 }
 
-Houses::Houses()
-{
-	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
-	if (strRentPeriod == "yearly") {
-		rentPeriod = RENTPERIOD_YEARLY;
-	} else if (strRentPeriod == "weekly") {
-		rentPeriod = RENTPERIOD_WEEKLY;
-	} else if (strRentPeriod == "monthly") {
-		rentPeriod = RENTPERIOD_MONTHLY;
-	} else if (strRentPeriod == "daily") {
-		rentPeriod = RENTPERIOD_DAILY;
-	} else {
-		rentPeriod = RENTPERIOD_NEVER;
-	}
-}
-
 House* Houses::getHouseByPlayerId(uint32_t playerId)
 {
 	for (const auto& it : houseMap) {
@@ -658,11 +642,11 @@ bool Houses::loadHousesXML(const std::string& filename)
 			return false;
 		}
 
-		int32_t _houseid = pugi::cast<int32_t>(houseIdAttribute.value());
+		int32_t houseId = pugi::cast<int32_t>(houseIdAttribute.value());
 
-		House* house = Houses::getInstance().getHouse(_houseid);
+		House* house = getHouse(houseId);
 		if (!house) {
-			std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << _houseid << std::endl;
+			std::cout << "Error: [Houses::loadHousesXML] Unknown house, id = " << houseId << std::endl;
 			return false;
 		}
 
@@ -676,7 +660,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
 			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
 					    << " - Name: " << house->getName()
-					    << " - House id: " << _houseid << std::endl;
+					    << " - House id: " << houseId << std::endl;
 		}
 		house->setEntryPos(entryPos);
 
@@ -688,7 +672,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 	return true;
 }
 
-void Houses::payHouses() const
+void Houses::payHouses(RentPeriod_t rentPeriod) const
 {
 	if (rentPeriod == RENTPERIOD_NEVER) {
 		return;

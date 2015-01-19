@@ -271,22 +271,17 @@ enum RentPeriod_t {
 
 class Houses
 {
-		Houses();
-		~Houses() {
-			for (const auto& it : houseMap) {
-				delete it.second;
-			}
-		}
+    public:
+        Houses() = default;
+        ~Houses() {
+            for (const auto& it : houseMap) {
+                delete it.second;
+            }
+        }
 
-		// non-copyable
-		Houses(const Houses&) = delete;
-		Houses& operator=(const Houses&) = delete;
-
-	public:
-		static Houses& getInstance() {
-			static Houses instance;
-			return instance;
-		}
+        // non-copyable
+        Houses(const Houses&) = delete;
+        Houses& operator=(const Houses&) = delete;
 
 		House* addHouse(uint32_t id) {
 			auto it = houseMap.find(id);
@@ -311,14 +306,13 @@ class Houses
 
 		bool loadHousesXML(const std::string& filename);
 
-		void payHouses() const;
+		void payHouses(RentPeriod_t rentPeriod) const;
 
 		const HouseMap& getHouses() const {
 			return houseMap;
 		}
 
 	private:
-		RentPeriod_t rentPeriod;
 		HouseMap houseMap;
 };
 

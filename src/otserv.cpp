@@ -284,7 +284,23 @@ void mainLoader(int, char*[], ServiceManager* services)
 	// Legacy login protocol
 	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
-	Houses::getInstance().payHouses();
+	RentPeriod_t rentPeriod;
+	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+
+	if (strRentPeriod == "yearly") {
+		rentPeriod = RENTPERIOD_YEARLY;
+	} else if (strRentPeriod == "weekly") {
+		rentPeriod = RENTPERIOD_WEEKLY;
+	} else if (strRentPeriod == "monthly") {
+		rentPeriod = RENTPERIOD_MONTHLY;
+	} else if (strRentPeriod == "daily") {
+		rentPeriod = RENTPERIOD_DAILY;
+	} else {
+		rentPeriod = RENTPERIOD_NEVER;
+	}
+
+	g_game.map.houses.payHouses(rentPeriod);
+
 	IOMarket::checkExpiredOffers();
 	IOMarket::getInstance()->updateStatistics();
 

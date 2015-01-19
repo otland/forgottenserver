@@ -339,7 +339,7 @@ void Commands::sellHouse(Player& player, const std::string& param)
 		return;
 	}
 
-	if (Houses::getInstance().getHouseByPlayerId(tradePartner->getGUID())) {
+	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
 		player.sendCancel("Trade player already owns a house.");
 		return;
 	}
