@@ -68,7 +68,7 @@ Game::Game() :
 	gameState = GAME_STATE_NORMAL;
 	worldType = WORLD_TYPE_PVP;
 
-	services = nullptr;
+	serviceManager = nullptr;
 	lastStageLevel = 0;
 	playersRecord = 0;
 	motdNum = 0;
@@ -103,9 +103,9 @@ Game::~Game()
 	}
 }
 
-void Game::start(ServiceManager* servicer)
+void Game::start(ServiceManager* manager)
 {
-	services = servicer;
+	serviceManager = manager;
 
 	g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, std::bind(&Game::checkLight, this)));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, std::bind(&Game::checkCreatures, this, 0)));
@@ -4580,8 +4580,8 @@ void Game::shutdown()
 
 	cleanup();
 
-	if (services) {
-		services->stop();
+	if (serviceManager) {
+		serviceManager->stop();
 	}
 
 	ConnectionManager::getInstance()->closeAll();

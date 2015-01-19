@@ -36,19 +36,19 @@ int32_t NetworkMessage::decodeHeader()
 }
 
 /******************************************************************************/
-std::string NetworkMessage::GetString(uint16_t stringlen/* = 0*/)
+std::string NetworkMessage::GetString(uint16_t stringLen/* = 0*/)
 {
-	if (stringlen == 0) {
-		stringlen = get<uint16_t>();
+	if (stringLen == 0) {
+		stringLen = get<uint16_t>();
 	}
 
-	if (!canRead(stringlen)) {
+	if (!canRead(stringLen)) {
 		return std::string();
 	}
 
 	char* v = reinterpret_cast<char*>(buffer) + position;
-	position += stringlen;
-	return std::string(v, stringlen);
+	position += stringLen;
+	return std::string(v, stringLen);
 }
 
 Position NetworkMessage::GetPosition()

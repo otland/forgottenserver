@@ -90,16 +90,16 @@ int main(int argc, char* argv[])
 	sigaction(SIGPIPE, &sigh, nullptr);
 #endif
 
-	ServiceManager servicer;
+	ServiceManager serviceManager;
 
 	g_dispatcher.start();
 	g_scheduler.start();
 
-	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
+	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
-	if (servicer.is_running()) {
+	if (serviceManager.is_running()) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 #ifdef _WIN32
 		SetConsoleCtrlHandler([](DWORD) -> BOOL {
@@ -114,10 +114,7 @@ int main(int argc, char* argv[])
 			ExitThread(0);
 		}, 1);
 #endif
-		servicer.run();
-		g_scheduler.join();
-		g_databaseTasks.join();
-		g_dispatcher.join();
+		serviceManager.run();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
 		g_dispatcher.addTask(createTask([]() {
@@ -130,10 +127,11 @@ int main(int argc, char* argv[])
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
 		}));
-		g_scheduler.join();
-		g_databaseTasks.join();
-		g_dispatcher.join();
 	}
+
+	g_scheduler.join();
+	g_databaseTasks.join();
+	g_dispatcher.join();
 	return 0;
 }
 
@@ -148,7 +146,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 #endif
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
 	std::cout << "Compiled with: " << BOOST_COMPILER << std::endl;
-	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for arch ";
+	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
 
 #if defined(__amd64__) || defined(_M_X64)
 	std::cout << "x64" << std::endl;
@@ -156,10 +154,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "x86" << std::endl;
 #elif defined(__arm__)
 	std::cout << "ARM" << std::endl;
-#elif defined(__mips__)
-	std::cout << "MIPS" << std::endl;
 #else
-	std::cout << "unk" << std::endl;
+	std::cout << "unknown" << std::endl;
 #endif
 	std::cout << std::endl;
 
@@ -176,11 +172,9 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 #ifdef _WIN32
 	std::string defaultPriority = asLowerCaseString(g_config.getString(ConfigManager::DEFAULT_PRIORITY));
-	if (defaultPriority == "realtime") {
-		SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-	} else if (defaultPriority == "high") {
+	if (defaultPriority == "high") {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (defaultPriority == "higher") {
+	} else if (defaultPriority == "above-normal") {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
 #endif

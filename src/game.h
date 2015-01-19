@@ -88,7 +88,7 @@ class Game
 		Game(const Game&) = delete;
 		Game& operator=(const Game&) = delete;
 
-		void start(ServiceManager* servicer);
+		void start(ServiceManager* manager);
 
 		void forceAddCondition(uint32_t creatureId, Condition* condition);
 		void forceRemoveCondition(uint32_t creatureId, ConditionType_t type);
@@ -578,7 +578,7 @@ class Game
 		int32_t lightHour;
 		int32_t lightHourDelta;
 
-		ServiceManager* services;
+		ServiceManager* serviceManager;
 
 		void updatePlayersRecord() const;
 		uint32_t playersRecord;

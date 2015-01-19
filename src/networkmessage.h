@@ -125,7 +125,7 @@ class NetworkMessage
 			return position;
 		}
 
-		void setReadPos(int32_t pos) {
+		void setPosition(int32_t pos) {
 			position = pos;
 		}
 
@@ -161,10 +161,11 @@ class NetworkMessage
 			return true;
 		}
 
-		uint8_t buffer[NETWORKMESSAGE_MAXSIZE];
 		int32_t length;
 		int32_t position;
 		bool overrun;
+
+		uint8_t buffer[NETWORKMESSAGE_MAXSIZE];
 };
 
 #endif // #ifndef __NETWORK_MESSAGE_H__
