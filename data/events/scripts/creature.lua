@@ -7,5 +7,17 @@ function Creature:onAreaCombat(tile, isAggressive)
 end
 
 function Creature:onTargetCombat(target)
-	return true
+	if target:isPlayer() then
+		local protection = loginProtectionTable[target:getGuid()]
+		if not protection then
+			return true
+		end
+
+		if protection >= os.mtime() then
+			return false
+		end
+
+		loginProtectionTable[target:getGuid()] = nil
+    	end
+    	return true
 end

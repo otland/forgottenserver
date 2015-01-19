@@ -1,3 +1,8 @@
+local config = {
+	loginProtection = true,
+	loginProtectionTime = 10000 -- Login Protection Time / miliseconds
+}
+
 function onLogin(player)
 	local loginStr = "Welcome to " .. configManager.getString(configKeys.SERVER_NAME) .. "!"
 	if player:getLastLoginSaved() <= 0 then
@@ -11,6 +16,10 @@ function onLogin(player)
 		loginStr = string.format("Your last visit was on %s.", os.date("%a %b %d %X %Y", player:getLastLoginSaved()))
 	end
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
+
+	if config.loginProtection then
+		loginProtectionTable[player:getGuid()] = os.mtime() + config.loginProtectionTime
+	end
 
 	player:registerEvent("PlayerDeath")
 	return true
