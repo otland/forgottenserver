@@ -526,6 +526,7 @@ class Game
 		void removeBedSleeper(uint32_t guid);
 
 		Map map;
+		Mounts mounts;
 		Raids raids;
 		Quests quests;
 	protected:

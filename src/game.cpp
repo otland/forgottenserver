@@ -148,7 +148,7 @@ void Game::setGameState(GameState_t newState)
 			raids.startup();
 
 			quests.loadFromXml();
-			Mounts::getInstance()->loadFromXml();
+			mounts.loadFromXml();
 
 			loadMotdNum();
 			loadPlayersRecord();
@@ -3325,7 +3325,7 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	player->hasRequestedOutfit(false);
 
 	if (outfit.lookMount != 0) {
-		Mount* mount = Mounts::getInstance()->getMountByClientID(outfit.lookMount);
+		Mount* mount = mounts.getMountByClientID(outfit.lookMount);
 		if (!mount) {
 			return;
 		}
@@ -3335,7 +3335,7 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 		}
 
 		if (player->isMounted()) {
-			Mount* prevMount = Mounts::getInstance()->getMountByID(player->getCurrentMount());
+			Mount* prevMount = mounts.getMountByID(player->getCurrentMount());
 			if (prevMount) {
 				changeSpeed(player, mount->speed - prevMount->speed);
 			}

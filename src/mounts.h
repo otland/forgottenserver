@@ -35,11 +35,6 @@ struct Mount
 class Mounts
 {
 	public:
-		static Mounts* getInstance() {
-			static Mounts instance;
-			return &instance;
-		}
-
 		bool reload();
 		bool loadFromXml();
 		Mount* getMountByID(uint8_t id);

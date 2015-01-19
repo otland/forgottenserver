@@ -4352,7 +4352,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		Mount* currentMount = Mounts::getInstance()->getMountByID(currentMountId);
+		Mount* currentMount = g_game.mounts.getMountByID(currentMountId);
 		if (!currentMount) {
 			return false;
 		}
@@ -4393,7 +4393,7 @@ bool Player::toggleMount(bool mount)
 
 bool Player::tameMount(uint8_t mountId)
 {
-	if (!Mounts::getInstance()->getMountByID(mountId)) {
+	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;
 	}
 
@@ -4413,7 +4413,7 @@ bool Player::tameMount(uint8_t mountId)
 
 bool Player::untameMount(uint8_t mountId)
 {
-	if (!Mounts::getInstance()->getMountByID(mountId)) {
+	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;
 	}
 
@@ -4462,7 +4462,7 @@ bool Player::hasMount(const Mount* mount) const
 
 void Player::dismount()
 {
-	Mount* mount = Mounts::getInstance()->getMountByID(getCurrentMount());
+	Mount* mount = g_game.mounts.getMountByID(getCurrentMount());
 	if (mount && mount->speed > 0) {
 		g_game.changeSpeed(this, -mount->speed);
 	}

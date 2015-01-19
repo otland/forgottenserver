@@ -2716,7 +2716,7 @@ void ProtocolGame::sendOutfitWindow()
 	msg.AddByte(0xC8);
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
-	Mount* currentMount = Mounts::getInstance()->getMountByID(player->getCurrentMount());
+	Mount* currentMount = g_game.mounts.getMountByID(player->getCurrentMount());
 	if (currentMount) {
 		currentOutfit.lookMount = currentMount->clientId;
 	}
@@ -2759,7 +2759,7 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	std::vector<const Mount*> mounts;
-	for (const Mount& mount : Mounts::getInstance()->getMounts()) {
+	for (const Mount& mount : g_game.mounts.getMounts()) {
 		if (player->hasMount(&mount)) {
 			mounts.push_back(&mount);
 		}

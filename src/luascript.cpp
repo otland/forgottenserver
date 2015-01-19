@@ -9492,7 +9492,7 @@ int32_t LuaScriptInterface::luaPlayerHasMount(lua_State* L)
 	}
 
 	uint8_t mountId = getNumber<uint8_t>(L, 2);
-	Mount* mount = Mounts::getInstance()->getMountByID(mountId);
+	Mount* mount = g_game.mounts.getMountByID(mountId);
 	if (mount) {
 		pushBoolean(L, player->hasMount(mount));
 	} else {
