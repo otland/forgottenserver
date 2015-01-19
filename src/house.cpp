@@ -706,15 +706,15 @@ void Houses::payHouses() const
 			continue;
 		}
 
-		const uint32_t ownerid = house->getOwner();
-		Town* town = Towns::getInstance().getTown(house->getTownId());
+		const uint32_t ownerId = house->getOwner();
+		Town* town = g_game.map.towns.getTown(house->getTownId());
 		if (!town) {
 			continue;
 		}
 
 		Player player(nullptr);
-		if (!IOLoginData::loadPlayerById(&player, ownerid)) {
-			//player doesnt exist, reset house owner
+		if (!IOLoginData::loadPlayerById(&player, ownerId)) {
+			// Player doesn't exist, reset house owner
 			house->setOwner(0);
 			continue;
 		}

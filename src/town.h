@@ -67,11 +67,6 @@ class Towns
 		Towns(const Towns&) = delete;
 		Towns& operator=(const Towns&) = delete;
 
-		static Towns& getInstance() {
-			static Towns singleton;
-			return singleton;
-		}
-
 		bool addTown(uint32_t townId, Town* town) {
 			auto it = townMap.find(townId);
 			if (it != townMap.end()) {

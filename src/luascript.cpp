@@ -4817,7 +4817,7 @@ int32_t LuaScriptInterface::luaGameGetNpcCount(lua_State* L)
 int32_t LuaScriptInterface::luaGameGetTowns(lua_State* L)
 {
 	// Game.getTowns()
-	const auto& towns = Towns::getInstance().getTowns();
+	const auto& towns = g_game.map.towns.getTowns();
 	lua_createtable(L, towns.size(), 0);
 
 	int32_t index = 0;
@@ -10798,9 +10798,9 @@ int32_t LuaScriptInterface::luaTownCreate(lua_State* L)
 	// Town(id or name)
 	Town* town;
 	if (isNumber(L, 2)) {
-		town = Towns::getInstance().getTown(getNumber<uint32_t>(L, 2));
+		town = g_game.map.towns.getTown(getNumber<uint32_t>(L, 2));
 	} else if (isString(L, 2)) {
-		town = Towns::getInstance().getTown(getString(L, 2));
+		town = g_game.map.towns.getTown(getString(L, 2));
 	} else {
 		town = nullptr;
 	}
@@ -10897,7 +10897,7 @@ int32_t LuaScriptInterface::luaHouseGetTown(lua_State* L)
 		return 1;
 	}
 
-	Town* town = Towns::getInstance().getTown(house->getTownId());
+	Town* town = g_game.map.towns.getTown(house->getTownId());
 	if (town) {
 		pushUserdata<Town>(L, town);
 		setMetatable(L, -1, "Town");

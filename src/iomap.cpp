@@ -418,16 +418,16 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				uint32_t townid;
-				if (!propStream.read<uint32_t>(townid)) {
+				uint32_t townId;
+				if (!propStream.read<uint32_t>(townId)) {
 					setLastErrorString("Could not read town id.");
 					return false;
 				}
 
-				Town* town = Towns::getInstance().getTown(townid);
+				Town* town = map->towns.getTown(townId);
 				if (!town) {
-					town = new Town(townid);
-					Towns::getInstance().addTown(townid, town);
+					town = new Town(townId);
+					map->towns.addTown(townId, town);
 				}
 
 				std::string townName;

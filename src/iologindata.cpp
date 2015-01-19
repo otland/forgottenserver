@@ -326,7 +326,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->offlineTrainingTime = result->getDataInt("offlinetraining_time") * 1000;
 	player->offlineTrainingSkill = result->getDataInt("offlinetraining_skill");
 
-	Town* town = Towns::getInstance().getTown(result->getDataInt("town_id"));
+	Town* town = g_game.map.towns.getTown(result->getDataInt("town_id"));
 	if (!town) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Town ID " << result->getDataInt("town_id") << " which doesn't exist." << std::endl;
 		return false;
