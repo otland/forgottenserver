@@ -26,7 +26,7 @@
 	<elements>
 		<element holyPercent="-10"/>
 	</elements>
-		<loot>
+	<loot>
 		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
 		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
 		<item id="2152" countmax="6" chance="45000"/><!-- platinum coin -->
