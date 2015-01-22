@@ -393,7 +393,7 @@ bool Items::loadFromXml()
 	for (pugi::xml_node itemNode = doc.child("items").first_child(); itemNode; itemNode = itemNode.next_sibling()) {
 		pugi::xml_attribute idAttribute = itemNode.attribute("id");
 		if (idAttribute) {
-			parseItemNode(itemNode, pugi::cast<uint32_t>(idAttribute.value()));
+			parseItemNode(itemNode, pugi::cast<uint16_t>(idAttribute.value()));
 		} else {
 			pugi::xml_attribute fromIdAttribute = itemNode.attribute("fromid");
 			if (fromIdAttribute) {
@@ -415,7 +415,7 @@ bool Items::loadFromXml()
 	return true;
 }
 
-void Items::parseItemNode(const pugi::xml_node& itemNode, uint32_t id)
+void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 {
 	if (id > 30000 && id < 30100) {
 		id -= 30000;

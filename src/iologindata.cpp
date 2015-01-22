@@ -306,8 +306,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		if (skullSeconds > 0) {
 			//ensure that we round up the number of ticks
 			player->skullTicks = (skullSeconds + 2) * 1000;
-			int32_t skull = result->getDataInt("skull");
 
+			int32_t skull = result->getDataInt("skull");
 			if (skull == SKULL_RED) {
 				player->skull = SKULL_RED;
 			} else if (skull == SKULL_BLACK) {

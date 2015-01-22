@@ -846,7 +846,7 @@ AStarNode* AStarNodes::getBestNode()
 
 	int32_t best_node_f = std::numeric_limits<int32_t>::max();
 	int32_t best_node = -1;
-	for (uint32_t i = 0; i < curNode; i++) {
+	for (size_t i = 0; i < curNode; i++) {
 		if (openNodes[i] && nodes[i].f < best_node_f) {
 			best_node_f = nodes[i].f;
 			best_node = i;

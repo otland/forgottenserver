@@ -249,7 +249,9 @@ class Player final : public Creature, public Cylinder
 		uint8_t getGuildLevel() const {
 			return guildLevel;
 		}
-		void setGuildLevel(uint8_t newGuildLevel);
+		void setGuildLevel(uint8_t newGuildLevel) {
+			guildLevel = newGuildLevel;
+		}
 
 		bool isGuildMate(const Player* player) const;
 
@@ -378,7 +380,9 @@ class Player final : public Creature, public Cylinder
 		bool getStorageValue(const uint32_t key, int32_t& value) const;
 		void genReservedStorageRange();
 
-		void setGroup(Group* newGroup);
+		void setGroup(Group* newGroup) {
+			group = newGroup;
+		}
 		Group* getGroup() const {
 			return group;
 		}
@@ -708,6 +712,9 @@ class Player final : public Creature, public Cylinder
 		bool getOutfitAddons(const Outfit& outfit, uint8_t& addons) const;
 
 		bool canLogout();
+
+		size_t getMaxVIPEntries() const;
+		size_t getMaxDepotItems() const;
 
 		//tile
 		//send methods
@@ -1290,10 +1297,7 @@ class Player final : public Creature, public Cylinder
 		uint32_t guid;
 		uint32_t windowTextId;
 		uint32_t editListId;
-		uint32_t maxDepotItems;
-		uint32_t maxVipEntries;
 		uint32_t soul;
-		uint32_t soulMax;
 		uint32_t manaMax;
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];

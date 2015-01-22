@@ -306,7 +306,7 @@ class Items
 		static uint32_t dwBuildNumber;
 
 		bool loadFromXml();
-		void parseItemNode(const pugi::xml_node& itemNode, uint32_t id);
+		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
 		inline size_t size() const {
 			return items.size();

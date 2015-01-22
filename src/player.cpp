@@ -67,7 +67,6 @@ Player::Player(ProtocolGame* p) :
 	manaMax = 0;
 	manaSpent = 0;
 	soul = 0;
-	soulMax = 100;
 	guildLevel = 0;
 	guild = nullptr;
 
@@ -131,9 +130,6 @@ Player::Player(ProtocolGame* p) :
 	lastFailedFollow = 0;
 	lastWalkthroughAttempt = 0;
 	lastToggleMount = 0;
-
-	maxDepotItems = 1000;
-	maxVipEntries = 20;
 
 	sex = PLAYERSEX_FEMALE;
 
@@ -202,8 +198,6 @@ bool Player::setVocation(uint16_t vocId)
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
-
-	soulMax = vocation->getSoulMax();
 	return true;
 }
 
@@ -1000,7 +994,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
 	depotChest->useThing2();
-	depotChest->setMaxDepotItems(maxDepotItems);
+	depotChest->setMaxDepotItems(getMaxDepotItems());
 	depotChests[depotId] = depotChest;
 	return depotChest;
 }
@@ -2383,7 +2377,7 @@ bool Player::addVIP(uint32_t _guid, const std::string& name, VipStatus_t status)
 		return false;
 	}
 
-	if (VIPList.size() >= maxVipEntries || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
+	if (VIPList.size() >= getMaxVIPEntries() || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
 		sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add more buddies.");
 		return false;
 	}
@@ -2411,7 +2405,7 @@ bool Player::addVIPInternal(uint32_t _guid)
 		return false;
 	}
 
-	if (VIPList.size() >= maxVipEntries || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
+	if (VIPList.size() >= getMaxVIPEntries() || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
 		return false;
 	}
 
@@ -3828,7 +3822,7 @@ void Player::changeMana(int32_t manaChange)
 void Player::changeSoul(int32_t soulChange)
 {
 	if (soulChange > 0) {
-		soul += std::min<int32_t>(soulChange, soulMax - soul);
+		soul += std::min<int32_t>(soulChange, vocation->getSoulMax() - soul);
 	} else {
 		soul = std::max<int32_t>(0, soul + soulChange);
 	}
@@ -4152,28 +4146,6 @@ void Player::setPremiumDays(int32_t v)
 {
 	premiumDays = v;
 	sendBasicData();
-}
-
-void Player::setGuildLevel(uint8_t newGuildLevel)
-{
-	guildLevel = newGuildLevel;
-}
-
-void Player::setGroup(Group* newGroup)
-{
-	group = newGroup;
-
-	if (group->maxDepotItems > 0) {
-		maxDepotItems = group->maxDepotItems;
-	} else if (isPremium()) {
-		maxDepotItems = 2000;
-	}
-
-	if (group->maxVipEntries > 0) {
-		maxVipEntries = group->maxVipEntries;
-	} else if (isPremium()) {
-		maxVipEntries = 100;
-	}
 }
 
 PartyShields_t Player::getPartyShield(const Player* player) const
@@ -4747,4 +4719,24 @@ uint64_t Player::getMoney() const
 		}
 	}
 	return moneyCount;
+}
+
+size_t Player::getMaxVIPEntries() const
+{
+	if (group->maxVipEntries != 0) {
+		return group->maxVipEntries;
+	} else if (isPremium()) {
+		return 100;
+	}
+	return 20;
+}
+
+size_t Player::getMaxDepotItems() const
+{
+	if (group->maxDepotItems != 0) {
+		return group->maxDepotItems;
+	} else if (isPremium()) {
+		return 2000;
+	}
+	return 1000;
 }
