@@ -756,7 +756,7 @@ end
 function doRelocate(fromPos, toPos)
 	if fromPos == toPos then
 		return false
-	end	
+	end
 
 	local fromTile = Tile(fromPos)
 	if fromTile == nil then
@@ -778,7 +778,7 @@ function doRelocate(fromPos, toPos)
 				thing:teleportTo(toPos)
 			end
 		end
-	end		
+	end
 	return true
 end
 

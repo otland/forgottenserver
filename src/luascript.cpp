@@ -2715,6 +2715,8 @@ void LuaScriptInterface::registerClass(const std::string& className, const std::
 		lua_pushnumber(m_luaState, LuaData_Monster);
 	} else if (className == "Npc") {
 		lua_pushnumber(m_luaState, LuaData_Npc);
+	} else if (className == "Tile") {
+		lua_pushnumber(m_luaState, LuaData_Tile);
 	} else {
 		lua_pushnumber(m_luaState, LuaData_Unknown);
 	}
@@ -4177,7 +4179,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 			lua_rawgeti(L, -1, 't');
 
 			LuaDataType type = getNumber<LuaDataType>(L, -1);
-			if (type != LuaData_Unknown) {
+			if (type != LuaData_Unknown && type != LuaData_Tile) {
 				indexes.push_back({i, type});
 			}
 			lua_pop(globalState, 2);
@@ -6854,7 +6856,7 @@ int32_t LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 
 int32_t LuaScriptInterface::luaItemMoveTo(lua_State* L)
 {
-	// item:moveTo(position)
+	// item:moveTo(position or cylinder)
 	Item** itemPtr = getRawUserdata<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
@@ -6867,23 +6869,42 @@ int32_t LuaScriptInterface::luaItemMoveTo(lua_State* L)
 		return 1;
 	}
 
-	const Position& position = getPosition(L, 2);
-	Tile* tile = g_game.map.getTile(position);
-	if (!tile) {
+	Cylinder* toCylinder;
+	if (isUserdata(L, 2)) {
+		const LuaDataType type = getUserdataType(L, 2);
+		switch (type) {
+			case LuaData_Container:
+				toCylinder = getUserdata<Container>(L, 2);
+				break;
+			case LuaData_Player:
+				toCylinder = getUserdata<Player>(L, 2);
+				break;
+			case LuaData_Tile:
+				toCylinder = getUserdata<Tile>(L, 2);
+				break;
+			default:
+				toCylinder = nullptr;
+				break;
+		}
+	} else {
+		toCylinder = g_game.map.getTile(getPosition(L, 2));
+	}
+
+	if (!toCylinder) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (item->getParent() == tile) {
+	if (item->getParent() == toCylinder) {
 		pushBoolean(L, true);
 		return 1;
 	}
 
 	if (item->getParent() == VirtualCylinder::virtualCylinder) {
-		pushBoolean(L, g_game.internalAddItem(tile, item) == RETURNVALUE_NOERROR);
+		pushBoolean(L, g_game.internalAddItem(toCylinder, item) == RETURNVALUE_NOERROR);
 	} else {
 		Item* moveItem = nullptr;
-		ReturnValue ret = g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
+		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toCylinder, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
 		if (moveItem) {
 			*itemPtr = moveItem;
 		}

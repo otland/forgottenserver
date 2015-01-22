@@ -62,7 +62,8 @@ enum LuaDataType {
 	LuaData_Teleport,
 	LuaData_Player,
 	LuaData_Monster,
-	LuaData_Npc
+	LuaData_Npc,
+	LuaData_Tile
 };
 
 struct LuaVariant {
