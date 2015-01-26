@@ -509,6 +509,10 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
                               const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	if (creature == this) {
+		for (CreatureEvent* moveEvent : getCreatureEvents(CREATURE_EVENT_MOVE)) {
+			moveEvent->executeOnMove(this, newPos);
+		}
+
 		lastStep = OTSYS_TIME();
 		lastStepCost = 1;
 
