@@ -392,12 +392,12 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 	return m_scriptInterface->callFunction(6);
 }
 
-bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos)
+bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos, const Position& oldPos)
 {
 	//onMove(creature, newPos, oldPos)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeOnMove] Call stack overflow" << std::endl;
-		return false;
+	 	return false;
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
@@ -409,10 +409,11 @@ bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos)
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushPosition(L, newPos);
-	LuaScriptInterface::pushPosition(L, creature->getLastPosition());
+	LuaScriptInterface::pushPosition(L, oldPos);
 
 	return m_scriptInterface->callFunction(3);
 }
+
 
 bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldLevel,
                                        uint32_t newLevel)

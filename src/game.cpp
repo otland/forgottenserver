@@ -946,28 +946,16 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
-	Tile* toTile = nullptr;
-
-	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
-	Position destPos = currentPos;
-	bool diagonalMovement;
+	Position destPos = getNextPosition(direction, currentPos);
 
-	switch (direction) {
-		case NORTHWEST:
-		case NORTHEAST:
-		case SOUTHWEST:
-		case SOUTHEAST:
-			diagonalMovement = true;
-			break;
-
-		default:
-			diagonalMovement = false;
-			break;
+	for (CreatureEvent* moveEvent : creature->getCreatureEvents(CREATURE_EVENT_MOVE)) {
+		if (!moveEvent->executeOnMove(creature, destPos, currentPos)) {
+			return RETURNVALUE_NOTPOSSIBLE;
+		}
 	}
 
-	destPos = getNextPosition(direction, destPos);
-
+	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
 	if (creature->getPlayer() && !diagonalMovement) {
 		//try go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
@@ -995,14 +983,11 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		}
 	}
 
-	toTile = map.getTile(destPos.x, destPos.y, destPos.z);
-	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
-
-	if (toTile != nullptr) {
-		ret = internalMoveCreature(*creature, *toTile, flags);
+	Tile* toTile = map.getTile(destPos);
+	if (!toTile) {
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
-
-	return ret;
+	return internalMoveCreature(*creature, *toTile, flags);
 }
 
 ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags /*= 0*/)
@@ -2663,7 +2648,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		player->sendTextMessage(MESSAGE_INFO_DESCR, "You can not trade more than 100 items.");
 		return;
 	}
-	
+
 	if (!g_events->eventPlayerOnTradeRequest(player, tradePartner, tradeItem)) {
 		return;
 	}
@@ -3985,7 +3970,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			std::string damageString = std::to_string(realHealthChange);
 			std::string pluralString = (realHealthChange != 1 ? "s." : ".");
-			
+
 			std::string spectatorMessage;
 			if (!attacker) {
 				spectatorMessage += ucfirst(target->getNameDescription());
