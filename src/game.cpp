@@ -968,10 +968,16 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 
 	destPos = getNextPosition(direction, destPos);
 
+	bool cancelMoveEvent = false;
+
 	for (CreatureEvent* moveEvent : creature->getCreatureEvents(CREATURE_EVENT_MOVE)) {
 		if (!moveEvent->executeOnMove(creature, destPos)) {
-			return RETURNVALUE_NOTPOSSIBLE;
+			cancelMoveEvent = true;
 		}
+	}
+
+	if (cancelMoveEvent) {
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (creature->getPlayer() && !diagonalMovement) {
