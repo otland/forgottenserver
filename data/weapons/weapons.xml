@@ -74,7 +74,7 @@
 	</wand>
 
 	<!-- Swords -->
-	<melee id="2396" />
+	<melee id="2396" action="removecount" />
 	<melee id="2413" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
