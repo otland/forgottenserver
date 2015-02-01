@@ -86,7 +86,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 				if (directionAttribute) {
 					dir = static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value()));
 				} else {
-					dir = NORTH;
+					dir = DIRECTION_NORTH;
 				}
 
 				Position pos(

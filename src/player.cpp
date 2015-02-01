@@ -761,81 +761,6 @@ uint16_t Player::getLookCorpse() const
 	}
 }
 
-uint16_t Player::getDropPercent() const
-{
-	uint16_t dropPercent;
-
-	std::bitset<5> bitset(blessings);
-	switch (bitset.count()) {
-		case 1:
-			dropPercent = 70;
-			break;
-
-		case 2:
-			dropPercent = 45;
-			break;
-
-		case 3:
-			dropPercent = 25;
-			break;
-
-		case 4:
-			dropPercent = 10;
-			break;
-
-		case 5:
-			dropPercent = 0;
-			break;
-
-		default:
-			dropPercent = 100;
-			break;
-	}
-	return dropPercent;
-}
-
-void Player::dropLoot(Container* corpse, Creature* _lastHitCreature)
-{
-	if (corpse && lootDrop && vocation->getId() != VOCATION_NONE) {
-		Skulls_t playerSkull = getSkull();
-		if (inventory[CONST_SLOT_NECKLACE] && inventory[CONST_SLOT_NECKLACE]->getID() == ITEM_AMULETOFLOSS && playerSkull != SKULL_RED && playerSkull != SKULL_BLACK) {
-			Player* lastHitPlayer;
-
-			if (_lastHitCreature) {
-				lastHitPlayer = _lastHitCreature->getPlayer();
-				if (!lastHitPlayer) {
-					Creature* lastHitMaster = _lastHitCreature->getMaster();
-					if (lastHitMaster) {
-						lastHitPlayer = lastHitMaster->getPlayer();
-					}
-				}
-			} else {
-				lastHitPlayer = nullptr;
-			}
-
-			if (!lastHitPlayer || blessings < 32) {
-				g_game.internalRemoveItem(inventory[CONST_SLOT_NECKLACE], 1);
-			}
-		} else {
-			for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
-				Item* item = inventory[i];
-				if (!item) {
-					continue;
-				}
-
-				if (playerSkull == SKULL_RED || playerSkull == SKULL_BLACK || uniform_random(1, (item->getContainer() ? 100 : 1000)) <= getDropPercent()) {
-					g_game.internalMoveItem(this, corpse, INDEX_WHEREEVER, item, item->getItemCount(), 0);
-					sendInventoryItem(static_cast<slots_t>(i), nullptr);
-				}
-			}
-		}
-	}
-
-	if (!inventory[CONST_SLOT_BACKPACK]) {
-		internalAddThing(CONST_SLOT_BACKPACK, Item::CreateItem(ITEM_BAG));
-	}
-}
-
 void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin/* = false*/)
 {
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
@@ -3750,18 +3675,7 @@ void Player::gainExperience(uint64_t gainExp, Creature* source)
 		useStamina();
 	}
 
-	uint64_t oldExperience = experience;
 	addExperience(source, gainExp, true, true, true);
-
-	//soul regeneration
-	// TODO: move to Lua script (onGainExperience event)
-	int64_t gainedExperience = experience - oldExperience;
-	if (gainedExperience >= level) {
-		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
-		condition->setParam(CONDITION_PARAM_SOULGAIN, 1);
-		condition->setParam(CONDITION_PARAM_SOULTICKS, vocation->getSoulGainTicks() * 1000);
-		addCondition(condition);
-	}
 }
 
 void Player::onGainExperience(uint64_t gainExp, Creature* target)

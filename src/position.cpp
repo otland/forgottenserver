@@ -33,35 +33,35 @@ std::ostream& operator<<(std::ostream& os, const Position& pos)
 std::ostream& operator<<(std::ostream& os, const Direction& dir)
 {
 	switch (dir) {
-		case NORTH:
+		case DIRECTION_NORTH:
 			os << "North";
 			break;
 
-		case EAST:
+		case DIRECTION_EAST:
 			os << "East";
 			break;
 
-		case WEST:
+		case DIRECTION_WEST:
 			os << "West";
 			break;
 
-		case SOUTH:
+		case DIRECTION_SOUTH:
 			os << "South";
 			break;
 
-		case SOUTHWEST:
+		case DIRECTION_SOUTHWEST:
 			os << "South-West";
 			break;
 
-		case SOUTHEAST:
+		case DIRECTION_SOUTHEAST:
 			os << "South-East";
 			break;
 
-		case NORTHWEST:
+		case DIRECTION_NORTHWEST:
 			os << "North-West";
 			break;
 
-		case NORTHEAST:
+		case DIRECTION_NORTHEAST:
 			os << "North-East";
 			break;
 

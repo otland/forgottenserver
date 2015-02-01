@@ -399,7 +399,7 @@ class Creature : virtual public Thing
 		virtual void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
 		                              const Item* item);
 
-		virtual void onCreatureAppear(Creature* creature, bool isLogin);
+		virtual void onCreatureAppear(Creature* creature, bool);
 		virtual void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout);
 		virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport);
@@ -454,13 +454,6 @@ class Creature : virtual public Thing
 		}
 
 		int32_t getWalkCache(const Position& pos) const;
-
-		const Position& getLastPosition() const {
-			return lastPosition;
-		}
-		void setLastPosition(const Position& newLastPos) {
-			lastPosition = newLastPos;
-		}
 
 		static bool canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY);
 
@@ -527,7 +520,6 @@ class Creature : virtual public Thing
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
 
-		Position lastPosition;
 		LightInfo internalLight;
 
 		Direction direction;

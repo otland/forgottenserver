@@ -949,12 +949,6 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	const Position& currentPos = creature->getPosition();
 	Position destPos = getNextPosition(direction, currentPos);
 
-	for (CreatureEvent* moveEvent : creature->getCreatureEvents(CREATURE_EVENT_MOVE)) {
-		if (!moveEvent->executeOnMove(creature, destPos)) {
-			return RETURNVALUE_NOTPOSSIBLE;
-		}
-	}
-
 	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
 	if (creature->getPlayer() && !diagonalMovement) {
 		//try go up
