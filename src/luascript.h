@@ -821,6 +821,7 @@ class LuaScriptInterface
 		static int32_t luaCreatureSetDropLoot(lua_State* L);
 
 		static int32_t luaCreatureGetPosition(lua_State* L);
+		static int32_t luaCreatureGetLastPosition(lua_State* L);
 		static int32_t luaCreatureGetTile(lua_State* L);
 		static int32_t luaCreatureGetDirection(lua_State* L);
 		static int32_t luaCreatureSetDirection(lua_State* L);
