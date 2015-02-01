@@ -946,26 +946,10 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
-	Tile* toTile = nullptr;
-
 	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
 	Position destPos = currentPos;
-	bool diagonalMovement;
-
-	switch (direction) {
-		case NORTHWEST:
-		case NORTHEAST:
-		case SOUTHWEST:
-		case SOUTHEAST:
-			diagonalMovement = true;
-			break;
-
-		default:
-			diagonalMovement = false;
-			break;
-	}
-
+	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
 	destPos = getNextPosition(direction, destPos);
 
 	if (creature->getPlayer() && !diagonalMovement) {
@@ -995,7 +979,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		}
 	}
 
-	toTile = map.getTile(destPos.x, destPos.y, destPos.z);
+	Tile* toTile = map.getTile(destPos.x, destPos.y, destPos.z);
 	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
 
 	if (toTile != nullptr) {

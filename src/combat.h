@@ -237,24 +237,24 @@ class AreaCombat
 
 			Direction dir;
 			if (dx < 0) {
-				dir = WEST;
+				dir = DIRECTION_WEST;
 			} else if (dx > 0) {
-				dir = EAST;
+				dir = DIRECTION_EAST;
 			} else if (dy < 0) {
-				dir = NORTH;
+				dir = DIRECTION_NORTH;
 			} else {
-				dir = SOUTH;
+				dir = DIRECTION_SOUTH;
 			}
 
 			if (hasExtArea) {
 				if (dx < 0 && dy < 0) {
-					dir = NORTHWEST;
+					dir = DIRECTION_NORTHWEST;
 				} else if (dx > 0 && dy < 0) {
-					dir = NORTHEAST;
+					dir = DIRECTION_NORTHEAST;
 				} else if (dx < 0 && dy > 0) {
-					dir = SOUTHWEST;
+					dir = DIRECTION_SOUTHWEST;
 				} else if (dx > 0 && dy > 0) {
-					dir = SOUTHEAST;
+					dir = DIRECTION_SOUTHEAST;
 				}
 			}
 
