@@ -946,12 +946,10 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
-	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
-	Position destPos = currentPos;
-	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
-	destPos = getNextPosition(direction, destPos);
+	Position destPos = getNextPosition(direction, currentPos);
 
+	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
 	if (creature->getPlayer() && !diagonalMovement) {
 		//try go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
@@ -979,14 +977,11 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		}
 	}
 
-	Tile* toTile = map.getTile(destPos.x, destPos.y, destPos.z);
-	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
-
-	if (toTile != nullptr) {
-		ret = internalMoveCreature(*creature, *toTile, flags);
+	Tile* toTile = map.getTile(destPos);
+	if (!toTile) {
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
-
-	return ret;
+	return internalMoveCreature(*creature, *toTile, flags);
 }
 
 ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags /*= 0*/)
