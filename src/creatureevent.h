@@ -100,7 +100,7 @@ class CreatureEvent final : public Event
 		bool executeOnThink(Creature* creature, uint32_t interval);
 		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
-		bool executeOnMove(Creature* creature, const Position& newPos);
+		bool executeOnMove(Creature* creature, const Position& newPos, const Position& oldPos);
 		bool executeOnKill(Creature* creature, Creature* target);
 		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);

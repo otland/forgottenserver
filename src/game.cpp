@@ -950,7 +950,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	Position destPos = getNextPosition(direction, currentPos);
 
 	for (CreatureEvent* moveEvent : creature->getCreatureEvents(CREATURE_EVENT_MOVE)) {
-		if (!moveEvent->executeOnMove(creature, destPos)) {
+		if (!moveEvent->executeOnMove(creature, destPos, currentPos)) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 	}

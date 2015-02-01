@@ -392,7 +392,7 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 	return m_scriptInterface->callFunction(6);
 }
 
-bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos)
+bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos, const Position& oldPos)
 {
 	//onMove(creature, newPos, oldPos)
 	if (!m_scriptInterface->reserveScriptEnv()) {
@@ -409,7 +409,7 @@ bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos)
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushPosition(L, newPos);
-	LuaScriptInterface::pushPosition(L, creature->getLastPosition());
+	LuaScriptInterface::pushPosition(L, oldPos);
 
 	return m_scriptInterface->callFunction(3);
 }
