@@ -946,40 +946,16 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
-	Tile* toTile = nullptr;
-
-	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
-	Position destPos = currentPos;
-	bool diagonalMovement;
-
-	switch (direction) {
-		case NORTHWEST:
-		case NORTHEAST:
-		case SOUTHWEST:
-		case SOUTHEAST:
-			diagonalMovement = true;
-			break;
-
-		default:
-			diagonalMovement = false;
-			break;
-	}
-
-	destPos = getNextPosition(direction, destPos);
-
-	bool cancelMoveEvent = false;
+	Position destPos = getNextPosition(direction, currentPos);
 
 	for (CreatureEvent* moveEvent : creature->getCreatureEvents(CREATURE_EVENT_MOVE)) {
 		if (!moveEvent->executeOnMove(creature, destPos)) {
-			cancelMoveEvent = true;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 	}
 
-	if (cancelMoveEvent) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
+	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
 	if (creature->getPlayer() && !diagonalMovement) {
 		//try go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
@@ -1007,14 +983,11 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 		}
 	}
 
-	toTile = map.getTile(destPos.x, destPos.y, destPos.z);
-	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
-
-	if (toTile != nullptr) {
-		ret = internalMoveCreature(*creature, *toTile, flags);
+	Tile* toTile = map.getTile(destPos);
+	if (!toTile) {
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
-
-	return ret;
+	return internalMoveCreature(*creature, *toTile, flags);
 }
 
 ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags /*= 0*/)
