@@ -2171,6 +2171,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "setDropLoot", LuaScriptInterface::luaCreatureSetDropLoot);
 
 	registerMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
+	registerMethod("Creature", "getLastPosition", LuaScriptInterface::luaCreatureGetLastPosition);
 	registerMethod("Creature", "getTile", LuaScriptInterface::luaCreatureGetTile);
 	registerMethod("Creature", "getDirection", LuaScriptInterface::luaCreatureGetDirection);
 	registerMethod("Creature", "setDirection", LuaScriptInterface::luaCreatureSetDirection);
@@ -7708,6 +7709,18 @@ int32_t LuaScriptInterface::luaCreatureGetPosition(lua_State* L)
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
 		pushPosition(L, creature->getPosition());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureGetLastPosition(lua_State* L)
+{
+	// creature:getLastPosition()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushPosition(L, creature->getLastPosition());
 	} else {
 		lua_pushnil(L);
 	}
