@@ -1527,9 +1527,11 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_TYPE_KEY)
 	registerEnum(ITEM_TYPE_RUNE)
 
+	registerEnum(ITEM_BAG)
 	registerEnum(ITEM_GOLD_COIN)
 	registerEnum(ITEM_PLATINUM_COIN)
 	registerEnum(ITEM_CRYSTAL_COIN)
+	registerEnum(ITEM_AMULETOFLOSS)
 	registerEnum(ITEM_PARCEL)
 	registerEnum(ITEM_LABEL)
 	registerEnum(ITEM_FIREFIELD_PVP_FULL)
@@ -1593,6 +1595,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerEnum(PLAYERSEX_FEMALE)
 	registerEnum(PLAYERSEX_MALE)
+
+	registerEnum(VOCATION_NONE)
 
 	registerEnum(SKILL_FIST)
 	registerEnum(SKILL_CLUB)
@@ -1718,7 +1722,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ORIGIN_SPELL)
 	registerEnum(ORIGIN_MELEE)
 	registerEnum(ORIGIN_RANGED)
-	
+
 	// Use with house:getAccessList, house:setAccessList
 	registerEnum(GUEST_LIST)
 	registerEnum(SUBOWNER_LIST)
@@ -1932,7 +1936,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
-	
+
 	registerMethod("Variant", "getNumber", LuaScriptInterface::luaVariantGetNumber);
 	registerMethod("Variant", "getString", LuaScriptInterface::luaVariantGetString);
 	registerMethod("Variant", "getPosition", LuaScriptInterface::luaVariantGetPosition);
@@ -2121,7 +2125,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Teleport", "Item", LuaScriptInterface::luaTeleportCreate);
 	registerMetaMethod("Teleport", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("Teleport", "__index", LuaScriptInterface::luaItemIndex);
-	
+
 	registerMethod("Teleport", "isTeleport", LuaScriptInterface::luaTeleportIsTeleport);
 
 	registerMethod("Teleport", "getDestination", LuaScriptInterface::luaTeleportGetDestination);
@@ -4188,7 +4192,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 		if (!indexes.empty()) {
 			if (g_config.getBoolean(ConfigManager::WARN_UNSAFE_SCRIPTS)) {
 				bool plural = indexes.size() > 1;
-				
+
 				std::string warningString = "Argument";
 				if (plural) {
 					warningString += 's';
@@ -4523,7 +4527,7 @@ int32_t LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 			if (!luaState) {
 				return;
 			}
-			
+
 			if (!LuaScriptInterface::reserveScriptEnv()) {
 				luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
 				return;
@@ -4560,7 +4564,7 @@ int32_t LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 			if (!luaState) {
 				return;
 			}
-			
+
 			if (!LuaScriptInterface::reserveScriptEnv()) {
 				luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
 				return;
@@ -12910,18 +12914,18 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	if (it == m_timerEvents.end()) {
 		return;
 	}
-	
+
 	LuaTimerEventDesc timerEventDesc = std::move(it->second);
 	m_timerEvents.erase(it);
-	
+
 	//push function
 	lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
-	
+
 	//push parameters
 	for (auto parameter : boost::adaptors::reverse(timerEventDesc.parameters)) {
 		lua_rawgeti(m_luaState, LUA_REGISTRYINDEX, parameter);
 	}
-	
+
 	//call the function
 	if (reserveScriptEnv()) {
 		ScriptEnvironment* env = getScriptEnv();
@@ -12931,7 +12935,7 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	} else {
 		std::cout << "[Error - LuaScriptInterface::executeTimerEvent] Call stack overflow" << std::endl;
 	}
-	
+
 	//free resources
 	luaL_unref(m_luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
 	for (auto parameter : timerEventDesc.parameters) {

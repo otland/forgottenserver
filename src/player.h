@@ -1359,14 +1359,11 @@ class Player final : public Creature, public Cylinder
 			return vocation->getAttackSpeed();
 		}
 
-		uint16_t getDropPercent() const;
-
 		static uint8_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
 		double getLostPercent() const;
 		uint64_t getLostExperience() const final {
 			return skillLoss ? static_cast<uint64_t>(experience * getLostPercent()) : 0;
 		}
-		void dropLoot(Container* corpse, Creature* _lastHitCreature) final;
 		uint32_t getDamageImmunities() const final {
 			return damageImmunities;
 		}
