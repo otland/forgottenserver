@@ -3675,18 +3675,7 @@ void Player::gainExperience(uint64_t gainExp, Creature* source)
 		useStamina();
 	}
 
-	uint64_t oldExperience = experience;
 	addExperience(source, gainExp, true, true, true);
-
-	//soul regeneration
-	// TODO: move to Lua script (onGainExperience event)
-	int64_t gainedExperience = experience - oldExperience;
-	if (gainedExperience >= level) {
-		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
-		condition->setParam(CONDITION_PARAM_SOULGAIN, 1);
-		condition->setParam(CONDITION_PARAM_SOULTICKS, vocation->getSoulGainTicks() * 1000);
-		addCondition(condition);
-	}
 }
 
 void Player::onGainExperience(uint64_t gainExp, Creature* target)
