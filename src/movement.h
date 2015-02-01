@@ -92,7 +92,7 @@ class MoveEvents final : public BaseEvents
 		LuaScriptInterface m_scriptInterface;
 };
 
-typedef uint32_t(StepFunction)(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
+typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
 typedef uint32_t (MoveFunction)(Item* item, Item* tileItem, const Position& pos);
 typedef uint32_t (EquipFunction)(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
 
