@@ -9,7 +9,7 @@
 	<event class="Party" method="onJoin" enabled="0" />
 	<event class="Party" method="onLeave" enabled="0" />
 	<event class="Party" method="onDisband" enabled="0" />
-	
+
 	<!-- Player methods -->
 	<event class="Player" method="onBrowseField" enabled="0" />
 	<event class="Player" method="onLook" enabled="1" />

@@ -26,7 +26,7 @@
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="15" range="7" min="-60" max="-140">
 			<attribute key="areaEffect" value="smallplants"/>
-		</attack>		
+		</attack>
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="-60" max="-140">
 			<attribute key="areaEffect" value="smallplants"/>
 		</attack>

@@ -2642,7 +2642,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		player->sendTextMessage(MESSAGE_INFO_DESCR, "You can not trade more than 100 items.");
 		return;
 	}
-	
+
 	if (!g_events->eventPlayerOnTradeRequest(player, tradePartner, tradeItem)) {
 		return;
 	}
@@ -3964,7 +3964,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			std::string damageString = std::to_string(realHealthChange);
 			std::string pluralString = (realHealthChange != 1 ? "s." : ".");
-			
+
 			std::string spectatorMessage;
 			if (!attacker) {
 				spectatorMessage += ucfirst(target->getNameDescription());

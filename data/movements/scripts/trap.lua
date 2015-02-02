@@ -4,7 +4,7 @@ local traps = {
 	[2579] = {transformTo = 2578, damage = {-15, -30}},
 	[4208] = {transformTo = 4209, damage = {-15, -30}, type = COMBAT_EARTHDAMAGE}
 }
-	
+
 function onStepIn(creature, item, position, fromPosition)
 	local trap = traps[item.itemid]
 	if trap ~= nil then

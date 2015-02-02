@@ -251,14 +251,14 @@ function Creature.getClosestFreePosition(self, position, extended)
 	local usePosition = Position(position)
 	local tiles = { usePosition:getTile() }
 	local length = extended and 2 or 1
-	
+
 	local tile
 	for y = -length, length do
 		for x = -length, length do
 			if x ~= 0 or y ~= 0 then
 				usePosition.x = position.x + x
 				usePosition.y = position.y + y
-				
+
 				tile = usePosition:getTile()
 				if tile then
 					tiles[#tiles + 1] = tile
@@ -266,7 +266,7 @@ function Creature.getClosestFreePosition(self, position, extended)
 			end
 		end
 	end
-	
+
 	for i = 1, #tiles do
 		tile = tiles[i]
 		if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) then
@@ -341,7 +341,7 @@ function Player.sendExtendedOpcode(self, opcode, buffer)
 	if not self:isUsingOtClient() then
 		return false
 	end
-	
+
 	local networkMessage = NetworkMessage()
 	networkMessage:addByte(0x32)
 	networkMessage:addByte(opcode)

@@ -32,7 +32,7 @@ class Database
 	public:
 		Database();
 		~Database();
-		
+
 		// non-copyable
 		Database(const Database&) = delete;
 		Database& operator=(const Database&) = delete;

@@ -21,7 +21,7 @@
 		<attack name="ice" interval="3000" chance="35" range="7" radius="7" target="1" min="-900" max="-1100">
 				<attribute key="shootEffect" value="ice"/>
 				<attribute key="areaEffect" value="icearea"/>
-		</attack> 
+		</attack>
 		<attack name="melee" interval="1800" chance="40" range="7" radius="5" target="0" min="0" max="-1000">
 			<attribute key="areaEffect" value="blackspark"/>
 		</attack>
@@ -64,7 +64,7 @@
 		<voice sentence="Minions! Follow my call!" yell="1"/>
 		<voice sentence="I've beaten tougher demons then you even know" yell="1"/>
 		<voice sentence="You puny humans will be my snacks!" yell="1"/>
-		<voice sentence="Gaz'haragoth calls down: DEATH AND DOOM!" yell="1"/>		
+		<voice sentence="Gaz'haragoth calls down: DEATH AND DOOM!" yell="1"/>
 	</voices>
 	<loot>
 		<item id="2152" countmax="50" chance="10000"/> <!-- Platinum Coin -->

@@ -10,7 +10,7 @@ for i = 40, 170 do
 
 		local condition = Condition(CONDITION_CURSED)
 		condition:setParameter(CONDITION_PARAM_DELAYED, 1)
-		
+
 		local damage = i
 		condition:addDamage(1, 4000, -damage)
 		for k = 1, 4 do
