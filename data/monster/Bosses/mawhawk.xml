@@ -23,11 +23,11 @@
 		</attack>
 		<attack name="earth" interval="2000" chance="9" radius="6" min="-250" max="-590">
 			<attribute key="areaEffect" value="bigplants"/>
-		</attack>	
+		</attack>
 	</attacks>
-	<defenses armor="55" defense="55"/>    
-	<elements>			
-		<element icePercent="-10"/>		
+	<defenses armor="55" defense="55"/>
+	<elements>
+		<element icePercent="-10"/>
 		<element firePercent="-10"/>
 	</elements>
 	<immunities>
@@ -39,7 +39,7 @@
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Knorrrr!"/>
-	</voices>     
+	</voices>
 	<loot>
 		<item id="22396" countmax="2" chance="30000"/> <!-- cluster of solace -->
 		<item id="22532" chance="30000"/> <!-- frazzle tongue -->

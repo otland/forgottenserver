@@ -12,7 +12,7 @@ function onUpdateDatabase()
 	end
 
 	local record = 0
-	
+
 	local playersRecordFile = io.open("playersRecord.txt", "r")
 	if playersRecordFile ~= nil then
 		record = playersRecordFile:read("*n")

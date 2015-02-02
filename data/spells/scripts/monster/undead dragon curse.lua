@@ -5,10 +5,10 @@ for i = 30, 50 do
 	combat[i]:setParameter(COMBAT_PARAM_TYPE, COMBAT_DEATHDAMAGE)
 	combat[i]:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLCLOUDS)
 	combat[i]:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
-	
+
 	local condition = Condition(CONDITION_CURSED)
 	condition:setParameter(CONDITION_PARAM_DELAYED, 1)
-	
+
 	local damage = i
 	condition:addDamage(1, 4000, -damage)
 	for j = 1, 9 do

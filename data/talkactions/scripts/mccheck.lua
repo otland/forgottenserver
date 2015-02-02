@@ -6,7 +6,7 @@ function onSay(player, words, param)
 	if player:getAccountType() < ACCOUNT_TYPE_GOD then
 		return false
 	end
-	
+
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Multiclient Check List:")
 
 	local ipList = {}
@@ -23,7 +23,7 @@ function onSay(player, words, param)
 			list[#list + 1] = tmpPlayer
 		end
 	end
-	
+
 	for ip, list in pairs(ipList) do
 		local listLength = #list
 		if listLength > 1 then
