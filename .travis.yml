@@ -1,9 +1,11 @@
 language: cpp
-compiler:
-  - gcc
-before_script:
-  - sudo apt-get install libboost-system-dev liblua5.2-dev libgmp3-dev libmysqlclient-dev
-script: |
-  mkdir build && cd build
-  cmake -DCMAKE_BUILD_TYPE=Release ..
-  make
+compiler: gcc
+cache: apt
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -qq
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+install: sudo apt-get install libboost-system-dev liblua5.2-dev libgmp3-dev libmysqlclient-dev
+before_script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
+script: make

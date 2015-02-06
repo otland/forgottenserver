@@ -2,7 +2,6 @@
 <monster name="Axeitus Headbanger" nameDescription="axeitus headbanger" race="blood" experience="140" speed="170" manacost="0">
 	<health now="365" max="365"/>
 	<look type="71" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,22 @@
 #ifndef FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
 #define FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
 
-enum Direction {
-	NORTH = 0,
-	EAST = 1,
-	SOUTH = 2,
-	WEST = 3,
-	SOUTHWEST = 4,
-	SOUTHEAST = 5,
-	NORTHWEST = 6,
-	NORTHEAST = 7,
-	SOUTH_ALT = 8,
-	EAST_ALT = 9,
-	NODIR = 10
+enum Direction : uint8_t {
+	DIRECTION_NORTH = 0,
+	DIRECTION_EAST = 1,
+	DIRECTION_SOUTH = 2,
+	DIRECTION_WEST = 3,
+
+	DIRECTION_DIAGONAL_MASK = 4,
+	DIRECTION_SOUTHWEST = DIRECTION_DIAGONAL_MASK | 0,
+	DIRECTION_SOUTHEAST = DIRECTION_DIAGONAL_MASK | 1,
+	DIRECTION_NORTHWEST = DIRECTION_DIAGONAL_MASK | 2,
+	DIRECTION_NORTHEAST = DIRECTION_DIAGONAL_MASK | 3,
+
+	DIRECTION_LAST = DIRECTION_NORTHEAST,
+	DIRECTION_SOUTH_ALT = 8,
+	DIRECTION_EAST_ALT = 9,
+	DIRECTION_NONE = 10
 };
 
 struct Position

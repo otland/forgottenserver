@@ -1,9 +1,8 @@
 local ipBanDays = 7
 
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
-		return false
+		return true
 	end
 
 	local resultId = db.storeQuery("SELECT `account_id`, `lastip` FROM `players` WHERE `name` = " .. db.escapeString(param))
@@ -11,7 +10,7 @@ function onSay(cid, words, param)
 		return false
 	end
 
-	local ip = result.getDataInt(resultId, "lastip")
+	local ip = result.getDataLong(resultId, "lastip")
 	result.free(resultId)
 
 	local targetCid = getPlayerByName(param)
@@ -31,7 +30,7 @@ function onSay(cid, words, param)
 	end
 
 	local timeNow = os.time()
-	db:query("INSERT INTO `ip_bans` (`ip`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
+	db.query("INSERT INTO `ip_bans` (`ip`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
 			ip .. ", '', " .. timeNow .. ", " .. timeNow + (ipBanDays * 86400) .. ", " .. player:getGuid() .. ")")
 	return false
 end

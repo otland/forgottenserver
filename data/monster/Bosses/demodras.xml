@@ -3,7 +3,6 @@
 	<health now="4500" max="4500"/>
 	<look type="204" corpse="5984"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -35,11 +34,9 @@
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
-	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
-	</elements>
 	<immunities>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>

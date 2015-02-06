@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ enum RaidState_t {
 };
 
 struct MonsterSpawn {
+	MonsterSpawn(const char* name, uint32_t minAmount, uint32_t maxAmount) : name(name), minAmount(minAmount), maxAmount(maxAmount) {}
+
 	std::string name;
 	uint32_t minAmount;
 	uint32_t maxAmount;
@@ -46,12 +48,12 @@ class RaidEvent;
 class Raids
 {
 	public:
-		static Raids* getInstance() {
-			static Raids instance;
-			return &instance;
-		}
-
+		Raids();
 		~Raids();
+
+		// non-copyable
+		Raids(const Raids&) = delete;
+		Raids& operator=(const Raids&) = delete;
 
 		bool loadFromXml();
 		bool startup();
@@ -85,13 +87,11 @@ class Raids
 		void checkRaids();
 
 		LuaScriptInterface& getScriptInterface() {
-			return m_scriptInterface;
+			return scriptInterface;
 		}
 
 	private:
-		Raids();
-
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 
 		std::list<Raid*> raidList;
 		Raid* running;
@@ -106,6 +106,10 @@ class Raid
 		Raid(const std::string& name, uint32_t interval, uint32_t marginTime, bool repeat)
 			: name(name), interval(interval), nextEvent(0), margin(marginTime), state(RAIDSTATE_IDLE), nextEventEvent(0), loaded(false), repeat(repeat) {}
 		~Raid();
+
+		// non-copyable
+		Raid(const Raid&) = delete;
+		Raid& operator=(const Raid&) = delete;
 
 		bool loadFromXml(const std::string& _filename);
 
@@ -154,8 +158,7 @@ class Raid
 class RaidEvent
 {
 	public:
-		RaidEvent() {}
-		virtual ~RaidEvent() {}
+		virtual ~RaidEvent() = default;
 
 		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
@@ -177,72 +180,63 @@ class RaidEvent
 		uint32_t m_delay;
 };
 
-class AnnounceEvent : public RaidEvent
+class AnnounceEvent final : public RaidEvent
 {
 	public:
 		AnnounceEvent() {
-			m_messageType = MSG_EVENT_ADVANCE;
+			m_messageType = MESSAGE_EVENT_ADVANCE;
 		}
-		virtual ~AnnounceEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
-		virtual bool executeEvent();
+		bool executeEvent() final;
 
 	private:
 		std::string m_message;
 		MessageClasses m_messageType;
 };
 
-class SingleSpawnEvent : public RaidEvent
+class SingleSpawnEvent final : public RaidEvent
 {
 	public:
-		SingleSpawnEvent() {}
-		virtual ~SingleSpawnEvent() {}
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
-
-		virtual bool executeEvent();
+		bool executeEvent() final;
 
 	private:
 		std::string m_monsterName;
 		Position m_position;
 };
 
-class AreaSpawnEvent : public RaidEvent
+class AreaSpawnEvent final : public RaidEvent
 {
 	public:
-		AreaSpawnEvent() {}
-		virtual ~AreaSpawnEvent();
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
-
-		void addMonster(MonsterSpawn* monsterSpawn);
 		void addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount);
 
-		virtual bool executeEvent();
+		bool executeEvent() final;
 
 	private:
-		std::list<MonsterSpawn*> m_spawnList;
+		std::list<MonsterSpawn> m_spawnList;
 		Position m_fromPos, m_toPos;
 };
 
-class ScriptEvent : public RaidEvent, public Event
+class ScriptEvent final : public RaidEvent, public Event
 {
 	public:
 		ScriptEvent(LuaScriptInterface* _interface);
 		ScriptEvent(const ScriptEvent* copy);
-		~ScriptEvent() {}
 
-		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
-		virtual bool configureEvent(const pugi::xml_node&) {
+		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
+		bool configureEvent(const pugi::xml_node&) final {
 			return false;
 		}
 
-		bool executeEvent();
+		bool executeEvent() final;
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,8 @@
 class IOMapSerialize
 {
 	public:
-		static void loadMap(Map* map);
-		static bool saveMap();
+		static void loadHouseItems(Map* map);
+		static bool saveHouseItems();
 		static bool loadHouseInfo();
 		static bool saveHouseInfo();
 
@@ -37,8 +37,6 @@ class IOMapSerialize
 
 		static bool loadContainer(PropStream& propStream, Container* container);
 		static bool loadItem(PropStream& propStream, Cylinder* parent);
-		static bool saveTile(Database* db, uint32_t tileId, const Tile* tile);
-		static bool loadTile(Database& db, Tile* tile);
 };
 
 #endif

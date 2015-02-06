@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ bool Quests::loadFromXml()
 			if (missionState.empty()) {
 				for (pugi::xml_node missionStateNode = missionNode.first_child(); missionStateNode; missionStateNode = missionStateNode.next_sibling()) {
 					int32_t missionId = pugi::cast<int32_t>(missionStateNode.attribute("id").value());
-					mission.state[missionId] = MissionState(missionStateNode.attribute("description").as_string(), missionId); // TODO: Use emplace
+					mission.state.emplace(missionId, MissionState(missionStateNode.attribute("description").as_string(), missionId));
 				}
 			} else {
 				mission.mainState = new MissionState(missionState, 0);

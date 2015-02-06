@@ -3,7 +3,6 @@
 	<health now="20000" max="20000"/>
 	<look type="356" corpse="12385"/>
 	<targetchange interval="2000" chance="10"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -21,7 +20,7 @@
 		<attack name="lifedrain" interval="2000" chance="40" length="8" spread="0" max="-300">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="50" radius="6"  min="-150" max="-270">
+		<attack name="earth" interval="2000" chance="50" radius="6" min="-150" max="-270">
 			<attribute key="areaEffect" value="greenshimmer"/>
 		</attack>
 	</attacks>

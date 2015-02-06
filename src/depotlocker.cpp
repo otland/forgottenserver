@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,35 +29,24 @@ DepotLocker::DepotLocker(uint16_t _type) :
 	maxSize = 3;
 }
 
-DepotLocker::~DepotLocker()
-{
-	//
-}
-
 Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_DEPOT_ID) {
-		uint16_t _depotId;
-		if (!propStream.GET_USHORT(_depotId)) {
+		if (!propStream.read<uint16_t>(depotId)) {
 			return ATTR_READ_ERROR;
 		}
-
-		setDepotId(_depotId);
 		return ATTR_READ_CONTINUE;
-	} else {
-		return Item::readAttr(attr, propStream);
 	}
+	return Item::readAttr(attr, propStream);
 }
 
-ReturnValue DepotLocker::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
-                                    uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue DepotLocker::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature*) const
 {
-	return Container::__queryAdd(index, thing, count, flags, actor);
+	return RETURNVALUE_NOTENOUGHROOM;
 }
 
 void DepotLocker::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	Cylinder* parent = getParent();
 	if (parent != nullptr) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
@@ -65,7 +54,6 @@ void DepotLocker::postAddNotification(Thing* thing, const Cylinder* oldParent, i
 
 void DepotLocker::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
 {
-	Cylinder* parent = getParent();
 	if (parent != nullptr) {
 		parent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 	}

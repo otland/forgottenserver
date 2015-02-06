@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 
 #ifndef FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
 #define FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
+
+#include <random>
 
 #include "position.h"
 #include "const.h"
@@ -40,8 +42,7 @@ StringVec explodeString(const std::string& inString, const std::string& separato
 IntegerVec vectorAtoi(const StringVec& stringVector);
 bool hasBitSet(uint32_t flag, uint32_t flags);
 
-bool isNumber(char character);
-
+std::mt19937& getRandomGenerator();
 int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
 int32_t normal_random(int32_t minNumber, int32_t maxNumber);
 bool boolean_random(double probability = 0.5);
@@ -61,13 +62,14 @@ void trimString(std::string& str);
 MagicEffectClasses getMagicEffect(const std::string& strValue);
 ShootType_t getShootType(const std::string& strValue);
 Ammo_t getAmmoType(const std::string& strValue);
-AmmoAction_t getAmmoAction(const std::string& strValue);
+WeaponAction_t getWeaponAction(const std::string& strValue);
 CombatType_t getCombatType(const std::string& strValue);
+Skulls_t getSkullType(const std::string& strValue);
 std::string getCombatName(CombatType_t combatType);
 
-std::string getSkillName(uint16_t skillid);
+std::string getSkillName(uint8_t skillid);
 
-uint32_t adlerChecksum(uint8_t* data, size_t len);
+uint32_t adlerChecksum(const uint8_t* data, size_t len);
 
 std::string ucfirst(std::string str);
 std::string ucwords(std::string str);
@@ -84,10 +86,6 @@ uint8_t clientFluidToServer(uint8_t clientFluid);
 itemAttrTypes stringToItemAttribute(const std::string& str);
 
 const char* getReturnMessage(ReturnValue value);
-
-#if !defined(_MSC_VER) || _MSC_VER < 1800
-double round(double v);
-#endif
 
 inline int64_t OTSYS_TIME()
 {

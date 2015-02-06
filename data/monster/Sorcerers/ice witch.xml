@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ice Witch" nameDescription="an ice witch" race="blood" experience="580" speed="188" manacost="0">
+<monster name="Ice Witch" nameDescription="an ice witch" race="blood" experience="580" speed="200" manacost="0">
 	<health now="650" max="650"/>
-	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20426"/>
-	<targetchange interval="2000" chance="5"/>
-	<strategy attack="100" defense="0"/>
+	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20423"/>
+	<targetchange interval="4000" chance="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -12,7 +11,7 @@
 		<flag convinceable="0"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
-		<flag staticattack="50"/>
+		<flag staticattack="70"/>
 		<flag lightlevel="0"/>
 		<flag lightcolor="0"/>
 		<flag targetdistance="4"/>
@@ -20,51 +19,55 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="30"/>
-		<attack name="outfit" interval="1000" chance="10" range="7" item="7172" duration="8000">
+		<attack name="outfit" interval="2000" chance="1" range="7" item="7172" duration="4000">
+			<attribute key="shootEffect" value="snowball"/>
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</attack>
-		<attack name="physical" interval="3000" chance="34" range="7" radius="3" target="1" min="0" max="-110">
-			<attribute key="shootEffect" value="snowball"/>
+		<attack name="ice" interval="2000" chance="10" length="5" spread="2" min="-60" max="-130">
+			<attribute key="areaEffect" value="icetornado"/>
 		</attack>
-		<attack name="ice wave" interval="2500" chance="20" min="-50" max="-124"/>
-		<attack name="speed" interval="1000" chance="10" range="7" speedchange="-600" duration="20000">
-			<attribute key="areaEffect" value="redshimmer"/>
+		<attack name="ice" interval="2000" chance="20" range="7" target="1" min="-55" max="-115">
+			<attribute key="shootEffect" value="smallice"/>
+			<attribute key="areaEffect" value="iceattack"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="20000">
+			<attribute key="shootEffect" value="smallice"/>
+			<attribute key="areaEffect" value="icetornado"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="20">
-		<defense name="healing" interval="1000" chance="25" min="50" max="80">
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="25" min="90" max="120">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="100"/>
 		<element firePercent="50"/>
 		<element earthPercent="40"/>
-		<element holyPercent="26"/>
+		<element holyPercent="30"/>
 		<element energyPercent="-10"/>
 		<element deathPercent="-10"/>
 	</elements>
 	<immunities>
+		<immunity ice="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="2000" chance="5">
+	<voices interval="5000" chance="10">
 		<voice sentence="So you think you are cool?"/>
 		<voice sentence="I hope it is not too cold for you! HeHeHe."/>
 		<voice sentence="Freeze!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="6300"/><!-- gold coin -->
-		<item id="7441" chance="5000"/><!-- ice cube -->
-		<item id="2796" chance="1550"/><!-- green mushroom -->
-		<item id="7892" chance="500"/><!-- glacier shoes -->
-		<item id="7387" chance="225"/><!-- diamond sceptre -->
-		<item id="7449" chance="660"/><!-- crystal sword -->
-		<item id="7290" chance="225"/><!-- shard -->
-		<item id="2423" chance="3250"/><!-- clerical mace -->
-		<item id="7589" chance="2650"/><!-- strong mana potion -->
-		<item id="2663" chance="750"/><!-- mystic turban -->
-		<item id="7896" chance="300"/><!-- glacier kilt -->
-		<item id="7459" chance="100"/><!-- ear muffs -->
+		<item id="2148" countmax="90" chance="29630"/><!-- gold coin -->
+		<item id="7441" chance="10000"/><!-- ice cube -->
+		<item id="2796" chance="1310"/><!-- green mushroom -->
+		<item id="7892" chance="280"/><!-- glacier shoes -->
+		<item id="7387" chance="330"/><!-- diamond sceptre -->
+		<item id="7449" chance="400"/><!-- crystal sword -->
+		<item id="7290" chance="530"/><!-- shard -->
+		<item id="2423" chance="920"/><!-- clerical mace -->
+		<item id="7589" chance="820"/><!-- strong mana potion -->
+		<item id="2663" chance="430"/><!-- mystic turban -->
+		<item id="7459" chance="90"/><!-- ear muffs -->
 	</loot>
 </monster>

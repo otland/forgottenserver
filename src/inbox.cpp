@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,32 +30,27 @@ Inbox::Inbox(uint16_t _type) :
 	pagination = true;
 }
 
-Inbox::~Inbox()
-{
-	//
-}
-
-ReturnValue Inbox::__queryAdd(int32_t, const Thing* thing, uint32_t,
-                              uint32_t flags, Creature*) const
+ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t,
+		uint32_t flags, Creature*) const
 {
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
-		return RET_CONTAINERNOTENOUGHROOM;
+		return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 	}
 
-	const Item* item = thing->getItem();
+	const Item* item = thing.getItem();
 	if (!item) {
-		return RET_NOTPOSSIBLE;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (item == this) {
-		return RET_THISISIMPOSSIBLE;
+		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
 	if (!item->isPickupable()) {
-		return RET_CANNOTPICKUP;
+		return RETURNVALUE_CANNOTPICKUP;
 	}
 
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
 void Inbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
@@ -72,4 +67,12 @@ void Inbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int3
 	if (parent != nullptr) {
 		parent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 	}
+}
+
+Cylinder* Inbox::getParent() const
+{
+	if (parent) {
+		return parent->getParent();
+	}
+	return nullptr;
 }

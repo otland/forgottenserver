@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Marauder" nameDescription="a orc marauder" race="blood" experience="220" speed="390" manacost="0">
+<monster name="Orc Marauder" nameDescription="a orc marauder" race="blood" experience="205" speed="210" manacost="0">
 	<health now="235" max="235"/>
-	<look type="342" corpse="11245"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
+	<look type="342" corpse="11251"/>
+	<targetchange interval="4000" chance="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -13,26 +12,24 @@
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
+		<flag targetdistance="4"/>
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="70"/>
-		<attack name="physical" interval="2000" chance="50" range="7" min="-0" max="-80">
-			<attribute key="shootEffect" value="arrow"/>
+		<attack name="melee" interval="2000" skill="40" attack="40"/>
+		<attack name="physical" interval="2000" chance="50" range="7" min="0" max="-100">
+			<attribute key="shootEffect" value="onyxarrow"/>
 		</attack>
 	</attacks>
-	<defenses armor="20" defense="45">
-		<defense name="speed" interval="2000" chance="7" speedchange="350" duration="4000">
+	<defenses armor="25" defense="25">
+		<defense name="speed" interval="2000" chance="15" speedchange="350" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="20"/>
-		<element holyPercent="10"/>
-		<element earthPercent="-10"/>
-		<element deathPercent="-10"/>
+		<element holyPercent="5"/>
+		<element earthPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -41,11 +38,16 @@
 		<voice sentence="Grrrrrr"/>
 	</voices>
 	<loot>
-		<item id="2666" chance="24300"/> <!-- meat -->
-		<item id="2148" countmax="89" chance="7225"/> <!-- gold coin -->
-		<item id="2456" chance="4625"/> <!-- bow -->
-		<item id="2425" chance="1075"/> <!-- obsidian lance -->
-		<item id="11324" chance="9475"/> <!-- shaggy tail -->
-		<item id="11113" chance="4150"/> <!-- orc tooth -->
+		<item id="2148" countmax="90" chance="55000"/><!-- gold coin -->
+		<item id="2666" chance="24600"/><!-- meat -->
+		<item id="2456" chance="5210"/><!-- bow -->
+		<item id="2425" chance="1110"/><!-- obsidian lance -->
+		<item id="11324" chance="10090"/><!-- shaggy tail -->
+		<item id="11113" chance="3890"/><!-- orc tooth -->
+		<item id="2428" chance="1320"/><!-- orcish axe -->
+		<item id="12435" chance="3800"/><!-- orc leather -->
+		<item id="8857" chance="70"/><!-- silkweaver bow -->
+		<item id="12407" chance="4830"/><!-- broken crossbow -->
+		<item id="2455" chance="440"/><!-- crossbow -->
 	</loot>
 </monster>

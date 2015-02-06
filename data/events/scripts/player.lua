@@ -1,3 +1,6 @@
+function Player:onBrowseField(position)
+	return true
+end
 
 function Player:onLook(thing, position, distance)
 	local description = "You see " .. thing:getDescription(distance)
@@ -9,15 +12,15 @@ function Player:onLook(thing, position, distance)
 			if actionId ~= 0 then
 				description = string.format("%s, ActionID: [%d]", description, actionId)
 			end
-			
+
 			local uniqueId = thing:getAttribute(ITEM_ATTRIBUTE_UNIQUEID)
 			if uniqueId > 0 and uniqueId < 65536 then
 				description = string.format("%s, UniqueId: [%d]", description, uniqueId)
 			end
-			
+
 			description = description .. "."
 			local itemType = thing:getType()
-			
+
 			local transformEquipId = itemType:getTransformEquipId()
 			local transformDeEquipId = itemType:getTransformDeEquipId()
 			if transformEquipId ~= 0 then
@@ -37,12 +40,18 @@ function Player:onLook(thing, position, distance)
 			end
 			description = string.format(str, description, thing:getHealth(), thing:getMaxHealth()) .. "."
 		end
-		
+
 		local position = thing:getPosition()
 		description = string.format(
 			"%s\nPosition: [X: %d] [Y: %d] [Z: %d].",
 			description, position.x, position.y, position.z
 		)
+
+		if thing:isCreature() then
+			if thing:isPlayer() then
+				description = string.format("%s\nIP: [%s].", description, Game.convertIpToString(thing:getIp()))
+			end
+		end
 	end
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
@@ -61,6 +70,10 @@ function Player:onLookInBattleList(creature, distance)
 			"%s\nPosition: [X: %d] [Y: %d] [Z: %d].",
 			description, position.x, position.y, position.z
 		)
+
+		if creature:isPlayer() then
+			description = string.format("%s\nIP: [%s].", description, Game.convertIpToString(creature:getIp()))
+		end
 	end
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
@@ -83,4 +96,37 @@ end
 
 function Player:onTurn(direction)
 	return true
+end
+
+function Player:onTradeRequest(target, item)
+	return true
+end
+
+function Player:onTradeAccept(target, item, targetItem)
+	return true
+end
+
+local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
+soulCondition:setTicks(4 * 60 * 1000)
+soulCondition:setParameter(CONDITION_PARAM_SOULGAIN, 1)
+
+function Player:onGainExperience(source, exp, rawExp)
+	local vocation = self:getVocation()
+	if self:getSoul() < vocation:getMaxSoul() and exp >= self:getLevel() then
+		soulCondition:setParameter(CONDITION_PARAM_SOULTICKS, vocation:getSoulGainTicks() * 1000)
+		self:addCondition(soulCondition)
+	end
+
+	return exp
+end
+
+function Player:onLoseExperience(exp)
+	return exp
+end
+
+function Player:onGainSkillTries(skill, tries)
+	if skill == SKILL_MAGLEVEL then
+		return tries * configManager.getNumber(configKeys.RATE_MAGIC)
+	end
+	return tries * configManager.getNumber(configKeys.RATE_SKILL)
 end

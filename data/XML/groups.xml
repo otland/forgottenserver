@@ -2,5 +2,5 @@
 <groups>
 	<group id="1" name="player" flags="0" access="0" maxdepotitems="0" maxvipentries="0" />
 	<group id="2" name="gamemaster" flags="137438953471" access="1" maxdepotitems="0" maxvipentries="200" />
-	<group id="3" name="god" flags="127540697997304" access="1" maxdepotitems="0" maxvipentries="200" />
+	<group id="3" name="god" flags="272730398714" access="1" maxdepotitems="0" maxvipentries="200" />
 </groups>

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ class IOLoginData
 
 		static bool loadPlayerById(Player* player, uint32_t id);
 		static bool loadPlayerByName(Player* player, const std::string& name);
-		static bool loadPlayer(Player* player, DBResult* result);
+		static bool loadPlayer(Player* player, DBResult_ptr result);
 		static bool savePlayer(Player* player);
-		static bool getGuidByName(uint32_t& guid, std::string& name);
+		static uint32_t getGuidByName(const std::string& name);
 		static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
-		static bool getNameByGuid(uint32_t guid, std::string& name);
+		static std::string getNameByGuid(uint32_t guid);
 		static bool formatPlayerName(std::string& name);
 		static bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
@@ -63,7 +63,7 @@ class IOLoginData
 	protected:
 		typedef std::map<int32_t , std::pair<Item*, int32_t> > ItemMap;
 
-		static void loadItems(ItemMap& itemMap, DBResult* result);
+		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
 		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& stream);
 };
 

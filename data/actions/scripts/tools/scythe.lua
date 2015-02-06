@@ -1,9 +1,11 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	if itemEx.itemid == 2739 then
-		doTransformItem(itemEx.uid, 2737)
-		doCreateItem(2694, 1, toPosition)
-		doDecayItem(itemEx.uid)
-		return TRUE
+		local iEx = Item(itemEx.uid)
+		iEx:transform(2737)
+		iEx:decay()
+		Game.createItem(2694, 1, toPosition)
+		return true
 	end
+
 	return destroyItem(cid, itemEx, toPosition)
 end

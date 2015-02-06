@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,18 +31,21 @@ class Container;
 class Thing
 {
 	protected:
-		Thing();
+		Thing() = default;
+		~Thing() = default;
 
 	public:
-		virtual ~Thing();
+		// non-copyable
+		Thing(const Thing&) = delete;
+		Thing& operator=(const Thing&) = delete;
 
 		virtual std::string getDescription(int32_t lookDistance) const = 0;
 
-		virtual Cylinder* getParent() {
+		virtual Cylinder* getParent() const {
 			return nullptr;
 		}
-		virtual const Cylinder* getParent() const {
-			return nullptr;
+		virtual Cylinder* getRealParent() const {
+			return getParent();
 		}
 
 		virtual void setParent(Cylinder*) {

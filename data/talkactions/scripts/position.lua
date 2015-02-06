@@ -1,5 +1,4 @@
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if player:getGroup():getAccess() and param ~= "" then
 		local split = param:split(",")
 		player:teleportTo(Position(split[1], split[2], split[3]))

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Bear" namedescription="a bear" race="blood" experience="23" speed="176" manacost="300">
+<monster name="Bear" namedescription="a bear" race="blood" experience="23" speed="145" manacost="300">
 	<health now="80" max="80"/>
 	<look type="16" corpse="5975"/>
-	<targetchange interval="2000" chance="0"/>
-	<strategy attack="100" defense="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -20,7 +19,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="10"/>
 	</attacks>
-	<defenses armor="6" defense="6"/>
+	<defenses armor="10" defense="10"/>
 	<elements>
 		<element holyPercent="10"/>
 		<element icePercent="-10"/>
@@ -32,8 +31,8 @@
 	</voices>
 	<loot>
 		<item id="5896" chance="2000"/><!-- bear paw -->
-		<item id="2671" countmax="3" chance="25000"/><!-- ham -->
-		<item id="2666" countmax="4" chance="46750"/><!-- meat -->
-		<item id="5902" chance="1700"/><!-- honeycomb -->
+		<item id="2671" countmax="3" chance="20000"/><!-- ham -->
+		<item id="2666" countmax="4" chance="39750"/><!-- meat -->
+		<item id="5902" chance="460"/><!-- honeycomb -->
 	</loot>
 </monster>

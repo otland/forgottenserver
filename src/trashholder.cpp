@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,50 +24,40 @@
 
 extern Game g_game;
 
-TrashHolder::TrashHolder(uint16_t _type, MagicEffectClasses _effect /*= NM_ME_NONE*/) : Item(_type)
+ReturnValue TrashHolder::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature*) const
 {
-	effect = _effect;
+	return RETURNVALUE_NOERROR;
 }
 
-TrashHolder::~TrashHolder()
-{
-	//
-}
-
-ReturnValue TrashHolder::__queryAdd(int32_t, const Thing*, uint32_t, uint32_t, Creature*) const
-{
-	return RET_NOERROR;
-}
-
-ReturnValue TrashHolder::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
+ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue TrashHolder::__queryRemove(const Thing*, uint32_t, uint32_t) const
+ReturnValue TrashHolder::queryRemove(const Thing&, uint32_t, uint32_t) const
 {
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Cylinder* TrashHolder::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)
+Cylinder* TrashHolder::queryDestination(int32_t&, const Thing&, Item**, uint32_t&)
 {
 	return this;
 }
 
-void TrashHolder::__addThing(Thing* thing)
+void TrashHolder::addThing(Thing* thing)
 {
-	return __addThing(0, thing);
+	return addThing(0, thing);
 }
 
-void TrashHolder::__addThing(int32_t, Thing* thing)
+void TrashHolder::addThing(int32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (!item) {
 		return;
 	}
 
-	if (item == this || !item->hasProperty(MOVEABLE)) {
+	if (item == this || !item->hasProperty(CONST_PROP_MOVEABLE)) {
 		return;
 	}
 
@@ -80,22 +70,23 @@ void TrashHolder::__addThing(int32_t, Thing* thing)
 
 	g_game.internalRemoveItem(item);
 
-	if (effect != NM_ME_NONE) {
-		g_game.addMagicEffect(getPosition(), effect);
+	const ItemType& it = Item::items[getID()];
+	if (it.magicEffect != CONST_ME_NONE) {
+		g_game.addMagicEffect(getPosition(), it.magicEffect);
 	}
 }
 
-void TrashHolder::__updateThing(Thing*, uint16_t, uint32_t)
+void TrashHolder::updateThing(Thing*, uint16_t, uint32_t)
 {
 	//
 }
 
-void TrashHolder::__replaceThing(uint32_t, Thing*)
+void TrashHolder::replaceThing(uint32_t, Thing*)
 {
 	//
 }
 
-void TrashHolder::__removeThing(Thing*, uint32_t)
+void TrashHolder::removeThing(Thing*, uint32_t)
 {
 	//
 }

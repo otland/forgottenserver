@@ -3,7 +3,6 @@
 	<health now="265" max="265"/>
 	<look type="202" corpse="5983"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="70" defense="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -40,7 +39,7 @@
 	<summons maxSummons="6">
 		<summon name="minotaur archer" interval="1000" chance="13" max="2"/>
 		<summon name="minotaur guard" interval="1000" chance="13" max="2"/>
-	<summon name="minotaur mage" interval="1000" chance="13" max="2"/>
+		<summon name="minotaur mage" interval="1000" chance="13" max="2"/>
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="You will never get me!"/>

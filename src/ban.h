@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@ struct BanInfo {
 };
 
 struct ConnectBlock {
+	ConnectBlock(uint64_t lastAttempt, uint64_t blockTime, uint32_t count)
+		: lastAttempt(lastAttempt), blockTime(blockTime), count(count) {}
+
 	uint64_t lastAttempt;
 	uint64_t blockTime;
 	uint32_t count;

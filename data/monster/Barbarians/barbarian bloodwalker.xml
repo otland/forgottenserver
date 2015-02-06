@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Barbarian Bloodwalker" nameDescription="a barbarian bloodwalker" race="blood" experience="195" speed="205" manacost="590">
+<monster name="Barbarian Bloodwalker" nameDescription="a barbarian bloodwalker" race="blood" experience="195" speed="230" manacost="590">
 	<health now="305" max="305"/>
 	<look type="255" head="114" body="132" legs="132" feet="132" corpse="20335"/>
-	<targetchange interval="2000" chance="5"/>
-	<strategy attack="100" defense="0"/>
+	<targetchange interval="4000" chance="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -19,10 +18,10 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="80"/>
+		<attack name="melee" interval="2000" skill="50" attack="80"/>
 	</attacks>
 	<defenses armor="15" defense="15">
-		<defense name="speed" interval="1000" chance="12" speedchange="260" duration="40000">
+		<defense name="speed" interval="2000" chance="15" speedchange="240" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
@@ -31,31 +30,27 @@
 		<element holyPercent="20"/>
 		<element energyPercent="10"/>
 		<element icePercent="50"/>
-		<element deathPercent="-8"/>
+		<element deathPercent="-5"/>
 		<element earthPercent="-5"/>
 	</elements>
-	<immunities>
-		<immunity drunk="1"/>
-		<immunity outfit="1"/>
-	</immunities>
-	<voices interval="2000" chance="20">
+	<voices interval="5000" chance="10">
 		<voice sentence="YAAAHEEE!"/>
 		<voice sentence="SLAUGHTER!"/>
 		<voice sentence="CARNAGE!"/>
 		<voice sentence="You can run but you can't hide"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="20000"/><!-- gold coin -->
-		<item id="2671" chance="14250"/><!-- ham -->
-		<item id="2044" chance="12500"/><!-- lamp -->
-		<item id="2381" chance="10750"/><!-- halberd -->
-		<item id="2458" chance="9000"/><!-- chain helmet -->
-		<item id="2378" chance="9000"/><!-- battle axe -->
-		<item id="2464" chance="5400"/><!-- chain armor -->
-		<item id="5911" chance="250"/><!-- red piece of cloth -->
-		<item id="7618" chance="2000"/><!-- health potion -->
-		<item id="3962" chance="500"/><!-- beastslayer axe -->
-		<item id="7457" chance="500"/><!-- fur boots -->
-		<item id="7290" chance="300"/><!-- shard -->
+		<item id="2148" countmax="12" chance="50000"/><!-- gold coin -->
+		<item id="2671" chance="4970"/><!-- ham -->
+		<item id="2044" chance="8280"/><!-- lamp -->
+		<item id="2381" chance="6730"/><!-- halberd -->
+		<item id="2458" chance="10440"/><!-- chain helmet -->
+		<item id="2378" chance="6000"/><!-- battle axe -->
+		<item id="2464" chance="10290"/><!-- chain armor -->
+		<item id="5911" chance="530"/><!-- red piece of cloth -->
+		<item id="7618" chance="950"/><!-- health potion -->
+		<item id="3962" chance="390"/><!-- beastslayer axe -->
+		<item id="7457" chance="100"/><!-- fur boots -->
+		<item id="7290" chance="290"/><!-- shard -->
 	</loot>
 </monster>

@@ -1,7 +1,6 @@
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
-		return false
+		return true
 	end
 
 	local effect = tonumber(param)

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ typedef std::map<uint32_t, Player*> InvitedMap;
 class ChatChannel
 {
 	public:
-		ChatChannel() {}
+		ChatChannel() = default;
 		ChatChannel(uint16_t channelId, const std::string& channelName) : name(channelName), canJoinEvent(-1), onJoinEvent(-1), onLeaveEvent(-1), onSpeakEvent(-1), id(channelId), publicChannel(false) {}
-		virtual ~ChatChannel() {}
+		virtual ~ChatChannel() = default;
 
 		bool addUser(Player& player);
 		bool removeUser(const Player& player);
@@ -82,17 +82,16 @@ class ChatChannel
 	friend class Chat;
 };
 
-class PrivateChatChannel : public ChatChannel
+class PrivateChatChannel final : public ChatChannel
 {
 	public:
 		PrivateChatChannel(uint16_t channelId, const std::string& channelName);
-		virtual ~PrivateChatChannel() {}
 
-		virtual uint32_t getOwner() const {
+		uint32_t getOwner() const final {
 			return m_owner;
 		}
-		void setOwner(uint32_t id) {
-			m_owner = id;
+		void setOwner(uint32_t owner) {
+			m_owner = owner;
 		}
 
 		bool isInvited(const Player& player) const;
@@ -109,7 +108,7 @@ class PrivateChatChannel : public ChatChannel
 			return m_invites;
 		}
 
-		const InvitedMap* getInvitedUsersPtr() const {
+		const InvitedMap* getInvitedUsersPtr() const final {
 			return &m_invites;
 		}
 
@@ -141,7 +140,6 @@ class Chat
 
 		bool talkToChannel(const Player& player, SpeakClasses type, const std::string& text, uint16_t channelId);
 
-		std::string getChannelName(const Player& player, uint16_t channelId);
 		ChannelList getChannelList(const Player& player);
 
 		ChatChannel* getChannel(const Player& player, uint16_t channelId);

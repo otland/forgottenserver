@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mercury Blob" nameDescription="a mercury blob" race="undead" experience="180" speed="210" manacost="0">
+<monster name="Mercury Blob" nameDescription="a mercury blob" race="undead" experience="180" speed="180" manacost="0">
 	<health now="150" max="150"/>
 	<look type="316" corpse="9961"/>
 	<targetchange interval="5000" chance="0"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -19,33 +18,41 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="30"/>
-		<attack name="drunk" interval="5000" chance="10" range="4" target="1" duration="15000">
+		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="3000">
 			<attribute key="areaEffect" value="stun"/>
 			<attribute key="shootEffect" value="holy"/>
 		</attack>
-		<attack name="energy" interval="3000" chance="5" range="5" target="1" min="-20" max="-40">
+		<attack name="energy" interval="2000" chance="20" range="7" target="1" min="-10" max="-30">
 			<attribute key="areaEffect" value="energy"/>
 			<attribute key="shootEffect" value="energy"/>
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10"/>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="5" min="20" max="30">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity death="1"/>
 	</immunities>
 	<elements>
-		<element firePercent="15"/>
-		<element earthPercent="70"/>
-		<element icePercent="10"/>
-		<element physicalPercent="20"/>
-		<element holyPercent="75"/>
+		<element firePercent="10"/>
+		<element earthPercent="65"/>
+		<element icePercent="15"/>
+		<element physicalPercent="5"/>
+		<element holyPercent="65"/>
+		<element lifedrainPercent="80"/>
 	</elements>
-	<summons maxSummons="2">
-		<summon name="Mercury Blob" interval="3000" chance="10"/>
+	<immunities>
+		<immunity death="1"/>
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Mercury Blob" interval="2000" chance="10"/>
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Crackle"/>
 	</voices>
 	<loot>
-		<item id="9966" chance="20000"/><!-- glob of mercury -->
+		<item id="9966" chance="17966"/><!-- glob of mercury -->
 	</loot>
 </monster>

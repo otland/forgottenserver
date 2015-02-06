@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Midnight Panther" nameDescription="a midnight panther" race="blood" experience="900" speed="240" manacost="0">
+<monster name="Midnight Panther" nameDescription="a midnight panther" race="blood" experience="900" speed="250" manacost="0">
 	<health now="1200" max="1200"/>
 	<look type="385" corpse="13327"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
+	<targetchange interval="4000" chance="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -14,31 +13,41 @@
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="1"/>
 		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
+		<flag staticattack="80"/>
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1500" skill="68" attack="42"/>
+		<attack name="melee" interval="1500" skill="40" attack="36"/>
+		<attack name="energy" interval="2000" chance="15" range="7" min="-75" max="-215">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="energyarea"/>
+		</attack>
 	</attacks>
-	<defenses armor="27" defense="39">
-		<defense name="speed" interval="1000" chance="12" speedchange="627" duration="5000">
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="370" duration="5000">
 			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+		<defense name="healing" interval="2000" chance="15" min="50" max="125">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="invisible" interval="2000" chance="15" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="-10"/>
-		<element firePercent="10"/>
-		<element energyPercent="100"/>
+		<element deathPercent="-1"/>
+		<element firePercent="1"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
+		<immunity invisibility="1"/>
+		<immunity energy="1"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="39" chance1="40000" chancemax="954"/> <!-- gp -->
-		<item id="2666" countmax="4" chance="16750"/> <!-- meat -->
-		<item id="13026" chance="7500"/> <!-- panther head -->
-		<item id="13027" chance="8500"/> <!-- panther paw -->
-
+		<item id="2148" countmax="57" chance1="100000"/><!-- gp -->
+		<item id="2666" countmax="4" chance="25000"/><!-- meat -->
+		<item id="13026" chance="12500"/><!-- panther head -->
+		<item id="2168" chance="12500"/><!-- Life Ring -->
+		<item id="13027" chance="100000"/><!-- panther paw -->
 	</loot>
 </monster>

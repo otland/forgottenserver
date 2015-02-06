@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,18 +35,22 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_ADVANCE,
 	CREATURE_EVENT_MODALWINDOW,
 	CREATURE_EVENT_TEXTEDIT,
-	CREATURE_EVENT_CHANGEHEALTH,
-	CREATURE_EVENT_CHANGEMANA,
+	CREATURE_EVENT_HEALTHCHANGE,
+	CREATURE_EVENT_MANACHANGE,
 	CREATURE_EVENT_EXTENDED_OPCODE // otclient additional network opcodes
 };
 
 class CreatureEvent;
 
-class CreatureEvents : public BaseEvents
+class CreatureEvents final : public BaseEvents
 {
 	public:
 		CreatureEvents();
-		virtual ~CreatureEvents();
+		~CreatureEvents();
+
+		// non-copyable
+		CreatureEvents(const CreatureEvents&) = delete;
+		CreatureEvents& operator=(const CreatureEvents&) = delete;
 
 		// global events
 		bool playerLogin(Player* player) const;
@@ -56,11 +60,11 @@ class CreatureEvents : public BaseEvents
 		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
 	protected:
-		virtual LuaScriptInterface& getScriptInterface();
-		virtual std::string getScriptBaseName();
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
-		virtual void clear();
+		LuaScriptInterface& getScriptInterface() final;
+		std::string getScriptBaseName() const final;
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+		void clear() final;
 
 		//creature events
 		typedef std::map<std::string, CreatureEvent*> CreatureEventList;
@@ -69,13 +73,12 @@ class CreatureEvents : public BaseEvents
 		LuaScriptInterface m_scriptInterface;
 };
 
-class CreatureEvent : public Event
+class CreatureEvent final : public Event
 {
 	public:
 		CreatureEvent(LuaScriptInterface* _interface);
-		virtual ~CreatureEvent() {}
 
-		virtual bool configureEvent(const pugi::xml_node& node);
+		bool configureEvent(const pugi::xml_node& node) final;
 
 		CreatureEventType_t getEventType() const {
 			return m_type;
@@ -98,15 +101,15 @@ class CreatureEvent : public Event
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
 		bool executeOnKill(Creature* creature, Creature* target);
 		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
-		bool executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
+		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
-		bool executeChangeHealth(Creature* creature, Creature* attacker, const CombatDamage& damage);
-		bool executeChangeMana(Creature* creature, Creature* attacker, int32_t manaChange);
-		bool executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
+		void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
+		void executeManaChange(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin);
+		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 		//
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 
 		std::string m_eventName;
 		CreatureEventType_t m_type;

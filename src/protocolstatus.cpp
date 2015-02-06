@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,6 @@ extern Game g_game;
 
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t ProtocolStatus::protocolStatusCount = 0;
-#endif
 
 enum RequestedInfo_t {
 	REQUEST_BASIC_SERVER_INFO = 0x01,
@@ -70,7 +67,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		//XML info protocol
 		case 0xFF: {
 			if (msg.GetString(4) == "info") {
-				g_dispatcher->addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, this)));
+				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, this)));
 				return;
 			}
 			break;
@@ -83,7 +80,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.GetString();
 			}
-			g_dispatcher->addTask(createTask(std::bind(&ProtocolStatus::sendInfo, this, requestedInfo, characterName)));
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendInfo, this, requestedInfo, characterName)));
 			return;
 		}
 
@@ -135,6 +132,16 @@ void ProtocolStatus::sendStatusString()
 	pugi::xml_node monsters = tsqp.append_child("monsters");
 	monsters.append_attribute("total") = std::to_string(g_game.getMonstersOnline()).c_str();
 
+	pugi::xml_node npcs = tsqp.append_child("npcs");
+	npcs.append_attribute("total") = std::to_string(g_game.getNpcsOnline()).c_str();
+
+	pugi::xml_node rates = tsqp.append_child("rates");
+	rates.append_attribute("experience") = std::to_string(g_config.getNumber(ConfigManager::RATE_EXPERIENCE)).c_str();
+	rates.append_attribute("skill") = std::to_string(g_config.getNumber(ConfigManager::RATE_SKILL)).c_str();
+	rates.append_attribute("loot") = std::to_string(g_config.getNumber(ConfigManager::RATE_LOOT)).c_str();
+	rates.append_attribute("magic") = std::to_string(g_config.getNumber(ConfigManager::RATE_MAGIC)).c_str();
+	rates.append_attribute("spawn") = std::to_string(g_config.getNumber(ConfigManager::RATE_SPAWN)).c_str();
+
 	pugi::xml_node map = tsqp.append_child("map");
 	map.append_attribute("name") = g_config.getString(ConfigManager::MAP_NAME).c_str();
 	map.append_attribute("author") = g_config.getString(ConfigManager::MAP_AUTHOR).c_str();
@@ -182,14 +189,14 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(g_config.getString(ConfigManager::MOTD));
 		output->AddString(g_config.getString(ConfigManager::LOCATION));
 		output->AddString(g_config.getString(ConfigManager::URL));
-		output->add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
+		output->Add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
 	}
 
 	if (requestedInfo & REQUEST_PLAYERS_INFO) {
 		output->AddByte(0x20);
-		output->add<uint32_t>(g_game.getPlayersOnline());
-		output->add<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-		output->add<uint32_t>(g_game.getPlayersRecord());
+		output->Add<uint32_t>(g_game.getPlayersOnline());
+		output->Add<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+		output->Add<uint32_t>(g_game.getPlayersRecord());
 	}
 
 	if (requestedInfo & REQUEST_MAP_INFO) {
@@ -198,18 +205,18 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->AddString(g_config.getString(ConfigManager::MAP_AUTHOR));
 		uint32_t mapWidth, mapHeight;
 		g_game.getMapDimensions(mapWidth, mapHeight);
-		output->add<uint16_t>(mapWidth);
-		output->add<uint16_t>(mapHeight);
+		output->Add<uint16_t>(mapWidth);
+		output->Add<uint16_t>(mapHeight);
 	}
 
 	if (requestedInfo & REQUEST_EXT_PLAYERS_INFO) {
 		output->AddByte(0x21); // players info - online players list
 
 		const auto& players = g_game.getPlayers();
-		output->add<uint32_t>(players.size());
+		output->Add<uint32_t>(players.size());
 		for (const auto& it : players) {
 			output->AddString(it.second->getName());
-			output->add<uint32_t>(it.second->getLevel());
+			output->Add<uint32_t>(it.second->getLevel());
 		}
 	}
 

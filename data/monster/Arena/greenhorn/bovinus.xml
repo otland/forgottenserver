@@ -2,7 +2,6 @@
 <monster name="Bovinus" nameDescription="bovinus" race="blood" experience="60" speed="170" manacost="0">
 	<health now="150" max="150"/>
 	<look type="25" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

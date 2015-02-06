@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,6 @@ typedef std::shared_ptr<ServiceBase> Service_ptr;
 class ServiceBase
 {
 	public:
-		virtual ~ServiceBase() {} // Redundant, but stifles compiler warnings
-
 		virtual bool is_single_socket() const = 0;
 		virtual bool is_checksummed() const = 0;
 		virtual uint8_t get_protocol_identifier() const = 0;
@@ -120,7 +118,6 @@ class ServiceManager
 		bool is_running() const {
 			return m_acceptors.empty() == false;
 		}
-		std::list<uint16_t> get_ports() const;
 
 	protected:
 		void die();

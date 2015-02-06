@@ -2,7 +2,6 @@
 <monster name="Orcus the Cruel" nameDescription="orcus the cruel" race="blood" experience="280" speed="230" manacost="0">
 	<health now="480" max="480"/>
 	<look type="59" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

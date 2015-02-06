@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190" manacost="0">
-<health now="230" max="230"/>
-<look type="403" corpse="13514"/>
-<targetchange interval="5000" chance="12"/>
-<strategy attack="100" defense="0"/>
+	<health now="230" max="230"/>
+	<look type="403" corpse="13514"/>
+	<targetchange interval="5000" chance="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -18,26 +17,27 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="33"/>
-		<attack name="poison" interval="2000" chance="12" range="3" target="1" min="-5" max="-15">
-			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poison"/>
-		</attack>
+		<attack name="melee" interval="2000" skill="30" attack="37" poison="60"/>
 	</attacks>
-	<defenses armor="16" defense="19"/>
+	<defenses armor="15" defense="15"/>
 	<elements>
-		<element physicalPercent="80"/>
-		<element firePercent="-10"/>
+		<element physicalPercent="5"/>
+		<element firePercent="-5"/>
+		<element earthPercent="50"/>
+		<element icePercent="-5"/>
+		<element energyPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Zrp zrp!"/>
+		<voice sentence="Chrrr! Chrr!"/>
+		<voice sentence="Klk! Klk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="69" chance="31800" /> <!-- gold coin -->
-		<item id="7618" chance="4000" /> <!-- health potion -->
-		<item id="3964" chance="1200" /> <!-- ripper lance -->
+		<item id="2148" countmax="80" chance="80000" /><!-- gold coin -->
+		<item id="3964" chance="850" /><!-- ripper lance -->
+		<item id="7618" chance="280" /><!-- hp -->
+		<item id="2209" chance="100" /><!-- club ring -->
 	</loot>
 </monster>

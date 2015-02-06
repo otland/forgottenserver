@@ -1,5 +1,4 @@
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if player:getAccountType() <= ACCOUNT_TYPE_TUTOR then
 		return true
 	end

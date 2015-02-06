@@ -1,5 +1,6 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	-- TODO: Different music effect for different instruments.
-	doSendMagicEffect(fromPosition, CONST_ME_SOUND_BLUE)
-	return TRUE
+	fromPosition:sendMagicEffect(CONST_ME_SOUND_BLUE)
+
+	return true
 end

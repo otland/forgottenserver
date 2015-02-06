@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cat" nameDescription="a cat" race="blood" experience="0" speed="124" manacost="220">
+<monster name="Cat" nameDescription="a cat" race="blood" experience="0" speed="190" manacost="220">
 	<health now="20" max="20"/>
 	<look type="276" corpse="7637"/>
-	<targetchange interval="2000" chance="0"/>
-	<strategy attack="100" defense="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -19,7 +18,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="0" attack="0"/>
 	</attacks>
-	<defenses armor="1" defense="2"/>
+	<defenses armor="5" defense="5"/>
 	<voices interval="5000" chance="10">
 		<voice sentence="Mew!"/>
 		<voice sentence="Meow!"/>

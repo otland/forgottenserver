@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,10 @@ class Commands
 		Commands();
 		~Commands();
 
+		// non-copyable
+		Commands(const Commands&) = delete;
+		Commands& operator=(const Commands&) = delete;
+
 		bool loadFromXml();
 		bool reload();
 
@@ -43,7 +47,6 @@ class Commands
 		void reloadInfo(Player& player, const std::string& param);
 		void sellHouse(Player& player, const std::string& param);
 		void forceRaid(Player& player, const std::string& param);
-		void serverDiag(Player& player, const std::string& param);
 
 		//table of commands
 		static s_defcommands defined_commands[];

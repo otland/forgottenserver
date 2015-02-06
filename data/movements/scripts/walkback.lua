@@ -1,6 +1,6 @@
-function onStepIn(cid, item, position, fromPosition)
-	if item.uid > 0 and item.uid <= 65535 and isPlayer(cid) == TRUE then
-		doTeleportThing(cid, fromPosition, FALSE)
+function onStepIn(creature, item, position, fromPosition)
+	if item.uid > 0 and item.uid <= 65535 then
+		creature:teleportTo(fromPosition, false)
 	end
-	return TRUE
+	return true
 end

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 #include <unordered_set>
 #include <queue>
 
-#include <thread>
 #include <condition_variable>
 
 #define SCHEDULER_MINTICKS 50
@@ -32,17 +31,15 @@
 class SchedulerTask : public Task
 {
 	public:
-		~SchedulerTask() {}
-
-		void setEventId(uint32_t eventid) {
-			m_eventid = eventid;
+		void setEventId(uint32_t id) {
+			eventId = id;
 		}
 		uint32_t getEventId() const {
-			return m_eventid;
+			return eventId;
 		}
 
 		std::chrono::system_clock::time_point getCycle() const {
-			return m_expiration;
+			return expiration;
 		}
 
 		bool operator<(const SchedulerTask& other) const {
@@ -51,10 +48,10 @@ class SchedulerTask : public Task
 
 	protected:
 		SchedulerTask(uint32_t delay, const std::function<void (void)>& f) : Task(delay, f) {
-			m_eventid = 0;
+			eventId = 0;
 		}
 
-		uint32_t m_eventid;
+		uint32_t eventId;
 
 		friend SchedulerTask* createSchedulerTask(uint32_t, const std::function<void (void)>&);
 };
@@ -76,7 +73,6 @@ class Scheduler
 {
 	public:
 		Scheduler();
-		~Scheduler() {}
 
 		uint32_t addEvent(SchedulerTask* task);
 		bool stopEvent(uint32_t eventId);
@@ -86,25 +82,19 @@ class Scheduler
 		void shutdown();
 		void join();
 
-		enum SchedulerState {
-			STATE_RUNNING,
-			STATE_CLOSING,
-			STATE_TERMINATED
-		};
-
 	protected:
 		void schedulerThread();
 
-		std::thread m_thread;
-		std::mutex m_eventLock;
-		std::condition_variable m_eventSignal;
+		std::thread thread;
+		std::mutex eventLock;
+		std::condition_variable eventSignal;
 
-		uint32_t m_lastEventId;
-		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > m_eventList;
-		std::unordered_set<uint32_t> m_eventIds;
-		SchedulerState m_threadState;
+		uint32_t lastEventId;
+		std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > eventList;
+		std::unordered_set<uint32_t> eventIds;
+		ThreadState threadState;
 };
 
-extern Scheduler* g_scheduler;
+extern Scheduler g_scheduler;
 
 #endif

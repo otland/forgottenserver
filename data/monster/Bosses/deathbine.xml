@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Deathbine" nameDescription="a deathbine" race="venom" experience="340" speed="240" manacost="0">
+	<health now="525" max="525"/>
+	<look type="120" corpse="6047"/>
+	<targetchange interval="5000" chance="8"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="100" poison="5"/>
+		<attack name="poison" interval="1000" chance="25" range="7" min="-60" max="-90">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="34" range="7" speedchange="-850" duration="30000">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="poison" interval="1000" chance="12" radius="3" target="0" min="-40" max="-130">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="26" defense="10"/>
+	<elements>
+		<element icePercent="35"/>
+		<element energyPercent="10"/>
+		<element firePercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="11217" chance="100000"/><!-- carniphila seeds -->
+		<item id="2152" countmax="5" chance="100000"/><!-- platinum coins -->
+		<item id="2804" chance="100000"/><!-- shadow herb -->
+		<item id="2149" countmax="4" chance="100000"/><!-- small emerald -->
+		<item id="2792" chance="50000"/><!-- dark mushroom -->
+		<item id="7732" chance="50000"/><!-- seeds -->
+		<item id="7887" chance="50000"/><!--terra amulet-->
+		<item id="7886" chance="50000"/><!-- terra boots -->
+		<item id="8912" chance="50000"/><!--springsprout rod-->
+		<item id="5015" chance="5555"/><!--mandrake-->
+		<item id="13307" chance="2854"/><!--mandrake-->
+	</loot>
+</monster>

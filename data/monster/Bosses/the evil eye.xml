@@ -3,7 +3,6 @@
 	<health now="1200" max="1200"/>
 	<look type="210" corpse="6037"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -54,10 +53,10 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="100"/>
 		<element holyPercent="-20"/>
 	</elements>
 	<immunities>
+		<immunity earth="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="5">

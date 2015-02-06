@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ struct TextMessage
 	}
 };
 
-class ProtocolGame : public Protocol
+class ProtocolGame final : public Protocol
 {
 	public:
 		// static protocol information
@@ -71,17 +71,9 @@ class ProtocolGame : public Protocol
 			return "gameworld protocol";
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t protocolGameCount;
-#endif
 		ProtocolGame(Connection_ptr connection);
-		virtual ~ProtocolGame();
 
-		virtual int32_t getProtocolId() {
-			return 0x0A;
-		}
-
-		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem, bool gamemasterLogin);
+		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
 
 		void setPlayer(Player* p);
@@ -90,20 +82,16 @@ class ProtocolGame : public Protocol
 			return version;
 		}
 
-		const std::unordered_set<uint32_t>& getKnownCreatures() const {
-			return knownCreatureSet;
-		}
-
 	private:
 		std::unordered_set<uint32_t> knownCreatureSet;
 
 		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
 		void disconnect();
-		void disconnectClient(uint8_t error, const char* message);
+		void disconnectClient(const std::string& message);
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
-		virtual void releaseProtocol();
-		virtual void deleteProtocolTask();
+		void releaseProtocol() final;
+		void deleteProtocolTask() final;
 
 		void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);
 
@@ -112,10 +100,9 @@ class ProtocolGame : public Protocol
 		bool canSee(const Position& pos) const;
 
 		// we have all the parse methods
-		virtual void parsePacket(NetworkMessage& msg);
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
-		virtual void onConnect();
-		bool parseFirstPacket(NetworkMessage& msg);
+		void parsePacket(NetworkMessage& msg) final;
+		void onRecvFirstMessage(NetworkMessage& msg) final;
+		void onConnect() final;
 
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);
@@ -193,6 +180,7 @@ class ProtocolGame : public Protocol
 		void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers);
 		void sendOpenPrivateChannel(const std::string& receiver);
 		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId);
+		void sendPrivateMessage(const Player* speaker, SpeakClasses type, const std::string& text);
 		void sendIcons(uint16_t icons);
 		void sendFYIBox(const std::string& message);
 
@@ -253,6 +241,8 @@ class ProtocolGame : public Protocol
 		void sendPendingStateEntered();
 		void sendEnterWorld();
 
+		void sendFightModes();
+
 		void sendCreatureLight(const Creature* creature);
 		void sendWorldLight(const LightInfo& lightInfo);
 
@@ -266,13 +256,12 @@ class ProtocolGame : public Protocol
 
 		void sendAddTileItem(const Position& pos, uint32_t stackpos, const Item* item);
 		void sendUpdateTileItem(const Position& pos, uint32_t stackpos, const Item* item);
-		void sendRemoveTileItem(const Position& pos, uint32_t stackpos);
+		void sendRemoveTileThing(const Position& pos, uint32_t stackpos);
 		void sendUpdateTile(const Tile* tile, const Position& pos);
 
-		void sendAddCreature(const Creature* creature, const Position& pos, uint32_t stackpos, bool isLogin);
-		void sendRemoveCreature(const Position& pos, uint32_t stackpos);
-		void sendMoveCreature(const Creature* creature, const Position& newPos, uint32_t newStackPos,
-		                      const Position& oldPos, uint32_t oldStackPos, bool teleport);
+		void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, bool isLogin);
+		void sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos,
+		                      const Position& oldPos, int32_t oldStackPos, bool teleport);
 
 		//containers
 		void sendAddContainerItem(uint8_t cid, uint16_t slot, const Item* item);
@@ -306,25 +295,15 @@ class ProtocolGame : public Protocol
 		void GetMapDescription(int32_t x, int32_t y, int32_t z,
 		                       int32_t width, int32_t height, NetworkMessage& msg);
 
-		void AddTextMessage(NetworkMessage& msg, MessageClasses mclass, const std::string& message);
-		void AddTextMessageEx(NetworkMessage& msg, MessageClasses mclass, const std::string& message, const Position& pos, uint32_t value, TextColor_t color);
-		void AddMagicEffect(NetworkMessage& msg, const Position& pos, uint8_t type);
-		void AddDistanceShoot(NetworkMessage& msg, const Position& from, const Position& to, uint8_t type);
 		void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
 		void AddPlayerStats(NetworkMessage& msg);
-		void AddCreatureSpeak(NetworkMessage& msg, const Creature* creature, SpeakClasses type,
-		                      const std::string& text, uint16_t channelId, const Position* pos = nullptr);
-		void AddCreatureHealth(NetworkMessage& msg, const Creature* creature);
 		void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 		void AddPlayerSkills(NetworkMessage& msg);
 		void AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo);
 		void AddCreatureLight(NetworkMessage& msg, const Creature* creature);
 
 		//tiles
-		void AddTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Item* item);
-		void AddTileCreature(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Creature* creature);
-		void UpdateTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos, const Item* item);
-		void RemoveTileItem(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
+		static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
 
 		void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 		void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
@@ -346,11 +325,11 @@ class ProtocolGame : public Protocol
 		friend class Player;
 
 		// Helper so we don't need to bind every time
-#define addGameTask(f, ...) addGameTaskInternal(false, 0, std::bind(f, &g_game, __VA_ARGS__))
-#define addGameTaskTimed(delay, f, ...) addGameTaskInternal(true, delay, std::bind(f, &g_game, __VA_ARGS__))
+#define addGameTask(f, ...) ProtocolGame::addGameTaskInternal(false, 0, std::bind(f, &g_game, __VA_ARGS__))
+#define addGameTaskTimed(delay, f, ...) ProtocolGame::addGameTaskInternal(true, delay, std::bind(f, &g_game, __VA_ARGS__))
 
 		template<class FunctionType>
-		void addGameTaskInternal(bool droppable, uint32_t delay, const FunctionType&);
+		static void addGameTaskInternal(bool droppable, uint32_t delay, const FunctionType&);
 
 		Player* player;
 

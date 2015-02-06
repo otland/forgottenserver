@@ -18,7 +18,7 @@ local function getMonthString(m)
 	return os.date("%B", os.time{year = 1970, month = m, day = 1})
 end
 
-function onSay(cid, words, param)
+function onSay(player, words, param)
 	local resultId = db.storeQuery("SELECT `id`, `name` FROM `players` WHERE `name` = " .. db.escapeString(param))
 	if resultId ~= false then
 		local targetGUID = result.getDataInt(resultId, "id")
@@ -54,9 +54,9 @@ function onSay(cid, words, param)
 		if str == "" then
 			str = "No deaths."
 		end
-		doPlayerPopupFYI(cid, "Deathlist for player, " .. targetName .. ".\n\n" .. str)
+		player:popupFYI("Deathlist for player, " .. targetName .. ".\n\n" .. str)
 	else
-		doPlayerSendCancel(cid, "A player with that name does not exist.")
+		player:sendCancelMessage("A player with that name does not exist.")
 	end
 	return false
 end

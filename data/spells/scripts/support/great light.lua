@@ -1,13 +1,13 @@
-local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
-setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, 0)
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
+combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
 
-local condition = createConditionObject(CONDITION_LIGHT)
-setConditionParam(condition, CONDITION_PARAM_LIGHT_LEVEL, 8)
-setConditionParam(condition, CONDITION_PARAM_LIGHT_COLOR, 215)
-setConditionParam(condition, CONDITION_PARAM_TICKS, ((11*60)+35)*1000) --11 minutes and 35 seconds(time in ms)
-setCombatCondition(combat, condition)
+local condition = Condition(CONDITION_LIGHT)
+condition:setParameter(CONDITION_PARAM_LIGHT_LEVEL, 8)
+condition:setParameter(CONDITION_PARAM_LIGHT_COLOR, 215)
+condition:setParameter(CONDITION_PARAM_TICKS, (11*60+35)*1000)
+combat:setCondition(condition)
 
-function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+function onCastSpell(creature, var)
+	return combat:execute(creature, var)
 end

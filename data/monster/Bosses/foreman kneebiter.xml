@@ -3,7 +3,6 @@
 	<health now="445" max="445"/>
 	<look type="70" corpse="6013"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
@@ -23,7 +22,7 @@
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
-	</immunities> 
+	</immunities>
 	<loot>
 		<item id="5880" countmax="2" chance="2500"/><!-- iron ore -->
 		<item id="2148" countmax="100" chance="90000"/><!-- gold coin -->

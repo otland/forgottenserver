@@ -3,7 +3,6 @@
 	<health now="5000" max="5000"/>
 	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20546"/>
 	<targetchange interval="2000" chance="5"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -19,7 +18,7 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-0" max="-389"/>
+		<attack name="melee" interval="2000" min="0" max="-389"/>
 		<attack name="outfit" interval="1000" chance="10" range="7" item="7172" duration="8000">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</attack>
@@ -40,7 +39,6 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="100"/>
 		<element firePercent="50"/>
 		<element earthPercent="40"/>
 		<element holyPercent="26"/>
@@ -48,10 +46,11 @@
 		<element deathPercent="-10"/>
 	</elements>
 	<immunities>
+		<immunity ice="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-		<summons maxSummons="4">
+	<summons maxSummons="4">
 		<summon name="Ice Golem" interval="1000" chance="13" max="4"/>
 	</summons>
 	<voices interval="2000" chance="5">

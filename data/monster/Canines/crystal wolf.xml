@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crystal Wolf" nameDescription="a crystal wolf" race="blood" experience="275" speed="200" manacost="0">
+<monster name="Crystal Wolf" nameDescription="a crystal wolf" race="undead" experience="275" speed="200" manacost="0">
 	<health now="750" max="750"/>
 	<look type="391" corpse="13584"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
+	<targetchange interval="4000" chance="10"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -19,38 +18,35 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="40"/>
-		<attack name="earth" interval="2000" chance="25" length="4" spread="3" min="-60" max="-130">
-			<attribute key="areaEffect" value="carniphila"/>
+		<attack name="earth" interval="2000" chance="15" length="3" spread="2" min="-60" max="-130">
+			<attribute key="areaEffect" value="stones"/>
 		</attack>
-		<attack name="ice" interval="2000" chance="21" range="6" radius="2" target="1" min="-80" max="-150">
+		<attack name="ice" interval="2000" chance="15" range="6" radius="3" target="1" min="-80" max="-150">
 			<attribute key="shootEffect" value="smallice"/>
 			<attribute key="areaEffect" value="giantice"/>
 		</attack>
-		<attack name="manadrain" interval="2000" chance="15" range="7" min="-25" max="-80"> 
-			<attribute key="shootEffect" value="earth"/>
-			<attribute key="areaeffect" value="carniphila"/>
-		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-25" max="-80"/>
 	</attacks>
-	<defenses armor="25" defense="25">
-		<defense name="healing" interval="2000" chance="18" min="15" max="55">
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="5" min="15" max="55">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
-	<elements>
-		<element icePercent="20"/>
-		<element firePercent="-5"/>
-		<element energyPercent="-10"/>
-	</elements>
 	<immunities>
-		<immunity earth="1"/>
+		<immunity ice="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Raaarrr!"/>
+		<voice sentence="Aaaauuuuuooooooo!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="46000"/><!-- gold coin -->
-		<item id="2666" countmax="4" chance="25000"/><!-- meat -->
+		<item id="2148" countmax="52" chance="56000"/><!-- gold coin -->
+		<item id="2666" countmax="4" chance="52000"/><!-- meat -->
+		<item id="7839" countmax="10" chance="11000"/><!-- shiver arrow -->
+		<item id="8878" chance="3700"/><!-- crystalline armor -->
+		<item id="2183" chance="7400"/><!-- hailstorm rod -->
+		<item id="5897" chance="3700"/><!-- wolf paw -->
 	</loot>
 </monster>

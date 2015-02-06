@@ -2,7 +2,7 @@ local combat = createCombatObject()
 setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
 
 setCombatParam(combat, COMBAT_PARAM_TARGETCASTERORTOPMOST, 1)
-setCombatParam(combat, COMBAT_PARAM_EFFECT, 0)
+setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_DRAWBLOOD)
 setCombatParam(combat, COMBATPARAM_USECHARGES, 1)
 setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_WEAPONTYPE)
 

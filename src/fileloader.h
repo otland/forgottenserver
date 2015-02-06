@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,24 +25,19 @@ struct NodeStruct;
 typedef NodeStruct* NODE;
 
 struct NodeStruct {
-		NodeStruct() {
-			start = propsSize = type = 0;
-			next = child = 0;
+	NodeStruct() : start(0), propsSize(0), type(0), next(nullptr), child(nullptr) {}
+
+	uint32_t start;
+	uint32_t propsSize;
+	uint32_t type;
+	NodeStruct* next;
+	NodeStruct* child;
+
+	static void clearNet(NodeStruct* root) {
+		if (root) {
+			clearChild(root);
 		}
-
-		~NodeStruct() {}
-
-		uint32_t start;
-		uint32_t propsSize;
-		uint32_t type;
-		NodeStruct* next;
-		NodeStruct* child;
-
-		static void clearNet(NodeStruct* root) {
-			if (root) {
-				clearChild(root);
-			}
-		}
+	}
 
 	private:
 		static void clearNext(NodeStruct* node) {
@@ -98,17 +93,18 @@ class FileLoader
 		FileLoader();
 		~FileLoader();
 
-		bool openFile(const char* filename, const char* identifier, bool write, bool caching = false);
-		const uint8_t* getProps(const NODE, uint32_t& size);
+		// non-copyable
+		FileLoader(const FileLoader&) = delete;
+		FileLoader& operator=(const FileLoader&) = delete;
+
+		bool openFile(const char* filename, const char* identifier);
+		const uint8_t* getProps(const NODE, size_t& size);
 		bool getProps(const NODE, PropStream& props);
 		NODE getChildNode(const NODE parent, uint32_t& type);
 		NODE getNextNode(const NODE prev, uint32_t& type);
 
 		int32_t getError() const {
 			return m_lastError;
-		}
-		void clearError() {
-			m_lastError = ERROR_NONE;
 		}
 
 	protected:
@@ -125,51 +121,29 @@ class FileLoader
 		inline bool safeSeek(uint32_t pos);
 		inline bool safeTell(int32_t& pos);
 
-	public:
-		inline bool writeData(const void* data, int32_t size, bool unescape) {
-			for (int32_t i = 0; i < size; ++i) {
-				uint8_t c = *(((uint8_t*)data) + i);
-
-				if (unescape && (c == NODE_START || c == NODE_END || c == ESCAPE_CHAR)) {
-					uint8_t escape = ESCAPE_CHAR;
-					size_t value = fwrite(&escape, 1, 1, m_file);
-					if (value != 1) {
-						m_lastError = ERROR_COULDNOTWRITE;
-						return false;
-					}
-				}
-
-				size_t value = fwrite(&c, 1, 1, m_file);
-				if (value != 1) {
-					m_lastError = ERROR_COULDNOTWRITE;
-					return false;
-				}
-			}
-
-			return true;
-		}
-
 	protected:
-		FILE* m_file;
-		FILELOADER_ERRORS m_lastError;
-		NODE m_root;
-		uint32_t m_buffer_size;
-		uint8_t* m_buffer;
-
-		bool m_use_cache;
 		struct _cache {
+			uint8_t* data;
 			uint32_t loaded;
 			uint32_t base;
 			uint32_t size;
-			uint8_t* data;
 		};
 
 #define CACHE_BLOCKS 3
-		uint32_t m_cache_size;
 		_cache m_cached_data[CACHE_BLOCKS];
+
+		uint8_t* m_buffer;
+		NODE m_root;
+		FILE* m_file;
+
+		FILELOADER_ERRORS m_lastError;
+		uint32_t m_buffer_size;
+
+		uint32_t m_cache_size;
 #define NO_VALID_CACHE 0xFFFFFFFF
 		uint32_t m_cache_index;
 		uint32_t m_cache_offset;
+
 		inline uint32_t getCacheBlock(uint32_t pos);
 		int32_t loadCacheBlock(uint32_t pos);
 };
@@ -181,9 +155,8 @@ class PropStream
 			end = nullptr;
 			p = nullptr;
 		}
-		~PropStream() {}
 
-		void init(const char* a, uint32_t size) {
+		void init(const char* a, size_t size) {
 			p = a;
 			end = a + size;
 		}
@@ -193,60 +166,48 @@ class PropStream
 		}
 
 		template <typename T>
-		inline bool GET_STRUCT(T* &ret) {
-			if (size() < (long)sizeof(T)) {
+		inline bool readStruct(T*& ret) {
+			if (size() < sizeof(T)) {
 				ret = nullptr;
 				return false;
 			}
 
-			ret = (T*)p;
+			ret = reinterpret_cast<const T*>(p);
 			p += sizeof(T);
 			return true;
 		}
 
 		template <typename T>
-		inline bool GET_VALUE(T& ret) {
-			if (size() < (long)sizeof(T)) {
+		inline bool read(T& ret) {
+			if (size() < sizeof(T)) {
 				return false;
 			}
 
-			ret = *((T*)p);
+			ret = *reinterpret_cast<const T*>(p);
 			p += sizeof(T);
 			return true;
 		}
 
-		inline bool GET_ULONG(uint32_t& ret) {
-			return GET_VALUE(ret);
-		}
-
-		inline bool GET_USHORT(uint16_t& ret) {
-			return GET_VALUE(ret);
-		}
-
-		inline bool GET_UCHAR(uint8_t& ret) {
-			return GET_VALUE(ret);
-		}
-
-		inline bool GET_STRING(std::string& ret) {
-			uint16_t str_len;
-			if (!GET_USHORT(str_len)) {
+		inline bool readString(std::string& ret) {
+			uint16_t strLen;
+			if (!read<uint16_t>(strLen)) {
 				return false;
 			}
 
-			if (size() < str_len) {
+			if (size() < strLen) {
 				return false;
 			}
 
-			char* str = new char[str_len + 1];
-			memcpy(str, p, str_len);
-			str[str_len] = 0;
-			ret.assign(str, str_len);
+			char* str = new char[strLen + 1];
+			memcpy(str, p, strLen);
+			str[strLen] = 0;
+			ret.assign(str, strLen);
 			delete[] str;
-			p += str_len;
+			p += strLen;
 			return true;
 		}
 
-		inline bool SKIP_N(uint32_t n) {
+		inline bool skip(size_t n) {
 			if (size() < n) {
 				return false;
 			}
@@ -265,7 +226,7 @@ class PropWriteStream
 	public:
 		PropWriteStream() {
 			buffer_size = 32;
-			buffer = (char*)malloc(buffer_size);
+			buffer = reinterpret_cast<char*>(malloc(buffer_size));
 			if (!buffer) {
 				throw std::bad_alloc();
 			}
@@ -291,29 +252,17 @@ class PropWriteStream
 		}
 
 		template <typename T>
-		inline void ADD_VALUE(T add) {
+		inline void write(T add) {
 			reserve(sizeof(T));
 			memcpy(&buffer[size], &add, sizeof(T));
 			size += sizeof(T);
 		}
 
-		inline void ADD_ULONG(uint32_t ret) {
-			ADD_VALUE(ret);
-		}
-
-		inline void ADD_USHORT(uint16_t ret) {
-			ADD_VALUE(ret);
-		}
-
-		inline void ADD_UCHAR(uint8_t ret) {
-			ADD_VALUE(ret);
-		}
-
-		inline void ADD_STRING(const std::string& add) {
-			size_t str_len = add.size();
-			ADD_USHORT(str_len);
+		inline void writeString(const std::string& str) {
+			size_t str_len = str.size();
+			write<uint16_t>(str_len);
 			reserve(str_len);
-			memcpy(&buffer[size], add.c_str(), str_len);
+			memcpy(&buffer[size], str.c_str(), str_len);
 			size += str_len;
 		}
 
@@ -332,7 +281,7 @@ class PropWriteStream
 				throw std::bad_alloc();
 			}
 
-			buffer = (char*)newBuffer;
+			buffer = reinterpret_cast<char*>(newBuffer);
 		}
 
 		char* buffer;

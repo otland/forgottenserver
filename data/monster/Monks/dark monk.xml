@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dark Monk" nameDescription="a dark monk" race="blood" experience="145" speed="210" manacost="0">
 	<health now="190" max="190"/>
-	<look type="225" corpse="20562"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
+	<look type="225" corpse="20371"/>
+	<targetchange interval="5000" chance="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -19,22 +18,22 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="50"/>
-		<attack name="lifedrain" interval="1000" chance="12" range="1" min="-55" max="-100">
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-50">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-	<defenses armor="22" defense="23">
-		<defense name="healing" interval="1000" chance="12" min="25" max="49">
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="15" min="25" max="49">
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="speed" interval="1000" chance="10" speedchange="300" duration="6000">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="6000">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
 		<element deathPercent="40"/>
-		<element holyPercent="-20"/>
-		<element physicalPercent="-12"/>
+		<element holyPercent="-10"/>
+		<element physicalPercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -45,17 +44,19 @@
 		<voice sentence="Your end has come!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="5" chance="34000"/><!-- gold coin -->
-		<item id="2193" chance="1400"/><!-- ankh -->
-		<item id="2689" chance="20000"/><!-- bread -->
-		<item id="2015" chance="10000"/><!-- brown flask -->
-		<item id="2044" chance="11750"/><!-- lamp -->
-		<item id="2467" chance="3500"/><!-- leather armor -->
-		<item id="2177" chance="2750"/><!-- life crystal -->
-		<item id="7620" chance="700"/><!-- mana potion -->
-		<item id="2166" chance="500"/><!-- power ring -->
-		<item id="1949" chance="18000"/><!-- scroll -->
-		<item id="2401" chance="20000"/><!-- staff -->
-		<item id="2642" chance="8250"/><!-- sandals -->
+		<item id="2148" countmax="18" chance="14600"/><!-- gold coin -->
+		<item id="2193" chance="900"/><!-- ankh -->
+		<item id="2689" chance="20550"/><!-- bread -->
+		<item id="2015" chance="380"/><!-- brown flask -->
+		<item id="10563" chance="1900"/><!-- Book of Prayers -->
+		<item id="2044" chance="550"/><!-- lamp -->
+		<item id="12448" chance="6666"/><!-- rope belt -->
+		<item id="12449" chance="990"/><!-- safety pins -->
+		<item id="2177" chance="990"/><!-- life crystal -->
+		<item id="7620" chance="790"/><!-- mana potion -->
+		<item id="2166" chance="120"/><!-- power ring -->
+		<item id="11220" chance="10500"/><!-- dark rosary -->
+		<item id="1949" chance="1790"/><!-- scroll -->
+		<item id="2642" chance="890"/><!-- sandals -->
 	</loot>
 </monster>

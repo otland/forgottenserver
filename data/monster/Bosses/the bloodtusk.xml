@@ -3,7 +3,6 @@
 	<health now="600" max="600"/>
 	<look type="199" corpse="6074"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -32,12 +31,12 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<loot>
-		<item id="2152" countmax="3" chance="83825" /> <!-- platinum coin -->
-		<item id="2148" countmax="65" chance="66900" /> <!-- gold coin -->
-		<item id="3973" chance="83825" /> <!-- tusk shield -->
-		<item id="8614" countmax="2" chance="58825" /> <!-- tusk -->
-		<item id="7463" chance="42175" /> <!-- mammoth fur cape -->
-		<item id="7432" chance="50500" /> <!-- furry club -->
-		<item id="11238" countmax="2" chance="38000" /> <!-- mammoth tusk -->
+		<item id="2152" countmax="3" chance="83825" /><!-- platinum coin -->
+		<item id="2148" countmax="65" chance="66900" /><!-- gold coin -->
+		<item id="3973" chance="83825" /><!-- tusk shield -->
+		<item id="8614" countmax="2" chance="58825" /><!-- tusk -->
+		<item id="7463" chance="42175" /><!-- mammoth fur cape -->
+		<item id="7432" chance="50500" /><!-- furry club -->
+		<item id="11238" countmax="2" chance="38000" /><!-- mammoth tusk -->
 	</loot>
 </monster>

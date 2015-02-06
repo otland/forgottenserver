@@ -3,7 +3,6 @@
 	<health now="3700" max="3700"/>
 	<look type="87" corpse="6031"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -48,14 +47,14 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="100"/>
-		<element earthPercent="100"/>
-		<element deathPercent="100"/>
 		<element firePercent="94"/>
 		<element energyPercent="92"/>
 		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
+		<immunity ice="1"/>
+		<immunity earth="1"/>
+		<immunity death="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>

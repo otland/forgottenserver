@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,12 +43,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "events.h"
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-#include "outputmessage.h"
-#include "connection.h"
-#include "protocolstatus.h"
-#include "protocollogin.h"
-#endif
+#include "chat.h"
 
 #include "pugicast.h"
 
@@ -63,15 +58,17 @@ extern Game g_game;
 extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
+extern Chat* g_chat;
 extern LuaEnvironment g_luaEnvironment;
 
 s_defcommands Commands::defined_commands[] = {
+	// TODO: move all commands to talkactions
+
 	//admin commands
 	{"/reload", &Commands::reloadInfo},
 	{"/raid", &Commands::forceRaid},
-	{"/serverdiag", &Commands::serverDiag},
 
-	// player commands - TODO: make them talkactions
+	// player commands
 	{"!sellhouse", &Commands::sellHouse}
 };
 
@@ -139,7 +136,7 @@ bool Commands::loadFromXml()
 		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
 		if (acctypeAttribute) {
 			if (!command->loadedAccountType) {
-				command->accountType = (AccountType_t)pugi::cast<uint32_t>(acctypeAttribute.value());
+				command->accountType = static_cast<AccountType_t>(pugi::cast<uint32_t>(acctypeAttribute.value()));
 				command->loadedAccountType = true;
 			} else {
 				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
@@ -216,7 +213,7 @@ bool Commands::exeCommand(Player& player, const std::string& cmd)
 	Command* command = it->second;
 	if (command->groupId > player.getGroup()->id || command->accountType > player.getAccountType()) {
 		if (player.getGroup()->access) {
-			player.sendTextMessage(MSG_STATUS_SMALL, "You can not execute this command.");
+			player.sendTextMessage(MESSAGE_STATUS_SMALL, "You can not execute this command.");
 		}
 
 		return false;
@@ -227,7 +224,7 @@ bool Commands::exeCommand(Player& player, const std::string& cmd)
 	(this->*cfunc)(player, str_param);
 
 	if (command->logged) {
-		player.sendTextMessage(MSG_STATUS_CONSOLE_RED, cmd);
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_RED, cmd);
 
 		std::ostringstream logFile;
 		logFile << "data/logs/" << player.getName() << " commands.log";
@@ -250,62 +247,66 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 	std::string tmpParam = asLowerCaseString(param);
 	if (tmpParam == "action" || tmpParam == "actions") {
 		g_actions->reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded actions.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded actions.");
 	} else if (tmpParam == "config" || tmpParam == "configuration") {
 		g_config.reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded config.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded config.");
 	} else if (tmpParam == "command" || tmpParam == "commands") {
 		reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded commands.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded commands.");
 	} else if (tmpParam == "creaturescript" || tmpParam == "creaturescripts") {
 		g_creatureEvents->reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded creature scripts.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded creature scripts.");
 	} else if (tmpParam == "monster" || tmpParam == "monsters") {
 		g_monsters.reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
 	} else if (tmpParam == "move" || tmpParam == "movement" || tmpParam == "movements"
 	           || tmpParam == "moveevents" || tmpParam == "moveevent") {
 		g_moveEvents->reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded movements.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded movements.");
 	} else if (tmpParam == "npc" || tmpParam == "npcs") {
 		Npcs::reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
 	} else if (tmpParam == "raid" || tmpParam == "raids") {
-		Raids::getInstance()->reload();
-		Raids::getInstance()->startup();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded raids.");
+		g_game.raids.reload();
+		g_game.raids.startup();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded raids.");
 	} else if (tmpParam == "spell" || tmpParam == "spells") {
 		g_spells->reload();
 		g_monsters.reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded spells.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded spells.");
 	} else if (tmpParam == "talk" || tmpParam == "talkaction" || tmpParam == "talkactions") {
 		g_talkActions->reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded talk actions.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded talk actions.");
 	} else if (tmpParam == "items") {
 		Item::items.reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded items.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded items.");
 	} else if (tmpParam == "weapon" || tmpParam == "weapons") {
 		g_weapons->reload();
 		g_weapons->loadDefaults();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded weapons.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded weapons.");
 	} else if (tmpParam == "quest" || tmpParam == "quests") {
-		Quests::getInstance()->reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded quests.");
+		g_game.quests.reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded quests.");
 	} else if (tmpParam == "mount" || tmpParam == "mounts") {
-		Mounts::getInstance()->reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded mounts.");
+		g_game.mounts.reload();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded mounts.");
 	} else if (tmpParam == "globalevents" || tmpParam == "globalevent") {
 		g_globalEvents->reload();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
 	} else if (tmpParam == "events") {
 		g_events->load();
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded events.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded events.");
+	} else if (tmpParam == "chat" || tmpParam == "channel" || tmpParam == "chatchannels") {
+		g_chat->load();
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded chatchannels.");
 	} else if (tmpParam == "global") {
 		g_luaEnvironment.loadFile("data/global.lua");
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
 	} else {
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Reload type not found.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}
+	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 }
 
 void Commands::sellHouse(Player& player, const std::string& param)
@@ -338,7 +339,7 @@ void Commands::sellHouse(Player& player, const std::string& param)
 		return;
 	}
 
-	if (Houses::getInstance().getHouseByPlayerId(tradePartner->getGUID())) {
+	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
 		player.sendCancel("Trade player already owns a house.");
 		return;
 	}
@@ -363,22 +364,22 @@ void Commands::sellHouse(Player& player, const std::string& param)
 
 void Commands::forceRaid(Player& player, const std::string& param)
 {
-	Raid* raid = Raids::getInstance()->getRaidByName(param);
+	Raid* raid = g_game.raids.getRaidByName(param);
 	if (!raid || !raid->isLoaded()) {
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "No such raid exists.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "No such raid exists.");
 		return;
 	}
 
-	if (Raids::getInstance()->getRunning()) {
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
+	if (g_game.raids.getRunning()) {
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
 		return;
 	}
 
-	Raids::getInstance()->setRunning(raid);
+	g_game.raids.setRunning(raid);
 
 	RaidEvent* event = raid->getNextRaidEvent();
 	if (!event) {
-		player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
 		return;
 	}
 
@@ -386,47 +387,10 @@ void Commands::forceRaid(Player& player, const std::string& param)
 
 	uint32_t ticks = event->getDelay();
 	if (ticks > 0) {
-		g_scheduler->addEvent(createSchedulerTask(ticks,
-		                     std::bind(&Raid::executeRaidEvent, raid, event)));
+		g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, raid, event)));
 	} else {
-		g_dispatcher->addTask(createTask(
-		                         std::bind(&Raid::executeRaidEvent, raid, event)));
+		g_dispatcher.addTask(createTask(std::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 
-	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");
-}
-
-void Commands::serverDiag(Player& player, const std::string&)
-{
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-	std::ostringstream text;
-	text << "Server diagonostic:\n";
-	text << "World:\n";
-	text << "Player: " << g_game.getPlayersOnline() << " (" << Player::playerCount << ")\n";
-	text << "Npc: " << g_game.getNpcsOnline() << " (" << Npc::npcCount << ")\n";
-	text << "Monster: " << g_game.getMonstersOnline() << " (" << Monster::monsterCount << ")\n";
-
-	text << "\nProtocols:\n";
-	text << "--------------------\n";
-	text << "ProtocolGame: " << ProtocolGame::protocolGameCount << "\n";
-	text << "ProtocolLogin: " << ProtocolLogin::protocolLoginCount << "\n";
-	text << "ProtocolStatus: " << ProtocolStatus::protocolStatusCount << "\n\n";
-
-	text << "\nConnections:\n";
-	text << "--------------------\n";
-	text << "Active connections: " << Connection::connectionCount << "\n";
-	text << "Total message pool: " << OutputMessagePool::getInstance()->getTotalMessageCount() << "\n";
-	text << "Auto message pool: " << OutputMessagePool::getInstance()->getAutoMessageCount() << "\n";
-	text << "Free message pool: " << OutputMessagePool::getInstance()->getAvailableMessageCount() << "\n";
-
-	text << "\nLibraries:\n";
-	text << "--------------------\n";
-	text << "asio: " << BOOST_ASIO_VERSION << "\n";
-	text << "lua: " << LUA_VERSION << "\n";
-	text << "pugixml: " << PUGIXML_VERSION << "\n";
-
-	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, text.str().c_str());
-#else
-	player.sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "This command requires the server to be compiled with the ENABLE_SERVER_DIAGNOSTIC flag.");
-#endif
+	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Raid started.");
 }

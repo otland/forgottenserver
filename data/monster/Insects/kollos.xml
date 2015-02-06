@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Kollos" nameDescription="a kollos" race="venom" experience="2400" speed="200" manacost="0">
+	<health now="3800" max="3800"/>
+	<look type="458" corpse="15354"/>
+	<targetchange interval="4000" chance="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="80" attack="70"/>
+		<attack name="physical" interval="2000" chance="15" target="1" range="7" radius="3" min="0" max="-500">
+			<attribute key="shootEffect" value="explosion"/>
+			<attribute key="areaEffect" value="explosion"/>
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35"/>
+	<elements>
+		<element firePercent="30"/>
+		<element energyPercent="5"/>
+		<element deathPercent="-5"/>
+		<element icePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zopp!"/>
+		<voice sentence="Flzlzlzlzlzlz!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="49000"/><!-- gold coin -->
+		<item id="2148" countmax="97" chance="50000"/><!-- gold coin -->
+		<item id="2152" countmax="3" chance="66000"/><!-- platinum coin -->
+		<item id="15480" chance="15390"/><!-- kollos shell -->
+		<item id="15486" chance="15720"/><!-- compound eye -->
+		<item id="15648" countmax="5" chance="10210"/><!-- tarsal arrow -->
+		<item id="2147" countmax="2" chance="8180"/><!-- small ruby -->
+		<item id="7590" countmax="4" chance="8950"/><!-- great mana potion -->
+		<item id="9971" chance="5160"/><!-- gold ingot -->
+		<item id="8473" countmax="3" chance="4000"/><!-- ultimate health potion -->
+		<item id="2214" chance="3270"/><!-- ring of healing -->
+		<item id="7632" chance="2600"/><!-- giant shimmering pearl -->
+		<item id="15646" chance="460"/><!-- buggy backpack -->
+		<item id="15489" chance="360"/><!-- calopteryx cape -->
+		<item id="15492" chance="700"/><!-- hive scythe -->
+		<item id="2645" chance="130"/><!-- steel boots -->
+		<item id="15491" chance="310"/><!-- carapace shield -->
+	</loot>
+</monster>

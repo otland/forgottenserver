@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,22 +22,26 @@
 
 #include "container.h"
 
-class Inbox : public Container
+class Inbox final : public Container
 {
 	public:
 		Inbox(uint16_t _type);
-		~Inbox();
 
 		//cylinder implementations
-		ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                       uint32_t flags, Creature* actor = nullptr) const;
+		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
+				uint32_t flags, Creature* actor = nullptr) const final;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) final;
 
 		//overrides
-		bool canRemove() const {
+		bool canRemove() const final {
 			return false;
+		}
+
+		Cylinder* getParent() const final;
+		Cylinder* getRealParent() const final {
+			return parent;
 		}
 };
 

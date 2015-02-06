@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Elder Wyrm" nameDescription="an elder wyrm" race="blood" experience="2500" speed="260" manacost="0">
+	<health now="2700" max="2700"/>
+	<look type="561" corpse="21283"/>
+	<targetchange interval="4000" chance="15"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="80"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="250"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="80" attack="80"/>
+		<attack name="energy" interval="2000" chance="15" radius="4" target="1" min="-90" max="-150">
+			<attribute key="areaEffect" value="teleport"/>
+		</attack>
+		<attack name="energy" interval="2000" chance="20" radius="5" target="0" min="-140" max="-250">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="10" length="8" spread="0" min="0" max="-180">
+			<attribute key="areaEffect" value="yellowspark"/>
+		</attack>
+		<attack name="death" interval="2000" chance="10" length="5" spread="2" target="1" min="-200" max="-300">
+			<attribute key="areaEffect" value="blacksmoke"/>
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="healing" interval="2000" chance="15" min="100" max="150">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="80"/>
+		<element firePercent="25"/>
+	</elements>
+	<immunities>
+		<immunity energy="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity lifedrain="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="GRRR!"/>
+		<voice sentence="GROOOOAAAAAAAAR!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="174" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="3" chance="25150"/><!-- platinum coin -->
+		<item id="10582" chance="15980"/><!-- wyrm scale -->
+		<item id="5944" chance="5980"/><!-- soul orb -->
+		<item id="2672" countmax="2" chance="32420"/><!-- dragon ham -->
+		<item id="7898" chance="310"/><!-- Lightning Robe -->
+		<item id="7588" chance="17710"/><!-- strong health potion -->
+		<item id="8920" chance="410"/><!-- wand of starstorm -->
+		<item id="8921" chance="2000"/><!-- wand of draconia -->
+		<item id="2145" countmax="5" chance="4000"/><!-- small diamonds-->
+		<item id="7589" chance="20930"/><!-- strong mana potion -->
+		<item id="2455" chance="9690"/><!-- crossbow -->
+		<item id="7451" chance="310"/><!-- Shadow Sceptre -->
+		<item id="7893" chance="310"/><!-- Lightning Boots -->
+		<item id="8871" chance="100"/><!-- focus cape -->
+		<item id="7889" chance="520"/><!-- Lightning Pendant -->
+		<item id="7895" chance="930"/><!-- Lightning legs -->
+		<item id="10221" chance="100"/><!-- Shockwave Amulet -->
+		<item id="7430" chance="100"/><!-- dragonbone staff -->
+		<item id="8855" chance="310"/><!-- composite hornbow -->
+	</loot>
+</monster>

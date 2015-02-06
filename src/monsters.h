@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,6 +76,10 @@ class MonsterType
 		MonsterType();
 		~MonsterType();
 
+		// non-copyable
+		MonsterType(const MonsterType&) = delete;
+		MonsterType& operator=(const MonsterType&) = delete;
+
 		void reset();
 
 		std::map<CombatType_t, int32_t> elementMap;
@@ -97,34 +101,36 @@ class MonsterType
 
 		Outfit_t outfit;
 
+		uint32_t manaCost;
+		uint32_t yellChance;
+		uint32_t yellSpeedTicks;
+		uint32_t staticAttackChance;
+		uint32_t maxSummons;
+		uint32_t changeTargetSpeed;
+		uint32_t conditionImmunities;
+		uint32_t damageImmunities;
+		uint32_t baseSpeed;
+
 		int32_t creatureAppearEvent;
 		int32_t creatureDisappearEvent;
 		int32_t creatureMoveEvent;
 		int32_t creatureSayEvent;
 		int32_t thinkEvent;
-
-		uint32_t manaCost;
-		uint32_t yellChance;
-		uint32_t yellSpeedTicks;
-		uint32_t staticAttackChance;
-		int32_t maxSummons;
 		int32_t targetDistance;
 		int32_t runAwayHealth;
-		int32_t baseSpeed;
 		int32_t health;
 		int32_t healthMax;
-		int32_t changeTargetSpeed;
 		int32_t changeTargetChance;
-		int32_t lightLevel;
-		int32_t lightColor;
-		int32_t conditionImmunities;
-		int32_t damageImmunities;
 		int32_t defense;
 		int32_t armor;
 
 		RaceType_t race;
 
 		uint16_t lookcorpse;
+
+		Skulls_t skull;
+		uint8_t lightLevel;
+		uint8_t lightColor;
 
 		bool canPushItems;
 		bool canPushCreatures;
@@ -146,6 +152,10 @@ class Monsters
 	public:
 		Monsters();
 		~Monsters();
+
+		// non-copyable
+		Monsters(const Monsters&) = delete;
+		Monsters& operator=(const Monsters&) = delete;
 
 		bool loadFromXml(bool reloading = false);
 		bool isLoaded() const {

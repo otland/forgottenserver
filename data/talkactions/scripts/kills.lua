@@ -1,6 +1,4 @@
-function onSay(cid, words, param)
-	local player = Player(cid)
-
+function onSay(player, words, param)
 	local fragTime = configManager.getNumber(configKeys.FRAG_TIME)
 	if fragTime <= 0 then
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "You do not have any unjustified kill.")

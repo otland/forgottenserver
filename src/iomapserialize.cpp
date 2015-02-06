@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,16 +22,15 @@
 #include "iomapserialize.h"
 #include "house.h"
 #include "game.h"
+#include "bed.h"
 
 extern Game g_game;
 
-void IOMapSerialize::loadMap(Map* map)
+void IOMapSerialize::loadHouseItems(Map* map)
 {
 	int64_t start = OTSYS_TIME();
 
-	Database* db = Database::getInstance();
-
-	DBResult* result = db->storeQuery("SELECT `data` FROM `tile_store`");
+	DBResult_ptr result = Database::getInstance()->storeQuery("SELECT `data` FROM `tile_store`");
 	if (!result) {
 		return;
 	}
@@ -45,7 +44,7 @@ void IOMapSerialize::loadMap(Map* map)
 
 		uint16_t x, y;
 		uint8_t z;
-		if (!propStream.GET_USHORT(x) || !propStream.GET_USHORT(y) || !propStream.GET_UCHAR(z)) {
+		if (!propStream.read<uint16_t>(x) || !propStream.read<uint16_t>(y) || !propStream.read<uint8_t>(z)) {
 			continue;
 		}
 
@@ -55,7 +54,7 @@ void IOMapSerialize::loadMap(Map* map)
 		}
 
 		uint32_t item_count;
-		if (!propStream.GET_ULONG(item_count)) {
+		if (!propStream.read<uint32_t>(item_count)) {
 			continue;
 		}
 
@@ -63,11 +62,10 @@ void IOMapSerialize::loadMap(Map* map)
 			loadItem(propStream, tile);
 		}
 	} while (result->next());
-	db->freeResult(result);
 	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
 }
 
-bool IOMapSerialize::saveMap()
+bool IOMapSerialize::saveHouseItems()
 {
 	int64_t start = OTSYS_TIME();
 	Database* db = Database::getInstance();
@@ -84,11 +82,10 @@ bool IOMapSerialize::saveMap()
 		return false;
 	}
 
-	DBInsert stmt;
-	stmt.setQuery("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
+	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
-	for (const auto& it : Houses::getInstance().getHouses()) {
+	for (const auto& it : g_game.map.houses.getHouses()) {
 		//save house items
 		House* house = it.second;
 		for (HouseTile* tile : house->getTiles()) {
@@ -101,9 +98,8 @@ bool IOMapSerialize::saveMap()
 				if (!stmt.addRow(query)) {
 					return false;
 				}
+				stream.clear();
 			}
-
-			stream.clear();
 		}
 	}
 
@@ -129,7 +125,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	}
 
 	uint8_t endAttr;
-	if (!propStream.GET_UCHAR(endAttr) || endAttr != 0) {
+	if (!propStream.read<uint8_t>(endAttr) || endAttr != 0) {
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 		return false;
 	}
@@ -139,7 +135,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 {
 	uint16_t id;
-	if (!propStream.GET_USHORT(id)) {
+	if (!propStream.read<uint16_t>(id)) {
 		return false;
 	}
 
@@ -160,8 +156,8 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 					return false;
 				}
 
-				parent->__internalAddThing(item);
-				item->__startDecaying();
+				parent->internalAddThing(item);
+				item->startDecaying();
 			} else {
 				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
 				delete item;
@@ -193,22 +189,26 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 					return false;
 				}
 
-				item = g_game.transformItem(item, id);
+				g_game.transformItem(item, id);
 			} else {
 				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
 			}
 		} else {
 			//The map changed since the last save, just read the attributes
-			Item* dummy = Item::CreateItem(id);
+			std::unique_ptr<Item> dummy(Item::CreateItem(id));
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
 				Container* container = dummy->getContainer();
-				if (container && !loadContainer(propStream, container)) {
-					delete dummy;
-					return false;
+				if (container) {
+					if (!loadContainer(propStream, container)) {
+						return false;
+					}
+				} else if (BedItem* bedItem = dynamic_cast<BedItem*>(dummy.get())) {
+					uint32_t sleeperGUID = bedItem->getSleeper();
+					if (sleeperGUID != 0) {
+						g_game.removeBedSleeper(sleeperGUID);
+					}
 				}
-
-				delete dummy;
 			}
 		}
 	}
@@ -220,20 +220,19 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 	const Container* container = item->getContainer();
 
 	// Write ID & props
-	stream.ADD_USHORT(item->getID());
+	stream.write<uint16_t>(item->getID());
 	item->serializeAttr(stream);
 
 	if (container) {
 		// Hack our way into the attributes
-		stream.ADD_UCHAR(ATTR_CONTAINER_ITEMS);
-		stream.ADD_ULONG(container->size());
-
+		stream.write<uint8_t>(ATTR_CONTAINER_ITEMS);
+		stream.write<uint32_t>(container->size());
 		for (ItemDeque::const_reverse_iterator it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
 			saveItem(stream, *it);
 		}
 	}
 
-	stream.ADD_UCHAR(0x00); // attr end
+	stream.write<uint8_t>(0x00); // attr end
 }
 
 void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
@@ -257,11 +256,11 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 
 	if (!items.empty()) {
 		const Position& tilePosition = tile->getPosition();
-		stream.ADD_USHORT(tilePosition.x);
-		stream.ADD_USHORT(tilePosition.y);
-		stream.ADD_UCHAR(tilePosition.z);
+		stream.write<uint16_t>(tilePosition.x);
+		stream.write<uint16_t>(tilePosition.y);
+		stream.write<uint8_t>(tilePosition.z);
 
-		stream.ADD_ULONG(count);
+		stream.write<uint32_t>(count);
 		for (const Item* item : items) {
 			saveItem(stream, item);
 		}
@@ -272,30 +271,28 @@ bool IOMapSerialize::loadHouseInfo()
 {
 	Database* db = Database::getInstance();
 
-	DBResult* result = db->storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
+	DBResult_ptr result = db->storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
 	if (!result) {
 		return false;
 	}
 
 	do {
-		House* house = Houses::getInstance().getHouse(result->getDataInt("id"));
+		House* house = g_game.map.houses.getHouse(result->getDataInt("id"));
 		if (house) {
 			house->setOwner(result->getDataInt("owner"), false);
 			house->setPaidUntil(result->getDataInt("paid"));
 			house->setPayRentWarnings(result->getDataInt("warnings"));
 		}
 	} while (result->next());
-	db->freeResult(result);
 
 	result = db->storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`");
 	if (result) {
 		do {
-			House* house = Houses::getInstance().getHouse(result->getDataInt("house_id"));
+			House* house = g_game.map.houses.getHouse(result->getDataInt("house_id"));
 			if (house) {
 				house->setAccessList(result->getDataInt("listid"), result->getDataString("list"));
 			}
 		} while (result->next());
-		db->freeResult(result);
 	}
 	return true;
 }
@@ -314,12 +311,11 @@ bool IOMapSerialize::saveHouseInfo()
 	}
 
 	std::ostringstream query;
-	for (const auto& it : Houses::getInstance().getHouses()) {
+	for (const auto& it : g_game.map.houses.getHouses()) {
 		House* house = it.second;
 		query << "SELECT `id` FROM `houses` WHERE `id` = " << house->getId();
-		DBResult* result = db->storeQuery(query.str());
+		DBResult_ptr result = db->storeQuery(query.str());
 		if (result) {
-			db->freeResult(result);
 			query.str("");
 			query << "UPDATE `houses` SET `owner` = " << house->getOwner() << ", `paid` = " << house->getPaidUntil() << ", `warnings` = " << house->getPayRentWarnings() << ", `name` = " << db->escapeString(house->getName()) << ", `town_id` = " << house->getTownId() << ", `rent` = " << house->getRent() << ", `size` = " << house->getTiles().size() << ", `beds` = " << house->getBedCount() << " WHERE `id` = " << house->getId();
 		} else {
@@ -331,10 +327,9 @@ bool IOMapSerialize::saveHouseInfo()
 		query.str("");
 	}
 
-	DBInsert stmt;
-	stmt.setQuery("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
+	DBInsert stmt("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
 
-	for (const auto& it : Houses::getInstance().getHouses()) {
+	for (const auto& it : g_game.map.houses.getHouses()) {
 		House* house = it.second;
 
 		std::string listText;

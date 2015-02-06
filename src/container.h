@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,21 +59,19 @@ class Container : public Item, public Cylinder
 	public:
 		Container(uint16_t _type);
 		Container(Tile* tile);
-		virtual ~Container();
-		virtual Item* clone() const;
+		~Container();
 
-		virtual Container* getContainer() {
+		// non-copyable
+		Container(const Container&) = delete;
+		Container& operator=(const Container&) = delete;
+
+		Item* clone() const final;
+
+		Container* getContainer() final {
 			return this;
 		}
-		virtual const Container* getContainer() const {
+		const Container* getContainer() const final {
 			return this;
-		}
-
-		virtual DepotChest* getDepotChest() {
-			return nullptr;
-		}
-		virtual const DepotChest* getDepotChest() const {
-			return nullptr;
 		}
 
 		virtual DepotLocker* getDepotLocker() {
@@ -83,12 +81,12 @@ class Container : public Item, public Cylinder
 			return nullptr;
 		}
 
-		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-		bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+		bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream) override;
 		std::string getContentDescription() const;
 
 		uint32_t size() const {
-			return (uint32_t)itemlist.size();
+			return static_cast<uint32_t>(itemlist.size());
 		}
 		bool empty() const {
 			return itemlist.empty();
@@ -119,7 +117,7 @@ class Container : public Item, public Cylinder
 		bool isHoldingItem(const Item* item) const;
 
 		uint32_t getItemHoldingCount() const;
-		virtual double getWeight() const;
+		uint32_t getWeight() const final;
 
 		bool isUnlocked() const {
 			return unlocked;
@@ -129,36 +127,36 @@ class Container : public Item, public Cylinder
 		}
 
 		//cylinder implementations
-		virtual ReturnValue __queryAdd(int32_t index, const Thing* thing, uint32_t count,
-		                               uint32_t flags, Creature* actor = nullptr) const;
-		virtual ReturnValue __queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-		                                    uint32_t flags) const;
-		virtual ReturnValue __queryRemove(const Thing* thing, uint32_t count, uint32_t flags) const;
-		virtual Cylinder* __queryDestination(int32_t& index, const Thing* thing, Item** destItem,
-		                                     uint32_t& flags);
+		virtual ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
+				uint32_t flags, Creature* actor = nullptr) const override;
+		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
+				uint32_t flags) const final;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const final;
+		Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
+				uint32_t& flags) final;
 
-		virtual void __addThing(Thing* thing);
-		virtual void __addThing(int32_t index, Thing* thing);
-		virtual void __addThingBack(Thing* thing);
+		void addThing(Thing* thing) final;
+		void addThing(int32_t index, Thing* thing) final;
+		void addThingBack(Thing* thing);
 
-		virtual void __updateThing(Thing* thing, uint16_t itemId, uint32_t count);
-		virtual void __replaceThing(uint32_t index, Thing* thing);
+		void updateThing(Thing* thing, uint16_t itemId, uint32_t count) final;
+		void replaceThing(uint32_t index, Thing* thing) final;
 
-		virtual void __removeThing(Thing* thing, uint32_t count);
+		void removeThing(Thing* thing, uint32_t count) final;
 
-		virtual int32_t __getIndexOfThing(const Thing* thing) const;
-		virtual int32_t __getFirstIndex() const;
-		virtual int32_t __getLastIndex() const;
-		virtual uint32_t __getItemTypeCount(uint16_t itemId, int32_t subType = -1) const;
-		virtual std::map<uint32_t, uint32_t>& __getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const;
-		virtual Thing* __getThing(size_t index) const;
+		int32_t getThingIndex(const Thing* thing) const final;
+		int32_t getFirstIndex() const final;
+		int32_t getLastIndex() const final;
+		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
+		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const final;
+		Thing*getThing(size_t index) const final;
 
-		virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
-		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) override;
 
-		virtual void __internalAddThing(Thing* thing);
-		virtual void __internalAddThing(uint32_t index, Thing* thing);
-		virtual void __startDecaying();
+		void internalAddThing(Thing* thing) final;
+		void internalAddThing(uint32_t index, Thing* thing) final;
+		void startDecaying() final;
 
 	private:
 		void onAddContainerItem(Item* item);
@@ -166,13 +164,13 @@ class Container : public Item, public Cylinder
 		void onRemoveContainerItem(uint32_t index, Item* item);
 
 		Container* getParentContainer();
-		void updateItemWeight(double diff);
+		void updateItemWeight(int32_t diff);
 
 	protected:
 		std::ostringstream& getContentDescription(std::ostringstream& os) const;
 
 		uint32_t maxSize;
-		double totalWeight;
+		uint32_t totalWeight;
 		ItemDeque itemlist;
 		uint32_t serializationCount;
 

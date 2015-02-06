@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,57 +25,24 @@
 class NetworkMessage;
 class OutputMessage;
 
-class ProtocolOld : public Protocol
+class ProtocolOld final : public Protocol
 {
 	public:
 		// static protocol information
 		enum {server_sends_first = false};
-		enum {use_checksum = false};
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t protocolOldCount;
-#endif
-
-		ProtocolOld(Connection_ptr connection) : Protocol(connection) {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolOldCount++;
-#endif
-		}
-
-		virtual ~ProtocolOld() {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolOldCount--;
-#endif
-		}
-
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
-
-	protected:
-		void disconnectClient(uint8_t error, const char* message);
-
-		bool parseFirstPacket(NetworkMessage& msg);
-};
-
-class ProtocolOldLogin : public ProtocolOld
-{
-	public:
 		enum {protocol_identifier = 0x01};
+		enum {use_checksum = false};
 		static const char* protocol_name() {
 			return "old login protocol";
 		}
 
-		ProtocolOldLogin(Connection_ptr connection) : ProtocolOld(connection) {}
-};
+		ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
 
-class ProtocolOldGame : public ProtocolOld
-{
-	public:
-		enum {protocol_identifier = 0x0A};
-		static const char* protocol_name() {
-			return "old gameworld protocol";
-		}
+		void onRecvFirstMessage(NetworkMessage& msg) final;
 
-		ProtocolOldGame(Connection_ptr connection) : ProtocolOld(connection) {}
+	protected:
+		void dispatchedDisconnectClient(const std::string& message);
+		void disconnectClient(const std::string& message);
 };
 
 #endif

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,20 +29,23 @@ extern Game g_game;
 WaitListIterator WaitingList::findClient(const Player* player, uint32_t& slot)
 {
 	slot = 1;
-
-	for (WaitListIterator it = waitList.begin(); it != waitList.end(); ++it) {
-		Wait* wait = *it;
-		if (wait->acc == player->getAccount() && wait->ip == player->getIP() && wait->name == player->getName()) {
+	for (WaitListIterator it = priorityWaitList.begin(); it != priorityWaitList.end(); ++it) {
+		if (it->playerGUID == player->getGUID()) {
 			return it;
 		}
-
 		++slot;
 	}
 
+	for (WaitListIterator it = waitList.begin(); it != waitList.end(); ++it) {
+		if (it->playerGUID == player->getGUID()) {
+			return it;
+		}
+		++slot;
+	}
 	return waitList.end();
 }
 
-int32_t WaitingList::getTime(int32_t slot)
+uint32_t WaitingList::getTime(uint32_t slot)
 {
 	if (slot < 5) {
 		return 5;
@@ -57,7 +60,7 @@ int32_t WaitingList::getTime(int32_t slot)
 	}
 }
 
-int32_t WaitingList::getTimeOut(int32_t slot)
+uint32_t WaitingList::getTimeout(uint32_t slot)
 {
 	//timeout is set to 15 seconds longer than expected retry attempt
 	return getTime(slot) + 15;
@@ -69,73 +72,54 @@ bool WaitingList::clientLogin(const Player* player)
 		return true;
 	}
 
-	if (waitList.empty() && g_game.getPlayersOnline() < (uint32_t)g_config.getNumber(ConfigManager::MAX_PLAYERS)) {
-		//no waiting list and enough room
+	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+	if (maxPlayers == 0 || (priorityWaitList.empty() && waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
 		return true;
 	}
 
-	cleanUpList();
+	WaitingList::cleanupList(priorityWaitList);
+	WaitingList::cleanupList(waitList);
 
 	uint32_t slot;
 
 	WaitListIterator it = findClient(player, slot);
 	if (it != waitList.end()) {
-		if ((g_game.getPlayersOnline() + slot) <= (uint32_t)g_config.getNumber(ConfigManager::MAX_PLAYERS)) {
+		if ((g_game.getPlayersOnline() + slot) <= maxPlayers) {
 			//should be able to login now
-			delete *it;
 			waitList.erase(it);
 			return true;
-		} else {
-			//let them wait a bit longer
-			(*it)->timeout = OTSYS_TIME() + (getTimeOut(slot) * 1000);
-			return false;
 		}
+
+		//let them wait a bit longer
+		it->timeout = OTSYS_TIME() + (getTimeout(slot) * 1000);
+		return false;
 	}
 
-	Wait* wait = new Wait();
-
+	slot = priorityWaitList.size();
 	if (player->isPremium()) {
-		slot = 1;
-
-		for (it = waitList.begin(); it != waitList.end(); ++it) {
-			if (!(*it)->premium) {
-				waitList.insert(it, wait);
-				break;
-			}
-
-			++slot;
-		}
+		priorityWaitList.emplace_back(OTSYS_TIME() + (getTimeout(slot + 1) * 1000), player->getGUID());
 	} else {
-		waitList.push_back(wait);
-		slot = (uint32_t)waitList.size();
+		slot += waitList.size();
+		waitList.emplace_back(OTSYS_TIME() + (getTimeout(slot + 1) * 1000), player->getGUID());
 	}
-
-	wait->name = player->getName();
-	wait->acc = player->getAccount();
-	wait->ip = player->getIP();
-	wait->premium = player->isPremium();
-	wait->timeout = OTSYS_TIME() + (getTimeOut(slot) * 1000);
 	return false;
 }
 
-int32_t WaitingList::getClientSlot(const Player* player)
+uint32_t WaitingList::getClientSlot(const Player* player)
 {
 	uint32_t slot;
 	WaitListIterator it = findClient(player, slot);
-
-	if (it != waitList.end()) {
-		return slot;
+	if (it == waitList.end()) {
+		return 0;
 	}
-
-	return -1;
+	return slot;
 }
 
-void WaitingList::cleanUpList()
+void WaitingList::cleanupList(WaitList& list)
 {
-	for (WaitListIterator it = waitList.begin(); it != waitList.end();) {
-		if ((*it)->timeout - OTSYS_TIME() <= 0) {
-			delete *it;
-			waitList.erase(it++);
+	for (WaitListIterator it = list.begin(); it != list.end();) {
+		if (it->timeout - OTSYS_TIME() <= 0) {
+			it = list.erase(it);
 		} else {
 			++it;
 		}

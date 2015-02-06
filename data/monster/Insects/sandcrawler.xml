@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sandcrawler" nameDescription="a sandcrawler" race="venom" experience="20" speed="220" manacost="0">
-<health now="30" max="30"/>
-<look type="350" corpse="11357"/>
-<targetchange interval="5000" chance="12"/>
-<strategy attack="100" defense="0"/>
+<monster name="Sandcrawler" nameDescription="a sandcrawler" race="venom" experience="20" speed="170" manacost="250">
+	<health now="30" max="30"/>
+	<look type="350" corpse="11357"/>
+	<targetchange interval="5000" chance="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
@@ -20,15 +19,15 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="10" attack="3"/>
 	</attacks>
-		<defenses armor="16" defense="19"/>
+	<defenses armor="10" defense="10"/>
 	<elements>
-		<element firePercent="-2"/>
+		<element firePercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Chrk chrk!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="6" chance="20000"/><!-- gold coin -->
-		<item id="11373" chance="1500"/><!-- sandcrawler shell -->
+		<item id="2148" countmax="6" chance="33333"/><!-- gold coin -->
+		<item id="11373" chance="2173"/><!-- sandcrawler shell -->
 	</loot>
 </monster>

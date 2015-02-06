@@ -43,7 +43,7 @@ shopModule:addBuyableItem({'paralyze'}, 2278, 700, 1, 'paralyze rune')
 shopModule:addBuyableItem({'animate dead'}, 2316, 375, 1, 'animate dead rune')
 shopModule:addBuyableItem({'convince creature'}, 2290, 80, 1, 'convince creature rune')
 shopModule:addBuyableItem({'chameleon'}, 2291, 210, 1, 'chameleon rune')
-shopModule:addBuyableItem({'desintegrate'}, 2310, 80,  3, 'desintegreate rune')
+shopModule:addBuyableItem({'desintegrate'}, 2310, 80, 3, 'desintegreate rune')
 
 shopModule:addBuyableItemContainer({'bp ap'}, 2002, 8378, 2000, 1, 'backpack of antidote potions')
 shopModule:addBuyableItemContainer({'bp slhp'}, 2000, 8610, 400, 1, 'backpack of small health potions')
@@ -72,7 +72,7 @@ shopModule:addBuyableItem({'northwind rod', 'northwind'}, 8911, 7500, 'northwind
 shopModule:addBuyableItem({'terra rod', 'terra'}, 2181, 10000, 'terra rod')
 shopModule:addBuyableItem({'hailstorm rod', 'hailstorm'}, 2183, 15000, 'hailstorm rod')
 shopModule:addBuyableItem({'springsprout rod', 'springsprout'}, 8912, 18000, 'springsprout rod')
-shopModule:addBuyableItem({'underworld rod', 'underworld'}, 8910, 22000,  'underworld rod')
+shopModule:addBuyableItem({'underworld rod', 'underworld'}, 8910, 22000, 'underworld rod')
 
 shopModule:addSellableItem({'wand of vortex', 'vortex'}, 2190, 250, 'wand of vortex')
 shopModule:addSellableItem({'wand of dragonbreath', 'dragonbreath'}, 2191, 500, 'wand of dragonbreath')
@@ -84,7 +84,7 @@ shopModule:addSellableItem({'wand of starstorm', 'starstorm'}, 8920, 9000, 'wand
 shopModule:addSellableItem({'wand of voodoo', 'voodoo'}, 8922, 11000, 'wand of voodoo')
 
 shopModule:addSellableItem({'snakebite rod', 'snakebite'}, 2182, 250,'snakebite rod')
-shopModule:addSellableItem({'moonlight rod', 'moonlight'}, 2186, 500,   'moonlight rod')
+shopModule:addSellableItem({'moonlight rod', 'moonlight'}, 2186, 500, 'moonlight rod')
 shopModule:addSellableItem({'necrotic rod', 'necrotic'}, 2185, 2500, 'necrotic rod')
 shopModule:addSellableItem({'northwind rod', 'northwind'}, 8911, 3750, 'northwind rod')
 shopModule:addSellableItem({'terra rod', 'terra'}, 2181, 5000, 'terra rod')

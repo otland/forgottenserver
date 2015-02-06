@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,20 +83,20 @@ struct OTBM_root_header {
 };
 
 struct OTBM_Destination_coords {
-	uint16_t _x;
-	uint16_t _y;
-	uint8_t _z;
+	uint16_t x;
+	uint16_t y;
+	uint8_t z;
 };
 
 struct OTBM_Tile_coords {
-	uint8_t _x;
-	uint8_t _y;
+	uint8_t x;
+	uint8_t y;
 };
 
 struct OTBM_HouseTile_coords {
-	uint8_t _x;
-	uint8_t _y;
-	uint32_t _houseid;
+	uint8_t x;
+	uint8_t y;
+	uint32_t houseId;
 };
 
 #pragma pack()
@@ -119,7 +119,7 @@ class IOMap
 				map->spawnfile += "-spawn.xml";
 			}
 
-			return Spawns::getInstance()->loadFromXml(map->spawnfile);
+			return map->spawns.loadFromXml(map->spawnfile);
 		}
 
 		/* Load the houses (not house tile-data)
@@ -134,15 +134,15 @@ class IOMap
 				map->housefile += "-house.xml";
 			}
 
-			return Houses::getInstance().loadHousesXML(map->housefile);
+			return map->houses.loadHousesXML(map->housefile);
 		}
 
 		const std::string& getLastErrorString() const {
 			return errorString;
 		}
 
-		void setLastErrorString(const std::string& _errorString) {
-			errorString = _errorString;
+		void setLastErrorString(const std::string& error) {
+			errorString = error;
 		}
 
 	protected:

@@ -1,29 +1,32 @@
 -- Combat settings
+-- NOTE: valid values for worldType are: "pvp", "no-pvp" and "pvp-enforced"
 worldType = "pvp"
 hotkeyAimbotEnabled = "yes"
 protectionLevel = 1
 killsToRedSkull = 3
 killsToBlackSkull = 6
 pzLocked = 60000
-removeAmmoWhenUsingDistanceWeapon = "yes"
 removeChargesFromRunes = "yes"
 timeToDecreaseFrags = 24 * 60 * 60 * 1000
 whiteSkullTime = 15 * 60 * 1000
 stairJumpExhaustion = 2000
 experienceByKillingPlayers = "no"
+expFromPlayersLevelRange = 75
+noDamageToSameLookfeet = "no"
 
 -- Connection Config
+-- NOTE: maxPlayers set to 0 means no limit
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = "no"
 loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
-maxPlayers = "1000"
+maxPlayers = 0
 motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = "yes"
 allowClones = "no"
 serverName = "Forgotten"
-statusTimeout = 60000
+statusTimeout = 5000
 replaceKickOnLogin = "yes"
 maxPacketsPerSecond = 25
 
@@ -43,6 +46,7 @@ timeBetweenActions = 200
 timeBetweenExActions = 1000
 
 -- Map
+-- NOTE: set mapName WITHOUT .otbm at the end
 mapName = "forgotten"
 mapAuthor = "Komic"
 
@@ -65,7 +69,8 @@ allowChangeOutfit = "yes"
 freePremium = "no"
 kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
-noDamageToSameLookfeet = "no"
+emoteSpells = "no"
+classicEquipmentSlots = "no"
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
@@ -81,6 +86,10 @@ deSpawnRadius = 50
 
 -- Stamina
 staminaSystem = "yes"
+
+-- Scripts
+warnUnsafeScripts = "yes"
+convertUnsafeScripts = "yes"
 
 -- Startup
 -- NOTE: defaultPriority only works on Windows and sets process priority.

@@ -1,5 +1,4 @@
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
 		return true
 	end
@@ -8,7 +7,7 @@ function onSay(cid, words, param)
 		return false
 	end
 
-	local house = House(getTileHouseInfo(player:getPosition()))	
+	local house = House(getTileHouseInfo(player:getPosition()))
 	if house == nil then
 		player:sendCancelMessage("You are not inside a house.")
 		return false

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Corym Charlatan" nameDescription="a corym charlatan" race="blood" experience="150" speed="180" manacost="0">
+	<health now="250" max="250"/>
+	<look type="532" body="97" legs="116" corpse="19725"/>
+	<targetchange interval="5000" chance="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="35"/>
+	</attacks>
+	<defenses armor="10" defense="10"/>
+	<elements>
+		<element earthPercent="20"/>
+		<element deathPercent="20"/>
+		<element energyPercent="25"/>
+		<element holyPercent="-20"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Mehehe!"/>
+		<voice sentence="Beware! Me hexing you!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="35" chance="50000"/><!-- gold coin -->
+		<item id="20101" chance="14285"/><!-- rat cheese -->
+		<item id="20100" chance="12500"/><!-- soft cheese -->
+		<item id="2696" chance="10000"/><!-- cheese -->
+		<item id="20089" chance="7692"/><!-- bola -->
+		<item id="20099" chance="7142"/><!-- earflap -->
+		<item id="20097" chance="5882"/><!-- cheese cutter -->
+		<item id="20092" chance="909"/><!-- ratana -->
+		<item id="20093" chance="854"/><!-- life preserver -->
+		<item id="20126" chance="537"/><!-- leather harness -->
+		<item id="20098" chance="518"/><!-- cheesy figurine -->
+		<item id="20090" chance="492"/><!-- spike shield -->
+	</loot>
+</monster>

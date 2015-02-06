@@ -1,77 +1,71 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
-	if isInArray(questDoors, item.itemid) == TRUE then
-		if getPlayerStorageValue(cid, item.actionid) ~= -1 then
-			doTransformItem(item.uid, item.itemid + 1)
-			doTeleportThing(cid, toPosition, TRUE)
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+	if isInArray(questDoors, item.itemid) then
+		if player:getStorageValue(item.actionid) ~= -1 then
+			Item(item.uid):transform(item.itemid + 1)
+			player:teleportTo(toPosition, true)
 		else
-			doPlayerSendTextMessage(cid, MESSAGE_INFO_DESCR, "The door seems to be sealed against unwanted intruders.")
+			player:sendTextMessage(MESSAGE_INFO_DESCR, "The door seems to be sealed against unwanted intruders.")
 		end
-		return TRUE
-	elseif isInArray(levelDoors, item.itemid) == TRUE then
-		if item.actionid > 0 and getPlayerLevel(cid) >= item.actionid - 1000 then
-			doTransformItem(item.uid, item.itemid + 1)
-			doTeleportThing(cid, toPosition, TRUE)
+		return true
+	elseif isInArray(levelDoors, item.itemid) then
+		if item.actionid > 0 and player:getLevel() >= item.actionid - 1000 then
+			Item(item.uid):transform(item.itemid + 1)
+			player:teleportTo(toPosition, true)
 		else
-			doPlayerSendTextMessage(cid, MESSAGE_INFO_DESCR, "Only the worthy may pass.")
+			player:sendTextMessage(MESSAGE_INFO_DESCR, "Only the worthy may pass.")
 		end
-		return TRUE
-	elseif isInArray(keys, item.itemid) == TRUE then
+		return true
+	elseif isInArray(keys, item.itemid) then
 		if itemEx.actionid > 0 then
 			if item.actionid == itemEx.actionid then
-				if doors[itemEx.itemid] ~= nil then
-					doTransformItem(itemEx.uid, doors[itemEx.itemid])
-					return TRUE
+				if doors[itemEx.itemid] then
+					Item(itemEx.uid):transform(doors[itemEx.itemid])
+					return true
 				end
 			end
-			doPlayerSendCancel(cid, "The key does not match.")
-			return TRUE
+			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
+			return true
 		end
-		return FALSE
-	elseif isInArray(horizontalOpenDoors, item.itemid) == TRUE then
-		local newPosition = toPosition
-		newPosition.y = newPosition.y + 1
-		local doorPosition = fromPosition
-		doorPosition.stackpos = STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE
-		local doorCreature = getThingfromPos(doorPosition)
-		if doorCreature.itemid ~= 0 then
-			if getTilePzInfo(doorPosition) == TRUE and getTilePzInfo(newPosition) == FALSE and doorCreature.uid ~= cid then
-				doPlayerSendCancel(cid, "Sorry, not possible.")
-			else
-				doTeleportThing(doorCreature.uid, newPosition, TRUE)
-				if isInArray(openSpecialDoors, item.itemid) ~= TRUE then
-					doTransformItem(item.uid, item.itemid - 1)
-				end
-			end
-			return TRUE
-		end
-		doTransformItem(item.uid, item.itemid - 1)
-		return TRUE
-	elseif isInArray(verticalOpenDoors, item.itemid) == TRUE then
-		local newPosition = toPosition
-		newPosition.x = newPosition.x + 1
-		local doorPosition = fromPosition
-		doorPosition.stackpos = STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE
-		local doorCreature = getThingfromPos(doorPosition)
-		if doorCreature.itemid ~= 0 then
-			if getTilePzInfo(doorPosition) == TRUE and getTilePzInfo(newPosition) == FALSE and doorCreature.uid ~= cid then
-				doPlayerSendCancel(cid, "Sorry, not possible.")
-			else
-				doTeleportThing(doorCreature.uid, newPosition, TRUE)
-				if isInArray(openSpecialDoors, item.itemid) ~= TRUE then
-					doTransformItem(item.uid, item.itemid - 1)
-				end
-			end
-			return TRUE
-		end
-		doTransformItem(item.uid, item.itemid - 1)
-		return TRUE
-	elseif doors[item.itemid] ~= nil then
-		if item.actionid == 0 then
-			doTransformItem(item.uid, doors[item.itemid])
-		else
-			doPlayerSendTextMessage(cid, MESSAGE_INFO_DESCR, "It is locked.")
-		end
-		return TRUE
+		return false
 	end
-	return FALSE
+
+	local tileToPos = toPosition:getTile()
+	local thing = tileToPos:getThing(STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE)
+	if thing and item.uid ~= thing:getUniqueId() and fromPosition:getTile():getItemByType(ITEM_TYPE_MAGICFIELD) then
+		return false
+	end
+
+	if isInArray(horizontalOpenDoors, item.itemid) or isInArray(verticalOpenDoors, item.itemid) then
+		local doorCreature = tileToPos:getTopCreature()
+		if doorCreature ~= nil then
+			toPosition.x = toPosition.x + 1
+			local query = toPosition:getTile():queryAdd(doorCreature, 20)
+			if query ~= RETURNVALUE_NOERROR then
+				toPosition.x = toPosition.x - 1
+				toPosition.y = toPosition.y + 1
+				query = toPosition:getTile():queryAdd(doorCreature, 20)
+			end
+
+			if query ~= RETURNVALUE_NOERROR then
+				player:sendTextMessage(MESSAGE_STATUS_SMALL, query)
+				return true
+			end
+
+			doorCreature:teleportTo(toPosition, true)
+		end
+		if not isInArray(openSpecialDoors, item.itemid) then
+			Item(item.uid):transform(item.itemid - 1)
+		end
+		return true
+	end
+
+	if doors[item.itemid] then
+		if item.actionid == 0 then
+			Item(item.uid):transform(doors[item.itemid])
+		else
+			player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
+		end
+		return true
+	end
+	return false
 end

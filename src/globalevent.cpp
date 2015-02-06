@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,9 @@ void GlobalEvents::clearMap(GlobalEventMap& map)
 
 void GlobalEvents::clear()
 {
-	g_scheduler->stopEvent(thinkEventId);
+	g_scheduler.stopEvent(thinkEventId);
 	thinkEventId = 0;
-	g_scheduler->stopEvent(timerEventId);
+	g_scheduler.stopEvent(timerEventId);
 	timerEventId = 0;
 
 	clearMap(thinkMap);
@@ -64,25 +64,21 @@ void GlobalEvents::clear()
 
 Event* GlobalEvents::getEvent(const std::string& nodeName)
 {
-	if (asLowerCaseString(nodeName) == "globalevent") {
-		return new GlobalEvent(&m_scriptInterface);
+	if (strcasecmp(nodeName.c_str(), "globalevent") != 0) {
+		return nullptr;
 	}
-	return nullptr;
+	return new GlobalEvent(&m_scriptInterface);
 }
 
 bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 {
-	GlobalEvent* globalEvent = dynamic_cast<GlobalEvent*>(event);
-	if (!globalEvent) {
-		return false;
-	}
-
+	GlobalEvent* globalEvent = reinterpret_cast<GlobalEvent*>(event);
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
 		GlobalEventMap::iterator it = timerMap.find(globalEvent->getName());
 		if (it == timerMap.end()) {
 			timerMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			if (timerEventId == 0) {
-				timerEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
+				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
 
 			return true;
@@ -98,7 +94,7 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 		if (it == thinkMap.end()) {
 			thinkMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
 			if (thinkEventId == 0) {
-				thinkEventId = g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
+				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}
 			return true;
 		}
@@ -149,7 +145,7 @@ void GlobalEvents::timer()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		timerEventId = g_scheduler->addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
+		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
 							                std::bind(&GlobalEvents::timer, this)));
 	}
 }
@@ -183,7 +179,7 @@ void GlobalEvents::think()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		thinkEventId = g_scheduler->addEvent(createSchedulerTask(nextScheduledTime, std::bind(&GlobalEvents::think, this)));
+		thinkEventId = g_scheduler.addEvent(createSchedulerTask(nextScheduledTime, std::bind(&GlobalEvents::think, this)));
 	}
 }
 
@@ -200,12 +196,8 @@ void GlobalEvents::execute(GlobalEvent_t type) const
 GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 {
 	switch (type) {
-		case GLOBALEVENT_NONE:
-			return thinkMap;
-
-		case GLOBALEVENT_TIMER:
-			return timerMap;
-
+		case GLOBALEVENT_NONE: return thinkMap;
+		case GLOBALEVENT_TIMER: return timerMap;
 		case GLOBALEVENT_STARTUP:
 		case GLOBALEVENT_SHUTDOWN:
 		case GLOBALEVENT_RECORD: {
@@ -217,9 +209,7 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			}
 			return retMap;
 		}
-
-		default:
-			return GlobalEventMap();
+		default: return GlobalEventMap();
 	}
 }
 
@@ -244,31 +234,30 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("time"))) {
 		std::vector<int32_t> params = vectorAtoi(explodeString(attr.as_string(), ":"));
-		if (params.front() < 0 || params.front() > 23) {
+
+		int32_t hour = params.front();
+		if (hour < 0 || hour > 23) {
 			std::cout << "[Error - GlobalEvent::configureEvent] Invalid hour \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 			return false;
 		}
 
-		m_interval |= params.front() << 16;
-		int32_t hour = params.front();
+		m_interval |= hour << 16;
+
 		int32_t min = 0;
 		int32_t sec = 0;
-
 		if (params.size() > 1) {
-			if (params[1] < 0 || params[1] > 59) {
+			min = params[1];
+			if (min < 0 || min > 59) {
 				std::cout << "[Error - GlobalEvent::configureEvent] Invalid minute \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 				return false;
 			}
 
-			min = params[1];
-
 			if (params.size() > 2) {
-				if (params[2] < 0 || params[2] > 59) {
+				sec = params[2];
+				if (sec < 0 || sec > 59) {
 					std::cout << "[Error - GlobalEvent::configureEvent] Invalid second \"" << attr.as_string() << "\" for globalevent with name: " << m_name << std::endl;
 					return false;
 				}
-
-				sec = params[2];
 			}
 		}
 
@@ -277,8 +266,8 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		timeinfo->tm_hour = hour;
 		timeinfo->tm_min = min;
 		timeinfo->tm_sec = sec;
-		time_t difference = (time_t)difftime(mktime(timeinfo), current_time);
 
+		time_t difference = static_cast<time_t>(difftime(mktime(timeinfo), current_time));
 		if (difference < 0) {
 			difference += 86400;
 		}
@@ -286,12 +275,12 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		m_nextExecution = current_time + difference;
 		m_eventType = GLOBALEVENT_TIMER;
 	} else if ((attr = node.attribute("type"))) {
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "startup" || tmpStrValue == "start" || tmpStrValue == "load") {
+		const char* value = attr.value();
+		if (strcasecmp(value, "startup") == 0) {
 			m_eventType = GLOBALEVENT_STARTUP;
-		} else if (tmpStrValue == "shutdown" || tmpStrValue == "quit" || tmpStrValue == "exit") {
+		} else if (strcasecmp(value, "shutdown") == 0) {
 			m_eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (tmpStrValue == "record" || tmpStrValue == "playersrecord") {
+		} else if (strcasecmp(value, "record") == 0) {
 			m_eventType = GLOBALEVENT_RECORD;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string() << "\" for globalevent with name " << m_name << std::endl;
@@ -307,7 +296,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string GlobalEvent::getScriptEventName()
+std::string GlobalEvent::getScriptEventName() const
 {
 	switch (m_eventType) {
 		case GLOBALEVENT_STARTUP: return "onStartup";
@@ -320,7 +309,7 @@ std::string GlobalEvent::getScriptEventName()
 
 bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 {
-	//onRecord(current, old, cid)
+	//onRecord(current, old)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow" << std::endl;
 		return false;

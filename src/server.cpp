@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,19 +38,6 @@ ServiceManager::ServiceManager()
 ServiceManager::~ServiceManager()
 {
 	stop();
-}
-
-std::list<uint16_t> ServiceManager::get_ports() const
-{
-	std::list<uint16_t> ports;
-
-	for (std::map<uint16_t, ServicePort_ptr>::const_iterator it = m_acceptors.begin();
-	        it != m_acceptors.end(); ++it) {
-		ports.push_back(it->first);
-	}
-
-	ports.unique();
-	return ports;
 }
 
 void ServiceManager::die()
@@ -106,7 +93,7 @@ ServicePort::~ServicePort()
 
 bool ServicePort::is_single_socket() const
 {
-	return m_services.size() && m_services.front()->is_single_socket();
+	return !m_services.empty() && m_services.front()->is_single_socket();
 }
 
 std::string ServicePort::get_protocol_names() const
@@ -116,7 +103,7 @@ std::string ServicePort::get_protocol_names() const
 	}
 
 	std::string str = m_services.front()->get_protocol_name();
-	for (uint32_t i = 1; i < m_services.size(); ++i) {
+	for (size_t i = 1; i < m_services.size(); ++i) {
 		str.push_back(',');
 		str.push_back(' ');
 		str.append(m_services[i]->get_protocol_name());
@@ -168,7 +155,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 		if (!m_pendingStart) {
 			close();
 			m_pendingStart = true;
-			g_scheduler->addEvent(createSchedulerTask(15000,
+			g_scheduler.addEvent(createSchedulerTask(15000,
 			                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
 		}
 	}
@@ -228,7 +215,7 @@ void ServicePort::open(uint16_t port)
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		m_pendingStart = true;
-		g_scheduler->addEvent(createSchedulerTask(15000,
+		g_scheduler.addEvent(createSchedulerTask(15000,
 		                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), port)));
 	}
 }

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,16 +31,11 @@ class Protocol
 {
 	public:
 		Protocol(Connection_ptr connection) : m_connection(connection), m_key(), m_refCount(), m_encryptionEnabled(false), m_checksumEnabled(true), m_rawMessages(false) {}
+		virtual ~Protocol() = default;
 
 		// non-copyable
 		Protocol(const Protocol&) = delete;
 		Protocol& operator=(const Protocol&) = delete;
-
-		virtual ~Protocol() {}
-
-		virtual int32_t getProtocolId() {
-			return 0x00;
-		}
 
 		virtual void parsePacket(NetworkMessage&) {}
 
@@ -58,11 +53,11 @@ class Protocol
 
 		uint32_t getIP() const;
 
-		int32_t addRef() {
-			return ++m_refCount;
+		void addRef() {
+			++m_refCount;
 		}
-		int32_t unRef() {
-			return --m_refCount;
+		void unRef() {
+			--m_refCount;
 		}
 
 		//Use this function for autosend messages only

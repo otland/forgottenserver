@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class ConnectionManager
 		void closeAll();
 
 	protected:
-		ConnectionManager() {}
+		ConnectionManager() = default;
 
 		std::unordered_set<Connection_ptr> m_connections;
 		std::recursive_mutex m_connectionManagerLock;
@@ -57,10 +57,6 @@ class ConnectionManager
 class Connection : public std::enable_shared_from_this<Connection>
 {
 	public:
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t connectionCount;
-#endif
-
 		// non-copyable
 		Connection(const Connection&) = delete;
 		Connection& operator=(const Connection&) = delete;
@@ -94,20 +90,10 @@ class Connection : public std::enable_shared_from_this<Connection>
 			m_readError = false;
 			m_packetsSent = 0;
 			m_timeConnected = time(nullptr);
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			connectionCount++;
-#endif
 		}
 		friend class ConnectionManager;
 
 	public:
-		~Connection() {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			connectionCount--;
-#endif
-		}
-
 		boost::asio::ip::tcp::socket& getHandle() {
 			return *m_socket;
 		}
@@ -121,11 +107,11 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		uint32_t getIP() const;
 
-		int32_t addRef() {
-			return ++m_refCount;
+		void addRef() {
+			++m_refCount;
 		}
-		int32_t unRef() {
-			return --m_refCount;
+		void unRef() {
+			--m_refCount;
 		}
 
 	private:

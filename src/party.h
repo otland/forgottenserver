@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,10 @@ typedef std::vector<Player*> PlayerVector;
 class Party
 {
 	public:
-		Party(Player* _leader);
-		~Party();
+		Party(Player* leader);
 
 		Player* getLeader() const {
 			return leader;
-		}
-		void setLeader(Player* _leader) {
-			leader = _leader;
 		}
 		PlayerVector& getMembers() {
 			return memberList;
@@ -71,7 +67,7 @@ class Party
 		}
 		bool canOpenCorpse(uint32_t ownerId) const;
 
-		void shareExperience(uint64_t experience);
+		void shareExperience(uint64_t experience, Creature* source = nullptr);
 		bool setSharedExperience(Player* player, bool _sharedExpActive);
 		bool isSharedExperienceActive() const {
 			return sharedExpActive;
@@ -81,6 +77,8 @@ class Party
 		}
 		bool canUseSharedExperience(const Player* player) const;
 		void updateSharedExperience();
+
+		void updateVocationsList();
 
 		void addPlayerHealedMember(Player* player, uint32_t points);
 		void addPlayerDamageMonster(Player* player, uint32_t points);
@@ -101,6 +99,8 @@ class Party
 		PlayerVector inviteList;
 
 		Player* leader;
+
+		float extraExpRate;
 
 		bool sharedExpActive;
 		bool sharedExpEnabled;

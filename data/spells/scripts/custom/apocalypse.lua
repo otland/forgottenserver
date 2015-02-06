@@ -1,20 +1,17 @@
 local combat = createCombatObject()
-
-arr = {
-{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
-{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-{1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1},
-{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
-{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-}
-
-local area = createCombatArea(arr)
+local area = createCombatArea({
+	{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+	{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+	{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+	{1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1},
+	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+	{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+	{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+	{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}
+})
 setCombatArea(combat, area)
 
 function spellCallback(param)
@@ -31,9 +28,9 @@ function spellCallback(param)
 	end
 end
 
-function onTargetTile(cid, pos)
+function onTargetTile(creature, pos)
 	local param = {}
-	param.cid = cid
+	param.cid = creature:getId()
 	param.pos = pos
 	param.count = 0
 	spellCallback(param)

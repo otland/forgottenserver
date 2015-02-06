@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frazzlemaw" nameDescription="Frazzlemaw" race="blood" experience="3400" speed="250" manacost="0">
+	<health now="4100" max="4100"/>
+	<look type="594" corpse="22567"/>
+	<targetchange interval="4000" chance="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="80"/>
+		<attack name="bleedcondition" interval="2000" chance="10" radius="3" target="0" min="-300" max="-400">
+			<attribute key="areaEffect" value="redspark"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="10" length="5" spread="0" target="1" min="0" max="-700">
+			<attribute key="areaEffect" value="explosionarea"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="2" target="1" min="0" max="-400">
+			<attribute key="shootEffect" value="largerock"/>
+			<attribute key="areaEffect" value="stones"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="5" target="0" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" radius="4" target="0" min="-80" max="-150">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="250" max="425">
+			<attribute key="areaEffect" value="greenspark"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="10"/>
+		<element deathPercent="15"/>
+		<element firePercent="10"/>
+		<element energyPercent="15"/>
+		<element icePercent="5"/>
+		<element earthPercent="20"/>
+		<element holyPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Mwaaaahnducate youuuuuu *gurgle*"/>
+		<voice sentence="mwaaah!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="7" chance="100000"/><!-- platinum coin -->
+		<item id="2219" chance="9500"/><!-- banana skin -->
+		<item id="2225" chance="10400"/><!-- piece of iron -->
+		<item id="2226" chance="10000"/><!-- fishbone -->
+		<item id="2229" chance="12680"/><!-- skull -->
+		<item id="2230" chance="10000"/><!-- bone -->
+		<item id="2231" chance="5500"/><!-- big bone -->
+		<item id="2377" chance="3200"/><!-- two handed sword -->
+		<item id="2667" countmax="3" chance="6750"/><!-- fish -->
+		<item id="2671" countmax="2" chance="6000"/><!-- ham -->
+		<item id="5880" chance="3000"/><!-- iron ore -->
+		<item id="5895" chance="4700"/><!-- fish fin -->
+		<item id="5925" chance="5000"/><!-- hardened bone -->
+		<item id="5951" chance="10800"/><!-- fish tail -->
+		<item id="7404" chance="1000"/><!-- assassin dagger -->
+		<item id="7407" chance="2240"/><!-- haunted blade -->
+		<item id="7418" chance="1100"/><!-- nightmare blade -->
+		<item id="7590" countmax="3" chance="15000"/><!-- great mana potion -->
+		<item id="7591" countmax="2" chance="15000"/><!-- great health potion -->
+		<item id="9971" chance="2300"/><!-- gold ingot -->
+		<item id="11306" chance="1460"/><!-- sai -->
+		<item id="18414" chance="3000"/><!-- violet crystal shard -->
+		<item id="18417" chance="16000"/><!-- brown crystal splinter -->
+		<item id="18420" chance="7600"/><!-- red crystal fragment -->
+		<item id="18554" chance="10000"/><!-- crystal rubbish -->
+		<item id="22396" chance="450"/><!-- cluster of solace -->
+		<item id="22532" chance="18760"/><!-- frazzle tongue -->
+		<item id="22533" chance="16000"/><!-- frazzle skin -->
+		<item id="2240" chance="9420"/><!-- remains of a fish -->
+	</loot>
+</monster>

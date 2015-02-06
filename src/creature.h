@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,20 +31,20 @@
 typedef std::list<Condition*> ConditionList;
 typedef std::list<CreatureEvent*> CreatureEventList;
 
-enum slots_t {
-	SLOT_WHEREEVER = 0,
-	SLOT_FIRST = 1,
-	SLOT_HEAD = SLOT_FIRST,
-	SLOT_NECKLACE = 2,
-	SLOT_BACKPACK = 3,
-	SLOT_ARMOR = 4,
-	SLOT_RIGHT = 5,
-	SLOT_LEFT = 6,
-	SLOT_LEGS = 7,
-	SLOT_FEET = 8,
-	SLOT_RING = 9,
-	SLOT_AMMO = 10,
-	SLOT_LAST = SLOT_AMMO
+enum slots_t : uint8_t {
+	CONST_SLOT_WHEREEVER = 0,
+	CONST_SLOT_FIRST = 1,
+	CONST_SLOT_HEAD = CONST_SLOT_FIRST,
+	CONST_SLOT_NECKLACE = 2,
+	CONST_SLOT_BACKPACK = 3,
+	CONST_SLOT_ARMOR = 4,
+	CONST_SLOT_RIGHT = 5,
+	CONST_SLOT_LEFT = 6,
+	CONST_SLOT_LEGS = 7,
+	CONST_SLOT_FEET = 8,
+	CONST_SLOT_RING = 9,
+	CONST_SLOT_AMMO = 10,
+	CONST_SLOT_LAST = CONST_SLOT_AMMO
 };
 
 struct FindPathParams {
@@ -61,7 +61,7 @@ struct FindPathParams {
 		clearSight = true;
 		allowDiagonal = true;
 		keepDistance = false;
-		maxSearchDist = -1;
+		maxSearchDist = 0;
 		minTargetDist = -1;
 		maxTargetDist = -1;
 	}
@@ -84,7 +84,6 @@ class FrozenPathingConditionCall
 {
 	public:
 		FrozenPathingConditionCall(const Position& targetPos) : targetPos(targetPos) {}
-		~FrozenPathingConditionCall() {}
 
 		bool operator()(const Position& startPos, const Position& testPos,
 		                const FindPathParams& fpp, int32_t& bestMatchDist) const;
@@ -110,10 +109,14 @@ class Creature : virtual public Thing
 
 		virtual ~Creature();
 
-		virtual Creature* getCreature() {
+		// non-copyable
+		Creature(const Creature&) = delete;
+		Creature& operator=(const Creature&) = delete;
+
+		Creature* getCreature() final {
 			return this;
 		}
-		virtual const Creature* getCreature()const {
+		const Creature* getCreature() const final {
 			return this;
 		}
 		virtual Player* getPlayer() {
@@ -157,6 +160,13 @@ class Creature : virtual public Thing
 		virtual RaceType_t getRace() const {
 			return RACE_NONE;
 		}
+		virtual Skulls_t getSkull() const {
+			return skull;
+		}
+		virtual Skulls_t getSkullClient(const Creature* creature) const {
+			return creature->getSkull();
+		}
+		void setSkull(Skulls_t newSkull);
 		Direction getDirection() const {
 			return direction;
 		}
@@ -171,13 +181,13 @@ class Creature : virtual public Thing
 			hiddenHealth = b;
 		}
 
-		virtual int32_t getThrowRange() const {
+		int32_t getThrowRange() const final {
 			return 1;
 		}
-		virtual bool isPushable() const {
-			return (getWalkDelay() <= 0);
+		bool isPushable() const override {
+			return getWalkDelay() <= 0;
 		}
-		virtual bool isRemoved() const {
+		bool isRemoved() const final {
 			return isInternalRemoved;
 		}
 		virtual bool canSeeInvisibility() const {
@@ -192,8 +202,8 @@ class Creature : virtual public Thing
 		int64_t getTimeSinceLastMove() const;
 
 		int64_t getEventStepTicks(bool onlyDelay = false) const;
-		int32_t getStepDuration(Direction dir) const;
-		int32_t getStepDuration() const;
+		int64_t getStepDuration(Direction dir) const;
+		int64_t getStepDuration() const;
 		virtual int32_t getStepSpeed() const {
 			return getSpeed();
 		}
@@ -215,20 +225,20 @@ class Creature : virtual public Thing
 		void setBaseSpeed(uint32_t newBaseSpeed) {
 			baseSpeed = newBaseSpeed;
 		}
-		int32_t getBaseSpeed() const {
+		uint32_t getBaseSpeed() const {
 			return baseSpeed;
 		}
 
-		virtual int32_t getHealth() const {
+		int32_t getHealth() const {
 			return health;
 		}
 		virtual int32_t getMaxHealth() const {
 			return healthMax;
 		}
-		virtual int32_t getMana() const {
+		uint32_t getMana() const {
 			return mana;
 		}
-		virtual int32_t getMaxMana() const {
+		virtual uint32_t getMaxMana() const {
 			return 0;
 		}
 
@@ -247,7 +257,7 @@ class Creature : virtual public Thing
 		}
 
 		//walk functions
-		bool startAutoWalk(const std::list<Direction>& listDir);
+		void startAutoWalk(const std::list<Direction>& listDir);
 		void addEventWalk(bool firstStep = false);
 		void stopEventWalk();
 		virtual void goToFollowCreature();
@@ -258,7 +268,7 @@ class Creature : virtual public Thing
 		virtual void onWalkComplete() {}
 
 		//follow functions
-		virtual Creature* getFollowCreature() const {
+		Creature* getFollowCreature() const {
 			return followCreature;
 		}
 		virtual bool setFollowCreature(Creature* creature);
@@ -273,7 +283,7 @@ class Creature : virtual public Thing
 		}
 		virtual bool setAttackedCreature(Creature* creature);
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false);
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false);
 
 		void setMaster(Creature* creature) {
 			master = creature;
@@ -285,8 +295,8 @@ class Creature : virtual public Thing
 			return master;
 		}
 
-		virtual void addSummon(Creature* creature);
-		virtual void removeSummon(Creature* creature);
+		void addSummon(Creature* creature);
+		void removeSummon(Creature* creature);
 		const std::list<Creature*>& getSummons() const {
 			return summons;
 		}
@@ -302,6 +312,10 @@ class Creature : virtual public Thing
 		}
 		virtual float getDefenseFactor() const {
 			return 1.0f;
+		}
+
+		virtual uint8_t getSpeechBubble() const {
+			return SPEECHBUBBLE_NONE;
 		}
 
 		bool addCondition(Condition* condition, bool force = false);
@@ -333,7 +347,7 @@ class Creature : virtual public Thing
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
 		virtual void changeMana(int32_t manaChange);
 
-		virtual void gainHealth(Creature* attacker, int32_t healthGain);
+		void gainHealth(Creature* attacker, int32_t healthGain);
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 		virtual void drainMana(Creature* attacker, int32_t manaLoss);
 
@@ -344,7 +358,7 @@ class Creature : virtual public Thing
 			return false;
 		}
 
-		virtual void onDeath();
+		void onDeath();
 		virtual uint64_t getGainedExperience(Creature* attacker) const;
 		void addDamagePoints(Creature* attacker, int32_t damagePoints);
 		bool hasBeenAttacked(uint32_t attackerId);
@@ -353,13 +367,13 @@ class Creature : virtual public Thing
 		virtual void onAddCondition(ConditionType_t type);
 		virtual void onAddCombatCondition(ConditionType_t type);
 		virtual void onEndCondition(ConditionType_t type);
-		virtual void onTickCondition(ConditionType_t type, bool& bRemove);
+		void onTickCondition(ConditionType_t type, bool& bRemove);
 		virtual void onCombatRemoveCondition(Condition* condition);
 		virtual void onAttackedCreature(Creature*) {}
 		virtual void onAttacked();
 		virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 		virtual void onTargetCreatureGainHealth(Creature*, int32_t) {}
-		virtual void onAttackedCreatureKilled(Creature* target);
+		void onAttackedCreatureKilled(Creature* target);
 		virtual bool onKilledCreature(Creature* target, bool lastHit = true);
 		virtual void onGainExperience(uint64_t gainExp, Creature* target);
 		virtual void onAttackedCreatureBlockHit(BlockType_t) {}
@@ -375,25 +389,25 @@ class Creature : virtual public Thing
 		}
 
 		virtual void onThink(uint32_t interval);
-		virtual void onAttacking(uint32_t interval);
+		void onAttacking(uint32_t interval);
 		virtual void onWalk();
 		virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-		virtual void onAddTileItem(const Tile* tile, const Position& pos);
+		void onAddTileItem(const Tile* tile, const Position& pos);
 		virtual void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
 		                              const ItemType& oldType, const Item* newItem, const ItemType& newType);
 		virtual void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
 		                              const Item* item);
 
-		virtual void onCreatureAppear(const Creature* creature, bool isLogin);
-		virtual void onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout);
-		virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
+		virtual void onCreatureAppear(Creature* creature, bool);
+		virtual void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout);
+		virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport);
 
 		virtual void onAttackedCreatureDisappear(bool) {}
 		virtual void onFollowCreatureDisappear(bool) {}
 
-		virtual void onCreatureSay(const Creature*, SpeakClasses, const std::string&) {}
+		virtual void onCreatureSay(Creature*, SpeakClasses, const std::string&) {}
 
 		virtual void onCreatureConvinced(const Creature*, const Creature*) {}
 		virtual void onPlacedCreature() {}
@@ -420,40 +434,33 @@ class Creature : virtual public Thing
 		bool registerCreatureEvent(const std::string& name);
 		bool unregisterCreatureEvent(const std::string& name);
 
-		Cylinder* getParent() {
+		Cylinder* getParent() const final {
 			return _tile;
 		}
-		const Cylinder* getParent() const {
-			return _tile;
-		}
-		virtual void setParent(Cylinder* cylinder) {
-			_tile = dynamic_cast<Tile*>(cylinder);
-			_position = _tile->getTilePosition();
+		void setParent(Cylinder* cylinder) final {
+			_tile = reinterpret_cast<Tile*>(cylinder);
+			_position = _tile->getPosition();
 		}
 
-		inline const Position& getPosition() const {
+		inline const Position& getPosition() const final {
 			return _position;
 		}
 
-		Tile* getTile() {
+		Tile* getTile() final {
 			return _tile;
 		}
-		const Tile* getTile() const {
+		const Tile* getTile() const final {
 			return _tile;
 		}
 
 		int32_t getWalkCache(const Position& pos) const;
 
-		const Position& getLastPosition() const {
-			return lastPosition;
-		}
-		void setLastPosition(const Position& newLastPos) {
-			lastPosition = newLastPos;
-		}
-
 		static bool canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY);
 
-		virtual double getDamageRatio(Creature* attacker) const;
+		double getDamageRatio(Creature* attacker) const;
+
+		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, const FindPathParams& fpp) const;
+		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
 
 		void useThing2() {
 			++useCount;
@@ -473,6 +480,11 @@ class Creature : virtual public Thing
 			int32_t total;
 			int64_t ticks;
 		};
+
+		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
+		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
+		static const int32_t maxWalkCacheWidth = (mapWalkWidth - 1) / 2;
+		static const int32_t maxWalkCacheHeight = (mapWalkHeight - 1) / 2;
 
 		Position _position;
 
@@ -500,25 +512,20 @@ class Creature : virtual public Thing
 		uint32_t blockTicks;
 		uint32_t lastStepCost;
 		uint32_t baseSpeed;
+		uint32_t mana;
 		int32_t varSpeed;
 		int32_t health;
 		int32_t healthMax;
-		int32_t mana;
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
 
-		Position lastPosition;
-		Direction direction;
 		LightInfo internalLight;
 
-		static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
-		static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
+		Direction direction;
+		Skulls_t skull;
+
 		bool localMapCache[mapWalkHeight][mapWalkWidth];
-
-		static const int32_t maxWalkCacheWidth = (mapWalkWidth - 1) / 2;
-		static const int32_t maxWalkCacheHeight = (mapWalkHeight - 1) / 2;
-
 		bool isInternalRemoved;
 		bool isMapLoaded;
 		bool isUpdatingPath;
@@ -533,7 +540,7 @@ class Creature : virtual public Thing
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {
-			return (0 != (scriptEventsBitField & ((uint32_t)1 << event)));
+			return (0 != (scriptEventsBitField & (static_cast<uint32_t>(1) << event)));
 		}
 		CreatureEventList getCreatureEvents(CreatureEventType_t type);
 
@@ -560,7 +567,6 @@ class Creature : virtual public Thing
 
 		friend class Game;
 		friend class Map;
-		friend class Commands;
 		friend class LuaScriptInterface;
 };
 

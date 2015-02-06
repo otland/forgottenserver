@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stone Devourer" nameDescription="a stone devourer" race="undead" experience="2900" speed="250" manacost="0">
+	<health now="4200" max="4200"/>
+	<look type="486" corpse="18375"/>
+	<targetchange interval="4000" chance="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="80"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="122" attack="150"/>
+		<attack name="earth" interval="2000" chance="15" range="7" target="1" min="-230" max="-460">
+			<attribute key="shootEffect" value="smallearth"/>
+			<attribute key="areaEffect" value="stones"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="15" range="7" target="1" min="0" max="-650">
+			<attribute key="shootEffect" value="largerock"/>
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" target="0" length="5" spread="0" min="-150" max="-260">
+			<attribute key="areaEffect" value="stones"/>
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35"/>
+	<elements>
+		<element deathPercent="1"/>
+		<element icePercent="30"/>
+		<element physicalPercent="1"/>
+		<element energyPercent="30"/>
+		<element holyPercent="30"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Rumble!"/>
+	</voices>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity fire="1"/>
+		<immunity earth="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="7" chance="92000"/><!-- platinum coins -->
+		<item id="18431" chance="18679"/><!-- stone nose -->
+		<item id="18432" chance="16320"/><!-- crystalline spikes -->
+		<item id="7590" countmax="2" chance="15610"/><!-- GMP -->
+		<item id="7620" countmax="2" chance="15050"/><!-- MP -->
+		<item id="7589" countmax="2" chance="14900"/><!-- SMP -->
+		<item id="8473" chance="14410"/><!-- UHP -->
+		<item id="7588" countmax="2" chance="13840"/><!-- SHP -->
+		<item id="10549" chance="12850"/><!-- ancient stone -->
+		<item id="8748" chance="11360"/><!-- coal -->
+		<item id="18304" countmax="10" chance="9940"/><!-- crystalline arrows -->
+		<item id="18416" chance="6960"/><!-- green crystal splinter -->
+		<item id="18419" chance="6810"/><!-- cyan crystal fragment -->
+		<item id="7454" chance="3340"/><!-- glorious axe -->
+		<item id="2213" chance="2840"/><!-- dwarven ring-->
+		<item id="2197" chance="2270"/><!-- stone skin amulet -->
+		<item id="7437" chance="1490"/><!-- sapphire hammer-->
+		<item id="7452" chance="1490"/><!-- spiked squelcher -->
+		<item id="2454" chance="920"/><!-- war axe -->
+		<item id="2445" chance="850"/><!-- crystal mace -->
+		<item id="2393" chance="570"/><!-- giant sword -->
+	</loot>
+</monster>

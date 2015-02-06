@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "scriptmanager.h"
 
 #include "actions.h"
+#include "chat.h"
 #include "talkaction.h"
 #include "spells.h"
 #include "movement.h"
@@ -32,12 +33,15 @@
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
+Chat* g_chat = nullptr;
 Events* g_events = nullptr;
 GlobalEvents* g_globalEvents = nullptr;
 Spells* g_spells = nullptr;
 TalkActions* g_talkActions = nullptr;
 MoveEvents* g_moveEvents = nullptr;
 Weapons* g_weapons = nullptr;
+
+extern LuaEnvironment g_luaEnvironment;
 
 ScriptingManager::ScriptingManager()
 {
@@ -52,12 +56,19 @@ ScriptingManager::~ScriptingManager()
 	delete g_actions;
 	delete g_talkActions;
 	delete g_moveEvents;
+	delete g_chat;
 	delete g_creatureEvents;
 	delete g_globalEvents;
 }
 
 bool ScriptingManager::loadScriptSystems()
 {
+	if (g_luaEnvironment.loadFile("data/global.lua") == -1) {
+		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load data/global.lua" << std::endl;
+	}
+
+	g_chat = new Chat();
+
 	g_weapons = new Weapons();
 	if (!g_weapons->loadFromXml()) {
 		std::cout << "> ERROR: Unable to load weapons!" << std::endl;

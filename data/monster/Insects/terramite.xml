@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Terramite" nameDescription="a terramite" race="venom" experience="160" speed="220" manacost="0">
-<health now="365" max="365"/>
-<look type="346" corpse="11347"/>
-<targetchange interval="5000" chance="12"/>
-<strategy attack="100" defense="0"/>
+<monster name="Terramite" nameDescription="a terramite" race="venom" experience="160" speed="200" manacost="505">
+	<health now="365" max="365"/>
+	<look type="346" corpse="11347"/>
+	<targetchange interval="5000" chance="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
 		<flag pushable="0"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
@@ -18,18 +17,17 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="36"/>
-		<attack name="poison" interval="2000" chance="12" range="3" target="1" min="-5" max="-15">
+		<attack name="melee" interval="2000" skill="30" attack="50"/>
+		<attack name="earth" interval="2000" chance="15" range="7" target="1" min="-5" max="-16">
 			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="16" defense="19"/>
+	<defenses armor="20" defense="20"/>
 	<elements>
 		<element physicalPercent="5"/>
+		<element earthPercent="20"/>
 		<element firePercent="-10"/>
 		<element energyPercent="-5"/>
-		<element earthPercent="20"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>
@@ -38,9 +36,9 @@
 		<voice sentence="Zrp zrp!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="25" chance="31800" /> <!-- gold coin -->
-		<item id="11371" chance="9075" /> <!-- terramite legs -->
-		<item id="11369" chance="2450" /> <!-- terramite shell -->
-		<item id="11370" chance="3875" /> <!-- terramite eggs -->
+		<item id="2148" countmax="45" chance="97520" /><!-- gold coin -->
+		<item id="11371" chance="14880" /><!-- terramite legs -->
+		<item id="11370" countmax="3" chance="4680" /><!-- terramite eggs -->
+		<item id="11369" chance="7730" /><!-- terramite shell -->
 	</loot>
 </monster>

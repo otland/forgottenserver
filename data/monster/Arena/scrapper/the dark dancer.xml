@@ -2,7 +2,6 @@
 <monster name="The Dark Dancer" nameDescription="the dark dancer" race="blood" experience="435" speed="170" manacost="0">
 	<health now="855" max="855"/>
 	<look type="58" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

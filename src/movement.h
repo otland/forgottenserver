@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ enum MoveEvent_t {
 	MOVE_EVENT_ADD_ITEM_ITEMTILE,
 	MOVE_EVENT_REMOVE_ITEM_ITEMTILE,
 	MOVE_EVENT_LAST,
-	MOVE_EVENT_NONE,
+	MOVE_EVENT_NONE
 };
 
 class MoveEvent;
@@ -43,15 +43,19 @@ struct MoveEventList {
 	std::list<MoveEvent*> moveEvent[MOVE_EVENT_LAST];
 };
 
-typedef std::map<int32_t, bool> VocEquipMap;
+typedef std::map<uint16_t, bool> VocEquipMap;
 
-class MoveEvents : public BaseEvents
+class MoveEvents final : public BaseEvents
 {
 	public:
 		MoveEvents();
-		virtual ~MoveEvents();
+		~MoveEvents();
 
-		uint32_t onCreatureMove(Creature* creature, const Tile* tile, bool isIn);
+		// non-copyable
+		MoveEvents(const MoveEvents&) = delete;
+		MoveEvents& operator=(const MoveEvents&) = delete;
+
+		uint32_t onCreatureMove(Creature* creature, const Tile* tile, const Position& fromPos, MoveEvent_t eventType);
 		uint32_t onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 		uint32_t onPlayerDeEquip(Player* player, Item* item, slots_t slot, bool isRemoval);
 		uint32_t onItemMove(Item* item, Tile* tile, bool isAdd);
@@ -63,11 +67,11 @@ class MoveEvents : public BaseEvents
 		void clearMap(MoveListMap& map);
 
 		typedef std::map<Position, MoveEventList> MovePosListMap;
-		virtual void clear();
-		virtual LuaScriptInterface& getScriptInterface();
-		virtual std::string getScriptBaseName();
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
+		void clear() final;
+		LuaScriptInterface& getScriptInterface() final;
+		std::string getScriptBaseName() const final;
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
 		void registerItemID(int32_t itemId, MoveEvent_t eventType);
 		void registerActionID(int32_t actionId, MoveEvent_t eventType);
@@ -88,24 +92,23 @@ class MoveEvents : public BaseEvents
 		LuaScriptInterface m_scriptInterface;
 };
 
-typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos);
+typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
 typedef uint32_t (MoveFunction)(Item* item, Item* tileItem, const Position& pos);
 typedef uint32_t (EquipFunction)(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
 
-class MoveEvent : public Event
+class MoveEvent final : public Event
 {
 	public:
 		MoveEvent(LuaScriptInterface* _interface);
 		MoveEvent(const MoveEvent* copy);
-		virtual ~MoveEvent();
 
 		MoveEvent_t getEventType() const;
 		void setEventType(MoveEvent_t type);
 
-		virtual bool configureEvent(const pugi::xml_node& node);
-		virtual bool loadFunction(const std::string& functionName);
+		bool configureEvent(const pugi::xml_node& node) final;
+		bool loadFunction(const pugi::xml_attribute& attr) final;
 
-		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
+		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
 		uint32_t fireEquip(Player* player, Item* item, slots_t slot, bool boolean);
 
@@ -114,16 +117,16 @@ class MoveEvent : public Event
 		}
 
 		//scripting
-		bool executeStep(Creature* creature, Item* item, const Position& pos);
+		bool executeStep(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
 		bool executeEquip(Player* player, Item* item, slots_t slot);
 		bool executeAddRemItem(Item* item, Item* tileItem, const Position& pos);
 		//
 
 		//onEquip information
-		int32_t getReqLevel() const {
+		uint32_t getReqLevel() const {
 			return reqLevel;
 		}
-		int32_t getReqMagLv() const {
+		uint32_t getReqMagLv() const {
 			return reqMagLevel;
 		}
 		bool isPremium() const {
@@ -140,7 +143,7 @@ class MoveEvent : public Event
 		}
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const final;
 
 		static StepFunction StepInField;
 		static StepFunction StepOutField;
@@ -157,8 +160,8 @@ class MoveEvent : public Event
 		uint32_t slot;
 
 		//onEquip information
-		int32_t reqLevel;
-		int32_t reqMagLevel;
+		uint32_t reqLevel;
+		uint32_t reqMagLevel;
 		bool premium;
 		std::string vocationString;
 		uint32_t wieldInfo;

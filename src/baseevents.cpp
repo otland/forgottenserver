@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,11 +27,6 @@ extern LuaEnvironment g_luaEnvironment;
 BaseEvents::BaseEvents()
 {
 	m_loaded = false;
-}
-
-BaseEvents::~BaseEvents()
-{
-	//
 }
 
 bool BaseEvents::loadFromXml()
@@ -77,12 +72,7 @@ bool BaseEvents::loadFromXml()
 			std::string scriptFile = "scripts/" + std::string(scriptAttribute.as_string());
 			success = event->checkScript(basePath, scriptsName, scriptFile) && event->loadScript(basePath + scriptFile);
 		} else {
-			pugi::xml_attribute functionAttribute = node.attribute("function");
-			if (functionAttribute) {
-				success = event->loadFunction(functionAttribute.as_string());
-			} else {
-				success = false;
-			}
+			success = event->loadFunction(node.attribute("function"));
 		}
 
 		if (!success || !registerEvent(event, node)) {
@@ -113,11 +103,6 @@ Event::Event(const Event* copy)
 	m_scripted = copy->m_scripted;
 }
 
-Event::~Event()
-{
-	//
-}
-
 bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile)
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
@@ -138,10 +123,9 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 		return false;
 	}
 
-	const std::string& eventName = getScriptEventName();
-	int32_t id = testInterface->getEvent(eventName);
+	int32_t id = testInterface->getEvent(getScriptEventName());
 	if (id == -1) {
-		std::cout << "[Warning - Event::checkScript] Event " << eventName << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
 	}
 	return true;
@@ -171,21 +155,11 @@ bool Event::loadScript(const std::string& scriptFile)
 	return true;
 }
 
-bool Event::loadFunction(const std::string&)
-{
-	return false;
-}
-
 CallBack::CallBack()
 {
 	m_scriptId = 0;
 	m_scriptInterface = nullptr;
 	m_loaded = false;
-}
-
-CallBack::~CallBack()
-{
-	//
 }
 
 bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& name)
@@ -197,7 +171,7 @@ bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& n
 
 	m_scriptInterface = _interface;
 
-	int32_t id = m_scriptInterface->getEvent(name);
+	int32_t id = m_scriptInterface->getEvent(name.c_str());
 	if (id == -1) {
 		std::cout << "[Warning - CallBack::loadCallBack] Event " << name << " not found." << std::endl;
 		return false;

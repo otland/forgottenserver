@@ -3,7 +3,6 @@
 	<health now="4000" max="4000"/>
 	<look type="90" corpse="6025"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -32,19 +31,19 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="100"/>
 		<element icePercent="20"/>
 		<element firePercent="20"/>
 		<element energyPercent="20"/>
 	</elements>
 	<immunities>
+		<immunity death="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="2">
 		<summon name="Banshee" interval="2000" chance="20" max="2"/>
 	</summons>
 	<voices interval="5000" chance="10">
-	<voice sentence="Come my maidens, we have visitors!"/>
+		<voice sentence="Come my maidens, we have visitors!"/>
 		<voice sentence="Are you enjoying my music?"/>
 		<voice sentence="If music is the food of death, drop dead."/>
 	</voices>

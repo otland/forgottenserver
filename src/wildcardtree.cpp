@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,8 +49,8 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 			child->breakpoint = true;
 		}
 	} else {
-		children[ch] = WildcardTreeNode(breakpoint); // TODO: Use emplace
-		child = &children[ch];
+		auto pair = children.emplace(ch, breakpoint);
+		child = &pair.first->second;
 	}
 	return child;
 }
@@ -76,6 +76,9 @@ void WildcardTreeNode::remove(const std::string& str)
 	size_t len = str.length();
 	for (size_t pos = 0; pos < len; ++pos) {
 		cur = cur->getChild(str[pos]);
+		if (!cur) {
+			return;
+		}
 		path.push(cur);
 	}
 
@@ -104,7 +107,7 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 	for (size_t pos = 0; pos < query.length(); ++pos) {
 		cur = cur->getChild(query[pos]);
 		if (!cur) {
-			return RET_PLAYERWITHTHISNAMEISNOTONLINE;
+			return RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE;
 		}
 	}
 
@@ -113,9 +116,9 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 	do {
 		size_t size = cur->children.size();
 		if (size == 0) {
-			return RET_NOERROR;
+			return RETURNVALUE_NOERROR;
 		} else if (size > 1 || cur->breakpoint) {
-			return RET_NAMEISTOOAMBIGIOUS;
+			return RETURNVALUE_NAMEISTOOAMBIGIOUS;
 		}
 
 		auto it = cur->children.begin();

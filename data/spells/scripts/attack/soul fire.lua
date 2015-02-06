@@ -8,6 +8,6 @@ setConditionParam(condition, CONDITION_PARAM_DELAYED, 1)
 addDamageCondition(condition, 10, 2000, -10)
 setCombatCondition(combat, condition)
 
-function onCastSpell(cid, var)
+function onCastSpell(cid, var, isHotkey)
 	return doCombat(cid, combat, var)
 end

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Retching Horror" nameDescription="Retching Horror" race="fire" experience="3900" speed="250" manacost="0">
+	<health now="5300" max="5300"/>
+	<look type="588" corpse="22508"/>
+	<targetchange interval="4000" chance="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="80"/>
+		<attack name="drunk" interval="2000" chance="10" length="4" spread="3" target="1" duration="5000">
+			<attribute key="areaEffect" value="greenshimmer"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="4" target="1" speedchange="-700" duration="15000">
+			<attribute key="shootEffect" value="whirlwindclub"/>
+			<attribute key="areaEffect" value="stun"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="4" target="0" min="0" max="-110">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="1" target="1" min="0" max="-200">
+			<attribute key="shootEffect" value="sniperarrow"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="10" radius="1" target="1" min="-200" max="-350">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="fireattack"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30"/>
+	<elements>
+		<element physicalPercent="10"/>
+		<element deathPercent="20"/>
+		<element energyPercent="10"/>
+		<element icePercent="15"/>
+	</elements>
+	<immunities>
+		<immunity fire="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Wait for us, little maggot..." />
+		<voice sentence="We will devour you..."/>
+		<voice sentence="My little beetles, go forth, eat, feast!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="9" chance="100000"/><!-- platinum coin -->
+		<item id="2392" chance="1240"/><!-- fire sword -->
+		<item id="2519" chance="1700"/><!-- crown shield -->
+		<item id="2528" chance="550"/><!-- tower shield -->
+		<item id="22363" chance="3700"/><!-- broken dream -->
+		<item id="2789" countmax="2" chance="14000"/><!-- brown mushroom -->
+		<item id="3962" chance="4260"/><!-- beastslayer axe -->
+		<item id="7452" chance="410"/><!-- spiked squelcher -->
+		<item id="7386" chance="2500"/><!-- mercenary sword -->
+		<item id="7590" chance="12500"/><!-- great mana potion -->
+		<item id="7591" chance="15000"/><!-- great health potion -->
+		<item id="8910" chance="1800"/><!-- underworld rod -->
+		<item id="8920" chance="960"/><!-- wand of starstorm -->
+		<item id="22539" chance="16400"/><!-- goosebump leather -->
+		<item id="22541" chance="14000"/><!-- pool of chitinous glue -->
+	</loot>
+</monster>

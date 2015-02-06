@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,8 @@ bool Vocations::loadFromXml()
 
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
 
-		// TODO: Use emplace ( auto res = vocationsMap.emplace(id, id); Vocation& voc = res.first->second; )
-		vocationsMap[id] = Vocation(id);
-		Vocation& voc = vocationsMap[id];
+		auto res = vocationsMap.emplace(id, id);
+		Vocation& voc = res.first->second;
 
 		if ((attr = vocationNode.attribute("name"))) {
 			voc.name = attr.as_string();
@@ -60,7 +59,7 @@ bool Vocations::loadFromXml()
 		}
 
 		if ((attr = vocationNode.attribute("gaincap"))) {
-			voc.gainCap = pugi::cast<uint32_t>(attr.value());
+			voc.gainCap = pugi::cast<uint32_t>(attr.value()) * 100;
 		}
 
 		if ((attr = vocationNode.attribute("gainhp"))) {
@@ -183,9 +182,8 @@ uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
 uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 Vocation::Vocation(uint16_t id)
-	: id(id)
+	: name("none"), id(id)
 {
-	name = "none";
 	gainHealthTicks = 6;
 	gainHealthAmount = 1;
 	gainManaTicks = 6;
@@ -196,7 +194,7 @@ Vocation::Vocation(uint16_t id)
 	clientId = 0;
 	fromVocation = 0;
 
-	gainCap = 5;
+	gainCap = 500;
 	gainMana = 5;
 	gainHP = 5;
 	attackSpeed = 1500;
@@ -215,9 +213,9 @@ Vocation::Vocation(uint16_t id)
 	skillMultipliers[6] = 1.1f;
 }
 
-uint32_t Vocation::getReqSkillTries(int32_t skill, int32_t level)
+uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 {
-	if (skill < SKILL_FIRST || skill > SKILL_LAST) {
+	if (skill > SKILL_LAST) {
 		return 0;
 	}
 
@@ -226,7 +224,7 @@ uint32_t Vocation::getReqSkillTries(int32_t skill, int32_t level)
 		return it->second;
 	}
 
-	uint32_t tries = (uint32_t)(skillBase[skill] * pow((float)skillMultipliers[skill], (float)(level - 11)));
+	uint64_t tries = static_cast<uint64_t>(skillBase[skill] * std::pow(static_cast<double>(skillMultipliers[skill]), level - 11));
 	cacheSkill[skill][level] = tries;
 	return tries;
 }
@@ -238,7 +236,7 @@ uint64_t Vocation::getReqMana(uint32_t magLevel)
 		return it->second;
 	}
 
-	uint64_t reqMana = (uint64_t)(400 * pow(manaMultiplier, (int32_t)magLevel - 1));
+	uint64_t reqMana = static_cast<uint64_t>(400 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
 	uint32_t modResult = reqMana % 20;
 	if (modResult < 10) {
 		reqMana -= modResult;

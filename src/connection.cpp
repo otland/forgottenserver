@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,10 +29,6 @@
 bool Connection::m_logError = true;
 
 extern ConfigManager g_config;
-
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-uint32_t Connection::connectionCount = 0;
-#endif
 
 Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket* socket,
         boost::asio::io_service& io_service, ServicePort_ptr servicer)
@@ -79,7 +75,7 @@ void Connection::closeConnection()
 
 	m_connectionState = CONNECTION_STATE_REQUEST_CLOSE;
 
-	g_dispatcher->addTask(
+	g_dispatcher.addTask(
 	    createTask(std::bind(&Connection::closeConnectionTask, this)));
 }
 
@@ -140,7 +136,7 @@ void Connection::releaseConnection()
 {
 	if (m_refCount > 0) {
 		//Reschedule it and try again.
-		g_scheduler->addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Connection::releaseConnection, this)));
+		g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Connection::releaseConnection, this)));
 	} else {
 		deleteConnectionTask();
 	}
@@ -189,7 +185,7 @@ void Connection::deleteConnectionTask()
 void Connection::acceptConnection(Protocol* protocol)
 {
 	m_protocol = protocol;
-	m_protocol->onConnect();
+	g_dispatcher.addTask(createTask(std::bind(&Protocol::onConnect, m_protocol)));
 
 	acceptConnection();
 }
@@ -231,13 +227,26 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		return;
 	}
 
+	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - m_timeConnected) + 1);
+	if ((++m_packetsSent / timePassed) > static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND))) {
+		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
+		closeConnection();
+		m_connectionLock.unlock();
+		return;
+	}
+
+	if (timePassed > 2) {
+		m_timeConnected = time(nullptr);
+		m_packetsSent = 0;
+	}
+
 	try {
 		m_readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		m_readTimer.async_wait( std::bind(&Connection::handleReadTimeout, std::weak_ptr<Connection>(shared_from_this()),
 		                                    std::placeholders::_1));
 
 		// Read packet content
-		m_msg.setMessageLength(size + NetworkMessage::header_length);
+		m_msg.setLength(size + NetworkMessage::header_length);
 		boost::asio::async_read(getHandle(), boost::asio::buffer(m_msg.getBodyBuffer(), size),
 		                        std::bind(&Connection::parsePacket, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
@@ -267,24 +276,11 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		return;
 	}
 
-	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - m_timeConnected) + 1);
-	if ((++m_packetsSent / timePassed) > (uint32_t)g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND)) {
-		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
-		closeConnection();
-		m_connectionLock.unlock();
-		return;
-	}
-
-	if (timePassed > 2) {
-		m_timeConnected = time(nullptr);
-		m_packetsSent = 0;
-	}
-
 	//Check packet checksum
 	uint32_t checksum;
-	int32_t len = m_msg.getMessageLength() - m_msg.getReadPos() - 4;
+	int32_t len = m_msg.getLength() - m_msg.getPosition() - 4;
 	if (len > 0) {
-		checksum = adlerChecksum(m_msg.getBuffer() + m_msg.getReadPos() + 4, len);
+		checksum = adlerChecksum(m_msg.getBuffer() + m_msg.getPosition() + 4, len);
 	} else {
 		checksum = 0;
 	}
@@ -368,7 +364,7 @@ void Connection::internalSend(OutputMessage_ptr msg)
 		                                     std::placeholders::_1));
 
 		boost::asio::async_write(getHandle(),
-		                         boost::asio::buffer(msg->getOutputBuffer(), msg->getMessageLength()),
+		                         boost::asio::buffer(msg->getOutputBuffer(), msg->getLength()),
 		                         std::bind(&Connection::onWriteOperation, shared_from_this(), msg, std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {

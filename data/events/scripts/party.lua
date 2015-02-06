@@ -1,4 +1,3 @@
-
 function Party:onJoin(player)
 	return true
 end

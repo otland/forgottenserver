@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,23 +26,25 @@ class ConfigManager
 {
 	public:
 		ConfigManager();
-		~ConfigManager();
 
 		enum boolean_config_t {
 			ALLOW_CHANGEOUTFIT = 0,
 			CANNOT_ATTACK_SAME_LOOKFEET = 1,
 			ONE_PLAYER_ON_ACCOUNT = 2,
 			AIMBOT_HOTKEY_ENABLED = 3,
-			REMOVE_AMMO = 4,
-			REMOVE_RUNE_CHARGES = 5,
-			EXPERIENCE_FROM_PLAYERS = 6,
-			FREE_PREMIUM = 7,
-			REPLACE_KICK_ON_LOGIN = 8,
-			ALLOW_CLONES = 9,
-			BIND_ONLY_GLOBAL_ADDRESS = 10,
-			OPTIMIZE_DATABASE = 11,
-			MARKET_PREMIUM = 12,
+			REMOVE_RUNE_CHARGES = 4,
+			EXPERIENCE_FROM_PLAYERS = 5,
+			FREE_PREMIUM = 6,
+			REPLACE_KICK_ON_LOGIN = 7,
+			ALLOW_CLONES = 8,
+			BIND_ONLY_GLOBAL_ADDRESS = 9,
+			OPTIMIZE_DATABASE = 10,
+			MARKET_PREMIUM = 11,
+			EMOTE_SPELLS = 12,
 			STAMINA_SYSTEM = 13,
+			WARN_UNSAFE_SCRIPTS = 14,
+			CONVERT_UNSAFE_SCRIPTS = 15,
+			CLASSIC_EQUIPMENT_SLOTS = 16,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
@@ -111,9 +113,8 @@ class ConfigManager
 		bool getBoolean(boolean_config_t _what) const;
 
 	private:
-		static std::string getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default = "");
+		static std::string getGlobalString(lua_State* _L, const std::string& _identifier, const char* _default);
 		static int32_t getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default = 0);
-		static std::string getGlobalStringField(lua_State* _L, const std::string& _identifier, const int32_t _key, const std::string& _default = "");
 
 		bool m_isLoaded;
 		std::string m_confString[LAST_STRING_CONFIG];

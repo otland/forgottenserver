@@ -1,15 +1,14 @@
-function onSay(cid, words, param)
-	local player = Player(cid)
+function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
 		return true
 	end
-	
+
 	local creature = Creature(param)
 	if not creature then
 		player:sendCancelMessage("A creature with that name could not be found.")
 		return false
 	end
-	
+
 	local oldPosition = creature:getPosition()
 	local newPosition = creature:getClosestFreePosition(player:getPosition(), false)
 	if newPosition.x == 0 then

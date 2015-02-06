@@ -3,7 +3,6 @@
 	<health now="4600" max="4600"/>
 	<look type="287" corpse="8937"/>
 	<targetchange interval="5000" chance="10"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -40,7 +39,7 @@
 		<immunity death="1"/>
 		<immunity invisible="1"/>
 	</immunities>
-		<summons maxSummons="1">
+	<summons maxSummons="1">
 		<summon name="Banshee" interval="4000" chance="50"/>
 	</summons>
 	<loot>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Yielothax" nameDescription="Yielothax" race="venom" experience="1250" speed="240" manacost="0">
+	<health now="1500" max="1500"/>
+	<look type="408" corpse="13752"/>
+	<targetchange interval="4000" chance="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="75"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" skill="65" attack="54"/>
+		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="0" min="-100" max="-130">
+			<attribute key="areaEffect" value="energyarea"/>
+		</attack>
+		<attack name="earth" interval="2000" chance="15" radius="3" target="0" min="-150" max="-250">
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="earth" interval="2000" chance="15" radius="3" target="1" min="-70" max="-120">
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" length="4" spread="3" min="-50" max="-150">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="100" max="150">
+			<attribute key="areaEffect" value="greenspark"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="50"/>
+		<element firePercent="25"/>
+		<element physicalPercent="-10"/>
+		<element energyPercent="-5"/>
+		<element icePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="IIEEH!! Iiih iih ih iiih!!!" yell="1"/>
+		<voice sentence="Bsssssssm Bssssssm Bsssssssssssm!" yell="1"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="27" chance="50000"/><!-- gold coin -->
+		<item id="7588" chance="20000"/><!-- strong health potion -->
+		<item id="7589" chance="20000"/><!-- strong mana potion -->
+		<item id="2789" countmax="3" chance="9090"/><!-- brown mushroom -->
+		<item id="2145" countmax="5" chance="4761"/><!-- small diamond -->
+		<item id="2164" chance="3846"/><!-- might ring -->
+		<item id="2151" chance="917"/><!-- talon -->
+		<item id="7889" chance="862"/><!-- lightning pendant -->
+		<item id="10221" chance="571"/><!-- shockwave amulet -->
+		<item id="2438" chance="564"/><!-- epee -->
+		<item id="7440" chance="490"/><!-- mastermind potion -->
+		<item id="2189" chance="523"/><!-- wand of cosmic energy -->
+		<item id="7895" chance="480"/><!-- lightning legs -->
+		<item id="13942" chance="320"/><!-- yielocks -->
+		<item id="13881" chance="300"/><!-- yielowax -->
+		<item id="13877" chance="261"/><!-- broken ring of ending -->
+	</loot>
+</monster>

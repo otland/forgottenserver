@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,19 @@
 #include "otpch.h"
 
 #include <cctype>
-#include <random>
+#include <climits>
 
 #include "tools.h"
 #include "configmanager.h"
 
 extern ConfigManager g_config;
 
-inline uint32_t circularShift(int bits, uint32_t value)
+inline static uint32_t circularShift(int bits, uint32_t value)
 {
 	return (value << bits) | (value >> (32 - bits));
 }
 
-void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
+static void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 {
 	uint32_t W[80];
 	for (int i = 0; i < 16; ++i) {
@@ -85,17 +85,15 @@ std::string transformToSHA1(const std::string& input)
 
 	uint8_t messageBlock[64];
 	size_t index = 0;
+
 	uint32_t length_low = 0;
 	uint32_t length_high = 0;
-
 	for (char ch : input) {
 		messageBlock[index++] = ch;
 
 		length_low += 8;
 		if (length_low == 0) {
-			if (++length_high == 0) {
-				return std::string();
-			}
+			length_high++;
 		}
 
 		if (index == 64) {
@@ -202,7 +200,7 @@ IntegerVec vectorAtoi(const StringVec& stringVector)
 {
 	IntegerVec returnVector;
 	for (const auto& string : stringVector) {
-		returnVector.push_back(atoi(string.c_str()));
+		returnVector.push_back(std::stoi(string));
 	}
 	return returnVector;
 }
@@ -245,11 +243,6 @@ bool boolean_random(double probability/* = 0.5*/)
 {
 	static std::bernoulli_distribution booleanRand;
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
-}
-
-bool isNumber(char character)
-{
-	return (character >= 48 && character <= 57);
 }
 
 void trimString(std::string& str)
@@ -302,24 +295,24 @@ std::string formatDateShort(time_t time)
 
 Direction getDirection(const std::string& string)
 {
-	Direction direction = NORTH;
+	Direction direction = DIRECTION_NORTH;
 
 	if (string == "north" || string == "n" || string == "0") {
-		direction = NORTH;
+		direction = DIRECTION_NORTH;
 	} else if (string == "east" || string == "e" || string == "1") {
-		direction = EAST;
+		direction = DIRECTION_EAST;
 	} else if (string == "south" || string == "s" || string == "2") {
-		direction = SOUTH;
+		direction = DIRECTION_SOUTH;
 	} else if (string == "west" || string == "w" || string == "3") {
-		direction = WEST;
+		direction = DIRECTION_WEST;
 	} else if (string == "southwest" || string == "south west" || string == "south-west" || string == "sw" || string == "4") {
-		direction = SOUTHWEST;
+		direction = DIRECTION_SOUTHWEST;
 	} else if (string == "southeast" || string == "south east" || string == "south-east" || string == "se" || string == "5") {
-		direction = SOUTHEAST;
+		direction = DIRECTION_SOUTHEAST;
 	} else if (string == "northwest" || string == "north west" || string == "north-west" || string == "nw" || string == "6") {
-		direction = NORTHWEST;
+		direction = DIRECTION_NORTHWEST;
 	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" || string == "7") {
-		direction = NORTHEAST;
+		direction = DIRECTION_NORTHEAST;
 	}
 
 	return direction;
@@ -328,38 +321,38 @@ Direction getDirection(const std::string& string)
 Position getNextPosition(Direction direction, Position pos)
 {
 	switch (direction) {
-		case NORTH:
+		case DIRECTION_NORTH:
 			pos.y--;
 			break;
 
-		case SOUTH:
+		case DIRECTION_SOUTH:
 			pos.y++;
 			break;
 
-		case WEST:
+		case DIRECTION_WEST:
 			pos.x--;
 			break;
 
-		case EAST:
+		case DIRECTION_EAST:
 			pos.x++;
 			break;
 
-		case SOUTHWEST:
+		case DIRECTION_SOUTHWEST:
 			pos.x--;
 			pos.y++;
 			break;
 
-		case NORTHWEST:
+		case DIRECTION_NORTHWEST:
 			pos.x--;
 			pos.y--;
 			break;
 
-		case NORTHEAST:
+		case DIRECTION_NORTHEAST:
 			pos.x++;
 			pos.y--;
 			break;
 
-		case SOUTHEAST:
+		case DIRECTION_SOUTHEAST:
 			pos.x++;
 			pos.y++;
 			break;
@@ -377,32 +370,32 @@ Direction getDirectionTo(const Position& from, const Position& to)
 
 	int32_t x_offset = Position::getOffsetX(from, to);
 	if (x_offset < 0) {
-		dir = EAST;
+		dir = DIRECTION_EAST;
 		x_offset = std::abs(x_offset);
 	} else {
-		dir = WEST;
+		dir = DIRECTION_WEST;
 	}
 
 	int32_t y_offset = Position::getOffsetY(from, to);
 	if (y_offset >= 0) {
 		if (y_offset > x_offset) {
-			dir = NORTH;
+			dir = DIRECTION_NORTH;
 		} else if (y_offset == x_offset) {
-			if (dir == EAST) {
-				dir = NORTHEAST;
+			if (dir == DIRECTION_EAST) {
+				dir = DIRECTION_NORTHEAST;
 			} else {
-				dir = NORTHWEST;
+				dir = DIRECTION_NORTHWEST;
 			}
 		}
 	} else {
 		y_offset = std::abs(y_offset);
 		if (y_offset > x_offset) {
-			dir = SOUTH;
+			dir = DIRECTION_SOUTH;
 		} else if (y_offset == x_offset) {
-			if (dir == EAST) {
-				dir = SOUTHEAST;
+			if (dir == DIRECTION_EAST) {
+				dir = DIRECTION_SOUTHEAST;
 			} else {
-				dir = SOUTHWEST;
+				dir = DIRECTION_SOUTHWEST;
 			}
 		}
 	}
@@ -429,140 +422,145 @@ struct AmmoTypeNames {
 	Ammo_t ammoType;
 };
 
-struct AmmoActionNames {
+struct WeaponActionNames {
 	const char* name;
-	AmmoAction_t ammoAction;
+	WeaponAction_t weaponAction;
+};
+
+struct SkullNames {
+	const char* name;
+	Skulls_t skull;
 };
 
 MagicEffectNames magicEffectNames[] = {
-	{"redspark",		NM_ME_DRAW_BLOOD},
-	{"bluebubble",		NM_ME_LOSE_ENERGY},
-	{"poff",		NM_ME_POFF},
-	{"yellowspark",		NM_ME_BLOCKHIT},
-	{"explosionarea",	NM_ME_EXPLOSION_AREA},
-	{"explosion",		NM_ME_EXPLOSION_DAMAGE},
-	{"firearea",		NM_ME_FIRE_AREA},
-	{"yellowbubble",	NM_ME_YELLOW_RINGS},
-	{"greenbubble",		NM_ME_POISON_RINGS},
-	{"blackspark",		NM_ME_HIT_AREA},
-	{"teleport",		NM_ME_TELEPORT},
-	{"energy",		NM_ME_ENERGY_DAMAGE},
-	{"blueshimmer",		NM_ME_MAGIC_ENERGY},
-	{"redshimmer",		NM_ME_MAGIC_BLOOD},
-	{"greenshimmer",	NM_ME_MAGIC_POISON},
-	{"fire",		NM_ME_HITBY_FIRE},
-	{"greenspark",		NM_ME_POISON},
-	{"mortarea",		NM_ME_MORT_AREA},
-	{"greennote",		NM_ME_SOUND_GREEN},
-	{"rednote",		NM_ME_SOUND_RED},
-	{"poison",		NM_ME_POISON_AREA},
-	{"yellownote",		NM_ME_SOUND_YELLOW},
-	{"purplenote",		NM_ME_SOUND_PURPLE},
-	{"bluenote",		NM_ME_SOUND_BLUE},
-	{"whitenote",		NM_ME_SOUND_WHITE},
-	{"bubbles",		NM_ME_BUBBLES},
-	{"dice",		NM_ME_CRAPS},
-	{"giftwraps",		NM_ME_GIFT_WRAPS},
-	{"yellowfirework",	NM_ME_FIREWORK_YELLOW},
-	{"redfirework",		NM_ME_FIREWORK_RED},
-	{"bluefirework",	NM_ME_FIREWORK_BLUE},
-	{"stun",		NM_ME_STUN},
-	{"sleep",		NM_ME_SLEEP},
-	{"watercreature",	NM_ME_WATERCREATURE},
-	{"groundshaker",	NM_ME_GROUNDSHAKER},
-	{"hearts",		NM_ME_HEARTS},
-	{"fireattack",		NM_ME_FIREATTACK},
-	{"energyarea",		NM_ME_ENERGY_AREA},
-	{"smallclouds",		NM_ME_SMALLCLOUDS},
-	{"holydamage",		NM_ME_HOLYDAMAGE},
-	{"bigclouds",		NM_ME_BIGCLOUDS},
-	{"icearea",		NM_ME_ICEAREA},
-	{"icetornado",		NM_ME_ICETORNADO},
-	{"iceattack",		NM_ME_ICEATTACK},
-	{"stones",		NM_ME_STONES},
-	{"smallplants",		NM_ME_SMALLPLANTS},
-	{"carniphila",		NM_ME_CARNIPHILA},
-	{"purpleenergy",	NM_ME_PURPLEENERGY},
-	{"yellowenergy",	NM_ME_YELLOWENERGY},
-	{"holyarea",		NM_ME_HOLYAREA},
-	{"bigplants",		NM_ME_BIGPLANTS},
-	{"cake",		NM_ME_CAKE},
-	{"giantice",		NM_ME_GIANTICE},
-	{"watersplash",		NM_ME_WATERSPLASH},
-	{"plantattack",		NM_ME_PLANTATTACK},
-	{"tutorialarrow",	NM_ME_TUTORIALARROW},
-	{"tutorialsquare",	NM_ME_TUTORIALSQUARE},
-	{"mirrorhorizontal",	NM_ME_MIRRORHORIZONTAL},
-	{"mirrorvertical",	NM_ME_MIRRORVERTICAL},
-	{"skullhorizontal",	NM_ME_SKULLHORIZONTAL},
-	{"skullvertical",	NM_ME_SKULLVERTICAL},
-	{"assassin",		NM_ME_ASSASSIN},
-	{"stepshorizontal",	NM_ME_STEPSHORIZONTAL},
-	{"bloodysteps",		NM_ME_BLOODYSTEPS},
-	{"stepsvertical",	NM_ME_STEPSVERTICAL},
-	{"yalaharighost",	NM_ME_YALAHARIGHOST},
-	{"bats",		NM_ME_BATS},
-	{"smoke",		NM_ME_SMOKE},
-	{"insects",		NM_ME_INSECTS},
-	{"dragonhead",		NM_ME_DRAGONHEAD},
-	{"orcshaman",		NM_ME_ORCSHAMAN},
-	{"orcshamanfire",	NM_ME_ORCSHAMAN_FIRE},
-	{"thunder",		NM_ME_THUNDER},
-	{"ferumbras",		NM_ME_FERUMBRAS},
-	{"confettihorizontal",	NM_ME_CONFETTI_HORIZONTAL},
-	{"confettivertical",	NM_ME_CONFETTI_VERTICAL},
-	{"blacksmoke",		NM_ME_BLACKSMOKE}
+	{"redspark",		CONST_ME_DRAWBLOOD},
+	{"bluebubble",		CONST_ME_LOSEENERGY},
+	{"poff",		CONST_ME_POFF},
+	{"yellowspark",		CONST_ME_BLOCKHIT},
+	{"explosionarea",	CONST_ME_EXPLOSIONAREA},
+	{"explosion",		CONST_ME_EXPLOSIONHIT},
+	{"firearea",		CONST_ME_FIREAREA},
+	{"yellowbubble",	CONST_ME_YELLOW_RINGS},
+	{"greenbubble",		CONST_ME_GREEN_RINGS},
+	{"blackspark",		CONST_ME_HITAREA},
+	{"teleport",		CONST_ME_TELEPORT},
+	{"energy",		CONST_ME_ENERGYHIT},
+	{"blueshimmer",		CONST_ME_MAGIC_BLUE},
+	{"redshimmer",		CONST_ME_MAGIC_RED},
+	{"greenshimmer",	CONST_ME_MAGIC_GREEN},
+	{"fire",		CONST_ME_HITBYFIRE},
+	{"greenspark",		CONST_ME_HITBYPOISON},
+	{"mortarea",		CONST_ME_MORTAREA},
+	{"greennote",		CONST_ME_SOUND_GREEN},
+	{"rednote",		CONST_ME_SOUND_RED},
+	{"poison",		CONST_ME_POISONAREA},
+	{"yellownote",		CONST_ME_SOUND_YELLOW},
+	{"purplenote",		CONST_ME_SOUND_PURPLE},
+	{"bluenote",		CONST_ME_SOUND_BLUE},
+	{"whitenote",		CONST_ME_SOUND_WHITE},
+	{"bubbles",		CONST_ME_BUBBLES},
+	{"dice",		CONST_ME_CRAPS},
+	{"giftwraps",		CONST_ME_GIFT_WRAPS},
+	{"yellowfirework",	CONST_ME_FIREWORK_YELLOW},
+	{"redfirework",		CONST_ME_FIREWORK_RED},
+	{"bluefirework",	CONST_ME_FIREWORK_BLUE},
+	{"stun",		CONST_ME_STUN},
+	{"sleep",		CONST_ME_SLEEP},
+	{"watercreature",	CONST_ME_WATERCREATURE},
+	{"groundshaker",	CONST_ME_GROUNDSHAKER},
+	{"hearts",		CONST_ME_HEARTS},
+	{"fireattack",		CONST_ME_FIREATTACK},
+	{"energyarea",		CONST_ME_ENERGYAREA},
+	{"smallclouds",		CONST_ME_SMALLCLOUDS},
+	{"holydamage",		CONST_ME_HOLYDAMAGE},
+	{"bigclouds",		CONST_ME_BIGCLOUDS},
+	{"icearea",		CONST_ME_ICEAREA},
+	{"icetornado",		CONST_ME_ICETORNADO},
+	{"iceattack",		CONST_ME_ICEATTACK},
+	{"stones",		CONST_ME_STONES},
+	{"smallplants",		CONST_ME_SMALLPLANTS},
+	{"carniphila",		CONST_ME_CARNIPHILA},
+	{"purpleenergy",	CONST_ME_PURPLEENERGY},
+	{"yellowenergy",	CONST_ME_YELLOWENERGY},
+	{"holyarea",		CONST_ME_HOLYAREA},
+	{"bigplants",		CONST_ME_BIGPLANTS},
+	{"cake",		CONST_ME_CAKE},
+	{"giantice",		CONST_ME_GIANTICE},
+	{"watersplash",		CONST_ME_WATERSPLASH},
+	{"plantattack",		CONST_ME_PLANTATTACK},
+	{"tutorialarrow",	CONST_ME_TUTORIALARROW},
+	{"tutorialsquare",	CONST_ME_TUTORIALSQUARE},
+	{"mirrorhorizontal",	CONST_ME_MIRRORHORIZONTAL},
+	{"mirrorvertical",	CONST_ME_MIRRORVERTICAL},
+	{"skullhorizontal",	CONST_ME_SKULLHORIZONTAL},
+	{"skullvertical",	CONST_ME_SKULLVERTICAL},
+	{"assassin",		CONST_ME_ASSASSIN},
+	{"stepshorizontal",	CONST_ME_STEPSHORIZONTAL},
+	{"bloodysteps",		CONST_ME_BLOODYSTEPS},
+	{"stepsvertical",	CONST_ME_STEPSVERTICAL},
+	{"yalaharighost",	CONST_ME_YALAHARIGHOST},
+	{"bats",		CONST_ME_BATS},
+	{"smoke",		CONST_ME_SMOKE},
+	{"insects",		CONST_ME_INSECTS},
+	{"dragonhead",		CONST_ME_DRAGONHEAD},
+	{"orcshaman",		CONST_ME_ORCSHAMAN},
+	{"orcshamanfire",	CONST_ME_ORCSHAMAN_FIRE},
+	{"thunder",		CONST_ME_THUNDER},
+	{"ferumbras",		CONST_ME_FERUMBRAS},
+	{"confettihorizontal",	CONST_ME_CONFETTI_HORIZONTAL},
+	{"confettivertical",	CONST_ME_CONFETTI_VERTICAL},
+	{"blacksmoke",		CONST_ME_BLACKSMOKE}
 };
 
 ShootTypeNames shootTypeNames[] = {
-	{"spear",		NM_SHOOT_SPEAR},
-	{"bolt",		NM_SHOOT_BOLT},
-	{"arrow",		NM_SHOOT_ARROW},
-	{"fire",		NM_SHOOT_FIRE},
-	{"energy",		NM_SHOOT_ENERGY},
-	{"poisonarrow",		NM_SHOOT_POISONARROW},
-	{"burstarrow",		NM_SHOOT_BURSTARROW},
-	{"throwingstar",	NM_SHOOT_THROWINGSTAR},
-	{"throwingknife",	NM_SHOOT_THROWINGKNIFE},
-	{"smallstone",		NM_SHOOT_SMALLSTONE},
-	{"death",		NM_SHOOT_DEATH},
-	{"largerock",		NM_SHOOT_LARGEROCK},
-	{"snowball",		NM_SHOOT_SNOWBALL},
-	{"powerbolt",		NM_SHOOT_POWERBOLT},
-	{"poison",		NM_SHOOT_POISONFIELD},
-	{"infernalbolt",	NM_SHOOT_INFERNALBOLT},
-	{"huntingspear",	NM_SHOOT_HUNTINGSPEAR},
-	{"enchantedspear",	NM_SHOOT_ENCHANTEDSPEAR},
-	{"redstar",		NM_SHOOT_REDSTAR},
-	{"greenstar",		NM_SHOOT_GREENSTAR},
-	{"royalspear",		NM_SHOOT_ROYALSPEAR},
-	{"sniperarrow",		NM_SHOOT_SNIPERARROW},
-	{"onyxarrow",		NM_SHOOT_ONYXARROW},
-	{"piercingbolt",	NM_SHOOT_PIERCINGBOLT},
-	{"whirlwindsword",	NM_SHOOT_WHIRLWINDSWORD},
-	{"whirlwindaxe",	NM_SHOOT_WHIRLWINDAXE},
-	{"whirlwindclub",	NM_SHOOT_WHIRLWINDCLUB},
-	{"etherealspear",	NM_SHOOT_ETHEREALSPEAR},
-	{"ice",			NM_SHOOT_ICE},
-	{"earth",		NM_SHOOT_EARTH},
-	{"holy",		NM_SHOOT_HOLY},
-	{"suddendeath",		NM_SHOOT_SUDDENDEATH},
-	{"flasharrow",		NM_SHOOT_FLASHARROW},
-	{"flammingarrow",	NM_SHOOT_FLAMMINGARROW},
-	{"shiverarrow",		NM_SHOOT_SHIVERARROW},
-	{"energyball",		NM_SHOOT_ENERGYBALL},
-	{"smallice",		NM_SHOOT_SMALLICE},
-	{"smallholy",		NM_SHOOT_SMALLHOLY},
-	{"smallearth",		NM_SHOOT_SMALLEARTH},
-	{"eartharrow",		NM_SHOOT_EARTHARROW},
-	{"explosion",		NM_SHOOT_EXPLOSION},
-	{"cake",		NM_SHOOT_CAKE},
-	{"tarsalarrow",		NM_SHOOT_TARSALARROW},
-	{"vortexbolt",		NM_SHOOT_VORTEXBOLT},
-	{"prismaticbolt",	NM_SHOOT_PRISMATICBOLT},
-	{"crystallinearrow",	NM_SHOOT_CRYSTALLINEARROW},
-	{"drillbolt",		NM_SHOOT_DRILLBOLT},
-	{"envenomedarrow",	NM_SHOOT_ENVENOMEDARROW}
+	{"spear",		CONST_ANI_SPEAR},
+	{"bolt",		CONST_ANI_BOLT},
+	{"arrow",		CONST_ANI_ARROW},
+	{"fire",		CONST_ANI_FIRE},
+	{"energy",		CONST_ANI_ENERGY},
+	{"poisonarrow",		CONST_ANI_POISONARROW},
+	{"burstarrow",		CONST_ANI_BURSTARROW},
+	{"throwingstar",	CONST_ANI_THROWINGSTAR},
+	{"throwingknife",	CONST_ANI_THROWINGKNIFE},
+	{"smallstone",		CONST_ANI_SMALLSTONE},
+	{"death",		CONST_ANI_DEATH},
+	{"largerock",		CONST_ANI_LARGEROCK},
+	{"snowball",		CONST_ANI_SNOWBALL},
+	{"powerbolt",		CONST_ANI_POWERBOLT},
+	{"poison",		CONST_ANI_POISON},
+	{"infernalbolt",	CONST_ANI_INFERNALBOLT},
+	{"huntingspear",	CONST_ANI_HUNTINGSPEAR},
+	{"enchantedspear",	CONST_ANI_ENCHANTEDSPEAR},
+	{"redstar",		CONST_ANI_REDSTAR},
+	{"greenstar",		CONST_ANI_GREENSTAR},
+	{"royalspear",		CONST_ANI_ROYALSPEAR},
+	{"sniperarrow",		CONST_ANI_SNIPERARROW},
+	{"onyxarrow",		CONST_ANI_ONYXARROW},
+	{"piercingbolt",	CONST_ANI_PIERCINGBOLT},
+	{"whirlwindsword",	CONST_ANI_WHIRLWINDSWORD},
+	{"whirlwindaxe",	CONST_ANI_WHIRLWINDAXE},
+	{"whirlwindclub",	CONST_ANI_WHIRLWINDCLUB},
+	{"etherealspear",	CONST_ANI_ETHEREALSPEAR},
+	{"ice",			CONST_ANI_ICE},
+	{"earth",		CONST_ANI_EARTH},
+	{"holy",		CONST_ANI_HOLY},
+	{"suddendeath",		CONST_ANI_SUDDENDEATH},
+	{"flasharrow",		CONST_ANI_FLASHARROW},
+	{"flammingarrow",	CONST_ANI_FLAMMINGARROW},
+	{"shiverarrow",		CONST_ANI_SHIVERARROW},
+	{"energyball",		CONST_ANI_ENERGYBALL},
+	{"smallice",		CONST_ANI_SMALLICE},
+	{"smallholy",		CONST_ANI_SMALLHOLY},
+	{"smallearth",		CONST_ANI_SMALLEARTH},
+	{"eartharrow",		CONST_ANI_EARTHARROW},
+	{"explosion",		CONST_ANI_EXPLOSION},
+	{"cake",		CONST_ANI_CAKE},
+	{"tarsalarrow",		CONST_ANI_TARSALARROW},
+	{"vortexbolt",		CONST_ANI_VORTEXBOLT},
+	{"prismaticbolt",	CONST_ANI_PRISMATICBOLT},
+	{"crystallinearrow",	CONST_ANI_CRYSTALLINEARROW},
+	{"drillbolt",		CONST_ANI_DRILLBOLT},
+	{"envenomedarrow",	CONST_ANI_ENVENOMEDARROW}
 };
 
 CombatTypeNames combatTypeNames[] = {
@@ -606,11 +604,20 @@ AmmoTypeNames ammoTypeNames[] = {
 	{"eartharrow",		AMMO_ARROW}
 };
 
-AmmoActionNames ammoActionNames[] = {
-	{"move",		AMMOACTION_MOVE},
-	{"moveback",		AMMOACTION_MOVEBACK},
-	{"removecharge",	AMMOACTION_REMOVECHARGE},
-	{"removecount",		AMMOACTION_REMOVECOUNT}
+WeaponActionNames weaponActionNames[] = {
+	{"move",		WEAPONACTION_MOVE},
+	{"removecharge",	WEAPONACTION_REMOVECHARGE},
+	{"removecount",		WEAPONACTION_REMOVECOUNT}
+};
+
+SkullNames skullNames[] = {
+	{"none",	SKULL_NONE},
+	{"yellow",	SKULL_YELLOW},
+	{"green",	SKULL_GREEN},
+	{"white",	SKULL_WHITE},
+	{"red",		SKULL_RED},
+	{"black",	SKULL_BLACK},
+	{"orange",	SKULL_ORANGE},
 };
 
 MagicEffectClasses getMagicEffect(const std::string& strValue)
@@ -620,7 +627,7 @@ MagicEffectClasses getMagicEffect(const std::string& strValue)
 			return magicEffectNames[i].effect;
 		}
 	}
-	return NM_ME_UNK;
+	return CONST_ME_NONE;
 }
 
 ShootType_t getShootType(const std::string& strValue)
@@ -630,7 +637,7 @@ ShootType_t getShootType(const std::string& strValue)
 			return shootTypeNames[i].shoot;
 		}
 	}
-	return NM_SHOOT_UNK;
+	return CONST_ANI_NONE;
 }
 
 CombatType_t getCombatType(const std::string& strValue)
@@ -663,17 +670,27 @@ Ammo_t getAmmoType(const std::string& strValue)
 	return AMMO_NONE;
 }
 
-AmmoAction_t getAmmoAction(const std::string& strValue)
+WeaponAction_t getWeaponAction(const std::string& strValue)
 {
-	for (size_t i = 0, size = sizeof(ammoActionNames) / sizeof(AmmoActionNames); i < size; ++i) {
-		if (strcasecmp(strValue.c_str(), ammoActionNames[i].name) == 0) {
-			return ammoActionNames[i].ammoAction;
+	for (size_t i = 0, size = sizeof(weaponActionNames) / sizeof(WeaponActionNames); i < size; ++i) {
+		if (strcasecmp(strValue.c_str(), weaponActionNames[i].name) == 0) {
+			return weaponActionNames[i].weaponAction;
 		}
 	}
-	return AMMOACTION_NONE;
+	return WEAPONACTION_NONE;
 }
 
-std::string getSkillName(uint16_t skillid)
+Skulls_t getSkullType(const std::string& strValue)
+{
+	for (size_t i = 0, size = sizeof(skullNames) / sizeof(SkullNames); i < size; ++i) {
+		if (strcasecmp(strValue.c_str(), skullNames[i].name) == 0) {
+			return skullNames[i].skull;
+		}
+	}
+	return SKULL_NONE;
+}
+
+std::string getSkillName(uint8_t skillid)
 {
 	switch (skillid) {
 		case SKILL_FIST:
@@ -688,19 +705,19 @@ std::string getSkillName(uint16_t skillid)
 		case SKILL_AXE:
 			return "axe fighting";
 
-		case SKILL_DIST:
+		case SKILL_DISTANCE:
 			return "distance fighting";
 
 		case SKILL_SHIELD:
 			return "shielding";
 
-		case SKILL_FISH:
+		case SKILL_FISHING:
 			return "fishing";
 
-		case SKILL__MAGLEVEL:
+		case SKILL_MAGLEVEL:
 			return "magic level";
 
-		case SKILL__LEVEL:
+		case SKILL_LEVEL:
 			return "level";
 
 		default:
@@ -708,7 +725,7 @@ std::string getSkillName(uint16_t skillid)
 	}
 }
 
-uint32_t adlerChecksum(uint8_t* data, size_t length)
+uint32_t adlerChecksum(const uint8_t* data, size_t length)
 {
 	if (length > NETWORKMESSAGE_MAXSIZE) {
 		return 0;
@@ -778,7 +795,7 @@ std::string getWeaponName(WeaponType_t weaponType)
 		case WEAPON_SWORD: return "sword";
 		case WEAPON_CLUB: return "club";
 		case WEAPON_AXE: return "axe";
-		case WEAPON_DIST: return "distance";
+		case WEAPON_DISTANCE: return "distance";
 		case WEAPON_WAND: return "wand";
 		case WEAPON_AMMO: return "ammunition";
 		default: return std::string();
@@ -824,75 +841,90 @@ CombatType_t indexToCombatType(uint32_t v)
 	if (v == 0) {
 		return COMBAT_FIRST;
 	}
-
-	return (CombatType_t)(1 << (v - 1));
+	return static_cast<CombatType_t>(1 << (v - 1));
 }
 
 uint8_t serverFluidToClient(uint8_t serverFluid)
 {
 	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(uint8_t);
-
 	for (uint8_t i = 0; i < size; ++i) {
 		if (clientToServerFluidMap[i] == serverFluid) {
 			return i;
 		}
 	}
-
 	return 0;
 }
 
 uint8_t clientFluidToServer(uint8_t clientFluid)
 {
-	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(int8_t);
-
+	uint8_t size = sizeof(clientToServerFluidMap) / sizeof(uint8_t);
 	if (clientFluid >= size) {
 		return 0;
 	}
-
 	return clientToServerFluidMap[clientFluid];
 }
 
 itemAttrTypes stringToItemAttribute(const std::string& str)
 {
 	if (str == "aid") {
-		return ATTR_ITEM_ACTIONID;
+		return ITEM_ATTRIBUTE_ACTIONID;
 	} else if (str == "uid") {
-		return ATTR_ITEM_UNIQUEID;
+		return ITEM_ATTRIBUTE_UNIQUEID;
 	} else if (str == "description") {
-		return ATTR_ITEM_DESC;
+		return ITEM_ATTRIBUTE_DESCRIPTION;
 	} else if (str == "text") {
-		return ATTR_ITEM_TEXT;
+		return ITEM_ATTRIBUTE_TEXT;
 	} else if (str == "date") {
-		return ATTR_ITEM_WRITTENDATE;
+		return ITEM_ATTRIBUTE_DATE;
 	} else if (str == "writer") {
-		return ATTR_ITEM_WRITTENBY;
+		return ITEM_ATTRIBUTE_WRITER;
+	} else if (str == "name") {
+		return ITEM_ATTRIBUTE_NAME;
+	} else if (str == "article") {
+		return ITEM_ATTRIBUTE_ARTICLE;
+	} else if (str == "pluralname") {
+		return ITEM_ATTRIBUTE_PLURALNAME;
+	} else if (str == "weight") {
+		return ITEM_ATTRIBUTE_WEIGHT;
+	} else if (str == "attack") {
+		return ITEM_ATTRIBUTE_ATTACK;
+	} else if (str == "defense") {
+		return ITEM_ATTRIBUTE_DEFENSE;
+	} else if (str == "extradefense") {
+		return ITEM_ATTRIBUTE_EXTRADEFENSE;
+	} else if (str == "armor") {
+		return ITEM_ATTRIBUTE_ARMOR;
+	} else if (str == "hitchance") {
+		return ITEM_ATTRIBUTE_HITCHANCE;
+	} else if (str == "shootrange") {
+		return ITEM_ATTRIBUTE_SHOOTRANGE;
 	} else if (str == "owner") {
-		return ATTR_ITEM_OWNER;
+		return ITEM_ATTRIBUTE_OWNER;
 	} else if (str == "duration") {
-		return ATTR_ITEM_DURATION;
+		return ITEM_ATTRIBUTE_DURATION;
 	} else if (str == "decaystate") {
-		return ATTR_ITEM_DECAYING;
+		return ITEM_ATTRIBUTE_DECAYSTATE;
 	} else if (str == "corpseowner") {
-		return ATTR_ITEM_CORPSEOWNER;
+		return ITEM_ATTRIBUTE_CORPSEOWNER;
 	} else if (str == "charges") {
-		return ATTR_ITEM_CHARGES;
+		return ITEM_ATTRIBUTE_CHARGES;
 	} else if (str == "fluidtype") {
-		return ATTR_ITEM_FLUIDTYPE;
+		return ITEM_ATTRIBUTE_FLUIDTYPE;
 	} else if (str == "doorid") {
-		return ATTR_ITEM_DOORID;
+		return ITEM_ATTRIBUTE_DOORID;
 	}
-	return ATTR_ITEM_NONE;
+	return ITEM_ATTRIBUTE_NONE;
 }
 
 std::string getFirstLine(const std::string& str)
 {
 	std::string firstLine;
-	for (size_t i = 0, strLength = str.length(); i < strLength; ++i) {
-		if (str[i] == '\n') {
+	firstLine.reserve(str.length());
+	for (const char c : str) {
+		if (c == '\n') {
 			break;
 		}
-
-		firstLine += str[i];
+		firstLine.push_back(c);
 	}
 	return firstLine;
 }
@@ -900,196 +932,185 @@ std::string getFirstLine(const std::string& str)
 const char* getReturnMessage(ReturnValue value)
 {
 	switch (value) {
-		case RET_DESTINATIONOUTOFREACH:
+		case RETURNVALUE_DESTINATIONOUTOFREACH:
 			return "Destination is out of reach.";
 
-		case RET_NOTMOVEABLE:
+		case RETURNVALUE_NOTMOVEABLE:
 			return "You cannot move this object.";
 
-		case RET_DROPTWOHANDEDITEM:
+		case RETURNVALUE_DROPTWOHANDEDITEM:
 			return "Drop the double-handed object first.";
 
-		case RET_BOTHHANDSNEEDTOBEFREE:
+		case RETURNVALUE_BOTHHANDSNEEDTOBEFREE:
 			return "Both hands need to be free.";
 
-		case RET_CANNOTBEDRESSED:
+		case RETURNVALUE_CANNOTBEDRESSED:
 			return "You cannot dress this object there.";
 
-		case RET_PUTTHISOBJECTINYOURHAND:
+		case RETURNVALUE_PUTTHISOBJECTINYOURHAND:
 			return "Put this object in your hand.";
 
-		case RET_PUTTHISOBJECTINBOTHHANDS:
+		case RETURNVALUE_PUTTHISOBJECTINBOTHHANDS:
 			return "Put this object in both hands.";
 
-		case RET_CANONLYUSEONEWEAPON:
+		case RETURNVALUE_CANONLYUSEONEWEAPON:
 			return "You may only use one weapon.";
 
-		case RET_TOOFARAWAY:
+		case RETURNVALUE_TOOFARAWAY:
 			return "Too far away.";
 
-		case RET_FIRSTGODOWNSTAIRS:
+		case RETURNVALUE_FIRSTGODOWNSTAIRS:
 			return "First go downstairs.";
 
-		case RET_FIRSTGOUPSTAIRS:
+		case RETURNVALUE_FIRSTGOUPSTAIRS:
 			return "First go upstairs.";
 
-		case RET_NOTENOUGHCAPACITY:
+		case RETURNVALUE_NOTENOUGHCAPACITY:
 			return "This object is too heavy for you to carry.";
 
-		case RET_CONTAINERNOTENOUGHROOM:
+		case RETURNVALUE_CONTAINERNOTENOUGHROOM:
 			return "You cannot put more objects in this container.";
 
-		case RET_NEEDEXCHANGE:
-		case RET_NOTENOUGHROOM:
+		case RETURNVALUE_NEEDEXCHANGE:
+		case RETURNVALUE_NOTENOUGHROOM:
 			return "There is not enough room.";
 
-		case RET_CANNOTPICKUP:
+		case RETURNVALUE_CANNOTPICKUP:
 			return "You cannot take this object.";
 
-		case RET_CANNOTTHROW:
+		case RETURNVALUE_CANNOTTHROW:
 			return "You cannot throw there.";
 
-		case RET_THEREISNOWAY:
+		case RETURNVALUE_THEREISNOWAY:
 			return "There is no way.";
 
-		case RET_THISISIMPOSSIBLE:
+		case RETURNVALUE_THISISIMPOSSIBLE:
 			return "This is impossible.";
 
-		case RET_PLAYERISPZLOCKED:
+		case RETURNVALUE_PLAYERISPZLOCKED:
 			return "You can not enter a protection zone after attacking another player.";
 
-		case RET_PLAYERISNOTINVITED:
+		case RETURNVALUE_PLAYERISNOTINVITED:
 			return "You are not invited.";
 
-		case RET_CREATUREDOESNOTEXIST:
+		case RETURNVALUE_CREATUREDOESNOTEXIST:
 			return "Creature does not exist.";
 
-		case RET_DEPOTISFULL:
+		case RETURNVALUE_DEPOTISFULL:
 			return "You cannot put more items in this depot.";
 
-		case RET_CANNOTUSETHISOBJECT:
+		case RETURNVALUE_CANNOTUSETHISOBJECT:
 			return "You cannot use this object.";
 
-		case RET_PLAYERWITHTHISNAMEISNOTONLINE:
+		case RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE:
 			return "A player with this name is not online.";
 
-		case RET_NOTREQUIREDLEVELTOUSERUNE:
+		case RETURNVALUE_NOTREQUIREDLEVELTOUSERUNE:
 			return "You do not have the required magic level to use this rune.";
 
-		case RET_YOUAREALREADYTRADING:
+		case RETURNVALUE_YOUAREALREADYTRADING:
 			return "You are already trading.";
 
-		case RET_THISPLAYERISALREADYTRADING:
+		case RETURNVALUE_THISPLAYERISALREADYTRADING:
 			return "This player is already trading.";
 
-		case RET_YOUMAYNOTLOGOUTDURINGAFIGHT:
+		case RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT:
 			return "You may not logout during or immediately after a fight!";
 
-		case RET_DIRECTPLAYERSHOOT:
+		case RETURNVALUE_DIRECTPLAYERSHOOT:
 			return "You are not allowed to shoot directly on players.";
 
-		case RET_NOTENOUGHLEVEL:
+		case RETURNVALUE_NOTENOUGHLEVEL:
 			return "You do not have enough level.";
 
-		case RET_NOTENOUGHMAGICLEVEL:
+		case RETURNVALUE_NOTENOUGHMAGICLEVEL:
 			return "You do not have enough magic level.";
 
-		case RET_NOTENOUGHMANA:
+		case RETURNVALUE_NOTENOUGHMANA:
 			return "You do not have enough mana.";
 
-		case RET_NOTENOUGHSOUL:
+		case RETURNVALUE_NOTENOUGHSOUL:
 			return "You do not have enough soul.";
 
-		case RET_YOUAREEXHAUSTED:
+		case RETURNVALUE_YOUAREEXHAUSTED:
 			return "You are exhausted.";
 
-		case RET_CANONLYUSETHISRUNEONCREATURES:
+		case RETURNVALUE_CANONLYUSETHISRUNEONCREATURES:
 			return "You can only use this rune on creatures.";
 
-		case RET_PLAYERISNOTREACHABLE:
+		case RETURNVALUE_PLAYERISNOTREACHABLE:
 			return "Player is not reachable.";
 
-		case RET_CREATUREISNOTREACHABLE:
+		case RETURNVALUE_CREATUREISNOTREACHABLE:
 			return "Creature is not reachable.";
 
-		case RET_ACTIONNOTPERMITTEDINPROTECTIONZONE:
+		case RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE:
 			return "This action is not permitted in a protection zone.";
 
-		case RET_YOUMAYNOTATTACKTHISPLAYER:
+		case RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER:
 			return "You may not attack this player.";
 
-		case RET_YOUMAYNOTATTACKTHISCREATURE:
+		case RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE:
 			return "You may not attack this creature.";
 
-		case RET_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE:
+		case RETURNVALUE_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE:
 			return "You may not attack a person in a protection zone.";
 
-		case RET_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE:
+		case RETURNVALUE_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE:
 			return "You may not attack a person while you are in a protection zone.";
 
-		case RET_YOUCANONLYUSEITONCREATURES:
+		case RETURNVALUE_YOUCANONLYUSEITONCREATURES:
 			return "You can only use it on creatures.";
 
-		case RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS:
+		case RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS:
 			return "Turn secure mode off if you really want to attack unmarked players.";
 
-		case RET_YOUNEEDPREMIUMACCOUNT:
+		case RETURNVALUE_YOUNEEDPREMIUMACCOUNT:
 			return "You need a premium account.";
 
-		case RET_YOUNEEDTOLEARNTHISSPELL:
+		case RETURNVALUE_YOUNEEDTOLEARNTHISSPELL:
 			return "You need to learn this spell first.";
 
-		case RET_YOURVOCATIONCANNOTUSETHISSPELL:
+		case RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL:
 			return "Your vocation cannot use this spell.";
 
-		case RET_YOUNEEDAWEAPONTOUSETHISSPELL:
+		case RETURNVALUE_YOUNEEDAWEAPONTOUSETHISSPELL:
 			return "You need to equip a weapon to use this spell.";
 
-		case RET_PLAYERISPZLOCKEDLEAVEPVPZONE:
+		case RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE:
 			return "You can not leave a pvp zone after attacking another player.";
 
-		case RET_PLAYERISPZLOCKEDENTERPVPZONE:
+		case RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE:
 			return "You can not enter a pvp zone after attacking another player.";
 
-		case RET_ACTIONNOTPERMITTEDINANOPVPZONE:
+		case RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE:
 			return "This action is not permitted in a non pvp zone.";
 
-		case RET_YOUCANNOTLOGOUTHERE:
+		case RETURNVALUE_YOUCANNOTLOGOUTHERE:
 			return "You can not logout here.";
 
-		case RET_YOUNEEDAMAGICITEMTOCASTSPELL:
+		case RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL:
 			return "You need a magic item to cast this spell.";
 
-		case RET_CANNOTCONJUREITEMHERE:
+		case RETURNVALUE_CANNOTCONJUREITEMHERE:
 			return "You cannot conjure items here.";
 
-		case RET_YOUNEEDTOSPLITYOURSPEARS:
+		case RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS:
 			return "You need to split your spears first.";
 
-		case RET_NAMEISTOOAMBIGIOUS:
+		case RETURNVALUE_NAMEISTOOAMBIGIOUS:
 			return "Name is too ambigious.";
 
-		case RET_CANONLYUSEONESHIELD:
+		case RETURNVALUE_CANONLYUSEONESHIELD:
 			return "You may use only one shield.";
 
-		case RET_NOPARTYMEMBERSINRANGE:
+		case RETURNVALUE_NOPARTYMEMBERSINRANGE:
 			return "No party members in range.";
 
-		case RET_YOUARENOTTHEOWNER:
+		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
-		default: // RET_NOTPOSSIBLE, etc
+		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}
 }
-
-#if !defined(_MSC_VER) || _MSC_VER < 1800
-double round(double v)
-{
-	if (v >= 0.0) {
-		return std::floor(v + 0.5);
-	} else {
-		return std::ceil(v - 0.5);
-	}
-}
-#endif

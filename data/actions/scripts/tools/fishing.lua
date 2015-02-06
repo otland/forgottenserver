@@ -1,17 +1,81 @@
-local useWorms = FALSE
-local waterIds = {493, 4608, 4609, 4610, 4611, 4612, 4613, 4614, 4615, 4616, 4617, 4618, 4619, 4620, 4621, 4622, 4623, 4624, 4625}
-function onUse(cid, item, fromPosition, itemEx, toPosition)
-	if isInArray(waterIds, itemEx.itemid) == TRUE then
-		if itemEx.itemid ~= 493 then
-			if useWorms == FALSE or useWorms == TRUE and doPlayerRemoveItem(cid, ITEM_WORM, 1) == TRUE then
-				if math.random(1, (100 + (getPlayerSkill(cid, SKILL_FISHING) / 10))) <= getPlayerSkill(cid, SKILL_FISHING) then
-					doPlayerAddItem(cid, ITEM_FISH, 1)
-				end
-				doPlayerAddSkillTry(cid, SKILL_FISHING, 1)
+local waterIds = {493, 4608, 4609, 4610, 4611, 4612, 4613, 4614, 4615, 4616, 4617, 4618, 4619, 4620, 4621, 4622, 4623, 4624, 4625, 7236, 10499, 15401, 15402}
+local lootTrash = {2234, 2238, 2376, 2509, 2667}
+local lootCommon = {2152, 2167, 2168, 2669, 7588, 7589}
+local lootRare = {2143, 2146, 2149, 7158, 7159}
+local lootVeryRare = {7632, 7633, 10220}
+local useWorms = true
+
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+	local targetId = itemEx.itemid
+	if not isInArray(waterIds, itemEx.itemid) then
+		return false
+	end
+
+	if targetId == 10499 then
+		local targetItem = Item(itemEx.uid)
+		local owner = targetItem:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
+		if owner ~= 0 and owner ~= player:getId() then
+			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
+			return true
+		end
+
+		toPosition:sendMagicEffect(CONST_ME_WATERSPLASH)
+		targetItem:remove()
+
+		local rareChance = math.random(1, 100)
+		if rareChance == 1 then
+			player:addItem(lootVeryRare[math.random(#lootVeryRare)], 1)
+		elseif rareChance <= 3 then
+			player:addItem(lootRare[math.random(#lootRare)], 1)
+		elseif rareChance <= 10 then
+			player:addItem(lootCommon[math.random(#lootCommon)], 1)
+		else
+			player:addItem(lootTrash[math.random(#lootTrash)], 1)
+		end
+		return true
+	end
+
+	if targetId ~= 7236 then
+		toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
+	end
+
+	if targetId == 493 or targetId == 15402 then
+		return true
+	end
+
+	player:addSkillTries(SKILL_FISHING, 1)
+	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
+		if useWorms and not player:removeItem("worm", 1) then
+			return true
+		end
+
+		if targetId == 15401 then
+			local targetItem = Item(itemEx.uid)
+			targetItem:transform(targetId + 1)
+			targetItem:decay()
+
+			if math.random(1, 100) >= 97 then
+				player:addItem(15405, 1)
+				return true
+			end
+		elseif targetId == 7236 then
+			local targetItem = Item(itemEx.uid)
+			targetItem:transform(targetId + 1)
+			targetItem:decay()
+
+			local rareChance = math.random(1, 100)
+			if rareChance == 1 then
+				player:addItem(7158, 1)
+				return true
+			elseif rareChance <= 4 then
+				player:addItem(2669, 1)
+				return true
+			elseif rareChance <= 10 then
+				player:addItem(7159, 1)
+				return true
 			end
 		end
-		doSendMagicEffect(toPosition, CONST_ME_LOSEENERGY)
-		return TRUE
+		player:addItem("fish", 1)
 	end
-	return FALSE
+	return true
 end

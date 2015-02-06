@@ -3,7 +3,6 @@
 	<health now="95" max="95"/>
 	<look type="23" corpse="5981"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -31,7 +30,7 @@
 			<attribute key="shootEffect" value="energy"/>
 		</attack>
 		<attack name="physical" interval="10500" chance="100" radius="3" target="0" min="0" max="0">
-			<atttibute key="areaEffect" value="redshimmer"/>
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
 	<defenses armor="12" defense="13"/>

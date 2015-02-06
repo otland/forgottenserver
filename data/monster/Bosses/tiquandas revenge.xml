@@ -3,7 +3,6 @@
 	<health now="2000" max="2000"/>
 	<look type="120" corpse="6047"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -34,10 +33,8 @@
 	<defenses armor="30" defense="31">
 		<defense name="ultimate healing" interval="1200" chance="35" min="600" max="800"/>
 	</defenses>
-	<elements>
-		<element earthPercent="100"/>
-	</elements>
 	<immunities>
+		<immunity earth="1"/>
 		<immunity invisible="1"/>
 	</immunities>
 	<loot>

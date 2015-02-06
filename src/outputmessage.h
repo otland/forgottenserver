@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,26 +34,24 @@ class OutputMessage : public NetworkMessage
 		OutputMessage();
 
 	public:
-		~OutputMessage() {}
-
 		// non-copyable
 		OutputMessage(const OutputMessage&) = delete;
 		OutputMessage& operator=(const OutputMessage&) = delete;
 
-		uint8_t* getOutputBuffer() const {
-			return &m_MsgBuf[m_outputBufferStart];
+		uint8_t* getOutputBuffer() {
+			return &buffer[outputBufferStart];
 		}
 
 		void writeMessageLength() {
-			add_header<uint16_t>(m_MsgSize);
+			add_header<uint16_t>(length);
 		}
 
 		void addCryptoHeader(bool addChecksum) {
 			if (addChecksum) {
-				add_header<uint32_t>(adlerChecksum(m_MsgBuf + m_outputBufferStart, m_MsgSize));
+				add_header<uint32_t>(adlerChecksum(buffer + outputBufferStart, length));
 			}
 
-			add_header<uint16_t>(m_MsgSize);
+			add_header<uint16_t>(length);
 		}
 
 		enum OutputMessageState {
@@ -67,54 +65,55 @@ class OutputMessage : public NetworkMessage
 			return m_protocol;
 		}
 		Connection_ptr getConnection() const {
-			return m_connection;
+			return connection;
 		}
 		int64_t getFrame() const {
-			return m_frame;
+			return frame;
 		}
 
 		inline void append(const NetworkMessage& msg) {
-			int32_t msgLen = msg.getMessageLength();
-			memcpy(m_MsgBuf + m_ReadPos, msg.getBuffer() + 8, msgLen);
-			m_MsgSize += msgLen;
-			m_ReadPos += msgLen;
+			int32_t msgLen = msg.getLength();
+			memcpy(buffer + position, msg.getBuffer() + 8, msgLen);
+			length += msgLen;
+			position += msgLen;
 		}
 
 		inline void append(OutputMessage_ptr msg) {
-			int32_t msgLen = msg->getMessageLength();
-			memcpy(m_MsgBuf + m_ReadPos, msg->getBuffer() + 8, msgLen);
-			m_MsgSize += msgLen;
-			m_ReadPos += msgLen;
+			int32_t msgLen = msg->getLength();
+			memcpy(buffer + position, msg->getBuffer() + 8, msgLen);
+			length += msgLen;
+			position += msgLen;
 		}
 
-		void setFrame(int64_t frame) {
-			m_frame = frame;
+		void setFrame(int64_t new_frame) {
+			frame = new_frame;
 		}
 
 	protected:
 		template <typename T>
 		inline void add_header(T add) {
-			if ((int32_t)m_outputBufferStart - (int32_t)sizeof(T) < 0) {
-				std::cout << "Error: [OutputMessage::add_header] m_outputBufferStart(" << m_outputBufferStart <<
+			if (sizeof(T) > outputBufferStart) {
+				std::cout << "Error: [OutputMessage::add_header] outputBufferStart(" << outputBufferStart <<
 				          ") < " << sizeof(T) << std::endl;
 				return;
 			}
 
-			m_outputBufferStart -= sizeof(T);
-			*(T*)(m_MsgBuf + m_outputBufferStart) = add;
+			outputBufferStart -= sizeof(T);
+			*reinterpret_cast<T*>(buffer + outputBufferStart) = add;
 			//added header size to the message size
-			m_MsgSize += sizeof(T);
+			length += sizeof(T);
 		}
 
 		void freeMessage() {
 			setConnection(Connection_ptr());
 			setProtocol(nullptr);
-			m_frame = 0;
-			//allocate enough size for headers
-			//2 bytes for unencrypted message size
-			//4 bytes for checksum
-			//2 bytes for encrypted message size
-			m_outputBufferStart = 8;
+			frame = 0;
+
+			// Allocate enough size for headers:
+			// 2 bytes for unencrypted message size
+			// 4 bytes for checksum
+			// 2 bytes for encrypted message size
+			outputBufferStart = 8;
 
 			//setState have to be the last one
 			setState(OutputMessage::STATE_FREE);
@@ -125,24 +124,24 @@ class OutputMessage : public NetworkMessage
 		void setProtocol(Protocol* protocol) {
 			m_protocol = protocol;
 		}
-		void setConnection(Connection_ptr connection) {
-			m_connection = connection;
+		void setConnection(Connection_ptr newConnection) {
+			connection = newConnection;
 		}
 
-		void setState(OutputMessageState state) {
-			m_state = state;
+		void setState(OutputMessageState newState) {
+			state = newState;
 		}
 		OutputMessageState getState() const {
-			return m_state;
+			return state;
 		}
 
-		Connection_ptr m_connection;
+		Connection_ptr connection;
 		Protocol* m_protocol;
 
-		int64_t m_frame;
-		uint32_t m_outputBufferStart;
+		int64_t frame;
+		uint32_t outputBufferStart;
 
-		OutputMessageState m_state;
+		OutputMessageState state;
 };
 
 typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
@@ -155,41 +154,35 @@ class OutputMessagePool
 	public:
 		~OutputMessagePool();
 
+		// non-copyable
+		OutputMessagePool(const OutputMessagePool&) = delete;
+		OutputMessagePool& operator=(const OutputMessagePool&) = delete;
+
 		static OutputMessagePool* getInstance() {
 			static OutputMessagePool instance;
 			return &instance;
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t OutputMessagePoolCount;
-#endif
-
 		void send(OutputMessage_ptr msg);
 		void sendAll();
 		void stop() {
-			m_isOpen = false;
+			m_open = false;
 		}
 		OutputMessage_ptr getOutputMessage(Protocol* protocol, bool autosend = true);
 		void startExecutionFrame();
 
 		int64_t getFrameTime() const {
-			return m_frameTime;
+			return frameTime;
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
 		size_t getTotalMessageCount() const {
-			return OutputMessagePoolCount;
+			return allOutputMessages.size();
 		}
-#else
-		size_t getTotalMessageCount() const {
-			return m_allOutputMessages.size();
-		}
-#endif
 		size_t getAvailableMessageCount() const {
-			return m_outputMessages.size();
+			return outputMessages.size();
 		}
 		size_t getAutoMessageCount() const {
-			return m_autoSendOutputMessages.size();
+			return autoSendOutputMessages.size();
 		}
 		void addToAutoSend(OutputMessage_ptr msg);
 
@@ -201,12 +194,12 @@ class OutputMessagePool
 		typedef std::list<OutputMessage*> InternalOutputMessageList;
 		typedef std::list<OutputMessage_ptr> OutputMessageMessageList;
 
-		InternalOutputMessageList m_outputMessages;
-		InternalOutputMessageList m_allOutputMessages;
-		OutputMessageMessageList m_autoSendOutputMessages;
-		OutputMessageMessageList m_toAddQueue;
-		std::recursive_mutex m_outputPoolLock;
-		int64_t m_frameTime;
-		bool m_isOpen;
+		InternalOutputMessageList outputMessages;
+		InternalOutputMessageList allOutputMessages;
+		OutputMessageMessageList autoSendOutputMessages;
+		OutputMessageMessageList toAddQueue;
+		std::recursive_mutex outputPoolLock;
+		int64_t frameTime;
+		bool m_open;
 };
 #endif

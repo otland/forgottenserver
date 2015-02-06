@@ -1,7 +1,9 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
-	if item.uid == getPlayerSlotItem(cid, CONST_SLOT_HEAD).uid then
-		doSendMagicEffect(getPlayerPosition(cid), CONST_ME_GIFT_WRAPS)
-		return TRUE
+function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+	local headSlotItem = player:getSlotItem(CONST_SLOT_HEAD)
+	if headSlotItem == nil or item.uid ~= headSlotItem:getUniqueId() then
+		return false
 	end
-	return FALSE
+
+	player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
+	return true
 end

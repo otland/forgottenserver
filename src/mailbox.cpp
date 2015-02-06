@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,67 +27,55 @@
 
 extern Game g_game;
 
-Mailbox::Mailbox(uint16_t _type) : Item(_type)
+ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature*) const
 {
-	//
-}
-
-Mailbox::~Mailbox()
-{
-	//
-}
-
-ReturnValue Mailbox::__queryAdd(int32_t, const Thing* thing, uint32_t, uint32_t, Creature*) const
-{
-	if (const Item* item = thing->getItem()) {
-		if (canSend(item)) {
-			return RET_NOERROR;
-		}
+	const Item* item = thing.getItem();
+	if (item && Mailbox::canSend(item)) {
+		return RETURNVALUE_NOERROR;
 	}
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-ReturnValue Mailbox::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
+ReturnValue Mailbox::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
-	return RET_NOERROR;
+	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Mailbox::__queryRemove(const Thing*, uint32_t, uint32_t) const
+ReturnValue Mailbox::queryRemove(const Thing&, uint32_t, uint32_t) const
 {
-	return RET_NOTPOSSIBLE;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Cylinder* Mailbox::__queryDestination(int32_t&, const Thing*, Item**, uint32_t&)
+Cylinder* Mailbox::queryDestination(int32_t&, const Thing&, Item**, uint32_t&)
 {
 	return this;
 }
 
-void Mailbox::__addThing(Thing* thing)
+void Mailbox::addThing(Thing* thing)
 {
-	return __addThing(0, thing);
+	return addThing(0, thing);
 }
 
-void Mailbox::__addThing(int32_t, Thing* thing)
+void Mailbox::addThing(int32_t, Thing* thing)
 {
-	if (Item* item = thing->getItem()) {
-		if (canSend(item)) {
-			sendItem(item);
-		}
+	Item* item = thing->getItem();
+	if (item && Mailbox::canSend(item)) {
+		sendItem(item);
 	}
 }
 
-void Mailbox::__updateThing(Thing*, uint16_t, uint32_t)
+void Mailbox::updateThing(Thing*, uint16_t, uint32_t)
 {
 	//
 }
 
-void Mailbox::__replaceThing(uint32_t, Thing*)
+void Mailbox::replaceThing(uint32_t, Thing*)
 {
 	//
 }
 
-void Mailbox::__removeThing(Thing*, uint32_t)
+void Mailbox::removeThing(Thing*, uint32_t)
 {
 	//
 }
@@ -102,7 +90,7 @@ void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, in
 	getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 }
 
-bool Mailbox::sendItem(Item* item)
+bool Mailbox::sendItem(Item* item) const
 {
 	std::string receiver;
 	if (!getReceiver(item, receiver)) {
@@ -117,74 +105,50 @@ bool Mailbox::sendItem(Item* item)
 	Player* player = g_game.getPlayerByName(receiver);
 	if (player) {
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
+		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			player->onReceiveMail();
 			return true;
 		}
 	} else {
-		player = new Player(nullptr);
-		if (!IOLoginData::loadPlayerByName(player, receiver)) {
-			delete player;
+		Player tmpPlayer(nullptr);
+		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
 			return false;
 		}
 
-		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RET_NOERROR) {
+		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER,
+		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
-			IOLoginData::savePlayer(player);
-			delete player;
+			IOLoginData::savePlayer(&tmpPlayer);
 			return true;
 		}
-		delete player;
 	}
 	return false;
 }
 
-bool Mailbox::getReceiver(Item* item, std::string& name)
+bool Mailbox::getReceiver(Item* item, std::string& name) const
 {
-	if (!item) {
-		return false;
-	}
-
-	const std::string* text = nullptr;
-
-	if (item->getID() == ITEM_PARCEL) { /**We need to get the text from the label incase its a parcel**/
-		Container* parcel = item->getContainer();
-		if (parcel) {
-			for (Item* parcelItem : parcel->getItemList()) {
-				if (parcelItem->getID() == ITEM_LABEL) {
-					item = parcelItem;
-					text = &item->getText();
-					if (!text->empty()) {
-						break;
-					}
-				}
+	const Container* container = item->getContainer();
+	if (container) {
+		for (Item* containerItem : container->getItemList()) {
+			if (containerItem->getID() == ITEM_LABEL && getReceiver(containerItem, name)) {
+				return true;
 			}
 		}
-	} else if (item->getID() != ITEM_LETTER) { /**The item is somehow not a parcel or letter**/
-		std::cout << "Mailbox::getReciver error, trying to get reciecer from unkown item! ID: " << item->getID() << '.' << std::endl;
 		return false;
 	}
 
-	if (!item) {
+	const std::string& text = item->getText();
+	if (text.empty()) {
 		return false;
 	}
 
-	if (!text) {
-		text = &item->getText();
-	}
-
-	if (text->empty()) {
-		return false;
-	}
-
-	name = getFirstLine(*text);
+	name = getFirstLine(text);
 	trimString(name);
 	return true;
 }
 
-bool Mailbox::canSend(const Item* item) const
+bool Mailbox::canSend(const Item* item)
 {
 	return item->getID() == ITEM_PARCEL || item->getID() == ITEM_LETTER;
 }

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 class Vocation
 {
 	public:
-		Vocation() {} // TODO: Remove this constructor when we can use emplace
 		Vocation(uint16_t id);
 
 		const std::string& getVocName() const {
@@ -35,10 +34,10 @@ class Vocation
 		const std::string& getVocDescription() const {
 			return description;
 		}
-		uint32_t getReqSkillTries(int32_t skill, int32_t level);
+		uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
 		uint64_t getReqMana(uint32_t magLevel);
 
-		int32_t getId() const {
+		uint16_t getId() const {
 			return id;
 		}
 

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include "networkmessage.h"
 #include "protocol.h"
 
-class ProtocolStatus : public Protocol
+class ProtocolStatus final : public Protocol
 {
 	public:
 		// static protocol information
@@ -34,25 +34,9 @@ class ProtocolStatus : public Protocol
 			return "status protocol";
 		}
 
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-		static uint32_t protocolStatusCount;
-#endif
-		ProtocolStatus(Connection_ptr connection) : Protocol(connection) {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolStatusCount++;
-#endif
-		}
-		virtual ~ProtocolStatus() {
-#ifdef ENABLE_SERVER_DIAGNOSTIC
-			protocolStatusCount--;
-#endif
-		}
+		ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
 
-		virtual int32_t getProtocolId() {
-			return 0xFF;
-		}
-
-		virtual void onRecvFirstMessage(NetworkMessage& msg);
+		void onRecvFirstMessage(NetworkMessage& msg) final;
 
 		void sendStatusString();
 		void sendInfo(uint16_t requestedInfo, const std::string& characterName);

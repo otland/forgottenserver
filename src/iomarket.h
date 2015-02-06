@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #define FS_IOMARKET_H_B981E52C218C42D3B9EF726EBF0E92C9
 
 #include "enums.h"
+#include "database.h"
 
 class IOMarket
 {
@@ -34,18 +35,18 @@ class IOMarket
 		static MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId);
 		static HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId);
 
-		static ExpiredMarketOfferList getExpiredOffers(MarketAction_t action);
+		static void processExpiredOffers(DBResult_ptr result, bool);
+		static void checkExpiredOffers();
 
 		static int32_t getPlayerOfferCount(uint32_t playerId);
-		static uint32_t getOfferIdByCounter(uint32_t timestamp, uint16_t counter);
-		static MarketOfferEx getOfferById(uint32_t id);
+		static MarketOfferEx getOfferByCounter(uint32_t timestamp, uint16_t counter);
 
 		static void createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous);
 		static void acceptOffer(uint32_t offerId, uint16_t amount);
 		static void deleteOffer(uint32_t offerId);
 
 		static void appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint32_t price, time_t timestamp, MarketOfferState_t state);
-		static void moveOfferToHistory(uint32_t offerId, MarketOfferState_t state);
+		static bool moveOfferToHistory(uint32_t offerId, MarketOfferState_t state);
 
 		void updateStatistics();
 
@@ -53,7 +54,7 @@ class IOMarket
 		MarketStatistics* getSaleStatistics(uint16_t itemId);
 
 	private:
-		IOMarket() {}
+		IOMarket() = default;
 
 		std::map<uint16_t, MarketStatistics> purchaseStatistics;
 		std::map<uint16_t, MarketStatistics> saleStatistics;

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,22 +23,25 @@
 #include "const.h"
 #include "enums.h"
 #include "itemloader.h"
+#include "optional.h"
 #include "position.h"
 
-#define SLOTP_WHEREEVER 0xFFFFFFFF
-#define SLOTP_HEAD 1
-#define	SLOTP_NECKLACE 2
-#define	SLOTP_BACKPACK 4
-#define	SLOTP_ARMOR 8
-#define	SLOTP_RIGHT 16
-#define	SLOTP_LEFT 32
-#define	SLOTP_LEGS 64
-#define	SLOTP_FEET 128
-#define	SLOTP_RING 256
-#define	SLOTP_AMMO 512
-#define	SLOTP_DEPOT 1024
-#define	SLOTP_TWO_HAND 2048
-#define SLOTP_HAND (SLOTP_LEFT | SLOTP_RIGHT)
+enum SlotPositionBits : uint32_t {
+	SLOTP_WHEREEVER = 0xFFFFFFFF,
+	SLOTP_HEAD = 1,
+	SLOTP_NECKLACE = 2,
+	SLOTP_BACKPACK = 4,
+	SLOTP_ARMOR = 8,
+	SLOTP_RIGHT = 16,
+	SLOTP_LEFT = 32,
+	SLOTP_LEGS = 64,
+	SLOTP_FEET = 128,
+	SLOTP_RING = 256,
+	SLOTP_AMMO = 512,
+	SLOTP_DEPOT = 1024,
+	SLOTP_TWO_HAND = 2048,
+	SLOTP_HAND = (SLOTP_LEFT | SLOTP_RIGHT)
+};
 
 enum ItemTypes_t {
 	ITEM_TYPE_NONE = 0,
@@ -56,7 +59,7 @@ enum ItemTypes_t {
 };
 
 struct Abilities {
-	Abilities() : skills(), absorbPercent(), stats(), statsPercent() {
+	Abilities() : skills(), fieldAbsorbPercent(), absorbPercent(), stats(), statsPercent() {
 		elementType = COMBAT_NONE;
 		elementDamage = 0;
 
@@ -72,7 +75,7 @@ struct Abilities {
 
 		conditionImmunities = 0;
 		conditionSuppressions = 0;
-	};
+	}
 
 	//elemental damage
 	CombatType_t elementType;
@@ -80,6 +83,9 @@ struct Abilities {
 
 	//extra skill modifiers
 	int32_t skills[SKILL_LAST + 1];
+
+	// field damage abilities modifiers
+	int16_t fieldAbsorbPercent[COMBAT_COUNT + 1];
 
 	//damage abilities modifiers
 	int16_t absorbPercent[COMBAT_COUNT + 1];
@@ -102,13 +108,12 @@ struct Abilities {
 	uint32_t conditionSuppressions;
 };
 
-class Condition;
+class ConditionDamage;
 
 class ItemType
 {
 	public:
 		ItemType();
-		~ItemType();
 
 		bool isGroundTile() const {
 			return (group == ITEM_GROUP_GROUND);
@@ -154,12 +159,11 @@ class ItemType
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
 		}
 
-		Abilities* getAbilities() {
-			if (abilities == nullptr) {
-				abilities = new Abilities();
+		Abilities& getAbilities() {
+			if (!abilities) {
+				abilities.set(new Abilities());
 			}
-
-			return abilities;
+			return *abilities;
 		}
 
 		std::string getPluralName() const {
@@ -192,20 +196,16 @@ class ItemType
 		std::string runeSpellName;
 		std::string vocationString;
 
-		Abilities* abilities;
-		Condition* condition;
+		Optional<Abilities> abilities;
+		Optional<ConditionDamage> conditionDamage;
 
-		float weight;
-
+		uint32_t weight;
 		uint32_t levelDoor;
 		uint32_t decayTime;
 		uint32_t wieldInfo;
 		uint32_t minReqLevel;
 		uint32_t minReqMagicLevel;
 		uint32_t charges;
-		uint32_t shootRange;
-		int32_t breakChance;
-		int32_t hitChance;
 		int32_t maxHitChance;
 		int32_t decayTo;
 		int32_t attack;
@@ -216,14 +216,6 @@ class ItemType
 		int32_t runeMagLevel;
 		int32_t runeLevel;
 
-		WeaponType_t weaponType;
-		Ammo_t ammoType;
-		ShootType_t shootType;
-		MagicEffectClasses magicEffect;
-		RaceType_t corpseType;
-		Direction bedPartnerDir;
-		AmmoAction_t ammoAction;
-		FluidTypes_t fluidSource;
 		CombatType_t combatType;
 
 		uint16_t transformToOnUse[2];
@@ -236,10 +228,20 @@ class ItemType
 		uint16_t slotPosition;
 		uint16_t speed;
 		uint16_t wareId;
-		uint16_t lightLevel;
-		uint16_t lightColor;
+
+		MagicEffectClasses magicEffect;
+		Direction bedPartnerDir;
+		WeaponType_t weaponType;
+		Ammo_t ammoType;
+		ShootType_t shootType;
+		RaceType_t corpseType;
+		FluidTypes_t fluidSource;
 
 		uint8_t alwaysOnTopOrder;
+		uint8_t lightLevel;
+		uint8_t lightColor;
+		uint8_t shootRange;
+		int8_t hitChance;
 
 		bool floorChangeDown;
 		bool floorChangeNorth;
@@ -281,6 +283,10 @@ class Items
 		Items();
 		~Items();
 
+		// non-copyable
+		Items(const Items&) = delete;
+		Items& operator=(const Items&) = delete;
+
 		bool reload();
 		void clear();
 
@@ -293,14 +299,14 @@ class Items
 		ItemType& getItemType(size_t id);
 		const ItemType& getItemIdByClientId(uint16_t spriteId) const;
 
-		int32_t getItemIdByName(const std::string& name);
+		uint16_t getItemIdByName(const std::string& name);
 
 		static uint32_t dwMajorVersion;
 		static uint32_t dwMinorVersion;
 		static uint32_t dwBuildNumber;
 
 		bool loadFromXml();
-		void parseItemNode(const pugi::xml_node& itemNode, uint32_t id);
+		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
 		inline size_t size() const {
 			return items.size();

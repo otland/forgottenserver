@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #define FS_GUILD_H_C00F0A1D732E4BA88FF62ACBE74D76BC
 
 class Player;
-typedef std::list<Player*> PlayerList;
 
 struct GuildRank {
 	uint32_t id;
@@ -39,7 +38,6 @@ class Guild
 {
 	public:
 		Guild(uint32_t id, const std::string& name) : name(name), id(id), memberCount(0) {}
-		~Guild() {}
 
 		void addMember(Player* player);
 		void removeMember(Player* player);
@@ -50,7 +48,7 @@ class Guild
 		const std::string& getName() const {
 			return name;
 		}
-		const PlayerList& getMembersOnline() const {
+		const std::list<Player*>& getMembersOnline() const {
 			return membersOnline;
 		}
 		uint32_t getMemberCount() const {
@@ -61,7 +59,7 @@ class Guild
 		}
 
 		GuildRank* getRankById(uint32_t id);
-		GuildRank* getRankByLevel(uint8_t level);
+		const GuildRank* getRankByLevel(uint8_t level) const;
 		void addRank(uint32_t id, const std::string& name, uint8_t level);
 
 		const std::string& getMotd() const {
@@ -72,7 +70,7 @@ class Guild
 		}
 
 	private:
-		PlayerList membersOnline;
+		std::list<Player*> membersOnline;
 		std::vector<GuildRank> ranks;
 		std::string name;
 		std::string motd;

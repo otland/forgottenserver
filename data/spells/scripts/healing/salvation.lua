@@ -5,12 +5,13 @@ setCombatParam(combat, COMBAT_PARAM_AGGRESSIVE, 0)
 setCombatParam(combat, COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 
 function onGetFormulaValues(cid, level, maglevel)
-	local min = (level / 7 + maglevel * 7 + 60) * 1.5
-	local max = (level / 10 + maglevel * 13 + 190) * 1.5
+	min = ((level / 5) + (maglevel * 12) + 75)
+	max = ((level / 5) + (maglevel * 20) + 125)
 	return min, max
 end
 
 setCombatCallback(combat, CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
+
 function onCastSpell(cid, var)
 	return doCombat(cid, combat, var)
 end

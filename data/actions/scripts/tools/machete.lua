@@ -1,8 +1,10 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition)
+function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
 	if itemEx.itemid == 2782 then
-		doTransformItem(itemEx.uid, 2781)
-		doDecayItem(itemEx.uid)
-		return TRUE
+		local iEx = Item(itemEx.uid)
+		iEx:transform(2781)
+		iEx:decay()
+		return true
 	end
+
 	return destroyItem(cid, itemEx, toPosition)
 end

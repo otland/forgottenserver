@@ -2,7 +2,6 @@
 <monster name="Avalanche" nameDescription="avalanche" race="undead" experience="305" speed="195" manacost="0">
 	<health now="550" max="550"/>
 	<look type="261" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

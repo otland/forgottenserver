@@ -2,7 +2,6 @@
 <monster name="Cursed Gladiator" nameDescription="cursed gladiator" race="undead" experience="215" speed="170" manacost="0">
 	<health now="435" max="435"/>
 	<look type="100" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

@@ -2,7 +2,6 @@
 <monster name="Rocky" nameDescription="rocky" race="undead" experience="190" speed="170" manacost="0">
 	<health now="250" max="250"/>
 	<look type="95" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

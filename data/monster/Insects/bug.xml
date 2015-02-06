@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Bug" namedescription="a bug" race="venom" experience="18" speed="240" manacost="250">
+<monster name="Bug" namedescription="a bug" race="venom" experience="18" speed="160" manacost="250">
 	<health now="29" max="29"/>
 	<look type="45" corpse="5990"/>
-	<targetchange interval="2000" chance="0"/>
-	<strategy attack="100" defense="0"/>
+	<targetchange interval="4000" chance="0"/>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -20,12 +19,12 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="20" attack="15"/>
 	</attacks>
-	<defenses armor="2" defense="3"/>
+	<defenses armor="5" defense="5"/>
 	<elements>
 		<element firePercent="-10"/>
 	</elements>
 	<loot>
-		<item id="2148" countmax="6" chance="21000"/><!-- gold coin -->
-		<item id="2679" countmax="3" chance="6600"/><!-- cherry -->
+		<item id="2148" countmax="6" chance="51170"/><!-- gold coin -->
+		<item id="2679" countmax="3" chance="2590"/><!-- cherry -->
 	</loot>
 </monster>

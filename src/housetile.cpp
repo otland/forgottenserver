@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,14 +32,9 @@ HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* _house) :
 	setFlag(TILESTATE_HOUSE);
 }
 
-HouseTile::~HouseTile()
+void HouseTile::addThing(int32_t index, Thing* thing)
 {
-	//
-}
-
-void HouseTile::__addThing(int32_t index, Thing* thing)
-{
-	Tile::__addThing(index, thing);
+	Tile::addThing(index, thing);
 
 	if (!thing->getParent()) {
 		return;
@@ -50,9 +45,9 @@ void HouseTile::__addThing(int32_t index, Thing* thing)
 	}
 }
 
-void HouseTile::__internalAddThing(uint32_t index, Thing* thing)
+void HouseTile::internalAddThing(uint32_t index, Thing* thing)
 {
-	Tile::__internalAddThing(index, thing);
+	Tile::internalAddThing(index, thing);
 
 	if (!thing->getParent()) {
 		return;
@@ -67,14 +62,12 @@ void HouseTile::updateHouse(Item* item)
 {
 	if (item->getTile() == this) {
 		Door* door = item->getDoor();
-
 		if (door && door->getDoorId() != 0) {
 			house->addDoor(door);
 		}
 
 		if (!door) {
 			BedItem* bed = item->getBed();
-
 			if (bed) {
 				house->addBed(bed);
 			}
@@ -82,43 +75,39 @@ void HouseTile::updateHouse(Item* item)
 	}
 }
 
-ReturnValue HouseTile::__queryAdd(int32_t index, const Thing* thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
 {
-	if (const Creature* creature = thing->getCreature()) {
+	if (const Creature* creature = thing.getCreature()) {
 		if (const Player* player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
-				return RET_PLAYERISNOTINVITED;
+				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		} else {
-			return RET_NOTPOSSIBLE;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
-	} else if (thing->getItem() && actor) {
+	} else if (thing.getItem() && actor) {
 		Player* actorPlayer = actor->getPlayer();
 		if (!house->isInvited(actorPlayer)) {
-			return RET_CANNOTTHROW;
+			return RETURNVALUE_CANNOTTHROW;
 		}
 	}
-
-	return Tile::__queryAdd(index, thing, count, flags, actor);
+	return Tile::queryAdd(index, thing, count, flags, actor);
 }
 
-Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item** destItem, uint32_t& flags)
+Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
 {
-	if (const Creature* creature = thing->getCreature()) {
+	if (const Creature* creature = thing.getCreature()) {
 		if (const Player* player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();
-				Tile* destTile = g_game.getTile(entryPos.x, entryPos.y, entryPos.z);
-
+				Tile* destTile = g_game.map.getTile(entryPos);
 				if (!destTile) {
-					std::cout << "Error: [HouseTile::__queryDestination] House entry not correct"
+					std::cout << "Error: [HouseTile::queryDestination] House entry not correct"
 					          << " - Name: " << house->getName()
 					          << " - House id: " << house->getId()
 					          << " - Tile not found: " << entryPos << std::endl;
 
-					const Position& templePos = player->getTemplePosition();
-					destTile = g_game.getTile(templePos.x, templePos.y, templePos.z);
-
+					destTile = g_game.map.getTile(player->getTemplePosition());
 					if (!destTile) {
 						destTile = &(Tile::nullptr_tile);
 					}
@@ -131,5 +120,5 @@ Cylinder* HouseTile::__queryDestination(int32_t& index, const Thing* thing, Item
 		}
 	}
 
-	return Tile::__queryDestination(index, thing, destItem, flags);
+	return Tile::queryDestination(index, thing, destItem, flags);
 }

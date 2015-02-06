@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,16 +36,20 @@ class TalkActions : public BaseEvents
 {
 	public:
 		TalkActions();
-		virtual ~TalkActions();
+		~TalkActions();
+
+		// non-copyable
+		TalkActions(const TalkActions&) = delete;
+		TalkActions& operator=(const TalkActions&) = delete;
 
 		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
 
 	protected:
-		virtual LuaScriptInterface& getScriptInterface();
-		virtual std::string getScriptBaseName();
-		virtual Event* getEvent(const std::string& nodeName);
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node);
-		virtual void clear();
+		LuaScriptInterface& getScriptInterface() final;
+		std::string getScriptBaseName() const final;
+		Event* getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+		void clear() final;
 
 		// TODO: Store TalkAction objects directly in the list instead of using pointers
 		std::list<TalkAction*> talkActions;
@@ -57,9 +61,8 @@ class TalkAction : public Event
 {
 	public:
 		TalkAction(LuaScriptInterface* _interface);
-		virtual ~TalkAction();
 
-		virtual bool configureEvent(const pugi::xml_node& node);
+		bool configureEvent(const pugi::xml_node& node) override;
 
 		std::string getWords() const {
 			return words;
@@ -69,11 +72,11 @@ class TalkAction : public Event
 		}
 
 		//scripting
-		bool executeSay(const Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
+		bool executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
 		//
 
 	protected:
-		virtual std::string getScriptEventName();
+		std::string getScriptEventName() const override;
 
 		std::string words;
 		char separator;

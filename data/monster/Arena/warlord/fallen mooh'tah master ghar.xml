@@ -2,7 +2,6 @@
 <monster name="Fallen Mooh'tah Master Ghar" nameDescription="fallen mooh'tah master ghar" race="blood" experience="4400" speed="190" manacost="0">
 	<health now="8000" max="8000"/>
 	<look type="29" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>

@@ -3,7 +3,6 @@
 	<health now="4300" max="4300"/>
 	<look type="90" corpse="6025"/>
 	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -42,10 +41,8 @@
 			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
-	<elements>
-		<element deathPercent="100"/>
-	</elements>
 	<immunities>
+		<immunity death="1"/>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>
 	</immunities>

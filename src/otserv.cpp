@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2013  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,9 +44,11 @@
 #include "house.h"
 #include "databasemanager.h"
 #include "scheduler.h"
+#include "databasetasks.h"
 
-Dispatcher* g_dispatcher = new Dispatcher;
-Scheduler* g_scheduler = new Scheduler;
+DatabaseTasks g_databaseTasks;
+Dispatcher g_dispatcher;
+Scheduler g_scheduler;
 
 Game g_game;
 ConfigManager g_config;
@@ -88,31 +90,48 @@ int main(int argc, char* argv[])
 	sigaction(SIGPIPE, &sigh, nullptr);
 #endif
 
-	ServiceManager servicer;
+	ServiceManager serviceManager;
 
-	g_dispatcher->start();
-	g_scheduler->start();
+	g_dispatcher.start();
+	g_scheduler.start();
 
-	g_dispatcher->addTask(createTask(std::bind(mainLoader, argc, argv, &servicer)));
+	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
-	if (servicer.is_running()) {
+	if (serviceManager.is_running()) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
-		servicer.run();
-		g_scheduler->join();
-		g_dispatcher->join();
+#ifdef _WIN32
+		SetConsoleCtrlHandler([](DWORD) -> BOOL {
+			g_dispatcher.addTask(createTask([]() {
+				g_dispatcher.addTask(createTask(
+					std::bind(&Game::shutdown, &g_game)
+				));
+				g_scheduler.stop();
+				g_databaseTasks.stop();
+				g_dispatcher.stop();
+			}));
+			ExitThread(0);
+		}, 1);
+#endif
+		serviceManager.run();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_scheduler->stop();
-		g_dispatcher->stop();
-		g_dispatcher->addTask(createTask([](){
-			g_scheduler->shutdown();
-			g_dispatcher->shutdown();
+		g_dispatcher.addTask(createTask([]() {
+			g_dispatcher.addTask(createTask([]() {
+				g_scheduler.shutdown();
+				g_databaseTasks.shutdown();
+				g_dispatcher.shutdown();
+			}));
+			g_scheduler.stop();
+			g_databaseTasks.stop();
+			g_dispatcher.stop();
 		}));
-		g_scheduler->join();
-		g_dispatcher->join();
 	}
+
+	g_scheduler.join();
+	g_databaseTasks.join();
+	g_dispatcher.join();
 	return 0;
 }
 
@@ -121,12 +140,13 @@ void mainLoader(int, char*[], ServiceManager* services)
 	//dispatcher thread
 	g_game.setGameState(GAME_STATE_STARTUP);
 
-	srand((unsigned int)OTSYS_TIME());
+	srand(static_cast<unsigned int>(OTSYS_TIME()));
 #ifdef _WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
 #endif
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
-	std::cout << "Compilied on " << __DATE__ << ' ' << __TIME__ << " for arch ";
+	std::cout << "Compiled with: " << BOOST_COMPILER << std::endl;
+	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
 
 #if defined(__amd64__) || defined(_M_X64)
 	std::cout << "x64" << std::endl;
@@ -134,10 +154,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "x86" << std::endl;
 #elif defined(__arm__)
 	std::cout << "ARM" << std::endl;
-#elif defined(__mips__)
-	std::cout << "MIPS" << std::endl;
 #else
-	std::cout << "unk" << std::endl;
+	std::cout << "unknown" << std::endl;
 #endif
 	std::cout << std::endl;
 
@@ -154,11 +172,9 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 #ifdef _WIN32
 	std::string defaultPriority = asLowerCaseString(g_config.getString(ConfigManager::DEFAULT_PRIORITY));
-	if (defaultPriority == "realtime") {
-		SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-	} else if (defaultPriority == "high") {
+	if (defaultPriority == "high") {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (defaultPriority == "higher") {
+	} else if (defaultPriority == "above-normal") {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
 #endif
@@ -185,6 +201,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
+	g_databaseTasks.start();
 
 	DatabaseManager::updateDatabase();
 
@@ -264,12 +281,27 @@ void mainLoader(int, char*[], ServiceManager* services)
 	// OT protocols
 	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
 
-	// Legacy protocols
-	services->add<ProtocolOldLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
-	services->add<ProtocolOldGame>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	// Legacy login protocol
+	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
-	Houses::getInstance().payHouses();
-	g_game.checkExpiredMarketOffers();
+	RentPeriod_t rentPeriod;
+	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+
+	if (strRentPeriod == "yearly") {
+		rentPeriod = RENTPERIOD_YEARLY;
+	} else if (strRentPeriod == "weekly") {
+		rentPeriod = RENTPERIOD_WEEKLY;
+	} else if (strRentPeriod == "monthly") {
+		rentPeriod = RENTPERIOD_MONTHLY;
+	} else if (strRentPeriod == "daily") {
+		rentPeriod = RENTPERIOD_DAILY;
+	} else {
+		rentPeriod = RENTPERIOD_NEVER;
+	}
+
+	g_game.map.houses.payHouses(rentPeriod);
+
+	IOMarket::checkExpiredOffers();
 	IOMarket::getInstance()->updateStatistics();
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;

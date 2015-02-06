@@ -1,8 +1,8 @@
-function onSay(cid, words, param)
+function onSay(player, words, param)
 	local uptime = getWorldUpTime()
 
 	local hours = math.floor(uptime / 3600)
 	local minutes = math.floor((uptime - (3600 * hours)) / 60)
-	Player(cid):sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Uptime: " .. hours .. " hours and " .. minutes .. " minutes.")
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Uptime: " .. hours .. " hours and " .. minutes .. " minutes.")
 	return false
 end
