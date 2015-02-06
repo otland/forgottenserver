@@ -34,113 +34,113 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 	end
 
 	if item.itemid == antidotePot then
-		if not doCombat(player, antidote, numberToVariant(player:getId())) then
+		if not antidote:execute(itemEx, numberToVariant(itemEx:getId())) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == smallHealthPot then
-		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 60, 90, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, itemEx, COMBAT_HEALING, 60, 90, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == healthPot then
-		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 125, 175, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, itemEx, COMBAT_HEALING, 125, 175, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == manaPot then
-		if not doTargetCombatMana(0, player, 75, 125, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatMana(0, itemEx, 75, 125, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(emptyPot, 1)
 	elseif item.itemid == strongHealthPot then
-		if(not isInArray({3,4,7,8}, player:getVocation():getId()) or player:getLevel() < 50) and not(player:getGroup():getId() >= 2) then
+		if(not isInArray({3,4,7,8}, itemEx:getVocation():getId()) or itemEx:getLevel() < 50) and not(player:getGroup():getId() >= 2) then
 			player:say("This potion can only be consumed by paladins and knights of level 50 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, itemEx, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(strongEmptyPot, 1)
 	elseif item.itemid == strongManaPot then
-		if(not isInArray({1,2,3,5,6,7}, player:getVocation():getId()) or player:getLevel() < 50) and not(player:getGroup():getId() >= 2) then
+		if(not isInArray({1,2,3,5,6,7}, itemEx:getVocation():getId()) or itemEx:getLevel() < 50) and not(player:getGroup():getId() >= 2) then
 			player:say("This potion can only be consumed by sorcerers, druids and paladins of level 50 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
 
-		if not doTargetCombatMana(0, player, 115, 185, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatMana(0, itemEx, 115, 185, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(strongEmptyPot, 1)
 	elseif item.itemid == greatSpiritPot then
-		if(not isInArray({3, 7}, player:getVocation():getId()) or (player:getLevel() < 80)) and not(player:getGroup():getId() >= 2) then
+		if(not isInArray({3, 7}, itemEx:getVocation():getId()) or (itemEx:getLevel() < 80)) and not(player:getGroup():getId() >= 2) then
 			player:say("This potion can only be consumed by paladins of level 80 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) or not doTargetCombatMana(0, player, 100, 200, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, itemEx, COMBAT_HEALING, 250, 350, CONST_ME_MAGIC_BLUE) or not doTargetCombatMana(0, itemEx, 100, 200, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(greatEmptyPot, 1)
 	elseif item.itemid == greatHealthPot then
-		if(not isInArray({4, 8}, player:getVocation():getId()) or player:getLevel() < 80) and not(player:getGroup():getId() >= 2) then
+		if(not isInArray({4, 8}, itemEx:getVocation():getId()) or itemEx:getLevel() < 80) and not(player:getGroup():getId() >= 2) then
 			player:say("This potion can only be consumed by knights of level 80 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 425, 575, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, itemEx, COMBAT_HEALING, 425, 575, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(greatEmptyPot, 1)
 	elseif item.itemid == greatManaPot then
-		if(not isInArray({1,2,5,6}, player:getVocation():getId()) or player:getLevel() < 80) and not(player:getGroup():getId() >= 2) then
+		if(not isInArray({1,2,5,6}, itemEx:getVocation():getId()) or itemEx:getLevel() < 80) and not(player:getGroup():getId() >= 2) then
 			player:say("This potion can only be consumed by sorcerers and druids of level 80 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
 
-		if not doTargetCombatMana(0, player, 150, 250, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatMana(0, itemEx, 150, 250, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(greatEmptyPot, 1)
 	elseif item.itemid == ultimateHealthPot then
-		if(not isInArray({4, 8}, player:getVocation():getId()) or player:getLevel() < 130) and not(player:getGroup():getId() >= 2) then
+		if(not isInArray({4, 8}, itemEx:getVocation():getId()) or itemEx:getLevel() < 130) and not(player:getGroup():getId() >= 2) then
 			player:say("This potion can only be consumed by knights of level 130 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
 
-		if not doTargetCombatHealth(0, player, COMBAT_HEALING, 650, 850, CONST_ME_MAGIC_BLUE) then
+		if not doTargetCombatHealth(0, itemEx, COMBAT_HEALING, 650, 850, CONST_ME_MAGIC_BLUE) then
 			return false
 		end
 		player:addCondition(exhaust)
-		player:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		itemEx:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		Item(item.uid):remove(1)
 		player:addItem(greatEmptyPot, 1)
 	end
