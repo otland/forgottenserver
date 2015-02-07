@@ -397,7 +397,7 @@ bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos, co
 	//onMove(creature, newPos, oldPos)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeOnMove] Call stack overflow" << std::endl;
-		return false;
+	 	return false;
 	}
 
 	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
@@ -413,6 +413,7 @@ bool CreatureEvent::executeOnMove(Creature* creature, const Position& newPos, co
 
 	return m_scriptInterface->callFunction(3);
 }
+
 
 bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldLevel,
                                        uint32_t newLevel)
