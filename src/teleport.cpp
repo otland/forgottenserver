@@ -85,7 +85,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 
 	if (Creature* creature = thing->getCreature()) {
 		Position origPos = creature->getPosition();
-		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? WEST : EAST);
+		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? DIRECTION_WEST : DIRECTION_EAST);
 		g_game.map.moveCreature(*creature, *destTile);
 		if (it.magicEffect != CONST_ME_NONE) {
 			g_game.addMagicEffect(origPos, it.magicEffect);

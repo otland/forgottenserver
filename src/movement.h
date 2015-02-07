@@ -55,7 +55,7 @@ class MoveEvents final : public BaseEvents
 		MoveEvents(const MoveEvents&) = delete;
 		MoveEvents& operator=(const MoveEvents&) = delete;
 
-		uint32_t onCreatureMove(Creature* creature, const Tile* tile, bool isIn);
+		uint32_t onCreatureMove(Creature* creature, const Tile* tile, const Position& fromPos, MoveEvent_t eventType);
 		uint32_t onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 		uint32_t onPlayerDeEquip(Player* player, Item* item, slots_t slot, bool isRemoval);
 		uint32_t onItemMove(Item* item, Tile* tile, bool isAdd);
@@ -92,7 +92,7 @@ class MoveEvents final : public BaseEvents
 		LuaScriptInterface m_scriptInterface;
 };
 
-typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos);
+typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
 typedef uint32_t (MoveFunction)(Item* item, Item* tileItem, const Position& pos);
 typedef uint32_t (EquipFunction)(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
 
@@ -108,7 +108,7 @@ class MoveEvent final : public Event
 		bool configureEvent(const pugi::xml_node& node) final;
 		bool loadFunction(const pugi::xml_attribute& attr) final;
 
-		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
+		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
 		uint32_t fireEquip(Player* player, Item* item, slots_t slot, bool boolean);
 
@@ -117,7 +117,7 @@ class MoveEvent final : public Event
 		}
 
 		//scripting
-		bool executeStep(Creature* creature, Item* item, const Position& pos);
+		bool executeStep(Creature* creature, Item* item, const Position& pos, const Position& fromPos);
 		bool executeEquip(Player* player, Item* item, slots_t slot);
 		bool executeAddRemItem(Item* item, Item* tileItem, const Position& pos);
 		//

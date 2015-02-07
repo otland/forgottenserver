@@ -253,22 +253,22 @@ class Tile : public Cylinder
 		}
 		bool floorChange(Direction direction) const {
 			switch (direction) {
-				case NORTH:
-					return hasFlag(TILESTATE_FLOORCHANGE_NORTH);
+				case DIRECTION_NORTH:
+						return hasFlag(TILESTATE_FLOORCHANGE_NORTH);
 
-				case SOUTH:
+				case DIRECTION_SOUTH:
 					return hasFlag(TILESTATE_FLOORCHANGE_SOUTH);
 
-				case EAST:
+				case DIRECTION_EAST:
 					return hasFlag(TILESTATE_FLOORCHANGE_EAST);
 
-				case WEST:
+				case DIRECTION_WEST:
 					return hasFlag(TILESTATE_FLOORCHANGE_WEST);
 
-				case SOUTH_ALT:
+				case DIRECTION_SOUTH_ALT:
 					return hasFlag(TILESTATE_FLOORCHANGE_SOUTH_ALT);
 
-				case EAST_ALT:
+				case DIRECTION_EAST_ALT:
 					return hasFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
 
 				default:

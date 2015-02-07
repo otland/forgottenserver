@@ -262,15 +262,15 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 	if (!teleport) {
 		if (oldPos.y > newPos.y) {
-			creature.setDirection(NORTH);
+			creature.setDirection(DIRECTION_NORTH);
 		} else if (oldPos.y < newPos.y) {
-			creature.setDirection(SOUTH);
+			creature.setDirection(DIRECTION_SOUTH);
 		}
 
 		if (oldPos.x < newPos.x) {
-			creature.setDirection(EAST);
+			creature.setDirection(DIRECTION_EAST);
 		} else if (oldPos.x > newPos.x) {
-			creature.setDirection(WEST);
+			creature.setDirection(DIRECTION_WEST);
 		}
 	}
 
@@ -681,26 +681,26 @@ bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirLis
 			const int_fast32_t offset_y = n->parent->y - y;
 			if (offset_y == 0) {
 				if (offset_x == -1) {
-					neighbors = *dirNeighbors[WEST];
+					neighbors = *dirNeighbors[DIRECTION_WEST];
 				} else {
-					neighbors = *dirNeighbors[EAST];
+					neighbors = *dirNeighbors[DIRECTION_EAST];
 				}
 			} else if (!fpp.allowDiagonal || offset_x == 0) {
 				if (offset_y == -1) {
-					neighbors = *dirNeighbors[NORTH];
+					neighbors = *dirNeighbors[DIRECTION_NORTH];
 				} else {
-					neighbors = *dirNeighbors[SOUTH];
+					neighbors = *dirNeighbors[DIRECTION_SOUTH];
 				}
 			} else if (offset_y == -1) {
 				if (offset_x == -1) {
-					neighbors = *dirNeighbors[NORTHWEST];
+					neighbors = *dirNeighbors[DIRECTION_NORTHWEST];
 				} else {
-					neighbors = *dirNeighbors[NORTHEAST];
+					neighbors = *dirNeighbors[DIRECTION_NORTHEAST];
 				}
 			} else if (offset_x == -1) {
-				neighbors = *dirNeighbors[SOUTHWEST];
+				neighbors = *dirNeighbors[DIRECTION_SOUTHWEST];
 			} else {
-				neighbors = *dirNeighbors[SOUTHEAST];
+				neighbors = *dirNeighbors[DIRECTION_SOUTHEAST];
 			}
 			dirCount = fpp.allowDiagonal ? 5 : 3;
 		} else {
@@ -781,21 +781,21 @@ bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirLis
 		prevy = pos.y;
 
 		if (dx == 1 && dy == 1) {
-			dirList.push_front(NORTHWEST);
+			dirList.push_front(DIRECTION_NORTHWEST);
 		} else if (dx == -1 && dy == 1) {
-			dirList.push_front(NORTHEAST);
+			dirList.push_front(DIRECTION_NORTHEAST);
 		} else if (dx == 1 && dy == -1) {
-			dirList.push_front(SOUTHWEST);
+			dirList.push_front(DIRECTION_SOUTHWEST);
 		} else if (dx == -1 && dy == -1) {
-			dirList.push_front(SOUTHEAST);
+			dirList.push_front(DIRECTION_SOUTHEAST);
 		} else if (dx == 1) {
-			dirList.push_front(WEST);
+			dirList.push_front(DIRECTION_WEST);
 		} else if (dx == -1) {
-			dirList.push_front(EAST);
+			dirList.push_front(DIRECTION_EAST);
 		} else if (dy == 1) {
-			dirList.push_front(NORTH);
+			dirList.push_front(DIRECTION_NORTH);
 		} else if (dy == -1) {
-			dirList.push_front(SOUTH);
+			dirList.push_front(DIRECTION_SOUTH);
 		}
 
 		found = found->parent;

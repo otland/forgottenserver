@@ -45,7 +45,7 @@ Creature::Creature() :
 
 	id = 0;
 	_tile = nullptr;
-	direction = SOUTH;
+	direction = DIRECTION_SOUTH;
 	master = nullptr;
 	lootDrop = true;
 	skillLoss = true;
@@ -273,25 +273,10 @@ void Creature::onWalk(Direction& dir)
 {
 	if (hasCondition(CONDITION_DRUNK)) {
 		uint32_t r = uniform_random(0, 20);
-		if (r <= 4) {
-			switch (r) {
-				case 0:
-					dir = NORTH;
-					break;
-				case 1:
-					dir = WEST;
-					break;
-				case 3:
-					dir = SOUTH;
-					break;
-				case 4:
-					dir = EAST;
-					break;
-
-				default:
-					break;
+		if (r <= DIRECTION_DIAGONAL_MASK) {
+			if (r < DIRECTION_DIAGONAL_MASK) {
+				dir = static_cast<Direction>(r);
 			}
-
 			g_game.internalCreatureSay(this, TALKTYPE_MONSTER_SAY, "Hicks!", false);
 		}
 	}
@@ -446,16 +431,12 @@ void Creature::onRemoveTileItem(const Tile* tile, const Position& pos, const Ite
 	}
 }
 
-void Creature::onCreatureAppear(Creature* creature, bool isLogin)
+void Creature::onCreatureAppear(Creature* creature, bool)
 {
 	if (creature == this) {
 		if (useCacheMap()) {
 			isMapLoaded = true;
 			updateMapCache();
-		}
-
-		if (isLogin) {
-			setLastPosition(getPosition());
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
@@ -934,7 +915,7 @@ void Creature::goToFollowCreature()
 
 		Monster* monster = getMonster();
 		if (monster && !monster->getMaster() && (monster->isFleeing() || fpp.maxTargetDist > 1)) {
-			Direction dir = NODIR;
+			Direction dir = DIRECTION_NONE;
 
 			if (monster->isFleeing()) {
 				monster->getDistanceStep(followCreature->getPosition(), dir, true);
@@ -953,7 +934,7 @@ void Creature::goToFollowCreature()
 				}
 			}
 
-			if (dir != NODIR) {
+			if (dir != DIRECTION_NONE) {
 				listWalkDir.clear();
 				listWalkDir.push_back(dir);
 
@@ -1409,7 +1390,7 @@ bool Creature::isSuppress(ConditionType_t type) const
 int64_t Creature::getStepDuration(Direction dir) const
 {
 	int64_t stepDuration = getStepDuration();
-	if (dir == NORTHWEST || dir == NORTHEAST || dir == SOUTHWEST || dir == SOUTHEAST) {
+	if ((dir & DIRECTION_DIAGONAL_MASK) != 0) {
 		stepDuration *= 3;
 	}
 	return stepDuration;

@@ -100,7 +100,7 @@ ItemType::ItemType()
 
 	replaceable = true;
 
-	bedPartnerDir = NORTH;
+	bedPartnerDir = DIRECTION_NORTH;
 	transformToOnUse[PLAYERSEX_MALE] = 0;
 	transformToOnUse[PLAYERSEX_FEMALE] = 0;
 	transformToFree = 0;

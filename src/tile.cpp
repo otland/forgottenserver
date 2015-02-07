@@ -740,38 +740,38 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 		uint8_t dz = tilePos.z + 1;
 
 		Tile* southDownTile = g_game.map.getTile(dx, dy - 1, dz);
-		if (southDownTile && southDownTile->floorChange(SOUTH_ALT)) {
+		if (southDownTile && southDownTile->floorChange(DIRECTION_SOUTH_ALT)) {
 			dy -= 2;
 			destTile = g_game.map.getTile(dx, dy, dz);
 		} else {
 			Tile* eastDownTile = g_game.map.getTile(dx - 1, dy, dz);
-			if (eastDownTile && eastDownTile->floorChange(EAST_ALT)) {
+			if (eastDownTile && eastDownTile->floorChange(DIRECTION_EAST_ALT)) {
 				dx -= 2;
 				destTile = g_game.map.getTile(dx, dy, dz);
 			} else {
 				Tile* downTile = g_game.map.getTile(dx, dy, dz);
 				if (downTile) {
-					if (downTile->floorChange(NORTH)) {
+					if (downTile->floorChange(DIRECTION_NORTH)) {
 						++dy;
 					}
 
-					if (downTile->floorChange(SOUTH)) {
+					if (downTile->floorChange(DIRECTION_SOUTH)) {
 						--dy;
 					}
 
-					if (downTile->floorChange(SOUTH_ALT)) {
+					if (downTile->floorChange(DIRECTION_SOUTH_ALT)) {
 						dy -= 2;
 					}
 
-					if (downTile->floorChange(EAST)) {
+					if (downTile->floorChange(DIRECTION_EAST)) {
 						--dx;
 					}
 
-					if (downTile->floorChange(EAST_ALT)) {
+					if (downTile->floorChange(DIRECTION_EAST_ALT)) {
 						dx -= 2;
 					}
 
-					if (downTile->floorChange(WEST)) {
+					if (downTile->floorChange(DIRECTION_WEST)) {
 						++dx;
 					}
 
@@ -784,27 +784,27 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 		uint16_t dy = tilePos.y;
 		uint8_t dz = tilePos.z - 1;
 
-		if (floorChange(NORTH)) {
+		if (floorChange(DIRECTION_NORTH)) {
 			--dy;
 		}
 
-		if (floorChange(SOUTH)) {
+		if (floorChange(DIRECTION_SOUTH)) {
 			++dy;
 		}
 
-		if (floorChange(EAST)) {
+		if (floorChange(DIRECTION_EAST)) {
 			++dx;
 		}
 
-		if (floorChange(WEST)) {
+		if (floorChange(DIRECTION_WEST)) {
 			--dx;
 		}
 
-		if (floorChange(SOUTH_ALT)) {
+		if (floorChange(DIRECTION_SOUTH_ALT)) {
 			dy += 2;
 		}
 
-		if (floorChange(EAST_ALT)) {
+		if (floorChange(DIRECTION_EAST_ALT)) {
 			dx += 2;
 		}
 
@@ -1393,7 +1393,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 		//calling movement scripts
 		Creature* creature = thing->getCreature();
 		if (creature) {
-			g_moveEvents->onCreatureMove(creature, this, true);
+			g_moveEvents->onCreatureMove(creature, this, oldParent ? oldParent->getPosition() : getPosition(), MOVE_EVENT_STEP_IN);
 		} else if (item) {
 			g_moveEvents->onItemMove(item, this, true);
 		}
@@ -1423,7 +1423,7 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	//calling movement scripts
 	Creature* creature = thing->getCreature();
 	if (creature) {
-		g_moveEvents->onCreatureMove(creature, this, false);
+		g_moveEvents->onCreatureMove(creature, this, getPosition(), MOVE_EVENT_STEP_OUT);
 	} else {
 		Item* item = thing->getItem();
 		if (item) {

@@ -1181,14 +1181,14 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(COMBAT_FORMULA_SKILL)
 	registerEnum(COMBAT_FORMULA_DAMAGE)
 
-	registerEnum(NORTH)
-	registerEnum(EAST)
-	registerEnum(SOUTH)
-	registerEnum(WEST)
-	registerEnum(SOUTHWEST)
-	registerEnum(SOUTHEAST)
-	registerEnum(NORTHWEST)
-	registerEnum(NORTHEAST)
+	registerEnum(DIRECTION_NORTH)
+	registerEnum(DIRECTION_EAST)
+	registerEnum(DIRECTION_SOUTH)
+	registerEnum(DIRECTION_WEST)
+	registerEnum(DIRECTION_SOUTHWEST)
+	registerEnum(DIRECTION_SOUTHEAST)
+	registerEnum(DIRECTION_NORTHWEST)
+	registerEnum(DIRECTION_NORTHEAST)
 
 	registerEnum(COMBAT_NONE)
 	registerEnum(COMBAT_PHYSICALDAMAGE)
@@ -3960,20 +3960,10 @@ int32_t LuaScriptInterface::luaDoMoveCreature(lua_State* L)
 	}
 
 	Direction direction = getNumber<Direction>(L, 2);
-	switch (direction) {
-		case NORTH:
-		case SOUTH:
-		case WEST:
-		case EAST:
-		case SOUTHWEST:
-		case NORTHWEST:
-		case NORTHEAST:
-		case SOUTHEAST:
-			break;
-		default:
-			reportErrorFunc("No valid direction");
-			pushBoolean(L, false);
-			return 1;
+	if (direction > DIRECTION_LAST) {
+		reportErrorFunc("No valid direction");
+		pushBoolean(L, false);
+		return 1;
 	}
 
 	ReturnValue ret = g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT);
@@ -8049,14 +8039,14 @@ int32_t LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 	if (!pushMovement) {
 		if (oldPosition.x == position.x) {
 			if (oldPosition.y < position.y) {
-				g_game.internalCreatureTurn(creature, SOUTH);
+				g_game.internalCreatureTurn(creature, DIRECTION_SOUTH);
 			} else {
-				g_game.internalCreatureTurn(creature, NORTH);
+				g_game.internalCreatureTurn(creature, DIRECTION_NORTH);
 			}
 		} else if (oldPosition.x > position.x) {
-			g_game.internalCreatureTurn(creature, WEST);
+			g_game.internalCreatureTurn(creature, DIRECTION_WEST);
 		} else if (oldPosition.x < position.x) {
-			g_game.internalCreatureTurn(creature, EAST);
+			g_game.internalCreatureTurn(creature, DIRECTION_EAST);
 		}
 	}
 	pushBoolean(L, true);
