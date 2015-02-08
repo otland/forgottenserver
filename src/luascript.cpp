@@ -2222,6 +2222,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getIp", LuaScriptInterface::luaPlayerGetIp);
 	registerMethod("Player", "getAccountId", LuaScriptInterface::luaPlayerGetAccountId);
 	registerMethod("Player", "getLastLoginSaved", LuaScriptInterface::luaPlayerGetLastLoginSaved);
+	registerMethod("Player", "getLastLogout", LuaScriptInterface::luaPlayerGetLastLogout);
 
 	registerMethod("Player", "getAccountType", LuaScriptInterface::luaPlayerGetAccountType);
 	registerMethod("Player", "setAccountType", LuaScriptInterface::luaPlayerSetAccountType);
@@ -8264,6 +8265,18 @@ int32_t LuaScriptInterface::luaPlayerGetLastLoginSaved(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->getLastLoginSaved());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetLastLogout(lua_State* L)
+{
+	// player:getLastLogout()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getLastLogout());
 	} else {
 		lua_pushnil(L);
 	}

@@ -156,7 +156,6 @@ Player::Player(ProtocolGame* p) :
 	requestedOutfit = false;
 
 	staminaMinutes = 2520;
-	nextUseStaminaTime = 0;
 
 	lastQuestlogUpdate = 0;
 
@@ -1687,7 +1686,7 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
-void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/, bool applyMultiplier/* = false*/)
+void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -1697,20 +1696,6 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		levelPercent = 0;
 		sendStats();
 		return;
-	}
-
-	if (applyMultiplier) {
-		exp *= g_game.getExperienceStage(level);
-	}
-
-	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
-		if (staminaMinutes > 2400) {
-			if (isPremium()) {
-				exp *= 1.5;
-			}
-		} else if (staminaMinutes <= 840) {
-			exp *= 0.5;
-		}
 	}
 
 	g_events->eventPlayerOnGainExperience(this, source, exp, rawExp);
@@ -3671,11 +3656,7 @@ void Player::gainExperience(uint64_t gainExp, Creature* source)
 		return;
 	}
 
-	if (source && !source->getPlayer()) {
-		useStamina();
-	}
-
-	addExperience(source, gainExp, true, true, true);
+	addExperience(source, gainExp, true);
 }
 
 void Player::onGainExperience(uint64_t gainExp, Creature* target)
@@ -4509,57 +4490,6 @@ void Player::sendModalWindow(const ModalWindow& modalWindow)
 void Player::clearModalWindows()
 {
 	modalWindows.clear();
-}
-
-void Player::regenerateStamina(int32_t offlineTime)
-{
-	if (!g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
-		return;
-	}
-
-	offlineTime -= 600;
-
-	if (offlineTime < 180) {
-		return;
-	}
-
-	int16_t regainStaminaMinutes = offlineTime / 180;
-	int16_t maxNormalStaminaRegen = 2400 - std::min<int16_t>(2400, staminaMinutes);
-
-	if (regainStaminaMinutes > maxNormalStaminaRegen) {
-		int16_t happyHourStaminaRegen = (offlineTime - (maxNormalStaminaRegen * 180)) / 600;
-		staminaMinutes = std::min<int16_t>(2520, std::max<int16_t>(2400, staminaMinutes) + happyHourStaminaRegen);
-	} else {
-		staminaMinutes += regainStaminaMinutes;
-	}
-}
-
-void Player::useStamina()
-{
-	if (!g_config.getBoolean(ConfigManager::STAMINA_SYSTEM) || staminaMinutes == 0) {
-		return;
-	}
-
-	time_t currentTime = time(nullptr);
-
-	if (currentTime > nextUseStaminaTime) {
-		time_t timePassed = currentTime - nextUseStaminaTime;
-
-		if (timePassed > 60) {
-			if (staminaMinutes > 2) {
-				staminaMinutes -= 2;
-			} else {
-				staminaMinutes = 0;
-			}
-
-			nextUseStaminaTime = currentTime + 120;
-		} else {
-			--staminaMinutes;
-			nextUseStaminaTime = currentTime + 60;
-		}
-
-		sendStats();
-	}
 }
 
 uint16_t Player::getHelpers() const

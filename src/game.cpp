@@ -653,7 +653,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		bool sentStats = false;
 
 		int16_t oldStaminaMinutes = player->getStaminaMinutes();
-		player->regenerateStamina(offlineTime);
 
 		int32_t offlineTrainingSkill = player->getOfflineTrainingSkill();
 		if (offlineTrainingSkill != -1) {
