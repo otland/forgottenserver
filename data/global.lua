@@ -394,4 +394,6 @@ function Game.broadcastMessage(message, messageType)
 	end
 end
 
-nextUseStaminaTime = {}
+if nextUseStaminaTime == nil then
+	nextUseStaminaTime = {}
+end
