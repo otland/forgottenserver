@@ -12,7 +12,7 @@ function onStepOut(creature, item, position, fromPosition)
 		query = Tile(newPosition):queryAdd(creature)
 	end
 
-	if query == RETURNVALUE_NOERROR and query ~= RETURNVALUE_NOTENOUGHROOM then
+	if query == RETURNVALUE_NOERROR or query ~= RETURNVALUE_NOTENOUGHROOM then
 		doRelocate(position, newPosition)
 	end
 
