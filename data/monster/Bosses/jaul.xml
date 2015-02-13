@@ -54,6 +54,7 @@
 		<immunity paralyze="1" />
 		<immunity drown="1" />
 		<immunity fire="1" />
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="3000" chance="200">
 		<voice sentence="QJELL AFAR GOU JEY!!"/>
