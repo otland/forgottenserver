@@ -157,15 +157,14 @@ if KeywordHandler == nil then
 	end
 
 	-- Moves the current position in the keyword hierarchy count steps upwards. Count defalut value = 1.
-	--	This function MIGHT not work properly yet. Use at your own risk.
-	function KeywordHandler:moveUp(count)
+	function KeywordHandler:moveUp(cid, count)
 		local steps = count
 		if steps == nil or type(steps) ~= "number" then
 			steps = 1
 		end
-		for i = 1, steps, 1 do
+		for i = 1, steps do
 			if self.lastNode[cid] == nil then
-				break
+				return nil
 			end
 			self.lastNode[cid] = self.lastNode[cid]:getParent() or self:getRoot()
 		end
