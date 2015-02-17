@@ -30,7 +30,7 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="Gnorrr!"/>
 		<voice sentence="Gnarrr!"/>
-		<voice sentence="<snort>"/>
+		<voice sentence="&lt;snort&gt;"/>
 		<voice sentence="Mrrr!"/>
 	</voices>
 	<loot>

@@ -49,7 +49,7 @@
 		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="<brrzz>"/>
+		<voice sentence="&lt;brrzz&gt;"/>
 		<voice sentence="Thun... Thun... THUNDER!"/>
 	</voices>
 	<loot>

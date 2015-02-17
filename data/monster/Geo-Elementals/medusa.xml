@@ -51,7 +51,7 @@
 		<voice sentence="You will make ssuch a fine ssstatue!"/>
 		<voice sentence="There isss no chhhanccce of esscape"/>
 		<voice sentence="Jusssst look at me!"/>
-		<voice sentence="Are you tired or why are you moving thhat sslow<chuckle>"/>
+		<voice sentence="Are you tired or why are you moving thhat sslow&lt;chuckle&gt;"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
