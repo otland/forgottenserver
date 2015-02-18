@@ -508,18 +508,18 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 	}
 
 	switch (searchType) {
-		case TARGETSEARCH_NEAREAST: {
+		case TARGETSEARCH_NEAREST: {
 			if (!resultList.empty()) {
 				auto it = resultList.begin();
 				Creature* target = *it;
 
 				if (++it != resultList.end()) {
 					const Position& targetPosition = target->getPosition();
-					int32_t minRange = std::max<int32_t>(Position::getDistanceX(myPos, targetPosition), Position::getDistanceY(myPos, targetPosition));
+					int32_t minRange = Position::getDistanceX(myPos, targetPosition) + Position::getDistanceY(myPos, targetPosition);
 					do {
 						const Position& pos = (*it)->getPosition();
 
-						int32_t distance = std::max<int32_t>(Position::getDistanceX(myPos, pos), Position::getDistanceY(myPos, pos));
+						int32_t distance = Position::getDistanceX(myPos, pos) + Position::getDistanceY(myPos, pos);
 						if (distance < minRange) {
 							target = *it;
 							minRange = distance;
@@ -888,7 +888,7 @@ void Monster::onThinkTarget(uint32_t interval)
 						if (mType->targetDistance <= 1) {
 							searchTarget(TARGETSEARCH_RANDOM);
 						} else {
-							searchTarget(TARGETSEARCH_NEAREAST);
+							searchTarget(TARGETSEARCH_NEAREST);
 						}
 					}
 				}
