@@ -393,3 +393,7 @@ function Game.broadcastMessage(message, messageType)
 		player:sendTextMessage(messageType, message)
 	end
 end
+
+if nextUseStaminaTime == nil then
+	nextUseStaminaTime = {}
+end

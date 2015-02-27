@@ -36,7 +36,7 @@
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Zzrkrrch!"/>
-		<voice sentence="<crackle>"/>
+		<voice sentence="&lt;crackle&gt;"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="99930" /><!-- gold coin -->

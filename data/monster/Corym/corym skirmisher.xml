@@ -35,7 +35,7 @@
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Squeak! Squeak!"/>
-		<voice sentence="<sniff><sniff><sniff>"/>
+		<voice sentence="&lt;sniff&gt;&lt;sniff&gt;&lt;sniff&gt;"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="45" chance="50000"/><!-- gold coin -->

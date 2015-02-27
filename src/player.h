@@ -210,8 +210,6 @@ class Player final : public Creature, public Cylinder
 		uint16_t getStaminaMinutes() const {
 			return staminaMinutes;
 		}
-		void regenerateStamina(int32_t offlineTime);
-		void useStamina();
 
 		bool addOfflineTrainingTries(skills_t skill, uint64_t tries);
 
@@ -1181,7 +1179,7 @@ class Player final : public Creature, public Cylinder
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
 		void gainExperience(uint64_t exp, Creature* source);
-		void addExperience(Creature* source, uint64_t exp, bool sendText = false, bool applyStaminaChange = false, bool applyMultiplier = false);
+		void addExperience(Creature* source, uint64_t exp, bool sendText = false);
 		void removeExperience(uint64_t exp, bool sendText = false);
 
 		void updateInventoryWeight();
@@ -1250,7 +1248,6 @@ class Player final : public Creature, public Cylinder
 
 		time_t lastLoginSaved;
 		time_t lastLogout;
-		time_t nextUseStaminaTime;
 
 		uint64_t experience;
 		uint64_t manaSpent;
