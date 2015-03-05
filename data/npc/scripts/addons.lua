@@ -28,17 +28,17 @@ function buyAddons(cid, message, keywords, parameters, node)
 		npcHandler:say('I only serve customers with premium accounts.', cid)
 	end
 
-	keywordHandler:moveUp(1)
+	keywordHandler:moveUp(cid, 2)
 	return true
 end
 
 local node1 = keywordHandler:addKeyword({'first addon'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to buy the first addons set for 5000 gold coins?'})
 	node1:addChildKeyword({'yes'}, buyAddons, {addon = 1, cost = 5000, premium = true})
-	node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, moveup = 1, text = 'Too expensive, eh?'})
+	node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, moveup = 2, text = 'Too expensive, eh?'})
 
 local node2 = keywordHandler:addKeyword({'second addon'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Would you like to buy the second addons set for 10000 gold coins?'})
 	node2:addChildKeyword({'yes'}, buyAddons, {addon = 2, cost = 10000, premium = true})
-	node2:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, moveup = 1, text = 'Too expensive, eh?'})
+	node2:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, moveup = 2, text = 'Too expensive, eh?'})
 
 keywordHandler:addKeyword({'addon'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'I sell the first addons set for 5000 gold coins and the second addons set for 10000 gold coins.'})
 
