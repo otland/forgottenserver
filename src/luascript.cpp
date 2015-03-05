@@ -11556,12 +11556,12 @@ int32_t LuaScriptInterface::luaItemTypeGetRequiredLevel(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->minReqLevel);
-	}
-	else {
+	}else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
+
 int32_t LuaScriptInterface::luaItemTypeHasSubType(lua_State* L)
 {
 	// itemType:hasSubType()
