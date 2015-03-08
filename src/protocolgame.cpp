@@ -1325,6 +1325,13 @@ void ProtocolGame::sendStats()
 
 void ProtocolGame::sendBasicData()
 {
+	NetworkMessage msg;
+	msg.AddByte(0x9F);
+	msg.AddByte(player->isPremium() ? 0x01 : 0x00);
+	msg.Add<uint32_t>(std::numeric_limits<uint32_t>::max());
+	msg.AddByte(player->getVocation()->getClientId());
+	msg.Add<uint16_t>(0x00);
+	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos/* = nullptr*/, uint32_t value/* = 0*/, TextColor_t color/* = TEXTCOLOR_NONE*/)
