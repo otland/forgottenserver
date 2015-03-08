@@ -66,6 +66,11 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		std::ostringstream ss;
 		ss << g_game.getMotdNum() << "\n" << g_config.getString(ConfigManager::MOTD);
 		output->AddString(ss.str());
+		
+		//SessionKey
+		output->AddByte(0x28);
+		
+		output->AddString(accountName + "&" + password);
 
 		//Add char list
 		output->AddByte(0x64);

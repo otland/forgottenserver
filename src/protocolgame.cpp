@@ -318,10 +318,17 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	msg.SkipBytes(1); // gamemaster flag
-	msg.GetString();
-	std::string accountName;
+	std::string sessionKey = msg.GetString();
+	std::stringstream account(sessionKey);
+	std::string segment;
+	std::vector<std::string> seglist;
+	while (std::getline(account, segment, '&'))
+	{
+		seglist.push_back(segment);
+	}
+	std::string accountName = seglist[0];
 	std::string characterName = msg.GetString();
-	std::string password;
+	std::string password = seglist[1];
 
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.GetByte();
@@ -334,6 +341,11 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
 		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		return;
+	}
+	
+	if (accountName.empty()) {
+		dispatchDisconnectClient("You must enter your account name.");
 		return;
 	}
 
@@ -360,6 +372,10 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
+	if (accountId == 0) {
+		dispatchDisconnectClient("Account name or password is not correct.");
+		return;
+	}
 
 #undef dispatchDisconnectClient
 
