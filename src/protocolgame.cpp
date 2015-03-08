@@ -218,7 +218,6 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 	}
 }
 
-
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 {
 	unRef();
@@ -451,9 +450,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			return;
 		}
 	}
-
-
-
 
 	switch (recvbyte) {
 		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, this, true, false))); break;
@@ -2172,9 +2168,6 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	static uint32_t statementId = 0;
 	msg.Add<uint32_t>(++statementId);
 
-
-
-
 	msg.AddString(creature->getName());
 
 	//Add level only for players
@@ -2190,9 +2183,6 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	} else {
 		msg.AddPosition(creature->getPosition());
 	}
-
-
-
 
 	msg.AddString(text);
 	writeToOutputBuffer(msg);
@@ -2242,7 +2232,6 @@ void ProtocolGame::sendPrivateMessage(const Player* speaker, SpeakClasses type, 
 	msg.AddString(text);
 	writeToOutputBuffer(msg);
 }
-
 
 void ProtocolGame::sendCancelTarget()
 {
