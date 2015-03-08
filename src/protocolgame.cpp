@@ -218,6 +218,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 	}
 }
 
+
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 {
 	unRef();
@@ -294,7 +295,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 	version = msg.get<uint16_t>();
 
-	msg.SkipBytes(5); // U32 clientVersion, U8 clientType
+	msg.SkipBytes(7); // U32 clientVersion, U8 clientType
 
 	if (!RSA_decrypt(msg)) {
 		getConnection()->closeConnection();
@@ -318,9 +319,10 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	msg.SkipBytes(1); // gamemaster flag
-	std::string accountName = msg.GetString();
+	msg.GetString();
+	std::string accountName;
 	std::string characterName = msg.GetString();
-	std::string password = msg.GetString();
+	std::string password;
 
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.GetByte();
@@ -333,11 +335,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
 		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
-		return;
-	}
-
-	if (accountName.empty()) {
-		dispatchDisconnectClient("You must enter your account name.");
 		return;
 	}
 
@@ -364,10 +361,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
-	if (accountId == 0) {
-		dispatchDisconnectClient("Account name or password is not correct.");
-		return;
-	}
 
 #undef dispatchDisconnectClient
 
@@ -458,6 +451,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			return;
 		}
 	}
+
+
+
 
 	switch (recvbyte) {
 		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, this, true, false))); break;
@@ -1319,6 +1315,7 @@ void ProtocolGame::sendReLoginWindow(uint8_t unfairFightReduction)
 {
 	NetworkMessage msg;
 	msg.AddByte(0x28);
+	msg.AddByte(0x00);
 	msg.AddByte(unfairFightReduction);
 	writeToOutputBuffer(msg);
 }
@@ -1332,13 +1329,6 @@ void ProtocolGame::sendStats()
 
 void ProtocolGame::sendBasicData()
 {
-	NetworkMessage msg;
-	msg.AddByte(0x9F);
-	msg.AddByte(player->isPremium() ? 0x01 : 0x00);
-	msg.Add<uint32_t>(std::numeric_limits<uint32_t>::max());
-	msg.AddByte(player->getVocation()->getClientId());
-	msg.Add<uint16_t>(0x00);
-	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos/* = nullptr*/, uint32_t value/* = 0*/, TextColor_t color/* = TEXTCOLOR_NONE*/)
@@ -2182,6 +2172,9 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	static uint32_t statementId = 0;
 	msg.Add<uint32_t>(++statementId);
 
+
+
+
 	msg.AddString(creature->getName());
 
 	//Add level only for players
@@ -2197,6 +2190,9 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	} else {
 		msg.AddPosition(creature->getPosition());
 	}
+
+
+
 
 	msg.AddString(text);
 	writeToOutputBuffer(msg);
@@ -2246,6 +2242,7 @@ void ProtocolGame::sendPrivateMessage(const Player* speaker, SpeakClasses type, 
 	msg.AddString(text);
 	writeToOutputBuffer(msg);
 }
+
 
 void ProtocolGame::sendCancelTarget()
 {
@@ -2476,6 +2473,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	} else {
 		msg.AddByte(0x00);
 	}
+
+	msg.AddByte(0x00);
+	msg.AddByte(0x00);
 
 	writeToOutputBuffer(msg);
 
@@ -2971,6 +2971,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 
 	msg.Add<uint16_t>(player->getLevel());
 	msg.AddByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
+
+	msg.AddDouble(0x00);
 
 	msg.Add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.Add<uint16_t>(std::min<int32_t>(player->getPlayerInfo(PLAYERINFO_MAXMANA), std::numeric_limits<uint16_t>::max()));
