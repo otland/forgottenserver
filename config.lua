@@ -71,6 +71,7 @@ kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
 emoteSpells = "no"
 classicEquipmentSlots = "no"
+expertMode = "yes"
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
