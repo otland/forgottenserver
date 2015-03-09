@@ -45,7 +45,6 @@ class ConfigManager
 			WARN_UNSAFE_SCRIPTS = 14,
 			CONVERT_UNSAFE_SCRIPTS = 15,
 			CLASSIC_EQUIPMENT_SLOTS = 16,
-			EXPERT_MODE = 16,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 

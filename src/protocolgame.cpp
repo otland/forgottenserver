@@ -2488,7 +2488,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	msg.AddByte(0x00);
-	msg.AddByte(g_config.getBoolean(ConfigManager::EXPERT_MODE) ? 0x01 : 0x00);
+	msg.AddByte(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
 
