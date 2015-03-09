@@ -89,7 +89,6 @@ bool ConfigManager::load()
 	m_confBoolean[WARN_UNSAFE_SCRIPTS] = booleanString(getGlobalString(L, "warnUnsafeScripts", "yes"));
 	m_confBoolean[CONVERT_UNSAFE_SCRIPTS] = booleanString(getGlobalString(L, "convertUnsafeScripts", "yes"));
 	m_confBoolean[CLASSIC_EQUIPMENT_SLOTS] = booleanString(getGlobalString(L, "classicEquipmentSlots", "no"));
-	m_confBoolean[EXPERT_MODE] = booleanString(getGlobalString(L, "expertMode", "yes"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	m_confString[SERVER_NAME] = getGlobalString(L, "serverName", "");
