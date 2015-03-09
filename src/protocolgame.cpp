@@ -343,7 +343,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
 		return;
 	}
-	
+
 	if (accountName.empty()) {
 		dispatchDisconnectClient("You must enter your account name.");
 		return;
@@ -511,6 +511,8 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x98: parseOpenChannel(msg); break;
 		case 0x99: parseCloseChannel(msg); break;
 		case 0x9A: parseOpenPrivateChannel(msg); break;
+		case 0x9C: ParseServerBlessings(msg); break;
+		case 0x9D: ParseServerSwitchPreset(msg); break;
 		case 0x9E: addGameTask(&Game::playerCloseNpcChannel, player->getID()); break;
 		case 0xA0: parseFightModes(msg); break;
 		case 0xA1: parseAttack(msg); break;
@@ -524,6 +526,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xAA: addGameTask(&Game::playerCreatePrivateChannel, player->getID()); break;
 		case 0xAB: parseChannelInvite(msg); break;
 		case 0xAC: parseChannelExclude(msg); break;
+		case 0xAE: ParseServerEditGuildMessage(msg); break;
+		case 0xB7: ParseServerUnjustifiedPoints(msg); break;
+		case 0xB8: ParseServerPvpSituations(msg); break;
 		case 0xBE: addGameTask(&Game::playerCancelAttackAndFollow, player->getID()); break;
 		case 0xC9: /* update tile */ break;
 		case 0xCA: parseUpdateContainer(msg); break;
@@ -1179,6 +1184,37 @@ void ProtocolGame::parseSeekInContainer(NetworkMessage& msg)
 	uint8_t containerId = msg.GetByte();
 	uint16_t index = msg.get<uint16_t>();
 	addGameTask(&Game::playerSeekInContainer, player->getID(), containerId, index);
+}
+
+void ProtocolGame::ParseServerBlessings(NetworkMessage& msg)
+{
+	msg.get<uint16_t>();
+}
+
+void ProtocolGame::ParseServerSwitchPreset(NetworkMessage& msg)
+{
+	msg.get<uint32_t>();
+}
+
+void ProtocolGame::ParseServerEditGuildMessage(NetworkMessage& msg)
+{
+	msg.GetString();
+}
+
+void ProtocolGame::ParseServerUnjustifiedPoints(NetworkMessage& msg)
+{
+	msg.GetByte();
+	msg.GetByte();
+	msg.GetByte();
+	msg.GetByte();
+	msg.GetByte();
+	msg.GetByte();
+	msg.GetByte();
+}
+
+void ProtocolGame::ParseServerPvpSituations(NetworkMessage& msg)
+{
+	msg.GetByte();
 }
 
 // Send methods
@@ -2270,7 +2306,7 @@ void ProtocolGame::sendChangeSpeed(const Creature* creature, uint32_t speed)
 	msg.AddByte(0x8F);
 	msg.Add<uint32_t>(creature->getID());
 	msg.Add<uint16_t>(speed / 2);
-	msg.Add<uint16_t>(speed / 2);
+	msg.Add<uint16_t>(creature->getBaseSpeed() / 2);
 	writeToOutputBuffer(msg);
 }
 
