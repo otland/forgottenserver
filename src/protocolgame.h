@@ -171,13 +171,6 @@ class ProtocolGame final : public Protocol
 		void parseOpenPrivateChannel(NetworkMessage& msg);
 		void parseCloseChannel(NetworkMessage& msg);
 
-		//?
-		void ParseServerBlessings(NetworkMessage& msg);
-		void ParseServerSwitchPreset(NetworkMessage& msg);
-		void ParseServerEditGuildMessage(NetworkMessage& msg);
-		void ParseServerUnjustifiedPoints(NetworkMessage& msg);
-		void ParseServerPvpSituations(NetworkMessage& msg);
-
 		//Send functions
 		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel);
 		void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent);
