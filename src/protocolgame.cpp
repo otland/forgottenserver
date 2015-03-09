@@ -1291,7 +1291,7 @@ void ProtocolGame::sendCreatureHelpers(uint32_t creatureId, uint16_t helpers)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t color)
+void ProtocolGame::sendCreatureSquare(const Creature* creature, bool isPermanent, SquareColor_t color)
 {
 	if (!canSee(creature)) {
 		return;
@@ -1300,7 +1300,7 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	NetworkMessage msg;
 	msg.AddByte(0x93);
 	msg.Add<uint32_t>(creature->getID());
-	msg.AddByte(0x01);
+	msg.AddByte(isPermanent ? 0x00 : 0x01);
 	msg.AddByte(color);
 	writeToOutputBuffer(msg);
 }
@@ -2488,7 +2488,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	msg.AddByte(0x00);
-	msg.AddByte(0x00);
+	msg.AddByte(g_config.getBoolean(ConfigManager::EXPERT_MODE) ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
 

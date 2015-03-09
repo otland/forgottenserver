@@ -1922,7 +1922,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field);
 
 	if (attacker) {
-		sendCreatureSquare(attacker, SQ_COLOR_BLACK);
+		sendCreatureSquare(attacker, false, SQ_COLOR_BLACK);
 	}
 
 	if (blockType != BLOCK_NONE) {
