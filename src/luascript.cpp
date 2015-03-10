@@ -2534,6 +2534,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getTransformEquipId", LuaScriptInterface::luaItemTypeGetTransformEquipId);
 	registerMethod("ItemType", "getTransformDeEquipId", LuaScriptInterface::luaItemTypeGetTransformDeEquipId);
 	registerMethod("ItemType", "getDecayId", LuaScriptInterface::luaItemTypeGetDecayId);
+	registerMethod("ItemType", "getRequiredLevel", LuaScriptInterface::luaItemTypeGetRequiredLevel);
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
@@ -11544,6 +11545,18 @@ int32_t LuaScriptInterface::luaItemTypeGetDecayId(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->decayTo);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetRequiredLevel(lua_State* L)
+{
+	// itemType:getRequiredLevel()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->minReqLevel);
 	} else {
 		lua_pushnil(L);
 	}
