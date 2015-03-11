@@ -66,7 +66,7 @@ bool Events::load()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/events/events.xml");
 	if (!result) {
-		std::cout << "[Error - Events::load] Failed to load data/events/events.xml: " << result.description() << std::endl;
+		printXMLError("Error - Events::load", "data/events/events.xml", result);
 		return false;
 	}
 

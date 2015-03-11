@@ -632,7 +632,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		std::cout << "[Error - Houses::loadHousesXML] Failed to load " << filename << ": " << result.description() << std::endl;
+		printXMLError("Error - Houses::loadHousesXML", filename, result);
 		return false;
 	}
 

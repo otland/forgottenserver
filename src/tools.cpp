@@ -27,6 +27,69 @@
 
 extern ConfigManager g_config;
 
+void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result)
+{
+	std::cout << '[' << where << "] Failed to load " << fileName << ": " << result.description() << std::endl;
+
+	FILE* file = fopen(fileName.c_str(), "rb");
+	if (!file) {
+		return;
+	}
+
+	char buffer[32768];
+	int32_t currentLine = 1;
+
+	for (size_t index = 0; index < result.offset; ) {
+		size_t bytes = fread(buffer, 1, 32768, file); 
+		for (size_t i = 0; i < bytes; ++i, ++index) {
+			if (buffer[i] == '\n') {
+				++currentLine;
+			}
+
+			if (index == result.offset) {
+				break;
+			}
+		}
+	}
+
+	size_t newOffset = result.offset % 16384;
+	fseek(file, std::max<long>(0, result.offset - 16384), SEEK_SET);
+
+	size_t bytes = fread(buffer, 1, 32768, file);
+	fclose(file);
+
+	size_t firstByte = 0;
+	for (size_t i = newOffset; i > 0; --i) {
+		if (buffer[i - 1] == '\n') {
+			firstByte = i;
+			break;
+		}
+	}
+
+	for (size_t i = newOffset; i < bytes; ++i) {
+		if (buffer[i] == '\n') {
+			bytes = i;
+			break;
+		}
+	}
+
+	std::cout << "Line " << currentLine << ':' << std::endl;
+	std::cout << std::string(buffer + firstByte, bytes - firstByte) << std::endl;
+
+	for (size_t i = firstByte; i <= bytes; ++i) {
+		if (i == newOffset) {
+			std::cout << '^' << std::endl;
+			break;
+		}
+
+		if (buffer[i] == '\t') {
+			std::cout << '\t';
+		} else {
+			std::cout << ' ';
+		}
+	}
+}
+
 inline static uint32_t circularShift(int bits, uint32_t value)
 {
 	return (value << bits) | (value >> (32 - bits));

@@ -159,7 +159,7 @@ bool Quests::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/quests.xml");
 	if (!result) {
-		std::cout << "[Error - Quests::loadFromXml] Failed to load data/XML/quests.xml: " << result.description() << std::endl;
+		printXMLError("Error - Quests::loadFromXml", "data/XML/quests.xml", result);
 		return false;
 	}
 

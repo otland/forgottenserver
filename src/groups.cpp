@@ -19,16 +19,17 @@
 
 #include "otpch.h"
 
-#include "pugicast.h"
-
 #include "groups.h"
+
+#include "pugicast.h"
+#include "tools.h"
 
 bool Groups::load()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/groups.xml");
 	if (!result) {
-		std::cout << "[Error - Groups::load] Failed to load data/XML/groups.xml: " << result.description() << std::endl;
+		printXMLError("Error - Groups::load", "data/XML/groups.xml", result);
 		return false;
 	}
 
