@@ -43,8 +43,7 @@ void ProtocolLogin::disconnectClient(uint16_t version, const std::string& messag
 			output->AddByte(0x0B);
 			output->AddString(message);
 			OutputMessagePool::getInstance()->send(output);
-		}
-		else {
+		} else {
 			output->AddByte(0x0A);
 			output->AddString(message);
 			OutputMessagePool::getInstance()->send(output);
