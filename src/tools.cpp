@@ -53,7 +53,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 	}
 
 	size_t newOffset = result.offset & 16383;
-	fseek(file, std::max<long>(0, result.offset - 16384), SEEK_SET);
+	fseek(file, result.offset - newOffset, SEEK_SET);
 
 	size_t bytes = fread(buffer, 1, 32768, file);
 	fclose(file);
