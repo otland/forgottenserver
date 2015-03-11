@@ -629,7 +629,7 @@ void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile*
 						itemId = ITEM_ENERGYFIELD_NOPVP;
 					}
 				} else if (itemId == ITEM_FIREFIELD_PVP_FULL || itemId == ITEM_POISONFIELD_PVP || itemId == ITEM_ENERGYFIELD_PVP) {
-					casterPlayer->addInFightTicks(true);
+					casterPlayer->addInFightTicks();
 				}
 			}
 		}
