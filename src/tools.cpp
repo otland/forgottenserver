@@ -39,7 +39,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 	char buffer[32768];
 	int32_t currentLine = 1;
 
-	for (size_t index = 0; index < result.offset; ) {
+	for (ptrdiff_t index = 0; index < result.offset; ) {
 		size_t bytes = fread(buffer, 1, 32768, file); 
 		for (size_t i = 0; i < bytes; ++i, ++index) {
 			if (buffer[i] == '\n') {
@@ -52,16 +52,16 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 		}
 	}
 
-	size_t newOffset = result.offset % 16384;
+	size_t newOffset = result.offset & 16383;
 	fseek(file, std::max<long>(0, result.offset - 16384), SEEK_SET);
 
 	size_t bytes = fread(buffer, 1, 32768, file);
 	fclose(file);
 
 	size_t firstByte = 0;
-	for (size_t i = newOffset; i > 0; --i) {
-		if (buffer[i - 1] == '\n') {
-			firstByte = i;
+	for (ptrdiff_t i = newOffset; --i >= 0; ) {
+		if (buffer[i] == '\n') {
+			firstByte = i + 1;
 			break;
 		}
 	}

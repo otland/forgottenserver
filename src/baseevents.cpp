@@ -47,7 +47,7 @@ bool BaseEvents::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		std::cout << "[Error - BaseEvents::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
+		printXMLError("Error - BaseEvents::loadFromXml", filename, result);
 		return false;
 	}
 
