@@ -22,6 +22,7 @@
 #include "vocation.h"
 
 #include "pugicast.h"
+
 #include "tools.h"
 
 bool Vocations::loadFromXml()
@@ -29,7 +30,7 @@ bool Vocations::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/vocations.xml");
 	if (!result) {
-		printXMLError("Error - Vocations::loadFromXml", "data/XML/vocations.xml", result);
+		std::cout << "[Error - Vocations::loadFromXml] Failed to load data/XML/vocations.xml: " << result.description() << std::endl;
 		return false;
 	}
 

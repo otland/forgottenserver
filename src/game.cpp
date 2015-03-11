@@ -4806,7 +4806,7 @@ bool Game::loadExperienceStages()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
 	if (!result) {
-		printXMLError("Error - Game::loadExperienceStages", "data/XML/stages.xml", result);
+		std::cout << "[Error - Game::loadExperienceStages] Failed to load data/XML/stages.xml: " << result.description() << std::endl;
 		return false;
 	}
 

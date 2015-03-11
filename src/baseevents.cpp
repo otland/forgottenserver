@@ -20,9 +20,7 @@
 #include "otpch.h"
 
 #include "baseevents.h"
-
 #include "pugicast.h"
-#include "tools.h"
 
 extern LuaEnvironment g_luaEnvironment;
 
@@ -49,7 +47,7 @@ bool BaseEvents::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		printXMLError("Error - BaseEvents::loadFromXml", filename, result);
+		std::cout << "[Error - BaseEvents::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
 

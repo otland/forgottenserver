@@ -1381,6 +1381,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_CONFETTI_HORIZONTAL)
 	registerEnum(CONST_ME_CONFETTI_VERTICAL)
 	registerEnum(CONST_ME_BLACKSMOKE)
+	registerEnum(CONST_ME_REDSMOKE)
+	registerEnum(CONST_ME_YELLOWSMOKE)
+	registerEnum(CONST_ME_GREENSMOKE)
+	registerEnum(CONST_ME_PURPLESMOKE)
 	registerEnum(CONST_ME_NONE)
 
 	registerEnum(CONST_ANI_SPEAR)
@@ -1431,6 +1435,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ANI_CRYSTALLINEARROW)
 	registerEnum(CONST_ANI_DRILLBOLT)
 	registerEnum(CONST_ANI_ENVENOMEDARROW)
+	registerEnum(CONST_ANI_GLOOTHSPEAR)
+	registerEnum(CONST_ANI_SIMPLEARROW)
 	registerEnum(CONST_ANI_WEAPONTYPE)
 	registerEnum(CONST_ANI_NONE)
 
@@ -2534,7 +2540,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getTransformEquipId", LuaScriptInterface::luaItemTypeGetTransformEquipId);
 	registerMethod("ItemType", "getTransformDeEquipId", LuaScriptInterface::luaItemTypeGetTransformDeEquipId);
 	registerMethod("ItemType", "getDecayId", LuaScriptInterface::luaItemTypeGetDecayId);
-	registerMethod("ItemType", "getRequiredLevel", LuaScriptInterface::luaItemTypeGetRequiredLevel);
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
@@ -11545,18 +11550,6 @@ int32_t LuaScriptInterface::luaItemTypeGetDecayId(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->decayTo);
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaItemTypeGetRequiredLevel(lua_State* L)
-{
-	// itemType:getRequiredLevel()
-	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
-	if (itemType) {
-		lua_pushnumber(L, itemType->minReqLevel);
 	} else {
 		lua_pushnil(L);
 	}

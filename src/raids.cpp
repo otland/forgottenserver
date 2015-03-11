@@ -60,7 +60,7 @@ bool Raids::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/raids/raids.xml");
 	if (!result) {
-		printXMLError("Error - Raids::loadFromXml", "data/raids/raids.xml", result);
+		std::cout << "[Error - Raids::loadFromXml] Failed to load data/raids/raids.xml: " << result.description() << std::endl;
 		return false;
 	}
 
@@ -209,7 +209,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
 	if (!result) {
-		printXMLError("Error - Raid::loadFromXml", _filename, result);
+		std::cout << "[Error - Raid::loadFromXml] Failed to load " << _filename << ": " << result.description() << std::endl;
 		return false;
 	}
 
