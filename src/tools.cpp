@@ -38,56 +38,41 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 
 	char buffer[32768];
 	int32_t currentLine = 1;
+	std::string line;
 
-	for (ptrdiff_t index = 0; index < result.offset; ) {
-		size_t bytes = fread(buffer, 1, 32768, file); 
-		for (size_t i = 0; i < bytes; ++i, ++index) {
+	size_t offset = static_cast<size_t>(result.offset);
+	size_t lineOffsetPosition = 0;
+	size_t index = 0;
+	size_t bytes;
+	do {
+		bytes = fread(buffer, 1, 32768, file);
+		for (size_t i = 0; i < bytes; ++i) {
 			if (buffer[i] == '\n') {
+				if ((index + i) >= offset) {
+					lineOffsetPosition = line.length() - ((index + i) - offset);
+					bytes = 0;
+					break;
+				}
 				++currentLine;
-			}
-
-			if (index == result.offset) {
-				break;
+				line.clear();
+			} else {
+				line.push_back(buffer[i]);
 			}
 		}
-	}
-
-	size_t newOffset = result.offset & 16383;
-	fseek(file, result.offset - newOffset, SEEK_SET);
-
-	size_t bytes = fread(buffer, 1, 32768, file);
+		index += bytes;
+	} while (bytes == 32768);
 	fclose(file);
 
-	size_t firstByte = 0;
-	for (ptrdiff_t i = newOffset; --i >= 0; ) {
-		if (buffer[i] == '\n') {
-			firstByte = i + 1;
-			break;
-		}
-	}
-
-	for (size_t i = newOffset; i < bytes; ++i) {
-		if (buffer[i] == '\n') {
-			bytes = i;
-			break;
-		}
-	}
-
 	std::cout << "Line " << currentLine << ':' << std::endl;
-	std::cout << std::string(buffer + firstByte, bytes - firstByte) << std::endl;
-
-	for (size_t i = firstByte; i <= bytes; ++i) {
-		if (i == newOffset) {
-			std::cout << '^' << std::endl;
-			break;
-		}
-
-		if (buffer[i] == '\t') {
+	std::cout << line << std::endl;
+	for (size_t i = 0; i < lineOffsetPosition; i++) {
+		if (line[i] == '\t') {
 			std::cout << '\t';
 		} else {
 			std::cout << ' ';
 		}
 	}
+	std::cout << '^' << std::endl;
 }
 
 inline static uint32_t circularShift(int bits, uint32_t value)
