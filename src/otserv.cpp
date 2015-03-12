@@ -218,7 +218,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// load item data
 	std::cout << ">> Loading items" << std::endl;
-	if (Item::items.loadFromOtb("data/items/items.otb")) {
+	if (Item::items.loadFromOtb("data/items/items.otb") != ERROR_NONE) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}

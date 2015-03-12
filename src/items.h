@@ -290,7 +290,7 @@ class Items
 		bool reload();
 		void clear();
 
-		int32_t loadFromOtb(const std::string& file);
+		FILELOADER_ERRORS loadFromOtb(const std::string& file);
 
 		const ItemType& operator[](size_t id) const {
 			return getItemType(id);

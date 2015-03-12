@@ -103,7 +103,7 @@ class FileLoader
 		NODE getChildNode(const NODE parent, uint32_t& type);
 		NODE getNextNode(const NODE prev, uint32_t& type);
 
-		int32_t getError() const {
+		FILELOADER_ERRORS getError() const {
 			return m_lastError;
 		}
 
