@@ -270,13 +270,6 @@ class Player final : public Creature, public Cylinder
 			lastWalkthroughPosition = walkthroughPosition;
 		}
 
-		bool hasRequestedOutfit() const {
-			return requestedOutfit;
-		}
-		void hasRequestedOutfit(bool newValue) {
-			requestedOutfit = newValue;
-		}
-
 		Inbox* getInbox() const {
 			return inbox;
 		}
@@ -1327,7 +1320,6 @@ class Player final : public Creature, public Cylinder
 		secureMode_t secureMode;
 		AccountType_t accountType;
 
-		bool requestedOutfit;
 		bool inMarket;
 		bool ghostMode;
 		bool pzLocked;

@@ -2775,7 +2775,6 @@ void ProtocolGame::sendOutfitWindow()
 		msg.AddString(mount->name);
 	}
 
-	player->hasRequestedOutfit(true);
 	writeToOutputBuffer(msg);
 }
 

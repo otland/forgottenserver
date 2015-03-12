@@ -153,7 +153,6 @@ Player::Player(ProtocolGame* p) :
 	lastStatsTrainingTime = 0;
 
 	ghostMode = false;
-	requestedOutfit = false;
 
 	staminaMinutes = 2520;
 

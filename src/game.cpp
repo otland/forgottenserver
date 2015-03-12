@@ -3292,11 +3292,6 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 		return;
 	}
 
-	if (!player->hasRequestedOutfit()) {
-		return;
-	}
-	player->hasRequestedOutfit(false);
-
 	if (outfit.lookMount != 0) {
 		Mount* mount = mounts.getMountByClientID(outfit.lookMount);
 		if (!mount) {
