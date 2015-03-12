@@ -2534,6 +2534,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getTransformEquipId", LuaScriptInterface::luaItemTypeGetTransformEquipId);
 	registerMethod("ItemType", "getTransformDeEquipId", LuaScriptInterface::luaItemTypeGetTransformDeEquipId);
 	registerMethod("ItemType", "getDecayId", LuaScriptInterface::luaItemTypeGetDecayId);
+	registerMethod("ItemType", "getDecayTime", LuaScriptInterface::luaItemTypeGetDecayTime);
 	registerMethod("ItemType", "getRequiredLevel", LuaScriptInterface::luaItemTypeGetRequiredLevel);
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
@@ -11596,6 +11597,24 @@ int32_t LuaScriptInterface::luaItemTypeGetDecayId(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->decayTo);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaItemTypeGetDecayTime(lua_State* L)
+{
+	// itemType:getDecayTime()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		uint32_t decayTime = itemType->decayTime;
+		if (decayTime == 0 && itemType->showDuration) {
+			const ItemType equipItemType = Item::items[itemType->transformEquipTo];
+			decayTime = equipItemType.decayTime;
+		}
+
+		lua_pushnumber(L, decayTime);
 	} else {
 		lua_pushnil(L);
 	}
