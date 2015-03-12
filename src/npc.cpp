@@ -143,7 +143,7 @@ bool Npc::loadFromXml(const std::string& filename)
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		printXMLError("Error - Npc::loadFromXml", filename, result);
+		std::cout << "[Error - Npc::loadFromXml] Failed to load " << filename << ": " << result.description() << std::endl;
 		return false;
 	}
 

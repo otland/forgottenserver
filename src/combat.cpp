@@ -59,50 +59,71 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 {
 	CombatDamage damage;
 	damage.origin = params.origin;
+	if (!creature) {
+		return damage;
+	}
+
 	damage.primary.type = params.combatType;
-	if (formulaType == COMBAT_FORMULA_DAMAGE) {
+
+	int32_t min, max;
+	if (creature->getCombatValues(min, max)) {
+		damage.primary.value = normal_random(min, max);
+	} else if (Player* player = creature->getPlayer()) {
+		if (params.valueCallback) {
+			params.valueCallback->getMinMaxValues(player, damage, params.useCharges);
+		} else {
+			switch (formulaType) {
+				case COMBAT_FORMULA_LEVELMAGIC: {
+					int32_t levelFormula = player->getLevel() * 2 + player->getMagicLevel() * 3;
+					damage.primary.value = normal_random(
+						static_cast<int32_t>(levelFormula * mina + minb),
+						static_cast<int32_t>(levelFormula * maxa + maxb)
+					);
+					break;
+				}
+
+				case COMBAT_FORMULA_SKILL: {
+					Item* tool = player->getWeapon();
+					const Weapon* weapon = g_weapons->getWeapon(tool);
+					if (weapon) {
+						damage.primary.value = normal_random(
+							static_cast<int32_t>(minb),
+							static_cast<int32_t>(weapon->getWeaponDamage(player, target, tool, true) * maxa + maxb)
+						);
+
+						damage.secondary.type = weapon->getElementType();
+						damage.secondary.value = weapon->getElementDamage(player, target, tool);
+						if (params.useCharges) {
+							uint16_t charges = tool->getCharges();
+							if (charges != 0) {
+								g_game.transformItem(tool, tool->getID(), charges - 1);
+							}
+						}
+					} else {
+						damage.primary.value = normal_random(
+							static_cast<int32_t>(minb),
+							static_cast<int32_t>(maxb)
+						);
+					}
+					break;
+				}
+
+				case COMBAT_FORMULA_DAMAGE: {
+					damage.primary.value = normal_random(
+						static_cast<int32_t>(mina),
+						static_cast<int32_t>(maxa)
+					);
+					break;
+				}
+				default:
+					break;
+			}
+		}
+	} else if (formulaType == COMBAT_FORMULA_DAMAGE) {
 		damage.primary.value = normal_random(
 			static_cast<int32_t>(mina),
 			static_cast<int32_t>(maxa)
 		);
-	} else if (creature) {
-		int32_t min, max;
-		if (creature->getCombatValues(min, max)) {
-			damage.primary.value = normal_random(min, max);
-		} else if (Player* player = creature->getPlayer()) {
-			if (params.valueCallback) {
-				params.valueCallback->getMinMaxValues(player, damage, params.useCharges);
-			} else if (formulaType == COMBAT_FORMULA_LEVELMAGIC) {
-				int32_t levelFormula = player->getLevel() * 2 + player->getMagicLevel() * 3;
-				damage.primary.value = normal_random(
-					static_cast<int32_t>(levelFormula * mina + minb),
-					static_cast<int32_t>(levelFormula * maxa + maxb)
-				);
-			} else if (formulaType == COMBAT_FORMULA_SKILL) {
-				Item* tool = player->getWeapon();
-				const Weapon* weapon = g_weapons->getWeapon(tool);
-				if (weapon) {
-					damage.primary.value = normal_random(
-						static_cast<int32_t>(minb),
-						static_cast<int32_t>(weapon->getWeaponDamage(player, target, tool, true) * maxa + maxb)
-					);
-
-					damage.secondary.type = weapon->getElementType();
-					damage.secondary.value = weapon->getElementDamage(player, target, tool);
-					if (params.useCharges) {
-						uint16_t charges = tool->getCharges();
-						if (charges != 0) {
-							g_game.transformItem(tool, tool->getID(), charges - 1);
-						}
-					}
-				} else {
-					damage.primary.value = normal_random(
-						static_cast<int32_t>(minb),
-						static_cast<int32_t>(maxb)
-					);
-				}
-			}
-		}
 	}
 	return damage;
 }

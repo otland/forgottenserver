@@ -294,7 +294,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 	version = msg.get<uint16_t>();
 
-	msg.SkipBytes(5); // U32 clientVersion, U8 clientType
+	msg.SkipBytes(7); // U32 clientVersion, U8 clientType
 
 	if (!RSA_decrypt(msg)) {
 		getConnection()->closeConnection();
@@ -318,9 +318,16 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	msg.SkipBytes(1); // gamemaster flag
-	std::string accountName = msg.GetString();
+	std::string sessionKey = msg.GetString();
+	std::stringstream account(sessionKey);
+	std::string segment;
+	std::vector<std::string> seglist;
+	while (std::getline(account, segment, '&')) {
+		seglist.push_back(segment);
+	}
+	std::string accountName = seglist[0];
 	std::string characterName = msg.GetString();
-	std::string password = msg.GetString();
+	std::string password = seglist[1];
 
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.GetByte();
@@ -1284,15 +1291,16 @@ void ProtocolGame::sendCreatureHelpers(uint32_t creatureId, uint16_t helpers)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t color)
+void ProtocolGame::sendCreatureSquare(const Creature* creature, bool isPermanent, SquareColor_t color)
 {
 	if (!canSee(creature)) {
 		return;
 	}
 
 	NetworkMessage msg;
-	msg.AddByte(0x86);
+	msg.AddByte(0x93);
 	msg.Add<uint32_t>(creature->getID());
+	msg.AddByte(isPermanent ? 0x00 : 0x01);
 	msg.AddByte(color);
 	writeToOutputBuffer(msg);
 }
@@ -1319,6 +1327,7 @@ void ProtocolGame::sendReLoginWindow(uint8_t unfairFightReduction)
 {
 	NetworkMessage msg;
 	msg.AddByte(0x28);
+	msg.AddByte(0x00);
 	msg.AddByte(unfairFightReduction);
 	writeToOutputBuffer(msg);
 }
@@ -2261,6 +2270,7 @@ void ProtocolGame::sendChangeSpeed(const Creature* creature, uint32_t speed)
 	msg.AddByte(0x8F);
 	msg.Add<uint32_t>(creature->getID());
 	msg.Add<uint16_t>(speed / 2);
+	msg.Add<uint16_t>(creature->getBaseSpeed() / 2);
 	writeToOutputBuffer(msg);
 }
 
@@ -2476,6 +2486,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	} else {
 		msg.AddByte(0x00);
 	}
+
+	msg.AddByte(0x00);
+	msg.AddByte(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
 
@@ -2971,6 +2984,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 
 	msg.Add<uint16_t>(player->getLevel());
 	msg.AddByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
+
+	msg.AddDouble(0x00);
 
 	msg.Add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.Add<uint16_t>(std::min<int32_t>(player->getPlayerInfo(PLAYERINFO_MAXMANA), std::numeric_limits<uint16_t>::max()));

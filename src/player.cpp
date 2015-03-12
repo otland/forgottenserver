@@ -1922,7 +1922,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field);
 
 	if (attacker) {
-		sendCreatureSquare(attacker, SQ_COLOR_BLACK);
+		sendCreatureSquare(attacker, false, SQ_COLOR_BLACK);
 	}
 
 	if (blockType != BLOCK_NONE) {
@@ -3082,7 +3082,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		}
 
 		if (shopOwner && requireListUpdate) {
-			updateSaleShopList(item);
+			updateSaleShopList(item->getID());
 		}
 	} else if (const Creature* creature = thing->getCreature()) {
 		if (creature == this) {
@@ -3159,35 +3159,21 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		}
 
 		if (shopOwner && requireListUpdate) {
-			updateSaleShopList(item);
+			updateSaleShopList(item->getID());
 		}
 	}
 }
 
-bool Player::updateSaleShopList(const Item* item)
+void Player::updateSaleShopList(uint32_t itemId)
 {
-	uint32_t itemId = item->getID();
-	if (itemId != ITEM_GOLD_COIN && itemId != ITEM_PLATINUM_COIN && itemId != ITEM_CRYSTAL_COIN) {
-		auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId](const ShopInfo& shopInfo) { return shopInfo.itemId == itemId; });
-		if (it == shopItemList.end()) {
-			const Container* container = item->getContainer();
-			if (!container) {
-				return false;
-			}
-
-			for (uint32_t index = 0; index < container->size(); ++index) {
-				if (updateSaleShopList(container->getItemByIndex(index))) {
-					return true;
-				}
-			}
-			return false;
-		}
+	auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId] (const ShopInfo& shopInfo) { return shopInfo.itemId == itemId; });
+	if (it == shopItemList.end()) {
+		return;
 	}
 
 	if (client) {
 		client->sendSaleItemList(shopItemList);
 	}
-	return true;
 }
 
 bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const

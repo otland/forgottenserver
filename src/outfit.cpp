@@ -20,16 +20,14 @@
 #include "otpch.h"
 
 #include "outfit.h"
-
 #include "pugicast.h"
-#include "tools.h"
 
 bool Outfits::loadFromXml()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/outfits.xml");
 	if (!result) {
-		printXMLError("Error - Outfits::loadFromXml", "data/XML/outfits.xml", result);
+		std::cout << "[Error - Outfits::loadFromXml] Failed to load data/XML/outfits.xml: " << result.description() << std::endl;
 		return false;
 	}
 

@@ -26,8 +26,6 @@
 #include "const.h"
 #include "enums.h"
 
-void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
-
 std::string transformToSHA1(const std::string& input);
 
 void replaceString(std::string& str, const std::string& sought, const std::string& replacement);

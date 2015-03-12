@@ -22,7 +22,6 @@
 #include "mounts.h"
 
 #include "pugicast.h"
-#include "tools.h"
 
 bool Mounts::reload()
 {
@@ -35,7 +34,7 @@ bool Mounts::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/XML/mounts.xml");
 	if (!result) {
-		printXMLError("Error - Mounts::loadFromXml", "data/XML/mounts.xml", result);
+		std::cout << "[Error - Mounts::loadFromXml] Failed to load data/XML/mounts.xml: " << result.description() << std::endl;
 		return false;
 	}
 

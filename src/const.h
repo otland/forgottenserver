@@ -102,7 +102,12 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_CONFETTI_VERTICAL = 76,
 	// 77-157 are empty
 	CONST_ME_BLACKSMOKE = 158,
-	CONST_ME_LAST = CONST_ME_BLACKSMOKE,
+	// 158-166 are empty
+	CONST_ME_REDSMOKE = 167,
+	CONST_ME_YELLOWSMOKE = 168,
+	CONST_ME_GREENSMOKE = 169,
+	CONST_ME_PURPLESMOKE = 170,
+	CONST_ME_LAST = CONST_ME_PURPLESMOKE,
 
 	//for internal use, dont send to client
 	CONST_ME_NONE             = 0xFF
@@ -162,6 +167,9 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_DRILLBOLT = 50,
 	CONST_ANI_ENVENOMEDARROW = 51,
 
+	CONST_ANI_GLOOTHSPEAR = 53,
+	CONST_ANI_SIMPLEARROW = 54,
+
 	//for internal use, dont send to client
 	CONST_ANI_WEAPONTYPE = 0xFE //254
 };
@@ -172,6 +180,7 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_YELL = 3,
 	TALKTYPE_PRIVATE_FROM = 4,
 	TALKTYPE_PRIVATE_TO = 5,
+	TALKTYPE_CHANNEL_MANAGEMENT = 6,
 	TALKTYPE_CHANNEL_Y = 7,
 	TALKTYPE_CHANNEL_O = 8,
 	TALKTYPE_PRIVATE_NP = 10,
@@ -180,31 +189,42 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_CHANNEL_R1 = 14, //red - #c text
 	TALKTYPE_PRIVATE_RED_FROM = 15, //@name@text
 	TALKTYPE_PRIVATE_RED_TO = 16, //@name@text
-	TALKTYPE_MONSTER_SAY = 35,
-	TALKTYPE_MONSTER_YELL = 36,
+	TALKTYPE_MONSTER_SAY = 36,
+	TALKTYPE_MONSTER_YELL = 37,
 
 	TALKTYPE_CHANNEL_R2 = 0xFF //#d
 };
 
 enum MessageClasses : uint8_t {
 	MESSAGE_STATUS_CONSOLE_BLUE		= 0x04, /*FIXME Blue message in the console*/
-	MESSAGE_STATUS_CONSOLE_RED		= 0x0D, /*Red message in the console*/
-	MESSAGE_STATUS_DEFAULT		= 0x11, /*White message at the bottom of the game window and in the console*/
-	MESSAGE_STATUS_WARNING		= 0x12, /*Red message in game window and in the console*/
-	MESSAGE_EVENT_ADVANCE		= 0x13, /*White message in game window and in the console*/
-	MESSAGE_STATUS_SMALL		= 0x14, /*White message at the bottom of the game window"*/
-	MESSAGE_INFO_DESCR			= 0x15, /*Green message in game window and in the console*/
-	MESSAGE_DAMAGE_DEALT		= 0x16,
-	MESSAGE_DAMAGE_RECEIVED		= 0x17,
-	MESSAGE_HEALED			= 0x18,
-	MESSAGE_EXPERIENCE			= 0x19,
-	MESSAGE_DAMAGE_OTHERS		= 0x1A,
-	MESSAGE_HEALED_OTHERS		= 0x1B,
-	MESSAGE_EXPERIENCE_OTHERS		= 0x1C,
-	MESSAGE_EVENT_DEFAULT		= 0x1D, /*White message at the bottom of the game window and in the console*/
-	MESSAGE_LOOT			= 0x1E,
-	MESSAGE_EVENT_ORANGE		= 0x23, /*Orange message in the console*/
-	MESSAGE_STATUS_CONSOLE_ORANGE	= 0x24  /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_RED		= 0x0E, /*Red message in the console*/
+	MESSAGE_STATUS_DEFAULT			= 0x11, /*White message at the bottom of the game window and in the console*/
+	MESSAGE_STATUS_WARNING			= 0x12, /*Red message in game window and in the console*/
+	MESSAGE_EVENT_ADVANCE			= 0x13, /*White message in game window and in the console*/
+	MESSAGE_GAME_HIGHLIGHT			= 0x14,
+	MESSAGE_STATUS_SMALL			= 0x15, /*White message at the bottom of the game window"*/
+	MESSAGE_INFO_DESCR				= 0x16, /*Green message in game window and in the console*/
+	MESSAGE_DAMAGE_DEALT			= 0x17,
+	MESSAGE_DAMAGE_RECEIVED			= 0x18,
+	MESSAGE_HEALED					= 0x19,
+	MESSAGE_EXPERIENCE				= 0x1A,
+	MESSAGE_DAMAGE_OTHERS			= 0x1B,
+	MESSAGE_HEALED_OTHERS			= 0x1C,
+	MESSAGE_EXPERIENCE_OTHERS		= 0x1D,
+	MESSAGE_EVENT_DEFAULT			= 0x1E, /*White message at the bottom of the game window and in the console*/
+	MESSAGE_LOOT					= 0x1F,
+	MESSAGE_TRADE_NPC				= 0x20,
+	MESSAGE_EVENT_GUILD				= 0x21,
+	MESSAGE_PARTY_MANAGEMENT		= 0x22,
+	MESSAGE_PARTY					= 0x23,
+	MESSAGE_EVENT_ORANGE			= 0x24, /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_ORANGE	= 0x25,  /*Orange message in the console*/
+	MESSAGE_REPORT					= 0x26,
+	MESSAGE_HOTKEY_USE				= 0x27,
+	MESSAGE_TUTORIAL_HINT			= 0x28,
+	MESSAGE_THANK_YOU				= 0x29,
+	MESSAGE_MARKET					= 0x30,
+	MESSAGE_BEYOND_LAST				= 0x31
 };
 
 enum FluidColors_t : uint8_t {

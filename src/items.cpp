@@ -386,7 +386,7 @@ bool Items::loadFromXml()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/items/items.xml");
 	if (!result) {
-		printXMLError("Error - Items::loadFromXml", "data/items/items.xml", result);
+		std::cout << "[Error - Items::loadFromXml] Failed to load data/items/items.xml: " << result.description() << std::endl;
 		return false;
 	}
 
