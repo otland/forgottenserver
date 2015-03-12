@@ -5171,7 +5171,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			return;
 		}
 
-		ItemList itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
+		std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
 		if (itemList.empty()) {
 			return;
 		}
@@ -5310,7 +5310,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			return;
 		}
 
-		ItemList itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
+		std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
 		if (itemList.empty()) {
 			return;
 		}
@@ -5455,9 +5455,9 @@ void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const st
 	}
 }
 
-ItemList Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, DepotChest* depotChest, Inbox* inbox)
+std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, DepotChest* depotChest, Inbox* inbox)
 {
-	ItemList itemList;
+	std::forward_list<Item*> itemList;
 	uint16_t count = 0;
 
 	std::list<Container*> containers{ depotChest, inbox };
@@ -5509,7 +5509,7 @@ ItemList Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Depo
 				}
 			}
 
-			itemList.push_back(item);
+			itemList.push_front(item);
 
 			count += Item::countByType(item, -1);
 			if (count >= sufficientCount) {
@@ -5517,7 +5517,7 @@ ItemList Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Depo
 			}
 		}
 	} while (!containers.empty());
-	return std::list<Item*> {};
+	return std::forward_list<Item*> {};
 }
 
 void Game::forceAddCondition(uint32_t creatureId, Condition* condition)
