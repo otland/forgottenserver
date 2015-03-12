@@ -581,18 +581,21 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
-			if (player->getTile() && player->isPzLocked()) {
-				if (!player->getTile()->hasFlag(TILESTATE_PVPZONE)) {
+			const Tile* playerTile = player->getTile();
+			if (playerTile && player->isPzLocked()) {
+				if (!playerTile->hasFlag(TILESTATE_PVPZONE)) {
 					//player is trying to enter a pvp zone while being pz-locked
 					if (hasFlag(TILESTATE_PVPZONE)) {
 						return RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE;
 					}
-				} else if (!hasFlag(TILESTATE_PVPZONE)) { //player is trying to leave a pvp zone while being pz-locked
+				} else if (!hasFlag(TILESTATE_PVPZONE)) {
+					// player is trying to leave a pvp zone while being pz-locked
 					return RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE;
 				}
 
-				if ((!player->getTile()->hasFlag(TILESTATE_NOPVPZONE) && hasFlag(TILESTATE_NOPVPZONE)) || (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE)
-						&& hasFlag(TILESTATE_PROTECTIONZONE))) { // player is trying to enter a non-pvp/protection zone while being pz-locked
+				if ((!playerTile->hasFlag(TILESTATE_NOPVPZONE) && hasFlag(TILESTATE_NOPVPZONE)) ||
+					(!playerTile->hasFlag(TILESTATE_PROTECTIONZONE) && hasFlag(TILESTATE_PROTECTIONZONE))) {
+					// player is trying to enter a non-pvp/protection zone while being pz-locked
 					return RETURNVALUE_PLAYERISPZLOCKED;
 				}
 			}
