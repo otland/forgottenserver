@@ -590,10 +590,11 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				} else if (!hasFlag(TILESTATE_PVPZONE)) { //player is trying to leave a pvp zone while being pz-locked
 					return RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE;
 				}
-			}
 
-			if ((hasFlag(TILESTATE_NOPVPZONE) || hasFlag(TILESTATE_PROTECTIONZONE)) && player->isPzLocked()) {
-				return RETURNVALUE_PLAYERISPZLOCKED;
+				if ((!player->getTile()->hasFlag(TILESTATE_NOPVPZONE) && hasFlag(TILESTATE_NOPVPZONE)) || (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE)
+						&& hasFlag(TILESTATE_PROTECTIONZONE))) { // player is trying to enter a non-pvp/protection zone while being pz-locked
+					return RETURNVALUE_PLAYERISPZLOCKED;
+				}
 			}
 		} else if (creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags)) {
 			for (const Creature* tileCreature : *creatures) {
