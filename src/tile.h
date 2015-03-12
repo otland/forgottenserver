@@ -294,7 +294,7 @@ class Tile : public Cylinder
 
 		int32_t getClientIndexOfCreature(const Player* player, const Creature* creature) const;
 		int32_t getStackposOfCreature(const Player* player, const Creature* creature) const;
-		int32_t getStackposOfThing(const Player* player, const Thing* thing) const;
+		int32_t getStackposOfItem(const Player* player, const Item* item) const;
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,

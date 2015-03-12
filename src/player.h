@@ -711,7 +711,7 @@ class Player final : public Creature, public Cylinder
 		//send methods
 		void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item) {
 			if (client) {
-				int32_t stackpos = tile->getStackposOfThing(this, item);
+				int32_t stackpos = tile->getStackposOfItem(this, item);
 				if (stackpos != -1) {
 					client->sendAddTileItem(pos, stackpos, item);
 				}
@@ -719,7 +719,7 @@ class Player final : public Creature, public Cylinder
 		}
 		void sendUpdateTileItem(const Tile* tile, const Position& pos, const Item* item) {
 			if (client) {
-				int32_t stackpos = tile->getStackposOfThing(this, item);
+				int32_t stackpos = tile->getStackposOfItem(this, item);
 				if (stackpos != -1) {
 					client->sendUpdateTileItem(pos, stackpos, item);
 				}
