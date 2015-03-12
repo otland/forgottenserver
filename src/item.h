@@ -224,27 +224,32 @@ class ItemAttributes
 
 		struct Attribute
 		{
-			uint8_t* value;
+			union {
+				int64_t integer;
+				std::string* string;
+			} value;
 			itemAttrTypes type;
 
-			Attribute(itemAttrTypes type) : value(nullptr), type(type) {}
+			Attribute(itemAttrTypes type) : type(type) {
+				memset(&value, 0, sizeof(value));
+			}
 			Attribute(const Attribute& i) {
 				type = i.type;
 				if (ItemAttributes::isIntAttrType(type)) {
-					value = i.value;
+					value.integer = i.value.integer;
 				} else if (ItemAttributes::isStrAttrType(type)) {
-					value = reinterpret_cast<uint8_t*>(new std::string(*reinterpret_cast<std::string*>(i.value)));
+					value.string = new std::string(*i.value.string);
 				} else {
-					value = nullptr;
+					memset(&value, 0, sizeof(value));
 				}
 			}
 			Attribute(Attribute&& attribute) : value(attribute.value), type(attribute.type) {
-				attribute.value = nullptr;
+				memset(&attribute.value, 0, sizeof(value));
 				attribute.type = ITEM_ATTRIBUTE_NONE;
 			}
 			~Attribute() {
 				if (ItemAttributes::isStrAttrType(type)) {
-					delete value;
+					delete value.string;
 				}
 			}
 			Attribute& operator=(Attribute other) {
@@ -254,12 +259,13 @@ class ItemAttributes
 			Attribute& operator=(Attribute&& other) {
 				if (this != &other) {
 					if (ItemAttributes::isStrAttrType(type)) {
-						delete value;
+						delete value.string;
 					}
 
 					value = other.value;
 					type = other.type;
-					other.value = nullptr;
+
+					memset(&other.value, 0, sizeof(value));
 					other.type = ITEM_ATTRIBUTE_NONE;
 				}
 				return *this;
@@ -277,9 +283,9 @@ class ItemAttributes
 		const std::string& getStrAttr(itemAttrTypes type) const;
 		void setStrAttr(itemAttrTypes type, const std::string& value);
 
-		int32_t getIntAttr(itemAttrTypes type) const;
-		void setIntAttr(itemAttrTypes type, int32_t value);
-		void increaseIntAttr(itemAttrTypes type, int32_t value);
+		int64_t getIntAttr(itemAttrTypes type) const;
+		void setIntAttr(itemAttrTypes type, int64_t value);
+		void increaseIntAttr(itemAttrTypes type, int64_t value);
 
 		void addAttr(Attribute* attr);
 		const Attribute* getExistingAttr(itemAttrTypes type) const;

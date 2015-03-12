@@ -223,9 +223,17 @@ bool Item::equals(const Item* otherItem) const
 	const auto& attributeList = attributes->attributes;
 	const auto& otherAttributeList = otherAttributes->attributes;
 	for (const auto& attribute : attributeList) {
-		for (const auto& otherAttribute : otherAttributeList) {
-			if (attribute.type == otherAttribute.type && attribute.value != otherAttribute.value) {
-				return false;
+		if (ItemAttributes::isStrAttrType(attribute.type)) {
+			for (const auto& otherAttribute : otherAttributeList) {
+				if (attribute.type == otherAttribute.type && *attribute.value.string != *otherAttribute.value.string) {
+					return false;
+				}
+			}
+		} else {
+			for (const auto& otherAttribute : otherAttributeList) {
+				if (attribute.type == otherAttribute.type && attribute.value.integer != otherAttribute.value.integer) {
+					return false;
+				}
 			}
 		}
 	}
@@ -1513,7 +1521,7 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 	if (!attr) {
 		return emptyString;
 	}
-	return *reinterpret_cast<std::string*>(attr->value);
+	return *attr->value.string;
 }
 
 void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
@@ -1527,8 +1535,8 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, const std::string& value)
 	}
 
 	Attribute& attr = getAttr(type);
-	delete reinterpret_cast<std::string*>(attr.value);
-	attr.value = reinterpret_cast<uint8_t*>(new std::string(value));
+	delete attr.value.string;
+	attr.value.string = new std::string(value);
 }
 
 void ItemAttributes::removeAttribute(itemAttrTypes type)
@@ -1553,7 +1561,7 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 	attributeBits &= ~type;
 }
 
-int32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
+int64_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 {
 	if (!isIntAttrType(type)) {
 		return 0;
@@ -1563,25 +1571,25 @@ int32_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 	if (!attr) {
 		return 0;
 	}
-	return reinterpret_cast<ptrdiff_t>(attr->value);
+	return attr->value.integer;
 }
 
-void ItemAttributes::setIntAttr(itemAttrTypes type, int32_t value)
+void ItemAttributes::setIntAttr(itemAttrTypes type, int64_t value)
 {
 	if (!isIntAttrType(type)) {
 		return;
 	}
 
-	getAttr(type).value = reinterpret_cast<uint8_t*>(value);
+	getAttr(type).value.integer = value;
 }
 
-void ItemAttributes::increaseIntAttr(itemAttrTypes type, int32_t value)
+void ItemAttributes::increaseIntAttr(itemAttrTypes type, int64_t value)
 {
 	if (!isIntAttrType(type)) {
 		return;
 	}
 
-	getAttr(type).value += value;
+	getAttr(type).value.integer += value;
 }
 
 const ItemAttributes::Attribute* ItemAttributes::getExistingAttr(itemAttrTypes type) const

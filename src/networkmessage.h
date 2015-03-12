@@ -79,7 +79,7 @@ class NetworkMessage
 		}
 
 		// simply write functions for outgoing message
-		void AddByte(uint8_t  value) {
+		void AddByte(uint8_t value) {
 			if (!canAdd(1)) {
 				return;
 			}

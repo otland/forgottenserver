@@ -5197,14 +5197,14 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 					ItemAttributes* attributes = item->getAttributes();
 					for (const auto& attr : attributes->getList()) {
 						if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-							uint16_t charges = static_cast<uint16_t>(reinterpret_cast<ptrdiff_t>(attr.value));
+							uint16_t charges = static_cast<uint16_t>(attr.value.integer);
 							if (charges != itemType.charges) {
 								badAttribute = true;
 								break;
 							}
 						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-							uint32_t duration = static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(attr.value));
-							if (duration != itemType.decayTime) {
+							uint32_t duration = static_cast<uint32_t>(attr.value.integer);
+							if (duration != item->getDefaultDuration()) {
 								badAttribute = true;
 								break;
 							}
@@ -5397,14 +5397,14 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 					ItemAttributes* attributes = item->getAttributes();
 					for (const auto& attr : attributes->getList()) {
 						if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-							uint16_t charges = static_cast<uint16_t>(reinterpret_cast<ptrdiff_t>(attr.value));
+							uint16_t charges = static_cast<uint16_t>(attr.value.integer);
 							if (charges != itemType.charges) {
 								badAttribute = true;
 								break;
 							}
 						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-							uint32_t duration = static_cast<uint32_t>(reinterpret_cast<ptrdiff_t>(attr.value));
-							if (duration != itemType.decayTime) {
+							uint32_t duration = static_cast<uint32_t>(attr.value.integer);
+							if (duration != item->getDefaultDuration()) {
 								badAttribute = true;
 								break;
 							}
