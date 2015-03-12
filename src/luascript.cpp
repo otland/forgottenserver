@@ -1928,6 +1928,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
 
 	registerMethod("Game", "createItem", LuaScriptInterface::luaGameCreateItem);
+	registerMethod("Game", "createContainer", LuaScriptInterface::luaGameCreateContainer);
 	registerMethod("Game", "createMonster", LuaScriptInterface::luaGameCreateMonster);
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
@@ -4917,6 +4918,39 @@ int32_t LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 	pushUserdata<Item>(L, item);
 	setItemMetatable(L, -1, item);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGameCreateContainer(lua_State* L)
+{
+	// Game.createContainer(itemId, size [, position])
+	uint16_t size = getNumber<uint16_t>(L, 2);
+	uint16_t id = getNumber<uint16_t>(L, 1);
+
+	Container* container = Item::CreateItemAsContainer(id, size);
+	if (!container) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (lua_gettop(L) >= 3) {
+		const Position& position = getPosition(L, 3);
+		Tile* tile = g_game.map.getTile(position);
+		if (!tile) {
+			delete container;
+			lua_pushnil(L);
+			return 1;
+		}
+
+		g_game.internalAddItem(tile, container, INDEX_WHEREEVER, FLAG_NOLIMIT);
+	} else {
+		ScriptEnvironment* env = getScriptEnv();
+		env->addTempItem(env, container);
+		container->setParent(VirtualCylinder::virtualCylinder);
+	}
+
+	pushUserdata<Container>(L, container);
+	setMetatable(L, -1, "Container");
 	return 1;
 }
 

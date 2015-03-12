@@ -88,6 +88,18 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 	return newItem;
 }
 
+Container* Item::CreateItemAsContainer(const uint16_t _type, uint16_t _size)
+{
+	const ItemType& it = Item::items[_type];
+	if (it.id == 0 || it.group == ITEM_GROUP_DEPRECATED || it.stackable || it.useable || it.moveable || it.pickupable || it.isDepot() || it.isSplash() || it.isDoor()) {
+		return nullptr;
+	}
+
+	Container* newItem = new Container(_type, _size);
+	newItem->useThing2();
+	return newItem;
+}
+
 Item* Item::CreateItem(PropStream& propStream)
 {
 	uint16_t _id;
@@ -1172,8 +1184,19 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		if (!begin) {
 			s << ')';
 		}
-	} else if (it.isContainer()) {
-		s << " (Vol:" << it.maxItems << ')';
+	} else if (it.isContainer() || (item && item->getContainer())) {
+		int volume = 0;
+		if (!item || !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+			if (it.isContainer()) {
+				volume = it.maxItems;
+			} else {
+				volume = item->getContainer()->capacity();
+			}
+		}
+		
+		if (volume != 0) {
+			s << " (Vol:" << volume << ')';
+		}
 	} else {
 		bool found = true;
 

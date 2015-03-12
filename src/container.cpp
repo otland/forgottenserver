@@ -35,6 +35,11 @@ Container::Container(uint16_t _type) : Item(_type)
 	pagination = false;
 }
 
+Container::Container(uint16_t _type, uint16_t _size) : Container(_type)
+{
+	maxSize = _size;
+}
+
 Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 {
 	TileItemVector* itemVector = tile->getItemList();

@@ -58,6 +58,7 @@ class Container : public Item, public Cylinder
 {
 	public:
 		Container(uint16_t _type);
+		Container(uint16_t _type, uint16_t _size);
 		Container(Tile* tile);
 		~Container();
 
