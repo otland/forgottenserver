@@ -35,9 +35,13 @@ Container::Container(uint16_t _type) : Item(_type)
 	pagination = false;
 }
 
-Container::Container(uint16_t _type, uint16_t _size) : Container(_type)
+Container::Container(uint16_t _type, uint16_t _size) : Item(_type)
 {
 	maxSize = _size;
+	totalWeight = 0;
+	serializationCount = 0;
+	unlocked = true;
+	pagination = false;
 }
 
 Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
