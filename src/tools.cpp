@@ -37,7 +37,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 	}
 
 	char buffer[32768];
-	int32_t currentLine = 1;
+	uint32_t currentLine = 1;
 	std::string line;
 
 	size_t offset = static_cast<size_t>(result.offset);

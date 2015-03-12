@@ -4923,7 +4923,7 @@ int32_t LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 int32_t LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 {
-	// Game.createContainer(itemId, size [, position])
+	// Game.createContainer(itemId, size[, position])
 	uint16_t size = getNumber<uint16_t>(L, 2);
 	uint16_t id = getNumber<uint16_t>(L, 1);
 

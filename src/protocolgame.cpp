@@ -1663,6 +1663,10 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 				continue;
 			}
 
+			if (c && (!itemType.isContainer() || c->capacity() != itemType.maxItems)) {
+				continue;
+			}
+
 			if (item->hasAttributes()) {
 				bool badAttribute = false;
 

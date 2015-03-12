@@ -5171,69 +5171,8 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			return;
 		}
 
-		ItemList itemList;
-		uint32_t count = 0;
-		std::vector<Container*> containers {depotChest, player->getInbox()};
-		bool enough = false;
-
-		size_t i = 0;
-		do {
-			Container* container = containers[i++];
-			for (Item* item : container->getItemList()) {
-				Container* c = item->getContainer();
-				if (c && !c->empty()) {
-					containers.push_back(c);
-					continue;
-				}
-
-				const ItemType& itemType = Item::items[item->getID()];
-				if (itemType.wareId != it.wareId) {
-					continue;
-				}
-
-				if (item->hasAttributes()) {
-					bool badAttribute = false;
-
-					ItemAttributes* attributes = item->getAttributes();
-					for (const auto& attr : attributes->getList()) {
-						if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-							uint16_t charges = static_cast<uint16_t>(attr.value.integer);
-							if (charges != itemType.charges) {
-								badAttribute = true;
-								break;
-							}
-						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-							uint32_t duration = static_cast<uint32_t>(attr.value.integer);
-							if (duration != item->getDefaultDuration()) {
-								badAttribute = true;
-								break;
-							}
-						} else {
-							badAttribute = true;
-							break;
-						}
-					}
-
-					if (badAttribute) {
-						continue;
-					}
-				}
-
-				itemList.push_back(item);
-
-				count += Item::countByType(item, -1);
-				if (count >= amount) {
-					enough = true;
-					break;
-				}
-			}
-
-			if (enough) {
-				break;
-			}
-		} while (i < containers.size());
-
-		if (!enough) {
+		ItemList itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
+		if (itemList.empty()) {
 			return;
 		}
 
@@ -5371,69 +5310,8 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			return;
 		}
 
-		ItemList itemList;
-		uint32_t count = 0;
-		std::vector<Container*> containers {depotChest, player->getInbox()};
-		bool enough = false;
-
-		size_t i = 0;
-		do {
-			Container* container = containers[i++];
-			for (Item* item : container->getItemList()) {
-				Container* c = item->getContainer();
-				if (c && !c->empty()) {
-					containers.push_back(c);
-					continue;
-				}
-
-				const ItemType& itemType = Item::items[item->getID()];
-				if (itemType.wareId != it.wareId) {
-					continue;
-				}
-
-				if (item->hasAttributes()) {
-					bool badAttribute = false;
-
-					ItemAttributes* attributes = item->getAttributes();
-					for (const auto& attr : attributes->getList()) {
-						if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-							uint16_t charges = static_cast<uint16_t>(attr.value.integer);
-							if (charges != itemType.charges) {
-								badAttribute = true;
-								break;
-							}
-						} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-							uint32_t duration = static_cast<uint32_t>(attr.value.integer);
-							if (duration != item->getDefaultDuration()) {
-								badAttribute = true;
-								break;
-							}
-						} else {
-							badAttribute = true;
-							break;
-						}
-					}
-
-					if (badAttribute) {
-						continue;
-					}
-				}
-
-				itemList.push_back(item);
-
-				count += Item::countByType(item, -1);
-				if (count >= amount) {
-					enough = true;
-					break;
-				}
-			}
-
-			if (enough) {
-				break;
-			}
-		} while (i < containers.size());
-
-		if (!enough) {
+		ItemList itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
+		if (itemList.empty()) {
 			return;
 		}
 
@@ -5575,6 +5453,71 @@ void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const st
 	for (CreatureEvent* creatureEvent : player->getCreatureEvents(CREATURE_EVENT_EXTENDED_OPCODE)) {
 		creatureEvent->executeExtendedOpcode(player, opcode, buffer);
 	}
+}
+
+ItemList Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, DepotChest* depotChest, Inbox* inbox)
+{
+	ItemList itemList;
+	uint16_t count = 0;
+
+	std::list<Container*> containers{ depotChest, inbox };
+	do {
+		Container* container = containers.front();
+		containers.pop_front();
+
+		for (Item* item : container->getItemList()) {
+			Container* c = item->getContainer();
+			if (c && !c->empty()) {
+				containers.push_back(c);
+				continue;
+			}
+
+			const ItemType& itemType = Item::items[item->getID()];
+			if (itemType.wareId != wareId) {
+				continue;
+			}
+
+			if (c && (!itemType.isContainer() || c->capacity() != itemType.maxItems)) {
+				continue;
+			}
+
+			if (item->hasAttributes()) {
+				bool badAttribute = false;
+
+				ItemAttributes* attributes = item->getAttributes();
+				for (const auto& attr : attributes->getList()) {
+					if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
+						uint16_t charges = static_cast<uint16_t>(attr.value.integer);
+						if (charges != itemType.charges) {
+							badAttribute = true;
+							break;
+						}
+					} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
+						uint32_t duration = static_cast<uint32_t>(attr.value.integer);
+						if (duration != item->getDefaultDuration()) {
+							badAttribute = true;
+							break;
+						}
+					} else {
+						badAttribute = true;
+						break;
+					}
+				}
+
+				if (badAttribute) {
+					continue;
+				}
+			}
+
+			itemList.push_back(item);
+
+			count += Item::countByType(item, -1);
+			if (count >= sufficientCount) {
+				return itemList;
+			}
+		}
+	} while (!containers.empty());
+	return std::list<Item*> {};
 }
 
 void Game::forceAddCondition(uint32_t creatureId, Condition* condition)

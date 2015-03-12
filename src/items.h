@@ -116,16 +116,16 @@ class ItemType
 		ItemType();
 
 		bool isGroundTile() const {
-			return (group == ITEM_GROUP_GROUND);
+			return group == ITEM_GROUP_GROUND;
 		}
 		bool isContainer() const {
-			return (group == ITEM_GROUP_CONTAINER);
+			return group == ITEM_GROUP_CONTAINER;
 		}
 		bool isSplash() const {
-			return (group == ITEM_GROUP_SPLASH);
+			return group == ITEM_GROUP_SPLASH;
 		}
 		bool isFluidContainer() const {
-			return (group == ITEM_GROUP_FLUID);
+			return group == ITEM_GROUP_FLUID;
 		}
 
 		bool isDoor() const {
