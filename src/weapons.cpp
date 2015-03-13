@@ -308,6 +308,11 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 		trueRange = player->getShootRange();
 	} else {
 		trueRange = range;
+
+		Item* item = player->getWeapon(true);
+		if (item) {
+			trueRange = item->getShootRange();
+		}
 	}
 
 	if (std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos)) > trueRange) {
