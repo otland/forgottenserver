@@ -513,13 +513,8 @@ void Container::addThing(int32_t index, Thing* thing)
 	}
 }
 
-void Container::addThingBack(Thing* thing)
+void Container::addItemBack(Item* item)
 {
-	Item* item = thing->getItem();
-	if (item == nullptr) {
-		return /*RETURNVALUE_NOTPOSSIBLE*/;
-	}
-
 	addItem(item);
 	updateItemWeight(item->getWeight());
 

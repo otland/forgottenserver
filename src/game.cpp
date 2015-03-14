@@ -819,7 +819,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 		if (fromPos.y & 0x40) {
 			fromIndex = fromPos.z;
 		} else {
-			fromIndex = fromPos.y;
+			fromIndex = static_cast<uint8_t>(fromPos.y);
 		}
 	} else {
 		fromIndex = fromStackPos;
@@ -831,31 +831,41 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
-	Cylinder* toCylinder = internalGetCylinder(player, toPos);
-	if (!toCylinder) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		return;
-	}
-
 	if (Creature* movingCreature = thing->getCreature()) {
+		Tile* tile = map.getTile(toPos);
+		if (!tile) {
+			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+			return;
+		}
+
 		if (Position::areInRange<1, 1, 0>(movingCreature->getPosition(), player->getPosition())) {
 			SchedulerTask* task = createSchedulerTask(1000,
-			                      std::bind(&Game::playerMoveCreature, this, player->getID(),
-			                                  movingCreature->getID(), movingCreature->getPosition(), toCylinder->getPosition()));
+			                      std::bind(&Game::playerMoveCreatureByID, this, player->getID(),
+			                                  movingCreature->getID(), movingCreature->getPosition(), tile->getPosition()));
 			player->setNextActionTask(task);
 		} else {
-			playerMoveCreature(playerId, movingCreature->getID(), movingCreature->getPosition(), toCylinder->getPosition());
+			playerMoveCreature(player, movingCreature, movingCreature->getPosition(), tile);
 		}
 	} else if (thing->getItem()) {
-		playerMoveItem(playerId, fromPos, spriteId, fromStackPos, toPos, count);
+		Cylinder* toCylinder = internalGetCylinder(player, toPos);
+		if (!toCylinder) {
+			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+			return;
+		}
+
+		playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, thing->getItem(), toCylinder);
 	}
 }
 
-void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
-                              const Position& movingCreatureOrigPos, const Position& toPos)
+void Game::playerMoveCreatureByID(uint32_t playerId, uint32_t movingCreatureId, const Position& movingCreatureOrigPos, const Position& toPos)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
+		return;
+	}
+
+	Creature* movingCreature = getCreatureByID(movingCreatureId);
+	if (!movingCreature) {
 		return;
 	}
 
@@ -865,15 +875,15 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		return;
 	}
 
-	Creature* movingCreature = getCreatureByID(movingCreatureId);
-	if (!movingCreature) {
-		return;
-	}
+	playerMoveCreature(player, movingCreature, movingCreatureOrigPos, toTile);
+}
 
+void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Position& movingCreatureOrigPos, Tile* toTile)
+{
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::playerMoveCreature,
-		                      this, playerId, movingCreatureId, movingCreatureOrigPos, toPos));
+		SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::playerMoveCreatureByID,
+			this, player->getID(), movingCreature->getID(), movingCreatureOrigPos, toTile->getPosition()));
 		player->setNextActionTask(task);
 		return;
 	}
@@ -886,8 +896,8 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		if (player->getPathTo(movingCreatureOrigPos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
-			SchedulerTask* task = createSchedulerTask(1500, std::bind(&Game::playerMoveCreature, this,
-			                      playerId, movingCreatureId, movingCreatureOrigPos, toPos));
+			SchedulerTask* task = createSchedulerTask(1500, std::bind(&Game::playerMoveCreatureByID, this,
+				player->getID(), movingCreature->getID(), movingCreatureOrigPos, toTile->getPosition()));
 			player->setNextWalkActionTask(task);
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
@@ -903,6 +913,7 @@ void Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 
 	//check throw distance
 	const Position& movingCreaturePos = movingCreature->getPosition();
+	const Position& toPos = toTile->getPosition();
 	if ((Position::getDistanceX(movingCreaturePos, toPos) > movingCreature->getThrowRange()) || (Position::getDistanceY(movingCreaturePos, toPos) > movingCreature->getThrowRange()) || (Position::getDistanceZ(movingCreaturePos, toPos) * 4 > movingCreature->getThrowRange())) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		return;
@@ -1022,59 +1033,66 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	return RETURNVALUE_NOERROR;
 }
 
-void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
-                          uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
+void Game::playerMoveItemByPlayerID(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
+	playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, nullptr, nullptr);
+}
 
+void Game::playerMoveItem(Player* player, const Position& fromPos,
+                          uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count, Item* item, Cylinder* toCylinder)
+{
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::playerMoveItem, this,
-		                      playerId, fromPos, spriteId, fromStackPos, toPos, count));
+		SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::playerMoveItemByPlayerID, this,
+		                      player->getID(), fromPos, spriteId, fromStackPos, toPos, count));
 		player->setNextActionTask(task);
 		return;
 	}
 
 	player->setNextActionTask(nullptr);
 
+	if (item == nullptr) {
+		uint8_t fromIndex = 0;
+		if (fromPos.x == 0xFFFF) {
+			if (fromPos.y & 0x40) {
+				fromIndex = fromPos.z;
+			} else {
+				fromIndex = static_cast<uint8_t>(fromPos.y);
+			}
+		} else {
+			fromIndex = fromStackPos;
+		}
+
+		Thing* thing = internalGetThing(player, fromPos, fromIndex, spriteId, STACKPOS_MOVE);
+		if (!thing || !thing->getItem()) {
+			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+			return;
+		}
+
+		item = thing->getItem();
+	}
+
+	if (item->getClientID() != spriteId) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
 	Cylinder* fromCylinder = internalGetCylinder(player, fromPos);
-	uint8_t fromIndex = 0;
-
-	if (fromPos.x == 0xFFFF) {
-		if (fromPos.y & 0x40) {
-			fromIndex = fromPos.z;
-		} else {
-			fromIndex = static_cast<uint8_t>(fromPos.y);
-		}
-	} else {
-		fromIndex = fromStackPos;
-	}
-
-	Thing* thing = internalGetThing(player, fromPos, fromIndex, spriteId, STACKPOS_MOVE);
-	if (!thing || !thing->getItem()) {
+	if (fromCylinder == nullptr) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
 
-	Item* item = thing->getItem();
-
-	Cylinder* toCylinder = internalGetCylinder(player, toPos);
-	uint8_t toIndex = 0;
-
-	if (toPos.x == 0xFFFF) {
-		if (toPos.y & 0x40) {
-			toIndex = toPos.z;
-		} else {
-			toIndex = toPos.y;
+	if (toCylinder == nullptr) {
+		toCylinder = internalGetCylinder(player, toPos);
+		if (toCylinder == nullptr) {
+			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+			return;
 		}
-	}
-
-	if (fromCylinder == nullptr || toCylinder == nullptr || item == nullptr || item->getClientID() != spriteId) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		return;
 	}
 
 	if (!item->isPushable() || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
@@ -1096,8 +1114,8 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
 
-			SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerMoveItem, this,
-			                      playerId, fromPos, spriteId, fromStackPos, toPos, count));
+			SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerMoveItemByPlayerID, this,
+			                      player->getID(), fromPos, spriteId, fromStackPos, toPos, count));
 			player->setNextWalkActionTask(task);
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
@@ -1155,8 +1173,8 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
 
-				SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerMoveItem, this,
-				                      playerId, itemPos, spriteId, itemStackPos, toPos, count));
+				SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerMoveItemByPlayerID, this,
+				                      player->getID(), itemPos, spriteId, itemStackPos, toPos, count));
 				player->setNextWalkActionTask(task);
 			} else {
 				player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
@@ -1181,6 +1199,15 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
+	uint8_t toIndex = 0;
+	if (toPos.x == 0xFFFF) {
+		if (toPos.y & 0x40) {
+			toIndex = toPos.z;
+		} else {
+			toIndex = static_cast<uint8_t>(toPos.y);
+		}
+	}
+
 	ReturnValue ret = internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, nullptr, 0, player);
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
@@ -1190,10 +1217,6 @@ void Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
 ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
                                    Item* item, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = nullptr*/, Item* tradeItem/* = nullptr*/)
 {
-	if (!toCylinder) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
 	Tile* fromTile = fromCylinder->getTile();
 	if (fromTile) {
 		auto it = browseFields.find(fromTile);
@@ -1830,18 +1853,20 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	}
 
 	Tile* toTile = map.getTile(newPos);
-	if (toTile) {
-		if (Creature* creature = thing->getCreature()) {
-			ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
-			if (ret != RETURNVALUE_NOERROR) {
-				return ret;
-			}
+	if (!toTile) {
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
 
-			map.moveCreature(*creature, *toTile, !pushMove);
-			return RETURNVALUE_NOERROR;
-		} else if (Item* item = thing->getItem()) {
-			return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
+	if (Creature* creature = thing->getCreature()) {
+		ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
+		if (ret != RETURNVALUE_NOERROR) {
+			return ret;
 		}
+
+		map.moveCreature(*creature, *toTile, !pushMove);
+		return RETURNVALUE_NOERROR;
+	} else if (Item* item = thing->getItem()) {
+		return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
 	}
 	return RETURNVALUE_NOTPOSSIBLE;
 }

@@ -358,15 +358,14 @@ Thing* Tile::getTopVisibleThing(const Creature* creature)
 
 	TileItemVector* items = getItemList();
 	if (items) {
-		for (ItemVector::iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
+		for (ItemVector::iterator it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
 			const ItemType& iit = Item::items[(*it)->getID()];
 			if (!iit.lookThrough) {
 				return (*it);
 			}
 		}
 
-		ItemVector::reverse_iterator itEnd = ItemVector::reverse_iterator(items->getBeginTopItem());
-		for (ItemVector::reverse_iterator it = ItemVector::reverse_iterator(items->getEndTopItem()); it != itEnd; ++it) {
+		for (ItemVector::reverse_iterator it = ItemVector::reverse_iterator(items->getEndTopItem()), end = ItemVector::reverse_iterator(items->getBeginTopItem()); it != end; ++it) {
 			const ItemType& iit = Item::items[(*it)->getID()];
 			if (!iit.lookThrough) {
 				return (*it);
@@ -382,7 +381,7 @@ void Tile::onAddTileItem(Item* item)
 	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
 		auto it = g_game.browseFields.find(this);
 		if (it != g_game.browseFields.end()) {
-			it->second->addThingBack(item);
+			it->second->addItemBack(item);
 			item->setParent(this);
 		}
 	}

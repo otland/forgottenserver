@@ -138,7 +138,7 @@ class Container : public Item, public Cylinder
 
 		void addThing(Thing* thing) final;
 		void addThing(int32_t index, Thing* thing) final;
-		void addThingBack(Thing* thing);
+		void addItemBack(Item* item);
 
 		void updateThing(Thing* thing, uint16_t itemId, uint32_t count) final;
 		void replaceThing(uint32_t index, Thing* thing) final;
