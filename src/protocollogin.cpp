@@ -76,7 +76,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		//SessionKey
 		output->AddByte(0x28);
 
-		output->AddString(accountName + "&" + password);
+		output->AddString(accountName + "\n" + password);
 
 		//Add char list
 		output->AddByte(0x64);

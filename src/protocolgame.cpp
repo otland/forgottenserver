@@ -322,7 +322,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	std::stringstream account(sessionKey);
 	std::string segment;
 	std::vector<std::string> seglist;
-	while (std::getline(account, segment, '&')) {
+	while (std::getline(account, segment, '\n')) {
 		seglist.push_back(segment);
 	}
 	std::string accountName = seglist[0];
@@ -2988,7 +2988,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.Add<uint16_t>(player->getLevel());
 	msg.AddByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
 
-	msg.AddDouble(0x00);
+	msg.AddDouble(0, 2);
 
 	msg.Add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.Add<uint16_t>(std::min<int32_t>(player->getPlayerInfo(PLAYERINFO_MAXMANA), std::numeric_limits<uint16_t>::max()));
