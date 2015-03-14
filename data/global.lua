@@ -50,6 +50,27 @@ function doCreatureSayWithRadius(cid, text, type, radiusx, radiusy, position)
 	end
 end
 
+function doForceSummonCreature(name, pos)
+	local creature = doSummonCreature(name, pos)
+	if creature == false then
+		pos.stackpos = STACKPOS_FIRST_ITEM_ABOVE_GROUNDTILE
+
+		local lastUid = nil
+		while true do
+			local thing = getTileThingByPos(pos)
+			if thing.uid == 0 or thing.uid == lastUid or not isItem(thing.uid) then
+				break
+			end
+
+			lastUid = thing.uid
+			doRemoveItem(thing.uid)
+		end
+
+		creature = doSummonCreature(name, pos)
+	end
+	return creature
+end
+
 function getBlessingsCost(level)
 	if level <= 30 then
 		return 2000
@@ -70,18 +91,6 @@ function getPvpBlessingCost(level)
 	end
 end
 
-function isInRange(pos, fromPos, toPos)
-	return pos.x >= fromPos.x and pos.y >= fromPos.y and pos.z >= fromPos.z and pos.x <= toPos.x and pos.y <= toPos.y and pos.z <= toPos.z
-end
-
-function Player:isPremium()
-	return self:getPremiumDays() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
-end
-
-function isNumber(str)
-	return tonumber(str) ~= nil
-end
-
 function getDistanceBetween(firstPosition, secondPosition)
 	local xDif = math.abs(firstPosition.x - secondPosition.x)
 	local yDif = math.abs(firstPosition.y - secondPosition.y)
@@ -90,6 +99,25 @@ function getDistanceBetween(firstPosition, secondPosition)
 		posDif = posDif + 15
 	end
 	return posDif
+end
+
+function getTibianTime()
+	local worldTime = getWorldTime()
+	local hours = math.floor(worldTime / 60)
+
+	local minutes = worldTime % 60
+	if minutes < 10 then
+		minutes = '0' .. minutes
+	end
+	return hours .. ':' .. minutes
+end
+
+function isInRange(pos, fromPos, toPos)
+	return pos.x >= fromPos.x and pos.y >= fromPos.y and pos.z >= fromPos.z and pos.x <= toPos.x and pos.y <= toPos.y and pos.z <= toPos.z
+end
+
+function isNumber(str)
+	return tonumber(str) ~= nil
 end
 
 function isSorcerer(cid)
@@ -122,129 +150,6 @@ function isKnight(cid)
 		return false
 	end
 	return isInArray({4, 8}, player:getVocation():getId())
-end
-
-function getTibianTime()
-	local worldTime = getWorldTime()
-	local hours = math.floor(worldTime / 60)
-
-	local minutes = worldTime % 60
-	if minutes < 10 then
-		minutes = '0' .. minutes
-	end
-	return hours .. ':' .. minutes
-end
-
-function doForceSummonCreature(name, pos)
-	local creature = doSummonCreature(name, pos)
-	if creature == false then
-		pos.stackpos = STACKPOS_FIRST_ITEM_ABOVE_GROUNDTILE
-
-		local lastUid = nil
-		while true do
-			local thing = getTileThingByPos(pos)
-			if thing.uid == 0 or thing.uid == lastUid or not isItem(thing.uid) then
-				break
-			end
-
-			lastUid = thing.uid
-			doRemoveItem(thing.uid)
-		end
-
-		creature = doSummonCreature(name, pos)
-	end
-	return creature
-end
-
-if not globalStorageTable then
-	globalStorageTable = {}
-end
-
-function Game.getStorageValue(key)
-	return globalStorageTable[key]
-end
-
-function Game.setStorageValue(key, value)
-	globalStorageTable[key] = value
-end
-
-function Game.convertIpToString(ip)
-	local band = bit.band
-	local rshift = bit.rshift
-	return string.format("%d.%d.%d.%d",
-		band(ip, 0xFF),
-		band(rshift(ip, 8), 0xFF),
-		band(rshift(ip, 16), 0xFF),
-		rshift(ip, 24)
-	)
-end
-
-function Game.getSkillType(weaponType)
-	if weaponType == WEAPON_CLUB then
-		return SKILL_CLUB
-	elseif weaponType == WEAPON_SWORD then
-		return SKILL_SWORD
-	elseif weaponType == WEAPON_AXE then
-		return SKILL_AXE
-	elseif weaponType == WEAPON_DISTANCE then
-		return SKILL_DISTANCE
-	elseif weaponType == WEAPON_SHIELD then
-		return SKILL_SHIELD
-	end
-	return SKILL_FIST
-end
-
-function Game.getReverseDirection(direction)
-	if direction == WEST then
-		return EAST
-	elseif direction == EAST then
-		return WEST
-	elseif direction == NORTH then
-		return SOUTH
-	elseif direction == SOUTH then
-		return NORTH
-	elseif direction == NORTHWEST then
-		return SOUTHEAST
-	elseif direction == NORTHEAST then
-		return SOUTHWEST
-	elseif direction == SOUTHWEST then
-		return NORTHEAST
-	elseif direction == SOUTHEAST then
-		return NORTHWEST
-	end
-	return NORTH
-end
-
-function Position.getNextPosition(self, direction, steps)
-	steps = steps or 1
-	if direction == WEST then
-		self.x = self.x - steps
-	elseif direction == EAST then
-		self.x = self.x + steps
-	elseif direction == NORTH then
-		self.y = self.y - steps
-	elseif direction == SOUTH then
-		self.y = self.y + steps
-	elseif direction == NORTHWEST then
-		self.x = self.x - steps
-		self.y = self.y - steps
-	elseif direction == NORTHEAST then
-		self.x = self.x + steps
-		self.y = self.y - steps
-	elseif direction == SOUTHWEST then
-		self.x = self.x - steps
-		self.y = self.y + steps
-	elseif direction == SOUTHEAST then
-		self.x = self.x + steps
-		self.y = self.y + steps
-	end
-end
-
-function Player.getClosestFreePosition(self, position, extended)
-	if self:getAccountType() >= ACCOUNT_TYPE_GOD then
-		return position
-	end
-	return Creature.getClosestFreePosition(self, position, extended)
 end
 
 function Creature.getClosestFreePosition(self, position, extended)
@@ -280,11 +185,98 @@ function Creature.getPlayer(self)
 	return self:isPlayer() and self or nil
 end
 
-function Player.sendCancelMessage(self, message)
-	if type(message) == "number" then
-		message = Game.getReturnMessage(message)
+function Creature.isTile(self)
+	return false
+end
+
+function Game.broadcastMessage(message, messageType)
+	if messageType == nil then
+		messageType = MESSAGE_STATUS_WARNING
 	end
-	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
+
+	for _, player in ipairs(Game.getPlayers()) do
+		player:sendTextMessage(messageType, message)
+	end
+end
+
+function Game.convertIpToString(ip)
+	local band = bit.band
+	local rshift = bit.rshift
+	return string.format("%d.%d.%d.%d",
+		band(ip, 0xFF),
+		band(rshift(ip, 8), 0xFF),
+		band(rshift(ip, 16), 0xFF),
+		rshift(ip, 24)
+	)
+end
+
+function Game.getReverseDirection(direction)
+	if direction == WEST then
+		return EAST
+	elseif direction == EAST then
+		return WEST
+	elseif direction == NORTH then
+		return SOUTH
+	elseif direction == SOUTH then
+		return NORTH
+	elseif direction == NORTHWEST then
+		return SOUTHEAST
+	elseif direction == NORTHEAST then
+		return SOUTHWEST
+	elseif direction == SOUTHWEST then
+		return NORTHEAST
+	elseif direction == SOUTHEAST then
+		return NORTHWEST
+	end
+	return NORTH
+end
+
+function Game.getSkillType(weaponType)
+	if weaponType == WEAPON_CLUB then
+		return SKILL_CLUB
+	elseif weaponType == WEAPON_SWORD then
+		return SKILL_SWORD
+	elseif weaponType == WEAPON_AXE then
+		return SKILL_AXE
+	elseif weaponType == WEAPON_DISTANCE then
+		return SKILL_DISTANCE
+	elseif weaponType == WEAPON_SHIELD then
+		return SKILL_SHIELD
+	end
+	return SKILL_FIST
+end
+
+if not globalStorageTable then
+	globalStorageTable = {}
+end
+
+function Game.getStorageValue(key)
+	return globalStorageTable[key]
+end
+
+function Game.setStorageValue(key, value)
+	globalStorageTable[key] = value
+end
+
+function Item.isTile(self)
+	return false
+end
+
+local slotBits = {
+	[CONST_SLOT_HEAD] = SLOTP_HEAD,
+	[CONST_SLOT_NECKLACE] = SLOTP_NECKLACE,
+	[CONST_SLOT_BACKPACK] = SLOTP_BACKPACK,
+	[CONST_SLOT_ARMOR] = SLOTP_ARMOR,
+	[CONST_SLOT_RIGHT] = SLOTP_RIGHT,
+	[CONST_SLOT_LEFT] = SLOTP_LEFT,
+	[CONST_SLOT_LEGS] = SLOTP_LEGS,
+	[CONST_SLOT_FEET] = SLOTP_FEET,
+	[CONST_SLOT_RING] = SLOTP_RING,
+	[CONST_SLOT_AMMO] = SLOTP_AMMO
+}
+
+function ItemType.usesSlot(self, slot)
+	return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
 end
 
 local foodCondition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
@@ -310,6 +302,13 @@ function Player.feed(self, food)
 	return true
 end
 
+function Player.getClosestFreePosition(self, position, extended)
+	if self:getAccountType() >= ACCOUNT_TYPE_GOD then
+		return position
+	end
+	return Creature.getClosestFreePosition(self, position, extended)
+end
+
 function Player.getDepotItems(self, depotId)
 	return self:getDepotChest(depotId, true):getItemHoldingCount()
 end
@@ -333,6 +332,17 @@ function Player.getLossPercent(self)
 	return lossPercent[blessings]
 end
 
+function Player.isPremium(self)
+	return self:getPremiumDays() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
+end
+
+function Player.sendCancelMessage(self, message)
+	if type(message) == "number" then
+		message = Game.getReturnMessage(message)
+	end
+	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
+end
+
 function Player.isUsingOtClient(self)
 	return self:getClient().os >= CLIENTOS_OTCLIENT_LINUX
 end
@@ -351,6 +361,47 @@ function Player.sendExtendedOpcode(self, opcode, buffer)
 	return true
 end
 
+function Position.getNextPosition(self, direction, steps)
+	steps = steps or 1
+	if direction == WEST then
+		self.x = self.x - steps
+	elseif direction == EAST then
+		self.x = self.x + steps
+	elseif direction == NORTH then
+		self.y = self.y - steps
+	elseif direction == SOUTH then
+		self.y = self.y + steps
+	elseif direction == NORTHWEST then
+		self.x = self.x - steps
+		self.y = self.y - steps
+	elseif direction == NORTHEAST then
+		self.x = self.x + steps
+		self.y = self.y - steps
+	elseif direction == SOUTHWEST then
+		self.x = self.x - steps
+		self.y = self.y + steps
+	elseif direction == SOUTHEAST then
+		self.x = self.x + steps
+		self.y = self.y + steps
+	end
+end
+
+function Position.getTile(self)
+	return Tile(self)
+end
+
+function Tile.isCreature(self)
+	return false
+end
+
+function Tile.isItem(self)
+	return false
+end
+
+function Tile.isTile(self)
+	return true
+end
+
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do
@@ -361,37 +412,6 @@ end
 
 string.trim = function(str)
 	return str:match'^()%s*$' and '' or str:match'^%s*(.*%S)'
-end
-
-function Position.getTile(self)
-	return Tile(self)
-end
-
-local slotBits = {
-	[CONST_SLOT_HEAD] = SLOTP_HEAD,
-	[CONST_SLOT_NECKLACE] = SLOTP_NECKLACE,
-	[CONST_SLOT_BACKPACK] = SLOTP_BACKPACK,
-	[CONST_SLOT_ARMOR] = SLOTP_ARMOR,
-	[CONST_SLOT_RIGHT] = SLOTP_RIGHT,
-	[CONST_SLOT_LEFT] = SLOTP_LEFT,
-	[CONST_SLOT_LEGS] = SLOTP_LEGS,
-	[CONST_SLOT_FEET] = SLOTP_FEET,
-	[CONST_SLOT_RING] = SLOTP_RING,
-	[CONST_SLOT_AMMO] = SLOTP_AMMO
-}
-
-function ItemType.usesSlot(self, slot)
-	return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
-end
-
-function Game.broadcastMessage(message, messageType)
-	if messageType == nil then
-		messageType = MESSAGE_STATUS_WARNING
-	end
-
-	for _, player in ipairs(Game.getPlayers()) do
-		player:sendTextMessage(messageType, message)
-	end
 end
 
 if nextUseStaminaTime == nil then
