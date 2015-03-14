@@ -323,10 +323,18 @@ Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
 		switch (item->getWeaponType()) {
 			case WEAPON_SWORD:
 			case WEAPON_AXE:
-			case WEAPON_CLUB:
+			case WEAPON_CLUB: {
+				const Weapon* weapon = g_weapons->getWeapon(item);
+				if (weapon) {
+					return item;
+				}
+				break;
+			}
+
 			case WEAPON_WAND: {
 				const Weapon* weapon = g_weapons->getWeapon(item);
 				if (weapon) {
+					shootRange = item->getShootRange();
 					return item;
 				}
 				break;

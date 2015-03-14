@@ -304,7 +304,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 
 	uint8_t trueRange;
 	const ItemType& it = Item::items[getID()];
-	if (it.weaponType == WEAPON_AMMO) {
+	if (it.weaponType == WEAPON_WAND || it.weaponType == WEAPON_DISTANCE || it.weaponType == WEAPON_AMMO) {
 		trueRange = player->getShootRange();
 	} else {
 		trueRange = range;
