@@ -112,7 +112,22 @@ class QTreeNode
 		}
 
 		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
-		inline static const QTreeLeafNode* getLeafStatic(const QTreeNode* root, uint32_t x, uint32_t y);
+
+		template<typename Leaf, typename Node>
+		inline static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y)
+		{
+			do {
+				node = node->m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
+				if (!node) {
+					return nullptr;
+				}
+
+				x <<= 1;
+				y <<= 1;
+			} while (!node->m_isLeaf);
+			return reinterpret_cast<Leaf>(node);
+		}
+
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:

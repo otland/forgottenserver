@@ -89,7 +89,7 @@ Tile* Map::getTile(uint16_t x, uint16_t y, uint8_t z) const
 		return nullptr;
 	}
 
-	const QTreeLeafNode* leaf = QTreeNode::getLeafStatic(&root, x, y);
+	const QTreeLeafNode* leaf = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, x, y);
 	if (!leaf) {
 		return nullptr;
 	}
@@ -247,8 +247,8 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	//remove the creature
 	oldTile.removeThing(&creature, 0);
 
-	auto leaf = const_cast<QTreeLeafNode*>(QTreeNode::getLeafStatic(&root, oldPos.x, oldPos.y));
-	auto new_leaf = const_cast<QTreeLeafNode*>(QTreeLeafNode::getLeafStatic(&root, newPos.x, newPos.y));
+	QTreeLeafNode* leaf = QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, oldPos.x, oldPos.y);
+	QTreeLeafNode* new_leaf = QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, newPos.x, newPos.y);
 
 	// Switch the node ownership
 	if (leaf != new_leaf) {
@@ -327,7 +327,7 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	int32_t endx2 = x2 - (x2 % FLOOR_SIZE);
 	int32_t endy2 = y2 - (y2 % FLOOR_SIZE);
 
-	const QTreeLeafNode* startLeaf = QTreeNode::getLeafStatic(&root, startx1, starty1);
+	const QTreeLeafNode* startLeaf = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, startx1, starty1);
 	const QTreeLeafNode* leafS = startLeaf;
 	const QTreeLeafNode* leafE;
 
@@ -361,14 +361,14 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 				}
 				leafE = leafE->m_leafE;
 			} else {
-				leafE = QTreeNode::getLeafStatic(&root, nx + FLOOR_SIZE, ny);
+				leafE = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, nx + FLOOR_SIZE, ny);
 			}
 		}
 
 		if (leafS) {
 			leafS = leafS->m_leafS;
 		} else {
-			leafS = QTreeNode::getLeafStatic(&root, startx1, ny + FLOOR_SIZE);
+			leafS = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, startx1, ny + FLOOR_SIZE);
 		}
 	}
 }
@@ -964,20 +964,6 @@ QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 		return nullptr;
 	}
 	return node->getLeaf(x << 1, y << 1);
-}
-
-const QTreeLeafNode* QTreeNode::getLeafStatic(const QTreeNode* node, uint32_t x, uint32_t y)
-{
-	do {
-		node = node->m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
-		if (!node) {
-			return nullptr;
-		}
-
-		x <<= 1;
-		y <<= 1;
-	} while (!node->m_isLeaf);
-	return reinterpret_cast<const QTreeLeafNode*>(node);
 }
 
 QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
