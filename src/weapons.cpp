@@ -162,7 +162,6 @@ Weapon::Weapon(LuaScriptInterface* _interface) :
 	premium = false;
 	enabled = true;
 	wieldUnproperly = false;
-	range = 1;
 	breakChance = 0;
 	action = WEAPONACTION_NONE;
 }
@@ -238,7 +237,6 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 			}
 		}
 	}
-	range = Item::items[id].shootRange;
 
 	std::string vocationString;
 	for (const std::string& str : vocStringList) {
@@ -303,11 +301,11 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 	}
 
 	uint8_t trueRange;
-	const ItemType& it = Item::items[getID()];
+	const ItemType& it = Item::items[id];
 	if (it.weaponType == WEAPON_WAND || it.weaponType == WEAPON_DISTANCE || it.weaponType == WEAPON_AMMO) {
 		trueRange = player->getShootRange();
 	} else {
-		trueRange = range;
+		trueRange = it.shootRange;
 	}
 
 	if (std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos)) > trueRange) {
@@ -621,62 +619,13 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
 	Weapon(_interface)
 {
-	hitChance = 0;
-	maxHitChance = 0;
-	ammuAttackValue = 0;
 	params.blockedByArmor = true;
 	params.combatType = COMBAT_PHYSICALDAMAGE;
 }
 
-bool WeaponDistance::configureEvent(const pugi::xml_node& node)
-{
-	if (!Weapon::configureEvent(node)) {
-		return false;
-	}
-
-	const ItemType& it = Item::items[id];
-
-	//default values
-	if (it.ammoType != AMMO_NONE) {
-		//hit chance on two-handed weapons is limited to 90%
-		maxHitChance = 90;
-	} else {
-		//one-handed is set to 75%
-		maxHitChance = 75;
-	}
-
-	if (it.hitChance != 0) {
-		hitChance = it.hitChance;
-	}
-
-	if (it.maxHitChance != -1) {
-		maxHitChance = it.maxHitChance;
-	}
-	return true;
-}
-
 void WeaponDistance::configureWeapon(const ItemType& it)
 {
-	//default values
-	if (it.ammoType != AMMO_NONE) {
-		//hit chance on two-handed weapons is limited to 90%
-		maxHitChance = 90;
-	} else {
-		//one-handed is set to 75%
-		maxHitChance = 75;
-	}
-
 	params.distanceEffect = it.shootType;
-	range = it.shootRange;
-	ammuAttackValue = it.attack;
-
-	if (it.hitChance != 0) {
-		hitChance = it.hitChance;
-	}
-
-	if (it.maxHitChance > 0) {
-		maxHitChance = it.maxHitChance;
-	}
 
 	if (it.abilities) {
 		elementType = it.abilities->elementType;
@@ -712,12 +661,24 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 	int32_t chance;
 
-	if (hitChance == 0) {
+	const ItemType& it = Item::items[id];
+	if (it.hitChance == 0) {
 		//hit chance is based on distance to target and distance skill
 		uint32_t skill = player->getSkillLevel(SKILL_DISTANCE);
 		const Position& playerPos = player->getPosition();
 		const Position& targetPos = target->getPosition();
 		uint32_t distance = std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos));
+
+		uint32_t maxHitChance;
+		if (it.maxHitChance != -1) {
+			maxHitChance = it.maxHitChance;
+		} else if (it.ammoType != AMMO_NONE) {
+			//hit chance on two-handed weapons is limited to 90%
+			maxHitChance = 90;
+		} else {
+			//one-handed is set to 75%
+			maxHitChance = 75;
+		}
 
 		if (maxHitChance == 75) {
 			//chance for one-handed weapons
@@ -742,7 +703,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 104) * 0.70f) + 2;
 					break;
 				default:
-					chance = hitChance;
+					chance = it.hitChance;
 					break;
 			}
 		} else if (maxHitChance == 90) {
@@ -766,7 +727,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 					chance = std::min<uint32_t>(skill, 90);
 					break;
 				default:
-					chance = hitChance;
+					chance = it.hitChance;
 					break;
 			}
 		} else if (maxHitChance == 100) {
@@ -791,14 +752,14 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 90) * 1.10f) + 1;
 					break;
 				default:
-					chance = hitChance;
+					chance = it.hitChance;
 					break;
 			}
 		} else {
 			chance = maxHitChance;
 		}
 	} else {
-		chance = hitChance;
+		chance = it.hitChance;
 	}
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
@@ -825,9 +786,8 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			Position destPos = target->getPosition();
 
 			for (const auto& dir : destList) {
-				Tile* tmpTile = g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
-
 				// Blocking tiles or tiles without ground ain't valid targets for spears
+				Tile* tmpTile = g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
 				if (tmpTile && !tmpTile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && tmpTile->ground != nullptr) {
 					destTile = tmpTile;
 					break;
@@ -872,7 +832,7 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 
 int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
 {
-	int32_t attackValue = ammuAttackValue;
+	int32_t attackValue = item->getAttack();
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
 		Item* bow = const_cast<Player*>(player)->getWeapon(true);
@@ -974,7 +934,6 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 
 void WeaponWand::configureWeapon(const ItemType& it)
 {
-	range = it.shootRange;
 	params.distanceEffect = it.shootType;
 
 	Weapon::configureWeapon(it);

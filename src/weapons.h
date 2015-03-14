@@ -121,7 +121,6 @@ class Weapon : public Event
 		uint32_t soul;
 		uint16_t id;
 		WeaponAction_t action;
-		uint8_t range;
 		uint8_t breakChance;
 		bool enabled;
 		bool premium;
@@ -159,7 +158,6 @@ class WeaponDistance final : public Weapon
 	public:
 		WeaponDistance(LuaScriptInterface* _interface);
 
-		bool configureEvent(const pugi::xml_node& node) final;
 		void configureWeapon(const ItemType& it) final;
 		bool interruptSwing() const final {
 			return true;
@@ -174,10 +172,6 @@ class WeaponDistance final : public Weapon
 
 	protected:
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
-
-		int32_t hitChance;
-		int32_t maxHitChance;
-		int32_t ammuAttackValue;
 
 		CombatType_t elementType;
 		int16_t elementDamage;
