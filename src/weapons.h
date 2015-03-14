@@ -73,7 +73,7 @@ class Weapon : public Event
 			return false;
 		}
 
-		virtual int32_t playerWeaponCheck(Player* player, Creature* target) const;
+		int32_t playerWeaponCheck(Player* player, Creature* target, uint8_t shootRange) const;
 		static bool useFist(Player* player, Creature* target);
 		virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
 
@@ -163,7 +163,6 @@ class WeaponDistance final : public Weapon
 			return true;
 		}
 
-		int32_t playerWeaponCheck(Player* player, Creature* target) const final;
 		bool useWeapon(Player* player, Item* item, Creature* target) const final;
 
 		int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false) const final;

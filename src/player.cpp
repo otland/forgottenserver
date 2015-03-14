@@ -106,7 +106,6 @@ Player::Player(ProtocolGame* p) :
 	lastAttackBlockType = BLOCK_NONE;
 	addAttackSkillPoint = false;
 	lastAttack = 0;
-	shootRange = 1;
 
 	blessings = 0;
 
@@ -312,63 +311,46 @@ void Player::removeConditionSuppressions(uint32_t conditions)
 	conditionSuppressions &= ~conditions;
 }
 
-Item* Player::getWeapon(bool ignoreAmmo /*= false*/)
+Item* Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 {
-	for (uint32_t slot = CONST_SLOT_RIGHT; slot <= CONST_SLOT_LEFT; slot++) {
-		Item* item = inventory[slot];
-		if (!item) {
-			continue;
+	Item* item = inventory[slot];
+	if (!item) {
+		return nullptr;
+	}
+
+	WeaponType_t weaponType = item->getWeaponType();
+	if (weaponType == WEAPON_NONE || weaponType == WEAPON_AMMO) {
+		return nullptr;
+	}
+
+	if (!ignoreAmmo && weaponType == WEAPON_DISTANCE) {
+		const ItemType& it = Item::items[item->getID()];
+		if (it.ammoType != AMMO_NONE) {
+			Item* ammoItem = inventory[CONST_SLOT_AMMO];
+			if (!ammoItem || ammoItem->getAmmoType() != it.ammoType) {
+				return nullptr;
+			}
+			item = ammoItem;
 		}
+	}
+	return item;
+}
 
-		switch (item->getWeaponType()) {
-			case WEAPON_SWORD:
-			case WEAPON_AXE:
-			case WEAPON_CLUB: {
-				const Weapon* weapon = g_weapons->getWeapon(item);
-				if (weapon) {
-					return item;
-				}
-				break;
-			}
+Item* Player::getWeapon(bool ignoreAmmo/* = false*/) const
+{
+	Item* item = getWeapon(CONST_SLOT_LEFT, ignoreAmmo);
+	if (item) {
+		return item;
+	}
 
-			case WEAPON_WAND: {
-				const Weapon* weapon = g_weapons->getWeapon(item);
-				if (weapon) {
-					shootRange = item->getShootRange();
-					return item;
-				}
-				break;
-			}
-
-			case WEAPON_DISTANCE: {
-				const ItemType& it = Item::items[item->getID()];
-				if (!ignoreAmmo && it.ammoType != AMMO_NONE) {
-					Item* ammoItem = inventory[CONST_SLOT_AMMO];
-					if (ammoItem && ammoItem->getAmmoType() == it.ammoType) {
-						const Weapon* weapon = g_weapons->getWeapon(ammoItem);
-						if (weapon) {
-							shootRange = item->getShootRange();
-							return ammoItem;
-						}
-					}
-				} else {
-					const Weapon* weapon = g_weapons->getWeapon(item);
-					if (weapon) {
-						shootRange = item->getShootRange();
-						return item;
-					}
-				}
-				break;
-			}
-
-			default:
-				break;
-		}
+	item = getWeapon(CONST_SLOT_RIGHT, ignoreAmmo);
+	if (item) {
+		return item;
 	}
 	return nullptr;
 }
 
-WeaponType_t Player::getWeaponType()
+WeaponType_t Player::getWeaponType() const
 {
 	Item* item = getWeapon();
 	if (!item) {

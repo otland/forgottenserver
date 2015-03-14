@@ -670,7 +670,12 @@ void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const 
 			return;
 		}
 
-		switch (caster->getWeaponType()) {
+		Player* player = caster->getPlayer();
+		if (!player) {
+			return;
+		}
+
+		switch (player->getWeaponType()) {
 			case WEAPON_AXE:
 				effect = CONST_ANI_WHIRLWINDAXE;
 				break;

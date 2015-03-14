@@ -413,9 +413,6 @@ class Creature : virtual public Thing
 		virtual void onPlacedCreature() {}
 		virtual void onRemovedCreature() {}
 
-		virtual WeaponType_t getWeaponType() {
-			return WEAPON_NONE;
-		}
 		virtual bool getCombatValues(int32_t&, int32_t&) {
 			return false;
 		}

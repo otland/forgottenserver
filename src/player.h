@@ -618,9 +618,6 @@ class Player final : public Creature, public Cylinder
 		bool hasExtraSwing() final {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());
 		}
-		uint8_t getShootRange() const {
-			return shootRange;
-		}
 
 		uint16_t getSkillLevel(uint8_t skill) const {
 			return std::max<int32_t>(0, skills[skill].level + varSkills[skill]);
@@ -639,8 +636,9 @@ class Player final : public Creature, public Cylinder
 			return lastAttackBlockType;
 		}
 
-		Item* getWeapon(bool ignoreAmmo = false);
-		WeaponType_t getWeaponType() final;
+		Item* getWeapon(slots_t slot, bool ignoreAmmo) const;
+		Item* getWeapon(bool ignoreAmmo = false) const;
+		WeaponType_t getWeaponType() const;
 		int32_t getWeaponSkill(const Item* item) const;
 		void getShieldAndWeapon(const Item*& shield, const Item*& weapon) const;
 
@@ -1307,7 +1305,6 @@ class Player final : public Creature, public Cylinder
 
 		uint8_t blessings;
 		uint8_t guildLevel;
-		uint8_t shootRange;
 		uint8_t levelPercent;
 		uint8_t magLevelPercent;
 
