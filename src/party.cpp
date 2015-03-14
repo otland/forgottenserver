@@ -228,7 +228,7 @@ bool Party::joinParty(Player& player)
 	updateVocationsList();
 
 	const std::string& leaderName = leader->getName();
-	ss.str("");
+	ss.str(std::string());
 	ss << "You have joined " << leaderName << "'" << (leaderName.back() == 's' ? "" : "s") <<
 	   " party. Open the party channel to communicate with your companions.";
 	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
@@ -270,7 +270,7 @@ void Party::revokeInvitation(Player& player)
 	ss << leader->getName() << " has revoked " << (leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " invitation.";
 	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 
-	ss.str("");
+	ss.str(std::string());
 	ss << "Invitation for " << player.getName() << " has been revoked.";
 	leader->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 
@@ -306,7 +306,7 @@ bool Party::invitePlayer(Player& player)
 
 	player.addPartyInvitation(this);
 
-	ss.str("");
+	ss.str(std::string());
 	ss << leader->getName() << " has invited you to " << (leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " party.";
 	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 	return true;

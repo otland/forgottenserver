@@ -302,7 +302,7 @@ bool DBInsert::addRow(const std::string& row)
 bool DBInsert::addRow(std::ostringstream& row)
 {
 	bool ret = addRow(row.str());
-	row.str("");
+	row.str(std::string());
 	return ret;
 }
 

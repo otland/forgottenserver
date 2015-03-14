@@ -77,7 +77,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	account.premiumDays = result->getDataInt("premdays");
 	account.lastDay = result->getDataInt("lastday");
 
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
 	result = db->storeQuery(query.str());
 	if (result) {
@@ -108,7 +108,7 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 
 	int32_t accountId = result->getDataInt("id");
 
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = " << db->escapeString(characterName);
 	result = db->storeQuery(query.str());
 	if (!result) {
@@ -366,13 +366,13 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		Guild* guild = g_game.getGuild(guildId);
 		if (!guild) {
-			query.str("");
+			query.str(std::string());
 			query << "SELECT `name` FROM `guilds` WHERE `id` = " << guildId;
 			if ((result = db->storeQuery(query.str()))) {
 				guild = new Guild(guildId, result->getDataString("name"));
 				g_game.addGuild(guild);
 
-				query.str("");
+				query.str(std::string());
 				query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = " << guildId << " LIMIT 3";
 
 				if ((result = db->storeQuery(query.str()))) {
@@ -394,7 +394,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			IOGuild::getWarList(guildId, player->guildWarList);
 
-			query.str("");
+			query.str(std::string());
 			query << "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = " << guildId;
 			if ((result = db->storeQuery(query.str()))) {
 				guild->setMemberCount(result->getDataInt("members"));
@@ -402,7 +402,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
 	if ((result = db->storeQuery(query.str()))) {
 		do {
@@ -413,7 +413,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	//load inventory items
 	ItemMap itemMap;
 
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
@@ -441,7 +441,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	//load depot items
 	itemMap.clear();
 
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
@@ -473,7 +473,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	//load inbox items
 	itemMap.clear();
 
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
@@ -501,7 +501,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	//load storage map
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
 	if ((result = db->storeQuery(query.str()))) {
 		do {
@@ -510,7 +510,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	//load vip
-	query.str("");
+	query.str(std::string());
 	query << "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = " << player->getAccount();
 	if ((result = db->storeQuery(query.str()))) {
 		do {
@@ -601,7 +601,7 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (result->getDataInt("save") == 0) {
-		query.str("");
+		query.str(std::string());
 		query << "UPDATE `players` SET `lastlogin` = " << player->lastLoginSaved << ", `lastip` = " << player->lastIP << " WHERE `id` = " << player->getGUID();
 		return db->executeQuery(query.str());
 	}
@@ -619,7 +619,7 @@ bool IOLoginData::savePlayer(Player* player)
 	const char* conditions = propWriteStream.getStream(conditionsSize);
 
 	//First, an UPDATE query to write the player itself
-	query.str("");
+	query.str(std::string());
 	query << "UPDATE `players` SET ";
 	query << "`level` = " << player->level << ',';
 	query << "`group_id` = " << player->group->id << ',';
@@ -713,13 +713,13 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	// learned spells
-	query.str("");
+	query.str(std::string());
 	query << "DELETE FROM `player_spells` WHERE `player_id` = " << player->getGUID();
 	if (!db->executeQuery(query.str())) {
 		return false;
 	}
 
-	query.str("");
+	query.str(std::string());
 
 	DBInsert spellsQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
 	for (const std::string& spellName : player->learnedInstantSpellList) {
@@ -755,7 +755,7 @@ bool IOLoginData::savePlayer(Player* player)
 
 	if (player->lastDepotId != -1) {
 		//save depot items
-		query.str("");
+		query.str(std::string());
 		query << "DELETE FROM `player_depotitems` WHERE `player_id` = " << player->getGUID();
 
 		if (!db->executeQuery(query.str())) {
@@ -778,7 +778,7 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	//save inbox items
-	query.str("");
+	query.str(std::string());
 	query << "DELETE FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID();
 	if (!db->executeQuery(query.str())) {
 		return false;
@@ -795,13 +795,13 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	query.str("");
+	query.str(std::string());
 	query << "DELETE FROM `player_storage` WHERE `player_id` = " << player->getGUID();
 	if (!db->executeQuery(query.str())) {
 		return false;
 	}
 
-	query.str("");
+	query.str(std::string());
 
 	DBInsert storageQuery("INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES ");
 	player->genReservedStorageRange();

@@ -4742,7 +4742,7 @@ void Game::saveMotdNum() const
 	query << "UPDATE `server_config` SET `value` = '" << motdNum << "' WHERE `config` = 'motd_num'";
 	db->executeQuery(query.str());
 
-	query.str("");
+	query.str(std::string());
 	query << "UPDATE `server_config` SET `value` = '" << transformToSHA1(g_config.getString(ConfigManager::MOTD)) << "' WHERE `config` = 'motd_hash'";
 	db->executeQuery(query.str());
 }
