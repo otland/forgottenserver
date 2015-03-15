@@ -2277,8 +2277,8 @@ void ProtocolGame::sendChangeSpeed(const Creature* creature, uint32_t speed)
 	NetworkMessage msg;
 	msg.AddByte(0x8F);
 	msg.Add<uint32_t>(creature->getID());
-	msg.Add<uint16_t>(speed / 2);
 	msg.Add<uint16_t>(creature->getBaseSpeed() / 2);
+	msg.Add<uint16_t>(speed / 2);
 	writeToOutputBuffer(msg);
 }
 
