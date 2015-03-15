@@ -4884,8 +4884,8 @@ int32_t LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
 
 int32_t LuaScriptInterface::luaGameCreateItem(lua_State* L)
 {
-	// Game.createItem(itemId, count[, position])
-	uint16_t count = getNumber<uint16_t>(L, 2);
+	// Game.createItem(itemId[, count[, position]])
+	uint16_t count = getNumber<uint16_t>(L, 2, 1);
 	uint16_t id;
 	if (isNumber(L, 1)) {
 		id = getNumber<uint16_t>(L, 1);
