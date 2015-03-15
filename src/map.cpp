@@ -291,7 +291,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 		spectator->onCreatureMove(&creature, &newTile, newPos, &oldTile, oldPos, teleport);
 	}
 
-	oldTile.postRemoveNotification(&creature, &newTile, oldStackPos, true);
+	oldTile.postRemoveNotification(&creature, &newTile, oldStackPos);
 	newTile.postAddNotification(&creature, &oldTile, newStackPos);
 }
 

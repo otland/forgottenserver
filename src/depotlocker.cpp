@@ -52,10 +52,10 @@ void DepotLocker::postAddNotification(Thing* thing, const Cylinder* oldParent, i
 	}
 }
 
-void DepotLocker::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
+void DepotLocker::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	if (parent != nullptr) {
-		parent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
+		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
 

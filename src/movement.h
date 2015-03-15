@@ -57,7 +57,7 @@ class MoveEvents final : public BaseEvents
 
 		uint32_t onCreatureMove(Creature* creature, const Tile* tile, const Position& fromPos, MoveEvent_t eventType);
 		uint32_t onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck);
-		uint32_t onPlayerDeEquip(Player* player, Item* item, slots_t slot, bool isRemoval);
+		uint32_t onPlayerDeEquip(Player* player, Item* item, slots_t slot);
 		uint32_t onItemMove(Item* item, Tile* tile, bool isAdd);
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType);

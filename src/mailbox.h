@@ -54,7 +54,7 @@ class Mailbox final : public Item, public Cylinder
 		void removeThing(Thing* thing, uint32_t count) final;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) final;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
 
 	private:
 		bool getReceiver(Item* item, std::string& name) const;

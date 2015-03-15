@@ -872,7 +872,7 @@ void Tile::addThing(int32_t, Thing* thing)
 				resetTileFlags(oldGround);
 				setTileFlags(item);
 				onUpdateTileItem(oldGround, oldType, item, newType);
-				postRemoveNotification(oldGround, nullptr, oldGroundIndex, true);
+				postRemoveNotification(oldGround, nullptr, oldGroundIndex);
 			}
 		} else if (item->isAlwaysOnTop()) {
 			if (item->isSplash()) {
@@ -885,7 +885,7 @@ void Tile::addThing(int32_t, Thing* thing)
 							removeThing(oldSplash, 1);
 							oldSplash->setParent(nullptr);
 							g_game.ReleaseItem(oldSplash);
-							postRemoveNotification(oldSplash, nullptr, oldSplashIndex, true);
+							postRemoveNotification(oldSplash, nullptr, oldSplashIndex);
 							break;
 						}
 					}
@@ -925,7 +925,7 @@ void Tile::addThing(int32_t, Thing* thing)
 
 								oldField->setParent(nullptr);
 								g_game.ReleaseItem(oldField);
-								postRemoveNotification(oldField, nullptr, oldFieldIndex, true);
+								postRemoveNotification(oldField, nullptr, oldFieldIndex);
 								break;
 							} else {
 								//This magic field cannot be replaced.
@@ -1406,17 +1406,17 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	}
 }
 
-void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
+void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	SpectatorVec list;
 	g_game.getSpectators(list, getPosition(), true, true);
 
-	if (/*isCompleteRemoval &&*/ getThingCount() > 8) {
+	if (getThingCount() > 8) {
 		onUpdateTile(list);
 	}
 
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_NEAR);
+		spectator->getPlayer()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 	}
 
 	//calling movement scripts

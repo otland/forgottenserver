@@ -201,17 +201,6 @@ Item* Item::clone() const
 	return _item;
 }
 
-void Item::moveAttributes(Item* item)
-{
-	if (item->attributes) {
-		attributes = item->attributes;
-		item->attributes = nullptr;
-	}
-
-	removeAttribute(ITEM_ATTRIBUTE_DECAYSTATE);
-	removeAttribute(ITEM_ATTRIBUTE_DURATION);
-}
-
 Item::~Item()
 {
 	delete attributes;

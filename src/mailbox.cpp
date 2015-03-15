@@ -85,9 +85,9 @@ void Mailbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32
 	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
 }
 
-void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
+void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
+	getParent()->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 }
 
 bool Mailbox::sendItem(Item* item) const

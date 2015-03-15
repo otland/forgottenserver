@@ -1143,7 +1143,7 @@ class Player final : public Creature, public Cylinder
 		void onThink(uint32_t interval) final;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) final;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
 
 		void setNextAction(int64_t time) {
 			if (time > nextAction) {

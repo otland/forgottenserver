@@ -68,11 +68,11 @@ void DepotChest::postAddNotification(Thing* thing, const Cylinder* oldParent, in
 	}
 }
 
-void DepotChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
+void DepotChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* parent = getParent();
 	if (parent != nullptr) {
-		parent->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
+		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
 

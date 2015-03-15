@@ -145,10 +145,9 @@ class Cylinder : virtual public Thing
 		  * Is sent after an operation (move/remove) to update internal values
 		  * \param thing is the object that has been removed
 		  * \param index is the previous index of the removed object
-		  * \param isCompleteRemoval indicates if the item was completely removed or just partially (stackables)
 		  * \param link holds the relation the object has to the cylinder
 		  */
-		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER) = 0;
+		virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) = 0;
 
 		/**
 		  * Gets the index of an object
@@ -231,7 +230,7 @@ class VirtualCylinder final : public Cylinder
 		virtual void removeThing(Thing*, uint32_t) {}
 
 		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) {}
-		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, bool, cylinderlink_t = LINK_OWNER) {}
+		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) {}
 
 		bool isPushable() const override {
 			return false;

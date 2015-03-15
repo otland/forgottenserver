@@ -96,7 +96,7 @@ void TrashHolder::postAddNotification(Thing* thing, const Cylinder* oldParent, i
 	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
 }
 
-void TrashHolder::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t)
+void TrashHolder::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
+	getParent()->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 }

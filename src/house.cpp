@@ -596,18 +596,6 @@ bool Door::getAccessList(std::string& list) const
 	return true;
 }
 
-void Door::moveAttributes(Item* item)
-{
-	Item::moveAttributes(item);
-
-	if (Door* door = item->getDoor()) {
-		std::string list;
-		if (door->getAccessList(list)) {
-			setAccessList(list);
-		}
-	}
-}
-
 void Door::onRemoved()
 {
 	Item::onRemoved();

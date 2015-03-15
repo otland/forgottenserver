@@ -88,7 +88,6 @@ class Door final : public Item
 		bool getAccessList(std::string& list) const;
 
 		void onRemoved() final;
-		void moveAttributes(Item* item) final;
 
 	protected:
 		void setHouse(House* _house);

@@ -950,10 +950,6 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			abilities.elementType = COMBAT_ENERGYDAMAGE;
 		} else if (tmpStrValue == "walkstack") {
 			it.walkStack = valueAttribute.as_bool();
-		} else if (tmpStrValue == "alwaysontop") {
-			it.alwaysOnTop = booleanString(valueAttribute.as_string());
-		} else if (tmpStrValue == "toporder") {
-			it.alwaysOnTopOrder = pugi::cast<uint16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "blocking") {
 			it.blockSolid = valueAttribute.as_bool();
 		} else if (tmpStrValue == "allowdistread") {

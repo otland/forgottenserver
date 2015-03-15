@@ -333,21 +333,19 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, const 
 uint32_t MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_EQUIP, slot);
-	if (moveEvent) {
-		return moveEvent->fireEquip(player, item, slot, isCheck);
+	if (!moveEvent) {
+		return 1;
 	}
-
-	return 1;
+	return moveEvent->fireEquip(player, item, slot, isCheck);
 }
 
-uint32_t MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot, bool isRemoval)
+uint32_t MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
-	if (moveEvent) {
-		return moveEvent->fireEquip(player, item, slot, isRemoval);
+	if (!moveEvent) {
+		return 1;
 	}
-
-	return 1;
+	return moveEvent->fireEquip(player, item, slot, true);
 }
 
 uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
@@ -739,7 +737,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	return 1;
 }
 
-uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool isRemoval)
+uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 {
 	if (!player->isItemAbilityEnabled(slot)) {
 		return 1;
@@ -748,8 +746,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	player->setItemAbility(slot, false);
 
 	const ItemType& it = Item::items[item->getID()];
-
-	if (isRemoval && it.transformDeEquipTo != 0) {
+	if (it.transformDeEquipTo != 0) {
 		g_game.transformItem(item, it.transformDeEquipTo);
 		g_game.startDecay(item);
 	}
