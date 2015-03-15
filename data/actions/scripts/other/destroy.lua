@@ -1,3 +1,3 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
-	return destroyItem(cid, itemEx, toPosition)
+function onUse(cid, item, fromPosition, target, toPosition, isHotkey)
+	return destroyItem(cid, target, toPosition)
 end

@@ -1,5 +1,5 @@
 local annihilatorReward = {1990, 2400, 2431, 2494}
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if item.uid <= 1000 or item.uid > 22700 then
 		return false
 	end

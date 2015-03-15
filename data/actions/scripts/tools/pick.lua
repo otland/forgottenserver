@@ -1,6 +1,6 @@
-function onUse(cid, item, fromPosition, itemEx, toPosition, isHotkey)
-	if (itemEx.uid <= 65535 or itemEx.actionid > 0) and (itemEx.itemid == 354 or itemEx.itemid == 355) then
-		local iEx = Item(itemEx.uid)
+function onUse(cid, item, fromPosition, target, toPosition, isHotkey)
+	if (target.uid <= 65535 or target.actionid > 0) and (target.itemid == 354 or target.itemid == 355) then
+		local iEx = Item(target.uid)
 		iEx:transform(392)
 		iEx:decay()
 		toPosition:sendMagicEffect(CONST_ME_POFF)

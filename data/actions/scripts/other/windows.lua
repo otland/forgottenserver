@@ -21,7 +21,7 @@ local windows = {
 	[20182] = 19974, [20183] = 19445, [20184] = 19446, [20185] = 19975
 }
 
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local window = windows[item.itemid]
 	if window == nil then
 		return false

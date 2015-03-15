@@ -5,14 +5,14 @@ local lootRare = {2143, 2146, 2149, 7158, 7159}
 local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
-	local targetId = itemEx.itemid
-	if not isInArray(waterIds, itemEx.itemid) then
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+	local targetId = target.itemid
+	if not isInArray(waterIds, target.itemid) then
 		return false
 	end
 
 	if targetId == 10499 then
-		local targetItem = Item(itemEx.uid)
+		local targetItem = Item(target.uid)
 		local owner = targetItem:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
 		if owner ~= 0 and owner ~= player:getId() then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
@@ -50,7 +50,7 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		end
 
 		if targetId == 15401 then
-			local targetItem = Item(itemEx.uid)
+			local targetItem = Item(target.uid)
 			targetItem:transform(targetId + 1)
 			targetItem:decay()
 
@@ -59,7 +59,7 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 				return true
 			end
 		elseif targetId == 7236 then
-			local targetItem = Item(itemEx.uid)
+			local targetItem = Item(target.uid)
 			targetItem:transform(targetId + 1)
 			targetItem:decay()
 

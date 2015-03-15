@@ -1,4 +1,4 @@
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if isInArray(questDoors, item.itemid) then
 		if player:getStorageValue(item.actionid) ~= -1 then
 			Item(item.uid):transform(item.itemid + 1)
@@ -16,10 +16,10 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		end
 		return true
 	elseif isInArray(keys, item.itemid) then
-		if itemEx.actionid > 0 then
-			if item.actionid == itemEx.actionid then
-				if doors[itemEx.itemid] then
-					Item(itemEx.uid):transform(doors[itemEx.itemid])
+		if target.actionid > 0 then
+			if item.actionid == target.actionid then
+				if doors[target.itemid] then
+					Item(target.uid):transform(doors[target.itemid])
 					return true
 				end
 			end

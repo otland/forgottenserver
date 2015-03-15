@@ -6,7 +6,7 @@ local statues = {
 	[18492] = SKILL_MAGLEVEL
 }
 
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local skill = statues[item.itemid]
 	if not skill then
 		return false

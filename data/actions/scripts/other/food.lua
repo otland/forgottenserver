@@ -98,7 +98,7 @@ local FOODS = {
 	[20101] = {12, "Smack."} -- rat cheese
 }
 
-function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local food = FOODS[item.itemid]
 	if food == nil then
 		return false
