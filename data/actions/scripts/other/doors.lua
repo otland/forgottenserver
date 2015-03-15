@@ -29,12 +29,6 @@ function onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
 		return false
 	end
 
-	local tileToPos = toPosition:getTile()
-	local thing = tileToPos:getThing(STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE)
-	if thing and item.uid ~= thing:getUniqueId() and fromPosition:getTile():getItemByType(ITEM_TYPE_MAGICFIELD) then
-		return false
-	end
-
 	if isInArray(horizontalOpenDoors, item.itemid) or isInArray(verticalOpenDoors, item.itemid) then
 		local doorCreature = tileToPos:getTopCreature()
 		if doorCreature ~= nil then

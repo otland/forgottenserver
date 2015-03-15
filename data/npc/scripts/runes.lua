@@ -102,7 +102,7 @@ function creatureSayCallback(cid, type, msg)
 
 	local items = {[1] = 2190, [2] = 2182, [5] = 2190, [6] = 2182}
 	if(msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand')) then
-		if(isSorcerer(cid) or isDruid(cid)) then
+		if isInArray({1, 2, 5, 6}, getPlayerVocation(cid)) then
 			if(getPlayerStorageValue(cid, 30002) == -1) then
 				selfSay('So you ask me for a {' .. getItemNameById(items[getPlayerVocation(cid)]) .. '} to begin your advanture?', cid)
 				talkState[talkUser] = 1

@@ -11,15 +11,8 @@ GUILDLEVEL_MEMBER = 1
 GUILDLEVEL_VICE = 2
 GUILDLEVEL_LEADER = 3
 
-STACKPOS_GROUND = 0
-STACKPOS_FIRST_ITEM_ABOVE_GROUNDTILE = 1
-STACKPOS_SECOND_ITEM_ABOVE_GROUNDTILE = 2
-STACKPOS_THIRD_ITEM_ABOVE_GROUNDTILE = 3
-STACKPOS_FOURTH_ITEM_ABOVE_GROUNDTILE = 4
-STACKPOS_FIFTH_ITEM_ABOVE_GROUNDTILE = 5
-STACKPOS_TOP_CREATURE = 253
-STACKPOS_TOP_FIELD = 254
-STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE = 255
+CONTAINER_POSITION = 0xFFFF
+ITEMCOUNT_MAX = 100
 
 ropeSpots = {384, 418, 8278, 8592, 13189, 14435, 14436, 15635, 19518}
 
@@ -30,63 +23,6 @@ openSpecialDoors = {1224, 1226, 1228, 1230, 1242, 1244, 1246, 1248, 1256, 1258, 
 questDoors = {1223, 1225, 1241, 1243, 1255, 1257, 3542, 3551, 5105, 5114, 5123, 5132, 5288, 5290, 5745, 5748, 6202, 6204, 6259, 6261, 6898, 6907, 7040, 7049, 8551, 8553, 9175, 9177, 9277, 9279, 10278, 10280, 10475, 10484, 10782, 12097, 12193, 19847, 19987, 20280, 10791, 12104, 12202, 19856, 19996, 20289}
 levelDoors = {1227, 1229, 1245, 1247, 1259, 1261, 3540, 3549, 5103, 5112, 5121, 5130, 5292, 5294, 6206, 6208, 6263, 6265, 6896, 6905, 7038, 7047, 8555, 8557, 9179, 9181, 9281, 9283, 10282, 10284, 10473, 10482, 10780, 10789, 10780, 12095, 12195, 19845, 19985, 20278, 10789, 12102, 12204, 19854, 19994, 20287}
 keys = {2086, 2087, 2088, 2089, 2090, 2091, 2092, 10032}
-
-CONTAINER_POSITION = 0xFFFF
-ITEMCOUNT_MAX = 100
-
-function doCreatureSayWithRadius(cid, text, type, radiusx, radiusy, position)
-	if position == nil then
-		position = getCreaturePosition(cid)
-	end
-
-	local spectators = getSpectators(position, radiusx, radiusy, false, true)
-	if spectators ~= nil then
-		for _, spectator in ipairs(spectators) do
-			doCreatureSay(cid, text, type, false, spectator, position)
-		end
-	end
-end
-
-function doForceSummonCreature(name, pos)
-	local creature = doSummonCreature(name, pos)
-	if creature == false then
-		pos.stackpos = STACKPOS_FIRST_ITEM_ABOVE_GROUNDTILE
-
-		local lastUid = nil
-		while true do
-			local thing = getTileThingByPos(pos)
-			if thing.uid == 0 or thing.uid == lastUid or not isItem(thing.uid) then
-				break
-			end
-
-			lastUid = thing.uid
-			doRemoveItem(thing.uid)
-		end
-
-		creature = doSummonCreature(name, pos)
-	end
-	return creature
-end
-
-function getBlessingsCost(level)
-	if level <= 30 then
-		return 2000
-	elseif level >= 120 then
-		return 20000
-	else
-		return ((level - 20) * 200)
-	end
-end
-
-function getPvpBlessingCost(level)
-	if level <= 30 then
-		return 2000
-	elseif level >= 270 then
-		return 50000
-	else
-		return ((level - 20) * 200)
-	end
-end
 
 function getDistanceBetween(firstPosition, secondPosition)
 	local xDif = math.abs(firstPosition.x - secondPosition.x)
@@ -107,46 +43,6 @@ function getTibianTime()
 		minutes = '0' .. minutes
 	end
 	return hours .. ':' .. minutes
-end
-
-function isInRange(pos, fromPos, toPos)
-	return pos.x >= fromPos.x and pos.y >= fromPos.y and pos.z >= fromPos.z and pos.x <= toPos.x and pos.y <= toPos.y and pos.z <= toPos.z
-end
-
-function isNumber(str)
-	return tonumber(str) ~= nil
-end
-
-function isSorcerer(cid)
-	local player = Player(cid)
-	if player == nil then
-		return false
-	end
-	return isInArray({1, 5}, player:getVocation():getId())
-end
-
-function isDruid(cid)
-	local player = Player(cid)
-	if player == nil then
-		return false
-	end
-	return isInArray({2, 6}, player:getVocation():getId())
-end
-
-function isPaladin(cid)
-	local player = Player(cid)
-	if player == nil then
-		return false
-	end
-	return isInArray({3, 7}, player:getVocation():getId())
-end
-
-function isKnight(cid)
-	local player = Player(cid)
-	if player == nil then
-		return false
-	end
-	return isInArray({4, 8}, player:getVocation():getId())
 end
 
 string.split = function(str, sep)
