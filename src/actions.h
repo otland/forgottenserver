@@ -24,7 +24,7 @@
 #include "enums.h"
 #include "luascript.h"
 
-typedef bool (ActionFunction)(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool extendedUse, bool isHotkey);
+typedef bool (ActionFunction)(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey);
 
 class Action : public Event
 {
@@ -36,8 +36,8 @@ class Action : public Event
 		bool loadFunction(const pugi::xml_attribute& attr) override;
 
 		//scripting
-		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-			const PositionEx& posTo, bool extendedUse, Creature* creature, bool isHotkey);
+		virtual bool executeUse(Player* player, Item* item, const Position& fromPosition,
+			Thing* target, const Position& toPosition, bool isHotkey);
 		//
 
 		bool getAllowFarUse() const {
@@ -65,6 +65,7 @@ class Action : public Event
 		virtual bool hasOwnErrorHandler() {
 			return false;
 		}
+		virtual Thing* getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const;
 
 		ActionFunction* function;
 

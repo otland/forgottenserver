@@ -49,12 +49,9 @@ class NpcScriptInterface final : public LuaScriptInterface
 		static int32_t luaActionMoveTo(lua_State* L);
 		static int32_t luaActionTurn(lua_State* L);
 		static int32_t luaActionFollow(lua_State* L);
-		static int32_t luaSelfGetPos(lua_State* L);
 		static int32_t luagetDistanceTo(lua_State* L);
 		static int32_t luaSetNpcFocus(lua_State* L);
 		static int32_t luaGetNpcCid(lua_State* L);
-		static int32_t luaGetNpcPos(lua_State* L);
-		static int32_t luaGetNpcName(lua_State* L);
 		static int32_t luaGetNpcParameter(lua_State* L);
 		static int32_t luaOpenShopWindow(lua_State* L);
 		static int32_t luaCloseShopWindow(lua_State* L);
@@ -161,8 +158,6 @@ class Npc final : public Creature
 		void doSay(const std::string& text);
 		void doSayToPlayer(Player* player, const std::string& text);
 
-		void doMove(Direction dir);
-		void doTurn(Direction dir);
 		void doMoveTo(const Position& pos);
 
 		int32_t getMasterRadius() const {

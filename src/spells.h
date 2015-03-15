@@ -303,9 +303,11 @@ class RuneSpell final : public Action, public Spell
 		bool hasOwnErrorHandler() final {
 			return true;
 		}
+		Thing* getTarget(Player*, Creature* targetCreature, const Position&, uint8_t) const final {
+			return targetCreature;
+		}
 
-		bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-		                        const PositionEx& posTo, bool extendedUse, Creature* creature, bool isHotkey) final;
+		bool executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey) final;
 
 		bool castSpell(Creature* creature) final;
 		bool castSpell(Creature* creature, Creature* target) final;

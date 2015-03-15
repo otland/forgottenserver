@@ -74,7 +74,7 @@ struct LuaVariant {
 
 	LuaVariantType_t type;
 	std::string text;
-	PositionEx pos;
+	Position pos;
 	uint32_t number;
 };
 

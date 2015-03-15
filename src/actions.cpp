@@ -292,15 +292,12 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 	Action* action = getAction(item);
 	if (action) {
-		int32_t stack = item->getParent()->getThingIndex(item);
-		PositionEx posEx(pos, stack);
-
 		if (action->isScripted()) {
-			if (action->executeUse(player, item, posEx, posEx, false, nullptr, isHotkey)) {
+			if (action->executeUse(player, item, pos, nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
 			}
 		} else if (action->function) {
-			if (action->function(player, item, posEx, posEx, false, isHotkey)) {
+			if (action->function(player, item, pos, nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
 			}
 		}
@@ -415,8 +412,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 		showUseHotkeyMessage(player, item, player->getItemTypeCount(item->getID(), -1));
 	}
 
-	int32_t fromStackPos = item->getParent()->getThingIndex(item);
-	if (!action->executeUse(player, item, PositionEx(fromPos, fromStackPos), PositionEx(toPos, toStackPos), true, creature, isHotkey)) {
+	if (!action->executeUse(player, item, fromPos, action->getTarget(player, creature, toPos, toStackPos), toPos, isHotkey)) {
 		if (!action->hasOwnErrorHandler()) {
 			player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		}
@@ -501,19 +497,19 @@ bool Action::loadFunction(const pugi::xml_attribute& attr)
 	return true;
 }
 
-bool Action::increaseItemId(Player*, Item* item, const PositionEx&, const PositionEx&, bool, bool)
+bool Action::increaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
 {
 	g_game.startDecay(g_game.transformItem(item, item->getID() + 1));
 	return true;
 }
 
-bool Action::decreaseItemId(Player*, Item* item, const PositionEx&, const PositionEx&, bool, bool)
+bool Action::decreaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
 {
 	g_game.startDecay(g_game.transformItem(item, item->getID() - 1));
 	return true;
 }
 
-bool Action::enterMarket(Player* player, Item*, const PositionEx&, const PositionEx&, bool, bool)
+bool Action::enterMarket(Player* player, Item*, const Position&, Thing*, const Position&, bool)
 {
 	if (player->getLastDepotId() == -1) {
 		return false;
@@ -537,17 +533,17 @@ ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos
 	}
 }
 
-bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, const PositionEx& toPos, bool extendedUse, Creature* creature, bool isHotkey)
+Thing* Action::getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const
 {
-	Thing* thing = creature;
-	if (extendedUse && thing == nullptr) {
-		thing = g_game.internalGetThing(player, toPos, toPos.stackpos, 0, STACKPOS_USETARGET);
-		if (thing == nullptr) {
-			return false;
-		}
+	if (targetCreature) {
+		return targetCreature;
 	}
+	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
+}
 
-	//onUse(player, item, fromPosition, itemEx, toPosition, isHotkey)
+bool Action::executeUse(Player* player, Item* item, const Position& fromPos, Thing* target, const Position& toPos, bool isHotkey)
+{
+	//onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - Action::executeUse] Call stack overflow" << std::endl;
 		return false;
@@ -564,10 +560,10 @@ bool Action::executeUse(Player* player, Item* item, const PositionEx& fromPos, c
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	LuaScriptInterface::pushThing(L, item);
-	LuaScriptInterface::pushPosition(L, fromPos, fromPos.stackpos);
+	LuaScriptInterface::pushPosition(L, fromPos);
 
-	LuaScriptInterface::pushThing(L, thing);
-	LuaScriptInterface::pushPosition(L, toPos, toPos.stackpos);
+	LuaScriptInterface::pushThing(L, target);
+	LuaScriptInterface::pushPosition(L, toPos);
 
 	LuaScriptInterface::pushBoolean(L, isHotkey);
 	return m_scriptInterface->callFunction(6);

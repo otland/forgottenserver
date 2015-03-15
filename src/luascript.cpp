@@ -641,7 +641,7 @@ void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
 			break;
 		case VARIANT_TARGETPOSITION:
 		case VARIANT_POSITION: {
-			pushPosition(L, var.pos, var.pos.stackpos);
+			pushPosition(L, var.pos);
 			lua_setfield(L, -2, "pos");
 			break;
 		}
@@ -3675,7 +3675,7 @@ int32_t LuaScriptInterface::luaDoAreaCombatMana(lua_State* L)
 		damage.primary.type = COMBAT_MANADRAIN;
 		damage.primary.value = normal_random(getNumber<int32_t>(L, 4), getNumber<int32_t>(L, 5));
 
-		PositionEx pos = getPosition(L, 2);
+		Position pos = getPosition(L, 2);
 		Combat::doCombatMana(creature, pos, area, damage, params);
 		pushBoolean(L, true);
 	} else {
@@ -5115,7 +5115,7 @@ int32_t LuaScriptInterface::luaVariantGetPosition(lua_State* L)
 	// Variant:getPosition()
 	const LuaVariant& variant = getVariant(L, 1);
 	if (variant.type == VARIANT_POSITION || variant.type == VARIANT_TARGETPOSITION) {
-		pushPosition(L, variant.pos, variant.pos.stackpos);
+		pushPosition(L, variant.pos);
 	} else {
 		pushPosition(L, Position());
 	}
@@ -7060,7 +7060,7 @@ int32_t LuaScriptInterface::luaContainerCreate(lua_State* L)
 {
 	// Container(uid)
 	uint32_t id = getNumber<uint32_t>(L, 2);
-	
+
 	Container* container = getScriptEnv()->getContainerByUID(id);
 	if (container) {
 		pushUserdata(L, container);
@@ -7295,7 +7295,7 @@ int32_t LuaScriptInterface::luaTeleportGetDestination(lua_State* L)
 	// teleport:getDestination()
 	Teleport* teleport = getUserdata<Teleport>(L, 1);
 	if (teleport) {
-		pushPosition(L, teleport->getDestPos(), 0);
+		pushPosition(L, teleport->getDestPos());
 	} else {
 		lua_pushnil(L);
 	}

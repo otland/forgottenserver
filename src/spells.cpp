@@ -1905,9 +1905,9 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 	return RETURNVALUE_NOERROR;
 }
 
-bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool, Creature* creature, bool isHotkey)
+bool RuneSpell::executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey)
 {
-	if (!playerRuneSpellCheck(player, posTo)) {
+	if (!playerRuneSpellCheck(player, toPosition)) {
 		return false;
 	}
 
@@ -1918,8 +1918,9 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 
 		if (needTarget) {
 			var.type = VARIANT_NUMBER;
-			if (creature == nullptr) {
-				Tile* toTile = g_game.map.getTile(posTo);
+
+			if (target == nullptr) {
+				Tile* toTile = g_game.map.getTile(toPosition);
 				if (toTile) {
 					const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);
 					if (visibleCreature) {
@@ -1927,16 +1928,16 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 					}
 				}
 			} else {
-				var.number = creature->getID();
+				var.number = target->getCreature()->getID();
 			}
 		} else {
 			var.type = VARIANT_POSITION;
-			var.pos = posTo;
+			var.pos = toPosition;
 		}
 
 		result = internalCastSpell(player, var, isHotkey);
 	} else if (function) {
-		result = function(this, player, item, posFrom, posTo, isHotkey);
+		result = function(this, player, item, fromPosition, toPosition, isHotkey);
 	}
 
 	if (result) {

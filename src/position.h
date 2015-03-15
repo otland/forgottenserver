@@ -133,34 +133,4 @@ struct Position
 std::ostream& operator<<(std::ostream&, const Position&);
 std::ostream& operator<<(std::ostream&, const Direction&);
 
-struct PositionEx : public Position
-{
-	PositionEx() : stackpos(0) {}
-
-	PositionEx(uint16_t x, uint16_t y, uint8_t z, int32_t stackpos)
-		: Position(x, y, z), stackpos(stackpos) {}
-
-	PositionEx(uint16_t x, uint16_t y, uint8_t z)
-		: Position(x, y, z), stackpos(0) {}
-
-	PositionEx(const Position& p)
-		: Position(p.x, p.y, p.z), stackpos(0) {}
-
-	PositionEx(const PositionEx& p)
-		: Position(p.x, p.y, p.z), stackpos(p.stackpos) {}
-
-	PositionEx(const Position& p, int32_t _stackpos)
-		: Position(p.x, p.y, p.z), stackpos(_stackpos) {}
-
-	int32_t stackpos;
-
-	bool operator==(const PositionEx& p) const {
-		return p.x == x && p.y == y && p.z == z && p.stackpos == stackpos;
-	}
-
-	bool operator!=(const PositionEx& p) const {
-		return p.x != x || p.y != y || p.z != z || p.stackpos != stackpos;
-	}
-};
-
 #endif

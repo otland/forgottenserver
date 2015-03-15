@@ -345,16 +345,6 @@ void Npc::doSayToPlayer(Player* player, const std::string& text)
 	}
 }
 
-void Npc::doMove(Direction dir)
-{
-	g_game.internalMoveCreature(this, dir);
-}
-
-void Npc::doTurn(Direction dir)
-{
-	g_game.internalCreatureTurn(this, dir);
-}
-
 void Npc::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count,
                         uint8_t amount, bool ignore/* = false*/, bool inBackpacks/* = false*/)
 {
@@ -586,12 +576,9 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "selfMoveTo", NpcScriptInterface::luaActionMoveTo);
 	lua_register(m_luaState, "selfTurn", NpcScriptInterface::luaActionTurn);
 	lua_register(m_luaState, "selfFollow", NpcScriptInterface::luaActionFollow);
-	lua_register(m_luaState, "selfGetPosition", NpcScriptInterface::luaSelfGetPos);
 	lua_register(m_luaState, "getDistanceTo", NpcScriptInterface::luagetDistanceTo);
 	lua_register(m_luaState, "doNpcSetCreatureFocus", NpcScriptInterface::luaSetNpcFocus);
 	lua_register(m_luaState, "getNpcCid", NpcScriptInterface::luaGetNpcCid);
-	lua_register(m_luaState, "getNpcPos", NpcScriptInterface::luaGetNpcPos);
-	lua_register(m_luaState, "getNpcName", NpcScriptInterface::luaGetNpcName);
 	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
 	lua_register(m_luaState, "openShopWindow", NpcScriptInterface::luaOpenShopWindow);
 	lua_register(m_luaState, "closeShopWindow", NpcScriptInterface::luaCloseShopWindow);
@@ -603,18 +590,6 @@ void NpcScriptInterface::registerFunctions()
 
 	registerMethod("Npc", "openShopWindow", NpcScriptInterface::luaNpcOpenShopWindow);
 	registerMethod("Npc", "closeShopWindow", NpcScriptInterface::luaNpcCloseShopWindow);
-}
-
-int32_t NpcScriptInterface::luaSelfGetPos(lua_State* L)
-{
-	//selfGetPosition()
-	Npc* npc = getScriptEnv()->getNpc();
-	if (npc) {
-		pushPosition(L, npc->getPosition());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
 }
 
 int32_t NpcScriptInterface::luaActionSay(lua_State* L)
@@ -643,7 +618,7 @@ int32_t NpcScriptInterface::luaActionMove(lua_State* L)
 	//selfMove(direction)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->doMove(getNumber<Direction>(L, 1));
+		g_game.internalMoveCreature(npc, getNumber<Direction>(L, 1));
 	}
 	return 0;
 }
@@ -669,7 +644,7 @@ int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 	//selfTurn(direction)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		npc->doTurn(getNumber<Direction>(L, 1));
+		g_game.internalCreatureTurn(npc, getNumber<Direction>(L, 1));
 	}
 	return 0;
 }
@@ -729,22 +704,6 @@ int32_t NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 	return 0;
 }
 
-int32_t NpcScriptInterface::luaGetNpcPos(lua_State* L)
-{
-	//getNpcPos()
-	Position pos;
-	uint32_t stackpos = 0;
-
-	Npc* npc = getScriptEnv()->getNpc();
-	if (npc) {
-		pos = npc->getPosition();
-		stackpos = npc->getParent()->getThingIndex(npc);
-	}
-
-	pushPosition(L, pos, stackpos);
-	return 1;
-}
-
 int32_t NpcScriptInterface::luaGetNpcCid(lua_State* L)
 {
 	//getNpcCid()
@@ -753,18 +712,6 @@ int32_t NpcScriptInterface::luaGetNpcCid(lua_State* L)
 		lua_pushnumber(L, npc->getID());
 	} else {
 		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int32_t NpcScriptInterface::luaGetNpcName(lua_State* L)
-{
-	//getNpcName()
-	Npc* npc = getScriptEnv()->getNpc();
-	if (npc) {
-		LuaScriptInterface::pushString(L, npc->getName());
-	} else {
-		pushBoolean(L, false);
 	}
 	return 1;
 }

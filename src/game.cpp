@@ -300,10 +300,9 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			}
 
 			case STACKPOS_USETARGET: {
-				thing = tile->getThing(index);
-
-				// only creatures may be selected arbitrarily
-				if (thing && thing->getCreature()) {
+				// select top creature
+				thing = tile->getTopVisibleCreature(player);
+				if (thing) {
 					break;
 				}
 
