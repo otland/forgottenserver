@@ -305,7 +305,7 @@ class RuneSpell final : public Action, public Spell
 		}
 
 		bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-		                        const PositionEx& posTo, bool extendedUse, uint32_t creatureId, bool isHotkey) final;
+		                        const PositionEx& posTo, bool extendedUse, Creature* creature, bool isHotkey) final;
 
 		bool castSpell(Creature* creature) final;
 		bool castSpell(Creature* creature, Creature* target) final;

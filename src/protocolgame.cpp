@@ -877,9 +877,9 @@ void ProtocolGame::parseThrow(NetworkMessage& msg)
 void ProtocolGame::parseLookAt(NetworkMessage& msg)
 {
 	Position pos = msg.GetPosition();
-	uint16_t spriteId = msg.get<uint16_t>();
+	msg.SkipBytes(2); // spriteId
 	uint8_t stackpos = msg.GetByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerLookAt, player->getID(), pos, spriteId, stackpos);
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerLookAt, player->getID(), pos, stackpos);
 }
 
 void ProtocolGame::parseLookInBattleList(NetworkMessage& msg)

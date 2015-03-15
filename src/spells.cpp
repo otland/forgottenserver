@@ -1905,7 +1905,7 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 	return RETURNVALUE_NOERROR;
 }
 
-bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool, uint32_t creatureId, bool isHotkey)
+bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom, const PositionEx& posTo, bool, Creature* creature, bool isHotkey)
 {
 	if (!playerRuneSpellCheck(player, posTo)) {
 		return false;
@@ -1917,18 +1917,18 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 		LuaVariant var;
 
 		if (needTarget) {
-			if (creatureId == 0) {
+			var.type = VARIANT_NUMBER;
+			if (creature == nullptr) {
 				Tile* toTile = g_game.map.getTile(posTo);
 				if (toTile) {
-					const Creature* creature = toTile->getBottomVisibleCreature(player);
-					if (creature) {
-						creatureId = creature->getID();
+					const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);
+					if (visibleCreature) {
+						var.number = visibleCreature->getID();
 					}
 				}
+			} else {
+				var.number = creature->getID();
 			}
-
-			var.type = VARIANT_NUMBER;
-			var.number = creatureId;
 		} else {
 			var.type = VARIANT_POSITION;
 			var.pos = posTo;

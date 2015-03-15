@@ -248,109 +248,154 @@ Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 	return player;
 }
 
-Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index, uint32_t spriteId /*= 0*/, stackPosType_t type /*= STACKPOS_NORMAL*/) const
+Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index, uint32_t spriteId, stackPosType_t type) const
 {
 	if (pos.x != 0xFFFF) {
 		Tile* tile = map.getTile(pos);
-		if (tile) {
-			/*look at*/
-			if (type == STACKPOS_LOOK) {
+		if (!tile) {
+			return nullptr;
+		}
+
+		Thing* thing;
+		switch (type) {
+			case STACKPOS_LOOK: {
 				return tile->getTopVisibleThing(player);
 			}
 
-			Thing* thing;
-
-			/*for move operations*/
-			if (type == STACKPOS_MOVE) {
+			case STACKPOS_MOVE: {
 				Item* item = tile->getTopDownItem();
 				if (item && item->isMoveable()) {
 					thing = item;
 				} else {
 					thing = tile->getTopVisibleCreature(player);
 				}
-			} else if (type == STACKPOS_USEITEM) {
+				break;
+			}
+
+			case STACKPOS_USEITEM: {
 				//First check items with topOrder 2 (ladders, signs, splashes)
 				Item* item = tile->getItemByTopOrder(2);
 				if (item && g_actions->hasAction(item)) {
 					thing = item;
-				} else {
-					//then down items
-					thing = tile->getTopDownItem();
-					if (!thing) {
-						thing = tile->getTopTopItem(); //then last we check items with topOrder 3 (doors etc)
-						if (!thing) {
-							thing = tile->ground;
-						}
-					}
+					break;
 				}
-			} else if (type == STACKPOS_USE) {
+
+				//then down items
 				thing = tile->getTopDownItem();
-			} else {
+				if (thing) {
+					break;
+				}
+
+				//then last we check items with topOrder 3 (doors etc)
+				thing = tile->getTopTopItem();
+				if (!thing) {
+					thing = tile->ground;
+				}
+				break;
+			}
+
+			case STACKPOS_TOPDOWN_ITEM: {
+				thing = tile->getTopDownItem();
+				break;
+			}
+
+			case STACKPOS_USETARGET: {
 				thing = tile->getThing(index);
+
+				// only creatures may be selected arbitrarily
+				if (thing && thing->getCreature()) {
+					break;
+				}
+
+				// select item with top order 2 (ladders, signs, splashes)
+				Item* item = tile->getItemByTopOrder(2);
+				if (item) {
+					thing = item;
+					break;
+				}
+
+				// select the top down item
+				thing = tile->getTopDownItem();
+				if (thing) {
+					break;
+				}
+
+				// select the top top item (doors, etc.)
+				thing = tile->getTopTopItem();
+				if (!thing) {
+					thing = tile->ground;
+				}
+				break;
 			}
 
-			if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
-				//do extra checks here if the thing is accessable
-				if (thing && thing->getItem()) {
-					if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
-						if (player->getPosition().x + 1 == tile->getPosition().x) {
-							thing = nullptr;
-						}
-					} else { // horizontal
-						if (player->getPosition().y + 1 == tile->getPosition().y) {
-							thing = nullptr;
-						}
+			default: {
+				thing = nullptr;
+				break;
+			}
+		}
+
+		if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+			//do extra checks here if the thing is accessable
+			if (thing && thing->getItem()) {
+				if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
+					if (player->getPosition().x + 1 == tile->getPosition().x) {
+						thing = nullptr;
+					}
+				} else { // horizontal
+					if (player->getPosition().y + 1 == tile->getPosition().y) {
+						thing = nullptr;
 					}
 				}
 			}
-			return thing;
 		}
-	} else {
-		//container
-		if (pos.y & 0x40) {
-			uint8_t fromCid = pos.y & 0x0F;
-			uint8_t slot = pos.z;
-
-			Container* parentContainer = player->getContainerByID(fromCid);
-			if (!parentContainer) {
-				return nullptr;
-			}
-
-			if (parentContainer->getID() == ITEM_BROWSEFIELD) {
-				Tile* tile = parentContainer->getTile();
-				if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
-					if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
-						if (player->getPosition().x + 1 == tile->getPosition().x) {
-							return nullptr;
-						}
-					} else { // horizontal
-						if (player->getPosition().y + 1 == tile->getPosition().y) {
-							return nullptr;
-						}
-					}
-				}
-			}
-			return parentContainer->getItemByIndex(player->getContainerIndex(fromCid) + slot);
-		} else if (pos.y == 0 && pos.z == 0) {
-			const ItemType& it = Item::items.getItemIdByClientId(spriteId);
-			if (it.id == 0) {
-				return nullptr;
-			}
-
-			int32_t subType;
-			if (it.isFluidContainer() && index < static_cast<int32_t>(sizeof(reverseFluidMap) / sizeof(uint8_t))) {
-				subType = reverseFluidMap[index];
-			} else {
-				subType = -1;
-			}
-
-			return findItemOfType(player, it.id, true, subType);
-		} else { //inventory
-			slots_t slot = static_cast<slots_t>(pos.y);
-			return player->getInventoryItem(slot);
-		}
+		return thing;
 	}
-	return nullptr;
+
+	//container
+	if (pos.y & 0x40) {
+		uint8_t fromCid = pos.y & 0x0F;
+
+		Container* parentContainer = player->getContainerByID(fromCid);
+		if (!parentContainer) {
+			return nullptr;
+		}
+
+		if (parentContainer->getID() == ITEM_BROWSEFIELD) {
+			Tile* tile = parentContainer->getTile();
+			if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+				if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
+					if (player->getPosition().x + 1 == tile->getPosition().x) {
+						return nullptr;
+					}
+				} else { // horizontal
+					if (player->getPosition().y + 1 == tile->getPosition().y) {
+						return nullptr;
+					}
+				}
+			}
+		}
+
+		uint8_t slot = pos.z;
+		return parentContainer->getItemByIndex(player->getContainerIndex(fromCid) + slot);
+	} else if (pos.y == 0 && pos.z == 0) {
+		const ItemType& it = Item::items.getItemIdByClientId(spriteId);
+		if (it.id == 0) {
+			return nullptr;
+		}
+
+		int32_t subType;
+		if (it.isFluidContainer() && index < static_cast<int32_t>(sizeof(reverseFluidMap) / sizeof(uint8_t))) {
+			subType = reverseFluidMap[index];
+		} else {
+			subType = -1;
+		}
+
+		return findItemOfType(player, it.id, true, subType);
+	}
+
+	//inventory
+	slots_t slot = static_cast<slots_t>(pos.y);
+	return player->getInventoryItem(slot);
 }
 
 void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
@@ -825,7 +870,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 		fromIndex = fromStackPos;
 	}
 
-	Thing* thing = internalGetThing(player, fromPos, fromIndex, spriteId, STACKPOS_MOVE);
+	Thing* thing = internalGetThing(player, fromPos, fromIndex, 0, STACKPOS_MOVE);
 	if (!thing) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -1067,7 +1112,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 			fromIndex = fromStackPos;
 		}
 
-		Thing* thing = internalGetThing(player, fromPos, fromIndex, spriteId, STACKPOS_MOVE);
+		Thing* thing = internalGetThing(player, fromPos, fromIndex, 0, STACKPOS_MOVE);
 		if (!thing || !thing->getItem()) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
@@ -2312,7 +2357,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
 
-	g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item, isHotkey, creatureId);
+	g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item, isHotkey, creature);
 }
 
 void Game::playerCloseContainer(uint32_t playerId, uint8_t cid)
@@ -2382,7 +2427,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	Thing* thing = internalGetThing(player, pos, stackPos);
+	Thing* thing = internalGetThing(player, pos, stackPos, 0, STACKPOS_TOPDOWN_ITEM);
 	if (!thing) {
 		return;
 	}
@@ -2597,8 +2642,14 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	Item* tradeItem = dynamic_cast<Item*>(internalGetThing(player, pos, stackPos, spriteId, STACKPOS_USE));
-	if (!tradeItem || tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+	Thing* tradeThing = internalGetThing(player, pos, stackPos, 0, STACKPOS_TOPDOWN_ITEM);
+	if (!tradeThing) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	Item* tradeItem = tradeThing->getItem();
+	if (tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
@@ -3069,14 +3120,14 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 }
 
-void Game::playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteId, uint8_t stackPos)
+void Game::playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
 
-	Thing* thing = internalGetThing(player, pos, stackPos, spriteId, STACKPOS_LOOK);
+	Thing* thing = internalGetThing(player, pos, stackPos, 0, STACKPOS_LOOK);
 	if (!thing) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;

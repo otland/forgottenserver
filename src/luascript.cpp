@@ -5316,21 +5316,23 @@ int32_t LuaScriptInterface::luaTileGetThing(lua_State* L)
 	// tile:getThing(index)
 	int32_t index = getNumber<int32_t>(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Thing* thing = tile->getThing(index);
-		if (thing) {
-			if (Creature* creature = thing->getCreature()) {
-				pushUserdata<Creature>(L, creature);
-				setCreatureMetatable(L, -1, creature);
-			} else if (Item* item = thing->getItem()) {
-				pushUserdata<Item>(L, item);
-				setItemMetatable(L, -1, item);
-			} else {
-				lua_pushnil(L);
-			}
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Thing* thing = tile->getThing(index);
+	if (!thing) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Creature* creature = thing->getCreature()) {
+		pushUserdata<Creature>(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (Item* item = thing->getItem()) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
 	}
@@ -7058,7 +7060,7 @@ int32_t LuaScriptInterface::luaContainerCreate(lua_State* L)
 {
 	// Container(uid)
 	uint32_t id = getNumber<uint32_t>(L, 2);
-
+	
 	Container* container = getScriptEnv()->getContainerByUID(id);
 	if (container) {
 		pushUserdata(L, container);

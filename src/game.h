@@ -41,11 +41,11 @@ class Npc;
 class CombatInfo;
 
 enum stackPosType_t {
-	STACKPOS_NORMAL,
 	STACKPOS_MOVE,
 	STACKPOS_LOOK,
-	STACKPOS_USE,
-	STACKPOS_USEITEM
+	STACKPOS_TOPDOWN_ITEM,
+	STACKPOS_USEITEM,
+	STACKPOS_USETARGET
 };
 
 enum WorldType_t {
@@ -115,7 +115,7 @@ class Game
 
 		Cylinder* internalGetCylinder(Player* player, const Position& pos) const;
 		Thing* internalGetThing(Player* player, const Position& pos, int32_t index,
-		                        uint32_t spriteId = 0, stackPosType_t type = STACKPOS_NORMAL) const;
+		                        uint32_t spriteId, stackPosType_t type) const;
 		static void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
 
 		static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
@@ -388,7 +388,7 @@ class Game
 		void playerFollowCreature(uint32_t playerId, uint32_t creatureId);
 		void playerCancelAttackAndFollow(uint32_t playerId);
 		void playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, secureMode_t secureMode);
-		void playerLookAt(uint32_t playerId, const Position& pos, uint16_t spriteId, uint8_t stackPos);
+		void playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos);
 		void playerLookInBattleList(uint32_t playerId, uint32_t creatureId);
 		void playerRequestAddVip(uint32_t playerId, const std::string& name);
 		void playerRequestRemoveVip(uint32_t playerId, uint32_t guid);

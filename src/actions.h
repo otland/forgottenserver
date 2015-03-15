@@ -37,7 +37,7 @@ class Action : public Event
 
 		//scripting
 		virtual bool executeUse(Player* player, Item* item, const PositionEx& posFrom,
-			const PositionEx& posTo, bool extendedUse, uint32_t creatureId, bool isHotkey);
+			const PositionEx& posTo, bool extendedUse, Creature* creature, bool isHotkey);
 		//
 
 		bool getAllowFarUse() const {
@@ -91,7 +91,7 @@ class Actions final : public BaseEvents
 		Actions& operator=(const Actions&) = delete;
 
 		bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey, uint32_t creatureId = 0);
+		bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey, Creature* creature = nullptr);
 
 		ReturnValue canUse(const Player* player, const Position& pos);
 		ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
