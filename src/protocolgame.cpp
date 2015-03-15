@@ -1305,7 +1305,7 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, bool isPermanent
 	msg.AddByte(0x93);
 	msg.Add<uint32_t>(creature->getID());
 	msg.AddByte(isPermanent ? 0x00 : 0x01);
-	msg.AddByte(g_config.getNumber(ConfigManager::COLOR_TEST));
+	msg.AddByte(color);
 	writeToOutputBuffer(msg);
 }
 
