@@ -319,15 +319,19 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.SkipBytes(1); // gamemaster flag
 	std::string sessionKey = msg.GetString();
-	std::stringstream account(sessionKey);
-	std::string segment;
-	std::vector<std::string> seglist;
-	while (std::getline(account, segment, '\n')) {
-		seglist.push_back(segment);
-	}
-	std::string accountName = seglist[0];
+	std::string accountName;
 	std::string characterName = msg.GetString();
-	std::string password = seglist[1];
+	std::string password;
+	if (!sessionKey.empty()) {
+		std::stringstream account(sessionKey);
+		std::string segment;
+		std::vector<std::string> vector;
+		while (std::getline(account, segment, '\n')) {
+			vector.push_back(segment);
+		}
+		accountName += vector[0];
+		password += vector[1];
+	}
 
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.GetByte();
@@ -1301,7 +1305,7 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, bool isPermanent
 	msg.AddByte(0x93);
 	msg.Add<uint32_t>(creature->getID());
 	msg.AddByte(isPermanent ? 0x00 : 0x01);
-	msg.AddByte(color);
+	msg.AddByte(g_config.getNumber(ConfigManager::COLOR_TEST));
 	writeToOutputBuffer(msg);
 }
 
