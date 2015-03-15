@@ -19,7 +19,7 @@ function onCastSpell(cid, var)
 	if(membersList == nil or type(membersList) ~= 'table' or #membersList <= 1) then
 		doPlayerSendCancel(cid, "No party members in range.")
 		doSendMagicEffect(pos, CONST_ME_POFF)
-		return LUA_ERROR
+		return false
 	end
 
 	local affectedList = {}
@@ -33,20 +33,20 @@ function onCastSpell(cid, var)
 	if(tmp <= 1) then
 		doPlayerSendCancel(cid, "No party members in range.")
 		doSendMagicEffect(pos, CONST_ME_POFF)
-		return LUA_ERROR
+		return false
 	end
 
 	local mana = math.ceil((0.9 ^ (tmp - 1) * baseMana) * tmp)
 	if(getPlayerMana(cid) < mana) then
 		doPlayerSendDefaultCancel(cid, RETURNVALUE_NOTENOUGHMANA)
 		doSendMagicEffect(pos, CONST_ME_POFF)
-		return LUA_ERROR
+		return false
 	end
 
-	if(doCombat(cid, combat, var) ~= LUA_NO_ERROR) then
+	if(doCombat(cid, combat, var) ~= true) then
 		doPlayerSendDefaultCancel(cid, RETURNVALUE_NOTPOSSIBLE)
 		doSendMagicEffect(pos, CONST_ME_POFF)
-		return LUA_ERROR
+		return false
 	end
 
 	doPlayerAddMana(cid, -(mana - baseMana), FALSE)
@@ -55,5 +55,5 @@ function onCastSpell(cid, var)
 		doAddCondition(pid, condition)
 	end
 
-	return LUA_NO_ERROR
+	return true
 end

@@ -1,3 +1,4 @@
+dofile('data/lib/core/constants.lua')
 dofile('data/lib/core/creature.lua')
 dofile('data/lib/core/game.lua')
 dofile('data/lib/core/item.lua')
