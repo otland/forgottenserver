@@ -365,7 +365,8 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 	m_scriptInterface->pushFunction(m_scriptId);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	lua_pushnumber(L, env->addThing(corpse));
+
+	LuaScriptInterface::pushThing(L, corpse);
 
 	if (killer) {
 		LuaScriptInterface::pushUserdata<Creature>(L, killer);
