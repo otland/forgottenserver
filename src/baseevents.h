@@ -37,7 +37,7 @@ class Event
 			return false;
 		}
 
-		bool isScripted() {
+		bool isScripted() const {
 			return m_scripted;
 		}
 
