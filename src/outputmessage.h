@@ -144,8 +144,6 @@ class OutputMessage : public NetworkMessage
 		OutputMessageState state;
 };
 
-typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
-
 class OutputMessagePool
 {
 	private:

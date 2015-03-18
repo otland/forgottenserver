@@ -269,10 +269,9 @@ bool DBResult::next()
 	return m_row != nullptr;
 }
 
-DBInsert::DBInsert(const std::string& query)
+DBInsert::DBInsert(std::string query) : query(query)
 {
-	this->query = query;
-	this->length = query.length();
+	this->length = this->query.length();
 }
 
 bool DBInsert::addRow(const std::string& row)

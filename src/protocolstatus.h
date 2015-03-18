@@ -34,7 +34,7 @@ class ProtocolStatus final : public Protocol
 			return "status protocol";
 		}
 
-		ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
+		explicit ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
 
 		void onRecvFirstMessage(NetworkMessage& msg) final;
 

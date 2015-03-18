@@ -130,7 +130,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (!RSA_decrypt(msg)) {
+	if (!Protocol::RSA_decrypt(msg)) {
 		getConnection()->closeConnection();
 		return;
 	}

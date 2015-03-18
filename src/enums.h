@@ -530,7 +530,7 @@ struct ModalWindow
 	uint8_t defaultEnterButton, defaultEscapeButton;
 	bool priority;
 
-	ModalWindow(uint32_t id, const std::string& title, const std::string& message)
+	ModalWindow(uint32_t id, std::string title, std::string message)
 		: title(title), message(message), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
 };
 

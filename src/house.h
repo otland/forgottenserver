@@ -53,7 +53,7 @@ class AccessList
 class Door final : public Item
 {
 	public:
-		Door(uint16_t _type);
+		explicit Door(uint16_t _type);
 		~Door();
 
 		// non-copyable
@@ -118,7 +118,7 @@ class HouseTransferItem final : public Item
 	public:
 		static HouseTransferItem* createHouseTransferItem(House* house);
 
-		HouseTransferItem(House* _house) : Item(0) {
+		explicit HouseTransferItem(House* _house) : Item(0) {
 			house = _house;
 		}
 
@@ -134,7 +134,7 @@ class HouseTransferItem final : public Item
 class House
 {
 	public:
-		House(uint32_t _houseid);
+		explicit House(uint32_t _houseid);
 
 		void addTile(HouseTile* tile);
 		void updateDoorDescription() const;
@@ -151,15 +151,15 @@ class House
 		AccessHouseLevel_t getHouseAccessLevel(const Player* player);
 		bool kickPlayer(Player* player, Player* target);
 
-		void setEntryPos(const Position& pos) {
+		void setEntryPos(Position pos) {
 			posEntry = pos;
 		}
 		const Position& getEntryPosition() const {
 			return posEntry;
 		}
 
-		void setName(const std::string& _houseName) {
-			houseName = _houseName;
+		void setName(std::string houseName) {
+			this->houseName = houseName;
 		}
 		const std::string& getName() const {
 			return houseName;

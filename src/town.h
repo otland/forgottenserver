@@ -25,8 +25,7 @@
 class Town
 {
 	public:
-		Town(uint32_t _id)
-			: id(_id) {}
+		explicit Town(uint32_t _id) : id(_id) {}
 
 		const Position& getTemplePosition() const {
 			return templePosition;
@@ -35,11 +34,11 @@ class Town
 			return name;
 		}
 
-		void setTemplePos(const Position& pos) {
+		void setTemplePos(Position pos) {
 			templePosition = pos;
 		}
-		void setName(const std::string& _name) {
-			name = _name;
+		void setName(std::string name) {
+			this->name = name;
 		}
 		uint32_t getID() const {
 			return id;

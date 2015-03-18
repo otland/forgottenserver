@@ -110,7 +110,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		player = new Player(this);
 		player->setName(name);
 
-		player->useThing2();
+		player->incrementReferenceCounter();
 		player->setID();
 
 		if (!IOLoginData::preloadPlayer(player, name)) {
@@ -230,7 +230,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	}
 
 	player = _player;
-	player->useThing2();
+	player->incrementReferenceCounter();
 
 	g_chat->removeUserFromAllChannels(*player);
 	player->clearModalWindows();
@@ -296,7 +296,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.SkipBytes(5); // U32 clientVersion, U8 clientType
 
-	if (!RSA_decrypt(msg)) {
+	if (!Protocol::RSA_decrypt(msg)) {
 		getConnection()->closeConnection();
 		return;
 	}
@@ -415,7 +415,7 @@ void ProtocolGame::disconnectClient(const std::string& message)
 	disconnect();
 }
 
-void ProtocolGame::disconnect()
+void ProtocolGame::disconnect() const
 {
 	Connection_ptr connection = getConnection();
 	if (connection) {
@@ -817,8 +817,7 @@ void ProtocolGame::parseUseItem(NetworkMessage& msg)
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.GetByte();
 	uint8_t index = msg.GetByte();
-	bool isHotkey = (pos.x == 0xFFFF && pos.y == 0 && pos.z == 0);
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerUseItem, player->getID(), pos, stackpos, index, spriteId, isHotkey);
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerUseItem, player->getID(), pos, stackpos, index, spriteId);
 }
 
 void ProtocolGame::parseUseItemEx(NetworkMessage& msg)
@@ -829,8 +828,7 @@ void ProtocolGame::parseUseItemEx(NetworkMessage& msg)
 	Position toPos = msg.GetPosition();
 	uint16_t toSpriteId = msg.get<uint16_t>();
 	uint8_t toStackPos = msg.GetByte();
-	bool isHotkey = (fromPos.x == 0xFFFF && fromPos.y == 0 && fromPos.z == 0);
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerUseItemEx, player->getID(), fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId, isHotkey);
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerUseItemEx, player->getID(), fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId);
 }
 
 void ProtocolGame::parseUseWithCreature(NetworkMessage& msg)
@@ -839,8 +837,7 @@ void ProtocolGame::parseUseWithCreature(NetworkMessage& msg)
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t fromStackPos = msg.GetByte();
 	uint32_t creatureId = msg.get<uint32_t>();
-	bool isHotkey = (fromPos.x == 0xFFFF && fromPos.y == 0 && fromPos.z == 0);
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerUseWithCreature, player->getID(), fromPos, fromStackPos, creatureId, spriteId, isHotkey);
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerUseWithCreature, player->getID(), fromPos, fromStackPos, creatureId, spriteId);
 }
 
 void ProtocolGame::parseCloseContainer(NetworkMessage& msg)
@@ -2682,7 +2679,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	}
 
 	time_t writtenDate = item->getDate();
-	if (writtenDate > 0) {
+	if (writtenDate != 0) {
 		msg.AddString(formatDateShort(writtenDate));
 	} else {
 		msg.Add<uint16_t>(0x00);
@@ -2731,8 +2728,8 @@ void ProtocolGame::sendOutfitWindow()
 	if (player->isAccessPlayer()) {
 		static const std::string gamemasterOutfitName = "Gamemaster";
 		protocolOutfits.emplace_back(
-			75,
 			&gamemasterOutfitName,
+			75,
 			0
 		);
 	}
@@ -2746,8 +2743,8 @@ void ProtocolGame::sendOutfitWindow()
 		}
 
 		protocolOutfits.emplace_back(
-			outfit.lookType,
 			&outfit.name,
+			outfit.lookType,
 			addons
 		);
 		if (protocolOutfits.size() == 50) { // Game client doesn't allow more than 50 outfits

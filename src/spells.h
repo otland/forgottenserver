@@ -72,7 +72,7 @@ class Spells final : public BaseEvents
 };
 
 typedef bool (InstantSpellFunction)(const InstantSpell* spell, Creature* creature, const std::string& param);
-typedef bool (RuneSpellFunction)(const RuneSpell* spell, Creature* creature, Item* item, const Position& posFrom, const Position& posTo, bool isHotkey);
+typedef bool (RuneSpellFunction)(const RuneSpell* spell, Player* player, const Position& posTo);
 
 class BaseSpell
 {
@@ -130,7 +130,7 @@ class Spell : public BaseSpell
 		}
 
 		void postCastSpell(Player* player, bool finishedSpell = true, bool payCost = true) const;
-		void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
+		static void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost);
 
 		uint32_t getManaCost(const Player* player) const;
 		uint32_t getSoulCost() const {
@@ -200,7 +200,7 @@ class Spell : public BaseSpell
 class InstantSpell : public TalkAction, public Spell
 {
 	public:
-		InstantSpell(LuaScriptInterface* _interface);
+		explicit InstantSpell(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute& attr) override;
@@ -253,7 +253,7 @@ class InstantSpell : public TalkAction, public Spell
 class ConjureSpell final : public InstantSpell
 {
 	public:
-		ConjureSpell(LuaScriptInterface* _interface);
+		explicit ConjureSpell(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		bool loadFunction(const pugi::xml_attribute& attr) final;
@@ -282,7 +282,7 @@ class ConjureSpell final : public InstantSpell
 
 		static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount);
 
-		bool conjureItem(const ConjureSpell* spell, Creature* creature);
+		bool conjureItem(Creature* creature) const;
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
 		Position getCasterPosition(Creature* creature);
 
@@ -294,7 +294,7 @@ class ConjureSpell final : public InstantSpell
 class RuneSpell final : public Action, public Spell
 {
 	public:
-		RuneSpell(LuaScriptInterface* _interface);
+		explicit RuneSpell(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		bool loadFunction(const pugi::xml_attribute& attr) final;
@@ -330,7 +330,7 @@ class RuneSpell final : public Action, public Spell
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
-		RuneSpellFunction* function;
+		RuneSpellFunction* runeFunction;
 		uint16_t runeId;
 		bool hasCharges;
 };

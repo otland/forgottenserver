@@ -230,7 +230,7 @@ class ItemAttributes
 			} value;
 			itemAttrTypes type;
 
-			Attribute(itemAttrTypes type) : type(type) {
+			explicit Attribute(itemAttrTypes type) : type(type) {
 				memset(&value, 0, sizeof(value));
 			}
 			Attribute(const Attribute& i) {
@@ -253,7 +253,7 @@ class ItemAttributes
 				}
 			}
 			Attribute& operator=(Attribute other) {
-				swap(*this, other);
+				Attribute::swap(*this, other);
 				return *this;
 			}
 			Attribute& operator=(Attribute&& other) {
@@ -271,7 +271,7 @@ class ItemAttributes
 				return *this;
 			}
 
-			void swap(Attribute& first, Attribute &second) {
+			static void swap(Attribute& first, Attribute& second) {
 				std::swap(first.value, second.value);
 				std::swap(first.type, second.type);
 			}
@@ -783,11 +783,11 @@ class Item : virtual public Thing
 			return attributes;
 		}
 
-		void useThing2() {
-			++useCount;
+		void incrementReferenceCounter() {
+			++referenceCounter;
 		}
-		void releaseThing2() {
-			if (--useCount == 0) {
+		void decrementReferenceCounter() {
+			if (--referenceCounter == 0) {
 				delete this;
 			}
 		}
@@ -812,7 +812,7 @@ class Item : virtual public Thing
 		Cylinder* parent;
 		ItemAttributes* attributes;
 
-		uint32_t useCount;
+		uint32_t referenceCounter;
 
 		uint16_t id;  // the same id as in ItemType
 		uint8_t count; // number of stacked items

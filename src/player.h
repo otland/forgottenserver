@@ -96,7 +96,7 @@ enum tradestate_t : uint8_t {
 };
 
 struct VIPEntry {
-	VIPEntry(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify)
+	VIPEntry(uint32_t guid, std::string name, const std::string& description, uint32_t icon, bool notify)
 		: guid(guid), name(name), description(description), icon(icon), notify(notify) {}
 
 	uint32_t guid;
@@ -126,7 +126,6 @@ struct Skill {
 };
 
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
-typedef std::vector<uint32_t> GuildWarList;
 
 #define PLAYER_MAX_SPEED 1500
 #define PLAYER_MIN_SPEED 10
@@ -134,7 +133,7 @@ typedef std::vector<uint32_t> GuildWarList;
 class Player final : public Creature, public Cylinder
 {
 	public:
-		Player(ProtocolGame* p);
+		explicit Player(ProtocolGame* p);
 		~Player();
 
 		// non-copyable
@@ -159,7 +158,7 @@ class Player final : public Creature, public Cylinder
 		const std::string& getName() const final {
 			return name;
 		}
-		void setName(const std::string& name) {
+		void setName(std::string name) {
 			this->name = name;
 		}
 		const std::string& getNameDescription() const final {
@@ -256,7 +255,7 @@ class Player final : public Creature, public Cylinder
 		const std::string& getGuildNick() const {
 			return guildNick;
 		}
-		void setGuildNick(const std::string& nick) {
+		void setGuildNick(std::string nick) {
 			guildNick = nick;
 		}
 
@@ -266,7 +265,7 @@ class Player final : public Creature, public Cylinder
 		void setLastWalkthroughAttempt(int64_t walkthroughAttempt) {
 			lastWalkthroughAttempt = walkthroughAttempt;
 		}
-		void setLastWalkthroughPosition(const Position& walkthroughPosition) {
+		void setLastWalkthroughPosition(Position walkthroughPosition) {
 			lastWalkthroughPosition = walkthroughPosition;
 		}
 
@@ -279,8 +278,8 @@ class Player final : public Creature, public Cylinder
 		const GuildWarList& getGuildWarList() const {
 			return guildWarList;
 		}
-		void setGuildWarList(const GuildWarList& _guildWarList) {
-			guildWarList = _guildWarList;
+		void setGuildWarList(GuildWarList guildWarList) {
+			this->guildWarList = guildWarList;
 		}
 
 		Vocation* getVocation() const {
@@ -593,7 +592,9 @@ class Player final : public Creature, public Cylinder
 		bool hasShopItemForSale(uint32_t itemId, uint8_t subType) const;
 
 		void setChaseMode(chaseMode_t mode);
-		void setFightMode(fightMode_t mode);
+		void setFightMode(fightMode_t mode) {
+			fightMode = mode;
+		}
 		void setSecureMode(secureMode_t mode) {
 			secureMode = mode;
 		}
@@ -888,7 +889,7 @@ class Player final : public Creature, public Cylinder
 		                              const Item* item) final;
 
 		void onCreatureAppear(Creature* creature, bool isLogin) final;
-		void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout) final;
+		void onRemoveCreature(Creature* creature, bool isLogout) final;
 		void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
 		                            const Tile* oldTile, const Position& oldPos, bool teleport) final;
 

@@ -29,8 +29,8 @@ typedef bool (ActionFunction)(Player* player, Item* item, const Position& fromPo
 class Action : public Event
 {
 	public:
-		Action(const Action* copy);
-		Action(LuaScriptInterface* _interface);
+		explicit Action(const Action* copy);
+		explicit Action(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute& attr) override;

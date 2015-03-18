@@ -41,7 +41,7 @@ extern CreatureEvents* g_creatureEvents;
 Creature::Creature() :
 	localMapCache(), isInternalRemoved(false)
 {
-	useCount = 0;
+	referenceCounter = 0;
 
 	id = 0;
 	_tile = nullptr;
@@ -89,7 +89,7 @@ Creature::~Creature()
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(nullptr);
 		summon->setMaster(nullptr);
-		summon->releaseThing2();
+		summon->decrementReferenceCounter();
 	}
 
 	for (Condition* condition : conditions) {
@@ -445,7 +445,7 @@ void Creature::onCreatureAppear(Creature* creature, bool)
 	}
 }
 
-void Creature::onCreatureDisappear(Creature* creature, uint32_t, bool)
+void Creature::onRemoveCreature(Creature* creature, bool)
 {
 	onCreatureDisappear(creature, true);
 	if (creature == this) {
@@ -1163,7 +1163,7 @@ void Creature::addSummon(Creature* creature)
 	creature->setDropLoot(false);
 	creature->setLossSkill(false);
 	creature->setMaster(this);
-	creature->useThing2();
+	creature->incrementReferenceCounter();
 	summons.push_back(creature);
 }
 
@@ -1174,7 +1174,7 @@ void Creature::removeSummon(Creature* creature)
 		creature->setDropLoot(false);
 		creature->setLossSkill(true);
 		creature->setMaster(nullptr);
-		creature->releaseThing2();
+		creature->decrementReferenceCounter();
 		summons.erase(cit);
 	}
 }

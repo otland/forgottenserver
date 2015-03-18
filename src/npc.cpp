@@ -269,9 +269,9 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	}
 }
 
-void Npc::onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout)
+void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 {
-	Creature::onCreatureDisappear(creature, stackpos, isLogout);
+	Creature::onRemoveCreature(creature, isLogout);
 
 	if (creature == this) {
 		closeAllShopWindows();

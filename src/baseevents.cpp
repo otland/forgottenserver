@@ -105,7 +105,7 @@ Event::Event(const Event* copy)
 	m_scripted = copy->m_scripted;
 }
 
-bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile)
+bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
 	testInterface->reInitState();

@@ -300,7 +300,7 @@ inline bool FileLoader::readByte(int32_t& value)
 inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 {
 	//seek at pos
-	uint32_t reading, remain = size, bufferPos = 0;
+	uint32_t remain = size, bufferPos = 0;
 	do {
 		//prepare cache
 		uint32_t i = getCacheBlock(pos);
@@ -312,7 +312,7 @@ inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 		m_cache_offset = pos - m_cached_data[i].base;
 
 		//get maximum read block size and calculate remaining bytes
-		reading = std::min<int32_t>(remain, m_cached_data[i].size - m_cache_offset);
+		uint32_t reading = std::min<int32_t>(remain, m_cached_data[i].size - m_cache_offset);
 		remain -= reading;
 
 		//read it

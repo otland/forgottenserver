@@ -28,7 +28,7 @@ class Player;
 class BedItem final : public Item
 {
 	public:
-		BedItem(uint16_t id);
+		explicit BedItem(uint16_t id);
 
 		BedItem* getBed() final {
 			return this;

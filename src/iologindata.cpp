@@ -531,7 +531,6 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	typedef std::pair<Container*, int32_t> containerBlock;
 	std::queue<containerBlock> queue;
 
-	int32_t parentId = 0;
 	int32_t runningId = 100;
 
 	Database* db = Database::getInstance();
@@ -559,7 +558,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	while (!queue.empty()) {
 		const containerBlock& cb = queue.front();
 		Container* container = cb.first;
-		parentId = cb.second;
+		int32_t parentId = cb.second;
 		queue.pop();
 
 		for (Item* item : container->getItemList()) {

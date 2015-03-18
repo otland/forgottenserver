@@ -45,7 +45,7 @@ class ContainerIterator
 		Item* operator->();
 
 	protected:
-		ContainerIterator(Container* super);
+		explicit ContainerIterator(Container* super);
 
 		Container* super;
 		std::queue<Container*> over;
@@ -57,9 +57,9 @@ class ContainerIterator
 class Container : public Item, public Cylinder
 {
 	public:
-		Container(uint16_t _type);
+		explicit Container(uint16_t _type);
 		Container(uint16_t _type, uint16_t _size);
-		Container(Tile* tile);
+		explicit Container(Tile* tile);
 		~Container();
 
 		// non-copyable

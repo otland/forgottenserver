@@ -76,7 +76,6 @@ class AStarNodes
 		int_fast32_t closedNodes;
 };
 
-typedef std::unordered_set<Creature*> SpectatorVec;
 typedef std::map<Position, std::shared_ptr<SpectatorVec>> SpectatorCache;
 
 #define FLOOR_BITS 3
@@ -195,7 +194,7 @@ class Map
 		  * Save a map.
 		  * \returns true if the map was saved successfully
 		  */
-		bool saveMap();
+		static bool save();
 
 		/**
 		  * Get a single tile.
@@ -221,7 +220,7 @@ class Map
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param forceLogin If true, placing the creature will not fail becase of obstacles (creatures/chests)
 		  */
-		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
+		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false) const;
 
 		void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 

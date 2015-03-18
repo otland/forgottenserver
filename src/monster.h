@@ -44,7 +44,7 @@ class Monster final : public Creature
 		static int32_t despawnRange;
 		static int32_t despawnRadius;
 
-		Monster(MonsterType* mtype);
+		explicit Monster(MonsterType* mtype);
 		~Monster();
 
 		// non-copyable
@@ -128,7 +128,7 @@ class Monster final : public Creature
 		void onAttackedCreatureDisappear(bool isLogout) final;
 
 		void onCreatureAppear(Creature* creature, bool isLogin) final;
-		void onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout) final;
+		void onRemoveCreature(Creature* creature, bool isLogout) final;
 		void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos, bool teleport) final;
 		void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text) final;
 
@@ -244,9 +244,9 @@ class Monster final : public Creature
 		bool canWalkTo(Position pos, Direction dir) const;
 
 		static bool pushItem(Item* item);
-		void pushItems(Tile* tile);
+		static void pushItems(Tile* tile);
 		static bool pushCreature(Creature* creature);
-		void pushCreatures(Tile* tile);
+		static void pushCreatures(Tile* tile);
 
 		void onThinkTarget(uint32_t interval);
 		void onThinkYell(uint32_t interval);

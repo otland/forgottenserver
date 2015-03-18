@@ -35,8 +35,8 @@ class QTreeLeafNode;
 class BedItem;
 
 typedef std::vector<Creature*> CreatureVector;
-typedef std::unordered_set<Creature*> SpectatorVec;
 typedef std::vector<Item*> ItemVector;
+typedef std::unordered_set<Creature*> SpectatorVec;
 
 enum tileflags_t {
 	TILESTATE_NONE = 0,
@@ -312,6 +312,8 @@ class Tile : public Cylinder
 
 		void removeThing(Thing* thing, uint32_t count) final;
 
+		void removeCreature(Creature* creature);
+
 		int32_t getThingIndex(const Thing* thing) const final;
 		int32_t getFirstIndex() const final;
 		int32_t getLastIndex() const final;
@@ -343,7 +345,7 @@ class Tile : public Cylinder
 
 	protected:
 		// Put this first for cache-coherency
-		bool is_dynamic() const {
+		bool isDynamic() const {
 			return (m_flags & TILESTATE_DYNAMIC_TILE) != 0;
 		}
 
@@ -447,7 +449,7 @@ inline Tile::~Tile()
 
 inline CreatureVector* Tile::getCreatures()
 {
-	if (is_dynamic()) {
+	if (isDynamic()) {
 		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::getCreatures();
 	}
 	return reinterpret_cast<StaticTile*>(this)->StaticTile::getCreatures();
@@ -455,7 +457,7 @@ inline CreatureVector* Tile::getCreatures()
 
 inline const CreatureVector* Tile::getCreatures() const
 {
-	if (is_dynamic()) {
+	if (isDynamic()) {
 		return reinterpret_cast<const DynamicTile*>(this)->DynamicTile::getCreatures();
 	}
 	return reinterpret_cast<const StaticTile*>(this)->StaticTile::getCreatures();
@@ -463,7 +465,7 @@ inline const CreatureVector* Tile::getCreatures() const
 
 inline TileItemVector* Tile::getItemList()
 {
-	if (is_dynamic()) {
+	if (isDynamic()) {
 		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::getItemList();
 	}
 	return reinterpret_cast<StaticTile*>(this)->StaticTile::getItemList();
@@ -471,7 +473,7 @@ inline TileItemVector* Tile::getItemList()
 
 inline const TileItemVector* Tile::getItemList() const
 {
-	if (is_dynamic()) {
+	if (isDynamic()) {
 		return reinterpret_cast<const DynamicTile*>(this)->DynamicTile::getItemList();
 	}
 	return reinterpret_cast<const StaticTile*>(this)->StaticTile::getItemList();
@@ -479,7 +481,7 @@ inline const TileItemVector* Tile::getItemList() const
 
 inline CreatureVector* Tile::makeCreatures()
 {
-	if (is_dynamic()) {
+	if (isDynamic()) {
 		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::makeCreatures();
 	}
 	return reinterpret_cast<StaticTile*>(this)->StaticTile::makeCreatures();
@@ -487,7 +489,7 @@ inline CreatureVector* Tile::makeCreatures()
 
 inline TileItemVector* Tile::makeItemList()
 {
-	if (is_dynamic()) {
+	if (isDynamic()) {
 		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::makeItemList();
 	}
 	return reinterpret_cast<StaticTile*>(this)->StaticTile::makeItemList();
@@ -504,7 +506,7 @@ inline StaticTile::~StaticTile()
 {
 	if (items) {
 		for (Item* item : *items) {
-			item->releaseThing2();
+			item->decrementReferenceCounter();
 		}
 		delete items;
 	}
@@ -521,7 +523,7 @@ inline DynamicTile::DynamicTile(uint16_t x, uint16_t y, uint16_t z) :
 inline DynamicTile::~DynamicTile()
 {
 	for (Item* item : items) {
-		item->releaseThing2();
+		item->decrementReferenceCounter();
 	}
 }
 

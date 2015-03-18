@@ -27,17 +27,13 @@ struct GuildRank {
 	std::string name;
 	uint8_t level;
 
-	GuildRank(uint32_t id, const std::string& name, uint8_t level) {
-		this->id = id;
-		this->name = name;
-		this->level = level;
-	}
+	GuildRank(uint32_t id, std::string name, uint8_t level) : id(id), name(name), level(level) {}
 };
 
 class Guild
 {
 	public:
-		Guild(uint32_t id, const std::string& name) : name(name), id(id), memberCount(0) {}
+		Guild(uint32_t id, std::string name) : name(name), id(id), memberCount(0) {}
 
 		void addMember(Player* player);
 		void removeMember(Player* player);

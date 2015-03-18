@@ -95,7 +95,7 @@ void ScriptEnvironment::resetEnv()
 		return;
 	}
 
-	ItemList& itemList = it->second;
+	auto& itemList = it->second;
 	for (Item* item : itemList) {
 		if (item->getParent() == VirtualCylinder::virtualCylinder) {
 			g_game.ReleaseItem(item);
@@ -282,7 +282,7 @@ void ScriptEnvironment::addTempItem(ScriptEnvironment* env, Item* item)
 void ScriptEnvironment::removeTempItem(Item* item)
 {
 	for (auto& it : m_tempItems) {
-		ItemList& itemList = it.second;
+		auto& itemList = it.second;
 		auto it_ = std::find(itemList.begin(), itemList.end(), item);
 		if (it_ != itemList.end()) {
 			itemList.erase(it_);
@@ -340,12 +340,9 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 ScriptEnvironment LuaScriptInterface::m_scriptEnv[16];
 int32_t LuaScriptInterface::m_scriptEnvIndex = -1;
 
-LuaScriptInterface::LuaScriptInterface(const std::string& interfaceName)
+LuaScriptInterface::LuaScriptInterface(std::string interfaceName)
+	: m_luaState(nullptr), m_interfaceName(interfaceName), m_eventTableRef(-1)
 {
-	m_eventTableRef = -1;
-	m_luaState = nullptr;
-	m_interfaceName = interfaceName;
-
 	if (!g_luaEnvironment.getLuaState()) {
 		g_luaEnvironment.initState();
 	}
@@ -7655,7 +7652,7 @@ int32_t LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 		master = creature->getMaster();
 		if (master) {
 			master->removeSummon(creature);
-			creature->useThing2();
+			creature->incrementReferenceCounter();
 			creature->setDropLoot(true);
 		}
 		pushBoolean(L, true);

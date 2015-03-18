@@ -35,7 +35,7 @@ struct Position;
 class ValueCallback final : public CallBack
 {
 	public:
-		ValueCallback(formulaType_t _type) {
+		explicit ValueCallback(formulaType_t _type) {
 			type = _type;
 		}
 		void getMinMaxValues(Player* player, CombatDamage& damage, bool useCharges) const;
@@ -362,7 +362,7 @@ class Combat
 class MagicField final : public Item
 {
 	public:
-		MagicField(uint16_t _type) : Item(_type) {
+		explicit MagicField(uint16_t _type) : Item(_type) {
 			createTime = OTSYS_TIME();
 		}
 

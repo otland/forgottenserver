@@ -103,7 +103,7 @@ class Raids
 class Raid
 {
 	public:
-		Raid(const std::string& name, uint32_t interval, uint32_t marginTime, bool repeat)
+		Raid(std::string name, uint32_t interval, uint32_t marginTime, bool repeat)
 			: name(name), interval(interval), nextEvent(0), margin(marginTime), state(RAIDSTATE_IDLE), nextEventEvent(0), loaded(false), repeat(repeat) {}
 		~Raid();
 
@@ -225,8 +225,8 @@ class AreaSpawnEvent final : public RaidEvent
 class ScriptEvent final : public RaidEvent, public Event
 {
 	public:
-		ScriptEvent(LuaScriptInterface* _interface);
-		ScriptEvent(const ScriptEvent* copy);
+		explicit ScriptEvent(LuaScriptInterface* _interface);
+		explicit ScriptEvent(const ScriptEvent* copy);
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 		bool configureEvent(const pugi::xml_node&) final {

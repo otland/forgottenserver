@@ -34,7 +34,7 @@ class Task
 		Task(uint32_t ms, const std::function<void (void)>& f) : func(f) {
 			expiration = std::chrono::system_clock::now() + std::chrono::milliseconds(ms);
 		}
-		Task(const std::function<void (void)>& f)
+		explicit Task(const std::function<void (void)>& f)
 			: expiration(SYSTEM_TIME_ZERO), func(f) {}
 
 		void operator()() {

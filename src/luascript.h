@@ -113,7 +113,7 @@ class ScriptEnvironment
 			m_interface = scriptInterface;
 		}
 		bool setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface);
-		void setEventDesc(const std::string& desc) {
+		void setEventDesc(std::string desc) {
 			m_eventdesc = desc;
 		}
 
@@ -167,7 +167,6 @@ class ScriptEnvironment
 		typedef std::vector<const LuaVariant*> VariantVector;
 		typedef std::map<uint32_t, int32_t> StorageMap;
 		typedef std::map<uint32_t, DBResult_ptr> DBResultMap;
-		typedef std::list<Item*> ItemList;
 
 		//script file id
 		int32_t m_scriptId;
@@ -185,7 +184,7 @@ class ScriptEnvironment
 		ThingMap m_localMap;
 
 		//temporary item list
-		typedef std::map<ScriptEnvironment*, ItemList> TempItemListMap;
+		typedef std::map<ScriptEnvironment*, std::list<Item*>> TempItemListMap;
 		static TempItemListMap m_tempItems;
 
 		//result map
@@ -217,7 +216,7 @@ enum ErrorCode_t {
 class LuaScriptInterface
 {
 	public:
-		LuaScriptInterface(const std::string& interfaceName);
+		explicit LuaScriptInterface(std::string interfaceName);
 		virtual ~LuaScriptInterface();
 
 		// non-copyable

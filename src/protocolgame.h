@@ -21,7 +21,7 @@
 #define FS_PROTOCOLGAME_H_FACA2A2D1A9348B78E8FD7E8003EBB87
 
 #include "protocol.h"
-#include "enums.h"
+#include "chat.h"
 #include "creature.h"
 
 enum connectResult_t {
@@ -39,9 +39,6 @@ class Container;
 class Tile;
 class Connection;
 class Quest;
-
-typedef std::map<uint32_t, Player*> UsersMap;
-typedef std::map<uint32_t, Player*> InvitedMap;
 
 struct TextMessage
 {
@@ -71,7 +68,7 @@ class ProtocolGame final : public Protocol
 			return "gameworld protocol";
 		}
 
-		ProtocolGame(Connection_ptr connection);
+		explicit ProtocolGame(Connection_ptr connection);
 
 		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
@@ -86,7 +83,7 @@ class ProtocolGame final : public Protocol
 		std::unordered_set<uint32_t> knownCreatureSet;
 
 		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
-		void disconnect();
+		void disconnect() const;
 		void disconnectClient(const std::string& message);
 		void writeToOutputBuffer(const NetworkMessage& msg);
 

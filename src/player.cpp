@@ -145,7 +145,7 @@ Player::Player(ProtocolGame* p) :
 	bankBalance = 0;
 
 	inbox = new Inbox(ITEM_INBOX);
-	inbox->useThing2();
+	inbox->incrementReferenceCounter();
 
 	offlineTrainingSkill = -1;
 	offlineTrainingTime = 0;
@@ -165,16 +165,16 @@ Player::~Player()
 	for (Item* item : inventory) {
 		if (item) {
 			item->setParent(nullptr);
-			item->releaseThing2();
+			item->decrementReferenceCounter();
 		}
 	}
 
 	for (const auto& it : depotLockerMap) {
 		it.second->removeInbox(inbox);
-		it.second->releaseThing2();
+		it.second->decrementReferenceCounter();
 	}
 
-	inbox->releaseThing2();
+	inbox->decrementReferenceCounter();
 
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
@@ -661,7 +661,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 	}
 
 	if (container->getID() == ITEM_BROWSEFIELD) {
-		container->useThing2();
+		container->incrementReferenceCounter();
 	}
 
 	auto it = openContainers.find(cid);
@@ -669,7 +669,7 @@ void Player::addContainer(uint8_t cid, Container* container)
 		OpenContainer& openContainer = it->second;
 		Container* oldContainer = openContainer.container;
 		if (oldContainer->getID() == ITEM_BROWSEFIELD) {
-			oldContainer->releaseThing2();
+			oldContainer->decrementReferenceCounter();
 		}
 
 		openContainer.container = container;
@@ -694,7 +694,7 @@ void Player::closeContainer(uint8_t cid)
 	openContainers.erase(it);
 
 	if (container && container->getID() == ITEM_BROWSEFIELD) {
-		container->releaseThing2();
+		container->decrementReferenceCounter();
 	}
 }
 
@@ -908,7 +908,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 	}
 
 	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
-	depotChest->useThing2();
+	depotChest->incrementReferenceCounter();
 	depotChest->setMaxDepotItems(getMaxDepotItems());
 	depotChests[depotId] = depotChest;
 	return depotChest;
@@ -986,13 +986,13 @@ void Player::setWriteItem(Item* item, uint16_t _maxWriteLen /*= 0*/)
 	windowTextId++;
 
 	if (writeItem) {
-		writeItem->releaseThing2();
+		writeItem->decrementReferenceCounter();
 	}
 
 	if (item) {
 		writeItem = item;
 		maxWriteLen = _maxWriteLen;
-		writeItem->useThing2();
+		writeItem->incrementReferenceCounter();
 	} else {
 		writeItem = nullptr;
 		maxWriteLen = 0;
@@ -1232,9 +1232,9 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 	}
 }
 
-void Player::onCreatureDisappear(Creature* creature, uint32_t stackpos, bool isLogout)
+void Player::onRemoveCreature(Creature* creature, bool isLogout)
 {
-	Creature::onCreatureDisappear(creature, stackpos, isLogout);
+	Creature::onRemoveCreature(creature, isLogout);
 
 	if (creature == this) {
 		if (isLogout) {
@@ -3354,11 +3354,6 @@ void Player::setChaseMode(chaseMode_t mode)
 			cancelNextWalk = true;
 		}
 	}
-}
-
-void Player::setFightMode(fightMode_t mode)
-{
-	fightMode = mode;
 }
 
 void Player::onWalkAborted()

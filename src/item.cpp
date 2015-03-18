@@ -82,7 +82,7 @@ Item* Item::CreateItem(const uint16_t _type, uint16_t _count /*= 0*/)
 			newItem = new Item(_type, _count);
 		}
 
-		newItem->useThing2();
+		newItem->incrementReferenceCounter();
 	}
 
 	return newItem;
@@ -96,7 +96,7 @@ Container* Item::CreateItemAsContainer(const uint16_t _type, uint16_t _size)
 	}
 
 	Container* newItem = new Container(_type, _size);
-	newItem->useThing2();
+	newItem->incrementReferenceCounter();
 	return newItem;
 }
 
@@ -146,7 +146,7 @@ Item* Item::CreateItem(PropStream& propStream)
 Item::Item(const uint16_t _type, uint16_t _count /*= 0*/)
 {
 	parent = nullptr;
-	useCount = 0;
+	referenceCounter = 0;
 
 	id = _type;
 	attributes = nullptr;
@@ -179,7 +179,7 @@ Item::Item(const Item& i) :
 	Thing()
 {
 	parent = nullptr;
-	useCount = 0;
+	referenceCounter = 0;
 
 	id = i.id;
 	count = i.count;
@@ -678,35 +678,35 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	}
 
 	if (isMoveable()) {
-		uint16_t _actionId = getActionId();
-		if (_actionId != 0) {
+		uint16_t actionId = getActionId();
+		if (actionId != 0) {
 			propWriteStream.write<uint8_t>(ATTR_ACTION_ID);
-			propWriteStream.write<uint16_t>(_actionId);
+			propWriteStream.write<uint16_t>(actionId);
 		}
 	}
 
-	const std::string& _text = getText();
-	if (!_text.empty()) {
+	const std::string& text = getText();
+	if (!text.empty()) {
 		propWriteStream.write<uint8_t>(ATTR_TEXT);
-		propWriteStream.writeString(_text);
+		propWriteStream.writeString(text);
 	}
 
-	const time_t _writtenDate = getDate();
-	if (_writtenDate > 0) {
+	const time_t writtenDate = getDate();
+	if (writtenDate != 0) {
 		propWriteStream.write<uint8_t>(ATTR_WRITTENDATE);
-		propWriteStream.write<uint32_t>(_writtenDate);
+		propWriteStream.write<uint32_t>(writtenDate);
 	}
 
-	const std::string& _writer = getWriter();
-	if (!_writer.empty()) {
+	const std::string& writer = getWriter();
+	if (!writer.empty()) {
 		propWriteStream.write<uint8_t>(ATTR_WRITTENBY);
-		propWriteStream.writeString(_writer);
+		propWriteStream.writeString(writer);
 	}
 
-	const std::string& _specialDesc = getSpecialDescription();
-	if (!_specialDesc.empty()) {
+	const std::string& specialDesc = getSpecialDescription();
+	if (!specialDesc.empty()) {
 		propWriteStream.write<uint8_t>(ATTR_DESC);
-		propWriteStream.writeString(_specialDesc);
+		propWriteStream.writeString(specialDesc);
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
@@ -1244,7 +1244,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 							if (!writer.empty()) {
 								s << writer << " wrote";
 								time_t date = item->getDate();
-								if (date > 0) {
+								if (date != 0) {
 									s << " on " << formatDateShort(date);
 								}
 								s << ": ";

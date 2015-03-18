@@ -28,12 +28,6 @@
 extern Chat* g_chat;
 extern Game g_game;
 
-PrivateChatChannel::PrivateChatChannel(uint16_t channelId, const std::string& channelName) :
-	ChatChannel(channelId, channelName)
-{
-	m_owner = 0;
-}
-
 bool PrivateChatChannel::isInvited(const Player& player) const
 {
 	if (player.getGUID() == getOwner()) {
@@ -90,7 +84,7 @@ void PrivateChatChannel::excludePlayer(const Player& player, Player& excludePlay
 		ss << excludePlayer.getName() << " has been excluded.";
 		player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 
-		excludePlayer.sendClosePrivate(getId());
+		excludePlayer.sendClosePrivate(id);
 
 		for (const auto& it : users) {
 			it.second->sendChannelEvent(id, excludePlayer.getName(), CHANNELEVENT_EXCLUDE);
@@ -98,10 +92,10 @@ void PrivateChatChannel::excludePlayer(const Player& player, Player& excludePlay
 	}
 }
 
-void PrivateChatChannel::closeChannel()
+void PrivateChatChannel::closeChannel() const
 {
 	for (const auto& it : users) {
-		it.second->sendClosePrivate(getId());
+		it.second->sendClosePrivate(id);
 	}
 }
 
@@ -152,7 +146,7 @@ bool ChatChannel::removeUser(const Player& player)
 	return true;
 }
 
-void ChatChannel::sendToAll(const std::string& message, SpeakClasses type)
+void ChatChannel::sendToAll(const std::string& message, SpeakClasses type) const
 {
 	for (const auto& it : users) {
 		it.second->sendChannelMessage("", message, type, id);
@@ -166,7 +160,7 @@ bool ChatChannel::talk(const Player& fromPlayer, SpeakClasses type, const std::s
 	}
 
 	for (const auto& it : users) {
-		it.second->sendToChannel(&fromPlayer, type, text, getId());
+		it.second->sendToChannel(&fromPlayer, type, text, id);
 	}
 	return true;
 }
@@ -505,7 +499,7 @@ void Chat::removeUserFromAllChannels(const Player& player)
 		channel->removeInvited(player);
 		channel->removeUser(player);
 		if (channel->getOwner() == player.getGUID()) {
-			deleteChannel(player, channel->getId());
+			deleteChannel(player, channel->id);
 		}
 	}
 }

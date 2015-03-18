@@ -709,13 +709,12 @@ void Combat::CombatFunc(Creature* caster, const Position& pos, const AreaCombat*
 	SpectatorVec list;
 	uint32_t maxX = 0;
 	uint32_t maxY = 0;
-	uint32_t diff;
 
 	//calculate the max viewable range
 	for (Tile* tile : tileList) {
 		const Position& tilePos = tile->getPosition();
 
-		diff = Position::getDistanceX(tilePos, pos);
+		uint32_t diff = Position::getDistanceX(tilePos, pos);
 		if (diff > maxX) {
 			maxX = diff;
 		}

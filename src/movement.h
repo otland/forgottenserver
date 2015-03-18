@@ -99,8 +99,8 @@ typedef uint32_t (EquipFunction)(MoveEvent* moveEvent, Player* player, Item* ite
 class MoveEvent final : public Event
 {
 	public:
-		MoveEvent(LuaScriptInterface* _interface);
-		MoveEvent(const MoveEvent* copy);
+		explicit MoveEvent(LuaScriptInterface* _interface);
+		explicit MoveEvent(const MoveEvent* copy);
 
 		MoveEvent_t getEventType() const;
 		void setEventType(MoveEvent_t type);

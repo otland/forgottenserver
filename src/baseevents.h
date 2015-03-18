@@ -25,13 +25,13 @@
 class Event
 {
 	public:
-		Event(LuaScriptInterface* _interface);
-		Event(const Event* copy);
+		explicit Event(LuaScriptInterface* _interface);
+		explicit Event(const Event* copy);
 		virtual ~Event() = default;
 
 		virtual bool configureEvent(const pugi::xml_node& node) = 0;
 
-		bool checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile);
+		bool checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const;
 		bool loadScript(const std::string& scriptFile);
 		virtual bool loadFunction(const pugi::xml_attribute&) {
 			return false;

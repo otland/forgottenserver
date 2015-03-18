@@ -290,7 +290,7 @@ bool House::isInvited(const Player* player)
 
 void House::addDoor(Door* door)
 {
-	door->useThing2();
+	door->incrementReferenceCounter();
 	doorList.push_back(door);
 	door->setHouse(this);
 	updateDoorDescription();
@@ -300,7 +300,7 @@ void House::removeDoor(Door* door)
 {
 	auto it = std::find(doorList.begin(), doorList.end(), door);
 	if (it != doorList.end()) {
-		door->releaseThing2();
+		door->decrementReferenceCounter();
 		doorList.erase(it);
 	}
 }
@@ -372,7 +372,7 @@ void House::resetTransferItem()
 HouseTransferItem* HouseTransferItem::createHouseTransferItem(House* house)
 {
 	HouseTransferItem* transferItem = new HouseTransferItem(house);
-	transferItem->useThing2();
+	transferItem->incrementReferenceCounter();
 	transferItem->setID(ITEM_DOCUMENT_RO);
 	transferItem->setSubType(1);
 	std::ostringstream ss;

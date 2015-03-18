@@ -20,17 +20,12 @@
 #ifndef FS_PROTOCOL_H_D71405071ACF4137A4B1203899DE80E1
 #define FS_PROTOCOL_H_D71405071ACF4137A4B1203899DE80E1
 
-class NetworkMessage;
-class OutputMessage;
-class Connection;
-typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
-typedef std::shared_ptr<Connection> Connection_ptr;
-class RSA;
+#include "connection.h"
 
 class Protocol
 {
 	public:
-		Protocol(Connection_ptr connection) : m_connection(connection), m_key(), m_refCount(), m_encryptionEnabled(false), m_checksumEnabled(true), m_rawMessages(false) {}
+		explicit Protocol(Connection_ptr connection) : m_connection(connection), m_key(), m_refCount(), m_encryptionEnabled(false), m_checksumEnabled(true), m_rawMessages(false) {}
 		virtual ~Protocol() = default;
 
 		// non-copyable
@@ -82,7 +77,7 @@ class Protocol
 
 		void XTEA_encrypt(OutputMessage& msg) const;
 		bool XTEA_decrypt(NetworkMessage& msg) const;
-		bool RSA_decrypt(NetworkMessage& msg);
+		static bool RSA_decrypt(NetworkMessage& msg);
 
 		void setRawMessages(bool value) {
 			m_rawMessages = value;

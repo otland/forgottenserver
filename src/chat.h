@@ -33,14 +33,14 @@ class ChatChannel
 {
 	public:
 		ChatChannel() = default;
-		ChatChannel(uint16_t channelId, const std::string& channelName) : name(channelName), canJoinEvent(-1), onJoinEvent(-1), onLeaveEvent(-1), onSpeakEvent(-1), id(channelId), publicChannel(false) {}
+		ChatChannel(uint16_t channelId, std::string channelName) : name(channelName), canJoinEvent(-1), onJoinEvent(-1), onLeaveEvent(-1), onSpeakEvent(-1), id(channelId), publicChannel(false) {}
 		virtual ~ChatChannel() = default;
 
 		bool addUser(Player& player);
 		bool removeUser(const Player& player);
 
 		bool talk(const Player& fromPlayer, SpeakClasses type, const std::string& text);
-		void sendToAll(const std::string& message, SpeakClasses type);
+		void sendToAll(const std::string& message, SpeakClasses type) const;
 
 		const std::string& getName() const {
 			return name;
@@ -85,13 +85,13 @@ class ChatChannel
 class PrivateChatChannel final : public ChatChannel
 {
 	public:
-		PrivateChatChannel(uint16_t channelId, const std::string& channelName);
+		PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, channelName), owner(0) {}
 
 		uint32_t getOwner() const final {
-			return m_owner;
+			return owner;
 		}
 		void setOwner(uint32_t owner) {
-			m_owner = owner;
+			this->owner = owner;
 		}
 
 		bool isInvited(const Player& player) const;
@@ -102,7 +102,7 @@ class PrivateChatChannel final : public ChatChannel
 		bool addInvited(Player& player);
 		bool removeInvited(const Player& player);
 
-		void closeChannel();
+		void closeChannel() const;
 
 		const InvitedMap& getInvitedUsers() const {
 			return m_invites;
@@ -114,7 +114,7 @@ class PrivateChatChannel final : public ChatChannel
 
 	protected:
 		InvitedMap m_invites;
-		uint32_t m_owner;
+		uint32_t owner;
 };
 
 typedef std::list<ChatChannel*> ChannelList;

@@ -31,7 +31,7 @@ typedef std::vector<Player*> PlayerVector;
 class Party
 {
 	public:
-		Party(Player* leader);
+		explicit Party(Player* leader);
 
 		Player* getLeader() const {
 			return leader;
@@ -87,13 +87,7 @@ class Party
 	protected:
 		bool canEnableSharedExperience();
 
-		struct CountBlock_t {
-			int32_t totalHeal;
-			int32_t totalDamage;
-			int64_t ticks;
-		};
-		typedef std::map<uint32_t, CountBlock_t> CountMap;
-		CountMap pointMap;
+		std::map<uint32_t, int64_t> ticksMap;
 
 		PlayerVector memberList;
 		PlayerVector inviteList;

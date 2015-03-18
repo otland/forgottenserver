@@ -25,7 +25,7 @@
 class Teleport final : public Item, public Cylinder
 {
 	public:
-		Teleport(uint16_t _type);
+		explicit Teleport(uint16_t _type);
 
 		Teleport* getTeleport() final {
 			return this;
@@ -41,7 +41,7 @@ class Teleport final : public Item, public Cylinder
 		const Position& getDestPos() const {
 			return destPos;
 		}
-		void setDestPos(const Position& pos) {
+		void setDestPos(Position pos) {
 			destPos = pos;
 		}
 

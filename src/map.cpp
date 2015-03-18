@@ -59,7 +59,7 @@ bool Map::loadMap(const std::string& identifier, bool loadHouses)
 	return true;
 }
 
-bool Map::saveMap()
+bool Map::save()
 {
 	bool saved = false;
 	for (uint32_t tries = 0; tries < 3; tries++) {
@@ -147,7 +147,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 	newTile->qt_node = leaf;
 }
 
-bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos /*=false*/, bool forceLogin /*=false*/)
+bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/) const
 {
 	bool foundTile;
 	bool placeInPZ;
@@ -222,7 +222,6 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* = false*/)
 {
 	Tile& oldTile = *creature.getTile();
-	int32_t oldStackPos = oldTile.getThingIndex(&creature);
 
 	Position oldPos = oldTile.getPosition();
 	Position newPos = newTile.getPosition();
@@ -258,7 +257,6 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 	//add the creature
 	newTile.addThing(&creature);
-	int32_t newStackPos = newTile.getThingIndex(&creature);
 
 	if (!teleport) {
 		if (oldPos.y > newPos.y) {
@@ -291,20 +289,8 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 		spectator->onCreatureMove(&creature, &newTile, newPos, &oldTile, oldPos, teleport);
 	}
 
-	oldTile.postRemoveNotification(&creature, &newTile, oldStackPos);
-	newTile.postAddNotification(&creature, &oldTile, newStackPos);
-}
-
-bool Map::removeCreature(Creature* creature)
-{
-	Tile* tile = creature->getTile();
-	if (!tile) {
-		return false;
-	}
-
-	tile->qt_node->removeCreature(creature);
-	tile->removeThing(creature, 0);
-	return true;
+	oldTile.postRemoveNotification(&creature, &newTile, 0);
+	newTile.postAddNotification(&creature, &oldTile, 0);
 }
 
 void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
@@ -767,15 +753,14 @@ bool Map::getPathMatching(const Creature& creature, std::list<Direction>& dirLis
 
 	int_fast32_t prevx = endPos.x;
 	int_fast32_t prevy = endPos.y;
-	int_fast32_t dx, dy;
 
 	found = found->parent;
 	while (found) {
 		pos.x = found->x;
 		pos.y = found->y;
 
-		dx = pos.getX() - prevx;
-		dy = pos.getY() - prevy;
+		int_fast32_t dx = pos.getX() - prevx;
+		int_fast32_t dy = pos.getY() - prevy;
 
 		prevx = pos.x;
 		prevy = pos.y;

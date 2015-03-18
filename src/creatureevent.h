@@ -76,7 +76,7 @@ class CreatureEvents final : public BaseEvents
 class CreatureEvent final : public Event
 {
 	public:
-		CreatureEvent(LuaScriptInterface* _interface);
+		explicit CreatureEvent(LuaScriptInterface* _interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
 

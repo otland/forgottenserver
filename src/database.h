@@ -176,7 +176,7 @@ class DBResult
 		bool next();
 
 	protected:
-		DBResult(MYSQL_RES* res);
+		explicit DBResult(MYSQL_RES* res);
 
 	private:
 		MYSQL_RES* m_handle;
@@ -193,7 +193,7 @@ class DBResult
 class DBInsert
 {
 	public:
-		DBInsert(const std::string& query);
+		explicit DBInsert(std::string query);
 		bool addRow(const std::string& row);
 		bool addRow(std::ostringstream& row);
 		bool execute();

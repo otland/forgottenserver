@@ -75,7 +75,7 @@ Container::~Container()
 	} else {
 		for (Item* item : itemlist) {
 			item->setParent(nullptr);
-			item->releaseThing2();
+			item->decrementReferenceCounter();
 		}
 	}
 }

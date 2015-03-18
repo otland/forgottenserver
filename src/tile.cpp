@@ -22,15 +22,16 @@
 #include <boost/range/adaptor/reversed.hpp>
 
 #include "tile.h"
-#include "game.h"
-#include "player.h"
+
 #include "creature.h"
+#include "combat.h"
+#include "game.h"
+#include "mailbox.h"
+#include "monster.h"
+#include "movement.h"
+#include "player.h"
 #include "teleport.h"
 #include "trashholder.h"
-#include "mailbox.h"
-#include "combat.h"
-#include "movement.h"
-#include "monster.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
@@ -390,7 +391,7 @@ void Tile::onAddTileItem(Item* item)
 
 	const Position& cylinderMapPos = getPosition();
 
-	const SpectatorVec& list = g_game.getSpectators(cylinderMapPos);
+	const auto& list = g_game.getSpectators(cylinderMapPos);
 
 	//send to client
 	for (Creature* spectator : list) {
@@ -427,7 +428,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 
 	const Position& cylinderMapPos = getPosition();
 
-	const SpectatorVec& list = g_game.getSpectators(cylinderMapPos);
+	const auto& list = g_game.getSpectators(cylinderMapPos);
 
 	//send to client
 	for (Creature* spectator : list) {
@@ -864,7 +865,6 @@ void Tile::addThing(int32_t, Thing* thing)
 				const ItemType& oldType = Item::items[ground->getID()];
 				const ItemType& newType = Item::items[item->getID()];
 
-				int32_t oldGroundIndex = getThingIndex(ground);
 				Item* oldGround = ground;
 				ground->setParent(nullptr);
 				g_game.ReleaseItem(ground);
@@ -872,20 +872,19 @@ void Tile::addThing(int32_t, Thing* thing)
 				resetTileFlags(oldGround);
 				setTileFlags(item);
 				onUpdateTileItem(oldGround, oldType, item, newType);
-				postRemoveNotification(oldGround, nullptr, oldGroundIndex);
+				postRemoveNotification(oldGround, nullptr, 0);
 			}
 		} else if (item->isAlwaysOnTop()) {
 			if (item->isSplash()) {
 				//remove old splash if exists
 				if (items) {
 					for (ItemVector::iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
-						if ((*it)->isSplash()) {
-							int32_t oldSplashIndex = getThingIndex(*it);
-							Item* oldSplash = *it;
+						Item* oldSplash = *it;
+						if (oldSplash->isSplash()) {
 							removeThing(oldSplash, 1);
 							oldSplash->setParent(nullptr);
 							g_game.ReleaseItem(oldSplash);
-							postRemoveNotification(oldSplash, nullptr, oldSplashIndex);
+							postRemoveNotification(oldSplash, nullptr, 0);
 							break;
 						}
 					}
@@ -920,12 +919,11 @@ void Tile::addThing(int32_t, Thing* thing)
 						MagicField* oldField = (*it)->getMagicField();
 						if (oldField) {
 							if (oldField->isReplaceable()) {
-								int32_t oldFieldIndex = getThingIndex(*it);
 								removeThing(oldField, 1);
 
 								oldField->setParent(nullptr);
 								g_game.ReleaseItem(oldField);
-								postRemoveNotification(oldField, nullptr, oldFieldIndex);
+								postRemoveNotification(oldField, nullptr, 0);
 								break;
 							} else {
 								//This magic field cannot be replaced.
@@ -1068,7 +1066,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 	if (item == ground) {
 		ground->setParent(nullptr);
 		ground = nullptr;
-		const SpectatorVec& list = g_game.getSpectators(getPosition());
+		const auto& list = g_game.getSpectators(getPosition());
 		onRemoveTileItem(list, std::vector<int32_t>(list.size(), 0), item);
 		return;
 	}
@@ -1086,7 +1084,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 
 		std::vector<int32_t> oldStackPosVector;
 
-		const SpectatorVec& list = g_game.getSpectators(getPosition());
+		const auto& list = g_game.getSpectators(getPosition());
 		for (Creature* spectator : list) {
 			if (Player* tmpPlayer = spectator->getPlayer()) {
 				oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
@@ -1112,7 +1110,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		} else {
 			std::vector<int32_t> oldStackPosVector;
 
-			const SpectatorVec& list = g_game.getSpectators(getPosition());
+			const auto& list = g_game.getSpectators(getPosition());
 			for (Creature* spectator : list) {
 				if (Player* tmpPlayer = spectator->getPlayer()) {
 					oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
@@ -1125,6 +1123,12 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 			onRemoveTileItem(list, oldStackPosVector, item);
 		}
 	}
+}
+
+void Tile::removeCreature(Creature* creature)
+{
+	qt_node->removeCreature(creature);
+	removeThing(creature, 0);
 }
 
 int32_t Tile::getThingIndex(const Thing* thing) const
@@ -1362,12 +1366,12 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	Creature* creature = thing->getCreature();
 	Item* item;
 	if (creature) {
-		creature->useThing2();
+		creature->incrementReferenceCounter();
 		item = nullptr;
 	} else {
 		item = thing->getItem();
 		if (item) {
-			item->useThing2();
+			item->incrementReferenceCounter();
 		}
 	}
 

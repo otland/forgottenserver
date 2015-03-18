@@ -20,14 +20,9 @@
 #ifndef FS_SERVER_H_984DA68ABF744127850F90CC710F281B
 #define FS_SERVER_H_984DA68ABF744127850F90CC710F281B
 
-class Connection;
-typedef std::shared_ptr<Connection> Connection_ptr;
+#include "connection.h"
+
 class Protocol;
-class NetworkMessage;
-
-class ServiceBase;
-
-typedef std::shared_ptr<ServiceBase> Service_ptr;
 
 class ServiceBase
 {
@@ -94,8 +89,6 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		uint16_t m_serverPort;
 		bool m_pendingStart;
 };
-
-typedef std::shared_ptr<ServicePort> ServicePort_ptr;
 
 class ServiceManager
 {

@@ -358,7 +358,6 @@ void Party::updateSharedExperience()
 {
 	if (sharedExpActive) {
 		bool result = canEnableSharedExperience();
-
 		if (result != sharedExpEnabled) {
 			sharedExpEnabled = result;
 			updateAllPartyIcons();
@@ -451,12 +450,12 @@ bool Party::canUseSharedExperience(const Player* player) const
 
 	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
 		//check if the player has healed/attacked anything recently
-		auto it = pointMap.find(player->getID());
-		if (it == pointMap.end()) {
+		auto it = ticksMap.find(player->getID());
+		if (it == ticksMap.end()) {
 			return false;
 		}
 
-		uint64_t timeDiff = OTSYS_TIME() - it->second.ticks;
+		uint64_t timeDiff = OTSYS_TIME() - it->second;
 		if (timeDiff > static_cast<uint64_t>(g_config.getNumber(ConfigManager::PZ_LOCKED))) {
 			return false;
 		}
@@ -480,49 +479,25 @@ bool Party::canEnableSharedExperience()
 
 void Party::addPlayerHealedMember(Player* player, uint32_t points)
 {
-	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
-		if (points > 0) {
-			auto it = pointMap.find(player->getID());
-			if (it == pointMap.end()) {
-				CountBlock_t cb;
-				cb.ticks = OTSYS_TIME();
-				cb.totalHeal = points;
-				cb.totalDamage = 0;
-				pointMap[player->getID()] = cb;
-			} else {
-				it->second.totalHeal += points;
-				it->second.ticks = OTSYS_TIME();
-			}
-			updateSharedExperience();
-		}
+	if (points != 0 && !player->hasFlag(PlayerFlag_NotGainInFight)) {
+		ticksMap[player->getID()] = OTSYS_TIME();
+		updateSharedExperience();
 	}
 }
 
 void Party::addPlayerDamageMonster(Player* player, uint32_t points)
 {
-	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
-		if (points > 0) {
-			CountMap::iterator it = pointMap.find(player->getID());
-			if (it == pointMap.end()) {
-				CountBlock_t cb;
-				cb.ticks = OTSYS_TIME();
-				cb.totalDamage = points;
-				cb.totalHeal = 0;
-				pointMap[player->getID()] = cb;
-			} else {
-				it->second.totalDamage += points;
-				it->second.ticks = OTSYS_TIME();
-			}
-			updateSharedExperience();
-		}
+	if (points != 0 && !player->hasFlag(PlayerFlag_NotGainInFight)) {
+		ticksMap[player->getID()] = OTSYS_TIME();
+		updateSharedExperience();
 	}
 }
 
 void Party::clearPlayerPoints(Player* player)
 {
-	auto it = pointMap.find(player->getID());
-	if (it != pointMap.end()) {
-		pointMap.erase(it);
+	auto it = ticksMap.find(player->getID());
+	if (it != ticksMap.end()) {
+		ticksMap.erase(it);
 		updateSharedExperience();
 	}
 }
