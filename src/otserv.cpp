@@ -171,20 +171,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+#ifdef _WIN32
 	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
 	if (strcasecmp(defaultPriority.c_str(), "high") == 0) {
-#ifdef _WIN32
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-#else
-		nice(-10);
-#endif
 	} else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
-#ifdef _WIN32
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
-#else
-		nice(-5);
-#endif
 	}
+#endif
 
 	//set RSA key
 	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");
