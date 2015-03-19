@@ -28,6 +28,7 @@
 
 #ifndef _WIN32
 #include <csignal> // for sigemptyset()
+#include <unistd.h>
 #endif
 
 #include "monsters.h"
@@ -170,14 +171,20 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
+	if (strcasecmp(defaultPriority.c_str(), "high") == 0) {
 #ifdef _WIN32
-	std::string defaultPriority = asLowerCaseString(g_config.getString(ConfigManager::DEFAULT_PRIORITY));
-	if (defaultPriority == "high") {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (defaultPriority == "above-normal") {
-		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
-	}
+#else
+		nice(-10);
 #endif
+	} else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
+#ifdef _WIN32
+		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+#else
+		nice(-5);
+#endif
+	}
 
 	//set RSA key
 	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");
@@ -306,7 +313,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 
-#ifndef WIN32
+#ifndef _WIN32
 	if (getuid() == 0 || geteuid() == 0) {
 		std::cout << "> Warning: " << STATUS_SERVER_NAME << " has been executed as root user, please consider running it as a normal user." << std::endl;
 	}

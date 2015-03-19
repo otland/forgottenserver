@@ -91,7 +91,7 @@ warnUnsafeScripts = "yes"
 convertUnsafeScripts = "yes"
 
 -- Startup
--- NOTE: defaultPriority only works on Windows and sets process priority.
+-- NOTE: defaultPriority sets process priority, valid values are: "normal", "above-normal", "high"
 defaultPriority = "high"
 startupDatabaseOptimization = "no"
 
