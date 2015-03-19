@@ -84,9 +84,8 @@ class Monster final : public Creature
 		const Position& getMasterPos() const {
 			return masterPos;
 		}
-		void setMasterPos(const Position& pos, int32_t radius = 1) {
+		void setMasterPos(Position pos) {
 			masterPos = pos;
-			masterRadius = radius;
 		}
 
 		RaceType_t getRace() const final {
@@ -196,7 +195,6 @@ class Monster final : public Creature
 		int32_t maxCombatValue;
 		int32_t targetChangeCooldown;
 		int32_t stepDuration;
-		int32_t masterRadius;
 
 		Position masterPos;
 
@@ -221,8 +219,6 @@ class Monster final : public Creature
 
 		void death(Creature* _lastHitCreature) final;
 		Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature) final;
-		bool despawn();
-		bool inDespawnRange(const Position& pos) const;
 
 		void setIdle(bool _idle);
 		void updateIdleStatus();
@@ -240,7 +236,7 @@ class Monster final : public Creature
 		bool getRandomStep(const Position& creaturePos, Direction& dir) const;
 		bool getDanceStep(const Position& creaturePos, Direction& dir,
 		                  bool keepAttack = true, bool keepDistance = true);
-		bool isInSpawnRange(const Position& toPos) const;
+		bool isInSpawnRange(const Position& pos) const;
 		bool canWalkTo(Position pos, Direction dir) const;
 
 		static bool pushItem(Item* item);

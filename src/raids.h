@@ -126,8 +126,6 @@ class Raid
 			return name;
 		}
 
-		void addEvent(RaidEvent* event);
-
 		bool isLoaded() const {
 			return loaded;
 		}
@@ -162,14 +160,12 @@ class RaidEvent
 
 		virtual bool configureRaidEvent(const pugi::xml_node& eventNode);
 
-		virtual bool executeEvent() {
-			return false;
-		}
+		virtual bool executeEvent() = 0;
 		uint32_t getDelay() const {
-			return m_delay;
+			return delay;
 		}
 		void setDelay(uint32_t newDelay) {
-			m_delay = newDelay;
+			delay = newDelay;
 		}
 
 		static bool compareEvents(const RaidEvent* lhs, const RaidEvent* rhs) {
@@ -177,23 +173,21 @@ class RaidEvent
 		}
 
 	private:
-		uint32_t m_delay;
+		uint32_t delay;
 };
 
 class AnnounceEvent final : public RaidEvent
 {
 	public:
-		AnnounceEvent() {
-			m_messageType = MESSAGE_EVENT_ADVANCE;
-		}
+		AnnounceEvent() : messageType(MESSAGE_EVENT_ADVANCE) {}
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
 		bool executeEvent() final;
 
 	private:
-		std::string m_message;
-		MessageClasses m_messageType;
+		std::string message;
+		MessageClasses messageType;
 };
 
 class SingleSpawnEvent final : public RaidEvent
@@ -204,8 +198,8 @@ class SingleSpawnEvent final : public RaidEvent
 		bool executeEvent() final;
 
 	private:
-		std::string m_monsterName;
-		Position m_position;
+		std::string monsterName;
+		Position position;
 };
 
 class AreaSpawnEvent final : public RaidEvent
@@ -218,8 +212,8 @@ class AreaSpawnEvent final : public RaidEvent
 		bool executeEvent() final;
 
 	private:
-		std::list<MonsterSpawn> m_spawnList;
-		Position m_fromPos, m_toPos;
+		std::list<MonsterSpawn> spawnList;
+		Position fromPos, toPos;
 };
 
 class ScriptEvent final : public RaidEvent, public Event

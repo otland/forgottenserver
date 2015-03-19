@@ -1007,7 +1007,7 @@ class LuaScriptInterface
 		static int32_t luaMonsterGetType(lua_State* L);
 
 		static int32_t luaMonsterGetSpawnPosition(lua_State* L);
-		static int32_t luaMonsterDespawn(lua_State* L);
+		static int32_t luaMonsterIsInSpawnRange(lua_State* L);
 
 		static int32_t luaMonsterIsIdle(lua_State* L);
 		static int32_t luaMonsterSetIdle(lua_State* L);

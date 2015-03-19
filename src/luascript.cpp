@@ -2361,7 +2361,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Monster", "getType", LuaScriptInterface::luaMonsterGetType);
 
 	registerMethod("Monster", "getSpawnPosition", LuaScriptInterface::luaMonsterGetSpawnPosition);
-	registerMethod("Monster", "despawn", LuaScriptInterface::luaMonsterDespawn);
+	registerMethod("Monster", "isInSpawnRange", LuaScriptInterface::luaMonsterIsInSpawnRange);
 
 	registerMethod("Monster", "isIdle", LuaScriptInterface::luaMonsterIsIdle);
 	registerMethod("Monster", "setIdle", LuaScriptInterface::luaMonsterSetIdle);
@@ -10028,12 +10028,12 @@ int32_t LuaScriptInterface::luaMonsterGetSpawnPosition(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaMonsterDespawn(lua_State* L)
+int32_t LuaScriptInterface::luaMonsterIsInSpawnRange(lua_State* L)
 {
-	// monster:despawn()
+	// monster:isInSpawnRange([position])
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
-		pushBoolean(L, monster->despawn());
+		pushBoolean(L, monster->isInSpawnRange(lua_gettop(L) >= 2 ? getPosition(L, 2) : monster->getPosition()));
 	} else {
 		lua_pushnil(L);
 	}

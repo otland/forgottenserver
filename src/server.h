@@ -60,7 +60,7 @@ class Service : public ServiceBase
 class ServicePort : public std::enable_shared_from_this<ServicePort>
 {
 	public:
-		ServicePort(boost::asio::io_service& io_service);
+		explicit ServicePort(boost::asio::io_service& io_service);
 		~ServicePort();
 
 		// non-copyable

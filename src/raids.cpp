@@ -245,7 +245,6 @@ bool Raid::loadFromXml(const std::string& _filename)
 void Raid::startRaid()
 {
 	RaidEvent* raidEvent = getNextRaidEvent();
-
 	if (raidEvent) {
 		state = RAIDSTATE_EXECUTING;
 		nextEventEvent = g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), std::bind(&Raid::executeRaidEvent, this, raidEvent)));
@@ -294,11 +293,6 @@ RaidEvent* Raid::getNextRaidEvent()
 	}
 }
 
-void Raid::addEvent(RaidEvent* event)
-{
-	raidEvents.push_back(event);
-}
-
 bool RaidEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 {
 	pugi::xml_attribute delayAttribute = eventNode.attribute("delay");
@@ -307,10 +301,7 @@ bool RaidEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		return false;
 	}
 
-	m_delay = pugi::cast<uint32_t>(delayAttribute.value());
-	if (m_delay < RAID_MINTICKS) {
-		m_delay = RAID_MINTICKS;
-	}
+	delay = std::max<uint32_t>(RAID_MINTICKS, pugi::cast<uint32_t>(delayAttribute.value()));
 	return true;
 }
 
@@ -321,43 +312,42 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	}
 
 	pugi::xml_attribute messageAttribute = eventNode.attribute("message");
-	if (messageAttribute) {
-		m_message = messageAttribute.as_string();
-	} else {
+	if (!messageAttribute) {
 		std::cout << "[Error] Raid: message tag missing for announce event." << std::endl;
 		return false;
 	}
+	message = messageAttribute.as_string();
 
 	pugi::xml_attribute typeAttribute = eventNode.attribute("type");
 	if (typeAttribute) {
 		std::string tmpStrValue = asLowerCaseString(typeAttribute.as_string());
 		if (tmpStrValue == "warning") {
-			m_messageType = MESSAGE_STATUS_WARNING;
+			messageType = MESSAGE_STATUS_WARNING;
 		} else if (tmpStrValue == "event") {
-			m_messageType = MESSAGE_EVENT_ADVANCE;
+			messageType = MESSAGE_EVENT_ADVANCE;
 		} else if (tmpStrValue == "default") {
-			m_messageType = MESSAGE_EVENT_DEFAULT;
+			messageType = MESSAGE_EVENT_DEFAULT;
 		} else if (tmpStrValue == "description") {
-			m_messageType = MESSAGE_INFO_DESCR;
+			messageType = MESSAGE_INFO_DESCR;
 		} else if (tmpStrValue == "smallstatus") {
-			m_messageType = MESSAGE_STATUS_SMALL;
+			messageType = MESSAGE_STATUS_SMALL;
 		} else if (tmpStrValue == "blueconsole") {
-			m_messageType = MESSAGE_STATUS_CONSOLE_BLUE;
+			messageType = MESSAGE_STATUS_CONSOLE_BLUE;
 		} else if (tmpStrValue == "redconsole") {
-			m_messageType = MESSAGE_STATUS_CONSOLE_RED;
+			messageType = MESSAGE_STATUS_CONSOLE_RED;
 		} else {
-			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << static_cast<uint32_t>(m_messageType) << std::endl;
+			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 		}
 	} else {
-		m_messageType = MESSAGE_EVENT_ADVANCE;
-		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << static_cast<uint32_t>(m_messageType) << std::endl;
+		messageType = MESSAGE_EVENT_ADVANCE;
+		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 	}
 	return true;
 }
 
 bool AnnounceEvent::executeEvent()
 {
-	g_game.broadcastMessage(m_message, m_messageType);
+	g_game.broadcastMessage(message, messageType);
 	return true;
 }
 
@@ -369,28 +359,28 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 	pugi::xml_attribute attr;
 	if ((attr = eventNode.attribute("name"))) {
-		m_monsterName = attr.as_string();
+		monsterName = attr.as_string();
 	} else {
 		std::cout << "[Error] Raid: name tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
 	if ((attr = eventNode.attribute("x"))) {
-		m_position.x = pugi::cast<uint16_t>(attr.value());
+		position.x = pugi::cast<uint16_t>(attr.value());
 	} else {
 		std::cout << "[Error] Raid: x tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
 	if ((attr = eventNode.attribute("y"))) {
-		m_position.y = pugi::cast<uint16_t>(attr.value());
+		position.y = pugi::cast<uint16_t>(attr.value());
 	} else {
 		std::cout << "[Error] Raid: y tag missing for singlespawn event." << std::endl;
 		return false;
 	}
 
 	if ((attr = eventNode.attribute("z"))) {
-		m_position.z = pugi::cast<uint16_t>(attr.value());
+		position.z = pugi::cast<uint16_t>(attr.value());
 	} else {
 		std::cout << "[Error] Raid: z tag missing for singlespawn event." << std::endl;
 		return false;
@@ -400,15 +390,15 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 bool SingleSpawnEvent::executeEvent()
 {
-	Monster* monster = Monster::createMonster(m_monsterName);
+	Monster* monster = Monster::createMonster(monsterName);
 	if (!monster) {
-		std::cout << "[Error] Raids: Cant create monster " << m_monsterName << std::endl;
+		std::cout << "[Error] Raids: Cant create monster " << monsterName << std::endl;
 		return false;
 	}
 
-	if (!g_game.placeCreature(monster, m_position, false, true)) {
+	if (!g_game.placeCreature(monster, position, false, true)) {
 		delete monster;
-		std::cout << "[Error] Raids: Cant place monster " << m_monsterName << std::endl;
+		std::cout << "[Error] Raids: Cant place monster " << monsterName << std::endl;
 		return false;
 	}
 	return true;
@@ -446,51 +436,51 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 			return false;
 		}
 
-		m_fromPos.x = std::max<int32_t>(0, centerPos.getX() - radius);
-		m_fromPos.y = std::max<int32_t>(0, centerPos.getY() - radius);
-		m_fromPos.z = centerPos.z;
+		fromPos.x = std::max<int32_t>(0, centerPos.getX() - radius);
+		fromPos.y = std::max<int32_t>(0, centerPos.getY() - radius);
+		fromPos.z = centerPos.z;
 
-		m_toPos.x = std::min<int32_t>(0xFFFF, centerPos.getX() + radius);
-		m_toPos.y = std::min<int32_t>(0xFFFF, centerPos.getY() + radius);
-		m_toPos.z = centerPos.z;
+		toPos.x = std::min<int32_t>(0xFFFF, centerPos.getX() + radius);
+		toPos.y = std::min<int32_t>(0xFFFF, centerPos.getY() + radius);
+		toPos.z = centerPos.z;
 	} else {
 		if ((attr = eventNode.attribute("fromx"))) {
-			m_fromPos.x = pugi::cast<uint16_t>(attr.value());
+			fromPos.x = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: fromx tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
 		if ((attr = eventNode.attribute("fromy"))) {
-			m_fromPos.y = pugi::cast<uint16_t>(attr.value());
+			fromPos.y = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: fromy tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
 		if ((attr = eventNode.attribute("fromz"))) {
-			m_fromPos.z = pugi::cast<uint16_t>(attr.value());
+			fromPos.z = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: fromz tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
 		if ((attr = eventNode.attribute("tox"))) {
-			m_toPos.x = pugi::cast<uint16_t>(attr.value());
+			toPos.x = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: tox tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
 		if ((attr = eventNode.attribute("toy"))) {
-			m_toPos.y = pugi::cast<uint16_t>(attr.value());
+			toPos.y = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: toy tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
 		if ((attr = eventNode.attribute("toz"))) {
-			m_toPos.z = pugi::cast<uint16_t>(attr.value());
+			toPos.z = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: toz tag missing for areaspawn event." << std::endl;
 			return false;
@@ -531,14 +521,14 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 			}
 		}
 
-		m_spawnList.emplace_back(name, minAmount, maxAmount);
+		spawnList.emplace_back(name, minAmount, maxAmount);
 	}
 	return true;
 }
 
 bool AreaSpawnEvent::executeEvent()
 {
-	for (const MonsterSpawn& spawn : m_spawnList) {
+	for (const MonsterSpawn& spawn : spawnList) {
 		uint32_t amount = uniform_random(spawn.minAmount, spawn.maxAmount);
 		for (uint32_t i = 0; i < amount; ++i) {
 			Monster* monster = Monster::createMonster(spawn.name);
@@ -549,9 +539,8 @@ bool AreaSpawnEvent::executeEvent()
 
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
-				Position pos(uniform_random(m_fromPos.x, m_toPos.x), uniform_random(m_fromPos.y, m_toPos.y), uniform_random(m_fromPos.z, m_toPos.z));
-				Tile* tile = g_game.map.getTile(pos);
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, pos, false, true)) {
+				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;
 					break;
 				}

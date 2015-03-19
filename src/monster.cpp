@@ -67,8 +67,6 @@ Monster::Monster(MonsterType* _mtype) :
 	minCombatValue = 0;
 	maxCombatValue = 0;
 
-	masterRadius = -1;
-
 	targetTicks = 0;
 	targetChangeTicks = 0;
 	targetChangeCooldown = 0;
@@ -719,7 +717,7 @@ void Monster::onThink(uint32_t interval)
 		}
 	}
 
-	if (despawn()) {
+	if (!isInSpawnRange(_position)) {
 		g_game.internalTeleport(this, masterPos);
 		setIdle(true);
 	} else {
@@ -1738,15 +1736,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	return true;
 }
 
-bool Monster::isInSpawnRange(const Position& toPos) const
-{
-	if (masterRadius == -1) {
-		return true;
-	}
-
-	return !inDespawnRange(toPos);
-}
-
 bool Monster::canWalkTo(Position pos, Direction dir) const
 {
 	pos = getNextPosition(dir, pos);
@@ -1797,34 +1786,29 @@ Item* Monster::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatur
 	return corpse;
 }
 
-bool Monster::inDespawnRange(const Position& pos) const
+bool Monster::isInSpawnRange(const Position& pos) const
 {
 	if (!spawn) {
-		return false;
+		return true;
 	}
 
 	if (Monster::despawnRadius == 0) {
-		return false;
+		return true;
 	}
 
 	if (!Spawns::isInZone(masterPos, Monster::despawnRadius, pos)) {
-		return true;
-	}
-
-	if (Monster::despawnRange == 0) {
 		return false;
 	}
 
-	if (Position::getDistanceZ(pos, masterPos) > Monster::despawnRange) {
+	if (Monster::despawnRange == 0) {
 		return true;
 	}
 
-	return false;
-}
+	if (Position::getDistanceZ(pos, masterPos) > Monster::despawnRange) {
+		return false;
+	}
 
-bool Monster::despawn()
-{
-	return inDespawnRange(getPosition());
+	return true;
 }
 
 bool Monster::getCombatValues(int32_t& min, int32_t& max)
@@ -1951,76 +1935,44 @@ bool Monster::convinceCreature(Creature* creature)
 	if (isSummon()) {
 		if (getMaster()->getPlayer()) {
 			return false;
-		} else if (getMaster() != creature) {
-			Creature* oldMaster = getMaster();
-			oldMaster->removeSummon(this);
-			creature->addSummon(this);
-
-			setFollowCreature(nullptr);
-			setAttackedCreature(nullptr);
-
-			//destroy summons
-			for (Creature* summon : summons) {
-				summon->changeHealth(-summon->getHealth());
-				summon->setMaster(nullptr);
-				summon->decrementReferenceCounter();
-			}
-			summons.clear();
-
-			isMasterInRange = true;
-			updateTargetList();
-			updateIdleStatus();
-
-			//Notify surrounding about the change
-			SpectatorVec list;
-			g_game.getSpectators(list, getPosition(), true);
-			g_game.getSpectators(list, creature->getPosition(), true);
-			for (Creature* spectator : list) {
-				spectator->onCreatureConvinced(creature, this);
-			}
-
-			if (spawn) {
-				spawn->removeMonster(this);
-				spawn = nullptr;
-				masterRadius = -1;
-			}
-
-			return true;
-		}
-	} else {
-		creature->addSummon(this);
-		setFollowCreature(nullptr);
-		setAttackedCreature(nullptr);
-
-		for (Creature* summon : summons) {
-			summon->changeHealth(-summon->getHealth());
-			summon->setMaster(nullptr);
-			summon->decrementReferenceCounter();
-		}
-		summons.clear();
-
-		isMasterInRange = true;
-		updateTargetList();
-		updateIdleStatus();
-
-		//Notify surrounding about the change
-		SpectatorVec list;
-		g_game.getSpectators(list, getPosition(), true);
-		g_game.getSpectators(list, creature->getPosition(), true);
-		for (Creature* spectator : list) {
-			spectator->onCreatureConvinced(creature, this);
+		} else if (getMaster() == creature) {
+			return false;
 		}
 
-		if (spawn) {
-			spawn->removeMonster(this);
-			spawn = nullptr;
-			masterRadius = -1;
-		}
-
-		return true;
+		Creature* oldMaster = getMaster();
+		oldMaster->removeSummon(this);
 	}
 
-	return false;
+	creature->addSummon(this);
+
+	setFollowCreature(nullptr);
+	setAttackedCreature(nullptr);
+
+	//destroy summons
+	for (Creature* summon : summons) {
+		summon->changeHealth(-summon->getHealth());
+		summon->setMaster(nullptr);
+		summon->decrementReferenceCounter();
+	}
+	summons.clear();
+
+	isMasterInRange = true;
+	updateTargetList();
+	updateIdleStatus();
+
+	//Notify surrounding about the change
+	SpectatorVec list;
+	g_game.getSpectators(list, getPosition(), true);
+	g_game.getSpectators(list, creature->getPosition(), true);
+	for (Creature* spectator : list) {
+		spectator->onCreatureConvinced(creature, this);
+	}
+
+	if (spawn) {
+		spawn->removeMonster(this);
+		spawn = nullptr;
+	}
+	return true;
 }
 
 void Monster::onCreatureConvinced(const Creature* convincer, const Creature* creature)
