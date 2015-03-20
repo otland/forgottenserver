@@ -35,23 +35,29 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-void ProtocolLogin::disconnectClient(const std::string& message)
+void ProtocolLogin::disconnectClient(uint16_t version, const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		output->AddByte(0x0A);
-		output->AddString(message);
-		OutputMessagePool::getInstance()->send(output);
+		if (version >= 1076) {
+			output->AddByte(0x0B);
+			output->AddString(message);
+			OutputMessagePool::getInstance()->send(output);
+		} else {
+			output->AddByte(0x0A);
+			output->AddString(message);
+			OutputMessagePool::getInstance()->send(output);
+		}
 	}
 
 	getConnection()->closeConnection();
 }
 
-void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password)
+void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password, uint16_t version)
 {
 	Account account;
 	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
-		disconnectClient("Account name or password is not correct.");
+		disconnectClient(version, "Account name or password is not correct.");
 		return;
 	}
 
@@ -66,6 +72,11 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		std::ostringstream ss;
 		ss << g_game.getMotdNum() << "\n" << g_config.getString(ConfigManager::MOTD);
 		output->AddString(ss.str());
+
+		//SessionKey
+		output->AddByte(0x28);
+
+		output->AddString(accountName + "\n" + password);
 
 		//Add char list
 		output->AddByte(0x64);
@@ -123,10 +134,10 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 * 1 byte: 0 (only 971+)
 	 */
 
-#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, this, err)))
+#define dispatchDisconnectClient(ver, err) g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, this, ver, err)))
 
 	if (version <= 760) {
-		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		dispatchDisconnectClient(version, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
 		return;
 	}
 
@@ -147,17 +158,17 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	std::string password = msg.GetString();
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		dispatchDisconnectClient(version, "Only clients with protocol " CLIENT_VERSION_STR " allowed!");
 		return;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
-		dispatchDisconnectClient("Gameworld is starting up. Please wait.");
+		dispatchDisconnectClient(version, "Gameworld is starting up. Please wait.");
 		return;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
-		dispatchDisconnectClient("Gameworld is under maintenance. Please re-connect in a while.");
+		dispatchDisconnectClient(version, "Gameworld is under maintenance. Please re-connect in a while.");
 		return;
 	}
 
@@ -169,16 +180,16 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 		std::ostringstream ss;
 		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-		dispatchDisconnectClient(ss.str());
+		dispatchDisconnectClient(version, ss.str());
 		return;
 	}
 
 	if (accountName.empty()) {
-		dispatchDisconnectClient("Invalid account name.");
+		dispatchDisconnectClient(version, "Invalid account name.");
 		return;
 	}
 
 #undef dispatchDisconnectClient
 
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, this, accountName, password)));
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, this, accountName, password, version)));
 }

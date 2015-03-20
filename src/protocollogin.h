@@ -41,9 +41,9 @@ class ProtocolLogin : public Protocol
 		void onRecvFirstMessage(NetworkMessage& msg);
 
 	protected:
-		void disconnectClient(const std::string& message);
+		void disconnectClient(uint16_t version, const std::string& message);
 
-		void getCharacterList(const std::string& accountName, const std::string& password);
+		void getCharacterList(const std::string& accountName, const std::string& password, uint16_t version);
 };
 
 #endif
