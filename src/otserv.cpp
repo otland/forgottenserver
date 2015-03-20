@@ -28,7 +28,6 @@
 
 #ifndef _WIN32
 #include <csignal> // for sigemptyset()
-#include <unistd.h>
 #endif
 
 #include "monsters.h"
