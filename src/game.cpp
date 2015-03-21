@@ -5488,7 +5488,7 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 	std::forward_list<Item*> itemList;
 	uint16_t count = 0;
 
-	std::list<Container*> containers{ depotChest, inbox };
+	std::list<Container*> containers { depotChest, inbox };
 	do {
 		Container* container = containers.front();
 		containers.pop_front();
@@ -5545,7 +5545,7 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 			}
 		}
 	} while (!containers.empty());
-	return std::forward_list<Item*> {};
+	return std::forward_list<Item*>();
 }
 
 void Game::forceAddCondition(uint32_t creatureId, Condition* condition)

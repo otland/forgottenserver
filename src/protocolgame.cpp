@@ -1645,9 +1645,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	player->setInMarket(true);
 
 	std::map<uint16_t, uint32_t> depotItems;
-	std::list<Container*> containerList;
-	containerList.push_back(depotChest);
-	containerList.push_back(player->getInbox());
+	std::forward_list<Container*> containerList { depotChest, player->getInbox() };
 
 	do {
 		Container* container = containerList.front();
@@ -1656,7 +1654,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		for (Item* item : container->getItemList()) {
 			Container* c = item->getContainer();
 			if (c && !c->empty()) {
-				containerList.push_back(c);
+				containerList.push_front(c);
 				continue;
 			}
 
@@ -2118,12 +2116,8 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 	msg.addString(player->getName());
 
 	if (const Container* tradeContainer = item->getContainer()) {
-		std::list<const Container*> listContainer;
-		listContainer.push_back(tradeContainer);
-
-		std::list<const Item*> itemList;
-		itemList.push_back(tradeContainer);
-
+		std::list<const Container*> listContainer {tradeContainer};
+		std::list<const Item*> itemList {tradeContainer};
 		while (!listContainer.empty()) {
 			const Container* container = listContainer.front();
 			listContainer.pop_front();
