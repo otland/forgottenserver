@@ -35,7 +35,7 @@ Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket*
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionManagerLock);
 
-	auto connection = std::make_shared<Connection>(socket, io_service, servicer);
+	Connection_ptr connection = std::make_shared<Connection>(socket, io_service, servicer);
 	m_connections.insert(connection);
 	return connection;
 }
@@ -140,7 +140,7 @@ void Connection::releaseConnection()
 void Connection::onStopOperation()
 {
 	//io_service thread
-	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
+	m_connectionLock.lock();
 
 	m_readTimer.cancel();
 	m_writeTimer.cancel();
@@ -157,6 +157,8 @@ void Connection::onStopOperation()
 
 	delete m_socket;
 	m_socket = nullptr;
+
+	m_connectionLock.unlock();
 
 	ConnectionManager::getInstance()->releaseConnection(shared_from_this());
 }
