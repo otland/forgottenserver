@@ -83,10 +83,10 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	if (result) {
 		do {
 			if (result->getDataInt("deletion") == 0) {
-				account.charList.push_back(result->getDataString("name"));
+				account.characters.push_back(result->getDataString("name"));
 			}
 		} while (result->next());
-		account.charList.sort();
+		std::sort(account.characters.begin(), account.characters.end());
 	}
 	return true;
 }

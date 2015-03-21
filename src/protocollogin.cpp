@@ -78,10 +78,11 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
 		output->addByte(0);
 
-		output->addByte(static_cast<uint8_t>(account.charList.size()));
-		for (const std::string& characterName : account.charList) {
+		uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), account.characters.size());
+		output->addByte(size);
+		for (uint8_t i = 0; i < size; i++) {
 			output->addByte(0);
-			output->addString(characterName);
+			output->addString(account.characters[i]);
 		}
 
 		//Add premium days

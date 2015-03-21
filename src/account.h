@@ -23,7 +23,7 @@
 #include "enums.h"
 
 struct Account {
-	std::list<std::string> charList;
+	std::vector<std::string> characters;
 	std::string name;
 	time_t lastDay;
 	uint32_t id;
