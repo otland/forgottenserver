@@ -35,7 +35,7 @@ Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket*
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionManagerLock);
 
-	Connection_ptr connection = Connection_ptr(new Connection(socket, io_service, servicer));
+	auto connection = std::make_shared<Connection>(socket, io_service, servicer);
 	m_connections.insert(connection);
 	return connection;
 }
@@ -82,11 +82,10 @@ void Connection::close()
 void Connection::closeConnectionTask()
 {
 	//dispatcher thread
-	m_connectionLock.lock();
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_connectionState != CONNECTION_STATE_REQUEST_CLOSE) {
 		std::cout << "Error: [Connection::closeConnectionTask] m_connectionState = " << m_connectionState << std::endl;
-		m_connectionLock.unlock();
 		return;
 	}
 
@@ -105,13 +104,11 @@ void Connection::closeConnectionTask()
 	} else {
 		//will be closed by onWriteOperation/handleWriteTimeout/handleReadTimeout instead
 	}
-
-	m_connectionLock.unlock();
 }
 
 void Connection::closeSocket()
 {
-	m_connectionLock.lock();
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_socket->is_open()) {
 		m_pendingRead = 0;
@@ -128,8 +125,6 @@ void Connection::closeSocket()
 			}
 		}
 	}
-
-	m_connectionLock.unlock();
 }
 
 void Connection::releaseConnection()
@@ -145,7 +140,7 @@ void Connection::releaseConnection()
 void Connection::onStopOperation()
 {
 	//io_service thread
-	m_connectionLock.lock();
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	m_readTimer.cancel();
 	m_writeTimer.cancel();
@@ -163,7 +158,6 @@ void Connection::onStopOperation()
 	delete m_socket;
 	m_socket = nullptr;
 
-	m_connectionLock.unlock();
 	ConnectionManager::getInstance()->releaseConnection(shared_from_this());
 }
 
@@ -213,7 +207,7 @@ void Connection::accept()
 
 void Connection::parseHeader(const boost::system::error_code& error)
 {
-	m_connectionLock.lock();
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	m_readTimer.cancel();
 
 	int32_t size = m_msg.decodeHeader();
@@ -223,7 +217,6 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_readError) {
 		close();
-		m_connectionLock.unlock();
 		return;
 	}
 
@@ -231,7 +224,6 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	if ((++m_packetsSent / timePassed) > static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND))) {
 		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
 		close();
-		m_connectionLock.unlock();
 		return;
 	}
 
@@ -257,13 +249,11 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 		close();
 	}
-
-	m_connectionLock.unlock();
 }
 
 void Connection::parsePacket(const boost::system::error_code& error)
 {
-	m_connectionLock.lock();
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	m_readTimer.cancel();
 
 	if (error) {
@@ -272,7 +262,6 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_readError) {
 		close();
-		m_connectionLock.unlock();
 		return;
 	}
 
@@ -300,7 +289,6 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			m_protocol = m_service_port->make_protocol(recvChecksum == checksum, m_msg);
 			if (!m_protocol) {
 				close();
-				m_connectionLock.unlock();
 				return;
 			}
 
@@ -331,16 +319,13 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 		close();
 	}
-
-	m_connectionLock.unlock();
 }
 
 bool Connection::send(OutputMessage_ptr msg)
 {
-	m_connectionLock.lock();
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
-		m_connectionLock.unlock();
 		return false;
 	}
 
@@ -351,7 +336,6 @@ bool Connection::send(OutputMessage_ptr msg)
 		OutputMessagePool::getInstance()->addToAutoSend(msg);
 	}
 
-	m_connectionLock.unlock();
 	return true;
 }
 
@@ -389,7 +373,7 @@ uint32_t Connection::getIP() const
 
 void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::error_code& error)
 {
-	m_connectionLock.lock();
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);;
 	m_writeTimer.cancel();
 
 	msg.reset();
@@ -401,12 +385,10 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
 		closeSocket();
 		close();
-		m_connectionLock.unlock();
 		return;
 	}
 
 	--m_pendingWrite;
-	m_connectionLock.unlock();
 }
 
 void Connection::handleReadError(const boost::system::error_code& error)

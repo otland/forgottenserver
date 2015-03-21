@@ -71,7 +71,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 			CONNECTION_STATE_CLOSED = 3
 		};
 
-	private:
 		Connection(boost::asio::ip::tcp::socket* socket,
 		           boost::asio::io_service& io_service,
 		           ServicePort_ptr service_port) :
