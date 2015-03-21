@@ -772,9 +772,7 @@ class Item : virtual public Thing
 			return !loadedFromMap && canRemove() && isPickupable() && !hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) && !hasAttribute(ITEM_ATTRIBUTE_ACTIONID);
 		}
 
-		bool hasAttributes() const {
-			return attributes != nullptr;
-		}
+		bool hasMarketAttributes() const;
 
 		ItemAttributes* getAttributes() {
 			if (!attributes) {

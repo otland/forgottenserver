@@ -5509,32 +5509,8 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 				continue;
 			}
 
-			if (item->hasAttributes()) {
-				bool badAttribute = false;
-
-				ItemAttributes* attributes = item->getAttributes();
-				for (const auto& attr : attributes->getList()) {
-					if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-						uint16_t charges = static_cast<uint16_t>(attr.value.integer);
-						if (charges != itemType.charges) {
-							badAttribute = true;
-							break;
-						}
-					} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-						uint32_t duration = static_cast<uint32_t>(attr.value.integer);
-						if (duration != item->getDefaultDuration()) {
-							badAttribute = true;
-							break;
-						}
-					} else {
-						badAttribute = true;
-						break;
-					}
-				}
-
-				if (badAttribute) {
-					continue;
-				}
+			if (!item->hasMarketAttributes()) {
+				continue;
 			}
 
 			itemList.push_front(item);
