@@ -6092,6 +6092,7 @@ int32_t LuaScriptInterface::luaNetworkMessageReset(lua_State* L)
 	// networkMessage:reset()
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
+		message->reset();
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

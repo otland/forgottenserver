@@ -42,14 +42,12 @@ class NetworkMessage
 			reset();
 		}
 
-	protected:
 		void reset() {
 			overrun = false;
 			length = 0;
 			position = 8;
 		}
 
-	public:
 		// simply read functions for incoming message
 		uint8_t getByte() {
 			if (!canRead(1)) {
