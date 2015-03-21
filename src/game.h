@@ -104,8 +104,8 @@ class Game
 		  * \param height height of the map
 		  */
 		void getMapDimensions(uint32_t& width, uint32_t& height) const {
-			width = map.mapWidth;
-			height = map.mapHeight;
+			width = map.width;
+			height = map.height;
 		}
 
 		void setWorldType(WorldType_t type);
@@ -357,7 +357,7 @@ class Game
 		void playerCloseNpcChannel(uint32_t playerId);
 		void playerReceivePing(uint32_t playerId);
 		void playerReceivePingBack(uint32_t playerId);
-		void playerAutoWalk(uint32_t playerId, const std::list<Direction>& listDir);
+		void playerAutoWalk(uint32_t playerId, const std::forward_list<Direction>& listDir);
 		void playerStopAutoWalk(uint32_t playerId);
 		void playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos,
 		                     uint16_t fromSpriteId, const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId);

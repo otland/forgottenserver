@@ -121,7 +121,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
 					centerPos.z
 				), radius);
-				npcList.push_back(npc);
+				npcList.push_front(npc);
 			}
 		}
 	}
@@ -279,10 +279,10 @@ void Spawn::cleanup()
 			}
 
 			monster->decrementReferenceCounter();
-			spawnedMap.erase(it++);
+			it = spawnedMap.erase(it);
 		} else if (!isInSpawnZone(monster->getPosition()) && spawnId != 0) {
 			spawnedMap.insert(spawned_pair(0, monster));
-			spawnedMap.erase(it++);
+			it = spawnedMap.erase(it);
 		} else {
 			++it;
 		}

@@ -64,7 +64,7 @@ void ConnectionManager::closeAll()
 
 // Connection
 
-void Connection::closeConnection()
+void Connection::close()
 {
 	//any thread
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
@@ -182,15 +182,15 @@ void Connection::deleteConnectionTask()
 	}
 }
 
-void Connection::acceptConnection(Protocol* protocol)
+void Connection::accept(Protocol* protocol)
 {
 	m_protocol = protocol;
 	g_dispatcher.addTask(createTask(std::bind(&Protocol::onConnect, m_protocol)));
 
-	acceptConnection();
+	accept();
 }
 
-void Connection::acceptConnection()
+void Connection::accept()
 {
 	try {
 		++m_pendingRead;
@@ -203,11 +203,11 @@ void Connection::acceptConnection()
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
-			std::cout << "[Network error - Connection::acceptConnection] " << e.what() << std::endl;
+			std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
 			m_logError = false;
 		}
 
-		closeConnection();
+		close();
 	}
 }
 
@@ -222,7 +222,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	}
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_readError) {
-		closeConnection();
+		close();
 		m_connectionLock.unlock();
 		return;
 	}
@@ -230,7 +230,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - m_timeConnected) + 1);
 	if ((++m_packetsSent / timePassed) > static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND))) {
 		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
-		closeConnection();
+		close();
 		m_connectionLock.unlock();
 		return;
 	}
@@ -255,7 +255,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 			m_logError = false;
 		}
 
-		closeConnection();
+		close();
 	}
 
 	m_connectionLock.unlock();
@@ -271,16 +271,16 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_readError) {
-		closeConnection();
+		close();
 		m_connectionLock.unlock();
 		return;
 	}
 
 	//Check packet checksum
 	uint32_t checksum;
-	int32_t len = m_msg.getLength() - m_msg.getPosition() - 4;
+	int32_t len = m_msg.getLength() - m_msg.getBufferPosition() - 4;
 	if (len > 0) {
-		checksum = adlerChecksum(m_msg.getBuffer() + m_msg.getPosition() + 4, len);
+		checksum = adlerChecksum(m_msg.getBuffer() + m_msg.getBufferPosition() + 4, len);
 	} else {
 		checksum = 0;
 	}
@@ -288,7 +288,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	uint32_t recvChecksum = m_msg.get<uint32_t>();
 	if (recvChecksum != checksum) {
 		// it might not have been the checksum, step back
-		m_msg.SkipBytes(-4);
+		m_msg.skipBytes(-4);
 	}
 
 	if (!m_receivedFirst) {
@@ -299,14 +299,14 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			// Game protocol has already been created at this point
 			m_protocol = m_service_port->make_protocol(recvChecksum == checksum, m_msg);
 			if (!m_protocol) {
-				closeConnection();
+				close();
 				m_connectionLock.unlock();
 				return;
 			}
 
 			m_protocol->setConnection(shared_from_this());
 		} else {
-			m_msg.GetByte();    // Skip protocol ID
+			m_msg.getByte();    // Skip protocol ID
 		}
 
 		m_protocol->onRecvFirstMessage(m_msg);
@@ -329,7 +329,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			m_logError = false;
 		}
 
-		closeConnection();
+		close();
 	}
 
 	m_connectionLock.unlock();
@@ -400,7 +400,7 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
 		closeSocket();
-		closeConnection();
+		close();
 		m_connectionLock.unlock();
 		return;
 	}
@@ -415,7 +415,7 @@ void Connection::handleReadError(const boost::system::error_code& error)
 
 	if (error == boost::asio::error::operation_aborted) {
 		// Operation aborted because connection will be closed
-		// Do NOT call closeConnection() from here
+		// Do NOT call close() from here
 	} else {
 		/**
 		 * error == boost::asio::error::eof:
@@ -423,7 +423,7 @@ void Connection::handleReadError(const boost::system::error_code& error)
 		 * error == boost::asio::error::connection_reset || error == boost::asio::error::connection_aborted:
 		 *  Connection closed remotely
 		 */
-		closeConnection();
+		close();
 	}
 
 	m_readError = true;
@@ -435,7 +435,7 @@ void Connection::onReadTimeout()
 
 	if (m_pendingRead > 0 || m_readError) {
 		closeSocket();
-		closeConnection();
+		close();
 	}
 }
 
@@ -445,7 +445,7 @@ void Connection::onWriteTimeout()
 
 	if (m_pendingWrite > 0 || m_writeError) {
 		closeSocket();
-		closeConnection();
+		close();
 	}
 }
 
@@ -470,7 +470,7 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 
 	if (error == boost::asio::error::operation_aborted) {
 		// Operation aborted because connection will be closed
-		// Do NOT call closeConnection() from here
+		// Do NOT call close() from here
 	} else {
 		/**
 		 * error == boost::asio::error::eof:
@@ -478,7 +478,7 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 		 * error == boost::asio::error::connection_reset || error == boost::asio::error::connection_aborted:
 		 *  Connection closed remotely
 		 */
-		closeConnection();
+		close();
 	}
 
 	m_writeError = true;

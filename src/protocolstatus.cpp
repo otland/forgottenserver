@@ -54,7 +54,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			std::map<uint32_t, int64_t>::const_iterator it = ipConnectMap.find(ip);
 			if (it != ipConnectMap.end()) {
 				if (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT))) {
-					getConnection()->closeConnection();
+					getConnection()->close();
 					return;
 				}
 			}
@@ -63,10 +63,10 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 	ipConnectMap[ip] = OTSYS_TIME();
 
-	switch (msg.GetByte()) {
+	switch (msg.getByte()) {
 		//XML info protocol
 		case 0xFF: {
-			if (msg.GetString(4) == "info") {
+			if (msg.getString(4) == "info") {
 				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, this)));
 				return;
 			}
@@ -78,7 +78,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			uint16_t requestedInfo = msg.get<uint16_t>(); //Only a Byte is necessary, though we could add new infos here
 			std::string characterName;
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
-				characterName = msg.GetString();
+				characterName = msg.getString();
 			}
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendInfo, this, requestedInfo, characterName)));
 			return;
@@ -87,14 +87,14 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		default:
 			break;
 	}
-	getConnection()->closeConnection();
+	getConnection()->close();
 }
 
 void ProtocolStatus::sendStatusString()
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (!output) {
-		getConnection()->closeConnection();
+		getConnection()->close();
 		return;
 	}
 
@@ -158,83 +158,83 @@ void ProtocolStatus::sendStatusString()
 	doc.save(ss, "", pugi::format_raw);
 
 	std::string data = ss.str();
-	output->AddBytes(data.c_str(), data.size());
+	output->addBytes(data.c_str(), data.size());
 	OutputMessagePool::getInstance()->send(output);
-	getConnection()->closeConnection();
+	getConnection()->close();
 }
 
 void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& characterName)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (!output) {
-		getConnection()->closeConnection();
+		getConnection()->close();
 		return;
 	}
 
 	if (requestedInfo & REQUEST_BASIC_SERVER_INFO) {
-		output->AddByte(0x10);
-		output->AddString(g_config.getString(ConfigManager::SERVER_NAME));
-		output->AddString(g_config.getString(ConfigManager::IP));
-		output->AddString(std::to_string(g_config.getNumber(ConfigManager::LOGIN_PORT)));
+		output->addByte(0x10);
+		output->addString(g_config.getString(ConfigManager::SERVER_NAME));
+		output->addString(g_config.getString(ConfigManager::IP));
+		output->addString(std::to_string(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 	}
 
 	if (requestedInfo & REQUEST_OWNER_SERVER_INFO) {
-		output->AddByte(0x11);
-		output->AddString(g_config.getString(ConfigManager::OWNER_NAME));
-		output->AddString(g_config.getString(ConfigManager::OWNER_EMAIL));
+		output->addByte(0x11);
+		output->addString(g_config.getString(ConfigManager::OWNER_NAME));
+		output->addString(g_config.getString(ConfigManager::OWNER_EMAIL));
 	}
 
 	if (requestedInfo & REQUEST_MISC_SERVER_INFO) {
-		output->AddByte(0x12);
-		output->AddString(g_config.getString(ConfigManager::MOTD));
-		output->AddString(g_config.getString(ConfigManager::LOCATION));
-		output->AddString(g_config.getString(ConfigManager::URL));
-		output->Add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
+		output->addByte(0x12);
+		output->addString(g_config.getString(ConfigManager::MOTD));
+		output->addString(g_config.getString(ConfigManager::LOCATION));
+		output->addString(g_config.getString(ConfigManager::URL));
+		output->add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
 	}
 
 	if (requestedInfo & REQUEST_PLAYERS_INFO) {
-		output->AddByte(0x20);
-		output->Add<uint32_t>(g_game.getPlayersOnline());
-		output->Add<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-		output->Add<uint32_t>(g_game.getPlayersRecord());
+		output->addByte(0x20);
+		output->add<uint32_t>(g_game.getPlayersOnline());
+		output->add<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+		output->add<uint32_t>(g_game.getPlayersRecord());
 	}
 
 	if (requestedInfo & REQUEST_MAP_INFO) {
-		output->AddByte(0x30);
-		output->AddString(g_config.getString(ConfigManager::MAP_NAME));
-		output->AddString(g_config.getString(ConfigManager::MAP_AUTHOR));
+		output->addByte(0x30);
+		output->addString(g_config.getString(ConfigManager::MAP_NAME));
+		output->addString(g_config.getString(ConfigManager::MAP_AUTHOR));
 		uint32_t mapWidth, mapHeight;
 		g_game.getMapDimensions(mapWidth, mapHeight);
-		output->Add<uint16_t>(mapWidth);
-		output->Add<uint16_t>(mapHeight);
+		output->add<uint16_t>(mapWidth);
+		output->add<uint16_t>(mapHeight);
 	}
 
 	if (requestedInfo & REQUEST_EXT_PLAYERS_INFO) {
-		output->AddByte(0x21); // players info - online players list
+		output->addByte(0x21); // players info - online players list
 
 		const auto& players = g_game.getPlayers();
-		output->Add<uint32_t>(players.size());
+		output->add<uint32_t>(players.size());
 		for (const auto& it : players) {
-			output->AddString(it.second->getName());
-			output->Add<uint32_t>(it.second->getLevel());
+			output->addString(it.second->getName());
+			output->add<uint32_t>(it.second->getLevel());
 		}
 	}
 
 	if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
-		output->AddByte(0x22); // players info - online status info of a player
+		output->addByte(0x22); // players info - online status info of a player
 		if (g_game.getPlayerByName(characterName) != nullptr) {
-			output->AddByte(0x01);
+			output->addByte(0x01);
 		} else {
-			output->AddByte(0x00);
+			output->addByte(0x00);
 		}
 	}
 
 	if (requestedInfo & REQUEST_SERVER_SOFTWARE_INFO) {
-		output->AddByte(0x23); // server software info
-		output->AddString(STATUS_SERVER_NAME);
-		output->AddString(STATUS_SERVER_VERSION);
-		output->AddString(CLIENT_VERSION_STR);
+		output->addByte(0x23); // server software info
+		output->addString(STATUS_SERVER_NAME);
+		output->addString(STATUS_SERVER_VERSION);
+		output->addString(CLIENT_VERSION_STR);
 	}
 	OutputMessagePool::getInstance()->send(output);
-	getConnection()->closeConnection();
+	getConnection()->close();
 }

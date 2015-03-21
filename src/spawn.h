@@ -95,7 +95,7 @@ class Spawns
 		}
 
 	private:
-		std::list<Npc*> npcList;
+		std::forward_list<Npc*> npcList;
 		std::forward_list<Spawn> spawnList;
 		std::string filename;
 		bool loaded, started;

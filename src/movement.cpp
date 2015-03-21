@@ -888,7 +888,7 @@ uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& p
 
 bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& pos)
 {
-	//onAddItem(moveitem, tileitem, pos)
+	//onaddItem(moveitem, tileitem, pos)
 	//onRemoveItem(moveitem, tileitem, pos)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeAddRemItem] Call stack overflow" << std::endl;

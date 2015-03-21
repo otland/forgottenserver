@@ -52,7 +52,7 @@ class TalkActions : public BaseEvents
 		void clear() final;
 
 		// TODO: Store TalkAction objects directly in the list instead of using pointers
-		std::list<TalkAction*> talkActions;
+		std::forward_list<TalkAction*> talkActions;
 
 		LuaScriptInterface m_scriptInterface;
 };

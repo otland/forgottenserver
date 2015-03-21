@@ -711,7 +711,7 @@ ContainerIterator Container::begin()
 	ContainerIterator cit(this);
 
 	if (!itemlist.empty()) {
-		cit.over.push(this);
+		cit.over.push_back(this);
 		cit.cur = itemlist.begin();
 	}
 
@@ -806,7 +806,7 @@ ContainerIterator& ContainerIterator::operator++()
 	if (Item* i = *cur) {
 		if (Container* c = i->getContainer()) {
 			if (!c->empty()) {
-				over.push(c);
+				over.push_back(c);
 			}
 		}
 	}
@@ -814,8 +814,7 @@ ContainerIterator& ContainerIterator::operator++()
 	++cur;
 
 	if (cur == over.front()->itemlist.end()) {
-		over.pop();
-
+		over.pop_front();
 		if (over.empty()) {
 			return *this;
 		}

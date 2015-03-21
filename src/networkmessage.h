@@ -39,11 +39,11 @@ class NetworkMessage
 
 		// constructor
 		NetworkMessage() {
-			Reset();
+			reset();
 		}
 
 	protected:
-		void Reset() {
+		void reset() {
 			overrun = false;
 			length = 0;
 			position = 8;
@@ -51,12 +51,16 @@ class NetworkMessage
 
 	public:
 		// simply read functions for incoming message
-		uint8_t GetByte() {
+		uint8_t getByte() {
 			if (!canRead(1)) {
 				return 0;
 			}
 
 			return buffer[position++];
+		}
+
+		uint8_t getPreviousByte() {
+			return buffer[--position];
 		}
 
 		template<typename T>
@@ -70,16 +74,16 @@ class NetworkMessage
 			return v;
 		}
 
-		std::string GetString(uint16_t stringLen = 0);
-		Position GetPosition();
+		std::string getString(uint16_t stringLen = 0);
+		Position getPosition();
 
 		// skips count unknown/unused bytes in an incoming message
-		void SkipBytes(int count) {
+		void skipBytes(int count) {
 			position += count;
 		}
 
 		// simply write functions for outgoing message
-		void AddByte(uint8_t value) {
+		void addByte(uint8_t value) {
 			if (!canAdd(1)) {
 				return;
 			}
@@ -89,7 +93,7 @@ class NetworkMessage
 		}
 
 		template<typename T>
-		void Add(T value) {
+		void add(T value) {
 			if (!canAdd(sizeof(T))) {
 				return;
 			}
@@ -99,19 +103,19 @@ class NetworkMessage
 			length += sizeof(T);
 		}
 
-		void AddBytes(const char* bytes, size_t size);
-		void AddPaddingBytes(size_t n);
+		void addBytes(const char* bytes, size_t size);
+		void addPaddingBytes(size_t n);
 
-		void AddString(const std::string& value);
-		void AddString(const char* value);
+		void addString(const std::string& value);
+		void addString(const char* value);
 
-		void AddDouble(double value, uint8_t precision = 2);
+		void addDouble(double value, uint8_t precision = 2);
 
 		// write functions for complex types
-		void AddPosition(const Position& pos);
-		void AddItem(uint16_t id, uint8_t count);
-		void AddItem(const Item* item);
-		void AddItemId(uint16_t itemId);
+		void addPosition(const Position& pos);
+		void addItem(uint16_t id, uint8_t count);
+		void addItem(const Item* item);
+		void addItemId(uint16_t itemId);
 
 		int32_t getLength() const {
 			return length;
@@ -121,11 +125,11 @@ class NetworkMessage
 			length = newLength;
 		}
 
-		int32_t getPosition() const {
+		int32_t getBufferPosition() const {
 			return position;
 		}
 
-		void setPosition(int32_t pos) {
+		void setBufferPosition(int32_t pos) {
 			position = pos;
 		}
 

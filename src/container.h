@@ -48,7 +48,7 @@ class ContainerIterator
 		explicit ContainerIterator(Container* super);
 
 		Container* super;
-		std::queue<Container*> over;
+		std::list<Container*> over;
 		ItemDeque::iterator cur;
 
 		friend class Container;

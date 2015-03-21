@@ -98,10 +98,10 @@ class Connection : public std::enable_shared_from_this<Connection>
 			return *m_socket;
 		}
 
-		void closeConnection();
+		void close();
 		// Used by protocols that require server to send first
-		void acceptConnection(Protocol* protocol);
-		void acceptConnection();
+		void accept(Protocol* protocol);
+		void accept();
 
 		bool send(OutputMessage_ptr msg);
 

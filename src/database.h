@@ -140,6 +140,7 @@ class Database
 class DBResult
 {
 	public:
+		explicit DBResult(MYSQL_RES* res);
 		~DBResult();
 
 		// non-copyable
@@ -174,9 +175,6 @@ class DBResult
 
 		bool hasNext() const;
 		bool next();
-
-	protected:
-		explicit DBResult(MYSQL_RES* res);
 
 	private:
 		MYSQL_RES* m_handle;

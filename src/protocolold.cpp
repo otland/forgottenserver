@@ -33,12 +33,12 @@ void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		output->AddByte(0x0A);
-		output->AddString(message);
+		output->addByte(0x0A);
+		output->addString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->closeConnection();
+	getConnection()->close();
 }
 
 void ProtocolOld::disconnectClient(const std::string& message)
@@ -49,13 +49,13 @@ void ProtocolOld::disconnectClient(const std::string& message)
 void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		getConnection()->closeConnection();
+		getConnection()->close();
 		return;
 	}
 
 	/*uint16_t clientOS =*/ msg.get<uint16_t>();
 	uint16_t version = msg.get<uint16_t>();
-	msg.SkipBytes(12);
+	msg.skipBytes(12);
 
 	if (version <= 760) {
 		disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
@@ -63,7 +63,7 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		getConnection()->closeConnection();
+		getConnection()->close();
 		return;
 	}
 

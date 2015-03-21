@@ -65,7 +65,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)
 {
-	talkActions.push_back(reinterpret_cast<TalkAction*>(event));
+	talkActions.push_front(reinterpret_cast<TalkAction*>(event));
 	return true;
 }
 

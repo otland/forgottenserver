@@ -158,7 +158,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	database_lock.unlock();
 
 	// retrieving results of query
-	DBResult_ptr result = DBResult_ptr(new DBResult(m_res));
+	DBResult_ptr result = std::make_shared<DBResult>(m_res);
 	if (!result->hasNext()) {
 		return nullptr;
 	}

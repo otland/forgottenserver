@@ -36,7 +36,7 @@ int32_t NetworkMessage::decodeHeader()
 }
 
 /******************************************************************************/
-std::string NetworkMessage::GetString(uint16_t stringLen/* = 0*/)
+std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 {
 	if (stringLen == 0) {
 		stringLen = get<uint16_t>();
@@ -51,49 +51,49 @@ std::string NetworkMessage::GetString(uint16_t stringLen/* = 0*/)
 	return std::string(v, stringLen);
 }
 
-Position NetworkMessage::GetPosition()
+Position NetworkMessage::getPosition()
 {
 	Position pos;
 	pos.x = get<uint16_t>();
 	pos.y = get<uint16_t>();
-	pos.z = GetByte();
+	pos.z = getByte();
 	return pos;
 }
 /******************************************************************************/
 
-void NetworkMessage::AddString(const std::string& value)
+void NetworkMessage::addString(const std::string& value)
 {
 	size_t stringLen = value.length();
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
-	Add<uint16_t>(stringLen);
+	add<uint16_t>(stringLen);
 	memcpy(buffer + position, value.c_str(), stringLen);
 	position += stringLen;
 	length += stringLen;
 }
 
-void NetworkMessage::AddString(const char* value)
+void NetworkMessage::addString(const char* value)
 {
 	size_t stringLen = strlen(value);
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
-	Add<uint16_t>(stringLen);
+	add<uint16_t>(stringLen);
 	memcpy(buffer + position, value, stringLen);
 	position += stringLen;
 	length += stringLen;
 }
 
-void NetworkMessage::AddDouble(double value, uint8_t precision/* = 2*/)
+void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
 {
-	AddByte(precision);
-	Add<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + INT_MAX);
+	addByte(precision);
+	add<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + INT_MAX);
 }
 
-void NetworkMessage::AddBytes(const char* bytes, size_t size)
+void NetworkMessage::addBytes(const char* bytes, size_t size)
 {
 	if (!canAdd(size) || size > 8192) {
 		return;
@@ -104,7 +104,7 @@ void NetworkMessage::AddBytes(const char* bytes, size_t size)
 	length += size;
 }
 
-void NetworkMessage::AddPaddingBytes(size_t n)
+void NetworkMessage::addPaddingBytes(size_t n)
 {
 	if (!canAdd(n)) {
 		return;
@@ -114,51 +114,51 @@ void NetworkMessage::AddPaddingBytes(size_t n)
 	length += n;
 }
 
-void NetworkMessage::AddPosition(const Position& pos)
+void NetworkMessage::addPosition(const Position& pos)
 {
-	Add<uint16_t>(pos.x);
-	Add<uint16_t>(pos.y);
-	AddByte(pos.z);
+	add<uint16_t>(pos.x);
+	add<uint16_t>(pos.y);
+	addByte(pos.z);
 }
 
-void NetworkMessage::AddItem(uint16_t id, uint8_t count)
+void NetworkMessage::addItem(uint16_t id, uint8_t count)
 {
 	const ItemType& it = Item::items[id];
 
-	Add<uint16_t>(it.clientId);
+	add<uint16_t>(it.clientId);
 
-	AddByte(0xFF);    // MARK_UNMARKED
+	addByte(0xFF);    // MARK_UNMARKED
 
 	if (it.stackable) {
-		AddByte(count);
+		addByte(count);
 	} else if (it.isSplash() || it.isFluidContainer()) {
-		AddByte(fluidMap[count & 7]);
+		addByte(fluidMap[count & 7]);
 	}
 
 	if (it.isAnimation) {
-		AddByte(0xFE);    // random phase (0xFF for async)
+		addByte(0xFE);    // random phase (0xFF for async)
 	}
 }
 
-void NetworkMessage::AddItem(const Item* item)
+void NetworkMessage::addItem(const Item* item)
 {
 	const ItemType& it = Item::items[item->getID()];
 
-	Add<uint16_t>(it.clientId);
-	AddByte(0xFF);    // MARK_UNMARKED
+	add<uint16_t>(it.clientId);
+	addByte(0xFF);    // MARK_UNMARKED
 
 	if (it.stackable) {
-		AddByte(std::min<uint16_t>(0xFF, item->getItemCount()));
+		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
 	} else if (it.isSplash() || it.isFluidContainer()) {
-		AddByte(fluidMap[item->getFluidType() & 7]);
+		addByte(fluidMap[item->getFluidType() & 7]);
 	}
 
 	if (it.isAnimation) {
-		AddByte(0xFE);    // random phase (0xFF for async)
+		addByte(0xFE);    // random phase (0xFF for async)
 	}
 }
 
-void NetworkMessage::AddItemId(uint16_t itemId)
+void NetworkMessage::addItemId(uint16_t itemId)
 {
-	Add<uint16_t>(Item::items[itemId].clientId);
+	add<uint16_t>(Item::items[itemId].clientId);
 }

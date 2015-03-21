@@ -529,7 +529,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	std::ostringstream ss;
 
 	typedef std::pair<Container*, int32_t> containerBlock;
-	std::queue<containerBlock> queue;
+	std::list<containerBlock> queue;
 
 	int32_t runningId = 100;
 
@@ -551,7 +551,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		}
 
 		if (Container* container = item->getContainer()) {
-			queue.emplace(container, runningId);
+			queue.emplace_back(container, runningId);
 		}
 	}
 
@@ -559,14 +559,14 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		const containerBlock& cb = queue.front();
 		Container* container = cb.first;
 		int32_t parentId = cb.second;
-		queue.pop();
+		queue.pop_front();
 
 		for (Item* item : container->getItemList()) {
 			++runningId;
 
 			Container* subContainer = item->getContainer();
 			if (subContainer) {
-				queue.emplace(subContainer, runningId);
+				queue.emplace_back(subContainer, runningId);
 			}
 
 			propWriteStream.clear();

@@ -675,7 +675,6 @@ class Player final : public Creature, public Cylinder
 		void onAttackedCreatureChangeZone(ZoneType_t zone) final;
 		void onIdleStatus() final;
 		void onPlacedCreature() final;
-		void onRemovedCreature() final;
 
 		void getCreatureLight(LightInfo& light) const final;
 

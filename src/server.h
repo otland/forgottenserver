@@ -150,7 +150,7 @@ bool ServiceManager::add(uint16_t port)
 		}
 	}
 
-	return service_port->add_service(Service_ptr(new Service<ProtocolType>()));
+	return service_port->add_service(std::make_shared<Service<ProtocolType>>());
 }
 
 #endif

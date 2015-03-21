@@ -175,7 +175,7 @@ class QTreeLeafNode final : public QTreeNode
 class Map
 {
 	public:
-		Map();
+		Map() : width(0), height(0) {}
 
 		static const int32_t maxViewportX = 11; //min value: maxClientViewportX + 1
 		static const int32_t maxViewportY = 11; //min value: maxClientViewportY + 1
@@ -255,7 +255,7 @@ class Map
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
-		bool getPathMatching(const Creature& creature, std::list<Direction>& dirList,
+		bool getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList,
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 		std::map<std::string, Position> waypoints;
@@ -272,7 +272,7 @@ class Map
 		std::string spawnfile;
 		std::string housefile;
 
-		uint32_t mapWidth, mapHeight;
+		uint32_t width, height;
 
 		// Actually scans the map for spectators
 		void getSpectatorsInternal(SpectatorVec& list, const Position& centerPos,

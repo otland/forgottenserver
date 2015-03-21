@@ -140,9 +140,9 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 			Connection_ptr connection = ConnectionManager::getInstance()->createConnection(socket, m_io_service, shared_from_this());
 			Service_ptr service = m_services.front();
 			if (service->is_single_socket()) {
-				connection->acceptConnection(service->make_protocol(connection));
+				connection->accept(service->make_protocol(connection));
 			} else {
-				connection->acceptConnection();
+				connection->accept();
 			}
 		} else if (socket->is_open()) {
 			socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both, socketError);
@@ -163,7 +163,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 
 Protocol* ServicePort::make_protocol(bool checksummed, NetworkMessage& msg) const
 {
-	uint8_t protocolID = msg.GetByte();
+	uint8_t protocolID = msg.getByte();
 	for (Service_ptr service : m_services) {
 		if (protocolID != service->get_protocol_identifier()) {
 			continue;

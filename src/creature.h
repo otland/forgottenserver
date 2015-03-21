@@ -257,7 +257,7 @@ class Creature : virtual public Thing
 		}
 
 		//walk functions
-		void startAutoWalk(const std::list<Direction>& listDir);
+		void startAutoWalk(const std::forward_list<Direction>& listDir);
 		void addEventWalk(bool firstStep = false);
 		void stopEventWalk();
 		virtual void goToFollowCreature();
@@ -411,7 +411,6 @@ class Creature : virtual public Thing
 
 		virtual void onCreatureConvinced(const Creature*, const Creature*) {}
 		virtual void onPlacedCreature() {}
-		virtual void onRemovedCreature() {}
 
 		virtual bool getCombatValues(int32_t&, int32_t&) {
 			return false;
@@ -456,8 +455,8 @@ class Creature : virtual public Thing
 
 		double getDamageRatio(Creature* attacker) const;
 
-		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, const FindPathParams& fpp) const;
-		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
+		bool getPathTo(const Position& targetPos, std::forward_list<Direction>& dirList, const FindPathParams& fpp) const;
+		bool getPathTo(const Position& targetPos, std::forward_list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
 
 		void incrementReferenceCounter() {
 			++referenceCounter;
@@ -488,10 +487,11 @@ class Creature : virtual public Thing
 		typedef std::map<uint32_t, CountBlock_t> CountMap;
 		CountMap damageMap;
 
-		std::list<Direction> listWalkDir;
 		std::list<Creature*> summons;
 		CreatureEventList eventsList;
 		ConditionList conditions;
+
+		std::forward_list<Direction> listWalkDir;
 
 		Tile* _tile;
 		Creature* attackedCreature;

@@ -3576,11 +3576,6 @@ void Player::onPlacedCreature()
 	}
 }
 
-void Player::onRemovedCreature()
-{
-	//
-}
-
 void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {
 	Creature::onAttackedCreatureDrainHealth(target, points);

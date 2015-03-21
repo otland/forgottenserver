@@ -165,7 +165,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 
 void OutputMessagePool::configureOutputMessage(OutputMessage_ptr msg, Protocol* protocol, bool autosend)
 {
-	msg->Reset();
+	msg->reset();
 
 	if (autosend) {
 		msg->setState(OutputMessage::STATE_ALLOCATED);

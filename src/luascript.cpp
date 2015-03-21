@@ -5877,7 +5877,7 @@ int32_t LuaScriptInterface::luaNetworkMessageGetByte(lua_State* L)
 	// networkMessage:getByte()
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		lua_pushnumber(L, message->GetByte());
+		lua_pushnumber(L, message->getByte());
 	} else {
 		lua_pushnil(L);
 	}
@@ -5925,7 +5925,7 @@ int32_t LuaScriptInterface::luaNetworkMessageGetString(lua_State* L)
 	// networkMessage:getString()
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		pushString(L, message->GetString());
+		pushString(L, message->getString());
 	} else {
 		lua_pushnil(L);
 	}
@@ -5937,7 +5937,7 @@ int32_t LuaScriptInterface::luaNetworkMessageGetPosition(lua_State* L)
 	// networkMessage:getPosition()
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		pushPosition(L, message->GetPosition());
+		pushPosition(L, message->getPosition());
 	} else {
 		lua_pushnil(L);
 	}
@@ -5950,7 +5950,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddByte(lua_State* L)
 	uint8_t number = getNumber<uint8_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->AddByte(number);
+		message->addByte(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -5964,7 +5964,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU16(lua_State* L)
 	uint16_t number = getNumber<uint16_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->Add<uint16_t>(number);
+		message->add<uint16_t>(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -5978,7 +5978,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU32(lua_State* L)
 	uint32_t number = getNumber<uint32_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->Add<uint32_t>(number);
+		message->add<uint32_t>(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -5992,7 +5992,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddU64(lua_State* L)
 	uint64_t number = getNumber<uint64_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->Add<uint64_t>(number);
+		message->add<uint64_t>(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6006,7 +6006,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddString(lua_State* L)
 	const std::string& string = getString(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->AddString(string);
+		message->addString(string);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6020,7 +6020,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddPosition(lua_State* L)
 	const Position& position = getPosition(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->AddPosition(position);
+		message->addPosition(position);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6034,7 +6034,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddDouble(lua_State* L)
 	double number = getNumber<double>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->AddDouble(number);
+		message->addDouble(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6054,7 +6054,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddItem(lua_State* L)
 
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->AddItem(item);
+		message->addItem(item);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6082,7 +6082,7 @@ int32_t LuaScriptInterface::luaNetworkMessageAddItemId(lua_State* L)
 		}
 	}
 
-	message->AddItemId(itemId);
+	message->addItemId(itemId);
 	pushBoolean(L, true);
 	return 1;
 }
@@ -6105,7 +6105,7 @@ int32_t LuaScriptInterface::luaNetworkMessageSkipBytes(lua_State* L)
 	int16_t number = getNumber<int16_t>(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
-		message->SkipBytes(number);
+		message->skipBytes(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -8218,9 +8218,9 @@ int32_t LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 	fpp.clearSight = getBoolean(L, 6, fpp.clearSight);
 	fpp.maxSearchDist = getNumber<int32_t>(L, 7, fpp.maxSearchDist);
 
-	std::list<Direction> dirList;
+	std::forward_list<Direction> dirList;
 	if (creature->getPathTo(position, dirList, fpp)) {
-		lua_createtable(L, dirList.size(), 0);
+		lua_newtable(L);
 
 		int32_t index = 0;
 		for (Direction dir : dirList) {

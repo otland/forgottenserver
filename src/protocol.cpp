@@ -89,7 +89,7 @@ void Protocol::XTEA_encrypt(OutputMessage& msg) const
 	// The message must be a multiple of 8
 	size_t paddingBytes = msg.getLength() % 8;
 	if (paddingBytes != 0) {
-		msg.AddPaddingBytes(8 - paddingBytes);
+		msg.addPaddingBytes(8 - paddingBytes);
 	}
 
 	uint32_t* buffer = reinterpret_cast<uint32_t*>(msg.getOutputBuffer());
@@ -119,7 +119,7 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 
 	const uint32_t delta = 0x61C88647;
 
-	uint32_t* buffer = reinterpret_cast<uint32_t*>(msg.getBuffer() + msg.getPosition());
+	uint32_t* buffer = reinterpret_cast<uint32_t*>(msg.getBuffer() + msg.getBufferPosition());
 	const size_t messageLength = (msg.getLength() - 6) / 4;
 	size_t readPos = 0;
 	const uint32_t k[] = {m_key[0], m_key[1], m_key[2], m_key[3]};
@@ -148,12 +148,12 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 
 bool Protocol::RSA_decrypt(NetworkMessage& msg)
 {
-	if (msg.getLength() - msg.getPosition() != 128) {
+	if ((msg.getLength() - msg.getBufferPosition()) != 128) {
 		return false;
 	}
 
-	g_RSA.decrypt(reinterpret_cast<char*>(msg.getBuffer()) + msg.getPosition());
-	return msg.GetByte() == 0;
+	g_RSA.decrypt(reinterpret_cast<char*>(msg.getBuffer()) + msg.getBufferPosition());
+	return msg.getByte() == 0;
 }
 
 uint32_t Protocol::getIP() const
