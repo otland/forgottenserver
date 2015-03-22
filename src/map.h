@@ -230,6 +230,12 @@ class Map
 		  */
 		bool removeCreature(Creature* c);
 
+		void getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
+		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
+		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
+
+		void clearSpectatorCache();
+		
 		/**
 		  * Checks if you can throw an object to that position
 		  *	\param fromPos from Source point
@@ -279,14 +285,6 @@ class Map
 		                           int32_t minRangeX, int32_t maxRangeX,
 		                           int32_t minRangeY, int32_t maxRangeY,
 		                           int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const;
-
-		// Use this when a custom spectator vector is needed, this support many
-		// more parameters than the heavily cached version below.
-		void getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
-		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
-		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
-
-		void clearSpectatorCache();
 
 		friend class Game;
 		friend class IOMap;

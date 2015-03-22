@@ -378,7 +378,7 @@ void Monster::updateTargetList()
 	}
 
 	SpectatorVec list;
-	g_game.getSpectators(list, _position, true);
+	g_game.map.getSpectators(list, _position, true);
 	for (Creature* spectator : list) {
 		if (spectator != this && canSee(spectator->getPosition())) {
 			onCreatureFound(spectator);
@@ -1964,8 +1964,8 @@ bool Monster::convinceCreature(Creature* creature)
 
 	//Notify surrounding about the change
 	SpectatorVec list;
-	g_game.getSpectators(list, getPosition(), true);
-	g_game.getSpectators(list, creature->getPosition(), true);
+	g_game.map.getSpectators(list, getPosition(), true);
+	g_game.map.getSpectators(list, creature->getPosition(), true);
 	for (Creature* spectator : list) {
 		spectator->onCreatureConvinced(creature, this);
 	}

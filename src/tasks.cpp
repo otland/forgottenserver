@@ -64,7 +64,7 @@ void Dispatcher::dispatcherThread()
 				(*task)();
 				outputPool->sendAll();
 
-				g_game.clearSpectatorCache();
+				g_game.map.clearSpectatorCache();
 			}
 			delete task;
 		} else {
@@ -112,7 +112,7 @@ void Dispatcher::flush()
 			outputPool->sendAll();
 		}
 
-		g_game.clearSpectatorCache();
+		g_game.map.clearSpectatorCache();
 	}
 }
 

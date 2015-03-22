@@ -1155,7 +1155,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 		std::string strExp = ssExp.str();
 
 		SpectatorVec list;
-		g_game.getSpectators(list, targetPos, false, true);
+		g_game.map.getSpectators(list, targetPos, false, true);
 
 		for (Creature* spectator : list) {
 			spectator->getPlayer()->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, gainExp, TEXTCOLOR_WHITE_EXP);

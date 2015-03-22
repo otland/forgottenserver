@@ -232,16 +232,6 @@ class Game
 
 		void getWorldLightInfo(LightInfo& lightInfo) const;
 
-		void getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
-		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
-		                   int32_t minRangeY = 0, int32_t maxRangeY = 0) {
-			map.getSpectators(list, centerPos, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
-		}
-
-		void clearSpectatorCache() {
-			map.clearSpectatorCache();
-		}
-
 		ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
 		ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
 

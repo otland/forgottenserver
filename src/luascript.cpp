@@ -4729,7 +4729,7 @@ int32_t LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 	int32_t maxRangeY = getNumber<int32_t>(L, 7, 0);
 
 	SpectatorVec spectators;
-	g_game.getSpectators(spectators, position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
+	g_game.map.getSpectators(spectators, position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 
 	lua_createtable(L, spectators.size(), 0);
 
@@ -9872,7 +9872,7 @@ int32_t LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	const Position& position = player->getPosition();
 
 	SpectatorVec list;
-	g_game.getSpectators(list, position, true, true);
+	g_game.map.getSpectators(list, position, true, true);
 	for (Creature* spectator : list) {
 		Player* tmpPlayer = spectator->getPlayer();
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {

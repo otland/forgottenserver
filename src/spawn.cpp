@@ -187,7 +187,7 @@ Spawn::~Spawn()
 bool Spawn::findPlayer(const Position& pos)
 {
 	SpectatorVec list;
-	g_game.getSpectators(list, pos, false, true);
+	g_game.map.getSpectators(list, pos, false, true);
 	for (Creature* spectator : list) {
 		if (!spectator->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) {
 			return true;

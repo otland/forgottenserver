@@ -726,7 +726,7 @@ void Combat::CombatFunc(Creature* caster, const Position& pos, const AreaCombat*
 
 	const int32_t rangeX = maxX + Map::maxViewportX;
 	const int32_t rangeY = maxY + Map::maxViewportY;
-	g_game.getSpectators(list, pos, true, true, rangeX, rangeX, rangeY, rangeY);
+	g_game.map.getSpectators(list, pos, true, true, rangeX, rangeX, rangeY, rangeY);
 
 	for (Tile* tile : tileList) {
 		if (canDoCombat(caster, tile, params.aggressive) != RETURNVALUE_NOERROR) {
@@ -893,7 +893,7 @@ void Combat::doCombatDefault(Creature* caster, Creature* target, const CombatPar
 {
 	if (!params.aggressive || (caster != target && Combat::canDoCombat(caster, target) == RETURNVALUE_NOERROR)) {
 		SpectatorVec list;
-		g_game.getSpectators(list, target->getPosition(), true, true);
+		g_game.map.getSpectators(list, target->getPosition(), true, true);
 
 		CombatNullFunc(caster, target, params, nullptr);
 		combatTileEffects(list, caster, target->getTile(), params);

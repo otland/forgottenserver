@@ -748,7 +748,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 					player->sendHealMessage(MESSAGE_HEALED, tmpSs.str(), player->getPosition(), realHealthGain, TEXTCOLOR_MAYABLUE);
 
 					SpectatorVec list;
-					g_game.getSpectators(list, player->getPosition(), false, true);
+					g_game.map.getSpectators(list, player->getPosition(), false, true);
 					for (Creature* spectator : list) {
 						if (spectator != player) {
 							spectator->getPlayer()->sendHealMessage(MESSAGE_HEALED_OTHERS, message, player->getPosition(), realHealthGain, TEXTCOLOR_MAYABLUE);

@@ -1704,7 +1704,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		std::string strExp = ssExp.str();
 
 		SpectatorVec list;
-		g_game.getSpectators(list, targetPos, false, true);
+		g_game.map.getSpectators(list, targetPos, false, true);
 		for (Creature* spectator : list) {
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer != this) {
@@ -1786,7 +1786,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		std::string strExp = ssExp.str();
 
 		SpectatorVec list;
-		g_game.getSpectators(list, targetPos, false, true);
+		g_game.map.getSpectators(list, targetPos, false, true);
 		for (Creature* spectator : list) {
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer != this) {
