@@ -377,7 +377,8 @@ void Monster::updateTargetList()
 		}
 	}
 
-	for (Creature* spectator : g_game.getSpectators(getPosition())) {
+	auto spectatorsPtr = g_game.getSpectators(getPosition());
+	for (Creature* spectator : *spectatorsPtr) {
 		if (spectator != this && canSee(spectator->getPosition())) {
 			onCreatureFound(spectator);
 		}

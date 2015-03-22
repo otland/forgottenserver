@@ -238,7 +238,7 @@ class Game
 			map.getSpectators(list, centerPos, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 		}
 
-		const SpectatorVec& getSpectators(const Position& centerPos) {
+		const std::shared_ptr<SpectatorVec> getSpectators(const Position& centerPos) {
 			return map.getSpectators(centerPos);
 		}
 

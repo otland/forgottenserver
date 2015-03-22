@@ -391,7 +391,8 @@ void Tile::onAddTileItem(Item* item)
 
 	const Position& cylinderMapPos = getPosition();
 
-	const auto& list = g_game.getSpectators(cylinderMapPos);
+	auto spectatorsPtr = g_game.getSpectators(cylinderMapPos);
+	const auto& list = *spectatorsPtr;
 
 	//send to client
 	for (Creature* spectator : list) {
@@ -428,7 +429,8 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 
 	const Position& cylinderMapPos = getPosition();
 
-	const auto& list = g_game.getSpectators(cylinderMapPos);
+	auto spectatorsPtr = g_game.getSpectators(cylinderMapPos);
+	const auto& list = *spectatorsPtr;
 
 	//send to client
 	for (Creature* spectator : list) {
@@ -1049,7 +1051,6 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 				creatures->erase(it);
 			}
 		}
-
 		return;
 	}
 
@@ -1066,7 +1067,8 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 	if (item == ground) {
 		ground->setParent(nullptr);
 		ground = nullptr;
-		const auto& list = g_game.getSpectators(getPosition());
+		auto spectatorsPtr = g_game.getSpectators(getPosition());
+		const auto& list = *spectatorsPtr;
 		onRemoveTileItem(list, std::vector<int32_t>(list.size(), 0), item);
 		return;
 	}
@@ -1084,7 +1086,8 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 
 		std::vector<int32_t> oldStackPosVector;
 
-		const auto& list = g_game.getSpectators(getPosition());
+		auto spectatorsPtr = g_game.getSpectators(getPosition());
+		const auto& list = *spectatorsPtr;
 		for (Creature* spectator : list) {
 			if (Player* tmpPlayer = spectator->getPlayer()) {
 				oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
@@ -1110,7 +1113,8 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		} else {
 			std::vector<int32_t> oldStackPosVector;
 
-			const auto& list = g_game.getSpectators(getPosition());
+			auto spectatorsPtr = g_game.getSpectators(getPosition());
+			const auto& list = *spectatorsPtr;
 			for (Creature* spectator : list) {
 				if (Player* tmpPlayer = spectator->getPlayer()) {
 					oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));

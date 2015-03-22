@@ -288,7 +288,7 @@ class Map
 		// The returned SpectatorVec is a temporary and should not be kept around
 		// Take special heed in that the vector will be destroyed if any function
 		// that calls clearSpectatorCache is called.
-		const SpectatorVec& getSpectators(const Position& centerPos);
+		const std::shared_ptr<SpectatorVec> getSpectators(const Position& centerPos);
 
 		void clearSpectatorCache();
 
