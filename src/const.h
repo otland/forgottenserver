@@ -102,7 +102,7 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_CONFETTI_VERTICAL = 76,
 	// 77-157 are empty
 	CONST_ME_BLACKSMOKE = 158,
-	// 158-166 are empty
+	// 159-166 are empty
 
 	CONST_ME_REDSMOKE = 167,
 	CONST_ME_YELLOWSMOKE = 168,
