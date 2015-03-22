@@ -3162,12 +3162,8 @@ bool Player::updateSaleShopList(const Item* item)
 				return false;
 			}
 
-			for (uint32_t index = 0; index < container->size(); ++index) {
-				if (updateSaleShopList(container->getItemByIndex(index))) {
-					return true;
-				}
-			}
-			return false;
+			const auto& items = container->getItemList();
+			return std::any_of(items.begin(), items.end(), [this](const Item* item){return updateSaleShopList(item);});
 		}
 	}
 
@@ -3180,22 +3176,8 @@ bool Player::updateSaleShopList(const Item* item)
 bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 {
 	const ItemType& itemType = Item::items[itemId];
-	for (const ShopInfo& shopInfo : shopItemList) {
-		if (shopInfo.itemId != itemId) {
-			continue;
-		}
-
-		if (shopInfo.buyPrice == 0) {
-			continue;
-		}
-
-		if (itemType.isFluidContainer() && shopInfo.subType != subType) {
-			continue;
-		}
-
-		return true;
-	}
-	return false;
+	return std::any_of(shopItemList.begin(), shopItemList.end(), [&](const ShopInfo& shopInfo) {
+		return shopInfo.itemId == itemId && shopInfo.buyPrice != 0 && (!itemType.isFluidContainer() || shopInfo.subType == subType); });
 }
 
 void Player::internalAddThing(Thing* thing)
@@ -3210,11 +3192,7 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 		return;
 	}
 
-	//index == 0 means we should equip this item at the most appropiate slot
-	if (index == 0) {
-		return;
-	}
-
+	//index == 0 means we should equip this item at the most appropiate slot (no action required here)
 	if (index > 0 && index < 11) {
 		if (inventory[index]) {
 			return;
