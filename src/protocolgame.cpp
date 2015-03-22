@@ -323,17 +323,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	std::string characterName = msg.GetString();
 	std::string password;
 	if (!sessionKey.empty()) {
-		std::stringstream account(sessionKey);
-		std::string segment;
-		std::vector<std::string> vector;
-		while (std::getline(account, segment, '\n')) {
-			vector.push_back(segment);
-			continue;
-		}
-		if (!vector[1].empty()) {
-			accountName += vector[0];
-			password += vector[1];
-		}
+		accountName += sessionKey.substr(0, sessionKey.find_first_of("\n"));
+		password += sessionKey.substr(sessionKey.find_first_of("\n") + 1);
 	}
 
 	uint32_t timeStamp = msg.get<uint32_t>();
