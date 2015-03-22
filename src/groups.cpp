@@ -46,7 +46,7 @@ bool Groups::load()
 	return true;
 }
 
-Group* Groups::getGroup(uint32_t id)
+Group* Groups::getGroup(uint16_t id)
 {
 	for (Group& group : groups) {
 		if (group.id == id) {

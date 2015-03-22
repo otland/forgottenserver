@@ -68,8 +68,8 @@ class Vocation
 			return gainHealthAmount;
 		}
 
-		uint16_t getSoulMax() const {
-			return std::min<uint16_t>(soulMax, 255);
+		uint8_t getSoulMax() const {
+			return soulMax;
 		}
 		uint16_t getSoulGainTicks() const {
 			return gainSoulTicks;
@@ -113,8 +113,8 @@ class Vocation
 		uint16_t id;
 
 		uint16_t gainSoulTicks;
-		uint16_t soulMax;
 
+		uint8_t soulMax;
 		uint8_t clientId;
 
 		static uint32_t skillBase[SKILL_LAST + 1];

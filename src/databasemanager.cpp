@@ -39,7 +39,7 @@ bool DatabaseManager::optimizeTables()
 	}
 
 	do {
-		std::string tableName = result->getDataString("TABLE_NAME");
+		std::string tableName = result->getString("TABLE_NAME");
 		std::cout << "> Optimizing table " << tableName << "..." << std::flush;
 
 		query.str(std::string());
@@ -153,7 +153,7 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 		return false;
 	}
 
-	value = result->getDataInt("value");
+	value = result->getNumber<int32_t>("value");
 	return true;
 }
 

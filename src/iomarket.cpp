@@ -46,12 +46,12 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 
 	do {
 		MarketOffer offer;
-		offer.amount = result->getDataInt("amount");
-		offer.price = result->getDataInt("price");
-		offer.timestamp = result->getDataInt("created") + marketOfferDuration;
-		offer.counter = result->getDataInt("id") & 0xFFFF;
-		if (result->getDataInt("anonymous") == 0) {
-			offer.playerName = result->getDataString("player_name");
+		offer.amount = result->getNumber<uint16_t>("amount");
+		offer.price = result->getNumber<uint32_t>("price");
+		offer.timestamp = result->getNumber<uint32_t>("created") + marketOfferDuration;
+		offer.counter = result->getNumber<uint16_t>("id") & 0xFFFF;
+		if (result->getNumber<uint16_t>("anonymous") == 0) {
+			offer.playerName = result->getString("player_name");
 		} else {
 			offer.playerName = "Anonymous";
 		}
@@ -76,11 +76,11 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 
 	do {
 		MarketOffer offer;
-		offer.amount = result->getDataInt("amount");
-		offer.price = result->getDataInt("price");
-		offer.timestamp = result->getDataInt("created") + marketOfferDuration;
-		offer.counter = result->getDataInt("id") & 0xFFFF;
-		offer.itemId = result->getDataInt("itemtype");
+		offer.amount = result->getNumber<uint16_t>("amount");
+		offer.price = result->getNumber<uint32_t>("price");
+		offer.timestamp = result->getNumber<uint32_t>("created") + marketOfferDuration;
+		offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
+		offer.itemId = result->getNumber<uint16_t>("itemtype");
 		offerList.push_back(offer);
 	} while (result->next());
 	return offerList;
@@ -100,12 +100,12 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 
 	do {
 		HistoryMarketOffer offer;
-		offer.itemId = result->getDataInt("itemtype");
-		offer.amount = result->getDataInt("amount");
-		offer.price = result->getDataInt("price");
-		offer.timestamp = result->getDataInt("expires_at");
+		offer.itemId = result->getNumber<uint16_t>("itemtype");
+		offer.amount = result->getNumber<uint16_t>("amount");
+		offer.price = result->getNumber<uint32_t>("price");
+		offer.timestamp = result->getNumber<uint32_t>("expires_at");
 
-		MarketOfferState_t offerState = static_cast<MarketOfferState_t>(result->getDataInt("state"));
+		MarketOfferState_t offerState = static_cast<MarketOfferState_t>(result->getNumber<uint16_t>("state"));
 		if (offerState == OFFERSTATE_ACCEPTEDEX) {
 			offerState = OFFERSTATE_ACCEPTED;
 		}
@@ -130,7 +130,7 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 
 		const uint32_t playerId = result->getNumber<uint32_t>("player_id");
 		const uint16_t amount = result->getNumber<uint16_t>("amount");
-		if (result->getDataInt("sale") == 1) {
+		if (result->getNumber<uint16_t>("sale") == 1) {
 			Player* player = g_game.getPlayerByGUID(playerId);
 			if (!player) {
 				player = new Player(nullptr);
@@ -216,7 +216,7 @@ int32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 	if (!result) {
 		return -1;
 	}
-	return result->getDataInt("count");
+	return result->getNumber<int32_t>("count");
 }
 
 MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
@@ -234,16 +234,16 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 		return offer;
 	}
 
-	offer.id = result->getDataInt("id");
-	offer.type = static_cast<MarketAction_t>(result->getDataInt("sale"));
-	offer.amount = result->getDataInt("amount");
-	offer.counter = result->getDataInt("id") & 0xFFFF;
-	offer.timestamp = result->getDataInt("created");
-	offer.price = result->getDataInt("price");
-	offer.itemId = result->getDataInt("itemtype");
-	offer.playerId = result->getDataInt("player_id");
-	if (result->getDataInt("anonymous") == 0) {
-		offer.playerName = result->getDataString("player_name");
+	offer.id = result->getNumber<uint32_t>("id");
+	offer.type = static_cast<MarketAction_t>(result->getNumber<uint16_t>("sale"));
+	offer.amount = result->getNumber<uint16_t>("amount");
+	offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
+	offer.timestamp = result->getNumber<uint32_t>("created");
+	offer.price = result->getNumber<uint32_t>("price");
+	offer.itemId = result->getNumber<uint16_t>("itemtype");
+	offer.playerId = result->getNumber<uint32_t>("player_id");
+	if (result->getNumber<uint16_t>("anonymous") == 0) {
+		offer.playerName = result->getString("player_name");
 	} else {
 		offer.playerName = "Anonymous";
 	}
@@ -300,7 +300,7 @@ bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 		return false;
 	}
 
-	appendHistory(result->getDataInt("player_id"), static_cast<MarketAction_t>(result->getDataInt("sale")), result->getDataInt("itemtype"), result->getDataInt("amount"), result->getDataInt("price"), result->getDataInt("created") + marketOfferDuration, state);
+	appendHistory(result->getNumber<uint32_t>("player_id"), static_cast<MarketAction_t>(result->getNumber<uint16_t>("sale")), result->getNumber<uint16_t>("itemtype"), result->getNumber<uint16_t>("amount"), result->getNumber<uint32_t>("price"), result->getNumber<uint32_t>("created") + marketOfferDuration, state);
 	return true;
 }
 
@@ -315,16 +315,16 @@ void IOMarket::updateStatistics()
 
 	do {
 		MarketStatistics* statistics;
-		if (result->getDataInt("sale") == MARKETACTION_BUY) {
-			statistics = &purchaseStatistics[result->getDataInt("itemtype")];
+		if (result->getNumber<uint16_t>("sale") == MARKETACTION_BUY) {
+			statistics = &purchaseStatistics[result->getNumber<uint16_t>("itemtype")];
 		} else {
-			statistics = &saleStatistics[result->getDataInt("itemtype")];
+			statistics = &saleStatistics[result->getNumber<uint16_t>("itemtype")];
 		}
 
-		statistics->numTransactions = result->getDataInt("num");
-		statistics->lowestPrice = result->getDataInt("min");
+		statistics->numTransactions = result->getNumber<uint32_t>("num");
+		statistics->lowestPrice = result->getNumber<uint32_t>("min");
 		statistics->totalPrice = result->getNumber<uint64_t>("sum");
-		statistics->highestPrice = result->getDataInt("max");
+		statistics->highestPrice = result->getNumber<uint32_t>("max");
 	} while (result->next());
 }
 

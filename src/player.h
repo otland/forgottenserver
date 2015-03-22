@@ -61,7 +61,6 @@ enum playerinfo_t {
 	PLAYERINFO_MAXMANA,
 	PLAYERINFO_MAGICLEVEL,
 	PLAYERINFO_MAGICLEVELPERCENT,
-	PLAYERINFO_SOUL,
 };
 
 enum chaseMode_t : uint8_t {
@@ -417,8 +416,8 @@ class Player final : public Creature, public Cylinder
 		uint32_t getBaseMagicLevel() const {
 			return magLevel;
 		}
-		uint32_t getSoul() const {
-			return std::max<int32_t>(0, soul + varStats[STAT_SOULPOINTS]);
+		uint8_t getSoul() const {
+			return soul;
 		}
 		bool isAccessPlayer() const {
 			return group->access;
@@ -1284,7 +1283,6 @@ class Player final : public Creature, public Cylinder
 		uint32_t guid;
 		uint32_t windowTextId;
 		uint32_t editListId;
-		uint32_t soul;
 		uint32_t manaMax;
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];
@@ -1303,6 +1301,7 @@ class Player final : public Creature, public Cylinder
 		uint16_t maxWriteLen;
 		int16_t lastDepotId;
 
+		uint8_t soul;
 		uint8_t blessings;
 		uint8_t guildLevel;
 		uint8_t levelPercent;

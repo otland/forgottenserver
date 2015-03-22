@@ -1282,11 +1282,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SKILL_FISHING)
 	registerEnum(CONDITION_PARAM_STAT_MAXHITPOINTS)
 	registerEnum(CONDITION_PARAM_STAT_MAXMANAPOINTS)
-	registerEnum(CONDITION_PARAM_STAT_SOULPOINTS)
 	registerEnum(CONDITION_PARAM_STAT_MAGICPOINTS)
 	registerEnum(CONDITION_PARAM_STAT_MAXHITPOINTSPERCENT)
 	registerEnum(CONDITION_PARAM_STAT_MAXMANAPOINTSPERCENT)
-	registerEnum(CONDITION_PARAM_STAT_SOULPOINTSPERCENT)
 	registerEnum(CONDITION_PARAM_STAT_MAGICPOINTSPERCENT)
 	registerEnum(CONDITION_PARAM_PERIODICDAMAGE)
 	registerEnum(CONDITION_PARAM_SKILL_MELEEPERCENT)
@@ -4600,29 +4598,15 @@ int32_t LuaScriptInterface::luaDatabaseTableExists(lua_State* L)
 }
 
 const luaL_Reg LuaScriptInterface::luaResultTable[] = {
-	{"getDataInt", LuaScriptInterface::luaResultGetDataInt},
-	{"getDataLong", LuaScriptInterface::luaResultGetDataLong},
-	{"getDataString", LuaScriptInterface::luaResultGetDataString},
-	{"getDataStream", LuaScriptInterface::luaResultGetDataStream},
+	{"getNumber", LuaScriptInterface::luaResultGetNumber},
+	{"getString", LuaScriptInterface::luaResultGetString},
+	{"getStream", LuaScriptInterface::luaResultGetStream},
 	{"next", LuaScriptInterface::luaResultNext},
 	{"free", LuaScriptInterface::luaResultFree},
 	{nullptr, nullptr}
 };
 
-int32_t LuaScriptInterface::luaResultGetDataInt(lua_State* L)
-{
-	DBResult_ptr res = ScriptEnvironment::getResultByID(getNumber<uint32_t>(L, 1));
-	if (!res) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	const std::string& s = getString(L, 2);
-	lua_pushnumber(L, res->getDataInt(s));
-	return 1;
-}
-
-int32_t LuaScriptInterface::luaResultGetDataLong(lua_State* L)
+int32_t LuaScriptInterface::luaResultGetNumber(lua_State* L)
 {
 	DBResult_ptr res = ScriptEnvironment::getResultByID(getNumber<uint32_t>(L, 1));
 	if (!res) {
@@ -4635,7 +4619,7 @@ int32_t LuaScriptInterface::luaResultGetDataLong(lua_State* L)
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaResultGetDataString(lua_State* L)
+int32_t LuaScriptInterface::luaResultGetString(lua_State* L)
 {
 	DBResult_ptr res = ScriptEnvironment::getResultByID(getNumber<uint32_t>(L, 1));
 	if (!res) {
@@ -4644,11 +4628,11 @@ int32_t LuaScriptInterface::luaResultGetDataString(lua_State* L)
 	}
 
 	const std::string& s = getString(L, 2);
-	pushString(L, res->getDataString(s));
+	pushString(L, res->getString(s));
 	return 1;
 }
 
-int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
+int32_t LuaScriptInterface::luaResultGetStream(lua_State* L)
 {
 	DBResult_ptr res = ScriptEnvironment::getResultByID(getNumber<uint32_t>(L, 1));
 	if (!res) {
@@ -4657,8 +4641,8 @@ int32_t LuaScriptInterface::luaResultGetDataStream(lua_State* L)
 	}
 
 	unsigned long length;
-	const std::string& s = getString(L, 2);
-	lua_pushstring(L, res->getDataStream(s, length));
+	const char* stream = res->getStream(getString(L, 2), length);
+	lua_pushlstring(L, stream, length);
 	lua_pushnumber(L, length);
 	return 2;
 }
@@ -8969,7 +8953,7 @@ int32_t LuaScriptInterface::luaPlayerGetSoul(lua_State* L)
 	// player:getSoul()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->getPlayerInfo(PLAYERINFO_SOUL));
+		lua_pushnumber(L, player->getSoul());
 	} else {
 		lua_pushnil(L);
 	}

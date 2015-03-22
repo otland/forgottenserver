@@ -1,6 +1,11 @@
 TRUE = true
 FALSE = false
 
+result.getDataInt = result.getNumber
+result.getDataLong = result.getNumber
+result.getDataString = result.getString
+result.getDataStream = result.getDataStream
+
 LUA_ERROR = false
 LUA_NO_ERROR = true
 

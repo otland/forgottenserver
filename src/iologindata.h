@@ -61,7 +61,7 @@ class IOLoginData
 		static void removePremiumDays(uint32_t accountId, int32_t removeDays);
 
 	protected:
-		typedef std::map<int32_t , std::pair<Item*, int32_t> > ItemMap;
+		typedef std::map<uint32_t, std::pair<Item*, uint32_t>> ItemMap;
 
 		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
 		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& stream);

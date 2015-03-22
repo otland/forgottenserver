@@ -23,16 +23,16 @@
 struct Group {
 	std::string name;
 	uint64_t flags;
-	uint32_t id;
 	uint32_t maxDepotItems;
 	uint32_t maxVipEntries;
+	uint16_t id;
 	bool access;
 };
 
 class Groups {
 	public:
 		bool load();
-		Group* getGroup(uint32_t id);
+		Group* getGroup(uint16_t id);
 
 	private:
 		std::vector<Group> groups;

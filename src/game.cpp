@@ -4752,14 +4752,14 @@ void Game::loadMotdNum()
 
 	DBResult_ptr result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'motd_num'");
 	if (result) {
-		motdNum = result->getDataInt("value");
+		motdNum = result->getNumber<uint32_t>("value");
 	} else {
 		db->executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('motd_num', '0')");
 	}
 
 	result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'motd_hash'");
 	if (result) {
-		motdHash = result->getDataString("value");
+		motdHash = result->getString("value");
 		if (motdHash != transformToSHA1(g_config.getString(ConfigManager::MOTD))) {
 			++motdNum;
 		}
@@ -4810,7 +4810,7 @@ void Game::loadPlayersRecord()
 
 	DBResult_ptr result = db->storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'");
 	if (result) {
-		playersRecord = result->getDataInt("value");
+		playersRecord = result->getNumber<uint32_t>("value");
 	} else {
 		db->executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')");
 	}

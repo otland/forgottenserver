@@ -37,7 +37,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 
 	do {
 		unsigned long attrSize;
-		const char* attr = result->getDataStream("data", attrSize);
+		const char* attr = result->getStream("data", attrSize);
 
 		PropStream propStream;
 		propStream.init(attr, attrSize);
@@ -277,20 +277,20 @@ bool IOMapSerialize::loadHouseInfo()
 	}
 
 	do {
-		House* house = g_game.map.houses.getHouse(result->getDataInt("id"));
+		House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("id"));
 		if (house) {
-			house->setOwner(result->getDataInt("owner"), false);
-			house->setPaidUntil(result->getDataInt("paid"));
-			house->setPayRentWarnings(result->getDataInt("warnings"));
+			house->setOwner(result->getNumber<uint32_t>("owner"), false);
+			house->setPaidUntil(result->getNumber<time_t>("paid"));
+			house->setPayRentWarnings(result->getNumber<uint32_t>("warnings"));
 		}
 	} while (result->next());
 
 	result = db->storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`");
 	if (result) {
 		do {
-			House* house = g_game.map.houses.getHouse(result->getDataInt("house_id"));
+			House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("house_id"));
 			if (house) {
-				house->setAccessList(result->getDataInt("listid"), result->getDataString("list"));
+				house->setAccessList(result->getNumber<uint32_t>("listid"), result->getString("list"));
 			}
 		} while (result->next());
 	}

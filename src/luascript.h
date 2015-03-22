@@ -411,7 +411,7 @@ class LuaScriptInterface
 #endif
 		static const luaL_Reg luaConfigManagerTable[4];
 		static const luaL_Reg luaDatabaseTable[9];
-		static const luaL_Reg luaResultTable[7];
+		static const luaL_Reg luaResultTable[6];
 
 		static int32_t protectedCall(lua_State* L, int32_t nargs, int32_t nresults);
 
@@ -543,10 +543,9 @@ class LuaScriptInterface
 		static int32_t luaDatabaseConnected(lua_State* L);
 		static int32_t luaDatabaseTableExists(lua_State* L);
 
-		static int32_t luaResultGetDataInt(lua_State* L);
-		static int32_t luaResultGetDataLong(lua_State* L);
-		static int32_t luaResultGetDataString(lua_State* L);
-		static int32_t luaResultGetDataStream(lua_State* L);
+		static int32_t luaResultGetNumber(lua_State* L);
+		static int32_t luaResultGetString(lua_State* L);
+		static int32_t luaResultGetStream(lua_State* L);
 		static int32_t luaResultNext(lua_State* L);
 		static int32_t luaResultFree(lua_State* L);
 

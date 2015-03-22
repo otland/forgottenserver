@@ -101,7 +101,7 @@ class Database
 		 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
 		 */
 		uint64_t getLastInsertId() const {
-			return static_cast<uint64_t>(mysql_insert_id(m_handle));
+			return static_cast<uint64_t>(mysql_insert_id(handle));
 		}
 
 		/**
@@ -130,8 +130,8 @@ class Database
 		bool commit();
 
 	private:
-		MYSQL* m_handle;
-		std::recursive_mutex database_lock;
+		MYSQL* handle;
+		std::recursive_mutex databaseLock;
 		uint64_t maxPacketSize;
 
 	friend class DBTransaction;
@@ -150,37 +150,36 @@ class DBResult
 		template<typename T>
 		T getNumber(const std::string& s) const
 		{
-			auto it = m_listNames.find(s);
-			if (it == m_listNames.end()) {
-				std::cout << "[Error - DBResult::getData] Column '" << s << "' does not exist in result set." << std::endl;
+			auto it = listNames.find(s);
+			if (it == listNames.end()) {
+				std::cout << "[Error - DBResult::getNumber] Column '" << s << "' doesn't exist in the result set" << std::endl;
 				return static_cast<T>(0);
 			}
 
-			if (m_row[it->second] == nullptr) {
+			if (row[it->second] == nullptr) {
 				return static_cast<T>(0);
 			}
 
 			T data;
 			try {
-				data = boost::lexical_cast<T>(m_row[it->second]);
+				data = boost::lexical_cast<T>(row[it->second]);
 			} catch (boost::bad_lexical_cast&) {
 				data = 0;
 			}
 			return data;
 		}
 
-		int32_t getDataInt(const std::string& s) const;
-		std::string getDataString(const std::string& s) const;
-		const char* getDataStream(const std::string& s, unsigned long& size) const;
+		std::string getString(const std::string& s) const;
+		const char* getStream(const std::string& s, unsigned long& size) const;
 
 		bool hasNext() const;
 		bool next();
 
 	private:
-		MYSQL_RES* m_handle;
-		MYSQL_ROW m_row;
+		MYSQL_RES* handle;
+		MYSQL_ROW row;
 
-		std::map<std::string, uint32_t> m_listNames;
+		std::map<std::string, uint32_t> listNames;
 
 	friend class Database;
 };
@@ -206,11 +205,11 @@ class DBTransaction
 {
 	public:
 		DBTransaction() {
-			m_state = STATE_NO_START;
+			state = STATE_NO_START;
 		}
 
 		~DBTransaction() {
-			if (m_state == STATE_START) {
+			if (state == STATE_START) {
 				Database::getInstance()->rollback();
 			}
 		}
@@ -220,16 +219,16 @@ class DBTransaction
 		DBTransaction& operator=(const DBTransaction&) = delete;
 
 		bool begin() {
-			m_state = STATE_START;
+			state = STATE_START;
 			return Database::getInstance()->beginTransaction();
 		}
 
 		bool commit() {
-			if (m_state != STATE_START) {
+			if (state != STATE_START) {
 				return false;
 			}
 
-			m_state = STEATE_COMMIT;
+			state = STEATE_COMMIT;
 			return Database::getInstance()->commit();
 		}
 
@@ -240,7 +239,7 @@ class DBTransaction
 			STEATE_COMMIT
 		};
 
-		TransactionStates_t m_state;
+		TransactionStates_t state;
 };
 
 #endif
