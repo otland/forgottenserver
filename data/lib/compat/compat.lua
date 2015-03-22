@@ -4,7 +4,7 @@ FALSE = false
 result.getDataInt = result.getNumber
 result.getDataLong = result.getNumber
 result.getDataString = result.getString
-result.getDataStream = result.getDataStream
+result.getDataStream = result.getStream
 
 LUA_ERROR = false
 LUA_NO_ERROR = true
