@@ -446,47 +446,6 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 	}
 }
 
-const std::shared_ptr<SpectatorVec> Map::getSpectators(const Position& centerPos)
-{
-	std::shared_ptr<SpectatorVec> p = std::make_shared<SpectatorVec>();
-	if (centerPos.z >= MAP_MAX_LAYERS) {
-		return p;
-	}
-
-	auto it = spectatorCache.find(centerPos);
-	if (it != spectatorCache.end()) {
-		return it->second;
-	}
-
-	spectatorCache[centerPos] = p;
-
-	int32_t minRangeX = -maxViewportX;
-	int32_t maxRangeX = maxViewportX;
-	int32_t minRangeY = -maxViewportY;
-	int32_t maxRangeY = maxViewportY;
-	int32_t minRangeZ, maxRangeZ;
-
-	if (centerPos.z > 7) {
-		//underground
-
-		//8->15
-		minRangeZ = std::max<int32_t>(centerPos.z - 2, 0);
-		maxRangeZ = std::min<int32_t>(centerPos.z + 2, MAP_MAX_LAYERS - 1);
-	} else if (centerPos.z == 6) {
-		minRangeZ = 0;
-		maxRangeZ = 8;
-	} else if (centerPos.z == 7) {
-		minRangeZ = 0;
-		maxRangeZ = 9;
-	} else {
-		minRangeZ = 0;
-		maxRangeZ = 7;
-	}
-
-	getSpectatorsInternal(*p, centerPos, minRangeX, maxRangeX, minRangeY, maxRangeY, minRangeZ, maxRangeZ, false);
-	return p;
-}
-
 void Map::clearSpectatorCache()
 {
 	spectatorCache.clear();

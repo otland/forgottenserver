@@ -285,10 +285,6 @@ class Map
 		void getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
 		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
 		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
-		// The returned SpectatorVec is a temporary and should not be kept around
-		// Take special heed in that the vector will be destroyed if any function
-		// that calls clearSpectatorCache is called.
-		const std::shared_ptr<SpectatorVec> getSpectators(const Position& centerPos);
 
 		void clearSpectatorCache();
 
