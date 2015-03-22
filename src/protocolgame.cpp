@@ -319,13 +319,9 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.SkipBytes(1); // gamemaster flag
 	std::string sessionKey = msg.GetString();
-	std::string accountName;
+	std::string accountName = sessionKey.substr(0, sessionKey.find_first_of("\n"));
 	std::string characterName = msg.GetString();
-	std::string password;
-	if (!sessionKey.empty()) {
-		accountName += sessionKey.substr(0, sessionKey.find_first_of("\n"));
-		password += sessionKey.substr(sessionKey.find_first_of("\n") + 1);
-	}
+	std::string password = sessionKey.substr(sessionKey.find_first_of("\n") + 1);
 
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.GetByte();
