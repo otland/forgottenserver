@@ -417,6 +417,10 @@ enum MapMark_t
 
 struct Outfit_t {
 	Outfit_t() {
+		reset();
+	}
+
+	void reset() {
 		lookType = 0;
 		lookTypeEx = 0;
 		lookMount = 0;
