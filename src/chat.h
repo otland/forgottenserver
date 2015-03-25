@@ -27,7 +27,7 @@ class Party;
 class Player;
 
 typedef std::map<uint32_t, Player*> UsersMap;
-typedef std::map<uint32_t, Player*> InvitedMap;
+typedef std::map<uint32_t, const Player*> InvitedMap;
 
 class ChatChannel
 {
@@ -94,13 +94,12 @@ class PrivateChatChannel final : public ChatChannel
 			this->owner = owner;
 		}
 
-		bool isInvited(const Player& player) const;
+		bool isInvited(uint32_t guid) const;
 
 		void invitePlayer(const Player& player, Player& invitePlayer);
 		void excludePlayer(const Player& player, Player& excludePlayer);
 
-		bool addInvited(Player& player);
-		bool removeInvited(const Player& player);
+		bool removeInvite(uint32_t guid);
 
 		void closeChannel() const;
 

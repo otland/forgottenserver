@@ -74,75 +74,76 @@ bool Events::load()
 
 	std::set<std::string> classes;
 	for (pugi::xml_node eventNode = doc.child("events").first_child(); eventNode; eventNode = eventNode.next_sibling()) {
-		if (eventNode.attribute("enabled").as_bool()) {
-			const std::string& className = eventNode.attribute("class").as_string();
-			if (classes.count(className) == 0) {
-				classes.insert(className);
-				const std::string& lowercase = asLowerCaseString(className);
-				if (scriptInterface.loadFile("data/events/scripts/" + lowercase + ".lua") != 0) {
-					std::cout << "[Warning - Events::load] Can not load script: " << lowercase << ".lua" << std::endl;
-					std::cout << scriptInterface.getLastLuaError() << std::endl;
-				}
-			}
+		if (!eventNode.attribute("enabled").as_bool()) {
+			continue;
+		}
 
-			const std::string& methodName = eventNode.attribute("method").as_string();
-			const int32_t event = scriptInterface.getMetaEvent(className, methodName);
-			if (className == "Creature") {
-				if (methodName == "onChangeOutfit") {
-					creatureOnChangeOutfit = event;
-				} else if (methodName == "onAreaCombat") {
-					creatureOnAreaCombat = event;
-				} else if (methodName == "onTargetCombat") {
-					creatureOnTargetCombat = event;
-				} else {
-					std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
-				}
-			} else if (className == "Party") {
-				if (methodName == "onJoin") {
-					partyOnJoin = event;
-				} else if (methodName == "onLeave") {
-					partyOnLeave = event;
-				} else if (methodName == "onDisband") {
-					partyOnDisband = event;
-				} else {
-					std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
-				}
-			} else if (className == "Player") {
-				if (methodName == "onBrowseField") {
-					playerOnBrowseField = event;
-				} else if (methodName == "onLook") {
-					playerOnLook = event;
-				} else if (methodName == "onLookInBattleList") {
-					playerOnLookInBattleList = event;
-				} else if (methodName == "onLookInTrade") {
-					playerOnLookInTrade = event;
-				} else if (methodName == "onLookInShop") {
-					playerOnLookInShop = event;
-				} else if (methodName == "onTradeRequest") {
-					playerOnTradeRequest = event;
-				} else if (methodName == "onTradeAccept") {
-					playerOnTradeAccept = event;
-				} else if (methodName == "onMoveItem") {
-					playerOnMoveItem = event;
-				} else if (methodName == "onMoveCreature") {
-					playerOnMoveCreature = event;
-				} else if (methodName == "onTurn") {
-					playerOnTurn = event;
-				} else if (methodName == "onGainExperience") {
-					playerOnGainExperience = event;
-				} else if (methodName == "onLoseExperience") {
-					playerOnLoseExperience = event;
-				} else if (methodName == "onGainSkillTries") {
-					playerOnGainSkillTries = event;
-				} else {
-					std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
-				}
-			} else {
-				std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
+		const std::string& className = eventNode.attribute("class").as_string();
+		auto result = classes.insert(className);
+		if (result.second) {
+			const std::string& lowercase = asLowerCaseString(className);
+			if (scriptInterface.loadFile("data/events/scripts/" + lowercase + ".lua") != 0) {
+				std::cout << "[Warning - Events::load] Can not load script: " << lowercase << ".lua" << std::endl;
+				std::cout << scriptInterface.getLastLuaError() << std::endl;
 			}
 		}
-	}
 
+		const std::string& methodName = eventNode.attribute("method").as_string();
+		const int32_t event = scriptInterface.getMetaEvent(className, methodName);
+		if (className == "Creature") {
+			if (methodName == "onChangeOutfit") {
+				creatureOnChangeOutfit = event;
+			} else if (methodName == "onAreaCombat") {
+				creatureOnAreaCombat = event;
+			} else if (methodName == "onTargetCombat") {
+				creatureOnTargetCombat = event;
+			} else {
+				std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
+			}
+		} else if (className == "Party") {
+			if (methodName == "onJoin") {
+				partyOnJoin = event;
+			} else if (methodName == "onLeave") {
+				partyOnLeave = event;
+			} else if (methodName == "onDisband") {
+				partyOnDisband = event;
+			} else {
+				std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
+			}
+		} else if (className == "Player") {
+			if (methodName == "onBrowseField") {
+				playerOnBrowseField = event;
+			} else if (methodName == "onLook") {
+				playerOnLook = event;
+			} else if (methodName == "onLookInBattleList") {
+				playerOnLookInBattleList = event;
+			} else if (methodName == "onLookInTrade") {
+				playerOnLookInTrade = event;
+			} else if (methodName == "onLookInShop") {
+				playerOnLookInShop = event;
+			} else if (methodName == "onTradeRequest") {
+				playerOnTradeRequest = event;
+			} else if (methodName == "onTradeAccept") {
+				playerOnTradeAccept = event;
+			} else if (methodName == "onMoveItem") {
+				playerOnMoveItem = event;
+			} else if (methodName == "onMoveCreature") {
+				playerOnMoveCreature = event;
+			} else if (methodName == "onTurn") {
+				playerOnTurn = event;
+			} else if (methodName == "onGainExperience") {
+				playerOnGainExperience = event;
+			} else if (methodName == "onLoseExperience") {
+				playerOnLoseExperience = event;
+			} else if (methodName == "onGainSkillTries") {
+				playerOnGainSkillTries = event;
+			} else {
+				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
+			}
+		} else {
+			std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
+		}
+	}
 	return true;
 }
 
