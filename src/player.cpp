@@ -1164,6 +1164,171 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			guild->addMember(this);
 		}
 
+		int32_t offlineTime;
+		if (getLastLogout() != 0) {
+			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
+			offlineTime = std::min<int32_t>(time(nullptr) - getLastLogout(), 86400 * 21);
+		} else {
+			offlineTime = 0;
+		}
+
+		Condition* conditionMuted = getCondition(CONDITION_MUTED, CONDITIONID_DEFAULT);
+		if (conditionMuted && conditionMuted->getTicks() > 0) {
+			conditionMuted->setTicks(conditionMuted->getTicks() - (offlineTime * 1000));
+			if (conditionMuted->getTicks() <= 0) {
+				removeCondition(conditionMuted);
+			} else {
+				addCondition(conditionMuted->clone());
+			}
+		}
+
+		Condition* conditionTrade = getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISING);
+		if (conditionTrade && conditionTrade->getTicks() > 0) {
+			conditionTrade->setTicks(conditionTrade->getTicks() - (offlineTime * 1000));
+			if (conditionTrade->getTicks() <= 0) {
+				removeCondition(conditionTrade);
+			} else {
+				addCondition(conditionTrade->clone());
+			}
+		}
+
+		Condition* conditionTradeRook = getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISINGROOKGAARD);
+		if (conditionTradeRook && conditionTradeRook->getTicks() > 0) {
+			conditionTradeRook->setTicks(conditionTradeRook->getTicks() - (offlineTime * 1000));
+			if (conditionTradeRook->getTicks() <= 0) {
+				removeCondition(conditionTradeRook);
+			} else {
+				addCondition(conditionTradeRook->clone());
+			}
+		}
+
+		Condition* conditionHelp = getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP);
+		if (conditionHelp && conditionHelp->getTicks() > 0) {
+			conditionHelp->setTicks(conditionHelp->getTicks() - (offlineTime * 1000));
+			if (conditionHelp->getTicks() <= 0) {
+				removeCondition(conditionHelp);
+			} else {
+				addCondition(conditionHelp->clone());
+			}
+		}
+
+		Condition* conditionYell = getCondition(CONDITION_YELLTICKS, CONDITIONID_DEFAULT);
+		if (conditionYell && conditionYell->getTicks() > 0) {
+			conditionYell->setTicks(conditionYell->getTicks() - (offlineTime * 1000));
+			if (conditionYell->getTicks() <= 0) {
+				removeCondition(conditionYell);
+			} else {
+				addCondition(conditionYell->clone());
+			}
+		}
+
+		if (isPremium()) {
+			int32_t value;
+			getStorageValue(STORAGEVALUE_PROMOTION, value);
+
+			if (isPromoted() && value != 1) {
+				addStorageValue(STORAGEVALUE_PROMOTION, 1);
+			} else if (!isPromoted() && value == 1) {
+				setVocation(g_vocations.getPromotedVocation(getVocationId()));
+			}
+		} else if (isPromoted()) {
+			setVocation(vocation->getFromVocation());
+		}
+
+		bool sentStats = false;
+
+		int16_t oldStaminaMinutes = getStaminaMinutes();
+
+		int32_t offlineTrainingSkill = getOfflineTrainingSkill();
+		if (offlineTrainingSkill != -1) {
+			setOfflineTrainingSkill(-1);
+			uint32_t offlineTrainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, getOfflineTrainingTime() / 1000)));
+
+			if (offlineTime >= 600) {
+				removeOfflineTrainingTime(offlineTrainingTime * 1000);
+
+				int32_t remainder = offlineTime - offlineTrainingTime;
+				if (remainder > 0) {
+					addOfflineTrainingTime(remainder * 1000);
+				}
+
+				if (offlineTrainingTime >= 60) {
+					std::ostringstream ss;
+					ss << "During your absence you trained for ";
+					int32_t hours = offlineTrainingTime / 3600;
+					if (hours > 1) {
+						ss << hours << " hours";
+					} else if (hours == 1) {
+						ss << "1 hour";
+					}
+
+					int32_t minutes = (offlineTrainingTime % 3600) / 60;
+					if (minutes != 0) {
+						if (hours != 0) {
+							ss << " and ";
+						}
+
+						if (minutes > 1) {
+							ss << minutes << " minutes";
+						} else {
+							ss << "1 minute";
+						}
+					}
+
+					ss << '.';
+					sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+
+					Vocation* vocation;
+					if (isPromoted()) {
+						vocation = getVocation();
+					} else {
+						int32_t promotedVocationId = g_vocations.getPromotedVocation(getVocationId());
+						vocation = g_vocations.getVocation(promotedVocationId);
+						if (!vocation) {
+							vocation = getVocation();
+						}
+					}
+
+					bool sendUpdateSkills = false;
+					if (offlineTrainingSkill == SKILL_CLUB || offlineTrainingSkill == SKILL_SWORD || offlineTrainingSkill == SKILL_AXE) {
+						float modifier = vocation->getAttackSpeed() / 1000.f;
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 2);
+					} else if (offlineTrainingSkill == SKILL_DISTANCE) {
+						float modifier = vocation->getAttackSpeed() / 1000.f;
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 4);
+					} else if (offlineTrainingSkill == SKILL_MAGLEVEL) {
+						int32_t gainTicks = vocation->getManaGainTicks() * 2;
+						if (gainTicks == 0) {
+							gainTicks = 1;
+						}
+
+						addOfflineTrainingTries(SKILL_MAGLEVEL, offlineTrainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
+					}
+
+					if (addOfflineTrainingTries(SKILL_SHIELD, offlineTrainingTime / 4) || sendUpdateSkills) {
+						sendSkills();
+					}
+				}
+
+				sendStats();
+				sentStats = true;
+			} else {
+				sendTextMessage(MESSAGE_EVENT_ADVANCE, "You must be logged out for more than 10 minutes to start offline training.");
+			}
+		} else {
+			uint16_t oldMinutes = getOfflineTrainingTime() / 60 / 1000;
+			addOfflineTrainingTime(offlineTime * 1000);
+			uint16_t newMinutes = getOfflineTrainingTime() / 60 / 1000;
+			if (oldMinutes != newMinutes) {
+				sendStats();
+				sentStats = true;
+			}
+		}
+
+		if (!sentStats && getStaminaMinutes() != oldStaminaMinutes) {
+			sendStats();
+		}
+
 		g_game.checkPlayersRecord();
 		IOLoginData::updateOnlineStatus(guid, true);
 	}
