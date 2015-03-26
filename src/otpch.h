@@ -17,19 +17,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifdef FS_OTPCH_H_F00C737DA6CA4C8D90F57430C614367F
-#error "Precompiled header should only be included once."
-#endif
-
 #define FS_OTPCH_H_F00C737DA6CA4C8D90F57430C614367F
 
 // Definitions should be global.
 #include "definitions.h"
 
-//boost
-#include <boost/asio.hpp>
-
-//std
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
@@ -47,5 +39,6 @@
 #include <unordered_map>
 #include <vector>
 
-//pugixml
+#include <boost/asio.hpp>
+
 #include "ext/pugixml.hpp"

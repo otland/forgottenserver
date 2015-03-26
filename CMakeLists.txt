@@ -7,6 +7,8 @@ project(tfs)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
+include(cotire)
+
 # Initialize CXXFLAGS.
 set(CMAKE_CXX_FLAGS                "-Wall -Werror")
 set(CMAKE_CXX_FLAGS_DEBUG          "-O0 -g")
@@ -42,3 +44,7 @@ add_executable(tfs ${tfs_SRC})
 
 include_directories(${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${GMP_INCLUDE_DIR})
 target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${GMP_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
+set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+cotire(tfs)
