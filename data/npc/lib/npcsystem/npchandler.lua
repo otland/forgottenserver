@@ -130,7 +130,7 @@ if NpcHandler == nil then
 		self.idleTime = newTime
 	end
 
-	-- Attackes a new keyword handler to this npchandler
+	-- Attaches a new keyword handler to this npchandler
 	function NpcHandler:setKeywordHandler(newHandler)
 		self.keywordHandler = newHandler
 	end
