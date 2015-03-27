@@ -3940,11 +3940,12 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				std::string damageString = std::to_string(manaDamage);
 				std::string spectatorMessage = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana";
 				if (attacker) {
-					spectatorMessage += " blocking an attack by ";
+					spectatorMessage += " due to ";
 					if (attacker == target) {
-						spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "herself" : "himself") : "itself");
+						spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
+						spectatorMessage += " own attack";
 					} else {
-						spectatorMessage += attacker->getNameDescription();
+						spectatorMessage += "an attack by " + attacker->getNameDescription();
 					}
 				}
 				spectatorMessage += '.';
@@ -3957,15 +3958,15 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					if (tmpPlayer->getPosition().z == targetPos.z) {
 						if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 							message.type = MESSAGE_DAMAGE_DEALT;
-							message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana blocking your attack.";
+							message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana due to your attack.";
 						} else if (tmpPlayer == targetPlayer) {
 							message.type = MESSAGE_DAMAGE_RECEIVED;
 							if (!attacker) {
 								message.text = "You lose " + damageString + " mana.";
 							} else if (targetPlayer == attackerPlayer) {
-								message.text = "You lose " + damageString + " mana blocking an attack by yourself.";
+								message.text = "You lose " + damageString + " mana due to your own attack.";
 							} else {
-								message.text = "You lose " + damageString + " mana blocking an attack by " + attacker->getNameDescription() + '.';
+								message.text = "You lose " + damageString + " mana due to an attack by " + attacker->getNameDescription() + '.';
 							}
 						} else {
 							message.type = MESSAGE_DAMAGE_OTHERS;
@@ -4152,11 +4153,12 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		std::string damageString = std::to_string(manaLoss);
 		std::string spectatorMessage = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana";
 		if (attacker) {
-			spectatorMessage += " blocking an attack by ";
+			spectatorMessage += " due to ";
 			if (attacker == target) {
-				spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "herself" : "himself") : "itself");
+				spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
+				spectatorMessage += " own attack";
 			} else {
-				spectatorMessage += attacker->getNameDescription();
+				spectatorMessage += "an attack by " + attacker->getNameDescription();
 			}
 		}
 		spectatorMessage += '.';
@@ -4172,15 +4174,15 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 				message.type = MESSAGE_DAMAGE_DEALT;
-				message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana blocking your attack.";
+				message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana due to your attack.";
 			} else if (tmpPlayer == targetPlayer) {
 				message.type = MESSAGE_DAMAGE_RECEIVED;
 				if (!attacker) {
 					message.text = "You lose " + damageString + " mana.";
 				} else if (targetPlayer == attackerPlayer) {
-					message.text = "You lose " + damageString + " mana blocking an attack by yourself.";
+					message.text = "You lose " + damageString + " mana due to your own attack.";
 				} else {
-					message.text = "You lose " + damageString + " mana blocking an attack by " + attacker->getNameDescription() + '.';
+					message.text = "You lose " + damageString + " mana due to an attack by " + attacker->getNameDescription() + '.';
 				}
 			} else {
 				message.type = MESSAGE_DAMAGE_OTHERS;
