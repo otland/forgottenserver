@@ -3942,8 +3942,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				if (attacker) {
 					spectatorMessage += " due to ";
 					if (attacker == target) {
-						spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
-						spectatorMessage += " own attack";
+						spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her own attack" : "his own attack") : "its own attack");
 					} else {
 						spectatorMessage += "an attack by " + attacker->getNameDescription();
 					}
@@ -4049,8 +4048,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			if (attacker) {
 				spectatorMessage += " due to ";
 				if (attacker == target) {
-					spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
-					spectatorMessage += " own attack";
+					spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her own attack" : "his own attack") : "its own attack");
 				} else {
 					spectatorMessage += "an attack by " + attacker->getNameDescription();
 				}
@@ -4155,8 +4153,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		if (attacker) {
 			spectatorMessage += " due to ";
 			if (attacker == target) {
-				spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
-				spectatorMessage += " own attack";
+				spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her own attack" : "his own attack") : "its own attack");
 			} else {
 				spectatorMessage += "an attack by " + attacker->getNameDescription();
 			}
