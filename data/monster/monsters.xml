@@ -235,7 +235,6 @@
 	<monster name="The Plasmother" file="Bosses/the plasmother.xml"/>
 	<monster name="The Snapper" file="Bosses/the snapper.xml"/>
 	<monster name="Thul" file="Bosses/thul.xml"/>
-	<monster name="Tibia Bug" file="Bosses/tibia bug.xml"/>
 	<monster name="Tiquandas Revenge" file="Bosses/tiquandas revenge.xml"/>
 	<monster name="Tirecz" file="Bosses/tirecz.xml"/>
 	<monster name="Tremorak" file="Bosses/tremorak.xml"/>

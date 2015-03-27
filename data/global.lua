@@ -20,7 +20,7 @@ function getDistanceBetween(firstPosition, secondPosition)
 	return posDif
 end
 
-function getTibianTime()
+function getFormattedWorldTime()
 	local worldTime = getWorldTime()
 	local hours = math.floor(worldTime / 60)
 

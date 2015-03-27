@@ -34,7 +34,7 @@
 		<immunity drunk="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="ISHH THAT THE BESHHT YOU HAVE TO OFFERRR, TIBIANSHH?"/>
+		<voice sentence="ISHH THAT THE BESHHT YOU HAVE TO OFFERRR?"/>
 		<voice sentence="YOU ARRRRRE DOOMED!"/>
 		<voice sentence="I SHHMELL FEEAARRR!"/>
 		<voice sentence="MY SHHEED IS FEARRR AND MY HARRRVEST ISHH YOURRR SHHOUL!"/>

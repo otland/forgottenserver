@@ -533,7 +533,7 @@
 	<item fromid="1429" toid="1434" article="a" name="sign" />
 	<item id="1435" article="a" name="dragon flag" />
 	<item id="1436" article="a" name="castle flag" />
-	<item id="1437" article="a" name="flag of Tibia" />
+	<item id="1437" article="a" name="flag" />
 	<item fromid="1438" toid="1439" article="a" name="street sign">
 		<attribute key="allowDistRead" value="true" />
 	</item>
@@ -1472,23 +1472,23 @@
 	</item>
 	<item id="1982" article="a" name="purple tome">
 		<attribute key="weight" value="1900" />
-		<attribute key="description" value="It's a volume of The Mystic Secrets of Tibia." />
+		<attribute key="description" value="It's a volume of The Mystic Secrets of the world." />
 	</item>
 	<item id="1983" article="a" name="green tome">
 		<attribute key="weight" value="1900" />
-		<attribute key="description" value="It's a volume of The Mystic Secrets of Tibia." />
+		<attribute key="description" value="It's a volume of The Mystic Secrets of the world." />
 	</item>
 	<item id="1984" article="a" name="blue tome">
 		<attribute key="weight" value="1900" />
-		<attribute key="description" value="It's a volume of The Mystic Secrets of Tibia." />
+		<attribute key="description" value="It's a volume of The Mystic Secrets of the world." />
 	</item>
 	<item id="1985" article="a" name="grey tome">
 		<attribute key="weight" value="1900" />
-		<attribute key="description" value="It's a volume of The Mystic Secrets of Tibia." />
+		<attribute key="description" value="It's a volume of The Mystic Secrets of the world." />
 	</item>
 	<item id="1986" article="a" name="red tome">
 		<attribute key="weight" value="1900" />
-		<attribute key="description" value="It's a volume of The Mystic Secrets of Tibia." />
+		<attribute key="description" value="It's a volume of The Mystic Secrets of the world." />
 	</item>
 	<item id="1987" article="a" name="bag">
 		<attribute key="weight" value="800" />
@@ -3367,7 +3367,7 @@
 		<attribute key="weaponType" value="sword" />
 	</item>
 	<item id="2421" article="a" name="thunder hammer">
-		<attribute key="description" value="It is blessed by the gods of Tibia." />
+		<attribute key="description" value="It is blessed by the gods." />
 		<attribute key="weight" value="12500" />
 		<attribute key="defense" value="35" />
 		<attribute key="attack" value="49" />
@@ -3931,7 +3931,7 @@
 		<attribute key="weaponType" value="shield" />
 	</item>
 	<item id="2517" article="a" name="shield of honour">
-		<attribute key="description" value="A mighty shield awarded by the gods of Tibia." />
+		<attribute key="description" value="A mighty shield awarded by the gods." />
 		<attribute key="weight" value="5400" />
 		<attribute key="defense" value="33" />
 		<attribute key="weaponType" value="shield" />
@@ -4242,7 +4242,7 @@
 		<attribute key="containerSize" value="3" />
 	</item>
 	<item id="2593" article="a" name="mailbox">
-		<attribute key="description" value="Royal Tibia Mail." />
+		<attribute key="description" value="Royal Mail." />
 		<attribute key="type" value="mailbox" />
 	</item>
 	<item id="2594" article="a" name="depot chest">
@@ -4457,7 +4457,7 @@
 		<attribute key="slotType" value="head" />
 	</item>
 	<item id="2665" article="a" name="post officer's hat">
-		<attribute key="description" value="This hat is the insignia of all Tibian post officers." />
+		<attribute key="description" value="This hat is the insignia of all post officers." />
 		<attribute key="weight" value="700" />
 		<attribute key="armor" value="1" />
 		<attribute key="slotType" value="head" />
@@ -9207,7 +9207,7 @@
 		<attribute key="weight" value="500" />
 	</item>
 	<item id="5888" article="a" name="piece of hell steel">
-		<attribute key="description" value="This rare metal must have been refined in the depths of Tibia." />
+		<attribute key="description" value="This rare metal must have been refined in the depths." />
 		<attribute key="weight" value="500" />
 	</item>
 	<item id="5889" article="a" name="piece of draconian steel">
@@ -9416,7 +9416,7 @@
 		<attribute key="weight" value="500" />
 	</item>
 	<item id="5942" article="a" name="blessed wooden stake">
-		<attribute key="description" value="Many mighty priests of Tibia have blessed this stake." />
+		<attribute key="description" value="Many mighty priests have blessed this stake." />
 		<attribute key="weight" value="500" />
 	</item>
 	<item id="5943" name="Morgaroth's Heart">
@@ -10397,7 +10397,7 @@
 		<attribute key="weight" value="3800" />
 	</item>
 	<item id="6108" article="an" name="atlas">
-		<attribute key="description" value="It is filled with detailed maps of Tibia." />
+		<attribute key="description" value="It is filled with detailed maps." />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="6109" article="a" name="weapon rack">
@@ -11444,7 +11444,7 @@
 		<attribute key="armor" value="1" />
 		<attribute key="slotType" value="head" />
 	</item>
-	<item id="6579" article="a" name="tibia doll">
+	<item id="6579" article="a" name="doll">
 		<attribute key="weight" value="750" />
 	</item>
 	<item fromid="6580" toid="6593" name="snow" />
@@ -16301,20 +16301,20 @@
 		<attribute key="duration" value="3" />
 	</item>
 	<item id="8976" article="a" name="golden falcon">
-		<attribute key="description" value="It is a token of honour granted only by TibiaBR." />
+		<attribute key="description" value="It is a token of honour granted only by the gods." />
 		<attribute key="weight" value="2000" />
 	</item>
-	<item id="8977" article="a" name="Tibiacity Encyclopedia">
-		<attribute key="description" value="It contains all the knowledge of Tibia." />
+	<item id="8977" article="an" name="encyclopedia">
+		<attribute key="description" value="It contains all the knowledge of the world." />
 		<attribute key="weight" value="1337" />
 	</item>
 	<item id="8978" article="a" name="key of numerous locks">
 		<attribute key="description" value="It opens every locked forum thread." />
 		<attribute key="weight" value="150" />
 	</item>
-	<item id="8979" article="a" name="TibiaHispano emblem">
+	<item id="8979" article="an" name="emblem">
 		<attribute key="weight" value="1000" />
-		<attribute key="description" value="Only a brave and true hero of TibiaHispano can possess it." />
+		<attribute key="description" value="Only a brave and true hero can possess it." />
 	</item>
 	<item id="8980" name="the Mexcalibur">
 		<attribute key="description" value="Your name is carved on this mighty sword." />
@@ -16322,14 +16322,14 @@
 	</item>
 	<item id="8981" article="a" name="golden newspaper">
 		<attribute key="weight" value="2400" />
-		<attribute key="description" value="Tibia's most amazing news can be read in it. It was awarded for winning a TibiaNews contest." />
+		<attribute key="description" value="The worlds most amazing news can be read in it. It was awarded for winning a contest." />
 	</item>
 	<item id="8982" article="a" name="norseman doll">
-		<attribute key="description" value="It is given to the winners of Tibia Nordic competitions." />
+		<attribute key="description" value="It is given to the winners of competitions." />
 		<attribute key="weight" value="1000" />
 	</item>
 	<item id="8983" article="a" name="heavily bound book">
-		<attribute key="description" value="It contains the scribings of many knowledgeable Tibians." />
+		<attribute key="description" value="It contains the scribings of many knowledgeable." />
 		<attribute key="weight" value="7800" />
 	</item>
 	<item id="8984" article="an" name="abacus">
@@ -16338,24 +16338,24 @@
 	</item>
 	<item id="8985" article="a" name="norseman doll">
 		<attribute key="weight" value="1000" />
-		<attribute key="description" value="It is given to the winners of Tibia Nordic competitions." />
+		<attribute key="description" value="It is given to the winners of competitions." />
 		<attribute key="decayTo" value="8982" />
 		<attribute key="duration" value="3" />
 	</item>
 	<item fromid="8986" toid="9001" article="a" name="tree" />
-	<item id="9002" article="a" name="Tibiacity Encyclopedia">
+	<item id="9002" article="an" name="encyclopedia">
 		<attribute key="weight" value="1337" />
-		<attribute key="description" value="It contains all the knowledge of Tibia." />
+		<attribute key="description" value="It contains all the knowledge." />
 		<attribute key="decayTo" value="8977" />
 		<attribute key="duration" value="5" />
 	</item>
 	<item id="9003" article="a" name="golden falcon">
-		<attribute key="description" value="It is a token of honour granted only by TibiaBR." />
+		<attribute key="description" value="It is a token of honour granted only by the gods." />
 		<attribute key="weight" value="2000" />
 	</item>
 	<item id="9004" article="a" name="golden newspaper">
 		<attribute key="weight" value="2400" />
-		<attribute key="description" value="Tibia's most amazing news can be read in it. It was awarded for winning a TibiaNews contest." />
+		<attribute key="description" value="The most amazing news can be read in it. It was awarded for winning a contest." />
 		<attribute key="decayTo" value="8981" />
 		<attribute key="duration" value="5" />
 	</item>
@@ -17823,8 +17823,8 @@
 		<attribute key="description" value="It contains the formula for the memory potion Eclesius invented." />
 		<attribute key="weight" value="110" />
 	</item>
-	<item fromid="10107" toid="10108" article="an" name="hand puppets">
-		<attribute key="description" value="They were awarded by Tibia RP." />
+	<item fromid="10107" toid="10108" name="hand puppets">
+		<attribute key="description" value="They were awarded by the gods." />
 		<attribute key="weight" value="5" />
 	</item>
 	<item id="10109" article="a" name="bundle of rags">
@@ -18310,7 +18310,7 @@
 		<attribute key="description" value="It is said that you can break a mighty evil spell with it." />
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="10306" name="fan doll of King Tibianus">
+	<item id="10306" name="fan doll of the King">
 		<attribute key="description" value="The small label reads: For my greatest admirer." />
 		<attribute key="weight" value="650" />
 	</item>
@@ -18319,7 +18319,7 @@
 		<attribute key="weight" value="8000" />
 	</item>
 	<item id="10308" article="a" name="fan club membership card">
-		<attribute key="description" value="This king Tibianus fan club premium membership card is issued to 'The Evil Mastermind'." />
+		<attribute key="description" value="The kings fan club premium membership card is issued to 'The Evil Mastermind'." />
 		<attribute key="weight" value="150" />
 	</item>
 	<item id="10309" name="claw of 'The Noxious Spawn'">
@@ -18470,7 +18470,7 @@
 		<attribute key="weight" value="20" />
 	</item>
 	<item id="10455" article="a" name="pigeon trophy">
-		<attribute key="description" value="It's a symbol of peace handed out by Tibia ML." />
+		<attribute key="description" value="It's a symbol of peace handed out by the gods." />
 		<attribute key="weight" value="400" />
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="128" />
@@ -18894,7 +18894,7 @@
 	<item fromid="10711" toid="10712" article="a" name="dragon statue" />
 	<item fromid="10713" toid="10718" name="serpent decoration" />
 	<item fromid="10719" toid="10720" name="friendship amulet">
-		<attribute key="description" value="It shines as beautifully as a good friendship. This amulet was rewarded by Tibiafriends." />
+		<attribute key="description" value="It shines as beautifully as a good friendship." />
 		<attribute key="weight" value="520" />
 	</item>
 	<item id="10721" name="zaoan decoration" />
@@ -19527,7 +19527,7 @@
 	</item>
 	<item id="11259" article="a" name="unity charm">
 		<attribute key="weight" value="1000" />
-		<attribute key="description" value="The Embrace of Tibia is contained in it." />
+		<attribute key="description" value="The Embrace of the World is contained in it." />
 	</item>
 	<item id="11260" article="a" name="spiritual charm">
 		<attribute key="weight" value="1000" />
@@ -20036,13 +20036,13 @@
 	<item fromid="11379" toid="11384" name="dark spikes" />
 	<item fromid="11385" toid="11392" article="a" name="part of a giant stone dragon" />
 	<item id="11393" article="a" name="lucky clover amulet">
-		<attribute key="description" value="It is rumoured to bring you good luck! Luck sponsored by TibiaLottery." />
+		<attribute key="description" value="It is rumoured to bring you good luck!" />
 		<attribute key="weight" value="150" />
 		<attribute key="slotType" value="necklace" />
 	</item>
 	<item id="11394" article="a" name="dragon goblet">
 		<attribute key="weight" value="1800" />
-		<attribute key="description" value="A goblet forged by the dragon Khax that represents all the knowledge and wisdom of TibiaVenezuela." />
+		<attribute key="description" value="A goblet forged by the dragon Khax that represents all the knowledge and wisdom." />
 	</item>
 	<item id="11395" article="a" name="crimson sword">
 		<attribute key="weight" value="3600" />
@@ -20068,7 +20068,7 @@
 		<attribute key="weight" value="30" />
 	</item>
 	<item fromid="11401" toid="11402" article="a" name="Tibiora's box">
-		<attribute key="description" value="It contains all the knowledge of the Tibian lands gathered arduously by Tibia-Stats.com." />
+		<attribute key="description" value="It contains all the knowledge of the lands gathered arduously." />
 		<attribute key="weight" value="4200" />
 	</item>
 	<item id="11409" article="a" name="slain ghoul">
@@ -20159,32 +20159,32 @@
 	<item fromid="11729" toid="11752" name="ground" />
 	<item id="11753" article="a" name="large black crystal" />
 	<item id="11754" article="a" name="ferumbras doll">
-		<attribute key="description" value="It was awarded by Tibiopedia.pl." />
+		<attribute key="description" value="It was awarded by the gods." />
 		<attribute key="weight" value="1700" />
 	</item>
 	<item id="11755" article="a" name="ferumbras doll">
-		<attribute key="description" value="It was awarded by Tibiopedia.pl." />
+		<attribute key="description" value="It was awarded by the gods." />
 		<attribute key="weight" value="1700" />
 		<attribute key="decayTo" value="11754" />
 		<attribute key="duration" value="2" />
 	</item>
 	<item id="11756" article="an" name="orc's jaw shredder">
-		<attribute key="description" value="There is no better way to get rid of top secret data. Awarded by TibiaSpy.com" />
+		<attribute key="description" value="There is no better way to get rid of top secret data." />
 		<attribute key="weight" value="2500" />
 	</item>
 	<item id="11757" article="an" name="orc's jaw shredder">
-		<attribute key="description" value="There is no better way to get rid of top secret data. Awarded by TibiaSpy.com" />
+		<attribute key="description" value="There is no better way to get rid of top secret data." />
 		<attribute key="weight" value="2500" />
 		<attribute key="decayTo" value="11756" />
 		<attribute key="duration" value="2" />
 	</item>
 	<item id="11759" name="branch" />
 	<item id="11773" article="a" name="bag of oriental spices">
-		<attribute key="description" value="Those spices were gathered all around the Tibian world." />
+		<attribute key="description" value="Those spices were gathered all around the world." />
 		<attribute key="weight" value="1508" />
 	</item>
 	<item id="11774" article="a" name="bag of oriental spices">
-		<attribute key="description" value="Those spices were gathered all around the Tibian world." />
+		<attribute key="description" value="Those spices were gathered all around the world." />
 		<attribute key="weight" value="1508" />
 		<attribute key="decayTo" value="11773" />
 		<attribute key="duration" value="2" />
@@ -21224,11 +21224,11 @@
 		<attribute key="containerSize" value="20" />
 	</item>
 	<item id="12666" name="gamemaster doll">
-		<attribute key="description" value="It was awarded in memory of the dedicated service of Tibia's gamemaster team." />
+		<attribute key="description" value="It was awarded in memory of the dedicated service of the gamemaster team." />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item fromid="12667" toid="12668" name="phoenix statue">
-		<attribute key="description" value="This mighty statue contains a true phoenix feather inside. Awarded by Tibiafans.se." />
+		<attribute key="description" value="This mighty statue contains a true phoenix feather inside." />
 		<attribute key="weight" value="2000" />
 	</item>
 	<item id="12670" name="magical measurement device">
@@ -21393,15 +21393,15 @@
 		<attribute key="weight" value="150" />
 	</item>
 	<item fromid="13028" toid="13029" name="frozen heart">
-		<attribute key="description" value="The eternal love is awarded by TibiaTR.net." />
+		<attribute key="description" value="The eternal love is awarded by the gods." />
 		<attribute key="weight" value="2000" />
 	</item>
 	<item fromid="13030" toid="13031" name="draken doll">
-		<attribute key="description" value="This doll seems to be the favourite doll of the emperor. It was awarded by TibiaJourney.com." />
+		<attribute key="description" value="This doll seems to be the favourite doll of the emperor. It was awarded by the gods." />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item fromid="13032" toid="13033" name="music box">
-		<attribute key="description" value="The song inside is made of love. It was rewarded by TibiaSpace.com." />
+		<attribute key="description" value="The song inside is made of love. It was rewarded by the gods." />
 		<attribute key="weight" value="2700" />
 	</item>
 	<item id="13034" name="reward box">
@@ -22076,7 +22076,7 @@
 	</item>
 	<item fromid="13547" toid="13552" name="dirty water" />
 	<item id="13559" name="dread doll">
-		<attribute key="description" value="It is shining with positive energy and was awarded by FunTibia.com." />
+		<attribute key="description" value="It is shining with positive energy and was awarded by the gods." />
 		<attribute key="weight" value="1100" />
 	</item>
 	<item id="13560" article="a" name="fan doll of Queen Eloise">
@@ -22084,7 +22084,7 @@
 	</item>
 	<item id="13561" article="a" name="dragon goblet">
 		<attribute key="weight" value="1800" />
-		<attribute key="description" value="A goblet forged by the dragon Khax that represents all the knowledge and wisdom of TibiaVenezuela." />
+		<attribute key="description" value="A goblet forged by the dragon Khax that represents all the knowledge and wisdom." />
 	</item>
 	<item id="13564" name="Whinona">
 		<attribute key="weight" value="600" />
@@ -22113,7 +22113,7 @@
 	<item fromid="13572" toid="13575" article="a" name="mysterious machine" />
 	<item fromid="13576" toid="13577" article="a" name="wheel" />
 	<item id="13581" name="dread doll">
-		<attribute key="description" value="It is shining with positive energy and was awarded by FunTibia.com." />
+		<attribute key="description" value="It is shining with positive energy and was awarded by the gods." />
 		<attribute key="weight" value="1100" />
 	</item>
 	<item id="13582" name="Impward">
@@ -22603,7 +22603,7 @@
 		<attribute key="weight" value="4690" />
 	</item>
 	<item fromid="13950" toid="13951" name="old radio">
-		<attribute key="description" value="Granted by RadioTibia.com.br to hear the sounds of Tibia." />
+		<attribute key="description" value="Granted by the gods to hear the sounds of the world." />
 		<attribute key="weight" value="4015" />
 	</item>
 	<item id="13953" article="a" name="water pump" />
@@ -24029,25 +24029,25 @@
 	</item>
 	<item id="16000" article="an" name="anniversary remains" />
 	<item id="16004" name="Delany's golden bug trophy">
-		<attribute key="description" value="It was awarded during the festivities of Tibia's 15th anniversary." />
+		<attribute key="description" value="It was awarded during the festivities of the worlds 15th anniversary." />
 		<attribute key="weight" value="1250" />
 	</item>
 	<item id="16005" name="Bolfrim's golden bug trophy">
-		<attribute key="description" value="It was awarded during the festivities of Tibia's 15th anniversary." />
+		<attribute key="description" value="It was awarded during the festivities of the worlds 15th anniversary." />
 		<attribute key="weight" value="1250" />
 	</item>
 	<item id="16006" name="Siramal's golden bug trophy">
-		<attribute key="description" value="It was awarded during the festivities of Tibia's 15th anniversary." />
+		<attribute key="description" value="It was awarded during the festivities of the worlds 15th anniversary." />
 		<attribute key="weight" value="1250" />
 	</item>
 	<item id="16007" article="an" name="anniversary backpack">
-		<attribute key="description" value="It was awarded during the festivities of Tibia's 15th anniversary." />
+		<attribute key="description" value="It was awarded during the festivities of the worlds 15th anniversary." />
 		<attribute key="weight" value="1500" />
 		<attribute key="containerSize" value="15" />
 		<attribute key="slotType" value="backpack" />
 	</item>
 	<item id="16014" article="an" name="anniversary cake">
-		<attribute key="description" value="It was created by Tibia's finest bakers for the celebration of 15 years of Tibia." />
+		<attribute key="description" value="It was created by the finest bakers for the celebration of 15 years of the world." />
 		<attribute key="weight" value="500" />
 	</item>
 	<item id="16015" article="a" name="Chayenne's magical key">
@@ -24117,21 +24117,21 @@
 	</item>
 	<item fromid="16103" toid="16104" article="a" name="mathmaster shield">
 		<attribute key="weight" value="314" />
-		<attribute key="description" value="It's an Emblem of Wisdom. Awarded by TibiaStat.com." />
+		<attribute key="description" value="It's an Emblem of Wisdom." />
 		<attribute key="defense" value="0" />
 		<attribute key="weaponType" value="shield" />
 	</item>
 	<item fromid="16105" toid="16106" article="a" name="medusa skull">
-		<attribute key="description" value="You see a medusa skull. Her hair's snakes are still alive. Awarded only on TibiaPic.com." />
+		<attribute key="description" value="Her hair's snakes are still alive." />
 		<attribute key="weight" value="1000" />
 	</item>
 	<item fromid="16107" toid="16108" article="a" name="doll of Durin The Almighty">
 		<attribute key="weight" value="4000" />
-		<attribute key="description" value="The mightiest. The only. God of all dwarfs. Awarded by Tibia Bariloche." />
+		<attribute key="description" value="The mightiest. The only. God of all dwarfs." />
 	</item>
 	<item fromid="16109" toid="16110" article="a" name="majestic shield">
 		<attribute key="weight" value="15000" />
-		<attribute key="description" value="This wonderful shield is designed for GuildStats.eu, to honour all guilds in Tibia." />
+		<attribute key="description" value="This wonderful shield is designed to honour all guilds in the world." />
 	</item>
 	<item id="16111" article="a" name="thorn spitter">
 		<attribute key="weight" value="12600" />
@@ -24153,7 +24153,7 @@
 	</item>
 	<item id="16619" article="a" name="miniature house">
 		<attribute key="weight" value="1000" />
-		<attribute key="description" value="This trophy was awarded to honour the greatest architects in Tibia." />
+		<attribute key="description" value="This trophy was awarded to honour the greatest architects in the world." />
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="128" />
 	</item>
@@ -25524,7 +25524,7 @@
 	</item>
 	<item fromid="18526" toid="18527" article="a" name="dragon eye">
 		<attribute key="weight" value="2800" />
-		<attribute key="description" value="It belonged to the first dragon to roam the world and was adorned with Tibia-Market's purest gold." />
+		<attribute key="description" value="It belonged to the first dragon to roam the world and was adorned with the purest gold." />
 	</item>
 	<item id="18528" article="a" name="prismatic ring">
 		<attribute key="weight" value="105" />
@@ -28547,11 +28547,11 @@
 		<attribute key="weight" value="3800" />
 	</item>
 	<item id="20624" article="a" name="bookworm doll">
-		<attribute key="description" value="It does not wish to be disturbed. Awarded by TibiaLibrary.org." />
+		<attribute key="description" value="It does not wish to be disturbed." />
 		<attribute key="weight" value="1900" />
 	</item>
 	<item id="20625" article="a" name="draken doll">
-		<attribute key="description" value="This doll seems to be the favourite doll of the emperor. It was rewarded by TibiaJourney.com." />
+		<attribute key="description" value="This doll seems to be the favourite doll of the emperor. It was awarded by the gods." />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item id="20668" article="a" name="shadowy statue" />
@@ -29323,7 +29323,7 @@
 		<attribute key="magiclevelpoints" value="2" />
 	</item>
 	<item fromid="21731" toid="21732" name="memory box">
-		<attribute key="description" value="It is said to freeze time itself to capture your fondest memories. Awarded by TibiaEvents.com" />
+		<attribute key="description" value="It is said to freeze time itself to capture your fondest memories." />
 		<attribute key="weight" value="2000" />
 	</item>
 	<item fromid="22133" toid="22134" name="instable vortex">

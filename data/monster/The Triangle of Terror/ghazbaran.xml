@@ -66,7 +66,7 @@
 	</summons>
 	<voices interval="5000" chance="30">
 		<voice sentence="COME AND GIVE ME SOME AMUSEMENT"/>
-		<voice sentence="IS THAT THE BEST YOU HAVE TO OFFER, TIBIANS?" yell="1"/>
+		<voice sentence="IS THAT THE BEST YOU HAVE TO OFFER?" yell="1"/>
 		<voice sentence="I AM GHAZBARAN OF THE TRIANGLE... AND I AM HERE TO CHALLENGE YOU ALL." yell="1"/>
 		<voice sentence="FLAWLESS VICTORY!" yell="1"/>
 	</voices>
