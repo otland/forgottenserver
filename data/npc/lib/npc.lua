@@ -13,10 +13,11 @@ function msgcontains(message, keyword)
 end
 
 function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, backpack)
-	local amount, subType, ignoreCap, item = amount or 1, subType or 0, ignoreCap and TRUE or FALSE, 0
-	ignoreCap = FALSE
+	local amount = amount or 1
+	local subType = subType or 0
+	local item = 0
 	if isItemStackable(itemid) then
-		if(inBackpacks) then
+		if inBackpacks then
 			stuff = doCreateItemEx(backpack, 1)
 			item = doAddContainerItem(stuff, itemid, math.min(100, amount))
 		else
@@ -26,17 +27,18 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	end
 
 	local a = 0
-	if(inBackpacks) then
+	if inBackpacks then
 		local container, b = doCreateItemEx(backpack, 1), 1
 		for i = 1, amount do
 			local item = doAddContainerItem(container, itemid, subType)
-			if(isInArray({(getContainerCapById(backpack) * b), amount}, i) == TRUE) then
-				if(doPlayerAddItemEx(cid, container, ignoreCap) ~= RETURNVALUE_NOERROR) then
-					b = b - 1 --
+			if isInArray({(getContainerCapById(backpack) * b), amount}, i) then
+				if doPlayerAddItemEx(cid, container, ignoreCap) ~= RETURNVALUE_NOERROR then
+					b = b - 1
 					break
 				end
-				a = i -- a = a + i
-				if(amount > i) then
+				
+				a = i
+				if amount > i then
 					container = doCreateItemEx(backpack, 1)
 					b = b + 1
 				end
@@ -47,7 +49,7 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 
 	for i = 1, amount do -- normal method for non-stackable items
 		local item = doCreateItemEx(itemid, subType)
-		if(doPlayerAddItemEx(cid, item, ignoreCap) ~= RETURNVALUE_NOERROR) then
+		if doPlayerAddItemEx(cid, item, ignoreCap) ~= RETURNVALUE_NOERROR then
 			break
 		end
 		a = i
@@ -55,17 +57,17 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	return a, 0
 end
 
-local func = function(pars)
-	if isPlayer(pars.pcid) == TRUE then
-		doCreatureSay(pars.cid, pars.text, pars.type, false, pars.pcid, getCreaturePosition(pars.cid))
-		pars.e.done = TRUE
+local func = function(cid, text, type, e, pcid)
+	if isPlayer(pcid) then
+		doCreatureSay(cid, text, type, false, pcid, getCreaturePosition(cid))
+		e.done = TRUE
 	end
 end
 
 function doCreatureSayWithDelay(cid, text, type, delay, e, pcid)
-	if isPlayer(pcid) == TRUE then
+	if isPlayer(pcid) then
 		e.done = FALSE
-		e.event = addEvent(func, delay < 1 and 1000 or delay, {cid=cid, text=text, type=type, e=e, pcid=pcid})
+		e.event = addEvent(func, delay < 1 and 1000 or delay, cid, text, type, e, pcid)
 	end
 end
 

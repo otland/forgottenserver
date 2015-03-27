@@ -31,6 +31,7 @@ if KeywordHandler == nil then
 		if self.keywords.callback ~= nil then
 			return self.keywords.callback(self.keywords, message)
 		end
+
 		for i,v in ipairs(self.keywords) do
 			if type(v) == 'string' then
 				local a, b = string.find(message, v)
@@ -156,12 +157,12 @@ if KeywordHandler == nil then
 		return self:getRoot():addChildKeyword(keys, callback, parameters)
 	end
 
-	-- Moves the current position in the keyword hierarchy count steps upwards. Count defalut value = 1.
-	function KeywordHandler:moveUp(cid, count)
-		local steps = count
+	-- Moves the current position in the keyword hierarchy steps upwards. Steps defalut value = 1.
+	function KeywordHandler:moveUp(cid, steps)
 		if steps == nil or type(steps) ~= "number" then
 			steps = 1
 		end
+
 		for i = 1, steps do
 			if self.lastNode[cid] == nil then
 				return nil
