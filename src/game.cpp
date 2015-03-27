@@ -3840,13 +3840,12 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		realHealthChange = target->getHealth() - realHealthChange;
 
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
-			std::string damageString = std::to_string(realHealthChange);
-			std::string pluralString = (realHealthChange != 1 ? "s." : ".");
+			std::string damageString = std::to_string(realHealthChange) + (realHealthChange != 1 ? " hitpoints." : " hitpoint.");
 
 			std::string spectatorMessage;
 			if (!attacker) {
 				spectatorMessage += ucfirst(target->getNameDescription());
-				spectatorMessage += " was healed for " + damageString + " hitpoint" + pluralString;
+				spectatorMessage += " was healed for " + damageString;
 			} else {
 				spectatorMessage += ucfirst(attacker->getNameDescription());
 				spectatorMessage += " healed ";
@@ -3855,7 +3854,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				} else {
 					spectatorMessage += target->getNameDescription();
 				}
-				spectatorMessage += " for " + damageString + " hitpoint" + pluralString;
+				spectatorMessage += " for " + damageString;
 			}
 
 			TextMessage message;
@@ -3869,15 +3868,15 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				Player* tmpPlayer = spectator->getPlayer();
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_HEALED;
-					message.text = "You heal " + target->getNameDescription() + " for " + damageString + " hitpoint" + pluralString;
+					message.text = "You heal " + target->getNameDescription() + " for " + damageString;
 				} else if (tmpPlayer == targetPlayer) {
 					message.type = MESSAGE_HEALED;
 					if (!attacker) {
-						message.text = "You were healed for " + damageString + " hitpoint" + pluralString;
+						message.text = "You were healed for " + damageString;
 					} else if (targetPlayer == attackerPlayer) {
-						message.text = "You heal yourself for " + damageString + " hitpoint" + pluralString;
+						message.text = "You heal yourself for " + damageString;
 					} else {
-						message.text = "You were healed by " + attacker->getNameDescription() + " for " + damageString + " hitpoint" + pluralString;
+						message.text = "You were healed by " + attacker->getNameDescription() + " for " + damageString;
 					}
 				} else {
 					message.type = MESSAGE_HEALED_OTHERS;
@@ -4044,9 +4043,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (message.primary.color != TEXTCOLOR_NONE || message.secondary.color != TEXTCOLOR_NONE) {
-			std::string damageString = std::to_string(realDamage);
-			std::string pluralString = (realDamage != 1 ? "s" : "");
-			std::string spectatorMessage = ucfirst(target->getNameDescription()) + " loses " + damageString + " hitpoint" + pluralString;
+			std::string damageString = std::to_string(realDamage) + (realDamage != 1 ? " hitpoints" : " hitpoint");
+			std::string spectatorMessage = ucfirst(target->getNameDescription()) + " loses " + damageString;
 			if (attacker) {
 				spectatorMessage += " due to ";
 				if (attacker == target) {
@@ -4063,15 +4061,15 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				if (tmpPlayer->getPosition().z == targetPos.z) {
 					if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 						message.type = MESSAGE_DAMAGE_DEALT;
-						message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " hitpoint" + pluralString + " due to your attack.";
+						message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " due to your attack.";
 					} else if (tmpPlayer == targetPlayer) {
 						message.type = MESSAGE_DAMAGE_RECEIVED;
 						if (!attacker) {
-							message.text = "You lose " + damageString + " hitpoint" + pluralString + '.';
+							message.text = "You lose " + damageString + '.';
 						} else if (targetPlayer == attackerPlayer) {
-							message.text = "You lose " + damageString + " hitpoint" + pluralString + " due to your own attack.";
+							message.text = "You lose " + damageString + " due to your own attack.";
 						} else {
-							message.text = "You lose " + damageString + " hitpoint" + pluralString + " due to an attack by " + attacker->getNameDescription() + '.';
+							message.text = "You lose " + damageString + " due to an attack by " + attacker->getNameDescription() + '.';
 						}
 					} else {
 						message.type = MESSAGE_DAMAGE_OTHERS;
