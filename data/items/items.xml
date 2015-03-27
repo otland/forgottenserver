@@ -22599,7 +22599,7 @@
 		<attribute key="slotType" value="head" />
 	</item>
 	<item fromid="13948" toid="13949" name="Imortus">
-		<attribute key="description" value="It knows all secrets of all numbers. It was awarded by fansite Exhiti.com." />
+		<attribute key="description" value="It knows all secrets of all numbers. It was awarded by the gods." />
 		<attribute key="weight" value="4690" />
 	</item>
 	<item fromid="13950" toid="13951" name="old radio">
@@ -25542,11 +25542,11 @@
 	</item>
 	<item id="18550" article="a" name="noble sword">
 		<attribute key="weight" value="5000" />
-		<attribute key="description" value="This sword was forged with the enthusiasm and dreams of the Rookgaardians. Awarded by Rookie.pl." />
+		<attribute key="description" value="This sword was forged with the enthusiasm and dreams of the Rookgaardians." />
 	</item>
 	<item id="18551" article="a" name="noble sword">
 		<attribute key="weight" value="5000" />
-		<attribute key="description" value="This sword was forged with the enthusiasm and dreams of the Rookgaardians. Awarded by Rookie.pl." />
+		<attribute key="description" value="This sword was forged with the enthusiasm and dreams of the Rookgaardians." />
 	</item>
 	<item id="18554" name="crystal rubbish" />
 	<item fromid="18560" toid="18579" name="muddy floor" />
