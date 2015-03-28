@@ -112,8 +112,11 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(2); // client OS
 
 	uint16_t version = msg.get<uint16_t>();
-
-	msg.skipBytes(17);
+	if (version >= 971) {
+		msg.skipBytes(17);
+	} else {
+		msg.skipBytes(12);
+	}
 	/*
 	 * Skipped bytes:
 	 * 4 bytes: protocolVersion
