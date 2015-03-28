@@ -1,6 +1,6 @@
 function onCastSpell(creature, var, isHotkey)
 	local position = variantToPosition(var)
-	local tile = position:getTile()
+	local tile = Tile(position)
 	local field = tile and tile:getItemByType(ITEM_TYPE_MAGICFIELD)
 	if field and isInArray(FIELDS, field:getId()) then
 		field:remove()

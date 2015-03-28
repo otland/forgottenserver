@@ -22,7 +22,3 @@ function Position.getNextPosition(self, direction, steps)
 		self.y = self.y + steps
 	end
 end
-
-function Position.getTile(self)
-	return Tile(self)
-end

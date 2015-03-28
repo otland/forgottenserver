@@ -5,14 +5,12 @@ local decayItems = {
 }
 
 function onUse(cid, item, fromPosition, target, toPosition, isHotkey)
-	local decayItemId = decayItems[item.itemid]
+	local decayItemId = decayItems[item:getId()]
 	if not decayItemId then
 		return false
 	end
 
-	local decayItem = Item(item.uid)
-	decayItem:transform(decayItemId)
-	decayItem:decay()
-
+	item:transform(decayItemId)
+	item:decay()
 	return true
 end

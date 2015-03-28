@@ -21,10 +21,10 @@ function onUse(cid, item, fromPosition, target, toPosition, isHotkey)
 
 	if fromPosition.x == CONTAINER_POSITION then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
-	elseif not fromPosition:getTile():getHouse() then
+	elseif not Tile(fromPosition):getHouse() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may construct this only inside a house.")
 	else
-		Item(item.uid):transform(kit)
+		item:transform(kit)
 		fromPosition:sendMagicEffect(CONST_ME_POFF)
 	end
 	return true

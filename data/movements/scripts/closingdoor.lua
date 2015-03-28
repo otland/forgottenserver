@@ -1,5 +1,5 @@
 function onStepOut(creature, item, position, fromPosition)
-	local tile = position:getTile()
+	local tile = Tile(position)
 	if tile:getCreatureCount() > 0 then
 		return true
 	end
@@ -26,6 +26,6 @@ function onStepOut(creature, item, position, fromPosition)
 		end
 	end
 
-	Item(item.uid):transform(item.itemid - 1)
+	item:transform(item.itemid - 1)
 	return true
 end

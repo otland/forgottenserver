@@ -24,6 +24,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		text = text .. line .. "  " .. spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
 	end
-	player:showTextDialog(item.itemid, text)
+	player:showTextDialog(item:getId(), text)
 	return true
 end

@@ -11,7 +11,7 @@ function onStepIn(creature, item, position, fromPosition)
 		return true
 	end
 
-	Item(item.uid):transform(increasing[item.itemid])
+	item:transform(increasing[item.itemid])
 
 	if item.actionid >= 1000 then
 		if player:getLevel() < item.actionid - 1000 then
@@ -22,10 +22,10 @@ function onStepIn(creature, item, position, fromPosition)
 		return true
 	end
 
-	if position:getTile():hasFlag(TILESTATE_PROTECTIONZONE) then
+	if Tile(position):hasFlag(TILESTATE_PROTECTIONZONE) then
 		local lookPos = player:getPosition()
 		lookPos:getNextPosition(player:getDirection())
-		local depotItem = lookPos:getTile():getItemByType(ITEM_TYPE_DEPOT)
+		local depotItem = Tile(lookPos):getItemByType(ITEM_TYPE_DEPOT)
 		if depotItem ~= nil then
 			local depotItems = player:getDepotChest(getDepotId(depotItem:getUniqueId()), true):getItemHoldingCount()
 			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, "Your depot contains " .. depotItems .. " item" .. (depotItems > 1 and "s." or "."))
@@ -51,6 +51,6 @@ function onStepOut(creature, item, position, fromPosition)
 		return true
 	end
 
-	Item(item.uid):transform(decreasing[item.itemid])
+	item:transform(decreasing[item.itemid])
 	return true
 end

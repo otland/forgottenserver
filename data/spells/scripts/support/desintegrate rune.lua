@@ -3,7 +3,7 @@ local dead_human = {
 }
 function onCastSpell(creature, var, isHotkey)
 	local position = variantToPosition(var)
-	local tile = position:getTile()
+	local tile = Tile(position)
 	local object = tile and tile:getTopVisibleThing()
 	if object and not object:isCreature() then
 		local desintegrate = false

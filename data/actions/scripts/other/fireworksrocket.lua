@@ -9,6 +9,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addHealth(-10)
 	end
 
-	Item(item.uid):remove()
+	item:remove()
 	return true
 end

@@ -1,27 +1,26 @@
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if isInArray(questDoors, item.itemid) then
+	local itemId = item:getId()
+	if isInArray(questDoors, itemId) then
 		if player:getStorageValue(item.actionid) ~= -1 then
-			Item(item.uid):transform(item.itemid + 1)
+			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "The door seems to be sealed against unwanted intruders.")
 		end
 		return true
-	elseif isInArray(levelDoors, item.itemid) then
+	elseif isInArray(levelDoors, itemId) then
 		if item.actionid > 0 and player:getLevel() >= item.actionid - 1000 then
-			Item(item.uid):transform(item.itemid + 1)
+			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "Only the worthy may pass.")
 		end
 		return true
-	elseif isInArray(keys, item.itemid) then
+	elseif isInArray(keys, itemId) then
 		if target.actionid > 0 then
-			if item.actionid == target.actionid then
-				if doors[target.itemid] then
-					Item(target.uid):transform(doors[target.itemid])
-					return true
-				end
+			if item.actionid == target.actionid and doors[target.itemid] then
+				target:transform(doors[target.itemid])
+				return true
 			end
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
 			return true
@@ -29,15 +28,15 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if isInArray(horizontalOpenDoors, item.itemid) or isInArray(verticalOpenDoors, item.itemid) then
+	if isInArray(horizontalOpenDoors, itemId) or isInArray(verticalOpenDoors, itemId) then
 		local doorCreature = Tile(toPosition):getTopCreature()
 		if doorCreature ~= nil then
 			toPosition.x = toPosition.x + 1
-			local query = toPosition:getTile():queryAdd(doorCreature, 20)
+			local query = Tile(toPosition):queryAdd(doorCreature, bit.bor(FLAG_IGNOREBLOCKCREATURE, FLAG_PATHFINDING))
 			if query ~= RETURNVALUE_NOERROR then
 				toPosition.x = toPosition.x - 1
 				toPosition.y = toPosition.y + 1
-				query = toPosition:getTile():queryAdd(doorCreature, 20)
+				query = Tile(toPosition):queryAdd(doorCreature, bit.bor(FLAG_IGNOREBLOCKCREATURE, FLAG_PATHFINDING))
 			end
 
 			if query ~= RETURNVALUE_NOERROR then
@@ -47,15 +46,16 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 			doorCreature:teleportTo(toPosition, true)
 		end
-		if not isInArray(openSpecialDoors, item.itemid) then
-			Item(item.uid):transform(item.itemid - 1)
+
+		if not isInArray(openSpecialDoors, itemId) then
+			item:transform(itemId - 1)
 		end
 		return true
 	end
 
-	if doors[item.itemid] then
+	if doors[itemId] then
 		if item.actionid == 0 then
-			Item(item.uid):transform(doors[item.itemid])
+			item:transform(doors[itemId])
 		else
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
 		end

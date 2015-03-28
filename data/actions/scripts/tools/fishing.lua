@@ -12,15 +12,14 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if targetId == 10499 then
-		local targetItem = Item(target.uid)
-		local owner = targetItem:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
+		local owner = target:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
 		if owner ~= 0 and owner ~= player:getId() then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
 			return true
 		end
 
 		toPosition:sendMagicEffect(CONST_ME_WATERSPLASH)
-		targetItem:remove()
+		target:remove()
 
 		local rareChance = math.random(1, 100)
 		if rareChance == 1 then
@@ -50,18 +49,16 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 
 		if targetId == 15401 then
-			local targetItem = Item(target.uid)
-			targetItem:transform(targetId + 1)
-			targetItem:decay()
+			target:transform(targetId + 1)
+			target:decay()
 
 			if math.random(1, 100) >= 97 then
 				player:addItem(15405, 1)
 				return true
 			end
 		elseif targetId == 7236 then
-			local targetItem = Item(target.uid)
-			targetItem:transform(targetId + 1)
-			targetItem:decay()
+			target:transform(targetId + 1)
+			target:decay()
 
 			local rareChance = math.random(1, 100)
 			if rareChance == 1 then
