@@ -172,7 +172,6 @@ MagicField* Tile::getFieldItem() const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -312,22 +311,18 @@ const Creature* Tile::getBottomVisibleCreature(const Creature* creature) const
 	return nullptr;
 }
 
-Item* Tile::getTopDownItem()
+Item* Tile::getTopDownItem() const
 {
-	if (TileItemVector* items = getItemList()) {
-		if (items->getDownItemCount() > 0) {
-			return *items->getBeginDownItem();
-		}
+	if (const TileItemVector* items = getItemList()) {
+		return items->getTopDownItem();
 	}
 	return nullptr;
 }
 
-Item* Tile::getTopTopItem()
+Item* Tile::getTopTopItem() const
 {
-	if (TileItemVector* items = getItemList()) {
-		if (items->getTopItemCount() > 0) {
-			return *(items->getEndTopItem() - 1);
-		}
+	if (const TileItemVector* items = getItemList()) {
+		return items->getTopTopItem();
 	}
 	return nullptr;
 }
@@ -1674,4 +1669,24 @@ void Tile::resetTileFlags(const Item* item)
 bool Tile::isMoveableBlocking() const
 {
 	return !ground || hasFlag(TILESTATE_BLOCKSOLID);
+}
+
+Item* Tile::getUseItem() const
+{
+	const TileItemVector* items = getItemList();
+	if (!items || items->size() == 0) {
+		return ground;
+	}
+
+	for (Item* item : *items) {
+		if (Item::items[item->getID()].forceUse) {
+			return item;
+		}
+	}
+
+	Item* item = items->getTopDownItem();
+	if (!item) {
+		item = items->getTopTopItem();
+	}
+	return item;
 }

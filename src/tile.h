@@ -164,8 +164,18 @@ class TileItemVector
 		uint32_t getDownItemCount() const {
 			return std::distance(getBeginDownItem(), getEndDownItem());
 		}
-		Item* getTopTopItem();
-		Item* getTopDownItem();
+		inline Item* getTopTopItem() const {
+			if (getTopItemCount() == 0) {
+				return nullptr;
+			}
+			return *(getEndTopItem() - 1);
+		}
+		inline Item* getTopDownItem() const {
+			if (getDownItemCount() == 0) {
+				return nullptr;
+			}
+			return *getBeginDownItem();
+		}
 
 	private:
 		ItemVector items;
@@ -210,8 +220,8 @@ class Tile : public Cylinder
 		const Creature* getBottomCreature() const;
 		Creature* getTopVisibleCreature(const Creature* creature) const;
 		const Creature* getBottomVisibleCreature(const Creature* creature) const;
-		Item* getTopTopItem();
-		Item* getTopDownItem();
+		Item* getTopTopItem() const;
+		Item* getTopDownItem() const;
 		bool isMoveableBlocking() const;
 		Thing* getTopVisibleThing(const Creature* creature);
 		Item* getItemByTopOrder(int32_t topOrder);
@@ -333,6 +343,8 @@ class Tile : public Cylinder
 		bool isRemoved() const final {
 			return false;
 		}
+
+		Item* getUseItem() const;
 
 	private:
 		void onAddTileItem(Item* item);

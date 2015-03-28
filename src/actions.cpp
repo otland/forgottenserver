@@ -436,11 +436,6 @@ void Actions::showUseHotkeyMessage(Player* player, const Item* item, uint32_t co
 	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 }
 
-bool Actions::hasAction(const Item* item)
-{
-	return getAction(item) != nullptr;
-}
-
 Action::Action(LuaScriptInterface* _interface) :
 	Event(_interface)
 {

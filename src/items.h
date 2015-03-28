@@ -243,6 +243,7 @@ class ItemType
 		uint8_t shootRange;
 		int8_t hitChance;
 
+		bool forceUse;
 		bool floorChangeDown;
 		bool floorChangeNorth;
 		bool floorChangeSouth;
