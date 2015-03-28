@@ -1870,7 +1870,7 @@ void Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 	}
 
 	if (!IOLoginData::formatPlayerName(receiver)) {
-		player->sendCancel("A player with this name does not exist.");
+		player->sendCancelMessage("A player with this name does not exist.");
 		return;
 	}
 
@@ -3954,25 +3954,27 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 				for (Creature* spectator : list) {
 					Player* tmpPlayer = spectator->getPlayer();
-					if (tmpPlayer->getPosition().z == targetPos.z) {
-						if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
-							message.type = MESSAGE_DAMAGE_DEALT;
-							message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana due to your attack.";
-						} else if (tmpPlayer == targetPlayer) {
-							message.type = MESSAGE_DAMAGE_RECEIVED;
-							if (!attacker) {
-								message.text = "You lose " + damageString + " mana.";
-							} else if (targetPlayer == attackerPlayer) {
-								message.text = "You lose " + damageString + " mana due to your own attack.";
-							} else {
-								message.text = "You lose " + damageString + " mana due to an attack by " + attacker->getNameDescription() + '.';
-							}
-						} else {
-							message.type = MESSAGE_DAMAGE_OTHERS;
-							message.text = spectatorMessage;
-						}
-						tmpPlayer->sendTextMessage(message);
+					if (tmpPlayer->getPosition().z != targetPos.z) {
+						continue;
 					}
+
+					if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
+						message.type = MESSAGE_DAMAGE_DEALT;
+						message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana due to your attack.";
+					} else if (tmpPlayer == targetPlayer) {
+						message.type = MESSAGE_DAMAGE_RECEIVED;
+						if (!attacker) {
+							message.text = "You lose " + damageString + " mana.";
+						} else if (targetPlayer == attackerPlayer) {
+							message.text = "You lose " + damageString + " mana due to your own attack.";
+						} else {
+							message.text = "You lose " + damageString + " mana due to an attack by " + attacker->getNameDescription() + '.';
+						}
+					} else {
+						message.type = MESSAGE_DAMAGE_OTHERS;
+						message.text = spectatorMessage;
+					}
+					tmpPlayer->sendTextMessage(message);
 				}
 
 				damage.primary.value -= manaDamage;
@@ -4057,25 +4059,27 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 			for (Creature* spectator : list) {
 				Player* tmpPlayer = spectator->getPlayer();
-				if (tmpPlayer->getPosition().z == targetPos.z) {
-					if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
-						message.type = MESSAGE_DAMAGE_DEALT;
-						message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " due to your attack.";
-					} else if (tmpPlayer == targetPlayer) {
-						message.type = MESSAGE_DAMAGE_RECEIVED;
-						if (!attacker) {
-							message.text = "You lose " + damageString + '.';
-						} else if (targetPlayer == attackerPlayer) {
-							message.text = "You lose " + damageString + " due to your own attack.";
-						} else {
-							message.text = "You lose " + damageString + " due to an attack by " + attacker->getNameDescription() + '.';
-						}
-					} else {
-						message.type = MESSAGE_DAMAGE_OTHERS;
-						message.text = spectatorMessage;
-					}
-					tmpPlayer->sendTextMessage(message);
+				if (tmpPlayer->getPosition().z != targetPos.z) {
+					continue;
 				}
+
+				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
+					message.type = MESSAGE_DAMAGE_DEALT;
+					message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " due to your attack.";
+				} else if (tmpPlayer == targetPlayer) {
+					message.type = MESSAGE_DAMAGE_RECEIVED;
+					if (!attacker) {
+						message.text = "You lose " + damageString + '.';
+					} else if (targetPlayer == attackerPlayer) {
+						message.text = "You lose " + damageString + " due to your own attack.";
+					} else {
+						message.text = "You lose " + damageString + " due to an attack by " + attacker->getNameDescription() + '.';
+					}
+				} else {
+					message.type = MESSAGE_DAMAGE_OTHERS;
+					message.text = spectatorMessage;
+				}
+				tmpPlayer->sendTextMessage(message);
 			}
 		}
 	}

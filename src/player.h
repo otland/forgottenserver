@@ -843,24 +843,6 @@ class Player final : public Creature, public Cylinder
 				client->sendSpellGroupCooldown(groupId, time);
 			}
 		}
-
-		void sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
-		                       uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
-		                       uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE) {
-			if (client) {
-				client->sendDamageMessage(mclass, message, pos, primaryDamage, primaryColor, secondaryDamage, secondaryColor);
-			}
-		}
-		void sendHealMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t heal, TextColor_t color) {
-			if (client) {
-				client->sendHealMessage(mclass, message, pos, heal, color);
-			}
-		}
-		void sendExperienceMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t exp, TextColor_t color) {
-			if (client) {
-				client->sendExperienceMessage(mclass, message, pos, exp, color);
-			}
-		}
 		void sendModalWindow(const ModalWindow& modalWindow);
 
 		//container
@@ -907,9 +889,9 @@ class Player final : public Creature, public Cylinder
 		void onUpdateInventoryItem(Item* oldItem, Item* newItem);
 		void onRemoveInventoryItem(Item* item);
 
-		void sendCancel(const std::string& msg) const {
+		void sendCancelMessage(const std::string& msg) const {
 			if (client) {
-				client->sendTextMessage(MESSAGE_STATUS_SMALL, msg);
+				client->sendTextMessage(TextMessage(MESSAGE_STATUS_SMALL, msg));
 			}
 		}
 		void sendCancelMessage(ReturnValue message) const;
@@ -972,9 +954,9 @@ class Player final : public Creature, public Cylinder
 				client->sendSkills();
 			}
 		}
-		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t value = 0, TextColor_t color = TEXTCOLOR_NONE) const {
+		void sendTextMessage(MessageClasses mclass, const std::string& message) const {
 			if (client) {
-				client->sendTextMessage(mclass, message, pos, value, color);
+				client->sendTextMessage(TextMessage(mclass, message));
 			}
 		}
 		void sendTextMessage(const TextMessage& message) const {

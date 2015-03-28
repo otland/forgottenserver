@@ -937,7 +937,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	int32_t parameters = 1;
+	int parameters = 1;
 	switch (type) {
 		case COMBAT_FORMULA_LEVELMAGIC: {
 			//onGetPlayerMinMaxValues(player, level, maglevel)
@@ -980,7 +980,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 		}
 	}
 
-	int32_t size0 = lua_gettop(L);
+	int size0 = lua_gettop(L);
 	if (lua_pcall(L, parameters, 2, 0) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
@@ -1062,7 +1062,7 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 		lua_pushnil(L);
 	}
 
-	int32_t size0 = lua_gettop(L);
+	int size0 = lua_gettop(L);
 
 	if (lua_pcall(L, 2, 0 /*nReturnValues*/, 0) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));

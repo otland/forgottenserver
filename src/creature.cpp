@@ -1133,22 +1133,26 @@ bool Creature::onKilledCreature(Creature* target, bool)
 
 void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 {
-	if (gainExp != 0 && master) {
-		gainExp = gainExp / 2;
-		master->onGainExperience(gainExp, target);
+	if (gainExp == 0 || !master) {
+		return;
+	}
 
-		const Position& targetPos = getPosition();
+	gainExp /= 2;
+	master->onGainExperience(gainExp, target);
 
-		std::ostringstream ssExp;
-		ssExp << ucfirst(getNameDescription()) << " gained " << gainExp << " experience points.";
-		std::string strExp = ssExp.str();
+	SpectatorVec list;
+	g_game.map.getSpectators(list, _position, false, true);
+	if (list.empty()) {
+		return;
+	}
 
-		SpectatorVec list;
-		g_game.map.getSpectators(list, targetPos, false, true);
+	TextMessage message(MESSAGE_EXPERIENCE_OTHERS, ucfirst(getNameDescription()) + " gained " + std::to_string(gainExp) + (gainExp != 1 ? " experience points." : " experience point."));
+	message.position = _position;
+	message.primary.color = TEXTCOLOR_WHITE_EXP;
+	message.primary.value = gainExp;
 
-		for (Creature* spectator : list) {
-			spectator->getPlayer()->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, gainExp, TEXTCOLOR_WHITE_EXP);
-		}
+	for (Creature* spectator : list) {
+		spectator->getPlayer()->sendTextMessage(message);
 	}
 }
 

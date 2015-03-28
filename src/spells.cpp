@@ -1506,7 +1506,7 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 		}
 
 		if (player->getSummonCount() >= 2) {
-			player->sendCancel("You cannot summon more creatures.");
+			player->sendCancelMessage("You cannot summon more creatures.");
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 			return false;
 		}

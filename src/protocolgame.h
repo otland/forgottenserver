@@ -50,8 +50,11 @@ struct TextMessage
 		TextColor_t color;
 	} primary, secondary;
 
-	TextMessage()
-	{
+	TextMessage() {
+		primary.value = 0;
+		secondary.value = 0;
+	}
+	TextMessage(MessageClasses type, std::string text) : type(type), text(text) {
 		primary.value = 0;
 		secondary.value = 0;
 	}
@@ -200,7 +203,6 @@ class ProtocolGame final : public Protocol
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
 		void sendBasicData();
-		void sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos = nullptr, uint32_t exp = 0, TextColor_t color = TEXTCOLOR_NONE);
 		void sendTextMessage(const TextMessage& message);
 		void sendReLoginWindow(uint8_t unfairFightReduction);
 
@@ -272,11 +274,6 @@ class ProtocolGame final : public Protocol
 		void sendInventoryItem(slots_t slot, const Item* item);
 
 		//messages
-		void sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
-		                       uint32_t primaryDamage = 0, TextColor_t primaryColor = TEXTCOLOR_NONE,
-		                       uint32_t secondaryDamage = 0, TextColor_t secondaryColor = TEXTCOLOR_NONE);
-		void sendHealMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t heal, TextColor_t color);
-		void sendExperienceMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t exp, TextColor_t color);
 		void sendModalWindow(const ModalWindow& modalWindow);
 
 		//Help functions

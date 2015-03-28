@@ -262,8 +262,8 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	LuaScriptInterface::pushString(L, message);
 
 	bool result = false;
-	int32_t size0 = lua_gettop(L);
-	int32_t ret = m_scriptInterface->protectedCall(L, 3, 1);
+	int size0 = lua_gettop(L);
+	int ret = m_scriptInterface->protectedCall(L, 3, 1);
 	if (ret != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else if (lua_gettop(L) > 0) {

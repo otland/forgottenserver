@@ -739,19 +739,22 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 			if (isBuff && realHealthGain > 0) {
 				Player* player = creature->getPlayer();
 				if (player) {
-					std::ostringstream ss;
-					ss << player->getName() << " was healed for " << realHealthGain << (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
-					std::string message = ss.str();
+					std::string healString = std::to_string(realHealthGain) + (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
 
-					std::ostringstream tmpSs;
-					tmpSs << "You were healed for " << realHealthGain << (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
-					player->sendHealMessage(MESSAGE_HEALED, tmpSs.str(), player->getPosition(), realHealthGain, TEXTCOLOR_MAYABLUE);
+					TextMessage message(MESSAGE_HEALED, "You were healed for " + healString);
+					message.position = player->getPosition();
+					message.primary.value = realHealthGain;
+					message.primary.color = TEXTCOLOR_MAYABLUE;
+					player->sendTextMessage(message);
 
 					SpectatorVec list;
 					g_game.map.getSpectators(list, player->getPosition(), false, true);
-					for (Creature* spectator : list) {
-						if (spectator != player) {
-							spectator->getPlayer()->sendHealMessage(MESSAGE_HEALED_OTHERS, message, player->getPosition(), realHealthGain, TEXTCOLOR_MAYABLUE);
+					list.erase(player);
+					if (!list.empty()) {
+						message.type = MESSAGE_HEALED_OTHERS;
+						message.text = player->getName() + " was healed for " + healString;
+						for (Creature* spectator : list) {
+							spectator->getPlayer()->sendTextMessage(message);
 						}
 					}
 				}

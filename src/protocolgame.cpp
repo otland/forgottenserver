@@ -1343,25 +1343,6 @@ void ProtocolGame::sendBasicData()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message, Position* pos/* = nullptr*/, uint32_t value/* = 0*/, TextColor_t color/* = TEXTCOLOR_NONE*/)
-{
-	NetworkMessage msg;
-	if (pos != nullptr && (mclass == MESSAGE_DAMAGE_DEALT || mclass == MESSAGE_DAMAGE_RECEIVED || mclass == MESSAGE_HEALED || mclass == MESSAGE_EXPERIENCE || mclass == MESSAGE_DAMAGE_OTHERS || mclass == MESSAGE_HEALED_OTHERS || mclass == MESSAGE_EXPERIENCE_OTHERS)) {
-		msg.addByte(0xB4);
-		msg.addByte(mclass);
-		msg.addPosition(*pos);
-		msg.add<uint32_t>(value);
-		msg.addByte(color);
-		msg.addString(message);
-	} else {
-		msg.addByte(0xB4);
-		msg.addByte(mclass);
-		msg.addString(message);
-	}
-
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendTextMessage(const TextMessage& message)
 {
 	NetworkMessage msg;
@@ -2787,46 +2768,6 @@ void ProtocolGame::sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time)
 	msg.addByte(0xA5);
 	msg.addByte(groupId);
 	msg.add<uint32_t>(time);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendDamageMessage(MessageClasses mclass, const std::string& message, const Position& pos,
-                                     uint32_t primaryDamage/* = 0*/, TextColor_t primaryColor/* = TEXTCOLOR_NONE*/,
-                                     uint32_t secondaryDamage/* = 0*/, TextColor_t secondaryColor/* = TEXTCOLOR_NONE*/)
-{
-	NetworkMessage msg;
-	msg.addByte(0xB4);
-	msg.addByte(mclass);
-	msg.addPosition(pos);
-	msg.add<uint32_t>(primaryDamage);
-	msg.addByte(primaryColor);
-	msg.add<uint32_t>(secondaryDamage);
-	msg.addByte(secondaryColor);
-	msg.addString(message);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendHealMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t heal, TextColor_t color)
-{
-	NetworkMessage msg;
-	msg.addByte(0xB4);
-	msg.addByte(mclass);
-	msg.addPosition(pos);
-	msg.add<uint32_t>(heal);
-	msg.addByte(color);
-	msg.addString(message);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendExperienceMessage(MessageClasses mclass, const std::string& message, const Position& pos, uint32_t exp, TextColor_t color)
-{
-	NetworkMessage msg;
-	msg.addByte(0xB4);
-	msg.addByte(mclass);
-	msg.addPosition(pos);
-	msg.add<uint32_t>(exp);
-	msg.addByte(color);
-	msg.addString(message);
 	writeToOutputBuffer(msg);
 }
 

@@ -262,8 +262,8 @@ class LuaScriptInterface
 		bool pushFunction(int32_t functionId);
 
 		static int32_t luaErrorHandler(lua_State* L);
-		bool callFunction(int32_t params);
-		void callVoidFunction(int32_t params);
+		bool callFunction(int params);
+		void callVoidFunction(int params);
 
 		//push/pop common structures
 		static void pushThing(lua_State* L, Thing* thing);
@@ -413,7 +413,7 @@ class LuaScriptInterface
 		static const luaL_Reg luaDatabaseTable[9];
 		static const luaL_Reg luaResultTable[6];
 
-		static int32_t protectedCall(lua_State* L, int32_t nargs, int32_t nresults);
+		static int protectedCall(lua_State* L, int nargs, int nresults);
 
 	protected:
 		virtual bool closeState();

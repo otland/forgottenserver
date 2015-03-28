@@ -764,7 +764,7 @@ int32_t NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	std::list<ShopInfo> items;
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
-		const int32_t tableIndex = lua_gettop(L);
+		const auto tableIndex = lua_gettop(L);
 		ShopInfo item;
 
 		item.itemId = getField<uint32_t>(L, tableIndex, "id");
@@ -984,7 +984,7 @@ int32_t NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 
 	lua_pushnil(L);
 	while (lua_next(L, 3) != 0) {
-		const int32_t tableIndex = lua_gettop(L);
+		const auto tableIndex = lua_gettop(L);
 		ShopInfo item;
 
 		item.itemId = getField<uint32_t>(L, tableIndex, "id");

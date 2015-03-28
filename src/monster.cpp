@@ -379,8 +379,9 @@ void Monster::updateTargetList()
 
 	SpectatorVec list;
 	g_game.map.getSpectators(list, _position, true);
+	list.erase(this);
 	for (Creature* spectator : list) {
-		if (spectator != this && canSee(spectator->getPosition())) {
+		if (canSee(spectator->getPosition())) {
 			onCreatureFound(spectator);
 		}
 	}
