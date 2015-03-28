@@ -294,7 +294,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 	version = msg.get<uint16_t>();
 
-	msg.skipBytes(5); // U32 clientVersion, U8 clientType
+	msg.skipBytes(7); // U32 client version, U8 client type, U16 dat revision
 
 	if (!Protocol::RSA_decrypt(msg)) {
 		getConnection()->close();
@@ -318,9 +318,25 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	msg.skipBytes(1); // gamemaster flag
-	std::string accountName = msg.getString();
+
+#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::disconnectClient, this, err)))
+
+	std::string sessionKey = msg.getString();
+	size_t pos = sessionKey.find('\n');
+	if (pos == std::string::npos) {
+		dispatchDisconnectClient("You must enter your account name.");
+		return;
+	}
+
+	std::string accountName = sessionKey.substr(0, pos);
+	if (accountName.empty()) {
+		dispatchDisconnectClient("You must enter your account name.");
+		return;
+	}
+
+	std::string password = sessionKey.substr(pos + 1);
+
 	std::string characterName = msg.getString();
-	std::string password = msg.getString();
 
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
@@ -329,15 +345,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::disconnectClient, this, err)))
-
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
 		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
-		return;
-	}
-
-	if (accountName.empty()) {
-		dispatchDisconnectClient("You must enter your account name.");
 		return;
 	}
 
@@ -1293,8 +1302,9 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	}
 
 	NetworkMessage msg;
-	msg.addByte(0x86);
+	msg.addByte(0x93);
 	msg.add<uint32_t>(creature->getID());
+	msg.addByte(0x01);
 	msg.addByte(color);
 	writeToOutputBuffer(msg);
 }
@@ -2217,6 +2227,7 @@ void ProtocolGame::sendChangeSpeed(const Creature* creature, uint32_t speed)
 	NetworkMessage msg;
 	msg.addByte(0x8F);
 	msg.add<uint32_t>(creature->getID());
+	msg.add<uint16_t>(creature->getBaseSpeed() / 2);
 	msg.add<uint16_t>(speed / 2);
 	writeToOutputBuffer(msg);
 }
@@ -2433,6 +2444,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	} else {
 		msg.addByte(0x00);
 	}
+
+	msg.addByte(0x00); // can change pvp framing option
+	msg.addByte(0x00); // expert mode button enabled
 
 	writeToOutputBuffer(msg);
 
@@ -2887,6 +2901,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 
 	msg.add<uint16_t>(player->getLevel());
 	msg.addByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
+	msg.addDouble(0, 3); // experience bonus
 
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getPlayerInfo(PLAYERINFO_MAXMANA), std::numeric_limits<uint16_t>::max()));

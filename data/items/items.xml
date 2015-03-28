@@ -9114,7 +9114,7 @@
 	<item id="5807" article="a" name="bronze goblet">
 		<attribute key="weight" value="1500" />
 	</item>
-	<item id="5808" name="orshabaal's brain">
+	<item id="5808" name="Orshabaal's brain">
 		<attribute key="weight" value="3500" />
 	</item>
 	<item id="5809" article="a" name="soul stone">
@@ -9419,7 +9419,7 @@
 		<attribute key="description" value="Many mighty priests have blessed this stake." />
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="5943" name="Morgaroth's Heart">
+	<item id="5943" name="Morgaroth's heart">
 		<attribute key="weight" value="3500" />
 	</item>
 	<item id="5944" article="a" name="soul orb">

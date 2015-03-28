@@ -191,7 +191,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 	} else if (Items::dwMajorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
-	} else if (Items::dwMinorVersion < CLIENT_VERSION_1035) {
+	} else if (Items::dwMinorVersion < CLIENT_VERSION_1076) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}

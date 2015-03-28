@@ -35,11 +35,11 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-void ProtocolLogin::disconnectClient(const std::string& message)
+void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
 {
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if (output) {
-		output->addByte(0x0A);
+		output->addByte(version >= 1076 ? 0x0B : 0x0A);
 		output->addString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
@@ -47,11 +47,11 @@ void ProtocolLogin::disconnectClient(const std::string& message)
 	getConnection()->close();
 }
 
-void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password)
+void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password, uint16_t version)
 {
 	Account account;
 	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
-		disconnectClient("Account name or password is not correct.");
+		disconnectClient("Account name or password is not correct.", version);
 		return;
 	}
 
@@ -66,6 +66,10 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		std::ostringstream ss;
 		ss << g_game.getMotdNum() << "\n" << g_config.getString(ConfigManager::MOTD);
 		output->addString(ss.str());
+
+		//Add session key
+		output->addByte(0x28);
+		output->addString(accountName + "\n" + password);
 
 		//Add char list
 		output->addByte(0x64);
@@ -105,26 +109,19 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t clientip = getConnection()->getIP();
+	msg.skipBytes(2); // client OS
 
-	/*uint16_t clientos = */
-	msg.get<uint16_t>();
 	uint16_t version = msg.get<uint16_t>();
 
-	if (version >= 971) {
-		msg.skipBytes(17);
-	} else {
-		msg.skipBytes(12);
-	}
-
+	msg.skipBytes(17);
 	/*
 	 * Skipped bytes:
-	 * 4 bytes: protocolVersion (only 971+)
+	 * 4 bytes: protocolVersion
 	 * 12 bytes: dat, spr, pic signatures (4 bytes each)
-	 * 1 byte: 0 (only 971+)
+	 * 1 byte: 0
 	 */
 
-#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, this, err)))
+#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, this, err, version)))
 
 	if (version <= 760) {
 		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
@@ -144,9 +141,6 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
-	std::string accountName = msg.getString();
-	std::string password = msg.getString();
-
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
 		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
 		return;
@@ -163,7 +157,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	BanInfo banInfo;
-	if (IOBan::isIpBanned(clientip, banInfo)) {
+	if (IOBan::isIpBanned(getConnection()->getIP(), banInfo)) {
 		if (banInfo.reason.empty()) {
 			banInfo.reason = "(none)";
 		}
@@ -174,6 +168,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
+	std::string accountName = msg.getString();
 	if (accountName.empty()) {
 		dispatchDisconnectClient("Invalid account name.");
 		return;
@@ -181,5 +176,6 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 #undef dispatchDisconnectClient
 
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, this, accountName, password)));
+	std::string password = msg.getString();
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, this, accountName, password, version)));
 }

@@ -180,8 +180,8 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_CHANNEL_R1 = 14, //red - #c text
 	TALKTYPE_PRIVATE_RED_FROM = 15, //@name@text
 	TALKTYPE_PRIVATE_RED_TO = 16, //@name@text
-	TALKTYPE_MONSTER_SAY = 35,
-	TALKTYPE_MONSTER_YELL = 36,
+	TALKTYPE_MONSTER_SAY = 36,
+	TALKTYPE_MONSTER_YELL = 37,
 
 	TALKTYPE_CHANNEL_R2 = 0xFF //#d
 };
@@ -192,19 +192,19 @@ enum MessageClasses : uint8_t {
 	MESSAGE_STATUS_DEFAULT		= 0x11, /*White message at the bottom of the game window and in the console*/
 	MESSAGE_STATUS_WARNING		= 0x12, /*Red message in game window and in the console*/
 	MESSAGE_EVENT_ADVANCE		= 0x13, /*White message in game window and in the console*/
-	MESSAGE_STATUS_SMALL		= 0x14, /*White message at the bottom of the game window"*/
-	MESSAGE_INFO_DESCR			= 0x15, /*Green message in game window and in the console*/
-	MESSAGE_DAMAGE_DEALT		= 0x16,
-	MESSAGE_DAMAGE_RECEIVED		= 0x17,
-	MESSAGE_HEALED			= 0x18,
-	MESSAGE_EXPERIENCE			= 0x19,
-	MESSAGE_DAMAGE_OTHERS		= 0x1A,
-	MESSAGE_HEALED_OTHERS		= 0x1B,
-	MESSAGE_EXPERIENCE_OTHERS		= 0x1C,
-	MESSAGE_EVENT_DEFAULT		= 0x1D, /*White message at the bottom of the game window and in the console*/
-	MESSAGE_LOOT			= 0x1E,
-	MESSAGE_EVENT_ORANGE		= 0x23, /*Orange message in the console*/
-	MESSAGE_STATUS_CONSOLE_ORANGE	= 0x24  /*Orange message in the console*/
+	MESSAGE_STATUS_SMALL		= 0x15, /*White message at the bottom of the game window"*/
+	MESSAGE_INFO_DESCR			= 0x16, /*Green message in game window and in the console*/
+	MESSAGE_DAMAGE_DEALT		= 0x17,
+	MESSAGE_DAMAGE_RECEIVED		= 0x18,
+	MESSAGE_HEALED			= 0x19,
+	MESSAGE_EXPERIENCE			= 0x1A,
+	MESSAGE_DAMAGE_OTHERS		= 0x1B,
+	MESSAGE_HEALED_OTHERS		= 0x1C,
+	MESSAGE_EXPERIENCE_OTHERS		= 0x1D,
+	MESSAGE_EVENT_DEFAULT		= 0x1E, /*White message at the bottom of the game window and in the console*/
+	MESSAGE_LOOT			= 0x1F,
+	MESSAGE_EVENT_ORANGE		= 0x24, /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_ORANGE	= 0x25  /*Orange message in the console*/
 };
 
 enum FluidColors_t : uint8_t {
