@@ -1239,30 +1239,30 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 
 		int16_t oldStaminaMinutes = getStaminaMinutes();
 
-		int32_t offlineTrainingSkill = getOfflineTrainingSkill();
 		if (offlineTrainingSkill != -1) {
 			setOfflineTrainingSkill(-1);
-			uint32_t offlineTrainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, getOfflineTrainingTime() / 1000)));
 
 			if (offlineTime >= 600) {
-				removeOfflineTrainingTime(offlineTrainingTime * 1000);
+				uint32_t trainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, offlineTrainingTime / 1000)));
 
-				int32_t remainder = offlineTime - offlineTrainingTime;
+				removeOfflineTrainingTime(trainingTime * 1000);
+
+				int32_t remainder = offlineTime - trainingTime;
 				if (remainder > 0) {
 					addOfflineTrainingTime(remainder * 1000);
 				}
 
-				if (offlineTrainingTime >= 60) {
+				if (trainingTime >= 60) {
 					std::ostringstream ss;
 					ss << "During your absence you trained for ";
-					int32_t hours = offlineTrainingTime / 3600;
+					int32_t hours = trainingTime / 3600;
 					if (hours > 1) {
 						ss << hours << " hours";
 					} else if (hours == 1) {
 						ss << "1 hour";
 					}
 
-					int32_t minutes = (offlineTrainingTime % 3600) / 60;
+					int32_t minutes = (trainingTime % 3600) / 60;
 					if (minutes != 0) {
 						if (hours != 0) {
 							ss << " and ";
@@ -1278,34 +1278,34 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 					ss << '.';
 					sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 
-					Vocation* vocation;
+					Vocation* topVocation;
 					if (isPromoted()) {
-						vocation = getVocation();
+						topVocation = getVocation();
 					} else {
 						int32_t promotedVocationId = g_vocations.getPromotedVocation(getVocationId());
-						vocation = g_vocations.getVocation(promotedVocationId);
-						if (!vocation) {
-							vocation = getVocation();
+						topVocation = g_vocations.getVocation(promotedVocationId);
+						if (!topVocation) {
+							topVocation = getVocation();
 						}
 					}
 
 					bool sendUpdateSkills = false;
 					if (offlineTrainingSkill == SKILL_CLUB || offlineTrainingSkill == SKILL_SWORD || offlineTrainingSkill == SKILL_AXE) {
-						float modifier = vocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 2);
+						float modifier = topVocation->getAttackSpeed() / 1000.f;
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (trainingTime / modifier) / 2);
 					} else if (offlineTrainingSkill == SKILL_DISTANCE) {
-						float modifier = vocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 4);
+						float modifier = topVocation->getAttackSpeed() / 1000.f;
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (trainingTime / modifier) / 4);
 					} else if (offlineTrainingSkill == SKILL_MAGLEVEL) {
-						int32_t gainTicks = vocation->getManaGainTicks() * 2;
+						int32_t gainTicks = topVocation->getManaGainTicks() * 2;
 						if (gainTicks == 0) {
 							gainTicks = 1;
 						}
 
-						addOfflineTrainingTries(SKILL_MAGLEVEL, offlineTrainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
+						addOfflineTrainingTries(SKILL_MAGLEVEL, trainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
 					}
 
-					if (addOfflineTrainingTries(SKILL_SHIELD, offlineTrainingTime / 4) || sendUpdateSkills) {
+					if (addOfflineTrainingTries(SKILL_SHIELD, trainingTime / 4) || sendUpdateSkills) {
 						sendSkills();
 					}
 				}
