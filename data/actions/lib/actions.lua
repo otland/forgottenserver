@@ -7,7 +7,7 @@ function destroyItem(cid, target, toPosition)
 		return false
 	end
 
-	local targetId = itemEx:getId()
+	local targetId = target:getId()
 	if (targetId >= 1724 and targetId <= 1741) or (targetId >= 2581 and targetId <= 2588) or targetId == 1770 or targetId == 2098 or targetId == 1774 or targetId == 1775 or targetId == 2064 or (targetId >= 1747 and targetId <= 1753) or (targetId >= 1714 and targetId <= 1717) or (targetId >= 1650 and targetId <= 1653) or (targetId >= 1666 and targetId <= 1677) or (targetId >= 1614 and targetId <= 1616) or (targetId >= 3813 and targetId <= 3820) or (targetId >= 3807 and targetId <= 3810) or (targetId >= 2080 and targetId <= 2085) or (targetId >= 2116 and targetId <= 2119) or targetId == 2094 or targetId == 2095 or targetId == 1619 or targetId == 2602 or targetId == 3805 or targetId == 3806 then
 		if math.random(1, 7) == 1 then
 			target:remove(1)
