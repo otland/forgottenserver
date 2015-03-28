@@ -37,12 +37,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if bed[1][1] == targetItemId or isInArray({1758, 5502, 18027}, targetItemId) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.y = toPosition.y + 1
-			internalBedTransform(item, target, tile, toPosition, newBed[1])
+			internalBedTransform(item, target, toPosition, newBed[1])
 			break
 		elseif bed[2][1] == targetItemId or isInArray({1756, 5500, 18029}, targetItemId) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.x = toPosition.x + 1
-			internalBedTransform(item, target, tile, toPosition, newBed[2])
+			internalBedTransform(item, target, toPosition, newBed[2])
 			break
 		end
 	end
