@@ -134,6 +134,12 @@
 	<movevent event="AddItem" tileitem="1" itemid="1788" script="dough.lua"/>
 	<movevent event="AddItem" tileitem="1" itemid="1790" script="dough.lua"/>
 	<movevent event="AddItem" tileitem="1" itemid="1792" script="dough.lua"/>
+	<movevent event="AddItem" tileitem="1" itemid="6356" script="dough.lua"/>
+	<movevent event="AddItem" tileitem="1" itemid="6358" script="dough.lua"/>
+	<movevent event="AddItem" tileitem="1" itemid="6360" script="dough.lua"/>
+	<movevent event="AddItem" tileitem="1" itemid="6362" script="dough.lua"/>
+	<movevent event="AddItem" tileitem="1" itemid="6278" script="cake.lua"/>
+	<movevent event="AddItem" tileitem="1" itemid="6279" script="cake.lua"/>
 
 	<!-- Campfires -->
 	<movevent event="StepIn" itemid="1423" function="onStepInField"/>

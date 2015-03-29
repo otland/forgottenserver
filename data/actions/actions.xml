@@ -112,7 +112,6 @@
 	<action itemid="8847" script="other/food.lua"/>
 	<action itemid="9005" script="other/food.lua"/>
 	<action itemid="9114" script="other/food.lua"/>
-	<action itemid="9996" script="other/food.lua"/>
 	<action itemid="10454" script="other/food.lua"/>
 	<action itemid="11246" script="other/food.lua"/>
 	<action itemid="11370" script="other/food.lua"/>
@@ -126,6 +125,9 @@
 	<action itemid="18397" script="other/food.lua"/>
 	<action itemid="19737" script="other/food.lua"/>
 	<action fromid="20100" toid="20101" script="other/food.lua"/>
+	<action fromid="9992" toid="10001" script="other/food_special.lua"/>
+	<action itemid="12540" script="other/food_special.lua"/>
+	<action fromid="12542" toid="12544" script="other/food_special.lua"/>
 
 	<!-- Spellbooks -->
 	<action itemid="2175" script="other/spellbook.lua"/>
@@ -202,8 +204,10 @@
 	<action itemid="8473" script="other/potions.lua"/>
 	<action itemid="8474" script="other/potions.lua"/>
 	<action itemid="8704" script="other/potions.lua"/>
-	<action itemid="2692" script="other/createbread.lua"/>
-	<action itemid="2694" script="other/createbread.lua"/>
+	<action itemid="2692" script="other/createfood.lua"/>
+	<action itemid="2694" script="other/createfood.lua"/>
+	<action itemid="6277" script="other/createfood.lua"/>
+	<action itemid="8848" script="other/createfood.lua"/>
 	<action fromid="6436" toid="6447" script="other/windows.lua"/>
 	<action fromid="6450" toid="6473" script="other/windows.lua"/>
 	<action fromid="6788" toid="6791" script="other/windows.lua"/>
