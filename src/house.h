@@ -100,14 +100,14 @@ class Door final : public Item
 
 enum AccessList_t {
 	GUEST_LIST = 0x100,
-	SUBOWNER_LIST = 0x101
+	SUBOWNER_LIST = 0x101,
 };
 
 enum AccessHouseLevel_t {
-	HOUSE_NO_INVITED = 0,
+	HOUSE_NOT_INVITED = 0,
 	HOUSE_GUEST = 1,
 	HOUSE_SUBOWNER = 2,
-	HOUSE_OWNER = 3
+	HOUSE_OWNER = 3,
 };
 
 typedef std::list<HouseTile*> HouseTileList;
@@ -265,7 +265,7 @@ enum RentPeriod_t {
 	RENTPERIOD_WEEKLY,
 	RENTPERIOD_MONTHLY,
 	RENTPERIOD_YEARLY,
-	RENTPERIOD_NEVER
+	RENTPERIOD_NEVER,
 };
 
 class Houses

@@ -932,7 +932,7 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 
 void ProtocolGame::parseFightModes(NetworkMessage& msg)
 {
-	uint8_t rawFightMode = msg.getByte(); //1 - offensive, 2 - balanced, 3 - defensive
+	uint8_t rawFightMode = msg.getByte(); // 1 - offensive, 2 - balanced, 3 - defensive
 	uint8_t rawChaseMode = msg.getByte(); // 0 - stand while fightning, 1 - chase opponent
 	uint8_t rawSecureMode = msg.getByte(); // 0 - can't attack unmarked, 1 - can attack unmarked
 	// uint8_t rawPvpMode = msg.getByte(); // pvp mode introduced in 10.0
@@ -953,14 +953,7 @@ void ProtocolGame::parseFightModes(NetworkMessage& msg)
 		fightMode = FIGHTMODE_DEFENSE;
 	}
 
-	secureMode_t secureMode;
-	if (rawSecureMode == 1) {
-		secureMode = SECUREMODE_ON;
-	} else {
-		secureMode = SECUREMODE_OFF;
-	}
-
-	addGameTask(&Game::playerSetFightModes, player->getID(), fightMode, chaseMode, secureMode);
+	addGameTask(&Game::playerSetFightModes, player->getID(), fightMode, chaseMode, rawSecureMode != 0);
 }
 
 void ProtocolGame::parseAttack(NetworkMessage& msg)
@@ -1900,8 +1893,8 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		std::ostringstream ss;
 		bool separator = false;
 
-		for (uint32_t i = (COMBAT_FIRST + 1); i <= COMBAT_COUNT; ++i) {
-			if (!it.abilities->absorbPercent[i]) {
+		for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+			if (it.abilities->absorbPercent[i] == 0) {
 				continue;
 			}
 

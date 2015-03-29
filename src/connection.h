@@ -65,10 +65,10 @@ class Connection : public std::enable_shared_from_this<Connection>
 		enum { read_timeout = 30 };
 
 		enum ConnectionState_t {
-			CONNECTION_STATE_OPEN = 0,
-			CONNECTION_STATE_REQUEST_CLOSE = 1,
-			CONNECTION_STATE_CLOSING = 2,
-			CONNECTION_STATE_CLOSED = 3
+			CONNECTION_STATE_OPEN,
+			CONNECTION_STATE_REQUEST_CLOSE,
+			CONNECTION_STATE_CLOSING,
+			CONNECTION_STATE_CLOSED,
 		};
 
 		Connection(boost::asio::ip::tcp::socket* socket,

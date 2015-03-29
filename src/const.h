@@ -23,8 +23,7 @@
 #define NETWORKMESSAGE_MAXSIZE 24590
 
 enum MagicEffectClasses : uint8_t {
-	CONST_ME_FIRST = 1,
-	CONST_ME_DRAWBLOOD = CONST_ME_FIRST,
+	CONST_ME_DRAWBLOOD = 1,
 	CONST_ME_LOSEENERGY = 2,
 	CONST_ME_POFF = 3,
 	CONST_ME_BLOCKHIT = 4,
@@ -102,16 +101,14 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_CONFETTI_VERTICAL = 76,
 	// 77-157 are empty
 	CONST_ME_BLACKSMOKE = 158,
-	CONST_ME_LAST = CONST_ME_BLACKSMOKE,
 
 	//for internal use, dont send to client
-	CONST_ME_NONE             = 0xFF
+	CONST_ME_NONE = 0xFF,
 };
 
 enum ShootType_t : uint8_t {
 	CONST_ANI_NONE = 0,
-	CONST_ANI_FIRST = 1,
-	CONST_ANI_SPEAR = CONST_ANI_FIRST,
+	CONST_ANI_SPEAR = 1,
 	CONST_ANI_BOLT = 2,
 	CONST_ANI_ARROW = 3,
 	CONST_ANI_FIRE = 4,
@@ -163,7 +160,7 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_ENVENOMEDARROW = 51,
 
 	//for internal use, dont send to client
-	CONST_ANI_WEAPONTYPE = 0xFE //254
+	CONST_ANI_WEAPONTYPE = 0xFE, // 254
 };
 
 enum SpeakClasses : uint8_t {
@@ -183,39 +180,42 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_MONSTER_SAY = 36,
 	TALKTYPE_MONSTER_YELL = 37,
 
-	TALKTYPE_CHANNEL_R2 = 0xFF //#d
+	TALKTYPE_CHANNEL_R2 = 0xFF, //#d
 };
 
 enum MessageClasses : uint8_t {
-	MESSAGE_STATUS_CONSOLE_BLUE		= 0x04, /*FIXME Blue message in the console*/
-	MESSAGE_STATUS_CONSOLE_RED		= 0x0D, /*Red message in the console*/
-	MESSAGE_STATUS_DEFAULT		= 0x11, /*White message at the bottom of the game window and in the console*/
-	MESSAGE_STATUS_WARNING		= 0x12, /*Red message in game window and in the console*/
-	MESSAGE_EVENT_ADVANCE		= 0x13, /*White message in game window and in the console*/
-	MESSAGE_STATUS_SMALL		= 0x15, /*White message at the bottom of the game window"*/
-	MESSAGE_INFO_DESCR			= 0x16, /*Green message in game window and in the console*/
-	MESSAGE_DAMAGE_DEALT		= 0x17,
-	MESSAGE_DAMAGE_RECEIVED		= 0x18,
-	MESSAGE_HEALED			= 0x19,
-	MESSAGE_EXPERIENCE			= 0x1A,
-	MESSAGE_DAMAGE_OTHERS		= 0x1B,
-	MESSAGE_HEALED_OTHERS		= 0x1C,
-	MESSAGE_EXPERIENCE_OTHERS		= 0x1D,
-	MESSAGE_EVENT_DEFAULT		= 0x1E, /*White message at the bottom of the game window and in the console*/
-	MESSAGE_LOOT			= 0x1F,
-	MESSAGE_EVENT_ORANGE		= 0x24, /*Orange message in the console*/
-	MESSAGE_STATUS_CONSOLE_ORANGE	= 0x25  /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_BLUE = 4, /*FIXME Blue message in the console*/
+
+	MESSAGE_STATUS_CONSOLE_RED = 13, /*Red message in the console*/
+
+	MESSAGE_STATUS_DEFAULT = 17, /*White message at the bottom of the game window and in the console*/
+	MESSAGE_STATUS_WARNING = 18, /*Red message in game window and in the console*/
+	MESSAGE_EVENT_ADVANCE = 19, /*White message in game window and in the console*/
+
+	MESSAGE_STATUS_SMALL = 21, /*White message at the bottom of the game window"*/
+	MESSAGE_INFO_DESCR = 22, /*Green message in game window and in the console*/
+	MESSAGE_DAMAGE_DEALT = 23,
+	MESSAGE_DAMAGE_RECEIVED = 24,
+	MESSAGE_HEALED = 25,
+	MESSAGE_EXPERIENCE = 26,
+	MESSAGE_DAMAGE_OTHERS = 27,
+	MESSAGE_HEALED_OTHERS = 28,
+	MESSAGE_EXPERIENCE_OTHERS = 29,
+	MESSAGE_EVENT_DEFAULT = 30, /*White message at the bottom of the game window and in the console*/
+
+	MESSAGE_EVENT_ORANGE = 36, /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_ORANGE = 37,  /*Orange message in the console*/
 };
 
 enum FluidColors_t : uint8_t {
-	FLUID_EMPTY = 0x00,
-	FLUID_BLUE = 0x01,
-	FLUID_RED = 0x02,
-	FLUID_BROWN = 0x03,
-	FLUID_GREEN = 0x04,
-	FLUID_YELLOW = 0x05,
-	FLUID_WHITE = 0x06,
-	FLUID_PURPLE = 0x07
+	FLUID_EMPTY,
+	FLUID_BLUE,
+	FLUID_RED,
+	FLUID_BROWN,
+	FLUID_GREEN,
+	FLUID_YELLOW,
+	FLUID_WHITE,
+	FLUID_PURPLE,
 };
 
 enum FluidTypes_t : uint8_t {
@@ -242,7 +242,8 @@ enum FluidTypes_t : uint8_t {
 	FLUID_SWAMP = FLUID_GREEN + 24,
 
 	FLUID_TEA = FLUID_BROWN + 32,
-	FLUID_MEAD = FLUID_BROWN + 40
+
+	FLUID_MEAD = FLUID_BROWN + 40,
 };
 
 const uint8_t reverseFluidMap[] = {
@@ -255,7 +256,7 @@ const uint8_t reverseFluidMap[] = {
 	FLUID_SLIME,
 	FLUID_EMPTY,
 	FLUID_LEMONADE,
-	FLUID_MILK
+	FLUID_MILK,
 };
 
 const uint8_t clientToServerFluidMap[] = {
@@ -276,20 +277,20 @@ const uint8_t clientToServerFluidMap[] = {
 	FLUID_FRUITJUICE,
 	FLUID_COCONUTMILK,
 	FLUID_TEA,
-	FLUID_MEAD
+	FLUID_MEAD,
 };
 
 enum ClientFluidTypes_t : uint8_t {
-	CLIENTFLUID_EMPTY	= 0x00,
-	CLIENTFLUID_BLUE	= 0x01,
-	CLIENTFLUID_PURPLE	= 0x02,
-	CLIENTFLUID_BROWN_1	= 0x03,
-	CLIENTFLUID_BROWN_2	= 0x04,
-	CLIENTFLUID_RED		= 0x05,
-	CLIENTFLUID_GREEN	= 0x06,
-	CLIENTFLUID_BROWN	= 0x07,
-	CLIENTFLUID_YELLOW	= 0x08,
-	CLIENTFLUID_WHITE	= 0x09
+	CLIENTFLUID_EMPTY = 0,
+	CLIENTFLUID_BLUE = 1,
+	CLIENTFLUID_PURPLE = 2,
+	CLIENTFLUID_BROWN_1 = 3,
+	CLIENTFLUID_BROWN_2 = 4,
+	CLIENTFLUID_RED = 5,
+	CLIENTFLUID_GREEN = 6,
+	CLIENTFLUID_BROWN = 7,
+	CLIENTFLUID_YELLOW = 8,
+	CLIENTFLUID_WHITE = 9,
 };
 
 const uint8_t fluidMap[] = {
@@ -300,11 +301,11 @@ const uint8_t fluidMap[] = {
 	CLIENTFLUID_GREEN,
 	CLIENTFLUID_YELLOW,
 	CLIENTFLUID_WHITE,
-	CLIENTFLUID_PURPLE
+	CLIENTFLUID_PURPLE,
 };
 
 enum SquareColor_t : uint8_t {
-	SQ_COLOR_BLACK = 0
+	SQ_COLOR_BLACK = 0,
 };
 
 enum TextColor_t : uint8_t {
@@ -320,62 +321,62 @@ enum TextColor_t : uint8_t {
 	TEXTCOLOR_ORANGE = 198,
 	TEXTCOLOR_YELLOW = 210,
 	TEXTCOLOR_WHITE_EXP = 215,
-	TEXTCOLOR_NONE = 255
+	TEXTCOLOR_NONE = 255,
 };
 
 enum Icons_t {
-	ICON_POISON = 1,
-	ICON_BURN = 2,
-	ICON_ENERGY =  4,
-	ICON_DRUNK = 8,
-	ICON_MANASHIELD = 16,
-	ICON_PARALYZE = 32,
-	ICON_HASTE = 64,
-	ICON_SWORDS = 128,
-	ICON_DROWNING = 256,
-	ICON_FREEZING = 512,
-	ICON_DAZZLED = 1024,
-	ICON_CURSED = 2048,
-	ICON_PARTY_BUFF = 4096,
-	ICON_REDSWORDS = 8192,
-	ICON_PIGEON = 16384,
-	ICON_BLEEDING = 32768
+	ICON_POISON = 1 << 0,
+	ICON_BURN = 1 << 1,
+	ICON_ENERGY =  1 << 2,
+	ICON_DRUNK = 1 << 3,
+	ICON_MANASHIELD = 1 << 4,
+	ICON_PARALYZE = 1 << 5,
+	ICON_HASTE = 1 << 6,
+	ICON_SWORDS = 1 << 7,
+	ICON_DROWNING = 1 << 8,
+	ICON_FREEZING = 1 << 9,
+	ICON_DAZZLED = 1 << 10,
+	ICON_CURSED = 1 << 11,
+	ICON_PARTY_BUFF = 1 << 12,
+	ICON_REDSWORDS = 1 << 13,
+	ICON_PIGEON = 1 << 14,
+	ICON_BLEEDING = 1 << 15,
 };
 
 enum WeaponType_t : uint8_t {
-	WEAPON_NONE = 0,
-	WEAPON_SWORD = 1,
-	WEAPON_CLUB = 2,
-	WEAPON_AXE = 3,
-	WEAPON_SHIELD = 4,
-	WEAPON_DISTANCE = 5,
-	WEAPON_WAND = 6,
-	WEAPON_AMMO = 7
+	WEAPON_NONE,
+	WEAPON_SWORD,
+	WEAPON_CLUB,
+	WEAPON_AXE,
+	WEAPON_SHIELD,
+	WEAPON_DISTANCE,
+	WEAPON_WAND,
+	WEAPON_AMMO,
 };
 
 enum Ammo_t : uint8_t {
-	AMMO_NONE = 0,
-	AMMO_BOLT = 1,
-	AMMO_ARROW = 2,
-	AMMO_SPEAR = 3,
-	AMMO_THROWINGSTAR = 4,
-	AMMO_THROWINGKNIFE = 5,
-	AMMO_STONE = 6,
-	AMMO_SNOWBALL = 7
+	AMMO_NONE,
+	AMMO_BOLT,
+	AMMO_ARROW,
+	AMMO_SPEAR,
+	AMMO_THROWINGSTAR,
+	AMMO_THROWINGKNIFE,
+	AMMO_STONE,
+	AMMO_SNOWBALL,
 };
 
 enum WeaponAction_t : uint8_t {
 	WEAPONACTION_NONE,
 	WEAPONACTION_REMOVECOUNT,
 	WEAPONACTION_REMOVECHARGE,
-	WEAPONACTION_MOVE
+	WEAPONACTION_MOVE,
 };
 
 enum WieldInfo_t {
-	WIELDINFO_LEVEL = 1,
-	WIELDINFO_MAGLV = 2,
-	WIELDINFO_VOCREQ = 4,
-	WIELDINFO_PREMIUM = 8
+	WIELDINFO_LEVEL = 1 << 0,
+	WIELDINFO_MAGLV = 1 << 1,
+	WIELDINFO_VOCREQ = 1 << 2,
+	WIELDINFO_PREMIUM = 1 << 3,
 };
 
 enum Skulls_t : uint8_t {
@@ -386,7 +387,6 @@ enum Skulls_t : uint8_t {
 	SKULL_RED = 4,
 	SKULL_BLACK = 5,
 	SKULL_ORANGE = 6,
-	SKULL_LAST = SKULL_ORANGE
 };
 
 enum PartyShields_t : uint8_t {
@@ -401,7 +401,7 @@ enum PartyShields_t : uint8_t {
 	SHIELD_YELLOW_NOSHAREDEXP_BLINK = 8,
 	SHIELD_BLUE_NOSHAREDEXP = 9,
 	SHIELD_YELLOW_NOSHAREDEXP = 10,
-	SHIELD_GRAY = 11
+	SHIELD_GRAY = 11,
 };
 
 enum GuildEmblems_t : uint8_t {
@@ -410,10 +410,10 @@ enum GuildEmblems_t : uint8_t {
 	GUILDEMBLEM_ENEMY = 2,
 	GUILDEMBLEM_NEUTRAL = 3,
 	GUILDEMBLEM_MEMBER = 4,
-	GUILDEMBLEM_OTHER = 5
+	GUILDEMBLEM_OTHER = 5,
 };
 
-enum item_t {
+enum item_t : uint16_t {
 	ITEM_BROWSEFIELD = 460, // for internal use
 
 	ITEM_FIREFIELD_PVP_FULL = 1487,
@@ -464,59 +464,52 @@ enum item_t {
 
 	ITEM_AMULETOFLOSS = 2173,
 
-	ITEM_DOCUMENT_RO = 1968 //read-only
+	ITEM_DOCUMENT_RO = 1968, //read-only
 };
 
 enum PlayerFlags : uint64_t {
-	PlayerFlag_CannotUseCombat = 1,
-	PlayerFlag_CannotAttackPlayer = 2,
-	PlayerFlag_CannotAttackMonster = 4,
-	PlayerFlag_CannotBeAttacked = 8,
-	PlayerFlag_CanConvinceAll = 16,
-	PlayerFlag_CanSummonAll = 32,
-	PlayerFlag_CanIllusionAll = 64,
-	PlayerFlag_CanSenseInvisibility = 128,
-	PlayerFlag_IgnoredByMonsters = 256,
-	PlayerFlag_NotGainInFight = 512,
-	PlayerFlag_HasInfiniteMana = 1024,
-	PlayerFlag_HasInfiniteSoul = 2048,
-	PlayerFlag_HasNoExhaustion = 4096,
-	PlayerFlag_CannotUseSpells = 8192,
-	PlayerFlag_CannotPickupItem = 16384,
-	PlayerFlag_CanAlwaysLogin = 32768,
-	PlayerFlag_CanBroadcast = 65536,
-	PlayerFlag_CanEditHouses = 131072,
-	PlayerFlag_CannotBeBanned = 262144,
-	PlayerFlag_CannotBePushed = 524288,
-	PlayerFlag_HasInfiniteCapacity = 1048576,
-	PlayerFlag_CanPushAllCreatures = 2097152,
-	PlayerFlag_CanTalkRedPrivate = 4194304,
-	PlayerFlag_CanTalkRedChannel = 8388608,
-	PlayerFlag_TalkOrangeHelpChannel = 16777216,
-	PlayerFlag_NotGainExperience = 33554432,
-	PlayerFlag_NotGainMana = 67108864,
-	PlayerFlag_NotGainHealth = 134217728,
-	PlayerFlag_NotGainSkill = 268435456,
-	PlayerFlag_SetMaxSpeed = 536870912,
-	PlayerFlag_SpecialVIP = 1073741824,
-	PlayerFlag_NotGenerateLoot = 2147483648,
-	PlayerFlag_CanTalkRedChannelAnonymous = 4294967296,
-	PlayerFlag_IgnoreProtectionZone = 8589934592,
-	PlayerFlag_IgnoreSpellCheck = 17179869184,
-	PlayerFlag_IgnoreWeaponCheck = 34359738368,
-	PlayerFlag_CannotBeMuted = 68719476736,
-	PlayerFlag_IsAlwaysPremium = 137438953472
+	PlayerFlag_CannotUseCombat = 1 << 0,
+	PlayerFlag_CannotAttackPlayer = 1 << 1,
+	PlayerFlag_CannotAttackMonster = 1 << 2,
+	PlayerFlag_CannotBeAttacked = 1 << 3,
+	PlayerFlag_CanConvinceAll = 1 << 4,
+	PlayerFlag_CanSummonAll = 1 << 5,
+	PlayerFlag_CanIllusionAll = 1 << 6,
+	PlayerFlag_CanSenseInvisibility = 1 << 7,
+	PlayerFlag_IgnoredByMonsters = 1 << 8,
+	PlayerFlag_NotGainInFight = 1 << 9,
+	PlayerFlag_HasInfiniteMana = 1 << 10,
+	PlayerFlag_HasInfiniteSoul = 1 << 11,
+	PlayerFlag_HasNoExhaustion = 1 << 12,
+	PlayerFlag_CannotUseSpells = 1 << 13,
+	PlayerFlag_CannotPickupItem = 1 << 14,
+	PlayerFlag_CanAlwaysLogin = 1 << 15,
+	PlayerFlag_CanBroadcast = 1 << 16,
+	PlayerFlag_CanEditHouses = 1 << 17,
+	PlayerFlag_CannotBeBanned = 1 << 18,
+	PlayerFlag_CannotBePushed = 1 << 19,
+	PlayerFlag_HasInfiniteCapacity = 1 << 20,
+	PlayerFlag_CanPushAllCreatures = 1 << 21,
+	PlayerFlag_CanTalkRedPrivate = 1 << 22,
+	PlayerFlag_CanTalkRedChannel = 1 << 23,
+	PlayerFlag_TalkOrangeHelpChannel = 1 << 24,
+	PlayerFlag_NotGainExperience = 1 << 25,
+	PlayerFlag_NotGainMana = 1 << 26,
+	PlayerFlag_NotGainHealth = 1 << 27,
+	PlayerFlag_NotGainSkill = 1 << 28,
+	PlayerFlag_SetMaxSpeed = 1 << 29,
+	PlayerFlag_SpecialVIP = 1 << 30,
+	PlayerFlag_NotGenerateLoot = static_cast<uint64_t>(1) << 31,
+	PlayerFlag_CanTalkRedChannelAnonymous = static_cast<uint64_t>(1) << 32,
+	PlayerFlag_IgnoreProtectionZone = static_cast<uint64_t>(1) << 33,
+	PlayerFlag_IgnoreSpellCheck = static_cast<uint64_t>(1) << 34,
+	PlayerFlag_IgnoreWeaponCheck = static_cast<uint64_t>(1) << 35,
+	PlayerFlag_CannotBeMuted = static_cast<uint64_t>(1) << 36,
+	PlayerFlag_IsAlwaysPremium = static_cast<uint64_t>(1) << 37,
 };
 
 #define CHANNEL_GUILD 0x00
 #define CHANNEL_PARTY 0x01
-#define CHANNEL_TUTOR 0x02
-#define CHANNEL_WORLDCHAT 0x03
-#define CHANNEL_ENGLISHCHAT 0x04
-#define CHANNEL_ADVERTISING 0x05
-#define CHANNEL_ADVERTISINGROOKGAARD 0x06
-#define CHANNEL_HELP 0x07
-#define CHANNEL_GAMEMASTER 0x08
 #define CHANNEL_PRIVATE 0xFFFF
 
 //Reserved player storage key ranges

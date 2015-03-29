@@ -24,13 +24,6 @@
 #include "chat.h"
 #include "creature.h"
 
-enum connectResult_t {
-	CONNECT_SUCCESS = 1,
-	CONNECT_TOMANYPLAYERS = 2,
-	CONNECT_MASTERPOSERROR = 3,
-	CONNECT_INTERNALERROR = 4
-};
-
 class NetworkMessage;
 class Player;
 class Game;

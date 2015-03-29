@@ -45,13 +45,13 @@ enum stackPosType_t {
 	STACKPOS_LOOK,
 	STACKPOS_TOPDOWN_ITEM,
 	STACKPOS_USEITEM,
-	STACKPOS_USETARGET
+	STACKPOS_USETARGET,
 };
 
 enum WorldType_t {
 	WORLD_TYPE_NO_PVP = 1,
 	WORLD_TYPE_PVP = 2,
-	WORLD_TYPE_PVP_ENFORCED = 3
+	WORLD_TYPE_PVP_ENFORCED = 3,
 };
 
 enum GameState_t {
@@ -61,14 +61,14 @@ enum GameState_t {
 	GAME_STATE_CLOSED,
 	GAME_STATE_SHUTDOWN,
 	GAME_STATE_CLOSING,
-	GAME_STATE_MAINTAIN
+	GAME_STATE_MAINTAIN,
 };
 
 enum LightState_t {
 	LIGHT_STATE_DAY,
 	LIGHT_STATE_NIGHT,
 	LIGHT_STATE_SUNSET,
-	LIGHT_STATE_SUNRISE
+	LIGHT_STATE_SUNRISE,
 };
 
 #define EVENT_LIGHTINTERVAL 10000
@@ -371,7 +371,7 @@ class Game
 		void playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId);
 		void playerFollowCreature(uint32_t playerId, uint32_t creatureId);
 		void playerCancelAttackAndFollow(uint32_t playerId);
-		void playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, secureMode_t secureMode);
+		void playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, bool secureMode);
 		void playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos);
 		void playerLookInBattleList(uint32_t playerId, uint32_t creatureId);
 		void playerRequestAddVip(uint32_t playerId, const std::string& name);

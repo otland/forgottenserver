@@ -37,7 +37,7 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_TEXTEDIT,
 	CREATURE_EVENT_HEALTHCHANGE,
 	CREATURE_EVENT_MANACHANGE,
-	CREATURE_EVENT_EXTENDED_OPCODE // otclient additional network opcodes
+	CREATURE_EVENT_EXTENDED_OPCODE, // otclient additional network opcodes
 };
 
 class CreatureEvent;

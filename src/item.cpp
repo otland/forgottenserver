@@ -927,22 +927,21 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
 				}
 
-				int32_t show = it.abilities->absorbPercent[COMBAT_FIRST];
-
-				for (uint32_t i = (COMBAT_FIRST + 1); i <= COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] == show) {
-						continue;
+				int16_t show = it.abilities->absorbPercent[0];
+				if (show != 0) {
+					for (size_t i = 1; i < COMBAT_COUNT; ++i) {
+						if (it.abilities->absorbPercent[i] != show) {
+							show = 0;
+							break;
+						}
 					}
-
-					show = 0;
-					break;
 				}
 
-				if (!show) {
+				if (show == 0) {
 					bool tmp = true;
 
-					for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
-						if (!it.abilities->absorbPercent[i]) {
+					for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+						if (it.abilities->absorbPercent[i] == 0) {
 							continue;
 						}
 
@@ -974,22 +973,21 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << "protection all " << std::showpos << show << std::noshowpos << '%';
 				}
 
-				show = it.abilities->fieldAbsorbPercent[COMBAT_FIRST];
-
-				for (uint32_t i = (COMBAT_FIRST + 1); i <= COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] == show) {
-						continue;
+				show = it.abilities->fieldAbsorbPercent[0];
+				if (show != 0) {
+					for (size_t i = 1; i < COMBAT_COUNT; ++i) {
+						if (it.abilities->absorbPercent[i] != show) {
+							show = 0;
+							break;
+						}
 					}
-
-					show = 0;
-					break;
 				}
 
-				if (!show) {
+				if (show == 0) {
 					bool tmp = true;
 
-					for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
-						if (!it.abilities->fieldAbsorbPercent[i]) {
+					for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+						if (it.abilities->fieldAbsorbPercent[i] == 0) {
 							continue;
 						}
 
@@ -1073,21 +1071,20 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
 			}
 
-			int32_t show = it.abilities->absorbPercent[COMBAT_FIRST];
-
-			for (uint32_t i = (COMBAT_FIRST + 1); i <= COMBAT_COUNT; ++i) {
-				if (it.abilities->absorbPercent[i] == show) {
-					continue;
+			int16_t show = it.abilities->absorbPercent[0];
+			if (show != 0) {
+				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->absorbPercent[i] != show) {
+						show = 0;
+						break;
+					}
 				}
-
-				show = 0;
-				break;
 			}
 
 			if (!show) {
 				bool protectionBegin = true;
-				for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
-					if (!it.abilities->absorbPercent[i]) {
+				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->absorbPercent[i] == 0) {
 						continue;
 					}
 
@@ -1119,22 +1116,21 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			show = it.abilities->fieldAbsorbPercent[COMBAT_FIRST];
-
-			for (uint32_t i = (COMBAT_FIRST + 1); i <= COMBAT_COUNT; ++i) {
-				if (it.abilities->absorbPercent[i] == show) {
-					continue;
+			show = it.abilities->fieldAbsorbPercent[0];
+			if (show != 0) {
+				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->absorbPercent[i] != show) {
+						show = 0;
+						break;
+					}
 				}
-
-				show = 0;
-				break;
 			}
 
 			if (!show) {
 				bool tmp = true;
 
-				for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
-					if (!it.abilities->fieldAbsorbPercent[i]) {
+				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->fieldAbsorbPercent[i] == 0) {
 						continue;
 					}
 

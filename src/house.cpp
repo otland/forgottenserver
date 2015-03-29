@@ -159,7 +159,7 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 		return HOUSE_GUEST;
 	}
 
-	return HOUSE_NO_INVITED;
+	return HOUSE_NOT_INVITED;
 }
 
 bool House::kickPlayer(Player* player, Player* target)
@@ -285,7 +285,7 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 
 bool House::isInvited(const Player* player)
 {
-	return getHouseAccessLevel(player) != HOUSE_NO_INVITED;
+	return getHouseAccessLevel(player) != HOUSE_NOT_INVITED;
 }
 
 void House::addDoor(Door* door)

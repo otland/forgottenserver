@@ -109,9 +109,9 @@ class FileLoader
 
 	protected:
 		enum SPECIAL_BYTES {
+			ESCAPE_CHAR = 0xFD,
 			NODE_START = 0xFE,
 			NODE_END = 0xFF,
-			ESCAPE_CHAR = 0xFD,
 		};
 
 		bool parseNode(NODE node);

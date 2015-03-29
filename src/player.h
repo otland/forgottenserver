@@ -50,7 +50,7 @@ class Guild;
 enum skillsid_t {
 	SKILLVALUE_LEVEL = 0,
 	SKILLVALUE_TRIES = 1,
-	SKILLVALUE_PERCENT = 2
+	SKILLVALUE_PERCENT = 2,
 };
 
 enum playerinfo_t {
@@ -71,19 +71,14 @@ enum chaseMode_t : uint8_t {
 enum fightMode_t : uint8_t {
 	FIGHTMODE_ATTACK = 1,
 	FIGHTMODE_BALANCED = 2,
-	FIGHTMODE_DEFENSE = 3
-};
-
-enum secureMode_t : uint8_t {
-	SECUREMODE_OFF = 0,
-	SECUREMODE_ON = 1
+	FIGHTMODE_DEFENSE = 3,
 };
 
 enum pvpMode_t : uint8_t {
 	PVP_MODE_DOVE = 0,
 	PVP_MODE_WHITE_HAND = 1,
 	PVP_MODE_YELLOW_HAND = 2,
-	PVP_MODE_RED_FIST = 3
+	PVP_MODE_RED_FIST = 3,
 };
 
 enum tradestate_t : uint8_t {
@@ -91,7 +86,7 @@ enum tradestate_t : uint8_t {
 	TRADE_INITIATED,
 	TRADE_ACCEPT,
 	TRADE_ACKNOWLEDGE,
-	TRADE_TRANSFER
+	TRADE_TRANSFER,
 };
 
 struct VIPEntry {
@@ -300,7 +295,7 @@ class Player final : public Creature, public Cylinder
 			return client->getVersion();
 		}
 
-		secureMode_t getSecureMode() const {
+		bool hasSecureMode() const {
 			return secureMode;
 		}
 
@@ -594,7 +589,7 @@ class Player final : public Creature, public Cylinder
 		void setFightMode(fightMode_t mode) {
 			fightMode = mode;
 		}
-		void setSecureMode(secureMode_t mode) {
+		void setSecureMode(bool mode) {
 			secureMode = mode;
 		}
 
@@ -1147,6 +1142,8 @@ class Player final : public Creature, public Cylinder
 		bool hasLearnedInstantSpell(const std::string& name) const;
 
 	protected:
+		std::forward_list<Condition*> getMuteConditions() const;
+
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
@@ -1295,9 +1292,9 @@ class Player final : public Creature, public Cylinder
 		tradestate_t tradeState;
 		chaseMode_t chaseMode;
 		fightMode_t fightMode;
-		secureMode_t secureMode;
 		AccountType_t accountType;
 
+		bool secureMode;
 		bool inMarket;
 		bool ghostMode;
 		bool pzLocked;

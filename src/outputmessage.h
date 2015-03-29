@@ -58,7 +58,7 @@ class OutputMessage : public NetworkMessage
 			STATE_FREE,
 			STATE_ALLOCATED,
 			STATE_ALLOCATED_NO_AUTOSEND,
-			STATE_WAITING
+			STATE_WAITING,
 		};
 
 		Protocol* getProtocol() const {

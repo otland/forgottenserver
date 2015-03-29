@@ -850,46 +850,41 @@ std::string getWeaponName(WeaponType_t weaponType)
 	}
 }
 
-uint32_t combatTypeToIndex(CombatType_t combatType)
+size_t combatTypeToIndex(CombatType_t combatType)
 {
 	switch (combatType) {
-		case COMBAT_NONE:
-			return 0;
 		case COMBAT_PHYSICALDAMAGE:
-			return 1;
+			return 0;
 		case COMBAT_ENERGYDAMAGE:
-			return 2;
+			return 1;
 		case COMBAT_EARTHDAMAGE:
-			return 3;
+			return 2;
 		case COMBAT_FIREDAMAGE:
-			return 4;
+			return 3;
 		case COMBAT_UNDEFINEDDAMAGE:
-			return 5;
+			return 4;
 		case COMBAT_LIFEDRAIN:
-			return 6;
+			return 5;
 		case COMBAT_MANADRAIN:
-			return 7;
+			return 6;
 		case COMBAT_HEALING:
-			return 8;
+			return 7;
 		case COMBAT_DROWNDAMAGE:
-			return 9;
+			return 8;
 		case COMBAT_ICEDAMAGE:
-			return 10;
+			return 9;
 		case COMBAT_HOLYDAMAGE:
-			return 11;
+			return 10;
 		case COMBAT_DEATHDAMAGE:
-			return 12;
+			return 11;
 		default:
 			return 0;
 	}
 }
 
-CombatType_t indexToCombatType(uint32_t v)
+CombatType_t indexToCombatType(size_t v)
 {
-	if (v == 0) {
-		return COMBAT_FIRST;
-	}
-	return static_cast<CombatType_t>(1 << (v - 1));
+	return static_cast<CombatType_t>(1 << v);
 }
 
 uint8_t serverFluidToClient(uint8_t serverFluid)

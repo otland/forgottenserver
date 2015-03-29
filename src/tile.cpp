@@ -39,7 +39,7 @@ extern MoveEvents* g_moveEvents;
 StaticTile real_nullptr_tile(0xFFFF, 0xFFFF, 0xFFFF);
 Tile& Tile::nullptr_tile = real_nullptr_tile;
 
-bool Tile::hasProperty(enum ITEMPROPERTY prop) const
+bool Tile::hasProperty(ITEMPROPERTY prop) const
 {
 	if (ground && ground->hasProperty(prop)) {
 		return true;
@@ -55,7 +55,7 @@ bool Tile::hasProperty(enum ITEMPROPERTY prop) const
 	return false;
 }
 
-bool Tile::hasProperty(const Item* exclude, enum ITEMPROPERTY prop) const
+bool Tile::hasProperty(const Item* exclude, ITEMPROPERTY prop) const
 {
 	assert(exclude);
 

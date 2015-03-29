@@ -34,15 +34,15 @@ extern Game g_game;
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
 
-enum RequestedInfo_t {
-	REQUEST_BASIC_SERVER_INFO = 0x01,
-	REQUEST_OWNER_SERVER_INFO = 0x02,
-	REQUEST_MISC_SERVER_INFO = 0x04,
-	REQUEST_PLAYERS_INFO = 0x08,
-	REQUEST_MAP_INFO = 0x10,
-	REQUEST_EXT_PLAYERS_INFO = 0x20,
-	REQUEST_PLAYER_STATUS_INFO = 0x40,
-	REQUEST_SERVER_SOFTWARE_INFO = 0x80
+enum RequestedInfo_t : uint16_t {
+	REQUEST_BASIC_SERVER_INFO = 1 << 0,
+	REQUEST_OWNER_SERVER_INFO = 1 << 1,
+	REQUEST_MISC_SERVER_INFO = 1 << 2,
+	REQUEST_PLAYERS_INFO = 1 << 3,
+	REQUEST_MAP_INFO = 1 << 4,
+	REQUEST_EXT_PLAYERS_INFO = 1 << 5,
+	REQUEST_PLAYER_STATUS_INFO = 1 << 6,
+	REQUEST_SERVER_SOFTWARE_INFO = 1 << 7,
 };
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
@@ -75,7 +75,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 		//Another ServerInfo protocol
 		case 0x01: {
-			uint16_t requestedInfo = msg.get<uint16_t>(); //Only a Byte is necessary, though we could add new infos here
+			uint16_t requestedInfo = msg.get<uint16_t>(); // only a Byte is necessary, though we could add new info here
 			std::string characterName;
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.getString();

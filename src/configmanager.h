@@ -28,79 +28,82 @@ class ConfigManager
 		ConfigManager();
 
 		enum boolean_config_t {
-			ALLOW_CHANGEOUTFIT = 0,
-			ONE_PLAYER_ON_ACCOUNT = 1,
-			AIMBOT_HOTKEY_ENABLED = 2,
-			REMOVE_RUNE_CHARGES = 3,
-			EXPERIENCE_FROM_PLAYERS = 4,
-			FREE_PREMIUM = 5,
-			REPLACE_KICK_ON_LOGIN = 6,
-			ALLOW_CLONES = 7,
-			BIND_ONLY_GLOBAL_ADDRESS = 8,
-			OPTIMIZE_DATABASE = 9,
-			MARKET_PREMIUM = 10,
-			EMOTE_SPELLS = 11,
-			STAMINA_SYSTEM = 12,
-			WARN_UNSAFE_SCRIPTS = 13,
-			CONVERT_UNSAFE_SCRIPTS = 14,
-			CLASSIC_EQUIPMENT_SLOTS = 15,
+			ALLOW_CHANGEOUTFIT,
+			ONE_PLAYER_ON_ACCOUNT,
+			AIMBOT_HOTKEY_ENABLED,
+			REMOVE_RUNE_CHARGES,
+			EXPERIENCE_FROM_PLAYERS,
+			FREE_PREMIUM,
+			REPLACE_KICK_ON_LOGIN,
+			ALLOW_CLONES,
+			BIND_ONLY_GLOBAL_ADDRESS,
+			OPTIMIZE_DATABASE,
+			MARKET_PREMIUM,
+			EMOTE_SPELLS,
+			STAMINA_SYSTEM,
+			WARN_UNSAFE_SCRIPTS,
+			CONVERT_UNSAFE_SCRIPTS,
+			CLASSIC_EQUIPMENT_SLOTS,
+
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
 		enum string_config_t {
-			DUMMY_STR = 0,
-			MAP_NAME = 1,
-			HOUSE_RENT_PERIOD = 2,
-			SERVER_NAME = 3,
-			OWNER_NAME = 4,
-			OWNER_EMAIL = 5,
-			URL = 6,
-			LOCATION = 7,
-			IP = 8,
-			MOTD = 9,
-			WORLD_TYPE = 10,
-			MYSQL_HOST = 11,
-			MYSQL_USER = 12,
-			MYSQL_PASS = 13,
-			MYSQL_DB = 14,
-			MYSQL_SOCK = 15,
-			DEFAULT_PRIORITY = 16,
-			MAP_AUTHOR = 17,
+			DUMMY_STR,
+			MAP_NAME,
+			HOUSE_RENT_PERIOD,
+			SERVER_NAME,
+			OWNER_NAME,
+			OWNER_EMAIL,
+			URL,
+			LOCATION,
+			IP,
+			MOTD,
+			WORLD_TYPE,
+			MYSQL_HOST,
+			MYSQL_USER,
+			MYSQL_PASS,
+			MYSQL_DB,
+			MYSQL_SOCK,
+			DEFAULT_PRIORITY,
+			MAP_AUTHOR,
+
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
 
 		enum integer_config_t {
-			SQL_PORT = 0,
-			MAX_PLAYERS = 1,
-			PZ_LOCKED = 2,
-			DEFAULT_DESPAWNRANGE = 3,
-			DEFAULT_DESPAWNRADIUS = 4,
-			RATE_EXPERIENCE = 5,
-			RATE_SKILL = 6,
-			RATE_LOOT = 7,
-			RATE_MAGIC = 8,
-			RATE_SPAWN = 9,
-			HOUSE_PRICE = 10,
-			KILLS_TO_RED = 11,
-			KILLS_TO_BLACK = 12,
-			MAX_MESSAGEBUFFER = 13,
-			ACTIONS_DELAY_INTERVAL = 14,
-			EX_ACTIONS_DELAY_INTERVAL = 15,
-			KICK_AFTER_MINUTES = 16,
-			PROTECTION_LEVEL = 17,
-			DEATH_LOSE_PERCENT = 18,
-			STATUSQUERY_TIMEOUT = 19,
-			FRAG_TIME = 20,
-			WHITE_SKULL_TIME = 21,
-			GAME_PORT = 22,
-			LOGIN_PORT = 23,
-			STATUS_PORT = 24,
-			STAIRHOP_DELAY = 25,
-			MARKET_OFFER_DURATION = 26,
-			CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES = 27,
-			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER = 28,
-			EXP_FROM_PLAYERS_LEVEL_RANGE = 29,
-			MAX_PACKETS_PER_SECOND = 30,
+			SQL_PORT,
+			MAX_PLAYERS,
+			PZ_LOCKED,
+			DEFAULT_DESPAWNRANGE,
+			DEFAULT_DESPAWNRADIUS,
+			RATE_EXPERIENCE,
+			RATE_SKILL,
+			RATE_LOOT,
+			RATE_MAGIC,
+			RATE_SPAWN,
+			HOUSE_PRICE,
+			KILLS_TO_RED,
+			KILLS_TO_BLACK,
+			MAX_MESSAGEBUFFER,
+			ACTIONS_DELAY_INTERVAL,
+			EX_ACTIONS_DELAY_INTERVAL,
+			KICK_AFTER_MINUTES,
+			PROTECTION_LEVEL,
+			DEATH_LOSE_PERCENT,
+			STATUSQUERY_TIMEOUT,
+			FRAG_TIME,
+			WHITE_SKULL_TIME,
+			GAME_PORT,
+			LOGIN_PORT,
+			STATUS_PORT,
+			STAIRHOP_DELAY,
+			MARKET_OFFER_DURATION,
+			CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES,
+			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER,
+			EXP_FROM_PLAYERS_LEVEL_RANGE,
+			MAX_PACKETS_PER_SECOND,
+
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 
@@ -112,13 +115,15 @@ class ConfigManager
 		bool getBoolean(boolean_config_t _what) const;
 
 	private:
-		static std::string getGlobalString(lua_State* _L, const std::string& _identifier, const char* _default);
-		static int32_t getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default = 0);
+		static std::string getGlobalString(lua_State* L, const char* identifier, const char* _default);
+		static int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t _default = 0);
+		static bool getGlobalBoolean(lua_State* L, const char* identifier, const bool _default);
+		
+		std::string string[LAST_STRING_CONFIG];
+		int32_t integer[LAST_INTEGER_CONFIG];
+		bool boolean[LAST_BOOLEAN_CONFIG];
 
-		bool m_isLoaded;
-		std::string m_confString[LAST_STRING_CONFIG];
-		int32_t m_confInteger[LAST_INTEGER_CONFIG];
-		bool m_confBoolean[LAST_BOOLEAN_CONFIG];
+		bool loaded;
 };
 
 #endif

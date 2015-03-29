@@ -28,23 +28,23 @@
 
 enum SlotPositionBits : uint32_t {
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
-	SLOTP_HEAD = 1,
-	SLOTP_NECKLACE = 2,
-	SLOTP_BACKPACK = 4,
-	SLOTP_ARMOR = 8,
-	SLOTP_RIGHT = 16,
-	SLOTP_LEFT = 32,
-	SLOTP_LEGS = 64,
-	SLOTP_FEET = 128,
-	SLOTP_RING = 256,
-	SLOTP_AMMO = 512,
-	SLOTP_DEPOT = 1024,
-	SLOTP_TWO_HAND = 2048,
+	SLOTP_HEAD = 1 << 0,
+	SLOTP_NECKLACE = 1 << 1,
+	SLOTP_BACKPACK = 1 << 2,
+	SLOTP_ARMOR = 1 << 3,
+	SLOTP_RIGHT = 1 << 4,
+	SLOTP_LEFT = 1 << 5,
+	SLOTP_LEGS = 1 << 6,
+	SLOTP_FEET = 1 << 7,
+	SLOTP_RING = 1 << 8,
+	SLOTP_AMMO = 1 << 9,
+	SLOTP_DEPOT = 1 << 10,
+	SLOTP_TWO_HAND = 1 << 11,
 	SLOTP_HAND = (SLOTP_LEFT | SLOTP_RIGHT)
 };
 
 enum ItemTypes_t {
-	ITEM_TYPE_NONE = 0,
+	ITEM_TYPE_NONE,
 	ITEM_TYPE_DEPOT,
 	ITEM_TYPE_MAILBOX,
 	ITEM_TYPE_TRASHHOLDER,
@@ -59,7 +59,7 @@ enum ItemTypes_t {
 };
 
 struct Abilities {
-	Abilities() : skills(), fieldAbsorbPercent(), absorbPercent(), stats(), statsPercent() {
+	Abilities() : stats(), statsPercent(), skills(), fieldAbsorbPercent(), absorbPercent() {
 		elementType = COMBAT_NONE;
 		elementDamage = 0;
 
@@ -77,28 +77,6 @@ struct Abilities {
 		conditionSuppressions = 0;
 	}
 
-	//elemental damage
-	CombatType_t elementType;
-	int16_t elementDamage;
-
-	//extra skill modifiers
-	int32_t skills[SKILL_LAST + 1];
-
-	// field damage abilities modifiers
-	int16_t fieldAbsorbPercent[COMBAT_COUNT + 1];
-
-	//damage abilities modifiers
-	int16_t absorbPercent[COMBAT_COUNT + 1];
-
-	//stats modifiers
-	int32_t stats[STAT_LAST + 1];
-	int32_t statsPercent[STAT_LAST + 1];
-
-	int32_t speed;
-	bool manaShield;
-	bool invisible;
-	bool regeneration;
-
 	uint32_t healthGain;
 	uint32_t healthTicks;
 	uint32_t manaGain;
@@ -106,6 +84,29 @@ struct Abilities {
 
 	uint32_t conditionImmunities;
 	uint32_t conditionSuppressions;
+
+	//stats modifiers
+	int32_t stats[STAT_LAST + 1];
+	int32_t statsPercent[STAT_LAST + 1];
+
+	//extra skill modifiers
+	int32_t skills[SKILL_LAST + 1];
+
+	int32_t speed;
+
+	// field damage abilities modifiers
+	int16_t fieldAbsorbPercent[COMBAT_COUNT];
+
+	//damage abilities modifiers
+	int16_t absorbPercent[COMBAT_COUNT];
+
+	//elemental damage
+	int16_t elementDamage;
+	CombatType_t elementType;
+
+	bool manaShield;
+	bool invisible;
+	bool regeneration;
 };
 
 class ConditionDamage;

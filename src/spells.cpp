@@ -782,7 +782,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	if (aggressive && needTarget && topVisibleCreature && player->getSecureMode() == SECUREMODE_ON) {
+	if (aggressive && needTarget && topVisibleCreature && player->hasSecureMode()) {
 		const Player* targetPlayer = topVisibleCreature->getPlayer();
 		if (targetPlayer && targetPlayer != player && player->getSkullClient(targetPlayer) == SKULL_NONE && !Combat::isInPvpZone(player, targetPlayer)) {
 			player->sendCancelMessage(RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
@@ -1317,18 +1317,18 @@ bool InstantSpell::SearchPlayer(const InstantSpell*, Creature* creature, const s
 		DISTANCE_BESIDE,
 		DISTANCE_CLOSE,
 		DISTANCE_FAR,
-		DISTANCE_VERYFAR
+		DISTANCE_VERYFAR,
 	};
 
 	enum direction_t {
 		DIR_N, DIR_S, DIR_E, DIR_W,
-		DIR_NE, DIR_NW, DIR_SE, DIR_SW
+		DIR_NE, DIR_NW, DIR_SE, DIR_SW,
 	};
 
 	enum level_t {
 		LEVEL_HIGHER,
 		LEVEL_LOWER,
-		LEVEL_SAME
+		LEVEL_SAME,
 	};
 
 	Player* playerExiva = g_game.getPlayerByName(param);

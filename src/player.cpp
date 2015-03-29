@@ -1172,53 +1172,10 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			offlineTime = 0;
 		}
 
-		Condition* conditionMuted = getCondition(CONDITION_MUTED, CONDITIONID_DEFAULT);
-		if (conditionMuted && conditionMuted->getTicks() > 0) {
-			conditionMuted->setTicks(conditionMuted->getTicks() - (offlineTime * 1000));
-			if (conditionMuted->getTicks() <= 0) {
-				removeCondition(conditionMuted);
-			} else {
-				addCondition(conditionMuted->clone());
-			}
-		}
-
-		Condition* conditionTrade = getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISING);
-		if (conditionTrade && conditionTrade->getTicks() > 0) {
-			conditionTrade->setTicks(conditionTrade->getTicks() - (offlineTime * 1000));
-			if (conditionTrade->getTicks() <= 0) {
-				removeCondition(conditionTrade);
-			} else {
-				addCondition(conditionTrade->clone());
-			}
-		}
-
-		Condition* conditionTradeRook = getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISINGROOKGAARD);
-		if (conditionTradeRook && conditionTradeRook->getTicks() > 0) {
-			conditionTradeRook->setTicks(conditionTradeRook->getTicks() - (offlineTime * 1000));
-			if (conditionTradeRook->getTicks() <= 0) {
-				removeCondition(conditionTradeRook);
-			} else {
-				addCondition(conditionTradeRook->clone());
-			}
-		}
-
-		Condition* conditionHelp = getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP);
-		if (conditionHelp && conditionHelp->getTicks() > 0) {
-			conditionHelp->setTicks(conditionHelp->getTicks() - (offlineTime * 1000));
-			if (conditionHelp->getTicks() <= 0) {
-				removeCondition(conditionHelp);
-			} else {
-				addCondition(conditionHelp->clone());
-			}
-		}
-
-		Condition* conditionYell = getCondition(CONDITION_YELLTICKS, CONDITIONID_DEFAULT);
-		if (conditionYell && conditionYell->getTicks() > 0) {
-			conditionYell->setTicks(conditionYell->getTicks() - (offlineTime * 1000));
-			if (conditionYell->getTicks() <= 0) {
-				removeCondition(conditionYell);
-			} else {
-				addCondition(conditionYell->clone());
+		for (Condition* condition : getMuteConditions()) {
+			condition->setTicks(condition->getTicks() - (offlineTime * 1000));
+			if (condition->getTicks() <= 0) {
+				removeCondition(condition);
 			}
 		}
 
@@ -4719,4 +4676,22 @@ size_t Player::getMaxDepotItems() const
 		return 2000;
 	}
 	return 1000;
+}
+
+std::forward_list<Condition*> Player::getMuteConditions() const
+{
+	std::forward_list<Condition*> muteConditions;
+	for (Condition* condition : conditions) {
+		if (condition->getTicks() <= 0) {
+			continue;
+		}
+
+		ConditionType_t type = condition->getType();
+		if (type != CONDITION_MUTED && type != CONDITION_CHANNELMUTEDTICKS && type != CONDITION_YELLTICKS) {
+			continue;
+		}
+
+		muteConditions.push_front(condition);
+	}
+	return muteConditions;
 }

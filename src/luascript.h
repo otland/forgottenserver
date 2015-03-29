@@ -48,7 +48,8 @@ class Npc;
 class Monster;
 
 enum LuaVariantType_t {
-	VARIANT_NONE = 0,
+	VARIANT_NONE,
+
 	VARIANT_NUMBER,
 	VARIANT_POSITION,
 	VARIANT_TARGETPOSITION,
@@ -56,14 +57,15 @@ enum LuaVariantType_t {
 };
 
 enum LuaDataType {
-	LuaData_Unknown = 0,
+	LuaData_Unknown,
+
 	LuaData_Item,
 	LuaData_Container,
 	LuaData_Teleport,
 	LuaData_Player,
 	LuaData_Monster,
 	LuaData_Npc,
-	LuaData_Tile
+	LuaData_Tile,
 };
 
 struct LuaVariant {
@@ -210,7 +212,7 @@ enum ErrorCode_t {
 	LUA_ERROR_CONTAINER_NOT_FOUND,
 	LUA_ERROR_VARIANT_NOT_FOUND,
 	LUA_ERROR_VARIANT_UNKNOWN,
-	LUA_ERROR_SPELL_NOT_FOUND
+	LUA_ERROR_SPELL_NOT_FOUND,
 };
 
 class LuaScriptInterface

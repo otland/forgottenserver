@@ -743,7 +743,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		} else if (tmpStrValue == "absorbpercentall" || tmpStrValue == "absorbpercentallelements") {
 			int16_t value = pugi::cast<int16_t>(valueAttribute.value());
 			Abilities& abilities = it.getAbilities();
-			for (uint32_t i = COMBAT_FIRST; i <= COMBAT_COUNT; i++) {
+			for (size_t i = 0; i < COMBAT_COUNT; ++i) {
 				abilities.absorbPercent[i] += value;
 			}
 		} else if (tmpStrValue == "absorbpercentelements") {

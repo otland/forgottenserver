@@ -25,8 +25,8 @@
 #include "baseevents.h"
 
 enum RaidState_t {
-	RAIDSTATE_IDLE = 0,
-	RAIDSTATE_EXECUTING
+	RAIDSTATE_IDLE,
+	RAIDSTATE_EXECUTING,
 };
 
 struct MonsterSpawn {

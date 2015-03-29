@@ -236,7 +236,7 @@ class DBTransaction
 		enum TransactionStates_t {
 			STATE_NO_START,
 			STATE_START,
-			STEATE_COMMIT
+			STEATE_COMMIT,
 		};
 
 		TransactionStates_t state;
