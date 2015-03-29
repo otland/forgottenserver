@@ -75,7 +75,6 @@ local FOODS = {
 	[8847] = {11, "Yum."}, -- chocolate cake
 	[9005] = {7, "Slurp."}, -- yummy gummy worm
 	[9114] = {5, "Crunch."}, -- bulb of garlic
-	[9996] = {0, "Slurp."}, -- banana chocolate shake
 	[10454] = {0, "Your head begins to feel better."}, -- headache pill
 	[11246] = {15, "Yum."}, -- rice ball
 	[11370] = {3, "Urgh."}, -- terramite eggs
