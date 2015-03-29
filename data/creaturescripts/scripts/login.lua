@@ -16,5 +16,7 @@ function onLogin(player)
 
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
+	player:registerEvent("FragHandler")
+	player:registerEvent("PlayerThink")
 	return true
 end
