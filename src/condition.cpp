@@ -994,6 +994,7 @@ bool ConditionDamage::updateCondition(const Condition* addCondition)
 
 bool ConditionDamage::addDamage(int32_t rounds, int32_t time, int32_t value)
 {
+	time = std::max<int32_t>(time, EVENT_CREATURE_THINK_INTERVAL);
 	if (rounds == -1) {
 		//periodic damage
 		periodDamage = value;
