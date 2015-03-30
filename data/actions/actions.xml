@@ -125,9 +125,6 @@
 	<action itemid="18397" script="other/food.lua"/>
 	<action itemid="19737" script="other/food.lua"/>
 	<action fromid="20100" toid="20101" script="other/food.lua"/>
-	<action fromid="9992" toid="10001" script="other/food_special.lua"/>
-	<action itemid="12540" script="other/food_special.lua"/>
-	<action fromid="12542" toid="12544" script="other/food_special.lua"/>
 
 	<!-- Spellbooks -->
 	<action itemid="2175" script="other/spellbook.lua"/>
