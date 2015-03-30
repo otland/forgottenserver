@@ -171,6 +171,10 @@ function Player:onLoseExperience(exp)
 end
 
 function Player:onGainSkillTries(skill, tries)
+	if APPLY_SKILL_MULTIPLIER == false then
+		return tries
+	end
+
 	if skill == SKILL_MAGLEVEL then
 		return tries * configManager.getNumber(configKeys.RATE_MAGIC)
 	end

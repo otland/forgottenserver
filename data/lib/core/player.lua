@@ -79,3 +79,12 @@ function Player.sendExtendedOpcode(self, opcode, buffer)
 	networkMessage:delete()
 	return true
 end
+
+APPLY_SKILL_MULTIPLIER = true
+local addSkillTriesFunc = Player.addSkillTries
+function Player.addSkillTries(...)
+	APPLY_SKILL_MULTIPLIER = false
+	local ret = addSkillTriesFunc(...)
+	APPLY_SKILL_TRIES = true
+	return ret
+end
