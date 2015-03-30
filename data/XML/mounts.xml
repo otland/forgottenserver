@@ -42,4 +42,36 @@
 	<mount id="40" clientid="571" name="Lion" speed="20" premium="yes" />
 	<mount id="41" clientid="572" name="Golden Lion" speed="20" premium="yes" />
 	<mount id="42" clientid="580" name="Shock Head" speed="20" premium="yes" />
+	<mount id="43" clientid="606" name="Walker" speed="10" premium="yes" />
+	<mount id="44" clientid="621" name="Azudocus" speed="10" premium="yes" />	
+	<mount id="45" clientid="622" name="Carpacosaurus" speed="10" premium="yes" />
+	<mount id="46" clientid="624" name="Death Crawler" speed="10" premium="yes" />	
+	<mount id="47" clientid="626" name="Flamesteed" speed="10" premium="yes" />
+	<mount id="48" clientid="627" name="Jade Lion" speed="10" premium="yes" />	
+	<mount id="49" clientid="628" name="Jade Pincer" speed="10" premium="yes" />	
+	<mount id="50" clientid="629" name="Nethersteed" speed="10" premium="yes" />	
+	<mount id="51" clientid="630" name="Tempest" speed="10" premium="yes" />	
+	<mount id="52" clientid="631" name="Winter King" speed="10" premium="yes" />
+	<mount id="53" clientid="644" name="Doombringer" speed="10" premium="yes" />	
+	<mount id="54" clientid="647" name="Woodland Prince" speed="10" premium="yes" />
+	<mount id="55" clientid="648" name="Hailtorm Fury" speed="10" premium="yes" />
+	<mount id="56" clientid="649" name="Siegebreaker" speed="10" premium="yes" />
+	<mount id="57" clientid="650" name="Poisonbane" speed="10" premium="yes" />
+	<mount id="58" clientid="651" name="Blackpelt" speed="10" premium="yes" />
+	<mount id="59" clientid="669" name="Golden Dragonfly" speed="10" premium="yes" />
+	<mount id="60" clientid="670" name="Steel Bee" speed="10" premium="yes" />
+	<mount id="61" clientid="671" name="Copper Fly" speed="10" premium="yes" />
+	<mount id="62" clientid="672" name="Tundra Rambler" speed="10" premium="yes" />
+	<mount id="63" clientid="673" name="Highland Yak" speed="10" premium="yes" />
+	<mount id="64" clientid="674" name="Glacier Vagabond" speed="10" premium="yes" />
+	<mount id="65" clientid="688" name="Flying Divan" speed="10" premium="yes" />
+	<mount id="66" clientid="689" name="Magic Carpet" speed="10" premium="yes" />
+	<mount id="67" clientid="690" name="Floating Kashmir" speed="10" premium="yes" />
+	<mount id="68" clientid="691" name="Ringtail Waccoon" speed="10" premium="yes" />
+	<mount id="69" clientid="692" name="Night Waccoon" speed="10" premium="yes" />
+	<mount id="70" clientid="693" name="Emerald Waccoon" speed="10" premium="yes" />
+	<mount id="71" clientid="682" name="Glooth Glider" speed="10" premium="yes" />
+	<mount id="72" clientid="685" name="Shadow Hart" speed="20" premium="yes" />
+	<mount id="73" clientid="686" name="Black Stag" speed="10" premium="yes" />
+	<mount id="74" clientid="687" name="Emperor Deer" speed="10" premium="yes" />
 </mounts>
