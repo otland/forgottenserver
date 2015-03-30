@@ -85,6 +85,6 @@ local addSkillTriesFunc = Player.addSkillTries
 function Player.addSkillTries(...)
 	APPLY_SKILL_MULTIPLIER = false
 	local ret = addSkillTriesFunc(...)
-	APPLY_SKILL_TRIES = true
+	APPLY_SKILL_MULTIPLIER = true
 	return ret
 end
