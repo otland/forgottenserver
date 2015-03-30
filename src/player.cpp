@@ -931,7 +931,7 @@ DepotLocker* Player::getDepotLocker(uint32_t depotId)
 
 void Player::sendCancelMessage(ReturnValue message) const
 {
-	sendCancel(getReturnMessage(message));
+	sendCancelMessage(getReturnMessage(message));
 }
 
 void Player::sendStats()
@@ -1239,30 +1239,30 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 
 		int16_t oldStaminaMinutes = getStaminaMinutes();
 
-		int32_t offlineTrainingSkill = getOfflineTrainingSkill();
 		if (offlineTrainingSkill != -1) {
 			setOfflineTrainingSkill(-1);
-			uint32_t offlineTrainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, getOfflineTrainingTime() / 1000)));
 
 			if (offlineTime >= 600) {
-				removeOfflineTrainingTime(offlineTrainingTime * 1000);
+				uint32_t trainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, offlineTrainingTime / 1000)));
 
-				int32_t remainder = offlineTime - offlineTrainingTime;
+				removeOfflineTrainingTime(trainingTime * 1000);
+
+				int32_t remainder = offlineTime - trainingTime;
 				if (remainder > 0) {
 					addOfflineTrainingTime(remainder * 1000);
 				}
 
-				if (offlineTrainingTime >= 60) {
+				if (trainingTime >= 60) {
 					std::ostringstream ss;
 					ss << "During your absence you trained for ";
-					int32_t hours = offlineTrainingTime / 3600;
+					int32_t hours = trainingTime / 3600;
 					if (hours > 1) {
 						ss << hours << " hours";
 					} else if (hours == 1) {
 						ss << "1 hour";
 					}
 
-					int32_t minutes = (offlineTrainingTime % 3600) / 60;
+					int32_t minutes = (trainingTime % 3600) / 60;
 					if (minutes != 0) {
 						if (hours != 0) {
 							ss << " and ";
@@ -1278,34 +1278,34 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 					ss << '.';
 					sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 
-					Vocation* vocation;
+					Vocation* topVocation;
 					if (isPromoted()) {
-						vocation = getVocation();
+						topVocation = getVocation();
 					} else {
 						int32_t promotedVocationId = g_vocations.getPromotedVocation(getVocationId());
-						vocation = g_vocations.getVocation(promotedVocationId);
-						if (!vocation) {
-							vocation = getVocation();
+						topVocation = g_vocations.getVocation(promotedVocationId);
+						if (!topVocation) {
+							topVocation = getVocation();
 						}
 					}
 
 					bool sendUpdateSkills = false;
 					if (offlineTrainingSkill == SKILL_CLUB || offlineTrainingSkill == SKILL_SWORD || offlineTrainingSkill == SKILL_AXE) {
-						float modifier = vocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 2);
+						float modifier = topVocation->getAttackSpeed() / 1000.f;
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (trainingTime / modifier) / 2);
 					} else if (offlineTrainingSkill == SKILL_DISTANCE) {
-						float modifier = vocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (offlineTrainingTime / modifier) / 4);
+						float modifier = topVocation->getAttackSpeed() / 1000.f;
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (trainingTime / modifier) / 4);
 					} else if (offlineTrainingSkill == SKILL_MAGLEVEL) {
-						int32_t gainTicks = vocation->getManaGainTicks() * 2;
+						int32_t gainTicks = topVocation->getManaGainTicks() * 2;
 						if (gainTicks == 0) {
 							gainTicks = 1;
 						}
 
-						addOfflineTrainingTries(SKILL_MAGLEVEL, offlineTrainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
+						addOfflineTrainingTries(SKILL_MAGLEVEL, trainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
 					}
 
-					if (addOfflineTrainingTries(SKILL_SHIELD, offlineTrainingTime / 4) || sendUpdateSkills) {
+					if (addOfflineTrainingTries(SKILL_SHIELD, trainingTime / 4) || sendUpdateSkills) {
 						sendSkills();
 					}
 				}
@@ -1706,7 +1706,7 @@ void Player::onThink(uint32_t interval)
 		} else if (client && idleTime == 60000 * kickAfterMinutes) {
 			std::ostringstream ss;
 			ss << "You have been idle for " << kickAfterMinutes << " minutes. You will be disconnected in one minute if you are still idle then.";
-			client->sendTextMessage(MESSAGE_STATUS_WARNING, ss.str());
+			client->sendTextMessage(TextMessage(MESSAGE_STATUS_WARNING, ss.str()));
 		}
 	}
 
@@ -1858,22 +1858,22 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 	experience += exp;
 
 	if (sendText) {
-		const Position& targetPos = getPosition();
+		std::string expString = std::to_string(exp) + (exp != 1 ? " experience points." : " experience point.");
 
-		std::ostringstream ss;
-		ss << "You gained " << exp << " experience points.";
-		sendExperienceMessage(MESSAGE_EXPERIENCE, ss.str(), targetPos, exp, TEXTCOLOR_WHITE_EXP);
-
-		std::ostringstream ssExp;
-		ssExp << getNameDescription() << " gained " << exp << " experience points.";
-		std::string strExp = ssExp.str();
+		TextMessage message(MESSAGE_EXPERIENCE, "You gained " + expString);
+		message.position = _position;
+		message.primary.value = exp;
+		message.primary.color = TEXTCOLOR_WHITE_EXP;
+		sendTextMessage(message);
 
 		SpectatorVec list;
-		g_game.map.getSpectators(list, targetPos, false, true);
-		for (Creature* spectator : list) {
-			Player* tmpPlayer = spectator->getPlayer();
-			if (tmpPlayer != this) {
-				tmpPlayer->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, exp, TEXTCOLOR_WHITE_EXP);
+		g_game.map.getSpectators(list, _position, false, true);
+		list.erase(this);
+		if (!list.empty()) {
+			message.type = MESSAGE_EXPERIENCE_OTHERS;
+			message.text = getName() + " gained " + expString;
+			for (Creature* spectator : list) {
+				spectator->getPlayer()->sendTextMessage(message);
 			}
 		}
 	}
@@ -1939,23 +1939,24 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 	experience = std::max<int64_t>(0, experience - exp);
 
 	if (sendText) {
-		const Position& targetPos = getPosition();
-
 		lostExp -= experience;
-		std::ostringstream ss;
-		ss << "You lost " << lostExp << " experience points.";
-		sendExperienceMessage(MESSAGE_EXPERIENCE, ss.str(), targetPos, lostExp, TEXTCOLOR_RED);
 
-		std::ostringstream ssExp;
-		ssExp << getNameDescription() << " lost " << lostExp << " experience points.";
-		std::string strExp = ssExp.str();
+		std::string expString = std::to_string(lostExp) + (lostExp != 1 ? " experience points." : " experience point.");
+
+		TextMessage message(MESSAGE_EXPERIENCE, "You lost " + expString);
+		message.position = _position;
+		message.primary.value = lostExp;
+		message.primary.color = TEXTCOLOR_RED;
+		sendTextMessage(message);
 
 		SpectatorVec list;
-		g_game.map.getSpectators(list, targetPos, false, true);
-		for (Creature* spectator : list) {
-			Player* tmpPlayer = spectator->getPlayer();
-			if (tmpPlayer != this) {
-				tmpPlayer->sendExperienceMessage(MESSAGE_EXPERIENCE_OTHERS, strExp, targetPos, lostExp, TEXTCOLOR_RED);
+		g_game.map.getSpectators(list, _position, false, true);
+		list.erase(this);
+		if (!list.empty()) {
+			message.type = MESSAGE_EXPERIENCE_OTHERS;
+			message.text = getName() + " lost " + expString;
+			for (Creature* spectator : list) {
+				spectator->getPlayer()->sendTextMessage(message);
 			}
 		}
 	}
@@ -2418,9 +2419,9 @@ void Player::notifyStatusChange(Player* loginPlayer, VipStatus_t status)
 	client->sendUpdatedVIPStatus(loginPlayer->guid, status);
 
 	if (status == VIPSTATUS_ONLINE) {
-		client->sendTextMessage(MESSAGE_STATUS_SMALL, (loginPlayer->getName() + " has logged in."));
+		client->sendTextMessage(TextMessage(MESSAGE_STATUS_SMALL, loginPlayer->getName() + " has logged in."));
 	} else if (status == VIPSTATUS_OFFLINE) {
-		client->sendTextMessage(MESSAGE_STATUS_SMALL, (loginPlayer->getName() + " has logged out."));
+		client->sendTextMessage(TextMessage(MESSAGE_STATUS_SMALL, loginPlayer->getName() + " has logged out."));
 	}
 }
 
@@ -2605,7 +2606,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		case CONST_SLOT_RIGHT: {
 			if (slotPosition & SLOTP_RIGHT) {
 				if (!g_config.getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
-					if (item->getWeaponType() != WEAPON_SHIELD) {
+					if (item->getWeaponType() != WEAPON_SHIELD && !item->isDual()) {
 						ret = RETURNVALUE_CANNOTBEDRESSED;
 					} else {
 						const Item* leftItem = inventory[CONST_SLOT_LEFT];
@@ -2637,7 +2638,8 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 						ret = RETURNVALUE_CANONLYUSEONESHIELD;
 					} else if (!leftItem->isWeapon() || !item->isWeapon() ||
 					           leftType == WEAPON_SHIELD || leftType == WEAPON_AMMO
-					           || type == WEAPON_SHIELD || type == WEAPON_AMMO) {
+					           || type == WEAPON_SHIELD || type == WEAPON_AMMO
+							   || leftItem->isDual() && item->isDual()) {
 						ret = RETURNVALUE_NOERROR;
 					} else {
 						ret = RETURNVALUE_CANONLYUSEONEWEAPON;
@@ -2652,7 +2654,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		case CONST_SLOT_LEFT: {
 			if (slotPosition & SLOTP_LEFT) {
 				if (!g_config.getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
-					if (!item->isWeapon() || item->getWeaponType() == WEAPON_SHIELD) {
+					if (!item->isWeapon() && !item->isDual() || item->getWeaponType() == WEAPON_SHIELD) {
 						ret = RETURNVALUE_CANNOTBEDRESSED;
 					} else if (inventory[CONST_SLOT_RIGHT] && (slotPosition & SLOTP_TWO_HAND)) {
 						ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
@@ -2677,7 +2679,8 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 						ret = RETURNVALUE_CANONLYUSEONESHIELD;
 					} else if (!rightItem->isWeapon() || !item->isWeapon() ||
 					           rightType == WEAPON_SHIELD || rightType == WEAPON_AMMO
-					           || type == WEAPON_SHIELD || type == WEAPON_AMMO) {
+					           || type == WEAPON_SHIELD || type == WEAPON_AMMO
+							   || rightItem->isDual() && item->isDual()) {
 						ret = RETURNVALUE_NOERROR;
 					} else {
 						ret = RETURNVALUE_CANONLYUSEONEWEAPON;
@@ -4049,11 +4052,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		return;
 	}
 
-	if (client) {
-		std::ostringstream ss;
-		ss << "Warning! The murder of " << attacked->getName() << " was not justified.";
-		client->sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
-	}
+	sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " + attacked->getName() + " was not justified.");
 
 	skullTicks += g_config.getNumber(ConfigManager::FRAG_TIME);
 

@@ -73,6 +73,7 @@ ItemType::ItemType()
 	defense = 0;
 	extraDefense = 0;
 	armor = 0;
+	dual = false;
 	decayTo = -1;
 	decayTime = 0;
 	stopTime = false;
@@ -191,7 +192,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 	} else if (Items::dwMajorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
-	} else if (Items::dwMinorVersion < CLIENT_VERSION_1035) {
+	} else if (Items::dwMinorVersion < CLIENT_VERSION_1076) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
@@ -365,6 +366,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		iType.lookThrough = hasBitSet(FLAG_LOOKTHROUGH, flags);
 		iType.isAnimation = hasBitSet(FLAG_ANIMATION, flags);
 		// iType.walkStack = !hasBitSet(FLAG_FULLTILE, flags);
+		iType.forceUse = hasBitSet(FLAG_FORCEUSE, flags);
 
 		iType.id = serverId;
 		iType.clientId = clientId;
@@ -494,6 +496,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.armor = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "defense") {
 			it.defense = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "dual") {
+			it.dual = valueAttribute.as_bool();
 		} else if (tmpStrValue == "extradef") {
 			it.extraDefense = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "attack") {

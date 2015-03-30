@@ -215,6 +215,7 @@ class ItemType
 		int32_t rotateTo;
 		int32_t runeMagLevel;
 		int32_t runeLevel;
+		bool dual;
 
 		CombatType_t combatType;
 
@@ -243,6 +244,7 @@ class ItemType
 		uint8_t shootRange;
 		int8_t hitChance;
 
+		bool forceUse;
 		bool floorChangeDown;
 		bool floorChangeNorth;
 		bool floorChangeSouth;

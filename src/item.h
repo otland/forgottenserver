@@ -96,7 +96,8 @@ enum AttrTypes_t {
 	ATTR_EXTRADEFENSE = 30,
 	ATTR_ARMOR = 31,
 	ATTR_HITCHANCE = 32,
-	ATTR_SHOOTRANGE = 33
+	ATTR_SHOOTRANGE = 33,
+	ATTR_DUAL = 34
 };
 
 enum Attr_ReadValue {
@@ -599,6 +600,12 @@ class Item : virtual public Thing
 				return getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
 			}
 			return items[id].defense;
+		}
+		bool isDual() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DUAL)) {
+				return bool(ITEM_ATTRIBUTE_DUAL);
+			}
+			return items[id].dual;
 		}
 		int32_t getExtraDefense() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)) {

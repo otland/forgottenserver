@@ -938,6 +938,8 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_ATTACK;
 	} else if (str == "defense") {
 		return ITEM_ATTRIBUTE_DEFENSE;
+	} else if (str == "dual") {
+		return ITEM_ATTRIBUTE_DUAL;
 	} else if (str == "extradefense") {
 		return ITEM_ATTRIBUTE_EXTRADEFENSE;
 	} else if (str == "armor") {

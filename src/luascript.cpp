@@ -363,13 +363,13 @@ bool LuaScriptInterface::reInitState()
 }
 
 /// Same as lua_pcall, but adds stack trace to error strings in called function.
-int32_t LuaScriptInterface::protectedCall(lua_State* L, int32_t nargs, int32_t nresults)
+int LuaScriptInterface::protectedCall(lua_State* L, int nargs, int nresults)
 {
-	int32_t error_index = lua_gettop(L) - nargs;
+	int error_index = lua_gettop(L) - nargs;
 	lua_pushcfunction(L, luaErrorHandler);
 	lua_insert(L, error_index);
 
-	int32_t ret = lua_pcall(L, nargs, nresults, error_index);
+	int ret = lua_pcall(L, nargs, nresults, error_index);
 	lua_remove(L, error_index);
 	return ret;
 }
@@ -377,7 +377,7 @@ int32_t LuaScriptInterface::protectedCall(lua_State* L, int32_t nargs, int32_t n
 int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = nullptr*/)
 {
 	//loads file as a chunk at stack top
-	int32_t ret = luaL_loadfile(m_luaState, file.c_str());
+	int ret = luaL_loadfile(m_luaState, file.c_str());
 	if (ret != 0) {
 		m_lastLuaError = popString(m_luaState);
 		return -1;
@@ -592,10 +592,10 @@ int32_t LuaScriptInterface::luaErrorHandler(lua_State* L)
 	return 1;
 }
 
-bool LuaScriptInterface::callFunction(int32_t params)
+bool LuaScriptInterface::callFunction(int params)
 {
 	bool result = false;
-	int32_t size = lua_gettop(m_luaState);
+	int size = lua_gettop(m_luaState);
 	if (protectedCall(m_luaState, params, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(m_luaState, -1));
 	} else {
@@ -611,9 +611,9 @@ bool LuaScriptInterface::callFunction(int32_t params)
 	return result;
 }
 
-void LuaScriptInterface::callVoidFunction(int32_t params)
+void LuaScriptInterface::callVoidFunction(int params)
 {
-	int32_t size = lua_gettop(m_luaState);
+	int size = lua_gettop(m_luaState);
 	if (protectedCall(m_luaState, params, 0) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(m_luaState));
 	}
@@ -709,10 +709,10 @@ void LuaScriptInterface::setWeakMetatable(lua_State* L, int32_t index, const std
 	const std::string& weakName = name + "_weak";
 	if (weakObjectTypes.find(name) == weakObjectTypes.end()) {
 		luaL_getmetatable(L, name.c_str());
-		int32_t childMetatable = lua_gettop(L);
+		int childMetatable = lua_gettop(L);
 
 		luaL_newmetatable(L, weakName.c_str());
-		int32_t metatable = lua_gettop(L);
+		int metatable = lua_gettop(L);
 
 		static const std::vector<std::string> methodKeys = {"__index", "__metatable", "__eq"};
 		for (const std::string& metaKey : methodKeys) {
@@ -720,8 +720,8 @@ void LuaScriptInterface::setWeakMetatable(lua_State* L, int32_t index, const std
 			lua_setfield(L, metatable, metaKey.c_str());
 		}
 
-		static const std::vector<int32_t> methodIndexes = {'h', 'p', 't'};
-		for (int32_t metaIndex : methodIndexes) {
+		static const std::vector<int> methodIndexes = {'h', 'p', 't'};
+		for (int metaIndex : methodIndexes) {
 			lua_rawgeti(L, childMetatable, metaIndex);
 			lua_rawseti(L, metatable, metaIndex);
 		}
@@ -1498,6 +1498,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_PLURALNAME)
 	registerEnum(ITEM_ATTRIBUTE_WEIGHT)
 	registerEnum(ITEM_ATTRIBUTE_ATTACK)
+	registerEnum(ITEM_ATTRIBUTE_DUAL)
 	registerEnum(ITEM_ATTRIBUTE_DEFENSE)
 	registerEnum(ITEM_ATTRIBUTE_EXTRADEFENSE)
 	registerEnum(ITEM_ATTRIBUTE_ARMOR)
@@ -2659,11 +2660,11 @@ void LuaScriptInterface::registerClass(const std::string& className, const std::
 	lua_newtable(m_luaState);
 	lua_pushvalue(m_luaState, -1);
 	lua_setglobal(m_luaState, className.c_str());
-	int32_t methods = lua_gettop(m_luaState);
+	int methods = lua_gettop(m_luaState);
 
 	// methodsTable = {}
 	lua_newtable(m_luaState);
-	int32_t methodsTable = lua_gettop(m_luaState);
+	int methodsTable = lua_gettop(m_luaState);
 
 	if (newFunction) {
 		// className.__call = newFunction
@@ -2685,7 +2686,7 @@ void LuaScriptInterface::registerClass(const std::string& className, const std::
 
 	// className.metatable = {}
 	luaL_newmetatable(m_luaState, className.c_str());
-	int32_t metatable = lua_gettop(m_luaState);
+	int metatable = lua_gettop(m_luaState);
 
 	// className.metatable.__metatable = className
 	lua_pushvalue(m_luaState, methods);
@@ -3190,7 +3191,7 @@ int32_t LuaScriptInterface::luaCreateCombatArea(lua_State* L)
 	uint32_t areaId = g_luaEnvironment.createAreaObject(env->getScriptInterface());
 	AreaCombat* area = g_luaEnvironment.getAreaObject(areaId);
 
-	int32_t parameters = lua_gettop(L);
+	int parameters = lua_gettop(L);
 	if (parameters >= 2) {
 		uint32_t rowsExtArea;
 		std::list<uint32_t> listExtArea;
@@ -4154,7 +4155,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 		lua_xmove(L, globalState, lua_gettop(L));
 	}
 
-	int32_t parameters = lua_gettop(globalState);
+	int parameters = lua_gettop(globalState);
 	if (!isFunction(globalState, -parameters)) { //-parameters means the first parameter from left to right
 		reportErrorFunc("callback parameter should be a function.");
 		pushBoolean(L, false);
@@ -4163,7 +4164,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 
 	if (g_config.getBoolean(ConfigManager::WARN_UNSAFE_SCRIPTS) || g_config.getBoolean(ConfigManager::CONVERT_UNSAFE_SCRIPTS)) {
 		std::vector<std::pair<int32_t, LuaDataType>> indexes;
-		for (int32_t i = 3; i <= parameters; ++i) {
+		for (int i = 3; i <= parameters; ++i) {
 			if (lua_getmetatable(globalState, i) == 0) {
 				continue;
 			}
@@ -4236,7 +4237,7 @@ int32_t LuaScriptInterface::luaAddEvent(lua_State* L)
 	}
 
 	LuaTimerEventDesc eventDesc;
-	for (int32_t i = 0; i < parameters - 2; ++i) { //-2 because addEvent needs at least two parameters
+	for (int i = 0; i < parameters - 2; ++i) { //-2 because addEvent needs at least two parameters
 		eventDesc.parameters.push_back(luaL_ref(globalState, LUA_REGISTRYINDEX));
 	}
 
@@ -8093,7 +8094,7 @@ int32_t LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 int32_t LuaScriptInterface::luaCreatureSay(lua_State* L)
 {
 	// creature:say(text, type[, ghost = false[, target = nullptr[, position]]])
-	int32_t parameters = lua_gettop(L);
+	int parameters = lua_gettop(L);
 
 	Position position;
 	if (parameters >= 6) {
@@ -9079,7 +9080,7 @@ int32_t LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 	const ItemType& it = Item::items[itemId];
 
 	int32_t itemCount = 1;
-	int32_t parameters = lua_gettop(L);
+	int parameters = lua_gettop(L);
 	if (parameters >= 4) {
 		itemCount = std::max<int32_t>(1, count);
 	} else if (it.hasSubType()) {
@@ -9259,7 +9260,7 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 	bool canWrite = getBoolean(L, 4, false);
 	std::string text;
 
-	int32_t parameters = lua_gettop(L);
+	int parameters = lua_gettop(L);
 	if (parameters >= 3) {
 		text = getString(L, 3);
 	}
@@ -9301,22 +9302,19 @@ int32_t LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 int32_t LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
 	// player:sendTextMessage(type, text[, position, primaryValue = 0, primaryColor = TEXTCOLOR_NONE[, secondaryValue = 0, secondaryColor = TEXTCOLOR_NONE]])
-	int32_t parameters = lua_gettop(L);
+	int parameters = lua_gettop(L);
 
-	TextMessage message;
-	if (parameters >= 8) {
-		message.secondary.color = getNumber<TextColor_t>(L, 8);
-		message.secondary.value = getNumber<int32_t>(L, 7);
-	}
-
+	TextMessage message(getNumber<MessageClasses>(L, 2), getString(L, 3));
 	if (parameters >= 6) {
-		message.primary.color = getNumber<TextColor_t>(L, 6);
-		message.primary.value = getNumber<int32_t>(L, 5);
 		message.position = getPosition(L, 4);
+		message.primary.value = getNumber<int32_t>(L, 5);
+		message.primary.color = getNumber<TextColor_t>(L, 6);
 	}
 
-	message.text = getString(L, 3);
-	message.type = getNumber<MessageClasses>(L, 2);
+	if (parameters >= 8) {
+		message.secondary.value = getNumber<int32_t>(L, 7);
+		message.secondary.color = getNumber<TextColor_t>(L, 8);
+	}
 
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {

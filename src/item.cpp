@@ -560,6 +560,15 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+		case ATTR_DUAL: {
+			bool dual;
+			if (!propStream.read<bool>(dual)) {
+				return ATTR_READ_ERROR;
+			}
+
+			break;
+		}
+
 		case ATTR_ARMOR: {
 			int32_t armor;
 			if (!propStream.read<int32_t>(armor)) {
@@ -753,6 +762,10 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	if (hasAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)) {
 		propWriteStream.write<uint8_t>(ATTR_EXTRADEFENSE);
 		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE));
+	}
+
+	if (hasAttribute(ITEM_ATTRIBUTE_DUAL)) {
+		return;
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
