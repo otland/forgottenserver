@@ -23,6 +23,8 @@
 #define NETWORKMESSAGE_MAXSIZE 24590
 
 enum MagicEffectClasses : uint8_t {
+	CONST_ME_NONE,
+
 	CONST_ME_DRAWBLOOD = 1,
 	CONST_ME_LOSEENERGY = 2,
 	CONST_ME_POFF = 3,
@@ -101,13 +103,16 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_CONFETTI_VERTICAL = 76,
 	// 77-157 are empty
 	CONST_ME_BLACKSMOKE = 158,
-
-	//for internal use, dont send to client
-	CONST_ME_NONE = 0xFF,
+	// 159-166 are empty
+	CONST_ME_REDSMOKE = 167,
+	CONST_ME_YELLOWSMOKE = 168,
+	CONST_ME_GREENSMOKE = 169,
+	CONST_ME_PURPLESMOKE = 170,
 };
 
 enum ShootType_t : uint8_t {
-	CONST_ANI_NONE = 0,
+	CONST_ANI_NONE,
+
 	CONST_ANI_SPEAR = 1,
 	CONST_ANI_BOLT = 2,
 	CONST_ANI_ARROW = 3,
@@ -159,7 +164,10 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_DRILLBOLT = 50,
 	CONST_ANI_ENVENOMEDARROW = 51,
 
-	//for internal use, dont send to client
+	CONST_ANI_GLOOTHSPEAR = 53,
+	CONST_ANI_SIMPLEARROW = 54,
+
+	// for internal use, don't send to client
 	CONST_ANI_WEAPONTYPE = 0xFE, // 254
 };
 

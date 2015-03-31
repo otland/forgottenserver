@@ -557,7 +557,11 @@ MagicEffectNames magicEffectNames[] = {
 	{"ferumbras",		CONST_ME_FERUMBRAS},
 	{"confettihorizontal",	CONST_ME_CONFETTI_HORIZONTAL},
 	{"confettivertical",	CONST_ME_CONFETTI_VERTICAL},
-	{"blacksmoke",		CONST_ME_BLACKSMOKE}
+	{"blacksmoke",		CONST_ME_BLACKSMOKE},
+	{"redsmoke",		CONST_ME_REDSMOKE},
+	{"yellowsmoke",		CONST_ME_YELLOWSMOKE},
+	{"greensmoke",		CONST_ME_GREENSMOKE},
+	{"purplesmoke",		CONST_ME_PURPLESMOKE},
 };
 
 ShootTypeNames shootTypeNames[] = {
@@ -608,7 +612,9 @@ ShootTypeNames shootTypeNames[] = {
 	{"prismaticbolt",	CONST_ANI_PRISMATICBOLT},
 	{"crystallinearrow",	CONST_ANI_CRYSTALLINEARROW},
 	{"drillbolt",		CONST_ANI_DRILLBOLT},
-	{"envenomedarrow",	CONST_ANI_ENVENOMEDARROW}
+	{"envenomedarrow",	CONST_ANI_ENVENOMEDARROW},
+	{"gloothspear",		CONST_ANI_GLOOTHSPEAR},
+	{"simplearrow",		CONST_ANI_SIMPLEARROW},
 };
 
 CombatTypeNames combatTypeNames[] = {
@@ -623,7 +629,7 @@ CombatTypeNames combatTypeNames[] = {
 	{"drown",		COMBAT_DROWNDAMAGE},
 	{"ice",			COMBAT_ICEDAMAGE},
 	{"holy",		COMBAT_HOLYDAMAGE},
-	{"death",		COMBAT_DEATHDAMAGE}
+	{"death",		COMBAT_DEATHDAMAGE},
 };
 
 AmmoTypeNames ammoTypeNames[] = {
@@ -649,13 +655,13 @@ AmmoTypeNames ammoTypeNames[] = {
 	{"flasharrow",		AMMO_ARROW},
 	{"flammingarrow",	AMMO_ARROW},
 	{"shiverarrow",		AMMO_ARROW},
-	{"eartharrow",		AMMO_ARROW}
+	{"eartharrow",		AMMO_ARROW},
 };
 
 WeaponActionNames weaponActionNames[] = {
 	{"move",		WEAPONACTION_MOVE},
 	{"removecharge",	WEAPONACTION_REMOVECHARGE},
-	{"removecount",		WEAPONACTION_REMOVECOUNT}
+	{"removecount",		WEAPONACTION_REMOVECOUNT},
 };
 
 SkullNames skullNames[] = {
