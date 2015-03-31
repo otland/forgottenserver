@@ -140,15 +140,19 @@ void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 	Database::getInstance()->executeQuery(query.str());
 }
 
-bool IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
+void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 {
+	if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+		return;
+	}
+
 	std::ostringstream query;
 	if (login) {
 		query << "INSERT INTO `players_online` VALUES (" << guid << ')';
 	} else {
 		query << "DELETE FROM `players_online` WHERE `player_id` = " << guid;
 	}
-	return Database::getInstance()->executeQuery(query.str());
+	Database::getInstance()->executeQuery(query.str());
 }
 
 bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
