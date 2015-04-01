@@ -1324,6 +1324,7 @@ void ProtocolGame::sendReLoginWindow(uint8_t unfairFightReduction)
 {
 	NetworkMessage msg;
 	msg.addByte(0x28);
+	msg.addByte(0x00);
 	msg.addByte(unfairFightReduction);
 	writeToOutputBuffer(msg);
 }
