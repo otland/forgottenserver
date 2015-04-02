@@ -173,15 +173,6 @@ class OutputMessagePool
 			return frameTime;
 		}
 
-		size_t getTotalMessageCount() const {
-			return allOutputMessages.size();
-		}
-		size_t getAvailableMessageCount() const {
-			return outputMessages.size();
-		}
-		size_t getAutoMessageCount() const {
-			return autoSendOutputMessages.size();
-		}
 		void addToAutoSend(OutputMessage_ptr msg);
 
 	protected:

@@ -931,19 +931,19 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.transformToFree = pugi::cast<uint16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "elementice") {
 			Abilities& abilities = it.getAbilities();
-			abilities.elementDamage = pugi::cast<int16_t>(valueAttribute.value());
+			abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
 			abilities.elementType = COMBAT_ICEDAMAGE;
 		} else if (tmpStrValue == "elementearth") {
 			Abilities& abilities = it.getAbilities();
-			abilities.elementDamage = pugi::cast<int16_t>(valueAttribute.value());
+			abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
 			abilities.elementType = COMBAT_EARTHDAMAGE;
 		} else if (tmpStrValue == "elementfire") {
 			Abilities& abilities = it.getAbilities();
-			abilities.elementDamage = pugi::cast<int16_t>(valueAttribute.value());
+			abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
 			abilities.elementType = COMBAT_FIREDAMAGE;
 		} else if (tmpStrValue == "elementenergy") {
 			Abilities& abilities = it.getAbilities();
-			abilities.elementDamage = pugi::cast<int16_t>(valueAttribute.value());
+			abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
 			abilities.elementType = COMBAT_ENERGYDAMAGE;
 		} else if (tmpStrValue == "walkstack") {
 			it.walkStack = valueAttribute.as_bool();

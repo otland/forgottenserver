@@ -150,7 +150,7 @@ class WeaponMelee final : public Weapon
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
 		CombatType_t elementType;
-		int16_t elementDamage;
+		uint16_t elementDamage;
 };
 
 class WeaponDistance final : public Weapon
@@ -173,7 +173,7 @@ class WeaponDistance final : public Weapon
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
 		CombatType_t elementType;
-		int16_t elementDamage;
+		uint16_t elementDamage;
 };
 
 class WeaponWand final : public Weapon

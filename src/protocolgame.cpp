@@ -1489,24 +1489,22 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	uint32_t containerSize = container->size();
 	msg.add<uint16_t>(containerSize);
 	msg.add<uint16_t>(firstIndex);
+	if (firstIndex < containerSize) {
+		uint8_t itemsToSend;
+		if (container->hasPagination() && firstIndex > 0) {
+			itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), containerSize);
+		} else {
+			itemsToSend = std::min<uint32_t>(container->capacity(), containerSize);
+		}
+		itemsToSend = std::min<uint32_t>(itemsToSend, std::numeric_limits<uint8_t>::max());
 
-	uint32_t maxItemsToSend;
-	if (container->hasPagination() && firstIndex > 0) {
-		maxItemsToSend = std::min<uint32_t>(container->capacity(), containerSize - firstIndex);
-	} else {
-		maxItemsToSend = container->capacity();
-	}
+		msg.addByte(itemsToSend);
 
-	if (firstIndex >= containerSize) {
-		msg.addByte(0x00);
-	} else {
-		msg.addByte(std::min<uint32_t>(maxItemsToSend, containerSize));
-
-		uint32_t i = 0;
-		const ItemDeque& itemList = container->getItemList();
-		for (ItemDeque::const_iterator it = itemList.begin() + firstIndex, end = itemList.end(); i < maxItemsToSend && it != end; ++it, ++i) {
+		for (ItemDeque::const_iterator it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
 			msg.addItem(*it);
 		}
+	} else {
+		msg.addByte(0x00);
 	}
 	writeToOutputBuffer(msg);
 }
@@ -1516,11 +1514,12 @@ void ProtocolGame::sendShop(Npc* npc, const ShopInfoList& itemList)
 	NetworkMessage msg;
 	msg.addByte(0x7A);
 	msg.addString(npc->getName());
-	msg.add<uint16_t>(std::min<size_t>(0xFFFF, itemList.size()));
 
-	uint32_t i = 0;
+	uint16_t itemsToSend = std::min<size_t>(itemList.size(), std::numeric_limits<uint16_t>::max());
+	msg.add<uint16_t>(itemsToSend);
 
-	for (ShopInfoList::const_iterator it = itemList.begin(), end = itemList.end(); i < 0xFFFF && it != end; ++it, ++i) {
+	uint16_t i = 0;
+	for (ShopInfoList::const_iterator it = itemList.begin(); i < itemsToSend; ++it, ++i) {
 		AddShopItem(msg, *it);
 	}
 
@@ -1580,7 +1579,6 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 
 				if (subtype != -1) {
 					uint32_t count;
-
 					if (!itemType.isFluidContainer() && !itemType.isSplash()) {
 						count = player->getItemTypeCount(shopInfo.itemId, subtype);    // This shop item requires extra checks
 					} else {
@@ -1600,13 +1598,13 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 		}
 	}
 
-	msg.addByte(std::min<size_t>(0xFF, saleMap.size()));
+	uint8_t itemsToSend = std::min<size_t>(saleMap.size(), std::numeric_limits<uint8_t>::max());
+	msg.addByte(itemsToSend);
 
-	uint32_t i = 0;
-
-	for (std::map<uint32_t, uint32_t>::const_iterator it = saleMap.begin(), end = saleMap.end(); i < 0xFF && it != end; ++it, ++i) {
+	uint8_t i = 0;
+	for (std::map<uint32_t, uint32_t>::const_iterator it = saleMap.begin(); i < itemsToSend; ++it, ++i) {
 		msg.addItemId(it->first);
-		msg.addByte(std::min<uint32_t>(0xFF, it->second));
+		msg.addByte(std::min<uint32_t>(it->second, std::numeric_limits<uint8_t>::max()));
 	}
 
 	writeToOutputBuffer(msg);
@@ -1618,7 +1616,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	msg.addByte(0xF6);
 
 	msg.add<uint64_t>(player->getBankBalance());
-	msg.addByte(std::min<int32_t>(0xFF, IOMarket::getPlayerOfferCount(player->getGUID())));
+	msg.addByte(std::min<uint32_t>(IOMarket::getPlayerOfferCount(player->getGUID()), std::numeric_limits<uint8_t>::max()));
 
 	DepotChest* depotChest = player->getDepotChest(depotId, false);
 	if (!depotChest) {
@@ -1660,11 +1658,11 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		}
 	} while (!containerList.empty());
 
-	msg.add<uint16_t>(std::min<size_t>(0xFFFF, depotItems.size()));
+	uint16_t itemsToSend = std::min<size_t>(depotItems.size(), std::numeric_limits<uint16_t>::max());
+	msg.add<uint16_t>(itemsToSend);
 
 	uint16_t i = 0;
-
-	for (std::map<uint16_t, uint32_t>::const_iterator it = depotItems.begin(), end = depotItems.end(); it != end && i < 0xFFFF; ++it, ++i) {
+	for (std::map<uint16_t, uint32_t>::const_iterator it = depotItems.begin(); i < itemsToSend; ++it, ++i) {
 		msg.add<uint16_t>(it->first);
 		msg.add<uint16_t>(std::min<uint32_t>(0xFFFF, it->second));
 	}
@@ -1790,16 +1788,17 @@ void ProtocolGame::sendMarketCancelOffer(const MarketOfferEx& offer)
 
 void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers)
 {
+	uint32_t i = 0;
+	std::map<uint32_t, uint16_t> counterMap;
+	uint32_t buyOffersToSend = std::min<uint32_t>(buyOffers.size(), 810 + std::max<int32_t>(0, 810 - sellOffers.size()));
+	uint32_t sellOffersToSend = std::min<uint32_t>(sellOffers.size(), 810 + std::max<int32_t>(0, 810 - buyOffers.size()));
+
 	NetworkMessage msg;
 	msg.addByte(0xF9);
 	msg.add<uint16_t>(MARKETREQUEST_OWN_HISTORY);
 
-	std::map<uint32_t, uint16_t> counterMap;
-
-	uint32_t i = 0;
-	msg.add<uint32_t>(std::min<uint32_t>(800, buyOffers.size()));
-
-	for (HistoryMarketOfferList::const_iterator it = buyOffers.begin(), end = buyOffers.end(); it != end && i < 800; ++it, ++i) {
+	msg.add<uint32_t>(buyOffersToSend);
+	for (HistoryMarketOfferList::const_iterator it = buyOffers.begin(); i < buyOffersToSend; ++it, ++i) {
 		msg.add<uint32_t>(it->timestamp);
 		msg.add<uint16_t>(counterMap[it->timestamp]++);
 		msg.addItemId(it->itemId);
@@ -1811,9 +1810,8 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 	counterMap.clear();
 	i = 0;
 
-	msg.add<uint32_t>(std::min<uint32_t>(800, sellOffers.size()));
-
-	for (HistoryMarketOfferList::const_iterator it = sellOffers.begin(), end = sellOffers.end(); it != end && i < 800; ++it, ++i) {
+	msg.add<uint32_t>(sellOffersToSend);
+	for (HistoryMarketOfferList::const_iterator it = sellOffers.begin(); i < sellOffersToSend; ++it, ++i) {
 		msg.add<uint32_t>(it->timestamp);
 		msg.add<uint16_t>(counterMap[it->timestamp]++);
 		msg.addItemId(it->itemId);
@@ -1842,7 +1840,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		// TODO: chance to hit, range
 		// example:
 		// "attack +x, chance to hit +y%, z fields"
-		if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.decayTo > 0) {
+		if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
 			std::ostringstream ss;
 			ss << it.attack << " physical +" << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
 			msg.addString(ss.str());

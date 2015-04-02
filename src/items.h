@@ -101,7 +101,7 @@ struct Abilities {
 	int16_t absorbPercent[COMBAT_COUNT];
 
 	//elemental damage
-	int16_t elementDamage;
+	uint16_t elementDamage;
 	CombatType_t elementType;
 
 	bool manaShield;

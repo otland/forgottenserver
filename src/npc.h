@@ -44,25 +44,25 @@ class NpcScriptInterface final : public LuaScriptInterface
 	protected:
 		void registerFunctions();
 
-		static int32_t luaActionSay(lua_State* L);
-		static int32_t luaActionMove(lua_State* L);
-		static int32_t luaActionMoveTo(lua_State* L);
-		static int32_t luaActionTurn(lua_State* L);
-		static int32_t luaActionFollow(lua_State* L);
-		static int32_t luagetDistanceTo(lua_State* L);
-		static int32_t luaSetNpcFocus(lua_State* L);
-		static int32_t luaGetNpcCid(lua_State* L);
-		static int32_t luaGetNpcParameter(lua_State* L);
-		static int32_t luaOpenShopWindow(lua_State* L);
-		static int32_t luaCloseShopWindow(lua_State* L);
-		static int32_t luaDoSellItem(lua_State* L);
+		static int luaActionSay(lua_State* L);
+		static int luaActionMove(lua_State* L);
+		static int luaActionMoveTo(lua_State* L);
+		static int luaActionTurn(lua_State* L);
+		static int luaActionFollow(lua_State* L);
+		static int luagetDistanceTo(lua_State* L);
+		static int luaSetNpcFocus(lua_State* L);
+		static int luaGetNpcCid(lua_State* L);
+		static int luaGetNpcParameter(lua_State* L);
+		static int luaOpenShopWindow(lua_State* L);
+		static int luaCloseShopWindow(lua_State* L);
+		static int luaDoSellItem(lua_State* L);
 
 		// metatable
-		static int32_t luaNpcGetParameter(lua_State* L);
-		static int32_t luaNpcSetFocus(lua_State* L);
+		static int luaNpcGetParameter(lua_State* L);
+		static int luaNpcSetFocus(lua_State* L);
 
-		static int32_t luaNpcOpenShopWindow(lua_State* L);
-		static int32_t luaNpcCloseShopWindow(lua_State* L);
+		static int luaNpcOpenShopWindow(lua_State* L);
+		static int luaNpcCloseShopWindow(lua_State* L);
 
 	private:
 		bool initState() final;

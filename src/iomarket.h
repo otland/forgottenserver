@@ -38,7 +38,7 @@ class IOMarket
 		static void processExpiredOffers(DBResult_ptr result, bool);
 		static void checkExpiredOffers();
 
-		static int32_t getPlayerOfferCount(uint32_t playerId);
+		static uint32_t getPlayerOfferCount(uint32_t playerId);
 		static MarketOfferEx getOfferByCounter(uint32_t timestamp, uint16_t counter);
 
 		static void createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous);

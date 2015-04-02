@@ -608,7 +608,7 @@ void Container::removeThing(Thing* thing, uint32_t count)
 
 int32_t Container::getThingIndex(const Thing* thing) const
 {
-	uint32_t index = 0;
+	int32_t index = 0;
 	for (Item* item : itemlist) {
 		if (item == thing) {
 			return index;

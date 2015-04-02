@@ -207,14 +207,14 @@ void IOMarket::checkExpiredOffers()
 	g_scheduler.addEvent(createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, IOMarket::checkExpiredOffers));
 }
 
-int32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
+uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 {
 	std::ostringstream query;
 	query << "SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = " << playerId;
 
 	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
 	if (!result) {
-		return -1;
+		return 0;
 	}
 	return result->getNumber<int32_t>("count");
 }

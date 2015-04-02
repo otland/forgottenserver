@@ -273,7 +273,7 @@ void Item::setID(uint16_t newid)
 	const ItemType& it = Item::items[newid];
 	uint32_t newDuration = it.decayTime * 1000;
 
-	if (newDuration == 0 && !it.stopTime && it.decayTo == -1) {
+	if (newDuration == 0 && !it.stopTime && it.decayTo < 0) {
 		removeAttribute(ITEM_ATTRIBUTE_DECAYSTATE);
 		removeAttribute(ITEM_ATTRIBUTE_DURATION);
 	}
@@ -1482,7 +1482,7 @@ bool Item::canDecay() const
 	}
 
 	const ItemType& it = Item::items[id];
-	if (it.decayTo == -1 || it.decayTime == 0) {
+	if (it.decayTo < 0 || it.decayTime == 0) {
 		return false;
 	}
 

@@ -585,7 +585,7 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Creature*, con
 	}
 
 	int32_t attackSkill = player->getWeaponSkill(item);
-	int32_t attackValue = std::max<int32_t>(0, elementDamage);
+	int32_t attackValue = elementDamage;
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
