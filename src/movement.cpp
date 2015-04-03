@@ -314,19 +314,22 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, const 
 		ret &= moveEvent->fireStepEvent(creature, nullptr, pos, fromPos);
 	}
 
-	for (int32_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
+	for (size_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
 		Thing* thing = tile->getThing(i);
-		if (thing) {
-			Item* tileItem = thing->getItem();
-			if (tileItem) {
-				moveEvent = getEvent(tileItem, eventType);
-				if (moveEvent) {
-					ret &= moveEvent->fireStepEvent(creature, tileItem, pos, fromPos);
-				}
-			}
+		if (!thing) {
+			continue;
+		}
+
+		Item* tileItem = thing->getItem();
+		if (!tileItem) {
+			continue;
+		}
+
+		moveEvent = getEvent(tileItem, eventType);
+		if (moveEvent) {
+			ret &= moveEvent->fireStepEvent(creature, tileItem, pos, fromPos);
 		}
 	}
-
 	return ret;
 }
 
@@ -370,16 +373,20 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 		ret &= moveEvent->fireAddRemItem(item, nullptr, tile->getPosition());
 	}
 
-	for (int32_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
+	for (size_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
 		Thing* thing = tile->getThing(i);
-		if (thing) {
-			Item* tileItem = thing->getItem();
-			if (tileItem && tileItem != item) {
-				moveEvent = getEvent(tileItem, eventType2);
-				if (moveEvent) {
-					ret &= moveEvent->fireAddRemItem(item, tileItem, tile->getPosition());
-				}
-			}
+		if (!thing) {
+			continue;
+		}
+
+		Item* tileItem = thing->getItem();
+		if (!tileItem || tileItem == item) {
+			continue;
+		}
+
+		moveEvent = getEvent(tileItem, eventType2);
+		if (moveEvent) {
+			ret &= moveEvent->fireAddRemItem(item, tileItem, tile->getPosition());
 		}
 	}
 	return ret;

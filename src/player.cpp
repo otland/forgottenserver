@@ -3036,12 +3036,12 @@ int32_t Player::getThingIndex(const Thing* thing) const
 	return -1;
 }
 
-int32_t Player::getFirstIndex() const
+size_t Player::getFirstIndex() const
 {
 	return CONST_SLOT_FIRST;
 }
 
-int32_t Player::getLastIndex() const
+size_t Player::getLastIndex() const
 {
 	return CONST_SLOT_LAST + 1;
 }

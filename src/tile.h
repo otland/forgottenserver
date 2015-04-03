@@ -87,27 +87,15 @@ class TileItemVector
 	public:
 		TileItemVector() : downItemCount(0) {}
 
-		ItemVector::iterator begin() {
-			return items.begin();
-		}
 		ItemVector::const_iterator begin() const {
 			return items.begin();
-		}
-		ItemVector::reverse_iterator rbegin() {
-			return items.rbegin();
 		}
 		ItemVector::const_reverse_iterator rbegin() const {
 			return items.rbegin();
 		}
 
-		ItemVector::iterator end() {
-			return items.end();
-		}
 		ItemVector::const_iterator end() const {
 			return items.end();
-		}
-		ItemVector::reverse_iterator rend() {
-			return items.rend();
 		}
 		ItemVector::const_reverse_iterator rend() const {
 			return items.rend();
@@ -117,10 +105,10 @@ class TileItemVector
 			return items.size();
 		}
 
-		ItemVector::iterator insert(ItemVector::iterator _where, Item* item) {
+		ItemVector::const_iterator insert(ItemVector::const_iterator _where, Item* item) {
 			return items.insert(_where, item);
 		}
-		ItemVector::iterator erase(ItemVector::iterator _pos) {
+		ItemVector::const_iterator erase(ItemVector::const_iterator _pos) {
 			return items.erase(_pos);
 		}
 		Item* at(size_t _pos) const {
@@ -133,37 +121,24 @@ class TileItemVector
 			return items.push_back(item);
 		}
 
-		ItemVector::iterator getBeginDownItem() {
-			return items.begin();
-		}
 		ItemVector::const_iterator getBeginDownItem() const {
 			return items.begin();
-		}
-		ItemVector::iterator getEndDownItem() {
-			return items.begin() + downItemCount;
 		}
 		ItemVector::const_iterator getEndDownItem() const {
 			return items.begin() + downItemCount;
 		}
-
-		ItemVector::iterator getBeginTopItem() {
-			return items.begin() + downItemCount;
-		}
 		ItemVector::const_iterator getBeginTopItem() const {
 			return items.begin() + downItemCount;
-		}
-		ItemVector::iterator getEndTopItem() {
-			return items.end();
 		}
 		ItemVector::const_iterator getEndTopItem() const {
 			return items.end();
 		}
 
 		uint32_t getTopItemCount() const {
-			return std::distance(getBeginTopItem(), getEndTopItem());
+			return size() - downItemCount;
 		}
 		uint32_t getDownItemCount() const {
-			return std::distance(getBeginDownItem(), getEndDownItem());
+			return downItemCount;
 		}
 		inline Item* getTopTopItem() const {
 			if (getTopItemCount() == 0) {
@@ -172,7 +147,7 @@ class TileItemVector
 			return *(getEndTopItem() - 1);
 		}
 		inline Item* getTopDownItem() const {
-			if (getDownItemCount() == 0) {
+			if (downItemCount == 0) {
 				return nullptr;
 			}
 			return *getBeginDownItem();
@@ -326,8 +301,8 @@ class Tile : public Cylinder
 		void removeCreature(Creature* creature);
 
 		int32_t getThingIndex(const Thing* thing) const final;
-		int32_t getFirstIndex() const final;
-		int32_t getLastIndex() const final;
+		size_t getFirstIndex() const final;
+		size_t getLastIndex() const final;
 		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
 		Thing* getThing(size_t index) const final;
 

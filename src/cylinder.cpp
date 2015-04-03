@@ -28,14 +28,14 @@ int32_t Cylinder::getThingIndex(const Thing*) const
 	return -1;
 }
 
-int32_t Cylinder::getFirstIndex() const
+size_t Cylinder::getFirstIndex() const
 {
-	return -1;
+	return 0;
 }
 
-int32_t Cylinder::getLastIndex() const
+size_t Cylinder::getLastIndex() const
 {
-	return -1;
+	return 0;
 }
 
 uint32_t Cylinder::getItemTypeCount(uint16_t, int32_t) const

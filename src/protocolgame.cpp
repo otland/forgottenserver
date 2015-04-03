@@ -574,7 +574,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 
 	const TileItemVector* items = tile->getItemList();
 	if (items) {
-		for (auto it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it) {
+		for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 			msg.addItem(*it);
 
 			if (++count == 10) {
@@ -602,7 +602,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	}
 
 	if (items) {
-		for (auto it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it) {
+		for (auto it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
 			msg.addItem(*it);
 
 			if (++count == 10) {

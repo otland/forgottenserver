@@ -618,14 +618,14 @@ int32_t Container::getThingIndex(const Thing* thing) const
 	return -1;
 }
 
-int32_t Container::getFirstIndex() const
+size_t Container::getFirstIndex() const
 {
 	return 0;
 }
 
-int32_t Container::getLastIndex() const
+size_t Container::getLastIndex() const
 {
-	return size();
+	return itemlist.size();
 }
 
 uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const

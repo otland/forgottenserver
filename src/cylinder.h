@@ -158,15 +158,15 @@ class Cylinder : virtual public Thing
 
 		/**
 		  * Returns the first index
-		  * \returns the first index, if not implemented -1 is returned
+		  * \returns the first index, if not implemented 0 is returned
 		  */
-		virtual int32_t getFirstIndex() const;
+		virtual size_t getFirstIndex() const;
 
 		/**
 		  * Returns the last index
-		  * \returns the last index, if not implemented -1 is returned
+		  * \returns the last index, if not implemented 0 is returned
 		  */
-		virtual int32_t getLastIndex() const;
+		virtual size_t getLastIndex() const;
 
 		/**
 		  * Gets the object based on index
