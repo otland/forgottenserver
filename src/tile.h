@@ -105,10 +105,10 @@ class TileItemVector
 			return items.size();
 		}
 
-		ItemVector::const_iterator insert(ItemVector::const_iterator _where, Item* item) {
+		ItemVector::iterator insert(ItemVector::iterator _where, Item* item) {
 			return items.insert(_where, item);
 		}
-		ItemVector::const_iterator erase(ItemVector::const_iterator _pos) {
+		ItemVector::iterator erase(ItemVector::iterator _pos) {
 			return items.erase(_pos);
 		}
 		Item* at(size_t _pos) const {
@@ -121,14 +121,26 @@ class TileItemVector
 			return items.push_back(item);
 		}
 
+		ItemVector::iterator getBeginDownItem() {
+			return items.begin();
+		}
 		ItemVector::const_iterator getBeginDownItem() const {
 			return items.begin();
+		}
+		ItemVector::iterator getEndDownItem() {
+			return items.begin() + downItemCount;
 		}
 		ItemVector::const_iterator getEndDownItem() const {
 			return items.begin() + downItemCount;
 		}
+		ItemVector::iterator getBeginTopItem() {
+			return items.begin() + downItemCount;
+		}
 		ItemVector::const_iterator getBeginTopItem() const {
 			return items.begin() + downItemCount;
+		}
+		ItemVector::iterator getEndTopItem() {
+			return items.end();
 		}
 		ItemVector::const_iterator getEndTopItem() const {
 			return items.end();
@@ -418,7 +430,10 @@ class StaticTile final : public Tile
 			return creatures;
 		}
 		CreatureVector* makeCreatures() {
-			return (creatures) ? (creatures) : (creatures = new CreatureVector);
+			if (!creatures) {
+				creatures = new CreatureVector;
+			}
+			return creatures;
 		}
 };
 
