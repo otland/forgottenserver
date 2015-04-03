@@ -270,7 +270,8 @@ void Spawn::checkSpawn()
 
 void Spawn::cleanup()
 {
-	for (SpawnedMap::iterator it = spawnedMap.begin(); it != spawnedMap.end();) {
+	auto it = spawnedMap.begin();
+	while (it != spawnedMap.end()) {
 		uint32_t spawnId = it->first;
 		Monster* monster = it->second;
 		if (monster->isRemoved()) {
@@ -315,7 +316,7 @@ bool Spawn::addMonster(const std::string& _name, const Position& _pos, Direction
 
 void Spawn::removeMonster(Monster* monster)
 {
-	for (auto it = spawnedMap.begin(); it != spawnedMap.end(); ++it) {
+	for (auto it = spawnedMap.begin(), end = spawnedMap.end(); it != end; ++it) {
 		if (it->second == monster) {
 			monster->decrementReferenceCounter();
 			spawnedMap.erase(it);

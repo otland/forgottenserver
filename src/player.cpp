@@ -2245,7 +2245,8 @@ void Player::death(Creature* _lastHitCreature)
 			mana = manaMax;
 		}
 
-		for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
+		auto it = conditions.begin(), end = conditions.end();
+		while (it != end) {
 			Condition* condition = *it;
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
@@ -2260,7 +2261,8 @@ void Player::death(Creature* _lastHitCreature)
 	} else {
 		setLossSkill(true);
 
-		for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
+		auto it = conditions.begin(), end = conditions.end();
+		while (it != end) {
 			Condition* condition = *it;
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
@@ -2711,8 +2713,8 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 					n += queryCount;
 
 					//iterate through all items, including sub-containers (deep search)
-					for (ContainerIterator cit = subContainer->begin(); cit != subContainer->end(); ++cit) {
-						if (Container* tmpContainer = (*cit)->getContainer()) {
+					for (ContainerIterator it = subContainer->begin(); it.hasNext(); ++it) {
+						if (Container* tmpContainer = (*it)->getContainer()) {
 							queryCount = 0;
 							tmpContainer->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags);
 							n += queryCount;
@@ -3058,7 +3060,7 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 		if (item->getID() == itemId) {
 			count += Item::countByType(item, subType);
 		} else if (Container* container = item->getContainer()) {
-			for (ContainerIterator it = container->begin(), end = container->end(); it != end; ++it) {
+			for (ContainerIterator it = container->begin(); it.hasNext(); ++it) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
 				}
@@ -3097,7 +3099,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 				return true;
 			}
 		} else if (Container* container = item->getContainer()) {
-			for (ContainerIterator it = container->begin(), end = container->end(); it != end; ++it) {
+			for (ContainerIterator it = container->begin(); it.hasNext(); ++it) {
 				Item* containerItem = *it;
 				if (containerItem->getID() == itemId) {
 					uint32_t itemCount = Item::countByType(containerItem, subType);
@@ -3130,7 +3132,7 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 		countMap[item->getID()] += Item::countByType(item, -1);
 
 		if (Container* container = item->getContainer()) {
-			for (ContainerIterator it = container->begin(), end = container->end(); it != end; ++it) {
+			for (ContainerIterator it = container->begin(); it.hasNext(); ++it) {
 				countMap[(*it)->getID()] += Item::countByType(*it, -1);
 			}
 		}
@@ -3876,7 +3878,7 @@ void Player::addOutfit(uint16_t lookType, uint8_t addons)
 
 bool Player::removeOutfit(uint16_t lookType)
 {
-	for (auto it = outfits.begin(); it != outfits.end(); ++it) {
+	for (auto it = outfits.begin(), end = outfits.end(); it != end; ++it) {
 		OutfitEntry& entry = *it;
 		if (entry.lookType == lookType) {
 			outfits.erase(it);

@@ -3525,8 +3525,10 @@ void Game::removeCreatureCheck(Creature* creature)
 void Game::checkCreatures(size_t index)
 {
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CHECK_CREATURE_INTERVAL, std::bind(&Game::checkCreatures, this, (index + 1) % EVENT_CREATURECOUNT)));
+
 	auto& checkCreatureList = checkCreatureLists[index];
-	for (auto it = checkCreatureList.begin(), end = checkCreatureList.end(); it != end;) {
+	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
+	while (it != end) {
 		Creature* creature = *it;
 		if (creature->creatureCheck) {
 			if (creature->getHealth() > 0) {
@@ -4249,7 +4251,8 @@ void Game::checkDecay()
 
 	size_t bucket = (lastBucket + 1) % EVENT_DECAY_BUCKETS;
 
-	for (auto it = decayItems[bucket].begin(); it != decayItems[bucket].end();) {
+	auto it = decayItems[bucket].begin(), end = decayItems[bucket].end();
+	while (it != end) {
 		Item* item = *it;
 		if (!item->canDecay()) {
 			item->setDecaying(DECAYING_FALSE);

@@ -32,24 +32,17 @@ class DepotLocker;
 class ContainerIterator
 {
 	public:
-		ContainerIterator();
-		ContainerIterator(const ContainerIterator& rhs);
-		~ContainerIterator();
+		bool hasNext() const {
+			return !over.empty();
+		}
 
-		ContainerIterator& operator=(const ContainerIterator& rhs);
-		bool operator==(const ContainerIterator& rhs) const;
-		bool operator!=(const ContainerIterator& rhs) const;
 		ContainerIterator& operator++();
-		ContainerIterator operator++(int);
 		Item* operator*();
-		Item* operator->();
 
 	protected:
-		explicit ContainerIterator(Container* super);
-
 		Container* super;
-		std::list<Container*> over;
-		ItemDeque::iterator cur;
+		std::list<const Container*> over;
+		ItemDeque::const_iterator cur;
 
 		friend class Container;
 };
@@ -96,10 +89,7 @@ class Container : public Item, public Cylinder
 			return maxSize;
 		}
 
-		ContainerIterator begin();
-		ContainerIterator end();
 		ContainerIterator begin() const;
-		ContainerIterator end() const;
 
 		const ItemDeque& getItemList() const {
 			return itemlist;

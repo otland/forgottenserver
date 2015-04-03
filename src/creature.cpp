@@ -1223,8 +1223,8 @@ bool Creature::addCombatCondition(Condition* condition)
 
 void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 {
-	auto it = conditions.begin();
-	while (it != conditions.end()) {
+	auto it = conditions.begin(), end = conditions.end();
+	while (it != end) {
 		Condition* condition = *it;
 		if (condition->getType() != type) {
 			++it;
@@ -1250,8 +1250,8 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 
 void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool force/* = false*/)
 {
-	auto it = conditions.begin();
-	while (it != conditions.end()) {
+	auto it = conditions.begin(), end = conditions.end();
+	while (it != end) {
 		Condition* condition = *it;
 		if (condition->getType() != type || condition->getId() != id) {
 			++it;
@@ -1333,10 +1333,10 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t id, uint32
 
 void Creature::executeConditions(uint32_t interval)
 {
-	for (ConditionList::iterator it = conditions.begin(); it != conditions.end();) {
-		if (!(*it)->executeCondition(this, interval)) {
-			Condition* condition = *it;
-
+	auto it = conditions.begin(), end = conditions.end();
+	while (it != end) {
+		Condition* condition = *it;
+		if (!condition->executeCondition(this, interval)) {
 			ConditionType_t type = condition->getType();
 
 			it = conditions.erase(it);
@@ -1496,8 +1496,8 @@ bool Creature::unregisterCreatureEvent(const std::string& name)
 
 	bool resetTypeBit = true;
 
-	auto it = eventsList.begin();
-	while (it != eventsList.end()) {
+	auto it = eventsList.begin(), end = eventsList.end();
+	while (it != end) {
 		CreatureEvent* curEvent = *it;
 		if (curEvent == event) {
 			it = eventsList.erase(it);

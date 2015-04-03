@@ -29,14 +29,14 @@ extern Game g_game;
 WaitListIterator WaitingList::findClient(const Player* player, uint32_t& slot)
 {
 	slot = 1;
-	for (WaitListIterator it = priorityWaitList.begin(); it != priorityWaitList.end(); ++it) {
+	for (WaitListIterator it = priorityWaitList.begin(), end = priorityWaitList.end(); it != end; ++it) {
 		if (it->playerGUID == player->getGUID()) {
 			return it;
 		}
 		++slot;
 	}
 
-	for (WaitListIterator it = waitList.begin(); it != waitList.end(); ++it) {
+	for (WaitListIterator it = waitList.begin(), end = waitList.end(); it != end; ++it) {
 		if (it->playerGUID == player->getGUID()) {
 			return it;
 		}
@@ -117,8 +117,11 @@ uint32_t WaitingList::getClientSlot(const Player* player)
 
 void WaitingList::cleanupList(WaitList& list)
 {
-	for (WaitListIterator it = list.begin(); it != list.end();) {
-		if (it->timeout - OTSYS_TIME() <= 0) {
+	int64_t time = OTSYS_TIME();
+
+	WaitListIterator it = list.begin(), end = list.end();
+	while (it != end) {
+		if ((it->timeout - time) <= 0) {
 			it = list.erase(it);
 		} else {
 			++it;
