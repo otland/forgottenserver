@@ -1495,19 +1495,24 @@ bool Creature::unregisterCreatureEvent(const std::string& name)
 	}
 
 	bool resetTypeBit = true;
-	for (auto it = eventsList.begin(); it != eventsList.end(); ++it) {
+
+	auto it = eventsList.begin();
+	while (it != eventsList.end()) {
 		CreatureEvent* curEvent = *it;
 		if (curEvent == event) {
 			it = eventsList.erase(it);
-		} else if (curEvent->getEventType() == type) {
+			continue;
+		}
+
+		if (curEvent->getEventType() == type) {
 			resetTypeBit = false;
 		}
+		++it;
 	}
 
 	if (resetTypeBit) {
 		scriptEventsBitField &= ~(static_cast<uint32_t>(1) << type);
 	}
-
 	return true;
 }
 
