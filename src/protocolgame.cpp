@@ -1490,12 +1490,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	msg.add<uint16_t>(containerSize);
 	msg.add<uint16_t>(firstIndex);
 	if (firstIndex < containerSize) {
-		uint8_t itemsToSend;
-		if (container->hasPagination() && firstIndex > 0) {
-			itemsToSend = std::min<uint32_t>(std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), containerSize), std::numeric_limits<uint8_t>::max());
-		} else {
-			itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize), std::numeric_limits<uint8_t>::max());
-		}
+		uint8_t itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), std::numeric_limits<uint8_t>::max());
 
 		msg.addByte(itemsToSend);
 		for (ItemDeque::const_iterator it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
