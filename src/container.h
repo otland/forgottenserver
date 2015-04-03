@@ -36,7 +36,7 @@ class ContainerIterator
 			return !over.empty();
 		}
 
-		ContainerIterator& operator++();
+		void advance();
 		Item* operator*();
 
 	protected:
@@ -89,7 +89,7 @@ class Container : public Item, public Cylinder
 			return maxSize;
 		}
 
-		ContainerIterator begin() const;
+		ContainerIterator iterator() const;
 
 		const ItemDeque& getItemList() const {
 			return itemlist;

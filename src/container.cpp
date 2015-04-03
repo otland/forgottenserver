@@ -181,7 +181,7 @@ std::string Container::getContentDescription() const
 std::ostringstream& Container::getContentDescription(std::ostringstream& os) const
 {
 	bool firstitem = true;
-	for (ContainerIterator it = begin(); it.hasNext(); ++it) {
+	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
 		Item* item = *it;
 
 		Container* container = item->getContainer();
@@ -215,7 +215,7 @@ Item* Container::getItemByIndex(uint32_t index) const
 uint32_t Container::getItemHoldingCount() const
 {
 	uint32_t counter = 0;
-	for (ContainerIterator it = begin(); it.hasNext(); ++it) {
+	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
 		++counter;
 	}
 	return counter;
@@ -223,7 +223,7 @@ uint32_t Container::getItemHoldingCount() const
 
 bool Container::isHoldingItem(const Item* item) const
 {
-	for (ContainerIterator it = begin(); it.hasNext(); ++it) {
+	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
 		if (*it == item) {
 			return true;
 		}
@@ -704,7 +704,7 @@ void Container::startDecaying()
 	}
 }
 
-ContainerIterator Container::begin() const
+ContainerIterator Container::iterator() const
 {
 	ContainerIterator cit;
 	if (!itemlist.empty()) {
@@ -719,7 +719,7 @@ Item* ContainerIterator::operator*()
 	return *cur;
 }
 
-ContainerIterator& ContainerIterator::operator++()
+void ContainerIterator::advance()
 {
 	if (Item* i = *cur) {
 		if (Container* c = i->getContainer()) {
@@ -733,12 +733,8 @@ ContainerIterator& ContainerIterator::operator++()
 
 	if (cur == over.front()->itemlist.end()) {
 		over.pop_front();
-		if (over.empty()) {
-			return *this;
+		if (!over.empty()) {
+			cur = over.front()->itemlist.begin();
 		}
-
-		cur = over.front()->itemlist.begin();
 	}
-
-	return *this;
 }

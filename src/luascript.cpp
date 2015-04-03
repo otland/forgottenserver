@@ -7102,7 +7102,7 @@ int LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 	uint32_t slots = container->capacity() - container->size();
 	bool recursive = getBoolean(L, 2, false);
 	if (recursive) {
-		for (ContainerIterator it = container->begin(); it.hasNext(); ++it) {
+		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 			if (Container* tmpContainer = (*it)->getContainer()) {
 				slots += tmpContainer->capacity() - tmpContainer->size();
 			}

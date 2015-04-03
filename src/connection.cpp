@@ -335,6 +335,8 @@ bool Connection::send(OutputMessage_ptr msg)
 		msg->getProtocol()->onSendMessage(msg);
 		internalSend(msg);
 	} else {
+		// FIXME: This results in packets being sent in wrong order, all queued
+		// packets to the same connection should also be moved to auto send.
 		OutputMessagePool::getInstance()->addToAutoSend(msg);
 	}
 

@@ -2713,7 +2713,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 					n += queryCount;
 
 					//iterate through all items, including sub-containers (deep search)
-					for (ContainerIterator it = subContainer->begin(); it.hasNext(); ++it) {
+					for (ContainerIterator it = subContainer->iterator(); it.hasNext(); it.advance()) {
 						if (Container* tmpContainer = (*it)->getContainer()) {
 							queryCount = 0;
 							tmpContainer->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags);
@@ -3060,7 +3060,7 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 		if (item->getID() == itemId) {
 			count += Item::countByType(item, subType);
 		} else if (Container* container = item->getContainer()) {
-			for (ContainerIterator it = container->begin(); it.hasNext(); ++it) {
+			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
 				}
@@ -3099,7 +3099,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 				return true;
 			}
 		} else if (Container* container = item->getContainer()) {
-			for (ContainerIterator it = container->begin(); it.hasNext(); ++it) {
+			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				Item* containerItem = *it;
 				if (containerItem->getID() == itemId) {
 					uint32_t itemCount = Item::countByType(containerItem, subType);
@@ -3132,7 +3132,7 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 		countMap[item->getID()] += Item::countByType(item, -1);
 
 		if (Container* container = item->getContainer()) {
-			for (ContainerIterator it = container->begin(); it.hasNext(); ++it) {
+			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				countMap[(*it)->getID()] += Item::countByType(*it, -1);
 			}
 		}
