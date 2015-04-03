@@ -94,11 +94,6 @@ enum CreatureType_t : uint8_t {
 	CREATURETYPE_SUMMON_OTHERS = 4,
 };
 
-// TODO: Move this to reserved range
-enum StorageValues_t {
-	STORAGEVALUE_PROMOTION = 30018,
-};
-
 enum OperatingSystem_t : uint8_t {
 	CLIENTOS_LINUX = 1,
 	CLIENTOS_WINDOWS = 2,

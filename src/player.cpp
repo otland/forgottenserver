@@ -1179,19 +1179,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			}
 		}
 
-		if (isPremium()) {
-			int32_t value;
-			getStorageValue(STORAGEVALUE_PROMOTION, value);
-
-			if (isPromoted() && value != 1) {
-				addStorageValue(STORAGEVALUE_PROMOTION, 1);
-			} else if (!isPromoted() && value == 1) {
-				setVocation(g_vocations.getPromotedVocation(getVocationId()));
-			}
-		} else if (isPromoted()) {
-			setVocation(vocation->getFromVocation());
-		}
-
 		bool sentStats = false;
 
 		int16_t oldStaminaMinutes = getStaminaMinutes();

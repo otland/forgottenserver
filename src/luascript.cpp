@@ -8737,12 +8737,6 @@ int LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 	}
 
 	player->setVocation(vocation->getId());
-
-	uint32_t promotedVocation = g_vocations.getPromotedVocation(player->getVocationId());
-	if (promotedVocation == 0 && player->getVocationId() != promotedVocation) {
-		player->addStorageValue(STORAGEVALUE_PROMOTION, 1);
-	}
-
 	pushBoolean(L, true);
 	return 1;
 }

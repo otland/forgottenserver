@@ -68,21 +68,24 @@ if Modules == nil then
 		if npcHandler == nil then
 			error("StdModule.promotePlayer called without any npcHandler instance.")
 		end
+
 		if not npcHandler:isFocused(cid) then
 			return false
 		end
 
-		if(isPlayerPremiumCallback == nil or isPlayerPremiumCallback(cid) == true or parameters.premium == false) then
-			local promotedVoc = getPromotedVocation(getPlayerVocation(cid))
-			if(getPlayerStorageValue(cid, 30018) == 1) then
+		local player = Player(cid)
+		if player:isPremium() or not parameters.premium then
+			local promotion = player:getVocation():getPromotion()
+			if player:getStorageValue(STORAGEVALUE_PROMOTION) == 1 then
 				npcHandler:say("You are already promoted!", cid)
-			elseif(getPlayerLevel(cid) < parameters.level) then
+			elseif player:getLevel() < parameters.level then
 				npcHandler:say("I am sorry, but I can only promote you once you have reached level " .. parameters.level .. ".", cid)
-			elseif(doPlayerRemoveMoney(cid, parameters.cost) ~= TRUE) then
+			elseif not player:removeMoney(parameters.cost) then
 				npcHandler:say("You do not have enough money!", cid)
 			else
-				doPlayerSetVocation(cid, promotedVoc)
 				npcHandler:say(parameters.text, cid)
+				player:setVocation(promotion)
+				player:setStorageValue(STORAGEVALUE_PROMOTION, 1)
 			end
 		else
 			npcHandler:say("You need a premium account in order to get promoted.", cid)
@@ -100,24 +103,22 @@ if Modules == nil then
 		if not npcHandler:isFocused(cid) then
 			return false
 		end
-
-		if(isPlayerPremiumCallback == nil or isPlayerPremiumCallback(cid) or not parameters.premium) then
-			if getPlayerLearnedInstantSpell(cid, parameters.spellName) == TRUE then
+		
+		local player = Player(cid)
+		if player:isPremium() or not parameters.premium then
+			if player:hasLearnedSpell(parameters.spellName) then
 				npcHandler:say("You already know this spell.", cid)
-			elseif getPlayerLevel(cid) < parameters.level then
-				npcHandler:say("You need to obtain a level of " .. parameters.level .. " or higher to be able to learn " .. parameters.spellName .. ".", cid)
-			elseif getPlayerVocation(cid) ~= parameters.vocation and getPlayerVocation(cid) ~= parameters.vocation + 4 and vocation ~= 9 then
-				npcHandler:say("This spell is not for your vocation", cid)
-			elseif doPlayerRemoveMoney(cid, parameters.price) == FALSE then
+			elseif not player:canLearnSpell(parameters.spellName) then
+				npcHandler:say("You cannot learn this spell.", cid)
+			elseif not player:removeMoney(parameters.price) then
 				npcHandler:say("You do not have enough money, this spell costs " .. parameters.price .. " gold.", cid)
 			else
 				npcHandler:say("You have learned " .. parameters.spellName .. ".", cid)
-				playerLearnInstantSpell(cid, parameters.spellName)
+				player:learnSpell(parameters.spellName)
 			end
 		else
 			npcHandler:say("You need a premium account in order to buy " .. parameters.spellName .. ".", cid)
 		end
-
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -128,23 +129,23 @@ if Modules == nil then
 			error("StdModule.bless called without any npcHandler instance.")
 		end
 
-		if(not npcHandler:isFocused(cid) or getWorldType() == WORLD_TYPE_PVP_ENFORCED) then
+		if not npcHandler:isFocused(cid) or getWorldType() == WORLD_TYPE_PVP_ENFORCED then
 			return false
 		end
 
-		if(isPlayerPremiumCallback == nil or isPlayerPremiumCallback(cid) == true or parameters.premium == false) then
-			if getPlayerBlessing(cid, parameters.bless) then
+		local player = Player(cid)
+		if player:isPremium() or not parameters.premium then
+			if player:hasBlessing(parameters.bless) then
 				npcHandler:say("Gods have already blessed you with this blessing!", cid)
-			elseif doPlayerRemoveMoney(cid, parameters.cost) == FALSE then
+			elseif not player:removeMoney(parameters.cost) then
 				npcHandler:say("You don't have enough money for blessing.", cid)
 			else
+				player:addBlessing(parameters.bless)
 				npcHandler:say("You have been blessed by one of the five gods!", cid)
-				doPlayerAddBlessing(cid, parameters.bless)
 			end
 		else
 			npcHandler:say("You need a premium account in order to be blessed.", cid)
 		end
-
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -154,22 +155,29 @@ if Modules == nil then
 		if npcHandler == nil then
 			error("StdModule.travel called without any npcHandler instance.")
 		end
-		if(not npcHandler:isFocused(cid)) then
+
+		if not npcHandler:isFocused(cid) then
 			return false
 		end
-		if(isPlayerPremiumCallback == nil or isPlayerPremiumCallback(cid) == true or parameters.premium == false) then
-			if(isPlayerPzLocked(cid)) then
+
+		local player = Player(cid)
+		if player:isPremium() or not parameters.premium then
+			if player:isPzLocked() then
 				npcHandler:say("First get rid of those blood stains! You are not going to ruin my vehicle!", cid)
-			elseif(parameters.level ~= nil and getPlayerLevel(cid) < parameters.level) then
+			elseif parameters.level and player:getLevel() < parameters.level then
 				npcHandler:say("You must reach level " .. parameters.level .. " before I can let you go there.", cid)
-			elseif(doPlayerRemoveMoney(cid, parameters.cost) ~= TRUE) then
+			elseif not player:removeMoney(parameters.cost) then
 				npcHandler:say("You don't have enough money.", cid)
 			else
 				npcHandler:say(parameters.msg or "Set the sails!", cid)
 				npcHandler:releaseFocus(cid)
-				doSendMagicEffect(getCreaturePosition(cid), CONST_ME_TELEPORT)
-				doTeleportThing(cid, parameters.destination)
-				doSendMagicEffect(parameters.destination, CONST_ME_TELEPORT)
+
+				local destination = Position(parameters.destination)
+				local position = player:getPosition()
+				player:teleportTo(destination)
+
+				position:sendMagicEffect(CONST_ME_TELEPORT)
+				destination:sendMagicEffect(CONST_ME_TELEPORT)
 			end
 		else
 			npcHandler:say("I'm sorry, but you need a premium account in order to travel onboard our ships.", cid)
@@ -418,31 +426,34 @@ if Modules == nil then
 
 	function TravelModule.onConfirm(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(not module.npcHandler:isFocused(cid)) then
+		if not module.npcHandler:isFocused(cid) then
 			return false
 		end
 
-		if shop_npcuid[cid] ~= getNpcCid() then
+		if shop_npcuid[cid] ~= Npc().uid then
 			return false
 		end
 
 		local npcHandler = module.npcHandler
 
-		local parentParameters = node:getParent():getParameters()
 		local cost = shop_cost[cid]
-		local destination = shop_destination[cid]
-		local premium = shop_premium[cid]
+		local destination = Position(shop_destination[cid])
 
-		if(not isPlayerPremiumCallback or isPlayerPremiumCallback(cid) or shop_premium[cid] ~= true) then
-			if(doPlayerRemoveMoney(cid, cost) ~= TRUE) then
+		local player = Player(cid)
+		if player:isPremium() or not shop_premium[cid] then
+			if not player:removeMoney(cost) then
 				npcHandler:say("You do not have enough money!", cid)
-			elseif(isPlayerPzLocked(cid)) then
+			elseif player:isPzLocked(cid) then
 				npcHandler:say("Get out of there with this blood.", cid)
 			else
 				npcHandler:say("It was a pleasure doing business with you.", cid)
 				npcHandler:releaseFocus(cid)
-				doTeleportThing(cid, destination, 0)
-				doSendMagicEffect(destination, CONST_ME_TELEPORT)
+
+				local position = player:getPosition()
+				player:teleportTo(destination)
+
+				position:sendMagicEffect(CONST_ME_TELEPORT)
+				destination:sendMagicEffect(CONST_ME_TELEPORT)
 			end
 		else
 			npcHandler:say("I can only allow premium players to travel there.", cid)
@@ -473,13 +484,16 @@ if Modules == nil then
 		end
 
 		local cost = parameters.cost
-		local destination = parameters.destination
-		local premium = parameters.premium
+		local destination = Position(parameters.destination)
 
-		if(not isPlayerPremiumCallback or isPlayerPremiumCallback(cid) or parameters.premium ~= true) then
-			if(doPlayerRemoveMoney(cid, cost) == TRUE) then
-				doTeleportThing(cid, destination, 0)
-				doSendMagicEffect(destination, CONST_ME_TELEPORT)
+		local player = Player(cid)
+		if player:isPremium() or not parameters.premium then
+			if player:removeMoney(cost) then
+				local position = player:getPosition()
+				player:teleportTo(destination)
+
+				position:sendMagicEffect(CONST_ME_TELEPORT)
+				destination:sendMagicEffect(CONST_ME_TELEPORT)
 			end
 		end
 		return true
