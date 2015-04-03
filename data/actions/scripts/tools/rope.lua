@@ -8,7 +8,7 @@ local holeId = {
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local tile = Tile(toPosition)
 	if isInArray(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
-		player:teleportTo({x = toPosition.x, y = toPosition.y + 1, z = toPosition.z - 1}, false)
+		player:teleportTo(toPosition:moveUpstairs(), false)
 		return true
 	elseif isInArray(holeId, target.itemid) then
 		toPosition.z = toPosition.z + 1
@@ -16,7 +16,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if tile then
 			local thing = tile:getTopVisibleThing()
 			if thing:isItem() and thing:getType():isMovable() then
-				return thing:moveTo({x = toPosition.x, y = toPosition.y + 1, z = toPosition.z - 1})
+				return thing:moveTo(toPosition:moveUpstairs())
 			end
 		end
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
