@@ -8723,14 +8723,24 @@ int LuaScriptInterface::luaPlayerGetVocation(lua_State* L)
 
 int LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 {
-	// player:setVocation(vocation)
+	// player:setVocation(id or name or userdata)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Vocation* vocation = getUserdata<Vocation>(L, 2);
+	Vocation* vocation;
+	if (isNumber(L, 2)) {
+		vocation = g_vocations.getVocation(getNumber<uint16_t>(L, 2));
+	} else if (isString(L, 2)) {
+		vocation = g_vocations.getVocation(g_vocations.getVocationId(getString(L, 2)));
+	} else if (isUserdata(L, 2)) {
+		vocation = getUserdata<Vocation>(L, 2);
+	} else {
+		vocation = nullptr;
+	}
+
 	if (!vocation) {
 		pushBoolean(L, false);
 		return 1;
