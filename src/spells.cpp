@@ -580,7 +580,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		if (vocationId != -1) {
 			vocSpellMap[vocationId] = true;
 			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if (promotedVocation != 0) {
+			if (promotedVocation != VOCATION_NONE) {
 				vocSpellMap[promotedVocation] = true;
 			}
 		} else {

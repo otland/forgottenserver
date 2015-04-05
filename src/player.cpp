@@ -4026,7 +4026,7 @@ void Player::checkSkullTicks(int32_t ticks)
 bool Player::isPromoted() const
 {
 	uint16_t promotedVocation = g_vocations.getPromotedVocation(vocation->getId());
-	return promotedVocation == 0 && vocation->getId() != promotedVocation;
+	return promotedVocation == VOCATION_NONE && vocation->getId() != promotedVocation;
 }
 
 double Player::getLostPercent() const

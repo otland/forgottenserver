@@ -175,7 +175,7 @@ uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
 			return it.first;
 		}
 	}
-	return 0;
+	return VOCATION_NONE;
 }
 
 uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
@@ -191,7 +191,7 @@ Vocation::Vocation(uint16_t id)
 	soulMax = 100;
 
 	clientId = 0;
-	fromVocation = 0;
+	fromVocation = VOCATION_NONE;
 
 	gainCap = 500;
 	gainMana = 5;
