@@ -204,7 +204,7 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 	return os;
 }
 
-Item* Container::getItemByIndex(uint32_t index) const
+Item* Container::getItemByIndex(size_t index) const
 {
 	if (index >= size()) {
 		return nullptr;
@@ -623,10 +623,10 @@ size_t Container::getFirstIndex() const
 
 size_t Container::getLastIndex() const
 {
-	return itemlist.size();
+	return size();
 }
 
-uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
+uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType/* = -1*/) const
 {
 	uint32_t count = 0;
 	for (Item* item : itemlist) {

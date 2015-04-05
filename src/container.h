@@ -79,8 +79,8 @@ class Container : public Item, public Cylinder
 		bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream) override;
 		std::string getContentDescription() const;
 
-		uint32_t size() const {
-			return static_cast<uint32_t>(itemlist.size());
+		size_t size() const {
+			return itemlist.size();
 		}
 		bool empty() const {
 			return itemlist.empty();
@@ -104,7 +104,7 @@ class Container : public Item, public Cylinder
 
 		bool hasParent() const;
 		void addItem(Item* item);
-		Item* getItemByIndex(uint32_t index) const;
+		Item* getItemByIndex(size_t index) const;
 		bool isHoldingItem(const Item* item) const;
 
 		uint32_t getItemHoldingCount() const;

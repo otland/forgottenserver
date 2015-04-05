@@ -477,15 +477,7 @@ bool Party::canEnableSharedExperience()
 	return true;
 }
 
-void Party::addPlayerHealedMember(Player* player, uint32_t points)
-{
-	if (points != 0 && !player->hasFlag(PlayerFlag_NotGainInFight)) {
-		ticksMap[player->getID()] = OTSYS_TIME();
-		updateSharedExperience();
-	}
-}
-
-void Party::addPlayerDamageMonster(Player* player, uint32_t points)
+void Party::updatePlayerTicks(Player* player, uint32_t points)
 {
 	if (points != 0 && !player->hasFlag(PlayerFlag_NotGainInFight)) {
 		ticksMap[player->getID()] = OTSYS_TIME();

@@ -395,22 +395,25 @@ bool Items::loadFromXml()
 		pugi::xml_attribute idAttribute = itemNode.attribute("id");
 		if (idAttribute) {
 			parseItemNode(itemNode, pugi::cast<uint16_t>(idAttribute.value()));
-		} else {
-			pugi::xml_attribute fromIdAttribute = itemNode.attribute("fromid");
-			if (fromIdAttribute) {
-				pugi::xml_attribute toIdAttribute = itemNode.attribute("toid");
-				if (toIdAttribute) {
-					uint16_t id = pugi::cast<uint16_t>(fromIdAttribute.value());
-					uint16_t toId = pugi::cast<uint16_t>(toIdAttribute.value());
-					while (id <= toId) {
-						parseItemNode(itemNode, id++);
-					}
-				} else {
-					std::cout << "[Warning - Items::loadFromXml] fromid (" << fromIdAttribute.value() << ") without toid" << std::endl;
-				}
-			} else {
-				std::cout << "[Warning - Items::loadFromXml] No itemid found" << std::endl;
-			}
+			continue;
+		}
+
+		pugi::xml_attribute fromIdAttribute = itemNode.attribute("fromid");
+		if (!fromIdAttribute) {
+			std::cout << "[Warning - Items::loadFromXml] No item id found" << std::endl;
+			continue;
+		}
+
+		pugi::xml_attribute toIdAttribute = itemNode.attribute("toid");
+		if (!toIdAttribute) {
+			std::cout << "[Warning - Items::loadFromXml] fromid (" << fromIdAttribute.value() << ") without toid" << std::endl;
+			continue;
+		}
+
+		uint16_t id = pugi::cast<uint16_t>(fromIdAttribute.value());
+		uint16_t toId = pugi::cast<uint16_t>(toIdAttribute.value());
+		while (id <= toId) {
+			parseItemNode(itemNode, id++);
 		}
 	}
 	return true;

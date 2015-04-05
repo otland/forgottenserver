@@ -4528,7 +4528,7 @@ void Game::updatePremium(Account& account)
 					account.lastDay = 0;
 				} else {
 					account.premiumDays -= days;
-					uint32_t remainder = (timeNow - account.lastDay) % 86400;
+					time_t remainder = (timeNow - account.lastDay) % 86400;
 					account.lastDay = timeNow - remainder;
 				}
 

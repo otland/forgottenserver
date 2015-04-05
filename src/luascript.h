@@ -708,10 +708,7 @@ class LuaScriptInterface
 		static int luaItemCreate(lua_State* L);
 		static int luaItemIndex(lua_State* L);
 
-		static int luaItemIsCreature(lua_State* L);
 		static int luaItemIsItem(lua_State* L);
-		static int luaItemIsContainer(lua_State* L);
-		static int luaItemIsTeleport(lua_State* L);
 
 		static int luaItemGetParent(lua_State* L);
 		static int luaItemGetTopParent(lua_State* L);
@@ -757,8 +754,6 @@ class LuaScriptInterface
 		// Container
 		static int luaContainerCreate(lua_State* L);
 
-		static int luaContainerIsContainer(lua_State* L);
-
 		static int luaContainerGetSize(lua_State* L);
 		static int luaContainerGetCapacity(lua_State* L);
 		static int luaContainerGetEmptySlots(lua_State* L);
@@ -774,8 +769,6 @@ class LuaScriptInterface
 		// Teleport
 		static int luaTeleportCreate(lua_State* L);
 
-		static int luaTeleportIsTeleport(lua_State* L);
-
 		static int luaTeleportGetDestination(lua_State* L);
 		static int luaTeleportSetDestination(lua_State* L);
 
@@ -788,10 +781,6 @@ class LuaScriptInterface
 
 		static int luaCreatureIsRemoved(lua_State* L);
 		static int luaCreatureIsCreature(lua_State* L);
-		static int luaCreatureIsPlayer(lua_State* L);
-		static int luaCreatureIsMonster(lua_State* L);
-		static int luaCreatureIsNpc(lua_State* L);
-		static int luaCreatureIsItem(lua_State* L);
 		static int luaCreatureIsInGhostMode(lua_State* L);
 		static int luaCreatureIsHealthHidden(lua_State* L);
 

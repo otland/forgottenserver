@@ -79,7 +79,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 	int64_t start = OTSYS_TIME();
 
 	FileLoader f;
-
 	if (!f.openFile(identifier.c_str(), "OTBM")) {
 		std::ostringstream ss;
 		ss << "Could not open the file " << identifier << '.';

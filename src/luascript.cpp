@@ -2057,10 +2057,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Item", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("Item", "__index", LuaScriptInterface::luaItemIndex);
 
-	registerMethod("Item", "isCreature", LuaScriptInterface::luaItemIsCreature);
 	registerMethod("Item", "isItem", LuaScriptInterface::luaItemIsItem);
-	registerMethod("Item", "isContainer", LuaScriptInterface::luaItemIsContainer);
-	registerMethod("Item", "isTeleport", LuaScriptInterface::luaItemIsTeleport);
 
 	registerMethod("Item", "getParent", LuaScriptInterface::luaItemGetParent);
 	registerMethod("Item", "getTopParent", LuaScriptInterface::luaItemGetTopParent);
@@ -2108,8 +2105,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Container", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("Container", "__index", LuaScriptInterface::luaItemIndex);
 
-	registerMethod("Container", "isContainer", LuaScriptInterface::luaContainerIsContainer);
-
 	registerMethod("Container", "getSize", LuaScriptInterface::luaContainerGetSize);
 	registerMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
 	registerMethod("Container", "getEmptySlots", LuaScriptInterface::luaContainerGetEmptySlots);
@@ -2127,8 +2122,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Teleport", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("Teleport", "__index", LuaScriptInterface::luaItemIndex);
 
-	registerMethod("Teleport", "isTeleport", LuaScriptInterface::luaTeleportIsTeleport);
-
 	registerMethod("Teleport", "getDestination", LuaScriptInterface::luaTeleportGetDestination);
 	registerMethod("Teleport", "setDestination", LuaScriptInterface::luaTeleportSetDestination);
 
@@ -2142,10 +2135,6 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "isRemoved", LuaScriptInterface::luaCreatureIsRemoved);
 	registerMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
-	registerMethod("Creature", "isPlayer", LuaScriptInterface::luaCreatureIsPlayer);
-	registerMethod("Creature", "isMonster", LuaScriptInterface::luaCreatureIsMonster);
-	registerMethod("Creature", "isNpc", LuaScriptInterface::luaCreatureIsNpc);
-	registerMethod("Creature", "isItem", LuaScriptInterface::luaCreatureIsItem);
 	registerMethod("Creature", "isInGhostMode", LuaScriptInterface::luaCreatureIsInGhostMode);
 	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
 
@@ -6413,31 +6402,10 @@ int LuaScriptInterface::luaItemIndex(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaItemIsCreature(lua_State* L)
-{
-	// item:isCreature()
-	pushBoolean(L, false);
-	return 1;
-}
-
 int LuaScriptInterface::luaItemIsItem(lua_State* L)
 {
 	// item:isItem()
 	pushBoolean(L, getUserdata<const Item>(L, 1) != nullptr);
-	return 1;
-}
-
-int LuaScriptInterface::luaItemIsContainer(lua_State* L)
-{
-	// item:isContainer()
-	pushBoolean(L, false);
-	return 1;
-}
-
-int LuaScriptInterface::luaItemIsTeleport(lua_State* L)
-{
-	// item:isTeleport()
-	pushBoolean(L, false);
 	return 1;
 }
 
@@ -7059,13 +7027,6 @@ int LuaScriptInterface::luaContainerCreate(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaContainerIsContainer(lua_State* L)
-{
-	// container:isContainer()
-	pushBoolean(L, true);
-	return 1;
-}
-
 int LuaScriptInterface::luaContainerGetSize(lua_State* L)
 {
 	// container:getSize()
@@ -7271,13 +7232,6 @@ int LuaScriptInterface::luaTeleportCreate(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaTeleportIsTeleport(lua_State* L)
-{
-	// teleport:isTeleport()
-	pushBoolean(L, true);
-	return 1;
-}
-
 int LuaScriptInterface::luaTeleportGetDestination(lua_State* L)
 {
 	// teleport:getDestination()
@@ -7408,34 +7362,6 @@ int LuaScriptInterface::luaCreatureIsCreature(lua_State* L)
 {
 	// creature:isCreature()
 	pushBoolean(L, getUserdata<const Creature>(L, 1) != nullptr);
-	return 1;
-}
-
-int LuaScriptInterface::luaCreatureIsPlayer(lua_State* L)
-{
-	// creature:isPlayer()
-	pushBoolean(L, false);
-	return 1;
-}
-
-int LuaScriptInterface::luaCreatureIsMonster(lua_State* L)
-{
-	// creature:isMonster()
-	pushBoolean(L, false);
-	return 1;
-}
-
-int LuaScriptInterface::luaCreatureIsNpc(lua_State* L)
-{
-	// creature:isNpc()
-	pushBoolean(L, false);
-	return 1;
-}
-
-int LuaScriptInterface::luaCreatureIsItem(lua_State* L)
-{
-	// creature:isItem()
-	pushBoolean(L, false);
 	return 1;
 }
 
@@ -8260,8 +8186,7 @@ int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 int LuaScriptInterface::luaPlayerIsPlayer(lua_State* L)
 {
 	// player:isPlayer()
-	const Player* player = getUserdata<const Player>(L, 1);
-	pushBoolean(L, player != nullptr);
+	pushBoolean(L, getUserdata<const Player>(L, 1) != nullptr);
 	return 1;
 }
 
@@ -9990,8 +9915,7 @@ int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 int LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 {
 	// monster:isMonster()
-	const Monster* monster = getUserdata<const Monster>(L, 1);
-	pushBoolean(L, monster != nullptr);
+	pushBoolean(L, getUserdata<const Monster>(L, 1) != nullptr);
 	return 1;
 }
 
@@ -10282,8 +10206,7 @@ int LuaScriptInterface::luaNpcCreate(lua_State* L)
 int LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 {
 	// npc:isNpc()
-	const Npc* npc = getUserdata<const Npc>(L, 1);
-	pushBoolean(L, npc != nullptr);
+	pushBoolean(L, getUserdata<const Npc>(L, 1) != nullptr);
 	return 1;
 }
 
