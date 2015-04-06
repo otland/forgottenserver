@@ -273,7 +273,7 @@ if Modules == nil then
 	end
 
 	function KeywordModule:parseKeywords(data)
-		local n = 1
+		local n = 1	
 		for keys in string.gmatch(data, "[^;]+") do
 			local i = 1
 
@@ -531,7 +531,9 @@ if Modules == nil then
 		noNode = nil,
 		noText = "",
 		maxCount = 100,
-		amount = 0
+		amount = 0,
+		buyableItens = {},
+		sellableItens = {}
 	}
 
 	-- Add it to the parseable module list.
@@ -561,10 +563,37 @@ if Modules == nil then
 		if ret ~= nil then
 			self:parseBuyableContainers(ret)
 		end
+
+		if #self.buyableItens > 0 then
+	
+			self.npcHandler.keywordHandler:addKeyword(
+							{
+								"buy"
+							}, 
+							ShopModule.showBuyableItens,
+							{	
+								module = self
+							})
+		end
+
+		if #self.sellableItens > 0 then
+	
+			self.npcHandler.keywordHandler:addKeyword(
+							{
+								"sell"
+							}, 
+							ShopModule.showSellableItens,
+							{	
+								module = self
+							})
+		end
+
+
 	end
 
 	-- Parse a string contaning a set of buyable items.
 	function ShopModule:parseBuyable(data)
+		
 		for item in string.gmatch(data, "[^;]+") do
 			local i = 1
 
@@ -608,6 +637,8 @@ if Modules == nil then
 				end
 			else
 				if name ~= nil and itemid ~= nil and cost ~= nil then
+	
+					self.buyableItens[#self.buyableItens + 1] = name
 					if subType == nil and it:isFluidContainer() then
 						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
 					else
@@ -659,6 +690,7 @@ if Modules == nil then
 			else
 				if name ~= nil and itemid ~= nil and cost ~= nil then
 					local names = {}
+					self.sellableItens[#self.sellableItens + 1] = name
 					names[#names + 1] = name
 					self:addSellableItem(names, itemid, cost, realName, subType)
 				else
@@ -670,6 +702,7 @@ if Modules == nil then
 
 	-- Parse a string contaning a set of buyable items.
 	function ShopModule:parseBuyableContainers(data)
+	
 		for item in string.gmatch(data, "[^;]+") do
 			local i = 1
 
@@ -700,6 +733,7 @@ if Modules == nil then
 			end
 
 			if name ~= nil and container ~= nil and itemid ~= nil and cost ~= nil then
+				self.buyableItens[#self.buyableItens + 1] = name
 				if subType == nil and ItemType(itemid):isFluidContainer() then
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
 				else
@@ -1146,8 +1180,57 @@ if Modules == nil then
 		return true
 	end
 
+	function ShopModule.showSellableItens(cid, message, keywords, pars, node)
+	
+		local module = pars.module
+		local msg = "I buy: "
+
+		if(not module.npcHandler:isFocused(cid)) then
+
+			return false
+		end
+
+		for k, v in pairs(module.sellableItens) do
+
+			if (k ~= 1) then
+			
+				msg = msg .. ", " .. v
+			else
+				msg = msg .. " " .. v
+			end
+		end
+
+		msg = msg .. "."	
+		module.npcHandler:say(msg, cid)
+	end
+
+	function ShopModule.showBuyableItens(cid, message, keywords, pars, node)
+	
+		local module = pars.module
+		local msg = "I sell: "
+
+		if(not module.npcHandler:isFocused(cid)) then
+
+			return false
+		end
+
+		for k, v in pairs(module.buyableItens) do
+
+			if (k ~= 1) then
+			
+				msg = msg .. ", " .. v
+			else
+				msg = msg .. " " .. v
+			end
+		end
+
+		msg = msg .. "."	
+		module.npcHandler:say(msg, cid)
+	end
+
 	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
 	function ShopModule.tradeItem(cid, message, keywords, parameters, node)
+	
 		local module = parameters.module
 		if(not module.npcHandler:isFocused(cid)) then
 			return false
