@@ -158,8 +158,6 @@ void Game::setGameState(GameState_t newState)
 		}
 
 		case GAME_STATE_SHUTDOWN: {
-			g_globalEvents->execute(GLOBALEVENT_SHUTDOWN);
-
 			//kick all players that are still online
 			auto it = players.begin();
 			while (it != players.end()) {
@@ -4369,6 +4367,7 @@ void Game::resetCommandTag()
 
 void Game::shutdown()
 {
+	g_globalEvents->execute(GLOBALEVENT_SHUTDOWN);
 	std::cout << "Shutting down server..." << std::flush;
 
 	g_scheduler.shutdown();
