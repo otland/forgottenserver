@@ -1184,8 +1184,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		int16_t oldStaminaMinutes = getStaminaMinutes();
 
 		if (offlineTrainingSkill != -1) {
-			setOfflineTrainingSkill(-1);
-
 			if (offlineTime >= 600) {
 				uint32_t trainingTime = std::max<int32_t>(0, std::min<int32_t>(offlineTime, std::min<int32_t>(43200, offlineTrainingTime / 1000)));
 
@@ -1259,6 +1257,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			} else {
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "You must be logged out for more than 10 minutes to start offline training.");
 			}
+			setOfflineTrainingSkill(-1);
 		} else {
 			uint16_t oldMinutes = getOfflineTrainingTime() / 60 / 1000;
 			addOfflineTrainingTime(offlineTime * 1000);
