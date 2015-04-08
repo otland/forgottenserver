@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include <cctype>
-#include <climits>
 
 #include "tools.h"
 #include "configmanager.h"
