@@ -2278,7 +2278,7 @@ void ProtocolGame::sendCreatureHealth(const Creature* creature)
 	if (creature->isHealthHidden()) {
 		msg.addByte(0x00);
 	} else {
-		msg.addByte(static_cast<int32_t>(std::ceil(static_cast<float>(creature->getHealth() * 100) / std::max<int32_t>(creature->getMaxHealth(), 1))));
+		msg.addByte(std::ceil((static_cast<double>(creature->getHealth()) / std::max<int32_t>(creature->getMaxHealth(), 1)) * 100));
 	}
 	writeToOutputBuffer(msg);
 }
@@ -2819,7 +2819,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	if (creature->isHealthHidden()) {
 		msg.addByte(0x00);
 	} else {
-		msg.addByte(static_cast<int32_t>(std::ceil(static_cast<float>(creature->getHealth() * 100) / std::max<int32_t>(creature->getMaxHealth(), 1))));
+		msg.addByte(std::ceil((static_cast<double>(creature->getHealth()) / std::max<int32_t>(creature->getMaxHealth(), 1)) * 100));
 	}
 
 	msg.addByte(creature->getDirection());
