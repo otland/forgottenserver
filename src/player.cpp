@@ -645,8 +645,8 @@ void Player::setVarStats(stats_t stat, int32_t modifier)
 int32_t Player::getDefaultStats(stats_t stat) const
 {
 	switch (stat) {
-		case STAT_MAXHITPOINTS: return getMaxHealth() - varStats[STAT_MAXHITPOINTS];
-		case STAT_MAXMANAPOINTS: return getMaxMana() - varStats[STAT_MAXMANAPOINTS];
+		case STAT_MAXHITPOINTS: return healthMax;
+		case STAT_MAXMANAPOINTS: return manaMax;
 		case STAT_MAGICPOINTS: return getBaseMagicLevel();
 		default: return 0;
 	}
