@@ -319,7 +319,7 @@ Item* Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 	}
 
 	WeaponType_t weaponType = item->getWeaponType();
-	if (weaponType == WEAPON_NONE || weaponType == WEAPON_AMMO) {
+	if (weaponType == WEAPON_NONE || weaponType == WEAPON_SHIELD || weaponType == WEAPON_AMMO) {
 		return nullptr;
 	}
 
