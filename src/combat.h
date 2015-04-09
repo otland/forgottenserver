@@ -89,7 +89,7 @@ struct CombatParams {
 	TileCallback* tileCallback;
 	TargetCallback* targetCallback;
 
-	uint32_t itemId;
+	uint16_t itemId;
 
 	ConditionType_t dispelType;
 	CombatType_t combatType;

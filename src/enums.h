@@ -451,7 +451,7 @@ struct LightInfo {
 };
 
 struct ShopInfo {
-	uint32_t itemId;
+	uint16_t itemId;
 	int32_t subType;
 	uint32_t buyPrice;
 	uint32_t sellPrice;
@@ -464,7 +464,7 @@ struct ShopInfo {
 		sellPrice = 0;
 	}
 
-	ShopInfo(uint32_t itemId, int32_t subType = 0, uint32_t buyPrice = 0, uint32_t sellPrice = 0, std::string realName = "")
+	ShopInfo(uint16_t itemId, int32_t subType = 0, uint32_t buyPrice = 0, uint32_t sellPrice = 0, std::string realName = "")
 		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(realName) {}
 };
 

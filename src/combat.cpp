@@ -575,7 +575,7 @@ void Combat::CombatNullFunc(Creature* caster, Creature* target, const CombatPara
 void Combat::combatTileEffects(const SpectatorVec& list, Creature* caster, Tile* tile, const CombatParams& params)
 {
 	if (params.itemId != 0) {
-		uint32_t itemId = params.itemId;
+		uint16_t itemId = params.itemId;
 		switch (itemId) {
 			case ITEM_FIREFIELD_PERSISTENT_FULL:
 				itemId = ITEM_FIREFIELD_PVP_FULL;

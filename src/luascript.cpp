@@ -2848,7 +2848,7 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		return 1;
 	}
 
-	uint32_t itemId = getNumber<uint32_t>(L, 2);
+	uint16_t itemId = getNumber<uint16_t>(L, 2);
 	int32_t count = getNumber<int32_t>(L, 3, 1);
 	bool canDropOnMap = getBoolean(L, 4, true);
 	uint16_t subType = getNumber<uint16_t>(L, 5, 1);
@@ -3020,7 +3020,7 @@ int LuaScriptInterface::luaDoCreateItem(lua_State* L)
 	int32_t itemCount = 1;
 	int32_t subType = 1;
 
-	uint32_t itemId = getNumber<uint32_t>(L, 1);
+	uint16_t itemId = getNumber<uint16_t>(L, 1);
 	uint32_t count = getNumber<uint32_t>(L, 2, 1);
 
 	const ItemType& it = Item::items[itemId];
@@ -3075,7 +3075,7 @@ int LuaScriptInterface::luaDoCreateItemEx(lua_State* L)
 {
 	//doCreateItemEx(itemid, <optional> count/subtype)
 	//Returns uid of the created item
-	uint32_t itemId = getNumber<uint32_t>(L, 1);
+	uint16_t itemId = getNumber<uint16_t>(L, 1);
 	uint32_t count = getNumber<uint32_t>(L, 2, 1);
 
 	const ItemType& it = Item::items[itemId];
