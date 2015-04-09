@@ -101,7 +101,7 @@ class TileItemVector
 			return items.rend();
 		}
 
-		void clear {
+		void clear() {
 			items.clear();
 		}
 
