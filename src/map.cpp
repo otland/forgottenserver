@@ -136,9 +136,24 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 	uint32_t offsetY = y & FLOOR_MASK;
 
 	Tile*& tile = floor->tiles[offsetX][offsetY];
-	delete tile;
-	tile = newTile;
-	newTile->qt_node = leaf;
+	if (tile) {
+		TileItemVector* items = newTile->getItemList();
+		if (items) {
+			for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
+				tile->addThing(*it);
+			}
+			items->clear();
+		}
+
+		if (newTile->ground) {
+			tile->addThing(newTile->ground);
+			newTile->ground = nullptr;
+		}
+		delete newTile;
+	} else {
+		tile = newTile;
+		tile->qt_node = leaf;
+	}
 }
 
 bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/) const

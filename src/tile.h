@@ -101,6 +101,10 @@ class TileItemVector
 			return items.rend();
 		}
 
+		void clear {
+			items.clear();
+		}
+
 		size_t size() const {
 			return items.size();
 		}
