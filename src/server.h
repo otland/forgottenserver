@@ -21,6 +21,7 @@
 #define FS_SERVER_H_984DA68ABF744127850F90CC710F281B
 
 #include "connection.h"
+#include <memory>
 
 class Protocol;
 
@@ -32,7 +33,7 @@ class ServiceBase
 		virtual uint8_t get_protocol_identifier() const = 0;
 		virtual const char* get_protocol_name() const = 0;
 
-		virtual Protocol* make_protocol(Connection_ptr c) const = 0;
+		virtual Protocol_ptr make_protocol(const Connection_ptr& c) const = 0;
 };
 
 template <typename ProtocolType>
@@ -52,8 +53,8 @@ class Service : public ServiceBase
 			return ProtocolType::protocol_name();
 		}
 
-		Protocol* make_protocol(Connection_ptr c) const {
-			return new ProtocolType(c);
+		Protocol_ptr make_protocol(const Connection_ptr& c) const {
+			return std::make_shared<ProtocolType>(c);
 		}
 };
 
@@ -73,8 +74,8 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		bool is_single_socket() const;
 		std::string get_protocol_names() const;
 
-		bool add_service(Service_ptr);
-		Protocol* make_protocol(bool checksummed, NetworkMessage& msg) const;
+		bool add_service(const Service_ptr& new_svc);
+		Protocol_ptr make_protocol(bool checksummed, NetworkMessage& msg, const Connection_ptr& connection) const;
 
 		void onStopServer();
 		void onAccept(boost::asio::ip::tcp::socket* socket, const boost::system::error_code& error);
@@ -83,7 +84,7 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		void accept();
 
 		boost::asio::io_service& m_io_service;
-		boost::asio::ip::tcp::acceptor* m_acceptor;
+		std::unique_ptr<boost::asio::ip::tcp::acceptor> m_acceptor;
 		std::vector<Service_ptr> m_services;
 
 		uint16_t m_serverPort;
@@ -132,11 +133,10 @@ bool ServiceManager::add(uint16_t port)
 
 	ServicePort_ptr service_port;
 
-	std::map<uint16_t, ServicePort_ptr>::iterator finder =
-	    m_acceptors.find(port);
+	auto finder = m_acceptors.find(port);
 
 	if (finder == m_acceptors.end()) {
-		service_port.reset(new ServicePort(m_io_service));
+		service_port = std::make_shared<ServicePort>(m_io_service);
 		service_port->open(port);
 		m_acceptors[port] = service_port;
 	} else {

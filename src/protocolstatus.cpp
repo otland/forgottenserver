@@ -53,9 +53,8 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		if (ipStr != g_config.getString(ConfigManager::IP)) {
 			std::map<uint32_t, int64_t>::const_iterator it = ipConnectMap.find(ip);
 			if (it != ipConnectMap.end() && (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT)))) {
-				getConnection()->close();
+				disconnect();
 				return;
-			}
 		}
 	}
 
@@ -65,7 +64,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		//XML info protocol
 		case 0xFF: {
 			if (msg.getString(4) == "info") {
-				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, this)));
+				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, std::dynamic_pointer_cast<ProtocolStatus>(shared_from_this()))));
 				return;
 			}
 			break;
@@ -78,21 +77,21 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.getString();
 			}
-			g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendInfo, this, requestedInfo, characterName)));
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendInfo, std::dynamic_pointer_cast<ProtocolStatus>(shared_from_this()), requestedInfo, characterName)));
 			return;
 		}
 
 		default:
 			break;
 	}
-	getConnection()->close();
+	disconnect();
 }
 
 void ProtocolStatus::sendStatusString()
 {
-	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	OutputMessage_ptr output = requestOutputMessage(false);
 	if (!output) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -155,17 +154,16 @@ void ProtocolStatus::sendStatusString()
 	std::ostringstream ss;
 	doc.save(ss, "", pugi::format_raw);
 
-	std::string data = ss.str();
-	output->addBytes(data.c_str(), data.size());
+	output->addString(ss.str());
 	OutputMessagePool::getInstance()->send(output);
-	getConnection()->close();
+	disconnect();
 }
 
 void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& characterName)
 {
-	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	OutputMessage_ptr output = requestOutputMessage(false);
 	if (!output) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -234,5 +232,5 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->addString(CLIENT_VERSION_STR);
 	}
 	OutputMessagePool::getInstance()->send(output);
-	getConnection()->close();
+	disconnect();
 }

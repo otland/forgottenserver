@@ -31,25 +31,25 @@ extern Game g_game;
 
 void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
 {
-	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	OutputMessage_ptr output = requestOutputMessage(false);
 	if (output) {
 		output->addByte(0x0A);
 		output->addString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->close();
+	disconnect();
 }
 
 void ProtocolOld::disconnectClient(const std::string& message)
 {
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolOld::dispatchedDisconnectClient, this, message)));
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolOld::dispatchedDisconnectClient, std::dynamic_pointer_cast<ProtocolOld>(shared_from_this()), message)));
 }
 
 void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -63,7 +63,7 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 

@@ -127,7 +127,7 @@ typedef std::map<uint32_t, uint32_t> MuteCountMap;
 class Player final : public Creature, public Cylinder
 {
 	public:
-		explicit Player(ProtocolGame* p);
+		explicit Player(ProtocolGame_ptr p);
 		~Player();
 
 		// non-copyable
@@ -1239,7 +1239,7 @@ class Player final : public Creature, public Cylinder
 		Npc* shopOwner;
 		Party* party;
 		Player* tradePartner;
-		ProtocolGame* client;
+		ProtocolGame_ptr client;
 		SchedulerTask* walkTask;
 		Town* town;
 		Vocation* vocation;

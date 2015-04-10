@@ -25,10 +25,12 @@
 #include "networkmessage.h"
 
 class Protocol;
+typedef std::shared_ptr<Protocol> Protocol_ptr;
 class OutputMessage;
 typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
 class Connection;
 typedef std::shared_ptr<Connection> Connection_ptr;
+typedef std::weak_ptr<Connection> ConnectionWeak_ptr;
 class ServiceBase;
 typedef std::shared_ptr<ServiceBase> Service_ptr;
 class ServicePort;
@@ -44,14 +46,14 @@ class ConnectionManager
 
 		Connection_ptr createConnection(boost::asio::ip::tcp::socket* socket,
 		                                boost::asio::io_service& io_service, ServicePort_ptr servicers);
-		void releaseConnection(Connection_ptr connection);
+		void releaseConnection(const Connection_ptr& connection);
 		void closeAll();
 
 	protected:
 		ConnectionManager() = default;
 
 		std::unordered_set<Connection_ptr> m_connections;
-		std::recursive_mutex m_connectionManagerLock;
+		std::mutex m_connectionManagerLock;
 };
 
 class Connection : public std::enable_shared_from_this<Connection>
@@ -66,8 +68,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		enum ConnectionState_t {
 			CONNECTION_STATE_OPEN,
-			CONNECTION_STATE_REQUEST_CLOSE,
-			CONNECTION_STATE_CLOSING,
 			CONNECTION_STATE_CLOSED,
 		};
 
@@ -79,10 +79,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 			m_service_port(service_port),
 			m_socket(socket),
 			m_io_service(io_service) {
-			m_refCount = 0;
-			m_protocol = nullptr;
-			m_pendingWrite = 0;
-			m_pendingRead = 0;
+			m_pendingWrite = false;
+			m_pendingRead = false;
 			m_connectionState = CONNECTION_STATE_OPEN;
 			m_receivedFirst = false;
 			m_writeError = false;
@@ -90,29 +88,21 @@ class Connection : public std::enable_shared_from_this<Connection>
 			m_packetsSent = 0;
 			m_timeConnected = time(nullptr);
 		}
-		friend class ConnectionManager;
+		~Connection();
 
-	public:
-		boost::asio::ip::tcp::socket& getHandle() {
-			return *m_socket;
-		}
+		friend class ConnectionManager;
 
 		void close();
 		// Used by protocols that require server to send first
-		void accept(Protocol* protocol);
+		void accept(const Protocol_ptr& protocol);
 		void accept();
 
-		bool send(OutputMessage_ptr msg);
+		bool send(const OutputMessage_ptr& msg);
 
-		uint32_t getIP() const;
-
-		void addRef() {
-			++m_refCount;
+		uint32_t getIP();
+		Protocol_ptr getProtocol() const {
+			return m_protocol;
 		}
-		void unRef() {
-			--m_refCount;
-		}
-
 	private:
 		void parseHeader(const boost::system::error_code& error);
 		void parsePacket(const boost::system::error_code& error);
@@ -123,17 +113,15 @@ class Connection : public std::enable_shared_from_this<Connection>
 		void handleReadError(const boost::system::error_code& error);
 		void handleWriteError(const boost::system::error_code& error);
 
-		static void handleReadTimeout(std::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
-		static void handleWriteTimeout(std::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
+		static void handleReadTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error);
+		static void handleWriteTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error);
 
 		void closeConnectionTask();
-		void deleteConnectionTask();
-		void releaseConnection();
 		void closeSocket();
 		void onReadTimeout();
 		void onWriteTimeout();
 
-		void internalSend(OutputMessage_ptr msg);
+		void internalSend(const OutputMessage_ptr& msg);
 
 		NetworkMessage m_msg;
 
@@ -144,16 +132,15 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		ServicePort_ptr m_service_port;
 
-		boost::asio::ip::tcp::socket* m_socket;
-		Protocol* m_protocol;
+		std::unique_ptr<boost::asio::ip::tcp::socket> m_socket;
+		Protocol_ptr m_protocol;
 		boost::asio::io_service& m_io_service;
 
 		time_t m_timeConnected;
 		uint32_t m_packetsSent;
-		uint32_t m_refCount;
-		int32_t m_pendingWrite;
-		int32_t m_pendingRead;
-		ConnectionState_t m_connectionState;
+		bool m_pendingWrite;
+		bool m_pendingRead;
+		bool m_connectionState;
 
 		bool m_receivedFirst;
 		bool m_writeError;

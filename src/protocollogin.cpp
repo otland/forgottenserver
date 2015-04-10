@@ -37,14 +37,14 @@ extern Game g_game;
 
 void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
 {
-	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	OutputMessage_ptr output = requestOutputMessage(false);
 	if (output) {
 		output->addByte(version >= 1076 ? 0x0B : 0x0A);
 		output->addString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->close();
+	disconnect();
 }
 
 void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password, uint16_t version)
@@ -55,7 +55,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		return;
 	}
 
-	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	OutputMessage_ptr output = requestOutputMessage(false);
 	if (output) {
 		//Update premium days
 		Game::updatePremium(account);
@@ -102,13 +102,13 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		OutputMessagePool::getInstance()->send(output);
 	}
 
-	getConnection()->close();
+	disconnect();
 }
 
 void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -127,7 +127,9 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 * 1 byte: 0
 	 */
 
-#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, this, err, version)))
+	auto dispatchDisconnectClient = [this, version](const std::string& err) {
+		g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, std::dynamic_pointer_cast<ProtocolLogin>(shared_from_this()), err, version)));
+	};
 
 	if (version <= 760) {
 		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
@@ -135,7 +137,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -180,8 +182,6 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-#undef dispatchDisconnectClient
-
 	std::string password = msg.getString();
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, this, accountName, password, version)));
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, std::dynamic_pointer_cast<ProtocolLogin>(shared_from_this()), accountName, password, version)));
 }
