@@ -161,7 +161,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 	}
 }
 
-Protocol* ServicePort::make_protocol(bool checksummed, NetworkMessage& msg) const
+Protocol_ptr ServicePort::make_protocol(bool checksummed, NetworkMessage& msg, const Connection_ptr& connection) const
 {
 	uint8_t protocolID = msg.getByte();
 	for (Service_ptr service : m_services) {
@@ -183,10 +183,6 @@ void ServicePort::onStopServer()
 
 void ServicePort::openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
 {
-	if (weak_service.expired()) {
-		return;
-	}
-
 	if (ServicePort_ptr service = weak_service.lock()) {
 		service->open(port);
 	}
@@ -201,11 +197,11 @@ void ServicePort::open(uint16_t port)
 
 	try {
 		if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-			m_acceptor = new boost::asio::ip::tcp::acceptor(m_io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), m_serverPort));
+			m_acceptor.reset(new boost::asio::ip::tcp::acceptor(m_io_service, boost::asio::ip::tcp::endpoint(
+			            boost::asio::ip::address(boost::asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), m_serverPort)));
 		} else {
-			m_acceptor = new boost::asio::ip::tcp::acceptor(m_io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), m_serverPort));
+			m_acceptor.reset(new boost::asio::ip::tcp::acceptor(m_io_service, boost::asio::ip::tcp::endpoint(
+			            boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), m_serverPort)));
 		}
 
 		m_acceptor->set_option(boost::asio::ip::tcp::no_delay(true));
@@ -222,23 +218,16 @@ void ServicePort::open(uint16_t port)
 
 void ServicePort::close()
 {
-	if (m_acceptor) {
-		if (m_acceptor->is_open()) {
-			boost::system::error_code error;
-			m_acceptor->close(error);
-		}
-
-		delete m_acceptor;
-		m_acceptor = nullptr;
+	if (m_acceptor && m_acceptor->is_open()) {
+		boost::system::error_code error;
+		m_acceptor->close(error);
 	}
 }
 
-bool ServicePort::add_service(Service_ptr new_svc)
+bool ServicePort::add_service(const Service_ptr& new_svc)
 {
-	for (Service_ptr& svc : m_services) {
-		if (svc->is_single_socket()) {
-			return false;
-		}
+	if (std::any_of(m_services.begin(), m_services.end(), [](const Service_ptr& svc) {return svc->is_single_socket();})) {
+		return false;
 	}
 
 	m_services.push_back(new_svc);

@@ -74,19 +74,6 @@ void NetworkMessage::addString(const std::string& value)
 	length += stringLen;
 }
 
-void NetworkMessage::addString(const char* value)
-{
-	size_t stringLen = strlen(value);
-	if (!canAdd(stringLen + 2) || stringLen > 8192) {
-		return;
-	}
-
-	add<uint16_t>(stringLen);
-	memcpy(buffer + position, value, stringLen);
-	position += stringLen;
-	length += stringLen;
-}
-
 void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
 {
 	addByte(precision);

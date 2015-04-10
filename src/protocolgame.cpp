@@ -82,24 +82,16 @@ void ProtocolGame::setPlayer(Player* p)
 	player = p;
 }
 
-void ProtocolGame::releaseProtocol()
+void ProtocolGame::release()
 {
 	//dispatcher thread
-	if (player && player->client == this) {
-		player->client = nullptr;
-	}
-	Protocol::releaseProtocol();
-}
-
-void ProtocolGame::deleteProtocolTask()
-{
-	//dispatcher thread
-	if (player) {
+	if (player && player->client == shared_from_this()) {
+		player->client.reset();
 		g_game.ReleaseCreature(player);
+		player->decrementReferenceCounter();
 		player = nullptr;
 	}
-
-	Protocol::deleteProtocolTask();
+	Protocol::release();
 }
 
 void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
@@ -107,7 +99,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 	//dispatcher thread
 	Player* _player = g_game.getPlayerByName(name);
 	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
-		player = new Player(this);
+		player = new Player(getThis());
 		player->setName(name);
 
 		player->incrementReferenceCounter();
@@ -164,7 +156,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			ss << "Too many players online.\nYou are at place "
 			   << currentSlot << " on the waiting list.";
 
-			OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+			OutputMessage_ptr output = requestOutputMessage(false);
 			if (output) {
 				output->addByte(0x16);
 				output->addString(ss.str());
@@ -172,7 +164,8 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 				OutputMessagePool::getInstance()->send(output);
 			}
 
-			getConnection()->close();
+			disconnect();
+
 			return;
 		}
 
@@ -208,19 +201,16 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			_player->disconnect();
 			_player->isConnecting = true;
 
-			addRef();
-			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, this, _player->getID(), operatingSystem)));
+			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, getThis(), _player->getID(), operatingSystem)));
 			return;
 		}
 
-		addRef();
 		connect(_player->getID(), operatingSystem);
 	}
 }
 
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 {
-	unRef();
 	eventConnect = 0;
 
 	Player* _player = g_game.getPlayerByID(playerId);
@@ -237,7 +227,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->setOperatingSystem(operatingSystem);
 	player->isConnecting = false;
 
-	player->client = this;
+	player->client = getThis();
 	sendAddCreature(player, player->getPosition(), 0, false);
 	player->lastIP = player->getIP();
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
@@ -277,9 +267,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 		}
 	}
 
-	if (Connection_ptr connection = getConnection()) {
-		connection->close();
-	}
+	disconnect();
 
 	g_game.removeCreature(player);
 }
@@ -287,7 +275,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -297,7 +285,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(7); // U32 client version, U8 client type, U16 dat revision
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -319,7 +307,9 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(1); // gamemaster flag
 
-#define dispatchDisconnectClient(err) g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::disconnectClient, this, err)))
+	auto dispatchDisconnectClient = [this](const std::string& err) {
+		g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::disconnectClient, getThis(), err)));
+	};
 
 	std::string sessionKey = msg.getString();
 	size_t pos = sessionKey.find('\n');
@@ -341,7 +331,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
 	if (m_challengeTimestamp != timeStamp || m_challengeRandom != randNumber) {
-		getConnection()->close();
+		disconnect();
 		return;
 	}
 
@@ -378,14 +368,12 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-#undef dispatchDisconnectClient
-
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, this, characterName, accountId, operatingSystem)));
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, getThis(), characterName, accountId, operatingSystem)));
 }
 
 void ProtocolGame::onConnect()
 {
-	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	OutputMessage_ptr output = requestOutputMessage(false);
 	if (output) {
 		static std::random_device rd;
 		static std::ranlux24 generator(rd());
@@ -415,21 +403,13 @@ void ProtocolGame::onConnect()
 
 void ProtocolGame::disconnectClient(const std::string& message)
 {
-	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
+	OutputMessage_ptr output = requestOutputMessage(false);
 	if (output) {
 		output->addByte(0x14);
 		output->addString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
 	disconnect();
-}
-
-void ProtocolGame::disconnect() const
-{
-	Connection_ptr connection = getConnection();
-	if (connection) {
-		connection->close();
-	}
 }
 
 void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
@@ -469,7 +449,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	}
 
 	switch (recvbyte) {
-		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, this, true, false))); break;
+		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, getThis(), true, false))); break;
 		case 0x1D: addGameTask(&Game::playerReceivePingBack, player->getID()); break;
 		case 0x1E: addGameTask(&Game::playerReceivePing, player->getID()); break;
 		case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcode

@@ -27,7 +27,7 @@
 
 extern RSA g_RSA;
 
-void Protocol::onSendMessage(OutputMessage_ptr msg)
+void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 {
 	if (!m_rawMessages) {
 		msg->writeMessageLength();
@@ -38,9 +38,7 @@ void Protocol::onSendMessage(OutputMessage_ptr msg)
 		}
 	}
 
-	if (msg == m_outputBuffer) {
-		m_outputBuffer.reset();
-	}
+	clearOutputBuffer(msg);
 }
 
 void Protocol::onRecvMessage(NetworkMessage& msg)
@@ -54,32 +52,13 @@ void Protocol::onRecvMessage(NetworkMessage& msg)
 
 OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 {
+	//dispatcher thread
 	if (m_outputBuffer && NetworkMessage::max_protocol_body_length >= m_outputBuffer->getLength() + size) {
 		return m_outputBuffer;
-	} else if (m_connection) {
-		m_outputBuffer = OutputMessagePool::getInstance()->getOutputMessage(this);
+	} else {
+		m_outputBuffer = requestOutputMessage();
 		return m_outputBuffer;
 	}
-	return OutputMessage_ptr();
-}
-
-void Protocol::releaseProtocol()
-{
-	if (m_refCount > 0) {
-		//Reschedule it and try again.
-		g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Protocol::releaseProtocol, this)));
-	} else {
-		deleteProtocolTask();
-	}
-}
-
-void Protocol::deleteProtocolTask()
-{
-	//dispather thread
-	assert(m_refCount == 0);
-	setConnection(Connection_ptr());
-
-	delete this;
 }
 
 void Protocol::XTEA_encrypt(OutputMessage& msg) const
@@ -156,11 +135,17 @@ bool Protocol::RSA_decrypt(NetworkMessage& msg)
 	return msg.getByte() == 0;
 }
 
-uint32_t Protocol::getIP() const
+uint32_t Protocol::getIP()
 {
-	if (getConnection()) {
-		return getConnection()->getIP();
+	if (auto connection = getConnection()) {
+		return connection->getIP();
 	}
 
 	return 0;
 }
+
+OutputMessage_ptr Protocol::requestOutputMessage(const bool autosend)
+{
+	return OutputMessagePool::getInstance()->getOutputMessage(shared_from_this(), autosend);
+}
+

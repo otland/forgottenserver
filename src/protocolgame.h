@@ -32,6 +32,8 @@ class Container;
 class Tile;
 class Connection;
 class Quest;
+class ProtocolGame;
+typedef std::shared_ptr<ProtocolGame> ProtocolGame_ptr;
 
 struct TextMessage
 {
@@ -77,14 +79,14 @@ class ProtocolGame final : public Protocol
 
 	private:
 		std::unordered_set<uint32_t> knownCreatureSet;
-
+		ProtocolGame_ptr getThis() {
+			return std::dynamic_pointer_cast<ProtocolGame>(shared_from_this());
+		}
 		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
-		void disconnect() const;
 		void disconnectClient(const std::string& message);
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
-		void releaseProtocol() final;
-		void deleteProtocolTask() final;
+		void release() final;
 
 		void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);
 

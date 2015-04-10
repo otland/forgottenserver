@@ -22,10 +22,10 @@
 
 #include "connection.h"
 
-class Protocol
+class Protocol : public std::enable_shared_from_this<Protocol>
 {
 	public:
-		explicit Protocol(Connection_ptr connection) : m_connection(connection), m_key(), m_refCount(), m_encryptionEnabled(false), m_checksumEnabled(true), m_rawMessages(false) {}
+		explicit Protocol(Connection_ptr connection) : m_connection(connection), m_key(), m_encryptionEnabled(false), m_checksumEnabled(true), m_rawMessages(false) {}
 		virtual ~Protocol() = default;
 
 		// non-copyable
@@ -34,31 +34,32 @@ class Protocol
 
 		virtual void parsePacket(NetworkMessage&) {}
 
-		virtual void onSendMessage(OutputMessage_ptr msg);
+		virtual void onSendMessage(const OutputMessage_ptr& msg);
 		void onRecvMessage(NetworkMessage& msg);
 		virtual void onRecvFirstMessage(NetworkMessage& msg) = 0;
 		virtual void onConnect() {}
 
 		Connection_ptr getConnection() const {
-			return m_connection;
-		}
-		void setConnection(Connection_ptr connection) {
-			m_connection = connection;
+			return m_connection.lock();
 		}
 
-		uint32_t getIP() const;
-
-		void addRef() {
-			++m_refCount;
-		}
-		void unRef() {
-			--m_refCount;
-		}
+		uint32_t getIP();
 
 		//Use this function for autosend messages only
 		OutputMessage_ptr getOutputBuffer(int32_t size);
 
+		OutputMessage_ptr requestOutputMessage(const bool autosend = true);
+		void clearOutputBuffer(const OutputMessage_ptr& msg) {
+			if (msg == m_outputBuffer) {
+				m_outputBuffer.reset();
+			}
+		}
 	protected:
+		void disconnect() const {
+			if (auto connection = getConnection()) {
+				connection->close();
+			}
+		}
 		void enableXTEAEncryption() {
 			m_encryptionEnabled = true;
 		}
@@ -83,16 +84,13 @@ class Protocol
 			m_rawMessages = value;
 		}
 
-		virtual void releaseProtocol();
-		virtual void deleteProtocolTask();
+		virtual void release() {}
 		friend class Connection;
 
 		OutputMessage_ptr m_outputBuffer;
-
 	private:
-		Connection_ptr m_connection;
+		const ConnectionWeak_ptr m_connection;
 		uint32_t m_key[4];
-		uint32_t m_refCount;
 		bool m_encryptionEnabled;
 		bool m_checksumEnabled;
 		bool m_rawMessages;
