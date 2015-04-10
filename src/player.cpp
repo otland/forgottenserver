@@ -1037,21 +1037,18 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 		}
 
 		uint16_t slot = openContainer.index;
-
 		if (container->getID() == ITEM_BROWSEFIELD) {
 			uint16_t containerSize = container->size() - 1;
-			uint16_t pageEnd = openContainer.index + container->capacity();
-			if (containerSize > pageEnd) {
-				slot = pageEnd;
-				item = container->getItemByIndex(pageEnd);
-			} else {
-				slot = containerSize;
+			if (containerSize >= openContainer.index + container->capacity()) {
+				client->sendContainer(it.first, container, false, openContainer.index);
+				break;
 			}
+			slot = containerSize;
 		} else if (openContainer.index >= container->capacity()) {
 			item = container->getItemByIndex(openContainer.index - 1);
 		}
-
 		client->sendAddContainerItem(it.first, slot, item);
+		break;
 	}
 }
 
