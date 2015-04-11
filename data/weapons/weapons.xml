@@ -74,7 +74,7 @@
 	</wand>
 
 	<!-- Swords -->
-	<melee id="2396" action="removecount" />
+	<melee id="2396" action="removecharge" />
 	<melee id="2413" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
@@ -197,51 +197,55 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Fire -->
-	<melee id="7744" />
-	<melee id="7745" level="50" unproperly="1" />
-	<melee id="7746" level="60" unproperly="1" />
-	<melee id="7747" level="35" unproperly="1">
+
+	<!-- Fire -->
+	<melee id="7744" action="removecharge" />
+	<melee id="7745" level="50" action="removecharge" unproperly="1" />
+	<melee id="7746" level="60" action="removecharge" unproperly="1" />
+	<melee id="7747" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7748" level="45" unproperly="1">
+	<melee id="7748" level="45" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Ice -->
-	<melee id="7763" />
-	<melee id="7764" level="50" unproperly="1" />
-	<melee id="7765" level="60" unproperly="1" />
-	<melee id="7766" level="35" unproperly="1">
+
+	<!-- Ice -->
+	<melee id="7763" action="removecharge" />
+	<melee id="7764" level="50" action="removecharge" unproperly="1" />
+	<melee id="7765" level="60" action="removecharge" unproperly="1" />
+	<melee id="7766" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7767" level="45" unproperly="1">
+	<melee id="7767" level="45" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Earth -->
-	<melee id="7854" />
-	<melee id="7855" level="50" unproperly="1" />
-	<melee id="7856" level="60" unproperly="1" />
-	<melee id="7857" level="35" unproperly="1">
+
+	<!-- Earth -->
+	<melee id="7854" action="removecharge" />
+	<melee id="7855" level="50" action="removecharge" unproperly="1" />
+	<melee id="7856" level="60" action="removecharge" unproperly="1" />
+	<melee id="7857" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7858" level="45" unproperly="1">
+	<melee id="7858" level="45" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Energy -->
-	<melee id="7869" />
-	<melee id="7870" level="50" unproperly="1" />
-	<melee id="7871" level="60" unproperly="1" />
-	<melee id="7872" level="35" unproperly="1">
+
+	<!-- Energy -->
+	<melee id="7869" action="removecharge" />
+	<melee id="7870" level="50" action="removecharge" unproperly="1" />
+	<melee id="7871" level="60" action="removecharge" unproperly="1" />
+	<melee id="7872" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7873" level="45" unproperly="1">
+	<melee id="7873" level="45" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
@@ -361,51 +365,55 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Fire -->
-	<melee id="7749" level="20" unproperly="1" />
-	<melee id="7750" level="25" unproperly="1" />
-	<melee id="7751" level="60" unproperly="1" />
-	<melee id="7752" level="35" unproperly="1">
+
+	<!-- Fire -->
+	<melee id="7749" level="20" action="removecharge" unproperly="1" />
+	<melee id="7750" level="25" action="removecharge" unproperly="1" />
+	<melee id="7751" level="60" action="removecharge" unproperly="1" />
+	<melee id="7752" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7753" level="65" unproperly="1">
+	<melee id="7753" level="65" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Ice -->
-	<melee id="7768" level="20" unproperly="1" />
-	<melee id="7769" level="25" unproperly="1" />
-	<melee id="7770" level="60" unproperly="1" />
-	<melee id="7771" level="35" unproperly="1">
+
+	<!-- Ice -->
+	<melee id="7768" level="20" action="removecharge" unproperly="1" />
+	<melee id="7769" level="25" action="removecharge" unproperly="1" />
+	<melee id="7770" level="60" action="removecharge" unproperly="1" />
+	<melee id="7771" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7772" level="65" unproperly="1">
+	<melee id="7772" level="65" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Earth -->
-	<melee id="7859" level="20" unproperly="1" />
-	<melee id="7860" level="25" unproperly="1" />
-	<melee id="7861" level="60" unproperly="1" />
-	<melee id="7862" level="35" unproperly="1">
+
+	<!-- Earth -->
+	<melee id="7859" level="20" action="removecharge" unproperly="1" />
+	<melee id="7860" level="25" action="removecharge" unproperly="1" />
+	<melee id="7861" level="60" action="removecharge" unproperly="1" />
+	<melee id="7862" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7863" level="65" unproperly="1">
+	<melee id="7863" level="65" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Energy -->
-	<melee id="7874" level="20" />
-	<melee id="7875" level="25" unproperly="1" />
-	<melee id="7876" level="60" unproperly="1" />
-	<melee id="7877" level="35" unproperly="1">
+
+	<!-- Energy -->
+	<melee id="7874" level="20" action="removecharge" />
+	<melee id="7875" level="25" action="removecharge" unproperly="1" />
+	<melee id="7876" level="60" action="removecharge" unproperly="1" />
+	<melee id="7877" level="35" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-	<melee id="7878" level="65" unproperly="1">
+	<melee id="7878" level="65" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
@@ -514,39 +522,43 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Fire -->
-	<melee id="7754" level="20" unproperly="1" />
-	<melee id="7755" level="35" unproperly="1" />
-	<melee id="7756" level="60" unproperly="1" />
-	<melee id="7757" level="35" unproperly="1" />
-	<melee id="7758" level="50" unproperly="1">
+
+	<!-- Fire -->
+	<melee id="7754" level="20" action="removecharge" unproperly="1" />
+	<melee id="7755" level="35" action="removecharge" unproperly="1" />
+	<melee id="7756" level="60" action="removecharge" unproperly="1" />
+	<melee id="7757" level="35" action="removecharge" unproperly="1" />
+	<melee id="7758" level="50" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Ice -->
-	<melee id="7773" level="20" unproperly="1" />
-	<melee id="7774" level="35" unproperly="1" />
-	<melee id="7775" level="60" unproperly="1" />
-	<melee id="7776" level="35" unproperly="1" />
-	<melee id="7777" level="50" unproperly="1">
+
+	<!-- Ice -->
+	<melee id="7773" level="20" action="removecharge" unproperly="1" />
+	<melee id="7774" level="35" action="removecharge" unproperly="1" />
+	<melee id="7775" level="60" action="removecharge" unproperly="1" />
+	<melee id="7776" level="35" action="removecharge" unproperly="1" />
+	<melee id="7777" level="50" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Earth -->
-	<melee id="7864" level="20" unproperly="1" />
-	<melee id="7865" level="35" unproperly="1" />
-	<melee id="7866" level="60" unproperly="1" />
-	<melee id="7867" level="35" unproperly="1" />
-	<melee id="7868" level="50" unproperly="1">
+
+	<!-- Earth -->
+	<melee id="7864" level="20" action="removecharge" unproperly="1" />
+	<melee id="7865" level="35" action="removecharge" unproperly="1" />
+	<melee id="7866" level="60" action="removecharge" unproperly="1" />
+	<melee id="7867" level="35" action="removecharge" unproperly="1" />
+	<melee id="7868" level="50" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
-		<!-- Energy -->
-	<melee id="7879" level="20" unproperly="1" />
-	<melee id="7880" level="35" unproperly="1" />
-	<melee id="7881" level="60" unproperly="1" />
-	<melee id="7882" level="35" unproperly="1" />
-	<melee id="7883" level="50" unproperly="1">
+
+	<!-- Energy -->
+	<melee id="7879" level="20" action="removecharge" unproperly="1" />
+	<melee id="7880" level="35" action="removecharge" unproperly="1" />
+	<melee id="7881" level="60" action="removecharge" unproperly="1" />
+	<melee id="7882" level="35" action="removecharge" unproperly="1" />
+	<melee id="7883" level="50" action="removecharge" unproperly="1">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />
 	</melee>
