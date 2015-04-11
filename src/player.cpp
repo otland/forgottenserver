@@ -1050,7 +1050,6 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 			item = container->getItemByIndex(openContainer.index - 1);
 		}
 		client->sendAddContainerItem(it.first, slot, item);
-		break;
 	}
 }
 
