@@ -452,10 +452,8 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 
 		case WEAPONACTION_REMOVECHARGE: {
 			uint16_t charges = item->getCharges();
-			if (charges > 1) {
+			if (charges != 0) {
 				g_game.transformItem(item, item->getID(), charges - 1);
-			} else {
-				g_game.internalRemoveItem(item);
 			}
 			break;
 		}
