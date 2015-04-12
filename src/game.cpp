@@ -843,7 +843,7 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	Tile* toCylinder = &toTile;
 	uint32_t n = 0;
 
-	while ((subCylinder = toTile.queryDestination(index, creature, &toItem, flags)) != toCylinder) {
+	while ((subCylinder = toCylinder->queryDestination(index, creature, &toItem, flags)) != toCylinder) {
 		map.moveCreature(creature, *subCylinder);
 
 		if (creature.getParent() != subCylinder) {
