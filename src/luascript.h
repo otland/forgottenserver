@@ -439,7 +439,6 @@ class LuaScriptInterface
 		//lua functions
 		static int luaDoCreateItem(lua_State* L);
 		static int luaDoCreateItemEx(lua_State* L);
-		static int luaDoAddCondition(lua_State* L);
 		static int luaDoRemoveCondition(lua_State* L);
 		static int luaDoMoveCreature(lua_State* L);
 

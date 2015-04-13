@@ -982,9 +982,6 @@ void LuaScriptInterface::registerFunctions()
 	//doTileAddItemEx(pos, uid)
 	lua_register(m_luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
 
-	//doAddCondition(cid, condition)
-	lua_register(m_luaState, "doAddCondition", LuaScriptInterface::luaDoAddCondition);
-
 	//doRemoveCondition(cid, type[, subId])
 	lua_register(m_luaState, "doRemoveCondition", LuaScriptInterface::luaDoRemoveCondition);
 
@@ -3780,29 +3777,6 @@ int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 	}
 
 	target->challengeCreature(creature);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaDoAddCondition(lua_State* L)
-{
-	//doAddCondition(cid, condition)
-	Creature* creature = getCreature(L, 1);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	uint32_t conditionId = getNumber<uint32_t>(L, 2);
-	Condition* condition = g_luaEnvironment.getConditionObject(conditionId);
-	if (!condition) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CONDITION_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	creature->addCondition(condition->clone());
 	pushBoolean(L, true);
 	return 1;
 }

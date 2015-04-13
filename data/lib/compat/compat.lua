@@ -114,6 +114,7 @@ function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c ~=
 function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c ~= nil and c:setOutfit(outfit) or false end
 function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c ~= nil and c:setDropLoot(doDrop) or false end
 function doChangeSpeed(cid, delta) local c = Creature(cid) return c ~= nil and c:changeSpeed(delta) or false end
+function doAddCondition(cid, conditionId) local c = Creature(cid) return c ~= nil and c:addCondition(conditionId) or false end
 
 doSetCreatureDirection = doCreatureSetLookDir
 
