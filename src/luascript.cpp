@@ -9230,7 +9230,7 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 	}
 
 	if (length < 0) {
-		length = item->getMaxWriteLength();
+		length = Item::items[item->getID()].maxTextLen;
 	}
 
 	if (!text.empty()) {

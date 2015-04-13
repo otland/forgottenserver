@@ -264,7 +264,7 @@ class ItemType
 		bool showAttributes;
 		bool replaceable;
 		bool pickupable;
-		bool rotable;
+		bool rotatable;
 		bool useable;
 		bool moveable;
 		bool alwaysOnTop;

@@ -666,7 +666,8 @@ bool Item::unserializeItemNode(FileLoader&, NODE, PropStream& propStream)
 
 void Item::serializeAttr(PropWriteStream& propWriteStream) const
 {
-	if (isStackable() || isFluidContainer() || isSplash()) {
+	const ItemType& it = items[id];
+	if (it.stackable || it.isFluidContainer() || it.isSplash()) {
 		propWriteStream.write<uint8_t>(ATTR_COUNT);
 		propWriteStream.write<uint8_t>(getSubType());
 	}
@@ -677,7 +678,7 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.write<uint16_t>(charges);
 	}
 
-	if (isMoveable()) {
+	if (it.moveable) {
 		uint16_t actionId = getActionId();
 		if (actionId != 0) {
 			propWriteStream.write<uint8_t>(ATTR_ACTION_ID);
