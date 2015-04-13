@@ -607,6 +607,19 @@ function getItemRWInfo(uid)
 end
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
 function getFluidSourceType(itemId) local it = ItemType(itemId) return it.id ~= 0 and it:getFluidSource() or false end
+function hasProperty(uid, prop)
+	local item = Item(uid)
+	if item == nil then
+		return false
+	end
+
+	local parent = item:getParent()
+	if parent:isTile() and item == parent:getGround() then
+		return parent:hasProperty(prop)
+	else
+		return item:hasProperty(prop)
+	end
+end
 
 function doSetItemText(uid, text)
 	local item = Item(uid)

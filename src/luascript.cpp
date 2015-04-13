@@ -1090,9 +1090,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureOutfit(cid, outfit, time)
 	lua_register(m_luaState, "doSetCreatureOutfit", LuaScriptInterface::luaSetCreatureOutfit);
 
-	//hasProperty(uid, prop)
-	lua_register(m_luaState, "hasProperty", LuaScriptInterface::luaHasProperty);
-
 	//isInArray(array, value)
 	lua_register(m_luaState, "isInArray", LuaScriptInterface::luaIsInArray);
 
@@ -3997,30 +3994,6 @@ int LuaScriptInterface::luaDoSetCreatureLight(lua_State* L)
 	Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_LIGHT, time, level | (color << 8));
 	creature->addCondition(condition);
 	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaHasProperty(lua_State* L)
-{
-	//hasProperty(uid, prop)
-	uint32_t uid = getNumber<uint32_t>(L, 1);
-
-	Item* item = getScriptEnv()->getItemByUID(uid);
-	if (!item) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	ITEMPROPERTY prop = getNumber<ITEMPROPERTY>(L, 2);
-
-	//Check if the item is a tile, so we can get more accurate properties
-	const Tile* itemTile = item->getTile();
-	if (itemTile && itemTile->ground == item) {
-		pushBoolean(L, itemTile->hasProperty(prop));
-	} else {
-		pushBoolean(L, item->hasProperty(prop));
-	}
 	return 1;
 }
 
