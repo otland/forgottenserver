@@ -783,6 +783,31 @@ function getThingPos(uid)
 	return position
 end
 
+function getThingfromPos(pos)
+	local tile = Tile(pos)
+	if tile == nil then
+		return pushThing(nil)
+	end
+
+	local thing
+	if stackpos == 255 then
+		thing = tile:getTopCreature()
+		if thing == nil then
+			local item = tile:getTopDownItem()
+			if item ~= nil and item:getType():isMovable() then
+				thing = item
+			end
+		end
+	elseif stackpos == 254 then
+		thing = tile:getFieldItem()
+	elseif stackpos == 253 then
+		thing = tile:getTopCreature()
+	else
+		thing = tile:getThing(pos.stackpos)
+	end
+	return pushThing(thing)
+end
+
 function doRelocate(fromPos, toPos)
 	if fromPos == toPos then
 		return false

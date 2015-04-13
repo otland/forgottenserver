@@ -448,7 +448,6 @@ class LuaScriptInterface
 		static int luaDoSetCreatureLight(lua_State* L);
 
 		//get item info
-		static int luaGetThingfromPos(lua_State* L);
 		static int luaHasProperty(lua_State* L);
 		static int luaGetDepotId(lua_State* L);
 

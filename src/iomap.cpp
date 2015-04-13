@@ -324,7 +324,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 									item->setLoadedFromMap(true);
 								}
 							}
-
 							break;
 						}
 

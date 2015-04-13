@@ -967,9 +967,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerInstantSpellInfo(cid, index)
 	lua_register(m_luaState, "getPlayerInstantSpellInfo", LuaScriptInterface::luaGetPlayerInstantSpellInfo);
 
-	//getThingfromPos(pos)
-	lua_register(m_luaState, "getThingfromPos", LuaScriptInterface::luaGetThingfromPos);
-
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
 	//Returns uid of the created item
@@ -2941,63 +2938,6 @@ int LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	}
 
 	lua_pushnumber(L, g_game.internalAddItem(tile, item));
-	return 1;
-}
-
-int LuaScriptInterface::luaGetThingfromPos(lua_State* L)
-{
-	//Consider using getTileItemById/getTileItemByType/getTileThingByPos/getTopCreature instead.
-
-	//getThingfromPos(pos)
-	//Note:
-	//	stackpos = 255. Get the top thing(item moveable or creature)
-	//	stackpos = 254. Get MagicFieldtItem
-	//	stackpos = 253. Get the top creature (moveable creature)
-
-	int32_t stackpos;
-	const Position& pos = getPosition(L, 1, stackpos);
-
-	Tile* tile = g_game.map.getTile(pos);
-	if (!tile) {
-		pushThing(L, nullptr);
-		return 1;
-	}
-
-	Thing* thing;
-	switch (stackpos) {
-		case 255: {
-			thing = tile->getTopCreature();
-			if (!thing) {
-				Item* item = tile->getTopDownItem();
-				if (item && item->isMoveable()) {
-					thing = item;
-				}
-			}
-			break;
-		}
-
-		case 254: {
-			thing = tile->getFieldItem();
-			break;
-		}
-
-		case 253: {
-			thing = tile->getTopCreature();
-			break;
-		}
-
-		default: {
-			thing = tile->getThing(stackpos);
-			break;
-		}
-	}
-
-	if (!thing) {
-		pushThing(L, nullptr);
-		return 1;
-	}
-
-	pushThing(L, thing);
 	return 1;
 }
 
