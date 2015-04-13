@@ -60,17 +60,19 @@ void HouseTile::internalAddThing(uint32_t index, Thing* thing)
 
 void HouseTile::updateHouse(Item* item)
 {
-	if (item->getTile() == this) {
-		Door* door = item->getDoor();
-		if (door && door->getDoorId() != 0) {
+	if (item->getParent() != this) {
+		return;
+	}
+
+	Door* door = item->getDoor();
+	if (door) {
+		if (door->getDoorId() != 0) {
 			house->addDoor(door);
 		}
-
-		if (!door) {
-			BedItem* bed = item->getBed();
-			if (bed) {
-				house->addBed(bed);
-			}
+	} else {
+		BedItem* bed = item->getBed();
+		if (bed) {
+			house->addBed(bed);
 		}
 	}
 }
