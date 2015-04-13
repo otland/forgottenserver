@@ -3056,7 +3056,9 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 
 		if (item->getID() == itemId) {
 			count += Item::countByType(item, subType);
-		} else if (Container* container = item->getContainer()) {
+		}
+
+		if (Container* container = item->getContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
