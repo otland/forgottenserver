@@ -23,6 +23,7 @@
 #include "networkmessage.h"
 #include "connection.h"
 #include "tools.h"
+#include <atomic>
 #include <boost/lockfree/stack.hpp>
 
 const uint16_t OUTPUTMESSAGE_FREE_LIST_CAPACITY = 4096;
@@ -42,7 +43,7 @@ class OutputMessage : public NetworkMessage
 			frame(frame),
 			outputBufferStart(INITIAL_BUFFER_POSITION),
 			state(STATE_FREE) {}
-		
+
 		OutputMessage() = delete;
 		// non-copyable
 		OutputMessage(const OutputMessage&) = delete;
