@@ -982,9 +982,6 @@ void LuaScriptInterface::registerFunctions()
 	//doTileAddItemEx(pos, uid)
 	lua_register(m_luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
 
-	//doRemoveCondition(cid, type[, subId])
-	lua_register(m_luaState, "doRemoveCondition", LuaScriptInterface::luaDoRemoveCondition);
-
 	//doMoveCreature(cid, direction)
 	lua_register(m_luaState, "doMoveCreature", LuaScriptInterface::luaDoMoveCreature);
 
@@ -3777,32 +3774,6 @@ int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 	}
 
 	target->challengeCreature(creature);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaDoRemoveCondition(lua_State* L)
-{
-	//doRemoveCondition(cid, type[, subId])
-	Creature* creature = getCreature(L, 1);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
-	uint32_t subId = getNumber<uint32_t>(L, 3, 0);
-
-	Condition* condition = creature->getCondition(conditionType, CONDITIONID_COMBAT, subId);
-	if (!condition) {
-		condition = creature->getCondition(conditionType, CONDITIONID_DEFAULT, subId);
-	}
-
-	if (condition) {
-		creature->removeCondition(condition);
-	}
-
 	pushBoolean(L, true);
 	return 1;
 }

@@ -115,6 +115,7 @@ function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c ~=
 function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c ~= nil and c:setDropLoot(doDrop) or false end
 function doChangeSpeed(cid, delta) local c = Creature(cid) return c ~= nil and c:changeSpeed(delta) or false end
 function doAddCondition(cid, conditionId) local c = Creature(cid) return c ~= nil and c:addCondition(conditionId) or false end
+function doRemoveCondition(cid, conditionType, subId) local c = Creature(cid) return c ~= nil and (c:removeCondition(conditionType, CONDITIONID_COMBAT, subId) or c:removeCondition(conditionType, CONDITIONID_DEFAULT, subId) or true) end
 
 doSetCreatureDirection = doCreatureSetLookDir
 
@@ -791,7 +792,7 @@ function getThingfromPos(pos)
 	end
 
 	local thing
-	if stackpos == 255 then
+	if stackpos == STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE then
 		thing = tile:getTopCreature()
 		if thing == nil then
 			local item = tile:getTopDownItem()
@@ -799,9 +800,9 @@ function getThingfromPos(pos)
 				thing = item
 			end
 		end
-	elseif stackpos == 254 then
+	elseif stackpos == STACKPOS_TOP_FIELD then
 		thing = tile:getFieldItem()
-	elseif stackpos == 253 then
+	elseif stackpos == STACKPOS_TOP_CREATURE then
 		thing = tile:getTopCreature()
 	else
 		thing = tile:getThing(pos.stackpos)
