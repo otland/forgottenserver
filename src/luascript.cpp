@@ -4058,18 +4058,20 @@ int LuaScriptInterface::luaGetDepotId(lua_State* L)
 	uint32_t uid = getNumber<uint32_t>(L, -1);
 
 	Container* container = getScriptEnv()->getContainerByUID(uid);
-	if (container) {
-		DepotLocker* depotLocker = container->getDepotLocker();
-		if (depotLocker) {
-			lua_pushnumber(L, depotLocker->getDepotId());
-		} else {
-			reportErrorFunc("Depot not found");
-			pushBoolean(L, false);
-		}
-	} else {
+	if (!container) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
 		pushBoolean(L, false);
+		return 1;
 	}
+
+	DepotLocker* depotLocker = container->getDepotLocker();
+	if (!depotLocker) {
+		reportErrorFunc("Depot not found");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	lua_pushnumber(L, depotLocker->getDepotId());
 	return 1;
 }
 
@@ -5332,21 +5334,23 @@ int LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
 	// tile:getTopVisibleThing(creature)
 	Creature* creature = getCreature(L, 2);
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Thing* thing = tile->getTopVisibleThing(creature);
-		if (thing) {
-			if (Creature* visibleCreature = thing->getCreature()) {
-				pushUserdata<Creature>(L, visibleCreature);
-				setCreatureMetatable(L, -1, visibleCreature);
-			} else if (Item* visibleItem = thing->getItem()) {
-				pushUserdata<Item>(L, visibleItem);
-				setItemMetatable(L, -1, visibleItem);
-			} else {
-				lua_pushnil(L);
-			}
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Thing* thing = tile->getTopVisibleThing(creature);
+	if (!thing) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Creature* visibleCreature = thing->getCreature()) {
+		pushUserdata<Creature>(L, visibleCreature);
+		setCreatureMetatable(L, -1, visibleCreature);
+	} else if (Item* visibleItem = thing->getItem()) {
+		pushUserdata<Item>(L, visibleItem);
+		setItemMetatable(L, -1, visibleItem);
 	} else {
 		lua_pushnil(L);
 	}
@@ -5357,14 +5361,15 @@ int LuaScriptInterface::luaTileGetTopTopItem(lua_State* L)
 {
 	// tile:getTopTopItem()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Item* item = tile->getTopTopItem();
-		if (item) {
-			pushUserdata<Item>(L, item);
-			setItemMetatable(L, -1, item);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Item* item = tile->getTopTopItem();
+	if (item) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
 	}
@@ -5375,14 +5380,15 @@ int LuaScriptInterface::luaTileGetTopDownItem(lua_State* L)
 {
 	// tile:getTopDownItem()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Item* item = tile->getTopDownItem();
-		if (item) {
-			pushUserdata<Item>(L, item);
-			setItemMetatable(L, -1, item);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Item* item = tile->getTopDownItem();
+	if (item) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
 	}
@@ -5393,14 +5399,15 @@ int LuaScriptInterface::luaTileGetFieldItem(lua_State* L)
 {
 	// tile:getFieldItem()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Item* item = tile->getFieldItem();
-		if (item) {
-			pushUserdata<Item>(L, item);
-			setItemMetatable(L, -1, item);
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Item* item = tile->getFieldItem();
+	if (item) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
 	}
@@ -5474,24 +5481,27 @@ int LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 			break;
 	}
 
-	if (found) {
-		if (Item* item = tile->ground) {
+	if (!found) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Item* item = tile->ground) {
+		const ItemType& it = Item::items[item->getID()];
+		if (it.type == itemType) {
+			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
+			return 1;
+		}
+	}
+
+	if (const TileItemVector* items = tile->getItemList()) {
+		for (Item* item : *items) {
 			const ItemType& it = Item::items[item->getID()];
 			if (it.type == itemType) {
 				pushUserdata<Item>(L, item);
 				setItemMetatable(L, -1, item);
 				return 1;
-			}
-		}
-
-		if (const TileItemVector* items = tile->getItemList()) {
-			for (Item* item : *items) {
-				const ItemType& it = Item::items[item->getID()];
-				if (it.type == itemType) {
-					pushUserdata<Item>(L, item);
-					setItemMetatable(L, -1, item);
-					return 1;
-				}
 			}
 		}
 	}
@@ -5770,13 +5780,14 @@ int LuaScriptInterface::luaTileGetThingIndex(lua_State* L)
 {
 	// tile:getThingIndex(thing)
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		Thing* thing = getThing(L, 2);
-		if (thing) {
-			lua_pushnumber(L, tile->getThingIndex(thing));
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Thing* thing = getThing(L, 2);
+	if (thing) {
+		lua_pushnumber(L, tile->getThingIndex(thing));
 	} else {
 		lua_pushnil(L);
 	}
@@ -5819,13 +5830,14 @@ int LuaScriptInterface::luaTileGetHouse(lua_State* L)
 {
 	// tile:getHouse()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile) {
-		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
-			pushUserdata<House>(L, houseTile->getHouse());
-			setMetatable(L, -1, "House");
-		} else {
-			lua_pushnil(L);
-		}
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
+		pushUserdata<House>(L, houseTile->getHouse());
+		setMetatable(L, -1, "House");
 	} else {
 		lua_pushnil(L);
 	}

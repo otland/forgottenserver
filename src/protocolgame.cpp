@@ -1532,23 +1532,25 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	msg.addByte(0x7B);
 	msg.add<uint64_t>(player->getMoney());
 
-	std::map<uint32_t, uint32_t> saleMap;
+	std::map<uint16_t, uint32_t> saleMap;
 
 	if (shop.size() <= 5) {
 		// For very small shops it's not worth it to create the complete map
 		for (const ShopInfo& shopInfo : shop) {
-			if (shopInfo.sellPrice != 0) {
-				int8_t subtype = -1;
+			if (shopInfo.sellPrice == 0) {
+				continue;
+			}
 
-				const ItemType& itemType = Item::items[shopInfo.itemId];
-				if (itemType.hasSubType() && !itemType.stackable) {
-					subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
-				}
+			int8_t subtype = -1;
 
-				uint32_t count = player->getItemTypeCount(shopInfo.itemId, subtype);
-				if (count > 0) {
-					saleMap[shopInfo.itemId] = count;
-				}
+			const ItemType& itemType = Item::items[shopInfo.itemId];
+			if (itemType.hasSubType() && !itemType.stackable) {
+				subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
+			}
+
+			uint32_t count = player->getItemTypeCount(shopInfo.itemId, subtype);
+			if (count > 0) {
+				saleMap[shopInfo.itemId] = count;
 			}
 		}
 	} else {
@@ -1562,30 +1564,32 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 		// (That is, fluids such as potions etc., actually these items are very few since
 		// health potions now use their own ID)
 		for (const ShopInfo& shopInfo : shop) {
-			if (shopInfo.sellPrice != 0) {
-				int8_t subtype = -1;
+			if (shopInfo.sellPrice == 0) {
+				continue;
+			}
 
-				const ItemType& itemType = Item::items[shopInfo.itemId];
-				if (itemType.hasSubType() && !itemType.stackable) {
-					subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
+			int8_t subtype = -1;
+
+			const ItemType& itemType = Item::items[shopInfo.itemId];
+			if (itemType.hasSubType() && !itemType.stackable) {
+				subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
+			}
+
+			if (subtype != -1) {
+				uint32_t count;
+				if (!itemType.isFluidContainer() && !itemType.isSplash()) {
+					count = player->getItemTypeCount(shopInfo.itemId, subtype);    // This shop item requires extra checks
+				} else {
+					count = subtype;
 				}
 
-				if (subtype != -1) {
-					uint32_t count;
-					if (!itemType.isFluidContainer() && !itemType.isSplash()) {
-						count = player->getItemTypeCount(shopInfo.itemId, subtype);    // This shop item requires extra checks
-					} else {
-						count = subtype;
-					}
-
-					if (count > 0) {
-						saleMap[shopInfo.itemId] = count;
-					}
-				} else {
-					std::map<uint32_t, uint32_t>::const_iterator findIt = tempSaleMap.find(shopInfo.itemId);
-					if (findIt != tempSaleMap.end() && findIt->second > 0) {
-						saleMap[shopInfo.itemId] = findIt->second;
-					}
+				if (count > 0) {
+					saleMap[shopInfo.itemId] = count;
+				}
+			} else {
+				std::map<uint32_t, uint32_t>::const_iterator findIt = tempSaleMap.find(shopInfo.itemId);
+				if (findIt != tempSaleMap.end() && findIt->second > 0) {
+					saleMap[shopInfo.itemId] = findIt->second;
 				}
 			}
 		}
@@ -1595,7 +1599,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	msg.addByte(itemsToSend);
 
 	uint8_t i = 0;
-	for (std::map<uint32_t, uint32_t>::const_iterator it = saleMap.begin(); i < itemsToSend; ++it, ++i) {
+	for (std::map<uint16_t, uint32_t>::const_iterator it = saleMap.begin(); i < itemsToSend; ++it, ++i) {
 		msg.addItemId(it->first);
 		msg.addByte(std::min<uint32_t>(it->second, std::numeric_limits<uint8_t>::max()));
 	}
