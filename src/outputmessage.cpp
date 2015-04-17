@@ -30,7 +30,7 @@ OutputMessagePool::OutputMessagePool()
 
 void OutputMessagePool::startExecutionFrame()
 {
-	frameTime = OTSYS_TIME();
+	frameTime.store(OTSYS_TIME(),  std::memory_order_relaxed);
 }
 
 void OutputMessagePool::internalSend(const OutputMessage_ptr& msg) const
@@ -47,7 +47,7 @@ void OutputMessagePool::send(const OutputMessage_ptr& msg) const
 void OutputMessagePool::sendAll()
 {
 	//dispatcher thread
-	const auto currentFrameTime = frameTime.load();
+	const auto currentFrameTime = frameTime.load(std::memory_order_relaxed);
 	const int64_t dropTime = currentFrameTime - 10000;
 	const int64_t staleTime = currentFrameTime - 10;
 	static OutputMessageList autoSendBuffer;
@@ -94,7 +94,7 @@ std::vector<OutputMessage_ptr> OutputMessagePool::getOutputMessages(const std::v
 	for (const auto& protocol : protocols) {
 		auto connection = protocol->getConnection();
 		if (connection && m_open) {
-			ret.emplace_back(internalGetMessage(connection, false));
+			ret.emplace_back(internalGetMessage(std::move(connection), false));
 		}
 	}
 
@@ -110,7 +110,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(const Protocol_ptr& protoc
 		return msg;
 	}
 
-	msg = internalGetMessage(connection, autosend);
+	msg = internalGetMessage(std::move(connection), autosend);
 	return msg;
 }
 
@@ -141,6 +141,13 @@ class RebindingAllocator : std::allocator<T>
 				operator delete(p);
 			}
 		}
+		
+		~RebindingAllocator() {
+			getFreeList().consume_all([](T* ptr) {
+				operator delete(ptr);
+			});
+			
+		}
 	private:
 		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<OUTPUTMESSAGE_FREE_LIST_CAPACITY>> FreeList;
 		static FreeList& getFreeList() noexcept {
@@ -157,11 +164,11 @@ class OutputMessageAllocator
 		struct rebind {typedef RebindingAllocator<U> other;};
 };
 
-OutputMessage_ptr OutputMessagePool::internalGetMessage(const Connection_ptr& connection, const bool autosend)
+OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connection, const bool autosend)
 {
-	static OutputMessageAllocator alloc;
+	OutputMessageAllocator alloc;
 	assert(connection && connection->getProtocol());
-	auto msg = std::allocate_shared<OutputMessage>(alloc, connection, frameTime.load());
+	auto msg = std::allocate_shared<OutputMessage>(alloc, connection, frameTime.load(std::memory_order_relaxed));
 
 	if (autosend) {
 		msg->setState(OutputMessage::STATE_ALLOCATED);
