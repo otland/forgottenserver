@@ -2051,7 +2051,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getTopParent", LuaScriptInterface::luaItemGetTopParent);
 
 	registerMethod("Item", "getId", LuaScriptInterface::luaItemGetId);
-	registerMethod("Item", "getType", LuaScriptInterface::luaItemGetType);
 
 	registerMethod("Item", "clone", LuaScriptInterface::luaItemClone);
 	registerMethod("Item", "split", LuaScriptInterface::luaItemSplit);
@@ -6349,20 +6348,6 @@ int LuaScriptInterface::luaItemGetId(lua_State* L)
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		lua_pushnumber(L, item->getID());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaItemGetType(lua_State* L)
-{
-	// item:getType()
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		const ItemType& it = Item::items[item->getID()];
-		pushUserdata<const ItemType>(L, &it);
-		setMetatable(L, -1, "ItemType");
 	} else {
 		lua_pushnil(L);
 	}

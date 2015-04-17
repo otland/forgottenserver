@@ -710,7 +710,6 @@ class LuaScriptInterface
 		static int luaItemGetTopParent(lua_State* L);
 
 		static int luaItemGetId(lua_State* L);
-		static int luaItemGetType(lua_State* L);
 
 		static int luaItemClone(lua_State* L);
 		static int luaItemSplit(lua_State* L);
