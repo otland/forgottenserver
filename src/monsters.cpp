@@ -186,6 +186,121 @@ void MonsterType::createLoot(Container* corpse)
 	corpse->startDecaying();
 }
 
+void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string type) {
+	if (type == "attacks") {
+		if (!child->spellAttackList.empty()) {
+			for (spellBlock_t attacks : child->spellAttackList) {
+				root->spellAttackList.push_back(attacks);
+			}
+		}
+	} else if (type == "defenses") {
+		if (!child->spellDefenseList.empty()) {
+			for (spellBlock_t defenses : child->spellDefenseList) {
+				root->spellDefenseList.push_back(defenses);
+			}
+		}
+	} else if (type == "loot") {
+		if (!child->lootItems.empty()) {
+			for (LootBlock loot : child->lootItems) {
+				root->lootItems.push_back(loot);
+			}
+		}
+	} else if (type == "voices") {
+		if (!child->voiceVector.empty()) {
+			for (voiceBlock_t voices : child->voiceVector) {
+				root->voiceVector.push_back(voices);
+			}
+		}
+	}
+	else if (type == "summons") {
+		if (!child->summonList.empty()) {
+			for (summonBlock_t summons : child->summonList) {
+				root->summonList.push_back(summons);
+			}
+		}
+	} else if (type == "all") {
+		root->experience = child->experience;
+		root->hiddenHealth = child->hiddenHealth;
+		root->canPushCreatures = child->canPushCreatures;
+		root->canPushItems = child->canPushItems;
+		root->staticAttackChance = child->staticAttackChance;
+		root->maxSummons = child->maxSummons;
+		root->targetDistance = child->targetDistance;
+		root->runAwayHealth = child->runAwayHealth;
+		root->pushable = child->pushable;
+		root->baseSpeed = child->baseSpeed;
+		root->health = child->health;
+		root->healthMax = child->healthMax;
+
+		root->outfit.lookHead = child->outfit.lookHead;
+		root->outfit.lookBody = child->outfit.lookBody;
+		root->outfit.lookLegs = child->outfit.lookLegs;
+		root->outfit.lookFeet = child->outfit.lookFeet;
+		root->outfit.lookType = child->outfit.lookType;
+		root->outfit.lookTypeEx = child->outfit.lookTypeEx;
+		root->outfit.lookAddons = child->outfit.lookAddons;
+		root->outfit.lookMount = child->outfit.lookMount;
+		root->lookcorpse = child->lookcorpse;
+
+		root->skull = child->skull;
+		root->conditionImmunities = child->conditionImmunities;
+		root->damageImmunities = child->damageImmunities;
+		root->race = child->race;
+		root->isSummonable = child->isSummonable;
+		root->isIllusionable = child->isIllusionable;
+		root->isConvinceable = child->isConvinceable;
+		root->isAttackable = child->isAttackable;
+		root->isHostile = child->isHostile;
+		root->lightLevel = child->lightLevel;
+		root->lightColor = child->lightColor;
+		root->manaCost = child->manaCost;
+
+		root->elementMap[COMBAT_PHYSICALDAMAGE] = child->elementMap[COMBAT_PHYSICALDAMAGE];
+		root->elementMap[COMBAT_ICEDAMAGE] = child->elementMap[COMBAT_ICEDAMAGE];
+		root->elementMap[COMBAT_EARTHDAMAGE] = child->elementMap[COMBAT_EARTHDAMAGE];
+		root->elementMap[COMBAT_FIREDAMAGE] = child->elementMap[COMBAT_FIREDAMAGE];
+		root->elementMap[COMBAT_ENERGYDAMAGE] = child->elementMap[COMBAT_ENERGYDAMAGE];
+		root->elementMap[COMBAT_HOLYDAMAGE] = child->elementMap[COMBAT_HOLYDAMAGE];
+		root->elementMap[COMBAT_DEATHDAMAGE] = child->elementMap[COMBAT_DEATHDAMAGE];
+		root->elementMap[COMBAT_DROWNDAMAGE] = child->elementMap[COMBAT_DROWNDAMAGE];
+		root->elementMap[COMBAT_LIFEDRAIN] = child->elementMap[COMBAT_LIFEDRAIN];
+		root->elementMap[COMBAT_MANADRAIN] = child->elementMap[COMBAT_MANADRAIN];
+
+		if (!child->voiceVector.empty()) {
+			for (voiceBlock_t voices : child->voiceVector) {
+				root->voiceVector.push_back(voices);
+			}
+		}
+
+		if (!child->summonList.empty()) {
+			for (summonBlock_t summons : child->summonList) {
+				root->summonList.push_back(summons);
+			}
+		}
+	
+		if (!child->spellAttackList.empty()) {
+			for (spellBlock_t attacks : child->spellAttackList) {
+				root->spellAttackList.push_back(attacks);
+			}
+		}
+
+		if (!child->spellDefenseList.empty()) {
+			for (spellBlock_t defenses : child->spellDefenseList) {
+				root->spellDefenseList.push_back(defenses);
+			}
+		}
+
+		if (!child->lootItems.empty()) {
+			for (LootBlock loot : child->lootItems) {
+				root->lootItems.push_back(loot);
+			}
+		}
+
+	} else {
+		std::cout << "[Error - MonsterType::clone] unknown type" << std::endl;
+	}
+}
+
 std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 {
 	int32_t itemCount = 0;
@@ -1195,13 +1310,8 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		}
 	}
 
-	static uint32_t id = 0;
 	if (new_mType) {
-		std::string lowername = monster_name;
-		toLowerCaseString(lowername);
-
-		monsterNames[lowername] = ++id;
-		monsters[id] = mType;
+		addMonsterType(monster_name, mType);
 	}
 	return true;
 }
@@ -1288,4 +1398,14 @@ uint32_t Monsters::getIdByName(const std::string& name)
 		return 0;
 	}
 	return it->second;
+}
+
+void Monsters::addMonsterType(const std::string& name, MonsterType* mType)
+{
+	static uint32_t id = 0;
+	std::string lowername = name;
+	toLowerCaseString(lowername);
+
+	monsterNames[lowername] = ++id;
+	monsters[id] = mType;
 }

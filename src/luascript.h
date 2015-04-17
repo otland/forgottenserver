@@ -1192,9 +1192,56 @@ class LuaScriptInterface
 
 		static int luaConditionAddDamage(lua_State* L);
 
+		// NewMonsterType
+		static int luaNewMonsterTypeCreate(lua_State* L);
+
 		// MonsterType
 		static int luaMonsterTypeCreate(lua_State* L);
 
+		static int luaMonsterTypeCreateNew(lua_State* L);
+
+		static int luaMonsterTypeClone(lua_State* L);
+
+		// set informations
+		static int luaMonsterTypeSetName(lua_State* L);
+		static int luaMonsterTypeSetNameDescription(lua_State* L);
+		static int luaMonsterTypeSetMaxHealth(lua_State* L);
+		static int luaMonsterTypeSetHealth(lua_State* L);
+		static int luaMonsterTypeSetRunHealth(lua_State* L);
+		static int luaMonsterTypeSetExperience(lua_State* L);
+		static int luaMonsterTypeSetMaxSummons(lua_State* L);
+		static int luaMonsterTypeSetOutfit(lua_State* L);
+		static int luaMonsterTypeSetRace(lua_State* L);
+		static int luaMonsterTypeSetSkull(lua_State* L);
+		static int luaMonsterTypeSetCorpseId(lua_State* L);
+		static int luaMonsterTypeSetManaCost(lua_State* L);
+		static int luaMonsterTypeSetLight(lua_State* L);
+		static int luaMonsterTypeSetBaseSpeed(lua_State* L);
+		static int luaMonsterTypeSetChangeTarget(lua_State* L);
+
+		static int luaMonsterTypeSetIsAttackable(lua_State* L);
+		static int luaMonsterTypeSetIsConvinceable(lua_State* L);
+		static int luaMonsterTypeSetIsSummonable(lua_State* L);
+		static int luaMonsterTypeSetIsIllusionable(lua_State* L);
+		static int luaMonsterTypeSetIsHostile(lua_State* L);
+		static int luaMonsterTypeSetIsPushable(lua_State* L);
+		static int luaMonsterTypeSetIsHealthHidden(lua_State* L);
+
+		static int luaMonsterTypeSetCanPushItems(lua_State* L);
+		static int luaMonsterTypeSetCanPushCreatures(lua_State* L);
+
+		//static int luaMonsterTypeAddCombatImmunity(lua_State* L);
+		//static int luaMonsterTypeAddConditionImmunity(lua_State* L);
+		//static int luaMonsterTypeAddAttack(lua_State* L);
+		//static int luaMonsterTypeAddDefense(lua_State* L);
+		//static int luaMonsterTypeAddElement(lua_State* L);
+		static int luaMonsterTypeAddVoice(lua_State* L);
+		//static int luaMonsterTypeAddLoot(lua_State* L);
+		static int luaMonsterTypeAddSummon(lua_State* L);
+
+		static int luaMonsterTypeRegisterEvent(lua_State* L);
+
+		// get informations
 		static int luaMonsterTypeIsAttackable(lua_State* L);
 		static int luaMonsterTypeIsConvinceable(lua_State* L);
 		static int luaMonsterTypeIsSummonable(lua_State* L);

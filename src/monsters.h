@@ -144,6 +144,7 @@ class MonsterType
 
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);
+		void clone(MonsterType* root, MonsterType* child, const std::string type);
 		std::list<Item*> createLootItem(const LootBlock& lootblock);
 };
 
@@ -166,6 +167,7 @@ class Monsters
 		MonsterType* getMonsterType(const std::string& name);
 		MonsterType* getMonsterType(uint32_t mid);
 		uint32_t getIdByName(const std::string& name);
+		void addMonsterType(const std::string& name, MonsterType* mType);
 
 		static uint32_t getLootRandom();
 

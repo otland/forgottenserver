@@ -2553,10 +2553,54 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Condition", "addDamage", LuaScriptInterface::luaConditionAddDamage);
 
+	// NewMonsterType
+	registerClass("NewMonsterType", "", LuaScriptInterface::luaNewMonsterTypeCreate);
+
 	// MonsterType
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
 	registerMetaMethod("MonsterType", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMethod("MonsterType", "clone", LuaScriptInterface::luaMonsterTypeClone);
 
+	// set informations
+	registerMethod("MonsterType", "setName", LuaScriptInterface::luaMonsterTypeSetName);
+	registerMethod("MonsterType", "setNameDescription", LuaScriptInterface::luaMonsterTypeSetNameDescription);
+	registerMethod("MonsterType", "setMaxHealth", LuaScriptInterface::luaMonsterTypeSetMaxHealth);
+	registerMethod("MonsterType", "setHealth", LuaScriptInterface::luaMonsterTypeSetHealth);
+	registerMethod("MonsterType", "setRunHealth", LuaScriptInterface::luaMonsterTypeSetRunHealth);
+	registerMethod("MonsterType", "setExperience", LuaScriptInterface::luaMonsterTypeSetExperience);
+	registerMethod("MonsterType", "setMaxSummons", LuaScriptInterface::luaMonsterTypeSetMaxSummons);
+	registerMethod("MonsterType", "setOutfit", LuaScriptInterface::luaMonsterTypeSetOutfit);
+	registerMethod("MonsterType", "setRace", LuaScriptInterface::luaMonsterTypeSetRace);
+	registerMethod("MonsterType", "setSkull", LuaScriptInterface::luaMonsterTypeSetSkull);
+	registerMethod("MonsterType", "setCorpseId", LuaScriptInterface::luaMonsterTypeSetCorpseId);
+	registerMethod("MonsterType", "setManaCost", LuaScriptInterface::luaMonsterTypeSetManaCost);
+	registerMethod("MonsterType", "setLight", LuaScriptInterface::luaMonsterTypeSetLight);
+	registerMethod("MonsterType", "setBaseSpeed", LuaScriptInterface::luaMonsterTypeSetBaseSpeed);
+	registerMethod("MonsterType", "setChangeTarget", LuaScriptInterface::luaMonsterTypeSetChangeTarget);
+
+	registerMethod("MonsterType", "setIsAttackable", LuaScriptInterface::luaMonsterTypeSetIsAttackable);
+	registerMethod("MonsterType", "setIsConvinceable", LuaScriptInterface::luaMonsterTypeSetIsConvinceable);
+	registerMethod("MonsterType", "setIsSummonable", LuaScriptInterface::luaMonsterTypeSetIsSummonable);
+	registerMethod("MonsterType", "setIsIllusionable", LuaScriptInterface::luaMonsterTypeSetIsIllusionable);
+	registerMethod("MonsterType", "setIsHostile", LuaScriptInterface::luaMonsterTypeSetIsHostile);
+	registerMethod("MonsterType", "setIsPushable", LuaScriptInterface::luaMonsterTypeSetIsPushable);
+	registerMethod("MonsterType", "setIsHealthHidden", LuaScriptInterface::luaMonsterTypeSetIsHealthHidden);
+
+	registerMethod("MonsterType", "setCanPushItems", LuaScriptInterface::luaMonsterTypeSetCanPushItems);
+	registerMethod("MonsterType", "setCanPushCreatures", LuaScriptInterface::luaMonsterTypeSetCanPushCreatures);
+
+	//registerMethod("MonsterType", "addCombatImmunity", LuaScriptInterface::luaMonsterTypeAddCombatImmunity);
+	//registerMethod("MonsterType", "addConditionImmunity", LuaScriptInterface::luaMonsterTypeAddConditionImmunity);
+	//registerMethod("MonsterType", "addAttack", LuaScriptInterface::luaMonsterTypeAddAttack);
+	//registerMethod("MonsterType", "addDefense", LuaScriptInterface::luaMonsterTypeAddDefense);
+	//registerMethod("MonsterType", "addElement", LuaScriptInterface::luaMonsterTypeAddElement);
+	registerMethod("MonsterType", "addVoice", LuaScriptInterface::luaMonsterTypeAddVoice);
+	//registerMethod("MonsterType", "addLoot", LuaScriptInterface::luaMonsterTypeAddLoot);
+	registerMethod("MonsterType", "addSummon", LuaScriptInterface::luaMonsterTypeAddSummon);
+
+	registerMethod("MonsterType", "registerEvent", LuaScriptInterface::luaMonsterTypeRegisterEvent);
+
+	// get informations
 	registerMethod("MonsterType", "isAttackable", LuaScriptInterface::luaMonsterTypeIsAttackable);
 	registerMethod("MonsterType", "isConvinceable", LuaScriptInterface::luaMonsterTypeIsConvinceable);
 	registerMethod("MonsterType", "isSummonable", LuaScriptInterface::luaMonsterTypeIsSummonable);
@@ -11820,7 +11864,32 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 	return 1;
 }
 
-// MonsterType
+// NewMonsterType
+int32_t LuaScriptInterface::luaNewMonsterTypeCreate(lua_State* L)
+{
+	// NewMonsterType(name)
+	// if a monster name is inserted which exists already, it will push to the MonsterType table.
+	MonsterType* mType = nullptr;
+	if (isString(L, 2)) {
+		mType = g_monsters.getMonsterType(getString(L, 2));
+		if (mType == nullptr) {
+			mType = new MonsterType();
+			std::string name = getString(L, 2);
+			mType->name = name;
+			g_monsters.addMonsterType(name, mType);
+		}
+	}
+
+	if (mType) {
+		pushUserdata<MonsterType>(L, mType);
+		setMetatable(L, -1, "MonsterType");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// MonsterType /
 int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 {
 	// MonsterType(id or name)
@@ -11840,6 +11909,460 @@ int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 	return 1;
 }
 
+// set informations
+int32_t LuaScriptInterface::luaMonsterTypeSetName(lua_State* L)
+{
+	// monsterType:setName()
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->name = getString(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetNameDescription(lua_State* L)
+{
+	// monsterType:setNameDescription(desc)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->nameDescription = getString(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetMaxHealth(lua_State* L)
+{
+	// monsterType:setMaxHealth(health)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->healthMax = getNumber<int32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetHealth(lua_State* L)
+{
+	// monsterType:setHealth(health)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->health = getNumber<int32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetRunHealth(lua_State* L)
+{
+	// monsterType:setRunHealth(health)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->runAwayHealth = getNumber<int32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetExperience(lua_State* L)
+{
+	// monsterType:setExperience(exp)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->experience = getNumber<uint64_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetMaxSummons(lua_State* L)
+{
+	// monsterType:setMaxSummons(max)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->maxSummons = getNumber<uint32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetOutfit(lua_State* L)
+{
+	// monsterType:setOutfit(outfit)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->outfit = getOutfit(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetRace(lua_State* L)
+{
+	// monsterType:setRace(race)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	std::string race = getString(L, 2);
+	if (monsterType) {
+		if (race == "venom") {
+			monsterType->race = RACE_VENOM;
+			pushBoolean(L, true);
+		} else if (race == "blood") {
+			monsterType->race = RACE_BLOOD;
+			pushBoolean(L, true);
+		} else if (race == "undead") {
+			monsterType->race = RACE_UNDEAD;
+			pushBoolean(L, true);
+		} else if (race == "fire") {
+			monsterType->race = RACE_FIRE;
+			pushBoolean(L, true);
+		} else if (race == "energy") {
+			monsterType->race = RACE_ENERGY;
+			pushBoolean(L, true);
+		} else {
+			std::cout << "[Warning - Monsters::loadMonster] Unknown race type " << race << "." << std::endl;
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetSkull(lua_State* L)
+{
+	// monsterType:setSkull(skull)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->skull = getSkullType(getString(L, 2));
+		pushBoolean(L, true);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetCorpseId(lua_State* L)
+{
+	// monsterType:setCorpseId(itemid)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->lookcorpse = getNumber<uint16_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetManaCost(lua_State* L)
+{
+	// monsterType:setManaCost(cost)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->manaCost = getNumber<uint32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetLight(lua_State* L)
+{
+	// monsterType:setLight(color, level)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->lightColor = getNumber<uint8_t>(L, 2);
+		monsterType->lightLevel = getNumber<uint8_t>(L, 3);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetBaseSpeed(lua_State* L)
+{
+	// monsterType:setBaseSpeed(speed)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->baseSpeed = getNumber<uint32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetChangeTarget(lua_State* L)
+{
+	// monsterType:setChangeTarget(chance, speed)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->changeTargetChance = getNumber<int32_t>(L, 2);
+		monsterType->changeTargetSpeed = getNumber<uint32_t>(L, 3);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetIsAttackable(lua_State* L)
+{
+	// monsterType:setIsAttackable(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->isAttackable = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetIsConvinceable(lua_State* L)
+{
+	// monsterType:setIsConvinceable(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->isConvinceable = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetIsSummonable(lua_State* L)
+{
+	// monsterType:setIsSummonable(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->isSummonable = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetIsIllusionable(lua_State* L)
+{
+	// monsterType:setIsIllusionable(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->isIllusionable = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetIsHostile(lua_State* L)
+{
+	// monsterType:setIsHostile(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->isHostile = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetIsPushable(lua_State* L)
+{
+	// monsterType:setIsPushable(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->pushable = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetIsHealthHidden(lua_State* L)
+{
+	// monsterType:setIsHealthHidden(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->hiddenHealth = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetCanPushItems(lua_State* L)
+{
+	// monsterType:setCanPushItems(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->canPushItems = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetCanPushCreatures(lua_State* L)
+{
+	// monsterType:setCanPushCreatures(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->canPushCreatures = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+/*
+int LuaScriptInterface::luaMonsterTypeAddCombatImmunity(lua_State* L)
+{
+	// monsterType:addCombatImmunity(type)
+	// TODO
+	return 1;
+}
+
+
+int LuaScriptInterface::luaMonsterTypeAddConditionImmunity(lua_State* L)
+{
+	// monsterType:addConditionImmunity(type)
+	// TODO
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeAddAttack(lua_State* L)
+{
+	// monsterType:addAttack(attack)
+	// TODO
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeAddDefense(lua_State* L)
+{
+	// monsterType:addDefense(defense)
+	// TODO
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeAddElement(lua_State* L)
+{
+	// monsterType:addElement(type)
+	// TODO
+	return 1;
+}
+*/
+
+int LuaScriptInterface::luaMonsterTypeAddVoice(lua_State* L)
+{
+	// monsterType:addVoice(sentence, interval, chance, yell)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		voiceBlock_t voice;
+		voice.text = getString(L, 2);
+		monsterType->yellSpeedTicks = getNumber<uint32_t>(L, 3);
+		monsterType->yellChance = getNumber<uint32_t>(L, 4);
+		voice.yellText = getBoolean(L, 5);
+		monsterType->voiceVector.push_back(voice);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+/*
+int LuaScriptInterface::luaMonsterTypeAddLoot(lua_State* L)
+{
+	// monsterType:addLoot(loot)
+	// TODO
+	return 1;
+}
+*/
+
+int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
+{
+	// monsterType:addSummon(name, interval, chance)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		summonBlock_t summon;
+		summon.name = getString(L, 2);
+		summon.chance = getNumber<int32_t>(L, 3);
+		summon.speed = getNumber<int32_t>(L, 4);
+		monsterType->summonList.push_back(summon);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeRegisterEvent(lua_State* L)
+{
+	// monsterType:registerEvent(name)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->scriptList.push_back(getString(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeClone(lua_State* L)
+{
+	// monsterType:clone(name, type)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	MonsterType* clone = g_monsters.getMonsterType(getString(L, 2));
+	std::string type = getString(L, 3);
+
+	if (clone) {
+		pushUserdata<MonsterType>(L, clone);
+		setMetatable(L, -1, "MonsterType");
+	} else {
+		lua_pushnil(L);
+	}
+
+	if (monsterType) {
+		monsterType->clone(monsterType, clone, type);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+
+//get informations
 int LuaScriptInterface::luaMonsterTypeIsAttackable(lua_State* L)
 {
 	// monsterType:isAttackable()
