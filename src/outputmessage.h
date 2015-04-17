@@ -38,7 +38,7 @@ class OutputMessage : public NetworkMessage
 			STATE_ALLOCATED,
 			STATE_ALLOCATED_NO_AUTOSEND,
 		};
-		OutputMessage(const Connection_ptr& connection, const int64_t frame):
+		OutputMessage(Connection_ptr&& connection, const int64_t frame):
 			connection(connection),
 			frame(frame),
 			outputBufferStart(INITIAL_BUFFER_POSITION),
@@ -152,7 +152,7 @@ class OutputMessagePool
 
 	protected:
 		typedef std::list<OutputMessage_ptr> OutputMessageList;
-		OutputMessage_ptr internalGetMessage(const Connection_ptr& connection, const bool autosend);
+		OutputMessage_ptr internalGetMessage(Connection_ptr&& connection, const bool autosend);
 		void internalSend(const OutputMessage_ptr& msg) const;
 		OutputMessageList autoSendOutputMessages;
 		OutputMessageList toAddQueue;
