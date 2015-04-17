@@ -144,7 +144,7 @@ class MonsterType
 
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);
-		void clone(MonsterType* root, MonsterType* child, const std::string type);
+		void clone(MonsterType* root, MonsterType* child, const std::string& type);
 		std::list<Item*> createLootItem(const LootBlock& lootblock);
 };
 

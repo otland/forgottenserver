@@ -1,28 +1,49 @@
 -- a testing layout
-local test = NewMonsterType("Test")
-test:setNameDescription("a test")
-test:setExperience(5000)
-test:setOutfit({lookType = 698, lookMount = 368, lookAddons = 3})
-test:setMaxHealth(2)
-test:setHealth(2)
-test:setRunHealth(1)
-test:setMaxSummons(3)
-test:setRace("fire")
-test:setManaCost(200)
-test:setBaseSpeed(250)
-test:setCorpseId(1987)
-test:setIsAttackable(true)
-test:setIsHealthHidden(false)
-test:isConvinceable(true)
-test:isIllusionable(false)
-test:isHostile(false)
-test:isPushable(true)
-test:setCanPushItems(true)
-test:setCanPushCreatures(true)
-test:addVoice("works", 5000, 10000, false)
-test:addVoice("I can talk", 5000, 10000, false)
-test:addVoice("testzor", 5000, 10000, false)
-test:setSkull("black")
-test:addSummon("Demon", 5000, 10000)
+local test = NewMonsterType('Test')
+local monster = {}
+monster.description = 'a Test'
+monster.experience = 5000
+monster.outfit = {
+    lookType = 698,
+    lookMount = 368,
+    lookAddons = 3
+}
+
+monster.health = 5000
+monster.maxHealth = monster.health
+monster.race = 'fire'
+monster.skull = "black"
+
+monster.flags = {
+    attackable = true,
+    hiddenHealth = false,
+    convinceable = true
+}
+
+monster.voices = {
+    {
+		text = 'Works', 
+		interval = 5000, 
+		chance = 10000, 
+		yell = false
+	},
+    {
+		text = 'I can talk', 
+		interval = 5000, 
+		chance = 10000, 
+		yell = false
+	},
+    {
+		text = 'Test', 
+		interval = 5000, 
+		chance = 10000, 
+		yell = false
+	}
+}
+
+test:register(monster)
+
+
+
 
 

@@ -1,14 +1,13 @@
-dofile('data/lib/lib.lua')
-function loadMonsters()
-	print(">> Loading lua monsters")
-	local cmd = jit.os == "Windows" and [[cd "data\monster\" && dir *.lua /b/s]] or "cd data/monster && find . -type f | grep .lua"
+function loadDirectory(dir)
+	local cmd = jit.os == "Windows" and "cd ".. dir .." && dir *.lua /b/s" or "cd ".. dir .." && find . -type f | grep .lua"
 	for path in io.popen(cmd):lines() do
 		if path then
 			dofile(path)
 		end
 	end
 end
-loadMonsters()
+loadDirectory("data/lib/")
+loadDirectory("data/monster/")
 
 STORAGEVALUE_PROMOTION = 30018
 

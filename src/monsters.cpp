@@ -186,7 +186,7 @@ void MonsterType::createLoot(Container* corpse)
 	corpse->startDecaying();
 }
 
-void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string type) {
+void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string& type) {
 	if (type == "attacks") {
 		if (!child->spellAttackList.empty()) {
 			for (spellBlock_t attacks : child->spellAttackList) {
