@@ -248,17 +248,15 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 
 Action* Actions::getAction(const Item* item)
 {
-	uint16_t uniqueId = item->getUniqueId();
-	if (uniqueId != 0) {
-		auto it = uniqueItemMap.find(uniqueId);
+	if (item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+		auto it = uniqueItemMap.find(item->getUniqueId());
 		if (it != uniqueItemMap.end()) {
 			return it->second;
 		}
 	}
 
-	uint16_t actionId = item->getActionId();
-	if (actionId != 0) {
-		auto it = actionItemMap.find(actionId);
+	if (item->hasAttribute(ITEM_ATTRIBUTE_ACTIONID)) {
+		auto it = actionItemMap.find(item->getActionId());
 		if (it != actionItemMap.end()) {
 			return it->second;
 		}

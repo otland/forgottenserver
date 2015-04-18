@@ -138,11 +138,8 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 	}
 
 	Item* item = thing->getItem();
-	if (item) {
-		uint16_t uid = item->getUniqueId();
-		if (uid != 0) {
-			return uid;
-		}
+	if (item && item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+		return item->getUniqueId();
 	}
 
 	for (const auto& it : localMap) {
