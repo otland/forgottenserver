@@ -5500,12 +5500,11 @@ Item* Game::getUniqueItem(uint16_t uniqueId)
 
 bool Game::addUniqueItem(uint16_t uniqueId, Item* item)
 {
-	auto it = uniqueItems.insert(std::make_pair(uniqueId, item));
-	if (!it.second) {
+	auto result = uniqueItems.emplace(uniqueId, item);
+	if (!result.second) {
 		std::cout << "Duplicate unique id: " << uniqueId << std::endl;
-		return false;
 	}
-	return true;
+	return result.second;
 }
 
 void Game::removeUniqueItem(uint16_t uniqueId)

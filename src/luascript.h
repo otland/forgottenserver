@@ -175,7 +175,7 @@ class ScriptEnvironment
 		//script event desc
 		std::string m_eventdesc;
 
-		//item/creature map
+		//local item map
 		uint32_t m_lastUID;
 		std::unordered_map<uint32_t, Item*> localMap;
 

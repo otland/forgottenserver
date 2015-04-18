@@ -191,7 +191,7 @@ DBResult::DBResult(MYSQL_RES* res)
 {
 	handle = res;
 
-	int32_t i = 0;
+	size_t i = 0;
 
 	MYSQL_FIELD* field = mysql_fetch_field(handle);
 	while (field) {

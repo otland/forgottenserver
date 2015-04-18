@@ -179,7 +179,7 @@ class DBResult
 		MYSQL_RES* handle;
 		MYSQL_ROW row;
 
-		std::map<std::string, uint32_t> listNames;
+		std::map<std::string, size_t> listNames;
 
 	friend class Database;
 };

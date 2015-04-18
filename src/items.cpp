@@ -308,9 +308,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 			}
 		}
 
-		if (reverseItemMap.find(clientId) == reverseItemMap.end()) {
-			reverseItemMap[clientId] = serverId;
-		}
+		reverseItemMap.emplace(clientId, serverId);
 
 		// store the found item
 		if (serverId >= items.size()) {

@@ -38,23 +38,15 @@ bool PrivateChatChannel::isInvited(uint32_t guid) const
 
 bool PrivateChatChannel::removeInvite(uint32_t guid)
 {
-	auto it = m_invites.find(guid);
-	if (it == m_invites.end()) {
-		return false;
-	}
-
-	m_invites.erase(it);
-	return true;
+	return m_invites.erase(guid) != 0;
 }
 
 void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer)
 {
-	auto it = m_invites.find(player.getGUID());
-	if (it != m_invites.end()) {
+	auto result = m_invites.emplace(player.getGUID(), &player);
+	if (!result.second) {
 		return;
 	}
-
-	m_invites[player.getGUID()] = &player;
 
 	std::ostringstream ss;
 	ss << player.getName() << " invites you to " << (player.getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " private chat channel.";

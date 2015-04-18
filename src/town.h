@@ -67,13 +67,7 @@ class Towns
 		Towns& operator=(const Towns&) = delete;
 
 		bool addTown(uint32_t townId, Town* town) {
-			auto it = townMap.find(townId);
-			if (it != townMap.end()) {
-				return false;
-			}
-
-			townMap[townId] = town;
-			return true;
+			return townMap.emplace(townId, town).second;
 		}
 
 		Town* getTown(const std::string& townName) const {

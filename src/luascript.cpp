@@ -157,8 +157,8 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 
 void ScriptEnvironment::insertItem(uint32_t uid, Item* item)
 {
-	auto it = localMap.insert(std::make_pair(uid, item));
-	if (!it.second) {
+	auto result = localMap.emplace(uid, item);
+	if (!result.second) {
 		std::cout << std::endl << "Lua Script Error: Thing uid already taken.";
 	}
 }
@@ -651,7 +651,9 @@ void LuaScriptInterface::setWeakMetatable(lua_State* L, int32_t index, const std
 {
 	static std::set<std::string> weakObjectTypes;
 	const std::string& weakName = name + "_weak";
-	if (weakObjectTypes.find(name) == weakObjectTypes.end()) {
+
+	auto result = weakObjectTypes.emplace(name);
+	if (result.second) {
 		luaL_getmetatable(L, name.c_str());
 		int childMetatable = lua_gettop(L);
 
@@ -674,7 +676,6 @@ void LuaScriptInterface::setWeakMetatable(lua_State* L, int32_t index, const std
 		lua_setfield(L, metatable, "__gc");
 
 		lua_remove(L, childMetatable);
-		weakObjectTypes.insert(name);
 	} else {
 		luaL_getmetatable(L, weakName.c_str());
 	}

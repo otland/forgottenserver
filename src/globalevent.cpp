@@ -74,25 +74,21 @@ bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 {
 	GlobalEvent* globalEvent = reinterpret_cast<GlobalEvent*>(event);
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
-		GlobalEventMap::iterator it = timerMap.find(globalEvent->getName());
-		if (it == timerMap.end()) {
-			timerMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
+		auto result = timerMap.emplace(globalEvent->getName(), globalEvent);
+		if (result.second) {
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
-
 			return true;
 		}
 	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
-		GlobalEventMap::iterator it = serverMap.find(globalEvent->getName());
-		if (it == serverMap.end()) {
-			serverMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
+		auto result = serverMap.emplace(globalEvent->getName(), globalEvent);
+		if (result.second) {
 			return true;
 		}
 	} else { // think event
-		auto it = thinkMap.find(globalEvent->getName());
-		if (it == thinkMap.end()) {
-			thinkMap.insert(std::make_pair(globalEvent->getName(), globalEvent));
+		auto result = thinkMap.emplace(globalEvent->getName(), globalEvent);
+		if (result.second) {
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}

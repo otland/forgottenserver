@@ -2390,13 +2390,11 @@ bool Player::addVIP(uint32_t _guid, const std::string& name, VipStatus_t status)
 		return false;
 	}
 
-	auto it = VIPList.find(_guid);
-	if (it != VIPList.end()) {
+	auto result = VIPList.insert(_guid);
+	if (!result.second) {
 		sendTextMessage(MESSAGE_STATUS_SMALL, "This player is already in your list.");
 		return false;
 	}
-
-	VIPList.insert(_guid);
 
 	IOLoginData::addVIPEntry(accountNumber, _guid, "", 0, false);
 
@@ -2417,13 +2415,7 @@ bool Player::addVIPInternal(uint32_t _guid)
 		return false;
 	}
 
-	auto it = VIPList.find(_guid);
-	if (it != VIPList.end()) {
-		return false;
-	}
-
-	VIPList.insert(_guid);
-	return true;
+	return VIPList.insert(_guid).second;
 }
 
 bool Player::editVIP(uint32_t _guid, const std::string& description, uint32_t icon, bool notify)
