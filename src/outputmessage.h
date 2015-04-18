@@ -24,7 +24,7 @@
 #include "connection.h"
 #include "tools.h"
 #include <atomic>
-#include <boost/lockfree/stack.hpp>
+#include <limits>
 
 const uint16_t OUTPUTMESSAGE_FREE_LIST_CAPACITY = 4096;
 
@@ -39,7 +39,7 @@ class OutputMessage : public NetworkMessage
 			STATE_ALLOCATED_NO_AUTOSEND,
 		};
 		OutputMessage(Connection_ptr&& connection, const int64_t frame):
-			connection(connection),
+			connection(std::move(connection)),
 			frame(frame),
 			outputBufferStart(INITIAL_BUFFER_POSITION),
 			state(STATE_FREE) {}
@@ -95,7 +95,7 @@ class OutputMessage : public NetworkMessage
 	protected:
 		template <typename T>
 		inline void add_header(T add) {
-			assert(outputBufferStart < sizeof(T));
+			assert(outputBufferStart >= sizeof(T));
 			outputBufferStart -= sizeof(T);
 			*reinterpret_cast<T*>(buffer + outputBufferStart) = add;
 			//added header size to the message size
@@ -137,7 +137,7 @@ class OutputMessagePool
 		void send(const OutputMessage_ptr& msg) const;
 		void sendAll();
 		void stop() {
-			m_open = false;
+			m_open.store(false, std::memory_order_relaxed);
 		}
 
 		OutputMessage_ptr getOutputMessage(const Protocol_ptr& protocol, const bool autosend);
@@ -158,7 +158,108 @@ class OutputMessagePool
 		OutputMessageList toAddQueue;
 		std::mutex outputPoolLock;
 		std::atomic<int64_t> frameTime;
-		std::atomic<bool> m_open;
+		std::atomic<bool> m_open {true};
+};
+
+template <typename T, uint16_t SPECIFIED_CAPACITY>
+class LockfreeBoundedStack {
+	private:
+		static constexpr uint16_t CAPACITY = SPECIFIED_CAPACITY+1;
+		static_assert(SPECIFIED_CAPACITY != 0 && SPECIFIED_CAPACITY < std::numeric_limits<uint16_t>::max(), "Specified capacity out of range.");
+		struct _Node 
+		{
+			static constexpr uint16_t END = 0;
+			uint16_t generation;
+			uint16_t index;
+			uint16_t nextNode;
+			uint16_t UNUSED;
+			operator bool () const noexcept {
+				return index != END;
+			}
+		};
+		static_assert(sizeof(_Node) == sizeof(uint64_t), "Invalid node size.");
+		union Node{
+			Node() = default;
+			Node(uint64_t value): asInt(value) {}
+			_Node asNode;
+			uint64_t asInt;
+			operator bool() const noexcept {
+				return asNode;
+			}
+
+			const _Node* operator->() const noexcept {
+				return &asNode;
+			}
+
+			_Node* operator->() noexcept {
+				return &asNode;
+			}
+		};
+	public:
+		LockfreeBoundedStack() {
+			for (uint16_t i = 1; i < CAPACITY; ++i) {
+				nodes[i].asNode.index = i;
+				
+				internal_push(freeNodes, nodes[i]);
+			}
+		}
+
+		bool pop(T& ret) noexcept {
+			if (auto node = internal_pop(head)) {
+				ret = getPayload(node);
+				internal_push(freeNodes, node);
+				return true;
+			}
+
+			return false;
+		}
+
+		bool push(const T& value) noexcept {
+			if (auto node = internal_pop(freeNodes)) {
+				getPayload(node) = value;
+				internal_push(head, node);
+				return true;
+			}
+
+			return false;
+		}
+	private:
+		Node internal_pop(std::atomic<Node>& listHead) noexcept {
+			Node cur_head, nextNode;
+			do {
+				cur_head = listHead.load();
+				if (!cur_head) {
+					break;
+				}
+				nextNode = getNextNode(cur_head);
+
+			} while (!listHead.compare_exchange_weak(cur_head, nextNode));
+
+			return cur_head;
+		}
+
+		void internal_push(std::atomic<Node>& listHead, Node& newNode) noexcept {
+			auto cur_head = listHead.load();
+			newNode->nextNode = cur_head->index;
+			newNode->generation++;
+			while (!listHead.compare_exchange_weak(cur_head, newNode)) {
+				newNode->nextNode = cur_head->index;
+			}
+		}
+
+		T& getPayload(const Node& node) noexcept {
+			assert(node);
+			return payloads[node->index];
+		}
+
+		const Node& getNextNode(const Node& node) const noexcept {
+			return nodes[node->nextNode];
+		}
+		Node nodes[CAPACITY];
+		T payloads[CAPACITY];
+
+		std::atomic<Node> freeNodes {0};
+		std::atomic<Node> head {0};
 };
 
 #endif

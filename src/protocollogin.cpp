@@ -165,7 +165,11 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	BanInfo banInfo;
-	if (IOBan::isIpBanned(getConnection()->getIP(), banInfo)) {
+	auto connection = getConnection();
+	if (!connection) {
+		return;
+	}
+	if (IOBan::isIpBanned(connection->getIP(), banInfo)) {
 		if (banInfo.reason.empty()) {
 			banInfo.reason = "(none)";
 		}
