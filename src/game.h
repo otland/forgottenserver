@@ -494,11 +494,16 @@ class Game
 		void setBedSleeper(BedItem* bed, uint32_t guid);
 		void removeBedSleeper(uint32_t guid);
 
+		Item* getUniqueItem(uint16_t uniqueId);
+		bool addUniqueItem(uint16_t uniqueId, Item* item);
+		void removeUniqueItem(uint16_t uniqueId);
+
 		Groups groups;
 		Map map;
 		Mounts mounts;
 		Raids raids;
 		Quests quests;
+
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
@@ -513,6 +518,7 @@ class Game
 		std::unordered_map<uint32_t, Player*> players;
 		std::unordered_map<std::string, Player*> mappedPlayerNames;
 		std::unordered_map<uint32_t, Guild*> guilds;
+		std::unordered_map<uint16_t, Item*> uniqueItems;
 		std::map<uint32_t, uint32_t> stages;
 
 		std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];

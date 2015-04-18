@@ -261,7 +261,7 @@ void Item::onRemoved()
 	ScriptEnvironment::removeTempItem(this);
 
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
-		ScriptEnvironment::removeUniqueThing(this);
+		g_game.removeUniqueItem(getUniqueId());
 	}
 }
 
@@ -1472,8 +1472,9 @@ void Item::setUniqueId(uint16_t n)
 		return;
 	}
 
-	getAttributes()->setUniqueId(n);
-	ScriptEnvironment::addUniqueThing(this);
+	if (g_game.addUniqueItem(n, this)) {
+		getAttributes()->setUniqueId(n);
+	}
 }
 
 bool Item::canDecay() const

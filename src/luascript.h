@@ -143,10 +143,8 @@ class ScriptEnvironment
 
 		static void addTempItem(ScriptEnvironment* env, Item* item);
 		static void removeTempItem(Item* item);
-		static void addUniqueThing(Thing* thing);
-		static void removeUniqueThing(Thing* thing);
 		uint32_t addThing(Thing* thing);
-		void insertThing(uint32_t uid, Thing* thing);
+		void insertItem(uint32_t uid, Item* item);
 
 		static DBResult_ptr getResultByID(uint32_t id);
 		static uint32_t addResult(DBResult_ptr res);
@@ -165,7 +163,6 @@ class ScriptEnvironment
 		void removeItemByUID(uint32_t uid);
 
 	private:
-		typedef std::unordered_map<uint32_t, Thing*> ThingMap;
 		typedef std::vector<const LuaVariant*> VariantVector;
 		typedef std::map<uint32_t, int32_t> StorageMap;
 		typedef std::map<uint32_t, DBResult_ptr> DBResultMap;
@@ -178,12 +175,9 @@ class ScriptEnvironment
 		//script event desc
 		std::string m_eventdesc;
 
-		//unique id map
-		static ThingMap m_globalMap;
-
 		//item/creature map
 		uint32_t m_lastUID;
-		ThingMap m_localMap;
+		std::unordered_map<uint32_t, Item*> localMap;
 
 		//temporary item list
 		typedef std::map<ScriptEnvironment*, std::list<Item*>> TempItemListMap;

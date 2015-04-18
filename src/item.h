@@ -148,10 +148,6 @@ class ItemAttributes
 		}
 
 		void setActionId(uint16_t n) {
-			if (n < 100) {
-				n = 100;
-			}
-
 			setIntAttr(ITEM_ATTRIBUTE_ACTIONID, n);
 		}
 		uint16_t getActionId() const {
@@ -159,10 +155,6 @@ class ItemAttributes
 		}
 
 		void setUniqueId(uint16_t n) {
-			if (n < 1000) {
-				n = 1000;
-			}
-
 			setIntAttr(ITEM_ATTRIBUTE_UNIQUEID, n);
 		}
 		uint16_t getUniqueId() const {

@@ -60,8 +60,6 @@ enum {
 	EVENT_ID_USER = 1000,
 };
 
-ScriptEnvironment::ThingMap ScriptEnvironment::m_globalMap;
-
 ScriptEnvironment::DBResultMap ScriptEnvironment::m_tempResults;
 uint32_t ScriptEnvironment::m_lastResultId = 0;
 
@@ -73,7 +71,7 @@ ScriptEnvironment::ScriptEnvironment()
 {
 	m_curNpc = nullptr;
 	resetEnv();
-	m_lastUID = 70000;
+	m_lastUID = std::numeric_limits<uint16_t>::max();
 }
 
 ScriptEnvironment::~ScriptEnvironment()
@@ -87,7 +85,7 @@ void ScriptEnvironment::resetEnv()
 	m_callbackId = 0;
 	m_timerEvent = false;
 	m_interface = nullptr;
-	m_localMap.clear();
+	localMap.clear();
 	m_tempResults.clear();
 
 	auto it = m_tempItems.find(this);
@@ -128,40 +126,6 @@ void ScriptEnvironment::getEventInfo(int32_t& scriptId, std::string& desc, LuaSc
 	timerEvent = m_timerEvent;
 }
 
-void ScriptEnvironment::addUniqueThing(Thing* thing)
-{
-	Item* item = thing->getItem();
-	if (!item) {
-		return;
-	}
-
-	uint16_t uniqueId = item->getUniqueId();
-	if (uniqueId != 0) {
-		auto it = m_globalMap.find(uniqueId);
-		if (it == m_globalMap.end()) {
-			m_globalMap[uniqueId] = thing;
-		} else {
-			std::cout << "Duplicate uniqueId " << uniqueId << std::endl;
-		}
-	}
-}
-
-void ScriptEnvironment::removeUniqueThing(Thing* thing)
-{
-	Item* item = thing->getItem();
-	if (!item) {
-		return;
-	}
-
-	uint16_t uniqueId = item->getUniqueId();
-	if (uniqueId != 0) {
-		auto it = m_globalMap.find(uniqueId);
-		if (it != m_globalMap.end()) {
-			m_globalMap.erase(it);
-		}
-	}
-}
-
 uint32_t ScriptEnvironment::addThing(Thing* thing)
 {
 	if (!thing || thing->isRemoved()) {
@@ -176,45 +140,25 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 	Item* item = thing->getItem();
 	if (item) {
 		uint16_t uid = item->getUniqueId();
-		if (uid > 0) {
-			bool isOnTile = false;
-
-			const Cylinder* parent = item->getParent();
-			if (item->getTile() == parent) {
-				isOnTile = true;
-			} else if (parent) {
-				const Container* parentContainer = parent->getContainer();
-				if (parentContainer && parentContainer->getID() == ITEM_BROWSEFIELD) {
-					isOnTile = true;
-				}
-			}
-
-			if (isOnTile) {
-				if (m_localMap.find(uid) != m_localMap.end()) {
-					return uid;
-				}
-
-				m_localMap[uid] = thing;
-				return uid;
-			}
+		if (uid != 0) {
+			return uid;
 		}
 	}
 
-	for (const auto& it : m_localMap) {
-		if (it.second == thing) {
+	for (const auto& it : localMap) {
+		if (it.second == item) {
 			return it.first;
 		}
 	}
 
-	m_localMap[++m_lastUID] = thing;
+	localMap[++m_lastUID] = item;
 	return m_lastUID;
 }
 
-void ScriptEnvironment::insertThing(uint32_t uid, Thing* thing)
+void ScriptEnvironment::insertItem(uint32_t uid, Item* item)
 {
-	if (m_localMap.find(uid) == m_localMap.end()) {
-		m_localMap[uid] = thing;
-	} else {
+	auto it = localMap.insert(std::make_pair(uid, item));
+	if (!it.second) {
 		std::cout << std::endl << "Lua Script Error: Thing uid already taken.";
 	}
 }
@@ -225,19 +169,19 @@ Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 		return g_game.getCreatureByID(uid);
 	}
 
-	auto it = m_localMap.find(uid);
-	if (it != m_localMap.end()) {
-		Thing* thing = it->second;
-		if (thing && !thing->isRemoved()) {
-			return thing;
+	if (uid <= std::numeric_limits<uint16_t>::max()) {
+		Item* item = g_game.getUniqueItem(uid);
+		if (item && !item->isRemoved()) {
+			return item;
 		}
+		return nullptr;
 	}
 
-	it = m_globalMap.find(uid);
-	if (it != m_globalMap.end()) {
-		Thing* thing = it->second;
-		if (thing && !thing->isRemoved()) {
-			return thing;
+	auto it = localMap.find(uid);
+	if (it != localMap.end()) {
+		Item* item = it->second;
+		if (!item->isRemoved()) {
+			return item;
 		}
 	}
 	return nullptr;
@@ -263,14 +207,14 @@ Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
 
 void ScriptEnvironment::removeItemByUID(uint32_t uid)
 {
-	auto it = m_localMap.find(uid);
-	if (it != m_localMap.end()) {
-		m_localMap.erase(it);
+	if (uid <= std::numeric_limits<uint16_t>::max()) {
+		g_game.removeUniqueItem(uid);
+		return;
 	}
 
-	it = m_globalMap.find(uid);
-	if (it != m_globalMap.end()) {
-		m_globalMap.erase(it);
+	auto it = localMap.find(uid);
+	if (it != localMap.end()) {
+		localMap.erase(it);
 	}
 }
 
@@ -6411,7 +6355,7 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 	}
 
 	if (newItem && newItem != item) {
-		env->insertThing(uid, newItem);
+		env->insertItem(uid, newItem);
 	}
 
 	*itemPtr = newItem;
@@ -6675,6 +6619,12 @@ int LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 	}
 
 	if (ItemAttributes::isIntAttrType(attribute)) {
+		if (attribute == ITEM_ATTRIBUTE_UNIQUEID) {
+			reportErrorFunc("Attempt to set protected key \"uid\"");
+			pushBoolean(L, false);
+			return 1;
+		}
+
 		item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
 		pushBoolean(L, true);
 	} else if (ItemAttributes::isStrAttrType(attribute)) {
@@ -6819,7 +6769,7 @@ int LuaScriptInterface::luaItemTransform(lua_State* L)
 	}
 
 	if (newItem && newItem != item) {
-		env->insertThing(uid, newItem);
+		env->insertItem(uid, newItem);
 	}
 
 	item = newItem;

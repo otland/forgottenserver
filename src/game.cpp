@@ -5488,3 +5488,30 @@ void Game::removeBedSleeper(uint32_t guid)
 		bedSleepersMap.erase(it);
 	}
 }
+
+Item* Game::getUniqueItem(uint16_t uniqueId)
+{
+	auto it = uniqueItems.find(uniqueId);
+	if (it == uniqueItems.end()) {
+		return nullptr;
+	}
+	return it->second;
+}
+
+bool Game::addUniqueItem(uint16_t uniqueId, Item* item)
+{
+	auto it = uniqueItems.insert(std::make_pair(uniqueId, item));
+	if (!it.second) {
+		std::cout << "Duplicate unique id: " << uniqueId << std::endl;
+		return false;
+	}
+	return true;
+}
+
+void Game::removeUniqueItem(uint16_t uniqueId)
+{
+	auto it = uniqueItems.find(uniqueId);
+	if (it != uniqueItems.end()) {
+		uniqueItems.erase(it);
+	}
+}
