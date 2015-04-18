@@ -1995,22 +1995,16 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getParent", LuaScriptInterface::luaItemGetParent);
 	registerMethod("Item", "getTopParent", LuaScriptInterface::luaItemGetTopParent);
 
-	registerMethod("Item", "getId", LuaScriptInterface::luaItemGetId);
-
 	registerMethod("Item", "clone", LuaScriptInterface::luaItemClone);
 	registerMethod("Item", "split", LuaScriptInterface::luaItemSplit);
 	registerMethod("Item", "remove", LuaScriptInterface::luaItemRemove);
 
-	registerMethod("Item", "getUniqueId", LuaScriptInterface::luaItemGetUniqueId);
-	registerMethod("Item", "getActionId", LuaScriptInterface::luaItemGetActionId);
 	registerMethod("Item", "setActionId", LuaScriptInterface::luaItemSetActionId);
 
 	registerMethod("Item", "getCount", LuaScriptInterface::luaItemGetCount);
 	registerMethod("Item", "getCharges", LuaScriptInterface::luaItemGetCharges);
 	registerMethod("Item", "getFluidType", LuaScriptInterface::luaItemGetFluidType);
 	registerMethod("Item", "getWeight", LuaScriptInterface::luaItemGetWeight);
-
-	registerMethod("Item", "getSubType", LuaScriptInterface::luaItemGetSubType);
 
 	registerMethod("Item", "getName", LuaScriptInterface::luaItemGetName);
 	registerMethod("Item", "getPluralName", LuaScriptInterface::luaItemGetPluralName);
@@ -2075,7 +2069,6 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getParent", LuaScriptInterface::luaCreatureGetParent);
 
-	registerMethod("Creature", "getId", LuaScriptInterface::luaCreatureGetId);
 	registerMethod("Creature", "getName", LuaScriptInterface::luaCreatureGetName);
 
 	registerMethod("Creature", "getTarget", LuaScriptInterface::luaCreatureGetTarget);
@@ -6287,18 +6280,6 @@ int LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaItemGetId(lua_State* L)
-{
-	// item:getId()
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		lua_pushnumber(L, item->getID());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaItemClone(lua_State* L)
 {
 	// item:clone()
@@ -6382,34 +6363,6 @@ int LuaScriptInterface::luaItemRemove(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaItemGetUniqueId(lua_State* L)
-{
-	// item:getUniqueId()
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		uint32_t uniqueId = item->getUniqueId();
-		if (uniqueId == 0) {
-			uniqueId = getScriptEnv()->addThing(item);
-		}
-		lua_pushnumber(L, uniqueId);
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaItemGetActionId(lua_State* L)
-{
-	// item:getActionId()
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		lua_pushnumber(L, item->getActionId());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaItemSetActionId(lua_State* L)
 {
 	// item:setActionId(actionId)
@@ -6466,18 +6419,6 @@ int LuaScriptInterface::luaItemGetWeight(lua_State* L)
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		lua_pushnumber(L, item->getWeight());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaItemGetSubType(lua_State* L)
-{
-	// item:getSubType()
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		lua_pushnumber(L, item->getSubType());
 	} else {
 		lua_pushnil(L);
 	}
@@ -7245,18 +7186,6 @@ int LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 	} else if (Tile* tile = parent->getTile()) {
 		pushUserdata<Tile>(L, tile);
 		setMetatable(L, -1, "Tile");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaCreatureGetId(lua_State* L)
-{
-	// creature:getId()
-	const Creature* creature = getUserdata<const Creature>(L, 1);
-	if (creature) {
-		lua_pushnumber(L, creature->getID());
 	} else {
 		lua_pushnil(L);
 	}

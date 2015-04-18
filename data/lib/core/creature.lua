@@ -27,6 +27,10 @@ function Creature.getClosestFreePosition(self, position, extended)
 	return Position()
 end
 
+function Creature.getId(self)
+	return self.uid
+end
+
 function Creature.getPlayer(self)
 	return self:isPlayer() and self or nil
 end
