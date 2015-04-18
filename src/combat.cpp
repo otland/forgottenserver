@@ -954,6 +954,12 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage, bool u
 			int32_t attackValue = 7;
 			if (weapon) {
 				attackValue = tool->getAttack();
+				if (tool->getWeaponType() == WEAPON_AMMO) {
+					Item* item = player->getWeapon(true);
+					if (item) {
+						attackValue += item->getAttack();
+					}
+				}
 
 				damage.secondary.type = weapon->getElementType();
 				damage.secondary.value = weapon->getElementDamage(player, nullptr, tool);
