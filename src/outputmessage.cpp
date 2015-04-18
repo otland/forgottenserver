@@ -21,16 +21,67 @@
 
 #include "outputmessage.h"
 #include "protocol.h"
+#include <boost/lockfree/stack.hpp>
 
+class OutputMessageAllocator;
+
+template <typename T>
+class RebindingAllocator : std::allocator<T>
+{
+	public:
+		RebindingAllocator(const OutputMessageAllocator&) noexcept {}
+		typedef T value_type;
+
+		T* allocate(size_t n) noexcept {
+			assert(n == 1);
+			T* p;
+			if (!getFreeList().pop(p)) {
+				//Acquire memory without calling the constructor of T
+				p = static_cast<T*>(operator new (sizeof(T)));
+			}
+			return p;
+		}
+	
+		void deallocate(T* p, size_t n) noexcept {
+			assert(n == 1);
+			if (!getFreeList().push(p)) {
+				//Release memory without calling the destructor of T
+				//(it has already been called at this point)
+				operator delete(p);
+			}
+		}
+		
+		~RebindingAllocator() {
+			/*getFreeList().consume_all([](T* ptr) {
+				operator delete(ptr);
+			});*/
+			
+		}
+	private:
+		//typedef boost::lockfree::stack<T*, boost::lockfree::capacity<OUTPUTMESSAGE_FREE_LIST_CAPACITY>> FreeList;
+		typedef LockfreeBoundedStack<T*, 100> FreeList;
+		static FreeList& getFreeList() noexcept {
+			static FreeList freeList;
+			return freeList;
+		}
+};
+
+class OutputMessageAllocator
+{
+	public:
+		typedef OutputMessage value_type;
+		template<typename U>
+		struct rebind {typedef RebindingAllocator<U> other;};
+};
 OutputMessagePool::OutputMessagePool()
 {
+	//for (auto i = 0; i < 100; ++i) auto msg = std::allocate_shared<OutputMessage>(OutputMessageAllocator(), Connection_ptr(), frameTime.load(std::memory_order_relaxed));
 	startExecutionFrame();
-	m_open = true;
 }
 
 void OutputMessagePool::startExecutionFrame()
 {
-	frameTime.store(OTSYS_TIME(),  std::memory_order_relaxed);
+	frameTime.store(OTSYS_TIME(), std::memory_order_relaxed);
 }
 
 void OutputMessagePool::internalSend(const OutputMessage_ptr& msg) const
@@ -93,7 +144,7 @@ std::vector<OutputMessage_ptr> OutputMessagePool::getOutputMessages(const std::v
 
 	for (const auto& protocol : protocols) {
 		auto connection = protocol->getConnection();
-		if (connection && m_open) {
+		if (connection && m_open.load(std::memory_order_relaxed)) {
 			ret.emplace_back(internalGetMessage(std::move(connection), false));
 		}
 	}
@@ -106,7 +157,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(const Protocol_ptr& protoc
 	assert(protocol);
 	OutputMessage_ptr msg;
 	auto connection = protocol->getConnection();
-	if (!connection || !m_open) {
+	if (!connection || !m_open.load(std::memory_order_relaxed)) {
 		return msg;
 	}
 
@@ -114,61 +165,18 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(const Protocol_ptr& protoc
 	return msg;
 }
 
-class OutputMessageAllocator;
-
-template <typename T>
-class RebindingAllocator : std::allocator<T>
+void OutputMessagePool::addToAutoSend(const OutputMessage_ptr& msg)
 {
-	public:
-		RebindingAllocator(const OutputMessageAllocator&) noexcept {}
-		typedef T value_type;
-
-		T* allocate(size_t n) noexcept {
-			assert(n == 1);
-			T* p;
-			if (!getFreeList().pop(p)) {
-				//Acquire memory without calling the constructor of T
-				p = static_cast<T*>(operator new (sizeof(T)));
-			}
-			return p;
-		}
-	
-		void deallocate(T* p, size_t n) noexcept {
-			assert(n == 1);
-			if (!getFreeList().bounded_push(p)) {
-				//Release memory without calling the destructor of T
-				//(it has already been called at this point)
-				operator delete(p);
-			}
-		}
-		
-		~RebindingAllocator() {
-			getFreeList().consume_all([](T* ptr) {
-				operator delete(ptr);
-			});
-			
-		}
-	private:
-		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<OUTPUTMESSAGE_FREE_LIST_CAPACITY>> FreeList;
-		static FreeList& getFreeList() noexcept {
-			static FreeList freeList;
-			return freeList;
-		}
-};
-
-class OutputMessageAllocator
-{
-	public:
-		typedef OutputMessage value_type;
-		template<typename U>
-		struct rebind {typedef RebindingAllocator<U> other;};
-};
+	std::lock_guard<std::mutex> lockClass(outputPoolLock);
+	toAddQueue.push_back(msg);
+}
 
 OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connection, const bool autosend)
 {
+	//LockfreeBoundedStack<int*, 100> list;
 	OutputMessageAllocator alloc;
 	assert(connection && connection->getProtocol());
-	auto msg = std::allocate_shared<OutputMessage>(alloc, connection, frameTime.load(std::memory_order_relaxed));
+	auto msg = std::allocate_shared<OutputMessage>(alloc, std::forward<Connection_ptr>(connection), frameTime.load(std::memory_order_relaxed));
 
 	if (autosend) {
 		msg->setState(OutputMessage::STATE_ALLOCATED);
@@ -179,10 +187,4 @@ OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connect
 	}
 
 	return msg;
-}
-
-void OutputMessagePool::addToAutoSend(const OutputMessage_ptr& msg)
-{
-	std::lock_guard<std::mutex> lockClass(outputPoolLock);
-	toAddQueue.push_back(msg);
 }

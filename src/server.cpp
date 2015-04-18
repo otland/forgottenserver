@@ -170,7 +170,7 @@ Protocol_ptr ServicePort::make_protocol(bool checksummed, NetworkMessage& msg, c
 		}
 
 		if ((checksummed && service->is_checksummed()) || !service->is_checksummed()) {
-			return service->make_protocol(Connection_ptr());
+			return service->make_protocol(connection);
 		}
 	}
 	return nullptr;
