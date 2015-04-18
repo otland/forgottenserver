@@ -55,6 +55,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			if (it != ipConnectMap.end() && (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT)))) {
 				disconnect();
 				return;
+			}
 		}
 	}
 
