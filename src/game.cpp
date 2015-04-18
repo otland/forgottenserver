@@ -1482,7 +1482,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			uint32_t removeCount = (money / worth) + 1;
 
 			addMoney(cylinder, (worth * removeCount) - money, flags);
-			item->getParent()->removeThing(item, removeCount);
+			internalRemoveItem(item, removeCount);
 			money = 0;
 		} else {
 			internalRemoveItem(item);
