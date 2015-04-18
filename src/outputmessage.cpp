@@ -21,18 +21,16 @@
 
 #include "outputmessage.h"
 #include "protocol.h"
-#include <boost/lockfree/stack.hpp>
-
-class OutputMessageAllocator;
 
 template <typename T>
-class RebindingAllocator : std::allocator<T>
+class RebindingAllocator : public std::allocator<T>
 {
 	public:
-		RebindingAllocator(const OutputMessageAllocator&) noexcept {}
+		template <typename U>
+		RebindingAllocator(const U&) noexcept {}
 		typedef T value_type;
 
-		T* allocate(size_t n) noexcept {
+		T* allocate(size_t n) const noexcept {
 			assert(n == 1);
 			T* p;
 			if (!getFreeList().pop(p)) {
@@ -42,7 +40,7 @@ class RebindingAllocator : std::allocator<T>
 			return p;
 		}
 	
-		void deallocate(T* p, size_t n) noexcept {
+		void deallocate(T* p, size_t n) const noexcept {
 			assert(n == 1);
 			if (!getFreeList().push(p)) {
 				//Release memory without calling the destructor of T
@@ -58,8 +56,7 @@ class RebindingAllocator : std::allocator<T>
 			
 		}
 	private:
-		//typedef boost::lockfree::stack<T*, boost::lockfree::capacity<OUTPUTMESSAGE_FREE_LIST_CAPACITY>> FreeList;
-		typedef LockfreeBoundedStack<T*, 100> FreeList;
+		typedef LockfreeBoundedStack<T*, OUTPUTMESSAGE_FREE_LIST_CAPACITY> FreeList;
 		static FreeList& getFreeList() noexcept {
 			static FreeList freeList;
 			return freeList;
@@ -75,7 +72,6 @@ class OutputMessageAllocator
 };
 OutputMessagePool::OutputMessagePool()
 {
-	//for (auto i = 0; i < 100; ++i) auto msg = std::allocate_shared<OutputMessage>(OutputMessageAllocator(), Connection_ptr(), frameTime.load(std::memory_order_relaxed));
 	startExecutionFrame();
 }
 
@@ -165,15 +161,8 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(const Protocol_ptr& protoc
 	return msg;
 }
 
-void OutputMessagePool::addToAutoSend(const OutputMessage_ptr& msg)
-{
-	std::lock_guard<std::mutex> lockClass(outputPoolLock);
-	toAddQueue.push_back(msg);
-}
-
 OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connection, const bool autosend)
 {
-	//LockfreeBoundedStack<int*, 100> list;
 	OutputMessageAllocator alloc;
 	assert(connection && connection->getProtocol());
 	auto msg = std::allocate_shared<OutputMessage>(alloc, std::forward<Connection_ptr>(connection), frameTime.load(std::memory_order_relaxed));
@@ -187,4 +176,10 @@ OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connect
 	}
 
 	return msg;
+}
+
+void OutputMessagePool::addToAutoSend(const OutputMessage_ptr& msg)
+{
+	std::lock_guard<std::mutex> lockClass(outputPoolLock);
+	toAddQueue.push_back(msg);
 }

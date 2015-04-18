@@ -161,105 +161,98 @@ class OutputMessagePool
 		std::atomic<bool> m_open {true};
 };
 
-template <typename T, uint16_t SPECIFIED_CAPACITY>
+template <typename T, uint16_t CAPACITY>
 class LockfreeBoundedStack {
 	private:
-		static constexpr uint16_t CAPACITY = SPECIFIED_CAPACITY+1;
-		static_assert(SPECIFIED_CAPACITY != 0 && SPECIFIED_CAPACITY < std::numeric_limits<uint16_t>::max(), "Specified capacity out of range.");
-		struct _Node 
+		struct Node
 		{
-			static constexpr uint16_t END = 0;
-			uint16_t generation;
-			uint16_t index;
-			uint16_t nextNode;
-			uint16_t UNUSED;
+			static constexpr uint16_t END = std::numeric_limits<decltype(CAPACITY)>::max();
+			uint16_t generation = 0;
+			uint16_t index = END;
+			uint16_t nextNode = END;
+			uint16_t unused = 0;
 			operator bool () const noexcept {
 				return index != END;
 			}
 		};
-		static_assert(sizeof(_Node) == sizeof(uint64_t), "Invalid node size.");
-		union Node{
-			Node() = default;
-			Node(uint64_t value): asInt(value) {}
-			_Node asNode;
-			uint64_t asInt;
-			operator bool() const noexcept {
-				return asNode;
-			}
-
-			const _Node* operator->() const noexcept {
-				return &asNode;
-			}
-
-			_Node* operator->() noexcept {
-				return &asNode;
-			}
-		};
+		static_assert(sizeof(Node) == sizeof(uint64_t), "Invalid node size.");
+		static_assert(CAPACITY != 0 && CAPACITY < Node::END, "Specified capacity out of range.");
 	public:
 		LockfreeBoundedStack() {
-			for (uint16_t i = 1; i < CAPACITY; ++i) {
-				nodes[i].asNode.index = i;
-				
+			for (uint16_t i = 0; i < CAPACITY; ++i) {
+				nodes[i].index = i;
 				internal_push(freeNodes, nodes[i]);
 			}
 		}
 
+		LockfreeBoundedStack(const LockfreeBoundedStack&) = delete;
+		LockfreeBoundedStack& operator=(const LockfreeBoundedStack&) = delete;
+
 		bool pop(T& ret) noexcept {
 			if (auto node = internal_pop(head)) {
-				ret = getPayload(node);
+				ret = std::move(getPayload(node));
 				internal_push(freeNodes, node);
 				return true;
 			}
 
-			return false;
+			return false; //The stack was empty
 		}
 
-		bool push(const T& value) noexcept {
+		typename std::enable_if<std::is_copy_assignable<T>::value, bool>::type //Disable this overload for non-copyable types using SFINAE
+			push(const T& value) noexcept {
+				return push(value);
+			}
+
+		bool push(T&& value) noexcept {
 			if (auto node = internal_pop(freeNodes)) {
 				getPayload(node) = value;
 				internal_push(head, node);
 				return true;
 			}
 
-			return false;
+			return false; //Exceeded maximum capacity
 		}
 	private:
 		Node internal_pop(std::atomic<Node>& listHead) noexcept {
-			Node cur_head, nextNode;
+			Node currentHead, nextNode;
 			do {
-				cur_head = listHead.load();
-				if (!cur_head) {
+				currentHead = listHead.load();
+				if (!currentHead) {
 					break;
 				}
-				nextNode = getNextNode(cur_head);
+				nextNode = getNextNode(currentHead);
+			} while (!listHead.compare_exchange_weak(currentHead, nextNode));
 
-			} while (!listHead.compare_exchange_weak(cur_head, nextNode));
-
-			return cur_head;
+			return currentHead;
 		}
 
 		void internal_push(std::atomic<Node>& listHead, Node& newNode) noexcept {
-			auto cur_head = listHead.load();
-			newNode->nextNode = cur_head->index;
-			newNode->generation++;
-			while (!listHead.compare_exchange_weak(cur_head, newNode)) {
-				newNode->nextNode = cur_head->index;
+			auto currentHead = listHead.load();
+			newNode.nextNode = currentHead.index;
+			newNode.generation++;
+			nodes[newNode.index] = newNode;
+			while (!listHead.compare_exchange_weak(currentHead, newNode)) {
+				newNode.nextNode = currentHead.index;
+				nodes[newNode.index] = newNode;
 			}
 		}
 
 		T& getPayload(const Node& node) noexcept {
-			assert(node);
-			return payloads[node->index];
+			return payloads[node.index];
 		}
 
-		const Node& getNextNode(const Node& node) const noexcept {
-			return nodes[node->nextNode];
+		Node getNextNode(const Node& node) const noexcept {
+			if (node.nextNode == Node::END) {
+				return Node();
+			}
+			return nodes[node.nextNode];
 		}
+
 		Node nodes[CAPACITY];
 		T payloads[CAPACITY];
 
-		std::atomic<Node> freeNodes {0};
-		std::atomic<Node> head {0};
+		std::atomic<Node> freeNodes;
+		std::atomic<Node> head;
 };
 
 #endif
