@@ -1428,9 +1428,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 
 	std::vector<Container*> containers;
 
-	typedef std::multimap<uint64_t, Item*, std::less<uint64_t>> MoneyMap;
-	typedef MoneyMap::value_type moneymap_pair;
-	MoneyMap moneyMap;
+	std::multimap<uint64_t, Item*, std::less<uint64_t>> moneyMap;
 	uint64_t moneyCount = 0;
 
 	for (size_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
@@ -1447,9 +1445,12 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 		Container* container = item->getContainer();
 		if (container) {
 			containers.push_back(container);
-		} else if (item->getWorth() != 0) {
-			moneyCount += item->getWorth();
-			moneyMap.insert(moneymap_pair(item->getWorth(), item));
+		} else {
+			int32_t worth = item->getWorth();
+			if (worth != 0) {
+				moneyCount += worth;
+				moneyMap.emplace(worth, item);
+			}
 		}
 	}
 
@@ -1460,33 +1461,39 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
 				containers.push_back(tmpContainer);
-			} else if (item->getWorth() != 0) {
-				moneyCount += item->getWorth();
-				moneyMap.insert(moneymap_pair(item->getWorth(), item));
+			} else {
+				int32_t worth = item->getWorth();
+				if (worth != 0) {
+					moneyCount += worth;
+					moneyMap.emplace(worth, item);
+				}
 			}
 		}
 	}
 
-	/*not enough money*/
 	if (moneyCount < money) {
 		return false;
 	}
 
-	for (MoneyMap::const_iterator mit = moneyMap.begin(), mend = moneyMap.end(); mit != mend && money > 0; ++mit) {
-		Item* item = mit->second;
-		internalRemoveItem(item);
+	for (const auto& moneyEntry : moneyMap) {
+		Item* item = moneyEntry.second;
+		if (moneyEntry.first > money) {
+			uint32_t worth = moneyEntry.first / item->getItemCount();
+			uint32_t removeCount = (money / worth) + 1;
 
-		if (mit->first > money) {
-			/* Remove a monetary value from an item*/
-			uint64_t remaind = item->getWorth() - money;
-			addMoney(cylinder, remaind, flags);
+			addMoney(cylinder, (worth * removeCount) - money, flags);
+			item->getParent()->removeThing(item, removeCount);
 			money = 0;
 		} else {
-			money -= mit->first;
+			internalRemoveItem(item);
+			money -= moneyEntry.first;
+		}
+
+		if (money == 0) {
+			return true;
 		}
 	}
-
-	return money == 0;
+	return false;
 }
 
 void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
