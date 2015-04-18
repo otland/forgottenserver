@@ -102,9 +102,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
 		}
 		return result.second;
-	}
-	
-	if ((attr = node.attribute("fromid"))) {
+	} else if ((attr = node.attribute("fromid"))) {
 		pugi::xml_attribute toIdAttribute = node.attribute("toid");
 		if (!toIdAttribute) {
 			std::cout << "[Warning - Actions::registerEvent] Missing toid in fromid: " << attr.as_string() << std::endl;
@@ -190,7 +188,7 @@ bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 
 		bool success = result.second;
 		while (++iterAid <= toAid) {
-			auto result = actionItemMap.emplace(iterAid, action);
+			result = actionItemMap.emplace(iterAid, action);
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
 				continue;
