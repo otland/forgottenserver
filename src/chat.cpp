@@ -43,7 +43,7 @@ bool PrivateChatChannel::removeInvite(uint32_t guid)
 
 void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer)
 {
-	auto result = m_invites.emplace(player.getGUID(), &player);
+	auto result = m_invites.emplace(invitePlayer.getGUID(), &invitePlayer);
 	if (!result.second) {
 		return;
 	}
