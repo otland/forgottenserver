@@ -4304,21 +4304,20 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	return 1;
 }
 
+
 int LuaScriptInterface::luaLoadDirectory(lua_State* L)
 {
-	using namespace boost::filesystem;
-	const path& dir = getString(L, 1);
+	const boost::filesystem::path& dir = boost::filesystem::current_path().string() + getString(L, 1);
 
-	if (!exists(dir) || !is_directory(dir)) {
+	if (!boost::filesystem::exists(dir) || !boost::filesystem::is_directory(dir)) {
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	recursive_directory_iterator it(dir);
-	recursive_directory_iterator endit;
+	boost::filesystem::recursive_directory_iterator it(dir);
+	boost::filesystem::recursive_directory_iterator endit;
 
-	for (it; it != endit; ++it)
-	{
+	for (; it != endit; ++it) {
 		if (is_regular_file(*it) && it->path().extension() == ".lua") {
 			if ((g_luaEnvironment.loadFile(it->path().string())) == -1) {
 				// need to add a better error handler here.
