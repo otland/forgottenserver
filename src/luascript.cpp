@@ -20,6 +20,7 @@
 #include "otpch.h"
 
 #include <boost/range/adaptor/reversed.hpp>
+#include <boost/filesystem.hpp>
 
 #include "luascript.h"
 #include "chat.h"
@@ -1122,6 +1123,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(m_luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
+
+	//loadDirectory(dir)
+	lua_register(m_luaState, "loadDirectory", LuaScriptInterface::luaLoadDirectory);
 
 #ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
@@ -4297,6 +4301,34 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	std::string message = getString(L, 3);
 	channel->sendToAll(message, type);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaLoadDirectory(lua_State* L)
+{
+	using namespace boost::filesystem;
+	const path& dir = getString(L, 1);
+
+	if (!exists(dir) || !is_directory(dir)) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	recursive_directory_iterator it(dir);
+	recursive_directory_iterator endit;
+
+	for (it; it != endit; ++it)
+	{
+		if (is_regular_file(*it) && it->path().extension() == ".lua") {
+			if ((g_luaEnvironment.loadFile(it->path().string())) == -1) {
+				// need to add a better error handler here.
+				std::cout << "[LuaScriptInterface: loadDirectory] could not load " << it->path().string() << " there is an error in it." << std::endl;
+			}
+		}
+
+	}
+	pushBoolean(L, true);
+
 	return 1;
 }
 
@@ -12263,6 +12295,10 @@ int LuaScriptInterface::luaMonsterTypeAddAttack(lua_State* L)
 {
 	// monsterType:addAttack(attack)
 	// TODO
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		
+	}
 	return 1;
 }
 

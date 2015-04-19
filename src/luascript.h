@@ -444,6 +444,7 @@ class LuaScriptInterface
 		static int luaDoPlayerAddItem(lua_State* L);
 		static int luaDoTileAddItemEx(lua_State* L);
 		static int luaDoSetCreatureLight(lua_State* L);
+		static int luaLoadDirectory(lua_State* L);
 
 		//get item info
 		static int luaGetDepotId(lua_State* L);

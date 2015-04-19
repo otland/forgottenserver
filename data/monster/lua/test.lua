@@ -21,19 +21,20 @@ monster.flags = {
 }
 
 monster.voices = {
-    {
+	{
 		text = 'Works', 
 		interval = 5000, 
 		chance = 10000, 
 		yell = false
 	},
-    {
+	{
 		text = 'I can talk', 
 		interval = 5000, 
 		chance = 10000, 
 		yell = false
 	},
-    {
+	{
+	
 		text = 'Test', 
 		interval = 5000, 
 		chance = 10000, 
