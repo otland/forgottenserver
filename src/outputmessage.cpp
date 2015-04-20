@@ -39,7 +39,7 @@ class RebindingAllocator : public std::allocator<T>
 			}
 			return p;
 		}
-	
+
 		void deallocate(T* p, size_t n) const noexcept {
 			assert(n == 1);
 			if (!getFreeList().push(p)) {
@@ -48,12 +48,13 @@ class RebindingAllocator : public std::allocator<T>
 				operator delete(p);
 			}
 		}
-		
+
 		~RebindingAllocator() {
-			/*getFreeList().consume_all([](T* ptr) {
+			T* ptr;
+			auto& freeList = getFreeList();
+			while(freeList.pop(ptr)) {
 				operator delete(ptr);
-			});*/
-			
+			}
 		}
 	private:
 		typedef LockfreeBoundedStack<T*, OUTPUTMESSAGE_FREE_LIST_CAPACITY> FreeList;
@@ -70,6 +71,7 @@ class OutputMessageAllocator
 		template<typename U>
 		struct rebind {typedef RebindingAllocator<U> other;};
 };
+
 OutputMessagePool::OutputMessagePool()
 {
 	startExecutionFrame();
@@ -80,67 +82,69 @@ void OutputMessagePool::startExecutionFrame()
 	frameTime.store(OTSYS_TIME(), std::memory_order_relaxed);
 }
 
-void OutputMessagePool::internalSend(const OutputMessage_ptr& msg) const
+bool OutputMessagePool::internalSend(const OutputMessage_ptr& msg) const
 {
-	msg->getConnection()->send(msg);
+	return msg->getConnection()->send(msg);
 }
 
-void OutputMessagePool::send(const OutputMessage_ptr& msg) const
+void OutputMessagePool::send(const OutputMessage_ptr& msg)
 {
 	assert(msg->getState() == OutputMessage::STATE_ALLOCATED_NO_AUTOSEND);
-	internalSend(msg);
+	if (!internalSend(msg)) {
+		addToAutoSend(msg);
+	}
 }
 
 void OutputMessagePool::sendAll()
 {
 	//dispatcher thread
-	const auto currentFrameTime = frameTime.load(std::memory_order_relaxed);
+	const auto currentFrameTime = getFrameTime();
 	const int64_t dropTime = currentFrameTime - 10000;
 	const int64_t staleTime = currentFrameTime - 10;
 	static OutputMessageList autoSendBuffer;
-	OutputMessageList toAddBuffer;
 
 	{
 		std::lock_guard<std::mutex> lockClass(outputPoolLock);
 		autoSendBuffer.splice(autoSendBuffer.end(), autoSendOutputMessages);
-		toAddBuffer = std::move(toAddQueue);
 	}
 
-	for (auto& msg : toAddBuffer) {
-		const int64_t msgFrame = msg->getFrame();
-		if (msgFrame >= dropTime) {
-			msg->setState(OutputMessage::STATE_ALLOCATED);
-
-			if (msgFrame < staleTime) {
-				autoSendBuffer.emplace_front(std::move(msg));
-			} else {
-				autoSendBuffer.emplace_back(std::move(msg));
-			}
-		} else {
+	for (auto it = autoSendBuffer.begin(), end = autoSendBuffer.end(); it != end;) {
+		const OutputMessage_ptr& msg = *it;
+		const auto msgFrame = msg->getFrame();
+		
+		if (msgFrame < dropTime) {
 			//drop messages that are older than 10 seconds
 			auto connection = msg->getConnection();
-			assert(connection);
 			connection->getProtocol()->clearOutputBuffer(msg);
+			it = autoSendBuffer.erase(it);
+			continue;
 		}
-	}
-
-	for (auto it = autoSendBuffer.begin(), end = autoSendBuffer.end(); it != end; it = autoSendBuffer.erase(it)) {
-		const OutputMessage_ptr& msg = *it;
-		if (staleTime <= msg->getFrame()) {
+		
+		if (msgFrame < staleTime) {
 			return;
 		}
-		internalSend(msg);
+
+		if (internalSend(msg))  {
+			it = autoSendBuffer.erase(it);
+		} else {
+			//send returns false if there's already a write operation in progress
+			//so we leave the message in the queue
+			++it;
+		}
 	}
 }
 
 std::vector<OutputMessage_ptr> OutputMessagePool::getOutputMessages(const std::vector<Protocol_ptr>& protocols)
 {
 	std::vector<OutputMessage_ptr> ret;
+	if (!m_open.load(std::memory_order_relaxed)) {
+		return ret;
+	}
 	ret.reserve(protocols.size());
 
 	for (const auto& protocol : protocols) {
 		auto connection = protocol->getConnection();
-		if (connection && m_open.load(std::memory_order_relaxed)) {
+		if (connection) {
 			ret.emplace_back(internalGetMessage(std::move(connection), false));
 		}
 	}
@@ -165,14 +169,10 @@ OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connect
 {
 	OutputMessageAllocator alloc;
 	assert(connection && connection->getProtocol());
-	auto msg = std::allocate_shared<OutputMessage>(alloc, std::forward<Connection_ptr>(connection), frameTime.load(std::memory_order_relaxed));
+	auto msg = std::allocate_shared<OutputMessage>(alloc, std::forward<Connection_ptr>(connection), getFrameTime());
 
 	if (autosend) {
-		msg->setState(OutputMessage::STATE_ALLOCATED);
-		std::lock_guard<std::mutex> lockClass(outputPoolLock);
-		autoSendOutputMessages.push_back(msg);
-	} else {
-		msg->setState(OutputMessage::STATE_ALLOCATED_NO_AUTOSEND);
+		addToAutoSend(msg);
 	}
 
 	return msg;
@@ -181,5 +181,7 @@ OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connect
 void OutputMessagePool::addToAutoSend(const OutputMessage_ptr& msg)
 {
 	std::lock_guard<std::mutex> lockClass(outputPoolLock);
-	toAddQueue.push_back(msg);
+	msg->setState(OutputMessage::STATE_ALLOCATED);
+	autoSendOutputMessages.push_back(msg);
 }
+

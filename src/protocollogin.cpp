@@ -128,7 +128,8 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 */
 
 	auto dispatchDisconnectClient = [this, version](const std::string& err) {
-		g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::disconnectClient, std::dynamic_pointer_cast<ProtocolLogin>(shared_from_this()), err, version)));
+		g_dispatcher.addTask(createTask(
+			std::bind(&ProtocolLogin::disconnectClient, std::dynamic_pointer_cast<ProtocolLogin>(shared_from_this()), err, version)));
 	};
 
 	if (version <= 760) {
