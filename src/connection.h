@@ -109,14 +109,12 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		void onWriteOperation(OutputMessage_ptr msg, const boost::system::error_code& error);
 
-		void onStopOperation();
 		void handleReadError(const boost::system::error_code& error);
 		void handleWriteError(const boost::system::error_code& error);
 
 		static void handleReadTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error);
 		static void handleWriteTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error);
 
-		void closeConnectionTask();
 		void closeSocket();
 		void onReadTimeout();
 		void onWriteTimeout();
@@ -131,9 +129,9 @@ class Connection : public std::enable_shared_from_this<Connection>
 		std::recursive_mutex m_connectionLock;
 
 		ServicePort_ptr m_service_port;
+		Protocol_ptr m_protocol;
 
 		std::unique_ptr<boost::asio::ip::tcp::socket> m_socket;
-		Protocol_ptr m_protocol;
 		boost::asio::io_service& m_io_service;
 
 		time_t m_timeConnected;

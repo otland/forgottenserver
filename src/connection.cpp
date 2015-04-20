@@ -52,6 +52,7 @@ void ConnectionManager::closeAll()
 	std::lock_guard<std::mutex> lockClass(m_connectionManagerLock);
 
 	for (const auto& connection : m_connections) {
+		assert(connection.use_count() == 1);
 		try {
 			boost::system::error_code error;
 			connection->m_socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
@@ -67,29 +68,19 @@ void ConnectionManager::closeAll()
 void Connection::close()
 {
 	//any thread
-	auto this_shared = shared_from_this();
-	ConnectionManager::getInstance()->releaseConnection(this_shared);
-	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
+	ConnectionManager::getInstance()->releaseConnection(shared_from_this());
 
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	if (m_connectionState != CONNECTION_STATE_OPEN) {
 		return;
 	}
-
 	m_connectionState = CONNECTION_STATE_CLOSED;
-
-	g_dispatcher.addTask(
-	    createTask(std::bind(&Connection::closeConnectionTask, std::move(this_shared))));
-}
-
-void Connection::closeConnectionTask()
-{
-	//dispatcher thread
-	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
-
+	
 	if (m_protocol) {
-		m_protocol->release();
+		g_dispatcher.addTask(
+			createTask(std::bind(&Protocol::release, m_protocol)));
 	}
-
+	
 	if (!m_pendingWrite || m_writeError) {
 		closeSocket();
 	} else {
@@ -120,6 +111,7 @@ void Connection::closeSocket()
 
 Connection::~Connection()
 {
+	assert(m_connectionState != CONNECTION_STATE_OPEN); //If this fires, no one closed this Connection and we're being deleted - something went wrong
 	closeSocket();
 }
 
@@ -272,19 +264,16 @@ bool Connection::send(const OutputMessage_ptr& msg)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
-		if (m_protocol) {
-			m_protocol->clearOutputBuffer(msg);
-		}
-		return false;
+		m_protocol->clearOutputBuffer(msg);
+		return true;
 	}
 
 	if (!m_pendingWrite) {
 		m_protocol->onSendMessage(msg);
 		internalSend(msg);
 	} else {
-		// FIXME: This results in packets being sent in wrong order, all queued
-		// packets to the same connection should also be moved to auto send.
-		OutputMessagePool::getInstance()->addToAutoSend(msg);
+		//There's a pending write operation - let the caller now
+		return false;
 	}
 
 	return true;
@@ -333,7 +322,6 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 	}
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
-		closeSocket();
 		close();
 		return;
 	}
@@ -363,7 +351,6 @@ void Connection::onReadTimeout()
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_pendingRead || m_readError) {
-		closeSocket();
 		close();
 	}
 }
@@ -373,7 +360,6 @@ void Connection::onWriteTimeout()
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 
 	if (m_pendingWrite || m_writeError) {
-		closeSocket();
 		close();
 	}
 }

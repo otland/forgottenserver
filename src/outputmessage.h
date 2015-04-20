@@ -34,7 +34,6 @@ class OutputMessage : public NetworkMessage
 {
 	public:
 		enum OutputMessageState {
-			STATE_FREE,
 			STATE_ALLOCATED,
 			STATE_ALLOCATED_NO_AUTOSEND,
 		};
@@ -42,7 +41,7 @@ class OutputMessage : public NetworkMessage
 			connection(std::move(connection)),
 			frame(frame),
 			outputBufferStart(INITIAL_BUFFER_POSITION),
-			state(STATE_FREE) {}
+			state(STATE_ALLOCATED_NO_AUTOSEND) {}
 
 		OutputMessage() = delete;
 		// non-copyable
@@ -134,7 +133,7 @@ class OutputMessagePool
 			return &instance;
 		}
 
-		void send(const OutputMessage_ptr& msg) const;
+		void send(const OutputMessage_ptr& msg);
 		void sendAll();
 		void stop() {
 			m_open.store(false, std::memory_order_relaxed);
@@ -145,17 +144,16 @@ class OutputMessagePool
 		void startExecutionFrame();
 
 		int64_t getFrameTime() const {
-			return frameTime;
+			return frameTime.load(std::memory_order_relaxed);
 		}
 
+	protected:
+		OutputMessage_ptr internalGetMessage(Connection_ptr&& connection, const bool autosend);
+		bool internalSend(const OutputMessage_ptr& msg) const;
 		void addToAutoSend(const OutputMessage_ptr& msg);
 
-	protected:
 		typedef std::list<OutputMessage_ptr> OutputMessageList;
-		OutputMessage_ptr internalGetMessage(Connection_ptr&& connection, const bool autosend);
-		void internalSend(const OutputMessage_ptr& msg) const;
 		OutputMessageList autoSendOutputMessages;
-		OutputMessageList toAddQueue;
 		std::mutex outputPoolLock;
 		std::atomic<int64_t> frameTime;
 		std::atomic<bool> m_open {true};
@@ -228,13 +226,11 @@ class LockfreeBoundedStack {
 
 		void internal_push(std::atomic<Node>& listHead, Node& newNode) noexcept {
 			auto currentHead = listHead.load();
-			newNode.nextNode = currentHead.index;
 			newNode.generation++;
-			nodes[newNode.index] = newNode;
-			while (!listHead.compare_exchange_weak(currentHead, newNode)) {
+			do {
 				newNode.nextNode = currentHead.index;
 				nodes[newNode.index] = newNode;
-			}
+			} while (!listHead.compare_exchange_weak(currentHead, newNode));
 		}
 
 		T& getPayload(const Node& node) noexcept {
@@ -248,8 +244,9 @@ class LockfreeBoundedStack {
 			return nodes[node.nextNode];
 		}
 
-		Node nodes[CAPACITY];
 		T payloads[CAPACITY];
+		Node nodes[CAPACITY];
+
 
 		std::atomic<Node> freeNodes;
 		std::atomic<Node> head;
