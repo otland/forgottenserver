@@ -37,7 +37,7 @@ else()
     find_package(Lua)
 endif()
 
-find_package(Boost 1.42.0 COMPONENTS system REQUIRED)
+find_package(Boost 1.42.0 COMPONENTS system filesystem REQUIRED)
 
 include(src/CMakeLists.txt)
 add_executable(tfs ${tfs_SRC})

@@ -70,6 +70,23 @@ struct voiceBlock_t {
 	bool yellText;
 };
 
+class Loot
+{
+	public:
+		Loot();
+
+		void reset();
+
+		uint16_t id;
+		uint32_t chance;
+		uint8_t countMax;
+		int16_t subType;
+		int32_t actionId;
+		std::string text;
+
+		std::list<Loot*> childs;
+};
+
 class MonsterType
 {
 	public:
@@ -145,6 +162,8 @@ class MonsterType
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);
 		void clone(MonsterType* root, MonsterType* child, const std::string& type);
+		void loadLoot(MonsterType* monsterType, Loot* loot);
+		void loadChildLoot(Loot* loot, LootBlock& parent);
 		std::list<Item*> createLootItem(const LootBlock& lootblock);
 };
 

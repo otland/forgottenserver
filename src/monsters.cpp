@@ -122,6 +122,21 @@ void MonsterType::reset()
 	scriptList.clear();
 }
 
+Loot::Loot()
+{
+	reset();
+}
+
+void Loot::reset()
+{
+	id = 0;
+	chance = 0;
+	countMax = 1;
+	subType = -1;
+	actionId = -1;
+	text = "";
+}
+
 MonsterType::~MonsterType()
 {
 	reset();
@@ -299,6 +314,84 @@ void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string
 	} else {
 		std::cout << "[Error - MonsterType::clone] unknown type" << std::endl;
 	}
+}
+
+void MonsterType::loadLoot(MonsterType* monsterType, Loot* loot) 
+{
+	LootBlock lootblock;
+	
+	lootblock.id = loot->id;
+	lootblock.countmax = loot->countMax;
+	
+	if (loot->chance != 0) {
+		lootblock.chance = loot->chance;
+	} else {
+		lootblock.chance = MAX_LOOTCHANCE;
+	}
+	
+	if (loot->actionId != -1) {
+		lootblock.actionId = loot->actionId;
+	}
+
+	if (loot->subType != -1) {
+		lootblock.subType = loot->subType;
+	} else {
+		uint32_t charges = Item::items[lootblock.id].charges;
+		if (charges != 0) {
+			lootblock.subType = charges;
+		}
+	}
+
+	if (!loot->text.empty()) {
+		lootblock.text = loot->text;
+	}
+
+	if (!loot->childs.empty()) {
+		bool isContainer = Item::items[lootblock.id].isContainer();
+		if (isContainer) {
+			for (Loot* l : loot->childs) {
+				loadChildLoot(l, lootblock);
+			}
+		}
+		monsterType->lootItems.push_back(lootblock);
+	} else {
+		monsterType->lootItems.push_back(lootblock);
+	}
+}
+
+void MonsterType::loadChildLoot(Loot* loot, LootBlock& parent)
+{
+	LootBlock child;
+
+	child.id = loot->id;
+	child.countmax = loot->countMax;
+
+	if (loot->chance != 0) {
+		child.chance = loot->chance;
+	}
+	else {
+		child.chance = MAX_LOOTCHANCE;
+	}
+
+	if (loot->actionId != -1) {
+		child.actionId = loot->actionId;
+	}
+
+	if (loot->subType != -1) {
+		child.subType = loot->subType;
+	}
+	else {
+		uint32_t charges = Item::items[child.id].charges;
+		if (charges != 0) {
+			child.subType = charges;
+		}
+	}
+
+	if (!loot->text.empty()) {
+		child.text = loot->text;
+	}
+
+	parent.childLoot.push_back(child);
 }
 
 std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)

@@ -2599,7 +2599,7 @@ void LuaScriptInterface::registerFunctions()
 	//registerMethod("MonsterType", "addDefense", LuaScriptInterface::luaMonsterTypeAddDefense);
 	//registerMethod("MonsterType", "addElement", LuaScriptInterface::luaMonsterTypeAddElement);
 	registerMethod("MonsterType", "addVoice", LuaScriptInterface::luaMonsterTypeAddVoice);
-	//registerMethod("MonsterType", "addLoot", LuaScriptInterface::luaMonsterTypeAddLoot);
+	registerMethod("MonsterType", "addLoot", LuaScriptInterface::luaMonsterTypeAddLoot);
 	registerMethod("MonsterType", "addSummon", LuaScriptInterface::luaMonsterTypeAddSummon);
 
 	registerMethod("MonsterType", "registerEvent", LuaScriptInterface::luaMonsterTypeRegisterEvent);
@@ -2679,6 +2679,16 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Party", "isSharedExperienceEnabled", LuaScriptInterface::luaPartyIsSharedExperienceEnabled);
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
+
+	// Loot
+	registerClass("Loot", "", LuaScriptInterface::luaCreateLoot);
+	registerMethod("Loot", "setId", LuaScriptInterface::luaLootSetId);
+	registerMethod("Loot", "setMaxCount", LuaScriptInterface::luaLootSetMaxCount);
+	registerMethod("Loot", "setSubType", LuaScriptInterface::luaLootSetSubType);
+	registerMethod("Loot", "setChance", LuaScriptInterface::luaLootSetChance);
+	registerMethod("Loot", "setActionId", LuaScriptInterface::luaLootSetActionId);
+	registerMethod("Loot", "setDescription", LuaScriptInterface::luaLootSetDescription);
+	registerMethod("Loot", "addChildLoot", LuaScriptInterface::luaLootAddChildLoot);
 }
 
 #undef registerEnum
@@ -12083,8 +12093,7 @@ int LuaScriptInterface::luaMonsterTypeSetSkull(lua_State* L)
 	if (monsterType) {
 		monsterType->skull = getSkullType(getString(L, 2));
 		pushBoolean(L, true);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
@@ -12334,14 +12343,25 @@ int LuaScriptInterface::luaMonsterTypeAddVoice(lua_State* L)
 	return 1;
 }
 
-/*
+
 int LuaScriptInterface::luaMonsterTypeAddLoot(lua_State* L)
 {
 	// monsterType:addLoot(loot)
-	// TODO
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		Loot* loot = getUserdata<Loot>(L, 2);
+		if (loot) {
+			monsterType->loadLoot(monsterType, loot);
+			pushBoolean(L, true);
+		} else {
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
-*/
+
 
 int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
 {
@@ -13160,6 +13180,117 @@ int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
 		pushBoolean(L, party->setSharedExperience(party->getLeader(), active));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// Loot
+
+int LuaScriptInterface::luaCreateLoot(lua_State* L)
+{
+	// Loot() will create a new loot item
+	Loot* loot = new Loot();
+	if (loot) {
+		pushUserdata<Loot>(L, loot);
+		setMetatable(L, -1, "Loot");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLootSetId(lua_State* L)
+{
+	// loot:setId(id or name)
+	Loot* loot = getUserdata<Loot>(L, 1);
+	uint16_t item;
+	if (loot) {
+		if (isNumber(L, 2)) {
+			loot->id = getNumber<uint16_t>(L, 2);
+		} else {
+			item = Item::items.getItemIdByName(getString(L, 2));
+			loot->id = item;
+		}
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLootSetSubType(lua_State* L)
+{
+	// loot:setSubType(type)
+	Loot* loot = getUserdata<Loot>(L, 1);
+	if (loot) {
+		loot->subType = getNumber<uint16_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLootSetChance(lua_State* L)
+{
+	// loot:setChance(actionid)
+	Loot* loot = getUserdata<Loot>(L, 1);
+	if (loot) {
+		loot->chance = getNumber<uint32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLootSetMaxCount(lua_State* L)
+{
+	// loot:setMaxCount(max)
+	Loot* loot = getUserdata<Loot>(L, 1);
+	if (loot) {
+		loot->countMax = getNumber<uint32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLootSetActionId(lua_State* L)
+{
+	// loot:setActionId(actionid)
+	Loot* loot = getUserdata<Loot>(L, 1);
+	if (loot) {
+		loot->actionId = getNumber<uint32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLootSetDescription(lua_State* L)
+{
+	// loot:setDescription(desc)
+	Loot* loot = getUserdata<Loot>(L, 1);
+	if (loot) {
+		loot->text = getString(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLootAddChildLoot(lua_State* L)
+{
+	// loot:addChildLoot(loot)
+	Loot* loot = getUserdata<Loot>(L, 1);
+	if (loot) {
+		loot->childs.push_back(getUserdata<Loot>(L, 2));
 	} else {
 		lua_pushnil(L);
 	}

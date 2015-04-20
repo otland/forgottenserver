@@ -113,4 +113,49 @@ function MonsterType.register(self, mask)
 			self:registerEvent(v)
 		end
 	end
+	
+	if type(mask.loot) == "table" then
+		for _, loot in pairs(mask.loot) do
+			local parent = Loot()
+			parent:setId(loot.id)
+			if loot.chance then
+				parent:setChance(loot.chance)
+			end
+			if loot.maxCount then
+				parent:setMaxCount(loot.maxCount)
+			end
+			if loot.aid or loot.actionId then
+				parent:setActionId(loot.aid or loot.actionId)
+			end
+			if loot.subType or loot.charges then
+				parent:setSubType(loot.subType or loot.charges)
+			end
+			if loot.text or loot.description then
+				parent:setDescription(loot.text or loot.description)
+			end
+			if loot.child then
+				for _, childs in pairs(loot.child) do
+					local child = Loot()
+					child:setId(childs.id)
+					if childs.chance then
+						child:setChance(childs.chance)
+					end
+					if childs.maxCount then
+						child:setMaxCount(childs.maxCount)
+					end
+					if childs.aid or childs.actionId then
+						child:setActionId(childs.aid or childs.actionId)
+					end
+					if childs.subType or childs.charges then
+						child:setSubType(childs.subType or childs.charges)
+					end
+					if childs.text or childs.description then
+						child:setDescription(childs.text or childs.description)
+					end
+					parent:addChildLoot(child)
+				end
+			end
+			self:addLoot(parent)
+		end
+	end	
 end

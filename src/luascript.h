@@ -1237,7 +1237,7 @@ class LuaScriptInterface
 		//static int luaMonsterTypeAddDefense(lua_State* L);
 		//static int luaMonsterTypeAddElement(lua_State* L);
 		static int luaMonsterTypeAddVoice(lua_State* L);
-		//static int luaMonsterTypeAddLoot(lua_State* L);
+		static int luaMonsterTypeAddLoot(lua_State* L);
 		static int luaMonsterTypeAddSummon(lua_State* L);
 
 		static int luaMonsterTypeRegisterEvent(lua_State* L);
@@ -1314,6 +1314,16 @@ class LuaScriptInterface
 		static int luaPartyIsSharedExperienceEnabled(lua_State* L);
 		static int luaPartyShareExperience(lua_State* L);
 		static int luaPartySetSharedExperience(lua_State* L);
+
+		// Loot
+		static int luaCreateLoot(lua_State* L);
+		static int luaLootSetId(lua_State* L);
+		static int luaLootSetMaxCount(lua_State* L);
+		static int luaLootSetSubType(lua_State* L);
+		static int luaLootSetChance(lua_State* L);
+		static int luaLootSetActionId(lua_State* L);
+		static int luaLootSetDescription(lua_State* L);
+		static int luaLootAddChildLoot(lua_State* L);
 
 		//
 		lua_State* m_luaState;
