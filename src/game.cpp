@@ -841,6 +841,7 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	Item* toItem = nullptr;
 	Tile* subCylinder = nullptr;
 	Tile* toCylinder = &toTile;
+	Tile* fromCylinder = nullptr;
 	uint32_t n = 0;
 
 	while ((subCylinder = toCylinder->queryDestination(index, creature, &toItem, flags)) != toCylinder) {
@@ -848,15 +849,25 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 
 		if (creature.getParent() != subCylinder) {
 			//could happen if a script move the creature
+			fromCylinder = nullptr;
 			break;
 		}
 
+		fromCylinder = toCylinder;
 		toCylinder = subCylinder;
 		flags = 0;
 
 		//to prevent infinite loop
 		if (++n >= MAP_MAX_LAYERS) {
 			break;
+		}
+	}
+
+	if (fromCylinder) {
+		const Position& fromPosition = fromCylinder->getPosition();
+		const Position& toPosition = toCylinder->getPosition();
+		if (fromPosition.z != toPosition.z) {
+			internalCreatureTurn(&creature, getDirectionTo(fromPosition, toPosition));
 		}
 	}
 
