@@ -286,11 +286,11 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 	Action* action = getAction(item);
 	if (action) {
 		if (action->isScripted()) {
-			if (action->executeUse(player, item, pos, nullptr, pos, isHotkey)) {
+			if (action->executeUse(player, item, player->getPosition(), nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
 			}
 		} else if (action->function) {
-			if (action->function(player, item, pos, nullptr, pos, isHotkey)) {
+			if (action->function(player, item, player->getPosition(), nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
 			}
 		}
