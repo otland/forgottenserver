@@ -866,7 +866,7 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	if (fromCylinder) {
 		const Position& fromPosition = fromCylinder->getPosition();
 		const Position& toPosition = toCylinder->getPosition();
-		if (fromPosition.z != toPosition.z) {
+		if (fromPosition.z != toPosition.z && (fromPosition.x != toPosition.x || fromPosition.y != toPosition.y)) {
 			internalCreatureTurn(&creature, getDirectionTo(fromPosition, toPosition));
 		}
 	}
