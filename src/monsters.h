@@ -84,7 +84,50 @@ class Loot
 		int32_t actionId;
 		std::string text;
 
-		std::list<Loot*> childs;
+		std::list<Loot*> children;
+};
+
+class MonsterSpell
+{
+	public:
+		MonsterSpell();
+
+		void reset();
+		
+		uint8_t chance;
+		uint16_t interval;
+		uint8_t range;
+		int32_t minCombatValue;
+		int32_t maxCombatValue;
+		int32_t attack;
+		int32_t skill;
+		bool combatSpell;
+		bool isMelee;
+		std::string name;
+		std::string scriptName;
+		bool isScripted;
+		bool needTarget;
+		bool needDirection;
+
+		int32_t length;
+		int32_t spread;
+		int32_t radius;
+
+		ConditionType_t conditionType;
+		CombatType_t combatType;
+		int32_t conditionMinDamage;
+		int32_t conditionMaxDamage;
+		int32_t conditionStartDamage;
+
+		int32_t tickInterval;
+
+		int32_t speedChange;
+		int32_t duration;
+		Outfit_t outfit;
+
+		ShootType_t shoot;
+		MagicEffectClasses effect;
+
 };
 
 class MonsterType
@@ -187,6 +230,7 @@ class Monsters
 		MonsterType* getMonsterType(uint32_t mid);
 		uint32_t getIdByName(const std::string& name);
 		void addMonsterType(const std::string& name, MonsterType* mType);
+		bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
 		static uint32_t getLootRandom();
 

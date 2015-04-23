@@ -1233,8 +1233,8 @@ class LuaScriptInterface
 
 		//static int luaMonsterTypeAddCombatImmunity(lua_State* L);
 		//static int luaMonsterTypeAddConditionImmunity(lua_State* L);
-		//static int luaMonsterTypeAddAttack(lua_State* L);
-		//static int luaMonsterTypeAddDefense(lua_State* L);
+		static int luaMonsterTypeAddAttack(lua_State* L);
+		static int luaMonsterTypeAddDefense(lua_State* L);
 		//static int luaMonsterTypeAddElement(lua_State* L);
 		static int luaMonsterTypeAddVoice(lua_State* L);
 		static int luaMonsterTypeAddLoot(lua_State* L);
@@ -1324,6 +1324,28 @@ class LuaScriptInterface
 		static int luaLootSetActionId(lua_State* L);
 		static int luaLootSetDescription(lua_State* L);
 		static int luaLootAddChildLoot(lua_State* L);
+
+		// MonsterSpell
+		static int luaCreateMonsterSpell(lua_State* L);
+		static int luaMonsterSpellSetType(lua_State* L);
+		static int luaMonsterSpellSetScriptName(lua_State* L);
+		static int luaMonsterSpellSetChance(lua_State* L);
+		static int luaMonsterSpellSetInterval(lua_State* L);
+		static int luaMonsterSpellSetRange(lua_State* L);
+		static int luaMonsterSpellSetCombatValue(lua_State* L);
+		static int luaMonsterSpellSetCombatType(lua_State* L);
+		static int luaMonsterSpellSetAttackValue(lua_State* L);
+		static int luaMonsterSpellSetNeedTarget(lua_State* L);
+		static int luaMonsterSpellSetCombatLength(lua_State* L);
+		static int luaMonsterSpellSetCombatSpread(lua_State* L);
+		static int luaMonsterSpellSetCombatRadius(lua_State* L);
+		static int luaMonsterSpellSetConditionType(lua_State* L);
+		static int luaMonsterSpellSetConditionDamage(lua_State* L);
+		static int luaMonsterSpellSetConditionSpeedChange(lua_State* L);
+		static int luaMonsterSpellSetConditionDuration(lua_State* L);
+		static int luaMonsterSpellSetConditionTickInterval(lua_State* L);
+		static int luaMonsterSpellSetCombatShootEffect(lua_State* L);
+		static int luaMonsterSpellSetCombatEffect(lua_State* L);
 
 		//
 		lua_State* m_luaState;

@@ -137,6 +137,44 @@ void Loot::reset()
 	text = "";
 }
 
+MonsterSpell::MonsterSpell()
+{
+	reset();
+}
+
+void MonsterSpell::reset()
+{
+	name = "";
+	scriptName = "";
+	chance = 100;
+	interval = 2000;
+	range = 0;
+	minCombatValue = 0;
+	maxCombatValue = 0;
+	attack = 0;
+	skill = 0;
+	combatSpell = false;
+	isMelee = false;
+	needTarget = false;
+	needDirection = false;
+
+	length = 0;
+	spread = 0;
+	radius = 0;
+	conditionType = CONDITION_NONE;
+	conditionMinDamage = 0;
+	conditionMaxDamage = 0;
+	conditionStartDamage = 0;
+	tickInterval = 0;
+
+	speedChange = 0;
+	duration = 0;
+
+	shoot = CONST_ANI_NONE;
+	effect = CONST_ME_NONE;
+}
+
+
 MonsterType::~MonsterType()
 {
 	reset();
@@ -346,10 +384,10 @@ void MonsterType::loadLoot(MonsterType* monsterType, Loot* loot)
 		lootblock.text = loot->text;
 	}
 
-	if (!loot->childs.empty()) {
+	if (!loot->children.empty()) {
 		bool isContainer = Item::items[lootblock.id].isContainer();
 		if (isContainer) {
-			for (Loot* l : loot->childs) {
+			for (Loot* l : loot->children) {
 				loadChildLoot(l, lootblock);
 			}
 		}
@@ -531,6 +569,242 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType,
 	condition->setParam(CONDITION_PARAM_STARTVALUE, startDamage);
 	condition->setParam(CONDITION_PARAM_DELAYED, 1);
 	return condition;
+}
+
+bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description)
+{
+	if (!spell->scriptName.empty()) {
+		spell->isScripted = true;
+	} else if (!spell->name.empty()) {
+		spell->isScripted = false;
+	} else {
+		return false;
+	}
+
+	sb.speed = spell->interval;
+
+	if (spell->chance > 100) {
+		sb.chance = 100;
+	} else {
+		sb.chance = spell->chance;
+	}
+
+	if (spell->range > (Map::maxViewportX * 2)) {
+		spell->range = Map::maxViewportX * 2;
+	}
+	sb.range = spell->range;
+
+	sb.minCombatValue = spell->minCombatValue;
+	sb.maxCombatValue = spell->maxCombatValue;
+	if (std::abs(sb.minCombatValue) > std::abs(sb.maxCombatValue)) {
+		int32_t value = sb.maxCombatValue;
+		sb.maxCombatValue = sb.minCombatValue;
+		sb.minCombatValue = value;
+	}
+
+	sb.spell = g_spells->getSpellByName(spell->name);
+	if (sb.spell) {
+		return true;
+	}
+
+	CombatSpell* combatSpell = nullptr;
+
+	if (spell->isScripted) {
+		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, spell->needTarget, spell->needDirection));
+		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + spell->scriptName)) {
+			std::cout << "cannot find file" << std::endl;
+			return false;
+		}
+
+		if (!combatSpellPtr->loadScriptCombat()) {
+			return false;
+		}
+
+		combatSpell = combatSpellPtr.release();
+		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+	} else {
+		Combat* combat = new Combat;
+		sb.combatSpell = true;
+
+		if (spell->length > 0) {
+			//need direction spell
+			//if (spell->spread > 0) {
+				spell->spread = std::max<int32_t>(0, spell->spread);
+			//} else {
+				//spell->spread = 3;
+			//}
+
+			AreaCombat* area = new AreaCombat();
+			area->setupArea(spell->length, spell->spread);
+			combat->setArea(area);
+
+			spell->needDirection = true;
+		}
+
+		if (spell->radius > 0) {
+			AreaCombat* area = new AreaCombat();
+			area->setupArea(spell->radius);
+			combat->setArea(area);
+		}
+
+		std::string tmpName = asLowerCaseString(spell->name);
+
+		if (tmpName == "melee") {
+			sb.isMelee = true;
+
+			if (spell->attack > 0 && spell->skill > 0) {
+				sb.minCombatValue = 0;
+				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(spell->skill, spell->attack);
+			}
+
+			ConditionType_t conditionType = CONDITION_NONE;
+			int32_t minDamage = 0;
+			int32_t maxDamage = 0;
+			uint32_t tickInterval = 2000;
+
+			if (spell->conditionType != CONDITION_NONE) {
+				conditionType = spell->conditionType;
+
+				minDamage = spell->conditionMinDamage;
+				maxDamage = minDamage;
+				if (spell->tickInterval != 0) {
+					tickInterval = spell->tickInterval;
+				}
+
+				Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, spell->conditionStartDamage, tickInterval);
+				combat->setCondition(condition);
+			}
+
+			sb.range = 1;
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
+			combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
+			combat->setParam(COMBAT_PARAM_BLOCKSHIELD, 1);
+			combat->setOrigin(ORIGIN_MELEE);
+		} else if (tmpName == "combat") {
+			if (spell->combatType == COMBAT_PHYSICALDAMAGE) {
+				combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
+				combat->setOrigin(ORIGIN_RANGED);
+			} else if (spell->combatType == COMBAT_HEALING) {
+				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			}
+			combat->setParam(COMBAT_PARAM_TYPE, spell->combatType);
+		} else if (tmpName == "speed") {
+			int32_t speedChange = 0;
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			if (spell->speedChange != 0) {
+				speedChange = spell->speedChange;
+				if (speedChange < -1000) {
+					//cant be slower than 100%
+					speedChange = -1000;
+				}
+			}
+
+			ConditionType_t conditionType;
+			if (speedChange > 0) {
+				conditionType = CONDITION_HASTE;
+				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			} else {
+				conditionType = CONDITION_PARALYZE;
+			}
+
+			ConditionSpeed* condition = reinterpret_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
+			condition->setFormulaVars(speedChange / 1000.0, 0, speedChange / 1000.0, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "outfit") {
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			ConditionOutfit* condition = reinterpret_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
+			condition->setOutfit(spell->outfit);
+			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "invisible") {
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_INVISIBLE, duration, 0);
+			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "drunk") {
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "firefield") {
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);
+		} else if (tmpName == "poisonfield") {
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_POISONFIELD_PVP);
+		} else if (tmpName == "energyfield") {
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
+		} else if (tmpName == "condition") {
+			uint32_t tickInterval = 2000;
+
+			if (spell->conditionType == CONDITION_NONE) {
+				std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Condition is not set for: " << spell->name << std::endl;
+				return false;
+			}
+
+			if (spell->tickInterval != 0) {
+				int32_t value = spell->tickInterval;
+				if (value > 0) {
+					tickInterval = value;
+				}
+			}
+
+			int32_t minDamage = std::abs(spell->conditionMinDamage);
+			int32_t maxDamage = std::abs(spell->conditionMaxDamage);
+			int32_t startDamage = 0;
+
+			if (spell->conditionStartDamage != 0) {
+				int32_t value = std::abs(spell->conditionStartDamage);
+				if (value <= minDamage) {
+					startDamage = value;
+				}
+			}
+
+			Condition* condition = getDamageCondition(spell->conditionType, maxDamage, minDamage, startDamage, tickInterval);
+			combat->setCondition(condition);
+		} else {
+			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << spell->name << std::endl;
+			delete combat;
+			return false;
+		}
+
+		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		combatSpell = new CombatSpell(combat, spell->needTarget, spell->needDirection);
+
+		if (spell->needTarget) {
+			if (spell->shoot != CONST_ANI_NONE) {
+				combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, spell->shoot);
+			} else {
+				std::cout << "[Warning - Monsters::deserializeSpells] Shoot Effect type \"" << spell->shoot << "\" does not exist." << std::endl;
+			}
+		}
+
+		if (spell->effect != CONST_ME_NONE) {
+			combat->setParam(COMBAT_PARAM_EFFECT, spell->effect);
+		} else {
+			std::cout << "[Warning - Monsters::deserializeSpells] Effect type \"" << spell->effect << "\" does not exist." << std::endl;
+		}
+	}
+
+	sb.spell = combatSpell;
+	return true;
 }
 
 bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, const std::string& description)
