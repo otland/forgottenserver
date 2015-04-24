@@ -21,6 +21,7 @@
 #define FS_CONNECTION_H_FC8E1B4392D24D27A2F129D8B93A6348
 
 #include <unordered_set>
+#include <queue>
 
 #include "networkmessage.h"
 
@@ -39,9 +40,9 @@ typedef std::shared_ptr<ServicePort> ServicePort_ptr;
 class ConnectionManager
 {
 	public:
-		static ConnectionManager* getInstance() {
+		static ConnectionManager& getInstance() {
 			static ConnectionManager instance;
-			return &instance;
+			return instance;
 		}
 
 		Connection_ptr createConnection(boost::asio::ip::tcp::socket* socket,
@@ -94,15 +95,13 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		void close();
 		// Used by protocols that require server to send first
-		void accept(const Protocol_ptr& protocol);
+		void accept(Protocol_ptr protocol);
 		void accept();
 
-		bool send(const OutputMessage_ptr& msg);
+		void send(OutputMessage_ptr msg);
 
 		uint32_t getIP();
-		Protocol_ptr getProtocol() const {
-			return m_protocol;
-		}
+
 	private:
 		void parseHeader(const boost::system::error_code& error);
 		void parsePacket(const boost::system::error_code& error);
@@ -119,7 +118,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 		void onReadTimeout();
 		void onWriteTimeout();
 
-		void internalSend(const OutputMessage_ptr& msg);
+		void internalSend(OutputMessage_ptr msg);
 
 		NetworkMessage m_msg;
 
@@ -127,6 +126,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 		boost::asio::deadline_timer m_writeTimer;
 
 		std::recursive_mutex m_connectionLock;
+
+		std::queue<OutputMessage_ptr> messageQueue;
 
 		ServicePort_ptr m_service_port;
 		Protocol_ptr m_protocol;

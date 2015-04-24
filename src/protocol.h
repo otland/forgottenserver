@@ -34,7 +34,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 
 		virtual void parsePacket(NetworkMessage&) {}
 
-		virtual void onSendMessage(const OutputMessage_ptr& msg);
+		virtual void onSendMessage(const OutputMessage_ptr& msg) const;
 		void onRecvMessage(NetworkMessage& msg);
 		virtual void onRecvFirstMessage(NetworkMessage& msg) = 0;
 		virtual void onConnect() {}
@@ -47,11 +47,14 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 
 		//Use this function for autosend messages only
 		OutputMessage_ptr getOutputBuffer(int32_t size);
-
-		OutputMessage_ptr requestOutputMessage(const bool autosend = true);
-		void clearOutputBuffer(const OutputMessage_ptr& msg) {
-			if (msg == m_outputBuffer) {
-				m_outputBuffer.reset();
+		
+		OutputMessage_ptr& getCurrentBuffer() {
+			return m_outputBuffer;
+		}
+		
+		void send(OutputMessage_ptr msg) {
+			if (auto connection = getConnection()) {
+				connection->send(msg);
 			}
 		}
 	protected:

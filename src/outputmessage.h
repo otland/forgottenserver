@@ -33,17 +33,9 @@ class Protocol;
 class OutputMessage : public NetworkMessage
 {
 	public:
-		enum OutputMessageState {
-			STATE_ALLOCATED,
-			STATE_ALLOCATED_NO_AUTOSEND,
-		};
-		OutputMessage(Connection_ptr&& connection, const int64_t frame):
-			connection(std::move(connection)),
-			frame(frame),
-			outputBufferStart(INITIAL_BUFFER_POSITION),
-			state(STATE_ALLOCATED_NO_AUTOSEND) {}
+		OutputMessage():
+			outputBufferStart(INITIAL_BUFFER_POSITION) {}
 
-		OutputMessage() = delete;
 		// non-copyable
 		OutputMessage(const OutputMessage&) = delete;
 		OutputMessage& operator=(const OutputMessage&) = delete;
@@ -67,13 +59,6 @@ class OutputMessage : public NetworkMessage
 			writeMessageLength();
 		}
 
-		const Connection_ptr&  getConnection() const {
-			return connection;
-		}
-		int64_t getFrame() const {
-			return frame;
-		}
-
 		inline void append(const NetworkMessage& msg) {
 			auto msgLen = msg.getLength();
 			memcpy(buffer + position, msg.getBuffer() + 8, msgLen);
@@ -81,16 +66,13 @@ class OutputMessage : public NetworkMessage
 			position += msgLen;
 		}
 
-		inline void append(OutputMessage_ptr msg) {
+		inline void append(const OutputMessage_ptr& msg) {
 			auto msgLen = msg->getLength();
 			memcpy(buffer + position, msg->getBuffer() + 8, msgLen);
 			length += msgLen;
 			position += msgLen;
 		}
 
-		void setFrame(int64_t new_frame) {
-			frame = new_frame;
-		}
 	protected:
 		template <typename T>
 		inline void add_header(T add) {
@@ -101,62 +83,30 @@ class OutputMessage : public NetworkMessage
 			length += sizeof(T);
 		}
 
-		friend class OutputMessagePool;
-
-		void setState(OutputMessageState newState) {
-			state = newState;
-		}
-		OutputMessageState getState() const {
-			return state;
-		}
-
-		Connection_ptr connection;
-
-		int64_t frame;
 		MsgSize_t outputBufferStart;
-
-		OutputMessageState state;
 };
 
 class OutputMessagePool
 {
-	private:
-		OutputMessagePool();
-
 	public:
 		// non-copyable
 		OutputMessagePool(const OutputMessagePool&) = delete;
 		OutputMessagePool& operator=(const OutputMessagePool&) = delete;
 
-		static OutputMessagePool* getInstance() {
+		static OutputMessagePool& getInstance() {
 			static OutputMessagePool instance;
-			return &instance;
+			return instance;
 		}
 
-		void send(const OutputMessage_ptr& msg);
 		void sendAll();
-		void stop() {
-			m_open.store(false, std::memory_order_relaxed);
-		}
 
-		OutputMessage_ptr getOutputMessage(const Protocol_ptr& protocol, const bool autosend);
-		std::vector<OutputMessage_ptr> getOutputMessages(const std::vector< Protocol_ptr >& protocols);
-		void startExecutionFrame();
+		static OutputMessage_ptr getOutputMessage();
 
-		int64_t getFrameTime() const {
-			return frameTime.load(std::memory_order_relaxed);
-		}
-
-	protected:
-		OutputMessage_ptr internalGetMessage(Connection_ptr&& connection, const bool autosend);
-		bool internalSend(const OutputMessage_ptr& msg) const;
-		void addToAutoSend(const OutputMessage_ptr& msg);
-
-		typedef std::list<OutputMessage_ptr> OutputMessageList;
-		OutputMessageList autoSendOutputMessages;
-		std::mutex outputPoolLock;
-		std::atomic<int64_t> frameTime;
-		std::atomic<bool> m_open {true};
+		void addProtocolToAutosend(Protocol_ptr protocol);
+		void removeProtocolFromAutosend(const Protocol_ptr& protocol);
+	private:
+		OutputMessagePool() = default;
+		std::vector<Protocol_ptr> bufferedProtocols;
 };
 
 template <typename T, uint16_t CAPACITY>
@@ -213,31 +163,35 @@ class LockfreeBoundedStack {
 	private:
 		Node internal_pop(std::atomic<Node>& listHead) noexcept {
 			Node currentHead, nextNode;
+			currentHead = listHead.load(std::memory_order_acquire);
 			do {
-				currentHead = listHead.load();
 				if (!currentHead) {
 					break;
 				}
 				nextNode = getNextNode(currentHead);
-			} while (!listHead.compare_exchange_weak(currentHead, nextNode));
+			} while (!listHead.compare_exchange_weak(currentHead, nextNode,
+								 std::memory_order_release,
+								 std::memory_order_relaxed));
 
 			return currentHead;
 		}
 
-		void internal_push(std::atomic<Node>& listHead, Node& newNode) noexcept {
-			auto currentHead = listHead.load();
+		void internal_push(std::atomic<Node>& listHead, Node newNode) noexcept {
+			auto currentHead = listHead.load(std::memory_order_acquire);
 			newNode.generation++;
 			do {
 				newNode.nextNode = currentHead.index;
 				nodes[newNode.index] = newNode;
-			} while (!listHead.compare_exchange_weak(currentHead, newNode));
+			} while (!listHead.compare_exchange_weak(currentHead, newNode, 
+								 std::memory_order_release,
+								 std::memory_order_relaxed));
 		}
 
-		T& getPayload(const Node& node) noexcept {
+		T& getPayload(Node node) noexcept {
 			return payloads[node.index];
 		}
 
-		Node getNextNode(const Node& node) const noexcept {
+		Node getNextNode(Node node) const noexcept {
 			if (node.nextNode == Node::END) {
 				return Node();
 			}
@@ -247,7 +201,7 @@ class LockfreeBoundedStack {
 		T payloads[CAPACITY];
 		Node nodes[CAPACITY];
 
-
+		//TODO: Add padding to prevent these two from being on the same cache line
 		std::atomic<Node> freeNodes;
 		std::atomic<Node> head;
 };

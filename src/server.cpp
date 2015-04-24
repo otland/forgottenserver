@@ -71,8 +71,6 @@ void ServiceManager::stop()
 
 	m_acceptors.clear();
 
-	OutputMessagePool::getInstance()->stop();
-
 	death_timer.expires_from_now(boost::posix_time::seconds(3));
 	death_timer.async_wait(std::bind(&ServiceManager::die, this));
 }
@@ -137,7 +135,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 		}
 
 		if (remote_ip != 0 && g_bans.acceptConnection(remote_ip)) {
-			Connection_ptr connection = ConnectionManager::getInstance()->createConnection(socket, m_io_service, shared_from_this());
+			Connection_ptr connection = ConnectionManager::getInstance().createConnection(socket, m_io_service, shared_from_this());
 			Service_ptr service = m_services.front();
 			if (service->is_single_socket()) {
 				connection->accept(service->make_protocol(connection));

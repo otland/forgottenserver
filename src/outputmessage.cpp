@@ -23,15 +23,14 @@
 #include "protocol.h"
 
 template <typename T>
-class RebindingAllocator : public std::allocator<T>
+class PoolingAllocator : public std::allocator<T>
 {
 	public:
 		template <typename U>
-		RebindingAllocator(const U&) noexcept {}
+		PoolingAllocator(const U&) noexcept {}
 		typedef T value_type;
 
-		T* allocate(size_t n) const noexcept {
-			assert(n == 1);
+		T* allocate(size_t n) const {
 			T* p;
 			if (!getFreeList().pop(p)) {
 				//Acquire memory without calling the constructor of T
@@ -40,8 +39,7 @@ class RebindingAllocator : public std::allocator<T>
 			return p;
 		}
 
-		void deallocate(T* p, size_t n) const noexcept {
-			assert(n == 1);
+		void deallocate(T* p, size_t n) const {
 			if (!getFreeList().push(p)) {
 				//Release memory without calling the destructor of T
 				//(it has already been called at this point)
@@ -49,7 +47,7 @@ class RebindingAllocator : public std::allocator<T>
 			}
 		}
 
-		~RebindingAllocator() {
+		~PoolingAllocator() {
 			T* ptr;
 			auto& freeList = getFreeList();
 			while(freeList.pop(ptr)) {
@@ -58,7 +56,7 @@ class RebindingAllocator : public std::allocator<T>
 		}
 	private:
 		typedef LockfreeBoundedStack<T*, OUTPUTMESSAGE_FREE_LIST_CAPACITY> FreeList;
-		static FreeList& getFreeList() noexcept {
+		static FreeList& getFreeList() {
 			static FreeList freeList;
 			return freeList;
 		}
@@ -69,119 +67,45 @@ class OutputMessageAllocator
 	public:
 		typedef OutputMessage value_type;
 		template<typename U>
-		struct rebind {typedef RebindingAllocator<U> other;};
+		struct rebind {typedef PoolingAllocator<U> other;};
 };
-
-OutputMessagePool::OutputMessagePool()
-{
-	startExecutionFrame();
-}
-
-void OutputMessagePool::startExecutionFrame()
-{
-	frameTime.store(OTSYS_TIME(), std::memory_order_relaxed);
-}
-
-bool OutputMessagePool::internalSend(const OutputMessage_ptr& msg) const
-{
-	return msg->getConnection()->send(msg);
-}
-
-void OutputMessagePool::send(const OutputMessage_ptr& msg)
-{
-	assert(msg->getState() == OutputMessage::STATE_ALLOCATED_NO_AUTOSEND);
-	if (!internalSend(msg)) {
-		addToAutoSend(msg);
-	}
-}
 
 void OutputMessagePool::sendAll()
 {
 	//dispatcher thread
-	const auto currentFrameTime = getFrameTime();
-	const int64_t dropTime = currentFrameTime - 10000;
-	const int64_t staleTime = currentFrameTime - 10;
-	static OutputMessageList autoSendBuffer;
+	static int64_t lastSend = 0;
 
-	{
-		std::lock_guard<std::mutex> lockClass(outputPoolLock);
-		autoSendBuffer.splice(autoSendBuffer.end(), autoSendOutputMessages);
+	auto currentFrame = OTSYS_TIME();
+	auto staleTime = currentFrame - 10;
+	if (lastSend > staleTime) {
+		return;
 	}
+	lastSend = currentFrame;
 
-	for (auto it = autoSendBuffer.begin(), end = autoSendBuffer.end(); it != end;) {
-		const OutputMessage_ptr& msg = *it;
-		const auto msgFrame = msg->getFrame();
-		
-		if (msgFrame < dropTime) {
-			//drop messages that are older than 10 seconds
-			auto connection = msg->getConnection();
-			connection->getProtocol()->clearOutputBuffer(msg);
-			it = autoSendBuffer.erase(it);
-			continue;
-		}
-		
-		if (msgFrame < staleTime) {
-			return;
-		}
-
-		if (internalSend(msg))  {
-			it = autoSendBuffer.erase(it);
-		} else {
-			//send returns false if there's already a write operation in progress
-			//so we leave the message in the queue
-			++it;
+	for (auto& protocol : bufferedProtocols) {
+		auto& msg = protocol->getCurrentBuffer();
+		if (msg) {
+			protocol->send(std::move(msg));
 		}
 	}
 }
 
-std::vector<OutputMessage_ptr> OutputMessagePool::getOutputMessages(const std::vector<Protocol_ptr>& protocols)
+void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol) 
 {
-	std::vector<OutputMessage_ptr> ret;
-	if (!m_open.load(std::memory_order_relaxed)) {
-		return ret;
-	}
-	ret.reserve(protocols.size());
-
-	for (const auto& protocol : protocols) {
-		auto connection = protocol->getConnection();
-		if (connection) {
-			ret.emplace_back(internalGetMessage(std::move(connection), false));
-		}
-	}
-
-	return ret;
+	//dispatcher thread
+	bufferedProtocols.emplace_back(protocol);
 }
 
-OutputMessage_ptr OutputMessagePool::getOutputMessage(const Protocol_ptr& protocol, const bool autosend /*= true*/)
+void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)
 {
-	assert(protocol);
-	OutputMessage_ptr msg;
-	auto connection = protocol->getConnection();
-	if (!connection || !m_open.load(std::memory_order_relaxed)) {
-		return msg;
+	//dispatcher thread
+	auto it = std::find(bufferedProtocols.begin(), bufferedProtocols.end(), protocol);
+	if (it != bufferedProtocols.end()) {
+		bufferedProtocols.erase(it);
 	}
-
-	msg = internalGetMessage(std::move(connection), autosend);
-	return msg;
 }
 
-OutputMessage_ptr OutputMessagePool::internalGetMessage(Connection_ptr&& connection, const bool autosend)
+OutputMessage_ptr OutputMessagePool::getOutputMessage()
 {
-	OutputMessageAllocator alloc;
-	assert(connection && connection->getProtocol());
-	auto msg = std::allocate_shared<OutputMessage>(alloc, std::forward<Connection_ptr>(connection), getFrameTime());
-
-	if (autosend) {
-		addToAutoSend(msg);
-	}
-
-	return msg;
+	return std::allocate_shared<OutputMessage>(OutputMessageAllocator());
 }
-
-void OutputMessagePool::addToAutoSend(const OutputMessage_ptr& msg)
-{
-	std::lock_guard<std::mutex> lockClass(outputPoolLock);
-	msg->setState(OutputMessage::STATE_ALLOCATED);
-	autoSendOutputMessages.push_back(msg);
-}
-

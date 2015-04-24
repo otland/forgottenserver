@@ -90,7 +90,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolStatus::sendStatusString()
 {
-	OutputMessage_ptr output = requestOutputMessage(false);
+	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
 	if (!output) {
 		disconnect();
 		return;
@@ -156,17 +156,13 @@ void ProtocolStatus::sendStatusString()
 	doc.save(ss, "", pugi::format_raw);
 
 	output->addString(ss.str());
-	OutputMessagePool::getInstance()->send(output);
+	send(output);
 	disconnect();
 }
 
 void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& characterName)
 {
-	OutputMessage_ptr output = requestOutputMessage(false);
-	if (!output) {
-		disconnect();
-		return;
-	}
+	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
 
 	if (requestedInfo & REQUEST_BASIC_SERVER_INFO) {
 		output->addByte(0x10);
@@ -232,6 +228,6 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->addString(STATUS_SERVER_VERSION);
 		output->addString(CLIENT_VERSION_STR);
 	}
-	OutputMessagePool::getInstance()->send(output);
+	send(output);
 	disconnect();
 }

@@ -37,11 +37,11 @@ extern Game g_game;
 
 void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
 {
-	OutputMessage_ptr output = requestOutputMessage(false);
+	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
 	if (output) {
 		output->addByte(version >= 1076 ? 0x0B : 0x0A);
 		output->addString(message);
-		OutputMessagePool::getInstance()->send(output);
+		send(output);
 	}
 
 	disconnect();
@@ -55,52 +55,50 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		return;
 	}
 
-	OutputMessage_ptr output = requestOutputMessage(false);
-	if (output) {
-		//Update premium days
-		Game::updatePremium(account);
+	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	//Update premium days
+	Game::updatePremium(account);
+	
+	const std::string& motd = g_config.getString(ConfigManager::MOTD);
+	if (!motd.empty()) {
+		//Add MOTD
+		output->addByte(0x14);
 
-		const std::string& motd = g_config.getString(ConfigManager::MOTD);
-		if (!motd.empty()) {
-			//Add MOTD
-			output->addByte(0x14);
-
-			std::ostringstream ss;
-			ss << g_game.getMotdNum() << "\n" << motd;
-			output->addString(ss.str());
-		}
-
-		//Add session key
-		output->addByte(0x28);
-		output->addString(accountName + "\n" + password);
-
-		//Add char list
-		output->addByte(0x64);
-
-		output->addByte(1); // number of worlds
-
-		output->addByte(0); // world id
-		output->addString(g_config.getString(ConfigManager::SERVER_NAME));
-		output->addString(g_config.getString(ConfigManager::IP));
-		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
-		output->addByte(0);
-
-		uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), account.characters.size());
-		output->addByte(size);
-		for (uint8_t i = 0; i < size; i++) {
-			output->addByte(0);
-			output->addString(account.characters[i]);
-		}
-
-		//Add premium days
-		if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-			output->add<uint16_t>(0xFFFF);    //client displays free premium
-		} else {
-			output->add<uint16_t>(account.premiumDays);
-		}
-
-		OutputMessagePool::getInstance()->send(output);
+		std::ostringstream ss;
+		ss << g_game.getMotdNum() << "\n" << g_config.getString(ConfigManager::MOTD);
+		output->addString(ss.str());
 	}
+
+	//Add session key
+	output->addByte(0x28);
+	output->addString(accountName + "\n" + password);
+
+	//Add char list
+	output->addByte(0x64);
+
+	output->addByte(1); // number of worlds
+
+	output->addByte(0); // world id
+	output->addString(g_config.getString(ConfigManager::SERVER_NAME));
+	output->addString(g_config.getString(ConfigManager::IP));
+	output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+	output->addByte(0);
+
+	uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), account.characters.size());
+	output->addByte(size);
+	for (uint8_t i = 0; i < size; i++) {
+		output->addByte(0);
+		output->addString(account.characters[i]);
+	}
+
+	//Add premium days
+	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
+		output->add<uint16_t>(0xFFFF);    //client displays free premium
+	} else {
+		output->add<uint16_t>(account.premiumDays);
+	}
+
+	send(output);
 
 	disconnect();
 }

@@ -91,6 +91,8 @@ void ProtocolGame::release()
 		player->decrementReferenceCounter();
 		player = nullptr;
 	}
+	
+	OutputMessagePool::getInstance().removeProtocolFromAutosend(shared_from_this());
 	Protocol::release();
 }
 
@@ -156,13 +158,11 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			ss << "Too many players online.\nYou are at place "
 			   << currentSlot << " on the waiting list.";
 
-			OutputMessage_ptr output = requestOutputMessage(false);
-			if (output) {
-				output->addByte(0x16);
-				output->addString(ss.str());
-				output->addByte(retryTime);
-				OutputMessagePool::getInstance()->send(output);
-			}
+			OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+			output->addByte(0x16);
+			output->addString(ss.str());
+			output->addByte(retryTime);
+			send(output);
 
 			disconnect();
 
@@ -207,6 +207,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 
 		connect(_player->getID(), operatingSystem);
 	}
+	OutputMessagePool::getInstance().addProtocolToAutosend(shared_from_this());
 }
 
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
@@ -373,51 +374,45 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolGame::onConnect()
 {
-	OutputMessage_ptr output = requestOutputMessage(false);
-	if (output) {
-		static std::random_device rd;
-		static std::ranlux24 generator(rd());
-		static std::uniform_int_distribution<uint16_t> randNumber(0x00, 0xFF);
+	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	static std::random_device rd;
+	static std::ranlux24 generator(rd());
+	static std::uniform_int_distribution<uint16_t> randNumber(0x00, 0xFF);
 
-		// Skip checksum
-		output->skipBytes(sizeof(uint32_t));
+	// Skip checksum
+	output->skipBytes(sizeof(uint32_t));
 
-		// Packet length & type
-		output->add<uint16_t>(0x0006);
-		output->addByte(0x1F);
+	// Packet length & type
+	output->add<uint16_t>(0x0006);
+	output->addByte(0x1F);
 
-		// Add timestamp & random number
-		m_challengeTimestamp = static_cast<uint32_t>(time(nullptr));
-		output->add<uint32_t>(m_challengeTimestamp);
+	// Add timestamp & random number
+	m_challengeTimestamp = static_cast<uint32_t>(time(nullptr));
+	output->add<uint32_t>(m_challengeTimestamp);
 
-		m_challengeRandom = randNumber(generator);
-		output->addByte(m_challengeRandom);
+	m_challengeRandom = randNumber(generator);
+	output->addByte(m_challengeRandom);
 
-		// Go back and write checksum
-		output->skipBytes(-12);
-		output->add<uint32_t>(adlerChecksum(output->getOutputBuffer() + sizeof(uint32_t), 8));
+	// Go back and write checksum
+	output->skipBytes(-12);
+	output->add<uint32_t>(adlerChecksum(output->getOutputBuffer() + sizeof(uint32_t), 8));
 
-		OutputMessagePool::getInstance()->send(output);
-	}
+	send(output);
 }
 
 void ProtocolGame::disconnectClient(const std::string& message)
 {
-	OutputMessage_ptr output = requestOutputMessage(false);
-	if (output) {
-		output->addByte(0x14);
-		output->addString(message);
-		OutputMessagePool::getInstance()->send(output);
-	}
+	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	output->addByte(0x14);
+	output->addString(message);
+	send(output);
 	disconnect();
 }
 
 void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 {
 	OutputMessage_ptr out = getOutputBuffer(msg.getLength());
-	if (out) {
-		out->append(msg);
-	}
+	out->append(msg);
 }
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)

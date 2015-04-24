@@ -68,7 +68,7 @@ void ConnectionManager::closeAll()
 void Connection::close()
 {
 	//any thread
-	ConnectionManager::getInstance()->releaseConnection(shared_from_this());
+	ConnectionManager::getInstance().releaseConnection(shared_from_this());
 
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	if (m_connectionState != CONNECTION_STATE_OPEN) {
@@ -115,7 +115,7 @@ Connection::~Connection()
 	closeSocket();
 }
 
-void Connection::accept(const Protocol_ptr& protocol)
+void Connection::accept(Protocol_ptr protocol)
 {
 	m_protocol = protocol;
 	g_dispatcher.addTask(createTask(std::bind(&Protocol::onConnect, m_protocol)));
@@ -260,27 +260,23 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 }
 
-bool Connection::send(const OutputMessage_ptr& msg)
+void Connection::send(OutputMessage_ptr msg)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
-		m_protocol->clearOutputBuffer(msg);
-		return true;
+		return;
 	}
 
 	if (!m_pendingWrite) {
-		m_protocol->onSendMessage(msg);
 		internalSend(msg);
 	} else {
-		//There's a pending write operation - let the caller now
-		return false;
+		messageQueue.push(msg);
 	}
-
-	return true;
 }
 
-void Connection::internalSend(const OutputMessage_ptr& msg)
+void Connection::internalSend(OutputMessage_ptr msg)
 {
+	m_protocol->onSendMessage(msg);
 	try {
 		m_pendingWrite = true;
 		m_writeTimer.expires_from_now(boost::posix_time::seconds(Connection::write_timeout));
@@ -323,10 +319,15 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 
 	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
 		close();
+		closeSocket();
 		return;
 	}
 
 	m_pendingWrite = false;
+	if (!messageQueue.empty()) {
+		internalSend(std::move(messageQueue.front()));
+		messageQueue.pop();
+	}
 }
 
 void Connection::handleReadError(const boost::system::error_code& error)
@@ -352,6 +353,7 @@ void Connection::onReadTimeout()
 
 	if (m_pendingRead || m_readError) {
 		close();
+		closeSocket();
 	}
 }
 
@@ -361,6 +363,7 @@ void Connection::onWriteTimeout()
 
 	if (m_pendingWrite || m_writeError) {
 		close();
+		closeSocket();
 	}
 }
 
