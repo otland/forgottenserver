@@ -27,7 +27,7 @@
 
 extern RSA g_RSA;
 
-void Protocol::onSendMessage(const OutputMessage_ptr& msg)
+void Protocol::onSendMessage(const OutputMessage_ptr& msg) const
 {
 	if (!m_rawMessages) {
 		msg->writeMessageLength();
@@ -37,8 +37,6 @@ void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 			msg->addCryptoHeader(m_checksumEnabled);
 		}
 	}
-
-	clearOutputBuffer(msg);
 }
 
 void Protocol::onRecvMessage(NetworkMessage& msg)
@@ -56,7 +54,7 @@ OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 	if (m_outputBuffer && NetworkMessage::max_protocol_body_length >= m_outputBuffer->getLength() + size) {
 		return m_outputBuffer;
 	} else {
-		m_outputBuffer = requestOutputMessage();
+		m_outputBuffer = OutputMessagePool::getOutputMessage();
 		return m_outputBuffer;
 	}
 }
@@ -143,9 +141,3 @@ uint32_t Protocol::getIP()
 
 	return 0;
 }
-
-OutputMessage_ptr Protocol::requestOutputMessage(const bool autosend)
-{
-	return OutputMessagePool::getInstance()->getOutputMessage(shared_from_this(), autosend);
-}
-

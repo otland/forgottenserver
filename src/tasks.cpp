@@ -38,7 +38,7 @@ void Dispatcher::start()
 
 void Dispatcher::dispatcherThread()
 {
-	OutputMessagePool* outputPool = OutputMessagePool::getInstance();
+	auto& outputPool = OutputMessagePool::getInstance();
 
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
@@ -60,9 +60,8 @@ void Dispatcher::dispatcherThread()
 
 			if (!task->hasExpired()) {
 				// execute it
-				outputPool->startExecutionFrame();
 				(*task)();
-				outputPool->sendAll();
+				outputPool.sendAll();
 
 				g_game.map.clearSpectatorCache();
 			}
@@ -107,10 +106,7 @@ void Dispatcher::flush()
 		(*task)();
 		delete task;
 
-		OutputMessagePool* outputPool = OutputMessagePool::getInstance();
-		if (outputPool) {
-			outputPool->sendAll();
-		}
+		OutputMessagePool::getInstance().sendAll();
 
 		g_game.map.clearSpectatorCache();
 	}

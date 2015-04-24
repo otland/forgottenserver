@@ -4388,7 +4388,7 @@ void Game::shutdown()
 		serviceManager->stop();
 	}
 
-	ConnectionManager::getInstance()->closeAll();
+	ConnectionManager::getInstance().closeAll();
 
 	std::cout << " done!" << std::endl;
 }

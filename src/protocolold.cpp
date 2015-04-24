@@ -31,12 +31,10 @@ extern Game g_game;
 
 void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
 {
-	OutputMessage_ptr output = requestOutputMessage(false);
-	if (output) {
-		output->addByte(0x0A);
-		output->addString(message);
-		OutputMessagePool::getInstance()->send(output);
-	}
+	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	output->addByte(0x0A);
+	output->addString(message);
+	send(output);
 
 	disconnect();
 }
