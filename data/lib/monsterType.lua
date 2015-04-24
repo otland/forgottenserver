@@ -64,14 +64,18 @@ function MonsterType.register(self, mask)
 		if mask.flags.pushable then
 			self:setIsPushable(mask.flags.pushable)
 		end
-	end
-	
-	if mask.canPushItems then
-		self:setCanPushItems(mask.canPushItems)
-	end
-	
-	if mask.canPushCreatures then
-		self:setCanPushCreatures(mask.canPushCreatures)
+		if mask.flags.canPushItems then
+			self:setCanPushItems(mask.flags.canPushItems)
+		end
+		if mask.flags.canPushCreatures then
+			self:setCanPushCreatures(mask.flags.canPushCreatures)
+		end
+		if mask.flags.targetDistance then
+			self:setTargetDistance(mask.flags.targetDistance)
+		end
+		if mask.flags.staticAttack then
+			self:setStaticAttack(mask.flags.staticAttack)
+		end
 	end
 	
 	if mask.skull then
@@ -91,8 +95,8 @@ function MonsterType.register(self, mask)
 		if mask.changeTarget.chance then
 			local chance = mask.changeTarget.chance
 		end
-		if mask.changeTarget.speed then
-			self:setChangeTarget(chance, mask.changeTarget.speed)
+		if mask.changeTarget.interval then
+			self:setChangeTarget(chance, mask.changeTarget.interval)
 		end
 	end
 	
@@ -103,7 +107,7 @@ function MonsterType.register(self, mask)
 	end
 	
 	if type(mask.summons) == "table" then
-		for k, v in pairs(mask.summonss) do
+		for k, v in pairs(mask.summons) do
 			self:addSummon(v.name, v.interval, v.chance)
 		end
 	end
@@ -156,6 +160,25 @@ function MonsterType.register(self, mask)
 				end
 			end
 			self:addLoot(parent)
+		end
+	end
+	
+	if type(mask.elements) == "table" then
+		for _, element in pairs(mask.elements) do
+			if element.type and element.percent then
+				self:addElement(element.type, element.percent)
+			end
+		end
+	end
+	
+	if type(mask.immunities) == "table" then
+		for _, immunity in pairs(mask.immunities) do
+			if immunity.type and immunity.combat then
+				self:addCombatImmunity(immunity.type)
+			end
+			if immunity.type and immunity.condition then
+				self:addConditionImmunity(immunity.type)
+			end
 		end
 	end
 	

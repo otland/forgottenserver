@@ -2589,15 +2589,17 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "setIsHostile", LuaScriptInterface::luaMonsterTypeSetIsHostile);
 	registerMethod("MonsterType", "setIsPushable", LuaScriptInterface::luaMonsterTypeSetIsPushable);
 	registerMethod("MonsterType", "setIsHealthHidden", LuaScriptInterface::luaMonsterTypeSetIsHealthHidden);
+	registerMethod("MonsterType", "setStaticAttack", LuaScriptInterface::luaMonsterTypeSetStaticAttack);
+	registerMethod("MonsterType", "setTargetDistance", LuaScriptInterface::luaMonsterTypeSetTargetDistance);
 
 	registerMethod("MonsterType", "setCanPushItems", LuaScriptInterface::luaMonsterTypeSetCanPushItems);
 	registerMethod("MonsterType", "setCanPushCreatures", LuaScriptInterface::luaMonsterTypeSetCanPushCreatures);
 
-	//registerMethod("MonsterType", "addCombatImmunity", LuaScriptInterface::luaMonsterTypeAddCombatImmunity);
-	//registerMethod("MonsterType", "addConditionImmunity", LuaScriptInterface::luaMonsterTypeAddConditionImmunity);
+	registerMethod("MonsterType", "addCombatImmunity", LuaScriptInterface::luaMonsterTypeAddCombatImmunity);
+	registerMethod("MonsterType", "addConditionImmunity", LuaScriptInterface::luaMonsterTypeAddConditionImmunity);
 	registerMethod("MonsterType", "addAttack", LuaScriptInterface::luaMonsterTypeAddAttack);
 	registerMethod("MonsterType", "addDefense", LuaScriptInterface::luaMonsterTypeAddDefense);
-	//registerMethod("MonsterType", "addElement", LuaScriptInterface::luaMonsterTypeAddElement);
+	registerMethod("MonsterType", "addElement", LuaScriptInterface::luaMonsterTypeAddElement);
 	registerMethod("MonsterType", "addVoice", LuaScriptInterface::luaMonsterTypeAddVoice);
 	registerMethod("MonsterType", "addLoot", LuaScriptInterface::luaMonsterTypeAddLoot);
 	registerMethod("MonsterType", "addSummon", LuaScriptInterface::luaMonsterTypeAddSummon);
@@ -12305,22 +12307,139 @@ int LuaScriptInterface::luaMonsterTypeSetCanPushCreatures(lua_State* L)
 	return 1;
 }
 
-/*
-int LuaScriptInterface::luaMonsterTypeAddCombatImmunity(lua_State* L)
+int LuaScriptInterface::luaMonsterTypeSetTargetDistance(lua_State* L)
 {
-	// monsterType:addCombatImmunity(type)
-	// TODO
+	// monsterType:setTargetDistance(distance)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->targetDistance = getNumber<int32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
+int LuaScriptInterface::luaMonsterTypeSetStaticAttack(lua_State* L)
+{
+	// monsterType:setStaticAttack(attack)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		uint32_t staticAttack = getNumber<uint32_t>(L, 2);
+		if (staticAttack > 100) {
+			std::cout << "[Warning - Monsters::loadMonster] staticattack greater than 100. " << monsterType->name << std::endl;
+			staticAttack = 100;
+		}
+		monsterType->staticAttackChance = staticAttack;
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeAddCombatImmunity(lua_State* L)
+{
+	// monsterType:addCombatImmunity(type)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		std::string immunity = getString(L, 2);
+		if (immunity == "physical") {
+			monsterType->damageImmunities |= COMBAT_PHYSICALDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "energy") {
+			monsterType->damageImmunities |= COMBAT_ENERGYDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "fire") {
+			monsterType->damageImmunities |= COMBAT_FIREDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "poison" || immunity == "earth") {
+			monsterType->damageImmunities |= COMBAT_EARTHDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "drown") {
+			monsterType->damageImmunities |= COMBAT_DROWNDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "ice") {
+			monsterType->damageImmunities |= COMBAT_ICEDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "holy") {
+			monsterType->damageImmunities |= COMBAT_HOLYDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "death") {
+			monsterType->damageImmunities |= COMBAT_DEATHDAMAGE;
+			pushBoolean(L, true);
+		} else if (immunity == "lifedrain") {
+			monsterType->damageImmunities |= COMBAT_LIFEDRAIN;
+			pushBoolean(L, true);
+		} else if (immunity == "manadrain") {
+			monsterType->damageImmunities |= COMBAT_MANADRAIN;
+			pushBoolean(L, true);
+		} else {
+			std::cout << "[Warning - Monsters::loadMonster] Unknown immunity name " << immunity << " for monster: " << monsterType->name << std::endl;
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
 
 int LuaScriptInterface::luaMonsterTypeAddConditionImmunity(lua_State* L)
 {
 	// monsterType:addConditionImmunity(type)
-	// TODO
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		std::string immunity = getString(L, 2);
+		if (immunity == "physical") {
+			monsterType->conditionImmunities |= CONDITION_BLEEDING;
+			pushBoolean(L, true);
+		} else if (immunity == "energy") {
+			monsterType->conditionImmunities |= CONDITION_ENERGY;
+			pushBoolean(L, true);
+		} else if (immunity == "fire") {
+			monsterType->conditionImmunities |= CONDITION_FIRE;
+			pushBoolean(L, true);
+		} else if (immunity == "poison" || immunity == "earth") {
+			monsterType->conditionImmunities |= CONDITION_POISON;
+			pushBoolean(L, true);
+		} else if (immunity == "drown") {
+			monsterType->conditionImmunities |= CONDITION_DROWN;
+			pushBoolean(L, true);
+		} else if (immunity == "ice") {
+			monsterType->conditionImmunities |= CONDITION_FREEZING;
+			pushBoolean(L, true);
+		} else if (immunity == "holy") {
+			monsterType->conditionImmunities |= CONDITION_DAZZLED;
+			pushBoolean(L, true);
+		} else if (immunity == "death") {
+			monsterType->conditionImmunities |= CONDITION_CURSED;
+			pushBoolean(L, true);
+		} else if (immunity == "paralyze") {
+			monsterType->conditionImmunities |= CONDITION_PARALYZE;
+			pushBoolean(L, true);
+		} else if (immunity == "outfit") {
+			monsterType->conditionImmunities |= CONDITION_OUTFIT;
+			pushBoolean(L, true);
+		} else if (immunity == "drunk") {
+			monsterType->conditionImmunities |= CONDITION_DRUNK;
+			pushBoolean(L, true);
+		} else if (immunity == "invisible" || immunity == "invisibility") {
+			monsterType->conditionImmunities |= CONDITION_INVISIBLE;
+			pushBoolean(L, true);
+		} else if (immunity == "bleed") {
+			monsterType->conditionImmunities |= CONDITION_BLEEDING;
+			pushBoolean(L, true);
+		} else {
+			std::cout << "[Warning - Monsters::loadMonster] Unknown immunity name " << immunity << " for monster: " << monsterType->name << std::endl;
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
-*/
+
 int LuaScriptInterface::luaMonsterTypeAddAttack(lua_State* L)
 {
 	// monsterType:addAttack(attack)
@@ -12364,14 +12483,21 @@ int LuaScriptInterface::luaMonsterTypeAddDefense(lua_State* L)
 	}
 	return 1;
 }
-/*
+
 int LuaScriptInterface::luaMonsterTypeAddElement(lua_State* L)
 {
-	// monsterType:addElement(type)
-	// TODO
+	// monsterType:addElement(type, percent)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		CombatType_t element = getNumber<CombatType_t>(L, 2);
+		monsterType->elementMap[element] = getNumber<int32_t>(L, 3);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+
 	return 1;
 }
-*/
 
 int LuaScriptInterface::luaMonsterTypeAddVoice(lua_State* L)
 {

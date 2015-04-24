@@ -312,7 +312,7 @@
 	<monster name="Askarak Lord" file="Demons/askarak lord.xml"/>
 	<monster name="Askarak Prince" file="Demons/askarak prince.xml"/>
 	<monster name="Dark Torturer" file="Demons/dark torturer.xml"/>
-	<monster name="Demon" file="Demons/demon.xml"/>
+	<!-- monster name="Demon" file="Demons/demon.xml"/ -->
 	<monster name="Destroyer" file="Demons/destroyer.xml"/>
 	<monster name="Diabolic Imp" file="Demons/diabolic imp.xml"/>
 	<monster name="Fire Devil" file="Demons/fire devil.xml"/>

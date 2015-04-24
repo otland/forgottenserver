@@ -240,19 +240,7 @@ void MonsterType::createLoot(Container* corpse)
 }
 
 void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string& type) {
-	if (type == "attacks") {
-		if (!child->spellAttackList.empty()) {
-			for (spellBlock_t attacks : child->spellAttackList) {
-				root->spellAttackList.push_back(attacks);
-			}
-		}
-	} else if (type == "defenses") {
-		if (!child->spellDefenseList.empty()) {
-			for (spellBlock_t defenses : child->spellDefenseList) {
-				root->spellDefenseList.push_back(defenses);
-			}
-		}
-	} else if (type == "loot") {
+	if (type == "loot") {
 		if (!child->lootItems.empty()) {
 			for (LootBlock loot : child->lootItems) {
 				root->lootItems.push_back(loot);
@@ -328,18 +316,6 @@ void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string
 		if (!child->summonList.empty()) {
 			for (summonBlock_t summons : child->summonList) {
 				root->summonList.push_back(summons);
-			}
-		}
-	
-		if (!child->spellAttackList.empty()) {
-			for (spellBlock_t attacks : child->spellAttackList) {
-				root->spellAttackList.push_back(attacks);
-			}
-		}
-
-		if (!child->spellDefenseList.empty()) {
-			for (spellBlock_t defenses : child->spellDefenseList) {
-				root->spellDefenseList.push_back(defenses);
 			}
 		}
 
@@ -627,12 +603,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		sb.combatSpell = true;
 
 		if (spell->length > 0) {
-			//need direction spell
-			//if (spell->spread > 0) {
-				spell->spread = std::max<int32_t>(0, spell->spread);
-			//} else {
-				//spell->spread = 3;
-			//}
+			spell->spread = std::max<int32_t>(0, spell->spread);
 
 			AreaCombat* area = new AreaCombat();
 			area->setupArea(spell->length, spell->spread);
@@ -791,15 +762,11 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		if (spell->needTarget) {
 			if (spell->shoot != CONST_ANI_NONE) {
 				combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, spell->shoot);
-			} else {
-				std::cout << "[Warning - Monsters::deserializeSpells] Shoot Effect type \"" << spell->shoot << "\" does not exist." << std::endl;
 			}
 		}
 
 		if (spell->effect != CONST_ME_NONE) {
 			combat->setParam(COMBAT_PARAM_EFFECT, spell->effect);
-		} else {
-			std::cout << "[Warning - Monsters::deserializeSpells] Effect type \"" << spell->effect << "\" does not exist." << std::endl;
 		}
 	}
 

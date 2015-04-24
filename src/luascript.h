@@ -1227,15 +1227,17 @@ class LuaScriptInterface
 		static int luaMonsterTypeSetIsHostile(lua_State* L);
 		static int luaMonsterTypeSetIsPushable(lua_State* L);
 		static int luaMonsterTypeSetIsHealthHidden(lua_State* L);
+		static int luaMonsterTypeSetStaticAttack(lua_State* L);
+		static int luaMonsterTypeSetTargetDistance(lua_State* L);
 
 		static int luaMonsterTypeSetCanPushItems(lua_State* L);
 		static int luaMonsterTypeSetCanPushCreatures(lua_State* L);
 
-		//static int luaMonsterTypeAddCombatImmunity(lua_State* L);
-		//static int luaMonsterTypeAddConditionImmunity(lua_State* L);
+		static int luaMonsterTypeAddCombatImmunity(lua_State* L);
+		static int luaMonsterTypeAddConditionImmunity(lua_State* L);
 		static int luaMonsterTypeAddAttack(lua_State* L);
 		static int luaMonsterTypeAddDefense(lua_State* L);
-		//static int luaMonsterTypeAddElement(lua_State* L);
+		static int luaMonsterTypeAddElement(lua_State* L);
 		static int luaMonsterTypeAddVoice(lua_State* L);
 		static int luaMonsterTypeAddLoot(lua_State* L);
 		static int luaMonsterTypeAddSummon(lua_State* L);
