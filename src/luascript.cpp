@@ -63,7 +63,7 @@ enum {
 ScriptEnvironment::DBResultMap ScriptEnvironment::m_tempResults;
 uint32_t ScriptEnvironment::m_lastResultId = 0;
 
-ScriptEnvironment::TempItemListMap ScriptEnvironment::m_tempItems;
+std::multimap<ScriptEnvironment*, Item*> ScriptEnvironment::tempItems;
 
 LuaEnvironment g_luaEnvironment;
 
@@ -88,18 +88,15 @@ void ScriptEnvironment::resetEnv()
 	localMap.clear();
 	m_tempResults.clear();
 
-	auto it = m_tempItems.find(this);
-	if (it == m_tempItems.end()) {
-		return;
-	}
-
-	auto& itemList = it->second;
-	for (Item* item : itemList) {
+	auto pair = tempItems.equal_range(this);
+	auto it = pair.first;
+	while (it != pair.second) {
+		Item* item = it->second;
 		if (item->getParent() == VirtualCylinder::virtualCylinder) {
 			g_game.ReleaseItem(item);
 		}
+		it = tempItems.erase(it);
 	}
-	itemList.clear();
 }
 
 bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
@@ -215,18 +212,16 @@ void ScriptEnvironment::removeItemByUID(uint32_t uid)
 	}
 }
 
-void ScriptEnvironment::addTempItem(ScriptEnvironment* env, Item* item)
+void ScriptEnvironment::addTempItem(Item* item)
 {
-	m_tempItems[env].push_back(item);
+	tempItems.emplace(this, item);
 }
 
 void ScriptEnvironment::removeTempItem(Item* item)
 {
-	for (auto& it : m_tempItems) {
-		auto& itemList = it.second;
-		auto it_ = std::find(itemList.begin(), itemList.end(), item);
-		if (it_ != itemList.end()) {
-			itemList.erase(it_);
+	for (auto it = tempItems.begin(), end = tempItems.end(); it != end; ++it) {
+		if (it->second == item) {
+			tempItems.erase(it);
 			break;
 		}
 	}
@@ -2959,7 +2954,7 @@ int LuaScriptInterface::luaDoCreateItemEx(lua_State* L)
 	newItem->setParent(VirtualCylinder::virtualCylinder);
 
 	ScriptEnvironment* env = getScriptEnv();
-	env->addTempItem(env, newItem);
+	env->addTempItem(newItem);
 
 	uint32_t uid = env->addThing(newItem);
 	lua_pushnumber(L, uid);
@@ -4689,8 +4684,7 @@ int LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 		g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
 	} else {
-		ScriptEnvironment* env = getScriptEnv();
-		env->addTempItem(env, item);
+		getScriptEnv()->addTempItem(item);
 		item->setParent(VirtualCylinder::virtualCylinder);
 	}
 
@@ -4731,8 +4725,7 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 
 		g_game.internalAddItem(tile, container, INDEX_WHEREEVER, FLAG_NOLIMIT);
 	} else {
-		ScriptEnvironment* env = getScriptEnv();
-		env->addTempItem(env, container);
+		getScriptEnv()->addTempItem(container);
 		container->setParent(VirtualCylinder::virtualCylinder);
 	}
 
@@ -6292,8 +6285,7 @@ int LuaScriptInterface::luaItemClone(lua_State* L)
 		return 1;
 	}
 
-	ScriptEnvironment* env = getScriptEnv();
-	env->addTempItem(env, clone);
+	getScriptEnv()->addTempItem(clone);
 	clone->setParent(VirtualCylinder::virtualCylinder);
 
 	pushUserdata<Item>(L, clone);
@@ -6340,7 +6332,7 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 	*itemPtr = newItem;
 
 	splitItem->setParent(VirtualCylinder::virtualCylinder);
-	env->addTempItem(env, splitItem);
+	env->addTempItem(splitItem);
 
 	pushUserdata<Item>(L, splitItem);
 	setItemMetatable(L, -1, splitItem);
@@ -6929,7 +6921,7 @@ int LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 	uint32_t flags = getNumber<uint32_t>(L, 4, 0);
 	ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
 	if (ret == RETURNVALUE_NOERROR) {
-		getScriptEnv()->removeTempItem(item);
+		ScriptEnvironment::removeTempItem(item);
 	}
 	lua_pushnumber(L, ret);
 	return 1;
@@ -8841,7 +8833,7 @@ int LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 	}
 
 	if (returnValue == RETURNVALUE_NOERROR) {
-		getScriptEnv()->removeTempItem(item);
+		ScriptEnvironment::removeTempItem(item);
 	}
 	lua_pushnumber(L, returnValue);
 	return 1;

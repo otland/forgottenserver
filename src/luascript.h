@@ -141,7 +141,7 @@ class ScriptEnvironment
 
 		void getEventInfo(int32_t& scriptId, std::string& desc, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent) const;
 
-		static void addTempItem(ScriptEnvironment* env, Item* item);
+		void addTempItem(Item* item);
 		static void removeTempItem(Item* item);
 		uint32_t addThing(Thing* thing);
 		void insertItem(uint32_t uid, Item* item);
@@ -180,8 +180,7 @@ class ScriptEnvironment
 		std::unordered_map<uint32_t, Item*> localMap;
 
 		//temporary item list
-		typedef std::map<ScriptEnvironment*, std::list<Item*>> TempItemListMap;
-		static TempItemListMap m_tempItems;
+		static std::multimap<ScriptEnvironment*, Item*> tempItems;
 
 		//result map
 		static uint32_t m_lastResultId;

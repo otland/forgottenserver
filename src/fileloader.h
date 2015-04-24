@@ -254,16 +254,21 @@ class PropWriteStream
 		template <typename T>
 		inline void write(T add) {
 			reserve(sizeof(T));
-			memcpy(&buffer[size], &add, sizeof(T));
+			memcpy(buffer + size, &add, sizeof(T));
 			size += sizeof(T);
 		}
 
 		inline void writeString(const std::string& str) {
-			size_t str_len = str.size();
-			write<uint16_t>(str_len);
-			reserve(str_len);
-			memcpy(&buffer[size], str.c_str(), str_len);
-			size += str_len;
+			size_t strLength = str.size();
+			if (strLength > std::numeric_limits<uint16_t>::max()) {
+				write<uint16_t>(0);
+				return;
+			}
+
+			write<uint16_t>(strLength);
+			reserve(strLength);
+			memcpy(buffer + size, str.c_str(), strLength);
+			size += strLength;
 		}
 
 	protected:
