@@ -13,7 +13,7 @@ include(cotire)
 set(CMAKE_CXX_FLAGS                "-Wall -Werror -pipe")
 set(CMAKE_CXX_FLAGS_DEBUG          "-O0 -g")
 set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE        "-Ofast -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE        "-Ofast -march=native -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
 if (CMAKE_COMPILER_IS_GNUCXX)
