@@ -46,14 +46,6 @@ class PoolingAllocator : public std::allocator<T>
 				operator delete(p);
 			}
 		}
-
-		~PoolingAllocator() {
-			T* ptr;
-			auto& freeList = getFreeList();
-			while(freeList.pop(ptr)) {
-				operator delete(ptr);
-			}
-		}
 	private:
 		typedef LockfreeBoundedStack<T*, OUTPUTMESSAGE_FREE_LIST_CAPACITY> FreeList;
 		static FreeList& getFreeList() {
