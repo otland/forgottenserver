@@ -47,15 +47,14 @@
 #include "creatureevent.h"
 #include "scheduler.h"
 
-extern Game g_game;
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
 // Helping templates to add dispatcher tasks
-template<class FunctionType>
-void ProtocolGame::addGameTaskInternal(bool droppable, uint32_t delay, const FunctionType& func)
+template<bool droppable, class FunctionType>
+void ProtocolGame::addGameTaskInternal(uint32_t delay, FunctionType func)
 {
 	if (droppable) {
 		g_dispatcher.addTask(createTask(delay, func));

@@ -52,7 +52,6 @@ void ConnectionManager::closeAll()
 	std::lock_guard<std::mutex> lockClass(m_connectionManagerLock);
 
 	for (const auto& connection : m_connections) {
-		assert(connection.use_count() == 1);
 		try {
 			boost::system::error_code error;
 			connection->m_socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);

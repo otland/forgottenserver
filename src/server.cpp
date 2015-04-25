@@ -60,10 +60,9 @@ void ServiceManager::stop()
 
 	running = false;
 
-	for (std::map<uint16_t, ServicePort_ptr>::iterator it = m_acceptors.begin();
-	        it != m_acceptors.end(); ++it) {
+	for (auto& servicePortIt : m_acceptors) {
 		try {
-			m_io_service.post(std::bind(&ServicePort::onStopServer, it->second));
+			m_io_service.post(std::bind(&ServicePort::onStopServer, servicePortIt.second));
 		} catch (boost::system::system_error& e) {
 			std::cout << "[ServiceManager::stop] Network Error: " << e.what() << std::endl;
 		}
@@ -116,7 +115,7 @@ void ServicePort::accept()
 	}
 
 	boost::asio::ip::tcp::socket* socket = new boost::asio::ip::tcp::socket(m_io_service);
-	m_acceptor->async_accept(*socket, std::bind(&ServicePort::onAccept, this, socket, std::placeholders::_1));
+	m_acceptor->async_accept(*socket, std::bind(&ServicePort::onAccept, shared_from_this(), socket, std::placeholders::_1));
 }
 
 void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::system::error_code& error)
@@ -162,7 +161,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 Protocol_ptr ServicePort::make_protocol(bool checksummed, NetworkMessage& msg, const Connection_ptr& connection) const
 {
 	uint8_t protocolID = msg.getByte();
-	for (Service_ptr service : m_services) {
+	for (auto& service : m_services) {
 		if (protocolID != service->get_protocol_identifier()) {
 			continue;
 		}
@@ -181,7 +180,7 @@ void ServicePort::onStopServer()
 
 void ServicePort::openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
 {
-	if (ServicePort_ptr service = weak_service.lock()) {
+	if (auto service = weak_service.lock()) {
 		service->open(port);
 	}
 }
