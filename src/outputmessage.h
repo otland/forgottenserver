@@ -146,12 +146,7 @@ class LockfreeBoundedStack {
 			return false; //The stack was empty
 		}
 
-		typename std::enable_if<std::is_copy_assignable<T>::value, bool>::type //Disable this overload for non-copyable types using SFINAE
-			push(const T& value) noexcept {
-				return push(value);
-			}
-
-		bool push(T&& value) noexcept {
+		bool push(T value) noexcept {
 			if (auto node = internal_pop(freeNodes)) {
 				getPayload(node) = value;
 				internal_push(head, node);
