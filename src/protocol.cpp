@@ -133,7 +133,7 @@ bool Protocol::RSA_decrypt(NetworkMessage& msg)
 	return msg.getByte() == 0;
 }
 
-uint32_t Protocol::getIP()
+uint32_t Protocol::getIP() const
 {
 	if (auto connection = getConnection()) {
 		return connection->getIP();

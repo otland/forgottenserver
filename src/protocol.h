@@ -43,7 +43,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 			return m_connection.lock();
 		}
 
-		uint32_t getIP();
+		uint32_t getIP() const;
 
 		//Use this function for autosend messages only
 		OutputMessage_ptr getOutputBuffer(int32_t size);
@@ -70,7 +70,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 			m_encryptionEnabled = false;
 		}
 		void setXTEAKey(const uint32_t* key) {
-			memcpy(m_key, key, sizeof(uint32_t) * 4);
+			memcpy(m_key, key, sizeof(*key) * 4);
 		}
 		void enableChecksum() {
 			m_checksumEnabled = true;

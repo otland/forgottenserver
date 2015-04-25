@@ -35,6 +35,8 @@ class Quest;
 class ProtocolGame;
 typedef std::shared_ptr<ProtocolGame> ProtocolGame_ptr;
 
+extern Game g_game;
+
 struct TextMessage
 {
 	MessageClasses type;
@@ -78,7 +80,6 @@ class ProtocolGame final : public Protocol
 		}
 
 	private:
-		std::unordered_set<uint32_t> knownCreatureSet;
 		ProtocolGame_ptr getThis() {
 			return std::dynamic_pointer_cast<ProtocolGame>(shared_from_this());
 		}
@@ -313,19 +314,27 @@ class ProtocolGame final : public Protocol
 
 		friend class Player;
 
-		// Helper so we don't need to bind every time
-#define addGameTask(f, ...) ProtocolGame::addGameTaskInternal(false, 0, std::bind(f, &g_game, __VA_ARGS__))
-#define addGameTaskTimed(delay, f, ...) ProtocolGame::addGameTaskInternal(true, delay, std::bind(f, &g_game, __VA_ARGS__))
+		// Helpers so we don't need to bind every time
+		template <typename Callable, typename... Args>
+		void addGameTask(Callable function, Args... args) {
+			addGameTaskInternal<false>(0, std::bind(function, &g_game, std::forward<Args>(args)...));
+		}
+		
+		template <typename Callable, typename... Args>
+		void addGameTaskTimed(uint32_t delay, Callable function, Args... args) {
+			addGameTaskInternal<true>(delay, std::bind(function, &g_game, std::forward<Args>(args)...));
+		}
 
-		template<class FunctionType>
-		static void addGameTaskInternal(bool droppable, uint32_t delay, const FunctionType&);
-
+		template<bool droppable, class FunctionType>
+		static void addGameTaskInternal(uint32_t delay, FunctionType func);
+		
+		std::unordered_set<uint32_t> knownCreatureSet;
 		Player* player;
 
 		uint32_t eventConnect;
+		uint32_t m_challengeTimestamp;
 		uint16_t version;
 
-		uint32_t m_challengeTimestamp;
 		uint8_t m_challengeRandom;
 
 		bool m_debugAssertSent;

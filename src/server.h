@@ -116,7 +116,7 @@ class ServiceManager
 	protected:
 		void die();
 
-		std::map<uint16_t, ServicePort_ptr> m_acceptors;
+		std::unordered_map<uint16_t, ServicePort_ptr> m_acceptors;
 
 		boost::asio::io_service m_io_service;
 		boost::asio::deadline_timer death_timer;
