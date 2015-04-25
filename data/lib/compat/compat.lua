@@ -33,6 +33,52 @@ SOUTHEAST = DIRECTION_SOUTHEAST
 NORTHWEST = DIRECTION_NORTHWEST
 NORTHEAST = DIRECTION_NORTHEAST
 
+do
+	local function CreatureIndex(self, key)
+		local methods = getmetatable(self)
+		if key == "uid" then
+			return methods.getId(self)
+		elseif key == "type" then
+			local creatureType = -1
+			if methods.isPlayer(self) then
+				creatureType = CREATURETYPE_PLAYER
+			elseif methods.isMonster(self) then
+				creatureType = CREATURETYPE_MONSTER
+			elseif methods.isNpc(self) then
+				creatureType = CREATURETYPE_NPC
+			end
+			return creatureType + 1
+		elseif key == "itemid" then
+			return 1
+		elseif key == "actionid" then
+			return 0
+		end
+		return methods[key]
+	end
+	rawgetmetatable("Player").__index = CreatureIndex
+	rawgetmetatable("Monster").__index = CreatureIndex
+	rawgetmetatable("Npc").__index = CreatureIndex
+end
+
+do
+	local function ItemIndex(self, key)
+		local methods = getmetatable(self)
+		if key == "itemid" then
+			return methods.getId(self)
+		elseif key == "actionid" then
+			return methods.getActionId(self)
+		elseif key == "uid" then
+			return methods.getUniqueId(self)
+		elseif key == "type" then
+			return methods.getSubType(self)
+		end
+		return methods[key]
+	end
+	rawgetmetatable("Item").__index = ItemIndex
+	rawgetmetatable("Container").__index = ItemIndex
+	rawgetmetatable("Teleport").__index = ItemIndex
+end
+
 function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing ~= nil then
@@ -47,11 +93,11 @@ function pushThing(thing)
 			t.uid = thing:getId()
 			t.itemid = 1
 			if thing:isPlayer() then
-				t.type = 1
+				t.type = CREATURETYPE_PLAYER + 1
 			elseif thing:isMonster() then
-				t.type = 2
+				t.type = CREATURETYPE_MONSTER + 1
 			else
-				t.type = 3
+				t.type = CREATURETYPE_NPC + 1
 			end
 		end
 	end

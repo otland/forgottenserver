@@ -545,6 +545,7 @@ class LuaScriptInterface
 
 		// _G
 		static int luaIsType(lua_State* L);
+		static int luaRawGetMetatable(lua_State* L);
 
 		// os
 		static int luaSystemTime(lua_State* L);
@@ -695,23 +696,28 @@ class LuaScriptInterface
 
 		// Item
 		static int luaItemCreate(lua_State* L);
-		static int luaItemIndex(lua_State* L);
 
 		static int luaItemIsItem(lua_State* L);
 
 		static int luaItemGetParent(lua_State* L);
 		static int luaItemGetTopParent(lua_State* L);
 
+		static int luaItemGetId(lua_State* L);
+
 		static int luaItemClone(lua_State* L);
 		static int luaItemSplit(lua_State* L);
 		static int luaItemRemove(lua_State* L);
 
+		static int luaItemGetUniqueId(lua_State* L);
+		static int luaItemGetActionId(lua_State* L);
 		static int luaItemSetActionId(lua_State* L);
 
 		static int luaItemGetCount(lua_State* L);
 		static int luaItemGetCharges(lua_State* L);
 		static int luaItemGetFluidType(lua_State* L);
 		static int luaItemGetWeight(lua_State* L);
+
+		static int luaItemGetSubType(lua_State* L);
 
 		static int luaItemGetName(lua_State* L);
 		static int luaItemGetPluralName(lua_State* L);
@@ -756,7 +762,6 @@ class LuaScriptInterface
 
 		// Creature
 		static int luaCreatureCreate(lua_State* L);
-		static int luaCreatureIndex(lua_State* L);
 
 		static int luaCreatureRegisterEvent(lua_State* L);
 		static int luaCreatureUnregisterEvent(lua_State* L);
@@ -771,6 +776,7 @@ class LuaScriptInterface
 
 		static int luaCreatureGetParent(lua_State* L);
 
+		static int luaCreatureGetId(lua_State* L);
 		static int luaCreatureGetName(lua_State* L);
 
 		static int luaCreatureGetTarget(lua_State* L);
