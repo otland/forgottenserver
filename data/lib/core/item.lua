@@ -1,5 +1,5 @@
 function Item.getType(self)
-	return ItemType(self.itemid)
+	return ItemType(self:getId())
 end
 
 function Item.isContainer(self)

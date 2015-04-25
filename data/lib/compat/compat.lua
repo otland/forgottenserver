@@ -19,6 +19,10 @@ STACKPOS_TOP_CREATURE = 253
 STACKPOS_TOP_FIELD = 254
 STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE = 255
 
+THING_TYPE_PLAYER = CREATURETYPE_PLAYER + 1
+THING_TYPE_MONSTER = CREATURETYPE_MONSTER + 1
+THING_TYPE_NPC = CREATURETYPE_NPC + 1
+
 COMBAT_POISONDAMAGE = COMBAT_EARTHDAMAGE
 CONDITION_EXHAUST = CONDITION_EXHAUST_WEAPON
 TALKTYPE_ORANGE_1 = TALKTYPE_MONSTER_SAY
@@ -39,15 +43,15 @@ do
 		if key == "uid" then
 			return methods.getId(self)
 		elseif key == "type" then
-			local creatureType = -1
+			local creatureType = 0
 			if methods.isPlayer(self) then
-				creatureType = CREATURETYPE_PLAYER
+				creatureType = THING_TYPE_PLAYER
 			elseif methods.isMonster(self) then
-				creatureType = CREATURETYPE_MONSTER
+				creatureType = THING_TYPE_MONSTER
 			elseif methods.isNpc(self) then
-				creatureType = CREATURETYPE_NPC
+				creatureType = THING_TYPE_NPC
 			end
-			return creatureType + 1
+			return creatureType
 		elseif key == "itemid" then
 			return 1
 		elseif key == "actionid" then
@@ -93,11 +97,11 @@ function pushThing(thing)
 			t.uid = thing:getId()
 			t.itemid = 1
 			if thing:isPlayer() then
-				t.type = CREATURETYPE_PLAYER + 1
+				t.type = THING_TYPE_PLAYER
 			elseif thing:isMonster() then
-				t.type = CREATURETYPE_MONSTER + 1
+				t.type = THING_TYPE_MONSTER
 			else
-				t.type = CREATURETYPE_NPC + 1
+				t.type = THING_TYPE_NPC
 			end
 		end
 	end
