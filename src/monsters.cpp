@@ -239,89 +239,82 @@ void MonsterType::createLoot(Container* corpse)
 	corpse->startDecaying();
 }
 
-void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string& type) {
+void MonsterType::clone(MonsterType* target, MonsterType* source, const std::string& type) {
 	if (type == "loot") {
-		if (!child->lootItems.empty()) {
-			for (LootBlock loot : child->lootItems) {
-				root->lootItems.push_back(loot);
+		if (!source->lootItems.empty()) {
+			for (LootBlock loot : source->lootItems) {
+				target->lootItems.push_back(loot);
 			}
 		}
 	} else if (type == "voices") {
-		if (!child->voiceVector.empty()) {
-			for (voiceBlock_t voices : child->voiceVector) {
-				root->voiceVector.push_back(voices);
+		if (!source->voiceVector.empty()) {
+			for (voiceBlock_t voices : source->voiceVector) {
+				target->voiceVector.push_back(voices);
 			}
 		}
 	}
 	else if (type == "summons") {
-		if (!child->summonList.empty()) {
-			for (summonBlock_t summons : child->summonList) {
-				root->summonList.push_back(summons);
+		if (!source->summonList.empty()) {
+			for (summonBlock_t summons : source->summonList) {
+				target->summonList.push_back(summons);
 			}
 		}
 	} else if (type == "all") {
-		root->experience = child->experience;
-		root->hiddenHealth = child->hiddenHealth;
-		root->canPushCreatures = child->canPushCreatures;
-		root->canPushItems = child->canPushItems;
-		root->staticAttackChance = child->staticAttackChance;
-		root->maxSummons = child->maxSummons;
-		root->targetDistance = child->targetDistance;
-		root->runAwayHealth = child->runAwayHealth;
-		root->pushable = child->pushable;
-		root->baseSpeed = child->baseSpeed;
-		root->health = child->health;
-		root->healthMax = child->healthMax;
+		target->experience = source->experience;
+		target->hiddenHealth = source->hiddenHealth;
+		target->canPushCreatures = source->canPushCreatures;
+		target->canPushItems = source->canPushItems;
+		target->staticAttackChance = source->staticAttackChance;
+		target->maxSummons = source->maxSummons;
+		target->targetDistance = source->targetDistance;
+		target->runAwayHealth = source->runAwayHealth;
+		target->pushable = source->pushable;
+		target->baseSpeed = source->baseSpeed;
+		target->health = source->health;
+		target->healthMax = source->healthMax;
 
-		root->outfit.lookHead = child->outfit.lookHead;
-		root->outfit.lookBody = child->outfit.lookBody;
-		root->outfit.lookLegs = child->outfit.lookLegs;
-		root->outfit.lookFeet = child->outfit.lookFeet;
-		root->outfit.lookType = child->outfit.lookType;
-		root->outfit.lookTypeEx = child->outfit.lookTypeEx;
-		root->outfit.lookAddons = child->outfit.lookAddons;
-		root->outfit.lookMount = child->outfit.lookMount;
-		root->lookcorpse = child->lookcorpse;
+		target->outfit = source->outfit;
+		target->lookcorpse = source->lookcorpse;
 
-		root->skull = child->skull;
-		root->conditionImmunities = child->conditionImmunities;
-		root->damageImmunities = child->damageImmunities;
-		root->race = child->race;
-		root->isSummonable = child->isSummonable;
-		root->isIllusionable = child->isIllusionable;
-		root->isConvinceable = child->isConvinceable;
-		root->isAttackable = child->isAttackable;
-		root->isHostile = child->isHostile;
-		root->lightLevel = child->lightLevel;
-		root->lightColor = child->lightColor;
-		root->manaCost = child->manaCost;
+		target->skull = source->skull;
+		target->conditionImmunities = source->conditionImmunities;
+		target->damageImmunities = source->damageImmunities;
+		target->race = source->race;
+		target->isSummonable = source->isSummonable;
+		target->isIllusionable = source->isIllusionable;
+		target->isConvinceable = source->isConvinceable;
+		target->isAttackable = source->isAttackable;
+		target->isHostile = source->isHostile;
+		target->lightLevel = source->lightLevel;
+		target->lightColor = source->lightColor;
+		target->manaCost = source->manaCost;
 
-		root->elementMap[COMBAT_PHYSICALDAMAGE] = child->elementMap[COMBAT_PHYSICALDAMAGE];
-		root->elementMap[COMBAT_ICEDAMAGE] = child->elementMap[COMBAT_ICEDAMAGE];
-		root->elementMap[COMBAT_EARTHDAMAGE] = child->elementMap[COMBAT_EARTHDAMAGE];
-		root->elementMap[COMBAT_FIREDAMAGE] = child->elementMap[COMBAT_FIREDAMAGE];
-		root->elementMap[COMBAT_ENERGYDAMAGE] = child->elementMap[COMBAT_ENERGYDAMAGE];
-		root->elementMap[COMBAT_HOLYDAMAGE] = child->elementMap[COMBAT_HOLYDAMAGE];
-		root->elementMap[COMBAT_DEATHDAMAGE] = child->elementMap[COMBAT_DEATHDAMAGE];
-		root->elementMap[COMBAT_DROWNDAMAGE] = child->elementMap[COMBAT_DROWNDAMAGE];
-		root->elementMap[COMBAT_LIFEDRAIN] = child->elementMap[COMBAT_LIFEDRAIN];
-		root->elementMap[COMBAT_MANADRAIN] = child->elementMap[COMBAT_MANADRAIN];
+		target->elementMap[COMBAT_PHYSICALDAMAGE] = source->elementMap[COMBAT_PHYSICALDAMAGE];
+		target->elementMap[COMBAT_ICEDAMAGE] = source->elementMap[COMBAT_ICEDAMAGE];
+		target->elementMap[COMBAT_EARTHDAMAGE] = source->elementMap[COMBAT_EARTHDAMAGE];
+		target->elementMap[COMBAT_FIREDAMAGE] = source->elementMap[COMBAT_FIREDAMAGE];
+		target->elementMap[COMBAT_ENERGYDAMAGE] = source->elementMap[COMBAT_ENERGYDAMAGE];
+		target->elementMap[COMBAT_HOLYDAMAGE] = source->elementMap[COMBAT_HOLYDAMAGE];
+		target->elementMap[COMBAT_DEATHDAMAGE] = source->elementMap[COMBAT_DEATHDAMAGE];
+		target->elementMap[COMBAT_DROWNDAMAGE] = source->elementMap[COMBAT_DROWNDAMAGE];
+		target->elementMap[COMBAT_LIFEDRAIN] = source->elementMap[COMBAT_LIFEDRAIN];
+		target->elementMap[COMBAT_MANADRAIN] = source->elementMap[COMBAT_MANADRAIN];
 
-		if (!child->voiceVector.empty()) {
-			for (voiceBlock_t voices : child->voiceVector) {
-				root->voiceVector.push_back(voices);
+		if (!source->voiceVector.empty()) {
+			for (voiceBlock_t voices : source->voiceVector) {
+				target->voiceVector.push_back(voices);
 			}
 		}
 
-		if (!child->summonList.empty()) {
-			for (summonBlock_t summons : child->summonList) {
-				root->summonList.push_back(summons);
+		if (!source->summonList.empty()) {
+			for (summonBlock_t summons : source->summonList) {
+				target->summonList.push_back(summons);
 			}
 		}
 
-		if (!child->lootItems.empty()) {
-			for (LootBlock loot : child->lootItems) {
-				root->lootItems.push_back(loot);
+		if (!source->lootItems.empty()) {
+			for (LootBlock loot : source->lootItems) {
+				target->lootItems.push_back(loot);
 			}
 		}
 
@@ -330,19 +323,17 @@ void MonsterType::clone(MonsterType* root, MonsterType* child, const std::string
 	}
 }
 
-void MonsterType::loadLoot(MonsterType* monsterType, Loot* loot) 
+void MonsterType::loadLoot(Loot* loot, LootBlock& lootblock)
 {
-	LootBlock lootblock;
-	
 	lootblock.id = loot->id;
 	lootblock.countmax = loot->countMax;
-	
+
 	if (loot->chance != 0) {
 		lootblock.chance = loot->chance;
 	} else {
 		lootblock.chance = MAX_LOOTCHANCE;
 	}
-	
+
 	if (loot->actionId != -1) {
 		lootblock.actionId = loot->actionId;
 	}
@@ -359,6 +350,12 @@ void MonsterType::loadLoot(MonsterType* monsterType, Loot* loot)
 	if (!loot->text.empty()) {
 		lootblock.text = loot->text;
 	}
+}
+
+void MonsterType::loadLoot(MonsterType* monsterType, Loot* loot) 
+{
+	LootBlock lootblock;
+	loadLoot(loot, lootblock);
 
 	if (!loot->children.empty()) {
 		bool isContainer = Item::items[lootblock.id].isContainer();
@@ -376,34 +373,7 @@ void MonsterType::loadLoot(MonsterType* monsterType, Loot* loot)
 void MonsterType::loadChildLoot(Loot* loot, LootBlock& parent)
 {
 	LootBlock child;
-
-	child.id = loot->id;
-	child.countmax = loot->countMax;
-
-	if (loot->chance != 0) {
-		child.chance = loot->chance;
-	}
-	else {
-		child.chance = MAX_LOOTCHANCE;
-	}
-
-	if (loot->actionId != -1) {
-		child.actionId = loot->actionId;
-	}
-
-	if (loot->subType != -1) {
-		child.subType = loot->subType;
-	}
-	else {
-		uint32_t charges = Item::items[child.id].charges;
-		if (charges != 0) {
-			child.subType = charges;
-		}
-	}
-
-	if (!loot->text.empty()) {
-		child.text = loot->text;
-	}
+	loadLoot(loot, child);
 
 	parent.childLoot.push_back(child);
 }

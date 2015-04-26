@@ -4341,18 +4341,19 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 
 int LuaScriptInterface::luaLoadDirectory(lua_State* L)
 {
-	const boost::filesystem::path& dir = boost::filesystem::current_path().string() + getString(L, 1);
+	namespace bfs = boost::filesystem;
+	const auto dir = bfs::current_path() / getString(L, 1);
 
-	if (!boost::filesystem::exists(dir) || !boost::filesystem::is_directory(dir)) {
+	if (!bfs::exists(dir) || !bfs::is_directory(dir)) {
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	boost::filesystem::recursive_directory_iterator it(dir);
-	boost::filesystem::recursive_directory_iterator endit;
+	bfs::recursive_directory_iterator it(dir);
+	bfs::recursive_directory_iterator endit;
 
 	for (; it != endit; ++it) {
-		if (is_regular_file(*it) && it->path().extension() == ".lua") {
+		if (bfs::is_regular_file(*it) && it->path().extension() == ".lua") {
 			if ((g_luaEnvironment.loadFile(it->path().string())) == -1) {
 				// need to add a better error handler here.
 				std::cout << "[LuaScriptInterface: loadDirectory] could not load " << it->path().string() << " there is an error in it." << std::endl;
@@ -12572,18 +12573,17 @@ int LuaScriptInterface::luaMonsterTypeClone(lua_State* L)
 	// monsterType:clone(name, type)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	MonsterType* clone = g_monsters.getMonsterType(getString(L, 2));
-	std::string type = getString(L, 3);
-
-	if (clone) {
-		pushUserdata<MonsterType>(L, clone);
-		setMetatable(L, -1, "MonsterType");
-	} else {
-		lua_pushnil(L);
-	}
 
 	if (monsterType) {
-		monsterType->clone(monsterType, clone, type);
-		pushBoolean(L, true);
+		if (clone) {
+			std::string type = getString(L, 3);
+			pushUserdata<MonsterType>(L, clone);
+			setMetatable(L, -1, "MonsterType");
+			monsterType->clone(monsterType, clone, type);
+			pushBoolean(L, true);
+		} else {
+			lua_pushnil(L);
+		}
 	} else {
 		lua_pushnil(L);
 	}
