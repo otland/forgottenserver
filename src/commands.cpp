@@ -44,6 +44,7 @@
 #include "scheduler.h"
 #include "events.h"
 #include "chat.h"
+#include "tools.h"
 
 #include "pugicast.h"
 
@@ -259,6 +260,7 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded creature scripts.");
 	} else if (tmpParam == "monster" || tmpParam == "monsters") {
 		g_monsters.reload();
+		loadDirectory("/data/monster/");
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
 	} else if (tmpParam == "move" || tmpParam == "movement" || tmpParam == "movements"
 	           || tmpParam == "moveevents" || tmpParam == "moveevent") {

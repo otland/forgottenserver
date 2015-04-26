@@ -20,11 +20,14 @@
 #include "otpch.h"
 
 #include <cctype>
+#include <boost/filesystem.hpp>
 
 #include "tools.h"
 #include "configmanager.h"
+#include "luascript.h"
 
 extern ConfigManager g_config;
+extern LuaEnvironment g_luaEnvironment;
 
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result)
 {
@@ -1161,4 +1164,28 @@ const char* getReturnMessage(ReturnValue value)
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}
+}
+
+bool loadDirectory(const std::string directory)
+{
+	namespace bfs = boost::filesystem;
+	const auto dir = bfs::current_path() / directory;
+
+	if (!bfs::exists(dir) || !bfs::is_directory(dir)) {
+		return false;
+	}
+
+	bfs::recursive_directory_iterator it(dir);
+	bfs::recursive_directory_iterator endit;
+
+	for (; it != endit; ++it) {
+		if (bfs::is_regular_file(*it) && it->path().extension() == ".lua") {
+			if ((g_luaEnvironment.loadFile(it->path().string())) == -1) {
+				// need to add a better error handler here.
+				std::cout << "[LuaScriptInterface: loadDirectory] could not load " << it->path().string() << " there is an error in it." << std::endl;
+			}
+		}
+	}
+
+	return true;
 }

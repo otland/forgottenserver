@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include <boost/range/adaptor/reversed.hpp>
-#include <boost/filesystem.hpp>
 
 #include "luascript.h"
 #include "chat.h"
@@ -48,6 +47,7 @@
 #include "scheduler.h"
 #include "raids.h"
 #include "databasetasks.h"
+#include "tools.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -4341,27 +4341,12 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 
 int LuaScriptInterface::luaLoadDirectory(lua_State* L)
 {
-	namespace bfs = boost::filesystem;
-	const auto dir = bfs::current_path() / getString(L, 1);
-
-	if (!bfs::exists(dir) || !bfs::is_directory(dir)) {
+	std::string dir = getString(L, 1);
+	if (!loadDirectory(dir)) {
 		pushBoolean(L, false);
-		return 1;
+	} else {
+		pushBoolean(L, true);
 	}
-
-	bfs::recursive_directory_iterator it(dir);
-	bfs::recursive_directory_iterator endit;
-
-	for (; it != endit; ++it) {
-		if (bfs::is_regular_file(*it) && it->path().extension() == ".lua") {
-			if ((g_luaEnvironment.loadFile(it->path().string())) == -1) {
-				// need to add a better error handler here.
-				std::cout << "[LuaScriptInterface: loadDirectory] could not load " << it->path().string() << " there is an error in it." << std::endl;
-			}
-		}
-
-	}
-	pushBoolean(L, true);
 
 	return 1;
 }
