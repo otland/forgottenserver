@@ -1319,6 +1319,7 @@ class LuaScriptInterface
 
 		// Loot
 		static int luaCreateLoot(lua_State* L);
+		static int luaDeleteLoot(lua_State* L);
 		static int luaLootSetId(lua_State* L);
 		static int luaLootSetMaxCount(lua_State* L);
 		static int luaLootSetSubType(lua_State* L);
@@ -1329,6 +1330,7 @@ class LuaScriptInterface
 
 		// MonsterSpell
 		static int luaCreateMonsterSpell(lua_State* L);
+		static int luaDeleteMonsterSpell(lua_State* L);
 		static int luaMonsterSpellSetType(lua_State* L);
 		static int luaMonsterSpellSetScriptName(lua_State* L);
 		static int luaMonsterSpellSetChance(lua_State* L);

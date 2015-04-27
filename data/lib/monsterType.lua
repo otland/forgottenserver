@@ -1,4 +1,3 @@
-print(">> Loading lua monsters")
 function MonsterType.register(self, mask)
 	
 	if mask.description then
@@ -157,9 +156,11 @@ function MonsterType.register(self, mask)
 						child:setDescription(children.text or children.description)
 					end
 					parent:addChildLoot(child)
+					table.insert(monster_gc, child)
 				end
 			end
 			self:addLoot(parent)
+			table.insert(monster_gc, parent)
 		end
 	end
 	
@@ -285,6 +286,7 @@ function MonsterType.register(self, mask)
 				end
 			end
 			self:addAttack(spell)
+			table.insert(monster_gc, spell)
 		end
 	end
 	
@@ -391,6 +393,7 @@ function MonsterType.register(self, mask)
 				end
 			end
 			self:addDefense(spell)
+			table.insert(monster_gc, spell)
 		end
 	end
 end

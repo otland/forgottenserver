@@ -2684,6 +2684,9 @@ void LuaScriptInterface::registerFunctions()
 
 	// Loot
 	registerClass("Loot", "", LuaScriptInterface::luaCreateLoot);
+	registerMetaMethod("Loot", "__gc", LuaScriptInterface::luaDeleteLoot);
+	registerMethod("Loot", "delete", LuaScriptInterface::luaDeleteLoot);
+
 	registerMethod("Loot", "setId", LuaScriptInterface::luaLootSetId);
 	registerMethod("Loot", "setMaxCount", LuaScriptInterface::luaLootSetMaxCount);
 	registerMethod("Loot", "setSubType", LuaScriptInterface::luaLootSetSubType);
@@ -2694,6 +2697,9 @@ void LuaScriptInterface::registerFunctions()
 
 	// MonsterSpell
 	registerClass("MonsterSpell", "", LuaScriptInterface::luaCreateMonsterSpell);
+	registerMetaMethod("MonsterSpell", "__gc", LuaScriptInterface::luaDeleteMonsterSpell);
+	registerMethod("MonsterSpell", "delete", LuaScriptInterface::luaDeleteMonsterSpell);
+
 	registerMethod("MonsterSpell", "setType", LuaScriptInterface::luaMonsterSpellSetType);
 	registerMethod("MonsterSpell", "setScriptName", LuaScriptInterface::luaMonsterSpellSetScriptName);
 	registerMethod("MonsterSpell", "setChance", LuaScriptInterface::luaMonsterSpellSetChance);
@@ -13360,6 +13366,17 @@ int LuaScriptInterface::luaCreateLoot(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaDeleteLoot(lua_State* L)
+{
+	// loot:delete() loot:__gc()
+	Loot** lootPtr = getRawUserdata<Loot>(L, 1);
+	if (lootPtr && *lootPtr) {
+		delete *lootPtr;
+		*lootPtr = nullptr;
+	}
+	return 0;
+}
+
 int LuaScriptInterface::luaLootSetId(lua_State* L)
 {
 	// loot:setId(id or name)
@@ -13469,6 +13486,17 @@ int LuaScriptInterface::luaCreateMonsterSpell(lua_State* L)
 		lua_pushnil(L);
 	}
 	return 1;
+}
+
+int LuaScriptInterface::luaDeleteMonsterSpell(lua_State* L)
+{
+	// monsterSpell:delete() monsterSpell:__gc()
+	MonsterSpell** monsterSpellPtr = getRawUserdata<MonsterSpell>(L, 1);
+	if (monsterSpellPtr && *monsterSpellPtr) {
+		delete *monsterSpellPtr;
+		*monsterSpellPtr = nullptr;
+	}
+	return 0;
 }
 
 int LuaScriptInterface::luaMonsterSpellSetType(lua_State* L)

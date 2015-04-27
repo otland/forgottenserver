@@ -77,6 +77,9 @@ class Loot
 
 		void reset();
 
+		Loot(const Loot&) = delete;
+		Loot& operator=(const Loot&) = delete;
+
 		uint16_t id;
 		uint32_t chance;
 		uint8_t countMax;
@@ -93,6 +96,9 @@ class MonsterSpell
 		MonsterSpell();
 
 		void reset();
+
+		MonsterSpell(const MonsterSpell&) = delete;
+		MonsterSpell& operator=(const MonsterSpell&) = delete;
 		
 		uint8_t chance;
 		uint16_t interval;

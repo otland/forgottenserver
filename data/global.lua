@@ -1,5 +1,4 @@
 loadDirectory("/data/lib/")
-loadDirectory("/data/monster/")
 
 STORAGEVALUE_PROMOTION = 30018
 
