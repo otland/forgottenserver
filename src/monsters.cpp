@@ -569,7 +569,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		std::unique_ptr<Combat> combat;
+		std::unique_ptr<Combat> combat{ new Combat };
 		sb.combatSpell = true;
 
 		if (spell->length > 0) {
@@ -723,9 +723,6 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << spell->name << std::endl;
 		}
 
-		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
-		combatSpell = new CombatSpell(combat.release(), spell->needTarget, spell->needDirection);
-
 		if (spell->needTarget) {
 			if (spell->shoot != CONST_ANI_NONE) {
 				combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, spell->shoot);
@@ -735,6 +732,9 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		if (spell->effect != CONST_ME_NONE) {
 			combat->setParam(COMBAT_PARAM_EFFECT, spell->effect);
 		}
+
+		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		combatSpell = new CombatSpell(combat.release(), spell->needTarget, spell->needDirection);
 	}
 
 	sb.spell = combatSpell;
