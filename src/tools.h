@@ -26,7 +26,7 @@
 #include "const.h"
 #include "enums.h"
 
-bool loadDirectory(const std::string fileName);
+bool loadLuaFilesInDirectory(const std::string fileName);
 
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
 

@@ -586,6 +586,7 @@ class LuaScriptInterface
 		static int luaGameCreateMonster(lua_State* L);
 		static int luaGameCreateNpc(lua_State* L);
 		static int luaGameCreateTile(lua_State* L);
+		static int luaGameCreateMonsterType(lua_State* L);
 
 		static int luaGameStartRaid(lua_State* L);
 
@@ -1192,9 +1193,6 @@ class LuaScriptInterface
 		static int luaConditionSetOutfit(lua_State* L);
 
 		static int luaConditionAddDamage(lua_State* L);
-
-		// NewMonsterType
-		static int luaNewMonsterTypeCreate(lua_State* L);
 
 		// MonsterType
 		static int luaMonsterTypeCreate(lua_State* L);

@@ -478,7 +478,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 		for (const auto& scriptEntry : monsterScriptList) {
 			MonsterType* mType = scriptEntry.first;
-			if (scriptInterface->loadFile("data/monster/scripts/" + scriptEntry.second) == 0 || scriptInterface->loadFile("data/lua monster/scripts/" + scriptEntry.second) == 0) {
+			if (scriptInterface->loadFile("data/monster/scripts/" + scriptEntry.second) == 0 || scriptInterface->loadFile("data/luamonster/scripts/" + scriptEntry.second) == 0) {
 				mType->scriptInterface = scriptInterface;
 				mType->creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
 				mType->creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");

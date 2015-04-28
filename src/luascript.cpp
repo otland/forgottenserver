@@ -1924,6 +1924,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createMonster", LuaScriptInterface::luaGameCreateMonster);
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
+	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
 
@@ -2556,9 +2557,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Condition", "setOutfit", LuaScriptInterface::luaConditionSetOutfit);
 
 	registerMethod("Condition", "addDamage", LuaScriptInterface::luaConditionAddDamage);
-
-	// NewMonsterType
-	registerClass("NewMonsterType", "", LuaScriptInterface::luaNewMonsterTypeCreate);
 
 	// MonsterType
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
@@ -4351,7 +4349,7 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 int LuaScriptInterface::luaLoadDirectory(lua_State* L)
 {
 	std::string dir = getString(L, 1);
-	if (!loadDirectory(dir)) {
+	if (!loadLuaFilesInDirectory(dir)) {
 		pushBoolean(L, false);
 	} else {
 		pushBoolean(L, true);
@@ -4984,6 +4982,30 @@ int LuaScriptInterface::luaGameCreateTile(lua_State* L)
 
 	pushUserdata(L, tile);
 	setMetatable(L, -1, "Tile");
+	return 1;
+}
+
+int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
+{
+	// Game.createMonsterType(name)
+	// if a monster name is inserted which exists already, it will push to the MonsterType table.
+	MonsterType* monsterType = nullptr;
+	if (isString(L, 1)) {
+		monsterType = g_monsters.getMonsterType(getString(L, 1));
+		if (monsterType == nullptr) {
+			monsterType = new MonsterType();
+			std::string name = getString(L, 1);
+			monsterType->name = name;
+			g_monsters.addMonsterType(name, monsterType);
+		}
+	}
+
+	if (monsterType) {
+		pushUserdata<MonsterType>(L, monsterType);
+		setMetatable(L, -1, "MonsterType");
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
@@ -11924,32 +11946,7 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 	return 1;
 }
 
-// NewMonsterType
-int32_t LuaScriptInterface::luaNewMonsterTypeCreate(lua_State* L)
-{
-	// NewMonsterType(name)
-	// if a monster name is inserted which exists already, it will push to the MonsterType table.
-	MonsterType* mType = nullptr;
-	if (isString(L, 2)) {
-		mType = g_monsters.getMonsterType(getString(L, 2));
-		if (mType == nullptr) {
-			mType = new MonsterType();
-			std::string name = getString(L, 2);
-			mType->name = name;
-			g_monsters.addMonsterType(name, mType);
-		}
-	}
-
-	if (mType) {
-		pushUserdata<MonsterType>(L, mType);
-		setMetatable(L, -1, "MonsterType");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-// MonsterType /
+// MonsterType 
 int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 {
 	// MonsterType(id or name)

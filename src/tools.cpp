@@ -1166,7 +1166,7 @@ const char* getReturnMessage(ReturnValue value)
 	}
 }
 
-bool loadDirectory(const std::string directory)
+bool loadLuaFilesInDirectory(const std::string directory)
 {
 	namespace bfs = boost::filesystem;
 	const auto dir = bfs::current_path() / directory;
@@ -1183,7 +1183,8 @@ bool loadDirectory(const std::string directory)
 		if (bfs::is_regular_file(*it) && it->path().extension() == ".lua") {
 			if ((g_luaEnvironment.loadFile(it->path().string())) == -1) {
 				// need to add a better error handler here.
-				std::cout << "[LuaScriptInterface: loadDirectory] could not load " << it->path().string() << " there is an error in it." << std::endl;
+				std::cout << "[LuaScriptInterface: loadDirectory] could not load " << it->path().string() << std::endl;
+				std::cout << g_luaEnvironment.getLastLuaError() << std::endl;
 			} else {
 				ret = true;
 			}

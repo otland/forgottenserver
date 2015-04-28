@@ -1,5 +1,5 @@
 -- a testing Demon layout
-local demon = NewMonsterType("Demon")
+local demon = Game.createMonsterType("Demon")
 local monster = {}
 monster.description = "a demon"
 monster.experience = 6000

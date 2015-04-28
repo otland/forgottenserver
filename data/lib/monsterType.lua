@@ -104,8 +104,17 @@ function MonsterType.register(self, mask)
 	end
 	
 	if type(mask.voices) == "table" then
+		local interval; local chance;
+		if mask.voices.interval then
+			interval = mask.voices.interval
+		end
+		if mask.voices.chance then
+			chance = mask.voices.chance
+		end
 		for k, v in pairs(mask.voices) do
-			self:addVoice(v.text, v.interval, v.chance, v.yell)
+			if type(v) == "table" then
+				self:addVoice(v.text, interval, chance, v.yell)
+			end
 		end
 	end
 	
