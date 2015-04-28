@@ -235,7 +235,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 
 	std::cout << ">> Loading lua monsters" << std::endl;
-	if (!loadDirectory("/data/monster/")) {
+	if (!loadDirectory("/data/lua monster/monsters/")) {
 		startupErrorMessage("Unable to load lua monsters!");
 		return;
 	}

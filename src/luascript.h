@@ -1219,6 +1219,8 @@ class LuaScriptInterface
 		static int luaMonsterTypeSetLight(lua_State* L);
 		static int luaMonsterTypeSetBaseSpeed(lua_State* L);
 		static int luaMonsterTypeSetChangeTarget(lua_State* L);
+		static int luaMonsterTypeSetDefense(lua_State* L);
+		static int luaMonsterTypeSetArmor(lua_State* L);
 
 		static int luaMonsterTypeSetIsAttackable(lua_State* L);
 		static int luaMonsterTypeSetIsConvinceable(lua_State* L);
@@ -1243,6 +1245,7 @@ class LuaScriptInterface
 		static int luaMonsterTypeAddSummon(lua_State* L);
 
 		static int luaMonsterTypeRegisterEvent(lua_State* L);
+		static int luaMonsterTypeSetScriptFile(lua_State* L);
 
 		// get informations
 		static int luaMonsterTypeIsAttackable(lua_State* L);

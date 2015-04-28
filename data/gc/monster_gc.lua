@@ -9,7 +9,7 @@ function monster_gc_memory()
 	end
 	collectgarbage("collect")
 	monster_gc = {}
-	loadDirectory("/data/monster/")
+	loadDirectory("/data/lua monster/monsters/")
 end
 
 monster_gc_memory()

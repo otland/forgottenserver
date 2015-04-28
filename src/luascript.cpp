@@ -2581,6 +2581,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "setLight", LuaScriptInterface::luaMonsterTypeSetLight);
 	registerMethod("MonsterType", "setBaseSpeed", LuaScriptInterface::luaMonsterTypeSetBaseSpeed);
 	registerMethod("MonsterType", "setChangeTarget", LuaScriptInterface::luaMonsterTypeSetChangeTarget);
+	registerMethod("MonsterType", "setDefense", LuaScriptInterface::luaMonsterTypeSetDefense);
+	registerMethod("MonsterType", "setArmor", LuaScriptInterface::luaMonsterTypeSetArmor);
 
 	registerMethod("MonsterType", "setIsAttackable", LuaScriptInterface::luaMonsterTypeSetIsAttackable);
 	registerMethod("MonsterType", "setIsConvinceable", LuaScriptInterface::luaMonsterTypeSetIsConvinceable);
@@ -2605,6 +2607,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "addSummon", LuaScriptInterface::luaMonsterTypeAddSummon);
 
 	registerMethod("MonsterType", "registerEvent", LuaScriptInterface::luaMonsterTypeRegisterEvent);
+	registerMethod("MonsterType", "setScriptFile", LuaScriptInterface::luaMonsterTypeSetScriptFile);
 
 	// get informations
 	registerMethod("MonsterType", "isAttackable", LuaScriptInterface::luaMonsterTypeIsAttackable);
@@ -12182,6 +12185,32 @@ int LuaScriptInterface::luaMonsterTypeSetChangeTarget(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaMonsterTypeSetDefense(lua_State* L)
+{
+	// monsterType:setDefense(defense)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->defense = getNumber<int32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetArmor(lua_State* L)
+{
+	// monsterType:setArmor(armor)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->armor = getNumber<int32_t>(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaMonsterTypeSetIsAttackable(lua_State* L)
 {
 	// monsterType:setIsAttackable(bool)
@@ -12552,6 +12581,19 @@ int LuaScriptInterface::luaMonsterTypeRegisterEvent(lua_State* L)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		monsterType->scriptList.push_back(getString(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSetScriptFile(lua_State* L)
+{
+	// monsterType:setScriptFile(file)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		g_monsters.monsterScriptList[monsterType] = getString(L, 2);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

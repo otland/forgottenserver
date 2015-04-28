@@ -37,11 +37,13 @@ monster.summons = {
 }
 
 monster.voices = {
-	{text = "Your soul will be mine!", interval = 5000, chance = 10, yell = false},
-	{text = "MUHAHAHAHA!", interval = 5000, chance = 10, yell = false},
-	{text = "CHAMEK ATH UTHUL ARAK!", interval = 5000, chance = 10, yell = false},
-	{text = "I SMELL FEEEEAAAAAR!", interval = 5000, chance = 10, yell = false},
-	{text = "Your resistance is futile!", interval = 5000, chance = 10, yell = false}
+	interval = 5000,
+	chance = 10,
+	{text = "Your soul will be mine!", yell = false},
+	{text = "MUHAHAHAHA!", yell = false},
+	{text = "CHAMEK ATH UTHUL ARAK!", yell = false},
+	{text = "I SMELL FEEEEAAAAAR!", yell = false},
+	{text = "Your resistance is futile!", yell = false}
 }
 
 monster.loot = {
@@ -87,6 +89,8 @@ monster.attacks = {
 }
 
 monster.defenses = {
+	defense = 55,
+	armor = 55,
 	{name = "combat", type = COMBAT_HEALING, chance = 15, interval = 2*1000, minDamage = 180, maxDamage = 250, effect = CONST_ME_MAGIC_BLUE},
 	{name = "speed", chance = 15, interval = 2*1000, speed = 320, effect = CONST_ME_MAGIC_RED}
 }
@@ -109,6 +113,9 @@ monster.immunities = {
 }
 
 demon:register(monster)
+
+
+
 
 
 

@@ -241,6 +241,8 @@ class Monsters
 
 		static uint32_t getLootRandom();
 
+		std::map<MonsterType*, std::string> monsterScriptList;
+
 	private:
 		ConditionDamage* getDamageCondition(ConditionType_t conditionType,
 		                                    int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval);
@@ -252,7 +254,6 @@ class Monsters
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
 		std::map<std::string, uint32_t> monsterNames;
-		std::map<MonsterType*, std::string> monsterScriptList;
 		std::map<uint32_t, MonsterType*> monsters;
 		LuaScriptInterface* scriptInterface;
 
