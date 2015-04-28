@@ -569,7 +569,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		Combat* combat = new Combat;
+		std::unique_ptr<Combat> combat;
 		sb.combatSpell = true;
 
 		if (spell->length > 0) {
@@ -697,7 +697,6 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 
 			if (spell->conditionType == CONDITION_NONE) {
 				std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Condition is not set for: " << spell->name << std::endl;
-				return false;
 			}
 
 			if (spell->tickInterval != 0) {
@@ -722,12 +721,10 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			combat->setCondition(condition);
 		} else {
 			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << spell->name << std::endl;
-			delete combat;
-			return false;
 		}
 
 		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
-		combatSpell = new CombatSpell(combat, spell->needTarget, spell->needDirection);
+		combatSpell = new CombatSpell(combat.release(), spell->needTarget, spell->needDirection);
 
 		if (spell->needTarget) {
 			if (spell->shoot != CONST_ANI_NONE) {

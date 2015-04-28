@@ -44,7 +44,6 @@
 #include "scheduler.h"
 #include "events.h"
 #include "chat.h"
-#include "tools.h"
 
 #include "pugicast.h"
 
