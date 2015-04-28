@@ -29,7 +29,7 @@
 
 extern Game g_game;
 
-void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
+void ProtocolOld::disconnectClient(const std::string& message)
 {
 	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
 	output->addByte(0x0A);
@@ -37,11 +37,6 @@ void ProtocolOld::dispatchedDisconnectClient(const std::string& message)
 	send(output);
 
 	disconnect();
-}
-
-void ProtocolOld::disconnectClient(const std::string& message)
-{
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolOld::dispatchedDisconnectClient, std::dynamic_pointer_cast<ProtocolOld>(shared_from_this()), message)));
 }
 
 void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
