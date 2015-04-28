@@ -21,45 +21,14 @@
 
 #include "outputmessage.h"
 #include "protocol.h"
-
-template <typename T>
-class PoolingAllocator : public std::allocator<T>
-{
-	public:
-		template <typename U>
-		PoolingAllocator(const U&) noexcept {}
-		typedef T value_type;
-
-		T* allocate(size_t n) const {
-			T* p;
-			if (!getFreeList().pop(p)) {
-				//Acquire memory without calling the constructor of T
-				p = static_cast<T*>(operator new (sizeof(T)));
-			}
-			return p;
-		}
-
-		void deallocate(T* p, size_t n) const {
-			if (!getFreeList().push(p)) {
-				//Release memory without calling the destructor of T
-				//(it has already been called at this point)
-				operator delete(p);
-			}
-		}
-	private:
-		typedef LockfreeBoundedStack<T*, OUTPUTMESSAGE_FREE_LIST_CAPACITY> FreeList;
-		static FreeList& getFreeList() {
-			static FreeList freeList;
-			return freeList;
-		}
-};
+#include "lockfree.h"
 
 class OutputMessageAllocator
 {
 	public:
 		typedef OutputMessage value_type;
 		template<typename U>
-		struct rebind {typedef PoolingAllocator<U> other;};
+		struct rebind {typedef LockfreePoolingAllocator<U> other;};
 };
 
 void OutputMessagePool::sendAll()
@@ -80,12 +49,6 @@ void OutputMessagePool::sendAll()
 			protocol->send(std::move(msg));
 		}
 	}
-}
-
-void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol) 
-{
-	//dispatcher thread
-	bufferedProtocols.emplace_back(protocol);
 }
 
 void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)
