@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "party.h"
-#include "player.h"
 #include "game.h"
 #include "configmanager.h"
 #include "events.h"

@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <cctype>
-
 #include "tools.h"
 #include "configmanager.h"
 

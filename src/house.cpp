@@ -24,9 +24,7 @@
 #include "house.h"
 #include "iologindata.h"
 #include "game.h"
-#include "town.h"
 #include "configmanager.h"
-#include "tools.h"
 #include "bed.h"
 
 extern ConfigManager g_config;

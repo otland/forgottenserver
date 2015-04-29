@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "databasetasks.h"
-#include "database.h"
 #include "tasks.h"
 
 extern Dispatcher g_dispatcher;
