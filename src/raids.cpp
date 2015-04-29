@@ -24,7 +24,6 @@
 #include "pugicast.h"
 
 #include "game.h"
-#include "player.h"
 #include "configmanager.h"
 #include "scheduler.h"
 #include "monster.h"
