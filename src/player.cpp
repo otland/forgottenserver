@@ -56,10 +56,6 @@ Player::Player(ProtocolGame_ptr p) :
 	client = p;
 	isConnecting = false;
 
-	if (client) {
-		client->setPlayer(this);
-	}
-
 	accountNumber = 0;
 	setVocation(0);
 	capacity = 40000;
