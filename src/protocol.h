@@ -52,7 +52,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 			return m_outputBuffer;
 		}
 		
-		void send(OutputMessage_ptr msg) {
+		void send(OutputMessage_ptr msg) const {
 			if (auto connection = getConnection()) {
 				connection->send(msg);
 			}

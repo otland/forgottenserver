@@ -23,6 +23,7 @@
 #include "protocol.h"
 #include "chat.h"
 #include "creature.h"
+#include "tasks.h"
 
 class NetworkMessage;
 class Player;
@@ -73,8 +74,6 @@ class ProtocolGame final : public Protocol
 		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
 
-		void setPlayer(Player* p);
-
 		uint16_t getVersion() const {
 			return version;
 		}
@@ -84,7 +83,7 @@ class ProtocolGame final : public Protocol
 			return std::dynamic_pointer_cast<ProtocolGame>(shared_from_this());
 		}
 		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
-		void disconnectClient(const std::string& message);
+		void disconnectClient(const std::string& message) const;
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
 		void release() final;
@@ -326,7 +325,13 @@ class ProtocolGame final : public Protocol
 		}
 
 		template<bool droppable, class FunctionType>
-		static void addGameTaskInternal(uint32_t delay, FunctionType func);
+		static void addGameTaskInternal(uint32_t delay, FunctionType func) {
+			if (droppable) {
+				g_dispatcher.addTask(createTask(delay, func));
+			} else {
+				g_dispatcher.addTask(createTask(func));
+			}
+		}
 		
 		std::unordered_set<uint32_t> knownCreatureSet;
 		Player* player;

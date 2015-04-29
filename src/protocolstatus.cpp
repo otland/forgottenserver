@@ -92,7 +92,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolStatus::sendStatusString()
 {
-	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	auto output = OutputMessagePool::getOutputMessage();
 
 	setRawMessages(true);
 
@@ -160,7 +160,7 @@ void ProtocolStatus::sendStatusString()
 
 void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& characterName)
 {
-	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	auto output = OutputMessagePool::getOutputMessage();
 
 	if (requestedInfo & REQUEST_BASIC_SERVER_INFO) {
 		output->addByte(0x10);

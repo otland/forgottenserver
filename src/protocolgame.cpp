@@ -52,17 +52,6 @@ extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
-// Helping templates to add dispatcher tasks
-template<bool droppable, class FunctionType>
-void ProtocolGame::addGameTaskInternal(uint32_t delay, FunctionType func)
-{
-	if (droppable) {
-		g_dispatcher.addTask(createTask(delay, func));
-	} else {
-		g_dispatcher.addTask(createTask(func));
-	}
-}
-
 ProtocolGame::ProtocolGame(Connection_ptr connection) :
 	Protocol(connection),
 	player(nullptr),
@@ -74,11 +63,6 @@ ProtocolGame::ProtocolGame(Connection_ptr connection) :
 	m_acceptPackets(false)
 {
 	//
-}
-
-void ProtocolGame::setPlayer(Player* p)
-{
-	player = p;
 }
 
 void ProtocolGame::release()
@@ -157,14 +141,12 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			ss << "Too many players online.\nYou are at place "
 			   << currentSlot << " on the waiting list.";
 
-			OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+			auto output = OutputMessagePool::getOutputMessage();
 			output->addByte(0x16);
 			output->addString(ss.str());
 			output->addByte(retryTime);
 			send(output);
-
 			disconnect();
-
 			return;
 		}
 
@@ -307,20 +289,16 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(1); // gamemaster flag
 
-	auto dispatchDisconnectClient = [this](const std::string& err) {
-		g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::disconnectClient, getThis(), err)));
-	};
-
 	std::string sessionKey = msg.getString();
 	size_t pos = sessionKey.find('\n');
 	if (pos == std::string::npos) {
-		dispatchDisconnectClient("You must enter your account name.");
+		disconnectClient("You must enter your account name.");
 		return;
 	}
 
 	std::string accountName = sessionKey.substr(0, pos);
 	if (accountName.empty()) {
-		dispatchDisconnectClient("You must enter your account name.");
+		disconnectClient("You must enter your account name.");
 		return;
 	}
 
@@ -336,17 +314,17 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		dispatchDisconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
 		return;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
-		dispatchDisconnectClient("Gameworld is starting up. Please wait.");
+		disconnectClient("Gameworld is starting up. Please wait.");
 		return;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
-		dispatchDisconnectClient("Gameworld is under maintenance. Please re-connect in a while.");
+		disconnectClient("Gameworld is under maintenance. Please re-connect in a while.");
 		return;
 	}
 
@@ -358,13 +336,13 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 		std::ostringstream ss;
 		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-		dispatchDisconnectClient(ss.str());
+		disconnectClient(ss.str());
 		return;
 	}
 
 	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
 	if (accountId == 0) {
-		dispatchDisconnectClient("Account name or password is not correct.");
+		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
@@ -373,7 +351,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolGame::onConnect()
 {
-	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	auto output = OutputMessagePool::getOutputMessage();
 	static std::random_device rd;
 	static std::ranlux24 generator(rd());
 	static std::uniform_int_distribution<uint16_t> randNumber(0x00, 0xFF);
@@ -399,9 +377,9 @@ void ProtocolGame::onConnect()
 	send(output);
 }
 
-void ProtocolGame::disconnectClient(const std::string& message)
+void ProtocolGame::disconnectClient(const std::string& message) const
 {
-	OutputMessage_ptr output = OutputMessagePool::getOutputMessage();
+	auto output = OutputMessagePool::getOutputMessage();
 	output->addByte(0x14);
 	output->addString(message);
 	send(output);
@@ -410,7 +388,7 @@ void ProtocolGame::disconnectClient(const std::string& message)
 
 void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 {
-	OutputMessage_ptr out = getOutputBuffer(msg.getLength());
+	auto out = getOutputBuffer(msg.getLength());
 	out->append(msg);
 }
 
