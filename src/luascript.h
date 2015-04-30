@@ -587,6 +587,7 @@ class LuaScriptInterface
 		static int luaGameCreateNpc(lua_State* L);
 		static int luaGameCreateTile(lua_State* L);
 		static int luaGameCreateMonsterType(lua_State* L);
+		static int luaGameGetMonsterTypes(lua_State* L);
 
 		static int luaGameStartRaid(lua_State* L);
 
@@ -1294,6 +1295,7 @@ class LuaScriptInterface
 		static int luaMonsterTypeGetYellSpeedTicks(lua_State* L);
 		static int luaMonsterTypeGetChangeTargetChance(lua_State* L);
 		static int luaMonsterTypeGetChangeTargetSpeed(lua_State* L);
+		static int luaMonsterTypeFromLuaFile(lua_State* L);
 
 		// Party
 		static int luaPartyDisband(lua_State* L);

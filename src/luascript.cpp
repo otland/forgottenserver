@@ -1925,6 +1925,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
+	registerMethod("Game", "getMonsterTypes", LuaScriptInterface::luaGameGetMonsterTypes);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
 
@@ -2656,6 +2657,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "getYellSpeedTicks", LuaScriptInterface::luaMonsterTypeGetYellSpeedTicks);
 	registerMethod("MonsterType", "getChangeTargetChance", LuaScriptInterface::luaMonsterTypeGetChangeTargetChance);
 	registerMethod("MonsterType", "getChangeTargetSpeed", LuaScriptInterface::luaMonsterTypeGetChangeTargetSpeed);
+	registerMethod("MonsterType", "fromLuaFile", LuaScriptInterface::luaMonsterTypeFromLuaFile);
 
 	// Party
 	registerClass("Party", "", nullptr);
@@ -4988,7 +4990,7 @@ int LuaScriptInterface::luaGameCreateTile(lua_State* L)
 int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 {
 	// Game.createMonsterType(name)
-	// if a monster name is inserted which exists already, it will push to the MonsterType table.
+	// if a monster name is inserted which exists already, it will give us nil.
 	MonsterType* monsterType = nullptr;
 	if (isString(L, 1)) {
 		monsterType = g_monsters.getMonsterType(getString(L, 1));
@@ -4996,15 +4998,25 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 			monsterType = new MonsterType();
 			std::string name = getString(L, 1);
 			monsterType->name = name;
+			monsterType->fromLuaFile = true;
 			g_monsters.addMonsterType(name, monsterType);
+			pushUserdata<MonsterType>(L, monsterType);
+			setMetatable(L, -1, "MonsterType");
+		} else {
+			lua_pushnil(L);
 		}
 	}
+	return 1;
+}
 
-	if (monsterType) {
-		pushUserdata<MonsterType>(L, monsterType);
-		setMetatable(L, -1, "MonsterType");
-	} else {
-		lua_pushnil(L);
+int LuaScriptInterface::luaGameGetMonsterTypes(lua_State* L)
+{
+	// Game.getMonsterTypes()
+	lua_createtable(L, g_monsters.monsters.size(), 0);
+	for (auto name : g_monsters.monsters) {
+		lua_pushnumber(L, name.first);
+		lua_pushstring(L, name.second->name.c_str());
+		lua_settable(L, -3);
 	}
 	return 1;
 }
@@ -12469,6 +12481,7 @@ int LuaScriptInterface::luaMonsterTypeAddAttack(lua_State* L)
 			if (g_monsters.deserializeSpell(spell, sb, monsterType->name)) {
 				monsterType->spellAttackList.push_back(sb);
 			} else {
+				std::cout << monsterType->name << std::endl;
 				std::cout << "[Warning - Monsters::loadMonster] Cant load spell. " << spell->name << std::endl;
 			}
 		} else {
@@ -12807,7 +12820,15 @@ int LuaScriptInterface::luaMonsterTypeGetCombatImmunities(lua_State* L)
 	// monsterType:getCombatImmunities()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
-		lua_pushnumber(L, monsterType->damageImmunities);
+		lua_createtable(L, 12, 0);
+		std::bitset<12> bit = monsterType->damageImmunities;
+		uint8_t x = 1;
+		for (int i = 0; i < 12; ++i) {
+			lua_pushnumber(L, x);
+			lua_pushnumber(L, bit.test(i));
+			lua_settable(L, -3);
+			++x;
+		}
 	} else {
 		lua_pushnil(L);
 	}
@@ -12819,7 +12840,32 @@ int LuaScriptInterface::luaMonsterTypeGetConditionImmunities(lua_State* L)
 	// monsterType:getConditionImmunities()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
-		lua_pushnumber(L, monsterType->conditionImmunities);
+		lua_createtable(L, 12, 0);
+		std::bitset<28> bit = monsterType->conditionImmunities;
+		uint8_t x = 1;
+		for (int i = 0; i < 28; ++i) {
+			switch (1 << i) {
+			case CONDITION_POISON:
+			case CONDITION_FIRE:
+			case CONDITION_ENERGY:
+			case CONDITION_BLEEDING:
+			case CONDITION_PARALYZE:
+			case CONDITION_OUTFIT:
+			case CONDITION_INVISIBLE:
+			case CONDITION_DRUNK:
+			case CONDITION_DROWN:
+			case CONDITION_FREEZING:
+			case CONDITION_DAZZLED:
+			case CONDITION_CURSED:
+				lua_pushnumber(L, x);
+				lua_pushnumber(L, bit.test(i));
+				lua_settable(L, -3);
+				++x;
+				break;
+			default:
+				break;
+			}
+		}
 	} else {
 		lua_pushnil(L);
 	}
@@ -12839,7 +12885,7 @@ int LuaScriptInterface::luaMonsterTypeGetAttackList(lua_State* L)
 
 	int index = 0;
 	for (const auto& spellBlock : monsterType->spellAttackList) {
-		lua_createtable(L, 0, 8);
+		lua_createtable(L, 0, 22);
 
 		setField(L, "chance", spellBlock.chance);
 		setField(L, "isCombatSpell", spellBlock.combatSpell ? 1 : 0);
@@ -12848,6 +12894,20 @@ int LuaScriptInterface::luaMonsterTypeGetAttackList(lua_State* L)
 		setField(L, "maxCombatValue", spellBlock.maxCombatValue);
 		setField(L, "range", spellBlock.range);
 		setField(L, "speed", spellBlock.speed);
+		setField(L, "script", spellBlock.scriptName);
+		setField(L, "name", spellBlock.name);
+		setField(L, "length", spellBlock.length);
+		setField(L, "spread", spellBlock.spread);
+		setField(L, "radius", spellBlock.radius);
+		setField(L, "target", spellBlock.needTarget);
+		setField(L, "shootType", spellBlock.shootType);
+		setField(L, "effect", spellBlock.effect);
+		setField(L, "attack", spellBlock.attack);
+		setField(L, "skill", spellBlock.skill);
+		setField(L, "needTarget", spellBlock.needTarget);
+		setField(L, "duration", spellBlock.duration);
+		setField(L, "tick", spellBlock.tick);
+		setField(L, "speedChange", spellBlock.speedChange);
 		pushUserdata<CombatSpell>(L, static_cast<CombatSpell*>(spellBlock.spell));
 		lua_setfield(L, -2, "spell");
 
@@ -12869,7 +12929,7 @@ int LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 
 	int index = 0;
 	for (const auto& spellBlock : monsterType->spellDefenseList) {
-		lua_createtable(L, 0, 8);
+		lua_createtable(L, 0, 22);
 
 		setField(L, "chance", spellBlock.chance);
 		setField(L, "isCombatSpell", spellBlock.combatSpell ? 1 : 0);
@@ -12878,6 +12938,20 @@ int LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 		setField(L, "maxCombatValue", spellBlock.maxCombatValue);
 		setField(L, "range", spellBlock.range);
 		setField(L, "speed", spellBlock.speed);
+		setField(L, "script", spellBlock.scriptName);
+		setField(L, "name", spellBlock.name);
+		setField(L, "length", spellBlock.length);
+		setField(L, "spread", spellBlock.spread);
+		setField(L, "radius", spellBlock.radius);
+		setField(L, "target", spellBlock.needTarget);
+		setField(L, "shootType", spellBlock.shootType);
+		setField(L, "effect", spellBlock.effect);
+		setField(L, "attack", spellBlock.attack);
+		setField(L, "skill", spellBlock.skill);
+		setField(L, "needTarget", spellBlock.needTarget);
+		setField(L, "duration", spellBlock.duration);
+		setField(L, "tick", spellBlock.tick);
+		setField(L, "speedChange", spellBlock.speedChange);
 		pushUserdata<CombatSpell>(L, static_cast<CombatSpell*>(spellBlock.spell));
 		lua_setfield(L, -2, "spell");
 
@@ -13171,6 +13245,18 @@ int LuaScriptInterface::luaMonsterTypeGetChangeTargetSpeed(lua_State* L)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		lua_pushnumber(L, monsterType->changeTargetSpeed);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeFromLuaFile(lua_State* L)
+{
+	// monsterType:fromLuaFile()
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		pushBoolean(L, monsterType->fromLuaFile);
 	} else {
 		lua_pushnil(L);
 	}

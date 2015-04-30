@@ -1177,19 +1177,15 @@ bool loadLuaFilesInDirectory(const std::string directory)
 
 	bfs::recursive_directory_iterator it(dir);
 	bfs::recursive_directory_iterator endit;
-	bool ret = false;
 
 	for (; it != endit; ++it) {
 		if (bfs::is_regular_file(*it) && it->path().extension() == ".lua") {
 			if ((g_luaEnvironment.loadFile(it->path().string())) == -1) {
-				// need to add a better error handler here.
 				std::cout << "[LuaScriptInterface: loadDirectory] could not load " << it->path().string() << std::endl;
 				std::cout << g_luaEnvironment.getLastLuaError() << std::endl;
-			} else {
-				ret = true;
 			}
 		}
 	}
 
-	return ret;
+	return true;
 }

@@ -82,6 +82,7 @@ void MonsterType::reset()
 	isConvinceable = false;
 	isAttackable = true;
 	isHostile = true;
+	fromLuaFile = false;
 
 	lightLevel = 0;
 	lightColor = 0;
@@ -719,6 +720,10 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 
 			Condition* condition = getDamageCondition(spell->conditionType, maxDamage, minDamage, startDamage, tickInterval);
 			combat->setCondition(condition);
+		} else if (tmpName == "strength") {
+			//
+		} else if (tmpName == "effect") {
+			//
 		} else {
 			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << spell->name << std::endl;
 		}
@@ -746,10 +751,16 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	sb.chance = 100;
 	sb.speed = 2000;
 	sb.range = 0;
+	sb.duration = 0;
+	sb.tick = 0;
+	sb.speedChange = 0;
 	sb.minCombatValue = 0;
 	sb.maxCombatValue = 0;
+	sb.spread = 0;
+	sb.length = 0;
 	sb.combatSpell = false;
 	sb.isMelee = false;
+	sb.needTarget = false;
 
 	std::string name;
 	std::string scriptName;
@@ -758,9 +769,11 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("script"))) {
 		scriptName = attr.as_string();
+		sb.scriptName = attr.as_string();
 		isScripted = true;
 	} else if ((attr = node.attribute("name"))) {
 		name = attr.as_string();
+		sb.name = attr.as_string();
 		isScripted = false;
 	} else {
 		return false;
@@ -817,6 +830,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 		if ((attr = node.attribute("target"))) {
 			needTarget = attr.as_bool();
+			sb.needTarget = needTarget;
 		}
 
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, needTarget, needDirection));
@@ -843,6 +857,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				if ((attr = node.attribute("spread"))) {
 					spread = std::max<int32_t>(0, pugi::cast<int32_t>(attr.value()));
 				}
+				sb.spread = spread;
 
 				AreaCombat* area = new AreaCombat();
 				area->setupArea(length, spread);
@@ -850,14 +865,17 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				needDirection = true;
 			}
+			sb.length = length;
 		}
 
 		if ((attr = node.attribute("radius"))) {
 			int32_t radius = pugi::cast<int32_t>(attr.value());
+			sb.radius = radius;
 
 			//target spell
 			if ((attr = node.attribute("target"))) {
 				needTarget = attr.as_bool();
+				sb.needTarget = needTarget;
 			}
 
 			AreaCombat* area = new AreaCombat();
@@ -872,6 +890,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 			pugi::xml_attribute attackAttribute, skillAttribute;
 			if ((attackAttribute = node.attribute("attack")) && (skillAttribute = node.attribute("skill"))) {
+				sb.attack = pugi::cast<int32_t>(attackAttribute.value());
+				sb.skill = pugi::cast<int32_t>(skillAttribute.value());
 				sb.minCombatValue = 0;
 				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(pugi::cast<int32_t>(skillAttribute.value()), pugi::cast<int32_t>(attackAttribute.value()));
 			}
@@ -934,6 +954,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					tickInterval = value;
 				}
 			}
+			sb.tick = tickInterval;
 
 			if (conditionType != CONDITION_NONE) {
 				Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, 0, tickInterval);
@@ -978,6 +999,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 			if ((attr = node.attribute("duration"))) {
 				duration = pugi::cast<int32_t>(attr.value());
+				sb.duration = duration;
 			}
 
 			if ((attr = node.attribute("speedchange"))) {
@@ -986,6 +1008,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					//cant be slower than 100%
 					speedChange = -1000;
 				}
+				sb.speedChange = speedChange;
 			}
 
 			ConditionType_t conditionType;
@@ -1090,6 +1113,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					tickInterval = value;
 				}
 			}
+			sb.tick = tickInterval;
 
 			int32_t minDamage = std::abs(sb.minCombatValue);
 			int32_t maxDamage = std::abs(sb.maxCombatValue);
@@ -1101,6 +1125,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					startDamage = value;
 				}
 			}
+			sb.startDamage = startDamage;
 
 			Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, startDamage, tickInterval);
 			combat->setCondition(condition);
@@ -1125,6 +1150,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 						ShootType_t shoot = getShootType(attr.as_string());
 						if (shoot != CONST_ANI_NONE) {
 							combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, shoot);
+							sb.shootType = shoot;
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
@@ -1134,6 +1160,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 						MagicEffectClasses effect = getMagicEffect(attr.as_string());
 						if (effect != CONST_ME_NONE) {
 							combat->setParam(COMBAT_PARAM_EFFECT, effect);
+							sb.effect = effect;
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown areaEffect: " << attr.as_string() << std::endl;
 						}

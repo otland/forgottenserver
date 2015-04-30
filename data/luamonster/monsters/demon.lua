@@ -1,5 +1,4 @@
--- a testing Demon layout
-local demon = Game.createMonsterType("Demon")
+local mType = Game.createMonsterType("Demon")
 local monster = {}
 monster.description = "a demon"
 monster.experience = 6000
@@ -25,7 +24,6 @@ monster.flags = {
 	hostile = true,
     convinceable = false,
 	illusionable = false,
-	convinceable = false,
 	canPushItems = true,
 	canPushCreatures = true,
 	targetDistance = 1,
@@ -80,7 +78,7 @@ monster.loot = {
 
 monster.attacks = {
 	{name = "melee", attack = 130, skill = 70, effect = CONST_ME_DRAWBLOOD, interval = 2*1000},
-	{script = "attack/energy strike.lua", range = 1, chance = 10, interval = 2*1000, minDamage = -210, maxDamage = -300, target = true},
+	{name = "energy strike", range = 1, chance = 10, interval = 2*1000, minDamage = -210, maxDamage = -300, target = true},
 	{name = "combat", type = COMBAT_MANADRAIN, chance = 10, interval = 2*1000, minDamage = 0, maxDamage = -120, target = true, range = 7, effect = CONST_ME_MAGIC_BLUE},
 	{name = "combat", type = COMBAT_FIREDAMAGE, chance = 20, interval = 2*1000, minDamage = -150, maxDamage = -250, radius = 1, target = true, effect = CONST_ME_FIREAREA, shootEffect = CONST_ANI_FIRE},
 	{name = "speed", chance = 15, interval = 2*1000, speed = -700, radius = 1, target = true, duration = 30*1000, effect = CONST_ME_MAGIC_RED},
@@ -112,7 +110,7 @@ monster.immunities = {
 	{type = "invisible", condition = true}
 }
 
-demon:register(monster)
+mType:register(monster)
 
 
 

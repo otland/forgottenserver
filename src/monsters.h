@@ -59,10 +59,24 @@ struct spellBlock_t {
 	uint32_t chance;
 	uint32_t speed;
 	uint32_t range;
+	uint32_t duration;
+	uint32_t tick;
 	int32_t minCombatValue;
 	int32_t maxCombatValue;
+	int32_t attack;
+	int32_t skill;
+	int32_t speedChange;
+	int32_t startDamage;
 	bool combatSpell;
 	bool isMelee;
+	bool needTarget;
+	std::string scriptName;
+	std::string name;
+	int32_t length;
+	int32_t radius;
+	int32_t spread;
+	ShootType_t shootType;
+	MagicEffectClasses effect;
 };
 
 struct voiceBlock_t {
@@ -207,6 +221,7 @@ class MonsterType
 		bool isAttackable;
 		bool isHostile;
 		bool hiddenHealth;
+		bool fromLuaFile;
 
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);
@@ -242,6 +257,7 @@ class Monsters
 		static uint32_t getLootRandom();
 
 		std::map<MonsterType*, std::string> monsterScriptList;
+		std::map<uint32_t, MonsterType*> monsters;
 
 	private:
 		ConditionDamage* getDamageCondition(ConditionType_t conditionType,
@@ -254,7 +270,6 @@ class Monsters
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
 		std::map<std::string, uint32_t> monsterNames;
-		std::map<uint32_t, MonsterType*> monsters;
 		LuaScriptInterface* scriptInterface;
 
 		bool loaded;
