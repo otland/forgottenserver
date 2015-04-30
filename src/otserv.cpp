@@ -234,6 +234,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+	std::cout << ">> Loading lua monsters" << std::endl;
+	if (!loadLuaFilesInDirectory("/data/luamonster/monsters/")) {
+		startupErrorMessage("Unable to load lua monsters!");
+		return;
+	}
+
 	std::cout << ">> Loading monsters" << std::endl;
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");

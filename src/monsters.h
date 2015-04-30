@@ -59,15 +59,95 @@ struct spellBlock_t {
 	uint32_t chance;
 	uint32_t speed;
 	uint32_t range;
+	uint32_t duration;
+	uint32_t tick;
 	int32_t minCombatValue;
 	int32_t maxCombatValue;
+	int32_t attack;
+	int32_t skill;
+	int32_t speedChange;
+	int32_t startDamage;
 	bool combatSpell;
 	bool isMelee;
+	bool needTarget;
+	std::string scriptName;
+	std::string name;
+	int32_t length;
+	int32_t radius;
+	int32_t spread;
+	ShootType_t shootType;
+	MagicEffectClasses effect;
 };
 
 struct voiceBlock_t {
 	std::string text;
 	bool yellText;
+};
+
+class Loot
+{
+	public:
+		Loot();
+
+		void reset();
+
+		Loot(const Loot&) = delete;
+		Loot& operator=(const Loot&) = delete;
+
+		uint16_t id;
+		uint32_t chance;
+		uint8_t countMax;
+		int16_t subType;
+		int32_t actionId;
+		std::string text;
+
+		std::list<Loot*> children;
+};
+
+class MonsterSpell
+{
+	public:
+		MonsterSpell();
+
+		void reset();
+
+		MonsterSpell(const MonsterSpell&) = delete;
+		MonsterSpell& operator=(const MonsterSpell&) = delete;
+		
+		uint8_t chance;
+		uint16_t interval;
+		uint8_t range;
+		int32_t minCombatValue;
+		int32_t maxCombatValue;
+		int32_t attack;
+		int32_t skill;
+		bool combatSpell;
+		bool isMelee;
+		std::string name;
+		std::string scriptName;
+		bool isScripted;
+		bool needTarget;
+		bool needDirection;
+
+		int32_t length;
+		int32_t spread;
+		int32_t radius;
+
+		ConditionType_t conditionType;
+		CombatType_t combatType;
+		int32_t conditionMinDamage;
+		int32_t conditionMaxDamage;
+		int32_t conditionStartDamage;
+
+		int32_t tickInterval;
+
+		int32_t speedChange;
+		int32_t duration;
+		Outfit_t outfit;
+
+		ShootType_t shoot;
+		MagicEffectClasses effect;
+
 };
 
 class MonsterType
@@ -141,9 +221,14 @@ class MonsterType
 		bool isAttackable;
 		bool isHostile;
 		bool hiddenHealth;
+		bool fromLuaFile;
 
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);
+		void clone(MonsterType* target, MonsterType* source, const std::string& type);
+		void loadLoot(Loot* loot, LootBlock& lootblock);
+		void loadLoot(MonsterType* monsterType, Loot* loot);
+		void loadChildLoot(Loot* loot, LootBlock& parent);
 		std::list<Item*> createLootItem(const LootBlock& lootblock);
 };
 
@@ -166,8 +251,13 @@ class Monsters
 		MonsterType* getMonsterType(const std::string& name);
 		MonsterType* getMonsterType(uint32_t mid);
 		uint32_t getIdByName(const std::string& name);
+		void addMonsterType(const std::string& name, MonsterType* mType);
+		bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
 		static uint32_t getLootRandom();
+
+		std::map<MonsterType*, std::string> monsterScriptList;
+		std::map<uint32_t, MonsterType*> monsters;
 
 	private:
 		ConditionDamage* getDamageCondition(ConditionType_t conditionType,
@@ -180,8 +270,6 @@ class Monsters
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
 		std::map<std::string, uint32_t> monsterNames;
-		std::map<MonsterType*, std::string> monsterScriptList;
-		std::map<uint32_t, MonsterType*> monsters;
 		LuaScriptInterface* scriptInterface;
 
 		bool loaded;
