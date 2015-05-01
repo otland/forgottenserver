@@ -39,9 +39,9 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 110, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 110, skill = 90, minDamage = 0, maxDamage = -550, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 40, interval = 2000, minDamage = 0, maxDamage = -980, radius = 3, effect = 17},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 50, interval = 2000, minDamage = -200, maxDamage = -300, length = 8, radius = 3, effect = 14},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 50, interval = 2000, minDamage = -200, maxDamage = -300, length = 8, effect = 14},
 	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, speedChange = -800, radius = 3, effect = 21}
 }
 

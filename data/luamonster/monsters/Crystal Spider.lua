@@ -59,16 +59,16 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -250, interval = 2000, effect = 0},
 	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 15000, speedChange = -800, range = 7, radius = 6, effect = 3},
-	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 15, interval = 2000, minDamage = -50, maxDamage = -100, range = 7, radius = 6, shootEffect = 29, effect = 42},
-	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, duration = 10000, speedChange = -600, range = 7, radius = 6, shootEffect = 13, effect = 42}
+	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 15, interval = 2000, minDamage = -50, maxDamage = -100, range = 7, shootEffect = 29, effect = 42},
+	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, duration = 10000, speedChange = -600, range = 7, shootEffect = 13, effect = 42}
 }
 
 monster.defenses = {
 	defense = 40,
     armor = 40,
-    {name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 250, radius = 6, shootEffect = 13, effect = 14}
+    {name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 250, shootEffect = 13, effect = 14}
 }
 
 monster.elements = {

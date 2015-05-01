@@ -43,10 +43,10 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 100, skill = 120, interval = 1200, effect = 0},
+	{name = "melee",  attack = 100, skill = 120, minDamage = 0, maxDamage = -650, interval = 1200, effect = 0},
 	{name = "firefield",  chance = 30, interval = 1200, minDamage = 0, maxDamage = 0, range = 7, radius = 4, shootEffect = 4},
-	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 40, interval = 1000, minDamage = -700, maxDamage = -1615, range = 5, length = 8, spread = 3, radius = 4, shootEffect = 4, effect = 7},
-	{name = "melee",  attack = 100, skill = 120, interval = 1000, effect = 5}
+	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 40, interval = 1000, minDamage = -700, maxDamage = -1615, range = 5, length = 8, spread = 3, shootEffect = 4, effect = 7},
+	{name = "melee",  attack = 0, skill = 0, minDamage = -750, maxDamage = -950, interval = 1000, effect = 5}
 }
 
 monster.immunities = {
@@ -67,6 +67,10 @@ monster.immunities = {
 	{type = "holy", condition = false, combat = false},
 	{type = "fire", condition = false, combat = false},
 	{type = "ice", condition = false, combat = false}
+}
+
+monster.events = {
+    "Versperoth"
 }
 
 mType:register(monster)

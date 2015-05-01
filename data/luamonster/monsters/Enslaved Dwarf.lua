@@ -67,18 +67,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 91, skill = 100, interval = 2000, effect = 0},
+	{name = "melee",  attack = 91, skill = 100, minDamage = 0, maxDamage = -501, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 15, interval = 2000, minDamage = 0, maxDamage = -340, range = 7, shootEffect = 12},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -250, target = true, range = 7, radius = 3, shootEffect = 41, effect = 6},
 	{name = "drunk",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, radius = 5, shootEffect = 41, effect = 4},
-	{name = "enslaved dwarf skill reducer 1",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 5, shootEffect = 41, effect = 4},
-	{name = "enslaved dwarf skill reducer 2",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 5, shootEffect = 41, effect = 4}
+	{name = "enslaved dwarf skill reducer 1",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 41, effect = 4},
+	{name = "enslaved dwarf skill reducer 2",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 41, effect = 4}
 }
 
 monster.defenses = {
 	defense = 30,
     armor = 30,
-    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 396, maxDamage = 478, radius = 5, shootEffect = 41, effect = 15}
+    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 396, maxDamage = 478, shootEffect = 41, effect = 15}
 }
 
 monster.elements = {

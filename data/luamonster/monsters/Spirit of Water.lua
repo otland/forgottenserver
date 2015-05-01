@@ -37,7 +37,7 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 100, skill = 70, interval = 2000, effect = 0},
+	{name = "melee",  attack = 100, skill = 70, minDamage = 0, maxDamage = -400, interval = 2000, effect = 0},
 	{name = "poisonfield",  chance = 50, interval = 1000, minDamage = 0, maxDamage = 0, shootEffect = 15},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 40, interval = 2000, minDamage = -1, maxDamage = -120, shootEffect = 15, effect = 2}
 }

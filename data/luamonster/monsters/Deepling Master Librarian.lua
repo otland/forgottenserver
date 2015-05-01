@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 15211
 monster.speed = 190
+monsters.runHealth = 250
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -53,18 +54,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 60, skill = 60, interval = 2000, effect = 0},
+	{name = "melee",  attack = 60, skill = 60, minDamage = 0, maxDamage = -210, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 10, interval = 2000, minDamage = -260, maxDamage = -450, length = 10, spread = 3, effect = 43},
 	{name = "combat", type = COMBAT_DROWNDAMAGE,  chance = 20, interval = 2000, minDamage = -150, maxDamage = -280, target = true, radius = 4, effect = 26},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = -80, maxDamage = -140, range = 7, radius = 4, effect = 46},
-	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -60, maxDamage = -140, range = 7, radius = 4, effect = 46},
-	{name = "deepling spellsinger skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 4, effect = 46}
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = -80, maxDamage = -140, range = 7, effect = 46},
+	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -60, maxDamage = -140, range = 7, effect = 46},
+	{name = "deepling spellsinger skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, effect = 46}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 40, maxDamage = 80, radius = 4, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 40, maxDamage = 80, effect = 13}
 }
 
 monster.immunities = {

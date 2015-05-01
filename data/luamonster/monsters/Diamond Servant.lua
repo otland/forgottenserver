@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "energy"
 monster.corpse = 13485
 monster.speed = 210
+monsters.runHealth = 100
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -59,10 +60,10 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 50, skill = 30, interval = 2000, effect = 0},
+	{name = "melee",  attack = 50, skill = 30, minDamage = 0, maxDamage = -100, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 20, interval = 2000, minDamage = -80, maxDamage = -120, radius = 3, effect = 49},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 15, interval = 2000, minDamage = -125, maxDamage = -170, length = 5, spread = 2, radius = 3, shootEffect = 5, effect = 12},
-	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 3, shootEffect = 11, effect = 32}
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 15, interval = 2000, minDamage = -125, maxDamage = -170, length = 5, spread = 2, shootEffect = 5, effect = 12},
+	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 11, effect = 32}
 }
 
 monster.immunities = {

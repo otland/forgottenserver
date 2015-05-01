@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 10320
 monster.speed = 300
+monsters.runHealth = 50
 monster.maxSummons = 2
 
 monster.changeTarget = {
@@ -43,9 +44,9 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 1200, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -125, interval = 1200, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 30, interval = 2000, minDamage = 0, maxDamage = -100, range = 7, shootEffect = 8},
-	{name = "melee",  attack = 0, skill = 0, interval = 1200, effect = 20}
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = 0, interval = 1200, effect = 20}
 }
 
 monster.immunities = {

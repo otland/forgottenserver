@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "undead"
 monster.corpse = 7091
 monster.speed = 240
+monsters.runHealth = 250
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -62,21 +63,21 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 67, skill = 57, interval = 2000, effect = 0},
+	{name = "melee",  attack = 67, skill = 57, minDamage = 0, maxDamage = -225, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -175, maxDamage = -380, length = 8, spread = 3, effect = 3},
 	{name = "speed",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, duration = 12000, speedChange = -700, radius = 3, effect = 3},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 18000, speedChange = -850, length = 7, spread = 3, radius = 3, effect = 44},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 18000, speedChange = -850, length = 7, spread = 3, effect = 44},
 	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 5, interval = 2000, minDamage = -60, maxDamage = -120, radius = 3, effect = 43},
 	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 10, interval = 2000, minDamage = -100, maxDamage = -240, target = true, radius = 4, effect = 42},
-	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 5, interval = 2000, minDamage = 0, maxDamage = -220, length = 1, radius = 4, effect = 3},
+	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 5, interval = 2000, minDamage = 0, maxDamage = -220, length = 1, effect = 3},
 	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, target = true, duration = 12000, speedChange = -600, radius = 4, effect = 42}
 }
 
 monster.defenses = {
 	defense = 45,
     armor = 45,
-    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 150, maxDamage = 200, radius = 4, effect = 13},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 290, radius = 4, effect = 14}
+    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 150, maxDamage = 200, effect = 13},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 290, effect = 14}
 }
 
 monster.elements = {

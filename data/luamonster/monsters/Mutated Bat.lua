@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 9829
 monster.speed = 210
+monsters.runHealth = 300
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -55,17 +56,17 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 56, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 56, skill = 50, minDamage = 0, maxDamage = -168, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = -70, maxDamage = -180, range = 7, shootEffect = 15},
 	{name = "combat", type = COMBAT_DROWNDAMAGE,  chance = 15, interval = 2000, minDamage = -30, maxDamage = -90, radius = 6, shootEffect = 15, effect = 25},
-	{name = "mutated bat curse",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 6, shootEffect = 15, effect = 25},
-	{name = "condition", type = CONDITION_POISON,  chance = 15, interval = 2000, minDamage = -190, maxDamage = -240, length = 4, spread = 3, radius = 6, shootEffect = 15, effect = 21}
+	{name = "mutated bat curse",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 25},
+	{name = "condition", type = CONDITION_POISON,  chance = 15, interval = 2000, minDamage = -190, maxDamage = -240, length = 4, spread = 3, shootEffect = 15, effect = 21}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 80, maxDamage = 95, radius = 6, shootEffect = 15, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 80, maxDamage = 95, shootEffect = 15, effect = 13}
 }
 
 monster.immunities = {

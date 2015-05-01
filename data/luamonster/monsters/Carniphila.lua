@@ -42,7 +42,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 50, skill = 30, interval = 2000, effect = 0},
+	{name = "melee",  attack = 50, skill = 30, minDamage = 0, maxDamage = -100, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = -60, maxDamage = -95, range = 7, shootEffect = 15, effect = 9},
 	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -800, range = 7, shootEffect = 15, effect = 9},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 10, interval = 2000, minDamage = -40, maxDamage = -130, radius = 3, shootEffect = 15, effect = 21}

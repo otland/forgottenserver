@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "venom"
 monster.corpse = 6047
 monster.speed = 440
+monsters.runHealth = 400
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -42,7 +43,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 40, skill = 70, interval = 2000, effect = 0},
+	{name = "melee",  attack = 40, skill = 70, minDamage = 0, maxDamage = -160, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 25, interval = 1000, minDamage = -60, maxDamage = -200, range = 7, shootEffect = 15, effect = 17},
 	{name = "speed",  chance = 34, interval = 1000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -850, range = 7, shootEffect = 15, effect = 17},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 12, interval = 1000, minDamage = -40, maxDamage = -130, radius = 3, shootEffect = 15, effect = 21}
@@ -51,7 +52,7 @@ monster.attacks = {
 monster.defenses = {
 	defense = 31,
     armor = 30,
-    {name = "ultimate healing",  chance = 35, interval = 1200, minDamage = 600, maxDamage = 800, radius = 3, shootEffect = 15, effect = 21}
+    {name = "ultimate healing",  chance = 35, interval = 1200, minDamage = 600, maxDamage = 800, shootEffect = 15, effect = 21}
 }
 
 monster.immunities = {

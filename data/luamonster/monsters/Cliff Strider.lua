@@ -74,11 +74,11 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 95, skill = 95, interval = 2000, effect = 0},
+	{name = "melee",  attack = 95, skill = 95, minDamage = 0, maxDamage = -499, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 20, interval = 2000, minDamage = 0, maxDamage = -800, target = true, radius = 4, shootEffect = 12, effect = 45},
-	{name = "cliff strider skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, shootEffect = 12, effect = 45},
-	{name = "cliff strider electrify",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 1, radius = 4, shootEffect = 12, effect = 45},
-	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -1000, length = 6, radius = 4, shootEffect = 12, effect = 35},
+	{name = "cliff strider skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 12, effect = 45},
+	{name = "cliff strider electrify",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 1, shootEffect = 12, effect = 45},
+	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -1000, length = 6, shootEffect = 12, effect = 35},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 15, interval = 2000, minDamage = -100, maxDamage = -300, radius = 4, shootEffect = 12, effect = 49}
 }
 

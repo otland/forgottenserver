@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 6002
 monster.speed = 200
+monsters.runHealth = 15
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -55,7 +56,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 15, skill = 10, interval = 2000, effect = 0},
+	{name = "melee",  attack = 15, skill = 10, minDamage = 0, maxDamage = -15, interval = 2000, effect = 0},
 	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 15},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -35, range = 6, shootEffect = 9}
 }

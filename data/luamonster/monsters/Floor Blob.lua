@@ -31,7 +31,7 @@ monster.flags = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 2000, effect = 0}
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = 0, interval = 2000, effect = 0}
 }
 
 monster.immunities = {

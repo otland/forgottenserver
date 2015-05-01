@@ -65,7 +65,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 70, skill = 110, interval = 2000, effect = 0},
+	{name = "melee",  attack = 70, skill = 110, minDamage = 0, maxDamage = -420, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 10, interval = 2000, minDamage = -310, maxDamage = -630, length = 4, spread = 3, effect = 6},
 	{name = "draken abomination curse",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, effect = 6},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 15, interval = 2000, minDamage = -170, maxDamage = -370, length = 4, effect = 18},
@@ -76,7 +76,7 @@ monster.attacks = {
 monster.defenses = {
 	defense = 30,
     armor = 30,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 650, maxDamage = 700, radius = 3, shootEffect = 15, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 650, maxDamage = 700, shootEffect = 15, effect = 13}
 }
 
 monster.elements = {

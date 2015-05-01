@@ -66,21 +66,21 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 96, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 96, skill = 90, minDamage = 0, maxDamage = -481, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 5, interval = 2000, minDamage = -300, maxDamage = -400, target = true, range = 7, radius = 4, effect = 1},
-	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -125, maxDamage = -600, range = 7, radius = 4, shootEffect = 32, effect = 39},
+	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -125, maxDamage = -600, range = 7, shootEffect = 32, effect = 39},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 5, interval = 2000, minDamage = -100, maxDamage = -390, target = true, range = 7, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = 0, maxDamage = -180, range = 7, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 10, interval = 2000, minDamage = -150, maxDamage = -690, length = 8, spread = 3, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -300, maxDamage = -700, length = 8, spread = 3, radius = 4, shootEffect = 15, effect = 14},
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = 0, maxDamage = -180, range = 7, shootEffect = 15, effect = 21},
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 10, interval = 2000, minDamage = -150, maxDamage = -690, length = 8, spread = 3, shootEffect = 15, effect = 21},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -300, maxDamage = -700, length = 8, spread = 3, shootEffect = 15, effect = 14},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -100, maxDamage = -200, radius = 3, shootEffect = 15, effect = 14},
-	{name = "undead dragon curse",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 15, effect = 14}
+	{name = "undead dragon curse",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 14}
 }
 
 monster.defenses = {
 	defense = 40,
     armor = 40,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 200, maxDamage = 250, radius = 3, shootEffect = 15, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 200, maxDamage = 250, shootEffect = 15, effect = 13}
 }
 
 monster.elements = {

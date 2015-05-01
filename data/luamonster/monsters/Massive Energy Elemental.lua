@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "energy"
 monster.corpse = 8966
 monster.speed = 210
+monsters.runHealth = 1
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -47,16 +48,16 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 70, skill = 40, interval = 2000, effect = 0},
+	{name = "melee",  attack = 70, skill = 40, minDamage = 0, maxDamage = -175, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 10, interval = 2000, minDamage = -270, maxDamage = -615, target = true, range = 7, radius = 2, shootEffect = 5, effect = 12},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 15, interval = 2000, minDamage = -175, maxDamage = -205, range = 7, radius = 2, shootEffect = 36, effect = 12},
-	{name = "massive energy elemental electrify",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, radius = 2, shootEffect = 36, effect = 12}
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 15, interval = 2000, minDamage = -175, maxDamage = -205, range = 7, shootEffect = 36, effect = 12},
+	{name = "massive energy elemental electrify",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 36, effect = 12}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "combat", type = COMBAT_HEALING,  chance = 5, interval = 2000, minDamage = 190, maxDamage = 250, radius = 2, shootEffect = 36, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 5, interval = 2000, minDamage = 190, maxDamage = 250, shootEffect = 36, effect = 13}
 }
 
 monster.elements = {

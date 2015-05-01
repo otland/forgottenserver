@@ -39,12 +39,12 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 150, skill = 60, interval = 2000, effect = 0},
+	{name = "melee",  attack = 150, skill = 60, minDamage = 0, maxDamage = -525, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 30, interval = 6000, minDamage = -80, maxDamage = -300, length = 8, spread = 3, effect = 7},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 45, interval = 3000, minDamage = -80, maxDamage = -400, target = true, radius = 5, shootEffect = 4, effect = 7},
-	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 30, interval = 4000, minDamage = -80, maxDamage = -270, radius = 5, shootEffect = 11, effect = 18},
-	{name = "condition", type = CONDITION_POISON,  chance = 40, interval = 4500, minDamage = -10, maxDamage = -200, range = 10, radius = 5, shootEffect = 15, effect = 18},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 30, interval = 5000, minDamage = -60, maxDamage = -300, length = 8, spread = 3, radius = 5, shootEffect = 15, effect = 21}
+	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 30, interval = 4000, minDamage = -80, maxDamage = -270, shootEffect = 11, effect = 18},
+	{name = "condition", type = CONDITION_POISON,  chance = 40, interval = 4500, minDamage = -10, maxDamage = -200, range = 10, shootEffect = 15, effect = 18},
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 30, interval = 5000, minDamage = -60, maxDamage = -300, length = 8, spread = 3, shootEffect = 15, effect = 21}
 }
 
 monster.immunities = {

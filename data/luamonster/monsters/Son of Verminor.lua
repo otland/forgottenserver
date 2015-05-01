@@ -37,7 +37,7 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 90, skill = 95, interval = 2000, effect = 0},
+	{name = "melee",  attack = 90, skill = 95, minDamage = 0, maxDamage = -473, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 20, interval = 2000, minDamage = -150, maxDamage = -200, range = 7, shootEffect = 15},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = -350, maxDamage = -390, radius = 3, shootEffect = 15, effect = 21},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 15, interval = 2000, minDamage = -220, maxDamage = -270, radius = 3, shootEffect = 15, effect = 39}
@@ -46,11 +46,11 @@ monster.attacks = {
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 250, maxDamage = 350, radius = 3, shootEffect = 15, effect = 13},
-	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 15, effect = 13},
-	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 15, effect = 13},
-	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 15, effect = 13},
-	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 15, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 250, maxDamage = 350, shootEffect = 15, effect = 13},
+	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 13},
+	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 13},
+	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 13},
+	{name = "outfit",  chance = 10, interval = 5000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 13}
 }
 
 monster.elements = {

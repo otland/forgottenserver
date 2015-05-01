@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 6302
 monster.speed = 300
+monsters.runHealth = 300
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -37,7 +38,7 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 40, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 40, skill = 50, minDamage = 0, maxDamage = -120, interval = 2000, effect = 0},
 	{name = "condition", type = CONDITION_POISON,  chance = 15, interval = 2000, minDamage = -20, maxDamage = -240, length = 8, spread = 3, effect = 21},
 	{name = "drunk",  chance = 13, interval = 2000, minDamage = 0, maxDamage = 0, length = 8, spread = 3, effect = 25}
 }

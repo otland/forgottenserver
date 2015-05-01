@@ -45,14 +45,14 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 60, skill = 60, interval = 1950, effect = 0},
-	{name = "melee",  attack = 60, skill = 60, interval = 2000, effect = 1},
-	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 15, interval = 2800, minDamage = 0, maxDamage = -400, range = 7, radius = 4, shootEffect = 32, effect = 18},
+	{name = "melee",  attack = 60, skill = 60, minDamage = 0, maxDamage = -210, interval = 1950, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -795, interval = 2000, effect = 1},
+	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 15, interval = 2800, minDamage = 0, maxDamage = -400, range = 7, shootEffect = 32, effect = 18},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 17, interval = 2000, minDamage = -55, maxDamage = -155, target = true, range = 7, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 14, interval = 2500, minDamage = -333, maxDamage = -413, length = 8, spread = 3, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 18, interval = 2000, minDamage = -165, maxDamage = -200, length = 7, radius = 4, shootEffect = 15, effect = 1},
-	{name = "combat", type = COMBAT_MANADRAIN,  chance = 22, interval = 2500, minDamage = -85, maxDamage = -110, range = 8, radius = 4, shootEffect = 29, effect = 1},
-	{name = "condition", type = CONDITION_DROWN,  chance = 45, interval = 1000, minDamage = 0, maxDamage = 0, length = 8, spread = 3, radius = 4, shootEffect = 29, effect = 3}
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 14, interval = 2500, minDamage = -333, maxDamage = -413, length = 8, spread = 3, shootEffect = 15, effect = 21},
+	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 18, interval = 2000, minDamage = -165, maxDamage = -200, length = 7, shootEffect = 15, effect = 1},
+	{name = "combat", type = COMBAT_MANADRAIN,  chance = 22, interval = 2500, minDamage = -85, maxDamage = -110, range = 8, shootEffect = 29, effect = 1},
+	{name = "condition", type = CONDITION_DROWN,  chance = 45, interval = 1000, minDamage = 0, maxDamage = 0, length = 8, spread = 3, shootEffect = 29, effect = 3}
 }
 
 monster.immunities = {

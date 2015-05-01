@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 20475
 monster.speed = 250
+monsters.runHealth = 40
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -60,7 +61,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 40, skill = 75, interval = 2000, effect = 0},
+	{name = "melee",  attack = 40, skill = 75, minDamage = 0, maxDamage = -170, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 20, interval = 2000, minDamage = 0, maxDamage = -150, range = 7, shootEffect = 8},
 	{name = "pirate corsair skill reducer",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 8}
 }

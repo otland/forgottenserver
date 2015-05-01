@@ -65,7 +65,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 88, skill = 70, interval = 2000, effect = 0},
+	{name = "melee",  attack = 88, skill = 70, minDamage = 0, maxDamage = -352, interval = 2000, effect = 0},
 	{name = "fireball",  chance = 20, interval = 2000, minDamage = -150, maxDamage = -175},
 	{name = "hellspawn soulfire",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 5}
 }

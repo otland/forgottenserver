@@ -758,9 +758,12 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	sb.maxCombatValue = 0;
 	sb.spread = 0;
 	sb.length = 0;
+	sb.radius = 0;
 	sb.combatSpell = false;
 	sb.isMelee = false;
 	sb.needTarget = false;
+	sb.attack = 0;
+	sb.skill = 0;
 
 	std::string name;
 	std::string scriptName;

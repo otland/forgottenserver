@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 20380
 monster.speed = 200
+monsters.runHealth = 300
 monster.maxSummons = 2
 
 monster.changeTarget = {
@@ -67,19 +68,19 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 70, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 70, skill = 90, minDamage = 0, maxDamage = -350, interval = 2000, effect = 0},
 	{name = "outfit",  chance = 1, interval = 2000, minDamage = 0, maxDamage = 0, target = true, radius = 1, effect = 24},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -80, maxDamage = -200, length = 4, spread = 2, radius = 1, effect = 20},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -80, maxDamage = -200, length = 4, spread = 2, effect = 20},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 40, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, effect = 25},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 1, effect = 19},
-	{name = "werewolf skill reducer",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 1, radius = 1, effect = 19}
+	{name = "werewolf skill reducer",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 1, effect = 19}
 }
 
 monster.defenses = {
 	defense = 40,
     armor = 40,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 120, maxDamage = 225, radius = 1, effect = 15},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 400, range = 7, radius = 1, effect = 23}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 120, maxDamage = 225, effect = 15},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 400, range = 7, effect = 23}
 }
 
 monster.elements = {

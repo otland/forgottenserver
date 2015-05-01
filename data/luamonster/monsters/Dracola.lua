@@ -43,15 +43,15 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 85, skill = 85, interval = 2000, effect = 0},
-	{name = "melee",  attack = 85, skill = 85, interval = 2000, effect = 1},
-	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 3000, minDamage = 0, maxDamage = -800, range = 7, radius = 4, shootEffect = 32, effect = 18},
+	{name = "melee",  attack = 85, skill = 85, minDamage = 0, maxDamage = -404, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = -300, maxDamage = -395, interval = 2000, effect = 1},
+	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 3000, minDamage = 0, maxDamage = -800, range = 7, shootEffect = 32, effect = 18},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 20, interval = 2000, minDamage = -120, maxDamage = -390, target = true, range = 7, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 23, interval = 1000, minDamage = -50, maxDamage = -180, range = 7, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 20, interval = 4000, minDamage = -500, maxDamage = -600, length = 8, spread = 3, radius = 4, shootEffect = 15, effect = 7},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 20, interval = 2000, minDamage = -200, maxDamage = -685, length = 8, spread = 3, radius = 4, shootEffect = 15, effect = 21},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 20, interval = 3000, minDamage = -300, maxDamage = -600, length = 8, spread = 3, radius = 4, shootEffect = 15, effect = 15},
-	{name = "condition", type = CONDITION_DROWN,  chance = 20, interval = 1000, minDamage = 0, maxDamage = 0, length = 8, spread = 3, radius = 4, shootEffect = 15, effect = 3}
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 23, interval = 1000, minDamage = -50, maxDamage = -180, range = 7, shootEffect = 15, effect = 21},
+	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 20, interval = 4000, minDamage = -500, maxDamage = -600, length = 8, spread = 3, shootEffect = 15, effect = 7},
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 20, interval = 2000, minDamage = -200, maxDamage = -685, length = 8, spread = 3, shootEffect = 15, effect = 21},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 20, interval = 3000, minDamage = -300, maxDamage = -600, length = 8, spread = 3, shootEffect = 15, effect = 15},
+	{name = "condition", type = CONDITION_DROWN,  chance = 20, interval = 1000, minDamage = 0, maxDamage = 0, length = 8, spread = 3, shootEffect = 15, effect = 3}
 }
 
 monster.immunities = {

@@ -35,7 +35,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -215, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 15, interval = 2000, minDamage = -100, maxDamage = -250, radius = 3, effect = 1},
 	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, target = true, speedChange = -400, radius = 1, effect = 67},
 	{name = "condition", type = CONDITION_BLEEDING,  chance = 20, interval = 2000, minDamage = -400, maxDamage = -600, radius = 2, effect = 1}

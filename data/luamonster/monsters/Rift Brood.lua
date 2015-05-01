@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "energy"
 monster.corpse = 1495
 monster.speed = 300
+monsters.runHealth = 1
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -31,14 +32,14 @@ monster.flags = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 60, skill = 75, interval = 2000, effect = 0},
+	{name = "melee",  attack = 60, skill = 75, minDamage = 0, maxDamage = -255, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 90, interval = 1000, minDamage = -200, maxDamage = -400, target = true, range = 3, radius = 2, effect = 48}
 }
 
 monster.defenses = {
 	defense = 30,
     armor = 30,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 90, maxDamage = 150, radius = 2, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 90, maxDamage = 150, effect = 13}
 }
 
 monster.elements = {

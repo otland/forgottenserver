@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "undead"
 monster.corpse = 11362
 monster.speed = 320
+monsters.runHealth = 366
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -67,13 +68,13 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 90, skill = 124, interval = 2000, effect = 0},
+	{name = "melee",  attack = 90, skill = 124, minDamage = 0, maxDamage = -603, interval = 2000, effect = 0},
 	{name = "ghastly dragon curse",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, range = 5},
 	{name = "condition", type = CONDITION_POISON,  chance = 10, interval = 2000, minDamage = -920, maxDamage = -1280, range = 5, effect = 39},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = -80, maxDamage = -230, range = 7, effect = 14},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -120, maxDamage = -250, length = 8, spread = 3, effect = 2},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 15, interval = 2000, minDamage = -110, maxDamage = -180, radius = 4, effect = 18},
-	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -800, range = 7, radius = 4, effect = 39}
+	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -800, range = 7, effect = 39}
 }
 
 monster.elements = {

@@ -53,18 +53,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 80, skill = 40, interval = 2000, effect = 0},
+	{name = "melee",  attack = 80, skill = 40, minDamage = 0, maxDamage = -200, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = -50, maxDamage = -90, range = 7, shootEffect = 15, effect = 21},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -25, maxDamage = -47, radius = 3, shootEffect = 15, effect = 14},
 	{name = "condition", type = CONDITION_POISON,  chance = 10, interval = 2000, minDamage = -50, maxDamage = -60, radius = 3, shootEffect = 15, effect = 21},
-	{name = "condition", type = CONDITION_POISON,  chance = 10, interval = 2000, minDamage = -70, maxDamage = -80, length = 6, radius = 3, shootEffect = 15, effect = 21},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 13000, speedChange = -600, radius = 3, shootEffect = 15, effect = 21}
+	{name = "condition", type = CONDITION_POISON,  chance = 10, interval = 2000, minDamage = -70, maxDamage = -80, length = 6, shootEffect = 15, effect = 21},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 13000, speedChange = -600, shootEffect = 15, effect = 21}
 }
 
 monster.defenses = {
 	defense = 30,
     armor = 30,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 50, maxDamage = 60, radius = 3, shootEffect = 15, effect = 17}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 50, maxDamage = 60, shootEffect = 15, effect = 17}
 }
 
 monster.immunities = {

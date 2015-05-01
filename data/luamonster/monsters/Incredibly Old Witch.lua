@@ -15,6 +15,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 6081
 monster.speed = 180
+monsters.runHealth = 1000000
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -58,15 +59,15 @@ monster.attacks = {
 monster.defenses = {
 	defense = 0,
     armor = 0,
-    {name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13},
-	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 13}
+    {name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13},
+	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13}
 }
 
 monster.immunities = {

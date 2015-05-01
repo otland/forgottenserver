@@ -53,11 +53,11 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 80, skill = 120, interval = 2000, effect = 0},
+	{name = "melee",  attack = 80, skill = 120, minDamage = 0, maxDamage = -520, interval = 2000, effect = 0},
 	{name = "firefield",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 3, shootEffect = 4},
-	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 10, interval = 2000, minDamage = -392, maxDamage = -1500, length = 8, radius = 3, shootEffect = 4, effect = 37},
+	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 10, interval = 2000, minDamage = -392, maxDamage = -1500, length = 8, shootEffect = 4, effect = 37},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 15, interval = 2000, minDamage = -60, maxDamage = -330, range = 7, radius = 3, shootEffect = 4, effect = 16},
-	{name = "hellfire fighter soulfire",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 4, effect = 16}
+	{name = "hellfire fighter soulfire",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 16}
 }
 
 monster.elements = {

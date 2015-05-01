@@ -37,16 +37,16 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 50, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 50, skill = 50, minDamage = 0, maxDamage = -150, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 16, interval = 2000, minDamage = 0, maxDamage = -130, radius = 3, effect = 12},
-	{name = "condition", type = CONDITION_POISON,  chance = 16, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 3, shootEffect = 15, effect = 21}
+	{name = "condition", type = CONDITION_POISON,  chance = 16, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 15, effect = 21}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 25,
-    {name = "combat", type = COMBAT_HEALING,  chance = 16, interval = 2000, minDamage = 100, maxDamage = 155, radius = 3, shootEffect = 15, effect = 13},
-	{name = "speed",  chance = 16, interval = 2000, minDamage = 0, maxDamage = 0, duration = 80000, speedChange = 360, radius = 3, shootEffect = 15, effect = 14}
+    {name = "combat", type = COMBAT_HEALING,  chance = 16, interval = 2000, minDamage = 100, maxDamage = 155, shootEffect = 15, effect = 13},
+	{name = "speed",  chance = 16, interval = 2000, minDamage = 0, maxDamage = 0, duration = 80000, speedChange = 360, shootEffect = 15, effect = 14}
 }
 
 monster.immunities = {

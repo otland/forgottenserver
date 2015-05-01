@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "fire"
 monster.corpse = 6364
 monster.speed = 220
+monsters.runHealth = 400
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -59,18 +60,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 60, skill = 70, interval = 2000, effect = 0},
+	{name = "melee",  attack = 60, skill = 70, minDamage = 0, maxDamage = -240, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 20, interval = 2000, minDamage = -100, maxDamage = -240, target = true, range = 7, radius = 4, shootEffect = 4, effect = 7},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 10, interval = 2000, minDamage = -300, maxDamage = -430, target = true, range = 7, radius = 2, shootEffect = 4, effect = 37},
-	{name = "diabolic imp skill reducer",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 2, shootEffect = 4, effect = 37}
+	{name = "diabolic imp skill reducer",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, shootEffect = 4, effect = 37}
 }
 
 monster.defenses = {
 	defense = 25,
     armor = 25,
-    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 650, maxDamage = 800, radius = 2, shootEffect = 4, effect = 13},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 2000, speedChange = 800, radius = 2, shootEffect = 4, effect = 14},
-	{name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 2, shootEffect = 4, effect = 11}
+    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 650, maxDamage = 800, shootEffect = 4, effect = 13},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 2000, speedChange = 800, shootEffect = 4, effect = 14},
+	{name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 11}
 }
 
 monster.immunities = {

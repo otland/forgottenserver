@@ -50,17 +50,17 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -900, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -2000, range = 7, shootEffect = 5, effect = 3},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 15, interval = 2000, minDamage = 0, maxDamage = -800, target = true, range = 7, radius = 7, shootEffect = 4, effect = 41},
-	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 20, interval = 2000, minDamage = 0, maxDamage = -524, range = 7, radius = 7, shootEffect = 32, effect = 18},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 1000, minDamage = -100, maxDamage = -500, length = 8, radius = 7, shootEffect = 32, effect = 33}
+	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 20, interval = 2000, minDamage = 0, maxDamage = -524, range = 7, shootEffect = 32, effect = 18},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 1000, minDamage = -100, maxDamage = -500, length = 8, shootEffect = 32, effect = 33}
 }
 
 monster.defenses = {
 	defense = 65,
     armor = 40,
-    {name = "combat", type = COMBAT_HEALING,  chance = 11, interval = 1000, minDamage = 400, maxDamage = 900, radius = 7, shootEffect = 32, effect = 15}
+    {name = "combat", type = COMBAT_HEALING,  chance = 11, interval = 1000, minDamage = 400, maxDamage = 900, shootEffect = 32, effect = 15}
 }
 
 monster.immunities = {

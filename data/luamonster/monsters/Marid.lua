@@ -65,20 +65,20 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 30, skill = 50, interval = 2000, effect = 13},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 10, interval = 2000, minDamage = -100, maxDamage = -250, range = 7, radius = 1, shootEffect = 36, effect = 13},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = -30, maxDamage = -90, range = 7, radius = 1, shootEffect = 36, effect = 14},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 1500, speedChange = -650, range = 7, radius = 1, shootEffect = 36, effect = 14},
-	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 1, shootEffect = 5, effect = 14},
-	{name = "outfit",  chance = 1, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 1, shootEffect = 5, effect = 13},
-	{name = "djinn electrify",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 1, shootEffect = 5, effect = 13},
+	{name = "melee",  attack = 30, skill = 50, minDamage = 0, maxDamage = -90, interval = 2000, effect = 13},
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 10, interval = 2000, minDamage = -100, maxDamage = -250, range = 7, shootEffect = 36, effect = 13},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = -30, maxDamage = -90, range = 7, shootEffect = 36, effect = 14},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 1500, speedChange = -650, range = 7, shootEffect = 36, effect = 14},
+	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 5, effect = 14},
+	{name = "outfit",  chance = 1, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 5, effect = 13},
+	{name = "djinn electrify",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, shootEffect = 5, effect = 13},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 15, interval = 2000, minDamage = -30, maxDamage = -90, radius = 3, shootEffect = 5, effect = 12}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 50, maxDamage = 80, radius = 3, shootEffect = 5, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 50, maxDamage = 80, shootEffect = 5, effect = 13}
 }
 
 monster.elements = {

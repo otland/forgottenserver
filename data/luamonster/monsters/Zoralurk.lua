@@ -58,23 +58,23 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 135, skill = 140, interval = 2000, effect = 0},
+	{name = "melee",  attack = 135, skill = 140, minDamage = 0, maxDamage = -1013, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 12, interval = 1000, minDamage = -600, maxDamage = -900, radius = 7, effect = 12},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 12, interval = 1000, minDamage = -400, maxDamage = -800, radius = 7, effect = 46},
-	{name = "combat", type = COMBAT_MANADRAIN,  chance = 25, interval = 2000, minDamage = -500, maxDamage = -800, range = 7, radius = 7, effect = 13},
+	{name = "combat", type = COMBAT_MANADRAIN,  chance = 25, interval = 2000, minDamage = -500, maxDamage = -800, range = 7, effect = 13},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 35, interval = 3000, minDamage = -200, maxDamage = -600, target = true, range = 7, radius = 7, shootEffect = 4, effect = 7}
 }
 
 monster.defenses = {
 	defense = 65,
     armor = 55,
-    {name = "combat", type = COMBAT_HEALING,  chance = 35, interval = 2000, minDamage = 300, maxDamage = 800, radius = 7, shootEffect = 4, effect = 13},
-	{name = "speed",  chance = 80, interval = 4000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 440, radius = 7, shootEffect = 4, effect = 14},
-	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 7, shootEffect = 4, effect = 27},
-	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 7, shootEffect = 4, effect = 27},
-	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 7, shootEffect = 4, effect = 27},
-	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 7, shootEffect = 4, effect = 27},
-	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 7, shootEffect = 4, effect = 27}
+    {name = "combat", type = COMBAT_HEALING,  chance = 35, interval = 2000, minDamage = 300, maxDamage = 800, shootEffect = 4, effect = 13},
+	{name = "speed",  chance = 80, interval = 4000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 440, shootEffect = 4, effect = 14},
+	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 27},
+	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 27},
+	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 27},
+	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 27},
+	{name = "outfit",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 27}
 }
 
 monster.immunities = {

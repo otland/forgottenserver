@@ -64,19 +64,19 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 95, skill = 95, interval = 2000, effect = 0},
+	{name = "melee",  attack = 95, skill = 95, minDamage = 0, maxDamage = -499, interval = 2000, effect = 0},
 	{name = "condition", type = CONDITION_POISON,  chance = 10, interval = 2000, minDamage = -700, maxDamage = -900, length = 5, spread = 3, effect = 17},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -300, target = true, radius = 1, shootEffect = 41, effect = 33},
 	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, target = true, duration = 15000, speedChange = -800, radius = 1, shootEffect = 41, effect = 33},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -130, maxDamage = -300, radius = 4, shootEffect = 41, effect = 20},
-	{name = "choking fear drown",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, shootEffect = 41, effect = 20},
+	{name = "choking fear drown",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 41, effect = 20},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 20, interval = 2000, minDamage = -250, maxDamage = -500, target = true, radius = 4, shootEffect = 32, effect = 18}
 }
 
 monster.defenses = {
 	defense = 35,
     armor = 35,
-    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 80, maxDamage = 150, radius = 4, shootEffect = 32, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 80, maxDamage = 150, shootEffect = 32, effect = 13}
 }
 
 monster.elements = {

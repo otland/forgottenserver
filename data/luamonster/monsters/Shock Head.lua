@@ -46,18 +46,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 145, skill = 100, interval = 2000, effect = 0},
+	{name = "melee",  attack = 145, skill = 100, minDamage = 0, maxDamage = -798, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 15, interval = 2000, minDamage = -200, maxDamage = -300, length = 5, spread = 2, effect = 158},
 	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 7500, speedChange = -800, length = 8, spread = 3, effect = 48},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 20, interval = 2000, minDamage = 0, maxDamage = -350, target = true, radius = 4, shootEffect = 30, effect = 45},
-	{name = "shock head skill reducer 1",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 4, shootEffect = 30, effect = 45},
-	{name = "shock head skill reducer 2",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, shootEffect = 30, effect = 45}
+	{name = "shock head skill reducer 1",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, shootEffect = 30, effect = 45},
+	{name = "shock head skill reducer 2",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 30, effect = 45}
 }
 
 monster.defenses = {
 	defense = 30,
     armor = 30,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 250, maxDamage = 350, radius = 4, shootEffect = 30, effect = 69}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 250, maxDamage = 350, shootEffect = 30, effect = 69}
 }
 
 monster.elements = {

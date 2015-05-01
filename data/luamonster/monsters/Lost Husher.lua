@@ -69,7 +69,7 @@ monster.loot = {
 monster.attacks = {
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -150, maxDamage = -300, length = 6, effect = 158},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -150, maxDamage = -250, radius = 5, effect = 158},
-	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -150, maxDamage = -200, range = 7, radius = 5, shootEffect = 32, effect = 18},
+	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -150, maxDamage = -200, range = 7, shootEffect = 32, effect = 18},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 10, interval = 2000, minDamage = -150, maxDamage = -250, target = true, range = 7, radius = 2, shootEffect = 39, effect = 15},
 	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, shootEffect = 39, effect = 20}
 }
@@ -77,8 +77,8 @@ monster.attacks = {
 monster.defenses = {
 	defense = 25,
     armor = 25,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 75, maxDamage = 92, radius = 4, shootEffect = 39, effect = 49},
-	{name = "invisible",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, shootEffect = 39, effect = 11}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 75, maxDamage = 92, shootEffect = 39, effect = 49},
+	{name = "invisible",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 39, effect = 11}
 }
 
 monster.elements = {

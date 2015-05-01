@@ -60,19 +60,19 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 82, skill = 65, interval = 2000, effect = 0},
+	{name = "melee",  attack = 82, skill = 65, minDamage = 0, maxDamage = -308, interval = 2000, effect = 0},
 	{name = "drunk",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 23},
-	{name = "spectre drown",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 23},
-	{name = "combat", type = COMBAT_MANADRAIN,  chance = 15, interval = 2000, minDamage = -100, maxDamage = -400, range = 7, radius = 4, effect = 23},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 20, interval = 2000, minDamage = -300, maxDamage = -550, range = 7, radius = 4, effect = 14}
+	{name = "spectre drown",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, effect = 23},
+	{name = "combat", type = COMBAT_MANADRAIN,  chance = 15, interval = 2000, minDamage = -100, maxDamage = -400, range = 7, effect = 23},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 20, interval = 2000, minDamage = -300, maxDamage = -550, range = 7, effect = 14}
 }
 
 monster.defenses = {
 	defense = 35,
     armor = 35,
-    {name = "combat", type = COMBAT_HEALING,  chance = 25, interval = 2000, minDamage = 100, maxDamage = 250, radius = 4, effect = 13},
-	{name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 370, maxDamage = 700, radius = 4, effect = 13},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 290, radius = 4, effect = 14}
+    {name = "combat", type = COMBAT_HEALING,  chance = 25, interval = 2000, minDamage = 100, maxDamage = 250, effect = 13},
+	{name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 370, maxDamage = 700, effect = 13},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 290, effect = 14}
 }
 
 monster.elements = {

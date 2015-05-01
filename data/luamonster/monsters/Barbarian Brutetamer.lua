@@ -15,6 +15,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 20339
 monster.speed = 190
+monsters.runHealth = 10
 monster.maxSummons = 2
 
 monster.changeTarget = {
@@ -61,15 +62,15 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 20, skill = 10, interval = 2000, effect = 0},
+	{name = "melee",  attack = 20, skill = 10, minDamage = 0, maxDamage = -20, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 20, interval = 2000, minDamage = 0, maxDamage = -34, target = true, range = 7, radius = 1, shootEffect = 13},
-	{name = "barbarian brutetamer skill reducer",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 1, shootEffect = 13}
+	{name = "barbarian brutetamer skill reducer",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, shootEffect = 13}
 }
 
 monster.defenses = {
 	defense = 10,
     armor = 10,
-    {name = "combat", type = COMBAT_HEALING,  chance = 40, interval = 2000, minDamage = 50, maxDamage = 80, radius = 1, shootEffect = 13, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 40, interval = 2000, minDamage = 50, maxDamage = 80, shootEffect = 13, effect = 13}
 }
 
 monster.elements = {

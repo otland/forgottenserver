@@ -40,12 +40,12 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 155, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 155, skill = 50, minDamage = 0, maxDamage = -465, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 10, interval = 1000, minDamage = -80, maxDamage = -120, target = true, range = 7, radius = 4, shootEffect = 4, effect = 1},
-	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 17, interval = 3000, minDamage = -300, maxDamage = -450, length = 8, spread = 3, radius = 4, shootEffect = 4, effect = 7},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 12, interval = 2000, minDamage = -300, maxDamage = -450, length = 8, spread = 3, radius = 4, shootEffect = 4, effect = 21},
+	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 17, interval = 3000, minDamage = -300, maxDamage = -450, length = 8, spread = 3, shootEffect = 4, effect = 7},
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 12, interval = 2000, minDamage = -300, maxDamage = -450, length = 8, spread = 3, shootEffect = 4, effect = 21},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -80, maxDamage = -100, radius = 6, shootEffect = 4, effect = 3},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 25, interval = 3000, minDamage = -80, maxDamage = -150, range = 7, radius = 6, shootEffect = 4, effect = 14}
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 25, interval = 3000, minDamage = -80, maxDamage = -150, range = 7, shootEffect = 4, effect = 14}
 }
 
 monster.elements = {

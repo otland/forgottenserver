@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 15224
 monster.speed = 560
+monsters.runHealth = 60
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -44,18 +45,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 1000, skill = 0, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -1200, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 23, interval = 3000, minDamage = -200, maxDamage = -800, target = true, range = 7, radius = 7, shootEffect = 32, effect = 18},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 20, interval = 3500, minDamage = -200, maxDamage = -600, target = true, range = 7, radius = 6, shootEffect = 32, effect = 41},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 25, interval = 2000, minDamage = -200, maxDamage = -800, target = true, range = 7, radius = 1, shootEffect = 6, effect = 9},
-	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 7, interval = 1200, minDamage = -600, maxDamage = -1300, length = 8, radius = 1, shootEffect = 6, effect = 53},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 14, interval = 2000, minDamage = -600, maxDamage = -1600, length = 8, spread = 3, radius = 1, shootEffect = 6, effect = 43}
+	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 7, interval = 1200, minDamage = -600, maxDamage = -1300, length = 8, shootEffect = 6, effect = 53},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 14, interval = 2000, minDamage = -600, maxDamage = -1600, length = 8, spread = 3, shootEffect = 6, effect = 43}
 }
 
 monster.defenses = {
 	defense = 40,
     armor = 40,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 1000, minDamage = 1000, maxDamage = 2100, radius = 1, shootEffect = 6, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 1000, minDamage = 1000, maxDamage = 2100, shootEffect = 6, effect = 13}
 }
 
 monster.elements = {

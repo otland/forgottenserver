@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "fire"
 monster.corpse = 18476
 monster.speed = 230
+monsters.runHealth = 220
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -59,7 +60,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 67, skill = 60, interval = 2000, effect = 0},
+	{name = "melee",  attack = 67, skill = 60, minDamage = 0, maxDamage = -235, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 10, interval = 2000, minDamage = -195, maxDamage = -340, length = 8, effect = 6},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 15, interval = 2000, minDamage = -100, maxDamage = -200, range = 7, shootEffect = 4, effect = 6},
 	{name = "vulcongra soulfire",  chance = 100, interval = 3000, minDamage = 0, maxDamage = 0, shootEffect = 4, effect = 6}

@@ -103,22 +103,22 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 210, skill = 230, interval = 2000, effect = 0},
+	{name = "melee",  attack = 210, skill = 230, minDamage = 0, maxDamage = -2520, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 8, interval = 1000, minDamage = -800, maxDamage = -1900, radius = 9, effect = 18},
 	{name = "speed",  chance = 12, interval = 1000, minDamage = 0, maxDamage = 0, duration = 60000, speedChange = -850, radius = 6, effect = 21},
 	{name = "strength",  chance = 10, interval = 1000, minDamage = -600, maxDamage = -1450, radius = 5, effect = 10},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 13, interval = 3000, minDamage = -300, maxDamage = -800, target = true, range = 7, radius = 7, shootEffect = 4, effect = 7},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 8, interval = 3000, minDamage = -600, maxDamage = -700, radius = 10, shootEffect = 4, effect = 38},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 9, interval = 2000, minDamage = -400, maxDamage = -800, length = 8, radius = 10, shootEffect = 4, effect = 14},
-	{name = "condition", type = CONDITION_POISON,  chance = 18, interval = 5000, minDamage = -800, maxDamage = -1000, radius = 10, shootEffect = 4, effect = 17},
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 9, interval = 2000, minDamage = -400, maxDamage = -800, length = 8, shootEffect = 4, effect = 14},
+	{name = "condition", type = CONDITION_POISON,  chance = 18, interval = 5000, minDamage = -800, maxDamage = -1000, shootEffect = 4, effect = 17},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 6, interval = 2000, minDamage = -600, maxDamage = -1200, radius = 14, shootEffect = 4, effect = 15}
 }
 
 monster.defenses = {
 	defense = 145,
     armor = 188,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 1000, minDamage = 1000, maxDamage = 3000, radius = 14, shootEffect = 4, effect = 13},
-	{name = "speed",  chance = 8, interval = 2000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 480, radius = 14, shootEffect = 4, effect = 14}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 1000, minDamage = 1000, maxDamage = 3000, shootEffect = 4, effect = 13},
+	{name = "speed",  chance = 8, interval = 2000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 480, shootEffect = 4, effect = 14}
 }
 
 monster.immunities = {

@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "venom"
 monster.corpse = 8951
 monster.speed = 150
+monsters.runHealth = 1
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -51,17 +52,17 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 60, skill = 59, interval = 2000, effect = 0},
+	{name = "melee",  attack = 60, skill = 59, minDamage = 0, maxDamage = -207, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 100, interval = 2000, minDamage = -90, maxDamage = -140, effect = 14},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 40, interval = 1000, minDamage = -100, maxDamage = -175, radius = 2, shootEffect = 39, effect = 14},
-	{name = "paralyze",  chance = 40, interval = 3000, minDamage = 0, maxDamage = 0, radius = 2, shootEffect = 39, effect = 14}
+	{name = "paralyze",  chance = 40, interval = 3000, minDamage = 0, maxDamage = 0, shootEffect = 39, effect = 14}
 }
 
 monster.defenses = {
 	defense = 15,
     armor = 10,
-    {name = "speed",  chance = 40, interval = 10000, minDamage = 0, maxDamage = 0, duration = 20000, speedChange = 310, radius = 2, shootEffect = 39, effect = 15},
-	{name = "combat", type = COMBAT_HEALING,  chance = 60, interval = 5000, minDamage = 50, maxDamage = 80, radius = 2, shootEffect = 39, effect = 13}
+    {name = "speed",  chance = 40, interval = 10000, minDamage = 0, maxDamage = 0, duration = 20000, speedChange = 310, shootEffect = 39, effect = 15},
+	{name = "combat", type = COMBAT_HEALING,  chance = 60, interval = 5000, minDamage = 50, maxDamage = 80, shootEffect = 39, effect = 13}
 }
 
 monster.elements = {

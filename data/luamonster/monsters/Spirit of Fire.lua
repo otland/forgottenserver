@@ -37,9 +37,9 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 100, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 100, skill = 50, minDamage = 0, maxDamage = -300, interval = 2000, effect = 0},
 	{name = "firefield",  chance = 15, interval = 1000, minDamage = 0, maxDamage = 0, target = true, range = 7, radius = 4, shootEffect = 4},
-	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 20, interval = 1000, minDamage = -315, maxDamage = -650, range = 7, radius = 4, shootEffect = 4}
+	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 20, interval = 1000, minDamage = -315, maxDamage = -650, range = 7, shootEffect = 4}
 }
 
 monster.elements = {

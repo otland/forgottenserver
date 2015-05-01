@@ -44,17 +44,17 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 40, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 40, skill = 50, minDamage = 0, maxDamage = -120, interval = 2000, effect = 0},
 	{name = "drunk",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 4, effect = 20},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -40, maxDamage = -70, radius = 3, effect = 14},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = -60, maxDamage = -110, range = 7, radius = 3, shootEffect = 15, effect = 14}
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = -60, maxDamage = -110, range = 7, shootEffect = 15, effect = 14}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "combat", type = COMBAT_HEALING,  chance = 5, interval = 2000, minDamage = 70, maxDamage = 100, radius = 3, shootEffect = 15, effect = 25},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 820, radius = 3, shootEffect = 15, effect = 22}
+    {name = "combat", type = COMBAT_HEALING,  chance = 5, interval = 2000, minDamage = 70, maxDamage = 100, shootEffect = 15, effect = 25},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 820, shootEffect = 15, effect = 22}
 }
 
 monster.immunities = {

@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "fire"
 monster.corpse = 17336
 monster.speed = 220
+monsters.runHealth = 300
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -68,7 +69,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 58, skill = 60, interval = 2000, effect = 0},
+	{name = "melee",  attack = 58, skill = 60, minDamage = 0, maxDamage = -204, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -300, maxDamage = -1100, length = 8, effect = 18},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 15, interval = 2000, minDamage = -290, maxDamage = -800, length = 3, spread = 2, effect = 37},
 	{name = "magma crawler soulfire",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, effect = 37},
@@ -80,7 +81,7 @@ monster.attacks = {
 monster.defenses = {
 	defense = 45,
     armor = 45,
-    {name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 2, effect = 13}
+    {name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, effect = 13}
 }
 
 monster.elements = {

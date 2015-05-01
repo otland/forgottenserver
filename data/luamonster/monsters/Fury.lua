@@ -69,20 +69,20 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 170, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 170, skill = 50, minDamage = 0, maxDamage = -510, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 10, interval = 2000, minDamage = -200, maxDamage = -300, length = 8, spread = 3, effect = 5},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 5, interval = 2000, minDamage = -120, maxDamage = -700, length = 8, effect = 1},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -120, maxDamage = -300, radius = 4, effect = 1},
-	{name = "fury skill reducer",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 1},
+	{name = "fury skill reducer",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 1},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -120, maxDamage = -300, radius = 3, effect = 10},
-	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -125, maxDamage = -250, range = 7, radius = 3, shootEffect = 32, effect = 39},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -800, range = 7, radius = 3, shootEffect = 32, effect = 39}
+	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -125, maxDamage = -250, range = 7, shootEffect = 32, effect = 39},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -800, range = 7, shootEffect = 32, effect = 39}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 800, radius = 3, shootEffect = 32, effect = 14}
+    {name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 800, shootEffect = 32, effect = 14}
 }
 
 monster.elements = {

@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "undead"
 monster.corpse = 8933
 monster.speed = 290
+monsters.runHealth = 1
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -37,16 +38,16 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 50, skill = 36, interval = 2000, effect = 0},
+	{name = "melee",  attack = 50, skill = 36, minDamage = 0, maxDamage = -115, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 16, interval = 2000, minDamage = 0, maxDamage = -255, radius = 7, effect = 35},
-	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 16, interval = 2000, minDamage = 0, maxDamage = -405, length = 8, radius = 7, effect = 35},
-	{name = "condition", type = CONDITION_POISON,  chance = 16, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 7, shootEffect = 15, effect = 35}
+	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 16, interval = 2000, minDamage = 0, maxDamage = -405, length = 8, effect = 35},
+	{name = "condition", type = CONDITION_POISON,  chance = 16, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 15, effect = 35}
 }
 
 monster.defenses = {
 	defense = 30,
     armor = 30,
-    {name = "combat", type = COMBAT_HEALING,  chance = 16, interval = 2000, minDamage = 75, maxDamage = 200, radius = 7, shootEffect = 15, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 16, interval = 2000, minDamage = 75, maxDamage = 200, shootEffect = 15, effect = 13}
 }
 
 monster.elements = {

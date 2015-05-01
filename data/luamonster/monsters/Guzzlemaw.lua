@@ -71,9 +71,9 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 95, skill = 95, interval = 2000, effect = 0},
+	{name = "melee",  attack = 95, skill = 95, minDamage = 0, maxDamage = -499, interval = 2000, effect = 0},
 	{name = "condition", type = CONDITION_BLEEDING,  chance = 10, interval = 2000, minDamage = -500, maxDamage = -1000, radius = 3, effect = 1},
-	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -900, length = 8, spread = 3, radius = 3, effect = 5},
+	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = -900, length = 8, spread = 3, effect = 5},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 20, interval = 2000, minDamage = 0, maxDamage = -500, target = true, radius = 2, shootEffect = 12, effect = 45},
 	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 15000, speedChange = -800, radius = 6, shootEffect = 12, effect = 14},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -120, maxDamage = -250, radius = 4, shootEffect = 12, effect = 14}
@@ -82,7 +82,7 @@ monster.attacks = {
 monster.defenses = {
 	defense = 50,
     armor = 50,
-    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 250, maxDamage = 425, radius = 4, shootEffect = 12, effect = 17}
+    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 250, maxDamage = 425, shootEffect = 12, effect = 17}
 }
 
 monster.elements = {

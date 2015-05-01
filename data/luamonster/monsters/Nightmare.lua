@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 6340
 monster.speed = 240
+monsters.runHealth = 300
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -62,7 +63,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 50, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 50, skill = 50, minDamage = 0, maxDamage = -150, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -120, maxDamage = -170, target = true, range = 7, radius = 1, shootEffect = 11, effect = 39},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 20, interval = 2000, minDamage = -150, maxDamage = -350, target = true, range = 7, radius = 4, shootEffect = 15, effect = 21}
 }
@@ -70,8 +71,8 @@ monster.attacks = {
 monster.defenses = {
 	defense = 25,
     armor = 25,
-    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 60, maxDamage = 100, radius = 4, shootEffect = 15, effect = 13},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 420, radius = 4, shootEffect = 15, effect = 14}
+    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 60, maxDamage = 100, shootEffect = 15, effect = 13},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 420, shootEffect = 15, effect = 14}
 }
 
 monster.elements = {

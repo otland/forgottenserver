@@ -12,6 +12,7 @@ monster.maxHealth = monster.health
 monster.race = "undead"
 monster.corpse = 6344
 monster.speed = 240
+monsters.runHealth = 350
 monster.maxSummons = 4
 
 monster.changeTarget = {
@@ -67,19 +68,19 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 95, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 95, skill = 90, minDamage = 0, maxDamage = -475, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -250, maxDamage = -610, range = 7, shootEffect = 32, effect = 39},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 20, interval = 2000, minDamage = -5, maxDamage = -80, radius = 3, shootEffect = 32, effect = 8},
-	{name = "phantasm drown",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 32, effect = 8},
+	{name = "phantasm drown",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 32, effect = 8},
 	{name = "drunk",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 5, shootEffect = 32, effect = 14}
 }
 
 monster.defenses = {
 	defense = 0,
     armor = 0,
-    {name = "combat", type = COMBAT_HEALING,  chance = 30, interval = 2000, minDamage = 228, maxDamage = 449, radius = 5, shootEffect = 32, effect = 13},
-	{name = "speed",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 500, radius = 5, shootEffect = 32, effect = 14},
-	{name = "invisible",  chance = 25, interval = 2000, minDamage = 0, maxDamage = 0, radius = 5, shootEffect = 32, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 30, interval = 2000, minDamage = 228, maxDamage = 449, shootEffect = 32, effect = 13},
+	{name = "speed",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 500, shootEffect = 32, effect = 14},
+	{name = "invisible",  chance = 25, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 32, effect = 13}
 }
 
 monster.elements = {

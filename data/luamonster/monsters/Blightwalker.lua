@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "undead"
 monster.corpse = 6354
 monster.speed = 250
+monsters.runHealth = 800
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -66,12 +67,12 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -490, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 20, interval = 2000, minDamage = -220, maxDamage = -405, target = true, range = 7, radius = 1, shootEffect = 15},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = -65, maxDamage = -135, radius = 4, shootEffect = 15, effect = 15},
 	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 15, effect = 17},
-	{name = "blightwalker curse",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, shootEffect = 15, effect = 17},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -300, range = 7, radius = 3, shootEffect = 15, effect = 17}
+	{name = "blightwalker curse",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 17},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -300, range = 7, shootEffect = 15, effect = 17}
 }
 
 monster.elements = {

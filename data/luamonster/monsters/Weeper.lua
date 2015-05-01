@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "fire"
 monster.corpse = 17252
 monster.speed = 260
+monsters.runHealth = 570
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -60,16 +61,16 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 90, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 90, skill = 90, minDamage = 0, maxDamage = -450, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 15, interval = 2000, minDamage = -400, maxDamage = -1000, length = 8, effect = 37},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 100, interval = 3000, minDamage = -80, maxDamage = -250, radius = 3, effect = 16},
-	{name = "speed",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -800, length = 5, spread = 3, radius = 3, effect = 4}
+	{name = "speed",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, duration = 30000, speedChange = -800, length = 5, spread = 3, effect = 4}
 }
 
 monster.defenses = {
 	defense = 50,
     armor = 50,
-    {name = "invisible",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, effect = 14}
+    {name = "invisible",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, effect = 14}
 }
 
 monster.elements = {

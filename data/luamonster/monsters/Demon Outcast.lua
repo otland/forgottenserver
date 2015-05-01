@@ -71,18 +71,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 80, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 80, skill = 90, minDamage = 0, maxDamage = -400, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 10, interval = 2000, minDamage = -250, maxDamage = -450, length = 6, effect = 48},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 10, interval = 2000, minDamage = -350, maxDamage = -550, length = 8, effect = 49},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 20, interval = 2000, minDamage = -100, maxDamage = -250, target = true, radius = 3, effect = 12},
-	{name = "demon outcast skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 3, effect = 12},
+	{name = "demon outcast skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, effect = 12},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -80, maxDamage = -150, radius = 4, effect = 15}
 }
 
 monster.defenses = {
 	defense = 40,
     armor = 40,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 250, maxDamage = 425, radius = 4, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 250, maxDamage = 425, effect = 13}
 }
 
 monster.elements = {

@@ -71,7 +71,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 110, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 110, skill = 90, minDamage = 0, maxDamage = -550, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 15, interval = 2000, minDamage = -165, maxDamage = -220, range = 7, shootEffect = 5},
 	{name = "outfit",  chance = 1, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 5},
 	{name = "war golem electrify",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 1, shootEffect = 5},

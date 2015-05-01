@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 8941
 monster.speed = 230
+monsters.runHealth = 1
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -59,17 +60,17 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 67, skill = 60, interval = 2000, effect = 0},
+	{name = "melee",  attack = 67, skill = 60, minDamage = 0, maxDamage = -235, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 15, interval = 2000, minDamage = -100, maxDamage = -220, radius = 3, effect = 49},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 10, interval = 2000, minDamage = -130, maxDamage = -200, length = 5, spread = 2, radius = 3, effect = 48},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 20, interval = 2000, minDamage = -100, maxDamage = -125, range = 7, radius = 3, shootEffect = 5, effect = 12},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -98, maxDamage = -145, length = 4, radius = 3, shootEffect = 5, effect = 3}
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 10, interval = 2000, minDamage = -130, maxDamage = -200, length = 5, spread = 2, effect = 48},
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 20, interval = 2000, minDamage = -100, maxDamage = -125, range = 7, shootEffect = 5, effect = 12},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -98, maxDamage = -145, length = 4, shootEffect = 5, effect = 3}
 }
 
 monster.defenses = {
 	defense = 35,
     armor = 35,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 100, maxDamage = 150, radius = 3, shootEffect = 5, effect = 13},
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 100, maxDamage = 150, shootEffect = 5, effect = 13},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 1, shootEffect = 5, effect = 22}
 }
 

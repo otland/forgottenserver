@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "venom"
 monster.corpse = 11375
 monster.speed = 200
+monsters.runHealth = 30
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -47,17 +48,17 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 46, skill = 40, interval = 2000, effect = 0},
+	{name = "melee",  attack = 46, skill = 40, minDamage = 0, maxDamage = -116, interval = 2000, effect = 0},
 	{name = "poisonfield",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, effect = 21},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = 0, maxDamage = -90, length = 7, radius = 4, effect = 17},
-	{name = "condition", type = CONDITION_POISON,  chance = 10, interval = 2000, minDamage = -40, maxDamage = -80, range = 7, radius = 4, shootEffect = 15, effect = 17},
-	{name = "lancer beetle curse",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 4, shootEffect = 15, effect = 17}
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 15, interval = 2000, minDamage = 0, maxDamage = -90, length = 7, effect = 17},
+	{name = "condition", type = CONDITION_POISON,  chance = 10, interval = 2000, minDamage = -40, maxDamage = -80, range = 7, shootEffect = 15, effect = 17},
+	{name = "lancer beetle curse",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, shootEffect = 15, effect = 17}
 }
 
 monster.defenses = {
 	defense = 20,
     armor = 20,
-    {name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 4, shootEffect = 15, effect = 35}
+    {name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 15, effect = 35}
 }
 
 monster.immunities = {

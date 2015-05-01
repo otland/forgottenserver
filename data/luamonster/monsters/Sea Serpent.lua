@@ -62,7 +62,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 100, skill = 40, interval = 2000, effect = 0},
+	{name = "melee",  attack = 100, skill = 40, minDamage = 0, maxDamage = -250, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_EARTHDAMAGE,  chance = 15, interval = 2000, minDamage = -60, maxDamage = -300, length = 7, spread = 2, effect = 46},
 	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 15, interval = 2000, minDamage = -101, maxDamage = -300, length = 7, spread = 2, effect = 44},
 	{name = "sea serpent drown",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, effect = 44}

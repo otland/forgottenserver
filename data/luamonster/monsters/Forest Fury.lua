@@ -51,9 +51,9 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 50, skill = 40, interval = 2000, effect = 0},
+	{name = "melee",  attack = 50, skill = 40, minDamage = 0, maxDamage = -125, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 40, interval = 1500, minDamage = 0, maxDamage = -100, target = true, range = 7, radius = 4, shootEffect = 17, effect = 15},
-	{name = "forest fury skill reducer",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 4, shootEffect = 17, effect = 15}
+	{name = "forest fury skill reducer",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, shootEffect = 17, effect = 15}
 }
 
 monster.immunities = {

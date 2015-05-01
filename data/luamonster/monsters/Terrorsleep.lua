@@ -61,20 +61,20 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 90, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 90, skill = 90, minDamage = 0, maxDamage = -450, interval = 2000, effect = 0},
 	{name = "condition", type = CONDITION_POISON,  chance = 20, interval = 2000, minDamage = -1000, maxDamage = -1500, radius = 7, effect = 8},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -100, maxDamage = -300, radius = 5, effect = 14},
-	{name = "feversleep skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 5, effect = 14},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -350, maxDamage = -500, length = 6, radius = 5, effect = 49},
+	{name = "feversleep skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, effect = 14},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -350, maxDamage = -500, length = 6, effect = 49},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 20, interval = 2000, minDamage = -200, maxDamage = -450, target = true, radius = 1, shootEffect = 32, effect = 18}
 }
 
 monster.defenses = {
 	defense = 50,
     armor = 50,
-    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 350, maxDamage = 600, radius = 1, shootEffect = 32, effect = 13},
-	{name = "invisible",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, radius = 1, shootEffect = 32, effect = 10},
-	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 300, radius = 1, shootEffect = 32, effect = 14}
+    {name = "combat", type = COMBAT_HEALING,  chance = 15, interval = 2000, minDamage = 350, maxDamage = 600, shootEffect = 32, effect = 13},
+	{name = "invisible",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 32, effect = 10},
+	{name = "speed",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, duration = 5000, speedChange = 300, shootEffect = 32, effect = 14}
 }
 
 monster.elements = {

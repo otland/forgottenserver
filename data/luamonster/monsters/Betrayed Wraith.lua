@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "undead"
 monster.corpse = 6316
 monster.speed = 230
+monsters.runHealth = 300
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -62,7 +63,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 100, skill = 80, interval = 2000, effect = 0},
+	{name = "melee",  attack = 100, skill = 80, minDamage = 0, maxDamage = -450, interval = 2000, effect = 0},
 	{name = "betrayed wraith skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0},
 	{name = "speed",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, duration = 3000, speedChange = -600, range = 7, shootEffect = 32, effect = 39}
 }

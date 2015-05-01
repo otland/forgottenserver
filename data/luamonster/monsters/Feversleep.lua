@@ -47,19 +47,19 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 90, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 90, skill = 90, minDamage = 0, maxDamage = -450, interval = 2000, effect = 0},
 	{name = "condition", type = CONDITION_POISON,  chance = 20, interval = 2000, minDamage = -800, maxDamage = -1000, radius = 7, effect = 8},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 10, interval = 2000, minDamage = -70, maxDamage = -100, radius = 5, effect = 14},
-	{name = "feversleep skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 5, effect = 14},
-	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -250, maxDamage = -300, length = 6, radius = 5, effect = 49},
+	{name = "feversleep skill reducer",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, effect = 14},
+	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -250, maxDamage = -300, length = 6, effect = 49},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 15, interval = 2000, minDamage = -150, maxDamage = -300, target = true, radius = 1, shootEffect = 32, effect = 18}
 }
 
 monster.defenses = {
 	defense = 45,
     armor = 45,
-    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 250, maxDamage = 425, radius = 1, shootEffect = 32, effect = 13},
-	{name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 1, shootEffect = 32, effect = 10}
+    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 250, maxDamage = 425, shootEffect = 32, effect = 13},
+	{name = "invisible",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 32, effect = 10}
 }
 
 monster.elements = {

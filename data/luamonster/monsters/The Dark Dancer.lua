@@ -51,8 +51,8 @@ monster.attacks = {
 monster.defenses = {
 	defense = 12,
     armor = 11,
-    {name = "combat", type = COMBAT_HEALING,  chance = 45, interval = 2000, minDamage = 75, maxDamage = 135, radius = 1, shootEffect = 32, effect = 13},
-	{name = "invisible",  chance = 50, interval = 3000, minDamage = 0, maxDamage = 0, radius = 1, shootEffect = 32, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 45, interval = 2000, minDamage = 75, maxDamage = 135, shootEffect = 32, effect = 13},
+	{name = "invisible",  chance = 50, interval = 3000, minDamage = 0, maxDamage = 0, shootEffect = 32, effect = 13}
 }
 
 monster.immunities = {

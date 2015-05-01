@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 0
 monster.speed = 230
+monsters.runHealth = 300
 monster.maxSummons = 1
 
 monster.changeTarget = {
@@ -44,17 +45,17 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 37, skill = 32, interval = 2000, effect = 0},
+	{name = "melee",  attack = 37, skill = 32, minDamage = 0, maxDamage = -78, interval = 2000, effect = 0},
 	{name = "thunderstorm",  chance = 40, interval = 2000, minDamage = -150, maxDamage = -230, range = 7},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 20, interval = 2000, minDamage = -100, maxDamage = -200, range = 7},
 	{name = "energyfield",  chance = 20, interval = 2000, minDamage = 0, maxDamage = 0, target = true, range = 7, radius = 2, shootEffect = 5},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 25, interval = 2000, minDamage = -200, maxDamage = -300, length = 8, radius = 2, shootEffect = 5, effect = 41}
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 25, interval = 2000, minDamage = -200, maxDamage = -300, length = 8, shootEffect = 5, effect = 41}
 }
 
 monster.defenses = {
 	defense = 35,
     armor = 35,
-    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 155, maxDamage = 200, radius = 2, shootEffect = 5, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 20, interval = 2000, minDamage = 155, maxDamage = 200, shootEffect = 5, effect = 13}
 }
 
 monster.elements = {

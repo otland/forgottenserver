@@ -152,7 +152,7 @@ local function serializeAttacks(mType)
 			s = s ..'{name = "'.. attacks[i].name ..'", '
 		end
 		if attacks[i].name == "melee" then
-			s = s ..' attack = '.. attacks[i].attack ..', skill = '.. attacks[i].skill ..', interval = '.. attacks[i].speed ..', effect = '.. attacks[i].effect ..'}'
+			s = s ..' attack = '.. attacks[i].attack ..', skill = '.. attacks[i].skill ..', minDamage = '.. attacks[i].minCombatValue ..', maxDamage = '.. attacks[i].maxCombatValue ..', interval = '.. attacks[i].speed ..', effect = '.. attacks[i].effect ..'}'
 		else
 			s = s ..' chance = '.. attacks[i].chance ..', interval = '.. attacks[i].speed ..', minDamage = '.. attacks[i].minCombatValue ..', maxDamage = '.. attacks[i].maxCombatValue ..''
 			if attacks[i].needTarget == 1 then
@@ -205,7 +205,7 @@ local function serializeDefenses(mType)
 			s = s ..'{name = "'.. defenses[i].name ..'", '
 		end
 		if defenses[i].name == "melee" then
-			s = s ..' attack = '.. defenses[i].attack ..', skill = '.. defenses[i].skill ..', interval = '.. defenses[i].speed ..', effect = '.. defenses[i].effect ..'}'
+			s = s ..' attack = '.. defenses[i].attack ..', skill = '.. defenses[i].skill ..', minDamage = '.. attacks[i].minCombatValue ..', maxDamage = '.. attacks[i].maxCombatValue ..', interval = '.. defenses[i].speed ..', effect = '.. defenses[i].effect ..'}'
 		else
 			s = s ..' chance = '.. defenses[i].chance ..', interval = '.. defenses[i].speed ..', minDamage = '.. defenses[i].minCombatValue ..', maxDamage = '.. defenses[i].maxCombatValue ..''
 			if defenses[i].needTarget == 1 then
@@ -267,6 +267,9 @@ function onSay(player, words, param)
 					f:write('monster.race = "'.. races[mType:getRace()] ..'"\n')
 					f:write('monster.corpse = '.. mType:getCorpseId() ..'\n')
 					f:write('monster.speed = '.. mType:getBaseSpeed() ..'\n')
+					if mType:getRunHealth() > 0 then
+						f:write('monsters.runHealth = '.. mType:getRunHealth() ..'\n')
+					end
 					f:write('monster.maxSummons = '.. mType:getMaxSummons() ..'\n\n')
 					f:write('monster.changeTarget = {\n    interval = '.. mType:getChangeTargetSpeed() ..',\n	chance = '.. mType:getChangeTargetChance() ..'\n}\n\n')
 					f:write('monster.flags = {\n	summonable = '.. tostring(mType:isSummonable()) ..',\n    attackable = '.. tostring(mType:isAttackable()) ..',\n	hostile = '.. tostring(mType:isHostile()) ..',\n	convinceable = '.. tostring(mType:isConvinceable()) ..',\n    illusionable = '.. tostring(mType:isIllusionable()) ..',\n	canPushItems = '.. tostring(mType:canPushItems()) ..',\n	canPushCreatures = '.. tostring(mType:canPushCreatures()) ..',\n	targetDistance = '.. mType:getTargetDistance() ..',\n	staticAttack = '.. mType:getStaticAttackChance() ..'\n}\n\n')

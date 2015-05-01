@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 6064
 monster.speed = 520
+monsters.runHealth = 40
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -42,7 +43,7 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 109, skill = 60, interval = 1000, effect = 0},
+	{name = "melee",  attack = 109, skill = 60, minDamage = 0, maxDamage = -382, interval = 1000, effect = 0},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 8, interval = 2000, minDamage = -162, maxDamage = -228, range = 7, effect = 14},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 7, interval = 2000, minDamage = -106, maxDamage = -169, length = 8, spread = 3, effect = 17},
 	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 9, interval = 2000, minDamage = -134, maxDamage = -148, length = 8, effect = 26},
@@ -52,7 +53,7 @@ monster.attacks = {
 monster.defenses = {
 	defense = 15,
     armor = 15,
-    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 100, maxDamage = 120, radius = 3, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 10, interval = 2000, minDamage = 100, maxDamage = 120, effect = 13}
 }
 
 monster.elements = {

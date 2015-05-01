@@ -63,21 +63,21 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = -700, maxDamage = -2000, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 35, interval = 3000, minDamage = -700, maxDamage = -1200, target = true, range = 7, radius = 7, shootEffect = 4, effect = 7},
-	{name = "melee",  attack = 0, skill = 0, interval = 1800, effect = 10},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 30, interval = 3000, minDamage = -300, maxDamage = -1000, length = 8, radius = 5, shootEffect = 4, effect = 12},
+	{name = "melee",  attack = 0, skill = 0, minDamage = -250, maxDamage = -400, interval = 1800, effect = 10},
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 30, interval = 3000, minDamage = -300, maxDamage = -1000, length = 8, shootEffect = 4, effect = 12},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 20, interval = 2500, minDamage = -200, maxDamage = -480, range = 7, radius = 5, shootEffect = 4, effect = 15},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 15, interval = 2000, minDamage = -250, maxDamage = -500, range = 7, radius = 13, shootEffect = 4, effect = 20},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 20, interval = 2000, minDamage = -200, maxDamage = -450, radius = 14, shootEffect = 4, effect = 2},
-	{name = "melee",  attack = 0, skill = 0, interval = 3000, effect = 13}
+	{name = "melee",  attack = 0, skill = 0, minDamage = -100, maxDamage = -200, interval = 3000, effect = 13}
 }
 
 monster.defenses = {
 	defense = 65,
     armor = 55,
-    {name = "combat", type = COMBAT_HEALING,  chance = 35, interval = 3000, minDamage = 300, maxDamage = 800, radius = 3, shootEffect = 4, effect = 13},
-	{name = "speed",  chance = 80, interval = 4000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 440, radius = 3, shootEffect = 4, effect = 14}
+    {name = "combat", type = COMBAT_HEALING,  chance = 35, interval = 3000, minDamage = 300, maxDamage = 800, shootEffect = 4, effect = 13},
+	{name = "speed",  chance = 80, interval = 4000, minDamage = 0, maxDamage = 0, duration = 6000, speedChange = 440, shootEffect = 4, effect = 14}
 }
 
 monster.elements = {

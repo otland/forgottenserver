@@ -41,15 +41,15 @@ monster.voices = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 140, skill = 90, interval = 2000, effect = 0},
+	{name = "melee",  attack = 140, skill = 90, minDamage = 0, maxDamage = -700, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 20, interval = 1000, minDamage = -100, maxDamage = -250, target = true, range = 5, radius = 7, shootEffect = 4, effect = 7},
-	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 30, interval = 3000, minDamage = -200, maxDamage = -500, length = 8, radius = 7, shootEffect = 4, effect = 12}
+	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 30, interval = 3000, minDamage = -200, maxDamage = -500, length = 8, shootEffect = 4, effect = 12}
 }
 
 monster.defenses = {
 	defense = 45,
     armor = 40,
-    {name = "combat", type = COMBAT_HEALING,  chance = 5, interval = 4000, minDamage = 50, maxDamage = 200, radius = 7, shootEffect = 4, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 5, interval = 4000, minDamage = 50, maxDamage = 200, shootEffect = 4, effect = 13}
 }
 
 monster.elements = {

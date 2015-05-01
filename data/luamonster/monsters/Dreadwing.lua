@@ -31,7 +31,7 @@ monster.flags = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 100, skill = 40, interval = 2000, effect = 0},
+	{name = "melee",  attack = 100, skill = 40, minDamage = 0, maxDamage = -250, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_PHYSICALDAMAGE,  chance = 50, interval = 3000, minDamage = 0, maxDamage = -100, target = true, radius = 7, effect = 25}
 }
 

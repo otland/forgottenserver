@@ -31,7 +31,7 @@ monster.flags = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 2000, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = 0, interval = 2000, effect = 0},
 	{name = "outfit",  chance = 6, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, effect = 4},
 	{name = "outfit",  chance = 5, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, effect = 4},
 	{name = "outfit",  chance = 6, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, effect = 4},
@@ -52,7 +52,7 @@ monster.attacks = {
 monster.defenses = {
 	defense = 999,
     armor = 999,
-    {name = "combat", type = COMBAT_HEALING,  chance = 50, interval = 1000, minDamage = 1500, maxDamage = 2000, radius = 3, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 50, interval = 1000, minDamage = 1500, maxDamage = 2000, effect = 13}
 }
 
 monster.immunities = {

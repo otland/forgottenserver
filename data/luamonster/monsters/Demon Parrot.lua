@@ -45,7 +45,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 0, skill = 0, interval = 1200, effect = 0},
+	{name = "melee",  attack = 0, skill = 0, minDamage = 0, maxDamage = -100, interval = 1200, effect = 0},
 	{name = "drunk",  chance = 30, interval = 1000, minDamage = 0, maxDamage = 0, length = 5, effect = 20},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 30, interval = 1000, minDamage = -25, maxDamage = -45, range = 5, shootEffect = 32, effect = 20},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 30, interval = 1000, minDamage = -15, maxDamage = -45, range = 1, shootEffect = 32, effect = 20}

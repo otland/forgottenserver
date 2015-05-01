@@ -55,13 +55,13 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 40, skill = 45, interval = 2000, effect = 0},
+	{name = "melee",  attack = 40, skill = 45, minDamage = 0, maxDamage = -110, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 15, interval = 2000, minDamage = -45, maxDamage = -80, range = 7, shootEffect = 4},
 	{name = "combat", type = COMBAT_DEATHDAMAGE,  chance = 10, interval = 2000, minDamage = -50, maxDamage = -105, target = true, range = 7, radius = 1, shootEffect = 32, effect = 39},
-	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 1, shootEffect = 5, effect = 39},
-	{name = "outfit",  chance = 1, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, radius = 1, shootEffect = 5, effect = 13},
-	{name = "djinn electrify",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, radius = 1, shootEffect = 5, effect = 13},
-	{name = "djinn cancel invisibility",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 1, shootEffect = 5, effect = 13}
+	{name = "drunk",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 5, effect = 39},
+	{name = "outfit",  chance = 1, interval = 2000, minDamage = 0, maxDamage = 0, range = 7, shootEffect = 5, effect = 13},
+	{name = "djinn electrify",  chance = 15, interval = 2000, minDamage = 0, maxDamage = 0, range = 5, shootEffect = 5, effect = 13},
+	{name = "djinn cancel invisibility",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, shootEffect = 5, effect = 13}
 }
 
 monster.elements = {

@@ -58,7 +58,7 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 130, skill = 130, interval = 2000, effect = 0},
+	{name = "melee",  attack = 130, skill = 130, minDamage = 0, maxDamage = -910, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_ENERGYDAMAGE,  chance = 11, interval = 1000, minDamage = -250, maxDamage = -819, length = 8, effect = 48},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 14, interval = 2000, minDamage = -90, maxDamage = -500, radius = 5, effect = 32},
 	{name = "combat", type = COMBAT_FIREDAMAGE,  chance = 11, interval = 1000, minDamage = -50, maxDamage = -520, target = true, radius = 5, effect = 7},
@@ -68,7 +68,7 @@ monster.attacks = {
 monster.defenses = {
 	defense = 65,
     armor = 70,
-    {name = "combat", type = COMBAT_HEALING,  chance = 11, interval = 1000, minDamage = 400, maxDamage = 900, radius = 7, effect = 15}
+    {name = "combat", type = COMBAT_HEALING,  chance = 11, interval = 1000, minDamage = 400, maxDamage = 900, effect = 15}
 }
 
 monster.elements = {

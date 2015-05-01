@@ -11,6 +11,7 @@ monster.maxHealth = monster.health
 monster.race = "blood"
 monster.corpse = 6065
 monster.speed = 230
+monsters.runHealth = 30
 monster.maxSummons = 0
 
 monster.changeTarget = {
@@ -50,11 +51,11 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 50, skill = 50, interval = 2000, effect = 0},
+	{name = "melee",  attack = 50, skill = 50, minDamage = 0, maxDamage = -150, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 10, interval = 2000, minDamage = -50, maxDamage = -90, radius = 3, effect = 10},
-	{name = "quara constrictor freeze",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, radius = 3, effect = 10},
+	{name = "quara constrictor freeze",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, effect = 10},
 	{name = "combat", type = COMBAT_ICEDAMAGE,  chance = 10, interval = 2000, minDamage = -40, maxDamage = -70, range = 7, radius = 4, effect = 44},
-	{name = "quara constrictor electrify",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 1, radius = 4, effect = 44}
+	{name = "quara constrictor electrify",  chance = 10, interval = 2000, minDamage = 0, maxDamage = 0, range = 1, effect = 44}
 }
 
 monster.elements = {

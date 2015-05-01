@@ -56,18 +56,18 @@ monster.loot = {
 }
 
 monster.attacks = {
-	{name = "melee",  attack = 80, skill = 40, interval = 2000, effect = 0},
+	{name = "melee",  attack = 80, skill = 40, minDamage = 0, maxDamage = -200, interval = 2000, effect = 0},
 	{name = "combat", type = COMBAT_LIFEDRAIN,  chance = 20, interval = 4000, minDamage = -100, maxDamage = -800, range = 1},
 	{name = "combat", type = COMBAT_MANADRAIN,  chance = 15, interval = 2000, minDamage = -100, maxDamage = -500, range = 7, effect = 14},
 	{name = "speed",  chance = 15, interval = 1000, minDamage = 0, maxDamage = 0, duration = 50000, speedChange = -650, range = 7, effect = 14},
 	{name = "drunk",  chance = 12, interval = 1000, minDamage = 0, maxDamage = 0, radius = 7, effect = 2},
-	{name = "melee",  attack = 80, skill = 40, interval = 3000, effect = 2}
+	{name = "melee",  attack = 0, skill = 0, minDamage = -50, maxDamage = -600, interval = 3000, effect = 2}
 }
 
 monster.defenses = {
 	defense = 25,
     armor = 25,
-    {name = "combat", type = COMBAT_HEALING,  chance = 25, interval = 1000, minDamage = 100, maxDamage = 200, radius = 3, effect = 13}
+    {name = "combat", type = COMBAT_HEALING,  chance = 25, interval = 1000, minDamage = 100, maxDamage = 200, effect = 13}
 }
 
 monster.immunities = {
