@@ -148,7 +148,7 @@ class QTreeLeafNode final : public QTreeNode
 		QTreeLeafNode& operator=(const QTreeLeafNode&) = delete;
 
 		Floor* createFloor(uint32_t z);
-		Floor* getFloor(uint16_t z) const {
+		Floor* getFloor(uint8_t z) const {
 			return m_array[z];
 		}
 
@@ -220,7 +220,7 @@ class Map
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param forceLogin If true, placing the creature will not fail becase of obstacles (creatures/chests)
 		  */
-		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false) const;
+		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
 
 		void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 
@@ -265,6 +265,10 @@ class Map
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 		std::map<std::string, Position> waypoints;
+
+		QTreeLeafNode* getQTNode(uint16_t x, uint16_t y) {
+			return QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, x, y);
+		}
 
 		Spawns spawns;
 		Towns towns;

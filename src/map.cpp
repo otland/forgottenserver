@@ -145,18 +145,18 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 			items->clear();
 		}
 
-		if (newTile->ground) {
-			tile->addThing(newTile->ground);
-			newTile->ground = nullptr;
+		Item* ground = newTile->getGround();
+		if (ground) {
+			tile->addThing(ground);
+			newTile->setGround(nullptr);
 		}
 		delete newTile;
 	} else {
 		tile = newTile;
-		tile->qt_node = leaf;
 	}
 }
 
-bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/) const
+bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/)
 {
 	bool foundTile;
 	bool placeInPZ;
@@ -223,8 +223,8 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	Cylinder* toCylinder = tile->queryDestination(index, *creature, &toItem, flags);
 	toCylinder->internalAddThing(creature);
 
-	Tile* toTile = toCylinder->getTile();
-	toTile->qt_node->addCreature(creature);
+	const Position& dest = toCylinder->getPosition();
+	getQTNode(dest.x, dest.y)->addCreature(creature);
 	return true;
 }
 
@@ -235,7 +235,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	Position oldPos = oldTile.getPosition();
 	Position newPos = newTile.getPosition();
 
-	bool teleport = forceTeleport || !newTile.ground || !Position::areInRange<1, 1, 0>(oldPos, newPos);
+	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
 	SpectatorVec list;
 	getSpectators(list, oldPos, true);
@@ -255,8 +255,8 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	//remove the creature
 	oldTile.removeThing(&creature, 0);
 
-	QTreeLeafNode* leaf = QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, oldPos.x, oldPos.y);
-	QTreeLeafNode* new_leaf = QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, newPos.x, newPos.y);
+	QTreeLeafNode* leaf = getQTNode(oldPos.x, oldPos.y);
+	QTreeLeafNode* new_leaf = getQTNode(newPos.x, newPos.y);
 
 	// Switch the node ownership
 	if (leaf != new_leaf) {
@@ -999,7 +999,7 @@ uint32_t Map::clean() const
 		nodes.pop_back();
 		if (node->isLeaf()) {
 			const QTreeLeafNode* leafNode = reinterpret_cast<const QTreeLeafNode*>(node);
-			for (uint16_t z = 0; z < MAP_MAX_LAYERS; ++z) {
+			for (uint8_t z = 0; z < MAP_MAX_LAYERS; ++z) {
 				Floor* floor = leafNode->getFloor(z);
 				if (!floor) {
 					continue;

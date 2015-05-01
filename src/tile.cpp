@@ -36,7 +36,7 @@
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
 
-StaticTile real_nullptr_tile(0xFFFF, 0xFFFF, 0xFFFF);
+StaticTile real_nullptr_tile(0xFFFF, 0xFFFF, 0xFF);
 Tile& Tile::nullptr_tile = real_nullptr_tile;
 
 bool Tile::hasProperty(ITEMPROPERTY prop) const
@@ -1124,7 +1124,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 
 void Tile::removeCreature(Creature* creature)
 {
-	qt_node->removeCreature(creature);
+	g_game.map.getQTNode(tilePos.x, tilePos.y)->removeCreature(creature);
 	removeThing(creature, 0);
 }
 

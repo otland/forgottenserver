@@ -5079,9 +5079,9 @@ int LuaScriptInterface::luaTileGetGround(lua_State* L)
 {
 	// tile:getGround()
 	Tile* tile = getUserdata<Tile>(L, 1);
-	if (tile && tile->ground) {
-		pushUserdata<Item>(L, tile->ground);
-		setItemMetatable(L, -1, tile->ground);
+	if (tile && tile->getGround()) {
+		pushUserdata<Item>(L, tile->getGround());
+		setItemMetatable(L, -1, tile->getGround());
 	} else {
 		lua_pushnil(L);
 	}
@@ -5285,7 +5285,7 @@ int LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 		return 1;
 	}
 
-	if (Item* item = tile->ground) {
+	if (Item* item = tile->getGround()) {
 		const ItemType& it = Item::items[item->getID()];
 		if (it.type == itemType) {
 			pushUserdata<Item>(L, item);

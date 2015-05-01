@@ -565,8 +565,9 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	msg.add<uint16_t>(0x00); //environmental effects
 
 	int32_t count;
-	if (tile->ground) {
-		msg.addItem(tile->ground);
+	Item* ground = tile->getGround();
+	if (ground) {
+		msg.addItem(ground);
 		count = 1;
 	} else {
 		count = 0;

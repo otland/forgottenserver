@@ -834,7 +834,7 @@ bool Player::canWalkthrough(const Creature* creature) const
 		return false;
 	}
 
-	const Item* playerTileGround = playerTile->ground;
+	const Item* playerTileGround = playerTile->getGround();
 	if (!playerTileGround || !playerTileGround->hasWalkStack()) {
 		return false;
 	}
