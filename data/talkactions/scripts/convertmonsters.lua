@@ -268,7 +268,7 @@ function onSay(player, words, param)
 					f:write('monster.corpse = '.. mType:getCorpseId() ..'\n')
 					f:write('monster.speed = '.. mType:getBaseSpeed() ..'\n')
 					if mType:getRunHealth() > 0 then
-						f:write('monsters.runHealth = '.. mType:getRunHealth() ..'\n')
+						f:write('monster.runHealth = '.. mType:getRunHealth() ..'\n')
 					end
 					f:write('monster.maxSummons = '.. mType:getMaxSummons() ..'\n\n')
 					f:write('monster.changeTarget = {\n    interval = '.. mType:getChangeTargetSpeed() ..',\n	chance = '.. mType:getChangeTargetChance() ..'\n}\n\n')
