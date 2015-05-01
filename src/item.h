@@ -57,7 +57,7 @@ enum TradeEvents_t {
 	ON_TRADE_CANCEL,
 };
 
-enum ItemDecayState_t {
+enum ItemDecayState_t : uint8_t {
 	DECAYING_FALSE = 0,
 	DECAYING_TRUE,
 	DECAYING_PENDING,

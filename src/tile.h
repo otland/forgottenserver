@@ -38,7 +38,7 @@ typedef std::vector<Creature*> CreatureVector;
 typedef std::vector<Item*> ItemVector;
 typedef std::unordered_set<Creature*> SpectatorVec;
 
-enum tileflags_t {
+enum tileflags_t : uint32_t {
 	TILESTATE_NONE,
 
 	TILESTATE_PROTECTIONZONE = 1 << 0,
