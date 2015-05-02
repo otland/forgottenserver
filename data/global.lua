@@ -1,4 +1,4 @@
-dofile('data/lib/lib.lua')
+loadDirectory("/data/lib/")
 
 STORAGEVALUE_PROMOTION = 30018
 

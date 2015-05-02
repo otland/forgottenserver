@@ -82,6 +82,7 @@ void MonsterType::reset()
 	isConvinceable = false;
 	isAttackable = true;
 	isHostile = true;
+	fromLuaFile = false;
 
 	lightLevel = 0;
 	lightColor = 0;
@@ -121,6 +122,59 @@ void MonsterType::reset()
 
 	scriptList.clear();
 }
+
+Loot::Loot()
+{
+	reset();
+}
+
+void Loot::reset()
+{
+	id = 0;
+	chance = 0;
+	countMax = 1;
+	subType = -1;
+	actionId = -1;
+	text = "";
+}
+
+MonsterSpell::MonsterSpell()
+{
+	reset();
+}
+
+void MonsterSpell::reset()
+{
+	name = "";
+	scriptName = "";
+	chance = 100;
+	interval = 2000;
+	range = 0;
+	minCombatValue = 0;
+	maxCombatValue = 0;
+	attack = 0;
+	skill = 0;
+	combatSpell = false;
+	isMelee = false;
+	needTarget = false;
+	needDirection = false;
+
+	length = 0;
+	spread = 0;
+	radius = 0;
+	conditionType = CONDITION_NONE;
+	conditionMinDamage = 0;
+	conditionMaxDamage = 0;
+	conditionStartDamage = 0;
+	tickInterval = 0;
+
+	speedChange = 0;
+	duration = 0;
+
+	shoot = CONST_ANI_NONE;
+	effect = CONST_ME_NONE;
+}
+
 
 MonsterType::~MonsterType()
 {
@@ -184,6 +238,145 @@ void MonsterType::createLoot(Container* corpse)
 	}
 
 	corpse->startDecaying();
+}
+
+void MonsterType::clone(MonsterType* target, MonsterType* source, const std::string& type) {
+	if (type == "loot") {
+		if (!source->lootItems.empty()) {
+			for (LootBlock loot : source->lootItems) {
+				target->lootItems.push_back(loot);
+			}
+		}
+	} else if (type == "voices") {
+		if (!source->voiceVector.empty()) {
+			for (voiceBlock_t voices : source->voiceVector) {
+				target->voiceVector.push_back(voices);
+			}
+		}
+	}
+	else if (type == "summons") {
+		if (!source->summonList.empty()) {
+			for (summonBlock_t summons : source->summonList) {
+				target->summonList.push_back(summons);
+			}
+		}
+	} else if (type == "all") {
+		target->experience = source->experience;
+		target->hiddenHealth = source->hiddenHealth;
+		target->canPushCreatures = source->canPushCreatures;
+		target->canPushItems = source->canPushItems;
+		target->staticAttackChance = source->staticAttackChance;
+		target->maxSummons = source->maxSummons;
+		target->targetDistance = source->targetDistance;
+		target->runAwayHealth = source->runAwayHealth;
+		target->pushable = source->pushable;
+		target->baseSpeed = source->baseSpeed;
+		target->health = source->health;
+		target->healthMax = source->healthMax;
+
+		target->outfit = source->outfit;
+		target->lookcorpse = source->lookcorpse;
+
+		target->skull = source->skull;
+		target->conditionImmunities = source->conditionImmunities;
+		target->damageImmunities = source->damageImmunities;
+		target->race = source->race;
+		target->isSummonable = source->isSummonable;
+		target->isIllusionable = source->isIllusionable;
+		target->isConvinceable = source->isConvinceable;
+		target->isAttackable = source->isAttackable;
+		target->isHostile = source->isHostile;
+		target->lightLevel = source->lightLevel;
+		target->lightColor = source->lightColor;
+		target->manaCost = source->manaCost;
+
+		target->elementMap[COMBAT_PHYSICALDAMAGE] = source->elementMap[COMBAT_PHYSICALDAMAGE];
+		target->elementMap[COMBAT_ICEDAMAGE] = source->elementMap[COMBAT_ICEDAMAGE];
+		target->elementMap[COMBAT_EARTHDAMAGE] = source->elementMap[COMBAT_EARTHDAMAGE];
+		target->elementMap[COMBAT_FIREDAMAGE] = source->elementMap[COMBAT_FIREDAMAGE];
+		target->elementMap[COMBAT_ENERGYDAMAGE] = source->elementMap[COMBAT_ENERGYDAMAGE];
+		target->elementMap[COMBAT_HOLYDAMAGE] = source->elementMap[COMBAT_HOLYDAMAGE];
+		target->elementMap[COMBAT_DEATHDAMAGE] = source->elementMap[COMBAT_DEATHDAMAGE];
+		target->elementMap[COMBAT_DROWNDAMAGE] = source->elementMap[COMBAT_DROWNDAMAGE];
+		target->elementMap[COMBAT_LIFEDRAIN] = source->elementMap[COMBAT_LIFEDRAIN];
+		target->elementMap[COMBAT_MANADRAIN] = source->elementMap[COMBAT_MANADRAIN];
+
+		if (!source->voiceVector.empty()) {
+			for (voiceBlock_t voices : source->voiceVector) {
+				target->voiceVector.push_back(voices);
+			}
+		}
+
+		if (!source->summonList.empty()) {
+			for (summonBlock_t summons : source->summonList) {
+				target->summonList.push_back(summons);
+			}
+		}
+
+		if (!source->lootItems.empty()) {
+			for (LootBlock loot : source->lootItems) {
+				target->lootItems.push_back(loot);
+			}
+		}
+
+	} else {
+		std::cout << "[Error - MonsterType::clone] unknown type" << std::endl;
+	}
+}
+
+void MonsterType::loadLoot(Loot* loot, LootBlock& lootblock)
+{
+	lootblock.id = loot->id;
+	lootblock.countmax = loot->countMax;
+
+	if (loot->chance != 0) {
+		lootblock.chance = loot->chance;
+	} else {
+		lootblock.chance = MAX_LOOTCHANCE;
+	}
+
+	if (loot->actionId != -1) {
+		lootblock.actionId = loot->actionId;
+	}
+
+	if (loot->subType != -1) {
+		lootblock.subType = loot->subType;
+	} else {
+		uint32_t charges = Item::items[lootblock.id].charges;
+		if (charges != 0) {
+			lootblock.subType = charges;
+		}
+	}
+
+	if (!loot->text.empty()) {
+		lootblock.text = loot->text;
+	}
+}
+
+void MonsterType::loadLoot(MonsterType* monsterType, Loot* loot) 
+{
+	LootBlock lootblock;
+	loadLoot(loot, lootblock);
+
+	if (!loot->children.empty()) {
+		bool isContainer = Item::items[lootblock.id].isContainer();
+		if (isContainer) {
+			for (Loot* l : loot->children) {
+				loadChildLoot(l, lootblock);
+			}
+		}
+		monsterType->lootItems.push_back(lootblock);
+	} else {
+		monsterType->lootItems.push_back(lootblock);
+	}
+}
+
+void MonsterType::loadChildLoot(Loot* loot, LootBlock& parent)
+{
+	LootBlock child;
+	loadLoot(loot, child);
+
+	parent.childLoot.push_back(child);
 }
 
 std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
@@ -286,7 +479,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 		for (const auto& scriptEntry : monsterScriptList) {
 			MonsterType* mType = scriptEntry.first;
-			if (scriptInterface->loadFile("data/monster/scripts/" + scriptEntry.second) == 0) {
+			if (scriptInterface->loadFile("data/monster/scripts/" + scriptEntry.second) == 0 || scriptInterface->loadFile("data/luamonster/scripts/" + scriptEntry.second) == 0) {
 				mType->scriptInterface = scriptInterface;
 				mType->creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
 				mType->creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
@@ -325,15 +518,252 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType,
 	return condition;
 }
 
+bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description)
+{
+	if (!spell->scriptName.empty()) {
+		spell->isScripted = true;
+	} else if (!spell->name.empty()) {
+		spell->isScripted = false;
+	} else {
+		return false;
+	}
+
+	sb.speed = spell->interval;
+
+	if (spell->chance > 100) {
+		sb.chance = 100;
+	} else {
+		sb.chance = spell->chance;
+	}
+
+	if (spell->range > (Map::maxViewportX * 2)) {
+		spell->range = Map::maxViewportX * 2;
+	}
+	sb.range = spell->range;
+
+	sb.minCombatValue = spell->minCombatValue;
+	sb.maxCombatValue = spell->maxCombatValue;
+	if (std::abs(sb.minCombatValue) > std::abs(sb.maxCombatValue)) {
+		int32_t value = sb.maxCombatValue;
+		sb.maxCombatValue = sb.minCombatValue;
+		sb.minCombatValue = value;
+	}
+
+	sb.spell = g_spells->getSpellByName(spell->name);
+	if (sb.spell) {
+		return true;
+	}
+
+	CombatSpell* combatSpell = nullptr;
+
+	if (spell->isScripted) {
+		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, spell->needTarget, spell->needDirection));
+		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + spell->scriptName)) {
+			std::cout << "cannot find file" << std::endl;
+			return false;
+		}
+
+		if (!combatSpellPtr->loadScriptCombat()) {
+			return false;
+		}
+
+		combatSpell = combatSpellPtr.release();
+		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+	} else {
+		std::unique_ptr<Combat> combat{ new Combat };
+		sb.combatSpell = true;
+
+		if (spell->length > 0) {
+			spell->spread = std::max<int32_t>(0, spell->spread);
+
+			AreaCombat* area = new AreaCombat();
+			area->setupArea(spell->length, spell->spread);
+			combat->setArea(area);
+
+			spell->needDirection = true;
+		}
+
+		if (spell->radius > 0) {
+			AreaCombat* area = new AreaCombat();
+			area->setupArea(spell->radius);
+			combat->setArea(area);
+		}
+
+		std::string tmpName = asLowerCaseString(spell->name);
+
+		if (tmpName == "melee") {
+			sb.isMelee = true;
+
+			if (spell->attack > 0 && spell->skill > 0) {
+				sb.minCombatValue = 0;
+				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(spell->skill, spell->attack);
+			}
+
+			ConditionType_t conditionType = CONDITION_NONE;
+			int32_t minDamage = 0;
+			int32_t maxDamage = 0;
+			uint32_t tickInterval = 2000;
+
+			if (spell->conditionType != CONDITION_NONE) {
+				conditionType = spell->conditionType;
+
+				minDamage = spell->conditionMinDamage;
+				maxDamage = minDamage;
+				if (spell->tickInterval != 0) {
+					tickInterval = spell->tickInterval;
+				}
+
+				Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, spell->conditionStartDamage, tickInterval);
+				combat->setCondition(condition);
+			}
+
+			sb.range = 1;
+			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
+			combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
+			combat->setParam(COMBAT_PARAM_BLOCKSHIELD, 1);
+			combat->setOrigin(ORIGIN_MELEE);
+		} else if (tmpName == "combat") {
+			if (spell->combatType == COMBAT_PHYSICALDAMAGE) {
+				combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
+				combat->setOrigin(ORIGIN_RANGED);
+			} else if (spell->combatType == COMBAT_HEALING) {
+				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			}
+			combat->setParam(COMBAT_PARAM_TYPE, spell->combatType);
+		} else if (tmpName == "speed") {
+			int32_t speedChange = 0;
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			if (spell->speedChange != 0) {
+				speedChange = spell->speedChange;
+				if (speedChange < -1000) {
+					//cant be slower than 100%
+					speedChange = -1000;
+				}
+			}
+
+			ConditionType_t conditionType;
+			if (speedChange > 0) {
+				conditionType = CONDITION_HASTE;
+				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			} else {
+				conditionType = CONDITION_PARALYZE;
+			}
+
+			ConditionSpeed* condition = reinterpret_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
+			condition->setFormulaVars(speedChange / 1000.0, 0, speedChange / 1000.0, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "outfit") {
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			ConditionOutfit* condition = reinterpret_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
+			condition->setOutfit(spell->outfit);
+			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "invisible") {
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_INVISIBLE, duration, 0);
+			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "drunk") {
+			int32_t duration = 10000;
+
+			if (spell->duration != 0) {
+				duration = spell->duration;
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, 0);
+			combat->setCondition(condition);
+		} else if (tmpName == "firefield") {
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);
+		} else if (tmpName == "poisonfield") {
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_POISONFIELD_PVP);
+		} else if (tmpName == "energyfield") {
+			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
+		} else if (tmpName == "condition") {
+			uint32_t tickInterval = 2000;
+
+			if (spell->conditionType == CONDITION_NONE) {
+				std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Condition is not set for: " << spell->name << std::endl;
+			}
+
+			if (spell->tickInterval != 0) {
+				int32_t value = spell->tickInterval;
+				if (value > 0) {
+					tickInterval = value;
+				}
+			}
+
+			int32_t minDamage = std::abs(spell->conditionMinDamage);
+			int32_t maxDamage = std::abs(spell->conditionMaxDamage);
+			int32_t startDamage = 0;
+
+			if (spell->conditionStartDamage != 0) {
+				int32_t value = std::abs(spell->conditionStartDamage);
+				if (value <= minDamage) {
+					startDamage = value;
+				}
+			}
+
+			Condition* condition = getDamageCondition(spell->conditionType, maxDamage, minDamage, startDamage, tickInterval);
+			combat->setCondition(condition);
+		} else if (tmpName == "strength") {
+			//
+		} else if (tmpName == "effect") {
+			//
+		} else {
+			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << spell->name << std::endl;
+		}
+
+		if (spell->needTarget) {
+			if (spell->shoot != CONST_ANI_NONE) {
+				combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, spell->shoot);
+			}
+		}
+
+		if (spell->effect != CONST_ME_NONE) {
+			combat->setParam(COMBAT_PARAM_EFFECT, spell->effect);
+		}
+
+		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
+		combatSpell = new CombatSpell(combat.release(), spell->needTarget, spell->needDirection);
+	}
+
+	sb.spell = combatSpell;
+	return true;
+}
+
 bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, const std::string& description)
 {
 	sb.chance = 100;
 	sb.speed = 2000;
 	sb.range = 0;
+	sb.duration = 0;
+	sb.tick = 0;
+	sb.speedChange = 0;
 	sb.minCombatValue = 0;
 	sb.maxCombatValue = 0;
+	sb.spread = 0;
+	sb.length = 0;
+	sb.radius = 0;
 	sb.combatSpell = false;
 	sb.isMelee = false;
+	sb.needTarget = false;
+	sb.attack = 0;
+	sb.skill = 0;
 
 	std::string name;
 	std::string scriptName;
@@ -342,9 +772,11 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("script"))) {
 		scriptName = attr.as_string();
+		sb.scriptName = attr.as_string();
 		isScripted = true;
 	} else if ((attr = node.attribute("name"))) {
 		name = attr.as_string();
+		sb.name = attr.as_string();
 		isScripted = false;
 	} else {
 		return false;
@@ -401,6 +833,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 		if ((attr = node.attribute("target"))) {
 			needTarget = attr.as_bool();
+			sb.needTarget = needTarget;
 		}
 
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, needTarget, needDirection));
@@ -425,6 +858,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				if ((attr = node.attribute("spread"))) {
 					spread = std::max<int32_t>(0, pugi::cast<int32_t>(attr.value()));
 				}
+				sb.spread = spread;
 
 				AreaCombat* area = new AreaCombat();
 				area->setupArea(length, spread);
@@ -432,14 +866,17 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				needDirection = true;
 			}
+			sb.length = length;
 		}
 
 		if ((attr = node.attribute("radius"))) {
 			int32_t radius = pugi::cast<int32_t>(attr.value());
+			sb.radius = radius;
 
 			//target spell
 			if ((attr = node.attribute("target"))) {
 				needTarget = attr.as_bool();
+				sb.needTarget = needTarget;
 			}
 
 			AreaCombat* area = new AreaCombat();
@@ -454,6 +891,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 			pugi::xml_attribute attackAttribute, skillAttribute;
 			if ((attackAttribute = node.attribute("attack")) && (skillAttribute = node.attribute("skill"))) {
+				sb.attack = pugi::cast<int32_t>(attackAttribute.value());
+				sb.skill = pugi::cast<int32_t>(skillAttribute.value());
 				sb.minCombatValue = 0;
 				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(pugi::cast<int32_t>(skillAttribute.value()), pugi::cast<int32_t>(attackAttribute.value()));
 			}
@@ -516,6 +955,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					tickInterval = value;
 				}
 			}
+			sb.tick = tickInterval;
 
 			if (conditionType != CONDITION_NONE) {
 				Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, 0, tickInterval);
@@ -560,6 +1000,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 			if ((attr = node.attribute("duration"))) {
 				duration = pugi::cast<int32_t>(attr.value());
+				sb.duration = duration;
 			}
 
 			if ((attr = node.attribute("speedchange"))) {
@@ -568,6 +1009,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					//cant be slower than 100%
 					speedChange = -1000;
 				}
+				sb.speedChange = speedChange;
 			}
 
 			ConditionType_t conditionType;
@@ -672,6 +1114,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					tickInterval = value;
 				}
 			}
+			sb.tick = tickInterval;
 
 			int32_t minDamage = std::abs(sb.minCombatValue);
 			int32_t maxDamage = std::abs(sb.maxCombatValue);
@@ -683,6 +1126,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					startDamage = value;
 				}
 			}
+			sb.startDamage = startDamage;
 
 			Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, startDamage, tickInterval);
 			combat->setCondition(condition);
@@ -707,6 +1151,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 						ShootType_t shoot = getShootType(attr.as_string());
 						if (shoot != CONST_ANI_NONE) {
 							combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, shoot);
+							sb.shootType = shoot;
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
@@ -716,6 +1161,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 						MagicEffectClasses effect = getMagicEffect(attr.as_string());
 						if (effect != CONST_ME_NONE) {
 							combat->setParam(COMBAT_PARAM_EFFECT, effect);
+							sb.effect = effect;
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown areaEffect: " << attr.as_string() << std::endl;
 						}
@@ -1196,13 +1642,8 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 		}
 	}
 
-	static uint32_t id = 0;
 	if (new_mType) {
-		std::string lowername = monster_name;
-		toLowerCaseString(lowername);
-
-		monsterNames[lowername] = ++id;
-		monsters[id] = mType;
+		addMonsterType(monster_name, mType);
 	}
 	return true;
 }
@@ -1289,4 +1730,14 @@ uint32_t Monsters::getIdByName(const std::string& name)
 		return 0;
 	}
 	return it->second;
+}
+
+void Monsters::addMonsterType(const std::string& name, MonsterType* mType)
+{
+	static uint32_t id = 0;
+	std::string lowername = name;
+	toLowerCaseString(lowername);
+
+	monsterNames[lowername] = ++id;
+	monsters[id] = mType;
 }

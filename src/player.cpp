@@ -50,15 +50,11 @@ MuteCountMap Player::muteCountMap;
 
 uint32_t Player::playerAutoID = 0x10000000;
 
-Player::Player(ProtocolGame* p) :
+Player::Player(ProtocolGame_ptr p) :
 	Creature(), inventory(), varSkills(), varStats(), inventoryAbilities()
 {
 	client = p;
 	isConnecting = false;
-
-	if (client) {
-		client->setPlayer(this);
-	}
 
 	accountNumber = 0;
 	setVocation(0);
@@ -771,7 +767,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 		storageMap[key] = value;
 
 		if (!isLogin) {
-			int64_t currentFrameTime = OutputMessagePool::getInstance()->getFrameTime();
+			int64_t currentFrameTime = OTSYS_TIME();
 			if (lastQuestlogUpdate != currentFrameTime && g_game.quests.isQuestStorage(key, value, oldValue)) {
 				lastQuestlogUpdate = currentFrameTime;
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");
