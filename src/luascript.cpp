@@ -11096,7 +11096,7 @@ int LuaScriptInterface::luaItemTypeGetWeight(lua_State* L)
 		return 1;
 	}
 
-	uint64_t weight = (itemType->weight * std::max<int32_t>(1, count));
+	uint64_t weight = static_cast<uint64_t>(itemType->weight) * std::max<int32_t>(1, count);
 	lua_pushnumber(L, weight);
 	return 1;
 }
