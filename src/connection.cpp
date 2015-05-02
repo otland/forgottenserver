@@ -341,6 +341,7 @@ void Connection::handleReadError(const boost::system::error_code& error)
 		 *  Connection closed remotely
 		 */
 		close();
+		closeSocket();
 	}
 
 	m_readError = true;
@@ -387,6 +388,7 @@ void Connection::handleWriteError(const boost::system::error_code& error)
 		 *  Connection closed remotely
 		 */
 		close();
+		closeSocket();
 	}
 
 	m_writeError = true;
