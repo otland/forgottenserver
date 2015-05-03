@@ -13164,7 +13164,7 @@
 	<item id="7538" article="a" name="spider web">
 		<attribute key="destroyTo" value="7544" />
 	</item>
-	<item id="7539" article="a" name="spider web" />
+	<item id="7539" article="a" name="spider web">
 		<attribute key="destroyTo" value="7545" />
 	</item>
 	<item fromid="7540" toid="7543" article="a" name="spider web" />
