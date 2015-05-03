@@ -1144,6 +1144,7 @@ class LuaScriptInterface
 
 		static int luaItemTypeGetTransformEquipId(lua_State* L);
 		static int luaItemTypeGetTransformDeEquipId(lua_State* L);
+		static int luaItemTypeGetDestroyId(lua_State* L);
 		static int luaItemTypeGetDecayId(lua_State* L);
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
 
