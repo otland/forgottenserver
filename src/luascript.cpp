@@ -11696,13 +11696,7 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 {
 	// MonsterType(name)
-	
-	if (!isString(L, 2)) {
-		lua_pushnil(L);
-		return 1;
-	}
 	MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 2));
-	
 	if (monsterType) {
 		pushUserdata<MonsterType>(L, monsterType);
 		setMetatable(L, -1, "MonsterType");

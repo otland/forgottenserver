@@ -523,7 +523,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 		//Gather vocation information
 		std::list<std::string> vocStringList;
-		for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
+		for (auto vocationNode : node.children()) {
 			pugi::xml_attribute vocationNameAttribute = vocationNode.attribute("name");
 			if (!vocationNameAttribute) {
 				continue;

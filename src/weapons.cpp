@@ -216,7 +216,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	std::list<std::string> vocStringList;
-	for (pugi::xml_node vocationNode = node.first_child(); vocationNode; vocationNode = vocationNode.next_sibling()) {
+	for (auto vocationNode : node.children()) {
 		if (!(attr = vocationNode.attribute("name"))) {
 			continue;
 		}

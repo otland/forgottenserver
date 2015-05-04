@@ -108,7 +108,7 @@ bool Commands::loadFromXml()
 
 	loaded = true;
 
-	for (pugi::xml_node commandNode = doc.child("commands").first_child(); commandNode; commandNode = commandNode.next_sibling()) {
+	for (auto commandNode : doc.child("commands").children()) {
 		pugi::xml_attribute cmdAttribute = commandNode.attribute("cmd");
 		if (!cmdAttribute) {
 			std::cout << "[Warning - Commands::loadFromXml] Missing cmd" << std::endl;

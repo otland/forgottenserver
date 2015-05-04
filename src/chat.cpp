@@ -318,7 +318,7 @@ bool Chat::load()
 		removedChannels.push_front(channelEntry.first);
 	}
 
-	for (pugi::xml_node channelNode = doc.child("channels").first_child(); channelNode; channelNode = channelNode.next_sibling()) {
+	for (auto channelNode : doc.child("channels").children()) {
 		ChatChannel channel(pugi::cast<uint16_t>(channelNode.attribute("id").value()), channelNode.attribute("name").as_string());
 		channel.publicChannel = channelNode.attribute("public").as_bool();
 

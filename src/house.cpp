@@ -622,7 +622,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 		return false;
 	}
 
-	for (pugi::xml_node houseNode = doc.child("houses").first_child(); houseNode; houseNode = houseNode.next_sibling()) {
+	for (auto houseNode : doc.child("houses").children()) {
 		pugi::xml_attribute houseIdAttribute = houseNode.attribute("houseid");
 		if (!houseIdAttribute) {
 			return false;

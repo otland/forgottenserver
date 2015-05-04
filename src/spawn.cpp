@@ -55,7 +55,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 	filename = _filename;
 	loaded = true;
 
-	for (pugi::xml_node spawnNode = doc.child("spawns").first_child(); spawnNode; spawnNode = spawnNode.next_sibling()) {
+	for (auto spawnNode : doc.child("spawns").children()) {
 		Position centerPos(
 			pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
 			pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
@@ -73,7 +73,7 @@ bool Spawns::loadFromXml(const std::string& _filename)
 		spawnList.emplace_front(centerPos, radius);
 		Spawn& spawn = spawnList.front();
 
-		for (pugi::xml_node childNode = spawnNode.first_child(); childNode; childNode = childNode.next_sibling()) {
+		for (auto childNode : spawnNode.children()) {
 			if (strcasecmp(childNode.name(), "monster") == 0) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
 				if (!nameAttribute) {

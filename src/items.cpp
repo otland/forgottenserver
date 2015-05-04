@@ -391,7 +391,7 @@ bool Items::loadFromXml()
 		return false;
 	}
 
-	for (pugi::xml_node itemNode = doc.child("items").first_child(); itemNode; itemNode = itemNode.next_sibling()) {
+	for (auto itemNode : doc.child("items").children()) {
 		pugi::xml_attribute idAttribute = itemNode.attribute("id");
 		if (idAttribute) {
 			parseItemNode(itemNode, pugi::cast<uint16_t>(idAttribute.value()));
@@ -448,7 +448,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		it.pluralName = pluralAttribute.as_string();
 	}
 
-	for (pugi::xml_node attributeNode = itemNode.first_child(); attributeNode; attributeNode = attributeNode.next_sibling()) {
+	for (auto attributeNode : itemNode.children()) {
 		pugi::xml_attribute keyAttribute = attributeNode.attribute("key");
 		if (!keyAttribute) {
 			continue;
@@ -860,7 +860,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				int32_t start = 0;
 				int32_t count = 1;
 
-				for (pugi::xml_node subAttributeNode = attributeNode.first_child(); subAttributeNode; subAttributeNode = subAttributeNode.next_sibling()) {
+				for (auto subAttributeNode : attributeNode.children()) {
 					pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
 					if (!subKeyAttribute) {
 						continue;

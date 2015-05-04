@@ -73,7 +73,7 @@ bool Events::load()
 	clear();
 
 	std::set<std::string> classes;
-	for (pugi::xml_node eventNode = doc.child("events").first_child(); eventNode; eventNode = eventNode.next_sibling()) {
+	for (auto eventNode : doc.child("events").children()) {
 		if (!eventNode.attribute("enabled").as_bool()) {
 			continue;
 		}

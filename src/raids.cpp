@@ -63,7 +63,7 @@ bool Raids::loadFromXml()
 		return false;
 	}
 
-	for (pugi::xml_node raidNode = doc.child("raids").first_child(); raidNode; raidNode = raidNode.next_sibling()) {
+	for (auto raidNode : doc.child("raids").children()) {
 		std::string name, file;
 		uint32_t interval, margin;
 
@@ -212,7 +212,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		return false;
 	}
 
-	for (pugi::xml_node eventNode = doc.child("raid").first_child(); eventNode; eventNode = eventNode.next_sibling()) {
+	for (auto eventNode : doc.child("raid").children()) {
 		RaidEvent* event;
 		if (strcasecmp(eventNode.name(), "announce") == 0) {
 			event = new AnnounceEvent();
@@ -486,7 +486,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		}
 	}
 
-	for (pugi::xml_node monsterNode = eventNode.first_child(); monsterNode; monsterNode = monsterNode.next_sibling()) {
+	for (auto monsterNode : eventNode.children()) {
 		const char* name;
 
 		if ((attr = monsterNode.attribute("name"))) {
