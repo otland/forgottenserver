@@ -250,9 +250,9 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 	loaded = true;
 
-	auto allMonstersNode = doc.child("monsters");
-	for (auto& monsterNode : allMonstersNode.children()) {
-		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), reloading);
+	std::list<std::pair<MonsterType*, std::string>> monsterScriptList;
+	for (auto monsterNode : doc.child("monsters").children()) {
+		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), monsterScriptList, reloading);
 	}
 
 	if (!monsterScriptList.empty()) {
@@ -284,7 +284,6 @@ bool Monsters::reload()
 	loaded = false;
 
 	scriptInterface.reset(); 
-	monsterScriptList.clear();
 
 	return loadFromXml(true);
 }
@@ -667,7 +666,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 		combatSpell = new CombatSpell(combat, needTarget, needDirection);
 
-		for (auto& attributeNode : node.children()) {
+		for (auto attributeNode : node.children()) {
 			if ((attr = attributeNode.attribute("key"))) {
 				const char* value = attr.value();
 				if (strcasecmp(value, "shooteffect") == 0) {
@@ -702,7 +701,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	return true;
 }
 
-bool Monsters::loadMonster(const std::string& file, const std::string& monster_name, bool reloading /*= false*/)
+bool Monsters::loadMonster(const std::string& file, const std::string& monsterName, std::list<std::pair<MonsterType*, std::string>>& monsterScriptList, bool reloading /*= false*/)
 {
 	MonsterType* mType = nullptr;
 	bool new_mType = true;
@@ -727,7 +726,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if (reloading) {
-		mType = getMonsterType(monster_name);
+		mType = getMonsterType(monsterName);
 		if (mType != nullptr) {
 			new_mType = false;
 			mType->reset();
@@ -735,7 +734,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if (new_mType) {
-		mType = &monsters[asLowerCaseString(monster_name)];
+		mType = &monsters[asLowerCaseString(monsterName)];
 	}
 
 	mType->name = attr.as_string();
@@ -782,7 +781,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if ((attr = monsterNode.attribute("script"))) {
-		monsterScriptList[mType] = attr.as_string();
+		monsterScriptList.emplace_back(mType, attr.as_string());
 	}
 
 	pugi::xml_node node;
@@ -801,7 +800,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if ((node = monsterNode.child("flags"))) {
-		for (auto& flagNode : node.children()) {
+		for (auto flagNode : node.children()) {
 			attr = flagNode.first_attribute();
 			const char* attrName = attr.name();
 			if (strcasecmp(attrName, "summonable") == 0) {
@@ -903,9 +902,9 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if ((node = monsterNode.child("attacks"))) {
-		for (auto& attackNode : node.children()) {
+		for (auto attackNode : node.children()) {
 			spellBlock_t sb;
-			if (deserializeSpell(attackNode, sb, monster_name)) {
+			if (deserializeSpell(attackNode, sb, monsterName)) {
 				mType->attackSpells.emplace_back(std::move(sb));
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Cant load spell. " << file << std::endl;
@@ -922,9 +921,9 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			mType->armor = pugi::cast<int32_t>(attr.value());
 		}
 
-		for (auto& defenseNode : node.children()) {
+		for (auto defenseNode : node.children()) {
 			spellBlock_t sb;
-			if (deserializeSpell(defenseNode, sb, monster_name)) {
+			if (deserializeSpell(defenseNode, sb, monsterName)) {
 				mType->defenseSpells.emplace_back(std::move(sb));
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Cant load spell. " << file << std::endl;
@@ -933,7 +932,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if ((node = monsterNode.child("immunities"))) {
-		for (auto& immunityNode : node.children()) {
+		for (auto immunityNode : node.children()) {
 			if ((attr = immunityNode.attribute("name"))) {
 				std::string tmpStrValue = asLowerCaseString(attr.as_string());
 				if (tmpStrValue == "physical") {
@@ -1065,7 +1064,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			std::cout << "[Warning - Monsters::loadMonster] Missing voices chance. " << file << std::endl;
 		}
 
-		for (auto& voiceNode : node.children()) {
+		for (auto voiceNode : node.children()) {
 			voiceBlock_t vb;
 			if ((attr = voiceNode.attribute("sentence"))) {
 				vb.text = attr.as_string();
@@ -1083,7 +1082,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if ((node = monsterNode.child("loot"))) {
-		for (auto& lootNode : node.children()) {
+		for (auto lootNode : node.children()) {
 			LootBlock lootBlock;
 			if (loadLootItem(lootNode, lootBlock)) {
 				mType->lootItems.emplace_back(std::move(lootBlock));
@@ -1094,7 +1093,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if ((node = monsterNode.child("elements"))) {
-		for (auto& elementNode : node.children()) {
+		for (auto elementNode : node.children()) {
 			if ((attr = elementNode.attribute("physicalPercent"))) {
 				mType->elementMap[COMBAT_PHYSICALDAMAGE] = pugi::cast<int32_t>(attr.value());
 			} else if ((attr = elementNode.attribute("icePercent"))) {
@@ -1128,7 +1127,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 			std::cout << "[Warning - Monsters::loadMonster] Missing summons maxSummons. " << file << std::endl;
 		}
 
-		for (auto& summonNode : node.children()) {
+		for (auto summonNode : node.children()) {
 			int32_t chance = 100;
 			int32_t speed = 1000;
 
@@ -1153,7 +1152,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 	}
 
 	if ((node = monsterNode.child("script"))) {
-		for (auto& eventNode : node.children()) {
+		for (auto eventNode : node.children()) {
 			if ((attr = eventNode.attribute("name"))) {
 				mType->scripts.emplace_back(attr.as_string());
 			} else {
@@ -1220,7 +1219,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 
 void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 {
-	for (auto& subNode : node.children()) {
+	for (auto subNode : node.children()) {
 		LootBlock lootBlock;
 		if (loadLootItem(subNode, lootBlock)) {
 			lBlock.childLoot.emplace_back(std::move(lootBlock));
