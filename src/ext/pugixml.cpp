@@ -1,7 +1,7 @@
 /**
- * pugixml parser - version 1.5
+ * pugixml parser - version 1.6
  * --------------------------------------------------------
- * Copyright (C) 2006-2014, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
+ * Copyright (C) 2006-2015, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
  * Report bugs and download new versions at http://pugixml.org/
  *
  * This library is distributed under the MIT License. See notice at the end
@@ -392,7 +392,9 @@ PUGI__NS_BEGIN
 
 		char_t* allocate_string(size_t length)
 		{
-			PUGI__STATIC_ASSERT(xml_memory_page_size <= (1 << 16));
+			static const size_t max_encoded_offset = (1 << 16) * sizeof(void*);
+
+			PUGI__STATIC_ASSERT(xml_memory_page_size <= max_encoded_offset);
 
 			// allocate memory for string and header block
 			size_t size = sizeof(xml_memory_string_header) + length * sizeof(char_t);
@@ -408,12 +410,14 @@ PUGI__NS_BEGIN
 			// setup header
 			ptrdiff_t page_offset = reinterpret_cast<char*>(header) - reinterpret_cast<char*>(page) - sizeof(xml_memory_page);
 
-			assert(page_offset >= 0 && page_offset < (1 << 16));
-			header->page_offset = static_cast<uint16_t>(page_offset);
+			assert(page_offset % sizeof(void*) == 0);
+			assert(page_offset >= 0 && static_cast<size_t>(page_offset) < max_encoded_offset);
+			header->page_offset = static_cast<uint16_t>(static_cast<size_t>(page_offset) / sizeof(void*));
 
 			// full_size == 0 for large strings that occupy the whole page
-			assert(full_size < (1 << 16) || (page->busy_size == full_size && page_offset == 0));
-			header->full_size = static_cast<uint16_t>(full_size < (1 << 16) ? full_size : 0);
+			assert(full_size % sizeof(void*) == 0);
+			assert(full_size < max_encoded_offset || (page->busy_size == full_size && page_offset == 0));
+			header->full_size = static_cast<uint16_t>(full_size < max_encoded_offset ? full_size / sizeof(void*) : 0);
 
 			// round-trip through void* to avoid 'cast increases required alignment of target type' warning
 			// header is guaranteed a pointer-sized alignment, which should be enough for char_t
@@ -430,11 +434,11 @@ PUGI__NS_BEGIN
 			assert(header);
 
 			// deallocate
-			size_t page_offset = sizeof(xml_memory_page) + header->page_offset;
+			size_t page_offset = sizeof(xml_memory_page) + header->page_offset * sizeof(void*);
 			xml_memory_page* page = reinterpret_cast<xml_memory_page*>(static_cast<void*>(reinterpret_cast<char*>(header) - page_offset));
 
 			// if full_size == 0 then this string occupies the whole page
-			size_t full_size = header->full_size == 0 ? page->busy_size : header->full_size;
+			size_t full_size = header->full_size == 0 ? page->busy_size : header->full_size * sizeof(void*);
 
 			deallocate_memory(header, full_size, page);
 		}
@@ -2340,7 +2344,7 @@ PUGI__NS_BEGIN
 				PUGI__SCANFOR(s[0] == '-' && s[1] == '-' && s[2] == '>'); // no need for ENDSWITH because --> can't terminate proper doctype
 				if (!*s) PUGI__THROW_ERROR(status_bad_doctype, s);
 
-				s += 4;
+				s += 3;
 			}
 			else PUGI__THROW_ERROR(status_bad_doctype, s);
 
@@ -2349,23 +2353,28 @@ PUGI__NS_BEGIN
 
 		char_t* parse_doctype_ignore(char_t* s)
 		{
+			size_t depth = 0;
+
 			assert(s[0] == '<' && s[1] == '!' && s[2] == '[');
-			s++;
+			s += 3;
 
 			while (*s)
 			{
 				if (s[0] == '<' && s[1] == '!' && s[2] == '[')
 				{
 					// nested ignore section
-					s = parse_doctype_ignore(s);
-					if (!s) return s;
+					s += 3;
+					depth++;
 				}
 				else if (s[0] == ']' && s[1] == ']' && s[2] == '>')
 				{
 					// ignore section end
 					s += 3;
 
-					return s;
+					if (depth == 0)
+						return s;
+
+					depth--;
 				}
 				else s++;
 			}
@@ -2373,10 +2382,12 @@ PUGI__NS_BEGIN
 			PUGI__THROW_ERROR(status_bad_doctype, s);
 		}
 
-		char_t* parse_doctype_group(char_t* s, char_t endch, bool toplevel)
+		char_t* parse_doctype_group(char_t* s, char_t endch)
 		{
+			size_t depth = 0;
+
 			assert((s[0] == '<' || s[0] == 0) && s[1] == '!');
-			s++;
+			s += 2;
 
 			while (*s)
 			{
@@ -2391,12 +2402,8 @@ PUGI__NS_BEGIN
 					else
 					{
 						// some control group
-						s = parse_doctype_group(s, endch, false);
-						if (!s) return s;
-
-						// skip >
-						assert(*s == '>');
-						s++;
+						s += 2;
+						depth++;
 					}
 				}
 				else if (s[0] == '<' || s[0] == '"' || s[0] == '\'')
@@ -2407,12 +2414,16 @@ PUGI__NS_BEGIN
 				}
 				else if (*s == '>')
 				{
-					return s;
+					if (depth == 0)
+						return s;
+
+					depth--;
+					s++;
 				}
 				else s++;
 			}
 
-			if (!toplevel || endch != '>') PUGI__THROW_ERROR(status_bad_doctype, s);
+			if (depth != 0 || endch != '>') PUGI__THROW_ERROR(status_bad_doctype, s);
 
 			return s;
 		}
@@ -2504,7 +2515,7 @@ PUGI__NS_BEGIN
 
 				char_t* mark = s + 9;
 
-				s = parse_doctype_group(s, endch, true);
+				s = parse_doctype_group(s, endch);
 				if (!s) return s;
 
 				assert((*s == 0 && endch == '>') || *s == '>');
@@ -3443,6 +3454,27 @@ PUGI__NS_BEGIN
 		writer.write('-', '-', '>');
 	}
 
+	PUGI__FN void node_output_pi_value(xml_buffered_writer& writer, const char_t* s)
+	{
+		while (*s)
+		{
+			const char_t* prev = s;
+
+			// look for ?> sequence - we can't output it since ?> terminates PI
+			while (*s && !(s[0] == '?' && s[1] == '>')) ++s;
+
+			writer.write_buffer(prev, static_cast<size_t>(s - prev));
+
+			if (*s)
+			{
+				assert(s[0] == '?' && s[1] == '>');
+
+				writer.write('?', ' ', '>');
+				s += 2;
+			}
+		}
+	}
+
 	PUGI__FN void node_output_attributes(xml_buffered_writer& writer, xml_node_struct* node, unsigned int flags)
 	{
 		const char_t* default_name = PUGIXML_TEXT(":anonymous");
@@ -3471,61 +3503,28 @@ PUGI__NS_BEGIN
 		if (node->first_attribute)
 			node_output_attributes(writer, node, flags);
 
-		if (flags & format_raw)
+		if (!node->first_child)
 		{
-			if (!node->first_child)
-				writer.write(' ', '/', '>');
-			else
-			{
-				writer.write('>');
+			writer.write(' ', '/', '>');
 
-				return true;
-			}
+			return false;
 		}
 		else
 		{
-			xml_node_struct* first = node->first_child;
+			writer.write('>');
 
-			if (!first)
-				writer.write(' ', '/', '>', '\n');
-			else if (!first->next_sibling && (PUGI__NODETYPE(first) == node_pcdata || PUGI__NODETYPE(first) == node_cdata))
-			{
-				writer.write('>');
-
-				const char_t* value = first->value ? first->value : PUGIXML_TEXT("");
-
-				if (PUGI__NODETYPE(first) == node_pcdata)
-					text_output(writer, value, ctx_special_pcdata, flags);
-				else
-					text_output_cdata(writer, value);
-
-				writer.write('<', '/');
-				writer.write_string(name);
-				writer.write('>', '\n');
-			}
-			else
-			{
-				writer.write('>', '\n');
-
-				return true;
-			}
+			return true;
 		}
-
-		return false;
 	}
 
-	PUGI__FN void node_output_end(xml_buffered_writer& writer, xml_node_struct* node, unsigned int flags)
+	PUGI__FN void node_output_end(xml_buffered_writer& writer, xml_node_struct* node)
 	{
 		const char_t* default_name = PUGIXML_TEXT(":anonymous");
 		const char_t* name = node->name ? node->name : default_name;
 
 		writer.write('<', '/');
 		writer.write_string(name);
-
-		if (flags & format_raw)
-			writer.write('>');
-		else
-			writer.write('>', '\n');
+		writer.write('>');
 	}
 
 	PUGI__FN void node_output_simple(xml_buffered_writer& writer, xml_node_struct* node, unsigned int flags)
@@ -3536,17 +3535,14 @@ PUGI__NS_BEGIN
 		{
 			case node_pcdata:
 				text_output(writer, node->value ? node->value : PUGIXML_TEXT(""), ctx_special_pcdata, flags);
-				if ((flags & format_raw) == 0) writer.write('\n');
 				break;
 
 			case node_cdata:
 				text_output_cdata(writer, node->value ? node->value : PUGIXML_TEXT(""));
-				if ((flags & format_raw) == 0) writer.write('\n');
 				break;
 
 			case node_comment:
 				node_output_comment(writer, node->value ? node->value : PUGIXML_TEXT(""));
-				if ((flags & format_raw) == 0) writer.write('\n');
 				break;
 
 			case node_pi:
@@ -3556,11 +3552,10 @@ PUGI__NS_BEGIN
 				if (node->value)
 				{
 					writer.write(' ');
-					writer.write_string(node->value);
+					node_output_pi_value(writer, node->value);
 				}
 
 				writer.write('?', '>');
-				if ((flags & format_raw) == 0) writer.write('\n');
 				break;
 
 			case node_declaration:
@@ -3568,7 +3563,6 @@ PUGI__NS_BEGIN
 				writer.write_string(node->name ? node->name : default_name);
 				node_output_attributes(writer, node, flags);
 				writer.write('?', '>');
-				if ((flags & format_raw) == 0) writer.write('\n');
 				break;
 
 			case node_doctype:
@@ -3582,7 +3576,6 @@ PUGI__NS_BEGIN
 				}
 
 				writer.write('>');
-				if ((flags & format_raw) == 0) writer.write('\n');
 				break;
 
 			default:
@@ -3590,9 +3583,16 @@ PUGI__NS_BEGIN
 		}
 	}
 
+	enum indent_flags_t
+	{
+		indent_newline = 1,
+		indent_indent = 2
+	};
+
 	PUGI__FN void node_output(xml_buffered_writer& writer, xml_node_struct* root, const char_t* indent, unsigned int flags, unsigned int depth)
 	{
 		size_t indent_length = ((flags & (format_indent | format_raw)) == format_indent) ? strlength(indent) : 0;
+		unsigned int indent_flags = indent_indent;
 
 		xml_node_struct* node = root;
 
@@ -3601,29 +3601,47 @@ PUGI__NS_BEGIN
 			assert(node);
 
 			// begin writing current node
-			if (indent_length)
-				text_output_indent(writer, indent, indent_length, depth);
+			if (PUGI__NODETYPE(node) == node_pcdata || PUGI__NODETYPE(node) == node_cdata)
+			{
+				node_output_simple(writer, node, flags);
 
-			if (PUGI__NODETYPE(node) == node_element)
-			{
-				if (node_output_start(writer, node, flags))
-				{
-					node = node->first_child;
-					depth++;
-					continue;
-				}
-			}
-			else if (PUGI__NODETYPE(node) == node_document)
-			{
-				if (node->first_child)
-				{
-					node = node->first_child;
-					continue;
-				}
+				indent_flags = 0;
 			}
 			else
 			{
-				node_output_simple(writer, node, flags);
+				if ((indent_flags & indent_newline) && (flags & format_raw) == 0)
+					writer.write('\n');
+
+				if ((indent_flags & indent_indent) && indent_length)
+					text_output_indent(writer, indent, indent_length, depth);
+
+				if (PUGI__NODETYPE(node) == node_element)
+				{
+					indent_flags = indent_newline | indent_indent;
+
+					if (node_output_start(writer, node, flags))
+					{
+						node = node->first_child;
+						depth++;
+						continue;
+					}
+				}
+				else if (PUGI__NODETYPE(node) == node_document)
+				{
+					indent_flags = indent_indent;
+
+					if (node->first_child)
+					{
+						node = node->first_child;
+						continue;
+					}
+				}
+				else
+				{
+					node_output_simple(writer, node, flags);
+
+					indent_flags = indent_newline | indent_indent;
+				}
 			}
 
 			// continue to the next node
@@ -3642,14 +3660,22 @@ PUGI__NS_BEGIN
 				{
 					depth--;
 
-					if (indent_length)
+					if ((indent_flags & indent_newline) && (flags & format_raw) == 0)
+						writer.write('\n');
+
+					if ((indent_flags & indent_indent) && indent_length)
 						text_output_indent(writer, indent, indent_length, depth);
 
-					node_output_end(writer, node, flags);
+					node_output_end(writer, node);
+
+					indent_flags = indent_newline | indent_indent;
 				}
 			}
 		}
 		while (node != root);
+
+		if ((indent_flags & indent_newline) && (flags & format_raw) == 0)
+			writer.write('\n');
 	}
 
 	PUGI__FN bool has_declaration(xml_node_struct* node)
@@ -3946,10 +3972,18 @@ PUGI__NS_BEGIN
 		return set_value_buffer(dest, header, header_mask, buf);
 	}
 
+	PUGI__FN bool set_value_convert(char_t*& dest, uintptr_t& header, uintptr_t header_mask, float value)
+	{
+		char buf[128];
+		sprintf(buf, "%.9g", value);
+
+		return set_value_buffer(dest, header, header_mask, buf);
+	}
+
 	PUGI__FN bool set_value_convert(char_t*& dest, uintptr_t& header, uintptr_t header_mask, double value)
 	{
 		char buf[128];
-		sprintf(buf, "%g", value);
+		sprintf(buf, "%.17g", value);
 
 		return set_value_buffer(dest, header, header_mask, buf);
 	}
@@ -4293,7 +4327,7 @@ PUGI__NS_BEGIN
 	PUGI__FN xml_parse_result load_buffer_impl(xml_document_struct* doc, xml_node_struct* root, void* contents, size_t size, unsigned int options, xml_encoding encoding, bool is_mutable, bool own, char_t** out_buffer)
 	{
 		// check input buffer
-		assert(contents || size == 0);
+		if (!contents && size) return make_parse_result(status_io_error);
 
 		// get actual encoding
 		xml_encoding buffer_encoding = impl::get_buffer_encoding(encoding, contents, size);
@@ -4537,6 +4571,12 @@ namespace pugi
 		return *this;
 	}
 
+	PUGI__FN xml_attribute& xml_attribute::operator=(float rhs)
+	{
+		set_value(rhs);
+		return *this;
+	}
+
 	PUGI__FN xml_attribute& xml_attribute::operator=(bool rhs)
 	{
 		set_value(rhs);
@@ -4586,6 +4626,13 @@ namespace pugi
 	}
 
 	PUGI__FN bool xml_attribute::set_value(double rhs)
+	{
+		if (!_attr) return false;
+
+		return impl::set_value_convert(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs);
+	}
+
+	PUGI__FN bool xml_attribute::set_value(float rhs)
 	{
 		if (!_attr) return false;
 
@@ -5595,6 +5642,13 @@ namespace pugi
 		return dn ? impl::set_value_convert(dn->value, dn->header, impl::xml_memory_page_value_allocated_mask, rhs) : false;
 	}
 
+	PUGI__FN bool xml_text::set(float rhs)
+	{
+		xml_node_struct* dn = _data_new();
+
+		return dn ? impl::set_value_convert(dn->value, dn->header, impl::xml_memory_page_value_allocated_mask, rhs) : false;
+	}
+
 	PUGI__FN bool xml_text::set(double rhs)
 	{
 		xml_node_struct* dn = _data_new();
@@ -5644,6 +5698,12 @@ namespace pugi
 	}
 
 	PUGI__FN xml_text& xml_text::operator=(double rhs)
+	{
+		set(rhs);
+		return *this;
+	}
+
+	PUGI__FN xml_text& xml_text::operator=(float rhs)
 	{
 		set(rhs);
 		return *this;
@@ -6264,7 +6324,7 @@ namespace std
 #endif
 
 /**
- * Copyright (c) 2006-2014 Arseny Kapoulkine
+ * Copyright (c) 2006-2015 Arseny Kapoulkine
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
