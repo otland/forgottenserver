@@ -11695,14 +11695,14 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 // MonsterType
 int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 {
-	// MonsterType(id or name)
-	MonsterType* monsterType;
-	if (isNumber(L, 2)) {
-		monsterType = g_monsters.getMonsterType(getNumber<uint32_t>(L, 2));
-	} else {
-		monsterType = g_monsters.getMonsterType(getString(L, 2));
+	// MonsterType(name)
+	
+	if (!isString(L, 2)) {
+		lua_pushnil(L);
+		return 1;
 	}
-
+	MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 2));
+	
 	if (monsterType) {
 		pushUserdata<MonsterType>(L, monsterType);
 		setMetatable(L, -1, "MonsterType");
@@ -11925,10 +11925,10 @@ int LuaScriptInterface::luaMonsterTypeGetAttackList(lua_State* L)
 		return 1;
 	}
 
-	lua_createtable(L, monsterType->spellAttackList.size(), 0);
+	lua_createtable(L, monsterType->attackSpells.size(), 0);
 
 	int index = 0;
-	for (const auto& spellBlock : monsterType->spellAttackList) {
+	for (const auto& spellBlock : monsterType->attackSpells) {
 		lua_createtable(L, 0, 8);
 
 		setField(L, "chance", spellBlock.chance);
@@ -11955,10 +11955,11 @@ int LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 		return 1;
 	}
 
-	lua_createtable(L, monsterType->spellDefenseList.size(), 0);
+	lua_createtable(L, monsterType->defenseSpells.size(), 0);
+
 
 	int index = 0;
-	for (const auto& spellBlock : monsterType->spellDefenseList) {
+	for (const auto& spellBlock : monsterType->attackSpells) {
 		lua_createtable(L, 0, 8);
 
 		setField(L, "chance", spellBlock.chance);
@@ -12022,7 +12023,7 @@ int LuaScriptInterface::luaMonsterTypeGetLoot(lua_State* L)
 		return 1;
 	}
 
-	static const std::function<void(const std::list<LootBlock>&)> parseLoot = [&](const std::list<LootBlock>& lootList) {
+	static const std::function<void(const std::vector<LootBlock>&)> parseLoot = [&](const std::vector<LootBlock>& lootList) {
 		lua_createtable(L, lootList.size(), 0);
 
 		int index = 0;
@@ -12056,8 +12057,8 @@ int LuaScriptInterface::luaMonsterTypeGetCreatureEvents(lua_State* L)
 	}
 
 	int index = 0;
-	lua_createtable(L, monsterType->scriptList.size(), 0);
-	for (const std::string& creatureEvent : monsterType->scriptList) {
+	lua_createtable(L, monsterType->scripts.size(), 0);
+	for (const std::string& creatureEvent : monsterType->scripts) {
 		pushString(L, creatureEvent);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -12074,8 +12075,8 @@ int LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 	}
 
 	int index = 0;
-	lua_createtable(L, monsterType->summonList.size(), 0);
-	for (const auto& summonBlock : monsterType->summonList) {
+	lua_createtable(L, monsterType->summons.size(), 0);
+	for (const auto& summonBlock : monsterType->summons) {
 		lua_createtable(L, 0, 3);
 		setField(L, "name", summonBlock.name);
 		setField(L, "speed", summonBlock.speed);

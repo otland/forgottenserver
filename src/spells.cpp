@@ -858,12 +858,7 @@ ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t& outfit, in
 
 ReturnValue Spell::CreateIllusion(Creature* creature, const std::string& name, int32_t time)
 {
-	uint32_t mId = g_monsters.getIdByName(name);
-	if (mId == 0) {
-		return RETURNVALUE_CREATUREDOESNOTEXIST;
-	}
-
-	const MonsterType* mType = g_monsters.getMonsterType(mId);
+	const auto mType = g_monsters.getMonsterType(name);
 	if (mType == nullptr) {
 		return RETURNVALUE_CREATUREDOESNOTEXIST;
 	}

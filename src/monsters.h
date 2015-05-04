@@ -22,8 +22,9 @@
 
 #include "creature.h"
 
-#define MAX_LOOTCHANCE 100000
-#define MAX_STATICWALK 100
+
+const uint32_t MAX_LOOTCHANCE = 100000;
+const uint32_t MAX_STATICWALK = 100;
 
 struct LootBlock {
 	uint16_t id;
@@ -35,7 +36,7 @@ struct LootBlock {
 	int32_t actionId;
 	std::string text;
 
-	std::list<LootBlock> childLoot;
+	std::vector<LootBlock> childLoot;
 	LootBlock() {
 		id = 0;
 		countmax = 0;
@@ -53,16 +54,31 @@ struct summonBlock_t {
 };
 
 class BaseSpell;
-
 struct spellBlock_t {
-	BaseSpell* spell;
-	uint32_t chance;
-	uint32_t speed;
-	uint32_t range;
-	int32_t minCombatValue;
-	int32_t maxCombatValue;
-	bool combatSpell;
-	bool isMelee;
+	spellBlock_t() = default;
+	~spellBlock_t();
+	spellBlock_t(const spellBlock_t& other) = delete;
+	spellBlock_t& operator=(const spellBlock_t& other) = delete;
+	spellBlock_t(spellBlock_t&& other):
+		spell(other.spell),
+		chance(other.chance),
+		speed(other.speed),
+		range(other.range),
+		minCombatValue(other.minCombatValue),
+		maxCombatValue(other.maxCombatValue),
+		combatSpell(other.combatSpell),
+		isMelee(other.isMelee) {
+		other.spell = nullptr;
+	}
+
+	BaseSpell* spell = nullptr;
+	uint32_t chance = 100;
+	uint32_t speed = 2000;
+	uint32_t range = 0;
+	int32_t minCombatValue = 0;
+	int32_t maxCombatValue = 0;
+	bool combatSpell = false;
+	bool isMelee = false;
 };
 
 struct voiceBlock_t {
@@ -74,7 +90,7 @@ class MonsterType
 {
 	public:
 		MonsterType();
-		~MonsterType();
+		~MonsterType() = default;
 
 		// non-copyable
 		MonsterType(const MonsterType&) = delete;
@@ -86,11 +102,11 @@ class MonsterType
 
 		std::vector<voiceBlock_t> voiceVector;
 
-		std::list<LootBlock> lootItems;
-		std::list<std::string> scriptList;
-		std::list<spellBlock_t> spellAttackList;
-		std::list<spellBlock_t> spellDefenseList;
-		std::list<summonBlock_t> summonList;
+		std::vector<LootBlock> lootItems;
+		std::vector<std::string> scripts;
+		std::vector<spellBlock_t> attackSpells;
+		std::vector<spellBlock_t> defenseSpells;
+		std::vector<summonBlock_t> summons;
 
 		std::string name;
 		std::string nameDescription;
@@ -144,15 +160,14 @@ class MonsterType
 
 		void createLoot(Container* corpse);
 		bool createLootContainer(Container* parent, const LootBlock& lootblock);
-		std::list<Item*> createLootItem(const LootBlock& lootblock);
+		std::vector<Item*> createLootItem(const LootBlock& lootBlock);
 };
 
 class Monsters
 {
 	public:
 		Monsters();
-		~Monsters();
-
+		~Monsters() = default;
 		// non-copyable
 		Monsters(const Monsters&) = delete;
 		Monsters& operator=(const Monsters&) = delete;
@@ -164,7 +179,6 @@ class Monsters
 		bool reload();
 
 		MonsterType* getMonsterType(const std::string& name);
-		MonsterType* getMonsterType(uint32_t mid);
 		uint32_t getIdByName(const std::string& name);
 
 		static uint32_t getLootRandom();
@@ -179,10 +193,9 @@ class Monsters
 		void loadLootContainer(const pugi::xml_node& node, LootBlock&);
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
-		std::map<std::string, uint32_t> monsterNames;
 		std::map<MonsterType*, std::string> monsterScriptList;
-		std::map<uint32_t, MonsterType*> monsters;
-		LuaScriptInterface* scriptInterface;
+		std::map<std::string, MonsterType> monsters;
+		std::unique_ptr<LuaScriptInterface> scriptInterface;
 
 		bool loaded;
 };
