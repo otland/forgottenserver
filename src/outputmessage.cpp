@@ -22,33 +22,46 @@
 #include "outputmessage.h"
 #include "protocol.h"
 #include "lockfree.h"
+#include "scheduler.h"
+
+extern Scheduler g_scheduler;
+
+const uint16_t OUTPUTMESSAGE_FREE_LIST_CAPACITY = 2048;
+const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY {10};
 
 class OutputMessageAllocator
 {
 	public:
 		typedef OutputMessage value_type;
 		template<typename U>
-		struct rebind {typedef LockfreePoolingAllocator<U> other;};
+		struct rebind {typedef LockfreePoolingAllocator<U, OUTPUTMESSAGE_FREE_LIST_CAPACITY> other;};
 };
+
+void OutputMessagePool::scheduleSendAll() {
+	auto functor = std::bind(&OutputMessagePool::sendAll, this);
+	g_scheduler.addEvent(createLowDelayTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), functor));
+}
 
 void OutputMessagePool::sendAll()
 {
 	//dispatcher thread
-	static int64_t lastSend = 0;
-
-	auto currentFrame = OTSYS_TIME();
-	auto staleTime = currentFrame - 10;
-	if (lastSend > staleTime) {
-		return;
-	}
-	lastSend = currentFrame;
-
 	for (auto& protocol : bufferedProtocols) {
 		auto& msg = protocol->getCurrentBuffer();
 		if (msg) {
 			protocol->send(std::move(msg));
 		}
 	}
+	if (!bufferedProtocols.empty()) {
+		scheduleSendAll();
+	}
+}
+
+void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol) {
+	//dispatcher thread
+	if (bufferedProtocols.empty()) {
+		scheduleSendAll();
+	}
+	bufferedProtocols.emplace_back(protocol);
 }
 
 void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)

@@ -22,7 +22,7 @@
 
 #include <boost/lockfree/stack.hpp>
 
-template <typename T>
+template <typename T, size_t CAPACITY>
 class LockfreePoolingAllocator : public std::allocator<T>
 {
 	public:
@@ -47,7 +47,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 			}
 		}
 	private:
-		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<OUTPUTMESSAGE_FREE_LIST_CAPACITY>> FreeList;
+		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>> FreeList;
 		static FreeList& getFreeList() noexcept {
 			static FreeList freeList;
 			return freeList;

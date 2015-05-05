@@ -23,10 +23,6 @@
 #include "networkmessage.h"
 #include "connection.h"
 #include "tools.h"
-#include <atomic>
-#include <limits>
-
-const uint16_t OUTPUTMESSAGE_FREE_LIST_CAPACITY = 4096;
 
 class Protocol;
 
@@ -99,13 +95,11 @@ class OutputMessagePool
 		}
 
 		void sendAll();
+		void scheduleSendAll();
 
 		static OutputMessage_ptr getOutputMessage();
 
-		void addProtocolToAutosend(Protocol_ptr protocol) {
-			//dispatcher thread
-			bufferedProtocols.emplace_back(protocol);
-		}
+		void addProtocolToAutosend(Protocol_ptr protocol);
 		void removeProtocolFromAutosend(const Protocol_ptr& protocol);
 	private:
 		OutputMessagePool() = default;

@@ -50,7 +50,12 @@ class SchedulerTask : public Task
 		uint32_t eventId;
 
 		friend SchedulerTask* createSchedulerTask(uint32_t, const std::function<void (void)>&);
+		friend SchedulerTask* createLowDelayTask(uint16_t delay, std::function<void (void)> f);
 };
+
+inline SchedulerTask* createLowDelayTask(uint16_t delay, std::function<void (void)> f) {
+	return new SchedulerTask(delay, f);
+}
 
 inline SchedulerTask* createSchedulerTask(uint32_t delay, const std::function<void (void)>& f)
 {
