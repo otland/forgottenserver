@@ -453,9 +453,9 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 
 		if (cacheResult) {
 			if (onlyPlayers) {
-				playersSpectatorCache[centerPos].reset(new SpectatorVec(list));
+				playersSpectatorCache[centerPos] = std::make_shared<SpectatorVec>(list);
 			} else {
-				spectatorCache[centerPos].reset(new SpectatorVec(list));
+				spectatorCache[centerPos] = std::make_shared<SpectatorVec>(list);
 			}
 		}
 	}
