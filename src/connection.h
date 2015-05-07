@@ -81,11 +81,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 			m_socket(socket),
 			m_io_service(io_service) {
 			m_pendingWrite = false;
-			m_pendingRead = false;
 			m_connectionState = CONNECTION_STATE_OPEN;
 			m_receivedFirst = false;
-			m_writeError = false;
-			m_readError = false;
 			m_packetsSent = 0;
 			m_timeConnected = time(nullptr);
 		}
@@ -108,17 +105,13 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		void onWriteOperation(OutputMessage_ptr msg, const boost::system::error_code& error);
 
-		void handleReadError(const boost::system::error_code& error);
-		void handleWriteError(const boost::system::error_code& error);
-
-		static void handleReadTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error);
-		static void handleWriteTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error);
+		static void handleReadTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error);
+		static void handleWriteTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error);
 
 		void closeSocket();
-		void onReadTimeout();
-		void onWriteTimeout();
 
 		void internalSend(OutputMessage_ptr msg);
+		void clearMessageQueue();
 
 		NetworkMessage m_msg;
 
@@ -137,13 +130,10 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		time_t m_timeConnected;
 		uint32_t m_packetsSent;
-		bool m_pendingWrite;
-		bool m_pendingRead;
-		bool m_connectionState;
 
+		bool m_pendingWrite;
+		bool m_connectionState;
 		bool m_receivedFirst;
-		bool m_writeError;
-		bool m_readError;
 
 		static bool m_logError;
 };

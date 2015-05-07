@@ -80,17 +80,16 @@ void Connection::close()
 			createTask(std::bind(&Protocol::release, m_protocol)));
 	}
 	
-	if (!m_pendingWrite || m_writeError) {
+	if (!m_pendingWrite) {
 		closeSocket();
 	} else {
-		//will be closed by onWriteOperation/handleWriteTimeout/handleReadTimeout instead
+		//will be closed by onWriteOperation
 	}
 }
 
 void Connection::closeSocket()
 {
 	if (m_socket->is_open()) {
-		m_pendingRead = false;
 		m_pendingWrite = false;
 
 		try {
@@ -126,7 +125,6 @@ void Connection::accept()
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	try {
-		m_pendingRead = true;
 		m_readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		m_readTimer.async_wait(std::bind(&Connection::handleReadTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
@@ -151,11 +149,10 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 	int32_t size = m_msg.decodeHeader();
 	if (error || size <= 0 || size >= NETWORKMESSAGE_MAXSIZE - 16) {
-		handleReadError(error);
+		close();
 	}
 
-	if (m_connectionState != CONNECTION_STATE_OPEN || m_readError) {
-		close();
+	if (m_connectionState != CONNECTION_STATE_OPEN) {
 		return;
 	}
 
@@ -196,11 +193,10 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	m_readTimer.cancel();
 
 	if (error) {
-		handleReadError(error);
+		close();
 	}
 
-	if (m_connectionState != CONNECTION_STATE_OPEN || m_readError) {
-		close();
+	if (m_connectionState != CONNECTION_STATE_OPEN) {
 		return;
 	}
 
@@ -262,7 +258,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 void Connection::send(OutputMessage_ptr msg)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
-	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
+	if (m_connectionState != CONNECTION_STATE_OPEN) {
 		return;
 	}
 
@@ -307,100 +303,60 @@ uint32_t Connection::getIP()
 	return htonl(endpoint.address().to_v4().to_ulong());
 }
 
+void Connection::clearMessageQueue()
+{
+	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
+	while (!messageQueue.empty()) {
+		messageQueue.pop();
+	}
+}
+
+
 void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::error_code& error)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	m_writeTimer.cancel();
+	m_pendingWrite = false;
 
 	if (error) {
-		handleWriteError(error);
+		clearMessageQueue();
+		close();
 	}
 
-	if (m_connectionState != CONNECTION_STATE_OPEN || m_writeError) {
-		close();
+	//If someone requested a connection close, we allow all pending outputMessages to be sent,
+	//unless an error occured during the send operation
+	if ((m_connectionState != CONNECTION_STATE_OPEN && messageQueue.empty()) || error) {
 		closeSocket();
 		return;
 	}
 
-	m_pendingWrite = false;
 	if (!messageQueue.empty()) {
 		internalSend(std::move(messageQueue.front()));
 		messageQueue.pop();
 	}
 }
 
-void Connection::handleReadError(const boost::system::error_code& error)
-{
-	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
-
-	if (error != boost::asio::error::operation_aborted) {
-		/**
-		 * error == boost::asio::error::eof:
-		 *  No more to read
-		 * error == boost::asio::error::connection_reset || error == boost::asio::error::connection_aborted:
-		 *  Connection closed remotely
-		 */
-		close();
-		closeSocket();
-	}
-
-	m_readError = true;
-}
-
-void Connection::onReadTimeout()
-{
-	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
-
-	if (m_pendingRead || m_readError) {
-		close();
-		closeSocket();
-	}
-}
-
-void Connection::onWriteTimeout()
-{
-	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
-
-	if (m_pendingWrite || m_writeError) {
-		close();
-		closeSocket();
-	}
-}
-
-void Connection::handleReadTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error)
+void Connection::handleReadTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error)
 {
 	if (error == boost::asio::error::operation_aborted) {
+		//The timer has been manually cancelled
 		return;
 	}
 
-	if (auto connection = weak_conn.lock()) {
-		connection->onReadTimeout();
+	if (auto connection = connectionWeak.lock()) {
+		connection->close();
 	}
 }
 
-void Connection::handleWriteError(const boost::system::error_code& error)
-{
-	if (error != boost::asio::error::operation_aborted) {
-		/**
-		 * error == boost::asio::error::eof:
-		 *  No more to read
-		 * error == boost::asio::error::connection_reset || error == boost::asio::error::connection_aborted:
-		 *  Connection closed remotely
-		 */
-		close();
-		closeSocket();
-	}
-
-	m_writeError = true;
-}
-
-void Connection::handleWriteTimeout(ConnectionWeak_ptr weak_conn, const boost::system::error_code& error)
+void Connection::handleWriteTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error)
 {
 	if (error == boost::asio::error::operation_aborted) {
+		//The timer has been manually cancelled
 		return;
 	}
 
-	if (auto connection = weak_conn.lock()) {
-		connection->onWriteTimeout();
+	if (auto connection = connectionWeak.lock()) {
+		connection->clearMessageQueue();
+		connection->close();
 	}
 }
