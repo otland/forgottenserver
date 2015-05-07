@@ -11953,7 +11953,7 @@ int LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 
 
 	int index = 0;
-	for (const auto& spellBlock : monsterType->attackSpells) {
+	for (const auto& spellBlock : monsterType->defenseSpells) {
 		lua_createtable(L, 0, 8);
 
 		setField(L, "chance", spellBlock.chance);
