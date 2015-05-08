@@ -6,12 +6,11 @@ function onCastSpell(creature, var)
 	local item = creature:getSlotItem(CONST_SLOT_LEFT)
 	if not item or item:getId() ~= 2401 then
 		item = creature:getSlotItem(CONST_SLOT_RIGHT)
-	end
-
-	if not item or item:getId() ~= 2401 then
-		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
-		creature:sendTextMessage(MESSAGE_STATUS_SMALL, "You need a magic item to cast this spell.")
-		return false
+		if not item or item:getId() ~= 2401 then
+			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
+			creature:sendTextMessage(MESSAGE_STATUS_SMALL, "You need a magic item to cast this spell.")
+			return false
+		end
 	end
 
 	item:transform(2433)
