@@ -10,6 +10,7 @@ function onCastSpell(creature, var)
 
 	if not item or item:getId() ~= 2401 then
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
+		creature:sendTextMessage(MESSAGE_STATUS_SMALL, "You need a magic item to cast this spell.")
 		return false
 	end
 
