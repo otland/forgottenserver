@@ -121,6 +121,9 @@
 		<vocation name="Paladin"/>
 		<vocation name="Royal Paladin"/>
 	</instant>
+	<instant group="support" spellid="92" name="Enchant Staff" words="exeta vis" lvl="41" mana="80" prem="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/enchant staff.lua">
+		<vocation name="Master Sorcerer" />
+	</instant>
 	<instant group="attack" spellid="105" name="Fierce Berserk" words="exori gran" lvl="90" mana="340" prem="1" needweapon="1" exhaustion="6000" groupcooldown="2000" needlearn="0" script="attack/fierce berserk.lua">
 		<vocation name="Knight"/>
 		<vocation name="Elite Knight"/>
