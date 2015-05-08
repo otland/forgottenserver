@@ -21,6 +21,7 @@
 #define FS_TASKS_H_A66AC384766041E59DCA059DAB6E1976
 
 #include <condition_variable>
+#include <atomic>
 
 #include "enums.h"
 
@@ -73,8 +74,6 @@ inline Task* createTask(uint32_t expiration, const std::function<void (void)>& f
 class Dispatcher
 {
 	public:
-		Dispatcher();
-
 		void addTask(Task* task, bool push_front = false);
 
 		void start();
@@ -84,15 +83,20 @@ class Dispatcher
 
 	protected:
 		void dispatcherThread();
-
-		void flush();
+		void setState(ThreadState newState) {
+			threadState.store(newState, std::memory_order_relaxed);
+		}
+		
+		ThreadState getState() const {
+			return threadState.load(std::memory_order_relaxed);
+		}
 
 		std::thread thread;
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
 
 		std::list<Task*> taskList;
-		ThreadState threadState;
+		std::atomic<ThreadState> threadState {THREAD_STATE_TERMINATED};
 };
 
 extern Dispatcher g_dispatcher;
