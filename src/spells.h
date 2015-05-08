@@ -267,20 +267,8 @@ class ConjureSpell final : public InstantSpell
 			return false;
 		}
 
-		uint32_t getConjureId() const {
-			return conjureId;
-		}
-		uint32_t getConjureCount() const {
-			return conjureCount;
-		}
-		uint32_t getReagentId() const {
-			return conjureReagentId;
-		}
-
 	protected:
 		std::string getScriptEventName() const final;
-
-		static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount);
 
 		bool conjureItem(Creature* creature) const;
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
@@ -288,7 +276,7 @@ class ConjureSpell final : public InstantSpell
 
 		uint32_t conjureId;
 		uint32_t conjureCount;
-		uint32_t conjureReagentId;
+		uint32_t reagentId;
 };
 
 class RuneSpell final : public Action, public Spell
