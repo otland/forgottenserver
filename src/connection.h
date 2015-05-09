@@ -21,7 +21,6 @@
 #define FS_CONNECTION_H_FC8E1B4392D24D27A2F129D8B93A6348
 
 #include <unordered_set>
-#include <queue>
 
 #include "networkmessage.h"
 
@@ -111,7 +110,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 		void closeSocket();
 
 		void internalSend(OutputMessage_ptr msg);
-		void clearMessageQueue();
 
 		NetworkMessage m_msg;
 
@@ -120,7 +118,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		std::recursive_mutex m_connectionLock;
 
-		std::queue<OutputMessage_ptr> messageQueue;
+		std::list<OutputMessage_ptr> messageQueue;
 
 		ServicePort_ptr m_service_port;
 		Protocol_ptr m_protocol;

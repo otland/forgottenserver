@@ -21,7 +21,6 @@
 #define FS_NETWORKMESSAGE_H_B853CFED58D1413A87ACED07B2926E03
 
 #include "const.h"
-#include <limits>
 
 class Item;
 class Creature;
@@ -32,16 +31,12 @@ class RSA;
 class NetworkMessage
 {
 	public:
-		// non-moveable
-		NetworkMessage(NetworkMessage&&) = delete;
-		NetworkMessage& operator=(NetworkMessage&&) = delete;
 		typedef uint16_t MsgSize_t;
-		static_assert(std::numeric_limits<MsgSize_t>::max() > NETWORKMESSAGE_MAXSIZE, "MsgSize type too small.");
 		// Headers:
 		// 2 bytes for unencrypted message size
 		// 4 bytes for checksum
 		// 2 bytes for encrypted message size
-		static constexpr MsgSize_t INITIAL_BUFFER_POSITION = 8;
+		static const MsgSize_t INITIAL_BUFFER_POSITION = 8;
 		enum { header_length = 2 };
 		enum { crypto_length = 4 };
 		enum { xtea_multiple = 8 };

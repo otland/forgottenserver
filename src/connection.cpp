@@ -264,7 +264,7 @@ void Connection::send(OutputMessage_ptr msg)
 	if (!m_pendingWrite) {
 		internalSend(msg);
 	} else {
-		messageQueue.push(msg);
+		messageQueue.push_back(msg);
 	}
 }
 
@@ -302,15 +302,6 @@ uint32_t Connection::getIP()
 	return htonl(endpoint.address().to_v4().to_ulong());
 }
 
-void Connection::clearMessageQueue()
-{
-	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
-	while (!messageQueue.empty()) {
-		messageQueue.pop();
-	}
-}
-
-
 void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::error_code& error)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
@@ -318,7 +309,7 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 	m_pendingWrite = false;
 
 	if (error) {
-		clearMessageQueue();
+		messageQueue.clear();
 		close();
 	}
 
@@ -330,7 +321,7 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 
 	if (!messageQueue.empty()) {
 		internalSend(std::move(messageQueue.front()));
-		messageQueue.pop();
+		messageQueue.pop_front();
 	}
 }
 
@@ -354,7 +345,7 @@ void Connection::handleWriteTimeout(ConnectionWeak_ptr connectionWeak, const boo
 	}
 
 	if (auto connection = connectionWeak.lock()) {
-		connection->clearMessageQueue();
+		connection->messageQueue.clear();
 		connection->close();
 	}
 }

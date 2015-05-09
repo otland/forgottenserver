@@ -35,9 +35,6 @@ class OutputMessage : public NetworkMessage
 		// non-copyable
 		OutputMessage(const OutputMessage&) = delete;
 		OutputMessage& operator=(const OutputMessage&) = delete;
-		// non-moveable
-		OutputMessage(OutputMessage&&) = delete;
-		OutputMessage& operator=(OutputMessage&&) = delete;
 
 		uint8_t* getOutputBuffer() {
 			return buffer + outputBufferStart;
