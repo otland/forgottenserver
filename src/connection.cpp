@@ -64,7 +64,7 @@ void ConnectionManager::closeAll()
 
 // Connection
 
-void Connection::close()
+void Connection::close(bool forceClose)
 {
 	//any thread
 	ConnectionManager::getInstance().releaseConnection(shared_from_this());
@@ -80,7 +80,7 @@ void Connection::close()
 			createTask(std::bind(&Protocol::release, m_protocol)));
 	}
 	
-	if (!m_pendingWrite) {
+	if (!m_pendingWrite || forceClose) {
 		closeSocket();
 	} else {
 		//will be closed by the destructor
@@ -137,7 +137,7 @@ void Connection::accept()
 			m_logError = false;
 		}
 
-		close();
+		close(FORCE_CLOSE);
 	}
 }
 
@@ -148,7 +148,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 	int32_t size = m_msg.decodeHeader();
 	if (error || size <= 0 || size >= NETWORKMESSAGE_MAXSIZE - 16) {
-		close();
+		close(FORCE_CLOSE);
 	}
 
 	if (m_connectionState != CONNECTION_STATE_OPEN) {
@@ -182,7 +182,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 			m_logError = false;
 		}
 
-		close();
+		close(FORCE_CLOSE);
 	}
 }
 
@@ -192,7 +192,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	m_readTimer.cancel();
 
 	if (error) {
-		close();
+		close(FORCE_CLOSE);
 	}
 
 	if (m_connectionState != CONNECTION_STATE_OPEN) {
@@ -222,7 +222,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			// Game protocol has already been created at this point
 			m_protocol = m_service_port->make_protocol(recvChecksum == checksum, m_msg, shared_from_this());
 			if (!m_protocol) {
-				close();
+				close(FORCE_CLOSE);
 				return;
 			}
 
@@ -250,7 +250,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			m_logError = false;
 		}
 
-		close();
+		close(FORCE_CLOSE);
 	}
 }
 
@@ -310,7 +310,7 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 
 	if (error) {
 		messageQueue.clear();
-		close();
+		close(FORCE_CLOSE);
 	}
 
 	//If someone requested a connection close, we allow all pending OutputMessages to be sent,
@@ -333,7 +333,7 @@ void Connection::handleReadTimeout(ConnectionWeak_ptr connectionWeak, const boos
 	}
 
 	if (auto connection = connectionWeak.lock()) {
-		connection->close();
+		connection->close(FORCE_CLOSE);
 	}
 }
 
@@ -345,7 +345,6 @@ void Connection::handleWriteTimeout(ConnectionWeak_ptr connectionWeak, const boo
 	}
 
 	if (auto connection = connectionWeak.lock()) {
-		connection->messageQueue.clear();
-		connection->close();
+		connection->close(FORCE_CLOSE);
 	}
 }

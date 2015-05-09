@@ -70,6 +70,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 			CONNECTION_STATE_OPEN,
 			CONNECTION_STATE_CLOSED,
 		};
+		
+		enum { FORCE_CLOSE = true};
 
 		Connection(boost::asio::ip::tcp::socket* socket,
 		           boost::asio::io_service& io_service,
@@ -89,7 +91,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		friend class ConnectionManager;
 
-		void close();
+		void close(bool forceClose = false);
 		// Used by protocols that require server to send first
 		void accept(Protocol_ptr protocol);
 		void accept();
