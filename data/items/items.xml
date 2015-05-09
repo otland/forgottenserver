@@ -25642,7 +25642,7 @@
 		<attribute key="weight" value="105" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="absorbPercentPhysical" value="10" />
-		<attribute key="absorbPercentEarth" value="8" />
+		<attribute key="absorbPercentEnergy" value="8" />
 		<attribute key="transformDeEquipTo" value="18408" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="3600" />
