@@ -1448,17 +1448,21 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 			return;
 		}
 
+		const ItemType& itemType = Item::items[item->getID()];
+		if (itemType.isGroundTile()) {
+			if (ground == nullptr) {
+				ground = item;
+				setTileFlags(item);
+			}
+			return;
+		}
+
 		TileItemVector* items = makeItemList();
 		if (items->size() >= 0xFFFF) {
 			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
-		const ItemType& itemType = Item::items[item->getID()];
-		if (itemType.isGroundTile()) {
-			if (ground == nullptr) {
-				ground = item;
-			}
-		} else if (itemType.alwaysOnTop) {
+		if (itemType.alwaysOnTop) {
 			bool isInserted = false;
 			for (ItemVector::iterator it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 				if (Item::items[(*it)->getID()].alwaysOnTopOrder > itemType.alwaysOnTopOrder) {
