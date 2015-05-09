@@ -83,7 +83,7 @@ void Connection::close()
 	if (!m_pendingWrite) {
 		closeSocket();
 	} else {
-		//will be closed by onWriteOperation
+		//will be closed by the destructor
 	}
 }
 
@@ -109,7 +109,6 @@ void Connection::closeSocket()
 
 Connection::~Connection()
 {
-	assert(m_connectionState != CONNECTION_STATE_OPEN); //If this fires, no one closed this Connection and we're being deleted - something went wrong
 	closeSocket();
 }
 
@@ -323,10 +322,9 @@ void Connection::onWriteOperation(OutputMessage_ptr msg, const boost::system::er
 		close();
 	}
 
-	//If someone requested a connection close, we allow all pending outputMessages to be sent,
+	//If someone requested a connection close, we allow all pending OutputMessages to be sent,
 	//unless an error occured during the send operation
 	if ((m_connectionState != CONNECTION_STATE_OPEN && messageQueue.empty()) || error) {
-		closeSocket();
 		return;
 	}
 
