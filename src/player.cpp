@@ -771,7 +771,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 		storageMap[key] = value;
 
 		if (!isLogin) {
-			int64_t currentFrameTime = OTSYS_TIME();
+			auto currentFrameTime = g_dispatcher.getDispatcherCycle();
 			if (lastQuestlogUpdate != currentFrameTime && g_game.quests.isQuestStorage(key, value, oldValue)) {
 				lastQuestlogUpdate = currentFrameTime;
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");

@@ -264,7 +264,7 @@ void Connection::send(OutputMessage_ptr msg)
 	if (!m_pendingWrite) {
 		internalSend(msg);
 	} else {
-		messageQueue.push_back(msg);
+		messageQueue.emplace_back(msg);
 	}
 }
 

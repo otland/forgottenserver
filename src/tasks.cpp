@@ -51,6 +51,7 @@ void Dispatcher::dispatcherThread()
 			taskLockUnique.unlock();
 
 			if (!task->hasExpired()) {
+				++dispatcherCycle;
 				// execute it
 				(*task)();
 
