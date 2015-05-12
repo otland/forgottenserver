@@ -603,22 +603,21 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			}
 		}
 
-		const TileItemVector* items = getItemList();
-		if (items) {
-			if (!hasBitSet(FLAG_IGNOREBLOCKITEM, flags)) {
-				//If the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
-				if (hasFlag(TILESTATE_BLOCKSOLID)) {
-					return RETURNVALUE_NOTENOUGHROOM;
+		if (!hasBitSet(FLAG_IGNOREBLOCKITEM, flags)) {
+			//If the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
+			if (hasFlag(TILESTATE_BLOCKSOLID)) {
+				return RETURNVALUE_NOTENOUGHROOM;
+			}
+		} else {
+			//FLAG_IGNOREBLOCKITEM is set
+			if (ground) {
+				const ItemType& iiType = Item::items[ground->getID()];
+				if (iiType.blockSolid && (!iiType.moveable || ground->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
+					return RETURNVALUE_NOTPOSSIBLE;
 				}
-			} else {
-				//FLAG_IGNOREBLOCKITEM is set
-				if (ground) {
-					const ItemType& iiType = Item::items[ground->getID()];
-					if (iiType.blockSolid && (!iiType.moveable || ground->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
-						return RETURNVALUE_NOTPOSSIBLE;
-					}
-				}
-
+			}
+			
+			if (const auto items = getItemList()) {
 				for (const Item* item : *items) {
 					const ItemType& iiType = Item::items[item->getID()];
 					if (iiType.blockSolid && (!iiType.moveable || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
