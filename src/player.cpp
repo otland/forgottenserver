@@ -4294,8 +4294,9 @@ bool Player::toggleMount(bool mount)
 		}
 
 		const Outfit* playerOutfit = Outfits::getInstance()->getOutfitByLookType(getSex(), defaultOutfit.lookType);
-		if(!playerOutfit)
+		if(!playerOutfit) {
 		    return false;
+		}
 
 		Mount* currentMount = g_game.mounts.getMountByID(currentMountId);
 		if (!currentMount) {
