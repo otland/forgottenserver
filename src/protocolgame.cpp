@@ -2060,7 +2060,7 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, bool ack)
+void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack)
 {
 	NetworkMessage msg;
 
@@ -2070,7 +2070,7 @@ void ProtocolGame::sendTradeItemRequest(const Player* player, const Item* item, 
 		msg.addByte(0x7E);
 	}
 
-	msg.addString(player->getName());
+	msg.addString(traderName);
 
 	if (const Container* tradeContainer = item->getContainer()) {
 		std::list<const Container*> listContainer {tradeContainer};

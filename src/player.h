@@ -563,9 +563,9 @@ class Player final : public Creature, public Cylinder
 		//V.I.P. functions
 		void notifyStatusChange(Player* player, VipStatus_t status);
 		bool removeVIP(uint32_t guid);
-		bool addVIP(uint32_t guid, const std::string& name, VipStatus_t status);
-		bool addVIPInternal(uint32_t guid);
-		bool editVIP(uint32_t _guid, const std::string& description, uint32_t icon, bool notify);
+		bool addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status);
+		bool addVIPInternal(uint32_t vipGuid);
+		bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
 
 		//follow functions
 		bool setFollowCreature(Creature* creature) final;
@@ -1035,9 +1035,9 @@ class Player final : public Creature, public Cylinder
 				client->sendMarketCancelOffer(offer);
 			}
 		}
-		void sendTradeItemRequest(const Player* player, const Item* item, bool ack) const {
+		void sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack) const {
 			if (client) {
-				client->sendTradeItemRequest(player, item, ack);
+				client->sendTradeItemRequest(traderName, item, ack);
 			}
 		}
 		void sendTradeClose() const {
@@ -1137,9 +1137,9 @@ class Player final : public Creature, public Cylinder
 		House* getEditHouse(uint32_t& _windowTextId, uint32_t& _listId);
 		void setEditHouse(House* house, uint32_t listId = 0);
 
-		void learnInstantSpell(const std::string& name);
-		void forgetInstantSpell(const std::string& name);
-		bool hasLearnedInstantSpell(const std::string& name) const;
+		void learnInstantSpell(const std::string& spellName);
+		void forgetInstantSpell(const std::string& spellName);
+		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
 	protected:
 		std::forward_list<Condition*> getMuteConditions() const;

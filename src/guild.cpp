@@ -42,10 +42,10 @@ void Guild::removeMember(Player* player)
 	g_game.updatePlayerHelpers(*player);
 }
 
-GuildRank* Guild::getRankById(uint32_t id)
+GuildRank* Guild::getRankById(uint32_t rankId)
 {
 	for (size_t i = 0; i < ranks.size(); ++i) {
-		if (ranks[i].id == id) {
+		if (ranks[i].id == rankId) {
 			return &ranks[i];
 		}
 	}
@@ -62,7 +62,7 @@ const GuildRank* Guild::getRankByLevel(uint8_t level) const
 	return nullptr;
 }
 
-void Guild::addRank(uint32_t id, const std::string& name, uint8_t level)
+void Guild::addRank(uint32_t rankId, const std::string& rankName, uint8_t level)
 {
-	ranks.emplace_back(id, name, level);
+	ranks.emplace_back(rankId, rankName, level);
 }

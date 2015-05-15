@@ -1248,12 +1248,12 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 	}
 }
 
-void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool force/* = false*/)
+void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, bool force/* = false*/)
 {
 	auto it = conditions.begin(), end = conditions.end();
 	while (it != end) {
 		Condition* condition = *it;
-		if (condition->getType() != type || condition->getId() != id) {
+		if (condition->getType() != type || condition->getId() != conditionId) {
 			++it;
 			continue;
 		}
@@ -1321,10 +1321,10 @@ Condition* Creature::getCondition(ConditionType_t type) const
 	return nullptr;
 }
 
-Condition* Creature::getCondition(ConditionType_t type, ConditionId_t id, uint32_t subId/* = 0*/) const
+Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionId, uint32_t subId/* = 0*/) const
 {
 	for (Condition* condition : conditions) {
-		if (condition->getType() == type && condition->getId() == id && condition->getSubId() == subId) {
+		if (condition->getType() == type && condition->getId() == conditionId && condition->getSubId() == subId) {
 			return condition;
 		}
 	}

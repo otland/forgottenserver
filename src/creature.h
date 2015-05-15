@@ -321,12 +321,12 @@ class Creature : virtual public Thing
 
 		bool addCondition(Condition* condition, bool force = false);
 		bool addCombatCondition(Condition* condition);
-		void removeCondition(ConditionType_t type, ConditionId_t id, bool force = false);
+		void removeCondition(ConditionType_t type, ConditionId_t conditionId, bool force = false);
 		void removeCondition(ConditionType_t type, bool force = false);
 		void removeCondition(Condition* condition, bool force = false);
 		void removeCombatCondition(ConditionType_t type);
 		Condition* getCondition(ConditionType_t type) const;
-		Condition* getCondition(ConditionType_t type, ConditionId_t id, uint32_t subId = 0) const;
+		Condition* getCondition(ConditionType_t type, ConditionId_t conditionId, uint32_t subId = 0) const;
 		void executeConditions(uint32_t interval);
 		bool hasCondition(ConditionType_t type, uint32_t subId = 0) const;
 		virtual bool isImmune(ConditionType_t type) const;

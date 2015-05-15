@@ -99,7 +99,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (talkAction->executeSay(player, talkactionWords, param, type)) {
+		if (talkAction->executeSay(player, param, type)) {
 			return TALKACTION_CONTINUE;
 		} else {
 			return TALKACTION_BREAK;
@@ -136,7 +136,7 @@ std::string TalkAction::getScriptEventName() const
 	return "onSay";
 }
 
-bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
+bool TalkAction::executeSay(Player* player, const std::string& param, SpeakClasses type) const
 {
 	//onSay(player, words, param, type)
 	if (!m_scriptInterface->reserveScriptEnv()) {
