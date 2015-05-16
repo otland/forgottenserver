@@ -42,10 +42,6 @@ class SchedulerTask : public Task
 			return expiration;
 		}
 
-		bool operator<(const SchedulerTask& other) const {
-			return getCycle() > other.getCycle();
-		}
-
 	protected:
 		SchedulerTask(uint32_t delay, const std::function<void (void)>& f) : Task(delay, f) {
 			eventId = 0;
@@ -60,6 +56,12 @@ inline SchedulerTask* createSchedulerTask(uint32_t delay, const std::function<vo
 {
 	return new SchedulerTask(std::max<uint32_t>(delay, SCHEDULER_MINTICKS), f);
 }
+
+struct TaskComparator {
+	bool operator()(const SchedulerTask* lhs, const SchedulerTask* rhs) const {
+		return lhs->getCycle() > rhs->getCycle();
+	}
+};
 
 class Scheduler
 {
@@ -89,7 +91,7 @@ class Scheduler
 		std::condition_variable eventSignal;
 
 		uint32_t lastEventId;
-		std::priority_queue<SchedulerTask*> eventList;
+		std::priority_queue<SchedulerTask*, std::deque<SchedulerTask*>, TaskComparator> eventList;
 		std::unordered_set<uint32_t> eventIds;
 		std::atomic<ThreadState> threadState {THREAD_STATE_TERMINATED};
 };
