@@ -387,10 +387,10 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
 				if (!list.empty()) {
-					const SpectatorVec& cachedList = *it->second;
+					const SpectatorVec& cachedList = it->second;
 					list.insert(cachedList.begin(), cachedList.end());
 				} else {
-					list = *it->second;
+					list = it->second;
 				}
 
 				foundCache = true;
@@ -402,13 +402,13 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
 					if (!list.empty()) {
-						const SpectatorVec& cachedList = *it->second;
+						const SpectatorVec& cachedList = it->second;
 						list.insert(cachedList.begin(), cachedList.end());
 					} else {
-						list = *it->second;
+						list = it->second;
 					}
 				} else {
-					const SpectatorVec& cachedList = *it->second;
+					const SpectatorVec& cachedList = it->second;
 					for (Creature* spectator : cachedList) {
 						if (spectator->getPlayer()) {
 							list.insert(spectator);
@@ -453,9 +453,9 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 
 		if (cacheResult) {
 			if (onlyPlayers) {
-				playersSpectatorCache[centerPos] = std::make_shared<SpectatorVec>(list);
+				playersSpectatorCache[centerPos] = list;
 			} else {
-				spectatorCache[centerPos] = std::make_shared<SpectatorVec>(list);
+				spectatorCache[centerPos] = list;
 			}
 		}
 	}
