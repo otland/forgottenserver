@@ -382,6 +382,7 @@ void Party::updateVocationsList()
 
 	size_t size = vocationIds.size();
 	if (size > 1) {
+		sharedExperienceMultiplier = 1.0f + (static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f);
 	} else {
 		sharedExperienceMultiplier = 1.20f;
 	}
