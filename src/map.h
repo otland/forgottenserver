@@ -76,7 +76,7 @@ class AStarNodes
 		int_fast32_t closedNodes;
 };
 
-typedef std::map<Position, std::shared_ptr<SpectatorVec>> SpectatorCache;
+typedef std::map<Position, SpectatorVec> SpectatorCache;
 
 #define FLOOR_BITS 3
 #define FLOOR_SIZE (1 << FLOOR_BITS)
