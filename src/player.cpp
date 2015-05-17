@@ -1484,6 +1484,17 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 			if (Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED, ticks, 0)) {
 				addCondition(condition);
 			}
+			Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, ticks, 0, false, SPELLGROUP_ATTACK);
+                        if (condition) {
+                                Condition* prevCondition = getCondition(condition->getType(), condition->getId(), condition->getSubId());
+                                if (prevCondition) {
+                                        if (prevCondition->getEndTime() - OTSYS_TIME() < ticks) {
+                                                addCondition(condition);
+                                        }
+                                } else {
+                                    addCondition(condition);
+                                }
+                        }
 		}
 	}
 }
