@@ -93,7 +93,7 @@ class Party
 
 		Player* leader;
 
-		float extraExpRate;
+		float sharedExperienceMultiplier;
 
 		bool sharedExpActive;
 		bool sharedExpEnabled;

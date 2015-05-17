@@ -30,7 +30,7 @@ extern Events* g_events;
 
 Party::Party(Player* leader)
 {
-	extraExpRate = 0.20f;
+	sharedExperienceMultiplier = 1.20f;
 
 	sharedExpActive = false;
 	sharedExpEnabled = false;
@@ -382,9 +382,8 @@ void Party::updateVocationsList()
 
 	size_t size = vocationIds.size();
 	if (size > 1) {
-		extraExpRate = static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f;
 	} else {
-		extraExpRate = 0.20f;
+		sharedExperienceMultiplier = 1.20f;
 	}
 }
 
@@ -418,7 +417,7 @@ bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 
 void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
 {
-	uint32_t shareExperience = static_cast<uint64_t>(std::ceil(((static_cast<double>(experience) / (memberList.size() + 1)) + (static_cast<double>(experience) * extraExpRate))));
+	uint64_t shareExperience = std::ceil((static_cast<double>(experience) * sharedExperienceMultiplier) / (memberList.size() + 1));
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
