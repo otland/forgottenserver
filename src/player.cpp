@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include <bitset>
+
 #include "bed.h"
 #include "chat.h"
 #include "combat.h"
