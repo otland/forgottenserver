@@ -1060,6 +1060,12 @@ void LuaScriptInterface::registerFunctions()
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(m_luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
+	//doCreateParty(cid, invitedPlayer)
+	lua_register(m_luaState, "doCreateParty", LuaScriptInterface::luaDoCreateParty);
+
+	//doJoinParty(lider, invitedPlayer)
+	lua_register(m_luaState, "doJoinParty", LuaScriptInterface::luaDoJoinParty);
+
 #ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
@@ -12472,6 +12478,71 @@ int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoCreateParty(lua_State* L)
+{
+	//doCreateParty(cid, invitedPlayer)
+	Player* player = getPlayer(L, 1);
+
+	if (player){
+		Party* party = player->getParty();
+		if (!party) {
+			party = new Party(player);
+
+			Player* invitedPlayer = getPlayer(L, 2);
+			party->invitePlayer(*invitedPlayer);
+		}
+		else if (party->getLeader() != player) {
+			std::ostringstream ss;
+			ss << player->getName() << " is already in a party.";
+			player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+			lua_pushboolean(L, false);
+		}
+
+	}
+	else{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoJoinParty(lua_State* L)
+{
+	//doJoinParty(lider, invitedPlayer)
+	Player* player = getPlayer(L, 2);
+	if (!player) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+	else{
+		Player* leader = getPlayer(L, 1);
+		if (!leader || !leader->isInviting(player)) {
+			reportErrorFunc("Invite not found");
+			lua_pushboolean(L, false);
+		}
+		else{
+
+			Party* party = leader->getParty();
+			if (!party || party->getLeader() != leader) {
+				reportErrorFunc("Party not found");
+				lua_pushboolean(L, false);
+			}
+			else{
+
+				if (player->getParty()) {
+					player->sendTextMessage(MESSAGE_INFO_DESCR, "You are already in a party.");
+					lua_pushboolean(L, false);
+				}
+				else{
+					party->joinParty(*player);
+				};
+			};
+		};
+	};
 	return 1;
 }
 
