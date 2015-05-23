@@ -102,6 +102,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Users\Eduardo\Desktop\Mortera Test Server\tfs-sdk-2.0\mysql-connector-c\include;C:\Users\Eduardo\Desktop\Mortera Test Server\tfs-sdk-2.0\mpir\include;C:\Users\Eduardo\Desktop\Mortera Test Server\tfs-sdk-2.0\LuaJIT\include;C:\boost_1_56_0\lib32-msvc-12.0;C:\boost_1_56_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -109,6 +110,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\Eduardo\Desktop\Mortera Test Server\tfs-sdk-2.0;C:\Users\Eduardo\Desktop\Mortera Test Server\tfs-sdk-2.0\mysql-connector-c\lib;C:\Users\Eduardo\Desktop\Mortera Test Server\tfs-sdk-2.0\mpir\lib;C:\Users\Eduardo\Desktop\Mortera Test Server\tfs-sdk-2.0\LuaJIT\lib;C:\boost_1_56_0\lib32-msvc-12.0;C:\boost_1_56_0;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

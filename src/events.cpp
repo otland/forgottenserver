@@ -44,6 +44,7 @@ void Events::clear()
 	partyOnJoin = -1;
 	partyOnLeave = -1;
 	partyOnDisband = -1;
+	partyOnShareExperience = -1;
 
 	// Player
 	playerOnBrowseField = -1;
@@ -107,6 +108,8 @@ bool Events::load()
 				partyOnLeave = event;
 			} else if (methodName == "onDisband") {
 				partyOnDisband = event;
+			} else if (methodName == "onShareExperience") {
+				partyOnShareExperience = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
 			}
@@ -337,6 +340,39 @@ bool Events::eventPartyOnDisband(Party* party)
 	return scriptInterface.callFunction(1);
 }
 
+void Events::eventPartyOnShareExperience(Party* party, uint64_t& exp)
+{
+	// Party:onShareExperience(exp) or Party.onShareExperience(self, exp)
+	if (partyOnShareExperience == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnShareExperience] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(partyOnShareExperience, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(partyOnShareExperience);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	lua_pushnumber(L, exp);
+
+	if (scriptInterface.protectedCall(L, 2, 1) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	}
+	else {
+		exp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
+		lua_pop(L, 1);
+	}
+
+	scriptInterface.resetScriptEnv();
+}
 // Player
 bool Events::eventPlayerOnBrowseField(Player* player, const Position& position)
 {

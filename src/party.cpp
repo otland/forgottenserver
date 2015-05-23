@@ -30,8 +30,6 @@ extern Events* g_events;
 
 Party::Party(Player* leader)
 {
-	sharedExperienceMultiplier = 1.20f;
-
 	sharedExpActive = false;
 	sharedExpEnabled = false;
 
@@ -133,7 +131,6 @@ bool Party::leaveParty(Player* player)
 	player->sendTextMessage(MESSAGE_INFO_DESCR, "You have left the party.");
 
 	updateSharedExperience();
-	updateVocationsList();
 
 	clearPlayerPoints(player);
 
@@ -224,7 +221,6 @@ bool Party::joinParty(Player& player)
 
 	player.removePartyInvitation(this);
 	updateSharedExperience();
-	updateVocationsList();
 
 	const std::string& leaderName = leader->getName();
 	ss.str(std::string());
@@ -364,30 +360,6 @@ void Party::updateSharedExperience()
 	}
 }
 
-void Party::updateVocationsList()
-{
-	std::set<uint32_t> vocationIds;
-
-	uint32_t vocationId = leader->getVocation()->getFromVocation();
-	if (vocationId != VOCATION_NONE) {
-		vocationIds.insert(vocationId);
-	}
-
-	for (const Player* member : memberList) {
-		vocationId = member->getVocation()->getFromVocation();
-		if (vocationId != VOCATION_NONE) {
-			vocationIds.insert(vocationId);
-		}
-	}
-
-	size_t size = vocationIds.size();
-	if (size > 1) {
-		sharedExperienceMultiplier = 1.0f + (static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f);
-	} else {
-		sharedExperienceMultiplier = 1.20f;
-	}
-}
-
 bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 {
 	if (!player || leader != player) {
@@ -418,7 +390,9 @@ bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 
 void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
 {
-	uint64_t shareExperience = std::ceil((static_cast<double>(experience) * sharedExperienceMultiplier) / (memberList.size() + 1));
+	uint64_t shareExperience = experience;
+	g_events->eventPartyOnShareExperience(this, shareExperience);
+	
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
