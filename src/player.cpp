@@ -2378,13 +2378,13 @@ void Player::notifyStatusChange(Player* loginPlayer, VipStatus_t status)
 	}
 }
 
-bool Player::removeVIP(uint32_t _guid)
+bool Player::removeVIP(uint32_t vipGuid)
 {
-	if (VIPList.erase(_guid) == 0) {
+	if (VIPList.erase(vipGuid) == 0) {
 		return false;
 	}
 
-	IOLoginData::removeVIPEntry(accountNumber, _guid);
+	IOLoginData::removeVIPEntry(accountNumber, vipGuid);
 	return true;
 }
 
