@@ -147,7 +147,7 @@ class NetworkMessage
 
 		uint8_t* getBodyBuffer() {
 			position = 2;
-			return &buffer[header_length];
+			return buffer + header_length;
 		}
 
 	protected:

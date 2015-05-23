@@ -39,7 +39,7 @@ class OutputMessage : public NetworkMessage
 		OutputMessage& operator=(const OutputMessage&) = delete;
 
 		uint8_t* getOutputBuffer() {
-			return &buffer[outputBufferStart];
+			return buffer + outputBufferStart;
 		}
 
 		void writeMessageLength() {
