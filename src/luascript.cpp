@@ -9085,7 +9085,7 @@ int LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 
 int LuaScriptInterface::luaPlayerCreateParty(lua_State* L)
 {
-	// player:createParty(targetPlayer)
+	// player:createParty(targetPlayer[, joinTargetPlayer = false])
 	Player* player = getUserdata<Player>(L, 1);
 	Player* targetPlayer = getUserdata<Player>(L, 2);
 	if (!player || !targetPlayer) {
@@ -9099,7 +9099,10 @@ int LuaScriptInterface::luaPlayerCreateParty(lua_State* L)
 	if (!partyPlayer && !partyInvitedPlayer) {
 		partyPlayer = new Party(player);
 		partyPlayer->invitePlayer(*targetPlayer);
-		//partyPlayer->joinParty(*targetPlayer);
+		bool joinTargetPlayer = getBoolean(L, 3, false);
+		if (joinTargetPlayer) {
+			partyPlayer->joinParty(*targetPlayer);
+		}
 		pushUserdata<Party>(L, partyPlayer);
 		setMetatable(L, -1, "Party");
 	}
