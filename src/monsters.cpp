@@ -153,7 +153,7 @@ void MonsterType::createLoot(Container* corpse)
 			if (owner->getParty()) {
 				owner->getParty()->broadcastPartyLoot(ss.str());
 			} else {
-				owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+				owner->sendTextMessage(MESSAGE_LOOT, ss.str());
 			}
 		}
 	} else {
@@ -163,7 +163,7 @@ void MonsterType::createLoot(Container* corpse)
 		if (owner->getParty()) {
 			owner->getParty()->broadcastPartyLoot(ss.str());
 		} else {
-			owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+			owner->sendTextMessage(MESSAGE_LOOT, ss.str());
 		}
 	}
 
