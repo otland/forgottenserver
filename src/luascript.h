@@ -229,7 +229,7 @@ class LuaScriptInterface
 
 		static ScriptEnvironment* getScriptEnv() {
 			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 16);
-			return &m_scriptEnv[m_scriptEnvIndex];
+			return m_scriptEnv + m_scriptEnvIndex;
 		}
 
 		static bool reserveScriptEnv() {

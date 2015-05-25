@@ -88,9 +88,9 @@ void RSA::decrypt(char* msg)
 	// m = c^d mod n
 	mpz_powm(m, c, m_d, m_n);
 
-	size_t count = (mpz_sizeinbase(m, 2) + 7)/8;
+	size_t count = (mpz_sizeinbase(m, 2) + 7) / 8;
 	memset(msg, 0, 128 - count);
-	mpz_export(&msg[128 - count], nullptr, 1, 1, 0, 0, m);
+	mpz_export(msg + (128 - count), nullptr, 1, 1, 0, 0, m);
 
 	mpz_clear(c);
 	mpz_clear(m);

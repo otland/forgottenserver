@@ -562,7 +562,7 @@ class Player final : public Creature, public Cylinder
 
 		//V.I.P. functions
 		void notifyStatusChange(Player* player, VipStatus_t status);
-		bool removeVIP(uint32_t guid);
+		bool removeVIP(uint32_t vipGuid);
 		bool addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status);
 		bool addVIPInternal(uint32_t vipGuid);
 		bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
