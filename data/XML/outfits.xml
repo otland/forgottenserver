@@ -44,7 +44,8 @@
 	<outfit type="0" looktype="683" name="Ranger" premium="1" unlocked="0" enabled="1" />
 	<outfit type="0" looktype="694" name="Ceremonial Garb" premium="1" unlocked="0" enabled="1" />
 	<outfit type="0" looktype="696" name="Puppeteer" premium="1" unlocked="0" enabled="1" />
-	<outfit type="0" looktype="698" name="Spirit Caller" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="699" name="Spirit Caller" premium="1" unlocked="0" enabled="1" />
+	<outfit type="0" looktype="724" name="Evoker" premium="1" unlocked="0" enabled="1" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="0" unlocked="1" enabled="1" />
@@ -90,5 +91,6 @@
 	<outfit type="1" looktype="684" name="Ranger" premium="1" unlocked="0" enabled="1" />
 	<outfit type="1" looktype="695" name="Ceremonial Garb" premium="1" unlocked="0" enabled="1" />
 	<outfit type="1" looktype="697" name="Puppeteer" premium="1" unlocked="0" enabled="1" />
-	<outfit type="1" looktype="699" name="Spirit Caller" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="723" name="Spirit Caller" premium="1" unlocked="0" enabled="1" />
+	<outfit type="1" looktype="725" name="Evoker" premium="1" unlocked="0" enabled="1" />
 </outfits>
