@@ -131,6 +131,11 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 		const uint32_t playerId = result->getNumber<uint32_t>("player_id");
 		const uint16_t amount = result->getNumber<uint16_t>("amount");
 		if (result->getNumber<uint16_t>("sale") == 1) {
+			const ItemType& itemType = Item::items[result->getNumber<uint16_t>("itemtype")];
+			if (itemType.id == 0) {
+				continue;
+			}
+
 			Player* player = g_game.getPlayerByGUID(playerId);
 			if (!player) {
 				player = new Player(nullptr);
@@ -138,11 +143,6 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 					delete player;
 					continue;
 				}
-			}
-
-			const ItemType& itemType = Item::items[result->getNumber<uint16_t>("itemtype")];
-			if (itemType.id == 0) {
-				continue;
 			}
 
 			if (itemType.stackable) {
