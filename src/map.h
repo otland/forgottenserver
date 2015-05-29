@@ -20,8 +20,6 @@
 #ifndef FS_MAP_H_E3953D57C058461F856F5221D359DAFA
 #define FS_MAP_H_E3953D57C058461F856F5221D359DAFA
 
-#include <bitset>
-
 #include "position.h"
 #include "item.h"
 #include "fileloader.h"
@@ -48,7 +46,6 @@ struct AStarNode {
 };
 
 #define MAX_NODES 512
-#define GET_NODE_INDEX(a) (a - &nodes[0])
 
 #define MAP_NORMALWALKCOST 10
 #define MAP_DIAGONALWALKCOST 25
@@ -76,7 +73,7 @@ class AStarNodes
 		int_fast32_t closedNodes;
 };
 
-typedef std::map<Position, std::shared_ptr<SpectatorVec>> SpectatorCache;
+typedef std::map<Position, SpectatorVec> SpectatorCache;
 
 #define FLOOR_BITS 3
 #define FLOOR_SIZE (1 << FLOOR_BITS)

@@ -44,7 +44,8 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 	do {
 		bytes = fread(buffer, 1, 32768, file);
 		for (size_t i = 0; i < bytes; ++i) {
-			if (buffer[i] == '\n') {
+			char ch = buffer[i];
+			if (ch == '\n') {
 				if ((index + i) >= offset) {
 					lineOffsetPosition = line.length() - ((index + i) - offset);
 					bytes = 0;
@@ -53,7 +54,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 				++currentLine;
 				line.clear();
 			} else {
-				line.push_back(buffer[i]);
+				line.push_back(ch);
 			}
 		}
 		index += bytes;

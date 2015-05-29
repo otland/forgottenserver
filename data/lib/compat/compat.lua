@@ -978,3 +978,79 @@ function broadcastMessage(message, messageType)
 	Game.broadcastMessage(message, messageType)
 	print("> Broadcasted message: \"" .. message .. "\".")
 end
+
+function doPlayerAddItem(cid, itemid, count, canDropOnMap, subtype)
+	local player = Player(cid)
+	if player == nil then
+		return false
+	end
+
+	local item = player:addItem(itemid, count, canDropOnMap, subtype)
+	if item == nil then
+		return false
+	end
+
+	return item:getUniqueId()
+end
+
+function doAddContainerItem(uid, itemid, subtype)
+	local container = Container(uid)
+	if container == nil then
+		return false
+	end
+
+	return container:addItem(itemid, subtype)
+end
+
+function createConditionObject(type)
+	return Condition(type)
+end
+
+function setCombatArea(combat, area)
+	return combat:setArea(area)
+end
+
+function setCombatCondition(combat, condition)
+	return combat:setCondition(condition)
+end
+
+function setCombatParam(combat, key, value)
+	return combat:setParameter(key, value)
+end
+
+function setConditionParam(condition, key, value)
+	return condition:setParameter(key, value)
+end
+
+function addDamageCondition(condition, rounds, time, value)
+	return condition:addDamage(rounds, time, value)
+end
+
+function addOutfitCondition(condition, lookTypeEx, lookType, lookHead, lookBody, lookLegs, lookFeet)
+	return condition:setOutfit(lookTypeEx, lookType, lookHead, lookBody, lookLegs, lookFeet)
+end
+
+function setCombatCallBack(combat, key, functionName)
+	return combat:setCallback(key, functionName)
+end
+
+function setCombatFormula(combat, type, minA, minB, maxA, maxB)
+	return combat:setFormula(type, minA, minB, maxA, maxB)
+end
+
+function setConditionFormula(condition, minA, minB, maxA, maxB)
+	return condition:setFormula(minA, minB, maxA, maxB)
+end
+
+function doCombat(cid, combat, variant)
+	local creature = Creature(cid)
+	if creature == nil then
+		return false
+	end
+
+	return combat:execute(creature, variant)
+end
+
+function createCombatObject()
+	return Combat()
+end

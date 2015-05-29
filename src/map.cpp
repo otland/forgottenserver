@@ -387,10 +387,10 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
 				if (!list.empty()) {
-					const SpectatorVec& cachedList = *it->second;
+					const SpectatorVec& cachedList = it->second;
 					list.insert(cachedList.begin(), cachedList.end());
 				} else {
-					list = *it->second;
+					list = it->second;
 				}
 
 				foundCache = true;
@@ -402,13 +402,13 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
 					if (!list.empty()) {
-						const SpectatorVec& cachedList = *it->second;
+						const SpectatorVec& cachedList = it->second;
 						list.insert(cachedList.begin(), cachedList.end());
 					} else {
-						list = *it->second;
+						list = it->second;
 					}
 				} else {
-					const SpectatorVec& cachedList = *it->second;
+					const SpectatorVec& cachedList = it->second;
 					for (Creature* spectator : cachedList) {
 						if (spectator->getPlayer()) {
 							list.insert(spectator);
@@ -453,9 +453,9 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 
 		if (cacheResult) {
 			if (onlyPlayers) {
-				playersSpectatorCache[centerPos] = std::make_shared<SpectatorVec>(list);
+				playersSpectatorCache[centerPos] = list;
 			} else {
-				spectatorCache[centerPos] = std::make_shared<SpectatorVec>(list);
+				spectatorCache[centerPos] = list;
 			}
 		}
 	}
@@ -763,7 +763,7 @@ AStarNodes::AStarNodes(uint32_t x, uint32_t y)
 	startNode.x = x;
 	startNode.y = y;
 	startNode.f = 0;
-	nodeTable[(x << 16) | y] = &startNode;
+	nodeTable[(x << 16) | y] = nodes;
 }
 
 AStarNode* AStarNodes::createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f)
@@ -775,7 +775,7 @@ AStarNode* AStarNodes::createOpenNode(AStarNode* parent, uint32_t x, uint32_t y,
 	size_t retNode = curNode++;
 	openNodes[retNode] = true;
 
-	AStarNode* node = &nodes[retNode];
+	AStarNode* node = nodes + retNode;
 	nodeTable[(x << 16) | y] = node;
 	node->parent = parent;
 	node->x = x;
@@ -800,33 +800,25 @@ AStarNode* AStarNodes::getBestNode()
 	}
 
 	if (best_node >= 0) {
-		return &nodes[best_node];
+		return nodes + best_node;
 	}
 	return nullptr;
 }
 
 void AStarNodes::closeNode(AStarNode* node)
 {
-	size_t pos = GET_NODE_INDEX(node);
-	if (pos >= MAX_NODES) {
-		std::cout << "AStarNodes. trying to close node out of range" << std::endl;
-		return;
-	}
-
-	openNodes[pos] = false;
+	size_t index = node - nodes;
+	assert(index < MAX_NODES);
+	openNodes[index] = false;
 	++closedNodes;
 }
 
 void AStarNodes::openNode(AStarNode* node)
 {
-	size_t pos = GET_NODE_INDEX(node);
-	if (pos >= MAX_NODES) {
-		std::cout << "AStarNodes. trying to open node out of range" << std::endl;
-		return;
-	}
-
-	if (!openNodes[pos]) {
-		openNodes[pos] = true;
+	size_t index = node - nodes;
+	assert(index < MAX_NODES);
+	if (!openNodes[index]) {
+		openNodes[index] = true;
 		--closedNodes;
 	}
 }

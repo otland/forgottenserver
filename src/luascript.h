@@ -229,7 +229,7 @@ class LuaScriptInterface
 
 		static ScriptEnvironment* getScriptEnv() {
 			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 16);
-			return &m_scriptEnv[m_scriptEnvIndex];
+			return m_scriptEnv + m_scriptEnvIndex;
 		}
 
 		static bool reserveScriptEnv() {
@@ -434,7 +434,6 @@ class LuaScriptInterface
 		static int luaDoCreateItemEx(lua_State* L);
 		static int luaDoMoveCreature(lua_State* L);
 
-		static int luaDoPlayerAddItem(lua_State* L);
 		static int luaDoTileAddItemEx(lua_State* L);
 		static int luaDoSetCreatureLight(lua_State* L);
 
@@ -457,24 +456,8 @@ class LuaScriptInterface
 		static int luaIsMoveable(lua_State* L);
 		static int luaIsValidUID(lua_State* L);
 
-		//container
-		static int luaDoAddContainerItem(lua_State* L);
-
 		//
-		static int luaCreateCombatObject(lua_State* L);
 		static int luaCreateCombatArea(lua_State* L);
-		static int luaSetCombatArea(lua_State* L);
-		static int luaSetCombatCondition(lua_State* L);
-		static int luaSetCombatParam(lua_State* L);
-		static int luaCreateConditionObject(lua_State* L);
-		static int luaSetConditionParam(lua_State* L);
-		static int luaAddDamageCondition(lua_State* L);
-		static int luaAddOutfitCondition(lua_State* L);
-
-		static int luaSetCombatCallBack(lua_State* L);
-		static int luaSetCombatFormula(lua_State* L);
-		static int luaSetConditionFormula(lua_State* L);
-		static int luaDoCombat(lua_State* L);
 
 		static int luaDoAreaCombatHealth(lua_State* L);
 		static int luaDoTargetCombatHealth(lua_State* L);
