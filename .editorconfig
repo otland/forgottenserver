@@ -1,0 +1,18 @@
+root = true
+
+# General configuration
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[**.{.cpp,.h}]
+# Options not ubiquitous, but useful
+indent_brace_style = K&R
+spaces_around_brackets = none
+
+[.travis.yml]
+indent_style = spaces
+indent_size = 2
