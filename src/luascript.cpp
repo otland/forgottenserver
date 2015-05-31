@@ -2007,7 +2007,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getCharges", LuaScriptInterface::luaItemGetCharges);
 	registerMethod("Item", "getFluidType", LuaScriptInterface::luaItemGetFluidType);
 	registerMethod("Item", "getWeight", LuaScriptInterface::luaItemGetWeight);
-	
+
 	registerMethod("Item", "getSubType", LuaScriptInterface::luaItemGetSubType);
 
 	registerMethod("Item", "getName", LuaScriptInterface::luaItemGetName);

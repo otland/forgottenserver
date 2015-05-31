@@ -81,11 +81,11 @@ class Scheduler
 		void setState(ThreadState newState) {
 			threadState.store(newState, std::memory_order_relaxed);
 		}
-		
+
 		ThreadState getState() const {
 			return threadState.load(std::memory_order_relaxed);
 		}
-		
+
 		std::thread thread;
 		std::mutex eventLock;
 		std::condition_variable eventSignal;

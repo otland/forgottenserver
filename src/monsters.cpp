@@ -139,7 +139,7 @@ void MonsterType::createLoot(Container* corpse)
 						continue;
 					}
 				}
-				
+
 				if (g_game.internalAddItem(corpse, item) != RETURNVALUE_NOERROR) {
 					corpse->internalAddThing(item);
 				}
@@ -283,7 +283,7 @@ bool Monsters::reload()
 {
 	loaded = false;
 
-	scriptInterface.reset(); 
+	scriptInterface.reset();
 
 	return loadFromXml(true);
 }
@@ -1230,7 +1230,7 @@ void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 MonsterType* Monsters::getMonsterType(const std::string& name)
 {
 	auto it = monsters.find(asLowerCaseString(name));
-	
+
 	if (it == monsters.end()) {
 		return nullptr;
 	}

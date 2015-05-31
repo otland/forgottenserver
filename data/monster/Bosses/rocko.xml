@@ -24,7 +24,7 @@
                 </attack>
                 <attack name="physical" interval="2000" chance="20" length="8" spread="0" min="0" max="-411">
                         <attribute key="areaEffect" value="groundshaker"/>
-                </attack>       
+                </attack>
         </attacks>
         <defenses armor="10" defense="18"/>
         <elements>
