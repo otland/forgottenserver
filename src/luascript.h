@@ -434,7 +434,6 @@ class LuaScriptInterface
 		static int luaDoCreateItemEx(lua_State* L);
 		static int luaDoMoveCreature(lua_State* L);
 
-		static int luaDoPlayerAddItem(lua_State* L);
 		static int luaDoTileAddItemEx(lua_State* L);
 		static int luaDoSetCreatureLight(lua_State* L);
 
@@ -456,9 +455,6 @@ class LuaScriptInterface
 		static int luaIsDepot(lua_State* L);
 		static int luaIsMoveable(lua_State* L);
 		static int luaIsValidUID(lua_State* L);
-
-		//container
-		static int luaDoAddContainerItem(lua_State* L);
 
 		//
 		static int luaCreateCombatObject(lua_State* L);

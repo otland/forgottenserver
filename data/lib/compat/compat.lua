@@ -978,3 +978,31 @@ function broadcastMessage(message, messageType)
 	Game.broadcastMessage(message, messageType)
 	print("> Broadcasted message: \"" .. message .. "\".")
 end
+
+function doPlayerAddItem(cid, itemid, count, canDropOnMap, subtype)
+	local player = Player(cid)
+	if player == nil then
+		return false
+	end
+
+	local item = player:addItem(itemid, count, canDropOnMap, subtype)
+	if item == nil then
+		return false
+	end
+
+	return item:getUniqueId()
+end
+
+function doAddContainerItem(uid, itemid, subtype)
+	local container = Container(uid)
+	if container == nil then
+		return false
+	end
+
+	local container = container:addItem(itemid, subtype)
+	if container == nil then
+		return false
+	end
+
+	return container:getUniqueId()
+end

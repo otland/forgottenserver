@@ -45,6 +45,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	item:transform(window) 
+	item:transform(window)
 	return true
 end
