@@ -1187,7 +1187,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				volume = item->getContainer()->capacity();
 			}
 		}
-		
+
 		if (volume != 0) {
 			s << " (Vol:" << volume << ')';
 		}

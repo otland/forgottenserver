@@ -34,7 +34,7 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 					b = b - 1
 					break
 				end
-				
+
 				a = i
 				if amount > i then
 					container = doCreateItemEx(backpack, 1)

@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `houses` (
   KEY `owner` (`owner`),
   KEY `town_id` (`town_id`)
 ) ENGINE=InnoDB;
-  
+
 CREATE TABLE IF NOT EXISTS `house_lists` (
   `house_id` int(11) NOT NULL,
   `listid` int(11) NOT NULL,
