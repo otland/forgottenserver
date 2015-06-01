@@ -1228,20 +1228,20 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 					bool sendUpdateSkills = false;
 					if (offlineTrainingSkill == SKILL_CLUB || offlineTrainingSkill == SKILL_SWORD || offlineTrainingSkill == SKILL_AXE) {
 						float modifier = topVocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (trainingTime / modifier) / 2);
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), g_config.getNumber(ConfigManager::RATE_SKILL) * (trainingTime / modifier) / 2);
 					} else if (offlineTrainingSkill == SKILL_DISTANCE) {
 						float modifier = topVocation->getAttackSpeed() / 1000.f;
-						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), (trainingTime / modifier) / 4);
+						sendUpdateSkills = addOfflineTrainingTries(static_cast<skills_t>(offlineTrainingSkill), g_config.getNumber(ConfigManager::RATE_SKILL) * (trainingTime / modifier) / 4);
 					} else if (offlineTrainingSkill == SKILL_MAGLEVEL) {
 						int32_t gainTicks = topVocation->getManaGainTicks() * 2;
 						if (gainTicks == 0) {
 							gainTicks = 1;
 						}
 
-						addOfflineTrainingTries(SKILL_MAGLEVEL, trainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
+						addOfflineTrainingTries(SKILL_MAGLEVEL, g_config.getNumber(ConfigManager::RATE_MAGIC) * trainingTime * (static_cast<double>(vocation->getManaGainAmount()) / gainTicks));
 					}
 
-					if (addOfflineTrainingTries(SKILL_SHIELD, trainingTime / 4) || sendUpdateSkills) {
+					if (addOfflineTrainingTries(SKILL_SHIELD, g_config.getNumber(ConfigManager::RATE_SKILL) * trainingTime / 4) || sendUpdateSkills) {
 						sendSkills();
 					}
 				}
