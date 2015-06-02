@@ -24,12 +24,12 @@ function Position:moveUpstairs()
 		if not tile then
 			return false
 		end
-		
+
 		local ground = tile:getGround()
 		if not ground or ground:hasProperty(CONST_PROP_BLOCKSOLID) then
 			return false
 		end
-		
+
 		local items = tile:getItems()
 		for i = 1, tile:getItemCount() do
 			local item = items[i]
@@ -40,22 +40,22 @@ function Position:moveUpstairs()
 		end
 		return true
 	end
-	
+
 	local swap = function (lhs, rhs)
 		lhs.x, rhs.x = rhs.x, lhs.x
 		lhs.y, rhs.y = rhs.y, lhs.y
 		lhs.z, rhs.z = rhs.z, lhs.z
 	end
-	
+
 	self.z = self.z - 1
-	
+
 	local defaultPosition = self + Position.directionOffset[DIRECTION_SOUTH]
 	if not isWalkable(defaultPosition) then
 		for direction = DIRECTION_NORTH, DIRECTION_NORTHEAST do
 			if direction == DIRECTION_SOUTH then
 				direction = DIRECTION_WEST
 			end
-			
+
 			local position = self + Position.directionOffset[direction]
 			if isWalkable(position) then
 				swap(self, position)

@@ -616,7 +616,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
-			
+
 			if (const auto items = getItemList()) {
 				for (const Item* item : *items) {
 					const ItemType& iiType = Item::items[item->getID()];

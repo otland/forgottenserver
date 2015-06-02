@@ -104,7 +104,7 @@ ItemType::ItemType()
 	transformToOnUse[PLAYERSEX_MALE] = 0;
 	transformToOnUse[PLAYERSEX_FEMALE] = 0;
 	transformToFree = 0;
-	
+
 	destroyTo = 0;
 
 	levelDoor = 0;

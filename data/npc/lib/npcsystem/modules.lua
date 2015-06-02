@@ -103,7 +103,7 @@ if Modules == nil then
 		if not npcHandler:isFocused(cid) then
 			return false
 		end
-		
+
 		local player = Player(cid)
 		if player:isPremium() or not parameters.premium then
 			if player:hasLearnedSpell(parameters.spellName) then
