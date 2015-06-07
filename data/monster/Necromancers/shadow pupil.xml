@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Shadow Pupil" nameDescription="a shadow pupil" race="blood" experience="410" speed="210" manacost="0">
-	<health now="450" max="450"/>
-	<look type="551" corpse="21254"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="450" max="450" />
+	<look type="551" corpse="21254" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="30" attack="35" poison="90" />
 		<attack name="death" interval="2000" chance="20" range="7" target="1" min="-60" max="-80">
-			<attribute key="shootEffect" value="suddendeath"/>
-			<attribute key="areaEffect" value="smallclouds"/>
-			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 		<attack name="death" interval="2000" chance="15" target="0" radius="3" min="-30" max="-60">
-			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25"/>
+	<defenses armor="25" defense="25" />
 	<elements>
-		<element energyPercent="5"/>
-		<element icePercent="5"/>
-		<element deathPercent="5"/>
-		<element physicalPercent="-5"/>
-		<element firePercent="-5"/>
-		<element holyPercent="-5"/>
+		<element energyPercent="5" />
+		<element icePercent="5" />
+		<element deathPercent="5" />
+		<element physicalPercent="-5" />
+		<element firePercent="-5" />
+		<element holyPercent="-5" />
 	</elements>
 	<immunities>
-		<immunity invisible="1"/>
-		<immunity earth="1"/>
-		<immunity drown="1"/>
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
 	</immunities>
 	<summons maxSummons="4">
-		<summon name="Skeleton" interval="2000" chance="10"/>
+		<summon name="Skeleton" interval="2000" chance="10" />
 		<summon name="Ghost" interval="2000" chance="5" />
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="When I'm finished with you, you'll be a shadow of your former self."/>
+		<voice sentence="When I'm finished with you, you'll be a shadow of your former self." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="64" chance="100000"/><!-- gold coin -->
-		<item id="21246" chance="9130"/><!-- Incantation Notes -->
-		<item id="21243" chance="15000"/><!-- horoscope -->
-		<item id="11237" chance="6920"/><!-- Book of Necromantic Rituals -->
-		<item id="2789" chance="5170"/><!-- brown mushroom -->
-		<item id="21247" chance="4300"/><!-- Pieces of Magic Chalk -->
-		<item id="7589" chance="470"/><!-- Strong Mana Potion -->
-		<item id="2663" chance="580"/><!-- Mystic Turban -->
-		<item id="2195" chance="60"/><!-- boots of haste -->
-		<item id="2423" chance="290"/><!-- clerical mace -->
-		<item id="8900" chance="290"/><!-- Spellbook of enlightenment -->
+		<item id="2148" countmax="64" chance="100000" /><!-- gold coin -->
+		<item id="21246" chance="9130" /><!-- Incantation Notes -->
+		<item id="21243" chance="15000" /><!-- horoscope -->
+		<item id="11237" chance="6920" /><!-- Book of Necromantic Rituals -->
+		<item id="2789" chance="5170" /><!-- brown mushroom -->
+		<item id="21247" chance="4300" /><!-- Pieces of Magic Chalk -->
+		<item id="7589" chance="470" /><!-- Strong Mana Potion -->
+		<item id="2663" chance="580" /><!-- Mystic Turban -->
+		<item id="2195" chance="60" /><!-- boots of haste -->
+		<item id="2423" chance="290" /><!-- clerical mace -->
+		<item id="8900" chance="290" /><!-- Spellbook of enlightenment -->
 	</loot>
 </monster>

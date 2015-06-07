@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Quara Predator" nameDescription="a quara predator" race="blood" experience="1600" speed="280" manacost="0">
-	<health now="2200" max="2200"/>
-	<look type="20" corpse="6067"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="2200" max="2200" />
+	<look type="20" corpse="6067" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
-		<flag staticattack="90"/>
-		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="105"/>
+		<attack name="melee" interval="2000" skill="80" attack="105" />
 	</attacks>
 	<defenses armor="45" defense="45">
 		<defense name="speed" interval="2000" chance="15" speedchange="270" duration="5000">
-			<attribute key="areaEffect" value="greenshimmer"/>
+			<attribute key="areaEffect" value="greenshimmer" />
 		</defense>
 		<defense name="healing" interval="2000" chance="10" min="25" max="75">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="-10"/>
-		<element energyPercent="-25"/>
+		<element earthPercent="-10" />
+		<element energyPercent="-25" />
 	</elements>
 	<immunities>
-		<immunity lifedrain="1"/>
-		<immunity invisible="1"/>
-		<immunity drown="1"/>
-		<immunity fire="1"/>
-		<immunity ice="1"/>
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Rrrah!"/>
-		<voice sentence="Rraaar!"/>
+		<voice sentence="Rrrah!" />
+		<voice sentence="Rraaar!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="28000" /><!-- gold coin -->

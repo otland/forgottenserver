@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Draptor" nameDescription="a draptor" race="blood" experience="2400" speed="282" manacost="0">
-	<health now="3000" max="3000"/>
-	<look type="382" corpse="13316"/>
-	<targetchange interval="5000" chance="8"/>
+	<health now="3000" max="3000" />
+	<look type="382" corpse="13316" />
+	<targetchange interval="5000" chance="8" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="350"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="350" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-1" max="-150"/>
+		<attack name="melee" interval="2000" min="-1" max="-150" />
 		<attack name="energy" interval="3000" chance="30" radius="3" min="-130" max="-310">
-			<attribute key="areaEffect" value="yellowenergy"/>
+			<attribute key="areaEffect" value="yellowenergy" />
 		</attack>
 		<attack name="energy" interval="3000" chance="35" range="7" min="-200" max="-300">
-			<attribute key="shootEffect" value="energy"/>
+			<attribute key="shootEffect" value="energy" />
 		</attack>
 		<attack name="fire" interval="2500" chance="17" length="8" spread="3" min="-70" max="-250">
-			<attribute key="areaEffect" value="firearea"/>
+			<attribute key="areaEffect" value="firearea" />
 		</attack>
 	</attacks>
 	<defenses armor="23" defense="37">
 		<defense name="healing" interval="1000" chance="25" min="57" max="93">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 		<defense name="speed" interval="2000" chance="12" speedchange="457" duration="5000">
-			<attribute key="areaEffect" value="redshimmer"/>
+			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="-10"/>
-		<element earthPercent="-10"/>
+		<element physicalPercent="-10" />
+		<element earthPercent="-10" />
 	</elements>
 	<immunities>
-		<immunity energy="1"/>
-		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
+		<immunity energy="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="90" chance="33750"/><!-- gold coin -->
-		<item id="2148" countmax="60" chance="33750"/><!-- gold coin -->
-		<item id="8867" chance="950"/><!-- dragon robe -->
-		<item id="13296" chance="6650"/><!-- draptor scales -->
-		<item id="7588" chance="3150"/><!-- strong health potion -->
-		<item id="7589" chance="4150"/><!-- strong mana potion -->
+		<item id="2148" countmax="90" chance="33750" /><!-- gold coin -->
+		<item id="2148" countmax="60" chance="33750" /><!-- gold coin -->
+		<item id="8867" chance="950" /><!-- dragon robe -->
+		<item id="13296" chance="6650" /><!-- draptor scales -->
+		<item id="7588" chance="3150" /><!-- strong health potion -->
+		<item id="7589" chance="4150" /><!-- strong mana potion -->
 	</loot>
 </monster>

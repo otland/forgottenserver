@@ -12003,7 +12003,7 @@
 	<item id="7185" article="a" name="small crack in the ice">
 		<attribute key="description" value="This would be a good place to destroy the ice." />
 	</item>
-	<item id="7186" article="a" name="big crack in the ice"/>
+	<item id="7186" article="a" name="big crack in the ice" />
 	<item fromid="7187" toid="7188" article="a" name="raft" />
 	<item id="7189" article="a" name="stone shelf">
 		<attribute key="containerSize" value="6" />

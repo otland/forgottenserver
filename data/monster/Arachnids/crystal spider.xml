@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crystal Spider" nameDescription="a crystal spider" race="undead" experience="900" speed="220" manacost="0">
-	<health now="1250" max="1250"/>
-	<look type="263" corpse="7344"/>
-	<targetchange interval="4000" chance="15"/>
+	<health now="1250" max="1250" />
+	<look type="263" corpse="7344" />
+	<targetchange interval="4000" chance="15" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag staticattack="80"/>
-		<flag lightlevel="0"/>
-		<flag lightcolor="0"/>
-		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-250" poison="160"/>
+		<attack name="melee" interval="2000" min="0" max="-250" poison="160" />
 		<attack name="speed" interval="2000" chance="15" range="7" radius="6" target="0" speedchange="-800" duration="15000">
-			<attribute key="areaEffect" value="poff"/>
+			<attribute key="areaEffect" value="poff" />
 		</attack>
 		<attack name="ice" interval="2000" chance="15" range="7" target="1" min="-50" max="-100">
-			<attribute key="shootEffect" value="ice"/>
-			<attribute key="areaEffect" value="icearea"/>
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="icearea" />
 		</attack>
 		<attack name="speed" interval="2000" chance="20" range="7" target="1" speedchange="-600" duration="10000">
-			<attribute key="shootEffect" value="snowball"/>
+			<attribute key="shootEffect" value="snowball" />
 		</attack>
 	</attacks>
 	<defenses armor="40" defense="40">
 		<defense name="speed" interval="2000" chance="15" speedchange="250" duration="5000">
-			<attribute key="areaEffect" value="redshimmer"/>
+			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="20"/>
-		<element energyPercent="-20"/>
+		<element earthPercent="20" />
+		<element energyPercent="-20" />
 	</elements>
 	<immunities>
-		<immunity fire="1"/>
-		<immunity ice="1"/>
-		<immunity paralyze="1"/>
-		<immunity outfit="1"/>
-		<immunity drunk="1"/>
-		<immunity invisible="1"/>
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Screeech!"/>
+		<voice sentence="Screeech!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000"/><!-- gold coin -->
-		<item id="2148" countmax="92" chance="50000"/><!-- gold coin -->
-		<item id="7589" chance="14810"/><!-- strong mana potion -->
-		<item id="2463" chance="10000"/><!-- plate armor -->
-		<item id="7364" countmax="6" chance="6250"/><!-- sniper arrow -->
-		<item id="2463" chance="5263"/><!-- ice cube -->
-		<item id="2457" chance="4545"/><!-- steel helmet -->
-		<item id="7449" chance="2564"/><!-- crystal sword -->
-		<item id="2125" chance="1730"/><!-- crystal necklace -->
-		<item id="2124" chance="1560"/><!-- crystal ring -->
-		<item id="5879" chance="1950"/><!-- spider silk-->
-		<item id="2169" chance="1587"/><!-- time ring -->
-		<item id="7290" chance="750"/><!-- shard -->
-		<item id="2477" chance="690"/><!-- knight legs -->
-		<item id="2476" chance="540"/><!-- knight armor -->
-		<item id="7902" chance="650"/><!-- glacier mask -->
-		<item id="2171" chance="120"/><!-- platinum amulet -->
-		<item id="7437" chance="130"/><!-- sapphire hammer -->
-		<item id="5801" chance="70"/><!-- jeweled backpack -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="92" chance="50000" /><!-- gold coin -->
+		<item id="7589" chance="14810" /><!-- strong mana potion -->
+		<item id="2463" chance="10000" /><!-- plate armor -->
+		<item id="7364" countmax="6" chance="6250" /><!-- sniper arrow -->
+		<item id="2463" chance="5263" /><!-- ice cube -->
+		<item id="2457" chance="4545" /><!-- steel helmet -->
+		<item id="7449" chance="2564" /><!-- crystal sword -->
+		<item id="2125" chance="1730" /><!-- crystal necklace -->
+		<item id="2124" chance="1560" /><!-- crystal ring -->
+		<item id="5879" chance="1950" /><!-- spider silk-->
+		<item id="2169" chance="1587" /><!-- time ring -->
+		<item id="7290" chance="750" /><!-- shard -->
+		<item id="2477" chance="690" /><!-- knight legs -->
+		<item id="2476" chance="540" /><!-- knight armor -->
+		<item id="7902" chance="650" /><!-- glacier mask -->
+		<item id="2171" chance="120" /><!-- platinum amulet -->
+		<item id="7437" chance="130" /><!-- sapphire hammer -->
+		<item id="5801" chance="70" /><!-- jeweled backpack -->
 	</loot>
 </monster>

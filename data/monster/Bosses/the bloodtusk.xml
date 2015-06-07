@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Bloodtusk" nameDescription="the bloodtuskh" race="blood" experience="300" speed="190" manacost="0">
-	<health now="600" max="600"/>
-	<look type="199" corpse="6074"/>
-	<targetchange interval="5000" chance="8"/>
+	<health now="600" max="600" />
+	<look type="199" corpse="6074" />
+	<targetchange interval="5000" chance="8" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="1"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag staticattack="90"/>
-		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="40"/>
+		<attack name="melee" interval="2000" skill="50" attack="40" />
 	</attacks>
-	<defenses armor="40" defense="57"/>
+	<defenses armor="40" defense="57" />
 	<elements>
-		<element earthPercent="20"/>
-		<element icePercent="20"/>
-		<element physicalPercent="15"/>
-		<element firePercent="-10"/>
+		<element earthPercent="20" />
+		<element icePercent="20" />
+		<element physicalPercent="15" />
+		<element firePercent="-10" />
 	</elements>
 	<immunities>
-		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<loot>
 		<item id="2152" countmax="3" chance="83825" /><!-- platinum coin -->

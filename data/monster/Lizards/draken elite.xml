@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Draken Elite" nameDescription="a draken elite" race="blood" experience="4200" speed="250" manacost="0">
-	<health now="5550" max="5550"/>
-	<look type="362" corpse="12609"/>
-	<targetchange interval="5000" chance="10"/>
+	<health now="5550" max="5550" />
+	<look type="362" corpse="12609" />
+	<targetchange interval="5000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="110" attack="59"/>
+		<attack name="melee" interval="2000" skill="110" attack="59" />
 		<attack name="fire" interval="2000" chance="10" length="4" spread="3" min="-240" max="-550">
-			<attribute key="areaEffect" value="explosion"/>
+			<attribute key="areaEffect" value="explosion" />
 		</attack>
 		<attack name="fire" interval="2000" chance="15" range="7" target="1" min="-200" max="-300">
-			<attribute key="shootEffect" value="fire"/>
-			<attribute key="areaEffect" value="firearea"/>
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
 		</attack>
 		<attack name="earth" interval="2000" chance="15" target="1" radius="4" min="-280" max="-410">
-			<attribute key="areaEffect" value="poff"/>
+			<attribute key="areaEffect" value="poff" />
 		</attack>
-		<attack name="soulfire" interval="2000" chance="10"/>
+		<attack name="soulfire" interval="2000" chance="10" />
 		<attack name="poisoncondition" interval="2000" chance="10" range="7" target="1" min="-250" max="-320">
-			<attribute key="shootEffect" value="poison"/>
+			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>
 	<defenses armor="45" defense="45">
 		<defense name="healing" interval="2000" chance="15" min="510" max="600">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element holyPercent="30"/>
-		<element deathPercent="30"/>
-		<element energyPercent="40"/>
+		<element holyPercent="30" />
+		<element deathPercent="30" />
+		<element energyPercent="40" />
 	</elements>
 	<immunities>
-		<immunity fire="1"/>
-		<immunity earth="1"/>
-		<immunity invisible="1"/>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="For ze emperor!"/>
-		<voice sentence="You will die zhouzandz deazhz!"/>
+		<voice sentence="For ze emperor!" />
+		<voice sentence="You will die zhouzandz deazhz!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
@@ -71,9 +71,9 @@
 		<item id="12646" chance="600" /><!-- draken boots -->
 		<item id="12649" chance="20" /><!-- blade of corruption -->
 		<item id="12630" chance="10" /><!-- cobra crown -->
-		<item id="11302" chance="150"/><!-- zaoan helmet -->
-		<item id="11304" chance="770"/><!-- zaoan legs -->
-		<item id="11301" chance="490"/><!-- zaoan armor -->
+		<item id="11302" chance="150" /><!-- zaoan helmet -->
+		<item id="11304" chance="770" /><!-- zaoan legs -->
+		<item id="11301" chance="490" /><!-- zaoan armor -->
 		<item id="12647" chance="80" /><!-- snake god's wristguard -->
 		<item id="12607" chance="110" /><!-- elite draken mail -->
 	</loot>

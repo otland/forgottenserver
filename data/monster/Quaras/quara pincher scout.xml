@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Quara Pincher Scout" nameDescription="a quara pincher scout" race="blood" experience="600" speed="200" manacost="0">
-	<health now="775" max="775"/>
-	<look type="77" corpse="6063"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="775" max="775" />
+	<look type="77" corpse="6063" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag staticattack="90"/>
-		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="60"/>
+		<attack name="melee" interval="2000" skill="70" attack="60" />
 		<attack name="speed" interval="2000" chance="20" range="1" speedchange="-600" duration="3000">
-			<attribute key="areaEffect" value="redshimmer"/>
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="45" defense="45"/>
+	<defenses armor="45" defense="45" />
 	<immunities>
-		<immunity ice="1"/>
-		<immunity fire="1"/>
-		<immunity lifedrain="1"/>
-		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
+		<immunity ice="1" />
+		<immunity fire="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<elements>
-		<element energyPercent="-10"/>
-		<element physicalPercent="10"/>
+		<element energyPercent="-10" />
+		<element physicalPercent="10" />
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Clank clank!"/>
-		<voice sentence="Clap!"/>
-		<voice sentence="Crrrk! Crrrk!"/>
+		<voice sentence="Clank clank!" />
+		<voice sentence="Clap!" />
+		<voice sentence="Crrrk! Crrrk!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->

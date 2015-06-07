@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lizard Noble" nameDescription="a lizard noble" race="blood" experience="2000" speed="200" manacost="0">
-	<health now="7000" max="7000"/>
-	<look type="115" corpse="6041"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="7000" max="7000" />
+	<look type="115" corpse="6041" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
-		<flag pushable="1"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="4"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="20"/>
+		<attack name="melee" interval="2000" skill="20" attack="20" />
 		<attack name="earth" interval="2000" chance="25" range="7" min="-120" max="-250">
-			<attribute key="shootEffect" value="poison"/>
-			<attribute key="areaEffect" value="poison"/>
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-100">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="healing" interval="2000" chance="50" min="200" max="250">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="90"/>
+		<element firePercent="90" />
 	</elements>
 	<immunities>
-		<immunity invisible="1"/>
-		<immunity earth="1"/>
+		<immunity invisible="1" />
+		<immunity earth="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Where are zhe guardz when you need zhem!"/>
+		<voice sentence="Where are zhe guardz when you need zhem!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="91300" /><!-- gold coin -->
