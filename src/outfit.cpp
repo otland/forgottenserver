@@ -39,14 +39,14 @@ bool Outfits::loadFromXml()
 			continue;
 		}
 
-		if (!(attr = outfitNode.attribute("type"))) {
-			std::cout << "[Warning - Outfits::loadFromXml] Missing outfit type." << std::endl;
+		if (!(attr = outfitNode.attribute("sex"))) {
+			std::cout << "[Warning - Outfits::loadFromXml] Missing outfit sex." << std::endl;
 			continue;
 		}
 
-		uint16_t type = pugi::cast<uint16_t>(attr.value());
-		if (type > PLAYERSEX_LAST) {
-			std::cout << "[Warning - Outfits::loadFromXml] Invalid outfit type " << type << "." << std::endl;
+		std::string sex = attr.as_string();
+		if (sex != "male" || sex != "female") {
+			std::cout << "[Warning - Outfits::loadFromXml] Invalid outfit sex " << sex << "." << std::endl;
 			continue;
 		}
 
@@ -56,7 +56,8 @@ bool Outfits::loadFromXml()
 			continue;
 		}
 
-		outfits[type].emplace_back(
+		uint16_t sexId = sex == "male" ? 1 : 0;
+		outfits[sexId].emplace_back(
 			outfitNode.attribute("name").as_string(),
 			pugi::cast<uint16_t>(lookTypeAttribute.value()),
 			outfitNode.attribute("premium").as_bool(),
