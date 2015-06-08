@@ -304,7 +304,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 							if (isHouseTile && item->isMoveable()) {
 								std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << px << ", y: " << py << ", z: " << pz << "]." << std::endl;
 								delete item;
-								item = nullptr;
 							} else {
 								if (item->getItemCount() <= 0) {
 									item->setItemCount(1);
