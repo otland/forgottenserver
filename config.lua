@@ -79,6 +79,12 @@ rateLoot = 2
 rateMagic = 3
 rateSpawn = 1
 
+-- Offline training rates
+-- NOTE: setting one of them to 0 will disable that skill gain
+offlineTrainingSkill = 1
+offlineTrainingMagic = 1
+offlineTrainingShield = 1
+
 -- Monsters
 deSpawnRange = 2
 deSpawnRadius = 50
