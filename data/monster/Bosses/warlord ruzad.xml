@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Warlord Ruzad" nameDescription="the warlord ruzad" race="blood" experience="1700" speed="270" manacost="0">
-	<health now="1950" max="1950"/>
-	<look type="2" head="20" body="30" legs="40" feet="50" corpse="6008"/>
-	<targetchange interval="2000" chance="10"/>
+	<health now="1950" max="1950" />
+	<look type="2" head="20" body="30" legs="40" feet="50" corpse="6008" />
+	<targetchange interval="2000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="65" attack="80"/>
+		<attack name="melee" interval="2000" skill="65" attack="80" />
 	</attacks>
-	<defenses armor="32" defense="35"/>
+	<defenses armor="32" defense="35" />
 	<immunities>
-		<immunity invisible="1"/>
-		<immunity paralyze="1"/>
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
 	</immunities>
 	<elements>
-		<element firePercent="80"/>
-		<element energyPercent="30"/>
-		<element holyPercent="10"/>
-		<element earthPercent="-10"/>
-		<element deathPercent="-10"/>
+		<element firePercent="80" />
+		<element energyPercent="30" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
 	</elements>
 	<summons maxSummons="3">
-		<summon name="Orc Berserker" interval="2000" chance="30" max="3"/>
+		<summon name="Orc Berserker" interval="2000" chance="30" max="3" />
 	</summons>
 	<loot>
 		<item id="2148" chance="50000" countmax="59" /><!-- gold coin -->

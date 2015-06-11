@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Skunk" nameDescription="a skunk" race="blood" experience="3" speed="120" manacost="200">
-	<health now="20" max="20"/>
-	<look type="106" corpse="6035"/>
-	<targetchange interval="4000" chance="0"/>
+	<health now="20" max="20" />
+	<look type="106" corpse="6035" />
+	<targetchange interval="4000" chance="0" />
 	<flags>
-		<flag summonable="1"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
-		<flag pushable="1"/>
-		<flag canpushitems="0"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="8"/>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="8" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="5"/>
-		<attack name="poison" interval="2000" chance="10" range="1" target="1" min="-1" max="-3"/>
+		<attack name="melee" interval="2000" skill="10" attack="5" />
+		<attack name="poison" interval="2000" chance="10" range="1" target="1" min="-1" max="-3" />
 	</attacks>
-	<defenses armor="5" defense="5"/>
+	<defenses armor="5" defense="5" />
 	<loot>
-		<item id="9114" chance="4910"/><!-- bulb of garlic -->
-		<item id="11191" chance="920"/><!-- skunk tail -->
+		<item id="9114" chance="4910" /><!-- bulb of garlic -->
+		<item id="11191" chance="920" /><!-- skunk tail -->
 	</loot>
 </monster>

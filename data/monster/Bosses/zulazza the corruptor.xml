@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Zulazza the Corruptor" nameDescription="a zulazza the corruptor" race="blood" experience="9800" speed="290" manacost="0">
-	<health now="28000" max="28000"/>
-	<look type="334" corpse="11107"/>
-	<targetchange interval="2000" chance="10"/>
+	<health now="28000" max="28000" />
+	<look type="334" corpse="11107" />
+	<targetchange interval="2000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="80"/>
-		<flag runonhealth="1500"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="1500" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="200" attack="200"/>
+		<attack name="melee" interval="2000" skill="200" attack="200" />
 		<attack name="physical" interval="2000" chance="40" length="8" spread="0" min="-500" max="-800">
-			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 		<attack name="poison" interval="2000" chance="30" radius="3" target="0" min="-300" max="-800">
-			<attribute key="areaEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="manadrain" interval="2000" chance="25" range="7" target="1" min="-50" max="-130">
-			<attribute key="areaEffect" value="greenshimmer"/>
+			<attribute key="areaEffect" value="greenshimmer" />
 		</attack>
 		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-500" duration="20000">
-			<attribute key="areaEffect" value="redshimmer"/>
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
 	<defenses armor="96" defense="119">
 		<defense name="healing" interval="2000" chance="20" min="2000" max="3000">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="20"/>
-		<element holyPercent="20"/>
-		<element deathPercent="30"/>
-		<element earthPercent="70"/>
+		<element icePercent="20" />
+		<element holyPercent="20" />
+		<element deathPercent="30" />
+		<element earthPercent="70" />
 	</elements>
 	<immunities>
-		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
-		<immunity energy="1"/>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity energy="1" />
 	</immunities>
 	<voices interval="2000" chance="10">
-		<voice sentence="I'm Zulazza, and you won't forget me that fazzt."/>
-		<voice sentence="Oh, HE will take revenge on zzizz azzault when you zztep in front of HIZZ fazze!"/>
+		<voice sentence="I'm Zulazza, and you won't forget me that fazzt." />
+		<voice sentence="Oh, HE will take revenge on zzizz azzault when you zztep in front of HIZZ fazze!" />
 	</voices>
 	<loot>
 		<item id="7591" chance="30500" /><!-- great health potion -->

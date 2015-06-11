@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Bandit" nameDescription="a bandit" race="blood" experience="65" speed="180" manacost="450">
-	<health now="245" max="245"/>
-	<look type="129" head="58" body="59" legs="45" feet="114" corpse="20331"/>
-	<targetchange interval="5000" chance="0"/>
+	<health now="245" max="245" />
+	<look type="129" head="58" body="59" legs="45" feet="114" corpse="20331" />
+	<targetchange interval="5000" chance="0" />
 	<flags>
-		<flag summonable="1"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
-		<flag pushable="1"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="25"/>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="25" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="30"/>
+		<attack name="melee" interval="2000" skill="20" attack="30" />
 	</attacks>
-	<defenses armor="15" defense="15"/>
+	<defenses armor="15" defense="15" />
 	<elements>
-		<element physicalPercent="-10"/>
-		<element deathPercent="-5"/>
+		<element physicalPercent="-10" />
+		<element deathPercent="-5" />
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Your money or your life!"/>
-		<voice sentence="Hand me your purse!"/>
+		<voice sentence="Your money or your life!" />
+		<voice sentence="Hand me your purse!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="49000"/><!-- gold coin -->
-		<item id="2386" chance="29900"/><!-- axe -->
-		<item id="2511" chance="16800"/><!-- brass shield -->
-		<item id="2649" chance="15500"/><!-- leather legs -->
-		<item id="2398" chance="10100"/><!-- mace -->
-		<item id="2458" chance="5000"/><!-- chain helmet -->
-		<item id="2465" chance="2500"/><!-- brass armor -->
-		<item id="2459" chance="520"/><!-- iron helmet -->
-		<item id="2685" countmax="2" chance="7630"/><!-- tomatoes -->
+		<item id="2148" countmax="30" chance="49000" /><!-- gold coin -->
+		<item id="2386" chance="29900" /><!-- axe -->
+		<item id="2511" chance="16800" /><!-- brass shield -->
+		<item id="2649" chance="15500" /><!-- leather legs -->
+		<item id="2398" chance="10100" /><!-- mace -->
+		<item id="2458" chance="5000" /><!-- chain helmet -->
+		<item id="2465" chance="2500" /><!-- brass armor -->
+		<item id="2459" chance="520" /><!-- iron helmet -->
+		<item id="2685" countmax="2" chance="7630" /><!-- tomatoes -->
 	</loot>
 </monster>

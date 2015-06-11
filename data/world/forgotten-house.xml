@@ -1,113 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <houses>
-  <house name="Rhyves Flats 14" houseid="1" entryx="167" entryy="361" entryz="6" rent="0" townid="2" size="17"/>
-  <house name="Rhyves Flats 15" houseid="2" entryx="164" entryy="362" entryz="6" rent="0" townid="2" size="19"/>
-  <house name="Rhyves Flats 16" houseid="3" entryx="163" entryy="361" entryz="6" rent="0" townid="2" size="13"/>
-  <house name="Baraganor Boulevard 1" houseid="4" entryx="250" entryy="481" entryz="12" rent="0" townid="3" size="29"/>
-  <house name="Saund Top 1" houseid="5" entryx="229" entryy="560" entryz="5" rent="0" townid="5" size="16"/>
-  <house name="Kazgal Close 1" houseid="6" entryx="233" entryy="481" entryz="12" rent="0" townid="3" size="32"/>
-  <house name="Tower Flat" houseid="7" entryx="131" entryy="352" entryz="4" rent="0" townid="2" size="13"/>
-  <house name="Castle Street 1" houseid="8" entryx="117" entryy="349" entryz="7" rent="0" townid="2" size="29"/>
-  <house name="Seaview 2" houseid="9" entryx="114" entryy="356" entryz="6" rent="0" townid="2" size="42"/>
-  <house name="Seaview 1" houseid="10" entryx="117" entryy="353" entryz="5" rent="0" townid="2" size="29"/>
-  <house name="Hill Hut 1" houseid="11" entryx="129" entryy="363" entryz="6" rent="0" townid="2" size="26"/>
-  <house name="Hill Hut 2" houseid="12" entryx="134" entryy="359" entryz="5" rent="0" townid="2" size="26"/>
-  <house name="Farm Lane 1" houseid="13" entryx="117" entryy="379" entryz="7" rent="0" townid="2" size="20"/>
-  <house name="Farm Lane 2" houseid="14" entryx="116" entryy="391" entryz="7" rent="0" townid="2" size="34"/>
-  <house name="Church Avenue 1" houseid="15" entryx="147" entryy="375" entryz="7" rent="0" townid="2" size="21"/>
-  <house name="Church Avenue 2" houseid="16" entryx="147" entryy="382" entryz="7" rent="0" townid="2" size="21"/>
-  <house name="Church Avenue 3" houseid="17" entryx="151" entryy="400" entryz="7" rent="0" townid="2" size="37"/>
-  <house name="Church Avenue 4" houseid="18" entryx="151" entryy="404" entryz="7" rent="0" townid="2" size="29"/>
-  <house name="Church Avenue 5" houseid="19" entryx="160" entryy="399" entryz="7" rent="0" townid="2" size="19"/>
-  <house name="Church Avenue 7" houseid="20" entryx="162" entryy="404" entryz="7" rent="0" townid="2" size="23"/>
-  <house name="City Walls 1" houseid="23" entryx="115" entryy="414" entryz="7" rent="0" townid="2" size="29"/>
-  <house name="City Walls 2" houseid="24" entryx="115" entryy="414" entryz="6" rent="0" townid="2" size="29"/>
-  <house name="City Walls 3" houseid="25" entryx="193" entryy="362" entryz="7" rent="0" townid="2" size="39"/>
-  <house name="City Walls 4" houseid="26" entryx="193" entryy="362" entryz="6" rent="0" townid="2" size="39"/>
-  <house name="Hilltop 1" houseid="27" entryx="166" entryy="409" entryz="6" rent="0" townid="2" size="31"/>
-  <house name="Hilltop 2" houseid="28" entryx="177" entryy="400" entryz="6" rent="0" townid="2" size="36"/>
-  <house name="Hilltop 3" houseid="29" entryx="178" entryy="412" entryz="6" rent="0" townid="2" size="45"/>
-  <house name="Hilltop Hall" houseid="30" entryx="193" entryy="405" entryz="5" rent="0" townid="2" size="191"/>
-  <house name="Rhyves Flats 1" houseid="31" entryx="166" entryy="365" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 2" houseid="32" entryx="166" entryy="361" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 3" houseid="33" entryx="166" entryy="358" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 4" houseid="34" entryx="171" entryy="364" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 5" houseid="35" entryx="175" entryy="365" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 6" houseid="36" entryx="175" entryy="361" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 7" houseid="37" entryx="175" entryy="357" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 8" houseid="38" entryx="173" entryy="358" entryz="7" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 9" houseid="39" entryx="176" entryy="358" entryz="6" rent="0" townid="2" size="25"/>
-  <house name="Rhyves Flats 10" houseid="40" entryx="175" entryy="361" entryz="6" rent="0" townid="2" size="15"/>
-  <house name="Rhyves Flats 11" houseid="41" entryx="175" entryy="365" entryz="6" rent="0" townid="2" size="13"/>
-  <house name="Rhyves Flats 13" houseid="42" entryx="171" entryy="361" entryz="6" rent="0" townid="2" size="17"/>
-  <house name="Rhyves Flats 12" houseid="43" entryx="171" entryy="361" entryz="6" rent="0" townid="2" size="14"/>
-  <house name="Baraganor Boulevard 2" houseid="44" entryx="260" entryy="471" entryz="12" rent="0" townid="3" size="33"/>
-  <house name="Baraganor Boulevard 3" houseid="45" entryx="266" entryy="471" entryz="12" rent="0" townid="3" size="33"/>
-  <house name="Baraganor Boulevard 4" houseid="46" entryx="268" entryy="469" entryz="12" rent="0" townid="3" size="29"/>
-  <house name="Baraganor Boulevard 5" houseid="47" entryx="268" entryy="463" entryz="12" rent="0" townid="3" size="29"/>
-  <house name="Baraganor Boulevard 6" houseid="48" entryx="268" entryy="457" entryz="12" rent="0" townid="3" size="29"/>
-  <house name="Baraganor Boulevard 7" houseid="49" entryx="266" entryy="454" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Baraganor Boulevard 8" houseid="50" entryx="260" entryy="454" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Kazgal Close 2" houseid="51" entryx="224" entryy="471" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Kazgal Close 3" houseid="52" entryx="218" entryy="471" entryz="12" rent="0" townid="3" size="33"/>
-  <house name="Kazgal Close 4" houseid="53" entryx="215" entryy="469" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Kazgal Close 5" houseid="54" entryx="215" entryy="463" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Kazgal Close6" houseid="55" entryx="215" entryy="457" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Kazgal Close 7" houseid="56" entryx="218" entryy="454" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Kazgal Close 8" houseid="57" entryx="224" entryy="454" entryz="12" rent="0" townid="3" size="34"/>
-  <house name="Hammersmith Hall" houseid="58" entryx="230" entryy="439" entryz="12" rent="0" townid="3" size="203"/>
-  <house name="Varnack's Cavern" houseid="59" entryx="253" entryy="444" entryz="12" rent="0" townid="3" size="224"/>
-  <house name="Saund Street 1" houseid="60" entryx="231" entryy="550" entryz="6" rent="0" townid="5" size="13"/>
-  <house name="Saund Street 2" houseid="61" entryx="226" entryy="550" entryz="6" rent="0" townid="5" size="17"/>
-  <house name="Saund Street 3" houseid="62" entryx="241" entryy="554" entryz="6" rent="0" townid="5" size="13"/>
-  <house name="Saund Street 4" houseid="63" entryx="238" entryy="558" entryz="6" rent="0" townid="0" size="17"/>
-  <house name="Saund Street 5" houseid="64" entryx="241" entryy="558" entryz="6" rent="0" townid="5" size="13"/>
-  <house name="Saund Top 2" houseid="65" entryx="231" entryy="558" entryz="5" rent="0" townid="5" size="17"/>
-  <house name="Saund Top 3" houseid="66" entryx="229" entryy="557" entryz="5" rent="0" townid="5" size="16"/>
-  <house name="Dock Street 1" houseid="67" entryx="430" entryy="238" entryz="6" rent="0" townid="4" size="21"/>
-  <house name="Dock Street 2" houseid="68" entryx="414" entryy="237" entryz="7" rent="0" townid="4" size="23"/>
-  <house name="Dock Street 3" houseid="69" entryx="415" entryy="212" entryz="7" rent="0" townid="4" size="45"/>
-  <house name="Nomad Hill 1" houseid="70" entryx="406" entryy="222" entryz="6" rent="0" townid="4" size="18"/>
-  <house name="Nomad Hill 2" houseid="71" entryx="400" entryy="229" entryz="6" rent="0" townid="4" size="20"/>
-  <house name="Nomad Hill 3" houseid="72" entryx="397" entryy="222" entryz="5" rent="0" townid="4" size="28"/>
-  <house name="Great Hall 1" houseid="73" entryx="436" entryy="208" entryz="6" rent="0" townid="4" size="26"/>
-  <house name="Great Hall 2" houseid="74" entryx="437" entryy="207" entryz="6" rent="0" townid="4" size="30"/>
-  <house name="Tarat Road 1" houseid="75" entryx="434" entryy="195" entryz="7" rent="0" townid="4" size="26"/>
-  <house name="Temple Terrace 1" houseid="76" entryx="478" entryy="190" entryz="7" rent="0" townid="4" size="36"/>
-  <house name="Temple Terrace 2" houseid="77" entryx="482" entryy="183" entryz="7" rent="0" townid="4" size="33"/>
-  <house name="Temple Terrace 3" houseid="78" entryx="492" entryy="176" entryz="6" rent="0" townid="4" size="33"/>
-  <house name="Tarat Road 2" houseid="79" entryx="440" entryy="193" entryz="7" rent="0" townid="4" size="26"/>
-  <house name="Tarat Road 3" houseid="80" entryx="446" entryy="196" entryz="7" rent="0" townid="4" size="35"/>
-  <house name="Tarat Road 4" houseid="81" entryx="451" entryy="192" entryz="7" rent="0" townid="4" size="23"/>
-  <house name="Tarat Road 6" houseid="82" entryx="452" entryy="200" entryz="7" rent="0" townid="4" size="50"/>
-  <house name="Tarat Road 7" houseid="83" entryx="455" entryy="192" entryz="7" rent="0" townid="4" size="16"/>
-  <house name="Tarat Road 8" houseid="84" entryx="461" entryy="200" entryz="7" rent="0" townid="4" size="29"/>
-  <house name="Tarat Road 9" houseid="85" entryx="446" entryy="192" entryz="6" rent="0" townid="4" size="25"/>
-  <house name="Smith Lane 1" houseid="86" entryx="475" entryy="183" entryz="7" rent="0" townid="4" size="26"/>
-  <house name="Smith Lane 2" houseid="87" entryx="475" entryy="175" entryz="7" rent="0" townid="4" size="31"/>
-  <house name="Smith Lane 3" houseid="88" entryx="473" entryy="168" entryz="7" rent="0" townid="0" size="37"/>
-  <house name="Smith Lane 4" houseid="89" entryx="475" entryy="163" entryz="7" rent="0" townid="4" size="29"/>
-  <house name="Smith Lane 5" houseid="90" entryx="475" entryy="158" entryz="7" rent="0" townid="4" size="21"/>
-  <house name="Smith Lane 6" houseid="91" entryx="473" entryy="164" entryz="6" rent="0" townid="0" size="30"/>
-  <house name="Smith Lane 7" houseid="92" entryx="473" entryy="161" entryz="6" rent="0" townid="4" size="30"/>
-  <house name="Smith Lane Shop" houseid="93" entryx="479" entryy="160" entryz="7" rent="0" townid="4" size="37"/>
-  <house name="Snowcapped Street 1" houseid="94" entryx="426" entryy="195" entryz="6" rent="0" townid="4" size="26"/>
-  <house name="Snowcapped Street 2" houseid="95" entryx="425" entryy="192" entryz="6" rent="0" townid="4" size="21"/>
-  <house name="Snowcapped Street 3" houseid="96" entryx="421" entryy="192" entryz="6" rent="0" townid="4" size="21"/>
-  <house name="Wall Flat 1" houseid="97" entryx="439" entryy="183" entryz="7" rent="0" townid="4" size="17"/>
-  <house name="Wall Flat 2" houseid="98" entryx="439" entryy="181" entryz="6" rent="0" townid="4" size="17"/>
-  <house name="Wall Flat 3" houseid="99" entryx="463" entryy="185" entryz="5" rent="0" townid="4" size="32"/>
-  <house name="Wall Flat 4" houseid="100" entryx="461" entryy="155" entryz="6" rent="0" townid="4" size="13"/>
-  <house name="Farm Lane 3" houseid="101" entryx="116" entryy="395" entryz="7" rent="0" townid="2" size="29"/>
-  <house name="Farm Lane 4" houseid="102" entryx="116" entryy="399" entryz="7" rent="0" townid="2" size="35"/>
-  <house name="The Square 1" houseid="103" entryx="127" entryy="406" entryz="7" rent="0" townid="2" size="25"/>
-  <house name="The Square 2 (Shop)" houseid="104" entryx="121" entryy="398" entryz="7" rent="0" townid="2" size="37"/>
-  <house name="Central Hall" houseid="105" entryx="125" entryy="381" entryz="7" rent="0" townid="2" size="209"/>
-  <house name="The Square 3" houseid="106" entryx="136" entryy="380" entryz="7" rent="0" townid="2" size="21"/>
-  <house name="The Square 4 (Shop)" houseid="107" entryx="143" entryy="391" entryz="7" rent="0" townid="2" size="42"/>
-  <house name="Church Avenue 6" houseid="108" entryx="158" entryy="404" entryz="7" rent="0" townid="2" size="24"/>
-  <house name="Castle Street 2" houseid="109" entryx="112" entryy="345" entryz="7" rent="0" townid="2" size="26"/>
-  <house name="Castle Street 3" houseid="110" entryx="116" entryy="341" entryz="7" rent="0" townid="2" size="28"/>
-  <house name="Armory Flat 1" houseid="111" entryx="186" entryy="377" entryz="6" rent="0" townid="2" size="26"/>
-  <house name="Armory Flat 2" houseid="112" entryx="185" entryy="376" entryz="6" rent="0" townid="2" size="24"/>
+  <house name="Rhyves Flats 14" houseid="1" entryx="167" entryy="361" entryz="6" rent="0" townid="2" size="17" />
+  <house name="Rhyves Flats 15" houseid="2" entryx="164" entryy="362" entryz="6" rent="0" townid="2" size="19" />
+  <house name="Rhyves Flats 16" houseid="3" entryx="163" entryy="361" entryz="6" rent="0" townid="2" size="13" />
+  <house name="Baraganor Boulevard 1" houseid="4" entryx="250" entryy="481" entryz="12" rent="0" townid="3" size="29" />
+  <house name="Saund Top 1" houseid="5" entryx="229" entryy="560" entryz="5" rent="0" townid="5" size="16" />
+  <house name="Kazgal Close 1" houseid="6" entryx="233" entryy="481" entryz="12" rent="0" townid="3" size="32" />
+  <house name="Tower Flat" houseid="7" entryx="131" entryy="352" entryz="4" rent="0" townid="2" size="13" />
+  <house name="Castle Street 1" houseid="8" entryx="117" entryy="349" entryz="7" rent="0" townid="2" size="29" />
+  <house name="Seaview 2" houseid="9" entryx="114" entryy="356" entryz="6" rent="0" townid="2" size="42" />
+  <house name="Seaview 1" houseid="10" entryx="117" entryy="353" entryz="5" rent="0" townid="2" size="29" />
+  <house name="Hill Hut 1" houseid="11" entryx="129" entryy="363" entryz="6" rent="0" townid="2" size="26" />
+  <house name="Hill Hut 2" houseid="12" entryx="134" entryy="359" entryz="5" rent="0" townid="2" size="26" />
+  <house name="Farm Lane 1" houseid="13" entryx="117" entryy="379" entryz="7" rent="0" townid="2" size="20" />
+  <house name="Farm Lane 2" houseid="14" entryx="116" entryy="391" entryz="7" rent="0" townid="2" size="34" />
+  <house name="Church Avenue 1" houseid="15" entryx="147" entryy="375" entryz="7" rent="0" townid="2" size="21" />
+  <house name="Church Avenue 2" houseid="16" entryx="147" entryy="382" entryz="7" rent="0" townid="2" size="21" />
+  <house name="Church Avenue 3" houseid="17" entryx="151" entryy="400" entryz="7" rent="0" townid="2" size="37" />
+  <house name="Church Avenue 4" houseid="18" entryx="151" entryy="404" entryz="7" rent="0" townid="2" size="29" />
+  <house name="Church Avenue 5" houseid="19" entryx="160" entryy="399" entryz="7" rent="0" townid="2" size="19" />
+  <house name="Church Avenue 7" houseid="20" entryx="162" entryy="404" entryz="7" rent="0" townid="2" size="23" />
+  <house name="City Walls 1" houseid="23" entryx="115" entryy="414" entryz="7" rent="0" townid="2" size="29" />
+  <house name="City Walls 2" houseid="24" entryx="115" entryy="414" entryz="6" rent="0" townid="2" size="29" />
+  <house name="City Walls 3" houseid="25" entryx="193" entryy="362" entryz="7" rent="0" townid="2" size="39" />
+  <house name="City Walls 4" houseid="26" entryx="193" entryy="362" entryz="6" rent="0" townid="2" size="39" />
+  <house name="Hilltop 1" houseid="27" entryx="166" entryy="409" entryz="6" rent="0" townid="2" size="31" />
+  <house name="Hilltop 2" houseid="28" entryx="177" entryy="400" entryz="6" rent="0" townid="2" size="36" />
+  <house name="Hilltop 3" houseid="29" entryx="178" entryy="412" entryz="6" rent="0" townid="2" size="45" />
+  <house name="Hilltop Hall" houseid="30" entryx="193" entryy="405" entryz="5" rent="0" townid="2" size="191" />
+  <house name="Rhyves Flats 1" houseid="31" entryx="166" entryy="365" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 2" houseid="32" entryx="166" entryy="361" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 3" houseid="33" entryx="166" entryy="358" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 4" houseid="34" entryx="171" entryy="364" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 5" houseid="35" entryx="175" entryy="365" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 6" houseid="36" entryx="175" entryy="361" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 7" houseid="37" entryx="175" entryy="357" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 8" houseid="38" entryx="173" entryy="358" entryz="7" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 9" houseid="39" entryx="176" entryy="358" entryz="6" rent="0" townid="2" size="25" />
+  <house name="Rhyves Flats 10" houseid="40" entryx="175" entryy="361" entryz="6" rent="0" townid="2" size="15" />
+  <house name="Rhyves Flats 11" houseid="41" entryx="175" entryy="365" entryz="6" rent="0" townid="2" size="13" />
+  <house name="Rhyves Flats 13" houseid="42" entryx="171" entryy="361" entryz="6" rent="0" townid="2" size="17" />
+  <house name="Rhyves Flats 12" houseid="43" entryx="171" entryy="361" entryz="6" rent="0" townid="2" size="14" />
+  <house name="Baraganor Boulevard 2" houseid="44" entryx="260" entryy="471" entryz="12" rent="0" townid="3" size="33" />
+  <house name="Baraganor Boulevard 3" houseid="45" entryx="266" entryy="471" entryz="12" rent="0" townid="3" size="33" />
+  <house name="Baraganor Boulevard 4" houseid="46" entryx="268" entryy="469" entryz="12" rent="0" townid="3" size="29" />
+  <house name="Baraganor Boulevard 5" houseid="47" entryx="268" entryy="463" entryz="12" rent="0" townid="3" size="29" />
+  <house name="Baraganor Boulevard 6" houseid="48" entryx="268" entryy="457" entryz="12" rent="0" townid="3" size="29" />
+  <house name="Baraganor Boulevard 7" houseid="49" entryx="266" entryy="454" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Baraganor Boulevard 8" houseid="50" entryx="260" entryy="454" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Kazgal Close 2" houseid="51" entryx="224" entryy="471" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Kazgal Close 3" houseid="52" entryx="218" entryy="471" entryz="12" rent="0" townid="3" size="33" />
+  <house name="Kazgal Close 4" houseid="53" entryx="215" entryy="469" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Kazgal Close 5" houseid="54" entryx="215" entryy="463" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Kazgal Close6" houseid="55" entryx="215" entryy="457" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Kazgal Close 7" houseid="56" entryx="218" entryy="454" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Kazgal Close 8" houseid="57" entryx="224" entryy="454" entryz="12" rent="0" townid="3" size="34" />
+  <house name="Hammersmith Hall" houseid="58" entryx="230" entryy="439" entryz="12" rent="0" townid="3" size="203" />
+  <house name="Varnack's Cavern" houseid="59" entryx="253" entryy="444" entryz="12" rent="0" townid="3" size="224" />
+  <house name="Saund Street 1" houseid="60" entryx="231" entryy="550" entryz="6" rent="0" townid="5" size="13" />
+  <house name="Saund Street 2" houseid="61" entryx="226" entryy="550" entryz="6" rent="0" townid="5" size="17" />
+  <house name="Saund Street 3" houseid="62" entryx="241" entryy="554" entryz="6" rent="0" townid="5" size="13" />
+  <house name="Saund Street 4" houseid="63" entryx="238" entryy="558" entryz="6" rent="0" townid="0" size="17" />
+  <house name="Saund Street 5" houseid="64" entryx="241" entryy="558" entryz="6" rent="0" townid="5" size="13" />
+  <house name="Saund Top 2" houseid="65" entryx="231" entryy="558" entryz="5" rent="0" townid="5" size="17" />
+  <house name="Saund Top 3" houseid="66" entryx="229" entryy="557" entryz="5" rent="0" townid="5" size="16" />
+  <house name="Dock Street 1" houseid="67" entryx="430" entryy="238" entryz="6" rent="0" townid="4" size="21" />
+  <house name="Dock Street 2" houseid="68" entryx="414" entryy="237" entryz="7" rent="0" townid="4" size="23" />
+  <house name="Dock Street 3" houseid="69" entryx="415" entryy="212" entryz="7" rent="0" townid="4" size="45" />
+  <house name="Nomad Hill 1" houseid="70" entryx="406" entryy="222" entryz="6" rent="0" townid="4" size="18" />
+  <house name="Nomad Hill 2" houseid="71" entryx="400" entryy="229" entryz="6" rent="0" townid="4" size="20" />
+  <house name="Nomad Hill 3" houseid="72" entryx="397" entryy="222" entryz="5" rent="0" townid="4" size="28" />
+  <house name="Great Hall 1" houseid="73" entryx="436" entryy="208" entryz="6" rent="0" townid="4" size="26" />
+  <house name="Great Hall 2" houseid="74" entryx="437" entryy="207" entryz="6" rent="0" townid="4" size="30" />
+  <house name="Tarat Road 1" houseid="75" entryx="434" entryy="195" entryz="7" rent="0" townid="4" size="26" />
+  <house name="Temple Terrace 1" houseid="76" entryx="478" entryy="190" entryz="7" rent="0" townid="4" size="36" />
+  <house name="Temple Terrace 2" houseid="77" entryx="482" entryy="183" entryz="7" rent="0" townid="4" size="33" />
+  <house name="Temple Terrace 3" houseid="78" entryx="492" entryy="176" entryz="6" rent="0" townid="4" size="33" />
+  <house name="Tarat Road 2" houseid="79" entryx="440" entryy="193" entryz="7" rent="0" townid="4" size="26" />
+  <house name="Tarat Road 3" houseid="80" entryx="446" entryy="196" entryz="7" rent="0" townid="4" size="35" />
+  <house name="Tarat Road 4" houseid="81" entryx="451" entryy="192" entryz="7" rent="0" townid="4" size="23" />
+  <house name="Tarat Road 6" houseid="82" entryx="452" entryy="200" entryz="7" rent="0" townid="4" size="50" />
+  <house name="Tarat Road 7" houseid="83" entryx="455" entryy="192" entryz="7" rent="0" townid="4" size="16" />
+  <house name="Tarat Road 8" houseid="84" entryx="461" entryy="200" entryz="7" rent="0" townid="4" size="29" />
+  <house name="Tarat Road 9" houseid="85" entryx="446" entryy="192" entryz="6" rent="0" townid="4" size="25" />
+  <house name="Smith Lane 1" houseid="86" entryx="475" entryy="183" entryz="7" rent="0" townid="4" size="26" />
+  <house name="Smith Lane 2" houseid="87" entryx="475" entryy="175" entryz="7" rent="0" townid="4" size="31" />
+  <house name="Smith Lane 3" houseid="88" entryx="473" entryy="168" entryz="7" rent="0" townid="0" size="37" />
+  <house name="Smith Lane 4" houseid="89" entryx="475" entryy="163" entryz="7" rent="0" townid="4" size="29" />
+  <house name="Smith Lane 5" houseid="90" entryx="475" entryy="158" entryz="7" rent="0" townid="4" size="21" />
+  <house name="Smith Lane 6" houseid="91" entryx="473" entryy="164" entryz="6" rent="0" townid="0" size="30" />
+  <house name="Smith Lane 7" houseid="92" entryx="473" entryy="161" entryz="6" rent="0" townid="4" size="30" />
+  <house name="Smith Lane Shop" houseid="93" entryx="479" entryy="160" entryz="7" rent="0" townid="4" size="37" />
+  <house name="Snowcapped Street 1" houseid="94" entryx="426" entryy="195" entryz="6" rent="0" townid="4" size="26" />
+  <house name="Snowcapped Street 2" houseid="95" entryx="425" entryy="192" entryz="6" rent="0" townid="4" size="21" />
+  <house name="Snowcapped Street 3" houseid="96" entryx="421" entryy="192" entryz="6" rent="0" townid="4" size="21" />
+  <house name="Wall Flat 1" houseid="97" entryx="439" entryy="183" entryz="7" rent="0" townid="4" size="17" />
+  <house name="Wall Flat 2" houseid="98" entryx="439" entryy="181" entryz="6" rent="0" townid="4" size="17" />
+  <house name="Wall Flat 3" houseid="99" entryx="463" entryy="185" entryz="5" rent="0" townid="4" size="32" />
+  <house name="Wall Flat 4" houseid="100" entryx="461" entryy="155" entryz="6" rent="0" townid="4" size="13" />
+  <house name="Farm Lane 3" houseid="101" entryx="116" entryy="395" entryz="7" rent="0" townid="2" size="29" />
+  <house name="Farm Lane 4" houseid="102" entryx="116" entryy="399" entryz="7" rent="0" townid="2" size="35" />
+  <house name="The Square 1" houseid="103" entryx="127" entryy="406" entryz="7" rent="0" townid="2" size="25" />
+  <house name="The Square 2 (Shop)" houseid="104" entryx="121" entryy="398" entryz="7" rent="0" townid="2" size="37" />
+  <house name="Central Hall" houseid="105" entryx="125" entryy="381" entryz="7" rent="0" townid="2" size="209" />
+  <house name="The Square 3" houseid="106" entryx="136" entryy="380" entryz="7" rent="0" townid="2" size="21" />
+  <house name="The Square 4 (Shop)" houseid="107" entryx="143" entryy="391" entryz="7" rent="0" townid="2" size="42" />
+  <house name="Church Avenue 6" houseid="108" entryx="158" entryy="404" entryz="7" rent="0" townid="2" size="24" />
+  <house name="Castle Street 2" houseid="109" entryx="112" entryy="345" entryz="7" rent="0" townid="2" size="26" />
+  <house name="Castle Street 3" houseid="110" entryx="116" entryy="341" entryz="7" rent="0" townid="2" size="28" />
+  <house name="Armory Flat 1" houseid="111" entryx="186" entryy="377" entryz="6" rent="0" townid="2" size="26" />
+  <house name="Armory Flat 2" houseid="112" entryx="185" entryy="376" entryz="6" rent="0" townid="2" size="24" />
 </houses>

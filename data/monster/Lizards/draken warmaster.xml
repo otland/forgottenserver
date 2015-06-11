@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Draken Warmaster" nameDescription="a draken warmaster" race="blood" experience="2400" speed="220" manacost="0">
-	<health now="4150" max="4150"/>
-	<look type="334" corpse="11107"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="4150" max="4150" />
+	<look type="334" corpse="11107" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="60"/>
+		<attack name="melee" interval="2000" skill="90" attack="60" />
 		<attack name="fire" interval="2000" chance="10" length="4" spread="3" min="-240" max="-520">
-			<attribute key="areaEffect" value="explosion"/>
+			<attribute key="areaEffect" value="explosion" />
 		</attack>
 	</attacks>
 	<defenses armor="40" defense="40">
 		<defense name="healing" interval="2000" chance="10" min="510" max="600">
-			<attribute key="areaEffect" value="blueshimmer"/>
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="5"/>
-		<element holyPercent="5"/>
-		<element deathPercent="50"/>
-		<element energyPercent="5"/>
-		<element icePercent="-5"/>
+		<element physicalPercent="5" />
+		<element holyPercent="5" />
+		<element deathPercent="50" />
+		<element energyPercent="5" />
+		<element icePercent="-5" />
 	</elements>
 	<immunities>
-		<immunity fire="1"/>
-		<immunity earth="1"/>
-		<immunity invisible="1"/>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Attack aggrezzively! Dezztroy zze intruderzz!"/>
-		<voice sentence="Hizzzzz!"/>
+		<voice sentence="Attack aggrezzively! Dezztroy zze intruderzz!" />
+		<voice sentence="Hizzzzz!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="47000" /><!-- gold coin -->
@@ -56,9 +56,9 @@
 		<item id="2123" chance="180" /><!-- ring of the sky -->
 		<item id="2147" countmax="5" chance="1525" /><!-- small ruby -->
 		<item id="11305" chance="860" /><!-- drakinata -->
-		<item id="11304" chance="960"/><!-- zaoan legs -->
-		<item id="11301" chance="790"/><!-- zaoan armor -->
-		<item id="11321" chance="12010"/><!-- bone shoulderplate -->
-		<item id="11322" chance="7000"/><!-- warmaster's wristguards -->
+		<item id="11304" chance="960" /><!-- zaoan legs -->
+		<item id="11301" chance="790" /><!-- zaoan armor -->
+		<item id="11321" chance="12010" /><!-- bone shoulderplate -->
+		<item id="11322" chance="7000" /><!-- warmaster's wristguards -->
 	</loot>
 </monster>
