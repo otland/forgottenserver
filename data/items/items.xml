@@ -25662,7 +25662,7 @@
 	</item>
 	<item id="18554" name="crystal rubbish" />
 	<item id="18559" article="an" name="adventurer's stone">
-		<attribute key="weight" value="3" />
+		<attribute key="weight" value="30" />
 		<attribute key="description" value="Use it in major temples to travel to the adventurers guild. A replacement is available at temples." />
 	</item>		
 	<item fromid="18560" toid="18579" name="muddy floor" />
