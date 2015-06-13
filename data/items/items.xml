@@ -25661,6 +25661,10 @@
 		<attribute key="description" value="This sword was forged with the enthusiasm and dreams of the Rookgaardians." />
 	</item>
 	<item id="18554" name="crystal rubbish" />
+	<item id="18559" article="an" name="adventurer's stone">
+		<attribute key="weight" value="30" />
+		<attribute key="description" value="Use it in major temples to travel to the adventurers guild. A replacement is available at temples." />
+	</item>		
 	<item fromid="18560" toid="18579" name="muddy floor" />
 	<item fromid="18580" toid="18590" name="swamp">
 		<attribute key="type" value="trashholder" />
@@ -29343,10 +29347,32 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="21558" article="a" name="ghost pacifier" />
+	<item id="21559" article="a" name="monster nest" />
+	<item id="21560" article="a" name="destroyed monster nest">
+        <attribute key="decayTo" value="21559" />
+        <attribute key="duration" value="120" />
+	</item>
+	<item id="21561" article="an" name="ominous mound" />
+	<item id="21562" article="an" name="opened ominous mound">
+        <attribute key="decayTo" value="21561" />
+        <attribute key="duration" value="120" />
+	</item>
 	<item id="21563" article="a" name="charged ghost pacifier">
 		<attribute key="decayTo" value="21558" />
 		<attribute key="duration" value="120" />
 	</item>
+	<item id="21564" article="a" name="flask mushroom fertilizer">
+        <attribute key="weight" value="180" />
+        <attribute key="description" value="It holds a liquid concentrate developed by the gnomes to fertilise mushrooms." />
+	</item>        
+	<item id="21565" article="a" name="gardener mushroom"/>
+	<item id="21566" article="a" name="partially charged lodestone">
+        <attribute key="weight" value="300" />
+	</item>        
+	<item id="21567" article="a" name="magnetic monolith"/>
+	<item id="21568" article="a" name="highly charged lodestone">
+        <attribute key="weight" value="300" />
+	</item>                
 	<item id="21569" name="gnomish supplies">
 		<attribute key="description" value="It contains the clothes of a dwarf." />
 		<attribute key="weight" value="800" />
@@ -29426,6 +29452,10 @@
 	</item>
 	<item id="21708" name="vampire silk slippers">
 		<attribute key="weight" value="1150" />
+	</item>
+	<item id="21713" article="a" name="chargeless monolith">
+        <attribute key="decayTo" value="21567" />
+        <attribute key="duration" value="120" />
 	</item>
 	<item id="21725" article="a" name="furious frock">
 		<attribute key="weight" value="3400" />
