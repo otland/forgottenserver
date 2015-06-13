@@ -29366,7 +29366,7 @@
         <attribute key="description" value="It holds a liquid concentrate developed by the gnomes to fertilise mushrooms." />
 	</item>        
 	<item id="21565" article="a" name="gardener mushroom"/>
-	<item id="21566" article="a" name="partically charged lodestone">
+	<item id="21566" article="a" name="partially charged lodestone">
         <attribute key="weight" value="300" />
 	</item>        
 	<item id="21567" article="a" name="magnetic monolith"/>
