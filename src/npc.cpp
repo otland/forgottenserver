@@ -97,6 +97,7 @@ bool Npc::load()
 
 void Npc::reset()
 {
+	isIdle = true;
 	loaded = false;
 	walkTicks = 1500;
 	floorChange = false;
@@ -110,6 +111,7 @@ void Npc::reset()
 
 	parameters.clear();
 	shopPlayerSet.clear();
+	spectators.clear();
 }
 
 void Npc::reload()
@@ -251,10 +253,13 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (creature->getPlayer()) {
+	} else if (Player* player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
+
+		spectators.insert(player);
+		updateIdleStatus();
 	}
 }
 
@@ -267,10 +272,13 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (creature->getPlayer()) {
+	} else if (Player* player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
+
+		spectators.erase(player);
+		updateIdleStatus();
 	}
 }
 
@@ -282,6 +290,19 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 	if (creature == this || creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureMove(creature, oldPos, newPos);
+		}
+
+		if (creature != this) {
+			Player* player = creature->getPlayer();
+
+			// if player is now in range, add to spectators list, otherwise erase
+			if (player->canSee(position)) {
+				spectators.insert(player);
+			} else {
+				spectators.erase(player);
+			}
+
+			updateIdleStatus();
 		}
 	}
 }
@@ -316,7 +337,7 @@ void Npc::onThink(uint32_t interval)
 		npcEventHandler->onThink();
 	}
 
-	if (getTimeSinceLastMove() >= walkTicks) {
+	if (!isIdle && getTimeSinceLastMove() >= walkTicks) {
 		addEventWalk();
 	}
 }
@@ -381,6 +402,30 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	}
 
 	return getRandomStep(dir);
+}
+
+void Npc::setIdle(bool idle)
+{
+	if (isRemoved() || getHealth() <= 0) {
+		return;
+	}
+
+	isIdle = idle;
+
+	if (!isIdle) {
+		g_game.addCreatureCheck(this);
+	} else {
+		onIdleStatus();
+		Game::removeCreatureCheck(this);
+	}
+}
+
+void Npc::updateIdleStatus()
+{
+	bool status = spectators.empty();
+	if (status != isIdle) {
+		setIdle(status);
+	}
 }
 
 bool Npc::canWalkTo(const Position& fromPos, Direction dir) const

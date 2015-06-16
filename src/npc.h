@@ -24,6 +24,7 @@
 #include "luascript.h"
 
 #include <set>
+#include <unordered_set>
 
 class Npc;
 class Player;
@@ -208,6 +209,12 @@ class Npc final : public Creature
 		}
 		bool getNextStep(Direction& dir, uint32_t& flags) final;
 
+		void setIdle(bool idle);
+		void updateIdleStatus();
+		bool getIdleStatus() const {
+			return isIdle;
+		}
+
 		bool canWalkTo(const Position& fromPos, Direction dir) const;
 		bool getRandomStep(Direction& dir) const;
 
@@ -221,6 +228,7 @@ class Npc final : public Creature
 		std::map<std::string, std::string> parameters;
 
 		std::set<Player*> shopPlayerSet;
+		std::unordered_set<Player*> spectators;
 
 		std::string name;
 		std::string filename;
@@ -239,6 +247,7 @@ class Npc final : public Creature
 		bool attackable;
 		bool ignoreHeight;
 		bool loaded;
+		bool isIdle;
 
 		static NpcScriptInterface* scriptInterface;
 
