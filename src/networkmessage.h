@@ -37,11 +37,11 @@ class NetworkMessage
 		// 4 bytes for checksum
 		// 2 bytes for encrypted message size
 		static const MsgSize_t INITIAL_BUFFER_POSITION = 8;
-		enum { header_length = 2 };
-		enum { crypto_length = 4 };
-		enum { xtea_multiple = 8 };
-		enum { max_body_length = NETWORKMESSAGE_MAXSIZE - header_length - crypto_length - xtea_multiple };
-		enum { max_protocol_body_length = max_body_length - 10 };
+		enum { HEADER_LENGTH = 2 };
+		enum { CRYPTO_LENGTH = 4 };
+		enum { XTEA_MULTIPLE = 8 };
+		enum { MAX_BODY_LENGTH = NETWORKMESSAGE_MAXSIZE - HEADER_LENGTH - CRYPTO_LENGTH - XTEA_MULTIPLE };
+		enum { MAX_PROTOCOL_BODY_LENGTH = MAX_BODY_LENGTH - 10 };
 
 		NetworkMessage() {
 			reset();
@@ -151,12 +151,12 @@ class NetworkMessage
 
 		uint8_t* getBodyBuffer() {
 			position = 2;
-			return buffer + header_length;
+			return buffer + HEADER_LENGTH;
 		}
 
 	protected:
 		inline bool canAdd(size_t size) const {
-			return (size + position) < max_body_length;
+			return (size + position) < MAX_BODY_LENGTH;
 		}
 
 		inline bool canRead(int32_t size) {

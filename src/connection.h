@@ -91,12 +91,12 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		friend class ConnectionManager;
 
-		void close(bool forceClose = false);
+		void close(bool isForced = false);
 		// Used by protocols that require server to send first
 		void accept(Protocol_ptr protocol);
 		void accept();
 
-		void send(OutputMessage_ptr msg);
+		void send(const OutputMessage_ptr& msg);
 
 		uint32_t getIP();
 
@@ -111,7 +111,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		void closeSocket();
 
-		void internalSend(OutputMessage_ptr msg);
+		void internalSend(const OutputMessage_ptr& msg);
 
 		NetworkMessage m_msg;
 

@@ -64,7 +64,7 @@ void ConnectionManager::closeAll()
 
 // Connection
 
-void Connection::close(bool forceClose)
+void Connection::close(bool isForced)
 {
 	//any thread
 	ConnectionManager::getInstance().releaseConnection(shared_from_this());
@@ -80,7 +80,7 @@ void Connection::close(bool forceClose)
 			createTask(std::bind(&Protocol::release, m_protocol)));
 	}
 	
-	if (!m_pendingWrite || forceClose) {
+	if (!m_pendingWrite || isForced) {
 		closeSocket();
 	} else {
 		//will be closed by the destructor
@@ -129,7 +129,7 @@ void Connection::accept()
 
 		// Read size of the first packet
 		boost::asio::async_read(*m_socket,
-		                        boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
+		                        boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
@@ -173,7 +173,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		                                    std::placeholders::_1));
 
 		// Read packet content
-		m_msg.setLength(size + NetworkMessage::header_length);
+		m_msg.setLength(size + NetworkMessage::HEADER_LENGTH);
 		boost::asio::async_read(*m_socket, boost::asio::buffer(m_msg.getBodyBuffer(), size),
 		                        std::bind(&Connection::parsePacket, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
@@ -242,7 +242,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 		// Wait to the next packet
 		boost::asio::async_read(*m_socket,
-		                        boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::header_length),
+		                        boost::asio::buffer(m_msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		if (m_logError) {
@@ -254,7 +254,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 }
 
-void Connection::send(OutputMessage_ptr msg)
+void Connection::send(const OutputMessage_ptr& msg)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(m_connectionLock);
 	if (m_connectionState != CONNECTION_STATE_OPEN) {
@@ -268,7 +268,7 @@ void Connection::send(OutputMessage_ptr msg)
 	}
 }
 
-void Connection::internalSend(OutputMessage_ptr msg)
+void Connection::internalSend(const OutputMessage_ptr& msg)
 {
 	m_protocol->onSendMessage(msg);
 	try {

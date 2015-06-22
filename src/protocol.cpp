@@ -51,7 +51,7 @@ void Protocol::onRecvMessage(NetworkMessage& msg)
 OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 {
 	//dispatcher thread
-	if (m_outputBuffer && NetworkMessage::max_protocol_body_length >= m_outputBuffer->getLength() + size) {
+	if (m_outputBuffer && NetworkMessage::MAX_PROTOCOL_BODY_LENGTH >= m_outputBuffer->getLength() + size) {
 		return m_outputBuffer;
 	} else {
 		m_outputBuffer = OutputMessagePool::getOutputMessage();
