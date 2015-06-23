@@ -6,12 +6,14 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 	local amulet = player:getSlotItem(CONST_SLOT_NECKLACE)
 	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not isInArray({SKULL_RED, SKULL_BLACK}, player:getSkull()) then
 		local isPlayer = false
-		if killer:isPlayer() then
-			isPlayer = true
-		else
-			local master = killer:getMaster()
-			if master and master:isPlayer() then
+		if killer then
+			if killer:isPlayer() then
 				isPlayer = true
+			else
+				local master = killer:getMaster()
+				if master and master:isPlayer() then
+					isPlayer = true
+				end
 			end
 		end
 
