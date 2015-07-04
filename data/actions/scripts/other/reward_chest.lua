@@ -1,11 +1,11 @@
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-    --Reward Chest
+    -- Reward Chest
     if item:getId() == 21584 then
         if player:getExhaustion(REWARD_CHEST.STORAGE) > 0 then
             return player:sendCancelMessage('You need to wait ' .. string.diff(player:getStorageValue(REWARD_CHEST.STORAGE)-os.time()) .. ' before using this chest again.')
         end
         player:updateRewardChest()
-    --Boss Corpse
+    -- Boss Corpse
     elseif item:getActionId() == 21584 then
         local reward = REWARD_CHEST.LOOT[tonumber(item:getAttribute('text'))][player:getGuid()]
         if reward ~= nil then

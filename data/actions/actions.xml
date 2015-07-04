@@ -6,8 +6,8 @@
 	<action uniqueid="30015" script="quests/annihilator.lua" />
 	
 	<!-- Reward Chest System -->
-	<action itemid="21584" script="other/reward_chest.lua"/>
-	<action actionid="21584" script="other/reward_chest.lua"/>
+	<action itemid="21584" script="other/reward_chest.lua" />
+	<action actionid="21584" script="other/reward_chest.lua" />
 
 	<!-- Tools -->
 	<action itemid="2420" script="tools/machete.lua" />

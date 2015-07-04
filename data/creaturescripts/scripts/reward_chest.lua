@@ -1,19 +1,13 @@
 REWARD_CHEST = {
-	BOSSES = {"bibby bloodbath", "chizzoron the distorter", "ferumbras",
-			"furyosa", "gaz'haragoth", "ghazbaran", "hirintror",
-			"jaul", "mad mage", "mawhawk", "morgaroth", "obujos",
-			"ocyakao", "omrafir", "orshabaal", "raging mage",
-			"tanjis", "the mutated pumpkin", "the pale count",
-			"the welter", "tyrn", "white pale", "zulazza the corruptor",
-			"zushuka"},
+	BOSSES = {"bibby bloodbath", "chizzoron the distorter", "ferumbras", "furyosa", "gaz'haragoth", "ghazbaran", "hirintror", "jaul", "mad mage", "mawhawk", "morgaroth", "obujos", "ocyakao", "omrafir", "orshabaal", "raging mage", "tanjis", "the mutated pumpkin", "the pale count", "the welter", "tyrn", "white pale", "zulazza the corruptor", "zushuka"},
 	LOOT = {},			
 	DECAY = {},
 	DEPOT_ID = 99,
 	CONTAINER = 21518,
-	ENCODE = true,			--encode stored rewards on db?
-	EXPIRE = 7*24*60*60, 	--days to erase stored rewards
-	STORAGE = 18394, 		--player storage for chest exhaustion
-	EXHAUST = 5*60, 		--time allowed to use again the chest
+	ENCODE = true,			    -- encode stored rewards on db?
+	EXPIRE = 7 * 24 * 60 * 60, 	-- days to erase stored rewards
+	STORAGE = 18394, 		    -- player storage for chest exhaustion
+	EXHAUST = 5 * 60, 		    -- time allowed to use again the chest
 }
 
 -- Lua 5.1+ base64 v3.0 (c) 2009 by Alex Kloss <alexthkloss@web.de>
@@ -24,28 +18,28 @@ local enc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 
 function string.encode(str)
     return ((str:gsub('.', function(x) 
-        local r,enc='',x:byte()
-        for i=8,1,-1 do r=r..(enc%2^i-enc%2^(i-1)>0 and '1' or '0') end
+        local r, enc = '', x:byte()
+        for i = 8, 1, -1 do r = r .. (enc % 2 ^ i - enc % 2 ^ (i - 1) > 0 and '1' or '0') end
         return r;
     end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
         if (#x < 6) then return '' end
-        local c=0
-        for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
-        return enc:sub(c+1,c+1)
-    end)..({ '', '==', '=' })[#str%3+1])
+        local c = 0
+        for i = 1, 6 do c = c + (x:sub(i, i) == '1' and 2 ^ (6 - i) or 0) end
+        return enc:sub(c + 1, c + 1)
+    end)..({ '', '==', '=' })[#str % 3 + 1])
 end
 
 function string.decode(str)
-    str = string.gsub(str, '[^'.. enc ..'=]', '')
+    str = string.gsub(str, '[^' .. enc .. '=]', '')
     return (str:gsub('.', function(x)
         if (x == '=') then return '' end
-        local r,f='',(enc:find(x)-1)
-        for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
+        local r, f='', (enc:find(x) - 1)
+        for i = 6, 1, -1 do r = r .. (f % 2 ^ i - f % 2 ^ (i - 1) > 0 and '1' or '0') end
         return r;
     end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x)
         if (#x ~= 8) then return '' end
-        local c=0
-        for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
+        local c = 0
+        for i = 1, 8 do c = c + (x:sub(i, i) == '1' and 2 ^ (8 - i) or 0) end
         return string.char(c)
     end))
 end
