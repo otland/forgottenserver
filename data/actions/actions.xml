@@ -4,6 +4,10 @@
 	<action itemid="1740" script="quests/quests.lua" />
 	<action fromid="1747" toid="1749" script="quests/quests.lua" />
 	<action uniqueid="30015" script="quests/annihilator.lua" />
+	
+	<!-- Reward Chest System -->
+	<action itemid="21584" script="other/reward_chest.lua"/>
+	<action actionid="21584" script="other/reward_chest.lua"/>
 
 	<!-- Tools -->
 	<action itemid="2420" script="tools/machete.lua" />
