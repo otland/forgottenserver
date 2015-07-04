@@ -26,6 +26,7 @@ DepotChest::DepotChest(uint16_t _type) :
 	Container(_type)
 {
 	maxDepotItems = 1500;
+	depotId = 0;
 }
 
 ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count,
@@ -55,6 +56,10 @@ ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t cou
 		if (getItemHoldingCount() + addCount > maxDepotItems) {
 			return RETURNVALUE_DEPOTISFULL;
 		}
+	}
+
+	if (actor != nullptr && getDepotId() == REWARD_CHEST_DEPOT) {
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	return Container::queryAdd(index, thing, count, flags, actor);

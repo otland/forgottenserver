@@ -298,7 +298,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (!item->isPickupable()) {
+	if (item->getID() != 21518 && !item->isPickupable()) {
 		return RETURNVALUE_CANNOTPICKUP;
 	}
 
