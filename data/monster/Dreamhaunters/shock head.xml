@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Shock Head" nameDescription="Shock Head" race="blood" experience="4700" speed="250" manacost="0">
-	<health now="5800" max="5800"/>
-	<look type="579" corpse="22392"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="5800" max="5800" />
+	<look type="579" corpse="22392" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="1"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="80"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="100" attack="145"/>
+		<attack name="melee" interval="2000" skill="100" attack="145" />
 		<attack name="death" interval="2000" chance="15" length="5" spread="2" target="1" min="-200" max="-300">
-			<attribute key="areaEffect" value="blacksmoke"/>
+			<attribute key="areaEffect" value="blacksmoke" />
 		</attack>
 		<attack name="speed" interval="2000" chance="15" length="8" spread="3" target="1" speedchange="-800" duration="7500">
-			<attribute key="areaEffect" value="purpleenergy"/>
+			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
 		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="0" max="-350">
-			<attribute key="shootEffect" value="earth"/>
-			<attribute key="areaEffect" value="stones"/>
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="stones" />
 		</attack>
-		<attack name="shock head skill reducer 1" range="5" interval="2000" chance="5"/>
-		<attack name="shock head skill reducer 2" interval="2000" chance="5"/>
+		<attack name="shock head skill reducer 1" range="5" interval="2000" chance="5" />
+		<attack name="shock head skill reducer 2" interval="2000" chance="5" />
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="15" min="250" max="350">
-			<attribute key="areaEffect" value="insects"/>
+			<attribute key="areaEffect" value="insects" />
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="-5"/>
-		<element deathPercent="30"/>
-		<element energyPercent="30"/>
-		<element icePercent="5"/>
+		<element physicalPercent="-5" />
+		<element deathPercent="30" />
+		<element energyPercent="30" />
+		<element icePercent="5" />
 	</elements>
 	<immunities>
-		<immunity earth="1"/>
-		<immunity fire="1"/>
-		<immunity paralyze="1"/>
-		<immunity invisible="1"/>
+		<immunity earth="1" />
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="&lt;brrzz&gt;"/>
-		<voice sentence="Thun... Thun... THUNDER!"/>
+		<voice sentence="&lt;brrzz&gt;" />
+		<voice sentence="Thun... Thun... THUNDER!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="43000"/><!-- gold coin -->
-		<item id="2148" countmax="87" chance="50000"/><!-- gold coin -->
-		<item id="2146" chance="5000"/><!-- small sapphire -->
-		<item id="2498" chance="270"/><!-- royal helmet -->
-		<item id="22539" chance="10000"/><!-- goosebump leather -->
+		<item id="2148" countmax="100" chance="43000" /><!-- gold coin -->
+		<item id="2148" countmax="87" chance="50000" /><!-- gold coin -->
+		<item id="2146" chance="5000" /><!-- small sapphire -->
+		<item id="2498" chance="270" /><!-- royal helmet -->
+		<item id="22539" chance="10000" /><!-- goosebump leather -->
 	</loot>
 </monster>

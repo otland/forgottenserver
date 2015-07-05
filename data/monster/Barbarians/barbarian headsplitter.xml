@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Barbarian Headsplitter" nameDescription="a barbarian headsplitter" race="blood" experience="85" speed="200" manacost="450">
-	<health now="100" max="100"/>
-	<look type="253" head="115" body="105" legs="119" feet="132" corpse="20343"/>
-	<targetchange interval="60000" chance="0"/>
+	<health now="100" max="100" />
+	<look type="253" head="115" body="105" legs="119" feet="132" corpse="20343" />
+	<targetchange interval="60000" chance="0" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="1"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag staticattack="70"/>
-		<flag lightlevel="0"/>
-		<flag lightcolor="0"/>
-		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="70" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="20"/>
+		<attack name="melee" interval="2000" skill="40" attack="20" />
 		<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1" min="0" max="-60">
-			<attribute key="shootEffect" value="whirlwindaxe"/>
+			<attribute key="shootEffect" value="whirlwindaxe" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15"/>
+	<defenses armor="15" defense="15" />
 	<elements>
-		<element icePercent="50"/>
-		<element holyPercent="10"/>
-		<element energyPercent="20"/>
-		<element earthPercent="-10"/>
-		<element deathPercent="-1"/>
+		<element icePercent="50" />
+		<element holyPercent="10" />
+		<element energyPercent="20" />
+		<element earthPercent="-10" />
+		<element deathPercent="-1" />
 	</elements>
 	<immunities>
-		<immunity paralyze="1"/>
-		<immunity drunk="1"/>
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="I will regain my honor with your blood!"/>
-		<voice sentence="Surrender is not option!"/>
-		<voice sentence="Its you or me!"/>
-		<voice sentence="Die! Die! Die!"/>
+		<voice sentence="I will regain my honor with your blood!" />
+		<voice sentence="Surrender is not option!" />
+		<voice sentence="Its you or me!" />
+		<voice sentence="Die! Die! Die!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="60000"/><!-- gold coin -->
-		<item id="2050" chance="61500"/><!-- torch -->
-		<item id="2403" chance="15500"/><!-- knife -->
-		<item id="2460" chance="20360"/><!-- brass helmet -->
-		<item id="2483" chance="4090"/><!-- scale armor -->
-		<item id="2473" chance="5080"/><!-- viking helmet -->
-		<item id="2320" chance="3270"/><!-- skull -->
-		<item id="5913" chance="950"/><!-- brown piece of cloth -->
-		<item id="7618" chance="560"/><!-- health potion -->
-		<item id="2168" chance="230"/><!-- life ring-->
-		<item id="7461" chance="110"/><!-- krimhorn helmet -->
-		<item id="7457" chance="100"/><!-- fur boots -->
+		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
+		<item id="2050" chance="61500" /><!-- torch -->
+		<item id="2403" chance="15500" /><!-- knife -->
+		<item id="2460" chance="20360" /><!-- brass helmet -->
+		<item id="2483" chance="4090" /><!-- scale armor -->
+		<item id="2473" chance="5080" /><!-- viking helmet -->
+		<item id="2320" chance="3270" /><!-- skull -->
+		<item id="5913" chance="950" /><!-- brown piece of cloth -->
+		<item id="7618" chance="560" /><!-- health potion -->
+		<item id="2168" chance="230" /><!-- life ring-->
+		<item id="7461" chance="110" /><!-- krimhorn helmet -->
+		<item id="7457" chance="100" /><!-- fur boots -->
 	</loot>
 </monster>

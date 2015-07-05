@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Chakoya Tribewarden" nameDescription="a chakoya tribewarden" race="blood" experience="40" speed="200" manacost="305">
-	<health now="68" max="68"/>
-	<look type="259" corpse="7320"/>
-	<targetchange interval="60000" chance="0"/>
+	<health now="68" max="68" />
+	<look type="259" corpse="7320" />
+	<targetchange interval="60000" chance="0" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="1"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag staticattack="80"/>
-		<flag lightlevel="0"/>
-		<flag lightcolor="0"/>
-		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="20"/>
+		<attack name="melee" interval="2000" skill="20" attack="20" />
 	</attacks>
-	<defenses armor="10" defense="10"/>
+	<defenses armor="10" defense="10" />
 	<elements>
-		<element firePercent="25"/>
-		<element holyPercent="10"/>
-		<element energyPercent="-15"/>
-		<element deathPercent="-5"/>
+		<element firePercent="25" />
+		<element holyPercent="10" />
+		<element energyPercent="-15" />
+		<element deathPercent="-5" />
 	</elements>
 	<immunities>
-		<immunity ice="1"/>
+		<immunity ice="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Quisavu tukavi!"/>
-		<voice sentence="Si siyoqua jamjam!"/>
-		<voice sentence="Achuq! jinuma!"/>
-		<voice sentence="Si ji jusipa!"/>
+		<voice sentence="Quisavu tukavi!" />
+		<voice sentence="Si siyoqua jamjam!" />
+		<voice sentence="Achuq! jinuma!" />
+		<voice sentence="Si ji jusipa!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="60000"/><!-- gold coin -->
-		<item id="2667" chance="20000"/><!-- fish -->
-		<item id="2541" chance="1000"/><!-- bone shield -->
-		<item id="7381" chance="300"/><!-- mammoth whopper -->
-		<item id="7158" chance="130"/><!-- rainbow trout -->
-		<item id="7159" chance="190"/><!-- green perch -->
-		<item id="2669" chance="90"/><!-- northern pike -->
-		<item id="2406" chance="4680"/><!-- short sword -->
+		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
+		<item id="2667" chance="20000" /><!-- fish -->
+		<item id="2541" chance="1000" /><!-- bone shield -->
+		<item id="7381" chance="300" /><!-- mammoth whopper -->
+		<item id="7158" chance="130" /><!-- rainbow trout -->
+		<item id="7159" chance="190" /><!-- green perch -->
+		<item id="2669" chance="90" /><!-- northern pike -->
+		<item id="2406" chance="4680" /><!-- short sword -->
 	</loot>
 </monster>

@@ -88,3 +88,15 @@ function Player.addSkillTries(...)
 	APPLY_SKILL_MULTIPLIER = true
 	return ret
 end
+
+function Player.setExhaustion(self, value, time)
+    return self:setStorageValue(value, time + os.time())
+end
+
+function Player.getExhaustion(self, value)
+    local storage = self:getStorageValue(value)
+    if storage <= 0 then
+        return 0
+    end
+    return storage - os.time()
+end

@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lizard Legionnaire" nameDescription="a lizard legionnaire" race="blood" experience="1100" speed="230" manacost="0">
-	<health now="1400" max="1400"/>
-	<look type="338" corpse="11276"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="1400" max="1400" />
+	<look type="338" corpse="11276" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="4"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="10"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="60"/>
+		<attack name="melee" interval="2000" skill="50" attack="60" />
 		<attack name="physical" interval="2000" chance="40" range="7" target="1" min="0" max="-200">
-			<attribute key="shootEffect" value="spear"/>
+			<attribute key="shootEffect" value="spear" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25"/>
+	<defenses armor="25" defense="25" />
 	<elements>
-		<element firePercent="45"/>
-		<element icePercent="-10"/>
+		<element firePercent="45" />
+		<element icePercent="-10" />
 	</elements>
 	<immunities>
-		<immunity earth="1"/>
-		<immunity invisible="1"/>
+		<immunity earth="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Tssss!"/>
+		<voice sentence="Tssss!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
@@ -49,6 +49,6 @@
 		<item id="2145" countmax="2" chance="1001" /><!-- small diamond -->
 		<item id="11303" chance="460" /><!-- zaoan shoes -->
 		<item id="11336" chance="20" /><!-- lizard trophy -->
-		<item id="11301" chance="70"/><!-- zaoan armor -->
+		<item id="11301" chance="70" /><!-- zaoan armor -->
 	</loot>
 </monster>

@@ -47,6 +47,10 @@ class DepotLocker final : public Container
 			this->depotId = depotId;
 		}
 
+		void setMaxLockerItems(uint32_t maxitems) {
+			maxSize = maxitems;
+		}
+
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature* actor = nullptr) const final;

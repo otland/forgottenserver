@@ -27,6 +27,14 @@ class DepotChest final : public Container
 	public:
 		explicit DepotChest(uint16_t _type);
 
+		uint32_t getDepotId() const {
+			return depotId;
+		}
+
+		void setDepotId(uint32_t id) {
+			depotId = id;
+		}
+
 		//serialization
 		void setMaxDepotItems(uint32_t maxitems) {
 			maxDepotItems = maxitems;
@@ -51,6 +59,7 @@ class DepotChest final : public Container
 
 	private:
 		uint32_t maxDepotItems;
+		uint32_t depotId;
 };
 
 #endif

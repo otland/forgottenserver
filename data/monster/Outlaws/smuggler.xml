@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Smuggler" nameDescription="a smuggler" race="blood" experience="48" speed="170" manacost="390">
-	<health now="130" max="130"/>
-	<look type="134" head="95" body="0" legs="113" feet="115" corpse="20507"/>
-	<targetchange interval="4000" chance="10"/>
+	<health now="130" max="130" />
+	<look type="134" head="95" body="0" legs="113" feet="115" corpse="20507" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="1"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="15"/>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="40"/>
+		<attack name="melee" interval="2000" skill="20" attack="40" />
 	</attacks>
-	<defenses armor="15" defense="15"/>
+	<defenses armor="15" defense="15" />
 	<elements>
-		<element physicalPercent="-5"/>
-		<element deathPercent="-5"/>
+		<element physicalPercent="-5" />
+		<element deathPercent="-5" />
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="I will silence you forever!"/>
-		<voice sentence="You saw something you shouldn't!"/>
+		<voice sentence="I will silence you forever!" />
+		<voice sentence="You saw something you shouldn't!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="10" chance="80000"/><!-- gold coin -->
-		<item id="2050" countmax="2" chance="30200"/><!-- torch -->
-		<item id="8840" countmax="5" chance="5000"/><!-- raspberries -->
-		<item id="2649" chance="14840"/><!-- leather legs -->
-		<item id="2403" chance="9920"/><!-- knife -->
-		<item id="2671" chance="10200"/><!-- ham -->
-		<item id="2406" chance="10000"/><!-- short sword -->
-		<item id="2461" chance="10050"/><!-- leather helmet -->
-		<item id="2404" chance="4400"/><!-- combat knife -->
-		<item id="2376" chance="5000"/><!-- sword -->
-		<item id="7397" chance="110"/><!-- deer trophy -->
+		<item id="2148" countmax="10" chance="80000" /><!-- gold coin -->
+		<item id="2050" countmax="2" chance="30200" /><!-- torch -->
+		<item id="8840" countmax="5" chance="5000" /><!-- raspberries -->
+		<item id="2649" chance="14840" /><!-- leather legs -->
+		<item id="2403" chance="9920" /><!-- knife -->
+		<item id="2671" chance="10200" /><!-- ham -->
+		<item id="2406" chance="10000" /><!-- short sword -->
+		<item id="2461" chance="10050" /><!-- leather helmet -->
+		<item id="2404" chance="4400" /><!-- combat knife -->
+		<item id="2376" chance="5000" /><!-- sword -->
+		<item id="7397" chance="110" /><!-- deer trophy -->
 	</loot>
 </monster>
