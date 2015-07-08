@@ -7,4 +7,5 @@
 	<event type="death" name="PlayerDeath" script="playerdeath.lua" />
 	<event type="death" name="DropLoot" script="droploot.lua" />
 	<event type="extendedopcode" name="ExtendedOpcode" script="extendedopcode.lua" />
+	<event type="kill" name="RewardChest" script="reward_chest.lua" />
 </creaturescripts>

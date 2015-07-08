@@ -2034,6 +2034,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
 	registerMetaMethod("Container", "__eq", LuaScriptInterface::luaUserdataCompare);
 
+	registerMethod("Container", "getContentDescription", LuaScriptInterface::luaContainerGetContentDescription);
 	registerMethod("Container", "getSize", LuaScriptInterface::luaContainerGetSize);
 	registerMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
 	registerMethod("Container", "getEmptySlots", LuaScriptInterface::luaContainerGetEmptySlots);
@@ -5908,12 +5909,15 @@ int LuaScriptInterface::luaNetworkMessageSkipBytes(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageSendToPlayer(lua_State* L)
 {
 	// networkMessage:sendToPlayer(player)
-	Player* player = getPlayer(L, 2);
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	if (!message) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Player* player = getPlayer(L, 2);
 	if (player) {
-		if (message) {
-			player->sendNetworkMessage(*message);
-		}
+		player->sendNetworkMessage(*message);
 		pushBoolean(L, true);
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -6789,6 +6793,20 @@ int LuaScriptInterface::luaContainerCreate(lua_State* L)
 		lua_pushnil(L);
 	}
 	return 1;
+}
+
+int LuaScriptInterface::luaContainerGetContentDescription(lua_State* L)
+{
+    // container:getContentDescription()
+    Container* container = getUserdata<Container>(L, 1);
+    if (container) {
+        std::ostringstream ss;
+        ss << container->getContentDescription();
+        pushString(L, ss.str());
+    } else {
+        lua_pushnil(L);
+    }
+    return 1;
 }
 
 int LuaScriptInterface::luaContainerGetSize(lua_State* L)
