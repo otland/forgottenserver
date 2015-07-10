@@ -37,7 +37,8 @@ class OutputMessageAllocator
 		struct rebind {typedef LockfreePoolingAllocator<U, OUTPUTMESSAGE_FREE_LIST_CAPACITY> other;};
 };
 
-void OutputMessagePool::scheduleSendAll() {
+void OutputMessagePool::scheduleSendAll()
+{
 	auto functor = std::bind(&OutputMessagePool::sendAll, this);
 	g_scheduler.addEvent(createLowDelayTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), functor));
 }
@@ -56,7 +57,8 @@ void OutputMessagePool::sendAll()
 	}
 }
 
-void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol) {
+void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
+{
 	//dispatcher thread
 	if (bufferedProtocols.empty()) {
 		scheduleSendAll();

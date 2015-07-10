@@ -64,7 +64,7 @@ void ConnectionManager::closeAll()
 
 // Connection
 
-void Connection::close(bool isForced)
+void Connection::close(bool force)
 {
 	//any thread
 	ConnectionManager::getInstance().releaseConnection(shared_from_this());
@@ -80,7 +80,7 @@ void Connection::close(bool isForced)
 			createTask(std::bind(&Protocol::release, m_protocol)));
 	}
 	
-	if (!m_pendingWrite || isForced) {
+	if (!m_pendingWrite || force) {
 		closeSocket();
 	} else {
 		//will be closed by the destructor

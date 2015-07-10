@@ -162,6 +162,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	if (!connection) {
 		return;
 	}
+
 	if (IOBan::isIpBanned(connection->getIP(), banInfo)) {
 		if (banInfo.reason.empty()) {
 			banInfo.reason = "(none)";
