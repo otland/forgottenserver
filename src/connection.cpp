@@ -295,7 +295,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 			m_protocol->setConnection(shared_from_this());
 		} else {
-			m_msg.getByte();    // Skip protocol ID
+			m_msg.skipBytes(1);    // Skip protocol ID
 		}
 
 		m_protocol->onRecvFirstMessage(m_msg);
