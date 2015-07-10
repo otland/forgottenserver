@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Serpent Spawn" nameDescription="a serpent spawn" race="venom" experience="3050" speed="250" manacost="0">
 	<health now="3000" max="3000" />
-	<look type="220" corpse="4323" />
+	<look type="220" corpse="6061" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
