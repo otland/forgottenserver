@@ -1,5 +1,5 @@
 local holes = {468, 481, 483}
-function onUse(cid, item, fromPosition, target, toPosition, isHotkey)
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if isInArray(holes, target.itemid) then
 		target:transform(target.itemid + 1)
 		target:decay()

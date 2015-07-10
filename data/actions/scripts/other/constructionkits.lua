@@ -13,7 +13,7 @@ local constructionKits = {
 	[20254] = 20295, [20255] = 20297, [20257] = 20299
 }
 
-function onUse(cid, item, fromPosition, target, toPosition, isHotkey)
+function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local kit = constructionKits[item.itemid]
 	if not kit then
 		return false
