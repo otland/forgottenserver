@@ -23,7 +23,11 @@ addOutfitCondition(condition, 0, 246, 0, 0, 0, 0)
 addOutfitCondition(condition, 0, 247, 0, 0, 0, 0)
 setCombatCondition(combat, condition)
 
-local area = createCombatArea( { {1, 1, 1}, {1, 3, 1}, {1, 1, 1} } )
+local area = createCombatArea({
+	{1, 1, 1},
+	{1, 3, 1},
+	{1, 1, 1}
+})
 setCombatArea(combat, area)
 
 function onCastSpell(cid, var)

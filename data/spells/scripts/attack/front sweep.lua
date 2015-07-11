@@ -8,7 +8,8 @@ local area = createCombatArea(AREA_WAVE6, AREADIAGONAL_WAVE6)
 combat:setArea(area)
 
 function onGetFormulaValues(player, skill, attack, factor)
-	local skillTotal, levelTotal = skill * attack, player:getLevel() / 5
+	local skillTotal = skill * attack
+	local levelTotal = player:getLevel() / 5
 	return -(((skillTotal * 0.04) + 31) + (levelTotal)), -(((skillTotal * 0.08) + 45) + (levelTotal))
 end
 

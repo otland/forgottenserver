@@ -6,8 +6,8 @@ local area = createCombatArea(AREA_WAVE4, AREADIAGONAL_WAVE4)
 combat:setArea(area)
 
 function onGetFormulaValues(player, level, maglevel)
-	min = (level / 5) + (maglevel * 0.8) + 5
-	max = (level / 5) + (maglevel * 2) + 12
+	local min = (level / 5) + (maglevel * 0.8) + 5
+	local max = (level / 5) + (maglevel * 2) + 12
 	return -min, -max
 end
 

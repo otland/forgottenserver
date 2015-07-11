@@ -5,7 +5,11 @@ local condition = createConditionObject(CONDITION_DRUNK)
 setConditionParam(condition, CONDITION_PARAM_TICKS, 20000)
 setCombatCondition(combat, condition)
 
-local area = createCombatArea( { {1, 1, 1}, {1, 3, 1}, {1, 1, 1} } )
+local area = createCombatArea({
+	{1, 1, 1},
+	{1, 3, 1},
+	{1, 1, 1}
+})
 setCombatArea(combat, area)
 
 function onCastSpell(cid, var)
