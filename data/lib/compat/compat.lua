@@ -108,6 +108,21 @@ function pushThing(thing)
 	return t
 end
 
+createCombatObject = Combat
+setCombatArea = Combat.setArea
+setCombatCallback = Combat.setCallback
+setCombatCondition = Combat.setCondition
+setCombatFormula = Combat.setFormula
+setCombatParam = Combat.setParameter
+
+createConditionObject = Condition
+setConditionParam = Condition.setParameter
+setConditionFormula = Condition.setFormula
+addDamageCondition = Condition.addDamage
+addOutfitCondition = Condition.setOutfit
+
+function doCombat(cid, combat, var) return combat:execute(cid, var) end
+
 function isCreature(cid) return Creature(cid) ~= nil end
 function isPlayer(cid) return Player(cid) ~= nil end
 function isMonster(cid) return Monster(cid) ~= nil end
