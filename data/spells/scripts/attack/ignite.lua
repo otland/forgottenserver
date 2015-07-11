@@ -1,12 +1,12 @@
-local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_FIREDAMAGE)
-setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_FIREDAMAGE)
+combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
 
-local condition = createConditionObject(CONDITION_FIRE)
-setConditionParam(condition, CONDITION_PARAM_DELAYED, 1)
-addDamageCondition(condition, 25, 3000, -45)
-setCombatCondition(combat, condition)
+local condition = Condition(CONDITION_FIRE)
+condition:setParameter(CONDITION_PARAM_DELAYED, 1)
+condition:addDamage(25, 3000, -45)
+combat:setCondition(condition)
 
-function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+function onCastSpell(creature, var)
+	return combat:execute(creature, var)
 end

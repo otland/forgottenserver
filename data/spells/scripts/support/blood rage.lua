@@ -5,7 +5,7 @@ condition:setParameter(CONDITION_PARAM_SKILL_SHIELDPERCENT, 0)
 condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
 local combat = Combat()
-combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_GREEN)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
 combat:setCondition(condition)
 

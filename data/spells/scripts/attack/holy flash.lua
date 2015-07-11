@@ -1,12 +1,12 @@
-local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_HOLYDAMAGE)
-setCombatParam(combat, COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_SMALLHOLY)
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_HOLYDAMAGE)
+combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_SMALLHOLY)
 
-local condition = createConditionObject(CONDITION_DAZZLED)
-setConditionParam(condition, CONDITION_PARAM_DELAYED, 1)
-addDamageCondition(condition, math.random(7,11), 3000, -20)
-setCombatCondition(combat, condition)
+local condition = Condition(CONDITION_DAZZLED)
+condition:setParameter(CONDITION_PARAM_DELAYED, 1)
+condition:addDamage(math.random(7,11), 3000, -20)
+combat:setCondition(condition)
 
-function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+function onCastSpell(creature, var)
+	return combat:execute(creature, var)
 end

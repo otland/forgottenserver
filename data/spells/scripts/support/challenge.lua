@@ -7,6 +7,7 @@ combat:setArea(area)
 function onTargetCreature(creature, target)
 	return doChallengeCreature(creature, target)
 end
+
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
 
 function onCastSpell(creature, var)

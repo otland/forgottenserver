@@ -57,7 +57,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="healing" spellid="29" name="Cure Poison" words="exana pox" lvl="10" mana="30" aggressive="0" selftarget="1" exhaustion="6000" groupcooldown="1000" needlearn="0" script="healing/antidote.lua">
+	<instant group="healing" spellid="29" name="Cure Poison" words="exana pox" lvl="10" mana="30" aggressive="0" selftarget="1" exhaustion="6000" groupcooldown="1000" needlearn="0" script="healing/cure poison.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Paladin" />
@@ -452,7 +452,7 @@
 	<rune group="attack" spellid="86" name="Magic Wall" id="2293" allowfaruse="1" charges="3" lvl="32" maglv="9" exhaustion="2000" groupcooldown="2000" blocktype="all" script="support/magic wall rune.lua" />
 
 	<!-- Healing Runes -->
-	<rune group="healing" spellid="31" name="Antidote Rune" id="2266" allowfaruse="1" charges="1" lvl="15" maglv="0" exhaustion="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/antidote rune.lua" />
+	<rune group="healing" spellid="31" name="Antidote Rune" id="2266" allowfaruse="1" charges="1" lvl="15" maglv="0" exhaustion="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/cure poison rune.lua" />
 	<rune group="healing" spellid="4" name="Intense Healing Rune" id="2265" allowfaruse="1" charges="1" lvl="15" maglv="1" exhaustion="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/intense healing rune.lua" />
 	<rune group="healing" spellid="5" name="Ultimate Healing Rune" id="2273" allowfaruse="1" charges="1" lvl="24" maglv="4" exhaustion="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/ultimate healing rune.lua" />
 
