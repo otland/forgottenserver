@@ -182,10 +182,9 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			_player->isConnecting = true;
 
 			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, getThis(), _player->getID(), operatingSystem)));
-			return;
+		} else {
+			connect(_player->getID(), operatingSystem);
 		}
-
-		connect(_player->getID(), operatingSystem);
 	}
 	OutputMessagePool::getInstance().addProtocolToAutosend(shared_from_this());
 }
