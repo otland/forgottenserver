@@ -130,7 +130,9 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		time_t m_timeConnected;
 		uint32_t m_packetsSent;
-
+		//If true, indicates that an asynchronous write (to the socket) has been started and is pending completion
+		//in this state any new output messages will be put into the messageQueue
+		//If false, a write to the socket can be initiated immediately
 		bool m_pendingWrite;
 		bool m_connectionState;
 		bool m_receivedFirst;

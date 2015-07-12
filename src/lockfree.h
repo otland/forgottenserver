@@ -31,7 +31,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 		typedef T value_type;
 
 		T* allocate(size_t) const {
-			T* p;
+			T* p; // NOTE: p doesn't have to be initialized
 			if (!getFreeList().pop(p)) {
 				//Acquire memory without calling the constructor of T
 				p = static_cast<T*>(operator new (sizeof(T)));
