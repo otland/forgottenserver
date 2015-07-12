@@ -198,6 +198,11 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 		disconnectClient("You are already logged in.");
 		return;
 	}
+	if (isConnectionExpired()) {
+		//ProtocolGame::release() has been called at this point and the Connection object
+		//no longer exists, so we return to prevent leakage of the Player.
+		return;
+	}
 
 	player = _player;
 	player->incrementReferenceCounter();
