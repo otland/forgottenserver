@@ -4682,3 +4682,31 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 	}
 	return muteConditions;
 }
+
+void Player::setGuild(Guild* guild)
+{
+	if (guild == this->guild) {
+		return;
+	}
+
+	Guild* oldGuild = this->guild;
+
+	this->guildNick.clear();
+	this->guild = nullptr;
+	this->guildLevel = 0;
+
+	if (guild) {
+		const GuildRank* rank = guild->getRankByLevel(1);
+		if (!rank) {
+			return;
+		}
+
+		this->guild = guild;
+		this->guildLevel = 1;
+		guild->addMember(this);
+	}
+
+	if (oldGuild) {
+		oldGuild->removeMember(this);
+	}
+}

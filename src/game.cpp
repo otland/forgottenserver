@@ -5458,6 +5458,11 @@ void Game::addGuild(Guild* guild)
 	guilds[guild->getId()] = guild;
 }
 
+void Game::removeGuild(uint32_t guildId)
+{
+	guilds.erase(guildId);
+}
+
 void Game::decreaseBrowseFieldRef(const Position& pos)
 {
 	Tile* tile = map.getTile(pos.x, pos.y, pos.z);

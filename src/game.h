@@ -484,6 +484,7 @@ class Game
 
 		Guild* getGuild(uint32_t id) const;
 		void addGuild(Guild* guild);
+		void removeGuild(uint32_t guildId);
 		void decreaseBrowseFieldRef(const Position& pos);
 
 		std::unordered_map<Tile*, Container*> browseFields;

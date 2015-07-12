@@ -2284,9 +2284,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Guild", "getName", LuaScriptInterface::luaGuildGetName);
 	registerMethod("Guild", "getMembersOnline", LuaScriptInterface::luaGuildGetMembersOnline);
 
-	registerMethod("Guild", "addMember", LuaScriptInterface::luaGuildAddMember);
-	registerMethod("Guild", "removeMember", LuaScriptInterface::luaGuildRemoveMember);
-
 	registerMethod("Guild", "addRank", LuaScriptInterface::luaGuildAddRank);
 	registerMethod("Guild", "getRankById", LuaScriptInterface::luaGuildGetRankById);
 	registerMethod("Guild", "getRankByLevel", LuaScriptInterface::luaGuildGetRankByLevel);
@@ -8064,19 +8061,14 @@ int LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 int LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 {
 	// player:setGuild(guild)
-	Guild* guild = getUserdata<Guild>(L, 2);
-	if (!guild) {
-		pushBoolean(L, false);
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
 		return 1;
 	}
 
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		player->setGuild(guild);
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
+	player->setGuild(getUserdata<Guild>(L, 2));
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -9612,44 +9604,6 @@ int LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 		pushUserdata<Player>(L, player);
 		setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaGuildAddMember(lua_State* L)
-{
-	// guild:addMember(player)
-	Guild* guild = getUserdata<Guild>(L, 1);
-	if (!guild) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	Player* player = getPlayer(L, 2);
-	if (player) {
-		guild->addMember(player);
-		pushBoolean(L, true);
-	} else {
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaGuildRemoveMember(lua_State* L)
-{
-	// guild:removeMember(player)
-	Guild* guild = getUserdata<Guild>(L, 1);
-	if (!guild) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	Player* player = getPlayer(L, 2);
-	if (player) {
-		guild->removeMember(player);
-		pushBoolean(L, true);
-	} else {
-		pushBoolean(L, false);
 	}
 	return 1;
 }

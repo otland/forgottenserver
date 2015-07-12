@@ -233,9 +233,7 @@ class Player final : public Creature, public Cylinder
 		Guild* getGuild() const {
 			return guild;
 		}
-		void setGuild(Guild* guild) {
-			this->guild = guild;
-		}
+		void setGuild(Guild* guild);
 
 		uint8_t getGuildLevel() const {
 			return guildLevel;

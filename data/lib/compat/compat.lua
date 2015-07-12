@@ -993,3 +993,10 @@ function broadcastMessage(message, messageType)
 	Game.broadcastMessage(message, messageType)
 	print("> Broadcasted message: \"" .. message .. "\".")
 end
+
+function Guild.addMember(self, player)
+	return player:setGuild(guild)
+end
+function Guild.removeMember(self, player)
+	return player:getGuild() == self and player:setGuild(nil)
+end
