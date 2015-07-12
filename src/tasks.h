@@ -81,7 +81,7 @@ class Dispatcher
 		void shutdown();
 		void join();
 
-		uint64_t getDispatcherCycle() {
+		uint64_t getDispatcherCycle() const {
 			return dispatcherCycle;
 		}
 	protected:

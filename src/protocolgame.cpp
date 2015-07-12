@@ -70,7 +70,6 @@ void ProtocolGame::release()
 	//dispatcher thread
 	if (player && player->client == shared_from_this()) {
 		player->client.reset();
-		g_game.ReleaseCreature(player);
 		player->decrementReferenceCounter();
 		player = nullptr;
 	}
