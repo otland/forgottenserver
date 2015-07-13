@@ -46,7 +46,7 @@ ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t,
 		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
-	if (!item->isPickupable()) {
+	if (item->getID() != 21518 && !item->isPickupable()) {
 		return RETURNVALUE_CANNOTPICKUP;
 	}
 

@@ -301,6 +301,15 @@ CREATE TABLE IF NOT EXISTS `player_items` (
   KEY `sid` (`sid`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `player_rewardchest` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `player_id` int(11) NOT NULL,
+  `reward` text NOT NULL,
+  `date` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `player_spells` (
   `player_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,

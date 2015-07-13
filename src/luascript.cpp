@@ -1998,6 +1998,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
 	registerMetaMethod("Container", "__eq", LuaScriptInterface::luaUserdataCompare);
 
+	registerMethod("Container", "getContentDescription", LuaScriptInterface::luaContainerGetContentDescription);
 	registerMethod("Container", "getSize", LuaScriptInterface::luaContainerGetSize);
 	registerMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
 	registerMethod("Container", "getEmptySlots", LuaScriptInterface::luaContainerGetEmptySlots);
@@ -6369,6 +6370,20 @@ int LuaScriptInterface::luaContainerCreate(lua_State* L)
 		lua_pushnil(L);
 	}
 	return 1;
+}
+
+int LuaScriptInterface::luaContainerGetContentDescription(lua_State* L)
+{
+    // container:getContentDescription()
+    Container* container = getUserdata<Container>(L, 1);
+    if (container) {
+        std::ostringstream ss;
+        ss << container->getContentDescription();
+        pushString(L, ss.str());
+    } else {
+        lua_pushnil(L);
+    }
+    return 1;
 }
 
 int LuaScriptInterface::luaContainerGetSize(lua_State* L)

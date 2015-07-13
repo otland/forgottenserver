@@ -910,6 +910,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 	}
 
 	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
+	depotChest->setDepotId(depotId);
 	depotChest->incrementReferenceCounter();
 	depotChest->setMaxDepotItems(getMaxDepotItems());
 	depotChests[depotId] = depotChest;
@@ -931,6 +932,22 @@ DepotLocker* Player::getDepotLocker(uint32_t depotId)
 	depotLocker->internalAddThing(getDepotChest(depotId, true));
 	depotLockerMap[depotId] = depotLocker;
 	return depotLocker;
+}
+
+DepotLocker* Player::getRewardChest()
+{
+    auto it = depotLockerMap.find(REWARD_CHEST_DEPOT);
+    if (it != depotLockerMap.end()) {
+        inbox->setParent(it->second);
+        return it->second;
+    }
+
+    DepotLocker* rewardChest = new DepotLocker(ITEM_LOCKER1);
+    rewardChest->setDepotId(REWARD_CHEST_DEPOT);
+    rewardChest->setMaxLockerItems(1);
+    rewardChest->internalAddThing(getDepotChest(REWARD_CHEST_DEPOT, true));
+    depotLockerMap[REWARD_CHEST_DEPOT] = rewardChest;
+    return rewardChest;
 }
 
 void Player::sendCancelMessage(ReturnValue message) const
@@ -2495,7 +2512,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		return RETURNVALUE_NOTENOUGHCAPACITY;
 	}
 
-	if (!item->isPickupable()) {
+	if (item->getID() != 21518 && !item->isPickupable()) {
 		return RETURNVALUE_CANNOTPICKUP;
 	}
 
