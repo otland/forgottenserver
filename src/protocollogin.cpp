@@ -60,12 +60,15 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		//Update premium days
 		Game::updatePremium(account);
 
-		//Add MOTD
-		output->addByte(0x14);
+		const std::string& motd = g_config.getString(ConfigManager::MOTD);
+		if (!motd.empty()) {
+			//Add MOTD
+			output->addByte(0x14);
 
-		std::ostringstream ss;
-		ss << g_game.getMotdNum() << "\n" << g_config.getString(ConfigManager::MOTD);
-		output->addString(ss.str());
+			std::ostringstream ss;
+			ss << g_game.getMotdNum() << "\n" << motd;
+			output->addString(ss.str());
+		}
 
 		//Add session key
 		output->addByte(0x28);
