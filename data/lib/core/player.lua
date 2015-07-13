@@ -88,3 +88,11 @@ function Player.addSkillTries(...)
 	APPLY_SKILL_MULTIPLIER = true
 	return ret
 end
+
+local addManaSpentFunc = Player.addManaSpent
+function Player.addManaSpent(...)
+	APPLY_SKILL_MULTIPLIER = false
+	local ret = addManaSpentFunc(...)
+	APPLY_SKILL_MULTIPLIER = true
+	return ret
+end
