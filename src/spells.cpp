@@ -203,6 +203,9 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 		if (strncasecmp(instantSpellWords.c_str(), words.c_str(), spellLen) == 0) {
 			if (!result || spellLen > result->getWords().length()) {
 				result = instantSpell;
+				if (words.length() == spellLen) {
+					break;
+				}
 			}
 		}
 	}
