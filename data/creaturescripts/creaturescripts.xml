@@ -7,5 +7,6 @@
 	<event type="login" name="RegenerateStamina" script="regeneratestamina.lua" />
 	<event type="death" name="PlayerDeath" script="playerdeath.lua" />
 	<event type="death" name="DropLoot" script="droploot.lua" />
+	<event type="report" name="PlayerReport" script="report.lua" />
 	<event type="extendedopcode" name="ExtendedOpcode" script="extendedopcode.lua" />
 </creaturescripts>
