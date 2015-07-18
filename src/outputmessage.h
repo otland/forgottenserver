@@ -26,14 +26,12 @@
 
 class Protocol;
 
-#define OUTPUT_POOL_SIZE 100
-
 class OutputMessage : public NetworkMessage
 {
-	private:
-		OutputMessage();
-
 	public:
+		OutputMessage():
+			outputBufferStart(INITIAL_BUFFER_POSITION) {}
+
 		// non-copyable
 		OutputMessage(const OutputMessage&) = delete;
 		OutputMessage& operator=(const OutputMessage&) = delete;
@@ -43,152 +41,69 @@ class OutputMessage : public NetworkMessage
 		}
 
 		void writeMessageLength() {
-			add_header<uint16_t>(length);
+			add_header(length);
 		}
 
 		void addCryptoHeader(bool addChecksum) {
 			if (addChecksum) {
-				add_header<uint32_t>(adlerChecksum(buffer + outputBufferStart, length));
+				add_header(adlerChecksum(buffer + outputBufferStart, length));
 			}
 
-			add_header<uint16_t>(length);
-		}
-
-		enum OutputMessageState {
-			STATE_FREE,
-			STATE_ALLOCATED,
-			STATE_ALLOCATED_NO_AUTOSEND,
-			STATE_WAITING,
-		};
-
-		Protocol* getProtocol() const {
-			return m_protocol;
-		}
-		Connection_ptr getConnection() const {
-			return connection;
-		}
-		int64_t getFrame() const {
-			return frame;
+			writeMessageLength();
 		}
 
 		inline void append(const NetworkMessage& msg) {
-			int32_t msgLen = msg.getLength();
+			auto msgLen = msg.getLength();
 			memcpy(buffer + position, msg.getBuffer() + 8, msgLen);
 			length += msgLen;
 			position += msgLen;
 		}
 
-		inline void append(OutputMessage_ptr msg) {
-			int32_t msgLen = msg->getLength();
+		inline void append(const OutputMessage_ptr& msg) {
+			auto msgLen = msg->getLength();
 			memcpy(buffer + position, msg->getBuffer() + 8, msgLen);
 			length += msgLen;
 			position += msgLen;
 		}
 
-		void setFrame(int64_t new_frame) {
-			frame = new_frame;
-		}
-
 	protected:
 		template <typename T>
 		inline void add_header(T add) {
-			if (sizeof(T) > outputBufferStart) {
-				std::cout << "Error: [OutputMessage::add_header] outputBufferStart(" << outputBufferStart <<
-				          ") < " << sizeof(T) << std::endl;
-				return;
-			}
-
+			assert(outputBufferStart >= sizeof(T));
 			outputBufferStart -= sizeof(T);
 			*reinterpret_cast<T*>(buffer + outputBufferStart) = add;
 			//added header size to the message size
 			length += sizeof(T);
 		}
 
-		void freeMessage() {
-			setConnection(Connection_ptr());
-			setProtocol(nullptr);
-			frame = 0;
-
-			// Allocate enough size for headers:
-			// 2 bytes for unencrypted message size
-			// 4 bytes for checksum
-			// 2 bytes for encrypted message size
-			outputBufferStart = 8;
-
-			//setState have to be the last one
-			setState(OutputMessage::STATE_FREE);
-		}
-
-		friend class OutputMessagePool;
-
-		void setProtocol(Protocol* protocol) {
-			m_protocol = protocol;
-		}
-		void setConnection(Connection_ptr newConnection) {
-			connection = newConnection;
-		}
-
-		void setState(OutputMessageState newState) {
-			state = newState;
-		}
-		OutputMessageState getState() const {
-			return state;
-		}
-
-		Connection_ptr connection;
-		Protocol* m_protocol;
-
-		int64_t frame;
-		uint32_t outputBufferStart;
-
-		OutputMessageState state;
+		MsgSize_t outputBufferStart;
 };
 
 class OutputMessagePool
 {
-	private:
-		OutputMessagePool();
-
 	public:
-		~OutputMessagePool();
-
 		// non-copyable
 		OutputMessagePool(const OutputMessagePool&) = delete;
 		OutputMessagePool& operator=(const OutputMessagePool&) = delete;
 
-		static OutputMessagePool* getInstance() {
+		static OutputMessagePool& getInstance() {
 			static OutputMessagePool instance;
-			return &instance;
+			return instance;
 		}
 
-		void send(OutputMessage_ptr msg);
 		void sendAll();
-		void stop() {
-			m_open = false;
-		}
-		OutputMessage_ptr getOutputMessage(Protocol* protocol, bool autosend = true);
-		void startExecutionFrame();
+		void scheduleSendAll();
 
-		int64_t getFrameTime() const {
-			return frameTime;
-		}
+		static OutputMessage_ptr getOutputMessage();
 
-		void addToAutoSend(OutputMessage_ptr msg);
-
-	protected:
-		void configureOutputMessage(OutputMessage_ptr msg, Protocol* protocol, bool autosend);
-		void releaseMessage(OutputMessage* msg);
-		void internalReleaseMessage(OutputMessage* msg);
-
-		typedef std::list<OutputMessage*> InternalOutputMessageList;
-		typedef std::list<OutputMessage_ptr> OutputMessageMessageList;
-
-		InternalOutputMessageList outputMessages;
-		InternalOutputMessageList allOutputMessages;
-		OutputMessageMessageList autoSendOutputMessages;
-		OutputMessageMessageList toAddQueue;
-		std::recursive_mutex outputPoolLock;
-		int64_t frameTime;
-		bool m_open;
+		void addProtocolToAutosend(Protocol_ptr protocol);
+		void removeProtocolFromAutosend(const Protocol_ptr& protocol);
+	private:
+		OutputMessagePool() = default;
+		//NOTE: A vector is used here because this container is mostly read 
+		//and relatively rarely modified (only when a client connects/disconnects)
+		std::vector<Protocol_ptr> bufferedProtocols;
 };
+
+
 #endif

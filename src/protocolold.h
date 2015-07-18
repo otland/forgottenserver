@@ -41,7 +41,6 @@ class ProtocolOld final : public Protocol
 		void onRecvFirstMessage(NetworkMessage& msg) final;
 
 	protected:
-		void dispatchedDisconnectClient(const std::string& message);
 		void disconnectClient(const std::string& message);
 };
 

@@ -81,6 +81,9 @@ class Dispatcher
 		void shutdown();
 		void join();
 
+		uint64_t getDispatcherCycle() const {
+			return dispatcherCycle;
+		}
 	protected:
 		void dispatcherThread();
 		void setState(ThreadState newState) {
@@ -97,6 +100,7 @@ class Dispatcher
 
 		std::list<Task*> taskList;
 		std::atomic<ThreadState> threadState {THREAD_STATE_TERMINATED};
+		uint64_t dispatcherCycle {0};
 };
 
 extern Dispatcher g_dispatcher;
