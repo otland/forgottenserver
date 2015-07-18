@@ -64,7 +64,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0x14);
 
 		std::ostringstream ss;
-		ss << g_game.getMotdNum() << "\n" << g_config.getString(ConfigManager::MOTD);
+		ss << g_game.getMotdNum() << "\n" << motd;
 		output->addString(ss.str());
 	}
 

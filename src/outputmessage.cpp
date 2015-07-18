@@ -52,6 +52,7 @@ void OutputMessagePool::sendAll()
 			protocol->send(std::move(msg));
 		}
 	}
+
 	if (!bufferedProtocols.empty()) {
 		scheduleSendAll();
 	}

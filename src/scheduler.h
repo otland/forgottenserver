@@ -53,7 +53,8 @@ class SchedulerTask : public Task
 		friend SchedulerTask* createLowDelayTask(uint16_t delay, std::function<void (void)> f);
 };
 
-inline SchedulerTask* createLowDelayTask(uint16_t delay, std::function<void (void)> f) {
+inline SchedulerTask* createLowDelayTask(uint16_t delay, std::function<void (void)> f)
+{
 	return new SchedulerTask(delay, f);
 }
 
