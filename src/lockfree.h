@@ -48,7 +48,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 		}
 	private:
 		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>> FreeList;
-		static FreeList& getFreeList() noexcept {
+		static FreeList& getFreeList() {
 			static FreeList freeList;
 			return freeList;
 		}
