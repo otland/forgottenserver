@@ -52,8 +52,8 @@ class ConnectionManager
 	protected:
 		ConnectionManager() = default;
 
-		std::unordered_set<Connection_ptr> m_connections;
-		std::mutex m_connectionManagerLock;
+		std::unordered_set<Connection_ptr> connections;
+		std::mutex connectionManagerLock;
 };
 
 class Connection : public std::enable_shared_from_this<Connection>
@@ -71,21 +71,20 @@ class Connection : public std::enable_shared_from_this<Connection>
 			CONNECTION_STATE_CLOSED,
 		};
 		
-		enum { FORCE_CLOSE = true};
+		enum { FORCE_CLOSE = true };
 
 		Connection(boost::asio::ip::tcp::socket* socket,
 		           boost::asio::io_service& io_service,
 		           ServicePort_ptr service_port) :
-			m_readTimer(io_service),
-			m_writeTimer(io_service),
-			m_service_port(service_port),
-			m_socket(socket),
-			m_io_service(io_service) {
-			m_pendingWrite = false;
-			m_connectionState = CONNECTION_STATE_OPEN;
-			m_receivedFirst = false;
-			m_packetsSent = 0;
-			m_timeConnected = time(nullptr);
+			readTimer(io_service),
+			writeTimer(io_service),
+			service_port(service_port),
+			socket(socket),
+			io_service(io_service) {
+			connectionState = CONNECTION_STATE_OPEN;
+			receivedFirst = false;
+			packetsSent = 0;
+			timeConnected = time(nullptr);
 		}
 		~Connection();
 
@@ -104,40 +103,36 @@ class Connection : public std::enable_shared_from_this<Connection>
 		void parseHeader(const boost::system::error_code& error);
 		void parsePacket(const boost::system::error_code& error);
 
-		void onWriteOperation(OutputMessage_ptr msg, const boost::system::error_code& error);
+		void onWriteOperation(const boost::system::error_code& error);
 
-		static void handleReadTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error);
-		static void handleWriteTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error);
+		static void handleTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error);
 
 		void closeSocket();
 
 		void internalSend(const OutputMessage_ptr& msg);
 
-		NetworkMessage m_msg;
+		NetworkMessage msg;
 
-		boost::asio::deadline_timer m_readTimer;
-		boost::asio::deadline_timer m_writeTimer;
+		boost::asio::deadline_timer readTimer;
+		boost::asio::deadline_timer writeTimer;
 
-		std::recursive_mutex m_connectionLock;
+		std::recursive_mutex connectionLock;
 
 		std::list<OutputMessage_ptr> messageQueue;
 
-		ServicePort_ptr m_service_port;
-		Protocol_ptr m_protocol;
+		ServicePort_ptr service_port;
+		Protocol_ptr protocol;
 
-		std::unique_ptr<boost::asio::ip::tcp::socket> m_socket;
-		boost::asio::io_service& m_io_service;
+		std::unique_ptr<boost::asio::ip::tcp::socket> socket;
+		boost::asio::io_service& io_service;
 
-		time_t m_timeConnected;
-		uint32_t m_packetsSent;
-		//If true, indicates that an asynchronous write (to the socket) has been started and is pending completion
-		//in this state any new output messages will be put into the messageQueue
-		//If false, a write to the socket can be initiated immediately
-		bool m_pendingWrite;
-		bool m_connectionState;
-		bool m_receivedFirst;
+		time_t timeConnected;
+		uint32_t packetsSent;
 
-		static bool m_logError;
+		bool connectionState;
+		bool receivedFirst;
+
+		static bool logError;
 };
 
 #endif

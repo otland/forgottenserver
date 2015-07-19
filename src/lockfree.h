@@ -46,6 +46,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 				operator delete(p);
 			}
 		}
+
 	private:
 		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>> FreeList;
 		static FreeList& getFreeList() {
