@@ -33,7 +33,7 @@ function onSay(player, words, param)
 
 	local timeNow = os.time()
 	db.query("INSERT INTO `ip_bans` (`ip`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
-			targetIp .. ", '', " .. timeNow .. ", " .. timeNow + (ipBanDays * 86400) .. ", " .. player:getGuid() .. ")")
+			targetIp .. ", '', FROM_UNIXTIME(" .. timeNow .. "), FROM_UNIXTIME(" .. timeNow + (ipBanDays * 86400) .. "), " .. player:getGuid() .. ")")
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, targetName .. "  has been IP banned.")
 	return false
 end

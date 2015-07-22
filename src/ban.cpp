@@ -63,7 +63,7 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = " << accountId;
+	query << "SELECT `reason`, UNIX_TIMESTAMP(`expires_at`) as `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = " << accountId;
 
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
@@ -74,7 +74,7 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
 		// Move the ban to history if it has expired
 		query.str(std::string());
-		query << "INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES (" << accountId << ',' << db.escapeString(result->getString("reason")) << ',' << result->getNumber<time_t>("banned_at") << ',' << expiresAt << ',' << result->getNumber<uint32_t>("banned_by") << ')';
+		query << "INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES (" << accountId << ',' << db.escapeString(result->getString("reason")) << ", FROM_UNIXTIME(" << result->getNumber<time_t>("banned_at") << ")," << expiresAt << ',' << result->getNumber<uint32_t>("banned_by") << ')';
 		g_databaseTasks.addTask(query.str());
 
 		query.str(std::string());
@@ -98,7 +98,7 @@ bool IOBan::isIpBanned(uint32_t clientip, BanInfo& banInfo)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = " << clientip;
+	query << "SELECT `reason`, UNIX_TIMESTAMP(`expires_at`) AS `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = " << clientip;
 
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {

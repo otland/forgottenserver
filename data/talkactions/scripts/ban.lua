@@ -27,7 +27,7 @@ function onSay(player, words, param)
 
 	local timeNow = os.time()
 	db.query("INSERT INTO `account_bans` (`account_id`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
-			accountId .. ", " .. db.escapeString(reason) .. ", " .. timeNow .. ", " .. timeNow + (banDays * 86400) .. ", " .. player:getGuid() .. ")")
+			accountId .. ", " .. db.escapeString(reason) .. ", FROM_UNIXTIME(" .. timeNow .. "), FROM_UNIXTIME(" .. timeNow + (banDays * 86400) .. "), " .. player:getGuid() .. ")")
 
 	local target = Player(name)
 	if target ~= nil then
