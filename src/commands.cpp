@@ -34,7 +34,6 @@
 #include "spells.h"
 #include "talkaction.h"
 #include "movement.h"
-#include "spells.h"
 #include "weapons.h"
 #include "raids.h"
 #include "quests.h"
