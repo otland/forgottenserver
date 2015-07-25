@@ -842,10 +842,14 @@ end
 
 function getThingPos(uid)
 	local thing
-	if uid >= 0x10000000 then
-		thing = Creature(uid)
+	if type(uid) ~= "userdata" then
+		if uid >= 0x10000000 then
+			thing = Creature(uid)
+		else
+			thing = Item(uid)
+		end
 	else
-		thing = Item(uid)
+		thing = uid
 	end
 
 	if thing == nil then
