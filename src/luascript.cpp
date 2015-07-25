@@ -1012,9 +1012,6 @@ void LuaScriptInterface::registerFunctions()
 	//isInWar(cid, target)
 	lua_register(m_luaState, "isInWar", LuaScriptInterface::luaIsInWar);
 
-	//doPlayerSetOfflineTrainingSkill(cid, skill)
-	lua_register(m_luaState, "doPlayerSetOfflineTrainingSkill", LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill);
-
 	//getWaypointPosition(name)
 	lua_register(m_luaState, "getWaypointPositionByName", LuaScriptInterface::luaGetWaypointPositionByName);
 
@@ -2135,6 +2132,15 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getSkillPercent", LuaScriptInterface::luaPlayerGetSkillPercent);
 	registerMethod("Player", "getSkillTries", LuaScriptInterface::luaPlayerGetSkillTries);
 	registerMethod("Player", "addSkillTries", LuaScriptInterface::luaPlayerAddSkillTries);
+
+	registerMethod("Player", "addOfflineTrainingTime", LuaScriptInterface::luaPlayerAddOfflineTrainingTime);
+	registerMethod("Player", "getOfflineTrainingTime", LuaScriptInterface::luaPlayerGetOfflineTrainingTime);
+	registerMethod("Player", "removeOfflineTrainingTime", LuaScriptInterface::luaPlayerRemoveOfflineTrainingTime);
+
+	registerMethod("Player", "addOfflineTrainingTries", LuaScriptInterface::luaPlayerAddOfflineTrainingTries);
+
+	registerMethod("Player", "getOfflineTrainingSkill", LuaScriptInterface::luaPlayerGetOfflineTrainingSkill);
+	registerMethod("Player", "setOfflineTrainingSkill", LuaScriptInterface::luaPlayerSetOfflineTrainingSkill);
 
 	registerMethod("Player", "getItemCount", LuaScriptInterface::luaPlayerGetItemCount);
 	registerMethod("Player", "getItemById", LuaScriptInterface::luaPlayerGetItemById);
@@ -3704,21 +3710,6 @@ int LuaScriptInterface::luaIsInWar(lua_State* L)
 	}
 
 	pushBoolean(L, player->isInWar(targetPlayer));
-	return 1;
-}
-
-int LuaScriptInterface::luaDoPlayerSetOfflineTrainingSkill(lua_State* L)
-{
-	//doPlayerSetOfflineTrainingSkill(cid, skillid)
-	Player* player = getPlayer(L, 1);
-	if (player) {
-		uint32_t skillid = getNumber<uint32_t>(L, 2);
-		player->setOfflineTrainingSkill(skillid);
-		pushBoolean(L, true);
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
 	return 1;
 }
 
@@ -7873,6 +7864,89 @@ int LuaScriptInterface::luaPlayerAddSkillTries(lua_State* L)
 		skills_t skillType = getNumber<skills_t>(L, 2);
 		uint64_t tries = getNumber<uint64_t>(L, 3);
 		player->addSkillAdvance(skillType, tries);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerAddOfflineTrainingTime(lua_State* L)
+{
+	// player:addOfflineTrainingTime(time)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		int32_t time = getNumber<int32_t>(L, 2);
+		player->addOfflineTrainingTime(time);
+		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+
+int LuaScriptInterface::luaPlayerGetOfflineTrainingTime(lua_State* L)
+{
+	// player:getOfflineTrainingTime()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getOfflineTrainingTime());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerRemoveOfflineTrainingTime(lua_State* L)
+{
+	// player:removeOfflineTrainingTime(time)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		int32_t time = getNumber<int32_t>(L, 2);
+		player->removeOfflineTrainingTime(time);
+		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerAddOfflineTrainingTries(lua_State* L)
+{
+	// player:addOfflineTrainingTries(skillType, tries)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		skills_t skillType = getNumber<skills_t>(L, 2);
+		uint64_t tries = getNumber<uint64_t>(L, 3);
+		pushBoolean(L, player->addOfflineTrainingTries(skillType, tries));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetOfflineTrainingSkill(lua_State* L)
+{
+	// player:getOfflineTrainingSkill()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getOfflineTrainingSkill());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetOfflineTrainingSkill(lua_State* L)
+{
+	// player:setOfflineTrainingSkill(skillId)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		uint32_t skillId = getNumber<uint32_t>(L, 2);
+		player->setOfflineTrainingSkill(skillId);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

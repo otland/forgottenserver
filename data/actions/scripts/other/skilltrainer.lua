@@ -8,7 +8,7 @@ local statues = {
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local skill = statues[item:getId()]
-	if player:getPremiumDays() == 0 then
+	if not player:isPremium() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT))
 		return true
 	end
@@ -17,7 +17,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	doPlayerSetOfflineTrainingSkill(player, skill)
+	player:setOfflineTrainingSkill(skill)
 	player:remove()
 	return true
 end
