@@ -322,7 +322,9 @@ if NpcHandler == nil then
 		if callback == nil or callback() then
 			if self:processModuleCallback(CALLBACK_FAREWELL) then
 				local msg = self:getMessage(MESSAGE_FAREWELL)
-				local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+				local player = Player(cid)
+				local playerName = player and player:getName() or -1
+				local parseInfo = { [TAG_PLAYERNAME] = playerName }
 				self:resetNpc(cid)
 				msg = self:parseMessage(msg, parseInfo)
 				self:say(msg, cid, true)
@@ -338,7 +340,9 @@ if NpcHandler == nil then
 			if callback == nil or callback(cid) then
 				if self:processModuleCallback(CALLBACK_GREET, cid) then
 					local msg = self:getMessage(MESSAGE_GREET)
-					local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+					local player = Player(cid)
+					local playerName = player and player:getName() or -1
+					local parseInfo = { [TAG_PLAYERNAME] = playerName }
 					msg = self:parseMessage(msg, parseInfo)
 					self:say(msg, cid, true)
 				else
@@ -423,7 +427,9 @@ if NpcHandler == nil then
 		if callback == nil or callback(cid) then
 			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid, msgtype, msg) then
 				if self:isFocused(cid) then
-					local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+					local player = Player(cid)
+					local playerName = player and player:getName() or -1
+					local parseInfo = { [TAG_PLAYERNAME] = playerName }
 					local msg = self:parseMessage(self:getMessage(MESSAGE_ONCLOSESHOP), parseInfo)
 					self:say(msg, cid)
 				end
@@ -528,10 +534,10 @@ if NpcHandler == nil then
 			if callback == nil or callback() then
 				if self:processModuleCallback(CALLBACK_CREATURE_DISAPPEAR, cid) then
 					local msg = self:getMessage(MESSAGE_WALKAWAY)
-					local playerName = Player(cid):getName()
-					if not playerName then
-						playerName = -1
-					end
+
+					local player = Player(cid)
+					local playerName = player and player:getName() or -1
+					local playerSex = player and player:getSex() or 0
 
 					local parseInfo = { [TAG_PLAYERNAME] = playerName }
 					local message = self:parseMessage(msg, parseInfo)
@@ -541,7 +547,7 @@ if NpcHandler == nil then
 					local msg_female = self:getMessage(MESSAGE_WALKAWAY_FEMALE)
 					local message_female = self:parseMessage(msg_female, parseInfo)
 					if message_female ~= message_male then
-						if Player(cid):getSex() == 0 then
+						if playerSex == PLAYERSEX_FEMALE then
 							selfSay(message_female)
 						else
 							selfSay(message_male)
