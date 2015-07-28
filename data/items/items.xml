@@ -4305,19 +4305,15 @@
 	</item>
 	<item id="2585" article="a" name="ship's telescope">
 		<attribute key="rotateTo" value="2588" />
-		<attribute key="destroyTo" value="2250" />
 	</item>
 	<item id="2586" article="a" name="ship's telescope">
 		<attribute key="rotateTo" value="2587" />
-		<attribute key="destroyTo" value="2250" />
 	</item>
 	<item id="2587" article="a" name="ship's telescope">
 		<attribute key="rotateTo" value="2585" />
-		<attribute key="destroyTo" value="2250" />
 	</item>
 	<item id="2588" article="a" name="ship's telescope">
 		<attribute key="rotateTo" value="2586" />
-		<attribute key="destroyTo" value="2250" />
 	</item>
 	<item fromid="2589" toid="2592" article="a" name="locker">
 		<attribute key="type" value="depot" />
