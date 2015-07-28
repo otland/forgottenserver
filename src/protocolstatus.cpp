@@ -153,7 +153,8 @@ void ProtocolStatus::sendStatusString()
 	std::ostringstream ss;
 	doc.save(ss, "", pugi::format_raw);
 
-	output->addString(ss.str());
+	std::string data = ss.str();
+	output->addBytes(data.c_str(), data.size());
 	send(output);
 	disconnect();
 }
