@@ -22,7 +22,6 @@
 #include "container.h"
 #include "iomap.h"
 #include "game.h"
-#include "player.h"
 
 extern Game g_game;
 

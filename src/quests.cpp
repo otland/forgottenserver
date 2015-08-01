@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "quests.h"
-#include "tools.h"
 
 #include "pugicast.h"
 

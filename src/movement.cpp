@@ -20,12 +20,6 @@
 #include "otpch.h"
 
 #include "game.h"
-#include "creature.h"
-#include "player.h"
-#include "tile.h"
-#include "tools.h"
-#include "combat.h"
-#include "vocation.h"
 
 #include "pugicast.h"
 

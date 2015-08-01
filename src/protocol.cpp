@@ -20,8 +20,6 @@
 #include "otpch.h"
 
 #include "protocol.h"
-#include "scheduler.h"
-#include "connection.h"
 #include "outputmessage.h"
 #include "rsa.h"
 

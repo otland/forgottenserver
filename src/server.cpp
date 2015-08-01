@@ -21,7 +21,6 @@
 
 #include "outputmessage.h"
 #include "server.h"
-#include "connection.h"
 #include "scheduler.h"
 #include "configmanager.h"
 #include "ban.h"

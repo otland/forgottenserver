@@ -22,10 +22,6 @@
 #include "combat.h"
 
 #include "game.h"
-#include "creature.h"
-#include "player.h"
-#include "const.h"
-#include "tools.h"
 #include "weapons.h"
 #include "configmanager.h"
 #include "events.h"
