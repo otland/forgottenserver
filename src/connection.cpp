@@ -83,7 +83,7 @@ void Connection::close(bool force)
 	if (messageQueue.empty() || force) {
 		closeSocket();
 	} else {
-		//will be closed by the destructor
+		//will be closed by the destructor or onWriteOperation
 	}
 }
 
@@ -312,6 +312,8 @@ void Connection::onWriteOperation(const boost::system::error_code& error)
 
 	if (!messageQueue.empty()) {
 		internalSend(messageQueue.front());
+	} else if (connectionState == CONNECTION_STATE_CLOSED) {
+		closeSocket();
 	}
 }
 
