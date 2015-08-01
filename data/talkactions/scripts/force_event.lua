@@ -9,12 +9,11 @@ function onSay(player, words, param)
 
 	logCommand(player, words, param)
 
-	local returnValue = Game.startRaid(param)
+	local returnValue = Game.startEvent(param)
 	if returnValue ~= RETURNVALUE_NOERROR then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, Game.getReturnMessage(returnValue))
 	else
-		player:sendTextMessage(MESSAGE_INFO_DESCR, "Raid started.")
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "Event started.")
 	end
-
-	return false
+	return true
 end
