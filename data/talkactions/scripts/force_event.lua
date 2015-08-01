@@ -9,9 +9,8 @@ function onSay(player, words, param)
 
 	logCommand(player, words, param)
 
-	-- prevent forcing server save through /raid
-	if param == "Server Save" or not Game.startEvent(param) then
-		player:sendCancelMessage("There is no raid with that name.")
+	if not Game.startEvent(param) then
+		player:sendCancelMessage("There is no event with that name.")
 	end
 	return true
 end

@@ -549,7 +549,7 @@ class LuaScriptInterface
 		static int luaGameCreateNpc(lua_State* L);
 		static int luaGameCreateTile(lua_State* L);
 
-		static int luaGameStartRaid(lua_State* L);
+		static int luaGameStartEvent(lua_State* L);
 
 		static int luaGameGetClientVersion(lua_State* L);
 

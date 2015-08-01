@@ -29,7 +29,6 @@
 #include "talkaction.h"
 #include "movement.h"
 #include "weapons.h"
-#include "raids.h"
 #include "quests.h"
 #include "mounts.h"
 #include "globalevent.h"
@@ -135,10 +134,6 @@ void Signals::sighupHandler()
 
 	Npcs::reload();
 	std::cout << "Reloaded npcs." << std::endl;
-
-	g_game.raids.reload();
-	g_game.raids.startup();
-	std::cout << "Reloaded raids." << std::endl;
 
 	g_spells->reload();
 	std::cout << "Reloaded monsters." << std::endl;
