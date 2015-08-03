@@ -79,8 +79,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 			readTimer(io_service),
 			writeTimer(io_service),
 			service_port(service_port),
-			socket(socket),
-			io_service(io_service) {
+			socket(socket) {
 			connectionState = CONNECTION_STATE_OPEN;
 			receivedFirst = false;
 			packetsSent = 0;
@@ -124,7 +123,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 		Protocol_ptr protocol;
 
 		std::unique_ptr<boost::asio::ip::tcp::socket> socket;
-		boost::asio::io_service& io_service;
 
 		time_t timeConnected;
 		uint32_t packetsSent;
