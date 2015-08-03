@@ -20,12 +20,8 @@
 #include "otpch.h"
 
 #include "monster.h"
-#include "monsters.h"
 #include "game.h"
 #include "spells.h"
-#include "combat.h"
-#include "spawn.h"
-#include "tasks.h"
 
 extern Game g_game;
 extern Monsters g_monsters;

@@ -28,15 +28,11 @@
 #include "creatureevent.h"
 #include "events.h"
 #include "game.h"
-#include "house.h"
 #include "iologindata.h"
 #include "monster.h"
 #include "movement.h"
 #include "outputmessage.h"
-#include "player.h"
-#include "quests.h"
 #include "scheduler.h"
-#include "town.h"
 #include "weapons.h"
 
 extern ConfigManager g_config;

@@ -22,15 +22,10 @@
 #include "actions.h"
 #include "bed.h"
 #include "configmanager.h"
-#include "const.h"
 #include "container.h"
 #include "game.h"
-#include "house.h"
-#include "item.h"
-#include "player.h"
 #include "pugicast.h"
 #include "spells.h"
-#include "tasks.h"
 
 extern Game g_game;
 extern Spells* g_spells;

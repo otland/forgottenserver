@@ -21,11 +21,8 @@
 
 #include "monsters.h"
 #include "monster.h"
-#include "container.h"
-#include "tools.h"
 #include "spells.h"
 #include "combat.h"
-#include "luascript.h"
 #include "weapons.h"
 #include "configmanager.h"
 #include "game.h"

@@ -22,12 +22,10 @@
 #include "protocollogin.h"
 
 #include "outputmessage.h"
-#include "connection.h"
 #include "rsa.h"
 #include "tasks.h"
 
 #include "configmanager.h"
-#include "tools.h"
 #include "iologindata.h"
 #include "ban.h"
 #include "game.h"
@@ -57,7 +55,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	auto output = OutputMessagePool::getOutputMessage();
 	//Update premium days
 	Game::updatePremium(account);
-	
+
 	const std::string& motd = g_config.getString(ConfigManager::MOTD);
 	if (!motd.empty()) {
 		//Add MOTD

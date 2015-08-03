@@ -21,9 +21,6 @@
 
 #include "configmanager.h"
 #include "game.h"
-#include "tools.h"
-
-#include <stdexcept>
 
 #if LUA_VERSION_NUM >= 502
 #define lua_strlen lua_rawlen

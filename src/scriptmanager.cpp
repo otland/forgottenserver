@@ -27,7 +27,6 @@
 #include "spells.h"
 #include "movement.h"
 #include "weapons.h"
-#include "creatureevent.h"
 #include "globalevent.h"
 #include "events.h"
 

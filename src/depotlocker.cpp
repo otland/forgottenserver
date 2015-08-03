@@ -20,7 +20,6 @@
 #include "otpch.h"
 
 #include "depotlocker.h"
-#include "tools.h"
 
 DepotLocker::DepotLocker(uint16_t _type) :
 	Container(_type)

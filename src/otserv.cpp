@@ -23,25 +23,18 @@
 
 #include "game.h"
 
-#include "iologindata.h"
 #include "iomarket.h"
 
 #ifndef _WIN32
 #include <csignal> // for sigemptyset()
 #endif
 
-#include "monsters.h"
-#include "outfit.h"
-#include "vocation.h"
 #include "configmanager.h"
 #include "scriptmanager.h"
-#include "tools.h"
 #include "rsa.h"
-#include "protocolgame.h"
 #include "protocolold.h"
 #include "protocollogin.h"
 #include "protocolstatus.h"
-#include "house.h"
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"

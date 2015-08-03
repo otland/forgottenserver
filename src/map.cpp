@@ -21,9 +21,6 @@
 
 #include "iomap.h"
 #include "iomapserialize.h"
-#include "items.h"
-#include "map.h"
-#include "tile.h"
 #include "combat.h"
 #include "creature.h"
 #include "game.h"

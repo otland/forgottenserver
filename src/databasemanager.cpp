@@ -21,9 +21,7 @@
 
 #include "configmanager.h"
 #include "databasemanager.h"
-#include "enums.h"
 #include "luascript.h"
-#include "tools.h"
 
 extern ConfigManager g_config;
 

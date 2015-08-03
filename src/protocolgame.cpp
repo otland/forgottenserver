@@ -19,32 +19,21 @@
 
 #include "otpch.h"
 
-#include <random>
 #include <boost/range/adaptor/reversed.hpp>
 
 #include "protocolgame.h"
 
-#include "networkmessage.h"
 #include "outputmessage.h"
 
-#include "items.h"
-
-#include "tile.h"
 #include "player.h"
-#include "chat.h"
 
 #include "configmanager.h"
 #include "actions.h"
 #include "game.h"
 #include "iologindata.h"
 #include "iomarket.h"
-#include "house.h"
 #include "waitlist.h"
-#include "quests.h"
-#include "mounts.h"
 #include "ban.h"
-#include "connection.h"
-#include "creatureevent.h"
 #include "scheduler.h"
 
 extern ConfigManager g_config;
@@ -73,7 +62,7 @@ void ProtocolGame::release()
 		player->decrementReferenceCounter();
 		player = nullptr;
 	}
-	
+
 	OutputMessagePool::getInstance().removeProtocolFromAutosend(shared_from_this());
 	Protocol::release();
 }

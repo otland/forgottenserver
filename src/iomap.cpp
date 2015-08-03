@@ -20,14 +20,6 @@
 #include "otpch.h"
 
 #include "iomap.h"
-#include "map.h"
-
-#include "tile.h"
-#include "item.h"
-#include "container.h"
-#include "teleport.h"
-#include "fileloader.h"
-#include "town.h"
 
 #include "bed.h"
 

@@ -21,9 +21,7 @@
 
 #include "mailbox.h"
 #include "game.h"
-#include "player.h"
 #include "iologindata.h"
-#include "town.h"
 
 extern Game g_game;
 
