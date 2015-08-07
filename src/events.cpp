@@ -79,8 +79,8 @@ bool Events::load()
 		}
 
 		const std::string& className = eventNode.attribute("class").as_string();
-		auto result = classes.insert(className);
-		if (result.second) {
+		auto res = classes.insert(className);
+		if (res.second) {
 			const std::string& lowercase = asLowerCaseString(className);
 			if (scriptInterface.loadFile("data/events/scripts/" + lowercase + ".lua") != 0) {
 				std::cout << "[Warning - Events::load] Can not load script: " << lowercase << ".lua" << std::endl;

@@ -179,9 +179,9 @@ std::string transformToSHA1(const std::string& input)
 	static const char hexDigits[] = {"0123456789abcdef"};
 	for (int hashByte = 20; --hashByte >= 0;) {
 		const uint8_t byte = H[hashByte >> 2] >> (((3 - hashByte) & 3) << 3);
-		size_t index = hashByte << 1;
-		hexstring[index++] = hexDigits[byte >> 4];
-		hexstring[index] = hexDigits[byte & 15];
+		index = hashByte << 1;
+		hexstring[index] = hexDigits[byte >> 4];
+		hexstring[index + 1] = hexDigits[byte & 15];
 	}
 	return std::string(hexstring, 40);
 }
