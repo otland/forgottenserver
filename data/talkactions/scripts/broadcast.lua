@@ -4,8 +4,8 @@ function onSay(player, words, param)
 	end
 
 	print("> " .. player:getName() .. " broadcasted: \"" .. param .. "\".")
-	for _, tmpPlayer in ipairs(Game.getPlayers()) do
-		tmpPlayer:sendPrivateMessage(player, param, TALKTYPE_BROADCAST)
+	for _, targetPlayer in ipairs(Game.getPlayers()) do
+		targetPlayer:sendPrivateMessage(player, param, TALKTYPE_BROADCAST)
 	end
 	return false
 end

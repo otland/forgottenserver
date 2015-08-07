@@ -73,7 +73,7 @@ void ProtocolGame::release()
 		player->decrementReferenceCounter();
 		player = nullptr;
 	}
-	
+
 	OutputMessagePool::getInstance().removeProtocolFromAutosend(shared_from_this());
 	Protocol::release();
 }
@@ -1542,7 +1542,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 			if (subtype != -1) {
 				uint32_t count;
 				if (!itemType.isFluidContainer() && !itemType.isSplash()) {
-					count = player->getItemTypeCount(shopInfo.itemId, subtype);    // This shop item requires extra checks
+					count = player->getItemTypeCount(shopInfo.itemId, subtype); // This shop item requires extra checks
 				} else {
 					count = subtype;
 				}

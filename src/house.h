@@ -141,8 +141,8 @@ class House
 
 		bool canEditAccessList(uint32_t listId, const Player* player);
 		// listId special values:
-		//	GUEST_LIST	 guest list
-		//  SUBOWNER_LIST subowner list
+		// GUEST_LIST	 guest list
+		// SUBOWNER_LIST subowner list
 		void setAccessList(uint32_t listId, const std::string& textlist);
 		bool getAccessList(uint32_t listId, std::string& list) const;
 
@@ -224,7 +224,7 @@ class House
 			return bedsList;
 		}
 		uint32_t getBedCount() {
-			return static_cast<uint32_t>(std::ceil(bedsList.size() / 2.));   //each bed takes 2 sqms of space, ceil is just for bad maps
+			return static_cast<uint32_t>(std::ceil(bedsList.size() / 2.)); //each bed takes 2 sqms of space, ceil is just for bad maps
 		}
 
 	private:
@@ -270,17 +270,17 @@ enum RentPeriod_t {
 
 class Houses
 {
-    public:
-        Houses() = default;
-        ~Houses() {
-            for (const auto& it : houseMap) {
-                delete it.second;
-            }
-        }
+	public:
+		Houses() = default;
+		~Houses() {
+			for (const auto& it : houseMap) {
+				delete it.second;
+			}
+		}
 
-        // non-copyable
-        Houses(const Houses&) = delete;
-        Houses& operator=(const Houses&) = delete;
+		// non-copyable
+		Houses(const Houses&) = delete;
+		Houses& operator=(const Houses&) = delete;
 
 		House* addHouse(uint32_t id) {
 			auto it = houseMap.find(id);

@@ -32,7 +32,7 @@ if KeywordHandler == nil then
 			return self.keywords.callback(self.keywords, message)
 		end
 
-		for i,v in ipairs(self.keywords) do
+		for _, v in ipairs(self.keywords) do
 			if type(v) == 'string' then
 				local a, b = string.find(message, v)
 				if a == nil or b == nil then

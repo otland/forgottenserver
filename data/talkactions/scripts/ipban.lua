@@ -10,20 +10,20 @@ function onSay(player, words, param)
 		return false
 	end
 
-	local ip = result.getDataLong(resultId, "lastip")
+	local targetIp = result.getDataLong(resultId, "lastip")
 	result.free(resultId)
 
-	local targetCid = getPlayerByName(param)
-	if targetCid ~= false then
-		ip = getIpByName(param)
-		doRemoveCreature(targetCid)
+	local targetPlayer = Player(param)
+	if targetPlayer then
+		targetIp = targetPlayer:getIp()
+		targetPlayer:remove()
 	end
 
-	if ip == 0 then
+	if targetIp == 0 then
 		return false
 	end
 
-	resultId = db.storeQuery("SELECT 1 FROM `ip_bans` WHERE `ip` = " .. ip)
+	resultId = db.storeQuery("SELECT 1 FROM `ip_bans` WHERE `ip` = " .. targetIp)
 	if resultId ~= false then
 		result.free(resultId)
 		return false
@@ -31,6 +31,6 @@ function onSay(player, words, param)
 
 	local timeNow = os.time()
 	db.query("INSERT INTO `ip_bans` (`ip`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
-			ip .. ", '', " .. timeNow .. ", " .. timeNow + (ipBanDays * 86400) .. ", " .. player:getGuid() .. ")")
+			targetIp .. ", '', " .. timeNow .. ", " .. timeNow + (ipBanDays * 86400) .. ", " .. player:getGuid() .. ")")
 	return false
 end

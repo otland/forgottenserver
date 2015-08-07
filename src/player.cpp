@@ -2426,7 +2426,7 @@ bool Player::editVIP(uint32_t vipGuid, const std::string& description, uint32_t 
 {
 	auto it = VIPList.find(vipGuid);
 	if (it == VIPList.end()) {
-		return false;    // player is not in VIP
+		return false; // player is not in VIP
 	}
 
 	IOLoginData::editVIPEntry(accountNumber, vipGuid, description, icon, notify);

@@ -113,7 +113,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		item:remove(1)
 		player:addItem(greatEmptyPot, 1)
 	elseif itemId == greatHealthPot then
-		if (not isInArray({4, 8}, target:getVocation():getId()) or target:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck)  then
+		if (not isInArray({4, 8}, target:getVocation():getId()) or target:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
 			player:say("This potion can only be consumed by knights of level 80 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
