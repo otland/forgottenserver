@@ -27,9 +27,9 @@
 		<attack name="energy" interval="750" chance="10" radius="12" range="3" target="1" min="-650" max="-1300">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
-      		<attack name="lifedrain" interval="700" chance="10" range="3" radius="4" target="1" min="-600" max="-1230">
-      		<attribute key="shootEffect" value="poison" />
-      		</attack>
+		<attack name="lifedrain" interval="700" chance="10" range="3" radius="4" target="1" min="-600" max="-1230">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
 		<attack name="poison" interval="700" chance="12" radius="3" target="0" min="-40" max="-130">
 			<attribute key="areaEffect" value="poison" />
 		</attack>

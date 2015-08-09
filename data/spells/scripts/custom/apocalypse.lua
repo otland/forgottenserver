@@ -1,43 +1,25 @@
-local combat = createCombatObject()
-local area = createCombatArea({
-	{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-	{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-	{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
-	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-	{1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1},
-	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-	{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
-	{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-	{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}
-})
-setCombatArea(combat, area)
-
-function spellCallback(param)
-	if isCreature(param.cid) then
-		if param.count > 0 or math.random(0, 1) == 1 and isCreature(param.cid) then
-			doSendMagicEffect(param.pos, CONST_ME_HITBYFIRE)
-			doAreaCombatHealth(param.cid, COMBAT_FIREDAMAGE, param.pos, 0, -100, -100, CONST_ME_EXPLOSIONHIT)
+function spellCallback(cid, position, count)
+	if Creature(cid) then
+		if count > 0 or math.random(0, 1) == 1 then
+			position:sendMagicEffect(CONST_ME_HITBYFIRE)
+			doAreaCombatHealth(cid, COMBAT_FIREDAMAGE, position, 0, -100, -100, CONST_ME_EXPLOSIONHIT)
 		end
 
-		if(param.count < 5) then
-			param.count = param.count + 1
-			addEvent(spellCallback, math.random(1000, 4000), param)
+		if count < 5 then
+			count = count + 1
+			addEvent(spellCallback, math.random(1000, 4000), cid, position, count)
 		end
 	end
 end
 
-function onTargetTile(creature, pos)
-	local param = {}
-	param.cid = creature:getId()
-	param.pos = pos
-	param.count = 0
-	spellCallback(param)
+function onTargetTile(creature, position)
+	spellCallback(creature:getId(), position, 0)
 end
 
-setCombatCallback(combat, CALLBACK_PARAM_TARGETTILE, "onTargetTile")
+local combat = Combat()
+combat:setArea(createCombatArea(AREA_CROSS5X5))
+combat:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
 
-function onCastSpell(cid, var)
-	return doCombat(cid, combat, var)
+function onCastSpell(creature, var, isHotkey)
+	return combat:execute(creature, var)
 end

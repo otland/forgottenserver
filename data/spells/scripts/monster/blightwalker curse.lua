@@ -15,8 +15,7 @@ for i = 10, 30 do
 		condition:addDamage(1, 4000, -damage)
 	end
 
-	local area = createCombatArea(AREA_CROSS6X6)
-	combat[i]:setArea(area)
+	combat[i]:setArea(createCombatArea(AREA_CROSS6X6))
 	combat[i]:setCondition(condition)
 end
 

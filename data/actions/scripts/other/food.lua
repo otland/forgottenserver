@@ -1,4 +1,4 @@
-local FOODS = {
+local foods = {
 	[2362] = {5, "Crunch."}, -- carrot
 	[2666] = {15, "Munch."}, -- meat
 	[2667] = {12, "Munch."}, -- fish
@@ -99,7 +99,7 @@ local FOODS = {
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local food = FOODS[item.itemid]
+	local food = foods[item.itemid]
 	if food == nil then
 		return false
 	end

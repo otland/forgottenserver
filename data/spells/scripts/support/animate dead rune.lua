@@ -3,9 +3,8 @@ function onCastSpell(creature, variant, isHotkey)
 		return false
 	end
 
-	local position = variantToPosition(variant)
+	local position = Variant.getPosition(variant)
 	local tile = Tile(position)
-
 	if tile and creature:getSkull() ~= SKULL_BLACK then
 		local corpse = tile:getTopDownItem()
 		if corpse then

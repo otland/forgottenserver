@@ -51,11 +51,11 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 
 		//Use this function for autosend messages only
 		OutputMessage_ptr getOutputBuffer(int32_t size);
-		
+
 		OutputMessage_ptr& getCurrentBuffer() {
 			return m_outputBuffer;
 		}
-		
+
 		void send(OutputMessage_ptr msg) const {
 			if (auto connection = getConnection()) {
 				connection->send(msg);

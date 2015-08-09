@@ -12,7 +12,8 @@ function onSay(player, words, param)
 	local position = player:getPosition()
 	position:getNextPosition(player:getDirection())
 
-	local house = House(getTileHouseInfo(position))
+	local tile = Tile(position)
+	local house = tile and tile:getHouse()
 	if house == nil then
 		player:sendCancelMessage("You have to be looking at the door of the house you would like to buy.")
 		return false

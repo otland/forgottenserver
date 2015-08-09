@@ -3,9 +3,7 @@ combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_HITAREA)
 combat:setParameter(COMBAT_PARAM_BLOCKARMOR, 1)
 combat:setParameter(COMBAT_PARAM_USECHARGES, 1)
-
-local area = createCombatArea(AREA_SQUARE1X1)
-combat:setArea(area)
+combat:setArea(createCombatArea(AREA_SQUARE1X1))
 
 function onGetFormulaValues(player, skill, attack, factor)
 	local skillTotal = skill * attack

@@ -1265,9 +1265,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	int32_t distance = std::max<int32_t>(dx, dy);
 
 	if (!flee && (distance > mType->targetDistance || !g_game.isSightClear(creaturePos, targetPos, true))) {
-		return false;    // let the A* calculate it
+		return false; // let the A* calculate it
 	} else if (!flee && distance == mType->targetDistance) {
-		return true;    // we don't really care here, since it's what we wanted to reach (a dancestep will take of dancing in that position)
+		return true; // we don't really care here, since it's what we wanted to reach (a dancestep will take of dancing in that position)
 	}
 
 	int_fast32_t offsetx = Position::getOffsetX(creaturePos, targetPos);
@@ -1283,7 +1283,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	}
 
 	if (offsetx == 0 && offsety == 0) {
-		return getRandomStep(creaturePos, dir);    // player is "on" the monster so let's get some random step and rest will be taken care later.
+		return getRandomStep(creaturePos, dir); // player is "on" the monster so let's get some random step and rest will be taken care later.
 	}
 
 	if (dx == dy) {

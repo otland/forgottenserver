@@ -70,7 +70,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 			CONNECTION_STATE_OPEN,
 			CONNECTION_STATE_CLOSED,
 		};
-		
+
 		enum { FORCE_CLOSE = true };
 
 		Connection(boost::asio::ip::tcp::socket* socket,

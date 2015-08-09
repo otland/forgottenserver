@@ -742,7 +742,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	int32_t sellCallback;
 	if (lua_isfunction(L, -1) == 0) {
 		sellCallback = -1;
-		lua_pop(L, 1);    // skip it - use default value
+		lua_pop(L, 1); // skip it - use default value
 	} else {
 		sellCallback = popCallback(L);
 	}
@@ -750,7 +750,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	int32_t buyCallback;
 	if (lua_isfunction(L, -1) == 0) {
 		buyCallback = -1;
-		lua_pop(L, 1);    // skip it - use default value
+		lua_pop(L, 1); // skip it - use default value
 	} else {
 		buyCallback = popCallback(L);
 	}
