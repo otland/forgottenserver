@@ -35,9 +35,6 @@ function onCastSpell(creature, var)
 		return false
 	end
 
-	creature:addMana(-manaToRemove)
-	creature:addManaSpent(manaToRemove)
-
 	local position = creature:getPosition()
 	local summon = Game.createMonster(monsterName, position, true)
 	if not summon then
@@ -45,6 +42,9 @@ function onCastSpell(creature, var)
 		position:sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
+
+	creature:addMana(-manaToRemove)
+	creature:addManaSpent(manaToRemove)
 
 	summon:setMaster(creature)
 	position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
