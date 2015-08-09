@@ -32,7 +32,7 @@ class RSA
 		RSA(const RSA&) = delete;
 		RSA& operator=(const RSA&) = delete;
 
-		void setKey(const char* p_str, const char* q_str);
+		void setKey(const char* pString, const char* qString);
 		void decrypt(char* msg) const;
 
 	private:
