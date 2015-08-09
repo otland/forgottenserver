@@ -4,7 +4,7 @@ function onSay(player, words, param)
 		return true
 	end
 
-	if player:getPremiumDays() <= 0 then
+	if not player:isPremium() then
 		player:sendCancelMessage("You need a premium account.")
 		return false
 	end
