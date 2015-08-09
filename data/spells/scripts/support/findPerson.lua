@@ -1,11 +1,13 @@
-local LEVEL_LOWER = 1
-local LEVEL_SAME = 2
-local LEVEL_HIGHER = 3
-
-local DISTANCE_BESIDE = 1
-local DISTANCE_CLOSE = 2
-local DISTANCE_FAR = 3
-local DISTANCE_VERYFAR = 4
+local directionNames = {
+	["DIRECTION_NORTH"] = "north.",
+	["DIRECTION_SOUTH"] = "south.",
+	["DIRECTION_EAST"] = "east.",
+	["DIRECTION_WEST"] = "west.",
+	["DIRECTION_NORTHEAST"] = "north-east.",
+	["DIRECTION_NORTHWEST"] = "north-west.",
+	["DIRECTION_SOUTHEAST"] = "south-east.",
+	["DIRECTION_SOUTHWEST"] = "south-west."
+}
 
 function onCastSpell(creature, var)
 	if not creature:getPlayer() then
@@ -109,23 +111,7 @@ function onCastSpell(creature, var)
 		end
 	end
 
-	if direction == DIRECTION_NORTH then
-		returnMessage = returnMessage .. "north."
-	elseif direction == DIRECTION_SOUTH then
-		returnMessage = returnMessage .. "south."
-	elseif direction == DIRECTION_EAST then
-		returnMessage = returnMessage .. "east."
-	elseif direction == DIRECTION_WEST then
-		returnMessage = returnMessage .. "west."
-	elseif direction == DIRECTION_NORTHEAST then
-		returnMessage = returnMessage .. "north-east."
-	elseif direction == DIRECTION_NORTHWEST then
-		returnMessage = returnMessage .. "north-west."
-	elseif direction == DIRECTION_SOUTHEAST then
-		returnMessage = returnMessage .. "south-east."
-	elseif direction == DIRECTION_SOUTHWEST then
-		returnMessage = returnMessage .. "south-west."
-	end
+	returnMessage = returnMessage .. directionNames[direction]
 
 	creature:sendTextMessage(MESSAGE_INFO_DESCR, returnMessage)
 	playerPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
