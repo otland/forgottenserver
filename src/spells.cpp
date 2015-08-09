@@ -886,63 +886,6 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 
 namespace {
 
-bool SummonMonster(const InstantSpell* spell, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	MonsterType* mType = g_monsters.getMonsterType(param);
-	if (!mType) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	if (!player->hasFlag(PlayerFlag_CanSummonAll)) {
-		if (!mType->info.isSummonable) {
-			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getMana() < mType->info.manaCost) {
-			player->sendCancelMessage(RETURNVALUE_NOTENOUGHMANA);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getSummonCount() >= 2) {
-			player->sendCancelMessage("You cannot summon more creatures.");
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-	}
-
-	Monster* monster = Monster::createMonster(param);
-	if (!monster) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	// Place the monster
-	creature->addSummon(monster);
-
-	if (!g_game.placeCreature(monster, creature->getPosition(), true)) {
-		creature->removeSummon(monster);
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	Spell::postCastSpell(player, mType->info.manaCost, spell->getSoulCost());
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_BLUE);
-	g_game.addMagicEffect(monster->getPosition(), CONST_ME_TELEPORT);
-	return true;
-}
-
 bool Levitate(const InstantSpell*, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -994,8 +937,6 @@ bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 	const char* functionName = attr.as_string();
 	if (strcasecmp(functionName, "levitate") == 0) {
 		function = Levitate;
-	} else if (strcasecmp(functionName, "summonmonster") == 0) {
-		function = SummonMonster;
 	} else {
 		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
