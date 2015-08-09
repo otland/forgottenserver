@@ -948,8 +948,6 @@ bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 		function = Levitate;
 	} else if (strcasecmp(functionName, "illusion") == 0) {
 		function = Illusion;
-	} else if (strcasecmp(functionName, "summonmonster") == 0) {
-		function = SummonMonster;
 	} else {
 		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
@@ -1464,63 +1462,6 @@ bool InstantSpell::SearchPlayer(const InstantSpell*, Creature* creature, const s
 	}
 	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_BLUE);
-	return true;
-}
-
-bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	MonsterType* mType = g_monsters.getMonsterType(param);
-	if (!mType) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	if (!player->hasFlag(PlayerFlag_CanSummonAll)) {
-		if (!mType->isSummonable) {
-			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getMana() < mType->manaCost) {
-			player->sendCancelMessage(RETURNVALUE_NOTENOUGHMANA);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getSummonCount() >= 2) {
-			player->sendCancelMessage("You cannot summon more creatures.");
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-	}
-
-	Monster* monster = Monster::createMonster(param);
-	if (!monster) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	// Place the monster
-	creature->addSummon(monster);
-
-	if (!g_game.placeCreature(monster, creature->getPosition(), true)) {
-		creature->removeSummon(monster);
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	Spell::postCastSpell(player, mType->manaCost, spell->getSoulCost());
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_BLUE);
-	g_game.addMagicEffect(monster->getPosition(), CONST_ME_TELEPORT);
 	return true;
 }
 

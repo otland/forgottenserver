@@ -233,7 +233,6 @@ class InstantSpell : public TalkAction, public Spell
 		static InstantSpellFunction HouseDoorList;
 		static InstantSpellFunction HouseKick;
 		static InstantSpellFunction SearchPlayer;
-		static InstantSpellFunction SummonMonster;
 		static InstantSpellFunction Levitate;
 		static InstantSpellFunction Illusion;
 
