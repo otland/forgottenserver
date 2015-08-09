@@ -32,14 +32,12 @@ class RSA
 		RSA(const RSA&) = delete;
 		RSA& operator=(const RSA&) = delete;
 
-		void setKey(const char* p, const char* q);
-		void decrypt(char* msg);
+		void setKey(const char* pString, const char* qString);
+		void decrypt(char* msg) const;
 
-	protected:
-		std::recursive_mutex lock;
-
+	private:
 		//use only GMP
-		mpz_t m_n, m_d;
+		mpz_t n, d;
 };
 
 #endif
