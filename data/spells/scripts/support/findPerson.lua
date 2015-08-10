@@ -1,12 +1,12 @@
 local directionNames = {
-	["DIRECTION_NORTH"] = "north.",
-	["DIRECTION_SOUTH"] = "south.",
-	["DIRECTION_EAST"] = "east.",
-	["DIRECTION_WEST"] = "west.",
-	["DIRECTION_NORTHEAST"] = "north-east.",
-	["DIRECTION_NORTHWEST"] = "north-west.",
-	["DIRECTION_SOUTHEAST"] = "south-east.",
-	["DIRECTION_SOUTHWEST"] = "south-west."
+	DIRECTION_NORTH = "north.",
+	DIRECTION_SOUTH = "south.",
+	DIRECTION_EAST = "east.",
+	DIRECTION_WEST = "west.",
+	DIRECTION_NORTHEAST = "north-east.",
+	DIRECTION_NORTHWEST = "north-west.",
+	DIRECTION_SOUTHEAST = "south-east.",
+	DIRECTION_SOUTHWEST = "south-west."
 }
 
 local LEVEL_LOWER = 1
