@@ -12072,7 +12072,7 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 	if (isNumber(L, 2)) {
 		spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
 	} else if (isString(L, 2)) {
-		const std::string& stringArgument = getString(L, 2)
+		const std::string& stringArgument = getString(L, 2);
 		spell = g_spells->getInstantSpellByName(stringArgument);
 		if (spell == nullptr) {
 			spell = g_spells->getInstantSpell(stringArgument);
