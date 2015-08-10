@@ -35,6 +35,14 @@ function onCastSpell(creature, var)
 		return false
 	end
 
+	local spell = Spell() -- TBA
+	local soulCost = spell and spell:getSoulCost()
+	if creature:getSoul() < soulCost then
+		creature:sendCancelMessage(RETURNVALUE_NOTENOUGHSOUL)
+		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
 	local position = creature:getPosition()
 	local summon = Game.createMonster(monsterName, position, true)
 	if not summon then
@@ -45,6 +53,7 @@ function onCastSpell(creature, var)
 
 	creature:addMana(-manaToRemove)
 	creature:addManaSpent(manaToRemove)
+	creature:addSoul(-soulCost)
 
 	summon:setMaster(creature)
 	position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
