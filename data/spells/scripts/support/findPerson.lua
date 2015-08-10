@@ -28,9 +28,9 @@ function onCastSpell(creature, var)
 	local playerPosition = creature:getPosition()
 	local targetPosition = targetPlayer:getPosition()
 	local distance = {
-		["x"] = playerPosition.x - targetPosition.x,
-		["y"] = playerPosition.y - targetPosition.y,
-		["z"] = playerPosition.z - targetPosition.z
+		x = playerPosition.x - targetPosition.x,
+		y = playerPosition.y - targetPosition.y,
+		z = playerPosition.z - targetPosition.z
 	}
 
 	local level = LEVEL_SAME
