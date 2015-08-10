@@ -9,6 +9,15 @@ local directionNames = {
 	["DIRECTION_SOUTHWEST"] = "south-west."
 }
 
+local LEVEL_LOWER = 1
+local LEVEL_SAME = 2
+local LEVEL_HIGHER = 3
+
+local DISTANCE_BESIDE = 1
+local DISTANCE_CLOSE = 2
+local DISTANCE_FAR = 3
+local DISTANCE_VERYFAR = 4
+
 function onCastSpell(creature, var)
 	if not creature:getPlayer() then
 		return false
@@ -57,6 +66,7 @@ function onCastSpell(creature, var)
 		distanceValue = distance.y / distance.x
 	end
 
+	local direction
 	local absValue = math.abs(distanceValue)
 	if absValue < 0.4142 then
 		if distance.x > 0 then
