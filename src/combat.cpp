@@ -44,11 +44,6 @@ Combat::~Combat()
 	for (const Condition* condition : params.conditionList) {
 		delete condition;
 	}
-
-	delete params.valueCallback;
-	delete params.tileCallback;
-	delete params.targetCallback;
-	delete area;
 }
 
 CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
@@ -461,26 +456,22 @@ bool Combat::setCallback(CallBackParam_t key)
 {
 	switch (key) {
 		case CALLBACK_PARAM_LEVELMAGICVALUE: {
-			delete params.valueCallback;
-			params.valueCallback = new ValueCallback(COMBAT_FORMULA_LEVELMAGIC);
+			params.valueCallback.reset(new ValueCallback(COMBAT_FORMULA_LEVELMAGIC));
 			return true;
 		}
 
 		case CALLBACK_PARAM_SKILLVALUE: {
-			delete params.valueCallback;
-			params.valueCallback = new ValueCallback(COMBAT_FORMULA_SKILL);
+			params.valueCallback.reset(new ValueCallback(COMBAT_FORMULA_SKILL));
 			return true;
 		}
 
 		case CALLBACK_PARAM_TARGETTILE: {
-			delete params.tileCallback;
-			params.tileCallback = new TileCallback();
+			params.tileCallback.reset(new TileCallback());
 			return true;
 		}
 
 		case CALLBACK_PARAM_TARGETCREATURE: {
-			delete params.targetCallback;
-			params.targetCallback = new TargetCallback();
+			params.targetCallback.reset(new TargetCallback());
 			return true;
 		}
 	}
@@ -492,15 +483,15 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 	switch (key) {
 		case CALLBACK_PARAM_LEVELMAGICVALUE:
 		case CALLBACK_PARAM_SKILLVALUE: {
-			return params.valueCallback;
+			return params.valueCallback.get();
 		}
 
 		case CALLBACK_PARAM_TARGETTILE: {
-			return params.tileCallback;
+			return params.tileCallback.get();
 		}
 
 		case CALLBACK_PARAM_TARGETCREATURE: {
-			return params.targetCallback;
+			return params.targetCallback.get();
 		}
 	}
 	return nullptr;
@@ -779,12 +770,12 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 	if (params.combatType != COMBAT_NONE) {
 		CombatDamage damage = getCombatDamage(caster, nullptr);
 		if (damage.primary.type != COMBAT_MANADRAIN) {
-			doCombatHealth(caster, position, area, damage, params);
+			doCombatHealth(caster, position, area.get(), damage, params);
 		} else {
-			doCombatMana(caster, position, area, damage, params);
+			doCombatMana(caster, position, area.get(), damage, params);
 		}
 	} else {
-		CombatFunc(caster, position, area, params, CombatNullFunc, nullptr);
+		CombatFunc(caster, position, area.get(), params, CombatNullFunc, nullptr);
 	}
 }
 
