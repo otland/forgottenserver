@@ -568,6 +568,9 @@ class LuaScriptInterface
 
 		static int luaGameStartRaid(lua_State* L);
 
+		static int luaGameHasEffect(lua_State* L);
+		static int luaGameHasDistanceEffect(lua_State* L);
+
 		// Variant
 		static int luaVariantCreate(lua_State* L);
 

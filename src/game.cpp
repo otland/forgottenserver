@@ -5544,3 +5544,23 @@ void Game::removeUniqueItem(uint16_t uniqueId)
 		uniqueItems.erase(it);
 	}
 }
+
+bool Game::hasEffect(uint8_t effectId) {
+	for (uint8_t i = CONST_ME_NONE; i <= CONST_ME_LAST; i++) {
+		MagicEffectClasses effect = static_cast<MagicEffectClasses>(i);
+		if (effect == effectId) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Game::hasDistanceEffect(uint8_t effectId) {
+	for (uint8_t i = CONST_ANI_NONE; i <= CONST_ANI_LAST; i++) {
+		ShootType_t effect = static_cast<ShootType_t>(i);
+		if (effect == effectId) {
+			return true;
+		}
+	}
+	return false;
+}

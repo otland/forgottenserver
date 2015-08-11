@@ -4,6 +4,11 @@ function onSay(player, words, param)
 	end
 
 	local effect = tonumber(param)
+	if not Game.hasDistanceEffect(effect) then
+		player:sendCancelMessage("Invalid effect id.")
+		return false
+	end
+
 	local position = player:getPosition()
 	local toPositionLow = {z = position.z}
 	local toPositionHigh = {z = position.z}
