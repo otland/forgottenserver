@@ -39,13 +39,6 @@ Combat::Combat() :
 	//
 }
 
-Combat::~Combat()
-{
-	for (const Condition* condition : params.conditionList) {
-		delete condition;
-	}
-}
-
 CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 {
 	CombatDamage damage;
@@ -535,7 +528,7 @@ void Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 
 void Combat::CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void*)
 {
-	for (const Condition* condition : params.conditionList) {
+	for (const auto& condition : params.conditionList) {
 		if (caster == target || !target->isImmune(condition->getType())) {
 			Condition* conditionCopy = condition->clone();
 			if (caster) {

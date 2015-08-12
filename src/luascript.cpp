@@ -3168,7 +3168,7 @@ int LuaScriptInterface::luaDoAreaCombatCondition(lua_State* L)
 	if (area || areaId == 0) {
 		CombatParams params;
 		params.impactEffect = getNumber<uint8_t>(L, 5);
-		params.conditionList.push_front(condition);
+		params.conditionList.emplace_front(condition);
 		Combat::doCombatCondition(creature, getPosition(L, 2), area, params);
 		pushBoolean(L, true);
 	} else {
@@ -3204,7 +3204,7 @@ int LuaScriptInterface::luaDoTargetCombatCondition(lua_State* L)
 
 	CombatParams params;
 	params.impactEffect = getNumber<uint8_t>(L, 4);
-	params.conditionList.push_front(condition);
+	params.conditionList.emplace_front(condition);
 	Combat::doCombatCondition(creature, target, params);
 	pushBoolean(L, true);
 	return 1;
