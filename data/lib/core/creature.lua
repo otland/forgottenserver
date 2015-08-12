@@ -50,3 +50,48 @@ end
 function Creature.isTile(self)
 	return false
 end
+
+function Creature:setMonsterOutfit(monster, time)
+	if not self then
+		return false
+	end
+
+	local monsterType = MonsterType(monster)
+	if not monsterType then
+		return false
+	end
+
+	if self:getPlayer() and not getPlayerFlagValue(self, PlayerFlag_CanIllusionAll) then
+		if not monsterType:isIllusionable() then
+			return false
+		end
+	end
+
+	local condition = Condition(CONDITION_OUTFIT)
+	condition:setOutfit(monsterType:getOutfit())
+	condition:setTicks(time)
+	self:addCondition(condition)
+
+	return true
+end
+
+function Creature:setItemOutfit(item, time)
+	if not self then
+		return false
+	end
+
+	local itemType = ItemType(item)
+	if not itemType then
+		return false
+	end
+
+	local outfit = {}
+	outfit.lookTypeEx = itemType:getId()
+
+	local condition = Condition(CONDITION_OUTFIT)
+	condition:setOutfit(outfit)
+	condition:setTicks(time)
+	self:addCondition(condition)
+
+	return true
+end
