@@ -79,7 +79,7 @@ struct CombatParams {
 		origin = ORIGIN_SPELL;
 	}
 
-	std::forward_list<const Condition*> conditionList;
+	std::forward_list<std::unique_ptr<const Condition>> conditionList;
 
 	std::unique_ptr<ValueCallback> valueCallback;
 	std::unique_ptr<TileCallback> tileCallback;
@@ -269,7 +269,6 @@ class Combat
 {
 	public:
 		Combat();
-		~Combat();
 
 		// non-copyable
 		Combat(const Combat&) = delete;
@@ -314,8 +313,8 @@ class Combat
 		bool hasArea() const {
 			return area != nullptr;
 		}
-		void setCondition(const Condition* _condition) {
-			params.conditionList.push_front(_condition);
+		void setCondition(const Condition* condition) {
+			params.conditionList.emplace_front(condition);
 		}
 		void setPlayerCombatValues(formulaType_t _type, double _mina, double _minb, double _maxa, double _maxb);
 		void postCombatEffects(Creature* caster, const Position& pos) const {
