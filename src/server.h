@@ -37,23 +37,23 @@ class ServiceBase
 };
 
 template <typename ProtocolType>
-class Service : public ServiceBase
+class Service final : public ServiceBase
 {
 	public:
-		bool is_single_socket() const {
+		bool is_single_socket() const final {
 			return ProtocolType::server_sends_first;
 		}
-		bool is_checksummed() const {
+		bool is_checksummed() const final {
 			return ProtocolType::use_checksum;
 		}
-		uint8_t get_protocol_identifier() const {
+		uint8_t get_protocol_identifier() const final {
 			return ProtocolType::protocol_identifier;
 		}
-		const char* get_protocol_name() const {
+		const char* get_protocol_name() const final {
 			return ProtocolType::protocol_name();
 		}
 
-		Protocol_ptr make_protocol(const Connection_ptr& c) const {
+		Protocol_ptr make_protocol(const Connection_ptr& c) const final {
 			return std::make_shared<ProtocolType>(c);
 		}
 };
@@ -78,17 +78,17 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		Protocol_ptr make_protocol(bool checksummed, NetworkMessage& msg, const Connection_ptr& connection) const;
 
 		void onStopServer();
-		void onAccept(boost::asio::ip::tcp::socket* socket, const boost::system::error_code& error);
+		void onAccept(Connection_ptr connection, const boost::system::error_code& error);
 
 	protected:
 		void accept();
 
-		boost::asio::io_service& m_io_service;
-		std::unique_ptr<boost::asio::ip::tcp::acceptor> m_acceptor;
-		std::vector<Service_ptr> m_services;
+		boost::asio::io_service& io_service;
+		std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor;
+		std::vector<Service_ptr> services;
 
-		uint16_t m_serverPort;
-		bool m_pendingStart;
+		uint16_t serverPort;
+		bool pendingStart;
 };
 
 class ServiceManager
@@ -110,15 +110,15 @@ class ServiceManager
 		bool add(uint16_t port);
 
 		bool is_running() const {
-			return m_acceptors.empty() == false;
+			return acceptors.empty() == false;
 		}
 
 	protected:
 		void die();
 
-		std::unordered_map<uint16_t, ServicePort_ptr> m_acceptors;
+		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;
 
-		boost::asio::io_service m_io_service;
+		boost::asio::io_service io_service;
 		boost::asio::deadline_timer death_timer;
 		bool running;
 };
@@ -133,12 +133,12 @@ bool ServiceManager::add(uint16_t port)
 
 	ServicePort_ptr service_port;
 
-	auto foundServicePort = m_acceptors.find(port);
+	auto foundServicePort = acceptors.find(port);
 
-	if (foundServicePort == m_acceptors.end()) {
-		service_port = std::make_shared<ServicePort>(m_io_service);
+	if (foundServicePort == acceptors.end()) {
+		service_port = std::make_shared<ServicePort>(io_service);
 		service_port->open(port);
-		m_acceptors[port] = service_port;
+		acceptors[port] = service_port;
 	} else {
 		service_port = foundServicePort->second;
 
