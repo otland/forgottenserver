@@ -69,7 +69,7 @@ function Creature:setMonsterOutfit(monster, time)
 
 	local condition = Condition(CONDITION_OUTFIT)
 	condition:setOutfit(monsterType:getOutfit())
-	condition:setTicks(time)
+	condition:setTicks(time * 1000)
 	self:addCondition(condition)
 
 	return true
@@ -90,7 +90,7 @@ function Creature:setItemOutfit(item, time)
 
 	local condition = Condition(CONDITION_OUTFIT)
 	condition:setOutfit(outfit)
-	condition:setTicks(time)
+	condition:setTicks(time * 1000)
 	self:addCondition(condition)
 
 	return true
