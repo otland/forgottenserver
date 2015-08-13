@@ -1016,7 +1016,7 @@ function doSetCreatureOutfit(cid, outfit, time)
 
 	local condition = Condition(CONDITION_OUTFIT)
 	condition:setOutfit(outfit)
-	condition:setTicks(time * 1000)
+	condition:setTicks(time)
 	creature:addCondition(condition)
 
 	return true
