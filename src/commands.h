@@ -44,7 +44,6 @@ class Commands
 
 	protected:
 		//commands
-		void reloadInfo(Player& player, const std::string& param);
 		void sellHouse(Player& player, const std::string& param);
 		void forceRaid(Player& player, const std::string& param);
 

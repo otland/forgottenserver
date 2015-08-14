@@ -568,6 +568,8 @@ class LuaScriptInterface
 
 		static int luaGameStartRaid(lua_State* L);
 
+		static int luaGameReload(lua_State* L);
+
 		// Variant
 		static int luaVariantCreate(lua_State* L);
 

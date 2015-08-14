@@ -46,11 +46,13 @@
 #include "mounts.h"
 #include "bed.h"
 #include "scheduler.h"
-#include "monster.h"
 #include "spawn.h"
 #include "connection.h"
 #include "events.h"
 #include "databasetasks.h"
+#include "creatureevent.h"
+#include "movement.h"
+#include "weapons.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -60,6 +62,10 @@ extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
+extern CreatureEvents* g_creatureEvents;
+extern Monsters g_monsters;
+extern MoveEvents* g_moveEvents;
+extern Weapons* g_weapons;
 
 Game::Game() :
 	wildcardTree(false),
@@ -5542,5 +5548,49 @@ void Game::removeUniqueItem(uint16_t uniqueId)
 	auto it = uniqueItems.find(uniqueId);
 	if (it != uniqueItems.end()) {
 		uniqueItems.erase(it);
+	}
+}
+
+bool Game::reload(ReloadTypes_t reloadType)
+{
+	if (reloadType == RELOAD_TYPE_ACTIONS) {
+		return g_actions->reload();
+	} else if (reloadType == RELOAD_TYPE_CONFIG) {
+		return g_config.reload();
+	} else if (reloadType == RELOAD_TYPE_CREATURESCRIPTS) {
+		return g_creatureEvents->reload();
+	} else if (reloadType == RELOAD_TYPE_MONSTERS) {
+		return g_monsters.reload();
+	} else if (reloadType == RELOAD_TYPE_MOVEMENTS) {
+		return g_moveEvents->reload();
+	} else if (reloadType == RELOAD_TYPE_NPCS) {
+		Npcs::reload();
+		return true;
+	} else if (reloadType == RELOAD_TYPE_RAIDS) {
+		return g_game.raids.reload() && g_game.raids.startup();
+	} else if (reloadType == RELOAD_TYPE_SPELLS) {
+		return g_spells->reload() && g_monsters.reload();
+	} else if (reloadType == RELOAD_TYPE_TALKCTIONS) {
+		return g_talkActions->reload();
+	} else if (reloadType == RELOAD_TYPE_ITEMS) {
+		return Item::items.reload();
+	} else if (reloadType == RELOAD_TYPE_WEAPONS) {
+		bool results = g_weapons->reload();
+		g_weapons->loadDefaults();
+		return results;
+	} else if (reloadType == RELOAD_TYPE_QUESTS) {
+		return g_game.quests.reload();
+	} else if (reloadType == RELOAD_TYPE_MOUNTS) {
+		return g_game.mounts.reload();
+	} else if (reloadType == RELOAD_TYPE_GLOBALEVENTS) {
+		return g_globalEvents->reload();
+	} else if (reloadType == RELOAD_TYPE_EVENTS) {
+		return g_events->load();
+	} else if (reloadType == RELOAD_TYPE_CHAT) {
+		return g_chat->load();
+	} else if (reloadType == RELOAD_TYPE_COMMANDS) {
+		return commands.reload();
+	} else {
+		return false;
 	}
 }
