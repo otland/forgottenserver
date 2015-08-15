@@ -96,7 +96,7 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 
 bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 {
-	MoveEvent* moveEvent = reinterpret_cast<MoveEvent*>(event);
+	MoveEvent* moveEvent = static_cast<MoveEvent*>(event); //event is guaranteed to be a MoveEvent
 
 	const MoveEvent_t eventType = moveEvent->getEventType();
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {

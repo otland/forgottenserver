@@ -86,7 +86,7 @@ Event* Actions::getEvent(const std::string& nodeName)
 
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
 {
-	Action* action = reinterpret_cast<Action*>(event);
+	Action* action = static_cast<Action*>(event); //event is guaranteed to be an Action
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
