@@ -5567,9 +5567,13 @@ bool Game::reload(ReloadTypes_t reloadType)
 		Npcs::reload();
 		return true;
 	} else if (reloadType == RELOAD_TYPE_RAIDS) {
-		return g_game.raids.reload() && g_game.raids.startup();
+		return raids.reload() && raids.startup();
 	} else if (reloadType == RELOAD_TYPE_SPELLS) {
-		return g_spells->reload() && g_monsters.reload();
+		if (!g_spells->reload()) {
+			std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+			return false;
+		}
+		return g_monsters.reload();
 	} else if (reloadType == RELOAD_TYPE_TALKCTIONS) {
 		return g_talkActions->reload();
 	} else if (reloadType == RELOAD_TYPE_ITEMS) {
@@ -5579,9 +5583,9 @@ bool Game::reload(ReloadTypes_t reloadType)
 		g_weapons->loadDefaults();
 		return results;
 	} else if (reloadType == RELOAD_TYPE_QUESTS) {
-		return g_game.quests.reload();
+		return quests.reload();
 	} else if (reloadType == RELOAD_TYPE_MOUNTS) {
-		return g_game.mounts.reload();
+		return mounts.reload();
 	} else if (reloadType == RELOAD_TYPE_GLOBALEVENTS) {
 		return g_globalEvents->reload();
 	} else if (reloadType == RELOAD_TYPE_EVENTS) {
