@@ -5574,7 +5574,13 @@ bool Game::reload(ReloadTypes_t reloadType)
 			std::terminate();
 			return false;
 		}
-		return g_monsters.reload();
+
+		if (!g_monsters.reload()) {
+			std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
+			std::terminate();
+			return false;
+		}
+		return true;
 	} else if (reloadType == RELOAD_TYPE_TALKCTIONS) {
 		return g_talkActions->reload();
 	} else if (reloadType == RELOAD_TYPE_ITEMS) {
