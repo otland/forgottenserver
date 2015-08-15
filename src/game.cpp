@@ -5571,6 +5571,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 	} else if (reloadType == RELOAD_TYPE_SPELLS) {
 		if (!g_spells->reload()) {
 			std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+			std::terminate();
 			return false;
 		}
 		return g_monsters.reload();
