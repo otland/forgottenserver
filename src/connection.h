@@ -35,6 +35,7 @@ class ServiceBase;
 typedef std::shared_ptr<ServiceBase> Service_ptr;
 class ServicePort;
 typedef std::shared_ptr<ServicePort> ServicePort_ptr;
+typedef std::shared_ptr<const ServicePort> ConstServicePort_ptr;
 
 class ConnectionManager
 {
@@ -44,8 +45,7 @@ class ConnectionManager
 			return instance;
 		}
 
-		Connection_ptr createConnection(boost::asio::ip::tcp::socket* socket,
-		                                boost::asio::io_service& io_service, ServicePort_ptr servicers);
+		Connection_ptr createConnection(boost::asio::io_service& io_service, ConstServicePort_ptr servicePort);
 		void releaseConnection(const Connection_ptr& connection);
 		void closeAll();
 
@@ -73,13 +73,12 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		enum { FORCE_CLOSE = true };
 
-		Connection(boost::asio::ip::tcp::socket* socket,
-		           boost::asio::io_service& io_service,
-		           ServicePort_ptr service_port) :
+		Connection(boost::asio::io_service& io_service,
+		           ConstServicePort_ptr service_port) :
 			readTimer(io_service),
 			writeTimer(io_service),
 			service_port(service_port),
-			socket(socket) {
+			socket(io_service) {
 			connectionState = CONNECTION_STATE_OPEN;
 			receivedFirst = false;
 			packetsSent = 0;
@@ -107,8 +106,12 @@ class Connection : public std::enable_shared_from_this<Connection>
 		static void handleTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error);
 
 		void closeSocket();
-
 		void internalSend(const OutputMessage_ptr& msg);
+
+		boost::asio::ip::tcp::socket& getSocket() {
+			return socket;
+		}
+		friend class ServicePort;
 
 		NetworkMessage msg;
 
@@ -119,18 +122,16 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		std::list<OutputMessage_ptr> messageQueue;
 
-		ServicePort_ptr service_port;
+		ConstServicePort_ptr service_port;
 		Protocol_ptr protocol;
 
-		std::unique_ptr<boost::asio::ip::tcp::socket> socket;
+		boost::asio::ip::tcp::socket socket;
 
 		time_t timeConnected;
 		uint32_t packetsSent;
 
 		bool connectionState;
 		bool receivedFirst;
-
-		static bool logError;
 };
 
 #endif
