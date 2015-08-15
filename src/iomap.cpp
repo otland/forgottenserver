@@ -254,7 +254,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					}
 
 					tile = new HouseTile(px, py, pz, house);
-					house->addTile(reinterpret_cast<HouseTile*>(tile));
+					house->addTile(static_cast<HouseTile*>(tile));
 					isHouseTile = true;
 				}
 
