@@ -5573,9 +5573,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
 			std::terminate();
 			return false;
-		}
-
-		if (!g_monsters.reload()) {
+		} else if (!g_monsters.reload()) {
 			std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
 			std::terminate();
 			return false;
