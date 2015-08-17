@@ -112,15 +112,15 @@ class PrivateChatChannel final : public ChatChannel
 		void closeChannel() const;
 
 		const InvitedMap& getInvitedUsers() const {
-			return m_invites;
+			return invites;
 		}
 
 		const InvitedMap* getInvitedUsersPtr() const final {
-			return &m_invites;
+			return &invites;
 		}
 
 	protected:
-		InvitedMap m_invites;
+		InvitedMap invites;
 		uint32_t owner;
 };
 
@@ -154,7 +154,7 @@ class Chat
 		PrivateChatChannel* getPrivateChannel(const Player& player);
 
 		LuaScriptInterface* getScriptInterface() {
-			return &m_scriptInterface;
+			return &scriptInterface;
 		}
 
 	private:
@@ -163,9 +163,9 @@ class Chat
 		std::map<Party*, ChatChannel> partyChannels;
 		std::map<uint32_t, ChatChannel> guildChannels;
 
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 
-		std::unique_ptr<PrivateChatChannel> dummyPrivate;
+		PrivateChatChannel dummyPrivate;
 };
 
 #endif

@@ -33,17 +33,17 @@ bool PrivateChatChannel::isInvited(uint32_t guid) const
 	if (guid == getOwner()) {
 		return true;
 	}
-	return m_invites.find(guid) != m_invites.end();
+	return invites.find(guid) != invites.end();
 }
 
 bool PrivateChatChannel::removeInvite(uint32_t guid)
 {
-	return m_invites.erase(guid) != 0;
+	return invites.erase(guid) != 0;
 }
 
 void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer)
 {
-	auto result = m_invites.emplace(invitePlayer.getGUID(), &invitePlayer);
+	auto result = invites.emplace(invitePlayer.getGUID(), &invitePlayer);
 	if (!result.second) {
 		return;
 	}
@@ -275,11 +275,11 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	return result;
 }
 
-Chat::Chat()
-	: m_scriptInterface("Chat Interface")
+Chat::Chat():
+	scriptInterface("Chat Interface"),
+	dummyPrivate(CHANNEL_PRIVATE, "Private Chat Channel")
 {
-	m_scriptInterface.initState();
-	dummyPrivate.reset(new PrivateChatChannel(CHANNEL_PRIVATE, "Private Chat Channel"));
+	scriptInterface.initState();
 }
 
 bool Chat::load()
@@ -307,11 +307,11 @@ bool Chat::load()
 
 		pugi::xml_attribute scriptAttribute = channelNode.attribute("script");
 		if (scriptAttribute) {
-			if (m_scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
-				channel.onSpeakEvent = m_scriptInterface.getEvent("onSpeak");
-				channel.canJoinEvent = m_scriptInterface.getEvent("canJoin");
-				channel.onJoinEvent = m_scriptInterface.getEvent("onJoin");
-				channel.onLeaveEvent = m_scriptInterface.getEvent("onLeave");
+			if (scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
+				channel.onSpeakEvent = scriptInterface.getEvent("onSpeak");
+				channel.canJoinEvent = scriptInterface.getEvent("canJoin");
+				channel.onJoinEvent = scriptInterface.getEvent("onJoin");
+				channel.onLeaveEvent = scriptInterface.getEvent("onLeave");
 			} else {
 				std::cout << "[Warning - Chat::load] Can not load script: " << scriptAttribute.as_string() << std::endl;
 			}
@@ -543,7 +543,7 @@ ChannelList Chat::getChannelList(const Player& player)
 	}
 
 	if (!hasPrivate && player.isPremium()) {
-		list.push_front(dummyPrivate.get());
+		list.push_front(&dummyPrivate);
 	}
 	return list;
 }
