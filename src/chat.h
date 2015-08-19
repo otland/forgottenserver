@@ -33,7 +33,15 @@ class ChatChannel
 {
 	public:
 		ChatChannel() = default;
-		ChatChannel(uint16_t channelId, std::string channelName) : name(channelName), canJoinEvent(-1), onJoinEvent(-1), onLeaveEvent(-1), onSpeakEvent(-1), id(channelId), publicChannel(false) {}
+		ChatChannel(uint16_t channelId, std::string channelName):
+			name(channelName),
+			canJoinEvent(-1),
+			onJoinEvent(-1),
+			onLeaveEvent(-1),
+			onSpeakEvent(-1),
+			id(channelId),
+			publicChannel(false) {}
+
 		virtual ~ChatChannel() = default;
 
 		bool addUser(Player& player);
@@ -104,15 +112,15 @@ class PrivateChatChannel final : public ChatChannel
 		void closeChannel() const;
 
 		const InvitedMap& getInvitedUsers() const {
-			return m_invites;
+			return invites;
 		}
 
 		const InvitedMap* getInvitedUsersPtr() const final {
-			return &m_invites;
+			return &invites;
 		}
 
 	protected:
-		InvitedMap m_invites;
+		InvitedMap invites;
 		uint32_t owner;
 };
 
@@ -122,7 +130,6 @@ class Chat
 {
 	public:
 		Chat();
-		~Chat();
 
 		// non-copyable
 		Chat(const Chat&) = delete;
@@ -147,18 +154,18 @@ class Chat
 		PrivateChatChannel* getPrivateChannel(const Player& player);
 
 		LuaScriptInterface* getScriptInterface() {
-			return &m_scriptInterface;
+			return &scriptInterface;
 		}
 
 	private:
 		std::map<uint16_t, ChatChannel> normalChannels;
-		std::map<uint16_t, PrivateChatChannel*> privateChannels;
-		std::map<Party*, ChatChannel*> partyChannels;
-		std::map<uint32_t, ChatChannel*> guildChannels;
+		std::map<uint16_t, PrivateChatChannel> privateChannels;
+		std::map<Party*, ChatChannel> partyChannels;
+		std::map<uint32_t, ChatChannel> guildChannels;
 
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 
-		ChatChannel* dummyPrivate;
+		PrivateChatChannel dummyPrivate;
 };
 
 #endif
