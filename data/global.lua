@@ -13,18 +13,18 @@ levelDoors = {1227, 1229, 1245, 1247, 1259, 1261, 3540, 3549, 5103, 5112, 5121, 
 keys = {2086, 2087, 2088, 2089, 2090, 2091, 2092, 10032}
 
 function getDistanceBetween(firstPosition, secondPosition)
-	local xDif = math.abs(firstPosition.x - secondPosition.x)
-	local yDif = math.abs(firstPosition.y - secondPosition.y)
+	local xDif = math.abs(firstPosition.x-secondPosition.x)
+	local yDif = math.abs(firstPosition.y-secondPosition.y)
 	local posDif = math.max(xDif, yDif)
 	if firstPosition.z ~= secondPosition.z then
-		posDif = posDif + 15
+		posDif = posDif+15
 	end
 	return posDif
 end
 
 function getFormattedWorldTime()
 	local worldTime = getWorldTime()
-	local hours = math.floor(worldTime / 60)
+	local hours = math.floor(worldTime/60)
 
 	local minutes = worldTime % 60
 	if minutes < 10 then
