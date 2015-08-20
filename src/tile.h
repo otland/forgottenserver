@@ -82,66 +82,36 @@ enum ZoneType_t {
 	ZONE_NORMAL,
 };
 
-class TileItemVector
+class TileItemVector : private ItemVector
 {
 	public:
-		TileItemVector() : downItemCount(0) {}
-
-		using value_type = ItemVector::value_type;
-		using iterator = ItemVector::iterator;
-		using const_iterator = ItemVector::const_iterator;
-		using reverse_iterator = ItemVector::reverse_iterator;
-		using const_reverse_iterator = ItemVector::const_reverse_iterator;
-
-		const_iterator begin() const {
-			return items.begin();
-		}
-		const_reverse_iterator rbegin() const {
-			return items.rbegin();
-		}
-
-		const_iterator end() const {
-			return items.end();
-		}
-		const_reverse_iterator rend() const {
-			return items.rend();
-		}
-
-		void clear() {
-			items.clear();
-		}
-
-		size_t size() const {
-			return items.size();
-		}
-
-		iterator insert(ItemVector::iterator _where, Item* item) {
-			return items.insert(_where, item);
-		}
-		iterator erase(ItemVector::iterator _pos) {
-			return items.erase(_pos);
-		}
-		Item* at(size_t _pos) const {
-			return items.at(_pos);
-		}
-		Item* back() const {
-			return items.back();
-		}
-		void push_back(Item* item) {
-			return items.push_back(item);
-		}
+		using ItemVector::begin;
+		using ItemVector::end;
+		using ItemVector::rbegin;
+		using ItemVector::rend;
+		using ItemVector::size;
+		using ItemVector::clear;
+		using ItemVector::at;
+		using ItemVector::insert;
+		using ItemVector::erase;
+		using ItemVector::push_back;
+		using ItemVector::value_type;
+		using ItemVector::iterator;
+		using ItemVector::const_iterator;
+		using ItemVector::reverse_iterator;
+		using ItemVector::const_reverse_iterator;
 
 		iterator getBeginDownItem() {
-			return items.begin();
+			return begin();
 		}
 		const_iterator getBeginDownItem() const {
 			return begin();
 		}
 		iterator getEndDownItem() {
-			return items.begin() + downItemCount;
+			return begin() + downItemCount;
 		}
 		const_iterator getEndDownItem() const {
-			return items.begin() + downItemCount;
+			return begin() + downItemCount;
 		}
 		iterator getBeginTopItem() {
 			return getEndDownItem();
@@ -150,7 +120,7 @@ class TileItemVector
 			return getEndDownItem();
 		}
 		iterator getEndTopItem() {
-			return items.end();
+			return end();
 		}
 		const_iterator getEndTopItem() const {
 			return end();
@@ -174,12 +144,11 @@ class TileItemVector
 			}
 			return *getBeginDownItem();
 		}
-
+		void addDownItemCount(int32_t increment) {
+			downItemCount += increment;
+		}
 	private:
-		ItemVector items;
-		uint16_t downItemCount;
-
-		friend class Tile;
+		uint16_t downItemCount {0};
 };
 
 class Tile : public Cylinder

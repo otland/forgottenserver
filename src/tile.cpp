@@ -933,7 +933,7 @@ void Tile::addThing(int32_t, Thing* thing)
 
 			items = makeItemList();
 			items->insert(items->getBeginDownItem(), item);
-			++items->downItemCount;
+			items->addDownItemCount(1);
 			onAddTileItem(item);
 		}
 	}
@@ -1115,7 +1115,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 
 			item->setParent(nullptr);
 			items->erase(it);
-			--items->downItemCount;
+			items->addDownItemCount(-1);
 			onRemoveTileItem(list, oldStackPosVector, item);
 		}
 	}
@@ -1328,7 +1328,7 @@ Thing* Tile::getThing(size_t index) const
 	if (items) {
 		uint32_t topItemSize = items->getTopItemCount();
 		if (index < topItemSize) {
-			return items->at(items->downItemCount + index);
+			return items->at(items->getDownItemCount() + index);
 		}
 		index -= topItemSize;
 	}
@@ -1475,7 +1475,7 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 			}
 		} else {
 			items->insert(items->getBeginDownItem(), item);
-			++items->downItemCount;
+			items->addDownItemCount(1);
 		}
 
 		setTileFlags(item);
