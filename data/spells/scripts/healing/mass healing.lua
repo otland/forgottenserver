@@ -1,7 +1,7 @@
 function onTargetCreature(creature, target)
 	local player = creature:getPlayer()
-	local min = ((player:getLevel() / 5) + (player:getMagicLevel() * 4.6) + 100)
-	local max = ((player:getLevel() / 5) + (player:getMagicLevel() * 9.6) + 125)
+	local min = (player:getLevel() / 5) + (player:getMagicLevel() * 4.6) + 100
+	local max = (player:getLevel() / 5) + (player:getMagicLevel() * 9.6) + 125
 
 	local master = target:getMaster()
 	if target:isMonster() and not master or master and master:isMonster() then
