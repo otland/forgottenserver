@@ -21,18 +21,7 @@
 
 #include "scheduler.h"
 
-Scheduler::Scheduler()
-{
-	lastEventId = 0;
-}
-
-void Scheduler::start()
-{
-	setState(THREAD_STATE_RUNNING);
-	thread = std::thread(&Scheduler::schedulerThread, this);
-}
-
-void Scheduler::schedulerThread()
+void Scheduler::threadMain()
 {
 	std::unique_lock<std::mutex> eventLockUnique(eventLock, std::defer_lock);
 	while (getState() != THREAD_STATE_TERMINATED) {
@@ -127,11 +116,6 @@ bool Scheduler::stopEvent(uint32_t eventid)
 	return true;
 }
 
-void Scheduler::stop()
-{
-	setState(THREAD_STATE_CLOSING);
-}
-
 void Scheduler::shutdown()
 {
 	setState(THREAD_STATE_TERMINATED);
@@ -148,9 +132,3 @@ void Scheduler::shutdown()
 	eventSignal.notify_one();
 }
 
-void Scheduler::join()
-{
-	if (thread.joinable()) {
-		thread.join();
-	}
-}

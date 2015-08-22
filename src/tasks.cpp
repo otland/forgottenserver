@@ -24,13 +24,7 @@
 
 extern Game g_game;
 
-void Dispatcher::start()
-{
-	setState(THREAD_STATE_RUNNING);
-	thread = std::thread(&Dispatcher::dispatcherThread, this);
-}
-
-void Dispatcher::dispatcherThread()
+void Dispatcher::threadMain()
 {
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
@@ -90,11 +84,6 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 	}
 }
 
-void Dispatcher::stop()
-{
-	setState(THREAD_STATE_CLOSING);
-}
-
 void Dispatcher::shutdown()
 {
 	Task* task = createTask([this]() {
@@ -106,11 +95,4 @@ void Dispatcher::shutdown()
 	taskList.push_back(task);
 
 	taskSignal.notify_one();
-}
-
-void Dispatcher::join()
-{
-	if (thread.joinable()) {
-		thread.join();
-	}
 }
