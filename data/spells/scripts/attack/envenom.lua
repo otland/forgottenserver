@@ -1,11 +1,24 @@
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_EARTHDAMAGE)
-combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLPLANTS)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_CARNIPHILA)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_EARTH)
 
 local condition = Condition(CONDITION_POISON)
 condition:setParameter(CONDITION_PARAM_DELAYED, 1)
-condition:addDamage(25, 3000, -45)
+
+local damageTable = {
+	{id = 1, 45, 43, 41, 39, 37, 35, 33, 31, 29, 27, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16},
+	{id = 2, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6},
+	{id = 10, 5}
+}
+
+for i = 1, #damageTable do
+	local t = damageTable[i]
+	for j = 1, #t do
+		condition:addDamage(t.id, 4000, -t[j])
+	end
+end
+
 combat:setCondition(condition)
 
 function onCastSpell(creature, var)

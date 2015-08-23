@@ -4,7 +4,7 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
 
 local condition = Condition(CONDITION_FIRE)
 condition:setParameter(CONDITION_PARAM_DELAYED, 1)
-condition:addDamage(25, 3000, -45)
+condition:addDamage(25, 4000, -45)
 combat:setCondition(condition)
 
 function onCastSpell(creature, var)
