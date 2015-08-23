@@ -18,9 +18,17 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
+	<instant group="healing" spellid="175" name="Bruise Bane" words="exura infir ico" lvl="1" mana="10" aggressive="0" selftarget="1" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/bruise bane.lua">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" />
+	</instant>
 	<instant group="attack" spellid="61" name="Brutal Strike" words="exori ico" lvl="16" mana="30" prem="1" range="1" needtarget="1" blockwalls="1" needweapon="1" exhaustion="6000" groupcooldown="2000" needlearn="0" script="attack/brutal strike.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
+	</instant>
+	<instant group="attack" spellid="177" name="Buzz" words="exori infir vis" lvl="1" mana="6" prem="0" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/buzz.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
 	</instant>
 	<instant group="support" spellid="90" name="Cancel Invisibility" words="exana ina" lvl="26" mana="200" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/cancel invisibility.lua">
 		<vocation name="Paladin" />
@@ -32,6 +40,10 @@
 	<instant group="support" spellid="131" name="Charge" words="utani tempo hur" lvl="25" mana="100" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/charge.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
+	</instant>
+	<instant group="attack" spellid="173" name="Chill Out" words="exevo infir frigo hur" lvl="1" mana="8" direction="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/chill out.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
 	</instant>
 	<instant group="support" spellid="38" name="Creature Illusion" words="utevo res ina" lvl="23" mana="100" aggressive="0" params="1" exhaustion="2000" groupcooldown="2000" needlearn="0" function="Illusion">
 		<vocation name="Sorcerer" />
@@ -271,6 +283,14 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
+	<instant group="healing" spellid="174" name="Magic Patch" words="exura infir" lvl="1" mana="6" aggressive="0" selftarget="1" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/magic patch.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Paladin" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Elder Druid" />
+		<vocation name="Royal Paladin" />
+	</instant>
 	<instant group="support" spellid="76" name="Magic Rope" words="exani tera" lvl="9" mana="20" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/magic rope.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
@@ -288,6 +308,10 @@
 		<vocation name="Elder Druid" />
 	</instant>
 	<instant group="healing" spellid="82" name="Mass Healing" words="exura gran mas res" lvl="36" mana="150" prem="1" aggressive="0" exhaustion="2000" groupcooldown="1000" needlearn="0" script="healing/mass healing.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="attack" spellid="172" name="Mud Attack" words="exori infir tera" lvl="1" mana="6" prem="1" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/mud attack.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -322,6 +346,10 @@
 	<instant group="healing" spellid="36" name="Salvation" words="exura gran san" lvl="60" mana="210" prem="1" selftarget="1" aggressive="0" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/salvation.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
+	</instant>
+	<instant group="attack" spellid="178" name="Scorch" words="exevo infir flam hur" lvl="1" mana="8" direction="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/scorch.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
 	</instant>
 	<instant group="support" spellid="135" name="Sharpshooter" words="utito tempo san" lvl="60" mana="450" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/sharpshooter.lua">
 		<vocation name="Paladin" />
@@ -486,6 +514,10 @@
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</conjure>
+	<!--<conjure group="support" spellid="176" name="Arrow Call" words="exevo infir con" lvl="1" mana="10" soul="1" conjureId="2544" conjureCount="3" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" />
+	</conjure>-->
 	<conjure group="support" spellid="48" name="Conjure Poisoned Arrow" words="exevo con pox" lvl="16" mana="130" soul="2" conjureId="2545" conjureCount="7" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
