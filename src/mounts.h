@@ -40,12 +40,12 @@ class Mounts
 		Mount* getMountByID(uint8_t id);
 		Mount* getMountByClientID(uint16_t clientId);
 
-		const std::list<Mount>& getMounts() const {
+		const std::vector<Mount>& getMounts() const {
 			return mounts;
 		}
 
 	private:
-		std::list<Mount> mounts;
+		std::vector<Mount> mounts;
 };
 
 #endif
