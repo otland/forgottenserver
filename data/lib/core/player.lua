@@ -96,3 +96,11 @@ function Player.addManaSpent(...)
 	APPLY_SKILL_MULTIPLIER = true
 	return ret
 end
+
+function Player:hasBiddedOnHouse()
+	local results = db.storeQuery("SELECT `id` FROM `houses` WHERE `highest_bidder` = " .. self:getGuid() .. " LIMIT 1")
+	if not results then
+		return false
+	end
+	return true
+end
