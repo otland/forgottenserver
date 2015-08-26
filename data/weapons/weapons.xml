@@ -670,15 +670,15 @@
 	<distance id="2410" breakchance="7" /> <!-- throwing knife -->
 	<distance id="2543" action="removecount" /> <!-- bolt -->
 	<distance id="2544" action="removecount" /> <!-- arrow -->
-	<distance id="2545" action="removecount" script="poison_arrow.lua" /> <!-- poison arrow -->
-	<distance id="2546" action="removecount" script="explosive_arrow.lua" /> <!-- burst arrow -->
+	<distance id="2545" action="removecount" script="poison arrow.lua" /> <!-- poison arrow -->
+	<distance id="2546" action="removecount" script="burst arrow.lua" /> <!-- burst arrow -->
 	<distance id="2547" action="removecount" unproperly="1" level="55" />	<!-- Power Bolt -->
 	<distance id="3965" breakchance="6" unproperly="1" level="20" />	<!-- Hunting Spear -->
 	<distance id="6529" action="removecount" unproperly="1" level="110" />	<!-- Infernal Bolt -->
 	<distance id="7363" action="removecount" unproperly="1" level="30" />	<!-- Piercing Bolt -->
 	<distance id="7364" action="removecount" unproperly="1" level="20" />	<!-- Sniper Arrow -->
 	<distance id="7365" action="removecount" unproperly="1" level="40" />	<!-- Onyx Arrow -->
-	<distance id="7366" breakchance="9" script="viper_star.lua" />
+	<distance id="7366" breakchance="9" script="viper star.lua" />
 	<distance id="7367" breakchance="1" unproperly="1" level="42" />	<!-- Enchanted Spear -->
 	<distance id="7368" breakchance="33" unproperly="1" level="80" />	<!-- Assassin Star -->
 	<distance id="7378" breakchance="3" unproperly="1" level="25" />	<!-- Royal Spear -->
