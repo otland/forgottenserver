@@ -97,7 +97,7 @@ function Player.addManaSpent(...)
 	return ret
 end
 
-function Player:hasBiddedOnHouse()
+function Player:hasBidOnHouse()
 	local results = db.storeQuery("SELECT `id` FROM `houses` WHERE `highest_bidder` = " .. self:getGuid() .. " LIMIT 1")
 	if not results then
 		return false

@@ -33,7 +33,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	if buyer:hasBiddedOnHouse() then
+	if buyer:hasBidOnHouse() then
 		player:sendCancelMessage("Trade player is currently the highest bidder of an auctioned house.")
 		return false
 	end
