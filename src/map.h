@@ -121,7 +121,7 @@ class QTreeNode
 				x <<= 1;
 				y <<= 1;
 			} while (!node->m_isLeaf);
-			return reinterpret_cast<Leaf>(node);
+			return static_cast<Leaf>(node);
 		}
 
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);

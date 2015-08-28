@@ -176,14 +176,14 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 				return ERROR_INVALID_FORMAT;
 			}
 
-			const VERSIONINFO* vi;
-			if (!props.readStruct(vi)) {
+			VERSIONINFO vi;
+			if (!props.read(vi)) {
 				return ERROR_INVALID_FORMAT;
 			}
 
-			Items::dwMajorVersion = vi->dwMajorVersion; //items otb format file version
-			Items::dwMinorVersion = vi->dwMinorVersion; //client version
-			Items::dwBuildNumber = vi->dwBuildNumber; //revision
+			Items::dwMajorVersion = vi.dwMajorVersion; //items otb format file version
+			Items::dwMinorVersion = vi.dwMinorVersion; //client version
+			Items::dwBuildNumber = vi.dwBuildNumber; //revision
 		}
 	}
 
@@ -267,13 +267,13 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					const lightBlock2* lb2;
-					if (!stream.readStruct(lb2)) {
+					lightBlock2 lb2;
+					if (!stream.read(lb2)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
-					lightLevel = static_cast<uint8_t>(lb2->lightLevel);
-					lightColor = static_cast<uint8_t>(lb2->lightColor);
+					lightLevel = static_cast<uint8_t>(lb2.lightLevel);
+					lightColor = static_cast<uint8_t>(lb2.lightColor);
 					break;
 				}
 
