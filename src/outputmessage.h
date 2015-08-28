@@ -71,7 +71,7 @@ class OutputMessage : public NetworkMessage
 		inline void add_header(T add) {
 			assert(outputBufferStart >= sizeof(T));
 			outputBufferStart -= sizeof(T);
-			*reinterpret_cast<T*>(buffer + outputBufferStart) = add;
+			memcpy(buffer + outputBufferStart, &add, sizeof(T));
 			//added header size to the message size
 			length += sizeof(T);
 		}
