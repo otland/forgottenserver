@@ -101,7 +101,7 @@ struct CombatParams {
 	bool useCharges;
 };
 
-typedef void (*COMBATFUNC)(Creature*, Creature*, const CombatParams&, void*);
+typedef void (*COMBATFUNC)(Creature*, Creature*, const CombatParams&, CombatDamage*);
 
 class MatrixArea
 {
@@ -328,14 +328,13 @@ class Combat
 	protected:
 		static void doCombatDefault(Creature* caster, Creature* target, const CombatParams& params);
 
-		static void CombatFunc(Creature* caster, const Position& pos,
-		                       const AreaCombat* area, const CombatParams& params, COMBATFUNC func, void* data);
+		static void CombatFunc(Creature* caster, const Position& pos, const AreaCombat* area, const CombatParams& params, COMBATFUNC func, CombatDamage* data);
 
-		static void CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static void CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static void CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static void CombatDispelFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
-		static void CombatNullFunc(Creature* caster, Creature* target, const CombatParams& params, void* data);
+		static void CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* data);
+		static void CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* damage);
+		static void CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* data);
+		static void CombatDispelFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* data);
+		static void CombatNullFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* data);
 
 		static void combatTileEffects(const SpectatorVec& list, Creature* caster, Tile* tile, const CombatParams& params);
 		CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
