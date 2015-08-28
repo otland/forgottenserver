@@ -37,6 +37,7 @@ class Task
 		explicit Task(const std::function<void (void)>& f)
 			: expiration(SYSTEM_TIME_ZERO), func(f) {}
 
+		virtual ~Task() = default;
 		void operator()() {
 			func();
 		}
