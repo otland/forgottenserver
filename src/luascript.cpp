@@ -512,7 +512,9 @@ bool LuaScriptInterface::closeState()
 int LuaScriptInterface::luaErrorHandler(lua_State* L)
 {
 	const std::string& errorMessage = popString(L);
-	pushString(L, getScriptEnv()->getScriptInterface()->getStackTrace(errorMessage));
+	auto interface = getScriptEnv()->getScriptInterface();
+	assert(interface); //This fires if the ScriptEnvironment hasn't been setup
+	pushString(L, interface->getStackTrace(errorMessage));
 	return 1;
 }
 
@@ -3857,7 +3859,8 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 	std::function<void(DBResult_ptr, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
-		callback = [ref](DBResult_ptr, bool success) {
+		auto scriptId = getScriptEnv()->getScriptId();
+		callback = [ref, scriptId](DBResult_ptr, bool success) {
 			lua_State* luaState = g_luaEnvironment.getLuaState();
 			if (!luaState) {
 				return;
@@ -3870,6 +3873,8 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 
 			lua_rawgeti(luaState, LUA_REGISTRYINDEX, ref);
 			pushBoolean(luaState, success);
+			auto env = getScriptEnv();
+			env->setScriptId(scriptId, &g_luaEnvironment);
 			g_luaEnvironment.callFunction(1);
 
 			luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
@@ -3894,7 +3899,8 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 	std::function<void(DBResult_ptr, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
-		callback = [ref](DBResult_ptr result, bool) {
+		auto scriptId = getScriptEnv()->getScriptId();
+		callback = [ref, scriptId](DBResult_ptr result, bool) {
 			lua_State* luaState = g_luaEnvironment.getLuaState();
 			if (!luaState) {
 				return;
@@ -3911,6 +3917,8 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 			} else {
 				pushBoolean(luaState, false);
 			}
+			auto env = getScriptEnv();
+			env->setScriptId(scriptId, &g_luaEnvironment);
 			g_luaEnvironment.callFunction(1);
 
 			luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
