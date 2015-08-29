@@ -23,7 +23,6 @@
 #include "const.h"
 #include "enums.h"
 #include "itemloader.h"
-#include "optional.h"
 #include "position.h"
 
 enum SlotPositionBits : uint32_t {
@@ -162,7 +161,7 @@ class ItemType
 
 		Abilities& getAbilities() {
 			if (!abilities) {
-				abilities.set(new Abilities());
+				abilities.reset(new Abilities());
 			}
 			return *abilities;
 		}
@@ -197,8 +196,8 @@ class ItemType
 		std::string runeSpellName;
 		std::string vocationString;
 
-		Optional<Abilities> abilities;
-		Optional<ConditionDamage> conditionDamage;
+		std::unique_ptr<Abilities> abilities;
+		std::unique_ptr<ConditionDamage> conditionDamage;
 
 		uint32_t weight;
 		uint32_t levelDoor;
