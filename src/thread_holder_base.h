@@ -21,6 +21,7 @@
 #define FS_THREAD_HOLDER_H_BEB56FC46748E71D15A5BF0773ED2E67
 
 #include <thread>
+#include <atomic>
 #include "enums.h"
 
 template <typename Derived>
