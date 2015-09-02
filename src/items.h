@@ -115,6 +115,13 @@ class ItemType
 	public:
 		ItemType();
 
+		//non-copyable
+		ItemType(const ItemType& other) = delete;
+		ItemType& operator=(const ItemType& other) = delete;
+
+		ItemType(ItemType&& other) = default;
+		ItemType& operator=(ItemType&& other) = default;
+
 		bool isGroundTile() const {
 			return group == ITEM_GROUP_GROUND;
 		}
