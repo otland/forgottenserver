@@ -150,7 +150,7 @@ void MonsterType::createLoot(Container* corpse)
 			if (owner->getParty()) {
 				owner->getParty()->broadcastPartyLoot(ss.str());
 			} else {
-				owner->sendTextMessage(MESSAGE_LOOT, ss.str());
+				owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 			}
 		}
 	} else {
@@ -160,7 +160,7 @@ void MonsterType::createLoot(Container* corpse)
 		if (owner->getParty()) {
 			owner->getParty()->broadcastPartyLoot(ss.str());
 		} else {
-			owner->sendTextMessage(MESSAGE_LOOT, ss.str());
+			owner->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 		}
 	}
 
@@ -887,10 +887,6 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			mType->outfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Missing look type/typeex. " << file << std::endl;
-		}
-
-		if ((attr = node.attribute("mount"))) {
-			mType->outfit.lookMount = pugi::cast<uint16_t>(attr.value());
 		}
 
 		if ((attr = node.attribute("corpse"))) {

@@ -136,7 +136,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 	} else if (Items::dwMajorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
-	} else if (Items::dwMinorVersion < CLIENT_VERSION_1076) {
+	} else if (Items::dwMinorVersion < CLIENT_VERSION_860) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
@@ -306,7 +306,6 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		iType.rotatable = hasBitSet(FLAG_ROTATABLE, flags);
 		iType.canReadText = hasBitSet(FLAG_READABLE, flags);
 		iType.lookThrough = hasBitSet(FLAG_LOOKTHROUGH, flags);
-		iType.isAnimation = hasBitSet(FLAG_ANIMATION, flags);
 		// iType.walkStack = !hasBitSet(FLAG_FULLTILE, flags);
 		iType.forceUse = hasBitSet(FLAG_FORCEUSE, flags);
 

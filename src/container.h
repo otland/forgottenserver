@@ -101,7 +101,6 @@ class Container : public Item, public Cylinder
 			return itemlist.rend();
 		}
 
-		bool hasParent() const;
 		void addItem(Item* item);
 		Item* getItemByIndex(size_t index) const;
 		bool isHoldingItem(const Item* item) const;
@@ -111,9 +110,6 @@ class Container : public Item, public Cylinder
 
 		bool isUnlocked() const {
 			return unlocked;
-		}
-		bool hasPagination() const {
-			return pagination;
 		}
 
 		//cylinder implementations
@@ -165,7 +161,6 @@ class Container : public Item, public Cylinder
 		uint32_t serializationCount;
 
 		bool unlocked;
-		bool pagination;
 
 		friend class ContainerIterator;
 		friend class IOMapSerialize;

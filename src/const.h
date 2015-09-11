@@ -95,19 +95,6 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_SMOKE = 68,
 	CONST_ME_INSECTS = 69,
 	CONST_ME_DRAGONHEAD = 70,
-	CONST_ME_ORCSHAMAN = 71,
-	CONST_ME_ORCSHAMAN_FIRE = 72,
-	CONST_ME_THUNDER = 73,
-	CONST_ME_FERUMBRAS = 74,
-	CONST_ME_CONFETTI_HORIZONTAL = 75,
-	CONST_ME_CONFETTI_VERTICAL = 76,
-	// 77-157 are empty
-	CONST_ME_BLACKSMOKE = 158,
-	// 159-166 are empty
-	CONST_ME_REDSMOKE = 167,
-	CONST_ME_YELLOWSMOKE = 168,
-	CONST_ME_GREENSMOKE = 169,
-	CONST_ME_PURPLESMOKE = 170,
 };
 
 enum ShootType_t : uint8_t {
@@ -156,17 +143,6 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_EXPLOSION = 41,
 	CONST_ANI_CAKE = 42,
 
-	CONST_ANI_TARSALARROW = 44,
-	CONST_ANI_VORTEXBOLT = 45,
-
-	CONST_ANI_PRISMATICBOLT = 48,
-	CONST_ANI_CRYSTALLINEARROW = 49,
-	CONST_ANI_DRILLBOLT = 50,
-	CONST_ANI_ENVENOMEDARROW = 51,
-
-	CONST_ANI_GLOOTHSPEAR = 53,
-	CONST_ANI_SIMPLEARROW = 54,
-
 	// for internal use, don't send to client
 	CONST_ANI_WEAPONTYPE = 0xFE, // 254
 };
@@ -175,45 +151,34 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_SAY = 1,
 	TALKTYPE_WHISPER = 2,
 	TALKTYPE_YELL = 3,
-	TALKTYPE_PRIVATE_FROM = 4,
-	TALKTYPE_PRIVATE_TO = 5,
+	TALKTYPE_PRIVATE_PN = 4,
+	TALKTYPE_PRIVATE_NP = 5,
+	TALKTYPE_PRIVATE = 6,
 	TALKTYPE_CHANNEL_Y = 7,
-	TALKTYPE_CHANNEL_O = 8,
-	TALKTYPE_PRIVATE_NP = 10,
-	TALKTYPE_PRIVATE_PN = 12,
-	TALKTYPE_BROADCAST = 13,
-	TALKTYPE_CHANNEL_R1 = 14, //red - #c text
-	TALKTYPE_PRIVATE_RED_FROM = 15, //@name@text
-	TALKTYPE_PRIVATE_RED_TO = 16, //@name@text
-	TALKTYPE_MONSTER_SAY = 36,
-	TALKTYPE_MONSTER_YELL = 37,
-
-	TALKTYPE_CHANNEL_R2 = 0xFF, //#d
+	TALKTYPE_CHANNEL_W = 8,
+	TALKTYPE_RVR_CHANNEL = 9,
+	TALKTYPE_RVR_ANSWER = 10,
+	TALKTYPE_RVR_CONTINUE = 11,
+	TALKTYPE_BROADCAST = 12,
+	TALKTYPE_CHANNEL_R1 = 13, //red - #c text
+	TALKTYPE_PRIVATE_RED = 14, //@name@text
+	TALKTYPE_CHANNEL_O = 15, //@name@text
+	TALKTYPE_CHANNEL_R2 = 17, //#d
+	TALKTYPE_MONSTER_SAY = 19,
+	TALKTYPE_MONSTER_YELL = 20,
 };
 
 enum MessageClasses : uint8_t {
-	MESSAGE_STATUS_CONSOLE_BLUE = 4, /*FIXME Blue message in the console*/
-
-	MESSAGE_STATUS_CONSOLE_RED = 13, /*Red message in the console*/
-
-	MESSAGE_STATUS_DEFAULT = 17, /*White message at the bottom of the game window and in the console*/
-	MESSAGE_STATUS_WARNING = 18, /*Red message in game window and in the console*/
-	MESSAGE_EVENT_ADVANCE = 19, /*White message in game window and in the console*/
-
-	MESSAGE_STATUS_SMALL = 21, /*White message at the bottom of the game window"*/
-	MESSAGE_INFO_DESCR = 22, /*Green message in game window and in the console*/
-	MESSAGE_DAMAGE_DEALT = 23,
-	MESSAGE_DAMAGE_RECEIVED = 24,
-	MESSAGE_HEALED = 25,
-	MESSAGE_EXPERIENCE = 26,
-	MESSAGE_DAMAGE_OTHERS = 27,
-	MESSAGE_HEALED_OTHERS = 28,
-	MESSAGE_EXPERIENCE_OTHERS = 29,
-	MESSAGE_EVENT_DEFAULT = 30, /*White message at the bottom of the game window and in the console*/
-	MESSAGE_LOOT = 31,
-
-	MESSAGE_EVENT_ORANGE = 36, /*Orange message in the console*/
-	MESSAGE_STATUS_CONSOLE_ORANGE = 37,  /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_RED = 18, /*Red message in the console*/
+	MESSAGE_EVENT_ORANGE = 19, /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_ORANGE = 20,  /*Orange message in the console*/
+	MESSAGE_STATUS_WARNING = 21, /*Red message in game window and in the console*/
+	MESSAGE_EVENT_ADVANCE = 22, /*White message in game window and in the console*/
+	MESSAGE_EVENT_DEFAULT = 23, /*White message at the bottom of the game window and in the console*/
+	MESSAGE_STATUS_DEFAULT = 24, /*White message at the bottom of the game window and in the console*/
+	MESSAGE_INFO_DESCR = 25, /*Green message in game window and in the console*/
+	MESSAGE_STATUS_SMALL = 26, /*White message at the bottom of the game window"*/
+	MESSAGE_STATUS_CONSOLE_BLUE = 27, /*FIXME Blue message in the console*/
 };
 
 enum FluidColors_t : uint8_t {
@@ -349,7 +314,6 @@ enum Icons_t {
 	ICON_PARTY_BUFF = 1 << 12,
 	ICON_REDSWORDS = 1 << 13,
 	ICON_PIGEON = 1 << 14,
-	ICON_BLEEDING = 1 << 15,
 };
 
 enum WeaponType_t : uint8_t {
@@ -395,7 +359,6 @@ enum Skulls_t : uint8_t {
 	SKULL_WHITE = 3,
 	SKULL_RED = 4,
 	SKULL_BLACK = 5,
-	SKULL_ORANGE = 6,
 };
 
 enum PartyShields_t : uint8_t {
@@ -410,21 +373,16 @@ enum PartyShields_t : uint8_t {
 	SHIELD_YELLOW_NOSHAREDEXP_BLINK = 8,
 	SHIELD_BLUE_NOSHAREDEXP = 9,
 	SHIELD_YELLOW_NOSHAREDEXP = 10,
-	SHIELD_GRAY = 11,
 };
 
 enum GuildEmblems_t : uint8_t {
 	GUILDEMBLEM_NONE = 0,
 	GUILDEMBLEM_ALLY = 1,
 	GUILDEMBLEM_ENEMY = 2,
-	GUILDEMBLEM_NEUTRAL = 3,
-	GUILDEMBLEM_MEMBER = 4,
-	GUILDEMBLEM_OTHER = 5,
+	GUILDEMBLEM_NEUTRAL = 3
 };
 
 enum item_t : uint16_t {
-	ITEM_BROWSEFIELD = 460, // for internal use
-
 	ITEM_FIREFIELD_PVP_FULL = 1487,
 	ITEM_FIREFIELD_PVP_MEDIUM = 1488,
 	ITEM_FIREFIELD_PVP_SMALL = 1489,
@@ -456,9 +414,7 @@ enum item_t : uint16_t {
 	ITEM_CRYSTAL_COIN = 2160,
 
 	ITEM_DEPOT = 2594,
-	ITEM_LOCKER1 = 2589,
-	ITEM_INBOX = 14404,
-	ITEM_MARKET = 14405,
+	ITEM_LOCKER = 2589,
 
 	ITEM_MALE_CORPSE = 3058,
 	ITEM_FEMALE_CORPSE = 3065,
@@ -528,10 +484,6 @@ enum PlayerFlags : uint64_t {
 //[1000 - 1500]
 #define PSTRG_OUTFITS_RANGE_START (PSTRG_RESERVED_RANGE_START + 1000)
 #define PSTRG_OUTFITS_RANGE_SIZE 500
-//[2001 - 2011]
-#define PSTRG_MOUNTS_RANGE_START (PSTRG_RESERVED_RANGE_START + 2001)
-#define PSTRG_MOUNTS_RANGE_SIZE 10
-#define PSTRG_MOUNTS_CURRENTMOUNT (PSTRG_MOUNTS_RANGE_START + 10)
 
 #define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
 

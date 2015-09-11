@@ -45,7 +45,6 @@ class Events
 		bool eventPartyOnDisband(Party* party);
 
 		// Player
-		bool eventPlayerOnBrowseField(Player* player, const Position& position);
 		void eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance);
 		void eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance);
 		void eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
@@ -73,7 +72,6 @@ class Events
 		int32_t partyOnDisband;
 
 		// Player
-		int32_t playerOnBrowseField;
 		int32_t playerOnLook;
 		int32_t playerOnLookInBattleList;
 		int32_t playerOnLookInTrade;

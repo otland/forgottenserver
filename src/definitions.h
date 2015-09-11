@@ -24,9 +24,9 @@
 #define STATUS_SERVER_VERSION "1.2"
 #define STATUS_SERVER_DEVELOPERS "Mark Samman"
 
-#define CLIENT_VERSION_MIN 1076
-#define CLIENT_VERSION_MAX 1077
-#define CLIENT_VERSION_STR "10.77"
+#define CLIENT_VERSION_MIN 860
+#define CLIENT_VERSION_MAX 860
+#define CLIENT_VERSION_STR "8.6"
 
 #ifndef __FUNCTION__
 #define __FUNCTION__ __func__
@@ -36,7 +36,12 @@
 #define _USE_MATH_DEFINES
 #endif
 
+#include <cassert>
 #include <cmath>
+#include <cstdint>
+#include <string>
+#include <vector>
+#include <chrono>
 
 #ifdef _WIN32
 #ifndef NOMINMAX
@@ -57,6 +62,7 @@
 #pragma warning(disable:4267) // 'var' : conversion from 'size_t' to 'type', possible loss of data
 #pragma warning(disable:4351) // new behavior: elements of array will be default initialized
 #pragma warning(disable:4458) // declaration hides class member
+#pragma warning(disable:4996)
 #endif
 
 #define strcasecmp _stricmp
@@ -71,5 +77,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+
+typedef std::vector< std::pair<uint32_t, uint32_t> > IPList;
 
 #endif
