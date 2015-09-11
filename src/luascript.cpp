@@ -2230,6 +2230,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getContainerById", LuaScriptInterface::luaPlayerGetContainerById);
 	registerMethod("Player", "getContainerIndex", LuaScriptInterface::luaPlayerGetContainerIndex);
 
+	registerMethod("Player", "hasSecureMode", LuaScriptInterface::luaPlayerHasSecureMode);
+	registerMethod("Player", "getFightMode", LuaScriptInterface::luaPlayerGetFightMode);
+	registerMethod("Player", "getChaseMode", LuaScriptInterface::luaPlayerGetChaseMode);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -9249,6 +9253,42 @@ int LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->getContainerIndex(getNumber<uint8_t>(L, 2)));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerHasSecureMode(lua_State* L)
+{
+	// player:hasSecureMode()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->hasSecureMode());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
+{
+	// player:getFightMode()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->fightMode);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetChaseMode(lua_State* L)
+{
+	// player:getChaseMode()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->chaseMode);
 	} else {
 		lua_pushnil(L);
 	}
