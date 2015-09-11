@@ -110,16 +110,10 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 
 	add<uint16_t>(it.clientId);
 
-	addByte(0xFF); // MARK_UNMARKED
-
 	if (it.stackable) {
 		addByte(count);
 	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[count & 7]);
-	}
-
-	if (it.isAnimation) {
-		addByte(0xFE); // random phase (0xFF for async)
 	}
 }
 
@@ -128,16 +122,11 @@ void NetworkMessage::addItem(const Item* item)
 	const ItemType& it = Item::items[item->getID()];
 
 	add<uint16_t>(it.clientId);
-	addByte(0xFF); // MARK_UNMARKED
 
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
 	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[item->getFluidType() & 7]);
-	}
-
-	if (it.isAnimation) {
-		addByte(0xFE); // random phase (0xFF for async)
 	}
 }
 

@@ -555,17 +555,6 @@ MagicEffectNames magicEffectNames[] = {
 	{"smoke",		CONST_ME_SMOKE},
 	{"insects",		CONST_ME_INSECTS},
 	{"dragonhead",		CONST_ME_DRAGONHEAD},
-	{"orcshaman",		CONST_ME_ORCSHAMAN},
-	{"orcshamanfire",	CONST_ME_ORCSHAMAN_FIRE},
-	{"thunder",		CONST_ME_THUNDER},
-	{"ferumbras",		CONST_ME_FERUMBRAS},
-	{"confettihorizontal",	CONST_ME_CONFETTI_HORIZONTAL},
-	{"confettivertical",	CONST_ME_CONFETTI_VERTICAL},
-	{"blacksmoke",		CONST_ME_BLACKSMOKE},
-	{"redsmoke",		CONST_ME_REDSMOKE},
-	{"yellowsmoke",		CONST_ME_YELLOWSMOKE},
-	{"greensmoke",		CONST_ME_GREENSMOKE},
-	{"purplesmoke",		CONST_ME_PURPLESMOKE},
 };
 
 ShootTypeNames shootTypeNames[] = {
@@ -611,14 +600,6 @@ ShootTypeNames shootTypeNames[] = {
 	{"eartharrow",		CONST_ANI_EARTHARROW},
 	{"explosion",		CONST_ANI_EXPLOSION},
 	{"cake",		CONST_ANI_CAKE},
-	{"tarsalarrow",		CONST_ANI_TARSALARROW},
-	{"vortexbolt",		CONST_ANI_VORTEXBOLT},
-	{"prismaticbolt",	CONST_ANI_PRISMATICBOLT},
-	{"crystallinearrow",	CONST_ANI_CRYSTALLINEARROW},
-	{"drillbolt",		CONST_ANI_DRILLBOLT},
-	{"envenomedarrow",	CONST_ANI_ENVENOMEDARROW},
-	{"gloothspear",		CONST_ANI_GLOOTHSPEAR},
-	{"simplearrow",		CONST_ANI_SIMPLEARROW},
 };
 
 CombatTypeNames combatTypeNames[] = {
@@ -675,7 +656,6 @@ SkullNames skullNames[] = {
 	{"white",	SKULL_WHITE},
 	{"red",		SKULL_RED},
 	{"black",	SKULL_BLACK},
-	{"orange",	SKULL_ORANGE},
 };
 
 MagicEffectClasses getMagicEffect(const std::string& strValue)

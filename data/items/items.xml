@@ -4321,7 +4321,7 @@
 	</item>
 	<item fromid="2589" toid="2592" article="a" name="locker">
 		<attribute key="type" value="depot" />
-		<attribute key="containerSize" value="3" />
+		<attribute key="containerSize" value="30" />
 	</item>
 	<item id="2593" article="a" name="mailbox">
 		<attribute key="description" value="Royal Mail." />

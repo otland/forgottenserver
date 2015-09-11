@@ -44,7 +44,7 @@ class DepotChest final : public Container
 			return false;
 		}
 
-		Cylinder* getParent() const;
+		//Cylinder* getParent() const;
 		Cylinder* getRealParent() const {
 			return parent;
 		}

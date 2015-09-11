@@ -1147,20 +1147,9 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	gainExp /= 2;
 	master->onGainExperience(gainExp, target);
 
-	SpectatorVec list;
-	g_game.map.getSpectators(list, _position, false, true);
-	if (list.empty()) {
-		return;
-	}
-
-	TextMessage message(MESSAGE_EXPERIENCE_OTHERS, ucfirst(getNameDescription()) + " gained " + std::to_string(gainExp) + (gainExp != 1 ? " experience points." : " experience point."));
-	message.position = _position;
-	message.primary.color = TEXTCOLOR_WHITE_EXP;
-	message.primary.value = gainExp;
-
-	for (Creature* spectator : list) {
-		spectator->getPlayer()->sendTextMessage(message);
-	}
+	std::ostringstream strExp;
+	strExp << ucfirst(getNameDescription()) + " gained " + std::to_string(gainExp) + (gainExp != 1 ? " experience points." : " experience point.");
+	g_game.addAnimatedText(strExp.str(), _position, TEXTCOLOR_WHITE_EXP);
 }
 
 void Creature::addSummon(Creature* creature)

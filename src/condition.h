@@ -376,30 +376,4 @@ class ConditionLight final : public Condition
 		uint32_t lightChangeInterval;
 };
 
-class ConditionSpellCooldown final : public ConditionGeneric
-{
-	public:
-		ConditionSpellCooldown(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
-
-		bool startCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
-
-		ConditionSpellCooldown* clone() const final {
-			return new ConditionSpellCooldown(*this);
-		}
-};
-
-class ConditionSpellGroupCooldown final : public ConditionGeneric
-{
-	public:
-		ConditionSpellGroupCooldown(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
-
-		bool startCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
-
-		ConditionSpellGroupCooldown* clone() const final {
-			return new ConditionSpellGroupCooldown(*this);
-		}
-};
-
 #endif
