@@ -328,7 +328,7 @@ class Tile : public Cylinder
 		void internalAddThing(Thing* thing) final;
 		void internalAddThing(uint32_t index, Thing* thing) override;
 
-		const Position& getPosition() const {
+		const Position& getPosition() const final {
 			return tilePos;
 		}
 

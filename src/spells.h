@@ -213,7 +213,7 @@ class InstantSpell : public TalkAction, public Spell
 		//scripting
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
 
-		bool isInstant() const {
+		bool isInstant() const final {
 			return true;
 		}
 		bool getHasParam() const {
