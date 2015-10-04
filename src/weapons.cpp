@@ -142,7 +142,7 @@ int32_t Weapons::getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue)
 //players
 int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor)
 {
-	return static_cast<int32_t>(std::ceil((2 * (attackValue * (attackSkill + 5.8) / 25 + (level - 1) / 10.)) / attackFactor));
+	return static_cast<int32_t>(std::floor(((level / 5.0) + ((((attackSkill / 4.0) + 0.982) * (((attackValue / 3.0) * 30.0)) * 0.034) + 0.35) / attackFactor)));
 }
 
 Weapon::Weapon(LuaScriptInterface* _interface) :
