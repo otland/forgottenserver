@@ -17,58 +17,43 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_OPTIONAL_H_3066D9DCEF5FD19181A29F5FFC822713
-#define FS_OPTIONAL_H_3066D9DCEF5FD19181A29F5FFC822713
+#ifndef FS_THREAD_HOLDER_H_BEB56FC46748E71D15A5BF0773ED2E67
+#define FS_THREAD_HOLDER_H_BEB56FC46748E71D15A5BF0773ED2E67
 
-template <typename T>
-class Optional {
+#include <thread>
+#include <atomic>
+#include "enums.h"
+
+template <typename Derived>
+class ThreadHolder
+{
 	public:
-		Optional() : ptr(nullptr) {}
-		Optional(const Optional& rhs) {
-			if (rhs.ptr) {
-				ptr = new T;
-				*ptr = *rhs.ptr;
-			} else {
-				ptr = nullptr;
-			}
-		}
-		Optional(Optional&& rhs) : ptr(rhs.ptr) {
-			rhs.ptr = nullptr;
-		}
-		~Optional() {
-			delete ptr;
-		}
-		void swap(Optional& other) {
-			std::swap(ptr, other.ptr);
-		}
-		Optional& operator=(Optional other) {
-			swap(other);
-			return *this;
-		}
-		Optional& operator=(Optional&& other) {
-			if (this != &other) {
-				delete ptr;
-				ptr = other.ptr;
-				other.ptr = nullptr;
-			}
-			return *this;
-		}
-		T* operator->() const {
-			return ptr;
-		}
-		explicit operator bool() const {
-			return ptr != nullptr;
-		}
-		T& operator*() {
-			return *ptr;
+		ThreadHolder(): threadState(THREAD_STATE_TERMINATED) {}
+		void start() {
+			setState(THREAD_STATE_RUNNING);
+			thread = std::thread(&Derived::threadMain, static_cast<Derived*>(this));
 		}
 
-		void set(T* ptr) {
-			this->ptr = ptr;
+		void stop() {
+			setState(THREAD_STATE_CLOSING);
 		}
 
+		void join() {
+			if (thread.joinable()) {
+				thread.join();
+			}
+		}
+	protected:
+		void setState(ThreadState newState) {
+			threadState.store(newState, std::memory_order_relaxed);
+		}
+
+		ThreadState getState() const {
+			return threadState.load(std::memory_order_relaxed);
+		}
 	private:
-		T* ptr;
+		std::atomic<ThreadState> threadState;
+		std::thread thread;
 };
 
 #endif

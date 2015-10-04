@@ -21,8 +21,7 @@
 #define FS_TASKS_H_A66AC384766041E59DCA059DAB6E1976
 
 #include <condition_variable>
-#include <atomic>
-
+#include "thread_holder_base.h"
 #include "enums.h"
 
 const int DISPATCHER_TASK_EXPIRATION = 2000;
@@ -38,6 +37,7 @@ class Task
 		explicit Task(const std::function<void (void)>& f)
 			: expiration(SYSTEM_TIME_ZERO), func(f) {}
 
+		virtual ~Task() = default;
 		void operator()() {
 			func();
 		}
@@ -71,35 +71,22 @@ inline Task* createTask(uint32_t expiration, const std::function<void (void)>& f
 	return new Task(expiration, f);
 }
 
-class Dispatcher
+class Dispatcher : public ThreadHolder<Dispatcher>
 {
 	public:
 		void addTask(Task* task, bool push_front = false);
-
-		void start();
-		void stop();
 		void shutdown();
-		void join();
 
 		uint64_t getDispatcherCycle() const {
 			return dispatcherCycle;
 		}
+		void threadMain();
 	protected:
-		void dispatcherThread();
-		void setState(ThreadState newState) {
-			threadState.store(newState, std::memory_order_relaxed);
-		}
-
-		ThreadState getState() const {
-			return threadState.load(std::memory_order_relaxed);
-		}
-
 		std::thread thread;
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
 
 		std::list<Task*> taskList;
-		std::atomic<ThreadState> threadState {THREAD_STATE_TERMINATED};
 		uint64_t dispatcherCycle {0};
 };
 

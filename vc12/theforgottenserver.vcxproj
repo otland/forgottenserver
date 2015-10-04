@@ -259,7 +259,6 @@
     <ClInclude Include="..\src\movement.h" />
     <ClInclude Include="..\src\networkmessage.h" />
     <ClInclude Include="..\src\npc.h" />
-    <ClInclude Include="..\src\optional.h" />
     <ClInclude Include="..\src\otpch.h" />
     <ClInclude Include="..\src\outfit.h" />
     <ClInclude Include="..\src\outputmessage.h" />
@@ -284,6 +283,7 @@
     <ClInclude Include="..\src\tasks.h" />
     <ClInclude Include="..\src\teleport.h" />
     <ClInclude Include="..\src\thing.h" />
+    <ClInclude Include="..\src\thread_holder_base.h" />
     <ClInclude Include="..\src\tile.h" />
     <ClInclude Include="..\src\tools.h" />
     <ClInclude Include="..\src\town.h" />

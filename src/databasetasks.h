@@ -21,9 +21,7 @@
 #define FS_DATABASETASKS_H_9CBA08E9F5FEBA7275CCEE6560059576
 
 #include <condition_variable>
-#include <list>
-#include <thread>
-
+#include "thread_holder_base.h"
 #include "database.h"
 #include "enums.h"
 
@@ -36,19 +34,17 @@ struct DatabaseTask {
 	bool store;
 };
 
-class DatabaseTasks {
+class DatabaseTasks : public ThreadHolder<DatabaseTasks>
+{
 	public:
-		DatabaseTasks();
-
+		DatabaseTasks() = default;
 		void start();
-		void run();
 		void flush();
-		void stop();
 		void shutdown();
-		void join();
 
 		void addTask(const std::string& query, const std::function<void(DBResult_ptr, bool)>& callback = nullptr, bool store = false);
 
+		void threadMain();
 	private:
 		void runTask(const DatabaseTask& task);
 
@@ -57,7 +53,6 @@ class DatabaseTasks {
 		std::list<DatabaseTask> tasks;
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
-		ThreadState threadState;
 };
 
 extern DatabaseTasks g_databaseTasks;
