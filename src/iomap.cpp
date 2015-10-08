@@ -87,13 +87,13 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		return false;
 	}
 
-	const OTBM_root_header* root_header;
-	if (!propStream.readStruct(root_header)) {
+	OTBM_root_header root_header;
+	if (!propStream.read(root_header)) {
 		setLastErrorString("Could not read header.");
 		return false;
 	}
 
-	uint32_t headerVersion = root_header->version;
+	uint32_t headerVersion = root_header.version;
 	if (headerVersion <= 0) {
 		//In otbm version 1 the count variable after splashes/fluidcontainers and stackables
 		//are saved as attributes instead, this solves alot of problems with items
@@ -107,28 +107,28 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		return false;
 	}
 
-	if (root_header->majorVersionItems < 3) {
+	if (root_header.majorVersionItems < 3) {
 		setLastErrorString("This map need to be upgraded by using the latest map editor version to be able to load correctly.");
 		return false;
 	}
 
-	if (root_header->majorVersionItems > Items::dwMajorVersion) {
+	if (root_header.majorVersionItems > Items::dwMajorVersion) {
 		setLastErrorString("The map was saved with a different items.otb version, an upgraded items.otb is required.");
 		return false;
 	}
 
-	if (root_header->minorVersionItems < CLIENT_VERSION_810) {
+	if (root_header.minorVersionItems < CLIENT_VERSION_810) {
 		setLastErrorString("This map needs to be updated.");
 		return false;
 	}
 
-	if (root_header->minorVersionItems > Items::dwMinorVersion) {
+	if (root_header.minorVersionItems > Items::dwMinorVersion) {
 		std::cout << "[Warning - IOMap::loadMap] This map needs an updated items.otb." << std::endl;
 	}
 
-	std::cout << "> Map size: " << root_header->width << "x" << root_header->height << '.' << std::endl;
-	map->width = root_header->width;
-	map->height = root_header->height;
+	std::cout << "> Map size: " << root_header.width << "x" << root_header.height << '.' << std::endl;
+	map->width = root_header.width;
+	map->height = root_header.height;
 
 	NODE nodeMap = f.getChildNode(root, type);
 	if (type != OTBM_MAP_DATA) {
@@ -193,15 +193,15 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				return false;
 			}
 
-			const OTBM_Destination_coords* area_coord;
-			if (!propStream.readStruct(area_coord)) {
+			OTBM_Destination_coords area_coord;
+			if (!propStream.read(area_coord)) {
 				setLastErrorString("Invalid map node.");
 				return false;
 			}
 
-			int32_t base_x = area_coord->x;
-			int32_t base_y = area_coord->y;
-			int32_t base_z = area_coord->z;
+			int32_t base_x = area_coord.x;
+			int32_t base_y = area_coord.y;
+			int32_t base_z = area_coord.z;
 
 			NODE nodeTile = f.getChildNode(nodeMapData, type);
 			while (nodeTile != NO_NODE) {
@@ -220,14 +220,14 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				const OTBM_Tile_coords* tile_coord;
-				if (!propStream.readStruct(tile_coord)) {
+				OTBM_Tile_coords tile_coord;
+				if (!propStream.read(tile_coord)) {
 					setLastErrorString("Could not read tile position.");
 					return false;
 				}
 
-				uint16_t px = base_x + tile_coord->x;
-				uint16_t py = base_y + tile_coord->y;
+				uint16_t px = base_x + tile_coord.x;
+				uint16_t py = base_y + tile_coord.y;
 				uint16_t pz = base_z;
 
 				bool isHouseTile = false;
@@ -426,13 +426,13 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 
 				town->setName(townName);
 
-				const OTBM_Destination_coords* town_coords;
-				if (!propStream.readStruct(town_coords)) {
+				OTBM_Destination_coords town_coords;
+				if (!propStream.read(town_coords)) {
 					setLastErrorString("Could not read town coordinates.");
 					return false;
 				}
 
-				town->setTemplePos(Position(town_coords->x, town_coords->y, town_coords->z));
+				town->setTemplePos(Position(town_coords.x, town_coords.y, town_coords.z));
 
 				nodeTown = f.getNextNode(nodeTown, type);
 			}
@@ -455,13 +455,13 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 					return false;
 				}
 
-				const OTBM_Destination_coords* waypoint_coords;
-				if (!propStream.readStruct(waypoint_coords)) {
+				OTBM_Destination_coords waypoint_coords;
+				if (!propStream.read(waypoint_coords)) {
 					setLastErrorString("Could not read waypoint coordinates.");
 					return false;
 				}
 
-				map->waypoints[name] = Position(waypoint_coords->x, waypoint_coords->y, waypoint_coords->z);
+				map->waypoints[name] = Position(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z);
 
 				nodeWaypoint = f.getNextNode(nodeWaypoint, type);
 			}

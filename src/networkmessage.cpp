@@ -46,7 +46,7 @@ std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 		return std::string();
 	}
 
-	char* v = reinterpret_cast<char*>(buffer) + position;
+	char* v = reinterpret_cast<char*>(buffer) + position; //does not break strict aliasing
 	position += stringLen;
 	return std::string(v, stringLen);
 }

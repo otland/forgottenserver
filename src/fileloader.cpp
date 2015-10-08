@@ -236,7 +236,7 @@ bool FileLoader::getProps(const NODE node, PropStream& props)
 {
 	size_t size;
 	if (const uint8_t* a = getProps(node, size)) {
-		props.init(reinterpret_cast<const char*>(a), size);
+		props.init(reinterpret_cast<const char*>(a), size); // does not break strict aliasing
 		return true;
 	}
 

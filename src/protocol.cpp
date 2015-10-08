@@ -67,12 +67,16 @@ void Protocol::XTEA_encrypt(OutputMessage& msg) const
 		msg.addPaddingBytes(8 - paddingBytes);
 	}
 
-	uint32_t* buffer = reinterpret_cast<uint32_t*>(msg.getOutputBuffer());
-	const size_t messageLength = msg.getLength() / 4;
+	uint8_t* buffer = msg.getOutputBuffer();
+	const size_t messageLength = msg.getLength();
 	size_t readPos = 0;
 	const uint32_t k[] = {m_key[0], m_key[1], m_key[2], m_key[3]};
 	while (readPos < messageLength) {
-		uint32_t v0 = buffer[readPos], v1 = buffer[readPos + 1];
+		uint32_t v0;
+		memcpy(&v0, buffer + readPos, 4);
+		uint32_t v1;
+		memcpy(&v1, buffer + readPos + 4, 4);
+
 		uint32_t sum = 0;
 
 		for (int32_t i = 32; --i >= 0;) {
@@ -81,8 +85,10 @@ void Protocol::XTEA_encrypt(OutputMessage& msg) const
 			v1 += ((v0 << 4 ^ v0 >> 5) + v0) ^ (sum + k[(sum >> 11) & 3]);
 		}
 
-		buffer[readPos++] = v0;
-		buffer[readPos++] = v1;
+		memcpy(buffer + readPos, &v0, 4);
+		readPos += 4;
+		memcpy(buffer + readPos, &v1, 4);
+		readPos += 4;
 	}
 }
 
@@ -94,12 +100,16 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 
 	const uint32_t delta = 0x61C88647;
 
-	uint32_t* buffer = reinterpret_cast<uint32_t*>(msg.getBuffer() + msg.getBufferPosition());
-	const size_t messageLength = (msg.getLength() - 6) / 4;
+	uint8_t* buffer = msg.getBuffer() + msg.getBufferPosition();
+	const size_t messageLength = (msg.getLength() - 6);
 	size_t readPos = 0;
 	const uint32_t k[] = {m_key[0], m_key[1], m_key[2], m_key[3]};
 	while (readPos < messageLength) {
-		uint32_t v0 = buffer[readPos], v1 = buffer[readPos + 1];
+		uint32_t v0;
+		memcpy(&v0, buffer + readPos, 4);
+		uint32_t v1;
+		memcpy(&v1, buffer + readPos + 4, 4);
+
 		uint32_t sum = 0xC6EF3720;
 
 		for (int32_t i = 32; --i >= 0;) {
@@ -108,8 +118,10 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 			v0 -= ((v1 << 4 ^ v1 >> 5) + v1) ^ (sum + k[sum & 3]);
 		}
 
-		buffer[readPos++] = v0;
-		buffer[readPos++] = v1;
+		memcpy(buffer + readPos, &v0, 4);
+		readPos += 4;
+		memcpy(buffer + readPos, &v1, 4);
+		readPos += 4;
 	}
 
 	int innerLength = msg.get<uint16_t>();
@@ -127,7 +139,7 @@ bool Protocol::RSA_decrypt(NetworkMessage& msg)
 		return false;
 	}
 
-	g_RSA.decrypt(reinterpret_cast<char*>(msg.getBuffer()) + msg.getBufferPosition());
+	g_RSA.decrypt(reinterpret_cast<char*>(msg.getBuffer()) + msg.getBufferPosition()); //does not break strict aliasing
 	return msg.getByte() == 0;
 }
 
