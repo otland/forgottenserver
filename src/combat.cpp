@@ -493,7 +493,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 void Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* data)
 {
 	assert(data);
-	auto& damage = *data;
+	CombatDamage damage = *data;
 	if (g_game.combatBlockHit(damage, caster, target, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
 		return;
 	}
@@ -515,7 +515,7 @@ void Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 void Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* data)
 {
 	assert(data);
-	auto& damage = *data;
+	CombatDamage damage = *data;
 	if (damage.primary.value < 0) {
 		if (caster && caster->getPlayer() && target->getPlayer()) {
 			damage.primary.value /= 2;
