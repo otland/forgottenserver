@@ -49,7 +49,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 		offer.amount = result->getNumber<uint16_t>("amount");
 		offer.price = result->getNumber<uint32_t>("price");
 		offer.timestamp = result->getNumber<uint32_t>("created") + marketOfferDuration;
-		offer.counter = result->getNumber<uint16_t>("id") & 0xFFFF;
+		offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
 		if (result->getNumber<uint16_t>("anonymous") == 0) {
 			offer.playerName = result->getString("player_name");
 		} else {
