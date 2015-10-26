@@ -460,12 +460,16 @@ void Chat::removeUserFromAllChannels(const Player& player)
 		it.second.removeUser(player);
 	}
 
-	for (auto& it : privateChannels) {
-		PrivateChatChannel* channel = &it.second;
+	auto it = privateChannels.begin();
+	while (it != privateChannels.end()) {
+		PrivateChatChannel* channel = &it->second;
 		channel->removeInvite(player.getGUID());
 		channel->removeUser(player);
 		if (channel->getOwner() == player.getGUID()) {
-			deleteChannel(player, channel->id);
+			channel->closeChannel();
+			it = privateChannels.erase(it);
+		} else {
+			++it;
 		}
 	}
 }

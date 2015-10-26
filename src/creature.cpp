@@ -666,6 +666,7 @@ void Creature::onDeath()
 	const int64_t timeNow = OTSYS_TIME();
 	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
 	int32_t mostDamage = 0;
+	std::map<Creature*, uint64_t> experienceMap;
 	for (const auto& it : damageMap) {
 		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
 			CountBlock_t cb = it.second;
@@ -673,8 +674,28 @@ void Creature::onDeath()
 				mostDamage = cb.total;
 				mostDamageCreature = attacker;
 			}
-			attacker->onAttackedCreatureKilled(this);
+
+			if (attacker != this) {
+				uint64_t gainExp = getGainedExperience(attacker);
+				if (Player* player = attacker->getPlayer()) {
+					Party* party = player->getParty();
+					if (party && party->getLeader() && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
+						attacker = party->getLeader();
+					}
+				}
+
+				auto tmpIt = experienceMap.find(attacker);
+				if (tmpIt == experienceMap.end()) {
+					experienceMap[attacker] = gainExp;
+				} else {
+					tmpIt->second += gainExp;
+				}
+			}
 		}
+	}
+
+	for (const auto& it : experienceMap) {
+		it.first->onGainExperience(it.second, this);
 	}
 
 	if (mostDamageCreature) {
@@ -1102,14 +1123,6 @@ void Creature::onAttacked()
 void Creature::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {
 	target->addDamagePoints(this, points);
-}
-
-void Creature::onAttackedCreatureKilled(Creature* target)
-{
-	if (target != this) {
-		uint64_t gainExp = target->getGainedExperience(this);
-		onGainExperience(gainExp, target);
-	}
 }
 
 bool Creature::onKilledCreature(Creature* target, bool)

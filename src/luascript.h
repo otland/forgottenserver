@@ -318,7 +318,7 @@ class LuaScriptInterface
 		template<class T>
 		inline static T** getRawUserdata(lua_State* L, int32_t arg)
 		{
-			return reinterpret_cast<T**>(lua_touserdata(L, arg));
+			return static_cast<T**>(lua_touserdata(L, arg));
 		}
 
 		inline static bool getBoolean(lua_State* L, int32_t arg)
