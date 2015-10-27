@@ -3369,6 +3369,7 @@
 		<attribute key="attack" value="25" />
 		<attribute key="weaponType" value="distance" />
 		<attribute key="shootType" value="throwingknife" />
+		<attribute key="maxHitChance" value="76" />
 		<attribute key="range" value="4" />
 	</item>
 	<item id="2411" article="a" name="poison dagger">
@@ -4176,7 +4177,7 @@
 		<attribute key="weaponType" value="ammunition" />
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="burstarrow" />
-		<attribute key="hitChance" value="100" />
+		<attribute key="maxHitChance" value="100" />
 	</item>
 	<item id="2547" article="a" name="power bolt">
 		<attribute key="weight" value="80" />
@@ -24087,7 +24088,7 @@
 		<attribute key="weaponType" value="ammunition" />
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="tarsalarrow" />
-		<attribute key="maxHitChance" value="90" />
+		<attribute key="maxHitChance" value="94" />
 	</item>
 	<item id="15649" article="a" name="vortex bolt">
 		<attribute key="weight" value="80" />
@@ -24096,7 +24097,7 @@
 		<attribute key="weaponType" value="ammunition" />
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="shootType" value="vortexbolt" />
-		<attribute key="maxHitChance" value="90" />
+		<attribute key="maxHitChance" value="89" />
 	</item>
 	<item id="15650" article="a" name="swarmer drum">
 		<attribute key="weight" value="3200" />
@@ -25295,7 +25296,7 @@
 		<attribute key="weaponType" value="ammunition" />
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="envenomedarrow" />
-		<attribute key="maxHitChance" value="90" />
+		<attribute key="maxHitChance" value="93" />
 	</item>
 	<item id="18438" article="a" name="dead dragonling">
 		<attribute key="containerSize" value="25" />
