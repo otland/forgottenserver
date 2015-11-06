@@ -749,7 +749,7 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 // AStarNodes
 
 AStarNodes::AStarNodes(uint32_t x, uint32_t y)
-	: openNodes()
+	: openNodes(), nodes()
 {
 	curNode = 1;
 	closedNodes = 0;

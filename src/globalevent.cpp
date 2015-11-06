@@ -212,6 +212,7 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 GlobalEvent::GlobalEvent(LuaScriptInterface* _interface):
 	Event(_interface)
 {
+	m_eventType = GLOBALEVENT_NONE;
 	m_nextExecution = 0;
 	m_interval = 0;
 }

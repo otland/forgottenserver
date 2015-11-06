@@ -510,7 +510,7 @@ void Weapon::decrementItemCount(Item* item) const
 }
 
 WeaponMelee::WeaponMelee(LuaScriptInterface* _interface) :
-	Weapon(_interface)
+	Weapon(_interface), elementType(COMBAT_NONE), elementDamage(0)
 {
 	params.blockedByArmor = true;
 	params.blockedByShield = true;
@@ -603,7 +603,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 }
 
 WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
-	Weapon(_interface)
+	Weapon(_interface), elementType(COMBAT_NONE), elementDamage(0)
 {
 	params.blockedByArmor = true;
 	params.combatType = COMBAT_PHYSICALDAMAGE;

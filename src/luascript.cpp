@@ -265,7 +265,7 @@ ScriptEnvironment LuaScriptInterface::m_scriptEnv[16];
 int32_t LuaScriptInterface::m_scriptEnvIndex = -1;
 
 LuaScriptInterface::LuaScriptInterface(std::string interfaceName)
-	: m_luaState(nullptr), m_interfaceName(interfaceName), m_eventTableRef(-1)
+	: m_luaState(nullptr), m_interfaceName(interfaceName), m_eventTableRef(-1), m_runningEventId(EVENT_ID_USER)
 {
 	if (!g_luaEnvironment.getLuaState()) {
 		g_luaEnvironment.initState();
