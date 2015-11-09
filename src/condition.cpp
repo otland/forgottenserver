@@ -479,8 +479,8 @@ void ConditionAttributes::updatePercentSkills(Player* player)
 			continue;
 		}
 
-		int32_t currSkill = player->getSkillLevel(i);
-		skills[i] = static_cast<int32_t>(currSkill * ((skillsPercent[i] - 100) / 100.f));
+		int32_t unmodifiedSkill = player->getBaseSkill(i);
+		skills[i] = static_cast<int32_t>(unmodifiedSkill * ((skillsPercent[i] - 100) / 100.f));
 	}
 }
 
