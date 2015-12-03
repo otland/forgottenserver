@@ -27,6 +27,8 @@
 #include "pugicast.h"
 #include "spells.h"
 
+extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
+
 extern Game g_game;
 extern Spells* g_spells;
 extern Actions* g_actions;
@@ -317,8 +319,24 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			openContainer = container;
 		}
 
+		//reward chest
+		if (RewardChest* rewardChest = container->getRewardChest()) {
+			std::cout << "opening a reward chest\n";
+			RewardChest* myRewardChest = player->getRewardChest();
+			myRewardChest->setParent(container->getParent()->getTile());
+			openContainer = myRewardChest;
+		}
+
 		uint32_t corpseOwner = container->getCorpseOwner();
-		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
+		if (container->isRewardCorpse()) {
+			openContainer = new Container(container->getID(), 8);
+			openContainer->setParent(container->getParent()->getTile());
+			Reward* reward = player->getReward(container->getIntAttr(ITEM_ATTRIBUTE_DATE), false);
+			if (reward) {
+				openContainer->internalAddThing(reward);
+			}
+
+		} else if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}
 

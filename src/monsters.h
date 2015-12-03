@@ -152,6 +152,7 @@ class MonsterType
 		bool canPushCreatures;
 		bool pushable;
 		bool isSummonable;
+		bool isRewardBoss;
 		bool isIllusionable;
 		bool isConvinceable;
 		bool isAttackable;

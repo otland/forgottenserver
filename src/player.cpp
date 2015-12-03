@@ -925,6 +925,40 @@ DepotLocker* Player::getDepotLocker(uint32_t depotId)
 	return depotLocker;
 }
 
+RewardChest* Player::getRewardChest()
+{
+	if (rewardChest != nullptr) {
+		return rewardChest;
+	}
+
+	rewardChest = new RewardChest(ITEM_REWARD_CHEST);
+	return rewardChest;
+}
+
+Reward* Player::getReward(uint32_t rewardId, bool autoCreate)
+{
+	auto it = rewardMap.find(rewardId);
+	if (it != rewardMap.end()) {
+		return it->second;
+	}
+
+	Reward* reward = new Reward();
+	rewardMap[rewardId] = reward;
+	return reward;
+}
+
+void Player::removeReward(uint32_t rewardId) {
+	rewardMap.erase(rewardId);
+}
+
+std::vector<uint32_t> Player::getRewardList() {
+	std::vector<uint32_t> list;
+	for (auto& it : rewardMap) {
+		list.push_back(it.first);
+	}
+	return list;
+}
+
 void Player::sendCancelMessage(ReturnValue message) const
 {
 	sendCancelMessage(getReturnMessage(message));
