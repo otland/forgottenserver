@@ -1,4 +1,6 @@
-#pragma once
+#ifndef FS_REWARD_H
+#define FS_REWARD_H
+
 #include "container.h"
 
 class Reward :
@@ -24,4 +26,6 @@ public:
 		return parent;
 	}
 };
+
+#endif
 

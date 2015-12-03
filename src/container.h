@@ -24,11 +24,11 @@
 
 #include "cylinder.h"
 #include "item.h"
-#include "rewardchest.h"
 
 class Container;
 class DepotChest;
 class DepotLocker;
+class RewardChest;
 
 class ContainerIterator
 {

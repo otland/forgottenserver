@@ -943,6 +943,7 @@ Reward* Player::getReward(uint32_t rewardId, bool autoCreate)
 	}
 
 	Reward* reward = new Reward();
+	reward->setIntAttr(ITEM_ATTRIBUTE_DATE, rewardId);
 	rewardMap[rewardId] = reward;
 	return reward;
 }
