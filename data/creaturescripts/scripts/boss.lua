@@ -222,7 +222,7 @@ local function getPlayerStats(bossId, playerGuid, autocreate)
 end
 
 function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
-    if creature:getType():isBoss() then -- Make sure it is a boss
+    if creature:getType():isRewardBoss() then -- Make sure it is a boss
         local bossId = creature:getId()
         local timestamp = os.time()
         corpse:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
@@ -263,9 +263,12 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
         for _, con in ipairs(scores) do         
             if(con.player) then   
                 local reward = con.player:getReward(timestamp, true)
+                local bag = Game.createItem(1987)
+                Container(bag:getUniqueId()):addItem(ITEM_GOLD_COIN, 67)
                 reward:addItem(ITEM_GOLD_COIN, math.random(1, 180))
                 reward:addItem(2525)
                 reward:addItem(ItemType("assassin star"):getId(), math.random(1, 20))
+                reward:addItemEx(bag)
 
                 local lootMessage = {"The following items are available in your reward chest: "}
 

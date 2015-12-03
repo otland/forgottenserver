@@ -72,6 +72,8 @@ Container::~Container()
 			item->setParent(parent);
 		}
 	} else {
+		std::cout << "shit collected\n";
+
 		for (Item* item : itemlist) {
 			item->setParent(nullptr);
 			item->decrementReferenceCounter();

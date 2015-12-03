@@ -190,10 +190,9 @@ function Player:onMoveItem(item, count, fromPosition, toPosition)
 			self:sendCancelMessage('Sorry, not possible.')
 			return false
 		end
-		-- The player also shouldn't be able to insert items into the boss corpse
+		-- The player also shouldn't be able to insert items into the boss corpse		
 		local tile = Tile(container:getPosition())
 		for _, item in ipairs(tile:getItems()) do
-			print('corpseowner', item:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER))
 			if item:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER) == 2^31 - 1 and item:getName() == container:getName() then
 				self:sendCancelMessage('Sorry, not possible.')
 				return false

@@ -4,8 +4,8 @@ end
 
 function Monster.setReward(self, enable)
     if enable then
-        if not self:getType():isBoss() then
-            error("Rewards can only be enabled to bosses.")
+        if not self:getType():isRewardBoss() then
+            error("Rewards can only be enabled to rewards bosses.")
             return false
         end
         globalBosses[self:getId()] = {}
@@ -17,6 +17,17 @@ function Monster.setReward(self, enable)
         self:unregisterEvent("BossThink")
     end
     return true
+end
+
+local function pushValues(buffer, sep, ...)
+    local argv = {...}
+    local argc = #argv
+    for k, v in ipairs(argv) do
+        table.insert(buffer, v)
+        if k < argc and sep then
+            table.insert(buffer, sep)
+        end
+    end
 end
 
 function Item.getNameDescription(self)

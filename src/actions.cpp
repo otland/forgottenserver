@@ -26,6 +26,7 @@
 #include "game.h"
 #include "pugicast.h"
 #include "spells.h"
+#include "rewardchest.h"
 
 extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
 
@@ -321,7 +322,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 		//reward chest
 		if (RewardChest* rewardChest = container->getRewardChest()) {
-			std::cout << "opening a reward chest\n";
 			RewardChest* myRewardChest = player->getRewardChest();
 			myRewardChest->setParent(container->getParent()->getTile());
 			openContainer = myRewardChest;

@@ -29389,8 +29389,8 @@
 		<attribute key="type" value="rewardchest" />
 		<attribute key="description" value="This chest contains your rewards earned in battles." />
 		<attribute key="containersize" value="32" />
-	  <attribute key="pickupable" value="0" />
-	  <attribute key="moveable" value="0" />		
+	 	<attribute key="pickupable" value="0" />
+	  	<attribute key="moveable" value="0" />		
 	</item>
 	<item id="21690" article="a" name="triple bolt crossbow">
 		<attribute key="weight" value="6200" />

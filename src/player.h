@@ -37,6 +37,7 @@
 #include "town.h"
 #include "mounts.h"
 #include "reward.h"
+#include "rewardchest.h"
 
 class House;
 class NetworkMessage;

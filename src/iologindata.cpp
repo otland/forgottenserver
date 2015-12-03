@@ -470,6 +470,50 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
+	//load reward chest items
+	itemMap.clear();
+
+	query.str(std::string());
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_rewards` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	if ((result = db->storeQuery(query.str()))) {
+		loadItems(itemMap, result);
+
+		for (ItemMap::iterator it = itemMap.begin(), end = itemMap.end(); it != end; ++it) {
+			const std::pair<Item*, int32_t>& pair = it->second;
+			Item* item = pair.first;
+
+			int32_t pid = pair.second; 
+			if (pid >= 0 && pid < 100) {
+				Reward* reward = player->getReward(item->getIntAttr(ITEM_ATTRIBUTE_DATE), true);
+				if (reward) {
+					it->second = std::pair<Item*, int32_t>(reward->getItem(), pid); //update the map with the special reward container
+				}
+			} else {
+				ItemMap::const_iterator it2 = itemMap.find(pid);
+				if (it2 == itemMap.end()) {
+					continue;
+				}
+
+				Container* container = it2->second.first->getContainer();
+				if (container) {
+					container->internalAddThing(item);
+				}
+			}
+		}
+
+		RewardChest* rewardChest = player->getRewardChest();
+		//insert rewards into the reward chest
+		for (auto& rewardId : player->getRewardList()) {
+			Reward* reward = player->getReward(rewardId, false);
+			if (reward->empty()) {
+				player->removeReward(rewardId);
+				continue;
+			}
+
+			rewardChest->internalAddThing(reward);
+		}
+	}
+
 	//load inbox items
 	itemMap.clear();
 
@@ -776,33 +820,31 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 	}
 
-	/*
 	auto rewardList = player->getRewardList();
+	//save reward items
+	query.str(std::string());
+	query << "DELETE FROM `player_rewards` WHERE `player_id` = " << player->getGUID();
+
+	if (!db->executeQuery(query.str())) {
+		return false;
+	}
+
 	if (!rewardList.empty()) {
-		//save reward items
-		query.str(std::string());
-		query << "DELETE FROM `player_rewards` WHERE `player_id` = " << player->getGUID();
-
-		if (!db->executeQuery(query.str())) {
-			return false;
-		}
-
 		DBInsert rewardQuery("INSERT INTO `player_rewards` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 		itemList.clear();
 
 		int running = 0;
 		for (const auto& rewardId : rewardList) {
 			Reward* reward = player->getReward(rewardId, false);
-			running += 1;
-			for (Item* item : reward->getItemList()) {
-				itemList.emplace_back(running, item);
+			if (!reward->empty()) {
+				itemList.emplace_back(++running, reward);
 			}
 		}
 
 		if (!saveItems(player, itemList, rewardQuery, propWriteStream)) {
 			return false;
 		}
-	}*/
+	}
 
 	//save inbox items
 	query.str(std::string());

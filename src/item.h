@@ -496,10 +496,10 @@ class Item : virtual public Thing
 		}
 
 		void setRewardCorpse() {
-			setCorpseOwner(static_cast<int32_t>(std::numeric_limits<uint32_t>::max()));
+			setCorpseOwner(static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
 		}
 		bool isRewardCorpse() {
-			return getCorpseOwner() == static_cast<int32_t>(std::numeric_limits<uint32_t>::max());
+			return getCorpseOwner() == static_cast<uint32_t>(std::numeric_limits<int32_t>::max());
 		}
 
 		void setDuration(int32_t time) {
