@@ -87,17 +87,23 @@ class TileItemVector
 	public:
 		TileItemVector() : downItemCount(0) {}
 
-		ItemVector::const_iterator begin() const {
+		using value_type = ItemVector::value_type;
+		using iterator = ItemVector::iterator;
+		using const_iterator = ItemVector::const_iterator;
+		using reverse_iterator = ItemVector::reverse_iterator;
+		using const_reverse_iterator = ItemVector::const_reverse_iterator;
+
+		const_iterator begin() const {
 			return items.begin();
 		}
-		ItemVector::const_reverse_iterator rbegin() const {
+		const_reverse_iterator rbegin() const {
 			return items.rbegin();
 		}
 
-		ItemVector::const_iterator end() const {
+		const_iterator end() const {
 			return items.end();
 		}
-		ItemVector::const_reverse_iterator rend() const {
+		const_reverse_iterator rend() const {
 			return items.rend();
 		}
 
@@ -109,10 +115,10 @@ class TileItemVector
 			return items.size();
 		}
 
-		ItemVector::iterator insert(ItemVector::iterator _where, Item* item) {
+		iterator insert(ItemVector::iterator _where, Item* item) {
 			return items.insert(_where, item);
 		}
-		ItemVector::iterator erase(ItemVector::iterator _pos) {
+		iterator erase(ItemVector::iterator _pos) {
 			return items.erase(_pos);
 		}
 		Item* at(size_t _pos) const {
@@ -125,28 +131,28 @@ class TileItemVector
 			return items.push_back(item);
 		}
 
-		ItemVector::iterator getBeginDownItem() {
+		iterator getBeginDownItem() {
 			return items.begin();
 		}
-		ItemVector::const_iterator getBeginDownItem() const {
+		const_iterator getBeginDownItem() const {
 			return begin();
 		}
-		ItemVector::iterator getEndDownItem() {
+		iterator getEndDownItem() {
 			return items.begin() + downItemCount;
 		}
-		ItemVector::const_iterator getEndDownItem() const {
+		const_iterator getEndDownItem() const {
 			return items.begin() + downItemCount;
 		}
-		ItemVector::iterator getBeginTopItem() {
+		iterator getBeginTopItem() {
 			return getEndDownItem();
 		}
-		ItemVector::const_iterator getBeginTopItem() const {
+		const_iterator getBeginTopItem() const {
 			return getEndDownItem();
 		}
-		ItemVector::iterator getEndTopItem() {
+		iterator getEndTopItem() {
 			return items.end();
 		}
-		ItemVector::const_iterator getEndTopItem() const {
+		const_iterator getEndTopItem() const {
 			return end();
 		}
 
