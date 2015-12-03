@@ -324,18 +324,16 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		if (RewardChest* rewardChest = container->getRewardChest()) {
 			RewardChest* myRewardChest = player->getRewardChest();
 			myRewardChest->setParent(container->getParent()->getTile());
+			for (auto& it : player->rewardMap) {
+				it.second->setParent(myRewardChest);
+			}
+
 			openContainer = myRewardChest;
 		}
 
 		uint32_t corpseOwner = container->getCorpseOwner();
 		if (container->isRewardCorpse()) {
-			openContainer = new Container(container->getID(), 8);
-			openContainer->setParent(container->getParent()->getTile());
-			Reward* reward = player->getReward(container->getIntAttr(ITEM_ATTRIBUTE_DATE), false);
-			if (reward) {
-				openContainer->internalAddThing(reward);
-			}
-
+			openContainer = player->getRewardCorpse(container);
 		} else if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}

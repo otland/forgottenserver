@@ -518,6 +518,8 @@ class Player final : public Creature, public Cylinder
 		std::vector<uint32_t> getRewardList();
 		RewardChest* getRewardChest();
 
+		Container* getRewardCorpse(Container* _corpse);
+
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
 		DepotLocker* getDepotLocker(uint32_t depotId);
 		void onReceiveMail();
@@ -1203,6 +1205,7 @@ class Player final : public Creature, public Cylinder
 
 		std::map<uint32_t, Reward*> rewardMap;
 		RewardChest* rewardChest = nullptr;
+		std::unordered_map<int32_t, Container*> rewardCorpses;
 
 		std::vector<OutfitEntry> outfits;
 		GuildWarList guildWarList;

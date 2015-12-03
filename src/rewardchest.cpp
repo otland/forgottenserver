@@ -10,20 +10,8 @@ RewardChest::RewardChest(uint16_t _type) :
 	pagination = true;
 }
 
-/*
-Attr_ReadValue RewardChest::readAttr(AttrTypes_t attr, PropStream& propStream)
-{
-	if (attr == ATTR_DEPOT_ID) {
-		if (!propStream.read<uint16_t>(depotId)) {
-			return ATTR_READ_ERROR;
-		}
-		return ATTR_READ_CONTINUE;
-	}
-	return Item::readAttr(attr, propStream);
-}*/
-
-ReturnValue RewardChest::queryAdd(int32_t index, const Thing& thing, uint32_t count,
-	uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue RewardChest::queryAdd(int32_t, const Thing&, uint32_t,
+	uint32_t, Creature* actor/* = nullptr*/) const
 {
 	if (actor) {
 		return RETURNVALUE_NOTPOSSIBLE;

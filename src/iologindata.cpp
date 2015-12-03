@@ -478,6 +478,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
+		//first loop handles the reward containers to retrieve its date attribute
 		for (ItemMap::iterator it = itemMap.begin(), end = itemMap.end(); it != end; ++it) {
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
@@ -489,28 +490,29 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					it->second = std::pair<Item*, int32_t>(reward->getItem(), pid); //update the map with the special reward container
 				}
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-				if (it2 == itemMap.end()) {
-					continue;
-				}
-
-				Container* container = it2->second.first->getContainer();
-				if (container) {
-					container->internalAddThing(item);
-				}
+				break;
 			}
 		}
 
-		RewardChest* rewardChest = player->getRewardChest();
-		//insert rewards into the reward chest
-		for (auto& rewardId : player->getRewardList()) {
-			Reward* reward = player->getReward(rewardId, false);
-			if (reward->empty()) {
-				player->removeReward(rewardId);
+		//second loop (this time a reverse one) to inser the items in the correct order
+		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
+			const std::pair<Item*, int32_t>& pair = it->second;
+			Item* item = pair.first;
+
+			int32_t pid = pair.second;
+			if (pid >= 0 && pid < 100) {
+				break;
+			}
+			
+			ItemMap::const_iterator it2 = itemMap.find(pid);
+			if (it2 == itemMap.end()) {
 				continue;
 			}
 
-			rewardChest->internalAddThing(reward);
+			Container* container = it2->second.first->getContainer();
+			if (container) {
+				container->internalAddThing(item);
+			}
 		}
 	}
 
@@ -836,7 +838,8 @@ bool IOLoginData::savePlayer(Player* player)
 		int running = 0;
 		for (const auto& rewardId : rewardList) {
 			Reward* reward = player->getReward(rewardId, false);
-			if (!reward->empty()) {
+			// rewards that are empty or older than 7 days aren't stored
+			if (!reward->empty() && (time(nullptr) - rewardId <= 60 * 60 * 24 * 7)) {
 				itemList.emplace_back(++running, reward);
 			}
 		}
