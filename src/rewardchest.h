@@ -14,9 +14,6 @@ public:
 	const RewardChest* getRewardChest() const final {
 		return this;
 	}
-	/*
-	//serialization
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;*/
 
 	//cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,

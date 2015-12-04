@@ -28,8 +28,6 @@
 #include "spells.h"
 #include "rewardchest.h"
 
-extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
-
 extern Game g_game;
 extern Spells* g_spells;
 extern Actions* g_actions;

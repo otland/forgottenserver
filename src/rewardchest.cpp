@@ -33,13 +33,3 @@ void RewardChest::postRemoveNotification(Thing* thing, const Cylinder* newParent
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
-
-/*
-void RewardChest::removeInbox(Inbox* inbox)
-{
-	auto cit = std::find(itemlist.begin(), itemlist.end(), inbox);
-	if (cit == itemlist.end()) {
-		return;
-	}
-	itemlist.erase(cit);
-}*/
