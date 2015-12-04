@@ -160,6 +160,7 @@ local function pushValues(buffer, sep, ...)
 end
 
 local function insertItems(buffer, info, parent, items)
+    local start = info.running
     for _, item in ipairs(items) do
         if _ ~= 1 or parent > 100 then
             table.insert(buffer, ",")
@@ -181,27 +182,64 @@ local function insertItems(buffer, info, parent, items)
             end
         end
     end
+    return info.running - start
 end
 
 local function insertDepotItems(playerGuid, depotId, ...)
     local items = {...}
     db.asyncStoreQuery('select COUNT(*) from `player_depotitems` where player_id = ' .. playerGuid .. ';', 
         function(query)
+            local count = 0
             if(query) then
-                local count = result.getDataInt(query, 'COUNT(*)')
+                count = result.getDataInt(query, 'COUNT(*)')
                 result.free(query)
-                local buffer = {'INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES'}
-                local info = {
-                    playerGuid = playerGuid,
-                    running = 100 + count
-                }
+            end
 
-                insertItems(buffer, info, depotId, items)
-                table.insert(buffer, ";")
+            local buffer = {'INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES'}
+            local info = {
+                playerGuid = playerGuid,
+                running = 100 + count
+            }
 
+            local total = insertItems(buffer, info, depotId, items)
+            table.insert(buffer, ";")
+
+            if(total ~= 0) then
                 db.query(table.concat(buffer))
-            else
-                print('[Warning - reward] - Could not retrieve reward chest items from player.')
+            end
+        end
+    )
+end
+
+local function insertRewardBag(playerGuid, bag)
+    db.asyncStoreQuery('select `pid`, `sid` from `player_rewards` where player_id = ' .. playerGuid .. ' order by `sid` ASC;', 
+        function(query)
+            local lastReward = 0
+            local lastStoreId   
+            if(query) then             
+                repeat
+                    local sid = result.getDataInt(query, 'sid')
+                    local pid = result.getDataInt(query, 'pid')
+
+                    if pid < 100 then
+                        lastReward = pid
+                    end
+                    lastStoreId = sid
+                until not result.next(query)
+            end
+
+            local buffer = {'INSERT INTO `player_rewards` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES'}
+
+            --reward bag
+            local info = {
+                playerGuid = playerGuid,
+                running = lastStoreId or 100
+            }
+            local total = insertItems(buffer, info, lastReward + 1, {bag})
+            table.insert(buffer, ";")
+
+            if(total ~= 0) then
+                db.query(table.concat(buffer))
             end
         end
     )
@@ -280,16 +318,7 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
                 table.insert(lootMessage, ".")
                 con.player:sendTextMessage(MESSAGE_EVENT_ADVANCE, table.concat(lootMessage))
             else
-                --[[
-                print 'sending bps'
-                local bp = Game.createItem(1988)
-                local bpCont = Container(bp:getUniqueId())
-                local bag = Game.createItem(1987)
-                local bagCont = Container(bag:getUniqueId())
-                bagCont:addItem(ITEM_GOLD_COIN, 13)
-                bpCont:addItem(2525)
-                bpCont:addItemEx(bag)
-                insertDepotItems(2, 99, bpCont)]]
+                
             end
         end
 

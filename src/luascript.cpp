@@ -1413,6 +1413,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerEnum(ITEM_BAG)
 	registerEnum(ITEM_GOLD_COIN)
+	registerEnum(ITEM_REWARD_CHEST)
+	registerEnum(ITEM_REWARD_CONTAINER)
 	registerEnum(ITEM_PLATINUM_COIN)
 	registerEnum(ITEM_CRYSTAL_COIN)
 	registerEnum(ITEM_AMULETOFLOSS)
