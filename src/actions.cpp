@@ -319,7 +319,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		}
 
 		//reward chest
-		if (RewardChest* rewardChest = container->getRewardChest()) {
+		if (container->getRewardChest()) {
 			RewardChest* myRewardChest = player->getRewardChest();
 			myRewardChest->setParent(container->getParent()->getTile());
 			for (auto& it : player->rewardMap) {
