@@ -260,7 +260,8 @@ local function getPlayerStats(bossId, playerGuid, autocreate)
 end
 
 function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
-    if creature:getType():isRewardBoss() then -- Make sure it is a boss
+    local monsterType = creature:getType()
+    if monsterType:isRewardBoss() then -- Make sure it is a boss
         local bossId = creature:getId()
         local timestamp = os.time()
         corpse:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
@@ -273,13 +274,8 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
 
         for guid, stats in pairs(info) do
             local player = Player(stats.playerId)
-            if not player then
-                print "Player is not online to receive his reward."                
-                
-            end
-            local damageOut, damageIn, healing = (stats.damageOut or 0) + ((damageMap[stats.playerId] or { }).total or 0), stats.damageIn or 0, stats.healing or 0
-
-            --print(('Player: %s.\nDamage Out: %d\nDamage In: %d\nHealing: %d'):format(player:getName(), damageOut, damageIn, healing))
+            local part = damageMap[stats.playerId]
+            local damageOut, damageIn, healing = (stats.damageOut or 0) + (part and part.total or 0), stats.damageIn or 0, stats.healing or 0
 
             totalDamageOut = totalDamageOut + damageOut
             totalDamageIn = totalDamageIn + damageIn
@@ -294,23 +290,37 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
             })            
         end
 
-        --print(('Boss %s is dead.\nTotal Damage Out: %d\nTotal Damage In: %d\nTotal Healing: %d'):format(creature:getName(), totalDamageOut, totalDamageIn, totalHealing))
+        local participants = 0
+        for _, con in ipairs(scores) do
+            local score = (con.damageOut / totalDamageOut) + (con.damageIn / totalDamageIn) + (con.healing / totalHealing)
+            con.score = score / 3 -- normalize to 0-1
+            if score ~= 0 then
+                participants = participants + 1
+            end
+        end
+        table.sort(scores, function(a, b) return a.score > b.score end)
 
-        -- table.sort(scores, function(a, b) return a.score > b.score end)
+        local expectedScore = 1 / participants
 
-        for _, con in ipairs(scores) do         
-            if(con.player) then   
-                local reward = con.player:getReward(timestamp, true)
-                local bag = Game.createItem(1987)
-                Container(bag:getUniqueId()):addItem(ITEM_GOLD_COIN, 67)
-                reward:addItem(ITEM_GOLD_COIN, math.random(1, 180))
-                reward:addItem(2525)
-                reward:addItem(ItemType("assassin star"):getId(), math.random(1, 20))
-                reward:addItemEx(bag)
+        for _, con in ipairs(scores) do
+            local reward, stamina          
+            if con.player then   
+                reward = Game.createItem(ITEM_REWARD_CONTAINER)--con.player:getReward(25, true)
+                stamina = con.player:getStamina()
+            else
+                reward = Game.createItem(ITEM_REWARD_CONTAINER)
+                reward:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
+                stamina = con.stamina or 0
+            end
 
+            if stamina > 840 and con.score ~= 0 then
+                local playerLoot = monsterType:getBossReward
+            end
+
+            if con.player then
                 local lootMessage = {"The following items are available in your reward chest: "}
 
-                if con.player:getStamina() > 840 then
+                if stamina > 840 then
                     reward:getContentDescription(lootMessage)
                 else
                     table.insert(lootMessage, 'nothing (due to low stamina)')
@@ -318,7 +328,7 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
                 table.insert(lootMessage, ".")
                 con.player:sendTextMessage(MESSAGE_EVENT_ADVANCE, table.concat(lootMessage))
             else
-                
+                --insertRewardBag(con.guid, reward)
             end
         end
 

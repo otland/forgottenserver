@@ -93,3 +93,34 @@ function Player.inBossFight(self)
     end
     return false
 end
+
+-- by https://otland.net/members/cbrm.25752/ with some modifications
+function MonsterType.createLootItem(self, lootBlock, chance, lootTable, topScore)
+    local lootTable, itemCount = lootTable or {}, 0
+    local randvalue = math.random(0, 100000) / (getConfigInfo("rateLoot") * chance)
+    if randvalue < lootBlock.chance then
+        if (ItemType(lootBlock.itemId):isStackable()) then
+            itemCount = randvalue % lootBlock.maxCount + 1
+        else
+            itemCount = 1
+        end
+    end
+
+    while itemCount > 0 do
+        local n = math.min(itemCount, 100)
+        itemCount = itemCount - n
+        table.insert(lootTable, {lootBlock.itemId, n})
+    end
+
+    return lootTable
+end
+
+function MonsterType.getBossReward(self, lootFactor, topScore)
+    local result = {}
+    if getConfigInfo("rateLoot") > 0 then
+        for _, loot in pairs(self:getLoot()) do
+            self:createLootItem(loot, lootFactor, result, topScore)
+        end
+    end
+    return result
+end

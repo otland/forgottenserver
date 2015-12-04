@@ -35,6 +35,7 @@ struct LootBlock {
 	int32_t subType;
 	int32_t actionId;
 	std::string text;
+	bool unique;
 
 	std::vector<LootBlock> childLoot;
 	LootBlock() {
@@ -44,6 +45,7 @@ struct LootBlock {
 
 		subType = -1;
 		actionId = -1;
+		unique = false;
 	}
 };
 
