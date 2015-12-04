@@ -212,8 +212,10 @@ local function insertRewardBag(playerGuid, timestamp, itemList)
 
             local bag = Game.createItem(ITEM_REWARD_CONTAINER)
             bag:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
-            for _, p in ipairs(itemList) do
-                bag:addItem(p[1], p[2])
+            if itemList then
+                for _, p in ipairs(itemList) do
+                    bag:addItem(p[1], p[2])
+                end
             end
 
             local total = insertItems(buffer, info, lastReward + 1, {bag})
