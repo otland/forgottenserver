@@ -11708,7 +11708,8 @@ int LuaScriptInterface::luaMonsterTypeGetLoot(lua_State* L)
 			setField(L, "maxCount", lootBlock.countmax);
 			setField(L, "actionId", lootBlock.actionId);
 			setField(L, "text", lootBlock.text);
-			setField(L, "unique", lootBlock.unique);
+			pushBoolean(L, lootBlock.unique);
+			lua_setfield(L, -2, "unique");
 
 			parseLoot(lootBlock.childLoot);
 			lua_setfield(L, -2, "childLoot");

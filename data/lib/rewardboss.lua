@@ -95,7 +95,7 @@ function Player.inBossFight(self)
 end
 
 -- by https://otland.net/members/cbrm.25752/ with some modifications
-function MonsterType.createLootItem(self, lootBlock, chance, lootTable, topScore)
+function MonsterType.createLootItem(self, lootBlock, chance, lootTable)
     local lootTable, itemCount = lootTable or {}, 0
     local randvalue = math.random(0, 100000) / (getConfigInfo("rateLoot") * chance)
     if randvalue < lootBlock.chance then
@@ -118,8 +118,12 @@ end
 function MonsterType.getBossReward(self, lootFactor, topScore)
     local result = {}
     if getConfigInfo("rateLoot") > 0 then
-        for _, loot in pairs(self:getLoot()) do
-            self:createLootItem(loot, lootFactor, result, topScore)
+        for _, lootBlock in pairs(self:getLoot()) do
+            if lootBlock.unique and not topScore then
+                --continue
+            else
+                self:createLootItem(lootBlock, lootFactor, result)
+            end
         end
     end
     return result

@@ -172,7 +172,7 @@ local function insertItems(buffer, info, parent, items)
 
         if item:isContainer() then
             local size = item:getSize()
-            if size > 0 then                
+            if size > 0 then              
                 local subItems = {}
                 for i = 1, size do
                     table.insert(subItems, item:getItem(i - 1))
@@ -185,33 +185,7 @@ local function insertItems(buffer, info, parent, items)
     return info.running - start
 end
 
-local function insertDepotItems(playerGuid, depotId, ...)
-    local items = {...}
-    db.asyncStoreQuery('select COUNT(*) from `player_depotitems` where player_id = ' .. playerGuid .. ';', 
-        function(query)
-            local count = 0
-            if(query) then
-                count = result.getDataInt(query, 'COUNT(*)')
-                result.free(query)
-            end
-
-            local buffer = {'INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES'}
-            local info = {
-                playerGuid = playerGuid,
-                running = 100 + count
-            }
-
-            local total = insertItems(buffer, info, depotId, items)
-            table.insert(buffer, ";")
-
-            if(total ~= 0) then
-                db.query(table.concat(buffer))
-            end
-        end
-    )
-end
-
-local function insertRewardBag(playerGuid, bag)
+local function insertRewardBag(playerGuid, timestamp, itemList)
     db.asyncStoreQuery('select `pid`, `sid` from `player_rewards` where player_id = ' .. playerGuid .. ' order by `sid` ASC;', 
         function(query)
             local lastReward = 0
@@ -235,6 +209,13 @@ local function insertRewardBag(playerGuid, bag)
                 playerGuid = playerGuid,
                 running = lastStoreId or 100
             }
+
+            local bag = Game.createItem(ITEM_REWARD_CONTAINER)
+            bag:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
+            for _, p in ipairs(itemList) do
+                bag:addItem(p[1], p[2])
+            end
+
             local total = insertItems(buffer, info, lastReward + 1, {bag})
             table.insert(buffer, ";")
 
@@ -266,7 +247,7 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
         local timestamp = os.time()
         corpse:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
 
-        local totalDamageOut, totalDamageIn, totalHealing = 0, 0, 0
+        local totalDamageOut, totalDamageIn, totalHealing = 0.1, 0.1, 0.1 -- avoid dividing by zero
 
         local scores = {}
         local info = globalBosses[bossId]
@@ -303,24 +284,32 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
         local expectedScore = 1 / participants
 
         for _, con in ipairs(scores) do
-            local reward, stamina          
+            local reward, stamina -- ignoring stamina for now because I heard you get receive rewards even when it's depleted   
             if con.player then   
-                reward = Game.createItem(ITEM_REWARD_CONTAINER)--con.player:getReward(25, true)
+                reward = con.player:getReward(timestamp, true)
                 stamina = con.player:getStamina()
             else
-                reward = Game.createItem(ITEM_REWARD_CONTAINER)
-                reward:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
                 stamina = con.stamina or 0
             end
 
-            if stamina > 840 and con.score ~= 0 then
-                local playerLoot = monsterType:getBossReward
+            local playerLoot
+            if --[[stamina > 840 and]] con.score ~= 0 then
+                local lootFactor = 1
+                lootFactor = lootFactor / participants ^ (1 / 3) -- tone down the loot a notch if there are many participants
+                lootFactor = lootFactor * (1 + lootFactor) ^ (con.score / expectedScore) -- increase the loot multiplicatively by how many times the player surpassed the expected score
+                playerLoot = monsterType:getBossReward(lootFactor, _ == 1)
+
+                if con.player then
+                    for _, p in ipairs(playerLoot) do
+                        reward:addItem(p[1], p[2])
+                    end
+                end
             end
 
             if con.player then
                 local lootMessage = {"The following items are available in your reward chest: "}
 
-                if stamina > 840 then
+                if --[[stamina > 840]]true then
                     reward:getContentDescription(lootMessage)
                 else
                     table.insert(lootMessage, 'nothing (due to low stamina)')
@@ -328,7 +317,7 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
                 table.insert(lootMessage, ".")
                 con.player:sendTextMessage(MESSAGE_EVENT_ADVANCE, table.concat(lootMessage))
             else
-                --insertRewardBag(con.guid, reward)
+                insertRewardBag(con.guid, timestamp, playerLoot)
             end
         end
 
@@ -344,6 +333,7 @@ function onThink(creature, interval)
     for _, player in pairs(info) do
         player.active = false
     end
+    -- Set all players in boss' target list as active in the fight
     local targets = creature:getTargetList()
     for _, target in ipairs(targets) do
         if target:isPlayer() then
@@ -371,14 +361,15 @@ function onHealthChange(creature, attacker, primaryDamage, primaryType, secondar
     local creatureId, attackerId = creature:getId(), attacker:getId()
     stats.playerId = creatureId -- Update player id
 
+    -- Account for healing of others active in the boss fight
     if primaryType == COMBAT_HEALING and attacker:isPlayer() and attackerId ~= creatureId then
         local healerStats = getPlayerStats(stats.bossId, attacker:getGuid(), true)
         healerStats.active = true
         healerStats.playerId = attackerId -- Update player id
         healerStats.healing = healerStats.healing + primaryDamage
     elseif stats.bossId == attackerId then
+        -- Account for damage taken from the boss
         stats.damageIn = stats.damageIn + primaryDamage
-    else
     end
     return primaryDamage, primaryType, secondaryDamage, secondaryType
 end

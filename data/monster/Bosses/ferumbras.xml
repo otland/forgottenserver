@@ -4,6 +4,7 @@
 	<look type="229" corpse="6078" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
+		<flag rewardboss="1" />
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
@@ -81,7 +82,7 @@
 		<item id="2678" countmax="3" chance="20000" /><!-- coconut -->
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2151" countmax="4" chance="12000" /><!-- talon -->
-		<item id="5903" chance="100000" /><!-- ferumbras' hat -->
+		<item id="5903" chance="100000" unique="1"/><!-- ferumbras' hat -->
 		<item id="2149" countmax="3" chance="15000" /><!-- small emerald -->
 		<item id="2171" chance="30000" /><!-- platinum amulet -->
 		<item id="2415" chance="6000" /><!-- great axe -->
