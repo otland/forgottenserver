@@ -439,32 +439,39 @@ void Player::getShieldAndWeapon(const Item*& shield, const Item*& weapon) const
 
 int32_t Player::getDefense() const
 {
-	int32_t baseDefense = 5;
 	int32_t defenseValue = 0;
 	int32_t defenseSkill = 0;
-	int32_t extraDefense = 0;
+	const float baseDefense = 2.23f;
 	float defenseFactor = getDefenseFactor();
 	const Item* weapon;
 	const Item* shield;
 	getShieldAndWeapon(shield, weapon);
 
-	if (weapon) {
-		defenseValue = baseDefense + weapon->getDefense();
-		extraDefense = weapon->getExtraDefense();
+	defenseValue = 7; // fist base defense
+	defenseSkill = getSkillLevel(SKILL_FIST); // fist fighting will work as a shield if no weapon nor shield are equipped.
+
+	if (weapon) { // while using weapon without shield, then to count damage reduction instead of shielding skill, weapon skill is used.
+		defenseValue = weapon->getDefense() + weapon->getExtraDefense();
 		defenseSkill = getWeaponSkill(weapon);
 	}
 
-	if (shield && shield->getDefense() >= defenseValue) {
-		defenseValue = baseDefense + shield->getDefense() + extraDefense;
+	if (shield) { // while wearing shield its def is always used to count damage reduction, even if weapon's defense is higher than shield's.
+		defenseValue = weapon ? shield->getDefense() + weapon->getExtraDefense() : shield->getDefense();
 		defenseSkill = getSkillLevel(SKILL_SHIELD);
 	}
 
 	if (defenseSkill == 0) {
-		return 0;
+		if (defenseFactor == FIGHTMODE_ATTACK || defenseFactor == FIGHTMODE_BALANCED) {
+			return 1;
+		} else if (defenseFactor == FIGHTMODE_DEFENSE) {
+			return 2;
+		} else {
+			return 0;
+		}
 	}
 
-	defenseValue = static_cast<int32_t>(defenseValue * vocation->defenseMultiplier);
-	return static_cast<int32_t>(std::ceil((static_cast<float>(defenseSkill * (defenseValue * 0.015)) + (defenseValue * 0.1)) * defenseFactor));
+	defenseValue = static_cast<int32_t>(((((defenseSkill / 4) + baseDefense) * defenseValue) * 0.15) * vocation->defenseMultiplier);
+	return static_cast<int32_t>(std::floor(static_cast<float>(defenseValue * defenseFactor)));
 }
 
 float Player::getAttackFactor() const
@@ -479,16 +486,21 @@ float Player::getAttackFactor() const
 
 float Player::getDefenseFactor() const
 {
+	bool isAttackingTarget = (OTSYS_TIME() - lastAttack) < getAttackSpeed();
 	switch (fightMode) {
-		case FIGHTMODE_ATTACK: return 1.0f;
-		case FIGHTMODE_BALANCED: return 1.2f;
-		case FIGHTMODE_DEFENSE: {
-			if ((OTSYS_TIME() - lastAttack) < getAttackSpeed()) {
-				return 1.0f;
+		case FIGHTMODE_ATTACK: {
+			if (isAttackingTarget) {
+				return 0.5f;
 			}
-
-			return 2.0f;
+			return 1.0f;
 		}
+		case FIGHTMODE_BALANCED: {
+			if (isAttackingTarget) {
+				return 0.75f;
+			}
+			return 1.0f;
+		}
+		case FIGHTMODE_DEFENSE: return 1.0f;
 		default: return 1.0f;
 	}
 }

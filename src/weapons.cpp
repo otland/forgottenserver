@@ -142,7 +142,7 @@ int32_t Weapons::getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue)
 //players
 int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor)
 {
-	return static_cast<int32_t>(std::ceil((2 * (attackValue * (attackSkill + 5.8) / 25 + (level - 1) / 10.)) / attackFactor));
+	return static_cast<int32_t>(std::floor((level / 5) + ((((((attackSkill / 4.) + 0.982) * (attackValue / 3.)) + 0.3) * 1.02) / attackFactor)));
 }
 
 Weapon::Weapon(LuaScriptInterface* _interface) :
@@ -574,7 +574,7 @@ bool WeaponMelee::getSkillType(const Player* player, const Item* item,
 	return false;
 }
 
-int32_t WeaponMelee::getElementDamage(const Player* player, const Creature*, const Item* item) const
+int32_t WeaponMelee::getElementDamage(const Player* player, const Creature* target, const Item* item) const
 {
 	if (elementType == COMBAT_NONE) {
 		return 0;
@@ -584,11 +584,21 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Creature*, con
 	int32_t attackValue = elementDamage;
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
-	return -normal_random(0, static_cast<int32_t>(maxValue * player->getVocation()->meleeDamageMultiplier));
+	int32_t maxValue = static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->meleeDamageMultiplier);
+
+	int32_t minValue = 0;
+	if (target) {
+		if (target->getPlayer()) {
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 10));
+		} else {
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 5));
+		}
+	}
+
+	return -normal_random(minValue, maxValue);
 }
 
-int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, const Item* item, bool maxDamage /*= false*/) const
+int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
 {
 	int32_t attackSkill = player->getWeaponSkill(item);
 	int32_t attackValue = std::max<int32_t>(0, item->getAttack());
@@ -599,7 +609,16 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 		return -maxValue;
 	}
 
-	return -normal_random(0, maxValue);
+	int32_t minValue = 0;
+	if (target) {
+		if (target->getPlayer()) {
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 10));
+		} else {
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 5));
+		}
+	}
+
+	return -normal_random(minValue, maxValue);
 }
 
 WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
@@ -803,16 +822,16 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 	float attackFactor = player->getAttackFactor();
 
 	int32_t minValue = 0;
-	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
+	int32_t maxValue = static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) * player->getVocation()->distDamageMultiplier);
 	if (target) {
 		if (target->getPlayer()) {
-			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.1));
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 10));
 		} else {
-			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.2));
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 5));
 		}
 	}
 
-	return -normal_random(minValue, static_cast<int32_t>(maxValue * player->getVocation()->distDamageMultiplier));
+	return -normal_random(minValue, maxValue);
 }
 
 int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
@@ -834,16 +853,15 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 		return -maxValue;
 	}
 
-	int32_t minValue;
+	int32_t minValue = 0;
 	if (target) {
 		if (target->getPlayer()) {
-			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.1));
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 10));
 		} else {
-			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.2));
+			minValue = static_cast<int32_t>(std::floor(player->getLevel() / 5));
 		}
-	} else {
-		minValue = 0;
 	}
+
 	return -normal_random(minValue, maxValue);
 }
 
