@@ -2,7 +2,7 @@ local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_HITAREA)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ETHEREALSPEAR)
-combat:setParameter(COMBAT_PARAM_BLOCKARMOR, 1)
+combat:setParameter(COMBAT_PARAM_BLOCKSHIELD, 1)
 
 function onGetFormulaValues(player, attack, factor)
 	local skillTotal = 2 * player:getEffectiveSkillLevel(SKILL_DISTANCE)
