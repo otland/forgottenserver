@@ -4,11 +4,11 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
 
 local condition = Condition(CONDITION_ATTRIBUTES)
-condition:setParameter(CONDITION_PARAM_SUBID, 1)
-condition:setParameter(CONDITION_PARAM_BUFF_SPELL, 1)
 condition:setParameter(CONDITION_PARAM_TICKS, 2 * 60 * 1000)
 condition:setParameter(CONDITION_PARAM_SKILL_MELEE, 3)
 condition:setParameter(CONDITION_PARAM_SKILL_DISTANCE, 3)
+condition:setParameter(CONDITION_PARAM_SUBID, 1)
+condition:setParameter(CONDITION_PARAM_BUFF_SPELL, 1)
 
 local baseMana = 60
 function onCastSpell(creature, var, isHotkey)

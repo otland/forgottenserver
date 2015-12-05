@@ -1,9 +1,9 @@
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_HEALING)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
-combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
-combat:setParameter(COMBAT_PARAM_TARGETCASTERORTOPMOST, 1)
 combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
+combat:setParameter(COMBAT_PARAM_TARGETCASTERORTOPMOST, 1)
+combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
 
 function onGetFormulaValues(player, level, maglevel)
 	local min = (level / 5) + (maglevel * 7.3) + 42

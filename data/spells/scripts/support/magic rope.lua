@@ -14,5 +14,6 @@ function onCastSpell(creature, var)
 	else
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end
+	
 	return true
 end
