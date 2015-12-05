@@ -981,7 +981,7 @@ Reward* Player::getReward(uint32_t rewardId, bool autoCreate)
 	reward->setIntAttr(ITEM_ATTRIBUTE_DATE, rewardId);
 	rewardMap[rewardId] = reward;
 
-	getRewardChest()->internalAddThing(reward);
+	g_game.internalAddItem(getRewardChest(), reward, INDEX_WHEREEVER, FLAG_NOLIMIT);
 
 	return reward;
 }
