@@ -247,7 +247,6 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
     if monsterType:isRewardBoss() then -- Make sure it is a boss
         local bossId = creature:getId()
         local timestamp = os.time()
-        corpse:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
 
         local totalDamageOut, totalDamageIn, totalHealing = 0.1, 0.1, 0.1 -- avoid dividing by zero
 

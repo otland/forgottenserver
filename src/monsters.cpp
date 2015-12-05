@@ -121,6 +121,11 @@ void MonsterType::createLoot(Container* corpse)
 	}
 
 	if (isRewardBoss) {
+		auto timestamp = time(nullptr);
+		Item* rewardContainer = Item::CreateItem(ITEM_REWARD_CONTAINER);
+		rewardContainer->setIntAttr(ITEM_ATTRIBUTE_DATE, timestamp);	
+		corpse->setIntAttr(ITEM_ATTRIBUTE_DATE, timestamp);
+		corpse->internalAddThing(rewardContainer);
 		corpse->setRewardCorpse();
 		corpse->startDecaying();
 		return;

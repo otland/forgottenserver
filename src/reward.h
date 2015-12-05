@@ -9,6 +9,13 @@ class Reward :
 public:
 	explicit Reward();
 
+	Reward* getReward() final {
+		return this;
+	}
+	const Reward* getReward() const final {
+		return this;
+	}
+
 	//cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t flags, Creature* actor = nullptr) const final;
