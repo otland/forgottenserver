@@ -9,7 +9,7 @@
 	<event type="death" name="DropLoot" script="droploot.lua" />
 	<event type="extendedopcode" name="ExtendedOpcode" script="extendedopcode.lua" />
 
-    <event type="death" name="BossDeath" script="boss.lua" />
-    <event type="healthchange" name="BossParticipation" script="boss.lua" />
-    <event type="think" name="BossThink" script="boss.lua" />
+  <event type="death" name="BossDeath" script="boss.lua" />
+  <event type="healthchange" name="BossParticipation" script="boss.lua" />
+  <event type="think" name="BossThink" script="boss.lua" />
 </creaturescripts>

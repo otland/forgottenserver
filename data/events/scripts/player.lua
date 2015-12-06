@@ -181,15 +181,17 @@ function Player:onMoveItem(item, count, fromPosition, toPosition)
 	if toPosition.x == CONTAINER_POSITION then
 		local cid = toPosition.y - 64 -- container id
 		local container = self:getContainerById(cid)		
-		if(not container) then
+		if not container then
 			return true 
 		end
-		local itemId = container:getId()
+
 		-- Do not let the player insert items into either the Reward Container or the Reward Chest
+		local itemId = container:getId()		
 		if itemId == 21518 or itemId == 21584 then
 			self:sendCancelMessage('Sorry, not possible.')
 			return false
 		end
+
 		-- The player also shouldn't be able to insert items into the boss corpse		
 		local tile = Tile(container:getPosition())
 		for _, item in ipairs(tile:getItems()) do

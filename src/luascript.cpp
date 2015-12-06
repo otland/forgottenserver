@@ -7627,8 +7627,7 @@ int LuaScriptInterface::luaPlayerGetReward(lua_State* L)
 	if (Reward* reward = player->getReward(rewardId, autoCreate)) {
 		pushUserdata<Item>(L, reward);
 		setItemMetatable(L, -1, reward);
-	}
-	else {
+	} else {
 		pushBoolean(L, false);
 	}
 	return 1;
@@ -11461,8 +11460,7 @@ int LuaScriptInterface::luaMonsterTypeIsRewardBoss(lua_State* L)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		pushBoolean(L, monsterType->isRewardBoss);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
