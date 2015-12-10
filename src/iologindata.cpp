@@ -470,6 +470,52 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
+	//load reward chest items
+	itemMap.clear();
+
+	query.str(std::string());
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_rewards` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	if ((result = db->storeQuery(query.str()))) {
+		loadItems(itemMap, result);
+
+		//first loop handles the reward containers to retrieve its date attribute
+		for (ItemMap::iterator it = itemMap.begin(), end = itemMap.end(); it != end; ++it) {
+			const std::pair<Item*, int32_t>& pair = it->second;
+			Item* item = pair.first;
+
+			int32_t pid = pair.second; 
+			if (pid >= 0 && pid < 100) {
+				Reward* reward = player->getReward(item->getIntAttr(ITEM_ATTRIBUTE_DATE), true);
+				if (reward) {
+					it->second = std::pair<Item*, int32_t>(reward->getItem(), pid); //update the map with the special reward container
+				}
+			} else {
+				break;
+			}
+		}
+
+		//second loop (this time a reverse one) to inser the items in the correct order
+		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
+			const std::pair<Item*, int32_t>& pair = it->second;
+			Item* item = pair.first;
+
+			int32_t pid = pair.second;
+			if (pid >= 0 && pid < 100) {
+				break;
+			}
+			
+			ItemMap::const_iterator it2 = itemMap.find(pid);
+			if (it2 == itemMap.end()) {
+				continue;
+			}
+
+			Container* container = it2->second.first->getContainer();
+			if (container) {
+				container->internalAddThing(item);
+			}
+		}
+	}
+
 	//load inbox items
 	itemMap.clear();
 
@@ -772,6 +818,33 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 
 		if (!saveItems(player, itemList, depotQuery, propWriteStream)) {
+			return false;
+		}
+	}
+
+	auto rewardList = player->getRewardList();
+	//save reward items
+	query.str(std::string());
+	query << "DELETE FROM `player_rewards` WHERE `player_id` = " << player->getGUID();
+
+	if (!db->executeQuery(query.str())) {
+		return false;
+	}
+
+	if (!rewardList.empty()) {
+		DBInsert rewardQuery("INSERT INTO `player_rewards` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+		itemList.clear();
+
+		int running = 0;
+		for (const auto& rewardId : rewardList) {
+			Reward* reward = player->getReward(rewardId, false);
+			// rewards that are empty or older than 7 days aren't stored
+			if (!reward->empty() && (time(nullptr) - rewardId <= 60 * 60 * 24 * 7)) {
+				itemList.emplace_back(++running, reward);
+			}
+		}
+
+		if (!saveItems(player, itemList, rewardQuery, propWriteStream)) {
 			return false;
 		}
 	}

@@ -26,6 +26,7 @@
 #include "game.h"
 #include "pugicast.h"
 #include "spells.h"
+#include "rewardchest.h"
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -317,8 +318,34 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			openContainer = container;
 		}
 
+		//reward chest
+		if (container->getRewardChest()) {
+			RewardChest* myRewardChest = player->getRewardChest();
+			myRewardChest->setParent(container->getParent()->getTile());
+			for (auto& it : player->rewardMap) {
+				it.second->setParent(myRewardChest);
+			}
+
+			openContainer = myRewardChest;
+		}
+
+		//reward container proxy created when the boss dies
+		if (container->getID() == ITEM_REWARD_CONTAINER && !container->getReward()) {
+			if (Reward* reward = player->getReward(container->getIntAttr(ITEM_ATTRIBUTE_DATE), false)) {
+				reward->setParent(container->getRealParent());
+				openContainer = reward;
+			} else {
+				return RETURNVALUE_THISISIMPOSSIBLE; 
+			}
+		}		
+
 		uint32_t corpseOwner = container->getCorpseOwner();
-		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
+		if (container->isRewardCorpse()) {
+			//only players who participated in the fight can open the corpse
+			if (!player->getReward(container->getIntAttr(ITEM_ATTRIBUTE_DATE), false)) {
+				return RETURNVALUE_YOUARENOTTHEOWNER;
+			}			
+		} else if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}
 
