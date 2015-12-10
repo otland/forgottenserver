@@ -1,154 +1,4 @@
-local attr = {
-	--ATTR_DESCRIPTION = 1,
-	--ATTR_EXT_FILE = 2,
-	ATTR_TILE_FLAGS = 3,
-	ATTR_ACTION_ID = 4,
-	ATTR_UNIQUE_ID = 5,
-	ATTR_TEXT = 6,
-	ATTR_DESC = 7,
-	ATTR_TELE_DEST = 8,
-	ATTR_ITEM = 9,
-	ATTR_DEPOT_ID = 10,
-	--ATTR_EXT_SPAWN_FILE = 11,
-	ATTR_RUNE_CHARGES = 12,
-	--ATTR_EXT_HOUSE_FILE = 13,
-	ATTR_HOUSEDOORID = 14,
-	ATTR_COUNT = 15,
-	ATTR_DURATION = 16,
-	ATTR_DECAYING_STATE = 17,
-	ATTR_WRITTENDATE = 18,
-	ATTR_WRITTENBY = 19,
-	ATTR_SLEEPERGUID = 20,
-	ATTR_SLEEPSTART = 21,
-	ATTR_CHARGES = 22,
-	ATTR_CONTAINER_ITEMS = 23,
-	ATTR_NAME = 24,
-	ATTR_ARTICLE = 25,
-	ATTR_PLURALNAME = 26,
-	ATTR_WEIGHT = 27,
-	ATTR_ATTACK = 28,
-	ATTR_DEFENSE = 29,
-	ATTR_EXTRADEFENSE = 30,
-	ATTR_ARMOR = 31,
-	ATTR_HITCHANCE = 32,
-	ATTR_SHOOTRANGE = 33,
-}
-
-
-local function addI32(msg, x)
-	local b4=x%256  x=(x-x%256)/256
-	local b3=x%256  x=(x-x%256)/256
-	local b2=x%256  x=(x-x%256)/256
-	local b1=x%256  x=(x-x%256)/256
-	msg:addByte(b4)
-	msg:addByte(b3)
-	msg:addByte(b2)
-	msg:addByte(b1)
-end
-
-local function addI8(msg, x)
-	msg:addByte(x%256)
-end
-
-
-local attributes = {
-	ITEM_ATTRIBUTE_ARTICLE = {"string", "ATTR_ARTICLE"},
-	ITEM_ATTRIBUTE_PLURALNAME = {"string", "ATTR_PLURALNAME"},
-	ITEM_ATTRIBUTE_WEIGHT = {"u32", "ATTR_WEIGHT"},
-	ITEM_ATTRIBUTE_DECAYSTATE = {"byte", "ATTR_DECAYING_STATE"},
-	ITEM_ATTRIBUTE_DURATION = {"u32", "ATTR_DURATION"},
-	ITEM_ATTRIBUTE_WRITER = {"string", "ATTR_WRITTENBY"},
-	ITEM_ATTRIBUTE_TEXT = {"string", "ATTR_TEXT"},
-	ITEM_ATTRIBUTE_DATE = {"u32", "ATTR_WRITTENDATE"},
-	ITEM_ATTRIBUTE_ATTACK = {"i32", "ATTR_ATTACK"},
-	ITEM_ATTRIBUTE_DEFENSE = {"i32", "ATTR_DEFENSE"},
-	ITEM_ATTRIBUTE_EXTRADEFENSE = {"i32", "ATTR_EXTRADEFENSE"},
-	ITEM_ATTRIBUTE_ARMOR = {"i32", "ATTR_ARMOR"},
-	ITEM_ATTRIBUTE_HITCHANCE = {"i8", "ATTR_HITCHANCE"},
-	ITEM_ATTRIBUTE_SHOOTRANGE = {"byte", "ATTR_SHOOTRANGE"}
-}
-
-local function serializeAttributes(item)
-	local itemType = item:getType()
-	local msg = NetworkMessage()
-	local size = 0
-
-	if itemType:isStackable() or itemType:isFluidContainer() then
-		msg:addByte(attr.ATTR_COUNT)
-		msg:addByte(item:getSubType())
-		size = size + 2
-	end
-
-	local charges = item:getCharges()
-	if charges and charges ~= 0 then
-		msg:addByte(attr.ATTR_CHARGES)
-		msg:addU16(charges)
-		size = size + 3
-	end
-
-	if itemType:isMovable() then
-		local actionId = item:getActionId()
-		if(actionId ~= 0) then
-			msg:addByte(attr.ATTR_ACTION_ID)
-			msg:addU16(actionId)
-			size = size + 3
-		end
-	end
-
--- Only necessary with special descriptions
---[[local desc = item:getDescription(0)
-	if #desc ~= 0 then
-		msg:addByte(attr.ATTR_DESC)
-		msg:addString(desc)
-		size = size + #desc + 3
-	end
-]]
-
--- Only necessary with special names
---[[
-	local name = item:getName()
-	if name and name ~= 0 then
-		msg:addByte(attr.ATTR_NAME)
-		msg:addString(name)
-		size = size + #name + 3
-	end
-]]
-
-	for attribute, p in pairs(attributes) do
-		local value = item:getAttribute(attribute)
-		if(p[1] == "string") then
-			if(value and #value ~= 0) then
-				msg:addByte(attr[p[2]])
-				msg:addString(value)
-				size = size + #value + 3
-			end
-		elseif(value and value ~= 0) then
-			local t, func, n = p[1]
-			if(t == "byte") then 
-				func, n = msg.addByte, 1 
-			elseif(t == "i8") then 
-				func, n = addI8, 1 
-			elseif(t == "u32") then
-				func, n = msg.addU32, 4
-			elseif(t == "i32") then
-				func, n = addI32, 4
-			end
-			msg:addByte(attr[p[2]])
-			func(msg, value)
-			size = size + 1 + n
-		end
-	end
-
-	msg:skipBytes(-size)
-	local buffer = {}
-	for i = 1, size do
-		table.insert(buffer, string.char(msg:getByte()))
-	end
-
-	return table.concat(buffer)
-end
-
-local function pushValues(buffer, sep, ...)
+local function pushSeparated(buffer, sep, ...)
 	local argv = {...}
 	local argc = #argv
 	for k, v in ipairs(argv) do
@@ -167,7 +17,7 @@ local function insertItems(buffer, info, parent, items)
 		end
 		info.running = info.running + 1
 		table.insert(buffer, "(")        
-		pushValues(buffer, ",", info.playerGuid, parent, info.running, item:getId(), item:getSubType(), db.escapeString(serializeAttributes(item)))
+		pushSeparated(buffer, ",", info.playerGuid, parent, info.running, item:getId(), item:getSubType(), db.escapeString(serializeAttributes(item)))
 		table.insert(buffer, ")")
 
 		if item:isContainer() then
@@ -185,7 +35,7 @@ local function insertItems(buffer, info, parent, items)
 	return info.running - start
 end
 
-local function insertRewardBag(playerGuid, timestamp, itemList)
+local function insertRewardItems(playerGuid, timestamp, itemList)
 	db.asyncStoreQuery('select `pid`, `sid` from `player_rewards` where player_id = ' .. playerGuid .. ' order by `sid` ASC;', 
 		function(query)
 			local lastReward = 0
@@ -221,7 +71,7 @@ local function insertRewardBag(playerGuid, timestamp, itemList)
 			local total = insertItems(buffer, info, lastReward + 1, {bag})
 			table.insert(buffer, ";")
 
-			if(total ~= 0) then
+			if total ~= 0 then
 				db.query(table.concat(buffer))
 			end
 		end
@@ -318,7 +168,7 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
 				table.insert(lootMessage, ".")
 				con.player:sendTextMessage(MESSAGE_EVENT_ADVANCE, table.concat(lootMessage))
 			else
-				insertRewardBag(con.guid, timestamp, playerLoot)
+				insertRewardItems(con.guid, timestamp, playerLoot)
 			end
 		end
 
