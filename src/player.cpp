@@ -156,6 +156,8 @@ Player::Player(ProtocolGame_ptr p) :
 	operatingSystem = CLIENTOS_NONE;
 	secureMode = false;
 	guid = 0;
+
+	rewardChest = nullptr;
 }
 
 Player::~Player()
@@ -169,6 +171,10 @@ Player::~Player()
 
 	for (const auto& it : depotLockerMap) {
 		it.second->removeInbox(inbox);
+		it.second->decrementReferenceCounter();
+	}
+
+	for (const auto& it : rewardMap) {
 		it.second->decrementReferenceCounter();
 	}
 
@@ -925,6 +931,49 @@ DepotLocker* Player::getDepotLocker(uint32_t depotId)
 	depotLocker->internalAddThing(getDepotChest(depotId, true));
 	depotLockerMap[depotId] = depotLocker;
 	return depotLocker;
+}
+
+RewardChest* Player::getRewardChest()
+{
+	if (rewardChest != nullptr) {
+		return rewardChest;
+	}
+
+	rewardChest = new RewardChest(ITEM_REWARD_CHEST);
+	return rewardChest;
+}
+
+Reward* Player::getReward(uint32_t rewardId, bool autoCreate)
+{
+	auto it = rewardMap.find(rewardId);
+	if (it != rewardMap.end()) {
+		return it->second;
+	}
+
+	if (!autoCreate) {
+		return nullptr;
+	}
+
+	Reward* reward = new Reward();
+	reward->incrementReferenceCounter();
+	reward->setIntAttr(ITEM_ATTRIBUTE_DATE, rewardId);
+	rewardMap[rewardId] = reward;
+
+	g_game.internalAddItem(getRewardChest(), reward, INDEX_WHEREEVER, FLAG_NOLIMIT);
+
+	return reward;
+}
+
+void Player::removeReward(uint32_t rewardId) {
+	rewardMap.erase(rewardId);
+}
+
+std::vector<uint32_t> Player::getRewardList() {
+	std::vector<uint32_t> list;
+	for (auto& it : rewardMap) {
+		list.push_back(it.first);
+	}
+	return list;
 }
 
 void Player::sendCancelMessage(ReturnValue message) const

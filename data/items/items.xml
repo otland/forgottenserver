@@ -29326,6 +29326,11 @@
 	<item fromid="21514" toid="21515" article="a" name="strange shrine" />
 	<item id="21516" article="a" name="lift" />
 	<item id="21517" article="an" name="ornate door with a keyhole" />
+	<item id="21518" article="a" name="reward container">
+	    <attribute key="containersize" value="32" />
+	    <attribute key="pickupable" value="0" />
+	    <attribute key="moveable" value="0" />
+	</item>
 	<item id="21536" article="a" name="hole">
 		<attribute key="floorchange" value="down" />
 	</item>
@@ -29380,6 +29385,13 @@
 	<item id="21569" name="gnomish supplies">
 		<attribute key="description" value="It contains the clothes of a dwarf." />
 		<attribute key="weight" value="800" />
+	</item>
+	<item id="21584" article="a" name="reward chest">
+		<attribute key="type" value="rewardchest" />
+		<attribute key="description" value="This chest contains your rewards earned in battles." />
+		<attribute key="containersize" value="32" />
+	 	<attribute key="pickupable" value="0" />
+	  	<attribute key="moveable" value="0" />		
 	</item>
 	<item id="21690" article="a" name="triple bolt crossbow">
 		<attribute key="weight" value="6200" />

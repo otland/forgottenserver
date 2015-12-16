@@ -3,3 +3,5 @@ dofile('data/lib/core/core.lua')
 
 -- Compatibility library for our old Lua API
 dofile('data/lib/compat/compat.lua')
+
+dofile('data/lib/rewardboss.lua')

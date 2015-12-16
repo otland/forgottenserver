@@ -54,7 +54,8 @@ enum ItemTypes_t {
 	ITEM_TYPE_BED,
 	ITEM_TYPE_KEY,
 	ITEM_TYPE_RUNE,
-	ITEM_TYPE_LAST
+	ITEM_TYPE_REWARDCHEST,
+	ITEM_TYPE_LAST,	
 };
 
 struct Abilities {
@@ -149,6 +150,9 @@ class ItemType
 		}
 		bool isDepot() const {
 			return (type == ITEM_TYPE_DEPOT);
+		}
+		bool isRewardChest() const {
+			return (type == ITEM_TYPE_REWARDCHEST);
 		}
 		bool isMailbox() const {
 			return (type == ITEM_TYPE_MAILBOX);
