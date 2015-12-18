@@ -316,6 +316,11 @@ class Combat
 		void setCondition(const Condition* condition) {
 			params.conditionList.emplace_front(condition);
 		}
+
+		void clearConditions() {
+			params.conditionList.clear();
+		}
+
 		void setPlayerCombatValues(formulaType_t _type, double _mina, double _minb, double _maxa, double _maxb);
 		void postCombatEffects(Creature* caster, const Position& pos) const {
 			postCombatEffects(caster, pos, params);

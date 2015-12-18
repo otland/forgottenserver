@@ -2419,6 +2419,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Combat", "setArea", LuaScriptInterface::luaCombatSetArea);
 	registerMethod("Combat", "setCondition", LuaScriptInterface::luaCombatSetCondition);
+	registerMethod("Combat", "clearConditions", LuaScriptInterface::luaCombatClearConditions);
 	registerMethod("Combat", "setCallback", LuaScriptInterface::luaCombatSetCallback);
 	registerMethod("Combat", "setOrigin", LuaScriptInterface::luaCombatSetOrigin);
 
@@ -10970,6 +10971,19 @@ int LuaScriptInterface::luaCombatSetCondition(lua_State* L)
 	Combat* combat = getUserdata<Combat>(L, 1);
 	if (combat && condition) {
 		combat->setCondition(condition->clone());
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCombatClearConditions(lua_State* L)
+{
+	// combat:clearConditions()
+	Combat* combat = getUserdata<Combat>(L, 1);
+	if (combat) {
+		combat->clearConditions();
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
