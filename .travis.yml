@@ -7,7 +7,6 @@ addons:
       - boost-latest
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.8
       - g++-4.8
       - libboost1.55-dev
       - libboost-system1.55-dev
@@ -15,6 +14,6 @@ addons:
       - liblua5.2-dev
       - libmysqlclient-dev
 install:
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 before_script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
 script: make -j2
