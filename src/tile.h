@@ -68,7 +68,7 @@ enum tileflags_t : uint32_t {
 	TILESTATE_IMMOVABLEBLOCKPATH = 1 << 22,
 	TILESTATE_IMMOVABLENOFIELDBLOCKPATH = 1 << 23,
 	TILESTATE_NOFIELDBLOCKPATH = 1 << 24,
-	TILESTATE_DYNAMIC_TILE = 1 << 25,
+	TILESTATE_DYNAMIC_TILE = 1 << 25, //DEPRECATED
 	TILESTATE_FLOORCHANGE_SOUTH_ALT = 1 << 26,
 	TILESTATE_FLOORCHANGE_EAST_ALT = 1 << 27,
 	TILESTATE_SUPPORTS_HANGABLE = 1 << 28,
@@ -82,66 +82,36 @@ enum ZoneType_t {
 	ZONE_NORMAL,
 };
 
-class TileItemVector
+class TileItemVector : private ItemVector
 {
 	public:
-		TileItemVector() : downItemCount(0) {}
-
-		using value_type = ItemVector::value_type;
-		using iterator = ItemVector::iterator;
-		using const_iterator = ItemVector::const_iterator;
-		using reverse_iterator = ItemVector::reverse_iterator;
-		using const_reverse_iterator = ItemVector::const_reverse_iterator;
-
-		const_iterator begin() const {
-			return items.begin();
-		}
-		const_reverse_iterator rbegin() const {
-			return items.rbegin();
-		}
-
-		const_iterator end() const {
-			return items.end();
-		}
-		const_reverse_iterator rend() const {
-			return items.rend();
-		}
-
-		void clear() {
-			items.clear();
-		}
-
-		size_t size() const {
-			return items.size();
-		}
-
-		iterator insert(ItemVector::iterator _where, Item* item) {
-			return items.insert(_where, item);
-		}
-		iterator erase(ItemVector::iterator _pos) {
-			return items.erase(_pos);
-		}
-		Item* at(size_t _pos) const {
-			return items.at(_pos);
-		}
-		Item* back() const {
-			return items.back();
-		}
-		void push_back(Item* item) {
-			return items.push_back(item);
-		}
+		using ItemVector::begin;
+		using ItemVector::end;
+		using ItemVector::rbegin;
+		using ItemVector::rend;
+		using ItemVector::size;
+		using ItemVector::clear;
+		using ItemVector::at;
+		using ItemVector::insert;
+		using ItemVector::erase;
+		using ItemVector::push_back;
+		using ItemVector::value_type;
+		using ItemVector::iterator;
+		using ItemVector::const_iterator;
+		using ItemVector::reverse_iterator;
+		using ItemVector::const_reverse_iterator;
 
 		iterator getBeginDownItem() {
-			return items.begin();
+			return begin();
 		}
 		const_iterator getBeginDownItem() const {
 			return begin();
 		}
 		iterator getEndDownItem() {
-			return items.begin() + downItemCount;
+			return begin() + downItemCount;
 		}
 		const_iterator getEndDownItem() const {
-			return items.begin() + downItemCount;
+			return begin() + downItemCount;
 		}
 		iterator getBeginTopItem() {
 			return getEndDownItem();
@@ -150,7 +120,7 @@ class TileItemVector
 			return getEndDownItem();
 		}
 		iterator getEndTopItem() {
-			return items.end();
+			return end();
 		}
 		const_iterator getEndTopItem() const {
 			return end();
@@ -174,12 +144,11 @@ class TileItemVector
 			}
 			return *getBeginDownItem();
 		}
-
+		void addDownItemCount(int32_t increment) {
+			downItemCount += increment;
+		}
 	private:
-		ItemVector items;
-		uint16_t downItemCount;
-
-		friend class Tile;
+		uint16_t downItemCount {0};
 };
 
 class Tile : public Cylinder
@@ -193,13 +162,13 @@ class Tile : public Cylinder
 		Tile(const Tile&) = delete;
 		Tile& operator=(const Tile&) = delete;
 
-		TileItemVector* getItemList();
-		const TileItemVector* getItemList() const;
-		TileItemVector* makeItemList();
+		virtual TileItemVector* getItemList() = 0;
+		virtual const TileItemVector* getItemList() const = 0;
+		virtual TileItemVector* makeItemList() = 0;
 
-		CreatureVector* getCreatures();
-		const CreatureVector* getCreatures() const;
-		CreatureVector* makeCreatures();
+		virtual CreatureVector* getCreatures() = 0;
+		virtual const CreatureVector* getCreatures() const = 0;
+		virtual CreatureVector* makeCreatures() = 0;
 
 		int32_t getThrowRange() const final {
 			return 0;
@@ -361,11 +330,6 @@ class Tile : public Cylinder
 		void resetTileFlags(const Item* item);
 
 	protected:
-		// Put this first for cache-coherency
-		bool isDynamic() const {
-			return (m_flags & TILESTATE_DYNAMIC_TILE) != 0;
-		}
-
 		Item* ground;
 		Position tilePos;
 		uint32_t m_flags;
@@ -387,23 +351,23 @@ class DynamicTile : public Tile
 		DynamicTile(const DynamicTile&) = delete;
 		DynamicTile& operator=(const DynamicTile&) = delete;
 
-		TileItemVector* getItemList() {
+		TileItemVector* getItemList() final {
 			return &items;
 		}
-		const TileItemVector* getItemList() const {
+		const TileItemVector* getItemList() const final {
 			return &items;
 		}
-		TileItemVector* makeItemList() {
+		TileItemVector* makeItemList() final {
 			return &items;
 		}
 
-		CreatureVector* getCreatures() {
+		CreatureVector* getCreatures() final {
 			return &creatures;
 		}
-		const CreatureVector* getCreatures() const {
+		const CreatureVector* getCreatures() const final {
 			return &creatures;
 		}
-		CreatureVector* makeCreatures() {
+		CreatureVector* makeCreatures() final {
 			return &creatures;
 		}
 };
@@ -412,8 +376,8 @@ class DynamicTile : public Tile
 class StaticTile final : public Tile
 {
 	// We very rarely even need the vectors, so don't keep them in memory
-	TileItemVector* items;
-	CreatureVector* creatures;
+	std::unique_ptr<TileItemVector> items;
+	std::unique_ptr<CreatureVector> creatures;
 
 	public:
 		StaticTile(uint16_t x, uint16_t y, uint8_t z);
@@ -423,30 +387,30 @@ class StaticTile final : public Tile
 		StaticTile(const StaticTile&) = delete;
 		StaticTile& operator=(const StaticTile&) = delete;
 
-		TileItemVector* getItemList() {
-			return items;
+		TileItemVector* getItemList() final {
+			return items.get();
 		}
-		const TileItemVector* getItemList() const {
-			return items;
+		const TileItemVector* getItemList() const final {
+			return items.get();
 		}
-		TileItemVector* makeItemList() {
+		TileItemVector* makeItemList() final {
 			if (!items) {
-				items = new TileItemVector;
+				items.reset(new TileItemVector);
 			}
-			return items;
+			return items.get();
 		}
 
-		CreatureVector* getCreatures() {
-			return creatures;
+		CreatureVector* getCreatures() final {
+			return creatures.get();
 		}
-		const CreatureVector* getCreatures() const {
-			return creatures;
+		const CreatureVector* getCreatures() const final {
+			return creatures.get();
 		}
-		CreatureVector* makeCreatures() {
+		CreatureVector* makeCreatures() final {
 			if (!creatures) {
-				creatures = new CreatureVector;
+				creatures.reset(new CreatureVector);
 			}
-			return creatures;
+			return creatures.get();
 		}
 };
 
@@ -462,53 +426,6 @@ inline Tile::~Tile()
 	delete ground;
 }
 
-inline CreatureVector* Tile::getCreatures()
-{
-	if (isDynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::getCreatures();
-	}
-	return static_cast<StaticTile*>(this)->StaticTile::getCreatures();
-}
-
-inline const CreatureVector* Tile::getCreatures() const
-{
-	if (isDynamic()) {
-		return static_cast<const DynamicTile*>(this)->DynamicTile::getCreatures();
-	}
-	return static_cast<const StaticTile*>(this)->StaticTile::getCreatures();
-}
-
-inline TileItemVector* Tile::getItemList()
-{
-	if (isDynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::getItemList();
-	}
-	return static_cast<StaticTile*>(this)->StaticTile::getItemList();
-}
-
-inline const TileItemVector* Tile::getItemList() const
-{
-	if (isDynamic()) {
-		return static_cast<const DynamicTile*>(this)->DynamicTile::getItemList();
-	}
-	return static_cast<const StaticTile*>(this)->StaticTile::getItemList();
-}
-
-inline CreatureVector* Tile::makeCreatures()
-{
-	if (isDynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::makeCreatures();
-	}
-	return static_cast<StaticTile*>(this)->StaticTile::makeCreatures();
-}
-
-inline TileItemVector* Tile::makeItemList()
-{
-	if (isDynamic()) {
-		return static_cast<DynamicTile*>(this)->DynamicTile::makeItemList();
-	}
-	return static_cast<StaticTile*>(this)->StaticTile::makeItemList();
-}
 
 inline StaticTile::StaticTile(uint16_t x, uint16_t y, uint8_t z) :
 	Tile(x, y, z),
@@ -523,10 +440,7 @@ inline StaticTile::~StaticTile()
 		for (Item* item : *items) {
 			item->decrementReferenceCounter();
 		}
-		delete items;
 	}
-
-	delete creatures;
 }
 
 inline DynamicTile::DynamicTile(uint16_t x, uint16_t y, uint8_t z) :
