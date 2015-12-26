@@ -608,7 +608,7 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 			damage = static_cast<int32_t>(std::ceil(damage * ((100 - elementMod) / 100.)));
 			if (damage <= 0) {
 				damage = 0;
-				blockType = BLOCK_DEFENSE;
+				blockType = BLOCK_ARMOR;
 			}
 		}
 	}
