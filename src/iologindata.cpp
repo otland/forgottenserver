@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include "iologindata.h"
 #include "configmanager.h"
 #include "game.h"
@@ -479,15 +481,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		//first loop handles the reward containers to retrieve its date attribute
-		for (ItemMap::iterator it = itemMap.begin(), end = itemMap.end(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
+		//for (ItemMap::iterator it = itemMap.begin(), end = itemMap.end(); it != end; ++it) {
+		for (auto& it : itemMap) {
+			const std::pair<Item*, int32_t>& pair = it.second;
 			Item* item = pair.first;
 
 			int32_t pid = pair.second; 
 			if (pid >= 0 && pid < 100) {
 				Reward* reward = player->getReward(item->getIntAttr(ITEM_ATTRIBUTE_DATE), true);
 				if (reward) {
-					it->second = std::pair<Item*, int32_t>(reward->getItem(), pid); //update the map with the special reward container
+					it.second = std::pair<Item*, int32_t>(reward->getItem(), pid); //update the map with the special reward container
 				}
 			} else {
 				break;
@@ -495,8 +498,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 
 		//second loop (this time a reverse one) to insert the items in the correct order
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
+		//for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
+		for (const auto& it : boost::adaptors::reverse(itemMap)) {
+			const std::pair<Item*, int32_t>& pair = it.second;
 			Item* item = pair.first;
 
 			int32_t pid = pair.second;
