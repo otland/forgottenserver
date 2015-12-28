@@ -6,7 +6,7 @@ RewardChest::RewardChest(uint16_t _type) :
 	Container(_type)
 {
 	maxSize = 32;
-	unlocked = true;
+	unlocked = false;
 	pagination = true;
 }
 

@@ -8,7 +8,7 @@ Reward::Reward() :
 	Container(ITEM_REWARD_CONTAINER)
 {
 	maxSize = 32;
-	unlocked = true;
+	unlocked = false;
 	pagination = true;
 }
 
