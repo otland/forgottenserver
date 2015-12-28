@@ -317,6 +317,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		//reward chest
 		if (container->getRewardChest()) {
 			RewardChest* myRewardChest = player->getRewardChest();
+			if (myRewardChest->size() == 0) {
+				return RETURNVALUE_REWARDCHESTISEMPTY;
+			}
+
 			myRewardChest->setParent(container->getParent()->getTile());
 			for (auto& it : player->rewardMap) {
 				it.second->setParent(myRewardChest);
