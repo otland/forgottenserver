@@ -35,6 +35,12 @@ function onLogin(player)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("You have %d %s in your reward chest.", rewards, rewards > 1 and "rewards" or "reward"))
 	end
 
+	-- Update player id 
+	local stats = player:inBossFight()
+	if stats then
+		stats.playerId = player:getId()
+	end
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")

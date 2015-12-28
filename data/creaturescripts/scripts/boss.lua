@@ -17,7 +17,7 @@ local function insertItems(buffer, info, parent, items)
 		end
 		info.running = info.running + 1
 		table.insert(buffer, "(")        
-		pushSeparated(buffer, ",", info.playerGuid, parent, info.running, item:getId(), item:getSubType(), db.escapeString(serializeAttributes(item)))
+		pushSeparated(buffer, ",", info.playerGuid, parent, info.running, item:getId(), item:getSubType(), db.escapeBlob(item:serializeAttributes()))
 		table.insert(buffer, ")")
 
 		if item:isContainer() then
@@ -36,7 +36,7 @@ local function insertItems(buffer, info, parent, items)
 end
 
 local function insertRewardItems(playerGuid, timestamp, itemList)
-	db.asyncStoreQuery('select `pid`, `sid` from `player_rewards` where player_id = ' .. playerGuid .. ' order by `sid` ASC;', 
+	db.asyncStoreQuery('SELECT `pid`, `sid` FROM `player_rewards` WHERE player_id = ' .. playerGuid .. ' ORDER BY `sid` ASC;', 
 		function(query)
 			local lastReward = 0
 			local lastStoreId   
@@ -135,7 +135,7 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
 		local expectedScore = 1 / participants
 
 		for _, con in ipairs(scores) do
-			local reward, stamina -- ignoring stamina for now because I heard you get receive rewards even when it's depleted   
+			local reward, stamina -- ignoring stamina for now because I heard you receive rewards even when it's depleted   
 			if con.player then   
 				reward = con.player:getReward(timestamp, true)
 				stamina = con.player:getStamina()
