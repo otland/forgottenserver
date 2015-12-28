@@ -969,11 +969,12 @@ void Player::removeReward(uint32_t rewardId) {
 }
 
 std::vector<uint32_t> Player::getRewardList() {
-	std::vector<uint32_t> list;
+	std::vector<uint32_t> rewards;
+	rewards.reserve(rewardMap.size());
 	for (auto& it : rewardMap) {
-		list.push_back(it.first);
+		rewards.push_back(it.first);
 	}
-	return list;
+	return rewards;
 }
 
 void Player::sendCancelMessage(ReturnValue message) const
