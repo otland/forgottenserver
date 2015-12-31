@@ -1,6 +1,6 @@
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_DEATHDAMAGE)
-combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLCLOUDS)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MORTAREA)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 
 local condition = Condition(CONDITION_CURSED)
