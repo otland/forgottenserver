@@ -34,6 +34,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	local itemId = item:getId()
+	local itemPos = item:getPosition()
+	
 	if itemId == antidotePot then
 		if not antidote:execute(target, numberToVariant(target:getId())) then
 			return false
@@ -42,7 +44,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(emptyPot, 1)
+			if (fromPosition.x == 65535) then
+				player:addItem(emptyPot, 1)
+			else
+				Game.createItem(emptyPot, 1, itemPos)
+			end
 	elseif itemId == smallHealthPot then
 		if not doTargetCombatHealth(0, target, COMBAT_HEALING, 60, 90, CONST_ME_MAGIC_BLUE) then
 			return false
@@ -51,7 +57,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(emptyPot, 1)
+			if (fromPosition.x == 65535) then
+				player:addItem(emptyPot, 1)
+			else
+				Game.createItem(emptyPot, 1, itemPos)
+			end
 	elseif itemId == healthPot then
 		if not doTargetCombatHealth(0, target, COMBAT_HEALING, 125, 175, CONST_ME_MAGIC_BLUE) then
 			return false
@@ -60,7 +70,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(emptyPot, 1)
+			if (fromPosition.x == 65535) then
+				player:addItem(emptyPot, 1)
+			else
+				Game.createItem(emptyPot, 1, itemPos)
+			end
 	elseif itemId == manaPot then
 		if not doTargetCombatMana(0, target, 75, 125, CONST_ME_MAGIC_BLUE) then
 			return false
@@ -69,9 +83,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(emptyPot, 1)
+				if (fromPosition.x == 65535) then
+				player:addItem(emptyPot, 1)
+			else
+				Game.createItem(emptyPot, 1, itemPos)
+			end
 	elseif itemId == strongHealthPot then
-		if (not isInArray({3, 4, 7, 8}, target:getVocation():getId()) or target:getLevel() < 50) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
+		if (not isInArray({3, 4, 7, 8}, player:getVocation():getId()) or player:getLevel() < 50) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
 			player:say("This potion can only be consumed by paladins and knights of level 50 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
@@ -83,9 +101,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(strongEmptyPot, 1)
+				if (fromPosition.x == 65535) then
+					player:addItem(strongEmptyPot, 1)
+			else
+					Game.createItem(strongEmptyPot, 1, itemPos)
+			end
 	elseif itemId == strongManaPot then
-		if (not isInArray({1, 2, 3, 5, 6, 7}, target:getVocation():getId()) or target:getLevel() < 50) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
+		if (not isInArray({1, 2, 3, 5, 6, 7}, player:getVocation():getId()) or player:getLevel() < 50) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
 			player:say("This potion can only be consumed by sorcerers, druids and paladins of level 50 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
@@ -97,9 +119,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(strongEmptyPot, 1)
+				if (fromPosition.x == 65535) then
+					player:addItem(strongEmptyPot, 1)
+			else
+					Game.createItem(strongEmptyPot, 1, itemPos)
+			end
 	elseif itemId == greatSpiritPot then
-		if (not isInArray({3, 7}, target:getVocation():getId()) or target:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
+		if (not isInArray({3, 7}, player:getVocation():getId()) or player:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
 			player:say("This potion can only be consumed by paladins of level 80 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
@@ -111,9 +137,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(greatEmptyPot, 1)
+				if (fromPosition.x == 65535) then
+					player:addItem(greatEmptyPot, 1)
+			else
+					Game.createItem(greatEmptyPot, 1, itemPos)
+			end
 	elseif itemId == greatHealthPot then
-		if (not isInArray({4, 8}, target:getVocation():getId()) or target:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
+		if (not isInArray({4, 8}, player:getVocation():getId()) or player:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
 			player:say("This potion can only be consumed by knights of level 80 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
@@ -125,9 +155,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(greatEmptyPot, 1)
+				if (fromPosition.x == 65535) then
+					player:addItem(greatEmptyPot, 1)
+				else
+					Game.createItem(greatEmptyPot, 1, itemPos)
+		end
 	elseif itemId == greatManaPot then
-		if (not isInArray({1,2,5,6}, target:getVocation():getId()) or target:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
+		if (not isInArray({1,2,5,6}, player:getVocation():getId()) or player:getLevel() < 80) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
 			player:say("This potion can only be consumed by sorcerers and druids of level 80 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
@@ -138,9 +172,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(greatEmptyPot, 1)
+				if (fromPosition.x == 65535) then
+					player:addItem(greatEmptyPot, 1)
+			else
+					Game.createItem(greatEmptyPot, 1, itemPos)
+			end
 	elseif itemId == ultimateHealthPot then
-		if (not isInArray({4, 8}, target:getVocation():getId()) or target:getLevel() < 130) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
+		if (not isInArray({4, 8}, player:getVocation():getId()) or player:getLevel() < 130) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
 			player:say("This potion can only be consumed by knights of level 130 or higher.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
@@ -152,7 +190,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addCondition(exhaust)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
-		player:addItem(greatEmptyPot, 1)
+				if (fromPosition.x == 65535) then
+					player:addItem(greatEmptyPot, 1)
+			else
+					Game.createItem(greatEmptyPot, 1, itemPos)
+			end
 	end
 	return true
 end
