@@ -67,7 +67,7 @@
 		<vocation name="Royal Paladin" />
 		<vocation name="Elite Knight" />
 	</instant>
-	<instant group="attack" spellid="139" name="Curse" words="utori mort" lvl="75" mana="30" range="3" aggressive="1" blockwalls="1" needtarget="1" exhaustion="50000" groupcooldown="2000" needlearn="0" script="attack/curse.lua">
+	<instant group="attack" spellid="139" name="Curse" words="utori mort" lvl="75" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" exhaustion="50000" groupcooldown="2000" needlearn="0" script="attack/curse.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
@@ -87,7 +87,7 @@
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="attack" spellid="140" name="Electrify" words="utori vis" lvl="34" mana="30" range="3" aggressive="1" blockwalls="1" needtarget="1" exhaustion="30000" groupcooldown="2000" needlearn="0" script="attack/electrify.lua">
+	<instant group="attack" spellid="140" name="Electrify" words="utori vis" lvl="34" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" exhaustion="30000" groupcooldown="2000" needlearn="0" script="attack/electrify.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
@@ -109,7 +109,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="attack" spellid="142" name="Envenom" words="utori pox" lvl="50" mana="30" range="3" aggressive="1" blockwalls="1" needtarget="1" exhaustion="40000" groupcooldown="2000" needlearn="0" script="attack/envenom.lua">
+	<instant group="attack" spellid="142" name="Envenom" words="utori pox" lvl="50" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" exhaustion="40000" groupcooldown="2000" needlearn="0" script="attack/envenom.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -193,7 +193,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="attack" spellid="143" name="Holy Flash" words="utori san" lvl="70" mana="30" range="3" aggressive="1" blockwalls="1" needtarget="1" exhaustion="40000" groupcooldown="2000" needlearn="0" script="attack/holy flash.lua">
+	<instant group="attack" spellid="143" name="Holy Flash" words="utori san" lvl="70" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" exhaustion="40000" groupcooldown="2000" needlearn="0" script="attack/holy flash.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
@@ -207,7 +207,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="attack" spellid="138" name="Ignite" words="utori flam" lvl="26" mana="30" range="3" aggressive="1" blockwalls="1" needtarget="1" exhaustion="30000" groupcooldown="2000" needlearn="0" script="attack/ignite.lua">
+	<instant group="attack" spellid="138" name="Ignite" words="utori flam" lvl="26" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" exhaustion="30000" groupcooldown="2000" needlearn="0" script="attack/ignite.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
