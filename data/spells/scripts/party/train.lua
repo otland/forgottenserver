@@ -1,17 +1,17 @@
 local combat = Combat()
-combat:setArea(createCombatArea(AREA_CROSS5X5))
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
-combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
+combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
+combat:setArea(createCombatArea(AREA_CROSS5X5))
 
 local condition = Condition(CONDITION_ATTRIBUTES)
 condition:setParameter(CONDITION_PARAM_SUBID, 1)
-condition:setParameter(CONDITION_PARAM_BUFF_SPELL, 1)
 condition:setParameter(CONDITION_PARAM_TICKS, 2 * 60 * 1000)
 condition:setParameter(CONDITION_PARAM_SKILL_MELEE, 3)
 condition:setParameter(CONDITION_PARAM_SKILL_DISTANCE, 3)
+condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
 local baseMana = 60
-function onCastSpell(creature, var, isHotkey)
+function onCastSpell(creature, variant, isHotkey)
 	local position = creature:getPosition()
 
 	local party = creature:getParty()
@@ -50,7 +50,7 @@ function onCastSpell(creature, var, isHotkey)
 		return false
 	end
 
-	if not combat:execute(creature, var) then
+	if not combat:execute(creature, variant) then
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		position:sendMagicEffect(CONST_ME_POFF)
 		return false

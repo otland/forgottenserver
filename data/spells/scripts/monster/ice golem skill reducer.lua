@@ -8,6 +8,6 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_HITAREA)
 combat:setArea(createCombatArea(AREA_SQUARE1X1))
 combat:setCondition(condition)
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end
