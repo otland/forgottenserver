@@ -2,7 +2,7 @@ local combat = {}
 
 for i = 30, 50 do
 	local condition = Condition(CONDITION_CURSED)
-	condition:setParameter(CONDITION_PARAM_DELAYED, 1)
+	condition:setParameter(CONDITION_PARAM_DELAYED, true)
 
 	local damage = i
 	condition:addDamage(1, 4000, -damage)
@@ -19,6 +19,6 @@ for i = 30, 50 do
 	combat[i]:setCondition(condition)
 end
 
-function onCastSpell(creature, var)
-	return combat[math.random(30, 50)]:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat[math.random(30, 50)]:execute(creature, variant)
 end

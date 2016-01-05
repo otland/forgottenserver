@@ -1,5 +1,5 @@
 local condition = Condition(CONDITION_FIRE)
-condition:setParameter(CONDITION_PARAM_DELAYED, 1)
+condition:setParameter(CONDITION_PARAM_DELAYED, true)
 condition:addDamage(20, 9000, -10)
 
 local combat = Combat()
@@ -8,6 +8,6 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_RED)
 combat:setArea(createCombatArea(AREA_CROSS6X6))
 combat:setCondition(condition)
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end
