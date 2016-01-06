@@ -48,7 +48,7 @@ enum slots_t : uint8_t {
 	CONST_SLOT_LAST = CONST_SLOT_AMMO,
 };
 
-+enum clientSlots_t : uint16_t {
+enum clientSlots_t : uint16_t {
 	CLIENT_SLOT_HAND = 48,
 	CLIENT_SLOT_HEAD = 49,
 	CLIENT_SLOT_NECKLACE = 50,
