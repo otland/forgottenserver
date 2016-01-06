@@ -827,53 +827,52 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 			s << ". " << (it.stackable && tmpSubType > 1 ? "They" : "It") << " can only be used by ";
 
-			VocSpellMap vocMap = g_spells->getRuneSpell(it.id)->getVocMap();
-			if (vocMap.empty()) {
-				s << "players";
-			} else {
-				std::vector<Vocation*> showVocMap;
+			if (RuneSpell* rune = g_spells->getRuneSpell(it.id)) {
+				const VocSpellMap& vocMap = rune->getVocMap();
+				if (vocMap.empty()) {
+					s << "players";
+				} else {
+					std::vector<Vocation*> showVocMap;
 
-				// vocations listed are mostly unpromoted ones and the promoted version, with the latter hidden from
-				// description, so probably always `total / 2` is the amount of vocations to be shown.
-				showVocMap.reserve(vocMap.size() / 2);
+					// vocations listed are mostly unpromoted ones and the promoted version, with the latter hidden from
+					// description, so probably always `total / 2` is the amount of vocations to be shown.
+					showVocMap.reserve(vocMap.size() / 2);
 
-				for (const auto& voc: vocMap) {
-					if (voc.second) {
-						showVocMap.push_back(g_vocations.getVocation(voc.first));
+					for (const auto& voc : vocMap) {
+						if (voc.second) {
+							showVocMap.push_back(g_vocations.getVocation(voc.first));
+						}
 					}
+
+					auto vocIt = showVocMap.begin(), vocLast = (showVocMap.end() - 1);
+					while (vocIt != vocLast) {
+						s << asLowerCaseString((*vocIt)->getVocName()) << "s";
+
+						if (++vocIt == vocLast) {
+							s << " and ";
+						} else {
+							s << ", ";
+						}
+					}
+					s << asLowerCaseString((*vocLast)->getVocName()) << "s";
 				}
 
-				auto vocIt = showVocMap.begin(), vocLast = (showVocMap.end() - 1);
+				s << " with";
 
-				while (vocIt != vocLast) {
-					auto vocName = asLowerCaseString((*vocIt)->getVocName());
-					++vocIt;
-
-					s << vocName << "s";
-					if (vocIt == vocLast) {
-						s << " and ";
-					} else {
-						s << ", ";
-					}
-				}
-				s << asLowerCaseString((*vocLast)->getVocName()) << "s";
-			}
-
-			s << " with";
-
-			if (it.runeLevel > 0) {
-				s << " level " << it.runeLevel;
-			}
-
-			if (it.runeMagLevel > 0) {
 				if (it.runeLevel > 0) {
-					s << " and";
+					s << " level " << it.runeLevel;
 				}
 
-				s << " magic level " << it.runeMagLevel;
-			}
+				if (it.runeMagLevel > 0) {
+					if (it.runeLevel > 0) {
+						s << " and";
+					}
 
-			s << " or higher";
+					s << " magic level " << it.runeMagLevel;
+				}
+
+				s << " or higher";
+			}
 		}
 	} else if (it.weaponType != WEAPON_NONE) {
 		if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
