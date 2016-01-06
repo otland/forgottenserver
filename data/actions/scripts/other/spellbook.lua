@@ -15,7 +15,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	table.sort(spells, function(a, b) return a.level < b.level end)
 
 	local prevLevel = -1
-	for i, spell in ipairs(t) do
+	for i, spell in ipairs(spells) do
 		local line = ""
 		if prevLevel ~= spell.level then
 			if i ~= 1 then
