@@ -572,11 +572,8 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
 		if (vocationId != -1) {
-			vocSpellMap[vocationId] = true;
-			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if (promotedVocation != VOCATION_NONE) {
-				vocSpellMap[promotedVocation] = true;
-			}
+			attr = vocationNode.attribute("showInDescription");
+			vocSpellMap[vocationId] = !attr || attr.as_bool();
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
