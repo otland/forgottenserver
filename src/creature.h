@@ -48,6 +48,16 @@ enum slots_t : uint8_t {
 	CONST_SLOT_LAST = CONST_SLOT_AMMO,
 };
 
++enum clientSlots_t : uint16_t {
+	CLIENT_SLOT_HAND = 48,
+	CLIENT_SLOT_HEAD = 49,
+	CLIENT_SLOT_NECKLACE = 50,
+	CLIENT_SLOT_ARMOR = 56,
+	CLIENT_SLOT_LEGS = 112,
+	CLIENT_SLOT_FEET = 176,
+	CLIENT_SLOT_RING = 304,
+	CLIENT_SLOT_AMMO = 560,
+};
 struct FindPathParams {
 	bool fullPathSearch;
 	bool clearSight;
