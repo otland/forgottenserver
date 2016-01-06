@@ -432,6 +432,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x70: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_EAST); break;
 		case 0x71: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_SOUTH); break;
 		case 0x72: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_WEST); break;
+		case 0x77: parseEquipHotkey(msg); break;
 		case 0x78: parseThrow(msg); break;
 		case 0x79: parseLookInShop(msg); break;
 		case 0x7A: parsePlayerPurchase(msg); break;
@@ -818,6 +819,35 @@ void ProtocolGame::parseUpdateContainer(NetworkMessage& msg)
 	addGameTask(&Game::playerUpdateContainer, player->getID(), cid);
 }
 
+void ProtocolGame::parseEquipHotkey(NetworkMessage& msg)
+{
+	uint16_t objectId = msg.get<uint16_t>();
+	//uint8_t data = msg.get<uint8_t>();
+
+	Item* item = player->getItemByClientId(objectId);
+	if (!item) {
+		return;
+	}
+
+	uint16_t slot = CONST_SLOT_WHEREEVER;
+	switch (item->getSlotPosition()) {
+		case CLIENT_SLOT_HEAD: slot = CONST_SLOT_HEAD; break;
+		case CLIENT_SLOT_NECKLACE: slot = CONST_SLOT_NECKLACE; break;
+		case CLIENT_SLOT_ARMOR: slot = CONST_SLOT_ARMOR; break;
+		case CLIENT_SLOT_HAND: slot = item->getWeaponType() != WEAPON_SHIELD ? CONST_SLOT_LEFT : CONST_SLOT_RIGHT; break;
+		case CLIENT_SLOT_RING: slot = CONST_SLOT_RING; break;
+		case CLIENT_SLOT_LEGS: slot = CONST_SLOT_LEGS; break;
+		case CLIENT_SLOT_FEET: slot = CONST_SLOT_FEET; break;
+		case CLIENT_SLOT_AMMO: slot = CONST_SLOT_AMMO; break;
+
+		default:
+			break;
+	}
+
+	Item* slotItem = player->getInventoryItem(static_cast<slots_t>(slot));
+	g_game.internalMoveItem(item->getParent(), player, (slotItem && slotItem == item ? CONST_SLOT_WHEREEVER : slot), item, item->getItemCount(), nullptr);
+}
+
 void ProtocolGame::parseThrow(NetworkMessage& msg)
 {
 	Position fromPos = msg.getPosition();
@@ -837,6 +867,29 @@ void ProtocolGame::parseLookAt(NetworkMessage& msg)
 	msg.skipBytes(2); // spriteId
 	uint8_t stackpos = msg.getByte();
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerLookAt, player->getID(), pos, stackpos);
+}
+
+void ProtocolGame::sendInventory()
+{
+	std::map<uint16_t, uint16_t> items = player->getAllItemsClientId();
+
+	NetworkMessage msg;
+	msg.addByte(0xF5);
+	msg.add<uint16_t>(items.size() + 11);
+
+	for (uint16_t i = 1; i <= 11; i++) {
+	    msg.add<uint16_t>(i);
+	    msg.addByte(0);
+	    msg.add<uint16_t>(1);
+	}
+
+	for (const auto& it : items) {
+	    msg.add<uint16_t>(it.first);
+	    msg.addByte(0);
+	    msg.add<uint16_t>(it.second);
+	}
+
+	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::parseLookInBattleList(NetworkMessage& msg)
@@ -2453,6 +2506,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	sendBasicData();
+	player->sendInventory();
 	player->sendIcons();
 }
 
