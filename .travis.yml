@@ -1,19 +1,14 @@
+sudo: required
+dist: trusty
 language: cpp
 compiler: gcc
 cache: apt
 addons:
   apt:
-    sources:
-      - boost-latest
-      - ubuntu-toolchain-r-test
     packages:
-      - g++-4.8
-      - libboost1.55-dev
-      - libboost-system1.55-dev
-      - libgmp3-dev
+      - libboost-dev
+      - libboost-system-dev
       - liblua5.2-dev
       - libmysqlclient-dev
-install:
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 before_script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
 script: make -j2
