@@ -7,7 +7,7 @@ for i = 2, 3 do
 	combat[i]:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 
 	local condition = Condition(CONDITION_CURSED)
-	condition:setParameter(CONDITION_PARAM_DELAYED, 1)
+	condition:setParameter(CONDITION_PARAM_DELAYED, true)
 
 	local damage = i
 	condition:addDamage(1, 4000, -damage)
@@ -19,6 +19,6 @@ for i = 2, 3 do
 	combat[i]:setCondition(condition)
 end
 
-function onCastSpell(creature, var)
-	return combat[math.random(2, 3)]:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat[math.random(2, 3)]:execute(creature, variant)
 end

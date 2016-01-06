@@ -4,10 +4,10 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_DRAWBLOOD)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_WEAPONTYPE)
 
 local condition = Condition(CONDITION_BLEEDING)
-condition:setParameter(CONDITION_PARAM_DELAYED, 10)
-condition:addDamage(15, 2000, -50)
+condition:setParameter(CONDITION_PARAM_DELAYED, true)
+condition:addDamage(25, 4000, -45)
 combat:setCondition(condition)
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end

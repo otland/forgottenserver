@@ -5,6 +5,6 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_POISON)
 combat:setParameter(COMBAT_PARAM_CREATEITEM, ITEM_POISONFIELD_PVP)
 combat:setArea(createCombatArea(AREA_WALLFIELD, AREADIAGONAL_WALLFIELD))
 
-function onCastSpell(creature, var, isHotkey)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant, isHotkey)
+	return combat:execute(creature, variant)
 end

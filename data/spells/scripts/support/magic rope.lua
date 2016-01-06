@@ -1,4 +1,4 @@
-function onCastSpell(creature, var)
+function onCastSpell(creature, variant)
 	local position = creature:getPosition()
 	position:sendMagicEffect(CONST_ME_POFF)
 

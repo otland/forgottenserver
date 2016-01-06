@@ -10,6 +10,6 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
 combat:setFormula(COMBAT_FORMULA_LEVELMAGIC, -1.3, -30, -1.7, 0)
 combat:setCondition(condition)
 
-function onCastSpell(creature, var, isHotkey)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant, isHotkey)
+	return combat:execute(creature, variant)
 end
