@@ -132,6 +132,11 @@
 	<action itemid="6120" script="other/spellbook.lua" />
 	<action fromid="8900" toid="8904" script="other/spellbook.lua" />
 	<action itemid="8918" script="other/spellbook.lua" />
+	<action fromid="22422" toid="22424" script="other/spellbook.lua" />
+	<action itemid="18401" script="other/spellbook.lua" />
+	<action itemid="16112" script="other/spellbook.lua" />
+	<action itemid="15411" script="other/spellbook.lua" />
+	<action itemid="12647" script="other/spellbook.lua" />
 
 	<!-- Other -->
 	<action itemid="6578" script="other/partyhat.lua" />
