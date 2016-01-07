@@ -20,6 +20,6 @@ local combat = Combat()
 combat:setArea(createCombatArea(AREA_CROSS5X5))
 combat:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
 
-function onCastSpell(creature, var, isHotkey)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant, isHotkey)
+	return combat:execute(creature, variant)
 end

@@ -4,10 +4,10 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_HITBYFIRE)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
 
 local condition = Condition(CONDITION_FIRE)
-condition:setParameter(CONDITION_PARAM_DELAYED, 1)
-condition:addDamage(10, 2000, -10)
+condition:setParameter(CONDITION_PARAM_DELAYED, true)
+condition:addDamage(13, 10000, -10)
 combat:setCondition(condition)
 
-function onCastSpell(creature, var, isHotkey)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant, isHotkey)
+	return combat:execute(creature, variant)
 end

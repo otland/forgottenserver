@@ -14,6 +14,6 @@ for i = CONDITION_PARAM_SKILL_FIST, CONDITION_PARAM_SKILL_SHIELD do
 	end
 end
 
-function onCastSpell(creature, var)
-	return combat[math.random(#combat)]:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat[math.random(#combat)]:execute(creature, variant)
 end

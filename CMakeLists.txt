@@ -24,12 +24,14 @@ include(FindCXX11)
 
 # Find packages.
 find_package(GMP REQUIRED)
-find_package(MySQL)
 find_package(LuaJIT)
+find_package(MySQL)
 find_package(Threads)
 
-if (LUAJIT_FOUND)
-    add_definitions(-D__LUAJIT__)
+option(USE_LUAJIT "Use LuaJIT" ${LUAJIT_FOUND})
+
+if(USE_LUAJIT)
+    find_package(LuaJIT REQUIRED)
     if(APPLE)
       set(CMAKE_EXE_LINKER_FLAGS "-pagezero_size 10000 -image_base 100000000")
     endif()

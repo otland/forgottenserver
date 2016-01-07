@@ -12,6 +12,6 @@ for i = 20, 70 do
 	combat[i]:setCondition(condition)
 end
 
-function onCastSpell(creature, var)
-	return combat[math.random(20, 70)]:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat[math.random(20, 70)]:execute(creature, variant)
 end
