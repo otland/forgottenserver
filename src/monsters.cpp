@@ -79,6 +79,7 @@ void MonsterType::reset()
 	isConvinceable = false;
 	isAttackable = true;
 	isHostile = true;
+	isRewardBoss = false;
 
 	lightLevel = 0;
 	lightColor = 0;
