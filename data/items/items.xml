@@ -29327,9 +29327,9 @@
 	<item id="21516" article="a" name="lift" />
 	<item id="21517" article="an" name="ornate door with a keyhole" />
 	<item id="21518" article="a" name="reward container">
-	    <attribute key="containersize" value="32" />
-	    <attribute key="pickupable" value="0" />
-	    <attribute key="moveable" value="0" />
+		<attribute key="containersize" value="32" />
+		<attribute key="pickupable" value="0" />
+		<attribute key="moveable" value="0" />
 	</item>
 	<item id="21536" article="a" name="hole">
 		<attribute key="floorchange" value="down" />
