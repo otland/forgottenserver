@@ -30227,7 +30227,7 @@
 		<attribute key="weight" value="210" />
 		<attribute key="charges" value="4" />
 	</item>
-	<item id="23723" article="a" name="light missile rune">
+	<item id="23723" article="a" name="lightest missile rune">
 		<attribute key="type" value="rune" />
 		<attribute key="runeSpellName" value="adori infir vis" />
 		<attribute key="weight" value="210" />
