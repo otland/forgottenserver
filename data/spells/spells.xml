@@ -18,9 +18,17 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
+	<instant group="healing" spellid="175" name="Bruise Bane" words="exura infir ico" lvl="1" mana="10" aggressive="0" selftarget="1" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/bruise bane.lua">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" />
+	</instant>
 	<instant group="attack" spellid="61" name="Brutal Strike" words="exori ico" lvl="16" mana="30" prem="1" range="1" needtarget="1" blockwalls="1" needweapon="1" exhaustion="6000" groupcooldown="2000" needlearn="0" script="attack/brutal strike.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
+	</instant>
+	<instant group="attack" spellid="177" name="Buzz" words="exori infir vis" lvl="1" mana="6" prem="0" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/buzz.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
 	</instant>
 	<instant group="support" spellid="90" name="Cancel Invisibility" words="exana ina" lvl="26" mana="200" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/cancel invisibility.lua">
 		<vocation name="Paladin" />
@@ -32,6 +40,10 @@
 	<instant group="support" spellid="131" name="Charge" words="utani tempo hur" lvl="25" mana="100" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/charge.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
+	</instant>
+	<instant group="attack" spellid="173" name="Chill Out" words="exevo infir frigo hur" lvl="1" mana="8" direction="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/chill out.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
 	</instant>
 	<instant group="support" spellid="38" name="Creature Illusion" words="utevo res ina" lvl="23" mana="100" aggressive="0" params="1" exhaustion="2000" groupcooldown="2000" needlearn="0" function="Illusion">
 		<vocation name="Sorcerer" />
@@ -271,6 +283,14 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
+	<instant group="healing" spellid="174" name="Magic Patch" words="exura infir" lvl="1" mana="6" aggressive="0" selftarget="1" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/magic patch.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Paladin" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Elder Druid" />
+		<vocation name="Royal Paladin" />
+	</instant>
 	<instant group="support" spellid="76" name="Magic Rope" words="exani tera" lvl="9" mana="20" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/magic rope.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
@@ -288,6 +308,10 @@
 		<vocation name="Elder Druid" />
 	</instant>
 	<instant group="healing" spellid="82" name="Mass Healing" words="exura gran mas res" lvl="36" mana="150" prem="1" aggressive="0" exhaustion="2000" groupcooldown="1000" needlearn="0" script="healing/mass healing.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="attack" spellid="172" name="Mud Attack" words="exori infir tera" lvl="1" mana="6" prem="1" range="3" casterTargetOrDirection="1" blockwalls="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="attack/mud attack.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -322,6 +346,10 @@
 	<instant group="healing" spellid="36" name="Salvation" words="exura gran san" lvl="60" mana="210" prem="1" selftarget="1" aggressive="0" exhaustion="1000" groupcooldown="1000" needlearn="0" script="healing/salvation.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
+	</instant>
+	<instant group="attack" spellid="178" name="Scorch" words="exevo infir flam hur" lvl="1" mana="8" direction="1" exhaustion="4000" groupcooldown="2000" needlearn="0" script="attack/scorch.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
 	</instant>
 	<instant group="support" spellid="135" name="Sharpshooter" words="utito tempo san" lvl="60" mana="450" prem="1" aggressive="0" selftarget="1" exhaustion="2000" groupcooldown="2000" needlearn="0" script="support/sharpshooter.lua">
 		<vocation name="Paladin" />
@@ -437,12 +465,14 @@
 	<rune group="attack" spellid="33" name="Energy Wall" id="2279" allowfaruse="1" charges="4" lvl="41" maglv="9" exhaustion="2000" groupcooldown="2000" blocktype="solid" script="attack/energy wall.lua" />
 	<rune group="attack" spellid="7" name="Light Magic Missile" id="2287" allowfaruse="1" charges="10" lvl="15" exhaustion="2000" groupcooldown="2000" maglv="0" needtarget="1" blocktype="solid" script="attack/light magic missile.lua" />
 	<!--<rune group="attack" spellid="7" name="Lightest Magic Missile" id="2287" allowfaruse="1" charges="10" lvl="1" exhaustion="2000" groupcooldown="2000" maglv="0" needtarget="1" blocktype="solid" script="attack/lightest magic missile.lua" />-->
+	<rune group="attack" spellid="7" name="Lightest Missile" id="23723" allowfaruse="1" charges="10" lvl="1" exhaustion="2000" groupcooldown="2000" maglv="0" needtarget="1" blocktype="solid" script="attack/lightest missile.lua" />
 	<rune group="attack" spellid="8" name="Heavy Magic Missile" id="2311" allowfaruse="1" charges="10" lvl="25" exhaustion="2000" groupcooldown="2000" maglv="3" needtarget="1" blocktype="solid" script="attack/heavy magic missile.lua" />
 	<rune group="attack" spellid="18" name="Explosion" id="2313" allowfaruse="1" charges="6" lvl="31" maglv="6" exhaustion="2000" groupcooldown="2000" blocktype="solid" script="attack/explosion.lua" />
 	<rune group="attack" spellid="21" name="Sudden Death" id="2268" allowfaruse="1" charges="3" lvl="45" maglv="15" exhaustion="2000" groupcooldown="2000" needtarget="1" blocktype="solid" script="attack/sudden death.lua" />
 	<rune group="attack" spellid="114" name="Icicle" id="2271" allowfaruse="1" charges="5" lvl="28" maglv="4" exhaustion="2000" groupcooldown="2000" needtarget="1" script="attack/icicle.lua" />
 	<rune group="attack" spellid="115" name="Avalanche" id="2274" allowfaruse="1" charges="4" lvl="30" maglv="4" exhaustion="2000" groupcooldown="2000" script="attack/avalanche.lua" />
 	<rune group="attack" spellid="116" name="Stone Shower" id="2288" allowfaruse="1" charges="4" lvl="28" maglv="4" exhaustion="2000" groupcooldown="2000" script="attack/stone shower.lua" />
+	<rune group="attack" spellid="116" name="Light Stone Shower" id="23722" allowfaruse="1" charges="4" lvl="1" maglv="0" exhaustion="2000" groupcooldown="2000" script="attack/light stone shower.lua" />
 	<rune group="attack" spellid="117" name="Thunderstorm" id="2315" allowfaruse="1" charges="4" lvl="28" maglv="4" exhaustion="2000" groupcooldown="2000" script="attack/thunderstorm.lua" />
 	<rune group="attack" spellid="77" name="Stalagmite" id="2292" allowfaruse="1" charges="10" lvl="24" maglv="3" exhaustion="2000" groupcooldown="2000" needtarget="1" script="attack/stalagmite.lua" />
 	<rune group="attack" spellid="130" name="Holy Missile" id="2295" allowfaruse="1" charges="5" lvl="27" maglv="4" exhaustion="2000" groupcooldown="2000" needtarget="1" blocktype="solid" script="attack/holy missile.lua">
@@ -483,6 +513,10 @@
 		<vocation name="Master Sorcerer" />
 	</conjure>
 	<conjure group="support" spellid="51" name="Conjure Arrow" words="exevo con" lvl="13" mana="100" soul="1" conjureId="2544" conjureCount="10" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" />
+	</conjure>
+	<conjure group="support" spellid="176" name="Arrow Call" words="exevo infir con" lvl="1" mana="10" soul="1" conjureId="23839" conjureCount="3" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</conjure>
@@ -531,6 +565,14 @@
 	<!--<conjure name="Lightest Magic Missile" words="adori dis min vis" lvl="1" mana="5" soul="0" reagentId="2260" conjureId="2287" conjureCount="10" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="None" />
 	</conjure>-->
+	<conjure name="Lightest Missile" words="adori infir vis" lvl="1" mana="6" soul="0" reagentId="2260" conjureId="23723" conjureCount="10" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+		<vocation name="Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Paladin" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Elder Druid" />
+		<vocation name="Royal Paladin" />
+	</conjure>
 	<conjure name="Fire Field" words="adevo grav flam" lvl="15" mana="240" soul="1" reagentId="2260" conjureId="2301" conjureCount="3" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
@@ -676,6 +718,14 @@
 	<conjure name="Stone Shower" words="adori mas tera" lvl="28" mana="430" soul="3" prem="1" reagentId="2260" conjureId="2288" conjureCount="4" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
+	</conjure>
+	<conjure name="Light Stone Shower" words="adori infir mas tera" lvl="1" mana="6" soul="3" prem="1" reagentId="2260" conjureId="23722" conjureCount="4" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+		<vocation name="Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Paladin" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Elder Druid" />
+		<vocation name="Royal Paladin" />
 	</conjure>
 	<conjure name="Thunderstorm" words="adori mas vis" lvl="28" mana="430" soul="3" prem="1" reagentId="2260" conjureId="2315" conjureCount="4" exhaustion="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Sorcerer" />

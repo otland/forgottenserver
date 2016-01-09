@@ -30221,6 +30221,27 @@
 	<item id="22699" article="a" name="cake tapestry">
 		<attribute key="weight" value="1000" />
 	</item>
+	<item id="23722" article="a" name="light stone shower rune">
+		<attribute key="type" value="rune" />
+		<attribute key="runeSpellName" value="adori infir mas tera" />
+		<attribute key="weight" value="210" />
+		<attribute key="charges" value="4" />
+	</item>
+	<item id="23723" article="a" name="light missile rune">
+		<attribute key="type" value="rune" />
+		<attribute key="runeSpellName" value="adori infir vis" />
+		<attribute key="weight" value="210" />
+		<attribute key="charges" value="4" />
+	</item>
+	<item id="23839" article="a" name="simple arrow">
+		<attribute key="weight" value="60" />
+		<attribute key="slotType" value="ammo" />
+		<attribute key="attack" value="20" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="shootType" value="simplearrow" />
+		<attribute key="maxHitChance" value="91" />
+	</item>
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
 	<item id="30003" name="beer" />
