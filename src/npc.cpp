@@ -21,12 +21,7 @@
 
 #include "npc.h"
 #include "game.h"
-#include "tools.h"
-#include "position.h"
-#include "player.h"
-#include "spawn.h"
 #include "pugicast.h"
-#include "luascript.h"
 
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;

@@ -22,7 +22,6 @@
 #include "protocollogin.h"
 
 #include "outputmessage.h"
-#include "rsa.h"
 #include "tasks.h"
 
 #include "configmanager.h"
