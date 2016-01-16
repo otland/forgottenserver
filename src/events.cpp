@@ -23,6 +23,7 @@
 #include "tools.h"
 #include "item.h"
 #include "player.h"
+#include "cylinder.h"
 
 #include <set>
 
@@ -491,9 +492,9 @@ bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, u
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition)
+bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* toCylinder)
 {
-	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition, toPosition)
+	// Player:onMoveItem(item, count, fromPosition, toPosition, toCylinder) or Player.onMoveItem(self, item, count, fromPosition, toPosition, toCylinder)
 	if (playerOnMoveItem == -1) {
 		return true;
 	}
@@ -518,6 +519,12 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 	lua_pushnumber(L, count);
 	LuaScriptInterface::pushPosition(L, fromPosition);
 	LuaScriptInterface::pushPosition(L, toPosition);
+
+	if (toCylinder->getContainer()) {
+		LuaScriptInterface::pushUserdata<Item>(L, toCylinder->getItem());
+		LuaScriptInterface::setItemMetatable(L, -1, toCylinder->getItem());
+		return scriptInterface.callFunction(6);
+	}
 
 	return scriptInterface.callFunction(5);
 }
