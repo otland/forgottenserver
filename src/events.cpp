@@ -23,7 +23,6 @@
 #include "tools.h"
 #include "item.h"
 #include "player.h"
-#include "cylinder.h"
 
 #include <set>
 
@@ -523,10 +522,11 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 	if (toCylinder->getContainer()) {
 		LuaScriptInterface::pushUserdata<Item>(L, toCylinder->getItem());
 		LuaScriptInterface::setItemMetatable(L, -1, toCylinder->getItem());
-		return scriptInterface.callFunction(6);
+	} else {
+		lua_pushnil(L);
 	}
 
-	return scriptInterface.callFunction(5);
+	return scriptInterface.callFunction(6);
 }
 
 bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition)
