@@ -26,13 +26,10 @@
 #include "mailbox.h"
 #include "house.h"
 #include "game.h"
-#include "luascript.h"
 #include "bed.h"
 
 #include "actions.h"
-#include "combat.h"
 #include "spells.h"
-#include "vocation.h"
 
 extern Game g_game;
 extern Spells* g_spells;
