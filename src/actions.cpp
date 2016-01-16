@@ -263,11 +263,7 @@ Action* Actions::getAction(const Item* item)
 	}
 
 	//rune items
-	Action* runeSpell = g_spells->getRuneSpell(item->getID());
-	if (runeSpell) {
-		return runeSpell;
-	}
-	return nullptr;
+	return g_spells->getRuneSpell(item->getID());
 }
 
 ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey)
