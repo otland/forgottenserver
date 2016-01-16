@@ -826,25 +826,21 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 			if (RuneSpell* rune = g_spells->getRuneSpell(it.id)) {
 				const VocSpellMap& vocMap = rune->getVocMap();
-				if (vocMap.empty()) {
-					s << "players";
-				} else {
-					std::vector<Vocation*> showVocMap;
+				std::vector<Vocation*> showVocMap;
 
-					// vocations listed are mostly unpromoted ones and the promoted version, with the latter hidden from
-					// description, so probably always `total / 2` is the amount of vocations to be shown.
-					showVocMap.reserve(vocMap.size() / 2);
-
-					for (const auto& voc : vocMap) {
-						if (voc.second) {
-							showVocMap.push_back(g_vocations.getVocation(voc.first));
-						}
+				// vocations are usually listed with the unpromoted and promoted version, the latter being
+				// hidden from description, so `total / 2` is most likely the amount of vocations to be shown.
+				showVocMap.reserve(vocMap.size() / 2);
+				for (const auto& voc : vocMap) {
+					if (voc.second) {
+						showVocMap.push_back(g_vocations.getVocation(voc.first));
 					}
+				}
 
+				if (!showVocMap.empty()) {
 					auto vocIt = showVocMap.begin(), vocLast = (showVocMap.end() - 1);
 					while (vocIt != vocLast) {
 						s << asLowerCaseString((*vocIt)->getVocName()) << "s";
-
 						if (++vocIt == vocLast) {
 							s << " and ";
 						} else {
@@ -852,6 +848,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						}
 					}
 					s << asLowerCaseString((*vocLast)->getVocName()) << "s";
+				} else {
+					s << "players";
 				}
 
 				s << " with";
