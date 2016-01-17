@@ -358,7 +358,7 @@ class LuaScriptInterface
 		// Is
 		inline static bool isNumber(lua_State* L, int32_t arg)
 		{
-			return lua_isnumber(L, arg) != 0;
+			return lua_type(L, arg) == LUA_TNUMBER;
 		}
 		inline static bool isString(lua_State* L, int32_t arg)
 		{
