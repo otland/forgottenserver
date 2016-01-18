@@ -524,7 +524,7 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 		LuaScriptInterface::setMetatable(L, -1, "Creature");
 	} else if (toCylinder->getItem()){
 		LuaScriptInterface::pushUserdata<Item>(L, toCylinder->getItem());
-		LuaScriptInterface::setItemMetatable(L, -1, "Item");
+		LuaScriptInterface::setItemMetatable(L, -1, toCylinder->getItem());
 	} else if (toCylinder->getContainer()){
 		LuaScriptInterface::pushUserdata<Container>(L, toCylinder->getContainer());
 		LuaScriptInterface::setItemMetatable(L, -1, toCylinder->getContainer());
