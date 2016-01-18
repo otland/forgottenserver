@@ -1502,7 +1502,7 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 	uint32_t crystalCoins = money / 10000;
 	money -= crystalCoins * 10000;
 	while (crystalCoins > 0) {
-		const uint16_t count = std::min<int32_t>(100, crystalCoins);
+		const uint16_t count = std::min<uint32_t>(100, crystalCoins);
 
 		Item* remaindItem = Item::CreateItem(ITEM_CRYSTAL_COIN, count);
 

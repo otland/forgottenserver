@@ -816,15 +816,13 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 	if (it.isRune()) {
 		if (it.runeLevel > 0 || it.runeMagLevel > 0) {
-			int32_t tmpSubType = subType;
-
-			if (item) {
-				tmpSubType = item->getSubType();
-			}
-
-			s << ". " << (it.stackable && tmpSubType > 1 ? "They" : "It") << " can only be used by ";
-
 			if (RuneSpell* rune = g_spells->getRuneSpell(it.id)) {
+				int32_t tmpSubType = subType;
+				if (item) {
+					tmpSubType = item->getSubType();
+				}
+				s << ". " << (it.stackable && tmpSubType > 1 ? "They" : "It") << " can only be used by ";
+
 				const VocSpellMap& vocMap = rune->getVocMap();
 				std::vector<Vocation*> showVocMap;
 
@@ -1355,7 +1353,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << "premium ";
 		}
 
-		if (it.wieldInfo & WIELDINFO_VOCREQ) {
+		if (!it.vocationString.empty()) {
 			s << it.vocationString;
 		} else {
 			s << "players";
