@@ -85,7 +85,7 @@ function Player:onLookInShop(itemType, count)
 	return true
 end
 
-function Player:onMoveItem(item, count, fromPosition, toPosition, toContainer)
+function Player:onMoveItem(item, count, fromPosition, toPosition, toCylinder)
 	return true
 end
 
