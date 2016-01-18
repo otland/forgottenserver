@@ -519,16 +519,18 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 	LuaScriptInterface::pushPosition(L, fromPosition);
 	LuaScriptInterface::pushPosition(L, toPosition);
 
-	if (toCylinder->getCreature()) {
-		LuaScriptInterface::pushUserdata<Creature>(L, toCylinder->getCreature);
-		LuaScriptInterface::setMetatable(L, -1, "Creature");
-	} else if (toCylinder->getItem()){
-		LuaScriptInterface::pushUserdata<Item>(L, toCylinder->getItem());
-		LuaScriptInterface::setItemMetatable(L, -1, toCylinder->getItem());
+	if (toCylinder->getCreature()->getPlayer()) {
+		LuaScriptInterface::pushUserdata<Player>(L, toCylinder->getCreature()->getPlayer());
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+	} else if (toCylinder->getTile()){
+		LuaScriptInterface::pushUserdata<Tile>(L, toCylinder->getTile());
+		LuaScriptInterface::setMetatable(L, -1, "Tile");
 	} else if (toCylinder->getContainer()){
 		LuaScriptInterface::pushUserdata<Container>(L, toCylinder->getContainer());
 		LuaScriptInterface::setItemMetatable(L, -1, toCylinder->getContainer());
-	} 
+	} else {
+		lua_pushnil(L);
+	}
 	
 	return scriptInterface.callFunction(6);
 }
