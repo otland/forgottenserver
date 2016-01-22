@@ -29,7 +29,6 @@ HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* _house) :
 	DynamicTile(x, y, z)
 {
 	house = _house;
-	setFlag(TILESTATE_HOUSE);
 }
 
 void HouseTile::addThing(int32_t index, Thing* thing)

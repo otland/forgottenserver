@@ -153,6 +153,9 @@ Player::Player(ProtocolGame_ptr p) :
 	lastQuestlogUpdate = 0;
 
 	inventoryWeight = 0;
+	operatingSystem = CLIENTOS_NONE;
+	secureMode = false;
+	guid = 0;
 }
 
 Player::~Player()

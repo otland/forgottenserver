@@ -251,11 +251,6 @@ IntegerVec vectorAtoi(const StringVec& stringVector)
 	return returnVector;
 }
 
-bool hasBitSet(uint32_t flag, uint32_t flags)
-{
-	return ((flags & flag) == flag);
-}
-
 std::mt19937& getRandomGenerator()
 {
 	static std::random_device rd;

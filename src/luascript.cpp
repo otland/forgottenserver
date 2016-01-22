@@ -596,6 +596,24 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing)
 	}
 }
 
+void LuaScriptInterface::pushCylinder(lua_State* L, Cylinder* cylinder)
+{
+	if (Creature* creature = cylinder->getCreature()) {
+		pushUserdata<Creature>(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (Item* parentItem = cylinder->getItem()) {
+		pushUserdata<Item>(L, parentItem);
+		setItemMetatable(L, -1, parentItem);
+	} else if (Tile* tile = cylinder->getTile()) {
+		pushUserdata<Tile>(L, tile);
+		setMetatable(L, -1, "Tile");
+	} else if (cylinder == VirtualCylinder::virtualCylinder) {
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+}
+
 void LuaScriptInterface::pushString(lua_State* L, const std::string& value)
 {
 	lua_pushlstring(L, value.c_str(), value.length());
@@ -1532,12 +1550,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerEnum(TILESTATE_NONE)
 	registerEnum(TILESTATE_PROTECTIONZONE)
-	registerEnum(TILESTATE_DEPRECATED_HOUSE)
 	registerEnum(TILESTATE_NOPVPZONE)
 	registerEnum(TILESTATE_NOLOGOUT)
 	registerEnum(TILESTATE_PVPZONE)
-	registerEnum(TILESTATE_REFRESH)
-	registerEnum(TILESTATE_HOUSE)
 	registerEnum(TILESTATE_FLOORCHANGE)
 	registerEnum(TILESTATE_FLOORCHANGE_DOWN)
 	registerEnum(TILESTATE_FLOORCHANGE_NORTH)
@@ -1556,7 +1571,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(TILESTATE_IMMOVABLEBLOCKPATH)
 	registerEnum(TILESTATE_IMMOVABLENOFIELDBLOCKPATH)
 	registerEnum(TILESTATE_NOFIELDBLOCKPATH)
-	registerEnum(TILESTATE_DYNAMIC_TILE)
 	registerEnum(TILESTATE_FLOORCHANGE_SOUTH_ALT)
 	registerEnum(TILESTATE_FLOORCHANGE_EAST_ALT)
 	registerEnum(TILESTATE_SUPPORTS_HANGABLE)
@@ -5764,20 +5778,7 @@ int LuaScriptInterface::luaItemGetParent(lua_State* L)
 		return 1;
 	}
 
-	if (Creature* creature = parent->getCreature()) {
-		pushUserdata<Creature>(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else if (Item* parentItem = parent->getItem()) {
-		pushUserdata<Item>(L, parentItem);
-		setItemMetatable(L, -1, parentItem);
-	} else if (Tile* tile = parent->getTile()) {
-		pushUserdata<Tile>(L, tile);
-		setMetatable(L, -1, "Tile");
-	} else if (parent == VirtualCylinder::virtualCylinder) {
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
+	pushCylinder(L, parent);
 	return 1;
 }
 
@@ -5796,20 +5797,7 @@ int LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 		return 1;
 	}
 
-	if (Creature* creature = topParent->getCreature()) {
-		pushUserdata<Creature>(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else if (Item* topParentItem = topParent->getItem()) {
-		pushUserdata<Item>(L, topParentItem);
-		setItemMetatable(L, -1, topParentItem);
-	} else if (Tile* tile = topParent->getTile()) {
-		pushUserdata<Tile>(L, tile);
-		setMetatable(L, -1, "Tile");
-	} else if (topParent == VirtualCylinder::virtualCylinder) {
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
+	pushCylinder(L, topParent);
 	return 1;
 }
 
@@ -6727,18 +6715,7 @@ int LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 		return 1;
 	}
 
-	if (Creature* parentCreature = parent->getCreature()) {
-		pushUserdata<Creature>(L, parentCreature);
-		setCreatureMetatable(L, -1, parentCreature);
-	} else if (Item* item = parent->getItem()) {
-		pushUserdata<Item>(L, item);
-		setItemMetatable(L, -1, item);
-	} else if (Tile* tile = parent->getTile()) {
-		pushUserdata<Tile>(L, tile);
-		setMetatable(L, -1, "Tile");
-	} else {
-		lua_pushnil(L);
-	}
+	pushCylinder(L, parent);
 	return 1;
 }
 

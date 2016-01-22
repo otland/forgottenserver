@@ -950,7 +950,6 @@ void Creature::goToFollowCreature()
 					} else {
 						hasFollowPath = false;
 					}
-
 					return;
 				}
 			}

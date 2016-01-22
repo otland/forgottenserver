@@ -39,39 +39,36 @@ typedef std::vector<Item*> ItemVector;
 typedef std::unordered_set<Creature*> SpectatorVec;
 
 enum tileflags_t : uint32_t {
-	TILESTATE_NONE,
+	TILESTATE_NONE = 0,
 
-	TILESTATE_PROTECTIONZONE = 1 << 0,
-	TILESTATE_DEPRECATED_HOUSE = 1 << 1,
-	TILESTATE_NOPVPZONE = 1 << 2,
-	TILESTATE_NOLOGOUT = 1 << 3,
-	TILESTATE_PVPZONE = 1 << 4,
-	TILESTATE_REFRESH = 1 << 5, // unused
+	TILESTATE_FLOORCHANGE_DOWN = 1 << 0,
+	TILESTATE_FLOORCHANGE_NORTH = 1 << 1,
+	TILESTATE_FLOORCHANGE_SOUTH = 1 << 2,
+	TILESTATE_FLOORCHANGE_EAST = 1 << 3,
+	TILESTATE_FLOORCHANGE_WEST = 1 << 4,
+	TILESTATE_FLOORCHANGE_SOUTH_ALT = 1 << 5,
+	TILESTATE_FLOORCHANGE_EAST_ALT = 1 << 6,
+	TILESTATE_FLOORCHANGE = TILESTATE_FLOORCHANGE_DOWN | TILESTATE_FLOORCHANGE_NORTH | TILESTATE_FLOORCHANGE_SOUTH | TILESTATE_FLOORCHANGE_EAST | TILESTATE_FLOORCHANGE_WEST | TILESTATE_FLOORCHANGE_SOUTH_ALT | TILESTATE_FLOORCHANGE_EAST_ALT,
+
+	TILESTATE_PROTECTIONZONE = 1 << 7,
+	TILESTATE_NOPVPZONE = 1 << 8,
+	TILESTATE_NOLOGOUT = 1 << 9,
+	TILESTATE_PVPZONE = 1 << 10,
 
 	//internal usage
-	TILESTATE_HOUSE = 1 << 6,
-	TILESTATE_FLOORCHANGE = 1 << 7,
-	TILESTATE_FLOORCHANGE_DOWN = 1 << 8,
-	TILESTATE_FLOORCHANGE_NORTH = 1 << 9,
-	TILESTATE_FLOORCHANGE_SOUTH = 1 << 10,
-	TILESTATE_FLOORCHANGE_EAST = 1 << 11,
-	TILESTATE_FLOORCHANGE_WEST = 1 << 12,
-	TILESTATE_TELEPORT = 1 << 13,
-	TILESTATE_MAGICFIELD = 1 << 14,
-	TILESTATE_MAILBOX = 1 << 15,
-	TILESTATE_TRASHHOLDER = 1 << 16,
-	TILESTATE_BED = 1 << 17,
-	TILESTATE_DEPOT = 1 << 18,
-	TILESTATE_BLOCKSOLID = 1 << 19,
-	TILESTATE_BLOCKPATH = 1 << 20,
-	TILESTATE_IMMOVABLEBLOCKSOLID = 1 << 21,
-	TILESTATE_IMMOVABLEBLOCKPATH = 1 << 22,
-	TILESTATE_IMMOVABLENOFIELDBLOCKPATH = 1 << 23,
-	TILESTATE_NOFIELDBLOCKPATH = 1 << 24,
-	TILESTATE_DYNAMIC_TILE = 1 << 25, //DEPRECATED
-	TILESTATE_FLOORCHANGE_SOUTH_ALT = 1 << 26,
-	TILESTATE_FLOORCHANGE_EAST_ALT = 1 << 27,
-	TILESTATE_SUPPORTS_HANGABLE = 1 << 28,
+	TILESTATE_TELEPORT = 1 << 11,
+	TILESTATE_MAGICFIELD = 1 << 12,
+	TILESTATE_MAILBOX = 1 << 13,
+	TILESTATE_TRASHHOLDER = 1 << 14,
+	TILESTATE_BED = 1 << 15,
+	TILESTATE_DEPOT = 1 << 16,
+	TILESTATE_BLOCKSOLID = 1 << 17,
+	TILESTATE_BLOCKPATH = 1 << 18,
+	TILESTATE_IMMOVABLEBLOCKSOLID = 1 << 19,
+	TILESTATE_IMMOVABLEBLOCKPATH = 1 << 20,
+	TILESTATE_IMMOVABLENOFIELDBLOCKPATH = 1 << 21,
+	TILESTATE_NOFIELDBLOCKPATH = 1 << 22,
+	TILESTATE_SUPPORTS_HANGABLE = 1 << 23,
 };
 
 enum ZoneType_t {
@@ -209,48 +206,14 @@ class Tile : public Cylinder
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool hasProperty(const Item* exclude, ITEMPROPERTY prop) const;
 
-		bool hasFlag(tileflags_t flag) const {
-			return hasBitSet(flag, m_flags);
+		inline bool hasFlag(uint32_t flag) const {
+			return hasBitSet(flag, this->flags);
 		}
-		void setFlag(tileflags_t flag) {
-			m_flags |= static_cast<uint32_t>(flag);
+		inline void setFlag(uint32_t flag) {
+			this->flags |= flag;
 		}
-		void resetFlag(tileflags_t flag) {
-			m_flags &= ~static_cast<uint32_t>(flag);
-		}
-
-		bool positionChange() const {
-			return hasFlag(TILESTATE_TELEPORT);
-		}
-		bool floorChange() const {
-			return hasFlag(TILESTATE_FLOORCHANGE);
-		}
-		bool floorChangeDown() const {
-			return hasFlag(TILESTATE_FLOORCHANGE_DOWN);
-		}
-		bool floorChange(Direction direction) const {
-			switch (direction) {
-				case DIRECTION_NORTH:
-						return hasFlag(TILESTATE_FLOORCHANGE_NORTH);
-
-				case DIRECTION_SOUTH:
-					return hasFlag(TILESTATE_FLOORCHANGE_SOUTH);
-
-				case DIRECTION_EAST:
-					return hasFlag(TILESTATE_FLOORCHANGE_EAST);
-
-				case DIRECTION_WEST:
-					return hasFlag(TILESTATE_FLOORCHANGE_WEST);
-
-				case DIRECTION_SOUTH_ALT:
-					return hasFlag(TILESTATE_FLOORCHANGE_SOUTH_ALT);
-
-				case DIRECTION_EAST_ALT:
-					return hasFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
-
-				default:
-					return false;
-			}
+		inline void resetFlag(uint32_t flag) {
+			this->flags &= ~flag;
 		}
 
 		ZoneType_t getZone() const {
@@ -332,7 +295,7 @@ class Tile : public Cylinder
 	protected:
 		Item* ground;
 		Position tilePos;
-		uint32_t m_flags;
+		uint32_t flags;
 };
 
 // Used for walkable tiles, where there is high likeliness of
@@ -417,7 +380,7 @@ class StaticTile final : public Tile
 inline Tile::Tile(uint16_t x, uint16_t y, uint8_t z) :
 	ground(nullptr),
 	tilePos(x, y, z),
-	m_flags(0)
+	flags(0)
 {
 }
 
@@ -446,7 +409,6 @@ inline StaticTile::~StaticTile()
 inline DynamicTile::DynamicTile(uint16_t x, uint16_t y, uint8_t z) :
 	Tile(x, y, z)
 {
-	m_flags |= TILESTATE_DYNAMIC_TILE;
 }
 
 inline DynamicTile::~DynamicTile()
