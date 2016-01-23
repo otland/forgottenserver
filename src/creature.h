@@ -185,8 +185,8 @@ class Creature : virtual public Thing
 		bool isMoveLocked() const {
 			return moveLocked;
 		}
-		void setMoveLocked(bool ml) {
-			moveLocked = ml;
+		void setMoveLocked(bool locked) {
+			moveLocked = locked;
 		}
 
 		int32_t getThrowRange() const final {
