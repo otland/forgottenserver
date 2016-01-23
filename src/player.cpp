@@ -3956,7 +3956,7 @@ double Player::getLostPercent() const
 		lossPercent *= 0.7;
 	}
   
-  lossPercent *= vocation->getLessLoss();
+	lossPercent *= vocation->getLessLoss();
 
 	return lossPercent * pow(0.92, blessingCount) / 100;
 }
