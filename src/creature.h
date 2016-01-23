@@ -182,6 +182,13 @@ class Creature : virtual public Thing
 			hiddenHealth = b;
 		}
 
+		bool isMoveLocked() const {
+			return moveLocked;
+		}
+		void setMoveLocked(bool ml) {
+			moveLocked = ml;
+		}
+
 		int32_t getThrowRange() const final {
 			return 1;
 		}
@@ -534,6 +541,7 @@ class Creature : virtual public Thing
 		bool hasFollowPath;
 		bool forceUpdateFollowPath;
 		bool hiddenHealth;
+		bool moveLocked;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {
