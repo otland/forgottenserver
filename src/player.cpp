@@ -3955,6 +3955,8 @@ double Player::getLostPercent() const
 	if (isPromoted()) {
 		lossPercent *= 0.7;
 	}
+  
+  lossPercent *= vocation->getLessLoss();
 
 	return lossPercent * pow(0.92, blessingCount) / 100;
 }
