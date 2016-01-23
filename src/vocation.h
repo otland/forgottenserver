@@ -86,6 +86,10 @@ class Vocation
 			return fromVocation;
 		}
 
+		uint32_t getLessLoss() const {
+			return lessLoss;
+		}
+
 		float meleeDamageMultiplier, distDamageMultiplier, defenseMultiplier, armorMultiplier;
 
 	protected:
@@ -99,6 +103,7 @@ class Vocation
 
 		float skillMultipliers[SKILL_LAST + 1];
 		float manaMultiplier;
+		float lessLoss;
 
 		uint32_t gainHealthTicks;
 		uint32_t gainHealthAmount;
