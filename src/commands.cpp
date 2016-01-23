@@ -235,6 +235,9 @@ bool Commands::exeCommand(Player& player, const std::string& cmd)
 
 void Commands::reloadInfo(Player& player, const std::string& param)
 {
+	// Always reload the global libraries
+	g_luaEnvironment.loadFile("data/global.lua");
+
 	std::string tmpParam = asLowerCaseString(param);
 	if (tmpParam == "action" || tmpParam == "actions") {
 		g_actions->reload();
@@ -292,8 +295,7 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 		g_chat->load();
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded chatchannels.");
 	} else if (tmpParam == "global") {
-		g_luaEnvironment.loadFile("data/global.lua");
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded globals.");
 	} else {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}
