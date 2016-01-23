@@ -3115,6 +3115,16 @@ void Game::playerTurn(uint32_t playerId, Direction dir)
 
 	player->resetIdleTime();
 	internalCreatureTurn(player, dir);
+
+	if(player->getDirection() != dir || (player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER))
+		return;
+
+	Position pos = getNextPosition(dir, player->getPosition());
+
+	Tile* tile = g_game.map.getTile(pos);
+	if(tile && tile->getGround()) {
+		internalTeleport(player, pos, false, FLAG_NOLIMIT);
+	}
 }
 
 void Game::playerRequestOutfit(uint32_t playerId)
