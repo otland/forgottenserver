@@ -277,7 +277,18 @@ int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 	} else if (minNumber > maxNumber) {
 		std::swap(minNumber, maxNumber);
 	}
-	return minNumber + round(std::max<float>(0.f, std::min<float>(1.f, normalRand(getRandomGenerator()))) * (maxNumber - minNumber));
+
+	int32_t increment;
+	const int32_t diff = maxNumber - minNumber;
+	const float v = normalRand(getRandomGenerator());
+	if (v < 0.0) {
+		increment = diff / 2;
+	} else if (v > 1.0) {
+		increment = (diff + 1) / 2;
+	} else {
+		increment = round(v * diff);
+	}
+	return minNumber + increment;
 }
 
 bool boolean_random(double probability/* = 0.5*/)
