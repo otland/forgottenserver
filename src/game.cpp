@@ -1026,7 +1026,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 		return;
 	}
 
-	if (!g_events->eventPlayerOnMoveItem(player, item, count, fromPos, toPos)) {
+	if (!g_events->eventPlayerOnMoveItem(player, item, count, fromPos, toPos, toCylinder)) {
 		return;
 	}
 
