@@ -752,7 +752,13 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 	}
 
 	if ((attr = monsterNode.attribute("speed"))) {
-		mType.baseSpeed = pugi::cast<int32_t>(attr.value());
+		int32_t baseSpeed = pugi::cast<int32_t>(attr.value());
+		if (baseSpeed >= 0) {
+			mType.baseSpeed = baseSpeed;
+		} else {
+			std::cout << "[Error - Monsters::loadMonster] Invalid speed value " << mType.baseSpeed << ". " << file << std::endl;
+			return false;
+		}
 	}
 
 	if ((attr = monsterNode.attribute("manacost"))) {
@@ -771,14 +777,19 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 	if ((node = monsterNode.child("health"))) {
 		if ((attr = node.attribute("now"))) {
 			mType.health = pugi::cast<int32_t>(attr.value());
+			if (mType.health <= 0) {
+				std::cout << "[Warning - Monsters::loadMonster] Invalid health now value " << mType.health << ". " << file << std::endl;
+			}
 		} else {
 			std::cout << "[Error - Monsters::loadMonster] Missing health now. " << file << std::endl;
+			return false;
 		}
 
 		if ((attr = node.attribute("max"))) {
 			mType.healthMax = pugi::cast<int32_t>(attr.value());
 		} else {
 			std::cout << "[Error - Monsters::loadMonster] Missing health max. " << file << std::endl;
+			return false;
 		}
 	}
 
@@ -815,7 +826,11 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			} else if (strcasecmp(attrName, "lightcolor") == 0) {
 				mType.lightColor = pugi::cast<uint16_t>(attr.value());
 			} else if (strcasecmp(attrName, "targetdistance") == 0) {
-				mType.targetDistance = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
+				mType.targetDistance = pugi::cast<int32_t>(attr.value());
+				if (mType.targetDistance < 1) {
+					std::cout << "[Error - Monsters::loadMonster] Invalid target distance " << mType.targetDistance << ". " << file << std::endl;
+					return false;
+				}
 			} else if (strcasecmp(attrName, "runonhealth") == 0) {
 				mType.runAwayHealth = pugi::cast<int32_t>(attr.value());
 			} else if (strcasecmp(attrName, "hidehealth") == 0) {
@@ -841,6 +856,10 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 
 		if ((attr = node.attribute("chance"))) {
 			mType.changeTargetChance = pugi::cast<int32_t>(attr.value());
+			if (mType.changeTargetChance < 0) {
+				std::cout << "[Error - Monsters::loadMonster] Invalid targetchange chance " << mType.changeTargetChance << ". " << file << std::endl;
+				return false;
+			}
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Missing targetchange chance. " << file << std::endl;
 		}
@@ -849,6 +868,10 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 	if ((node = monsterNode.child("look"))) {
 		if ((attr = node.attribute("type"))) {
 			mType.outfit.lookType = pugi::cast<uint16_t>(attr.value());
+			if (mType.outfit.lookType == 0) {
+				std::cout << "[Error - Monsters::loadMonster] Invalid outfit look type " << mType.outfit.lookType << ". " << file << std::endl;
+				return false;
+			}
 
 			if ((attr = node.attribute("head"))) {
 				mType.outfit.lookHead = pugi::cast<uint16_t>(attr.value());
@@ -1116,10 +1139,20 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 
 			if ((attr = summonNode.attribute("speed")) || (attr = summonNode.attribute("interval"))) {
 				speed = pugi::cast<int32_t>(attr.value());
+
+				if (speed <= 0) {
+					std::cout << "[Error - Monsters::loadMonster] Invalid summon speed " << speed << ". " << file << std::endl;
+					return false;
+				}
 			}
 
 			if ((attr = summonNode.attribute("chance"))) {
 				chance = pugi::cast<int32_t>(attr.value());
+
+				if (chance <= 0) {
+					std::cout << "[Error - Monsters::loadMonster] Invalid summon chance " << chance << ". " << file << std::endl;
+					return false;
+				}
 			}
 
 			if ((attr = summonNode.attribute("name"))) {
