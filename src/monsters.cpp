@@ -725,8 +725,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 	if ((attr = monsterNode.attribute("nameDescription"))) {
 		mType.nameDescription = attr.as_string();
 	} else {
-		mType.nameDescription = "a " + mType.name;
-		toLowerCaseString(mType.nameDescription);
+		mType.nameDescription = "a " + asLowerCaseString(mType.name);
 	}
 
 	if ((attr = monsterNode.attribute("race"))) {
@@ -913,7 +912,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			if (deserializeSpell(attackNode, sb, monsterName)) {
 				mType.attackSpells.emplace_back(std::move(sb));
 			} else {
-				std::cout << "[Warning - Monsters::loadMonster] Cant load spell. " << file << std::endl;
+				std::cout << "[Warning - Monsters::loadMonster] Can not load spell. " << file << std::endl;
 			}
 		}
 	}
@@ -932,7 +931,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			if (deserializeSpell(defenseNode, sb, monsterName)) {
 				mType.defenseSpells.emplace_back(std::move(sb));
 			} else {
-				std::cout << "[Warning - Monsters::loadMonster] Cant load spell. " << file << std::endl;
+				std::cout << "[Warning - Monsters::loadMonster] Can not load spell. " << file << std::endl;
 			}
 		}
 	}
