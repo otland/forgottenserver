@@ -179,8 +179,8 @@ end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition)
 	if toPosition.x == CONTAINER_POSITION then
-		local cid = toPosition.y - 64 -- container id
-		local container = self:getContainerById(cid)		
+		local containerId = toPosition.y - 64
+		local container = self:getContainerById(containerId)		
 		if not container then
 			return true 
 		end

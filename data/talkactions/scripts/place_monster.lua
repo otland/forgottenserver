@@ -13,6 +13,7 @@ function onSay(player, words, param)
 		if monster:getType():isRewardBoss() then
 			monster:setReward(true)
 		end
+		
 		monster:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 		position:sendMagicEffect(CONST_ME_MAGIC_RED)
 	else

@@ -15,6 +15,7 @@ local function insertItems(buffer, info, parent, items)
 		if _ ~= 1 or parent > 100 then
 			table.insert(buffer, ",")
 		end
+
 		info.running = info.running + 1
 		table.insert(buffer, "(")        
 		pushSeparated(buffer, ",", info.playerGuid, parent, info.running, item:getId(), item:getSubType(), db.escapeBlob(item:serializeAttributes()))
@@ -40,7 +41,7 @@ local function insertRewardItems(playerGuid, timestamp, itemList)
 		function(query)
 			local lastReward = 0
 			local lastStoreId   
-			if(query) then             
+			if query then             
 				repeat
 					local sid = result.getDataInt(query, 'sid')
 					local pid = result.getDataInt(query, 'pid')
@@ -62,9 +63,10 @@ local function insertRewardItems(playerGuid, timestamp, itemList)
 
 			local bag = Game.createItem(ITEM_REWARD_CONTAINER)
 			bag:setAttribute(ITEM_ATTRIBUTE_DATE, timestamp)
+
 			if itemList then
-				for _, p in ipairs(itemList) do
-					bag:addItem(p[1], p[2])
+				for _, item in ipairs(itemList) do
+					bag:addItem(item[1], item[2])
 				end
 			end
 
@@ -184,6 +186,7 @@ function onThink(creature, interval)
 	for _, player in pairs(info) do
 		player.active = false
 	end
+	
 	-- Set all players in boss' target list as active in the fight
 	local targets = creature:getTargetList()
 	for _, target in ipairs(targets) do
