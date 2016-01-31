@@ -7646,14 +7646,15 @@ int LuaScriptInterface::luaPlayerRemoveReward(lua_State* L)
 
 int LuaScriptInterface::luaPlayerGetRewardList(lua_State* L)
 {
-	// player:getRewardList(rewardId)
+	// player:getRewardList()
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	auto rewardVec = player->getRewardList();
+	std::vector<uint32_t> rewardVec;
+	player->getRewardList(rewardVec);
 	lua_createtable(L, rewardVec.size(), 0);
 
 	int index = 0;

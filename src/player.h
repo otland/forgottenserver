@@ -515,7 +515,7 @@ class Player final : public Creature, public Cylinder
 
 		Reward* getReward(uint32_t rewardId, bool autoCreate);
 		void removeReward(uint32_t rewardId);
-		std::vector<uint32_t> getRewardList();
+		void getRewardList(std::vector<uint32_t>& rewards);
 		RewardChest* getRewardChest();
 
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);

@@ -826,7 +826,6 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 	}
 
-	auto rewardList = player->getRewardList();
 	//save reward items
 	query.str(std::string());
 	query << "DELETE FROM `player_rewards` WHERE `player_id` = " << player->getGUID();
@@ -834,6 +833,9 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!db->executeQuery(query.str())) {
 		return false;
 	}
+
+	std::vector<uint32_t> rewardList;
+	player->getRewardList(rewardList);
 
 	if (!rewardList.empty()) {
 		DBInsert rewardQuery("INSERT INTO `player_rewards` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
