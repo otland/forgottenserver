@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Acolyte of the Cult" nameDescription="an acolyte of the cult" race="blood" experience="300" speed="230" manacost="0">
+	<health now="390" max="390"/>
+	<look type="194" head="114" body="121" legs="121" feet="57" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="5"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50" poison="150"/>
+		<attack name="lifedrain" interval="3000" chance="17" range="7" radius="1" target="1" min="-10" max="-100">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="poison" interval="2000" chance="17" range="7" radius="1" target="1" min="-50" max="-185">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="drunk" interval="1000" chance="15" range="7" radius="1" target="1">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="20">
+		<defense name="healing" interval="1000" chance="25" min="30" max="50">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="20"/>
+		<element earthPercent="10"/>
+		<element icePercent="10"/>
+		<element physicalPercent="-10"/>
+		<element energyPercent="-10"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Skeleton" interval="2000" chance="10000"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Praise voodoo!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="40" chance="20000"/><!-- gold coin -->
+		<item id="2394" chance="6000"/><!-- morning star -->
+		<item id="5810" chance="850"/><!-- pirate voodoo doll -->
+		<item id="2201" chance="900"/><!-- dragon necklace -->
+		<item id="1962" chance="1000"/><!-- orange book -->
+		<item id="1987" chance="100000"><!-- bag -->
+					
+				<item id="6087" chance="600"/><!-- music sheet 2nd verse -->
+				<item id="2168" chance="500"/><!-- life ring -->
+				<item id="2149"  chance="750"/><!-- small emerald -->
+				<item id="2181" chance="400"/><!-- terra rod -->
+				<item id="2652" chance="400"/><!-- green tunic -->		
+				<item id="5801" chance="100"/><!-- key ring -->
+			
+		</item>
+	</loot>
+</monster>

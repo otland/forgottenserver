@@ -7,7 +7,7 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 	local hasSkull = isInArray({SKULL_RED, SKULL_BLACK}, player:getSkull())
 	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not hasSkull then
 		local isPlayer = false
-		if killer ~= nil then
+		if killer then
 			if killer:isPlayer() then
 				isPlayer = true
 			else

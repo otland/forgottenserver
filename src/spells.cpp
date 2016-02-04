@@ -931,6 +931,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 
 		if (hasParam) {
 			Player* playerTarget = nullptr;
+			ReturnValue ret = g_game.getPlayerByNameWildcard(param, playerTarget);
 
 			if (playerTarget && playerTarget->isAccessPlayer() && !player->isAccessPlayer()) {
 				playerTarget = nullptr;
@@ -938,6 +939,20 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 
 			target = playerTarget;
 			if (!target || target->getHealth() <= 0) {
+				if (!casterTargetOrDirection) {
+					if (cooldown > 0) {
+						if (aggressive) {
+							player->addCombatExhaust(cooldown);
+						} else {
+							player->addHealExhaust(cooldown);
+						}
+					}
+
+					player->sendCancelMessage(ret);
+					g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+					return false;
+				}
+
 				useDirection = true;
 			}
 
@@ -979,6 +994,21 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 
 		if (getHasPlayerNameParam()) {
 			Player* playerTarget = nullptr;
+			ReturnValue ret = g_game.getPlayerByNameWildcard(param, playerTarget);
+
+			if (ret != RETURNVALUE_NOERROR) {
+				if (cooldown > 0) {
+					if (aggressive) {
+						player->addCombatExhaust(cooldown);
+					} else {
+						player->addHealExhaust(cooldown);
+					}
+				}
+
+				player->sendCancelMessage(ret);
+				g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+				return false;
+			}
 
 			if (playerTarget && (!playerTarget->isAccessPlayer() || player->isAccessPlayer())) {
 				param = playerTarget->getName();

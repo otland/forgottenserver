@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Marid" nameDescription="a marid" race="blood" experience="410" speed="170" manacost="0">
+	<health now="550" max="550"/>
+	<look type="104" corpse="6033"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="30"/>
+		<attack name="fire" interval="1000" chance="50" range="7" min="-40" max="-110">
+			<attribute key="shootEffect" value="fire"/>
+		</attack>
+		<attack name="energy" interval="2000" chance="25" range="7" min="-65" max="-115">
+			<attribute key="shootEffect" value="energy"/>
+		</attack>
+		<attack name="lifedrain" interval="3000" chance="20" range="7" min="-60" max="-120">
+			<attribute key="shootEffect" value="suddendeath"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="13" range="7" speedchange="-650" duration="15000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="drunk" interval="1000" chance="20" range="7">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="energyarea"/>
+		</attack>
+		<attack name="outfit" interval="1000" chance="17" range="7" monster="rabbit" duration="20000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</attack>
+		<attack name="energycondition" interval="2000" chance="17" radius="3" target="0" min="-60" max="-100">
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+	</attacks>
+	<defenses armor="22" defense="15">
+		<defense name="healing" interval="1000" chance="15" min="50" max="80">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="90"/>
+		<element earthPercent="70"/>
+		<element energyPercent="60"/>
+		<element holyPercent="30"/>
+		<element icePercent="-20"/>
+		<element deathPercent="-15"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="blue djinn" interval="1000" chance="15" max="2"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Simsalabim"/>
+		<voice sentence="Feel the power of my magic, tiny mortal!"/>
+		<voice sentence="Wishes can come true."/>
+		<voice sentence="Djinns will soon again be the greatest!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="70" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="60" chance="40000"/><!-- gold coin -->
+		<item id="2677" countmax="25" chance="5000"/><!-- blueberry -->
+		<item id="7378" countmax="3" chance="3500"/><!-- royal spear -->
+		<item id="2442" chance="5000"/><!-- heavy machete -->
+		<item id="2063" chance="20000"/><!-- small oil lamp -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="1872" chance="1000"/><!-- blue tapestry -->
+		<item id="2146" countmax="4" chance="1000"/><!-- small sapphire -->
+		<item id="7589" chance="3500"/><!-- strong mana potion -->
+		<item id="5912" chance="5000"/><!-- blue piece of cloth -->
+		<item id="2374" chance="5000"/><!-- wooden flute -->
+		<item id="7732" chance="100"/><!-- seeds -->
+		<item id="2183" chance="900"/><!-- hailstorm rod -->
+		<item id="2663" chance="750"/><!-- mystic turban -->
+	 	<item id="7900" chance="100"/><!-- magma monocle -->
+		<item id="2158" chance="200"/><!-- blue gem -->
+			
+		</item>
+	</loot>
+</monster>

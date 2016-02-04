@@ -1,59 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dragon Lord Hatchling" nameDescription="a dragon lord hatchling" race="blood" experience="645" speed="190" manacost="0">
-	<health now="750" max="750" />
-	<look type="272" corpse="7622" />
-	<targetchange interval="4000" chance="10" />
+<monster name="Dragon Lord Hatchling" nameDescription="a dragon lord hatchling" race="blood" experience="645" speed="200" manacost="0">
+	<health now="750" max="750"/>
+	<look type="272" corpse="7622"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="70" defense="10"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="30" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="80"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="45" />
-		<attack name="fire" interval="2000" chance="10" length="5" spread="2" min="-90" max="-125">
-			<attribute key="areaEffect" value="firearea" />
+		<attack name="melee" interval="2000" skill="30" attack="45"/>
+		<attack name="fire" interval="1000" chance="12" length="8" spread="3" min="-40" max="-110">
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="fire" interval="2000" chance="15" range="7" radius="4" target="1" min="-55" max="-105">
-			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="firearea" />
+		<attack name="lifedrain" interval="1000" chance="14" length="8" spread="3" min="-60" max="-90">
+			<attribute key="areaEffect" value="poff"/>
 		</attack>
-		<attack name="firefield" interval="2000" chance="10" range="7" radius="3" target="1">
-			<attribute key="shootEffect" value="fire" />
+		<attack name="fire" interval="1000" chance="15" range="7" min="-40" max="-80">
+			<attribute key="shootEffect" value="fire"/>
+		</attack>
+		<attack name="fire" interval="1000" chance="17" range="7" radius="4" target="1" min="-80" max="-140">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="firefield" interval="1000" chance="15" range="7" radius="4" target="1">
+			<attribute key="shootEffect" value="fire"/>
 		</attack>
 	</attacks>
-	<defenses armor="20" defense="20">
-		<defense name="healing" interval="2000" chance="15" min="26" max="48">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="25" defense="38">
+		<defense name="healing" interval="1000" chance="13" min="26" max="48">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="10" />
-		<element icePercent="-10" />
-		<element energyPercent="-10" />
+		<element firePercent="100"/>
+		<element earthPercent="70"/>
+		<element icePercent="-10"/>
+		<element energyPercent="-5"/>
 	</elements>
 	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity fire="1" />
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Fchu?" />
-		<voice sentence="Rooawwrr" />
+	<voices interval="5000" chance="50">
+		<voice sentence="Fchu?" yell="0"/>
+		<voice sentence="Rooawwrr"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="33750" /><!-- gold coin -->
-		<item id="2148" countmax="75" chance="33750" /><!-- gold coin -->
-		<item id="2672" chance="80000" /><!-- dragon ham -->
-		<item id="7620" chance="300" /><!-- mana potion -->
-		<item id="2796" chance="560" /><!-- green mushroom -->
-		<item id="7891" chance="100" /><!-- magma boots -->
+		<item id="2148" countmax="90" chance="33750"/><!-- gold coin -->
+		<item id="2148" countmax="75" chance="33750"/><!-- gold coin -->
+		<item id="2672" chance="25000"/><!-- dragon ham -->
+		<item id="7620" chance="5000"/><!-- mana potion -->
+		<item id="2796" chance="1500"/><!-- green mushroom -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="7891" chance="200"/><!-- magma boots -->
+			
+		</item>
 	</loot>
 </monster>
