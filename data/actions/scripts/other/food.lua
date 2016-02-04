@@ -87,15 +87,6 @@ local foods = {
 	[12637] = {55, "Gulp."}, -- ectoplasmic sushi
 	[12638] = {18, "Yum."}, -- dragonfruit
 	[12639] = {2, "Munch."}, -- peas
-	[13297] = {20, "Crunch."}, -- haunch of boar
-	[15405] = {55, "Munch."}, -- sandfish
-	[15487] = {14, "Urgh."}, -- larvae
-	[15488] = {15, "Munch."}, -- deepling filet
-	[16014] = {60, "Mmmm."}, -- anniversary cake
-	[18397] = {33, "Munch."}, -- mushroom pie
-	[19737] = {10, "Urgh."}, -- insectoid eggs
-	[20100] = {15, "Smack."}, -- soft cheese
-	[20101] = {12, "Smack."} -- rat cheese
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Elephant" nameDescription="a elephant" race="blood" experience="160" speed="240" manacost="500">
+	<health now="320" max="320"/>
+	<look type="211" corpse="6052"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50"/>
+	</attacks>
+	<defenses armor="20" defense="16"/>
+	<elements>
+		<element physicalPercent="15"/>
+		<element icePercent="20"/>
+		<element firePercent="20"/>
+		<element energyPercent="-10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hooooot-Toooooot!"/>
+		<voice sentence="Tooooot."/>
+		<voice sentence="Troooooot!"/>
+	</voices>
+	<loot>
+		<item id="2671" countmax="4" chance="15000"/><!-- ham -->
+		<item id="2666" countmax="3" chance="30000"/><!-- meat -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="3956" countmax="2" chance="3500"/><!-- elephant tusk -->
+		<item id="3973" chance="200"/><!-- tusk shield -->
+			
+		</item>
+	</loot>
+</monster>

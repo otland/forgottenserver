@@ -735,7 +735,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 					TextMessage message(MESSAGE_STATUS_DEFAULT, "You were healed for " + healString);
 					player->sendTextMessage(message);
 
-					std::stringstream strHealthGain;
+					std::ostringstream strHealthGain;
 					strHealthGain << realHealthGain;
 					g_game.addAnimatedText(strHealthGain.str(), player->getPosition(), TEXTCOLOR_MAYABLUE);
 

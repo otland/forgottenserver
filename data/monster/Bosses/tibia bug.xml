@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Tibia Bug" namedescription="a Tibia Bug" race="venom" experience="50" speed="240" manacost="250">
+	<health now="270" max="270"/>
+	<look type="45" corpse="5990"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" skill="43" attack="20"/>
+		<attack name="energy" interval="1000" chance="13" length="4" spread="0" min="-5" max="-35">
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="15">
+		<defense name="invisible" interval="1000" chance="17" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity poison="0"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="1"/>
+		<immunity invisible="0"/>
+	</immunities>
+	<summons maxSummons="10">
+		<summon name="tibia bug" interval="1000" chance="15" max="10"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="My father was a year 2k bug."/>
+		<voice sentence="Psst, I'll make you rich."/>
+		<voice sentence="You are bugged ... by me!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="11" chance="100000"/><!-- gold coin -->
+		<item id="6570" chance="5538"/><!-- blue surprise bag -->
+		<item id="6571" chance="1538"/><!-- red surprise bag -->
+	</loot>
+</monster>

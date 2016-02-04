@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Massive Energy Elemental" nameDescription="a massive energy elemental" race="undead" experience="850" speed="300" manacost="0">
+	<health now="1100" max="1100"/>
+	<look type="290" corpse="1495"/>
+	<targetchange interval="20000" chance="15"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="85"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="65" attack="60"/>
+		<attack name="energy" interval="1000" chance="11" range="3" target="1" radius="2" min="-200" max="-400">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="90" max="150">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30"/>
+		<element holyPercent="15"/>
+		<element deathPercent="10"/>
+		<element deathPercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+			<loot>
+		<item id="2148" countmax="75" chance="85000"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="85000"/><!-- gold coin -->
+		<item id="2150" countmax="3" chance="1500"/><!-- small amethysts -->
+		<item id="7638" countmax="14" chance="3200"/><!-- flash arrow -->
+		<item id="9809" chance="2500"/><!-- rusty armor -->
+		<item id="7589" chance="10000"/><!-- strong mana potion -->
+		<item id="7590" chance="9000"/><!-- great mana potion -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="7889" chance="1250"/><!-- lightning pendant -->
+		<item id="8901" chance="800"/><!-- spellbook of warding -->
+		<item id="8920" chance="850"/><!-- wand of starstorm -->
+		<item id="7763" chance="900"/><!-- energy spike sword -->
+		<item id="7895" chance="300"/><!-- lightning legs -->
+			
+		</item>
+	</loot>
+</monster>

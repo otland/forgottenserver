@@ -753,7 +753,7 @@ Outfit_t LuaScriptInterface::getOutfit(lua_State* L, int32_t arg)
 	outfit.lookTypeEx = getField<uint16_t>(L, arg, "lookTypeEx");
 	outfit.lookType = getField<uint16_t>(L, arg, "lookType");
 
-	lua_pop(L, 8);
+	lua_pop(L, 7);
 	return outfit;
 }
 
@@ -880,7 +880,7 @@ void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, in
 
 void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit_t& outfit)
 {
-	lua_createtable(L, 0, 8);
+	lua_createtable(L, 0, 7);
 	setField(L, "lookType", outfit.lookType);
 	setField(L, "lookTypeEx", outfit.lookTypeEx);
 	setField(L, "lookHead", outfit.lookHead);
@@ -8260,21 +8260,8 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 
 int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
-	// player:sendTextMessage(type, text[, position, primaryValue = 0, primaryColor = TEXTCOLOR_NONE[, secondaryValue = 0, secondaryColor = TEXTCOLOR_NONE]])
-	int parameters = lua_gettop(L);
-
+	// player:sendTextMessage(type, text)
 	TextMessage message(getNumber<MessageClasses>(L, 2), getString(L, 3));
-	if (parameters >= 6) {
-		message.position = getPosition(L, 4);
-		message.primary.value = getNumber<int32_t>(L, 5);
-		message.primary.color = getNumber<TextColor_t>(L, 6);
-	}
-
-	if (parameters >= 8) {
-		message.secondary.value = getNumber<int32_t>(L, 7);
-		message.secondary.color = getNumber<TextColor_t>(L, 8);
-	}
-
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->sendTextMessage(message);

@@ -180,7 +180,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	} else if (tmpStr == "kill") {
 		type = CREATURE_EVENT_KILL;
 	} else if (tmpStr == "advance") {
-		m_type = CREATURE_EVENT_ADVANCE;
+		type = CREATURE_EVENT_ADVANCE;
 	} else if (tmpStr == "textedit") {
 		type = CREATURE_EVENT_TEXTEDIT;
 	} else if (tmpStr == "healthchange") {

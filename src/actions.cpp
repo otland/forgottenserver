@@ -292,10 +292,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			return RETURNVALUE_CANNOTUSETHISOBJECT;
 		}
 
-		if (bed->trySleep(player)) {
-			player->setBedItem(bed);
-		}
-
+		bed->sleep(player);
 		return RETURNVALUE_NOERROR;
 	}
 

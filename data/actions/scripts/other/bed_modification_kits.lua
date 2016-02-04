@@ -3,7 +3,6 @@ local beds = {
 	[7905] = {{7819, 7820}, {7821, 7822}}, -- yellow kit
 	[7906] = {{7815, 7816}, {7817, 7818}}, -- red kit
 	[7907] = {{1754, 1755}, {1760, 1761}}, -- removal kit
-	[20252] = {{20197, 20198}, {20199, 20200}} -- canopy kit
 }
 
 local function internalBedTransform(item, targetItem, toPosition, itemArray)
@@ -34,12 +33,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	for _, bed in pairs(beds) do
-		if bed[1][1] == targetItemId or isInArray({1758, 5502, 18027}, targetItemId) then
+		if bed[1][1] == targetItemId or isInArray({1758, 5502}, targetItemId) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.y = toPosition.y + 1
 			internalBedTransform(item, target, toPosition, newBed[1])
 			break
-		elseif bed[2][1] == targetItemId or isInArray({1756, 5500, 18029}, targetItemId) then
+		elseif bed[2][1] == targetItemId or isInArray({1756, 5500}, targetItemId) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.x = toPosition.x + 1
 			internalBedTransform(item, target, toPosition, newBed[2])

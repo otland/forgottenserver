@@ -1148,7 +1148,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	master->onGainExperience(gainExp, target);
 
 	std::ostringstream strExp;
-	strExp << ucfirst(getNameDescription()) + " gained " + std::to_string(gainExp) + (gainExp != 1 ? " experience points." : " experience point.");
+	strExp << gainExp;
 	g_game.addAnimatedText(strExp.str(), _position, TEXTCOLOR_WHITE_EXP);
 }
 

@@ -1,58 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Massive Fire Elemental" nameDescription="a massive fire elemental" race="fire" experience="1400" speed="210" manacost="0">
-	<health now="1200" max="1200" />
-	<look type="242" corpse="6324" />
-	<targetchange interval="4000" chance="10" />
+<monster name="Massive Fire Elemental" nameDescription="a massive fire elemental" race="fire" experience="950" speed="260" manacost="0">
+	<health now="1800" max="1800"/>
+	<look type="242" corpse="1492"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="75" />
-		<attack name="firefield" interval="2000" chance="10" range="7" target="0" radius="3">
-			<attribute key="shootEffect" value="fire" />
+		<attack name="melee" interval="2000" skill="40" attack="100" fire="200"/>
+		<attack name="firefield" interval="2000" chance="16" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="fire"/>
 		</attack>
-		<attack name="firefield" interval="2000" chance="10" target="1" range="7" radius="3">
-			<attribute key="shootEffect" value="fire" />
+		<attack name="fire" interval="1000" chance="13" length="7" spread="3" min="-200" max="-700"/>
+		<attack name="fire" interval="1000" chance="11" radius="3" target="0" min="-60" max="-250">
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="fire" interval="2000" chance="10" length="7" spread="0" min="-200" max="-700" />
-		<attack name="fire" interval="2000" chance="15" radius="3" target="0" min="-60" max="-250">
-			<attribute key="areaEffect" value="explosion" />
-		</attack>
-		<attack name="massive fire elemental soulfire" interval="2000" chance="15" />
 	</attacks>
-	<defenses armor="30" defense="30" />
+	<defenses armor="25" defense="25"/>
 	<elements>
-		<element icePercent="-15" />
-		<element physicalPercent="40" />
-		<element deathPercent="20" />
-		<element energyPercent="30" />
+		<element icePercent="-25"/>
 	</elements>
 	<immunities>
-		<immunity fire="1" />
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
+		<immunity fire="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
-	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="25000" /><!-- gold coin -->
-		<item id="2148" countmax="12" chance="25000" /><!-- gold coin -->
-		<item id="2172" countmax="1" chance="15000" /><!-- platinum coin -->
-		<item id="2147" countmax="2" chance="6100" /><!-- small ruby -->
-		<item id="9809" chance="1330" /><!-- rusty armor -->
-		<item id="2187" chance="2240" /><!-- wand of inferno -->
-		<item id="7890" chance="1300" /><!-- magma amulet -->
-		<item id="7891" chance="560" /><!-- magma boots -->
-		<item id="2392" chance="530" /><!-- fire sword -->
-		<item id="7894" chance="210" /><!-- magma legs -->
-	</loot>
 </monster>

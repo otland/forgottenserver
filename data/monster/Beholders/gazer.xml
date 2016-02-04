@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gazer" nameDescription="a gazer" race="venom" experience="90" speed="240" manacost="0">
+	<health now="120" max="120"/>
+	<look type="109" corpse="6036"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="15"/>
+		<attack name="lifedrain" interval="1000" chance="12" range="7" min="-25" max="-35">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="manadrain" interval="1000" chance="15" range="7" min="-5" max="-15">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="4" defense="15">
+		<defense name="speed" interval="1000" chance="10" speedchange="320" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="100"/>
+		<element icePercent="20"/>
+		<element energyPercent="10"/>
+		<element firePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Mommy!?"/>
+		<voice sentence="Buuuuhaaaahhaaaaa!"/>
+		<voice sentence="Me need mana!"/>
+	</voices>
+	<loot>
+	</loot>
+</monster>
