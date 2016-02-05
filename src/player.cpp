@@ -54,7 +54,7 @@ Player::Player(ProtocolGame_ptr p) :
 	isConnecting = false;
 
 	accountNumber = 0;
-	setVocation(0);
+	vocation = nullptr;
 	capacity = 40000;
 	mana = 0;
 	manaMax = 0;
@@ -135,7 +135,7 @@ Player::Player(ProtocolGame_ptr p) :
 	idleTime = 0;
 
 	skullTicks = 0;
-	setParty(nullptr);
+	party = nullptr;
 
 	bankBalance = 0;
 
@@ -153,6 +153,9 @@ Player::Player(ProtocolGame_ptr p) :
 	lastQuestlogUpdate = 0;
 
 	inventoryWeight = 0;
+	operatingSystem = CLIENTOS_NONE;
+	secureMode = false;
+	guid = 0;
 }
 
 Player::~Player()

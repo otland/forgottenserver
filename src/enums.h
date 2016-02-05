@@ -102,6 +102,8 @@ enum CreatureType_t : uint8_t {
 };
 
 enum OperatingSystem_t : uint8_t {
+	CLIENTOS_NONE = 0,
+
 	CLIENTOS_LINUX = 1,
 	CLIENTOS_WINDOWS = 2,
 	CLIENTOS_FLASH = 3,
@@ -137,7 +139,7 @@ enum RaceType_t : uint8_t {
 };
 
 enum CombatType_t {
-	COMBAT_NONE,
+	COMBAT_NONE = 0,
 
 	COMBAT_PHYSICALDAMAGE = 1 << 0,
 	COMBAT_ENERGYDAMAGE = 1 << 1,

@@ -245,6 +245,7 @@ class ItemType
 		RaceType_t corpseType;
 		FluidTypes_t fluidSource;
 
+		uint8_t floorChange;
 		uint8_t alwaysOnTopOrder;
 		uint8_t lightLevel;
 		uint8_t lightColor;
@@ -252,13 +253,6 @@ class ItemType
 		int8_t hitChance;
 
 		bool forceUse;
-		bool floorChangeDown;
-		bool floorChangeNorth;
-		bool floorChangeSouth;
-		bool floorChangeSouthAlt;
-		bool floorChangeEast;
-		bool floorChangeEastAlt;
-		bool floorChangeWest;
 		bool hasHeight;
 		bool walkStack;
 		bool blockSolid;

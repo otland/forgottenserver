@@ -405,7 +405,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 		return false;
 	}
 
-	if (!floorChange && (tile->floorChange() || tile->getTeleportItem())) {
+	if (!floorChange && (tile->hasFlag(TILESTATE_FLOORCHANGE) || tile->getTeleportItem())) {
 		return false;
 	}
 

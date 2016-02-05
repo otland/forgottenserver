@@ -23,11 +23,11 @@
 #include <lua.hpp>
 
 #if LUA_VERSION_NUM >= 502
-// NOTE: Define LUA_COMPAT_ALL as a workaround if this doesn't work
 #ifndef LUA_COMPAT_ALL
 #ifndef LUA_COMPAT_MODULE
 #define luaL_register(L, libname, l) (luaL_newlib(L, l), lua_pushvalue(L, -1), lua_setglobal(L, libname))
 #endif
+#undef lua_equal
 #define lua_equal(L, i1, i2) lua_compare(L, (i1), (i2), LUA_OPEQ)
 #endif
 #endif
@@ -95,6 +95,7 @@ struct LuaTimerEventDesc {
 };
 
 class LuaScriptInterface;
+class Cylinder;
 class Game;
 class Npc;
 
@@ -265,6 +266,7 @@ class LuaScriptInterface
 		static void pushVariant(lua_State* L, const LuaVariant& var);
 		static void pushString(lua_State* L, const std::string& value);
 		static void pushCallback(lua_State* L, int32_t callback);
+		static void pushCylinder(lua_State* L, Cylinder* cylinder);
 
 		static std::string popString(lua_State* L);
 		static int32_t popCallback(lua_State* L);
