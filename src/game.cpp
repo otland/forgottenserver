@@ -1434,7 +1434,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	MoneyMap moneyMap;
 	uint64_t moneyCount = 0;
 
-	for (int32_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
+	for (size_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
 		Thing* thing = cylinder->getThing(i);
 		if (!thing) {
 			continue;
@@ -1445,12 +1445,16 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			continue;
 		}
 
+		
 		Container* container = item->getContainer();
 		if (container) {
 			containers.push_back(container);
-		} else if (item->getWorth() != 0) {
-			moneyCount += item->getWorth();
-			moneyMap.insert(moneymap_pair(item->getWorth(), item));
+		} else {
+			int32_t worth = item->getWorth();
+			if (worth != 0) {
+				moneyCount += worth;
+				moneyMap.insert(moneymap_pair(worth, item));
+			}
 		}
 	}
 
@@ -1461,9 +1465,12 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			Container* tmpContainer = item->getContainer();
 			if (tmpContainer) {
 				containers.push_back(tmpContainer);
-			} else if (item->getWorth() != 0) {
-				moneyCount += item->getWorth();
-				moneyMap.insert(moneymap_pair(item->getWorth(), item));
+			} else {
+				int32_t worth = item->getWorth();
+				if (worth != 0) {
+					moneyCount += worth;
+					moneyMap.insert(moneymap_pair(worth, item));
+				}
 			}
 		}
 	}
