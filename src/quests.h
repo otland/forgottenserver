@@ -23,36 +23,17 @@
 #include "player.h"
 #include "networkmessage.h"
 
-class MissionState;
 class Mission;
 class Quest;
 
 typedef std::list<Mission> MissionsList;
 typedef std::list<Quest> QuestsList;
 
-class MissionState
-{
-	public:
-		MissionState() = default;
-		MissionState(std::string description, int32_t missionID) : description(description), missionID(missionID) {}
-
-		int32_t getMissionID() const {
-			return missionID;
-		}
-		std::string getMissionDescription() const {
-			return description;
-		}
-
-	private:
-		std::string description;
-		int32_t missionID;
-};
-
 class Mission
 {
 	public:
 		Mission(std::string name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue)
-			: mainState(nullptr), name(name), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {}
+			: name(name), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {}
 
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;
@@ -69,8 +50,8 @@ class Mission
 			return endValue;
 		}
 
-		std::map<int32_t, MissionState> state;
-		MissionState* mainState;
+		std::map<int32_t, std::string> descriptions;
+		std::string mainDescription;
 
 	private:
 		std::string name;

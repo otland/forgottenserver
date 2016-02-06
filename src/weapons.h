@@ -127,7 +127,7 @@ class Weapon : public Event
 		bool wieldUnproperly;
 
 	private:
-		void decrementItemCount(Item* item) const;
+		static void decrementItemCount(Item* item);
 
 		std::map<uint16_t, bool> vocWeaponMap;
 		friend class Combat;

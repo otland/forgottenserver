@@ -71,14 +71,8 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		void enableXTEAEncryption() {
 			m_encryptionEnabled = true;
 		}
-		void disableXTEAEncryption() {
-			m_encryptionEnabled = false;
-		}
 		void setXTEAKey(const uint32_t* key) {
 			memcpy(m_key, key, sizeof(*key) * 4);
-		}
-		void enableChecksum() {
-			m_checksumEnabled = true;
 		}
 		void disableChecksum() {
 			m_checksumEnabled = false;

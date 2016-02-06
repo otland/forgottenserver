@@ -439,13 +439,13 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	}
 
 	if (breakChance != 0 && uniform_random(1, 100) <= breakChance) {
-		decrementItemCount(item);
+		Weapon::decrementItemCount(item);
 		return;
 	}
 
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
-			decrementItemCount(item);
+			Weapon::decrementItemCount(item);
 			break;
 
 		case WEAPONACTION_REMOVECHARGE: {
@@ -499,7 +499,7 @@ bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 	return m_scriptInterface->callFunction(2);
 }
 
-void Weapon::decrementItemCount(Item* item) const
+void Weapon::decrementItemCount(Item* item)
 {
 	uint16_t count = item->getItemCount();
 	if (count > 1) {

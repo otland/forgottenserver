@@ -116,18 +116,9 @@ class ScriptEnvironment
 			m_interface = scriptInterface;
 		}
 		bool setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface);
-		void setEventDesc(std::string desc) {
-			m_eventdesc = desc;
-		}
 
-		std::string getEventDesc() const {
-			return m_eventdesc;
-		}
 		int32_t getScriptId() const {
 			return m_scriptId;
-		}
-		int32_t getCallbackId() const {
-			return m_callbackId;
 		}
 		LuaScriptInterface* getScriptInterface() {
 			return m_interface;
@@ -136,11 +127,8 @@ class ScriptEnvironment
 		void setTimerEvent() {
 			m_timerEvent = true;
 		}
-		void resetTimerEvent() {
-			m_timerEvent = false;
-		}
 
-		void getEventInfo(int32_t& scriptId, std::string& desc, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent) const;
+		void getEventInfo(int32_t& scriptId, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent) const;
 
 		void addTempItem(Item* item);
 		static void removeTempItem(Item* item);
@@ -173,8 +161,6 @@ class ScriptEnvironment
 		int32_t m_callbackId;
 		bool m_timerEvent;
 		LuaScriptInterface* m_interface;
-		//script event desc
-		std::string m_eventdesc;
 
 		//local item map
 		uint32_t m_lastUID;
