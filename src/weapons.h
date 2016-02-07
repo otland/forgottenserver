@@ -56,7 +56,7 @@ class Weapons final : public BaseEvents
 
 		std::map<uint32_t, Weapon*> weapons;
 
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 };
 
 class Weapon : public Event

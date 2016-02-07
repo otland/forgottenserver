@@ -31,9 +31,9 @@ extern ConfigManager g_config;
 extern Weapons* g_weapons;
 
 Weapons::Weapons():
-	m_scriptInterface("Weapon Interface")
+	scriptInterface("Weapon Interface")
 {
-	m_scriptInterface.initState();
+	scriptInterface.initState();
 }
 
 Weapons::~Weapons()
@@ -61,12 +61,12 @@ void Weapons::clear()
 	}
 	weapons.clear();
 
-	m_scriptInterface.reInitState();
+	scriptInterface.reInitState();
 }
 
 LuaScriptInterface& Weapons::getScriptInterface()
 {
-	return m_scriptInterface;
+	return scriptInterface;
 }
 
 std::string Weapons::getScriptBaseName() const
@@ -86,7 +86,7 @@ void Weapons::loadDefaults()
 			case WEAPON_AXE:
 			case WEAPON_SWORD:
 			case WEAPON_CLUB: {
-				WeaponMelee* weapon = new WeaponMelee(&m_scriptInterface);
+				WeaponMelee* weapon = new WeaponMelee(&scriptInterface);
 				weapon->configureWeapon(it);
 				weapons[i] = weapon;
 				break;
@@ -98,7 +98,7 @@ void Weapons::loadDefaults()
 					continue;
 				}
 
-				WeaponDistance* weapon = new WeaponDistance(&m_scriptInterface);
+				WeaponDistance* weapon = new WeaponDistance(&scriptInterface);
 				weapon->configureWeapon(it);
 				weapons[i] = weapon;
 				break;
@@ -113,11 +113,11 @@ void Weapons::loadDefaults()
 Event* Weapons::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
-		return new WeaponMelee(&m_scriptInterface);
+		return new WeaponMelee(&scriptInterface);
 	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
-		return new WeaponDistance(&m_scriptInterface);
+		return new WeaponDistance(&scriptInterface);
 	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
-		return new WeaponWand(&m_scriptInterface);
+		return new WeaponWand(&scriptInterface);
 	}
 	return nullptr;
 }
@@ -148,7 +148,7 @@ int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t
 Weapon::Weapon(LuaScriptInterface* _interface) :
 	Event(_interface)
 {
-	m_scripted = false;
+	scripted = false;
 	id = 0;
 	level = 0;
 	magLevel = 0;
@@ -380,7 +380,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 
 void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const
 {
-	if (m_scripted) {
+	if (scripted) {
 		LuaVariant var;
 		var.type = VARIANT_NUMBER;
 		var.number = target->getID();
@@ -405,7 +405,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 
 void Weapon::internalUseWeapon(Player* player, Item* item, Tile* tile) const
 {
-	if (m_scripted) {
+	if (scripted) {
 		LuaVariant var;
 		var.type = VARIANT_TARGETPOSITION;
 		var.pos = tile->getPosition();
@@ -481,22 +481,22 @@ uint32_t Weapon::getManaCost(const Player* player) const
 bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 {
 	//onUseWeapon(player, var)
-	if (!m_scriptInterface->reserveScriptEnv()) {
+	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - Weapon::executeUseWeapon] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
 
-	lua_State* L = m_scriptInterface->getLuaState();
+	lua_State* L = scriptInterface->getLuaState();
 
-	m_scriptInterface->pushFunction(m_scriptId);
+	scriptInterface->pushFunction(scriptId);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
-	m_scriptInterface->pushVariant(L, var);
+	scriptInterface->pushVariant(L, var);
 
-	return m_scriptInterface->callFunction(2);
+	return scriptInterface->callFunction(2);
 }
 
 void Weapon::decrementItemCount(Item* item)

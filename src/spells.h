@@ -68,7 +68,7 @@ class Spells final : public BaseEvents
 		std::map<std::string, InstantSpell*> instants;
 
 		friend class CombatSpell;
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 };
 
 typedef bool (InstantSpellFunction)(const InstantSpell* spell, Creature* creature, const std::string& param);

@@ -33,9 +33,9 @@ extern Actions* g_actions;
 extern ConfigManager g_config;
 
 Actions::Actions() :
-	m_scriptInterface("Action Interface")
+	scriptInterface("Action Interface")
 {
-	m_scriptInterface.initState();
+	scriptInterface.initState();
 }
 
 Actions::~Actions()
@@ -63,12 +63,12 @@ void Actions::clear()
 	clearMap(uniqueItemMap);
 	clearMap(actionItemMap);
 
-	m_scriptInterface.reInitState();
+	scriptInterface.reInitState();
 }
 
 LuaScriptInterface& Actions::getScriptInterface()
 {
-	return m_scriptInterface;
+	return scriptInterface;
 }
 
 std::string Actions::getScriptBaseName() const
@@ -81,7 +81,7 @@ Event* Actions::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "action") != 0) {
 		return nullptr;
 	}
-	return new Action(&m_scriptInterface);
+	return new Action(&scriptInterface);
 }
 
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
@@ -462,7 +462,7 @@ bool Action::loadFunction(const pugi::xml_attribute& attr)
 		return false;
 	}
 
-	m_scripted = false;
+	scripted = false;
 	return true;
 }
 
@@ -513,17 +513,17 @@ Thing* Action::getTarget(Player* player, Creature* targetCreature, const Positio
 bool Action::executeUse(Player* player, Item* item, const Position& fromPos, Thing* target, const Position& toPos, bool isHotkey)
 {
 	//onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if (!m_scriptInterface->reserveScriptEnv()) {
+	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - Action::executeUse] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
 
-	lua_State* L = m_scriptInterface->getLuaState();
+	lua_State* L = scriptInterface->getLuaState();
 
-	m_scriptInterface->pushFunction(m_scriptId);
+	scriptInterface->pushFunction(scriptId);
 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
@@ -535,5 +535,5 @@ bool Action::executeUse(Player* player, Item* item, const Position& fromPos, Thi
 	LuaScriptInterface::pushPosition(L, toPos);
 
 	LuaScriptInterface::pushBoolean(L, isHotkey);
-	return m_scriptInterface->callFunction(6);
+	return scriptInterface->callFunction(6);
 }

@@ -120,7 +120,7 @@ class Actions final : public BaseEvents
 		Action* getAction(const Item* item);
 		void clearMap(ActionUseMap& map);
 
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 };
 
 #endif

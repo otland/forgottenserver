@@ -104,7 +104,7 @@ class FileLoader
 		NODE getNextNode(const NODE prev, uint32_t& type);
 
 		FILELOADER_ERRORS getError() const {
-			return m_lastError;
+			return lastError;
 		}
 
 	protected:
@@ -130,19 +130,19 @@ class FileLoader
 		};
 
 #define CACHE_BLOCKS 3
-		_cache m_cached_data[CACHE_BLOCKS];
+		_cache cached_data[CACHE_BLOCKS];
 
-		uint8_t* m_buffer;
-		NODE m_root;
-		FILE* m_file;
+		uint8_t* buffer;
+		NODE root;
+		FILE* file;
 
-		FILELOADER_ERRORS m_lastError;
-		uint32_t m_buffer_size;
+		FILELOADER_ERRORS lastError;
+		uint32_t buffer_size;
 
-		uint32_t m_cache_size;
+		uint32_t cache_size;
 #define NO_VALID_CACHE 0xFFFFFFFF
-		uint32_t m_cache_index;
-		uint32_t m_cache_offset;
+		uint32_t cache_index;
+		uint32_t cache_offset;
 
 		inline uint32_t getCacheBlock(uint32_t pos);
 		int32_t loadCacheBlock(uint32_t pos);
