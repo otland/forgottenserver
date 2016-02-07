@@ -1086,7 +1086,7 @@ void NpcEventsHandler::onCreatureAppear(Creature* creature)
 
 	//onCreatureAppear(creature)
 	if (!m_scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - NpcScript::onCreature] Call stack overflow" << std::endl;
+		std::cout << "[Error - NpcScript::onCreatureAppear] Call stack overflow" << std::endl;
 		return;
 	}
 
