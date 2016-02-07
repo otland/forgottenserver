@@ -1,5 +1,5 @@
 /**
- * pugixml parser - version 1.6
+ * pugixml parser - version 1.7
  * --------------------------------------------------------
  * Copyright (C) 2006-2015, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
  * Report bugs and download new versions at http://pugixml.org/
@@ -13,7 +13,7 @@
 
 #ifndef PUGIXML_VERSION
 // Define version macro; evaluates to major * 100 + minor so that it's safe to use in less-than comparisons
-#	define PUGIXML_VERSION 160
+#	define PUGIXML_VERSION 170
 #endif
 
 // Include user configuration file (this can define various configuration macros)
@@ -60,7 +60,7 @@
 
 // If the platform is known to have long long support, enable long long functions
 #ifndef PUGIXML_HAS_LONG_LONG
-#	if defined(__cplusplus) && __cplusplus >= 201103
+#	if __cplusplus >= 201103
 #		define PUGIXML_HAS_LONG_LONG
 #	elif defined(_MSC_VER) && _MSC_VER >= 1400
 #		define PUGIXML_HAS_LONG_LONG
@@ -128,13 +128,13 @@ namespace pugi
 
 	// This flag determines if EOL characters are normalized (converted to #xA) during parsing. This flag is on by default.
 	const unsigned int parse_eol = 0x0020;
-
+	
 	// This flag determines if attribute values are normalized using CDATA normalization rules during parsing. This flag is on by default.
 	const unsigned int parse_wconv_attribute = 0x0040;
 
 	// This flag determines if attribute values are normalized using NMTOKENS normalization rules during parsing. This flag is off by default.
 	const unsigned int parse_wnorm_attribute = 0x0080;
-
+	
 	// This flag determines if document declaration (node_declaration) is added to the DOM tree. This flag is off by default.
 	const unsigned int parse_declaration = 0x0100;
 
@@ -179,16 +179,16 @@ namespace pugi
 	};
 
 	// Formatting flags
-
+	
 	// Indent the nodes that are written to output stream with as many indentation strings as deep the node is in DOM tree. This flag is on by default.
 	const unsigned int format_indent = 0x01;
-
+	
 	// Write encoding-specific BOM to the output stream. This flag is off by default.
 	const unsigned int format_write_bom = 0x02;
 
 	// Use raw output mode (no indentation and no line breaks are written). This flag is off by default.
 	const unsigned int format_raw = 0x04;
-
+	
 	// Omit default XML declaration even if there is no declaration in the document. This flag is off by default.
 	const unsigned int format_no_declaration = 0x08;
 
@@ -197,6 +197,9 @@ namespace pugi
 
 	// Open file using text mode in xml_document::save_file. This enables special character (i.e. new-line) conversions on some systems. This flag is off by default.
 	const unsigned int format_save_file_text = 0x20;
+
+	// Write every attribute on a new line with appropriate indentation. This flag is off by default.
+	const unsigned int format_indent_attributes = 0x40;
 
 	// The default set of formatting flags.
 	// Nodes are indented depending on their depth in DOM tree, a default declaration is output if document has none.
@@ -284,13 +287,13 @@ namespace pugi
 
 	private:
 		xml_attribute_struct* _attr;
-
+	
 		typedef void (*unspecified_bool_type)(xml_attribute***);
 
 	public:
 		// Default constructor. Constructs an empty attribute.
 		xml_attribute();
-
+		
 		// Constructs attribute from internal pointer
 		explicit xml_attribute(xml_attribute_struct* attr);
 
@@ -402,7 +405,7 @@ namespace pugi
 
 		// Borland C++ workaround
 		bool operator!() const;
-
+	
 		// Comparison operators (compares wrapped node pointers)
 		bool operator==(const xml_node& r) const;
 		bool operator!=(const xml_node& r) const;
@@ -423,7 +426,7 @@ namespace pugi
 		// Get node value, or "" if node is empty or it has no value
 		// Note: For <node>text</node> node.value() does not return "text"! Use child_value() or text() methods to access text inside nodes.
 		const char_t* value() const;
-
+	
 		// Get attribute list
 		xml_attribute first_attribute() const;
 		xml_attribute last_attribute() const;
@@ -435,7 +438,7 @@ namespace pugi
 		// Get next/previous sibling in the children list of the parent node
 		xml_node next_sibling() const;
 		xml_node previous_sibling() const;
-
+		
 		// Get parent node
 		xml_node parent() const;
 
@@ -451,6 +454,9 @@ namespace pugi
 		xml_node next_sibling(const char_t* name) const;
 		xml_node previous_sibling(const char_t* name) const;
 
+		// Get attribute, starting the search from a hint (and updating hint so that searching for a sequence of attributes is fast)
+		xml_attribute attribute(const char_t* name, xml_attribute& hint) const;
+
 		// Get child value of current node; that is, value of the first child node of type PCDATA/CDATA
 		const char_t* child_value() const;
 
@@ -460,7 +466,7 @@ namespace pugi
 		// Set node name/value (returns false if node is empty, there is not enough memory, or node can not have name/value)
 		bool set_name(const char_t* rhs);
 		bool set_value(const char_t* rhs);
-
+		
 		// Add attribute with specified name. Returns added attribute, or empty attribute on errors.
 		xml_attribute append_attribute(const char_t* name);
 		xml_attribute prepend_attribute(const char_t* name);
@@ -514,11 +520,11 @@ namespace pugi
 		template <typename Predicate> xml_attribute find_attribute(Predicate pred) const
 		{
 			if (!_root) return xml_attribute();
-
+			
 			for (xml_attribute attrib = first_attribute(); attrib; attrib = attrib.next_attribute())
 				if (pred(attrib))
 					return attrib;
-
+		
 			return xml_attribute();
 		}
 
@@ -526,11 +532,11 @@ namespace pugi
 		template <typename Predicate> xml_node find_child(Predicate pred) const
 		{
 			if (!_root) return xml_node();
-
+	
 			for (xml_node node = first_child(); node; node = node.next_sibling())
 				if (pred(node))
 					return node;
-
+		
 			return xml_node();
 		}
 
@@ -540,7 +546,7 @@ namespace pugi
 			if (!_root) return xml_node();
 
 			xml_node cur = first_child();
-
+			
 			while (cur._root && cur._root != _root)
 			{
 				if (pred(cur)) return cur;
@@ -572,7 +578,7 @@ namespace pugi
 
 		// Recursively traverse subtree with xml_tree_walker
 		bool traverse(xml_tree_walker& walker);
-
+		
 		// Print subtree using a writer object
 		void print(xml_writer& writer, const char_t* indent = PUGIXML_TEXT("\t"), unsigned int flags = format_default, xml_encoding encoding = encoding_auto, unsigned int depth = 0) const;
 
@@ -834,11 +840,11 @@ namespace pugi
 
 	private:
 		int _depth;
-
+	
 	protected:
 		// Get current traversal depth
 		int depth() const;
-
+	
 	public:
 		xml_tree_walker();
 		virtual ~xml_tree_walker();
@@ -909,10 +915,10 @@ namespace pugi
 		char_t* _buffer;
 
 		char _memory[192];
-
+		
 		// Non-copyable semantics
 		xml_document(const xml_document&);
-		const xml_document& operator=(const xml_document&);
+		xml_document& operator=(const xml_document&);
 
 		void create();
 		void destroy();
@@ -978,7 +984,7 @@ namespace pugi
 	// Convert wide string to UTF8
 	std::basic_string<char, std::char_traits<char>, std::allocator<char> > PUGIXML_FUNCTION as_utf8(const wchar_t* str);
 	std::basic_string<char, std::char_traits<char>, std::allocator<char> > PUGIXML_FUNCTION as_utf8(const std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >& str);
-
+	
 	// Convert UTF8 to wide string
 	std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > PUGIXML_FUNCTION as_wide(const char* str);
 	std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > PUGIXML_FUNCTION as_wide(const std::basic_string<char, std::char_traits<char>, std::allocator<char> >& str);
@@ -986,13 +992,13 @@ namespace pugi
 
 	// Memory allocation function interface; returns pointer to allocated memory or NULL on failure
 	typedef void* (*allocation_function)(size_t size);
-
+	
 	// Memory deallocation function interface
 	typedef void (*deallocation_function)(void* ptr);
 
 	// Override default memory management functions. All subsequent allocations/deallocations will be performed via supplied functions.
 	void PUGIXML_FUNCTION set_memory_management_functions(allocation_function allocate, deallocation_function deallocate);
-
+	
 	// Get current memory management functions
 	allocation_function PUGIXML_FUNCTION get_memory_allocation_function();
 	deallocation_function PUGIXML_FUNCTION get_memory_deallocation_function();
@@ -1041,7 +1047,7 @@ namespace std
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
