@@ -608,7 +608,7 @@ class Item : virtual public Thing
 			return items[id].hitChance;
 		}
 
-		int32_t getWorth() const;
+		uint32_t getWorth() const;
 		void getLight(LightInfo& lightInfo) const;
 
 		bool hasProperty(ITEMPROPERTY prop) const;

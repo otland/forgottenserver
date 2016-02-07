@@ -1521,7 +1521,7 @@ bool Item::canDecay() const
 	return true;
 }
 
-int32_t Item::getWorth() const
+uint32_t Item::getWorth() const
 {
 	switch (id) {
 		case ITEM_GOLD_COIN:
