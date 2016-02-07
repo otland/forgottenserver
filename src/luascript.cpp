@@ -102,10 +102,9 @@ bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* sc
 	return true;
 }
 
-void ScriptEnvironment::getEventInfo(int32_t& scriptId, std::string& desc, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent) const
+void ScriptEnvironment::getEventInfo(int32_t& scriptId, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent) const
 {
 	scriptId = m_scriptId;
-	desc = m_eventdesc;
 	scriptInterface = m_interface;
 	callbackId = m_callbackId;
 	timerEvent = m_timerEvent;
@@ -433,9 +432,8 @@ void LuaScriptInterface::reportError(const char* function, const std::string& er
 	int32_t scriptId;
 	int32_t callbackId;
 	bool timerEvent;
-	std::string event_desc;
 	LuaScriptInterface* scriptInterface;
-	getScriptEnv()->getEventInfo(scriptId, event_desc, scriptInterface, callbackId, timerEvent);
+	getScriptEnv()->getEventInfo(scriptId, scriptInterface, callbackId, timerEvent);
 
 	std::cout << std::endl << "Lua Script Error: ";
 
@@ -451,10 +449,6 @@ void LuaScriptInterface::reportError(const char* function, const std::string& er
 		}
 
 		std::cout << scriptInterface->getFileById(scriptId) << std::endl;
-	}
-
-	if (!event_desc.empty()) {
-		std::cout << "Event: " << event_desc << std::endl;
 	}
 
 	if (function) {

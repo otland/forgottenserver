@@ -132,10 +132,6 @@ class NetworkMessage
 			return position;
 		}
 
-		void setBufferPosition(MsgSize_t pos) {
-			position = pos;
-		}
-
 		int32_t decodeHeader();
 
 		bool isOverrun() const {

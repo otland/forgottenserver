@@ -59,7 +59,7 @@ class ChatChannel
 		const UsersMap& getUsers() const {
 			return users;
 		}
-		virtual const InvitedMap* getInvitedUsersPtr() const {
+		virtual const InvitedMap* getInvitedUsers() const {
 			return nullptr;
 		}
 
@@ -111,11 +111,7 @@ class PrivateChatChannel final : public ChatChannel
 
 		void closeChannel() const;
 
-		const InvitedMap& getInvitedUsers() const {
-			return invites;
-		}
-
-		const InvitedMap* getInvitedUsersPtr() const final {
+		const InvitedMap* getInvitedUsers() const final {
 			return &invites;
 		}
 
