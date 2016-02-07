@@ -30,6 +30,7 @@
 extern Game g_game;
 
 ConfigManager::ConfigManager()
+	: integer(), boolean()
 {
 	loaded = false;
 }

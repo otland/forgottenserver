@@ -1205,7 +1205,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << ')';
 		}
 	} else if (it.isContainer() || (item && item->getContainer())) {
-		int volume = 0;
+		uint32_t volume = 0;
 		if (!item || !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 			if (it.isContainer()) {
 				volume = it.maxItems;

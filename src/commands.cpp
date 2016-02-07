@@ -65,19 +65,9 @@ s_defcommands Commands::defined_commands[] = {
 
 Commands::Commands()
 {
-	loaded = false;
-
-	//setup command map
+	// set up command map
 	for (uint32_t i = 0; i < sizeof(defined_commands) / sizeof(defined_commands[0]); i++) {
-		Command* cmd = new Command;
-		cmd->loadedGroupId = false;
-		cmd->loadedAccountType = false;
-		cmd->loadedLogging = false;
-		cmd->logged = true;
-		cmd->groupId = 1;
-		cmd->f = defined_commands[i].f;
-		std::string key = defined_commands[i].name;
-		commandMap[key] = cmd;
+		commandMap[defined_commands[i].name] = new Command(defined_commands[i].f, 1, ACCOUNT_TYPE_GOD, true);
 	}
 }
 
@@ -97,8 +87,6 @@ bool Commands::loadFromXml()
 		return false;
 	}
 
-	loaded = true;
-
 	for (auto commandNode : doc.child("commands").children()) {
 		pugi::xml_attribute cmdAttribute = commandNode.attribute("cmd");
 		if (!cmdAttribute) {
@@ -116,66 +104,36 @@ bool Commands::loadFromXml()
 
 		pugi::xml_attribute groupAttribute = commandNode.attribute("group");
 		if (groupAttribute) {
-			if (!command->loadedGroupId) {
-				command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
-				command->loadedGroupId = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
-			}
+			command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
+		} else {
+			std::cout << "[Warning - Commands::loadFromXml] Missing group for command " << it->first << std::endl;
 		}
 
 		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
 		if (acctypeAttribute) {
-			if (!command->loadedAccountType) {
-				command->accountType = static_cast<AccountType_t>(pugi::cast<uint32_t>(acctypeAttribute.value()));
-				command->loadedAccountType = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
-			}
+			command->accountType = static_cast<AccountType_t>(pugi::cast<uint32_t>(acctypeAttribute.value()));
+		} else {
+			std::cout << "[Warning - Commands::loadFromXml] Missing acctype for command " << it->first << std::endl;
 		}
 
 		pugi::xml_attribute logAttribute = commandNode.attribute("log");
 		if (logAttribute) {
-			if (!command->loadedLogging) {
-				command->logged = booleanString(logAttribute.as_string());
-				command->loadedLogging = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate log tag for: " << it->first << std::endl;
-			}
+			command->log = booleanString(logAttribute.as_string());
+		} else {
+			std::cout << "[Warning - Commands::loadFromXml] Missing log for command " << it->first << std::endl;
 		}
+		g_game.addCommandTag(it->first.front());
 	}
-
-	for (const auto& it : commandMap) {
-		Command* command = it.second;
-		if (!command->loadedGroupId) {
-			std::cout << "[Warning - Commands::loadFromXml] Missing group id for command " << it.first << std::endl;
-		}
-
-		if (!command->loadedAccountType) {
-			std::cout << "[Warning - Commands::loadFromXml] Missing acctype level for command " << it.first << std::endl;
-		}
-
-		if (!command->loadedLogging) {
-			std::cout << "[Warning - Commands::loadFromXml] Missing log command " << it.first << std::endl;
-		}
-
-		g_game.addCommandTag(it.first.front());
-	}
-	return loaded;
+	return true;
 }
 
 bool Commands::reload()
 {
-	loaded = false;
-
 	for (const auto& it : commandMap) {
 		Command* command = it.second;
 		command->groupId = 1;
 		command->accountType = ACCOUNT_TYPE_GOD;
-		command->loadedGroupId = false;
-		command->loadedAccountType = false;
-		command->logged = true;
-		command->loadedLogging = false;
+		command->log = true;
 	}
 
 	g_game.resetCommandTag();
@@ -214,7 +172,7 @@ bool Commands::exeCommand(Player& player, const std::string& cmd)
 	CommandFunc cfunc = command->f;
 	(this->*cfunc)(player, str_param);
 
-	if (command->logged) {
+	if (command->log) {
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_RED, cmd);
 
 		std::ostringstream logFile;
