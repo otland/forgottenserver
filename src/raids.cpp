@@ -585,15 +585,15 @@ std::string ScriptEvent::getScriptEventName() const
 bool ScriptEvent::executeEvent()
 {
 	//onRaid()
-	if (!m_scriptInterface->reserveScriptEnv()) {
+	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - ScriptEvent::onRaid] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
 
-	m_scriptInterface->pushFunction(m_scriptId);
+	scriptInterface->pushFunction(scriptId);
 
-	return m_scriptInterface->callFunction(0);
+	return scriptInterface->callFunction(0);
 }

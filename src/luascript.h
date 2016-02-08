@@ -112,20 +112,20 @@ class ScriptEnvironment
 		void resetEnv();
 
 		void setScriptId(int32_t scriptId, LuaScriptInterface* scriptInterface) {
-			m_scriptId = scriptId;
-			m_interface = scriptInterface;
+			this->scriptId = scriptId;
+			interface = scriptInterface;
 		}
 		bool setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface);
 
 		int32_t getScriptId() const {
-			return m_scriptId;
+			return scriptId;
 		}
 		LuaScriptInterface* getScriptInterface() {
-			return m_interface;
+			return interface;
 		}
 
 		void setTimerEvent() {
-			m_timerEvent = true;
+			timerEvent = true;
 		}
 
 		void getEventInfo(int32_t& scriptId, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent) const;
@@ -140,10 +140,10 @@ class ScriptEnvironment
 		static bool removeResult(uint32_t id);
 
 		void setNpc(Npc* npc) {
-			m_curNpc = npc;
+			curNpc = npc;
 		}
 		Npc* getNpc() const {
-			return m_curNpc;
+			return curNpc;
 		}
 
 		Thing* getThingByUID(uint32_t uid);
@@ -157,24 +157,24 @@ class ScriptEnvironment
 		typedef std::map<uint32_t, DBResult_ptr> DBResultMap;
 
 		//script file id
-		int32_t m_scriptId;
-		int32_t m_callbackId;
-		bool m_timerEvent;
-		LuaScriptInterface* m_interface;
+		int32_t scriptId;
+		int32_t callbackId;
+		bool timerEvent;
+		LuaScriptInterface* interface;
 
 		//local item map
-		uint32_t m_lastUID;
+		uint32_t lastUID;
 		std::unordered_map<uint32_t, Item*> localMap;
 
 		//temporary item list
 		static std::multimap<ScriptEnvironment*, Item*> tempItems;
 
 		//result map
-		static uint32_t m_lastResultId;
-		static DBResultMap m_tempResults;
+		static uint32_t lastResultId;
+		static DBResultMap tempResults;
 
 		//for npc scripts
-		Npc* m_curNpc;
+		Npc* curNpc;
 };
 
 #define reportErrorFunc(a)  reportError(__FUNCTION__, a, true)
@@ -215,30 +215,30 @@ class LuaScriptInterface
 		int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
-			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 16);
-			return m_scriptEnv + m_scriptEnvIndex;
+			assert(scriptEnvIndex >= 0 && scriptEnvIndex < 16);
+			return scriptEnv + scriptEnvIndex;
 		}
 
 		static bool reserveScriptEnv() {
-			return ++m_scriptEnvIndex < 16;
+			return ++scriptEnvIndex < 16;
 		}
 
 		static void resetScriptEnv() {
-			assert(m_scriptEnvIndex >= 0);
-			m_scriptEnv[m_scriptEnvIndex--].resetEnv();
+			assert(scriptEnvIndex >= 0);
+			scriptEnv[scriptEnvIndex--].resetEnv();
 		}
 
 		static void reportError(const char* function, const std::string& error_desc, bool stack_trace = false);
 
 		const std::string& getInterfaceName() const {
-			return m_interfaceName;
+			return interfaceName;
 		}
 		const std::string& getLastLuaError() const {
-			return m_lastLuaError;
+			return lastLuaError;
 		}
 
 		lua_State* getLuaState() const {
-			return m_luaState;
+			return luaState;
 		}
 
 		bool pushFunction(int32_t functionId);
@@ -1240,20 +1240,20 @@ class LuaScriptInterface
 		static int luaPartySetSharedExperience(lua_State* L);
 
 		//
-		lua_State* m_luaState;
-		std::string m_lastLuaError;
+		lua_State* luaState;
+		std::string lastLuaError;
 
-		std::string m_interfaceName;
-		int32_t m_eventTableRef;
+		std::string interfaceName;
+		int32_t eventTableRef;
 
-		static ScriptEnvironment m_scriptEnv[16];
-		static int32_t m_scriptEnvIndex;
+		static ScriptEnvironment scriptEnv[16];
+		static int32_t scriptEnvIndex;
 
-		int32_t m_runningEventId;
-		std::string m_loadingFile;
+		int32_t runningEventId;
+		std::string loadingFile;
 
 		//script file cache
-		std::map<int32_t, std::string> m_cacheFiles;
+		std::map<int32_t, std::string> cacheFiles;
 };
 
 class LuaEnvironment : public LuaScriptInterface
@@ -1284,18 +1284,18 @@ class LuaEnvironment : public LuaScriptInterface
 		void executeTimerEvent(uint32_t eventIndex);
 
 		//
-		std::unordered_map<uint32_t, LuaTimerEventDesc> m_timerEvents;
-		std::unordered_map<uint32_t, Combat*> m_combatMap;
-		std::unordered_map<uint32_t, AreaCombat*> m_areaMap;
+		std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
+		std::unordered_map<uint32_t, Combat*> combatMap;
+		std::unordered_map<uint32_t, AreaCombat*> areaMap;
 
-		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_combatIdMap;
-		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> m_areaIdMap;
+		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> combatIdMap;
+		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> areaIdMap;
 
-		LuaScriptInterface* m_testInterface;
+		LuaScriptInterface* testInterface;
 
-		uint32_t m_lastEventTimerId;
-		uint32_t m_lastCombatId;
-		uint32_t m_lastAreaId;
+		uint32_t lastEventTimerId;
+		uint32_t lastCombatId;
+		uint32_t lastAreaId;
 
 		//
 		friend class LuaScriptInterface;

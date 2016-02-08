@@ -68,9 +68,9 @@ class CreatureEvents final : public BaseEvents
 
 		//creature events
 		typedef std::map<std::string, CreatureEvent*> CreatureEventList;
-		CreatureEventList m_creatureEvents;
+		CreatureEventList creatureEvents;
 
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 };
 
 class CreatureEvent final : public Event
@@ -81,13 +81,13 @@ class CreatureEvent final : public Event
 		bool configureEvent(const pugi::xml_node& node) final;
 
 		CreatureEventType_t getEventType() const {
-			return m_type;
+			return type;
 		}
 		const std::string& getName() const {
-			return m_eventName;
+			return eventName;
 		}
 		bool isLoaded() const {
-			return m_isLoaded;
+			return loaded;
 		}
 
 		void clearEvent();
@@ -111,9 +111,9 @@ class CreatureEvent final : public Event
 	protected:
 		std::string getScriptEventName() const final;
 
-		std::string m_eventName;
-		CreatureEventType_t m_type;
-		bool m_isLoaded;
+		std::string eventName;
+		CreatureEventType_t type;
+		bool loaded;
 };
 
 #endif

@@ -52,19 +52,18 @@ class Commands
 		static s_defcommands defined_commands[];
 
 		std::map<std::string, Command*> commandMap;
-		bool loaded;
 };
 
 typedef void (Commands::*CommandFunc)(Player&, const std::string&);
 
 struct Command {
+	Command(CommandFunc f, uint32_t groupId, AccountType_t accountType, bool log)
+		: f(f), groupId(groupId), accountType(accountType), log(log) {}
+
 	CommandFunc f;
 	uint32_t groupId;
 	AccountType_t accountType;
-	bool loadedGroupId;
-	bool loadedAccountType;
-	bool logged;
-	bool loadedLogging;
+	bool log;
 };
 
 struct s_defcommands {

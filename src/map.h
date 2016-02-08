@@ -104,7 +104,7 @@ class QTreeNode
 		QTreeNode& operator=(const QTreeNode&) = delete;
 
 		bool isLeaf() const {
-			return m_isLeaf;
+			return leaf;
 		}
 
 		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
@@ -113,23 +113,23 @@ class QTreeNode
 		inline static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y)
 		{
 			do {
-				node = node->m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
+				node = node->child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
 				if (!node) {
 					return nullptr;
 				}
 
 				x <<= 1;
 				y <<= 1;
-			} while (!node->m_isLeaf);
+			} while (!node->leaf);
 			return static_cast<Leaf>(node);
 		}
 
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:
-		QTreeNode* m_child[4];
+		QTreeNode* child[4];
 
-		bool m_isLeaf;
+		bool leaf;
 
 		friend class Map;
 };
@@ -146,7 +146,7 @@ class QTreeLeafNode final : public QTreeNode
 
 		Floor* createFloor(uint32_t z);
 		Floor* getFloor(uint8_t z) const {
-			return m_array[z];
+			return array[z];
 		}
 
 		void addCreature(Creature* c);
@@ -154,9 +154,9 @@ class QTreeLeafNode final : public QTreeNode
 
 	protected:
 		static bool newLeaf;
-		QTreeLeafNode* m_leafS;
-		QTreeLeafNode* m_leafE;
-		Floor* m_array[MAP_MAX_LAYERS];
+		QTreeLeafNode* leafS;
+		QTreeLeafNode* leafE;
+		Floor* array[MAP_MAX_LAYERS];
 		CreatureVector creature_list;
 		CreatureVector player_list;
 
