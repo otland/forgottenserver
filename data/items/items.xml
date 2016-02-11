@@ -2855,7 +2855,7 @@
 		<attribute key="type" value="rune" />
 		<attribute key="weight" value="120" />
 	</item>
-	<item id="2310" article="a" name="desintegrate rune">
+	<item id="2310" article="a" name="disintegrate rune">
 		<attribute key="type" value="rune" />
 		<attribute key="runeSpellName" value="adito tera" />
 		<attribute key="weight" value="70" />
