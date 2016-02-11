@@ -3501,6 +3501,10 @@ void Player::onAttackedCreature(Creature* target)
 {
 	Creature::onAttackedCreature(target);
 
+	if (target && target->getZone() == ZONE_PVP) {
+		return;
+	}
+	
 	if (target == this) {
 		addInFightTicks();
 		return;
