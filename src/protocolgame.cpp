@@ -2378,7 +2378,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		writeToOutputBuffer(msg);
 
 		if (isLogin) {
-			sendMagicEffect(pos, CONST_ME_TELEPORT);
+		    sendMagicEffect(pos, CONST_ME_TELEPORT);
 		}
 
 		return;
@@ -2414,7 +2414,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendMapDescription(pos);
 
 	if (isLogin) {
-		sendMagicEffect(pos, CONST_ME_TELEPORT);
+	    sendMagicEffect(pos, CONST_ME_TELEPORT);
 	}
 	
 	sendInventoryItem(CONST_SLOT_HEAD, player->getInventoryItem(CONST_SLOT_HEAD));
