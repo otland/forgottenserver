@@ -2826,7 +2826,14 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	}
 
 	msg.addByte(creatureType); // Type (for summons)
-	msg.addByte(creature->getSpeechBubble());
+
+	if (CREATURETYPE_NPC == creatureType) {
+		uint8_t bubble = creature->getSpeechBubble();
+		msg.addByte((bubble == 0) ? 1 : bubble);
+	} else {
+		msg.addByte(0);
+	}
+
 	msg.addByte(0xFF); // MARK_UNMARKED
 
 	if (otherPlayer) {
