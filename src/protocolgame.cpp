@@ -1442,16 +1442,27 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	uint32_t containerSize = container->size();
 	msg.add<uint16_t>(containerSize);
 	msg.add<uint16_t>(firstIndex);
-	if (firstIndex < containerSize) {
-		uint8_t itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), std::numeric_limits<uint8_t>::max());
 
-		msg.addByte(itemsToSend);
-		for (ItemDeque::const_iterator it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
+	uint32_t maxItemsToSend;
+
+	if (container->hasPagination() && firstIndex > 0) {
+		maxItemsToSend = std::min<uint32_t>(container->capacity(), containerSize - firstIndex);
+	} else {
+		maxItemsToSend = container->capacity();
+	}
+
+	if (firstIndex >= containerSize) {
+		msg.addByte(0x00);
+	} else {
+		msg.addByte(std::min<uint32_t>(maxItemsToSend, containerSize));
+
+		uint32_t i = 0;
+		const ItemDeque& itemList = container->getItemList();
+		for (ItemDeque::const_iterator it = itemList.begin() + firstIndex, end = itemList.end(); i < maxItemsToSend && it != end; ++it, ++i) {
 			msg.addItem(*it);
 		}
-	} else {
-		msg.addByte(0x00);
 	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -2351,22 +2362,21 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	if (creature != player) {
-		if (stackpos != -1) {
-			NetworkMessage msg;
-			msg.addByte(0x6A);
-			msg.addPosition(pos);
-			msg.addByte(stackpos);
-
-			bool known;
-			uint32_t removedKnown;
-			checkCreatureAsKnown(creature->getID(), known, removedKnown);
-			AddCreature(msg, creature, known, removedKnown);
-			writeToOutputBuffer(msg);
+		if (stackpos >= 10) {
+			return;
 		}
 
-		if (isLogin) {
-			sendMagicEffect(pos, CONST_ME_TELEPORT);
-		}
+		NetworkMessage msg;
+		msg.addByte(0x6A);
+		msg.addPosition(pos);
+		msg.addByte(stackpos);
+
+		bool known;
+		uint32_t removedKnown;
+		checkCreatureAsKnown(creature->getID(), known, removedKnown);
+		AddCreature(msg, creature, known, removedKnown);
+		writeToOutputBuffer(msg);
+
 		return;
 	}
 
@@ -2388,18 +2398,17 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	msg.addByte(0x00); // can change pvp framing option
-	msg.addByte(0x00); // expert mode button enabled
+	msg.addByte(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED ? 0x01 : 0x00);
+
+	msg.addString("http://static.tibia.com/images/store/");
+	msg.addByte(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND));
 
 	writeToOutputBuffer(msg);
 
 	sendPendingStateEntered();
 	sendEnterWorld();
 	sendMapDescription(pos);
-
-	if (isLogin) {
-		sendMagicEffect(pos, CONST_ME_TELEPORT);
-	}
-
+	
 	sendInventoryItem(CONST_SLOT_HEAD, player->getInventoryItem(CONST_SLOT_HEAD));
 	sendInventoryItem(CONST_SLOT_NECKLACE, player->getInventoryItem(CONST_SLOT_NECKLACE));
 	sendInventoryItem(CONST_SLOT_BACKPACK, player->getInventoryItem(CONST_SLOT_BACKPACK));
@@ -2817,7 +2826,14 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	}
 
 	msg.addByte(creatureType); // Type (for summons)
-	msg.addByte(creature->getSpeechBubble());
+
+	if (CREATURETYPE_NPC == creatureType) {
+		uint8_t bubble = creature->getSpeechBubble();
+		msg.addByte((bubble == 0) ? 1 : bubble);
+	} else {
+		msg.addByte(0);
+	}
+
 	msg.addByte(0xFF); // MARK_UNMARKED
 
 	if (otherPlayer) {
