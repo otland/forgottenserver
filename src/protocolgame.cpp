@@ -2402,7 +2402,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	msg.addByte(0x00); // can change pvp framing option
-	msg.addByte(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED ? 0x01 : 0x00);
+	msg.addByte(0x00); // expert mode button enabled
 
 	msg.addString("http://static.tibia.com/images/store/");
 	msg.addByte(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND));
