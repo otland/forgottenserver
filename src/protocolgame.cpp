@@ -2404,8 +2404,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
 
-	msg.addString("http://static.tibia.com/images/store/");
-	msg.addByte(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND));
+	msg.addString(g_config.getString(ConfigManager::COIN_IMAGES_URL));
+	msg.addByte(g_config.getNumber(ConfigManager::COIN_PACKET_SIZE));
 
 	writeToOutputBuffer(msg);
 
@@ -2416,7 +2416,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	if (isLogin) {
 	    sendMagicEffect(pos, CONST_ME_TELEPORT);
 	}
-	
+
 	sendInventoryItem(CONST_SLOT_HEAD, player->getInventoryItem(CONST_SLOT_HEAD));
 	sendInventoryItem(CONST_SLOT_NECKLACE, player->getInventoryItem(CONST_SLOT_NECKLACE));
 	sendInventoryItem(CONST_SLOT_BACKPACK, player->getInventoryItem(CONST_SLOT_BACKPACK));
