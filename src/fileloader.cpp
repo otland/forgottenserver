@@ -209,7 +209,7 @@ const uint8_t* FileLoader::getProps(const NODE node, size_t& size)
 	}
 
 	//get buffer
-	if (!readBytes(buffer, node->propsSize, node->start + 2)) {
+	if (!readBytes(node->propsSize, node->start + 2)) {
 		return nullptr;
 	}
 
@@ -297,10 +297,11 @@ inline bool FileLoader::readByte(int32_t& value)
 	return true;
 }
 
-inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
+inline bool FileLoader::readBytes(uint32_t size, int32_t pos)
 {
 	//seek at pos
-	uint32_t remain = size, bufferPos = 0;
+	uint32_t remain = size;
+	uint8_t* buf = this->buffer;
 	do {
 		//prepare cache
 		uint32_t i = getCacheBlock(pos);
@@ -316,11 +317,11 @@ inline bool FileLoader::readBytes(uint8_t* buffer, uint32_t size, int32_t pos)
 		remain -= reading;
 
 		//read it
-		memcpy(buffer + bufferPos, cached_data[cache_index].data + cache_offset, reading);
+		memcpy(buf, cached_data[cache_index].data + cache_offset, reading);
 
 		//update variables
 		cache_offset += reading;
-		bufferPos += reading;
+		buf += reading;
 		pos += reading;
 	} while (remain > 0);
 	return true;

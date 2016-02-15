@@ -97,7 +97,7 @@ bool Npc::load()
 		scriptInterface->loadNpcLib("data/npc/lib/npc.lua");
 	}
 
-	loaded = loadFromXml(filename);
+	loaded = loadFromXml();
 	return loaded;
 }
 
@@ -133,7 +133,7 @@ void Npc::reload()
 	}
 }
 
-bool Npc::loadFromXml(const std::string& filename)
+bool Npc::loadFromXml()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
@@ -1055,21 +1055,21 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc)
 	if (!loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
 		std::cout << scriptInterface->getLastLuaError() << std::endl;
-		creatureSay = -1;
-		creatureDisappear = -1;
-		creatureAppear = -1;
-		creatureMove = -1;
-		playerCloseChannel = -1;
-		playerEndTrade = -1;
-		think = -1;
+		creatureSayEvent = -1;
+		creatureDisappearEvent = -1;
+		creatureAppearEvent = -1;
+		creatureMoveEvent = -1;
+		playerCloseChannelEvent = -1;
+		playerEndTradeEvent = -1;
+		thinkEvent = -1;
 	} else {
-		creatureSay = scriptInterface->getEvent("onCreatureSay");
-		creatureDisappear = scriptInterface->getEvent("onCreatureDisappear");
-		creatureAppear = scriptInterface->getEvent("onCreatureAppear");
-		creatureMove = scriptInterface->getEvent("onCreatureMove");
-		playerCloseChannel = scriptInterface->getEvent("onPlayerCloseChannel");
-		playerEndTrade = scriptInterface->getEvent("onPlayerEndTrade");
-		think = scriptInterface->getEvent("onThink");
+		creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
+		creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
+		creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
+		creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
+		playerCloseChannelEvent = scriptInterface->getEvent("onPlayerCloseChannel");
+		playerEndTradeEvent = scriptInterface->getEvent("onPlayerEndTrade");
+		thinkEvent = scriptInterface->getEvent("onThink");
 	}
 }
 
@@ -1080,7 +1080,7 @@ bool NpcEventsHandler::isLoaded() const
 
 void NpcEventsHandler::onCreatureAppear(Creature* creature)
 {
-	if (creatureAppear == -1) {
+	if (creatureAppearEvent == -1) {
 		return;
 	}
 
@@ -1090,11 +1090,11 @@ void NpcEventsHandler::onCreatureAppear(Creature* creature)
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureAppear, scriptInterface);
+	env->setScriptId(creatureAppearEvent, scriptInterface);
 	env->setNpc(npc);
 
 	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureAppear);
+	scriptInterface->pushFunction(creatureAppearEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	scriptInterface->callFunction(1);
@@ -1102,7 +1102,7 @@ void NpcEventsHandler::onCreatureAppear(Creature* creature)
 
 void NpcEventsHandler::onCreatureDisappear(Creature* creature)
 {
-	if (creatureDisappear == -1) {
+	if (creatureDisappearEvent == -1) {
 		return;
 	}
 
@@ -1113,11 +1113,11 @@ void NpcEventsHandler::onCreatureDisappear(Creature* creature)
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureDisappear, scriptInterface);
+	env->setScriptId(creatureDisappearEvent, scriptInterface);
 	env->setNpc(npc);
 
 	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureDisappear);
+	scriptInterface->pushFunction(creatureDisappearEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	scriptInterface->callFunction(1);
@@ -1125,7 +1125,7 @@ void NpcEventsHandler::onCreatureDisappear(Creature* creature)
 
 void NpcEventsHandler::onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos)
 {
-	if (creatureMove == -1) {
+	if (creatureMoveEvent == -1) {
 		return;
 	}
 
@@ -1136,11 +1136,11 @@ void NpcEventsHandler::onCreatureMove(Creature* creature, const Position& oldPos
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureMove, scriptInterface);
+	env->setScriptId(creatureMoveEvent, scriptInterface);
 	env->setNpc(npc);
 
 	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureMove);
+	scriptInterface->pushFunction(creatureMoveEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushPosition(L, oldPos);
@@ -1150,7 +1150,7 @@ void NpcEventsHandler::onCreatureMove(Creature* creature, const Position& oldPos
 
 void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
-	if (creatureSay == -1) {
+	if (creatureSayEvent == -1) {
 		return;
 	}
 
@@ -1161,11 +1161,11 @@ void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, cons
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureSay, scriptInterface);
+	env->setScriptId(creatureSayEvent, scriptInterface);
 	env->setNpc(npc);
 
 	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureSay);
+	scriptInterface->pushFunction(creatureSayEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	lua_pushnumber(L, type);
@@ -1204,7 +1204,7 @@ void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t 
 
 void NpcEventsHandler::onPlayerCloseChannel(Player* player)
 {
-	if (playerCloseChannel == -1) {
+	if (playerCloseChannelEvent == -1) {
 		return;
 	}
 
@@ -1215,11 +1215,11 @@ void NpcEventsHandler::onPlayerCloseChannel(Player* player)
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(playerCloseChannel, scriptInterface);
+	env->setScriptId(playerCloseChannelEvent, scriptInterface);
 	env->setNpc(npc);
 
 	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(playerCloseChannel);
+	scriptInterface->pushFunction(playerCloseChannelEvent);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 	scriptInterface->callFunction(1);
@@ -1227,7 +1227,7 @@ void NpcEventsHandler::onPlayerCloseChannel(Player* player)
 
 void NpcEventsHandler::onPlayerEndTrade(Player* player)
 {
-	if (playerEndTrade == -1) {
+	if (playerEndTradeEvent == -1) {
 		return;
 	}
 
@@ -1238,11 +1238,11 @@ void NpcEventsHandler::onPlayerEndTrade(Player* player)
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(playerEndTrade, scriptInterface);
+	env->setScriptId(playerEndTradeEvent, scriptInterface);
 	env->setNpc(npc);
 
 	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(playerEndTrade);
+	scriptInterface->pushFunction(playerEndTradeEvent);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 	scriptInterface->callFunction(1);
@@ -1250,7 +1250,7 @@ void NpcEventsHandler::onPlayerEndTrade(Player* player)
 
 void NpcEventsHandler::onThink()
 {
-	if (think == -1) {
+	if (thinkEvent == -1) {
 		return;
 	}
 
@@ -1261,9 +1261,9 @@ void NpcEventsHandler::onThink()
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(think, scriptInterface);
+	env->setScriptId(thinkEvent, scriptInterface);
 	env->setNpc(npc);
 
-	scriptInterface->pushFunction(think);
+	scriptInterface->pushFunction(thinkEvent);
 	scriptInterface->callFunction(0);
 }

@@ -117,7 +117,7 @@ class FileLoader
 		bool parseNode(NODE node);
 
 		inline bool readByte(int32_t& value);
-		inline bool readBytes(uint8_t* buffer, uint32_t size, int32_t pos);
+		inline bool readBytes(uint32_t size, int32_t pos);
 		inline bool safeSeek(uint32_t pos);
 		inline bool safeTell(int32_t& pos);
 

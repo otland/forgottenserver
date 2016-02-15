@@ -91,13 +91,13 @@ class NpcEventsHandler
 		Npc* npc;
 		NpcScriptInterface* scriptInterface;
 
-		int32_t creatureAppear;
-		int32_t creatureDisappear;
-		int32_t creatureMove;
-		int32_t creatureSay;
-		int32_t playerCloseChannel;
-		int32_t playerEndTrade;
-		int32_t think;
+		int32_t creatureAppearEvent;
+		int32_t creatureDisappearEvent;
+		int32_t creatureMoveEvent;
+		int32_t creatureSayEvent;
+		int32_t playerCloseChannelEvent;
+		int32_t playerEndTradeEvent;
+		int32_t thinkEvent;
 		bool loaded;
 };
 
@@ -212,7 +212,7 @@ class Npc final : public Creature
 		bool getRandomStep(Direction& dir) const;
 
 		void reset();
-		bool loadFromXml(const std::string& name);
+		bool loadFromXml();
 
 		void addShopPlayer(Player* player);
 		void removeShopPlayer(Player* player);
