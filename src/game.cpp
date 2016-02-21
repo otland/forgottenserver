@@ -3872,7 +3872,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 	} else {
 		if (!target->isAttackable()) {
 			if (!target->isInGhostMode()) {
-				addMagicEffect(targetPos, CONST_ME_POFF);
+				addMagicEffect(targetPos, CONST_ME_BLOCKHIT);
 			}
 			return true;
 		}
