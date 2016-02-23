@@ -17,13 +17,13 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="80" poison="100" />
+		<attack name="melee" interval="2000" min="0" max="-200" poison="5" />
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-25" max="-47">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
 		<attack name="earth" interval="2000" chance="15" range="7" min="-50" max="-90">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
-		</attack>
-		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-25" max="-47">
-			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 		<attack name="poisoncondition" interval="2000" chance="10" radius="3" target="0" min="-50" max="-60">
 			<attribute key="areaEffect" value="poison" />
@@ -31,10 +31,10 @@
 		<attack name="poisoncondition" interval="2000" chance="10" length="6" spread="0" target="0" min="-70" max="-80">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
-		<attack name="speed" interval="2000" chance="15" target="1" speedchange="-600" duration="13000" />
+		<attack name="speed" interval="2000" chance="15" target="1" speedchange="-200" duration="13000" />
 	</attacks>
 	<defenses armor="30" defense="30">
-		<defense name="healing" interval="2000" chance="15" min="50" max="60">
+		<defense name="healing" interval="4000" chance="15" min="50" max="60">
 			<attribute key="areaEffect" value="greenspark" />
 		</defense>
 	</defenses>
@@ -49,24 +49,22 @@
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
-		<immunity drunk="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Cccchhhhhhhhh!" />
 		<voice sentence="Knooorrrrr!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="14000" /><!-- gold coin -->
-		<item id="2148" countmax="40" chance="16000" /><!-- gold coin -->
-		<item id="5925" chance="960" /><!-- hardened bone -->
-		<item id="2230" chance="47750" /><!-- bone -->
-		<item id="2449" chance="4950" /><!-- bone club -->
-		<item id="2541" chance="2000" /><!-- bone shield -->
-		<item id="2796" chance="1350" /><!-- green mushroom -->
-		<item id="2463" chance="8000" /><!-- plate armor -->
-		<item id="7618" chance="540" /><!-- health potion -->
-		<item id="2229" chance="20000" /><!-- skull -->
-		<item id="11194" chance="9780" /><!-- bony tail -->
-		<item id="11161" chance="120" /><!-- bonebeast trophy -->
+		<item id="2230" chance="49750" />				<!-- bone -->
+		<item id="2148" countmax="90" chance="30000" />	<!-- gold coin -->
+		<item id="2229" chance="20000" />				<!-- skull -->
+		<item id="11194" chance="9780" />				<!-- bony tail -->
+		<item id="2463" chance="8000" />					<!-- plate armor -->
+		<item id="2449" chance="4950" />					<!-- bone club -->
+		<item id="2541" chance="2000" />					<!-- bone shield -->
+		<item id="2796" chance="1400" />					<!-- green mushroom -->
+		<item id="5925" chance="960" />					<!-- hardened bone -->
+		<item id="7618" chance="540" />					<!-- health potion -->
+		<item id="11161" chance="120" />					<!-- bonebeast trophy -->
 	</loot>
 </monster>

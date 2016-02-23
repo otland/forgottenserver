@@ -1,0 +1,39 @@
+---------------------------------------------------------------------------
+-- this file lists current spells/features that monsters are missing --
+---------------------------------------------------------------------------
+Incredibly Old Witch:
+	- need to be attackable
+	- if tamed while in donkey form it should disapear and respawn after 10 minutes
+
+Infernalist:
+	- missing its skill reducer spell
+
+Energized Raging Mage:
+	- missing its skill reducer spell
+
+Raging Mage
+	- missing sound when he dies
+
+Dreadbeast
+	- missing its skill increaser spell
+
+Ethershreck
+	- missing all attack values
+
+Inky
+	- missing freezing condition
+
+Dipthrah
+	- missing divine caldera that halves all skills
+
+Morik The Gladiator
+	- missing party buff spell
+
+Gnorre Chyllson
+	- missing all drown attacks
+
+Minotaur Amazon
+	- missing bleedingcondition
+
+Noble Lion
+	- missing bleedingcondition

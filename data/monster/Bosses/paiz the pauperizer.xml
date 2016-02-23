@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Paiz The Pauperizer" nameDescription="Paiz The Pauperizer" race="blood" experience="6300" speed="280" manacost="0">
+	<health now="8500" max="8500" />
+	<look type="362" corpse="12609" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="fire" interval="2000" chance="10" length="5" spread="3" min="-240" max="-550">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="12" range="7" min="-200" max="-350">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="12" target="1" radius="4" range="4" min="-280" max="-450">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="soulfire" interval="2000" chance="10" />
+		<attack name="poisoncondition" interval="2000" chance="11" range="7" min="-20" max="-20">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="25" min="230" max="330">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="30" />
+		<element physicalPercent="10" />
+		<element deathPercent="30" />
+		<element energyPercent="40" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity invisibility="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Hizzzzzz!" />
+		<voice sentence="For ze emperor!" />
+		<voice sentence="You will die zhouzandz deazhz!" />
+	</voices>
+	<loot>
+		<item id="12616" chance="100000" />					<!-- broken draken mail -->
+		<item id="12617" chance="100000" />					<!-- broken slicer -->
+		<item id="12614" chance="100000" />					<!-- draken sulphur -->
+		<item id="12615" chance="100000" />					<!-- draken wristbands -->
+		<item id="2148" countmax="99" chance="100000" />		<!-- gold coin -->
+		<item id="5881" chance="100000" />					<!-- lizard scale -->
+		<item id="2666" countmax="5" chance="100000" />		<!-- meat -->
+		<item id="2152" countmax="10" chance="100000" />		<!-- platinum coin -->
+		<item id="5904" chance="43000" />					<!-- magic sulphur -->
+		<item id="7591" countmax="3" chance="36960" />		<!-- great health potion -->
+		<item id="2154" chance="36960" />					<!-- yellow gem -->
+		<item id="8472" countmax="3" chance="32610" />		<!-- great spirit potion -->
+		<item id="7590" countmax="3" chance="30430" />		<!-- great mana potion -->
+		<item id="2156" chance="23910" />					<!-- red gem -->
+		<item id="11306" chance="23910" />					<!-- sai -->
+		<item id="2155" chance="21740" />					<!-- green gem -->
+		<item id="11307" chance="19570" />					<!-- zaoan sword -->
+		<item id="11301" chance="15220" />					<!-- zaoan armor -->
+		<item id="2492" chance="13040" />					<!-- dragon scale mail -->
+		<item id="8880" chance="10870" />					<!-- swamplair armor -->
+		<item id="12613" chance="10870" />					<!-- twiceslicer -->
+		<item id="2158" chance="8700" />						<!-- blue gem -->
+		<item id="12607" chance="8700" />					<!-- elite draken mail -->
+		<item id="2149" countmax="8" chance="8700" />		<!-- small emerald -->
+		<item id="13294" chance="4350" />					<!-- harness -->
+	</loot>
+</monster>

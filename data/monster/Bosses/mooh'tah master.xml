@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mooh'Tah Master" nameDescription="Mooh'Tah Master" race="blood" experience="0" speed="250" manacost="0">
+	<health now="185" max="185" />
+	<look type="611" corpse="23462" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="0" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="energy beam" interval="2000" chance="10" range="1" min="0" max="-500" />
+		<attack name="berserk" interval="2000" chance="10" range="1" min="0" max="-100" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<immunities>
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity poison="1" />
+		<immunity ice="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Kirll Karrrl!" />
+		<voice sentence="Kaplar!" />
+	</voices>
+</monster>

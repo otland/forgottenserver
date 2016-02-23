@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="demon" nameDescription="a demon" race="blood" experience="25" speed="150" manacost="0">
+<monster name="Demon" nameDescription="a demon" race="blood" experience="25" speed="150" manacost="0">
 	<health now="50" max="50" />
 	<look type="35" corpse="5995" />
 	<targetchange interval="4000" chance="10" />
@@ -41,6 +41,6 @@
 		<item id="2406" chance="8870" /><!-- short sword -->
 		<item id="2559" chance="9700" /><!-- small axe -->
 		<item id="1294" countmax="3" chance="15290" /><!-- small stone -->
-		<item id="12495" chance="910" /><!-- Goblin Ear -->
+		<item id="12495" chance="910" /><!-- goblin ear -->
 	</loot>
 </monster>

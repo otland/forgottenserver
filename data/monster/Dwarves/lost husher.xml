@@ -26,7 +26,6 @@
 		<attack name="death" interval="2000" chance="10" range="7" min="-150" max="-200">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="smallclouds" />
-			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 		<attack name="earth" interval="2000" chance="10" range="7" target="1" radius="2" min="-150" max="-250">
 			<attribute key="shootEffect" value="smallearth" />
@@ -57,7 +56,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Arr far zwar!" />
 	</voices>
 	<loot>

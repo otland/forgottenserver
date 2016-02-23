@@ -2,7 +2,7 @@
 <monster name="Crocodile" nameDescription="a crocodile" race="blood" experience="40" speed="190" manacost="350">
 	<health now="105" max="105" />
 	<look type="119" corpse="6046" />
-	<targetchange interval="5000" chance="0" />
+	<targetchange interval="5000" chance="5" />
 	<flags>
 		<flag summonable="1" />
 		<flag attackable="1" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-40" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -28,9 +28,9 @@
 		<element physicalPercent="-5" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="10" chance="50000" /><!-- gold coin -->
-		<item id="2671" chance="40000" /><!-- ham -->
-		<item id="3982" chance="100" /><!-- crocodile boots -->
-		<item id="11196" chance="20180" /><!-- Piece of Crocodile Leather -->
+		<item id="2148" countmax="10" chance="50000" />	<!-- gold coin -->
+		<item id="2671" chance="40000" />				<!-- ham -->
+		<item id="11196" chance="20180" />				<!-- piece of crocodile leather -->
+		<item id="3982" chance="100" />					<!-- crocodile boots -->
 	</loot>
 </monster>

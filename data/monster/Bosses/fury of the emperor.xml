@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fury of the Emperor" nameDescription="a fury of the emperor" race="undead" experience="26600" speed="450" manacost="0">
+<monster name="Fury Of The Emperor" nameDescription="a fury of the emperor" race="undead" experience="26600" speed="450" manacost="0">
 	<health now="28800" max="28800" />
-	<look type="351" corpse="0" />
+	<look type="351" corpse="12317" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />

@@ -18,7 +18,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-490" />
-		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="1" min="-220" max="-405">
+		<attack name="earth" interval="2000" chance="20" range="7" target="1" min="-220" max="-405">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="15" target="0" radius="4" min="-65" max="-135">
@@ -28,7 +28,7 @@
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
 		<attack name="blightwalker curse" interval="2000" chance="15" />
-		<attack name="speed" interval="2000" chance="15" target="1" range="7" speedchange="-300" duration="30000">
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-300" duration="30000">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>
@@ -46,7 +46,7 @@
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I can see you decaying!" />
 		<voice sentence="Let me taste your mortality!" />
 		<voice sentence="Your lifeforce is waning!" />

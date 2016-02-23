@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Minion of Gaz'haragoth" nameDescription="Minion of Gaz'haragoth" race="blood" experience="5700" speed="270" manacost="0">
+<monster name="Minion Of Gaz'Haragoth" nameDescription="a minion of gaz'haragoth" race="blood" experience="5700" speed="270" manacost="0">
 	<health now="9400" max="9400" />
 	<look type="590" corpse="22549" />
 	<targetchange interval="5000" chance="8" />
@@ -38,7 +38,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Knorrrr!" />
 	</voices>
 	<loot>

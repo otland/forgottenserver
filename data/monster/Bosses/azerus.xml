@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Azerus" nameDescription="Azerus" race="blood" experience="6000" speed="320" manacost="0">
+	<health now="7500" max="7500" />
+	<look type="309" corpse="0" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-900" />
+		<attack name="manadrain" interval="2000" chance="15" range="7" radius="4" min="0" max="-3800">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="bigclouds" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" range="7" min="0" max="-524">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" target="0" length="8" spread="0" min="-300" max="-1050">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="65">
+		<defense name="healing" interval="2000" chance="11" min="400" max="900">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="15" />
+		<element deathPercent="15" />
+		<element holyPercent="15" />
+		<element firePercent="15" />
+		<element energyPercent="15" />
+		<element icePercent="15" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="10">
+		<summon name="Rift Worm" interval="3000" chance="30" max="8" />
+		<summon name="Rift Brood" interval="3000" chance="30" max="8" />
+		<summon name="Rift Scythe" interval="3000" chance="30" max="8" />
+		<summon name="War Golem" interval="3000" chance="30" max="5" />
+	</summons>
+	<voices interval="5000" chance="12">
+		<voice sentence="The ultimate will finally consume this unworthy existence!" />
+		<voice sentence="My masters and I will tear down barriers and join the ultimate in its realm!" />
+		<voice sentence="The power of the Yalahari will all be mine!" />
+		<voice sentence="He who has returned from beyond has taught me secrets you can't even grasp!" />
+		<voice sentence="You can't hope to penetrate my shields!" />
+		<voice sentence="Do you really think you could beat me?" />
+	</voices>
+</monster>

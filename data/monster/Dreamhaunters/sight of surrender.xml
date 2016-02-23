@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sight of Surrender" nameDescription="Sight of Surrender" race="undead" experience="17000" speed="300" manacost="0">
+<monster name="Sight Of Surrender" nameDescription="a sight of surrender" race="undead" experience="17000" speed="300" manacost="0">
 	<health now="28000" max="28000" />
 	<look type="583" corpse="22478" />
 	<targetchange interval="4000" chance="20" />
@@ -46,7 +46,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="BOW LOW!" />
 		<voice sentence="FEEL THE TRUE MEANING OF VANQUISH!" />
 		<voice sentence="HAHAHAHA DO YOU WANT TO AMUSE YOUR MASTER?" />

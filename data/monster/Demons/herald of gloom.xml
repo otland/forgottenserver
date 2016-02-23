@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Herald of Gloom" nameDescription="a herald of gloom" experience="450" speed="260" race="undead">
+<monster name="Herald Of Gloom" nameDescription="a herald of gloom" experience="450" speed="260" race="undead">
 	<health now="450" max="450" />
 	<targetchange speed="0" chance="8" />
 	<look type="320" corpse="9915" />
@@ -60,7 +60,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="The powers of light are waning." yell="1" />
 		<voice sentence="You will join us in eternal night!" yell="1" />
 		<voice sentence="The shadows will engulf the world." yell="1" />

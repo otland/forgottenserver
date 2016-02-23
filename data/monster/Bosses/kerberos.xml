@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Kerberos" nameDescription="Kerberos" race="blood" experience="10000" speed="280" manacost="0">
+	<health now="11000" max="11000" />
+	<look type="240" corpse="6332" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-508" />
+		<attack name="earth" interval="2000" chance="5" length="8" spread="3" min="0" max="-700">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" min="0" max="-498">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="0" max="-662">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="3" min="0" max="-976">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="earth" interval="2000" chance="5" range="7" min="0" max="-549">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40" />
+	<elements>
+		<element earthPercent="20" />
+		<element energyPercent="10" />
+		<element icePercent="-5" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="GROOOWL!" />
+		<voice sentence="GRRRRR!" />
+	</voices>
+	<loot>
+		<item id="2152" countmax="18" chance="100000" /><!-- platinum coin -->
+		<item id="2144" countmax="5" chance="96880" /><!-- black pearl -->
+		<item id="6558" countmax="1" chance="100000" /><!-- concentrated demonic blood -->
+		<item id="6500" chance="62500" /><!-- demonic essence -->
+		<item id="9971" countmax="5" chance="100000" /><!-- gold ingot -->
+		<item id="2430" chance="10810" /><!-- knight axe -->
+		<item id="6553" chance="6250" /><!-- ruthless axe -->
+		<item id="10554" chance="100000" /><!-- hellhound slobber -->
+		<item id="2155" chance="50000" /><!-- green gem -->
+		<item id="2392" chance="46880" /><!-- fire sword -->
+		<item id="4873" chance="65630" /><!-- explorer brooch -->
+		<item id="7890" chance="96880" /><!-- magma amulet -->
+		<item id="7590" countmax="3" chance="96880" /><!-- great mana potion -->
+		<item id="7453" chance="3130" /><!-- executioner -->
+		<item id="2466" chance="31250" /><!-- golden armor -->
+	</loot>
+</monster>

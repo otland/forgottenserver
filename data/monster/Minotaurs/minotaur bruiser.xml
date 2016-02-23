@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Bruiser" nameDescription="a minotaur bruiser" race="blood" experience="50" speed="170" manacost="0">
+	<health now="100" max="100" />
+	<look type="25" corpse="5969" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-45" />
+	</attacks>
+	<defenses armor="10" defense="15" />
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2148" countmax="15" chance="65700" />	<!-- gold coin -->
+		<item id="2510" chance="20000" />				<!-- plate shield -->
+		<item id="2398" chance="12900" />				<!-- mace -->
+		<item id="2464" chance="10000" />				<!-- chain armor -->
+		<item id="2460" chance="7800" />					<!-- brass helmet -->
+		<item id="2376" chance="5000" />					<!-- sword -->
+		<item id="2666" chance="5000" />					<!-- meat -->
+		<item id="2386" chance="4000" />					<!-- axe -->
+		<item id="12428" countmax="2" chance="2000" />	<!-- minotaur horn -->
+		<item id="5878" chance="980" />					<!-- minotaur leather -->
+		<item id="2554" chance="310" />					<!-- shovel -->
+		<item id="2172" chance="120" />					<!-- bronze amulet -->
+	</loot>
+</monster>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Armenius" nameDescription="Armenius" race="undead" experience="500" speed="220" manacost="0">
+	<health now="550" max="550" />
+	<look type="68" corpse="6006" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="50" />
+		<attack name="lifedrain" interval="2000" chance="20" radius="1" target="1" range="1" min="-50" max="-200">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="1" target="0" speedchange="-400" duration="60000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="outfit" interval="2000" chance="10" monster="bat" duration="5000">
+			<attribute key="areaEffect" value="groundshaker" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="15" min="15" max="25" />
+	</defenses>
+	<elements>
+		<element physicalPercent="35" />
+		<element firePercent="-10" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="I smell warm blood!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="60" chance="90230" />	<!-- gold coin -->
+		<item id="10602" chance="7600" />				<!-- vampire teeth -->
+		<item id="12405" chance="5100" />				<!-- blood preservation -->
+		<item id="2747" chance="1910" />					<!-- grave flower -->
+		<item id="2144" chance="1800" />					<!-- black pearl -->
+		<item id="2412" chance="1560" />					<!-- katana -->
+		<item id="7588" chance="1500" />					<!-- strong health potion -->
+		<item id="2383" chance="1000" />					<!-- spike sword -->
+		<item id="2229" chance="1000" />					<!-- skull -->
+		<item id="2396" chance="420" />					<!-- ice rapier -->
+		<item id="2479" chance="420" />					<!-- strange helmet -->
+		<item id="2127" chance="230" />					<!-- emerald bangle -->
+		<item id="2534" chance="230" />					<!-- vampire shield -->
+		<item id="2172" chance="220" />					<!-- bronze amulet -->
+	</loot>
+</monster>

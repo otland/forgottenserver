@@ -26,7 +26,7 @@
 		<element deathPercent="-10" />
 		<element energyPercent="-1" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="GROARRR!" yell="1" />
 	</voices>
 	<loot>

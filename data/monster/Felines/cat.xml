@@ -19,7 +19,7 @@
 		<attack name="melee" interval="2000" skill="0" attack="0" />
 	</attacks>
 	<defenses armor="5" defense="5" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Mew!" />
 		<voice sentence="Meow!" />
 		<voice sentence="Meow meow!" />

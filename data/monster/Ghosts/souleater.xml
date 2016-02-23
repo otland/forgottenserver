@@ -47,7 +47,7 @@
 		<immunity invisible="1" />
 		<immunity death="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Life is such a fickle thing!" />
 		<voice sentence="I will devour your soul." />
 		<voice sentence="Souuuls!" />

@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ghazbaran" nameDescription="a ghazbaran" race="undead" experience="15000" speed="400" manacost="0">
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ghazbaran" nameDescription="ghazbaran" race="fire" experience="15000" speed="400" manacost="0">
 	<health now="60000" max="60000" />
 	<look type="12" head="0" body="123" legs="97" feet="94" corpse="6068" />
 	<targetchange interval="10000" chance="20" />
@@ -17,32 +17,21 @@
 		<flag runonhealth="3500" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-500" max="-2191" />
-		<attack name="melee" interval="2000" chance="40" range="7" radius="6" target="0" min="-250" max="-500">
-			<attribute key="areaEffect" value="blackspark" />
-		</attack>
-		<attack name="melee" interval="3000" chance="34" range="7" radius="1" target="1" min="-120" max="-500">
+		<attack name="melee" interval="2000" min="0" max="-3000" />
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-1000" />
+		<attack name="physical" interval="3000" chance="34" range="7" min="0" max="-2000">
 			<attribute key="shootEffect" value="whirlwindsword" />
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
-		<attack name="energy" interval="4000" chance="30" length="8" spread="0" min="-100" max="-800">
-			<attribute key="areaEffect" value="mortarea" />
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-400" duration="15000">
+			<attribute key="shootEffect" value="throwingknife" />
 		</attack>
-		<attack name="physical" interval="3000" chance="20" range="14" radius="5" target="0" min="-200" max="-480">
-			<attribute key="areaEffect" value="poff" />
-		</attack>
-		<attack name="physical" interval="4000" chance="15" range="7" radius="13" target="0" min="-100" max="-650">
-			<attribute key="areaEffect" value="yellowspark" />
-		</attack>
-		<attack name="physical" interval="4000" chance="18" radius="14" target="0" min="-200" max="-600">
-			<attribute key="areaEffect" value="bluebubble" />
-		</attack>
-		<attack name="melee" interval="3000" chance="15" range="7" radius="4" target="0" min="-200" max="-750">
-			<attribute key="areaEffect" value="energyarea" />
+		<attack name="ice" interval="2000" chance="20" range="7" radius="7" target="0" min="0" max="-800">
+			<attribute key="areaEffect" value="bigplants" />
 		</attack>
 	</attacks>
 	<defenses armor="55" defense="65">
-		<defense name="healing" interval="3000" chance="35" min="300" max="800">
+		<defense name="healing" interval="3000" chance="35" min="400" max="6000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 		<defense name="speed" interval="4000" chance="80" speedchange="440" duration="6000">
@@ -66,55 +55,56 @@
 	</summons>
 	<voices interval="5000" chance="30">
 		<voice sentence="COME AND GIVE ME SOME AMUSEMENT" />
-		<voice sentence="IS THAT THE BEST YOU HAVE TO OFFER?" yell="1" />
+		<voice sentence="IS THAT THE BEST YOU HAVE TO OFFER, TIBIANS?" yell="1" />
 		<voice sentence="I AM GHAZBARAN OF THE TRIANGLE... AND I AM HERE TO CHALLENGE YOU ALL." yell="1" />
 		<voice sentence="FLAWLESS VICTORY!" yell="1" />
 	</voices>
 	<loot>
-		<item id="6500" chance="100000" /><!-- demonic essence -->
-		<item id="2152" countmax="69" chance="100000" /><!-- platinum coin -->
-		<item id="5954" countmax="2" chance="33333" /><!-- demon horn -->
-		<item id="2145" countmax="5" chance="25000" /><!-- small diamond -->
-		<item id="6300" chance="25000" /><!-- death ring -->
-		<item id="8472" chance="25000" /><!-- great spirit potion -->
-		<item id="8904" chance="25000" /><!-- spellscroll of prophecies -->
-		<item id="8473" chance="25000" /><!-- ultimate health potion -->
-		<item id="2143" countmax="15" chance="25000" /><!-- white pearl -->
-		<item id="7591" chance="20000" /><!-- great health potion -->
-		<item id="2214" chance="20000" /><!-- ring of healing -->
-		<item id="2149" countmax="10" chance="25000" /><!-- small emerald -->
-		<item id="1984" chance="20000" /><!-- blue tome -->
-		<item id="7590" chance="20000" /><!-- great mana potion -->
-		<item id="2155" chance="20000" /><!-- green gem -->
-		<item id="2178" chance="20000" /><!-- mind stone -->
-		<item id="7493" chance="20000" /><!-- orb -->
-		<item id="2150" countmax="17" chance="25000" /><!-- small amethyst -->
-		<item id="2146" countmax="10" chance="25000" /><!-- small sapphire -->
-		<item id="8901" chance="20000" /><!-- spellbook of warding -->
-		<item id="2179" chance="20000" /><!-- gold ring -->
-		<item id="8918" chance="20000" /><!-- spellbook of dark mysteries -->
-		<item id="7405" chance="16666" /><!-- havoc blade -->
-		<item id="8884" chance="16666" /><!-- oceanborn leviathan armor -->
-		<item id="8903" chance="16666" /><!-- spellbook of lost souls -->
-		<item id="2158" chance="14285" /><!-- blue gem -->
-		<item id="7433" chance="14285" /><!-- ravenwing -->
-		<item id="6553" chance="14285" /><!-- ruthless axe -->
-		<item id="7368" countmax="44" chance="12500" /><!-- assassin star -->
-		<item id="2520" chance="12500" /><!-- demon shield -->
-		<item id="2177" chance="12500" /><!-- life crystal -->
-		<item id="2164" chance="12500" /><!-- might ring -->
-		<item id="2165" chance="12500" /><!-- stealth ring -->
-		<item id="2151" countmax="7" chance="12500" /><!-- talon -->
-		<item id="2112" chance="12500" /><!-- teddy bear -->
-		<item id="2144" countmax="14" chance="11111" /><!-- black pearl -->
-		<item id="8902" chance="11111" /><!-- spellbook of mind control -->
-		<item id="2174" chance="11111" /><!-- strange symbol -->
-		<item id="2447" chance="11111" /><!-- twin axe -->
-		<item id="2124" chance="8333" /><!-- crystal ring -->
-		<item id="8887" chance="8333" /><!-- frozen plate -->
-		<item id="7896" chance="8333" /><!-- glacier kilt -->
-		<item id="2466" chance="8333" /><!-- golden armor -->
-		<item id="2646" chance="8333" /><!-- golden boots -->
-		<item id="2472" chance="8333" /><!-- magic plate armor -->
+		<item id="6500" chance="100000" />				<!-- demonic essence -->
+		<item id="2152" countmax="69" chance="100000" />	<!-- platinum coin -->
+		<item id="5954" countmax="2" chance="33333" />	<!-- demon horn -->
+		<item id="2145" countmax="5" chance="30000" />	<!-- small diamond -->
+		<item id="6300" chance="28000" />				<!-- death ring -->
+		<item id="7591" chance="26000" />				<!-- great health potion -->
+		<item id="8472" chance="26000" />				<!-- great spirit potion -->
+		<item id="8904" chance="26000" />				<!-- spellscroll of prophecies -->
+		<item id="8473" chance="26000" />				<!-- ultimate health potion -->
+		<item id="2143" countmax="15" chance="26000" />	<!-- white pearl -->
+		<item id="2178" chance="23000" />				<!-- mind stone -->
+		<item id="2214" chance="23000" />				<!-- ring of healing -->
+		<item id="2150" countmax="17" chance="23000" />	<!-- small amethyst -->
+		<item id="2149" countmax="10" chance="23000" />	<!-- small emerald -->
+		<item id="1984" chance="21000" />				<!-- blue tome -->
+		<item id="7590" chance="21000" />				<!-- great mana potion -->
+		<item id="2155" chance="21000" />				<!-- green gem -->
+		<item id="2176" chance="21000" />				<!-- orb -->
+		<item id="2146" countmax="10" chance="21000" />	<!-- small sapphire -->
+		<item id="8918" chance="21000" />				<!-- spellbook of dark mysteries -->
+		<item id="8901" chance="21000" />				<!-- spellbook of warding -->
+		<item id="2179" chance="20000" />				<!-- gold ring -->
+		<item id="7405" chance="17000" />				<!-- havoc blade -->
+		<item id="8884" chance="17000" />				<!-- oceanborn leviathan armor -->
+		<item id="8903" chance="17000" />				<!-- spellbook of lost souls -->
+		<item id="7368" countmax="44" chance="15000" />	<!-- assassin star -->
+		<item id="2158" chance="15000" />				<!-- blue gem -->
+		<item id="7433" chance="15000" />				<!-- ravenwing -->
+		<item id="6553" chance="15000" />				<!-- ruthless axe -->
+		<item id="2112" chance="15000" />				<!-- teddy bear -->
+		<item id="2520" chance="13000" />				<!-- demon shield -->
+		<item id="2177" chance="13000" />				<!-- life crystal -->
+		<item id="2164" chance="13000" />				<!-- might ring -->
+		<item id="2165" chance="13000" />				<!-- stealth ring -->
+		<item id="2151" countmax="7" chance="13000" />	<!-- talon -->
+		<item id="2144" countmax="14" chance="10000" />	<!-- black pearl -->
+		<item id="2124" chance="10000" />				<!-- crystal ring -->
+		<item id="7896" chance="10000" />				<!-- glacier kilt -->
+		<item id="8902" chance="10000" />				<!-- spellbook of mind control -->
+		<item id="2174" chance="10000" />				<!-- strange symbol -->
+		<item id="2447" chance="10000" />				<!-- twin axe -->
+		<item id="8887" chance="8700" />					<!-- frozen plate -->
+		<item id="2466" chance="8700" />					<!-- golden armor -->
+		<item id="2646" chance="8700" />					<!-- golden boots -->
+		<item id="2472" chance="8700" />					<!-- magic plate armor -->
+		<item id="7455" chance="6500" />					<!-- mythril axe -->
 	</loot>
 </monster>

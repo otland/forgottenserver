@@ -29,7 +29,7 @@
 		<element holyPercent="10" />
 		<element firePercent="-5" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="To arms, sisters!" />
 		<voice sentence="Feel the wrath of mother forest!" />
 		<voice sentence="By the power of Greenskull!" />

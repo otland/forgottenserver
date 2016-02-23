@@ -20,7 +20,7 @@
 		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
 	<defenses armor="35" defense="35" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Grunt Grunt" />
 		<voice sentence="Grunt" />
 	</voices>

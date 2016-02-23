@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Zanakeph" nameDescription="Zanakeph" race="undead" experience="9900" speed="330" manacost="0">
+	<health now="13000" max="13000" />
+	<look type="231" corpse="6306" />
+	<targetchange interval="2000" chance="6" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="700" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="96" />
+		<attack name="physical" interval="2000" chance="5" range="7" radius="4" target="1" min="-300" max="-400">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" min="-125" max="-600">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="earth" interval="2000" chance="5" range="7" radius="4" target="1" min="-100" max="-390">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" target="1" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-150" max="-690">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="3" min="-300" max="-700">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" min="-100" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="undead dragon curse" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="15" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="10" />
+		<element icePercent="50" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity fire="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="FEEEED MY ETERNAL HUNGER!" yell="1" />
+		<voice sentence="I SENSE LIFE" yell="1" />
+	</voices>
+	<loot>
+		<item id="6300" chance="100000" />					<!-- death ring -->
+		<item id="7430" chance="100000" />					<!-- dragonbone staff -->
+		<item id="2148" countmax="100" chance="100000" />	<!-- gold coin -->
+		<item id="2033" chance="100000" />					<!-- golden mug -->
+		<item id="2152" countmax="10" chance="100000" />		<!-- platinum coin -->
+		<item id="11233" countmax="3" chance="100000" />		<!-- unholy bone -->
+		<item id="9971" chance="78000" />					<!-- gold ingot -->
+		<item id="6500" chance="56000" />					<!-- demonic essence -->
+		<item id="2476" chance="47270" />					<!-- knight armor -->
+		<item id="2491" chance="40000" />					<!-- crown helmet -->
+		<item id="8472" countmax="3" chance="37000" />		<!-- great spirit potion -->
+		<item id="5925" countmax="5" chance="37000" />		<!-- hardened bone -->
+		<item id="11368" chance="37000" />					<!-- jade hat -->
+		<item id="7591" countmax="4" chance="35000" />		<!-- great health potion -->
+		<item id="9810" chance="35000" />					<!-- rusty armor (rare) -->
+		<item id="2149" countmax="5" chance="33000" />		<!-- small emerald -->
+		<item id="2146" countmax="5" chance="33000" />		<!-- small sapphire -->
+		<item id="7590" countmax="3" chance="25000" />		<!-- great mana potion -->
+		<item id="2466" chance="13500" />					<!-- golden armor -->
+		<item id="13291" chance="6780" />					<!-- maxilla maximus -->
+		<item id="5741" chance="5000" />						<!-- skull helmet -->
+		<item id="8885" chance="3390" />						<!-- divine plate -->
+		<item id="2498" chance="1690" />						<!-- royal helmet -->
+	</loot>
+</monster>

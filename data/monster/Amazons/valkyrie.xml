@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Valkyrie" nameDescription="a valkyrie" race="blood" experience="85" speed="190" manacost="450">
 	<health now="190" max="190" />
-	<look type="139" head="113" body="57" legs="95" feet="113" corpse="20523" />
+	<look type="139" head="113" body="57" legs="95" feet="113" corpse="20526" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="1" />
@@ -30,7 +30,7 @@
 		<element deathPercent="-5" />
 		<element physicalPercent="-5" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Another head for me!" />
 		<voice sentence="Head off!" />
 		<voice sentence="Your head will be mine!" />

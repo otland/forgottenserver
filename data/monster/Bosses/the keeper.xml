@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Keeper" nameDescription="The Keeper" race="venom" experience="3205" speed="290" manacost="0">
+	<health now="40000" max="40000" />
+	<look type="220" corpse="12316" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="275" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="speed" interval="4000" chance="20" range="7" target="1" speedchange="-350" duration="12000">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" range="7" min="-80" max="-300">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-200" max="-500">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="1" range="7" item="3976" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-200" max="-500">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="15" min="250" max="400">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="50" />
+		<element icePercent="20" />
+		<element firePercent="-10" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

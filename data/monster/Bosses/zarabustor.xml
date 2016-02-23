@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Zarabustor" nameDescription="zarabustor" race="blood" experience="8000" speed="220" manacost="0">
+	<health now="5100" max="5100" />
+	<look type="130" head="0" body="77" legs="92" feet="115" addons="1" corpse="20554" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="900" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="fire" interval="2000" chance="20" range="7" radius="3" target="1" min="0" max="-250">
+			<attribute key="shootEffect" value="burstarrow" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="2" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="physical" interval="2000" chance="25" range="7" min="0" max="-250">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" length="8" spread="0" min="-130" max="-350">
+			<attribute key="areaEffect" value="bigclouds" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-250" />
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-330" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="warlock skill reducer" range="5" interval="2000" chance="5" />
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="20" min="100" max="225">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="20" duration="10000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="95" />
+		<element holyPercent="-5" />
+		<element physicalPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity energy="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Warlock" interval="2000" chance="10" max="2" />
+		<summon name="Green Djinn" interval="2000" chance="10" max="3" />
+	</summons>
+	<voices interval="2000" chance="7">
+		<voice sentence="Killing is such a splendid diversion from my studies." />
+		<voice sentence="Time to test my newest spells!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="80" chance="32000" />	<!-- gold coin -->
+		<item id="2679" countmax="4" chance="21000" />	<!-- cherry -->
+		<item id="2689" chance="11000" />				<!-- bread -->
+		<item id="2411" chance="9600" />					<!-- poison dagger -->
+		<item id="2436" chance="8330" />					<!-- skull staff -->
+		<item id="7591" chance="7190" />					<!-- great health potion -->
+		<item id="7590" chance="6760" />					<!-- great mana potion -->
+		<item id="7368" countmax="4" chance="5500" />	<!-- assassin star -->
+		<item id="2792" chance="5000" />					<!-- dark mushroom -->
+		<item id="2167" chance="4200" />					<!-- energy ring -->
+		<item id="2178" chance="4000" />					<!-- mind stone -->
+		<item id="2047" chance="3500" />					<!-- candlestick -->
+		<item id="2656" chance="3390" />					<!-- blue robe -->
+		<item id="2146" chance="3190" />					<!-- small sapphire -->
+		<item id="2151" chance="3160" />					<!-- talon -->
+		<item id="7898" chance="3040" />					<!-- lightning robe -->
+		<item id="2600" chance="3000" />					<!-- inkwell -->
+		<item id="2124" chance="2670" />					<!-- crystal ring -->
+		<item id="12410" chance="2500" />				<!-- luminous orb -->
+		<item id="2123" chance="2420" />					<!-- ring of the sky -->
+		<item id="2197" chance="2320" />					<!-- stone skin amulet -->
+		<item id="1986" chance="2310" />					<!-- red tome -->
+		<item id="2466" chance="2240" />					<!-- golden armor -->
+		<item id="2114" chance="2060" />					<!-- piggy bank -->
+	</loot>
+</monster>

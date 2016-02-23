@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ushuriel" nameDescription="Ushuriel" race="fire" experience="10500" speed="350" manacost="0">
+	<health now="31500" max="31500" />
+	<look type="12" head="0" body="95" legs="19" feet="112" corpse="8721" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="1500" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1200" />
+		<attack name="physical" interval="1000" chance="10" length="10" spread="0" min="-250" max="-500">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="ice" interval="2000" chance="10" length="8" spread="3" min="0" max="-400">
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+		<attack name="cursecondition" interval="2000" chance="15" radius="4" target="0" min="0" max="-800">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="energycondition" interval="2000" chance="15" radius="4" target="0" min="-25" max="-25">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="drunk" interval="3000" chance="11" radius="6" target="0" duration="25000">
+			<attribute key="areaEffect" value="purplenote" />
+		</attack>
+		<attack name="earth" interval="2000" chance="9" length="8" spread="3" min="0" max="-600">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="45">
+		<defense name="healing" interval="2000" chance="25" min="400" max="600">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="50" />
+		<element firePercent="30" />
+		<element energyPercent="30" />
+		<element icePercent="30" />
+		<element earthPercent="30" />
+		<element holyPercent="25" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="You can't run or hide forever!" />
+		<voice sentence="I'm the executioner of the Seven!" />
+		<voice sentence="The final punishment awaits you!" />
+		<voice sentence="The judgement is guilty! The sentence is death!" />
+	</voices>
+	<loot>
+		<item id="6500" chance="100000" />				<!-- demonic essence -->
+		<item id="2789" countmax="30" chance="88000" />	<!-- brown mushroom -->
+		<item id="2148" countmax="190" chance="88000" />	<!-- gold coin -->
+		<item id="5880" countmax="10" chance="39000" />	<!-- iron ore -->
+		<item id="5925" countmax="20" chance="32000" />	<!-- hardened bone -->
+		<item id="7591" chance="24000" />				<!-- great health potion -->
+		<item id="7391" chance="24000" />				<!-- thaian sword -->
+		<item id="2178" chance="23000" />				<!-- mind stone -->
+		<item id="2498" chance="22000" />				<!-- royal helmet -->
+		<item id="8473" chance="22000" />				<!-- ultimate health potion -->
+		<item id="7590" chance="21000" />				<!-- great mana potion -->
+		<item id="5741" chance="21000" />				<!-- skull helmet -->
+		<item id="8472" chance="20000" />				<!-- great spirit potion -->
+		<item id="9810" chance="20000" />				<!-- rusty armor (rare) -->
+		<item id="2475" chance="20000" />				<!-- warrior helmet -->
+		<item id="2152" countmax="26" chance="20000" />	<!-- platinum coin -->
+		<item id="9971" chance="19000" />				<!-- gold ingot -->
+		<item id="2177" chance="17000" />				<!-- life crystal -->
+		<item id="2176" chance="17000" />				<!-- orb -->
+		<item id="2392" chance="15000" />				<!-- fire sword -->
+		<item id="5892" chance="14285" />				<!-- huge chunk of crude iron -->
+		<item id="5669" chance="12500" />				<!-- mysterious voodoo skull -->
+		<item id="2419" chance="12000" />				<!-- scimitar -->
+		<item id="7385" chance="11000" />				<!-- crimson sword -->
+		<item id="2383" chance="9600" />					<!-- spike sword -->
+		<item id="5954" countmax="2" chance="9000" />	<!-- demon horn -->
+		<item id="7402" chance="8200" />					<!-- dragon slayer -->
+		<item id="2479" chance="8200" />					<!-- strange helmet -->
+		<item id="5891" chance="7500" />					<!-- enchanted chicken wing -->
+		<item id="2393" chance="7500" />					<!-- giant sword -->
+		<item id="7417" chance="6900" />					<!-- runed sword -->
+		<item id="2491" chance="6200" />					<!-- crown helmet -->
+		<item id="5885" chance="5550" />					<!-- flask of warrior's sweat -->
+		<item id="5884" chance="4800" />					<!-- spirit container -->
+		<item id="6103" chance="2000" />					<!-- unholy book -->
+	</loot>
+</monster>

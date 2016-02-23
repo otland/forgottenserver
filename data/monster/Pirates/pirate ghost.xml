@@ -7,21 +7,21 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="0" />
+		<flag illusionable="1" />
 		<flag convinceable="0" />
-		<flag pushable="1" />
+		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
+		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="40" />
-		<attack name="lifedrain" interval="2000" chance="15" radius="1" target="0" min="-40" max="-80">
+		<attack name="melee" interval="2000" min="0" max="-95" poison="2" />
+		<attack name="lifedrain" interval="2000" chance="15" radius="1" min="-30" max="-80">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="death" interval="2000" chance="10" range="7" radius="3" target="1" min="-50" max="-65">
+		<attack name="death" interval="2000" chance="10" radius="3" target="0" min="0" max="-65">
 			<attribute key="areaEffect" value="rednote" />
 		</attack>
 	</attacks>
@@ -40,7 +40,7 @@
 		<immunity death="1" />
 		<immunity earth="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Yooh Ho Hooh Ho!" />
 		<voice sentence="Hell is waiting for You!" />
 		<voice sentence="It's alive!" />
@@ -48,11 +48,11 @@
 		<voice sentence="You will not get my treasure!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="67" chance="48000" /><!-- gold coin -->
-		<item id="10601" chance="4300" /><!-- Tattered Piece of Robe -->
-		<item id="2165" chance="650" /><!-- stealth ring -->
-		<item id="1951" chance="910" /><!-- parchment -->
-		<item id="2383" chance="130" /><!-- spike sword -->
-		<item id="2655" chance="130" /><!-- red robe -->
+		<item id="2148" countmax="67" chance="47000" />	<!-- gold coin -->
+		<item id="10601" chance="3700" />				<!-- tattered piece of robe -->
+		<item id="1951" chance="1070" />					<!-- parchment -->
+		<item id="2165" chance="640" />					<!-- stealth ring -->
+		<item id="2655" chance="110" />					<!-- red robe -->
+		<item id="2383" chance="110" />					<!-- spike sword -->
 	</loot>
 </monster>

@@ -27,7 +27,6 @@
 		<attack name="death" interval="2000" chance="5" range="7" min="-30" max="-50">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />
-			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 		<attack name="poison" interval="2000" chance="5" range="7" min="-5" max="-45">
 			<attribute key="shootEffect" value="poison" />
@@ -53,7 +52,7 @@
 	<summons maxSummons="6">
 		<summon name="Skeleton" interval="2000" chance="20" max="6" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Eye for eye!" />
 		<voice sentence="Here's looking at you!" />
 		<voice sentence="Let me take a look at you!" />

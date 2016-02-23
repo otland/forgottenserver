@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Massacre" nameDescription="the massacre" race="blood" experience="9800" speed="390" manacost="0">
+<monster name="Massacre" nameDescription="Massacre" race="blood" experience="9800" speed="390" manacost="0">
 	<health now="30000" max="30000" />
 	<look type="244" corpse="6336" />
 	<targetchange interval="60000" chance="0" />
@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -33,8 +33,6 @@
 		<immunity poison="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<loot>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Deathbine" nameDescription="a deathbine" race="venom" experience="340" speed="240" manacost="0">
+<monster name="Deathbine" nameDescription="Deathbine" race="venom" experience="340" speed="240" manacost="0">
 	<health now="525" max="525" />
 	<look type="120" corpse="6047" />
 	<targetchange interval="5000" chance="8" />
@@ -51,6 +51,6 @@
 		<item id="7886" chance="50000" /><!-- terra boots -->
 		<item id="8912" chance="50000" /><!--springsprout rod-->
 		<item id="5015" chance="5555" /><!--mandrake-->
-		<item id="13307" chance="2854" /><!--mandrake-->
+		<item id="13307" chance="2854" /><!--sweet smelling bait-->
 	</loot>
 </monster>

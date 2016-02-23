@@ -38,11 +38,10 @@
 		<element icePercent="10" />
 	</elements>
 	<immunities>
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 		<immunity earth="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Shriiiek" yell="1" />
 	</voices>
 	<loot>

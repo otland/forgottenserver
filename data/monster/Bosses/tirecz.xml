@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Tirecz" nameDescription="Tirecz" race="blood" experience="6000" speed="220" manacost="0">
 	<health now="25000" max="25000" />
-	<look type="334" corpse="11103" />
+	<look type="334" corpse="0" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
@@ -16,9 +16,6 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<script>
-		<event name="tirecz" />
-	</script>
 	<attacks>
 		<attack name="melee" interval="2000" skill="72" attack="100" />
 		<attack name="invisible" interval="2000" chance="25" range="7" radius="1" target="1">
@@ -53,7 +50,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Hissss!" />
 	</voices>
 </monster>

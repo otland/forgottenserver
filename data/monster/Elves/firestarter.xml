@@ -35,7 +35,7 @@
 		<element deathPercent="-20" />
 		<element icePercent="-20" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="FIRE!" yell="1" />
 		<voice sentence="BURN!" yell="1" />
 		<voice sentence="DEATH to the FALSE GOD!!" yell="1" />

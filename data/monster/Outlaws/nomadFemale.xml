@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="205" manacost="0">
+	<health now="160" max="160" />
+	<look type="150" head="115" body="39" legs="59" feet="2" addons="2" corpse="20462" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-80" />
+		<attack name="physical" interval="2000" chance="10" target="0" radius="1">
+			<attribute key="areaeffect" value="whitenote" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element firePercent="20" />
+		<element holyPercent="20" />
+		<element physicalPercent="-10" />
+		<element icePercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<loot>
+		<item id="2148" countmax="40" chance="56000" />	<!-- gold coin -->
+		<item id="12448" chance="6420" />				<!-- rope belt -->
+		<item id="8838" countmax="3" chance="4840" />	<!-- potato -->
+		<item id="2386" chance="2730" />					<!-- axe -->
+		<item id="2465" chance="2350" />					<!-- brass armor -->
+		<item id="2398" chance="2150" />					<!-- mace -->
+		<item id="12412" chance="2140" />				<!-- dirty turban -->
+		<item id="2509" chance="900" />					<!-- steel shield -->
+		<item id="2459" chance="660" />					<!-- iron helmet -->
+		<item id="8267" chance="210" />					<!-- nomad parchment -->
+	</loot>
+</monster>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Deadeye Devious" nameDescription="deadeye devious" race="blood" experience="500" speed="300" manacost="0">
-	<health now="2000" max="2000" />
+<monster name="Deadeye Devious" nameDescription="Deadeye Devious" race="blood" experience="500" speed="300" manacost="0">
+	<health now="1450" max="1450" />
 	<look type="151" head="115" body="76" legs="35" feet="117" addons="2" corpse="20378" />
 	<targetchange interval="60000" chance="0" />
 	<flags>
@@ -11,38 +11,42 @@
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="3" />
 		<flag staticattack="50" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
-		<flag targetdistance="1" />
-		<flag runonhealth="0" />
+		<flag runonhealth="150" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-250" max="-550" />
-		<attack name="physical" interval="4000" chance="60" min="-200" max="-250">
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="physical" interval="4000" chance="60" min="0" max="-350">
 			<attribute key="shootEffect" value="throwingknife" />
 		</attack>
 	</attacks>
 	<defenses armor="35" defense="50">
-		<defense name="healing" interval="6000" chance="65" min="200" max="250">
+		<defense name="healing" interval="4000" chance="25" min="50" max="150">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Let's kill 'em" />
 		<voice sentence="Arrrgh!" />
 		<voice sentence="You'll never take me alive!" />
+		<voice sentence="§%§&amp;§! #*$§$!!" />
+		<voice sentence="You won't get me alive!" />
 	</voices>
 	<loot>
-		<item id="6102" chance="100000" /><!-- deadeye devious' eye patch -->
-		<item id="2148" countmax="65" chance="100000" /><!-- gold coin -->
-		<item id="2476" chance="1200" /><!-- knight armor -->
-		<item id="2463" chance="4000" /><!-- plate armor -->
-		<item id="2320" countmax="2" chance="100000" /><!-- skull -->
-		<item id="5926" chance="4000" /><!-- pirate backpack -->
-		<item id="2666" chance="100000" /><!-- meat -->
+		<item id="6102" chance="100000" />					<!-- deadeye devious' eye patch -->
+		<item id="2148" countmax="140" chance="100000" />	<!-- gold coin -->
+		<item id="2229" countmax="2" chance="85000" />		<!-- skull -->
+		<item id="2463" chance="78000" />					<!-- plate armor -->
+		<item id="2666" countmax="3" chance="42000" />		<!-- meat -->
+		<item id="2476" chance="28000" />					<!-- knight armor -->
+		<item id="2379" chance="21000" />					<!-- dagger -->
+		<item id="2145" chance="14000" />					<!-- small diamond -->
+		<item id="2387" chance="7000" />						<!-- double axe -->
+		<item id="5926" chance="7000" />						<!-- pirate backpack -->
 	</loot>
 </monster>

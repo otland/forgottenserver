@@ -17,8 +17,8 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="60" />
-		<attack name="speed" interval="2000" chance="20" range="1" speedchange="-600" duration="3000">
+		<attack name="melee" interval="2000" min="0" max="-240" />
+		<attack name="speed" interval="2000" chance="20" range="1" speedchange="-300" duration="3000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
@@ -34,20 +34,19 @@
 		<element energyPercent="-10" />
 		<element physicalPercent="10" />
 	</elements>
-	<voices interval="5000" chance="10">
-		<voice sentence="Clank clank!" />
+	<voices interval="2000" chance="7">
+		<voice sentence="Clank! Clank!" />
 		<voice sentence="Clap!" />
 		<voice sentence="Crrrk! Crrrk!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="43" chance="49000" /><!-- gold coin -->
-		<item id="12446" chance="9940" /><!-- quara pincers -->
-		<item id="2463" chance="4170" /><!-- plate armor -->
-		<item id="2381" chance="1840" /><!-- halberd -->
-		<item id="2147" chance="3440" /><!-- small ruby -->
-		<item id="5895" chance="1000" /><!-- fish fin -->
-		<item id="2177" chance="1000" /><!-- life crystal -->
-		<item id="13305" chance="10" /><!-- giant shrimp -->
+		<item id="2148" countmax="127" chance="90000" />	<!-- gold coin -->
+		<item id="12446" chance="9500" />				<!-- quara pincers -->
+		<item id="2463" chance="4170" />					<!-- plate armor -->
+		<item id="2147" countmax="2" chance="4000" />	<!-- small ruby -->
+		<item id="2381" chance="1700" />					<!-- halberd -->
+		<item id="2177" chance="810" />					<!-- life crystal -->
+		<item id="5895" chance="730" />					<!-- fish fin -->
+		<item id="13305" chance="10" />					<!-- giant shrimp -->
 	</loot>
 </monster>

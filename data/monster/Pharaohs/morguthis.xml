@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Morguthis" nameDescription="a morguthis" race="undead" experience="3000" speed="320" manacost="0">
+<monster name="Morguthis" nameDescription="Morguthis" race="undead" experience="3000" speed="320" manacost="0">
 	<health now="4800" max="4800" />
 	<look type="90" corpse="6025" />
 	<targetchange interval="5000" chance="8" />
@@ -17,35 +17,32 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="200" poison="65" />
-		<attack name="lifedrain" interval="3000" chance="7" range="1" min="-55" max="-550" />
-		<attack name="speed" interval="1000" chance="25" range="7" speedchange="-650" duration="50000">
-			<attribute key="areaEffect" value="redshimmer" />
+		<attack name="melee" interval="2000" min="0" max="-1000" />
+		<attack name="physical" interval="3000" chance="7" radius="3" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="mortarea" />
 		</attack>
-		<attack name="physical" interval="1000" chance="20" radius="3" target="0" min="-40" max="-400">
+		<attack name="physical" interval="1000" chance="20" radius="3" target="0" min="-140" max="-400">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
-		<attack name="physical" interval="3000" chance="7" radius="3" target="0" min="-50" max="-500">
-			<attribute key="areaEffect" value="mortarea" />
+		<attack name="speed" interval="1000" chance="25" range="7" speedchange="-250" duration="50000">
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
 	<defenses armor="35" defense="25">
-		<defense name="healing" interval="1000" chance="13" min="200" max="300">
+		<defense name="healing" interval="2000" chance="20" min="200" max="300">
 			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="speed" interval="1000" chance="7" speedchange="1201" duration="5000">
-			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 		<defense name="invisible" interval="2000" chance="10" duration="4000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="62" />
-		<element firePercent="60" />
-		<element energyPercent="52" />
-		<element earthPercent="-15" />
-		<element holyPercent="-22" />
+		<element physicalPercent="20" />
+		<element firePercent="20" />
+		<element energyPercent="20" />
+		<element icePercent="20" />
+		<element earthPercent="-10" />
+		<element holyPercent="-20" />
 	</elements>
 	<immunities>
 		<immunity death="1" />
@@ -53,9 +50,9 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="3">
-		<summon name="Hero" interval="2000" chance="1000" max="3" />
+		<summon name="Hero" interval="2000" chance="30" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Vengeance!" />
 		<voice sentence="You will make a fine trophy." />
 		<voice sentence="Come and fight me, cowards!" />
@@ -64,16 +61,16 @@
 		<voice sentence="Anotherone to bite the dust!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="73" chance="50000" /><!-- gold coin -->
-		<item id="2197" chance="7000" /><!-- stone skin amulet -->
-		<item id="2430" chance="7000" /><!-- knight axe -->
-		<item id="2144" chance="7000" /><!-- black pearl -->
-		<item id="7591" chance="1500" /><!-- great health potion -->
-		<item id="2136" chance="500" /><!-- demonbone amulet -->
-		<item id="2443" chance="300" /><!-- ravager's axe -->
-		<item id="7368" countmax="3" chance="500" /><!-- assassin star -->
-		<item id="2645" chance="500" /><!-- steel boots -->
-		<item id="2350" chance="100000" /><!-- sword hilt -->
+		<item id="2350" chance="100000" />				<!-- sword hilt -->
+		<item id="2148" countmax="221" chance="91000" />	<!-- gold coin -->
+		<item id="2144" chance="10000" />				<!-- black pearl -->
+		<item id="7368" countmax="3" chance="10000" />	<!-- assassin star -->
+		<item id="7591" chance="9500" />					<!-- great health potion -->
+		<item id="2430" chance="6000" />					<!-- knight axe -->
+		<item id="2197" chance="5000" />					<!-- stone skin amulet -->
+		<item id="11207" chance="140" />					<!-- mini mummy -->
+		<item id="2645" chance="140" />					<!-- steel boots -->
+		<item id="2136" chance="50" />					<!-- demonbone amulet -->
+		<item id="2443" chance="50" />					<!-- ravager's axe -->
 	</loot>
 </monster>

@@ -21,7 +21,7 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="*bell*" />
 		<voice sentence="ROOOAAARR!!" />
 		<voice sentence="*sniff*" />
@@ -32,4 +32,7 @@
 		<item id="13533" chance="20000" />				<!-- white deer antlers -->
 		<item id="13534" chance="20000" />				<!-- white deer skin -->
 	</loot>
+	<script>
+		<event name="WhiteDeerScoutsDeath" />
+	</script>
 </monster>

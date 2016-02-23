@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Pirate Corsair" nameDescription="a pirate corsair" race="blood" experience="350" speed="250" manacost="775">
 	<health now="675" max="675" />
-	<look type="98" corpse="20475" />
+	<look type="98" corpse="20478" />
 	<targetchange interval="4000" chance="15" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="0" />
+		<flag illusionable="1" />
 		<flag convinceable="1" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="40" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-170" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-150">
 			<attribute key="shootEffect" value="throwingstar" />
 		</attack>
@@ -34,29 +34,27 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Give up!" />
 		<voice sentence="Hiyaa!" />
 		<voice sentence="Plundeeeeer!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="88" chance="50000" /><!-- gold coin -->
-		<item id="2489" chance="1650" /><!-- dark armor -->
-		<item id="2385" chance="10000" /><!-- sabre -->
-		<item id="2376" chance="3000" /><!-- sword -->
-		<item id="2521" chance="1000" /><!-- dark shield -->
-		<item id="2399" countmax="12" chance="8400" /><!-- throwing star -->
-		<item id="5926" chance="930" /><!-- pirate backpack -->
-		<item id="6097" chance="600" /><!-- hook -->
-		<item id="6126" chance="600" /><!-- peg leg -->
-		<item id="6098" chance="500" /><!-- eye patch -->
-		<item id="7588" chance="820" /><!-- strong health potion -->
-		<item id="5813" chance="130" /><!-- skull candle -->
-		<item id="6096" chance="1150" /><!-- pirate hat -->
-		<item id="5462" chance="220" /><!-- pirate boots -->
-		<item id="2114" chance="150" /><!-- piggy bank -->
-		<item id="11219" chance="11050" /><!-- compass -->
-		<item id="5553" chance="130" /><!-- rum flask -->
-		<item id="11219" chance="11020" /><!-- compass -->
+		<item id="2148" countmax="83" chance="55000" />	<!-- gold coin -->
+		<item id="11219" chance="11020" />				<!-- compass -->
+		<item id="2385" chance="10000" />				<!-- sabre -->
+		<item id="2399" countmax="12" chance="8500" />	<!-- throwing star -->
+		<item id="2489" chance="1550" />					<!-- dark armor -->
+		<item id="6096" chance="1080" />					<!-- pirate hat -->
+		<item id="2521" chance="1050" />					<!-- dark shield -->
+		<item id="5926" chance="950" />					<!-- pirate backpack -->
+		<item id="7588" chance="820" />					<!-- strong health potion -->
+		<item id="6126" chance="590" />					<!-- peg leg -->
+		<item id="6097" chance="570" />					<!-- hook -->
+		<item id="6098" chance="500" />					<!-- eye patch -->
+		<item id="5462" chance="230" />					<!-- pirate boots -->
+		<item id="5553" chance="170" />					<!-- rum flask -->
+		<item id="2114" chance="150" />					<!-- piggy bank -->
+		<item id="5813" chance="130" />					<!-- skull candle -->
 	</loot>
 </monster>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Axeorcist" nameDescription="The Axeorcist" race="blood" experience="3000" speed="250">
-	<health now="5000" max="5000" />
+<monster name="The Axeorcist" nameDescription="the Axeorcist" race="blood" experience="4000" speed="250">
+	<health now="5100" max="5100" />
 	<look type="8" corpse="5980" />
 	<targetchange interval="2000" chance="9" />
 	<flags>
@@ -17,9 +17,19 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-276" />
+		<attack name="physical" interval="3000" chance="34" range="7" min="-100" max="-230">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-100" max="-200">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
 	</attacks>
-	<defenses armor="15" defense="12">
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
 	</defenses>
 	<immunities>
 		<immunity invisible="1" />

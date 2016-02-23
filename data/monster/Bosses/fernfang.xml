@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fernfang" nameDescription="Fernfang" race="blood" experience="400" speed="240" manacost="0">
+<monster name="Fernfang" nameDescription="Fernfang" race="blood" experience="600" speed="240" manacost="0">
 	<health now="400" max="400" />
 	<look type="206" corpse="20566" />
 	<targetchange interval="5000" chance="8" />
@@ -17,29 +17,23 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="40" />
-		<attack name="manadrain" interval="1000" chance="25" range="7" min="-25" max="-45">
+		<attack name="melee" interval="2000" min="0" max="-50" />
+		<attack name="holy" interval="1000" chance="13" range="7" min="-65" max="-180">
+			<attribute key="shootEffect" value="smallholy" />
+			<attribute key="areaEffect" value="holydamage" />
+		</attack>
+		<attack name="manadrain" interval="1000" chance="25" range="7" min="-20" max="-45">
 			<attribute key="areaEffect" value="redshimmer" />
-		</attack>
-		<attack name="energy" interval="1000" chance="13" range="7" min="-70" max="-90">
-			<attribute key="shootEffect" value="energy" />
-			<attribute key="areaEffect" value="energy" />
-		</attack>
-		<attack name="physical" interval="1000" chance="10" range="7" min="-140" max="-180">
-			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="10">
-		<defense name="healing" interval="1000" chance="15" min="90" max="120">
+		<defense name="healing" interval="2000" chance="15" min="10" max="200">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
-		<defense name="speed" interval="1000" chance="7" speedchange="310" duration="10000">
+		<defense name="speed" interval="1000" chance="7" speedchange="280" duration="10000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
-		<defense name="effect" interval="1000" chance="5">
-			<attribute key="areaEffect" value="redshimmer" />
-		</defense>
-		<defense name="outfit" interval="1000" chance="5" monster="war wolf" duration="14000">
+		<defense name="outfit" interval="1000" chance="5" monster="War Wolf" duration="14000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -51,23 +45,33 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="3">
-		<summon name="War Wolf" interval="1000" chance="13" max="3" />
+		<summon name="War Wolf" interval="1000" chance="13" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="You desecrated this place!" />
 		<voice sentence="I will cleanse this isle!" />
 		<voice sentence="Grrrrrrr" />
 		<voice sentence="Yoooohhuuuu!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
-		<item id="1949" chance="10000" /><!-- scroll -->
-		<item id="2467" chance="10000" /><!-- leather armor -->
-		<item id="2642" chance="6666" /><!-- sandals -->
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
-		<item id="2044" chance="6666" /><!-- lamp -->
-		<item id="2689" countmax="3" chance="20000" /><!-- bread -->
-		<item id="2401" chance="3333" /><!-- staff -->
-		<item id="2166" chance="1428" /><!-- power ring -->
+		<item id="10563" chance="100000" />				<!-- book of prayers -->
+		<item id="2148" countmax="95" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="3" chance="93000" />	<!-- platinum coin -->
+		<item id="2800" chance="86000" />				<!-- star herb -->
+		<item id="12448" chance="53000" />				<!-- rope belt -->
+		<item id="2166" chance="40000" />				<!-- power ring -->
+		<item id="12449" chance="40000" />				<!-- safety pin -->
+		<item id="2154" chance="33000" />				<!-- yellow gem -->
+		<item id="2015" chance="20000" />				<!-- brown flask -->
+		<item id="7589" chance="20000" />				<!-- strong mana potion -->
+		<item id="2044" chance="13000" />				<!-- lamp -->
+		<item id="2401" chance="13000" />				<!-- staff -->
+		<item id="5786" chance="13000" />				<!-- wooden whistle -->
+		<item id="2260" chance="7000" />					<!-- blank rune -->
+		<item id="2689" chance="7000" />					<!-- bread -->
+		<item id="2652" chance="7000" />					<!-- green tunic -->
+		<item id="2177" chance="7000" />					<!-- life crystal -->
+		<item id="2802" chance="7000" />					<!-- sling herb -->
+		<item id="2129" chance="7000" />					<!-- wolf tooth chain -->
 	</loot>
 </monster>

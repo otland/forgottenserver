@@ -52,7 +52,7 @@
 	<summons maxSummons="2">
 		<summon name="Death Blob" interval="2000" chance="10" max="2" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Ugggh!" />
 		<voice sentence="Gll" />
 	</voices>

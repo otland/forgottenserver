@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Flameborn" nameDescription="Flameborn" experience="2550" speed="260" race="fire" manacost="0">
+	<health now="3500" max="3500" />
+	<targetchange interval="4000" chance="15" />
+	<look type="322" corpse="9923" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="fireball" interval="2000" chance="20" min="-150" max="-175" />
+		<attack name="hellspawn soulfire" interval="2000" range="5" chance="10" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="10" min="120" max="230">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="270" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="20" />
+		<element energyPercent="10" />
+		<element firePercent="40" />
+		<element deathPercent="-5" />
+		<element icePercent="-10" />
+		<element holyPercent="30" />
+		<element earthPercent="80" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Your fragile bones are like toothpicks to me." />
+		<voice sentence="You little weasel will not live to see another day." />
+		<voice sentence="I'm just a messenger of what's yet to come." />
+		<voice sentence="HRAAAAAAAAAAAAAAAARRRR" yell="1" />
+		<voice sentence="I'm taking you down with me!" />
+	</voices>
+	<loot>
+		<item id="2152" countmax="1" chance="100000" /><!-- platinum coin -->
+		<item id="2152" countmax="13" chance="100000" /><!-- platinum coin -->
+		<item id="7591" chance="75810" /><!-- great health potion -->
+		<item id="11221" chance="100000" /><!-- hellspawn tail -->
+		<item id="7368" countmax="5" chance="19350" /><!-- assassin stars -->
+		<item id="8473" chance="77420" /><!-- ultimate health potion -->
+		<item id="6500" chance="35480" /><!-- demonic essence -->
+		<item id="2788" countmax="2" chance="67740" /><!-- red mushroom -->
+		<item id="9970" countmax="4" chance="43550" /><!-- small topaz -->
+		<item id="2477" chance="67740" /><!-- knight legs -->
+		<item id="2475" chance="20970" /><!-- warrior helmet -->
+		<item id="7452" chance="6450" /><!-- spiked squelcher -->
+		<item id="7439" chance="37100" /><!-- berserk potion -->
+		<item id="9969" chance="20970" /><!-- black skull -->
+		<item id="9948" chance="1610" /><!-- dracoyle statue -->
+		<item id="7421" chance="3230" /><!-- onyx fail -->
+		<item id="13298" chance="4840" /><!-- carron on a stick -->
+		<item id="2519" chance="29030" /><!-- crown shield -->
+	</loot>
+</monster>

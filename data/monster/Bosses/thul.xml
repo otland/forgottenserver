@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Thul" nameDescription="a thul" race="blood" experience="2700" speed="520" manacost="670">
+<monster name="Thul" nameDescription="Thul" race="blood" experience="2700" speed="520" manacost="0">
 	<health now="2950" max="2950" />
 	<look type="46" corpse="6065" />
 	<targetchange interval="5000" chance="8" />
@@ -11,28 +11,31 @@
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
+		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
-		<flag runonhealth="0" />
+		<flag runonhealth="40" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="85" attack="285" />
+		<attack name="melee" interval="2000" min="0" max="-285" />
+		<attack name="ice" interval="2000" chance="7" radius="4" target="0" min="-108" max="-137">
+			<attribute key="areaEffect" value="icearea" />
+		</attack>
 		<attack name="physical" interval="2000" chance="25" radius="3" min="0" max="-170">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
-		<attack name="poisonfield" interval="2000" chance="19" range="7" radius="3" target="0">
+		<attack name="poisonfield" interval="2000" chance="19" radius="3" target="0">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="speed" interval="2000" chance="18" range="7" speedchange="-360" duration="5000">
 			<attribute key="shootEffect" value="snowball" />
 		</attack>
-		<attack name="ice" interval="2000" chance="20" range="7" target="1" min="-108" max="-137">
-			<attribute key="shootEffect" value="ice" />
-			<attribute key="areaEffect" value="icearea" />
-		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="10" min="25" max="75">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<elements>
 		<element energyPercent="-15" />
 	</elements>
@@ -40,17 +43,23 @@
 		<immunity lifedrain="1" />
 		<immunity ice="1" />
 		<immunity earth="1" />
+		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Gaaahhh!" />
+		<voice sentence="Boohaa!" />
 	</voices>
 	<summons maxSummons="2">
-		<summon name="Massive Water Elementals" interval="2000" chance="10" max="2" />
+		<summon name="Massive Water Elemental" interval="2000" chance="10" />
 	</summons>
 	<loot>
-		<item id="5895" chance="100000" /><!-- fish fin -->
-		<item id="2148" countmax="77" chance="50000" /><!-- gold coin -->
-		<item id="7383" chance="50000" /><!-- relic sword -->
-		<item id="2670" chance="25000" /><!-- shrimp -->
+		<item id="5895" chance="100000" />				<!-- fish fin -->
+		<item id="2152" countmax="10" chance="88000" />	<!-- platinum coin -->
+		<item id="7963" chance="67000" />				<!-- marlin -->
+		<item id="7590" chance="46000" />				<!-- great mana potion -->
+		<item id="2150" countmax="4" chance="38000" />	<!-- small amethyst -->
+		<item id="7383" chance="35000" />				<!-- relic sword -->
+		<item id="2497" chance="16000" />				<!-- crusader helmet -->
+		<item id="2487" chance="10000" />				<!-- crown armor -->
 	</loot>
 </monster>

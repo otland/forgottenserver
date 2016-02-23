@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Gladiator" nameDescription="a undead gladiator" race="undead" experience="800" speed="180" manacost="0">
+<monster name="Undead Gladiator" nameDescription="an undead gladiator" race="undead" experience="800" speed="180" manacost="0">
 	<health now="1000" max="1000" />
 	<look type="306" corpse="9823" />
 	<targetchange interval="4000" chance="10" />
@@ -17,13 +17,13 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="50" />
-		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-135">
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="physical" interval="2000" chance="20" range="4" min="0" max="-135">
 			<attribute key="shootEffect" value="whirlwindsword" />
 		</attack>
 	</attacks>
 	<defenses armor="45" defense="45">
-		<defense name="invisible" interval="2000" chance="15" duration="3000">
+		<defense name="invisible" interval="4000" chance="15" duration="3000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -37,7 +37,7 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Let's battle it out in a duel!" />
 		<voice sentence="Bring it!" />
 		<voice sentence="I'll fight here in eternity and beyond." />
@@ -45,25 +45,23 @@
 		<voice sentence="Another foolish adventurer who tries to beat me." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
-		<item id="2148" countmax="48" chance="50500" /><!-- gold coin -->
-		<item id="8872" chance="5000" /><!-- belted cape -->
-		<item id="2465" chance="4700" /><!-- brass armor -->
-		<item id="2478" chance="5500" /><!-- brass legs -->
-		<item id="3965" chance="4200" /><!-- hunting spear -->
-		<item id="2666" countmax="2" chance="15000" /><!-- meat -->
-		<item id="2419" chance="11280" /><!-- scimitar -->
-		<item id="2399" countmax="18" chance="15700" /><!-- throwing star -->
-		<item id="2647" chance="2444" /><!-- plate legs -->
-		<item id="2463" chance="1700" /><!-- plate armor -->
-		<item id="2200" chance="2200" /><!-- protection amulet -->
-		<item id="2377" chance="1900" /><!-- two handed sword -->
-		<item id="2165" chance="30" /><!-- stealth ring -->
-		<item id="2490" chance="1460" /><!-- dark helmet -->
-		<item id="2497" chance="100" /><!-- crusader helmet -->
-		<item id="7618" chance="350" /><!-- health potion -->
-		<item id="2430" chance="280" /><!-- knight axe -->
-		<item id="5885" chance="210" /><!-- warrior's sweat -->
-		<item id="10573" chance="5200" /><!-- broken gladiator shield -->
+		<item id="2148" countmax="148" chance="94000" />	<!-- gold coin -->
+		<item id="2399" countmax="18" chance="16700" />	<!-- throwing star -->
+		<item id="2419" chance="11280" />				<!-- scimitar -->
+		<item id="8872" chance="5500" />					<!-- belted cape -->
+		<item id="10573" chance="5200" />				<!-- broken gladiator shield -->
+		<item id="2478" chance="4770" />					<!-- brass legs -->
+		<item id="2465" chance="4550" />					<!-- brass armor -->
+		<item id="3965" chance="4080" />					<!-- hunting spear -->
+		<item id="2647" chance="2730" />					<!-- plate legs -->
+		<item id="2200" chance="2200" />					<!-- protection amulet -->
+		<item id="2377" chance="1730" />					<!-- two handed sword -->
+		<item id="2463" chance="1600" />					<!-- plate armor -->
+		<item id="2490" chance="1320" />					<!-- dark helmet -->
+		<item id="7618" chance="310" />					<!-- health potion -->
+		<item id="2430" chance="310" />					<!-- knight axe -->
+		<item id="5885" chance="190" />					<!-- flask of warrior's sweat -->
+		<item id="2497" chance="90" />					<!-- crusader helmet -->
+		<item id="2165" chance="60" />					<!-- stealth ring -->
 	</loot>
 </monster>

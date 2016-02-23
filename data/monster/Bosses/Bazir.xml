@@ -82,14 +82,12 @@
 		<immunity poison="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="1">
 		<summon name="bazir" interval="1000" chance="15" max="1" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="COME HERE! FREE ITEMS FOR EVERYONE!" yell="1" />
 		<voice sentence="BOW TO THE POWER OF THE RUTHLESS SEVEN!" />
 		<voice sentence="Slay your friends and I will spare you!" yell="1" />

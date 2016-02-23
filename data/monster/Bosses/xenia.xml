@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Xenia" nameDescription="xenia" race="blood" experience="255" speed="176" manacost="450">
+<monster name="Xenia" nameDescription="Xenia" race="blood" experience="255" speed="176" manacost="450">
 	<health now="290" max="290" />
 	<look type="137" head="95" body="115" legs="115" feet="95" corpse="20542" />
 	<targetchange interval="5000" chance="8" />
@@ -30,7 +30,7 @@
 		<element deathPercent="-7" />
 		<element physicalPercent="-6" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Stand still!" />
 		<voice sentence="One more head for me!" />
 		<voice sentence="Head off!" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Bloodtusk" nameDescription="the bloodtuskh" race="blood" experience="300" speed="190" manacost="0">
+<monster name="The Bloodtusk" nameDescription="the Bloodtusk" race="blood" experience="300" speed="190" manacost="0">
 	<health now="600" max="600" />
 	<look type="199" corpse="6074" />
 	<targetchange interval="5000" chance="8" />
@@ -9,34 +9,33 @@
 		<flag hostile="1" />
 		<flag illusionable="0" />
 		<flag convinceable="0" />
-		<flag pushable="1" />
+		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
+		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-120" />
 	</attacks>
 	<defenses armor="40" defense="57" />
 	<elements>
-		<element earthPercent="20" />
-		<element icePercent="20" />
-		<element physicalPercent="15" />
+		<element earthPercent="15" />
+		<element icePercent="-10" />
 		<element firePercent="-10" />
 	</elements>
 	<immunities>
-		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2152" countmax="3" chance="83825" /><!-- platinum coin -->
-		<item id="2148" countmax="65" chance="66900" /><!-- gold coin -->
-		<item id="3973" chance="83825" /><!-- tusk shield -->
-		<item id="8614" countmax="2" chance="58825" /><!-- tusk -->
-		<item id="7463" chance="42175" /><!-- mammoth fur cape -->
-		<item id="7432" chance="50500" /><!-- furry club -->
-		<item id="11238" countmax="2" chance="38000" /><!-- mammoth tusk -->
+		<item id="2148" countmax="99" chance="100000" />	<!-- gold coin -->
+		<item id="11238" countmax="2" chance="100000" />	<!-- mammoth tusk -->
+		<item id="2152" countmax="5" chance="100000" />	<!-- platinum coin -->
+		<item id="7432" chance="63000" />				<!-- furry club -->
+		<item id="5911" chance="60000" />				<!-- red piece of cloth -->
+		<item id="3973" chance="55000" />				<!-- tusk shield -->
+		<item id="8614" countmax="4" chance="41000" />	<!-- tusk -->
+		<item id="7463" chance="18000" />				<!-- mammoth fur cape -->
 	</loot>
 </monster>

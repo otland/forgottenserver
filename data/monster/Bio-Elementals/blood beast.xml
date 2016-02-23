@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Blood Beast" nameDescription="a blood beast" race="blood" experience="1000" speed="250" manacost="0">
+	<health now="1600" max="1600" />
+	<look type="602" corpse="5962" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" poison="4" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="-60" max="-100">
+			<attribute key="shootEffect" value="greenstar" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" range="7" min="-120" max="-160">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" range="7" min="0" max="-160">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="healing" interval="2000" chance="5" min="0" max="115">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="10" />
+		<element icePercent="-5" />
+		<element firePercent="-10" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Roarr!" />
+		<voice sentence="*grlb*" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="149" chance="100000" />	<!-- gold coin -->
+		<item id="2148" chance="100" />						<!-- slime heart -->
+		<item id="2148" chance="100" />						<!-- poisoned fang -->
+		<item id="7588" chance="8000" />						<!-- strong health potion -->
+	</loot>
+</monster>

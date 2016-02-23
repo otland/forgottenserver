@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Poacher" nameDescription="a poacher" race="blood" experience="70" speed="185" manacost="530">
 	<health now="90" max="90" />
-	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="20487" />
+	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="20490" />
 	<targetchange interval="5000" chance="0" />
 	<flags>
 		<flag summonable="0" />
@@ -17,25 +17,25 @@
 		<flag runonhealth="5" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="25" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-35" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-35">
 			<attribute key="shootEffect" value="arrow" />
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="You will not live to tell anyone!" />
 		<voice sentence="You are my game today!" />
 		<voice sentence="Look what has stepped into my trap!" />
 	</voices>
 	<loot>
-		<item id="2649" chance="26740" /><!-- leather legs -->
-		<item id="2461" chance="30600" /><!-- leather helmet -->
-		<item id="2690" countmax="2" chance="11110" /><!-- roll -->
-		<item id="2456" chance="14930" /><!-- bow -->
-		<item id="2544" countmax="17" chance="49500" /><!-- arrow -->
-		<item id="2545" countmax="3" chance="2930" /><!-- poison arrow -->
-		<item id="2050" chance="4180" /><!-- torch -->
-		<item id="2578" chance="710" /><!-- closed trap -->
+		<item id="2544" countmax="17" chance="48500" />	<!-- arrow -->
+		<item id="2461" chance="30000" />				<!-- leather helmet -->
+		<item id="2649" chance="26000" />				<!-- leather legs -->
+		<item id="2456" chance="14000" />				<!-- bow -->
+		<item id="2690" countmax="2" chance="11110" />	<!-- roll -->
+		<item id="2050" chance="4300" />					<!-- torch -->
+		<item id="2545" countmax="3" chance="3000" />	<!-- poison arrow -->
+		<item id="2578" chance="750" />					<!-- closed trap -->
 	</loot>
 </monster>

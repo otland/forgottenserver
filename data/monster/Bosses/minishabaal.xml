@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Minishabaal" nameDescription="minishabaal" race="blood" experience="4000" speed="700" manacost="0">
+<monster name="Minishabaal" nameDescription="Minishabaal" race="blood" experience="4000" speed="700" manacost="0">
 	<health now="3500" max="3500" />
 	<look type="237" corpse="6364" />
 	<targetchange interval="5000" chance="8" />
@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -44,7 +44,7 @@
 	<summons maxSummons="3">
 		<summon name="Diabolic Imp" interval="2000" chance="40" max="3" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I had Princess Lumelia as breakfast!" />
 		<voice sentence="Naaa-Nana-Naaa-Naaa!" />
 		<voice sentence="My brother will come and get you for this!" />

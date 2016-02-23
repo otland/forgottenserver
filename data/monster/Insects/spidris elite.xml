@@ -26,21 +26,4 @@
 	<elements>
 		<element holyPercent="-10" />
 	</elements>
-	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="45000" /><!-- platinum coin -->
-		<item id="15485" chance="27440" /><!-- spidris sandible -->
-		<item id="15486" chance="13210" /><!-- compound eye -->
-		<item id="2147" countmax="5" chance="23280" /><!-- small ruby -->
-		<item id="7590" countmax="2" chance="20400" /><!-- great mana potion -->
-		<item id="8473" countmax="2" chance="9250" /><!-- ultimate health potion -->
-		<item id="6300" chance="4480" /><!-- death ring -->
-		<item id="7632" chance="3040" /><!-- giant shimmering pearl -->
-		<item id="7413" chance="1440" /><!-- titan axe -->
-		<item id="2153" chance="1120" /><!-- violet gem -->
-		<item id="15489" chance="1280" /><!-- calopteryx cape -->
-		<item id="15492" chance="1390" /><!-- hive scythe -->
-		<item id="15491" chance="1170" /><!-- carapace shield -->
-	</loot>
 </monster>

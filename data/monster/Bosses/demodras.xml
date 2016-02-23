@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Demodras" nameDescription="demodras" race="blood" experience="4000" speed="230" manacost="0">
+<monster name="Demodras" nameDescription="Demodras" race="blood" experience="4000" speed="230" manacost="0">
 	<health now="4500" max="4500" />
 	<look type="204" corpse="5984" />
 	<targetchange interval="5000" chance="8" />
@@ -43,7 +43,7 @@
 	<summons maxSummons="2">
 		<summon name="Dragon" interval="1000" chance="17" max="2" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I WILL SET THE WORLD IN FIRE!" yell="1" />
 		<voice sentence="I WILL PROTECT MY BROOD!" yell="1" />
 	</voices>

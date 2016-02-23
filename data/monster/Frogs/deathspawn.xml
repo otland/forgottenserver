@@ -26,7 +26,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="1" defense="5" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Ribbit!" />
 		<voice sentence="Ribbit! Ribbit!" />
 	</voices>

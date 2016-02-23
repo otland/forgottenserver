@@ -3,7 +3,6 @@
 	<health now="10000" max="10000" />
 	<look type="285" corpse="8933" />
 	<targetchange interval="2000" chance="5" />
-	<strategy attack="100" defense="0" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
@@ -48,7 +47,7 @@
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
-		<voices interval="2000" chance="9">
+	<voices interval="2000" chance="9">
 		<voice sentence="STOMP STOMP!" yell="1" />
 	</voices>
 </monster>

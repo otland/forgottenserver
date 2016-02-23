@@ -32,7 +32,7 @@
 		<element icePercent="20" />
 		<element physicalPercent="20" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Grrrr" />
 	</voices>
 	<loot>

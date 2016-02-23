@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -17,11 +17,10 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="fire" interval="2000" change="35" length="8" spread="1" min="0" max="-1000">
+		<attack name="fire" interval="2000" chance="35" length="8" spread="0" target="0" min="-700" max="-1025">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
-		<attack name="fire" interval="2000" change="35" range="7" radius="7" target="0" min="0" max="-395">
-			<attribute key="shootEffect" value="fire" />
+		<attack name="fire" interval="2000" chance="35" range="7" radius="7" min="0" max="-395">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
 	</attacks>

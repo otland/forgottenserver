@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Dark Dancer" nameDescription="the dark dancer" race="blood" experience="435" speed="170" manacost="0">
-	<health now="855" max="855" />
+<monster name="The Dark Dancer" nameDescription="The Dark Dancer" race="blood" experience="435" speed="170" manacost="0">
+	<health now="805" max="805" />
 	<look type="58" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -10,23 +10,19 @@
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag targetdistance="1" />
+		<flag targetdistance="4" />
 	</flags>
 	<attacks>
-		<attack name="poisoncondition" interval="2000" skill="20" attack="30" />
-		<attack name="physical" interval="3000" chance="70" radius="1" target="1" range="5" min="-60" max="-95">
-			<attribute key="areaEffect" value="mortarea" />
-			<attribute key="shootEffect" value="suddendeath" />
-		</attack>
-		<attack name="physical" interval="6000" chance="90" radius="1" target="1" range="5" min="-60" max="-95">
-			<attribute key="areaEffect" value="mortarea" />
-			<attribute key="shootEffect" value="suddendeath" />
-		</attack>
-		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="5" duration="10000" speed="-400">
+		<attack name="melee" interval="2000" min="0" max="-45" poison="11" />
+		<attack name="speed" interval="3500" chance="35" range="5" duration="10000" speed="-250">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="manadrain" interval="4000" chance="30" radius="1" target="1" range="5" min="-2" max="-110">
+		<attack name="manadrain" interval="4000" chance="30" range="5" min="0" max="-110">
 			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="3000" chance="70" range="5" min="-50" max="-90">
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
 	</attacks>
 	<defenses armor="11" defense="12">
@@ -39,11 +35,9 @@
 	</defenses>
 	<elements>
 		<element firePercent="40" />
-		<element deathPercent="20" />
+		<element deathPercent="5" />
 	</elements>
 	<immunities>
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="3">

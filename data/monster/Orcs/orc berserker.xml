@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Berserker" nameDescription="a orc berserker" race="blood" experience="195" speed="195" manacost="590">
+<monster name="Orc Berserker" nameDescription="an orc berserker" race="blood" experience="195" speed="195" manacost="590">
 	<health now="210" max="210" />
 	<look type="8" corpse="5980" />
 	<targetchange interval="4000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="6000">
@@ -30,19 +30,19 @@
 		<element earthPercent="-10" />
 		<element deathPercent="-10" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="KRAK ORRRRRRK!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="54000" /><!-- gold coin -->
-		<item id="2671" chance="10400" /><!-- ham -->
-		<item id="11113" chance="3000" /><!-- orc tooth -->
-		<item id="2464" chance="890" /><!-- chain armor -->
-		<item id="2044" chance="830" /><!-- lamp -->
-		<item id="2381" chance="7280" /><!-- halberd -->
-		<item id="2378" chance="6110" /><!-- battle axe -->
-		<item id="3965" chance="5000" /><!-- hunting spear -->
-		<item id="12433" chance="9400" /><!-- orcish gear -->
-		<item id="12435" chance="4000" /><!-- orc leather -->
+		<item id="2148" countmax="12" chance="54000" />	<!-- gold coin -->
+		<item id="2671" chance="10400" />				<!-- ham -->
+		<item id="12433" chance="9700" />				<!-- orcish gear -->
+		<item id="2381" chance="7000" />					<!-- halberd -->
+		<item id="2378" chance="6220" />					<!-- battle axe -->
+		<item id="3965" chance="5000" />					<!-- hunting spear -->
+		<item id="12435" chance="4000" />				<!-- orc leather -->
+		<item id="11113" chance="3000" />				<!-- orc tooth -->
+		<item id="2464" chance="910" />					<!-- chain armor -->
+		<item id="2044" chance="760" />					<!-- lamp -->
 	</loot>
 </monster>

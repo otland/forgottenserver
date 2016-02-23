@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grandfather Tridian" nameDescription="Grandfather Tridian" race="blood" experience="1400" speed="210" manacost="0">
+	<health now="1800" max="1800" />
+	<look type="193" corpse="20391" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="50" />
+		<flag targetdistance="4" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="lifedrain" interval="2000" chance="25" range="1" radius="1" target="1" min="-138" max="-362">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="1" radius="1" target="1" min="0" max="-50">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="25" min="60" max="90">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="15" duration="4000">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="20" />
+		<element icePercent="5" />
+		<element physicalPercent="35" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Crypt Shambler" interval="2000" chance="10" />
+		<summon name="Ghost" interval="2000" chance="10" />
+	</summons>
+	<voices interval="2000" chance="7">
+		<voice sentence="I will bring peace to your misguided soul!" />
+		<voice sentence="Your intrusion can't be tolerated!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="80" chance="100000" />	<!-- gold coin -->
+		<item id="2114" chance="100000" />				<!-- piggy bank -->
+		<item id="7589" chance="5000" />					<!-- strong mana potion -->
+		<item id="2789" chance="5000" />					<!-- brown mushroom -->
+		<item id="2187" chance="5000" />					<!-- wand of inferno -->
+		<item id="2436" chance="5000" />					<!-- skull staff -->
+		<item id="8922" chance="5000" />					<!-- wand of voodoo -->
+		<item id="7426" chance="3000" />					<!-- amber staff -->
+		<item id="6087" chance="3000" />					<!-- music sheet 1st verse -->
+		<item id="6088" chance="3000" />					<!-- music sheet 2nd verse -->
+		<item id="6089" chance="3000" />					<!-- music sheet 3rd verse -->
+		<item id="6090" chance="3000" />					<!-- music sheet 4th verse -->
+		<item id="3955" chance="1000" />					<!-- voodoo doll -->
+		<item id="10555" chance="10250" />				<!-- cultish mask -->
+		<item id="1962" chance="910" />					<!-- orange book -->
+		<item id="12411" chance="890" />					<!-- cultish symbol -->
+		<item id="2200" chance="790" />					<!-- protection amulet -->
+		<item id="2146" chance="550" />					<!-- small sapphire -->
+		<item id="2167" chance="450" />					<!-- energy ring -->
+		<item id="5810" chance="430" />					<!-- pirate voodoo doll -->
+		<item id="2171" chance="200" />					<!-- platinum amulet -->
+		<item id="5670" chance="130" />					<!-- mysterious voodoo skull -->
+		<item id="12608" chance="100" />					<!-- broken key ring -->
+		<item id="5801" chance="100" />					<!-- jewelled backpack -->
+		<item id="2656" chance="40" />					<!-- blue robe -->
+	</loot>
+</monster>

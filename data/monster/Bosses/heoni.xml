@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Heoni" nameDescription="heoni" race="blood" experience="515" speed="300" manacost="0">
+<monster name="Heoni" nameDescription="Heoni" race="blood" experience="515" speed="300" manacost="0">
 	<health now="795" max="795" />
-	<look type="239" corpse="6302" />
+	<look type="239" corpse="12546" />
 	<targetchange interval="2000" chance="10" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -38,7 +38,6 @@
 		<element icePercent="10" />
 	</elements>
 	<immunities>
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="10">

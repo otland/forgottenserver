@@ -27,7 +27,7 @@
 		<element earthPercent="-10" />
 		<element deathPercent="-5" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="CRAAAHHH!" />
 		<voice sentence="Gruuuh Gruuuh." />
 		<voice sentence="Carrah Carrah!" />

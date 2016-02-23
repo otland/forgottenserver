@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Norgle Glacierbeard" nameDescription="norgle glacierbeard" race="blood" experience="2100" speed="195" manacost="0">
+<monster name="Norgle Glacierbeard" nameDescription="Norgle Glacierbeard" race="blood" experience="2100" speed="195" manacost="0">
 	<health now="4300" max="4300" />
 	<look type="257" corpse="7349" />
 	<flags>
@@ -22,8 +22,6 @@
 	</elements>
 	<immunities>
 		<immunity ice="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="5">

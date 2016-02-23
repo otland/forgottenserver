@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mad Technomancer" nameDescription="mad technomancer" race="blood" experience="55" speed="200" manacost="0">
+<monster name="Mad Technomancer" nameDescription="Mad Technomancer" race="blood" experience="55" speed="200" manacost="0">
 	<health now="1000" max="1000" />
 	<look type="66" corpse="6015" />
 	<targetchange interval="500" chance="25" />
@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -43,7 +43,7 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I'm going to make them an offer they can't refuse." />
 		<voice sentence="My masterplan cannot fail!" />
 		<voice sentence="Gentlemen, you can't fight here! This is the War Room!" />

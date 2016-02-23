@@ -7,9 +7,9 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="0" />
+		<flag illusionable="1" />
 		<flag convinceable="0" />
-		<flag pushable="1" />
+		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="0" />
 		<flag staticattack="90" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="20" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -27,13 +27,13 @@
 		<immunity death="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="25" chance="48000" /><!-- gold coin -->
-		<item id="2231" chance="5140" /><!-- big bone -->
-		<item id="2230" chance="4250" /><!-- bone -->
-		<item id="2406" chance="1003" /><!-- short sword -->
-		<item id="2376" chance="550" /><!-- sword -->
-		<item id="2449" chance="960" /><!-- bone club -->
-		<item id="2229" chance="4460" /><!-- skull -->
-		<item id="10559" chance="4730" /><!-- Spooky Blue Eye -->
+		<item id="2148" countmax="25" chance="48000" />	<!-- gold coin -->
+		<item id="2231" chance="5220" />					<!-- big bone -->
+		<item id="10559" chance="4500" />				<!-- spooky blue eye -->
+		<item id="2229" chance="4460" />					<!-- skull -->
+		<item id="2230" chance="4380" />					<!-- bone -->
+		<item id="2449" chance="1030" />					<!-- bone club -->
+		<item id="2406" chance="1030" />					<!-- short sword -->
+		<item id="2376" chance="580" />					<!-- sword -->
 	</loot>
 </monster>

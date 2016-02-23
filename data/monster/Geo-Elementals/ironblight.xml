@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ironblight" nameDescription="ironblight" race="undead" experience="4400" speed="220" manacost="0">
+<monster name="Ironblight" nameDescription="an ironblight" race="undead" experience="4400" speed="220" manacost="0">
 	<health now="6600" max="6600" />
 	<look type="498" corpse="17424" />
 	<targetchange interval="4000" chance="10" />
+	<strategy attack="90" defense="10" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
@@ -39,7 +40,7 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Clonk!" />
 		<voice sentence="Yowl!" />
 	</voices>

@@ -18,10 +18,11 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-85" poison="4" />
-		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-30" max="-40">
+		<attack name="death" interval="2000" chance="20" range="1" min="-30" max="-40">
+			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
-		<attack name="speed" interval="2000" chance="15" range="7" target="1" speedchange="-226" duration="10000">
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-226" duration="10000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
@@ -38,7 +39,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I will ssswallow your sssoul!" />
 		<voice sentence="Mort ulhegh dakh visss." />
 		<voice sentence="Flesssh to dussst!" />

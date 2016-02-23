@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Scorn of the Emperor" nameDescription="a scorn of the emperor" race="undead" experience="4600" speed="410" manacost="0">
+<monster name="Scorn Of The Emperor" nameDescription="a scorn of the emperor" race="undead" experience="4600" speed="410" manacost="0">
 	<health now="7800" max="7800" />
-	<look type="351" corpse="0" />
+	<look type="351" corpse="12317" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />

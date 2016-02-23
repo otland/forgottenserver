@@ -29,7 +29,7 @@
 		<element firePercent="-5" />
 		<element firePercent="-1" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="*crackle*" />
 		<voice sentence="*swwwwishhhh*" />
 	</voices>

@@ -17,7 +17,7 @@
 		<flag runonhealth="20" />
 	</flags>
 	<defenses armor="5" defense="5" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Maeh" />
 	</voices>
 	<loot>

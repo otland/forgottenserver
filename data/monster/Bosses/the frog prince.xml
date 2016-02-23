@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Frog Prince" nameDescription="the frog prince" race="venom" experience="1" speed="230" manacost="250">
+<monster name="The Frog Prince" nameDescription="the Frog Prince" race="venom" experience="1" speed="230" manacost="250">
 	<health now="55" max="55" />
 	<look type="224" head="69" body="66" legs="69" feet="66" corpse="6079" />
 	<targetchange interval="5000" chance="20" />
 	<flags>
-		<flag summonable="1" />
+		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
@@ -25,8 +25,7 @@
 		<element icePercent="90" />
 		<element firePercent="10" />
 	</elements>
-	<voices interval="5000" chance="10">
-		<voice sentence="Ribbit!" />
-		<voice sentence="Ribbit! Ribbit!" />
+	<voices interval="2000" chance="7">
+		<voice sentence="Don't Kill me!!" />
 	</voices>
 </monster>

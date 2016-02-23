@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Amazon" nameDescription="a minotaur amazon" race="blood" experience="2200" speed="220" manacost="0">
+	<health now="2600" max="2600" />
+	<look type="608" corpse="5962" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="200" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="lifedrain" interval="2000" chance="10" target="1" radius="4" min="-80" max="-280">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-170">
+			<attribute key="shootEffect" value="spear" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" target="0" length="5" spread="0" min="-100" max="-480">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-300" duration="30000">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="invisible" interval="2000" chance="20" duration="7000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-10" />
+		<element firePercent="-5" />
+		<element icePercent="10" />
+		<element deathPercent="10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="I'll protect the herd!" />
+		<voice sentence="Never surrender!" />
+		<voice sentence="You won't hurt us!" />
+		<voice sentence="I will not allow your evil to continue!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="191" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="3" chance="59000" />		<!-- platinum coin -->
+		<item id="2671" chance="56000" />					<!-- ham -->
+		<item id="5878" chance="19000" />					<!-- minotaur leather -->
+		<item id="23575" chance="19000" />					<!-- cowbell -->
+		<item id="7591" chance="9800" />						<!-- great health potion -->
+		<item id="7590" chance="9800" />						<!-- great mana potion -->
+		<item id="12428" countmax="2" chance="7800" />		<!-- minotaur horn -->
+		<item id="2214" chance="6500" />						<!-- ring of healing -->
+		<item id="2666" chance="5800" />						<!-- meat -->
+		<item id="2147" countmax="2" chance="5800" />		<!-- small ruby -->
+		<item id="9970" countmax="2" chance="4500" />		<!-- small topaz -->
+		<item id="7368" countmax="5" chance="4000" />		<!-- assassin star -->
+		<item id="2150" countmax="2" chance="3900" />		<!-- small amethyst -->
+		<item id="2149" countmax="2" chance="3900" />		<!-- small emerald -->
+		<item id="23546" chance="2850" />					<!-- mino shield -->
+		<item id="5911" chance="1900" />						<!-- red piece of cloth -->
+		<item id="23545" chance="1780" />					<!-- mino lance -->
+		<item id="2156" chance="650" />						<!-- red gem -->
+		<item id="2197" chance="650" />						<!-- stone skin amulet -->
+		<item id="2154" chance="650" />						<!-- yellow gem -->
+	</loot>
+</monster>

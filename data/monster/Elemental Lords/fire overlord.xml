@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -17,16 +17,13 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="100" fire="650" />
-		<attack name="firefield" interval="2000" chance="15" range="7" radius="4" target="1">
-			<attribute key="shootEffect" value="fire" />
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="3" target="0" />
+		<attack name="fire" interval="1000" chance="15" length="8" spread="0" min="-400" max="-1100" />
+		<attack name="fire" interval="2000" chance="15" range="7" radius="3" target="0" min="-60" max="-330">
+			<attribute key="areaEffect" value="fire" />
 		</attack>
-		<attack name="fire" interval="1000" chance="15" length="1" min="-300" max="-900">
-			<attribute key="areaEffect" value="fireattack" />
-		</attack>
-		<attack name="fire" interval="1000" chance="13" target="1" radius="4" min="-200" max="-350">
-			<attribute key="areaEffect" value="firearea" />
-		</attack>
+		<attack name="hellfire fighter soulfire" interval="2000" chance="15" />
 	</attacks>
 	<defenses armor="25" defense="25" />
 	<elements>
@@ -38,12 +35,14 @@
 	</elements>
 	<immunities>
 		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="8304" chance="100000" /><!-- eternal flames -->
-		<item id="10553" chance="100000" /><!-- fiery heart -->
-		<item id="2148" countmax="75" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="3" chance="50000" /><!-- platinum coin -->
-		<item id="7899" chance="819" /><!-- magma coat -->
+		<item id="8304" chance="100000" />				<!-- eternal flames -->
+		<item id="10553" chance="100000" />				<!-- fiery heart -->
+		<item id="2148" countmax="75" chance="70000" />	<!-- gold coin -->
+		<item id="2152" countmax="3" chance="50000" />	<!-- platinum coin -->
+		<item id="7899" chance="550" />					<!-- magma coat -->
 	</loot>
 </monster>

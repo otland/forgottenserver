@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Dreadorian" nameDescription="The Dreadorian" race="blood" experience="4000" speed="250" manacost="0">
+<monster name="The Dreadorian" nameDescription="the Dreadorian" race="blood" experience="4000" speed="250" manacost="0">
 	<health now="9000" max="9000" />
 	<look type="234" corpse="6328" />
 	<targetchange interval="5000" chance="8" />

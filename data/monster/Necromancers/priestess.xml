@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Priestess" nameDescription="a priestess" race="blood" experience="420" speed="200" manacost="0">
 	<health now="390" max="390" />
-	<look type="58" corpse="20491" />
+	<look type="58" corpse="20494" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -17,14 +17,13 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="65" attack="20" />
-		<attack name="death" interval="2000" chance="20" range="7" min="-55" max="-120">
+		<attack name="melee" interval="2000" min="0" max="-75" />
+		<attack name="death" interval="2000" chance="20" range="7" min="0" max="-120">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="smallclouds" />
-			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 		<attack name="manadrain" interval="2000" chance="15" range="7" min="-2" max="-170" />
-		<attack name="poisoncondition" interval="2000" chance="15" range="7" min="-200">
+		<attack name="poisoncondition" interval="2000" chance="15" range="7" min="-10" max="-10">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>
@@ -44,32 +43,31 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="ghoul" interval="2000" chance="10" max="2" />
+		<summon name="Ghoul" interval="2000" chance="10" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Your energy is mine." />
-		<voice sentence="Now, your life has come to an end, hahahha!" />
+		<voice sentence="Now your life is come to the end, hahahaha!" />
 		<voice sentence="Throw the soul on the altar!" />
 	</voices>
 	<loot>
-		<item id="2529" chance="210" /><!-- black shield -->
-		<item id="1962" chance="890" /><!-- orange book -->
-		<item id="2423" chance="1500" /><!-- clerical mace -->
-		<item id="2192" chance="1250" /><!-- crystal ball -->
-		<item id="2125" chance="640" /><!-- crystal necklace -->
-		<item id="2760" chance="11720" /><!-- goat grass -->
-		<item id="2183" chance="1100" /><!-- hailstorm rod -->
-		<item id="7620" chance="850" /><!-- mana potion -->
-		<item id="2803" chance="5900" /><!-- powder herb -->
-		<item id="2674" countmax="2" chance="7500" /><!-- red apple -->
-		<item id="2802" chance="13200" /><!-- sling herb -->
-		<item id="2151" chance="750" /><!-- talon -->
-		<item id="2791" chance="3240" /><!-- wood mushroom -->
-		<item id="2070" chance="1410" /><!-- flute -->
-		<item id="2114" chance="90" /><!-- piggy bank -->
-		<item id="11220" chance="9840" /><!-- dark rosary -->
-		<item id="10556" chance="1800" /><!-- cultish robe -->
-		<item id="10562" chance="5230" /><!-- Black Hood -->
-		<item id="2374" chance="1400" /><!-- Wooden Flute -->
+		<item id="2802" chance="13200" />				<!-- sling herb -->
+		<item id="2760" chance="11720" />				<!-- goat grass -->
+		<item id="11220" chance="10000" />				<!-- dark rosary -->
+		<item id="2674" countmax="2" chance="7500" />	<!-- red apple -->
+		<item id="2803" chance="6500" />					<!-- powder herb -->
+		<item id="10562" chance="5000" />				<!-- black hood -->
+		<item id="2791" chance="3200" />					<!-- wood mushroom -->
+		<item id="10556" chance="1800" />				<!-- cultish robe -->
+		<item id="2423" chance="1500" />					<!-- clerical mace -->
+		<item id="2374" chance="1450" />					<!-- wooden flute -->
+		<item id="2192" chance="1100" />					<!-- crystal ball -->
+		<item id="2183" chance="1000" />					<!-- hailstorm rod -->
+		<item id="1962" chance="940" />					<!-- book -->
+		<item id="7620" chance="900" />					<!-- mana potion -->
+		<item id="2151" chance="730" />					<!-- talon -->
+		<item id="2125" chance="660" />					<!-- crystal necklace -->
+		<item id="2529" chance="200" />					<!-- black shield -->
+		<item id="2114" chance="80" />					<!-- piggy bank -->
 	</loot>
 </monster>

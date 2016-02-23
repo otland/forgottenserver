@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Shredderthrower" nameDescription="a shredderthrower" race="undead" experience="0" speed="0" manacost="0">
-	<health now="9950" max="9950" />
+	<health now="100" max="100" />
 	<look typeex="1551" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
@@ -31,10 +31,8 @@
 		<immunity holy="1" />
 		<immunity death="1" />
 		<immunity lifedrain="1" />
-		<immunity manadrain="1" />
 		<immunity paralyze="1" />
-		<immunity drunk="1" />
-		<immunity outfit="1" />
+		<immunity drown="1" />
 		<immunity invisible="1" />
 	</immunities>
 </monster>

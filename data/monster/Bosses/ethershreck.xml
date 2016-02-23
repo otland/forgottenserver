@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ethershreck" nameDescription="Ethershreck" race="undead" experience="7500" speed="320" manacost="0">
+	<health now="12500" max="12500" />
+	<look type="351" corpse="11362" />
+	<targetchange interval="4000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="366" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="124" attack="1000" />
+		<attack name="ghastly dragon curse" interval="2000" chance="5" range="5" />
+		<attack name="poisoncondition" interval="2000" chance="10" target="1" range="5" min="-920" max="-1280">
+			<attribute key="areaEffect" value="bats" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="7" target="1" min="-180" max="-330">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" length="8" spread="3" min="-220" max="-350">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" radius="4" target="0" min="-210" max="-280">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="7" target="1" speedchange="-300" duration="30000">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="4000" chance="10" min="215" max="300">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="10" />
+		<element icePercent="50" />
+		<element physicalPercent="-10" />
+		<element holyPercent="-15" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="EMBRACE MY GIFTS!" yell="1" />
+		<voice sentence="I WILL FEAST ON YOUR SOUL!" yell="1" />
+	</voices>
+	<loot>
+		<item id="11366" chance="100000" />					<!-- ghastly dragon head -->
+		<item id="2148" countmax="230" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="15" chance="100000" />		<!-- platinum coin -->
+		<item id="11367" chance="100000" />					<!-- undead heart -->
+		<item id="6500" chance="97000" />					<!-- demonic essence -->
+		<item id="7632" chance="45000" />					<!-- giant shimmering pearl -->
+		<item id="7633" chance="45000" />					<!-- giant shimmering pearl -->
+		<item id="9970" countmax="10" chance="97000" />		<!-- small topaz -->
+		<item id="11323" chance="76000" />					<!-- zaoan halberd -->
+		<item id="8473" chance="60000" />					<!-- ultimate health potion -->
+		<item id="11227" chance="45000" />					<!-- shiny stone -->
+		<item id="11368" chance="37000" />					<!-- jade hat -->
+		<item id="7591" countmax="3" chance="34000" />		<!-- great health potion -->
+		<item id="11303" chance="30000" />					<!-- zaoan shoes -->
+		<item id="7590" countmax="3" chance="26000" />		<!-- great mana potion -->
+		<item id="8472" countmax="3" chance="26000" />		<!-- great spirit potion -->
+		<item id="11355" chance="21000" />					<!-- spellweaver's robe -->
+		<item id="11304" chance="15000" />					<!-- zaoan legs -->
+		<item id="11301" chance="13000" />					<!-- zaoan armor -->
+		<item id="11302" chance="13000" />					<!-- zaoan helmet -->
+		<item id="11306" chance="10000" />					<!-- sai -->
+		<item id="11305" chance="8700" />					<!-- drakinata -->
+		<item id="13938" chance="2170" />					<!-- golden can of oil -->
+	</loot>
+</monster>

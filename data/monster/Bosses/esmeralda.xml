@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Esmeralda" nameDescription="esmeralda" race="blood" experience="600" speed="245" manacost="0">
+<monster name="Esmeralda" nameDescription="Esmeralda" race="blood" experience="600" speed="245" manacost="0">
 	<health now="800" max="800" />
 	<look type="305" corpse="9871" />
 	<targetchange interval="5000" chance="8" />
@@ -17,21 +17,25 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="50" poison="100" />
+		<attack name="melee" interval="2000" min="0" max="-170" poison="5" />
 		<attack name="earth" interval="2000" chance="30" range="7" min="0" max="-110">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
-		<attack name="poisoncondition" interval="2000" chance="22" length="8" spread="0" min="-100" max="-100">
+		<attack name="poisoncondition" interval="2000" chance="22" length="6" spread="0" min="-5" max="-5">
 			<attribute key="areaEffect" value="smallplants" />
 		</attack>
-		<attack name="poisoncondition" interval="2000" chance="15" radius="3" min="-80" max="-80">
-			<attribute key="areaEffect" value="greenspark" />
+		<attack name="poisoncondition" interval="2000" chance="15" radius="3" min="-4" max="-4">
+			<attribute key="areaEffect" value="poison" />
 		</attack>
-		<attack name="lifedrain" interval="2000" chance="25" range="7" radius="3" target="0" min="0" max="-110">
-			<attribute key="areaEffect" value="redspark" />
+		<attack name="lifedrain" interval="2000" chance="25" radius="3" target="0" min="0" max="-110">
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="30" defense="30" />
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="5" min="30" max="50">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<elements>
 		<element firePercent="-10" />
 	</elements>
@@ -40,24 +44,23 @@
 		<immunity earth="1" />
 		<immunity paralyze="1" />
 		<immunity lifedrain="1" />
-		<immunity drunk="1" />
 		<immunity drown="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="2000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Fcccccchhhhhh" />
 	</voices>
 	<loot>
-		<item id="2152" countmax="4" chance="68125" /><!-- platinum coin -->
-		<item id="2214" chance="100000" /><!-- ring of healing -->
-		<item id="2528" chance="41400" /><!-- tower shield -->
-		<item id="2381" chance="30050" /><!-- halberd -->
-		<item id="2148" countmax="100" chance="58775" /><!-- gold coin -->
-		<item id="2148" countmax="19" chance="58775" /><!-- gold coin -->
-		<item id="10585" chance="100000" /><!-- mutated rat tail -->
-		<item id="2438" chance="14150" /><!-- epee -->
-		<item id="2476" chance="45950" /><!-- knight armor -->
-		<item id="2799" chance="9600" /><!-- stone herb -->
-		<item id="7884" chance="2775" /><!-- terra mantle -->
+		<item id="2148" countmax="170" chance="100000" />	<!-- gold coin -->
+		<item id="10585" chance="100000" />					<!-- mutated rat tail -->
+		<item id="2214" chance="100000" />					<!-- ring of healing -->
+		<item id="2152" countmax="4" chance="95000" />		<!-- platinum coin -->
+		<item id="2147" countmax="3" chance="68000" />		<!-- small ruby -->
+		<item id="2476" chance="54000" />					<!-- knight armor -->
+		<item id="2528" chance="34000" />					<!-- tower shield -->
+		<item id="2381" chance="31050" />					<!-- halberd -->
+		<item id="2438" chance="26000" />					<!-- epee -->
+		<item id="7884" chance="8200" />						<!-- terra mantle -->
+		<item id="2799" chance="6500" />						<!-- stone herb -->
 	</loot>
 </monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="mad mage" nameDescription="a mad mage" race="blood" experience="1800" speed="240" manacost="0">
+<monster name="Mad Mage" nameDescription="mad mage" race="blood" experience="1800" speed="240" manacost="0">
 	<health now="2200" max="2200" />
 	<look type="394" corpse="13603" />
 	<targetchange interval="5000" chance="30" />
@@ -14,50 +14,63 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="4" />
 		<flag staticattack="90" />
-		<flag runonhealth="1000" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="32" attack="37" />
-		<attack name="fire" interval="1000" chance="12" range="7" target="1" min="-50" max="-185">
+		<attack name="melee" interval="2000" min="0" max="-30" />
+		<attack name="fire" interval="1000" chance="12" range="7" target="1" min="0" max="-200">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
-		<attack name="manadrain" interval="1400" chance="24" range="6" min="-30" max="-90">
+		<attack name="manadrain" interval="1400" chance="24" range="6" min="0" max="-120">
 			<attribute key="shootEffect" value="ice" />
 		</attack>
-		<attack name="firefield" interval="1600" chance="20" range="7" radius="2" target="1">
+		<attack name="firefield" interval="1600" chance="20" range="7" radius="3" target="1">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
-		<attack name="energy" interval="1900" chance="18" length="8" spread="0" min="-70" max="-150">
+		<attack name="energy" interval="2000" chance="15" radius="4" target="0" min="-100" max="-200">
 			<attribute key="areaEffect" value="bigclouds" />
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
-		<defense name="healing" interval="1000" chance="25" min="35" max="80">
+		<defense name="healing" interval="2000" chance="25" min="35" max="80">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
 		<element physicalPercent="-20" />
-		<element holyPercent="-10" />
-		<element earthPercent="50" />
 	</elements>
 	<immunities>
+		<immunity fire="1" />
 		<immunity energy="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
+		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<summon name="stone golem" interval="1000" chance="10" />
+		<summon name="Golden Servant" interval="1000" chance="10" />
 	</summons>
+	<voices interval="2000" chance="7">
+		<voice sentence="Did it not come to your mind that I placed them here for a reason?" />
+		<voice sentence="Now I have to create new servants! Do you want to spread this pest beyond these safe walls?" />
+		<voice sentence="What have you done!" />
+	</voices>
 	<loot>
-		<item id="7368" chance="2400" countmax="4" /><!-- assassin star :: Atk 65 -->
-		<item id="5911" chance="800" /><!-- red poc -->
-		<item id="7589" countmax="2" chance="1200" /><!-- strong mana potion -->
-		<item id="7588" countmax="5" chance="1300" /><!-- strong health potion -->
-		<item id="2148" countmax="66" chance="100000" /><!-- gold coins -->
-		<item id="2792" countmax="5" chance="5000" /><!-- dark mushroom -->
-		<item id="2148" chance="100000" countmax="20" /><!-- gold coin -->
-		<item id="7895" chance="800" /><!-- lightning legs :: Arm 8 -->
+		<item id="2148" countmax="340" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="5" chance="48000" />		<!-- platinum coin -->
+		<item id="7589" countmax="5" chance="21000" />		<!-- strong mana potion -->
+		<item id="7588" countmax="5" chance="17000" />		<!-- strong health potion -->
+		<item id="2178" chance="5000" />						<!-- mind stone -->
+		<item id="2165" chance="5000" />						<!-- stealth ring -->
+		<item id="7368" countmax="4" chance="4000" />		<!-- assassin star -->
+		<item id="2792" countmax="3" chance="4000" />		<!-- dark mushroom -->
+		<item id="5911" chance="3000" />						<!-- red piece of cloth -->
+		<item id="2150" countmax="3" chance="4000" />		<!-- small amethyst -->
+		<item id="13756" chance="1480" />					<!-- mage's cap -->
+		<item id="7443" chance="1100" />						<!-- bullseye potion -->
+		<item id="9941" chance="740" />						<!-- crystal of focus -->
+		<item id="2195" chance="370" />						<!-- boots of haste -->
+		<item id="12410" chance="370" />						<!-- luminous orb -->
+		<item id="2114" chance="370" />						<!-- piggy bank -->
+		<item id="2123" chance="370" />						<!-- ring of the sky -->
+		<item id="8901" chance="370" />						<!-- spellbook of warding -->
 	</loot>
 </monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mephiles" nameDescription="a mephiles" race="blood" experience="415" speed="300" manacost="0">
+<monster name="Mephiles" nameDescription="Mephiles" race="blood" experience="415" speed="300" manacost="0">
 	<health now="415" max="415" />
 	<look type="237" corpse="10323" />
 	<targetchange interval="5000" chance="8" />
@@ -40,10 +40,9 @@
 	<immunities>
 		<immunity fire="1" />
 		<immunity lifedrain="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I have a contract here which you should sign!" />
 		<voice sentence="I sence so much potential in you. It's almost a shame I have to kill you." />
 		<voice sentence="Yes, slay me for the loot I might have. Give in to your greed." />

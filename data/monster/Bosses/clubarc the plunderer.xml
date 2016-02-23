@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Clubarc The Plunderer" nameDescription="Clubarc The Plunderer" race="blood" experience="400" speed="210" manacost="0">
+	<health now="400" max="400" />
+	<look type="342" corpse="11254" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="physical" interval="2000" chance="50" range="7" min="0" max="-85">
+			<attribute key="shootEffect" value="onyxarrow" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="11" min="-8" max="-8">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="speed" interval="2000" chance="15" speedchange="350" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="2" />
+		<element earthPercent="-2" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Orc arga Huummmak!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="78" chance="58000" />	<!-- gold coin -->
+		<item id="2666" chance="24600" />				<!-- meat -->
+		<item id="2428" chance="21000" />				<!-- orcish axe -->
+		<item id="11324" chance="13000" />				<!-- shaggy tail -->
+		<item id="11338" chance="6000" />				<!-- disgusting trophy -->
+		<item id="2456" chance="4600" />					<!-- bow -->
+		<item id="8857" chance="3070" />					<!-- silkweaver bow -->
+		<item id="11113" chance="1500" />				<!-- orc tooth -->
+	</loot>
+</monster>

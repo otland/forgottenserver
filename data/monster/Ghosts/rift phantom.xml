@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Rift Phantom" nameDescription="a rift phantom" race="undead" experience="0" speed="160" manacost="100">
+	<health now="150" max="150" />
+	<look type="48" corpse="5993" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="0" />
+		<flag hostile="0" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+</monster>

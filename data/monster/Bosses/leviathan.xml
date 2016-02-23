@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Leviathan" nameDescription="a leviathan" race="blood" experience="5000" speed="758" manacost="0">
+<monster name="Leviathan" nameDescription="Leviathan" race="blood" experience="5000" speed="758" manacost="0">
 	<health now="6000" max="6000" />
 	<look type="275" corpse="8307" />
 	<targetchange interval="2000" chance="50" />
@@ -16,7 +16,7 @@
 		<flag runonhealth="600" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="70" />
+		<attack name="melee" interval="2000" min="0" max="-500" />
 		<attack name="earth" interval="1000" chance="8" length="9" spread="3" min="-130" max="-460">
 			<attribute key="areaEffect" value="bigplants" />
 		</attack>
@@ -28,7 +28,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="30">
-		<defense name="healing" interval="1000" chance="25" min="50" max="150">
+		<defense name="healing" interval="2000" chance="25" min="50" max="350">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -45,13 +45,19 @@
 	<elements>
 		<element firePercent="30" />
 		<element energyPercent="-10" />
-		<element physicalPercent="-10" />
+		<element physicalPercent="-15" />
 		<element deathPercent="-10" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="40000" /><!-- platinum coin -->
-		<item id="2146" countmax="3" chance="10000" /><!-- small saphire -->
-		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
+		<item id="10220" chance="100000" />				<!-- leviathan's amulet -->
+		<item id="10529" chance="100000" />				<!-- sea serpent trophy -->
+		<item id="9809" chance="83000" />				<!-- rusty armor (semi-rare) -->
+		<item id="2152" countmax="7" chance="82000" />	<!-- platinum coin -->
+		<item id="9812" chance="77000" />				<!-- rusty legs (semi-rare) -->
+		<item id="7428" chance="58000" />				<!-- bonebreaker -->
+		<item id="2146" countmax="5" chance="50000" />	<!-- small saphire -->
+		<item id="7589" chance="50000" />				<!-- strong mana potion -->
+		<item id="10521" chance="14000" />				<!-- moon backpack -->
+		<item id="8887" chance="1500" />					<!-- frozen plate -->
 	</loot>
 </monster>

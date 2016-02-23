@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fluffy" nameDescription="fluffy" race="blood" experience="3550" speed="310" manacost="0">
+<monster name="Fluffy" nameDescription="Fluffy" race="blood" experience="3550" speed="310" manacost="0">
 	<health now="4500" max="4500" />
 	<look type="240" corpse="6332" />
 	<targetchange interval="5000" chance="8" />
@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" skill="98" attack="120" />
+		<attack name="melee" interval="2000" skill="98" attack="120" />
 		<attack name="energy" interval="1500" chance="300" length="8" spread="3" min="-100" max="-200">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
@@ -33,10 +33,9 @@
 	</attacks>
 	<defenses armor="25" defense="35" />
 	<immunities>
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Wooof!" />
 	</voices>
 	<loot>

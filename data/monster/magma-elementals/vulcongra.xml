@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Vulcongra" nameDescription="vulcongra" race="fire" experience="1100" speed="230" manacost="0">
+	<health now="1600" max="1600" />
+	<look type="509" corpse="18475" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="220" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-230" />
+		<attack name="vulcongra soulfire" interval="2000" chance="100" />
+		<attack name="fire" interval="2000" chance="10" length="8" spread="0" min="-195" max="-340">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" target="1" min="-100" max="-200">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35" />
+	<elements>
+		<element deathPercent="1" />
+		<element icePercent="-1" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Fuchah! Fuchah!" />
+		<voice sentence="Fuchah!" />
+		<voice sentence="Yag! Yag! Yag!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="107" chance="100000" />	<!-- gold coin -->
+		<item id="2152" chance="14550" />					<!-- platinum coin -->
+		<item id="18424" chance="12440" />					<!-- Magma Clump -->
+		<item id="2676" countmax="10" chance="10000" />		<!-- banana -->
+		<item id="10553" chance="9000" />					<!-- fiery heart -->
+		<item id="18425" chance="8000" />					<!-- Blazing Bone -->
+		<item id="7588" chance="7100" />						<!-- Strong Health Potion -->
+		<item id="7589" chance="7100" />						<!-- Strong mana Potion -->
+		<item id="18417" chance="4850" />					<!-- Brown Crystal Splinter -->
+		<item id="2207" chance="3000" />						<!-- sword ring -->
+		<item id="18420" chance="2300" />					<!-- Red Crystal Fragment -->
+		<item id="2187" chance="1000" />						<!-- wand of inferno -->
+		<item id="7890" chance="920" />						<!-- magma amulet -->
+		<item id="13757" chance="890" />						<!-- coal -->
+		<item id="2392" chance="260" />						<!-- fire sword -->
+		<item id="7899" chance="130" />						<!-- magma coat -->
+	</loot>
+</monster>

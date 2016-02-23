@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" poison="100" />
+		<attack name="melee" interval="2000" min="0" max="-80" poison="5" />
 		<attack name="ice" interval="2000" chance="10" length="8" spread="0" min="-100" max="-180">
 			<attribute key="areaEffect" value="bubbles" />
 		</attack>
@@ -27,10 +27,10 @@
 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-170" max="-240">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
-		<attack name="lifedrain" interval="2000" chance="15" range="7" target="1" min="0" max="-170">
+		<attack name="lifedrain" interval="2000" chance="15" range="7" target="1" min="-45" max="-170">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="15000">
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-350" duration="15000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
@@ -51,7 +51,7 @@
 		<immunity fire="1" />
 		<immunity ice="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Qua hah tsh!" />
 		<voice sentence="Teech tsha tshul!" />
 		<voice sentence="Quara tsha Fach!" />
@@ -60,17 +60,17 @@
 		<voice sentence="Blup." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
-		<item id="12444" chance="15930" /><!-- quara eye -->
-		<item id="2670" countmax="5" chance="4545" /><!-- shrimp -->
-		<item id="2144" chance="3150" /><!-- black pearl -->
-		<item id="2143" chance="5250" /><!-- white pearl -->
-		<item id="2149" countmax="2" chance="5111" /><!-- small emerald -->
-		<item id="2189" chance="900" /><!-- wand of cosmic energy -->
-		<item id="7590" chance="3100" /><!-- great mana potion -->
-		<item id="5895" chance="1280" /><!-- fish fin -->
-		<item id="2214" chance="1008" /><!-- ring of healing -->
-		<item id="2476" chance="200" /><!-- knight armor -->
+		<item id="2148" countmax="110" chance="90000" />	<!-- gold coin -->
+		<item id="12444" chance="15000" />				<!-- quara eye -->
+		<item id="2143" chance="5300" />					<!-- white pearl -->
+		<item id="2149" countmax="2" chance="5000" />	<!-- small emerald -->
+		<item id="2670" countmax="5" chance="4600" />	<!-- shrimp -->
+		<item id="2144" chance="3000" />					<!-- black pearl -->
+		<item id="7590" chance="3000" />					<!-- great mana potion -->
+		<item id="5895" chance="1210" />					<!-- fish fin -->
+		<item id="2214" chance="1100" />					<!-- ring of healing -->
+		<item id="2189" chance="960" />					<!-- wand of cosmic energy -->
+		<item id="2476" chance="230" />					<!-- knight armor -->
+
 	</loot>
 </monster>

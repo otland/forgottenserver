@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hellgorak" nameDescription="Hellgorak" race="blood" experience="10000" speed="360" manacost="0">
+	<health now="25850" max="25850" />
+	<look type="12" head="19" body="96" legs="21" feet="81" corpse="8721" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack script="monster/smokeue.lua" interval="2000" chance="8" />
+		<attack name="melee" interval="2000" min="0" max="-800" />
+		<attack name="energy" interval="1000" chance="11" length="8" spread="0" min="-250" max="-850">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="fire" interval="1000" chance="11" radius="5" target="1" min="-50" max="-600">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="energy" interval="2000" chance="25" target="1" range="7" min="-200" max="-400">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="14" radius="5" target="0" min="-200" max="-400">
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="70" defense="65">
+		<defense name="healing" interval="1000" chance="11" min="400" max="1700">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="98" />
+		<element icePercent="98" />
+		<element energyPercent="98" />
+		<element earthPercent="98" />
+		<element holyPercent="95" />
+		<element deathPercent="98" />
+		<element firePercent="98" />
+		<element drownPercent="-205" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="5">
+		<voice sentence="I'll sacrifice yours souls to seven!" />
+		<voice sentence="I'm bad news for you mortals!" />
+		<voice sentence="No man can defeat me!" />
+		<voice sentence="Your puny skills are no match for me." />
+		<voice sentence="I smell your fear." />
+		<voice sentence="Delicious!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="198" chance="100000" />	<!-- gold coin -->
+		<item id="9813" chance="50000" />					<!-- rusty legs (rare) -->
+		<item id="8473" countmax="2" chance="42000" />		<!-- ultimate health potion -->
+		<item id="8901" chance="32000" />					<!-- spellbook of warding -->
+		<item id="9810" chance="30000" />					<!-- rusty armor (rare) -->
+		<item id="3962" chance="29000" />					<!-- beastslayer axe -->
+		<item id="8472" chance="21000" />					<!-- great spirit potion -->
+		<item id="2152" countmax="30" chance="21000" />		<!-- platinum coin -->
+		<item id="7591" chance="20000" />					<!-- great health potion -->
+		<item id="2487" chance="19000" />					<!-- crown armor -->
+		<item id="7590" chance="15000" />					<!-- great mana potion -->
+		<item id="2144" countmax="25" chance="14450" />		<!-- black pearl -->
+		<item id="2125" chance="13450" />					<!-- crystal necklace -->
+		<item id="2147" countmax="25" chance="13330" />		<!-- small ruby -->
+		<item id="2143" countmax="25" chance="13200" />		<!-- white pearl -->
+		<item id="7456" chance="12450" />					<!-- noble axe -->
+		<item id="2145" countmax="25" chance="12330" />		<!-- small diamond -->
+		<item id="7894" chance="11960" />					<!-- magma legs -->
+		<item id="2146" countmax="25" chance="11960" />		<!-- small sapphire -->
+		<item id="2133" chance="11830" />					<!-- ruby necklace -->
+		<item id="9970" countmax="25" chance="11710" />		<!-- small topaz -->
+		<item id="2150" countmax="25" chance="11580" />		<!-- small amethyst -->
+		<item id="2149" countmax="25" chance="11330" />		<!-- small emerald -->
+		<item id="8870" chance="10000" />					<!-- spirit cloak -->
+		<item id="8871" chance="10000" />					<!-- focus cape -->
+		<item id="2645" chance="10000" />					<!-- steel boots -->
+		<item id="2488" chance="9700" />						<!-- crown legs -->
+		<item id="5954" countmax="2" chance="9700" />		<!-- demon horn -->
+		<item id="2130" chance="9600" />						<!-- golden amulet -->
+		<item id="2477" chance="9600" />						<!-- knight legs -->
+		<item id="8902" chance="9200" />						<!-- spellbook of mind control -->
+		<item id="2197" chance="8300" />						<!-- stone skin amulet -->
+		<item id="2656" chance="8000" />						<!-- blue robe -->
+		<item id="8903" chance="8000" />						<!-- spellbook of lost souls -->
+		<item id="7412" chance="3000" />						<!-- butcher's axe -->
+		<item id="2466" chance="2600" />						<!-- golden armor -->
+		<item id="7388" chance="1740" />						<!-- vile axe -->
+		<item id="8904" chance="1370" />						<!-- spellscroll of prophecies -->
+		<item id="14333" chance="620" />						<!-- demonbone amulet -->
+		<item id="7453" chance="620" />						<!-- executioner -->
+		<item id="8926" chance="370" />						<!-- demonwing axe -->
+		<item id="2470" chance="370" />						<!-- golden legs -->
+		<item id="8879" chance="370" />						<!-- voltage armor -->
+		<item id="8918" chance="250" />						<!-- spellbook of dark mysteries -->
+	</loot>
+</monster>

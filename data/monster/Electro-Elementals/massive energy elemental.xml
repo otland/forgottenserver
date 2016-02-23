@@ -53,7 +53,7 @@
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="91" chance="50000" /><!-- gold coin -->
 		<item id="7589" chance="17450" /><!-- strong mana potion -->
-		<item id="7638" countmax="15" chance="6550" /><!-- flash arrow -->
+		<item id="7838" countmax="15" chance="6550" /><!-- flash arrow -->
 		<item id="7590" chance="5450" /><!-- great mana potion -->
 		<item id="9809" chance="730" /><!-- rusty armor -->
 		<item id="2150" countmax="3" chance="3270" /><!-- small amethysts -->

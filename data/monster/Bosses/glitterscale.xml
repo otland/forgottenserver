@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Glitterscale" nameDescription="glitterscale" race="blood" experience="700" speed="180" manacost="0">
+<monster name="Glitterscale" nameDescription="Glitterscale" race="blood" experience="700" speed="180" manacost="0">
 	<health now="1000" max="1000" />
-	<look type="34" corpse="5973" />
+	<look type="34" corpse="12545" />
 	<targetchange interval="2000" chance="10" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Diblis the fair" nameDescription="a vampire lord" race="undead" experience="1800" speed="280" manacost="0">
+<monster name="Diblis The Fair" nameDescription="Diblis The Fair" race="undead" experience="1800" speed="280" manacost="0">
 	<health now="1600" max="1600" />
 	<look type="287" corpse="8937" />
 	<targetchange interval="5000" chance="10" />
@@ -41,7 +41,7 @@
 		<immunity death="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I envy you to be slain by someone as beautiful as me." />
 		<voice sentence="I will drain your ugly corpses of the last drop of blood." />
 	</voices>
@@ -56,7 +56,7 @@
 		<item id="2148" chance="100000" countmax="99" />
 		<item id="2216" chance="14111" />
 		<item id="13224" chance="500" />
-		<item id="9020" chance1="100000" />
+		<item id="9020" chance="100000" />
 		<item id="2534" chance="2100" />
 		<item id="8903" chance="300" />
 	</loot>

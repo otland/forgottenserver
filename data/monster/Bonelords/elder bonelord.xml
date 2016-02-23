@@ -27,7 +27,6 @@
 		<attack name="death" interval="2000" chance="10" range="7" min="-45" max="-90">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />
-			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 		<attack name="poison" interval="2000" chance="10" range="7" min="-20" max="-40">
 			<attribute key="shootEffect" value="poison" />
@@ -56,7 +55,7 @@
 		<summon name="Gazer" interval="2000" chance="10" />
 		<summon name="Crypt Shambler" interval="2000" chance="15" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Let me take a look at you!" />
 		<voice sentence="Inferior creatures, bow before my power!" />
 	</voices>

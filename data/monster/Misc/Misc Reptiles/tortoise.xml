@@ -7,17 +7,17 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="0" />
+		<flag illusionable="1" />
 		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
 	<defenses armor="30" defense="30" />
 	<elements>
@@ -27,12 +27,12 @@
 		<element firePercent="-10" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="30" chance="59000" /><!-- gold coin -->
-		<item id="2510" chance="2850" /><!-- plate shield -->
-		<item id="2667" chance="4600" /><!-- fish -->
-		<item id="5678" countmax="2" chance="770" /><!-- tortoise egg -->
-		<item id="6131" chance="200" /><!-- tortoise shield -->
-		<item id="5899" chance="1300" /><!-- turtle shell -->
-		<item id="2417" chance="730" /><!-- battle hammer -->
+		<item id="2148" countmax="30" chance="60000" />	<!-- gold coin -->
+		<item id="2667" chance="4400" />					<!-- fish -->
+		<item id="2510" chance="2850" />					<!-- plate shield -->
+		<item id="5899" chance="1000" />					<!-- turtle shell -->
+		<item id="5678" countmax="2" chance="850" />		<!-- tortoise egg -->
+		<item id="2417" chance="790" />					<!-- battle hammer -->
+		<item id="6131" chance="170" />					<!-- tortoise shield -->
 	</loot>
 </monster>

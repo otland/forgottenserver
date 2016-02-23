@@ -41,7 +41,7 @@
 		<immunity lifedrain="1" />
 		<immunity drown="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Gokgoooook" />
 		<voice sentence="Cluck Cluck" />
 		<voice sentence="I will fill MY cushion with YOUR hair! CLUCK!" />

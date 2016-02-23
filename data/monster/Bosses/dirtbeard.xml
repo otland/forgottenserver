@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dirtbeard" nameDescription="a dirtbeard" race="blood" experience="375" speed="300" manacost="775">
+<monster name="Dirtbeard" nameDescription="Dirtbeard" race="blood" experience="375" speed="300" manacost="0">
 	<health now="630" max="630" />
 	<look type="98" corpse="10320" />
 	<targetchange interval="5000" chance="8" />
@@ -17,13 +17,14 @@
 		<flag runonhealth="50" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1200" min="0" max="-125" />
+		<attack name="melee" interval="2000" min="0" max="-125" />
 		<attack name="physical" interval="2000" chance="30" range="7" min="0" max="-100">
 			<attribute key="shootEffect" value="throwingstar" />
 		</attack>
-		<attack name="melee" interval="1200" chance="30" range="7" radius="3" target="0">
+		<attack name="melee" interval="2000" chance="30" range="7" radius="3" target="0">
 			<attribute key="areaEffect" value="rednote" />
 		</attack>
+		<attack name="pirate corsair skill reducer" interval="2000" chance="5" />
 	</attacks>
 	<defenses armor="30" defense="35" />
 	<elements>
@@ -35,12 +36,18 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="You are no match for the scourge of the seas!" />
 		<voice sentence="You move like a seasick whale!" />
 		<voice sentence="Yarr, death to all landlubbers!" />
 	</voices>
 	<summons maxSummons="2">
-		<summon name="pirate marauder" interval="4000" chance="30" max="2" />
+		<summon name="Pirate Marauder" interval="4000" chance="30" />
 	</summons>
+	<loot>
+		<item id="10292" chance="30000" />				<!-- pointed rabbitslayer -->
+		<item id="10299" chance="30000" />				<!-- helmet of nature -->
+		<item id="10291" chance="30000" />				<!-- odd hat -->
+		<item id="10318" chance="30000" />				<!-- the shield Nevermourn -->
+	</loot>
 </monster>

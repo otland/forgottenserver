@@ -41,12 +41,11 @@
 		<element deathPercent="-20" />
 	</elements>
 	<immunities>
-		<immunity outfit="1" />
 		<immunity drown="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="No more Mr. Nicegnome!" />
 		<voice sentence="Taste the power of the dark side!" />
 		<voice sentence="I've seen the light! And it was all engulfing fire!" />

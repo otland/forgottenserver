@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bovinus" nameDescription="bovinus" race="blood" experience="60" speed="170" manacost="0">
+<monster name="Bovinus" nameDescription="Bovinus" race="blood" experience="60" speed="170" manacost="0">
 	<health now="150" max="150" />
 	<look type="25" corpse="7349" />
 	<flags>
@@ -13,14 +13,12 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
 	<elements>
 		<element firePercent="20" />
 	</elements>
 	<immunities>
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<defenses armor="9" defense="11" />

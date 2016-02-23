@@ -14,15 +14,26 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
+		<flag runonhealth="100" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="100" />
-		<attack name="physical" interval="3000" chance="50" target="1" radius="7" min="0" max="-100">
+		<attack name="melee" interval="2000" min="0" max="-240" poison="6" />
+		<attack name="earth" interval="2000" chance="15" range="7" min="-70" max="-180">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="drown" interval="2000" chance="15" target="0" radius="6" min="-130" max="-237">
 			<attribute key="areaEffect" value="whitenote" />
 		</attack>
+		<attack name="mutated bat curse" interval="2000" chance="10" />
+		<attack name="poisoncondition" interval="2000" chance="15" target="0" length="4" spread="3" min="-12" max="-12">
+			<attribute key="areaeffect" value="poison" />
+		</attack>
 	</attacks>
-	<defenses armor="30" defense="30" />
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="80" max="95">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity death="1" />
 		<immunity earth="1" />

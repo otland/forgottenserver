@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dharalion" nameDescription="dharalion" race="blood" experience="380" speed="240" manacost="0">
+<monster name="Dharalion" nameDescription="Dharalion" race="blood" experience="380" speed="240" manacost="0">
 	<health now="380" max="380" />
 	<look type="203" corpse="6011" />
 	<targetchange interval="5000" chance="8" />
@@ -43,14 +43,12 @@
 		<immunity fire="1" />
 		<immunity poison="1" />
 		<immunity lifedrain="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="2">
 		<summon name="demon skeleton" interval="1000" chance="6" max="2" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Feel my wrath!" />
 		<voice sentence="Noone will stop my ascension!" />
 		<voice sentence="My powers are divine!" />
