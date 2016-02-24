@@ -29,7 +29,6 @@ class ProtocolStatus final : public Protocol
 		// static protocol information
 		enum {server_sends_first = false};
 		enum {protocol_identifier = 0xFF};
-		enum {use_checksum = false};
 		static const char* protocol_name() {
 			return "status protocol";
 		}

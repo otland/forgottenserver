@@ -36,7 +36,7 @@ class NetworkMessage
 		// 2 bytes for unencrypted message size
 		// 4 bytes for checksum
 		// 2 bytes for encrypted message size
-		static const MsgSize_t INITIAL_BUFFER_POSITION = 8;
+		static const MsgSize_t INITIAL_BUFFER_POSITION = 4;
 		enum { HEADER_LENGTH = 2 };
 		enum { CHECKSUM_LENGTH = 4 };
 		enum { XTEA_MULTIPLE = 8 };
@@ -157,7 +157,7 @@ class NetworkMessage
 		}
 
 		inline bool canRead(int32_t size) {
-			if ((position + size) > (length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - position)) {
+			if ((position + size) > (length + 4) || size >= (NETWORKMESSAGE_MAXSIZE - position)) {
 				overrun = true;
 				return false;
 			}

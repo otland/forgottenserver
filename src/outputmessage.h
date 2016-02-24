@@ -44,24 +44,20 @@ class OutputMessage : public NetworkMessage
 			add_header(length);
 		}
 
-		void addCryptoHeader(bool addChecksum) {
-			if (addChecksum) {
-				add_header(adlerChecksum(buffer + outputBufferStart, length));
-			}
-
+		void addCryptoHeader() {
 			writeMessageLength();
 		}
 
 		inline void append(const NetworkMessage& msg) {
 			auto msgLen = msg.getLength();
-			memcpy(buffer + position, msg.getBuffer() + 8, msgLen);
+			memcpy(buffer + position, msg.getBuffer() + 4, msgLen);
 			length += msgLen;
 			position += msgLen;
 		}
 
 		inline void append(const OutputMessage_ptr& msg) {
 			auto msgLen = msg->getLength();
-			memcpy(buffer + position, msg->getBuffer() + 8, msgLen);
+			memcpy(buffer + position, msg->getBuffer() + 4, msgLen);
 			length += msgLen;
 			position += msgLen;
 		}
