@@ -3,8 +3,9 @@ Welcome to the issues section if it's your first time!
 ### Before creating an issue, please be sure to:
 - [ ] Checkout to the latest version and recompile if you haven't
 - [ ] Try to find an *isolated* way to reproduce the behavior
+- [ ] Use the support board first: https://otland.net/forums/support.16/
+- [ ] Search if there's already a similar issue, and bump it instead
 - [ ] Fill in all the blanks in the most specific way you can
-- [ ] Gather the most information you can, including full dumps
 
 ### Steps to reproduce
 1.
