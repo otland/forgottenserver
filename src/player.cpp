@@ -3187,18 +3187,6 @@ void Player::onAddCombatCondition(ConditionType_t type)
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drunk.");
 			break;
 
-		case CONDITION_CURSED:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are cursed.");
-			break;
-
-		case CONDITION_FREEZING:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are freezing.");
-			break;
-
-		case CONDITION_DAZZLED:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are dazzled.");
-			break;
-
 		case CONDITION_BLEEDING:
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are bleeding.");
 			break;

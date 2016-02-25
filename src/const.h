@@ -256,6 +256,7 @@ enum Icons_t {
 	ICON_PARALYZE = 1 << 5,
 	ICON_HASTE = 1 << 6,
 	ICON_SWORDS = 1 << 7,
+	ICON_DROWNING = 1 << 8,
 };
 
 enum WeaponType_t : uint8_t {

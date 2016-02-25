@@ -782,12 +782,6 @@ size_t combatTypeToIndex(CombatType_t combatType)
 			return 7;
 		case COMBAT_DROWNDAMAGE:
 			return 8;
-		case COMBAT_ICEDAMAGE:
-			return 9;
-		case COMBAT_HOLYDAMAGE:
-			return 10;
-		case COMBAT_DEATHDAMAGE:
-			return 11;
 		default:
 			return 0;
 	}

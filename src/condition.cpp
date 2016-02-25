@@ -164,9 +164,6 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 		case CONDITION_FIRE:
 		case CONDITION_ENERGY:
 		case CONDITION_DROWN:
-		case CONDITION_FREEZING:
-		case CONDITION_DAZZLED:
-		case CONDITION_CURSED:
 		case CONDITION_BLEEDING:
 			return new ConditionDamage(_id, _type, _buff, _subId);
 
@@ -1218,6 +1215,10 @@ uint32_t ConditionDamage::getIcons() const
 
 		case CONDITION_ENERGY:
 			icons |= ICON_ENERGY;
+			break;
+
+		case CONDITION_DROWN:
+			icons |= ICON_DROWNING;
 			break;
 
 		case CONDITION_POISON:

@@ -127,15 +127,6 @@ CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 		case CONDITION_POISON:
 			return COMBAT_EARTHDAMAGE;
 
-		case CONDITION_FREEZING:
-			return COMBAT_ICEDAMAGE;
-
-		case CONDITION_DAZZLED:
-			return COMBAT_HOLYDAMAGE;
-
-		case CONDITION_CURSED:
-			return COMBAT_DEATHDAMAGE;
-
 		default:
 			break;
 	}
@@ -157,15 +148,6 @@ ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 
 		case COMBAT_EARTHDAMAGE:
 			return CONDITION_POISON;
-
-		case COMBAT_ICEDAMAGE:
-			return CONDITION_FREEZING;
-
-		case COMBAT_HOLYDAMAGE:
-			return CONDITION_DAZZLED;
-
-		case COMBAT_DEATHDAMAGE:
-			return CONDITION_CURSED;
 
 		case COMBAT_PHYSICALDAMAGE:
 			return CONDITION_BLEEDING;

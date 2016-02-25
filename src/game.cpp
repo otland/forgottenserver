@@ -3295,8 +3295,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 				}
 				case COMBAT_ENERGYDAMAGE:
 				case COMBAT_FIREDAMAGE:
-				case COMBAT_PHYSICALDAMAGE:
-				case COMBAT_DEATHDAMAGE: {
+				case COMBAT_PHYSICALDAMAGE: {
 					hitEffect = CONST_ME_BLOCKHIT;
 					break;
 				}

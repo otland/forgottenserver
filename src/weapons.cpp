@@ -900,16 +900,10 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		std::string tmpStrValue = asLowerCaseString(attr.as_string());
 		if (tmpStrValue == "earth") {
 			params.combatType = COMBAT_EARTHDAMAGE;
-		} else if (tmpStrValue == "ice") {
-			params.combatType = COMBAT_ICEDAMAGE;
 		} else if (tmpStrValue == "energy") {
 			params.combatType = COMBAT_ENERGYDAMAGE;
 		} else if (tmpStrValue == "fire") {
 			params.combatType = COMBAT_FIREDAMAGE;
-		} else if (tmpStrValue == "death") {
-			params.combatType = COMBAT_DEATHDAMAGE;
-		} else if (tmpStrValue == "holy") {
-			params.combatType = COMBAT_HOLYDAMAGE;
 		} else {
 			std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
 		}

@@ -1519,8 +1519,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg.addByte(0x0A);
 
 	msg.add<uint32_t>(player->getID());
-    msg.addByte(0x32); // beat duration (50)
-    msg.addByte(0x00);
+	msg.addByte(0x32); // beat duration (50)
+	msg.addByte(0x00);
 
 	// can report bugs?
 	if (player->getAccountType() >= ACCOUNT_TYPE_TUTOR) {
