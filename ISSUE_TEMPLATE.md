@@ -23,6 +23,7 @@ Tell us what happens instead. Post your faulty script, if there is any.
 
 **Compiler version**:
 (you can get with `clang --version` or `gcc --version`)
+pro-tip: clang < 3.3 and gcc < 4.8 **do not work**
 
 **Dependencies**:
 - Boost version:
