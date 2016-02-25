@@ -132,7 +132,6 @@ class ProtocolGame final : public Protocol
 		void parseJoinParty(NetworkMessage& msg);
 		void parseRevokePartyInvite(NetworkMessage& msg);
 		void parsePassPartyLeadership(NetworkMessage& msg);
-		void parseEnableSharedPartyExperience(NetworkMessage& msg);
 
 		//trade methods
 		void parseRequestTrade(NetworkMessage& msg);
@@ -181,18 +180,13 @@ class ProtocolGame final : public Protocol
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
 		void sendTextMessage(const TextMessage& message);
-		void sendReLoginWindow();
 
 		void sendTutorial(uint8_t tutorialId);
 		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc);
 
-		void sendCreatureWalkthrough(const Creature* creature, bool walkthrough);
 		void sendCreatureShield(const Creature* creature);
 		void sendCreatureSkull(const Creature* creature);
 
-		void sendShop(const ShopInfoList& itemList);
-		void sendCloseShop();
-		void sendSaleItemList(const std::list<ShopInfo>& shop);
 		void sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack);
 		void sendCloseTrade();
 
@@ -271,9 +265,6 @@ class ProtocolGame final : public Protocol
 		//inventory
 		void SetInventoryItem(NetworkMessage& msg, slots_t slot, const Item* item);
 
-		//shop
-		void AddShopItem(NetworkMessage& msg, const ShopInfo& item);
-
 		//otclient
 		void parseExtendedOpcode(NetworkMessage& msg);
 
@@ -294,10 +285,7 @@ class ProtocolGame final : public Protocol
 		Player* player;
 
 		uint32_t eventConnect;
-		uint32_t challengeTimestamp;
 		uint16_t version;
-
-		uint8_t challengeRandom;
 
 		bool debugAssertSent;
 		bool acceptPackets;

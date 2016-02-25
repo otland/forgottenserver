@@ -283,7 +283,7 @@ bool Condition::isPersistent() const
 
 uint32_t Condition::getIcons() const
 {
-	return isBuff ? ICON_PARTY_BUFF : 0;
+	return 0;
 }
 
 bool Condition::updateCondition(const Condition* addCondition)
@@ -1220,24 +1220,8 @@ uint32_t ConditionDamage::getIcons() const
 			icons |= ICON_ENERGY;
 			break;
 
-		case CONDITION_DROWN:
-			icons |= ICON_DROWNING;
-			break;
-
 		case CONDITION_POISON:
 			icons |= ICON_POISON;
-			break;
-
-		case CONDITION_FREEZING:
-			icons |= ICON_FREEZING;
-			break;
-
-		case CONDITION_DAZZLED:
-			icons |= ICON_DAZZLED;
-			break;
-
-		case CONDITION_CURSED:
-			icons |= ICON_CURSED;
 			break;
 
 		default:

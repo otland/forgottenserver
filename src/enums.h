@@ -407,24 +407,6 @@ struct LightInfo {
 	}
 };
 
-struct ShopInfo {
-	uint16_t itemId;
-	int32_t subType;
-	uint32_t buyPrice;
-	uint32_t sellPrice;
-	std::string realName;
-
-	ShopInfo() {
-		itemId = 0;
-		subType = 1;
-		buyPrice = 0;
-		sellPrice = 0;
-	}
-
-	ShopInfo(uint16_t itemId, int32_t subType = 0, uint32_t buyPrice = 0, uint32_t sellPrice = 0, std::string realName = "")
-		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(realName) {}
-};
-
 enum CombatOrigin
 {
 	ORIGIN_NONE,
@@ -449,7 +431,5 @@ struct CombatDamage
 		primary.value = secondary.value = 0;
 	}
 };
-
-typedef std::list<ShopInfo> ShopInfoList;
 
 #endif

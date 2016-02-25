@@ -45,7 +45,7 @@ void ProtocolLogin::disconnectClient(const std::string& message)
 	disconnect();
 }
 
-void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password)
+void ProtocolLogin::getCharacterList(uint32_t accountName, const std::string& password)
 {
 	uint32_t serverIp = serverIPs[0].first;
 	for (uint32_t i = 0; i < serverIPs.size(); i++) {
@@ -136,7 +136,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
-	std::string accountName = msg.getString();
+	uint32_t accountName = msg.get<uint32_t>();
 	std::string password = msg.getString();
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
@@ -171,7 +171,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (accountName.empty()) {
+	if (accountName == 0) {
 		disconnectClient("Invalid account name.");
 		return;
 	}
