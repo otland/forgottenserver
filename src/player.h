@@ -72,6 +72,11 @@ enum fightMode_t : uint8_t {
 	FIGHTMODE_DEFENSE = 3,
 };
 
+enum secureMode_t : uint8_t {
+	SECUREMODE_OFF = 0,
+	SECUREMODE_ON = 1,
+};
+
 enum tradestate_t : uint8_t {
 	TRADE_NONE,
 	TRADE_INITIATED,
@@ -81,14 +86,11 @@ enum tradestate_t : uint8_t {
 };
 
 struct VIPEntry {
-	VIPEntry(uint32_t guid, std::string name, const std::string& description, uint32_t icon, bool notify)
-		: guid(guid), name(name), description(description), icon(icon), notify(notify) {}
+	VIPEntry(uint32_t guid, const std::string& name)
+		: guid(guid), name(name) {}
 
 	uint32_t guid;
 	std::string name;
-	std::string description;
-	uint32_t icon;
-	bool notify;
 };
 
 struct OpenContainer {
@@ -487,31 +489,11 @@ class Player final : public Creature, public Cylinder
 			return tradeItem;
 		}
 
-		//shop functions
-		void setShopOwner(Npc* owner, int32_t onBuy, int32_t onSell) {
-			shopOwner = owner;
-			purchaseCallback = onBuy;
-			saleCallback = onSell;
-		}
-
-		Npc* getShopOwner(int32_t& onBuy, int32_t& onSell) {
-			onBuy = purchaseCallback;
-			onSell = saleCallback;
-			return shopOwner;
-		}
-
-		const Npc* getShopOwner(int32_t& onBuy, int32_t& onSell) const {
-			onBuy = purchaseCallback;
-			onSell = saleCallback;
-			return shopOwner;
-		}
-
 		//V.I.P. functions
-		void notifyStatusChange(Player* player, bool online);
+		void notifyStatusChange(Player* player, VipStatus_t status);
 		bool removeVIP(uint32_t vipGuid);
-		bool addVIP(uint32_t vipGuid, const std::string& vipName, bool online);
+		bool addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status);
 		bool addVIPInternal(uint32_t vipGuid);
-		bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
 
 		//follow functions
 		bool setFollowCreature(Creature* creature) final;
@@ -866,6 +848,11 @@ class Player final : public Creature, public Cylinder
 				client->sendTextMessage(message);
 			}
 		}
+		void sendReLoginWindow() const {
+			if (client) {
+				client->sendReLoginWindow();
+			}
+		}
 		void sendTextWindow(Item* item, uint16_t maxlen, bool canWrite) const {
 			if (client) {
 				client->sendTextWindow(windowTextId, item, maxlen, canWrite);
@@ -920,11 +907,6 @@ class Player final : public Creature, public Cylinder
 		void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers) {
 			if (client) {
 				client->sendChannel(channelId, channelName, channelUsers, invitedUsers);
-			}
-		}
-		void sendTutorial(uint8_t tutorialId) {
-			if (client) {
-				client->sendTutorial(tutorialId);
 			}
 		}
 		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc) {

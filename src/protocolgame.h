@@ -122,10 +122,6 @@ class ProtocolGame final : public Protocol
 		void parseTextWindow(NetworkMessage& msg);
 		void parseHouseWindow(NetworkMessage& msg);
 
-		void parseLookInShop(NetworkMessage& msg);
-		void parsePlayerPurchase(NetworkMessage& msg);
-		void parsePlayerSale(NetworkMessage& msg);
-
 		void parseQuestLine(NetworkMessage& msg);
 
 		void parseInviteToParty(NetworkMessage& msg);
@@ -179,9 +175,10 @@ class ProtocolGame final : public Protocol
 		void sendCreatureVisible(const Creature* creature, bool visible);
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
+		void sendTextMessage(MessageClasses mclass, const std::string& message);
 		void sendTextMessage(const TextMessage& message);
+		void sendReLoginWindow();
 
-		void sendTutorial(uint8_t tutorialId);
 		void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc);
 
 		void sendCreatureShield(const Creature* creature);
@@ -195,8 +192,8 @@ class ProtocolGame final : public Protocol
 		void sendHouseWindow(uint32_t windowTextId, const std::string& text);
 		void sendOutfitWindow();
 
-		void sendUpdatedVIPStatus(uint32_t guid, bool online);
-		void sendVIP(uint32_t guid, const std::string& name, bool isOnline);
+		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
+		void sendVIP(uint32_t guid, const std::string& name, VipStatus_t status);
 
 		void sendFightModes();
 

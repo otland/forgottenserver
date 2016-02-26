@@ -53,8 +53,7 @@ class IOLoginData
 		static bool hasBiddedOnHouse(uint32_t guid);
 
 		static std::forward_list<VIPEntry> getVIPEntries(uint32_t accountId);
-		static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
-		static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
+		static void addVIPEntry(uint32_t accountId, uint32_t guid);
 		static void removeVIPEntry(uint32_t accountId, uint32_t guid);
 
 		static void addPremiumDays(uint32_t accountId, int32_t addDays);

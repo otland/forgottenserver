@@ -1292,6 +1292,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CREATURETYPE_PLAYER)
 	registerEnum(CREATURETYPE_MONSTER)
 	registerEnum(CREATURETYPE_NPC)
+	registerEnum(CREATURETYPE_SUMMON_OWN)
+	registerEnum(CREATURETYPE_SUMMON_OTHERS)
 
 	registerEnum(CLIENTOS_LINUX)
 	registerEnum(CLIENTOS_WINDOWS)
@@ -2084,7 +2086,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "forgetSpell", LuaScriptInterface::luaPlayerForgetSpell);
 	registerMethod("Player", "hasLearnedSpell", LuaScriptInterface::luaPlayerHasLearnedSpell);
 
-	registerMethod("Player", "sendTutorial", LuaScriptInterface::luaPlayerSendTutorial);
 	registerMethod("Player", "addMapMark", LuaScriptInterface::luaPlayerAddMapMark);
 
 	registerMethod("Player", "save", LuaScriptInterface::luaPlayerSave);
@@ -8589,20 +8590,6 @@ int LuaScriptInterface::luaPlayerHasLearnedSpell(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerSendTutorial(lua_State* L)
-{
-	// player:sendTutorial(tutorialId)
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		uint8_t tutorialId = getNumber<uint8_t>(L, 2);
-		player->sendTutorial(tutorialId);
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaPlayerAddMapMark(lua_State* L)
 {
 	// player:addMapMark(position, type, description)
@@ -8729,14 +8716,14 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	if (player->isInGhostMode()) {
 		for (const auto& it : g_game.getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, false);
+				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 	} else {
 		for (const auto& it : g_game.getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, true);
+				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), true);

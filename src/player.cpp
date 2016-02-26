@@ -88,10 +88,6 @@ Player::Player(ProtocolGame_ptr p) :
 	editHouse = nullptr;
 	editListId = 0;
 
-	shopOwner = nullptr;
-	purchaseCallback = -1;
-	saleCallback = -1;
-
 	pzLocked = false;
 	bloodHitCount = 0;
 	shieldBlockCount = 0;
@@ -1944,6 +1940,7 @@ void Player::death(Creature* _lastHitCreature)
 
 		sendStats();
 		sendSkills();
+		sendReLoginWindow();
 
 		health = healthMax;
 		mana = manaMax;
@@ -2043,14 +2040,14 @@ void Player::removeList()
 	g_game.removePlayer(this);
 
 	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(this, false);
+		it.second->notifyStatusChange(this, VIPSTATUS_OFFLINE);
 	}
 }
 
 void Player::addList()
 {
 	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(this, true);
+		it.second->notifyStatusChange(this, VIPSTATUS_ONLINE);
 	}
 
 	g_game.addPlayer(this);
@@ -2066,7 +2063,7 @@ void Player::kickPlayer(bool displayEffect)
 	}
 }
 
-void Player::notifyStatusChange(Player* loginPlayer, bool online)
+void Player::notifyStatusChange(Player* loginPlayer, VipStatus_t status)
 {
 	if (!client) {
 		return;
@@ -2077,7 +2074,7 @@ void Player::notifyStatusChange(Player* loginPlayer, bool online)
 		return;
 	}
 
-	client->sendUpdatedVIPStatus(loginPlayer->guid, online);
+	client->sendUpdatedVIPStatus(loginPlayer->guid, status);
 }
 
 bool Player::removeVIP(uint32_t vipGuid)
@@ -2090,7 +2087,7 @@ bool Player::removeVIP(uint32_t vipGuid)
 	return true;
 }
 
-bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, bool online)
+bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status)
 {
 	if (guid == vipGuid) {
 		sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add yourself.");
@@ -2108,9 +2105,9 @@ bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, bool online)
 		return false;
 	}
 
-	IOLoginData::addVIPEntry(accountNumber, vipGuid, "", 0, false);
+	IOLoginData::addVIPEntry(accountNumber, vipGuid);
 	if (client) {
-		client->sendVIP(vipGuid, vipName, online);
+		client->sendVIP(vipGuid, vipName, status);
 	}
 	return true;
 }
@@ -2126,17 +2123,6 @@ bool Player::addVIPInternal(uint32_t vipGuid)
 	}
 
 	return VIPList.insert(vipGuid).second;
-}
-
-bool Player::editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify)
-{
-	auto it = VIPList.find(vipGuid);
-	if (it == VIPList.end()) {
-		return false; // player is not in VIP
-	}
-
-	IOLoginData::editVIPEntry(accountNumber, vipGuid, description, icon, notify);
-	return true;
 }
 
 //close container and its child containers

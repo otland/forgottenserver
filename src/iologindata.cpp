@@ -944,31 +944,19 @@ std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 		do {
 			entries.emplace_front(
 				result->getNumber<uint32_t>("player_id"),
-				result->getString("name"),
-				result->getString("description"),
-				result->getNumber<uint32_t>("icon"),
-				result->getNumber<uint16_t>("notify") != 0
+				result->getString("name")
 			);
 		} while (result->next());
 	}
 	return entries;
 }
 
-void IOLoginData::addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify)
+void IOLoginData::addVIPEntry(uint32_t accountId, uint32_t guid)
 {
 	Database* db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES (" << accountId << ',' << guid << ',' << db->escapeString(description) << ',' << icon << ',' << notify << ')';
-	db->executeQuery(query.str());
-}
-
-void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify)
-{
-	Database* db = Database::getInstance();
-
-	std::ostringstream query;
-	query << "UPDATE `account_viplist` SET `description` = " << db->escapeString(description) << ", `icon` = " << icon << ", `notify` = " << notify << " WHERE `account_id` = " << accountId << " AND `player_id` = " << guid;
+	query << "INSERT INTO `account_viplist` (`account_id`, `player_id`) VALUES (" << accountId << ',' << guid << ')';
 	db->executeQuery(query.str());
 }
 

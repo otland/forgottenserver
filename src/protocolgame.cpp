@@ -1030,14 +1030,6 @@ void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t co
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendTutorial(uint8_t tutorialId)
-{
-	NetworkMessage msg;
-	msg.addByte(0xDC);
-	msg.addByte(tutorialId);
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc)
 {
 	NetworkMessage msg;
@@ -1048,10 +1040,26 @@ void ProtocolGame::sendAddMarker(const Position& pos, uint8_t markType, const st
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendReLoginWindow()
+{
+	NetworkMessage msg;
+	msg.addByte(0x28);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendStats()
 {
 	NetworkMessage msg;
 	AddPlayerStats(msg);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendTextMessage(MessageClasses mclass, const std::string& message)
+{
+	NetworkMessage msg;
+	msg.addByte(0xB4);
+	msg.addByte(mclass);
+	msg.addString(message);
 	writeToOutputBuffer(msg);
 }
 
@@ -1144,9 +1152,10 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 
 	uint32_t i = 0;
 	const ItemDeque& itemList = container->getItemList();
-	for (ItemDeque::const_iterator cit = itemList.begin() + firstIndex, end = itemList.end(); i < 0xFF && cit != end; ++cit, ++i) {
-		msg.addItem(*cit);
- 	}
+	for (ItemDeque::const_iterator it = itemList.begin() + firstIndex, end = itemList.end(); i < 0xFF && it != end; ++it, ++i) {
+		msg.addItem(*it);
+	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -1259,8 +1268,8 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	NetworkMessage msg;
 	msg.addByte(0xAA);
 
-    static uint32_t statementId = 0;
-    msg.add<uint32_t>(++statementId);
+	static uint32_t statementId = 0;
+	msg.add<uint32_t>(++statementId);
 
 	msg.addString(creature->getName());
 
@@ -1287,8 +1296,8 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 	NetworkMessage msg;
 	msg.addByte(0xAA);
 
-    static uint32_t statementId = 0;
-    msg.add<uint32_t>(++statementId);
+	static uint32_t statementId = 0;
+	msg.add<uint32_t>(++statementId);
 	if (!creature) {
 		msg.add<uint32_t>(0x00);
 	} else if (type == TALKTYPE_CHANNEL_R2) {
@@ -1568,10 +1577,33 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendCreatureLight(creature);
 
 	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
-	for (const VIPEntry& entry : vipEntries) {
-		Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
 
-		sendVIP(entry.guid, entry.name, (vipPlayer && (!vipPlayer->isInGhostMode() || player->isAccessPlayer())));
+	if (player->isAccessPlayer()) {
+		for (const VIPEntry& entry : vipEntries) {
+			VipStatus_t vipStatus;
+
+			Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
+			if (!vipPlayer) {
+				vipStatus = VIPSTATUS_OFFLINE;
+			} else {
+				vipStatus = VIPSTATUS_ONLINE;
+			}
+
+			sendVIP(entry.guid, entry.name, vipStatus);
+		}
+	} else {
+		for (const VIPEntry& entry : vipEntries) {
+			VipStatus_t vipStatus;
+
+			Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
+			if (!vipPlayer || vipPlayer->isInGhostMode()) {
+				vipStatus = VIPSTATUS_OFFLINE;
+			} else {
+				vipStatus = VIPSTATUS_ONLINE;
+			}
+
+			sendVIP(entry.guid, entry.name, vipStatus);
+		}
 	}
 
 	player->sendIcons();
@@ -1784,21 +1816,21 @@ void ProtocolGame::sendOutfitWindow()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendUpdatedVIPStatus(uint32_t guid, bool online)
+void ProtocolGame::sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus)
 {
 	NetworkMessage msg;
-	msg.addByte(online ? 0xD3 : 0xD4);
+	msg.addByte(newStatus ? 0xD3 : 0xD4);
 	msg.add<uint32_t>(guid);
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, bool isOnline)
+void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, VipStatus_t status)
 {
 	NetworkMessage msg;
 	msg.addByte(0xD2);
 	msg.add<uint32_t>(guid);
 	msg.addString(name);
-	msg.addByte(isOnline ? 0x01 : 0x00);
+	msg.addByte(status);
 	writeToOutputBuffer(msg);
 }
 

@@ -2099,7 +2099,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 		}
 	}
 
-	bool hasParent = (dynamic_cast<const Container*>(parentContainer->getParent()) != nullptr);
+	bool hasParent = dynamic_cast<const Container*>(parentContainer->getParent()) != nullptr;
 	player->addContainer(cid, parentContainer);
 	player->sendContainer(cid, parentContainer, hasParent, player->getContainerIndex(cid));
 }
@@ -2116,7 +2116,7 @@ void Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
 		return;
 	}
 
-	bool hasParent = (dynamic_cast<const Container*>(container->getParent()) != nullptr);
+	bool hasParent = dynamic_cast<const Container*>(container->getParent()) != nullptr;
 	player->sendContainer(cid, container, hasParent, player->getContainerIndex(cid));
 }
 
@@ -2783,7 +2783,7 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 			return;
 		}
 
-		player->addVIP(guid, formattedName, false);
+		player->addVIP(guid, formattedName, VIPSTATUS_OFFLINE);
 	} else {
 		if (vipPlayer->hasFlag(PlayerFlag_SpecialVIP) && !player->hasFlag(PlayerFlag_SpecialVIP)) {
 			player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.");
@@ -2791,9 +2791,9 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 		}
 
 		if (!vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
-			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), true);
+			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_ONLINE);
 		} else {
-			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), false);
+			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_OFFLINE);
 		}
 	}
 }
