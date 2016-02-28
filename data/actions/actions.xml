@@ -65,26 +65,6 @@
 	<action itemid="6490" function="decreaseItemId" />
 	<action itemid="7058" function="increaseItemId" />
 	<action itemid="7059" function="decreaseItemId" />
-	<action itemid="8684" function="increaseItemId" />
-	<action itemid="8685" function="decreaseItemId" />
-	<action itemid="8686" function="increaseItemId" />
-	<action itemid="8687" function="decreaseItemId" />
-	<action itemid="8688" function="increaseItemId" />
-	<action itemid="8689" function="decreaseItemId" />
-	<action itemid="8690" function="increaseItemId" />
-	<action itemid="8691" function="decreaseItemId" />
-	<action itemid="9575" function="increaseItemId" />
-	<action itemid="9576" function="decreaseItemId" />
-	<action itemid="9577" function="increaseItemId" />
-	<action itemid="9578" function="decreaseItemId" />
-	<action itemid="9579" function="increaseItemId" />
-	<action itemid="9580" function="decreaseItemId" />
-	<action itemid="9581" function="increaseItemId" />
-	<action itemid="9582" function="decreaseItemId" />
-	<action itemid="9747" function="increaseItemId" />
-	<action itemid="9748" function="decreaseItemId" />
-	<action itemid="9749" function="increaseItemId" />
-	<action itemid="9750" function="decreaseItemId" />
 
 	<!-- Food -->
 	<action itemid="2362" script="other/food.lua" />
@@ -101,26 +81,10 @@
 	<action itemid="6574" script="other/food.lua" />
 	<action fromid="7158" toid="7159" script="other/food.lua" />
 	<action fromid="7372" toid="7377" script="other/food.lua" />
-	<action fromid="7909" toid="7910" script="other/food.lua" />
-	<action itemid="7963" script="other/food.lua" />
-	<action itemid="8112" script="other/food.lua" />
-	<action fromid="8838" toid="8845" script="other/food.lua" />
-	<action itemid="8847" script="other/food.lua" />
-	<action itemid="9005" script="other/food.lua" />
-	<action itemid="9114" script="other/food.lua" />
-	<action itemid="9996" script="other/food.lua" />
-	<action itemid="10454" script="other/food.lua" />
-	<action itemid="11246" script="other/food.lua" />
-	<action itemid="11370" script="other/food.lua" />
-	<action itemid="11429" script="other/food.lua" />
-	<action fromid="12415" toid="12418" script="other/food.lua" />
-	<action fromid="12637" toid="12639" script="other/food.lua" />
 
 	<!-- Spellbooks -->
 	<action itemid="2175" script="other/spellbook.lua" />
 	<action itemid="6120" script="other/spellbook.lua" />
-	<action fromid="8900" toid="8904" script="other/spellbook.lua" />
-	<action itemid="8918" script="other/spellbook.lua" />
 
 	<!-- Other -->
 	<action itemid="6578" script="other/partyhat.lua" />
@@ -141,13 +105,6 @@
 	<action itemid="6115" script="other/constructionkits.lua" />
 	<action itemid="6372" script="other/constructionkits.lua" />
 	<action itemid="6373" script="other/constructionkits.lua" />
-	<action itemid="8692" script="other/constructionkits.lua" />
-	<action itemid="9974" script="other/constructionkits.lua" />
-	<action itemid="11124" script="other/constructionkits.lua" />
-	<action itemid="11126" script="other/constructionkits.lua" />
-	<action itemid="11133" script="other/constructionkits.lua" />
-	<action itemid="11205" script="other/constructionkits.lua" />
-	<action fromid="7904" toid="7907" script="other/bed_modification_kits.lua" />
 	<action fromid="2070" toid="2078" script="other/music.lua" />
 	<action fromid="2080" toid="2085" script="other/music.lua" />
 	<action itemid="2332" script="other/music.lua" />
@@ -173,24 +130,12 @@
 	<action fromid="2031" toid="2034" script="other/fluids.lua" />
 	<action fromid="2574" toid="2577" script="other/fluids.lua" />
 	<action fromid="5792" toid="5797" script="other/die.lua" />
-	<action itemid="7588" script="other/potions.lua" />
-	<action itemid="7589" script="other/potions.lua" />
-	<action itemid="7590" script="other/potions.lua" />
-	<action itemid="7591" script="other/potions.lua" />
-	<action itemid="7618" script="other/potions.lua" />
-	<action itemid="7620" script="other/potions.lua" />
-	<action itemid="8472" script="other/potions.lua" />
-	<action itemid="8473" script="other/potions.lua" />
-	<action itemid="8474" script="other/potions.lua" />
-	<action itemid="8704" script="other/potions.lua" />
 	<action itemid="2692" script="other/createbread.lua" />
 	<action itemid="2694" script="other/createbread.lua" />
 	<action fromid="6436" toid="6447" script="other/windows.lua" />
 	<action fromid="6450" toid="6473" script="other/windows.lua" />
 	<action fromid="6788" toid="6791" script="other/windows.lua" />
 	<action fromid="7025" toid="7032" script="other/windows.lua" />
-	<action fromid="10264" toid="10267" script="other/windows.lua" />
-	<action fromid="10488" toid="10491" script="other/windows.lua" />
 	<action fromid="5303" toid="5304" script="other/windows.lua" />
 	<action fromid="6448" toid="6449" script="other/windows.lua" />
 	<action fromid="1209" toid="1214" script="other/doors.lua" />
@@ -211,19 +156,6 @@
 	<action fromid="6891" toid="6908" script="other/doors.lua" />
 	<action fromid="7033" toid="7050" script="other/doors.lua" />
 	<action fromid="7054" toid="7057" script="other/doors.lua" />
-	<action fromid="8541" toid="8558" script="other/doors.lua" />
-	<action fromid="9165" toid="9184" script="other/doors.lua" />
-	<action fromid="9267" toid="9284" script="other/doors.lua" />
-	<action itemid="10032" script="other/doors.lua" />
-	<action fromid="10268" toid="10285" script="other/doors.lua" />
-	<action fromid="10468" toid="10486" script="other/doors.lua" />
-	<action fromid="10775" toid="10777" script="other/doors.lua" />
-	<action fromid="10780" toid="10786" script="other/doors.lua" />
-	<action fromid="10789" toid="10792" script="other/doors.lua" />
-	<action fromid="12092" toid="12105" script="other/doors.lua" />
-	<action fromid="12188" toid="12190" script="other/doors.lua" />
-	<action fromid="12193" toid="12199" script="other/doors.lua" />
-	<action fromid="12202" toid="12205" script="other/doors.lua" />
 	<action itemid="3743" script="other/transforms.lua" />
 	<action itemid="4404" script="other/transforms.lua" />
 	<action fromaid="18488" toaid="18492" script="other/skilltrainer.lua" />

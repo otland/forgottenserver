@@ -17,14 +17,6 @@
 	<outfit type="0" looktype="157" name="Beggar" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="158" name="Shaman" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="252" name="Norsewoman" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="269" name="Nightmare" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="270" name="Jester" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="279" name="Brotherhood" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="288" name="Demonhunter" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="324" name="Yalaharian" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="329" name="Wife" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="336" name="Warmaster" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="366" name="Wayfarer" premium="yes" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -43,12 +35,4 @@
 	<outfit type="1" looktype="153" name="Beggar" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="154" name="Shaman" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="251" name="Norseman" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="268" name="Nightmare" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="273" name="Jester" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="278" name="Brotherhood" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="289" name="Demonhunter" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="325" name="Yalaharian" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="328" name="Husband" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="335" name="Warmaster" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="367" name="Wayfarer" premium="yes" unlocked="no" enabled="yes" />
 </outfits>

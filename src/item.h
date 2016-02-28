@@ -615,6 +615,9 @@ class Item : virtual public Thing
 		bool isStackable() const {
 			return items[id].stackable;
 		}
+		bool isRune() const {
+			return items[id].isRune();
+		}
 		bool isAlwaysOnTop() const {
 			return items[id].alwaysOnTop;
 		}

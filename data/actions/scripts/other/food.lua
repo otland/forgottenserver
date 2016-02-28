@@ -60,33 +60,6 @@ local foods = {
 	[7375] = {2, "Yum."}, -- ice cream cone (chilly cherry)
 	[7376] = {2, "Yum."}, -- ice cream cone (mellow melon)
 	[7377] = {2, "Yum."}, -- ice cream cone (blue-barian)
-	[7909] = {4, "Crunch."}, -- walnut
-	[7910] = {4, "Crunch."}, -- peanut
-	[7963] = {60, "Munch."}, -- marlin
-	[8112] = {9, "Urgh."}, -- scarab cheese
-	[8838] = {10, "Gulp."}, -- potato
-	[8839] = {5, "Yum."}, -- plum
-	[8840] = {1, "Yum."}, -- raspberry
-	[8841] = {1, "Urgh."}, -- lemon
-	[8842] = {7, "Munch."}, -- cucumber
-	[8843] = {5, "Crunch."}, -- onion
-	[8844] = {1, "Gulp."}, -- jalapeño pepper
-	[8845] = {5, "Munch."}, -- beetroot
-	[8847] = {11, "Yum."}, -- chocolate cake
-	[9005] = {7, "Slurp."}, -- yummy gummy worm
-	[9114] = {5, "Crunch."}, -- bulb of garlic
-	[9996] = {0, "Slurp."}, -- banana chocolate shake
-	[10454] = {0, "Your head begins to feel better."}, -- headache pill
-	[11246] = {15, "Yum."}, -- rice ball
-	[11370] = {3, "Urgh."}, -- terramite eggs
-	[11429] = {10, "Mmmm."}, -- crocodile steak
-	[12415] = {20, "Yum."}, -- pineapple
-	[12416] = {10, "Munch."}, -- aubergine
-	[12417] = {8, "Crunch."}, -- broccoli
-	[12418] = {9, "Crunch."}, -- cauliflower
-	[12637] = {55, "Gulp."}, -- ectoplasmic sushi
-	[12638] = {18, "Yum."}, -- dragonfruit
-	[12639] = {2, "Munch."}, -- peas
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)

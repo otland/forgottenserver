@@ -2274,57 +2274,57 @@
 		<attribute key="slotType" value="ring" />
 	</item>
 	<item id="2180" name="the orb of nature" />
-	<item id="2181" article="a" name="terra rod">
-		<attribute key="description" value="Small stones are flying from its tip." />
-		<attribute key="weight" value="2500" />
+	<item id="2181" article="a" name="quagmire rod">
+		<attribute key="description" value="It emits clouds of poisonous swamp gas." />
+		<attribute key="weight" value="2650" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallearth" />
-		<attribute key="range" value="3" />
+		<attribute key="shootType" value="poison" />
+		<attribute key="range" value="2" />
 	</item>
 	<item id="2182" article="a" name="snakebite rod">
 		<attribute key="description" value="It seems to twitch and quiver as if trying to escape your grip." />
 		<attribute key="weight" value="1900" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallearth" />
+		<attribute key="shootType" value="poison" />
 		<attribute key="range" value="3" />
 	</item>
-	<item id="2183" article="a" name="hailstorm rod">
-		<attribute key="description" value="It grants you the power of striking your foes with furious hailstorms." />
-		<attribute key="weight" value="2700" />
+	<item id="2183" article="a" name="tempest rod">
+		<attribute key="description" value="It grants you the power of striking your foes with furious thunderstorms." />
+		<attribute key="weight" value="2100" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallice" />
-		<attribute key="range" value="3" />
+		<attribute key="shootType" value="energy" />
+		<attribute key="range" value="1" />
 	</item>
 	<item id="2184" article="a" name="crystal wand">
 		<attribute key="weight" value="2800" />
 	</item>
-	<item id="2185" article="a" name="necrotic rod">
-		<attribute key="description" value="It was brought up from hell to deliver death." />
-		<attribute key="weight" value="2300" />
-		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="death" />
-		<attribute key="range" value="3" />
-	</item>
-	<item id="2186" article="a" name="moonlight rod">
-		<attribute key="description" value="Icecold rays of moonlight shimmer on its tip." />
-		<attribute key="weight" value="2100" />
-		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="smallice" />
-		<attribute key="range" value="3" />
-	</item>
-	<item id="2187" article="a" name="wand of inferno">
-		<attribute key="description" value="It unleashes the very fires of hell." />
-		<attribute key="weight" value="2700" />
+	<item id="2185" article="a" name="volcanic rod">
+		<attribute key="description" value="It erupts powerful bursts of magma upon everything in your path." />
+		<attribute key="weight" value="2900" />
 		<attribute key="weaponType" value="wand" />
 		<attribute key="shootType" value="fire" />
 		<attribute key="range" value="3" />
 	</item>
-	<item id="2188" article="a" name="wand of decay">
-		<attribute key="description" value="It is half-rotten itself and reeks terribly." />
+	<item id="2186" article="a" name="moonlight rod">
+		<attribute key="description" value="Shimmering rays of moonlight radiate from its tip." />
+		<attribute key="weight" value="1950" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="energy" />
+		<attribute key="range" value="3" />
+	</item>
+	<item id="2187" article="a" name="wand of inferno">
+		<attribute key="description" value="It unleashes the very fires of hell." />
+		<attribute key="weight" value="3050" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="fire" />
+		<attribute key="range" value="2" />
+	</item>
+	<item id="2188" article="a" name="wand of plague">
+		<attribute key="description" value="Infectious goo covers its tip." />
 		<attribute key="weight" value="2300" />
 		<attribute key="weaponType" value="wand" />
-		<attribute key="shootType" value="death" />
-		<attribute key="range" value="3" />
+		<attribute key="shootType" value="poison" />
+		<attribute key="range" value="2" />
 	</item>
 	<item id="2189" article="a" name="wand of cosmic energy">
 		<attribute key="description" value="The energy of a radiant star is trapped inside its globe." />
@@ -2335,14 +2335,14 @@
 	</item>
 	<item id="2190" article="a" name="wand of vortex">
 		<attribute key="description" value="Surges of energy rush through the tip of this wand." />
-		<attribute key="weight" value="1900" />
+		<attribute key="weight" value="2300" />
 		<attribute key="weaponType" value="wand" />
 		<attribute key="shootType" value="energy" />
 		<attribute key="range" value="3" />
 	</item>
 	<item id="2191" article="a" name="wand of dragonbreath">
 		<attribute key="description" value="Legends say that this wand holds the soul of a young dragon." />
-		<attribute key="weight" value="2100" />
+		<attribute key="weight" value="2300" />
 		<attribute key="weaponType" value="wand" />
 		<attribute key="shootType" value="fire" />
 		<attribute key="range" value="3" />
@@ -2372,7 +2372,6 @@
 		<attribute key="charges" value="5" />
 		<attribute key="showcharges" value="1" />
 		<attribute key="absorbPercentPhysical" value="80" />
-		<attribute key="absorbPercentDeath" value="80" />
 		<attribute key="showattributes" value="1" />
 	</item>
 	<item id="2198" article="an" name="elven amulet">
@@ -2680,9 +2679,9 @@
 	</item>
 	<item id="2268" article="a" name="sudden death rune">
 		<attribute key="type" value="rune" />
-		<attribute key="runeSpellName" value="adori gran mort" />
+		<attribute key="runeSpellName" value="adori vita vis" />
 		<attribute key="weight" value="70" />
-		<attribute key="charges" value="3" />
+		<attribute key="charges" value="1" />
 	</item>
 	<item id="2269" article="a" name="wild growth rune">
 		<attribute key="type" value="rune" />
@@ -2784,11 +2783,11 @@
 		<attribute key="weight" value="210" />
 		<attribute key="charges" value="1" />
 	</item>
-	<item id="2292" article="a" name="stalagmite rune">
+	<item id="2292" article="a" name="envenom rune">
 		<attribute key="type" value="rune" />
-		<attribute key="runeSpellName" value="adori tera" />
+		<attribute key="runeSpellName" value="adevo res pox" />
 		<attribute key="weight" value="21" />
-		<attribute key="charges" value="10" />
+		<attribute key="charges" value="1" />
 	</item>
 	<item id="2293" article="a" name="magic wall rune">
 		<attribute key="type" value="rune" />
@@ -2820,7 +2819,7 @@
 		<attribute key="type" value="rune" />
 		<attribute key="runeSpellName" value="adori flam" />
 		<attribute key="weight" value="42" />
-		<attribute key="charges" value="5" />
+		<attribute key="charges" value="2" />
 	</item>
 	<item id="2303" article="a" name="fire wall rune">
 		<attribute key="type" value="rune" />
@@ -2830,9 +2829,9 @@
 	</item>
 	<item id="2304" article="a" name="great fireball rune">
 		<attribute key="type" value="rune" />
-		<attribute key="runeSpellName" value="adori mas flam" />
+		<attribute key="runeSpellName" value="adori gran flam" />
 		<attribute key="weight" value="52" />
-		<attribute key="charges" value="4" />
+		<attribute key="charges" value="2" />
 	</item>
 	<item id="2305" article="a" name="fire bomb rune">
 		<attribute key="type" value="rune" />
@@ -2854,7 +2853,7 @@
 		<attribute key="type" value="rune" />
 		<attribute key="weight" value="120" />
 	</item>
-	<item id="2310" article="a" name="desintegrate rune">
+	<item id="2310" article="a" name="disintegrate rune">
 		<attribute key="type" value="rune" />
 		<attribute key="runeSpellName" value="adito tera" />
 		<attribute key="weight" value="70" />
@@ -2862,9 +2861,9 @@
 	</item>
 	<item id="2311" article="a" name="heavy magic missile rune">
 		<attribute key="type" value="rune" />
-		<attribute key="runeSpellName" value="adori vis" />
+		<attribute key="runeSpellName" value="adori gran" />
 		<attribute key="weight" value="21" />
-		<attribute key="charges" value="10" />
+		<attribute key="charges" value="5" />
 	</item>
 	<item id="2312" article="a" name="spell rune">
 		<attribute key="type" value="rune" />
@@ -2874,7 +2873,7 @@
 		<attribute key="type" value="rune" />
 		<attribute key="runeSpellName" value="adevo mas hur" />
 		<attribute key="weight" value="35" />
-		<attribute key="charges" value="6" />
+		<attribute key="charges" value="3" />
 	</item>
 	<item id="2314" article="a" name="spell rune">
 		<attribute key="type" value="rune" />
@@ -3273,7 +3272,6 @@
 		<attribute key="attack" value="42" />
 		<attribute key="defense" value="1" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="elementIce" value="18" />
 		<attribute key="charges" value="1" />
 	</item>
 	<item id="2397" article="a" name="longsword">
@@ -10754,13 +10752,11 @@
 		<attribute key="transformEquipTo" value="6301" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
-		<attribute key="absorbPercentDeath" value="5" />
 	</item>
 	<item id="6301" article="a" name="death ring">
 		<attribute key="weight" value="80" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="armor" value="1" />
-		<attribute key="absorbPercentDeath" value="5" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="transformDeEquipTo" value="6300" />
 		<attribute key="duration" value="480" />
@@ -12979,7 +12975,6 @@
 		<attribute key="weight" value="500" />
 		<attribute key="armor" value="0" />
 		<attribute key="slotType" value="head" />
-		<attribute key="absorbPercentIce" value="2" />
 	</item>
 	<item id="7460" article="a" name="norse shield">
 		<attribute key="weight" value="4100" />

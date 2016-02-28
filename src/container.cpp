@@ -68,6 +68,11 @@ Container* Container::getParentContainer()
 	return thing->getContainer();
 }
 
+bool Container::hasParent() const
+{
+	return dynamic_cast<const Container*>(getParent()) != nullptr;
+}
+
 void Container::addItem(Item* item)
 {
 	itemlist.push_back(item);

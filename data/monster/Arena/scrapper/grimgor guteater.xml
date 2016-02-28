@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Grimgor Guteater" nameDescription="grimgor guteater" race="blood" experience="670" speed="240" manacost="0">
-	<health now="1115" max="1115"/>
-	<look type="2" corpse="7349"/>
-	<strategy attack="100" defense="0"/>
+<monster name="Grimgor Guteater" nameDescription="Grimgor Guteater" race="blood" experience="670" speed="240" manacost="0">
+	<health now="1155" max="1155" />
+	<look type="2" corpse="7349" />
 	<flags>
-		<flag summonable="0"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag targetdistance="1"/>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="105" attack="40"/>
-		<attack name="physical" interval="4000" chance="60" min="-55" max="-130">
-			<attribute key="shootEffect" value="throwingstar"/>
+		<attack name="melee" interval="2000" min="0" max="-230" />
+		<attack name="physical" interval="4000" chance="60" min="0" max="-100">
+			<attribute key="shootEffect" value="throwingstar" />
 		</attack>
 	</attacks>
-	<defenses armor="45" defense="45"/>
-	<elements>
-		<element firePercent="100"/>
-		<element energyPercent="20"/>
-		<element deathPercent="-10"/>
-	</elements>
+	<defenses armor="35" defense="35">
+		<defense name="invisible" interval="2000" chance="5" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+
 	<immunities>
-		<immunity outfit="1"/>
-		<immunity drunk="1"/>
-		<immunity invisible="1"/>
+		<immunity fire="1" />
+		<immunity invisible="1" />
 	</immunities>
-	<voices interval="2000" chance="5">
-		<voice sentence="Dont run, You're burning off precious fat."/>
+	<voices interval="5000" chance="10">
+		<voice sentence="Don't run, You're burning off precious fat." />
 	</voices>
 </monster>

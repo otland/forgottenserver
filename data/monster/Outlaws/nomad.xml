@@ -1,52 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="215" manacost="420">
-	<health now="160" max="160"/>
-	<look type="146" head="114" body="20" legs="22" feet="2" corpse="6080"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
+<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="205" manacost="420">
+	<health now="160" max="160" />
+	<look type="146" head="114" body="20" legs="22" feet="2" addons="2" corpse="6080" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="1"/>
-		<flag attackable="1"/>
-		<flag hostile="1"/>
-		<flag illusionable="1"/>
-		<flag convinceable="1"/>
-		<flag pushable="0"/>
-		<flag canpushitems="1"/>
-		<flag canpushcreatures="0"/>
-		<flag targetdistance="1"/>
-		<flag staticattack="90"/>
-		<flag runonhealth="18"/>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40"/>
+		<attack name="melee" interval="2000" min="0" max="-80" />
+		<attack name="physical" interval="2000" chance="10" target="0" radius="1">
+			<attribute key="areaeffect" value="whitenote" />
+		</attack>
 	</attacks>
-	<defenses armor="10" defense="13"/>
-	<elements>
-		<element firePercent="20"/>
-		<element holyPercent="10"/>
-		<element physicalPercent="-12"/>
-		<element icePercent="-10"/>
-		<element deathPercent="-5"/>
-	</elements>
+	<defenses armor="15" defense="15" />
+
 	<voices interval="5000" chance="10">
-		<voice sentence="We are the true sons of the desert!"/>
-		<voice sentence="I will leave your remains to the vultures!"/>
-		<voice sentence="We are swift as the wind of the desert!"/>
+		<voice sentence="We are the true sons of the desert!" />
+		<voice sentence="I will leave your remains to the vultures!" />
+		<voice sentence="We are swift as the wind of the desert!" />
+		<voice sentence="Your riches will be mine!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="51" chance="16250"/><!-- gold coin -->
-		<item id="2666" countmax="2" chance="22500"/><!-- meat -->
-		<item id="2386" chance="28000"/><!-- axe -->
-		<item id="2511" chance="20000"/><!-- brass shield -->
-		<item id="2649" chance="13750"/><!-- leather legs -->
-		<item id="2398" chance="12500"/><!-- mace -->
-		<item id="2458" chance="4500"/><!-- chain helmet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			
-		<item id="2465" chance="1500"/><!-- brass armor -->
-		<item id="2509" chance="750"/><!-- steel shield -->
-		<item id="2459" chance="450"/><!-- iron helmet -->
-			
-		</item>
+		<item id="2148" countmax="40" chance="56000" />	<!-- gold coin -->
+		<item id="12448" chance="6420" />				<!-- rope belt -->
+		<item id="8838" countmax="3" chance="4840" />	<!-- potato -->
+		<item id="2386" chance="2730" />					<!-- axe -->
+		<item id="2465" chance="2350" />					<!-- brass armor -->
+		<item id="2398" chance="2150" />					<!-- mace -->
+		<item id="12412" chance="2140" />				<!-- dirty turban -->
+		<item id="2509" chance="900" />					<!-- steel shield -->
+		<item id="2459" chance="660" />					<!-- iron helmet -->
+		<item id="8267" chance="210" />					<!-- nomad parchment -->
 	</loot>
 </monster>

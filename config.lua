@@ -4,7 +4,6 @@ worldType = "pvp"
 hotkeyAimbotEnabled = true
 protectionLevel = 1
 killsToRedSkull = 3
-killsToBlackSkull = 6
 pzLocked = 60000
 removeChargesFromRunes = true
 timeToDecreaseFrags = 24 * 60 * 60 * 1000
