@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="5" defense="5" />
-
 	<immunities>
 		<immunity drunk="1" />
 		<immunity earth="1" />
@@ -32,7 +31,4 @@
 		<voice sentence="Zzzzzz" />
 		<voice sentence="Fsssss" />
 	</voices>
-	<loot>
-		<item id="10551" chance="5000" />	<!-- cobra tongue -->
-	</loot>
 </monster>

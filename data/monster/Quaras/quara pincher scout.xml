@@ -24,13 +24,11 @@
 	</attacks>
 	<defenses armor="45" defense="45" />
 	<immunities>
-
 		<immunity fire="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Clank! Clank!" />
 		<voice sentence="Clap!" />
@@ -38,12 +36,10 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="127" chance="90000" />	<!-- gold coin -->
-		<item id="12446" chance="9500" />				<!-- quara pincers -->
 		<item id="2463" chance="4170" />					<!-- plate armor -->
 		<item id="2147" countmax="2" chance="4000" />	<!-- small ruby -->
 		<item id="2381" chance="1700" />					<!-- halberd -->
 		<item id="2177" chance="810" />					<!-- life crystal -->
 		<item id="5895" chance="730" />					<!-- fish fin -->
-		<item id="13305" chance="10" />					<!-- giant shrimp -->
 	</loot>
 </monster>

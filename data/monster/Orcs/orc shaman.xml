@@ -30,7 +30,6 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -44,12 +43,8 @@
 	<loot>
 		<item id="2148" countmax="5" chance="90000" />	<!-- gold coin -->
 		<item id="2686" countmax="2" chance="10600" />	<!-- corncob -->
-		<item id="12408" chance="10300" />				<!-- broken shamanic staff -->
 		<item id="2464" chance="8800" />					<!-- chain armor -->
-		<item id="12434" chance="7000" />				<!-- shamanic hood -->
 		<item id="2389" chance="5000" />					<!-- spear -->
-		<item id="12435" chance="4000" />				<!-- orc leather -->
-		<item id="11113" chance="2000" />				<!-- orc tooth -->
 		<item id="2188" chance="1000" />					<!-- wand of decay -->
 		<item id="1958" chance="490" />					<!-- book -->
 	</loot>

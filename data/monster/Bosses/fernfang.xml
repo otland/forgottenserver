@@ -66,12 +66,10 @@
 		<item id="2642" chance="6666" /> <!-- sandals -->
 		<item id="3976" countmax="10" chance="50000" /> <!-- worm -->
 		<item id="1987" chance="100000"> <!-- bag -->
-
-				<item id="2044" chance="6666" /> <!-- lamp -->
-				<item id="2689" countmax="3" chance="20000" /> <!-- bread -->
-				<item id="2401" chance="3333" /> <!-- staff -->
-				<item id="2166" chance="1428" /> <!-- power ring -->
-
+			<item id="2044" chance="6666" /> <!-- lamp -->
+			<item id="2689" countmax="3" chance="20000" /> <!-- bread -->
+			<item id="2401" chance="3333" /> <!-- staff -->
+			<item id="2166" chance="1428" /> <!-- power ring -->
 		</item>
 	</loot>
 </monster>

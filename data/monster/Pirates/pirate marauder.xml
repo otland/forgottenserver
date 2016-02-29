@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -35,7 +34,6 @@
 	<loot>
 		<item id="2148" countmax="40" chance="77000" />	<!-- gold coin -->
 		<item id="2050" chance="9880" />					<!-- torch -->
-		<item id="11219" chance="9720" />				<!-- compass -->
 		<item id="2389" countmax="2" chance="5140" />	<!-- spear -->
 		<item id="2510" chance="5000" />					<!-- plate shield -->
 		<item id="2464" chance="3000" />					<!-- chain armor -->

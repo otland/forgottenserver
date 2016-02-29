@@ -28,12 +28,8 @@
 	</attacks>
 	<defenses armor="14" defense="10" />
 	<immunities>
-		<immunity physical="0" />
-		<immunity energy="0" />
 		<immunity fire="1" />
-		<immunity poison="0" />
 		<immunity lifedrain="1" />
-		<immunity paralyze="0" />
 		<immunity outfit="1" />
 		<immunity drunk="1" />
 		<immunity invisible="1" />
@@ -55,13 +51,11 @@
 		<item id="2691" chance="4000" /> <!-- brown bread -->
 		<item id="5913" chance="2000" /> <!-- brown piece of cloth -->
 		<item id="1987" chance="100000"> <!-- bag -->
-
-				<item id="7290" chance="4000" /> <!-- shard -->
-				<item id="7463" chance="6666" /> <!-- mammoth fur cape -->
-				<item id="7386" chance="6666" /> <!-- mercenary sword -->
-				<item id="7458" chance="1000" /> <!-- fur cap -->
-				<item id="2173" chance="500" /> <!-- amulet of loss -->
-
+			<item id="7290" chance="4000" /> <!-- shard -->
+			<item id="7463" chance="6666" /> <!-- mammoth fur cape -->
+			<item id="7386" chance="6666" /> <!-- mercenary sword -->
+			<item id="7458" chance="1000" /> <!-- fur cap -->
+			<item id="2173" chance="500" /> <!-- amulet of loss -->
 		</item>
 	</loot>
 </monster>

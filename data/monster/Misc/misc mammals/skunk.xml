@@ -21,8 +21,4 @@
 		<attack name="poison" interval="2000" chance="10" range="1" min="0" max="-3" />
 	</attacks>
 	<defenses armor="5" defense="5" />
-	<loot>
-		<item id="9114" chance="4910" />	<!-- bulb of garlic -->
-		<item id="11191" chance="940" />	<!-- skunk tail -->
-	</loot>
 </monster>

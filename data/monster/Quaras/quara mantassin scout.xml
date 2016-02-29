@@ -20,9 +20,7 @@
 		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<immunities>
-
 		<immunity fire="1" />
 		<immunity invisible="1" />
 		<immunity lifedrain="1" />
@@ -33,7 +31,6 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="30" chance="94000" />	<!-- gold coin -->
-		<item id="12445" chance="7750" />				<!-- mantassin tail -->
 		<item id="2464" chance="4550" />					<!-- chain armor -->
 		<item id="2229" chance="810" />					<!-- skull -->
 		<item id="2146" chance="810" />					<!-- small sapphire -->

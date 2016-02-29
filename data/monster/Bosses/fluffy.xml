@@ -34,13 +34,6 @@
 	</attacks>
 	<defenses armor="25" defense="35" />
 	<immunities>
-		<immunity physical="0" />
-		<immunity energy="0" />
-		<immunity fire="0" />
-		<immunity poison="0" />
-		<immunity lifedrain="0" />
-		<immunity paralyze="0" />
-		<immunity outfit="0" />
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
@@ -57,11 +50,9 @@
 		<item id="2230" chance="25000" /> <!-- bone -->
 		<item id="6500" chance="7200" /> <!-- demonic essence -->
 		<item id="1987" chance="100000"> <!-- bag -->
-
-				<item id="2430" chance="2857" /> <!-- knight axe -->
-				<item id="2383" chance="2500" /> <!-- spike sword -->
-				<item id="6558" chance="8888" /> <!-- concentrated demonic blood -->
-
+			<item id="2430" chance="2857" /> <!-- knight axe -->
+			<item id="2383" chance="2500" /> <!-- spike sword -->
+			<item id="6558" chance="8888" /> <!-- concentrated demonic blood -->
 		</item>
 	</loot>
 </monster>

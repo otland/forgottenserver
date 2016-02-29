@@ -22,6 +22,5 @@
 	</voices>
 	<loot>
 		<item id="2666" countmax="4" chance="64000" />	<!-- meat -->
-		<item id="10610" chance="950" />					<!-- pig foot -->
 	</loot>
 </monster>

@@ -28,7 +28,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-
 	<immunities>
 		<immunity fire="1" />
 	</immunities>
@@ -37,7 +36,6 @@
 		<voice sentence="Hell, oh hell!" />
 	</voices>
 	<loot>
-		<item id="12469" chance="19770" /> <!-- small pitchfork -->
 		<item id="2050" chance="10000" /> <!-- torch -->
 		<item id="2260" chance="10950" /> <!-- blank rune -->
 		<item id="2568" chance="1100" /> <!-- cleaver -->

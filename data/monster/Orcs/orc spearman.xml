@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Ugaar!" />
 	</voices>
@@ -34,7 +33,5 @@
 		<item id="2468" chance="10000" />				<!-- studded legs -->
 		<item id="2482" chance="9000" />					<!-- studded helmet -->
 		<item id="2420" chance="3000" />					<!-- machete -->
-		<item id="12435" chance="2300" />				<!-- orc leather -->
-		<item id="11113" chance="140" />					<!-- orc tooth -->
 	</loot>
 </monster>

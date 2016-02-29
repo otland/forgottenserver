@@ -31,7 +31,6 @@
 			<attribute key="areaEffect" value="yellowbubble" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -45,8 +44,6 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="60" chance="65520" />	<!-- gold coin -->
-		<item id="10556" chance="10080" />				<!-- cultish robe -->
-		<item id="12448" chance="10000" />				<!-- rope belt -->
 		<item id="5810" chance="1730" />					<!-- pirate voodoo doll -->
 		<item id="2170" chance="1020" />					<!-- silver amulet -->
 		<item id="2423" chance="1260" />					<!-- clerical mace -->
@@ -56,9 +53,7 @@
 		<item id="2169" chance="420" />					<!-- time ring -->
 		<item id="2147" chance="320" />					<!-- small ruby -->
 		<item id="2183" chance="220" />					<!-- hailstorm rod -->
-		<item id="12608" chance="120" />					<!-- broken key ring -->
 		<item id="7424" chance="120" />					<!-- lunar staff -->
 		<item id="2655" chance="80" />					<!-- red robe -->
-		<item id="12411" chance="90" />					<!-- cultish symbol -->
 	</loot>
 </monster>

@@ -96,7 +96,6 @@
 	<monster name="Annihilon" file="Bosses/annihilon.xml" />
 	<monster name="Apprentice Sheng" file="Bosses/apprentice sheng.xml" />
 	<monster name="Barbaria" file="Bosses/barbaria.xml" />
-	<monster name="Big Boss Trolliver" file="Bosses/big boss trolliver.xml" />
 	<monster name="Bones" file="Bosses/bones.xml" />
 	<monster name="Brutus Bloodbeard" file="Bosses/brutus bloodbeard.xml" />
 	<monster name="Countess Sorrow" file="Bosses/countess sorrow.xml" />
@@ -118,7 +117,6 @@
 	<monster name="Koshei The Deathless" file="Bosses/koshei the deathless.xml" />
 	<monster name="Latrivan" file="Bosses/latrivan.xml" />
 	<monster name="Lethal Lissy" file="Bosses/lethal lissy.xml" />
-	<monster name="Lord of the Elements" file="Bosses/lord of the elements.xml" />
 	<monster name="Mad Technomancer" file="Bosses/mad technomancer.xml" />
 	<monster name="Madareth" file="Bosses/madareth.xml" />
 	<monster name="Man In The Cave" file="Bosses/man in the cave.xml" />
@@ -130,9 +128,7 @@
 	<monster name="Necropharus" file="Bosses/necropharus.xml" />
 	<monster name="Orshabaal" file="Bosses/orshabaal.xml" />
 	<monster name="Ron the Ripper" file="Bosses/ron the ripper.xml" />
-	<monster name="Rotworm Queen" file="Bosses/rotworm queen.xml" />
 	<monster name="The Abomination" file="Bosses/the abomination.xml" />
-	<monster name="The Count" file="Bosses/the count.xml" />
 	<monster name="The Evil Eye" file="Bosses/the evil eye.xml" />
 	<monster name="The Handmaiden" file="Bosses/the handmaiden.xml" />
 	<monster name="The Horned Fox" file="Bosses/the horned fox.xml" />
@@ -178,7 +174,6 @@
 	<monster name="Fury" file="Demons/fury.xml" />
 	<monster name="Hand Of Cursed Fate" file="Demons/hand of cursed fate.xml" />
 	<monster name="Juggernaut" file="Demons/juggernaut.xml" />
-	<monster name="Nightmare Scion" file="Demons/nightmare scion.xml" />
 	<monster name="Nightmare" file="Demons/nightmare.xml" />
 	<monster name="Plaguesmith" file="Demons/plaguesmith.xml" />
 
@@ -211,7 +206,6 @@
 	<monster name="Elf Scout" file="Elves/elf scout.xml" />
 
 	<!-- Felines -->
-	<monster name="Cat" file="Felines/cat.xml" />
 	<monster name="Lion" file="Felines/lion.xml" />
 	<monster name="Tiger" file="Felines/tiger.xml" />
 
@@ -236,7 +230,6 @@
 	<!-- Ghosts -->
 	<monster name="Ghost" file="Ghosts/ghost.xml" />
 	<monster name="Spectre" file="Ghosts/spectre.xml" />
-	<monster name="Wisp" file="Ghosts/wisp.xml" />
 	<monster name="Phantasm Summon" file="Ghosts/phantasm summon.xml" />
 	<monster name="Phantasm" file="Ghosts/phantasm.xml" />
 
@@ -249,10 +242,6 @@
 	<!-- Goblins -->
 	<monster name="Goblin" file="Goblins/goblin.xml" />
 	<monster name="Demon (Goblin)" file="Goblins/demon (goblin).xml" />
-
-	<!-- Hydro-Elementals -->
-	<monster name="Slick Water Elemental" file="Hydro-Elementals/slick water elemental.xml" />
-	<monster name="Water Elemental" file="Hydro-Elementals/water elemental.xml" />
 
 	<!-- Insects -->
 	<monster name="Ancient Scarab" file="Insects/ancient scarab.xml" />
@@ -322,7 +311,6 @@
 	<monster name="Nomad" file="Outlaws/nomad.xml" />
 	<monster name="Smuggler" file="Outlaws/smuggler.xml" />
 	<monster name="Stalker" file="Outlaws/stalker.xml" />
-	<monster name="Werewolf" file="Outlaws/werewolf.xml" />
 	<monster name="Wild Warrior" file="Outlaws/wild warrior.xml" />
 
 	<!-- Pharaohs -->
@@ -392,7 +380,6 @@
 
 	<!-- Trolls -->
 	<monster name="Frost Troll" file="Trolls/frost troll.xml" />
-	<monster name="Island Troll" file="Trolls/island troll.xml" />
 	<monster name="Swamp Troll" file="Trolls/swamp troll.xml" />
 	<monster name="Troll" file="Trolls/troll.xml" />
 

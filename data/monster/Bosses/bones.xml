@@ -60,13 +60,11 @@
 		<item id="2472" chance="2000" /> <!-- magic plate armor -->
 		<item id="6300" chance="4000" /> <!-- death ring -->
 		<item id="1987" chance="100000"> <!-- bag -->
-
-				<item id="5944" chance="10000" /> <!-- soul orb -->
-				<item id="4851" chance="800" /> <!-- life crystal -->
-				<item id="2207" chance="10000" /> <!-- sword ring -->
-				<item id="7430" chance="50000" /> <!-- dragonbone staff -->
-				<item id="2413" chance="4000" /> <!-- broadsword -->
-
+			<item id="5944" chance="10000" /> <!-- soul orb -->
+			<item id="4851" chance="800" /> <!-- life crystal -->
+			<item id="2207" chance="10000" /> <!-- sword ring -->
+			<item id="7430" chance="50000" /> <!-- dragonbone staff -->
+			<item id="2413" chance="4000" /> <!-- broadsword -->
 		</item>
 	</loot>
 </monster>

@@ -28,7 +28,6 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -49,8 +48,5 @@
 		<item id="2213" chance="530" /> <!-- Dwarven ring -->
 		<item id="2146" chance="710" /> <!-- Small sapphire -->
 		<item id="5880" chance="120" /> <!-- Iron Ore -->
-		<item id="7886" chance="470" /> <!-- Terra Boots -->
-		<item id="12419" chance="7000" /> <!-- Geomancer's Staff -->
-		<item id="12414" chance="8000" /> <!-- Geomancer's Robe -->
 	</loot>
 </monster>

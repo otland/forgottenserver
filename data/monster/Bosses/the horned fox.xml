@@ -59,17 +59,15 @@
 		<item id="3976" countmax="10" chance="50000" /> <!-- worm -->
 		<item id="5804" chance="100000" /> <!-- nose ring -->
 		<item id="1987" chance="100000"> <!-- bag -->
-
-				<item id="2189" chance="1333" /> <!-- wand of cosmic energy -->
-				<item id="2207" chance="2000" /> <!-- sword ring -->
-				<item id="2666" countmax="2" chance="33333" /> <!-- meat -->
-				<item id="2379" chance="6666" /> <!-- dagger -->
-				<item id="2475" chance="1000" /> <!-- warrior helmet -->
-				<item id="2397" chance="10000" /> <!-- longsword -->
-				<item id="2652" chance="2500" /> <!-- green tunic -->
-				<item id="2478" chance="2857" /> <!-- brass legs -->
-				<item id="2463" chance="1818" /> <!-- plate armor -->
-
+			<item id="2189" chance="1333" /> <!-- wand of cosmic energy -->
+			<item id="2207" chance="2000" /> <!-- sword ring -->
+			<item id="2666" countmax="2" chance="33333" /> <!-- meat -->
+			<item id="2379" chance="6666" /> <!-- dagger -->
+			<item id="2475" chance="1000" /> <!-- warrior helmet -->
+			<item id="2397" chance="10000" /> <!-- longsword -->
+			<item id="2652" chance="2500" /> <!-- green tunic -->
+			<item id="2478" chance="2857" /> <!-- brass legs -->
+			<item id="2463" chance="1818" /> <!-- plate armor -->
 		</item>
 	</loot>
 </monster>

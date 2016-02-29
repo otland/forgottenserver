@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<voices interval="5000" chance="10">
 		<voice sentence="We are the true sons of the desert!" />
 		<voice sentence="I will leave your remains to the vultures!" />
@@ -32,14 +31,10 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="40" chance="56000" />	<!-- gold coin -->
-		<item id="12448" chance="6420" />				<!-- rope belt -->
-		<item id="8838" countmax="3" chance="4840" />	<!-- potato -->
 		<item id="2386" chance="2730" />					<!-- axe -->
 		<item id="2465" chance="2350" />					<!-- brass armor -->
 		<item id="2398" chance="2150" />					<!-- mace -->
-		<item id="12412" chance="2140" />				<!-- dirty turban -->
 		<item id="2509" chance="900" />					<!-- steel shield -->
 		<item id="2459" chance="660" />					<!-- iron helmet -->
-		<item id="8267" chance="210" />					<!-- nomad parchment -->
 	</loot>
 </monster>

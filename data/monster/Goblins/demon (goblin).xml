@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-
 	<loot>
 		<item id="2148" countmax="9" chance="50320" /> <!-- gold coin -->
 		<item id="2230" chance="1130" /> <!-- bone -->
@@ -36,6 +35,5 @@
 		<item id="2406" chance="8870" /> <!-- short sword -->
 		<item id="2559" chance="9700" /> <!-- small axe -->
 		<item id="1294" countmax="3" chance="15290" /> <!-- small stone -->
-		<item id="12495" chance="910" /> <!-- goblin ear -->
 	</loot>
 </monster>

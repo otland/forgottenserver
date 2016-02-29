@@ -20,7 +20,6 @@
 		<attack name="melee" interval="2000" min="0" max="-13" poison="1" />
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Grrrr" />
 		<voice sentence="Groar!" />
@@ -33,8 +32,6 @@
 		<item id="2389" chance="13000" />				<!-- spear -->
 		<item id="2235" chance="10000" />				<!-- mouldy cheese -->
 		<item id="2643" chance="9500" />					<!-- leather boots -->
-		<item id="10603" chance="3100" />				<!-- swamp grass -->
-		<item id="13506" chance="2160" />				<!-- medicine pouch -->
 		<item id="5901" chance="2140" />					<!-- wood -->
 		<item id="2805" chance="1200" />					<!-- troll green -->
 		<item id="2580" chance="60" />					<!-- fishing rod -->

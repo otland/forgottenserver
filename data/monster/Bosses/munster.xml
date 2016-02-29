@@ -22,17 +22,6 @@
 		<attack name="melee" interval="2000" min="-1" max="-15" />
 	</attacks>
 	<defenses armor="2" defense="4" />
-	<immunities>
-		<immunity physical="0" />
-		<immunity energy="0" />
-		<immunity fire="0" />
-		<immunity poison="0" />
-		<immunity lifedrain="0" />
-		<immunity paralyze="0" />
-		<immunity outfit="0" />
-		<immunity drunk="0" />
-		<immunity invisible="0" />
-	</immunities>
 	<voices interval="2000" chance="5">
 		<voice sentence="Meeeeep!" />
 	</voices>
@@ -43,11 +32,9 @@
 		<item id="2148" countmax="16" chance="100000" /> <!-- gold coin -->
 		<item id="2696" chance="50000" /> <!-- cheese -->
 		<item id="1987" chance="100000"> <!-- bag -->
-
-				<item id="2687" countmax="1" chance="5000" /> <!-- cookie -->
-				<item id="2650" chance="50000" /> <!-- jacket -->
-				<item id="2449" chance="5000" /> <!-- bone club -->
-
+			<item id="2687" countmax="1" chance="5000" /> <!-- cookie -->
+			<item id="2650" chance="50000" /> <!-- jacket -->
+			<item id="2449" chance="5000" /> <!-- bone club -->
 		</item>
 	</loot>
 </monster>

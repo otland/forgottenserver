@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Fire Elemental" nameDescription="a fire elemental" race="fire" experience="220" speed="200" manacost="690">
 	<health now="280" max="280" />
-	<look type="49" corpse="8964" />
+	<look type="49" corpse="1487" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="1" />
@@ -27,9 +27,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<immunities>
-
 		<immunity fire="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />

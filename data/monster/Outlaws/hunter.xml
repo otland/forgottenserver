@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Guess who we're hunting, haha!" />
 		<voice sentence="Guess who we are hunting!" />
@@ -34,7 +33,6 @@
 		<item id="2544" countmax="22" chance="82000" />	<!-- arrow -->
 		<item id="2675" countmax="2" chance="20000" />	<!-- orange -->
 		<item id="2690" countmax="2" chance="11000" />	<!-- roll -->
-		<item id="12425" chance="10000" />				<!-- hunter's quiver -->
 		<item id="2456" chance="5800" />					<!-- bow -->
 		<item id="2546" countmax="3" chance="5330" />	<!-- burst arrow -->
 		<item id="2465" chance="5200" />					<!-- brass armor -->

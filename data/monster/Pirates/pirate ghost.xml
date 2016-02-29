@@ -27,12 +27,10 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity lifedrain="1" />
 		<immunity physical="1" />
-
 		<immunity earth="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
@@ -44,7 +42,6 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="67" chance="47000" />	<!-- gold coin -->
-		<item id="10601" chance="3700" />				<!-- tattered piece of robe -->
 		<item id="1951" chance="1070" />					<!-- parchment -->
 		<item id="2165" chance="640" />					<!-- stealth ring -->
 		<item id="2655" chance="110" />					<!-- red robe -->

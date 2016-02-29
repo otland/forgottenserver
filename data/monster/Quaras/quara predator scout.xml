@@ -20,10 +20,8 @@
 		<attack name="melee" interval="2000" min="0" max="-190" />
 	</attacks>
 	<defenses armor="30" defense="30" />
-
 	<immunities>
 		<immunity drown="1" />
-
 		<immunity fire="1" />
 		<immunity lifedrain="1" />
 		<immunity invisible="1" />
@@ -36,13 +34,11 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="132" chance="98000" />	<!-- gold coin -->
-		<item id="12447" chance="10150" />				<!-- quara bone -->
 		<item id="2483" chance="8500" />					<!-- scale armor -->
 		<item id="2387" chance="5500" />					<!-- double axe -->
 		<item id="2145" countmax="2" chance="5320" />	<!-- small diamond -->
 		<item id="2670" countmax="5" chance="5050" />	<!-- shrimp -->
 		<item id="2377" chance="2380" />					<!-- two handed sword -->
 		<item id="5895" chance="1080" />					<!-- fish fin -->
-		<item id="8911" chance="800" />					<!-- northwind rod -->
 	</loot>
 </monster>

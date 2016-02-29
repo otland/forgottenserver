@@ -27,7 +27,6 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity invisible="1" />
 		<immunity lifedrain="1" />
@@ -38,7 +37,6 @@
 		<item id="2260" chance="8670" />					<!-- blank rune -->
 		<item id="2511" chance="5510" />					<!-- brass shield -->
 		<item id="2478" chance="3500" />					<!-- brass legs -->
-		<item id="12430" chance="1550" />				<!-- miraculum -->
 		<item id="2425" chance="1210" />					<!-- obsidian lance -->
 		<item id="2412" chance="530" />					<!-- katana -->
 	</loot>

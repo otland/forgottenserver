@@ -51,7 +51,6 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity physical="0" />
 		<immunity energy="1" />
 		<immunity fire="1" />
 		<immunity poison="1" />
@@ -77,11 +76,9 @@
 		<item id="6300" chance="12000" /> <!-- death ring -->
 		<item id="5943" chance="7000" /> <!-- Morgaroth's heart -->
 		<item id="2003" chance="100000"> <!-- grey backpack -->
-
-				<item id="7431" chance="6000" /> <!-- demonbone -->
-				<item id="2393" chance="60000" /> <!-- giant sword -->
-				<item id="2195" chance="14033" /> <!-- boots of haste -->
-
+			<item id="7431" chance="6000" /> <!-- demonbone -->
+			<item id="2393" chance="60000" /> <!-- giant sword -->
+			<item id="2195" chance="14033" /> <!-- boots of haste -->
 		</item>
 	</loot>
 </monster>

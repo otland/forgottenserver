@@ -20,7 +20,6 @@
 		<attack name="melee" interval="2000" min="0" max="-20" />
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Brrrr" />
 		<voice sentence="Broar!" />
@@ -32,7 +31,6 @@
 		<item id="2512" chance="15850" />				<!-- wooden shield -->
 		<item id="2384" chance="15500" />				<!-- rapier -->
 		<item id="2245" chance="8300" />					<!-- twigs -->
-		<item id="10565" chance="2000" />				<!-- frosty ear of a troll -->
 		<item id="2651" chance="1200" />					<!-- coat -->
 	</loot>
 </monster>

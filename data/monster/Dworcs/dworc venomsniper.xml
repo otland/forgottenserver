@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-
 	<immunities>
 		<immunity earth="1" />
 	</immunities>
@@ -43,6 +42,5 @@
 		<item id="3967" chance="510" /> <!-- tribal mask -->
 		<item id="2172" chance="110" /> <!-- bronze amulet -->
 		<item id="3983" chance="100" /> <!-- bask skirt -->
-		<item id="7732" chance="200" /> <!-- seeds -->
 	</loot>
 </monster>

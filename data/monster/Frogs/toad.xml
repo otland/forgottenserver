@@ -28,7 +28,6 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Ribbit, ribbit!" />
 		<voice sentence="Ribbit!" />
@@ -36,7 +35,6 @@
 	<loot>
 		<item id="2148" countmax="20" chance="80000" /> <!-- gold coin -->
 		<item id="2667" chance="20000" /> <!-- fish -->
-		<item id="10557" chance="4761" /> <!-- poisonous slime -->
 		<item id="2398" chance="2854" /> <!-- mace -->
 		<item id="2391" chance="148" /> <!-- war hammer -->
 	</loot>

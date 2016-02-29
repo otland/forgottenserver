@@ -27,7 +27,6 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -39,11 +38,8 @@
 	<loot>
 		<item id="2689" chance="20000" />				<!-- bread -->
 		<item id="2148" countmax="18" chance="15000" />	<!-- gold coin -->
-		<item id="10563" chance="4930" />				<!-- book of prayers -->
-		<item id="12448" chance="2950" />				<!-- rope belt -->
 		<item id="2193" chance="2440" />					<!-- ankh -->
 		<item id="1949" chance="2000" />					<!-- scroll -->
-		<item id="12449" chance="1000" />				<!-- safety pin -->
 		<item id="2177" chance="1000" />					<!-- life crystal -->
 		<item id="2015" chance="880" />					<!-- brown flask -->
 		<item id="2044" chance="880" />					<!-- lamp -->

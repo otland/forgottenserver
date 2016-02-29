@@ -27,12 +27,10 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity lifedrain="1" />
 		<immunity drown="1" />
 		<immunity fire="1" />
-
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Zuerk Pachak!" />
@@ -40,7 +38,6 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="129" chance="80000" />	<!-- gold coin -->
-		<item id="12445" chance="11600" />				<!-- mantassin tail -->
 		<item id="2670" countmax="5" chance="5000" />	<!-- shrimp -->
 		<item id="2381" chance="5000" />					<!-- halberd -->
 		<item id="2654" chance="1050" />					<!-- cape -->

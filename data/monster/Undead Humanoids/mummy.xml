@@ -26,9 +26,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<immunities>
-
 		<immunity earth="1" />
 		<immunity drown="1" />
 		<immunity lifedrain="1" />
@@ -46,8 +44,6 @@
 	<loot>
 		<item id="2148" countmax="80" chance="38000" />	<!-- gold coin -->
 		<item id="3976" countmax="3" chance="19000" />	<!-- worm -->
-		<item id="12422" chance="11690" />				<!-- flask of embalming fluid -->
-		<item id="10566" chance="10000" />				<!-- gauze bandage -->
 		<item id="2162" chance="5800" />					<!-- magic lightwand -->
 		<item id="2161" chance="5000" />					<!-- strange talisman -->
 		<item id="2134" chance="4000" />					<!-- silver brooch -->
@@ -57,6 +53,5 @@
 		<item id="2411" chance="450" />					<!-- poison dagger -->
 		<item id="2529" chance="170" />					<!-- black shield -->
 		<item id="2170" chance="100" />					<!-- silver amulet -->
-		<item id="11207" chance="10" />					<!-- mini mummy -->
 	</loot>
 </monster>

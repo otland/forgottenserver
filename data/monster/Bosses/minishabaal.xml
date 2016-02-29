@@ -40,14 +40,6 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity physical="0" />
-		<immunity energy="0" />
-		<immunity fire="0" />
-		<immunity poison="0" />
-		<immunity lifedrain="0" />
-		<immunity paralyze="0" />
-		<immunity outfit="0" />
-		<immunity drunk="0" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="3">
@@ -76,14 +68,12 @@
 		<item id="6500" countmax="2" chance="1000" /> <!-- demonic essence -->
 		<item id="2470" chance="180" /> <!-- golden legs -->
 		<item id="1987" chance="100000"> <!-- bag -->
-
-				<item id="2148" countmax="20" chance="100000" /> <!-- gold coin -->
-				<item id="5944" chance="909" /> <!-- soul orb -->
-				<item id="2488" chance="800" /> <!-- crown legs -->
-				<item id="2515" chance="1333" /> <!-- guardian shield -->
-				<item id="2136" chance="909" /> <!-- demonbone amulet -->
-				<item id="2542" chance="500" /> <!-- tempest shield -->
-
+			<item id="2148" countmax="20" chance="100000" /> <!-- gold coin -->
+			<item id="5944" chance="909" /> <!-- soul orb -->
+			<item id="2488" chance="800" /> <!-- crown legs -->
+			<item id="2515" chance="1333" /> <!-- guardian shield -->
+			<item id="2136" chance="909" /> <!-- demonbone amulet -->
+			<item id="2542" chance="500" /> <!-- tempest shield -->
 		</item>
 	</loot>
 </monster>

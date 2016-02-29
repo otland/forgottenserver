@@ -34,14 +34,12 @@
 		</defense>
 	</defenses>
 	<immunities>
-
 		<immunity fire="1" />
 		<immunity drown="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Qua hah tsh!" />
 		<voice sentence="Teech tsha tshul!" />
@@ -53,7 +51,6 @@
 	<loot>
 		<item id="2148" countmax="139" chance="90000" />	<!-- gold coin -->
 		<item id="2667" countmax="3" chance="19000" />	<!-- fish -->
-		<item id="12444" chance="12720" />				<!-- quara eye -->
 		<item id="2670" countmax="4" chance="9200" />	<!-- shrimp -->
 		<item id="2149" countmax="2" chance="5400" />	<!-- small emerald -->
 		<item id="2143" chance="4000" />					<!-- white pearl -->

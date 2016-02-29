@@ -23,7 +23,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -37,13 +36,11 @@
 	<loot>
 		<item id="2148" countmax="30" chance="44000" /> <!-- gold coin -->
 		<item id="2544" countmax="3" chance="7060" /> <!-- arrow -->
-		<item id="8839" countmax="2" chance="20000" /> <!-- plum -->
 		<item id="2397" chance="10800" /> <!-- longsword -->
 		<item id="2643" chance="11410" /> <!-- leather boots -->
 		<item id="2510" chance="9300" /> <!-- plate shield -->
 		<item id="2484" chance="8960" /> <!-- studded armor -->
 		<item id="2482" chance="13500" /> <!-- studded helmet -->
 		<item id="5921" chance="940" /> <!-- heaven blossom -->
-		<item id="10552" chance="2100" /> <!-- elvish talisman -->
 	</loot>
 </monster>

@@ -46,7 +46,6 @@
 		<item id="5895" chance="1930" />					<!-- fish fin -->
 		<item id="7383" chance="690" />					<!-- relic sword -->
 		<item id="7368" chance="580" />					<!-- assassin star -->
-		<item id="7897" chance="410" />					<!-- glacier robe -->
 		<item id="5741" chance="390" />					<!-- skull helmet -->
 	</loot>
 </monster>

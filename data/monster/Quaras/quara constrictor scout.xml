@@ -23,13 +23,11 @@
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
-
 	<immunities>
 		<immunity drown="1" />
 		<immunity lifedrain="1" />
 		<immunity fire="1" />
 		<immunity paralyze="1" />
-
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Gaaahhh!" />
@@ -39,7 +37,6 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="50" chance="99000" />	<!-- gold coin -->
-		<item id="12443" chance="15000" />				<!-- quara tentacle -->
 		<item id="2670" countmax="3" chance="9800" />	<!-- shrimp -->
 		<item id="2397" chance="8200" />					<!-- longsword -->
 		<item id="2465" chance="4700" />					<!-- brass armor -->

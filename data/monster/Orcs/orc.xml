@@ -20,7 +20,6 @@
 		<attack name="melee" interval="2000" min="0" max="-35" />
 	</attacks>
 	<defenses armor="10" defense="10" />
-
 	<voices interval="5000" chance="10">
 		<voice sentence="Grak brrretz!" />
 		<voice sentence="Grow truk grrrrr." />
@@ -34,7 +33,5 @@
 		<item id="2385" chance="5850" />					<!-- sabre -->
 		<item id="2386" chance="5000" />					<!-- axe -->
 		<item id="2482" chance="3000" />					<!-- studded helmet -->
-		<item id="12435" chance="490" />					<!-- orc leather -->
-		<item id="11113" chance="150" />					<!-- orc tooth -->
 	</loot>
 </monster>

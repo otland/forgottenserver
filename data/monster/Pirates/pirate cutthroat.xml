@@ -20,7 +20,6 @@
 		<attack name="melee" interval="2000" min="0" max="-175" poison="1" />
 	</attacks>
 	<defenses armor="25" defense="25" />
-
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -31,7 +30,6 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="50" chance="77000" />	<!-- gold coin -->
-		<item id="11219" chance="10120" />				<!-- compass -->
 		<item id="2483" chance="3000" />					<!-- scale armor -->
 		<item id="2509" chance="2800" />					<!-- steel shield -->
 		<item id="5710" chance="2000" />					<!-- light shovel -->

@@ -39,7 +39,6 @@
 			<attribute key="areaEffect" value="teleport" />
 		</defense>
 	</defenses>
-
 	<immunities>
 		<immunity fire="1" />
 		<immunity lifedrain="1" />
@@ -66,8 +65,6 @@
 		<item id="2165" chance="2702" /> <!-- stealth ring -->
 		<item id="2387" chance="1994" /> <!-- double axe -->
 		<item id="6300" chance="120" /> <!-- death ring -->
-		<item id="7899" chance="250" /> <!-- magma coat-->
-		<item id="7900" chance="430" /> <!-- magma monocle -->
 		<item id="2185" chance="830" /> <!-- necrotic rod -->
 	</loot>
 </monster>
