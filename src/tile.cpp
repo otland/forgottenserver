@@ -793,7 +793,7 @@ void Tile::addThing(int32_t, Thing* thing)
 		g_game.map.clearSpectatorCache();
 		creature->setParent(this);
 		CreatureVector* creatures = makeCreatures();
-		creatures->insert(creatures->begin(), creature);
+		creatures->insert(creatures->end(), creature);
 	} else {
 		Item* item = thing->getItem();
 		if (item == nullptr) {
