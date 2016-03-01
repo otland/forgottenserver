@@ -214,7 +214,6 @@ if NpcHandler == nil then
 		end
 
 		if Player(focus) ~= nil then
-			closeShopWindow(focus) --Even if it can not exist, we need to prevent it.
 			self:updateFocus()
 		end
 	end
@@ -394,7 +393,7 @@ if NpcHandler == nil then
 				end
 
 				if self.keywordHandler ~= nil then
-					if self:isFocused(cid) and msgtype == TALKTYPE_PRIVATE_PN or not self:isFocused(cid) then
+					if self:isFocused(cid) or not self:isFocused(cid) then
 						local ret = self.keywordHandler:processMessage(cid, msg)
 						if not ret then
 							local callback = self:getCallback(CALLBACK_MESSAGE_DEFAULT)
@@ -405,36 +404,6 @@ if NpcHandler == nil then
 							self.talkStart[cid] = os.time()
 						end
 					end
-				end
-			end
-		end
-	end
-
-	-- Handles onPlayerEndTrade events. If you wish to handle this yourself, use the CALLBACK_PLAYER_ENDTRADE callback.
-	function NpcHandler:onPlayerEndTrade(creature)
-		local cid = creature:getId()
-		local callback = self:getCallback(CALLBACK_PLAYER_ENDTRADE)
-		if callback == nil or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid, msgtype, msg) then
-				if self:isFocused(cid) then
-					local player = Player(cid)
-					local playerName = player and player:getName() or -1
-					local parseInfo = { [TAG_PLAYERNAME] = playerName }
-					local msg = self:parseMessage(self:getMessage(MESSAGE_ONCLOSESHOP), parseInfo)
-					self:say(msg, cid)
-				end
-			end
-		end
-	end
-
-	-- Handles onPlayerCloseChannel events. If you wish to handle this yourself, use the CALLBACK_PLAYER_CLOSECHANNEL callback.
-	function NpcHandler:onPlayerCloseChannel(creature)
-		local cid = creature:getId()
-		local callback = self:getCallback(CALLBACK_PLAYER_CLOSECHANNEL)
-		if callback == nil or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_CLOSECHANNEL, cid, msgtype, msg) then
-				if self:isFocused(cid) then
-					self:unGreet(cid)
 				end
 			end
 		end
@@ -586,7 +555,7 @@ if NpcHandler == nil then
 		local ret = {}
 		for aux = 1, #msgs do
 			self.eventDelayedSay[pcid][aux] = {}
-			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux-1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
+			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_SAY, ((aux-1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
 			ret[#ret + 1] = self.eventDelayedSay[pcid][aux]
 		end
 		return(ret)
@@ -618,7 +587,7 @@ if NpcHandler == nil then
 			end
 			local player = Player(focusId)
 			if player then
-				npc:say(message, TALKTYPE_PRIVATE_NP, false, player, npc:getPosition())
+				npc:say(message, TALKTYPE_SAY, false, player, npc:getPosition())
 			end
 		end, self.talkDelayTime * 1000, Npc():getId(), message, focus)
 	end

@@ -33,9 +33,9 @@
 		<item id="2148" countmax="10" chance="18000" /> <!-- gold coin -->
 		<item id="2667" countmax="4" chance="8000" /> <!-- fish -->
 		<item id="1987" chance="100000"> <!-- bag -->
-		<item id="7159" chance="7000" /> <!-- green perch -->
-		<item id="7158" chance="8000" /> <!-- rainbow trout -->
-		<item id="2434"  chance="500" /> <!-- dragon hammer -->
+			<item id="7159" chance="7000" /> <!-- green perch -->
+			<item id="7158" chance="8000" /> <!-- rainbow trout -->
+			<item id="2434"  chance="500" /> <!-- dragon hammer -->
 		</item>
 	</loot>
 </monster>
