@@ -729,7 +729,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 				if (player) {
 					std::string healString = std::to_string(realHealthGain) + (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
 
-					TextMessage message(MESSAGE_STATUS_DEFAULT, "You were healed for " + healString);
+					TextMessage message(MESSAGE_STATUS_SMALL, "You were healed for " + healString);
 					player->sendTextMessage(message);
 
 					std::ostringstream strHealthGain;
@@ -740,7 +740,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 					g_game.map.getSpectators(list, player->getPosition(), false, true);
 					list.erase(player);
 					if (!list.empty()) {
-						message.type = MESSAGE_STATUS_DEFAULT;
+						message.type = MESSAGE_STATUS_SMALL;
 						message.text = player->getName() + " was healed for " + healString;
 						for (Creature* spectator : list) {
 							spectator->getPlayer()->sendTextMessage(message);

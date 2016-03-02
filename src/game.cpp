@@ -3470,10 +3470,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			for (Creature* spectator : list) {
 				Player* tmpPlayer = spectator->getPlayer();
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
-					message.type = MESSAGE_STATUS_DEFAULT;
+					message.type = MESSAGE_STATUS_SMALL;
 					message.text = "You heal " + target->getNameDescription() + " for " + damageString;
 				} else if (tmpPlayer == targetPlayer) {
-					message.type = MESSAGE_STATUS_DEFAULT;
+					message.type = MESSAGE_STATUS_SMALL;
 					if (!attacker) {
 						message.text = "You were healed for " + damageString;
 					} else if (targetPlayer == attackerPlayer) {
@@ -3482,7 +3482,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						message.text = "You were healed by " + attacker->getNameDescription() + " for " + damageString;
 					}
 				} else {
-					message.type = MESSAGE_STATUS_DEFAULT;
+					message.type = MESSAGE_STATUS_SMALL;
 					message.text = spectatorMessage;
 				}
 				tmpPlayer->sendTextMessage(message);
@@ -3557,10 +3557,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					}
 
 					if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
-						message.type = MESSAGE_STATUS_DEFAULT;
+						message.type = MESSAGE_STATUS_SMALL;
 						message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana due to your attack.";
 					} else if (tmpPlayer == targetPlayer) {
-						message.type = MESSAGE_STATUS_DEFAULT;
+						message.type = MESSAGE_STATUS_SMALL;
 						if (!attacker) {
 							message.text = "You lose " + damageString + " mana.";
 						} else if (targetPlayer == attackerPlayer) {
@@ -3569,7 +3569,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 							message.text = "You lose " + damageString + " mana due to an attack by " + attacker->getNameDescription() + '.';
 						}
 					} else {
-						message.type = MESSAGE_STATUS_DEFAULT;
+						message.type = MESSAGE_STATUS_SMALL;
 						message.text = spectatorMessage;
 					}
 					tmpPlayer->sendTextMessage(message);
@@ -3674,10 +3674,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				}
 
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
-					message.type = MESSAGE_STATUS_DEFAULT;
+					message.type = MESSAGE_STATUS_SMALL;
 					message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " due to your attack.";
 				} else if (tmpPlayer == targetPlayer) {
-					message.type = MESSAGE_STATUS_DEFAULT;
+					message.type = MESSAGE_STATUS_SMALL;
 					if (!attacker) {
 						message.text = "You lose " + damageString + '.';
 					} else if (targetPlayer == attackerPlayer) {
@@ -3686,7 +3686,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						message.text = "You lose " + damageString + " due to an attack by " + attacker->getNameDescription() + '.';
 					}
 				} else {
-					message.type = MESSAGE_STATUS_DEFAULT;
+					message.type = MESSAGE_STATUS_SMALL;
 					// TODO: Avoid copying spectatorMessage everytime we send to a spectator
 					message.text = spectatorMessage;
 				}
@@ -3774,10 +3774,10 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		for (Creature* spectator : list) {
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
-				message.type = MESSAGE_STATUS_DEFAULT;
+				message.type = MESSAGE_STATUS_SMALL;
 				message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " mana due to your attack.";
 			} else if (tmpPlayer == targetPlayer) {
-				message.type = MESSAGE_STATUS_DEFAULT;
+				message.type = MESSAGE_STATUS_SMALL;
 				if (!attacker) {
 					message.text = "You lose " + damageString + " mana.";
 				} else if (targetPlayer == attackerPlayer) {
@@ -3786,7 +3786,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 					message.text = "You lose " + damageString + " mana due to an attack by " + attacker->getNameDescription() + '.';
 				}
 			} else {
-				message.type = MESSAGE_STATUS_DEFAULT;
+				message.type = MESSAGE_STATUS_SMALL;
 				message.text = spectatorMessage;
 			}
 			tmpPlayer->sendTextMessage(message);

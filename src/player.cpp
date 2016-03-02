@@ -1537,7 +1537,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 	if (sendText) {
 		std::string expString = std::to_string(exp) + (exp != 1 ? " experience points." : " experience point.");
 
-		TextMessage message(MESSAGE_STATUS_DEFAULT, "You gained " + expString);
+		TextMessage message(MESSAGE_STATUS_SMALL, "You gained " + expString);
 		sendTextMessage(message);
 
 		std::ostringstream strExp;
@@ -1548,7 +1548,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		g_game.map.getSpectators(list, _position, false, true);
 		list.erase(this);
 		if (!list.empty()) {
-			message.type = MESSAGE_STATUS_DEFAULT;
+			message.type = MESSAGE_STATUS_SMALL;
 			message.text = getName() + " gained " + expString;
 			for (Creature* spectator : list) {
 				spectator->getPlayer()->sendTextMessage(message);
@@ -1621,7 +1621,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 
 		std::string expString = std::to_string(lostExp) + (lostExp != 1 ? " experience points." : " experience point.");
 
-		TextMessage message(MESSAGE_STATUS_DEFAULT, "You lost " + expString);
+		TextMessage message(MESSAGE_STATUS_SMALL, "You lost " + expString);
 		sendTextMessage(message);
 
 		std::ostringstream strExp;
@@ -1632,7 +1632,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		g_game.map.getSpectators(list, _position, false, true);
 		list.erase(this);
 		if (!list.empty()) {
-			message.type = MESSAGE_STATUS_DEFAULT;
+			message.type = MESSAGE_STATUS_SMALL;
 			message.text = getName() + " lost " + expString;
 			for (Creature* spectator : list) {
 				spectator->getPlayer()->sendTextMessage(message);
@@ -3130,23 +3130,23 @@ void Player::onAddCombatCondition(ConditionType_t type)
 {
 	switch (type) {
 		case CONDITION_POISON:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are poisoned.");
+			sendTextMessage(MESSAGE_STATUS_SMALL, "You are poisoned.");
 			break;
 
 		case CONDITION_DROWN:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drowning.");
+			sendTextMessage(MESSAGE_STATUS_SMALL, "You are drowning.");
 			break;
 
 		case CONDITION_PARALYZE:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are paralyzed.");
+			sendTextMessage(MESSAGE_STATUS_SMALL, "You are paralyzed.");
 			break;
 
 		case CONDITION_DRUNK:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drunk.");
+			sendTextMessage(MESSAGE_STATUS_SMALL, "You are drunk.");
 			break;
 
 		case CONDITION_BLEEDING:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are bleeding.");
+			sendTextMessage(MESSAGE_STATUS_SMALL, "You are bleeding.");
 			break;
 
 		default:
