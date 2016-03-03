@@ -1,9 +1,28 @@
+local groundIds = {354, 355}
+
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if (target.uid <= 65535 or target.actionid > 0) and (target.itemid == 354 or target.itemid == 355) then
-		target:transform(392)
-		target:decay()
-		toPosition:sendMagicEffect(CONST_ME_POFF)
-		return true
+	if toPosition.x == CONTAINER_POSITION then
+		return false
 	end
-	return false
+
+	local tile = Tile(toPosition)
+	if not tile then
+		return false
+	end
+
+	local ground = tile:getGround()
+	if not ground then
+		return false
+	end
+
+	if (ground.uid > 65535 or ground.actionid == 0) and not isInArray(groundIds, ground.itemid) then
+		return false
+	end
+
+	ground:transform(392)
+	ground:decay()
+
+	toPosition.z = toPosition.z + 1
+	tile:relocateTo(toPosition)
+	return true
 end
