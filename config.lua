@@ -70,6 +70,7 @@ kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
 emoteSpells = false
 classicEquipmentSlots = false
+coinPacketSize = 25
 coinImagesURL = "http://some.url/images/store"
 
 -- Rates
