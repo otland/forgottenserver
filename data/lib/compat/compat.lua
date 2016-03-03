@@ -404,16 +404,16 @@ function doSendTutorial(cid, tutorialId) local p = Player(cid) return p ~= nil a
 function doAddMapMark(cid, pos, type, description) local p = Player(cid) return p ~= nil and p:addMapMark(pos, type, description or "") or false end
 function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) return p ~= nil and p:sendTextMessage(type, text, ...) or false end
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
-function Player.doPlayerAddExp(self, exp, useMult, ...)
-	if self == nil then
+function doPlayerAddExp(cid, exp, useMult, ...)
+	local player = Player(cid)
+	if player == nil then
 		return false
 	end
 
 	if useMult then
-		exp = exp * Game.getExperienceStage(self:getLevel())
+		exp = exp * Game.getExperienceStage(player:getLevel())
 	end
-
-   return self:addExperience(exp, ...)
+	return player:addExperience(exp, ...)
 end
 function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p ~= nil and p:addManaSpent(mana * configManager.getNumber(configKeys.RATE_MAGIC)) or false end
 function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p ~= nil and p:addSkillTries(skillid, n * configManager.getNumber(configKeys.RATE_SKILL)) or false end
