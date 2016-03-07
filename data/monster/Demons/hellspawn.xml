@@ -59,7 +59,7 @@
 		<item id="2394" chance="10000" /><!-- morning star -->
 		<item id="7368" countmax="2" chance="9090" /><!-- assassin stars -->
 		<item id="8473" chance="9090" /><!-- ultimate health potion -->
-		<item id="10000" chance="9090" /><!-- demonic essence -->
+		<item id="6500" chance="9090" /><!-- demonic essence -->
 		<item id="2788" countmax="2" chance="7692" /><!-- red mushroom -->
 		<item id="9970" countmax="3" chance="5882" /><!-- small topaz -->
 		<item id="9810" chance="3125" /><!-- rusty armor -->
