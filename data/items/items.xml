@@ -9177,7 +9177,7 @@
 	<item id="5791" article="a" name="stuffed dragon">
 		<attribute key="weight" value="850" />
 	</item>
-	<item fromid="5792" toid="5797" article="a" name="dice">
+	<item fromid="5792" toid="5797" article="a" name="die">
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="5798" article="an" name="abacus">
