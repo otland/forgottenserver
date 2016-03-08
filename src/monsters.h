@@ -96,6 +96,9 @@ class MonsterType
 		MonsterType(const MonsterType&) = delete;
 		MonsterType& operator=(const MonsterType&) = delete;
 
+		// assignment movable
+		MonsterType& operator=(MonsterType&&) = default;
+
 		void reset();
 
 		std::map<CombatType_t, int32_t> elementMap;
