@@ -1,34 +1,22 @@
 Welcome to the issues section if it's your first time!
 
-### Before creating an issue, please be sure to:
-- [ ] Checkout to the latest version and recompile if you haven't
-- [ ] Try to find an *isolated* way to reproduce the behavior
-- [ ] Use the support board first: https://otland.net/forums/support.16/
-- [ ] Search if there's already a similar issue, and bump it instead
-- [ ] Fill in all the blanks in the most specific way you can
+### Before creating an issue, please ensure:
+- [ ] This is a bug in the software that resides in this repository, and not a
+      support matter (use https://otland.net/forums/support.16/ for support)
+- [ ] You have not made changes to the source code related to the problem
+- [ ] Search for a similar issue, add your reaction there instead :tada:
 
-### Steps to reproduce
+### Steps to reproduce (include any configuration/script required to reproduce)
 1.
 2.
 3.
 
 ### Expected behaviour
-Tell us what should happen.
+Tell us what should happen
 
 ### Actual behaviour
-Tell us what happens instead. Post your faulty script, if there is any.
+Tell us what happens instead
 
 ### Environment
-**Operating system**:
-(in Linux, you can get with `cat /etc/os-release`)
-
-**Compiler version**:
-(you can get with `clang --version` or `gcc --version`)
-pro-tip: clang < 3.3 and gcc < 4.8 **do not work**
-
-**Dependencies**:
-- Boost version:
-- GMP version:
-- PugiXML version:
-- Lua/LuaJIT version: (you can get with `lua -v` or `luajit -v `)
-- MySQL version: (you can get with `mysql -v`)
+If the issue is environment specific (e.g. compiling errors), please include the
+name and version of the operating system and compiler you are using.
