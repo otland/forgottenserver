@@ -7842,7 +7842,7 @@ int LuaScriptInterface::luaPlayerSetStamina(lua_State* L)
 	uint16_t stamina = getNumber<uint16_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->staminaMinutes = std::min<uint16_t>(2520, stamina);
+		player->staminaMinutes = std::min<uint16_t>(3360, stamina);
 		player->sendStats();
 	} else {
 		lua_pushnil(L);

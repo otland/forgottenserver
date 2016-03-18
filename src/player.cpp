@@ -135,7 +135,7 @@ Player::Player(ProtocolGame_ptr p) :
 
 	ghostMode = false;
 
-	staminaMinutes = 3240;
+	staminaMinutes = 3360;
 
 	lastQuestlogUpdate = 0;
 
