@@ -530,14 +530,18 @@
 	</item>
 	<item id="1426" article="an" name="unlit campfire" />
 	<item fromid="1427" toid="1428" article="a" name="campfire" />
-	<item fromid="1429" toid="1434" article="a" name="sign" />
+	<item fromid="1429" toid="1434" article="a" name="sign">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1435" article="a" name="dragon flag" />
 	<item id="1436" article="a" name="castle flag" />
 	<item id="1437" article="a" name="flag" />
 	<item fromid="1438" toid="1439" article="a" name="street sign">
 		<attribute key="allowDistRead" value="true" />
 	</item>
-	<item fromid="1440" toid="1441" article="a" name="sign" />
+	<item fromid="1440" toid="1441" article="a" name="sign">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1442" article="a" name="statue">
 		<attribute key="rotateTo" value="1476" />
 	</item>
@@ -1279,18 +1283,24 @@
 	<item fromid="1794" toid="1802" article="a" name="red carpet" />
 	<item fromid="1803" toid="1808" article="an" name="oriental carpet" />
 	<item id="1809" article="a" name="painting" />
-	<item id="1810" article="a" name="blackboard" />
+	<item id="1810" article="a" name="blackboard">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1811" article="a" name="blackboard">
+		<attribute key="allowDistRead" value="true" />
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="1023" />
 	</item>
 	<item fromid="1812" toid="1813" article="a" name="tapestry" />
 	<item id="1814" article="a" name="painting" />
-	<item id="1815" article="a" name="blackboard" />
+	<item id="1815" article="a" name="blackboard">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="1816" toid="1817" article="a" name="wall mirror">
 		<attribute key="description" value="You look fine today." />
 	</item>
 	<item id="1818" article="a" name="blackboard">
+		<attribute key="allowDistRead" value="true" />
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="1023" />
 	</item>

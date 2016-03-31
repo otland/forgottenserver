@@ -13,8 +13,8 @@ npcHandler:addModule(shopModule)
 shopModule:addBuyableItem({'spellbook'}, 2175, 150, 'spellbook')
 shopModule:addBuyableItem({'magic lightwand'}, 2163, 400, 'magic lightwand')
 
-shopModule:addBuyableItem({'vial of lifefluid'}, 2006, 45, 10, 'lifefluid')
-shopModule:addBuyableItem({'vial of manafluid'}, 2006, 50, 7, 'manafluid')
+shopModule:addBuyableItem({'lifefluid'}, 2006, 45, 10, 'vial of lifefluid')
+shopModule:addBuyableItem({'manafluid'}, 2006, 50, 7, 'vial of manafluid')
 
 shopModule:addBuyableItem({'intense healing'}, 2265, 95, 1, 'intense healing rune')
 shopModule:addBuyableItem({'ultimate healing'}, 2273, 175, 1, 'ultimate healing rune')
@@ -62,6 +62,7 @@ function creatureSayCallback(cid, type, msg)
 	end
 
 	local player = Player(cid)
+	local vocationId = player:getVocation():getId()
 	local items = {
 		[1] = 2190,
 		[2] = 2182,
@@ -70,7 +71,6 @@ function creatureSayCallback(cid, type, msg)
 	}
 
 	if msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand') then
-		local vocationId = player:getVocation():getId()
 		if isInArray({1, 2, 5, 6}, vocationId) then
 			if player:getStorageValue(30002) == -1 then
 				selfSay('So you ask me for a {' .. ItemType(items[vocationId]):getName() .. '} to begin your advanture?', cid)
@@ -84,8 +84,8 @@ function creatureSayCallback(cid, type, msg)
 	elseif msgcontains(msg, 'yes') then
 		if npcHandler.topic[cid] == 1 then
 			player:addItem(items[vocationId], 1)
-			selfSay('Here you are young adept, take care yourself.', cid)
 			player:setStorageValue(30002, 1)
+			selfSay('Here you are young adept, take care yourself.', cid)
 		end
 		npcHandler.topic[cid] = 0
 	elseif msgcontains(msg, 'no') and npcHandler.topic[cid] == 1 then
