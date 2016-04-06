@@ -61,7 +61,7 @@ class Service final : public ServiceBase
 class ServicePort : public std::enable_shared_from_this<ServicePort>
 {
 	public:
-		explicit ServicePort(boost::asio::io_service& io_service);
+		explicit ServicePort(asio::io_service& io_service);
 		~ServicePort();
 
 		// non-copyable
@@ -78,13 +78,13 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		Protocol_ptr make_protocol(bool checksummed, NetworkMessage& msg, const Connection_ptr& connection) const;
 
 		void onStopServer();
-		void onAccept(Connection_ptr connection, const boost::system::error_code& error);
+		void onAccept(Connection_ptr connection, const asio::error_code& error);
 
 	protected:
 		void accept();
 
-		boost::asio::io_service& io_service;
-		std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor;
+		asio::io_service& io_service;
+		std::unique_ptr<asio::ip::tcp::acceptor> acceptor;
 		std::vector<Service_ptr> services;
 
 		uint16_t serverPort;
@@ -118,8 +118,8 @@ class ServiceManager
 
 		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;
 
-		boost::asio::io_service io_service;
-		boost::asio::deadline_timer death_timer;
+		asio::io_service io_service;
+		asio::basic_waitable_timer<std::chrono::steady_clock> death_timer;
 		bool running;
 };
 
