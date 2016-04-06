@@ -141,12 +141,8 @@ bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldL
 
 /////////////////////////////////////
 
-CreatureEvent::CreatureEvent(LuaScriptInterface* _interface) :
-	Event(_interface)
-{
-	type = CREATURE_EVENT_NONE;
-	loaded = false;
-}
+CreatureEvent::CreatureEvent(LuaScriptInterface* interface) :
+	Event(interface), type(CREATURE_EVENT_NONE), loaded(false) {}
 
 bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 {

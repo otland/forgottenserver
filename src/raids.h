@@ -111,7 +111,7 @@ class Raid
 		Raid(const Raid&) = delete;
 		Raid& operator=(const Raid&) = delete;
 
-		bool loadFromXml(const std::string& _filename);
+		bool loadFromXml(const std::string& filename);
 
 		void startRaid();
 
@@ -216,7 +216,7 @@ class AreaSpawnEvent final : public RaidEvent
 class ScriptEvent final : public RaidEvent, public Event
 {
 	public:
-		explicit ScriptEvent(LuaScriptInterface* _interface);
+		explicit ScriptEvent(LuaScriptInterface* interface);
 		explicit ScriptEvent(const ScriptEvent* copy);
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;

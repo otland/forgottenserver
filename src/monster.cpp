@@ -40,12 +40,12 @@ Monster* Monster::createMonster(const std::string& name)
 	return new Monster(mType);
 }
 
-Monster::Monster(MonsterType* _mtype) :
+Monster::Monster(MonsterType* mtype) :
 	Creature()
 {
 	isIdle = true;
 	isMasterInRange = false;
-	mType = _mtype;
+	mType = mtype;
 	spawn = nullptr;
 	defaultOutfit = mType->outfit;
 	currentOutfit = mType->outfit;
@@ -374,7 +374,7 @@ void Monster::updateTargetList()
 	}
 
 	SpectatorVec list;
-	g_game.map.getSpectators(list, _position, true);
+	g_game.map.getSpectators(list, position, true);
 	list.erase(this);
 	for (Creature* spectator : list) {
 		if (canSee(spectator->getPosition())) {
@@ -650,13 +650,13 @@ bool Monster::selectTarget(Creature* creature)
 	return setFollowCreature(creature);
 }
 
-void Monster::setIdle(bool _idle)
+void Monster::setIdle(bool idle)
 {
 	if (isRemoved() || getHealth() <= 0) {
 		return;
 	}
 
-	isIdle = _idle;
+	isIdle = idle;
 
 	if (!isIdle) {
 		g_game.addCreatureCheck(this);
@@ -731,7 +731,7 @@ void Monster::onThink(uint32_t interval)
 		}
 	}
 
-	if (!isInSpawnRange(_position)) {
+	if (!isInSpawnRange(position)) {
 		g_game.internalTeleport(this, masterPos);
 		setIdle(true);
 	} else {
@@ -1104,7 +1104,7 @@ void Monster::pushCreatures(Tile* tile)
 	}
 }
 
-bool Monster::getNextStep(Direction& dir, uint32_t& flags)
+bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 {
 	if (isIdle || getHealth() <= 0) {
 		//we dont have anyone watching might aswell stop walking
@@ -1116,26 +1116,26 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 	if ((!followCreature || !hasFollowPath) && !isSummon()) {
 		if (followCreature || getTimeSinceLastMove() > 1000) {
 			//choose a random direction
-			result = getRandomStep(getPosition(), dir);
+			result = getRandomStep(getPosition(), direction);
 		}
 	} else if (isSummon() || followCreature) {
-		result = Creature::getNextStep(dir, flags);
+		result = Creature::getNextStep(direction, flags);
 		if (result) {
 			flags |= FLAG_PATHFINDING;
 		} else {
 			//target dancing
 			if (attackedCreature && attackedCreature == followCreature) {
 				if (isFleeing()) {
-					result = getDanceStep(getPosition(), dir, false, false);
+					result = getDanceStep(getPosition(), direction, false, false);
 				} else if (mType->staticAttackChance < static_cast<uint32_t>(uniform_random(1, 100))) {
-					result = getDanceStep(getPosition(), dir);
+					result = getDanceStep(getPosition(), direction);
 				}
 			}
 		}
 	}
 
 	if (result && (canPushItems() || canPushCreatures())) {
-		const Position& pos = Spells::getCasterPosition(this, dir);
+		const Position& pos = Spells::getCasterPosition(this, direction);
 		Tile* tile = g_game.map.getTile(pos);
 		if (tile) {
 			if (canPushItems()) {
@@ -1151,7 +1151,7 @@ bool Monster::getNextStep(Direction& dir, uint32_t& flags)
 	return result;
 }
 
-bool Monster::getRandomStep(const Position& creaturePos, Direction& dir) const
+bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) const
 {
 	static std::vector<Direction> dirList{
 			DIRECTION_NORTH,
@@ -1160,16 +1160,16 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& dir) const
 	};
 	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 
-	for (Direction _dir : dirList) {
-		if (canWalkTo(creaturePos, _dir)) {
-			dir = _dir;
+	for (Direction dir : dirList) {
+		if (canWalkTo(creaturePos, dir)) {
+			direction = dir;
 			return true;
 		}
 	}
 	return false;
 }
 
-bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
+bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
                            bool keepAttack /*= true*/, bool keepDistance /*= true*/)
 {
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
@@ -1249,13 +1249,13 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& dir,
 
 	if (!dirList.empty()) {
 		std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
-		dir = dirList[uniform_random(0, dirList.size() - 1)];
+		direction = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
 	return false;
 }
 
-bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool flee /* = false */)
+bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, bool flee /* = false */)
 {
 	const Position& creaturePos = getPosition();
 
@@ -1283,7 +1283,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	}
 
 	if (offsetx == 0 && offsety == 0) {
-		return getRandomStep(creaturePos, dir); // player is "on" the monster so let's get some random step and rest will be taken care later.
+		return getRandomStep(creaturePos, direction); // player is "on" the monster so let's get some random step and rest will be taken care later.
 	}
 
 	if (dx == dy) {
@@ -1295,16 +1295,16 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool e = canWalkTo(creaturePos, DIRECTION_EAST);
 
 			if (s && e) {
-				dir = boolean_random() ? DIRECTION_SOUTH : DIRECTION_EAST;
+				direction = boolean_random() ? DIRECTION_SOUTH : DIRECTION_EAST;
 				return true;
 			} else if (s) {
-				dir = DIRECTION_SOUTH;
+				direction = DIRECTION_SOUTH;
 				return true;
 			} else if (e) {
-				dir = DIRECTION_EAST;
+				direction = DIRECTION_EAST;
 				return true;
 			} else if (canWalkTo(creaturePos, DIRECTION_SOUTHEAST)) {
-				dir = DIRECTION_SOUTHEAST;
+				direction = DIRECTION_SOUTHEAST;
 				return true;
 			}
 
@@ -1314,13 +1314,13 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (n && w) {
-					dir = boolean_random() ? DIRECTION_NORTH : DIRECTION_WEST;
+					direction = boolean_random() ? DIRECTION_NORTH : DIRECTION_WEST;
 					return true;
 				} else if (n) {
-					dir = DIRECTION_NORTH;
+					direction = DIRECTION_NORTH;
 					return true;
 				} else if (w) {
-					dir = DIRECTION_WEST;
+					direction = DIRECTION_WEST;
 					return true;
 				}
 			}
@@ -1328,9 +1328,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			/* end of fleeing */
 
 			if (w && canWalkTo(creaturePos, DIRECTION_SOUTHWEST)) {
-				dir = DIRECTION_WEST;
+				direction = DIRECTION_WEST;
 			} else if (n && canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
-				dir = DIRECTION_NORTH;
+				direction = DIRECTION_NORTH;
 			}
 
 			return true;
@@ -1341,18 +1341,18 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool n = canWalkTo(creaturePos, DIRECTION_NORTH);
 
 			if (w && n) {
-				dir = boolean_random() ? DIRECTION_WEST : DIRECTION_NORTH;
+				direction = boolean_random() ? DIRECTION_WEST : DIRECTION_NORTH;
 				return true;
 			} else if (w) {
-				dir = DIRECTION_WEST;
+				direction = DIRECTION_WEST;
 				return true;
 			} else if (n) {
-				dir = DIRECTION_NORTH;
+				direction = DIRECTION_NORTH;
 				return true;
 			}
 
 			if (canWalkTo(creaturePos, DIRECTION_NORTHWEST)) {
-				dir = DIRECTION_NORTHWEST;
+				direction = DIRECTION_NORTHWEST;
 				return true;
 			}
 
@@ -1362,13 +1362,13 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (s && e) {
-					dir = boolean_random() ? DIRECTION_SOUTH : DIRECTION_EAST;
+					direction = boolean_random() ? DIRECTION_SOUTH : DIRECTION_EAST;
 					return true;
 				} else if (s) {
-					dir = DIRECTION_SOUTH;
+					direction = DIRECTION_SOUTH;
 					return true;
 				} else if (e) {
-					dir = DIRECTION_EAST;
+					direction = DIRECTION_EAST;
 					return true;
 				}
 			}
@@ -1376,9 +1376,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			/* end of fleeing */
 
 			if (s && canWalkTo(creaturePos, DIRECTION_SOUTHWEST)) {
-				dir = DIRECTION_SOUTH;
+				direction = DIRECTION_SOUTH;
 			} else if (e && canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
-				dir = DIRECTION_EAST;
+				direction = DIRECTION_EAST;
 			}
 
 			return true;
@@ -1388,18 +1388,18 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool n = canWalkTo(creaturePos, DIRECTION_NORTH);
 			bool e = canWalkTo(creaturePos, DIRECTION_EAST);
 			if (n && e) {
-				dir = boolean_random() ? DIRECTION_NORTH : DIRECTION_EAST;
+				direction = boolean_random() ? DIRECTION_NORTH : DIRECTION_EAST;
 				return true;
 			} else if (n) {
-				dir = DIRECTION_NORTH;
+				direction = DIRECTION_NORTH;
 				return true;
 			} else if (e) {
-				dir = DIRECTION_EAST;
+				direction = DIRECTION_EAST;
 				return true;
 			}
 
 			if (canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
-				dir = DIRECTION_NORTHEAST;
+				direction = DIRECTION_NORTHEAST;
 				return true;
 			}
 
@@ -1409,13 +1409,13 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (s && w) {
-					dir = boolean_random() ? DIRECTION_SOUTH : DIRECTION_WEST;
+					direction = boolean_random() ? DIRECTION_SOUTH : DIRECTION_WEST;
 					return true;
 				} else if (s) {
-					dir = DIRECTION_SOUTH;
+					direction = DIRECTION_SOUTH;
 					return true;
 				} else if (w) {
-					dir = DIRECTION_WEST;
+					direction = DIRECTION_WEST;
 					return true;
 				}
 			}
@@ -1423,9 +1423,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			/* end of fleeing */
 
 			if (w && canWalkTo(creaturePos, DIRECTION_NORTHWEST)) {
-				dir = DIRECTION_WEST;
+				direction = DIRECTION_WEST;
 			} else if (s && canWalkTo(creaturePos, DIRECTION_SOUTHEAST)) {
-				dir = DIRECTION_SOUTH;
+				direction = DIRECTION_SOUTH;
 			}
 
 			return true;
@@ -1435,16 +1435,16 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			bool w = canWalkTo(creaturePos, DIRECTION_WEST);
 			bool s = canWalkTo(creaturePos, DIRECTION_SOUTH);
 			if (w && s) {
-				dir = boolean_random() ? DIRECTION_WEST : DIRECTION_SOUTH;
+				direction = boolean_random() ? DIRECTION_WEST : DIRECTION_SOUTH;
 				return true;
 			} else if (w) {
-				dir = DIRECTION_WEST;
+				direction = DIRECTION_WEST;
 				return true;
 			} else if (s) {
-				dir = DIRECTION_SOUTH;
+				direction = DIRECTION_SOUTH;
 				return true;
 			} else if (canWalkTo(creaturePos, DIRECTION_SOUTHWEST)) {
-				dir = DIRECTION_SOUTHWEST;
+				direction = DIRECTION_SOUTHWEST;
 				return true;
 			}
 
@@ -1454,13 +1454,13 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			if (flee) {
 				if (n && e) {
-					dir = boolean_random() ? DIRECTION_NORTH : DIRECTION_EAST;
+					direction = boolean_random() ? DIRECTION_NORTH : DIRECTION_EAST;
 					return true;
 				} else if (n) {
-					dir = DIRECTION_NORTH;
+					direction = DIRECTION_NORTH;
 					return true;
 				} else if (e) {
-					dir = DIRECTION_EAST;
+					direction = DIRECTION_EAST;
 					return true;
 				}
 			}
@@ -1468,9 +1468,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			/* end of fleeing */
 
 			if (e && canWalkTo(creaturePos, DIRECTION_SOUTHEAST)) {
-				dir = DIRECTION_EAST;
+				direction = DIRECTION_EAST;
 			} else if (n && canWalkTo(creaturePos, DIRECTION_NORTHWEST)) {
-				dir = DIRECTION_NORTH;
+				direction = DIRECTION_NORTH;
 			}
 
 			return true;
@@ -1484,33 +1484,33 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 			case DIRECTION_NORTH: {
 				// Player is to the NORTH, so obviously we need to check if we can go SOUTH, if not then let's choose WEST or EAST and again if we can't we need to decide about some diagonal movements.
 				if (canWalkTo(creaturePos, DIRECTION_SOUTH)) {
-					dir = DIRECTION_SOUTH;
+					direction = DIRECTION_SOUTH;
 					return true;
 				}
 
 				bool w = canWalkTo(creaturePos, DIRECTION_WEST);
 				bool e = canWalkTo(creaturePos, DIRECTION_EAST);
 				if (w && e && offsetx == 0) {
-					dir = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
+					direction = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
 					return true;
 				} else if (w && offsetx <= 0) {
-					dir = DIRECTION_WEST;
+					direction = DIRECTION_WEST;
 					return true;
 				} else if (e && offsetx >= 0) {
-					dir = DIRECTION_EAST;
+					direction = DIRECTION_EAST;
 					return true;
 				}
 
 				/* fleeing */
 				if (flee) {
 					if (w && e) {
-						dir = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
+						direction = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
 						return true;
 					} else if (w) {
-						dir = DIRECTION_WEST;
+						direction = DIRECTION_WEST;
 						return true;
 					} else if (e) {
-						dir = DIRECTION_EAST;
+						direction = DIRECTION_EAST;
 						return true;
 					}
 				}
@@ -1522,15 +1522,15 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				if (sw || se) {
 					// we can move both dirs
 					if (sw && se) {
-						dir = boolean_random() ? DIRECTION_SOUTHWEST : DIRECTION_SOUTHEAST;
+						direction = boolean_random() ? DIRECTION_SOUTHWEST : DIRECTION_SOUTHEAST;
 					} else if (w) {
-						dir = DIRECTION_WEST;
+						direction = DIRECTION_WEST;
 					} else if (sw) {
-						dir = DIRECTION_SOUTHWEST;
+						direction = DIRECTION_SOUTHWEST;
 					} else if (e) {
-						dir = DIRECTION_EAST;
+						direction = DIRECTION_EAST;
 					} else if (se) {
-						dir = DIRECTION_SOUTHEAST;
+						direction = DIRECTION_SOUTHEAST;
 					}
 					return true;
 				}
@@ -1538,7 +1538,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee && canWalkTo(creaturePos, DIRECTION_NORTH)) {
 					// towards player, yea
-					dir = DIRECTION_NORTH;
+					direction = DIRECTION_NORTH;
 					return true;
 				}
 
@@ -1548,33 +1548,33 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			case DIRECTION_SOUTH: {
 				if (canWalkTo(creaturePos, DIRECTION_NORTH)) {
-					dir = DIRECTION_NORTH;
+					direction = DIRECTION_NORTH;
 					return true;
 				}
 
 				bool w = canWalkTo(creaturePos, DIRECTION_WEST);
 				bool e = canWalkTo(creaturePos, DIRECTION_EAST);
 				if (w && e && offsetx == 0) {
-					dir = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
+					direction = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
 					return true;
 				} else if (w && offsetx <= 0) {
-					dir = DIRECTION_WEST;
+					direction = DIRECTION_WEST;
 					return true;
 				} else if (e && offsetx >= 0) {
-					dir = DIRECTION_EAST;
+					direction = DIRECTION_EAST;
 					return true;
 				}
 
 				/* fleeing */
 				if (flee) {
 					if (w && e) {
-						dir = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
+						direction = boolean_random() ? DIRECTION_WEST : DIRECTION_EAST;
 						return true;
 					} else if (w) {
-						dir = DIRECTION_WEST;
+						direction = DIRECTION_WEST;
 						return true;
 					} else if (e) {
-						dir = DIRECTION_EAST;
+						direction = DIRECTION_EAST;
 						return true;
 					}
 				}
@@ -1586,15 +1586,15 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				if (nw || ne) {
 					// we can move both dirs
 					if (nw && ne) {
-						dir = boolean_random() ? DIRECTION_NORTHWEST : DIRECTION_NORTHEAST;
+						direction = boolean_random() ? DIRECTION_NORTHWEST : DIRECTION_NORTHEAST;
 					} else if (w) {
-						dir = DIRECTION_WEST;
+						direction = DIRECTION_WEST;
 					} else if (nw) {
-						dir = DIRECTION_NORTHWEST;
+						direction = DIRECTION_NORTHWEST;
 					} else if (e) {
-						dir = DIRECTION_EAST;
+						direction = DIRECTION_EAST;
 					} else if (ne) {
-						dir = DIRECTION_NORTHEAST;
+						direction = DIRECTION_NORTHEAST;
 					}
 					return true;
 				}
@@ -1602,7 +1602,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee && canWalkTo(creaturePos, DIRECTION_SOUTH)) {
 					// towards player, yea
-					dir = DIRECTION_SOUTH;
+					direction = DIRECTION_SOUTH;
 					return true;
 				}
 
@@ -1618,33 +1618,33 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 		switch (playerDir) {
 			case DIRECTION_WEST: {
 				if (canWalkTo(creaturePos, DIRECTION_EAST)) {
-					dir = DIRECTION_EAST;
+					direction = DIRECTION_EAST;
 					return true;
 				}
 
 				bool n = canWalkTo(creaturePos, DIRECTION_NORTH);
 				bool s = canWalkTo(creaturePos, DIRECTION_SOUTH);
 				if (n && s && offsety == 0) {
-					dir = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
+					direction = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
 					return true;
 				} else if (n && offsety <= 0) {
-					dir = DIRECTION_NORTH;
+					direction = DIRECTION_NORTH;
 					return true;
 				} else if (s && offsety >= 0) {
-					dir = DIRECTION_SOUTH;
+					direction = DIRECTION_SOUTH;
 					return true;
 				}
 
 				/* fleeing */
 				if (flee) {
 					if (n && s) {
-						dir = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
+						direction = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
 						return true;
 					} else if (n) {
-						dir = DIRECTION_NORTH;
+						direction = DIRECTION_NORTH;
 						return true;
 					} else if (s) {
-						dir = DIRECTION_SOUTH;
+						direction = DIRECTION_SOUTH;
 						return true;
 					}
 				}
@@ -1655,15 +1655,15 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool ne = canWalkTo(creaturePos, DIRECTION_NORTHEAST);
 				if (se || ne) {
 					if (se && ne) {
-						dir = boolean_random() ? DIRECTION_SOUTHEAST : DIRECTION_NORTHEAST;
+						direction = boolean_random() ? DIRECTION_SOUTHEAST : DIRECTION_NORTHEAST;
 					} else if (s) {
-						dir = DIRECTION_SOUTH;
+						direction = DIRECTION_SOUTH;
 					} else if (se) {
-						dir = DIRECTION_SOUTHEAST;
+						direction = DIRECTION_SOUTHEAST;
 					} else if (n) {
-						dir = DIRECTION_NORTH;
+						direction = DIRECTION_NORTH;
 					} else if (ne) {
-						dir = DIRECTION_NORTHEAST;
+						direction = DIRECTION_NORTHEAST;
 					}
 					return true;
 				}
@@ -1671,7 +1671,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee && canWalkTo(creaturePos, DIRECTION_WEST)) {
 					// towards player, yea
-					dir = DIRECTION_WEST;
+					direction = DIRECTION_WEST;
 					return true;
 				}
 
@@ -1681,33 +1681,33 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 
 			case DIRECTION_EAST: {
 				if (canWalkTo(creaturePos, DIRECTION_WEST)) {
-					dir = DIRECTION_WEST;
+					direction = DIRECTION_WEST;
 					return true;
 				}
 
 				bool n = canWalkTo(creaturePos, DIRECTION_NORTH);
 				bool s = canWalkTo(creaturePos, DIRECTION_SOUTH);
 				if (n && s && offsety == 0) {
-					dir = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
+					direction = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
 					return true;
 				} else if (n && offsety <= 0) {
-					dir = DIRECTION_NORTH;
+					direction = DIRECTION_NORTH;
 					return true;
 				} else if (s && offsety >= 0) {
-					dir = DIRECTION_SOUTH;
+					direction = DIRECTION_SOUTH;
 					return true;
 				}
 
 				/* fleeing */
 				if (flee) {
 					if (n && s) {
-						dir = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
+						direction = boolean_random() ? DIRECTION_NORTH : DIRECTION_SOUTH;
 						return true;
 					} else if (n) {
-						dir = DIRECTION_NORTH;
+						direction = DIRECTION_NORTH;
 						return true;
 					} else if (s) {
-						dir = DIRECTION_SOUTH;
+						direction = DIRECTION_SOUTH;
 						return true;
 					}
 				}
@@ -1718,15 +1718,15 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				bool sw = canWalkTo(creaturePos, DIRECTION_SOUTHWEST);
 				if (nw || sw) {
 					if (nw && sw) {
-						dir = boolean_random() ? DIRECTION_NORTHWEST : DIRECTION_SOUTHWEST;
+						direction = boolean_random() ? DIRECTION_NORTHWEST : DIRECTION_SOUTHWEST;
 					} else if (n) {
-						dir = DIRECTION_NORTH;
+						direction = DIRECTION_NORTH;
 					} else if (nw) {
-						dir = DIRECTION_NORTHWEST;
+						direction = DIRECTION_NORTHWEST;
 					} else if (s) {
-						dir = DIRECTION_SOUTH;
+						direction = DIRECTION_SOUTH;
 					} else if (sw) {
-						dir = DIRECTION_SOUTHWEST;
+						direction = DIRECTION_SOUTHWEST;
 					}
 					return true;
 				}
@@ -1734,7 +1734,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 				/* fleeing */
 				if (flee && canWalkTo(creaturePos, DIRECTION_EAST)) {
 					// towards player, yea
-					dir = DIRECTION_EAST;
+					direction = DIRECTION_EAST;
 					return true;
 				}
 
@@ -1750,9 +1750,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& dir, bool fl
 	return true;
 }
 
-bool Monster::canWalkTo(Position pos, Direction dir) const
+bool Monster::canWalkTo(Position pos, Direction direction) const
 {
-	pos = getNextPosition(dir, pos);
+	pos = getNextPosition(direction, pos);
 	if (isInSpawnRange(pos)) {
 		if (getWalkCache(pos) == 0) {
 			return false;
@@ -1782,9 +1782,9 @@ void Monster::death(Creature*)
 	onIdleStatus();
 }
 
-Item* Monster::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature)
+Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
-	Item* corpse = Creature::getCorpse(_lastHitCreature, mostDamageCreature);
+	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse) {
 		if (mostDamageCreature) {
 			if (mostDamageCreature->getPlayer()) {

@@ -384,19 +384,18 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 	return ret;
 }
 
-MoveEvent::MoveEvent(LuaScriptInterface* _interface) :
-	Event(_interface)
-{
-	eventType = MOVE_EVENT_NONE;
-	stepFunction = nullptr;
-	moveFunction = nullptr;
-	equipFunction = nullptr;
-	slot = SLOTP_WHEREEVER;
-	wieldInfo = 0;
-	reqLevel = 0;
-	reqMagLevel = 0;
-	premium = false;
-}
+MoveEvent::MoveEvent(LuaScriptInterface* interface) :
+	Event(interface),
+	eventType(MOVE_EVENT_NONE),
+	stepFunction(nullptr),
+	moveFunction(nullptr),
+	equipFunction(nullptr),
+	slot(SLOTP_WHEREEVER),
+	reqLevel(0),
+	reqMagLevel(0),
+	premium(false),
+	wieldInfo(0)
+{}
 
 MoveEvent::MoveEvent(const MoveEvent* copy) :
 	Event(copy)

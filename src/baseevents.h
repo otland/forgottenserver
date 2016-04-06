@@ -25,7 +25,7 @@
 class Event
 {
 	public:
-		explicit Event(LuaScriptInterface* _interface);
+		explicit Event(LuaScriptInterface* interface);
 		explicit Event(const Event* copy);
 		virtual ~Event() = default;
 
@@ -76,7 +76,7 @@ class CallBack
 	public:
 		CallBack();
 
-		bool loadCallBack(LuaScriptInterface* _interface, const std::string& name);
+		bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
 
 	protected:
 		int32_t scriptId;
