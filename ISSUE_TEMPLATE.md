@@ -1,4 +1,4 @@
-Welcome to the issues section if it's your first time!
+<!-- Welcome to the issues section if it's your first time! -->
 
 ### Before creating an issue, please ensure:
 - [ ] This is a bug in the software that resides in this repository, and not a
@@ -11,11 +11,11 @@ Welcome to the issues section if it's your first time!
 3.
 
 ### Expected behaviour
-Tell us what should happen
+<!-- Tell us what should happen -->
 
 ### Actual behaviour
-Tell us what happens instead
+<!-- Tell us what happens instead -->
 
 ### Environment
-If the issue is environment specific (e.g. compiling errors), please include the
-name and version of the operating system and compiler you are using.
+<!-- If the issue is environment specific (e.g. compiling errors), include
+     name and version of the operating system and compiler you are using. -->
