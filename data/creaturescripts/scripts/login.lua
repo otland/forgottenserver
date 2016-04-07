@@ -29,8 +29,21 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
+	-- Rewards notice
+	local rewards = #player:getRewardList()
+	if rewards > 0 then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("You have %s %s in your reward chest.", rewards == 1 and 'one' or rewards, rewards > 1 and "rewards" or "reward"))
+	end
+
+	-- Update player id 
+	local stats = player:inBossFight()
+	if stats then
+		stats.playerId = player:getId()
+	end
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
+	player:registerEvent("BossParticipation")
 	return true
 end

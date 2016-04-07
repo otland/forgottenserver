@@ -85,10 +85,6 @@ function Player:onLookInShop(itemType, count)
 	return true
 end
 
-function Player:onMoveItem(item, count, fromPosition, toPosition)
-	return true
-end
-
 function Player:onMoveCreature(creature, fromPosition, toPosition)
 	return true
 end
@@ -179,4 +175,38 @@ function Player:onGainSkillTries(skill, tries)
 		return tries * configManager.getNumber(configKeys.RATE_MAGIC)
 	end
 	return tries * configManager.getNumber(configKeys.RATE_SKILL)
+end
+
+function Player:onMoveItem(item, count, fromPosition, toPosition)
+	if toPosition.x == CONTAINER_POSITION then
+		local containerId = toPosition.y - 64
+		local container = self:getContainerById(containerId)		
+		if not container then
+			return true 
+		end
+
+		-- Do not let the player insert items into either the Reward Container or the Reward Chest
+		local itemId = container:getId()		
+		if itemId == ITEM_REWARD_CONTAINER or itemId == ITEM_REWARD_CHEST then
+			self:sendCancelMessage('Sorry, not possible.')
+			return false
+		end
+
+		-- The player also shouldn't be able to insert items into the boss corpse		
+		local tile = Tile(container:getPosition())
+		for _, item in ipairs(tile:getItems()) do
+			if item:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER) == 2^31 - 1 and item:getName() == container:getName() then
+				self:sendCancelMessage('Sorry, not possible.')
+				return false
+			end
+		end
+	end
+
+	-- Do not let the player move the boss corpse.
+	if item:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER) == 2^31 - 1 then
+		self:sendCancelMessage('Sorry, not possible.')
+		return false
+	end
+
+	return true
 end
