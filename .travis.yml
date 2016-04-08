@@ -11,8 +11,7 @@ cache: apt
 addons:
   apt:
     packages:
-      - libboost-dev
-      - libboost-system-dev
+      - libasio-dev
       - liblua5.2-dev
       - libluajit-5.1-dev
       - libmysqlclient-dev
