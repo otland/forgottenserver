@@ -122,7 +122,7 @@ class FileLoader
 		inline bool safeTell(int32_t& pos);
 
 	protected:
-		struct _cache {
+		struct cache {
 			uint8_t* data;
 			uint32_t loaded;
 			uint32_t base;
@@ -130,7 +130,7 @@ class FileLoader
 		};
 
 #define CACHE_BLOCKS 3
-		_cache cached_data[CACHE_BLOCKS];
+		cache cached_data[CACHE_BLOCKS];
 
 		uint8_t* buffer;
 		NODE root;
@@ -230,8 +230,8 @@ class PropWriteStream
 		PropWriteStream(const PropWriteStream&) = delete;
 		PropWriteStream& operator=(const PropWriteStream&) = delete;
 
-		const char* getStream(size_t& _size) const {
-			_size = size;
+		const char* getStream(size_t& size) const {
+			size = this->size;
 			return buffer;
 		}
 

@@ -507,7 +507,7 @@ uint16_t Player::getClientIcons() const
 		icons |= ICON_REDSWORDS;
 	}
 
-	if (_tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+	if (tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		icons |= ICON_PIGEON;
 
 		// Don't show ICON_SWORDS if player is in protection zone.
@@ -969,14 +969,14 @@ void Player::sendPing()
 	}
 }
 
-Item* Player::getWriteItem(uint32_t& _windowTextId, uint16_t& _maxWriteLen)
+Item* Player::getWriteItem(uint32_t& windowTextId, uint16_t& maxWriteLen)
 {
-	_windowTextId = windowTextId;
-	_maxWriteLen = maxWriteLen;
+	windowTextId = this->windowTextId;
+	maxWriteLen = this->maxWriteLen;
 	return writeItem;
 }
 
-void Player::setWriteItem(Item* item, uint16_t _maxWriteLen /*= 0*/)
+void Player::setWriteItem(Item* item, uint16_t maxWriteLen /*= 0*/)
 {
 	windowTextId++;
 
@@ -986,18 +986,18 @@ void Player::setWriteItem(Item* item, uint16_t _maxWriteLen /*= 0*/)
 
 	if (item) {
 		writeItem = item;
-		maxWriteLen = _maxWriteLen;
+		this->maxWriteLen = maxWriteLen;
 		writeItem->incrementReferenceCounter();
 	} else {
 		writeItem = nullptr;
-		maxWriteLen = 0;
+		this->maxWriteLen = 0;
 	}
 }
 
-House* Player::getEditHouse(uint32_t& _windowTextId, uint32_t& _listId)
+House* Player::getEditHouse(uint32_t& windowTextId, uint32_t& listId)
 {
-	_windowTextId = windowTextId;
-	_listId = editListId;
+	windowTextId = this->windowTextId;
+	listId = this->editListId;
 	return editHouse;
 }
 
@@ -1712,13 +1712,13 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		std::string expString = std::to_string(exp) + (exp != 1 ? " experience points." : " experience point.");
 
 		TextMessage message(MESSAGE_EXPERIENCE, "You gained " + expString);
-		message.position = _position;
+		message.position = position;
 		message.primary.value = exp;
 		message.primary.color = TEXTCOLOR_WHITE_EXP;
 		sendTextMessage(message);
 
 		SpectatorVec list;
-		g_game.map.getSpectators(list, _position, false, true);
+		g_game.map.getSpectators(list, position, false, true);
 		list.erase(this);
 		if (!list.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
@@ -1795,13 +1795,13 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		std::string expString = std::to_string(lostExp) + (lostExp != 1 ? " experience points." : " experience point.");
 
 		TextMessage message(MESSAGE_EXPERIENCE, "You lost " + expString);
-		message.position = _position;
+		message.position = position;
 		message.primary.value = lostExp;
 		message.primary.color = TEXTCOLOR_RED;
 		sendTextMessage(message);
 
 		SpectatorVec list;
-		g_game.map.getSpectators(list, _position, false, true);
+		g_game.map.getSpectators(list, position, false, true);
 		list.erase(this);
 		if (!list.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
@@ -1987,17 +1987,17 @@ uint32_t Player::getIP() const
 	return 0;
 }
 
-void Player::death(Creature* _lastHitCreature)
+void Player::death(Creature* lastHitCreature)
 {
 	loginPosition = town->getTemplePosition();
 
 	if (skillLoss) {
 		uint8_t unfairFightReduction = 100;
 
-		if (_lastHitCreature) {
-			Player* lastHitPlayer = _lastHitCreature->getPlayer();
+		if (lastHitCreature) {
+			Player* lastHitPlayer = lastHitCreature->getPlayer();
 			if (!lastHitPlayer) {
-				Creature* lastHitMaster = _lastHitCreature->getMaster();
+				Creature* lastHitMaster = lastHitCreature->getMaster();
 				if (lastHitMaster) {
 					lastHitPlayer = lastHitMaster->getPlayer();
 				}
@@ -2118,10 +2118,10 @@ void Player::death(Creature* _lastHitCreature)
 		if (bitset[5]) {
 			Player* lastHitPlayer;
 
-			if (_lastHitCreature) {
-				lastHitPlayer = _lastHitCreature->getPlayer();
+			if (lastHitCreature) {
+				lastHitPlayer = lastHitCreature->getPlayer();
 				if (!lastHitPlayer) {
-					Creature* lastHitMaster = _lastHitCreature->getMaster();
+					Creature* lastHitMaster = lastHitCreature->getMaster();
 					if (lastHitMaster) {
 						lastHitPlayer = lastHitMaster->getPlayer();
 					}
@@ -2191,22 +2191,22 @@ void Player::death(Creature* _lastHitCreature)
 	}
 }
 
-bool Player::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
+bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
 	if (getZone() == ZONE_PVP) {
 		setDropLoot(true);
 		return false;
 	}
-	return Creature::dropCorpse(_lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+	return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 }
 
-Item* Player::getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature)
+Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
-	Item* corpse = Creature::getCorpse(_lastHitCreature, mostDamageCreature);
+	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
 		std::ostringstream ss;
-		if (_lastHitCreature) {
-			ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << _lastHitCreature->getNameDescription() << '.';
+		if (lastHitCreature) {
+			ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << lastHitCreature->getNameDescription() << '.';
 		} else {
 			ss << "You recognize " << getNameDescription() << '.';
 		}
@@ -4187,7 +4187,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		if (!group->access && _tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+		if (!group->access && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 			sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 			return false;
 		}

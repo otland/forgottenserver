@@ -35,9 +35,7 @@ struct Position;
 class ValueCallback final : public CallBack
 {
 	public:
-		explicit ValueCallback(formulaType_t _type) {
-			type = _type;
-		}
+		explicit ValueCallback(formulaType_t type): type(type) {}
 		void getMinMaxValues(Player* player, CombatDamage& damage, bool useCharges) const;
 
 	protected:
@@ -106,12 +104,12 @@ typedef void (*COMBATFUNC)(Creature*, Creature*, const CombatParams&, CombatDama
 class MatrixArea
 {
 	public:
-		MatrixArea(uint32_t _rows, uint32_t _cols) {
+		MatrixArea(uint32_t rows, uint32_t cols) {
 			centerX = 0;
 			centerY = 0;
 
-			rows = _rows;
-			cols = _cols;
+			this->rows = rows;
+			this->cols = cols;
 
 			data_ = new bool*[rows];
 
@@ -316,7 +314,7 @@ class Combat
 		void setCondition(const Condition* condition) {
 			params.conditionList.emplace_front(condition);
 		}
-		void setPlayerCombatValues(formulaType_t _type, double _mina, double _minb, double _maxa, double _maxb);
+		void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
 		void postCombatEffects(Creature* caster, const Position& pos) const {
 			postCombatEffects(caster, pos, params);
 		}
@@ -355,7 +353,7 @@ class Combat
 class MagicField final : public Item
 {
 	public:
-		explicit MagicField(uint16_t _type) : Item(_type) {
+		explicit MagicField(uint16_t type) : Item(type) {
 			createTime = OTSYS_TIME();
 		}
 

@@ -451,16 +451,10 @@ struct Outfit_t {
 };
 
 struct LightInfo {
-	uint8_t level;
-	uint8_t color;
-	LightInfo() {
-		level = 0;
-		color = 0;
-	}
-	LightInfo(uint8_t _level, uint8_t _color) {
-		level = _level;
-		color = _color;
-	}
+	uint8_t level = 0;
+	uint8_t color = 0;
+	LightInfo() = default;
+	LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
 struct ShopInfo {

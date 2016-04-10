@@ -186,7 +186,7 @@ class Npc final : public Creature
 		static uint32_t npcAutoID;
 
 	protected:
-		explicit Npc(const std::string& _name);
+		explicit Npc(const std::string& name);
 
 		void onCreatureAppear(Creature* creature, bool isLogin) final;
 		void onRemoveCreature(Creature* creature, bool isLogout) final;

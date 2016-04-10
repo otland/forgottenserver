@@ -199,16 +199,16 @@ Raid::~Raid()
 	}
 }
 
-bool Raid::loadFromXml(const std::string& _filename)
+bool Raid::loadFromXml(const std::string& filename)
 {
 	if (isLoaded()) {
 		return true;
 	}
 
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		printXMLError("Error - Raid::loadFromXml", _filename, result);
+		printXMLError("Error - Raid::loadFromXml", filename, result);
 		return false;
 	}
 
@@ -229,7 +229,7 @@ bool Raid::loadFromXml(const std::string& _filename)
 		if (event->configureRaidEvent(eventNode)) {
 			raidEvents.push_back(event);
 		} else {
-			std::cout << "[Error - Raid::loadFromXml] In file (" << _filename << "), eventNode: " << eventNode.name() << std::endl;
+			std::cout << "[Error - Raid::loadFromXml] In file (" << filename << "), eventNode: " << eventNode.name() << std::endl;
 			delete event;
 		}
 	}
@@ -553,10 +553,7 @@ bool AreaSpawnEvent::executeEvent()
 	return true;
 }
 
-ScriptEvent::ScriptEvent(LuaScriptInterface* _interface) :
-	Event(_interface)
-{
-}
+ScriptEvent::ScriptEvent(LuaScriptInterface* interface) : Event(interface) {}
 
 bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 {

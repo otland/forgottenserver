@@ -145,8 +145,8 @@ int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t
 	return static_cast<int32_t>(std::ceil((2 * (attackValue * (attackSkill + 5.8) / 25 + (level - 1) / 10.)) / attackFactor));
 }
 
-Weapon::Weapon(LuaScriptInterface* _interface) :
-	Event(_interface)
+Weapon::Weapon(LuaScriptInterface* interface) :
+	Event(interface)
 {
 	scripted = false;
 	id = 0;
@@ -509,8 +509,8 @@ void Weapon::decrementItemCount(Item* item)
 	}
 }
 
-WeaponMelee::WeaponMelee(LuaScriptInterface* _interface) :
-	Weapon(_interface), elementType(COMBAT_NONE), elementDamage(0)
+WeaponMelee::WeaponMelee(LuaScriptInterface* interface) :
+	Weapon(interface), elementType(COMBAT_NONE), elementDamage(0)
 {
 	params.blockedByArmor = true;
 	params.blockedByShield = true;
@@ -602,8 +602,8 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 	return -normal_random(0, maxValue);
 }
 
-WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
-	Weapon(_interface), elementType(COMBAT_NONE), elementDamage(0)
+WeaponDistance::WeaponDistance(LuaScriptInterface* interface) :
+	Weapon(interface), elementType(COMBAT_NONE), elementDamage(0)
 {
 	params.blockedByArmor = true;
 	params.combatType = COMBAT_PHYSICALDAMAGE;
@@ -874,8 +874,8 @@ bool WeaponDistance::getSkillType(const Player* player, const Item*, skills_t& s
 	return true;
 }
 
-WeaponWand::WeaponWand(LuaScriptInterface* _interface) :
-	Weapon(_interface)
+WeaponWand::WeaponWand(LuaScriptInterface* interface) :
+	Weapon(interface)
 {
 	minChange = 0;
 	maxChange = 0;

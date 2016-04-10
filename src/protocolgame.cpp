@@ -70,8 +70,8 @@ void ProtocolGame::release()
 void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	//dispatcher thread
-	Player* _player = g_game.getPlayerByName(name);
-	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	Player* foundPlayer = g_game.getPlayerByName(name);
+	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
 		player->setName(name);
 
@@ -166,13 +166,13 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			return;
 		}
 
-		if (_player->client) {
-			_player->disconnect();
-			_player->isConnecting = true;
+		if (foundPlayer->client) {
+			foundPlayer->disconnect();
+			foundPlayer->isConnecting = true;
 
-			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, getThis(), _player->getID(), operatingSystem)));
+			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, getThis(), foundPlayer->getID(), operatingSystem)));
 		} else {
-			connect(_player->getID(), operatingSystem);
+			connect(foundPlayer->getID(), operatingSystem);
 		}
 	}
 	OutputMessagePool::getInstance().addProtocolToAutosend(shared_from_this());
@@ -182,8 +182,8 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 {
 	eventConnect = 0;
 
-	Player* _player = g_game.getPlayerByID(playerId);
-	if (!_player || _player->client) {
+	Player* foundPlayer = g_game.getPlayerByID(playerId);
+	if (!foundPlayer || foundPlayer->client) {
 		disconnectClient("You are already logged in.");
 		return;
 	}
@@ -194,7 +194,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 		return;
 	}
 
-	player = _player;
+	player = foundPlayer;
 	player->incrementReferenceCounter();
 
 	g_chat->removeUserFromAllChannels(*player);
