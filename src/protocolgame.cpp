@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <boost/range/adaptor/reversed.hpp>
-
 #include "protocolgame.h"
 
 #include "outputmessage.h"
@@ -531,7 +529,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 
 	const CreatureVector* creatures = tile->getCreatures();
 	if (creatures) {
-		for (const Creature* creature : boost::adaptors::reverse(*creatures)) {
+		for (const Creature* creature : reverse(*creatures)) {
 			if (!player->canSeeCreature(creature)) {
 				continue;
 			}
