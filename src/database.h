@@ -20,8 +20,6 @@
 #ifndef FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 #define FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 
-#include <boost/lexical_cast.hpp>
-
 #include <mysql.h>
 
 class DBResult;
@@ -161,11 +159,8 @@ class DBResult
 			}
 
 			T data;
-			try {
-				data = boost::lexical_cast<T>(row[it->second]);
-			} catch (boost::bad_lexical_cast&) {
-				data = 0;
-			}
+			std::stringstream ss(row[it->second]);
+			ss >> data;
 			return data;
 		}
 
