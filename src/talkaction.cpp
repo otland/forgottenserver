@@ -21,7 +21,7 @@
 
 #include "player.h"
 #include "talkaction.h"
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 TalkActions::TalkActions()
 	: scriptInterface("TalkAction Interface")
@@ -120,7 +120,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 
 	pugi::xml_attribute separatorAttribute = node.attribute("separator");
 	if (separatorAttribute) {
-		separator = pugi::cast<char>(separatorAttribute.value());
+		separator = lexical_cast<char>(separatorAttribute.value());
 	}
 
 	words = wordsAttribute.as_string();

@@ -21,7 +21,7 @@
 
 #include "game.h"
 
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 #include "movement.h"
 
@@ -101,7 +101,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 	const MoveEvent_t eventType = moveEvent->getEventType();
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
 		pugi::xml_attribute tileItemAttribute = node.attribute("tileitem");
-		if (tileItemAttribute && pugi::cast<uint16_t>(tileItemAttribute.value()) == 1) {
+		if (tileItemAttribute && lexical_cast<uint16_t>(tileItemAttribute.value()) == 1) {
 			switch (eventType) {
 				case MOVE_EVENT_ADD_ITEM:
 					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
@@ -117,7 +117,7 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
+		int32_t id = lexical_cast<int32_t>(attr.value());
 		addEvent(moveEvent, id, itemIdMap);
 		if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
 			ItemType& it = Item::items.getItemType(id);
@@ -127,8 +127,8 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 			it.vocationString = moveEvent->getVocationString();
 		}
 	} else if ((attr = node.attribute("fromid"))) {
-		uint32_t id = pugi::cast<uint32_t>(attr.value());
-		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toid").value());
+		uint32_t id = lexical_cast<uint32_t>(attr.value());
+		uint32_t endId = lexical_cast<uint32_t>(node.attribute("toid").value());
 
 		addEvent(moveEvent, id, itemIdMap);
 
@@ -154,19 +154,19 @@ bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 			}
 		}
 	} else if ((attr = node.attribute("uniqueid"))) {
-		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), uniqueIdMap);
+		addEvent(moveEvent, lexical_cast<int32_t>(attr.value()), uniqueIdMap);
 	} else if ((attr = node.attribute("fromuid"))) {
-		uint32_t id = pugi::cast<uint32_t>(attr.value());
-		uint32_t endId = pugi::cast<uint32_t>(node.attribute("touid").value());
+		uint32_t id = lexical_cast<uint32_t>(attr.value());
+		uint32_t endId = lexical_cast<uint32_t>(node.attribute("touid").value());
 		addEvent(moveEvent, id, uniqueIdMap);
 		while (++id <= endId) {
 			addEvent(moveEvent, id, uniqueIdMap);
 		}
 	} else if ((attr = node.attribute("actionid"))) {
-		addEvent(moveEvent, pugi::cast<int32_t>(attr.value()), actionIdMap);
+		addEvent(moveEvent, lexical_cast<int32_t>(attr.value()), actionIdMap);
 	} else if ((attr = node.attribute("fromaid"))) {
-		uint32_t id = pugi::cast<uint32_t>(attr.value());
-		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toaid").value());
+		uint32_t id = lexical_cast<uint32_t>(attr.value());
+		uint32_t endId = lexical_cast<uint32_t>(node.attribute("toaid").value());
 		addEvent(moveEvent, id, actionIdMap);
 		while (++id <= endId) {
 			addEvent(moveEvent, id, actionIdMap);
@@ -492,7 +492,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 		pugi::xml_attribute levelAttribute = node.attribute("level");
 		if (levelAttribute) {
-			reqLevel = pugi::cast<uint32_t>(levelAttribute.value());
+			reqLevel = lexical_cast<uint32_t>(levelAttribute.value());
 			if (reqLevel > 0) {
 				wieldInfo |= WIELDINFO_LEVEL;
 			}
@@ -500,7 +500,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 		pugi::xml_attribute magLevelAttribute = node.attribute("maglevel");
 		if (magLevelAttribute) {
-			reqMagLevel = pugi::cast<uint32_t>(magLevelAttribute.value());
+			reqMagLevel = lexical_cast<uint32_t>(magLevelAttribute.value());
 			if (reqMagLevel > 0) {
 				wieldInfo |= WIELDINFO_MAGLV;
 			}

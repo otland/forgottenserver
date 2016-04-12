@@ -21,7 +21,7 @@
 
 #include "npc.h"
 #include "game.h"
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
@@ -153,17 +153,17 @@ bool Npc::loadFromXml()
 
 	pugi::xml_attribute attr;
 	if ((attr = npcNode.attribute("speed"))) {
-		baseSpeed = pugi::cast<uint32_t>(attr.value());
+		baseSpeed = lexical_cast<uint32_t>(attr.value());
 	} else {
 		baseSpeed = 100;
 	}
 
 	if ((attr = npcNode.attribute("walkinterval"))) {
-		walkTicks = pugi::cast<uint32_t>(attr.value());
+		walkTicks = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = npcNode.attribute("walkradius"))) {
-		masterRadius = pugi::cast<int32_t>(attr.value());
+		masterRadius = lexical_cast<int32_t>(attr.value());
 	}
 
 	if ((attr = npcNode.attribute("ignoreheight"))) {
@@ -171,7 +171,7 @@ bool Npc::loadFromXml()
 	}
 
 	if ((attr = npcNode.attribute("speechbubble"))) {
-		speechBubble = pugi::cast<uint32_t>(attr.value());
+		speechBubble = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
@@ -181,13 +181,13 @@ bool Npc::loadFromXml()
 	pugi::xml_node healthNode = npcNode.child("health");
 	if (healthNode) {
 		if ((attr = healthNode.attribute("now"))) {
-			health = pugi::cast<int32_t>(attr.value());
+			health = lexical_cast<int32_t>(attr.value());
 		} else {
 			health = 100;
 		}
 
 		if ((attr = healthNode.attribute("max"))) {
-			healthMax = pugi::cast<int32_t>(attr.value());
+			healthMax = lexical_cast<int32_t>(attr.value());
 		} else {
 			healthMax = 100;
 		}
@@ -197,16 +197,16 @@ bool Npc::loadFromXml()
 	if (lookNode) {
 		pugi::xml_attribute lookTypeAttribute = lookNode.attribute("type");
 		if (lookTypeAttribute) {
-			defaultOutfit.lookType = pugi::cast<uint16_t>(lookTypeAttribute.value());
-			defaultOutfit.lookHead = pugi::cast<uint16_t>(lookNode.attribute("head").value());
-			defaultOutfit.lookBody = pugi::cast<uint16_t>(lookNode.attribute("body").value());
-			defaultOutfit.lookLegs = pugi::cast<uint16_t>(lookNode.attribute("legs").value());
-			defaultOutfit.lookFeet = pugi::cast<uint16_t>(lookNode.attribute("feet").value());
-			defaultOutfit.lookAddons = pugi::cast<uint16_t>(lookNode.attribute("addons").value());
+			defaultOutfit.lookType = lexical_cast<uint16_t>(lookTypeAttribute.value());
+			defaultOutfit.lookHead = lexical_cast<uint16_t>(lookNode.attribute("head").value());
+			defaultOutfit.lookBody = lexical_cast<uint16_t>(lookNode.attribute("body").value());
+			defaultOutfit.lookLegs = lexical_cast<uint16_t>(lookNode.attribute("legs").value());
+			defaultOutfit.lookFeet = lexical_cast<uint16_t>(lookNode.attribute("feet").value());
+			defaultOutfit.lookAddons = lexical_cast<uint16_t>(lookNode.attribute("addons").value());
 		} else if ((attr = lookNode.attribute("typeex"))) {
-			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
+			defaultOutfit.lookTypeEx = lexical_cast<uint16_t>(attr.value());
 		}
-		defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
+		defaultOutfit.lookMount = lexical_cast<uint16_t>(lookNode.attribute("mount").value());
 
 		currentOutfit = defaultOutfit;
 	}

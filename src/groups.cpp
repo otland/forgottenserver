@@ -21,7 +21,7 @@
 
 #include "groups.h"
 
-#include "pugicast.h"
+#include "lexicalcast.h"
 #include "tools.h"
 
 bool Groups::load()
@@ -35,12 +35,12 @@ bool Groups::load()
 
 	for (auto groupNode : doc.child("groups").children()) {
 		Group group;
-		group.id = pugi::cast<uint32_t>(groupNode.attribute("id").value());
+		group.id = lexical_cast<uint32_t>(groupNode.attribute("id").value());
 		group.name = groupNode.attribute("name").as_string();
-		group.flags = pugi::cast<uint64_t>(groupNode.attribute("flags").value());
+		group.flags = lexical_cast<uint64_t>(groupNode.attribute("flags").value());
 		group.access = groupNode.attribute("access").as_bool();
-		group.maxDepotItems = pugi::cast<uint32_t>(groupNode.attribute("maxdepotitems").value());
-		group.maxVipEntries = pugi::cast<uint32_t>(groupNode.attribute("maxvipentries").value());
+		group.maxDepotItems = lexical_cast<uint32_t>(groupNode.attribute("maxdepotitems").value());
+		group.maxVipEntries = lexical_cast<uint32_t>(groupNode.attribute("maxvipentries").value());
 		groups.push_back(group);
 	}
 	return true;

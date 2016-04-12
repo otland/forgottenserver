@@ -21,7 +21,7 @@
 
 #include "quests.h"
 
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 std::string Mission::getDescription(Player* player) const
 {
@@ -160,8 +160,8 @@ bool Quests::loadFromXml()
 		quests.emplace_back(
 			questNode.attribute("name").as_string(),
 			++id,
-			pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
-			pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value())
+			lexical_cast<int32_t>(questNode.attribute("startstorageid").value()),
+			lexical_cast<int32_t>(questNode.attribute("startstoragevalue").value())
 		);
 		Quest& quest = quests.back();
 
@@ -170,16 +170,16 @@ bool Quests::loadFromXml()
 
 			quest.missions.emplace_back(
 				missionNode.attribute("name").as_string(),
-				pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
-				pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
-				pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
+				lexical_cast<int32_t>(missionNode.attribute("storageid").value()),
+				lexical_cast<int32_t>(missionNode.attribute("startvalue").value()),
+				lexical_cast<int32_t>(missionNode.attribute("endvalue").value()),
 				missionNode.attribute("ignoreendvalue").as_bool()
 			);
 			Mission& mission = quest.missions.back();
 
 			if (mainDescription.empty()) {
 				for (auto missionStateNode : missionNode.children()) {
-					int32_t missionId = pugi::cast<int32_t>(missionStateNode.attribute("id").value());
+					int32_t missionId = lexical_cast<int32_t>(missionStateNode.attribute("id").value());
 					mission.descriptions.emplace(missionId, missionStateNode.attribute("description").as_string());
 				}
 			} else {
