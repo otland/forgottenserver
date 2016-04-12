@@ -836,18 +836,17 @@ bool Player::canWalkthrough(const Creature* creature) const
 		return false;
 	}
 
-	Player* thisPlayer = const_cast<Player*>(this);
 	if ((OTSYS_TIME() - lastWalkthroughAttempt) > 2000) {
-		thisPlayer->setLastWalkthroughAttempt(OTSYS_TIME());
+		setLastWalkthroughAttempt(OTSYS_TIME());
 		return false;
 	}
 
 	if (creature->getPosition() != lastWalkthroughPosition) {
-		thisPlayer->setLastWalkthroughPosition(creature->getPosition());
+		setLastWalkthroughPosition(creature->getPosition());
 		return false;
 	}
 
-	thisPlayer->setLastWalkthroughPosition(creature->getPosition());
+	setLastWalkthroughPosition(creature->getPosition());
 	return true;
 }
 
