@@ -1,7 +1,7 @@
 local upFloorIds = {1386, 3678, 5543}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local tile = item:getTile()
-	if tile and tile:hasFlag(TILESTATE_PROTECTIONZONE) then
+	if tile and tile:hasFlag(TILESTATE_PROTECTIONZONE) and player:isPzLocked() then
 		return false
 	end
 
