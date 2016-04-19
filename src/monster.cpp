@@ -246,7 +246,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 		}
 
 		if (canSeeNewPos && isSummon() && getMaster() == creature) {
-			isMasterInRange = true;    //Turn the summon on again
+			isMasterInRange = true;    //Follow master again
 		}
 
 		updateIdleStatus();
@@ -417,9 +417,8 @@ void Monster::onCreatureEnter(Creature* creature)
 	// std::cout << "onCreatureEnter - " << creature->getName() << std::endl;
 
 	if (getMaster() == creature) {
-		//Turn the summon on again
+		//Follow master again
 		isMasterInRange = true;
-		updateIdleStatus();
 	}
 
 	onCreatureFound(creature, true);
@@ -472,9 +471,8 @@ void Monster::onCreatureLeave(Creature* creature)
 	// std::cout << "onCreatureLeave - " << creature->getName() << std::endl;
 
 	if (getMaster() == creature) {
-		//Turn the monster off until its master comes back
+		//Take random steps and only use defense abilities (e.g. heal) until its master comes back
 		isMasterInRange = false;
-		updateIdleStatus();
 	}
 
 	//update friendList
@@ -673,11 +671,7 @@ void Monster::updateIdleStatus()
 	bool idle = false;
 
 	if (conditions.empty()) {
-		if (isSummon()) {
-			if (!isMasterInRange || (getMaster()->getMonster() && getMaster()->getMonster()->getIdleStatus())) {
-				idle = true;
-			}
-		} else if (targetList.empty()) {
+		if (!isSummon() && targetList.empty()) {
 			idle = true;
 		}
 	}
@@ -932,7 +926,7 @@ void Monster::onThinkDefense(uint32_t interval)
 		}
 	}
 
-	if (!isSummon() && summons.size() < mType->maxSummons) {
+	if (!isSummon() && summons.size() < mType->maxSummons && hasFollowPath) {
 		for (const summonBlock_t& summonBlock : mType->summons) {
 			if (summonBlock.speed > defenseTicks) {
 				resetTicks = false;
@@ -958,7 +952,7 @@ void Monster::onThinkDefense(uint32_t interval)
 
 				addSummon(summon);
 
-				if (!g_game.placeCreature(summon, summonPos)) {
+				if (!g_game.placeCreature(summon, summonPos, false, summonBlock.force)) {
 					removeSummon(summon);
 				} else {
 					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
@@ -1113,12 +1107,12 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 	}
 
 	bool result = false;
-	if ((!followCreature || !hasFollowPath) && !isSummon()) {
+	if (((!followCreature || !hasFollowPath) && (isSummon() && !isMasterInRange))) {
 		if (followCreature || getTimeSinceLastMove() > 1000) {
 			//choose a random direction
 			result = getRandomStep(getPosition(), direction);
 		}
-	} else if (isSummon() || followCreature) {
+	} else if ((isSummon() && isMasterInRange) || followCreature) {
 		result = Creature::getNextStep(direction, flags);
 		if (result) {
 			flags |= FLAG_PATHFINDING;

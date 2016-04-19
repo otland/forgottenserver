@@ -1127,6 +1127,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 		for (auto summonNode : node.children()) {
 			int32_t chance = 100;
 			int32_t speed = 1000;
+			bool force = false;
 
 			if ((attr = summonNode.attribute("speed")) || (attr = summonNode.attribute("interval"))) {
 				speed = pugi::cast<int32_t>(attr.value());
@@ -1135,12 +1136,17 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			if ((attr = summonNode.attribute("chance"))) {
 				chance = pugi::cast<int32_t>(attr.value());
 			}
+			
+			if ((attr = summonNode.attribute("force"))) {
+				force = attr.as_bool();
+			}
 
 			if ((attr = summonNode.attribute("name"))) {
 				summonBlock_t sb;
 				sb.name = attr.as_string();
 				sb.speed = speed;
 				sb.chance = chance;
+				sb.force = force;
 				mType->summons.emplace_back(sb);
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Missing summon name. " << file << std::endl;
