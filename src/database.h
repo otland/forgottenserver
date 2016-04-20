@@ -21,6 +21,7 @@
 #define FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 
 #include <mysql.h>
+#include "lexicalcast.h"
 
 class DBResult;
 typedef std::shared_ptr<DBResult> DBResult_ptr;
@@ -158,10 +159,7 @@ class DBResult
 				return static_cast<T>(0);
 			}
 
-			T data;
-			std::stringstream ss(row[it->second]);
-			ss >> data;
-			return data;
+			return lexical_cast<T>(row[it->second]);
 		}
 
 		std::string getString(const std::string& s) const;
