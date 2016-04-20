@@ -186,6 +186,51 @@ std::string transformToSHA1(const std::string& input)
 	return std::string(hexstring, 40);
 }
 
+std::string generateToken(const std::string& key, uint32_t ticks)
+{
+	// generate message from ticks
+	std::string message(8, 0);
+	for (uint8_t i = 8; --i; ticks >>= 8) {
+		message[i] = static_cast<char>(ticks & 0xFF);
+	}
+
+	// hmac key pad generation
+	std::string iKeyPad(64, 0x36), oKeyPad(64, 0x5C);
+	for (uint8_t i = 0; i < key.length(); ++i) {
+		iKeyPad[i] ^= key[i];
+		oKeyPad[i] ^= key[i];
+	}
+
+	oKeyPad.reserve(84);
+
+	// hmac concat inner pad with message
+	iKeyPad.append(message);
+
+	// hmac first pass
+	message.assign(transformToSHA1(iKeyPad));
+
+	// hmac concat outer pad with message, conversion from hex to int needed
+	for (uint8_t i = 0; i < message.length(); i += 2) {
+		oKeyPad.push_back(static_cast<char>(std::stol(message.substr(i, 2), nullptr, 16)));
+	}
+
+	// hmac second pass
+	message.assign(transformToSHA1(oKeyPad));
+
+	// calculate hmac offset
+	uint32_t offset = static_cast<uint32_t>(std::stol(message.substr(39, 1), nullptr, 16) & 0xF);
+
+	// get truncated hash
+	uint32_t truncHash = std::stol(message.substr(2 * offset, 8), nullptr, 16) & 0x7FFFFFFF;
+	message.assign(std::to_string(truncHash));
+
+	// return only last AUTHENTICATOR_DIGITS (default 6) digits, also asserts exactly 6 digits
+	uint32_t hashLen = message.length();
+	message.assign(message.substr(hashLen - std::min(hashLen, AUTHENTICATOR_DIGITS)));
+	message.insert(0, AUTHENTICATOR_DIGITS - std::min(hashLen, AUTHENTICATOR_DIGITS), '0');
+	return message;
+}
+
 void replaceString(std::string& str, const std::string& sought, const std::string& replacement)
 {
 	size_t pos = 0;
