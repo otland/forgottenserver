@@ -52,7 +52,8 @@ bool IOLoginData::saveAccount(const Account& acc)
 	return Database::getInstance()->executeQuery(query.str());
 }
 
-std::string decodeSecret(const std::string& secret) {
+std::string decodeSecret(const std::string& secret)
+{
 	// simple base32 decoding
 	std::string key;
 	key.reserve(10);
