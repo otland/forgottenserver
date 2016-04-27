@@ -1,8 +1,8 @@
 --- CONFIGURATION ---
 potions = {
 	removePots = true,
-	addEmptyPots = true, -- Only works if removepots is true
-	words = "Aaaah...", -- Only works if sayWords
+	addEmptyPots = true, -- Only works if removepots isn't false or nil
+	words = "Aaaah...",
 	[8473] = { -- ultimate health potion
 		vocations = {4},
 		minLevel = 130,
