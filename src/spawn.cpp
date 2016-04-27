@@ -184,18 +184,6 @@ Spawn::~Spawn()
 	}
 }
 
-bool Spawn::findPlayer(const Position& pos)
-{
-	SpectatorVec list;
-	g_game.map.getSpectators(list, pos, false, true);
-	for (Creature* spectator : list) {
-		if (!spectator->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) {
-			return true;
-		}
-	}
-	return false;
-}
-
 bool Spawn::isInSpawnZone(const Position& pos)
 {
 	return Spawns::isInZone(centerPos, radius, pos);
@@ -251,12 +239,7 @@ void Spawn::checkSpawn()
 
 		spawnBlock_t& sb = it.second;
 		if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
-			if (findPlayer(sb.pos)) {
-				sb.lastSpawn = OTSYS_TIME();
-				continue;
-			}
-
-			spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
+			scheduleSpawn(spawnId, sb, 4200);
 			if (++spawnCount >= static_cast<uint32_t>(g_config.getNumber(ConfigManager::RATE_SPAWN))) {
 				break;
 			}
@@ -265,6 +248,16 @@ void Spawn::checkSpawn()
 
 	if (spawnedMap.size() < spawnMap.size()) {
 		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+	}
+}
+
+void Spawn::scheduleSpawn(uint32_t spawnId, spawnBlock_t sb, uint32_t interval)
+{
+	if (interval <= 0) {
+		spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
+	} else {
+		g_game.addMagicEffect(sb.pos, CONST_ME_TELEPORT);
+		g_scheduler.addEvent(createSchedulerTask(1400, std::bind(&Spawn::scheduleSpawn, this, spawnId, sb, interval - 1400)));
 	}
 }
 
