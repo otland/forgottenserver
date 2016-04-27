@@ -96,7 +96,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			-- Checking vocation, level
 			local isDifferentVocation = true
 			for k, v in ipairs(stats.vocations) do
-				if isInArray(v, vocationList) then
+				if isInArray(vocationList, v) then
 					isDifferentVocation = false
 					break
 				end
