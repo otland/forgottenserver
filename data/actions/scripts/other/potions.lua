@@ -107,12 +107,10 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				if #vocations > 0 then
 					for i = 1, #vocations do
 						local voc = Vocation(vocations[i])
-						if not voc:getDemotion() then
-							if i == #vocations then
-								str = str .. (#vocations ~= 1 and " and " or "") .. voc:getName():lower() .. "s"
-							else
-								str = str .. (i ~= 1 and ", " or "") .. voc:getName():lower() .. "s"
-							end
+						if i == #vocations then
+							str = str .. (#vocations ~= 1 and " and " or "") .. voc:getName():lower() .. "s"
+						else
+							str = str .. (i ~= 1 and ", " or "") .. voc:getName():lower() .. "s"
 						end
 					end
 				end
