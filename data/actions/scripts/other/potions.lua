@@ -1,7 +1,9 @@
 --- CONFIGURATION ---
 potions = {
-	removepots = true,
-	addemptypots = true, -- Only works if removepots is true
+	removePots = true,
+	addEmptyPots = true, -- Only works if removepots is true
+	sayWords = true,
+	words = "Aaaah...", -- Only works if sayWords
 	[8473] = { -- ultimate health potion
 		vocations = {4},
 		minLevel = 130,
@@ -79,7 +81,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local stats = potions[item:getId()]
 	if stats then
-		if ( stats.vocations or stats.minLevel ) and not player:getGroup():getAccess() then
+		if (stats.vocations or stats.minLevel) and not player:getGroup():getAccess() then
 			if not stats.minLevel then
 				stats.minLevel = 1
 			end
@@ -87,21 +89,21 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				stats.vocations = {}
 			end
 			
-			local voclist, mvoc = {}, target:getVocation()
+			local vocationList, mvoc = {}, target:getVocation()
 			while mvoc do
-				table.insert(voclist, mvoc:getId())
+				table.insert(vocationList, mvoc:getId())
 				mvoc = mvoc:getDemotion()
 			end
 			-- Checking vocation, level
-			local isdifferentvocation = true
+			local isDifferentVocation = true
 			for k, v in ipairs(stats.vocations) do
-				if isInArray(v, voclist) then
-					isdifferentvocation = false
+				if isInArray(v, vocationList) then
+					isDifferentVocation = false
 					break
 				end
 			end
-			voclist = nil
-			if isdifferentvocation or target:getLevel() < stats.minLevel then
+			vocationList = nil
+			if isDifferentVocation or target:getLevel() < stats.minLevel then
 				local str, vocations = "", stats.vocations
 				if #vocations > 0 then
 					for i = 1, #vocations do
@@ -117,9 +119,9 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				end
 				vocations = nil
 				if str == "" then
-					str = "all vocations"
+					str = "players"
 				end
-				player:say("This potion can only be consumed by ".. str .. " of level " .. stats.minLevel .. " or higher.", TALKTYPE_MONSTER_SAY)
+				player:say("This potion can be consumed by ".. str .. " of level " .. stats.minLevel .. " or higher.", TALKTYPE_MONSTER_SAY)
 				return false
 			end
 		end
@@ -143,11 +145,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		
 		player:addCondition(exhaust)
-		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
-		
-		if potions.removepots then
+		if potions.sayWords and potions.words then
+			target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		end
+		if potions.removePots then
 			item:remove(1)
-			if potions.addemptypots and stats.empty then
+			if potions.addEmptyPots and stats.empty then
 				player:addItem(stats.empty, 1)
 			end
 		end
