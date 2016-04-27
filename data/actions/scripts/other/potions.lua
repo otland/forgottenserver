@@ -95,11 +95,15 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 			-- Checking vocation, level
 			local isDifferentVocation = true
-			for k, v in ipairs(stats.vocations) do
-				if isInArray(vocationList, v) then
-					isDifferentVocation = false
-					break
+			if #stats.vocations > 0 then
+				for k, v in ipairs(stats.vocations) do
+					if isInArray(vocationList, v) then
+						isDifferentVocation = false
+						break
+					end
 				end
+			else
+				isDifferentVocation = false
 			end
 			vocationList = nil
 			if isDifferentVocation or target:getLevel() < stats.minLevel then
