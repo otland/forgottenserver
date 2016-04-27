@@ -2,7 +2,6 @@
 potions = {
 	removePots = true,
 	addEmptyPots = true, -- Only works if removepots is true
-	sayWords = true,
 	words = "Aaaah...", -- Only works if sayWords
 	[8473] = { -- ultimate health potion
 		vocations = {4},
@@ -73,7 +72,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if target == nil or not target:isPlayer() then
 		return true
 	end
-
+	
 	if player:getCondition(CONDITION_EXHAUST_HEAL) then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUAREEXHAUSTED))
 		return true
@@ -145,8 +144,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		
 		player:addCondition(exhaust)
-		if potions.sayWords and potions.words then
-			target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		if potions.words then
+			target:say(potions.words, TALKTYPE_MONSTER_SAY)
 		end
 		if potions.removePots then
 			item:remove(1)
