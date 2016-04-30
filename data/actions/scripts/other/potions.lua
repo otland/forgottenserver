@@ -4,38 +4,38 @@ potions = {
 	addEmptyPots = true, -- Only works if removepots isn't false or nil
 	words = "Aaaah...",
 	[8473] = { -- ultimate health potion
-		vocations = {4},
+		vocations = {4, 8},
 		minLevel = 130,
 		health = { min = 650, max = 850},
 		empty = 7635
 	},
 	[7591] = { -- great health potion
-		vocations = {4},
+		vocations = {4, 8},
 		minLevel = 80,
 		health = { min = 425, max = 575},
 		empty = 7635
 	},
 	[7590] = { -- great mana potion
-		vocations = {1, 2},
+		vocations = {1, 2, 5, 6},
 		minLevel = 80,
 		mana = { min = 150, max = 250},
 		empty = 7635
 	},
 	[8472] = { -- great spitit potion
-		vocations = {3},
+		vocations = {3, 7},
 		minLevel = 80,
 		health = { min = 250, max = 350},
 		mana = { min = 100, max = 200},
 		empty = 7635
 	},
 	[7588] = { -- strong health potion
-		vocations = {3, 4},
+		vocations = {3, 4, 7, 8},
 		minLevel = 50,
 		health = { min = 250, max = 350},
 		empty = 7634
 	},
 	[7589] = { -- strong mana potion
-		vocations = {1, 2, 3},
+		vocations = {1, 2, 3, 5, 6, 7},
 		minLevel = 50,
 		mana = { min = 115, max = 185},
 		empty = 7634
@@ -88,33 +88,23 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 				stats.vocations = {}
 			end
 			
-			local vocationList, mvoc = {}, player:getVocation()
-			while mvoc do
-				table.insert(vocationList, mvoc:getId()) -- Every demotion of player's vocation.
-				mvoc = mvoc:getDemotion()
-			end
-			-- Checking vocation, level
-			local isDifferentVocation = true
-			if #stats.vocations > 0 then
+			if not inArray(states.vocations, player:getVocation():getId()) or player:getLevel() < stats.minLevel then
+				local str, vocations = "", {}
+				-- We only show unpromoted vocations in description.
 				for k, v in ipairs(stats.vocations) do
-					if isInArray(vocationList, v) then
-						isDifferentVocation = false
-						break
+					if Vocation(v):getDemotion() then
+						table.insert(vocations, v)
 					end
 				end
-			else
-				isDifferentVocation = false
-			end
-			vocationList = nil
-			if isDifferentVocation or player:getLevel() < stats.minLevel then
-				local str, vocations = "", stats.vocations
 				if #vocations > 0 then
 					for i = 1, #vocations do
 						local voc = Vocation(vocations[i])
-						if i == #vocations then
-							str = str .. (#vocations ~= 1 and " and " or "") .. voc:getName():lower() .. "s"
-						else
-							str = str .. (i ~= 1 and ", " or "") .. voc:getName():lower() .. "s"
+						if not voc:getDemotion() then -- Elder druid won't be showed;
+							if i == #vocations then
+								str = str .. (#vocations ~= 1 and " and " or "") .. voc:getName():lower() .. "s"
+							else
+								str = str .. (i ~= 1 and ", " or "") .. voc:getName():lower() .. "s"
+							end
 						end
 					end
 				end
