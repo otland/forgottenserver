@@ -6,50 +6,50 @@ potions = {
 	[8473] = { -- ultimate health potion
 		vocations = {4},
 		minLevel = 130,
-		health = {650, 850},  -- min, max
+		health = { min = 650, max = 850},
 		empty = 7635
 	},
 	[7591] = { -- great health potion
 		vocations = {4},
 		minLevel = 80,
-		health = {425, 575},
+		health = { min = 425, max = 575},
 		empty = 7635
 	},
 	[7590] = { -- great mana potion
 		vocations = {1, 2},
 		minLevel = 80,
-		mana = {150, 250},
+		mana = { min = 150, max = 250},
 		empty = 7635
 	},
 	[8472] = { -- great spitit potion
 		vocations = {3},
 		minLevel = 80,
-		health = {250, 350},
-		mana = {100, 200},
+		health = { min = 250, max = 350},
+		mana = { min = 100, max = 200},
 		empty = 7635
 	},
 	[7588] = { -- strong health potion
 		vocations = {3, 4},
 		minLevel = 50,
-		health = {250, 350},
+		health = { min = 250, max = 350},
 		empty = 7634
 	},
 	[7589] = { -- strong mana potion
 		vocations = {1, 2, 3},
 		minLevel = 50,
-		mana = {115, 185},
+		mana = { min = 115, max = 185},
 		empty = 7634
 	},
-	[7618] = { -- health potion
-		health = {75, 125},
+	[7620] = { -- mana potion
+		mana = { min = 75, max = 125},
 		empty = 7636
 	},
-	[7620] = { -- mana potion
-		mana = {125, 175},
+	[7618] = { -- health potion
+		health = { min = 125, max = 175},
 		empty = 7636
 	},
 	[8704] = { -- small health potion
-		health = {60, 90},
+		health = { min = 60, max = 90},
 		empty = 7636
 	}
 }
@@ -68,7 +68,7 @@ local exhaust = Condition(CONDITION_EXHAUST_HEAL)
 exhaust:setParameter(CONDITION_PARAM_TICKS, (configManager.getNumber(configKeys.EX_ACTIONS_DELAY_INTERVAL) - 100))
 -- 1000 - 100 due to exact condition timing. -100 doesn't hurt us, and players don't have reminding ~50ms exhaustion.
 
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 	if target == nil or not target:isPlayer() then
 		return true
 	end
@@ -78,7 +78,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	local stats = potions[item:getId()]
+	local stats = potions[potion:getId()]
 	if stats then
 		if (stats.vocations or stats.minLevel) and not player:getGroup():getAccess() then
 			if not stats.minLevel then
@@ -90,7 +90,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			
 			local vocationList, mvoc = {}, player:getVocation()
 			while mvoc do
-				table.insert(vocationList, mvoc:getId())
+				table.insert(vocationList, mvoc:getId()) -- Every demotion of player's vocation.
 				mvoc = mvoc:getDemotion()
 			end
 			-- Checking vocation, level
@@ -127,14 +127,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 		end
 		if stats.health then
-			local hmin, hmax = stats.health[1], stats.health[2]
-			if not doTargetCombatHealth(0, target, COMBAT_HEALING, hmin, hmax, CONST_ME_MAGIC_BLUE) then
+			if not doTargetCombatHealth(0, target, COMBAT_HEALING, stats.health.min, stats.health.max, CONST_ME_MAGIC_BLUE) then
 				return false
 			end
 		end
 		if stats.mana then
-			local mmin, mmax = stats.mana[1], stats.mana[2]
-			if not doTargetCombatMana(0, target, mmin, mmax, CONST_ME_MAGIC_BLUE) then
+			if not doTargetCombatMana(0, target, stats.mana.min, stats.mana.max, CONST_ME_MAGIC_BLUE) then
 				return false
 			end
 		end
