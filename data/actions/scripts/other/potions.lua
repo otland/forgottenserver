@@ -88,7 +88,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				stats.vocations = {}
 			end
 			
-			local vocationList, mvoc = {}, target:getVocation()
+			local vocationList, mvoc = {}, player:getVocation()
 			while mvoc do
 				table.insert(vocationList, mvoc:getId())
 				mvoc = mvoc:getDemotion()
@@ -106,7 +106,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				isDifferentVocation = false
 			end
 			vocationList = nil
-			if isDifferentVocation or target:getLevel() < stats.minLevel then
+			if isDifferentVocation or player:getLevel() < stats.minLevel then
 				local str, vocations = "", stats.vocations
 				if #vocations > 0 then
 					for i = 1, #vocations do
