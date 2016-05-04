@@ -88,7 +88,7 @@ antidote:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 antidote:setParameter(COMBAT_PARAM_TARGETCASTERORTOPMOST, true)
 antidote:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 antidote:setParameter(COMBAT_PARAM_DISPEL, CONDITION_POISON)
-potions[8474] = {combat = antidote, emptyPot = 7636}
+potions[8474] = {combat = antidote, emptyPotion = 7636}
 
 --- FUNCTIONS ---
 
