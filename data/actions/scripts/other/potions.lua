@@ -100,15 +100,18 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 	if target == nil or not target:isPlayer() then
 		return true
 	end
+
 	local stats = potions[potion:getId()]
 	if stats then
 		if (stats.vocations or stats.minLevel) and not player:getGroup():getAccess() then
 			if not stats.minLevel then
 				stats.minLevel = 1
 			end
+
 			if not stats.vocations then
 				stats.vocations = { [1] = player:getVocation():getId() }
 			end
+
 			if not isInArray(stats.vocations, player:getVocation():getId()) or player:getLevel() < stats.minLevel then
 				local str, vocations = "", {}
 				-- We only show unpromoted vocations in description.
@@ -117,6 +120,7 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 						table.insert(vocations, v)
 					end
 				end
+
 				-- If we prefered to only put promoted vocations, we only show those who are lowered!
 				-- Instead of showing (elite knigts, epic knights, ..), only shows (elite knights)
 				-- It don't get affected by adding different vocations!
@@ -135,6 +139,7 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 						end
 					end
 				end
+
 				for i = 1, #vocations do
 					if i == #vocations then
 						str = str .. (#vocations ~= 1 and " and " or "") .. Vocation(vocations[i]):getName():lower() .. "s"
@@ -142,36 +147,44 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 						str = str .. (i ~= 1 and ", " or "") .. Vocation(vocations[i]):getName():lower() .. "s"
 					end
 				end
+
 				vocations = nil
+
 				if str == "" then
 					str = "players"
 				end
+
 				player:say(string.format(potions.stringOfVocation, str, stats.minLevel), TALKTYPE_MONSTER_SAY)
 				return false
 			end
 		end
+
 		-- Condition exists after the check!
 		if player:getCondition(CONDITION_EXHAUST_HEAL) then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUAREEXHAUSTED))
 			return true
 		end
+	
 		if stats.health then
 			if not doTargetCombatHealth((target.uid == player.uid and player.uid or 0), target, COMBAT_HEALING, stats.health.min * (potions.healthRate and potions.healthRate or 1),
 					stats.health.max * (potions.healthRate and potions.healthRate or 1), CONST_ME_MAGIC_BLUE) then
 				return false
 			end
 		end
+	
 		if stats.mana then
 			if not doTargetCombatMana((target.uid == player.uid and player.uid or 0), target, stats.mana.min * (potions.manaRate and potions.manaRate or 1),
 					stats.mana.max * (potions.manaRate and potions.manaRate or 1), CONST_ME_MAGIC_BLUE) then
 				return false
 			end
 		end
+	
 		if stats.combat then
 			if not stats.combat:execute(target, numberToVariant(target:getId())) then
 				return false
 			end
 		end
+
 		if potions.words then
 			target:say(potions.words, TALKTYPE_MONSTER_SAY)
 		end
@@ -188,6 +201,7 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 			-- Removing should be last part not to cause errors if only 1 potion (nil value).
 			potion:remove(1)
 		end
+
 		-- Access members aren't affected by the exaust!
 		if not player:getGroup():getAccess() then
 			player:addCondition(potions.exhaust) -- Last thing to do is adding condition!
