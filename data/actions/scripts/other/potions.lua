@@ -133,6 +133,7 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 						end
 						return false
 					end
+
 					for k, v in ipairs(stats.vocations) do
 						if not tablefind(stats.vocations, Vocation(v):getDemotion():getId()) then
 							table.insert(vocations, v)
@@ -164,21 +165,21 @@ function onUse(player, potion, fromPosition, target, toPosition, isHotkey)
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUAREEXHAUSTED))
 			return true
 		end
-	
+
 		if stats.health then
 			if not doTargetCombatHealth((target.uid == player.uid and player.uid or 0), target, COMBAT_HEALING, stats.health.min * (potions.healthRate and potions.healthRate or 1),
 					stats.health.max * (potions.healthRate and potions.healthRate or 1), CONST_ME_MAGIC_BLUE) then
 				return false
 			end
 		end
-	
+
 		if stats.mana then
 			if not doTargetCombatMana((target.uid == player.uid and player.uid or 0), target, stats.mana.min * (potions.manaRate and potions.manaRate or 1),
 					stats.mana.max * (potions.manaRate and potions.manaRate or 1), CONST_ME_MAGIC_BLUE) then
 				return false
 			end
 		end
-	
+
 		if stats.combat then
 			if not stats.combat:execute(target, numberToVariant(target:getId())) then
 				return false
