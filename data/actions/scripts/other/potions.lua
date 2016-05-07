@@ -80,7 +80,7 @@ potions = {
 }
 --[[ available custom methods!
 	combat : MetatableCombat
-	
+	condition : MetatableCondition
 ]]
 -- antidote
 local antidote = Combat()
