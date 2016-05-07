@@ -187,7 +187,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 		end
 
-		if potion.condition and potiom.condition:getType() ~= CONDITION_EXHAUST_HEAL then
+		if potion.condition and potion.condition:getType() ~= CONDITION_EXHAUST_HEAL then
 			if not player:addCondition(potion.condition) then
 				return false
 			end
@@ -206,7 +206,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 					Game.createItem(potion.emptyPotion, 1, potion:getPosition())
 				end
 			end
-			-- Removing should be last part not to cause errors if only 1 potion (nil value).
+
+			-- Removing potion at the end to avoid <nil> error.
 			item:remove(1)
 		end
 
