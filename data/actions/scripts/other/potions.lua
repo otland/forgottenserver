@@ -200,7 +200,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if potions.removePotions then
 			if potions.addEmptyPotions and potion.emptyPotion then
 				-- potion's empty potion should be in player's backpack only if the potion was in his backpack!
-				if potion:getTopParent().uid == player.uid then
+				if item:getTopParent().uid == player.uid then
 					player:addItem(potion.emptyPotion)
 				else
 					Game.createItem(potion.emptyPotion, 1, potion:getPosition())
