@@ -203,7 +203,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				if item:getTopParent().uid == player.uid then
 					player:addItem(potion.emptyPotion)
 				else
-					Game.createItem(potion.emptyPotion, 1, potion:getPosition())
+					Game.createItem(potion.emptyPotion, 1, item:getPosition())
 				end
 			end
 
