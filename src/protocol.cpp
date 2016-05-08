@@ -49,12 +49,13 @@ void Protocol::onRecvMessage(NetworkMessage& msg)
 OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 {
 	//dispatcher thread
-	if (outputBuffer && NetworkMessage::MAX_PROTOCOL_BODY_LENGTH >= outputBuffer->getLength() + size) {
-		return outputBuffer;
-	} else {
+	if (!outputBuffer) {
 		outputBuffer = OutputMessagePool::getOutputMessage();
-		return outputBuffer;
+	} else if ((outputBuffer->getLength() + size) > NetworkMessage::MAX_PROTOCOL_BODY_LENGTH) {
+		send(outputBuffer);
+		outputBuffer = OutputMessagePool::getOutputMessage();
 	}
+	return outputBuffer;
 }
 
 void Protocol::XTEA_encrypt(OutputMessage& msg) const
