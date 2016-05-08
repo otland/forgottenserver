@@ -168,14 +168,14 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 
 		if potion.healthToAdd then
-			if not doTargetCombatHealth((target.uid == player.uid and player.uid or 0), target, COMBAT_HEALING, potion.healthToAdd.min * (potions.healthRate and potions.healthRate or 1),
+			if not doTargetCombatHealth(0, target, COMBAT_HEALING, potion.healthToAdd.min * (potions.healthRate and potions.healthRate or 1),
 					potion.healthToAdd.max * (potions.healthRate and potions.healthRate or 1), CONST_ME_MAGIC_BLUE) then
 				return false
 			end
 		end
 
 		if potion.manaToAdd then
-			if not doTargetCombatMana((target.uid == player.uid and player.uid or 0), target, potion.manaToAdd.min * (potions.manaRate and potions.manaRate or 1),
+			if not doTargetCombatMana(0, target, potion.manaToAdd.min * (potions.manaRate and potions.manaRate or 1),
 					potion.manaToAdd.max * (potions.manaRate and potions.manaRate or 1), CONST_ME_MAGIC_BLUE) then
 				return false
 			end
