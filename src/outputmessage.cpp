@@ -72,7 +72,8 @@ void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)
 	//dispatcher thread
 	auto it = std::find(bufferedProtocols.begin(), bufferedProtocols.end(), protocol);
 	if (it != bufferedProtocols.end()) {
-		bufferedProtocols.erase(it);
+		std::swap(*it, bufferedProtocols.back());
+		bufferedProtocols.pop_back();
 	}
 }
 
