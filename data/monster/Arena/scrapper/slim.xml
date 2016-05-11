@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Slim" nameDescription="slim" race="undead" experience="580" speed="200" manacost="0">
+<monster name="Slim" nameDescription="Slim" race="undead" experience="580" speed="200" manacost="0">
 	<health now="1025" max="1025" />
 	<look type="101" corpse="7349" />
 	<flags>
@@ -13,12 +13,15 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="50" />
-		<attack name="poisonfield" interval="1000" chance="50">
-			<attribute key="shootEffect" value="poison" />
-		</attack>
-		<attack name="physical" interval="3049" chance="40" min="-10" max="-50">
+		<attack name="melee" interval="2000" min="0" max="-150" poison="3" />
+		<attack name="lifedrain" interval="2000" chance="20" target="0" radius="3" min="-10" max="-50">
 			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" target="0" radius="3" min="-10" max="-50">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" target="1" min="-10" max="-50">
+			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>
 	<defenses armor="36" defense="38" />
@@ -29,8 +32,6 @@
 	<immunities>
 		<immunity death="1" />
 		<immunity earth="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="5">

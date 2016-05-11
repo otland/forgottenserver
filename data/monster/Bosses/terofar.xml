@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Terofar" nameDescription="a Terofar" race="blood" experience="0" speed="380" manacost="220">
+<monster name="Terofar" nameDescription="Terofar" race="blood" experience="0" speed="380" manacost="220">
 	<health now="15" max="15" />
 	<look type="74" corpse="6017" />
 	<targetchange interval="5000" chance="20" />

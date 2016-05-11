@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Bloodweb" nameDescription="the bloodweb" race="undead" experience="900" speed="340" manacost="0">
+<monster name="The Bloodweb" nameDescription="the Bloodweb" race="undead" experience="900" speed="340" manacost="0">
 	<health now="1250" max="1250" />
 	<look type="263" corpse="7344" />
-	<targetchange speed="20000" chance="8" />
+	<targetchange interval="20000" chance="8" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
@@ -33,15 +33,13 @@
 		</defense>
 	</defenses>
 	<elements>
+		<element firePercent="100" />
+		<element icePercent="100" />
 		<element earthPercent="20" />
 		<element energyPercent="-20" />
 	</elements>
 	<immunities>
-		<immunity fire="1" />
-		<immunity ice="1" />
 		<immunity paralyze="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="5">

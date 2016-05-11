@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ribstride" nameDescription="Ribstride" race="undead" experience="1100" speed="210" manacost="0">
+	<health now="1000" max="1000" />
+	<look type="101" corpse="6030" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" poison="5" />
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-25" max="-47">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" range="7" min="-50" max="-90">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" radius="3" target="0" min="-50" max="-60">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" length="6" spread="0" target="0" min="-70" max="-80">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="1" speedchange="-300" duration="13000" />
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="15" min="30" max="50">
+			<attribute key="areaEffect" value="greenspark" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="-10" />
+		<element holyPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="11194" chance="100000" />				<!-- bony tail -->
+		<item id="5925" countmax="3" chance="98910" />	<!-- hardened bone -->
+		<item id="2152" countmax="8" chance="98910" />	<!-- platinum coin -->
+		<item id="2145" countmax="4" chance="61960" />	<!-- small diamond -->
+		<item id="2541" chance="60000" />				<!-- bone shield -->
+		<item id="2796" countmax="4" chance="60000" />	<!-- green mushroom -->
+		<item id="11161" chance="29000" />				<!-- bonebeast trophy -->
+		<item id="5741" chance="8700" />					<!-- skull helmet -->
+		<item id="13291" chance="2000" />				<!-- maxilla maximus -->
+	</loot>
+</monster>

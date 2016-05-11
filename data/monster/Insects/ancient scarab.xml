@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ancient Scarab" nameDescription="a ancient scarab" race="venom" experience="720" speed="230" manacost="0">
+<monster name="Ancient Scarab" nameDescription="an ancient scarab" race="venom" experience="720" speed="230" manacost="0">
 	<health now="1000" max="1000" />
 	<look type="79" corpse="6021" />
 	<targetchange interval="4000" chance="10" />

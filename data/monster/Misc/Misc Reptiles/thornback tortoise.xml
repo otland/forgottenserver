@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="0" />
+		<flag illusionable="1" />
 		<flag convinceable="1" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40" poison="40" />
+		<attack name="melee" interval="2000" min="0" max="-110" poison="2" />
 	</attacks>
 	<defenses armor="40" defense="40" />
 	<elements>
@@ -27,16 +27,16 @@
 		<element firePercent="-10" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="48" chance="89500" /><!-- gold coin -->
-		<item id="5678" countmax="3" chance="790" /><!-- tortoise egg -->
-		<item id="2667" countmax="2" chance="10800" /><!-- fish -->
-		<item id="7618" chance="1600" /><!-- health potion -->
-		<item id="2789" chance="700" /><!-- brown mushroom -->
-		<item id="2787" chance="1200" /><!-- white mushroom -->
-		<item id="2391" chance="260" /><!-- war hammer -->
-		<item id="10560" chance="15980" /><!-- thorn -->
-		<item id="2143" chance="1600" /><!-- white pearl -->
-		<item id="5899" chance="800" /><!-- turtle shell -->
-		<item id="2144" chance="800" /><!-- black pearl -->
+		<item id="2148" countmax="50" chance="89500" />	<!-- gold coin -->
+		<item id="10560" chance="16000" />				<!-- thorn -->
+		<item id="2667" countmax="2" chance="10800" />	<!-- fish -->
+		<item id="7618" chance="1500" />					<!-- health potion -->
+		<item id="2143" chance="1500" />					<!-- white pearl -->
+		<item id="2787" chance="1300" />					<!-- white mushroom -->
+		<item id="5678" countmax="3" chance="860" />		<!-- tortoise egg -->
+		<item id="5899" chance="800" />					<!-- turtle shell -->
+		<item id="2144" chance="710" />					<!-- black pearl -->
+		<item id="2789" chance="630" />					<!-- brown mushroom -->
+		<item id="2391" chance="240" />					<!-- war hammer -->
 	</loot>
 </monster>

@@ -27,7 +27,7 @@
 		<element energyPercent="-10" />
 		<element deathPercent="-15" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Brrrr" />
 		<voice sentence="Broar!" />
 	</voices>

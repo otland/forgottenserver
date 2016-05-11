@@ -41,7 +41,7 @@
 		<immunity invisible="1" />
 		<immunity fire="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Fchu?" />
 		<voice sentence="Rooawwrr" />
 	</voices>

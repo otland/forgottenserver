@@ -16,13 +16,16 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<defenses armor="0" defense="0" />
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1" />
+	</attacks>
+	<defenses armor="1" defense="1" />
 	<immunities>
 		<immunity earth="1" />
 		<immunity physical="1" />
 		<immunity death="1" />
 	</immunities>
-	<voices interval="5000" chance="11">
+	<voices interval="2000" chance="7">
 		<voice sentence="Welcome to Yalahar, outsider." />
 		<voice sentence="Hail Yalahar." />
 		<voice sentence="You can learn a lot from us." />

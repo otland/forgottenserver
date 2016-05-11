@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Execowtioner" nameDescription="an execowtioner" race="blood" experience="2400" speed="220" manacost="0">
+	<health now="3500" max="3500" />
+	<look type="609" corpse="5962" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-260" />
+		<attack name="death" interval="2000" chance="10" range="3" min="-100" max="-200">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="physical" interval="3000" chance="34" range="7" min="0" max="-280">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40" />
+	<elements>
+		<element physicalPercent="1" />
+		<element deathPercent="15" />
+		<element energyPercent="10" />
+		<element icePercent="10" />
+		<element earthPercent="20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="I'm the one who puts the cute into execute!" />
+		<voice sentence="I'm here to punish!" />
+		<voice sentence="Justice is swift and unavoidable!" />
+		<voice sentence="I'll bring justice!" />
+		<voice sentence="There is excellence in execution!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="186" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="3" chance="65000" />		<!-- platinum coin -->
+		<item id="5878" chance="14000" />					<!-- minotaur leather -->
+		<!-- execowtioner mask -->
+		<item id="7591" chance="9600" />						<!-- great health potion -->
+		<item id="7590" chance="8400" />						<!-- great mana potion -->
+		<item id="2666" chance="6600" />						<!-- meat -->
+		<item id="12428" countmax="2" chance="6000" />		<!-- minotaur horn -->
+		<item id="9970" countmax="2" chance="6000" />		<!-- small topaz -->
+		<item id="2147" countmax="2" chance="4800" />		<!-- small ruby -->
+		<item id="5911" chance="3000" />						<!-- red piece of cloth -->
+		<item id="7412" chance="1800" />						<!-- butcher's axe -->
+		<item id="2487" chance="600" />						<!-- crown armor -->
+		<!-- execowtioner axe -->
+		<item id="9971" chance="600" />						<!-- gold ingot -->
+		<item id="2430" chance="600" />						<!-- knight axe -->
+		<item id="7401" chance="600" />						<!-- minotaur trophy -->
+	</loot>
+</monster>

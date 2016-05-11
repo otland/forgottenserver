@@ -38,7 +38,7 @@
 		<element energyPercent="30" />
 		<element holyPercent="30" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Rumble!" />
 	</voices>
 	<immunities>

@@ -58,7 +58,7 @@
 	<summons maxSummons="2">
 		<summon name="blue djinn" interval="2000" chance="10" max="2" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Simsalabim" />
 		<voice sentence="Feel the power of my magic, tiny mortal!" />
 		<voice sentence="Wishes can come true." />

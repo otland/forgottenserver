@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Silencer" nameDescription="Silencer" race="blood" experience="3800" speed="230" manacost="0">
+<monster name="Silencer" nameDescription="a silencer" race="blood" experience="3800" speed="230" manacost="0">
 	<health now="4900" max="4900" />
 	<look type="585" corpse="22489" />
 	<targetchange interval="4000" chance="5" />
@@ -45,7 +45,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Prrrroooaaaah!!! PRROAAAH!!" />
 		<voice sentence="PRRRROOOOOAAAAAHHHH!!!" />
 		<voice sentence="HUUUSSSSSSSSH!!" />

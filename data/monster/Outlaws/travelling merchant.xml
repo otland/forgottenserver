@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Travelling Merchant" nameDescription="a travelling merchant" race="blood" experience="65" speed="170" manacost="0">
+	<health now="100" max="100" />
+	<look type="132" head="110" body="90" legs="128" feet="95" addons="1" corpse="13176" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="0" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="100" />
+	</flags>
+	<voices interval="2000" chance="7">
+		<voice sentence="It's quite dark in the forest, isn't it?" />
+	</voices>
+</monster>

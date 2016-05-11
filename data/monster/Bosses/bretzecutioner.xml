@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Bretzecutioner" nameDescription="Bretzecutioner" race="undead" experience="3700" speed="270" manacost="0">
+	<health now="5600" max="5600" />
+	<look type="236" corpse="6320" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-514" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-200">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="420" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="25" />
+		<element deathPercent="20" />
+		<element firePercent="30" />
+		<element earthPercent="20" />
+		<element holyPercent="-3" />
+		<element icePercent="-15" />
+	</elements>
+	<immunities>
+		<immunity energy="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="COME HERE AND DIE!" />
+		<voice sentence="Destructiooooon!" />
+		<voice sentence="It's a good day to destroy!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="1" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="98" chance="100000" /><!-- gold coin -->
+		<item id="2666" chance="100000" /><!-- meat -->
+		<item id="6500" chance="64000" /><!-- demonic essence -->
+		<item id="7368" countmax="10" chance="100000" /><!-- assassin star -->
+		<item id="2489" chance="68000" /><!-- dark armor -->
+		<item id="2150" countmax="5" chance="28000" /><!-- small amethyst -->
+		<item id="2146" countmax="5" chance="40000" /><!-- small sapphire -->
+		<item id="2145" countmax="5" chance="32000" /><!-- small diamond -->
+		<item id="11215" chance="100000" /><!-- metal spike -->
+		<item id="7452" chance="32000" /><!-- spike squelcher -->
+		<item id="2152" countmax="8" chance="100000" /><!-- platinum coin -->
+		<item id="2393" chance="24000" /><!-- giant sword -->
+		<item id="7591" countmax="3" chance="44000" /><!-- great health potion -->
+		<item id="7590" countmax="3" chance="44000" /><!-- great mana potion -->
+		<item id="8472" countmax="3" chance="44000" /><!-- great spirit potion -->
+		<item id="7632" chance="48000" /><!-- giant shimmering pearl -->
+		<item id="7633" chance="48000" /><!-- giant shimmering pearl -->
+		<item id="2645" chance="4000" /><!-- steel boots -->
+		<item id="7427" chance="24000" /><!-- chaos mace -->
+		<item id="7419" chance="12000" /><!-- dreaded cleaver -->
+		<item id="2125" chance="24000" /><!-- crystal necklace -->
+		<item id="2521" chance="16000" /><!-- dark shield -->
+		<item id="6300" chance="100000" /><!-- death ring -->
+		<item id="5741" chance="4000" /><!-- skull helmet -->
+	</loot>
+</monster>

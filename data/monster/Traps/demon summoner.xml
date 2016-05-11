@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Demon Summoner" nameDescription="bones" race="undead" experience="0" speed="0" manacost="0">
+	<health now="100" max="100" />
+	<look typeex="460" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="0" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="100" />
+		<flag runonhealth="0" />
+		<flag hidehealth="1" />
+	</flags>
+	<immunities>
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity poison="1" />
+		<immunity ice="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<defenses>
+		<defense name="healing" interval="2000" chance="30" min="0" max="0">
+			<attribute key="areaEffect" value="mortarea" />
+		</defense>
+	</defenses>
+	<summons maxSummons="1">
+		<summon name="Demon" interval="1000" chance="100" />
+	</summons>
+</monster>

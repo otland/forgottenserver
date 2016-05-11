@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Teleskor" nameDescription="Teleskor" race="undead" experience="70" speed="150" manacost="0">
+	<health now="80" max="80" />
+	<look type="298" corpse="5972" />
+	<targetchange interval="4000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element holyPercent="-5" />
+	</elements>
+	<voices interval="2000" chance="7">
+		<voice sentence="Who disturbs my slumber?" />
+		<voice sentence="Mourn the dead, do not hunt them!" />
+	</voices>
+	<loot>
+		<item id="12437" chance="100000" />				<!-- pelvis bone -->
+		<item id="2148" countmax="79" chance="81000" />	<!-- gold coin -->
+		<item id="2398" chance="72000" />				<!-- mace -->
+		<item id="2473" chance="72000" />				<!-- viking helmet -->
+		<item id="2511" chance="45000" />				<!-- brass shield -->
+		<item id="2050" chance="36000" />				<!-- torch -->
+		<item id="2388" chance="27000" />				<!-- hatchet -->
+		<item id="2376" chance="27000" />				<!-- sword -->
+	</loot>
+</monster>

@@ -39,7 +39,7 @@
 		<immunity fire="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="You like it, don't you?" />
 		<voice sentence="IahaEhheAie!" />
 		<voice sentence="It's party time!" />

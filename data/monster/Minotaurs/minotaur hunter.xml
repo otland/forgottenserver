@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Hunter" nameDescription="a minotaur hunter" race="blood" experience="1700" speed="200" manacost="0">
+	<health now="1400" max="1400" />
+	<look type="612" corpse="23466" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="100" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="2000" chance="15" range="7" target="1" radius="3" min="0" max="-135">
+			<attribute key="shootEffect" value="throwingknife" />
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="30" range="7" radius="2" target="1" min="0" max="-245">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="4" target="0" min="0" max="-45">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="4000" chance="15" min="130" max="245">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="10" />
+		<element holyPercent="1" />
+		<element icePercent="-1" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="You are marked for death!" />
+		<voice sentence="This time the prey is you!" />
+		<voice sentence="You are hunted!" />
+		<voice sentence="You'll make a fine trophy!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="199" chance="99500" />	<!-- gold coin -->
+		<item id="2152" countmax="3" chance="33000" />	<!-- platinum coin -->
+		<item id="3965" countmax="5" chance="15000" />	<!-- hunting spear -->
+		<item id="2260" countmax="2" chance="13000" />	<!-- blank rune -->
+		<item id="7378" countmax="5" chance="11000" />	<!-- royal spear -->
+		<item id="7589" countmax="2" chance="10000" />	<!-- strong mana potion -->
+		<item id="7588" countmax="2" chance="10000" />	<!-- strong health potion -->
+		<item id="5944" chance="7500" />					<!-- soul orb -->
+		<item id="5878" chance="5000" />					<!-- minotaur leather -->
+		<item id="12428" countmax="2" chance="4700" />	<!-- minotaur horn -->
+		<item id="2147" countmax="3" chance="2600" />	<!-- small ruby -->
+		<item id="2150" countmax="3" chance="2500" />	<!-- small amethyst -->
+		<item id="2165" chance="2200" />					<!-- stealth ring -->
+		<item id="5912" chance="1600" />					<!-- blue piece of cloth -->
+		<item id="5910" chance="1400" />					<!-- green piece of cloth -->
+		<item id="5911" chance="1300" />					<!-- red piece of cloth -->
+		<item id="23546" chance="750" />					<!-- mino shield -->
+		<item id="2154" chance="470" />					<!-- yellow gem -->
+		<item id="2156" chance="400" />					<!-- red gem -->
+		<item id="7401" chance="190" />					<!-- minotaur trophy -->
+		<item id="23537" chance="110" />					<!-- mooh'tah plate -->
+	</loot>
+</monster>

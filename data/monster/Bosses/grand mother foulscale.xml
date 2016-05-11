@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Grand Mother Foulscale" nameDescription="a grand mother foulscale" race="blood" experience="1400" speed="180" manacost="0">
+<monster name="Grand Mother Foulscale" nameDescription="Grand Mother Foulscale" race="blood" experience="1400" speed="180" manacost="0">
 	<health now="1850" max="1850" />
 	<look type="34" corpse="5973" />
 	<targetchange interval="5000" chance="8" />
@@ -44,7 +44,7 @@
 	<summons maxSummons="4">
 		<summon name="dragon hatchlings" interval="4000" chance="40" max="4" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="GROOAAARRR" yell="1" />
 		<voice sentence="FCHHHHH" yell="1" />
 	</voices>

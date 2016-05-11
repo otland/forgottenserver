@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Acolyte of the Cult" nameDescription="an acolyte of the cult" race="blood" experience="300" speed="200" manacost="0">
+<monster name="Acolyte Of The Cult" nameDescription="an acolyte of the cult" race="blood" experience="300" speed="200" manacost="0">
 	<health now="390" max="390" />
-	<look type="194" head="114" body="121" legs="121" feet="57" corpse="20319" />
+	<look type="194" head="114" body="121" legs="121" feet="57" corpse="20322" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -46,7 +46,7 @@
 	<summons maxSummons="1">
 		<summon name="Skeleton" interval="2000" chance="10" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Praise the voodoo!" />
 		<voice sentence="Power to the cult!" />
 		<voice sentence="Feel the power of the cult!" />

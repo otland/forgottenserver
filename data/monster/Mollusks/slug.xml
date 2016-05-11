@@ -17,8 +17,8 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="16" />
-		<attack name="poison" interval="1000" chance="15" range="7" target="1" min="-5" max="-40">
+		<attack name="melee" interval="2000" min="0" max="-45" />
+		<attack name="poison" interval="1000" chance="15" range="7" min="0" max="-40">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>
@@ -27,8 +27,15 @@
 		<element energyPercent="20" />
 		<element deathPercent="7" />
 	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Sluuurz" />
+		<voice sentence="Sluuuurp" />
+	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="62000" /><!-- gold coin -->
-		<item id="3976" countmax="3" chance="5000" /><!-- worm -->
+		<item id="2148" countmax="40" chance="62000" />	<!-- gold coin -->
+		<item id="3976" countmax="3" chance="5000" />	<!-- worm -->
 	</loot>
 </monster>

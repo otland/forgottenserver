@@ -28,7 +28,7 @@
 	<defenses armor="10" defense="10">
 		<defense name="invisible" interval="2000" chance="15" duration="3000" />
 	</defenses>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Luuurrrp" />
 	</voices>
 	<loot>

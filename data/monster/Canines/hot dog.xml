@@ -36,7 +36,7 @@
 		<element holyPercent="-5" />
 		<element physicalPercent="-20" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Wuff Wuff" />
 		<voice sentence="Grrr Wuff" />
 		<voice sentence="Show me how good you are without some rolled newspaper!" />

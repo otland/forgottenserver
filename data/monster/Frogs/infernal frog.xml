@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Infernal Frog" nameDescription="a infernal frog" race="blood" experience="190" speed="220" manacost="0">
+<monster name="Infernal Frog" nameDescription="an infernal frog" race="blood" experience="190" speed="220" manacost="0">
 	<health now="655" max="655" />
 	<look type="224" head="69" body="66" legs="69" feet="66" corpse="6079" />
 	<targetchange interval="4000" chance="10" />
@@ -31,7 +31,7 @@
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Ribbit!" />
 		<voice sentence="Ribbit! Ribbit!" />
 		<voice sentence="No Kisses for you!" />

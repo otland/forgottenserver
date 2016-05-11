@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Wounded Cave Draptor" nameDescription="a wounded cave draptor" race="blood" experience="150" speed="150" manacost="0">
+	<health now="10" max="10" />
+	<look type="596" corpse="22686" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="9" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-3" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<loot>
+		<item id="2148" countmax="3" chance="100000" />	<!-- gold coin -->
+	</loot>
+</monster>

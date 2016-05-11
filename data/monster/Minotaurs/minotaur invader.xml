@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Invader" nameDescription="a minotaur invader" race="blood" experience="1600" speed="250" manacost="0">
+	<health now="1850" max="1850" />
+	<look type="29" corpse="5983" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element firePercent="20" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2148" countmax="160" chance="59640" />	<!-- gold coin -->
+		<item id="12428" countmax="2" chance="8330" />	<!-- minotaur horn -->
+		<item id="12438" chance="5040" />				<!-- piece of warrior armor -->
+		<item id="2465" chance="4390" />					<!-- brass armor -->
+		<item id="2464" chance="3000" />					<!-- chain armor -->
+		<item id="2513" chance="2000" />					<!-- battle shield -->
+		<item id="5878" chance="1000" />					<!-- minotaur leather -->
+		<item id="2580" chance="480" />					<!-- fishing rod -->
+		<item id="2387" chance="400" />					<!-- double axe -->
+		<item id="7618" chance="370" />					<!-- health potion -->
+		<item id="7401" chance="90" />					<!-- minotaur trophy -->
+	</loot>
+</monster>

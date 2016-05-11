@@ -20,7 +20,7 @@
 		<attack name="melee" interval="2000" skill="10" attack="24" />
 	</attacks>
 	<defenses armor="5" defense="5" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Ribbit!" />
 		<voice sentence="Ribbit! Ribbit!" />
 	</voices>

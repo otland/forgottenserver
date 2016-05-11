@@ -31,7 +31,7 @@
 		<element icePercent="-15" />
 		<element deathPercent="-5" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Hugah!" />
 		<voice sentence="Ungh! Ungh!" />
 		<voice sentence="Huaauaauaauaa!" />

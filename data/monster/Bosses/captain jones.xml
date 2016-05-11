@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Captain Jones" nameDescription="Captain Jones" race="undead" experience="825" speed="170" manacost="0">
+	<health now="800" max="800" />
+	<look type="196" corpse="5566" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-95" poison="2" />
+		<attack name="lifedrain" interval="2000" chance="15" radius="1" min="-30" max="-80">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" radius="1" target="1" range="1" min="-130" max="-150">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="5" target="1" range="3" monster="Skeleton" duration="4000">
+			<attribute key="shootEffect" value="explosion" />
+		</attack>
+	</attacks>
+	<defenses>
+		<defense name="healing" interval="2000" chance="5" min="40" max="70">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-15" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity lifedrain="1" />
+		<immunity physical="1" />
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<loot>
+		<item id="2148" countmax="150" chance="100000" />	<!-- gold coin -->
+		<item id="2165" chance="33000" />					<!-- stealth ring -->
+		<item id="10601" chance="13700" />					<!-- tattered piece of robe -->
+		<item id="2488" chance="5070" />						<!-- crown legs -->
+		<item id="8871" chance="3070" />						<!-- focus cape -->
+		<item id="2655" chance="1110" />						<!-- red robe -->
+		<item id="2383" chance="1110" />						<!-- spike sword -->
+	</loot>
+</monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Boogey" nameDescription="a boogey" race="undead" experience="475" speed="400" manacost="0">
+<monster name="Boogey" nameDescription="Boogey" race="undead" experience="475" speed="400" manacost="0">
 	<health now="930" max="930" />
 	<look type="300" corpse="10324" />
 	<targetchange interval="5000" chance="10" />
@@ -27,12 +27,11 @@
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
 		<attack name="physical" interval="1500" chance="40" lenght="8" spread="3" min="-20" max="-30">
-			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 	</attacks>
-	<defenses armor="50" defense="50">
-		<defense name="healing" interval="1000" chance="25" min="80" max="120">
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="25" min="80" max="120">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -49,7 +48,7 @@
 		<immunity lifedrain="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Since you didn't eat your spinach Bogey comes to get you!" yell="1" />
 		<voice sentence="Too bad you did not eat your lunch, now I have to punish you!" yell="1" />
 		<voice sentence="Even if you beat me, I'll hide in your closet until you one day drop your guard!" yell="1" />
@@ -57,6 +56,12 @@
 		<voice sentence="I'll take you into the darkness ... forever!" yell="1" />
 	</voices>
 	<summons maxSummons="2">
-		<summon name="demon skeleton" interval="4000" chance="40" max="2" />
+		<summon name="Demon Skeleton" interval="4000" chance="40" />
 	</summons>
+	<loot>
+		<item id="10296" chance="1000" />	<!-- heavy metal t-shirt -->
+		<item id="10302" chance="1000" />	<!-- club of the fury -->
+		<item id="10301" chance="1000" />	<!-- scythe of the reaper -->
+		<item id="10295" chance="1000" />	<!-- musician's bow -->
+	</loot>
 </monster>

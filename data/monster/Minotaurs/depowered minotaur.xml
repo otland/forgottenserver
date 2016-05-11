@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Depowered Minotaur" nameDescription="a depowered minotaur" race="blood" experience="1100" speed="170" manacost="0">
+	<health now="1500" max="1500" />
+	<look type="25" corpse="5969" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-245" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element firePercent="20" />
+		<element holyPercent="10" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2148" countmax="100" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="4" chance="67000" />		<!-- platinum coin -->
+		<item id="2147" chance="67000" />					<!-- small ruby -->
+		<item id="7588" countmax="2" chance="67000" />		<!-- strong health potion -->
+		<item id="2666" countmax="3" chance="34000" />		<!-- meat -->
+		<item id="2145" chance="34000" />					<!-- small diamond -->
+	</loot>
+</monster>

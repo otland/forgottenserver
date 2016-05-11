@@ -19,7 +19,7 @@
 		<attack name="melee" interval="2000" skill="24" attack="15" />
 	</attacks>
 	<defenses armor="7" defense="10" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Work, work!" />
 		<voice sentence="Intruders in the mines!" />
 		<voice sentence="Mine, all mine!" />

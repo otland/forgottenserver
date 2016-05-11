@@ -20,7 +20,6 @@
 		<attack name="melee" interval="2000" skill="30" attack="25" />
 		<attack name="death" interval="2000" chance="15" range="7" min="-50" max="-80">
 			<attribute key="shootEffect" value="suddendeath" />
-			<attribute key="areaEffect" value="mortarea" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 		<attack name="manadrain" interval="2000" chance="10" target="0" radius="3" min="-5" max="-80">
@@ -56,7 +55,7 @@
 		<immunity lifedrain="1" />
 		<immunity physical="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Oh my, you forgot to put your pants on!" />
 		<voice sentence="Weeheeheeheehee!" />
 		<voice sentence="Its nothing but a dream!" />

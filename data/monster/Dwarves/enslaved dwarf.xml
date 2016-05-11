@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Enslaved Dwarf" nameDescription="enslaved dwarf" race="blood" experience="2900" speed="280" manacost="0">
+<monster name="Enslaved Dwarf" nameDescription="an enslaved dwarf" race="blood" experience="2900" speed="280" manacost="0">
 	<health now="4200" max="4200" />
 	<look type="494" corpse="17408" />
 	<targetchange interval="4000" chance="10" />
@@ -47,7 +47,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Bark!" />
 		<voice sentence="Blood!" />
 	</voices>

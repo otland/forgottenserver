@@ -33,7 +33,7 @@
 		<element earthPercent="-10" />
 		<element deathPercent="-5" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Outis emoi g' onoma." />
 		<voice sentence="Whack da humy!" />
 		<voice sentence="Ai humy phary ty kaynon" />

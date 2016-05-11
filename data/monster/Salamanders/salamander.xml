@@ -3,40 +3,40 @@
 	<health now="70" max="70" />
 	<look type="529" corpse="19707" />
 	<targetchange interval="4000" chance="10" />
+	<strategy attack="90" defense="10" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="0" />
 		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="30" poison="10" />
+		<attack name="melee" interval="2000" min="0" max="-11" poison="1" />
 	</attacks>
 	<defenses armor="5" defense="5">
 		<defense name="healing" interval="6000" chance="20" min="0" max="4">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Chrrch!" />
-		<voice sentence="Chhh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="60000" /><!-- Gold Coin -->
-		<item id="2544" countmax="3" chance="7890" /><!-- Arrows -->
-		<item id="7618" chance="840" /><!-- HP -->
-		<item id="2120" chance="4700" /><!-- Rope -->
-		<item id="2456" chance="1090" /><!-- Bow -->
-		<item id="2398" chance="3780" /><!-- Mace -->
-		<item id="2460" chance="2180" /><!-- Brass Helmet -->
-		<item id="2419" chance="420" /><!-- Scimitar -->
-		<item id="19736" countmax="5" chance="32830" /><!-- Insectoid Eggs -->
+		<item id="2148" countmax="15" chance="72000" />	<!-- gold coin -->
+		<item id="19737" countmax="5" chance="33000" />	<!-- insectoid eggs -->
+		<item id="2544" countmax="3" chance="7890" />	<!-- arrow -->
+		<item id="2120" chance="4700" />					<!-- rope -->
+		<item id="2398" chance="3780" />					<!-- mace -->
+		<item id="2460" chance="2180" />					<!-- brass helmet -->
+		<item id="2456" chance="1100" />					<!-- bow -->
+		<item id="7618" chance="860" />					<!-- health potion -->
+		<item id="2419" chance="390" />					<!-- scimitar -->
 	</loot>
 </monster>

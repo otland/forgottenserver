@@ -17,7 +17,7 @@
 		<flag runonhealth="100" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-145" />
 		<attack name="physical" interval="2000" chance="20" length="5" spread="3" min="0" max="-200">
 			<attribute key="areaEffect" value="yellowspark" />
 		</attack>
@@ -26,7 +26,7 @@
 		<defense name="invisible" interval="2000" chance="10" duration="2000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
-		<defense name="healing" interval="2000" chance="10" min="150" max="300">
+		<defense name="healing" interval="2000" chance="10" min="150" max="200">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -41,21 +41,20 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="GRAAARRRRRR" />
 		<voice sentence="CHHHHHHHHHHH" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="5" chance="50000" /><!-- gold coin -->
-		<item id="11210" chance="20130" /><!-- striped fur -->
-		<item id="2666" countmax="2" chance="29500" /><!-- meat -->
-		<item id="11228" chance="10600" /><!-- sabretooth -->
-		<item id="2168" chance="5580" /><!-- life ring -->
-		<item id="7588" chance="6000" /><!-- strong health potion -->
-		<item id="2515" chance="380" /><!-- guardian shield -->
-		<item id="7454" chance="870" /><!-- glorius axe -->
-		<item id="7436" chance="440" /><!-- angelic axe -->
-		<item id="9959" chance="730" /><!-- Silky Tapestry -->
+		<item id="2148" countmax="105" chance="100000" />	<!-- gold coin -->
+		<item id="2666" countmax="2" chance="29500" />		<!-- meat -->
+		<item id="11210" chance="20130" />					<!-- striped fur -->
+		<item id="11228" chance="10600" />					<!-- sabretooth -->
+		<item id="7588" chance="6000" />						<!-- strong health potion -->
+		<item id="2168" chance="5580" />						<!-- life ring -->
+		<item id="7454" chance="880" />						<!-- glorius axe -->
+		<item id="9959" chance="780" />						<!-- silky tapestry -->
+		<item id="2515" chance="440" />						<!-- guardian shield -->
+		<item id="7436" chance="380" />						<!-- angelic axe -->
 	</loot>
 </monster>

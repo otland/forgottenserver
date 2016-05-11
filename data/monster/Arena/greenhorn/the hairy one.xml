@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Hairy One" nameDescription="the hairy one" race="blood" experience="115" speed="240" manacost="0">
+<monster name="The Hairy One" nameDescription="The Hairy One" race="blood" experience="115" speed="240" manacost="0">
 	<health now="325" max="325" />
 	<look type="116" corpse="7349" />
 	<flags>
@@ -21,8 +21,6 @@
 		<element firePercent="-20" />
 	</elements>
 	<immunities>
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="5">

@@ -40,7 +40,7 @@
 	<summons maxSummons="3">
 		<summon name="Evil Sheep" interval="2000" chance="30" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="You can COUNT on us!" />
 		<voice sentence="Maeh!" />
 		<voice sentence="I feel you're getting sleepy! Maeh!" />

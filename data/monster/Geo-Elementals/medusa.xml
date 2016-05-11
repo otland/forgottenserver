@@ -25,7 +25,7 @@
 		<attack name="earth" interval="2000" chance="15" length="8" spread="3" min="-250" max="-500">
 			<attribute key="areaEffect" value="carniphila" />
 		</attack>
-		<attack name="speed" interval="2000" chance="25" radius="7" target="1" speedchange="-900">
+		<attack name="speed" interval="4000" chance="20" radius="7" target="1" speedchange="-400">
 			<attribute key="areaEffect" value="poff" />
 		</attack>
 		<attack name="outfit" interval="2000" chance="1" target="1" range="7" monster="clay guardian" duration="3000" />
@@ -47,7 +47,7 @@
 		<immunity lifedrain="1" />
 		<immunity drown="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="You will make ssuch a fine ssstatue!" />
 		<voice sentence="There isss no chhhanccce of esscape" />
 		<voice sentence="Jusssst look at me!" />

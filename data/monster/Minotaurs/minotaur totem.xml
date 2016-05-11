@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Totem" nameDescription="a minotaur totem" race="undead" experience="0" speed="0" manacost="0">
+	<health now="5000" max="5000" />
+	<look typeex="3802" />
+	<targetchange interval="5000" chance="16" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag hidehealth="1" />
+	</flags>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="4000" chance="15" min="10" max="1000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+</monster>

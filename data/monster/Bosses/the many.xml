@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Many" nameDescription="the many" race="blood" experience="4000" speed="260" manacost="0">
-	<health now="4600" max="4600" />
+<monster name="The Many" nameDescription="The Many" race="blood" experience="4000" speed="260" manacost="0">
+	<health now="5000" max="5000" />
 	<look type="121" corpse="6048" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -17,31 +17,29 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="60" />
-		<attack name="earth" interval="2000" chance="7" length="8" spread="3" min="-65" max="-320">
-			<attribute key="areaEffect" value="smallplants" />
+		<attack name="melee" interval="2000" min="0" max="-270" />
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-65" max="-320">
+			<attribute key="areaEffect" value="carniphila" />
 		</attack>
-		<attack name="speed" interval="2000" chance="8" range="7" radius="4" target="1" speedchange="-360" duration="15000">
+		<attack name="speed" interval="2000" chance="25" range="7" radius="4" target="1" speedchange="-300" duration="15000">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
-		<attack name="ice" interval="2000" chance="9" length="8" spread="3" min="-100" max="-250">
+		<attack name="ice" interval="2000" chance="10" length="8" spread="3" min="-100" max="-250">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
-		<attack name="ice" interval="2000" chance="10" range="7" target="1" min="-70" max="-155">
+		<attack name="ice" interval="2000" chance="10" range="7" min="-70" max="-155">
 			<attribute key="shootEffect" value="ice" />
 			<attribute key="areaEffect" value="iceattack" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="35">
-		<defense name="healing" interval="2000" chance="30" min="420" max="500">
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="20" min="260" max="407">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="50" />
 		<element holyPercent="30" />
-		<element physicalPercent="-5" />
 		<element energyPercent="-10" />
 	</elements>
 	<immunities>
@@ -50,19 +48,16 @@
 		<immunity invisible="1" />
 		<immunity earth="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="FCHHHHH" />
-		<voice sentence="HISSSS" />
-	</voices>
 	<loot>
-		<item id="7589" countmax="2" chance="100000" /><!-- strong mana potion -->
-		<item id="2146" countmax="5" chance="56325" /><!-- small sapphire -->
-		<item id="9971" countmax="3" chance="47725" /><!-- gold ingot -->
-		<item id="2197" chance="100000" /><!-- stone skin amulet -->
-		<item id="10523" chance="100000" /><!-- egg of the many -->
-		<item id="10219" chance="75500" /><!-- sacred tree amulet -->
-		<item id="2536" chance="75500" /><!-- medusa shield -->
-		<item id="2498" chance="25500" /><!-- royal helmet -->
-		<item id="2475" chance="75500" /><!-- warrior helmet -->
+		<item id="2197" chance="90000" />				<!-- stone skin amulet -->
+		<item id="7589" countmax="5" chance="83000" />	<!-- strong mana potion -->
+		<item id="10219" chance="80000" />				<!-- sacred tree amulet -->
+		<item id="2475" chance="79000" />				<!-- warrior helmet -->
+		<item id="2146" countmax="5" chance="77000" />	<!-- small sapphire -->
+		<item id="9971" countmax="3" chance="60000" />	<!-- gold ingot -->
+		<item id="2536" chance="53000" />				<!-- medusa shield -->
+		<item id="10523" chance="37000" />				<!-- egg of the many -->
+		<item id="2498" chance="20000" />				<!-- royal helmet -->
+		<item id="2476" chance="10000" />				<!-- knight armor -->
 	</loot>
 </monster>

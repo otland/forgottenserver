@@ -28,7 +28,7 @@
 		<element icePercent="5" />
 		<element earthPercent="-5" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Rrrawk! Rrrrawk!" />
 	</voices>
 	<loot>
@@ -36,8 +36,8 @@
 		<item id="3976" countmax="2" chance="15000" /><!-- Worms -->
 		<item id="2667" countmax="2" chance="20290" /><!-- Fish -->
 		<item id="2666" countmax="2" chance="20360" /><!-- Meat -->
-		<item id="19740" chance="7180" /><!-- Marsh Stalker Beak -->
-		<item id="19741" chance="9300" /><!-- Marsh Stalker Feather -->
+		<item id="19741" chance="7180" /><!-- Marsh Stalker Beak -->
+		<item id="19742" chance="9300" /><!-- Marsh Stalker Feather -->
 		<item id="2397" chance="7180" /><!-- Longsword -->
 		<item id="7732" chance="120" /><!-- seeds -->
 		<item id="2120" chance="4530" /><!-- rope -->

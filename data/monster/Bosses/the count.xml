@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Count" nameDescription="the count" race="undead" experience="1750" speed="370" manacost="0">
-	<health now="4600" max="4600" />
+<monster name="The Count" nameDescription="the Count" race="undead" experience="450" speed="370" manacost="0">
+	<health now="1250" max="1250" />
 	<look type="287" corpse="8937" />
 	<targetchange interval="5000" chance="10" />
 	<flags>
@@ -17,9 +17,9 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="130" attack="135" />
+		<attack name="melee" interval="2000" skill="120" min="-80" max="-135" />
 		<attack name="lifedrain" interval="1000" chance="9" target="0" radius="4" min="0" max="-300">
-			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">
@@ -39,7 +39,7 @@
 		<immunity death="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<summons maxSummons="1">
+		<summons maxSummons="1">
 		<summon name="Banshee" interval="4000" chance="50" />
 	</summons>
 	<loot>

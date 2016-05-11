@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Furyosa" nameDescription="Furyosa" race="blood" experience="11500" speed="270" manacost="0">
+	<health now="25000" max="25000" />
+	<look type="149" head="94" body="77" legs="96" feet="0" addons="3" corpse="20399" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-625" />
+		<attack name="death" interval="2000" chance="20" target="0" radius="6" min="-260" max="-310">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" length="8" spread="0" min="-50" max="-210">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-200" max="-300">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="5" length="8" spread="0" min="-300" max="-800">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="3000" chance="18" radius="5" target="1" min="0" max="-150">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="fury skill reducer" interval="2000" chance="5" />
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="invisible" interval="2000" chance="10" duration="8000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="7000" chance="20" min="500" max="700">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="40" />
+		<element holyPercent="40" />
+		<element deathPercent="10" />
+		<element energyPercent="10" />
+		<element physicalPercent="10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity fire="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Fury" interval="2000" chance="10" />
+	</summons>
+	<voices interval="2000" chance="7">
+		<voice sentence="MUHAHA!" />
+		<voice sentence="Back in black!" />
+		<voice sentence="Die!" />
+		<voice sentence="Dieeee!" />
+		<voice sentence="Caaarnaaage!" />
+		<voice sentence="Ahhhhrrrr!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="200" chance="100000" />	<!-- gold coin -->
+		<item id="8844" countmax="5" chance="100000" />		<!-- jalapeño peppers -->
+		<item id="21400" chance="45000" />					<!-- silver raid token -->
+		<item id="2152" countmax="25" chance="85000" />		<!-- platinum coin -->
+		<item id="6558" countmax="3" chance="35000" /><!-- concentrated demonic blood -->
+		<item id="6500" chance="22500" /><!-- demonic essence -->
+		<item id="2470" chance="130" /><!-- golden legs -->
+		<item id="7591" chance="10500" /><!-- great health potion -->
+		<item id="2666" chance="25000" /><!-- meat -->
+		<item id="7456" chance="2000" /><!-- noble axe -->
+		<item id="5022" countmax="4" chance="1500" /><!-- orichalcum pearl -->
+		<item id="5911" chance="4000" /><!-- red piece of cloth -->
+		<item id="9813" chance="1920" /><!-- rusty legs -->
+		<item id="2120" countmax="3" chance="8000" /><!-- small amethyst -->
+		<item id="5944" chance="21500" /><!-- soul orb -->
+		<item id="2645" chance="790" /><!-- steel boots -->
+		<item id="2181" chance="20000" /><!-- terra rod -->
+		<item id="7404" chance="660" /><!-- assassin dagger -->
+		<item id="5944" chance="50" /><!-- assassin star -->
+		<item id="2124" chance="410" /><!-- crystal ring -->
+		<item id="6301" chance="60" /><!-- death ring -->
+		<item id="2539" chance="100" />						<!-- phoenix shield -->
+		<item id="21725" chance="100" />						<!-- furious frock -->
+	</loot>
+</monster>

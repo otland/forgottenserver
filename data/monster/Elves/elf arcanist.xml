@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Elf Arcanist" nameDescription="a elf arcanist" race="blood" experience="175" speed="170" manacost="0">
+<monster name="Elf Arcanist" nameDescription="an elf arcanist" race="blood" experience="175" speed="170" manacost="0">
 	<health now="220" max="220" />
 	<look type="63" corpse="6011" />
 	<targetchange interval="4000" chance="10" />
@@ -28,7 +28,6 @@
 		<attack name="death" interval="2000" chance="10" range="7" min="-70" max="-85">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="smallclouds" />
-			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15">
@@ -45,7 +44,7 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Feel my wrath!" />
 		<voice sentence="For the Daughter of the Stars!" />
 		<voice sentence="I'll bring balance upon you!" />

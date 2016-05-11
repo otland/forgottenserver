@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Brutus Bloodbeard" nameDescription="Brutus Bloodbeard" race="blood" experience="500" speed="240" manacost="0">
-	<health now="1200" max="1200" />
+<monster name="Brutus Bloodbeard" nameDescription="Brutus Bloodbeard" race="blood" experience="795" speed="240" manacost="0">
+	<health now="1555" max="1555" />
 	<look type="98" corpse="20478" />
 	<targetchange interval="60000" chance="0" />
 	<flags>
@@ -11,24 +11,36 @@
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag staticattack="50" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-450" max="-500" /><!--		<attack name="drunk explosion" interval="2000" />-->
+		<attack name="melee" interval="2000" min="0" max="-175" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-175">
+			<attribute key="shootEffect" value="throwingstar" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" length="3" spread="2" duration="5000">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
 	</attacks>
 	<defenses armor="35" defense="50" />
+	<elements>
+		<element energyPercent="-1" />
+		<element holyPercent="1" />
+		<element icePercent="-1" />
+	</elements>
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="6099" chance="100000" /><!-- brutus bloodbeard's hat -->
-		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
-		<item id="2476" chance="1200" /><!-- knight armor -->
-		<item id="2463" chance="4000" /><!-- plate armor -->
-		<item id="2320" chance="100000" /><!-- skull -->
+		<item id="6099" chance="100000" />					<!-- brutus bloodbeard's hat -->
+		<item id="2148" countmax="200" chance="100000" />	<!-- gold coin -->
+		<item id="2229" countmax="2" chance="75000" />		<!-- skull -->
+		<item id="2379" chance="25000" />					<!-- dagger -->
+		<item id="2476" chance="25000" />					<!-- knight armor -->
+		<item id="2666" chance="25000" />					<!-- meat -->
+		<item id="2463" chance="25000" />					<!-- plate armor -->
 	</loot>
 </monster>

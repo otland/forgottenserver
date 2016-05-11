@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Darakan the Executioner" nameDescription="darakan the executioner" race="blood" experience="1600" speed="205" manacost="0">
+<monster name="Darakan The Executioner" nameDescription="Darakan The Executioner" race="blood" experience="1600" speed="205" manacost="0">
 	<health now="3500" max="3500" />
 	<look type="255" head="78" body="114" legs="114" feet="114" corpse="7349" />
 	<flags>
@@ -28,8 +28,6 @@
 		<element firePercent="-15" />
 	</elements>
 	<immunities>
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="5">

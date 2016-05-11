@@ -27,7 +27,6 @@
 		<immunity fire="1" />
 		<immunity poison="1" />
 		<immunity lifedrain="1" />
-		<immunity drunk="1" />
 	</immunities>
 	<loot>
 		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->

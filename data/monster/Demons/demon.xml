@@ -31,7 +31,7 @@
 		</attack>
 		<attack name="energy strike" interval="2000" chance="10" range="1" min="-210" max="-300">
 		</attack>
-		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-700" duration="30000">
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-300" duration="30000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
@@ -61,7 +61,7 @@
 	<summons maxSummons="1">
 		<summon name="fire elemental" interval="2000" chance="10" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Your soul will be mine!" />
 		<voice sentence="MUHAHAHAHA!" />
 		<voice sentence="CHAMEK ATH UTHUL ARAK!" />

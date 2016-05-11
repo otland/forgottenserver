@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Man in the Cave" nameDescription="man in the cave" race="blood" experience="555" speed="210" manacost="0">
+<monster name="Man In The Cave" nameDescription="man in the cave" race="blood" experience="770" speed="210" manacost="0">
 	<health now="485" max="485" />
-	<look type="128" head="95" body="116" legs="95" feet="114" addons="2" corpse="20446" />
+	<look type="128" head="77" body="59" legs="20" feet="116" addons="1" corpse="20446" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
@@ -14,23 +14,23 @@
 		<flag canpushcreatures="0" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
+		<flag runonhealth="50" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="30" />
-		<attack name="physical" interval="2000" chance="20" range="7" min="-10" max="-95">
+		<attack name="melee" interval="2000" min="0" max="-62" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-95">
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
-		<attack name="lifedrain" interval="1000" chance="100" range="1" min="-20" max="-30">
-			<attribute key="areaEffect" value="redshimmer" />
-		</attack>
 	</attacks>
-	<defenses armor="14" defense="10" />
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="12" speedchange="250" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="25" min="10" max="50">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
-		<immunity fire="1" />
-		<immunity lifedrain="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="5">
@@ -40,19 +40,14 @@
 		<voice sentence="A MIC to rule them all!" />
 	</voices>
 	<summons maxSummons="2">
-		<summon name="Monk" interval="2000" chance="20" max="1" />
+		<summon name="Monk" interval="2000" chance="20" />
 	</summons>
 	<loot>
-		<item id="2148" countmax="27" chance="100000" /><!-- gold coin -->
-		<item id="2120" chance="20000" /><!-- rope -->
-		<item id="2120" chance="6666" /><!-- rope -->
-		<item id="2120" chance="3333" /><!-- rope -->
-		<item id="2691" chance="4000" /><!-- brown bread -->
-		<item id="5913" chance="2000" /><!-- brown piece of cloth -->
-		<item id="7290" chance="4000" /><!-- shard -->
-		<item id="7463" chance="6666" /><!-- mammoth fur cape -->
-		<item id="7386" chance="6666" /><!-- mercenary sword -->
-		<item id="7458" chance="1000" /><!-- fur cap -->
-		<item id="2173" chance="500" /><!-- amulet of loss -->
+		<item id="2120" countmax="3" chance="100000" />	<!-- rope -->
+		<item id="7386" chance="38000" />				<!-- mercenary sword -->
+		<item id="5913" chance="30000" />				<!-- brown piece of cloth -->
+		<item id="2148" countmax="39" chance="30000" />	<!-- gold coin -->
+		<item id="7458" chance="15000" />				<!-- fur cap -->
+		<item id="7290" chance="8000" />					<!-- shard -->
 	</loot>
 </monster>

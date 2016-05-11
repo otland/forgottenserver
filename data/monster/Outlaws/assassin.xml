@@ -3,6 +3,7 @@
 	<health now="175" max="175" />
 	<look type="152" head="114" body="95" legs="95" feet="95" addons="3" corpse="20327" />
 	<targetchange interval="4000" chance="0" />
+	<strategy attack="70" defense="20" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
@@ -17,11 +18,11 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-120" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-40">
 			<attribute key="shootEffect" value="throwingstar" />
 		</attack>
-		<attack name="poisoncondition" interval="2000" chance="10" range="7" min="-120" max="-160">
+		<attack name="poisoncondition" interval="2000" chance="10" range="7" min="-5" max="-5">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -38,24 +39,24 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Die!" />
 		<voice sentence="Feel the hand of death!" />
 		<voice sentence="You are on my deathlist!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="83210" /><!-- gold coin -->
-		<item id="2050" countmax="2" chance="29980" /><!-- torch -->
-		<item id="2148" countmax="14" chance="7250" /><!-- throwing star -->
-		<item id="7366" countmax="7" chance="4200" /><!-- viper star -->
-		<item id="2403" chance="9500" /><!-- knife -->
-		<item id="2404" chance="4000" /><!-- combat knife -->
-		<item id="2457" chance="3230" /><!-- steel helmet -->
-		<item id="2509" chance="970" /><!-- steel shield -->
-		<item id="2510" chance="1900" /><!-- plate shield -->
-		<item id="3968" chance="480" /><!-- leopard armor -->
-		<item id="2513" chance="1600" /><!-- battle shield -->
-		<item id="2145" chance="220" /><!-- small diamond -->
-		<item id="3969" chance="230" /><!-- horseman helmet -->
+		<item id="2148" countmax="50" chance="83210" />	<!-- gold coin -->
+		<item id="2050" countmax="2" chance="30000" />	<!-- torch -->
+		<item id="2403" chance="9750" />					<!-- knife -->
+		<item id="2399" countmax="14" chance="7210" />	<!-- throwing star -->
+		<item id="7366" countmax="7" chance="4200" />	<!-- viper star -->
+		<item id="2404" chance="4000" />					<!-- combat knife -->
+		<item id="2457" chance="3190" />					<!-- steel helmet -->
+		<item id="2510" chance="1910" />					<!-- plate shield -->
+		<item id="2513" chance="1560" />					<!-- battle shield -->
+		<item id="2509" chance="940" />					<!-- steel shield -->
+		<item id="3968" chance="480" />					<!-- leopard armor -->
+		<item id="3969" chance="240" />					<!-- horseman helmet -->
+		<item id="2145" chance="220" />					<!-- small diamond -->
 	</loot>
 </monster>

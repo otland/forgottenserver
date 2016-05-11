@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Weeper" nameDescription="a weeper" race="fire" experience="4800" speed="260" manacost="0">
+	<health now="6800" max="6800" />
+	<look type="489" corpse="17251" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="0" />
+		<flag staticattack="90" />
+		<flag runonhealth="570" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="soulfire" interval="2000" chance="100" radius="3" target="0">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-400" max="-1000">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="physical" interval="3000" chance="30" target="1" radius="4" min="-250" max="-350">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="invisible" interval="2000" chance="5" duration="3000" />
+	</defenses>
+	<elements>
+		<element physicalPercent="-1" />
+		<element icePercent="-5" />
+		<element deathPercent="1" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Moooaaan!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="199" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="7" chance="100000" />		<!-- platinum coin -->
+		<item id="18426" chance="15500" />					<!-- eye of a weeper -->
+		<item id="18425" chance="15500" />					<!-- blazing bone -->
+		<item id="8473" countmax="2" chance="15470" />		<!-- ultimate health potion -->
+		<item id="2147" countmax="3" chance="15340" />		<!-- small ruby -->
+		<item id="7590" countmax="2" chance="14700" />		<!-- great mana potion -->
+		<item id="10553" chance="13200" />					<!-- fiery heart -->
+		<item id="18424" chance="12650" />					<!-- magma clump -->
+		<item id="18417" countmax="2" chance="12100" />		<!-- brown crystal splinter -->
+		<item id="18435" countmax="5" chance="11600" />		<!-- prismatic bolt -->
+		<item id="18420" chance="8880" />					<!-- red crystal fragment -->
+		<item id="18414" chance="5430" />					<!-- violet crystal shard -->
+		<item id="2392" chance="3300" />						<!-- fire sword -->
+		<item id="2432" chance="2180" />						<!-- fire axe -->
+		<item id="18409" chance="1450" />					<!-- wand of everblazing -->
+		<item id="13757" chance="1270" />					<!-- coal -->
+		<item id="7894" chance="790" />						<!-- magma legs -->
+		<item id="7899" chance="700" />						<!-- magma coat -->
+	</loot>
+</monster>

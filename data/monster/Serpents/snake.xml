@@ -8,7 +8,7 @@
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="1" />
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="8" poison="15" />
+		<attack name="melee" interval="2000" min="0" max="-8" poison="1" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<elements>
@@ -26,7 +26,7 @@
 		<element firePercent="-10" />
 		<element icePercent="-10" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Zzzzzzt" />
 	</voices>
 </monster>

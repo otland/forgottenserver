@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Splasher" nameDescription="a splasher" race="blood" experience="500" speed="520" manacost="480">
+<monster name="Splasher" nameDescription="Splasher" race="blood" experience="500" speed="520" manacost="0">
 	<health now="1000" max="1000" />
-	<look type="72" head="0" body="0" legs="0" feet="0" corpse="6064" />
+	<look type="72" corpse="6064" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="0" />
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
+		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
-		<flag runonhealth="40" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" skill="60" attack="109" />
-		<attack name="lifedrain" interval="2000" chance="8" range="7" target="1" min="-162" max="-228">
+		<attack name="melee" interval="2000" min="0" max="-109" poison="5" />
+		<attack name="lifedrain" interval="2000" chance="8" range="7" target="1" min="-106" max="-169">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="lifedrain" interval="2000" chance="7" length="8" spread="3" min="-106" max="-169">
+		<attack name="lifedrain" interval="2000" chance="7" length="8" spread="3" min="-162" max="-228">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
 		<attack name="ice" interval="2000" chance="9" length="8" spread="0" min="-134" max="-148">
@@ -29,6 +29,9 @@
 		</attack>
 		<attack name="ice" interval="2000" chance="12" radius="3" target="0" min="-101" max="-149">
 			<attribute key="areaEffect" value="bubbles" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="1" speedchange="-300" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15">
@@ -45,8 +48,9 @@
 		<immunity fire="1" />
 		<immunity drown="1" />
 		<immunity paralyze="1" />
+		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Qua hah tsh!" />
 		<voice sentence="Teech tsha tshul!" />
 		<voice sentence="Quara tsha Fach!" />

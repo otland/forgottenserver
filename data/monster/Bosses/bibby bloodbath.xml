@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Bibby Bloodbath" nameDescription="Bibby Bloodbath" race="blood" experience="1500" speed="240" manacost="0">
+	<health now="1200" max="1200" />
+	<look type="2" corpse="6008" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="2000" chance="20" length="5" spread="3" min="0" max="-200">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="3" target="0" speedchange="-300" duration="30000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="invisible" interval="2000" chance="15" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="-2" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Don't run, you'll just lose precious fat." />
+		<voice sentence="Hex hex!" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="10" chance="100000" />		<!-- platinum coin -->
+		<item id="2428" chance="33000" />					<!-- orcish axe -->
+		<item id="2399" countmax="18" chance="22000" />		<!-- throwing star -->
+		<item id="2377" chance="22000" />					<!-- two handed sword -->
+		<item id="2489" chance="14000" />					<!-- dark armor -->
+		<item id="7620" countmax="3" chance="13000" />		<!-- mana potion -->
+		<item id="2666" countmax="2" chance="10000" />		<!-- meat -->
+		<item id="7618" countmax="3" chance="9000" />		<!-- health potion -->
+		<item id="2667" chance="7500" />						<!-- fish -->
+		<item id="2647" chance="7500" />						<!-- plate legs -->
+		<item id="2165" chance="5700" />						<!-- stealth ring -->
+		<item id="7890" chance="4000" />						<!-- magma amulet -->
+		<item id="7412" chance="1600" />						<!-- butcher's axe -->
+		<item id="2393" chance="1600" />						<!-- giant sword -->
+		<item id="7395" chance="1600" />						<!-- orc trophy -->
+		<item id="2497" chance="830" />						<!-- crusader helmet -->
+	</loot>
+</monster>

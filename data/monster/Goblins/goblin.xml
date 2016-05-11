@@ -29,7 +29,7 @@
 		<element earthPercent="-12" />
 		<element deathPercent="-10" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Me have him!" />
 		<voice sentence="Zig Zag! Gobo attack!" />
 		<voice sentence="Help! Goblinkiller!" />

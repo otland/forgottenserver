@@ -17,21 +17,24 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="60" />
-		<attack name="speed" interval="2000" chance="25" range="7" radius="4" target="1" speedchange="-700" duration="15000">
+		<attack name="melee" interval="2000" min="0" max="-270" />
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-65" max="-320">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="speed" interval="2000" chance="25" range="7" radius="4" target="1" speedchange="-300" duration="15000">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
 		<attack name="ice" interval="2000" chance="10" length="8" spread="3" min="-100" max="-250">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
-		<attack name="icicle" interval="2000" chance="10" target="1" min="-80" max="-155" />
-		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-66" max="-320">
-			<attribute key="areaEffect" value="carniphila" />
+		<attack name="ice" interval="2000" chance="10" range="7" min="-70" max="-155">
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="iceattack" />
 		</attack>
 	</attacks>
 	<defenses armor="35" defense="35">
-		<defense name="healing" interval="2000" chance="25" min="260" max="407">
+		<defense name="healing" interval="2000" chance="15" min="260" max="407">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -47,28 +50,26 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="FCHHHHH" />
 		<voice sentence="HISSSS" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="34000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="34000" /><!-- gold coin -->
-		<item id="2148" countmax="46" chance="20000" /><!-- gold coin -->
-		<item id="2152" countmax="3" chance="48000" /><!-- platinum coins-->
-		<item id="2671" countmax="4" chance="60000" /><!-- ham -->
-		<item id="7589" chance="380" /><!-- strong mana potion -->
-		<item id="2177" chance="570" /><!-- life crystal -->
-		<item id="2197" chance="900" /><!-- stone skin amulet -->
-		<item id="2146" chance="5000" /><!-- small sapphire -->
-		<item id="4850" chance="930" /><!-- hydra egg -->
-		<item id="2214" chance="1190" /><!-- ring of healing -->
-		<item id="2475" chance="890" /><!-- warrior helmet -->
-		<item id="2476" chance="1000" /><!-- knight armor -->
-		<item id="2536" chance="270" /><!-- medusa shield -->
-		<item id="2498" chance="210" /><!-- royal helmet -->
-		<item id="2195" chance="130" /><!-- boots of haste -->
-		<item id="11199" chance="10120" /><!-- hydra head -->
-		<item id="8842" chance="4780" /><!-- cucumber -->
+		<item id="2148" countmax="246" chance="88000" />	<!-- gold coin -->
+		<item id="2671" countmax="4" chance="60000" />	<!-- ham -->
+		<item id="2152" countmax="3" chance="48000" />	<!-- platinum coin -->
+		<item id="11199" chance="10120" />				<!-- hydra head -->
+		<item id="2146" chance="5000" />					<!-- small sapphire -->
+		<item id="8842" chance="4780" />					<!-- cucumber -->
+		<item id="2214" chance="1190" />					<!-- ring of healing -->
+		<item id="2476" chance="1000" />					<!-- knight armor -->
+		<item id="4850" chance="940" />					<!-- hydra egg -->
+		<item id="2197" chance="900" />					<!-- stone skin amulet -->
+		<item id="2475" chance="890" />					<!-- warrior helmet -->
+		<item id="2177" chance="540" />					<!-- life crystal -->
+		<item id="7589" chance="390" />					<!-- strong mana potion -->
+		<item id="2536" chance="250" />					<!-- medusa shield -->
+		<item id="2498" chance="200" />					<!-- royal helmet -->
+		<item id="2195" chance="120" />					<!-- boots of haste -->
 	</loot>
 </monster>

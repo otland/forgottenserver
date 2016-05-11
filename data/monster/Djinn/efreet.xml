@@ -59,7 +59,7 @@
 	<summons maxSummons="2">
 		<summon name="green djinn" interval="2000" chance="10" max="2" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I grant you a deathwish!" />
 		<voice sentence="Good wishes are for fairytales" />
 	</voices>

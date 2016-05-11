@@ -33,7 +33,7 @@
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Hizzzzzzz!" />
 		<voice sentence="To armzzzz!" />
 		<voice sentence="Engage zze aggrezzor!" />

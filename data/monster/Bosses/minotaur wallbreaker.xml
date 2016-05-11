@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Wallbreaker" nameDescription="a minotaur wallbreaker" race="blood" experience="16725" speed="220" manacost="0">
+	<health now="120000" max="120000" />
+	<look type="607" corpse="5962" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-170" />
+		<attack name="physical" interval="2000" chance="15" radius="3" min="0" max="-200">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="7" radius="4" target="1" min="-100" max="-225">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="healing" interval="4000" chance="15" min="2000" max="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="85" />
+		<element holyPercent="85" />
+		<element icePercent="85" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<!-- roll of covering 100% -->
+		<item id="2148" countmax="195" chance="100000" />	<!-- gold coin -->
+		<item id="2152" countmax="2" chance="58000" />		<!-- platinum coin -->
+		<!-- moohtant horn -->
+		<!-- giant pacifier -->
+		<item id="7591" countmax="3" chance="7300" />		<!-- great health potion -->
+		<item id="7590" countmax="3" chance="7300" />		<!-- great mana potion -->
+		<item id="2666" chance="6400" />						<!-- meat -->
+		<item id="2147" countmax="2" chance="4600" />		<!-- small ruby -->
+		<item id="5878" chance="4200" />						<!-- minotaur leather -->
+		<item id="2145" countmax="2" chance="4000" />		<!-- small diamond -->
+		<item id="2214" chance="2000" />						<!-- ring of healing -->
+		<item id="5911" chance="1700" />						<!-- red piece of cloth -->
+		<!-- moohtant cudgel -->
+		<item id="2156" chance="880" />						<!-- red gem -->
+		<item id="2154" chance="730" />						<!-- yellow gem -->
+		<item id="7452" chance="440" />						<!-- spiked squelcher -->
+		<item id="7427" chance="290" />						<!-- chaos mace -->
+		<item id="9971" chance="290" />						<!-- gold ingot -->
+		<item id="7401" chance="290" />						<!-- minotaur trophy -->
+	</loot>
+</monster>

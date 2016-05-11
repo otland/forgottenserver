@@ -23,7 +23,6 @@
 		</attack>
 		<attack name="death" interval="2000" chance="10" range="7" min="-395" max="-498">
 			<attribute key="shootEffect" value="suddendeath" />
-			<attribute key="areaEffect" value="mortarea" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-350" max="-660">
@@ -56,12 +55,10 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
 		<immunity invisible="1" />
 		<immunity fire="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="GROOOWL!" />
 		<voice sentence="GRRRRR!" />
 	</voices>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minion Of Versperoth" nameDescription="a minion of Versperoth" race="fire" experience="2900" speed="290" manacost="0">
+	<health now="3800" max="3800" />
+	<look type="491" corpse="0" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-390" />
+		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-350" max="-700">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" length="8" spread="0" min="-600" max="-1300">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="lava golem soulfire" interval="2000" chance="15" />
+		<attack name="fire" interval="2000" chance="15" radius="4" target="1" min="-220" max="-350">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-300" duration="10000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="fire" interval="2000" chance="30" target="0" radius="3" min="-280" max="-350">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="60" defense="60" />
+	<elements>
+		<element icePercent="-5" />
+		<element physicalPercent="1" />
+		<element energyPercent="1" />
+		<element deathPercent="1" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Grrrrunt" />
+	</voices>
+</monster>

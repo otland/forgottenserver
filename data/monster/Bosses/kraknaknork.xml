@@ -1,27 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Kraknaknork" nameDescription="a Kraknaknork" race="blood" experience="0" speed="380" manacost="220">
-	<health now="15" max="15" />
-	<look type="74" corpse="6017" />
-	<targetchange interval="5000" chance="20" />
+<monster name="Kraknaknork" nameDescription="Kraknaknork" race="blood" experience="300" speed="180" manacost="0">
+	<health now="80" max="80" />
+	<look type="6" corpse="5978" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="1" />
+		<flag summonable="0" />
 		<flag attackable="1" />
-		<flag hostile="0" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
 		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
+		<flag targetdistance="4" />
 		<flag staticattack="90" />
-		<flag runonhealth="15" />
+		<flag runonhealth="23" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0" />
+		<attack name="melee" interval="2000" min="0" max="-10" poison="5" />
+		<attack name="ice" interval="2000" chance="10" length="7" spread="3" min="-1" max="-15">
+			<attribute key="areaEffect" value="icearea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="6" spread="3" min="-1" max="-10">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" length="7" spread="3" min="-1" max="-12">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-8">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="speed" interval="1000" chance="6" range="7" speedchange="-100" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="10" range="7" monster="Sheep" duration="3000" />
 	</attacks>
-	<defenses armor="1" defense="2" />
+	<defenses armor="5" defense="5" />
+	<voices interval="2000" chance="7">
+		<voice sentence="KRAK ORC DEMON" />
+		<voice sentence="???!!!" />
+		<voice sentence="Grak brrretz gulu." />
+	</voices>
+	<summons maxSummons="1">
+		<summon name="Weakened Demon" interval="2000" chance="20" />
+	</summons>
 	<loot>
-		<item id="2684" countmax="2" chance="9000" /><!-- carrot -->
-		<item id="2666" countmax="2" chance="20000" /><!-- meat -->
+		<item id="2148" countmax="15" chance="95000" />	<!-- gold coin -->
+		<item id="12435" chance="1000" />				<!-- orc leather -->
 	</loot>
 </monster>

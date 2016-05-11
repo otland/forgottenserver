@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tromphonyte" nameDescription="Tromphonyte" race="blood" experience="1300" speed="240">
+	<health now="3000" max="3000" />
+	<look type="381" corpse="13312" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-215" />
+		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-170" max="-300">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" target="1" min="-90" max="-130">
+			<attribute key="shootEffect" value="smallstone" />
+		</attack>
+		<attack name="stampor skill reducer" range="5" interval="2000" chance="10" />
+	</attacks>
+	<defenses>
+		<defense name="healing" interval="2000" chance="15" min="90" max="120">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="50" />
+		<element deathPercent="10" />
+		<element firePercent="20" />
+		<element energyPercent="20" />
+		<element icePercent="10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="HRRRRRNG" yell="1" />
+	</voices>
+	<loot>
+		<item id="13301" chance="100000" />					<!-- hollow stampor hoof -->
+		<item id="2476" chance="100000" />					<!-- knight armor -->
+		<item id="2152" countmax="13" chance="100000" />		<!-- platinum coin -->
+		<item id="9970" countmax="5" chance="100000" />		<!-- small topaz -->
+		<item id="13299" chance="100000" />					<!-- stampor horn -->
+		<item id="13300" countmax="2" chance="100000" />		<!-- stampor talon -->
+		<item id="7588" countmax="2" chance="100000" />		<!-- strong health potion -->
+		<item id="7589" countmax="2" chance="100000" />		<!-- strong mana potion -->
+		<item id="7452" chance="50000" />					<!-- spiked squelcher -->
+	</loot>
+</monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Omruc" nameDescription="a omruc" race="undead" experience="2950" speed="370" manacost="0">
+<monster name="Omruc" nameDescription="Omruc" race="undead" experience="2950" speed="370" manacost="0">
 	<health now="4300" max="4300" />
 	<look type="90" corpse="6025" />
 	<targetchange interval="5000" chance="8" />
@@ -17,19 +17,18 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="60" poison="65" />
-		<attack name="lifedrain" interval="5000" chance="20" range="1" min="-100" max="-250" />
-		<attack name="poison" interval="2000" chance="20" min="-200" max="-500">
+		<attack name="melee" interval="2000" min="0" max="-116" poison="3" />
+		<attack name="physical" interval="3000" chance="20" min="0" max="-500">
+			<attribute key="shootEffect" value="arrow" />
+		</attack>
+		<attack name="poison" interval="2000" chance="20" min="-100" max="-500">
 			<attribute key="shootEffect" value="poisonarrow" />
 		</attack>
-		<attack name="fire" interval="1000" chance="20" range="3" min="-120" max="-450">
+		<attack name="fire" interval="1000" chance="20" range="4" min="-100" max="-500">
 			<attribute key="shootEffect" value="burstarrow" />
 			<attribute key="areaEffect" value="explosionarea" />
 		</attack>
-		<attack name="melee" interval="3000" chance="20" min="-150" max="-500">
-			<attribute key="shootEffect" value="arrow" />
-		</attack>
-		<attack name="speed" interval="1000" chance="25" range="7" speedchange="-900" duration="50000">
+		<attack name="speed" interval="1000" chance="25" range="7" speedchange="-300" duration="50000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
@@ -41,34 +40,43 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element firePercent="20" />
+		<element earthPercent="20" />
+		<element holyPercent="-10" />
+		<element energyPercent="-5" />
+		<element icePercent="-5" />
+	</elements>
 	<immunities>
 		<immunity death="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="4">
-		<summon name="Stalker" interval="2000" chance="1000" />
+		<summon name="Stalker" interval="2000" chance="20" />
 	</summons>
-	<voices interval="5000" chance="10">
-		<voice sentence="Now chhhou shhhee me ... Now chhhou don't!!" />
+	<voices interval="2000" chance="7">
+		<voice sentence="Now chhhou shhhee me ... Now chhhou don't." />
 		<voice sentence="Chhhhou are marked ashhh my prey." />
 		<voice sentence="Psssst, I am over chhhere." />
+		<voice sentence="Catchhhh me if chhhou can." />
+		<voice sentence="Die!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="70" chance="50000" /><!-- gold coin -->
-		<item id="2443" countmax="2" chance="10000" /><!-- apple -->
-		<item id="2544" countmax="21" chance="10000" /><!-- arrow-->
-		<item id="2545" countmax="20" chance="10000" /><!-- poison arrow -->
-		<item id="2546" countmax="15" chance="10000" /><!-- burst arrow -->
-		<item id="7365" countmax="2" chance="10000" /><!-- onyx arrow -->
-		<item id="2547" countmax="3" chance="10000" /><!-- power bolt -->
-		<item id="2145" countmax="3" chance="7000" /><!-- small diamond -->
-		<item id="7591" chance="7000" /><!-- great health potion-->
-		<item id="2165" chance="5000" /><!-- stealth ring -->
-		<item id="2154" chance="5000" /><!-- yellow gem -->
-		<item id="2195" chance="1500" /><!-- boots of haste -->
-		<item id="2444" chance="300" /><!-- hammer of wrath -->
-		<item id="2352" chance="100000" /><!-- crystal arrow -->
+		<item id="2352" chance="100000" />				<!-- crystal arrow -->
+		<item id="2148" countmax="160" chance="85000" />	<!-- gold coin -->
+		<item id="2674" countmax="2" chance="74000" />	<!-- red apple -->
+		<item id="2545" countmax="19" chance="49000" />	<!-- poison arrow -->
+		<item id="2546" countmax="15" chance="44000" />	<!-- burst arrow -->
+		<item id="7365" countmax="6" chance="36000" />	<!-- onyx arrow -->
+		<item id="2544" countmax="25" chance="25000" />	<!-- arrow -->
+		<item id="2547" countmax="4" chance="17000" />	<!-- power bolt -->
+		<item id="7591" chance="12000" />				<!-- great health potion -->
+		<item id="2145" countmax="3" chance="12000" />	<!-- small diamond -->
+		<item id="11207" chance="4000" />				<!-- mini mummy -->
+		<item id="2165" chance="4000" />					<!-- stealth ring -->
+		<item id="2154" chance="150" />					<!-- yellow gem -->
+		<item id="2195" chance="150" />					<!-- boots of haste -->
+		<item id="2444" chance="150" />					<!-- hammer of wrath -->
 	</loot>
 </monster>

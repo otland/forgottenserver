@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="White Shade" nameDescription="a white shade" race="undead" experience="120" speed="190" manacost="0">
 	<health now="260" max="260" />
-	<look type="560" corpse="21376" />
+	<look type="560" corpse="21367" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -43,7 +43,7 @@
 		<immunity death="1" />
 		<immunity drown="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Leave this place... save yourself..." />
 		<voice sentence="The dark ones.. must be stopped... unholy, twisted, EVIL!" />
 		<voice sentence="No... don't go further stranger... danger lies in every step..." />

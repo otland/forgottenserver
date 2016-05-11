@@ -61,7 +61,7 @@
 	<summons maxSummons="4">
 		<summon name="demon" interval="1000" chance="10" max="4" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="PRAISED BE MY MASTERS, THE RUTHLESS SEVEN!" />
 		<voice sentence="YOU ARE DOOMED!" />
 		<voice sentence="ORSHABAAL IS BACK!" />

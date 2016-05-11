@@ -30,16 +30,16 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Gnark!" />
 		<voice sentence="Crrrck!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="12" chance="60000" /><!-- gold coin -->
 		<item id="2787" countmax="5" chance="8980" /><!-- White Mushroom -->
-		<item id="20102" chance="12610" /><!-- Piece of Swampling Wood -->
-		<item id="20103" chance="8270" /><!-- Swampling Club -->
-		<item id="20101" chance="18670" /><!-- Swampling Moss -->
+		<item id="20103" chance="12610" /><!-- Piece of Swampling Wood -->
+		<item id="20104" chance="8270" /><!-- Swampling Club -->
+		<item id="20102" chance="18670" /><!-- Swampling Moss -->
 		<item id="2120" chance="4540" /><!-- rope -->
 	</loot>
 </monster>

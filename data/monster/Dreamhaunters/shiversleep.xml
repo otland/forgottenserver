@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Shiversleep" nameDescription="Shiversleep" race="blood" experience="1900" speed="270" manacost="0">
+<monster name="Shiversleep" nameDescription="a shiversleep" race="blood" experience="1900" speed="270" manacost="0">
 	<health now="4600" max="4600" />
 	<look type="592" corpse="22497" />
 	<targetchange interval="5000" chance="8" />
@@ -38,7 +38,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Knorrrr!" />
 	</voices>
 	<loot>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Young Troll" nameDescription="a young troll" race="blood" experience="12" speed="380" manacost="0">
+<monster name="Young Troll" nameDescription="a young troll" race="blood" experience="12" speed="170" manacost="0">
 	<health now="30" max="30" />
 	<look type="15" corpse="5960" />
 	<targetchange interval="5000" chance="20" />

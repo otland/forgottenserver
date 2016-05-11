@@ -46,7 +46,6 @@
 		<immunity death="1" />
 		<immunity earth="1" />
 		<immunity lifedrain="1" />
-		<immunity drunk="1" />
 	</immunities>
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->

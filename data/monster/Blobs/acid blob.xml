@@ -36,7 +36,7 @@
 	<summons maxSummons="3">
 		<summon name="Acid Blob" interval="2000" chance="10" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Kzzchhh!" />
 	</voices>
 	<loot>

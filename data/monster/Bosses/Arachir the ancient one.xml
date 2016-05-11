@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Arachir the ancient one" nameDescription="a vampire lord" race="undead" experience="1800" speed="300" manacost="0">
+<monster name="Arachir The Ancient One" nameDescription="Arachir The Ancient One" race="undead" experience="1800" speed="300" manacost="0">
 	<health now="1600" max="1600" />
 	<look type="287" corpse="8937" />
 	<targetchange interval="5000" chance="10" />
@@ -45,7 +45,7 @@
 		<immunity death="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="I was the shadow that haunted the cradle of humanity!" />
 		<voice sentence="I exist since eons and you want to defy me?" />
 		<voice sentence="Can you feel the passage of time, mortal?" />
@@ -58,11 +58,11 @@
 		<item id="7416" chance="1200" />
 		<item id="7588" chance="10000" />
 		<item id="2229" chance="10000" />
-		<item id="2148" chance1="100000" countmax="98" />
-		<item id="9020" chance1="100000" />
-		<item id="2152" chance1="50000" countmax="5" />
+		<item id="2148" chance="100000" countmax="98" />
+		<item id="9020" chance="100000" />
+		<item id="2152" chance="50000" countmax="5" />
 		<item id="2216" chance="11111" />
 		<item id="2534" chance="6300" />
-		<item id="2144" chance1="8980" countmax="1" />
+		<item id="2144" chance="8980" countmax="1" />
 	</loot>
 </monster>

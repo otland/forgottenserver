@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Jesse The Wicked" nameDescription="Jesse The Wicked" race="blood" experience="180" speed="220" manacost="0">
+	<health now="280" max="280" />
+	<look type="134" head="76" body="76" legs="76" feet="115" addons="3" corpse="20434" />
+	<targetchange interval="4000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<loot>
+		<item id="2152" countmax="85" chance="100000" />	<!-- platinum coin -->
+		<item id="14903" chance="100000" />				<!-- bag with stolen gold -->
+	</loot>
+</monster>

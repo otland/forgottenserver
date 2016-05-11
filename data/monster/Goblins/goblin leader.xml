@@ -23,7 +23,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Go go, Gobo attack !!" />
 		<voice sentence="Me the greenest and the meanest!" />
 		<voice sentence="Me have power to crush you!" />

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Doomsday Cultist" nameDescription="a doomsday cultist" race="blood" experience="100" speed="215" manacost="0">
+	<health now="125" max="125" />
+	<look type="194" head="95" body="95" legs="95" feet="95" corpse="20383" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-90" />
+		<attack name="lifedrain" interval="2000" chance="20" range="7" target="1" min="-50" max="-100">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element holyPercent="30" />
+		<element earthPercent="40" />
+		<element icePercent="20" />
+		<element firePercent="20" />
+		<element energyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity death="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Fear the night without an end!" />
+		<voice sentence="An age of darkness is at hand!" />
+	</voices>
+	<loot>
+		<item id="10531" chance="1000" />	<!-- midnight shard -->
+	</loot>
+</monster>

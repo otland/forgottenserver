@@ -7,28 +7,28 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
+		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="359" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="50" poison="500" />
-		<attack name="earth" interval="2000" chance="10" target="0" length="4" spread="3" min="-180" max="-270" />
-		<attack name="poisoncondition" interval="2000" chance="10" range="7" min="-160" max="-200">
+		<attack name="melee" interval="2000" min="0" max="-200" poison="25" />
+		<attack name="poisoncondition" interval="2000" chance="10" range="2" min="-10" max="-10">
 			<attribute key="shootEffect" value="poisonarrow" />
 			<attribute key="areaEffect" value="smallplants" />
 		</attack>
-		<attack name="speed" interval="2000" chance="15" target="0" length="3" spread="2" speedchange="-700" duration="30000">
+		<attack name="speed" interval="2000" chance="15" target="0" length="3" spread="2" speedchange="-300" duration="30000">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
+		<attack name="earth" interval="2000" chance="10" target="0" length="4" spread="3" min="-180" max="-270" />
 	</attacks>
 	<defenses armor="15" defense="15">
-		<defense name="speed" interval="2000" chance="15" speedchange="510" duration="5000">
+		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
@@ -42,24 +42,24 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Zzzrp!" />
 		<voice sentence="Crick! Crick!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="18304" countmax="5" chance="15540" /><!-- crystalline arrow -->
-		<item id="18436" countmax="5" chance="15260" /><!-- drill bolt -->
-		<item id="2152" chance="14790" /><!-- platinum coin -->
-		<item id="2787" countmax="5" chance="7142" /><!-- white mushroom -->
-		<item id="7589" chance="5250" /><!-- strong mana potion -->
-		<item id="7588" chance="4930" /><!-- strong health potion -->
-		<item id="18416" chance="3600" /><!-- green crystal splinter -->
-		<item id="5912" chance="2080" /><!-- blue piece of cloth -->
-		<item id="5914" chance="2160" /><!-- yellow piece of cloth -->
-		<item id="18421" chance="2070" /><!-- green crystal fragment -->
-		<item id="2409" chance="1360" /><!-- serpent sword -->
-		<item id="2529" chance="1320" /><!-- black shield -->
-		<item id="2181" chance="850" /><!-- terra rod -->
+		<item id="2148" countmax="100" chance="100000" />	<!-- gold coin -->
+		<item id="18304" countmax="5" chance="15540" />		<!-- crystalline arrow -->
+		<item id="18436" countmax="5" chance="15260" />		<!-- drill bolt -->
+		<item id="2152" chance="14790" />					<!-- platinum coin -->
+		<item id="2787" countmax="5" chance="7142" />		<!-- white mushroom -->
+		<item id="7589" chance="5000" />						<!-- strong mana potion -->
+		<item id="7588" chance="5000" />						<!-- strong health potion -->
+		<item id="18416" chance="3700" />					<!-- green crystal splinter -->
+		<item id="5914" chance="2200" />						<!-- yellow piece of cloth -->
+		<item id="5912" chance="2010" />						<!-- blue piece of cloth -->
+		<item id="18421" chance="2000" />					<!-- green crystal fragment -->
+		<item id="2409" chance="1360" />						<!-- serpent sword -->
+		<item id="2529" chance="1320" />						<!-- black shield -->
+		<item id="2181" chance="800" />						<!-- terra rod -->
 	</loot>
 </monster>

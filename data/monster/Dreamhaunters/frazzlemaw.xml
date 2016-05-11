@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Frazzlemaw" nameDescription="Frazzlemaw" race="blood" experience="3400" speed="250" manacost="0">
+<monster name="Frazzlemaw" nameDescription="a frazzlemaw" race="blood" experience="3400" speed="250" manacost="0">
 	<health now="4100" max="4100" />
 	<look type="594" corpse="22567" />
 	<targetchange interval="4000" chance="10" />
@@ -53,7 +53,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Mwaaaahnducate youuuuuu *gurgle*" />
 		<voice sentence="mwaaah!" />
 	</voices>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Adept of the Cult" nameDescription="an adept of the cult" race="blood" experience="400" speed="215" manacost="0">
+<monster name="Adept Of The Cult" nameDescription="an adept of the cult" race="blood" experience="400" speed="215" manacost="0">
 	<health now="430" max="430" />
-	<look type="194" head="114" body="94" legs="94" feet="57" corpse="20311" />
+	<look type="194" head="114" body="94" legs="94" feet="57" corpse="20314" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -48,7 +48,7 @@
 	<summons maxSummons="2">
 		<summon name="Ghoul" interval="2000" chance="10" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Feel the power of the cult!" />
 		<voice sentence="Praise the voodoo!" />
 		<voice sentence="Power to the cult!" />

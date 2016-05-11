@@ -26,7 +26,6 @@
 		</attack>
 		<attack name="death" interval="2000" chance="5" range="7" min="-1" max="-30">
 			<attribute key="shootEffect" value="suddendeath" />
-			<attribute key="areaEffect" value="mortarea" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 	</attacks>
@@ -41,7 +40,7 @@
 		<element earthPercent="-10" />
 		<element deathPercent="-10" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Shiny, Shiny!" />
 		<voice sentence="You mean!" />
 		<voice sentence="All mine!" />

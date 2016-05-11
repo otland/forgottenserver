@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orchid Frog" nameDescription="a orchid frog" race="blood" experience="20" speed="200" manacost="305">
+<monster name="Orchid Frog" nameDescription="an orchid frog" race="blood" experience="20" speed="200" manacost="305">
 	<health now="60" max="60" />
 	<look type="226" head="109" body="14" legs="109" feet="114" corpse="6079" />
 	<targetchange interval="5000" chance="20" />
@@ -24,7 +24,7 @@
 		<element icePercent="10" />
 		<element firePercent="-10" />
 	</elements>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Ribbit!" />
 		<voice sentence="Ribbit! Ribbit!" />
 	</voices>

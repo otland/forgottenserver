@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Horestis" nameDescription="Horestis" race="undead" experience="3500" speed="280" manacost="0">
+	<health now="6000" max="6000" />
+	<look type="88" corpse="6031" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="death" interval="1000" chance="12" range="7" min="-200" max="-750">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="lifedrain" interval="3000" chance="17" length="8" spread="0" target="0" min="-400" max="-500">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="drunk" interval="3000" chance="11" radius="6" target="0" duration="25000">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="1000" chance="25" length="7" spread="3" target="0" speedchange="-350" duration="30000">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="30" radius="5" target="0" min="-35" max="-35" />
+	</attacks>
+	<defenses armor="25" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="200" max="400">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="50" />
+		<element icePercent="20" />
+		<element energyPercent="5" />
+		<element physicalPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity lifedrain="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Sandstone Scorpion" interval="1000" chance="12" />
+	</summons>
+	<voices interval="2000" chance="7">
+		<voice sentence="Feel my eternal wrath!" />
+		<voice sentence="I might be dead but I'm not gone!" />
+		<voice sentence="Receive a lesson of the past!" />
+	</voices>
+	<loot>
+		<item id="13498" chance="100000" />				<!-- scorpion sceptre -->
+		<item id="2148" countmax="243" chance="95000" />	<!-- gold coin -->
+		<item id="2152" countmax="5" chance="36000" />	<!-- platinum coin -->
+		<item id="13472" chance="17000" />				<!-- pharaoh banner -->
+		<item id="2159" countmax="5" chance="14000" />	<!-- scarab coin -->
+		<item id="13739" chance="12000" />				<!-- hieroglyph banner -->
+		<item id="2134" chance="12000" />				<!-- silver brooch -->
+		<item id="7590" countmax="3" chance="10000" />	<!-- great mana potion -->
+		<item id="7591" countmax="4" chance="5000" />	<!-- great health potion -->
+		<item id="2446" chance="5000" />					<!-- pharaoh sword -->
+		<item id="11207" chance="2500" />				<!-- mini mummy -->
+		<item id="9811" chance="2500" />					<!-- rusty legs -->
+		<item id="2447" chance="2500" />					<!-- twin axe -->
+	</loot>
+</monster>

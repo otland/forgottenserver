@@ -31,9 +31,8 @@
 		<immunity energy="1" />
 		<immunity fire="1" />
 		<immunity poison="1" />
-		<immunity drunk="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Feel the wrath of me dos attack!" />
 		<voice sentence="You're next!" />
 		<voice sentence="Gimme free gold!" />

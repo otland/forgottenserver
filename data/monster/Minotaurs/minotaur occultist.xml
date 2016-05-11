@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Occultist" nameDescription="a minotaur occultist" race="blood" experience="100" speed="170" manacost="0">
+	<health now="125" max="125" />
+	<look type="23" corpse="5981" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-10" />
+		<attack name="energy" interval="2000" chance="15" range="7" min="0" max="-20">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" min="0" max="-20">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="energyfield" interval="2000" chance="10" range="7" target="1">
+			<attribute key="shootEffect" value="energyball" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2148" countmax="21" chance="100000" />	<!-- gold coin -->
+		<item id="2684" countmax="4" chance="35000" />	<!-- carrot -->
+		<item id="20104" chance="12000" />				<!-- swampling club -->
+		<item id="12428" chance="10000" />				<!-- minotaur horn -->
+		<item id="2649" chance="9000" />					<!-- leather legs -->
+		<item id="7620" chance="3500" />					<!-- mana potion -->
+		<item id="2050" chance="3500" />					<!-- torch -->
+		<item id="2461" chance="1800" />					<!-- leather helmet -->
+		<item id="12429" chance="1800" />				<!-- purple robe -->
+	</loot>
+</monster>

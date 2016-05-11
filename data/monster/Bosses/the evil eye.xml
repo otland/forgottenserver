@@ -63,7 +63,7 @@
 		<summon name="demon skeleton" interval="1000" chance="13" max="5" />
 		<summon name="ghost" interval="1000" chance="12" max="4" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Inferior creatures, bow before my power!" />
 	</voices>
 	<loot>

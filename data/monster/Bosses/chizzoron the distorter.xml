@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Chizzoron the Distorter" nameDescription="chizzoron the distorter" race="blood" experience="7500" speed="260" manacost="0">
+<monster name="Chizzoron The Distorter" nameDescription="Chizzoron The Distorter" race="blood" experience="7500" speed="260" manacost="0">
 	<health now="8500" max="8500" />
 	<look type="340" corpse="11316" />
 	<targetchange interval="2000" chance="10" />

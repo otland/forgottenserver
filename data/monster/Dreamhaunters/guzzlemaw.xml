@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Guzzlemaw" nameDescription="Guzzlemaw" race="blood" experience="5500" speed="270" manacost="0">
+<monster name="Guzzlemaw" nameDescription="a guzzlemaw" race="blood" experience="5500" speed="270" manacost="0">
 	<health now="6400" max="6400" />
 	<look type="584" corpse="22485" />
 	<targetchange interval="4000" chance="10" />

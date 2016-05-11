@@ -2,7 +2,6 @@
 <monster name="Bane Bringer" nameDescription="a bane bringer" experience="400" speed="260" race="undead" manacost="0">
 	<health now="2500" max="2500" />
 	<look type="310" corpse="9867" />
-	<targetchange speed="0" chance="8" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />

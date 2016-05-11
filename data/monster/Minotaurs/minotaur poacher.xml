@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Poacher" nameDescription="a minotaur poacher" race="blood" experience="55" speed="170" manacost="0">
+	<health now="160" max="160" />
+	<look type="24" corpse="5982" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-15" />
+		<attack name="physical" interval="2000" chance="40" range="7" min="0" max="-20">
+			<attribute key="shootEffect" value="bolt" />
+		</attack>
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2148" countmax="28" chance="100000" />	<!-- gold coin -->
+		<item id="2543" countmax="18" chance="55000" />	<!-- bolt -->
+		<item id="12407" chance="19400" />				<!-- broken crossbow -->
+		<item id="2464" chance="10000" />				<!-- chain armor -->
+		<item id="2484" chance="6000" />					<!-- studded armor -->
+		<item id="2666" chance="5000" />					<!-- meat -->
+		<item id="5878" chance="1400" />					<!-- minotaur leather -->
+		<item id="2455" chance="710" />					<!-- crossbow -->
+		<item id="12428" chance="710" />					<!-- minotaur horn -->
+	</loot>
+</monster>

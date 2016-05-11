@@ -20,7 +20,7 @@
 		<attack name="melee" interval="2000" min="0" max="-10" />
 	</attacks>
 	<defenses armor="10" defense="10" />
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Hmmm, turtles" />
 		<voice sentence="Hmmm, dogs" />
 		<voice sentence="Hmmm, worms" />

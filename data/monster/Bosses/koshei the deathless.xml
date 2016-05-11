@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Koshei The Deathless" nameDescription="Koshei The Deathless" race="undead" experience="0" speed="390" manacost="0">
-	<health now="2000" max="2000" />
-	<look type="99" head="95" body="116" legs="119" feet="115" corpse="6028" />
+	<health now="3000" max="3000" />
+	<look type="99" corpse="8269" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
@@ -17,60 +17,47 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-90" max="-170" poison="300" />
-		<attack name="lifedrain" interval="3000" chance="9" range="1" min="-60" max="-250">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</attack>
-		<attack name="lifedrain" interval="1000" chance="11" radius="3" target="0" min="-70" max="-135">
+		<attack name="melee" interval="2000" min="0" max="-100" poison="20" />
+		<attack name="lifedrain" interval="1000" chance="11" radius="3" target="0" min="-70" max="-239">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="death" interval="2000" chance="9" length="8" spread="0" min="-50" max="-140">
-			<attribute key="areaEffect" value="mortarea" />
-		</attack>
-		<attack name="cursecondition" interval="3000" chance="15" range="1" min="-54" max="-54" />
-		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-900" duration="30000">
+		<attack name="lifedrain" interval="2000" chance="9" length="7" spread="0" min="-50" max="-140">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-300" duration="30000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="cursecondition" interval="3000" chance="15" range="1" min="-52" max="-52" />
 	</attacks>
 	<defenses armor="20" defense="20">
-		<defense name="healing" interval="1000" chance="30" min="150" max="300">
+		<defense name="healing" interval="2000" chance="30" min="251" max="345">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="80" />
+		<element physicalPercent="20" />
+		<element energyPercent="90" />
+		<element icePercent="20" />
 		<element holyPercent="-15" />
 		<element firePercent="-10" />
 	</elements>
 	<immunities>
 		<immunity death="1" />
 		<immunity earth="1" />
-		<immunity paralyze="1" />
+		<immunity lifedrain="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<summon name="bonebeast" interval="1000" chance="16" max="1" />
+		<summon name="Bonebeast" interval="1000" chance="16" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Your pain will be beyond imagination!" />
-		<voice sentence="You can't defeat me! I will ressurect and take your soul!" />
+		<voice sentence="You can't defeat me! I will resurrect and take your soul!" />
 		<voice sentence="Death is my ally!" />
-		<voice sentence="Welcome to my domain, visitor!" />
+		<voice sentence="Welcome to my domain visitor!" />
 		<voice sentence="You will be my toy on the other side!" />
 		<voice sentence="What a disgusting smell of life!" />
+		<voice sentence="You will endure agony beyond thy death!" />
+		<voice sentence="Ahhh, your life energy tastes so delicious!" />
 	</voices>
-	<loot>
-		<item id="2148" countmax="100" chance1="100000" chancemax="0" />
-		<item id="2401" chance="10000" />
-		<item id="2171" chance="1666" />
-		<item id="2656" chance="709" />
-		<item id="7893" chance="688" />
-		<item id="2535" chance="588" />
-		<item id="2165" chance="888" />
-		<item id="2237" chance="10000" />
-		<item id="2148" countmax="12" chance1="80000" chancemax="0" />
-		<item id="2175" chance="10000" />
-		<item id="2179" chance="900" />
-		<item id="3961" chance="1000" />
-	</loot>
 </monster>

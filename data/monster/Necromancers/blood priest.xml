@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Blood Priest" nameDescription="a blood priest" race="blood" experience="900" speed="210" manacost="0">
 	<health now="820" max="820" />
-	<look type="553" corpse="21262" />
+	<look type="553" corpse="21265" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -17,18 +17,18 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" poison="100" />
-		<attack name="death" interval="2000" chance="20" range="7" target="1" min="-60" max="-100">
+		<attack name="melee" interval="2000" min="0" max="-80" poison="5" />
+		<attack name="death" interval="2000" chance="20" range="7" min="-60" max="-100">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="15" radius="4" target="0" min="-40" max="-60">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="manadrain" interval="3000" chance="10" range="1" target="1" length="7" spread="0" min="-80" max="-130">
+		<attack name="manadrain" interval="3000" chance="10" range="1" length="7" spread="0" min="-80" max="-130">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
-		<attack name="bleedcondition" interval="2000" chance="5" range="1" radius="1" target="1" min="-160" max="-290">
+		<attack name="bleedcondition" interval="2000" chance="5" range="1" min="-160" max="-290">
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
 	</attacks>
@@ -50,28 +50,27 @@
 		<immunity earth="1" />
 		<immunity drown="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Blood for the dark god!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="71" chance="50000" /><!-- gold coin -->
-		<item id="21245" chance="14460" /><!-- Blood Tincture in a Vial -->
-		<item id="21242" chance="14410" /><!-- Lancet -->
-		<item id="21246" chance="14660" /><!-- Incantation Notes -->
-		<item id="11237" chance="13550" /><!-- Book of Necromantic Rituals -->
-		<item id="21243" chance="9270" /><!-- Horoscope -->
-		<item id="21247" chance="7770" /><!-- Pieces of Magic Chalk -->
-		<item id="7589" chance="6000" /><!-- Strong Mana Potion -->
-		<item id="2147" countmax="2" chance="3510" /><!-- Small Rubies -->
-		<item id="8910" chance="470" /><!-- Underworld Rod -->
-		<item id="8902" chance="180" /><!-- Spellbook of Mind Control -->
-		<item id="15565" chance="880" /><!-- Red Gem -->
-		<item id="5909" chance="3040" /><!-- White Piece of Cloth -->
-		<item id="2663" chance="2170" /><!-- Mystic Turban -->
-		<item id="2195" chance="120" /><!-- Boots of Haste -->
-		<item id="5911" chance="640" /><!-- Red Piece of Cloth -->
-		<item id="2436" chance="180" /><!-- Skull Staff -->
-		<item id="8901" chance="290" /><!-- Spellbook of Warding -->
+		<item id="2148" countmax="176" chance="99900" />	<!-- gold coin -->
+		<item id="21242" chance="14600" />				<!-- lancet -->
+		<item id="21246" chance="14500" />				<!-- incantation notes -->
+		<item id="11237" chance="14300" />				<!-- book of necromantic rituals -->
+		<item id="21245" chance="13700" />				<!-- blood tincture in a vial -->
+		<item id="21243" chance="9300" />				<!-- horoscope -->
+		<item id="21247" chance="7800" />				<!-- pieces of magic chalk -->
+		<item id="7589" chance="6000" />					<!-- strong mana potion -->
+		<item id="2147" countmax="2" chance="3510" />	<!-- small ruby -->
+		<item id="2663" chance="3000" />					<!-- mystic turban -->
+		<item id="5909" chance="2800" />					<!-- white piece of cloth -->
+		<item id="2156" chance="1000" />					<!-- red gem -->
+		<item id="5911" chance="970" />					<!-- red piece of cloth -->
+		<item id="8910" chance="390" />					<!-- underworld rod -->
+		<item id="8902" chance="310" />					<!-- spellbook of mind control -->
+		<item id="8901" chance="230" />					<!-- spellbook of warding -->
+		<item id="2195" chance="160" />					<!-- boots of haste -->
+		<item id="2436" chance="160" />					<!-- skull staff -->
 	</loot>
 </monster>

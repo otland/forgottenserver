@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Death Priest" nameDescription="a death priest" race="undead" experience="750" speed="220" manacost="0">
 	<health now="800" max="800" />
 	<look type="99" head="95" body="116" legs="119" feet="115" corpse="13975" />
@@ -18,7 +18,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
-		<attack name="death" interval="2000" chance="20" target="1" range="7" min="-120" max="-250">
+		<attack name="death" interval="2000" chance="20" range="7" min="-120" max="-250">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>

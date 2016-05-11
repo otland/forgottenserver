@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hemming" nameDescription="Hemming" experience="2850" speed="210" race="blood" manacost="0">
+	<health now="3000" max="3000" />
+	<targetchange interval="4000" chance="10" />
+	<look type="308" corpse="20570" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="300" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-180" max="-265">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="5" monster="Werewolf" duration="2000">
+			<attribute key="areaeffect" value="bluenote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="40" radius="3" target="0">
+			<attribute key="areaEffect" value="whitenote" />
+		</attack>
+		<attack name="werewolf skill reducer" interval="2000" range="1" chance="15" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="15" min="50" max="200">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" range="7" speedchange="300" duration="5000">
+			<attribute key="areaEffect" value="purplenote" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30" />
+		<element energyPercent="5" />
+		<element earthPercent="65" />
+		<element firePercent="-5" />
+		<element deathPercent="50" />
+		<element icePercent="-5" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="War Wolf" interval="2000" chance="100" />
+	</summons>
+	<voices interval="2000" chance="7">
+		<voice sentence="GRRR" />
+		<voice sentence="GRROARR" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="99" chance="100000" />	<!-- gold coin -->
+		<item id="11234" chance="100000" />				<!-- werewolf fur -->
+		<item id="5897" chance="100000" />				<!-- wolf paw -->
+		<item id="8473" chance="98000" />				<!-- ultimate health potion -->
+		<item id="2789" countmax="5" chance="94000" />	<!-- brown mushroom -->
+		<item id="2152" countmax="10" chance="94000" />	<!-- platinum coin -->
+		<item id="7439" chance="82000" />				<!-- berserk potion -->
+		<item id="2197" chance="70000" />				<!-- stone skin amulet -->
+		<item id="2144" countmax="5" chance="62000" />	<!-- black pearl -->
+		<item id="5480" chance="31000" />				<!-- cat's paw -->
+		<item id="2805" chance="21000" />				<!-- troll green -->
+		<item id="11306" chance="15000" />				<!-- sai -->
+		<item id="7419" chance="9800" />					<!-- dreaded cleaver -->
+		<item id="2169" chance="6000" />					<!-- time ring -->
+		<item id="7428" chance="2000" />					<!-- bonebreaker -->
+	</loot>
+</monster>

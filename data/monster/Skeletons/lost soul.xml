@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -17,11 +17,11 @@
 		<flag runonhealth="450" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="120" />
+		<attack name="melee" interval="2000" min="0" max="-429" />
 		<attack name="death" interval="2000" chance="10" length="3" spread="0" target="0" min="-40" max="-210">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="speed" interval="2000" chance="20" radius="6" target="0" speedchange="-800" duration="4000">
+		<attack name="speed" interval="2000" chance="20" radius="6" target="0" speedchange="-400" duration="4000">
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 	</attacks>
@@ -39,35 +39,34 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
+	<voices interval="2000" chance="7">
 		<voice sentence="Forgive Meeeee!" />
 		<voice sentence="Mouuuurn meeee!" />
 		<voice sentence="Help meeee!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="98" chance="49000" /><!-- gold coin -->
-		<item id="2152" countmax="7" chance="100000" /><!-- platinum coin -->
-		<item id="2260" countmax="3" chance="35250" /><!-- blank rune -->
-		<item id="6500" chance="7500" /><!-- demonic essence -->
-		<item id="7590" countmax="2" chance="14200" /><!-- great mana potion -->
-		<item id="2144" countmax="3" chance="12000" /><!-- black pearl -->
-		<item id="2143" countmax="3" chance="10000" /><!-- white pearl -->
-		<item id="7591" countmax="2" chance="8800" /><!-- great health potion -->
-		<item id="9809" chance="3500" /><!-- rusty armor -->
-		<item id="9810" chance="3500" /><!-- rusty armor -->
-		<item id="5806" chance="4950" /><!-- silver goblet -->
-		<item id="2133" chance="1500" /><!-- ruby necklace -->
-		<item id="2197" chance="2780" /><!-- stone skin amulet -->
-		<item id="7413" chance="1000" /><!-- titan axe -->
-		<item id="5944" chance="15000" /><!-- soul orb -->
-		<item id="2156" chance="15000" /><!-- red gem -->
-		<item id="6300" chance="2170" /><!-- death ring -->
-		<item id="6526" chance="1250" /><!-- skeleton decoration -->
-		<item id="2436" chance="850" /><!-- skull staff -->
-		<item id="5741" chance="170" /><!-- skull helmet -->
-		<item id="7407" chance="740" /><!-- haunted blade -->
-		<item id="11233" chance="33010" /><!--unholy bone -->
-		<item id="2528" chance="740" /><!--tower shield -->
+		<item id="2148" countmax="198" chance="99950" />	<!-- gold coin -->
+		<item id="2152" countmax="7" chance="99950" />	<!-- platinum coin -->
+		<item id="2260" countmax="3" chance="35250" />	<!-- blank rune -->
+		<item id="11233" chance="33010" />				<!-- unholy bone -->
+		<item id="5944" chance="15000" />				<!-- soul orb -->
+		<item id="7590" countmax="2" chance="14000" />	<!-- great mana potion -->
+		<item id="2144" countmax="3" chance="12000" />	<!-- black pearl -->
+		<item id="2143" countmax="3" chance="11000" />	<!-- white pearl -->
+		<item id="7591" countmax="2" chance="9300" />	<!-- great health potion -->
+		<item id="6500" chance="7070" />					<!-- demonic essence -->
+		<item id="5806" chance="5240" />					<!-- silver goblet -->
+		<item id="9809" chance="3880" />					<!-- rusty armor (semi-rare) -->
+		<item id="9810" chance="3880" />					<!-- rusty armor (rare) -->
+		<item id="2197" chance="2980" />					<!-- stone skin amulet -->
+		<item id="6300" chance="2510" />					<!-- death ring -->
+		<item id="2156" chance="1920" />					<!-- red gem -->
+		<item id="2133" chance="1500" />					<!-- ruby necklace -->
+		<item id="6526" chance="1190" />					<!-- skeleton decoration -->
+		<item id="7413" chance="1000" />					<!-- titan axe -->
+		<item id="2436" chance="960" />					<!-- skull staff -->
+		<item id="7407" chance="910" />					<!-- haunted blade -->
+		<item id="2528" chance="820" />					<!-- tower shield -->
+		<item id="5741" chance="140" />					<!-- skull helmet -->
 	</loot>
 </monster>

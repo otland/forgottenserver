@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Bruise Payne" nameDescription="Bruise Payne" race="blood" experience="1000" speed="210" manacost="0">
+	<health now="1600" max="1600" />
+	<look type="307" corpse="9829" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="300" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-240" poison="6" />
+		<attack name="earth" interval="2000" chance="15" range="7" min="-70" max="-180">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="drown" interval="2000" chance="15" target="0" radius="6" min="-130" max="-237">
+			<attribute key="areaEffect" value="whitenote" />
+		</attack>
+		<attack name="mutated bat curse" interval="2000" chance="10" />
+		<attack name="poisoncondition" interval="2000" chance="15" target="0" length="4" spread="3" min="-12" max="-12">
+			<attribute key="areaeffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="10" min="80" max="95">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="5894" countmax="2" chance="100000" />	<!-- bat wing -->
+		<item id="2167" chance="100000" />				<!-- energy ring -->
+		<item id="2148" countmax="99" chance="100000" />	<!-- gold coin -->
+		<item id="10579" chance="100000" />				<!-- mutated bat ear -->
+		<item id="2150" countmax="5" chance="100000" />	<!-- small amethyst -->
+		<item id="2800" chance="100000" />				<!-- star herb -->
+		<item id="2529" chance="92000" />				<!-- black shield -->
+		<item id="2144" countmax="5" chance="85000" />	<!-- black pearl -->
+		<item id="7386" chance="25000" />				<!-- mercenary sword -->
+		<item id="10016" chance="16000" />				<!-- batwing hat -->
+	</loot>
+</monster>
