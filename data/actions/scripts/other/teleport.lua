@@ -5,6 +5,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		fromPosition.z = fromPosition.z + 1
 	end
+	local t = Tile(fromPosition)
+	if t:hasFlag(TILESTATE_PROTECTIONZONE) and player:isPzLocked() then
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You can not enter a protection zone after attacking another player.")
+		return true
+	end
 	player:teleportTo(fromPosition, false)
 	return true
 end
