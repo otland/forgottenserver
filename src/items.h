@@ -58,7 +58,7 @@ enum ItemTypes_t {
 };
 
 struct Abilities {
-	Abilities() : stats(), statsPercent(), skills(), fieldAbsorbPercent(), absorbPercent() {
+	Abilities() : stats(), statsPercent(), skills(), fieldAbsorbPercent(), absorbPercent(), reflectPercent() {
 		elementType = COMBAT_NONE;
 		elementDamage = 0;
 
@@ -99,6 +99,9 @@ struct Abilities {
 	//damage abilities modifiers
 	int16_t absorbPercent[COMBAT_COUNT];
 
+	//relfect abilities modifires
+	int16_t reflectPercent[COMBAT_COUNT];
+	
 	//elemental damage
 	uint16_t elementDamage;
 	CombatType_t elementType;
