@@ -269,7 +269,7 @@ class ProtocolGame final : public Protocol
 
 		//inventory
 		void sendInventoryItem(slots_t slot, const Item* item);
-		void sendItems();
+		void sendItems(std::map<uint16_t, uint16_t> items);
 
 		//messages
 		void sendModalWindow(const ModalWindow& modalWindow);

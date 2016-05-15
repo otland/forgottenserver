@@ -1708,11 +1708,11 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		return;
 	}
 
-	static const std::function<Container*(Container*)> fetchFreeIndex = [](Container* container) -> Container* {
+	static const std::function<Container*(Container*)> fetchFreeContainer = [](Container* container) -> Container* {
 		if (container->getLastIndex() == container->capacity()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if (Container* new_container = (*it)->getContainer()) {
-					if (Container* free_container = fetchFreeIndex(new_container)) {
+					if (Container* free_container = fetchFreeContainer(new_container)) {
 						return free_container;
 					}
 				}
@@ -1726,9 +1726,9 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 
 	Container* toContainer = nullptr;
 	Container* backpack = nullptr;
-	if (Item* i = player->getInventoryItem(CONST_SLOT_BACKPACK)) {
-		if ((backpack = i->getContainer())) {
-			toContainer = fetchFreeIndex(backpack);
+	if (Item* item = player->getInventoryItem(CONST_SLOT_BACKPACK)) {
+		if ((backpack = item->getContainer())) {
+			toContainer = fetchFreeContainer(backpack);
 		} else {
 			return;
 		}

@@ -2542,29 +2542,7 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendItems() {
-	static const std::function<void(std::map<uint16_t, uint16_t>&, Container*)> parseItems = [](std::map<uint16_t, uint16_t>& itemsMap, Container* container) {
-		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-			itemsMap[(*it)->getClientID()] += Item::countByType(*it, -1);
-			if (Container* container2 = (*it)->getContainer()) {
-				parseItems(itemsMap, container2);
-			}
-		}
-	};
-
-	std::map<uint16_t, uint16_t> items;
-	for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
-		Item* item = player->getInventoryItem(static_cast<slots_t>(i));
-		if (!item) {
-			continue;
-		}
-
-		items[item->getClientID()] += Item::countByType(item, -1);
-		if (Container* container = item->getContainer()) {
-			parseItems(items, container);
-		}
-	}
-
+void ProtocolGame::sendItems(std::map<uint16_t, uint16_t> items) {
 	NetworkMessage msg;
 	msg.addByte(0xF5);
 	msg.add<uint16_t>(items.size() + 11);

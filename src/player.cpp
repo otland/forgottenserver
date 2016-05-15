@@ -540,6 +540,46 @@ void Player::updateInventoryWeight()
 	}
 }
 
+void Player::updateItemsCache(Thing* thing, bool remove)
+{
+	std::vector<Container*> containers;
+	if (thing) {
+		if (Item* item = thing->getItem()) {
+			cached_items[item->getClientID()] += remove ? -Item::countByType(item, -1) : Item::countByType(item, -1);
+			if (cached_items[item->getClientID()] == 0) {
+				cached_items.erase(item->getClientID());
+			}
+
+			if (Container* container = item->getContainer()) {
+				containers.push_back(container);
+			}
+		}
+	} else {
+		for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+			Item* item = getInventoryItem(static_cast<slots_t>(i));
+			if (!item) {
+				continue;
+			}
+
+			cached_items[item->getClientID()] += Item::countByType(item, -1);
+			if (Container* container = item->getContainer()) {
+				containers.push_back(container);
+			}
+		}
+	}
+
+	for (Container* container : containers) {
+		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+			cached_items[(*it)->getClientID()] += Item::countByType(*it, -1);
+			if (Container* new_container = (*it)->getContainer()) {
+				containers.push_back(new_container);
+			}
+		}
+	}
+
+	sendItems();
+}
+
 int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 {
 	switch (playerinfo) {
@@ -1174,7 +1214,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		g_game.checkPlayersRecord();
 		IOLoginData::updateOnlineStatus(guid, true);
 
-		sendItems();
+		updateItemsCache(nullptr, false);
 	}
 }
 
@@ -3071,8 +3111,8 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 
 		updateInventoryWeight();
 		updateItemsLight();
+		updateItemsCache(thing, false);
 		sendStats();
-		sendItems();
 	}
 
 	if (const Item* item = thing->getItem()) {
@@ -3126,8 +3166,8 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 
 		updateInventoryWeight();
 		updateItemsLight();
+		updateItemsCache(thing, true);
 		sendStats();
-		sendItems();
 	}
 
 	if (const Item* item = thing->getItem()) {
