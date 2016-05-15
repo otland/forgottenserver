@@ -1701,6 +1701,124 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 }
 
 //Implementation of player invoked events
+void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	static const std::function<Container*(Container*)> fetchFreeIndex = [](Container* container) -> Container* {
+		if (container->getLastIndex() == container->capacity()) {
+			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+				if (Container* new_container = (*it)->getContainer()) {
+					if (Container* free_container = fetchFreeIndex(new_container)) {
+						return free_container;
+					}
+				}
+			}
+		} else {
+			return container;
+		}
+
+		return nullptr;
+	};
+
+	Container* toContainer = nullptr;
+	Container* backpack = nullptr;
+	if (Item* i = player->getInventoryItem(CONST_SLOT_BACKPACK)) {
+		if ((backpack = i->getContainer())) {
+			toContainer = fetchFreeIndex(backpack);
+		} else {
+			return;
+		}
+	} else {
+		return;
+	}
+
+	static const std::function<Item*(Container*, uint16_t)> searchForItem = [](Container* container, uint16_t itemid) -> Item* {
+		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+			if (Container* c = (*it)->getContainer()) {
+				if (Item* item = searchForItem(c, itemid)) {
+					return item;
+				}
+			} else if ((*it)->getID() == itemid) {
+				return *it;
+			}
+		}
+		return nullptr;
+	};
+
+	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
+	slots_t slot = CONST_SLOT_RIGHT;
+	if (it.weaponType == WeaponType_t::WEAPON_SHIELD) {
+		slot = CONST_SLOT_RIGHT;
+	} else {
+		int32_t slotPosition = it.slotPosition;
+
+		if (slotPosition & SLOTP_HEAD) {
+			slot = CONST_SLOT_HEAD;
+		} else if (slotPosition & SLOTP_NECKLACE) {
+			slot = CONST_SLOT_NECKLACE;
+		} else if (slotPosition & SLOTP_ARMOR) {
+			slot = CONST_SLOT_ARMOR;
+		} else if(slotPosition & SLOTP_LEGS) {
+			slot = CONST_SLOT_LEGS;
+		} else if (slotPosition & SLOTP_FEET) {
+			slot = CONST_SLOT_FEET;
+		} else if(slotPosition & SLOTP_RING) {
+			slot = CONST_SLOT_RING;
+		} else if((slotPosition & SLOTP_AMMO)) {
+			slot = CONST_SLOT_AMMO;
+		} else if (slotPosition & SLOTP_TWO_HAND || slotPosition & SLOTP_LEFT) {
+			slot = CONST_SLOT_LEFT;
+		} else {
+			return;
+		}
+	}
+
+	ReturnValue ret1 = RETURNVALUE_NOTPOSSIBLE;
+	if (Item* item = player->getInventoryItem(slot)) {
+		if (toContainer) {
+			if (item->getID() == it.id) {
+				if (!it.stackable || item->getItemCount() == 100) {
+					ret1 = internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
+				} else {
+					if (Item* item_ = searchForItem(backpack, it.id)) {
+						uint8_t count = item_->getItemCount() + item->getItemCount() > 100 ? 100 - item->getItemCount() : item_->getItemCount();
+						ret1 = internalMoveItem(item_->getParent(), player, slot, item_, count, nullptr);
+					}
+				}
+			} else {
+				if (Item* item_ = searchForItem(backpack, it.id)) {
+					ReturnValue ret2 = RETURNVALUE_NOERROR;
+					ret1 = internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
+					ret2 = internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
+
+					if (ret2 != RETURNVALUE_NOERROR) {
+						player->sendCancelMessage(ret2);
+					}
+				}
+			}
+		} else {
+			if (it.stackable && item->getItemCount() != 100) {
+				if (Item* item_ = searchForItem(backpack, it.id)) {
+					uint8_t count = item_->getItemCount() + item->getItemCount() > 100 ? 100 - item->getItemCount() : item_->getItemCount();
+					ret1 = internalMoveItem(item_->getParent(), player, slot, item_, count, nullptr);
+				}
+			}
+		}
+	} else {
+		if (Item* item_ = searchForItem(backpack, it.id)) {
+			ret1 = internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
+		}
+	}
+
+	if (ret1 != RETURNVALUE_NOERROR) {
+		player->sendCancelMessage(ret1);
+	}
+}
+
 void Game::playerMove(uint32_t playerId, Direction direction)
 {
 	Player* player = getPlayerByID(playerId);

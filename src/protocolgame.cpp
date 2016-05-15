@@ -432,6 +432,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x70: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_EAST); break;
 		case 0x71: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_SOUTH); break;
 		case 0x72: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_WEST); break;
+		case 0x77: parseEquipObject(msg); break;
 		case 0x78: parseThrow(msg); break;
 		case 0x79: parseLookInShop(msg); break;
 		case 0x7A: parsePlayerPurchase(msg); break;
@@ -914,6 +915,14 @@ void ProtocolGame::parseFollow(NetworkMessage& msg)
 	uint32_t creatureId = msg.get<uint32_t>();
 	// msg.get<uint32_t>(); creatureId (same as above)
 	addGameTask(&Game::playerFollowCreature, player->getID(), creatureId);
+}
+
+void ProtocolGame::parseEquipObject(NetworkMessage& msg)
+{
+	uint16_t spriteId = msg.get<uint16_t>();
+	msg.get<uint8_t>();
+
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerEquipItem, player->getID(), spriteId);
 }
 
 void ProtocolGame::parseTextWindow(NetworkMessage& msg)
@@ -2530,6 +2539,48 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 		msg.addByte(0x79);
 		msg.addByte(slot);
 	}
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendItems() {
+	static const std::function<void(std::map<uint16_t, uint16_t>&, Container*)> parseItems = [](std::map<uint16_t, uint16_t>& itemsMap, Container* container) {
+		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+			itemsMap[(*it)->getClientID()] += Item::countByType(*it, -1);
+			if (Container* container2 = (*it)->getContainer()) {
+				parseItems(itemsMap, container2);
+			}
+		}
+	};
+
+	std::map<uint16_t, uint16_t> items;
+	for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+		Item* item = player->getInventoryItem(static_cast<slots_t>(i));
+		if (!item) {
+			continue;
+		}
+
+		items[item->getClientID()] += Item::countByType(item, -1);
+		if (Container* container = item->getContainer()) {
+			parseItems(items, container);
+		}
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0xF5);
+	msg.add<uint16_t>(items.size() + 11);
+	//for whatever reason, and I don't know why, real Tibia always sends 11 1-count objects at the beginning.
+	for (uint16_t i = 1; i <= 11; i++) {
+		msg.add<uint16_t>(i);
+		msg.addByte(0); //always 0
+		msg.add<uint16_t>(1); // always 1
+	}
+
+	for (const auto& it : items) {
+		msg.add<uint16_t>(it.first);
+		msg.addByte(0); //always 0
+		msg.add<uint16_t>(it.second);
+	}
+
 	writeToOutputBuffer(msg);
 }
 
