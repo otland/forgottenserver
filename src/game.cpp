@@ -1709,16 +1709,16 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 	}
 
 	static const std::function<Container*(Container*)> fetchFreeContainer = [](Container* container) -> Container* {
-		if (container->getLastIndex() == container->capacity()) {
-			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-				if (Container* new_container = (*it)->getContainer()) {
-					if (Container* free_container = fetchFreeContainer(new_container)) {
-						return free_container;
-					}
+		if (container->getLastIndex() != container->capacity()) {
+			return container;
+		}
+
+		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+			if (Container* new_container = (*it)->getContainer()) {
+				if (Container* free_container = fetchFreeContainer(new_container)) {
+					return free_container;
 				}
 			}
-		} else {
-			return container;
 		}
 
 		return nullptr;
