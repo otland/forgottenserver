@@ -573,9 +573,6 @@ void Player::updateItemsCache(Thing* thing, bool remove)
 	for (Container* container : containers) {
 		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 			cached_items[(*it)->getClientID()] += Item::countByType(*it, -1);
-			if (Container* new_container = (*it)->getContainer()) {
-				containers.push_back(new_container);
-			}
 		}
 	}
 
@@ -1175,6 +1172,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 
 	if (isLogin && creature == this) {
 		updateItemsCache(nullptr, false);
+
 		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 			Item* item = inventory[slot];
 			if (item) {

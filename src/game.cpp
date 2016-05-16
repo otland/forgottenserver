@@ -1733,11 +1733,7 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 
 	static const std::function<Item*(Container*, uint16_t)> searchForItem = [](Container* container, uint16_t itemid) -> Item* {
 		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-			if (Container* c = (*it)->getContainer()) {
-				if (Item* item = searchForItem(c, itemid)) {
-					return item;
-				}
-			} else if ((*it)->getID() == itemid) {
+			if ((*it)->getID() == itemid) {
 				return *it;
 			}
 		}
