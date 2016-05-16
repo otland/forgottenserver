@@ -155,6 +155,8 @@ Player::Player(ProtocolGame_ptr p) :
 	operatingSystem = CLIENTOS_NONE;
 	secureMode = false;
 	guid = 0;
+
+	sendUpdatedItems = false;
 }
 
 Player::~Player()
@@ -577,7 +579,7 @@ void Player::updateItemsCache(Thing* thing, bool remove)
 		}
 	}
 
-	sendItems();
+	sendUpdatedItems = true;
 }
 
 int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
@@ -1172,6 +1174,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (isLogin && creature == this) {
+		updateItemsCache(nullptr, false);
 		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 			Item* item = inventory[slot];
 			if (item) {
@@ -1213,8 +1216,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 
 		g_game.checkPlayersRecord();
 		IOLoginData::updateOnlineStatus(guid, true);
-
-		updateItemsCache(nullptr, false);
 	}
 }
 
@@ -1607,6 +1608,11 @@ void Player::onThink(uint32_t interval)
 	addOfflineTrainingTime(interval);
 	if (lastStatsTrainingTime != getOfflineTrainingTime() / 60 / 1000) {
 		sendStats();
+	}
+
+	if (sendUpdatedItems) {
+		sendItems();
+		sendUpdatedItems = false;
 	}
 }
 

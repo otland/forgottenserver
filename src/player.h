@@ -1296,6 +1296,7 @@ class Player final : public Creature, public Cylinder
 		fightMode_t fightMode;
 		AccountType_t accountType;
 
+		bool sendUpdatedItems;
 		bool secureMode;
 		bool inMarket;
 		bool wasMounted;
