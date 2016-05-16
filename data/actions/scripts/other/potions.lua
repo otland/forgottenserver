@@ -16,7 +16,7 @@
 		emptyFlask : the empty flask to add to player (optional)
 	}
 ]]
-potions = {
+local potions = {
 	-- The values used in every config is copied from tibia wiki!
 	removePotions = true,
 	addEmptyFlasks = true,
@@ -80,7 +80,7 @@ potions = {
 }
 --[[ available custom methods!
 	combat : MetatableCombat
-	condition : MetatableCondition
+	condition : MetatableCondition (not used)
 ]]
 -- antidote
 local antidote = Combat()
@@ -99,7 +99,7 @@ potions.exhaust:setParameter(CONDITION_PARAM_TICKS, (configManager.getNumber(con
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if target == nil or not target:isPlayer() then
-		return true
+		return false
 	end
 
 	local potion = potions[item:getId()]
@@ -126,8 +126,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				-- Instead of showing (elite knigts, epic knights, ..), only shows (elite knights)
 				-- It don't get affected by adding different vocations!
 				if #vocations == 0 then
-					local function tablefind(t, toFind)
-						for key, value in ipairs(t) do
+					table.find = function(table, toFind)
+						for key, value in ipairs(table) do
 							if value == toFind then
 								return true
 							end
@@ -136,7 +136,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 					end
 
 					for key, vocationId in ipairs(potion.vocations) do
-						if not tablefind(potion.vocations, Vocation(vocationId):getDemotion():getId()) then
+						if not table.find(potion.vocations, Vocation(vocationId):getDemotion():getId()) then
 							table.insert(vocations, vocationId)
 						end
 					end
@@ -158,14 +158,14 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				end
 
 				player:say(string.format(potions.stringOfVocation, vocationString, potion.minLevel), TALKTYPE_MONSTER_SAY)
-				return false
+				return true
 			end
 		end
 
 		-- Condition exists after the check!
 		if player:getCondition(CONDITION_EXHAUST_HEAL) then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUAREEXHAUSTED))
-			return true
+			return false
 		end
 
 		if potion.healthToAdd then
