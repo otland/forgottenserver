@@ -1787,6 +1787,8 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 					if (Item* item_ = searchForItem(backpack, it.id)) {
 						uint8_t count = item_->getItemCount() + item->getItemCount() > 100 ? 100 - item->getItemCount() : item_->getItemCount();
 						ret1 = internalMoveItem(item_->getParent(), player, slot, item_, count, nullptr);
+					} else {
+						ret1 = internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
 					}
 				}
 			} else {
