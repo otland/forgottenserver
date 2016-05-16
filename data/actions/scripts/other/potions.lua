@@ -1,12 +1,13 @@
 --[[
-	-- Don't forget to put new potions in actions.xml before adding here!
+	-- Don't forget to put new potions in actions.xml in addition to adding here!
 	Values of potions are copied from tibia wiki!
 	-- Explanations!
+	effect : effect to send to player after using potion! Default : CONST_ME_MAGIC_BLUE (required)
 	removePotions : removing the potion after use. Default : true (optional)
 	addEmptyFlasks : add the empty flask after using! ( only works if removePotions ) Default : true (optional)
 	words : to say after using! Default : "Aaaah..." (optional)
-	healthRate : affects the formula of health/mana added (min * healthRate), (max * healthRate) - Default: 1 (required)
-	manaRate : same as healthRate but, for mana - Default: 1 (required)
+	healthRate : affects the formula of health/mana added (min * healthRate), (max * healthRate) -- Default: 1 (required)
+	manaRate : same as healthRate but, for mana -- Default: 1 (required)
 	-- For every potion!
 	[potionId] = {
 		vocations : the vocations that are able to use the potion! (optional)
@@ -17,7 +18,8 @@
 	}
 ]]
 local potions = {
-	-- The values used in every config is copied from tibia wiki!
+	-- These values are default values in tibia, copied from tibiawiki.
+	effect = CONST_ME_MAGIC_GREEN,
 	removePotions = true,
 	addEmptyFlasks = true,
 	words = "Aaaah...",
@@ -143,13 +145,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				end
 
 				for i = 1, #vocations do
-					local stringPtr = ""
+					local stringPtr
 					if i == #vocations then
 						stringPtr = #vocations ~= 1 and " and " or ""
 					else
 						stringPtr = i ~= 1 and ", " or ""
 					end
-					
+
 					vocationString = vocationString .. stringPtr .. Vocation(vocations[i]):getName():lower() .. "s"
 				end
 
@@ -157,27 +159,31 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 					vocationString = "players"
 				end
 
-				player:say(string.format(potions.stringOfVocation, vocationString, potion.minLevel), TALKTYPE_MONSTER_SAY)
-				return true
+				if not potion.stringOfVocation then
+					potion.stringOfVocation = "This potion can only be consumed by %s of level %d or higher"
+				end
+
+				return not player:say(string.format(potions.stringOfVocation, vocationString, potion.minLevel), TALKTYPE_MONSTER_SAY)
 			end
 		end
 
 		-- Condition exists after the check!
 		if player:getCondition(CONDITION_EXHAUST_HEAL) then
-			player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUAREEXHAUSTED))
-			return false
+			return player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_YOUAREEXHAUSTED))
 		end
+
+		local effect = potions.effect or CONST_ME_MAGIC_BLUE
 
 		if potion.healthToAdd then
 			local min, max = potion.healthToAdd.min * (potions.healthRate or 1), potion.healthToAdd.max * (potions.healthRate or 1)
-			if not doTargetCombatHealth(0, target, COMBAT_HEALING, min, max, CONST_ME_MAGIC_BLUE) then
+			if not doTargetCombatHealth(0, target, COMBAT_HEALING, min, max, effect) then
 				return false
 			end
 		end
 
 		if potion.manaToAdd then
 			local min, max = potion.manaToAdd.min * (potions.manaRate or 1), potion.manaToAdd.max * (potions.manaRate or 1)
-			if not doTargetCombatMana(0, target, min, max, CONST_ME_MAGIC_BLUE) then
+			if not doTargetCombatMana(0, target, min, max, effect) then
 				return false
 			end
 		end
@@ -194,9 +200,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 		end
 
-		if potions.words then
-			target:say(potions.words, TALKTYPE_MONSTER_SAY)
+		if not potions.words then
+			potions.words = "Aaaah..."
 		end
+
+		target:say(potions.words, TALKTYPE_MONSTER_SAY)
 
 		-- The default behavior is removing even if nil.
 		if potions.removePotions ~= false then
@@ -216,6 +224,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if not getPlayerFlagValue(player, PlayerFlag_HasNoExhaustion) then
 			player:addCondition(potions.exhaust) -- Last thing to do is adding condition!
 		end
+		return true
 	end
-	return true
+	return false -- you can't use this object (potion isn't added to the table.)
 end
