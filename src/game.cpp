@@ -1708,27 +1708,37 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		return;
 	}
 
-	Container* toContainer = nullptr;
+	Item* item = nullptr;
+	if (!(item = player->getInventoryItem(CONST_SLOT_BACKPACK))) {
+		return;
+	}
+
 	Container* backpack = nullptr;
-	if (Item* item = player->getInventoryItem(CONST_SLOT_BACKPACK)) {
-		if ((backpack = item->getContainer())) {
-			if (backpack->getLastIndex() != backpack->capacity()) {
-				toContainer = backpack;
-			} else {
-				for (ContainerIterator it = backpack->iterator(); it.hasNext(); it.advance()) {
-					if (Container* container = (*it)->getContainer()) {
-						if (container->getLastIndex() != container->capacity()) {
-							toContainer = container;
-							break;
-						}
-					}
+	if (!(backpack = item->getContainer())) {
+		return;
+	}
+
+	Container* toContainer = nullptr;
+	std::vector<Container*> containers;
+	std::vector<Container*> new_containers;
+
+	containers.push_back(backpack);
+	while (!containers.empty() && !toContainer) {
+		for (Container* container : containers) {
+			if (container->getLastIndex() != container->capacity()) {
+				toContainer = container;
+				break;
+			}
+
+			for (Item* i : container->getItemList()) {
+				if (Container* new_container = i->getContainer()) {
+					new_containers.push_back(new_container);
 				}
 			}
-		} else {
-			return;
 		}
-	} else {
-		return;
+
+		containers.swap(new_containers);
+		new_containers.clear();
 	}
 
 	static const std::function<Item*(Container*, uint16_t)> searchForItem = [](Container* container, uint16_t itemid) -> Item* {
@@ -1769,7 +1779,7 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 	}
 
 	ReturnValue ret1 = RETURNVALUE_NOTPOSSIBLE;
-	if (Item* item = player->getInventoryItem(slot)) {
+	if ((item = player->getInventoryItem(slot))) {
 		if (toContainer) {
 			if (item->getID() == it.id) {
 				if (!it.stackable || item->getItemCount() == 100) {
