@@ -2542,10 +2542,12 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendItems(std::map<uint16_t, uint16_t> items) {
+void ProtocolGame::sendItems() {
 	NetworkMessage msg;
 	msg.addByte(0xF5);
-	msg.add<uint16_t>(items.size() + 11);
+
+	std::vector<uint16_t> inventory = Item::items.getInventory();
+	msg.add<uint16_t>(inventory.size() + 11);
 	//for whatever reason, and I don't know why, real Tibia always sends 11 1-count objects at the beginning.
 	for (uint16_t i = 1; i <= 11; i++) {
 		msg.add<uint16_t>(i);
@@ -2553,10 +2555,10 @@ void ProtocolGame::sendItems(std::map<uint16_t, uint16_t> items) {
 		msg.add<uint16_t>(1); // always 1
 	}
 
-	for (const auto& it : items) {
-		msg.add<uint16_t>(it.first);
+	for (int clientId : inventory) {
+		msg.add<uint16_t>(clientId);
 		msg.addByte(0); //always 0
-		msg.add<uint16_t>(it.second);
+		msg.add<uint16_t>(1);
 	}
 
 	writeToOutputBuffer(msg);

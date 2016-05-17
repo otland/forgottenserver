@@ -853,7 +853,7 @@ class Player final : public Creature, public Cylinder
 		}
 		void sendItems() {
 			if (client) {
-				client->sendItems(cached_items);
+				client->sendItems();
 			}
 		}
 
@@ -1152,7 +1152,6 @@ class Player final : public Creature, public Cylinder
 		void removeExperience(uint64_t exp, bool sendText = false);
 
 		void updateInventoryWeight();
-		void updateItemsCache(Thing*, bool);
 
 		void setNextWalkActionTask(SchedulerTask* task);
 		void setNextWalkTask(SchedulerTask* task);
@@ -1196,7 +1195,6 @@ class Player final : public Creature, public Cylinder
 		std::map<uint32_t, DepotLocker*> depotLockerMap;
 		std::map<uint32_t, DepotChest*> depotChests;
 		std::map<uint32_t, int32_t> storageMap;
-		std::map<uint16_t, uint16_t> cached_items;
 
 		std::vector<OutfitEntry> outfits;
 		GuildWarList guildWarList;
@@ -1296,7 +1294,6 @@ class Player final : public Creature, public Cylinder
 		fightMode_t fightMode;
 		AccountType_t accountType;
 
-		bool sendUpdatedItems;
 		bool secureMode;
 		bool inMarket;
 		bool wasMounted;

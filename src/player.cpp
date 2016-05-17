@@ -155,8 +155,6 @@ Player::Player(ProtocolGame_ptr p) :
 	operatingSystem = CLIENTOS_NONE;
 	secureMode = false;
 	guid = 0;
-
-	sendUpdatedItems = false;
 }
 
 Player::~Player()
@@ -540,43 +538,6 @@ void Player::updateInventoryWeight()
 			inventoryWeight += item->getWeight();
 		}
 	}
-}
-
-void Player::updateItemsCache(Thing* thing, bool remove)
-{
-	std::vector<Container*> containers;
-	if (thing) {
-		if (Item* item = thing->getItem()) {
-			cached_items[item->getClientID()] += remove ? -Item::countByType(item, -1) : Item::countByType(item, -1);
-			if (cached_items[item->getClientID()] == 0) {
-				cached_items.erase(item->getClientID());
-			}
-
-			if (Container* container = item->getContainer()) {
-				containers.push_back(container);
-			}
-		}
-	} else {
-		for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
-			Item* item = getInventoryItem(static_cast<slots_t>(i));
-			if (!item) {
-				continue;
-			}
-
-			cached_items[item->getClientID()] += Item::countByType(item, -1);
-			if (Container* container = item->getContainer()) {
-				containers.push_back(container);
-			}
-		}
-	}
-
-	for (Container* container : containers) {
-		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-			cached_items[(*it)->getClientID()] += Item::countByType(*it, -1);
-		}
-	}
-
-	sendUpdatedItems = true;
 }
 
 int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
@@ -1171,7 +1132,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (isLogin && creature == this) {
-		updateItemsCache(nullptr, false);
+		sendItems();
 
 		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 			Item* item = inventory[slot];
@@ -1606,11 +1567,6 @@ void Player::onThink(uint32_t interval)
 	addOfflineTrainingTime(interval);
 	if (lastStatsTrainingTime != getOfflineTrainingTime() / 60 / 1000) {
 		sendStats();
-	}
-
-	if (sendUpdatedItems) {
-		sendItems();
-		sendUpdatedItems = false;
 	}
 }
 
@@ -3115,7 +3071,6 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 
 		updateInventoryWeight();
 		updateItemsLight();
-		updateItemsCache(thing, false);
 		sendStats();
 	}
 
@@ -3170,7 +3125,6 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 
 		updateInventoryWeight();
 		updateItemsLight();
-		updateItemsCache(thing, true);
 		sendStats();
 	}
 
