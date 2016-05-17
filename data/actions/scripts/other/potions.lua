@@ -107,9 +107,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local potion = potions[item:getId()]
 	if potion then
 		if (potion.vocations or potion.minLevel) and not getPlayerFlagValue(player, PlayerFlag_IgnoreSpellCheck) then
-			if not potion.minLevel then
-				potion.minLevel = 1
-			end
+			potion.minLevel = math.max(potion.minLevel, 1)
 
 			if not potion.vocations then
 				potion.vocations = { [1] = player:getVocation():getId() }
@@ -155,7 +153,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 					vocationString = vocationString .. stringPtr .. Vocation(vocations[i]):getName():lower() .. "s"
 				end
 
-				if string.len(vocationString) == 0 then
+				if vocationString:len() == 0 then
 					vocationString = "players"
 				end
 
@@ -188,16 +186,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 		end
 
-		if potion.combat then
-			if not potion.combat:execute(target, numberToVariant(target:getId())) then
-				return false
-			end
+		if potion.combat and not potion.combat:execute(target, numberToVariant(target:getId())) then
+			return false
 		end
 
-		if potion.condition and potion.condition:getType() ~= CONDITION_EXHAUST_HEAL then
-			if not player:addCondition(potion.condition) then
-				return false
-			end
+		if potion.condition and potion.condition:getType() ~= CONDITION_EXHAUST_HEAL and not player:addCondition(potion.condition) then
+			return false
 		end
 
 		if not potions.words then
