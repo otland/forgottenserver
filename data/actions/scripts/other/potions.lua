@@ -126,17 +126,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				-- Instead of showing (elite knigts, epic knights, ..), only shows (elite knights)
 				-- It don't get affected by adding different vocations!
 				if #vocations == 0 then
-					table.find = function(table, toFind)
-						for key, value in ipairs(table) do
-							if value == toFind then
-								return true
-							end
-						end
-						return false
-					end
-
 					for key, vocationId in ipairs(potion.vocations) do
-						if not table.find(potion.vocations, Vocation(vocationId):getDemotion():getId()) then
+						if not isInArray(potion.vocations, Vocation(vocationId):getDemotion():getId()) then
 							table.insert(vocations, vocationId)
 						end
 					end
