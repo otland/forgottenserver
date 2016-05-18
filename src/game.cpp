@@ -1718,27 +1718,13 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		return;
 	}
 
-	Container* toContainer = nullptr;
-	std::vector<Container*> containers;
-	std::vector<Container*> new_containers;
-
-	containers.push_back(backpack);
-	while (!containers.empty() && !toContainer) {
-		for (Container* container : containers) {
+	Container* toContainer = backpack->getLastIndex() != backpack->capacity() ? backpack : nullptr;
+	for (ContainerIterator it = backpack->iterator(); it.hasNext() && !toContainer; it.advance()) {
+		if (Container* container = (*it)->getContainer()) {
 			if (container->getLastIndex() != container->capacity()) {
 				toContainer = container;
-				break;
-			}
-
-			for (Item* i : container->getItemList()) {
-				if (Container* new_container = i->getContainer()) {
-					new_containers.push_back(new_container);
-				}
 			}
 		}
-
-		containers.swap(new_containers);
-		new_containers.clear();
 	}
 
 	static const std::function<Item*(Container*, uint16_t)> searchForItem = [](Container* container, uint16_t itemid) -> Item* {
@@ -1752,9 +1738,7 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
 	slots_t slot = CONST_SLOT_RIGHT;
-	if (it.weaponType == WeaponType_t::WEAPON_SHIELD) {
-		slot = CONST_SLOT_RIGHT;
-	} else {
+	if (it.weaponType != WeaponType_t::WEAPON_SHIELD) {
 		int32_t slotPosition = it.slotPosition;
 
 		if (slotPosition & SLOTP_HEAD) {
@@ -1766,10 +1750,10 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		} else if(slotPosition & SLOTP_LEGS) {
 			slot = CONST_SLOT_LEGS;
 		} else if (slotPosition & SLOTP_FEET) {
-			slot = CONST_SLOT_FEET;
-		} else if(slotPosition & SLOTP_RING) {
+			slot = CONST_SLOT_FEET ;
+		} else if (slotPosition & SLOTP_RING) {
 			slot = CONST_SLOT_RING;
-		} else if((slotPosition & SLOTP_AMMO)) {
+		} else if (slotPosition & SLOTP_AMMO) {
 			slot = CONST_SLOT_AMMO;
 		} else if (slotPosition & SLOTP_TWO_HAND || slotPosition & SLOTP_LEFT) {
 			slot = CONST_SLOT_LEFT;
