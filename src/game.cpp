@@ -1778,47 +1778,17 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		}
 	}
 
-	ReturnValue ret1 = RETURNVALUE_NOTPOSSIBLE;
-	if ((item = player->getInventoryItem(slot))) {
-		if (toContainer) {
-			if (item->getID() == it.id) {
-				if (!it.stackable || item->getItemCount() == 100) {
-					ret1 = internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
-				} else {
-					if (Item* item_ = searchForItem(backpack, it.id)) {
-						uint8_t count = item_->getItemCount() + item->getItemCount() > 100 ? 100 - item->getItemCount() : item_->getItemCount();
-						ret1 = internalMoveItem(item_->getParent(), player, slot, item_, count, nullptr);
-					} else {
-						ret1 = internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
-					}
-				}
-			} else {
-				if (Item* item_ = searchForItem(backpack, it.id)) {
-					ReturnValue ret2 = RETURNVALUE_NOERROR;
-					ret1 = internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
-					ret2 = internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
-
-					if (ret2 != RETURNVALUE_NOERROR) {
-						player->sendCancelMessage(ret2);
-					}
-				}
-			}
-		} else {
-			if (it.stackable && item->getItemCount() != 100) {
-				if (Item* item_ = searchForItem(backpack, it.id)) {
-					uint8_t count = item_->getItemCount() + item->getItemCount() > 100 ? 100 - item->getItemCount() : item_->getItemCount();
-					ret1 = internalMoveItem(item_->getParent(), player, slot, item_, count, nullptr);
-				}
-			}
-		}
-	} else {
+	if (!(item = player->getInventoryItem(slot)) || (it.stackable && item->getItemCount() != 100)) {
 		if (Item* item_ = searchForItem(backpack, it.id)) {
-			ret1 = internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
+			internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
 		}
-	}
-
-	if (ret1 != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret1);
+	} else if (toContainer) {
+		if (item->getID() == it.id) {
+			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
+		} else if (Item* item_ = searchForItem(backpack, it.id)) {
+			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
+			internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
+		}
 	}
 }
 
