@@ -1762,9 +1762,9 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		}
 	}
 
-	if (!(item = player->getInventoryItem(slot)) || (it.stackable && item->getItemCount() != 100)) {
-		if (Item* item_ = searchForItem(backpack, it.id)) {
-			internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
+	if (!(item = player->getInventoryItem(slot)) || (item->getID() == it.id && it.stackable && item->getItemCount() != 100)) {
+		if (Item* equipItem = searchForItem(backpack, it.id)) {
+			internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
 			return;
 		}
 	}
@@ -1772,9 +1772,9 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 	if (item && toContainer) {
 		if (item->getID() == it.id) {
 			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
-		} else if (Item* item_ = searchForItem(backpack, it.id)) {
+		} else if (Item* equipItem = searchForItem(backpack, it.id)) {
 			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
-			internalMoveItem(item_->getParent(), player, slot, item_, item_->getItemCount(), nullptr);
+			internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
 		}
 	}
 }
