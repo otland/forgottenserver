@@ -312,7 +312,7 @@ class Items
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
 		void buildInventoryList();
-		std::vector<uint16_t> getInventory() { return inventory; }
+		const std::vector<uint16_t>& getInventory() const { return inventory; }
 
 		inline size_t size() const {
 			return items.size();
