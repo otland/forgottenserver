@@ -287,6 +287,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		}
 	}
 
+	if (item->isRemoved()) {
+		return RETURNVALUE_CANNOTUSETHISOBJECT;
+	}
+
 	if (BedItem* bed = item->getBed()) {
 		if (!bed->canUse(player)) {
 			return RETURNVALUE_CANNOTUSETHISOBJECT;
