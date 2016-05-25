@@ -280,15 +280,15 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			if (action->executeUse(player, item, pos, nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
 			}
+
+			if (item->isRemoved()) {
+				return RETURNVALUE_CANNOTUSETHISOBJECT;
+			}
 		} else if (action->function) {
 			if (action->function(player, item, pos, nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
 			}
 		}
-	}
-
-	if (item->isRemoved()) {
-		return RETURNVALUE_CANNOTUSETHISOBJECT;
 	}
 
 	if (BedItem* bed = item->getBed()) {
