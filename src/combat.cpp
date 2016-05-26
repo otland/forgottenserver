@@ -380,13 +380,13 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 	return g_events->eventCreatureOnTargetCombat(attacker, target);
 }
 
-void Combat::setPlayerCombatValues(formulaType_t _type, double _mina, double _minb, double _maxa, double _maxb)
+void Combat::setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb)
 {
-	formulaType = _type;
-	mina = _mina;
-	minb = _minb;
-	maxa = _maxa;
-	maxb = _maxb;
+	this->formulaType = formulaType;
+	this->mina = mina;
+	this->minb = minb;
+	this->maxa = maxa;
+	this->maxb = maxb;
 }
 
 bool Combat::setParam(CombatParam_t param, uint32_t value)

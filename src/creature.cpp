@@ -39,7 +39,7 @@ Creature::Creature() :
 	referenceCounter = 0;
 
 	id = 0;
-	_tile = nullptr;
+	tile = nullptr;
 	direction = DIRECTION_SOUTH;
 	master = nullptr;
 	lootDrop = true;
@@ -64,7 +64,7 @@ Creature::Creature() :
 
 	attackedCreature = nullptr;
 
-	lastHitCreature = 0;
+	lastHitCreatureId = 0;
 	blockCount = 0;
 	blockTicks = 0;
 	walkUpdateTicks = 0;
@@ -224,7 +224,7 @@ void Creature::onIdleStatus()
 {
 	if (getHealth() > 0) {
 		damageMap.clear();
-		lastHitCreature = 0;
+		lastHitCreatureId = 0;
 	}
 }
 
@@ -652,11 +652,11 @@ void Creature::onDeath()
 {
 	bool lastHitUnjustified = false;
 	bool mostDamageUnjustified = false;
-	Creature* _lastHitCreature = g_game.getCreatureByID(lastHitCreature);
+	Creature* lastHitCreature = g_game.getCreatureByID(lastHitCreatureId);
 	Creature* lastHitCreatureMaster;
-	if (_lastHitCreature) {
-		lastHitUnjustified = _lastHitCreature->onKilledCreature(this);
-		lastHitCreatureMaster = _lastHitCreature->getMaster();
+	if (lastHitCreature) {
+		lastHitUnjustified = lastHitCreature->onKilledCreature(this);
+		lastHitCreatureMaster = lastHitCreature->getMaster();
 	} else {
 		lastHitCreatureMaster = nullptr;
 	}
@@ -699,16 +699,16 @@ void Creature::onDeath()
 	}
 
 	if (mostDamageCreature) {
-		if (mostDamageCreature != _lastHitCreature && mostDamageCreature != lastHitCreatureMaster) {
+		if (mostDamageCreature != lastHitCreature && mostDamageCreature != lastHitCreatureMaster) {
 			Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-			if (_lastHitCreature != mostDamageCreatureMaster && (lastHitCreatureMaster == nullptr || mostDamageCreatureMaster != lastHitCreatureMaster)) {
+			if (lastHitCreature != mostDamageCreatureMaster && (lastHitCreatureMaster == nullptr || mostDamageCreatureMaster != lastHitCreatureMaster)) {
 				mostDamageUnjustified = mostDamageCreature->onKilledCreature(this, false);
 			}
 		}
 	}
 
-	bool droppedCorpse = dropCorpse(_lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
-	death(_lastHitCreature);
+	bool droppedCorpse = dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+	death(lastHitCreature);
 
 	if (master) {
 		master->removeSummon(this);
@@ -719,14 +719,14 @@ void Creature::onDeath()
 	}
 }
 
-bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
+bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
 	if (!lootDrop && getMonster()) {
 		if (master) {
 			//scripting event - onDeath
 			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
 			for (CreatureEvent* deathEvent : deathEvents) {
-				deathEvent->executeOnDeath(this, nullptr, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+				deathEvent->executeOnDeath(this, nullptr, lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 			}
 		}
 
@@ -754,7 +754,7 @@ bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatu
 			g_game.startDecay(splash);
 		}
 
-		Item* corpse = getCorpse(_lastHitCreature, mostDamageCreature);
+		Item* corpse = getCorpse(lastHitCreature, mostDamageCreature);
 		if (corpse) {
 			g_game.internalAddItem(tile, corpse, INDEX_WHEREEVER, FLAG_NOLIMIT);
 			g_game.startDecay(corpse);
@@ -762,11 +762,11 @@ bool Creature::dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreatu
 
 		//scripting event - onDeath
 		for (CreatureEvent* deathEvent : getCreatureEvents(CREATURE_EVENT_DEATH)) {
-			deathEvent->executeOnDeath(this, corpse, _lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+			deathEvent->executeOnDeath(this, corpse, lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 		}
 
 		if (corpse) {
-			dropLoot(corpse->getContainer(), _lastHitCreature);
+			dropLoot(corpse->getContainer(), lastHitCreature);
 		}
 	}
 
@@ -1050,7 +1050,7 @@ void Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 		it->second.ticks = OTSYS_TIME();
 	}
 
-	lastHitCreature = attackerId;
+	lastHitCreatureId = attackerId;
 }
 
 void Creature::onAddCondition(ConditionType_t type)
@@ -1148,13 +1148,13 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	master->onGainExperience(gainExp, target);
 
 	SpectatorVec list;
-	g_game.map.getSpectators(list, _position, false, true);
+	g_game.map.getSpectators(list, position, false, true);
 	if (list.empty()) {
 		return;
 	}
 
 	TextMessage message(MESSAGE_EXPERIENCE_OTHERS, ucfirst(getNameDescription()) + " gained " + std::to_string(gainExp) + (gainExp != 1 ? " experience points." : " experience point."));
-	message.position = _position;
+	message.position = position;
 	message.primary.color = TEXTCOLOR_WHITE_EXP;
 	message.primary.value = gainExp;
 
@@ -1420,7 +1420,7 @@ int64_t Creature::getStepDuration() const
 		calculatedStepSpeed = 1;
 	}
 
-	Item* ground = _tile->getGround();
+	Item* ground = tile->getGround();
 	if (ground) {
 		groundSpeed = Item::items[ground->getID()].speed;
 		if (groundSpeed == 0) {

@@ -280,6 +280,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			if (action->executeUse(player, item, pos, nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
 			}
+
+			if (item->isRemoved()) {
+				return RETURNVALUE_CANNOTUSETHISOBJECT;
+			}
 		} else if (action->function) {
 			if (action->function(player, item, pos, nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
@@ -410,23 +414,11 @@ void Actions::showUseHotkeyMessage(Player* player, const Item* item, uint32_t co
 	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 }
 
-Action::Action(LuaScriptInterface* _interface) :
-	Event(_interface)
-{
-	allowFarUse = false;
-	checkFloor = true;
-	checkLineOfSight = true;
-	function = nullptr;
-}
+Action::Action(LuaScriptInterface* interface) :
+	Event(interface), function(nullptr), allowFarUse(false), checkFloor(true), checkLineOfSight(true) {}
 
 Action::Action(const Action* copy) :
-	Event(copy)
-{
-	allowFarUse = copy->allowFarUse;
-	checkFloor = copy->checkFloor;
-	checkLineOfSight = copy->checkLineOfSight;
-	function = copy->function;
-}
+	Event(copy), function(copy->function), allowFarUse(copy->allowFarUse), checkFloor(copy->checkFloor), checkLineOfSight(copy->checkLineOfSight) {}
 
 bool Action::configureEvent(const pugi::xml_node& node)
 {

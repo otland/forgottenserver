@@ -25,7 +25,7 @@
 class Inbox final : public Container
 {
 	public:
-		explicit Inbox(uint16_t _type);
+		explicit Inbox(uint16_t type);
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,

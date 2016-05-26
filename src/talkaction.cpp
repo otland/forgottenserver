@@ -107,11 +107,8 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	return TALKACTION_CONTINUE;
 }
 
-TalkAction::TalkAction(LuaScriptInterface* _interface) :
-	Event(_interface)
-{
-	separator = '"';
-}
+TalkAction::TalkAction(LuaScriptInterface* interface) :
+	Event(interface), separator('"') {}
 
 bool TalkAction::configureEvent(const pugi::xml_node& node)
 {

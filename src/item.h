@@ -137,8 +137,8 @@ class ItemAttributes
 			return static_cast<time_t>(getIntAttr(ITEM_ATTRIBUTE_DATE));
 		}
 
-		void setWriter(const std::string& _writer) {
-			setStrAttr(ITEM_ATTRIBUTE_WRITER, _writer);
+		void setWriter(const std::string& writer) {
+			setStrAttr(ITEM_ATTRIBUTE_WRITER, writer);
 		}
 		void resetWriter() {
 			removeAttribute(ITEM_ATTRIBUTE_WRITER);
@@ -175,15 +175,15 @@ class ItemAttributes
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE));
 		}
 
-		void setOwner(uint32_t _owner) {
-			setIntAttr(ITEM_ATTRIBUTE_OWNER, _owner);
+		void setOwner(uint32_t owner) {
+			setIntAttr(ITEM_ATTRIBUTE_OWNER, owner);
 		}
 		uint32_t getOwner() const {
 			return getIntAttr(ITEM_ATTRIBUTE_OWNER);
 		}
 
-		void setCorpseOwner(uint32_t _corpseOwner) {
-			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, _corpseOwner);
+		void setCorpseOwner(uint32_t corpseOwner) {
+			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, corpseOwner);
 		}
 		uint32_t getCorpseOwner() const {
 			return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER);
@@ -302,13 +302,13 @@ class Item : virtual public Thing
 {
 	public:
 		//Factory member to create item of right type based on type
-		static Item* CreateItem(const uint16_t _type, uint16_t _count = 0);
-		static Container* CreateItemAsContainer(const uint16_t _type, uint16_t size);
+		static Item* CreateItem(const uint16_t type, uint16_t count = 0);
+		static Container* CreateItemAsContainer(const uint16_t type, uint16_t size);
 		static Item* CreateItem(PropStream& propStream);
 		static Items items;
 
 		// Constructor for items
-		Item(const uint16_t _type, uint16_t _count = 0);
+		Item(const uint16_t type, uint16_t count = 0);
 		Item(const Item& i);
 		virtual Item* clone() const;
 
@@ -424,8 +424,8 @@ class Item : virtual public Thing
 			return static_cast<time_t>(getIntAttr(ITEM_ATTRIBUTE_DATE));
 		}
 
-		void setWriter(const std::string& _writer) {
-			setStrAttr(ITEM_ATTRIBUTE_WRITER, _writer);
+		void setWriter(const std::string& writer) {
+			setStrAttr(ITEM_ATTRIBUTE_WRITER, writer);
 		}
 		void resetWriter() {
 			removeAttribute(ITEM_ATTRIBUTE_WRITER);
@@ -475,8 +475,8 @@ class Item : virtual public Thing
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE));
 		}
 
-		void setOwner(uint32_t _owner) {
-			setIntAttr(ITEM_ATTRIBUTE_OWNER, _owner);
+		void setOwner(uint32_t owner) {
+			setIntAttr(ITEM_ATTRIBUTE_OWNER, owner);
 		}
 		uint32_t getOwner() const {
 			if (!attributes) {
@@ -485,8 +485,8 @@ class Item : virtual public Thing
 			return getIntAttr(ITEM_ATTRIBUTE_OWNER);
 		}
 
-		void setCorpseOwner(uint32_t _corpseOwner) {
-			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, _corpseOwner);
+		void setCorpseOwner(uint32_t corpseOwner) {
+			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, corpseOwner);
 		}
 		uint32_t getCorpseOwner() const {
 			if (!attributes) {

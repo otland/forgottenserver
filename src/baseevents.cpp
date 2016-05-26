@@ -91,19 +91,11 @@ bool BaseEvents::reload()
 	return loadFromXml();
 }
 
-Event::Event(LuaScriptInterface* _interface)
-{
-	scriptInterface = _interface;
-	scriptId = 0;
-	scripted = false;
-}
+Event::Event(LuaScriptInterface* interface) :
+	scripted(false), scriptId(0), scriptInterface(interface) {}
 
-Event::Event(const Event* copy)
-{
-	scriptInterface = copy->scriptInterface;
-	scriptId = copy->scriptId;
-	scripted = copy->scripted;
-}
+Event::Event(const Event* copy) :
+	scripted(copy->scripted), scriptId(copy->scriptId), scriptInterface(copy->scriptInterface) {}
 
 bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const
 {
@@ -164,14 +156,14 @@ CallBack::CallBack()
 	loaded = false;
 }
 
-bool CallBack::loadCallBack(LuaScriptInterface* _interface, const std::string& name)
+bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& name)
 {
-	if (!_interface) {
+	if (!interface) {
 		std::cout << "Failure: [CallBack::loadCallBack] scriptInterface == nullptr" << std::endl;
 		return false;
 	}
 
-	scriptInterface = _interface;
+	scriptInterface = interface;
 
 	int32_t id = scriptInterface->getEvent(name.c_str());
 	if (id == -1) {

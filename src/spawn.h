@@ -45,7 +45,7 @@ class Spawn
 		Spawn(const Spawn&) = delete;
 		Spawn& operator=(const Spawn&) = delete;
 
-		bool addMonster(const std::string& _name, const Position& _pos, Direction _dir, uint32_t _interval);
+		bool addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
 		void removeMonster(Monster* monster);
 
 		uint32_t getInterval() const {
@@ -86,7 +86,7 @@ class Spawns
 
 		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
-		bool loadFromXml(const std::string& _filename);
+		bool loadFromXml(const std::string& filename);
 		void startup();
 		void clear();
 

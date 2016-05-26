@@ -30,7 +30,7 @@ class Action : public Event
 {
 	public:
 		explicit Action(const Action* copy);
-		explicit Action(LuaScriptInterface* _interface);
+		explicit Action(LuaScriptInterface* interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute& attr) override;

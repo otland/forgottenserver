@@ -25,7 +25,7 @@
 class Teleport final : public Item, public Cylinder
 {
 	public:
-		explicit Teleport(uint16_t _type);
+		explicit Teleport(uint16_t type);
 
 		Teleport* getTeleport() final {
 			return this;

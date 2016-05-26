@@ -60,7 +60,7 @@ class TalkActions : public BaseEvents
 class TalkAction : public Event
 {
 	public:
-		explicit TalkAction(LuaScriptInterface* _interface);
+		explicit TalkAction(LuaScriptInterface* interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
 

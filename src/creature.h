@@ -419,11 +419,11 @@ class Creature : virtual public Thing
 		size_t getSummonCount() const {
 			return summons.size();
 		}
-		void setDropLoot(bool _lootDrop) {
-			lootDrop = _lootDrop;
+		void setDropLoot(bool lootDrop) {
+			this->lootDrop = lootDrop;
 		}
-		void setLossSkill(bool _skillLoss) {
-			skillLoss = _skillLoss;
+		void setLossSkill(bool skillLoss) {
+			this->skillLoss = skillLoss;
 		}
 
 		//creature script events
@@ -431,22 +431,22 @@ class Creature : virtual public Thing
 		bool unregisterCreatureEvent(const std::string& name);
 
 		Cylinder* getParent() const final {
-			return _tile;
+			return tile;
 		}
 		void setParent(Cylinder* cylinder) final {
-			_tile = static_cast<Tile*>(cylinder);
-			_position = _tile->getPosition();
+			tile = static_cast<Tile*>(cylinder);
+			position = tile->getPosition();
 		}
 
 		inline const Position& getPosition() const final {
-			return _position;
+			return position;
 		}
 
 		Tile* getTile() final {
-			return _tile;
+			return tile;
 		}
 		const Tile* getTile() const final {
-			return _tile;
+			return tile;
 		}
 
 		int32_t getWalkCache(const Position& pos) const;
@@ -482,7 +482,7 @@ class Creature : virtual public Thing
 		static const int32_t maxWalkCacheWidth = (mapWalkWidth - 1) / 2;
 		static const int32_t maxWalkCacheHeight = (mapWalkHeight - 1) / 2;
 
-		Position _position;
+		Position position;
 
 		typedef std::map<uint32_t, CountBlock_t> CountMap;
 		CountMap damageMap;
@@ -493,7 +493,7 @@ class Creature : virtual public Thing
 
 		std::forward_list<Direction> listWalkDir;
 
-		Tile* _tile;
+		Tile* tile;
 		Creature* attackedCreature;
 		Creature* master;
 		Creature* followCreature;
@@ -504,7 +504,7 @@ class Creature : virtual public Thing
 		uint32_t scriptEventsBitField;
 		uint32_t eventWalk;
 		uint32_t walkUpdateTicks;
-		uint32_t lastHitCreature;
+		uint32_t lastHitCreatureId;
 		uint32_t blockCount;
 		uint32_t blockTicks;
 		uint32_t lastStepCost;
@@ -559,8 +559,8 @@ class Creature : virtual public Thing
 		}
 		virtual void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const;
 		virtual void death(Creature*) {}
-		virtual bool dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified);
-		virtual Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature);
+		virtual bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified);
+		virtual Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature);
 
 		friend class Game;
 		friend class Map;
