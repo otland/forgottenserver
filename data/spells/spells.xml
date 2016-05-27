@@ -51,21 +51,21 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="healing" spellid="144" name="Cure Bleeding" words="exana kor" lvl="45" mana="30" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_bleeding.lua">
+	<instant group="healing" spellid="144" name="Cure Bleeding" words="exana kor" lvl="45" mana="30" prem="1" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_bleeding.lua">
 		<vocation name="Druid" />
 		<vocation name="Knight" />
 		<vocation name="Elder Druid" />
 		<vocation name="Elite Knight" />
 	</instant>
-	<instant group="healing" spellid="145" name="Cure Burning" words="exana flam" lvl="30" mana="30" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_burning.lua">
+	<instant group="healing" spellid="145" name="Cure Burning" words="exana flam" lvl="30" mana="30" prem="1" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_burning.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="healing" spellid="147" name="Cure Curse" words="exana mort" lvl="80" mana="40" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_curse.lua">
+	<instant group="healing" spellid="147" name="Cure Curse" words="exana mort" lvl="80" mana="40" prem="1" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_curse.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="healing" spellid="146" name="Cure Electrification" words="exana vis" lvl="22" mana="30" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_electrification.lua">
+	<instant group="healing" spellid="146" name="Cure Electrification" words="exana vis" lvl="22" mana="30" prem="1" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/cure_electrification.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -79,7 +79,7 @@
 		<vocation name="Royal Paladin" />
 		<vocation name="Elite Knight" />
 	</instant>
-	<instant group="attack" spellid="139" name="Curse" words="utori mort" lvl="75" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="40000" groupcooldown="2000" needlearn="0" script="attack/curse.lua">
+	<instant group="attack" spellid="139" name="Curse" words="utori mort" lvl="75" mana="30" prem="1" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="40000" groupcooldown="2000" needlearn="0" script="attack/curse.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
@@ -99,7 +99,7 @@
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="attack" spellid="140" name="Electrify" words="utori vis" lvl="34" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/electrify.lua">
+	<instant group="attack" spellid="140" name="Electrify" words="utori vis" lvl="34" mana="30" prem="1" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/electrify.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
@@ -121,7 +121,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="attack" spellid="142" name="Envenom" words="utori pox" lvl="50" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="40000" groupcooldown="2000" needlearn="0" script="attack/envenom.lua">
+	<instant group="attack" spellid="142" name="Envenom" words="utori pox" lvl="50" mana="30" prem="1" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="40000" groupcooldown="2000" needlearn="0" script="attack/envenom.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -205,7 +205,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="attack" spellid="143" name="Holy Flash" words="utori san" lvl="70" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="40000" groupcooldown="2000" needlearn="0" script="attack/holy_flash.lua">
+	<instant group="attack" spellid="143" name="Holy Flash" words="utori san" lvl="70" mana="30" prem="1" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="40000" groupcooldown="2000" needlearn="0" script="attack/holy_flash.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
@@ -219,11 +219,11 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="attack" spellid="138" name="Ignite" words="utori flam" lvl="26" mana="30" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/ignite.lua">
+	<instant group="attack" spellid="138" name="Ignite" words="utori flam" lvl="26" mana="30" prem="1" range="3" casterTargetOrDirection="1" aggressive="1" blockwalls="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/ignite.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="attack" spellid="141" name="Inflict Wound" words="utori kor" lvl="40" mana="30" range="1" aggressive="1" blockwalls="1" needtarget="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/inflict_wound.lua">
+	<instant group="attack" spellid="141" name="Inflict Wound" words="utori kor" lvl="40" mana="30" prem="1" range="1" aggressive="1" blockwalls="1" needtarget="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/inflict_wound.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
@@ -235,7 +235,7 @@
 		<vocation name="Elder Druid" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="healing" spellid="160" name="Intense Recovery" words="utura gran" lvl="100" mana="165" aggressive="0" selftarget="1" cooldown="60000" groupcooldown="1000" needlearn="0" script="healing/intense_recovery.lua">
+	<instant group="healing" spellid="160" name="Intense Recovery" words="utura gran" lvl="100" mana="165" prem="1" aggressive="0" selftarget="1" cooldown="60000" groupcooldown="1000" needlearn="0" script="healing/intense_recovery.lua">
 		<vocation name="Paladin" />
 		<vocation name="Knight" />
 		<vocation name="Royal Paladin" />
@@ -311,7 +311,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="attack" spellid="172" name="Mud Attack" words="exori infir tera" lvl="1" mana="6" prem="1" range="3" casterTargetOrDirection="1" blockwalls="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="attack/mud_attack.lua">
+	<instant group="attack" spellid="172" name="Mud Attack" words="exori infir tera" lvl="1" mana="6" prem="0" range="3" casterTargetOrDirection="1" blockwalls="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="attack/mud_attack.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -337,7 +337,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="healing" spellid="159" name="Recovery" words="utura" lvl="50" mana="75" aggressive="0" selftarget="1" cooldown="60000" groupcooldown="1000" needlearn="0" script="healing/recovery.lua">
+	<instant group="healing" spellid="159" name="Recovery" words="utura" lvl="50" mana="75" prem="1" aggressive="0" selftarget="1" cooldown="60000" groupcooldown="1000" needlearn="0" script="healing/recovery.lua">
 		<vocation name="Paladin" />
 		<vocation name="Knight" />
 		<vocation name="Royal Paladin" />
@@ -377,7 +377,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="attack" spellid="43" name="Strong Ice Wave" words="exevo gran frigo hur" lvl="40" mana="170" direction="1" cooldown="8000" groupcooldown="2000" needlearn="0" script="attack/strong_ice_wave.lua">
+	<instant group="attack" spellid="43" name="Strong Ice Wave" words="exevo gran frigo hur" lvl="40" mana="170" prem="1" direction="1" cooldown="8000" groupcooldown="2000" needlearn="0" script="attack/strong_ice_wave.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -437,7 +437,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="healing" spellid="123" name="Wound Cleansing" words="exura ico" lvl="10" mana="40" prem="0" selftarget="1" aggressive="0" cooldown="1000" groupcooldown="1000" needlearn="0" script="healing/wound_cleansing.lua">
+	<instant group="healing" spellid="123" name="Wound Cleansing" words="exura ico" lvl="8" mana="40" prem="0" selftarget="1" aggressive="0" cooldown="1000" groupcooldown="1000" needlearn="0" script="healing/wound_cleansing.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
@@ -562,9 +562,9 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</conjure>
-	<!--<conjure name="Lightest Magic Missile" words="adori dis min vis" lvl="1" mana="5" soul="0" reagentId="2260" conjureId="2287" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	<conjure name="Lightest Magic Missile" words="adori dis min vis" lvl="1" mana="5" soul="0" reagentId="2260" conjureId="2287" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="None" />
-	</conjure>-->
+	</conjure>
 	<conjure name="Lightest Missile" words="adori infir vis" lvl="1" mana="6" soul="0" reagentId="2260" conjureId="23723" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
@@ -589,7 +589,7 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</conjure>
-	<conjure name="Stalagmite" words="adori tera" lvl="24" mana="400" soul="2" prem="2" reagentId="2260" conjureId="2292" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	<conjure name="Stalagmite" words="adori tera" lvl="24" mana="350" soul="2" prem="2" reagentId="2260" conjureId="2292" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Druid" />
@@ -615,7 +615,7 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</conjure>
-	<conjure name="Soulfire" words="adevo res flam" lvl="27" mana="600" soul="3" prem="1" reagentId="2260" conjureId="2308" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	<conjure name="Soulfire" words="adevo res flam" lvl="27" mana="420" soul="3" prem="1" reagentId="2260" conjureId="2308" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
@@ -657,7 +657,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</conjure>
-	<conjure name="Intense Healing Rune" words="adura gran" lvl="15" mana="240" soul="2" reagentId="2260" conjureId="2265" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	<conjure name="Intense Healing Rune" words="adura gran" lvl="15" mana="120" soul="2" reagentId="2260" conjureId="2265" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</conjure>
@@ -731,7 +731,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</conjure>
-	<conjure name="Holy Missile" words="adori san" lvl="27" mana="350" soul="3" prem="1" reagentId="2260" conjureId="2295" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	<conjure name="Holy Missile" words="adori san" lvl="27" mana="300" soul="3" prem="1" reagentId="2260" conjureId="2295" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</conjure>
