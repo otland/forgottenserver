@@ -1082,6 +1082,19 @@ AreaCombat::AreaCombat(const AreaCombat& rhs)
 
 void AreaCombat::getList(const Position& centerPos, const Position& targetPos, std::forward_list<Tile*>& list) const
 {
+	Tile* tile = g_game.map.getTile(targetPos);
+	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
+		return;
+	}
+	
+	if (tile->hasFlag(TILESTATE_FLOORCHANGE)) {
+		return;
+	}
+
+	if (tile->getTeleportItem()) {
+		return;
+	}
+	
 	const MatrixArea* area = getArea(centerPos, targetPos);
 	if (!area) {
 		return;
@@ -1096,7 +1109,7 @@ void AreaCombat::getList(const Position& centerPos, const Position& targetPos, s
 		for (uint32_t x = 0; x < cols; ++x) {
 			if (area->getValue(y, x) != 0) {
 				if (g_game.isSightClear(targetPos, tmpPos, true)) {
-					Tile* tile = g_game.map.getTile(tmpPos);
+					tile = g_game.map.getTile(tmpPos);
 					if (!tile) {
 						tile = new StaticTile(tmpPos.x, tmpPos.y, tmpPos.z);
 						g_game.map.setTile(tmpPos, tile);
