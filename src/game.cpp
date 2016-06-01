@@ -34,19 +34,21 @@
 #include "configmanager.h"
 #include "server.h"
 #include "globalevent.h"
+#include "movement.h"
 #include "bed.h"
 #include "scheduler.h"
 #include "events.h"
 #include "databasetasks.h"
 
-extern ConfigManager g_config;
 extern Actions* g_actions;
 extern Chat* g_chat;
-extern TalkActions* g_talkActions;
-extern Spells* g_spells;
-extern Vocations g_vocations;
-extern GlobalEvents* g_globalEvents;
+extern ConfigManager g_config;
 extern Events* g_events;
+extern GlobalEvents* g_globalEvents;
+extern MoveEvents* g_moveEvents;
+extern Spells* g_spells;
+extern TalkActions* g_talkActions;
+extern Vocations g_vocations;
 
 Game::Game() :
 	wildcardTree(false),
@@ -817,6 +819,14 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	ReturnValue ret = toTile.queryAdd(0, creature, 1, flags);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
+	}
+
+	if (!g_moveEvents->onCreatureMove(&creature, creature.getTile(), creature.getPosition(), MOVE_EVENT_STEP_OUT)) {
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
+
+	if (!g_moveEvents->onCreatureMove(&creature, &toTile, creature.getPosition(), MOVE_EVENT_STEP_IN)) {
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	map.moveCreature(creature, toTile);
