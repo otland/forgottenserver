@@ -12,8 +12,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if isInArray(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
-		tile = Tile(toPosition:moveUpstairs())
-		if tile:hasFlag(TILESTATE_PROTECTIONZONE) and player:isPzLocked() then
+		if player:isPzLocked() and Tile(toPosition:moveUpstairs()):hasFlag(TILESTATE_PROTECTIONZONE) then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_PLAYERISPZLOCKED))
 			return true
 		end
@@ -25,8 +24,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if tile then
 			local thing = tile:getTopVisibleThing()
 			if thing:isPlayer() then
-				tile = Tile(toPosition:moveUpstairs())
-				if tile:hasFlag(TILESTATE_PROTECTIONZONE) and thing:isPzLocked() then
+				if thing:isPzLocked() and Tile(toPosition:moveUpstairs()):hasFlag(TILESTATE_PROTECTIONZONE) then
 					return false
 				end
 				return thing:teleportTo(toPosition, false)
