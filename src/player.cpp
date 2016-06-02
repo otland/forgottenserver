@@ -734,11 +734,7 @@ bool Player::canOpenCorpse(uint32_t ownerId) const
 
 uint16_t Player::getLookCorpse() const
 {
-	if (sex == PLAYERSEX_FEMALE) {
-		return ITEM_FEMALE_CORPSE;
-	} else {
-		return ITEM_MALE_CORPSE;
-	}
+	return sex == PLAYERSEX_FEMALE ? ITEM_FEMALE_CORPSE : ITEM_MALE_CORPSE;
 }
 
 void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin/* = false*/)
@@ -790,10 +786,7 @@ bool Player::getStorageValue(const uint32_t key, int32_t& value) const
 
 bool Player::canSee(const Position& pos) const
 {
-	if (!client) {
-		return false;
-	}
-	return client->canSee(pos);
+	return client && client->canSee(pos);
 }
 
 bool Player::canSeeCreature(const Creature* creature) const

@@ -20,39 +20,26 @@ function Game.convertIpToString(ip)
 end
 
 function Game.getReverseDirection(direction)
-	if direction == WEST then
-		return EAST
-	elseif direction == EAST then
-		return WEST
-	elseif direction == NORTH then
-		return SOUTH
-	elseif direction == SOUTH then
-		return NORTH
-	elseif direction == NORTHWEST then
-		return SOUTHEAST
-	elseif direction == NORTHEAST then
-		return SOUTHWEST
-	elseif direction == SOUTHWEST then
-		return NORTHEAST
-	elseif direction == SOUTHEAST then
-		return NORTHWEST
-	end
-	return NORTH
+	local config = {
+		[DIRECTION_NORTH] = DIRECTION_SOUTH,
+		[DIRECTION_SOUTH] = DIRECTION_NORTH,
+		[DIRECTION_EAST] = DIRECTION_WEST,
+		[DIRECTION_WEST] = DIRECTION_EAST
+	}
+
+	return config[direction] or DIRECTION_NORTH
 end
 
 function Game.getSkillType(weaponType)
-	if weaponType == WEAPON_CLUB then
-		return SKILL_CLUB
-	elseif weaponType == WEAPON_SWORD then
-		return SKILL_SWORD
-	elseif weaponType == WEAPON_AXE then
-		return SKILL_AXE
-	elseif weaponType == WEAPON_DISTANCE then
-		return SKILL_DISTANCE
-	elseif weaponType == WEAPON_SHIELD then
-		return SKILL_SHIELD
-	end
-	return SKILL_FIST
+	local config = {
+		[WEAPON_CLUB] = SKILL_CLUB
+		[WEAPON_SWORD] = SKILL_SWORD
+		[WEAPON_AXE] = SKILL_AXE
+		[WEAPON_DISTANCE] = SKILL_DISTANCE
+		[WEAPON_SHIELD] = SKILL_SHIELD
+	}
+
+	return config[weaponType] or SKILL_FIST
 end
 
 if not globalStorageTable then
