@@ -582,6 +582,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	}
 
 	Tile* tile = creature->getTile();
+	g_moveEvents->onCreatureMove(creature, tile, creature->getPosition(), MOVE_EVENT_STEP_OUT);
 
 	std::vector<int32_t> oldStackPosVector;
 
