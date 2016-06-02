@@ -23,7 +23,7 @@
 #include "globalevent.h"
 #include "tools.h"
 #include "scheduler.h"
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 extern ConfigManager g_config;
 
@@ -279,7 +279,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 			return false;
 		}
 	} else if ((attr = node.attribute("interval"))) {
-		interval = std::max<int32_t>(SCHEDULER_MINTICKS, pugi::cast<int32_t>(attr.value()));
+		interval = std::max<int32_t>(SCHEDULER_MINTICKS, lexical_cast<int32_t>(attr.value()));
 		nextExecution = OTSYS_TIME() + interval;
 	} else {
 		std::cout << "[Error - GlobalEvent::configureEvent] No interval for globalevent with name " << name << std::endl;

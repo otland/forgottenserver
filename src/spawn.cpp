@@ -25,7 +25,7 @@
 #include "configmanager.h"
 #include "scheduler.h"
 
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;
@@ -57,15 +57,15 @@ bool Spawns::loadFromXml(const std::string& filename)
 
 	for (auto spawnNode : doc.child("spawns").children()) {
 		Position centerPos(
-			pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
-			pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
-			pugi::cast<uint16_t>(spawnNode.attribute("centerz").value())
+			lexical_cast<uint16_t>(spawnNode.attribute("centerx").value()),
+			lexical_cast<uint16_t>(spawnNode.attribute("centery").value()),
+			lexical_cast<uint16_t>(spawnNode.attribute("centerz").value())
 		);
 
 		int32_t radius;
 		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
 		if (radiusAttribute) {
-			radius = pugi::cast<int32_t>(radiusAttribute.value());
+			radius = lexical_cast<int32_t>(radiusAttribute.value());
 		} else {
 			radius = -1;
 		}
@@ -84,17 +84,17 @@ bool Spawns::loadFromXml(const std::string& filename)
 
 				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
 				if (directionAttribute) {
-					dir = static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value()));
+					dir = static_cast<Direction>(lexical_cast<uint16_t>(directionAttribute.value()));
 				} else {
 					dir = DIRECTION_NORTH;
 				}
 
 				Position pos(
-					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
+					centerPos.x + lexical_cast<uint16_t>(childNode.attribute("x").value()),
+					centerPos.y + lexical_cast<uint16_t>(childNode.attribute("y").value()),
 					centerPos.z
 				);
-				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
+				uint32_t interval = lexical_cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
 				if (interval > MINSPAWN_INTERVAL) {
 					spawn.addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {
@@ -113,12 +113,12 @@ bool Spawns::loadFromXml(const std::string& filename)
 
 				pugi::xml_attribute directionAttribute = childNode.attribute("direction");
 				if (directionAttribute) {
-					npc->setDirection(static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value())));
+					npc->setDirection(static_cast<Direction>(lexical_cast<uint16_t>(directionAttribute.value())));
 				}
 
 				npc->setMasterPos(Position(
-					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
+					centerPos.x + lexical_cast<uint16_t>(childNode.attribute("x").value()),
+					centerPos.y + lexical_cast<uint16_t>(childNode.attribute("y").value()),
 					centerPos.z
 				), radius);
 				npcList.push_front(npc);

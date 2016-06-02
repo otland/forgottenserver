@@ -23,7 +23,7 @@
 #include "configmanager.h"
 #include "game.h"
 #include "monster.h"
-#include "pugicast.h"
+#include "lexicalcast.h"
 #include "spells.h"
 
 extern Game g_game;
@@ -440,7 +440,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("spellid"))) {
-		spellId = pugi::cast<uint16_t>(attr.value());
+		spellId = lexical_cast<uint16_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("group"))) {
@@ -461,7 +461,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("groupcooldown"))) {
-		groupCooldown = pugi::cast<uint32_t>(attr.value());
+		groupCooldown = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("secondarygroup"))) {
@@ -482,35 +482,35 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("secondarygroupcooldown"))) {
-		secondaryGroupCooldown = pugi::cast<uint32_t>(attr.value());
+		secondaryGroupCooldown = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("lvl"))) {
-		level = pugi::cast<uint32_t>(attr.value());
+		level = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("maglv"))) {
-		magLevel = pugi::cast<uint32_t>(attr.value());
+		magLevel = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("mana"))) {
-		mana = pugi::cast<uint32_t>(attr.value());
+		mana = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("manapercent"))) {
-		manaPercent = pugi::cast<uint32_t>(attr.value());
+		manaPercent = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("soul"))) {
-		soul = pugi::cast<uint32_t>(attr.value());
+		soul = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("range"))) {
-		range = pugi::cast<int32_t>(attr.value());
+		range = lexical_cast<int32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("exhaustion")) || (attr = node.attribute("cooldown"))) {
-		cooldown = pugi::cast<uint32_t>(attr.value());
+		cooldown = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("prem"))) {
@@ -1625,11 +1625,11 @@ bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("conjureId"))) {
-		conjureId = pugi::cast<uint32_t>(attr.value());
+		conjureId = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("conjureCount"))) {
-		conjureCount = pugi::cast<uint32_t>(attr.value());
+		conjureCount = lexical_cast<uint32_t>(attr.value());
 	} else if (conjureId != 0) {
 		// load default charges from items.xml
 		const ItemType& it = Item::items[conjureId];
@@ -1639,7 +1639,7 @@ bool ConjureSpell::configureEvent(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("reagentId"))) {
-		reagentId = pugi::cast<uint32_t>(attr.value());
+		reagentId = lexical_cast<uint32_t>(attr.value());
 	}
 
 	return true;
@@ -1726,11 +1726,11 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 		std::cout << "[Error - RuneSpell::configureSpell] Rune spell without id." << std::endl;
 		return false;
 	}
-	runeId = pugi::cast<uint16_t>(attr.value());
+	runeId = lexical_cast<uint16_t>(attr.value());
 
 	uint32_t charges;
 	if ((attr = node.attribute("charges"))) {
-		charges = pugi::cast<uint32_t>(attr.value());
+		charges = lexical_cast<uint32_t>(attr.value());
 	} else {
 		charges = 0;
 	}

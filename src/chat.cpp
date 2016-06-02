@@ -21,7 +21,7 @@
 
 #include "chat.h"
 #include "game.h"
-#include "pugicast.h"
+#include "lexicalcast.h"
 #include "scheduler.h"
 
 extern Chat* g_chat;
@@ -301,7 +301,7 @@ bool Chat::load()
 	}
 
 	for (auto channelNode : doc.child("channels").children()) {
-		ChatChannel channel(pugi::cast<uint16_t>(channelNode.attribute("id").value()), channelNode.attribute("name").as_string());
+		ChatChannel channel(lexical_cast<uint16_t>(channelNode.attribute("id").value()), channelNode.attribute("name").as_string());
 		channel.publicChannel = channelNode.attribute("public").as_bool();
 
 		pugi::xml_attribute scriptAttribute = channelNode.attribute("script");

@@ -20,9 +20,8 @@
 #ifndef FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 #define FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 
-#include <boost/lexical_cast.hpp>
-
 #include <mysql.h>
+#include "lexicalcast.h"
 
 class DBResult;
 typedef std::shared_ptr<DBResult> DBResult_ptr;
@@ -160,13 +159,7 @@ class DBResult
 				return static_cast<T>(0);
 			}
 
-			T data;
-			try {
-				data = boost::lexical_cast<T>(row[it->second]);
-			} catch (boost::bad_lexical_cast&) {
-				data = 0;
-			}
-			return data;
+			return lexical_cast<T>(row[it->second]);
 		}
 
 		std::string getString(const std::string& s) const;

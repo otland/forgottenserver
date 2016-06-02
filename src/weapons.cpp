@@ -22,7 +22,7 @@
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
-#include "pugicast.h"
+#include "lexicalcast.h"
 #include "weapons.h"
 
 extern Game g_game;
@@ -169,26 +169,26 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 		std::cout << "[Error - Weapon::configureEvent] Weapon without id." << std::endl;
 		return false;
 	}
-	id = pugi::cast<uint16_t>(attr.value());
+	id = lexical_cast<uint16_t>(attr.value());
 
 	if ((attr = node.attribute("level"))) {
-		level = pugi::cast<uint32_t>(attr.value());
+		level = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("maglv")) || (attr = node.attribute("maglevel"))) {
-		magLevel = pugi::cast<uint32_t>(attr.value());
+		magLevel = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("mana"))) {
-		mana = pugi::cast<uint32_t>(attr.value());
+		mana = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("manapercent"))) {
-		manaPercent = pugi::cast<uint32_t>(attr.value());
+		manaPercent = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("soul"))) {
-		soul = pugi::cast<uint32_t>(attr.value());
+		soul = lexical_cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("prem"))) {
@@ -196,7 +196,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("breakchance"))) {
-		breakChance = std::min<uint8_t>(100, pugi::cast<uint16_t>(attr.value()));
+		breakChance = std::min<uint8_t>(100, lexical_cast<uint16_t>(attr.value()));
 	}
 
 	if ((attr = node.attribute("action"))) {
@@ -889,11 +889,11 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("min"))) {
-		minChange = pugi::cast<int32_t>(attr.value());
+		minChange = lexical_cast<int32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("max"))) {
-		maxChange = pugi::cast<int32_t>(attr.value());
+		maxChange = lexical_cast<int32_t>(attr.value());
 	}
 
 	if ((attr = node.attribute("type"))) {

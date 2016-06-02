@@ -36,7 +36,7 @@
 #include "scheduler.h"
 #include "events.h"
 
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -104,14 +104,14 @@ bool Commands::loadFromXml()
 
 		pugi::xml_attribute groupAttribute = commandNode.attribute("group");
 		if (groupAttribute) {
-			command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
+			command->groupId = lexical_cast<uint32_t>(groupAttribute.value());
 		} else {
 			std::cout << "[Warning - Commands::loadFromXml] Missing group for command " << it->first << std::endl;
 		}
 
 		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
 		if (acctypeAttribute) {
-			command->accountType = static_cast<AccountType_t>(pugi::cast<uint32_t>(acctypeAttribute.value()));
+			command->accountType = static_cast<AccountType_t>(lexical_cast<uint32_t>(acctypeAttribute.value()));
 		} else {
 			std::cout << "[Warning - Commands::loadFromXml] Missing acctype for command " << it->first << std::endl;
 		}

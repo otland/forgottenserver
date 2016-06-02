@@ -97,4 +97,29 @@ inline int64_t OTSYS_TIME()
 	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
+template<typename Container>
+class reverse_adaptor
+{
+	private:
+		const Container& container;
+
+	public:
+		reverse_adaptor(const Container& container) :
+			container(container) {}
+
+		decltype(container.rbegin()) begin() const {
+			return container.rbegin();
+		}
+
+		decltype(container.rend()) end() const {
+			return container.rend();
+		}
+};
+
+template<typename Container>
+reverse_adaptor<Container> reverse(const Container& container)
+{
+	return reverse_adaptor<Container>(container);
+}
+
 #endif

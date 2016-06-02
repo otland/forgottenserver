@@ -21,7 +21,7 @@
 
 #include "mounts.h"
 
-#include "pugicast.h"
+#include "lexicalcast.h"
 #include "tools.h"
 
 bool Mounts::reload()
@@ -41,10 +41,10 @@ bool Mounts::loadFromXml()
 
 	for (auto mountNode : doc.child("mounts").children()) {
 		mounts.emplace_back(
-			static_cast<uint8_t>(pugi::cast<uint16_t>(mountNode.attribute("id").value())),
-			pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
+			static_cast<uint8_t>(lexical_cast<uint16_t>(mountNode.attribute("id").value())),
+			lexical_cast<uint16_t>(mountNode.attribute("clientid").value()),
 			mountNode.attribute("name").as_string(),
-			pugi::cast<int32_t>(mountNode.attribute("speed").value()),
+			lexical_cast<int32_t>(mountNode.attribute("speed").value()),
 			mountNode.attribute("premium").as_bool()
 		);
 	}

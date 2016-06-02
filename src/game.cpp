@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "pugicast.h"
+#include "lexicalcast.h"
 
 #include "items.h"
 #include "commands.h"
@@ -4655,14 +4655,14 @@ bool Game::loadExperienceStages()
 
 			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
 			if (minLevelAttribute) {
-				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
+				minLevel = lexical_cast<uint32_t>(minLevelAttribute.value());
 			} else {
 				minLevel = 1;
 			}
 
 			pugi::xml_attribute maxLevelAttribute = stageNode.attribute("maxlevel");
 			if (maxLevelAttribute) {
-				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
+				maxLevel = lexical_cast<uint32_t>(maxLevelAttribute.value());
 			} else {
 				maxLevel = 0;
 				lastStageLevel = minLevel;
@@ -4671,7 +4671,7 @@ bool Game::loadExperienceStages()
 
 			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
 			if (multiplierAttribute) {
-				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
+				multiplier = lexical_cast<uint32_t>(multiplierAttribute.value());
 			} else {
 				multiplier = 1;
 			}
