@@ -373,7 +373,8 @@ void Items::buildInventoryList()
 			type.extraDefense != 0 || type.armor != 0 ||
 			(type.slotPosition & SLOTP_NECKLACE) == SLOTP_NECKLACE ||
 			(type.slotPosition & SLOTP_RING) == SLOTP_RING ||
-			(type.slotPosition & SLOTP_AMMO) == SLOTP_AMMO)
+			(type.slotPosition & SLOTP_AMMO) == SLOTP_AMMO ||
+			(type.slotPosition & SLOTP_FEET) == SLOTP_FEET)
 		{
 			inventory.push_back(type.clientId);
 		}
