@@ -825,10 +825,6 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (!g_moveEvents->onCreatureMove(&creature, &toTile, creature.getPosition(), MOVE_EVENT_STEP_IN)) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
 	map.moveCreature(creature, toTile);
 	if (creature.getParent() != &toTile) {
 		return RETURNVALUE_NOERROR;
@@ -1700,6 +1696,10 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 		ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
+		}
+
+		if (!g_moveEvents->onCreatureMove(creature, creature->getTile(), creature->getPosition(), MOVE_EVENT_STEP_OUT)) {
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
 		map.moveCreature(*creature, *toTile, !pushMove);
