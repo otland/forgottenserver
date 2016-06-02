@@ -374,7 +374,10 @@ void Items::buildInventoryList()
 			(type.slotPosition & SLOTP_NECKLACE) == SLOTP_NECKLACE ||
 			(type.slotPosition & SLOTP_RING) == SLOTP_RING ||
 			(type.slotPosition & SLOTP_AMMO) == SLOTP_AMMO ||
-			(type.slotPosition & SLOTP_FEET) == SLOTP_FEET)
+			(type.slotPosition & SLOTP_FEET) == SLOTP_FEET ||
+			(type.slotPosition & SLOTP_HEAD) == SLOTP_HEAD ||
+			(type.slotPosition & SLOTP_ARMOR) == SLOTP_ARMOR ||
+			(type.slotPosition & SLOTP_LEGS) == SLOTP_LEGS)
 		{
 			inventory.push_back(type.clientId);
 		}
