@@ -121,7 +121,10 @@ bool Creature::canSee(const Position& pos) const
 
 bool Creature::canSeeCreature(const Creature* creature) const
 {
-	return canSeeInvisibility() && creature->isInvisible();
+	if (!canSeeInvisibility() && creature->isInvisible()) {
+		return false;
+	}
+	return true;
 }
 
 void Creature::setSkull(Skulls_t newSkull)
