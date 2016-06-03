@@ -27,7 +27,7 @@ function Game.getReverseDirection(direction)
 		[DIRECTION_WEST] = DIRECTION_EAST
 	}
 
-	return config[direction] or DIRECTION_NORTH
+	return config[direction] or DIRECTION_SOUTH
 end
 
 function Game.getSkillType(weaponType)

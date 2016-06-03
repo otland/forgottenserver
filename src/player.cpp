@@ -786,7 +786,7 @@ bool Player::getStorageValue(const uint32_t key, int32_t& value) const
 
 bool Player::canSee(const Position& pos) const
 {
-	return client && client->canSee(pos);
+	return client != nullptr && client->canSee(pos);
 }
 
 bool Player::canSeeCreature(const Creature* creature) const
@@ -1970,11 +1970,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 
 uint32_t Player::getIP() const
 {
-	if (client) {
-		return client->getIP();
-	}
-
-	return 0;
+	return client != nullptr ? client->getIP() : 0;
 }
 
 void Player::death(Creature* lastHitCreature)
