@@ -11851,6 +11851,7 @@ int LuaScriptInterface::luaMonsterTypeGetChangeTargetSpeed(lua_State* L)
 // Party
 int32_t LuaScriptInterface::luaPartyCreate(lua_State* L)
 {
+	// Party(userdata)
 	Player* player = getUserdata<Player>(L, 2);
 	if (!player) {
 		lua_pushnil(L);
