@@ -286,7 +286,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
 				tmpPlayer->sendCreatureMove(&creature, newPos, newTile.getStackposOfCreature(tmpPlayer, &creature), oldPos, stackpos, teleport);
-				if (!tmpPlayer->canSee(oldPos) && tmpPlayer->canSee(newPos)) {
+				if (Position::areInRange<7, 5>(tmpPlayer->getPosition(), newPos) && !Position::areInRange<7, 5>(tmpPlayer->getPosition(), oldPos)) {
 					tmpPlayer->onCreatureAppear(&creature, false);
 				}
 			}
