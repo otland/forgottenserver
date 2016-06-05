@@ -205,4 +205,45 @@ class Cylinder : virtual public Thing
 		virtual void startDecaying();
 };
 
+class VirtualCylinder final : public Cylinder
+{
+	public:
+		static VirtualCylinder* virtualCylinder;
+
+		virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override {
+			return RETURNVALUE_NOTPOSSIBLE;
+		}
+		virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const override {
+			return RETURNVALUE_NOTPOSSIBLE;
+		}
+		virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t) const override {
+			return RETURNVALUE_NOTPOSSIBLE;
+		}
+		virtual Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override {
+			return nullptr;
+		}
+
+		virtual void addThing(Thing*) override {}
+		virtual void addThing(int32_t, Thing*) override {}
+		virtual void updateThing(Thing*, uint16_t, uint32_t) override {}
+		virtual void replaceThing(uint32_t, Thing*) override {}
+		virtual void removeThing(Thing*, uint32_t) override {}
+
+		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) override {}
+		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) override {}
+
+		bool isPushable() const override {
+			return false;
+		}
+		int32_t getThrowRange() const override {
+			return 1;
+		}
+		std::string getDescription(int32_t) const override {
+			return std::string();
+		}
+		bool isRemoved() const override {
+			return false;
+		}
+};
+
 #endif

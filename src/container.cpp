@@ -494,7 +494,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	updateItemWeight(item->getWeight());
 
 	//send change to client
-	if (getParent() != nullptr) {
+	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
 }
@@ -505,7 +505,7 @@ void Container::addItemBack(Item* item)
 	updateItemWeight(item->getWeight());
 
 	//send change to client
-	if (getParent() != nullptr) {
+	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
 }
