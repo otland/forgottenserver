@@ -219,6 +219,12 @@ void Game::loadMap(const std::string& path)
 	map.loadMap(path, false);
 }
 
+void Game::loadMapU(const std::string& path, int place_x, int place_y)
+{
+	std::cout << "[UrbanInfo - Map::loadMapU] Place x: " << place_x << ", y: " << place_y << std::endl;
+	map.loadMapU(path, false, place_x, place_y);
+}
+
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 {
 	if (pos.x != 0xFFFF) {
