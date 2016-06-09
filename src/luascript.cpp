@@ -4137,6 +4137,23 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 	return 0;
 }
 
+int LuaScriptInterface::luaGameLoadMapU(lua_State* L)
+{
+	// Game.loadMapU(path)
+	const std::string& path = getString(L, 1);
+	int32_t place_x = getNumber<int32_t>(L, 2, 0);
+	int32_t place_y = getNumber<int32_t>(L, 3, 0);
+	g_dispatcher.addTask(createTask(std::bind(&Game::loadMapU, &g_game, path, place_x, place_y)));
+	return 0;
+}
+
+int LuaScriptInterface::luaUrbanMessage(lua_State* L)
+{	
+	const std::string& messageStr = getString(L, 1);
+	std::cout << "> UrbanInfo: " << messageStr << std::endl;
+	return 1;
+}
+
 int LuaScriptInterface::luaGameGetExperienceStage(lua_State* L)
 {
 	// Game.getExperienceStage(level)
