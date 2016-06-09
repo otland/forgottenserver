@@ -1801,6 +1801,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getSpectators", LuaScriptInterface::luaGameGetSpectators);
 	registerMethod("Game", "getPlayers", LuaScriptInterface::luaGameGetPlayers);
 	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
+	registerMethod("Game", "loadMapU", LuaScriptInterface::luaGameLoadMapU);
+	registerMethod("Game", "urbanMessage", LuaScriptInterface::luaUrbanMessage);
 
 	registerMethod("Game", "getExperienceStage", LuaScriptInterface::luaGameGetExperienceStage);
 	registerMethod("Game", "getMonsterCount", LuaScriptInterface::luaGameGetMonsterCount);
@@ -4133,6 +4135,23 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 	const std::string& path = getString(L, 1);
 	g_dispatcher.addTask(createTask(std::bind(&Game::loadMap, &g_game, path)));
 	return 0;
+}
+
+int LuaScriptInterface::luaGameLoadMapU(lua_State* L)
+{
+	// Game.loadMapU(path)
+	const std::string& path = getString(L, 1);
+	int32_t place_x = getNumber<int32_t>(L, 2, 0);
+	int32_t place_y = getNumber<int32_t>(L, 3, 0);
+	g_dispatcher.addTask(createTask(std::bind(&Game::loadMapU, &g_game, path, place_x, place_y)));
+	return 0;
+}
+
+int LuaScriptInterface::luaUrbanMessage(lua_State* L)
+{	
+	const std::string& messageStr = getString(L, 1);
+	std::cout << "> UrbanInfo: " << messageStr << std::endl;
+	return 1;
 }
 
 int LuaScriptInterface::luaGameGetExperienceStage(lua_State* L)
