@@ -50,6 +50,29 @@ bool Map::loadMap(const std::string& identifier, bool loadHouses)
 	return true;
 }
 
+bool Map::loadMapU(const std::string& identifier, bool loadHouses, int place_x, int place_y)
+{
+	IOMap loader;
+	if (!loader.loadMapU(this, identifier, place_x, place_y)) {
+		std::cout << "[Fatal - Map::loadMap] " << loader.getLastErrorString() << std::endl;
+		return false;
+	}
+
+	if (!IOMap::loadSpawns(this)) {
+		std::cout << "[Warning - Map::loadMap] Failed to load spawn data." << std::endl;
+	}
+
+	if (loadHouses) {
+		if (!IOMap::loadHouses(this)) {
+			std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
+		}
+
+		IOMapSerialize::loadHouseInfo();
+		IOMapSerialize::loadHouseItems(this);
+	}
+	return true;
+}
+
 bool Map::save()
 {
 	bool saved = false;
