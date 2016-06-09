@@ -1801,7 +1801,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getSpectators", LuaScriptInterface::luaGameGetSpectators);
 	registerMethod("Game", "getPlayers", LuaScriptInterface::luaGameGetPlayers);
 	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
-
+	registerMethod("Game", "loadMapU", LuaScriptInterface::luaGameLoadMapU);
+	registerMethod("Game", "urbanMessage", LuaScriptInterface::luaUrbanMessage);
+	
 	registerMethod("Game", "getExperienceStage", LuaScriptInterface::luaGameGetExperienceStage);
 	registerMethod("Game", "getMonsterCount", LuaScriptInterface::luaGameGetMonsterCount);
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
