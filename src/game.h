@@ -97,7 +97,8 @@ class Game
 
 		bool loadMainMap(const std::string& filename);
 		void loadMap(const std::string& path);
-
+		void loadMapU(const std::string& path, int place_x, int place_y);
+		
 		/**
 		  * Get the map size - info purpose only
 		  * \param width width of the map
