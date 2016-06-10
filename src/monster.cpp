@@ -1126,6 +1126,9 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 				}
 			}
 		}
+	} else if (getTimeSinceLastMove() > 1000) {
+		//choose a random direction
+		result = getRandomStep(getPosition(), direction);
 	}
 
 	if (result && (canPushItems() || canPushCreatures())) {
