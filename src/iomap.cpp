@@ -201,8 +201,6 @@ bool IOMap::loadMap(Map* map, const std::string& identifier, int place_x, int pl
 			
 			uint16_t base_x = 0;
 			uint16_t base_y = 0;
-			uint16_t offset_x = 0;
-			uint16_t offset_y = 0;
 			
 			if (place_x != 0 && place_y != 0) {
 				base_x = place_x;
