@@ -214,9 +214,9 @@ bool Game::loadMainMap(const std::string& filename)
 	return map.loadMap("data/world/" + filename + ".otbm", true);
 }
 
-void Game::loadMap(const std::string& path)
+void Game::loadMap(const std::string& path, int place_x, int place_y)
 {
-	map.loadMap(path, false);
+	map.loadMap(path, false, place_x, place_y);
 }
 
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
