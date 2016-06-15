@@ -205,10 +205,8 @@ bool IOMap::loadMap(Map* map, const std::string& identifier, int place_x, int pl
 			uint16_t offset_y = 0;
 			
 			if (place_x != 0 && place_y != 0) {
-				offset_x = base_x - place_x;
-				offset_y = base_y - place_y;
-				base_x = base_x - offset_x;
-				base_y = base_y - offset_y;
+				base_x = place_x;
+				base_y = place_y;
 			}
 			else {
 				base_x = area_coord.x;
