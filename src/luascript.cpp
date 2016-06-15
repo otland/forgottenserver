@@ -4131,8 +4131,8 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
 	const std::string& path = getString(L, 1);
-	int32_t place_x = getNumber<int32_t>(L, 2, 0);
-	int32_t place_y = getNumber<int32_t>(L, 3, 0);
+	uint16_t place_x = getNumber<uint16_t>(L, 2, 0);
+	uint16_t place_y = getNumber<uint16_t>(L, 3, 0);
 	g_dispatcher.addTask(createTask(std::bind(&Game::loadMap, &g_game, path, place_x, place_y)));
 	return 0;
 }
