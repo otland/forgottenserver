@@ -214,7 +214,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier, int place_x, int pl
 				base_x = area_coord.x;
 				base_y = area_coord.y;
 			}
-			uint16_t base_z = area_coord.z;
+			uint16_t z = area_coord.z;
 
 			NODE nodeTile = f.getChildNode(nodeMapData, type);
 			while (nodeTile != NO_NODE) {
