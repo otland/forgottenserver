@@ -2030,6 +2030,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
 	registerMethod("Creature", "isInGhostMode", LuaScriptInterface::luaCreatureIsInGhostMode);
 	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
+	registerMethod("Creature", "isImmuneTo", LuaScriptInterface::luaCreatureIsImmuneTo);
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
 	registerMethod("Creature", "canSeeCreature", LuaScriptInterface::luaCreatureCanSeeCreature);
@@ -7249,6 +7250,28 @@ int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureIsImmuneTo(lua_State* L)
+{
+	// creature:isImmuneTo(condition or conditionType)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (isNumber(L, 2)) {
+		pushBoolean(L, creature->isImmune(getNumber<ConditionType_t>(L, 2)));
+	} else {
+		Condition* condition = getUserdata<Condition>(L, 2);
+		if (condition) {
+			pushBoolean(L, creature->isImmune(condition->getType()));
+		} else {
+			lua_pushnil(L);
+		}
 	}
 	return 1;
 }
