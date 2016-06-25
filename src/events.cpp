@@ -635,7 +635,7 @@ bool Events::eventPlayerOnTradeAccept(Player* player, Player* target, Item* item
 	LuaScriptInterface::setItemMetatable(L, -1, item);
 
 	LuaScriptInterface::pushUserdata<Item>(L, targetItem);
-	LuaScriptInterface::setItemMetatable(L, -1, item);
+	LuaScriptInterface::setItemMetatable(L, -1, targetItem);
 
 	return scriptInterface.callFunction(4);
 }
