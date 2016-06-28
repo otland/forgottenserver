@@ -452,7 +452,7 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing &thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	//try find a suitable item to stack with
-	if (autoStack && item->isStackable() && item->getParent() != this && !(*destItem && (*destItem)->isStackable() && (*destItem)->equals(item))) {
+	if (autoStack && item->isStackable() && item->getParent() != this && !(*destItem && (*destItem)->equals(item))) {
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
 			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < 100) {
