@@ -1183,7 +1183,12 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	//add item
 	if (moveItem /*m - n > 0*/) {
-		toCylinder->addThing(index, moveItem);
+		if (fromCylinder == toCylinder) {
+			toCylinder->addThing(index, moveItem);
+			
+		} else {
+			internalAddItem(toCylinder, moveItem, INDEX_WHEREEVER);
+		}
 	}
 
 	if (itemIndex != -1) {
