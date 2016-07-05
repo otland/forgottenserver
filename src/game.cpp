@@ -1847,6 +1847,11 @@ void Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 		return;
 	}
 
+	if (player->getName() == receiver) {
+		player->sendCancelMessage("You cannot set up a private message channel with yourself.");
+		return;
+	}
+
 	player->sendOpenPrivateChannel(receiver);
 }
 
