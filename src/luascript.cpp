@@ -5616,8 +5616,7 @@ int LuaScriptInterface::luaNetworkMessageSeek(lua_State* L)
 	if (message && isNumber(L, 2)) {
 		message->setBufferPosition(getNumber<uint16_t>(L, 2));
 		pushBoolean(L, true);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
@@ -5629,8 +5628,7 @@ int LuaScriptInterface::luaNetworkMessageTell(lua_State* L)
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->getBufferPosition() - message->INITIAL_BUFFER_POSITION);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
@@ -5642,8 +5640,7 @@ int LuaScriptInterface::luaNetworkMessageLength(lua_State* L)
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->getLength());
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
