@@ -5471,8 +5471,7 @@ int LuaScriptInterface::luaNetworkMessageSeek(lua_State* L)
 	// networkMessage:seek(position)
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message && isNumber(L, 2)) {
-		message->setBufferPosition(getNumber<uint16_t>(L, 2));
-		pushBoolean(L, true);
+		pushBoolean(L, message->setBufferPosition(getNumber<uint16_t>(L, 2)));
 	} else {
 		lua_pushnil(L);
 	}
