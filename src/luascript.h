@@ -845,6 +845,9 @@ class LuaScriptInterface
 		static int luaPlayerGetManaSpent(lua_State* L);
 		static int luaPlayerAddManaSpent(lua_State* L);
 
+		static int luaPlayerGetBaseMaxHealth(lua_State* L);
+		static int luaPlayerGetBaseMaxMana(lua_State* L);
+
 		static int luaPlayerGetSkillLevel(lua_State* L);
 		static int luaPlayerGetEffectiveSkillLevel(lua_State* L);
 		static int luaPlayerGetSkillPercent(lua_State* L);
