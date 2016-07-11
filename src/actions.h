@@ -108,10 +108,6 @@ class Actions final : public BaseEvents
 		Event* getEvent(const std::string& nodeName) final;
 		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
-		void registerItemID(int32_t itemId, Event* event);
-		void registerActionID(int32_t actionId, Event* event);
-		void registerUniqueID(int32_t uniqueId, Event* event);
-
 		typedef std::map<uint16_t, Action*> ActionUseMap;
 		ActionUseMap useItemMap;
 		ActionUseMap uniqueItemMap;
