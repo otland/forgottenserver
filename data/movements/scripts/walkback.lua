@@ -1,6 +1,11 @@
 function onStepIn(creature, item, position, fromPosition)
 	if item.uid > 0 and item.uid <= 65535 then
-		creature:teleportTo(fromPosition, false)
+		if position == fromPosition then
+			local temple = creature:getTown():getTemplePosition()
+			creature:teleportTo(temple, false)
+		else
+			creature:teleportTo(fromPosition, false)
+		end
 	end
 	return true
 end
