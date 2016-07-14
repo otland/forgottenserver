@@ -28,6 +28,7 @@ serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = true
 maxPacketsPerSecond = 25
+passwordType = "sha1"
 
 -- Deaths
 -- NOTE: Leave deathLosePercent as -1 if you want to use the default
