@@ -20,18 +20,19 @@
 #ifndef FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
 #define FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
 
+#include <limits>
+#include <vector>
+
 struct NodeStruct;
 
 typedef NodeStruct* NODE;
 
 struct NodeStruct {
-	NodeStruct() : start(0), propsSize(0), type(0), next(nullptr), child(nullptr) {}
-
-	uint32_t start;
-	uint32_t propsSize;
-	uint32_t type;
-	NodeStruct* next;
-	NodeStruct* child;
+	uint32_t start = 0;
+	uint32_t propsSize = 0;
+	uint32_t type = 0;
+	NodeStruct* next = nullptr;
+	NodeStruct* child = nullptr;
 
 	static void clearNet(NodeStruct* root) {
 		if (root) {
@@ -151,11 +152,6 @@ class FileLoader
 class PropStream
 {
 	public:
-		PropStream() {
-			end = nullptr;
-			p = nullptr;
-		}
-
 		void init(const char* a, size_t size) {
 			p = a;
 			end = a + size;
@@ -205,45 +201,32 @@ class PropStream
 		}
 
 	protected:
-		const char* p;
-		const char* end;
+		const char* p = nullptr;
+		const char* end = nullptr;
 };
 
 class PropWriteStream
 {
 	public:
-		PropWriteStream() {
-			buffer_size = 32;
-			buffer = static_cast<char*>(malloc(buffer_size));
-			if (!buffer) {
-				throw std::bad_alloc();
-			}
-
-			size = 0;
-		}
-
-		~PropWriteStream() {
-			free(buffer);
-		}
+		PropWriteStream() = default;
 
 		// non-copyable
 		PropWriteStream(const PropWriteStream&) = delete;
 		PropWriteStream& operator=(const PropWriteStream&) = delete;
 
 		const char* getStream(size_t& size) const {
-			size = this->size;
-			return buffer;
+			size = buffer.size();
+			return buffer.data();
 		}
 
 		inline void clear() {
-			size = 0;
+			buffer.clear();
 		}
 
 		template <typename T>
 		inline void write(T add) {
-			reserve(sizeof(T));
-			memcpy(buffer + size, &add, sizeof(T));
-			size += sizeof(T);
+			char* addr = reinterpret_cast<char*>(&add);
+			std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
 		}
 
 		inline void writeString(const std::string& str) {
@@ -253,33 +236,12 @@ class PropWriteStream
 				return;
 			}
 
-			write<uint16_t>(strLength);
-			reserve(strLength);
-			memcpy(buffer + size, str.c_str(), strLength);
-			size += strLength;
+			write(static_cast<uint16_t>(strLength));
+			std::copy(str.begin(), str.end(), std::back_inserter(buffer));
 		}
 
 	protected:
-		void reserve(size_t length) {
-			if ((buffer_size - size) >= length) {
-				return;
-			}
-
-			do {
-				buffer_size <<= 1;
-			} while ((buffer_size - size) < length);
-
-			void* newBuffer = realloc(buffer, buffer_size);
-			if (!newBuffer) {
-				throw std::bad_alloc();
-			}
-
-			buffer = static_cast<char*>(newBuffer);
-		}
-
-		char* buffer;
-		size_t buffer_size;
-		size_t size;
+		std::vector<char> buffer;
 };
 
 #endif
