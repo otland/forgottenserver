@@ -162,7 +162,7 @@ class PropStream
 		}
 
 		template <typename T>
-		inline bool read(T& ret) {
+		bool read(T& ret) {
 			if (size() < sizeof(T)) {
 				return false;
 			}
@@ -172,7 +172,7 @@ class PropStream
 			return true;
 		}
 
-		inline bool readString(std::string& ret) {
+		bool readString(std::string& ret) {
 			uint16_t strLen;
 			if (!read<uint16_t>(strLen)) {
 				return false;
@@ -191,7 +191,7 @@ class PropStream
 			return true;
 		}
 
-		inline bool skip(size_t n) {
+		bool skip(size_t n) {
 			if (size() < n) {
 				return false;
 			}
@@ -219,17 +219,17 @@ class PropWriteStream
 			return buffer.data();
 		}
 
-		inline void clear() {
+		void clear() {
 			buffer.clear();
 		}
 
 		template <typename T>
-		inline void write(T add) {
+		void write(T add) {
 			char* addr = reinterpret_cast<char*>(&add);
 			std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
 		}
 
-		inline void writeString(const std::string& str) {
+		void writeString(const std::string& str) {
 			size_t strLength = str.size();
 			if (strLength > std::numeric_limits<uint16_t>::max()) {
 				write<uint16_t>(0);
