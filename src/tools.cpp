@@ -259,18 +259,16 @@ void toLowerCaseString(std::string& source)
 	std::transform(source.begin(), source.end(), source.begin(), tolower);
 }
 
-std::string asLowerCaseString(const std::string& source)
+std::string asLowerCaseString(std::string source)
 {
-	std::string s = source;
-	toLowerCaseString(s);
-	return s;
+	toLowerCaseString(source);
+	return source;
 }
 
-std::string asUpperCaseString(const std::string& source)
+std::string asUpperCaseString(std::string source)
 {
-	std::string s = source;
-	std::transform(s.begin(), s.end(), s.begin(), toupper);
-	return s;
+	std::transform(source.begin(), source.end(), source.begin(), toupper);
+	return source;
 }
 
 StringVec explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
@@ -354,7 +352,7 @@ std::string convertIPToString(uint32_t ip)
 
 	int res = sprintf(buffer, "%u.%u.%u.%u", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
 	if (res < 0) {
-		return std::string();
+		return {};
 	}
 
 	return buffer;
@@ -364,30 +362,30 @@ std::string formatDate(time_t time)
 {
 	const tm* tms = localtime(&time);
 	if (!tms) {
-		return std::string();
+		return {};
 	}
 
 	char buffer[20];
 	int res = sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900, tms->tm_hour, tms->tm_min, tms->tm_sec);
 	if (res < 0) {
-		return std::string();
+		return {};
 	}
-	return std::string(buffer, 19);
+	return {buffer, 19};
 }
 
 std::string formatDateShort(time_t time)
 {
 	const tm* tms = localtime(&time);
 	if (!tms) {
-		return std::string();
+		return {};
 	}
 
 	char buffer[12];
 	size_t res = strftime(buffer, 12, "%d %b %Y", tms);
 	if (res == 0) {
-		return std::string();
+		return {};
 	}
-	return std::string(buffer, 11);
+	return {buffer, 11};
 }
 
 Direction getDirection(const std::string& string)

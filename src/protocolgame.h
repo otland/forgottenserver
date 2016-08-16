@@ -40,23 +40,16 @@ extern Game g_game;
 
 struct TextMessage
 {
-	MessageClasses type;
+	MessageClasses type = MESSAGE_STATUS_DEFAULT;
 	std::string text;
 	Position position;
 	struct {
-		int32_t value;
+		int32_t value = 0;
 		TextColor_t color;
 	} primary, secondary;
 
-	TextMessage() {
-		type = MESSAGE_STATUS_DEFAULT;
-		primary.value = 0;
-		secondary.value = 0;
-	}
-	TextMessage(MessageClasses type, std::string text) : type(type), text(text) {
-		primary.value = 0;
-		secondary.value = 0;
-	}
+	TextMessage() = default;
+	TextMessage(MessageClasses type, std::string text) : type(type), text(text) {}
 };
 
 class ProtocolGame final : public Protocol
@@ -70,7 +63,7 @@ class ProtocolGame final : public Protocol
 			return "gameworld protocol";
 		}
 
-		explicit ProtocolGame(Connection_ptr connection);
+		explicit ProtocolGame(Connection_ptr connection) : Protocol(connection) {}
 
 		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
@@ -317,16 +310,16 @@ class ProtocolGame final : public Protocol
 		}
 
 		std::unordered_set<uint32_t> knownCreatureSet;
-		Player* player;
+		Player* player = nullptr;
 
-		uint32_t eventConnect;
-		uint32_t challengeTimestamp;
-		uint16_t version;
+		uint32_t eventConnect = 0;
+		uint32_t challengeTimestamp = 0;
+		uint16_t version = CLIENT_VERSION_MIN;
 
-		uint8_t challengeRandom;
+		uint8_t challengeRandom = 0;
 
-		bool debugAssertSent;
-		bool acceptPackets;
+		bool debugAssertSent = false;
+		bool acceptPackets = false;
 };
 
 #endif

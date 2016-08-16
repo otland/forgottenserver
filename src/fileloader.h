@@ -91,7 +91,7 @@ class PropStream;
 class FileLoader
 {
 	public:
-		FileLoader();
+		constexpr FileLoader() = default;
 		~FileLoader();
 
 		// non-copyable
@@ -131,19 +131,19 @@ class FileLoader
 		};
 
 #define CACHE_BLOCKS 3
-		cache cached_data[CACHE_BLOCKS];
+		cache cached_data[CACHE_BLOCKS] = {};
 
-		uint8_t* buffer;
-		NODE root;
-		FILE* file;
+		uint8_t* buffer = new uint8_t[1024];
+		NODE root = nullptr;
+		FILE* file = nullptr;
 
-		FILELOADER_ERRORS lastError;
-		uint32_t buffer_size;
+		FILELOADER_ERRORS lastError = ERROR_NONE;
+		uint32_t buffer_size = 1024;
 
-		uint32_t cache_size;
+		uint32_t cache_size = 0;
 #define NO_VALID_CACHE 0xFFFFFFFF
-		uint32_t cache_index;
-		uint32_t cache_offset;
+		uint32_t cache_index = NO_VALID_CACHE;
+		uint32_t cache_offset = NO_VALID_CACHE;
 
 		inline uint32_t getCacheBlock(uint32_t pos);
 		int32_t loadCacheBlock(uint32_t pos);

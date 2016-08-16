@@ -28,9 +28,8 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern Events* g_events;
 
-Party::Party(Player* leader)
+Party::Party(Player* leader) : leader(leader)
 {
-	this->leader = leader;
 	leader->setParty(this);
 }
 

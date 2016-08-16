@@ -144,14 +144,14 @@ class TileItemVector : private ItemVector
 		}
 
 	private:
-		uint16_t downItemCount {0};
+		uint16_t downItemCount = 0;
 };
 
 class Tile : public Cylinder
 {
 	public:
 		static Tile& nullptr_tile;
-		Tile(uint16_t x, uint16_t y, uint8_t z);
+		Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos(x, y, z) {}
 		virtual ~Tile();
 
 		// non-copyable
@@ -292,9 +292,9 @@ class Tile : public Cylinder
 		void resetTileFlags(const Item* item);
 
 	protected:
-		Item* ground;
+		Item* ground = nullptr;
 		Position tilePos;
-		uint32_t flags;
+		uint32_t flags = 0;
 };
 
 // Used for walkable tiles, where there is high likeliness of
@@ -306,7 +306,7 @@ class DynamicTile : public Tile
 		CreatureVector creatures;
 
 	public:
-		DynamicTile(uint16_t x, uint16_t y, uint8_t z);
+		DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
 		~DynamicTile();
 
 		// non-copyable
@@ -342,7 +342,7 @@ class StaticTile final : public Tile
 	std::unique_ptr<CreatureVector> creatures;
 
 	public:
-		StaticTile(uint16_t x, uint16_t y, uint8_t z);
+		StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
 		~StaticTile();
 
 		// non-copyable
@@ -376,23 +376,9 @@ class StaticTile final : public Tile
 		}
 };
 
-inline Tile::Tile(uint16_t x, uint16_t y, uint8_t z) :
-	ground(nullptr),
-	tilePos(x, y, z),
-	flags(0)
-{
-}
-
 inline Tile::~Tile()
 {
 	delete ground;
-}
-
-inline StaticTile::StaticTile(uint16_t x, uint16_t y, uint8_t z) :
-	Tile(x, y, z),
-	items(nullptr),
-	creatures(nullptr)
-{
 }
 
 inline StaticTile::~StaticTile()
@@ -402,11 +388,6 @@ inline StaticTile::~StaticTile()
 			item->decrementReferenceCounter();
 		}
 	}
-}
-
-inline DynamicTile::DynamicTile(uint16_t x, uint16_t y, uint8_t z) :
-	Tile(x, y, z)
-{
 }
 
 inline DynamicTile::~DynamicTile()

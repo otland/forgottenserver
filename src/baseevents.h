@@ -44,15 +44,15 @@ class Event
 	protected:
 		virtual std::string getScriptEventName() const = 0;
 
-		bool scripted;
-		int32_t scriptId;
-		LuaScriptInterface* scriptInterface;
+		bool scripted = false;
+		int32_t scriptId = 0;
+		LuaScriptInterface* scriptInterface = nullptr;
 };
 
 class BaseEvents
 {
 	public:
- 		BaseEvents() = default;
+ 		constexpr BaseEvents() = default;
 		virtual ~BaseEvents() = default;
 
 		bool loadFromXml();

@@ -86,8 +86,7 @@ bool BaseEvents::reload()
 	return loadFromXml();
 }
 
-Event::Event(LuaScriptInterface* interface) :
-	scripted(false), scriptId(0), scriptInterface(interface) {}
+Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
 
 Event::Event(const Event* copy) :
 	scripted(copy->scripted), scriptId(copy->scriptId), scriptInterface(copy->scriptInterface) {}

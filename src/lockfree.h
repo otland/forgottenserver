@@ -21,7 +21,7 @@
 #define FS_LOCKFREE_H_8C707AEB7C7235A2FBC5D4EDDF03B008
 
 #if _MSC_FULL_VER >= 190023918 // Workaround for VS2015 Update 2. Boost.Lockfree is a header-only library, so this should be safe to do.
-#define _ENABLE_ATOMIC_ALIGNMENT_FIX 
+#define _ENABLE_ATOMIC_ALIGNMENT_FIX
 #endif
 
 #include <boost/lockfree/stack.hpp>
@@ -31,7 +31,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 {
 	public:
 		template <typename U>
-		explicit LockfreePoolingAllocator(const U&) {}
+		explicit constexpr LockfreePoolingAllocator(const U&) {}
 		typedef T value_type;
 
 		T* allocate(size_t) const {

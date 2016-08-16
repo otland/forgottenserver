@@ -239,7 +239,7 @@ class VirtualCylinder final : public Cylinder
 			return 1;
 		}
 		std::string getDescription(int32_t) const override {
-			return std::string();
+			return {};
 		}
 		bool isRemoved() const override {
 			return false;

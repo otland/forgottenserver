@@ -80,14 +80,14 @@ typedef std::map<Position, SpectatorVec> SpectatorCache;
 #define FLOOR_MASK (FLOOR_SIZE - 1)
 
 struct Floor {
-	Floor() = default;
+	constexpr Floor() = default;
 	~Floor();
 
 	// non-copyable
 	Floor(const Floor&) = delete;
 	Floor& operator=(const Floor&) = delete;
 
-	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {{ nullptr }};
+	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
 };
 
 class FrozenPathingConditionCall;
@@ -96,7 +96,7 @@ class QTreeLeafNode;
 class QTreeNode
 {
 	public:
-		QTreeNode();
+		constexpr QTreeNode() = default;
 		virtual ~QTreeNode();
 
 		// non-copyable
@@ -127,9 +127,9 @@ class QTreeNode
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:
-		QTreeNode* child[4];
+		QTreeNode* child[4] = {};
 
-		bool leaf;
+		bool leaf = false;
 
 		friend class Map;
 };
@@ -137,7 +137,7 @@ class QTreeNode
 class QTreeLeafNode final : public QTreeNode
 {
 	public:
-		QTreeLeafNode();
+		QTreeLeafNode() { leaf = true; newLeaf = true; }
 		~QTreeLeafNode();
 
 		// non-copyable
@@ -154,9 +154,9 @@ class QTreeLeafNode final : public QTreeNode
 
 	protected:
 		static bool newLeaf;
-		QTreeLeafNode* leafS;
-		QTreeLeafNode* leafE;
-		Floor* array[MAP_MAX_LAYERS];
+		QTreeLeafNode* leafS = nullptr;
+		QTreeLeafNode* leafE = nullptr;
+		Floor* array[MAP_MAX_LAYERS] = {};
 		CreatureVector creature_list;
 		CreatureVector player_list;
 
