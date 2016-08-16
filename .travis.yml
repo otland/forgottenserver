@@ -13,6 +13,7 @@ addons:
     packages:
       - libboost-dev
       - libboost-system-dev
+      - libboost-iostreams-dev
       - liblua5.2-dev
       - libluajit-5.1-dev
       - libmysqlclient-dev
