@@ -32,7 +32,7 @@ typedef std::list<Quest> QuestsList;
 class Mission
 {
 	public:
-		Mission(std::string name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue)
+		Mission(const std::string& name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue)
 			: name(name), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {}
 
 		bool isCompleted(Player* player) const;
@@ -63,7 +63,7 @@ class Mission
 class Quest
 {
 	public:
-		Quest(std::string name, uint16_t id, int32_t startStorageID, int32_t startStorageValue)
+		Quest(const std::string& name, uint16_t id, int32_t startStorageID, int32_t startStorageValue)
 			: name(name), startStorageID(startStorageID), startStorageValue(startStorageValue), id(id) {}
 
 		bool isCompleted(Player* player) const;

@@ -2640,7 +2640,7 @@ void ProtocolGame::sendOutfitWindow()
 	if (player->isAccessPlayer()) {
 		static const std::string gamemasterOutfitName = "Gamemaster";
 		protocolOutfits.emplace_back(
-			&gamemasterOutfitName,
+			gamemasterOutfitName,
 			75,
 			0
 		);
@@ -2655,7 +2655,7 @@ void ProtocolGame::sendOutfitWindow()
 		}
 
 		protocolOutfits.emplace_back(
-			&outfit.name,
+			outfit.name,
 			outfit.lookType,
 			addons
 		);
@@ -2667,7 +2667,7 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(protocolOutfits.size());
 	for (const ProtocolOutfit& outfit : protocolOutfits) {
 		msg.add<uint16_t>(outfit.lookType);
-		msg.addString(*outfit.name);
+		msg.addString(outfit.name);
 		msg.addByte(outfit.addons);
 	}
 

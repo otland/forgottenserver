@@ -34,10 +34,10 @@ class Town
 			return name;
 		}
 
-		void setTemplePos(Position pos) {
+		void setTemplePos(const Position& pos) {
 			templePosition = pos;
 		}
-		void setName(std::string name) {
+		void setName(const std::string& name) {
 			this->name = name;
 		}
 		uint32_t getID() const {

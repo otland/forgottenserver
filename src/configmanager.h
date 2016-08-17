@@ -116,8 +116,8 @@ class ConfigManager
 
 	private:
 		static std::string getGlobalString(lua_State* L, const char* identifier, const char* defaultValue);
-		static int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defaultValue = 0);
-		static bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue);
+		static int32_t getGlobalNumber(lua_State* L, const char* identifier, int32_t defaultValue = 0);
+		static bool getGlobalBoolean(lua_State* L, const char* identifier, bool defaultValue);
 
 		std::string string[LAST_STRING_CONFIG];
 		int32_t integer[LAST_INTEGER_CONFIG];

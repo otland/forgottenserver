@@ -36,7 +36,7 @@ class ProtocolOld final : public Protocol
 			return "old login protocol";
 		}
 
-		explicit ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
+		explicit ProtocolOld(const Connection_ptr& connection) : Protocol(connection) {}
 
 		void onRecvFirstMessage(NetworkMessage& msg) final;
 
