@@ -853,9 +853,9 @@ int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* t
 // Floor
 Floor::~Floor()
 {
-	for (uint32_t i = 0; i < FLOOR_SIZE; ++i) {
-		for (uint32_t j = 0; j < FLOOR_SIZE; ++j) {
-			delete tiles[i][j];
+	for (auto& row : tiles) {
+		for (auto tile : row) {
+			delete tile;
 		}
 	}
 }
@@ -927,7 +927,7 @@ void QTreeLeafNode::addCreature(Creature* c)
 
 void QTreeLeafNode::removeCreature(Creature* c)
 {
-	CreatureVector::iterator iter = std::find(creature_list.begin(), creature_list.end(), c);
+	auto iter = std::find(creature_list.begin(), creature_list.end(), c);
 	assert(iter != creature_list.end());
 	*iter = creature_list.back();
 	creature_list.pop_back();
@@ -964,9 +964,8 @@ uint32_t Map::clean() const
 					continue;
 				}
 
-				for (size_t x = 0; x < FLOOR_SIZE; ++x) {
-					for (size_t y = 0; y < FLOOR_SIZE; ++y) {
-						Tile* tile = floor->tiles[x][y];
+				for (auto& row : floor->tiles) {
+					for (auto tile : row) {
 						if (!tile || tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 							continue;
 						}
@@ -992,8 +991,7 @@ uint32_t Map::clean() const
 				}
 			}
 		} else {
-			for (size_t i = 0; i < 4; ++i) {
-				QTreeNode* childNode = node->child[i];
+			for (auto childNode : node->child) {
 				if (childNode) {
 					nodes.push_back(childNode);
 				}

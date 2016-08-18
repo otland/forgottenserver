@@ -245,7 +245,7 @@ bool DBResult::next()
 	return row != nullptr;
 }
 
-DBInsert::DBInsert(std::string query) : query(query)
+DBInsert::DBInsert(std::string query) : query(std::move(query))
 {
 	this->length = this->query.length();
 }

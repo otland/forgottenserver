@@ -91,7 +91,7 @@ bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node&)
 
 CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
 {
-	CreatureEventList::iterator it = creatureEvents.find(name);
+	auto it = creatureEvents.find(name);
 	if (it != creatureEvents.end()) {
 		if (!forceLoaded || it->second->isLoaded()) {
 			return it->second;

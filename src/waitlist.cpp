@@ -29,14 +29,14 @@ extern Game g_game;
 WaitListIterator WaitingList::findClient(const Player* player, uint32_t& slot)
 {
 	slot = 1;
-	for (WaitListIterator it = priorityWaitList.begin(), end = priorityWaitList.end(); it != end; ++it) {
+	for (auto it = priorityWaitList.begin(), end = priorityWaitList.end(); it != end; ++it) {
 		if (it->playerGUID == player->getGUID()) {
 			return it;
 		}
 		++slot;
 	}
 
-	for (WaitListIterator it = waitList.begin(), end = waitList.end(); it != end; ++it) {
+	for (auto it = waitList.begin(), end = waitList.end(); it != end; ++it) {
 		if (it->playerGUID == player->getGUID()) {
 			return it;
 		}
@@ -82,7 +82,7 @@ bool WaitingList::clientLogin(const Player* player)
 
 	uint32_t slot;
 
-	WaitListIterator it = findClient(player, slot);
+	auto it = findClient(player, slot);
 	if (it != waitList.end()) {
 		if ((g_game.getPlayersOnline() + slot) <= maxPlayers) {
 			//should be able to login now
@@ -108,7 +108,7 @@ bool WaitingList::clientLogin(const Player* player)
 uint32_t WaitingList::getClientSlot(const Player* player)
 {
 	uint32_t slot;
-	WaitListIterator it = findClient(player, slot);
+	auto it = findClient(player, slot);
 	if (it == waitList.end()) {
 		return 0;
 	}
@@ -119,7 +119,7 @@ void WaitingList::cleanupList(WaitList& list)
 {
 	int64_t time = OTSYS_TIME();
 
-	WaitListIterator it = list.begin(), end = list.end();
+	auto it = list.begin(), end = list.end();
 	while (it != end) {
 		if ((it->timeout - time) <= 0) {
 			it = list.erase(it);

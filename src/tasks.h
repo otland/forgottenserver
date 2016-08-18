@@ -31,8 +31,9 @@ class Task
 {
 	public:
 		// DO NOT allocate this class on the stack
-		explicit Task(const std::function<void (void)>& f) : func(f) {}
-		Task(uint32_t ms, const std::function<void (void)>& f) : expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(f) {}
+		explicit Task(std::function<void (void)> f) : func(std::move(f)) {}
+		Task(uint32_t ms, std::function<void (void)> f) :
+			expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f)) {}
 
 		virtual ~Task() = default;
 		void operator()() {

@@ -31,8 +31,8 @@ FileLoader::~FileLoader()
 	NodeStruct::clearNet(root);
 	delete[] buffer;
 
-	for (int32_t i = 0; i < CACHE_BLOCKS; i++) {
-		delete[] cached_data[i].data;
+	for (auto& i : cached_data) {
+		delete[] i.data;
 	}
 }
 

@@ -44,8 +44,8 @@ void MoveEvents::clearMap(MoveListMap& map)
 	std::unordered_set<MoveEvent*> set;
 	for (const auto& it : map) {
 		const MoveEventList& moveEventList = it.second;
-		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
-			for (MoveEvent* moveEvent : moveEventList.moveEvent[i]) {
+		for (const auto& i : moveEventList.moveEvent) {
+			for (MoveEvent* moveEvent : i) {
 				set.insert(moveEvent);
 			}
 		}
@@ -65,8 +65,8 @@ void MoveEvents::clear()
 
 	for (const auto& it : positionMap) {
 		const MoveEventList& moveEventList = it.second;
-		for (int32_t i = 0; i < MOVE_EVENT_LAST; ++i) {
-			for (MoveEvent* moveEvent : moveEventList.moveEvent[i]) {
+		for (const auto& i : moveEventList.moveEvent) {
+			for (MoveEvent* moveEvent : i) {
 				delete moveEvent;
 			}
 		}
@@ -285,7 +285,7 @@ void MoveEvents::addEvent(MoveEvent* moveEvent, const Position& pos, MovePosList
 
 MoveEvent* MoveEvents::getEvent(const Tile* tile, MoveEvent_t eventType)
 {
-	MovePosListMap::iterator it = positionMap.find(tile->getPosition());
+	auto it = positionMap.find(tile->getPosition());
 	if (it != positionMap.end()) {
 		std::list<MoveEvent*>& moveEventList = it->second.moveEvent[eventType];
 		if (!moveEventList.empty()) {
