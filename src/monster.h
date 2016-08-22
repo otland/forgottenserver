@@ -162,7 +162,7 @@ class Monster final : public Creature
 
 		bool isTarget(const Creature* creature) const;
 		bool isFleeing() const {
-			return getHealth() <= mType->runAwayHealth;
+			return !isSummon() && getHealth() <= mType->runAwayHealth;
 		}
 
 		bool getDistanceStep(const Position& targetPos, Direction& direction, bool flee = false);
