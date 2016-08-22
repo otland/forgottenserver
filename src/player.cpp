@@ -2190,11 +2190,27 @@ void Player::death(Creature* lastHitCreature)
 
 bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
-	if (getZone() == ZONE_PVP) {
-		setDropLoot(true);
-		return false;
+	if (getZone() != ZONE_PVP) {
+		return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 	}
-	return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+
+	Player* lastHitPlayer = nullptr;
+	if (lastHitCreature) {
+		lastHitPlayer = lastHitCreature->getPlayer();
+		if (!lastHitPlayer) {
+			Creature* lastHitMaster = lastHitCreature->getMaster();
+			if (lastHitMaster) {
+				lastHitPlayer = lastHitMaster->getPlayer();
+			}
+		}
+	}
+
+	if (!lastHitPlayer) {
+		return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+	}
+
+	setDropLoot(true);
+	return false;
 }
 
 Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
