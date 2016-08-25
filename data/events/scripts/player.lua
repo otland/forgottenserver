@@ -86,6 +86,18 @@ function Player:onLookInShop(itemType, count)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	local fc_parent_name = fromCylinder:isItem() and fromCylinder:getTopParent():getName() or ""
+	local tc_parent_name = toCylinder:isItem() and toCylinder:getTopParent():getName() or ""
+	if toCylinder == fromCylinder or tc_parent_name == fc_parent_name then
+		return true
+	end
+
+	if fc_parent_name == "depot chest" or fc_parent_name == "your inbox" then
+		if item:hasAttribute(ITEM_ATTRIBUTE_DECAYSTATE) then
+			item:decay()
+		end
+	end
+
 	return true
 end
 
