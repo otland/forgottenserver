@@ -1347,6 +1347,20 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_SLOT_RING)
 	registerEnum(CONST_SLOT_AMMO)
 
+	registerEnum(CREATURE_EVENT_NONE)
+	registerEnum(CREATURE_EVENT_LOGIN)
+	registerEnum(CREATURE_EVENT_LOGOUT)
+	registerEnum(CREATURE_EVENT_THINK)
+	registerEnum(CREATURE_EVENT_PREPAREDEATH)
+	registerEnum(CREATURE_EVENT_DEATH)
+	registerEnum(CREATURE_EVENT_KILL)
+	registerEnum(CREATURE_EVENT_ADVANCE)
+	registerEnum(CREATURE_EVENT_MODALWINDOW)
+	registerEnum(CREATURE_EVENT_TEXTEDIT)
+	registerEnum(CREATURE_EVENT_HEALTHCHANGE)
+	registerEnum(CREATURE_EVENT_MANACHANGE)
+	registerEnum(CREATURE_EVENT_EXTENDED_OPCODE)
+
 	registerEnum(GAME_STATE_STARTUP)
 	registerEnum(GAME_STATE_INIT)
 	registerEnum(GAME_STATE_NORMAL)
@@ -2016,6 +2030,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Creature", "", LuaScriptInterface::luaCreatureCreate);
 	registerMetaMethod("Creature", "__eq", LuaScriptInterface::luaUserdataCompare);
 
+	registerMethod("Creature", "getEvents", LuaScriptInterface::luaCreatureGetEvents);
 	registerMethod("Creature", "registerEvent", LuaScriptInterface::luaCreatureRegisterEvent);
 	registerMethod("Creature", "unregisterEvent", LuaScriptInterface::luaCreatureUnregisterEvent);
 
@@ -6598,6 +6613,27 @@ int LuaScriptInterface::luaCreatureCreate(lua_State* L)
 		setCreatureMetatable(L, -1, creature);
 	} else {
 		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetEvents(lua_State* L)
+{
+	// creature:getEvents(type)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	CreatureEventType_t eventType = getNumber<CreatureEventType_t>(L, 2);
+	const auto& eventList = creature->getCreatureEvents(eventType);
+	lua_createtable(L, eventList.size(), 0);
+
+	int index = 0;
+	for (CreatureEvent* event : eventList) {
+		pushString(L, event->getName());
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
