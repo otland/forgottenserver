@@ -594,6 +594,7 @@ class Player final : public Creature, public Cylinder
 		bool isImmune(ConditionType_t type) const final;
 		bool hasShield() const;
 		bool isAttackable() const final;
+		bool lastHitIsPlayer(Creature* lastHitCreature) const;
 
 		void changeHealth(int32_t healthChange, bool sendHealthChange = true) final;
 		void changeMana(int32_t manaChange) final;
