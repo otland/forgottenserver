@@ -1990,7 +1990,7 @@ void Player::death(Creature* lastHitCreature)
 
 	if (skillLoss) {
 		uint8_t unfairFightReduction = 100;
-		bool lastHitPlayer = lastHitIsPlayer(lastHitCreature);
+		bool lastHitPlayer = Player::lastHitIsPlayer(lastHitCreature);
 
 		if (lastHitPlayer) {
 			uint32_t sumLevels = 0;
@@ -2167,7 +2167,7 @@ void Player::death(Creature* lastHitCreature)
 
 bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
-	if (getZone() != ZONE_PVP || !lastHitIsPlayer(lastHitCreature)) {
+	if (getZone() != ZONE_PVP || !Player::lastHitIsPlayer(lastHitCreature)) {
 		return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 	}
 
@@ -3664,7 +3664,7 @@ bool Player::isAttackable() const
 	return !hasFlag(PlayerFlag_CannotBeAttacked);
 }
 
-bool Player::lastHitIsPlayer(Creature* lastHitCreature) const
+bool Player::lastHitIsPlayer(Creature* lastHitCreature)
 {
 	if (!lastHitCreature) {
 		return false;
