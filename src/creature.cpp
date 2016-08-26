@@ -865,15 +865,10 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 		}
 
 		if (checkArmor) {
-			int32_t armorValue = getArmor();
-			if (armorValue > 1) {
-				double armorFormula = armorValue * 0.475;
-				int32_t armorReduction = static_cast<int32_t>(std::ceil(armorFormula));
-				damage -= uniform_random(
-					armorReduction,
-					armorReduction + static_cast<int32_t>(std::floor(armorFormula))
-				);
-			} else if (armorValue == 1) {
+			int32_t armor = getArmor();
+			if (armor > 3) {
+				damage -= uniform_random(armor / 2, armor - (armor % 2 + 1));
+			} else if (armor > 0) {
 				--damage;
 			}
 

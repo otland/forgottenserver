@@ -5,6 +5,10 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		fromPosition.z = fromPosition.z + 1
 	end
+	if player:isPzLocked() and Tile(fromPosition):hasFlag(TILESTATE_PROTECTIONZONE) then
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_PLAYERISPZLOCKED))
+		return true
+	end
 	player:teleportTo(fromPosition, false)
 	return true
 end

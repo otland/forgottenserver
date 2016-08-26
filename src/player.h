@@ -594,6 +594,7 @@ class Player final : public Creature, public Cylinder
 		bool isImmune(ConditionType_t type) const final;
 		bool hasShield() const;
 		bool isAttackable() const final;
+		static bool lastHitIsPlayer(Creature* lastHitCreature);
 
 		void changeHealth(int32_t healthChange, bool sendHealthChange = true) final;
 		void changeMana(int32_t manaChange) final;
@@ -1182,8 +1183,8 @@ class Player final : public Creature, public Cylinder
 		size_t getFirstIndex() const final;
 		size_t getLastIndex() const final;
 		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
-		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const final;
-		Thing*getThing(size_t index) const final;
+		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const final;
+		Thing* getThing(size_t index) const final;
 
 		void internalAddThing(Thing* thing) final;
 		void internalAddThing(uint32_t index, Thing* thing) final;

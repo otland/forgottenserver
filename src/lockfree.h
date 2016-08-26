@@ -20,7 +20,7 @@
 #ifndef FS_LOCKFREE_H_8C707AEB7C7235A2FBC5D4EDDF03B008
 #define FS_LOCKFREE_H_8C707AEB7C7235A2FBC5D4EDDF03B008
 
-#if _MSC_FULL_VER == 190023918 // Workaround for VS2015 Update 2. Boost.Lockfree is a header-only library, so this should be safe to do.
+#if _MSC_FULL_VER >= 190023918 // Workaround for VS2015 Update 2. Boost.Lockfree is a header-only library, so this should be safe to do.
 #define _ENABLE_ATOMIC_ALIGNMENT_FIX 
 #endif
 
