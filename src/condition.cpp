@@ -1119,6 +1119,10 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 		return true;
 	}
 
+	if (field && creature->getPlayer()) {
+		healthChange = static_cast<int32_t>(std::round(healthChange / 2.));
+	}
+
 	CombatDamage damage;
 	damage.origin = ORIGIN_CONDITION;
 	damage.primary.value = healthChange;
