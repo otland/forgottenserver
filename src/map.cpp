@@ -328,28 +328,18 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 		for (int_fast32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
 				const CreatureVector& node_list = (onlyPlayers ? leafE->player_list : leafE->creature_list);
-				CreatureVector::const_iterator node_iter = node_list.begin();
-				CreatureVector::const_iterator node_end = node_list.end();
-				if (node_iter != node_end) {
-					do {
-						Creature* creature = *node_iter;
+				for (Creature* creature : node_list) {
+					const Position& cpos = creature->getPosition();
+					if (minRangeZ > cpos.z || maxRangeZ < cpos.z) {
+						continue;
+					}
 
-						const Position& cpos = creature->getPosition();
-						if (cpos.z < minRangeZ || cpos.z > maxRangeZ) {
-							continue;
-						}
+					int_fast16_t offsetZ = Position::getOffsetZ(centerPos, cpos);
+					if ((min_y + offsetZ) > cpos.y || (max_y + offsetZ) < cpos.y || (min_x + offsetZ) > cpos.x || (max_x + offsetZ) < cpos.x) {
+						continue;
+					}
 
-						int_fast16_t offsetZ = Position::getOffsetZ(centerPos, cpos);
-						if (cpos.y < (min_y + offsetZ) || cpos.y > (max_y + offsetZ)) {
-							continue;
-						}
-
-						if (cpos.x < (min_x + offsetZ) || cpos.x > (max_x + offsetZ)) {
-							continue;
-						}
-
-						list.insert(creature);
-					} while (++node_iter != node_end);
+					list.insert(creature);
 				}
 				leafE = leafE->leafE;
 			} else {
