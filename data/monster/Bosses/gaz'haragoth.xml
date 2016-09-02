@@ -67,66 +67,66 @@
 		<voice sentence="Gaz'haragoth calls down: DEATH AND DOOM!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2152" countmax="50" chance="10000" /> <!-- Platinum Coin -->
-		<item id="2160" countmax="6" chance="10000" /> <!-- Crystal Coins -->
-		<item id="18418" countmax="15" chance="10000" /> <!-- Blue Crystal Splinter -->
-		<item id="7368" countmax="100" chance="10000" /> <!-- Assassin Star -->
-		<item id="22598" countmax="3" chance="10000" /> <!-- Unrealized Dream -->
-		<item id="6500" countmax="2" chance="10000" /> <!-- Demonic Essence -->
-		<item id="8473" countmax="100" chance="10000" /> <!-- Ultimate Health Potion -->
-		<item id="7590" countmax="100" chance="10000" /> <!-- Great Mana Potions -->
-		<item id="8472" countmax="100" chance="10000" /> <!-- Great Spirit Potions -->
-		<item id="22397" countmax="3" chance="10000" /> <!-- Dream Matter -->
-		<item id="18415" countmax="5" chance="10000" /> <!-- Green Crystal Shard -->
-		<item id="22396" countmax="14" chance="10000" /> <!-- Cluster of Solace -->
-		<item id="2158" countmax="2" chance="10000" /> <!-- Blue Gem -->
-		<item id="18416" countmax="10" chance="10000" /> <!-- Green Crystal Splinter -->
-		<item id="18414" countmax="15" chance="10000" /> <!-- Violet Crystal Shard -->
-		<item id="6529" chance="6000" /> <!-- Infernal Bolt -->
-		<item id="22612" chance="6000" /> <!-- Demonic Tapestry -->
-		<item id="5914" chance="6000" /> <!-- Yellow Piece of Cloth -->
-		<item id="5911" chance="6000" /> <!-- Red Piece of Cloth -->
-		<item id="22610" chance="6000" /> <!-- Dream Warden Mask -->
-		<item id="7899" chance="6000" /> <!-- Magma Coat -->
-		<item id="7632" chance="6000" /> <!-- Giant Shimmering Pearl -->
-		<item id="5954" chance="6000" /> <!-- Demon Horn -->
-		<item id="22608" chance="6000" /> <!-- Nightmare Horn -->
-		<item id="2195" chance="6000" /> <!-- Boots of Haste -->
-		<item id="2168" chance="6000" /> <!-- Life Ring -->
-		<item id="22614" chance="6000" /> <!-- Nightmare Beacon -->
-		<item id="22613" chance="6000" /> <!-- Eye Pod -->
-		<item id="22611" chance="6000" /> <!-- Psychedelic Tapestry -->
-		<item id="22398" chance="5000" /> <!-- Crude Umbral Blade -->
-		<item id="22401" chance="5000" /> <!-- Crude Umbral Slayer -->
-		<item id="22404" chance="5000" /> <!-- Crude Umbral Axe -->
-		<item id="22407" chance="5000" /> <!-- Crude Umbral Chopper -->
-		<item id="22413" chance="5000" /> <!-- Crude Umbral Hammer -->
-		<item id="22410" chance="5000" /> <!-- Crude Umbral Mace -->
-		<item id="22416" chance="5000" /> <!-- Crude Umbral Bow -->
-		<item id="22419" chance="5000" /> <!-- Crude Umbral Crossbow -->
-		<item id="22422" chance="5000" /> <!-- Crude Umbral Spellbook -->
-		<item id="22399" chance="5000" /> <!-- Umbral Blade -->
-		<item id="22402" chance="5000" /> <!-- Umbral Slayer -->
-		<item id="22405" chance="4000" /> <!-- Umbral Axe -->
-		<item id="22408" chance="4000" /> <!-- Umbral Chopper -->
-		<item id="22414" chance="4000" /> <!-- Umbral Hammer -->
-		<item id="22411" chance="4000" /> <!-- Umbral Mace -->
-		<item id="22417" chance="4000" /> <!-- Umbral Bow -->
-		<item id="22420" chance="4000" /> <!-- Umbral Crossbow -->
-		<item id="22423" chance="4000" /> <!-- Umbral Spellbook -->
-		<item id="22400" chance="4000" /> <!-- Umbral Masterblade -->
-		<item id="22403" chance="3000" /> <!-- Umbral Master Slayer -->
-		<item id="22406" chance="3000" /> <!-- Umbral Master Axe -->
-		<item id="22409" chance="3000" /> <!-- Umbral Master Chopper -->
-		<item id="22415" chance="3000" /> <!-- Umbral Master Hammer -->
-		<item id="22412" chance="3000" /> <!-- Umbral Master Mace -->
-		<item id="22418" chance="3000" /> <!-- Umbral Master Bow -->
-		<item id="22421" chance="3000" /> <!-- Umbral Master Crossbow -->
-		<item id="22424" chance="3000" /> <!-- Umbral Master Spellbook -->
-		<item id="11262" chance="6000" /> <!-- Solitude Charm -->
-		<item id="11261" chance="6000" /> <!-- Twin Sun Charm -->
-		<item id="11260" chance="6000" /> <!-- Spiritual Charm -->
-		<item id="11259" chance="6000" /> <!-- Unity Charm -->
-		<item id="11258" chance="6000" /> <!-- Phoenix Charm -->
+		<item id="2152" countmax="50" chance="10000" /><!-- Platinum Coin -->
+		<item id="2160" countmax="6" chance="10000" /><!-- Crystal Coins -->
+		<item id="18418" countmax="15" chance="10000" /><!-- Blue Crystal Splinter -->
+		<item id="7368" countmax="100" chance="10000" /><!-- Assassin Star -->
+		<item id="22598" countmax="3" chance="10000" /><!-- Unrealized Dream -->
+		<item id="6500" countmax="2" chance="10000" /><!-- Demonic Essence -->
+		<item id="8473" countmax="100" chance="10000" /><!-- Ultimate Health Potion -->
+		<item id="7590" countmax="100" chance="10000" /><!-- Great Mana Potions -->
+		<item id="8472" countmax="100" chance="10000" /><!-- Great Spirit Potions -->
+		<item id="22397" countmax="3" chance="10000" /><!-- Dream Matter -->
+		<item id="18415" countmax="5" chance="10000" /><!-- Green Crystal Shard -->
+		<item id="22396" countmax="14" chance="10000" /><!-- Cluster of Solace -->
+		<item id="2158" countmax="2" chance="10000" /><!-- Blue Gem -->
+		<item id="18416" countmax="10" chance="10000" /><!-- Green Crystal Splinter -->
+		<item id="18414" countmax="15" chance="10000" /><!-- Violet Crystal Shard -->
+		<item id="6529" chance="6000" /><!-- Infernal Bolt -->
+		<item id="22612" chance="6000" /><!-- Demonic Tapestry -->
+		<item id="5914" chance="6000" /><!-- Yellow Piece of Cloth -->
+		<item id="5911" chance="6000" /><!-- Red Piece of Cloth -->
+		<item id="22610" chance="6000" /><!-- Dream Warden Mask -->
+		<item id="7899" chance="6000" /><!-- Magma Coat -->
+		<item id="7632" chance="6000" /><!-- Giant Shimmering Pearl -->
+		<item id="5954" chance="6000" /><!-- Demon Horn -->
+		<item id="22608" chance="6000" /><!-- Nightmare Horn -->
+		<item id="2195" chance="6000" /><!-- Boots of Haste -->
+		<item id="2168" chance="6000" /><!-- Life Ring -->
+		<item id="22614" chance="6000" /><!-- Nightmare Beacon -->
+		<item id="22613" chance="6000" /><!-- Eye Pod -->
+		<item id="22611" chance="6000" /><!-- Psychedelic Tapestry -->
+		<item id="22398" chance="5000" /><!-- Crude Umbral Blade -->
+		<item id="22401" chance="5000" /><!-- Crude Umbral Slayer -->
+		<item id="22404" chance="5000" /><!-- Crude Umbral Axe -->
+		<item id="22407" chance="5000" /><!-- Crude Umbral Chopper -->
+		<item id="22413" chance="5000" /><!-- Crude Umbral Hammer -->
+		<item id="22410" chance="5000" /><!-- Crude Umbral Mace -->
+		<item id="22416" chance="5000" /><!-- Crude Umbral Bow -->
+		<item id="22419" chance="5000" /><!-- Crude Umbral Crossbow -->
+		<item id="22422" chance="5000" /><!-- Crude Umbral Spellbook -->
+		<item id="22399" chance="5000" /><!-- Umbral Blade -->
+		<item id="22402" chance="5000" /><!-- Umbral Slayer -->
+		<item id="22405" chance="4000" /><!-- Umbral Axe -->
+		<item id="22408" chance="4000" /><!-- Umbral Chopper -->
+		<item id="22414" chance="4000" /><!-- Umbral Hammer -->
+		<item id="22411" chance="4000" /><!-- Umbral Mace -->
+		<item id="22417" chance="4000" /><!-- Umbral Bow -->
+		<item id="22420" chance="4000" /><!-- Umbral Crossbow -->
+		<item id="22423" chance="4000" /><!-- Umbral Spellbook -->
+		<item id="22400" chance="4000" /><!-- Umbral Masterblade -->
+		<item id="22403" chance="3000" /><!-- Umbral Master Slayer -->
+		<item id="22406" chance="3000" /><!-- Umbral Master Axe -->
+		<item id="22409" chance="3000" /><!-- Umbral Master Chopper -->
+		<item id="22415" chance="3000" /><!-- Umbral Master Hammer -->
+		<item id="22412" chance="3000" /><!-- Umbral Master Mace -->
+		<item id="22418" chance="3000" /><!-- Umbral Master Bow -->
+		<item id="22421" chance="3000" /><!-- Umbral Master Crossbow -->
+		<item id="22424" chance="3000" /><!-- Umbral Master Spellbook -->
+		<item id="11262" chance="6000" /><!-- Solitude Charm -->
+		<item id="11261" chance="6000" /><!-- Twin Sun Charm -->
+		<item id="11260" chance="6000" /><!-- Spiritual Charm -->
+		<item id="11259" chance="6000" /><!-- Unity Charm -->
+		<item id="11258" chance="6000" /><!-- Phoenix Charm -->
 	</loot>
 </monster>

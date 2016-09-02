@@ -49,18 +49,18 @@
 		<element deathPercent="50" />
 	</elements>
 	<loot>
-		<item id="2152" chance="80000" /> <!-- platinum coin -->
-		<item id="2148" countmax="60" chance="70000" /> <!-- gold coin -->
+		<item id="2152" chance="80000" /><!-- platinum coin -->
+		<item id="2148" countmax="60" chance="70000" /><!-- gold coin -->
 		<item id="15421" chance="14285" /><!-- spellsinger's seal -->
 		<item id="15488" chance="14285" /><!-- deepling filet -->
 		<item id="15422" chance="10000" /><!-- key to the drowned library -->
-		<item id="2667" chance="3448" /> <!-- fish -->
+		<item id="2667" chance="3448" /><!-- fish -->
 		<item id="2146" chance="2854" /><!-- small sapphire -->
 		<item id="13870" chance="2500" /><!-- eye of a deepling -->
-		<item id="2168" chance="2439" /> <!-- life ring -->
-		<item id="15400" chance="2000" /> <!-- deepling staff -->
-		<item id="15403" chance="813" /> <!-- necklace of the deep -->
+		<item id="2168" chance="2439" /><!-- life ring -->
+		<item id="15400" chance="2000" /><!-- deepling staff -->
+		<item id="15403" chance="813" /><!-- necklace of the deep -->
 		<item id="5895" chance="498" /><!-- fish fin -->
-		<item id="15644" chance="220" /> <!-- ornate crossbow -->
+		<item id="15644" chance="220" /><!-- ornate crossbow -->
 	</loot>
 </monster>
