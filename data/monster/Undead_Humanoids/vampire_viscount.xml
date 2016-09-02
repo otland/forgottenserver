@@ -50,18 +50,18 @@
 		<voice sentence="Ah, refreshments have arrived!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="83000" />	<!-- gold coin -->
-		<item id="7589" chance="8180" />					<!-- strong mana potion -->
-		<item id="10602" chance="7200" />				<!-- vampire teeth -->
-		<item id="7588" chance="7100" />					<!-- strong health potion -->
-		<item id="21241" chance="6560" />				<!-- tooth file -->
-		<item id="21244" chance="4460" />				<!-- vampire's cape chain -->
-		<item id="2147" countmax="2" chance="3040" />	<!-- small ruby -->
-		<item id="12405" chance="2910" />				<!-- blood preservation -->
-		<item id="2144" chance="2500" />					<!-- black pearl -->
-		<item id="2396" chance="810" />					<!-- ice rapier -->
-		<item id="2156" chance="540" />					<!-- red gem -->
-		<item id="2534" chance="200" />					<!-- vampire shield -->
-		<item id="5911" chance="70" />					<!-- red piece of cloth -->
+		<item id="2148" countmax="50" chance="83000" /><!-- gold coin -->
+		<item id="7589" chance="8180" /><!-- strong mana potion -->
+		<item id="10602" chance="7200" /><!-- vampire teeth -->
+		<item id="7588" chance="7100" /><!-- strong health potion -->
+		<item id="21241" chance="6560" /><!-- tooth file -->
+		<item id="21244" chance="4460" /><!-- vampire's cape chain -->
+		<item id="2147" countmax="2" chance="3040" /><!-- small ruby -->
+		<item id="12405" chance="2910" /><!-- blood preservation -->
+		<item id="2144" chance="2500" /><!-- black pearl -->
+		<item id="2396" chance="810" /><!-- ice rapier -->
+		<item id="2156" chance="540" /><!-- red gem -->
+		<item id="2534" chance="200" /><!-- vampire shield -->
+		<item id="5911" chance="70" /><!-- red piece of cloth -->
 	</loot>
 </monster>

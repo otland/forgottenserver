@@ -32,13 +32,13 @@
 		<voice sentence="Tooooot." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="90000" />	<!-- gold -->
-		<item id="2666" chance="39000" />				<!-- meat -->
-		<item id="2671" countmax="3" chance="30000" />	<!-- ham -->
-		<item id="11238" countmax="2" chance="7500" />	<!-- mammoth tusk -->
-		<item id="11224" chance="7280" />				<!-- thick fur -->
-		<item id="7381" chance="2800" />					<!-- mammoth whopper -->
-		<item id="7432" chance="500" />					<!-- furry club -->
-		<item id="3973" chance="500" />					<!-- tusk shield -->
+		<item id="2148" countmax="40" chance="90000" /><!-- gold -->
+		<item id="2666" chance="39000" /><!-- meat -->
+		<item id="2671" countmax="3" chance="30000" /><!-- ham -->
+		<item id="11238" countmax="2" chance="7500" /><!-- mammoth tusk -->
+		<item id="11224" chance="7280" /><!-- thick fur -->
+		<item id="7381" chance="2800" /><!-- mammoth whopper -->
+		<item id="7432" chance="500" /><!-- furry club -->
+		<item id="3973" chance="500" /><!-- tusk shield -->
 	</loot>
 </monster>

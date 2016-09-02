@@ -46,6 +46,6 @@
 		<voice sentence="I feel you're getting sleepy! Maeh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="60" chance="75000" />	<!-- gold coins -->
+		<item id="2148" countmax="60" chance="75000" /><!-- gold coins -->
 	</loot>
 </monster>

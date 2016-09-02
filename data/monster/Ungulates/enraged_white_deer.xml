@@ -31,8 +31,8 @@
 		<voice sentence="*bell*" />
 	</voices>
 	<loot>
-		<item id="2671" countmax="3" chance="19850" />	<!-- ham -->
-		<item id="13534" chance="20280" />				<!-- white deer skin -->
-		<item id="13533" chance="19520" />				<!-- white deer antlers -->
+		<item id="2671" countmax="3" chance="19850" /><!-- ham -->
+		<item id="13534" chance="20280" /><!-- white deer skin -->
+		<item id="13533" chance="19520" /><!-- white deer antlers -->
 	</loot>
 </monster>
