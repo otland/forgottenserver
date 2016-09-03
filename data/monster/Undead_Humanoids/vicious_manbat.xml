@@ -43,6 +43,6 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />	<!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 	</loot>
 </monster>

@@ -40,7 +40,7 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity invisibility="1" />
+		<immunity invisible="1" />
 		<immunity energy="1" />
 	</immunities>
 	<loot>

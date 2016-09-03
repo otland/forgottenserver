@@ -59,22 +59,22 @@
 		<voice sentence="You won't regret you came to me, sweetheart." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="149" chance="90000" />	<!-- gold coin -->
-		<item id="7589" chance="10210" />				<!-- strong mana potion -->
-		<item id="10602" chance="10000" />				<!-- vampire teeth -->
-		<item id="2152" chance="9910" />					<!-- platinum coin -->
-		<item id="2186" chance="5500" />					<!-- moonlight rod -->
-		<item id="7588" chance="5000" />					<!-- strong health potion -->
-		<item id="12405" chance="4950" />				<!-- blood preservation -->
-		<item id="2127" chance="1100" />					<!-- emerald bangle -->
-		<item id="8873" chance="1030" />					<!-- hibiscus dress -->
-		<item id="2145" countmax="2" chance="1020" />	<!-- small diamond -->
-		<item id="9809" chance="1010" />					<!-- rusty armor (semi-rare) -->
-		<item id="9837" chance="970" />					<!-- velvet tapestry -->
-		<item id="2195" chance="220" />					<!-- boots of haste -->
-		<item id="7733" chance="200" />					<!-- flower bouquet -->
-		<item id="5670" chance="170" />					<!-- mysterious voodo skull -->
-		<item id="9447" chance="60" />					<!-- blood goblet -->
-		<item id="13293" chance="20" />					<!-- leather whip -->
+		<item id="2148" countmax="149" chance="90000" /><!-- gold coin -->
+		<item id="7589" chance="10210" /><!-- strong mana potion -->
+		<item id="10602" chance="10000" /><!-- vampire teeth -->
+		<item id="2152" chance="9910" /><!-- platinum coin -->
+		<item id="2186" chance="5500" /><!-- moonlight rod -->
+		<item id="7588" chance="5000" /><!-- strong health potion -->
+		<item id="12405" chance="4950" /><!-- blood preservation -->
+		<item id="2127" chance="1100" /><!-- emerald bangle -->
+		<item id="8873" chance="1030" /><!-- hibiscus dress -->
+		<item id="2145" countmax="2" chance="1020" /><!-- small diamond -->
+		<item id="9809" chance="1010" /><!-- rusty armor (semi-rare) -->
+		<item id="9837" chance="970" /><!-- velvet tapestry -->
+		<item id="2195" chance="220" /><!-- boots of haste -->
+		<item id="7733" chance="200" /><!-- flower bouquet -->
+		<item id="5670" chance="170" /><!-- mysterious voodo skull -->
+		<item id="9447" chance="60" /><!-- blood goblet -->
+		<item id="13293" chance="20" /><!-- leather whip -->
 	</loot>
 </monster>

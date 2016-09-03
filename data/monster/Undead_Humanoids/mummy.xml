@@ -47,19 +47,19 @@
 		<voice sentence="Yohag Sssetham!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="38000" />	<!-- gold coin -->
-		<item id="3976" countmax="3" chance="19000" />	<!-- worm -->
-		<item id="12422" chance="11690" />				<!-- flask of embalming fluid -->
-		<item id="10566" chance="10000" />				<!-- gauze bandage -->
-		<item id="2162" chance="5800" />					<!-- magic lightwand -->
-		<item id="2161" chance="5000" />					<!-- strange talisman -->
-		<item id="2134" chance="4000" />					<!-- silver brooch -->
-		<item id="2124" chance="1500" />					<!-- crystal ring -->
-		<item id="2144" chance="1000" />					<!-- black pearl -->
-		<item id="5914" chance="900" />					<!-- yellow piece of cloth -->
-		<item id="2411" chance="450" />					<!-- poison dagger -->
-		<item id="2529" chance="170" />					<!-- black shield -->
-		<item id="2170" chance="100" />					<!-- silver amulet -->
-		<item id="11207" chance="10" />					<!-- mini mummy -->
+		<item id="2148" countmax="80" chance="38000" /><!-- gold coin -->
+		<item id="3976" countmax="3" chance="19000" /><!-- worm -->
+		<item id="12422" chance="11690" /><!-- flask of embalming fluid -->
+		<item id="10566" chance="10000" /><!-- gauze bandage -->
+		<item id="2162" chance="5800" /><!-- magic lightwand -->
+		<item id="2161" chance="5000" /><!-- strange talisman -->
+		<item id="2134" chance="4000" /><!-- silver brooch -->
+		<item id="2124" chance="1500" /><!-- crystal ring -->
+		<item id="2144" chance="1000" /><!-- black pearl -->
+		<item id="5914" chance="900" /><!-- yellow piece of cloth -->
+		<item id="2411" chance="450" /><!-- poison dagger -->
+		<item id="2529" chance="170" /><!-- black shield -->
+		<item id="2170" chance="100" /><!-- silver amulet -->
+		<item id="11207" chance="10" /><!-- mini mummy -->
 	</loot>
 </monster>

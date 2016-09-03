@@ -41,14 +41,14 @@
 		<voice sentence="Ljeave this sjacred pljace while you cjan" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="60000" /> <!-- gold coin -->
-		<item id="3965" countmax="3" chance="14285" /> <!-- hunting spear -->
-		<item id="2168" chance="2127" /> <!-- life ring -->
+		<item id="2148" countmax="50" chance="60000" /><!-- gold coin -->
+		<item id="3965" countmax="3" chance="14285" /><!-- hunting spear -->
+		<item id="2168" chance="2127" /><!-- life ring -->
 		<item id="9809" chance="925" /><!-- rusty armor -->
-		<item id="13838" chance="505" /> <!-- heavy trident -->
+		<item id="13838" chance="505" /><!-- heavy trident -->
 		<item id="13870" chance="310" /><!-- eye of a deepling -->
 		<item id="5895" chance="310" /><!-- fish fin -->
-		<item id="2149" chance="121" /> <!-- small emerald -->
+		<item id="2149" chance="121" /><!-- small emerald -->
 		<item id="9930" chance="111" /><!-- flask of rust remover -->
 	</loot>
 </monster>
