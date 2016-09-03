@@ -90,7 +90,7 @@ enum tradestate_t : uint8_t {
 };
 
 struct VIPEntry {
-	VIPEntry(uint32_t guid, std::string name, const std::string& description, uint32_t icon, bool notify)
+	VIPEntry(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify)
 		: guid(guid), name(name), description(description), icon(icon), notify(notify) {}
 
 	uint32_t guid;
@@ -152,7 +152,7 @@ class Player final : public Creature, public Cylinder
 		const std::string& getName() const final {
 			return name;
 		}
-		void setName(std::string name) {
+		void setName(const std::string& name) {
 			this->name = name;
 		}
 		const std::string& getNameDescription() const final {
@@ -257,7 +257,7 @@ class Player final : public Creature, public Cylinder
 		void setLastWalkthroughAttempt(int64_t walkthroughAttempt) {
 			lastWalkthroughAttempt = walkthroughAttempt;
 		}
-		void setLastWalkthroughPosition(Position walkthroughPosition) {
+		void setLastWalkthroughPosition(const Position& walkthroughPosition) {
 			lastWalkthroughPosition = walkthroughPosition;
 		}
 

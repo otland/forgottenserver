@@ -25,7 +25,7 @@
 class Protocol : public std::enable_shared_from_this<Protocol>
 {
 	public:
-		explicit Protocol(Connection_ptr connection) : connection(connection), key(), encryptionEnabled(false), checksumEnabled(true), rawMessages(false) {}
+		explicit Protocol(const Connection_ptr& connection) : connection(connection), key(), encryptionEnabled(false), checksumEnabled(true), rawMessages(false) {}
 		virtual ~Protocol() = default;
 
 		// non-copyable

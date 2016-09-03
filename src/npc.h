@@ -151,7 +151,7 @@ class Npc final : public Creature
 		uint8_t getSpeechBubble() const final {
 			return speechBubble;
 		}
-		void setSpeechBubble(const uint8_t bubble) {
+		void setSpeechBubble(uint8_t bubble) {
 			speechBubble = bubble;
 		}
 
@@ -166,7 +166,7 @@ class Npc final : public Creature
 		const Position& getMasterPos() const {
 			return masterPos;
 		}
-		void setMasterPos(Position pos, int32_t radius = 1) {
+		void setMasterPos(const Position& pos, int32_t radius = 1) {
 			masterPos = pos;
 			if (masterRadius == -1) {
 				masterRadius = radius;

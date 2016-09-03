@@ -33,7 +33,7 @@ class ChatChannel
 {
 	public:
 		ChatChannel() = default;
-		ChatChannel(uint16_t channelId, std::string channelName):
+		ChatChannel(uint16_t channelId, const std::string& channelName):
 			name(channelName),
 			canJoinEvent(-1),
 			onJoinEvent(-1),
@@ -93,7 +93,7 @@ class ChatChannel
 class PrivateChatChannel final : public ChatChannel
 {
 	public:
-		PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, channelName), owner(0) {}
+		PrivateChatChannel(uint16_t channelId, const std::string& channelName) : ChatChannel(channelId, channelName), owner(0) {}
 
 		uint32_t getOwner() const final {
 			return owner;

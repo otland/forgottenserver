@@ -36,7 +36,7 @@ class ProtocolLogin : public Protocol
 			return "login protocol";
 		}
 
-		explicit ProtocolLogin(Connection_ptr connection) : Protocol(connection) {}
+		explicit ProtocolLogin(const Connection_ptr& connection) : Protocol(connection) {}
 
 		void onRecvFirstMessage(NetworkMessage& msg);
 

@@ -23,7 +23,7 @@
 #include "enums.h"
 
 struct Outfit {
-	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) : name(name), lookType(lookType), premium(premium), unlocked(unlocked) {}
+	Outfit(const std::string& name, uint16_t lookType, bool premium, bool unlocked) : name(name), lookType(lookType), premium(premium), unlocked(unlocked) {}
 
 	std::string name;
 	uint16_t lookType;
@@ -32,9 +32,9 @@ struct Outfit {
 };
 
 struct ProtocolOutfit {
-	ProtocolOutfit(const std::string* name, uint16_t lookType, uint8_t addons) : name(name), lookType(lookType), addons(addons) {}
+	ProtocolOutfit(const std::string& name, uint16_t lookType, uint8_t addons) : name(name), lookType(lookType), addons(addons) {}
 
-	const std::string* name;
+	const std::string& name;
 	uint16_t lookType;
 	uint8_t addons;
 };

@@ -41,7 +41,7 @@ class Teleport final : public Item, public Cylinder
 		const Position& getDestPos() const {
 			return destPos;
 		}
-		void setDestPos(Position pos) {
+		void setDestPos(const Position& pos) {
 			destPos = pos;
 		}
 
