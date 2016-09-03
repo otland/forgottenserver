@@ -70,15 +70,15 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity name="physical" />
-		<immunity name="energy" />
-		<immunity name="fire" />
-		<immunity name="poison" />
-		<immunity name="drown" />
-		<immunity name="lifedrain" />
-		<immunity name="paralyze" />
-		<immunity name="outfit" />
-		<immunity name="drunk" />
-		<immunity name="invisible" />
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity poison="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
 	</immunities>
 </monster>

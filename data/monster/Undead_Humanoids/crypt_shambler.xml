@@ -38,16 +38,16 @@
 		<voice sentence="Chhhhhhh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="55" chance="57000" />	<!-- gold coin -->
-		<item id="3976" countmax="10" chance="9000" />	<!-- worm -->
-		<item id="11200" chance="5000" />				<!-- half-digested piece of meat -->
-		<item id="2230" chance="5000" />					<!-- bone -->
-		<item id="2459" chance="2130" />					<!-- iron helmet -->
-		<item id="2459" chance="2000" />					<!-- two handed sword -->
-		<item id="2227" chance="1850" />					<!-- rotten meat -->
-		<item id="2450" chance="1000" />					<!-- bone sword -->
-		<item id="2541" chance="1000" />					<!-- bone shield -->
-		<item id="2399" countmax="3" chance="910" />		<!-- throwing star -->
-		<item id="2145" chance="510" />					<!-- small diamond -->
+		<item id="2148" countmax="55" chance="57000" /><!-- gold coin -->
+		<item id="3976" countmax="10" chance="9000" /><!-- worm -->
+		<item id="11200" chance="5000" /><!-- half-digested piece of meat -->
+		<item id="2230" chance="5000" /><!-- bone -->
+		<item id="2459" chance="2130" /><!-- iron helmet -->
+		<item id="2459" chance="2000" /><!-- two handed sword -->
+		<item id="2227" chance="1850" /><!-- rotten meat -->
+		<item id="2450" chance="1000" /><!-- bone sword -->
+		<item id="2541" chance="1000" /><!-- bone shield -->
+		<item id="2399" countmax="3" chance="910" /><!-- throwing star -->
+		<item id="2145" chance="510" /><!-- small diamond -->
 	</loot>
 </monster>

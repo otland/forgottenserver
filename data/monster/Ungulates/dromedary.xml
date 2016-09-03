@@ -29,7 +29,7 @@
 		<voice sentence="Grunt!" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="2" chance="36000" />	<!-- meat -->
-		<item id="13939" chance="1000" />				<!-- sugar oat -->
+		<item id="2666" countmax="2" chance="36000" /><!-- meat -->
+		<item id="13939" chance="1000" /><!-- sugar oat -->
 	</loot>
 </monster>
