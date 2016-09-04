@@ -21,7 +21,9 @@
 		<attack name="drown" interval="2000" chance="10" target="1" range="7" radius="2" min="-125" max="-235">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
-		<attack name="icicle" interval="2000" chance="20" range="7" min="-88" max="-150" />
+		<attack name="ice" interval="2000" chance="20" range="7" min="-88" max="-150">
+			<attribute key="shootEffect" value="smallice" />
+		</attack>
 		<attack name="poisoncondition" interval="2000" chance="15" target="0" radius="5" min="-225" max="-260">
 			<attribute key="areaEffect" value="poison" />
 		</attack>

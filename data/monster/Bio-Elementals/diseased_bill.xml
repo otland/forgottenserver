@@ -25,7 +25,7 @@
 		<attack name="physical" interval="1000" chance="40" radius="2" target="0" min="-100" max="-175">
 			<attribute key="shootEffect" value="smallearth" />
 		</attack>
-		<attack name="paralyze" interval="3000" chance="40" target="1">
+		<attack name="speed" interval="3000" chance="40" target="1" speedchange="-900" duration="20000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>

@@ -18,7 +18,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="70" attack="88" />
-		<attack name="fireball" interval="2000" chance="20" min="-150" max="-175" />
+		<attack name="fire" interval="2000" chance="20" min="-150" max="-175">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fireattack"/>
+		</attack>
 		<attack name="hellspawn soulfire" interval="2000" range="5" chance="10" />
 	</attacks>
 	<defenses armor="40" defense="40">

@@ -25,7 +25,9 @@
 		<attack name="ice" interval="2000" chance="10" length="8" spread="3" min="-100" max="-250">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
-		<attack name="icicle" interval="2000" chance="10" target="1" min="-80" max="-155" />
+		<attack name="ice" interval="2000" chance="10" target="1" min="-80" max="-155">
+			<attribute key="shootEffect" value="smallice" />
+		</attack>
 		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-66" max="-320">
 			<attribute key="areaEffect" value="carniphila" />
 		</attack>
