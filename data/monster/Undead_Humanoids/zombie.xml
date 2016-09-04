@@ -47,16 +47,16 @@
 		<voice sentence="Httt.... hmnnsss..." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="65" chance="82000" />	<!-- gold coin -->
-		<item id="10576" chance="10000" />				<!-- half-eaten brain -->
-		<item id="2460" chance="9400" />					<!-- brass helmet -->
-		<item id="2398" chance="7250" />					<!-- mace -->
-		<item id="2417" chance="7000" />					<!-- battle hammer -->
-		<item id="9808" chance="5680" />					<!-- rusty armor (common) -->
-		<item id="2457" chance="4600" />					<!-- steel helmet -->
-		<item id="2381" chance="3750" />					<!-- halberd -->
-		<item id="2205" chance="1000" />					<!-- life ring -->
-		<item id="7620" chance="740" />					<!-- mana potion -->
-		<item id="2657" chance="560" />					<!-- simple dress -->
+		<item id="2148" countmax="65" chance="82000" /><!-- gold coin -->
+		<item id="10576" chance="10000" /><!-- half-eaten brain -->
+		<item id="2460" chance="9400" /><!-- brass helmet -->
+		<item id="2398" chance="7250" /><!-- mace -->
+		<item id="2417" chance="7000" /><!-- battle hammer -->
+		<item id="9808" chance="5680" /><!-- rusty armor (common) -->
+		<item id="2457" chance="4600" /><!-- steel helmet -->
+		<item id="2381" chance="3750" /><!-- halberd -->
+		<item id="2205" chance="1000" /><!-- life ring -->
+		<item id="7620" chance="740" /><!-- mana potion -->
+		<item id="2657" chance="560" /><!-- simple dress -->
 	</loot>
 </monster>

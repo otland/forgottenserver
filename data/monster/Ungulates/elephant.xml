@@ -31,9 +31,9 @@
 		<voice sentence="Trooooot!" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="4" chance="39000" />	<!-- meat -->
-		<item id="2671" countmax="3" chance="30000" />	<!-- ham -->
-		<item id="3956" countmax="2" chance="1000" />	<!-- tusk -->
-		<item id="3973" chance="140" />					<!-- tusk shield -->
+		<item id="2666" countmax="4" chance="39000" /><!-- meat -->
+		<item id="2671" countmax="3" chance="30000" /><!-- ham -->
+		<item id="3956" countmax="2" chance="1000" /><!-- tusk -->
+		<item id="3973" chance="140" /><!-- tusk shield -->
 	</loot>
 </monster>

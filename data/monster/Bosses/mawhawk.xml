@@ -41,22 +41,22 @@
 		<voice sentence="Knorrrr!" />
 	</voices>
 	<loot>
-		<item id="22396" countmax="2" chance="30000" /> <!-- cluster of solace -->
-		<item id="22532" chance="30000" /> <!-- frazzle tongue -->
-		<item id="22598" countmax="2" chance="30000" /> <!-- unrealized dream -->
-		<item id="2148" countmax="100" chance="10000" /> <!-- gold coin -->
-		<item id="2152" countmax="25" chance="10000" /> <!-- platinum coin -->
-		<item id="2392" chance="10000" /> <!-- fire sword -->
-		<item id="5880" chance="10000" /> <!-- iron ore -->
-		<item id="5895" chance="10000" /> <!-- fish fin -->
-		<item id="5911" chance="10000" /> <!-- red piece of cloth -->
-		<item id="5925" chance="10000" /> <!-- hardened bone -->
-		<item id="7404" chance="10000" /> <!-- assassin dagger -->
-		<item id="7407" chance="10000" /> <!-- haunted blade -->
-		<item id="7418" chance="10000" /> <!-- nightmare blade -->
-		<item id="18414" countmax="3" chance="10000" /> <!-- violet crystal shard -->
-		<item id="18415" countmax="3" chance="10000" /> <!-- green crystal shard -->
-		<item id="18416" countmax="5" chance="10000" /> <!-- green crystal splinter -->
-		<item id="18418" countmax="5" chance="10000" /> <!-- blue crystal splinter -->
+		<item id="22396" countmax="2" chance="30000" /><!-- cluster of solace -->
+		<item id="22532" chance="30000" /><!-- frazzle tongue -->
+		<item id="22598" countmax="2" chance="30000" /><!-- unrealized dream -->
+		<item id="2148" countmax="100" chance="10000" /><!-- gold coin -->
+		<item id="2152" countmax="25" chance="10000" /><!-- platinum coin -->
+		<item id="2392" chance="10000" /><!-- fire sword -->
+		<item id="5880" chance="10000" /><!-- iron ore -->
+		<item id="5895" chance="10000" /><!-- fish fin -->
+		<item id="5911" chance="10000" /><!-- red piece of cloth -->
+		<item id="5925" chance="10000" /><!-- hardened bone -->
+		<item id="7404" chance="10000" /><!-- assassin dagger -->
+		<item id="7407" chance="10000" /><!-- haunted blade -->
+		<item id="7418" chance="10000" /><!-- nightmare blade -->
+		<item id="18414" countmax="3" chance="10000" /><!-- violet crystal shard -->
+		<item id="18415" countmax="3" chance="10000" /><!-- green crystal shard -->
+		<item id="18416" countmax="5" chance="10000" /><!-- green crystal splinter -->
+		<item id="18418" countmax="5" chance="10000" /><!-- blue crystal splinter -->
 	</loot>
 </monster>

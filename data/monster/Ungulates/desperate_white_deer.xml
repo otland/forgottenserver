@@ -28,8 +28,8 @@
 		<voice sentence="*wheeze*" />
 	</voices>
 	<loot>
-		<item id="2671" countmax="3" chance="20000" />	<!-- ham -->
-		<item id="13533" chance="20000" />				<!-- white deer antlers -->
-		<item id="13534" chance="20000" />				<!-- white deer skin -->
+		<item id="2671" countmax="3" chance="20000" /><!-- ham -->
+		<item id="13533" chance="20000" /><!-- white deer antlers -->
+		<item id="13534" chance="20000" /><!-- white deer skin -->
 	</loot>
 </monster>

@@ -42,16 +42,16 @@
 		<voice sentence="QJELL NETA NA!!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="97" chance="100000" /> <!-- gold coin -->
-		<item id="2148" countmax="97" chance="100000" /> <!-- gold coin -->
-		<item id="2152" countmax="4" chance="70000" /> <!-- platinum coin -->
-		<item id="15455" chance="29960" /> <!-- deepling claw -->
-		<item id="15423" chance="23100" /> <!-- deepling guard belt buckle -->
-		<item id="15424" chance="34770" /> <!-- deepling breaktime snack -->
-		<item id="7590" countmax="3" chance="32640" /> <!-- great mana potion -->
+		<item id="2148" countmax="97" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="97" chance="100000" /><!-- gold coin -->
+		<item id="2152" countmax="4" chance="70000" /><!-- platinum coin -->
+		<item id="15455" chance="29960" /><!-- deepling claw -->
+		<item id="15423" chance="23100" /><!-- deepling guard belt buckle -->
+		<item id="15424" chance="34770" /><!-- deepling breaktime snack -->
+		<item id="7590" countmax="3" chance="32640" /><!-- great mana potion -->
 		<item id="13870" chance="28850" /><!-- eye of a deepling -->
-		<item id="7591" countmax="3" chance="33430" /> <!-- great health potion -->
-		<item id="15454" chance="1420" /> <!-- guardian axe -->
+		<item id="7591" countmax="3" chance="33430" /><!-- great health potion -->
+		<item id="15454" chance="1420" /><!-- guardian axe -->
 		<item id="15647" chance="1540" /><!-- deepling squelcher -->
 		<item id="15645" chance="510" /><!-- deepling backpack -->
 		<item id="15545" chance="80" /><!-- foxtail -->
