@@ -48,7 +48,6 @@ class IOLoginData
 		static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
 		static std::string getNameByGuid(uint32_t guid);
 		static bool formatPlayerName(std::string& name);
-		static bool addStorageValue(uint32_t guid, uint32_t storageKey, uint32_t storageValue);
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 		static bool hasBiddedOnHouse(uint32_t guid);
 

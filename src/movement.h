@@ -74,10 +74,6 @@ class MoveEvents final : public BaseEvents
 		Event* getEvent(const std::string& nodeName) final;
 		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
-		void registerItemID(int32_t itemId, MoveEvent_t eventType);
-		void registerActionID(int32_t actionId, MoveEvent_t eventType);
-		void registerUniqueID(int32_t uniqueId, MoveEvent_t eventType);
-
 		void addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map);
 
 		void addEvent(MoveEvent* moveEvent, const Position& pos, MovePosListMap& map);

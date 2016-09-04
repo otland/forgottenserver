@@ -104,8 +104,6 @@ class ServiceManager
 		void run();
 		void stop();
 
-		bool okay();
-
 		template <typename ProtocolType>
 		bool add(uint16_t port);
 
