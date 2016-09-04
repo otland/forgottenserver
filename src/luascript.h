@@ -506,7 +506,6 @@ class LuaScriptInterface
 		static int luaDatabaseEscapeString(lua_State* L);
 		static int luaDatabaseEscapeBlob(lua_State* L);
 		static int luaDatabaseLastInsertId(lua_State* L);
-		static int luaDatabaseConnected(lua_State* L);
 		static int luaDatabaseTableExists(lua_State* L);
 
 		static int luaResultGetNumber(lua_State* L);

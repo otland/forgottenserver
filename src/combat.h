@@ -203,7 +203,6 @@ class AreaCombat
 		// non-assignable
 		AreaCombat& operator=(const AreaCombat&) = delete;
 
-		ReturnValue doCombat(Creature* attacker, const Position& pos, const Combat& combat) const;
 		void getList(const Position& centerPos, const Position& targetPos, std::forward_list<Tile*>& list) const;
 
 		void setupArea(const std::list<uint32_t>& list, uint32_t rows);
