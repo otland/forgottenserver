@@ -47,7 +47,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="4">
-		<summon name="Stalker" interval="2000" chance="1000" />
+		<summon name="Stalker" interval="2000" chance="100" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Now chhhou shhhee me ... Now chhhou don't!!" />

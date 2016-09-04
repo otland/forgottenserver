@@ -54,7 +54,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="4">
-		<summon name="Fire Elemental" interval="2000" chance="3000" />
+		<summon name="Fire Elemental" interval="2000" chance="30" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Ashes to ashes!" />
