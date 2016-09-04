@@ -16,9 +16,6 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<script>
-		<event name="tirecz" />
-	</script>
 	<attacks>
 		<attack name="melee" interval="2000" skill="72" attack="100" />
 		<attack name="invisible" interval="2000" chance="25" range="7" radius="1" target="1">
