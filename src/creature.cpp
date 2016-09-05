@@ -531,7 +531,6 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 			} else {
 				Tile* tile;
 				const Position& myPos = getPosition();
-				Position pos;
 
 				if (oldPos.y > newPos.y) { //north
 					//shift y south
