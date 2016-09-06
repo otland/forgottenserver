@@ -104,7 +104,7 @@ bool Scheduler::stopEvent(uint32_t eventid)
 		return false;
 	}
 
-	std::lock_guard<std::mutex> lockGuard(eventLock);
+	std::lock_guard<std::mutex> lockClass(eventLock);
 
 	// search the event id..
 	auto it = eventIds.find(eventid);
